@@ -1,101 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD48333E35C
-	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 20:12:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9B33B8139
+	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 20:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781727169; cv=none; b=TknYiwgB7G2vLXzhd1WlXaMnHEiUdhdn8LsrAg2YH2xNnpNSrn9kuP59GJ1w16kS5q8dVUC12kBVevH1LF/y+XeXgxlR59EwRR0GR5Ztzzb8iaxJ/aaXKms28wHse2XuT82b9d3u6h7TLRaH+L3iYjXHN/nZ0rQvemVU+qyrAMk=
+	t=1781727735; cv=none; b=ckz2THvfPbu9g8gBH2NnAYZxO+IT5XGd6vIh9np8UrTmyztU21ZgpcHKUgZ2tHb3TLO77+du4C8yew1Co58t7YnE+7jsK5BiBBRsMa4iiUMF2JYlXfsQVwWz7iCHGSq42aej6BRmc8HNuK8HhWO2WgXS/5zULIMTsGkboSw5n5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781727169; c=relaxed/simple;
-	bh=ab2DlUr/CgaNCKlmskyAXjr3b7qDV1eEtIP4TSipdtY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pAnJim2cdTGYhj6njmbVPwb8KihgId8oOAphkGADWi1jzc8aCdmeGENEAx+2XX7KJgPk0G+Me7zNOaWljd+prMZgg9PkNnm2U4ZSJR3EgAU4DkSr1bDtqJ0vkH9MZNsIMQvI9pEcrCoLy9C6pz4f0exdrdG/f6wncrmgV5uvAFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VizkQnj4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781727735; c=relaxed/simple;
+	bh=CceglT3qlCWH4/jTzpi9DWCh866J7068WN2/OhvFVKY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IKg1jx7EkK8SyFOFBahbSVSCaLbBeFqdcb/XOdQ2fbpYyKxnIpn5FCQ0pO8QU394Gm/2IpKWrPhF0xpXabpluo/c8AefvtX5QOwN/TJ8MDcN7e1x2itAkuyU/DGqeZIScepqrtjqJgtHNAlJNtR8XgObb7SanjqNHxqf6/8DddQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=amAb0OIv; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VizkQnj4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B33E1F000E9;
-	Wed, 17 Jun 2026 20:12:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781727168;
-	bh=STQrX+fla0a7tqawMQZ3XGYNWhDGiifJb0LhptEzWP8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VizkQnj49p2BlIvXl94/NnCHQ5Ykcjuto7RteEN5nrC7QO6BjCiZxrQe9LRU9OHVM
-	 KWe+02RWF0DPeHymvSwsCkh+1FDSdLMB7yfCMdhcLZ+YgoQfAXUCgQ4DL/LwJj/Cm8
-	 CKl7sLQse7MKBzUIq8sMn9jNoZ18c4svyss4SBWmrFf4S3BJ4VVUUoTPKAm736NGCj
-	 b/zOhx8oKuEA7qVwFfvRGncLwYepMEvYAfJiMIL+AW8WmhXjQcehaky0w6krgnegwq
-	 Rw0N2L7L2bZ12xtfUA15AOpPtWez9AMQGJDChCUB8nIaAMuHEm35gFU2xBo8zlbrFt
-	 GLVLf3jc7wBhg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Cover stack nospec slot
- indexing
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260618-f01-11-stack-nospec-slot-index-v2-2-ede9495359b6@mails.tsinghua.edu.cn>
-References: <20260618-f01-11-stack-nospec-slot-index-v2-0-ede9495359b6@mails.tsinghua.edu.cn>
- <20260618-f01-11-stack-nospec-slot-index-v2-2-ede9495359b6@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 17 Jun 2026 20:12:48 +0000
-Message-Id: <20260617201248.7B33E1F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="amAb0OIv"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781727730;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bFbB1BtfczxDB+uTNT4qTGVZYo6BQXoVhZaGmDWFja4=;
+	b=amAb0OIvInfXWf4o2w+HJ/T068r7UoZcCTSudJaDxT5hZfiBMINHEYeQ8cAqMRg3iJKM/E
+	RT36vA4HAan0H+wug1L0XuHSxyIWCiM8cq/56X//0l5pyUgMGRNAOS958zWEEj188Xe0Lz
+	Ee4BduE0YQNFbT45bLzYHlcaEh4+K3M=
+From: JP Kobryn <jp.kobryn@linux.dev>
+To: roman.gushchin@linux.dev,
+	shakeel.butt@linux.dev,
+	akpm@linux-foundation.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/bpf_memcontrol: mark BPF memcg kfuncs static
+Date: Wed, 17 Jun 2026 13:21:47 -0700
+Message-ID: <20260617202147.78347-1-jp.kobryn@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The `__xlated_unpriv` expectation strings contain an extra space=
- in the frame pointer offsets (`r10 - 4` and `r10 - 8`), which will cause t=
-he strict substring match against the verifier disassembly to fail.
---
+The kfuncs in bpf_memcontrol.c are not called by in-kernel C code. They are
+only referenced by BPF programs and resolved through BTF.
 
-commit 14e5b2945bb48da1c1729feb483806b25ccac3aa
-Author: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Since no external linkage is needed, mark these functions static.
 
-selftests/bpf: Cover stack nospec slot indexing
+Fixes: 5904db9891f8 ("mm: introduce BPF kfuncs to deal with memcg pointers")
+Fixes: 5c7db3239c9f ("mm: introduce bpf_get_root_mem_cgroup() BPF kfunc")
+Fixes: 99430ab8b804 ("mm: introduce BPF kfuncs to access memcg statistics and events")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202606150332.Xy4Egd9s-lkp@intel.com/
+Signed-off-by: JP Kobryn <jp.kobryn@linux.dev>
+---
+ mm/bpf_memcontrol.c | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
-This commit adds a verifier test for fixed-offset stack writes where two
-4-byte stores initialize opposite halves of the same stack slot. The test
-runs through the unprivileged loader and expects both writes to emit
-nospec instructions.
+diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+index 716df49d7647..eff79bb2c758 100644
+--- a/mm/bpf_memcontrol.c
++++ b/mm/bpf_memcontrol.c
+@@ -20,7 +20,7 @@ __bpf_kfunc_start_defs();
+  *
+  * Return: A pointer to the root memory cgroup.
+  */
+-__bpf_kfunc struct mem_cgroup *bpf_get_root_mem_cgroup(void)
++__bpf_kfunc static struct mem_cgroup *bpf_get_root_mem_cgroup(void)
+ {
+ 	if (mem_cgroup_disabled())
+ 		return NULL;
+@@ -41,7 +41,7 @@ __bpf_kfunc struct mem_cgroup *bpf_get_root_mem_cgroup(void)
+  * Return: A pointer to a mem_cgroup structure after bumping
+  * the corresponding css's reference counter.
+  */
+-__bpf_kfunc struct mem_cgroup *
++__bpf_kfunc static struct mem_cgroup *
+ bpf_get_mem_cgroup(struct cgroup_subsys_state *css)
+ {
+ 	struct mem_cgroup *memcg = NULL;
+@@ -75,7 +75,7 @@ bpf_get_mem_cgroup(struct cgroup_subsys_state *css)
+  * Releases a previously acquired memcg reference.
+  * Implements KF_RELEASE semantics.
+  */
+-__bpf_kfunc void bpf_put_mem_cgroup(struct mem_cgroup *memcg)
++__bpf_kfunc static void bpf_put_mem_cgroup(struct mem_cgroup *memcg)
+ {
+ 	css_put(&memcg->css);
+ }
+@@ -89,8 +89,8 @@ __bpf_kfunc void bpf_put_mem_cgroup(struct mem_cgroup *memcg)
+  *
+  * Return: The current value of the corresponding events counter.
+  */
+-__bpf_kfunc unsigned long bpf_mem_cgroup_vm_events(struct mem_cgroup *memcg,
+-						   enum vm_event_item event)
++__bpf_kfunc static unsigned long
++bpf_mem_cgroup_vm_events(struct mem_cgroup *memcg, enum vm_event_item event)
+ {
+ 	if (unlikely(!memcg_vm_event_item_valid(event)))
+ 		return (unsigned long)-1;
+@@ -110,7 +110,7 @@ __bpf_kfunc unsigned long bpf_mem_cgroup_vm_events(struct mem_cgroup *memcg,
+  *
+  * Return: The current memory cgroup size in bytes.
+  */
+-__bpf_kfunc unsigned long bpf_mem_cgroup_usage(struct mem_cgroup *memcg)
++__bpf_kfunc static unsigned long bpf_mem_cgroup_usage(struct mem_cgroup *memcg)
+ {
+ 	return page_counter_read(&memcg->memory) * PAGE_SIZE;
+ }
+@@ -122,8 +122,8 @@ __bpf_kfunc unsigned long bpf_mem_cgroup_usage(struct mem_cgroup *memcg)
+  *
+  * Return: The current value of the memory event counter.
+  */
+-__bpf_kfunc unsigned long bpf_mem_cgroup_memory_events(struct mem_cgroup *memcg,
+-						       enum memcg_memory_event event)
++__bpf_kfunc static unsigned long
++bpf_mem_cgroup_memory_events(struct mem_cgroup *memcg, enum memcg_memory_event event)
+ {
+ 	if (unlikely(event >= MEMCG_NR_MEMORY_EVENTS))
+ 		return (unsigned long)-1;
+@@ -140,7 +140,8 @@ __bpf_kfunc unsigned long bpf_mem_cgroup_memory_events(struct mem_cgroup *memcg,
+  *
+  * Return: The value of the page state counter in bytes.
+  */
+-__bpf_kfunc unsigned long bpf_mem_cgroup_page_state(struct mem_cgroup *memcg, int idx)
++__bpf_kfunc static unsigned long
++bpf_mem_cgroup_page_state(struct mem_cgroup *memcg, int idx)
+ {
+ 	if (unlikely(!memcg_stat_item_valid(idx)))
+ 		return (unsigned long)-1;
+@@ -154,7 +155,7 @@ __bpf_kfunc unsigned long bpf_mem_cgroup_page_state(struct mem_cgroup *memcg, in
+  *
+  * Propagate memory cgroup's statistics up the cgroup tree.
+  */
+-__bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
++__bpf_kfunc static void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
+ {
+ 	mem_cgroup_flush_stats(memcg);
+ }
+-- 
+2.54.0
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/=
-testing/selftests/bpf/progs/verifier_unpriv.c
-> index c16f8382cf17d..d54e5b59e62e5 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-[ ... ]
-> @@ -976,4 +976,26 @@ l0_%=3D:	exit;						\
->  	: __clobber_all);
->  }
-> =20
-> +SEC("socket")
-> +__description("unpriv: Spectre v4 stack write slot index")
-> +__success __success_unpriv
-> +__retval(0)
-> +#ifdef SPEC_V4
-> +__xlated_unpriv("r0 =3D 0")
-> +__xlated_unpriv("*(u32 *)(r10 - 4) =3D r0")
-
-[Severity: Medium]
-Will this test fail due to the extra space in the offset? The BPF
-disassembler typically formats negative offsets without a space after the
-minus sign, like *(u32 *)(r10 -4) =3D r0. Since the selftest framework uses
-exact substring matching for the __xlated_unpriv assertions, expecting
-(r10 - 4) and (r10 - 8) might cause a spurious test failure.
-
-> +__xlated_unpriv("nospec")
-> +__xlated_unpriv("*(u32 *)(r10 - 8) =3D r0")
-> +__xlated_unpriv("nospec")
-> +__xlated_unpriv("exit")
-> +#endif
-> +__naked void stack_write_nospec_slot_index(void)
-> +{
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260618-f01-11-sta=
-ck-nospec-slot-index-v2-0-ede9495359b6@mails.tsinghua.edu.cn?part=3D2
