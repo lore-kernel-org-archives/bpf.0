@@ -1,108 +1,129 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00AB931BCAE
-	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 08:51:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 218ED3128BE;
+	Wed, 17 Jun 2026 08:52:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781686286; cv=none; b=K442HPsWfuSfcHRsLs8vfc8dvZZr/MMcYanlzr1n/oTN1mFPhnURJQ/ACoBnHHquQU77bYPW7IuRi9JM6Wx9pTVqmKo3dv2d8ozaEiS/lbzIwfrNleW2G8higlcpT5dJXwmb/QwhPry3yD/2x9plNLcMhugrsBzG1w4bXEiugEQ=
+	t=1781686379; cv=none; b=Seb1dPTm4ieYTc4RuucYsC42APVAFIVjI0GfltqMjOqtyvhC7r+VHdf+p0EXR5NuAgVw9A0RDrop8FkEwSY4LEU+gFdF6VfsC5KHg4xL4Y50DSC2992KOgIXHtsBeOzsNTBHBxbpGtxSIsGfO0bBkShuNxKjMW4RIAUL9dVHHQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781686286; c=relaxed/simple;
-	bh=7jOQwyTAzKJwsqIrwI4rqGiIXyGQCVHuD/4hW50+EoA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VsYv0D8GtG8qyIu0kpic5NUYrrrfmQMov4+tSw1d94o61PhoygA4jC+qp55uqktism5TakKnkaSUpVYwFBjJYoVAJrZNQboiiuQcVPd44W0/F5IAGnDJbCLG73Bw2GljecTSQsqxXPlz8+4w/uudNzwNUuLO+H/ovEldOvN1JFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eyTjndhm; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781686379; c=relaxed/simple;
+	bh=pUvQSNLWLRh7OpfgodfrsgtToT9DzCGSyR/QzanlZTA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=blkW1Ox0zw8l93WA4LiV2Y+gv5Z6iiaY2EE8KT1IlP03IqPx07uEEMSxn9Ed/j3t3onpziTKwjdEGW89LZOK1xgVLVSJJtHLjpg/B+jPdL39K3tiE/oF0XF2fj/5DX+WGB8t6U9Pv/QCGpq1pNPP/k0vosyREKUt7rFc0HJF3VE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=U8O7i/mO; arc=none smtp.client-ip=131.188.11.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eyTjndhm"
-Message-ID: <1c178c2f-358c-4933-b74e-36522f699f71@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781686282;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SU5qvsh3dMUY4+ATFzYh4gkQERaGRrV6gNprJHKVvNE=;
-	b=eyTjndhmJusNq1s7n6ec7rr+66OBzuuVglHQfJDchQSE9hWPLcVwz0XAEhfM9TlHCs/DGu
-	akC+RYMZX8y06LnEIpLPHY9aGrtINWawFAeP8qheeLfm9yh5W06aUkYU80ZGInxqQpMCW0
-	W0upzlr/mXGA/YUaBN9JU3vMdI1A/Fs=
-Date: Wed, 17 Jun 2026 16:51:12 +0800
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="U8O7i/mO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
+	t=1781685955; bh=EnC+xQ4kjAflTt/HOK2e1CKwIXuOTQTQ4uzmcNK7l4w=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From:To:CC:
+	 Subject;
+	b=U8O7i/mOH0wiYi63S/ed+enhvGbhDDC2J+vtgA0p5pjaRr5qEsz22ixJcMGdvhEcw
+	 BwnPOmws5mCBdlcInMHUlJIqxlS8UzyjGjEJey4rr9XOiI35zxuQXSye0yA5sAVFAm
+	 BnjHqhFVq6h13T9Yr8nf9x5eHPJtw5qXyA9qoLFVyLhAYi2uxyzOVLLdkS1zq3ex4v
+	 fZ6PbVwD/cJMDwB1I6882xFY43K6Ucn0frybtQZAiiGA6AOs1Yg2kSyUREYina0F4E
+	 ZPty9+V4DE9IQgBM897cNiYvuLLcWQs1s5B9WFjybcGVXXsx2igmfx56Vpe2yRA7ui
+	 TJH+vg7p4iqrQ==
+Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4ggHWR51djzPjj5;
+	Wed, 17 Jun 2026 10:45:55 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at boeck5.rrze.uni-erlangen.de (RRZE)
+X-RRZE-Flag: Not-Spam
+X-RRZE-Submit-IP: 2001:620:618:5b8:2:80b3:0:d9e
+Received: from localhost (unknown [IPv6:2001:620:618:5b8:2:80b3:0:d9e])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: U2FsdGVkX1+7VQ1Fq7UmwSr5wNINd1K9w5LBzRtcyQg=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4ggHWN4LgxzPkny;
+	Wed, 17 Jun 2026 10:45:52 +0200 (CEST)
+From: Luis Gerhorst <luis.gerhorst@fau.de>
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>,  Eduard Zingerman
+ <eddyz87@gmail.com>,  Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  John
+ Fastabend <john.fastabend@gmail.com>,  Martin KaFai Lau
+ <martin.lau@linux.dev>,  Shuah Khan <shuah@kernel.org>,
+  bpf@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf 2/2] selftests/bpf: Cover stack nospec slot indexing
+In-Reply-To: <20260617-f01-11-stack-nospec-slot-index-v1-2-e3a080b0cd7e@mails.tsinghua.edu.cn>
+	(Nuoqi Gui's message of "Wed, 17 Jun 2026 00:57:56 +0800")
+References: <20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn>
+	<20260617-f01-11-stack-nospec-slot-index-v1-2-e3a080b0cd7e@mails.tsinghua.edu.cn>
+User-Agent: mu4e 1.12.12; emacs 30.2
+Date: Wed, 17 Jun 2026 10:45:50 +0200
+Message-ID: <871pe5v9kx.fsf@fau.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [GIT PULL] BPF changes for 7.2
-To: Linus Torvalds <torvalds@linux-foundation.org>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Jakub Kicinski <kuba@kernel.org>, Yiming Qian <yimingqian591@gmail.com>,
- Zhang Cen <rollkingzzc@gmail.com>, Han Guidong <2045gemini@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- memxor@gmail.com, eddyz87@gmail.com, tj@kernel.org
-References: <20260615180858.15938-1-alexei.starovoitov@gmail.com>
- <CAHk-=wjAVP3uu1inFqxeGmk5bTJqm204kxcWu8zzDGFNOh=Q7A@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <CAHk-=wjAVP3uu1inFqxeGmk5bTJqm204kxcWu8zzDGFNOh=Q7A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain
 
+Nuoqi Gui <gnq25@mails.tsinghua.edu.cn> writes:
 
-On 6/17/26 4:37 PM, Linus Torvalds wrote:
-> On Mon, 15 Jun 2026 at 19:09, Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->> There are two conflicts:
-> Actually, since I ended up doing things a bit out of order and did the
-> networking pull first, there were three conflicts, and while the two
-> you mentioned were trivial, the one to net/core/filter.c was a bit
-> different. Both networking and bpf had done "make sure to preserve the
-> sg.copy" bits, but done it quite differently.
+> Add a verifier test for the fixed-offset stack write case where two 4-byte
+> stores initialize opposite halves of the same stack slot.
 >
-> And I think bpf did some things better, and the networking tree did
-> other things better, so my resolution is actually a mix of the two.
+> The test uses the CAP_BPF-without-CAP_PERFMON loader lane so Spectre v4
+> mitigation remains active. It expects both half-slot writes to emit nospec
+> in the translated program.
 >
-> bpf had nicely named helper functions.
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> ---
+>  .../testing/selftests/bpf/progs/verifier_unpriv.c  | 23 ++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
 >
-> And the networking version used __assign_bit() instead of duplicating that
->
->      if (set)
->            set_bit
->      else
->            clear_bit
->
-> pattern.
->
-> So my resolution is to take a bit from column A, and a bit from column B.
->
-> And the networking tree had a case of clearing the sg.copy fields (in
-> bpf_msg_pull_data()) that the bpf tree didn't have at all - but I took
-> the nicer helper function from the bpf side.
->
-> Did I get everything right? It _looks_ right to me, and better than
-> either side on their own. But mistakes happen. Please check out my
-> resolution and send me fixes from whatever I may have messed up.
->
-> It doesn't help that I did this on my laptop while traveling - I hate
-> not having my big monitors and better test build environment, but I
-> tried to be careful, and it builds for me in my limited test
-> environment.
->
-> Please give it a good once-over - I've cc'd everybody involved on both
-> sides of the conflicting changes.
->
->                  Linus
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+> index c16f8382cf17d..9ebbd4b531df1 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+> @@ -976,4 +976,27 @@ l0_%=:	exit;						\
+>  	: __clobber_all);
+>  }
+>  
+> +SEC("socket")
+> +__description("noperfmon: Spectre v4 stack write slot index")
+> +__success __success_unpriv
+> +__caps_unpriv(CAP_BPF)
 
+Not sure if the conditions that led Kartikeya and Eduard to add
+__caps_unpriv(CAP_BPF) explicitly for some tests also apply here.
 
-Thanks, Linus. I was just trying to figure out how to send a patch to
-avoid this merge conflict.
+It seems adding it to this test will not provide much benefit because
+the other tests in verifier_unpriv.c already assume
+sysctl_unprivileged_bpf_disabled=0.
 
-The resolution looks correct to me.
-One tiny thing: the call to sk_msg_set_elem_copy() in sk_msg_sg_move() has a
-trailing tab — it doesn't matter at all, and I'll clean it up next time I
-touch that code.
+Because this already affects the more restricted 'unpriv process under
+sysctl_unprivileged_bpf_disabled=0 without CAP_BPF' environment, I
+suggest dropping __caps_unpriv(CAP_BPF) it.
 
-Sorry for the inconvenience.
+> +__retval(0)
+> +#ifdef SPEC_V4
+> +__xlated_unpriv("r0 = 0")
+> +__xlated_unpriv("*(u32 *)(r10 -4) = r0")
+> +__xlated_unpriv("nospec")
+> +__xlated_unpriv("*(u32 *)(r10 -8) = r0")
+> +__xlated_unpriv("nospec")
+> +__xlated_unpriv("exit")
+> +#endif
+> +__naked void stack_write_nospec_slot_index(void)
+> +{
+> +	asm volatile ("					\
+> +	r0 = 0;						\
+> +	*(u32 *)(r10 - 4) = r0;			\
+> +	*(u32 *)(r10 - 8) = r0;			\
+> +	exit;						\
+> +"	::: __clobber_all);
+> +}
+> +
+>  char _license[] SEC("license") = "GPL";
 
+Acked-by: Luis Gerhorst <luis.gerhorst@fau.de>
