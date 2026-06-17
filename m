@@ -1,154 +1,109 @@
-Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
+Received: from mx-rz-3.rrze.uni-erlangen.de (mx-rz-3.rrze.uni-erlangen.de [131.188.11.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B20839C012;
-	Wed, 17 Jun 2026 07:30:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.224
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C41D3191BA;
+	Wed, 17 Jun 2026 07:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781681420; cv=none; b=PIA1zmjMvsdJh1WJpy+WHlm+ch7aAprZp9Bl6MxloXgkJxMLz+VA82SvDg4eSoYnmV+jkErZ10xbLLaV8BMlNhN5/3FXq7jqIOCk9FnOmVLCn/5zmtYOpEJj7+4xCTD63MOcKr1xbKhgJIeTvbjdR0NphgaQ8a9jh4s0yyvGaNQ=
+	t=1781682490; cv=none; b=TGBZrBzu+FoLS32nwOm0sY8IVK2nmD2hWxg5s/zfnKOCp76vJVQBUGKwaRboTir3Zr3HFJ1CoS7GaIM+Eg3Zl0+jrclCV981ZCBZFyZMQTRplv7sESd9YXgE1MnJ0pI+Kye6rl5QubFEm3TaGS5jPZWOyoHn7xqQIC3munyo82A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781681420; c=relaxed/simple;
-	bh=m5AOnezOQdbgPnq0bYL7H4+rLwUtXUfQiRIhvU82yM4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=LJP/poRZ+LaHw2I4O81pu62cqziudlWLDBPeNH0eXH32oYhjXUG0KCMCDHTiMMdF8YI2UnnC0Sh1828yCkT06MCKwiMs+UAc2c7x1FLxxzh9WxeZXxO5C+By47+WwfllTb4fXWqRaoiwwB8ExDAelCENOFWuyINmtf2AlnIspLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Vl7t1HdC; arc=none smtp.client-ip=113.46.200.224
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1781682490; c=relaxed/simple;
+	bh=nRfuCt93gFk3vbumuajPbWPzVHh37GYRRbFniBp4is0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=oVCqDDI8rEhZjfADd65DJO6W2XyA8WzMzhFxh1kbolLg8AhDUg5JYKHOxP0N4H+rkJjoKSUbvj/uATAJvcMch7/52DX4K+6mc8Rfhf8ZAmi5Fdtav17sRJkatTl3GrPkNJ45/wGy85iAxt6mMdFzwYAk855GieeIcKyqGi5O+2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=uo4+lRgY; arc=none smtp.client-ip=131.188.11.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Vl7t1HdC"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=r72SZ0T5nPg5YOaeX9GzZ5PhvkCNhJKsFZeacJsMyXc=;
-	b=Vl7t1HdCfBihnCzda/CLpC1pp2eNZcxuD23b1uR5Y7zyk7M1RyBoP8rd1LN1f4kvUCj/YhkQC
-	oWIuSQxui3bJlsK+KE2UT600MzS7vG735SE+8HzvU0okVGvzp2KlqgwYzQrWz+b27ONc0oFvDST
-	Bxz8Tm3GjUyLPKqZVg01Dfg=
-Received: from mail.maildlp.com (unknown [172.19.163.214])
-	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4ggFfm2DdNz1cypx;
-	Wed, 17 Jun 2026 15:22:08 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8C04D4056C;
-	Wed, 17 Jun 2026 15:30:05 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Wed, 17 Jun
- 2026 15:30:04 +0800
-Message-ID: <2ca2a85a-d4a9-4459-a534-6159de6e5890@huawei.com>
-Date: Wed, 17 Jun 2026 15:30:03 +0800
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="uo4+lRgY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
+	t=1781682079; bh=RKVWZMqrUacOZc0Vngz6mdjmDS6/q5LpvjOTD5B8Iio=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From:To:CC:
+	 Subject;
+	b=uo4+lRgYO1+Ccbpc4+baQwba6mx6OeYNUK5/EXttxkL+WD4Ju8An+JK7mjZl3/ipO
+	 adKdn7DvZZpZ1piZHuNe7p5HVv0X/6GErwYGfqePzfN4o3FOFTeD16efpc8fis8HsY
+	 XacH1meV+FjrqrdOJ8VbhzyCGQlojcjRHOlxWukCBSUCKTjpZS9124zh4FAKO0Fot/
+	 lpLor9Zm/neSSzIWUOveHy/WhMSHRtHSHBcyzl0IA3ZOGFZ5ihivqsJvMDMsMIlwes
+	 eU/yEDNWeBBtkS7S3fAwiAQAHOXPPSo18nMG/4lTrS72yviQ1n/CPNkMBcGo5SDkn9
+	 MdiYGW7AFjZ1g==
+Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-rz-3.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4ggG4v0NdPz1xpg;
+	Wed, 17 Jun 2026 09:41:19 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at boeck4.rrze.uni-erlangen.de (RRZE)
+X-RRZE-Flag: Not-Spam
+X-RRZE-Submit-IP: 2001:620:618:5b8:2:80b3:0:d9e
+Received: from localhost (unknown [IPv6:2001:620:618:5b8:2:80b3:0:d9e])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: U2FsdGVkX1/aeCQqU27acxigRb0HWE/fB1Z4zAFgx3o=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4ggG4r1cF7z1xrr;
+	Wed, 17 Jun 2026 09:41:16 +0200 (CEST)
+From: Luis Gerhorst <luis.gerhorst@fau.de>
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Cc: Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  Eduard
+ Zingerman <eddyz87@gmail.com>,  Kumar Kartikeya Dwivedi
+ <memxor@gmail.com>,  John Fastabend <john.fastabend@gmail.com>,  Martin
+ KaFai Lau <martin.lau@linux.dev>,  Shuah Khan <shuah@kernel.org>,
+  bpf@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf 1/2] bpf: Fix stack slot index in nospec checks
+In-Reply-To: <20260617-f01-11-stack-nospec-slot-index-v1-1-e3a080b0cd7e@mails.tsinghua.edu.cn>
+	(Nuoqi Gui's message of "Wed, 17 Jun 2026 00:57:55 +0800")
+References: <20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn>
+	<20260617-f01-11-stack-nospec-slot-index-v1-1-e3a080b0cd7e@mails.tsinghua.edu.cn>
+User-Agent: mu4e 1.12.12; emacs 30.2
+Date: Wed, 17 Jun 2026 09:41:13 +0200
+Message-ID: <871pe5y5pi.fsf@fau.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 2/3] riscv, bpf: Fix support for BPF_MOVSX in
- RV32 JIT
-Content-Language: en-US
-To: Kuan-Wei Chiu <visitorckw@gmail.com>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
-	<memxor@gmail.com>, <luke.r.nels@gmail.com>, <xi.wang@gmail.com>,
-	<pjw@kernel.org>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>
-CC: <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
-	<jolsa@kernel.org>, <alex@ghiti.fr>, <jserv@ccns.ncku.edu.tw>,
-	<eleanor15x@gmail.com>, <marscheng@google.com>, <bpf@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20260511221648.3251464-1-visitorckw@gmail.com>
- <20260511221648.3251464-3-visitorckw@gmail.com>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20260511221648.3251464-3-visitorckw@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemf100007.china.huawei.com (7.202.181.221)
+Content-Type: text/plain
 
+Nuoqi Gui <gnq25@mails.tsinghua.edu.cn> writes:
 
-
-On 2026/5/12 6:16, Kuan-Wei Chiu wrote:
-> The current rv32 bpf jit compiler incorrectly treats BPF_MOVSX as a
-> standard zero-extended move operation. The bpf instruction set allows
-> sign-extension moves by reusing the BPF_MOV opcode with the instruction
-> offset set to 8, 16, or 32.
-> 
-> Update the bpf_jit_emit_insn() function to check the offset field for
-> both ALU and ALU64 MOV operations. If the offset is non-zero, emit the
-> correct slli and srai instructions to perform the sign extension.
-> 
-> Before this patch:
-> [   19.549705] test_bpf: #82 ALU_MOVSX | BPF_B jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
-> [   19.551354] test_bpf: #83 ALU_MOVSX | BPF_H jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
-> [   19.552576] test_bpf: #84 ALU64_MOVSX | BPF_B jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
-> [   19.553542] test_bpf: #85 ALU64_MOVSX | BPF_H jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
-> [   19.554807] test_bpf: #86 ALU64_MOVSX | BPF_W jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
-> 
-> After this patch:
-> [   17.931172] test_bpf: #82 ALU_MOVSX | BPF_B jited:1 125 PASS
-> [   17.932198] test_bpf: #83 ALU_MOVSX | BPF_H jited:1 124 PASS
-> [   17.933039] test_bpf: #84 ALU64_MOVSX | BPF_B jited:1 124 PASS
-> [   17.933918] test_bpf: #85 ALU64_MOVSX | BPF_H jited:1 124 PASS
-> [   17.934751] test_bpf: #86 ALU64_MOVSX | BPF_W jited:1 122 PASS
-> 
-> Fixes: 8100928c8814 ("bpf: Support new sign-extension mov insns")
-
-not a fix, the fixes tag should remove. And the title should `Add 
-support for xxx`
-
-others lgtm,
-
-Reviewed-by: Pu Lehui <pulehui@huawei.com>
-
-> Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+> check_stack_write_fixed_off() computes the byte slot for a fixed-offset
+> stack write as -off - 1, and records each written byte in slot_type[] with
+> (slot - i) % BPF_REG_SIZE.
+>
+> The Spectre v4 sanitization pre-check uses slot_type[i] instead. For a
+> 4-byte write at fp-8 after the lower half of fp-8 has been zeroed, the
+> pre-check scans bytes 0..3 and sees STACK_ZERO while the actual write updates
+> bytes 7..4. That can leave the second half-slot write without nospec_result
+> even though the bytes being overwritten still require sanitization.
+>
+> Use the same slot index in the sanitization pre-check that the write path uses
+> when updating slot_type[].
+>
+> Fixes: e4f4db47794c ("bpf: Fix pointer-leak due to insufficient speculative store bypass mitigation")
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 > ---
->   arch/riscv/net/bpf_jit_comp32.c | 32 ++++++++++++++++++++++++++++++++
->   1 file changed, 32 insertions(+)
-> 
-> diff --git a/arch/riscv/net/bpf_jit_comp32.c b/arch/riscv/net/bpf_jit_comp32.c
-> index 7396899ea276..f8509950fed4 100644
-> --- a/arch/riscv/net/bpf_jit_comp32.c
-> +++ b/arch/riscv/net/bpf_jit_comp32.c
-> @@ -974,6 +974,24 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->   
->   	switch (code) {
->   	case BPF_ALU64 | BPF_MOV | BPF_X:
-> +		if (insn->off != 0) {
-> +			const s8 *rd = bpf_get_reg64(dst, tmp1, ctx);
-> +			const s8 *rs = bpf_get_reg64(src, tmp2, ctx);
-> +
-> +			if (insn->off == 8) {
-> +				emit(rv_slli(lo(rd), lo(rs), 24), ctx);
-> +				emit(rv_srai(lo(rd), lo(rd), 24), ctx);
-> +			} else if (insn->off == 16) {
-> +				emit(rv_slli(lo(rd), lo(rs), 16), ctx);
-> +				emit(rv_srai(lo(rd), lo(rd), 16), ctx);
-> +			} else {
-> +				emit(rv_addi(lo(rd), lo(rs), 0), ctx);
-> +			}
-> +			emit(rv_srai(hi(rd), lo(rd), 31), ctx);
-> +			bpf_put_reg64(dst, rd, ctx);
-> +			break;
-> +		}
-> +		fallthrough;
->   
->   	case BPF_ALU64 | BPF_ADD | BPF_X:
->   	case BPF_ALU64 | BPF_ADD | BPF_K:
-> @@ -1024,6 +1042,20 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->   			emit_zext64(dst, ctx);
->   			break;
->   		}
-> +		if (insn->off != 0) {
-> +			const s8 *rd = bpf_get_reg32(dst, tmp1, ctx);
-> +			const s8 *rs = bpf_get_reg32(src, tmp2, ctx);
-> +
-> +			if (insn->off == 8) {
-> +				emit(rv_slli(lo(rd), lo(rs), 24), ctx);
-> +				emit(rv_srai(lo(rd), lo(rd), 24), ctx);
-> +			} else if (insn->off == 16) {
-> +				emit(rv_slli(lo(rd), lo(rs), 16), ctx);
-> +				emit(rv_srai(lo(rd), lo(rd), 16), ctx);
-> +			}
-> +			bpf_put_reg32(dst, rd, ctx);
-> +			break;
-> +		}
->   		fallthrough;
->   
->   	case BPF_ALU | BPF_ADD | BPF_X:
+>  kernel/bpf/verifier.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2abc79dbf281c..50e80dbbc1784 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -3479,7 +3479,8 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+>  		bool sanitize = reg && is_spillable_regtype(reg->type);
+>  
+>  		for (i = 0; i < size; i++) {
+> -			u8 type = state->stack[spi].slot_type[i];
+> +			u8 type = state->stack[spi].slot_type[(slot - i) %
+> +							      BPF_REG_SIZE];
+>  
+>  			if (type != STACK_MISC && type != STACK_ZERO) {
+>  				sanitize = true;
+
+Acked-by: Luis Gerhorst <luis.gerhorst@fau.de>
+
+I have briefly checked the other uses of slot_type[i] and they look
+fine.
