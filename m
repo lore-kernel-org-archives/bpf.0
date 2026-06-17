@@ -1,147 +1,186 @@
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67AEC3CB919
-	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 11:20:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5224B3F2106;
+	Wed, 17 Jun 2026 11:23:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781695219; cv=none; b=SfmJe86P8BAzUqo81PLMUqoiDDsp5/KmAIi5pQjlnCHxnRNVPHG+V2MQZdVZbX+oRERpXLVS6gMrTrZFhh3o1ih8Zk2+W7al2qRj7H8jSwTK1FU/xMLgjHXSTJ+BXCLMktMSp/4TR1SiCGwQIwylZqp9bp17dGpkCaaRXQBkLxU=
+	t=1781695441; cv=none; b=AmaFudpBO2l22xseNhLErYhcupjaqh9g3q4s7zGNUfg3oc5HKDDxXRnoOItnibnhqfE+hOYwDHS0KBH6hqEuq/SEy9GUehcsKvCUGdzQnyedhsuPsSZChYlzLG1chxq+rSFf1srbkZpHahl7MpcoqJDL+N74+q/+Zdxdh8qzQuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781695219; c=relaxed/simple;
-	bh=CN3hTnHGTzcazerSqLwxWW1GpSBEGf3IG1NQptlmTJI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BzR56MMl03lb+20V6S4VawYs7pSxJb3NUDC4lV27R581oBv3kEsT7jknODAoi1pTVX6n6ckgjMUv6UTdyrYxolfRnm+F7hUA/A255tQjtm5qQS4SXCggIT4fNIU9YuRFLh7gkldmCsx3X/wsaludSjYDzXJVLr5l3TZDS5ctkeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ecEorMHW; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781695441; c=relaxed/simple;
+	bh=uXyFD3U8y/edjIOA6R0qWiwoiGa4ygcAQX+KfqQEqms=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=I2ppF495ewiB9ehTnbcKFoC2g9QTvSe3HfsHTy/y5LI32Sa5f9Hl1+VIuHCTXQQr1H78aVEq5hXRWkGaBi3OgeCiBbw3thOeZkWJNm9PNVMpBITmP+vQYn/jLFLiUTJnn/W3LuY9GQj3NYgayheqFUyfi7yuArhaW4ASCY5RVmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Bh/z6HDL; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ecEorMHW"
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-3996f80800bso4239061fa.1
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 04:20:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781695214; x=1782300014; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fEPBS2XQIGG150Y2esIPhsZu4HIK10nFbPjkifBbsWY=;
-        b=ecEorMHWxYRrFshldT4/9/HxINnrxEwiWHKpjj6NiVHDowYEgdGiP/kEd7VTQZF28F
-         ySgjjBkQYPSPB2u6Hy+r+6kvnJqRsouiSykcEf6loKSJAPbLZCufdjF+GMEtO48Oy+8M
-         2G3N0maccsgvVmClYCSGeoNm1f+HeAEfVP9Fr3Ewm6l6g5KrV/fpz2Ix/Mxv+cnE23EM
-         CFLz84P3IhH4iJjQDYvOb2l9LtKxU0u4tyzbgaWWJ9v8uvEuCsTIeSb6INi1R7NM7+GK
-         GJUN404Z7BvolbDAm33V4jvoi/zdw/V0YQoMkIV1kOAps7YMrE40RRpOAc9hadzs5m8F
-         rtCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781695214; x=1782300014;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fEPBS2XQIGG150Y2esIPhsZu4HIK10nFbPjkifBbsWY=;
-        b=cD5pcqYEPKJ/+hMjTsKTHRGs5tNkpVs5XswJHoiEWYqVDmCyA3+w0PPUNbfZE4ksNg
-         RIVFmof3kNHcAVTlZ5wCdBCZ0l7xV1Te2B25sRIfg6oIJrHICYYqAfsNvNgbZtWBG1OU
-         iFg+d/7zus3csMMrij3q9rK+5kZcTozKCxAs5w2od5+kwb8sdYeaVSxakz7lqnQ9II46
-         SgHaZqi0IFx/rhBT8TMqCbVAnUditLIVNGRudFm+CKm36PD4FmSeXiG1R5YA92KItYnS
-         IOQyIIg+iUIj/6Zmk5hnfrCWmq+6QjMScHwIdMYmAAlWCwuB8+EtP0shAvBMcOmF+hrc
-         DLCg==
-X-Gm-Message-State: AOJu0YyQ7UINAEVVQ0BbndLxk32AGQAmRzSS5MLDFWh8x25xPfJOXYFV
-	QuSKS7BEJcTWy0fo62U0pRnToPT6NaDeJ7W2B6eDHEiptfXIpBdY9nuR
-X-Gm-Gg: AfdE7clVxvGPDB3HzbiZDtozhAn996ViWMstb6QYwETHXvWIrAC+pnljTvbNk7AovhQ
-	wEufRgRCzxDjDbGsqo2k3B7lC+g3g4KWLWuEbtHv1I5fIzWhFO5hoAqg+JUPZeHjY+nh6TU+f7L
-	wAlcyWVT8ev9SwhjBSehIQV6scyyj8gVXgxHE9+5igwr9fGBS9AhtRE6Y7DGUtqi+ehrfFAxNYy
-	rNhICB2h0YSaK/J0vha7U9kA3I+MS0A7tKSLGK3hX1BwaU5f+rDkO7C+/0XRLBtR8dwO6lE9Kcc
-	GMacHZQR7XRiIL/Lub66zETP6pgwpXdertQ9WzvDC8c5qDImZUIB/lsJo+BndgwON9WNlA8FwHA
-	qXsAIJ7JYL6i4w++KSy6hRTTBReXBZcePISQQzdAIdNE8cvkWkBDN0nv12swMmz3/8VgTumnWon
-	pKPaJ73CX4XLrcPyOazPnohe1jmv/kMuCLiBADHUgN5Ky/324vJXC7B2VeCHwH6dQekqOdJ3Hvp
-	RaItC5N02GTEhZAr+WgL6E/ngVr01CEpqqaF1SGfQrPutUzlw==
-X-Received: by 2002:a2e:a594:0:b0:38a:5bf2:80d6 with SMTP id 38308e7fff4ca-3996a013db5mr9545231fa.5.1781695214065;
-        Wed, 17 Jun 2026 04:20:14 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:6e:3100:ab3:3fa0:bafe:f56b? (2001-14ba-6e-3100-ab3-3fa0-bafe-f56b.rev.dnainternet.fi. [2001:14ba:6e:3100:ab3:3fa0:bafe:f56b])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3995c191cd8sm14748111fa.20.2026.06.17.04.20.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jun 2026 04:20:13 -0700 (PDT)
-Message-ID: <09f69783-3eca-4318-b09b-78e6730e899c@gmail.com>
-Date: Wed, 17 Jun 2026 14:20:12 +0300
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Bh/z6HDL"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=gvtrjCP2WCAfDmfudQjzRpC6aeP8ChDRvrB0/Jx6nIw=; b=Bh/z6HDLkSjUcRwBMSJdrDibRB
+	sZk73KQ2/1knKwNBrltT8HicE40E0x+02r10VWcG9L2eCICOhtY1HWM30nrMyhng0SFUxNJImmr2w
+	xYfezpKxHNWbSuo2PkWAjTjdRK8Q6IAPDZcRrqJ5cC/dR9cJTZqpYZqf+s9It7Rj1JwB2SfXRvDeZ
+	nES5DSMPhtFgRnUDsnJp69S8TiyF2m1AHMk49tuwZlQ65kq1pMK8ERczon3vJeFrRtIZRtko0BA4U
+	AW8Z3ItyzHJVXDFqR9AXMJBqB6w9gfMOF9PByYkURb+feZxGo30B/7LkG6ufp9WzUiTJ9EwPr6ldl
+	HH1LEJ2Q==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wZoMy-00Ea9i-1i;
+	Wed, 17 Jun 2026 11:23:46 +0000
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH v5 0/7] bootconfig: embed kernel.* cmdline at build time
+Date: Wed, 17 Jun 2026 04:23:32 -0700
+Message-Id: <20260617-bootconfig_using_tools-v5-0-fd589a9cc5e3@debian.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] KVM: VMX: guard regparm(0) on
- vmread_error_trampoline for x86_32 only
-To: Clark Williams <clrkwllms@kernel.org>, stable@vger.kernel.org
-Cc: bpf@vger.kernel.org, x86@ekrnel.org, kvm@vger.kernel.org
-References: <20260617011303.3969027-1-clrkwllms@kernel.org>
- <20260617011303.3969027-3-clrkwllms@kernel.org>
-Content-Language: en-US
-From: =?UTF-8?B?SGFubmUtTG90dGEgTcOkZW5ww6TDpA==?= <hannelotta@gmail.com>
-In-Reply-To: <20260617011303.3969027-3-clrkwllms@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALWDMmoC/3XPS2rDMBCA4asYrTNlomfkVe9RStDTUSlSkRyRE
+ Hz34rTQlODlwPD9MzfSQk2hkXG4kRp6aqlkMg5iNxB3MnkKkDwZB0KRShR4AFvK7EqOaTqeW8r
+ TcS7ls4GLRhmjvTTCkN1AvmqI6XKH395/5na2H8HNq7ZunFKbS73ey32/7v1GqNqK9D0gWKlRm
+ oMMyotXH2wy+aXUiayVTv8ciWLToYDgGeooOLciqieHPTqbT3cGCNx7j0oblFo+OfzR0ZsOBwT
+ FHJcsIjP6/z3LsnwDlKiCRacBAAA=
+X-Change-ID: 20260508-bootconfig_using_tools-cfa7aa9d6a5a
+To: Masami Hiramatsu <mhiramat@kernel.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Nathan Chancellor <nathan@kernel.org>, paulmck@kernel.org, 
+ Nicolas Schier <nsc@kernel.org>
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
+ Breno Leitao <leitao@debian.org>, kernel-team@meta.com
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5450; i=leitao@debian.org;
+ h=from:subject:message-id; bh=uXyFD3U8y/edjIOA6R0qWiwoiGa4ygcAQX+KfqQEqms=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqMoO7zVhflpycvAJ7SGWr0Vn71YcGgMqItSemk
+ mOg+Sw7z82JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCajKDuwAKCRA1o5Of/Hh3
+ baBVEACTufbQagvdbzUSMD/OPPVRtQft/6zw/TJBzDiwqdAX8BEUhl61UZ/aOty4hyO7b8ud0qc
+ Z9opS1L91Sa0jz+xoD5ziDoOGW8+g0CyvoPyiOqcYyAayoWnKi2TBJqi8TzWDQFQ5UR6MBQ1bI9
+ 2fEUzpYl62Gc5OmKBuFMLR16O4g7qIQD6iEfskCjLwzv8EKz37Myd9i4ocdMMLJk1MvanrYJNj9
+ IgnoU6qzz5FZ3cB1csyu1MgmeD10a7gmU89hJgLX3TEqfG3qjW2BhP9bOMTBgdfkq4QD1ZGdYRW
+ PX6WtK4XQ9zzpv9PQXdPVMBbkJm8IkgV9PJgiVunLwrFE5JPyFro5UEQ5POGEMz2+gh6uWv7iBz
+ hizOSDk2xxQD7joAh6uG2CklrYyZInTzvCOFtWsVfcmr7CaXDBn9xZeWmr/MDYL1xshF+wGpkwx
+ nYwPRASHXBNmFJyCNaoMiwocCfNawx2/o3Ce9vcjLezldI7mR5xMJkKMIleX+rihLN/CkBhT9RJ
+ IgSDd3GzKEEkfADfqjLQLsac5aoTpGdJ6bXRp8ry48UBLm8JyrD++bM9lqpw0WOBdft1GZbXd8H
+ ayI0r3aUS06WB59yoO+t0cy0pBAqPE5IWXqMPU1MQCpfCSqI21gVKSOlsS6Z3N6pZJBR0sZx79x
+ /Jb7QCoQkAxiFMQ==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-On 6/17/26 4:13 AM, Clark Williams wrote:
-> [ Upstream commit 0b5e7a16a0a79a3742f0df9e45bca46f01b40e6a ]
-> 
-> regparm(0) overrides the kernel's -mregparm=3 convention on x86-32 so
-> that vmread_error_trampoline receives its arguments on the stack, matching
-> the inline asm callers that push args before the call.  On x86-64 the
-> attribute is a no-op and newer GCC now emits -Wattributes for it, which
-> becomes a build error under -Werror.  Guard it with CONFIG_X86_32.
-> 
-> [ clrkwllms: the upstream commit redesigns the trampoline declaration as
->    an opaque symbol; this simpler approach guards the regparm(0) attribute
->    with CONFIG_X86_32 since the attribute is only meaningful on x86-32. ]
-> 
-> Assisted-by: Claude:claude-sonnet-4.6
-> Signed-off-by: Clark Williams <clrkwllms@kernel.org>
-> ---
->   arch/x86/kvm/vmx/vmx_ops.h | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx_ops.h b/arch/x86/kvm/vmx/vmx_ops.h
-> index 5edab28dfb2e..50328be40b2b 100644
-> --- a/arch/x86/kvm/vmx/vmx_ops.h
-> +++ b/arch/x86/kvm/vmx/vmx_ops.h
-> @@ -11,8 +11,11 @@
->   #include "../x86.h"
->   
->   void vmread_error(unsigned long field, bool fault);
-> -__attribute__((regparm(0))) void vmread_error_trampoline(unsigned long field,
-> -							 bool fault);
-> +/* regparm(0) overrides -mregparm=3 so args are stack-passed, matching asm callers */
-> +#ifdef CONFIG_X86_32
-> +__attribute__((regparm(0)))
-> +#endif
-> +void vmread_error_trampoline(unsigned long field, bool fault);
->   void vmwrite_error(unsigned long field, unsigned long value);
->   void vmclear_error(struct vmcs *vmcs, u64 phys_addr);
->   void vmptrld_error(struct vmcs *vmcs, u64 phys_addr);
+The userspace pieces (xbc_snprint_cmdline() in lib/, tools/bootconfig -C)
+already landed; this series wires the rendered cmdline into the kernel.
 
-Hi,
+Motivation: today the embedded bootconfig is parsed at runtime, after
+parse_early_param() has already run, so early_param() handlers can't
+see embedded values. Folding the kernel.* subtree into the cmdline at
+build time gives a CONFIG_CMDLINE-equivalent for embedded-bootconfig
+users without forcing them to maintain two cmdline sources.
 
-I've sent a backport patch for this commit, see here:
+Behaviorally, the "kernel" subtree is rendered to a flat string at
+build time and stashed in .init.rodata. setup_arch() prepends it to
+boot_command_line before parse_early_param() runs. Overflow is a soft
+error: the helper logs and leaves boot_command_line untouched rather
+than panicking, so an oversized embedded bconf cannot brick a boot.
 
-https://lore.kernel.org/lkml/20260617105100.22094-1-hannelotta@gmail.com/
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Changes in v5:
+- Patch 3 (Kconfig): drop the redundant "depends on BOOT_CONFIG_EMBED"
+  from BOOT_CONFIG_EMBED_CMDLINE; Julian Braha.
+- Patch 6 (Documentation): spell out how the embedded cmdline interacts
+  with the bootloader cmdline, an initrd bootconfig, and the embedded
+  bootconfig 
+- Link to v4: https://lore.kernel.org/r/20260609-bootconfig_using_tools-v4-0-73c463f03a97@debian.org
 
-The commit applies cleanly without any modifications, and compiles 
-without errors with gcc-16, and boots.
+Changes in v4:
+- Patch 3 (build pipeline): clear CROSS_COMPILE= in the kernel-side
+  tools/bootconfig sub-make. Without it, an LLVM=1 cross build
+  inherits CROSS_COMPILE and tools/scripts/Makefile.include injects
+  --target=/--sysroot= into the host clang, producing a target
+  binary that fails to exec.
+- Patch 3 (build pipeline): place embedded-cmdline.S in its own
+  .init.rodata.embed_cmdline subsection ("a") so ld.lld does not
+  see a section-type mismatch against lib/bootconfig-data.S's
+  writable .init.rodata ("aw"). The linker's *(.init.rodata
+  .init.rodata.*) glob still folds it into the init image.
+- Patch 6 (x86/setup): also accept the bootconfig=<anything> form
+  via cmdline_find_option(), matching the runtime parse_args() loop.
+  Without it, bootconfig=0/=off would skip the early prepend but
+  still trigger the late runtime apply -- a split-brain state.
+- New patch 7: document CONFIG_BOOT_CONFIG_EMBED_CMDLINE in
+  Documentation/admin-guide/bootconfig.rst (semantics, opt-in,
+  precedence, overflow behavior, example).
+- Link to v3: https://lore.kernel.org/r/20260608-bootconfig_using_tools-v3-0-4ddd079a0696@debian.org
 
-For commits that apply cleanly, you can simply use:
+Changes in v3:
+- Patch 3: Move HOSTCC override to the kernel-side rule; tool keeps
+  $(CC) for standalone/cross builds.
+- Patch 6: Drop the false fail-safe wording; document the
+  BOOT_CONFIG_FORCE=y default interaction.
+- Link to v2:
+  https://lore.kernel.org/r/20260605-bootconfig_using_tools-v2-0-d309f544b5f7@debian.org
 
-     git cherry-pick -s -x <commit-id>
+Changes in v2 (addressing review of v1):
+- Split out a standalone fix for the NULL-pointer arithmetic in
+  xbc_snprint_cmdline() so the build-time render cannot trip host
+  UBSan/FORTIFY_SOURCE.
+- Rework the leaf-root handling: instead of returning early, skip @root
+  inside the loop so a root carrying both a value and subkeys
+  (kernel = x together with kernel.foo = bar) still renders its
+  descendant keys.
+- Build tools/bootconfig with $(HOSTCC) so cross-compiled (ARCH=...)
+  builds render the cmdline on the build host instead of failing with
+  "Exec format error".
+- Mark the embedded cmdline section read-only (drop the "w" flag from
+  .init.rodata).
+- Add a make-clean hook so tools/bootconfig artifacts are removed by
+  make clean.
+- Gate the x86 prepend on "bootconfig" being present on the command
+  line (or CONFIG_BOOT_CONFIG_FORCE), matching the init.* opt-in
+  semantics documented in bootconfig.rst and preserving fail-safe
+  recovery: dropping "bootconfig" from the bootloader cmdline now also
+  disables the embedded kernel.* keys.
+- Link to v1: https://patch.msgid.link/20260527-bootconfig_using_tools-v1-0-b6906a86e7d5@debian.org
 
-And after that
+---
+Breno Leitao (7):
+      bootconfig: fix NULL-pointer arithmetic in xbc_snprint_cmdline()
+      bootconfig: render descendant keys when xbc_snprint_cmdline() root has a value
+      bootconfig: render embedded bootconfig as a kernel cmdline at build time
+      bootconfig: clean build-time tools/bootconfig from make clean
+      bootconfig: add xbc_prepend_embedded_cmdline() helper
+      Documentation: bootconfig: document build-time cmdline rendering
+      x86/setup: prepend embedded bootconfig cmdline before parse_early_param
 
-     git commit --amend
-
-to add the required [ Upstream commit <commit-id> ] line.
-
-I wasn't able to see other compilation errors for v6.1.175 using gcc-16. 
-I tried with allyesconfig and my local config.
-
-Hope this helps.
+ Documentation/admin-guide/bootconfig.rst |  81 ++++++++++++++++++++++
+ MAINTAINERS                              |   1 +
+ Makefile                                 |  28 +++++++-
+ arch/x86/Kconfig                         |   1 +
+ arch/x86/kernel/setup.c                  |  27 ++++++++
+ include/linux/bootconfig.h               |   9 +++
+ init/Kconfig                             |  35 ++++++++++
+ init/main.c                              |  25 ++++++-
+ lib/Makefile                             |  16 +++++
+ lib/bootconfig.c                         | 112 +++++++++++++++++++++++++++++--
+ lib/embedded-cmdline.S                   |  16 +++++
+ tools/bootconfig/Makefile                |   4 +-
+ 12 files changed, 342 insertions(+), 13 deletions(-)
+---
+base-commit: a87737435cfa134f9cdcc696ba3080759d04cf72
+change-id: 20260508-bootconfig_using_tools-cfa7aa9d6a5a
 
 Best regards,
+-- 
+Breno Leitao <leitao@debian.org>
 
-Hanne-Lotta Mäenpää
