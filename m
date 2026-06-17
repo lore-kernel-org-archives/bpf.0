@@ -1,153 +1,181 @@
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A7F347C6
-	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 04:29:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781670583; cv=pass; b=ExiWq6/BiQ8qX+5BihcpJjRxRJs+8F+EzwQkZxGKl5C7CRzgIZzqE1zDn/bwXhqnu05xQ1+0Yho3vvnO+TZxCEkbzu7eiSy3oy3OVQbfM8M5yksLGJ3eUoUq9ltLVI6lGF+cBST828Guy5gMW8CZ9eU3OCe5xVNyFHsIqgvvFoE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781670583; c=relaxed/simple;
-	bh=47Xs0q0zKFuLpxzFZlmUfWNeYrh90WLJCmlkXjPRSRk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ceQ7uEOnJ+k2B7kpiwIoi3+tXa7pDV8vWlfJ0kfd+xkdQXc2cfmOhw8B+gk5YOTSdPXcA7XCydkU8XIzq0wiz0aJQM8RPiIq28dEHZGlbdsMO/jykf6jFv9fczi5eS8YmBeLtHw5erh5/9n6yoaXrcrkzgfCeNnC0I647a8gYnY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l7HvvQGM; arc=pass smtp.client-ip=209.85.160.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCA1A34F259;
+	Wed, 17 Jun 2026 05:14:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781673284; cv=none; b=HuNt1k3eUZO/Lq2Qslw1p21xVjSxTjC2pPy7eH7RPWRXLX7alqkea6WD2SAYQ9Ha+rN+otbiI38jbsiZkCtb9wzpYTum3uuL3H1hVHMgRQ2KUwKPdBWw5icIrc3NQmpJK8BvPUUSva9rJOwLi9jQgDtO6ig7OxgRr/NFcKjgsWw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781673284; c=relaxed/simple;
+	bh=M+gSoTHVbv7i2uM3rLoXA4a1hph9Oc98006a7MHR9hQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=biAyaQ/f95JWVhJG02Itdk43vRyk65cBqtcDR/qRtcYKUoph5jR0g+tuijwBgMvEt7liF+y5lMsZoCMBfJm7pHhhdYHlGptxlKRBhPbsdcovJVL2whs0HElWcN9vUO39acDVRHaJiewTUEaLIHyB6GuOGNypBteK+Gj/+j8410g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vq5KoxGj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l7HvvQGM"
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-5176d4c14f5so41181471cf.0
-        for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 21:29:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781670581; cv=none;
-        d=google.com; s=arc-20240605;
-        b=bOICEx/bCC25OBaEnVR1L5iZf7DU+i1o6FdL+bMZsJ7riP/IVOP3E00lslYokg+LH5
-         qXV1fAwQPRcK9wW1cc7X84NVdxVuIr8aH8KF24hawnG4Hb3kNq+/gD9aUyohSBhRwoRz
-         0GGFUYUCJC40nZt6fnzbx6yD6R2T3BuiQzBxdJOg7CsqyRKGyCEjJidZthoW+VHiSAQj
-         dIxEcn4NSexkukVbDF29T7aL/Y9k58ur7BfUIQckIvtE2KA/c54z9+9OsIKNfTRNgL3a
-         IZDrZl3e/90j3JyzwvSRxIb6nXQCYmmHOTA+mPIYNCSs4Skr5helgqQEgiZOvh7hggzK
-         BGig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=47Xs0q0zKFuLpxzFZlmUfWNeYrh90WLJCmlkXjPRSRk=;
-        fh=/ZlKb8AExKtg2EhmFovieSxcIZt7u9JbER7KVyTPvP8=;
-        b=YZTdTRy9a1p1ZM3peedMFM0vRNfLHux7P7upvDkNF9XMLSpi9cDa1McT0J4vu44D++
-         lXWkz2BiM7GFuZ8UxbFk7V4UX9v12hOf9JIBc7NqK40bLSnn4vAFwfoT2eUAINRFLRcq
-         emUgxp5HSY4kYcTUL2KxrEoBwGqIxurqJ4n7a0y1cy0PqcpylOOx7VYnfOzP/KdMot0z
-         xDUvhuz7N/WhRxSwQu11SIoX9TP5s97eB+0vURPnEkX5iEDVcgVSIl9P3JyBFaYI+y9X
-         9gIJent1GRMkJvVD9h62zhmLlV3LtReeT85sVTsRpwJmU6YpA/RQiPFPKh7DtMQfoTxT
-         28jg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781670581; x=1782275381; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=47Xs0q0zKFuLpxzFZlmUfWNeYrh90WLJCmlkXjPRSRk=;
-        b=l7HvvQGMWHbNOvr+/pv/qbWlX+0YsPf/qxb9EJmkeXmuf/+i8kGs8sgeooaMTxBs23
-         rKka2NLbcZe2ZMwN2ruDLC1uWEk2fsQgDqbOAGsOqmb/07vAj2swdC7MlCVnrOoKnMFg
-         6LRPWPU/OqOdYkUgfBbEMRLrbnrNYsXwhzgAkbxO9EmuUtzjYzOd/eh2xpsWKphzkJTC
-         zPg7AafOLwXX1sNXKXQ6Nw2NLy53WtDE/M8V+O6I0SlWMdOGa+b+8pi2G4BNTNv0Y4RT
-         /MQuhAS9vfoBperVt9o1+xgKGtF3lipiorIojuge+neSGEAbkUGvX97QQnuznqLw3iX+
-         6HZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781670581; x=1782275381;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=47Xs0q0zKFuLpxzFZlmUfWNeYrh90WLJCmlkXjPRSRk=;
-        b=kJ3psu0P/aciplmM1E2y41DuJOCAbc1uuuaScrvlb24G/Xo9YrHTo3n4YCy1DRk4FF
-         UfGvRmmPqoFviE8BBxWQyjh4ELi2I8fUYJyAgxwtdUq7D73LfIEWBRugsm5oNUNMtc9x
-         GNDgUp+xyQkAgIeTzc2eErtUcsNciwp5lX/1W0OmlicPG6cO52MW8BsLnM7kkDPRz+/D
-         N2ZFP5Q0GOmrJ5tPecY0vNhKJbU3R6wEPD0OzXCHxG7asCrcTrJhrwwJHupRvXMH4q+R
-         Ys+JCr2UQ2ZY4Mc4+l2CG1GujYH9dy9fnPEe37LXfouFQv40a5hmoQxHYCWzpS4/iRQh
-         KItg==
-X-Forwarded-Encrypted: i=1; AFNElJ/v1v71Ym7DenMkVS8s5Oj3De/6KgZBKwfiV6Lvci4K/xQpaDKodTCMhS2Z7haDbpsvh+o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzBe+ZfEA4CarFm7mlNkNpoYLsQ3WVQkWsW13jRb8cvRmsmUIg
-	5mLfJRDin81gWBDRd4F3veNxZuponlRR/XyyHpivaSOgqVY6DDXcNUHq821GQR3Ni7fbDKNKRvq
-	TGRxhCYKxBOrpRaT5iCNfTlK+VVvXiVbR8lfwK1lT
-X-Gm-Gg: Acq92OEShzEv4uxeYOziRiOjjxZUUxjs+7SkAh7GaO32UJzPoeYgbijdoptLXeEyCrS
-	lib95UY5MQl0eX4JCPq73C3qz4ooW9JG1hZYsein51w7Y8/5F5GswF9FqMN4LUF1PfUnOZhlhw4
-	9ySGfN29pc5q6uHRrJ9BHFZ22UwD6XdsRWlEYv3zdOb6hoQKWSaLT6Bt2/PM6P76bNGPYCo6o/5
-	oFQMYiFBOHz/6eoBRWyhXgnixq+5e02JgZnHMp3gBKf/wyfKUxnzp1lWBaBuCdPcsnsdOTk4/Ds
-	IdXoxVzimlVaydl18eTNdYxnxD4e2nFqB8e34oeHMGPN1USUqnFIBvZw6EfI/uYHoOtHFvA+2xw
-	KH35fknPx
-X-Received: by 2002:ac8:5ac9:0:b0:516:d4b1:48cd with SMTP id
- d75a77b69052e-519a8c6ad22mr37477331cf.2.1781670580489; Tue, 16 Jun 2026
- 21:29:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vq5KoxGj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5991F1F000E9;
+	Wed, 17 Jun 2026 05:14:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781673281;
+	bh=i4gI8nBuxA9HRcUwNvotK2yH1/Y4niKmJ4bOseHnoOY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Vq5KoxGjOeZU7bfYcs6X2ic2+hFhWSKqGgqfdCjVZy2jo1ZH3yXx6tBFJUGVnDLPq
+	 FRkbuYQdKulgt+hMMWNOJ6rg/hgsSsWtQgRZBsc8wIALCQdjtTY+90vF3lTjx+CJ76
+	 gc7RwVd0S2MmHruzJzyn/jJf3x+enPN8Yk/c3tVX11PsHcEakhw30+CDNpaiGZxbLi
+	 vo2iyxTE4uBv23I3XtYp5Km71YP+rjdtnogZPG5Ynv8IuBnmu/0SrQfqKiazfIrc2K
+	 MzKx0UlxQIeCPhRWYE7Rlj1opOvG/qB7x+PPd2g3llsJgPCPP5lcop1iW+bs50TTtT
+	 3GVL74u3KPyoA==
+Message-ID: <40591888-3a87-433e-b3d2-cda1cab543be@kernel.org>
+Date: Wed, 17 Jun 2026 14:14:16 +0900
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260614071756.239686-1-chia-yu.chang@nokia-bell-labs.com>
- <20260615185102.5e8de52d@kernel.org> <20260615191704.31be22da@kernel.org>
- <PAXPR07MB7984585F9348BB3F000EB330A3E52@PAXPR07MB7984.eurprd07.prod.outlook.com>
- <20260616082302.3618bd90@kernel.org>
-In-Reply-To: <20260616082302.3618bd90@kernel.org>
-From: Eric Dumazet <edumazet@google.com>
-Date: Tue, 16 Jun 2026 21:29:29 -0700
-X-Gm-Features: AVVi8CcPpCqwMc0RCNrYPHiIGgcG9rWXHumUyWiuW_YFsydzCpRf7A9XWj4rIrU
-Message-ID: <CANn89i+Qw8JecdpbEf0tC6RgvEi2aMxA=680xY2XZt-TXXvJrw@mail.gmail.com>
-Subject: Re: [PATCH v2 net-next 1/1] tcp: Replace min_tso_segs() with
- tso_segs() CC callback for TCP Prague
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>, 
-	"ncardwell@google.com" <ncardwell@google.com>, "jolsa@kernel.org" <jolsa@kernel.org>, 
-	"yonghong.song@linux.dev" <yonghong.song@linux.dev>, "song@kernel.org" <song@kernel.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "memxor@gmail.com" <memxor@gmail.com>, 
-	"shuah@kernel.org" <shuah@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>, 
-	"ast@kernel.org" <ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>, 
-	"andrii@kernel.org" <andrii@kernel.org>, "eddyz87@gmail.com" <eddyz87@gmail.com>, 
-	"horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org" <dsahern@kernel.org>, 
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
-	"pabeni@redhat.com" <pabeni@redhat.com>, "jhs@mojatatu.com" <jhs@mojatatu.com>, 
-	"stephen@networkplumber.org" <stephen@networkplumber.org>, "davem@davemloft.net" <davem@davemloft.net>, 
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com" <donald.hunter@gmail.com>, 
-	"kuniyu@google.com" <kuniyu@google.com>, "ij@kernel.org" <ij@kernel.org>, 
-	"Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>, 
-	"g.white@cablelabs.com" <g.white@cablelabs.com>, 
-	"ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>, 
-	"mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>, 
-	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, 
-	"Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH for-next v3 6/9] mm/slab: allow kfree_rcu_sheaf() on
+ PREEMPT_RT
+To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-6-70a54f3775bb@kernel.org>
+ <f3a56a5a-f10b-46dc-bc99-28449ade1661@kernel.org>
+Content-Language: en-US
+From: Harry Yoo <harry@kernel.org>
+In-Reply-To: <f3a56a5a-f10b-46dc-bc99-28449ade1661@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------kEBv9bKx3bhSjfXvp2FnnpK0"
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------kEBv9bKx3bhSjfXvp2FnnpK0
+Content-Type: multipart/mixed; boundary="------------vb0IaWkZAOplq9hp2tUYiTMN";
+ protected-headers="v1"
+From: Harry Yoo <harry@kernel.org>
+To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
+Message-ID: <40591888-3a87-433e-b3d2-cda1cab543be@kernel.org>
+Subject: Re: [PATCH for-next v3 6/9] mm/slab: allow kfree_rcu_sheaf() on
+ PREEMPT_RT
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-6-70a54f3775bb@kernel.org>
+ <f3a56a5a-f10b-46dc-bc99-28449ade1661@kernel.org>
+In-Reply-To: <f3a56a5a-f10b-46dc-bc99-28449ade1661@kernel.org>
+
+--------------vb0IaWkZAOplq9hp2tUYiTMN
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 16, 2026 at 8:23=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Tue, 16 Jun 2026 12:23:11 +0000 Chia-Yu Chang (Nokia) wrote:
-> > > On Mon, 15 Jun 2026 18:51:02 -0700 Jakub Kicinski wrote:
-> > > > On Sun, 14 Jun 2026 09:17:56 +0200 chia-yu.chang@nokia-bell-labs.co=
-m
-> > > > Eric, Neal, looks good?
-> > > >
-> > > > The min rtt thing in tcp_tso_autosize() helps a bit but if the send=
-er
-> > > > gets congested for a longer stretch min_rtts on new connections are
-> > > > high and we're back to sending small TSO, keeping the sender overlo=
-aded.
-> > > > Which is to say - I _hope_ this also solves some of Meta's problems=
- :)
-> > >
-> > > Ugh, I didn't see the Sashiko report, it's only CCed to the author an=
-d bpf@, not to netdev :/
-> > >
-> > > The zero-check sounds legit. Let's revisit this after the merge windo=
-w.
-> >
-> > Thanks for the comment, I will take action after the merge window.
-> >
-> > And, please correct me if I am wrong, the next eligible submission is e=
-xpected from 30-June, right?
->
-> It usually opens Monday morning (PST) so Jun 29th
 
-I missed this thread, I can not keep up with emails sent during
-weekends in May/June/July
 
-Please Chia-Yu, consider sending patches during weekdays; I would have
-a better chance to look at them.
+On 6/17/26 2:24 AM, Vlastimil Babka (SUSE) wrote:
+> On 6/15/26 13:06, Harry Yoo (Oracle) wrote:
+>> As suggested by Vlastimil Babka, kfree_rcu_sheaf() can be used
+>> on PREEMPT_RT if we always assume spinning is not allowed on PREEMPT_R=
+T.
+>> This is because local_trylock and spinlock_t are safe to use with
+>> trylock variant as long as the kernel does not spin and the context is=
+
+>> not NMI and not hardirq.
+>>
+>> Now that __kfree_rcu_sheaf() knows how to handle allow_spin =3D false,=
+
+>> relax the limitation and try the sheaves path on PREEMPT_RT as well.
+>>
+>> Keep the lockdep map on non RT kernels. However, do not use the lockde=
+p
+>> map on PREEMPT_RT to avoid suppressing valid lockdep warnings.
+>>
+>> Link: https://lore.kernel.org/linux-mm/6811cc17-8ee4-48c8-8cbf-6bf4d9f=
+98162@kernel.org
+>> Suggested-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+>> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+>=20
+> LGTM, but maybe unnecessary pessimistic wrt call_rcu() on PREEMPT_RT?
+> I thought (in the Link: above) we'd only need to downgrade allow_spin t=
+o
+> false on PREEMPT_RT for handling sheaves movement from/to barn and
+> alloc_empty_sheaf(), but call_rcu() would be safe from kfree_rcu() even=
+ on
+> RT?
+
+Indeed. Good point, thanks!
+
+Hmm, but I'm not sure that it's worth the complexity given that
+PREEMPT_RT tries very hard to avoid disabling IRQs...
+
+> Or is the irqs_disabled() condition rare enough so we don't care?
+
+Given that most users don't call kfree_rcu() under raw spinlock or
+IRQs-disabled section on PREEMPT_RT, I think it's okay to keep it as is
+(it's not making things worse, at least) and wait for call_rcu_nolock()?
+
+On a side note, I don't have much idea on what needs to call kfree_rcu()
+under a raw spinlock, other than set_cpus_allowed_force(), which should
+really be using kfree_nolock() instead of kfree_rcu() once we support
+kmalloc() -> kfree_nolock():
+> 	/*
+> 	 * Because this is called with p->pi_lock held, it is not possible
+> 	 * to use kfree() here (when PREEMPT_RT=3Dy), therefore punt to using
+> 	 * kfree_rcu().
+> 	 */
+> 	kfree_rcu((union cpumask_rcuhead *)ac.user_mask, rcu);
+
+Any thoughts, RCU/RT folks?
+
+--=20
+Cheers,
+Harry / Hyeonggon
+
+--------------vb0IaWkZAOplq9hp2tUYiTMN--
+
+--------------kEBv9bKx3bhSjfXvp2FnnpK0
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCajItKAAKCRCGXBN6rc5S
+1jLFAQDJjkqWNsckxRckQG/ifpkFidi3A6aFYgVvzxCG+/hQQwD+LUnZJI7/+UOa
+K4FDOVTUA6hwmP3OMAXM1Q1fH4PjOwM=
+=nbP0
+-----END PGP SIGNATURE-----
+
+--------------kEBv9bKx3bhSjfXvp2FnnpK0--
