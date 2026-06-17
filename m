@@ -1,103 +1,120 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F4BD217F27;
-	Wed, 17 Jun 2026 14:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4E7347DD64;
+	Wed, 17 Jun 2026 15:20:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781706365; cv=none; b=dHrXT7XS2gOzBW3Qs+WE7WQRO0L8OK0ohLHxoIjgK8NoNhy4RuIOawNgR5CdPcU0re8ddL5e3zg8usySBqVbbymCoxn/DUIdBzOSARC0HICXbwi6xZlNHqhtDCghy9Iho5Cr9OoFZULaNFmGZNvK7jI3y8yfrLcm3H5Q/QNwFbM=
+	t=1781709647; cv=none; b=MnrQ6TgFUxX+VnR5G+QIFlhF8gZXzvVv/PCrjC8LJA0dJLLHO7CvUFjT1DakVNYeEwozgWIZjbtC28LlYs2nsXpcmIfAKV1VOsnei7ZfFW66IAaVzgKLJPBzWbiUSrfXAQOVP4MBrqyx8OgVGu7T9uWy7OU8PRjzMvJPZTb8zFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781706365; c=relaxed/simple;
-	bh=WhYbhmTimzXV0DLL7tx/fRIspiZZC/Ou1otC3RLLRes=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=qe0XedW/sJdTfj1SXo2U61hQhf85rnCkmFghPMwHcObwsHMXvUl0BU/9vynCXwpjLAsvikCJEFA/n3zrK5R4WylVD8mnDRdSkaotaQ1nzeT/MvsZNlUmGgQL1necgiKq2UX6hAPJAn72ambpuDDcSmfDXmfbIkhXvo5Ye5Hrx6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=fail (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=q6b8CMx8 reason="signature verification failed"; arc=none smtp.client-ip=13.76.78.106
+	s=arc-20240116; t=1781709647; c=relaxed/simple;
+	bh=xxSMyiyIWZCLNOXvVfnN2XjxhJMl38vibdmw8HH4SjA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=jSoHiXAjKVwzi2H+y4ymj6nGi4wqWODAIQvdgV1DyV/gz3ncH6Q2dWtd1gSQ5dACkhcYvGhENCX0T2XPBQhz1jbBwCx5xHnANGP5tCN8+aJUd5eksse/VYIgiqlGlP41Ww5KYRMJZ0eJcLLfOO6bS3kSLzIdQKC1BszYZfrZHUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=QEkB0HvG; arc=none smtp.client-ip=162.243.164.118
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="q6b8CMx8"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="QEkB0HvG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:Date:From:To:Cc:
-	Subject:In-Reply-To:References:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-ID; bh=dAVtTN98vnuJ60CDUNlNwPB
-	3oVJ8GgGt4oQ8I3pU88E=; b=q6b8CMx8HiqJpeBpzOwEEuwoRm8uuQDnyBxfaZ3
-	fZHE4REFjXOF2CFuuuPrM17A1KEIpLWz9ZTcsXb0uabNUJYTCS5ClN+WFUcWVxe3
-	Bnqonb92Y974JwLbr5VNhf495XZYD4m04w/YH7gK+7RRXxpTtI1Arwmj4wknx2RE
-	55sk=
-Received: from gnq25$mails.tsinghua.edu.cn ( [59.66.19.181] ) by
- ajax-webmail-web4 (Coremail) ; Wed, 17 Jun 2026 22:25:37 +0800 (GMT+08:00)
-Date: Wed, 17 Jun 2026 22:25:37 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Cc: "Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Eduard Zingerman" <eddyz87@gmail.com>,
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-	"Emil Tsalapatis" <emil@etsalapatis.com>,
-	"John Fastabend" <john.fastabend@gmail.com>,
-	"Martin KaFai Lau" <martin.lau@linux.dev>,
-	"Luis Gerhorst" <luis.gerhorst@fau.de>,
-	"Shuah Khan" <shuah@kernel.org>, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH bpf 1/2] bpf: Fix stack slot index in nospec checks
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
- 20250909(015d6f0a) Copyright (c) 2002-2026 www.mailtech.cn
- mispb-4df55a87-4b50-4a66-85a0-70f79cb6c8b5-tsinghua.edu.cn
-In-Reply-To: <14d43777-e979-42b4-a9ec-cc5d46f4e01e@linux.dev>
-References: <20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn>
- <20260617-f01-11-stack-nospec-slot-index-v1-1-e3a080b0cd7e@mails.tsinghua.edu.cn>
- <14d43777-e979-42b4-a9ec-cc5d46f4e01e@linux.dev>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	References:In-Reply-To:To:Cc; bh=l9g4qUlwh8jYYn4wE6ky9fxMpRaXYWC
+	3azIJs+136CQ=; b=QEkB0HvGYEuQU4u8FvXoHBiwoegdt5f0/6dFcy4gOptH+lt
+	auZHZeoY/BejSBuWodqLgBnBtoQOxupY6Rb3JbphJF2bQkIKSl++hnSe60/Or5Kl
+	c9vZmJ7DC6iyhXX3uWqmsDriWFej5hXoFCd4PLP7xl6TkCK+1Mhmznjf9+Fc=
+Received: from [127.0.0.1] (unknown [101.6.30.195])
+	by web2 (Coremail) with SMTP id yQQGZQCXcJg6uzJqVHJaAg--.59129S4;
+	Wed, 17 Jun 2026 23:20:27 +0800 (CST)
+From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Date: Wed, 17 Jun 2026 23:20:21 +0800
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Cover half-slot cleanup of
+ pointer spills
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <4228110d.7e56d.19ed5f92d1a.Coremail.gnq25@mails.tsinghua.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID:ywQGZQDX66BhrjJqZXhTAg--.34152W
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQEBA2oyQ831mAA
-	As5
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260617-f01-06-half-slot-pointer-spill-v2-2-42b9cdc3cf64@mails.tsinghua.edu.cn>
+References: <20260617-f01-06-half-slot-pointer-spill-v2-0-42b9cdc3cf64@mails.tsinghua.edu.cn>
+In-Reply-To: <20260617-f01-06-half-slot-pointer-spill-v2-0-42b9cdc3cf64@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781709629; l=1537;
+ i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
+ bh=xxSMyiyIWZCLNOXvVfnN2XjxhJMl38vibdmw8HH4SjA=;
+ b=EYrlHREFgjcsY/FfWgWBJjWcWzI1i5uzhppx6DPEUeUoIf7KcrOQgACuClPmhA+qViivzcd+x
+ qTyrgpovgXCBWoujtKKSANXRAnAgekQerFF+lhE7LRePH77na5/X3Au
+X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
+ pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
+X-CM-TRANSID:yQQGZQCXcJg6uzJqVHJaAg--.59129S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFWkJry7WFWfXF48AFy3XFb_yoW8Xw45pr
+	97WasxtFZ5urn7C3W3AFWkGF1rKF1vqryF9F4SyFyUJF18tr1qqr4kKF4UJrsIkan5Xw4F
+	vFySq3ZrWF1UJrJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
+	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
+	kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VW8
+	Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6I
+	AqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xS
+	Y4AK67AK6ryrMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
+	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+	6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+	AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
+	s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
+	1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfU4uc_DUUUU
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgMBA2oytAoJJgACsI
 
-CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiSmlheXVhbiBDaGVuIiA8
-amlheXVhbi5jaGVuQGxpbnV4LmRldj4KPiBTZW5kIHRpbWU6V2VkbmVzZGF5LCAxNy8wNi8yMDI2
-IDE5OjA4OjQwCj4gVG86ICJOdW9xaSBHdWkiIDxnbnEyNUBtYWlscy50c2luZ2h1YS5lZHUuY24+
-LCAiQWxleGVpIFN0YXJvdm9pdG92IiA8YXN0QGtlcm5lbC5vcmc+LCAiRGFuaWVsIEJvcmttYW5u
-IiA8ZGFuaWVsQGlvZ2VhcmJveC5uZXQ+LCAiQW5kcmlpIE5ha3J5aWtvIiA8YW5kcmlpQGtlcm5l
-bC5vcmc+LCAiRWR1YXJkIFppbmdlcm1hbiIgPGVkZHl6ODdAZ21haWwuY29tPiwgIkt1bWFyIEth
-cnRpa2V5YSBEd2l2ZWRpIiA8bWVteG9yQGdtYWlsLmNvbT4sICJFbWlsIFRzYWxhcGF0aXMiIDxl
-bWlsQGV0c2FsYXBhdGlzLmNvbT4KPiBDYzogIkpvaG4gRmFzdGFiZW5kIiA8am9obi5mYXN0YWJl
-bmRAZ21haWwuY29tPiwgIk1hcnRpbiBLYUZhaSBMYXUiIDxtYXJ0aW4ubGF1QGxpbnV4LmRldj4s
-ICJMdWlzIEdlcmhvcnN0IiA8bHVpcy5nZXJob3JzdEBmYXUuZGU+LCAiU2h1YWggS2hhbiIgPHNo
-dWFoQGtlcm5lbC5vcmc+LCBicGZAdmdlci5rZXJuZWwub3JnLCBsaW51eC1rc2VsZnRlc3RAdmdl
-ci5rZXJuZWwub3JnLCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnCj4gU3ViamVjdDogUmU6
-IFtQQVRDSCBicGYgMS8yXSBicGY6IEZpeCBzdGFjayBzbG90IGluZGV4IGluIG5vc3BlYyBjaGVj
-a3MKPiAKPiAKPiBPbiA2LzE3LzI2IDEyOjU3IEFNLCBOdW9xaSBHdWkgd3JvdGU6Cj4gPiBjaGVj
-a19zdGFja193cml0ZV9maXhlZF9vZmYoKSBjb21wdXRlcyB0aGUgYnl0ZSBzbG90IGZvciBhIGZp
-eGVkLW9mZnNldAo+ID4gc3RhY2sgd3JpdGUgYXMgLW9mZiAtIDEsIGFuZCByZWNvcmRzIGVhY2gg
-d3JpdHRlbiBieXRlIGluIHNsb3RfdHlwZVtdIHdpdGgKPiA+IChzbG90IC0gaSkgJSBCUEZfUkVH
-X1NJWkUuCj4gPgo+ID4gVGhlIFNwZWN0cmUgdjQgc2FuaXRpemF0aW9uIHByZS1jaGVjayB1c2Vz
-IHNsb3RfdHlwZVtpXSBpbnN0ZWFkLiBGb3IgYQo+ID4gNC1ieXRlIHdyaXRlIGF0IGZwLTggYWZ0
-ZXIgdGhlIGxvd2VyIGhhbGYgb2YgZnAtOCBoYXMgYmVlbiB6ZXJvZWQsIHRoZQo+ID4gcHJlLWNo
-ZWNrIHNjYW5zIGJ5dGVzIDAuLjMgYW5kIHNlZXMgU1RBQ0tfWkVSTyB3aGlsZSB0aGUgYWN0dWFs
-IHdyaXRlIHVwZGF0ZXMKPiA+IGJ5dGVzIDcuLjQuIFRoYXQgY2FuIGxlYXZlIHRoZSBzZWNvbmQg
-aGFsZi1zbG90IHdyaXRlIHdpdGhvdXQgbm9zcGVjX3Jlc3VsdAo+ID4gZXZlbiB0aG91Z2ggdGhl
-IGJ5dGVzIGJlaW5nIG92ZXJ3cml0dGVuIHN0aWxsIHJlcXVpcmUgc2FuaXRpemF0aW9uLgo+ID4K
-PiA+IFVzZSB0aGUgc2FtZSBzbG90IGluZGV4IGluIHRoZSBzYW5pdGl6YXRpb24gcHJlLWNoZWNr
-IHRoYXQgdGhlIHdyaXRlIHBhdGggdXNlcwo+ID4gd2hlbiB1cGRhdGluZyBzbG90X3R5cGVbXS4K
-PiA+Cj4gPiBGaXhlczogZTRmNGRiNDc3OTRjICgiYnBmOiBGaXggcG9pbnRlci1sZWFrIGR1ZSB0
-byBpbnN1ZmZpY2llbnQgc3BlY3VsYXRpdmUgc3RvcmUgYnlwYXNzIG1pdGlnYXRpb24iKQo+ID4g
-U2lnbmVkLW9mZi1ieTogTnVvcWkgR3VpIDxnbnEyNUBtYWlscy50c2luZ2h1YS5lZHUuY24+Cj4g
-Cj4gCj4gSSB0aGluayB0aGUgRml4ZXMgdGFnIHNob3VsZCBiZcKgIDIwMzlmMjZmM2FjYSAoImJw
-ZjogRml4IGxlYWthZ2UgZHVlIHRvIAo+IGluc3VmZmljaWVudCBzcGVjdWxhdGl2ZSBzdG9yZSBi
-eXBhc3MgbWl0aWdhdGlvbiIpID8KPiAKPiBPdGhlcndpc2UsIGxvb2tzIGdvb2QgdG8gbWUuCj4g
-Cj4gUmV2aWV3ZWQtYnk6IEppYXl1YW4gQ2hlbiA8amlheXVhbi5jaGVuQGxpbnV4LmRldj4KClRo
-YW5rcy4KSSdsbCBjaGFuZ2UgdGhlIEZpeGVzIHRhZyBpbiB2MiB0bzoKRml4ZXM6IDIwMzlmMjZm
-M2FjYSAoImJwZjogRml4IGxlYWthZ2UgZHVlIHRvIGluc3VmZmljaWVudCAKc3BlY3VsYXRpdmUg
-c3RvcmUgYnlwYXNzIG1pdGlnYXRpb24iKQo=
+Add a verifier regression test for a pointer spill whose high half is
+cleaned dead while the low half remains live. Force checkpoint creation
+with BPF_F_TEST_STATE_FREQ and assert the verifier log reaches the
+checkpoint and the subsequent 32-bit fill before rejecting the partial fill
+from a non-scalar spill.
+
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+---
+ .../testing/selftests/bpf/progs/verifier_spill_fill.c  | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+index 6bc721accbae..0174887e28f5 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
++++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+@@ -1359,4 +1359,22 @@ __naked void var_off_write_over_scalar_spill(void)
+ 	: __clobber_all);
+ }
+ 
++SEC("socket")
++__description("partial fill from cleaned pointer spill")
++__failure
++__log_level(2)
++__msg("1: (05) goto pc+0")
++__msg("2: (61) r0 = *(u32 *)(r10 -4)")
++__msg("invalid size of register fill")
++__flag(BPF_F_TEST_STATE_FREQ)
++__naked void partial_fill_from_cleaned_pointer_spill(void)
++{
++	/* Spill R1(ctx), then force a checkpoint and half-slot cleanup. */
++	asm volatile ("*(u64 *)(r10 - 8) = r1;"
++		      "goto +0;"
++		      "r0 = *(u32 *)(r10 - 4);"
++		      "exit;"
++		      ::: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
+
+-- 
+2.34.1
+
