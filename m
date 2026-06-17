@@ -1,164 +1,164 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2845A3AFD01;
-	Wed, 17 Jun 2026 05:58:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BCB63AE6FB;
+	Wed, 17 Jun 2026 06:48:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781675901; cv=none; b=TUr2YPzk4v7WKohbZoKyjf7L6cAIpHS2Bxn2irNExt7Y3X7ZFmPuvAPNp/FjNc2MDqu15j8rr4+77+jmNwBK8R+2/isLsH459DxbAH/zBycozFzZ9bo9144k2/fTcfjaQT2zpr7jYcs8yA8mZPniaTqG5YlwJxuI/+HIzSveMWc=
+	t=1781678901; cv=none; b=QrsMek4l0S0rlREElr1jap2T4c3KhJ1h9Kg4d0zAH/avfcmE6L5U5ilP0PNuNHVx6nB0qnzyCDe3Ws9hjdQwPabNM4TnSE1CkqOvxKfA3vQqU3NsQczE0YasmCeyFdYaZ6WC0XRk2bklIQWnrrXbT0Y7iCn6QvfG66OBZZjqWj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781675901; c=relaxed/simple;
-	bh=MKp+gQfP29ujZM4yIYrm7TJ0istjf6qopuT84uY3M/8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JztmYO4dEN9xB+GsgUoQkY7BeuD6oHU6spbFP9VinpWP+q6v6FV6PIMzzdrKNmcB7lN1x+svLeC2hYzCNKF0ET8jwqrx6ARFcv22MCrGvDaeqmwtNvzgZozKnfiRyLdo0Rsgz0iCIwAf7QjUarEZWDNAC+ge77G6cTv/si16y08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RNB97Kz1; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RNB97Kz1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DFC01F000E9;
-	Wed, 17 Jun 2026 05:58:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781675899;
-	bh=z0WnoCTe/WZyehgOrexh6SFggV7BqrfLheqjX/wcWBQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=RNB97Kz10Ao2R5CDg1QEMage+MHmk+FqZV1XZM+AotUPoZ7KQ0Z5T+pzTAbTnxBw5
-	 Akfag50v5nhbjm1byNozw58F4ZlGMykbL+FJ/uhH0h4DMspxgDIlxOYxE3JLkSpc/h
-	 OCP+LwIwBY+uKtRjaZJTOxm/z8Iwe+7J2ylF2sIUs5MHx176pLyLiqq26IU8y11/db
-	 PO5luUTpvTYJ4KwMD7OwhbSyZDFDTVGH+XZalYYyH0zD0z+iXWrvKWqMifdoSP6UTm
-	 LtYwV5u6eqmFQXcGTCLD11o+wFeHPn4nIe/syIXpjCIOXx5om/rGxZpv14tdjXMhsl
-	 i7aerDDOvFFEg==
-Message-ID: <cda21b5a-b61b-430f-bb82-c6a4d1e7548a@kernel.org>
-Date: Wed, 17 Jun 2026 07:58:12 +0200
+	s=arc-20240116; t=1781678901; c=relaxed/simple;
+	bh=mxfJdKr4nXVKG7iuqYRdd2k/7ISp2J7jHFF8/ss5K+g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fhP2g9ypHbEA+jbdF0moNMZjYshwM1qslFypxOSl7l2ZIcpPMxQ9ebhvxLrXGqhqaQ4F97hXQzpGikh0GMD+4ra5e2ujj8yVsO/xSoOwyvGBW4WBDYPtPEp1Tf7AleopUbtrSlGKs1uQLqPpV1pb2n7rvszha63jHiA9HelQaW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 820c01c86a1811f1aa26b74ffac11d73-20260617
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:0fb00710-322f-4beb-af24-cba2d821374e,IP:0,U
+	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-META: VersionHash:e7bac3a,CLOUDID:a1f20e6cda53d291a7503115ae9a1876,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|123|136|850|865|898,TC:nil,Content:0
+	|15|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,O
+	SI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 820c01c86a1811f1aa26b74ffac11d73-20260617
+X-User: luoliang@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <luoliang@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 993940327; Wed, 17 Jun 2026 14:48:11 +0800
+From: luoliang@kylinos.cn
+To: tj@kernel.org,
+	void@manifault.com
+Cc: arighi@nvidia.com,
+	changwoo@igalia.com,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Liang Luo <luoliang@kylinos.cn>
+Subject: [PATCH] tools/sched_ext: scx_flatcg: Fix inverted vtime delta accounting
+Date: Wed, 17 Jun 2026 14:48:05 +0800
+Message-Id: <20260617064805.3901965-1-luoliang@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH for-next v3 3/9] mm/slab: handle the !allow_spin case in
- kfree_rcu_sheaf()
-Content-Language: en-US
-To: Harry Yoo <harry@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
- Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>,
- David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
-References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
- <20260615-kfree_rcu_nolock-v3-3-70a54f3775bb@kernel.org>
- <4d7ebcd5-f3b7-4c73-94f1-b7d3ac12a521@kernel.org>
- <e8940857-4f71-4a34-ad80-81584f7378c8@kernel.org>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Autocrypt: addr=vbabka@kernel.org; keydata=
- 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
-In-Reply-To: <e8940857-4f71-4a34-ad80-81584f7378c8@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/17/26 07:32, Harry Yoo wrote:
->> Here we would get a sheaf with kmalloc_nolock() so that's ok even if it's
->> later freed by someone else by kfree(), right.
->> 
->>> +		}
->>> +
->>> +		empty = alloc_empty_sheaf(s, gfp, alloc_flags);
->>>  
->>>  		if (!empty)
->>>  			goto fail;
->>>  
->>>  		if (!local_trylock(&s->cpu_sheaves->lock)) {
->>> -			barn_put_empty_sheaf(barn, empty);
->>> +			__free_empty_sheaf(s, empty, allow_spin);
->> 
->> Well we could still use the barn with allow_spin == true.
-> 
-> Initially I did
-> 
-> if (!__barn_put_empty_sheaf(barn, empty, allow_spin))
-> 	__free_empty_sheaf(s, empty, allow_spin);
-> 
-> but I ended up just calling __free_empty_sheaf() because it's
-> pretty rare to hit... no strong opinion though.
+From: Liang Luo <luoliang@kylinos.cn>
 
-Yeah we can leave it simpler as it's rare.
+In try_pick_next_cgroup(), a cgroup is charged its full slice upfront.
+fcg_dispatch() is then supposed to refund the unused time by adding
+(expected_end - now) * FCG_HWEIGHT_ONE / hweight to cvtime_delta:
 
->> But more crucially, here we might be freeing with kfree_nolock() a sheaf
->> from the barn previously allocated with kmalloc()?
-> 
-> Well, we don't release and reacquire the local lock when we got an empty
-> sheaf from the barn, so it doesn't free the sheaf from the barn?
-> 
-> That was indeed very subtle and I got confused :D.
-> 
-> When we free a sheaf in this function, it's always allocated in current
-> context?
+    __sync_fetch_and_add(&cgc->cvtime_delta,
+                         (cpuc->cur_at + cgrp_slice_ns - now) *
+                         FCG_HWEIGHT_ONE / (cgc->hweight ?: 1));
 
-Indeed! It's fine then.
+However, if a cgroup yields early (expected_end > now), this adds a
+positive value to cvtime_delta, which ultimately increases cvtime,
+heavily penalizing the cgroup instead of refunding it.
 
->> Maybe we need to track if it's the case and defer-free it or something.
->> 
->> Also maybe there could be a wrapper kfree_maybe_nolock() (~better name?)
->> That means "I want to kfree safely in kfree_nolock() context something that
->> MIGHT have been kmalloc()"
->> And maybe depending on the debugging options that make kmalloc() ->
->> kfree_nolock() incompatible, if those are not enabled, it wouldn't have to
->> defer, but proceed normally?
-> 
-> But I really like the idea of supporting kmalloc() -> kfree_nolock(),
-> and I think it's worth exploring that.
+Conversely, if a cgroup overuses its slice (now > expected_end), the
+unsigned subtraction underflows to a massive u64. When multiplied by
+FCG_HWEIGHT_ONE and divided by hweight via unsigned division, it
+yields an enormous positive number. Adding this huge value to
+cvtime_delta pushes the cgroup's virtual time roughly 3.25 days into
+the future, permanently starving it.
 
-At least my confusion potentially lead to something good then :)
+cgrp_cap_budget() later applies cvtime_delta to cvtime reading it as
+u64. Once dispatch can produce negative (refund) deltas, reading them
+as u64 turns every refund into a huge positive value with the same
+starving effect, so read and apply the delta as s64 and clamp the
+result at zero.
 
-> Thanks!
-> 
+Order the time delta as (now - expected_end) so overruns are positive
+and early yields negative, and split the magnitude scaling by sign
+since BPF has no signed division.
+
+Observed on a nested cgroup hierarchy under mixed CPU load: cvtime
+grew roughly 300x faster than wall-clock time, cvtime_delta reached
+2^47..2^49, and tasks in cgroups stalled. After the change cvtime
+advances at the expected weight-scaled rate and no anomalous deltas
+appear.
+
+Fixes: a4103eacc2ab ("sched_ext: Add a cgroup scheduler which uses flattened hierarchy")
+Signed-off-by: Liang Luo <luoliang@kylinos.cn>
+---
+ tools/sched_ext/scx_flatcg.bpf.c | 37 ++++++++++++++++++++++++++------
+ 1 file changed, 31 insertions(+), 6 deletions(-)
+
+diff --git a/tools/sched_ext/scx_flatcg.bpf.c b/tools/sched_ext/scx_flatcg.bpf.c
+index fec359581826..a37f5b876da8 100644
+--- a/tools/sched_ext/scx_flatcg.bpf.c
++++ b/tools/sched_ext/scx_flatcg.bpf.c
+@@ -249,15 +249,26 @@ static void cgrp_refresh_hweight(struct cgroup *cgrp, struct fcg_cgrp_ctx *cgc)
+ 
+ static void cgrp_cap_budget(struct cgv_node *cgv_node, struct fcg_cgrp_ctx *cgc)
+ {
+-	u64 delta, cvtime, max_budget;
++	s64 delta;
++	u64 cvtime, max_budget;
+ 
+ 	/*
+ 	 * A node which is on the rbtree can't be pointed to from elsewhere yet
+ 	 * and thus can't be updated and repositioned. Instead, we collect the
+ 	 * vtime deltas separately and apply it asynchronously here.
+ 	 */
+-	delta = __sync_fetch_and_sub(&cgc->cvtime_delta, cgc->cvtime_delta);
+-	cvtime = cgv_node->cvtime + delta;
++	delta = (s64)__sync_fetch_and_sub(&cgc->cvtime_delta, cgc->cvtime_delta);
++	/*
++	 * cvtime_delta may be negative (early-yield refund from fcg_dispatch()).
++	 * Apply it in the signed domain and clamp the resulting cvtime at zero
++	 * so that a refund larger than the accumulated cvtime doesn't roll the
++	 * field negative.
++	 */
++	s64 vtime = (s64)cgv_node->cvtime + delta;
++
++	if (vtime < 0)
++		vtime = 0;
++	cvtime = (u64)vtime;
+ 
+ 	/*
+ 	 * Allow a cgroup to carry the maximum budget proportional to its
+@@ -767,11 +778,25 @@ void BPF_STRUCT_OPS(fcg_dispatch, s32 cpu, struct task_struct *prev)
+ 		 * We want to update the vtime delta and then look for the next
+ 		 * cgroup to execute but the latter needs to be done in a loop
+ 		 * and we can't keep the lock held. Oh well...
++		 *
++		 * Charge the overrun or refund the unused time. The original
++		 * (cur_at + slice - now) was inverted: early yields were
++		 * penalized and overruns underflowed. Use (now - (cur_at +
++		 * slice)) so overruns are positive and early yields negative;
++		 * split the magnitude scaling by sign since BPF has no signed
++		 * division.
+ 		 */
+ 		bpf_spin_lock(&cgv_tree_lock);
+-		__sync_fetch_and_add(&cgc->cvtime_delta,
+-				     (cpuc->cur_at + cgrp_slice_ns - now) *
+-				     FCG_HWEIGHT_ONE / (cgc->hweight ?: 1));
++		s64 excess = (s64)now - (s64)(cpuc->cur_at + cgrp_slice_ns);
++		s64 delta;
++
++		if (excess > 0)
++			delta = (s64)((u64)excess * FCG_HWEIGHT_ONE /
++				      (cgc->hweight ?: 1));
++		else
++			delta = -(s64)((u64)-excess * FCG_HWEIGHT_ONE /
++				       (cgc->hweight ?: 1));
++		__sync_fetch_and_add(&cgc->cvtime_delta, delta);
+ 		bpf_spin_unlock(&cgv_tree_lock);
+ 	} else {
+ 		stat_inc(FCG_STAT_CNS_GONE);
+-- 
+2.43.0
 
