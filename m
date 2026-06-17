@@ -1,208 +1,610 @@
-Received: from mout.web.de (mout.web.de [212.227.15.14])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FEB3A6EE6;
-	Wed, 17 Jun 2026 19:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67FC5328B5E
+	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 20:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781726143; cv=none; b=G+YG6JY2SgAfoq3WVASPByRiBxfrIiFiCxOB93A3k/UWaAWUZCzcaHvDh1Uc6oOdC3QxprBaizGRtHiumeQpg9ppfXUNXnQpAYP+uCIa9B+ZCfzAfo5VoGu5mow5FMpmiKgkO21Hb12LeWiSVnWWjtyo+iQz0N4fQ7Z8tNQVTwk=
+	t=1781726916; cv=none; b=uo8GEertC67YLlKMIZ0kTPgQifTtfRHBRZXB3rZ5XVvg097RX/owWv8vO2m3k2mIG1EDcU07wf6wfz7uFXl03txV7db3FvzZuIpoj7CPKgrD9EgM4BhVQf4+EONMO0VSDfzpf3csymzBwhZ11mncf4ekNXu9kiWJnyghZ+K/GCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781726143; c=relaxed/simple;
-	bh=V18gbj1vJ8IADP15mWwGpVseCsp9pW46uoIX03YcBmY=;
+	s=arc-20240116; t=1781726916; c=relaxed/simple;
+	bh=9U+xeJIdd1FouSj2NfVGFxUSAnufknUJjgvZGCu2bSY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hkwi4gm4jR3Z/tgfE3j7gfkrLC2nsWL9HkFHRrenw8Mf0hjVlYfB2lCx52mMn9o5lncsotOWf2fU/zEF7rLG6JQukoo3bNqvf90uFabUphPGQPf7rbMNMA11OkC75mGfYFFGEtKVPUVmpNTRuU7hdcZDaKuCU01zHHfocT3QHJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=k5S5n+RK; arc=none smtp.client-ip=212.227.15.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+	 In-Reply-To:Content-Type; b=urVfCMBqv8+BLO0/T5nywMXrwDfC8M4mHuwX2fchg42An0PcRAHW4/rbOEdTjkf0+jOUMAgWjb7QGLssApGvtjSnyk3Urp7QRi2oA2QgNyF2FtjcafptMTDkXAAKtIetfyzUUF5iEeP9z51xJV4Lk4ksejlDzsRwHcsVIE7RSbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MBiBd4GK; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="k5S5n+RK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1781726120; x=1782330920; i=markus.elfring@web.de;
-	bh=Zkjxiv2OzXXACBMnS6hNYV6PrCKFy5WJIpmTTALkucM=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=k5S5n+RKbChC+SZgpBnonckUWpaK6sLn176SJJlv6+W5pHBIBgqY/fLSG5JVo91M
-	 srNYo7zAGiDwdlrYKsJ9Pzr0s+qAg5m3D4qoQtL2AeP/o0K0MN457iclZHBPHmwY6
-	 Vg4cXn3YWUda1djy9AzGNSxvcMTSNdW1Qlp1yn7LWVuOrkA5VpBpbR6qYc9flvDge
-	 OelRR6LFD+Zh5HavyMrfe1fWl8jAQSZ7L8sLfhRozW/r6hY377P04ANzbLMWnQJ+J
-	 X/CEbw8l53JL7GsPh0w0uZT5QJ2RIvVrP/Tw2dPaFioiywJhLROEtRR2Q+hM0L/ri
-	 wm5KS50Ha9Z/I7YwUA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from client.hidden.invalid by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MuFD7-1xU6FB2aQ1-012fKl; Wed, 17
- Jun 2026 21:55:20 +0200
-Message-ID: <451a504c-d7c5-4cbd-9184-25156f2fc581@web.de>
-Date: Wed, 17 Jun 2026 21:55:18 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MBiBd4GK"
+Message-ID: <2daeb438-e9b6-431b-8b74-49b09e055977@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781726911;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=t/7XyyGOJfzn0E7eOmoQZh8Xa0KHU5AgmtoKWj027x0=;
+	b=MBiBd4GKX69nsH3Of435Ew7U8gguM+YUCqmClicS6363cxHWlT+gK1wl/HBUCdNmenQ6Bs
+	5c2PuhDtFeiF2R+za1TkoEMWQTNma4x1INyJumXFEboD/wkmz9oXq6vf9SLMy8pNG0SrW1
+	lXJ5D4cyO1PdcXo/G2jxDvoR2icIpZI=
+Date: Wed, 17 Jun 2026 13:08:13 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: [PATCH RESEND bpf-next] bpf: Use common error handling code in
- bpf_is_state_visited()
-To: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis
- <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>
-Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org
-References: <d6622225-c765-4d9f-9501-1021df4687a4@web.de>
- <DJBL1JEE322B.28EZ7GUNTJP99@etsalapatis.com>
-Content-Language: en-GB, de-DE
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <DJBL1JEE322B.28EZ7GUNTJP99@etsalapatis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:0dtuQgJKPanhFqqtyxi47x5SCHNlC/aIemJw36MUxtysUxMfixs
- Ocgk8bTzdXwQlZTrcQhxo6l0VCD+lZehMD4dpLOGXVIp6zWcwCB9+eaH7tALbkZHe1U0vZ7
- S9V0UEbWTWGH8LCnDx6PXGXkuM+RSL86IXndebm9XVdz8em0ybxvbj5Vuwkmi3NtDaC3OIr
- /xrsQQPjESDuxOKgLbc5g==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:+gip8uKE6CA=;twtr+FjZ+Sl4w/iNO73TcRSFe2q
- /1NsY5g3m4HoYoGA1cmx6DhFUotUJqBbklIIatthW7UQ/sxP+KgcG4fXJEWrxd+0F6aKqnzRz
- AT12vt1xSVMv6peiBmbJNjjKDzPVYIiSY+7wSQgyUd15y4FqmW77bODG58qFxBRk1TGEunHWH
- wshTTPvCqJZ+go3966NsSg/P2uh6YZ2xH3rRNf4WQl1O0OU3u0Pi49Nwp9mK3WHOSOtAgBc4F
- 0wULPTEqRzGnlAZ9nlaYxmvfIrVP77geaxERkM411KmbEz4MfY8Al8CJZ9hWsIpp6Heh0+2hH
- jnwP4Lozn6cNGlr21Ih/pxHThYzogvqj+9kqcZYweItNyfN4dIJRIetGvq6SE8p++wRgvXoV/
- 0nZNtdye3v9B/uAropDD7T2lUPFzvCCcKtNfhjWgPonvUOipf7WnQlTvrGWhWSdR+ncYXCg5U
- NcWsIktBIUFyQ/F09qhyh9T63B6X7UAdqbRcoNnegjOGAd2ac2lx5miOcjMsZY0ThWW8AlDGD
- 1JMFynIhH4mWuQPKm+2MqMgifMjK5hX7ZIfTpzI7OUei15PjUu5/TNzGuebVLQkougZumOJMi
- 4npVJCRKtf1a7igkCi3TaiCWNFJVHo3s5CIdF3FnFNCjMGTXZ/GjFOTh2+pEVg9rR8xn0ktmR
- m9bwsI/Y4BqpwK0mFO6RwE5qABYD4e465tydJ65PkuHrY9y/cZ7xLObPFgBGIVxUnfh0RwJ6Q
- hyOUv0hYXGFDVh+V4RRs8/+bYZVjMJHQoR9BCqyycDFxHDFSOgV3sX6kgjnR4iY3mi6ekpeX1
- SvajbUG4A5/otuB47QxtrIAq0Gvaxneq3+jsRHaoY/bmeEYT1Zy5OAclVe3i3UbF9HcOAoVPx
- nxFG36PTFSNTrQMK80NOLp9+Qll6bWbTIg8apJL+yUs6iRFa5bpPycWzZbAZlssrSHpJMzYEP
- eQlUhAU01moa77q/uyiX1A8iRnAdLszXqClRiLX51Y3/theS3t/z1Fb0zX+1AMuqh3CwIaBbE
- 0egi+WznHuzpa1KZWaWNkQjFpig93kKu+s92gxetwHep3ySttKG/SIlQ4K28LK5ihoK6dSW68
- 9Wfj9d/qZU2I1TY5BSacewWDsJy/3/y/Lwaa88o5/i9ajuHEZP07UIvg9CVdWl+wbl1a6wa+5
- 39LbpWYy2C/JAaJ5xRHqLgqnb8X6k7M3JYxdJsjsbR0WycDddqO5o64WGKjjp7lTlYsCsVcM9
- AsLXGD8Ajtba133cCixqx/aMZ63xpkTTkPyuj4694nT1scWzbJZ5wis/oSRmIOqttTsdrBFvU
- 7fju8cvlDyN46xpP9vpjKV5nq+CoU0rS7o6en++gTrNX/XK96yDCZ0mhvC0rRGE6cisRDjlPq
- ZbYPVTF9k7cLlnBs8iD/HjlC/eOzFuH9o62rqb5iPzqPg2dH6fv8wCQVPetYsYSILBsXrYCnF
- NVW4OcD8F5Mqp2weOsWtUs3Sgc6dV/EhDay3LVGfERINzgfZaXscTrxM+B36nPLE1N7BWLNWe
- uElYITzPZVZt2AZU9a2Rgio4vIp72QxBgHi7mh8npa/8IK9Tpsb9zgKPH1AUpAKzsFruSZLCw
- 52MIGAHG8904E85vJquDeRmskJsLF/g420INz0jTHDC0X6IO1j+bk7tX/zsWxI3f067oN1mMe
- nhJ/HTfEw9llKAaaZaB/iaA2HGmpCB+W3TEg4fvcSOqOEWyPRuKVOEBNh47/8evp3wEqcQeEE
- EagzOut/tN3JUMpG+g69EHW0CT5mhlGCK2NDFtZnQB8vJZxyqlR0vq6yN1Ex3x2euiBSLg8eh
- sW0jscqrRrsUJiG7G0kMbaORNl9XxGIOkSA1oxC4dqxPUi2PAzs0p29Kr3gNIBw/FLuyrLAju
- d4aOFN7uKAllc5eXPentznZwI6IlxpyuSIqs7ed5XsnOzZuGuEvCrj98N44lH/kQq1zDDiie4
- Y5otknJHH9cYpiOiYJpMN3TdrqqOkoyhMIJCuXuCHyS5zB/KUoYsZuZyNv166GHCdv2nPW+lB
- aS9y0mPXu5xhCBrDXptPFWi9Uw9rMLzwPDyMQCNpDC2HGacW/XjT1W+mKHb5pTP5iWC0qpFxH
- nK9kSdO1TS/GZ25N+kgzlhV8sOJjXqMAvhs58kooaXgnRxyBeuiIeGI64Gz9j481FuQHwVxpn
- ReAYsj86BXqxRYKgL1GraFRAuRFcusqPIz560AcwyF2yr+lnW8SrFLJtygLEBOEEw5MUjsOX+
- kBPvOq4arvdT0gL6oFJKLA3QQxFQS7se51SJoffKsCqUY7MWNjKuNCZ+Hn6gmmQwrM+3C90IT
- dcux5KPmcL3yQd4/p9o+b3bTKHKVzDBVhMIuRTvZb/+3L2EQrG+wzB90v7oeONpgkFWBaRh0R
- u6j3WOxJSPqIU6KDWzJlbO7DXKYw5qjehUw12snrxEjDDdS0bJxaiWpY0tArc1tiLMi0/BgKG
- Z7q8gpC76oHLR8fGAqJIzfH74J6KH1zk04AVjPp+aW2x4foZlSGRh6QIgh3bXKxsCnwlwUtmS
- P70qFOtetcopGITF9vwoZia9tyQCw8GFJFc2tF2vw/rCqnKAWOf5vcxuBvLUSLrRQ39Tt0gJJ
- P5/DGGlnYWu9D+EuG6ZRJUOLcMdqNH9D+APuAvM5Z8z8yNYZJ9tNtZ4nMlOZwkPHskqNH65ej
- sbPyQZFHPGZQdRA+XQLFv+iB99aes2QQK25nJvP1MuBift8H8SwcJvVUk38bzSvIjFk/If8hn
- +DotNthzwhrVTxKZ0iV26YXL1UTyVM70PI6u4CqPJ+W7TXwMyRSVlMP2CPJ0Piq7X+OUZDSAo
- qoersK0aGscXteshoLYeH7msaYC8fUM9OeooSPCcqDIMRYXlrtNY08Quwk7BzdleCY1uG9W7O
- xqB5dskjUdJ/2Hi7fMpBUBneyTBmSUAaexAMPvRtWaVgx4ILcoUnv64ojLCfPITm/PWZt4IT1
- kbo8kG1aHhPDW3M94b1R1cD1Vz4xeXr2jpCEqBvDKBOL8zrKRnUAculIWgWwT1OinPO+n1Q69
- 4yW1/QtEdE+rhCcrnpNnmDj8npgZQ5DcMe7bXoVTUT1Fed/KDrKe9Yxw4lMx6R8SZ6rFbZoQg
- KI3g0ifKmNcvBXLzgF9ze/joyD1mM338flppHpaW9PVuCjTvNvlYkLXQ9O5MVO0pAo85RdfNm
- hs41AOaHBAblbC0y42v7/R06B455T6Xs+x4MxtZymCjWc/SVziLr+kDcVOt1DpzujXX8IS5w5
- qZjL899Wf3UUsMJd15Eh0FDENB9B3R+Pe/d/goQ2n1gzszqUV6WkBn5zjkQGGuc2VgkxtW3dE
- knv9QsaZp7FBvg/7TTXq/U2qc+bTqFMmCflOsKQ3/gQdr/dS4h0Ehf1XLvAqbvXyKYwqvOhsS
- xHEv/ypsthdx6xWPBYzDcJbTGWuHrUUjoeYJEhL6dq/lR8xO50o1G85XWHUqSakm6dlWf3uNj
- LJ49sRfWt/lowyMjc3/Ire2TS4VdWbYck2EfJx0rppSHQ256qeEzIFgH4zPOXU227rZtoDCQc
- Sh6WgXuMAOA1lOUfXT0E0Oqiu4U0xjBjoSAQtg9G1+yLwvVTEKw5CQqrUX5RTFBQcDuA4z8S4
- ZNXcpkOTjW5pAvfublcZsYLqi86U0s7WXv5Q2YMaT02DOx8tLr8dGr1O+C9ud/k5lUuuElvk5
- G5J26PrPW4CaMlqKBHVvKhvK6p1l1oEttAqpqIhSJ22eCIXCIsOEXdn6Rjyv3C+2xAP/isBB9
- jflJKhd4GvSw/qyFWUdSCtZ7/1mC0bRCFvjVtYgCz+cOk8ykp+lkE8IzTiiA0AT/3exHCvwLL
- HzsLx7vELB8kBUkilElarxc62/AQKxXRHq5TUvAIdmilrjnqh48T72BmBdEp1baXRT1uUUFsT
- jbF1/r8eh/aFO/OQTSYxwytk8fKBAn7UsOdNwPHZkHRinrgvXsAP/lGctOpTVuHgylhl03JoG
- oZtGiS+kee4zGyFa5LZ+CdkjFkplYdw9MwCMpFV7U9izRW/g1axqTKUBo99O7emQzvTfvkNoD
- /6EL/I8ElX+u+zRORCCn6hh/CqEXzUtI9+yiWBNDSFGgpVldxmvHmR8HndjwG02iAN1tJfqVY
- z9A0WphWR2KMN7BFDTT2C4un5HoWxZhEYW8CfBKISscm9VttX2fEp/DdW5n1q/hk4/hLV3wu9
- 6lUfC7fdO/m45szILHJCd2drV0EC1M+nzuZeP7WjpkqhtLSv9sthTNxblEqccfEe3AMDCCKly
- gXpestrCaaZ+5Zjjr5j6Tqi8eNON+6dCMNbKRZYsx6UCiydfF/IFE1KEbpkOEWkNnc07sz91r
- Y5igxUngaAzd1nAxM2cnylFYYVyWsYI8J9xW10DyeZIIIm1ftFYsjpq7h+g0tTBronZwnipMF
- 68k16kbXjcjGBOfjE1dOgGBF4op1pxj1FJqxdPEiwiXhApzRjdfa6f1G6v6fjAVRnXZpf+Ifw
- SGU06I3oTDsWL7o0+92oJ8mnyAmMhfbZEPU2sBON5rhtl7hzN1UcASiBNWHvieZgZxix3Tpuz
- cR6ewKCE4aKVpZHgD5EukRMM8MOu/QiU4qdeTpOHMDMCQslMh7ZHJoqlG+VS5kDKjVP974VSm
- Qx1bMSxE0OKhaCVkA/NyNOhPX2o0nVgQ+fS60QzihC9JStbLy8C7oqI4qLOWGEN65/KGg+Nau
- 6zYDuNhxWhtFvA7FfhrHBCanBb0Asf2D5CnxXEUau1T3f0WTF6THAZZa5oMfFPsIa5hdmtGhN
- w35AstM9BUCJmdT1qy0eYrSVb7Aa8ekkrxU5lMWrZUJBMpY2kwFETpKbL1Eub7kH/Ni6JHbcG
- yuwcVL6ASEOa9iF4BXKg4jV66TmOmZsHRkTv9PHJhZLgPoeeNeJ3sER1wAd39j23fC/8J1Ceh
- c+GUzPbJEahmiudxQ/wPKoOcbWswNA72D+McXoQHCbdzN+vXai+XafO3jXymSth9UPQ5E4/NU
- OrhVoAMsQeXEI7iMceK1l2XGUrrayJZcWgBR8BLUborMZu+QNqKXhfiFq4jLVJ1rw3yqIY4OU
- Cdfqs2pB91SO7mFmrYo+aOVw9IN1QQIpbrhPY0ADYBMdRfY17Vi4SIyQh59mgTpolWQx3juoZ
- tRJ5pPVDZg46bS7NkxN9t49bwaymJI/ldQKkMBqDjEBrnX0eXvWl8qtff1/KBhuQWvffqPKI9
- xfOBWOVaEQfDkgVzDW7JrS1jVOGOH05yaaVHLQ5Yv2gg7KArH7JhPFfyBhO1h+lKWVKrziKFg
- jdHGaGlDReExwNw9hIRzF1eoXv9Ew5BxbnZ/KpZaOO0v92eM9EMx/789IqFhkl7hysDgczHX+
- uUgi1gC8D89Kr5CsK5LgBNwFVg2EAVp1rnubvdxtUsnnyvlevXudB72nnWQ0D2gGeFT7kTmEg
- WEkmdIfEmfd44B5p64gz+oNurNwUHZnr7mA6KDDmdp668ABjwJx/hPtCkagYiXSzlE64H2ZXH
- 7n95vWiA6A+jFSRM/X0VBgbDuVFwkKRWxCHdQmuE4Q35VfLDg2nIxGefAzulVcwFLD95E1+/1
- 7/kyHuyJJfkFYqPw432uCT9YwXYs53niMsxABHTZ6ix7IZJifkhd5WM47jyq3V0hcVPAuR9t0
- XvksHa3hm+FIecdp5dyge/RtbsUZsSlcrKiZZzR
+Subject: Re: [PAHOLE v4 2/3] dwarf_loader: Add support for
+ DW_TAG_GNU_annotation
+To: Alan Maguire <alan.maguire@oracle.com>, dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ acme@kernel.org, Emil Tsalapatis <emil@etsalapatis.com>,
+ jose.marchesi@oracle.com, David Faust <david.faust@oracle.com>
+References: <20260602195512.1511013-1-vineet.gupta@linux.dev>
+ <20260602195512.1511013-2-vineet.gupta@linux.dev>
+ <e258ee1d-369c-46f7-a93b-ed665c276130@oracle.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <e258ee1d-369c-46f7-a93b-ed665c276130@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Wed, 17 Jun 2026 21:15:08 +0200
+On 6/7/26 2:54 AM, Alan Maguire wrote:
+> Thanks for the respin! Sorry for the delay took me a while to get set
+> up with latest gcc.
 
-Use an additional label so that a bit of exception handling can be better
-reused at the end of this function implementation.
+No worries, and then I disappeared for a PTO.
 
-This issue was detected by using the Coccinelle software.
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-=2D--
- kernel/bpf/states.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+> Two things below, but in summary there are a few
+> things we need to line things up between clang and gcc representations
+> I think. To test these completely there are some existing btf_loader/pfunct
+> issues below that I've outlined; I can send patches for those fixes as
+> prerequisites, or feel free to roll into a respin, whatever you'd prefer.
 
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index 5945956a7573..09f87e2bb1e6 100644
-=2D-- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -1566,21 +1566,16 @@ int bpf_is_state_visited(struct bpf_verifier_env *=
-env, int insn_idx)
- 	/* add new state to the head of linked list */
- 	new =3D &new_sl->state;
- 	err =3D bpf_copy_verifier_state(new, cur);
--	if (err) {
--		bpf_free_verifier_state(new, false);
--		kfree(new_sl);
--		return err;
--	}
-+	if (err)
-+		goto free_verifier_state;
-+
- 	new->insn_idx =3D insn_idx;
- 	verifier_bug_if(new->branches !=3D 1, env,
- 			"%s:branches_to_explore=3D%d insn %d",
- 			__func__, new->branches, insn_idx);
- 	err =3D maybe_enter_scc(env, new);
--	if (err) {
--		bpf_free_verifier_state(new, false);
--		kfree(new_sl);
--		return err;
--	}
-+	if (err)
-+		goto free_verifier_state;
-=20
- 	cur->parent =3D new;
- 	cur->first_insn_idx =3D insn_idx;
-@@ -1588,4 +1583,9 @@ int bpf_is_state_visited(struct bpf_verifier_env *en=
-v, int insn_idx)
- 	bpf_clear_jmp_history(cur);
- 	list_add(&new_sl->node, head);
- 	return 0;
-+
-+free_verifier_state:
-+	bpf_free_verifier_state(new, false);
-+	kfree(new_sl);
-+	return err;
- }
-=2D-=20
-2.54.0
+I don't mind the respin but will appreciate you sending the actual 
+patches as you have much more context on this than me and will have 
+easier time fielding any review requests.
+Also after reading the rest of email, these could even be follow ups to 
+this series in spirit of incremental improvements (and the reason is not 
+that I want to get the series out of the way ;-) but that these seem to 
+be existing issues so might as well wait for something else to land - 
+but your call really).
 
+> I don't want to introduce scope creep - and I may be missing something -
+> but it seems like the current changes don't cover decl tags for function
+> parameters.
+
+OK.
+
+> On this topic, there is an existing bug where decl tags
+> that have a component_idx reference are not rendered correctly by pfunct
+> which makes testing that properly impossible today. Parameter decl tags are
+> prepended to the function declaration rather than tied to the
+> parameter referenced by the component_idx, so we should fix that first.
+
+Hmm, it seems worthwhile putting this in a comment somewhere.
+
+> The root cause is btf_loader.c always attaches attributes to the function,
+> whereas it should use the component_idx to attach them to the parameter
+> tag where component_idx >= 0.
+>
+> The following changes are needed to fix that I think:
+>
+> diff --git a/btf_loader.c b/btf_loader.c
+> index b591219..9bb52c3 100644
+> --- a/btf_loader.c
+> +++ b/btf_loader.c
+> @@ -477,12 +477,56 @@ static struct attributes *attributes__realloc(struct attributes *attributes, con
+>          return result;
+>   }
+>   
+> +static struct tag *ftype__parameter(const struct ftype *ftype, int component_idx)
+> +{
+> +       struct parameter *pos;
+> +       int idx = 0;
+> +
+> +       ftype__for_each_parameter(ftype, pos) {
+> +               if (idx == component_idx)
+> +                       return &pos->tag;
+> +               ++idx;
+> +       }
+> +
+> +       return NULL;
+> +}
+> +
+> +static struct tag *function__parameter(const struct function *func, struct cu *cu,
+> +                                      int component_idx)
+> +{
+> +       struct tag *tag;
+> +
+> +       if (component_idx < 0)
+> +               return NULL;
+> +
+> +       tag = cu__type(cu, func->proto.tag.type);
+> +       if (tag == NULL)
+> +               return NULL;
+> +
+> +       return ftype__parameter(tag__ftype(tag), component_idx);
+> +}
+> +
+>   static int process_decl_tag(struct cu *cu, const struct btf_type *tp)
+>   {
+> +       int component_idx = btf_decl_tag(tp)->component_idx;
+>          struct tag *tag = cu__type(cu, tp->type);
+>          struct attributes *tmp;
+>   
+> -       if (tag == NULL)
+> +       if (component_idx >= 0) {
+> +               struct tag *func_tag = cu__function(cu, tp->type);
+> +
+> +               if (func_tag != NULL) {
+> +                       tag = function__parameter(tag__function(func_tag), cu,
+> +                                                 component_idx);
+> +                       if (tag == NULL) {
+> +                               fprintf(stderr, "WARNING: BTF_KIND_DECL_TAG for unknown parameter %d in BTF id %d\n",
+> +                                       component_idx, tp->type);
+> +                               return 0;
+> +                       }
+> +               }
+> +       }
+> +
+> +       if (tag == NULL && component_idx < 0)
+>                  tag = cu__function(cu, tp->type);
+>   
+>          if (tag == NULL)
+> diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
+> index 757e499..ab1c381 100644
+> --- a/dwarves_fprintf.c
+> +++ b/dwarves_fprintf.c
+> @@ -1203,6 +1203,18 @@ const char *function__prototype(const struct function *func,
+>                                          bf, len);
+>   }
+>   
+> +static size_t tag__attributes_fprintf(const struct tag *tag, FILE *fp)
+> +{
+> +       size_t printed = 0;
+> +       int i;
+> +
+> +       if (tag->attributes)
+> +               for (i = 0; i < tag->attributes->cnt; ++i)
+> +                       printed += fprintf(fp, "%s ", tag->attributes->values[i]);
+> +
+> +       return printed;
+> +}
+> +
+>   size_t ftype__fprintf_parms(const struct ftype *ftype,
+>                              const struct cu *cu, int indent,
+>                              const struct conf_fprintf *conf, FILE *fp)
+> @@ -1244,6 +1256,7 @@ size_t ftype__fprintf_parms(const struct ftype *ftype,
+>                                  if (n)
+>                                          return printed + n;
+>                                  if (ptype->tag == DW_TAG_subroutine_type) {
+> +                                       printed += tag__attributes_fprintf(&pos->tag, fp);
+>                                          printed +=
+>                                               ftype__fprintf(tag__ftype(ptype),
+>                                                              cu, name, 0, 1, 0,
+> @@ -1252,12 +1265,14 @@ size_t ftype__fprintf_parms(const struct ftype *ftype,
+>                                  }
+>                          }
+>                  } else if (type->tag == DW_TAG_subroutine_type) {
+> +                       printed += tag__attributes_fprintf(&pos->tag, fp);
+>                          printed += ftype__fprintf(tag__ftype(type), cu, name,
+>                                                    true, 0, 0, 0, conf, fp);
+>                          continue;
+>                  }
+>                  stype = tag__name(type, cu, sbf, sizeof(sbf), conf);
+>   print_it:
+> +               printed += tag__attributes_fprintf(&pos->tag, fp);
+>                  printed += fprintf(fp, "%s%s%s", stype, name ? " " : "",
+>                                     name ?: "");
+>          }
+> @@ -1409,11 +1424,8 @@ static size_t function__fprintf(const struct tag *tag, const struct cu *cu,
+>          struct ftype *ftype = func->btf ? tag__ftype(cu__type(cu, func->proto.tag.type)) : &func->proto;
+>          size_t printed = 0;
+>          bool inlined = !conf->strip_inline && function__declared_inline(func);
+> -       int i;
+>   
+> -       if (tag->attributes)
+> -               for (i = 0; i < tag->attributes->cnt; ++i)
+> -                       printed += fprintf(fp, "%s ", tag->attributes->values[i]);
+> +       printed += tag__attributes_fprintf(tag, fp);
+>   
+>          if (func->virtuality == DW_VIRTUALITY_virtual ||
+>              func->virtuality == DW_VIRTUALITY_pure_virtual)
+>
+>   
+> Now with that fix in place, we can add a decl tag parameter case to the pfunct test:
+>
+> diff --git a/tests/pfunct-btf-decl-tags.sh b/tests/pfunct-btf-decl-tags.sh
+> index a46aa1f..520148b 100755
+> --- a/tests/pfunct-btf-decl-tags.sh
+> +++ b/tests/pfunct-btf-decl-tags.sh
+> @@ -41,6 +41,7 @@ src=$(cat <<EOF
+>   __tag(a) __tag(b) __tag(c) void foo(void) {}
+>   __tag(a) __tag(b)          void bar(void) {}
+>   __tag(a)                   void buz(void) {}
+> +void qux(int __tag(param_a) arg) {}
+>   
+>   EOF
+>   )
+> @@ -48,13 +49,17 @@ EOF
+>   # tags order is not guaranteed
+>   sort_tags=$(cat <<EOF
+>   {
+> -match(\$0,/^(.*) (void .*)/,tags_and_proto);
+> -tags  = tags_and_proto[1];
+> -proto = tags_and_proto[2];
+> -split(tags, tags_arr ,/ /);
+> -asort(tags_arr);
+> -for (t in tags_arr) printf "%s ", tags_arr[t];
+> -print proto;
+> +delete tags_arr;
+> +if (match(\$0,/^(.*) (void .*)/,tags_and_proto)) {
+> +       tags  = tags_and_proto[1];
+> +       proto = tags_and_proto[2];
+> +       split(tags, tags_arr ,/ /);
+> +       asort(tags_arr);
+> +       for (t in tags_arr) printf "%s ", tags_arr[t];
+> +       print proto;
+> +} else {
+> +       print \$0;
+> +}
+>   }
+>   EOF
+>   )
+> @@ -63,6 +68,7 @@ expected=$(cat <<EOF
+>   a b c void foo(void);
+>   a b void bar(void);
+>   a void buz(void);
+> +void qux(param_a int arg);
+>   EOF
+>   )
+>   
+> @@ -98,7 +104,8 @@ fi
+>   
+>   if [ "$use_clang" -eq 1 ]; then
+>          tmpobj=$(make_tmpobj)
+> -       echo "$src" | $CLANG --target=bpf -c -g -x c -o $tmpobj -
+> +       echo "$src" | $CLANG -c -g -x c -o $tmpobj -
+> +       pahole -J $tmpobj 2>/dev/null
+>          run_test "$CLANG" "$tmpobj" || failed=1
+>   fi
+>   
+> Running this we see:
+>
+>   ./pfunct-btf-decl-tags.sh
+> Check that pfunct can print btf_decl_tags read from BTF.
+>     Testing with gcc (version 17)
+>     pfunct output does not match expected (gcc (version 17)):
+>     --- /dev/fd/63 2026-06-07 10:42:19.711753983 +0100 +++ /dev/fd/62 2026-06-07 10:42:19.711753983 +0100 @@ -1,4 +1,4 @@ a b c void foo(void); a b void bar(void); a void buz(void); -void qux(param_a int arg); +void qux(int arg);
+>     
+>     Complete output:
+>     a b c void foo(void); a b void bar(void); a void buz(void); void qux(int arg);
+>     Testing with clang
+>     passed
+> Test ./pfunct-btf-decl-tags.sh failed
+> Test data is in /tmp/pfunct-btf-decl-tags.sh.hXPG6r
+>
+> The following change to dwarf_loader.c fixes this:
+>
+> diff --git a/dwarf_loader.c b/dwarf_loader.c
+> index c492b56..7f5b44d 100644
+> --- a/dwarf_loader.c
+> +++ b/dwarf_loader.c
+> @@ -1910,6 +1910,8 @@ static struct tag *die__create_new_parameter(Dwarf_Die *die,
+>                  if (param_idx >= 0) {
+>                          if (add_child_llvm_annotations(die, param_idx, conf, &(tag__function(&ftype->tag)->annots)))
+>                                  return NULL;
+> +                       if (add_gnu_annotation_chain(die, param_idx, conf, &(tag__function(&ftype->tag)->annots)))
+> +                               return NULL;
+>                  }
+>          } else {
+>                  /*
+
+If you agree, I'd prefer you send this as an independent pre/post fix.
+
+[snipped]
+
+>> +check_gnu_attr:
+>> +	if (tag != NULL)
+>> +		goto out;
+>> +
+>> +	/* Handle GCC-style DW_AT_GNU_annotation attribute */
+>> +	while (dwarf_attr(die, DW_AT_GNU_annotation, &attr) != NULL &&
+>> +	       dwarf_formref_die(&attr, &annot_die) != NULL &&
+>> +	       dwarf_tag(&annot_die) == DW_TAG_GNU_annotation) {
+>> +		name = attr_string(&annot_die, DW_AT_name, conf);
+>> +		if (strcmp(name, "btf_type_tag") != 0)
+>> +			break;
+>> +
+>> +		tag = die__add_btf_type_tag(tag, die, &annot_die, cu, conf);
+>
+> I think there may be an issue here. die__add_btf_type_tag() will prepend
+> discovered tags to give us the BTF representation we want.
+
+Great catch. I would never have figured this out on my own.
+
+> However a
+> proof-of-concept test shows that gcc tested with latest master branch
+> as of
+>
+> commit 0e634b961123280c17c1c651b1d8b1567b9b523c (HEAD -> master, origin/trunk, origin/master, origin/HEAD)
+> Author: Marc Poulhiès <poulhies@adacore.com>
+> Date:   Fri Mar 27 16:29:16 2026 +0100
+>
+>      ada: Fix bug when reading multibyte utf-8 character
+>      
+>
+> ...shows that the DWARF representation already has the BTF-desired
+> order, so we wind up reversing it. Test below, but I _think_ something
+> like this may be needed:
+>
+> diff --git a/dwarf_loader.c b/dwarf_loader.c
+> index 14f71c9..c492b56 100644
+> --- a/dwarf_loader.c
+> +++ b/dwarf_loader.c
+> @@ -1633,7 +1633,8 @@ static struct btf_type_tag_type *die__create_new_btf_type_tag_type(Dwarf_Die *di
+>   
+>   static struct btf_type_tag_ptr_type *die__add_btf_type_tag(struct btf_type_tag_ptr_type *tag,
+>                                                              Dwarf_Die *die, Dwarf_Die *adie,
+> -                                                           struct cu *cu, struct conf_load *conf)
+> +                                                           struct cu *cu, struct conf_load *conf,
+> +                                                           bool prepend)
+>   {
+>          struct btf_type_tag_type *annot;
+>          uint32_t id;
+> @@ -1656,10 +1657,38 @@ static struct btf_type_tag_ptr_type *die__add_btf_type_tag(struct btf_type_tag_p
+>          cu__hash(cu, &annot->tag);
+>   
+>          /*
+> -        * Prepends: for annotations tag1 -> tag2 -> tag3,
+> -        * the tag->tags list ends up as tag3 -> tag2 -> tag1.
+> +        * Consider the following set of type tags:
+> +        *
+> +        * #define __tag(x) __attribute__((btf_type_tag(#x)))
+
+Bike shed, I'll just name it __type_tag.
+
+> +        *
+> +        * struct sample {
+> +        *      int value;
+> +        * };
+> +        *
+> +        * struct sample __tag(outer) __tag(inner) *global_ptr;
+> +        *
+> +        * The BTF chain should describe the pointer as:
+> +        *
+> +        * PTR -> TYPE_TAG "inner" -> TYPE_TAG "outer" -> STRUCT "sample"
+> +        *
+> +        * The tag nearest *global_ptr applies to the pointer’s immediate pointee
+> +        * type first. So inner wraps outer struct sample.
+> +        *
+> +        * For clang DWARF, child annotation DIEs are seen as "outer, inner"
+> +        * so to get the right final order we need to prepend.
+> +        *
+> +        * For GCC DWARF, the explicit DW_AT_GNU_annotation chain starts at the outermost
+> +        * BTF wrapper:
+> +        *
+> +        * pointer DIE -> inner annotation -> outer annotation -> struct sample
+> +        *
+> +        * so in this case we preserve that traversal order and append.
+>           */
+> -       list_add(&annot->node, &tag->tags);
+> +       if (prepend)
+> +               list_add(&annot->node, &tag->tags);
+> +       else
+> +               list_add_tail(&annot->node, &tag->tags);
+> +
+>          return tag;
+>   }
+>   
+> @@ -1690,7 +1719,7 @@ static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
+>                  if (strcmp(name, "btf_type_tag") != 0)
+>                          continue;
+>   
+> -               tag = die__add_btf_type_tag(tag, die, cdie, cu, conf);
+> +               tag = die__add_btf_type_tag(tag, die, cdie, cu, conf, true);
+>                  if (tag == NULL)
+>                          return NULL;
+>          } while (dwarf_siblingof(cdie, cdie) == 0);
+> @@ -1707,7 +1736,7 @@ check_gnu_attr:
+>                  if (strcmp(name, "btf_type_tag") != 0)
+>                          break;
+>   
+> -               tag = die__add_btf_type_tag(tag, die, &annot_die, cu, conf);
+> +               tag = die__add_btf_type_tag(tag, die, &annot_die, cu, conf, false);
+>                  if (tag == NULL)
+> :
+>
+>
+> Here's a test (feel free to adapt it if needed) that fails until the above is applied:
+>
+> #!/bin/bash
+> # SPDX-License-Identifier: GPL-2.0-only
+>
+> # Check that pahole preserves btf_type_tag order when emitting BTF from DWARF.
+>
+> source test_lib.sh
+>
+> outdir=$(make_tmpdir)
+>
+> # Comment this out to save test data.
+> trap cleanup EXIT
+>
+> title_log "Check BTF type tag order."
+>
+> GCC=${GCC:-gcc}
+> CLANG=${CLANG:-clang}
+> PAHOLE=${PAHOLE:-pahole}
+> BPFTOOL=${BPFTOOL:-bpftool}
+>
+> if ! command -v "$BPFTOOL" > /dev/null; then
+> 	info_log "skip: bpftool not available"
+> 	test_skip
+> fi
+>
+> compiler_has_btf_type_tag()
+> {
+> 	local compiler=$1
+>
+> 	if ! command -v "$compiler" > /dev/null; then
+> 		return 1
+> 	fi
+>
+> 	"$compiler" -x c -E -P - <<'EOF' 2>/dev/null | grep -qx 1
+> #ifndef __has_attribute
+> #define __has_attribute(x) 0
+> #endif
+> #if __has_attribute(btf_type_tag)
+> 1
+> #else
+> 0
+> #endif
+> EOF
+> }
+>
+> use_gcc=0
+> if compiler_has_btf_type_tag "$GCC"; then
+> 	use_gcc=1
+> fi
+>
+> use_clang=0
+> if compiler_has_btf_type_tag "$CLANG"; then
+> 	use_clang=1
+> fi
+>
+> if [ "$use_gcc" -eq 0 ] && [ "$use_clang" -eq 0 ]; then
+> 	error_log "Need gcc or clang with btf_type_tag support for test $0"
+> 	test_fail
+> fi
+>
+> src=$(cat <<EOF
+> #define __tag(x) __attribute__((btf_type_tag(#x)))
+>
+> struct sample {
+> 	int value;
+> };
+>
+> struct sample __tag(outer) __tag(inner) *global_ptr;
+>
+> EOF
+> )
+>
+> check_type_tag_order()
+> {
+> 	local btf=$1
+> 	local dump
+>
+> 	if ! dump=$("$BPFTOOL" btf dump file "$btf"); then
+> 		return 1
+> 	fi
+>
+> 	printf '%s\n' "$dump" | awk '
+> 	function parse_id(line, m) {
+> 		if (match(line, /^\[([0-9]+)\]/, m))
+> 			return m[1]
+> 		return 0
+> 	}
+> 	function parse_name(line, m) {
+> 		if (match(line, /\047([^\047]*)\047/, m))
+> 			return m[1]
+> 		return ""
+> 	}
+> 	function parse_type(line, m) {
+> 		if (match(line, /type_id=([0-9]+)/, m))
+> 			return m[1]
+> 		return 0
+> 	}
+> 	function check_ptr(ptr, id, tags, seen) {
+> 		id = type[ptr]
+> 		while (id != 0 && !seen[id]) {
+> 			seen[id] = 1
+> 			if (kind[id] == "TYPE_TAG") {
+> 				tags = tags (tags == "" ? "" : " -> ") name[id]
+> 				id = type[id]
+> 				continue
+> 			}
+> 			if (kind[id] == "STRUCT" && name[id] == "sample") {
+> 				if (tags == "inner -> outer")
+> 					exit 0
+> 				candidates = candidates (candidates == "" ? "" : ", ") tags
+> 			}
+> 			return
+> 		}
+> 	}
+> 	/^\[[0-9]+\]/ {
+> 		id = parse_id($0)
+> 		kind[id] = $2
+> 		name[id] = parse_name($0)
+> 		type[id] = parse_type($0)
+> 		if (kind[id] == "PTR")
+> 			ptrs[++nr_ptrs] = id
+> 	}
+> 	END {
+> 		for (i = 1; i <= nr_ptrs; i++)
+> 			check_ptr(ptrs[i])
+> 		if (candidates != "") {
+> 			print "type tag order mismatch; expected inner -> outer, found " candidates > "/dev/stderr"
+> 			exit 1
+> 		}
+> 		print "could not find tagged pointer to struct sample" > "/dev/stderr"
+> 		exit 1
+> 	}'
+> }
+>
+> run_test()
+> {
+> 	local compiler=$1
+> 	local tmpobj=$2
+> 	local btf=$3
+>
+> 	info_log "Testing with $compiler"
+>
+> 	if ! echo "$src" | "$compiler" -g -c -x c -o "$tmpobj" - 2>/dev/null; then
+> 		error_log "Could not compile type tag order test with $compiler"
+> 		return 1
+> 	fi
+>
+> 	if ! "$PAHOLE" --btf_features=+type_tag --btf_encode_detached="$btf" "$tmpobj" 2>/dev/null; then
+> 		error_log "Could not encode BTF for $tmpobj"
+> 		return 1
+> 	fi
+>
+> 	if check_type_tag_order "$btf"; then
+> 		info_log "  passed"
+> 		return 0
+> 	fi
+>
+> 	error_log "BTF type tag order does not match expected order ($compiler)"
+> 	return 1
+> }
+>
+> failed=0
+>
+> if [ "$use_gcc" -eq 1 ]; then
+> 	tmpobj=$(make_tmpobj)
+> 	btf=${tmpobj%.o}.btf
+> 	run_test "$GCC" "$tmpobj" "$btf" || failed=1
+> fi
+>
+> if [ "$use_clang" -eq 1 ]; then
+> 	tmpobj=$(make_tmpobj)
+> 	btf=${tmpobj%.o}.btf
+> 	run_test "$CLANG" "$tmpobj" "$btf" || failed=1
+> fi
+>
+> if [ "$failed" -eq 0 ]; then
+> 	test_pass
+> else
+> 	test_fail
+> fi
+
+This is definitely directly related to the series and I'm happy to fold 
+this in - any preference if this wants to be a separate patch or just 
+fold into into the main change.
+
+Thx,
+-Vineet
