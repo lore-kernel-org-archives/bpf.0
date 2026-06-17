@@ -1,32 +1,33 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA67F4A33EC;
-	Wed, 17 Jun 2026 16:46:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.229.168.213
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 057AB4ADDB1;
+	Wed, 17 Jun 2026 16:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781714769; cv=none; b=gpPYnrqS3vkltVsXnDLiTXW+fqjOOW1YtgbVfRMmrWqWjtrv4afWi9JitKTNimZ2C3RT9un0e2Fb8bQL+BbhWfkN30m1Z37h+CLRwG+IrdsYvqemj8QFwPkMvMftbjrFWygyCvWbN5EFRHM6eGAUX67cfsqfZZ8OLPBGItcMos4=
+	t=1781714772; cv=none; b=p931k0Fm/uKUY5OExiZi0aF6gW1X6bU/jZKxGU5UZEBHT5CneAXpvk9TZX3JsEi+mZpDEiIUI3FEkMwLU6L2yBHUZasSaAVim+vG4ld8s9bN1TUL+VNPhgDQWMxS5oqSnSqb4kWmoVDJXFxHjbidFVblrhCD2RN5vfXdPBl062g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781714769; c=relaxed/simple;
-	bh=Ft+QwchdqOIpmsUxZ8HcwZPUuDBPrCD8WYYuBMFr3To=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=B8MGc6JGhQDyfp0LKEX0pfn/MFsTKBHotgjBUBvzchezGVh6G/FfLIbxakyB5gSThkUvJ4NpH/DVWuogjkbXyl0w+2MBblMERZbNcrpJlzd1C9PLcyzTLuWZsHdGZwLbu9ro7gXGcv08T6M41E8m6uc0mAweyh5IgHlpdIBLMxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=BoLS0oVf; arc=none smtp.client-ip=52.229.168.213
+	s=arc-20240116; t=1781714772; c=relaxed/simple;
+	bh=VP48m+HF8GWGxqAIuK+5MU8Hq/Pi3J+1HQAHi/NBmqU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FXyaAC1vjkYtk0mUGENWFoDgIGHUqZ4MQkhrg+Hao66dp9dCcazmatpa5HzwyyIkM7ZFjzBGuPcWSAj5B4mVOebUAajZ5HL/GHQzTel4VLdxRHa5XrhQxIMROQas+x3V59BbO+qtYQ8Q38hw76ltIW2hZiWmXL8KUgGN2i2YKPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=OC35BhTJ; arc=none smtp.client-ip=206.189.21.223
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="BoLS0oVf"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="OC35BhTJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=wFAEN8lPUjghylnam62xB/cWBafMQoY
-	ww54ICbqvOig=; b=BoLS0oVf5Vqvj71x7LlT9uPiChUoO0ZotbXWEdOHHsMRhpr
-	cGfQ3R52/iv1jwLWrhPq2oFuVXb8kamsgaKoq9Q1j+ESLtg5eLT66bKpRYNpKRdv
-	9262OBLMAxe7Q40E+FlXkUsdA1yC2Boo+bHpFn0ncZ8zzdPJrJ4XK01rpuVM=
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
+	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	To:Cc; bh=Dludpoi7Cr5Ga4xsK6D1yZT28P4mKgAJAsM0zOOGxQk=; b=OC35Bh
+	TJ+xbhDfn+RdXZyYVkVYkOqlYHCF/WQGSN7D4mKwKd9+BGW10j1QweAwxSyt7l3D
+	/NnQgVtteHmxL7kFzgdwOu2dcdbNMcPSpBFtbMCEX4zFtFWyzoyA32leaWstYtgk
+	QA0MeX89bsMDTc0tfXUIkvwdnGrtlV++iY7mY=
 Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web5 (Coremail) with SMTP id zAQGZQA38cA1zzJqb498Ag--.43034S3;
-	Thu, 18 Jun 2026 00:45:42 +0800 (CST)
+	by web5 (Coremail) with SMTP id zAQGZQA38cA1zzJqb498Ag--.43034S2;
+	Thu, 18 Jun 2026 00:45:41 +0800 (CST)
 From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Thu, 18 Jun 2026 00:45:43 +0800
-Subject: [PATCH bpf v2 1/2] bpf: Fix stack slot index in nospec checks
+Subject: [PATCH bpf v2 0/2] bpf: Fix stack slot index for Spectre v4 nospec
+ checks
+Date: Thu, 18 Jun 2026 00:45:42 +0800
+Message-Id: <20260618-f01-11-stack-nospec-slot-index-v2-0-ede9495359b6@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,9 +36,11 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260618-f01-11-stack-nospec-slot-index-v2-1-ede9495359b6@mails.tsinghua.edu.cn>
-References: <20260618-f01-11-stack-nospec-slot-index-v2-0-ede9495359b6@mails.tsinghua.edu.cn>
-In-Reply-To: <20260618-f01-11-stack-nospec-slot-index-v2-0-ede9495359b6@mails.tsinghua.edu.cn>
+X-B4-Tracking: v=1; b=H4sIADbPMmoC/4WOzQ6CMBCEX8Xs2SUthp948j0Mh9IusIqFsIVgC
+ O8uoHePM5l83ywgNDAJXE8LDDSxcOe3EJ9PYBvja0J2W4ZYxalKdYKV0qg1SjD2ib6TnixK2wV
+ k72hG0klSxsa6JM9gg/QDVTwfgjuUfQXFt5SxfJANO3qfNSyhG97HjUkf458x+2ecNCqki1G5K
+ pV1Gd1ehluJgrCvm9FE5MbIeijWdf0AJisKSu8AAAA=
+X-Change-ID: 20260615-f01-11-stack-nospec-slot-index-e155b2acd587
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
@@ -50,70 +53,72 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
  Jiayuan Chen <jiayuan.chen@linux.dev>, 
  Emil Tsalapatis <emil@etsalapatis.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781714744; l=1631;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781714744; l=1801;
  i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=Ft+QwchdqOIpmsUxZ8HcwZPUuDBPrCD8WYYuBMFr3To=;
- b=iATZUF202DyOyeOV2mlIg5qX7HbDyrZsmSTESSq3mV+CTc453bCa3/vA91TJ0jekVmkHGS6LS
- KXem5sU1pqCDHTreLU3Yg5UiycsWzLx4JVSNK5ysYSLLV3IbbohRBxZ
+ bh=VP48m+HF8GWGxqAIuK+5MU8Hq/Pi3J+1HQAHi/NBmqU=;
+ b=Sgraxzp9IVh6gy24UxvMenGz4n322WPw+qRE1JhR51x/qFvCpFiFSmmDHmBPHoVn7yP+qx8Pt
+ yNbTcut8h93AwRQE71Emb0P8e7aFxHIwt7dQ447Cc3L9IU+WPBcC1DJ
 X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
  pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:zAQGZQA38cA1zzJqb498Ag--.43034S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7AF45tF1xAFykCw4kAw4rGrg_yoW8WF1xpr
-	ykWF12gF4xKasruFnFvF4v9r95GF4DG3y7GFWjv34FvFn5J34kWasagry5J3WFyFyrX3WS
-	qF1Yy39ayw1Uu3DanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPl1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+X-CM-TRANSID:zAQGZQA38cA1zzJqb498Ag--.43034S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4Dtw1DuFWrKw1rWF15Jwb_yoW8Aw4Upa
+	yvkF1Sy34DGFyxuF1ay3W8KFyrWrykGr47Xr1aqw1UZa1rGFyxWFZ29a4UAw1fAas5XayF
+	vFW3Xr90kayUAFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBC1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
 	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1U
-	M28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAac4AC62xK8x
-	CEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80
-	ewAv7VCjz48v1sIEY20_GrWkJr1UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-	vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
-	n4kS14v26r4a6rW5MxkIecxEwVAFwVWUMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1s
-	IEY20_GrWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC2
-	0s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI
-	0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv2
-	0xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2js
-	IE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZF
-	pf9x0JU21v3UUUUU=
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQQBA2oytN46JgAAsp
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l
+	84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1lnxkEFVAIw20F6cxK64vIFxWle2I262
+	IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx2
+	6r4rKr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4
+	CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY
+	02Avz4vE14v_JwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4rKr1UJr1l4I
+	8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWU
+	JVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7V
+	AKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42
+	IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU2L05UUUUU
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQYBA2oytN45-AADsx
 
-check_stack_write_fixed_off() computes the byte slot for a fixed-offset
-stack write as -off - 1, and records each written byte in slot_type[] with
-(slot - i) % BPF_REG_SIZE.
+check_stack_write_fixed_off() uses one byte-indexing scheme when checking
+whether a fixed-offset stack write needs Spectre v4 sanitization, and another
+scheme when recording the write into slot_type[].
 
-The Spectre v4 sanitization pre-check uses slot_type[i] instead. For a
-4-byte write at fp-8 after the lower half of fp-8 has been zeroed, the
-pre-check scans bytes 0..3 and sees STACK_ZERO while the actual write updates
-bytes 7..4. That can leave the second half-slot write without nospec_result
-even though the bytes being overwritten still require sanitization.
+For sub-8-byte writes this can make the sanitization check look at bytes that
+are not overwritten by the write. A zeroed lower half-slot followed by a write
+to the upper half-slot can therefore miss the nospec barrier for the second
+write.
 
-Use the same slot index in the sanitization pre-check that the write path uses
-when updating slot_type[].
+Use the same stack-byte index for the sanitization check and the slot update,
+and add a focused verifier selftest that expects both half-slot writes to emit
+nospec through the unprivileged loader lane.
+
+Bounded impact: this fixes verifier/JIT Spectre v4 mitigation emission for a
+fixed-offset stack-write corner case. No architectural verifier memory-safety
+bypass, exploit chain, CVE, embargo, or security escalation is claimed.
 
 Fixes: 2039f26f3aca ("bpf: Fix leakage due to insufficient speculative store bypass mitigation")
-Acked-by: Luis Gerhorst <luis.gerhorst@fau.de>
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+v1->v2:
+  - drop __caps_unpriv(CAP_BPF) from the selftest
+  - fix selftest style
+  - use Fixes: 2039f26f3aca per review
+
+v1: https://lore.kernel.org/bpf/20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn/
+
 Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 ---
- kernel/bpf/verifier.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Nuoqi Gui (2):
+      bpf: Fix stack slot index in nospec checks
+      selftests/bpf: Cover stack nospec slot indexing
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2abc79dbf281c..50e80dbbc1784 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3479,7 +3479,8 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
- 		bool sanitize = reg && is_spillable_regtype(reg->type);
- 
- 		for (i = 0; i < size; i++) {
--			u8 type = state->stack[spi].slot_type[i];
-+			u8 type = state->stack[spi].slot_type[(slot - i) %
-+							      BPF_REG_SIZE];
- 
- 			if (type != STACK_MISC && type != STACK_ZERO) {
- 				sanitize = true;
+ kernel/bpf/verifier.c                              |  3 ++-
+ .../testing/selftests/bpf/progs/verifier_unpriv.c  | 22 ++++++++++++++++++++++
+ 2 files changed, 24 insertions(+), 1 deletion(-)
+---
+base-commit: e4287bf34f97a88c7d9322f5bde828724c073a6b
+change-id: 20260615-f01-11-stack-nospec-slot-index-e155b2acd587
 
--- 
-2.34.1
+Best regards,
+--  
+Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 
