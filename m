@@ -1,161 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f68.google.com (mail-yx1-f68.google.com [74.125.224.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2902E7387
-	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 11:43:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781696589; cv=none; b=ux7VQN+eCQlO9u0Ynr8Lb0kYAW8ZBZNC0rfe9v1aZlRriZFZHQvijc3DPvjGsHm4k93aHKZ7Qu+c116My7+CigMw63eBSiXFBYQbOc5v9UlqoaT571dktPWvZmRG5KjLbX6oxjZqO5LCP1zkQ1L/3j2ljLq6vF6i8MwoLqQbuns=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781696589; c=relaxed/simple;
-	bh=Bke0GXKzlvtElmhtrORrXGNbHuHWsri/xRLwe/E1iOk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=or3YvbisTR/ZWGuYn6n+wgTi+FlKPh2/ZAjQA/6sLlVS69Q3kFvKkYCkpPBWDaNzWQtuVl5weHxwiV0eQ9nfq81ykkPSBm6brzG7P4+ItEJ66074SgQUn1Qe39O1LMxV0P1t0qPz4qyfo1cbFc480P02adHg+N5M6OaApipSWnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D/amrcCK; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466083F0751
+	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 12:00:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781697622; cv=pass; b=ubm+r+kyqLj2GCzb3TsHge/iV9sAk0VqvBEYtKhdJ+EAyUXjzkTDWBZ53ZklRxTBA/IPfqTfzjr032e/wauhS474lDJfwpQYt96VktK/HjlbtJVbq/h6eXqiYglINIrlfPkWn8q1af/Wslsm1JPlGdu7cZCJTM8/Ogn2XSyz3MM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781697622; c=relaxed/simple;
+	bh=9ymoeEPidKfzkZONuR4B16ek9eOD8FYaVaAsgJjxHfc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XiO7UE5EKEaXk7mLoSptvc13NNGOgtCkvU34Ldoo+Lsbhl3voi9s0qPjwqM58rv0eEllmacl+QqHFgTBIXg44rjvwY4BvBqp3vSCGu+ljgsXubyqptroPOMJ675Z9qyltf3qkc2XwGPiAHg3UthAAhP2ydLP5Xxu90YCJk6kqtg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fKKasQGQ; arc=pass smtp.client-ip=74.125.224.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D/amrcCK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08AA81F000E9;
-	Wed, 17 Jun 2026 11:43:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781696588;
-	bh=9iOf4gqd94N03VvdpHIe43f/sVZbKXfbImRTzVFw+x4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=D/amrcCKMZEL5jOe9heS9TuhU+sE6HIWvrhFj1jqvGlS+iqetUQouH1PsoOMpfrNW
-	 q5HEPjSBVvCZuIRRVofYraUC2bY+ewZlcc0obSVujyDh+3iM6Cs4gqNqAtAYa7bBnl
-	 cPeDztfYcl3a8/G6vDSp/VXYQPoXRlXNTHl3KsF4Trn25ZKQJcJyk31euD22bwGfav
-	 R63+B7FHCfQnaMvRM6q9Q92T4FTjQ92pDXkW3nFP3vudN16qFzEBuRq/HjKGOsiKiI
-	 pjyjgL0rmg8EBqvoSYdmygQJBUzBogzdz7Q1R2UHgoMMCB6yZ55804EGefmKBPuQGe
-	 RxaACPbkyJp5A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 7/7] x86/setup: prepend embedded bootconfig cmdline
- before parse_early_param
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Breno Leitao" <leitao@debian.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260617-bootconfig_using_tools-v5-7-fd589a9cc5e3@debian.org>
-References: <20260617-bootconfig_using_tools-v5-0-fd589a9cc5e3@debian.org>
- <20260617-bootconfig_using_tools-v5-7-fd589a9cc5e3@debian.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 17 Jun 2026 11:43:07 +0000
-Message-Id: <20260617114308.08AA81F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fKKasQGQ"
+Received: by mail-yx1-f68.google.com with SMTP id 956f58d0204a3-660512d80b4so1065051d50.1
+        for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 05:00:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781697618; cv=none;
+        d=google.com; s=arc-20240605;
+        b=dgj0/92M7IEcE5mhJwbu8xnkscaLl04wTBO/E4ZTv+08u5T+v6z480dGh15G2FzTew
+         2Wd4mA/68jV0sTVJa8FPEn2GH5WBKjxuhuGr9F0RZCklkzJ1V2WXstP43C16yTUuLfjw
+         2NoqSLmYMPJdqgaS0+VqhycrRL1DXVNzEvXDibRf3tpYaoXpULXefTft81VDy3uCRwIz
+         lFPe1p32o3c+8siBaH0hzf0jnnjwedIl7P2GTW93U0b8IqaeJ21usfC47XlzRjZ8NTcJ
+         UQRGCs1Fm0Wuh5qhiVDRFsT0CstTIT921IWLLSt/7Qzc5GHjuGf0Wll+wQNnEp504bKS
+         ZovA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=9ymoeEPidKfzkZONuR4B16ek9eOD8FYaVaAsgJjxHfc=;
+        fh=EvvwhkXYzdSjFibnMsr+0ei5uyYGaJ3ZHKo9b54o4Mw=;
+        b=iiMjEaJQNs6g62jMGWnPy7uteBW5zxsRogCnL3apYCPGVTIGzNbNmxOXt/uVCRf3k9
+         DqtUPY7vnc+VsjYOcaboN94QNEnkdWT6522qVh3/3dLSLGixtRPWC/MmKuz1RacDDHPP
+         Re5NhBdq3TZ9A0ndBga2d+EoXDga/aVSk4jxzPgQe4wNzv8iiqddqPkB3G/DzsIbY2fV
+         MZwAOGTxE3fFcU98LIFFS0H492Y5Ei3xvS/KSCltiZqIk1VLC4qzY4D0GIIF3nRgIcnc
+         pm+OXWjZhSZgEzjFeIQzCtwoqQhIcpzhopHONjLmzQMW3F9iUVD6ITn7asRvYcUFr5zL
+         hDJg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781697618; x=1782302418; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9ymoeEPidKfzkZONuR4B16ek9eOD8FYaVaAsgJjxHfc=;
+        b=fKKasQGQAyaUMtkjvtNnqJDg9XHwD33ASWPqISkI9Esv/eA2Gfvz+JNuom6/vOcjRf
+         n/NVyDLmeYTL4KS8qJ3lJmUzD3fqbUtWTMdRqxU2WbvFIdo6LDZ+IcpHNcM4eomL9uu0
+         8XwgcQVzDij2C5iwve8JJ5h7BAlBkhPDCYohbUo7NHSWxt6bCfIN9+uz+aBTWILmcLYB
+         lF5Ebe4G6pvBII6qp+ev8Wq8UKJZZCwwMeoLjvFFUNsD9qRj0PT+ijS83ooEkl3McGSk
+         b8rrq0ACFdIXJdGB45s6vnrpJJrjN8bD/lgx5/gQd/t7yogsk4kH/DJ9icypPn8Ib9Wq
+         UAcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781697618; x=1782302418;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9ymoeEPidKfzkZONuR4B16ek9eOD8FYaVaAsgJjxHfc=;
+        b=YeeVs8d5zxgkkIRhPdkKjv/dH2cupHmSUaiBoK3yeb5tcxBdxYkX1Ji4xGLdstExCK
+         lcnV82frnnkARA6Y97EEe9QJKVly2eBaqPlkhfwiDmhLVC1Hoj6u4+/s4JbBpD+ROI7m
+         jcruAQ+K9AeHEhRdjwxCFo+01x0wu/UxknyKrEe/DsuHB9B0DQ9JhjAVYH0z6K8HUaZU
+         sM5Dfv4qaGw2OJSE7FQJ32LnGx62mp1mvHR8gQ4ULCQWTfb73S6RTudS3wsXf0bJlCUc
+         PfyXQe4SmG3kwtg3NBPxk20hbm3vNOxfnI4IPIZa5ft9lVgM/oBwvLJAdC0mQZacvxx+
+         BYKg==
+X-Forwarded-Encrypted: i=1; AFNElJ/FipLh3lvksmDYAN6mJpSE9lWYLBfabP/6t12FdyfilORKJ2BXPz4Htqub4HUqp8iFudU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsQUPJMischR6bfjzFRYb2JcnFJUPSptOP5I+RqTa5wwbpl1zf
+	4BNDZrma1ymuQUc4f7pWFN6s/Gh21Ba3uAbHfJNXRiaeZ4IBGKxUnn9tQzxsAlKVpChPqv+eSjn
+	pmg7pY2VWRzaCelSvjmnBwUNr9Bm5Btw=
+X-Gm-Gg: AfdE7cl9UdWFUJ/fCw7vSBo0WqX72t0fTKAn6YJQnCQveSKjo1jObMVQ3FO/9hgj3CI
+	2TDAhoI5hBX44tpVtTTPbw8VmN6TkBG/zOjGPMTwfbtvXImS6o+0lmVSnccCMKish98HCqiHTd4
+	no/eU3oO2y81xT6fI3hDHIN8f+H7A+loRq0LUN/rUgf93UpTjd+qCPqtzyxin3oc6wSywleDvtT
+	KwuEj2sZvE71xlQVAp3SH7goLXuUKZzS+Yb48DTK/fGWTjzYEzwvdG5oH6fxzFaL2yzz/mVjNw=
+X-Received: by 2002:a05:690e:1306:b0:654:3fca:3515 with SMTP id
+ 956f58d0204a3-662ced30a5dmr1739473d50.30.1781697617856; Wed, 17 Jun 2026
+ 05:00:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260611071242.2485058-1-dongml2@chinatelecom.cn>
+ <20260611071242.2485058-2-dongml2@chinatelecom.cn> <20260613112113.55d9313f@kernel.org>
+ <TYn10tJ2SIGF1pAhF26DRQ@linux.dev> <ajJrckiXEUztBQDz@boxer>
+In-Reply-To: <ajJrckiXEUztBQDz@boxer>
+From: Menglong Dong <menglong8.dong@gmail.com>
+Date: Wed, 17 Jun 2026 20:00:06 +0800
+X-Gm-Features: AVVi8CceZgHFM8mfvFHKtEXFCMHWNlKB0MljWDwvRAc_BYBHABk8LGbFC_ALR_Q
+Message-ID: <CADxym3aXnGwna-TKQmJ24UD1XNmq3hsapRQXQtwKF=YC-qqrOA@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/3] net: busy-poll: introduce sk_tx_busy_loop()
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: Menglong Dong <menglong.dong@linux.dev>, Jakub Kicinski <kuba@kernel.org>, jasowang@redhat.com, 
+	mst@redhat.com, xuanzhuo@linux.alibaba.com, eperezma@redhat.com, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	pabeni@redhat.com, magnus.karlsson@intel.com, sdf@fomichev.me, 
+	horms@kernel.org, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
+	john.fastabend@gmail.com, bjorn@kernel.org, kerneljasonxing@gmail.com, 
+	netdev@vger.kernel.org, virtualization@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Split-brain and silent loss of embedded bootconfig when an initrd =
-bootconfig is present.
-- [High] The check for 'bootconfig' in setup_arch() does not stop at the '-=
--' separator, leading to a split-brain state if 'bootconfig' is passed stri=
-ctly as an init argument.
---
+On Wed, Jun 17, 2026 at 5:40=E2=80=AFPM Maciej Fijalkowski
+<maciej.fijalkowski@intel.com> wrote:
+>
+> On Sun, Jun 14, 2026 at 06:12:46PM +0800, Menglong Dong wrote:
+> > On 2026/6/14 02:21, Jakub Kicinski wrote:
+> > > On Thu, 11 Jun 2026 15:12:40 +0800 menglong8.dong@gmail.com wrote:
+[...]
+> >
+> > I'm not sure if it is a good idea to introduce the sk_tx_busy_loop().
+> > Maybe we can modify the driver instead by using the same NAPI
+> > for both data sending and receiving, just like others do. The
+> > advantage of introduce sk_tx_busy_loop() is that we can split the
+> > data sending and receiving, which maybe more efficient.
+>
+> Would be good if you back your changes by any performance numbers. I
+> believe that drivers do tx processing via rx napi as before AF_XDP it was
+> only about cleaning up writebacks, AF_XDP added more weight via actual tx
+> descriptors submission.
+>
+> Maybe you can vibe-code virtio-net to work only with rx napi and see what
+> are the results.
 
-commit 8df914967d65efb57f129f5003c1c8d584ad9df9
-Author: Breno Leitao <leitao@debian.org>
+Hi, Maciej. I have not done such performance testing yet. It's a good
+and interesting
+idea to do such testing on viriot-net, and I'll do it. If there is no obvio=
+us
+performance differences, I'll modify virtio-net by sending data via rx napi
+instead.
 
-x86/setup: prepend embedded bootconfig cmdline before parse_early_param
+>
+> Side note/question - Do you have a tx-only use case for AF_XDP ? I am
+> planning (for a long time actually) to implement asymmetric AF_XDP
+> sockets. Currently for ZC scenarios xsk socket occupies both rx and tx
+> queues even when you do rx or tx only.
 
-This patch modifies the x86 boot sequence to prepend embedded bootconfig
-parameters to the kernel command line early in setup_arch(). It manually
-checks for the "bootconfig" parameter before parse_early_param() runs,
-and adjusts setup_boot_config() to avoid duplicating the command line
-prepend later.
+I think this is an interesting idea, and will be helpful in some cases.
+I'm improving the performance of MySQL with AF_XDP. For this case,
+tx-only is not suitable, as data reading and writing are both needed.
 
-> The prepend necessarily runs before setup_boot_config() detects an
-> initrd bootconfig, so an initrd cannot override the embedded "kernel"
-> keys for early_param(). This is intentional: the embedded cmdline acts
-> like a build-time CONFIG_CMDLINE. An initrd bootconfig's "kernel" keys
-> never reached early_param() anyway (they apply late via
-> extra_command_line), so nothing is lost -- the initrd keys still apply
-> late, with last-wins keeping the embedded values in effect.
+But for the other case, such as Redis, data reading is mostly. And in
+this case, I think it's a good idea to use such "tx-only" ZC AF_XDP.
 
-[Severity: High]
-Does this accurately reflect the behavior when an initrd bootconfig is
-present?
+In my case, I don't want to occupy the whole NIC or the whole queue
+with AF_XDP, and the other users can use the NIC too. However, the
+ZC of AF_XDP has a little additional overhead to the skb in rx path,
+as there is an extra data copy.
 
-If both an embedded bootconfig and an initrd bootconfig are present,
-setup_boot_config() handles it like this:
+If such "tx-only" ZC is supported, the performance of AF_XDP is still
+good in the read mostly case, and doesn't have additional overhead to
+others too.
 
-init/main.c:setup_boot_config() {
-    data =3D get_boot_config_from_initrd(&size);
-    if (!data) {
-        data =3D xbc_get_embedded_bootconfig(&size);
-        from_embedded =3D true;
-    }
-    ...
-}
+I haven't used AF_XDP for such a "reading mostly" case yet, so I'm not
+sure if I'm right ;)
 
-This means the embedded bootconfig data is entirely ignored for the runtime
-tree, silently discarding any tree-structured configuration (like ftrace or
-IMA) from the embedded bootconfig.
+Thanks!
+Menglong Dong
 
-Furthermore, extra_command_line from the initrd is placed before
-boot_command_line in saved_command_line. Since the embedded keys were
-already prepended to boot_command_line in setup_arch(), they appear
-after the initrd keys.
-
-With last-wins semantics, the embedded kernel parameters override the
-initrd kernel parameters, while the tree data comes exclusively from the
-initrd.
-
-> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-> index 46882ce79c3a4..d69ba84c203f1 100644
-> --- a/arch/x86/kernel/setup.c
-> +++ b/arch/x86/kernel/setup.c
-
-[ ... ]
-
-> @@ -924,6 +926,31 @@ void __init setup_arch(char **cmdline_p)
->  	builtin_cmdline_added =3D true;
->  #endif
-> =20
-> +	/*
-> +	 * Match the runtime bootconfig parser's opt-in: only fold the
-> +	 * embedded kernel.* keys into the cmdline when "bootconfig" is
-> +	 * present on the command line, or CONFIG_BOOT_CONFIG_FORCE is set.
-> +	 * setup_boot_config()'s parse_args() loop treats any presence of
-> +	 * the "bootconfig" key as opt-in (bare, =3D0, =3D1, ...), so check both
-> +	 * forms here: cmdline_find_option_bool() matches the bare key,
-> +	 * cmdline_find_option() matches "bootconfig=3D<anything>". Without
-> +	 * the second check, "bootconfig=3D0" would skip the early prepend
-> +	 * but still trigger the late runtime apply -- a split-brain state.
-> +	 * CONFIG_BOOT_CONFIG_FORCE defaults to y when BOOT_CONFIG_EMBED is
-> +	 * set, so on the default config the embedded keys are applied
-> +	 * unconditionally.
-> +	 */
-> +	{
-> +		char buf[8];
-> +
-> +		if (IS_ENABLED(CONFIG_BOOT_CONFIG_FORCE) ||
-> +		    cmdline_find_option_bool(boot_command_line, "bootconfig") ||
-> +		    cmdline_find_option(boot_command_line, "bootconfig",
-> +					buf, sizeof(buf)) >=3D 0)
-> +			xbc_prepend_embedded_cmdline(boot_command_line,
-> +						     COMMAND_LINE_SIZE);
-> +	}
-
-[Severity: High]
-Could this create a split-brain state if "bootconfig" is passed strictly as
-an init argument (e.g., after the "--" separator)?
-
-The cmdline_find_option_bool() and cmdline_find_option() functions search
-the entire command-line string and do not stop at the "--" separator.
-
-If a user passes "-- bootconfig", setup_arch() will detect it and
-prematurely prepend the embedded kernel parameters to the command line.
-
-Later, the runtime parser parse_args() in setup_boot_config() strictly
-stops parsing at "--". It will fail to find "bootconfig" and exit early
-without initializing the bootconfig subsystem.
-
-This leaves the system in a state where the embedded kernel parameters are
-fully applied, but the bootconfig tree itself remains completely
-uninitialized.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260617-bootconfig=
-_using_tools-v5-0-fd589a9cc5e3@debian.org?part=3D7
+>
+> >
+> > >
+> > > Third, this series does not apply.
+> >
+> > Ah, I'll rebase this series if a V2 is acceptable.
+> >
+> > Thanks!
+> > Menglong Dong
+> >
+> > >
+> > >
+> >
+> >
+> >
+> >
