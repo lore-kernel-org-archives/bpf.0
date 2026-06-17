@@ -1,34 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E1BA394793;
-	Wed, 17 Jun 2026 11:18:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433E330F7FF;
+	Wed, 17 Jun 2026 11:18:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781695127; cv=none; b=Bj11N6hvG5LTQH9R9cuNwgSHvwJqgVMBi/5pp5LqG6aqxvZ+ExNHIib55UusH7UB1sN01Q39CUX9AiWTCBo8NocE7wWlA+A4zxK+JWSxKBkIVmFDfEz5FTgmAUDVXKPCrjbJ31niB0sc5UKKK2C0YE1BBNrFLIvwsHj1s6ViHUE=
+	t=1781695132; cv=none; b=G5ksp/tY5Lc+bHmHu6u6cg5M3Hg/yPkE7oEnPa2AiZvf39/Mn0yyT48DkmJjWP6d9iEI2TVmbC5tksRlTUb8o7FmmNAlSwR04kqik0oobWo5734TyB/902PW7NwtSaQ5mps6AJyPiWYSBgK6tJgTcxb2tjxFc/3ah936pFXpDDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781695127; c=relaxed/simple;
-	bh=RlnSDe8jTbvt6nTll+OU8DpOGpiGyEo+2R+RdH0TcI0=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HUl2xH7FRq1UHtJ+wKKLQYtZAdHwlukh7KSBLYj3xYi2BZKKiH1HdulP6C3t8YUUS++gl5HRy5mv1QKFjbb8dLT+tqFpRsxEcLIkb/c1PVuJS/tOtqej0WEYJ9pXo7VL7EY4H4eGtti3pdy+O9QZUv2AQ4nNJcZn03oIc/tWAYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CesLbRwW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781695132; c=relaxed/simple;
+	bh=nhtvb7n4nG7NtB98JV2iAuqTyzjMv1dlncYJFgBnYWM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=UDkjtmikVnsVbQu8xWJFfeqaCakYgWd6N5F9+5/nsvA2VPAdHgDYZDJBFnliAa/x2uenvYjEhVPqqmLjINvz9fAoAnyafD7xWQDljsL2QvDfQyt4t32v+w/6n3yErtFNbV+tj2mTVmRt3UqKmx5BW4bH+WKTO+bt+rartukLfu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jDZSgon4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CesLbRwW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DC011F00A3D;
-	Wed, 17 Jun 2026 11:18:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jDZSgon4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33EB81F00A3A;
+	Wed, 17 Jun 2026 11:18:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781695124;
-	bh=UfBJt+LNJ9jrCs3poe+MX0Rqq/0jXvVOHqHItbwOlTI=;
-	h=From:Subject:Date:To:Cc;
-	b=CesLbRwWZAsJTqbNT62CZ83MCeUQlmp9s8DXamFQmeRrCZjrYTA6b7+umICkOH2Hd
-	 0MwUg6MWMIr4/7U/EXfDqChhkayKF2WgKTTeCdBFZLXHxO8AP3M+1UW3QONcK/hmjO
-	 +1tTbq1xsYYru2VPF0mT6Hg5OXc5jVW++mu0XnXg0EAVYWsZGHk33T2ju+WFRspxsV
-	 SyuGsB4yS/F6jrCaGpq8qsFaWvJe9LEs/LWU4t77PqYI2JanrlHrVI4C7N+dZNmbxD
-	 WO3ibszcJ6HT63yPelw5pdhLdflH/W9xlgzwmdQkJ36wV68nX06a2PVjftAquU8buH
-	 2Dw8XDTGBkgKw==
+	s=k20260515; t=1781695129;
+	bh=IOYHzpnmvPvW25xDPV/zweS3p1AZM7TIzPB0ltBBd6E=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=jDZSgon4X/o1keAlZPXBdIhe7dvyzQhORt4PAu6yr//YLnKfECRtcKSN3bmmIjBJo
+	 l+opHyiqCZJNkSznwM5Bm6wSKhXMKe6lu+90ceVvsjNRj0r0/pNIJybpTkggp3v8LG
+	 oq4CY+zTsqgpvZKuMIVkLKnOANL0q2UmTTS/BX3YhzJtohkTbX/EXFGj+RpJywbqzP
+	 n8VmbZ96XJ+PVeEW2nAadgJXcNxrvH9DWBuRSDFKT70DHfiBZlXYNX9ETLwu7VqTV1
+	 AyOhzooMiLBq0IzL8HUlN9geoAZS92rI5/B/Xxjme9rGtyOF673cJp33WW4T1Teen4
+	 YQJ2+SSCSJ9dw==
 From: Christian Brauner <brauner@kernel.org>
-Subject: [PATCH 0/2] Add bpf_sock_read_xattr() kfunc to read socket xattrs
-Date: Wed, 17 Jun 2026 13:18:26 +0200
-Message-Id: <20260617-work-bpf-sock-xattr-v1-0-a1276f7c9da3@kernel.org>
+Date: Wed, 17 Jun 2026 13:18:27 +0200
+Subject: [PATCH 1/2] fs: Add bpf_sock_read_xattr() kfunc to read socket
+ xattrs
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,10 +38,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAIKCMmoC/yWMQQ6CMBBFr0Jm7RhAU8CrEBdtnUolaclMRRLC3
- W11+V7+fzsIsSeBW7UD0+rFx5ChOVVgJx2ehP6RGdq6VbVqOvxEntEsDiXaGTedEuOlI3u1w9D
- 0vYL8XJic337V8f5neZsX2VRSZWG0EBrWwU5FrU7ORcFxfAHX3FbIkgAAAA==
-X-Change-ID: 20260617-work-bpf-sock-xattr-37ec4c991886
+Message-Id: <20260617-work-bpf-sock-xattr-v1-1-a1276f7c9da3@kernel.org>
+References: <20260617-work-bpf-sock-xattr-v1-0-a1276f7c9da3@kernel.org>
+In-Reply-To: <20260617-work-bpf-sock-xattr-v1-0-a1276f7c9da3@kernel.org>
 To: "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
  Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
@@ -56,12 +56,12 @@ Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
  Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
  "Christian Brauner (Amutable)" <brauner@kernel.org>
 X-Mailer: b4 0.16-dev-4090c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3624; i=brauner@kernel.org;
- h=from:subject:message-id; bh=RlnSDe8jTbvt6nTll+OU8DpOGpiGyEo+2R+RdH0TcI0=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQZNfVLzxTxKW92D9i7LHWGX0l+zjX/hLYb3i7Bdn9LE
- 9tWKl7uKGVhEONikBVTZHFoNwmXW85TsdkoUwNmDisTyBAGLk4BmMghYUaGv8ZJN6af+Ri1abdO
- 3U2JsgdRVYy1hxw3Zly4d6BWeNH8HkaGl3Oa1meujo5Kj983/V/uYcvvOobx7xfzX0xl+Zz/81U
- QMwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7030; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=nhtvb7n4nG7NtB98JV2iAuqTyzjMv1dlncYJFgBnYWM=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQZNfVvaMhY8PSAtVrTjvKFzA+dSuQ3sHw3lDNUNMtii
+ 7UtuNfZUcrCIMbFICumyOLQbhIut5ynYrNRpgbMHFYmkCEMXJwCMBF3D0aGFXNzGVq9Vp7J0ru5
+ v/8IU3P8XUFVt6L5uWfMe7Yu/b36KSPD68o56x5/ujvpKtNqwQz+8irDlRVnv3I1cdcfqA6e83s
+ tOwA=
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
@@ -111,21 +111,124 @@ nor any xattr lock. The kfunc is therefore usable from both sleepable
 and non-sleepable LSM hooks.
 
 Link: https://github.com/systemd/systemd/pull/40559 [1]
-
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
-Christian Brauner (2):
-      fs: Add bpf_sock_read_xattr() kfunc to read socket xattrs
-      selftests/bpf: Add test for bpf_sock_read_xattr() kfunc
+ fs/bpf_fs_kfuncs.c  | 37 +++++++++++++++++++++++++++++++++++++
+ include/linux/net.h |  1 +
+ net/socket.c        | 25 +++++++++++++++++++++++++
+ 3 files changed, 63 insertions(+)
 
- fs/bpf_fs_kfuncs.c                                 | 37 ++++++++++++
- include/linux/net.h                                |  1 +
- net/socket.c                                       | 25 ++++++++
- tools/testing/selftests/bpf/bpf_experimental.h     |  3 +
- .../testing/selftests/bpf/prog_tests/sock_xattr.c  | 67 ++++++++++++++++++++++
- .../testing/selftests/bpf/progs/sock_read_xattr.c  | 54 +++++++++++++++++
- 6 files changed, 187 insertions(+)
----
-base-commit: 6b5a2b7d9bc156e505f09e698d85d6a1547c1206
-change-id: 20260617-work-bpf-sock-xattr-37ec4c991886
+diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
+index 11841c3d4260..85fc9519d1ff 100644
+--- a/fs/bpf_fs_kfuncs.c
++++ b/fs/bpf_fs_kfuncs.c
+@@ -11,6 +11,7 @@
+ #include <linux/file.h>
+ #include <linux/kernfs.h>
+ #include <linux/mm.h>
++#include <linux/net.h>
+ #include <linux/xattr.h>
+ 
+ __bpf_kfunc_start_defs();
+@@ -359,6 +360,39 @@ __bpf_kfunc int bpf_cgroup_read_xattr(struct cgroup *cgroup, const char *name__s
+ }
+ #endif /* CONFIG_CGROUPS */
+ 
++#ifdef CONFIG_NET
++/**
++ * bpf_sock_read_xattr - read xattr of a socket's inode in sockfs
++ * @sock: socket to get xattr from
++ * @name__str: name of the xattr
++ * @value_p: output buffer of the xattr value
++ *
++ * Get xattr *name__str* of *sock* and store the output in *value_p*.
++ *
++ * For security reasons, only *name__str* with prefix "user." is allowed.
++ *
++ * Return: length of the xattr value on success, a negative value on error.
++ */
++__bpf_kfunc int bpf_sock_read_xattr(struct socket *sock, const char *name__str,
++				    struct bpf_dynptr *value_p)
++{
++	struct bpf_dynptr_kern *value_ptr = (struct bpf_dynptr_kern *)value_p;
++	u32 value_len;
++	void *value;
++
++	/* Only allow reading "user.*" xattrs */
++	if (strncmp(name__str, XATTR_USER_PREFIX, XATTR_USER_PREFIX_LEN))
++		return -EPERM;
++
++	value_len = __bpf_dynptr_size(value_ptr);
++	value = __bpf_dynptr_data_rw(value_ptr, value_len);
++	if (!value)
++		return -EINVAL;
++
++	return sock_read_xattr(sock, name__str, value, value_len);
++}
++#endif /* CONFIG_NET */
++
+ /**
+  * bpf_real_inode - get the real inode backing a dentry
+  * @dentry: dentry to resolve
+@@ -385,6 +419,9 @@ BTF_ID_FLAGS(func, bpf_get_file_xattr, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_set_dentry_xattr, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_remove_dentry_xattr, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_real_inode, KF_SLEEPABLE | KF_RET_NULL)
++#ifdef CONFIG_NET
++BTF_ID_FLAGS(func, bpf_sock_read_xattr, KF_RCU)
++#endif
+ BTF_KFUNCS_END(bpf_fs_kfunc_set_ids)
+ 
+ static int bpf_fs_kfuncs_filter(const struct bpf_prog *prog, u32 kfunc_id)
+diff --git a/include/linux/net.h b/include/linux/net.h
+index f268f395ce47..fdcf9956805c 100644
+--- a/include/linux/net.h
++++ b/include/linux/net.h
+@@ -285,6 +285,7 @@ int sock_recvmsg(struct socket *sock, struct msghdr *msg, int flags);
+ struct file *sock_alloc_file(struct socket *sock, int flags, const char *dname);
+ struct socket *sockfd_lookup(int fd, int *err);
+ struct socket *sock_from_file(struct file *file);
++int sock_read_xattr(struct socket *sock, const char *name, void *value, size_t size);
+ #define		     sockfd_put(sock) fput(sock->file)
+ int net_ratelimit(void);
+ 
+diff --git a/net/socket.c b/net/socket.c
+index 9e8dc769ff7a..3566f8c8ea3f 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -465,6 +465,31 @@ static const struct xattr_handler sockfs_user_xattr_handler = {
+ 	.set = sockfs_user_xattr_set,
+ };
+ 
++/**
++ * sock_read_xattr - read a user.* xattr from a socket's sockfs inode
++ * @sock: socket whose inode holds the xattr
++ * @name: full xattr name, e.g. "user.bpf_test"
++ * @value: output buffer
++ * @size: size of @value in bytes
++ *
++ * SOCK_INODE() is valid only for sockfs sockets; sock_from_file() rejects
++ * anything else (e.g. tun, tap).
++ * Lockless: simple_xattr_get() looks up the value under RCU, no inode lock.
++ *
++ * Return: length of the value on success, a negative errno on error.
++ */
++int sock_read_xattr(struct socket *sock, const char *name, void *value, size_t size)
++{
++	struct file *file = sock->file;
++	struct sockfs_inode *si;
++
++	if (!file || sock_from_file(file) != sock)
++		return -EOPNOTSUPP;
++
++	si = SOCKFS_I(SOCK_INODE(sock));
++	return simple_xattr_get(&sockfs_xa_cache, &si->xattrs, name, value, size);
++}
++
+ static const struct xattr_handler * const sockfs_xattr_handlers[] = {
+ 	&sockfs_xattr_handler,
+ 	&sockfs_security_xattr_handler,
+
+-- 
+2.47.3
 
