@@ -1,41 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE603E3C68;
-	Wed, 17 Jun 2026 11:24:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC72A3F9A0D;
+	Wed, 17 Jun 2026 11:24:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781695460; cv=none; b=KDQF5rU+l/oGdTDZqkZCRt1T0SRaaxPCJEPjF8cJ/As70D8UiBqm7HAJJeyheWlwucL+0DK63Fc8mPqopqdi7PJjMeP+ruPyHXD9UAeNbkbW205ErqXrvHuOX+kdThDz7iheWolQaoTR+j/ItfOU9iWAr8BZOnwCkt4VuRQSc8c=
+	t=1781695463; cv=none; b=b44UHp71KLK0GVtNvA6NxBkL4USBBema8YzHj25e4mRBeJk3t2Z8JRJOsuVt759HiFbcKmDWJP6sQ1uP1x/hmXtMPA6u45SXWktkunifby86LydkCMOWmUw/R838PHJDB7Ll7Odbd9Oxu2iU6yO7kLHV0Kk7AeYC6mKS+P2xuMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781695460; c=relaxed/simple;
-	bh=WGe0fIn8r73770CCOkOPS7Vw12cXZpASEoN86LMa/eI=;
+	s=arc-20240116; t=1781695463; c=relaxed/simple;
+	bh=SL24hV7dS1abHTdI0Wlu/pbg6mrIXfF+8P8HjNfkVZU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DehUTimRSSqWFJjuENJ+70/krgrLweEN3AJKOs+vql+YCjiLhd5iaqpK+d4dD+CrcHZdAB+iaoIjp/GSbwYS8OIgKuxlLZtGZizfCETWfritU9WhbtXBMoAsMIvp0pH+y6Pb7BiQD9U38sDM7WFUBEleqUFcf6WzmNM+3fHMZWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=N7hnL2US; arc=none smtp.client-ip=82.195.75.108
+	 In-Reply-To:To:Cc; b=WYwGFmp+3Iq4a37EiGjSFHq4Ib7QgXDk1NeugEAfhI6uMWVS5ZrEfOrbY7yqLQ+fncbgC07sbjqTSZWovBtWsW/BYgTh7jZMA4UoW2VKz34bRPX1FLedL714rk4E2hRUSTO4ANkVR4W503i1PboW76nLaUlRvNT2M2z6aHl/RIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=meEtyZI2; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="N7hnL2US"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="meEtyZI2"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
 	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
 	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
 	From:Reply-To:Content-ID:Content-Description;
-	bh=l1fgs5/vY8CfUicrClnJtUp43P8Rg6yybujnLQdR3HY=; b=N7hnL2US5Rhh2cKeCul1OT/O0Z
-	BAPEsjfS8Ki5f9tZCP8s5WGHuB5itxIy9OwbcSDTrdnWCgyENhBzmv0HMU6fJrN0Qpzg1XU/h/myb
-	X2WKCTAEOjIVyMqguSXtpMjNQazy9sM5Q+uKdO9Eq/O6ID6TivxmLABnb9f9FlAWekuA0JpA2uitQ
-	FfVO1BzPrg+5yx2nohyEF4ifdqzMXTB0rDaggvGLUuTNIukedeFizYyh8XAl8OKEQ2RTxulpdo08R
-	753b9fuG9Yru71ki0W9cY9yXlNmc1wJtbiExAK5q3I4Mhkrg/RRIuQYIuZpzgmg3A/Pw7S+nG689s
-	cqDIttPg==;
+	bh=J20qhpFQ9ej5a+p2uT3xdAYqYeGNZcJmYYHS3J3L/Rw=; b=meEtyZI2x520qwi7Ua27MGCceL
+	6pVLBSjE+m3vs/z9IxOKh9r9ro3L7pyXNbbUDtZWrJVXS83zIMY4HRKTDUPf42oUQlmgkD0XmSjR5
+	bPpDXFBGcSTFLtu0Ydl4ka2sncUBD+6lRKb46SX7Wdhp2Mj2X2CyHIwY/Qd5tUnXYPQ+v9s7Cql4H
+	7wwzM7HtZHDY1oqA/BUM/kUMGkExN9lp8H1a22iO85YRzZz5xsdQ8NdEAN7hWWlZACsqEdydhIDyM
+	bxHvlxGbfj15yiwKAg+AHTVxN/dO2pKl+7m7KyXI11yToG+VOZG1mmPabU/vHSngzJP3IMfWN5Kim
+	A2CZhZoQ==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1wZoNN-00EaGI-1q;
-	Wed, 17 Jun 2026 11:24:09 +0000
+	id 1wZoNX-00EaGo-0T;
+	Wed, 17 Jun 2026 11:24:19 +0000
 From: Breno Leitao <leitao@debian.org>
-Date: Wed, 17 Jun 2026 04:23:37 -0700
-Subject: [PATCH v5 5/7] bootconfig: add xbc_prepend_embedded_cmdline()
- helper
+Date: Wed, 17 Jun 2026 04:23:39 -0700
+Subject: [PATCH v5 7/7] x86/setup: prepend embedded bootconfig cmdline
+ before parse_early_param
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260617-bootconfig_using_tools-v5-5-fd589a9cc5e3@debian.org>
+Message-Id: <20260617-bootconfig_using_tools-v5-7-fd589a9cc5e3@debian.org>
 References: <20260617-bootconfig_using_tools-v5-0-fd589a9cc5e3@debian.org>
 In-Reply-To: <20260617-bootconfig_using_tools-v5-0-fd589a9cc5e3@debian.org>
 To: Masami Hiramatsu <mhiramat@kernel.org>, 
@@ -58,168 +58,168 @@ Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
  linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
  Breno Leitao <leitao@debian.org>, kernel-team@meta.com
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5589; i=leitao@debian.org;
- h=from:subject:message-id; bh=WGe0fIn8r73770CCOkOPS7Vw12cXZpASEoN86LMa/eI=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqMoO706OqoRN9TjSzwYk6G3/xUu3PpuGJyomly
- IE2njRqCjqJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCajKDuwAKCRA1o5Of/Hh3
- bebcD/45KwEkp5UJDIZb1CgmuGRGkKeh56Q9waC79Kiiq3KZv8V3UmsJ3/DiQU4CvVM52O0Wrg6
- +sdsLB4jaIu9Xa1RfQjtDYmjdTFTFd2plRds4O2LAbYrLpAk8VHfGRIpNq2ZTPxkVp/oEYvCTWm
- BAJc9QH7zMJuRq7movTOoa02jNZI6ZXYtOvpKmx+rbqQX0bKznWcmP+fRxnU9hmXJc/heaeKl4x
- Xr3cUdJGvDBh4w3BL8gYad3pKjorsZ6F0gdeZ46RtbPgGtuvCUnqTl7QOGFqVSEHiKjm6XS19Bc
- vDtxnRx/wQwGb99nI2m42t6IpqL70ehJY+YjpBfgz9xbXBEvM3aQyN+x7Sdl3/tG3STOvPCmDex
- cuigakYdHBunl7BX2EiKfzyP80AGT0ByNUgJlQOab5baJkuCJOLR0MoA2rYUdpqb6b+eE3dgj5n
- hpGwtUS8G6sq1g7j69EswbRFC8USGDDUk3SCwplhn+K5sqY24xxbw0vf8vBwEdFGOhhc0njjif9
- lAHrHcytOkn54FFK2bEwSevU1lhrMFW4IuYsX94YOqVVcucC/fFRl6BNe21emrilCdVOSetsIUB
- 2XZAj0r3MXh0iI/2lvXQEBRlNhm9GSM+aDHqI8DtivByr81w5qBKOUuq0ORBDB4PxmiLvu3wdwS
- sE1EIr64sIjltyg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6199; i=leitao@debian.org;
+ h=from:subject:message-id; bh=SL24hV7dS1abHTdI0Wlu/pbg6mrIXfF+8P8HjNfkVZU=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqMoO7NPRgzOHmfEG7KNZxpwGco4T94YclyeCOS
+ wVYqVxjAyWJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCajKDuwAKCRA1o5Of/Hh3
+ batsD/92tFKKAnlsLH+Kz4qOQFLsPrA0ms2k/ORrAXrxDlm6rZkk01ikroLBPivK2wSBjSu7ykE
+ i+HWJ3scYzICLdcgJxvWADgcXPYGHNi2HloHlz/782v1v/i4csjfKWUDyW8BxgkaqGwxNjimRuM
+ FRnttKh+MB9RwiwTHBvgJaQx47MqXFvzBLP8450xRI0lAmQqF7lk/AKpONQvJLoHvlGjxAWwLtF
+ WhgsDAORIPAkRd2nyRRABTS3Dpnrh078BRKMBo7mrJvDh3TD0CNBpaKgtYhYH8mhgQ1V+0RbUtZ
+ uDwjWPskVLbwEBNDuhAqq1B+2oKa5NpW6n+/hpGGZusXj/8GlaAoAD6aySsj0PC/K+sxOuUX4MP
+ DJWZpBODpcwVD4PGTukP0mucWwf3TIUBYXLW5Z3vRc2VZkgFj0lEobI7VxZa+mgzcRbhzA9Lnu9
+ 57CFsEgqIlBIN0CHb14M5dUc6KTNguL/3XU7KVd9bp6LGh3b/79+JCmvpCoJ2iGpb+etCtddbBv
+ xURaMwBeZxD24HSc9Nym0md4EAavUrlnTEy46xIM+qDZRWZulJme7eXECLBLeU3CaFMQkLRTiA1
+ k/IqpQh3YZkc8cHYLI2NbnPUFCC6eXAU+N3ODQJiP1PLIWI9mjhArDbKYTqJ7WmBBc8VhBWSBCy
+ uP4pYZjvUZuyfbg==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-Add a helper that prepends the build-time-rendered embedded bootconfig
-"kernel" subtree (embedded_kernel_cmdline[] from embedded-cmdline.S) to
-a cmdline buffer with a separating space. Architectures call this from
-setup_arch() before parse_early_param() so early_param() handlers
-(mem=, earlycon=, loglevel=, ...) see values supplied via the embedded
-bootconfig.
+Call xbc_prepend_embedded_cmdline() in setup_arch() right after the
+CONFIG_CMDLINE merge and before strscpy(command_line, ...) so the
+build-time-rendered embedded bootconfig "kernel" subtree is part of
+boot_command_line by the time parse_early_param() runs. early_param()
+handlers (mem=, earlycon=, loglevel=, ...) now see values supplied via
+CONFIG_BOOT_CONFIG_EMBED_FILE without parsing bootconfig at runtime.
 
-The in-place prepend (shift the existing string right, then drop the
-embedded string in front) is factored into a small str_prepend() helper.
+Gate the prepend on the same opt-in the runtime parser uses: prepend
+when "bootconfig" is present on the command line, or when
+CONFIG_BOOT_CONFIG_FORCE is set. setup_boot_config()'s parse_args()
+loop treats any presence of the "bootconfig" key as opt-in regardless
+of value, so check both cmdline_find_option_bool() (matches the bare
+key) and cmdline_find_option() (matches "bootconfig=<anything>").
+Without the latter check, "bootconfig=0" would skip the early prepend
+yet still trigger the late runtime apply, leaving the embedded keys
+invisible to early_param() but applied to saved_command_line.
 
-On overflow the helper logs an error and leaves the cmdline untouched
-rather than panicking. Booting without the embedded values is better
-than refusing to boot, and the error tells the user why their embedded
-keys are missing.
-
-The helper records whether it actually prepended, exposed via
-xbc_embedded_cmdline_applied(). setup_boot_config() uses this to decide
-whether the runtime "kernel" render would duplicate keys already folded
-into boot_command_line.
-
-When CONFIG_BOOT_CONFIG_EMBED_CMDLINE=n, the public declaration in
-<linux/bootconfig.h> resolves to a no-op stub so callers compile
-unchanged.
+The prepend necessarily runs before setup_boot_config() detects an
+initrd bootconfig, so an initrd cannot override the embedded "kernel"
+keys for early_param(). This is intentional: the embedded cmdline acts
+like a build-time CONFIG_CMDLINE. An initrd bootconfig's "kernel" keys
+never reached early_param() anyway (they apply late via
+extra_command_line), so nothing is lost -- the initrd keys still apply
+late, with last-wins keeping the embedded values in effect.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- include/linux/bootconfig.h |  9 ++++++
- lib/bootconfig.c           | 78 ++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 87 insertions(+)
+ arch/x86/Kconfig        |  1 +
+ arch/x86/kernel/setup.c | 27 +++++++++++++++++++++++++++
+ init/main.c             | 25 ++++++++++++++++++++++---
+ 3 files changed, 50 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
-index 1c7f3b74ffcf3..c186137f87ac5 100644
---- a/include/linux/bootconfig.h
-+++ b/include/linux/bootconfig.h
-@@ -308,4 +308,13 @@ static inline const char *xbc_get_embedded_bootconfig(size_t *size)
- }
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 0de23e6471973..8ab11199c16d5 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -127,6 +127,7 @@ config X86
+ 	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
+ 	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <= 4096
+ 	select ARCH_SUPPORTS_CFI		if X86_64
++	select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG
+ 	select ARCH_USES_CFI_TRAPS		if X86_64 && CFI
+ 	select ARCH_SUPPORTS_LTO_CLANG
+ 	select ARCH_SUPPORTS_LTO_CLANG_THIN
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index 46882ce79c3a4..d69ba84c203f1 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -6,6 +6,7 @@
+  * parts of early kernel initialization.
+  */
+ #include <linux/acpi.h>
++#include <linux/bootconfig.h>
+ #include <linux/console.h>
+ #include <linux/cpu.h>
+ #include <linux/crash_dump.h>
+@@ -36,6 +37,7 @@
+ #include <asm/bios_ebda.h>
+ #include <asm/bugs.h>
+ #include <asm/cacheinfo.h>
++#include <asm/cmdline.h>
+ #include <asm/coco.h>
+ #include <asm/cpu.h>
+ #include <asm/efi.h>
+@@ -924,6 +926,31 @@ void __init setup_arch(char **cmdline_p)
+ 	builtin_cmdline_added = true;
  #endif
  
-+/* Build-time-rendered bootconfig cmdline prepended in setup_arch() */
-+#ifdef CONFIG_BOOT_CONFIG_EMBED_CMDLINE
-+void __init xbc_prepend_embedded_cmdline(char *dst, size_t size);
-+bool __init xbc_embedded_cmdline_applied(void);
-+#else
-+static inline void xbc_prepend_embedded_cmdline(char *dst, size_t size) { }
-+static inline bool xbc_embedded_cmdline_applied(void) { return false; }
-+#endif
++	/*
++	 * Match the runtime bootconfig parser's opt-in: only fold the
++	 * embedded kernel.* keys into the cmdline when "bootconfig" is
++	 * present on the command line, or CONFIG_BOOT_CONFIG_FORCE is set.
++	 * setup_boot_config()'s parse_args() loop treats any presence of
++	 * the "bootconfig" key as opt-in (bare, =0, =1, ...), so check both
++	 * forms here: cmdline_find_option_bool() matches the bare key,
++	 * cmdline_find_option() matches "bootconfig=<anything>". Without
++	 * the second check, "bootconfig=0" would skip the early prepend
++	 * but still trigger the late runtime apply -- a split-brain state.
++	 * CONFIG_BOOT_CONFIG_FORCE defaults to y when BOOT_CONFIG_EMBED is
++	 * set, so on the default config the embedded keys are applied
++	 * unconditionally.
++	 */
++	{
++		char buf[8];
 +
- #endif
-diff --git a/lib/bootconfig.c b/lib/bootconfig.c
-index 926094d97397e..f66be0b2dc241 100644
---- a/lib/bootconfig.c
-+++ b/lib/bootconfig.c
-@@ -19,6 +19,7 @@
- #include <linux/errno.h>
- #include <linux/cache.h>
- #include <linux/compiler.h>
-+#include <linux/printk.h>
- #include <linux/sprintf.h>
- #include <linux/memblock.h>
- #include <linux/string.h>
-@@ -34,6 +35,83 @@ const char * __init xbc_get_embedded_bootconfig(size_t *size)
- 	return (*size) ? embedded_bootconfig_data : NULL;
- }
- #endif
-+
-+#ifdef CONFIG_BOOT_CONFIG_EMBED_CMDLINE
-+/* embedded_kernel_cmdline is defined in embedded-cmdline.S */
-+extern __visible const char embedded_kernel_cmdline[];
-+extern __visible const char embedded_kernel_cmdline_end[];
-+
-+/* Set once the embedded cmdline has actually been prepended. */
-+static bool xbc_cmdline_applied __initdata;
-+
-+/*
-+ * str_prepend() - Prepend @src in front of the string in @dst, in place
-+ * @dst: NUL-terminated destination buffer, currently @dst_len bytes long
-+ * @dst_len: length of the current @dst string (excluding its NUL)
-+ * @src: bytes to prepend (not NUL-terminated)
-+ * @src_len: number of bytes from @src to prepend
-+ *
-+ * The caller must guarantee @dst has room for src_len + dst_len + 1 bytes.
-+ * Moving dst_len + 1 bytes carries @dst's NUL terminator too, so an empty
-+ * @dst needs no special case.
-+ */
-+static void __init str_prepend(char *dst, size_t dst_len,
-+			       const char *src, size_t src_len)
-+{
-+	memmove(dst + src_len, dst, dst_len + 1);
-+	memcpy(dst, src, src_len);
-+}
-+
-+/**
-+ * xbc_prepend_embedded_cmdline() - Prepend embedded bootconfig cmdline
-+ * @dst: cmdline buffer to prepend into (must already contain a NUL byte)
-+ * @size: total capacity of @dst in bytes
-+ *
-+ * Prepend the build-time-rendered "kernel" subtree of the embedded
-+ * bootconfig to @dst. The rendered string already ends with a single
-+ * space (the xbc_snprint_cmdline() invariant), which serves as the
-+ * separator between the embedded keys and any existing content of @dst.
-+ * On overflow, log an error and leave @dst untouched rather than
-+ * silently truncating: booting without the embedded values is better
-+ * than refusing to boot, and the error message tells the user why
-+ * their embedded keys are missing.
-+ *
-+ * Intended to be called from setup_arch() before parse_early_param() so
-+ * that early_param() handlers see the embedded values.
-+ */
-+void __init xbc_prepend_embedded_cmdline(char *dst, size_t size)
-+{
-+	size_t embed_len = embedded_kernel_cmdline_end - embedded_kernel_cmdline;
-+	size_t dst_len;
-+
-+	if (!size || embed_len <= 1)	/* trailing NUL only */
-+		return;
-+	embed_len--;			/* exclude trailing NUL byte */
-+
-+	dst_len = strnlen(dst, size);
-+	if (embed_len + dst_len + 1 > size) {
-+		pr_err("embedded bootconfig cmdline (%zu bytes) does not fit in COMMAND_LINE_SIZE with %zu bytes already used; ignoring embedded values\n",
-+		       embed_len, dst_len);
-+		return;
++		if (IS_ENABLED(CONFIG_BOOT_CONFIG_FORCE) ||
++		    cmdline_find_option_bool(boot_command_line, "bootconfig") ||
++		    cmdline_find_option(boot_command_line, "bootconfig",
++					buf, sizeof(buf)) >= 0)
++			xbc_prepend_embedded_cmdline(boot_command_line,
++						     COMMAND_LINE_SIZE);
 +	}
 +
-+	str_prepend(dst, dst_len, embedded_kernel_cmdline, embed_len);
-+	xbc_cmdline_applied = true;
-+}
-+
-+/**
-+ * xbc_embedded_cmdline_applied() - Did the embedded cmdline get prepended?
-+ *
-+ * Return true if xbc_prepend_embedded_cmdline() actually prepended the
-+ * embedded "kernel" subtree. setup_boot_config() uses this to avoid
-+ * rendering the same keys a second time.
-+ */
-+bool __init xbc_embedded_cmdline_applied(void)
-+{
-+	return xbc_cmdline_applied;
-+}
-+#endif
-+
- #endif
+ 	strscpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
+ 	*cmdline_p = command_line;
  
- /*
+diff --git a/init/main.c b/init/main.c
+index e363232b428b4..2ecb6aa536dd1 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -378,12 +378,15 @@ static void __init setup_boot_config(void)
+ 	int pos, ret;
+ 	size_t size;
+ 	char *err;
++	bool from_embedded = false;
+ 
+ 	/* Cut out the bootconfig data even if we have no bootconfig option */
+ 	data = get_boot_config_from_initrd(&size);
+ 	/* If there is no bootconfig in initrd, try embedded one. */
+-	if (!data)
++	if (!data) {
+ 		data = xbc_get_embedded_bootconfig(&size);
++		from_embedded = true;
++	}
+ 
+ 	strscpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+ 	err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
+@@ -421,8 +424,24 @@ static void __init setup_boot_config(void)
+ 	} else {
+ 		xbc_get_info(&ret, NULL);
+ 		pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
+-		/* keys starting with "kernel." are passed via cmdline */
+-		extra_command_line = xbc_make_cmdline("kernel");
++		/*
++		 * keys starting with "kernel." are passed via cmdline. When
++		 * this bootconfig came from the embedded source and
++		 * setup_arch() already prepended the rendered "kernel" subtree
++		 * to boot_command_line, rendering again here would duplicate
++		 * the keys in saved_command_line and make accumulating handlers
++		 * (console=, earlycon=, ...) re-register the same value. Skip
++		 * only when the prepend really happened.
++		 *
++		 * On arches that do not select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG,
++		 * CONFIG_BOOT_CONFIG_EMBED_CMDLINE is unselectable and
++		 * xbc_embedded_cmdline_applied() collapses to a stub returning
++		 * false, so this path still runs and the embedded "kernel"
++		 * keys reach the cmdline via the runtime parser exactly as
++		 * before this series.
++		 */
++		if (!from_embedded || !xbc_embedded_cmdline_applied())
++			extra_command_line = xbc_make_cmdline("kernel");
+ 		/* Also, "init." keys are init arguments */
+ 		extra_init_args = xbc_make_cmdline("init");
+ 	}
 
 -- 
 2.53.0-Meta
