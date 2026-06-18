@@ -1,91 +1,85 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41DFA2EA151
-	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 03:40:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 532E335F619
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 03:52:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781754004; cv=none; b=H29wUKccPbuLA3+CxPsKe3RctIRtTW4ejDvGgcMpqas5klmWZPRkqSt3rlKvfYswh/5m1u5LuuZfV3hKkXilm5QcFYHnXbfAXB8lDOKujQ5tOQ2TJsrG7y9jqCqcLj/pTHF/ljonVdPmKd6Ai5kr2uPw20km+IyTXj8cC9B6sZA=
+	t=1781754746; cv=none; b=SL+cc7vlQzO4lXEDn8Cz3NcTgktDlLQR0T0e3rtMgVb3Np9K9LNdAf2ZOOUBMNdyrcEuTE8p435qXxKMKo3bnVa2t0WZfHhWt5/yHWVaGUyW/eYB0bReUk3CJp9p34UD4zKhrIFHArygmociSDvCcUz15SgXAPh8BwR7nWaG1SI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781754004; c=relaxed/simple;
-	bh=u0BHccFFok4W4K1qDbFRTw5PIdV34AfWS/g7edMPN4g=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PcjRBacnM/8p8Z5ceYqVewaGTxrSX2DEh9fTWwAWewml6uFDvXwzqRopNCJpmLBwZ8GDZRSZiamMKdQJkl5T9FaRY7xcrx76/7J4JGYXLSUWnYCQylPMpvSCs505YPJNPjg5UXiSvhAoANk7i5J1IXG9q1pBY3uwk9cTHLI18gg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PzqAvyVv; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781754746; c=relaxed/simple;
+	bh=BQNh/DtST9OOQ17vCHJtWdOK4qHrl47TeiU0NnVlpNk=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=uxmzrBsJcJ5lgKj2sG9BeMIQGA+RUsaIknq/fXniJu1xxkas4Z80FUQ1zlVCKUHZv2q/ucJEDVV8bagNKfXe4b7VDnDL4wwCJggzue3kPhovjoxknw7dfiR/WjfQUao0Xw5zel6Tmn7v7vjtKrtBww/UzMaJD+nJJOyrrPMR814=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d35U6D3z; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PzqAvyVv"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781753991;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2ZJcV8qkE/533ZNLQ7MwZZ6HE6w38xEeqB7Q6PXDQMU=;
-	b=PzqAvyVvflt9XZhitNyiEXKOGl/qgok3prFKz/mNMEDJpjos0CERegjwwmzjOTBnKhY0gl
-	UpulZi6nCtN5exM+d2ypB13WEZbUxrBewY8PHSrtkMb44TIkoa3YbvsiOg5JMOUgZmJR/3
-	Tmn2jlbhhAofTCXei4G6rZNFaUIWoEw=
-From: George Guo <dongtai.guo@linux.dev>
-To: chenhuacai@kernel.org,
-	yangtiezhu@loongson.cn,
-	hengqi.chen@gmail.com
-Cc: kernel@xen0n.name,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	George Guo <guodongtai@kylinos.cn>
-Subject: [PATCH 5/5] selftests/bpf: Enable struct_ops private stack test for LoongArch
-Date: Thu, 18 Jun 2026 11:38:09 +0800
-Message-Id: <20260618033809.98253-6-dongtai.guo@linux.dev>
-In-Reply-To: <20260618033809.98253-1-dongtai.guo@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d35U6D3z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A8801F000E9;
+	Thu, 18 Jun 2026 03:52:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781754739;
+	bh=MFJLvpKB4/Ig+sCCyU/JLQPvsh3B6oxZwEqZBbdyzOs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=d35U6D3z4XwRUdMj4h8upiR4Kr2EnAGUKLi6zuABMx6/srbIOqyuWvtqLMny7HG13
+	 cCFEHutj2HVeuXIeqBpdXRs2JZ3Tod0co0kbnBJG00383fTSqc4+L9HjNHhdQcZV0u
+	 YJ97NisGVc2z/ij6jzvlH/rAjyiYcDb40pYxa2mlyMDZ5x/eXgCEmw66siLGOI//E1
+	 dobiWqecjJLRwPn0Ti8g58i5xoMvwloESABsme6Z5aZnLwbYlzSDYk5nwrzH2jmzAi
+	 apRVlMojXVPNFKLVmZidIjNBrvCiwcWZgSTom5UYmjrlKyAlFKlUY5Du53ueDE53Pi
+	 Gw+nfAZRz4S0A==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 4/5] selftests/bpf: Add LoongArch deny list
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "George Guo" <dongtai.guo@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260618033809.98253-5-dongtai.guo@linux.dev>
 References: <20260618033809.98253-1-dongtai.guo@linux.dev>
+ <20260618033809.98253-5-dongtai.guo@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 18 Jun 2026 03:52:19 +0000
+Message-Id: <20260618035219.7A8801F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-From: George Guo <guodongtai@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The `arena_spin_lock` test program relies on BPF atomic operatio=
+ns on arena pointers and will fail on LoongArch, but it was omitted from th=
+e newly created `DENYLIST.loongarch`.
+--
 
-LoongArch now supports BPF private stacks via
-bpf_jit_supports_private_stack(), so let the struct_ops private stack
-runtime test (private_stack / private_stack_fail / private_stack_recur)
-run there instead of being skipped.
+commit 4b438bd9b260c0e4fb1672644286e66f7e59d089
+Author: George Guo <guodongtai@kylinos.cn>
 
-Signed-off-by: George Guo <guodongtai@kylinos.cn>
----
- .../testing/selftests/bpf/prog_tests/struct_ops_private_stack.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+selftests/bpf: Add LoongArch deny list
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-index 98db9bafa44b..fcc86f1dfd15 100644
---- a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-+++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-@@ -5,7 +5,7 @@
- #include "struct_ops_private_stack_fail.skel.h"
- #include "struct_ops_private_stack_recur.skel.h"
- 
--#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__)
-+#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__) || defined(__loongarch__)
- static void test_private_stack(void)
- {
- 	struct struct_ops_private_stack *skel;
--- 
-2.25.1
+This commit adds a new test denylist for LoongArch in the BPF selftests. It
+disables the arena_atomics test because the LoongArch JIT does not currently
+support BPF atomic operations on arena pointers, which causes the verifier
+to reject the programs.
 
+> diff --git a/tools/testing/selftests/bpf/DENYLIST.loongarch b/tools/testi=
+ng/selftests/bpf/DENYLIST.loongarch
+> new file mode 100644
+> index 0000000000000..925005e4298fa
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/DENYLIST.loongarch
+> @@ -0,0 +1,2 @@
+> +# loongarch64 deny list for BPF CI and local vmtest
+> +arena_atomics					# JIT does not support atomics in arena (verifier reje=
+cts BPF_ATOMIC on arena pointers)
+
+[Severity: Medium]
+Should the arena_spin_lock test be added to this list as well?
+
+The arena_spin_lock test also relies on BPF atomic operations on arena
+pointers through atomic_try_cmpxchg_acquire(). Since the verifier rejects
+BPF_ATOMIC on arena pointers for LoongArch, will arena_spin_lock also fail
+to load and cause CI runs to break?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260618033809.9825=
+3-1-dongtai.guo@linux.dev?part=3D4
