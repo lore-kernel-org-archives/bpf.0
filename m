@@ -1,182 +1,189 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94872EEE90
-	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 03:55:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534F72E7369
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 03:55:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781754908; cv=none; b=LH6WhHqPle+f4vMQNuMul1ntGBwaq5+w6vVytPgfek9xBWoTPGse1fru9sRJXSjvWUr+pWpvlZiLHTiDxeiujwNkrpDXhuQyJ7SmDVI35GZGP+GPOj+wU8cgRX0EkrBL/N7065ctbr5q53e0fwbjv1oqEgmU77lG+egZ6455wd8=
+	t=1781754919; cv=none; b=aZoaCrNuR9Gz8ZGBL6k57n7+bDc7IeVJop5pxGSsH4DZjxm/8dtbb01sfyjYUGWYLRlQ39tNviZr63JnYUvTFP+ax1Z0lvlEyhswRmoqmX4pGeZkPCvwpf4xS4tEwX9eHCI5hsNz75E6LANtpo8FM0sCn7s+Vo6pk7z02rJkeus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781754908; c=relaxed/simple;
-	bh=GjCwA7ieprPSsZI+2bxWlpyXUl5WqwEr9X9KM52OPSo=;
+	s=arc-20240116; t=1781754919; c=relaxed/simple;
+	bh=2SiXmnCMYy3vpUtyU6YpFLYMHVbwGOqHWxThN0TR/5Y=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Oo5sWtLh0+4OfJ9eZRoepCHqvUiRtOq1adEccPvre+Ya7Hp3AmFsT/N91xU6odM/g9UlpgD0ovy7ZbjVEPU/SQY3kmXd2xX24hDZhp0EXWApT9hkzWwCbO4mQFSm2UsdzUDB67LOKInAss3ME+dBVPsN2D3/qyGGrGQcaJAJ+wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iz5HoLkS; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=lxkm+n1AerxgvDxoZAG7qMOnSJR0FBzlkRPdy/j56pu/tqTZClnLh+CB5MA7EJlrd7BTFN5edDQc4ZRDKnK/55vgbEXP0EDB+bJUdmOiEEB5ME2gpbT+uuKAWS+QAYo7vl9EQltb0BCSD3iX+qT5s8IUMxfoUWm4fRi/xFZeHUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QWAht3qh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iz5HoLkS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 391801F000E9;
-	Thu, 18 Jun 2026 03:55:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QWAht3qh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE3601F000E9;
+	Thu, 18 Jun 2026 03:55:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781754907;
-	bh=ce6hsM8I17x46O9cfbKB/xhWlsa94aleD+u3UhLaHxA=;
+	s=k20260515; t=1781754918;
+	bh=q/wDdDCvRV2RXlB6ouaxrRNdghIxcdwYVWLznJZmNcc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Iz5HoLkSX1wDzRSVwx2MPwJ+Jnr131L80H8mvfm27BdX5gvhc8uSLX+a5EQpVcUSv
-	 4uQAZ/0PYQMuNrM+UrutM4NTu7tcSKansJJicRjNXoMvJNMaFw9KFYPZeNyfd5gq6S
-	 4sYNDLelB2OiTQEPxZalLAIaLD7LumVbQT4uabAH4rS/6I+94FgIhB0neUcJaRZZaR
-	 loe2NjO+eV/3ZZJB9C/jPWAekjGunlYo8zD/H/gBhrHAiDL3TnL0/LuAMlqXydSOjL
-	 W66MBNOFrBKve9Vbsck1c5RnpyljAnjtsmKBgLMWIbhr9Cq/HXwrHhtimg3c29UPvh
-	 WAzFIpSU8L0Tw==
+	b=QWAht3qh17IgBBvqg24YCnKZr/qCBjX4Z6AWmTQVkh9B7k/w9Hj8HqYjA07s4Q4Kq
+	 itmHXMsSsxLeXDle0DMF78ndItGtpIxzBrvs8BA8JOsf6iSt77xMdKIXCkzsowPFDz
+	 WrxwRoVs7XzOEVzVhKjbAiS3scOMQvTPJMG6LZkd+4N8DrhuquyX3jN2CVJbs08lWj
+	 nCUuSeFEMIhO3XYKA2OvEfAnGhIBVDEwLI1OP0KnAUqxt37lrnmKy8SxDsZF/6ytWe
+	 37g4c01OxqNl3HwDM7sDsaFOKaH2V0Hs0LFuby9nymuF9R1r61SfcLBCPWYbX5aB+l
+	 RxGh48VuAeDzQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/5] LoongArch: BPF: Add private stack support
+Subject: Re: [PATCH 3/5] LoongArch: BPF: Add exceptions (bpf_throw) support
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "George Guo" <dongtai.guo@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260618033809.98253-3-dongtai.guo@linux.dev>
+In-Reply-To: <20260618033809.98253-4-dongtai.guo@linux.dev>
 References: <20260618033809.98253-1-dongtai.guo@linux.dev>
- <20260618033809.98253-3-dongtai.guo@linux.dev>
+ <20260618033809.98253-4-dongtai.guo@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 18 Jun 2026 03:55:06 +0000
-Message-Id: <20260618035507.391801F000E9@smtp.kernel.org>
+Date: Thu, 18 Jun 2026 03:55:17 +0000
+Message-Id: <20260618035517.CE3601F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
 New issues:
-- [High] Per-CPU private stack memory leak upon JIT compilation failure.
-- [Low] Undeclared identifier 'LOONGARCH_GPR_U0' causes build failure.
-- [Low] Typo in the private stack guard check error message (`%sx` instead =
-of `%s`).
+- [Critical] `arch_bpf_stack_walk()` uses inline assembly to capture the li=
+ve `$r22` register, incorrectly assuming it holds the unmodified BPF frame =
+pointer.
 
 Pre-existing issues:
-- [Critical] Incorrect BPF_TAIL_CALL_CNT_PTR_STACK_OFF offset calculation w=
-hen arena or exception boundary features are used.
+- [High] Tail calls within exception programs (or arena programs) cause a k=
+ernel panic (NULL pointer dereference) due to a hardcoded stack offset macr=
+o.
 --
 
-commit ec3426d8bc4121c18182b9bd92e8adc7fa663dc5
+commit 7327176c407071584a340964ddba1f924e66533a
 Author: George Guo <guodongtai@kylinos.cn>
 
-LoongArch: BPF: Add private stack support
+LoongArch: BPF: Add exceptions (bpf_throw) support
 
-Support per-program private stacks to reduce kernel stack pressure for deep
-or recursive tracing programs. The stack depth is computed and allocated
-per-CPU with guard regions. If a private stack is used, the BPF frame
-pointer is pointed into this region instead of the kernel stack.
+Implement BPF exception support, advertised via
+bpf_jit_supports_exceptions(). bpf_throw() unwinds the stack to find the
+exception boundary program's frame and then invokes its exception
+callback with that frame's stack and frame pointers.
 
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -18,8 +18,13 @@
+> diff --git a/arch/loongarch/kernel/stacktrace.c b/arch/loongarch/kernel/s=
+tacktrace.c
+> index 387dc4d3c4868..718c98b3f1fc4 100644
+> --- a/arch/loongarch/kernel/stacktrace.c
+> +++ b/arch/loongarch/kernel/stacktrace.c
+[ ... ]
+> @@ -40,6 +41,57 @@ void arch_stack_walk(stack_trace_consume_fn consume_en=
+try, void *cookie,
+>  	}
+>  }
 > =20
->  #define REG_TCC		LOONGARCH_GPR_A6
->  #define REG_ARENA	LOONGARCH_GPR_S6 /* For storing arena_vm_start */
-> +#define REG_PRIV_SP	LOONGARCH_GPR_S5 /* For storing the private stack po=
-inter */
->  #define BPF_TAIL_CALL_CNT_PTR_STACK_OFF(stack) (round_up(stack, 16) - 80)
+> +#ifdef CONFIG_UNWINDER_ORC
+[ ... ]
+> +void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp=
+, u64 bp),
+> +			 void *cookie)
+> +{
+> +	unsigned long fp;
+> +
+> +	/*
+> +	 * Capture the live frame pointer ($r22/$fp) here, before handing off to
+> +	 * the worker. The kernel is built with -fomit-frame-pointer, so $fp is
+> +	 * an ordinary callee-saved register that is preserved across the call
+> +	 * from the JITed BPF program into bpf_throw() down to here, and thus
+> +	 * still points at the innermost BPF frame. The ORC frame-pointer
+> +	 * fallback walks the BPF frames up to the exception boundary from it.
+> +	 *
+> +	 * This must be a thin wrapper with no large stack locals: the worker
+> +	 * uses $r22 to address its frame, which would clobber the live $fp
+> +	 * before it could be read. __builtin_frame_address() cannot be used
+> +	 * either, as it is $sp-derived and would yield a kernel-stack frame.
+> +	 */
+> +	asm volatile("move %0, $r22" : "=3Dr"(fp));
 
 [Severity: Critical]
-This isn't a bug introduced by this patch, but is the tail call count
-offset calculation correct when arena or exception boundary features are
-enabled? When ctx->arena_vm_start or is_exception_prog is true, 8 additional
-bytes are reserved on the stack, which shifts the actual location of TCC_PT=
-R.
-Because the macro doesn't account for this shift, will tail calls load the
-TCC counter value instead of the pointer address, causing a kernel panic
-when it's dereferenced?
+Could the compiler clobber the live $r22 register before we capture it
+here?
 
-[ ... ]
+Since the kernel is built with -fomit-frame-pointer, bpf_throw() is
+compiled as a standard C function and the compiler might use $r22 as a
+general-purpose callee-saved register for local variables (such as the
+cookie argument).
 
-> +static void emit_percpu_ptr(struct jit_ctx *ctx, u8 dst, void __percpu *=
-ptr)
-> +{
-> +	move_imm(ctx, dst, (__force long)ptr, false);
-> +#ifdef CONFIG_SMP
-> +	/* dst +=3D __my_cpu_offset, held in $r21 */
-> +	emit_insn(ctx, addd, dst, dst, LOONGARCH_GPR_U0);
-> +#endif
+If $r22 is clobbered during bpf_throw(), this inline assembly will capture
+the clobbered value instead of the unmodified BPF frame pointer. The
+exception callback then blindly trusts this propagated value (passed via
+$a2) to anchor its stack frame:
+
+arch/loongarch/net/bpf_jit.c:build_prologue() {
+    ...
+    move_reg(ctx, LOONGARCH_GPR_FP, LOONGARCH_GPR_A2);
+    emit_insn(ctx, addid, LOONGARCH_GPR_SP, LOONGARCH_GPR_FP, -stack_adjust=
+);
+    ...
+}
+
+Could this allow a forged chain of frame pointers to dictate the callback's
+return address, leading to a severe regression where arbitrary kernel code
+execution is possible?
+
+> +	walk_stackframe_bpf(consume_fn, cookie, fp);
 > +}
+> +#endif /* CONFIG_UNWINDER_ORC */
+> +
+>  int arch_stack_walk_reliable(stack_trace_consume_fn consume_entry,
+>  			     void *cookie, struct task_struct *task)
+>  {
 
-[Severity: Low]
-Does LOONGARCH_GPR_U0 exist in enum loongarch_gpr? It appears missing from
-the loongarch include headers, which would cause a build failure when
-CONFIG_SMP is enabled.
-
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index c410b02e64bef..22527428f0b34 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
 [ ... ]
-
-> +static void priv_stack_check_guard(void __percpu *priv_stack_ptr, int al=
-loc_size,
-> +				   struct bpf_prog *prog)
-> +{
-[ ... ]
-> +		if (stack_ptr[0] !=3D PRIV_STACK_GUARD_VAL ||
-> +		    stack_ptr[1] !=3D PRIV_STACK_GUARD_VAL ||
-> +		    stack_ptr[underflow_idx] !=3D PRIV_STACK_GUARD_VAL ||
-> +		    stack_ptr[underflow_idx + 1] !=3D PRIV_STACK_GUARD_VAL) {
-> +			pr_err("BPF private stack overflow/underflow detected for prog %sx\n",
-> +			       bpf_jit_get_prog_name(prog));
-
-[Severity: Low]
-Is the "%sx" format specifier intentional here? This looks like a typo that
-would append a literal 'x' to the end of the program name in the error log.
-
-[ ... ]
-
->  	if (!prog->is_func || extra_pass) {
->  		if (extra_pass && ctx.idx !=3D jit_data->ctx.idx) {
->  			pr_err_once("multi-func JIT bug %d !=3D %d\n",
->  				    ctx.idx, jit_data->ctx.idx);
->  			goto out_free;
->  		}
-[ ... ]
->  out_offset:
-> +		/*
-> +		 * A NULL ro_header here means the JIT failed, so release the
-> +		 * private stack that was allocated above; on success the
-> +		 * program keeps it until bpf_jit_free().
-> +		 */
-> +		if (!ro_header && priv_stack_ptr) {
-> +			free_percpu(priv_stack_ptr);
-> +			prog->aux->priv_stack_ptr =3D NULL;
-> +		}
->  		kvfree(ctx.offset);
-> +out_priv_stack:
->  		kfree(jit_data);
->  		prog->aux->jit_data =3D NULL;
->  	}
+> @@ -203,7 +223,7 @@ static void build_prologue(struct jit_ctx *ctx)
+>  	store_offset -=3D sizeof(long);
+>  	emit_insn(ctx, std, LOONGARCH_GPR_S5, LOONGARCH_GPR_SP, store_offset);
 > =20
->  	return prog;
-> =20
->  out_free:
->  	if (extra_pass) {
->  		prog->bpf_func =3D NULL;
->  		prog->jited =3D 0;
->  		prog->jited_len =3D 0;
+> -	if (ctx->arena_vm_start) {
+> +	if (ctx->arena_vm_start || is_exception_prog) {
+>  		store_offset -=3D sizeof(long);
+>  		emit_insn(ctx, std, REG_ARENA, LOONGARCH_GPR_SP, store_offset);
 >  	}
-> =20
->  	if (header) {
->  		bpf_arch_text_copy(&ro_header->size, &header->size, sizeof(header->siz=
-e));
->  		bpf_jit_binary_pack_free(ro_header, header);
->  	}
->  	goto out_offset;
->  }
 
 [Severity: High]
-Does this code leak the private stack allocation when JIT compilation fails?
-When jumping to out_free, ro_header is freed but the local pointer is not s=
-et
-to NULL.=20
+This isn't a bug introduced by this patch, but does forcing REG_ARENA to be
+pushed for exception programs expose an issue with the tail call layout?
 
-Because ro_header is still non-NULL when execution falls through to
-out_offset, the free_percpu() cleanup block is skipped. Furthermore, because
-prog->jited is set to 0, bpf_jit_free() will also skip freeing it, resulting
-in a permanent leak of the per-CPU allocation.
+When is_exception_prog is true, this adds an extra 8 bytes to the stack.
+However, emit_bpf_tail_call() relies on a hardcoded stack offset macro:
+
+arch/loongarch/net/bpf_jit.c:emit_bpf_tail_call() {
+    ...
+    int tcc_ptr_off =3D BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size);
+    ...
+    emit_insn(ctx, ldd, t3, REG_TCC, 0);
+    ...
+}
+
+Since BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size) evaluates to a fixed
+offset (stack_size - 80) regardless of whether REG_ARENA was pushed, does
+this cause emit_bpf_tail_call() to incorrectly fetch the TCC integer
+instead of TCC_PTR?
+
+If it fetches the integer (often 0) and immediately dereferences it, would
+tail calls within exception programs or arena programs cause a NULL pointer
+dereference?
+
+> @@ -212,6 +232,7 @@ static void build_prologue(struct jit_ctx *ctx)
+> =20
+>  	emit_insn(ctx, addid, LOONGARCH_GPR_FP, LOONGARCH_GPR_SP, stack_adjust);
+> =20
+> +setup_bpf_fp:
+>  	if (ctx->priv_sp_used) {
+>  		/* Set up the private stack pointer and the BPF frame pointer */
+>  		void __percpu *priv_stack_ptr;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260618033809.9825=
-3-1-dongtai.guo@linux.dev?part=3D2
+3-1-dongtai.guo@linux.dev?part=3D3
