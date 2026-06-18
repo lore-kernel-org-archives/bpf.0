@@ -1,65 +1,65 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D3D386429
-	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 12:31:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8106637AA65
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 12:32:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781785901; cv=none; b=fEGKMDNov2Um77RXD7qiZf8VOau8UZEc8deFsNTmIGluESPEzV+MIEILqp8FPxzrYsRVetdpAgvM8dTpuhpuYFy2YvTl8bYql0G8CGMOlUH0qaCjv8ilcNYKyg7KMz2N3qTaeKd42inDlFcoe1NpTFLhg//O//XNCxMPtull96I=
+	t=1781785952; cv=none; b=HWkbA02sOSji/VIMgCAEtpsSepHz6mEu43OeOOm81UAdnKOm+BAY87FRSm9BEvbMKlTNiSQ7L4fj7JwAYF/D4ZcArcoyy0Po8SEDqUKhiPjIzr6jRKq+eRDBsEwcqUAN3JDPE3doJ4Vzw60h9OYt76Kraysdzid644/eEgdHTa0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781785901; c=relaxed/simple;
-	bh=HUmGOYE/C8TU/uUS16RtcpM+syCs0OHKlLWtF5Qgk+w=;
+	s=arc-20240116; t=1781785952; c=relaxed/simple;
+	bh=gZdkqF0OerCSAV0j1QpiwzO4IBQfxaAKNYwglO9AMco=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hh5istz/gyJaOKJHT9N6wWI8bezKLg/TlRPDuDui4o9xqPOGr9dDK0t/N5cYxpqh6vl8ycyhuk2Ywu+ZGFgfSFWjZp/1mrWAK6BzcIxgyPM1zW8wi6EtdvoT9UWBLS2EUSJ062Ue2rlV411ejgRSVCUvuSmjIEKBMHEThPsUmRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JoNpDUB0; arc=none smtp.client-ip=209.85.128.48
+	 Content-Type:Content-Disposition:In-Reply-To; b=tkQGJl+l/+SDKgN+XRhH0nKKIDmHF0xEjCkDFHPu0nCajlktP8ZJO3/y6nNXNv1I5Zc9ngEfrwxXeOKvBkbP/mnwYF3Lz+9sLz+36C/+MPEseVBFtdIvVszZU23yO4CpwzXZzC/dkZ3oR0ygrCvMvMdK3xUjz9/x7JynEBjYIZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=azKr+AwJ; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JoNpDUB0"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-490ace40f4bso8906985e9.3
-        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 05:31:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="azKr+AwJ"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4905529b933so7921605e9.0
+        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 05:32:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781785899; x=1782390699; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781785950; x=1782390750; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PSGbxDjo+2rjoOObMeaDBZSVpoYq1jILY+Z8HnHA6Oc=;
-        b=JoNpDUB0z9Y6f8YJHfMfDAwpI3A7vZCYWwhLtOaf7NjgmEj0TIuGCYkpOEvvL2U64i
-         718YaYxWrKZQ1ilnQd2frDHit2F6sq+WIrI9UHaQGBu5/ZKWHyAkeeQEeULg3h7x/+gj
-         LvVGH6sB9GgQVpBSO+R5jeK3PPaxPd80iPmBeTN91/atqvYfQOqk7TdhXsFjYMZbqb9M
-         7dcnHaaKDVGCgHcfz6FY+1odsJpMCNzBKQ4VcExYN0vji09wbp7RpAqPMgLSE/hGvZkE
-         BbZuhElCSEvI/NnsB9CxIIwY7sot7g3Q1m1OPHJet81IUnZNrZYFlYqsSBHzmMGQZAKt
-         bV2w==
+        bh=uPc0OU9sjfyGQ7c3buNYbzdqaEGIx1/7pa99xR6SsZs=;
+        b=azKr+AwJlJPkxCEPNFm2sPWMpVx2+NpxkHMzk7Rz25vfvdQWJ/0asZ+wXQzdRwIQkz
+         S205UWFJnsImjFfl1303bdck1anIfw9CxGF3BtG+d627sGdQDF2Mh2y9LsHQXe9bPVjb
+         GyIWkbslZTWOsgESO+uvn2jamx9QoqQYnjQPrsxE5z0h+1rpcT1Dg3jB9Y90z1oamZyC
+         UzfYVpvY23UVww1Xf7HrkYiwC3g4ArU8Z/F1393CfXrjoFsOBw4ZBVdXWsJm8mX00+Bm
+         SrW9QAZUDqdjDS7seXpPc8G5xxuMg3HK/0uKV5dnaT1DXtRN7rIMWxCRqR/EP+3chabs
+         gdig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781785899; x=1782390699;
+        d=1e100.net; s=20251104; t=1781785950; x=1782390750;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PSGbxDjo+2rjoOObMeaDBZSVpoYq1jILY+Z8HnHA6Oc=;
-        b=ln/bHwzjsVdcZ7/iUSLhW7a+4jBuUMgGj+EC8cxSIb7VyCLpGwAmsK/Xbr3OW8Uqsq
-         u8O1cJHY1m6zf8GJR9b3PLdGLLGF64pGKVpeIEC6okPPchAMLfismAiZ94OBVkLa3K8D
-         Paw9752sYHCLJ1b2dhP2jKIT1nqTXvhTbKqoto12gchP80s35fd5cnTtwnHto+0rJwGS
-         SfUwgT5pn95rcOerugGLudM8cEGDPx32EMceYK/bwu8Xw0fXwTv4ahOe+qw4A6dBOqJI
-         NAt912dUCoBbG2lxCbOG3RgT3Fg019kj0gOCO5mILxUUic9xH2gHPL8Y1wtmaWdXes0L
-         f3xQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8a6XzukzhDnhCM1viBdR2nzmFQevJ7njGhUv2M68b54itdSWbH2sPO338Gu/V0OVTH9Uc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxf/3u2l4W+W+xgOtQBgZXu+dV2WiOk379gXDJ+btp7TPZkV+1T
-	Ucy5XWM11HSTXyhXRdpzbOYMqGKe4HT12g48ofS5VkxVyDhIOukml3Xn
-X-Gm-Gg: AfdE7cmJzj0IAcxhEKHQx2CBc9vWanesejB4G+dQW/9eF4Y+3q5d4cbtCt4b9jalA82
-	RISMz5AmR10NWS2NTofEbmJmutIOz3ZGhVT10f+3tOqpeBAWt+9cqpfuQhPh35oiA8GZzH3kTq4
-	UNrIYuSyU0NKW6vs+E2tNw66sbYmtJQzBu3J+QDRhVuVh8CuRi9R6XeHqm+fceEkZwq8KW0+a/1
-	6rOkmBFZvL5n5Y2LSV0caUvVy7aUeUxps+eAhokJxopguTk1ONxMozbp7VFoQR9WvR2PfaDO2T+
-	15ll9oOy2LihopGvDMJb/b0xWQXU2SwGHI/mnWWIb+CLbxr42Ub2cnLW7lxHpOxAqacFPiCiw0o
-	Ny0f7sQJm0pcMEuv6Q36wohCDXY2I6llZ56j0HTQ1Scmxj9s4H7r90gkw76LBeHwpYcyXX9MN1G
-	sb
-X-Received: by 2002:a05:600c:e547:10b0:491:9969:739d with SMTP id 5b1f17b1804b1-4923822eed4mr39446355e9.29.1781785898507;
-        Thu, 18 Jun 2026 05:31:38 -0700 (PDT)
+        bh=uPc0OU9sjfyGQ7c3buNYbzdqaEGIx1/7pa99xR6SsZs=;
+        b=UXRUKnep4qrWxCpNurmTMiX6Dy/jOj/n3TSD+w1iX63auYLkAIHm4T5/7MMWZ5bgBp
+         eY6vZZ9ABtvFFn7+pU3wBxXfnYDXyCcsYXrNnMfBOdEd9ajTLINI8vMyEM4ngz/76jRB
+         3VNXbzIDtTCn4Hu245lZgXRVhKZOUZ+h/j85RPEPF4C/VaLthOpVMPRne5COspAfSuTj
+         Y9uJGlvOzKdF4QOjnkAB5spUrDAc0qfxuXJogsSSp8e96U9IbLKuBTe31+IJb6N5YvZg
+         R9CryuDajftAdRHEmEgQOqR7YrKzD576d9m5MRW5LihCni0G93m64xJT0/PPXy7B4B20
+         ZA/Q==
+X-Forwarded-Encrypted: i=1; AFNElJ/P/N1yQX1MT6J5LSqUySa2k+bgMZmlbVdp4flWdowCAj9kFH/3TacdTIBWmgky/NFiOoQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzG1qmEkC1VsGxU8Vc3pLRLiSs2a7b27sRxrX9qmlFKzP7vX99P
+	nwyj8NtC5RlYQ94gCDFfCSB10q1XvfI2QnOenIgOy1apO4j5ZFT5jKnvbuky4Q==
+X-Gm-Gg: AfdE7cnOl3gSMm+kDTpZuIJQwKrdFKhZ+CKJaxvjl5jdduQlGiOUMbeQJ3XVLAIf0Xl
+	qGuaOo19hjz51/J7pwZt4PUmM5NBRUBfve6mRNhSyz3GcF+W5VEUuJCWnrlDOW1J+3NtwneBPzR
+	+J4LyO2Bx80aNcsnI2eRTr1WVO8S5pjhK2t0IJPutn1veWF6b9ntSUnRhjoHI9ADLChRyJLiAsB
+	y3jmBPng9RzqBB/CcyIAyMME+V8hHRMkblBwTHtWxXLtbWPF0x0Ql4wQog4ZmnATPYHtnPxD7Nd
+	Q4lj4bKDE13+MhrCuyoNM18UpCobkqUING91c3wzSSrlyirMWP2iAmhWH0Lo90wb9LlapaPXMNJ
+	LgxdHw/3Aw8YG0PcTJq3NYT6OhZMsGr5gcGLkZUsTG1oYdp/g9lvd1OJWdFw/m+w1JGvshwEDea
+	g+
+X-Received: by 2002:a05:600c:1c16:b0:490:469c:556b with SMTP id 5b1f17b1804b1-492333bf79amr154902955e9.12.1781785949811;
+        Thu, 18 Jun 2026 05:32:29 -0700 (PDT)
 Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49230a4601esm267646685e9.1.2026.06.18.05.31.37
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4922fa47da9sm292626405e9.5.2026.06.18.05.32.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2026 05:31:37 -0700 (PDT)
+        Thu, 18 Jun 2026 05:32:29 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 18 Jun 2026 14:31:35 +0200
+Date: Thu, 18 Jun 2026 14:32:28 +0200
 To: Ihor Solodrai <ihor.solodrai@linux.dev>
 Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -69,11 +69,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Alan Maguire <alan.maguire@oracle.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
 	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 4/4] selftests/bpf: Add kfunc set test to
- resolve_btfids
-Message-ID: <ajPlJ81PL_YaHsBo@krava>
+Subject: Re: [PATCH bpf-next v1 0/4] Modernize resolve_btfids selftest
+Message-ID: <ajPlXOE9gyoO3oi1@krava>
 References: <20260617210619.1562858-1-ihor.solodrai@linux.dev>
- <20260617210619.1562858-5-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,105 +80,45 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260617210619.1562858-5-ihor.solodrai@linux.dev>
+In-Reply-To: <20260617210619.1562858-1-ihor.solodrai@linux.dev>
 
-On Wed, Jun 17, 2026 at 02:06:19PM -0700, Ihor Solodrai wrote:
-> Extend the resolve_btfids selftest to cover kfunc sets defined with
-> BTF_KFUNCS_START/BTF_KFUNCS_END.
+On Wed, Jun 17, 2026 at 02:06:15PM -0700, Ihor Solodrai wrote:
+> This series updates resolve_btfids selftests to use latest selftest
+> helpers API and add kfunc set testing.
 > 
-> The test verifies that resolve_btfids correctly processes BTF_ID_FLAGS,
-> resolves function IDs, and checks the kfunc set is sorted.
+> This series was split from a bigger series [1].  It's general selftest
+> improvements that don't have to be entangled with resolve_btfids
+> development, and makes the main series a bit smaller.
 > 
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> ---
->  .../selftests/bpf/prog_tests/resolve_btfids.c | 63 ++++++++++++++++---
->  tools/testing/selftests/bpf/progs/btf_data.c  | 10 +++
->  2 files changed, 66 insertions(+), 7 deletions(-)
+> [1] https://lore.kernel.org/bpf/20260601221805.821394-1-ihor.solodrai@linux.dev/
 > 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-> index 6bcadee50bb8..65ede3ac5845 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-> @@ -12,6 +12,10 @@
->  
->  #define BTF_DATA_FILE "resolve_btfids.test.o.BTF"
->  
-> +#ifndef KF_FASTCALL
-> +#define KF_FASTCALL (1 << 12)
-> +#endif
-> +
->  struct symbol {
->  	const char	*name;
->  	int		 type;
-> @@ -28,6 +32,17 @@ struct symbol test_symbols[] = {
->  	{ "func",    BTF_KIND_FUNC,    -1 },
->  };
->  
-> +struct kfunc_symbol {
-> +	const char	*name;
-> +	s32		 id;
-> +	u32		 flags;
-> +};
-> +
-> +static struct kfunc_symbol kfunc_symbols[] = {
-> +	{ "kfunc_a", -1, 0 },
-> +	{ "kfunc_b", -1, KF_FASTCALL },
-> +};
-> +
->  /* Align the .BTF_ids section to 4 bytes */
->  asm (
->  ".pushsection " BTF_IDS_SECTION " ,\"a\"; \n"
-> @@ -35,9 +50,9 @@ asm (
->  ".popsection;                             \n");
->  
->  /*
-> - * test_list_local and test_set are .local symbols placed in .BTF_ids by
-> - * inline asm, and are read here directly by C name. To the compiler they
-> - * are plain, default-visibility extern objects.
-> + * test_list_local, test_set and test_kfunc_set are .local symbols placed
-> + * in .BTF_ids by inline asm, and are read here directly by C name. To the
-> + * compiler they are plain, default-visibility extern objects.
->   *
->   * When test_progs is linked as a position-independent executable (PIE),
->   * taking the address of such an extern is routed through the GOT. The
-> @@ -69,6 +84,11 @@ BTF_ID(struct,  S)
->  BTF_ID(union,   U)
->  BTF_ID(func,    func)
->  BTF_SET_END(test_set)
-> +
-> +BTF_KFUNCS_START(test_kfunc_set)
-> +BTF_ID_FLAGS(func, kfunc_a)
-> +BTF_ID_FLAGS(func, kfunc_b, KF_FASTCALL)
-> +BTF_KFUNCS_END(test_kfunc_set)
->  #pragma GCC visibility pop
->  
->  extern __u32 test_list_global[];
-> @@ -92,6 +112,8 @@ __resolve_symbol(struct btf *btf, int type_id)
->  	if (!ASSERT_OK_PTR(type, "btf__type_by_id"))
->  		return -1;
->  
-> +	str = btf__name_by_offset(btf, type->name_off);
+> Changes compared to original 4 patches:
+>   * various nits from Jiri, Andrii and Emil
+>   * in patch #3 (that adds gcc pragma) definitions are moved such that
+>     .local BTF_ID_* containers are grouped together and we have a
+>     single pragma scope
 
-should we assert str != NULL like below?
+left one comment, otherwise lgtm
+
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
 jirka
 
-> +
->  	for (i = 0; i < ARRAY_SIZE(test_symbols); i++) {
->  		if (test_symbols[i].id >= 0)
->  			continue;
-> @@ -99,14 +121,20 @@ __resolve_symbol(struct btf *btf, int type_id)
->  		if (BTF_INFO_KIND(type->info) != test_symbols[i].type)
->  			continue;
->  
-> -		str = btf__name_by_offset(btf, type->name_off);
-> -		if (!ASSERT_OK_PTR(str, "btf__name_by_offset"))
-> -			return -1;
-> -
->  		if (!strcmp(str, test_symbols[i].name))
->  			test_symbols[i].id = type_id;
->  	}
->  
-
-SNIP
+> 
+> ---
+> 
+> Ihor Solodrai (4):
+>   tools/bpf: Sync btf_ids.h to tools
+>   selftests/bpf: Modernize resolve_btfids test scaffolding
+>   selftests/bpf: Fix resolve_btfids test reads of BTF ID sets in PIE
+>     builds
+>   selftests/bpf: Add kfunc set test to resolve_btfids
+> 
+>  tools/include/linux/btf_ids.h                 |  78 +++++++++-
+>  .../selftests/bpf/prog_tests/resolve_btfids.c | 140 ++++++++++++------
+>  tools/testing/selftests/bpf/progs/btf_data.c  |  10 ++
+>  3 files changed, 177 insertions(+), 51 deletions(-)
+> 
+> -- 
+> 2.54.0
+> 
