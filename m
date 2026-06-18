@@ -1,155 +1,121 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from mail-m155101.qiye.163.com (mail-m155101.qiye.163.com [101.71.155.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6333215665C
-	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 02:45:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955F1175A7F;
+	Thu, 18 Jun 2026 03:37:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781750717; cv=none; b=Yjt8AuOeaG/8X4TN9pyTXXxoC4S5woUy/u/bL1TPxlNf/pD0IuXUGaA/vO39q9DuAMwXLuHvTsux09iIWmsHYC72hJ3jkTIRBYJcnUsE9pOoigfM8loYEd7/X5r6PQw/wLJKWfaJpQOHKP+e9gQJcmO8oU32K/ICNXzcxn0S3nw=
+	t=1781753837; cv=none; b=Eonmo6skqFKQUr0iAF8BHwvTb/BAaHmtj5VQiwx4RDtN0iCuZwxKhGPoxMGQd59bnefCJ/2DnVc4ltZWVUZuQBY0nb2qlVS7Wm41cRbbS0N+WrdUrDgS/m38PuLqrgBSVRQ4jWFuQ7Va/wSeHcROR9zrUmQbn6QkCaVVDswoSMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781750717; c=relaxed/simple;
-	bh=qSaukmowGj++JxcMa/yHy6Yr3sKPTxuk6LlldTdeOqw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dSFqvRO2bL7sGgl7p19ujw7K4wF7FQEmczsPOsSwqXuZXEd7rVXljX86muEG/yaAkFZwPb38QLS9+3QQwYPMYnEWWAckNhLQ2BcT9EjYw0drPYSvo3rOYjYFitF5IGQ4QCVPJOmG2U0RVp4iLklonh+k6qYW5nBJQDYJPDjbEqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=C3puk66i; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781753837; c=relaxed/simple;
+	bh=3hNrtWDOJ4EKm1eU4+zwpgKNmz3xVyAiYqvrYeCFNI0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VvnaCzwdam0/4dO7d+UwD9N0a6r3E7sbCUXUxTvtof2SVqkJbhqgHToKy59kCSxD+aVIju3ODfPTcxV29lvNatDkPCMd4QaEUZhuFLiHNgMQ4b7kXJoFnwVPby+GgAbuXeHv89eTkkcOuuf+N1AW3B6sOKJZ1S03aVL27zI63qo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=d+t2rThR; arc=none smtp.client-ip=101.71.155.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="C3puk66i"
-Message-ID: <04931588-e708-40d8-a1b7-3700a1a3b376@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781750713;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w8TDN8bzEOcGiFm8DZoqtUUF8TKfOf/eHYPCDbduM40=;
-	b=C3puk66iITvSMQ0yJqQY//K6d78xs+4OlkhtRCs3u2ZER4a33+m7J5CkbUrXltia3osEri
-	NmGrrtNCc3pUMqQhpfh3Tb0XVSMpJXXQWzD7wV/ToE2EN8O8uRxWynlYRyEHwGdoQqK1do
-	ZSaCZu985ysGspmmZcgTBP7zdqplX+w=
-Date: Thu, 18 Jun 2026 10:45:02 +0800
+	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="d+t2rThR"
+Received: from PC-202605011814.localdomain (unknown [58.241.16.34])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 42d8d4990;
+	Thu, 18 Jun 2026 11:31:59 +0800 (GMT+08:00)
+From: Runyu Xiao <runyu.xiao@seu.edu.cn>
+To: Song Liu <song@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	jianhao.xu@seu.edu.cn,
+	runyu.xiao@seu.edu.cn
+Subject: Question: BPF stack build-id lookup while holding mmap_lock
+Date: Thu, 18 Jun 2026 11:31:52 +0800
+Message-Id: <20260618033152.1541795-1-runyu.xiao@seu.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v2] bpf, sockmap: fix use-after-free when the stream
- parser resizes the skb
-To: Sechang Lim <rhkrqnwk98@gmail.com>,
- John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, "David S . Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Simon Horman <horms@kernel.org>, Bobby Eshleman
- <bobbyeshleman@gmail.com>, netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260612123553.2724240-1-rhkrqnwk98@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260612123553.2724240-1-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-HM-Tid: 0a9ed8c91b9403a1kunmf1a17f198b0ce
+X-HM-MType: 10
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCQh5JVhhMHx5MGU0fHUodGlYeHw
+	5VEwETFhoSFyQUDg9ZV1kYEgtZQVlOQ1VJT0pVSk1VSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpPSE
+	xVSktLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=d+t2rThRK1FWqYcBmWV3Z00gfk58PctNNHhkl5vo5qgv/jXWl6SabRXbcd1fYfOdaf4gGM1yBitWnr3DJ5CXyunDGCoFTbT9o/IhuaEIjv3+eA5l5NgrFmt0FJYJo0dqchY0UpFb90f/bejintMFRUTviOjB0GAa+D6n1XOmPbg=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
+	bh=bYDpZepRS42kHQfCV94DqqHuisGv99igJmwhldcBRIk=;
+	h=date:mime-version:subject:message-id:from;
 
+Hi,
 
-On 6/12/26 8:35 PM, Sechang Lim wrote:
-> sk_psock_strp_parse() runs the BPF_PROG_TYPE_SK_SKB stream-parser program
-> to find the length of the next message. strparser assembles a message out
-> of several received skbs by chaining them onto the head's frag_list and
-> recording where to append the next one in strp->skb_nextp:
->
-> 	*strp->skb_nextp = skb;
-> 	strp->skb_nextp = &skb->next;
->
-> and then calls the parser on the head:
->
-> 	len = (*strp->cb.parse_msg)(strp, head);
->
-> The parser is only meant to inspect the skb, but the program may call
-> bpf_skb_change_tail() -- or the sibling bpf_skb_pull_data(),
-> bpf_skb_change_head(), bpf_skb_adjust_room(), all allowed for SK_SKB.
-> Once the head carries a frag_list these go
->
-> 	... -> skb_ensure_writable -> pskb_may_pull -> __pskb_pull_tail
->
-> and __pskb_pull_tail() frees the frag_list skbs that strparser still
-> tracks through skb_nextp:
->
-> 	while ((list = skb_shinfo(skb)->frag_list) != insp) {
-> 		skb_shinfo(skb)->frag_list = list->next;
-> 		consume_skb(list);
-> 	}
->
-> strp->skb_nextp now points into a freed sk_buff. The next segment of
-> the same message arrives in __strp_recv(), which links it with
-> *strp->skb_nextp = skb, an 8-byte write into the freed skb. The free
-> and the write happen in different __strp_recv() calls, so the message
-> has to span at least three segments before it triggers.
->
->    BUG: KASAN: slab-use-after-free in __strp_recv+0x447/0xda0
->    Write of size 8 at addr ffff88810db86140 by task repro/349
->
->    Call Trace:
->     <IRQ>
->     __strp_recv+0x447/0xda0
->     __tcp_read_sock+0x13d/0x590
->     tcp_bpf_strp_read_sock+0x195/0x320
->     strp_data_ready+0x267/0x340
->     sk_psock_strp_data_ready+0x1ce/0x350
->     tcp_data_queue+0x1364/0x2fd0
->     tcp_rcv_established+0xe07/0x1640
->     [...]
->
->    Allocated by task 349:
->     skb_clone+0x17b/0x210
->     __strp_recv+0x2c3/0xda0
->     __tcp_read_sock+0x13d/0x590
->     [...]
->
->    Freed by task 349:
->     kmem_cache_free+0x150/0x570
->     __pskb_pull_tail+0x57b/0xc20
->     skb_ensure_writable+0x236/0x260
->     __bpf_skb_change_tail+0x1d4/0x590
->     sk_skb_change_tail+0x2a/0x40
->     bpf_prog_1b285dcd6c41373e+0x27/0x30
->     bpf_prog_run_pin_on_cpu+0xf3/0x260
->     sk_psock_strp_parse+0x118/0x1e0
->     __strp_recv+0x4f6/0xda0
->     [...]
->
-> The same resize also leaves the head's length inconsistent with its
-> frags, so a later __pskb_pull_tail() can instead hit the
-> BUG_ON(skb_copy_bits(...)) in net/core/skbuff.c.
->
-> Run the parser on a private clone of the head when the message spans more
-> than one skb and the program can modify the packet
-> (prog->aux->changes_pkt_data), so a resizing helper can only touch the
-> clone and strparser's head and skb_nextp stay valid. Single-skb messages
-> have no frag_list and read-only parsers cannot resize, so both are still
-> parsed in place. If the clone cannot be allocated, return 0 so the caller
-> retries on the next read rather than failing the parser.
->
-> Fixes: 8a31db561566 ("bpf: add access to sock fields and pkt data from sk_skb programs")
+While auditing lock ordering around faultable build-id lookups, our
+static analysis tool flagged the BPF stackmap user-build-id path, and we
+manually reviewed it against the current tree.
 
+The path we are concerned about is the sleepable helper path:
 
-Please consider Kuniyuki Iwashima's suggestion.
+  bpf_get_stack_sleepable() / bpf_get_task_stack_sleepable()
+    -> __bpf_get_stack(..., may_fault = true)
+       -> stack_map_get_build_id_offset()
+          -> mmap_read_trylock(current->mm)
+          -> build_id_parse(vma, ...)
+          -> __kernel_read()
 
-But it only covers the ATTACH path; the other two paths should be 
-covered as well:
+`build_id_parse()` can read from the backing file while mmap_lock is
+held.  That can form an ABBA dependency with file read paths where the
+inode side is held first and copy_to_user/copy_page_to_iter can fault
+and then need mmap_lock.
 
-- BPF_PROG_ATTACH → sock_map_get_from_fd → sock_map_prog_update
-- BPF_LINK_CREATE → sock_map_link_create → sock_map_prog_update
-- replace prog → sock_map_link_update_prog
+A minimal Lockdep reproducer preserving this BPF stackmap carrier and
+the reverse file-read edge reports:
 
-A new helper for this check is probably needed, called from both
+  WARNING: possible circular locking dependency detected
+  __kernel_read
+  stack_map_get_build_id_offset
+  __bpf_get_stack
+  *** DEADLOCK ***
 
-sock_map_prog_update() and sock_map_link_update_prog().
+The local fix I am considering is only for the faultable build-id path.
+It would snapshot the VMA file reference and offset metadata under
+mmap_lock, drop mmap_lock, and then parse the build-id from the file
+reference with build_id_parse_file().  The existing no-fault path would
+remain unchanged.
 
+Roughly:
 
-Since this rejects the program at attach time rather than fixing a 
-runtime crash,
+  1. Under mmap_lock, find the VMA for each user IP.
+  2. Take a file reference and snapshot vm_start/vm_pgoff.
+  3. Drop mmap_lock.
+  4. Parse build IDs from the files.
+  5. Fall back to reporting IPs if the faultable path cannot safely
+     release mmap_lock or allocate the temporary snapshot array.
 
-I'm not sure a Fixes tag is appropriate here - thoughts?
+The tradeoff is that build-id parsing would happen after releasing
+mmap_lock, so the VMA/file relationship is represented by the file
+reference and copied metadata rather than by holding the VMA lock context
+through the file read.  That avoids file I/O under mmap_lock, but may
+change edge-case behavior if the mapping changes concurrently.
 
+Does this direction sound acceptable for sleepable BPF stack helpers, or
+would you prefer a stricter fallback-to-IP behavior whenever build-id
+parsing would require faultable file I/O?  Another option would be to
+avoid build-id parsing entirely in the may_fault=true stackmap path unless
+there is an existing BPF/MM helper pattern I should reuse.
+
+The local draft subject is:
+
+  bpf: avoid faultable build-id lookup under mmap_lock
+
+Thanks,
+Runyu
