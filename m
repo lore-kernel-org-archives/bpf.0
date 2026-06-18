@@ -1,190 +1,155 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D691A40D57F
-	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 01:20:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6333215665C
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 02:45:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781745635; cv=none; b=PnSsHspsOJkDlaR5exa3t5Wu8XsvKzV89QvQkz8Cq+laUYViNIxgoM5O2GzXPbS+tr8Q94DHbSNLfvfx8qGMYNBDDaiMUdbPQwFRo/Mr8OvFjocHjC5Dml0Jb2+IgGKlAC1rKVKQbPjWgmquDazTBbdeohmXaQHG8GyMEBmgg9M=
+	t=1781750717; cv=none; b=Yjt8AuOeaG/8X4TN9pyTXXxoC4S5woUy/u/bL1TPxlNf/pD0IuXUGaA/vO39q9DuAMwXLuHvTsux09iIWmsHYC72hJ3jkTIRBYJcnUsE9pOoigfM8loYEd7/X5r6PQw/wLJKWfaJpQOHKP+e9gQJcmO8oU32K/ICNXzcxn0S3nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781745635; c=relaxed/simple;
-	bh=PBOZN1hq230CMxqsSiWQeiai90gS/fWOTWf32wTm9iM=;
+	s=arc-20240116; t=1781750717; c=relaxed/simple;
+	bh=qSaukmowGj++JxcMa/yHy6Yr3sKPTxuk6LlldTdeOqw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XgB02MhWFS/QEJ/o3GquU2wduK0aDEbRvMZUtYBNPphYE2vUZwnkC4gFX/hBKWVANwa/le0fajdcUp1JqN+QhJKtmvHd4Az6XMI341V347BpaTg1dS1aBl77LgGt0sER1O3etuhiR6dn23F+i7q3INWz9yMI6GQsVprg+ScNOCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UATYdMh5; arc=none smtp.client-ip=95.215.58.170
+	 In-Reply-To:Content-Type; b=dSFqvRO2bL7sGgl7p19ujw7K4wF7FQEmczsPOsSwqXuZXEd7rVXljX86muEG/yaAkFZwPb38QLS9+3QQwYPMYnEWWAckNhLQ2BcT9EjYw0drPYSvo3rOYjYFitF5IGQ4QCVPJOmG2U0RVp4iLklonh+k6qYW5nBJQDYJPDjbEqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=C3puk66i; arc=none smtp.client-ip=91.218.175.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UATYdMh5"
-Message-ID: <561fbc2b-92f5-4e63-97c2-b762deaf4a72@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="C3puk66i"
+Message-ID: <04931588-e708-40d8-a1b7-3700a1a3b376@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781745621;
+	t=1781750713;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=DaYki+tJFhcQgomTjlJCDeMHhHzWU5LwWN7dNO9dCQA=;
-	b=UATYdMh5XGqC8CxyOXr4tF99QhBMtFvBye9WQm8r8b/Uuo7Lia4i0+19LTZ0jtKOySCEnE
-	tsPFoMKM10cAcnZu2iC9WlcSVkIrnL35v9I4WrzcRpll8KVQEcylBMhIKscH/VLbdIVHY3
-	YMxkdGfo+YS8/j2VYoXjKIYBndlrhuY=
-Date: Wed, 17 Jun 2026 18:20:05 -0700
+	bh=w8TDN8bzEOcGiFm8DZoqtUUF8TKfOf/eHYPCDbduM40=;
+	b=C3puk66iITvSMQ0yJqQY//K6d78xs+4OlkhtRCs3u2ZER4a33+m7J5CkbUrXltia3osEri
+	NmGrrtNCc3pUMqQhpfh3Tb0XVSMpJXXQWzD7wV/ToE2EN8O8uRxWynlYRyEHwGdoQqK1do
+	ZSaCZu985ysGspmmZcgTBP7zdqplX+w=
+Date: Thu, 18 Jun 2026 10:45:02 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves v5 00/11] pahole: Encode true signatures in kernel
- BTF
-Content-Language: en-GB
-To: Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, kernel-team@fb.com
-References: <20260523165712.1225231-1-yonghong.song@linux.dev>
- <84234995-4664-4f03-81fe-38b22482a319@oracle.com>
+Subject: Re: [PATCH bpf v2] bpf, sockmap: fix use-after-free when the stream
+ parser resizes the skb
+To: Sechang Lim <rhkrqnwk98@gmail.com>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, "David S . Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Simon Horman <horms@kernel.org>, Bobby Eshleman
+ <bobbyeshleman@gmail.com>, netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260612123553.2724240-1-rhkrqnwk98@gmail.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <84234995-4664-4f03-81fe-38b22482a319@oracle.com>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260612123553.2724240-1-rhkrqnwk98@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 
+On 6/12/26 8:35 PM, Sechang Lim wrote:
+> sk_psock_strp_parse() runs the BPF_PROG_TYPE_SK_SKB stream-parser program
+> to find the length of the next message. strparser assembles a message out
+> of several received skbs by chaining them onto the head's frag_list and
+> recording where to append the next one in strp->skb_nextp:
+>
+> 	*strp->skb_nextp = skb;
+> 	strp->skb_nextp = &skb->next;
+>
+> and then calls the parser on the head:
+>
+> 	len = (*strp->cb.parse_msg)(strp, head);
+>
+> The parser is only meant to inspect the skb, but the program may call
+> bpf_skb_change_tail() -- or the sibling bpf_skb_pull_data(),
+> bpf_skb_change_head(), bpf_skb_adjust_room(), all allowed for SK_SKB.
+> Once the head carries a frag_list these go
+>
+> 	... -> skb_ensure_writable -> pskb_may_pull -> __pskb_pull_tail
+>
+> and __pskb_pull_tail() frees the frag_list skbs that strparser still
+> tracks through skb_nextp:
+>
+> 	while ((list = skb_shinfo(skb)->frag_list) != insp) {
+> 		skb_shinfo(skb)->frag_list = list->next;
+> 		consume_skb(list);
+> 	}
+>
+> strp->skb_nextp now points into a freed sk_buff. The next segment of
+> the same message arrives in __strp_recv(), which links it with
+> *strp->skb_nextp = skb, an 8-byte write into the freed skb. The free
+> and the write happen in different __strp_recv() calls, so the message
+> has to span at least three segments before it triggers.
+>
+>    BUG: KASAN: slab-use-after-free in __strp_recv+0x447/0xda0
+>    Write of size 8 at addr ffff88810db86140 by task repro/349
+>
+>    Call Trace:
+>     <IRQ>
+>     __strp_recv+0x447/0xda0
+>     __tcp_read_sock+0x13d/0x590
+>     tcp_bpf_strp_read_sock+0x195/0x320
+>     strp_data_ready+0x267/0x340
+>     sk_psock_strp_data_ready+0x1ce/0x350
+>     tcp_data_queue+0x1364/0x2fd0
+>     tcp_rcv_established+0xe07/0x1640
+>     [...]
+>
+>    Allocated by task 349:
+>     skb_clone+0x17b/0x210
+>     __strp_recv+0x2c3/0xda0
+>     __tcp_read_sock+0x13d/0x590
+>     [...]
+>
+>    Freed by task 349:
+>     kmem_cache_free+0x150/0x570
+>     __pskb_pull_tail+0x57b/0xc20
+>     skb_ensure_writable+0x236/0x260
+>     __bpf_skb_change_tail+0x1d4/0x590
+>     sk_skb_change_tail+0x2a/0x40
+>     bpf_prog_1b285dcd6c41373e+0x27/0x30
+>     bpf_prog_run_pin_on_cpu+0xf3/0x260
+>     sk_psock_strp_parse+0x118/0x1e0
+>     __strp_recv+0x4f6/0xda0
+>     [...]
+>
+> The same resize also leaves the head's length inconsistent with its
+> frags, so a later __pskb_pull_tail() can instead hit the
+> BUG_ON(skb_copy_bits(...)) in net/core/skbuff.c.
+>
+> Run the parser on a private clone of the head when the message spans more
+> than one skb and the program can modify the packet
+> (prog->aux->changes_pkt_data), so a resizing helper can only touch the
+> clone and strparser's head and skb_nextp stay valid. Single-skb messages
+> have no frag_list and read-only parsers cannot resize, so both are still
+> parsed in place. If the clone cannot be allocated, return 0 so the caller
+> retries on the next read rather than failing the parser.
+>
+> Fixes: 8a31db561566 ("bpf: add access to sock fields and pkt data from sk_skb programs")
 
-On 6/15/26 10:17 AM, Alan Maguire wrote:
-> On 23/05/2026 17:57, Yonghong Song wrote:
->> Current vmlinux BTF encoding is based on the source level signatures.
->> But the compiler may do some optimization and changed the signature.
->> If the user tried with source level signature, their initial implementation
->> may have wrong results and then the user need to check what is the
->> problem and work around it, e.g. through kprobe since kprobe does not
->> need vmlinux BTF.
->>
->> Majority of changed signatures are due to dead argument elimination.
->> The following is a more complex one. The original source signature:
->>    typedef struct {
->>          union {
->>                  void            *kernel;
->>                  void __user     *user;
->>          };
->>          bool            is_kernel : 1;
->>    } sockptr_t;
->>    typedef sockptr_t bpfptr_t;
->>    static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
->> After compiler optimization, the signature becomes:
->>    static int map_create(union bpf_attr *attr, bool uattr__is_kernel) { ... }
->> In the above, uattr__is_kernel corresponds to 'is_kernel' field in sockptr_t.
->> This makes it easier for developers to understand what changed.
->>
->> The new signature needs to properly follow ABI specification based on
->> locations. Otherwise, that signature should be discarded. For example,
->>
->>      0x0242f1f7:   DW_TAG_subprogram
->>                      DW_AT_name      ("memblock_find_in_range")
->>                      DW_AT_calling_convention        (DW_CC_nocall)
->>                      DW_AT_type      (0x0242decc "phys_addr_t")
->>                      ...
->>      0x0242f22e:     DW_TAG_formal_parameter
->>                        DW_AT_location        (indexed (0x14a) loclist = 0x005595bc:
->>                           [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_reg5 RDI
->>                           [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_reg14 R14
->>                           [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
->>                           [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg14 R14)
->>                        DW_AT_name    ("start")
->>                        DW_AT_type    (0x0242decc "phys_addr_t")
->>                        ...
->>      0x0242f239:     DW_TAG_formal_parameter
->>                        DW_AT_location        (indexed (0x14b) loclist = 0x005595e6:
->>                           [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_reg4 RSI
->>                           [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_reg3 RBX
->>                           [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
->>                           [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg3 RBX)
->>                        DW_AT_name    ("end")
->>                        DW_AT_type    (0x0242decc "phys_addr_t")
->>                        ...
->>      0x0242f245:     DW_TAG_formal_parameter
->>                        DW_AT_location        (indexed (0x14c) loclist = 0x00559610:
->>                           [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_breg4 RSI+0)
->>                        DW_AT_name    ("size")
->>                        DW_AT_type    (0x0242decc "phys_addr_t")
->>                        ...
->>      0x0242f250:     DW_TAG_formal_parameter
->>                        DW_AT_const_value     (4096)
->>                        DW_AT_name    ("align")
->>                        DW_AT_type    (0x0242decc "phys_addr_t")
->>                        ...
->>
->> The third argument should correspond to RDX for x86_64. But the location suggests that
->> the parameter value is stored in the address with 'RSI + 0'. It is not clear whether
->> the parameter value is stored in RDX or not. So we have to discard this funciton in
->> vmlinux BTF to avoid incorrect true signatures.
->>
->> For llvm, any function having
->>    DW_AT_calling_convention        (DW_CC_nocall)
->> in dwarf DW_TAG_subprogram will indicate that this function has signature changed.
->> I did experiment with latest bpf-next. For x86_64, there are 69103 kernel functions
->> and 875 kernel functions having signature changed. A series of patches are intended
->> to ensure true signatures are properly represented. Eventually, only 18 functions
->> cannot have true signatures due to locations.
->>
->> For arm64, there are 863 kernel functions having signature changed, and
->> 70 functions cannot have true signatures due to locations. I checked those
->> functions and look like llvm arm64 backend more relaxed to compute parameter
->> values.
->>
->> For full testing, I enabled true signature support in kernel scripts/Makefile.btf like below:
->>    -pahole-flags-$(call test-ge, $(pahole-ver), 130) += --btf_features=attributes
->>    +pahole-flags-$(call test-ge, $(pahole-ver), 130) += --btf_features=attributes --btf_features=+true_signature
->>
->> For the patch set, Patch 1 introduced usage of DW_AT_calling_convention, which
->> can precisely identify which function has signature changed. This can filter
->> majority of functions where their signature won't change. Patch 2 did a prescan
->> of parameter registers to accommodate some cases where the optimization could
->> happen but didn't. Patches 3 to 9 tried to find functions with true signature.
->> Patch 10 enables to btf encoder to properly generate BTF.
->> Patch 11 includes a few tests.
->>
->> Changelog:
->>    v4 -> v5:
->>      - v4: https://lore.kernel.org/bpf/20260326013144.2901265-1-yonghong.song@linux.dev/
->>      - Check info.signature_changed only under clang.
->>      - Fix an uninitialized varable issue (var reg_dix) for gcc.
->>    v3 -> v4:
->>      - v3: https://lore.kernel.org/bpf/20260320190917.1970524-1-yonghong.song@linux.dev/
->>      - Add simple prescan of parameter registers in order to get true signatures
->>        for those functions where optimization could happen but compiler didn't do it.
->>      - Do not create a new name (e.g. "uattr__is_kernel") with malloc at parameter_reg()
->>        stage. Instead remember both "uattr" and "is_kernel" and later generate the
->>        name "uattr_is_kernel" in btf encoder.
->>      - Add comments to explain how to handle parameters which may take two registers.
->>      - Fix some test failures on aarch64.
->>    v2 -> v3:
->>      - v2: https://lore.kernel.org/bpf/20260309153215.1917033-1-yonghong.song@linux.dev/
->>      - Change tests by using newly added test_lib.sh.
->>      - Simplify to get bool variable producer_clang.
->>      - Try to avoid producer_clang appearance in dwarf_loader.c in order to avoid
->>        clear separation between clang and gcc.
->>    v1 -> v2:
->>      - v1: https://lore.kernel.org/bpf/20260305225455.1151066-1-yonghong.song@linux.dev/
->>      - Added producer_clang guarding in btf_encoder. Otherwise, gcc kernel build
->>        will crash pahole.
->>      - Fix an early return in parameter__reg() which didn't do pthread_mutex_unlock()
->>        which caused the deadlock for arm64.
->>      - Add a few more places to guard with producer_clang and conf->true_signature
->>        to maintain the previous behavior if not clang or conf->true_signature is false.
->>
-> In order to be a bit more concrete about a proposed way forward, I'm thinking something
-> along the lines of the attached patch (which should apply on top of this whole series);
-> rather than doing prescans etc, we record param info as we go as we do today, and once done
-> compute true signature info. This saves some complexity around prescan of params etc, so
-> is a bit more  consistent with what's there today. Ideally we'd be able to enhance DWARF
-> processing for both cases (you have some great improvements in that area in this series),
-> and unify the representation of modified signatures where feasible. Let me know what you think.
 
-I just incorporated your change with some additional fix with patch
-     dwarf_loader: Analyze per-parameter information for true signatures
-in v6 https://lore.kernel.org/bpf/20260618011358.632394-1-yonghong.song@linux.dev/
+Please consider Kuniyuki Iwashima's suggestion.
 
-Please take a look. Thanks!
+But it only covers the ATTACH path; the other two paths should be 
+covered as well:
+
+- BPF_PROG_ATTACH → sock_map_get_from_fd → sock_map_prog_update
+- BPF_LINK_CREATE → sock_map_link_create → sock_map_prog_update
+- replace prog → sock_map_link_update_prog
+
+A new helper for this check is probably needed, called from both
+
+sock_map_prog_update() and sock_map_link_update_prog().
+
+
+Since this rejects the program at attach time rather than fixing a 
+runtime crash,
+
+I'm not sure a Fixes tag is appropriate here - thoughts?
 
