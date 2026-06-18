@@ -1,80 +1,71 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0BA2EAB6F
-	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 15:30:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD3D335BA7;
+	Thu, 18 Jun 2026 16:26:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781796615; cv=none; b=uHSoyLAXF6j487CCX2TA/SNmoJDEf2NgaV09Tk8319C4+lK141jqk5MH5b2TbHw5f2vZu/C9lxzBcr9dmzCWhgjVRYgj4a3A9S6UgZ41d3HADbO81vmbMsCwzZga+DCSqVdei0TcRRNbMvzOpURvQ767Iz/zEEDpROdD/JZsiQI=
+	t=1781799999; cv=none; b=IvE52tG0DiqPBFyMbsooU1w3K6uX0dIe2hrTOifSZ8W+V8fooz7X5siIAiR6vsNbV7AKzOzTrYM7UUT971t7PzlCvTUCD7dWWwhhW4KXme+s22BDKR6xVvszLmybLqPjtUD68avzwVs/RXKZczQ6HwtliznGM1qyp91ARm5Kejg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781796615; c=relaxed/simple;
-	bh=F0XHc5tffhJfH2pxJrKh1dRi5hlbamYiIhKbtvvu7wo=;
+	s=arc-20240116; t=1781799999; c=relaxed/simple;
+	bh=l9GsWwxaV6V2eqeKD24cv48fa9vPsxRqYgvfc+DFAUg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YhYifxmtI9LWgfY0wQaTWNF2y1ySc/cshd6XOsTGXQWFyDhWhhapT1sarAnaWVRdCWWrwCHsDDuDC3fH9f3AbtN4IuzMNOsSlYgXmh/aituSVsHbDlXOFtNe+tH3A46hGOuKjrjgCxbbeXIvA21zJjKq8JNI9hlEGSNYV6YFpO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h/hNjK4C; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=eWPbE/NjcP1Y7hiBbVqV1nElmai5gMVMhoWL8OBxxlYgJRFnx2TunEr3bup2yJEW6I7RaK5Cf7bozY2wxdKVp2rL0h6Ki7ObAd8miHbdRqfzuQ/CWawPQdvU3mvkXM8AYMH6voa7cbhvLjJGjxe/jPpPGbu9btwrVjUyOPaM2kM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UXeSeYYy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h/hNjK4C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D481F00A3D;
-	Thu, 18 Jun 2026 15:30:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UXeSeYYy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25ABF1F000E9;
+	Thu, 18 Jun 2026 16:26:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781796614;
-	bh=G0BFgogMIJaXJGDiQZV8U4+rZmptmkIJn2CptvNFtEg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=h/hNjK4CyFZfJGDHGnuBm2XDLAkK0L/+AS0Fahmfj/NxB3llMGA76jmBzlySanZ//
-	 ywhoZflZ7QTDyvfgIAtIoxPIs/8BGQXSwAlURTN6CvTsqjYRXQLBdgQbOtnKiD6HZv
-	 vz8W/Opk65B3zbbvFCI0D+CkZNywk72hnbf9C21fDcxCeGWZDvaTDkYdhIp//ep2y/
-	 TMfNaqWhJJCYEN1kJw4OpSp0sbltxs09ChYEiPxQeLFa04t24757kBLpQidpp6hYer
-	 M51TLbttOsl824C4+yxfi8IBC3ThvVds9xavjq+SVRAGo97gm27i/aPUwJqkoN+FZR
-	 HEyx2e9cc18YQ==
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfauth.phl.internal (Postfix) with ESMTP id A31B3F40082;
-	Thu, 18 Jun 2026 11:30:12 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Thu, 18 Jun 2026 11:30:12 -0400
-X-ME-Sender: <xms:BA80asNdm4zfeiaBzam79lJw3tcCGaYgs6S-Gq28UcCJ6cAzM812VQ>
-    <xme:BA80an31-XoElJPaZ8UAjINBag02b3TjWULPS6FWTiqNfw2-B9PYHIE8etYHjDTZo
-    5f8vjolCza9H5pMNf3ZdkTxgbWhPtASbI5iIjmQvBPHYykNv53LIA>
-X-ME-Received: <xmr:BA80ar0chNeqDGcHwK667pBFihJT8iZUrsiS8Q8ehieYN4o1XvogBxdHf1Q21rWiEpTKFC77PGYkd7Ex_S6atJCsG7FZ64KL>
-X-ME-Proxy-Cause: dmFkZTFMbSsA9J0WA0JULckOoW50HX4x9J7CjHhu7BPf2uJHl9tL6yhfYmd3fMQmaZnC7G
-    Tr/s4dTY1dimqtLUA/YZxW5i13LqojtflIgd4qePbDl9cbd7L+fsC5SiCXaYmv9BDlIyJW
-    6x0jQMH9i+a38GTWd/jiHTQw7rOWqdzDIc0PDwuy3TYnzwSiQcSsQ9Fz2xWGaA5zW2aIae
-    wdTncdObWpOmv3iy8Ty7W/8VRKBfVNtIbFDT4nsW+sqww6ua5ZkM+1cqv67HjSRf5CE+Wd
-    8HZS1bExz/22zkg8ZXi3O2ei9xVRhG0mGUwNJQrfNNkrbXDVloyOHB1jdcg9c5iDdFZSH8
-    zGFHXGzLSKdX2E2XN5Mec2ykR8p1BWTmzA+P2zaoPD0E6JNH+0njNk0H0ihMZpJ71GaA9x
-    SHeygttBoPEDOdF0HVLZglB73bp/I1cg/I+jym6LvZfaB1xPoCyob4axdlBxF+JCJzaEfO
-    Fv4prp0UhhgnsEunGdDQCOJ+CiublHU2jnQcYkxyZ1tb17y59pZr9ef3VeMMisAFtDQR0H
-    LdyFEiWrC0/xGWPRikpHJ3d8dLPoNt0urnEkFD/KZczA8pdIrsQqsubBlOgd5rdrsSkt0q
-    ibCxLV/X3NeKLZjD4W663RcLECpAd4Hyf0v/0xwiQpjKunV7/zuSiCsJqJWw
-X-ME-Proxy: <xmx:BA80al9ZUbW6v9VLLraQyxNt3khO62Ln66VEiaRbEuNuQVDkfIPgeg>
-    <xmx:BA80anZOlhjWzK85EIMgg7DhiQnm2GiBrXFqd1muzhy0amkZF__HRA>
-    <xmx:BA80akxWuH7DqRvmMJ6Buave3_hderdbGJzDjOaTHafOLPf3F-qdgw>
-    <xmx:BA80al-_gIOcs3PcdKvxsDpgrNkdx9z4bu7MlsuH8MvMv7u6Nv9aRw>
-    <xmx:BA80agxssDfbSnCBIzh0f27rlH-WnzVstuKAjp3xbiCvX7EBfH-A-hXo>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 18 Jun 2026 11:30:11 -0400 (EDT)
-Date: Thu, 18 Jun 2026 08:30:10 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc: Joel Fernandes <joelagnelf@nvidia.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	frederic@kernel.org, neeraj.iitr10@gmail.com, urezki@gmail.com,
-	boqun.feng@gmail.com, rcu@vger.kernel.org,
-	Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+	s=k20260515; t=1781799997;
+	bh=dp1MV9ObzkvUOdtywXejE6RIKhm8Pl3m6Mmpvgkxwlo=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=UXeSeYYy01DT4VR6OXkqWDULLhP/Ccy8K724rlCfZGQAGXI6Lp4xZ8QALJOyHr/2c
+	 Mq+ZZjyzqFJ+yAR82SvjbjzJ3ZCqeJG5h4ymHKb1wxf9ngahGzu8FzRLZ/9SRZKyP6
+	 Gt243QxzOS35okQnX6XxShRInIQunlGyY4hJ6auK1x2VVoZC8bU1nqcB08/rNrBB/T
+	 4kIyLPvyXFgHm19SFWfFF/vb3tNT778H7MuoWRRClTpTfDHxRgmcqy0t9XkjoCiNvY
+	 SIoHiZNod8mGUvvxZ5qfhjUwVmosYXvqZy3lJWipH8QqauvCd+CWU2Jspwb/L5k7eJ
+	 t025mjEP7Oc5A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id DC1B9CE0C39; Thu, 18 Jun 2026 09:26:36 -0700 (PDT)
+Date: Thu, 18 Jun 2026 09:26:36 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Harry Yoo <harry@kernel.org>
+Cc: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>,
+	David Rientjes <rientjes@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
 	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrea Righi <arighi@nvidia.com>, Zqiang <qiang.zhang@linux.dev>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2] rcu: Use an intermediate irq_work to start
- process_srcu()
-Message-ID: <ajQPAk_ALP-84obp@MacBook-0RXW5>
-References: <ab2yd35rm6OgZUmb@gpd4>
- <20260320222916.19987-1-boqun@kernel.org>
- <CAJM55Z-hiNDuu5UwoBe7m0wq+_WJrRY0cwopALUgpG+r3ixj8g@mail.gmail.com>
+	Andrii Nakryiko <andrii@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Amery Hung <ameryhung@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>, Pedro Falcato <pfalcato@suse.de>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+	rcu@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH for-next v3 6/9] mm/slab: allow kfree_rcu_sheaf() on
+ PREEMPT_RT
+Message-ID: <2bfc956b-0708-4e55-afba-77843e67b494@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-6-70a54f3775bb@kernel.org>
+ <f3a56a5a-f10b-46dc-bc99-28449ade1661@kernel.org>
+ <40591888-3a87-433e-b3d2-cda1cab543be@kernel.org>
+ <9d8ca1ed-bc53-417f-944b-d78eecd1e6a5@kernel.org>
+ <03da8742-3790-4428-84b8-11911bf44c9e@paulmck-laptop>
+ <39758d58-f646-470c-9c35-818ac75427d3@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,84 +74,139 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJM55Z-hiNDuu5UwoBe7m0wq+_WJrRY0cwopALUgpG+r3ixj8g@mail.gmail.com>
+In-Reply-To: <39758d58-f646-470c-9c35-818ac75427d3@kernel.org>
 
-On Thu, Jun 18, 2026 at 08:11:36AM -0500, Emil Renner Berthing wrote:
-> Quoting Boqun Feng (2026-03-20 23:29:16)
-> > Since commit c27cea4416a3 ("rcu: Re-implement RCU Tasks Trace in terms
-> > of SRCU-fast") we switched to SRCU in BPF. However as BPF instrument can
-> > happen basically everywhere (including where a scheduler lock is held),
-> > call_srcu() now needs to avoid acquiring scheduler lock because
-> > otherwise it could cause deadlock [1]. Fix this by following what the
-> > previous RCU Tasks Trace did: using an irq_work to delay the queuing of
-> > the work to start process_srcu().
-> >
-> > [boqun: Apply Joel's feedback]
-> > [boqun: Apply Andrea's test feedback]
-> >
-> > Reported-by: Andrea Righi <arighi@nvidia.com>
-> > Closes: https://lore.kernel.org/all/abjzvz_tL_siV17s@gpd4/
-> > Fixes: commit c27cea4416a3 ("rcu: Re-implement RCU Tasks Trace in terms of SRCU-fast")
-> > Link: https://lore.kernel.org/rcu/3c4c5a29-24ea-492d-aeee-e0d9605b4183@nvidia.com/ [1]
-> > Suggested-by: Zqiang <qiang.zhang@linux.dev>
-> > Tested-by: Andrea Righi <arighi@nvidia.com>
-> > Signed-off-by: Boqun Feng <boqun@kernel.org>
+On Thu, Jun 18, 2026 at 09:46:04PM +0900, Harry Yoo wrote:
+> On 6/18/26 5:40 AM, Paul E. McKenney wrote:
+> > On Wed, Jun 17, 2026 at 07:38:16AM +0200, Vlastimil Babka (SUSE) wrote:
+> >> On 6/17/26 07:14, Harry Yoo wrote:
+> >>> On 6/17/26 2:24 AM, Vlastimil Babka (SUSE) wrote:
+> >>>> On 6/15/26 13:06, Harry Yoo (Oracle) wrote:
+> >>>>> As suggested by Vlastimil Babka, kfree_rcu_sheaf() can be used
+> >>>>> on PREEMPT_RT if we always assume spinning is not allowed on PREEMPT_RT.
+> >>>>> This is because local_trylock and spinlock_t are safe to use with
+> >>>>> trylock variant as long as the kernel does not spin and the context is
+> >>>>> not NMI and not hardirq.
+> >>>>>
+> >>>>> Now that __kfree_rcu_sheaf() knows how to handle allow_spin = false,
+> >>>>> relax the limitation and try the sheaves path on PREEMPT_RT as well.
+> >>>>>
+> >>>>> Keep the lockdep map on non RT kernels. However, do not use the lockdep
+> >>>>> map on PREEMPT_RT to avoid suppressing valid lockdep warnings.
+> >>>>>
+> >>>>> Link: https://lore.kernel.org/linux-mm/6811cc17-8ee4-48c8-8cbf-6bf4d9f98162@kernel.org
+> >>>>> Suggested-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+> >>>>> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+> >>>>
+> >>>> LGTM, but maybe unnecessary pessimistic wrt call_rcu() on PREEMPT_RT?
+> >>>> I thought (in the Link: above) we'd only need to downgrade allow_spin to
+> >>>> false on PREEMPT_RT for handling sheaves movement from/to barn and
+> >>>> alloc_empty_sheaf(), but call_rcu() would be safe from kfree_rcu() even on
+> >>>> RT?
+> >>>
+> >>> Indeed. Good point, thanks!
+> >>>
+> >>> Hmm, but I'm not sure that it's worth the complexity given that
+> >>> PREEMPT_RT tries very hard to avoid disabling IRQs...
+> >>>
+> >>>> Or is the irqs_disabled() condition rare enough so we don't care?
+> >>>
+> >>> Given that most users don't call kfree_rcu() under raw spinlock or
+> >>> IRQs-disabled section on PREEMPT_RT, I think it's okay to keep it as is
+> >>> (it's not making things worse, at least) and wait for call_rcu_nolock()?
+> >>
+> >> Sounds good.
+> >>
+> >>> On a side note, I don't have much idea on what needs to call kfree_rcu()
+> >>> under a raw spinlock, other than set_cpus_allowed_force(), which should
+> >>> really be using kfree_nolock() instead of kfree_rcu() once we support
+> >>> kmalloc() -> kfree_nolock():
+> >>
+> >> Looks like the case. Well if the fallback path of kfree_nolock() that is
+> >> irq_work_queue() is indeed safe here.
+> >>
+> >>>> 	/*
+> >>>> 	 * Because this is called with p->pi_lock held, it is not possible
+> >>>> 	 * to use kfree() here (when PREEMPT_RT=y), therefore punt to using
+> >>>> 	 * kfree_rcu().
+> >>>> 	 */
+> >>>> 	kfree_rcu((union cpumask_rcuhead *)ac.user_mask, rcu);
+> >>>
+> >>> Any thoughts, RCU/RT folks? 
 > 
-> Thanks for the patch, which is now upstream as
-> 7c405fb3279b ("rcu: Use an intermediate irq_work to start process_srcu()")
+> Thanks for looking into it, Paul!
 > 
-> Unfortunately it seems to halt booting on the Allwinner D1 single-core RISC-V
-> SoC both on the 7.0 and 7.1 kernels:
+> Perhaps I'm missing some context here... let me clarify.
 > 
-
-By "single-core", is it only one CPU in that system?
-
-> https://esmil.dk/d1-7.0.txt
-> https://esmil.dk/d1-7.1.txt
+> > For the call_rcu*() counterparts, I am currently considering making the
+> > existing functions check for interrupts disabled, using irq_work_queue()
+> > in that case. 
 > 
-
-From the callstack,
-
-[  243.002818] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[  243.010681] task:kworker/0:0     state:D stack:0     pid:9     tgid:9     ppid:2      task_flags:0x4208060 flags:0x00000000
-[  243.021858] Workqueue: device_link_wq device_link_release_fn
-[  243.027587] Call Trace:
-[  243.030079] [<ffffffff80745b66>] __schedule+0x232/0x530
-[  243.035365] [<ffffffff80745e82>] schedule+0x1e/0x94
-[  243.040298] [<ffffffff8074aa7a>] schedule_timeout+0x6e/0xa8
-[  243.045929] [<ffffffff8004d6a0>] wakeup_preempt+0x8c/0x98
-[  243.051380] [<ffffffff80746aee>] wait_for_completion+0x3a/0xb0
-[  243.057267] [<ffffffff80087226>] __synchronize_srcu.part.0+0x4e/0x60
-[  243.063712] [<ffffffff80084414>] rcu_tasks_get_gp_data+0xc/0x10
-[  243.069699] [<ffffffff80490898>] device_link_release_fn+0x14/0x80
-[  243.075850] [<ffffffff8003dbd0>] process_one_work+0xf8/0x1c8
-[  243.081583] [<ffffffff8003e282>] worker_thread+0x11a/0x254
-[  243.087127] [<ffffffff8003e164>] rescuer_thread+0x3a0/0x3a4
-[  243.092755] [<ffffffff8003e164>] rescuer_thread+0x3a0/0x3a4
-[  243.098381] [<ffffffff8004499e>] kthread+0xbe/0xe4
-[  243.103231] [<ffffffff8001349e>] ret_from_fork_kernel+0x6/0xd0
-[  243.109127] [<ffffffff800517a8>] schedule_tail+0x8/0xac
-[  243.114410] [<ffffffff800448dc>] kthreads_online_cpu+0x0/0x4
-[  243.120121] [<ffffffff8074be0a>] ret_from_fork_kernel_asm+0x12/0x18
-
-I will guess for some reasons the irq_work was missed or the IPI never
-happened. Is it possible for you to enable trace points ipi_send_cpu and
-ipi_entry to get more information?
-
-> Reverting this patch seems to fix the issue although it then breaks when loading
-> modules which is can be fixed by reverting:
-> d6e152d905bd ("clockevents: Prevent timer interrupt starvation")
+> Ack.
 > 
-> This might be a side-effect of reverting this patch though.
+> > I suppose that I could use raise_softirq() in the
+> > use_softirq=1 case when in_hardirq(). 
 > 
-
-I'm not so sure about this, i.e. you might have *two* problems :(
-
-Regards,
-Boqun
-
-> We'd really like to continue support for this SoC on the 7.0 kernel, but since
-> this patch is a bugfix just shippping the revert doesn't sound appealing.
-> So some guidance would be much appreciated, thanks!
+> Ack.
 > 
-> /Emil
+> > Either way, the check should be
+> > cheap compared to rest of the processing.
+> 
+> Agreed.
+> 
+> > The additional rcu_barrier() work required is of course way down in
+> 
+> Assuming "The additional rcu_barrier() work required" means
+> rcu_barrier() now needs to wait for all CPUs to complete irq_work or
+> softirq...
+
+What I would instead have rcu_barrier() do is to: (1) pull in the pending
+callbacks awaiting irq-work, (2) wait for an RCU grace period (and thus
+for any pending irq-work handlers), (3) invoke the underlying call_rcu()
+machinery on these callbacks (just as the irq-work handler would,
+and also the rcu_core() function if the raise_softirq() optimization
+is implemented), and (4) proceed as it currently does, which is the
+for_each_possible_cpu(cpu) just before the retry: label.
+
+As in item #1 above would start just after this block of code:
+
+	init_completion(&rcu_state.barrier_completion);
+	atomic_set(&rcu_state.barrier_cpu_count, 2);
+	raw_spin_unlock_irqrestore(&rcu_state.barrier_lock, flags);
+
+> > the noise compared to acquiring a global mutex.
+> 
+> Are you referring to a specific mutex, or just in general?
+
+A specific mutex, namely the one that rcu_barrier() already acquires:
+
+	mutex_lock(&rcu_state.barrier_mutex);
+
+> > In your case, kfree_rcu() can be quite a bit lighter weight, though.
+> > So the extra checks might not be lost in the noise.
+> 
+> Assuming "the extra checks" means checking whether interrupts are
+> disabled in call_rcu()*...
+
+Yes, exactly.
+
+> It will probably be fine since we invoke call_rcu() only when sheaves
+> become full, not once for each object?
+
+For the purposes only of my verbiage starting with "In your case,
+kfree_rcu()", I was thinking in terms of these extra checks potentially
+also being in kfree_rcu().
+
+> Perhaps slightly off-topic; at some point, though, I think it'd be
+> better to teach SLUB to use RCU polling API for RCU sheaves.
+> 
+> e.g.) put sheaves into barn->sheaves_pending instead of invoking
+> call_rcu(), and the SLUB alloc slowpath checks if there are sheaves
+> past grace period before allocating and refilling sheaves.
+
+That makes a great deal of sense to me!
+
+In fact this one of the types of use case that I was thinking of back
+when I was implementing the RCU polling API.  ;-)
+
+							Thanx, Paul
