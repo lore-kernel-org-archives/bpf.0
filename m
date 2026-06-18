@@ -1,203 +1,171 @@
-Received: from mail-pj1-f65.google.com (mail-pj1-f65.google.com [209.85.216.65])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E3F3242D8
-	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 20:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4785279DAD
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 20:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781814116; cv=none; b=RUaSVAp/rxKy51ac/9WDvvdG1Dg4S+t2gjwt03xCghzE3wQ+SZ4YJXJKX9t7bOJnPqxf7mXb6Qw1vPfJt3uRCxP+NPQ9VvIbkmqomjqzAnMlCqrUhVadiVRGKMHzL04hJBgEOvD1GNF1D7atNPmRIOT2PiB+y20+kqM+BjkdNpw=
+	t=1781814858; cv=none; b=EJ8Tl7jA+IgAKK/RjoI6d5J9cFwUlNHC/nSO+vrZMuXIPLGT8xtb5QXwFGSaBl8eOfTg339LLPjRRGORo8/ellME+DCri6OFuE8SNYKCfDUe23PMWFJV2Fbwz3HZE99Qu5v+9v0VzCODyX/zIeDovnDvJfNlZc6LV1I1PsdClSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781814116; c=relaxed/simple;
-	bh=K7BlOS5ZnanYlo8YfioNtwoyHjaE57dvfpKSFjgnrfg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sO/d+4kdLv1z+iBrze0Zb6THkrVGCDLVbDIVN7qFbrI5WK5rg/hoXRYUjaWtmtpfvZaucLGe0SIvWfWjtBGN4dsuHrIFzYNnZ+JlBIUtBvmnqCmwKHE6Cv+JPtsOF418Wuy9Y1mSDcrt9L5ta4w86jldVjRxEH5Qq060xZuZVNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A1GbH6ta; arc=none smtp.client-ip=209.85.216.65
+	s=arc-20240116; t=1781814858; c=relaxed/simple;
+	bh=58J+e+qzOqSL8rLq819iM9p8hX+gCfzoDVUQTirsvLQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cq8nf3wLebQzTEZyvAyImA8oabmAiOysrulJdKPuiCHPfVijBbpYYqzDTOCnKGm/ESw4BqRZxifVUOag67fyhgHAYxV4XxDNoNycaKRsuDYAJ6f8uE7Ri1GH8yudXB20/8gnIQ2ZYW9vhyKxMZ4a7jXk31KkWlJFINM5ocA0aNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZpZDhoWP; arc=none smtp.client-ip=209.85.219.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A1GbH6ta"
-Received: by mail-pj1-f65.google.com with SMTP id 98e67ed59e1d1-36b8e1760ccso757246a91.0
-        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 13:21:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZpZDhoWP"
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8cce22e029cso34428296d6.0
+        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 13:34:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781814114; x=1782418914; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GqVnbRm8KqtJEACQ1WwFbfGkve6FBhURy9dsfQ5YnRM=;
-        b=A1GbH6taT1f/9LIuRCWVc8MeN89lOsyGrgJpHcxxK/xCkimISlGIGiHuwGcRgcrFxW
-         bupUxtVAFpHW0diU9En1ChUs1Nkx3zXM7z/wuLrpE6QXdrwC1U/z/qDQlAnwaXEI4aSb
-         /BtQachWt7JiSjs3F1OFv2zOu6FM8IDrbUX7hRkj/DKoG/xSpe/bwJqgHlY3OKuvyJmX
-         mKkjgPfZlQ9iFXpMt1FdIVh+FnSaIC/mL1Ai1hLfIaz63apCvbQx5WO7lJj3kyNLu4wc
-         84DmdSsdWCktJExA7xNrdZBdLMG0SYiJEyjkn4+Sv6d4QrQ/ywq8gHcx2CMLnpiAu6Er
-         RdEA==
+        d=gmail.com; s=20251104; t=1781814856; x=1782419656; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DA8ujigZ7IZh+Xr0JA9p0ivPwgMz7UTZBS7avx55oOk=;
+        b=ZpZDhoWPKMWpdhZAt8MJSKrpVWP33cTDKaLOR8NEm9junQifEuiYa61pJ5oKMbbDUp
+         42KlQxUeHhddXxpPPL9P1duAU4scCVYsf9Fv7rU3/GthpI/WNmrIVWvBONGMBsDmatKx
+         9pmj94Sw9dU5HEm0wqLwGiSYEfF/PvlCwC97ckbrUYXu7AtWeIuQdJtx42WNlmaLrw7d
+         zgOG/03uEJsvIoAfkBVVZG1S6pcC6/hKSd5wun/hlHCOOqb885aiX/JzgcJxPOMCXMc3
+         SBBF0xL/wmhsbV9oTsLOSFhom3l53/qIZn056E6zi+qFXQVjmzHM55+LIqbAFSK1CsxM
+         Ckyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781814114; x=1782418914;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GqVnbRm8KqtJEACQ1WwFbfGkve6FBhURy9dsfQ5YnRM=;
-        b=Gc8jmc4RKw3HtVxZhiH7Lzeq8BjepPBe7ZV7qQmglLsXmNOwjV0ne08be6vL8cuL+P
-         6H7+rdqZTgvZlTiYUxYE6YR9Ei4Lu6/D76Ai+pGakSZLAE2w0wkOrbPGdSyYbgatSyFb
-         DSkxvXZxWFKvfIXqPk5tgQ5iwEsbb7ylOm8N9WlUdDxxOKbpvr0gaX5QsUgNhCVo41T1
-         IaoV1nLnoAkt3ySmn962wg2SWPhuQh8VeY54QBeB4kQl3qR7MFHpOnj18+a2hn5UKEOL
-         1dubrsAtfoiZyTedLtpgNI6kP86Xsxjm+oUmHPF4yKs/aIFW3tMMNpH5ZWFtQvm0qbhr
-         o1fg==
-X-Gm-Message-State: AOJu0YweH1ghORSX0hNnCDSEN1FJseACXPiX4hg4TZh9SSBhnCU2vcmn
-	Fwc3jO9CJ9m0wnotu4+liieixlAXr+iq6EWfdMmut7LxBUTIIdKsrUJ38SEmyFdL
-X-Gm-Gg: AfdE7cn8O7yTthgU20r1MQBr1FmWj1M3r7CBMFnKUtcywu2FSSR04BNzniQl6Kp6yZD
-	t2BWlZ9A9tO8xP7hdjejG2lNgnqqhsHvzqexQtRFOlQzVN90Mzw5NXupk6i3A3TuWeRMkewNZOv
-	CuPJusZNZhucRY2D6rL1NyYiMzzrIvZyJlsc5nz5WgddjLlg5dgdzv0AfUMDrWyl17k3WrYXF67
-	sj5iGi4BpBfoRHKLYNoJzmGc9We919JZyQjJM4ESWZQxPEtiaXPdxR3clgwNGg9Dixs2YKzIjuR
-	ekqffemcBYiWmSvGASN3XY1alhTHUPdaa+lyBfk7KAR7t5lTrNOsoVEprpXp3AcAjBozLa1R0YB
-	nMxiSthA9OoxWHLqt16HAZi8iDV5wAakxM+3HKNIKFjFkwfBiXD9GEwGkDuDfZ+IGiUDShd8DWn
-	ZwLXKANw==
-X-Received: by 2002:a17:90b:33c8:b0:368:83e6:ca95 with SMTP id 98e67ed59e1d1-37d15fb0ae4mr892055a91.0.1781814114148;
-        Thu, 18 Jun 2026 13:21:54 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:58::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37d15de501asm521508a91.11.2026.06.18.13.21.53
+        d=1e100.net; s=20251104; t=1781814856; x=1782419656;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DA8ujigZ7IZh+Xr0JA9p0ivPwgMz7UTZBS7avx55oOk=;
+        b=MyclmDO4/lMtewQkjFGVCOYsznwN5XLjvnWOtfsSfogkWJ/42zO5TyYibB9DRNl1ck
+         Mdxcxwix0tN+j5PMzIuA9ilckwfZ8J15ZdkoeXr9XD4/ABc+u62FL913J6qp9ryr20C/
+         LZnI9jX4kY+v565eok7NSdEMUAfZsfatuCsq6vxyC8KpswlQFjkLKHYk76jJ+LBL8ZAa
+         EKCf5SMX+Ru6Lhe1ltygcqOcdxT/T9p9X2smsKZdebSIYw4oQnlNddNrbL9qGFsMVKvj
+         Joj1egc1Q7nSTPgmnzb420BwIwbrKBT7I5aOMHWRMqmLq1p94L2hBJbOs/9o+leDJ3Rt
+         Q9/Q==
+X-Forwarded-Encrypted: i=1; AFNElJ96UHhh1MfC6jvfslrzvkeEVRlCD7K6i6iiif1XL9oiBn3bOrVODcp2JMxtrRwLPnwQGuo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyvh2LL/jbgsyy8Cg9NBT9mS8p1nSh5oUzxl7TZnGBTKriHtRS/
+	DTqJppb70PJN1v3mB5QnqXKiiQ1RqETWnmkRPcUSRvpg7IKculTOXnTO
+X-Gm-Gg: AfdE7cnaQI9bcK4Uj4LSx1ppeToE/BVM2HPN6vXBHD2oUJYvozfX9fsN9TFGEQPElM1
+	lsUa5dbRvdbv1gd8BcivmErxm+lerdprD7wyOQ5csPid5WFus/TYC5VHmpNN0p1QzLyzSjNisR0
+	jPHzxroUt3Y2wfB1NrrtvN4P/YM879fLbw4+ZIJYQIe5ZoanOeuMaP3AgH0xKGdFP6Fgy+Xs89R
+	15PQDVCnm92pK1lNe+JGxWNWdpzrAK5wmtPL+1iNVYH2dMWKphOwSUMtMarSB353MZ1+omAR9vo
+	lB6jJm1/iCO7GaTTILr/cuvh3UTSm9Qxsjd0tANgnLYSwtlDBwnhvNOU38ikZ/vypTGlzSax9uc
+	HNGRyAxEaYx/UH2yWQim1XibPg8jhj7yHpI6vc9NzciM5FSxF0jBjDBmumzQpmgEFSi3HxPwJlT
+	yf8t9yVbKglaVrqonB/T5nPLa5NUOPrbVI7SSVceDXL1drgzRsb+z/gfkGys0WxWkWBDXFjt0wq
+	kMpACDvwK6ESvlSuogY83WCNw==
+X-Received: by 2002:a05:6214:dc1:b0:8dc:939d:b03d with SMTP id 6a1803df08f44-8de4c76b7c5mr8335506d6.16.1781814855698;
+        Thu, 18 Jun 2026 13:34:15 -0700 (PDT)
+Received: from battery.lan (pool-138-88-31-60.washdc.fios.verizon.net. [138.88.31.60])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8de5e12d1c3sm2176166d6.10.2026.06.18.13.34.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2026 13:21:53 -0700 (PDT)
-Date: Thu, 18 Jun 2026 13:21:47 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: bpf@vger.kernel.org
-Cc: kuba@kernel.org
-Subject: [ANN] bpf development stats for 7.2
-Message-ID: <ajRTHKxu6EOmGrsQ@devvm7509.cco0.facebook.com>
+        Thu, 18 Jun 2026 13:34:14 -0700 (PDT)
+From: David Windsor <dwindsor@gmail.com>
+To: viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	jack@suse.cz,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	kpsingh@kernel.org,
+	mattbobrowski@google.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	zohar@linux.ibm.com,
+	roberto.sassu@huawei.com,
+	dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com,
+	stephen.smalley.work@gmail.com,
+	omosnace@redhat.com,
+	casey@schaufler-ca.com,
+	shuah@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	selinux@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	David Windsor <dwindsor@gmail.com>
+Subject: [PATCH bpf-next v3 0/2] bpf: add bpf_init_inode_xattr kfunc for atomic inode labeling
+Date: Thu, 18 Jun 2026 16:34:09 -0400
+Message-ID: <20260618203411.73917-1-dwindsor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-Regular development statistics update, similar Jakub's netdev post:
-https://lore.kernel.org/netdev/20260617115319.43a5942d@kernel.org/
+Many in-kernel LSMs (SELinux, Smack, IMA) store security labels in
+extended attributes. For these LSMs, atomic labeling during inode
+creation is critical: if the inode becomes accessible before its xattr
+is set, it is briefly unlabeled, which can disrupt LSMs making policy
+decisions based on file labels.
 
-Previous cycle:
-8 Feb to 13 Apr: 8105 mailing list messages, 63 days, 129 messages per day
-587 repo commits (9 commits/day, 45.83% of these are selftests)
-https://lore.kernel.org/bpf/aeADR0h4R4MlfUxe@devvm17672.vll0.facebook.com/
+Existing LSMs solve this by setting xattrs directly in the
+inode_init_security hook, which runs before the inode becomes
+accessible. BPF LSM programs currently lack this capability because
+the hook uses an output parameter (xattr_count) that BPF programs
+cannot write to, and existing kfuncs like bpf_set_dentry_xattr
+require a dentry that isn't available until after the inode is
+accessible.
 
-Current cycle:
-12 Apr to 14 Jun: 8289 mailing list messages, 63 days, 132 messages per day
-301 repo commits (5 commits/day, 44.85% of these are selftests)
+This series introduces the bpf_init_inode_xattr() kfunc, which takes
+the combined inode_init_security xattr context argument to access
+xattrs and xattr_count, and internally writes to xattr_count via
+lsm_get_xattr_slot().
 
-Testing
--------
+v3:
+  - rename struct lsm_xattr_ctx to struct xattr_ctx (Paul)
+  - increase BPF_LSM_INODE_INIT_XATTRS to 4 (Song)
+  - enforce per-hook attachment cap at attach time to prevent
+    runtime rejection (Paul)
+  - add init_inode_xattr_attach_cap selftest
 
-Top contributors of selftests:
-   1 [ 12] Amery Hung
-   2 [ 12] Alexei Starovoitov
-   3 [  9] Kumar Kartikeya Dwivedi
-   4 [  9] Sun Jian
-   5 [  8] Eduard Zingerman
-   6 [  6] Mykyta Yatsenko
-   7 [  6] Daniel Borkmann
-   8 [  5] Emil Tsalapatis
-   9 [  4] Paul Chaignon
-  10 [  4] Varun R Mallya
+v2:
+  - pass the xattr state as a combined context object and drop the
+    verifier fixup path (Kumar)
+  - restrict bpf_init_inode_xattr labels to bpf.* namespace (Matt)
+  - cap bpf_init_inode_xattr() at BPF_LSM_INODE_INIT_XATTRS slots per
+    invocation (AI)
 
-Developer rankings
-------------------
+Link: https://lore.kernel.org/all/20260503211835.16103-1-dwindsor@gmail.com/ [v2]
 
-Top reviewers (cs):                  Top reviewers (msg):                
-   1 (   ) [11] Alexei Starovoitov      1 (   ) [26] Alexei Starovoitov  
-   2 ( +2) [ 4] Jakub Kicinski          2 (   ) [11] Eduard Zingerman    
-   3 ( +5) [ 3] Emil Tsalapatis         3 ( +4) [ 8] Emil Tsalapatis     
-   4 ( +2) [ 3] Mykyta Yatsenko         4 ( +1) [ 8] Jakub Kicinski      
-   5 ( -3) [ 3] Kumar Kartikeya Dwivedi    5 ( -1) [ 6] Andrii Nakryiko     
-   6 (+14) [ 3] Jiayuan Chen            6 (+26) [ 6] Stanislav Fomichev  
-   7 ( +5) [ 2] Yonghong Song           7 ( -1) [ 6] Mykyta Yatsenko     
-   8 ( -1) [ 2] Eduard Zingerman        8 ( -5) [ 6] Kumar Kartikeya Dwivedi
-   9 ( -6) [ 1] Andrii Nakryiko         9 ( +7) [ 5] Yonghong Song       
-  10 (+30) [ 1] Paolo Abeni            10 ( +7) [ 5] Jiayuan Chen        
-  11 ( -2) [ 1] Martin KaFai Lau       11 (+36) [ 4] Paul Moore          
-  12 ( -1) [ 1] Paul Chaignon          12 ( +2) [ 3] Steven Rostedt      
-  13 (+10) [ 1] Stanislav Fomichev     13 (***) [ 3] Andrew Lunn         
-  14 (***) [ 1] Leon Hwang             14 ( -5) [ 3] Martin KaFai Lau    
-  15 ( +6) [ 1] Daniel Borkmann        15 (+13) [ 3] Kuniyuki Iwashima   
+David Windsor (2):
+  bpf: add bpf_init_inode_xattr kfunc for atomic inode labeling
+  selftests/bpf: add tests for bpf_init_inode_xattr kfunc
 
-Top authors (cs):                    Top authors (msg):                  
-   1 ( +5) [1] Daniel Borkmann          1 ( +2) [22] Jiri Olsa           
-   2 (***) [1] Sechang Lim              2 ( +6) [21] Yonghong Song       
-   3 ( +7) [1] Puranjay Mohan           3 (***) [15] Ian Rogers          
-   4 (***) [1] Amery Hung               4 (   ) [13] Mykyta Yatsenko     
-   5 ( -1) [1] Alexei Starovoitov       5 (+17) [11] Ricardo B. Marlière 
-   6 (+11) [1] Tiezhu Yang              6 (***) [10] Jason Xing          
-   7 (***) [1] Dipayaan Roy             7 (***) [ 9] Leon Hwang          
-   8 (+13) [1] Yonghong Song            8 (***) [ 9] Amery Hung          
-   9 ( +5) [1] Paul Chaignon            9 (***) [ 8] Jens Remus          
-  10 ( +5) [1] Jiri Olsa               10 ( -4) [ 7] Eduard Zingerman    
+ fs/bpf_fs_kfuncs.c                            | 106 +++++++++++++++++-
+ include/linux/bpf.h                           |   1 +
+ include/linux/bpf_lsm.h                       |   3 +
+ include/linux/evm.h                           |   9 +-
+ include/linux/lsm_hook_defs.h                 |   4 +-
+ include/linux/lsm_hooks.h                     |  16 ++-
+ include/linux/security.h                      |   5 +
+ kernel/bpf/bpf_lsm.c                          |  10 ++
+ kernel/bpf/trampoline.c                       |   3 +
+ security/bpf/hooks.c                          |   1 +
+ security/integrity/evm/evm_main.c             |   8 +-
+ security/security.c                           |   7 +-
+ security/selinux/hooks.c                      |   4 +-
+ security/smack/smack_lsm.c                    |  27 ++---
+ tools/testing/selftests/bpf/bpf_kfuncs.h      |   5 +
+ .../selftests/bpf/prog_tests/fs_kfuncs.c      | 105 ++++++++++++++++-
+ .../bpf/progs/test_init_inode_xattr.c         |  31 +++++
+ 17 files changed, 306 insertions(+), 39 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_init_inode_xattr.c
 
-Top scores (positive):               Top scores (negative):              
-   1 (   ) [184] Alexei Starovoitov     1 (***) [72] Jiri Olsa           
-   2 ( +1) [ 49] Jakub Kicinski         2 (***) [58] Ian Rogers          
-   3 ( -1) [ 30] Andrii Nakryiko        3 (+13) [47] Yonghong Song       
-   4 ( +5) [ 30] Stanislav Fomichev     4 ( +4) [43] Ricardo B. Marlière 
-   5 (+20) [ 27] Emil Tsalapatis        5 (***) [38] Jason Xing          
-   6 ( -1) [ 24] Kumar Kartikeya Dwivedi    6 (***) [33] Jens Remus          
-   7 (***) [ 21] Jiayuan Chen           7 (+46) [25] Daniel Machon       
 
-Company rankings
-----------------
+base-commit: e771677c937da5808f7b6c1f0e4a97ec1a84f8a8
+-- 
+2.53.0
 
-Top reviewers (cs):                  Top reviewers (msg):                
-   1 (   ) [21] Meta                    1 (   ) [65] Meta                
-   2 ( +1) [ 5] Google                  2 (   ) [15] Google              
-   3 ( +2) [ 4] RedHat                  3 ( +5) [ 9] RedHat              
-   4 ( +2) [ 4] Shopee                  4 ( -1) [ 8] Isovalent           
-   5 ( -3) [ 4] Isovalent               5 ( -1) [ 6] Intel               
-   6 ( -2) [ 3] Intel                   6 ( -1) [ 6] Shopee              
-   7 ( +1) [ 1] SUSE                    7 (   ) [ 4] Oracle              
-
-Top authors (cs):                    Top authors (msg):                  
-   1 (   ) [8] Meta                     1 (   ) [92] Meta                
-   2 ( +2) [4] Google                   2 ( +9) [35] Google              
-   3 ( -1) [4] Isovalent                3 (   ) [33] Isovalent           
-   4 ( -1) [2] Shopee                   4 ( +1) [14] Shopee              
-   5 (+11) [1] Microsoft                5 ( +5) [12] IBM                 
-   6 ( +2) [1] Amazon                   6 (+16) [11] Tencent             
-   7 (***) [1] Seoul National University    7 ( +5) [11] SUSE                
-
-Top scores (positive):               Top scores (negative):              
-   1 (***) [57] RedHat                  1 (+49) [72] Isovalent           
-   2 ( -1) [27] Meta                    2 (***) [49] Google              
-   3 (***) [22] Intel                   3 ( +1) [43] IBM                 
-   4 ( -1) [10] Hedgehog                4 (***) [36] Tencent             
-   5 (   ) [10] Linux Foundation        5 (+17) [25] Microchip           
-   6 (+44) [ 9] Andrew Lunn             6 (***) [22] Microsoft           
-   7 (***) [ 8] CloudFlare              7 (***) [20] SUSE                
-
-More raw stats
---------------
-
-Prev: start: Sun, 08 Feb 2026 20:59:08 -0800
-	end: Mon, 13 Apr 2026 04:49:20 +0000
-Prev: messages: 8105 days: 63 (129 msg/day)
-Prev: direct commits: 587 (9 commits/day)
-Prev: test commits: 269 (45.83%)
-Prev: people: 402  {'author': 116, 'commenter': 207, 'both': 79, 'none': 25}
-Prev: people pct: {'author': 0.272, 'commenter': 0.485, 'both': 0.185, 'none': 0.059}
-Prev: review pct: 45.32%  x-corp pct: 40.72%
-Prev: avg revisions: single patch: 1.48 patch set: 2.63
-
-Curr: start: Sun, 12 Apr 2026 22:50:13 +0000
-	end: Sun, 14 Jun 2026 21:02:35 +0000
-Curr: messages: 8289 days: 63 (132 msg/day)
-Curr: direct commits: 301 (5 commits/day)
-Curr: test commits: 135 (44.85%)
-Curr: people: 343  {'author': 144, 'commenter': 131, 'both': 68, 'none': 25}
-Curr: people pct: {'author': 0.391, 'commenter': 0.356, 'both': 0.185, 'none': 0.068}
-Curr: review pct: 44.85%  x-corp pct: 39.53%
-Curr: avg revisions: single patch: 1.44 patch set: 2.35
-
-Diff: -65.6% linux-next size
-Diff:  +2.3% (+197.1%) msg/day
-Diff: -48.7% (+49.0%) commits/day
-Diff: -14.7% (+147.9%) people/day
-Diff: review pct: -0.5%
-      x-corp pct: -1.2%
-Diff: avg revisions: single patch: -2.6% patch set: -10.5%
