@@ -1,127 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843933B1EF1
-	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 10:59:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02813134CF;
+	Thu, 18 Jun 2026 11:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781780389; cv=none; b=IVNrSz6+1OYywrQ6Ti5OwJWUsOJimSLo4NItkOjUI6blzpIS1tqh+CnV8VQidXxvxklwceiNgTqjnvCyGIn5NxFgkcxMw2ylVv4a+ZPw+0M+BNc4io7mWVkHMQskycrBGtjND0jp5oTgc9oea9wcoJPXl0rBButqSRA3R6JubCw=
+	t=1781783831; cv=none; b=A+M3v2x6E70DGMJtUtAfxMkxTRtAAGCzeUQEKXqSe9YhHrMZuRSM4QSMV3xJze40sqcpYPtizyW8yA7K86JrLxY1H2lyqRYcf7C249340JUSWgsXK1UO4xZPheeHJWSBQENHKANJPUfh+mEfkMV7Fh6sT35NyrSr1vXW8F1iN0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781780389; c=relaxed/simple;
-	bh=C7k9xSHg46NGX1vEILqdEKet9tm0ADDmR62ltR61OhU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=iQ5y1n5TSo4IoN/MY8IRXSPE222VNnKPS8g9piLICymn1jQ7msBMYJwNoZLTKl8gOOVhVb+yMgDcLQDeIgJK6/nSmElzR2uiE9nte2lcnXuBDCIS8Ux/bJhEzNgr0JRHhqaWOmboit8d5PHflxujCH2Xz1NWtINIPmfa4RsTILU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X5X392YO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781783831; c=relaxed/simple;
+	bh=EmKLrmuw0L1SJA8xGx0is8Bar9U5MW7fs6K0yUE5+CQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bnkj4pSIFaExRDvyiYebl1Q9ks3Xu5JXPhtWqX4UMK8+tU4DIqJymGIbE22RUFjBkwtKM6Q7eItGhiBHHTbVHFrMPMyCOeSa3Z3qdmadBTCOr883TRPKh+Fk4R/XqbYCk6w+t1MhS3d0Ol3SJFgPnqxwjw0KIjWpFAkP9dqYVWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=b2kfGjID; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X5X392YO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F36C91F000E9;
-	Thu, 18 Jun 2026 10:59:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781780388;
-	bh=NJDcK1UVFzhkqlmncruhaF4wynZTf1/vY1Wse7raHUQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=X5X392YOiKVUkyE2XNvBvxhNTY9vRL6G9IRVQHGVeDjcslGmgbq24VMdAjlKbOJBO
-	 fq5DPpfF1H9mu18UAX9HilNl4Q4zjNr+XF/dt0bnrEqRYQli8T364N/nqYVG7M/tF/
-	 vebCThztMHIyqDmpuWIjc5GCtXV9cG9Hm1ikjnQZQ7IKZaTymjzdSOSGDlfccb7FNr
-	 7AdTPBeKMyGPyT3ZK5FEf1vLVGVJSRdYLi8iPgUBe037Al5bC/CL0Qe5+p6QA68hAR
-	 04j2QuJ5KgPmh0GHQnKUWCHVgGcRksNT6ZnIWA69QLsQbJGXYCf7RHQacZi2R+eHcu
-	 IZV2B82ro7FzA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v3 1/2] bpf, sockmap: fix use-after-free when the
- stream parser resizes the skb
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sechang Lim" <rhkrqnwk98@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260618102718.2331468-2-rhkrqnwk98@gmail.com>
-References: <20260618102718.2331468-1-rhkrqnwk98@gmail.com>
- <20260618102718.2331468-2-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 18 Jun 2026 10:59:47 +0000
-Message-Id: <20260618105947.F36C91F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="b2kfGjID"
+Message-ID: <34f330b8-60d2-4647-a6b4-a5b001c3715d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781783814;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NIDgjJc0kDWVk21VQMDvaZz53upB9zqPpo8g1ntXG+I=;
+	b=b2kfGjIDPXddkJPr1tI/nwGwhr8kHHcavSP+y/Rpez7K103Jrloy2+xgVctuso45fzDV/8
+	1hmzOfbHqTa21l0XQXO8QTBzXiICkx7Wh1jq/uy8yr3QvLJL7kJUz0rrniQFNyW4qDsFRj
+	+LKi9n3VbYY4RyTbvnI+Wq1zQhgnX1A=
+Date: Thu, 18 Jun 2026 19:56:34 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf v3 1/2] bpf, sockmap: fix use-after-free when the
+ stream parser resizes the skb
+To: John Fastabend <john.fastabend@gmail.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+ Sechang Lim <rhkrqnwk98@gmail.com>
+References: <20260618102718.2331468-1-rhkrqnwk98@gmail.com>
+ <20260618102718.2331468-2-rhkrqnwk98@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260618102718.2331468-2-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
 
-Pre-existing issues:
-- [Critical] The patch attempts to fix a slab-use-after-free by rejecting s=
-tream parser programs that modify the SKB, relying on `prog->aux->changes_p=
-kt_data`. However, this flag does not account for `bpf_dynptr_write`, which=
- also modifies the SKB and triggers the exact same use-after-free vulnerabi=
-lity.
---
+On 6/18/26 6:27 PM, Sechang Lim wrote:
+> sk_psock_strp_parse() runs the BPF_PROG_TYPE_SK_SKB stream-parser program
+> to find the length of the next message. strparser assembles a message out
+> of several received skbs by chaining them onto the head's frag_list and
+> recording where to append the next one in strp->skb_nextp:
+>
+> 	*strp->skb_nextp = skb;
+> 	strp->skb_nextp = &skb->next;
+>
+> and then calls the parser on the head:
+>
+> 	len = (*strp->cb.parse_msg)(strp, head);
 
-commit aeac0d3c109078049124a26f6151db8a79f11ac5
-Author: Sechang Lim <rhkrqnwk98@gmail.com>
+[...]
 
-bpf, sockmap: fix use-after-free when the stream parser resizes the skb
+> unaffected and may still modify the skb.
+>
+> Fixes: 8a31db561566 ("bpf: add access to sock fields and pkt data from sk_skb programs")
 
-This patch rejects stream parser programs that modify packet data to
-prevent a use-after-free. The issue occurs when skb_ensure_writable() frees
-the frag_list that the stream parser continues to track.
+Is the Fixes tag correct ?
 
+Anyway, I don't think this patch is a fix; it's more of a hardening. So 
+no Fixes tag needed, IMO.
+
+
+> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+> ---
+>   net/core/sock_map.c | 20 ++++++++++++++++++++
+>   1 file changed, 20 insertions(+)
+>
 > diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index 99e3789492a09..c60ba6d292f9a 100644
+> index 99e3789492a0..c60ba6d292f9 100644
 > --- a/net/core/sock_map.c
 > +++ b/net/core/sock_map.c
-
-[ ... ]
-
-> @@ -1515,6 +1515,17 @@ static int sock_map_prog_link_lookup(struct bpf_ma=
-p *map, struct bpf_prog ***ppr
->  	return 0;
->  }
-> =20
+> @@ -1515,6 +1515,17 @@ static int sock_map_prog_link_lookup(struct bpf_map *map, struct bpf_prog ***ppr
+>   	return 0;
+>   }
+>   
 > +static int sock_map_prog_attach_check(enum bpf_attach_type attach_type,
 > +				      struct bpf_prog *prog)
 > +{
 > +	/* A stream parser must not modify the skb, only measure it. */
-> +	if (prog && attach_type =3D=3D BPF_SK_SKB_STREAM_PARSER &&
+> +	if (prog && attach_type == BPF_SK_SKB_STREAM_PARSER &&
 > +	    prog->aux->changes_pkt_data)
-
-[Severity: Critical]
-This isn't a bug introduced by this patch, but does this check completely
-prevent the vulnerability?
-
-It appears that prog->aux->changes_pkt_data might be bypassed if a program
-uses bpf_dynptr_write(). Looking at bpf_helper_changes_pkt_data() in
-net/core/filter.c, BPF_FUNC_dynptr_write is missing from the switch
-statement.
-
-Consequently, the verifier does not set prog->aux->changes_pkt_data during
-CFG construction for programs that write via dynptrs. While the verifier
-sets a local changes_data flag in check_helper_call() to clear packet
-pointers:
-
-kernel/bpf/verifier.c:check_helper_call() {
-    ...
-        /* this will trigger clear_all_pkt_pointers(), which will
-         * invalidate all dynptr slices associated with the skb
-         */
-        changes_data =3D true;
-    ...
-}
-
-It never sets the permanent env->subprog_info[...].changes_pkt_data flag
-for this helper.
-
-Could a malicious BPF_PROG_TYPE_SK_SKB program use bpf_dynptr_from_skb() to
-get a writable dynptr, and then call bpf_dynptr_write() to invoke
-skb_ensure_writable() and free the frag_list? If so, would this trigger the
-exact same use-after-free, completely bypassing this attach-time check?
-
 > +		return -EINVAL;
 > +
 > +	return 0;
 > +}
+> +
+>   /* Handle the following four cases:
+>    * prog_attach: prog != NULL, old == NULL, link == NULL
+>    * prog_detach: prog == NULL, old != NULL, link == NULL
+> @@ -1533,6 +1544,10 @@ static int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
+>   	if (ret)
+>   		return ret;
+>   
+> +	ret = sock_map_prog_attach_check(which, prog);
+> +	if (ret)
+> +		return ret;
+> +
+>   	/* for prog_attach/prog_detach/link_attach, return error if a bpf_link
+>   	 * exists for that prog.
+>   	 */
+> @@ -1776,6 +1791,11 @@ static int sock_map_link_update_prog(struct bpf_link *link,
+>   		ret = -EINVAL;
+>   		goto out;
+>   	}
+> +
+> +	ret = sock_map_prog_attach_check(link->attach_type, prog);
+> +	if (ret)
+> +		goto out;
+> +
+>   	if (!sockmap_link->map) {
+>   		ret = -ENOLINK;
+>   		goto out;
 
-[ ... ]
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260618102718.2331=
-468-1-rhkrqnwk98@gmail.com?part=3D1
+CI failed:
+https://github.com/kernel-patches/bpf/actions/runs/27754218839/job/82113319982
+    Failed stream parser bpf prog attach
+
+Hi John
+I noticed that bpf_skb_pull_data was added to the skmsg test:
+https://github.com/torvalds/linux/commit/82a8616889d506cb690cfc0afb2ccadda120461d
+
+Can we drop bpf_skb_pull_data in parser prog(sockmap_parse_prog.c‎) ?
+And are there any scenarios where we need to modify skb len when using 
+strparser ?
+
+
