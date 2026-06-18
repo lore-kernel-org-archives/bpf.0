@@ -1,254 +1,157 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6033F4848;
-	Thu, 18 Jun 2026 12:46:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781786778; cv=none; b=OM6uGGQ2JUGuTRtD+zE5mQ4vx+iZd7sPNNC8LI7LCMIP5VXN7JbtK+PePuNIYQw+84guUai5rcNBPnZAgC6ISTBcGdZbiV6ay4kFPSBt4P46BlNWDNQLOcnORIVtrKFy2I4nbTkNBXveJwfeScSGWZG0XS8BKCPKZZj7wGHFT/s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781786778; c=relaxed/simple;
-	bh=uphuMnt1uv31fu+h58AyQqegTvqAVwkfKm/ty8QJGr0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l+VGo1raN+cjP8hnbs2VmsvhQ8dZz+lw4R6GbdDgJErWxRGbk2Ticd21CoHn1wISf/D7lV+OG8zxJDIG+m5p/FNXclyjKld4n1LgCYt5sJphKN4joVriv/DjT+L9acseu0dgaqpXdieGa5YH9ZzXMM9uH+mvLucokNnOO74Iu6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z+aV6eXH; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51C183E95BD
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 13:11:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.125.188.123
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781788304; cv=pass; b=PH/AU+tyS8DWWnVPopiYea0tIW/KyoyETxLNK7ORo4Xc6QNjgJlXydP0radcS0m6Di4owLrlDt1B+c5K21+nxu12CzohI0Jp7b/gDqAKQ6ZXKl7LQIQPwmlMiFWlR0LvKFakY8b5+6LrMLPIqLMbs0tw4ywrrNoCU0vcGRSLu0E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781788304; c=relaxed/simple;
+	bh=Ikyt66TMlNKpG3woAwTQOhNuC+F7tCqH5WhDe9sQD5w=;
+	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AYb04VbDyYDiByefVfZi+OBs6CFup+pUHuS2h8ZlauFZq0bQ99CnU3uVMb+QWF6h5ZXMwG5WPVCHuIXEYpZ5Rq9tVLJxwOg15KUGlrj4nODRWbyhxxXi83zIVUAuoLaCRha212L0dv9MhHTwh+5OnayURpsbH3ZElL4VvTUDxI4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=l7lBrjx/; arc=pass smtp.client-ip=185.125.188.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z+aV6eXH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C5301F000E9;
-	Thu, 18 Jun 2026 12:46:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781786776;
-	bh=12/PAUDTOYfrkJ9zjxNjbQQEDZEGb0acxRasEquNV8c=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Z+aV6eXHEz7VlgrnsQQ03Z+8Zb9YcjYrK+HMqvFJSpghpQu39jthl+uUJoATiBkss
-	 cleXhnjiOavl5FCxDhBVQWY7nkZniTKAC0EuFJs3M8ryMmM/JL3AkWqL2pQ8oDPyv+
-	 zpib5/x5p9qKtSzJlegXic5z4V9LWD1qQKFyo0/gZJp/nR3M9tVuPj97b9I+Lw9yAo
-	 1g38OX4/l8gaWl5SUjYY8xERklp7FAUfYxtp7lWExEAizO0VVPy6AignHbfgZxs3Wt
-	 YMQqE/qAAJIRPfXMLSJqgTvxObnFUQnnscTGGxSQR8K5+4YNgi0J50dUn99G6+7MqP
-	 DwgptAJDbbzow==
-Message-ID: <39758d58-f646-470c-9c35-818ac75427d3@kernel.org>
-Date: Thu, 18 Jun 2026 21:46:04 +0900
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="l7lBrjx/"
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C5A1A3F97D
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 13:11:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1781788299;
+	bh=Ikyt66TMlNKpG3woAwTQOhNuC+F7tCqH5WhDe9sQD5w=;
+	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=l7lBrjx/i4WZD1f4Wfxq71E84Mk5upv5cobBaRXhDUlFm7y6qHXwZy7DRfz8oJfSK
+	 KI7degmeiyUGkduQJC+G2el2K2yUTdq9DP8qx8BaMaRgPahfgkmgS/9LmDGV4hCrwr
+	 qgNuwcMqAtDucYs2wUOmGoZlYIQKtgNXSwTWOQtouvtDEQjhQERt+Da5NoYFPDJIjf
+	 eE0+/wnVNnsXZBVbg7C/TjrM7wtBVs0g/egEnAOldxr1WboZjg3noItr6WGO7u56uS
+	 t1UDo9n0sTQZjAElbRNS3w3fVwmIrd70BzioI5OD9Jk24SuoBM3yGeKWCLOky/iVoC
+	 siEjw2MwFHZ5JoRhUefwiLDSYQnUUBuoddHieM5ZWl+qJh74xtqSxxkBVVJ00Wki2d
+	 WyJ828StNI2NbPEvnxuLto7dKtxqhSTlXYWMTLBgAMfJxllxACcvYPT5eo0O0Ey0v/
+	 iGiH71OW+YkCbAo8kxi0pIWmJa8UdGuMe4ZvIFGvqCqMzWPBY9HN53R/+sYOSZ6fCl
+	 ibqanGkJxFb2ihN6MR6XuKVzD5s6AR6h4DETyiI/s4S/WZWoP1N2DmNvw8H8RgiUaW
+	 T1AHO4aq5WT2kR/vmsSnKgVo+mtT0sE3cdMUvha5LxZg4wXkwpzr1XFJfKBxHtLXIb
+	 TqPsm1ri7AFoAUAsgGmjuDmM=
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c0793772071so88189166b.0
+        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 06:11:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781788299; cv=none;
+        d=google.com; s=arc-20240605;
+        b=kq+m0VHqcgtCnn9hE7BnkKmfUJswCjzeEP74oNGG4tlg9U5JjN0RURaX7tIlz6S/Pl
+         L69Om5AwBKGEv5+2z3msNig6WAP094Pqug2tT4+Z1ld3R2fHnNAheLYPPSNFAxzOJDMO
+         hLgjnajtrlL4XjJgBf+6PtgT1aY5VCIgybV1KJJjcXblcOl4y0SVdcQKnRW9Z6hSJjla
+         hCZQc34Ry4ns7IfhZYhfeLGauEk9MTpHgtFttvSdNMGBEyvSB05Hh51+G9PLo4pW/QIO
+         tCi5dwFuIrjLu/mOhL+0gfJtygOBUAJKwiUHSVzynLjCZ66jQOtLVekL5b2oQ1GJG5It
+         9shQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version;
+        bh=Ikyt66TMlNKpG3woAwTQOhNuC+F7tCqH5WhDe9sQD5w=;
+        fh=xnB6TqSmnHr4ybWpnLQknbdacYtXERMFXbYTOB1zum8=;
+        b=VfDb70qQd4ZRgoEBRtX0EBUifomz7uvDsF+zpU5iygdh4EhqUdeBrtnixQxZe6Vudp
+         N0XU4pf8FPOLuahhDEexho8G32CNWqITeb85AImSC4PAcZWjKauOhdReBtSO6HbV85gx
+         H1xEBB+K7451mN70+exunrD0lFlH/x0gJHJJmZEabgW+2pmStFqXLNfs6OoDp75rNrjH
+         M9I+zGxlwG9P83qHWLcDHpZUBcUH3dzwAo3x44sxu0rs+PoNITdccWDUZg2I9lOcGIUG
+         M7xCpRtO2zgBGNZFiHUayW1Z+b/M6NWtGXnmI+FwRZ4eisXAvjNMikbkNONVEyBybpCU
+         tzaw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781788299; x=1782393099;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ikyt66TMlNKpG3woAwTQOhNuC+F7tCqH5WhDe9sQD5w=;
+        b=ebrNpM0aN+r++onc/oK2WqKQmncKU9KVHsm2W1v8wwtjqsIAbYVtfoMLG9otqo9LkX
+         zcNgZzBOuSzvQ16x96ZP90MZYnv6YzYHrca0EpqL4mJZ3EpAfCFdiRTE7YSyDgWXvnXY
+         hHGMFjlb4PLthXDu4nAH9aKI1wLZi7nJiH7bJ5yXZhd1RAjEOLXzJC7KrOhFl4PsyZOs
+         JKlK1Qn9NaTZLhyxGL/wglSNWNpRfYpe57rxytCNrR6LQqVvC5TK26XYbFafMiS1QjC6
+         6s4xLu3UJGSj/NK8F63TD4LYSCKUCnDC+t4khm3lxCVFhWpZW0u6o0I+XbcoX3z4OMQ9
+         J1CA==
+X-Forwarded-Encrypted: i=1; AFNElJ8DOOAXe7xHYXohfQ+DodxckNsNRm9PUja7mUA93zMcPvOfvZwa5DASUCl5y2HoyAOPT9g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxHxec3yAg7gQi843EpNTV+w4G3zUwEf9bbTeXpui2v+ZawcPy
+	MnzeqYscfiB1wc2BZf39c9w810MKpYclf1EtuMec/ZJC9EBPpReYVmbyx1O+eFmp4X0aIpTa4Wa
+	y86FtLWuivB1ogEsXNKRiEnbrcfV7YMdWwFn9qm8wnyXuhT8gkZM9TC7H19PgDyQWuR3YxW+iuu
+	1pHj5FW0rYo/wkm3B4hwig5uO9ibXuXGK3p/MaxN+GdYQBCAti3pNr
+X-Gm-Gg: Acq92OGjsak9SePAlMZYut6skQ6g88BfuaJU7h/+kWnMI2+VeyaS11d5E+bhxrS0Wbu
+	P9Z2RETuM3sGEYaKhUO6amkqPYdx1dA+tAjujbYe7XL4IzZ6c90TTaT8mGpvVawwwjEU/QtA7ko
+	iiWCpPS1aVKbiVUurlcETZnFdCHXY6cNcBAu9bBgHlJMAJGnNnRUBl/k9eE8kvI5JE1g==
+X-Received: by 2002:a17:906:cc47:b0:bec:e6ae:2f69 with SMTP id a640c23a62f3a-c05a4720184mr330890766b.30.1781788299123;
+        Thu, 18 Jun 2026 06:11:39 -0700 (PDT)
+X-Received: by 2002:a17:906:cc47:b0:bec:e6ae:2f69 with SMTP id
+ a640c23a62f3a-c05a4720184mr330886266b.30.1781788298585; Thu, 18 Jun 2026
+ 06:11:38 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 18 Jun 2026 08:11:36 -0500
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 18 Jun 2026 08:11:36 -0500
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH for-next v3 6/9] mm/slab: allow kfree_rcu_sheaf() on
- PREEMPT_RT
-To: paulmck@kernel.org, "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>,
- Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
- rcu@vger.kernel.org, bpf@vger.kernel.org
-References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
- <20260615-kfree_rcu_nolock-v3-6-70a54f3775bb@kernel.org>
- <f3a56a5a-f10b-46dc-bc99-28449ade1661@kernel.org>
- <40591888-3a87-433e-b3d2-cda1cab543be@kernel.org>
- <9d8ca1ed-bc53-417f-944b-d78eecd1e6a5@kernel.org>
- <03da8742-3790-4428-84b8-11911bf44c9e@paulmck-laptop>
-Content-Language: en-US
-From: Harry Yoo <harry@kernel.org>
-In-Reply-To: <03da8742-3790-4428-84b8-11911bf44c9e@paulmck-laptop>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------r52TW6tkzMED0vgUCNBCiTch"
+In-Reply-To: <20260320222916.19987-1-boqun@kernel.org>
+References: <ab2yd35rm6OgZUmb@gpd4> <20260320222916.19987-1-boqun@kernel.org>
+From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+User-Agent: alot/0.0.0
+Date: Thu, 18 Jun 2026 08:11:36 -0500
+X-Gm-Features: AVVi8CdNkaVYBWAhyDgLK0vLSd4h3zxECQx9FcmqMplPRvrgTirU1SNRffTdnLU
+Message-ID: <CAJM55Z-hiNDuu5UwoBe7m0wq+_WJrRY0cwopALUgpG+r3ixj8g@mail.gmail.com>
+Subject: Re: [PATCH v2] rcu: Use an intermediate irq_work to start process_srcu()
+To: Boqun Feng <boqun@kernel.org>, Joel Fernandes <joelagnelf@nvidia.com>, 
+	"Paul E. McKenney" <paulmck@kernel.org>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, frederic@kernel.org, 
+	neeraj.iitr10@gmail.com, urezki@gmail.com, boqun.feng@gmail.com, 
+	rcu@vger.kernel.org, Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrea Righi <arighi@nvidia.com>, 
+	Zqiang <qiang.zhang@linux.dev>, Samuel Holland <samuel.holland@sifive.com>, 
+	linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------r52TW6tkzMED0vgUCNBCiTch
-Content-Type: multipart/mixed; boundary="------------CZDOJb3QDvzu5IEDZMoq1w7C";
- protected-headers="v1"
-From: Harry Yoo <harry@kernel.org>
-To: paulmck@kernel.org, "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>,
- Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
- rcu@vger.kernel.org, bpf@vger.kernel.org
-Message-ID: <39758d58-f646-470c-9c35-818ac75427d3@kernel.org>
-Subject: Re: [PATCH for-next v3 6/9] mm/slab: allow kfree_rcu_sheaf() on
- PREEMPT_RT
-References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
- <20260615-kfree_rcu_nolock-v3-6-70a54f3775bb@kernel.org>
- <f3a56a5a-f10b-46dc-bc99-28449ade1661@kernel.org>
- <40591888-3a87-433e-b3d2-cda1cab543be@kernel.org>
- <9d8ca1ed-bc53-417f-944b-d78eecd1e6a5@kernel.org>
- <03da8742-3790-4428-84b8-11911bf44c9e@paulmck-laptop>
-In-Reply-To: <03da8742-3790-4428-84b8-11911bf44c9e@paulmck-laptop>
+Quoting Boqun Feng (2026-03-20 23:29:16)
+> Since commit c27cea4416a3 ("rcu: Re-implement RCU Tasks Trace in terms
+> of SRCU-fast") we switched to SRCU in BPF. However as BPF instrument can
+> happen basically everywhere (including where a scheduler lock is held),
+> call_srcu() now needs to avoid acquiring scheduler lock because
+> otherwise it could cause deadlock [1]. Fix this by following what the
+> previous RCU Tasks Trace did: using an irq_work to delay the queuing of
+> the work to start process_srcu().
+>
+> [boqun: Apply Joel's feedback]
+> [boqun: Apply Andrea's test feedback]
+>
+> Reported-by: Andrea Righi <arighi@nvidia.com>
+> Closes: https://lore.kernel.org/all/abjzvz_tL_siV17s@gpd4/
+> Fixes: commit c27cea4416a3 ("rcu: Re-implement RCU Tasks Trace in terms of SRCU-fast")
+> Link: https://lore.kernel.org/rcu/3c4c5a29-24ea-492d-aeee-e0d9605b4183@nvidia.com/ [1]
+> Suggested-by: Zqiang <qiang.zhang@linux.dev>
+> Tested-by: Andrea Righi <arighi@nvidia.com>
+> Signed-off-by: Boqun Feng <boqun@kernel.org>
 
---------------CZDOJb3QDvzu5IEDZMoq1w7C
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Thanks for the patch, which is now upstream as
+7c405fb3279b ("rcu: Use an intermediate irq_work to start process_srcu()")
 
+Unfortunately it seems to halt booting on the Allwinner D1 single-core RISC-V
+SoC both on the 7.0 and 7.1 kernels:
 
+https://esmil.dk/d1-7.0.txt
+https://esmil.dk/d1-7.1.txt
 
-On 6/18/26 5:40 AM, Paul E. McKenney wrote:
-> On Wed, Jun 17, 2026 at 07:38:16AM +0200, Vlastimil Babka (SUSE) wrote:=
+Reverting this patch seems to fix the issue although it then breaks when loading
+modules which is can be fixed by reverting:
+d6e152d905bd ("clockevents: Prevent timer interrupt starvation")
 
->> On 6/17/26 07:14, Harry Yoo wrote:
->>> On 6/17/26 2:24 AM, Vlastimil Babka (SUSE) wrote:
->>>> On 6/15/26 13:06, Harry Yoo (Oracle) wrote:
->>>>> As suggested by Vlastimil Babka, kfree_rcu_sheaf() can be used
->>>>> on PREEMPT_RT if we always assume spinning is not allowed on PREEMP=
-T_RT.
->>>>> This is because local_trylock and spinlock_t are safe to use with
->>>>> trylock variant as long as the kernel does not spin and the context=
- is
->>>>> not NMI and not hardirq.
->>>>>
->>>>> Now that __kfree_rcu_sheaf() knows how to handle allow_spin =3D fal=
-se,
->>>>> relax the limitation and try the sheaves path on PREEMPT_RT as well=
-=2E
->>>>>
->>>>> Keep the lockdep map on non RT kernels. However, do not use the loc=
-kdep
->>>>> map on PREEMPT_RT to avoid suppressing valid lockdep warnings.
->>>>>
->>>>> Link: https://lore.kernel.org/linux-mm/6811cc17-8ee4-48c8-8cbf-6bf4=
-d9f98162@kernel.org
->>>>> Suggested-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
->>>>> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
->>>>
->>>> LGTM, but maybe unnecessary pessimistic wrt call_rcu() on PREEMPT_RT=
-?
->>>> I thought (in the Link: above) we'd only need to downgrade allow_spi=
-n to
->>>> false on PREEMPT_RT for handling sheaves movement from/to barn and
->>>> alloc_empty_sheaf(), but call_rcu() would be safe from kfree_rcu() e=
-ven on
->>>> RT?
->>>
->>> Indeed. Good point, thanks!
->>>
->>> Hmm, but I'm not sure that it's worth the complexity given that
->>> PREEMPT_RT tries very hard to avoid disabling IRQs...
->>>
->>>> Or is the irqs_disabled() condition rare enough so we don't care?
->>>
->>> Given that most users don't call kfree_rcu() under raw spinlock or
->>> IRQs-disabled section on PREEMPT_RT, I think it's okay to keep it as =
-is
->>> (it's not making things worse, at least) and wait for call_rcu_nolock=
-()?
->>
->> Sounds good.
->>
->>> On a side note, I don't have much idea on what needs to call kfree_rc=
-u()
->>> under a raw spinlock, other than set_cpus_allowed_force(), which shou=
-ld
->>> really be using kfree_nolock() instead of kfree_rcu() once we support=
+This might be a side-effect of reverting this patch though.
 
->>> kmalloc() -> kfree_nolock():
->>
->> Looks like the case. Well if the fallback path of kfree_nolock() that =
-is
->> irq_work_queue() is indeed safe here.
->>
->>>> 	/*
->>>> 	 * Because this is called with p->pi_lock held, it is not possible
->>>> 	 * to use kfree() here (when PREEMPT_RT=3Dy), therefore punt to usi=
-ng
->>>> 	 * kfree_rcu().
->>>> 	 */
->>>> 	kfree_rcu((union cpumask_rcuhead *)ac.user_mask, rcu);
->>>
->>> Any thoughts, RCU/RT folks?=20
+We'd really like to continue support for this SoC on the 7.0 kernel, but since
+this patch is a bugfix just shippping the revert doesn't sound appealing.
+So some guidance would be much appreciated, thanks!
 
-Thanks for looking into it, Paul!
-
-Perhaps I'm missing some context here... let me clarify.
-
-> For the call_rcu*() counterparts, I am currently considering making the=
-
-> existing functions check for interrupts disabled, using irq_work_queue(=
-)
-> in that case.=20
-
-Ack.
-
-> I suppose that I could use raise_softirq() in the
-> use_softirq=3D1 case when in_hardirq().=20
-
-Ack.
-
-> Either way, the check should be
-> cheap compared to rest of the processing.
-
-Agreed.
-
-> The additional rcu_barrier() work required is of course way down in
-
-Assuming "The additional rcu_barrier() work required" means
-rcu_barrier() now needs to wait for all CPUs to complete irq_work or
-softirq...
-
-> the noise compared to acquiring a global mutex.
-
-Are you referring to a specific mutex, or just in general?
-
-> In your case, kfree_rcu() can be quite a bit lighter weight, though.
-> So the extra checks might not be lost in the noise.
-
-Assuming "the extra checks" means checking whether interrupts are
-disabled in call_rcu()*...
-
-It will probably be fine since we invoke call_rcu() only when sheaves
-become full, not once for each object?
-
-Perhaps slightly off-topic; at some point, though, I think it'd be
-better to teach SLUB to use RCU polling API for RCU sheaves.
-
-e.g.) put sheaves into barn->sheaves_pending instead of invoking
-call_rcu(), and the SLUB alloc slowpath checks if there are sheaves
-past grace period before allocating and refilling sheaves.
-
---=20
-Cheers,
-Harry / Hyeonggon
-
---------------CZDOJb3QDvzu5IEDZMoq1w7C--
-
---------------r52TW6tkzMED0vgUCNBCiTch
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCajPojAAKCRCGXBN6rc5S
-1iYYAP9R9SRxcpb+Lf9AzvYwC0ginyzWgaosKoEpwXTRJndtRQEApm4GZI/2RNXu
-Q24xU67ieuyKBqFI2alWnLxiGr7+Bws=
-=8O7i
------END PGP SIGNATURE-----
-
---------------r52TW6tkzMED0vgUCNBCiTch--
+/Emil
