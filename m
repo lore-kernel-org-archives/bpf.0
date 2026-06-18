@@ -1,193 +1,185 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243E337C0FE
-	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 10:07:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 907783EBF16;
+	Thu, 18 Jun 2026 10:19:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781777269; cv=none; b=dyFpgeIfivnJShfshXKzRtqE0y6howEwygnWrvKxfBRZt5bsHOV2tcmoDVil3jiJ1tKj7/FVRN2yet3L+ay1JXTHwgf6s2l55sQIuK/FJgzUpPZR3gxOew/6t15nmhEF0HVKA45hJMFOuj+xQsVA1hByVAWLdpgmhFOl2U98hzM=
+	t=1781777985; cv=none; b=lH6qkX3RtLRFEliFEhfqBqUWVg1BVadf92MNNzbCCv2Q1fwb6PtfVh6WCzk9aUkoUJSBs4GtwVVA9TeObwPKbJZOWMea2pU7WUgIURgYmsBGQzCzN7G9p4/itKwR/peUAVmvgbicXBLRNlANWa+XaelDuEsHiSFm+kNLup0Kuxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781777269; c=relaxed/simple;
-	bh=BCnhMXpiNt6GeK/JNZegIFyy6D8zcdHM6e+0Bxca6Ss=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=oztecB+SS9caTQIX7g2DjljvlPTurUAAep88FKz3LEZkbd5PT3owsTOmlzYBd/g00RktnoiJeY1jf2tET3qsLuxCWB44gV7yBWy/O47+NcRU14dblQ4a/qeoibw+/AljR1mQqT9uXli1qfig6BvZLLgoO1H/pqXQmWnphN83ZE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SsFSWvi0; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=BlNso0af; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1781777985; c=relaxed/simple;
+	bh=Hr4YQ5pAGnuxxVJ7lS+ujE2PxBUnmkoqFmAfEoJCUeM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ubUFEOWcHBYHMuQDBU/jhEbqnA+34uI8vhqCAqXbIK2udZ0/+bUBRNV1EvzppNGfguUf8eJTIO8AYvbDLPnF7v2qgeu2WJT9/ys1CAYke8fvyubTiElVbTWaVpg82uS8/fWof9G3BgwBrUkhRN2Nueofamm7mQEmCLgAqgxGYb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=S7EvzAzh; arc=none smtp.client-ip=206.189.21.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SsFSWvi0";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="BlNso0af"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1781777267;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=H2D+VZ/Tj0mUVDsv+aTtPFKUCIWgmNxSZBVstBUBcWw=;
-	b=SsFSWvi0o8XBWoVx7UXnNWY8oJcpSauRIKAhQBrDfKuwM5SM9l2e6lH0NIai50IdmtN6aX
-	8Q5VjfhU1hhNy3XJ3F2ri8CECmxoU+2q3S8kw4z7EipblWt+eQej2Udf9GYpRYX/nez5L/
-	x/yygCigoWDFCvPYWTC3c8UbVbI0uc4=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-392-yE2Omtj_NYKkCjlxx89uUQ-1; Thu, 18 Jun 2026 06:07:45 -0400
-X-MC-Unique: yE2Omtj_NYKkCjlxx89uUQ-1
-X-Mimecast-MFC-AGG-ID: yE2Omtj_NYKkCjlxx89uUQ_1781777265
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-46010392f89so709440f8f.2
-        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 03:07:45 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="S7EvzAzh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1781777264; x=1782382064; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=H2D+VZ/Tj0mUVDsv+aTtPFKUCIWgmNxSZBVstBUBcWw=;
-        b=BlNso0afPaiSvxBB6f5/68vwG3CqZVg+02CbcYz34zMqrVu+OkpZGJyf+Qzd3NEcWe
-         rRqNJjH2VUZIESv32fhmWNFWXXntp7DNxDR+bh2n1cxQILuVLENGNONebB1PQLLJEBTk
-         dlv1Gfiqn/tW93IwxdbUhIM6IJOaU/X4C2KcwqZ5+zBXBaKOWgF84NhHKs3iSNsLpAiF
-         /l8q5X9lm4Z1QICHKgfFvbv105u7XgSOSTmkVc71DvJjAA2IgOheplZev5YXwcHW57yP
-         iTDDcfjNBy9v44ODQqaHkaS0YPl/nTfhOxqIT6Ptxfcg609IqAYj5k6oNxmqd1FQV2Xk
-         dVGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781777264; x=1782382064;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H2D+VZ/Tj0mUVDsv+aTtPFKUCIWgmNxSZBVstBUBcWw=;
-        b=A1eoWarPwQZrdjBSBtio7R5Wf++OUqZIrgQyLm6f14t7uIST4SubRA8CSls1+VGgv4
-         1r/ZliVUUYAwkcZlzK1IADaZQTQt1CuHU6gNgzk+byxHCoAsvEydNoWe4Z0VvUhO3k8l
-         tMUrCFMvp7VJkF4o/ivocBjC/SuSwGbWJUqkJABu0fCsaoQUPssIP54pfg9sBOh91HBf
-         qLlk8OdhAIPf418Cj+Zz4HabeA/OkwjCO2CwTNmV4pQdBNIQtpSFDE/m9kjlXA9UXNdP
-         SrpT1dk6GLGinmbUBHXaqmHy3UXmO6oFhHZuMzrOHwtnobY5XMVApF52ZH3Qm0RmZihm
-         RQSw==
-X-Forwarded-Encrypted: i=1; AFNElJ/ZmsrlbaKiExWGTCCNyE7LMttkAc2LQjw87uKC4iksb0tMCNliOpvYimG6Xh2LuNc1qnk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzk4Sb51j+tpl3SlXZe+UQQAO4hDatWvBendQA6Ycoi7l7HMtyU
-	G6wFFEwJBiQ4CGKWMSCCZEPRaxc6UHIOMsvx13qEkJ+2+4Lvl2qCzzCp7eocW6Ad51BDtiBdndj
-	sOZ2FXdLjZIxO214Uk9JLjYdnt66/8isLDMOyGvKpHoL3ABNW6tFUqw==
-X-Gm-Gg: AfdE7clXhdaFbr2J77qkmFiA17KqRC3cCiYnkoTaIMHtiezfrMn8Sr65dq38zjDij4c
-	EEVMHC6A8hjo0J9g/IV74LGiLovepRMmAPFjd2UdojDTcOFq6fj6IecmG/MwapRrApW4zk6XrD+
-	xOnm3eMqRhKAcFlP4V1iilDemKYYac2rdlU6bnRGIIDDrvWtuUsI+xwh5/eesee6qiGF/U0Rhcv
-	T7oS05HRObGh+SlANIQp5/Z9P+aFSGebR1K/S3Dl1f2ZyZNByM1B6qk63ULQgdJNSOOthi8w1Ko
-	MKQReZqDw7KqjpMYlKEClCuUSVaDVtC4tIWOdC7ir/ZviJ3WMr3yEHkOGEhfaSIqT88mUF5nnLo
-	TTuKtgjE03NiHWrKg5GLyXUHKhRsP+QZQAY7K/A==
-X-Received: by 2002:a05:6000:1a53:b0:45e:dacb:8885 with SMTP id ffacd0b85a97d-4624179ba99mr9709043f8f.35.1781777264543;
-        Thu, 18 Jun 2026 03:07:44 -0700 (PDT)
-X-Received: by 2002:a05:6000:1a53:b0:45e:dacb:8885 with SMTP id ffacd0b85a97d-4624179ba99mr9708996f8f.35.1781777263942;
-        Thu, 18 Jun 2026 03:07:43 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f2c3fcfsm56057272f8f.26.2026.06.18.03.07.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2026 03:07:43 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 97AAE807861; Thu, 18 Jun 2026 12:07:42 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: ameryhung@gmail.com, a.s.protopopov@gmail.com, bpf@vger.kernel.org,
- davem@davemloft.net, dsahern@kernel.org, eddyz87@gmail.com,
- edumazet@google.com, emil@etsalapatis.com, eyal.birger@gmail.com,
- hawk@kernel.org, horms@kernel.org, john.fastabend@gmail.com,
- jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org,
- leon.hwang@linux.dev, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, martin.lau@linux.dev, memxor@gmail.com,
- netdev@vger.kernel.org, pabeni@redhat.com, rongtao@cestc.cn,
- sdf@fomichev.me, shuah@kernel.org, song@kernel.org, yatsenko@meta.com,
- yonghong.song@linux.dev
-Subject: Re: [PATCH bpf-next v3 0/3] bpf: bidirectional VLAN support for
- bpf_fib_lookup()
-In-Reply-To: <20260617224729.1428662-1-avinash.duduskar@gmail.com>
-References: <20260617224729.1428662-1-avinash.duduskar@gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Thu, 18 Jun 2026 12:07:42 +0200
-Message-ID: <87jyrwf9g1.fsf@toke.dk>
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:In-Reply-To:References:MIME-Version:
+	Content-Transfer-Encoding; bh=FQQ+9Ogk6rx/0IEJYojHK6G4ICcLBRBqgr
+	yX2IKHSR4=; b=S7EvzAzhWzIp40TSIYK9q80cu4cn52zi3rsTbpIhDUodphQ7Em
+	egwT75MdaAtTs8ehLSF3JhlKAiThlofzQIoZZmD4vLijJ7Qw5MfpE8wqyg7xI9E/
+	vluHMyFgApWGm5lxQnHIWV9vPvGEg6+7uHoPmHc9uY2VAQ3jMM+u7LcDM=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web5 (Coremail) with SMTP id zAQGZQB3L78IxjNq23+CAg--.46531S3;
+	Thu, 18 Jun 2026 18:19:01 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: bpf@vger.kernel.org,
+	netfilter-devel@vger.kernel.org
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	pablo@netfilter.org,
+	fw@strlen.de,
+	phil@nwl.cc,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	shuah@kernel.org,
+	kartikey406@gmail.com,
+	coreteam@netfilter.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v2 1/2] bpf: Guard conntrack opts error writes
+Date: Thu, 18 Jun 2026 10:18:43 +0000
+Message-Id: <9535e781fe14449b1d4e9bbc3baa7566a93bf512.1781765747.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1781765747.git.chenyy23@mails.tsinghua.edu.cn>
+References: <cover.1781586477.git.chenyy23@mails.tsinghua.edu.cn> <cover.1781765747.git.chenyy23@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zAQGZQB3L78IxjNq23+CAg--.46531S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxXry5uFy7ZFWxXryUtFW7XFb_yoWrJr4UpF
+	4ak3s7Ar9xAr4qyF4Fvan7A3WY9an3W3W7C34rG393CrsI93WYgFWxWr40vrZ3CFWrGrnx
+	tr45K3Z8CF1kAFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUH014x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
+	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAa
+	c4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
+	Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
+	6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxw
+	ACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY02Avz4vE14v_Gw1l
+	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
+	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r
+	4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+	cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sRRAwI7UUUUU==
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-Avinash Duduskar <avinash.duduskar@gmail.com> writes:
+The conntrack lookup and allocation kfuncs take an opts pointer
+together with an opts__sz argument. The verifier checks only the memory
+range described by opts__sz, but the wrappers unconditionally write
+opts->error whenever the internal lookup or allocation helper returns an
+error.
 
-> This series adds VLAN awareness to bpf_fib_lookup() in both directions.
-> BPF_FIB_LOOKUP_VLAN resolves a VLAN egress to its underlying real device
-> plus the VLAN tag (XDP programs need this because VLAN devices have no XDP
-> xmit), and BPF_FIB_LOOKUP_VLAN_INPUT runs the lookup as if a tagged frame
-> had arrived on the matching VLAN subinterface, for iif policy routing and
-> VRF table selection.
->
-> The l3mdev/VRF flow-init fix that was patch 1 in v1 and v2 has been split
-> out and sent to bpf on its own, since it is an independent Fixes:-tagged
-> fix that routes to stable on its own schedule. This series is otherwise
-> independent of it: on the default CONFIG_INIT_STACK_ALL_ZERO the VRF
-> selftests pass with or without the fix. Only the one full-lookup VRF arm
-> ("IPv4 VLAN input, tag selects VRF table") depends on it, and only on
-> INIT_STACK_ALL_PATTERN or NONE builds, where the uninitialized
-> flowi_l3mdev otherwise misses the l3mdev rule and the lookup falls
-> through to the main table. Applying the l3mdev fix first closes that
-> window.
->
-> Changes v2 -> v3 (all from Toke's review unless noted):
->
-> - Split the l3mdev/VRF flow-init fix out to a standalone bpf submission
->   (it was patch 1 in v2).
->
-> - Patch 2 (VLAN_INPUT): bpf_fib_vlan_input_dev() returns a
->   struct net_device * with ERR_PTR() for the -EINVAL case and NULL for
->   NOT_FWDED, instead of an int return and a **dev out-parameter.
->
-> - Trim the BPF_FIB_LOOKUP_VLAN and BPF_FIB_LOOKUP_VLAN_INPUT UAPI doc
->   blocks, and drop the in-function comments that restated the commit
->   message or the flag doc.
->
-> - Patch 1 (VLAN egress): on the skb path without tot_len, the deferred mtu
->   check now runs against the resolved egress (VLAN) device, not the parent
->   params->ifindex was swapped to, so a VLAN device with a smaller mtu than
->   its parent is no longer checked against, or reported as, the parent's
->   larger mtu. Found by the bpf ci bot; this was an open question in v2.
->
-> - Patch 3 (selftests): re-run every case through bpf_xdp_fib_lookup() as
->   well, since the feature targets XDP; and flip the no-tot_len mtu arm to
->   expect the VLAN device's mtu after the fix above.
->
-> Open questions (defaults chosen, noted here in case a maintainer
-> prefers otherwise):
->
-> 1. An unmatched, down, or foreign-netns tag returns
->    BPF_FIB_LKUP_RET_NOT_FWDED, matching the DIRECT path when
->    fib_get_table() finds no table, rather than a new return code.
->
-> 2. BPF_FIB_LOOKUP_OUTPUT | BPF_FIB_LOOKUP_VLAN_INPUT is rejected with
->    -EINVAL; restricting now keeps relaxing later backward-compatible.
->
-> 3. The name BPF_FIB_LOOKUP_VLAN_INPUT reads oddly next to
->    BPF_FIB_LOOKUP_OUTPUT. A pair like _VLAN_EGRESS/_VLAN_INGRESS is an
->    option while nothing is merged.
+For an invalid size smaller than the end of opts->error, that write can
+land outside the verifier-checked range. Keep returning NULL for invalid
+arguments, but only report the error through opts->error when the
+supplied size includes the field.
 
-These three are fine as-is, I think.
+This preserves error reporting for the supported 12-byte and 16-byte
+layouts, and for other invalid sizes that still include opts->error.
 
-> 4. The egress flag leaves a VLAN it cannot reduce to a physical parent
->    plus one tag (QinQ, or a parent in another namespace) as SUCCESS with
->    the VLAN device's ifindex and the vlan fields zero, like a plain
->    lookup. The input side instead fails closed (NOT_FWDED) on the
->    cross-namespace case. An XDP caller cannot xmit on a VLAN device, and
->    a zero h_vlan_proto does not distinguish this result from a physical
->    egress, so returning NOT_FWDED would be safer for XDP. But the two
->    cases differ: a foreign-netns parent is clearly fail-worthy, while a
->    QinQ egress is still a forwardable route (tc xmits on the inner VLAN
->    device), so failing it closed would reject a usable route. Should
->    egress signal NOT_FWDED, for both or only foreign-netns? I left it
->    best-effort, but will change it if you prefer.
+Fixes: b4c2b9593a1c ("net/netfilter: Add unstable CT lookup helpers for XDP and TC-BPF")
+Fixes: d7e79c97c00c ("net: netfilter: Add kfuncs to allocate and insert CT")
+Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+---
+ net/netfilter/nf_conntrack_bpf.c | 35 ++++++++++++--------------------
+ 1 file changed, 13 insertions(+), 22 deletions(-)
 
-This one is a bit more ambiguous. Specifically, the inability for an XDP
-program to distinguish between a route that actually targets a physical
-device, and one that targets a VLAN device that couldn't be resolved for
-whatever reason.
-
-Since this is a new feature that's opt-in, I think I would lean towards
-failing lookups with a new error code (BPF_FIB_LKUP_RET_VLAN_FAILURE,
-say) if the lookup finds a VLAN device but can't actually resolve the
-parent. That way the XDP program can repeat the lookup without the
-BPF_FIB_LOOKUP_VLAN flag if it really wants the ifindex of that VLAN
-device, but that will be explicit and not hidden.
-
--Toke
+diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrack_bpf.c
+index 40c261cd0af38..f98d1d4b42c3d 100644
+--- a/net/netfilter/nf_conntrack_bpf.c
++++ b/net/netfilter/nf_conntrack_bpf.c
+@@ -65,6 +65,15 @@ enum {
+ 	NF_BPF_CT_OPTS_SZ = 16,
+ };
+ 
++static void *bpf_ct_opts_result(struct bpf_ct_opts *opts, u32 opts__sz, void *ret)
++{
++	if (!IS_ERR(ret))
++		return ret;
++	if (opts__sz >= offsetofend(struct bpf_ct_opts, error))
++		opts->error = PTR_ERR(ret);
++	return NULL;
++}
++
+ static int bpf_nf_ct_tuple_parse(struct bpf_sock_tuple *bpf_tuple,
+ 				 u32 tuple_len, u8 protonum, u8 dir,
+ 				 struct nf_conntrack_tuple *tuple)
+@@ -297,12 +306,7 @@ bpf_xdp_ct_alloc(struct xdp_md *xdp_ctx, struct bpf_sock_tuple *bpf_tuple,
+ 
+ 	nfct = __bpf_nf_ct_alloc_entry(dev_net(ctx->rxq->dev), bpf_tuple, tuple__sz,
+ 				       opts, opts__sz, 10);
+-	if (IS_ERR(nfct)) {
+-		opts->error = PTR_ERR(nfct);
+-		return NULL;
+-	}
+-
+-	return (struct nf_conn___init *)nfct;
++	return (struct nf_conn___init *)bpf_ct_opts_result(opts, opts__sz, nfct);
+ }
+ 
+ /* bpf_xdp_ct_lookup - Lookup CT entry for the given tuple, and acquire a
+@@ -331,11 +335,7 @@ bpf_xdp_ct_lookup(struct xdp_md *xdp_ctx, struct bpf_sock_tuple *bpf_tuple,
+ 
+ 	caller_net = dev_net(ctx->rxq->dev);
+ 	nfct = __bpf_nf_ct_lookup(caller_net, bpf_tuple, tuple__sz, opts, opts__sz);
+-	if (IS_ERR(nfct)) {
+-		opts->error = PTR_ERR(nfct);
+-		return NULL;
+-	}
+-	return nfct;
++	return bpf_ct_opts_result(opts, opts__sz, nfct);
+ }
+ 
+ /* bpf_skb_ct_alloc - Allocate a new CT entry
+@@ -363,12 +363,7 @@ bpf_skb_ct_alloc(struct __sk_buff *skb_ctx, struct bpf_sock_tuple *bpf_tuple,
+ 
+ 	net = skb->dev ? dev_net(skb->dev) : sock_net(skb->sk);
+ 	nfct = __bpf_nf_ct_alloc_entry(net, bpf_tuple, tuple__sz, opts, opts__sz, 10);
+-	if (IS_ERR(nfct)) {
+-		opts->error = PTR_ERR(nfct);
+-		return NULL;
+-	}
+-
+-	return (struct nf_conn___init *)nfct;
++	return (struct nf_conn___init *)bpf_ct_opts_result(opts, opts__sz, nfct);
+ }
+ 
+ /* bpf_skb_ct_lookup - Lookup CT entry for the given tuple, and acquire a
+@@ -397,11 +392,7 @@ bpf_skb_ct_lookup(struct __sk_buff *skb_ctx, struct bpf_sock_tuple *bpf_tuple,
+ 
+ 	caller_net = skb->dev ? dev_net(skb->dev) : sock_net(skb->sk);
+ 	nfct = __bpf_nf_ct_lookup(caller_net, bpf_tuple, tuple__sz, opts, opts__sz);
+-	if (IS_ERR(nfct)) {
+-		opts->error = PTR_ERR(nfct);
+-		return NULL;
+-	}
+-	return nfct;
++	return bpf_ct_opts_result(opts, opts__sz, nfct);
+ }
+ 
+ /* bpf_ct_insert_entry - Add the provided entry into a CT map
+-- 
+2.34.1
 
