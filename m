@@ -1,74 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF252C11CB;
-	Thu, 18 Jun 2026 04:19:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7217137646E
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 04:46:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781756382; cv=none; b=IDMKMpJMRqYfHaaAtuU78YHyqHtO2x5GWWmtyG+MjvArkvp0ZafWYWRyfYrPFyuU+aI6XJeTXwEGvljlWoyK7nyh2SWhUV+KWTu36mVQ9h+52d8IHcHcMesvJYrLXmMKgaDbTt/BcElTATuZRXL3/guzIRLhV+Po6HUXcbbA5mA=
+	t=1781758015; cv=none; b=K+LQNQk0W6p5F3/m7dxKLbUFWadgf1OqNCedTh2vgnD/zA0JeB/ZMG48XZpvAKBdnIxvF+rfsQDBVjUnlHWHn2BNggshnXK/vt0uVRxkCAoHNiCa8O5y/3Ez4w5OXJ1YR6RnG3cTppUZ1CtwK8NtWXPkuat3Yf5XDAaFxJ8Kpyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781756382; c=relaxed/simple;
-	bh=1MW4VNkbZyVG64tjfqXLS8sUktdXvdrJeVTDqNjx+ms=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=dtguD+husvpAz4PIrNwQ/eTSLkPnPCfeeVQppCgknqpfS+nooCyLIt3Z8feo9iPRCr9ud5OOTrouWHpJXNg2AyYEFkFChrtY8N6QNedTwiwQC9L1tpTUbmKNiMYsi0qoxQiF2IZB17cvS+oq6iUlylUNbffgLo0mZQpmDLOhUy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H1sLS9hX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781758015; c=relaxed/simple;
+	bh=G7NNzpithMzUQF4K63cTAyYOJ7Z0wlyAVq4xsJQDNfk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=aZM7BNb0BGAWOndjTRDFp9GXlnXlOZtuZAC5rcF9pEC3t4Ud7mwZo3lDA24JpgdExfAiehhTotYGDRTkSqFA2kWG56m3kC099cOHFL+Vdf0SSIMg+G6NqIEAvKYNZURbKigeP6jsbVjojLD2BVKl+AKmcSePjuENMsZdYsVKmHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=NKL9QRpl; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H1sLS9hX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4951F000E9;
-	Thu, 18 Jun 2026 04:19:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781756380;
-	bh=ROVddDfOyk8zu86ME/wG6+AbO6JfOCq+Z2d8XvM+8G0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=H1sLS9hXMgSJ35QGbWdZFXbC2Wb91YkGd+c2CuTjTaPissvSOu7A1brYYYDav2CwF
-	 CcWeUf99ka4Zl1VAMjc1n/jAIJQVNoRpICyyXCPvmvCLBQnKcPk/4y4xLzimVgdQBb
-	 ebb4iMTSdlaZxGnN+yuiSbKpLtrIxAUKX9ZwdpHTFq3Mxg0wuomrS+XBco8/oaH3iv
-	 BvnRptt2zx8cyecCITzzSE6oxRq5+OvfZWAvMYdaL6jZv57kBCVqi6Rwb3Eh3puGOe
-	 OllBBT2i8xRP7842uAynv0JUiNotuy0DuLQgmIhHhfF+N+ChocaG89icNXwM9Wk/89
-	 Q8j7jsAUQRkWw==
-Content-Type: multipart/mixed; boundary="===============3276329233012674368=="
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="NKL9QRpl"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-37cab825ec9so415537a91.1
+        for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 21:46:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781758012; x=1782362812; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RwYn0b1ljZm5xm9vU8S5Ez8Hx6XEkpn06QsCD9WcSg8=;
+        b=NKL9QRple/VLlHvhQyWmRqWTmc3ScY+DppM6hCt+ttKCco2n7TRaEuQe6bvfdeTq1I
+         CdgbZUoPo1o00SM+knbWqD+uqNU0+UR0jasVGG4N7Yh060Mo9oXTOtb99nrdiAhIncDU
+         4a34dHVv8t8cihSYxH3+fu58ElvwlRHm47SBNi4A1nPvzOYgh3paTH8kmsZi2FLaeZnL
+         lFCEFGb2qYuiGbZS6umu7EngXoqf8n7ZZxCdlgHz7a7qfJrlr25uITyt6dxQx7uwGsof
+         sJntHc5FsIyY/3Szcl6TxkzGOrGUpcuZEIlT2bTWeCyjneVO7e1E8BVXZYDFbSfl++Gn
+         7qHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781758012; x=1782362812;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RwYn0b1ljZm5xm9vU8S5Ez8Hx6XEkpn06QsCD9WcSg8=;
+        b=hTrqQYLJ2gsWuJbc7e5XKfAB9lFh0SVOM/DNOUwNg/vvy7WkqnPb+uh6Rasfv3iSO3
+         jpOR9vsA+pX754x7qwnE5ictsgqXf2iuDWq8BZUgndv2gHUmw02GogGEKZbXrMJDgQri
+         8Q7jUM0GYybh+Wvy9PdrQh/9os7R/A49rv7+ExzDPEA1/II8vKyTbHFKsxSkpmFuUa2C
+         PM+RR+s4/HG44X8bUVNfsJhSTannByRzw6fQqf9Nnvl5zEa3dRtJqprYVlygMzbeWC2O
+         343Wh7fe9eB/k5mGuipw5vnXN9rjuFLOG68IHx7QqkuslZ+G59LE/pS+onQMxWpDzCTG
+         Gd1g==
+X-Gm-Message-State: AOJu0YyJO1xC7Fi1cJgS4b/0ckkbi6W0oBiyM+wNuqHa4LvMNGS9o1Fu
+	NI4SMT8q50UEG2asLr1TePI3EFeFs7WQ4/zFpz014yyt7dSAgID1epk7AcoWZEhtiVA=
+X-Gm-Gg: AfdE7clRAVMW24fYP2VQIFfmjgsl/pchlRCGGxcExfl+Po3TOncBJIfcDNuZzy9IpJi
+	lQkH+IbLN9bpba6qQpk42qvSmSskq5CYfH/VAgWk9pa28mKxuXrscdhwFVmyxFSCtwQXUzHOtFl
+	Zk+AyD+kk/QCCLkxHBPC76fSU8Ka7K/m40MIMqDse1TegAATdBq28H/vMFSq6khgqHpHlMoEm72
+	HK0NtjIiy5TVbaHvF/zMCVp2WjitvTg8/B9OYX1Yc5cUSGOslhjFz9RzceyRkVBQK5xZzST4ZqG
+	mN0aVTr83W8FXxPP9wPA8hlItPAwfoU02vaoGl8u0pfJpQgYWRdjprKMpF2PDixndf+9bku4Hnz
+	2G5CK+oFW/C6MA60vDfYj6RFQtFOnqWr6lYo6rir5QNVSj7ZC1ga044G1caH0/2m0ZZGxcMZ1d4
+	feLmJLabw0k+wFxKai8w2mlG33uuo12uMrb6vXZbJrh0A+iZ1H6P2TqD4=
+X-Received: by 2002:a17:90b:51cc:b0:36b:bec8:94c5 with SMTP id 98e67ed59e1d1-37ce44b6739mr2335254a91.10.1781758011754;
+        Wed, 17 Jun 2026 21:46:51 -0700 (PDT)
+Received: from localhost (S0106d8b37028eeb5.vc.shawcable.net. [24.84.91.85])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37c521ae039sm7756627a91.1.2026.06.17.21.46.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Jun 2026 21:46:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <7e996535cf04f95d2c4e54b1173f4e2d0a96102c737fe030decc432164df97a6@mail.kernel.org>
-In-Reply-To: <20260618033809.98253-2-dongtai.guo@linux.dev>
-References: <20260618033809.98253-2-dongtai.guo@linux.dev>
-Subject: Re: [PATCH 1/5] LoongArch: BPF: Gate unsupported arena instructions via bpf_jit_supports_insn()
-From: bot+bpf-ci@kernel.org
-To: dongtai.guo@linux.dev,chenhuacai@kernel.org,yangtiezhu@loongson.cn,hengqi.chen@gmail.com
-Cc: kernel@xen0n.name,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,loongarch@lists.linux.dev,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,guodongtai@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 18 Jun 2026 04:19:40 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 18 Jun 2026 00:46:50 -0400
+Message-Id: <DJBWI249TH74.C8BAB4SRRTXB@etsalapatis.com>
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Vineet Gupta" <vineet.gupta@linux.dev>, <dwarves@vger.kernel.org>
+Cc: <bpf@vger.kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
+ <acme@kernel.org>, "Alan Maguire" <alan.maguire@oracle.com>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, <jose.marchesi@oracle.com>, "David
+ Faust" <david.faust@oracle.com>, "Yonghong Song" <yonghong.song@linux.dev>
+Subject: Re: [PAHOLE v5 1/5] btf_loader: Handle decl tag component_idx for
+ parameters
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260618005731.273181-1-vineet.gupta@linux.dev>
+ <20260618005731.273181-2-vineet.gupta@linux.dev>
+In-Reply-To: <20260618005731.273181-2-vineet.gupta@linux.dev>
 
---===============3276329233012674368==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed Jun 17, 2026 at 8:57 PM EDT, Vineet Gupta wrote:
+> From: Alan Maguire <alan.maguire@oracle.com>
+>
+> A BTF_KIND_DECL_TAG with a non-negative component_idx applies to a
+> specific function parameter (or struct/union member), not to the
+> function itself. btf_loader.c however attached every decl tag to the
+> type named by btf_type->type, so parameter decl tags were recorded on
+> the function rather than on the parameter, and pfunct never printed
+> them with the parameter.
+>
+> Resolve a non-negative component_idx to the corresponding parameter via
+> new helpers ftype__parameter()/function__parameter(), and attach the
+> tag there. Teach the pretty printer to emit a parameter's attributes by
+> factoring the function-level attribute loop into tag__attributes_fprintf(=
+)
+> and calling it from ftype__fprintf_parms() for each parameter.
+>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 
->     The JIT does not implement atomics on arena pointers (BPF_PROBE_ATOMIC)
->     nor sign-extending loads from the arena (BPF_PROBE_MEM32SX). Without a
->     bpf_jit_supports_insn() callback the verifier assumes both are available,
->     so such programs are accepted only to fail later in the JIT with a
->     confusing -EINVAL 'unknown opcode'.
->     Implement bpf_jit_supports_insn() to reject these instructions in the
->     arena case. The verifier then rejects the program early with a clear
->     message ('BPF_ATOMIC stores into R<n> ... is not allowed' / 'sign
->     extending loads from arena are not supported yet'). Regular arena
->     accesses (BPF_PROBE_MEM32 loads/stores of all sizes) remain supported.
->     Signed-off-by: George Guo <guodongtai@kylinos.cn>
+With one nit:
 
-This looks like it fixes a gap that was introduced when arena support
-was first advertised via bpf_jit_supports_arena() returning true.
-Should this carry a Fixes: tag?
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-  Fixes: 4fdb5dd8aeba ("LoongArch: BPF: Implement bpf_addr_space_cast instruction")
+(Also feel free to keep the tags for the other 3 patches since the=20
+changes are minimal).
 
+</SNIP>
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> +	if (component_idx >=3D 0) {
+> +		struct tag *func_tag =3D cu__function(cu, tp->type);
+> +
+> +		if (func_tag !=3D NULL) {
+> +			tag =3D function__parameter(tag__function(func_tag), cu,
+> +						  component_idx);
+> +			if (tag =3D=3D NULL) {
+> +				fprintf(stderr, "WARNING: BTF_KIND_DECL_TAG for unknown parameter %d=
+ in BTF id %d\n",
+> +					component_idx, tp->type);
+> +				return 0;
+> +			}
+> +		}
+> +	}
+> +
+> +	if (tag =3D=3D NULL && component_idx < 0)
+>  		tag =3D cu__function(cu, tp->type);
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27735575341
---===============3276329233012674368==--
+Nit, I think this can be simplified as follows:
+
+tag =3D cu__function(cu, tp->type);
+if (component_idx >=3D 0 && tag !=3D NULL) {
+	tag =3D function__parameter(tag__function(tag), cu, component_idx);
+	if (tag =3D=3D NULL) {
+		fprintf(stderr, "WARNING: BTF_KIND_DECL_TAG for unknown parameter %d in B=
+TF id %d\n",
+			component_idx, tp->type);
+		return 0;
+	}
+}
+
+<SNIP>
