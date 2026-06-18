@@ -1,146 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7313563F6;
-	Thu, 18 Jun 2026 18:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73860371CE6
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 18:20:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781806334; cv=none; b=kGp6anikA9U7HFgUj+sxvniTmZWob0oVXKNtTW1dC2/QcnkpWDl1IiVw/KCmfxHo1HT4ae5c9PdNoCf5N7RDs47j6dukHmodWeyjma1JkbGZH6PZoZN8fRVaTt0JoFhfYq9Nqwug/XynUrsiV22ewQEUJbdzyDhMO5wzn6tTKFk=
+	t=1781806841; cv=none; b=OgqI2stRkdvquEb8I4jJUmFm9Rfi6ys7Il5s+x2KytevLdIDP0dWubBwBDNo0fxr78hxnligalU4FddHcdE5gi6vsUAfcB+Ku49bkcjj9BAgCAw8CNJRVPmJ/Jr/EaQ4hDg6jhoqrLZCDCvF8a60jjAj+WkXuAY8d8fMLN+/PJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781806334; c=relaxed/simple;
-	bh=KiOrftyVXSm2xYANpVQq31qn6xeMhRpGmJFyi1EtirQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ty56tOau78DxSGjT4S3hSb9BpupQGyWF/nP7X8d1p4l1JNHJCICIlwhcr9MBbfl00jGC7QlegTHNbwheDcqDURk/6P2GofcBP78pgk3QIriKhbvPwb6zzLjP/dhNlIbGCKBim8dRESLbDpvND6C8kPoBjFfdL8BTBJi5lByH2Yg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j5d3vJE0; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781806841; c=relaxed/simple;
+	bh=lmAls8g6TYWNiaABx/R8EHu8Nnn5uWDl1XOyYBPHlEY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZuAQV1CAwF6VYR5n73TykblGOkBo+ZQjmfL+OLq/6ddzqF39DRmnno7bdbN7oZvAhKPFFfamVh6ZQpxTJblgK533PCMSs70nKtvjNc/E4FOZqMIv/DJ0HU9dQUAiV2YiX83ImG7pm2fLpi6Yzgyf3F3/yyKmsKOqiFCf9AeDvc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zd3P9Lml; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j5d3vJE0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781806332; x=1813342332;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KiOrftyVXSm2xYANpVQq31qn6xeMhRpGmJFyi1EtirQ=;
-  b=j5d3vJE0wzeOcr+p7IdCLNGMxxJsgxM+pCU/PWGOPwWM06xOxw48hICF
-   LQQr7MpgbFVOrPUgyvvcWZuCBoYF/PBU00mexR193Bn3vfHcWipqwM8v5
-   f8Q0XAG517OdSxN/LqjlVYDDgjBcowTribeFU1MqMrN+i/464I4vPRQV/
-   lpD0+5Dm5zIUD2dAYQrKLZm6Swu5YZajYg7IOdqOqFes/3s+KA5M+tdo5
-   lYCEkM7nCQSLnClUG3kdCDJ9XBlQlHRAAkq4OtXrf1zxURy3O3C1vasue
-   D2LWYo2hZ3eRJS20GD53kd7Dlmpn0DPHTueS3Zmv6d7lgWa7i8nWsgf0z
-   w==;
-X-CSE-ConnectionGUID: jncuIO91RaeN0+BdsG541Q==
-X-CSE-MsgGUID: /aUGj6DpQ4OVE7bGShr17g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11821"; a="93301991"
-X-IronPort-AV: E=Sophos;i="6.24,211,1774335600"; 
-   d="scan'208";a="93301991"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2026 11:12:11 -0700
-X-CSE-ConnectionGUID: EEHx02poQu2Do1OLp+UeRQ==
-X-CSE-MsgGUID: 8x0vdmXVRXmypy68vhLGgg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,211,1774335600"; 
-   d="scan'208";a="272130460"
-Received: from rfrazer-mobl3.amr.corp.intel.com (HELO [10.125.111.222]) ([10.125.111.222])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2026 11:12:10 -0700
-Message-ID: <3207a706-354c-4e9d-ba53-dded1abb1842@intel.com>
-Date: Thu, 18 Jun 2026 11:12:09 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zd3P9Lml"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-36da8439078so1103946a91.2
+        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 11:20:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781806837; x=1782411637; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lmAls8g6TYWNiaABx/R8EHu8Nnn5uWDl1XOyYBPHlEY=;
+        b=Zd3P9LmlCJ3UAL1PQbhcEV6ghxr2eyxhvKJ6nkuGoS8zpkgwwAz+EXez5ngHOvG78P
+         zaDRH8jQWU1DD1+QgYOYLpPl2zWNw2AAT638LAolJpV9+pzqW1MZRaiwziHqJ+nBTaxO
+         qNJBfKVJCPkWGmxlEzjvhXBGcDIiQDP9RmlDq3mqvPFlyYGjDysGZ9QOOlO1sooyU2Mt
+         p8ZKVvrQZQW7NwR2XVxqrD4FSoeflSH2xKQW9GsPYQm2kl01jAzwCzI/Lm4g3aptuBkL
+         QLX6fbNwmh1kloHTN1WK6f9jcYRMbMXZHIyp/A8e0KpVWMUk9ENc+fWdM5yRE2CWwVpM
+         JHrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781806837; x=1782411637;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lmAls8g6TYWNiaABx/R8EHu8Nnn5uWDl1XOyYBPHlEY=;
+        b=fkUDFG/eOJnOigFEfgit0FnrzMrStAytI9qbyQ6ScE5iUPWVfuDAOWrb5CI2HUpkoi
+         0J0KwObo+PbOToVG2VdPOlZ1MihK/aHCBh69IcC9PZEuAOdYOTWh7hPUYxmXexWyHFrN
+         eiJJWqihsvDubzxbhYZk9GGjOpKnOPv5C1ZDsTvsR3jvDtkiH8lEkJ4nxnkKvBKzgIfG
+         bjkpcDCXvwIPuIM5D+v9oa4WzkKgz7kHrlI4Hhf6HYtxkT1kF4akplG9bS2eVAftwNhq
+         DAU3jkVdBUUArPRbFaxpj95G8LqQwFCzhrtZD+N0pWB8iypKBb9HuNdYmfu37OLv90kB
+         CD6w==
+X-Forwarded-Encrypted: i=1; AFNElJ/VNLRr1Y5dkA3+sBK+fLI8C2Cfq9PFo0/fDql9dhaTOOmmVegJInrgTo97d7alvqyYeac=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxoiHU6IuFDglPbDYJzfwVVDxUvslbjlNW6CLEkEcWnAt06W+S4
+	qgqZrcSRULCerUAvEZK/5ru/N42JHFpbGOsrNUTaTU3Sze4YTd94BJqgWRGHzw==
+X-Gm-Gg: AfdE7cnHRaSwEFejPkIUyHRRSizuhuXz/QHTH6zCd1MEl/C7TeiIHU2srChjbYxN0be
+	RVz7QPv25gRvUdD/VC6WVs/+6dk+ZihAesGJCMjOW4v2uCzgp1IGa+fTYrl8xm2++Pc36smHWKj
+	HG0uacxj1r+NHoEI93qdk++DNO6c90fjicqNX7/iMu3U7qnjqE0uOjltX26qOJZlJSpgkaICL2k
+	JCADZORD8QQbqcqdwsJxr2wW7/w56av10ylM8y1ezc8ctvqd/nvYj0wQ9km/E3StXo2SS7aSh9u
+	PL83YrlsuwbSGiHK5aCjjdT5MbAUOYY34mPSIb3fBBjgHV7J9qXFeDHKWxbJSAQivUnP53434oZ
+	AikOEdGypXhSdrU5NzdsTDSaH8NZ1MzoDZyVWKrMimIaQ6rHAWVS0EGdcCa/f3flrdvRS6xMKpf
+	pIiG/dWLSICw==
+X-Received: by 2002:a17:90b:3ece:b0:36d:635b:85a0 with SMTP id 98e67ed59e1d1-37d15fbff00mr568255a91.3.1781806837595;
+        Thu, 18 Jun 2026 11:20:37 -0700 (PDT)
+Received: from john-p8 ([98.97.43.82])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37d1558b599sm341702a91.7.2026.06.18.11.20.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jun 2026 11:20:36 -0700 (PDT)
+Date: Thu, 18 Jun 2026 11:20:34 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, Simon Horman <horms@kernel.org>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn <willemb@google.com>, 
+	linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH 1/2] fs: Add bpf_sock_read_xattr() kfunc to read socket
+ xattrs
+Message-ID: <ajQ0p4ernwLzxkhu@john-p8>
+References: <20260617-work-bpf-sock-xattr-v1-0-a1276f7c9da3@kernel.org>
+ <20260617-work-bpf-sock-xattr-v1-1-a1276f7c9da3@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] kasan: Fix false-positive wild-memory-access on x86
- under 5-level paging
-To: Borislav Petkov <bp@alien8.de>, Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>, bpf@vger.kernel.org,
- kasan-dev@googlegroups.com, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Andrey Konovalov <andreyknvl@gmail.com>
-References: <20260610175651.647515-1-ihor.solodrai@linux.dev>
- <326b85af-c41a-4387-90a0-60720111934d@linux.dev>
- <20260618170913.GBajQmOQyOiBLqopUl@fat_crate.local>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
- oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
- 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
- ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
- VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
- iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
- c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
- pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
- ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
- QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzUVEYXZpZCBDaHJp
- c3RvcGhlciBIYW5zZW4gKEludGVsIFdvcmsgQWRkcmVzcykgPGRhdmUuaGFuc2VuQGludGVs
- LmNvbT7CwXgEEwECACIFAlQ+9J0CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEGg1
- lTBwyZKwLZUP/0dnbhDc229u2u6WtK1s1cSd9WsflGXGagkR6liJ4um3XCfYWDHvIdkHYC1t
- MNcVHFBwmQkawxsYvgO8kXT3SaFZe4ISfB4K4CL2qp4JO+nJdlFUbZI7cz/Td9z8nHjMcWYF
- IQuTsWOLs/LBMTs+ANumibtw6UkiGVD3dfHJAOPNApjVr+M0P/lVmTeP8w0uVcd2syiaU5jB
- aht9CYATn+ytFGWZnBEEQFnqcibIaOrmoBLu2b3fKJEd8Jp7NHDSIdrvrMjYynmc6sZKUqH2
- I1qOevaa8jUg7wlLJAWGfIqnu85kkqrVOkbNbk4TPub7VOqA6qG5GCNEIv6ZY7HLYd/vAkVY
- E8Plzq/NwLAuOWxvGrOl7OPuwVeR4hBDfcrNb990MFPpjGgACzAZyjdmYoMu8j3/MAEW4P0z
- F5+EYJAOZ+z212y1pchNNauehORXgjrNKsZwxwKpPY9qb84E3O9KYpwfATsqOoQ6tTgr+1BR
- CCwP712H+E9U5HJ0iibN/CDZFVPL1bRerHziuwuQuvE0qWg0+0SChFe9oq0KAwEkVs6ZDMB2
- P16MieEEQ6StQRlvy2YBv80L1TMl3T90Bo1UUn6ARXEpcbFE0/aORH/jEXcRteb+vuik5UGY
- 5TsyLYdPur3TXm7XDBdmmyQVJjnJKYK9AQxj95KlXLVO38lczsFNBFRjzmoBEACyAxbvUEhd
- GDGNg0JhDdezyTdN8C9BFsdxyTLnSH31NRiyp1QtuxvcqGZjb2trDVuCbIzRrgMZLVgo3upr
- MIOx1CXEgmn23Zhh0EpdVHM8IKx9Z7V0r+rrpRWFE8/wQZngKYVi49PGoZj50ZEifEJ5qn/H
- Nsp2+Y+bTUjDdgWMATg9DiFMyv8fvoqgNsNyrrZTnSgoLzdxr89FGHZCoSoAK8gfgFHuO54B
- lI8QOfPDG9WDPJ66HCodjTlBEr/Cwq6GruxS5i2Y33YVqxvFvDa1tUtl+iJ2SWKS9kCai2DR
- 3BwVONJEYSDQaven/EHMlY1q8Vln3lGPsS11vSUK3QcNJjmrgYxH5KsVsf6PNRj9mp8Z1kIG
- qjRx08+nnyStWC0gZH6NrYyS9rpqH3j+hA2WcI7De51L4Rv9pFwzp161mvtc6eC/GxaiUGuH
- BNAVP0PY0fqvIC68p3rLIAW3f97uv4ce2RSQ7LbsPsimOeCo/5vgS6YQsj83E+AipPr09Caj
- 0hloj+hFoqiticNpmsxdWKoOsV0PftcQvBCCYuhKbZV9s5hjt9qn8CE86A5g5KqDf83Fxqm/
- vXKgHNFHE5zgXGZnrmaf6resQzbvJHO0Fb0CcIohzrpPaL3YepcLDoCCgElGMGQjdCcSQ+Ci
- FCRl0Bvyj1YZUql+ZkptgGjikQARAQABwsFfBBgBAgAJBQJUY85qAhsMAAoJEGg1lTBwyZKw
- l4IQAIKHs/9po4spZDFyfDjunimEhVHqlUt7ggR1Hsl/tkvTSze8pI1P6dGp2XW6AnH1iayn
- yRcoyT0ZJ+Zmm4xAH1zqKjWplzqdb/dO28qk0bPso8+1oPO8oDhLm1+tY+cOvufXkBTm+whm
- +AyNTjaCRt6aSMnA/QHVGSJ8grrTJCoACVNhnXg/R0g90g8iV8Q+IBZyDkG0tBThaDdw1B2l
- asInUTeb9EiVfL/Zjdg5VWiF9LL7iS+9hTeVdR09vThQ/DhVbCNxVk+DtyBHsjOKifrVsYep
- WpRGBIAu3bK8eXtyvrw1igWTNs2wazJ71+0z2jMzbclKAyRHKU9JdN6Hkkgr2nPb561yjcB8
- sIq1pFXKyO+nKy6SZYxOvHxCcjk2fkw6UmPU6/j/nQlj2lfOAgNVKuDLothIxzi8pndB8Jju
- KktE5HJqUUMXePkAYIxEQ0mMc8Po7tuXdejgPMwgP7x65xtfEqI0RuzbUioFltsp1jUaRwQZ
- MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
- hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
- vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-In-Reply-To: <20260618170913.GBajQmOQyOiBLqopUl@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20260617-work-bpf-sock-xattr-v1-1-a1276f7c9da3@kernel.org>
 
-On 6/18/26 10:09, Borislav Petkov wrote:
-> On Wed, Jun 17, 2026 at 03:13:33PM -0700, Ihor Solodrai wrote:
->> So my question to maintainers is what approach seems best?
-> The CPUID stuff is being rewritten currently and it should address your issue
-> too. If not, then we need to rewrite it better.
-> 
-> Can you reproduce with this set applied ontop:
-> 
-> https://lore.kernel.org/r/20260528153923.403473-1-darwi@linutronix.de
+On Wed, Jun 17, 2026 at 01:18:27PM +0200, Christian Brauner wrote:
+>In c8db08110cbe ("Merge tag 'vfs-7.1-rc1.xattr' of git://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs")
+>we added support for extended attributes for sockets. This comes in two
+>flavors: sockfs and non-sockfs/filesystem sockets. Filesystem sockets
+>are actual filesystem objects so reading xattrs must use dedicated fs
+>helpers such as bpf_get_dentry_xattr() and bpf_get_file_xattr(). Those
+>are inherently sleeping operations. Sockfs sockets on the other hand
+>don't need to use sleeping operations as the underlying data structure
+>is lockless. In addition, retrieval of sockfs extended attributes often
+>happens from LSM hooks that only provide struct socket and it's
+>completely nonsensical to grab a reference to a file, then force a
+>sleeping operation to retrieve the xattr and drop the reference. We know
+>that the sockfs file cannot go away while the LSM hook runs.
 
-Thinking about this a bit more... If Ahmed's series does fix this, I
-think it will be accidental. It still uses identify_cpu() and also does
-a memset() of the new c->cpuid structure in addition to the old
-c->x86_capability structure.
+[...]
 
-I'm not knocking Ahmed's series by any means. It just probably won't fix
-this issue.
+>
+>Link: https://github.com/systemd/systemd/pull/40559 [1]
+>Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+>---
 
-In a perfect world early_identify_cpu() and identify_cpu() would either
-get consolidated into one thing. Or at least become two discrete things
-that initialize two completely disjoint sets of data. That way,
-identify_cpu() wouldn't memset() anything.
+Nice this will simplify some of our socket tracking.
 
-Isn't that the _real_ fix? Instead of trying to hide the inconsistency
-when good data is blown away, we stop blowing it away in the first place?
-
-
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
