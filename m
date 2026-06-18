@@ -1,63 +1,80 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF7383ED105;
-	Thu, 18 Jun 2026 10:19:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA843E3141
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 10:27:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781777992; cv=none; b=i0acmVo8obXhMcPyZX/KBwt7EDbJy2bjk9DzUUi1SY4OdMGPRsdwzNTfJyYoD8JmpJqcFBUaLwOFIasFXaQvlMlA/+XJbggZZMmC54boUJWVu4Z5mdcJr5Uel6alJeu8ZQ20DW+jPdRhEC9A/O7ZUZMZ5ewY2bi9JrCoIUyFiYw=
+	t=1781778452; cv=none; b=QUvpv3s3M24410vj6Rb8vVoCdNF2KUD7Gy56zrAUCEwt4SIKE6o7yNeexRnkQCleMTxsXWFwB19TOXWcx8T01eUz5Y0W5ix60llZcwy/zUeb4ysO1ZJLZ8EL31fu7/Buhx+7u013cxzSaMJEZ8vCwEvtAUtxpYH7cx8jJlcSEpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781777992; c=relaxed/simple;
-	bh=b/X6ZNLGum2oS6sEsNNn+wpKuROst8BH4teA3a1TnvY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nNy7MVDm47y9WBGnDPhRo/D8n3TaE6nUYbXLl7y+oqVcJ2TU1a1f0UkDypBZC/Tcd0kCOIkqjYD/RCBIFIr6yTu8+8/twKuSWffbQFGOHUZPAA4gVbHTratDwv2lW0VRnQHmYnTVkpeeXlkrRmkbixADTAcBvz5pqC0ifi0Z1U4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=a0gbs1qh; arc=none smtp.client-ip=13.75.44.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781778452; c=relaxed/simple;
+	bh=ie+WeF9YvCciqNwiy2FTqjhEPlH33sG92o0tD3DNuUs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MReY6RDahD5u7/XMtUMCPGdCLrxLrQGg+eAy6/2ZE9rgxOs0Mmo62WQMxsgZVJOJBYia0IGIwDJssu5XQ7LIMrFdhimCpHL+tiY/E+1xyxk6YXFGbHNZ9bqQdMmAME1Qj/ZJWZy7pyDRQj8gwN1q+51MMxV4ZXlS1zCFA2J9vp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vxod0Tmg; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="a0gbs1qh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vxod0Tmg"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-37cae9b7536so422983a91.3
+        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 03:27:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=heiPlvi0bHJFp7LAke2GAwtGSzaSOGptO9
-	dMWBxYmEg=; b=a0gbs1qhU2ZZaRGjVMGuBDv3YiFfFLoiwEX/zmY+DwHLPcHgFh
-	nSsul/O0p4mglgisan65DGBhWr2ntzrNSJbd084W/AfdautmW9AZ68ifhsfgsPXU
-	8xa3cH5ZU6kNAMtRvsZwpg8hLA+j2gMx27O3Z3B6k1BpFkDMita9RvDHI=
-Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web5 (Coremail) with SMTP id zAQGZQB3L78IxjNq23+CAg--.46531S4;
-	Thu, 18 Jun 2026 18:19:03 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-To: bpf@vger.kernel.org,
-	netfilter-devel@vger.kernel.org
-Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
-	pablo@netfilter.org,
-	fw@strlen.de,
-	phil@nwl.cc,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	shuah@kernel.org,
-	kartikey406@gmail.com,
-	coreteam@netfilter.org,
+        d=gmail.com; s=20251104; t=1781778450; x=1782383250; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=X+g3ajtkFOOFkEfqzNyMI8IOO/HHBfQmbFF+r03Fz6Q=;
+        b=Vxod0TmgOV9GfPZJ29LcTX7XF3tczpqFvgyuvAMMZADv5UyG0PoyHU9iE391pFRwyY
+         TaPBVHFHPd1pOTfvqyReAD5AP2THdJSjkqiBSFwC9T6UAS7Ey//vAB3BBf5VMZJHqpc/
+         IPKBVnp02TjQII0ZuBBvbD1KEJwaobEPGE8PtpqfIfp5y5WkPuDQCWIFYDZb1noYscoJ
+         Ra+bWxhLib7lX8Hpl0qyAf2N4YKpdX62YDks/C9/nHVLwGM5cnPMxXOqL9+epcdD5kW9
+         7KW0u+VEmDtIUYLdsJX3IbE6GnvaRhqhO5iXFgieXrxwaHWt954vUn+LjqnrkmwaAN7m
+         Dm/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781778450; x=1782383250;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X+g3ajtkFOOFkEfqzNyMI8IOO/HHBfQmbFF+r03Fz6Q=;
+        b=s6sAT/0MUsPuP8yn7Vf4G7KKo7Awj38mr97fxUL3Z+Lzk8EGfAeObPukcKkrin5AFW
+         m91OovGBe6SBnbTfHpSHj5H4j8f7ngY5tW9o52H5yJSl4Mk6/i0FY7zcxjcqbJxPBKhc
+         EiLt2vuUluC161ujYXxAihIYPGS/jFIk9NeFEyjJr5r51M63wLwq1NuD+RBiih5Z1r8K
+         Tumcdrclsca6OQMHHAxh3UFp5rXZ+j6kJbIgXdNS5cAA0isUM31g+pp19xNEABihgfxM
+         iOkItIdYZytqqfVCTMXCB+lPCXhAMq2HHRdpy/42lqUHiV7T54Ft+5DLGG6+2svYXtyf
+         siGA==
+X-Forwarded-Encrypted: i=1; AFNElJ+WQn2fxqLOAEy2c0QrxzjAxFPy2/faptwFBFfLqbv4GOqe2mnMWl4QUIFO3L07+eCDm2o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsGYSQS1l2eloZbG5TWtSvy3KE0Fd2/Csvbx6hCvSkdLrbiuL1
+	ny2Ae7bpgSWDpRvIrqElAKcN05OL2Hj4wzQn58obc8i7pjeq2TYdjWQ4K8ywhg==
+X-Gm-Gg: AfdE7clWp1bDE07nkmCh3TbdHN+JiOHfufrpPJ1vJCWLVbDOjZ2LUOw3Z/APeale0zz
+	iLC1icVKHwI4AmfMowXPc5p1isFZQsh1GZL3WOamoNLaMHBpI0AwRzzw5/GQ1ccxAZawAiDKgbz
+	1aq6jjSDMj8QO35tlaECbt/9Jc48D4RFwXyIgbx6h5qVyNY22r9GFfH5d+8MxczVCJljB2PmM7B
+	bHLzPtxSi5EbbSN0akY73TF6W4gsIORWUuSNVJ1sFwJqNZf7CsjPeTaf5cDEkobUbQbBEabNQTp
+	a6gB6BC56WDrHvvLDrCWHK1o6FyJFZmfP/GWCgOUfoYG/iNOEMlKaY848kCITga73fAP3mvd8/Y
+	No/K2dYETAtDbwUcfR+ife7w//jRiXl1GCqeg8j4ASQ5xPi5NraO6dvoyZ6XJ8T3Pjiy+oXh1Bw
+	BuAuMWvPtPEZ/qff+3+qqCghdHOJMieDv+BuUvMq1NxhA+mIX8apY=
+X-Received: by 2002:a17:90b:3c12:b0:36d:8f51:fe29 with SMTP id 98e67ed59e1d1-37ce488901dmr3403296a91.17.1781778449635;
+        Thu, 18 Jun 2026 03:27:29 -0700 (PDT)
+Received: from cps-manycore-1.. ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37c521cac5bsm8997512a91.5.2026.06.18.03.27.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jun 2026 03:27:28 -0700 (PDT)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: John Fastabend <john.fastabend@gmail.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Willem de Bruijn <willemb@google.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>
+Cc: Simon Horman <horms@kernel.org>,
+	Bobby Eshleman <bobbyeshleman@gmail.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
 	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Cover small conntrack opts error writes
-Date: Thu, 18 Jun 2026 10:18:44 +0000
-Message-Id: <007dfd0341cd84560e4795a2a951cc56d4adff1d.1781765747.git.chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1781765747.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1781586477.git.chenyy23@mails.tsinghua.edu.cn> <cover.1781765747.git.chenyy23@mails.tsinghua.edu.cn>
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf v3 0/2] bpf, sockmap: reject a packet-modifying SK_SKB stream parser
+Date: Thu, 18 Jun 2026 10:27:06 +0000
+Message-ID: <20260618102718.2331468-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -65,119 +82,38 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zAQGZQB3L78IxjNq23+CAg--.46531S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxCw17GFy5uF4xAw18Gw45KFg_yoWrAFWrpF
-	yfZanFkryrJ3WUtw1xJFs2gF45tFs7XFyUGrs3Jw13Cr4kZa40vF42gF4jqF9xuFs5Zr1S
-	kws5tFnxGrZ7uaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUH014x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAa
-	c4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
-	Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
-	6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxw
-	ACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY02Avz4vE14v_Gw1l
-	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
-	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r
-	4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-	cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sRRdWrJUUUUU==
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-Add a conntrack kfunc regression check for opts__sz values that do not
-cover opts->error. The BPF program initializes opts->error with a guard
-value, calls the lookup and allocation kfuncs with opts__sz set to
-sizeof(opts->netns_id), and verifies that the guard is still intact
-after the kfunc returns NULL.
+A BPF_PROG_TYPE_SK_SKB stream parser runs on strparser's message head,
+which can chain skbs through frag_list. A parser that resizes the skb
+frees the frag_list segments that strparser still tracks through
+skb_nextp, leading to a use-after-free.
 
-Without the conntrack wrapper guard, the kfunc error path overwrites
-that guard with -EINVAL even though the verifier checked only the first
-four bytes of the options object.
+A stream parser is only meant to measure the next message, not to modify
+the packet, so reject a packet-modifying parser at attach time rather
+than working around the resize at runtime.
 
-Fixes: b4c2b9593a1c ("net/netfilter: Add unstable CT lookup helpers for XDP and TC-BPF")
-Fixes: d7e79c97c00c ("net: netfilter: Add kfuncs to allocate and insert CT")
-Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
----
- .../testing/selftests/bpf/prog_tests/bpf_nf.c |  6 +++++
- .../testing/selftests/bpf/progs/test_bpf_nf.c | 26 +++++++++++++++++++
- 2 files changed, 32 insertions(+)
+v3:
+ - reject the parser at attach time instead of cloning the skb at
+   runtime (Kuniyuki Iwashima, Jiayuan Chen)
+ - add a selftest (Bobby Eshleman)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-index b33dba4b126e2..14d4c1793aed5 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-@@ -5,6 +5,8 @@
- #include "test_bpf_nf.skel.h"
- #include "test_bpf_nf_fail.skel.h"
- 
-+#define CT_OPTS_ERROR_GUARD 0x12345678
-+
- static char log_buf[1024 * 1024];
- 
- struct {
-@@ -119,6 +121,10 @@ static void test_bpf_nf_ct(int mode)
- 	ASSERT_EQ(skel->bss->test_einval_reserved_new, -EINVAL, "Test EINVAL for reserved in new struct not set to 0");
- 	ASSERT_EQ(skel->bss->test_einval_netns_id, -EINVAL, "Test EINVAL for netns_id < -1");
- 	ASSERT_EQ(skel->bss->test_einval_len_opts, -EINVAL, "Test EINVAL for len__opts != NF_BPF_CT_OPTS_SZ");
-+	ASSERT_EQ(skel->bss->test_einval_len_opts_small_lookup, CT_OPTS_ERROR_GUARD,
-+		  "Test no error write for lookup opts__sz before error field");
-+	ASSERT_EQ(skel->bss->test_einval_len_opts_small_alloc, CT_OPTS_ERROR_GUARD,
-+		  "Test no error write for alloc opts__sz before error field");
- 	ASSERT_EQ(skel->bss->test_eproto_l4proto, -EPROTO, "Test EPROTO for l4proto != TCP or UDP");
- 	ASSERT_EQ(skel->bss->test_enonet_netns_id, -ENONET, "Test ENONET for bad but valid netns_id");
- 	ASSERT_EQ(skel->bss->test_enoent_lookup, -ENOENT, "Test ENOENT for failed lookup");
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-index 076fbf03a1268..df43649ecb785 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-@@ -10,6 +10,8 @@
- #define EINVAL 22
- #define ENOENT 2
- 
-+#define CT_OPTS_ERROR_GUARD 0x12345678
-+
- #define NF_CT_ZONE_DIR_ORIG (1 << IP_CT_DIR_ORIGINAL)
- #define NF_CT_ZONE_DIR_REPL (1 << IP_CT_DIR_REPLY)
- 
-@@ -19,6 +21,8 @@ int test_einval_reserved = 0;
- int test_einval_reserved_new = 0;
- int test_einval_netns_id = 0;
- int test_einval_len_opts = 0;
-+int test_einval_len_opts_small_lookup = 0;
-+int test_einval_len_opts_small_alloc = 0;
- int test_eproto_l4proto = 0;
- int test_enonet_netns_id = 0;
- int test_enoent_lookup = 0;
-@@ -124,6 +128,28 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
- 	else
- 		test_einval_len_opts = opts_def.error;
- 
-+	opts_def.error = CT_OPTS_ERROR_GUARD;
-+	ct = lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
-+		       sizeof(opts_def.netns_id));
-+	if (ct) {
-+		bpf_ct_release(ct);
-+		test_einval_len_opts_small_lookup = -EINVAL;
-+	} else {
-+		test_einval_len_opts_small_lookup = opts_def.error;
-+	}
-+
-+	opts_def.error = CT_OPTS_ERROR_GUARD;
-+	ct = alloc_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
-+		      sizeof(opts_def.netns_id));
-+	if (ct) {
-+		ct = bpf_ct_insert_entry(ct);
-+		if (ct)
-+			bpf_ct_release(ct);
-+		test_einval_len_opts_small_alloc = -EINVAL;
-+	} else {
-+		test_einval_len_opts_small_alloc = opts_def.error;
-+	}
-+
- 	opts_def.l4proto = IPPROTO_ICMP;
- 	ct = lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
- 		       sizeof(opts_def));
+v2:
+ - https://lore.kernel.org/all/20260612123553.2724240-1-rhkrqnwk98@gmail.com/
+
+v1:
+ - https://lore.kernel.org/all/20260609112316.3685738-1-rhkrqnwk98@gmail.com/
+
+Sechang Lim (2):
+  bpf, sockmap: fix use-after-free when the stream parser resizes the
+    skb
+  selftests/bpf: test rejection of a packet-modifying SK_SKB stream
+    parser
+
+ net/core/sock_map.c                           | 20 ++++++++++++
+ .../selftests/bpf/prog_tests/sockmap_strp.c   | 31 +++++++++++++++++++
+ .../selftests/bpf/progs/test_sockmap_strp.c   |  7 +++++
+ 3 files changed, 58 insertions(+)
+
 -- 
-2.34.1
+2.43.0
 
