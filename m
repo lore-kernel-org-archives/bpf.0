@@ -1,59 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6586933D4FB;
-	Thu, 18 Jun 2026 20:55:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F00FC3128B2;
+	Thu, 18 Jun 2026 21:12:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781816148; cv=none; b=VTGlwxJxhJf+NXWWdBDf8fw+VeN8iEXGP2ywyX9LJPAeAxylRGJ6ggu1svCofK1Ph2oKYM57OuTxaxq2DXAVRtB/t31H8cyMg4Pgy+Nny4jfPkNAEHt7qesZy649QBuCmGhwiZu66DkAzIPM/YyAoAGp4961nWyqpRBVdVkzYiw=
+	t=1781817145; cv=none; b=trhc/KsovuGXTKJ942KhF8IFMusmvCfnI1ZZNl2AoRcN+LpopOXtW9j3mc/5TKhPGtYFejEStBXRE/hvb2SI8GroFfCEHQDvCNUsC2J7ZFaEdL9hds/jQDraRyqhu1TtAa+6JuoUtnmpPUoLKHYoOpWQSSwfwuau4R8x58D9UJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781816148; c=relaxed/simple;
-	bh=wZ9mFPqRAm2TdSK/cvkHllSbhR7/LGR96v2WW/jl5gw=;
+	s=arc-20240116; t=1781817145; c=relaxed/simple;
+	bh=0wFyWqsckZjscNPwEBKHH24OfGu482IMvCdFzpTj73E=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 Content-Type; b=At80gOiPi27leG708SmlfQafhIanEfqbyqFjJEQhCZ093nc9TxBvDTOdCKASdXHifyXIUDy7gZcBnA+3m1jjEfjgCsJUhk5aks89Y3bErvg6OSFJIUusFhoTOPC2soZgUN18zFg2R1e2nmA45JblXh+qD3os12SE+izvoGm1OvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YexpeD5Q; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type; b=qMVshtmlMu25wquQRj2GEqlSnnA9kaIMi6jEjBqfyPMKO2IQv9TcCNhYRwKY2Z7yMgnT2URSWbmBbNeNWX2See+Ep0dxDGWDoGHCcsFlYvC0vIUKmlfoAl+2z4okyMpVZtnR9PW5g1aRunpNcJw57qPMFAoW4kzJoc/Q95Ggn2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NvH6jaw4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YexpeD5Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E4AD1F00A3A;
-	Thu, 18 Jun 2026 20:55:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NvH6jaw4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 728171F000E9;
+	Thu, 18 Jun 2026 21:12:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781816145;
-	bh=wZ9mFPqRAm2TdSK/cvkHllSbhR7/LGR96v2WW/jl5gw=;
+	s=k20260515; t=1781817144;
+	bh=0wFyWqsckZjscNPwEBKHH24OfGu482IMvCdFzpTj73E=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=YexpeD5QWR8pGq+SuIT5o7raWx3iotqUfHdCZfvQYlRzTihz+t3P+yB7fDWir3j7t
-	 7HJ5G3nT6pWIllU0OhXsUKAJikGifzVt/CGh6WcQSenJpxBZ+6YzRJOuF/oXcHQiZq
-	 YHjjTCsydS6NMYFZ1iEi2V2fVLLODE1X0QRWen6FWy7R9LzBldWWI2cRyBwrAPnxlc
-	 VFdWoYSXmr/xmlDRS6J/FLQooZeChC3C/YRbfAJwAJMZKIhmZ53j9CmO4ERjlqWD4J
-	 Yqb0aVwW8l5WLbBIOojrNE5UUcY9sOe4M/b6P1DfLmNxBEiPI/4ojFiftugrvoBbn8
-	 40NZFaxk7+ypA==
-Date: Thu, 18 Jun 2026 16:49:43 -0400
-Message-ID: <e384ef2f478093a70af11980d2d1cdeb@kernel.org>
+	b=NvH6jaw4s4BQ3d7SKQ2ij1OCWq4+r3zIxOpzGnK0ezhK8XfzFaQRL3W/y9K8ykZ34
+	 M+D3WWTP/VTNX8ioo2VJ1PEDO/0QEEE54S5on/ajdZx0chAc8hVTZd3k46pg4iWwc7
+	 NZ3CstK77xsmFXkURStyacKlQdlks6ksQ0Y1lnFwupytBx8apeArW8y6K0Qri2jSFM
+	 /Nr0ZdsIC04uQsC9K1eO7PHLuP7yTYVfKu7F3o9SW777c81Od0A//MlsaOpBuPf5FI
+	 ELq2zgvhXfzUSRdyfK5w6EzLO9Znchb2DCGQcpnOTYa+/Oqs5OQ26cNUPF9swm7Htp
+	 uHleaVQXaeSQg==
+Date: Thu, 18 Jun 2026 17:12:01 -0400
+Message-ID: <deddbbbc947400fa0cb3f0a6e164c290@kernel.org>
 From: Tamir Duberstein <tamird@kernel.org>
 To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>,
- Andrea Righi <arighi@nvidia.com>,
- Xu Kuohai <xukuohai@huawei.com>,
- Andrea Righi <andrea.righi@canonical.com>,
- bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org,
- Andrew Werner <awerner32@gmail.com>,
- Zvi Effron <zeffron@riotgames.com>,
- Andrii Nakryiko <andriin@fb.com>
-Subject: Re: [PATCH bpf 2/6] libbpf: ringbuf: Prevent NULL callback crash
-In-Reply-To: <DJAWPR7RA9VX.2LHJ0V3EVGR7S@etsalapatis.com>
-References: <20260613-bpf-ringbuf-fixes-v1-0-e623481cb724@kernel.org>
- <20260613-bpf-ringbuf-fixes-v1-2-e623481cb724@kernel.org>
- <DJAWPR7RA9VX.2LHJ0V3EVGR7S@etsalapatis.com>
+Cc: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf 3/6] libbpf: ringbuf: Handle position counter wrap
+In-Reply-To: <DJAXGXLF4NHZ.17HAW2R1YDK7I@etsalapatis.com>
+References: <20260613-bpf-ringbuf-fixes-v1-3-e623481cb724@kernel.org>
+ <20260614020552.022A11F000E9@smtp.kernel.org>
+ <DJAXGXLF4NHZ.17HAW2R1YDK7I@etsalapatis.com>
 Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -61,17 +43,16 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-On Tue, Jun 16, 2026 at 08:44:13PM -0400, Emil Tsalapatis wrote:
+On Tue, Jun 16, 2026 at 09:19:43PM -0400, Emil Tsalapatis wrote:
 [...]
-> Can we just prevent a ring from being added with a NULL sample_cb?
-> What's the use for permitting it?
+> This seems like a fair point, if we're going to modify one let's also
+> modify the other. Wrt the "32-bit binaries on 64-bit" Sashiko warnings
+> they're a bridge too far, we have to draw the line somewhere.
 
-I kept NULL callbacks valid because I plan to add a caller-owned
-iterator that does not use callbacks. Rejecting NULL during construction
-would prevent callers from creating iterator-only rings.
+Yep, my clanker also flagged the 32-bit-on-64-bit problem -- I agree
+it doesn't make sense to tackle here. The other two now have their own
+patches in v2.
 
-> Even if we don't, rechecking the callbacks every single time we
-> consume the ringbuf seems overkill.
+> Can we also add a comment as to why we're using != in both locations?
 
-Your `unlikely()` suggestion on patch 6 applies here too, so I used it
-in v2.
+Done in v2.
