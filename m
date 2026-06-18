@@ -1,124 +1,254 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8106637AA65
-	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 12:32:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6033F4848;
+	Thu, 18 Jun 2026 12:46:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781785952; cv=none; b=HWkbA02sOSji/VIMgCAEtpsSepHz6mEu43OeOOm81UAdnKOm+BAY87FRSm9BEvbMKlTNiSQ7L4fj7JwAYF/D4ZcArcoyy0Po8SEDqUKhiPjIzr6jRKq+eRDBsEwcqUAN3JDPE3doJ4Vzw60h9OYt76Kraysdzid644/eEgdHTa0=
+	t=1781786778; cv=none; b=OM6uGGQ2JUGuTRtD+zE5mQ4vx+iZd7sPNNC8LI7LCMIP5VXN7JbtK+PePuNIYQw+84guUai5rcNBPnZAgC6ISTBcGdZbiV6ay4kFPSBt4P46BlNWDNQLOcnORIVtrKFy2I4nbTkNBXveJwfeScSGWZG0XS8BKCPKZZj7wGHFT/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781785952; c=relaxed/simple;
-	bh=gZdkqF0OerCSAV0j1QpiwzO4IBQfxaAKNYwglO9AMco=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tkQGJl+l/+SDKgN+XRhH0nKKIDmHF0xEjCkDFHPu0nCajlktP8ZJO3/y6nNXNv1I5Zc9ngEfrwxXeOKvBkbP/mnwYF3Lz+9sLz+36C/+MPEseVBFtdIvVszZU23yO4CpwzXZzC/dkZ3oR0ygrCvMvMdK3xUjz9/x7JynEBjYIZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=azKr+AwJ; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781786778; c=relaxed/simple;
+	bh=uphuMnt1uv31fu+h58AyQqegTvqAVwkfKm/ty8QJGr0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=l+VGo1raN+cjP8hnbs2VmsvhQ8dZz+lw4R6GbdDgJErWxRGbk2Ticd21CoHn1wISf/D7lV+OG8zxJDIG+m5p/FNXclyjKld4n1LgCYt5sJphKN4joVriv/DjT+L9acseu0dgaqpXdieGa5YH9ZzXMM9uH+mvLucokNnOO74Iu6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z+aV6eXH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="azKr+AwJ"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4905529b933so7921605e9.0
-        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 05:32:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781785950; x=1782390750; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uPc0OU9sjfyGQ7c3buNYbzdqaEGIx1/7pa99xR6SsZs=;
-        b=azKr+AwJlJPkxCEPNFm2sPWMpVx2+NpxkHMzk7Rz25vfvdQWJ/0asZ+wXQzdRwIQkz
-         S205UWFJnsImjFfl1303bdck1anIfw9CxGF3BtG+d627sGdQDF2Mh2y9LsHQXe9bPVjb
-         GyIWkbslZTWOsgESO+uvn2jamx9QoqQYnjQPrsxE5z0h+1rpcT1Dg3jB9Y90z1oamZyC
-         UzfYVpvY23UVww1Xf7HrkYiwC3g4ArU8Z/F1393CfXrjoFsOBw4ZBVdXWsJm8mX00+Bm
-         SrW9QAZUDqdjDS7seXpPc8G5xxuMg3HK/0uKV5dnaT1DXtRN7rIMWxCRqR/EP+3chabs
-         gdig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781785950; x=1782390750;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uPc0OU9sjfyGQ7c3buNYbzdqaEGIx1/7pa99xR6SsZs=;
-        b=UXRUKnep4qrWxCpNurmTMiX6Dy/jOj/n3TSD+w1iX63auYLkAIHm4T5/7MMWZ5bgBp
-         eY6vZZ9ABtvFFn7+pU3wBxXfnYDXyCcsYXrNnMfBOdEd9ajTLINI8vMyEM4ngz/76jRB
-         3VNXbzIDtTCn4Hu245lZgXRVhKZOUZ+h/j85RPEPF4C/VaLthOpVMPRne5COspAfSuTj
-         Y9uJGlvOzKdF4QOjnkAB5spUrDAc0qfxuXJogsSSp8e96U9IbLKuBTe31+IJb6N5YvZg
-         R9CryuDajftAdRHEmEgQOqR7YrKzD576d9m5MRW5LihCni0G93m64xJT0/PPXy7B4B20
-         ZA/Q==
-X-Forwarded-Encrypted: i=1; AFNElJ/P/N1yQX1MT6J5LSqUySa2k+bgMZmlbVdp4flWdowCAj9kFH/3TacdTIBWmgky/NFiOoQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzG1qmEkC1VsGxU8Vc3pLRLiSs2a7b27sRxrX9qmlFKzP7vX99P
-	nwyj8NtC5RlYQ94gCDFfCSB10q1XvfI2QnOenIgOy1apO4j5ZFT5jKnvbuky4Q==
-X-Gm-Gg: AfdE7cnOl3gSMm+kDTpZuIJQwKrdFKhZ+CKJaxvjl5jdduQlGiOUMbeQJ3XVLAIf0Xl
-	qGuaOo19hjz51/J7pwZt4PUmM5NBRUBfve6mRNhSyz3GcF+W5VEUuJCWnrlDOW1J+3NtwneBPzR
-	+J4LyO2Bx80aNcsnI2eRTr1WVO8S5pjhK2t0IJPutn1veWF6b9ntSUnRhjoHI9ADLChRyJLiAsB
-	y3jmBPng9RzqBB/CcyIAyMME+V8hHRMkblBwTHtWxXLtbWPF0x0Ql4wQog4ZmnATPYHtnPxD7Nd
-	Q4lj4bKDE13+MhrCuyoNM18UpCobkqUING91c3wzSSrlyirMWP2iAmhWH0Lo90wb9LlapaPXMNJ
-	LgxdHw/3Aw8YG0PcTJq3NYT6OhZMsGr5gcGLkZUsTG1oYdp/g9lvd1OJWdFw/m+w1JGvshwEDea
-	g+
-X-Received: by 2002:a05:600c:1c16:b0:490:469c:556b with SMTP id 5b1f17b1804b1-492333bf79amr154902955e9.12.1781785949811;
-        Thu, 18 Jun 2026 05:32:29 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4922fa47da9sm292626405e9.5.2026.06.18.05.32.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2026 05:32:29 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 18 Jun 2026 14:32:28 +0200
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 0/4] Modernize resolve_btfids selftest
-Message-ID: <ajPlXOE9gyoO3oi1@krava>
-References: <20260617210619.1562858-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z+aV6eXH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C5301F000E9;
+	Thu, 18 Jun 2026 12:46:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781786776;
+	bh=12/PAUDTOYfrkJ9zjxNjbQQEDZEGb0acxRasEquNV8c=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Z+aV6eXHEz7VlgrnsQQ03Z+8Zb9YcjYrK+HMqvFJSpghpQu39jthl+uUJoATiBkss
+	 cleXhnjiOavl5FCxDhBVQWY7nkZniTKAC0EuFJs3M8ryMmM/JL3AkWqL2pQ8oDPyv+
+	 zpib5/x5p9qKtSzJlegXic5z4V9LWD1qQKFyo0/gZJp/nR3M9tVuPj97b9I+Lw9yAo
+	 1g38OX4/l8gaWl5SUjYY8xERklp7FAUfYxtp7lWExEAizO0VVPy6AignHbfgZxs3Wt
+	 YMQqE/qAAJIRPfXMLSJqgTvxObnFUQnnscTGGxSQR8K5+4YNgi0J50dUn99G6+7MqP
+	 DwgptAJDbbzow==
+Message-ID: <39758d58-f646-470c-9c35-818ac75427d3@kernel.org>
+Date: Thu, 18 Jun 2026 21:46:04 +0900
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260617210619.1562858-1-ihor.solodrai@linux.dev>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH for-next v3 6/9] mm/slab: allow kfree_rcu_sheaf() on
+ PREEMPT_RT
+To: paulmck@kernel.org, "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>,
+ Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+ rcu@vger.kernel.org, bpf@vger.kernel.org
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-6-70a54f3775bb@kernel.org>
+ <f3a56a5a-f10b-46dc-bc99-28449ade1661@kernel.org>
+ <40591888-3a87-433e-b3d2-cda1cab543be@kernel.org>
+ <9d8ca1ed-bc53-417f-944b-d78eecd1e6a5@kernel.org>
+ <03da8742-3790-4428-84b8-11911bf44c9e@paulmck-laptop>
+Content-Language: en-US
+From: Harry Yoo <harry@kernel.org>
+In-Reply-To: <03da8742-3790-4428-84b8-11911bf44c9e@paulmck-laptop>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------r52TW6tkzMED0vgUCNBCiTch"
 
-On Wed, Jun 17, 2026 at 02:06:15PM -0700, Ihor Solodrai wrote:
-> This series updates resolve_btfids selftests to use latest selftest
-> helpers API and add kfunc set testing.
-> 
-> This series was split from a bigger series [1].  It's general selftest
-> improvements that don't have to be entangled with resolve_btfids
-> development, and makes the main series a bit smaller.
-> 
-> [1] https://lore.kernel.org/bpf/20260601221805.821394-1-ihor.solodrai@linux.dev/
-> 
-> Changes compared to original 4 patches:
->   * various nits from Jiri, Andrii and Emil
->   * in patch #3 (that adds gcc pragma) definitions are moved such that
->     .local BTF_ID_* containers are grouped together and we have a
->     single pragma scope
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------r52TW6tkzMED0vgUCNBCiTch
+Content-Type: multipart/mixed; boundary="------------CZDOJb3QDvzu5IEDZMoq1w7C";
+ protected-headers="v1"
+From: Harry Yoo <harry@kernel.org>
+To: paulmck@kernel.org, "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>,
+ Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+ rcu@vger.kernel.org, bpf@vger.kernel.org
+Message-ID: <39758d58-f646-470c-9c35-818ac75427d3@kernel.org>
+Subject: Re: [PATCH for-next v3 6/9] mm/slab: allow kfree_rcu_sheaf() on
+ PREEMPT_RT
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-6-70a54f3775bb@kernel.org>
+ <f3a56a5a-f10b-46dc-bc99-28449ade1661@kernel.org>
+ <40591888-3a87-433e-b3d2-cda1cab543be@kernel.org>
+ <9d8ca1ed-bc53-417f-944b-d78eecd1e6a5@kernel.org>
+ <03da8742-3790-4428-84b8-11911bf44c9e@paulmck-laptop>
+In-Reply-To: <03da8742-3790-4428-84b8-11911bf44c9e@paulmck-laptop>
 
-left one comment, otherwise lgtm
+--------------CZDOJb3QDvzu5IEDZMoq1w7C
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-jirka
 
-> 
-> ---
-> 
-> Ihor Solodrai (4):
->   tools/bpf: Sync btf_ids.h to tools
->   selftests/bpf: Modernize resolve_btfids test scaffolding
->   selftests/bpf: Fix resolve_btfids test reads of BTF ID sets in PIE
->     builds
->   selftests/bpf: Add kfunc set test to resolve_btfids
-> 
->  tools/include/linux/btf_ids.h                 |  78 +++++++++-
->  .../selftests/bpf/prog_tests/resolve_btfids.c | 140 ++++++++++++------
->  tools/testing/selftests/bpf/progs/btf_data.c  |  10 ++
->  3 files changed, 177 insertions(+), 51 deletions(-)
-> 
-> -- 
-> 2.54.0
-> 
+On 6/18/26 5:40 AM, Paul E. McKenney wrote:
+> On Wed, Jun 17, 2026 at 07:38:16AM +0200, Vlastimil Babka (SUSE) wrote:=
+
+>> On 6/17/26 07:14, Harry Yoo wrote:
+>>> On 6/17/26 2:24 AM, Vlastimil Babka (SUSE) wrote:
+>>>> On 6/15/26 13:06, Harry Yoo (Oracle) wrote:
+>>>>> As suggested by Vlastimil Babka, kfree_rcu_sheaf() can be used
+>>>>> on PREEMPT_RT if we always assume spinning is not allowed on PREEMP=
+T_RT.
+>>>>> This is because local_trylock and spinlock_t are safe to use with
+>>>>> trylock variant as long as the kernel does not spin and the context=
+ is
+>>>>> not NMI and not hardirq.
+>>>>>
+>>>>> Now that __kfree_rcu_sheaf() knows how to handle allow_spin =3D fal=
+se,
+>>>>> relax the limitation and try the sheaves path on PREEMPT_RT as well=
+=2E
+>>>>>
+>>>>> Keep the lockdep map on non RT kernels. However, do not use the loc=
+kdep
+>>>>> map on PREEMPT_RT to avoid suppressing valid lockdep warnings.
+>>>>>
+>>>>> Link: https://lore.kernel.org/linux-mm/6811cc17-8ee4-48c8-8cbf-6bf4=
+d9f98162@kernel.org
+>>>>> Suggested-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+>>>>> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+>>>>
+>>>> LGTM, but maybe unnecessary pessimistic wrt call_rcu() on PREEMPT_RT=
+?
+>>>> I thought (in the Link: above) we'd only need to downgrade allow_spi=
+n to
+>>>> false on PREEMPT_RT for handling sheaves movement from/to barn and
+>>>> alloc_empty_sheaf(), but call_rcu() would be safe from kfree_rcu() e=
+ven on
+>>>> RT?
+>>>
+>>> Indeed. Good point, thanks!
+>>>
+>>> Hmm, but I'm not sure that it's worth the complexity given that
+>>> PREEMPT_RT tries very hard to avoid disabling IRQs...
+>>>
+>>>> Or is the irqs_disabled() condition rare enough so we don't care?
+>>>
+>>> Given that most users don't call kfree_rcu() under raw spinlock or
+>>> IRQs-disabled section on PREEMPT_RT, I think it's okay to keep it as =
+is
+>>> (it's not making things worse, at least) and wait for call_rcu_nolock=
+()?
+>>
+>> Sounds good.
+>>
+>>> On a side note, I don't have much idea on what needs to call kfree_rc=
+u()
+>>> under a raw spinlock, other than set_cpus_allowed_force(), which shou=
+ld
+>>> really be using kfree_nolock() instead of kfree_rcu() once we support=
+
+>>> kmalloc() -> kfree_nolock():
+>>
+>> Looks like the case. Well if the fallback path of kfree_nolock() that =
+is
+>> irq_work_queue() is indeed safe here.
+>>
+>>>> 	/*
+>>>> 	 * Because this is called with p->pi_lock held, it is not possible
+>>>> 	 * to use kfree() here (when PREEMPT_RT=3Dy), therefore punt to usi=
+ng
+>>>> 	 * kfree_rcu().
+>>>> 	 */
+>>>> 	kfree_rcu((union cpumask_rcuhead *)ac.user_mask, rcu);
+>>>
+>>> Any thoughts, RCU/RT folks?=20
+
+Thanks for looking into it, Paul!
+
+Perhaps I'm missing some context here... let me clarify.
+
+> For the call_rcu*() counterparts, I am currently considering making the=
+
+> existing functions check for interrupts disabled, using irq_work_queue(=
+)
+> in that case.=20
+
+Ack.
+
+> I suppose that I could use raise_softirq() in the
+> use_softirq=3D1 case when in_hardirq().=20
+
+Ack.
+
+> Either way, the check should be
+> cheap compared to rest of the processing.
+
+Agreed.
+
+> The additional rcu_barrier() work required is of course way down in
+
+Assuming "The additional rcu_barrier() work required" means
+rcu_barrier() now needs to wait for all CPUs to complete irq_work or
+softirq...
+
+> the noise compared to acquiring a global mutex.
+
+Are you referring to a specific mutex, or just in general?
+
+> In your case, kfree_rcu() can be quite a bit lighter weight, though.
+> So the extra checks might not be lost in the noise.
+
+Assuming "the extra checks" means checking whether interrupts are
+disabled in call_rcu()*...
+
+It will probably be fine since we invoke call_rcu() only when sheaves
+become full, not once for each object?
+
+Perhaps slightly off-topic; at some point, though, I think it'd be
+better to teach SLUB to use RCU polling API for RCU sheaves.
+
+e.g.) put sheaves into barn->sheaves_pending instead of invoking
+call_rcu(), and the SLUB alloc slowpath checks if there are sheaves
+past grace period before allocating and refilling sheaves.
+
+--=20
+Cheers,
+Harry / Hyeonggon
+
+--------------CZDOJb3QDvzu5IEDZMoq1w7C--
+
+--------------r52TW6tkzMED0vgUCNBCiTch
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCajPojAAKCRCGXBN6rc5S
+1iYYAP9R9SRxcpb+Lf9AzvYwC0ginyzWgaosKoEpwXTRJndtRQEApm4GZI/2RNXu
+Q24xU67ieuyKBqFI2alWnLxiGr7+Bws=
+=8O7i
+-----END PGP SIGNATURE-----
+
+--------------r52TW6tkzMED0vgUCNBCiTch--
