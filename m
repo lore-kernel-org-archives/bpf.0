@@ -1,233 +1,210 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC014231835
-	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 00:26:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D5A29405;
+	Thu, 18 Jun 2026 00:47:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781742363; cv=none; b=DoQvhr86a/8tUCCFN3iLDG41SZc84eak6gRcUJzdsVVklqFgHGnigCVsxBynzW5Qf28Y99Sun6pvQwW4JbZXMBtVKOiRMh+04j+vPLYyJxQW7BTE2CbEL3IhCORfsHy+0desutzM0izlUM5lhQnNdSmtfTP64P3h3M5DEeYaY1I=
+	t=1781743646; cv=none; b=Ntr9jRNbnTrYVMlurGQh/acmCG+vHxwd0IgViDfKkV0voxw67+r32Vo7PJZKzhYWXv/pgKQu6H20Y4BHtOx49+u2BCM5aYCDxtN0kFCpqaASN6/7ta/1EfP1reRsFcLVYFMCyHPosPWAvPPnEd67hrLDbrxPihojCvp7EqWHrrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781742363; c=relaxed/simple;
-	bh=IaxSBDr03P8BBiR/G3886M8Ma5cyVQXqRTT4MJa/o/g=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=UiXWHIbe4kzvldyoAFRS4kajU38XCyGgZsbkG2JXvimeb0s5PcnEI9MymNMkohra04Fyg9+Equw8zvU4M9/HxfMw86A6N74gvxT2mE6xk7G2floaCngjRhjKyZGNVZha8K3onBoVby6dnEIfLz3f1Pq4qaFSo/EVSdk8SVLfTdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GxltQFk5; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	s=arc-20240116; t=1781743646; c=relaxed/simple;
+	bh=F4gRYMlMxsy0+7Wx0VzxOwmwc0PB6Yh5GZ4Q0UAxf78=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=KqPwETe+lApM5lizUL18BFq8cClfL57wXRfFJ3y5wc0o0s1Jjq0swGBzVhsaxYWoUjkqT1UEIQ9s277+qzBnbZkHsi2qVn0FBGbq/8BwGG35hkklxxqEcWWheeJ06u5gnYSYNsXiBzu5ZJTLTD3jNWjdrufFANBJ0/8X5IS3XTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RQSSOjUv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GxltQFk5"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c8895156101so247193a12.1
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 17:26:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781742360; x=1782347160; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mCx80f7cZNUeuP+8DK2ePRZ7RWzQXES0UffqVXsTtbI=;
-        b=GxltQFk5a6NNWVu5RsKwp/UXv2lQ6kSFQ1HREWUMj35NWZR3k+JrWNisZJhnoeGwPB
-         BA12Saw6rAEunnZDhzwgChp5NDyMhHdHUS33ml1PZDucWLPG83akDUfTrNLzaYJmC9AZ
-         VXE9/LK1Gr0oR/kCSNbRBNpNm967HRCB1k+T9e2TTE7E+Jjy1wC/hS4YNLnfhxKipC11
-         MnDaFPBCvRpRHpJN5gcCRGdAqRkmZAqcBNDwfeynxFYbsFPikLAZ9cunYnlIPaDRhu1/
-         +ViaX0SYieX8ArDowotXDKmw27W8BNNiLkFzwsgpVF2D+FdbfvpufNiNwNVGacr5jaV2
-         Yl1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781742360; x=1782347160;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mCx80f7cZNUeuP+8DK2ePRZ7RWzQXES0UffqVXsTtbI=;
-        b=FHGb/jqL+pdqwxS2K4Mbp3b9AwQqON4LRoIRlOM3I/8HLwGEj/VBhVoo14NcUH/UHc
-         WSe1SllOXD50zeDp7vJW1/agZX2+rHMUO7X+QNo0UZ/DccXs8PkttZQ3gmc7g8eexETY
-         OOiIIk/ygRw71yKbD4Pw0jsqsw4w7crZ2nhyOEQo+EHDkFpQm2PSTYxpXKrqURPF0ztq
-         AqEXEa39Wcx/LNs+yIBwrgFZaWoeCq1Dv7r+c1DXXu482hSBLNRGhbL9SCwUphE1alHX
-         8wKxw9zYlTiBZliz0RL+Oo7Kv7kVtCB803e8RTDLY70M15WDeH1IwN94BzXPwclUbOrE
-         reZw==
-X-Forwarded-Encrypted: i=1; AFNElJ+OrE/XTHPtMTC66n2Avz6yjAyjMIXVtrwWF5ivNpuoppcovdMN6rzh7HKRKG5UhKiZKlM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwL3eYRIqJ7gmj/I4lOSFNqe9amhKM11WzklZLoqVZKjgDa7HiA
-	Hyvg8B2FI9FsXWAcLhU9rKQNkBd0Iiq6lp1y5W15KlXTPwDcPFwG8Z7vaCv3UVhulmZweY08NKa
-	vNAiz2g==
-X-Received: from pgah15.prod.google.com ([2002:a05:6a02:4e8f:b0:c79:7757:4178])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:329e:b0:3b4:5c6f:cf30
- with SMTP id adf61e73a8af0-3b9e81f8091mr1492708637.38.1781742359992; Wed, 17
- Jun 2026 17:25:59 -0700 (PDT)
-Date: Thu, 18 Jun 2026 00:25:57 +0000
-In-Reply-To: <20260612123553.2724240-1-rhkrqnwk98@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RQSSOjUv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A19B91F000E9;
+	Thu, 18 Jun 2026 00:47:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781743645;
+	bh=D4NrgH69WQfJXDd+cI1xHQfObRCCi25E5s09HMh6n+s=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=RQSSOjUvD+yKml31cpJlWhXt73t4M7WsT/mecNere55eTpb1Gyf4gaE0dqQGXvzan
+	 qeSmjM2Ls13O0IcxbndFQ0/8nCKqhnUTDuRxul+0nSq90HEKmVC0ViOJv1QCQv9513
+	 C9P6p35qvpxvF/+O7hKBrT1PzrRM17F0aVLAAd7L/qqWL783/43Uqiw3nRFtuZ5N9A
+	 9N7oyXsq2hMGzT0kqO2JQWD0YLRqImpEz+8VvQGmMO0GyMZV3kqDpfj+HdTW6Q0yAf
+	 gcAUl4gzeXsQHgAd/z3c8jDIQ8YQZghMCOzWLG/EIGOI4bBP7BggG3qTJh20sGOB8b
+	 kS8wxpQ9zgD/w==
+Date: Thu, 18 Jun 2026 09:47:19 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor
+ <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav
+ Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v4 6/7] Documentation: bootconfig: document build-time
+ cmdline rendering
+Message-Id: <20260618094719.17bf5448351adc2e56c267fb@kernel.org>
+In-Reply-To: <ajJu2KlfVyuUH-VA@gmail.com>
+References: <20260609-bootconfig_using_tools-v4-0-73c463f03a97@debian.org>
+	<20260609-bootconfig_using_tools-v4-6-73c463f03a97@debian.org>
+	<20260610233720.82fe59cf42aa57659c2e5697@kernel.org>
+	<ail6rQnRYKsXPxyF@gmail.com>
+	<ajJu2KlfVyuUH-VA@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260612123553.2724240-1-rhkrqnwk98@gmail.com>
-X-Mailer: git-send-email 2.54.0.1189.g8c84645362-goog
-Message-ID: <20260618002559.1479884-1-kuniyu@google.com>
-Subject: Re: [PATCH bpf v2] bpf, sockmap: fix use-after-free when the stream
- parser resizes the skb
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: rhkrqnwk98@gmail.com
-Cc: bobbyeshleman@gmail.com, bpf@vger.kernel.org, davem@davemloft.net, 
-	edumazet@google.com, horms@kernel.org, jakub@cloudflare.com, 
-	john.fastabend@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, pabeni@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-Date: Fri, 12 Jun 2026 12:35:51 +0000
-> sk_psock_strp_parse() runs the BPF_PROG_TYPE_SK_SKB stream-parser program
-> to find the length of the next message. strparser assembles a message out
-> of several received skbs by chaining them onto the head's frag_list and
-> recording where to append the next one in strp->skb_nextp:
-> 
-> 	*strp->skb_nextp = skb;
-> 	strp->skb_nextp = &skb->next;
-> 
-> and then calls the parser on the head:
-> 
-> 	len = (*strp->cb.parse_msg)(strp, head);
-> 
-> The parser is only meant to inspect the skb, but the program may call
-> bpf_skb_change_tail() -- or the sibling bpf_skb_pull_data(),
-> bpf_skb_change_head(), bpf_skb_adjust_room(), all allowed for SK_SKB.
+On Wed, 17 Jun 2026 02:56:23 -0700
+Breno Leitao <leitao@debian.org> wrote:
 
-It's bpf prog's responsibility not to abuse them.
+> On Wed, Jun 10, 2026 at 07:58:10AM -0700, Breno Leitao wrote:
+> > On Wed, Jun 10, 2026 at 11:37:20PM +0900, Masami Hiramatsu wrote:
+> > > To avoid confusion, when this option is used, shouldn't we treat it
+> > > the same way as if embedded command lines were enabled, and either
+> > > not display it in /proc/bootconfig (or always display it, by merging
+> > > the rendered string)?
+> > 
+> > You're right that EMBED_CMDLINE breaks it: the embedded kernel.* keys
+> > are already in boot_command_line before setup_boot_config() ever sees
+> > the initrd bconf, so a user reading /proc/bootconfig would see only
+> > the initrd keys while parse_early_param() acted on the embedded ones.
+> > That's exactly the split-state Sashiko was circling around.
+> > 
+> > Both options you suggest work for me, but they pull in opposite
+> > directions and I'd rather not guess wrong on the user-facing
+> > contract.  Which do you prefer for v5?
+> > 
+> >   (a) Don't display embedded in /proc/bootconfig -- keep the current
+> >       "file shows the active bootconfig source" behavior and document
+> >       that with EMBED_CMDLINE=y, the kernel.* subtree may have been
+> >       applied separately via the cmdline.
+> > 
+> >   (b) Always display embedded by merging the rendered string into
+> >       /proc/bootconfig when EMBED_CMDLINE=y, so the file reflects
+> >       what was actually applied.
+> > 
+> > Happy to go either way
+> 
+> Following up on my own mail rather than leaving it fully open: after
+> looking at the code more, I'd like to recommend (a).
 
-Even setting aside that, why not simply block such BPF prog ?
+Agreed. Sorry for replying late.
 
-It cannot be done at load time, but doable at attach time.
+> 
+> The deciding factor is ordering. EMBED_CMDLINE only works because the
+> embedded "kernel" keys are folded into boot_command_line in
+> setup_arch(), before parse_early_param() -- which is long before
+> setup_boot_config() looks at the initrd.
 
----8<---
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 630d530782fe..4d60b77da8ef 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4556,6 +4556,12 @@ static int bpf_prog_attach(const union bpf_attr *attr)
- 
- 	switch (ptype) {
- 	case BPF_PROG_TYPE_SK_SKB:
-+		if (attr->attach_type == BPF_SK_SKB_STREAM_PARSER &&
-+		    prog->aux->changes_pkt_data) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+		fallthrough;
- 	case BPF_PROG_TYPE_SK_MSG:
- 		ret = sock_map_get_from_fd(attr, prog);
- 		break;
----8<---
+Yes. Unless doing setup_arch() we can not get initrd image, this means
+we don't know whether there is bootconfig or not at that point.
 
+> 
+> So for early params the embedded values are necessarily applied first, and an
+> initrd bootconfig cannot override them no matter how we present
+> /proc/bootconfig. That makes the embedded cmdline behave like a build-time
+> CONFIG_CMDLINE rather than a bootconfig source, and (a) is the option that
+> describes it honestly: it shows in /proc/cmdline, and /proc/bootconfig keeps
+> meaning "the bootconfig tree that was parsed".
 
-> Once the head carries a frag_list these go
+Indeed. So I think this EMBED_CMDLINE is more like CMDLINE set by bootconfig
+file, instead of embedded string. That is useful for reusing the boot options.
+We need to change the explanation and clarify it.
+
+Thus we should those configs mutual exclusive. If user already sets the
+CONFIG_CMDLINE, EMBED_CMDLINE should not be enabled.
+
+But actually, there is another options we need to mention:
+
+- CONFIG_CMDLINE: default cmdline, could be ignored if bootloader passes
+   a cmdline string.
+- CONFIG_CMDLINE_FORCE: ignore the other cmdline. (but bootconfig can
+  overwrite it, hmm)
+- CONFIG_CMDLINE_EXTEND: append the embedded cmdline string to bootloader
+  cmdline. (similar to bootconfig current behavior)
+
+- CONFIG_BOOT_CONFIG_EMBED: just an embedded bootconfig. extends the
+  existing cmdline, but does not support early parameters. This is ignored
+  if user passed bootconfig via initrd.
+
+- CONFIG_BOOT_CONFIG_EMBED_CMDLINE: replacing CONFIG_CMDLINE with bootconfig
+  but it will not shown in /proc/bootconfig.
+
+So you can see CONFIG_BOOT_CONFIG_EMBED_CMDLINE is a bit special.
+I think it maybe natual that we call it CONFIG_CMDLINE_BOOT_CONFIG.
+In this case, we render the cmdline string from bootconfig build-time
+and set CONFIG_CMDLINE with the rendered cmdline string.
+
 > 
-> 	... -> skb_ensure_writable -> pskb_may_pull -> __pskb_pull_tail
+> (a) is also what the tree already does -- saved_boot_config is built
+> only from the XBC tree, the rendered string never enters it -- so it is
+> no new code on the /proc side and keeps the series small.
+
+Agreed.
+
 > 
-> and __pskb_pull_tail() frees the frag_list skbs that strparser still
-> tracks through skb_nextp:
+> (b) would pull the flattened cmdline string back into the structured
+> tree view and need dedup against the initrd keys, which muddies what
+> /proc/bootconfig means for little gain.
+
+I would like to avoid such complexity, just keep it simple as possible.
+
 > 
-> 	while ((list = skb_shinfo(skb)->frag_list) != insp) {
-> 		skb_shinfo(skb)->frag_list = list->next;
-> 		consume_skb(list);
-> 	}
+> So unless you'd rather have (b), I'll take (a) for v5 and extend
+> bootconfig.rst to cover the four sources (bootloader cmdline, embedded
+> cmdline, initrd bootconfig, embedded bootconfig).
+
+Yes, I agree with you.
+
 > 
-> strp->skb_nextp now points into a freed sk_buff. The next segment of
-> the same message arrives in __strp_recv(), which links it with
-> *strp->skb_nextp = skb, an 8-byte write into the freed skb. The free
-> and the write happen in different __strp_recv() calls, so the message
-> has to span at least three segments before it triggers.
-> 
->   BUG: KASAN: slab-use-after-free in __strp_recv+0x447/0xda0
->   Write of size 8 at addr ffff88810db86140 by task repro/349
-> 
->   Call Trace:
->    <IRQ>
->    __strp_recv+0x447/0xda0
->    __tcp_read_sock+0x13d/0x590
->    tcp_bpf_strp_read_sock+0x195/0x320
->    strp_data_ready+0x267/0x340
->    sk_psock_strp_data_ready+0x1ce/0x350
->    tcp_data_queue+0x1364/0x2fd0
->    tcp_rcv_established+0xe07/0x1640
->    [...]
-> 
->   Allocated by task 349:
->    skb_clone+0x17b/0x210
->    __strp_recv+0x2c3/0xda0
->    __tcp_read_sock+0x13d/0x590
->    [...]
-> 
->   Freed by task 349:
->    kmem_cache_free+0x150/0x570
->    __pskb_pull_tail+0x57b/0xc20
->    skb_ensure_writable+0x236/0x260
->    __bpf_skb_change_tail+0x1d4/0x590
->    sk_skb_change_tail+0x2a/0x40
->    bpf_prog_1b285dcd6c41373e+0x27/0x30
->    bpf_prog_run_pin_on_cpu+0xf3/0x260
->    sk_psock_strp_parse+0x118/0x1e0
->    __strp_recv+0x4f6/0xda0
->    [...]
-> 
-> The same resize also leaves the head's length inconsistent with its
-> frags, so a later __pskb_pull_tail() can instead hit the
-> BUG_ON(skb_copy_bits(...)) in net/core/skbuff.c.
-> 
-> Run the parser on a private clone of the head when the message spans more
-> than one skb and the program can modify the packet
-> (prog->aux->changes_pkt_data), so a resizing helper can only touch the
-> clone and strparser's head and skb_nextp stay valid. Single-skb messages
-> have no frag_list and read-only parsers cannot resize, so both are still
-> parsed in place. If the clone cannot be allocated, return 0 so the caller
-> retries on the next read rather than failing the parser.
-> 
-> Fixes: 8a31db561566 ("bpf: add access to sock fields and pkt data from sk_skb programs")
-> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
-> ---
-> v2:
->  - clone only when prog->aux->changes_pkt_data (Bobby Eshleman)
->  - return 0 on clone failure instead of -ENOMEM (Bobby Eshleman)
->  - free the clone with consume_skb() instead of kfree_skb()
->  - drop the unrelated guard(rcu)() change (Bobby Eshleman)
-> 
-> v1:
->  - https://lore.kernel.org/all/20260609112316.3685738-1-rhkrqnwk98@gmail.com/
-> 
->  net/core/skmsg.c | 26 +++++++++++++++++++++++---
->  1 file changed, 23 insertions(+), 3 deletions(-)
-> 
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index e1850caf1a71..97e5bc5f38c3 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -1149,9 +1149,29 @@ static int sk_psock_strp_parse(struct strparser *strp, struct sk_buff *skb)
->  	rcu_read_lock();
->  	prog = READ_ONCE(psock->progs.stream_parser);
->  	if (likely(prog)) {
-> -		skb->sk = psock->sk;
-> -		ret = bpf_prog_run_pin_on_cpu(prog, skb);
-> -		skb->sk = NULL;
-> +		struct sk_buff *parse_skb = skb;
-> +
-> +		/*
-> +		 * strparser chains the message skbs through skb->frag_list and
-> +		 * keeps a pointer into that list in strp->skb_nextp.  The parser
-> +		 * program may call bpf_skb_change_tail() and friends, which go
-> +		 * through __pskb_pull_tail() and free the frag_list skbs that
-> +		 * strparser still tracks.  Run the program on a clone when the head
-> +		 * has a frag_list and the program can modify the packet, so it
-> +		 * cannot drop frags strparser owns.
-> +		 */
-> +		if (skb_has_frag_list(skb) && prog->aux->changes_pkt_data) {
-> +			parse_skb = skb_clone(skb, GFP_ATOMIC);
-> +			if (!parse_skb) {
-> +				rcu_read_unlock();
-> +				return 0;
-> +			}
-> +		}
-> +		parse_skb->sk = psock->sk;
-> +		ret = bpf_prog_run_pin_on_cpu(prog, parse_skb);
-> +		parse_skb->sk = NULL;
-> +		if (parse_skb != skb)
-> +			consume_skb(parse_skb);
->  	}
->  	rcu_read_unlock();
->  	return ret;
-> -- 
-> 2.43.0
-> 
+> I'll also document the sharp edge -- with both an embedded cmdline and an
+> initrd bootconfig, early params reflect the embedded values because the initrd
+> is not parsed yet.
+
+My recommendation is to give simpler mind model to users. If it is simply
+extend the CONFIG_CMDLINE which can be described by bootconfig file,
+that is more managable outside of kernel configuration.
+
+Or, you would like to access cmdline setting via /proc/bootconfig?
+In this case, the problem is a bit more limitation of bootconfig side.
+
+Since the kernel cmdline accepts any contradictory settings, if "foo=A foo=B"
+are passed, bootconfig will make an error because foo has 2 different
+settings.
+Typically, this is represented as an array in bootconfig.
+
+ foo = A, B;
+
+But if cmdline bootconfig says:
+
+ foo = A;
+
+and initrd bootconfig says:
+
+ foo := B;
+
+":=" means overriding the previous settings. Thus a contradiction
+arises between these two, when rendering /proc/bootconfig. It can not
+show 2 different settings for the same key. (it is possible if we
+render it twice, but /proc/bootconfig user may not expect it.)
+
+I think it's fine to represent it as an array (foo = A, B) if this
+ENBED_CMDLINE is set, but it still seems risky if early parameters
+aren't detected. If `early_param = A` is set in the embedded
+bootconfig, and accidentally initrd bootconfig sets `early_param = B`
+we should ignore latter one (with warning). But maybe it is another
+story.
+
+I think we can proceed it without rendering it in /proc/bootconfig
+at this point. And later we find the way to detect early parameters
+correctly, we can fix it.
+
+(BTW, early parameter problem is a bit complicated. It is not hard
+to distinguish early parameters, but kernel accepts the same key
+for early parameter and normal parameter. e.g. "console=")
+
+Thank you,
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
