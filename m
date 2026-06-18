@@ -1,142 +1,186 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02813134CF;
-	Thu, 18 Jun 2026 11:57:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D3D386429
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 12:31:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781783831; cv=none; b=A+M3v2x6E70DGMJtUtAfxMkxTRtAAGCzeUQEKXqSe9YhHrMZuRSM4QSMV3xJze40sqcpYPtizyW8yA7K86JrLxY1H2lyqRYcf7C249340JUSWgsXK1UO4xZPheeHJWSBQENHKANJPUfh+mEfkMV7Fh6sT35NyrSr1vXW8F1iN0o=
+	t=1781785901; cv=none; b=fEGKMDNov2Um77RXD7qiZf8VOau8UZEc8deFsNTmIGluESPEzV+MIEILqp8FPxzrYsRVetdpAgvM8dTpuhpuYFy2YvTl8bYql0G8CGMOlUH0qaCjv8ilcNYKyg7KMz2N3qTaeKd42inDlFcoe1NpTFLhg//O//XNCxMPtull96I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781783831; c=relaxed/simple;
-	bh=EmKLrmuw0L1SJA8xGx0is8Bar9U5MW7fs6K0yUE5+CQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bnkj4pSIFaExRDvyiYebl1Q9ks3Xu5JXPhtWqX4UMK8+tU4DIqJymGIbE22RUFjBkwtKM6Q7eItGhiBHHTbVHFrMPMyCOeSa3Z3qdmadBTCOr883TRPKh+Fk4R/XqbYCk6w+t1MhS3d0Ol3SJFgPnqxwjw0KIjWpFAkP9dqYVWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=b2kfGjID; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781785901; c=relaxed/simple;
+	bh=HUmGOYE/C8TU/uUS16RtcpM+syCs0OHKlLWtF5Qgk+w=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hh5istz/gyJaOKJHT9N6wWI8bezKLg/TlRPDuDui4o9xqPOGr9dDK0t/N5cYxpqh6vl8ycyhuk2Ywu+ZGFgfSFWjZp/1mrWAK6BzcIxgyPM1zW8wi6EtdvoT9UWBLS2EUSJ062Ue2rlV411ejgRSVCUvuSmjIEKBMHEThPsUmRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JoNpDUB0; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="b2kfGjID"
-Message-ID: <34f330b8-60d2-4647-a6b4-a5b001c3715d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781783814;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NIDgjJc0kDWVk21VQMDvaZz53upB9zqPpo8g1ntXG+I=;
-	b=b2kfGjIDPXddkJPr1tI/nwGwhr8kHHcavSP+y/Rpez7K103Jrloy2+xgVctuso45fzDV/8
-	1hmzOfbHqTa21l0XQXO8QTBzXiICkx7Wh1jq/uy8yr3QvLJL7kJUz0rrniQFNyW4qDsFRj
-	+LKi9n3VbYY4RyTbvnI+Wq1zQhgnX1A=
-Date: Thu, 18 Jun 2026 19:56:34 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JoNpDUB0"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-490ace40f4bso8906985e9.3
+        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 05:31:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781785899; x=1782390699; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PSGbxDjo+2rjoOObMeaDBZSVpoYq1jILY+Z8HnHA6Oc=;
+        b=JoNpDUB0z9Y6f8YJHfMfDAwpI3A7vZCYWwhLtOaf7NjgmEj0TIuGCYkpOEvvL2U64i
+         718YaYxWrKZQ1ilnQd2frDHit2F6sq+WIrI9UHaQGBu5/ZKWHyAkeeQEeULg3h7x/+gj
+         LvVGH6sB9GgQVpBSO+R5jeK3PPaxPd80iPmBeTN91/atqvYfQOqk7TdhXsFjYMZbqb9M
+         7dcnHaaKDVGCgHcfz6FY+1odsJpMCNzBKQ4VcExYN0vji09wbp7RpAqPMgLSE/hGvZkE
+         BbZuhElCSEvI/NnsB9CxIIwY7sot7g3Q1m1OPHJet81IUnZNrZYFlYqsSBHzmMGQZAKt
+         bV2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781785899; x=1782390699;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PSGbxDjo+2rjoOObMeaDBZSVpoYq1jILY+Z8HnHA6Oc=;
+        b=ln/bHwzjsVdcZ7/iUSLhW7a+4jBuUMgGj+EC8cxSIb7VyCLpGwAmsK/Xbr3OW8Uqsq
+         u8O1cJHY1m6zf8GJR9b3PLdGLLGF64pGKVpeIEC6okPPchAMLfismAiZ94OBVkLa3K8D
+         Paw9752sYHCLJ1b2dhP2jKIT1nqTXvhTbKqoto12gchP80s35fd5cnTtwnHto+0rJwGS
+         SfUwgT5pn95rcOerugGLudM8cEGDPx32EMceYK/bwu8Xw0fXwTv4ahOe+qw4A6dBOqJI
+         NAt912dUCoBbG2lxCbOG3RgT3Fg019kj0gOCO5mILxUUic9xH2gHPL8Y1wtmaWdXes0L
+         f3xQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8a6XzukzhDnhCM1viBdR2nzmFQevJ7njGhUv2M68b54itdSWbH2sPO338Gu/V0OVTH9Uc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxf/3u2l4W+W+xgOtQBgZXu+dV2WiOk379gXDJ+btp7TPZkV+1T
+	Ucy5XWM11HSTXyhXRdpzbOYMqGKe4HT12g48ofS5VkxVyDhIOukml3Xn
+X-Gm-Gg: AfdE7cmJzj0IAcxhEKHQx2CBc9vWanesejB4G+dQW/9eF4Y+3q5d4cbtCt4b9jalA82
+	RISMz5AmR10NWS2NTofEbmJmutIOz3ZGhVT10f+3tOqpeBAWt+9cqpfuQhPh35oiA8GZzH3kTq4
+	UNrIYuSyU0NKW6vs+E2tNw66sbYmtJQzBu3J+QDRhVuVh8CuRi9R6XeHqm+fceEkZwq8KW0+a/1
+	6rOkmBFZvL5n5Y2LSV0caUvVy7aUeUxps+eAhokJxopguTk1ONxMozbp7VFoQR9WvR2PfaDO2T+
+	15ll9oOy2LihopGvDMJb/b0xWQXU2SwGHI/mnWWIb+CLbxr42Ub2cnLW7lxHpOxAqacFPiCiw0o
+	Ny0f7sQJm0pcMEuv6Q36wohCDXY2I6llZ56j0HTQ1Scmxj9s4H7r90gkw76LBeHwpYcyXX9MN1G
+	sb
+X-Received: by 2002:a05:600c:e547:10b0:491:9969:739d with SMTP id 5b1f17b1804b1-4923822eed4mr39446355e9.29.1781785898507;
+        Thu, 18 Jun 2026 05:31:38 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49230a4601esm267646685e9.1.2026.06.18.05.31.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jun 2026 05:31:37 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 18 Jun 2026 14:31:35 +0200
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
+	linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH bpf-next v1 4/4] selftests/bpf: Add kfunc set test to
+ resolve_btfids
+Message-ID: <ajPlJ81PL_YaHsBo@krava>
+References: <20260617210619.1562858-1-ihor.solodrai@linux.dev>
+ <20260617210619.1562858-5-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v3 1/2] bpf, sockmap: fix use-after-free when the
- stream parser resizes the skb
-To: John Fastabend <john.fastabend@gmail.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
- Sechang Lim <rhkrqnwk98@gmail.com>
-References: <20260618102718.2331468-1-rhkrqnwk98@gmail.com>
- <20260618102718.2331468-2-rhkrqnwk98@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260618102718.2331468-2-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260617210619.1562858-5-ihor.solodrai@linux.dev>
 
-
-On 6/18/26 6:27 PM, Sechang Lim wrote:
-> sk_psock_strp_parse() runs the BPF_PROG_TYPE_SK_SKB stream-parser program
-> to find the length of the next message. strparser assembles a message out
-> of several received skbs by chaining them onto the head's frag_list and
-> recording where to append the next one in strp->skb_nextp:
->
-> 	*strp->skb_nextp = skb;
-> 	strp->skb_nextp = &skb->next;
->
-> and then calls the parser on the head:
->
-> 	len = (*strp->cb.parse_msg)(strp, head);
-
-[...]
-
-> unaffected and may still modify the skb.
->
-> Fixes: 8a31db561566 ("bpf: add access to sock fields and pkt data from sk_skb programs")
-
-Is the Fixes tag correct ?
-
-Anyway, I don't think this patch is a fix; it's more of a hardening. So 
-no Fixes tag needed, IMO.
-
-
-> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+On Wed, Jun 17, 2026 at 02:06:19PM -0700, Ihor Solodrai wrote:
+> Extend the resolve_btfids selftest to cover kfunc sets defined with
+> BTF_KFUNCS_START/BTF_KFUNCS_END.
+> 
+> The test verifies that resolve_btfids correctly processes BTF_ID_FLAGS,
+> resolves function IDs, and checks the kfunc set is sorted.
+> 
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 > ---
->   net/core/sock_map.c | 20 ++++++++++++++++++++
->   1 file changed, 20 insertions(+)
->
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index 99e3789492a0..c60ba6d292f9 100644
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
-> @@ -1515,6 +1515,17 @@ static int sock_map_prog_link_lookup(struct bpf_map *map, struct bpf_prog ***ppr
->   	return 0;
->   }
->   
-> +static int sock_map_prog_attach_check(enum bpf_attach_type attach_type,
-> +				      struct bpf_prog *prog)
-> +{
-> +	/* A stream parser must not modify the skb, only measure it. */
-> +	if (prog && attach_type == BPF_SK_SKB_STREAM_PARSER &&
-> +	    prog->aux->changes_pkt_data)
-> +		return -EINVAL;
+>  .../selftests/bpf/prog_tests/resolve_btfids.c | 63 ++++++++++++++++---
+>  tools/testing/selftests/bpf/progs/btf_data.c  | 10 +++
+>  2 files changed, 66 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> index 6bcadee50bb8..65ede3ac5845 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> @@ -12,6 +12,10 @@
+>  
+>  #define BTF_DATA_FILE "resolve_btfids.test.o.BTF"
+>  
+> +#ifndef KF_FASTCALL
+> +#define KF_FASTCALL (1 << 12)
+> +#endif
 > +
-> +	return 0;
-> +}
+>  struct symbol {
+>  	const char	*name;
+>  	int		 type;
+> @@ -28,6 +32,17 @@ struct symbol test_symbols[] = {
+>  	{ "func",    BTF_KIND_FUNC,    -1 },
+>  };
+>  
+> +struct kfunc_symbol {
+> +	const char	*name;
+> +	s32		 id;
+> +	u32		 flags;
+> +};
 > +
->   /* Handle the following four cases:
->    * prog_attach: prog != NULL, old == NULL, link == NULL
->    * prog_detach: prog == NULL, old != NULL, link == NULL
-> @@ -1533,6 +1544,10 @@ static int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
->   	if (ret)
->   		return ret;
->   
-> +	ret = sock_map_prog_attach_check(which, prog);
-> +	if (ret)
-> +		return ret;
+> +static struct kfunc_symbol kfunc_symbols[] = {
+> +	{ "kfunc_a", -1, 0 },
+> +	{ "kfunc_b", -1, KF_FASTCALL },
+> +};
 > +
->   	/* for prog_attach/prog_detach/link_attach, return error if a bpf_link
->   	 * exists for that prog.
->   	 */
-> @@ -1776,6 +1791,11 @@ static int sock_map_link_update_prog(struct bpf_link *link,
->   		ret = -EINVAL;
->   		goto out;
->   	}
+>  /* Align the .BTF_ids section to 4 bytes */
+>  asm (
+>  ".pushsection " BTF_IDS_SECTION " ,\"a\"; \n"
+> @@ -35,9 +50,9 @@ asm (
+>  ".popsection;                             \n");
+>  
+>  /*
+> - * test_list_local and test_set are .local symbols placed in .BTF_ids by
+> - * inline asm, and are read here directly by C name. To the compiler they
+> - * are plain, default-visibility extern objects.
+> + * test_list_local, test_set and test_kfunc_set are .local symbols placed
+> + * in .BTF_ids by inline asm, and are read here directly by C name. To the
+> + * compiler they are plain, default-visibility extern objects.
+>   *
+>   * When test_progs is linked as a position-independent executable (PIE),
+>   * taking the address of such an extern is routed through the GOT. The
+> @@ -69,6 +84,11 @@ BTF_ID(struct,  S)
+>  BTF_ID(union,   U)
+>  BTF_ID(func,    func)
+>  BTF_SET_END(test_set)
 > +
-> +	ret = sock_map_prog_attach_check(link->attach_type, prog);
-> +	if (ret)
-> +		goto out;
+> +BTF_KFUNCS_START(test_kfunc_set)
+> +BTF_ID_FLAGS(func, kfunc_a)
+> +BTF_ID_FLAGS(func, kfunc_b, KF_FASTCALL)
+> +BTF_KFUNCS_END(test_kfunc_set)
+>  #pragma GCC visibility pop
+>  
+>  extern __u32 test_list_global[];
+> @@ -92,6 +112,8 @@ __resolve_symbol(struct btf *btf, int type_id)
+>  	if (!ASSERT_OK_PTR(type, "btf__type_by_id"))
+>  		return -1;
+>  
+> +	str = btf__name_by_offset(btf, type->name_off);
+
+should we assert str != NULL like below?
+
+jirka
+
 > +
->   	if (!sockmap_link->map) {
->   		ret = -ENOLINK;
->   		goto out;
+>  	for (i = 0; i < ARRAY_SIZE(test_symbols); i++) {
+>  		if (test_symbols[i].id >= 0)
+>  			continue;
+> @@ -99,14 +121,20 @@ __resolve_symbol(struct btf *btf, int type_id)
+>  		if (BTF_INFO_KIND(type->info) != test_symbols[i].type)
+>  			continue;
+>  
+> -		str = btf__name_by_offset(btf, type->name_off);
+> -		if (!ASSERT_OK_PTR(str, "btf__name_by_offset"))
+> -			return -1;
+> -
+>  		if (!strcmp(str, test_symbols[i].name))
+>  			test_symbols[i].id = type_id;
+>  	}
+>  
 
-
-CI failed:
-https://github.com/kernel-patches/bpf/actions/runs/27754218839/job/82113319982
-    Failed stream parser bpf prog attach
-
-Hi John
-I noticed that bpf_skb_pull_data was added to the skmsg test:
-https://github.com/torvalds/linux/commit/82a8616889d506cb690cfc0afb2ccadda120461d
-
-Can we drop bpf_skb_pull_data in parser prog(sockmap_parse_prog.c‎) ?
-And are there any scenarios where we need to modify skb len when using 
-strparser ?
-
-
+SNIP
