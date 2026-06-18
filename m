@@ -1,112 +1,132 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4954C28469F
-	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 04:58:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CFB21F30BB
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 05:05:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781758683; cv=none; b=AmUGdUqezb1g1yVP4EPJodgjjKgPxyOk0aI/wyYKg0SU5U0YKEoaeIPhZXaEiKNit4CQLprIzkTx6itbxBXrkYQ2QvjnArLkkkxf+NBk/hWmghB3TpvZOgDZuthRYfLc1AXO4NCJyzw2CdEl01kPk7o+nTOc9Z+2tm8Rm5JBQV4=
+	t=1781759157; cv=none; b=bkp6AjR/yzJbjRN1cuOfuQ71uDJD+t3S0tGg8js+vfJyTFhOJAbbTyGuRlK2E2/5t/t89BExgpSk0cstQ3nY6VqOhZOum0ivBhPRBA3SOnsx/EXy8VTyRAtWOIEGCq1n9p6T2YCf/XmdZs6NqiWZ14c/niUymo+bRpXix0h3dzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781758683; c=relaxed/simple;
-	bh=fcJZVCd4rqqpaz+9ULGeGk3h6Fv1G6tv/WpF+yZ45bs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PCcuRuXUipXFaal5pcT7LUUwblv7wB/fwUBiSqkxpbLPRV51PiXqLMvNWyaQ1qDvF15Nhb0S3af9lCXMExcx8TsoreTF4sV2EZVLOWPThg+GVrx/+1NvIQozrNAwUe3LZ+VTQOTazg1fFLLNLvvzlAlAxdsW/mZzAi38bdQfbzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YCfoL2Sh; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781759157; c=relaxed/simple;
+	bh=e5nZ9CI0XdIPWCf5kUW1S/FaaKqlQmQc6SW1UpCN42Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZjCntJFIU1B7dPXNtdC1HcQEGenlYMjW9QRLOkVsZTha+Cc+0jXEczI2vdmTBz2JUvm2uZ1BskuuTuJvHNUY33B0eOAnHSg5LwSEdB9N1rzzKY7gBj3s65YvZ4FtpHusKMmcc2uusjwrEzh5bXHIQ5g5jl+nGEW2Mc42aWdxy5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NX2tQQui; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YCfoL2Sh"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-36d5b11201aso313533a91.2
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 21:58:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781758682; x=1782363482; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZHSvIRDQemxGadgD2iE0xf18mNVbs+dB/ONQrSSSMCo=;
-        b=YCfoL2ShWv1p5M+pPW+asVskRor0flxkuxSGvacHoGCC022JmxnFgyoVKeIOkMMCvu
-         7PTBPswCfCx6k17fm2hUkAbeTpY6HPPPXO9O6mLqrxdFOfQS+7PvxyTP/Nr/yqq05CKc
-         /tCtCXguKXDRrL10U46qkpMUgNIQqdLbxdKaY+xzDfm7p7OKhc7akAe89vKbHvLCjWqS
-         Wx8GzBe0Bedvksd7Slf9Nq0G6cG6sGE1U2z8kWu7yX/R9M604AwKtirEOEupWsDpMKqk
-         lBQCrILbhS/oPLdcyWTcJJQ6xVoKZoME9SUoCQaVxCayDDmzrmMbP6Up0+/OpFgSSXtZ
-         04Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781758682; x=1782363482;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZHSvIRDQemxGadgD2iE0xf18mNVbs+dB/ONQrSSSMCo=;
-        b=Du4GWwOh58F+PblL5pjDenjzG1GKE1AXCw4N+b79e0xrTOWBe4Tm7559G2bmnCH1sN
-         p6PRLCbLTz89BdM4w4btK9h/GEZX98RqYTc+lKhQrU7Qie36goatFPh7XlsPedbATIHc
-         mV5Cxe3n2X+bom24GdFCdLmdaaDWMtx7mEQX7Q+o6wPG4OsXUAsNfHqzctSZAg5DXx/e
-         3s80DE4hC7gGEoKDjplvPKWm3tEWsZAoOvR8WegY8yshwQKiqgjojpAVTmGIoSGjC8Xw
-         EbPdSJgTwKkWn4V6BfQWhYSc/YIf0NjN+ALdAfINA0WOE60SB6lC9yAGWbzYFhUVFJNN
-         39AQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+VyKpUEL2ZKguHzowSXIHdaZqrdwEof6Qy0h3qsTKYKx/ep9f93rNYa6OQqgHXM6OCajg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhczPlqXXyatEHXc3zOvc4IElP0ILziZagqg7UW8hHwOUO7lEE
-	bQBhLMdZi5GFE4X1LrPvi7e6dvPUnSG0pfFH4dmus5/sdyeMaTgw/8cHPhjs8g==
-X-Gm-Gg: AfdE7cme+eyrmmelIaj3YMMH9BgqyFyXuD2lEC0HOSTcS8v3vnp4UryQ66lyAuFMGcn
-	8piQWRrYla7NjJpj4XGWix8ZoqeRS8de1SQXeML6z1ee2HxcTUM60Swe9SyXud39sWe9/eAv7LH
-	YeYUZe8zpAhnNqldABMtgyBT89ElwOxZaMaQAeIAnhIoF1p28OvW0VZe8WvRkv6QSjr1yYr52Oo
-	t9GLjt0Sg5P7aknED3v1NFvPV5NXpRuhkQW5qNWWBmR8Z+WJXWDL/4DYuc0lku6RXnwLP5i0MVc
-	06Df0dt2g954kGtWKXANeLAjFMr1LUBumouWH5UiX5CDi1sxYmrowfCzX6vuajmmbg9amcMiHiy
-	UU/ZA7fGeL0rYo8mDSV19ja5fReFzcyUalRzbcYzTnQbXeviXFH6bhqalLcsJCX5/SdC+H0BEpd
-	PYaPw4nMQg9i03IjWpWasoHnNnRgOfmNHzwv/pNRt90Eigw5lr
-X-Received: by 2002:a17:90b:5807:b0:36b:b3f4:d578 with SMTP id 98e67ed59e1d1-37ce4545be5mr1884346a91.15.1781758681588;
-        Wed, 17 Jun 2026 21:58:01 -0700 (PDT)
-Received: from cps-manycore-1 ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37c521ca980sm7976715a91.6.2026.06.17.21.57.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2026 21:58:01 -0700 (PDT)
-Date: Thu, 18 Jun 2026 04:57:54 +0000
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: bobbyeshleman@gmail.com, bpf@vger.kernel.org, davem@davemloft.net, 
-	edumazet@google.com, horms@kernel.org, jakub@cloudflare.com, john.fastabend@gmail.com, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	pabeni@redhat.com
-Subject: Re: [PATCH bpf v2] bpf, sockmap: fix use-after-free when the stream
- parser resizes the skb
-Message-ID: <kktndchjc5mnxcc4p3urfwu3sbkkpfvqo44st7z5djzntixvr7@2vnocsbraee5>
-References: <20260612123553.2724240-1-rhkrqnwk98@gmail.com>
- <20260618002559.1479884-1-kuniyu@google.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NX2tQQui"
+Message-ID: <24784bcb-a33d-4b97-bac3-6585329bfd93@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781759153;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WIyK1rEcx3ahlc01GPP5u4wcQgfbWN8KP5ZsOtgM8wg=;
+	b=NX2tQQuiHXETttIQ1n+4Qw2zPSLUda5o0rvuksYwwHY1O15OsJmP9+9ef93yTjW5OOFewq
+	nSvN32AghldDiOJg12pteFY0Mv+CnDTq+r/n3giHt57GP1qlXku3VPK9sOrRbEWVqUxUjq
+	jXSaYnvpnlXq6t6/cz8JJrRQEjt6BjA=
+Date: Wed, 17 Jun 2026 22:05:24 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20260618002559.1479884-1-kuniyu@google.com>
+Subject: Re: Question: BPF stack build-id lookup while holding mmap_lock
+To: Runyu Xiao <runyu.xiao@seu.edu.cn>, Song Liu <song@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, jianhao.xu@seu.edu.cn
+References: <20260618033152.1541795-1-runyu.xiao@seu.edu.cn>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260618033152.1541795-1-runyu.xiao@seu.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Jun 18, 2026 at 12:25:57AM +0000, Kuniyuki Iwashima wrote:
->From: Sechang Lim <rhkrqnwk98@gmail.com>
->Date: Fri, 12 Jun 2026 12:35:51 +0000
->> sk_psock_strp_parse() runs the BPF_PROG_TYPE_SK_SKB stream-parser program
->> to find the length of the next message. strparser assembles a message out
->> of several received skbs by chaining them onto the head's frag_list and
->> recording where to append the next one in strp->skb_nextp:
->>
->> 	*strp->skb_nextp = skb;
->> 	strp->skb_nextp = &skb->next;
->>
->> and then calls the parser on the head:
->>
->> 	len = (*strp->cb.parse_msg)(strp, head);
->>
->> The parser is only meant to inspect the skb, but the program may call
->> bpf_skb_change_tail() -- or the sibling bpf_skb_pull_data(),
->> bpf_skb_change_head(), bpf_skb_adjust_room(), all allowed for SK_SKB.
->
->It's bpf prog's responsibility not to abuse them.
->
->Even setting aside that, why not simply block such BPF prog ?
->
->It cannot be done at load time, but doable at attach time.
->
->>
 
-Thanks, this is cleaner than cloning. Will fix in v3.
 
-Best,
-Sechang
+On 6/17/26 8:31 PM, Runyu Xiao wrote:
+> Hi,
+> 
+> While auditing lock ordering around faultable build-id lookups, our
+> static analysis tool flagged the BPF stackmap user-build-id path, and we
+> manually reviewed it against the current tree.
+> 
+> The path we are concerned about is the sleepable helper path:
+> 
+>   bpf_get_stack_sleepable() / bpf_get_task_stack_sleepable()
+>     -> __bpf_get_stack(..., may_fault = true)
+>        -> stack_map_get_build_id_offset()
+>           -> mmap_read_trylock(current->mm)
+>           -> build_id_parse(vma, ...)
+>           -> __kernel_read()
+> 
+> `build_id_parse()` can read from the backing file while mmap_lock is
+> held.  That can form an ABBA dependency with file read paths where the
+> inode side is held first and copy_to_user/copy_page_to_iter can fault
+> and then need mmap_lock.
+> 
+> A minimal Lockdep reproducer preserving this BPF stackmap carrier and
+> the reverse file-read edge reports:
+> 
+>   WARNING: possible circular locking dependency detected
+>   __kernel_read
+>   stack_map_get_build_id_offset
+>   __bpf_get_stack
+>   *** DEADLOCK ***
+> 
+> The local fix I am considering is only for the faultable build-id path.
+> It would snapshot the VMA file reference and offset metadata under
+> mmap_lock, drop mmap_lock, and then parse the build-id from the file
+> reference with build_id_parse_file().  The existing no-fault path would
+> remain unchanged.
+> 
+> Roughly:
+> 
+>   1. Under mmap_lock, find the VMA for each user IP.
+>   2. Take a file reference and snapshot vm_start/vm_pgoff.
+>   3. Drop mmap_lock.
+>   4. Parse build IDs from the files.
+>   5. Fall back to reporting IPs if the faultable path cannot safely
+>      release mmap_lock or allocate the temporary snapshot array.
+
+
+Hi Runyu,
+
+A patch implementing more or less this algorithm has recently landed:
+https://lore.kernel.org/bpf/20260525223948.1920986-1-ihor.solodrai@linux.dev/
+
+I recommend doing a search on lore.kernel.org or other mailing list mirror
+in advance, to avoid unnecessary or duplicate work.
+
+
+> 
+> The tradeoff is that build-id parsing would happen after releasing
+> mmap_lock, so the VMA/file relationship is represented by the file
+> reference and copied metadata rather than by holding the VMA lock context
+> through the file read.  That avoids file I/O under mmap_lock, but may
+> change edge-case behavior if the mapping changes concurrently.
+> 
+> Does this direction sound acceptable for sleepable BPF stack helpers, or
+> would you prefer a stricter fallback-to-IP behavior whenever build-id
+> parsing would require faultable file I/O?  Another option would be to
+> avoid build-id parsing entirely in the may_fault=true stackmap path unless
+> there is an existing BPF/MM helper pattern I should reuse.
+> 
+> The local draft subject is:
+> 
+>   bpf: avoid faultable build-id lookup under mmap_lock
+> 
+> Thanks,
+> Runyu
+
