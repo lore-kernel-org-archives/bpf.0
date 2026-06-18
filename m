@@ -1,109 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC5123DE45A
-	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 09:47:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 313342D73A0
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 09:58:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781776064; cv=none; b=U1t9yqQa3NL/MDMGBmxtNMcJ4dOrZ+pK321cIbYTJtMV9FMa7b58jAXF0loHTf5P/ILCo5NVb4QkLrWEsvjsE7At52qvKh34RDSNrQcJHQeYAZKtA0WauKJjEAny7Mc4IEG9uza9Olrr5+NCiRnBwQF9B+FA5oKoR/ES5jb0W+0=
+	t=1781776722; cv=none; b=SO40KnuMzua5utJMlCD5NTnRvzyOa4++xd94kXuV0kx2AGQgz/miU9Y+72uqWprBmssKPsm4uivjCOVkdq+Yr5mMUd5vkx7EDt7d/lEIMbx39XZcffbvAx2Dkdajw3CNUNzbNulWMpZzYgwo1IDj2RTId17BImEgj1QwG2wAHrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781776064; c=relaxed/simple;
-	bh=6yCH4rixQKXhkNsp2C8lqQr56BdhbwExcXpxtjQ8C+U=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=AepUgNoSrwCE4/46c24KcspP2Q0KZV1zP12Rg/iWBMe2Mw07Wl4F7h4YsFOYFfzS5+OZfPwUFNx6j+z2mkUuTrJ0yr7iWpKOy3bNSpfTeiUfYLGGYWdIODKmBPKuUrZ1LdGwVpsVakIxnR3SbftU2/39l8CSM0bFz8a3gevE3Og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BAbbevzp; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781776722; c=relaxed/simple;
+	bh=IwcW9D8EVGwonbJsnujnZwT9HqYS2qimfSaEFYeqVH8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=axt6qzvsh9xRpNgEXFZlQmzHZAD+3N1Fp4I2oITg7NoxPx5q+ZvV/vBzb1GdRHCe1fPoz5L0KzXw/yaSS2f50pinqFwwIEOa3x0PZLFmCuB5XYnAVvnMdVw/Fe3hkqnp41xsVeg97iIoszcNOFE0HExqxObn7nM6LLBSxVGuyYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=DORGn3WL; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BAbbevzp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70EE21F00A3D;
-	Thu, 18 Jun 2026 09:47:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781776060;
-	bh=IY2S1bXutB83YA35mztxOVVIFyKHlRI/wQkqCbGY9NE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=BAbbevzpR6rH4OpyaewGvVFxkAhXcbh5CcYUI0WUnt7ztavGVC4VG5pm+olEPxFjq
-	 113ONQnEKrjp77OAB9cJKFGqF3s1yrnrnk5YOTMOR5JYH0cdZpOCqY1qCmCaOQAQyd
-	 Qa6tU7qmN568swn0IExwkt9RznuZIuEl9h7VIjKTdf73TCrI9sCfY4szZmkYe7dY65
-	 3D/8skJsH/EhYaOEaurT/FDKz7VfQHZtLiaEEkunECSQJq1lKDQrHJVRwAsYdFdsxX
-	 1SzSs6fclD8XC4hTiw0E15mvVzHbkExuILdUVqJAVyLtQ+zQdLYgJW9xChj8TTeNx2
-	 NPeNCchhHTQMA==
-Content-Type: multipart/mixed; boundary="===============8966313666933752693=="
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="DORGn3WL"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-68bd9fce347so1174876a12.2
+        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 02:58:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1781776719; x=1782381519; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:user-agent
+         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IwcW9D8EVGwonbJsnujnZwT9HqYS2qimfSaEFYeqVH8=;
+        b=DORGn3WLqDe3zPphxTEr9sMVXEJR4TcDjf9NBJjM+FbzHVuPcmNIpUU+vatpt9gzQK
+         DfOrzrJF4ZtqOTYBHTwV/VA+UQLo8gwaiDnsqp0J07wDcJuSoGzq2DDP7n5khO3oLdBx
+         nfeZw5O9EsX+uqYElb3mbYdn2C7yxNX0NR+d0GrBQNUGSBZ0O9ihbylxZW5AuR8lfHPV
+         +fV6mvDCRKh17txP4l+KLXBDZJHEGiK85Q6w0Z1NBYlKotjsF6w3JZDFkwPx8nC51HI/
+         5kRTZKQgdBERN3P7tUQgCEUZrL7dNhcIr1MaOq6QQr+OYWUHXjNXQIKWgVyRqmV90s/k
+         P9BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781776719; x=1782381519;
+        h=content-transfer-encoding:mime-version:message-id:date:user-agent
+         :references:in-reply-to:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IwcW9D8EVGwonbJsnujnZwT9HqYS2qimfSaEFYeqVH8=;
+        b=slUz/yrlqjYFkB0vXaDqJJkb+lon54LEVv7qGKVeADYCgFjGCq1WLWHzmn7/V+6G78
+         O/0PLqMs4mnWqYqnOKQUn+8qjIM1Er4OhIJilEDz2CmdnpxjTysxlv9ikxvYvzQMCH+M
+         bMhKqSr+CvFCkfo2bdwOmxT99RHgWQs7EsKYAR1PTQm1nALk1DccRIaxse8skUPbIz4/
+         +2iNFnDKZsJq/ubyLDraZlF6DTmeuf5POZM3TaexdxgQ7+SKXRIAEh1GSKFZh3vnQmi4
+         syqm9QTRraoIwjTlwmmkbA6miOPrQExzTNXX88KRDOilU4yWxdKwxMpAKps9zjDQFUGh
+         dIyw==
+X-Gm-Message-State: AOJu0Yx9sN+FTe1dTOsRw8K4Stppa9mkogczAF0c5ds2ZIsgxz8NnIsX
+	zmY+DolLKm7hS1TjeFD9NS3k2JLjZGKRftM/TXbCilGLq+FHjsJpwAQfOnMd4bRZGWKuFz6Y/vz
+	bPde0
+X-Gm-Gg: AfdE7ck9WXxgI38mmicF4RcjFnvV6ClcxllL8endTcV7MzAkVJ2INSePbinY1ZNQTxh
+	yED/r9rOJKswBEycUZo2PpkxOYyj/7BxnYEOAQQ2mG61otDqZjIXI4Vrmk1wYIo1vXlkYgR7YR5
+	RbcWlDEIfkyVPkRZ4giRuGggOQaQWdU9at0pkLnQHqm1ZMJKRyH8JegUo/uMVpkuwrbfnMBdrY3
+	TklL8TGo3lTwinCIGvltcoAuxrZymdsPgJxbtKGCJxRvBi5OZjvY3xfQUzRBLx9ufIlnpKCxLoA
+	qTM18RyW6407q65TEIrhVG+ETJCE2pyKzXCvpTKLmOuWrkCu18GbgDpneTKXR/lZ/hFZL2dpK6Q
+	5eqx8VG5vti+6vrJPhPK5m7bdHYSLq0ZgPkmSMxQDG/umjWenV/KySJqMIFxt0vz6u78x2dlkzg
+	SEpIQRfYDGcWl17b8=
+X-Received: by 2002:a05:6402:28c3:b0:691:6fca:c1af with SMTP id 4fb4d7f45d1cf-695ed873519mr610890a12.25.1781776718949;
+        Thu, 18 Jun 2026 02:58:38 -0700 (PDT)
+Received: from cloudflare.com ([104.28.21.182])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6937919b4c4sm7399972a12.6.2026.06.18.02.58.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jun 2026 02:58:38 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: =?utf-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
+Cc: bpf@vger.kernel.org,  Daniel Borkmann <daniel@iogearbox.net>,  Alexei
+ Starovoitov <ast@kernel.org>
+Subject: Re: [PATCH] bpf: Fix BPF_PROG_ASSOC_STRUCT_OPS last field check
+In-Reply-To: <20260618040934.4113938-1-tweek@google.com> (=?utf-8?Q?=22Thi?=
+ =?utf-8?Q?=C3=A9baud?=
+	Weksteen"'s message of "Thu, 18 Jun 2026 14:09:33 +1000")
+References: <20260618040934.4113938-1-tweek@google.com>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Thu, 18 Jun 2026 11:58:37 +0200
+Message-ID: <871pe4b25u.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <40db9b9c3e32c6f24f119d4e4c7c27af76d19393d278e9aa6bb8006631f5d92d@mail.kernel.org>
-In-Reply-To: <20260618085626.19633-5-emil@etsalapatis.com>
-References: <20260618085626.19633-5-emil@etsalapatis.com>
-Subject: Re: [PATCH bpf-next 4/5] selftests/bpf: Add arena-based bitmap data structure
-From: bot+bpf-ci@kernel.org
-To: emil@etsalapatis.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,memxor@gmail.com,daniel@iogearbox.net,eddyz87@gmail.com,mattbobrowski@google.com,song@kernel.org,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 18 Jun 2026 09:47:40 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
---===============8966313666933752693==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Thu, Jun 18, 2026 at 02:09 PM +10, Thi=C3=A9baud Weksteen wrote:
+> When struct prog_assoc_struct_ops was added,
+> BPF_PROG_ASSOC_STRUCT_OPS_LAST_FIELD referenced prog_fd instead of the
+> actual last field, flags.
+>
+> Fixes: b5709f6d26d6 ("bpf: Support associating BPF program with struct_op=
+s")
+> Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
+> ---
 
-> diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/bitmap.h b/tools/testing/selftests/bpf/libarena/include/libarena/bitmap.h
-> new file mode 100644
-> index 000000000000..11623a82e66a
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/libarena/include/libarena/bitmap.h
-> @@ -0,0 +1,31 @@
-> +#pragma once
-> +
-> +#define BITS_PER_BYTE		8
+You need to indicate which tree the patch should go to [1].
+bpf tree in this case since this is a fix.
 
-Should bitmap.h include an SPDX-License-Identifier header? The companion
-implementation file bitmap.bpf.c includes the standard tags:
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
 
-    // SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
-    /*
-     * Copyright (c) 2025-2026 Meta Platforms, Inc. and affiliates.
-     * Copyright (c) 2025-2026 Emil Tsalapatis <emil@etsalapatis.com>
-     */
-
-while the header begins directly with #pragma once. Every other header in
-this libarena series (common.h, asan.h, buddy.h) carries these tags.
-
-> +#define BYTES_TO_BITS(nb)	((nb) * BITS_PER_BYTE)
-> +
-> +#define BITS_PER_LONG		(sizeof(long) * BITS_PER_BYTE)
-> +#define BITS_TO_LONGS(nr)	(((nr) + BITS_PER_LONG - 1) / BITS_PER_LONG)
-> +#define BIT_MASK(nr)		(1UL << ((nr) % BITS_PER_LONG))
-> +#define BIT_WORD(nr)		((nr) / BITS_PER_LONG)
-> +
-> +struct bitmap {
-> +	u64 bits[0];
-> +};
-> +
-> +struct bitmap __arena *bmp_alloc(size_t bits);
-> +void bmp_free(struct bitmap __arena *bmp);
-> +
-> +void bmp_set_bit(u32 bit, struct bitmap __arena *bmp);
-> +void bmp_clear_bit(u32 bit, struct bitmap __arena *bmp);
-> +bool bmp_test_bit(u32 bit, struct bitmap __arena *bmp);
-> +bool bmp_test_and_clear_bit(u32 bit, struct bitmap __arena *bmp);
-> +
-> +void bmp_clear(size_t bits, struct bitmap __arena *bmp);
-> +void bmp_and(size_t bits, struct bitmap __arena *dst, struct bitmap __arena *src1, struct bitmap __arena *src2);
-> +void bmp_or(size_t bits, struct bitmap __arena *dst, struct bitmap __arena *src1, struct bitmap __arena *src2);
-> +bool bmp_empty(size_t bits, struct bitmap __arena *bmp);
-> +void bmp_copy(size_t bits, struct bitmap __arena *dst, struct bitmap __arena *src);
-> +
-> +bool bmp_intersects(size_t bits, struct bitmap __arena *arg1, struct bitmap __arena *arg2);
-> +bool bmp_subset(size_t bits, struct bitmap __arena *big, struct bitmap __arena *small);
-> +void bmp_print(size_t bits, struct bitmap __arena *bmp);
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27749630149
---===============8966313666933752693==--
+[1] https://docs.kernel.org/bpf/bpf_devel_QA.html#q-how-do-i-indicate-which=
+-tree-bpf-vs-bpf-next-my-patch-should-be-applied-to
