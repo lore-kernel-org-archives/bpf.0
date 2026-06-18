@@ -1,44 +1,53 @@
-Received: from mail-m155101.qiye.163.com (mail-m155101.qiye.163.com [101.71.155.101])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955F1175A7F;
-	Thu, 18 Jun 2026 03:37:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA93C14884C
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 03:38:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781753837; cv=none; b=Eonmo6skqFKQUr0iAF8BHwvTb/BAaHmtj5VQiwx4RDtN0iCuZwxKhGPoxMGQd59bnefCJ/2DnVc4ltZWVUZuQBY0nb2qlVS7Wm41cRbbS0N+WrdUrDgS/m38PuLqrgBSVRQ4jWFuQ7Va/wSeHcROR9zrUmQbn6QkCaVVDswoSMs=
+	t=1781753933; cv=none; b=gMs0yUL3z01xHypBYNT2tbb2XGjQgJ3XdlH3pi0OjxSFjAz4gioqL40P8dvyGdme2/OyDFcZ5YbHZxHhMGj3q0X8zOR3C0ZgVP9w9gp9n1nplqdKJVM8vEvoyuQtkStUZZ6ht5J6bGyvFG39pd33O/ke351sazMB2uUWxVXtqaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781753837; c=relaxed/simple;
-	bh=3hNrtWDOJ4EKm1eU4+zwpgKNmz3xVyAiYqvrYeCFNI0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VvnaCzwdam0/4dO7d+UwD9N0a6r3E7sbCUXUxTvtof2SVqkJbhqgHToKy59kCSxD+aVIju3ODfPTcxV29lvNatDkPCMd4QaEUZhuFLiHNgMQ4b7kXJoFnwVPby+GgAbuXeHv89eTkkcOuuf+N1AW3B6sOKJZ1S03aVL27zI63qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=d+t2rThR; arc=none smtp.client-ip=101.71.155.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
+	s=arc-20240116; t=1781753933; c=relaxed/simple;
+	bh=anaz+9ZZxyfRKUcRTPbX7Ph3HodpI6dtwKZOS0roqnc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=J5MZY4OTd+6wVVt90GwnCd+Jdsbq6G8RdWsKCp8Rz0Z6aT0EgaRuIcElpN/8AFoM7oQSJDfWBxPm4MLpHANhZfHPAOWVuwTXo/8Xiq14ufXTu8xop20HH1bVoTdElB8iIEk1LdCf4ceQykofd2hSfCQxWvEF7mQJ/ZcfSnipumQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QKubptTE; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="d+t2rThR"
-Received: from PC-202605011814.localdomain (unknown [58.241.16.34])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 42d8d4990;
-	Thu, 18 Jun 2026 11:31:59 +0800 (GMT+08:00)
-From: Runyu Xiao <runyu.xiao@seu.edu.cn>
-To: Song Liu <song@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Jiri Olsa <jolsa@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	bpf@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QKubptTE"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781753919;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=cGvmfKekfBpASW5+N5hmq6REiUIEtZPpTONmmCc5MJg=;
+	b=QKubptTEFnxfHcl43nVdAdwAMqz2UCSrozLyUD3gutlWhEu2VmlbnNb8uHOvaRrHgK00Lr
+	BKV+CGKsO7IuXZIsVnmXFjUOc9H5sXm4/K27BIvBlkxX3owyWoXwmlHD1V1ARLVJkhBELz
+	5OhvzMpPD+17UC94ipDa4lDVTknMqQE=
+From: George Guo <dongtai.guo@linux.dev>
+To: chenhuacai@kernel.org,
+	yangtiezhu@loongson.cn,
+	hengqi.chen@gmail.com
+Cc: kernel@xen0n.name,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	loongarch@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	jianhao.xu@seu.edu.cn,
-	runyu.xiao@seu.edu.cn
-Subject: Question: BPF stack build-id lookup while holding mmap_lock
-Date: Thu, 18 Jun 2026 11:31:52 +0800
-Message-Id: <20260618033152.1541795-1-runyu.xiao@seu.edu.cn>
-X-Mailer: git-send-email 2.34.1
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	George Guo <guodongtai@kylinos.cn>
+Subject: [PATCH 0/5] LoongArch: BPF: arena instruction gating, private stack and exceptions
+Date: Thu, 18 Jun 2026 11:38:04 +0800
+Message-Id: <20260618033809.98253-1-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,76 +55,64 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9ed8c91b9403a1kunmf1a17f198b0ce
-X-HM-MType: 10
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCQh5JVhhMHx5MGU0fHUodGlYeHw
-	5VEwETFhoSFyQUDg9ZV1kYEgtZQVlOQ1VJT0pVSk1VSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpPSE
-	xVSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=d+t2rThRK1FWqYcBmWV3Z00gfk58PctNNHhkl5vo5qgv/jXWl6SabRXbcd1fYfOdaf4gGM1yBitWnr3DJ5CXyunDGCoFTbT9o/IhuaEIjv3+eA5l5NgrFmt0FJYJo0dqchY0UpFb90f/bejintMFRUTviOjB0GAa+D6n1XOmPbg=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
-	bh=bYDpZepRS42kHQfCV94DqqHuisGv99igJmwhldcBRIk=;
-	h=date:mime-version:subject:message-id:from;
+X-Migadu-Flow: FLOW_OUT
 
-Hi,
+From: George Guo <guodongtai@kylinos.cn>
 
-While auditing lock ordering around faultable build-id lookups, our
-static analysis tool flagged the BPF stackmap user-build-id path, and we
-manually reviewed it against the current tree.
+This series adds three LoongArch BPF JIT features, plus the accompanying
+selftest changes:
 
-The path we are concerned about is the sleepable helper path:
+  1. Gate the arena instructions the JIT does not implement (atomics and
+     sign-extending loads on arena pointers) via bpf_jit_supports_insn(),
+     so the verifier rejects such programs early with a clear message
+     instead of letting them fail late in the JIT.
+  2. Per-program private stack (bpf_jit_supports_private_stack()): the BPF
+     stack of deep/recursive tracing programs is moved off the kernel
+     stack into a per-CPU allocation bracketed by overflow/underflow
+     guards that are checked on teardown.
+  3. Exceptions / bpf_throw (bpf_jit_supports_exceptions()): unwind to the
+     exception boundary program via arch_bpf_stack_walk() (built on the
+     ORC unwinder) and reuse its frame in the exception callback. Gated on
+     CONFIG_UNWINDER_ORC.
 
-  bpf_get_stack_sleepable() / bpf_get_task_stack_sleepable()
-    -> __bpf_get_stack(..., may_fault = true)
-       -> stack_map_get_build_id_offset()
-          -> mmap_read_trylock(current->mm)
-          -> build_id_parse(vma, ...)
-          -> __kernel_read()
+Patches 4-5 are the selftests side: a LoongArch deny list (arena_atomics,
+which patch 1 deliberately rejects) and enabling the struct_ops private
+stack test on LoongArch. They touch tools/testing/selftests/bpf, hence the
+bpf@vger / linux-kselftest Cc.
 
-`build_id_parse()` can read from the backing file while mmap_lock is
-held.  That can form an ABBA dependency with file read paths where the
-inode side is held first and copy_to_user/copy_page_to_iter can fault
-and then need mmap_lock.
+The series is independent of the earlier "LoongArch: BPF: Support
+internal-only MOV to resolve per-CPU addrs" / "Add timed may_goto support"
+patches [1] (no functional or apply dependency) and targets the LoongArch
+tree.
 
-A minimal Lockdep reproducer preserving this BPF stackmap carrier and
-the reverse file-read edge reports:
+Testing on a LoongArch board (test_progs):
+  - exceptions:               117 subtests, 0 failed
+  - struct_ops_private_stack: private_stack / _fail / _recur, 0 failed
+  - arena list/htab/strsearch and verifier_arena*: pass
+  - arena_atomics: rejected by the verifier as expected
+      ("BPF_ATOMIC stores into Rn arena is not allowed"), hence the
+      deny-list entry in patch 4
 
-  WARNING: possible circular locking dependency detected
-  __kernel_read
-  stack_map_get_build_id_offset
-  __bpf_get_stack
-  *** DEADLOCK ***
+[1] <https://lore.kernel.org/all/20260609041407.122384-1-dongtai.guo@linux.dev/>
 
-The local fix I am considering is only for the faultable build-id path.
-It would snapshot the VMA file reference and offset metadata under
-mmap_lock, drop mmap_lock, and then parse the build-id from the file
-reference with build_id_parse_file().  The existing no-fault path would
-remain unchanged.
+George Guo (5):
+  LoongArch: BPF: Gate unsupported arena instructions via
+    bpf_jit_supports_insn()
+  LoongArch: BPF: Add private stack support
+  LoongArch: BPF: Add exceptions (bpf_throw) support
+  selftests/bpf: Add LoongArch deny list
+  selftests/bpf: Enable struct_ops private stack test for LoongArch
 
-Roughly:
+ arch/loongarch/kernel/stacktrace.c            |  52 ++++++
+ arch/loongarch/net/bpf_jit.c                  | 172 +++++++++++++++++-
+ arch/loongarch/net/bpf_jit.h                  |   1 +
+ .../testing/selftests/bpf/DENYLIST.loongarch  |   2 +
+ .../bpf/prog_tests/struct_ops_private_stack.c |   2 +-
+ 5 files changed, 222 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/DENYLIST.loongarch
 
-  1. Under mmap_lock, find the VMA for each user IP.
-  2. Take a file reference and snapshot vm_start/vm_pgoff.
-  3. Drop mmap_lock.
-  4. Parse build IDs from the files.
-  5. Fall back to reporting IPs if the faultable path cannot safely
-     release mmap_lock or allocate the temporary snapshot array.
 
-The tradeoff is that build-id parsing would happen after releasing
-mmap_lock, so the VMA/file relationship is represented by the file
-reference and copied metadata rather than by holding the VMA lock context
-through the file read.  That avoids file I/O under mmap_lock, but may
-change edge-case behavior if the mapping changes concurrently.
+base-commit: 186d3c4e92242351afc24d9784f31cb4cd08a4b7
+-- 
+2.25.1
 
-Does this direction sound acceptable for sleepable BPF stack helpers, or
-would you prefer a stricter fallback-to-IP behavior whenever build-id
-parsing would require faultable file I/O?  Another option would be to
-avoid build-id parsing entirely in the may_fault=true stackmap path unless
-there is an existing BPF/MM helper pattern I should reuse.
-
-The local draft subject is:
-
-  bpf: avoid faultable build-id lookup under mmap_lock
-
-Thanks,
-Runyu
