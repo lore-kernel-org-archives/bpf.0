@@ -1,193 +1,186 @@
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2985F33F5A3
-	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 22:51:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C921C84D0
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 23:04:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.172
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781823065; cv=pass; b=l7VBVE0jXFgJFSQPPTOoKk8fsE1gx5aNCbZYB3wVIr+wOY71TEfy1YlIgVuEr4byRQEz9fav/tls0DwfU68y1C9NJN3pnDa23/HqO041+Afrf7Q53AHyRS9SZUu2ggjbsXuvm5IKCrL+ZaHB9Vu/S2Bn5Gfikijqle7klWoz0+g=
+	t=1781823899; cv=pass; b=NWw8wT+6lbckgUUg0ja2ywWeMtCPK7WufQeDABY6t42dfLzpj5liobxEH58sTTORTlhX+4+rcGKjCx7hnNG0NOH8mc3l6mywOhXjS9Jge3GnSjEhl5iDMx4zAmg3Bzv/nOjks/DIW4xy1nimKTDlvcgyKeSmungZCN2JYQedkH0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781823065; c=relaxed/simple;
-	bh=EMYr1F+PpGtSmTpfHsTm52f8sshX1D1zHOemelGKRHw=;
+	s=arc-20240116; t=1781823899; c=relaxed/simple;
+	bh=EX8FRVIG00u8HGBnvXLPq8RIp5dwT/Ow4pDrpVHV+pU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rUXJJgsPih11ph87fySmrAUT1E8V6ySWjpLLSQKdh7MjP+U/kkb9z5BPu3jSKK2176BNY7ZgGls9AkmIEH51QbYpg0zvhM+xFolH9rNwYrEfnpduRlYa2/KDOr3/0/f4qjCp0rsiJOI+B8n1+D7tF+xnjzcTfFdWqq9b1SWR7S4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CZ2E6C7p; arc=pass smtp.client-ip=209.85.222.178
+	 To:Cc:Content-Type; b=IX6eeIOzHD0cywCZq1giGQs4EG6Dw+jd2xJCXESBlNeIuxxlMSy+jvShjwgrI2LoW2/KDqP+sTEu1ctQosGHec02ySJj0B7iIcSMOOhwJJDaD+co4GPtzVWNblRbQstWCXcZD3IS0YwKnpuPd+T1MdqGu6NL997aebbzh/FONzU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J8Yfu7lb; arc=pass smtp.client-ip=209.85.128.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CZ2E6C7p"
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-9159da9bba5so118358885a.1
-        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 15:51:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781823063; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J8Yfu7lb"
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-7fe36f1be74so16013117b3.2
+        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 16:04:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781823897; cv=none;
         d=google.com; s=arc-20240605;
-        b=ekqv31n6xYsPKgMnjGHGdygfypACBI8n5p/nkiwk+ibllOe0BitGIusAd/uDko7bKO
-         CXocKhSU8ndpwrFh1Wr+o5UChqRSKtxJu3oHemu1I/Z7Bu4Z4YbW2yGeP7/yDGJOprva
-         NPoRQdhmY6jMFJAbvOnPxzE8/1Wcbt3fj6MWV7fMsHiMe0m67nDO1iiP0quhFxePdCey
-         riifii999SMz2KhbaW1z5k3FJLrtQ3HKwma5gkuXaxMl1vrhKucRQ5YlEpE0NSXBcxnV
-         agVbJ6MTH8Ffxb7UAQM5/08fqy6Q2wE2HWI4j+AV1kxl09J7hJ6mFa4XZqXCkTT7JsBR
-         UsUA==
+        b=XW/ovf2eOQZFSg6vTb21BsBIsUn23fj8DUckAhCJJPIKmGkHwMT+BQDU5zbEFf1Y9h
+         JiLsLWNC3KgBW4uOOpjXvGcAEIQ63ssvJv3dQdT9PmjqgBcsTr2t/q+uax0GEn4m9qXE
+         1PFetp6iYr9ekGWOkGv3f9fgJf5N0C8nE+rY7GxpdHebQbiCjODAM+azqOLLzc30YsSo
+         kYacjCSGiHMrCkio0KhhhUlektPh7g/nHGbbGTid++wn+oSo9AD1BfAStSTIUNXBrMzY
+         A+VNbr0Af0KK/AnMO7g1tEmrU7Qpn/k80xhbXKCB5z794dTCj0oECcAiz1aCxpVIH0zo
+         gG0w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=SMwuGs+SqkOWXXKsNFJ9sJZ3Linv0hyo9Jf2noGou30=;
-        fh=NnZ/0uFghiIgx7CIpUaFM/Cs6XnImRQsc5ocEn+XYx8=;
-        b=B0b05NtMQd2WS3OrbkunQZTXVQHLeNNPwS4wKo541i2vDQSU5ImU518TSvArVklcGJ
-         RtsXK0WWcQIuIhvJYgp768wh095amCMJNnlkrOkUJ9suMlKM+9eL4ie3YdD+dlAzblL1
-         +xYIl579w0Fo3wEm0KN8AdlqukIwmvi8kDkRprY09xGzhljBFX/L49Hj3XB64nwdlKMH
-         5rBIIws3kUQZl7vLogYlkosCsI5DoBcDRZ3YWGFoWP6MLxZh2aBAVmPmcBRu92Uk9T75
-         haAy9gxbh+izLqayt3f5KXre0axpOIn2vcfU8I/ri5UNfveBAEL7DENwLzwxWiUFosNw
-         2HYQ==;
+        bh=n+U5LnBvxE2n7Stgu6vC4rG5e+TN4oQ5BlsbYeF7xXs=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=DVXMOidQEt75BLfrLJEp1p0HP3VAL0b/YW7Y+eCZF+w3KS4Dm/eNjYYYw5E11+vbMe
+         URQIEwVdilOH/dipY+8/xq24T8g+w71c/MqxQxnd7f0U2mVwKzGNHboOBMXsMufexQuE
+         IJvFhAeqvRjEMMNuL0WbQ81cR3hCNgyLFxFXGzsGWzZer7kH5D7yVo+URZrl5arv5V6F
+         1nSn55Ei16yTDkbRYsoCMqPL3/QBTJTetSplfLBy8x5to1cGYKEqjnplCDzVc3+rFjKN
+         xWlMT6LaTtdbHXOQylrxFj03ohtlsIRZLaW+PfH2+KWhZpU7J2X4hcZwd+X7cHaY/VkQ
+         VCkg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781823063; x=1782427863; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781823897; x=1782428697; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SMwuGs+SqkOWXXKsNFJ9sJZ3Linv0hyo9Jf2noGou30=;
-        b=CZ2E6C7prhTojmgoHGdNe7OileXPbl3IdhXRahO17zU0p7sydgNazhp1YHE4kV/6eg
-         /iLvrxYKEmWLRXuKoolRzvba4DUUKfRHLyiBgYpuqOcdWtg82BbySEy4qLx6HhHXP7dS
-         PthIZYz4hSquO4gFZ3URQSYFja1vdkH+gSP3b9b2UHQAe+pCO5lsOGswbMvzZJQaVr3J
-         LMfxXi93vOcsvLFfsN8zLILywVKhEiv9aH7ub2Wr26pPk6HXp1A+vN3Q1qU+OaSnl3td
-         B+79jtylayY9plF1MJRE+jSxSw56SZl4UEYadYOtdVYwiErhIjX8wLS2AjK/RQ+xbQeP
-         KzBg==
+        bh=n+U5LnBvxE2n7Stgu6vC4rG5e+TN4oQ5BlsbYeF7xXs=;
+        b=J8Yfu7lb8NzUlpYNHvyBxO2YWLvhygfDEYlcvAUdZ4A5gYJMMV6F4K8jgtpyChlmdH
+         QveN6UzmF1Zj1fZgSa6cu+HdmjpaSb9HR7B/VoGhxoADgxLBocHni824MZIJHIgBJ5tE
+         1H1my+NDdhVnEdpGTagfpLQKOGR525Yk5R3CBOWI/tH5btxmmZvpJyY6fI0dRolMi+DC
+         taHFyRnPrki8hOqDCNigLhQIWMrolD2vsebItt0hKXnGnZA4gqs6R8uVIkD6I/bZSh1P
+         WBZ49i4yt+J5ezCU6R26stuA8+PH9txawotyDaQHaEOxCc2fYb/IdJ3Y6zycOlv7y3YE
+         XNiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781823063; x=1782427863;
+        d=1e100.net; s=20251104; t=1781823897; x=1782428697;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=SMwuGs+SqkOWXXKsNFJ9sJZ3Linv0hyo9Jf2noGou30=;
-        b=gjL4XAjqOQ7FBryiHon+w2rApcQs9czwCvwsLYKohm54oReaAOqZf2HtxzwkUkIvoB
-         y89i9gCX/l1TkRfRmBsRZkF6XJIyNeY26FLJu1MYn/mTJCYr/S9d/c9DcslFU9RFThcC
-         U05iDzcqho4JGBDvZJotEdjTD1XGsAu7AhQX68chzULZPjXr7yeURSzF3iMt3UwXJw5U
-         VJkxYuDPVNCVIxEAURIrthjkzSdpkQJfLzzhBe5JxW8Koq0Jt0vTj8IfID3oN6YzYEYa
-         fHJI1QhzbvKVq4pu1yJgyP4dK8fTTSMqwGoMiBuqfCytFm7cToYXGhZmO5LdiNvjNhiI
-         okYA==
-X-Forwarded-Encrypted: i=1; AFNElJ/oMmXtyEKD65mExV7evfuzcMsyawE0Atdj36CgmN2RGKy0Tq7KhLtNoU4iUjLbT5DPUhk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkyF0pCONk+iw7tYuCBZbOd1MKvmqgOu8yce20XifdqJMHjXQV
-	G+taxGboBU/+44tzkIfXoO63scwVPYN60VivGOOI0j/cobsfcY1ZDGryrButOazMWK2meNK3r74
-	F7cuRAnVEpb/n3e4WuklNK+ObtTfqtDE=
-X-Gm-Gg: AfdE7cnqNpl+8kMMci55PfP0+xUB1n+vDnq9BX/tqCdnvcFn553mXNnhMKtGPxCRgBC
-	x0DIOu2CeoBGhRj8LN3SAWn/nszIKTiRGF4sZAPESXv1mEt7I9+6neM5GzVO2eAo2xloAhwLPUw
-	zrZFVjbNlFfRbUgoTj3utrxv2I7/+YvtnDDQ6UmaGQPfO3DTELucXqaxGxVDppUiPsyAi7PNzsJ
-	56UAQdd0cqJjjpeIKJ8IoCBpeZOHu7gAwUKHYyetAI+tZPH1XDMDN4dDYhl2RR3qIEyF1aV4ha7
-	miNmifb2MvCmaZm7vCXu8+nwkUs=
-X-Received: by 2002:a05:620a:19a7:b0:915:6504:2a11 with SMTP id
- af79cd13be357-9208d2f42f5mr171322285a.44.1781823063019; Thu, 18 Jun 2026
- 15:51:03 -0700 (PDT)
+        bh=n+U5LnBvxE2n7Stgu6vC4rG5e+TN4oQ5BlsbYeF7xXs=;
+        b=XeBsWz6qChdptuJmzpVnTP9B3ItmocdPrQ4ot5UKHvvhTyPBQ3pgnJvMYeklUz2kEl
+         wjKnWSlIaSZLnaKB4Ru7x7tKijZXlaPzgWiWNLeMmRO38SUlGQVzvr4Vsr8A1kuYD5GZ
+         P2nPB9aWyeRvAjleLOCpc9HJgMtJQOxbvrFSWQhWFZBd0IyU005j6jn7fOwhk3XsfUL8
+         DLr2LaeAeony7W0k8CVmKNVaByh7DZnyCniyL9pSajLl52LIEs7Bi9ocr4xBoLnEdqZO
+         8qEb10GwuiQqNlVIrvhwlMvHA3fFEyjhrTwPmK3ZWhIw6oNTBb1gKn4jDJG7OGQruS1a
+         /iSQ==
+X-Gm-Message-State: AOJu0Yzh99mL5HTZJ3gqPM1rTMncxXQiu7AfCSmWZxhXhpUdNlKHdWEu
+	fHkxc25tw8B2B3Eh5vTgMH96Y1Y+nhalIMVzwrZYKZjheokp11E7feIGYNjfJlKSXZKHT12AQB0
+	tZhKxu8kpxGT/p+PSKVEFeaRik1BOV0zZiQ==
+X-Gm-Gg: AfdE7cnmJT7sh7Y3GLapZDUsusxz3cRcUNFH0+byNyhyLAalW6h966MAjHk+HcC5BzR
+	nmCXn+vrVGKthTCZVqa4sVm/iqBX7Kx6o4bDAF31e/PShXosYTX6dy9CXXI5+/B9fHnphI5gAEI
+	WUT1PW2qCNNBBfy2g5+MpIPSbUrCSlpbxcu4DgbvyGoD+hTQUekHqoMLQ5CsvRWkPfzB4xj1qpp
+	/ca3wiOPzL87LrpM2usnnLOMdwweJ4MFxfJSIdUcPgQCLtVdgTEvJBgWQrmGlPpS784G7Tg
+X-Received: by 2002:a05:690c:d21:b0:7f8:7e31:28a3 with SMTP id
+ 00721157ae682-80138627d6cmr9137217b3.49.1781823896442; Thu, 18 Jun 2026
+ 16:04:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260618203411.73917-2-dwindsor@gmail.com> <e9ec622a8a49be299cbbfd459e2fc10693bcd65c6dbf00c9e2645281564e5579@mail.kernel.org>
-In-Reply-To: <e9ec622a8a49be299cbbfd459e2fc10693bcd65c6dbf00c9e2645281564e5579@mail.kernel.org>
-From: David Windsor <dwindsor@gmail.com>
-Date: Thu, 18 Jun 2026 18:50:50 -0400
-X-Gm-Features: AVVi8Ceqq7GMU3vGf90S537LLM-Tkad05xeAgBh-3i_pTCiFmecE5-lsBfct2HY
-Message-ID: <CAEXv5_hDJyZ=nY6JaSL=17Mtw+e_m1doj=KReWSNmgo6ULFKpA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-To: bot+bpf-ci@kernel.org
-Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, ast@kernel.org, 
-	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, 
-	eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	kpsingh@kernel.org, mattbobrowski@google.com, paul@paul-moore.com, 
-	jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
-	roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, 
-	stephen.smalley.work@gmail.com, omosnace@redhat.com, casey@schaufler-ca.com, 
-	shuah@kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com, 
-	ihor.solodrai@linux.dev
+References: <20260618221919.2919512-1-ameryhung@gmail.com> <20260618223119.4696B1F000E9@smtp.kernel.org>
+In-Reply-To: <20260618223119.4696B1F000E9@smtp.kernel.org>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Thu, 18 Jun 2026 16:04:44 -0700
+X-Gm-Features: AVVi8CcFVwA3MIjPhnuWrGMCYNKvR0MNN_Sax3m2dGf3JDq0ygI5IQkS2uUOJu0
+Message-ID: <CAMB2axN2x0QXadyNm1FoDgkF9kfAOt58QXGw-0YbT3eEaUo+9Q@mail.gmail.com>
+Subject: Re: [PATCH bpf v1 1/2] bpf: Fix effective prog replacement with BPF_F_PREORDER
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 18, 2026 at 5:22=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
+On Thu, Jun 18, 2026 at 3:31=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
-> [ ... ]
-> >
-> > +struct xattr_ctx {
-> > +     struct xattr *xattrs;
-> > +     int *xattr_count;
-> > +};
-> > +
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
 >
-> Paul Moore suggested in v2 renaming this to 'struct lsm_xattrs' to avoid
-> overloading the term 'ctx' in the LSM space. The struct was renamed from
-> 'lsm_xattr_ctx' to 'xattr_ctx' in v3, but 'ctx' is still in the name. Was
-> there a reason to keep 'ctx' in the name, or would renaming to 'lsm_xattr=
-s'
-> as Paul suggested be preferable?
+> Pre-existing issues:
+> - [Critical] Incomplete fix leaves `purge_effective_progs()` vulnerable t=
+o an incorrect array index calculation, leading to a Use-After-Free.
+> --
 >
-
-Indeed he did; I mistakenly inverted his original request.
-
-Will send a fix for this, as well as converting GFP_KERNEL to GFP_NOFS
-in the allocation in __bpf_init_inode_xattr.
-
-
-> >  /* Default (no) options for the capable function */
-> >  #define CAP_OPT_NONE 0x0
-> >  /* If capable should audit the security request */
+> commit 66001d04979b50f447c6655c1c7db45dc464ee71
+> Author: Amery Hung <ameryhung@gmail.com>
+>
+> bpf: Fix effective prog replacement with BPF_F_PREORDER
+>
+> The patch fixes replace_effective_prog() to handle BPF_F_PREORDER array
+> indexing. By introducing effective_prog_pos(), it properly replays
+> compute_effective_progs()'s placement instead of relying on a linear coun=
+t.
+>
+> > diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> > index 83ce66296ac19..b12e44ec5d8cb 100644
+> > --- a/kernel/bpf/cgroup.c
+> > +++ b/kernel/bpf/cgroup.c
 >
 > [ ... ]
 >
-> > diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-> > index 564071a92d7d..86a8e188b900 100644
-> > --- a/kernel/bpf/bpf_lsm.c
-> > +++ b/kernel/bpf/bpf_lsm.c
-> > @@ -113,6 +113,9 @@ void bpf_lsm_find_cgroup_shim(const struct bpf_prog=
- *prog,
-> >  }
-> >  #endif
+> > @@ -960,22 +1006,10 @@ static void replace_effective_prog(struct cgroup=
+ *cgrp,
+> >               if (percpu_ref_is_zero(&desc->bpf.refcnt))
+> >                       continue;
 > >
-> > +BTF_ID_LIST_SINGLE(bpf_lsm_inode_init_security_btf_ids, func,
-> > +                bpf_lsm_inode_init_security)
-> > +
-> >  int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
-> >                       const struct bpf_prog *prog)
-> >  {
-> > @@ -137,6 +140,12 @@ int bpf_lsm_verify_prog(struct bpf_verifier_log *v=
-log,
-> >               return -EINVAL;
-> >       }
-> >
-> > +     /* bpf reserves a fixed number of xattr slots for itself.
-> > +      * Set the attach limit so the trampoline rejects excess attaches=
-.
-> > +      */
+> > -             /* find position of link in effective progs array */
+> > -             for (pos =3D 0, cg =3D desc; cg; cg =3D cgroup_parent(cg)=
+) {
+> > -                     if (pos && !(cg->bpf.flags[atype] & BPF_F_ALLOW_M=
+ULTI))
+> > -                             continue;
+> > -
+> > -                     head =3D &cg->bpf.progs[atype];
+> > -                     hlist_for_each_entry(pl, head, node) {
+> > -                             if (!prog_list_prog(pl))
+> > -                                     continue;
+> > -                             if (pl->link =3D=3D link)
+> > -                                     goto found;
+> > -                             pos++;
+> > -                     }
+> > -             }
+> > -found:
+> > -             BUG_ON(!cg);
+> >               pos =3D effective_prog_pos(desc, atype, link);
+> >               if (WARN_ON_ONCE(pos < 0))
+> >                       continue;
 >
-> This isn't a bug, but a subsystem pattern flags this as potentially
-> concerning: the BPF subsystem comment-style rule for files under kernel/b=
-pf/
-> requires multi-line comments to have the opening /* on its own line, with
-> comment text starting on the next line. The preferred form would be:
+> [Severity: Critical]
+> This is a pre-existing issue, but does purge_effective_progs() still
+> compute the array index using the naive linear increment that was removed
+> here?
+
+I think sashiko is right about this similar issue in the purge path. I
+will send v2 replacing the linear search below with
+effective_prog_pos() helper introduced in the set.
+
 >
->         /*
->          * bpf reserves a fixed number of xattr slots for itself.
->          * Set the attach limit so the trampoline rejects excess attaches=
-.
->          */
+> Looking at purge_effective_progs() in kernel/bpf/cgroup.c:
 >
-> > +     if (btf_id =3D=3D bpf_lsm_inode_init_security_btf_ids[0])
-> > +             prog->aux->attach_limit =3D BPF_LSM_INODE_INIT_XATTRS;
-> > +
-> >       return 0;
-> >  }
-> >
+>         /* find position of link or prog in effective progs array */
+>         for (pos =3D 0, cg =3D desc; cg; cg =3D cgroup_parent(cg)) {
+>                 if (pos && !(cg->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
+>                         continue;
 >
-> [ ... ]
+>                 head =3D &cg->bpf.progs[atype];
+>                 hlist_for_each_entry(pl, head, node) {
+>                         if (!prog_list_prog(pl))
+>                                 continue;
+>                         if (pl->prog =3D=3D prog && pl->link =3D=3D link)
+>                                 goto found;
+>                         pos++;
+>                 }
+>         }
 >
+> Since purge_effective_progs() acts as a fallback when
+> update_effective_progs() fails, could this incorrect array index calculat=
+ion
+> lead to a use-after-free?
 >
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
+> If bpf_prog_array_delete_safe_at(progs, pos) overwrites the wrong program
+> slot, __cgroup_bpf_detach() might later call bpf_prog_put() on a program
+> that is still active in the effective array.
 >
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/277886=
-16397
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260618221919.29=
+19512-1-ameryhung@gmail.com?part=3D1
