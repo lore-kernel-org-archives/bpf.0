@@ -1,95 +1,127 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F931DDC1D;
-	Thu, 18 Jun 2026 17:09:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65585346E57
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 17:18:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781802584; cv=none; b=UzETXbKkfq2ZqNQrcC/oSo9s5pN07+Y/gvbiPOJxrZ9ABrVgf4M80BSz+7gPYFb4HTtyjtNebI7H+q5qAs14fz5vnXEiabJsZOUr2vgIHNEmaVvUj16cqA81guysGobH9r9Kc4oqkfQAF/2ahKlX3Ej0NhYHf/cdmR+pqNYMMfM=
+	t=1781803114; cv=none; b=Yar+86deotYstRtaXOTjsuRwNRr8lTWhgx/RqMN6QBkROhy2Ef/xYmJdjU2jeyHYltafXQu9YVB7OyiRC1glhaogoz+qFE7Wlot20a0VI9zR8bN2498eYxPoVaAfeU2I4Tc8uNNeOVGBi7AwWnEH+S796Y/XxOOhs7gs58c+qV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781802584; c=relaxed/simple;
-	bh=ENpQMuYZJoBNkfXeFyOQiJiIy/YQyfAyOuHpN9bmnHA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gmjBnQYZKX+KtJKE2lnlj2rLjFncjYHw7SXAeFYQPDqSiHwW9xs7EkvBmLzzaqKPsogE2yEpuj2cfra0/t2jOd+MrZNKnxck7jNIZU+dsIRFAamnl678DW1feioEgl6Hw4fdgbterp9HH5DTIUdGuoL9pRkrmVDV0Mwk7+FTBbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Jn4lzMSf; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1781803114; c=relaxed/simple;
+	bh=Jz0A5qydOVFbTKVNouEcyrwig+LXMvAFbkgXcxps4R4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SG7SuJIUxhuLOqaWoLfRKMZTuUaOrDAIzR4rkXzBIYDTmYqV7eoadTbzvL1/EW5n37mTgEZxyXeGemZlPg4K1ezMu/gUWnRWbmNC1o/uhCJIwAdQWD7L5R4AECglxGYXlkUdmJtYE+Pt1yqYvUScaSD3QQgZLDFRHzrGjtMJDTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SU8840Rz; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Jn4lzMSf"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 5B82840E0287;
-	Thu, 18 Jun 2026 17:09:41 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 66VyEZMRCJp2; Thu, 18 Jun 2026 17:09:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1781802575; bh=hy1iY7sl6/2Sjr/G/dWwXWxqs32V/TwIOK86/jZYZ8Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Jn4lzMSfz9qxGWiDiy7D3IlfchOOE3WN5eiOfV9+VM8vD8YQEB3Z/aJVIhL6/AKC8
-	 aegt/8l5KXCzR3ITfuK5fpFE9wrfVG0IIvxyUNfmTnVyxCybWMoAvXoXj+P3wEgfiw
-	 274kDPCu3kHPi/sX+l8lcttO+G3Uocl8j4U1fwTsFIweNMm9GaPwW0FOAUzleohuy0
-	 7Ok0e07ReuV1+TQ3q7Cp/UpYCH7kHbJY412JuPav+IjbvCpXVgBZp8eMkc2wmY0/YP
-	 Ekd6UWQyrEKOtBLsUjtLMXz6fA9WPAvN6iIyFlGplgoy4wKgdqVDh/bBCt8z3YrAPy
-	 msFckykQCrayfA1X15uXAAqxz2xXFMOQQ8EV0ydbBCVc49H3PebThmZszAks9smhRe
-	 2SgB8I9d5+1YUDy9MEURMB0wKmDzHDWZN/kuxWsvTCeWga3HgkgMg4RSMT6b1sBmGc
-	 omdo53zdjfuqJ9XnJgE++0qJXGjaMawYtGzZdRzC2/nXFPgePjX/aXrGxd4XFpFUgf
-	 993gGw6PSXEnde0+Q9AQwtCycg7OVxkcm3pssUU3eEXB+4lnztTDjMwLzLNckqmPXQ
-	 K8CutW3K6oKHQq9Oui85W/c/3aAxp/jY6VqhABYSek5Fje8MD2DA+KtIkJW09zXuGi
-	 wNcG9aEzRIEe/zhxarjR/PgU=
-Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::1a])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C0BCF40E01D8;
-	Thu, 18 Jun 2026 17:09:16 +0000 (UTC)
-Date: Thu, 18 Jun 2026 10:09:13 -0700
-From: Borislav Petkov <bp@alien8.de>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>, bpf@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>
-Subject: Re: [PATCH v1] kasan: Fix false-positive wild-memory-access on x86
- under 5-level paging
-Message-ID: <20260618170913.GBajQmOQyOiBLqopUl@fat_crate.local>
-References: <20260610175651.647515-1-ihor.solodrai@linux.dev>
- <326b85af-c41a-4387-90a0-60720111934d@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SU8840Rz"
+Message-ID: <a753dae1-6a4f-404c-aef5-e28cfc708f31@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781803110;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bWkfRD+XeftsrUohEka8Qfm4BXzhYJhM5vZADskByts=;
+	b=SU8840RzLeBS8Q/DBx3KukJBcT/5HoeBh3fF/BD6ewucdApKigWQQDKZLN+b1ylXxDehzn
+	35VCPs1o+vsD0XIRla3T4xB9aUBX5V9HDkcR4oaP6z2i07mYebTc81QV6JpQPloS1UYhCM
+	eydaZUF1jeekuY20E9RcNqyXb5OfPq0=
+Date: Thu, 18 Jun 2026 10:18:21 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <326b85af-c41a-4387-90a0-60720111934d@linux.dev>
+Subject: Re: [PAHOLE v5 1/5] btf_loader: Handle decl tag component_idx for
+ parameters
+To: Alan Maguire <alan.maguire@oracle.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>, dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ acme@kernel.org, jose.marchesi@oracle.com,
+ David Faust <david.faust@oracle.com>, Yonghong Song <yonghong.song@linux.dev>
+References: <20260618005731.273181-1-vineet.gupta@linux.dev>
+ <20260618005731.273181-2-vineet.gupta@linux.dev>
+ <DJBWI249TH74.C8BAB4SRRTXB@etsalapatis.com>
+ <92447e74-7578-47cb-a08e-f6ca8a9e9274@oracle.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <92447e74-7578-47cb-a08e-f6ca8a9e9274@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Jun 17, 2026 at 03:13:33PM -0700, Ihor Solodrai wrote:
-> So my question to maintainers is what approach seems best?
+On 6/18/26 7:38 AM, Alan Maguire wrote:
+> On 18/06/2026 05:46, Emil Tsalapatis wrote:
+>> On Wed Jun 17, 2026 at 8:57 PM EDT, Vineet Gupta wrote:
+>>> From: Alan Maguire <alan.maguire@oracle.com>
+>>>
+>>> A BTF_KIND_DECL_TAG with a non-negative component_idx applies to a
+>>> specific function parameter (or struct/union member), not to the
+>>> function itself. btf_loader.c however attached every decl tag to the
+>>> type named by btf_type->type, so parameter decl tags were recorded on
+>>> the function rather than on the parameter, and pfunct never printed
+>>> them with the parameter.
+>>>
+>>> Resolve a non-negative component_idx to the corresponding parameter via
+>>> new helpers ftype__parameter()/function__parameter(), and attach the
+>>> tag there. Teach the pretty printer to emit a parameter's attributes by
+>>> factoring the function-level attribute loop into tag__attributes_fprintf()
+>>> and calling it from ftype__fprintf_parms() for each parameter.
+>>>
+>>> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+>>> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+>> With one nit:
+>>
+>> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+>>
+>> (Also feel free to keep the tags for the other 3 patches since the
+>> changes are minimal).
+>>
+>> </SNIP>
+>>
+>>> +	if (component_idx >= 0) {
+>>> +		struct tag *func_tag = cu__function(cu, tp->type);
+>>> +
+>>> +		if (func_tag != NULL) {
+>>> +			tag = function__parameter(tag__function(func_tag), cu,
+>>> +						  component_idx);
+>>> +			if (tag == NULL) {
+>>> +				fprintf(stderr, "WARNING: BTF_KIND_DECL_TAG for unknown parameter %d in BTF id %d\n",
+>>> +					component_idx, tp->type);
+>>> +				return 0;
+>>> +			}
+>>> +		}
+>>> +	}
+>>> +
+>>> +	if (tag == NULL && component_idx < 0)
+>>>   		tag = cu__function(cu, tp->type);
+>> Nit, I think this can be simplified as follows:
+>>
+>> tag = cu__function(cu, tp->type);
+>> if (component_idx >= 0 && tag != NULL) {
+>> 	tag = function__parameter(tag__function(tag), cu, component_idx);
+>> 	if (tag == NULL) {
+>> 		fprintf(stderr, "WARNING: BTF_KIND_DECL_TAG for unknown parameter %d in BTF id %d\n",
+>> 			component_idx, tp->type);
+>> 		return 0;
+>> 	}
+>> }
+>>
+>> <SNIP>
+> yep, that looks good to me. if there are no other issues arising from this
+> round and Vineet is happy with that change I can roll it in when landing this
+> to save having to roll a v6.
 
-The CPUID stuff is being rewritten currently and it should address your issue
-too. If not, then we need to rewrite it better.
+Cool, works for me and and indeed it will be nice to avoid a v6 :-)
 
-Can you reproduce with this set applied ontop:
+Thx,
+-Vineet
 
-https://lore.kernel.org/r/20260528153923.403473-1-darwi@linutronix.de
+>
+> One other issue; we need to install bpftool for CI. I'm working on a change to
+> support this (installing the version from the kernel tree), I'll try and get
+> this in place ASAP. Thanks!
 
-?
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
