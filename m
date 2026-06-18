@@ -1,125 +1,222 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11BE04048AA;
-	Thu, 18 Jun 2026 18:38:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4F0333440
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 19:00:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781807933; cv=none; b=n/djrj0U/9KFtikeZcMyVa5gclIsaAofgLlTBo6nibqryK17FqnwvgdmJKRGtQtlfHDnmXsW9cB4ZJ008PbW07TzbZ+9hi46w1jraquEnZkg7PiXTeWAOU1hntAmvlxVh2tNQObC3O8JT6QrytS/7dNFpZwgMY8Rjj+IozT8UTY=
+	t=1781809245; cv=none; b=i9NCpQ2ETSB4cO4vK0UlNPr7cy8dOcBZGExhRgOw8EpmxIAW3AIEuiqr3tt+LfKBlPa7H//4NM7s4jYiJQ4r1SrhQ/ou+biTsVkt29Y29zEn7cJ6VxOdUWK4C6NAle0UNyOn7R3IwU+3oi9Rap2Ik65Xp9lyWZH9QM0+Uo04G74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781807933; c=relaxed/simple;
-	bh=SX8wZq79+M4+psXDcElf7bosLtw4K0ZukwM5HKB9BnY=;
+	s=arc-20240116; t=1781809245; c=relaxed/simple;
+	bh=8kJMz9LKQ/8hfHjif49visLmKVnF4eIjhO0ToUzckXw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m7wx1dHJQXsN6PmvszITPoKYHaoUPAQFylb6izN5VxfT+jXI76kyaf8dlnBa3+jLvNcT9iIgt7LD5ycBCMSdaVDbz+Yqk8mfqoA/S7Gy4dcUVlTWknt+fZnX2s/2l2fCI7LUHfXr99PBQOou1wK+Jly7P2xElcpvphpE8dhwWKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=dFvkzbAf; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=PUfkHVNfAUqDTwSl9co8BdnFDybCZYDihZi6JJRVSqAHWFmboxe9CXfDCsMgKoqAEEbFrsQx1D/OKMXPaOG7tn3Ra9AMtRDHOlhJOz5S2yc3vkTVAfW1Lv4QTvLxJZdtSv2vPI77X3aEEn6R+VaX/+uBx50fDpn5OnYWOFyI5y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MFKNZsJG; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="dFvkzbAf"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 9056040E01D8;
-	Thu, 18 Jun 2026 18:38:48 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id x9SYV-9y-Tev; Thu, 18 Jun 2026 18:38:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1781807918; bh=qwqh5eZ76mKgaFMQg0L2w1CcuHyrk1cgEZhuhc/zz44=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dFvkzbAfQPOK4CXNEHjOU0/pafidSIvBGVQWa+M+eVk0nK+l7FxeVB+KpiPcRjhIW
-	 41/E5G1uXxBXncKFyeY0GuJxv4fxduTeEPnbP8sXNoVkzzMpqLY+PWFMFxKJbBfdZE
-	 COymlUbaf9iraqt6zd+uEHCya60wgCgRLrE7mQTMyvLa+ThLTpVRTp5r0RqCGYCs7m
-	 JL5pqKKRjdjpx/4cItX/ksjJEt+qiu8AvLeZ9ForEPuVDVcdLxHWYqQSE+22XdwJQ2
-	 5Uhzl52TNCezG7fGgFJYxv0zH9Fdme6nHdZLrgbrU6Ay7Y4PcXVeqOPjBi70EJnzD/
-	 KN5wSUyfx0g9QTmNaHbFg59WiYjJD/5XD6phynGoM/CzKcGFvvFklRwdvQvWe4C3k5
-	 EvcEo21v/8LVGINHIAmhKtDpxv9AzY2tCdYHSGuc7S4Q3bSnIzvKs33BwtgbMWYTKU
-	 5ofvxNiB72DNUtn4EI22pIbQwqTzDrwegGLyf1+FfNCywaUSfkn/JkQQ9/0VsY5PVf
-	 kprrKdQoABzkBguZvRhGgxVN04N7vtW5q9cUV7QkBXuBdE4oREf5stC3l0xg5mrXqV
-	 DCaAtrI2zNQ06uCU9QAGMF1Mask20BLMySp4Hx2fSt+9HBhCvtoATqhXTy/AuZXoM9
-	 /iYROZjf2CiQojDPnBfTxhVQ=
-Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::1a])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BC3C540E01D2;
-	Thu, 18 Jun 2026 18:38:18 +0000 (UTC)
-Date: Thu, 18 Jun 2026 11:38:15 -0700
-From: Borislav Petkov <bp@alien8.de>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>, bpf@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>
-Subject: Re: [PATCH v1] kasan: Fix false-positive wild-memory-access on x86
- under 5-level paging
-Message-ID: <20260618183815.GDajQ7F-bqTHnrakoi@fat_crate.local>
-References: <20260610175651.647515-1-ihor.solodrai@linux.dev>
- <326b85af-c41a-4387-90a0-60720111934d@linux.dev>
- <20260618170913.GBajQmOQyOiBLqopUl@fat_crate.local>
- <3207a706-354c-4e9d-ba53-dded1abb1842@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MFKNZsJG"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-37ce68a54f8so803800a91.0
+        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 12:00:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781809243; x=1782414043; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KZJIVkKgNSYCGOK4bX9+88PTNdyEosGt30DWnvoVWjY=;
+        b=MFKNZsJGybN51u5DlLE3vuL/c+ZASTuwQ8136Wh7+E648ocRlI9D91DTdsuiTrhVYr
+         3FxYFqxZhNebkQggoHO6yNw7/2krANRroyNy1Z7peuTTVQYe7yeRDyucuxfRbzEaADMM
+         qALQKFKCDK6T+uDuocjggyLSfjj94Etl14EvJJHX2LAs+jR8aCTE7oiyNmCCjKfONBfy
+         sRzXc0aw8JIfWf8BgwJMbDiNHN+W9J8AL1tFC950NJ+FLgSPOlhsBXrPGtiHiNmgrbMF
+         sMz8NKBEbnBdHW5+KF2DRp8pFgmemEcjRrNTCDWxVHyheBdY2lAWWIjV7QDlE/83Y+ke
+         +XeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781809243; x=1782414043;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KZJIVkKgNSYCGOK4bX9+88PTNdyEosGt30DWnvoVWjY=;
+        b=iXa5nTh16Gf0cYRIKDfMkelILx2tgSpJz4P4z232t50EE0MZUr6STHyrLyFkRKxsZI
+         dCeg+OTZt2yr1PjimsZJ5dW10L+mBoB65yNCVv4rd4E9PzIatQIR9XEB+HQT7wUbBcm+
+         KCdUS1K3Y5AhJ6mRQrhSw0L6Qh/eZYUA5lHEvdoZ6iV/llXWDXIdn0jK/xfRSfBHKGSu
+         KQyWhVLIkPNoEJfp3Du1JHYtSsWoXb9Y78yQ3N4TjItuguoO4D02kWcvnvC5mik635Ki
+         Vjoxw943jMWLXxv0rup7kYB09OPYbWHctLZH/Y+XuCztKvZHJw6a22jCT6oW1DlXnnqu
+         vLtA==
+X-Forwarded-Encrypted: i=1; AFNElJ+v+2IMQrJUieKR6cCE/KaRsvwVuaKEheD6yZxdugyiPumykk3fmD4uI1HwEhVRTcDYCdk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbmpXJqTkO8l3lWrDnjr7f/uIPvmXU+THlSyTDsxdMf+P5dFjV
+	BPG6/Sfell5TNX00R47WwEBwm42Q88k9fjVr+2ppdX/0EZaowsIl7HpL
+X-Gm-Gg: AfdE7ckjLFCjsQ7AB80cZZ+/xdXIBmLyd30WVakY5bFNYiFhwpwNpsIrlWX42ofQ4lk
+	YYacOW3CgzURHI84XqL96micxLl6CgItSaO1XCDGAWwD+crOoPc46lnThxZIyH8HERluwLCj+Kt
+	rakxmPqWtVy13wBV4ktr3uSTIBBqzP+4PvDWH3Y0/MHCY6TjawB4tK/8JFB2VTuiA52WWDfWHun
+	8Ry7rsPR0F69KcqyuKkucfJYE/3VrwxfmSFqQYDiXD0sSLJ1HDO3hmbg1D/CVuxNPhEez14x/FO
+	qIJLslEq1esdRtPj4PRhUL7Wmx6q6sFtn4NVr+qB2p4kv3x6zdOSahDKjPFP6KuaWSzLLTpwd1b
+	uxXhASkTH9O3LyBya1ZmfljpCBW+RrZ1u4pqqyt8dznxTuVgyXwn+5mptZPzV651SbPgc3cv2pa
+	HJuwo2kFZoTQ==
+X-Received: by 2002:a17:90b:5103:b0:369:2e00:1ff0 with SMTP id 98e67ed59e1d1-37d15e170e3mr781639a91.6.1781809242899;
+        Thu, 18 Jun 2026 12:00:42 -0700 (PDT)
+Received: from john-p8 ([98.97.43.82])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37d1aa48f04sm25097a91.2.2026.06.18.12.00.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jun 2026 12:00:42 -0700 (PDT)
+Date: Thu, 18 Jun 2026 12:00:40 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Sechang Lim <rhkrqnwk98@gmail.com>
+Cc: Jakub Sitnicki <jakub@cloudflare.com>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Liu Jian <liujian56@huawei.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Cong Wang <cwang@multikernel.io>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf] bpf, sockmap: fix BUG_ON in skb_to_sgvec() on a
+ resized ingress skb
+Message-ID: <ajQ9YXj216btyriM@john-p8>
+References: <20260613082442.3252576-1-rhkrqnwk98@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <3207a706-354c-4e9d-ba53-dded1abb1842@intel.com>
+In-Reply-To: <20260613082442.3252576-1-rhkrqnwk98@gmail.com>
 
-On Thu, Jun 18, 2026 at 11:12:09AM -0700, Dave Hansen wrote:
-> On 6/18/26 10:09, Borislav Petkov wrote:
-> > On Wed, Jun 17, 2026 at 03:13:33PM -0700, Ihor Solodrai wrote:
-> >> So my question to maintainers is what approach seems best?
-> > The CPUID stuff is being rewritten currently and it should address your issue
-> > too. If not, then we need to rewrite it better.
-> > 
-> > Can you reproduce with this set applied ontop:
-> > 
-> > https://lore.kernel.org/r/20260528153923.403473-1-darwi@linutronix.de
-> 
-> Thinking about this a bit more... If Ahmed's series does fix this, I
-> think it will be accidental. It still uses identify_cpu() and also does
-> a memset() of the new c->cpuid structure in addition to the old
-> c->x86_capability structure.
-> 
-> I'm not knocking Ahmed's series by any means. It just probably won't fix
-> this issue.
-> 
-> In a perfect world early_identify_cpu() and identify_cpu() would either
-> get consolidated into one thing. Or at least become two discrete things
-> that initialize two completely disjoint sets of data. That way,
-> identify_cpu() wouldn't memset() anything.
-> 
-> Isn't that the _real_ fix? Instead of trying to hide the inconsistency
-> when good data is blown away, we stop blowing it away in the first place?
+On Sat, Jun 13, 2026 at 08:24:31AM +0000, Sechang Lim wrote:
+>sk_psock_skb_ingress_enqueue() maps a received message into a scatterlist
+>with skb_to_sgvec(skb, sg, off, len). On the SK_SKB strparser path off and
+>len come from the message's strp_msg (stm->offset and stm->full_len), set
+>by the stream parser. strparser does not trim the skb, so normally
+>skb->len - off >= full_len and len is within the skb.
+>
+>An SK_SKB verdict (or parser) program may call bpf_skb_change_tail() and
+>shrink the skb after full_len was recorded. len then covers more bytes than
+>the skb holds, __skb_to_sgvec() walks past the data and trips BUG_ON(len):
 
-early_ is only on the BSP and you want to scan all CPUs.
+FWIW this only happens if the strparser program is also attached. If 
+there is no strparser program stm->offset = 0 and stm->full_len will be 
+whatever the verdict program set. So there we would get
 
-AFAIR, the last time I was looking at how we scan the CPUID leafs, we do have
-cases where there's blips in time when cap bits get disappeared to be
-rescanned again. The toggling of MSR bits which control feature flags is one
-thing that comes to mind.
+   len = skb->len; // then if it shrinks to skb->len - X its ok.
+   off = 0;
 
-But I'm with you on the consolidation approach. I think this is what we should
-do here and then that will be converted to the new way once Ahmed's lands.
 
-Thx.
+>
+>  kernel BUG at net/core/skbuff.c:5286!
+>  RIP: 0010:__skb_to_sgvec+0x78c/0x790
+>  Call Trace:
+>   <IRQ>
+>   skb_to_sgvec+0x32/0x90
+>   sk_psock_skb_ingress_enqueue+0x42/0x370
+>   sk_psock_skb_ingress_self+0x1a8/0x200
+>   sk_psock_verdict_apply+0x33c/0x360
+>   sk_psock_strp_read+0x24a/0x370
+>   __strp_recv+0x66d/0xda0
+>   __tcp_read_sock+0x13d/0x590
+>   tcp_bpf_strp_read_sock+0x195/0x320
+>   strp_data_ready+0x267/0x340
+>   sk_psock_strp_data_ready+0x1ce/0x350
+>   tcp_data_queue+0x1364/0x2fd0
+>   </IRQ>
+>
+>Clamp len to skb->len - off, and drop the message if off is already past
+>the skb. sk_psock_skb_ingress_enqueue() is the only skb_to_sgvec() caller
+>and both ingress paths (verdict SK_PASS and the backlog worker) reach it.
+>The clamp is a no-op unless the skb was shrunk.
+>
+>Fixes: 7303524e04af ("skmsg: Lose offset info in sk_psock_skb_ingress")
+>Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+>---
+> net/core/skmsg.c | 4 ++++
+> 1 file changed, 4 insertions(+)
+>
+>diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+>index e1850caf1a71..2961178ebd1e 100644
+>--- a/net/core/skmsg.c
+>+++ b/net/core/skmsg.c
+>@@ -550,6 +550,10 @@ static int sk_psock_skb_ingress_enqueue(struct sk_buff *skb,
+> {
+> 	int num_sge, copied;
+>
+>+	if (off >= skb->len)
+>+		return -EINVAL;
+>+	len = min_t(u32, len, skb->len - off);
+>+
 
--- 
-Regards/Gruss,
-    Boris.
+This is blocking the BUG but will break the socket. We should fix
+at the cause. Something like this untested... although I've never
+used the strparser program in any of our cases.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 2521b643fa05..95347f9d140c 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -542,6 +542,20 @@ static struct sk_msg *sk_psock_create_ingress_msg(struct sock *sk,
+         return alloc_sk_msg(GFP_KERNEL);
+  }
+
++static bool sk_psock_skb_strp_range(struct sk_buff *skb, u32 *off, u32 *len)
++{
++       struct strp_msg *stm = strp_msg(skb);
++
++       *off = stm->offset;
++       if (unlikely(*off >= skb->len)) {
++               *len = 0;
++               return false;
++       }
++
++       *len = min_t(u32, stm->full_len, skb->len - *off);
++       return *len;
++}
++
+  static int sk_psock_skb_ingress_enqueue(struct sk_buff *skb,
+                                         u32 off, u32 len,
+                                         struct sk_psock *psock,
+@@ -696,12 +710,8 @@ static void sk_psock_backlog(struct work_struct *work)
+         while ((skb = skb_peek(&psock->ingress_skb))) {
+                 len = skb->len;
+                 off = 0;
+-               if (skb_bpf_strparser(skb)) {
+-                       struct strp_msg *stm = strp_msg(skb);
+-
+-                       off = stm->offset;
+-                       len = stm->full_len;
+-               }
++               if (skb_bpf_strparser(skb))
++                       sk_psock_skb_strp_range(skb, &off, &len);
+
+                 /* Resume processing from previous partial state */
+                 if (unlikely(state->len)) {
+@@ -709,6 +719,9 @@ static void sk_psock_backlog(struct work_struct *work)
+                         off = state->off;
+                 }
+
++               if (unlikely(!len))
++                       goto out_free_skb;
++
+                 ingress = skb_bpf_ingress(skb);
+                 skb_bpf_redirect_clear(skb);
+                 do {
+@@ -737,7 +750,8 @@ static void sk_psock_backlog(struct work_struct *work)
+                         len -= ret;
+                 } while (len);
+
+-               /* The entire skb sent, clear state */
++out_free_skb:
++               /* The skb has been handled, clear state. */
+                 sk_psock_skb_state(psock, state, 0, 0);
+                 skb = skb_dequeue(&psock->ingress_skb);
+                 kfree_skb(skb);
+@@ -1020,10 +1034,10 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
+                         len = skb->len;
+                         off = 0;
+                         if (skb_bpf_strparser(skb)) {
+-                               struct strp_msg *stm = strp_msg(skb);
+-
+-                               off = stm->offset;
+-                               len = stm->full_len;
++                               if (unlikely(!sk_psock_skb_strp_range(skb, &off, &len))) {
++                                       err = 0;
++                                       goto out_free;
++                               }
+                         }
+                         err = sk_psock_skb_ingress_self(psock, skb, off, len, false);
+		}
