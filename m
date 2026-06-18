@@ -1,223 +1,231 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100D238D40D
-	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 06:52:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15A333AF64F
+	for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 08:44:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781765581; cv=none; b=TDO0Sl8WsnG9U7gRwaHRsw8gLhSvSPaAgoLdMBYrfFuJoJgALyg4bp9iWrxfTezShqCcIp5Fr50IIWP9hn7FNm8D2yWet1vidW3so2NpfWO37Xmlr9yB6V9WNVIPcIrzt5Old7bZ6+g/gX36olcDpWze6dovlUEEMhqS4x1kA80=
+	t=1781772292; cv=none; b=GIvCqdWBEQCa4nQpYJgCxuWtQ0Wz8X9TLNB1vavuX6FlJ4zir/32wAc0pWP4sHEjMrYYvFu82blI3QZoly9gU0lc3eyNgVDybExVPnkEJi/OW/jCYLgyKa8yUdD8xSYnVaJLgUaVMCnXe+h+MYdBAcomkA+u0gwtQhBwHaxaaSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781765581; c=relaxed/simple;
-	bh=se1FOkSfRfU7X0OFhGaQBFmVranH4EIPrVu6ylNOmCU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=cy9psipk39ePwT7t+izo9LxELIyGIAB0Pt8Q+VBo1ERTyjqYPRtb/vJHtT1GGTNvBB2/2tvr9Gu6VxyfQBFJEawrlSmgw54AfAmLSOl0rMJwNXiyjggrmqIY+dK1s5f6oizRgj+J0f1sttWXC8pm4wgrcsA9LRtdIy2g+U2y430=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=a7ZHZhOG; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1781772292; c=relaxed/simple;
+	bh=76A9PLA0Vo4uGvCdzH6m1R2rU33fdxsc/cfE8TrRFNI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dfr3OYDzZ9MPn6v/mlzrL9RP3d6IYY0KAXw/A1JF6T4ryf5wUJmxhUyv2cpQ2QulA0vk0TOFgtYdgyhGyUfkQtHn1m7PebkNoUWjBFDwXrRTCy4HJbbLIyLgQjcttWigUY3pLUFdgN1G1No1FCu+iG0kig7LeRanGM1xtqZMeHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rhOw7JoC; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="a7ZHZhOG"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2c6bdb8a8bdso3752055ad.1
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 23:52:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rhOw7JoC"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-490b4a8e28bso4004415e9.1
+        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 01:44:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781765579; x=1782370379; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5sEnXo35JuQ0QnVsUJrbhZuqaUj9pBPf+Es0v6/00A4=;
-        b=a7ZHZhOGc4790ByHzZh5vLNknMpyB6aoYDthj1c7vxJqH0EM7qmAsoymSVotedW21Q
-         vPSDhaiBbFFq/BFH1ST4d/6G8mXVqQwcEV2tENRun9TYxNLQAVcimyW57amVHhqVkSf2
-         +n3UFzGx8aGhJZiHXhnePAkOgT2onEOOm0QQ7RXqjUdqoNIR9cTy2sGZe1XSdznmzEyf
-         60QoHuJplDYq77baLuI8Ln1b2NOP/5oY33TCHMUSQda8PD/LuZCbKJYTM+5h2NfI+ENa
-         Xa9WJKiABkbLmmZC17DL87b+ABIA9uv3jBz2HAP9J1oUEZB2AHXS6fi3u2r/tuNVeoxc
-         FQqw==
+        d=gmail.com; s=20251104; t=1781772289; x=1782377089; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BMZN9/XZRkM1cRtvf9YfI3LamYxCsoX5bvp0jYNhRA4=;
+        b=rhOw7JoCdlFDxr43Ajxcrwuh2Rhd4S4I1Ll+1dn5dvfztv3CjTkcREYGKCcydkrIIp
+         PgqgXXK1hSY6T07tW0y3prQJ7MzigP8P1EHEsu05I14uQXBCNPwCpws3IXIuo5wjMF7U
+         CUAlZ8pK9h1iOh97bGCr/gOKxVhjgKgRA9a5gZdo5NJ/oLXEOHBly+GNq0SetASHCTgQ
+         /QeWH4vajVClpYpm4owzidy+Y+tVeNZ/f35EBOX5+CRFZ5ZSScIjXw+/5hzeomOh8kWr
+         YNKc1OOYLaEnQCAK4ZKdEnxGsH+jug+dk+uYpYCuCSiMgeA0r9Ua2mRJ+FSnjV5WEIOk
+         quJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781765579; x=1782370379;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5sEnXo35JuQ0QnVsUJrbhZuqaUj9pBPf+Es0v6/00A4=;
-        b=KalvaMBAEB02iPW/IHjntCieOf+Fcm5ed0r2EnmNxHR3yB3jR2y2pqqDe0hZe2l9tf
-         3sQcuqKwCo2WDMQ0OYKZGOkMsYbQ8IULN14ZeQsakee9VWd8GdlQr1g6FJYKDvZYQYI1
-         0S3XEwtIbFKpIg7Z1t3j/e3BxUWPjl6BXfy1Ppv+goxc38hCjVC5WkNxi0pV7GVbuXJC
-         Qu45rXbeNSn6SsXK1JRKCA3dTRc0FB3Tu7XVuCUD/hisoQWgtivKHHYXteAL5iNQIWdm
-         C/119qwfUVh5xXiVZBjLwuVK5HCiM6YXV5Zw0dI6JIrXgaI4pdd3mWURFtkTKV/pvOxf
-         cAkQ==
-X-Gm-Message-State: AOJu0YwTH4vE37KrYGNTuFFe8gMAgyIw3SMLnzbdHXSxWIm1C5vYX5DV
-	lo/jC2Wj+8J7b0dW4mosm/2oJ1sZH0l0WpMU1dOnDY4+0MWdUWBpPnLB0KzywgcJ5aI=
-X-Gm-Gg: AfdE7clr2FJ/M77YYhun094XPJg2BJUYSIWs5sMpM3S5xYLpVgo5L/I13OKPg6dHEWZ
-	FNZEgcBhncoEPhXwWCVYboxERLoRBXSkh0ZS7drfuSulOIIp77VkLw2OHaE+txU7F3vE8LyKTWj
-	T1iiu1GE7r1zAvomUH3ynERM1CEs8SXpbreRkMswU55JRwc/K4w3TtszCH4c6C2xVFWh3hmnMbx
-	gzh4ABg36hgbb1qX/spx+bfPbMvMgL4w8PC1fCBbMsTnt/s56YW7Fcl0mrvig3SABzY56S+nZxr
-	3u7wWmZDvMMltTD5IFACsBxz+qU9jfkt3uTwLmZ9O6Yy2aMbS0glD7wUlVbXWmAb6Ii2EZyqRrP
-	Sbbja1Uja/wNtzcrhUKGfLxbBNJCplG1HjEY9fFuoESfRGMq6/Jz3c2EbptrN30iH1FM5Dd8bAH
-	Nc8FaU9SwxHU2dn/DnCeG2NcBxQhottav9oe4VPyGRNk5X0Q==
-X-Received: by 2002:a17:902:e54a:b0:2c2:2a8a:af69 with SMTP id d9443c01a7336-2c6bc0c4a66mr71528235ad.9.1781765579163;
-        Wed, 17 Jun 2026 23:52:59 -0700 (PDT)
-Received: from localhost (d206-116-244-52.bchsia.telus.net. [206.116.244.52])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c4327aca9dsm182685375ad.50.2026.06.17.23.52.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jun 2026 23:52:58 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781772289; x=1782377089;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BMZN9/XZRkM1cRtvf9YfI3LamYxCsoX5bvp0jYNhRA4=;
+        b=cQOjIlCDqeEOrM+EAwWsMyYJ0CtS3N2iImqfDGkI69EBUybtbujvseSp71fHXFSwGf
+         +sCDDli90rLUvg71bAlrsuanc/thn49r/ygtXSeqQdXUJ9jjemMIhlPImfIyUmU7yCuL
+         SDfg2DcgodNVRUnp+QMLLDvc1h5aqFeLOmdLj9hJdB0cmFPkutcRrLY5jNl9ThGusO+1
+         4gsmcX30RILhEJNSLDxVMtLFVT3S8Kvn52KQjb4oFHk6plCvw14P9WubAXe3X3WicdG2
+         jXjslu6AYLAeRdPeV2A8/BrqDDA2TVqiyg3bjCbWXnseFXkZk87vvKuzETMJygJXN+p3
+         5ZFQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+yoRW4cyUwGee8+8zGKUF3LLgW9+H03qXbb77UI1sZN0wHH1bXN0A/K6ALQa54n1TfB1w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCAmyLmzn6/sizn959/i+HKs8VUGq+euBKKQptc/9usII3+odB
+	bVu7+qc3IOBNgAKD3ENxo8skFAzHR/N1ia3HeLDIu1fmNT6OGyU3DwdU
+X-Gm-Gg: Acq92OF6RrMFtclLCi8zwoayuhUoGl0tEo5y5F6oVRtYRD2oQsVULRHr2ETcH1/rQee
+	3JKEACMw40f1etTBhR6k48wrMp3y0UQ78c1X/JwXXwgpsddeyr4fC7BMgdVuXVl/BKNr/HBE1TW
+	iPcnTIpQcM2orO8Sb6f73MTgLxo8XzqvkDXorXI0rzpW8R6F1ZL7hunB3M02YffX7Fql5sN0VHA
+	dDctXIO9gY9U//dIS8AOHfhiTHJXJNuwW9n15+AcPOTDDdCR3ft+M/5M9ogSrmOP8vNm7Uzvp66
+	8c/sMZGH+kBwdTaBxWY9A6ePDSxOXsUaANdmNfk6ObXJK1vfLalcT157Bcjo4vzkNBcDVYzY6S2
+	4n3nxWdXosUVpbyKPJ1Rz2FWcdNN1pWnaXGX8LoD0D+TuiGUmH39gt9oDrxqhMbp5Y+o5qQDdur
+	5zunFTxHVcqKq+XLBm8whuCymOVqUp4oBGiMbKtRGJzFdKLiHSu7Og0jZqW2fCCTqYu1HABO/ER
+	+dBRPN1SR0hq7oynOczD1jCW7uOU+pmt8f7G9FGowD2Zy5bMKfF+EdgrZbR0rt3WJCr6xjp3yT9
+	ePrOvHe9DTyumtUIjxyvwNHCIlKnYJm2
+X-Received: by 2002:a05:600c:350a:b0:492:1e36:1fe9 with SMTP id 5b1f17b1804b1-49233430b8amr112747915e9.37.1781772289262;
+        Thu, 18 Jun 2026 01:44:49 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e006e99796483dfbc0d.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:6e99:7964:83df:bc0d])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4922fa96f0esm255321905e9.12.2026.06.18.01.44.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jun 2026 01:44:48 -0700 (PDT)
+Date: Thu, 18 Jun 2026 10:44:46 +0200
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: sun jian <sun.jian.kdev@gmail.com>
+Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+	hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+	toke@redhat.com, lorenzo@kernel.org, martin.lau@kernel.org,
+	clm@meta.com, ihor.solodrai@linux.dev
+Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Cover partial copy of
+ non-linear test_run output
+Message-ID: <ajOv_oOd1zInaW1b@mail.gmail.com>
+References: <20260617093557.63880-3-sun.jian.kdev@gmail.com>
+ <2dad9b5c184fa101d7cffa1d8f5eea5b5df60f53533d98c68175c9e3ec5ee6ac@mail.kernel.org>
+ <CABFUUZFeh18OjQ6EhjD17ZwQKb1aiVNkYKv-hAkVGrHhPpjE4Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 18 Jun 2026 02:52:58 -0400
-Message-Id: <DJBZ6ML455FF.15NG4FYCAX9DE@etsalapatis.com>
-Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, "Andrew Werner" <awerner32@gmail.com>,
- "Zvi Effron" <zeffron@riotgames.com>, "Andrii Nakryiko" <andriin@fb.com>
-Subject: Re: [PATCH bpf 6/6] libbpf: ringbuf: Reject overwrite callback use
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Tamir Duberstein" <tamird@kernel.org>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
- <shuah@kernel.org>, "Andrea Righi" <arighi@nvidia.com>, "Xu Kuohai"
- <xukuohai@huawei.com>, "Andrea Righi" <andrea.righi@canonical.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260613-bpf-ringbuf-fixes-v1-0-e623481cb724@kernel.org>
- <20260613-bpf-ringbuf-fixes-v1-6-e623481cb724@kernel.org>
-In-Reply-To: <20260613-bpf-ringbuf-fixes-v1-6-e623481cb724@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABFUUZFeh18OjQ6EhjD17ZwQKb1aiVNkYKv-hAkVGrHhPpjE4Q@mail.gmail.com>
 
-On Sat Jun 13, 2026 at 9:48 PM EDT, Tamir Duberstein wrote:
-> BPF_F_RB_OVERWRITE can advance overwrite_pos past consumer_pos.
-> Callback traversal does not read overwrite_pos, so after the producer
-> laps the consumer it can treat overwritten data as a record header.
->
-> An earlier proposal[0] copied the readable window before invoking
-> callbacks. Review concluded that callbacks are a poor fit because
-> copying penalizes zero-copy users and the API cannot report skipped
-> records.
->
-> Record the map flag and reject callback consumption with -EOPNOTSUPP.
->
-> Link: https://lore.kernel.org/bpf/CAEf4Bzaq5drHWChXoRBnrmkb6reAsSVj8r=3Du=
-ByFSup31FMA7hw@mail.gmail.com/ [0]
-> Fixes: feeaf1346f80 ("bpf: Add overwrite mode for BPF ring buffer")
-> Assisted-by: Codex:gpt-5.5
-> Signed-off-by: Tamir Duberstein <tamird@kernel.org>
-> ---
->  tools/lib/bpf/libbpf.h                           |  1 +
->  tools/lib/bpf/ringbuf.c                          |  4 +++
->  tools/testing/selftests/bpf/prog_tests/ringbuf.c | 39 ++++++++++++++++++=
-++++++
->  3 files changed, 44 insertions(+)
->
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index a3b8f606a91d..899457d5d536 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -1439,6 +1439,7 @@ struct ring_buffer;
->  struct ring;
->  struct user_ring_buffer;
-> =20
-> +/* Callback-based consumption is unsupported for BPF_F_RB_OVERWRITE maps=
-. */
->  /* A negative return stops consumption; non-negative values continue. St=
-opping
->   * can leave records queued without a new readiness notification. Before
->   * waiting for readiness again, consume until no records remain.
-> diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-> index ea8909fec4e9..f7972eae05ba 100644
-> --- a/tools/lib/bpf/ringbuf.c
-> +++ b/tools/lib/bpf/ringbuf.c
-> @@ -30,6 +30,7 @@ struct ring {
->  	unsigned long *producer_pos;
->  	unsigned long mask;
->  	int map_fd;
-> +	bool overwrite;
->  };
-> =20
->  struct ring_buffer {
-> @@ -118,6 +119,7 @@ int ring_buffer__add(struct ring_buffer *rb, int map_=
-fd,
->  	r->sample_cb =3D sample_cb;
->  	r->ctx =3D ctx;
->  	r->mask =3D info.max_entries - 1;
-> +	r->overwrite =3D info.map_flags & BPF_F_RB_OVERWRITE;
-> =20
->  	/* Map writable consumer page */
->  	tmp =3D mmap(NULL, rb->page_size, PROT_READ | PROT_WRITE, MAP_SHARED, m=
-ap_fd, 0);
-> @@ -233,6 +235,8 @@ static inline int roundup_len(__u32 len)
-> =20
->  static int ringbuf_validate(const struct ring *r)
->  {
-> +	if (r->overwrite)
-> +		return -EOPNOTSUPP;
+On Wed, Jun 17, 2026 at 10:19:52PM +0800, sun jian wrote:
+> On Wed, Jun 17, 2026 at 6:31 PM <bot+bpf-ci@kernel.org> wrote:
+> >
+> > > diff --git a/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c b/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
+> > > index 01f1d1b6715a..9cc898e6a9f7 100644
+> > > --- a/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
+> > > +++ b/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
+> > > @@ -4,6 +4,10 @@
+> > >
+> > >  #include "test_pkt_access.skel.h"
+> > >
+> > > +#define NONLINEAR_PKT_LEN 9000
+> > > +#define NONLINEAR_LINEAR_DATA_LEN 64
+> > > +#define SHORT_OUT_LEN 100
+> > > +
+> >
+> > [ ... ]
+> >
+> > > @@ -20,6 +24,69 @@ static void check_run_cnt(int prog_fd, __u64 run_cnt)
+> > >             "incorrect number of repetitions, want %llu have %llu\n", run_cnt, info.run_cnt);
+> > >  }
+> > >
+> > > +static void init_pkt(__u8 *pkt, size_t len)
+> > > +{
+> > > +     size_t i;
+> > > +
+> > > +     for (i = 0; i < len; i++)
+> > > +             pkt[i] = i & 0xff;
+> > > +}
+> >
+> > A question was raised on v2 about whether pkt_v4 could be reused by
+> > reducing the linear area to ETH_HLEN, rather than introducing a custom
+> > init_pkt() with a 9000-byte stack packet.
+> >
+> > Can't we reuse pkt_v4 here by reducing the linear area to ETH_HLEN?
+> > The v3 still adds init_pkt() and the NONLINEAR_PKT_LEN packet, so this
+> > doesn't seem to have been picked up.
+> >
+> > > +
+> > > +static void test_skb_nonlinear_data_out_partial(struct test_pkt_access *skel)
+> > > +{
+> > > +     LIBBPF_OPTS(bpf_test_run_opts, topts);
+> > > +     __u8 pkt[NONLINEAR_PKT_LEN];
+> > > +     __u8 out[SHORT_OUT_LEN];
+> > > +     struct __sk_buff skb = {};
+> > > +     int prog_fd, err;
+> > > +
+> > > +     init_pkt(pkt, sizeof(pkt));
+> > > +
+> > > +     skb.data_end = NONLINEAR_LINEAR_DATA_LEN;
+> > > +
+> > > +     topts.data_in = pkt;
+> > > +     topts.data_size_in = sizeof(pkt);
+> > > +     topts.data_out = out;
+> > > +     topts.data_size_out = sizeof(out);
+> > > +     topts.ctx_in = &skb;
+> > > +     topts.ctx_size_in = sizeof(skb);
+> > > +
+> > > +     prog_fd = bpf_program__fd(skel->progs.tc_pass_prog);
+> >
+> > [ ... ]
+> >
+> > > diff --git a/tools/testing/selftests/bpf/progs/test_pkt_access.c b/tools/testing/selftests/bpf/progs/test_pkt_access.c
+> > > index bce7173152c6..cd284401eebd 100644
+> > > --- a/tools/testing/selftests/bpf/progs/test_pkt_access.c
+> > > +++ b/tools/testing/selftests/bpf/progs/test_pkt_access.c
+> > > @@ -150,3 +150,15 @@ int test_pkt_access(struct __sk_buff *skb)
+> > >
+> > >       return TC_ACT_UNSPEC;
+> > >  }
+> > > +
+> > > +SEC("tc")
+> > > +int tc_pass_prog(struct __sk_buff *skb)
+> > > +{
+> > > +     return TC_ACT_OK;
+> > > +}
+> > > +
+> > > +SEC("xdp.frags")
+> > > +int xdp_frags_pass_prog(struct xdp_md *ctx)
+> > > +{
+> > > +     return XDP_PASS;
+> > > +}
+> >
+> > A related suggestion on v2 was that, once pkt_v4 is reused, the existing
+> > BPF program could be reused instead of adding new pass-through programs.
+> >
+> > Could tc_pass_prog and xdp_frags_pass_prog be dropped in favour of the
+> > existing program? The v3 still adds both of these, so this point also
+> > seems to be open.
+> >
+> >
+> > ---
+> > AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> > See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> >
+> > CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27680511802
+> 
+> Hi,
+> 
+> Thanks for checking this.
 
-Nit; unlikely(r->overwrite)?
+Hi Sun Jian,
 
-The check makes sense, we can add it whether we keep ringbuf_validate()
-or not.
+It would help if you could reply inline instead of at the end of the
+messages, especially when there are multiple comments. See [1] for an
+explanation of how that works.
 
->  	return r->sample_cb ? 0 : -EINVAL;
->  }
-> =20
-> diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/tes=
-ting/selftests/bpf/prog_tests/ringbuf.c
-> index 5f0c679bf9a6..a6c707af1134 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-> @@ -684,6 +684,43 @@ static void ringbuf_map_key_subtest(void)
->  	test_ringbuf_map_key_lskel__destroy(skel_map_key);
->  }
-> =20
-> +static void ringbuf_overwrite_callback_subtest(void)
-> +{
-> +	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags =3D BPF_F_RB_OVERWRIT=
-E);
-> +	struct ring_buffer *ringbuf;
-> +	struct ring *ring;
-> +	int map_fd, err;
-> +
-> +	map_fd =3D bpf_map_create(BPF_MAP_TYPE_RINGBUF, NULL, 0, 0, getpagesize=
-(),
-> +				&opts);
-> +	if (!ASSERT_OK_FD(map_fd, "bpf_map_create"))
-> +		return;
-> +
-> +	ringbuf =3D ring_buffer__new(map_fd, process_noop_sample, NULL, NULL);
-> +	if (!ASSERT_OK_PTR(ringbuf, "ring_buffer__new"))
-> +		goto cleanup_fd;
-> +
-> +	ring =3D ring_buffer__ring(ringbuf, 0);
-> +	if (!ASSERT_OK_PTR(ring, "ring_buffer__ring"))
-> +		goto cleanup_ringbuf;
-> +
-> +	err =3D ring_buffer__consume_n(ringbuf, 0);
-> +	ASSERT_EQ(err, -EOPNOTSUPP, "ringbuf_consume_zero");
-> +	err =3D ring_buffer__consume(ringbuf);
-> +	ASSERT_EQ(err, -EOPNOTSUPP, "ringbuf_consume");
-> +	err =3D ring_buffer__poll(ringbuf, 0);
-> +	ASSERT_EQ(err, -EOPNOTSUPP, "ringbuf_poll");
-> +	err =3D ring__consume_n(ring, 0);
-> +	ASSERT_EQ(err, -EOPNOTSUPP, "ring_consume_zero");
-> +	err =3D ring__consume(ring);
-> +	ASSERT_EQ(err, -EOPNOTSUPP, "ring_consume");
-> +
-> +cleanup_ringbuf:
-> +	ring_buffer__free(ringbuf);
-> +cleanup_fd:
-> +	close(map_fd);
-> +}
-> +
->  static void ringbuf_overwrite_mode_subtest(void)
->  {
->  	unsigned long size, len1, len2, len3, len4, len5;
-> @@ -760,6 +797,8 @@ void test_ringbuf(void)
->  		ringbuf_map_key_subtest();
->  	if (test__start_subtest("ringbuf_write"))
->  		ringbuf_write_subtest();
-> +	if (test__start_subtest("ringbuf_overwrite_callback"))
-> +		ringbuf_overwrite_callback_subtest();
->  	if (test__start_subtest("ringbuf_overwrite_mode"))
->  		ringbuf_overwrite_mode_subtest();
->  }
+1: https://kernelnewbies.org/FirstKernelPatch#Responding_inline
 
+> 
+> I tried reusing pkt_v4 and the existing TC program, but they do not fit
+> the skb case this test is trying to cover.
+> 
+> For skb test_run, IPv4/IPv6 inputs with a too-short L3 header in the
+> linear area are rejected before bpf_test_finish(). With pkt_v4 and a
+> linear area of ETH_HLEN, the test fails with -EINVAL before reaching the
+> partial copy-out path. If the linear area is increased enough to pass the
+> IPv4 check, pkt_v4 is too small to both trigger the old
+> copy_size - frag_size path and verify that the copied prefix spans the
+> linear data and the first fragment. pkt_v6 has the same issue: after
+> making the IPv6 header linear, only 20 bytes remain in frags.
+> 
+> The existing test_pkt_access program has its own packet-access coverage
+> goals and is not just a pass-through carrier. With such a short linear
+> area or small packet fixture, it can fail before the test hits the
+> bpf_test_finish()'s partial copy-out path. A pass-through TC program is
+> therefore a better fit, because it keeps the test focused on the
+> bpf_test_finish() copy-out semantics.
+
+If we're keeping tc_pass_prog() then can't we use pkt_v4 and get rid of
+init_pkt?
+
+> 
+> For XDP, this object does not have an existing xdp.frags pass-through
+> program, so the small XDP frags program is needed to cover the other
+> caller of the shared bpf_test_finish() path.
+> 
+> Thanks,
+> Sun Jian
