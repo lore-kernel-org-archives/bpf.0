@@ -1,114 +1,136 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3AF03BC69C;
-	Fri, 19 Jun 2026 16:04:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.229.168.213
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690723B38AA
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 16:17:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781885089; cv=none; b=H5yi6ZV5z7u0bEI538zCbDzGl8nTAZxq3vF7zWVjjTgkW6rnlnPXXbsSX07zB/OZtVgFcrf/8EaWIdnMcrB8G1Vph0xbwC3nLxQTU4eUjr4CNw9RMqXlmijgfSXU2WILrtuOoVz3bcxiMitrlRFQj88V/zhv3nfIcFxtcSrDxgs=
+	t=1781885865; cv=none; b=r/iZqaKjM5p5kqQGhD8sP20dcvhkOGQ+IYpgJG2Wrfqv6jmX3u9Q2r3FOq/8TbwqZtTbjYm2WV2jqejGxv8eIJUrRByvBXVC+CDfIvjt5UYAey5mlk8o81/kDigG4q5lMPgbMcIliU3mvXk9FDgYwE3d4jg/lha2w9sn9cgQVJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781885089; c=relaxed/simple;
-	bh=LIkUbbJRL7ljuIGsElXvukV42cE32V3Jp1gy7KWaa2U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Db5pHRT080vVHOqkIzXNRnz7klfM569VlBK7rT71e8BLuzshW3qvy7RF1OE6kUGVfEqnq3QjHpRgsd6zUm3RlBWYoAHwm1DBh0WhTCdQOSci4eknrlVYxWLWsfztKrLKjb1QEDq9sAZ2NcvdPq5Nm9pf4Jbex1TG8AkE/39nJoQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=ZPR+/vUI; arc=none smtp.client-ip=52.229.168.213
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781885865; c=relaxed/simple;
+	bh=TDppbc35T4vhbhgno2ei2F4nDNc4OtWWTAWIzmfseg4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=d6j/vhjwa+LH0EEjp1xI+SKb67BsfqZfmhYdw7Ek4QTSb7a5hz6nW+eEgUyXTMZ37ajAWq3ii4kOfzj6jeBFXUimNh6tXoP/Q8ZDeYVWRskr6aRA7SOlK3lq7IG0N9ahv4+juysEJEpgwcL95vcGXK5MZ037KKhcv51fR3Uv1OA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vd1wM0x7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="ZPR+/vUI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=uVy8dTWPpQpvVAjrQQgfAgneG25neUc
-	KPCsXPi3IARo=; b=ZPR+/vUICL8V4I8TNsxkg9Atk+x/EkWxk3bG04h9ojYi7hJ
-	S0MJd8GXaxCWJE0+fag2Ur/rhBmmWngtFmREyUcN3ScwEoPnpobCGiS5GsCMXHaJ
-	KLylBQqtFfkmv7yoz9c2+9pae8s6V7H9gAoKsjE2qtL6Znq8RFx1TnGUvtko=
-Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web3 (Coremail) with SMTP id ygQGZQCn8o+RaDVqIeaPAg--.58650S3;
-	Sat, 20 Jun 2026 00:04:33 +0800 (CST)
-From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Sat, 20 Jun 2026 00:04:27 +0800
-Subject: [PATCH bpf-next 1/2] bpf: Require CAP_BPF for pseudo-BTF ksym
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vd1wM0x7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DBDD1F000E9;
+	Fri, 19 Jun 2026 16:17:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781885862;
+	bh=QQso15NpjcPVkcN49D0alf5DNsvVtsRXsWW5vKArmmE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Vd1wM0x7mmEVdLm5wnpeMCaLVOjCE1L6ZvBTVdSo6qHiFBcLhHhPP6SuT/186DA+U
+	 VcG108f+SlzpKyal45uVLNDDVmKiagEQiJkAS2R9sTDZUHm8z3my+mBgVNNVvuz+0d
+	 Y9oEhGBHqdk9P0ImlAc2pHxbsPSQi1KYQfLxV6iTQedlfrlOln+66ZxqWt7C8La42z
+	 RIc0iabFwa9XoEYsAQFtdyZVoDg+dNw6niz3OhlMaU+eB7TxaoxbXpCFNIIguB8xgC
+	 pEUIwUjoNmVZBRN9SC340pBn6Ra/YKu7nlFBjDPyEz3vpVKfxSffV5sUcyaBCFpEEl
+	 k22UP44WvEb4w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/2] bpf: Require CAP_BPF for pseudo-BTF ksym
  loads
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-1-f950f69fe60c@mails.tsinghua.edu.cn>
+References: <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-0-f950f69fe60c@mails.tsinghua.edu.cn>
+ <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-1-f950f69fe60c@mails.tsinghua.edu.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 19 Jun 2026 16:17:42 +0000
+Message-Id: <20260619161742.8DBDD1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-1-f950f69fe60c@mails.tsinghua.edu.cn>
-References: <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-0-f950f69fe60c@mails.tsinghua.edu.cn>
-In-Reply-To: <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-0-f950f69fe60c@mails.tsinghua.edu.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Hao Luo <haoluo@google.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781885075; l=1123;
- i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=LIkUbbJRL7ljuIGsElXvukV42cE32V3Jp1gy7KWaa2U=;
- b=jvuYMBbdazb+7oLhL8LWKsIifqOElig0O0SM+8QlG5Jv8ltAwdrO3DuSJAmXX+nu6rFd5XB4h
- pbBqlB2osYiCMADFL/AFRikDJCGEx0C2g641YM3po4SPiFNsZ1sUYC8
-X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
- pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:ygQGZQCn8o+RaDVqIeaPAg--.58650S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7XFy5WrWDWrW8Cw4kJr1kXwb_yoWkWFb_Jr
-	4ku3ZxWwsrtFySg3W7CryxZryFkr4vkFy0yw47GrZrG3sYgF13Zrs2qF1rXFZrXr4DtrZr
-	Aw13Wr9rXry3ujkaLaAFLSUrUUUU0b8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbgkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kI
-	II0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7
-	xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2
-	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2kKe7AKxVWUAVWUtwAac4AC62xK8xCEY4
-	vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-	7VCjz48v1sIEY20_GrWkJr1UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
-	1lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxkIecxEwVAFwVWUMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY2
-	0_GrWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s02
-	6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GF
-	v_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvE
-	c7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
-	AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuY
-	vjfU0Q6JUUUUU
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgADA2o0cJz6FQAAsf
 
-BPF_PSEUDO_BTF_ID is resolved before the main verifier pass. The resolver
-looks up the referenced kernel symbol through kallsyms and rewrites the
-ldimm64 immediate to the concrete address that later becomes verifier
-state.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-Require CAP_BPF before doing that materialization. This keeps typed ksym
-address resolution on the privileged side and prevents loaders without
-CAP_BPF from receiving a verifier log that contains the resolved address.
+Pre-existing issues:
+- [High] BPF_PSEUDO_MAP_IDX and BPF_PSEUDO_MAP_IDX_VALUE bypass pointer lea=
+k protections in the verifier log, allowing unprivileged users to leak kern=
+el map pointers.
+- [High] Users with CAP_BPF but without CAP_PERFMON can leak kernel symbol =
+addresses via BPF_PSEUDO_BTF_ID.
+--
 
-Fixes: 4976b718c3551 ("bpf: Introduce pseudo_btf_id")
-Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
----
- kernel/bpf/verifier.c | 5 +++++
- 1 file changed, 5 insertions(+)
+commit eb6468c26c927b42e4085a370817e6247920a14e
+Author: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Subject: bpf: Require CAP_BPF for pseudo-BTF ksym loads
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ed7ba0e6a9ce..dbf5df995fc2 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17639,6 +17639,11 @@ static int check_pseudo_btf_id(struct bpf_verifier_env *env,
- 	int btf_fd;
- 	int err;
- 
-+	if (!env->bpf_capable) {
-+		verbose(env, "BPF_PSEUDO_BTF_ID loads require CAP_BPF\n");
-+		return -EACCES;
-+	}
-+
- 	btf_fd = insn[1].imm;
- 	if (btf_fd) {
- 		btf = btf_get_by_fd(btf_fd);
+This commit restricts BPF_PSEUDO_BTF_ID loads to callers with CAP_BPF. It
+aims to prevent unprivileged users from using the verifier log to leak
+resolved kernel symbol addresses.
 
--- 
-2.34.1
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index ed7ba0e6a9ce0..dbf5df995fc24 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -17639,6 +17639,11 @@ static int check_pseudo_btf_id(struct bpf_verifi=
+er_env *env,
+>  	int btf_fd;
+>  	int err;
+> =20
+> +	if (!env->bpf_capable) {
+> +		verbose(env, "BPF_PSEUDO_BTF_ID loads require CAP_BPF\n");
+> +		return -EACCES;
+> +	}
+> +
 
+[Severity: High]
+This is a pre-existing issue, but does checking only for CAP_BPF fully
+prevent kernel symbol leaks here?
+
+Pointer leaks typically require CAP_PERFMON, which is checked via
+allow_ptr_leaks. If a user has CAP_BPF but lacks CAP_PERFMON, they can still
+reach __check_pseudo_btf_id(), which uses kallsyms_lookup_name() to resolve
+the concrete kernel address and embeds it into the instruction's imm field.
+
+Because BPF_PSEUDO_BTF_ID is omitted from the is_ptr check in
+print_bpf_insn():
+
+kernel/bpf/disasm.c:print_bpf_insn() {
+    bool is_ptr =3D insn->src_reg =3D=3D BPF_PSEUDO_MAP_FD ||
+                  insn->src_reg =3D=3D BPF_PSEUDO_MAP_VALUE;
+
+    if (is_ptr && !allow_ptr_leaks)
+        imm =3D 0;
+    ...
+}
+
+Could triggering a verifier error dump the resolved kernel symbol address
+unmasked into the log buffer, allowing users with CAP_BPF to bypass the
+CAP_PERFMON privilege boundary?
+
+[Severity: High]
+This is also a pre-existing issue not introduced by this patch, but while
+reviewing the pointer leak protections in print_bpf_insn(), it appears
+BPF_PSEUDO_MAP_IDX and BPF_PSEUDO_MAP_IDX_VALUE might also bypass the
+masking.
+
+When a user loads a BPF program with fd_array and uses BPF_PSEUDO_MAP_IDX,
+check_and_resolve_insns() resolves the file descriptor to the direct kernel
+pointer and embeds it into the imm field:
+
+kernel/bpf/verifier.c:check_and_resolve_insns() {
+    if (insn[0].src_reg =3D=3D BPF_PSEUDO_MAP_FD ||
+        insn[0].src_reg =3D=3D BPF_PSEUDO_MAP_IDX) {
+        addr =3D (unsigned long)map;
+    }
+    ...
+    insn[0].imm =3D (u32)addr;
+}
+
+Since print_bpf_insn() strictly checks BPF_PSEUDO_MAP_FD and
+BPF_PSEUDO_MAP_VALUE, could this also allow users to leak kernel map
+pointers if verification fails and the instructions are dumped to the log?
+
+>  	btf_fd =3D insn[1].imm;
+>  	if (btf_fd) {
+>  		btf =3D btf_get_by_fd(btf_fd);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260620-f01-13-pse=
+udo-btf-id-cap-bpf-v1-0-f950f69fe60c@mails.tsinghua.edu.cn?part=3D1
