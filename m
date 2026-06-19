@@ -1,144 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A9CE573
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 23:02:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85BDC40D569
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 23:18:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781910124; cv=none; b=FJ+Ve834zlQIeuPs0NUCF8nOTQ37/2x9RTBMRyUst02urQ+l8+jrSQ+DxPHZVkcng5f/8PX+fg1u9yCsvGsnVQY8gCpNP1UktTqRjfnJ8xJzulOKDcZi4EW2MzjSXZD+R8aE+X9QutxN4pVAwqLC826fk6tnlxSJG9xFFRYF0p8=
+	t=1781911136; cv=none; b=il8o1ckb6AJ34LVirx6lTYpA9bQULeo04BQq48FNQVwP4/HKigZ7o43NXtka1mqHYpiTHCKl8LcqIFR8xLWPL0LPRJkAlCg1iZKyozHpUnSWD+6O06U1OrCay9EURJaYMqNs52ZwYicIAqJ/7Kfd+VODJSPlNyjutmnuv73iyaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781910124; c=relaxed/simple;
-	bh=NOHcuQMEfw4Tgjyp21C/Ttwwu8Sgc+99YJ1On0yK9qQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=e3QMAyc49AgMupORwVnl5vQfkFV7O4OWPB7nmM0EvnGjhdJA4ujiidWRob2Wai4uRoialydWXmGrAh8JvUFotXPCIl2LBT8qDskFjqdY9tCSTKqt85YgLTIckTtFujoTVmFk48myBXCH+4eRf8YL5upj0/phLK4EcjM1eRqMtqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K2Ge8+LD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781911136; c=relaxed/simple;
+	bh=1JyVplDhMeR4A27zCETSm2QSei+ypygpdnVrRWu/xHI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PAzzhyB3edSTslmMbvkI4I6jP0c5Ceh5Z/Npr9Bm0SgP4sZdQGt2V+NK6vnlI2Y5hlZaGmIn/2vN37OzO/DnWtZnbyxecjomLzx3W8kvFP8t9F1JYUDAhORQR7T7KfhfHk1z2XgX14CIbiPTkMWzOGAF4GuQyaG95pJzhoY7Wog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qKATV1fZ; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K2Ge8+LD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70E7F1F000E9;
-	Fri, 19 Jun 2026 23:02:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781910123;
-	bh=zkGV/t/5czmoFTD7E90wFFtOakS6UcD7fiS+PoFsrHg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=K2Ge8+LD1v/l9que4PoHkRwaKGflWEQZUlECyFwzjos3vlddjqaRGSUOde1XKdajB
-	 XY0yo5DNMLzBNC437cMdGEVxO6Stg2rEyzEZP/QwVD3z4Fi+wftHsRR5pAhq1KWssT
-	 8LKbAOXQEJkk4SaC7R0WQECSbHbVrsYoHtOco055hhCbqm3yxiat3vKH25pGdDDNWJ
-	 0ioHV/9nVG1+LppCa+FE9rO2KP42y/EudK22qQ2o1IDJ176Jir8ovv5JFuNujtrHxP
-	 lW0mvlf5PmoBhCqAUPKSTG7fzK3G+ATzOVJIylsaltC95qami7TgsYhHxlL4YN7vGN
-	 ykFXftnx6SL3Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] resolve_btfids: preserve tag and parameter names
- when processing implicit args
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Aelin Reidel" <aelin@mainlining.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260620-resolve-btfids-implicit-args-use-after-free-v2-1-4132e1f639f0@mainlining.org>
-References: <20260620-resolve-btfids-implicit-args-use-after-free-v2-1-4132e1f639f0@mainlining.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 19 Jun 2026 23:02:03 +0000
-Message-Id: <20260619230203.70E7F1F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qKATV1fZ"
+Message-ID: <ee92e842-85d8-4b1a-a741-4b6067895223@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781911131;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XSvxE/LkQFTZ7tFOUM7elx/jZmpKTxsHeCanyoDkH1E=;
+	b=qKATV1fZMSgpu6r3paZfdELrEb5IFzZbG6qUaXpgmOSYezVbILeO5wYK2SWwHHVV/R4BCj
+	w84VwhWmafrGNaS0Et/vevYbzALB3ktvRIb+gnp+3sOEEExOIE8eNFnJVP89Llml8tGKr4
+	QRANEaonNyI/oEgRyDjafsyrU2pZYXE=
+Date: Fri, 19 Jun 2026 16:18:40 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PAHOLE v5 0/5] support for DW_TAG_GNU_annotation and fixes
+To: Alan Maguire <alan.maguire@oracle.com>, dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ acme@kernel.org, Emil Tsalapatis <emil@etsalapatis.com>,
+ jose.marchesi@oracle.com, David Faust <david.faust@oracle.com>,
+ Yonghong Song <yonghong.song@linux.dev>
+References: <20260618005731.273181-1-vineet.gupta@linux.dev>
+ <663c926a-09f2-4239-bbe9-078bbf900822@oracle.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <663c926a-09f2-4239-bbe9-078bbf900822@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] Missing memory allocation check for `tmp_tag_name` leads to unde=
-fined behavior on OOM.
-- [Medium] `strdup()` on potentially NULL `param_name` introduces a new cra=
-sh vector on malformed BTF.
---
+Hi Alan,
 
-commit 6cb93b6d37df26aabf2d6e25d7969724248ceefb
-Author: Aelin Reidel <aelin@mainlining.org>
+On 6/19/26 05:17, Alan Maguire wrote:
+> On 18/06/2026 01:57, Vineet Gupta wrote:
+>> Hi,
+>>
+>> This series handles gcc generated DW_TAG_GNU_annotation with the end
+>> goal to finally enable CONFIG_PAHOLE_HAS_BTF_TAG for gcc kerenel builds.
+>>
+>> Patches 1/5 and 5/5 are newly introduced in v5 per Alan's ask.
+>>
+>> P.S.: I've optimistically included Reviewed-by/Acked-by from Emil and
+>> Yonghong respectively on v4 [4] but those were before additional changes
+>> in v5 from Alan for a few things. Please let me know if that's no longer
+>> true.
+>>
+>> [4] https://lore.kernel.org/bpf/20260602195512.1511013-1-vineet.gupta@linux.dev/
+>>
+> series applied, along with CI change to support [1]. Thank you!
 
-resolve_btfids: preserve tag and parameter names when processing implicit a=
-rgs
+Thanks for quickly merging this. I now need to plumb this thru on the 
+kernel side to essentially enable CONFIG_PAHOLE_HAS_BTF_TAG for gcc but 
+that would need to be keyed off of a pahole release version. Is pahole 
+due for a release (cadence and/or this changeset). If not I can 
+speculative use the next version whenever that happens. There are other 
+things in flight as well (gcc fix after 16.1) so this is not super 
+urgent but will be good to get out of the way.
 
-This commit updates process_kfunc_with_implicit_args() to duplicate
-tag and parameter strings before modifying the BTF object. This prevents
-btf__add_* operations from dereferencing stale pointers if the internal
-BTF storage is grown and reallocated during processing.
+Thx,
+-Vineet
 
-> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/m=
-ain.c
-> index f8a91fa7584f4..94b89e9c942ee 100644
-> --- a/tools/bpf/resolve_btfids/main.c
-> +++ b/tools/bpf/resolve_btfids/main.c
-> @@ -1163,18 +1164,22 @@ static int process_kfunc_with_implicit_args(struc=
-t btf2btf_context *ctx, struct
->  		if (strcmp(tag_name, "bpf_kfunc") =3D=3D 0)
->  			continue;
-> =20
-> +		tmp_tag_name =3D strdup(tag_name);
->  		idx =3D btf_decl_tag(t)->component_idx;
-> =20
->  		if (btf_kflag(t))
-> -			err =3D btf__add_decl_attr(btf, tag_name, new_func_id, idx);
-> +			err =3D btf__add_decl_attr(btf, tmp_tag_name, new_func_id, idx);
->  		else
-> -			err =3D btf__add_decl_tag(btf, tag_name, new_func_id, idx);
-> +			err =3D btf__add_decl_tag(btf, tmp_tag_name, new_func_id, idx);
-> =20
->  		if (err < 0) {
->  			pr_err("ERROR: resolve_btfids: failed to add decl tag %s for %s\n",
-> -			       tag_name, tmp_name);
-> +			       tmp_tag_name, tmp_name);
+>
+> Alan
+>
+> [1] https://lore.kernel.org/dwarves/20260619073358.1605594-1-alan.maguire@oracle.com/T/#r0d979ca6aa79a4586b75223ec51a54e7be1d74f8
+>
+>   
+>> Thx,
+>> -Vineet
+>>
+>> Alan Maguire (2):
+>>    btf_loader: Handle decl tag component_idx for parameters
+>>    tests: Add btf_type_tag ordering test
+>>
+>> Vineet Gupta (3):
+>>    dwarf_loader: Extract die__add_btf_type_tag() helper [NFC]
+>>    dwarf_loader: Add support for DW_TAG_GNU_annotation
+>>    tests: Support GCC in pfunct-btf-decl-tags test
+>>
+>>   btf_encoder.c                 |   1 +
+>>   btf_loader.c                  |  46 ++++++++-
+>>   dutil.h                       |  11 ++
+>>   dwarf_loader.c                | 185 +++++++++++++++++++++++++++-------
+>>   dwarves.h                     |   2 +-
+>>   dwarves_fprintf.c             |  32 ++++--
+>>   tests/btf_type_tag_order.sh   | 179 ++++++++++++++++++++++++++++++++
+>>   tests/pfunct-btf-decl-tags.sh |  93 ++++++++++++-----
+>>   8 files changed, 478 insertions(+), 71 deletions(-)
+>>   create mode 100755 tests/btf_type_tag_order.sh
+>>
 
-[Severity: Medium]
-What happens if strdup() fails and tmp_tag_name is NULL?
-
-If tmp_tag_name is NULL, btf__add_decl_tag() or btf__add_decl_attr() will
-fail and return -EINVAL. The error path then blindly passes the NULL
-tmp_tag_name to pr_err() using the %s format specifier.
-
-Could this cause a segmentation fault in libc instead of exiting with a
-clean error?
-
-> +			free(tmp_tag_name);
->  			return -EINVAL;
->  		}
-> +
-> +		free(tmp_tag_name);
->  	}
-> =20
->  add_new_proto:
-> @@ -1193,12 +1198,17 @@ static int process_kfunc_with_implicit_args(struc=
-t btf2btf_context *ctx, struct
->  		if (is_kf_implicit_arg(btf, &params[i]))
->  			break;
->  		param_name =3D btf__name_by_offset(btf, params[i].name_off);
-> -		err =3D btf__add_func_param(btf, param_name, params[i].type);
-> +		tmp_param_name =3D strdup(param_name);
-
-[Severity: Medium]
-Can param_name be NULL here if the BTF input is malformed and the string
-offset is out of bounds?
-
-If btf__name_by_offset() returns NULL, wouldn't strdup() dereference the
-NULL pointer and crash?
-
-Prior to this patch, the potentially NULL pointer was safely passed
-directly to btf__add_func_param(), which handles NULL by defaulting to an
-anonymous parameter.
-
-> +		if (!tmp_param_name)
-> +			return -ENOMEM;
-> +		err =3D btf__add_func_param(btf, tmp_param_name, params[i].type);
->  		if (err < 0) {
->  			pr_err("ERROR: resolve_btfids: failed to add param %s for %s\n",
-> -			       param_name, kfunc->name);
-> +			       tmp_param_name, kfunc->name);
-> +			free(tmp_param_name);
->  			return err;
->  		}
-> +		free(tmp_param_name);
->  		t =3D (struct btf_type *)btf__type_by_id(btf, proto_id);
->  	}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260620-resolve-bt=
-fids-implicit-args-use-after-free-v2-1-4132e1f639f0@mainlining.org?part=3D1
