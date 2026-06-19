@@ -1,41 +1,38 @@
-Received: from outbound.pv.icloud.com (pv-2005k-snip4-3.eps.apple.com [57.103.66.214])
+Received: from outbound.pv.icloud.com (pv-2005c-snip4-7.eps.apple.com [57.103.66.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B6F3438B9
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 19:58:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.66.214
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E1F38D68F
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 19:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.66.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781899104; cv=none; b=Ur+BcDf0YXTWwk3fbayxNoKu0a+bz/XnHiKSDOFKa6lmW8/XY1VMba12nAVfgQeNvxZq0m4vliTJz4kRzKkt/knBoAHSELT97YguXvN/46PcOsjfkOm/FPCMARzQp0enZHD4s6dDBrFqPwa4eZOONovGvbrhQjuhICBh+8YrVhQ=
+	t=1781899113; cv=none; b=OuRnAO1iqxODkUVa+ZuY+66REWJdCCM1FLdVuWr0Xa21SidD8QvfBLGzcBo1mXd+XLJomZkSqiLUe3PfIn+I6PVmrev9BdmVqP/BEJSTD98sf5KspTdJL7E7VZVaHdI8yZbAlM6NrP5GqeQXW7XX2gkKN1upjvvaKV/PpWuf18k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781899104; c=relaxed/simple;
-	bh=abkzKRJ2ahL2DDAvpCD/1XKjeQzMX896bZFcUDKWunc=;
+	s=arc-20240116; t=1781899113; c=relaxed/simple;
+	bh=6uGn0GopFXIezIt1AfR5Ttqh7FWwt6oPkOUWciKbdCw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=V+GoiOeBZB28ajWBgBHnGJg1WLdRfy2ejsaSQo2x7phDff2Uey6uvUU+IElfYfbLFn8dP3LD3B0k2Xco+4YFdvwKa+5JtRT/kQh1r49/7nUlUQlRfO8vmvcbnrOjTp1Q1L+wk09Jsv1HRGJPzZPDkfqCxfLn3VKZjn1e+lqiNaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=bcL/HJsz; arc=none smtp.client-ip=57.103.66.214
+	 MIME-Version; b=B3oIEawhh6qMGKmg39ncepO5LMFo4JFKZlpcaKpKDspje67kKKVcSS7uyuYyG97NZKJqYEacLwIfMRvVg7XggKYGwJdIucQ0g/0UZVNzy7hX1089ZKkEtuJgrBAXV4It9GqVBhJX1X4oQIKOZ0QjQpsuMu5WI6SR/QwSVH9bcBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=giUBqQ25; arc=none smtp.client-ip=57.103.66.158
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="bcL/HJsz"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="giUBqQ25"
 Received: from outbound.pv.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-west-1a-100-percent-11 (Postfix) with ESMTPS id ED2A2180010E;
-	Fri, 19 Jun 2026 19:58:20 +0000 (UTC)
-X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQpOHV8CXhxBAFYEWBcOVk1KEVcJXwpABFEbWg9eK1sTVRdGCRkIXR0ZHldQXgheH0wcHQ5YBhICWkUBXxcDVxxWRVwYQwldBVccHR1BRVsTVRdGCRkIXR0ZCEcfCjADQg5WA0MHRQAtGRxXUF4IXh9MHB0OWAYSHVAcDlEFWwBGCU4CVAZSB0cMQR1ZBlkHRBRKHh5eD1YYWApHBVQCUBl5EVABWB5WXloXXlMXH0sAXEVaDlsERxQ=
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1781899103; x=1784491103; bh=/JHpw/Y6YXDfEJ2X+/4MEbtrZiHImZ8h4NMn92pbpcU=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=bcL/HJsz6U4Y/HzlReDv/oO4H8oOxWx9KtlYcHT+f7qMEE4cTVcSuGXrR/w2MuDHvr6TlC68jX4uL52oymoyBhdQviYEdQffsltbqX2fP4QYWP/ALbd8MyMk84PKSYMVqOzpN6wTpJkqPpg9wH0Hw0JYVx07r+ecGUXJTB/Qf3C+jFANhecDc4sUFX0Uojq54nAQpOroCUG2fN9c5W0M8W3Ie2NUogKQ0jNKqh1hIr1aQTtc5NOcos8S/wAnw0s7Sd+Q8HGRDDgciZINZSts5vOI81QBQptzoUJnIb4hX21rvllN1YroO/EGdCtyIHNZ1xrpd5hY48jafQjq26voZA==
+	by p00-icloudmta-asmtp-us-west-1a-100-percent-11 (Postfix) with ESMTPS id 109F8180010D;
+	Fri, 19 Jun 2026 19:58:31 +0000 (UTC)
+X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQpOHV8CXhxBAFYEWBcOVk1KEVcJXwpABFEbWg9eK1sTVRdGCRkIXR0ZHldQXgheH0wcHQ5YBhICWkUBXBcDVxxWRVwYQwldBVccHR1BRVsTVRdGCRkIXR0ZCEcfCjADQg5WA0MHRQAtGRxXUF4IXh9MHB0OWAYSHVAcDlEFWwBGCU4CVAZSB0cMQR1ZBlkHRBRLHh5eD1YYWApHBVQCUBl5EVABWB5WXloXXlMXH0sAXEVaDlsERxQ=
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1781899112; x=1784491112; bh=uCzNyh9ez4ys8w28jvcLcpYoV8d+8g3nF2DPpTvrxL8=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=giUBqQ25koolVJBR+nXkdbkQNhd9Ibm/w5aNVnWZo/k5duQFaKW2fvI7VJe2U+VCnG0+UPUHwxuZllenpXgH1zYJIXmC+W/3lme3m1yHqAFOhDBaS1xV8FfXJtqwxeS6I2kJfiSaDXRz7PofSz8UsWnAeRzLLkZTDjhRpr+AamB9P7ngcT9cQC+Hr8931vH3ZtwQJcpvkNEdrarQRxnfcmoUYY9lgqLWogw6YPweJlem/qXNSUQScisDElmQ9zz0x4bxCYjtFNKCSPirDySqScYnP1wQTp8DeOOkycZ4N0qXjlQdEsFOBlGsuk9Ip8HsuuS0nNYd997L5T6+afgkLw==
 Received: from cibi (unknown [17.56.9.36])
-	by p00-icloudmta-asmtp-us-west-1a-100-percent-11 (Postfix) with ESMTPSA id 8DE4E1800125;
-	Fri, 19 Jun 2026 19:58:14 +0000 (UTC)
+	by p00-icloudmta-asmtp-us-west-1a-100-percent-11 (Postfix) with ESMTPSA id 3253E18000A9;
+	Fri, 19 Jun 2026 19:58:24 +0000 (UTC)
 From: Siddharth_Cibi <siddharthcibi@icloud.com>
 To: ast@kernel.org
-Cc: Siddharth C <siddharthcibi@icloud.com>,
+Cc: Siddharth_Cibi <siddharthcibi@icloud.com>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	"David S. Miller" <davem@davemloft.net>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Stanislav Fomichev <sdf@fomichev.me>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
@@ -44,12 +41,14 @@ Cc: Siddharth C <siddharthcibi@icloud.com>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
 	netdev@vger.kernel.org (open list:XDP (eXpress Data Path)),
 	bpf@vger.kernel.org (open list:XDP (eXpress Data Path)),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
 	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 1/2] bpf: preserve rx_queue_index across XDP redirects
-Date: Fri, 19 Jun 2026 19:57:57 +0000
-Message-ID: <20260619195759.41254-2-siddharthcibi@icloud.com>
+Subject: [PATCH 2/2] selftests/bpf: validate rx_queue_index in xdp_metadata
+Date: Fri, 19 Jun 2026 19:57:58 +0000
+Message-ID: <20260619195759.41254-3-siddharthcibi@icloud.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260619195759.41254-1-siddharthcibi@icloud.com>
 References: <20260619195759.41254-1-siddharthcibi@icloud.com>
@@ -60,104 +59,67 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE5MDE5MSBTYWx0ZWRfXz50Z1pmVn3Ir
- WkpKZHpg5JAR5uEqjhUaQaIrLXKzlVnFy4PKF1VZyodlhMbUIaOQGIbHUcExINvOgxG7TPjk1P1
- FNvAh/X9REAhq0XgW3O7KN6s1zD6Ecct3lQ1uVirjjcayfsSSakcvLq5jHm5eoRnAWTkB1VE364
- 9ciurTOqMGH0E/ydZYuBpcj1vr9JyH/55vNEe95vmhafNajCwIf7glpzDGURITcYfds2nEmFcUq
- S/KJsTJ+hTImnW1+fN0juDCGelm/1NDVKBTGhTnyDZmKwhvrVXIVUoECrRX2fdFTgxFxX+VuFPv
- M9j1QNGBj0ipD3up4Rn
-X-Proofpoint-ORIG-GUID: gsH6DdmmtnWjrESumUuan1cOtAplPPdq
-X-Proofpoint-GUID: gsH6DdmmtnWjrESumUuan1cOtAplPPdq
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE5MDE5MSBTYWx0ZWRfX9Svem6twCxxP
+ 80KPU026J0U9zQLpjIO6SbsWQw9GFqIaIsRBMRiW3x6/BPOLVjRNf0sBlaSDoMhjPml3B92vqPd
+ APf+gf5zoCRfz2qpzsnBrB9nFLGjFHo0VsLoIvlKWMnKn/QzzK9Hg5A2PekoHdsJwF2yQ/KRMJs
+ Jj5BOZcWPRJ9/mWvLIGn2PGDgZ+inQsc6XVymDqwWoM6gbBmarnXxkWqbSKpJteoAxnxDXyYKaa
+ IZWvKF6W95YnzwpWh6W/VaHmm8OcT+fsECx+tSLMEfMwJ3WAXBpE7nwS4dfoqb/HDZqptV8rQtd
+ HNJgV1TB2UWX4Klvmow
+X-Proofpoint-ORIG-GUID: Db2CYb48ct3jrMupaRyZFvbMjivAXCot
+X-Proofpoint-GUID: Db2CYb48ct3jrMupaRyZFvbMjivAXCot
 X-Apple-Category-Label: MjA0NzgyOTUxNDY6JGNhdGVnb3J5JF9QZXJzb25hbCw=
 
-From: Siddharth C <siddharthcibi@icloud.com>
+Extend xdp_metadata selftest coverage to validate that
+ctx->rx_queue_index is preserved and observable after XDP redirect
+execution.
 
-Store rx_queue_index in struct xdp_frame during xdp_buff to
-xdp_frame conversion and restore it when rebuilding xdp_rxq_info
-for cpumap and devmap execution paths.
-
-This preserves ingress RX queue information for XDP programs
-executed after redirect, allowing access to the original
-rx_queue_index instead of losing queue context.
-
-Also propagate rx_queue_index for zero-copy XDP frame conversion.
+Capture rx_queue_index in metadata and assert that it matches the
+expected queue during packet verification.
 
 Signed-off-by: Siddharth_Cibi <siddharthcibi@icloud.com>
 ---
- include/net/xdp.h   | 2 ++
- kernel/bpf/cpumap.c | 2 +-
- kernel/bpf/devmap.c | 5 ++++-
- net/core/xdp.c      | 1 +
- 4 files changed, 8 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/xdp_metadata.c | 3 ++-
+ tools/testing/selftests/bpf/progs/xdp_metadata.c      | 2 +-
+ tools/testing/selftests/bpf/xdp_metadata.h            | 1 +
+ 3 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index aa742f413c35..90318b2b76dc 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -301,6 +301,7 @@ struct xdp_frame {
- 	 */
- 	enum xdp_mem_type mem_type:32;
- 	struct net_device *dev_rx; /* used by cpumap */
-+	u32 rx_queue_index;
- 	u32 frame_sz;
- 	u32 flags; /* supported values defined in xdp_buff_flags */
- };
-@@ -441,6 +442,7 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct xdp_buff *xdp)
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+index 5c31054ad4a4..f8cabbbe7bb7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+@@ -309,7 +309,8 @@ static int verify_xsk_metadata(struct xsk *xsk, bool sent_from_af_xdp)
  
- 	/* rxq only valid until napi_schedule ends, convert to xdp_mem_type */
- 	xdp_frame->mem_type = xdp->rxq->mem.type;
-+	xdp_frame->rx_queue_index = xdp->rxq->queue_index;
- 
- 	return xdp_frame;
+ 	if (!ASSERT_NEQ(meta->rx_hash, 0, "rx_hash"))
+ 		return -1;
+-
++	if (!ASSERT_EQ(meta->rx_queue_index, QUEUE_ID, "rx_queue_index"))
++        	return -1;
+ 	if (!sent_from_af_xdp) {
+ 		if (!ASSERT_NEQ(meta->rx_hash_type & XDP_RSS_TYPE_L4, 0, "rx_hash_type"))
+ 			return -1;
+diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata.c b/tools/testing/selftests/bpf/progs/xdp_metadata.c
+index 09bb8a038d52..62ae83860d7f 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_metadata.c
++++ b/tools/testing/selftests/bpf/progs/xdp_metadata.c
+@@ -98,7 +98,7 @@ int rx(struct xdp_md *ctx)
+ 	bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash, &meta->rx_hash_type);
+ 	bpf_xdp_metadata_rx_vlan_tag(ctx, &meta->rx_vlan_proto,
+ 				     &meta->rx_vlan_tci);
+-
++	meta->rx_queue_index = ctx->rx_queue_index;
+ 	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
  }
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 5e59ab896f05..8f2d7013620f 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -197,7 +197,7 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_map_entry *rcpu,
  
- 		rxq.dev = xdpf->dev_rx;
- 		rxq.mem.type = xdpf->mem_type;
--		/* TODO: report queue_index to xdp_rxq_info */
-+		rxq.queue_index = xdpf->rx_queue_index;
- 
- 		xdp_convert_frame_to_buff(xdpf, &xdp);
- 
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index dc7b859e8bbf..f419fa0e53e5 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -339,7 +339,7 @@ static int dev_map_bpf_prog_run(struct bpf_prog *xdp_prog,
- 				struct net_device *rx_dev)
- {
- 	struct xdp_txq_info txq = { .dev = tx_dev };
--	struct xdp_rxq_info rxq = { .dev = rx_dev };
-+	struct xdp_rxq_info rxq = { };
- 	struct xdp_buff xdp;
- 	int i, nframes = 0;
- 
-@@ -349,6 +349,9 @@ static int dev_map_bpf_prog_run(struct bpf_prog *xdp_prog,
- 		int err;
- 
- 		xdp_convert_frame_to_buff(xdpf, &xdp);
-+		rxq.dev = rx_dev;
-+		rxq.mem.type = xdpf->mem_type;
-+		rxq.queue_index = xdpf->rx_queue_index;
- 		xdp.txq = &txq;
- 		xdp.rxq = &rxq;
- 
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 9890a30584ba..9691d8dfadf3 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -606,6 +606,7 @@ struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp)
- 	xdpf->metasize = metasize;
- 	xdpf->frame_sz = PAGE_SIZE;
- 	xdpf->mem_type = MEM_TYPE_PAGE_ORDER0;
-+	xdpf->rx_queue_index = xdp->rxq->queue_index;
- 
- 	xsk_buff_free(xdp);
- 	return xdpf;
+diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
+index 87318ad1117a..1f0ae4c00091 100644
+--- a/tools/testing/selftests/bpf/xdp_metadata.h
++++ b/tools/testing/selftests/bpf/xdp_metadata.h
+@@ -49,4 +49,5 @@ struct xdp_meta {
+ 		__s32 rx_vlan_tag_err;
+ 	};
+ 	enum xdp_meta_field hint_valid;
++	__u32 rx_queue_index;
+ };
 -- 
 2.53.0
 
