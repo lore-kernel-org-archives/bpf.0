@@ -1,134 +1,126 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D9417A2F6
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 09:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB532372EC5;
+	Fri, 19 Jun 2026 10:21:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781862607; cv=none; b=us1DeSqbYwFmYung01r3V09M0FIHugaiNNlspV29G/uWa1z6kA9M8MwaFnsctjNQtTyokBMWbffRrRpU6DtxMLbZ9yyOpVatITVLTchkqcvcBL0qy8dZWlaovovI14cYHJxyO0wzkG6MNmL+SfqgMY5F7IJJ9w4KIw490sSqPDI=
+	t=1781864505; cv=none; b=dyIUylKf+GEUlO2RhxZ3/tBgOMtzvLbZKVbzOTgJJskQ25YmA9nHe/mKeI0OkGJMMZ9Rg6KYlOHlqPjgQ0sJPKSrQE1YVmz0D+aSoOgfWytySevwnDnD1Jw9+tCmIBhOmtKcPPCI90QAnXyWfusdOyHdChhurumWg1CmIwi03Xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781862607; c=relaxed/simple;
-	bh=UAuG4vuG5CgKeF6G4DlWpnMnvTmR9AFwp6RBEUHrfe8=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z23oOe7GF8CRBQQSzfCe6ASH8x+OqQzbtzlBC6UgImk64tIyuGrKgYrMkcDPin8TAHiZ9NB1Nvc89B6MjymSY3f+3aUKbHj1CXWF5P2zEqi3zulW5ig7yNIURGnzUAHKCccIrPsg+3epchg43TvhoOYAZLW2E6zTLvTkEOxf0yo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nzJimoNp; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781864505; c=relaxed/simple;
+	bh=jFxT0LM8UGsZx6i6qi9eIzbSoSvm7DK4i7WSlN1G+jE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=HS88dJXlF7PVeYrwt9dYjlpJ6gXK6cFzZkLZoabMeGXmRCqtpyobtK+kIBoXNSeGi8Tp9GlJHSRS5RMXu04HAYKKVoWj4qs/cu6yw7vexkut5NEovubZDaG6rviy7ivh5ISJZ1t1FjgmhU6np8Jep4gy8HjqEbO2o1+WjaWQfiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=OAVB6kGM; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=uRRgJRBN; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nzJimoNp"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-490ac357c55so18620435e9.1
-        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 02:50:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781862602; x=1782467402; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=U+dCt2TtpuobcPqEN3sLtws+gA8QvpbrhpYYtvYzphQ=;
-        b=nzJimoNpU6NehT9fs0yByheSQnCHQbl/BdFPHa1k1l98ZLjoNL7EwZ4zLERa4IrNkz
-         Tbht4828SdC2FaKlI5gcQYFl9pbaqXCDCAcjkVzomWS65Hyo7d6528qCtkS/dF/7d0x4
-         ZMm4Q/3GoPBJj4yiiINfoebnDI3H7arTBSSWfsgX9zTn5VXeRke/izVCWilw+/lT6acg
-         Oc0+GIzmmyw5r/74pUrABU+vlRAC9VFrrBFS/Ik+J7tkYxEz5JH5ITDh93e4Jx4gQbwm
-         QxIhGktyNVx/Bt4xH7wkXFwPp2aY2NOLGfag0+gWp4al/0TEyiJsHJNovjy3zsC6LdqE
-         08fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781862602; x=1782467402;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U+dCt2TtpuobcPqEN3sLtws+gA8QvpbrhpYYtvYzphQ=;
-        b=qYEMaNagb4SxRG7LiAY1rfj5V22frWYLqqiAks0fyhKD1FkOQTubA8sOPQohnHbVjU
-         UjLbsKJFFlOxHV808+U4wuiDm1t/ZK53v8gtkL9F7I21dKxk8kKB9cCQua+XJzGVPGqz
-         z9jQCls8Eq/0eMuTRs8bVyYqMvCJNAHOfcI4ltOATl8EXmQ8Le86j91a02EuVJjYiwkF
-         dgyx7h5TGm7fVaiZgA8ZiZZrdQ1xsmZyI4eM23Pzn2s7mFDBKVwaD0jdhShPg2F1snLe
-         F3tBp1k2zYCSYaNWXtnYRpnbHgVcw0yNea1DRKh62ZENQJGhERO3Lnw2u+713Ae88Dmb
-         djnA==
-X-Forwarded-Encrypted: i=1; AFNElJ8D0qpSy6ufWlGpSNcVLmp2WC04lO8epaQqLTilGIZDtk5GR2ZyZ7svGAI9UYlff0Yhgoo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz38ehAmhcGWOmPI6cF0V914t6xxnesqBhYK9WWBYPGC5KwA8xg
-	saxRwlQfx0M3BNZ+MzkO63EcuGQ+Y8RYJPxM093XcYfow6G5gdmMtWOt
-X-Gm-Gg: AfdE7cnIavNL3NhBc9nIrj6RjWzH3LdU7FHLz4iJj/P960tSEXbtHpQSJgJC3kAljco
-	otxgXlinHtF3U9bMGt0VLAjJ8B5kUK1/wW0kZZ87nVICXosLifrOsgmp5VqHTdXRI7chZQI/3Yw
-	tf/hzTKS0szn+rshwwC9V+koVF27A730YgFXoW0WyXhlkZLAfwtYhrNFsgtE6q7UuJ+xsdCOuvw
-	wi/kBF81epo3OiHpQBxdO5P8Ih6BSjTLLRNVHIT4zn/cSaluRUX4uJoKpOSKWzhLLEkMDh6umvR
-	wbMw4YS0pSg2UDyJa0koWN+aNuhkHZS4tPNM9GuDSCPqmGm/LBbDdbfDB8gu2K/VzlP2etk6pSf
-	VHttkoQqrAEHupLIGuOStyt0yDjykUbQsmaeNtGy70AAT/M4KI4tYd2CuhfKlGjHrQDgsULGN66
-	Lqzw11ipvbY90=
-X-Received: by 2002:a05:600c:4e05:b0:490:9782:3eb8 with SMTP id 5b1f17b1804b1-49240e6c534mr44224975e9.25.1781862601718;
-        Fri, 19 Jun 2026 02:50:01 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4923fcd7027sm57929595e9.1.2026.06.19.02.50.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2026 02:50:01 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 19 Jun 2026 11:49:59 +0200
-To: Tristan Madani <tristmd@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Xu Kuohai <xukuohai@huawei.com>,
-	Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
-	stable@vger.kernel.org,
-	Tristan Madani <tristan@talencesecurity.com>
-Subject: Re: [PATCH] bpf: Reset register bounds before narrowing retval range
- in check_mem_access()
-Message-ID: <ajUQxyD2fu8M4wal@krava>
-References: <20260617120815.3910671-1-tristmd@gmail.com>
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="OAVB6kGM";
+	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="uRRgJRBN"
+DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
+	h=To:Message-Id:Subject:Date:From; t=1781864348; bh=OpDQSRZvNmDnkH0/vbgSAL6
+	YbsYxGu5Q3N1CSOTCu60=; b=OAVB6kGMP5RdoK314cICU2eM9/8bgn1Wg3Ut8QUur9m5Yvc4Cd
+	Q8NCSYSE5A1jvCiJXoJeXHKq9YKVSWF0TBFqF6jXY+BLvqo6uDMN4XuHZayr/5ZwM1S+alXFlib
+	7PSsXC1z1Rg0W47Cb+clfheHpGpx8AYeTflrKTuHLDaXLPwj78KMuTtSRhqviiTULk1za/aOLsh
+	Q6Mmt3TnHGJvD82/HkCu3VM5OlhSLNGSI7iXzNFeF7sxUvwKC79M/vYPgQuSo4DYTKQPjGyNyyd
+	Gz4mocDQeKB8cSkHroai4CAaC6a/Q7Wn+6houVIx5+CbhaMHZM80ywgAKjYbZMnB2ag==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
+	h=To:Message-Id:Subject:Date:From; t=1781864348; bh=OpDQSRZvNmDnkH0/vbgSAL6
+	YbsYxGu5Q3N1CSOTCu60=; b=uRRgJRBN+6GEO0GQyckBlIgF1DV2BDcC9+QaBtlDKapgta+sG/
+	DLFBW5GmS0blYYlJ4AD3Y4pfEi8I9scMu7AA==;
+From: Aelin Reidel <aelin@mainlining.org>
+Date: Fri, 19 Jun 2026 12:18:43 +0200
+Subject: [PATCH] resolve_btfids: preserve parameter names when processing
+ implicit args
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260617120815.3910671-1-tristmd@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260619-resolve-btfids-implicit-args-use-after-free-v1-1-2af87d4704c8@mainlining.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXNQQ6CMBBG4auQWTsJrZGkXsW4gPIXxyCQmUJMC
+ He36vLbvLeTQQVG12onxSYm81TgThXFRzsNYOmLyde+qRsXWGHzuIG7nKQ3ltcySpTMrQ7Gq4H
+ blKGcFGDXpOjDOVx8AJXiokjy/t1u979t7Z6I+bug4/gA9mX0vo8AAAA=
+X-Change-ID: 20260619-resolve-btfids-implicit-args-use-after-free-16fc2939529e
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org, Aelin Reidel <aelin@mainlining.org>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781864348; l=2568;
+ i=aelin@mainlining.org; s=20260503; h=from:subject:message-id;
+ bh=jFxT0LM8UGsZx6i6qi9eIzbSoSvm7DK4i7WSlN1G+jE=;
+ b=f/apJd0bxHyyVHuOKoIGyyPR2cSHWkuqqhH94ED/q7iRX7Zok5b2qghLdG1SeTr6D7BYJFvSr
+ zOVDmTnivA5Dzd563lZrkRbZS+/TQji0X+X+ptg4XlqK3FxL4drCQFV
+X-Developer-Key: i=aelin@mainlining.org; a=ed25519;
+ pk=JdivYHq/vT1Z1DpBeadmJbY/Fi5Ab9P/C35KYCOezfA=
 
-On Wed, Jun 17, 2026 at 12:08:15PM +0000, Tristan Madani wrote:
-> From: Tristan Madani <tristan@talencesecurity.com>
-> 
-> When the BPF verifier processes a context load of an LSM hook return
-> value, it calls __mark_reg_s32_range() to narrow the register to the
-> hook's valid range. However, __mark_reg_s32_range() intersects the new
-> range with the register's existing bounds using max_t()/min_t() rather
-> than replacing them.
-> 
-> If the destination register carries stale bounds from a prior instruction
-> (e.g. BPF_MOV64_IMM), the intersection can produce a range narrower than
-> reality. The verifier then believes it knows the register's exact value,
-> while at runtime the actual hook return value is loaded, creating a
-> verifier/runtime mismatch that can be used to bypass BPF memory safety
-> checks.
-> 
-> The else branch already calls mark_reg_unknown() to reset register state
-> before any narrowing. Apply the same reset in the is_retval path so
-> stale bounds are cleared before __mark_reg_s32_range() intersects.
+process_kfunc_with_implicit_args() obtains parameter names through
+btf__name_by_offset() and passes them to btf__add_func_param() while
+constructing a new function prototype.
 
-hi,
-you need to specify the bpf tree in the subject "[PATCH bpf] ..."
+The returned name pointer references memory owned by the BTF object.
+btf__add_func_param() modifies the same BTF and may grow its internal
+storage, invalidating previously returned string pointers.
 
-jirka
+This can result in btf__add_func_param() dereferencing a stale pointer
+when copying the parameter name, leading to crashes in strset__add_str().
 
+Duplicate the parameter name before calling btf__add_func_param() so it
+remains valid across BTF updates.
 
-> 
-> Fixes: 5d99e198be27 ("bpf, lsm: Add check for BPF LSM return value")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Tristan Madani <tristan@talencesecurity.com>
-> ---
->  kernel/bpf/verifier.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 54c6953a8b84..7e30dddc7721 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -7532,6 +7532,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
->  			 */
->  			if (info.reg_type == SCALAR_VALUE) {
->  				if (info.is_retval && get_func_retval_range(env->prog, &range)) {
-> +					mark_reg_unknown(env, regs, value_regno);
->  					err = __mark_reg_s32_range(env, regs, value_regno,
->  								   range.minval, range.maxval);
->  					if (err)
-> -- 
-> 2.47.3
-> 
-> 
+Fixes: 9d199965990c ("resolve_btfids: Support for KF_IMPLICIT_ARGS")
+Cc: stable@vger.kernel.org
+Signed-off-by: Aelin Reidel <aelin@mainlining.org>
+---
+We were noticing resolve_btfids crashing almost all the time when
+building our kernels with BTF debuginfo in postmarketOS. I'm not sure
+why specificially our environment triggered this extremely reliably, but
+I'm glad I was able to track down the issue. With the patch, I haven't
+seen any further issues and our kernel builds are succeeding again.
+---
+ tools/bpf/resolve_btfids/main.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+index f8a91fa7584f..970b810bb779 100644
+--- a/tools/bpf/resolve_btfids/main.c
++++ b/tools/bpf/resolve_btfids/main.c
+@@ -1113,6 +1113,7 @@ static int process_kfunc_with_implicit_args(struct btf2btf_context *ctx, struct
+ {
+ 	s32 idx, new_proto_id, new_func_id, proto_id;
+ 	const char *param_name, *tag_name;
++	char *tmp_param_name;
+ 	const struct btf_param *params;
+ 	enum btf_func_linkage linkage;
+ 	char tmp_name[KSYM_NAME_LEN];
+@@ -1193,7 +1194,11 @@ static int process_kfunc_with_implicit_args(struct btf2btf_context *ctx, struct
+ 		if (is_kf_implicit_arg(btf, &params[i]))
+ 			break;
+ 		param_name = btf__name_by_offset(btf, params[i].name_off);
+-		err = btf__add_func_param(btf, param_name, params[i].type);
++		tmp_param_name = strdup(param_name);
++		if (!tmp_param_name)
++			return -ENOMEM;
++		err = btf__add_func_param(btf, tmp_param_name, params[i].type);
++		free(tmp_param_name);
+ 		if (err < 0) {
+ 			pr_err("ERROR: resolve_btfids: failed to add param %s for %s\n",
+ 			       param_name, kfunc->name);
+
+---
+base-commit: 598c7067dd8b65b93f3ccada47e9014a13137f1b
+change-id: 20260619-resolve-btfids-implicit-args-use-after-free-16fc2939529e
+
+Best regards,
+--  
+Aelin Reidel <aelin@mainlining.org>
+
