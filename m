@@ -1,114 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C45AA2F851
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 00:45:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66142690F9
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 01:01:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781829960; cv=none; b=NPMfzQjvT6VZVWGiG/BXRcCFntQGySNt/PBbYlRwljeOnqpD5wGHKa5/jJXvP2EG73xpEtz1H0+tRzSNhTykey5nXQmj5fO+Mecz88t+9GFop3XZNUmAFH19DA7MC8NwvEkwm0CdbppEN/pg03C8pdnp5/BGsPOIMEN93kjWZoY=
+	t=1781830894; cv=none; b=JGox/FNFvrSLkeFVnqXr82YJDbiHqPIbPASowrFYWVoPsyBSUWqhiaq9vVsKViTb1GNyFV0hjvInLgGhsF5d1JKutmBdUr+A2XN5vsxjlAqWsvqyGkfVJQ+ezFs1njagDNKzY9EJJRweOUHcyGwi5uD4pwisZ0DPM1fLFWB3+aQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781829960; c=relaxed/simple;
-	bh=+0VRyFVPsJ4a7rS3cuRU6eqL566am4uM5xmSXoPk8aQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=o/xryScLLRTMLryp0jU/C1hTNwiaIInP11Z1BAQ7NXXE/PnmzNAgqybjZQuNsM2q/N1xkybY3YVveJ7pBJXSm40XYIuHHWtMg1SU2IRIpgjLtladPeqcBha/iAbMteBDex40EH0ZddOqBfzGPfTdF1OY5N7B13GNs207Nmu75BQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AIK1OgOm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781830894; c=relaxed/simple;
+	bh=0BpQE+MLK8ygVFWMCGPfPCcd3XYmy8dz/lbglEKRlGE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pDuxBTeSVpOEWI48zWaiizHXs3bPvh89dcSr4DbXa4DD+Ai6NMyvPvjTRNNbWwvz8+MX2IT7AcnAYntqVpCAEnq/lMmFZdUop7HqgM8gRmP3V5u8r0Kla7/gBP3NufwhsBZhANzNwMEOT9V//+S4SYyOkh18tICf4vhaoS1SfuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C8PpMNOH; arc=none smtp.client-ip=74.125.82.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AIK1OgOm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E1531F000E9;
-	Fri, 19 Jun 2026 00:45:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781829959;
-	bh=k4jE0Wl8X4KFsoQ3Rf+TI0+voqLbjqcK9ANqlKfVRmY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=AIK1OgOmdYymBS6C7qzU5WB3mCuYiwQsqQ7DoCQ15rVhpgPtTXvPvMBdvxP0bnxW9
-	 tNeZEfB6JyVCVMtlHbiARQEMzuCe70T7cb4XIU7McGPGsc+yCisEQysNm/8tM+L1G7
-	 olzTip/Lsj6sA3nFFNMmVfdC3EPkzyjv6L0abzIUKYAkQ3zpqhEGzRUQLaQ8AOYIu4
-	 LWX+DYWw0M+SZD74i0cdE+44k+p3TELIQEFnFVa+GOtlM+jPZ4VDUrYheE6iwHzp8f
-	 ddQK7jFRpvftPHaN4ot7ksYst6Yw0rpew59EHzKqRnf/b9r+s+2pmQLXASPUA8N9SH
-	 uQybkyWAGOzHg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2 5/8] bpf: ringbuf: Handle pending position wrap
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tamir Duberstein" <tamird@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260618-bpf-ringbuf-fixes-v2-5-33fde039ddf3@kernel.org>
-References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org>
- <20260618-bpf-ringbuf-fixes-v2-5-33fde039ddf3@kernel.org>
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C8PpMNOH"
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-30b9e755555so3427161eec.1
+        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 18:01:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781830892; x=1782435692; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=b4Kz/CJlQLDa0qon5uW3Vu21M3pPr+qVXqFwNmQJ4QM=;
+        b=C8PpMNOHJdjvQnF80WOCBMsX9lL8LEBN1Mm536+6lZPJa3K17S83K/mVyZ1cGNImz+
+         pelyVdgyprUz4P7KNDYlXRSCUj2c11qjDKxxGCyRL3mbvZUZ0KTDh7HlnQUqjRbl53iz
+         GiY4ZwdpqopwjcyToqDMNTx4jCm4mFXwwyogVgdkcHCpr3vwJZqeEqy2GycRBWz9HSdO
+         fNdEgPOUrzk6LNOv8Xlk+/kJrGe6WyacyOPnnD5+bC4S/mbOLnxPcyZMraP1L8p7z/94
+         Rpv0jQpuFxpExM8A5waslHqOVD9a2VR78EyggBElgGHeA8o1ziPvRc/rtdmh1kbsadKo
+         +KDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781830892; x=1782435692;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b4Kz/CJlQLDa0qon5uW3Vu21M3pPr+qVXqFwNmQJ4QM=;
+        b=CKnyIN3WqfS+DjJ1I1U+Q0Vm22Jj3xA5tLZySY4/qCFQbleV/q2oUKlxa2yx2lcL5u
+         47yOPvj1agGvtKVSG8rTTf8+ZlQpwn2TpX5KyWh+VsyEuUgC4Vg7N3wjvHFJM8WwHAss
+         Yh5aSiJmeRwmVPux7Xxn+gQdLUFPphd6GUijmVoE46Yx0s0Jr9WQknB7QYuPcSZ9blm/
+         AeIY8Bdh87YPXiwk/Xjn8S6kX04PC4sAZtLxDOZ/2QB1C8+ybLGK8e78z5BZgb0JCD9w
+         iw+WDvF7jVMvOvezj7hiGJ9tVisBECoyoqO0C+R5DU8ASClfT+4oXrL4azQ91lFK7chm
+         SGMA==
+X-Forwarded-Encrypted: i=1; AFNElJ/au3U8ISGa2fv+9hzURJKvOKDjQgdypr7pEYe0GRLpeYhrQU0u/aDRfIWxVWySGa0K7Ko=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDMToWLsxGQ0wOOpYnx700hH3XpcMPcpIRPiuRlpFE8QvIr/w2
+	5xdwW1LMQoNqRoIXU8OZwKCW8atUm8sU1L6cZ/MFr5AH+VNCkEeMHe1LHWJhiPAv
+X-Gm-Gg: AfdE7clu1vGDgmJKUDk8jCyz3nhTmdQ3LmVwq7a9Xvk25Vfih517UmhxfnjBjJ2fIzk
+	SGAIwHmm0ixe80QZdW1NWDRXUalE+seiciHLkK7vuLQagysbLGZnkDLUFwInLUGp4cLZy3Uj4SV
+	1agbb5UVH5Cq+M0mQYDjCQCtiT5p4zALuvvSLcYUQN+qxITzr+CsGesXR36b5tvNqBFta37Yvvo
+	riA1opcfoaoWMswfvVYIjT3dPP81rpGepWcY/ZTondSx3kEwLzJmIAx7LvzQCUHV3SdwrPiX6Aq
+	XWWbObRY/h/horvy8rIPCp0bDA+dgsHisVcqtoDLnd3xkfRsW3FVtQjpGO9zKJ0HduiBq3LbURn
+	rwdL4lZmjadEsF5nimLXLw0EMTbEII8MrQ5V7MtnR1j0vvgIhURx+ii53ykvOaw3Rr1ohBDZvdc
+	XmuTMOvrB1qHXfggIlejEoWFVbS/iV6Tpe7tbNmtZY75zfJxx9BqPp5u9W58m8eF0pyWuW
+X-Received: by 2002:a05:7300:c89:b0:304:e58b:cccb with SMTP id 5a478bee46e88-30c06fea688mr1125542eec.2.1781830891772;
+        Thu, 18 Jun 2026 18:01:31 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:ae6d:cb3e:a1c:6cba? ([2620:10d:c090:500::3:8ac8])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c06d5bec5sm985094eec.26.2026.06.18.18.01.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jun 2026 18:01:30 -0700 (PDT)
+Message-ID: <5c88bd7f01c7c156bb112f0f720dc9faffc7363b.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 4/4] selftests/bpf: Add kfunc set test to
+ resolve_btfids
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
+ linux-kbuild@vger.kernel.org
+Date: Thu, 18 Jun 2026 18:01:28 -0700
+In-Reply-To: <20260617210619.1562858-5-ihor.solodrai@linux.dev>
+References: <20260617210619.1562858-1-ihor.solodrai@linux.dev>
+	 <20260617210619.1562858-5-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 19 Jun 2026 00:45:58 +0000
-Message-Id: <20260619004559.4E1531F000E9@smtp.kernel.org>
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On Wed, 2026-06-17 at 14:06 -0700, Ihor Solodrai wrote:
 
-Pre-existing issues:
-- [High] `ringbuf_avail_data_sz` incorrectly uses the `max()` macro on wrap=
-ping `unsigned long` counters, leading to erroneous available data calculat=
-ions on 32-bit systems.
---
+[...]
 
-commit c0d823f17573cdb3b8da49e472d0ae2b71115825
-Author: Tamir Duberstein <tamird@kernel.org>
-
-bpf: ringbuf: Handle pending position wrap
-
-This commit fixes a counter wrapping issue on 32-bit systems in
-__bpf_ringbuf_reserve(). It ensures the pending position continues to
-advance after the producer position wraps by changing the loop condition
-from a magnitude comparison to a check for equality.
-
-Closes: https://lore.kernel.org/bpf/20260614020552.022A11F000E9@smtp.kernel=
-.org/
-
-> diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-> index 35ae64ade36b8..909880031fd38 100644
-> --- a/kernel/bpf/ringbuf.c
-> +++ b/kernel/bpf/ringbuf.c
-> @@ -482,7 +482,8 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf=
- *rb, u64 size)
->  	prod_pos =3D rb->producer_pos;
->  	new_prod_pos =3D prod_pos + len;
+> @@ -161,6 +189,27 @@ void test_resolve_btfids(void)
+>  			ASSERT_LE(test_set.ids[i - 1], test_set.ids[i], "sort_check");
+>  	}
 > =20
-> -	while (pend_pos < prod_pos) {
-> +	/* Positions wrap; pending_pos cannot logically pass producer_pos. */
-> +	while (pend_pos !=3D prod_pos) {
+> +	/* Check BTF_KFUNCS_START(test_kfunc_set) */
+> +	ASSERT_EQ(test_kfunc_set.flags, BTF_SET8_KFUNCS, "kfunc_set_flags");
+> +	ASSERT_EQ(test_kfunc_set.cnt, ARRAY_SIZE(kfunc_symbols), "kfunc_set_cnt=
+");
+> +
+> +	for (i =3D 0; i < test_kfunc_set.cnt; i++) {
+> +		for (j =3D 0; j < ARRAY_SIZE(kfunc_symbols); j++) {
+> +			if (kfunc_symbols[j].id =3D=3D (s32)test_kfunc_set.pairs[i].id) {
+> +				ASSERT_EQ(test_kfunc_set.pairs[i].flags,
+> +					  kfunc_symbols[j].flags, "kfunc_flags_check");
+> +				break;
+> +			}
+> +		}
+> +
+> +		ASSERT_TRUE(j < ARRAY_SIZE(kfunc_symbols), "kfunc_id_found");
+> +
+> +		if (i > 0) {
+> +			ASSERT_LE(test_kfunc_set.pairs[i - 1].id,
+> +				  test_kfunc_set.pairs[i].id, "kfunc_sort_check");
+> +		}
 
-[Severity: High]
-This is a pre-existing issue, but I noticed another problem with counter
-wrapping on 32-bit systems.
+To assert the sorted property, should one define two sets?
+{ a, b } and { b, a }? And check both.
+Otherwise the id assignments might be an artifact of compiler BTF
+generation logic.
 
-kernel/bpf/ringbuf.c:ringbuf_avail_data_sz() {
-    ...
-    if (unlikely(rb->overwrite_mode)) {
-        over_pos =3D smp_load_acquire(&rb->overwrite_pos);
-        prod_pos =3D smp_load_acquire(&rb->producer_pos);
-        return prod_pos - max(cons_pos, over_pos);
-    ...
-}
+> +	}
+> +
+>  out:
+>  	btf__free(btf);
+>  }
 
-Does the use of max() on wrapping unsigned long counters here lead to
-erroneous available data calculations?
-
-If over_pos wraps and becomes numerically smaller than a stalled cons_pos,
-max() will incorrectly evaluate cons_pos as larger. This evaluates the
-available data as prod_pos - cons_pos instead of prod_pos - over_pos, which
-could inflate the reported available data size up to 4GB.
-
-Additionally, if prod_pos exactly laps cons_pos by a multiple of 4GB, the
-calculation would yield 0. Could this cause ringbuf_map_poll_kern() to
-erroneously block the consumer in an infinite wait despite the buffer being
-full?
-
->  		hdr =3D (void *)rb->data + (pend_pos & rb->mask);
->  		hdr_len =3D READ_ONCE(hdr->len);
->  		if (hdr_len & BPF_RINGBUF_BUSY_BIT)
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260618-bpf-ringbu=
-f-fixes-v2-0-33fde039ddf3@kernel.org?part=3D5
+[...]
