@@ -1,77 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0804F3B71B4;
-	Fri, 19 Jun 2026 15:43:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2054D3B4E9F;
+	Fri, 19 Jun 2026 16:02:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781883823; cv=none; b=M7MmQ7RGIZGkLtLgcL5mAA5GHktjXIhjrFYE+D6YVOlqKox7Az3tTD3chfcUJm1V3GuCpFDvW1ZMG7ciAyvH4vARZ3npYEZdXodFAKTNrXAtxqtHo4DETPtFh3FoWOPvqN1XExeZD9/etwpXeeWJXVbvNEfTni3Av6Hhn/yyPUY=
+	t=1781884966; cv=none; b=jlysphCJutM0Fkv6aZWxsbT7IkwSlHogMaKP6aeDYDJ/KPvlUAy6fcQ/QCdtMF6p4ZPZNgFZBpVnACrc0Kje0DPioF60j3H9tw9spmepG+U8j9yMVJD98WOe1KIkw3A1UyBPPiGygDtOO9yvdFqEcuj/T2oEBQQPTbKbu7eUmu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781883823; c=relaxed/simple;
-	bh=V6fq8mfMiZVKCtjCrzdZ0T3E02/F+cxLsUSpHzRXKp0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VLRMZdX7J9bqqunF7dYYNcoMg9Ibx24NixiOFqne3YExI67v7InyPssvI+cfL9rwRPeJH/bfVnhaWRhlknT5we8vms+cOXom259v9IhMAgpYqWIQHLG5DHbBuiyTGL0AFFak2MgalwHAy80fKQWuTnyjen+a8DYduhphHF/9/dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F7aVViyf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781884966; c=relaxed/simple;
+	bh=eBmalbFwvezsu6JqPrRtaeiAUEkMDlAo27YCsl8U1rE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=BhIZZmmq+sFkm6H1fWfUkR8Nsq5gbPK01NKYEk3wysLo/02vFcw8jWYVdXys5yAuWwYzVUqen8AscxzWAbgL+HA9ZP3h7I8hdASMSz6z2elvfpputJp3txyyB3RAj3aBkxX8ypsOXbcCV8JnVuBicCdAedWNpNOX7y+HOtMNgfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=fail (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=LBLMKbBB reason="signature verification failed"; arc=none smtp.client-ip=13.76.78.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F7aVViyf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50B281F000E9;
-	Fri, 19 Jun 2026 15:43:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781883817;
-	bh=d7uDHjPWfe+a8WAJh7CqLu6PRzd1eWr1kyfgk1N9hjo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=F7aVViyfNdD0xIGGnW9PO5rasMldVDIwDoFgCWWLixSeZuN784c+fKdsH+I7kh8kk
-	 zLFfTBlX6eoclArQ2Ht+HV8ni+pTvka0T8VDtfeoweggbR5R9TQnVf+Y0+iogVHvuW
-	 oq02CQ2wur9mUnGaBGnS6bO7XVx+vXNV4wu9EzzhRDSKDvkJ0iUb68nYJtQ0E+UdvP
-	 KFs16cHgrguGwEgpzCsSvKq2VTjmWH69rR9HJgJfVeg4rvRI2RragLNIH5QqhajH4v
-	 9vQhYou1S4/36hBSSA2hPg31K1kSyPpLKWJYV0npgASs2Ciuvg75mU7+4frJU9w9Bh
-	 +yX5hBpIJoaBQ==
-Message-ID: <fcb66294-b3ca-4bf1-970d-23e4a7431757@kernel.org>
-Date: Fri, 19 Jun 2026 16:43:33 +0100
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="LBLMKbBB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:Date:From:To:Cc:
+	Subject:In-Reply-To:References:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-ID; bh=3ZSZ1GJmN9Ykp3wkoNvUZXy
+	ZqxRc7nzDIIQpdknRQQU=; b=LBLMKbBBbjkmvmut3ar1p8RP5gqml8Ua9qO/PMg
+	jQ8jIKbltGIQD8mOXxTEgudwjVhzso10qrgv0OKP0fgv4rCe6kgSRUcnf6lfwVWt
+	eO4LQfOWxcw6BOtAh2JE7/Ly6xG6WgMy4z0jx4scjBlZsdw/o0F9xYUQBe8fKQQX
+	+LyY=
+Received: from gnq25$mails.tsinghua.edu.cn ( [183.172.62.193] ) by
+ ajax-webmail-web2 (Coremail) ; Sat, 20 Jun 2026 00:02:14 +0800 (GMT+08:00)
+Date: Sat, 20 Jun 2026 00:02:14 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
+To: "Christian Loehle" <christian.loehle@arm.com>
+Cc: "Tejun Heo" <tj@kernel.org>, "David Vernet" <void@manifault.com>,
+	"Alexei Starovoitov" <ast@kernel.org>,
+	"Daniel Borkmann" <daniel@iogearbox.net>,
+	"Andrii Nakryiko" <andrii@kernel.org>,
+	"Andrea Righi" <arighi@nvidia.com>,
+	"Changwoo Min" <changwoo@igalia.com>,
+	"Shuah Khan" <shuah@kernel.org>, sched-ext@lists.linux.dev,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH bpf-next 0/2] sched_ext: Mark scx_bpf_cpu_rq()
+ nullable
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
+ 20250909(015d6f0a) Copyright (c) 2002-2026 www.mailtech.cn
+ mispb-4df55a87-4b50-4a66-85a0-70f79cb6c8b5-tsinghua.edu.cn
+In-Reply-To: <1b75c8ce-19c1-4a35-8747-d63e28dbbc16@arm.com>
+References: <20260619-f01-14-scx-cpu-rq-ret-null-v1-0-3b4281cdf0da@mails.tsinghua.edu.cn>
+ <1b75c8ce-19c1-4a35-8747-d63e28dbbc16@arm.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tools/bpf/bpftool: Fix vmlinux BTF leak in cgroup
- commands
-To: Yichong Chen <chenyichong@uniontech.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, sdf@fomichev.me, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <24357C69B4405079+20260617090117.280222-1-chenyichong@uniontech.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <24357C69B4405079+20260617090117.280222-1-chenyichong@uniontech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Message-ID: <41898842.82354.19ee09e5a42.Coremail.gnq25@mails.tsinghua.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID:yQQGZQC3k5sGaDVqDXtpAg--.741W
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQMDA2o0b7D0-AA
+	BsK
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-2026-06-17 17:01 UTC+0800 ~ Yichong Chen <chenyichong@uniontech.com>
-> bpftool cgroup show and tree call libbpf_find_kernel_btf() to
-> resolve attach_btf names, but never release the returned BTF object.
-> 
-> For cgroup tree, do_show_tree_fn() is called once for each cgroup
-> visited by nftw(). When more than one cgroup has attached programs,
-> each callback overwrites btf_vmlinux with a new object and loses the
-> previous allocation.
-> 
-> Load vmlinux BTF only once during a tree walk and release it when
-> cgroup show or tree completes. Reset btf_vmlinux_id at the same time
-> so batch mode starts with clean state.
-> 
-> Fixes: 596f5fb2ea2a ("bpftool: implement cgroup tree for BPF_LSM_CGROUP")
-> Signed-off-by: Yichong Chen <chenyichong@uniontech.com>
-
-
-Reviewed-by: Quentin Monnet <qmo@kernel.org>
-
-Thank you.
-
-It seems that Sashiko is right regarding the occurrences in struct_ops.c
-and map.c, would you mind following up with the related fixes, please?
-
-Thanks,
-Quentin
+CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiQ2hyaXN0aWFuIExvZWhs
+ZSIgPGNocmlzdGlhbi5sb2VobGVAYXJtLmNvbT4KPiBTZW5kIHRpbWU6RnJpZGF5LCAxOS8wNi8y
+MDI2IDIzOjMxOjU5Cj4gVG86ICJOdW9xaSBHdWkiIDxnbnEyNUBtYWlscy50c2luZ2h1YS5lZHUu
+Y24+LCAiVGVqdW4gSGVvIiA8dGpAa2VybmVsLm9yZz4sICJEYXZpZCBWZXJuZXQiIDx2b2lkQG1h
+bmlmYXVsdC5jb20+LCAiQWxleGVpIFN0YXJvdm9pdG92IiA8YXN0QGtlcm5lbC5vcmc+LCAiRGFu
+aWVsIEJvcmttYW5uIiA8ZGFuaWVsQGlvZ2VhcmJveC5uZXQ+LCAiQW5kcmlpIE5ha3J5aWtvIiA8
+YW5kcmlpQGtlcm5lbC5vcmc+Cj4gQ2M6ICJBbmRyZWEgUmlnaGkiIDxhcmlnaGlAbnZpZGlhLmNv
+bT4sICJDaGFuZ3dvbyBNaW4iIDxjaGFuZ3dvb0BpZ2FsaWEuY29tPiwgIlNodWFoIEtoYW4iIDxz
+aHVhaEBrZXJuZWwub3JnPiwgc2NoZWQtZXh0QGxpc3RzLmxpbnV4LmRldiwgYnBmQHZnZXIua2Vy
+bmVsLm9yZywgbGludXgta3NlbGZ0ZXN0QHZnZXIua2VybmVsLm9yZywgbGludXgta2VybmVsQHZn
+ZXIua2VybmVsLm9yZwo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggYnBmLW5leHQgMC8yXSBzY2hlZF9l
+eHQ6IE1hcmsgc2N4X2JwZl9jcHVfcnEoKSBudWxsYWJsZQo+IAo+IE9uIDYvMTkvMjYgMTU6NDUs
+IE51b3FpIEd1aSB3cm90ZToKPiA+IHNjeF9icGZfY3B1X3JxKCkgY2FuIHJldHVybiBOVUxMIGZv
+ciBpbnZhbGlkIENQVSBpbnB1dCBvciB3aGVuIG5vIFNDWAo+ID4gc2NoZWR1bGVyIGlzIGFjdGl2
+ZSwgYnV0IGl0cyBrZnVuYyByZWdpc3RyYXRpb24gZG9lcyBub3QgYWR2ZXJ0aXNlIHRoZQo+ID4g
+bnVsbGFibGUgcmV0dXJuIHRvIHRoZSB2ZXJpZmllci4KPiA+IAo+ID4gQWRkIEtGX1JFVF9OVUxM
+IHRvIHNjeF9icGZfY3B1X3JxKCksIG1hdGNoaW5nIHRoZSBudWxsYWJsZSBtZXRhZGF0YSBhbHJl
+YWR5Cj4gPiBwcmVzZW50IG9uIG5laWdoYm9yaW5nIFNDWCBhY2Nlc3NvcnMsIGFuZCBhZGQgYSBz
+Y2hlZF9leHQgc2VsZnRlc3QgdGhhdCByZWplY3RzCj4gPiBhbiB1bmNoZWNrZWQgZGlyZWN0IHJ1
+bnF1ZXVlIGZpZWxkIHJlYWQuCj4gPiAKPiAKPiBTZWUgNWM0OGQ4OGZlMDA0ICgic2NoZWRfZXh0
+OiBkZXByZWNhdGlvbiB3YXJuIGZvciBzY3hfYnBmX2NwdV9ycSgpIikKPiBJIGd1ZXNzIEkgY2Fu
+IHNlbmQgYSBwYXRjaCB0byByZW1vdmUgdGhlIGZ1bmN0aW9uLCBpdCdzIGJlZW4gYSB3aGlsZS4K
+PiAKPiA+IFRoaXMgZml4ZXMgYSByZWdyZXNzaW9uIGludHJvZHVjZWQgYnkgNjIwM2VmNzNmYTVj
+ICgic2NoZWQvZXh0OiBBZGQgQlBGCj4gPiBmdW5jdGlvbiB0byBmZXRjaCBycSIpLgo+IAo+IEhv
+dyBzbz8KPiAKPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogTnVvcWkgR3VpIDxnbnEyNUBtYWlscy50
+c2luZ2h1YS5lZHUuY24+Cj4gPiAtLS0KPiA+IE51b3FpIEd1aSAoMik6Cj4gPiAgICAgICBzY2hl
+ZF9leHQ6IE1hcmsgc2N4X2JwZl9jcHVfcnEoKSBhcyBudWxsYWJsZQo+ID4gICAgICAgc2VsZnRl
+c3RzL3NjaGVkX2V4dDogQ292ZXIgc2N4X2JwZl9jcHVfcnEoKSBudWxsIHJldHVybgo+ID4gCj4g
+PiAga2VybmVsL3NjaGVkL2V4dC5jICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAg
+MiArLQo+ID4gIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3NjaGVkX2V4dC9NYWtlZmlsZSAgICAg
+ICAgIHwgIDEgKwo+ID4gIC4uLi9zZWxmdGVzdHMvc2NoZWRfZXh0L2NwdV9ycV9yZXRfbnVsbC5i
+cGYuYyAgICAgIHwgMjcgKysrKysrKysrKysrKysrCj4gPiAgLi4uL3Rlc3Rpbmcvc2VsZnRlc3Rz
+L3NjaGVkX2V4dC9jcHVfcnFfcmV0X251bGwuYyAgfCAzOCArKysrKysrKysrKysrKysrKysrKysr
+Cj4gPiAgNCBmaWxlcyBjaGFuZ2VkLCA2NyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4g
+PiAtLS0KPiA+IGJhc2UtY29tbWl0OiBlNDI4N2JmMzRmOTdhODhjN2Q5MzIyZjViZGU4Mjg3MjRj
+MDczYTZiCj4gPiBjaGFuZ2UtaWQ6IDIwMjYwNjE3LWYwMS0xNC1zY3gtY3B1LXJxLXJldC1udWxs
+LTJlNzk1MzVhY2Q1Nwo+ID4gCj4gPiBCZXN0IHJlZ2FyZHMsCj4gPiAtLSAgCj4gPiBOdW9xaSBH
+dWkgPGducTI1QG1haWxzLnRzaW5naHVhLmVkdS5jbj4KPiA+IAo+ID4gCgpUaGFua3MsIHlvdSdy
+ZSByaWdodC4gIlJlZ3Jlc3Npb24iIHdhcyBpbmFjY3VyYXRlOyB0aGUgbWlzc2luZyBLRl9SRVRf
+TlVMTAptZXRhZGF0YSBoYXMgYmVlbiB0aGVyZSBzaW5jZSB0aGUga2Z1bmMgd2FzIGludHJvZHVj
+ZWQgYnkgNjIwM2VmNzNmYTVjLgoKSWYgdGhlIHByZWZlcnJlZCBkaXJlY3Rpb24gaXMgdG8gcmVt
+b3ZlIHNjeF9icGZfY3B1X3JxKCksIEknbGwgZHJvcCB0aGlzIApzZXJpZXMuCg==
