@@ -1,125 +1,138 @@
-Received: from outbound.pv.icloud.com (pv-2005c-snip4-7.eps.apple.com [57.103.66.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E1F38D68F
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 19:58:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.66.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3B331E823
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 20:05:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781899113; cv=none; b=OuRnAO1iqxODkUVa+ZuY+66REWJdCCM1FLdVuWr0Xa21SidD8QvfBLGzcBo1mXd+XLJomZkSqiLUe3PfIn+I6PVmrev9BdmVqP/BEJSTD98sf5KspTdJL7E7VZVaHdI8yZbAlM6NrP5GqeQXW7XX2gkKN1upjvvaKV/PpWuf18k=
+	t=1781899528; cv=none; b=imvLWPpVZp+sKrhsEcbO6O7kDrjo1nvQaDlTFGGmF/h7q7qJqmp6rIqmf6RQuRUu132T2mqLcHQl5NgdIyQz7HWkpgmYk1g3HGS2WM7RyqfUJJlGhCYChG6C1c2p20mbdRHGce0hgOW0ioz0Tesklh3DYRjh6pvEs8qC0ZF2v/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781899113; c=relaxed/simple;
-	bh=6uGn0GopFXIezIt1AfR5Ttqh7FWwt6oPkOUWciKbdCw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B3oIEawhh6qMGKmg39ncepO5LMFo4JFKZlpcaKpKDspje67kKKVcSS7uyuYyG97NZKJqYEacLwIfMRvVg7XggKYGwJdIucQ0g/0UZVNzy7hX1089ZKkEtuJgrBAXV4It9GqVBhJX1X4oQIKOZ0QjQpsuMu5WI6SR/QwSVH9bcBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=giUBqQ25; arc=none smtp.client-ip=57.103.66.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+	s=arc-20240116; t=1781899528; c=relaxed/simple;
+	bh=0T4Z7K/rb2nHa13lr/ex8NbDdCu91yZhRTr7Sid9GFM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=hNAtc+qpESyODV06N1At67NqHuFVaLTEhxmuYZPgf9evCf+0Z45AG0RN7KdhwJ8Gj+pgJCDTngINb6dETgH+Dpvxv0rlnTN8bDEi46eA9VcRDzEg8JCgWsp650lzBqXlXTr4ucS0Wa6tgZJZJYfROrIUs9gTwGcfvoCr1MzYbxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O4On/ejR; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="giUBqQ25"
-Received: from outbound.pv.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-west-1a-100-percent-11 (Postfix) with ESMTPS id 109F8180010D;
-	Fri, 19 Jun 2026 19:58:31 +0000 (UTC)
-X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQpOHV8CXhxBAFYEWBcOVk1KEVcJXwpABFEbWg9eK1sTVRdGCRkIXR0ZHldQXgheH0wcHQ5YBhICWkUBXBcDVxxWRVwYQwldBVccHR1BRVsTVRdGCRkIXR0ZCEcfCjADQg5WA0MHRQAtGRxXUF4IXh9MHB0OWAYSHVAcDlEFWwBGCU4CVAZSB0cMQR1ZBlkHRBRLHh5eD1YYWApHBVQCUBl5EVABWB5WXloXXlMXH0sAXEVaDlsERxQ=
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1781899112; x=1784491112; bh=uCzNyh9ez4ys8w28jvcLcpYoV8d+8g3nF2DPpTvrxL8=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=giUBqQ25koolVJBR+nXkdbkQNhd9Ibm/w5aNVnWZo/k5duQFaKW2fvI7VJe2U+VCnG0+UPUHwxuZllenpXgH1zYJIXmC+W/3lme3m1yHqAFOhDBaS1xV8FfXJtqwxeS6I2kJfiSaDXRz7PofSz8UsWnAeRzLLkZTDjhRpr+AamB9P7ngcT9cQC+Hr8931vH3ZtwQJcpvkNEdrarQRxnfcmoUYY9lgqLWogw6YPweJlem/qXNSUQScisDElmQ9zz0x4bxCYjtFNKCSPirDySqScYnP1wQTp8DeOOkycZ4N0qXjlQdEsFOBlGsuk9Ip8HsuuS0nNYd997L5T6+afgkLw==
-Received: from cibi (unknown [17.56.9.36])
-	by p00-icloudmta-asmtp-us-west-1a-100-percent-11 (Postfix) with ESMTPSA id 3253E18000A9;
-	Fri, 19 Jun 2026 19:58:24 +0000 (UTC)
-From: Siddharth_Cibi <siddharthcibi@icloud.com>
-To: ast@kernel.org
-Cc: Siddharth_Cibi <siddharthcibi@icloud.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org (open list:XDP (eXpress Data Path)),
-	bpf@vger.kernel.org (open list:XDP (eXpress Data Path)),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 2/2] selftests/bpf: validate rx_queue_index in xdp_metadata
-Date: Fri, 19 Jun 2026 19:57:58 +0000
-Message-ID: <20260619195759.41254-3-siddharthcibi@icloud.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260619195759.41254-1-siddharthcibi@icloud.com>
-References: <20260619195759.41254-1-siddharthcibi@icloud.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O4On/ejR"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2c68190ade4so25559025ad.0
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 13:05:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781899527; x=1782504327; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zH4OXFXG3GUtu3xSOVczzw0mmgwnoj/HVff9AySNWfk=;
+        b=O4On/ejRCxff79FXdpvy8qxPlHq67Q/v64j/KfEDq7ma+IR6aJSodNYEVpXxJp2z8/
+         ZJTJCwJVzTAdv5HoCCVkTbdCDSw7XW6ukrd9rMm6sobdxTsmqHVQatZUPxqfqX9oZfXc
+         BSAPxyFGSXe4dz+9iU8TaUHSc2kPL/zmoQEkHosdwXWgLxzXuo0SVxWGRFuCtDUeGazO
+         WZQVrQska7zYxBkUBQXIDc+LIoa7A3sYc/YZ5o+SCcwKog58/5E2hQPhY5+19gplz+LU
+         ORCQLy2MhqBUe/ZWEp84T2+tfj3WXGjBkNYhLPT4frlf7DL17UrAFLlh7F9JieHdfAKf
+         JF8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781899527; x=1782504327;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zH4OXFXG3GUtu3xSOVczzw0mmgwnoj/HVff9AySNWfk=;
+        b=FTU7FOfoWUMNJ1mDwgqhsmS3HK4vcKAJ0btwh2FKwDOnXH1YlWTSJwpSgaBELJVbOH
+         aKmh+9sgpQMkIqMthWyY3wu3qYQsEq1SGr/3FCxCh98ew4j3W6OjRe/y8swF7lEDJKwl
+         Ma8wgEwP++CM3LLGokjjzxh/L7Fyghs8KT32gVuSPHq7ycfO2vTnunGgY1ILCVQBqHZw
+         i8/aFMWlJJqBzjfYBU8VNLi57+2tyyyVhXqn6Ummjtuz/antpPYEmEFgoOHaoUh/Lp2R
+         US6Fzuvn+hBmc3qIcBIkBZTJpf0n6HEg0XhrbqXsTBXGBplgfFadKqh1/QxEq8gz9CH6
+         Qg9Q==
+X-Forwarded-Encrypted: i=1; AFNElJ9zqysDhSorN5Hmrkh4+iA4/PApotn9B2AwwTP4dOoBvnSUX53tVLOZ+JjnBYApaaYF5OY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlL0xAz9KGedfbJmvli8InbgMCLH5mmYfBSEMfsJL13eXMx1bf
+	Z1jJRcpcsBL7+yBRMLw1/fsrTzYNprYPGXJcu9VzBny62hY7qs1wZG9Z
+X-Gm-Gg: AfdE7ckttixmxQviW2rGyef1TE6mWtYPKodqsSNiPw567WK4Whc0eBC9zmsVm6QLeGK
+	7+ybcdTwuUJIomzzuW/Bw9ONVpXa2Aw6y+et8PgXjaewHEGVuQgH8bNDaZza1wC6VD1Crzj2pt3
+	X2jAAWkvcRNVhx5pAnM9VJL7lmwg8KTif+ToFKUE/E5l7zESb+9I+gP6iG2gOWquncVBw79Y+1/
+	v/BTZfSHlaivvM0LD+bbv1n05Z6fj88PooLeALoJLXLDcvdUjGDtP8ev5SeOhU10g+aAv875e+L
+	fzik/XJ9udJazeAz+AfjmULZcskc6mLNSu/rPQ7VGBFQhEMIvAlAC8Ug+OeYgsXk08RsoPfi5eN
+	+hMPCHM3+Yb9yEyOupinfJ34BA9y4FKAgP2Jpd4X3CgXxMQer7RBzLNwdVwQlmlerIB6GG4sHxT
+	1mlOsv5GwBE5H8qmDZfS+tcT+fv9AU/v8uuqXr5nnOCg==
+X-Received: by 2002:a17:902:c401:b0:2bc:ac76:c1d0 with SMTP id d9443c01a7336-2c719626ed0mr40699335ad.17.1781899526920;
+        Fri, 19 Jun 2026 13:05:26 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7439f8d1dsm2592035ad.51.2026.06.19.13.05.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Jun 2026 13:05:25 -0700 (PDT)
+Message-ID: <a15079723c8834a2baf3f35c6a8ed52c63addeb9.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Require CAP_BPF for pseudo-BTF ksym
+ loads
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song	 <yonghong.song@linux.dev>, Jiri Olsa
+ <jolsa@kernel.org>, Emil Tsalapatis	 <emil@etsalapatis.com>, Hao Luo
+ <haoluo@google.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
+ <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
+ 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Fri, 19 Jun 2026 13:05:22 -0700
+In-Reply-To: <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-1-f950f69fe60c@mails.tsinghua.edu.cn>
+References: 
+	<20260620-f01-13-pseudo-btf-id-cap-bpf-v1-0-f950f69fe60c@mails.tsinghua.edu.cn>
+	 <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-1-f950f69fe60c@mails.tsinghua.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE5MDE5MSBTYWx0ZWRfX9Svem6twCxxP
- 80KPU026J0U9zQLpjIO6SbsWQw9GFqIaIsRBMRiW3x6/BPOLVjRNf0sBlaSDoMhjPml3B92vqPd
- APf+gf5zoCRfz2qpzsnBrB9nFLGjFHo0VsLoIvlKWMnKn/QzzK9Hg5A2PekoHdsJwF2yQ/KRMJs
- Jj5BOZcWPRJ9/mWvLIGn2PGDgZ+inQsc6XVymDqwWoM6gbBmarnXxkWqbSKpJteoAxnxDXyYKaa
- IZWvKF6W95YnzwpWh6W/VaHmm8OcT+fsECx+tSLMEfMwJ3WAXBpE7nwS4dfoqb/HDZqptV8rQtd
- HNJgV1TB2UWX4Klvmow
-X-Proofpoint-ORIG-GUID: Db2CYb48ct3jrMupaRyZFvbMjivAXCot
-X-Proofpoint-GUID: Db2CYb48ct3jrMupaRyZFvbMjivAXCot
-X-Apple-Category-Label: MjA0NzgyOTUxNDY6JGNhdGVnb3J5JF9QZXJzb25hbCw=
 
-Extend xdp_metadata selftest coverage to validate that
-ctx->rx_queue_index is preserved and observable after XDP redirect
-execution.
+On Sat, 2026-06-20 at 00:04 +0800, Nuoqi Gui wrote:
+> BPF_PSEUDO_BTF_ID is resolved before the main verifier pass. The resolver
+> looks up the referenced kernel symbol through kallsyms and rewrites the
+> ldimm64 immediate to the concrete address that later becomes verifier
+> state.
+>=20
+> Require CAP_BPF before doing that materialization. This keeps typed ksym
+> address resolution on the privileged side and prevents loaders without
+> CAP_BPF from receiving a verifier log that contains the resolved address.
+>=20
+> Fixes: 4976b718c3551 ("bpf: Introduce pseudo_btf_id")
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> ---
+>  kernel/bpf/verifier.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>=20
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index ed7ba0e6a9ce..dbf5df995fc2 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -17639,6 +17639,11 @@ static int check_pseudo_btf_id(struct bpf_verifi=
+er_env *env,
+>  	int btf_fd;
+>  	int err;
+> =20
+> +	if (!env->bpf_capable) {
+> +		verbose(env, "BPF_PSEUDO_BTF_ID loads require CAP_BPF\n");
+> +		return -EACCES;
+> +	}
+> +
 
-Capture rx_queue_index in metadata and assert that it matches the
-expected queue during packet verification.
+Thank you for identifying this issue.
+I think the correct way to fix it is to extend the `is_ptr && !allow_ptr_le=
+aks`
+logic in kernel/bpf/disasm.c:print_bpf_insn().
+Note that it seems there are additional cases that are not covered,
+something like below seem warranted:
 
-Signed-off-by: Siddharth_Cibi <siddharthcibi@icloud.com>
----
- tools/testing/selftests/bpf/prog_tests/xdp_metadata.c | 3 ++-
- tools/testing/selftests/bpf/progs/xdp_metadata.c      | 2 +-
- tools/testing/selftests/bpf/xdp_metadata.h            | 1 +
- 3 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-index 5c31054ad4a4..f8cabbbe7bb7 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-@@ -309,7 +309,8 @@ static int verify_xsk_metadata(struct xsk *xsk, bool sent_from_af_xdp)
- 
- 	if (!ASSERT_NEQ(meta->rx_hash, 0, "rx_hash"))
- 		return -1;
--
-+	if (!ASSERT_EQ(meta->rx_queue_index, QUEUE_ID, "rx_queue_index"))
-+        	return -1;
- 	if (!sent_from_af_xdp) {
- 		if (!ASSERT_NEQ(meta->rx_hash_type & XDP_RSS_TYPE_L4, 0, "rx_hash_type"))
- 			return -1;
-diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata.c b/tools/testing/selftests/bpf/progs/xdp_metadata.c
-index 09bb8a038d52..62ae83860d7f 100644
---- a/tools/testing/selftests/bpf/progs/xdp_metadata.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_metadata.c
-@@ -98,7 +98,7 @@ int rx(struct xdp_md *ctx)
- 	bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash, &meta->rx_hash_type);
- 	bpf_xdp_metadata_rx_vlan_tag(ctx, &meta->rx_vlan_proto,
- 				     &meta->rx_vlan_tci);
--
-+	meta->rx_queue_index = ctx->rx_queue_index;
- 	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
- }
- 
-diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
-index 87318ad1117a..1f0ae4c00091 100644
---- a/tools/testing/selftests/bpf/xdp_metadata.h
-+++ b/tools/testing/selftests/bpf/xdp_metadata.h
-@@ -49,4 +49,5 @@ struct xdp_meta {
- 		__s32 rx_vlan_tag_err;
- 	};
- 	enum xdp_meta_field hint_valid;
-+	__u32 rx_queue_index;
- };
--- 
-2.53.0
+  bool is_ptr =3D insn->src_reg =3D=3D BPF_PSEUDO_MAP_FD    ||
+                insn->src_reg =3D=3D BPF_PSEUDO_MAP_VALUE  ||
+                insn->src_reg =3D=3D BPF_PSEUDO_MAP_IDX    ||
+                insn->src_reg =3D=3D BPF_PSEUDO_MAP_IDX_VALUE ||
+                insn->src_reg =3D=3D BPF_PSEUDO_BTF_ID;
 
+Could you please double check?
+
+>  	btf_fd =3D insn[1].imm;
+>  	if (btf_fd) {
+>  		btf =3D btf_get_by_fd(btf_fd);
