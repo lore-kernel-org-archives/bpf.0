@@ -1,63 +1,63 @@
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
+Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D8523CF68C
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 20:59:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058193CF695
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 20:59:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781902795; cv=none; b=U8T/SX+VeI10289YKSTnf+DGdc3QZ1H8ZMED1SedC2AZNYJBaIWUab0utxuMbOpxCrco3gE+Hya8OmbSiZSB7nCAxzZRnWOJqpe7bA2uHP8u8xf43f92XJgvVTnmdjyvrhw4MBpw3LMkk1lt5kqRdcP6sTQ3wfypFX3KsXkT5wo=
+	t=1781902796; cv=none; b=j+X5j30L6am9NFS3B2os57kc2C5a4UOTIvjzuCQUnAwpIK2JcA43OGHVAB+ejfXP1+c26zZsKoC+gYvq1jbSxiNnOM/yJhvcOrbFJM3/8Ul8ndh7vRKusxDk3hK8bYu8nhd4q8+nB3F5NRWUZG/18SlY/58xF6F8OhrJMTxuUF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781902795; c=relaxed/simple;
-	bh=j/1UVJQ7QZjGfqYGmBd1WiSCTsZRamkxREH11q4VPxQ=;
+	s=arc-20240116; t=1781902796; c=relaxed/simple;
+	bh=kwx88XHldEpP3rUuGxyOXPHuF7hVzAeEkFZEbyUp74I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CC3Xki5CelcKz0mDklgI29PWuDw2nkKFsixid19sBeHo4LfJLsHk6PQfeyNd8DTh9MFdYjqvAwR1auUnZLIi85/p8ZD+dF29xuO7da/pLYyfYnwqjQOWTn85FzMo5PfACKDeO/4LOPMYejyWEQMZZnoVzeYp/n7iee3pZUzRRz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SIoO/G8f; arc=none smtp.client-ip=209.85.128.65
+	 MIME-Version; b=dMje8DD5W73x6QCB7DPJ5S4qtaD2rFquXveTh3FPaM6kawV/+HOuNJtYeVresXzpyJrpayGTjis9RnMz9W1MtSrmfflJB71utb4oB309llZYOndE5UScQnzswbgip0yKgLXo7mrbseQCDbuCdl1/iQU8XM5dJ5xFQG5Db/TB2yY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HFJsooZe; arc=none smtp.client-ip=209.85.221.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SIoO/G8f"
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-4924944fe6bso1090305e9.0
-        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 13:59:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HFJsooZe"
+Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-45ef41adbc1so2049166f8f.0
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 13:59:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781902782; x=1782507582; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781902783; x=1782507583; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jySa/Bi7vo6f9i4WegYtCHrqGBCugdKwEW8kHF7s+ig=;
-        b=SIoO/G8f/zp8omUIAmrs5utQqgLb0hzXq8r+m6XWJlJMIYnnlIzclCYZpkumTC3cbs
-         7SZlULWuMfVRt5BIBv/TvyhkmIlNdw+RpwFZFXhl7OcwDnzEq6WA3ol2WTNRkwX9/6tE
-         ClqcqbJWvqQhz87RGq/DeTKOJJnZ2UMnaV0IDJZ2H4fR1m5NShl2gRjxrat4doNQTx5B
-         LL8xr2cq+e/wkXkSdEqgNNpsVIeS4T4nuW7qRtPVSZqfDaCc5RGhJInkU3p5WHSoM5KB
-         Vh8jCAxqixagZPlUN2KN71DnYEUJnSwmea0+19ZFHhubq6d4gL4J8Qsqr8CAzA6t3zYx
-         ScTg==
+        bh=XGMiHCA0HkBL+ewnAq1jWTHp0QfW/VL9HJke2P2Lnso=;
+        b=HFJsooZedPVp6mwen0NMMbFeq8ywiN+4k8yK5nnKuSZulFDJPaUKkgAttBcwwKUkCu
+         RaMLxUtVJf4Y+dptorUUuQq8rIG/oi1j25H3NhkJkTca0RwO9e29a+FzRmT8V8iINc7p
+         OarbVrIoa0vUs6QSS9BgaST4Gg+m/XraAqbI/kZk+TQsg4PpE6RFYgjNFYE56wPZ5VJF
+         DXHI4us7k672s1sTWH+2SJ/bHwvmoL+4QsvqFnhs3w2E2BSvN4M9UI6jg50Tcf9Kaw+p
+         insvAhdd/CuNG18jdqfcp05O80xzPRbTV3BZ4i3jRo+QxqdfyiNiOgsOAWPeiChQE6YR
+         1Daw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781902782; x=1782507582;
+        d=1e100.net; s=20251104; t=1781902783; x=1782507583;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=jySa/Bi7vo6f9i4WegYtCHrqGBCugdKwEW8kHF7s+ig=;
-        b=bVP8dSBJ92Bn8I/y0/cjThnBlmjPLPszsgWwQ9fR2ollisJ43vMaGxPA0A2afTlBmL
-         +Ynl4L8X1VrtmsOqAjUjsxWt8fwYG0OleetvwgHDogV9LyWmC+w9Ew2eT6pqEiZe+UBK
-         MYjmsWLW17PtAJVQacSLnk4mVDSwk7S0XppEzDgXk5tPWO0+TV9qwBA3TDIVsWs3fEki
-         a9ROdLHI0ZRuzNyQ0r33YZD298rDifF/6Coe/jkUUgPngaDxfjxwPye4ggZut+iTv+bI
-         ircqSjDj3/mq3z4qmSt/CtGE+PvDWuxA5l19ZDFnetmB9ayam9QpVm22M1vLBn6QSaY+
-         WBYg==
-X-Gm-Message-State: AOJu0YxO0/886xOZ3VnncxYIdnSgzieMM9q4dpMZrajrMG9nObGKxdm/
-	zbsqgUpJYfoeEkEDj+NFkKbgXVxk7x0AaD2dtva+KZrYuU43X2X09qxpKWUoD4Sy
-X-Gm-Gg: AfdE7cnsioeLOcsFzzQcTPEHKLuvfbHucJlfvMIwLjSFV7FEt0lg65GW3IGa2NbYQB4
-	n85s7Ox+ntE1XQlHvMQImyexDtVWwE1ggsuWm8ppL2pxRCvzXE2v5vaKsvbonvwT2H91Ew1yqVc
-	1Yz4T4ZI07dzHeTHFNCPIsCwJqp3mbM+SdSrxslnAjBK5m+DrO+qTw+PyJ+/4TSLPv1nnW5ZbaC
-	WuCK+jIVfXQQ1I3XRsEYoBSECd+yo3XqcJwChjFO3lV2s06DRPqoWRnzRwLf3CM89AOE5h5mCGv
-	kj66bS4rHwoKDs6macmvVNm6qV0Zsd3xAngGDPrIncfGpbvRkMxMhWVymciwazk9NcRW1EC4ccF
-	mHh+AJB2uq/QC2zdh9A0TWOTwjQ0l8tKKXWqWWFTuv/X7cnhPP2EKcmyP5vI0mUs2cIx1SYh8RJ
-	xqjVkRacC8gM/ls/GFLORo1EzBLNNZBcDCkwnhXCWbYV2DnxKmn7BS4oqtp1YczqALFhME807yn
-	PIuKlmDfs6JLAWuMhyBYRItZvaxJRKcWi9nZc7FfSnmcOERnTttORE=
-X-Received: by 2002:a05:600c:628f:b0:490:bd66:e522 with SMTP id 5b1f17b1804b1-49240e72434mr80436625e9.29.1781902781985;
-        Fri, 19 Jun 2026 13:59:41 -0700 (PDT)
+        bh=XGMiHCA0HkBL+ewnAq1jWTHp0QfW/VL9HJke2P2Lnso=;
+        b=lMafZtB4Ydl/1v9QjCBij7n1LzSz03vnKsclJb5U794MVO7sN6WxMSdCW8uMNnfXEW
+         46IPB4zblMu2DYZz0LdatGfua5Q6ihLtOQDnm2rc+82WQ/JClaTFokwDSTGEys7Grh5j
+         N97fZPqPH1Vn+cV298YjHh7La6MsX9v1QZMnGj6xHev+C46ven+cDzQbeyP6S3+4G4Vz
+         lSsJlnoduiCqB9Wup4bfwy4OkLLZwCFNwrveyX9OFVb73NxwC0j6Eoil/nMaghe1qOsM
+         kCXfkexwwQPuicmge0xZW/lEE2rgtEF4Qp3AaBni6znnBgVuNcLwQfy4ybqnw8/db9G1
+         /yYQ==
+X-Gm-Message-State: AOJu0Ywn9FxrbtbON78uMGNvr1cX7myuXafvS+48YDlcLHAgYArVVG+n
+	2Hy9tbV0hsttGo+ZslMvowXp360apnmI+CK1aSH6CposOsDjIQXeFR1So8ggpGpf
+X-Gm-Gg: AfdE7cnlPENQu6m82bEC2a/k3wicgU7KuuUMjORavHMNth6tUpV4OWuRWCrxISy0J2b
+	FzCOTkv38ipmbVhPjadYlAa16ejHNsywW1W8O/95wFPw4czaphBU0D7xWxB1NvBisq9ufakhMls
+	a0zbLabwAQ4egkRQgRCBczipOy9ht1RsPWTmILYJv6EOThIouZymHfkI9QzhBZYdjW4t8fa0buJ
+	eSBvoye0FnxlyJsm6gV37FTATNFkzINFIQ9bOoI6Rqtz+ouNcYUqbmqgOTj8dR6FMtFSgJpuTab
+	DKnYKO4ZW4tdsACETTWqVx7s3T0O8jDUz/leet5XqssA6AhW1aFlDLSERijZdv/j6LPddU61Ru4
+	2ATnJTl4Ln3N9l7zXYnyghyhl28dntnZ6AB+kYVvHKR2UJ0JHgwptjtBogbq6dHlA4+5zPvaifl
+	O9j/SN46+3zz7DRBL4cQ93BlBQ6zPEQgNNJ3xll3bSaikAmTNc/4vvWzWv+lx2lO30vrPyPztgY
+	Ty23d+72wokWW2pvWs5i9iL0LYQ/zN3PjnSb/EP1AVM3zsJUVzgkcU=
+X-Received: by 2002:a5d:608c:0:b0:464:98d2:4682 with SMTP id ffacd0b85a97d-465026e1126mr6743141f8f.35.1781902782894;
+        Fri, 19 Jun 2026 13:59:42 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4924944fbbdsm11935655e9.12.2026.06.19.13.59.41
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-466648c698dsm1998267f8f.16.2026.06.19.13.59.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2026 13:59:41 -0700 (PDT)
+        Fri, 19 Jun 2026 13:59:42 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -67,9 +67,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 06/17] bpf: Track verifier reference diagnostic events
-Date: Fri, 19 Jun 2026 22:59:19 +0200
-Message-ID: <20260619205934.1312876-7-memxor@gmail.com>
+Subject: [PATCH bpf-next v2 07/17] bpf: Track verifier context diagnostic events
+Date: Fri, 19 Jun 2026 22:59:20 +0200
+Message-ID: <20260619205934.1312876-8-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260619205934.1312876-1-memxor@gmail.com>
 References: <20260619205934.1312876-1-memxor@gmail.com>
@@ -79,218 +79,343 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6962; i=memxor@gmail.com; h=from:subject; bh=j/1UVJQ7QZjGfqYGmBd1WiSCTsZRamkxREH11q4VPxQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIct05T+7VG21RZJpHkLlk4Vzivpb7kl0rWfgapnezbryh 2wIQ1dHKQuDGBeDrJgiS8n/fUzGJyp/B9ou44aZw8oEMoSBi1MAJpJTzcjQ15f8u/XQ6vwzIdJn khfP9tq4/eOxA/enPNXee+2QjvGHR4wMi39O3/1MNSqrYopBSZ/px599OYnXDy9YuOzhyYQph02 FeQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11568; i=memxor@gmail.com; h=from:subject; bh=kwx88XHldEpP3rUuGxyOXPHuF7hVzAeEkFZEbyUp74I=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIct05f9G96pZmkvqwxVVby/9VhcwP3RR7+YayZIkvU6+K y43Vc06SlkYxLgYZMUUWUr+72MyPlH5O9B2GTfMHFYmkCEMXJwCMJGqC4wMO+RUbl61TQj7nNR7 qM20j63zWV84v6reVwN9za1lToy2jAxfxa+m5G6xrt7VlznvU+O0nLvrkk/m+Cv3G93UyTuZ7MQ EAA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Add reference acquire and release events to diagnostic history so Resource
-Lifetime Safety reports can show the lifetime of a specific reference id along
-the path.
+Record verifier context transitions in the diagnostic history so later reports
+can anchor causal paths to the critical section that made an operation invalid.
 
-Record acquisitions after the verifier assigns the reference id. Record
-releases only after release_reference_nomark() succeeds, including the
-kptr_xchg RCU conversion path and owning-to-non-owning conversion path that
-consume an owning reference.
+This covers lock, IRQ, RCU, and preempt regions without adding any new
+verifier error reports. Category-specific commits decide where those recorded
+events should be rendered.
+
+Use context depth when selecting scoped history so nested regions anchor at the
+outer active region, and fall back to the earliest retained event when the
+matching entry was pruned.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/diagnostics.c | 53 ++++++++++++++++++++++++++++++++++++++++
- kernel/bpf/diagnostics.h | 11 +++++++++
- kernel/bpf/verifier.c    | 18 +++++++++++---
- 3 files changed, 79 insertions(+), 3 deletions(-)
+ kernel/bpf/diagnostics.c | 85 +++++++++++++++++++++++++++++++++++++++-
+ kernel/bpf/diagnostics.h | 20 ++++++++++
+ kernel/bpf/verifier.c    | 35 ++++++++++++++---
+ 3 files changed, 133 insertions(+), 7 deletions(-)
 
 diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index f51b2860c11d..58cc7c18cf98 100644
+index 58cc7c18cf98..d6a9a2315f54 100644
 --- a/kernel/bpf/diagnostics.c
 +++ b/kernel/bpf/diagnostics.c
-@@ -1015,6 +1015,32 @@ void bpf_diag_record_stack_slot(struct bpf_verifier_env *env, u32 insn_idx,
- 	bpf_diag_append_history(env, &event);
+@@ -1041,6 +1041,53 @@ void bpf_diag_record_ref_release(struct bpf_verifier_env *env, u32 insn_idx,
+ 			    ref_id);
  }
  
-+static void bpf_diag_record_ref(struct bpf_verifier_env *env, u32 insn_idx,
-+				u8 kind, u32 ref_id)
++void bpf_diag_record_context(struct bpf_verifier_env *env, u32 insn_idx,
++			     enum bpf_diag_context_kind ctx_kind, bool enter,
++			     u32 depth)
 +{
++	/* Keep leave events so context rendering can stop at a depth-zero exit
++	 * and show nested-region depth accurately for the active path.
++	 */
 +	struct bpf_diag_history_event event = {
 +		.insn_idx = insn_idx,
-+		.kind = kind,
-+		.ref.ref_id = ref_id,
++		.kind = BPF_DIAG_HISTORY_CONTEXT,
++		.ctx.kind = ctx_kind,
++		.ctx.enter = enter,
++		.ctx.depth = depth,
 +	};
++
++	if (ctx_kind == BPF_DIAG_CONTEXT_NONE)
++		return;
 +
 +	bpf_diag_append_history(env, &event);
 +}
 +
-+void bpf_diag_record_ref_acquire(struct bpf_verifier_env *env, u32 insn_idx,
-+				 u32 ref_id)
++static int bpf_diag_history_context_start_idx(const struct bpf_diag_log *log,
++					      const struct bpf_diag_history_opts *opts)
 +{
-+	bpf_diag_record_ref(env, insn_idx, BPF_DIAG_HISTORY_REF_ACQUIRE,
-+			    ref_id);
-+}
++	int i;
 +
-+void bpf_diag_record_ref_release(struct bpf_verifier_env *env, u32 insn_idx,
-+				 u32 ref_id)
-+{
-+	bpf_diag_record_ref(env, insn_idx, BPF_DIAG_HISTORY_REF_RELEASE,
-+			    ref_id);
++	if (!opts->ctx_depth)
++		return 0;
++
++	for (i = log->cnt; i > 0; i--) {
++		const struct bpf_diag_history_event *event;
++
++		event = bpf_diag_history_event(log, i - 1);
++
++		if (event->kind != BPF_DIAG_HISTORY_CONTEXT ||
++		    event->ctx.kind != opts->ctx_kind)
++			continue;
++
++		if (event->ctx.enter && event->ctx.depth == 1)
++			return i - 1;
++		if (!event->ctx.enter && event->ctx.depth == 0)
++			return 0;
++	}
++
++	return 0;
 +}
 +
  struct bpf_diag_history_filter {
  	const struct bpf_diag_history_opts *opts;
  	bool stack_slot_valid;
-@@ -1136,6 +1162,10 @@ static int bpf_diag_history_start_idx(const struct bpf_diag_log *log,
- 		    event->stack_arg.slot == opts->stack_arg_slot &&
- 		    event->stack_arg.frameno == opts->frameno)
- 			return i - 1;
-+		if (opts->scope == BPF_DIAG_HISTORY_SCOPE_REF &&
-+		    event->kind == BPF_DIAG_HISTORY_REF_ACQUIRE &&
-+		    event->ref.ref_id == opts->ref_id)
-+			return i - 1;
- 	}
+@@ -1147,6 +1194,8 @@ static int bpf_diag_history_start_idx(const struct bpf_diag_log *log,
  
- 	return 0;
-@@ -1166,6 +1196,10 @@ bpf_diag_history_event_visible(const struct bpf_diag_history_event *event,
- 		return filter->stack_slot_valid &&
- 		       idx <= filter->stack_until_idx &&
- 		       bpf_diag_stack_slot_matches(event, filter);
-+	case BPF_DIAG_HISTORY_REF_ACQUIRE:
-+	case BPF_DIAG_HISTORY_REF_RELEASE:
-+		return opts->scope == BPF_DIAG_HISTORY_SCOPE_REF &&
-+		       event->ref.ref_id == opts->ref_id;
+ 	if (!opts || opts->scope == BPF_DIAG_HISTORY_SCOPE_ALL)
+ 		return 0;
++	if (opts->scope == BPF_DIAG_HISTORY_SCOPE_CONTEXT)
++		return bpf_diag_history_context_start_idx(log, opts);
+ 	if (filter->stack_slot_valid)
+ 		return bpf_diag_history_stack_start_idx(log, filter);
+ 
+@@ -1179,7 +1228,7 @@ bpf_diag_history_event_visible(const struct bpf_diag_history_event *event,
+ 	const struct bpf_diag_history_opts *opts = filter->opts;
+ 
+ 	if (!opts || opts->scope == BPF_DIAG_HISTORY_SCOPE_ALL)
+-		return true;
++		return event->kind != BPF_DIAG_HISTORY_CONTEXT;
+ 
+ 	switch (event->kind) {
+ 	case BPF_DIAG_HISTORY_BRANCH:
+@@ -1200,6 +1249,9 @@ bpf_diag_history_event_visible(const struct bpf_diag_history_event *event,
+ 	case BPF_DIAG_HISTORY_REF_RELEASE:
+ 		return opts->scope == BPF_DIAG_HISTORY_SCOPE_REF &&
+ 		       event->ref.ref_id == opts->ref_id;
++	case BPF_DIAG_HISTORY_CONTEXT:
++		return opts->scope == BPF_DIAG_HISTORY_SCOPE_CONTEXT &&
++		       event->ctx.kind == opts->ctx_kind;
  	default:
  		return false;
  	}
-@@ -1536,6 +1570,20 @@ static void bpf_diag_print_stack_slot(struct bpf_verifier_env *env,
- 			       off, fmt->old_buf, fmt->new_buf);
+@@ -1584,6 +1636,33 @@ static void bpf_diag_print_ref_event(struct bpf_verifier_env *env,
+ 			       "owned resource (id=%u)", event->ref.ref_id);
  }
  
-+static void bpf_diag_print_ref_event(struct bpf_verifier_env *env,
-+				     const struct bpf_diag_history_event *event)
++static const char *bpf_diag_context_name(enum bpf_diag_context_kind kind)
 +{
-+	if (event->kind == BPF_DIAG_HISTORY_REF_ACQUIRE) {
-+		bpf_diag_report_source(env, event->insn_idx, "acquired",
-+				       "owned resource (id=%u)",
-+				       event->ref.ref_id);
-+		return;
++	switch (kind) {
++	case BPF_DIAG_CONTEXT_RCU:
++		return "RCU read lock region";
++	case BPF_DIAG_CONTEXT_PREEMPT:
++		return "non-preemptible region";
++	case BPF_DIAG_CONTEXT_IRQ:
++		return "IRQ-disabled region";
++	case BPF_DIAG_CONTEXT_LOCK:
++		return "lock region";
++	case BPF_DIAG_CONTEXT_NONE:
++	default:
++		return "context";
 +	}
++}
 +
-+	bpf_diag_report_source(env, event->insn_idx, "released",
-+			       "owned resource (id=%u)", event->ref.ref_id);
++static void bpf_diag_print_context_event(struct bpf_verifier_env *env,
++					 const struct bpf_diag_history_event *event)
++{
++	bpf_diag_report_source(env, event->insn_idx, "context",
++			       "%s %s; depth is now %u",
++			       event->ctx.enter ? "entered" : "left",
++			       bpf_diag_context_name(event->ctx.kind),
++			       event->ctx.depth);
 +}
 +
  void bpf_diag_print_history(struct bpf_verifier_env *env,
  			    const struct bpf_diag_history_opts *opts)
  {
-@@ -1585,6 +1633,11 @@ void bpf_diag_print_history(struct bpf_verifier_env *env,
- 			bpf_diag_print_stack_slot(env, event);
+@@ -1638,6 +1717,10 @@ void bpf_diag_print_history(struct bpf_verifier_env *env,
+ 			bpf_diag_print_ref_event(env, event);
  			printed = true;
  			break;
-+		case BPF_DIAG_HISTORY_REF_ACQUIRE:
-+		case BPF_DIAG_HISTORY_REF_RELEASE:
-+			bpf_diag_print_ref_event(env, event);
++		case BPF_DIAG_HISTORY_CONTEXT:
++			bpf_diag_print_context_event(env, event);
 +			printed = true;
 +			break;
  		default:
  			break;
  		}
 diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
-index 7af0a694890b..af8b738f7087 100644
+index af8b738f7087..684574388343 100644
 --- a/kernel/bpf/diagnostics.h
 +++ b/kernel/bpf/diagnostics.h
-@@ -80,6 +80,9 @@ struct bpf_diag_history_event {
- 			u8 reason;
- 			struct bpf_diag_reg_snapshot old, new;
- 		} stack_slot;
+@@ -83,6 +83,11 @@ struct bpf_diag_history_event {
+ 		struct {
+ 			u32 ref_id;
+ 		} ref;
 +		struct {
-+			u32 ref_id;
-+		} ref;
++			u8 kind;
++			bool enter;
++			u32 depth;
++		} ctx;
  	};
  };
  
-@@ -88,12 +91,15 @@ enum bpf_diag_history_kind {
- 	BPF_DIAG_HISTORY_REG_MOD,
- 	BPF_DIAG_HISTORY_STACK_ARG,
+@@ -93,6 +98,7 @@ enum bpf_diag_history_kind {
  	BPF_DIAG_HISTORY_STACK_SLOT,
-+	BPF_DIAG_HISTORY_REF_ACQUIRE,
-+	BPF_DIAG_HISTORY_REF_RELEASE,
+ 	BPF_DIAG_HISTORY_REF_ACQUIRE,
+ 	BPF_DIAG_HISTORY_REF_RELEASE,
++	BPF_DIAG_HISTORY_CONTEXT,
  };
  
  enum bpf_diag_history_scope {
- 	BPF_DIAG_HISTORY_SCOPE_ALL,
+@@ -100,6 +106,15 @@ enum bpf_diag_history_scope {
  	BPF_DIAG_HISTORY_SCOPE_REG,
  	BPF_DIAG_HISTORY_SCOPE_STACK_ARG,
-+	BPF_DIAG_HISTORY_SCOPE_REF,
+ 	BPF_DIAG_HISTORY_SCOPE_REF,
++	BPF_DIAG_HISTORY_SCOPE_CONTEXT,
++};
++
++enum bpf_diag_context_kind {
++	BPF_DIAG_CONTEXT_NONE,
++	BPF_DIAG_CONTEXT_RCU,
++	BPF_DIAG_CONTEXT_PREEMPT,
++	BPF_DIAG_CONTEXT_IRQ,
++	BPF_DIAG_CONTEXT_LOCK,
  };
  
  struct bpf_diag_history_opts {
-@@ -101,6 +107,7 @@ struct bpf_diag_history_opts {
- 	u32 frameno;
+@@ -108,6 +123,8 @@ struct bpf_diag_history_opts {
  	int regno;
  	int stack_arg_slot;
-+	u32 ref_id;
+ 	u32 ref_id;
++	enum bpf_diag_context_kind ctx_kind;
++	u32 ctx_depth;
  };
  
  bool bpf_diag_enabled(const struct bpf_verifier_env *env);
-@@ -153,6 +160,10 @@ void bpf_diag_record_stack_slot(struct bpf_verifier_env *env, u32 insn_idx,
- 				enum bpf_diag_stack_slot_reason reason,
- 				const struct bpf_reg_state *old_reg,
- 				const struct bpf_reg_state *new_reg);
-+void bpf_diag_record_ref_acquire(struct bpf_verifier_env *env, u32 insn_idx,
-+				 u32 ref_id);
-+void bpf_diag_record_ref_release(struct bpf_verifier_env *env, u32 insn_idx,
-+				 u32 ref_id);
+@@ -164,6 +181,9 @@ void bpf_diag_record_ref_acquire(struct bpf_verifier_env *env, u32 insn_idx,
+ 				 u32 ref_id);
+ void bpf_diag_record_ref_release(struct bpf_verifier_env *env, u32 insn_idx,
+ 				 u32 ref_id);
++void bpf_diag_record_context(struct bpf_verifier_env *env, u32 insn_idx,
++			     enum bpf_diag_context_kind ctx_kind, bool enter,
++			     u32 depth);
  void bpf_diag_print_history(struct bpf_verifier_env *env,
  			    const struct bpf_diag_history_opts *opts);
  
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index fedabb6bb515..93941deb2cd8 100644
+index 93941deb2cd8..e584dec04b34 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -1438,6 +1438,7 @@ static int acquire_reference(struct bpf_verifier_env *env, int insn_idx, int par
- 	s->type = REF_TYPE_PTR;
+@@ -1064,7 +1064,7 @@ static int is_iter_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_s
+ }
+ 
+ static int acquire_irq_state(struct bpf_verifier_env *env, int insn_idx);
+-static int release_irq_state(struct bpf_verifier_state *state, int id);
++static int release_irq_state(struct bpf_verifier_env *env, int id);
+ 
+ static int mark_stack_slot_irq_flag(struct bpf_verifier_env *env,
+ 				     struct bpf_kfunc_call_arg_meta *meta,
+@@ -1123,7 +1123,7 @@ static int unmark_stack_slot_irq_flag(struct bpf_verifier_env *env, struct bpf_r
+ 		return -EINVAL;
+ 	}
+ 
+-	err = release_irq_state(env->cur_state, st->id);
++	err = release_irq_state(env, st->id);
+ 	WARN_ON_ONCE(err && err != -EACCES);
+ 	if (err) {
+ 		int insn_idx = 0;
+@@ -1458,6 +1458,8 @@ static int acquire_lock_state(struct bpf_verifier_env *env, int insn_idx, enum r
+ 	state->active_locks++;
+ 	state->active_lock_id = id;
+ 	state->active_lock_ptr = ptr;
++	bpf_diag_record_context(env, insn_idx, BPF_DIAG_CONTEXT_LOCK, true,
++				state->active_locks);
+ 	return 0;
+ }
+ 
+@@ -1473,6 +1475,7 @@ static int acquire_irq_state(struct bpf_verifier_env *env, int insn_idx)
  	s->id = ++env->id_gen;
- 	s->parent_id = parent_id;
-+	bpf_diag_record_ref_acquire(env, insn_idx, s->id);
+ 
+ 	state->active_irq_id = s->id;
++	bpf_diag_record_context(env, insn_idx, BPF_DIAG_CONTEXT_IRQ, true, 1);
  	return s->id;
  }
  
-@@ -9140,8 +9141,12 @@ static int release_reference(struct bpf_verifier_env *env, int id)
- 	if (err)
- 		return err;
+@@ -1514,8 +1517,10 @@ static bool reg_is_referenced(struct bpf_verifier_env *env, const struct bpf_reg
+ 	return find_reference_state(env->cur_state, reg->id);
+ }
  
--	if (find_reference_state(vstate, id))
--		WARN_ON_ONCE(release_reference_nomark(vstate, id));
-+	if (find_reference_state(vstate, id)) {
-+		err = release_reference_nomark(vstate, id);
-+		WARN_ON_ONCE(err);
-+		if (!err)
-+			bpf_diag_record_ref_release(env, env->insn_idx, id);
-+	}
- 
- 	while ((id = idstack_pop(idstack))) {
- 		/*
-@@ -9263,6 +9268,9 @@ static int ref_convert_alloc_rcu_protected(struct bpf_verifier_env *env, u32 id)
- 	int err;
- 
- 	err = release_reference_nomark(env->cur_state, id);
-+	if (err)
-+		return err;
-+	bpf_diag_record_ref_release(env, env->insn_idx, id);
- 
- 	bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
- 		if (reg->id != id)
-@@ -11746,8 +11754,12 @@ static void ref_convert_owning_non_owning(struct bpf_verifier_env *env, u32 id)
+-static int release_lock_state(struct bpf_verifier_state *state, int type, int id, void *ptr)
++static int release_lock_state(struct bpf_verifier_env *env, int type, int id,
++			      void *ptr)
  {
- 	struct bpf_func_state *unused;
- 	struct bpf_reg_state *reg;
-+	int err;
++	struct bpf_verifier_state *state = env->cur_state;
+ 	void *prev_ptr = NULL;
+ 	u32 prev_id = 0;
+ 	int i;
+@@ -1528,6 +1533,9 @@ static int release_lock_state(struct bpf_verifier_state *state, int type, int id
+ 			/* Reassign active lock (id, ptr). */
+ 			state->active_lock_id = prev_id;
+ 			state->active_lock_ptr = prev_ptr;
++			bpf_diag_record_context(env, env->insn_idx,
++						BPF_DIAG_CONTEXT_LOCK, false,
++						state->active_locks);
+ 			return 0;
+ 		}
+ 		if (state->refs[i].type & REF_TYPE_LOCK_MASK) {
+@@ -1538,8 +1546,9 @@ static int release_lock_state(struct bpf_verifier_state *state, int type, int id
+ 	return -EINVAL;
+ }
  
--	WARN_ON_ONCE(release_reference_nomark(env->cur_state, id));
-+	err = release_reference_nomark(env->cur_state, id);
-+	WARN_ON_ONCE(err);
-+	if (!err)
-+		bpf_diag_record_ref_release(env, env->insn_idx, id);
+-static int release_irq_state(struct bpf_verifier_state *state, int id)
++static int release_irq_state(struct bpf_verifier_env *env, int id)
+ {
++	struct bpf_verifier_state *state = env->cur_state;
+ 	u32 prev_id = 0;
+ 	int i;
  
- 	bpf_for_each_reg_in_vstate(env->cur_state, unused, reg, ({
- 		if (reg->id == id) {
+@@ -1552,6 +1561,9 @@ static int release_irq_state(struct bpf_verifier_state *state, int id)
+ 		if (state->refs[i].id == id) {
+ 			release_reference_state(state, i);
+ 			state->active_irq_id = prev_id;
++			bpf_diag_record_context(env, env->insn_idx,
++						BPF_DIAG_CONTEXT_IRQ, false,
++						state->active_irq_id ? 1 : 0);
+ 			return 0;
+ 		} else {
+ 			prev_id = state->refs[i].id;
+@@ -7209,7 +7221,7 @@ static int process_spin_lock(struct bpf_verifier_env *env, struct bpf_reg_state
+ 			verbose(env, "%s_unlock cannot be out of order\n", lock_str);
+ 			return -EINVAL;
+ 		}
+-		if (release_lock_state(cur, type, reg->id, ptr)) {
++		if (release_lock_state(env, type, reg->id, ptr)) {
+ 			verbose(env, "%s_unlock of different lock\n", lock_str);
+ 			return -EINVAL;
+ 		}
+@@ -13290,21 +13302,32 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 
+ 	if (rcu_lock) {
+ 		env->cur_state->active_rcu_locks++;
++		bpf_diag_record_context(env, insn_idx, BPF_DIAG_CONTEXT_RCU,
++					true, env->cur_state->active_rcu_locks);
+ 	} else if (rcu_unlock) {
+ 		if (env->cur_state->active_rcu_locks == 0) {
+ 			verbose(env, "unmatched rcu read unlock (kernel function %s)\n", func_name);
+ 			return -EINVAL;
+ 		}
+-		if (--env->cur_state->active_rcu_locks == 0)
++		env->cur_state->active_rcu_locks--;
++		bpf_diag_record_context(env, insn_idx, BPF_DIAG_CONTEXT_RCU,
++					false, env->cur_state->active_rcu_locks);
++		if (env->cur_state->active_rcu_locks == 0)
+ 			invalidate_rcu_protected_refs(env);
+ 	} else if (preempt_disable) {
+ 		env->cur_state->active_preempt_locks++;
++		bpf_diag_record_context(env, insn_idx,
++					BPF_DIAG_CONTEXT_PREEMPT, true,
++					env->cur_state->active_preempt_locks);
+ 	} else if (preempt_enable) {
+ 		if (env->cur_state->active_preempt_locks == 0) {
+ 			verbose(env, "unmatched attempt to enable preemption (kernel function %s)\n", func_name);
+ 			return -EINVAL;
+ 		}
+ 		env->cur_state->active_preempt_locks--;
++		bpf_diag_record_context(env, insn_idx,
++					BPF_DIAG_CONTEXT_PREEMPT, false,
++					env->cur_state->active_preempt_locks);
+ 	}
+ 
+ 	if (sleepable && !in_sleepable_context(env)) {
 -- 
 2.53.0
 
