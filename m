@@ -1,63 +1,63 @@
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
+Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 428F03CB2EA
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 20:59:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953EE3BBA05
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 20:59:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781902806; cv=none; b=ml76OMKA4GyXyaG4qtEHfLA+/na+z5LqomBa32NUx3uqtf7Ln7c/blsnGnz5ezRlIO2MaQvVg8uP37H5V7y3WzRYybXKGfZ+b589a9HHsZR36fPO7RmcB663g+PIq/QKOpux/5EKZ8msE6f53Z7jE7SsJ+U07hCLvjbljvz5Q4M=
+	t=1781902807; cv=none; b=Hjfglq0k2uI69IG6q5g0VJWItZ87GbzAfrtrazKVa2qU9dXLRCWAEuZJe8wBMJVhgvWbOJnpfoi2N4ySu1P+iei3x9tpM5dKNsH/DiX3Cu/NDGiE7OsKAc0FAxUaPXoOoQJ4AH+16jXm2yZCoFuODL7wVcVmGmuHeIxSvfFP1wI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781902806; c=relaxed/simple;
-	bh=NJQ/AEwWWbxteKaLyaWYg/j5vEDjKao2F8DFA1OM7UA=;
+	s=arc-20240116; t=1781902807; c=relaxed/simple;
+	bh=C+TJlg5Mq5hj4XsCboajvS6mceTLJbD0mnjiCQvsfK0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HUFPpabN9NpaEO6HA0YtTeaj01dp5bawbOvlWzgKl+f2IWxTWP1z6Yyzem/9ac/cup9CEmEDaFjsKKkz368Ue9QevETkewd5NxFoKwn/ozQIqiZygmV7/1RO0LL9WOJX8UM2AeIqz17U0QDqNDpmABxFjYdtwCQaiFuQUv+9qUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ojmqtXIu; arc=none smtp.client-ip=209.85.128.65
+	 MIME-Version; b=hHUZrXZbOUrklqyiRiEncd55P57JrGDi+sX+Qu5dIgQ4XbgaXiyD0sqfpX1oW9ES6PfIX3JEWjJ7yRc7aZVMjs925OfLtmtTXOR5BhuKmjiSwZDupXq6i2EVx+3C733XL9DcOMx2pGDfw1vyBvKtq8Mvtr1485jso7Sl6nvEBH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gypA9TNo; arc=none smtp.client-ip=209.85.128.68
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ojmqtXIu"
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-490c1915793so19849945e9.2
-        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 13:59:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gypA9TNo"
+Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-490b9318997so17438175e9.2
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 13:59:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781902789; x=1782507589; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781902794; x=1782507594; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6Sf2aDAtf1i4YeolTAMMGu38LI3wwKsPT4JhqAGqegI=;
-        b=ojmqtXIuOawa6Jm/CnYVOqGPp6k7mqTMPbMxieEUXy0gKlX7kRXt2XdBJ0ixdEnmDK
-         /FVz6Q/c8Omf+utNwEUTIm6k/seKw7Qa8vXBLMAytD5LPpg53TMOHSUorXfg/EhDmWzJ
-         ttFMc2HRVoOLjIL6wqE62fwVYYrWENnQea/7KBjMpgWpXqa9Ymz47infD4tjDRvukY2O
-         Iz4SIH2lf66z8OhzYyjESFWELZgIQoYWDxEyWRCk8pn6PoZHKMyrtUFiFaC5CoZmZMMP
-         704phuJqyjS4LsbWkHNr5xsFAnTjFNsWBcil35w95cNR4dSCLiD6Fy4+Nh4Zb1i3oaIb
-         r7Rg==
+        bh=8GsSkKk6M6t263pkTs75XCU17blcbQ67NmPhPEAdySY=;
+        b=gypA9TNouWOQBGVYIYgIwzPNKaP0MHqIvPvMCsEAoEFD6jsv6XBGkOECBuDq87+cfd
+         c3Uf6uyWbEIbEmk0Z0Lc/yrP8A3VNlXOyi5zSuufQaCuEMFzFmjbpugs3f2gi1yzx4ti
+         BAxZAW/iJlgMyLnOYLZ1Gi1BNfzszVNRs5uMz/GhvzthtViBG64ngFPsv/3D5lsYTjAz
+         ropdP2Q6dSvX4/SIVrjmLdzMz8SMXgqvbg7kj6fAfVLTvUwQDUslFwDiAvDAfdLMUaUP
+         xun5QhKijzVHTtMjTTRIzZUGXC33w3K3amO1C1RUvGBG+ILFm0rgJSNryEPOKH50znCP
+         xaeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781902789; x=1782507589;
+        d=1e100.net; s=20251104; t=1781902794; x=1782507594;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=6Sf2aDAtf1i4YeolTAMMGu38LI3wwKsPT4JhqAGqegI=;
-        b=XhqZrZevr/eWaza3sOE5ZqvhwNLFFESu0gSQvySKzwH1flPESniWr4JRwbmvxXXcdi
-         6qkGSLLtLhLs1xOXMw+JIhRRccQne1zm/YT14UcbQlyf5Xo/f409PEVESBsnJtkRHzSm
-         0BZOVeRwBcxO/McuKfoyI5foumFilLtRry16PBxSCLeXvIxM6zKIIz4MfBrWbAB7B7+C
-         BrP+6dV+sXcEIt0mVdC7Pb40PuZKBtR/CtSAK/r8dGUqhxjXlnE1KV+uAZ2WluuaMC9u
-         vhiah0XKZGCTvpeB2IX1z5O9MF9F7hYv+IyPU5Yo75gg8C9792eiB1enZcGtSuGNCYdg
-         QAaw==
-X-Gm-Message-State: AOJu0YyhP8ENgpqpofvV4pZwz1d5bPcrtQSWaMpwm1VKX2sv+ir1v4di
-	/XI/cgQguHsgn9I5+/6IXGsAS3WcxWffugAthMXW4+Y9zorlRehIvTFhDaGTi8Fo
-X-Gm-Gg: AfdE7cljjhsWMDtUJ6EfIOd40rUv6F+PPqnE2wvto/iRHAFOT177mT/ZgEKkQOsudvX
-	xVBIwxWoQYPegY6EC/miC6oIyQcC8mQnu7xSzKEYk1wViSi/xN01A3baoPKzul/dpfvK0DvzbKU
-	gInxcwowqCFmsE1ypIXcNIYYjn7lGPch3H9qZxW6chFy9lJHReT5kzu3sVGzp83PdOOI/Scz9OU
-	x+OEWUaDIfKovAFzxMD8LkZqVBdbnt9g7UtPLX9WX5oxig6aagI1jL6YC6XbPbM5TFJiDgPWI5K
-	7GIzayT25L9rNCwWC5o/kTO4aXXRv7EuC3KgKrnwiFfj0oc/S3tldeO12oCuticPMjQaUB/SO2F
-	fK4FWOcuJLsVPFB6fqCEH3iRsSUSdqdUL3yjRbGQL+7839MBirLt5XttWLSUazNs8hpGf+hqjwN
-	7GBztZcBsmOJ4Vv/QirEgplwuKdymsBaTz8+BwWMuN7xBn4/zs2jk8Ldc1gaZR1wr1eKf6FTxxR
-	UuZiY5cYu0IVIahNiSYRLc7/6jNId6jw4904SMIEAjyGgFYAaUDphQ=
-X-Received: by 2002:a05:600c:3e83:b0:492:3fb5:4697 with SMTP id 5b1f17b1804b1-492423140e0mr86413735e9.5.1781902789507;
-        Fri, 19 Jun 2026 13:59:49 -0700 (PDT)
+        bh=8GsSkKk6M6t263pkTs75XCU17blcbQ67NmPhPEAdySY=;
+        b=M216RkH1zQfK4HKA+fi8mLECTkSBAih/EGPHL9IqulmfEAMpGUGjT1Z5JMGrvCXG6X
+         dkCahRQYQwWuAzKhH0McBCMpJ6e277HKGQCftFkcXbZ3So/MW3KUl19SLHEBRmlBXYZS
+         T44WTByPCjHMKZR2J3jGecyp67X4DMO82lzFTeDcHjjDGg7XZC3GdBc+0aCSoppufQKL
+         FlexTJnwurdus1wq7E/N/jL+B10AWry7QZjAUz8W7bQb/YcFiZAAwTMxzrecGj3IeZMO
+         oZrzASCdTvAm1Zrzf/GHOuFmX9hH3MFnxZ0WDWRM4W1QWEkF+rL+GpBjVDpsnF5btPlY
+         8RRg==
+X-Gm-Message-State: AOJu0Yz60YMTWXmDMZEg72qvXh1hq66FM9kBiMqb3MGjcUvjIiPpuy/Y
+	cMoS+oIJn2Xtwj/qe2TE8e391QG7IsFxL0ArTo0Dy2DJM+4JWnKjevvuEgcrdUr2
+X-Gm-Gg: AfdE7cnaOnKMzQPcelksER8A0ReihY9aRYrDAzcAZ29ZQCrMiwpdER7lDbz9lYKcLDG
+	d/y2to4C9aeglXAtIoeFgdJbQ10q9IBD1peIhj3P7uOYz0mahYd7ejE76vlVn+3oZ51e52kL1xg
+	e2Od17533WnAux/ter9aBxgAByKa7limGHqE3lAdcKjNJGO5o/lr+QxwMbMrGkwmqFSJw2oBvHk
+	JcCRl37RnoppqFNfkw3Y7K1OZ5fEaWJCSVnrre4u+VGVOePW9apLbmGXgj4FSfQOZET+oD87Vvh
+	FrP2ShFxZ9Iyzq71WY715Devi7QuH33FTDTmAm6kZT0bQXKpRiirk39POzn4TcnKQcEF0qh8P5k
+	g87/yO0yKMJWK4hdVed1DWh5b57sU6SGvbdk244W6o/K9S4PNbQnJsFl0SQ9xVWlRpBPE+xlJ/p
+	Ny5SSOS0AKDzVzhryr3JmeelDr0bI2lkLDDd8eH65uybX5Wd1NXltoEEddZLrPttGkQTyCA+V8Z
+	OQwL4tO2Qcw92pGUEcZk7Fs4g5kJRSN9HvRa8wFWFPNuxi8yMt5dl8=
+X-Received: by 2002:a05:600c:8b42:b0:490:b724:5085 with SMTP id 5b1f17b1804b1-4923f5944eemr107492295e9.33.1781902793666;
+        Fri, 19 Jun 2026 13:59:53 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4923fe7ba08sm94619835e9.11.2026.06.19.13.59.49
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4924923392dsm25165575e9.2.2026.06.19.13.59.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2026 13:59:49 -0700 (PDT)
+        Fri, 19 Jun 2026 13:59:53 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -67,9 +67,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 14/17] bpf: Report Policy helper and kfunc errors
-Date: Fri, 19 Jun 2026 22:59:27 +0200
-Message-ID: <20260619205934.1312876-15-memxor@gmail.com>
+Subject: [PATCH bpf-next v2 17/17] bpf: Gate verifier diagnostics on log level
+Date: Fri, 19 Jun 2026 22:59:30 +0200
+Message-ID: <20260619205934.1312876-18-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260619205934.1312876-1-memxor@gmail.com>
 References: <20260619205934.1312876-1-memxor@gmail.com>
@@ -79,154 +79,125 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6261; i=memxor@gmail.com; h=from:subject; bh=NJQ/AEwWWbxteKaLyaWYg/j5vEDjKao2F8DFA1OM7UA=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIct0FaPVdu3ndT6HXyV5iX529Zm46sd+htfyLHv/Zpbx+ Ylqdu7oKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwEQ8tRj+h1/13SbyTrd5Vtjs 1VaRWt+/Hg2eJWkm2Wg4Z2GN3Lv99Qx/uBYx6rf6uFw4yelnpP5mms1BtYKaUr6JcY8ebv0pWj6 VDQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4858; i=memxor@gmail.com; h=from:subject; bh=C+TJlg5Mq5hj4XsCboajvS6mceTLJbD0mnjiCQvsfK0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIct0FdOaVZIH+Co4TQ5EZq28E2jHeiLCca4+w/oJCrMMt Paf5rzWUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgImk5DAyzFzEz2FsJ1zxyrP/ w3OmKduXLy/8LxrcdWjrdZnIvyLmUxkZpivduJe+lG3vgrdf9kg0Hkj2Os1Y5MPy58Q5mZOvvdf HsAEA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Augment selected helper and kfunc allowability failures with Policy reports.
-These reports explain which requested operation is forbidden and why, without
-adding path history for non-path-dependent policy checks.
+Verifier diagnostics collect active-path history and render richer reports for
+selected verifier failures. That work is useful only when the caller requests
+normal verifier log output.
 
-Cover unprivileged bpf2bpf and kfunc use, helper program-type restrictions,
-GPL-only helpers, helper-specific allow callbacks, kfunc allowability, and
-destructive kfunc capability checks.
+Do not enable diagnostic collection or report rendering for BPF_LOG_STATS-only
+loads. Stats-only loads still need the verifier's summary counters, but not
+the extra path history used by diagnostic reports.
+
+Keep enablement in the verifier environment and requested log mode so async
+callback verification uses the same diagnostic policy as the main verifier
+pass.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/diagnostics.c | 16 +++++++++++++++
- kernel/bpf/diagnostics.h |  3 +++
- kernel/bpf/verifier.c    | 44 +++++++++++++++++++++++++++++++++++++++-
- 3 files changed, 62 insertions(+), 1 deletion(-)
+ kernel/bpf/diagnostics.c |  6 ++++++
+ kernel/bpf/verifier.c    | 24 +++++++++++++++---------
+ 2 files changed, 21 insertions(+), 9 deletions(-)
 
 diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index d6893b2626c4..f199a6eeea54 100644
+index d27bd314d194..f10654dc6af8 100644
 --- a/kernel/bpf/diagnostics.c
 +++ b/kernel/bpf/diagnostics.c
-@@ -1139,6 +1139,22 @@ void bpf_diag_report_program_structure(struct bpf_verifier_env *env,
- 	bpf_diag_report_suggestion(env, "%s", suggestion);
- }
+@@ -1162,6 +1162,9 @@ void bpf_diag_report_limit(struct bpf_verifier_env *env, u32 insn_idx,
+ 	char *reason, *text;
+ 	va_list args;
  
-+void bpf_diag_report_policy(struct bpf_verifier_env *env, u32 insn_idx,
-+			    const char *operation, const char *reason,
-+			    const char *suggestion)
-+{
-+	bpf_diag_report_header(env, BPF_DIAG_CATEGORY_POLICY,
-+			       "operation is not allowed");
-+	bpf_diag_report_reason(env, "The operation %s is not allowed: %s.",
-+			       operation, reason);
++	if (!bpf_diag_enabled(env))
++		return;
 +
-+	bpf_diag_report_section(env, "At");
-+	bpf_diag_report_source(env, insn_idx, "error",
-+			       "policy check failed for %s", operation);
+ 	bpf_diag_report_header(env, BPF_DIAG_CATEGORY_VERIFIER_LIMIT,
+ 			       "limit exceeded");
+ 	bpf_diag_report_section(env, "Reason");
+@@ -2422,6 +2425,9 @@ void bpf_diag_print_history(struct bpf_verifier_env *env,
+ 	int start_idx;
+ 	u32 i;
+ 
++	if (!bpf_diag_enabled(env))
++		return;
 +
-+	bpf_diag_report_suggestion(env, "%s", suggestion);
-+}
-+
- void bpf_diag_report_invalid_deref(struct bpf_verifier_env *env, u32 insn_idx,
- 				   int regno, const char *reg_name,
- 				   const char *type_name,
-diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
-index b881ccaf6deb..99f82292a740 100644
---- a/kernel/bpf/diagnostics.h
-+++ b/kernel/bpf/diagnostics.h
-@@ -221,6 +221,9 @@ void bpf_diag_report_program_structure(struct bpf_verifier_env *env,
- 				       const char *suggestion,
- 				       const char *reason_fmt, ...)
- 		__printf(5, 6);
-+void bpf_diag_report_policy(struct bpf_verifier_env *env, u32 insn_idx,
-+			    const char *operation, const char *reason,
-+			    const char *suggestion);
- void bpf_diag_record_branch(struct bpf_verifier_env *env, u32 insn_idx,
- 			    bool cond_true);
- void bpf_diag_record_reg_mod(struct bpf_verifier_env *env, u32 insn_idx,
+ 	bpf_diag_report_section(env, "Causal path");
+ 
+ 	if (!env->diag) {
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e923366c6fdb..7938c51eb454 100644
+index 5c60fe033271..cdba76eb35bc 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -2860,6 +2860,10 @@ static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
+@@ -5359,7 +5359,9 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 	 * of caller's stack as shown on the example above.
+ 	 */
+ 	if (idx && subprog[idx].has_tail_call && depth >= 256) {
+-		char *chain = bpf_diag_alloc_subprog_call_chain(env, dinfo, idx);
++		char *chain = bpf_diag_enabled(env) ?
++			      bpf_diag_alloc_subprog_call_chain(env, dinfo, idx) :
++			      NULL;
  
- 		if (!env->bpf_capable) {
- 			verbose(env, "loading/calling other bpf or kernel functions are allowed for CAP_BPF and CAP_SYS_ADMIN\n");
-+			bpf_diag_report_policy(env, i,
-+					       "bpf-to-bpf or kernel function call",
-+					       "loading or calling other BPF or kernel functions requires CAP_BPF or CAP_SYS_ADMIN",
-+					       "Load this program with the required capability, or avoid bpf-to-bpf and kernel function calls in unprivileged programs.");
- 			return -EPERM;
- 		}
+ 		verbose(env,
+ 			"tail_calls are not allowed when call stack of previous frames is %d bytes. Too large\n",
+@@ -5391,11 +5393,12 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 		if (subprog_depth > env->max_stack_depth)
+ 			env->max_stack_depth = subprog_depth;
+ 		if (subprog_depth > MAX_BPF_STACK) {
+-			char *chain;
++			char *chain = NULL;
  
-@@ -10835,17 +10839,41 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 	if (err) {
- 		verbose(env, "program of this type cannot use helper %s#%d\n",
- 			func_id_name(func_id), func_id);
-+		operation = bpf_diag_scratch_printf(env,
-+						    1,
-+						    "helper %s#%d",
-+						    func_id_name(func_id),
-+						    func_id);
-+		bpf_diag_report_policy(env, insn_idx, operation,
-+				       "this program type does not allow the helper",
-+				       "Use a helper allowed for this program type, or move the logic to a compatible program type.");
- 		return err;
- 	}
+ 			verbose(env, "stack size of subprog %d is %d. Too large\n",
+ 				idx, subprog_depth);
+-			chain = bpf_diag_alloc_subprog_call_chain(env, dinfo, idx);
++			if (bpf_diag_enabled(env))
++				chain = bpf_diag_alloc_subprog_call_chain(env, dinfo, idx);
+ 			bpf_diag_report_limit(env, subprog[idx].start,
+ 					      "subprogram stack depth",
+ 					      "Reduce stack usage in this subprogram, or move large data out of the BPF stack.",
+@@ -5417,9 +5420,10 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 			verbose(env, "combined stack size of %d calls is %d. Too large\n",
+ 				total, depth);
+ 			{
+-				char *chain;
++				char *chain = NULL;
  
- 	/* eBPF programs must be GPL compatible to use GPL-ed functions */
- 	if (!env->prog->gpl_compatible && fn->gpl_only) {
- 		verbose(env, "cannot call GPL-restricted function from non-GPL compatible program\n");
-+		operation = bpf_diag_scratch_printf(env,
-+						    1,
-+						    "helper %s#%d",
-+						    func_id_name(func_id),
-+						    func_id);
-+		bpf_diag_report_policy(env, insn_idx, operation,
-+				       "this helper is restricted to GPL-compatible programs",
-+				       "Use a GPL-compatible license, or replace the helper with one that is available to non-GPL programs.");
- 		return -EINVAL;
- 	}
+-				chain = bpf_diag_alloc_subprog_call_chain(env, dinfo, idx);
++				if (bpf_diag_enabled(env))
++					chain = bpf_diag_alloc_subprog_call_chain(env, dinfo, idx);
+ 				bpf_diag_report_limit(env, subprog[idx].start,
+ 						      "combined call stack depth",
+ 						      "Reduce stack usage or call depth along this call chain.",
+@@ -5497,11 +5501,12 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
  
- 	if (fn->allowed && !fn->allowed(env->prog)) {
- 		verbose(env, "helper call is not allowed in probe\n");
-+		operation = bpf_diag_scratch_printf(env,
-+						    1,
-+						    "helper %s#%d",
-+						    func_id_name(func_id),
-+						    func_id);
-+		bpf_diag_report_policy(env, insn_idx, operation,
-+				       "the helper-specific policy callback rejected this program",
-+				       "Use the helper only from an allowed attach point or program configuration.");
- 		return -EINVAL;
- 	}
+ 		frame = bpf_subprog_is_global(env, idx) ? 0 : frame + 1;
+ 		if (frame >= MAX_CALL_FRAMES) {
+-			char *chain;
++			char *chain = NULL;
  
-@@ -13726,8 +13754,15 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		return 0;
+ 			verbose(env, "the call stack of %d frames is too deep !\n",
+ 				frame);
+-			chain = bpf_diag_alloc_subprog_call_chain(env, dinfo, idx);
++			if (bpf_diag_enabled(env))
++				chain = bpf_diag_alloc_subprog_call_chain(env, dinfo, idx);
+ 			bpf_diag_report_limit(env, call_insn,
+ 					      "bpf2bpf call frames",
+ 					      "Reduce the number of nested bpf2bpf calls on this path.",
+@@ -9760,11 +9765,12 @@ static int setup_func_entry(struct bpf_verifier_env *env, int subprog, int calls
+ 	int err;
  
- 	err = bpf_fetch_kfunc_arg_meta(env, insn->imm, insn->off, &meta);
--	if (err == -EACCES && meta.func_name)
-+	if (err == -EACCES && meta.func_name) {
- 		verbose(env, "calling kernel function %s is not allowed\n", meta.func_name);
-+		operation = bpf_diag_scratch_printf(env,
-+						    1,
-+						    "kfunc %s", meta.func_name);
-+		bpf_diag_report_policy(env, insn_idx, operation,
-+				       "this program cannot call the kfunc",
-+				       "Use a kfunc allowed for this program type and attach point, or change the program context.");
-+	}
- 	if (err)
- 		return err;
- 	desc_btf = meta.btf;
-@@ -13768,6 +13803,13 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	if (state->curframe + 1 >= MAX_CALL_FRAMES) {
+-		char *chain;
++		char *chain = NULL;
  
- 	if (is_kfunc_destructive(&meta) && !capable(CAP_SYS_BOOT)) {
- 		verbose(env, "destructive kfunc calls require CAP_SYS_BOOT capability\n");
-+		operation = bpf_diag_scratch_printf(env,
-+						    1,
-+						    "destructive kfunc %s",
-+						    meta.func_name);
-+		bpf_diag_report_policy(env, insn_idx, operation,
-+				       "destructive kfuncs require CAP_SYS_BOOT",
-+				       "Load the program with CAP_SYS_BOOT, or avoid destructive kfuncs.");
- 		return -EACCES;
- 	}
- 
+ 		verbose(env, "the call stack of %d frames is too deep\n",
+ 			state->curframe + 2);
+-		chain = bpf_diag_alloc_state_call_chain(env, state, subprog);
++		if (bpf_diag_enabled(env))
++			chain = bpf_diag_alloc_state_call_chain(env, state, subprog);
+ 		bpf_diag_report_limit(env, callsite, "bpf2bpf call frames",
+ 				      "Reduce the number of nested bpf2bpf calls on this path.",
+ 				      "Call chain %s would create %d verifier call frames, exceeding the %d frame limit",
 -- 
 2.53.0
 
