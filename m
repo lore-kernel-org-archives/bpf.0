@@ -1,131 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8361379980
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 21:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C17A3D25C2
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 21:13:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781903563; cv=none; b=mVvGsNLgZ0D/A4iyTayYYG2ViMvw1+CKdnq/nncuRrhYetMIFMFDSmZHTvArcpn0sEtHr3Hw3a3yv8mcC3ZkGv+jafTpKwRGhvbUNY9PMgbXULs/A9S8igW58CFpegOImI9KIRRexHdUSz7chrrutuZ3XlqjC7t3YsWob/eZRGA=
+	t=1781903625; cv=none; b=cEG0VzF1GU+IgxTHpqO8wVGcKS+BCLwOjvzG9Z4gajyWPuqW9Yumt9dVUIZXXZGPkRZXh351+v4bs7y1iPjNU66ycN9uvw6sQ841z8XiZrKbMOkZ3Z+Qas+3GNO5JurBk7pzL9LGHoyC/SzRIen8aJxPhgM/D7QrqN0O6kBBvXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781903563; c=relaxed/simple;
-	bh=8SOZnFys1/vR6rcm7IWb0WeZM+4qGb3Ud8cxyDhqQtI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=q6sD6JGp4ZJfpw5VmqKsLknzqNWCeHREyHCXITD051ygpbsKi6Fbpoq6BoZyRk7cIJfUm2M6FQOJCFszbFeIj6g+CUSxIkKUwC53g2dGtZKO0BIXoD0s9UDbAud24RJhqcpo5G/EWpwtHbIRMJaZLiJKfYmey5QrmUINAJQ6ehM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CqhlVKjR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781903625; c=relaxed/simple;
+	bh=BGS1cKnVpnESSPNZl/4xTDNdUBGokNfeZlrzdewdYP0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=IICYuRofW3zFORqWGQ/y8ZdH9OI9bOQzVjl5HqP+7dEqWJSG9wBnTmeI1pdhJO472FhAU4qYxKUMw/eaTGy1fLkLQSaZ0alkf8UarcH5WkWbcdVGuoL03YiDj2xDB86jWH+7/nhuiR3nGGJiaKoEOBdwaj5PIhPeYFmmzQXhtU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O+LtbxUR; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CqhlVKjR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 121D61F000E9;
-	Fri, 19 Jun 2026 21:12:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781903562;
-	bh=p+FDiBCgsXykrb+wHg8xhHY29v2JbfVuBl4LTS9qYhY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=CqhlVKjRmF6zW2uIOdAX1bNfj9wWWT3ADsCtPFX7r0bUgjwh981+ybcVEJ7UgYmIW
-	 P4l63PWy2hdRP9CJobLrxqrzDsWD4j+60buRQRG+A0dCHWTYwlCp7AophbytZUnzym
-	 qmxjKaP7jVuB1VE1nOoPbMnlpqDplNTf9cdSfKYUw1q8spzugn+ui28+TMjQDCox5C
-	 8JliZySBV0qSX7C8Hu+e1ayR8AHeYZiGVsete08TCaNhM/riLOfWnFNp6Tssrpy1Oc
-	 ggJPjPxDfgHzrElONWNGflft794uhG9rmu1xQ7LHDoHCfkTS7jGbX9AZNlIQ1hJIvL
-	 BOhVNv4RkhjVw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 10/17] bpf: Report Resource Lifetime
- reference leaks
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260619205934.1312876-11-memxor@gmail.com>
-References: <20260619205934.1312876-1-memxor@gmail.com>
- <20260619205934.1312876-11-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O+LtbxUR"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8422a92b6d6so1228782b3a.1
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 14:13:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781903623; x=1782508423; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lnxWivuqEQZ8dcpSoejNyWh6Ys/zhGqPoxY2tVIHTS8=;
+        b=O+LtbxUR0ApbzTzo/JATSanrfLlTIRLdVOBOmfXM+daJv2HQzljJJgw3PSLoIWZnIS
+         S5qzU4++0E0z00plii8CzYKD2Hmkl7Leq8Z3uAxywdC1g0gK9nsFldtw3MYXoV5mslOR
+         2sinMxMZyi7EvFMBnHNOlCtxyQVY5sVpgqZOTbGpjZzwhDTaO0U2XaQkeuQQjpu0uYMR
+         zOTIwSJ/eeIHGw4xM3Qju3LAD9ePgbMc9SIPgGvBBMivGCO1T4zLo754C3O5aMGlsf3h
+         /7f8NjiBHp/xnhZ1ouMizOBIb4rHjn0HwitOlJApCLSQDj0TuD7qnP4chdwi0y7ItIKP
+         4W+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781903623; x=1782508423;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lnxWivuqEQZ8dcpSoejNyWh6Ys/zhGqPoxY2tVIHTS8=;
+        b=f6KaCH/K1WeYR+pehYuQlfnn6PG4LDR7fOkPDGQFgGXaixRxLJUufPl0VHxDoWv2u3
+         XFrW2UXouT3lNytNphH5wlwKx16F2WokYabWC0amtEuPnVaMw77LTo3GJOb5v6fj3AJQ
+         bEZEsY2LLlSpuxS8nvTxhWHgEFXSmshsnxcU4ZPXUZ7+CC1oPgOI6it5L7Rbihm4tWDj
+         nFZjp9FRC0hdsaGRnsilK/icxSbwjwDCW3L+EmOtQRtCuNoR/FTT16Tl4isxn0z/G568
+         IHlUqJvTwcSrWbqMNcpRVB7tUvqmJNqO9sS8xcne0NnQ8aMPYOF/8B7bA83gb5rxQ6i1
+         A1iA==
+X-Gm-Message-State: AOJu0YycTPT2j+pPkYV00uZVNjjj4R2ZWG8nh9FXkWgAIoLacwkfqIOB
+	b6N37UHOhJ0bY11gLzDivvLWkvR1uHYq8yDKN8eO3ChvEpzKH+JFqkCI
+X-Gm-Gg: AfdE7cnC225NsDQqJoYWSqJ59VLZWiRVgntfO9uL50HxecWZ5jXy1h28LaLH6f7sBP5
+	J+P9MD/g8OsX/VpQPhEiNrucBKzMGg3K5THdjlxV6bdtVwTmbhbgUliYPPWIE2lgjm6Gb/XZYsq
+	LbDwzhQdstwaVsOGeLXSSvbh7MjV5qHM9PB6AcOIepkk5TxWX6r6uwArqc2kLsGuXgp4c/Mze+m
+	ioeE43Pdx9n6NKBbHz6WD+C2h8tcKLt3zo7hnV2AZJy5uqObL78aiK1Mb9WpZHObKeofN/DSray
+	u41+rcps3l+Wfb0CR+bxTRaZdTKNFgiu1WFrjlhq0f3NxZTjEh35xZ+uGtN4Hl5lME+ABTRFEzP
+	YYgLvRoaOwah+z8TbS01b79pzYojtfGXuslcl0555PmkHfT1Bu6jNVADtzt8DtwDsYlXZ5qbqKR
+	SUwdGL+n7HEcLDfwx4ZSEPnTCn2Xst3NwdUV4WfRc24Q==
+X-Received: by 2002:a05:6a00:2e93:b0:842:5f67:eada with SMTP id d2e1a72fcca58-84550113eb5mr4506253b3a.5.1781903623224;
+        Fri, 19 Jun 2026 14:13:43 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84564eca7fcsm142782b3a.52.2026.06.19.14.13.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Jun 2026 14:13:42 -0700 (PDT)
+Message-ID: <9323b0acc22de75ead4732db464672443eb141ff.camel@gmail.com>
+Subject: Re: [PATCH bpf v2 1/8] libbpf: ringbuf: Honor zero consume bounds
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Tamir Duberstein <tamird@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,  Kumar
+ Kartikeya Dwivedi	 <memxor@gmail.com>, Song Liu <song@kernel.org>, Yonghong
+ Song	 <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan	
+ <shuah@kernel.org>, Andrea Righi <arighi@nvidia.com>, Xu Kuohai	
+ <xukuohai@huawei.com>, Andrea Righi <andrea.righi@canonical.com>,
+ Bing-Jhong Billy Jheng <billy@starlabs.sg>, David Vernet
+ <void@manifault.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Andrew Werner <awerner32@gmail.com>, Zvi
+ Effron	 <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>, Emil
+ Tsalapatis	 <emil@etsalapatis.com>
+Date: Fri, 19 Jun 2026 14:13:39 -0700
+In-Reply-To: <20260618-bpf-ringbuf-fixes-v2-1-33fde039ddf3@kernel.org>
+References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org>
+	 <20260618-bpf-ringbuf-fixes-v2-1-33fde039ddf3@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 19 Jun 2026 21:12:41 +0000
-Message-Id: <20260619211242.121D61F000E9@smtp.kernel.org>
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Diagnostic history for nested IRQ-disabled regions prints the wr=
-ong context.
---
+On Thu, 2026-06-18 at 20:26 -0400, Tamir Duberstein wrote:
+> ringbuf_process_ring() checks the record bound only after advancing the
+> consumer position and invoking the callback. A zero bound therefore
+> consumes the first available record.
+>=20
+> Return before reading the ring positions when the bound is zero so
+> ring_buffer__consume_n() and ring__consume_n() leave all records queued.
+>=20
+> Fixes: 4d22ea94ea33 ("libbpf: Add ring__consume_n / ring_buffer__consume_=
+n")
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> Assisted-by: Codex:gpt-5.5
+> Signed-off-by: Tamir Duberstein <tamird@kernel.org>
+> ---
 
-commit 3353d537a1807034f6c2c245d23ed71ed9b90936
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: bpf: Report Resource Lifetime reference leaks
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-Augment selected Resource Lifetime Safety failures with structured diagnost=
-ics
-while preserving the existing verifier messages. Report unreleased referenc=
-es
-from check_reference_leak() using reference-scoped diagnostic history, and =
-add
-state reports for dynptr, iterator, lock, and IRQ-flag lifetime misuse.
+[...]
 
-> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-> index 933540eb105bf..e9c58f84ec89e 100644
-> --- a/kernel/bpf/diagnostics.c
-> +++ b/kernel/bpf/diagnostics.c
-[ ... ]
-> @@ -1702,6 +1702,71 @@ void bpf_diag_report_mem_bounds(struct bpf_verifie=
-r_env *env, u32 insn_idx,
-[ ... ]
-> +void bpf_diag_report_irq_resource_state(struct bpf_verifier_env *env,
-> +					u32 insn_idx, const char *problem,
-> +					const char *reason,
-> +					const char *suggestion,
-> +					u32 depth)
-> +{
-> +	struct bpf_diag_history_opts opts =3D {
-> +		.scope =3D BPF_DIAG_HISTORY_SCOPE_CONTEXT,
-> +		.ctx_kind =3D BPF_DIAG_CONTEXT_IRQ,
-> +		.ctx_depth =3D depth,
-> +	};
+> diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/tes=
+ting/selftests/bpf/prog_tests/ringbuf.c
+> index 64520684d2cb..4f0558f14847 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+> @@ -404,6 +404,7 @@ static int process_n_sample(void *ctx, void *data, si=
+ze_t len)
+>  static void ringbuf_n_subtest(void)
+>  {
+>  	struct test_ringbuf_n_lskel *skel_n;
+> +	struct ring *ring;
+>  	int err, i;
+> =20
+>  	skel_n =3D test_ringbuf_n_lskel__open();
+> @@ -431,6 +432,18 @@ static void ringbuf_n_subtest(void)
+>  	for (i =3D 0; i < N_TOT_SAMPLES; i++)
+>  		syscall(__NR_getpgid);
+> =20
+> +	ring =3D ring_buffer__ring(ringbuf, 0);
+> +	if (!ASSERT_OK_PTR(ring, "ring_buffer__ring"))
+> +		goto cleanup_ringbuf;
 > +
-> +	bpf_diag_report_header(env, BPF_DIAG_CATEGORY_RESOURCE_LIFETIME_SAFETY,
-> +			       problem);
-> +	bpf_diag_report_reason(env, "%s", reason);
+> +	err =3D ring_buffer__consume_n(ringbuf, 0);
+> +	if (!ASSERT_EQ(err, 0, "ringbuf_consume_zero"))
+> +		goto cleanup_ringbuf;
 > +
-> +	bpf_diag_report_section(env, "At");
-> +	bpf_diag_report_source(env, insn_idx, "error", "%s", problem);
+> +	err =3D ring__consume_n(ring, 0);
+> +	if (!ASSERT_EQ(err, 0, "ring_consume_zero"))
+> +		goto cleanup_ringbuf;
 > +
-> +	if (depth)
-> +		bpf_diag_print_history(env, &opts);
+>  	/* Consume all samples from the ring buffer in batches of N_SAMPLES */
+>  	for (i =3D 0; i < N_TOT_SAMPLES; i +=3D err) {
+>  		err =3D ring_buffer__consume_n(ringbuf, N_SAMPLES);
 
-[Severity: Medium]
-Will this diagnostic history print the correct context for nested
-IRQ-disabled regions?
-
-In acquire_irq_state(), the depth parameter passed to bpf_diag_record_conte=
-xt()
-is hardcoded to 1 regardless of whether bpf_local_irq_save() calls are nest=
-ed:
-
-kernel/bpf/verifier.c:acquire_irq_state() {
-	...
-	state->active_irq_id =3D s->id;
-	bpf_diag_record_context(env, insn_idx, BPF_DIAG_CONTEXT_IRQ, true, 1);
-	return s->id;
-}
-
-Because BPF allows nested IRQ-disabled regions, a sequence of nested saves
-will all emit enter events with depth 1. When an inner region is properly
-restored, its leave event is also recorded as depth 1.
-
-If a diagnostic report is triggered later while still in the outer IRQ regi=
-on,
-bpf_diag_history_context_start_idx() searches backwards, skips the leave ev=
-ent
-(as it only stops on leave if depth is 0), and incorrectly matches the enter
-event of the already closed inner region.
-
-Does the verifier need to track the actual nesting level instead of hardcod=
-ing 1
-so that bpf_diag_history_context_start_idx() finds the currently active out=
-er
-region?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260619205934.1312=
-876-1-memxor@gmail.com?part=3D10
+Could you please pack the tests as a separate commit (or commits)
+at the end of the series?
