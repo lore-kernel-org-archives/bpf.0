@@ -1,99 +1,157 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7454240D583
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 00:30:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7261AA7A6
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 00:40:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781829038; cv=none; b=rHyJ/wm7YGIN8i/8jcLIlAaqbkunG7zz3y72r3BHr4m4f/lzDSXofRBDkWY7GKu00SDthrOsMxLuVLAs9EtEhHWC7odSvYbFPqNXPKJ4MO7po4P8HnRXYC87Pfqv5wD/1PJVc2tzlmfqMdT5RErxzHZCYWf7Y2PKvlym6RRNyj8=
+	t=1781829609; cv=none; b=Ep8EjDvc+dTpTCZJiNdaTWbTUrLDaO2UL5aEWiVUy7uPlcQJbY4x4RyroRgnGyj9HAi3G/TyBPKrzlp1oDaejLoXXAwQ7I42sM2InT0mxQTHisB3TkRf74vTSCoWgDwg184nWUzyesKKa8PxJP8S7OYh7kJCNN8VmS0WUtfJAiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781829038; c=relaxed/simple;
-	bh=hvbIk5SojXr+ZJBfDkpyXUPKEQomDt0eXG4CXMpDO+c=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=We87HRSiM3Dhx/pYckgHGc05UENeZq6dJKgXJhtj8jwPV8GZ9iP1/IRpk0i5XRbq4EJxs2QmRWNav4O//WJ0SQAT8uxiMXgD0rvWpnvOcTfOHmjYRkpFnpQPSscNd/y3GEEU0wfAAGOGp+o4FTn44kwY5KFXvBPEc3w40BZcGwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kEleJeHi; arc=none smtp.client-ip=74.125.82.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781829609; c=relaxed/simple;
+	bh=EXIT5RGyfuhoS/WkIWWuPRTwkA00jZ8ZWI15RPpLiGI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=dM9fzJpTO8JdrhFq9JHZlrzOWn4HmXkVLgb6F6NJVMVCCIVta6piBaw6Se/WtQXSE4C2MwbSboHWXjtC0S8Mk/tuv1/GV2bD8uUef31445BVH9Ey7ut+sibUQsoMz4qnjcjjeyRHe6guOwAHfqybc+z/nc2/cnf/aRPpIpvpLe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MgEYMAG1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kEleJeHi"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-30bc806fcf8so1862171eec.1
-        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 17:30:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781829037; x=1782433837; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hvbIk5SojXr+ZJBfDkpyXUPKEQomDt0eXG4CXMpDO+c=;
-        b=kEleJeHiSnXW3n/o7zycSzSEPxLNn2fRmCv1YVtepm4hVc/nFeocFbfspgZPpGThNd
-         09JwIZeVP5uVSUY0aIK2wqbu2KZvrKY2VwTTKZ3YdSYTnV4gh7ionamGHQfQmZ+twk1v
-         TzmAXv7SYWzeOBl6dX8MEjScv3Eucq27SRrdY6izo9dnWjwkY3O5acDyOv2c0Pa+Ud62
-         v82qPfWgDcLDfLnunkBJEFvbGqWrarBQ3ycelXBRBEyiu/b01Ussf095zlHP04ddfsea
-         nsw255NTTT22V6YyKcFySSAEuL/uw35Ekecv6wSilVmsVgT8TgkW4a0jsXUcy1CFz1Lg
-         3XHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781829037; x=1782433837;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hvbIk5SojXr+ZJBfDkpyXUPKEQomDt0eXG4CXMpDO+c=;
-        b=nEuOx1xIh7fBOiNceRcZgLSZCUAlkMqwp5+ZipEz8EuBJbKYAT+FK7miuK5bSXBgy/
-         8meSEpXYXFaeUgt/72SjJB5f2YnISaemokd/Xe7fohUm3moK8Y3CLkOgV7GagL4NfVGZ
-         UHX//FdsPmkiRP1MU+x3/pLHY6UOFxwZv4pIwL2NYuaBv8AonxaIdULGF/LyO8InLtPx
-         Er1AsyKsMSENif8E6/pfjfdtDwT/gK9ek1eDl3MaWB1cNlRaYJ+HObcmzER3zAWWYsG9
-         PmBeXlLfQXWWJdVa4JS96ERHZdH42f5S2Ngn6r4Xt93VwKsGfPHQUtKBYidt9aWYBbqj
-         brVw==
-X-Forwarded-Encrypted: i=1; AFNElJ/DoUWGIrKi3suByBTotmmzbxWYb+NBv6nGPvxqxYVu5gRpHGOUJQP9JrhaxRWsz9EUACs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvsEYKSc4dsyG7hHy4dxXmPKweZj5o9XC80F2Tx5xPvTltu6yE
-	/Rh5joqn0KZjq981WXI+EzWlGiJ/TAGgPTVLzlwFzrnFAGlkxAgo1jwF
-X-Gm-Gg: AfdE7cmZnEm3WQKC+jW+V9k7T0LdEEtUhOaEOJdJZU1m0KIezhRW0CbfoBu51Ywv7c+
-	KaYwk0JPdWcjAmeBiyZhHHac/RhHdAYmHrMuN9Fkc2kAahrs7h0qhMXCTy9A8Z5xcuY8EGyHSdz
-	7bIZqMZcGiTjdokZ0XbVBVaWY1s48QjO4xT67LnxmtKMmBFOWJ4LN8AFhJfCndKwXrS8l/9fWZA
-	wvpOLBIkQVk9RO2sw2KLR5Z4WEym2/mmOnlYz/gKiQoTX0lFV8Tzr6SRm91/zq8lNBpf6ipiFiE
-	07+j90kjv0MuTcJCjKTBnQJiF+aHDw1eaBVAfnaihQ3uIb+/aeB4c6KcHuZkwVcJzfMYmKVpllD
-	+WUBFDqIrjLbkXd2o6+un243u2N15WQBqKYYaMQ9iCeEN4cWfeod18o4PpiWHmBCt79Uy6uEIFo
-	OCcex6Xt02UlU+x82pZNXuoZ3sN8gsbzWONKboR0NdY6Ul/IKr+38/XvzVBkPWZ+X4FC7H
-X-Received: by 2002:a05:693c:20d2:10b0:30c:2d7:cabd with SMTP id 5a478bee46e88-30c0cff3b63mr84557eec.9.1781829036416;
-        Thu, 18 Jun 2026 17:30:36 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:ae6d:cb3e:a1c:6cba? ([2620:10d:c090:500::3:8ac8])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c066cc0bdsm1022817eec.5.2026.06.18.17.30.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2026 17:30:36 -0700 (PDT)
-Message-ID: <ec06d9d008496090a3b67cea357bafb3b516fb77.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/4] tools/bpf: Sync btf_ids.h to tools
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
- linux-kbuild@vger.kernel.org
-Date: Thu, 18 Jun 2026 17:30:34 -0700
-In-Reply-To: <20260617210619.1562858-2-ihor.solodrai@linux.dev>
-References: <20260617210619.1562858-1-ihor.solodrai@linux.dev>
-	 <20260617210619.1562858-2-ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MgEYMAG1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA5461F000E9;
+	Fri, 19 Jun 2026 00:40:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781829608;
+	bh=yUI01W4q1O+dt7pUc4JlyMuCeRk3PPshNukGA+XVS+U=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=MgEYMAG1jActOqfJ0BBTqxenTIDCGgtA6tSivL5L9/ofoJjKHPmusf4HsoIHdqeos
+	 VXXOTvPvQuwO2iXHr9GkJLE+W/ic6V8Z0lxqgqn4YIzPb8GKpwp5SA+8cxuD3kbKym
+	 LBB0WcpMYtSUEufRYJ7YSpc6C7K+9qlDsBhpEWTTpdgAK/0lHP8zJPfaXgG/WYi7YY
+	 Tj9qk1W5v9f1BPAa7jJ9rJjIrot84hDlIa199nNw6u0HyiybUunZYTDpHT/IM925XE
+	 qBuzA6UX91uUqOZqAqDSiTPvTVURrJ65sBChd8+tB3B77NIJ5OVT7Ghust7dmKmKis
+	 GQthvAIkH6RXw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v2 6/8] bpf: user_ringbuf: Handle position wrap
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tamir Duberstein" <tamird@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260618-bpf-ringbuf-fixes-v2-6-33fde039ddf3@kernel.org>
+References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org>
+ <20260618-bpf-ringbuf-fixes-v2-6-33fde039ddf3@kernel.org>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+Date: Fri, 19 Jun 2026 00:40:07 +0000
+Message-Id: <20260619004007.EA5461F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Wed, 2026-06-17 at 14:06 -0700, Ihor Solodrai wrote:
-> Sync tools/include/linux/btf_ids.h with include/linux/btf_ids.h so
-> tools-side code can use BTF_ID_FLAGS(), BTF_SET8_START(), and
-> BTF_KFUNCS_START().
->=20
-> Keep the tools copy's existing compiler header dependency:
-> tools/include/linux/compiler.h already provides __maybe_unused and
-> tools/include/linux/compiler_attributes.h does not exist.
->=20
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> ---
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Pre-existing issues:
+- [High] ringbuf_avail_data_sz() uses max() for wrapping counters, yielding=
+ incorrect availability estimates after wrap-around on 32-bit systems.
+- [High] 32-bit user-space processes on a 64-bit kernel will permanently st=
+all the ring buffer upon crossing the 4GB counter boundary.
+--
 
-[...]
+commit ffd4323e55c15970e65b2c3f90be01a022bf7ad4
+Author: Tamir Duberstein <tamird@kernel.org>
+
+bpf: user_ringbuf: Handle position wrap
+
+This commit fixes an issue where user ring buffer positions are widened to =
+u64
+before comparing and subtracting them. This caused producer_pos wrapping be=
+low
+consumer_pos on 32-bit systems to appear as backward movement, permanently
+stalling the ring. The patch keeps the positions word-sized and derives
+available data using word-sized subtraction so arithmetic wraps with the
+counters.
+
+Closes: https://lore.kernel.org/bpf/20260614020552.022A11F000E9@smtp.kernel=
+.org/
+
+> diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+> index 909880031fd38..19cbb9b74ee7c 100644
+> --- a/kernel/bpf/ringbuf.c
+> +++ b/kernel/bpf/ringbuf.c
+
+[ ... ]
+
+> @@ -759,8 +759,11 @@ static int __bpf_user_ringbuf_peek(struct bpf_ringbu=
+f *rb, void **sample, u32 *s
+> =20
+>  	/* Synchronizes with smp_store_release() in __bpf_user_ringbuf_sample_r=
+elease() */
+>  	cons_pos =3D smp_load_acquire(&rb->consumer_pos);
+> -	if (cons_pos >=3D prod_pos)
+> +	avail =3D prod_pos - cons_pos;
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does this 64-bit subtraction
+fail to account for the 32-bit wrapping behavior of a compat userspace
+producer?
+
+The shared producer_pos and consumer_pos counters in struct bpf_ringbuf are
+defined as unsigned long, making them 8 bytes on a 64-bit kernel but 4 bytes
+for a 32-bit user-space process.
+
+When a 32-bit user-space process updates the counter, it only updates the
+lower 4 bytes. Upon reaching 4GB, it wraps to 0, leaving the upper 4 bytes
+as 0. The 64-bit kernel reads this as a massive backward jump to 0.
+
+Since avail is evaluated as an 8-byte unsigned long here, the subtraction
+underflows to a huge 64-bit number (e.g., 0xFFFFFFFF00000020).
+
+> +	if (!avail)
+>  		return -ENODATA;
+> +	if (avail > ringbuf_total_data_sz(rb))
+> +		return -EINVAL;
+
+[Severity: High]
+This isn't a bug introduced by this patch, but will a 32-bit user-space
+process on a 64-bit kernel permanently stall the ring buffer upon crossing
+the 4GB counter boundary here?
+
+Due to the underflow mentioned above, the massively inflated avail value
+fails this bounds check. This causes __bpf_user_ringbuf_peek() to
+permanently return -EINVAL.
+
+Could we use (u32)prod_pos - (u32)cons_pos to natively wrap at 32-bits,
+mitigating the issue for compat userspace since the ring size is inherently
+bounded by 32 bits?
+
+[ ... ]
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does ringbuf_avail_data_sz()
+yield incorrect availability estimates after wrap-around on 32-bit systems?
+
+In ringbuf_avail_data_sz():
+
+kernel/bpf/ringbuf.c:ringbuf_avail_data_sz() {
+    ...
+    if (unlikely(rb->overwrite_mode)) {
+        over_pos =3D smp_load_acquire(&rb->overwrite_pos);
+        prod_pos =3D smp_load_acquire(&rb->producer_pos);
+        return prod_pos - max(cons_pos, over_pos);
+    ...
+}
+
+The available data calculation for overwrite mode uses max(cons_pos,
+over_pos). Because these counters wrap around at 4GB on 32-bit systems,
+the max() macro will incorrectly evaluate a wrapped counter (e.g.,
+0x0000000A) as smaller than an unwrapped one (e.g., 0xFFFFFFF0), even
+though it is logically ahead.
+
+This causes the function to calculate the difference from the wrong
+offset, resulting in inaccurate data availability metrics, which can
+lead to spurious or missed epoll wakeups and garbage values returned by
+bpf_ringbuf_query(BPF_RB_AVAIL_DATA).
+
+Should a wrap-safe macro like time_after() or simple signed modulo
+arithmetic be used instead?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260618-bpf-ringbu=
+f-fixes-v2-0-33fde039ddf3@kernel.org?part=3D6
