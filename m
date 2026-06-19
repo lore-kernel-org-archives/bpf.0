@@ -1,43 +1,58 @@
-Received: from outbound.pv.icloud.com (pv-2005e-snip4-11.eps.apple.com [57.103.66.141])
+Received: from outbound.pv.icloud.com (pv-2005k-snip4-3.eps.apple.com [57.103.66.214])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A03A22A1D4
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 19:58:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.66.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B6F3438B9
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 19:58:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.66.214
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781899093; cv=none; b=nz0bV7t06gefzTnYmdhvuOqqokBleBW3VNW+EZYxWT3OpBSkNe+ZIXZuHxyTdeg6kYL42uEG/bK+PPUtbEOrCfpSenZTijejObAboBvR3IXAY3vJcaAtZj4WORgIGcel2aK7RivTbewbI8tqqPXc1UrvD7Tp3QbQ97fL4QbnTcc=
+	t=1781899104; cv=none; b=Ur+BcDf0YXTWwk3fbayxNoKu0a+bz/XnHiKSDOFKa6lmW8/XY1VMba12nAVfgQeNvxZq0m4vliTJz4kRzKkt/knBoAHSELT97YguXvN/46PcOsjfkOm/FPCMARzQp0enZHD4s6dDBrFqPwa4eZOONovGvbrhQjuhICBh+8YrVhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781899093; c=relaxed/simple;
-	bh=iXOV0asxCccyrJebaDoN3IQP5ubOpi/8P+XBmE4OYxA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=psZK0Ja1jtIXy4RBAlUMc8XyG03k2/GZEEi0LnhAHMRRJpnI1LUqTg8UBpObTHVCdyPLyVLV13lm+I9UpvHS4fs4mo4FzwC38vmyFBD+COICSijac1NR5cb5Qre44jJX5htRRm74muB5OAkr6LAPuW1ILFirzPzrFJ/RsnT2cFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=pzsmMuwm; arc=none smtp.client-ip=57.103.66.141
+	s=arc-20240116; t=1781899104; c=relaxed/simple;
+	bh=abkzKRJ2ahL2DDAvpCD/1XKjeQzMX896bZFcUDKWunc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=V+GoiOeBZB28ajWBgBHnGJg1WLdRfy2ejsaSQo2x7phDff2Uey6uvUU+IElfYfbLFn8dP3LD3B0k2Xco+4YFdvwKa+5JtRT/kQh1r49/7nUlUQlRfO8vmvcbnrOjTp1Q1L+wk09Jsv1HRGJPzZPDkfqCxfLn3VKZjn1e+lqiNaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=bcL/HJsz; arc=none smtp.client-ip=57.103.66.214
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="pzsmMuwm"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="bcL/HJsz"
 Received: from outbound.pv.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-west-1a-100-percent-11 (Postfix) with ESMTPS id 673EA1800204;
-	Fri, 19 Jun 2026 19:58:10 +0000 (UTC)
-X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQpOHV8CXhxBAFYEWBcOVk1KEVcJXwpABFEbWg9eK1sTVRdGCRkIXR0ZHldQXgheH0wcHQ5YBhICWkUCXRcDVxxWRVwYQwldBVccHR1BRVsTVRdGCRkIXR0ZCEcfCjADQg5WA0MHRQAtGRxXUF4IXh9MHB0OWAYSHVAcDlEFWwBGCU4CVAZSB0cMQR1ZBlkHRBRJHh5eD1YYWApHBVQCUBl5EVABWB5WXloXXlMXH0sAXEVaDlsERxQ=
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1781899092; x=1784491092; bh=sygBzNXjACQ2HHrw6dFTVMIDduwGR6Qd+HQII4kdHrE=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=pzsmMuwm5z02wfqWeG6D1llpmBZubmssWuoM7SckvCW4my7OkP5NOk2Wddk+5+O/RV5sWgElVAb7r878wPbRR+gxZX/dvMJm5hkYH+uEgrQ0HII2qUkv3d2c21HS+ihJI+QxJgE2BsNZ1TJ7pagNLDwrLZA01H7NyncRW5LxDzPpOua4SXj7rK1BpDqZA917fyVA67xSOiFgM9zxu7AFh+5bD3gF+o/Doe3P5F+/R9pkSE7Fzi4994nMWbvRyA/9y+v/wg7aq/Rp/VN921UOHrAGAdmrTL0C2+bzUWYOFxR9EIM9VhYWCmrP6epeVVPHfV8JhONg7mEbRezt7W/hag==
+	by p00-icloudmta-asmtp-us-west-1a-100-percent-11 (Postfix) with ESMTPS id ED2A2180010E;
+	Fri, 19 Jun 2026 19:58:20 +0000 (UTC)
+X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQpOHV8CXhxBAFYEWBcOVk1KEVcJXwpABFEbWg9eK1sTVRdGCRkIXR0ZHldQXgheH0wcHQ5YBhICWkUBXxcDVxxWRVwYQwldBVccHR1BRVsTVRdGCRkIXR0ZCEcfCjADQg5WA0MHRQAtGRxXUF4IXh9MHB0OWAYSHVAcDlEFWwBGCU4CVAZSB0cMQR1ZBlkHRBRKHh5eD1YYWApHBVQCUBl5EVABWB5WXloXXlMXH0sAXEVaDlsERxQ=
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1781899103; x=1784491103; bh=/JHpw/Y6YXDfEJ2X+/4MEbtrZiHImZ8h4NMn92pbpcU=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=bcL/HJsz6U4Y/HzlReDv/oO4H8oOxWx9KtlYcHT+f7qMEE4cTVcSuGXrR/w2MuDHvr6TlC68jX4uL52oymoyBhdQviYEdQffsltbqX2fP4QYWP/ALbd8MyMk84PKSYMVqOzpN6wTpJkqPpg9wH0Hw0JYVx07r+ecGUXJTB/Qf3C+jFANhecDc4sUFX0Uojq54nAQpOroCUG2fN9c5W0M8W3Ie2NUogKQ0jNKqh1hIr1aQTtc5NOcos8S/wAnw0s7Sd+Q8HGRDDgciZINZSts5vOI81QBQptzoUJnIb4hX21rvllN1YroO/EGdCtyIHNZ1xrpd5hY48jafQjq26voZA==
 Received: from cibi (unknown [17.56.9.36])
-	by p00-icloudmta-asmtp-us-west-1a-100-percent-11 (Postfix) with ESMTPSA id D140818001B6;
-	Fri, 19 Jun 2026 19:58:06 +0000 (UTC)
+	by p00-icloudmta-asmtp-us-west-1a-100-percent-11 (Postfix) with ESMTPSA id 8DE4E1800125;
+	Fri, 19 Jun 2026 19:58:14 +0000 (UTC)
 From: Siddharth_Cibi <siddharthcibi@icloud.com>
 To: ast@kernel.org
-Cc: Siddharth_Cibi <siddharthcibi@icloud.com>,
+Cc: Siddharth C <siddharthcibi@icloud.com>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	"David S. Miller" <davem@davemloft.net>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Stanislav Fomichev <sdf@fomichev.me>,
-	netdev@vger.kernel.org (open list:XDP (eXpress Data Path):Keyword:(?:\b|_)xdp(?:\b|_)),
-	bpf@vger.kernel.org (open list:XDP (eXpress Data Path):Keyword:(?:\b|_)xdp(?:\b|_))
-Subject: 
-Date: Fri, 19 Jun 2026 19:57:56 +0000
-Message-ID: <20260619195759.41254-1-siddharthcibi@icloud.com>
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	netdev@vger.kernel.org (open list:XDP (eXpress Data Path)),
+	bpf@vger.kernel.org (open list:XDP (eXpress Data Path)),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/2] bpf: preserve rx_queue_index across XDP redirects
+Date: Fri, 19 Jun 2026 19:57:57 +0000
+Message-ID: <20260619195759.41254-2-siddharthcibi@icloud.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260619195759.41254-1-siddharthcibi@icloud.com>
+References: <20260619195759.41254-1-siddharthcibi@icloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,50 +60,104 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: VZbJ9_7P6w0G_odWh_e7W5cgdlYCTZv6
-X-Proofpoint-GUID: VZbJ9_7P6w0G_odWh_e7W5cgdlYCTZv6
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE5MDE5MSBTYWx0ZWRfXzHWYE+hGpTkC
- MZlSqHWhOna5nBjCkCXWXvtedfRBzQgZX5PwUK/QV4cutm/WWyaZvIxGuUjr4jyj2Dk70+j3gRe
- XsStHuP1CKWzmcxsnn36ICa8PhREK1IIrFjn7HGzTwyneeSIhB/6d+2v37AXMdbNvhHvDuKJrBG
- rzt9r0Q9vxE9HtCG4s91K3JpTj7yelPy8kffgNqYcfe+uhqruUoaoLeP33NwtC9PqbSMPx6VDEO
- GevFxGnJpnKUC4eVZ/tIiFKTqgOicSIuSqBn2uO1R1IGKKVF8D9VMl+8tb/L8ht2tE+3nAbMx8r
- F0zXhyvKZqFK+TW5G2n
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE5MDE5MSBTYWx0ZWRfXz50Z1pmVn3Ir
+ WkpKZHpg5JAR5uEqjhUaQaIrLXKzlVnFy4PKF1VZyodlhMbUIaOQGIbHUcExINvOgxG7TPjk1P1
+ FNvAh/X9REAhq0XgW3O7KN6s1zD6Ecct3lQ1uVirjjcayfsSSakcvLq5jHm5eoRnAWTkB1VE364
+ 9ciurTOqMGH0E/ydZYuBpcj1vr9JyH/55vNEe95vmhafNajCwIf7glpzDGURITcYfds2nEmFcUq
+ S/KJsTJ+hTImnW1+fN0juDCGelm/1NDVKBTGhTnyDZmKwhvrVXIVUoECrRX2fdFTgxFxX+VuFPv
+ M9j1QNGBj0ipD3up4Rn
+X-Proofpoint-ORIG-GUID: gsH6DdmmtnWjrESumUuan1cOtAplPPdq
+X-Proofpoint-GUID: gsH6DdmmtnWjrESumUuan1cOtAplPPdq
 X-Apple-Category-Label: MjA0NzgyOTUxNDY6JGNhdGVnb3J5JF9QZXJzb25hbCw=
 
-Subject: [PATCH 0/2] preserve rx_queue_index across XDP redirects
+From: Siddharth C <siddharthcibi@icloud.com>
 
-XDP programs executed after redirect through cpumap and devmap
-currently lose ingress RX queue information because rx_queue_index
-is not preserved across xdp_buff to xdp_frame conversion.
+Store rx_queue_index in struct xdp_frame during xdp_buff to
+xdp_frame conversion and restore it when rebuilding xdp_rxq_info
+for cpumap and devmap execution paths.
 
-Preserve rx_queue_index in struct xdp_frame and restore it when
-rebuilding xdp_rxq_info for redirected execution paths.
+This preserves ingress RX queue information for XDP programs
+executed after redirect, allowing access to the original
+rx_queue_index instead of losing queue context.
 
-Add a selftest validating that ctx->rx_queue_index remains available
-through xdp_metadata after redirect.
+Also propagate rx_queue_index for zero-copy XDP frame conversion.
 
-Testing:
+Signed-off-by: Siddharth_Cibi <siddharthcibi@icloud.com>
+---
+ include/net/xdp.h   | 2 ++
+ kernel/bpf/cpumap.c | 2 +-
+ kernel/bpf/devmap.c | 5 ++++-
+ net/core/xdp.c      | 1 +
+ 4 files changed, 8 insertions(+), 2 deletions(-)
 
-* Built modified kernel objects
-* Ran tools/testing/selftests/bpf/test_progs -t xdp_metadata -v
-* Verified xdp_metadata passes
-* Added explicit rx_queue_index assertion
-
-Siddharth C (1):
-  bpf: preserve rx_queue_index across XDP redirects
-
-Siddharth_Cibi (1):
-  selftests/bpf: validate rx_queue_index in xdp_metadata
-
- include/net/xdp.h                                     | 2 ++
- kernel/bpf/cpumap.c                                   | 2 +-
- kernel/bpf/devmap.c                                   | 5 ++++-
- net/core/xdp.c                                        | 1 +
- tools/testing/selftests/bpf/prog_tests/xdp_metadata.c | 3 ++-
- tools/testing/selftests/bpf/progs/xdp_metadata.c      | 2 +-
- tools/testing/selftests/bpf/xdp_metadata.h            | 1 +
- 7 files changed, 12 insertions(+), 4 deletions(-)
-
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index aa742f413c35..90318b2b76dc 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -301,6 +301,7 @@ struct xdp_frame {
+ 	 */
+ 	enum xdp_mem_type mem_type:32;
+ 	struct net_device *dev_rx; /* used by cpumap */
++	u32 rx_queue_index;
+ 	u32 frame_sz;
+ 	u32 flags; /* supported values defined in xdp_buff_flags */
+ };
+@@ -441,6 +442,7 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct xdp_buff *xdp)
+ 
+ 	/* rxq only valid until napi_schedule ends, convert to xdp_mem_type */
+ 	xdp_frame->mem_type = xdp->rxq->mem.type;
++	xdp_frame->rx_queue_index = xdp->rxq->queue_index;
+ 
+ 	return xdp_frame;
+ }
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index 5e59ab896f05..8f2d7013620f 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -197,7 +197,7 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_map_entry *rcpu,
+ 
+ 		rxq.dev = xdpf->dev_rx;
+ 		rxq.mem.type = xdpf->mem_type;
+-		/* TODO: report queue_index to xdp_rxq_info */
++		rxq.queue_index = xdpf->rx_queue_index;
+ 
+ 		xdp_convert_frame_to_buff(xdpf, &xdp);
+ 
+diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+index dc7b859e8bbf..f419fa0e53e5 100644
+--- a/kernel/bpf/devmap.c
++++ b/kernel/bpf/devmap.c
+@@ -339,7 +339,7 @@ static int dev_map_bpf_prog_run(struct bpf_prog *xdp_prog,
+ 				struct net_device *rx_dev)
+ {
+ 	struct xdp_txq_info txq = { .dev = tx_dev };
+-	struct xdp_rxq_info rxq = { .dev = rx_dev };
++	struct xdp_rxq_info rxq = { };
+ 	struct xdp_buff xdp;
+ 	int i, nframes = 0;
+ 
+@@ -349,6 +349,9 @@ static int dev_map_bpf_prog_run(struct bpf_prog *xdp_prog,
+ 		int err;
+ 
+ 		xdp_convert_frame_to_buff(xdpf, &xdp);
++		rxq.dev = rx_dev;
++		rxq.mem.type = xdpf->mem_type;
++		rxq.queue_index = xdpf->rx_queue_index;
+ 		xdp.txq = &txq;
+ 		xdp.rxq = &rxq;
+ 
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 9890a30584ba..9691d8dfadf3 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -606,6 +606,7 @@ struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp)
+ 	xdpf->metasize = metasize;
+ 	xdpf->frame_sz = PAGE_SIZE;
+ 	xdpf->mem_type = MEM_TYPE_PAGE_ORDER0;
++	xdpf->rx_queue_index = xdp->rxq->queue_index;
+ 
+ 	xsk_buff_free(xdp);
+ 	return xdpf;
 -- 
 2.53.0
 
