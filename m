@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98CBD40D579
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 00:41:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C45AA2F851
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 00:45:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781829691; cv=none; b=Bels4E3Yhk6c+F1wlINiS+K4+KyTcO3/YRXoLL+80MeNdbtxV9giI8EXnAqpWDaQ+Xa+KN5HnYxF60TZMoEnnfledn5uy6l5HSqLMXwWqo0hzz967ZlKXZ7CpsdeuGGGBfjoDYgZSg0BJCYqe6BNIOTJgLQ422urAqxhma/A4LY=
+	t=1781829960; cv=none; b=NPMfzQjvT6VZVWGiG/BXRcCFntQGySNt/PBbYlRwljeOnqpD5wGHKa5/jJXvP2EG73xpEtz1H0+tRzSNhTykey5nXQmj5fO+Mecz88t+9GFop3XZNUmAFH19DA7MC8NwvEkwm0CdbppEN/pg03C8pdnp5/BGsPOIMEN93kjWZoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781829691; c=relaxed/simple;
-	bh=F0ETjK9arEGuk69OUso0SfT6PCEwR7WsPC+GxMbSLRY=;
+	s=arc-20240116; t=1781829960; c=relaxed/simple;
+	bh=+0VRyFVPsJ4a7rS3cuRU6eqL566am4uM5xmSXoPk8aQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=lZuo2tljbgpTesCBXfzI9tkI55xdbW+0oPhDy+xPrKmhN8Obj/3zT0dYTBaLUJYIPzA0Ll8NTDew7ntvgoxm3JF/xos2geuXUkemBusZot3LjgcpItzzhAmSClhe+qVId19d6xlJoQ1YbYeVSe+z73CcgseDB0IPzHEAMeS9i88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=El9VeCdJ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=o/xryScLLRTMLryp0jU/C1hTNwiaIInP11Z1BAQ7NXXE/PnmzNAgqybjZQuNsM2q/N1xkybY3YVveJ7pBJXSm40XYIuHHWtMg1SU2IRIpgjLtladPeqcBha/iAbMteBDex40EH0ZddOqBfzGPfTdF1OY5N7B13GNs207Nmu75BQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AIK1OgOm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="El9VeCdJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23E331F000E9;
-	Fri, 19 Jun 2026 00:41:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AIK1OgOm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E1531F000E9;
+	Fri, 19 Jun 2026 00:45:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781829690;
-	bh=qTqm6qTUUSWnc1uLPkUy4f+S0quKeOQ24WhbPLtVa6M=;
+	s=k20260515; t=1781829959;
+	bh=k4jE0Wl8X4KFsoQ3Rf+TI0+voqLbjqcK9ANqlKfVRmY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=El9VeCdJLgv24TZLiOJq6wqF2lUBJKpnyY47wNSxHP2atxwtZyb6bdnFMtLu/4B03
-	 VBg6pBao7ZWt8gIhfyMlRqEAvRpqMoR947MuKdNkfuUa7wXWATgbquDQyite5CKLbp
-	 gO9I2iUVctrq45/Xz8z691sMym+3zShp57KNaxEXdAnv6fHTbp+sWDwYspMaRpOP28
-	 KH5t1ZJyFm5fx+j8qFV3isUZVUituL7mkRtpkkUoqrQ8LTAAcPVUiWwnvo1QBuKJJK
-	 aJfpNe24Wcg01L4njDw5pW9P8ZlFKyvtBscLX8PHegrBUkIlbkhsPaNoFLWCPHr7JP
-	 o8xivP6bhrlog==
+	b=AIK1OgOmdYymBS6C7qzU5WB3mCuYiwQsqQ7DoCQ15rVhpgPtTXvPvMBdvxP0bnxW9
+	 tNeZEfB6JyVCVMtlHbiARQEMzuCe70T7cb4XIU7McGPGsc+yCisEQysNm/8tM+L1G7
+	 olzTip/Lsj6sA3nFFNMmVfdC3EPkzyjv6L0abzIUKYAkQ3zpqhEGzRUQLaQ8AOYIu4
+	 LWX+DYWw0M+SZD74i0cdE+44k+p3TELIQEFnFVa+GOtlM+jPZ4VDUrYheE6iwHzp8f
+	 ddQK7jFRpvftPHaN4ot7ksYst6Yw0rpew59EHzKqRnf/b9r+s+2pmQLXASPUA8N9SH
+	 uQybkyWAGOzHg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2 4/8] libbpf: ringbuf: Handle position counter
- wrap
+Subject: Re: [PATCH bpf v2 5/8] bpf: ringbuf: Handle pending position wrap
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Tamir Duberstein" <tamird@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260618-bpf-ringbuf-fixes-v2-4-33fde039ddf3@kernel.org>
+In-Reply-To: <20260618-bpf-ringbuf-fixes-v2-5-33fde039ddf3@kernel.org>
 References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org>
- <20260618-bpf-ringbuf-fixes-v2-4-33fde039ddf3@kernel.org>
+ <20260618-bpf-ringbuf-fixes-v2-5-33fde039ddf3@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 19 Jun 2026 00:41:29 +0000
-Message-Id: <20260619004130.23E331F000E9@smtp.kernel.org>
+Date: Fri, 19 Jun 2026 00:45:58 +0000
+Message-Id: <20260619004559.4E1531F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,59 +48,67 @@ Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] The BPF ring buffer permanently fails for 32-bit user space applic=
-ations running on 64-bit kernels after 4GB of data transfer.
+- [High] `ringbuf_avail_data_sz` incorrectly uses the `max()` macro on wrap=
+ping `unsigned long` counters, leading to erroneous available data calculat=
+ions on 32-bit systems.
 --
 
-commit f2aeeb4a1cf7d41d48bd7bbff2ebee0477b1c33c
+commit c0d823f17573cdb3b8da49e472d0ae2b71115825
 Author: Tamir Duberstein <tamird@kernel.org>
 
-libbpf: ringbuf: Handle position counter wrap
+bpf: ringbuf: Handle pending position wrap
 
-This commit addresses an issue in ringbuf_process_ring() on 32-bit systems
-where the counters can wrap. It changes the loop condition to compare the
-consumer and producer positions for equality instead of magnitude.
+This commit fixes a counter wrapping issue on 32-bit systems in
+__bpf_ringbuf_reserve(). It ensures the pending position continues to
+advance after the producer position wraps by changing the loop condition
+from a magnitude comparison to a check for equality.
 
-> diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-> index 5737e02c16703..1c5bce2b5e12d 100644
-> --- a/tools/lib/bpf/ringbuf.c
-> +++ b/tools/lib/bpf/ringbuf.c
-> @@ -274,7 +274,8 @@ static int64_t ringbuf_process_ring(struct ring *r, s=
-ize_t n)
->  	do {
->  		got_new_data =3D false;
->  		prod_pos =3D smp_load_acquire(r->producer_pos);
-> -		while (cons_pos < prod_pos) {
-> +		/* Positions wrap; the consumer cannot logically pass the producer. */
-> +		while (cons_pos !=3D prod_pos) {
+Closes: https://lore.kernel.org/bpf/20260614020552.022A11F000E9@smtp.kernel=
+.org/
+
+> diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+> index 35ae64ade36b8..909880031fd38 100644
+> --- a/kernel/bpf/ringbuf.c
+> +++ b/kernel/bpf/ringbuf.c
+> @@ -482,7 +482,8 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf=
+ *rb, u64 size)
+>  	prod_pos =3D rb->producer_pos;
+>  	new_prod_pos =3D prod_pos + len;
+> =20
+> -	while (pend_pos < prod_pos) {
+> +	/* Positions wrap; pending_pos cannot logically pass producer_pos. */
+> +	while (pend_pos !=3D prod_pos) {
 
 [Severity: High]
-This isn't a bug introduced by this patch, but since we are handling 32-bit
-counter wrap logic here, does this also expose the compat mismatch between
-32-bit userspace and 64-bit kernels?
+This is a pre-existing issue, but I noticed another problem with counter
+wrapping on 32-bit systems.
 
-In tools/lib/bpf/ringbuf.c, struct ring defines consumer_pos as an
-unsigned long pointer. On a 32-bit userspace, this maps and writes 4 bytes.
-However, on a 64-bit kernel, struct bpf_ringbuf in kernel/bpf/ringbuf.c
-defines consumer_pos as an 8-byte unsigned long.
+kernel/bpf/ringbuf.c:ringbuf_avail_data_sz() {
+    ...
+    if (unlikely(rb->overwrite_mode)) {
+        over_pos =3D smp_load_acquire(&rb->overwrite_pos);
+        prod_pos =3D smp_load_acquire(&rb->producer_pos);
+        return prod_pos - max(cons_pos, over_pos);
+    ...
+}
 
-Because of little-endian mapping, a 32-bit userspace app only overwrites
-the lower 4 bytes of the kernel's 64-bit consumer_pos. When the userspace
-counter wraps around 4GB, it writes a small value back to the lower 4 bytes
-while the upper 4 bytes remain zero.
+Does the use of max() on wrapping unsigned long counters here lead to
+erroneous available data calculations?
 
-Meanwhile, the kernel's 64-bit producer_pos continues to increment past 4GB.
-When bpf_ringbuf_has_space() evaluates new_prod_pos - cons_pos, the
-difference evaluates to larger than 4GB, exceeding the ring buffer's
-capacity mask.
+If over_pos wraps and becomes numerically smaller than a stalled cons_pos,
+max() will incorrectly evaluate cons_pos as larger. This evaluates the
+available data as prod_pos - cons_pos instead of prod_pos - over_pos, which
+could inflate the reported available data size up to 4GB.
 
-Could this permanently fail all further kernel ring buffer reservations,
-effectively deadlocking compat tasks once 4GB of data is transferred?
+Additionally, if prod_pos exactly laps cons_pos by a multiple of 4GB, the
+calculation would yield 0. Could this cause ringbuf_map_poll_kern() to
+erroneously block the consumer in an infinite wait despite the buffer being
+full?
 
->  			len_ptr =3D r->data + (cons_pos & r->mask);
->  			len =3D smp_load_acquire(len_ptr);
->
+>  		hdr =3D (void *)rb->data + (pend_pos & rb->mask);
+>  		hdr_len =3D READ_ONCE(hdr->len);
+>  		if (hdr_len & BPF_RINGBUF_BUSY_BIT)
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260618-bpf-ringbu=
-f-fixes-v2-0-33fde039ddf3@kernel.org?part=3D4
+f-fixes-v2-0-33fde039ddf3@kernel.org?part=3D5
