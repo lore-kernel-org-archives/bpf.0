@@ -1,106 +1,177 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B858E27727;
-	Fri, 19 Jun 2026 14:45:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B2193A7858
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 15:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781880358; cv=none; b=HIIjtJlRWJ4JZ1KuM5pNyiLOQvwhADTVsYlotnIjrDyUKDAaXNYuKON5dFL/A8dUW16Smyqg4PIGLd0+cZYxHp/fZu1E+Iz6T2IYuyYaF+pFboAF7Xp9J71Kj4ielUy4jsV4EzPd7FVjZq0IMzFzAB7IuGvbUOf0xMkYDCBoyaA=
+	t=1781881213; cv=none; b=ClQZaQB6m52QNzwrxABQfITw6QBgLB0V1mtNgYhrQ361S7bsmU1XvODQbDpvyCbfSk/Zk5iU+0K8+qk9pFmO/gQPLoLlU3FStwLKmA0rdtKErRvX87pSxaR2uqXBQBZ9ZDnbZdOasTYHKO5PbvVjwB5SdJv20znC7x7djEvlGUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781880358; c=relaxed/simple;
-	bh=TFk0MfznjCmyIteitfG9pMgEuBCZtq/YkYT56XbC+CA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dCeql2bKxgFoGpxuAkLDQepY97D00LF8f2cYeT47kcnGPoj3JLaTblh0aGtcDzOysnxfiDX3qd3+xmGkLteouCkHBZbrPStSds0niEcCFBsjpko1L+sMdglLuqXJPs+rIV+Q3I5nKV1WsLzDftIu9LOktV9DvjGNpqHtlGQWYSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=Wd6XSbTE; arc=none smtp.client-ip=207.46.229.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781881213; c=relaxed/simple;
+	bh=VQaH1wvSCcUtVwxxxrJu7Tdk9Yv26o0XHxhe+r5CnPg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DP19iooh/8e96VbTHhnEA1+yKskgraBxyrfzuD2BySUCeFTCQiJJSM7XAZdMVZ9584Cv9nG4Wefo/TEWNvdGDsnTKnjozLhbSp8eniB5KD4tsnh+pY2UgIxsBuvofu8Eok8oxjPDgsHXyYL+LxoP0/7E2eDM6jOq93HkjVyJtNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tKoDilM2; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="Wd6XSbTE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tKoDilM2"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c85822059d8so1587431a12.1
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 08:00:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=k1XdGtRaEIWXqE6Xs298BuLMDQ3U+fa
-	YOCgVLLTfqDI=; b=Wd6XSbTEMjmDGIj1T36GuYZmqqlrwHRgG2XRtbZQiMY11cu
-	XImukSf/jVd9XmLMSEGywuS2KUlALBr6uOIMN+H8GApFoQKKxm0uH9mmwBwupXhp
-	X6sF6XQogzI/hpO/UC1BwqvzDoOks43ynQ7dvWROxsXhCRIX6opAKbk4MbLI=
-Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web5 (Coremail) with SMTP id zAQGZQAnsbsMVjVqxDGLAg--.41554S3;
-	Fri, 19 Jun 2026 22:45:32 +0800 (CST)
-From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Fri, 19 Jun 2026 22:45:32 +0800
-Subject: [PATCH bpf-next 1/2] sched_ext: Mark scx_bpf_cpu_rq() as nullable
+        d=gmail.com; s=20251104; t=1781881211; x=1782486011; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/uXujLL2+ngck/ILaxQvK6OxWBpJRclqR1IeaIZXkpg=;
+        b=tKoDilM2jWAD/Ic4U7oWLx1hQZ1tx/+/OVZOWQWFadPycKBayOKBdHzJAWyvzC2Dvy
+         8sqXGwuLoJnTEJjEyyAzgWGGjgmpLBuLrwEbljXOlQmJP1kVwKrBWaFra6Z+q3+scVfi
+         N1DA1zD8UhvEQD9zqIxBA0WKHl/bzYehGa74ZnWTdhWmKxWD68BGMibn/N75cLbj3ybd
+         uSumgxj8sX91gbNx0QU1G2faMhQ3epqOLEDDJqkn5PeTGpP3/mtNGAnDhvAo63aq9jmc
+         eBjSHYGZOyuG+eLsyUeMniyFGu9Y6e1d3dxsZSpqRzOnSotzLlT65BcrVjk0Nsbt4yqA
+         TNfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781881211; x=1782486011;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/uXujLL2+ngck/ILaxQvK6OxWBpJRclqR1IeaIZXkpg=;
+        b=FkBIOZD1wzmxMjWgcbGf9n9eiXoGhC657p8u8h5Z3qlaAGDDtOKNogf+PztqmkDs1r
+         aipzxLs/7bgjuDcJv5ztOOaLFASFekrwDJsDuY9+fEq74KLGzP6ugTRT+6E2CJ0Zewfx
+         geLYy8zjA/CkjOoUQayWp3VbikcQxw9+UQ/eJSGhUNTYBoQFeln/UhbRHWrql6c68vRw
+         zIH71afF/QiBDLpUbFr5xXUx1wWIM2toFFhrNEkwqMVIA8GMsQgfm67VggjG442niLlU
+         bwkKljjtIuXgqCBK1uW9NH8+dlTMrq3MhXEtPNO8+ghAwGavwTAffeUB2NZUwv16k5Kp
+         UexQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+I6cvWtDMWD/gwpwtSlE/4wNXw+6CVSTdtKaiGES0yqO/0YCYtp1dUOAX06D+oJTzg7M0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3j9jRP49VKVOaiV+XImKB8v3Rh7j7Cb+jhGoEeWZS/m9goHc4
+	D6HcvdKmhtXGC1AU/tvI1cdWrAevKWfPifpoV1VFW+0yYOuyBI54A/to
+X-Gm-Gg: AfdE7cnyzGPMmYWXGFv0drSWcFWOsVY9YQmhkTBmxZNq4a6UYMzuw8qF0pndOP5VgJs
+	iqCW8okC1AcQ/JokFFA4P9QDSKO+KuDVdoeWFL9XwQ/UCwymGKPs2FNZ5WiZ1KJl3zw3V/8mUMI
+	zTaoVhUYEtFCXhLIpbqHmYGSQzJHt7/IY7rHyMqmPJHn501rdDmAXbrB4DBonlmEi4sTXC4GLHG
+	f5q2rt0h3hrflRp2rm31rz4M3GWon3zLIOSVu9qzUnGFKzNzknlxyHesK6EL/xA4B2BNWythG/P
+	+bZAbnuKeUwy/wWyUauBJuH9eaXJVVcIqXcmny/lwn+xkfLE0Tq5thspuYYBC2Wg0HSgIIx31A/
+	DUKBEP65RRqaqEtFSepojfcl5w6fuU8uEkjFNeIJ6oVT07ju6BojGtV7iOjkaZqD5ehqfX5QY1E
+	7cULXVfyaahi3N/5zmck1BUECcd2fNOCPFTbrbzWgnL+yd3iZ6
+X-Received: by 2002:a05:6a20:db97:b0:3bb:78b:9dcb with SMTP id adf61e73a8af0-3bb3486bb3cmr4411766637.42.1781881209586;
+        Fri, 19 Jun 2026 08:00:09 -0700 (PDT)
+Received: from cps-manycore-1 ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c8bbffc2329sm86900a12.0.2026.06.19.07.59.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Jun 2026 08:00:08 -0700 (PDT)
+Date: Fri, 19 Jun 2026 14:59:48 +0000
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: "D. Wythe" <alibuda@linux.alibaba.com>
+Cc: Dust Li <dust.li@linux.alibaba.com>, 
+	Sidraya Jayagond <sidraya@linux.ibm.com>, Wenjia Zhang <wenjia@linux.ibm.com>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, "David S . Miller" <davem@davemloft.net>, 
+	Mahanta Jambigi <mjambigi@linux.ibm.com>, Tony Lu <tonylu@linux.alibaba.com>, 
+	Wen Gu <guwen@linux.alibaba.com>, Simon Horman <horms@kernel.org>, 
+	Ursula Braun <ubraun@linux.ibm.com>, Karsten Graul <kgraul@linux.ibm.com>, 
+	Guvenc Gulce <guvenc@linux.ibm.com>, netdev@vger.kernel.org, linux-rdma@vger.kernel.org, 
+	linux-s390@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net/smc: fix out-of-bounds read in
+ smc_clcsock_data_ready()
+Message-ID: <k4p7go5fz7wx2gp6tp5rqawrpwdiouiyzgw3tf3u3sygxuivnq@eeo7qi5ym47e>
+References: <20260614120931.4041687-1-rhkrqnwk98@gmail.com>
+ <20260616071639.GA104390@j66a10360.sqa.eu95>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260619-f01-14-scx-cpu-rq-ret-null-v1-1-3b4281cdf0da@mails.tsinghua.edu.cn>
-References: <20260619-f01-14-scx-cpu-rq-ret-null-v1-0-3b4281cdf0da@mails.tsinghua.edu.cn>
-In-Reply-To: <20260619-f01-14-scx-cpu-rq-ret-null-v1-0-3b4281cdf0da@mails.tsinghua.edu.cn>
-To: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>
-Cc: Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
- Shuah Khan <shuah@kernel.org>, sched-ext@lists.linux.dev, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781880334; l=1369;
- i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=TFk0MfznjCmyIteitfG9pMgEuBCZtq/YkYT56XbC+CA=;
- b=EetAIW627OzjrXjBDGjy2GYzJBE26Wpl7U9/dqd47jiSHOJ5/GRW1G8z6+XHwAo1SE+1hMbzA
- Y3cyS0dTzc3CnzEFCdc5v7mWp4C7DiOAnuHBjblkDDzmj6Oc7aoc6MV
-X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
- pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:zAQGZQAnsbsMVjVqxDGLAg--.41554S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF48CFWUAw1fCF4kKF48WFg_yoW8Gw1DpF
-	srWr9Fkr18G3ykGa9rGr4rKrW5Aw1kJw4xuw1DArWIkw43X3Z5X34Syr12qr93uFn3tr1q
-	qF10vrWfCr1j93DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9v1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
-	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4
-	CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26r4r
-	Kr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc
-	8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Av
-	z4vE14v_Xryl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMxC20s
-	026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-	JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-	v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU0hSdPUUUUU==
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQMDA2o0b7DnBAAAsg
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20260616071639.GA104390@j66a10360.sqa.eu95>
 
-scx_bpf_cpu_rq() can return NULL when the calling program is not attached to
-an active SCX scheduler or when the requested CPU is invalid. Its kfunc
-registration currently advertises only KF_IMPLICIT_ARGS, so the verifier does
-not mark the return as PTR_MAYBE_NULL.
+On Tue, Jun 16, 2026 at 03:16:39PM +0800, D. Wythe wrote:
+>On Sun, Jun 14, 2026 at 12:09:30PM +0000, Sechang Lim wrote:
+>> smc_clcsock_data_ready() is installed on the listen socket and reads its
+>> sk_user_data as an smc_sock. A passive-open child inherits this callback,
+>> but sk_clone_lock() clears the child's sk_user_data because it is tagged
+>> SK_USER_DATA_NOCOPY. smc_tcp_syn_recv_sock() restores the child's af_ops,
+>> but the inherited sk_data_ready() is left in place until accept.
+>>
+>> In that window the child is established. A cgroup sock_ops program can run
+>> bpf_sock_hash_update() on it from tcp_init_transfer(); sk_psock_init()
+>> stores a sk_psock in the NULL sk_user_data. The inherited callback then
+>> reads sk_user_data via smc_clcsock_user_data(), which masks only
+>> SK_USER_DATA_NOCOPY, mistakes the sk_psock for an smc_sock, and reads a
+>> callback pointer past the end of the sk_psock:
+>>
+>>   BUG: KASAN: slab-out-of-bounds in smc_clcsock_data_ready+0x84/0x200 net/smc/af_smc.c:2637
+>>   Read of size 8 at addr ffff8880013b8674 by task syz.6.12484/67930
+>>    <IRQ>
+>>    smc_clcsock_data_ready+0x84/0x200 net/smc/af_smc.c:2637
+>>    tcp_urg+0x24d/0x360 net/ipv4/tcp_input.c:6264
+>>    tcp_rcv_state_process+0x280d/0x4940 net/ipv4/tcp_input.c:7336
+>>    tcp_child_process+0x371/0xa50 net/ipv4/tcp_minisocks.c:1002
+>>    tcp_v4_rcv+0x1eaa/0x2a00 net/ipv4/tcp_ipv4.c:2186
+>>    ip_protocol_deliver_rcu+0x226/0x420 net/ipv4/ip_input.c:207
+>>    ip_local_deliver_finish+0x35a/0x5f0 net/ipv4/ip_input.c:241
+>>    __netif_receive_skb_one_core+0x1e5/0x210 net/core/dev.c:6216
+>>    process_backlog+0x631/0x1470 net/core/dev.c:6682
+>>    __napi_poll+0xb3/0x320 net/core/dev.c:7749
+>>    net_rx_action+0x4fa/0xcb0 net/core/dev.c:7969
+>>    handle_softirqs+0x236/0x800 kernel/softirq.c:622
+>>    </IRQ>
+>>
+>>   Allocated by task 67930:
+>>    sk_psock_init+0x142/0x740 net/core/skmsg.c:766
+>>    sock_map_link+0x646/0xdf0 net/core/sock_map.c:279
+>>    sock_hash_update_common+0xd3/0x990 net/core/sock_map.c:1010
+>>    bpf_sock_hash_update+0x114/0x170 net/core/sock_map.c:1229
+>>    __cgroup_bpf_run_filter_sock_ops+0x74/0xa0 kernel/bpf/cgroup.c:1727
+>>    tcp_init_transfer+0x1085/0x1100 net/ipv4/tcp_input.c:6693
+>>    tcp_rcv_state_process+0x241e/0x4940 net/ipv4/tcp_input.c:7231
+>>    tcp_child_process+0x371/0xa50 net/ipv4/tcp_minisocks.c:1002
+>>
+>> Restore the inherited sk_data_ready() in smc_tcp_syn_recv_sock(), where the
+>> child's sk_user_data is already cleared, rather than only at accept.
+>>
+>> Fixes: a60a2b1e0af1 ("net/smc: reduce active tcp_listen workers")
+>> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+>> ---
+>>  net/smc/af_smc.c | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+>> index b5db69073e20..152971e8ad17 100644
+>> --- a/net/smc/af_smc.c
+>> +++ b/net/smc/af_smc.c
+>> @@ -156,6 +156,12 @@ static struct sock *smc_tcp_syn_recv_sock(const struct sock *sk,
+>>  	if (child) {
+>>  		rcu_assign_sk_user_data(child, NULL);
+>>
+>> +		/*
+>> +		 * the child inherited the listen-specific sk_data_ready();
+>> +		 * restore it here, as sk_user_data may be reused before accept
+>> +		 */
+>> +		child->sk_data_ready = smc->clcsk_data_ready;
+>
+>One concern:
+>
+>smc_clcsock_user_data_rcu() together with refcount_inc_not_zero() only
+>pins the smc_sock; it does not guarantee anything about the lifetime or
+>consistency of smc->clcsk_data_ready. In the listen-close path,
+>smc_clcsock_restore_cb() clears that field under sk_callback_lock,
+>while smc_tcp_syn_recv_sock() reads it without any lock. These are
+>independent protection domains. If close wins the race,
+>child->sk_data_ready can end up NULL and the next data arrival will
+>crash.
+>
 
-Add KF_RET_NULL to the registration, matching scx_bpf_locked_rq() and
-scx_bpf_cpu_curr(), so BPF programs must check the returned runqueue pointer
-before dereferencing it.
+will drop the syn_recv restore in v2. Thanks for your review.
 
-Fixes: 6203ef73fa5c ("sched/ext: Add BPF function to fetch rq")
-Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
----
- kernel/sched/ext.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>Also, I don't object to this fix, but I'd rather see the underlying cause
+>addressed directly. The real issue seems to be the conflict between
+>SMC's sk_user_data and sk_psock. Maybe there is a cleaner solution, e.g.
+>always setting user_data.
+>
 
-diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index 65631e577ee9..dbe1fe1ac465 100644
---- a/kernel/sched/ext.c
-+++ b/kernel/sched/ext.c
-@@ -9787,7 +9787,7 @@ BTF_ID_FLAGS(func, scx_bpf_get_online_cpumask, KF_ACQUIRE)
- BTF_ID_FLAGS(func, scx_bpf_put_cpumask, KF_RELEASE)
- BTF_ID_FLAGS(func, scx_bpf_task_running, KF_RCU)
- BTF_ID_FLAGS(func, scx_bpf_task_cpu, KF_RCU)
--BTF_ID_FLAGS(func, scx_bpf_cpu_rq, KF_IMPLICIT_ARGS)
-+BTF_ID_FLAGS(func, scx_bpf_cpu_rq, KF_IMPLICIT_ARGS | KF_RET_NULL)
- BTF_ID_FLAGS(func, scx_bpf_locked_rq, KF_IMPLICIT_ARGS | KF_RET_NULL)
- BTF_ID_FLAGS(func, scx_bpf_cpu_curr, KF_IMPLICIT_ARGS | KF_RET_NULL | KF_RCU_PROTECTED)
- BTF_ID_FLAGS(func, scx_bpf_now)
+Agreed. 
 
--- 
-2.34.1
+Thanks, will send v2.
 
+Best,
+Sechang
