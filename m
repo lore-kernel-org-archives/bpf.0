@@ -1,148 +1,77 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1170334D385
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 08:30:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67A2360EC3;
+	Fri, 19 Jun 2026 08:47:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781857861; cv=none; b=sIWE+UeGhydtrueLWerMVTTNbhw0kLjhOVdxx+ZHgQeaBP7wcJxfSd//W1ubb+E2RFPA7BlzryImvTNFlFpPy4MAnSoytAzsIUv1KOE0CY+Q4OLnEXyV8D28HO2xXK3WtEomMwLosGa1uT6E6RBMwFFhYUXqVuevBuCekbfYpmc=
+	t=1781858830; cv=none; b=nx62sOpnElHJzpsCA6BRZTn3w4Pr5iteG81s33d5vLH752Zf32givcndAfMtSDmPDOEfDY9sq/liagftimGBXhIyH/hReK+lGh6iJgGOU6MtU3L6QV+rYrrVtqsU+NY8JoYdrjNNush7NUXMW5oKF3Jp7LtEiZQdJ7ceVyhdKvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781857861; c=relaxed/simple;
-	bh=MzP2SJQm41disgu1F5DLjgUW0NXcf1kPeCEpR50nHQM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=iNRyWzOL1RqwLHNOBqzIMOuosKAmn533yfNYogSyHS0mHTfKueXtm6arlrxeI53EUAiMqQlymVwa6PeyG+ARyJZ2Qwv9TymCV8dfsFaltu1E0j19BGgeG9uhdsXz2uwvtxkQTc8g7/sjd8OCByKozkVpnBcwzydq96hbq1FOEMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QNQzWAd/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781858830; c=relaxed/simple;
+	bh=uLbnRyBCl+G21HT2eocAtnU8YiIX8TjALWLHBtpMqCU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=qW7c+DKJ7WhBDFt+Z2oNQzQurXPKml7iTI+YZpWYNaQoTt0X+ABfUu/M6q4Rzn8fMGV4hBJ75DBHpO+TqxX4cX1odiuAlixlBYmcYSmIDdjZnYyfmtsyzP9zdjUOZ9KSbcSf0JXmX8sktI9fBSzNHOOOVgwvV9diC1nAlzl9RHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KiLRXS0M; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QNQzWAd/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 985F21F000E9;
-	Fri, 19 Jun 2026 08:30:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KiLRXS0M"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAD8C1F000E9;
+	Fri, 19 Jun 2026 08:47:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781857859;
-	bh=i+P4O+nVuf8VvQPLR09Oa3sGFx75KJdc6vJb1lMvysM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=QNQzWAd/VLbMoTfqq7bfB3+fwd7+My6bh23qYfvX4aGSYw+3dueIj6qNSJCRqVqbl
-	 DiPCR+Qu5LkrYhmlKGBKxFXnfEw0bz3Plb9R7z8w5nWmCDD3boC5ZVDu5WgOXF6Wz/
-	 AAZ7zVx8rQGXgt1kmz6dNBNHVk/1v5xImkGoLLGgRTWMyWeniJ9GwP9AhO3rHdNcad
-	 usrGY64sCk5mPOS5KSVFoUuL3AK5t11QCTnMQoFhlBAX2JajoiHiRwSWXVvU/80Kev
-	 SfkEMKCOLXyGUVAEqlT/7JLSO4PEOAHTQZ/ZvjaxhgdoF8R+H0OEr0UI8nvpsXjOyf
-	 0Vc1/j7Vybm7Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover refcount acquire node
- offsets
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <264dd4a10d3abdd037e01ccc6da44e5a5758dee2.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
- <264dd4a10d3abdd037e01ccc6da44e5a5758dee2.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 19 Jun 2026 08:30:59 +0000
-Message-Id: <20260619083059.985F21F000E9@smtp.kernel.org>
+	s=k20260515; t=1781858828;
+	bh=jyoGc1besgldATEc9nvVUvFEnZ3Cn41D/3HcNcb6WyA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=KiLRXS0M1J/JAWkSlj1cwUtDxJLny5d9y55r7mYb8IIO44qkT7iGtlOB7qOLB8Mqg
+	 DU2fPfy2lqXjFniygwws1tT5e6jFxmDBZalgyNJuIXTCLq44nGBpEr0oa0eL1IFUHd
+	 iQm+VN9jXi4RpSjvMFVMbovyoGAFwXxFsGhALpr5a1KgCUvCh4+GfAczUv3E3iON0q
+	 fMzAMPGoQge9xNHuaT8VIr8urP15lEZpb/0EteGeJHoadTgERhdybZscIOrfAUr9an
+	 vLIq0LEwY59kB8mBKNoQnmGMMd60ODAOW0d1XwkchCwSccZhUVUT3j7Giyzo4jOs/X
+	 1ywiiMxuMxzBw==
+Content-Type: multipart/mixed; boundary="===============6665164561341181599=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <23e064af54162c9bcf55ac486982924d38ed28b8193903c003523f65166a124c@mail.kernel.org>
+In-Reply-To: <264dd4a10d3abdd037e01ccc6da44e5a5758dee2.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
+References: <264dd4a10d3abdd037e01ccc6da44e5a5758dee2.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover refcount acquire node offsets
+From: bot+bpf-ci@kernel.org
+To: chenyy23@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: chenyy23@mails.tsinghua.edu.cn,john.fastabend@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,vmalik@redhat.com,leon.hwang@linux.dev,davemarchevsky@fb.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 19 Jun 2026 08:47:07 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Logical double-free and verifier rejection in bpf_list_push_fron=
-t error paths.
---
+--===============6665164561341181599==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 822cb053457c04aa9becab9c713d49977dc74582
-Author: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+>     selftests/bpf: Cover refcount acquire node offsets
+>
+>     Add regression coverage for bpf_refcount_acquire() on graph-node-derived
+>     pointers.
+>
+>     The accepted case pops a list node and normalizes it with container_of()
+>     before acquiring a refcount. The rejected cases pass popped list and rbtree
+>     node pointers directly to bpf_refcount_acquire(), which must fail because
+>     those pointers carry non-zero fixed offsets.
+>
+>     Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 
-selftests/bpf: Cover refcount acquire node offsets
+This adds coverage for a verifier bug where bpf_refcount_acquire() did not
+require its argument to have a zero offset, so graph-node-derived pointers
+from bpf_list_pop_front()/bpf_rbtree_remove() carrying a fixed node-field
+offset could pass the type check. The companion kernel fix that rejects
+those offset arguments tags the commit that introduced the kfunc. Should
+this selftest commit carry the same tag?
 
-This commit adds regression tests for bpf_refcount_acquire() when used
-with graph-node-derived pointers. It includes both accepted cases with
-normalized pointers and rejected cases with non-zero fixed offsets.
+  Fixes: 7c50b1cb76aca ("bpf: Add bpf_refcount_acquire kfunc")
 
-> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/=
-testing/selftests/bpf/progs/refcounted_kptr.c
-> index 61906f48025cc..7955a997316e0 100644
-> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-[ ... ]
-> +SEC("tc")
-> +__description("refcount_acquire_list_pop_container: acquire normalized l=
-ist pop")
-> +__success __retval(0)
-> +int refcount_acquire_list_pop_container(void *ctx)
-> +{
-> +	struct node_data *node, *base, *ref;
-> +	struct bpf_list_node *list_node;
-> +	long err;
-> +
-> +	node =3D bpf_obj_new(typeof(*node));
-> +	if (!node)
-> +		return -1;
-> +
-> +	bpf_spin_lock(&lock);
-> +	err =3D bpf_list_push_front(&head, &node->l);
-> +	if (err) {
-> +		bpf_spin_unlock(&lock);
-> +		bpf_obj_drop(node);
 
-[Severity: Medium]
-Does this cause a double-free and verifier rejection?=20
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Since bpf_list_push_front() consumes the referenced object unconditionally,
-its reference ID is cleared upon return. The verifier treats the return val=
-ue
-as an unknown scalar and explores both branches of the error check.
-
-Because calling bpf_obj_drop() requires an owning reference, dropping the
-already-consumed node here might cause the __success test to fail loading
-with a 'release kfunc expects referenced PTR_TO_BTF_ID' error.
-
-> +		return -2;
-> +	}
-> +
-> +	list_node =3D bpf_list_pop_front(&head);
-> +	bpf_spin_unlock(&lock);
-[ ... ]
-> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/t=
-ools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-> index 7247a20c0a3bf..f6cb084af16aa 100644
-> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-[ ... ]
-> +SEC("?tc")
-> +__failure __msg("R1 must have zero offset when passed to bpf_refcount_ac=
-quire")
-> +long refcount_acquire_list_node_offset(void *ctx)
-> +{
-> +	struct node_refcounted *node, *base, *ref;
-> +	struct bpf_list_node *list_node;
-> +	long err;
-> +
-> +	node =3D bpf_obj_new(typeof(*node));
-> +	if (!node)
-> +		return 1;
-> +
-> +	bpf_spin_lock(&lock);
-> +	err =3D bpf_list_push_front(&head, &node->list);
-> +	if (err) {
-> +		bpf_spin_unlock(&lock);
-> +		bpf_obj_drop(node);
-
-[Severity: Medium]
-Similarly here in refcount_acquire_list_node_offset(), does dropping the
-node after bpf_list_push_front() cause the same issue?
-
-Depending on the verifier's branch evaluation order, this double-free logic
-might cause the test to fail verification for the wrong reason, which would
-break the expected __msg check.
-
-> +		return 2;
-> +	}
-> +
-> +	list_node =3D bpf_list_pop_front(&head);
-> +	bpf_spin_unlock(&lock);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1781852308.gi=
-t.chenyy23@mails.tsinghua.edu.cn?part=3D2
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27814304568
+--===============6665164561341181599==--
