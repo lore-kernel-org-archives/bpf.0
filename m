@@ -1,33 +1,33 @@
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 701ED381B0A;
-	Fri, 19 Jun 2026 16:04:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B746139281D;
+	Fri, 19 Jun 2026 16:04:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781885085; cv=none; b=BgbVo5e6fs6qntFNTqZ54aqC8T3O34pjy7zEbix75y5GUXEL1ksFCpmFrFCNMTgs8XqXp/Pfv8j23/wlEOgpx3VfcBRvVy+RFCKtmqMbtVOQ3uR5IV0HdsidOQUt0ZO/Fre/X7Heyl/zWxTJwmlOnaJbT2U3L5f00iU6DUNx/sk=
+	t=1781885086; cv=none; b=VNzPq9puAMh0iAhP+hxO9lkC0jNdXamBTvpYimTP7uYAHjaQJrzbibX1rImNGyc4W6IrxNf4HygDY4omZK47InOna/mKgyA/Hwj1v8XORecEZsxqpHOpHdsRxhRMRsjJTIozQn1T+rALnbpOiRhXrAv7/AJakX04AHudyrrbVzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781885085; c=relaxed/simple;
-	bh=+ALnsabsfDw796u9v7VhMx3HaQ/hih2C+iNPiz96QNs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=u7IyVp/pJuueanyO1hG3f9B28rkntvvboZwdqLO+Sua12GTro4TaM9N7WZ5h7qNsjCzr0opV6dV478E05jilEoI4I+iAXiHnBdWxD332Xvckaf/PH9GrjCL1vZyZk1NwCq29viMuVJITM5mniUXiMgi6GmjKfNYkaQkgRs+f0cc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=pu4qPx09; arc=none smtp.client-ip=209.97.182.222
+	s=arc-20240116; t=1781885086; c=relaxed/simple;
+	bh=AWGRdUn+QrNPrSS9cyunDWoLmJppNzNik8yj+cbLGBk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Li+GxzWs4DH9DobhDHCfB2yVGmXJ1KLukMtX9VlNQhwPrtodDsPZYJGnMDtKrUE/15cuaMkDKdMQby/1CwxNMtalZRFOsLcFlOEpmgcvgMZ4UMNKxlReBYLXl1rzkTlI6bSqtgyXExI09Bf8rekH1NfkJbGYxbu7HrIQcbVrmC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=aOR2KZmi; arc=none smtp.client-ip=206.189.21.223
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="pu4qPx09"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="aOR2KZmi"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=n4Z5foOXU961pSMWUAwF7GkXTuYcfGs
-	U2F6wupf6PWU=; b=pu4qPx09zzSAiPsRKInO9Rq4RHkAtviXvuDU/LgNw7FDM1y
-	8SAvEJvCubLTKS21XUjcxjrcPLAMUe8dFE/bY6PGlWs/NdumRWvy0UvUXAmqCC3F
-	Gw6K3LB5nr0EFXm89v1KWFE3RZYrfJ3GhMnx6EIoA0OpYiAd7o7SvaZZNFBc=
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
+	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	To:Cc; bh=logjK88Xidj1vtikb38Lg8v1FqKh6ehsDKZ6dbrriOw=; b=aOR2KZ
+	miJXaS6w5Aq/lOQFRdGEaMFDFyNevtk4a2UGxBlRCrS9/i3IWe/VKimqfdL4g/0h
+	nIDD8+nEFPRy24bN/SPHX6k6Mb+gWlIMPQokdAnAsWsQaiOdWnSNqw5Fe8F3p5Mx
+	RpZa+1ioZGnJRjlO3hOlqdqjjG6qBiiZg2jp8=
 Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web3 (Coremail) with SMTP id ygQGZQCn8o+RaDVqIeaPAg--.58650S4;
-	Sat, 20 Jun 2026 00:04:34 +0800 (CST)
+	by web3 (Coremail) with SMTP id ygQGZQCn8o+RaDVqIeaPAg--.58650S2;
+	Sat, 20 Jun 2026 00:04:33 +0800 (CST)
 From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Sat, 20 Jun 2026 00:04:28 +0800
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Cover pseudo-BTF ksym load
- capability
+Subject: [PATCH bpf-next 0/2] bpf: Require CAP_BPF for pseudo-BTF ksym
+ loads
+Date: Sat, 20 Jun 2026 00:04:26 +0800
+Message-Id: <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-0-f950f69fe60c@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -36,9 +36,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-2-f950f69fe60c@mails.tsinghua.edu.cn>
-References: <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-0-f950f69fe60c@mails.tsinghua.edu.cn>
-In-Reply-To: <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-0-f950f69fe60c@mails.tsinghua.edu.cn>
+X-B4-Tracking: v=1; b=H4sIAIpoNWoC/yWMQQrDIBAAvxL23AW1REy/UnpQs9tuD0bUlEDI3
+ 2va4zDD7FCpCFW4DTsU+kiVJXXQlwHiy6cnocydwShjldUTstKor5grrfOCoXEPMPqMITOObuT
+ JkY/GOuiLXIhl++3vcAaJtgaPv6lreFNs5x2O4wttp2+aigAAAA==
+X-Change-ID: 20260619-f01-13-pseudo-btf-id-cap-bpf-585f98eac268
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
@@ -50,100 +51,58 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781885075; l=2145;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781885074; l=1056;
  i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=+ALnsabsfDw796u9v7VhMx3HaQ/hih2C+iNPiz96QNs=;
- b=C0r7Pk8rXNzglQotCY+ndSSlK+Ga6yP3f83oYxLv0Myss8P+Ggiagkkf95mlnKjhXBRLQkyAo
- sAx6xzt3YASAzLF6FNC0Ni1CzFNkYAhWImBnV0RDzJrDuS0RR8zg9SU
+ bh=AWGRdUn+QrNPrSS9cyunDWoLmJppNzNik8yj+cbLGBk=;
+ b=ar4O2pWhwPUWwkTnTXiZn7FeaEenVL7qTuNxMO0cmTE35sqStXkjt5LKNIcPGiGpbX2q7wJDi
+ o9EjgPv+J2UB0S3fZBlf3ki8y9p59UVLV3Zl+9ieTwuPAQXbclYxeE2
 X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
  pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:ygQGZQCn8o+RaDVqIeaPAg--.58650S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7WFWfCw4DtFy8Jr1fGrW7urg_yoW8uw45pa
-	4kJ3sxCr1kGr4SgF93AFWUCFy5WFs7uw43Ja10vr15Aa13urn7tws2kF4UGFn5Aw4vvw1F
-	vanrA3sxuw1DAFJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPm1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l
-	84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAaw2AFwI0_JF0_Jw1lnxkEFVAIw20F6c
-	xK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-	Yx0E74AGY7Cv6cx26r4rKr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-	8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kK
-	e7AKxVW8ZVWrXwCY02Avz4vE14v_JwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6c
-	x26r4rKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2Iq
-	xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
-	4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY
-	6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-	AFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZE
-	Xa7VUj-B_UUUUUU==
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQQDA2o0b7D6BwAEs9
+X-CM-TRANSID:ygQGZQCn8o+RaDVqIeaPAg--.58650S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gr4rJryrGr4rGryfCry3Arb_yoWDZFbEkr
+	s3uF9xCrWIkF1SyF9rCrn7ZrWrZw48Cry5AFy7KFW7t34vqr13KFs2qF1xAry2yF4xJrZx
+	uF43Zr92vw1fCjkaLaAFLSUrUUUU1b8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbg8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kI
+	II0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7
+	xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28E
+	F7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS14v26r1Y6r17M2vYz4IE04k24VAvwV
+	AKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+	6x8ErcxFaVAv8VW8Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrw
+	ACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_GFv_Wrylc2xSY4AK67AK6r1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8V
+	W8Ww4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E
+	5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZV
+	WrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY
+	1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
+	0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7V
+	Uj8wIDUUUUU==
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQQDA2o0b7D6BwABs4
 
-Add verifier_unpriv cases for a raw socket-filter load of the typed ksym
-bpf_prog_active.
+BPF_PSEUDO_BTF_ID resolves a BTF id for a kernel symbol into a concrete
+kernel address before the main verifier pass. A raw ldimm64 using this
+pseudo source can currently reach kallsyms resolution without CAP_BPF,
+and verbose verifier logging can print the rewritten immediate.
 
-The first case verifies that a program without CAP_BPF is rejected before
-the pseudo-BTF ksym is materialized. The second case grants CAP_BPF in
-the unprivileged test-loader mode and verifies that the same load remains
-accepted when the capability requirement is satisfied.
+Require CAP_BPF before pseudo-BTF ksym materialization and add focused
+verifier selftests for both the no-CAP rejection and the CAP_BPF-allowed
+case.
 
-Declare the typed ksym in verifier_unpriv.c so these raw verifier tests do
-not need a separate selftest header.
+Fixes: 4976b718c3551 ("bpf: Introduce pseudo_btf_id")
 
 Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 ---
+Nuoqi Gui (2):
+      bpf: Require CAP_BPF for pseudo-BTF ksym loads
+      selftests/bpf: Cover pseudo-BTF ksym load capability
+
+ kernel/bpf/verifier.c                              |  5 ++++
  .../testing/selftests/bpf/progs/verifier_unpriv.c  | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ 2 files changed, 37 insertions(+)
+---
+base-commit: a3847994b4d20c0701ccc54fe110920ea78e73dc
+change-id: 20260619-f01-13-pseudo-btf-id-cap-bpf-585f98eac268
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-index c16f8382cf17..90e7ffc426ae 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -6,6 +6,8 @@
- #include "../../../include/linux/filter.h"
- #include "bpf_misc.h"
- 
-+extern const int bpf_prog_active __ksym;
-+
- #define BPF_SK_LOOKUP(func) \
- 	/* struct bpf_sock_tuple tuple = {} */ \
- 	"r2 = 0;"			\
-@@ -77,6 +79,36 @@ __naked void dummy_prog_loop1_socket(void)
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("unpriv: pseudo btf id ksym requires CAP_BPF")
-+__success __failure_unpriv
-+__msg_unpriv("BPF_PSEUDO_BTF_ID loads require CAP_BPF")
-+__retval(0)
-+__naked void pseudo_btf_id_ksym_requires_cap_bpf(void)
-+{
-+	asm volatile ("r1 = %[bpf_prog_active] ll;"
-+		      "r0 = 0;"
-+		      "exit;"
-+	:
-+	: __imm_addr(bpf_prog_active)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("unpriv: pseudo btf id ksym works with CAP_BPF")
-+__success_unpriv
-+__caps_unpriv(CAP_BPF)
-+__retval_unpriv(0)
-+__naked void pseudo_btf_id_ksym_with_cap_bpf(void)
-+{
-+	asm volatile ("r1 = %[bpf_prog_active] ll;"
-+		      "r0 = 0;"
-+		      "exit;"
-+	:
-+	: __imm_addr(bpf_prog_active)
-+	: __clobber_all);
-+}
-+
- SEC("socket")
- __description("unpriv: return pointer")
- __success __failure_unpriv __msg_unpriv("R0 leaks addr")
-
--- 
-2.34.1
+Best regards,
+--  
+Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 
