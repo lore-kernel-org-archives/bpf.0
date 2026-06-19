@@ -1,137 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9BE936404E
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 21:47:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A87C35E943
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 21:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781905622; cv=none; b=kmW2/K+bTo+wEJvoRCM8MbKOl5/V4hrwwea+pzC06wtLdV2LgEjRYR6x3k2iJWd5R1dIGBh77xp1wjILiiSyPlZ0Bb11Io9nlNircSEiz9To5QeyAwjFFYL5e3I41IiD47LDGqucL1M3dVwafVfrYHscWrgWFVHpK7+4kSIG/e4=
+	t=1781906122; cv=none; b=ICZJ1AohCnuiTK89DkqFWc2Byb7mySTl8w1Lm1GkaaESQ7szFmjn9odyEqe0cMgWS1Va7S80gbcVIrYYRW3Kzq2+nivjNuNfyeb6D5EADqJYuNtCUhBojP+3W6W2qmMgYZcmDn/dHIFSlkBq242/rxxCOWqHjKHAekm+ODNrffE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781905622; c=relaxed/simple;
-	bh=7D+VWczG3KgYZMN40pdq/oSyYkOj/AXJtJesYlO0VGI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=UXx4enP+flxbK7H28HXeSuTzgXgUOkBaYmtMphejstRuYPXYgP7TQFDQkXsS+zAogtRaoiAyr251cdcvPfgAfrJsdy5ErfZ0Mw2nem614eqHT9EBpoK7rIKTqFLeuwkz2DmBlGoe06deE8b5tVgPAtzBlMaBviYGEqi4AGFzxhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VfjfdTPX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781906122; c=relaxed/simple;
+	bh=1TBT000VZsjsrh2eGBT6mjiiO1fTUs34DeS+O0xeYrQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=jubo+eKIeGte60OGQ0fxhBcfpJURGvCcykFyUG714n1pdqyxvchnWS7atnSh4MP1PHCRtw6KMyCqDpwOwT4MQdme2DFZo5gG2OJ1ZlolW+7u72SVEPh4hufWsYQeEB3UPi/3tm53+RvEycKBRTX8dP3qOyrZ4aFvi9QVAGFewe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P5qtjfBr; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VfjfdTPX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1360B1F000E9;
-	Fri, 19 Jun 2026 21:47:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781905621;
-	bh=Mx5H40i1wuIF6ZzWUn3ZhPLCkOdRODwelEmw/FRl7V0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=VfjfdTPXwIPJWS7XKjVRg5egPy1nZILd2PcPeDrFEBez6PsA8pMk3TwjLux5HTLne
-	 14NJU8rsVEk92I8kTXmq5WAAE2n1CjzXjwvOSjzqHgSavHtzJiFs5pE13/Jj/9t7OP
-	 WxQgMCsmnVr1GLKSgBTRKDw1Xjs16AHkqWTE1ODEZ4P0A56cbmr7BNUwSg2mv5lzTY
-	 vED8aX1JIH+jpKNdafQGZtaYQwS3JVJlo4iCK7va1MfkJfQoLw/X0e89Db3GCqJKye
-	 OhqgszOB0Zapw9UGU+scg4HdU8uB8Efim9DZXPsT5ja9ZzbILxGjH1PO500gxXMUTX
-	 7W7pPH/Sxj7yQ==
-Content-Type: multipart/mixed; boundary="===============4767184949067385831=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P5qtjfBr"
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7e93d1dd156so266675a34.0
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 14:55:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781906120; x=1782510920; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1D3cBmNu4YFH8WjCxOSV1D9t43oN1k/1HHsWttX0H6M=;
+        b=P5qtjfBrJEYGa3WsF0ZfelJ6Urg50+QFj39AUSfTWfUoGuCBRxJsMtGMJZRmet4ODK
+         a066sxrmhNEl71PCuV6g2koK5CQmLxW2KwFs3No9k2LpJi8Eo1SITjwb0I/iSVMDymCL
+         PLToqUI5rpF2lzlLakExkaMXbUNoLQxTice5RMRsU73OIf0IpYU+IXmXOaWY/m0i3SB0
+         qvrWch4r+0/wNgbHSXDv9koe4DjjF8YaeMJwwEGerXTryRhB6D3Z5WGlPLKbz9hceqPM
+         bj/pMbA2roCYPN0EgM6Gj+xkCrVc8iVBYIN6xfoyj75dzGj/Qh80fjwki9ftaS2wNVsy
+         FrrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781906120; x=1782510920;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1D3cBmNu4YFH8WjCxOSV1D9t43oN1k/1HHsWttX0H6M=;
+        b=mFdlveyiPUCd6bghkeqyFL9q3TSjqqLTsqy+YeEmKPWvphUz0EmlC7EGxtp13E7zsl
+         RpTShhKA4DNTtj0uccQOIuf5noR8P4w/psH+xiDaZb2y90/vl7rF/L1jopr/2M9pRAE7
+         9sytEajQPVpFbmBumZSKr7iHPUpq6SiSPmpMoEpDBJfD3cpwVpls8k+b+gOF4IwjE4IS
+         HLQGpwPVcwmIr5eJ+xeB5Rw8jYQMYGpCmKKBbss+ov7LjtW5TjG86yx4QrYsM0/Dwysr
+         EFXhmRNdhXn0ikjZ44gwphHRa2rCh0R11N+4DMFnlDPUy2UJyCBb8vyQYhkK4DSXbd9e
+         dO+A==
+X-Forwarded-Encrypted: i=1; AFNElJ/nuhaa9pIRdEbw5xaK0zj3+S3fDHJ6bXWla8MHDqSwXTjXxftZ/lyqwnXaQei1SkGUstM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYfXOX5gtClihvV+nWCw/1125O5yZbzQpWBl9aiQaeVVSKi95U
+	2+UiU/QLlz+Skr+GXOvTwj1KSGpMtcnBRvToLmZQFFNehTK0xsvytRjZ
+X-Gm-Gg: AfdE7cl7p5BsceszdFcl2Py7YJ0LRxDcf71Yxt5xSIfdYKmjRTbM6Vbz0gFYi7DaKFw
+	mwZLqGeTS1j4A3oc0fFb6f9Or4t3i+8IWTxEVDPBRC7ggAn26lu+fh5CcXwnyM7+Cd1cx5b3m4R
+	1t2uxHHCBllq6VBZS9YIT753tXalf+dGWlVkXM43NpOh0LSO06XmS02L/qScp72qhsk1FikEx8T
+	qVpH/AoT1srT2IzXR1mCBH/BWxdt3LBxLM6GUFW4ugyvlaLhSSZkGKbWu6PK6otHm3ZaFRIGl97
+	oI/cqRCITxoj01zGhEAFJ4SONJONOqSJs8mev1idzjb0WkCkxSRKBFUy6xZp2Uesfetrs+8S5zO
+	2papBY9W7Ipc14okJu4PwQXcF+H93sOksQGsVr51EU7Y4qkOrck9nn0tMXnGpyA3IMRPf2exGCS
+	6tzJnXt/nd4I3nw3Z5xwBRGQLxgN2n7IMWkdxm/aWD//aM70rWpYbYNqN77o4ZlJ/HrtpZOtVPi
+	O+QOtU=
+X-Received: by 2002:a05:6830:620b:b0:7e6:cec2:a4a5 with SMTP id 46e09a7af769-7e92d8aec54mr4035312a34.20.1781906120073;
+        Fri, 19 Jun 2026 14:55:20 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:47::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e94424ca09sm293111a34.16.2026.06.19.14.55.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Jun 2026 14:55:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <2e698f1eb8290a797968f023b9736a7e3f502dbcde620ef32aa1e0e1d9915ef8@mail.kernel.org>
-In-Reply-To: <20260619205934.1312876-12-memxor@gmail.com>
-References: <20260619205934.1312876-12-memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v2 11/17] bpf: Report Call Type Safety argument errors
-From: bot+bpf-ci@kernel.org
-To: memxor@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 19 Jun 2026 21:47:01 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 19 Jun 2026 14:55:18 -0700
+Message-Id: <DJDD01YMA1GE.3G7B4LE5H780G@gmail.com>
+To: "John Fastabend" <john.fastabend@gmail.com>, "Sechang Lim"
+ <rhkrqnwk98@gmail.com>
+Cc: "Jiayuan Chen" <jiayuan.chen@linux.dev>, "Jakub Sitnicki"
+ <jakub@cloudflare.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Eric Dumazet" <edumazet@google.com>,
+ "Kuniyuki Iwashima" <kuniyu@google.com>, "Paolo Abeni" <pabeni@redhat.com>,
+ "Willem de Bruijn" <willemb@google.com>, "David S . Miller"
+ <davem@davemloft.net>, "Jakub Kicinski" <kuba@kernel.org>, "Simon Horman"
+ <horms@kernel.org>, <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf] bpf, sockmap: fix lock inversion between stab->lock
+ and sk_callback_lock
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+X-Mailer: aerc
+References: <20260616091153.2966617-1-rhkrqnwk98@gmail.com>
+ <575a878e-6d37-4337-a821-4883d3dd3a63@linux.dev>
+ <jxrrwhfd5igwnlo6v5y3l3grqhqqpiedfnsqzg62cmwxwaa7xd@qzthhuahjm5f>
+ <ajLR9CRn6O27Ound@john-p8>
+In-Reply-To: <ajLR9CRn6O27Ound@john-p8>
 
---===============4767184949067385831==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
+On Wed Jun 17, 2026 at 9:59 AM PDT, John Fastabend wrote:
+>
+> The bot also thinks it found another locking issue. I'm not sure
+> supporting 'tc' is really needed here. sockmap is much more easy
+> to reason about from socket layer. What about just blocking sockmap
+> manipulations from these prog types.
+>
+> My current thinking on sockmap at the moment is its has sprawled
+> across so many layers the locking is overly tricky to reason about.
+>
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index db151e6b8949..fdbf92bffc17 100644
+> index d9bdc3b32c05..5e08d3e03453 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
+> @@ -8567,11 +8567,7 @@ static bool may_update_sockmap(struct bpf_verifier=
+_env *env, int func_id)
+>                          return true;
+>                  break;
+>          case BPF_PROG_TYPE_SOCKET_FILTER:
+> -       case BPF_PROG_TYPE_SCHED_CLS:
+> -       case BPF_PROG_TYPE_SCHED_ACT:
+> -       case BPF_PROG_TYPE_XDP:
+>          case BPF_PROG_TYPE_SK_REUSEPORT:
+> -       case BPF_PROG_TYPE_FLOW_DISSECTOR:
+>          case BPF_PROG_TYPE_SK_LOOKUP:
+>                  return true;
 
-[ ... ]
-
-> @@ -12587..-12662 @@ BTF_ID trusted/rcu, ctx, alloc obj
-
-[ ... ]
-
-> @@ -12587,13 +12735,35 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  	case KF_ARG_PTR_TO_BTF_ID:
->  		if (!is_trusted_reg(env, reg)) {
->  			if (!is_kfunc_rcu(meta)) {
-> +				const char *expected_type;
-> +
-> +				expected_type = diag_btf_type_name(env, btf,
-> +								   ref_id);
->  				verbose(env, "%s must be referenced or trusted\n",
->  					reg_arg_name(env, argno));
-
-[ ... ]
-
->  		}
->  		if (!is_rcu_reg(reg)) {
-> +			const char *expected_type;
-> +
-> +			expected_type = diag_btf_type_name(env, btf,
-> +							   ref_id);
->  			verbose(env, "%s must be a rcu pointer\n",
->  				reg_arg_name(env, argno));
-
-[ ... ]
-
-> @@ -12831..-12946 @@ MEM/MEM_SIZE/refcounted/const str/irq
-
-[ ... ]
-
-> @@ -12831,8 +13015,18 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  			return -EINVAL;
->  		}
->  		ret = check_mem_reg(env, reg, argno, type_size);
-> -		if (ret < 0)
-> +		if (ret < 0) {
-> +			const char *expected_type;
-> +
-> +			expected_type = diag_btf_type_name(env, btf,
-> +							   ref_id);
->  			diag_call_arg_fmt(env, insn_idx, argno, func_name,
-
-[ ... ]
-
-> @@ -12880,8 +13091,16 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  		break;
->  	case KF_ARG_PTR_TO_REFCOUNTED_KPTR:
->  		if (!type_is_ptr_alloc_obj(reg->type)) {
-> +			const char *expected_type;
-> +
-> +			expected_type = diag_btf_type_name(env, btf,
-> +							   ref_id);
->  			verbose(env, "%s is neither owning or non-owning ref\n",
->  				reg_arg_name(env, argno));
-
-This isn't a bug, but would it be worth using a consistent helper name
-for the same computation?
-
-In check_kfunc_args, the NULL-pointer and release blocks
-(around lines 12650-12680) call the raw helper like this:
-
-    expected_type = bpf_diag_format_btf_type_scratch(env, 1, btf, ref_id);
-
-while the trusted/rcu, MEM, refcounted-kptr, and const-str blocks
-(CHANGE-2/CHANGE-3) call a thin wrapper:
-
-    expected_type = diag_btf_type_name(env, btf, ref_id);
-
-Since diag_btf_type_name() is defined as exactly that raw call with
-the same slot and parameters, could all these blocks use the wrapper
-so the same expected-type lookup reads the same way?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27848712882
---===============4767184949067385831==--
++1. Let's disable.
