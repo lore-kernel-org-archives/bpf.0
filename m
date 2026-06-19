@@ -1,139 +1,94 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outbound.pv.icloud.com (pv-2005e-snip4-11.eps.apple.com [57.103.66.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05FDF33F584
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 19:30:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A03A22A1D4
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 19:58:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.66.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781897411; cv=none; b=Ff2VrEq3BOcUnfBpDihFxwsR8ugaDexo6ssqMQx6dAPelM1cpImIYihpa/J1VqZ70wTtM0Zvmnk1lxJ+730Hrtzl0waeYr37Fig9dhdWrToqmu9LML4UtHFEzGtZs/gLJWNGy9/f8xAbXjrlcm5sW5exvwVUx6jHVFHI8KgbEds=
+	t=1781899093; cv=none; b=nz0bV7t06gefzTnYmdhvuOqqokBleBW3VNW+EZYxWT3OpBSkNe+ZIXZuHxyTdeg6kYL42uEG/bK+PPUtbEOrCfpSenZTijejObAboBvR3IXAY3vJcaAtZj4WORgIGcel2aK7RivTbewbI8tqqPXc1UrvD7Tp3QbQ97fL4QbnTcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781897411; c=relaxed/simple;
-	bh=Oh2ybLLGC9jnpxFv2cvrWqY59mjTNtmLCVMVU0nxLTA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WRNXtO8ie1EdwAx5dbphdegtyqFeW/xSdpjiaZS1DDOtvL8DtXJyIBuN/fghf7jIuG9LOva+5x5uqwo/5CNSSvgu2FmgF103IpJg6fYauLida8AdVlkP73Egd9alIa68FSodixbU7xOIow+lVBaFg9W0W81WP2FiEEF3dKWATTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IF5Oom64; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781899093; c=relaxed/simple;
+	bh=iXOV0asxCccyrJebaDoN3IQP5ubOpi/8P+XBmE4OYxA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=psZK0Ja1jtIXy4RBAlUMc8XyG03k2/GZEEi0LnhAHMRRJpnI1LUqTg8UBpObTHVCdyPLyVLV13lm+I9UpvHS4fs4mo4FzwC38vmyFBD+COICSijac1NR5cb5Qre44jJX5htRRm74muB5OAkr6LAPuW1ILFirzPzrFJ/RsnT2cFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=pzsmMuwm; arc=none smtp.client-ip=57.103.66.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IF5Oom64"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-37cab825ec9so1914880a91.1
-        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 12:30:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781897409; x=1782502209; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=7uOIAj81pDb7DXTvtaboe/dWyr0Wn96ZBecKWdg1P6Q=;
-        b=IF5Oom6449vLnhIMgVWPw4Sr5Oh81jM7a9PwpYu6wYYunqkVz9heUGHhcr0VWahYtJ
-         tzx5IPAKjMKnGkVssX3/4FDQbK7g3txsFEENFeZubKiNKnhpcwRVw0/PPEUec9khuwWi
-         i6Da77lAVwHBTwfASrJ21I1T2OVcZMp8f3wnb+JUGP6KHOjrWY2nSowv/YRt2Vs/V6E9
-         y49McxBlxBZmuBc2N2EWb5jNzFXIbYMifVd3ER9PzgQUJEpkE6VNUdK7TzVshWBtLb8p
-         4rDsdyqOiZcQ+O+fKwM9SuqwRJZ6NDlPuC8ZJy6PTVtCI9+AlM4Fm4Yu2OKOq1othuqy
-         pERQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781897409; x=1782502209;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7uOIAj81pDb7DXTvtaboe/dWyr0Wn96ZBecKWdg1P6Q=;
-        b=Dzij0ciEWaAKX2yiBTthhJGp1pzRI5ho6PhyQifmmRB3qxvGhb8uJy00/l6iGr3815
-         IOO2nCTtDSPeXqv6v6UWEGWSYuU8UmVZmva14kGUjkL4gCqR9ID+N1kQuxtm693j2wZa
-         MF9uQA8+ezzHSuXLK0zaOtkAU2htP2yp1qk7otucfYPrUmWJ03K/0zpmnfs73861Aa7l
-         9UeHrLvWkDFZhoPW/CdDGj9T9r1SFiDATBJANTaZtGYK4UeDi/6XZwebKGD+h96yXpqM
-         tcfmRG4Nav0oZnTHuQHAxM3xef7yfpnd8NRPH8N+1VZr2EyFEUnwYmEPDUMgffNk8gNE
-         pgxA==
-X-Forwarded-Encrypted: i=1; AFNElJ8+hbLo9E14UBdxUkgEQ1bADFb/WiNu+rdBwOE0Ma4OAjLzsVcIBUO5//qfl549OZN32kQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDNBTpLSaHAa+bJPXd3iJ1Ir7Vvpv7SktWj63iAWl/r5zbw2NT
-	T0r+o0BZxsLbrfQHBFZ3oL3cl+ZbJd3Wi8Kn8LO96sSuElv91Hsqbsq+
-X-Gm-Gg: AfdE7ck7dLmddxCi3V2YMSjhsXO7luI7gASl9CwdpcDH6HyhgkGnbiqCXQe91t0Vz65
-	uEuYxZvc9oQUJGQPISbTqzQ+ULGQ1cub084QNd6HJuwcf1QDwxCMLHsEmnIcGNQVRuQI47BByxo
-	ML1r8cuBFB3OfxA8Nzk2q0+0ryKp21Rgxsy1wlGpEvAE3Htgq9nawflzKh9gqxUwvwiW2GNR4Da
-	uAjDVrX5PRhWQb5MLIci77z+DYE9Vmk7b79M8J8snXk8BsWWYoCZcTQ1teB3FRxPyBmxwEmUUf7
-	3JBJ1DaaCrkB8HC8iJBVoVvq/dMyKG38AgOF/9vjG+R4lqx0C+xw6i83gY5pnL1Q68Btedf4qLg
-	P408Kknz2FcCp35TRUHunpSWzZeHimwfc+SEhg4dXHy4cJ8ZqR/fVEFkPfSNWv8cohkCNqbg38i
-	45OmUaBaVPvXe3aKAIbjZlh3lnVEq6EonwCiakgpzVwQ==
-X-Received: by 2002:a17:90b:2709:b0:35f:b987:4dac with SMTP id 98e67ed59e1d1-37d15e51976mr5755105a91.12.1781897409221;
-        Fri, 19 Jun 2026 12:30:09 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37d1558c6cfsm3705447a91.8.2026.06.19.12.30.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2026 12:30:08 -0700 (PDT)
-Message-ID: <a180a5f633b3555630d9a9d2bef2573852918112.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover refcount acquire node
- offsets
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
-	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
-	 <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	
- <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, Viktor Malik	
- <vmalik@redhat.com>, Leon Hwang <leon.hwang@linux.dev>, Dave Marchevsky	
- <davemarchevsky@fb.com>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, 	linux-kernel@vger.kernel.org
-Date: Fri, 19 Jun 2026 12:30:05 -0700
-In-Reply-To: <264dd4a10d3abdd037e01ccc6da44e5a5758dee2.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
-	 <264dd4a10d3abdd037e01ccc6da44e5a5758dee2.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="pzsmMuwm"
+Received: from outbound.pv.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-west-1a-100-percent-11 (Postfix) with ESMTPS id 673EA1800204;
+	Fri, 19 Jun 2026 19:58:10 +0000 (UTC)
+X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQpOHV8CXhxBAFYEWBcOVk1KEVcJXwpABFEbWg9eK1sTVRdGCRkIXR0ZHldQXgheH0wcHQ5YBhICWkUCXRcDVxxWRVwYQwldBVccHR1BRVsTVRdGCRkIXR0ZCEcfCjADQg5WA0MHRQAtGRxXUF4IXh9MHB0OWAYSHVAcDlEFWwBGCU4CVAZSB0cMQR1ZBlkHRBRJHh5eD1YYWApHBVQCUBl5EVABWB5WXloXXlMXH0sAXEVaDlsERxQ=
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1781899092; x=1784491092; bh=sygBzNXjACQ2HHrw6dFTVMIDduwGR6Qd+HQII4kdHrE=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=pzsmMuwm5z02wfqWeG6D1llpmBZubmssWuoM7SckvCW4my7OkP5NOk2Wddk+5+O/RV5sWgElVAb7r878wPbRR+gxZX/dvMJm5hkYH+uEgrQ0HII2qUkv3d2c21HS+ihJI+QxJgE2BsNZ1TJ7pagNLDwrLZA01H7NyncRW5LxDzPpOua4SXj7rK1BpDqZA917fyVA67xSOiFgM9zxu7AFh+5bD3gF+o/Doe3P5F+/R9pkSE7Fzi4994nMWbvRyA/9y+v/wg7aq/Rp/VN921UOHrAGAdmrTL0C2+bzUWYOFxR9EIM9VhYWCmrP6epeVVPHfV8JhONg7mEbRezt7W/hag==
+Received: from cibi (unknown [17.56.9.36])
+	by p00-icloudmta-asmtp-us-west-1a-100-percent-11 (Postfix) with ESMTPSA id D140818001B6;
+	Fri, 19 Jun 2026 19:58:06 +0000 (UTC)
+From: Siddharth_Cibi <siddharthcibi@icloud.com>
+To: ast@kernel.org
+Cc: Siddharth_Cibi <siddharthcibi@icloud.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	netdev@vger.kernel.org (open list:XDP (eXpress Data Path):Keyword:(?:\b|_)xdp(?:\b|_)),
+	bpf@vger.kernel.org (open list:XDP (eXpress Data Path):Keyword:(?:\b|_)xdp(?:\b|_))
+Subject: 
+Date: Fri, 19 Jun 2026 19:57:56 +0000
+Message-ID: <20260619195759.41254-1-siddharthcibi@icloud.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: VZbJ9_7P6w0G_odWh_e7W5cgdlYCTZv6
+X-Proofpoint-GUID: VZbJ9_7P6w0G_odWh_e7W5cgdlYCTZv6
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE5MDE5MSBTYWx0ZWRfXzHWYE+hGpTkC
+ MZlSqHWhOna5nBjCkCXWXvtedfRBzQgZX5PwUK/QV4cutm/WWyaZvIxGuUjr4jyj2Dk70+j3gRe
+ XsStHuP1CKWzmcxsnn36ICa8PhREK1IIrFjn7HGzTwyneeSIhB/6d+2v37AXMdbNvhHvDuKJrBG
+ rzt9r0Q9vxE9HtCG4s91K3JpTj7yelPy8kffgNqYcfe+uhqruUoaoLeP33NwtC9PqbSMPx6VDEO
+ GevFxGnJpnKUC4eVZ/tIiFKTqgOicSIuSqBn2uO1R1IGKKVF8D9VMl+8tb/L8ht2tE+3nAbMx8r
+ F0zXhyvKZqFK+TW5G2n
+X-Apple-Category-Label: MjA0NzgyOTUxNDY6JGNhdGVnb3J5JF9QZXJzb25hbCw=
 
-On Fri, 2026-06-19 at 07:59 +0000, Yiyang Chen wrote:
+Subject: [PATCH 0/2] preserve rx_queue_index across XDP redirects
 
-[...]
+XDP programs executed after redirect through cpumap and devmap
+currently lose ingress RX queue information because rx_queue_index
+is not preserved across xdp_buff to xdp_frame conversion.
 
-> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/=
-testing/selftests/bpf/progs/refcounted_kptr.c
-> index 61906f480..7955a9973 100644
-> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-> @@ -741,6 +741,39 @@ int list_push_back_uninit_head(void *ctx)
->  	return ret;
->  }
-> =20
-> +SEC("tc")
-> +__description("refcount_acquire_list_pop_container: acquire normalized l=
-ist pop")
-> +__success __retval(0)
-> +int refcount_acquire_list_pop_container(void *ctx)
-> +{
-> +	struct node_data *node, *base, *ref;
-> +	struct bpf_list_node *list_node;
-> +	long err;
-> +
-> +	node =3D bpf_obj_new(typeof(*node));
-> +	if (!node)
-> +		return -1;
-> +
-> +	bpf_spin_lock(&lock);
-> +	err =3D bpf_list_push_front(&head, &node->l);
-> +	if (err) {
-> +		bpf_spin_unlock(&lock);
-> +		bpf_obj_drop(node);
-> +		return -2;
-> +	}
-> +
-> +	list_node =3D bpf_list_pop_front(&head);
-> +	bpf_spin_unlock(&lock);
-> +	if (!list_node)
-> +		return -3;
-> +
-> +	base =3D container_of(list_node, struct node_data, l);
-> +	ref =3D bpf_refcount_acquire(base);
-> +	bpf_obj_drop(ref);
-> +	bpf_obj_drop(base);
-> +	return 0;
-> +}
-> +
+Preserve rx_queue_index in struct xdp_frame and restore it when
+rebuilding xdp_rxq_info for redirected execution paths.
 
-Why do you think the positive test case is necessary?
+Add a selftest validating that ctx->rx_queue_index remains available
+through xdp_metadata after redirect.
 
-[...]
+Testing:
+
+* Built modified kernel objects
+* Ran tools/testing/selftests/bpf/test_progs -t xdp_metadata -v
+* Verified xdp_metadata passes
+* Added explicit rx_queue_index assertion
+
+Siddharth C (1):
+  bpf: preserve rx_queue_index across XDP redirects
+
+Siddharth_Cibi (1):
+  selftests/bpf: validate rx_queue_index in xdp_metadata
+
+ include/net/xdp.h                                     | 2 ++
+ kernel/bpf/cpumap.c                                   | 2 +-
+ kernel/bpf/devmap.c                                   | 5 ++++-
+ net/core/xdp.c                                        | 1 +
+ tools/testing/selftests/bpf/prog_tests/xdp_metadata.c | 3 ++-
+ tools/testing/selftests/bpf/progs/xdp_metadata.c      | 2 +-
+ tools/testing/selftests/bpf/xdp_metadata.h            | 1 +
+ 7 files changed, 12 insertions(+), 4 deletions(-)
+
+-- 
+2.53.0
+
