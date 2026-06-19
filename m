@@ -1,161 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A3873C1084
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 21:19:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A0A3B47F7
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 21:19:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781903971; cv=none; b=cTkjZQzKrJPyASj5Pwwp44OLrPLb688WswjoiZwqaaT453tkpxYqv6s3PFPo80tXDKC6r6GpdCtpCjOO2Yl7MSf6W8QSQ5pgTFD1uWccGXp9nKiFSvFclXpVg3FfFn1j+Dw4jHj245snlJegI+73P8UwxyekL6JOSkudqpoP6E0=
+	t=1781903993; cv=none; b=F7tYREVIMLUF/6ojmId7oXzgZKHC9NM7lQD42jfPalSRNu0z97uRgsQ75wf7kUxzND3mdCFq32pmI8cxk37I39yS5ExC8B2bIT1NhYH6NoibH1cVzIfuEWgfCf1VCD2CNfhcmGLjMT/NRWOsQ8FMi6v4InmNBZ+Nia7ym1VT48g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781903971; c=relaxed/simple;
-	bh=3MSIEaHZi3+n8bDzmt3sGWk6//IkVaNnxxICKgcHt6k=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=d40fCN5/yVWLXLKgkJ4BsmWRhqPj9xP3BiM7me8dBd0s84fRdkQMStVGIGqVi/Wesi5Ep7TlttQOBcls2WgizyRBi7wLvjfStpMWg9+hUuq8FBnmqB+5jdOYyRrYVajfHyQFeFpHybhr2mkQZSPeKkvnwNdyGbDrUH11IZb5Jz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g7QDIqRv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781903993; c=relaxed/simple;
+	bh=Z1v7oK08s9cX9ai3rtGVy+hD16fiw/Yo5ZmR3yMmw6U=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=D5ZevaFtVT4Eo5jgJIpnKOvZ76Kw0Pv02xSc7Y6Q5FUDTHbVplkPQjraZIcictksXsRdLlOXRWniW3wPfav3W0TYj4FX7odfnu4BcxlL4SDhdx1l4xBOElkrCuMnZqVoOLcfartdeJ1kfSQOFooKIC/b7OLC5hsFl+y6CXkyFk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QjvXKwPb; arc=none smtp.client-ip=209.85.128.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g7QDIqRv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AFC51F000E9;
-	Fri, 19 Jun 2026 21:19:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781903970;
-	bh=sW7KbnyBLmN/er6fLbZX6zEj+rdz6ZlzXElP+s6BkXU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=g7QDIqRvg7Wh+BdHtUZJzXF2cDHrvoSnavjmDCFwBFNtZESQ+5roxJBYHZmqWk9Hd
-	 k7I39arqa7T/5J9A1DU0A2f8hiq3ZFQhjlCY2hB/khbUcxKaSOF9KyOPu4tp+7yf8Q
-	 /7xm0LfPCU+VjspKQohFKrw33tBeo5srKKQyZI9Ha9N5gWQQpRC+ZOYaM7tW/B217I
-	 ZJwUJMC0Eoohgo3+eTVhCD9/gfO/g8q3CZq4b6qHoOX2gfhj0NVbAK7b0tMq6SP4Al
-	 XueCgM85+PmSV9XVdGZi8fAvxWfy3ppj1yUatroyvCJHz2b3I2PiIYgOkIoo3XlH4I
-	 SGxESODqVkyFg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 12/17] bpf: Report Execution Context Safety
- errors
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260619205934.1312876-13-memxor@gmail.com>
-References: <20260619205934.1312876-1-memxor@gmail.com>
- <20260619205934.1312876-13-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 19 Jun 2026 21:19:29 +0000
-Message-Id: <20260619211930.5AFC51F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QjvXKwPb"
+Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-490ace40f4bso24953325e9.3
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 14:19:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781903990; x=1782508790; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aPe7xhOch75yXx5Pu0qv+8+PGvLXn4ZjaQ2xwLoyw08=;
+        b=QjvXKwPbU4nu/OPmYa2NOMoH7SpB/FxLIHdRfI+9+BzszJSm8f1ud7JKI0m/IS5fqc
+         WrCocLFwy366YhG0k8VyKujHTU/CNyPYT2fnhkji5Ld0mnhPiHOO9JD55zFg443q8L9G
+         YYAb+UjfDF4OrSi5PW3S2e2EPo6u32esJ1962nmKOF+aWq7gYLtQzJK0x8AUl8OO0M5C
+         NNzJzR2FJEOzJ8AfTp3aYqXWZ65HYdy4fIy08oJlL13Ln8ddehxBxERF4u2xRGvRD8PA
+         H0JWh94zejHUVOf+dtG2EbrBiF+Sco3AmVn9cz2whceGme02H3l7pOYTM/6iQN94Fplc
+         k5cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781903990; x=1782508790;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aPe7xhOch75yXx5Pu0qv+8+PGvLXn4ZjaQ2xwLoyw08=;
+        b=l+W/zFFAj10yUmMQKxZT7RyiJOkIKUzGufJwjLmYbnSF9a2hO3q6yejDVGlz82jDcp
+         1cHYdVyqFX19rIz/dfTpPkgM4xFjuNXZ0aQz2asG6GMiV5QJal/2PHsFxwSLL1hhNSPE
+         iimJ3jYnMREelcIZ6zPwVLG18dakX5xgBrC3StxvnLxnO0F4qt2ZhWCgVprUUc2Wa3rK
+         nu3BEB8xay2PVeytcIP4AIxaU3iZxzxl8FY8p6uPdzvZnkDM0amu606F1D9V2SLWnlj6
+         232cskW+9ckU0MHn8cURxK+phITln5cDx7VsZ4T8GlPqDY/H1/fbqYdT/yCViGmvy3r3
+         R5CQ==
+X-Gm-Message-State: AOJu0YxQLb0zV8Ly5l4tDyudgJr6FIzW5e2vtPZk1udvmCSdztLHIIlN
+	tbSPcoi9+Tl9OZbC5QIb8bPEj49qer3Ii9LQkatAjloKQdAvW7UrGMtr
+X-Gm-Gg: AfdE7ckc4S598uTo1IFql2rLZ/2iynIcvtTYDwffxOkaCOtVDX4cX25QdlLXL3efkSY
+	iq7FhEvAujGNG4vLmc8KJf+jCoI396PexEgylSno79kEE9R3AOsAhn7M8gftoXkzDa/r2Sij7YP
+	kh6Rr80K6VbOqnG1CTDPVGu4gk8vpzvynOlyxJMdchvbMWwHl/8ywLhBU0tEiXyZ+ha9+IvCdpM
+	Ua33MpCUlis6NLsn/vFnurNcDBTZ8YrPAD9CxT0A3lyzqB2likvDN2UCBeg1Gsj8IgKqJuHTp8v
+	/iThEXyRrzvDqvnNAMxsMrLVKOk+m9Py5JRoyo3otsoJqp5MHjUVMvVrDNsvSbXhkkLojp6YW/0
+	daVWIADs/nMr2TRFdFSEZ5rdCcM5T+pBDNVQsSZ3q05ubWzlxVfjPOuuJ/7KcUtMurV4jwCgc5+
+	53IbDPzbGiHPi2cACK59HS4CwWmaGRHvk4qfZCxQnJds+aH4jPRfz2oOlGjTm5QexUn58hcB41l
+	FXKk7TCwXm2yv9FoDMShejt3K+99eOZabkvrLw3t3uTMxyRzto7uSA=
+X-Received: by 2002:a05:600c:5252:b0:490:bd1d:4732 with SMTP id 5b1f17b1804b1-4923f579333mr93310165e9.23.1781903990201;
+        Fri, 19 Jun 2026 14:19:50 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4923ff821aasm97351255e9.12.2026.06.19.14.19.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Jun 2026 14:19:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 19 Jun 2026 23:19:49 +0200
+Message-Id: <DJDC8VWEQND5.F1DEG4W53SB7@gmail.com>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 07/17] bpf: Track verifier context
+ diagnostic events
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: <sashiko-reviews@lists.linux.dev>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>
+X-Mailer: aerc 0.21.0
+References: <20260619205934.1312876-1-memxor@gmail.com>
+ <20260619205934.1312876-8-memxor@gmail.com>
+ <20260619211353.0B4201F000E9@smtp.kernel.org>
+In-Reply-To: <20260619211353.0B4201F000E9@smtp.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On Fri Jun 19, 2026 at 11:13 PM CEST, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [Medium] Hardcoded depth for IRQ contexts breaks nested diagnostic hist=
+ory anchoring.
+> --
+>
+> commit 86418a115dc1ef24cac1a623674bfd700c69c32e
+> Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+>
+> bpf: Track verifier context diagnostic events
+>
+> Record verifier context transitions in the diagnostic history to anchor
+> causal paths for lock, IRQ, RCU, and preempt regions. The depth of the
+> context is used to ensure nested regions correctly anchor at the outermos=
+t
+> active region.
+>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 93941deb2cd8c..e584dec04b34d 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+> [ ... ]
+>> @@ -1473,6 +1475,7 @@ static int acquire_irq_state(struct bpf_verifier_e=
+nv *env, int insn_idx)
+>>  	s->id =3D ++env->id_gen;
+>>
+>>  	state->active_irq_id =3D s->id;
+>> +	bpf_diag_record_context(env, insn_idx, BPF_DIAG_CONTEXT_IRQ, true, 1);
+>
+> [Severity: Medium]
+> The commit message mentions using context depth to anchor nested regions =
+at
+> the outer active region. Since BPF allows nested IRQ disables (for exampl=
+e,
+> via multiple bpf_local_irq_save calls), does hardcoding the depth to 1 he=
+re
+> break that behavior?
+>
+> If a program nests IRQ contexts, multiple enter events will be recorded w=
+ith
+> a depth of 1. When bpf_diag_history_context_start_idx() searches backward=
+s
+> for an event with a depth of 1, won't it stop at the innermost IRQ enter
+> event rather than the outermost one?
+>
 
-Pre-existing issues:
-- [Critical] Integer overflow and out-of-bounds write in `bpf_bprintf_prepa=
-re` due to `snprintf` return value mishandling.
---
+Good catch in both replies; will fix in v3.
 
-commit 9da2a659fbd6ab09232d9dfa84f7ad227b09b2a1
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+>>  	return s->id;
+>>  }
+>
+> [ ... ]
+>> @@ -1552,6 +1561,9 @@ static int release_irq_state(struct bpf_verifier_s=
+tate *state, int id)
+>>  		if (state->refs[i].id =3D=3D id) {
+>>  			release_reference_state(state, i);
+>>  			state->active_irq_id =3D prev_id;
+>> +			bpf_diag_record_context(env, env->insn_idx,
+>> +						BPF_DIAG_CONTEXT_IRQ, false,
+>> +						state->active_irq_id ? 1 : 0);
+>
+> [Severity: Medium]
+> Similarly, won't this hardcode the exit depth to 1 if there are still out=
+er
+> nested IRQ contexts active? Should this calculate the actual number of
+> nested IRQ contexts instead?
+>
+>>  			return 0;
+>>  		} else {
+>>  			prev_id =3D state->refs[i].id;
 
-bpf: Report Execution Context Safety errors
-
-This commit augments the BPF verifier to report Execution Context Safety
-errors. It provides source context, path history, and suggestions for
-sleepability and critical-section failures.
-
-While reviewing the BPF codebase, I noticed a critical pre-existing issue in
-kernel/bpf/helpers.c within bpf_bprintf_prepare().
-
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -818, ... @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, co=
-nst u64 *raw_args,
->  			u32 num_args, struct bpf_bprintf_data *data)
->  {
-
-[ ... ]
-
->  			if (fmt[i + 1] =3D=3D 'B') {
->  				if (tmp_buf)  {
->  					err =3D snprintf(tmp_buf,
->  						       (tmp_buf_end - tmp_buf),
->  						       "%pB",
->  						       (void *)(long)raw_args[num_spec]);
->  					tmp_buf +=3D (err + 1);
-
-[Severity: Critical]
-This is a pre-existing issue, but does this handle the snprintf return value
-safely?
-
-The snprintf function returns the number of characters that would have been
-written if the buffer was large enough, not the actual number of characters
-written. If the output is truncated because the remaining buffer space is
-small, adding the return value to tmp_buf could advance the pointer past
-tmp_buf_end.
-
-[ ... ]
-
->  			/* hack: bstr_printf expects IP addresses to be
->  			 * pre-formatted as strings, ironically, the easiest way
->  			 * to do that is to call snprintf.
->  			 */
->  			ip_spec[2] =3D fmt[i - 1];
->  			ip_spec[3] =3D fmt[i];
->  			err =3D snprintf(tmp_buf, tmp_buf_end - tmp_buf,
->  				       ip_spec, &cur_ip);
-> =20
->  			tmp_buf +=3D err + 1;
-
-[Severity: Critical]
-This is a pre-existing issue, but the same snprintf return value behavior
-applies here. Could this also advance tmp_buf past tmp_buf_end if the output
-is truncated?
-
-[ ... ]
-
->  		} else if (fmt[i] =3D=3D 's') {
->  			fmt_ptype =3D fmt[i];
->  fmt_str:
->  			if (fmt[i + 1] !=3D 0 &&
->  			    !isspace(fmt[i + 1]) &&
->  			    !ispunct(fmt[i + 1])) {
->  				err =3D -EINVAL;
->  				goto out;
->  			}
-> =20
->  			if (!tmp_buf)
->  				goto nocopy_fmt;
-> =20
->  			if (tmp_buf_end =3D=3D tmp_buf) {
->  				err =3D -ENOSPC;
->  				goto out;
->  			}
-> =20
->  			unsafe_ptr =3D (char *)(long)raw_args[num_spec];
->  			err =3D bpf_trace_copy_string(tmp_buf, unsafe_ptr,
->  						    fmt_ptype,
->  						    tmp_buf_end - tmp_buf);
-
-[Severity: Critical]
-This is a pre-existing issue, but can this bypass the out-of-space check?
-
-If tmp_buf was advanced past tmp_buf_end by a previous truncated snprintf
-call, the exact equality check (tmp_buf_end =3D=3D tmp_buf) will evaluate to
-false.
-
-This would cause the size parameter (tmp_buf_end - tmp_buf) passed to
-bpf_trace_copy_string to be negative. Since the size parameter is typically
-treated as an unsigned value, this could result in a massive out-of-bounds
-write. Could we use a greater-than-or-equal check or track the remaining
-length more safely?
-
->  			if (err < 0) {
->  				tmp_buf[0] =3D '\0';
->  				err =3D 1;
->  			}
-> =20
->  			tmp_buf +=3D err;
->  			num_spec++;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260619205934.1312=
-876-1-memxor@gmail.com?part=3D12
