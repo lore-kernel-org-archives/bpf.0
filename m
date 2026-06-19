@@ -1,158 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07C7754652
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 20:14:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D733D3168E1;
+	Fri, 19 Jun 2026 20:50:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781900087; cv=none; b=q5iONCfBmmp9UEqrbZbSvF0sFQKOP/wA3jW/3zDpyWdxBJOyQLz5JBptGNKwGKpC5biBB5xBm9NPYIjmeSZ6SItwo76r5+0R5DH5iw9JIME0/BdwEikMG3pmtsjnCV6/mPtLK9VO3V83tWFjfp4GawqlUp6oVGV3ecYnzkzy6xo=
+	t=1781902243; cv=none; b=ImDThkTLxrvGk1ApqlGbX51ndVl5Etcndh84l7p7hDU7YBG/3zaVldI4Mfodwa2epqx48FOLtO8WXKwo8kY3kQHVPv/MtcAohsFPTUS0SXl1ATvUKjxWn6pJK5lv4zkRk08Bkx3srU/48/CY5RqadCJJGga78nzC6G7bza5OJMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781900087; c=relaxed/simple;
-	bh=oP3+ufLY+I8xwo6/masF9bxzbdP4GAHCEYnWdLrmBgU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hJ/NZdWLxEcNDgOMKFKVt/hMvO4XTNhfMMxPkZRr5vTndWz1xKnqhw/KSbNg1DPWmW8ypmFbYXyv7OhH8gkSpyvjwizMHhrAtE+fUzbTNMQZDWB1BtE+ppIMMzbuwDqgUFztRiTNs1W85Q1kmqskiWMKGIbVrLoTGo1ZOaG17Yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iz678+8y; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781902243; c=relaxed/simple;
+	bh=8hWp383H20IPYVUxSk9jh3jSBzTnmAxeNn/+eU1iGjA=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=tkG6fzOwVl8h4SSP1h2M1law8N80Lg1McPhsBPN/cnV4h3EYsh2xcx7vsUUsJO4nZyPmdvxfa2FJCfErApD/5GaLMKs4R1ptyPBPat2FabSWR2/1WIei29sny5GUdQiJShRBeZ1YMDcO3oAQZDwoBsuQKPHEEipc1cD8j/SqhyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T1i9wjCc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iz678+8y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F4A81F000E9;
-	Fri, 19 Jun 2026 20:14:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T1i9wjCc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 059331F000E9;
+	Fri, 19 Jun 2026 20:50:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781900085;
-	bh=6ngx8pQOpC/XSXzvcYqhflLIv/7TZc7VubQG8AtzoGE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=iz678+8yKzAXVC78HokSMto1PX7kmUn5PGgxCClu4irTvGASbJgmkij9EqdVl70In
-	 sQo1xeZwW2SohzKzz7Us7Gug4lLqbmHO9yDwP9ee5dp3G3tnL4Em4DQXqV2i34xvEo
-	 6aOcCe0NKtBLx1+7pmUbkntB3SNvsODDBUEkMbug8P5qE3PyWz2XCar247YQOfYvcP
-	 v50C/gdtDZ5GK3vJIOQPzE1GDjY1aUdtIkG6+8Q+bQegw/Le1/jUGd+dmK/iwoHl6b
-	 AIoqMGgcdvTbhbyL+EGWT1whqHhybvNDYKAtU3a2YkheRNy0H8QCI8JJgnU68Gqo/Z
-	 HLPk7Z3UcftCw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/2] bpf: preserve rx_queue_index across XDP redirects
-Reply-To: sashiko-reviews@lists.linux.dev
-To: Siddharth_Cibi <siddharthcibi@icloud.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260619195759.41254-2-siddharthcibi@icloud.com>
-References: <20260619195759.41254-1-siddharthcibi@icloud.com>
- <20260619195759.41254-2-siddharthcibi@icloud.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 19 Jun 2026 20:14:45 +0000
-Message-Id: <20260619201445.6F4A81F000E9@smtp.kernel.org>
+	s=k20260515; t=1781902242;
+	bh=ubdVkCBTxLsblQQGBqC3jnfb2D+Th5kU/3TXixs/ZmU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=T1i9wjCc468MBpKbBtx6X6RTBeOrKW6N6/wyle0++wNabnRSP+mwT121yo+k0x3vj
+	 1QhP4gkUN1+YGPDfakO9pAzMAC52MpcG7Ca3D9Oi/iksARIxj+f0msoAYQbqsyEz6K
+	 DXUefK1mBHHHRAK3u5QxGaXIIUQ8fBjHx3NLKJNkAJJBUVd185iNe8gR/A6mhsf+3D
+	 qkLF+LshsH3n2hKaTcs8vSsfCuOjium6q6y71Xhe7/LSEhg0nL4rM87Fpudiq+57kf
+	 eLoxWe3l3xryuMIFwrD/c92fe/8szPWVSEzevc7zLDYq/3TFLd3z1rela5Cy4+nl+q
+	 uwyBGYiBIKMJA==
+Content-Type: multipart/mixed; boundary="===============5507353603011061172=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <035e07c85b038384c51d75e5c98b80b62ce272b43831f8fb3ed34a65c0da29b6@mail.kernel.org>
+In-Reply-To: <20260619195759.41254-2-siddharthcibi@icloud.com>
+References: <20260619195759.41254-2-siddharthcibi@icloud.com>
+Subject: Re: [PATCH 1/2] bpf: preserve rx_queue_index across XDP redirects
+From: bot+bpf-ci@kernel.org
+To: siddharthcibi@icloud.com,ast@kernel.org
+Cc: siddharthcibi@icloud.com,daniel@iogearbox.net,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,edumazet@google.com,pabeni@redhat.com,horms@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,netdev@vger.kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 19 Jun 2026 20:50:42 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+--===============5507353603011061172==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-New issues:
-- [High] Uninitialized `rx_queue_index` leak in the BPF `test_run` framewor=
-k exposes kernel memory to BPF programs.
+> Store rx_queue_index in struct xdp_frame during xdp_buff to
+> xdp_frame conversion and restore it when rebuilding xdp_rxq_info
+> for cpumap and devmap execution paths.
+> This preserves ingress RX queue information for XDP programs
+> executed after redirect, allowing access to the original
+> rx_queue_index instead of losing queue context.
+> Also propagate rx_queue_index for zero-copy XDP frame conversion.
+> Signed-off-by: Siddharth_Cibi <siddharthcibi@icloud.com>
 
-Pre-existing issues:
-- [Critical] Incomplete metadata copy when manually duplicating `xdp_frame`=
- in the DPAA driver causes uninitialized flags usage.
-- [Critical] Converting a zero-copy XDP buffer with metadata into an `xdp_f=
-rame` causes an out-of-bounds write when an SKB is later built from it.
---
+This looks like a fix for the cpumap path, where the synthetic
+xdp_rxq_info was previously built without a queue_index, leaving the
+placeholder:
 
-commit bc57980ef3c6d7e89349b8a948f430b656d7ecab
-Author: Siddharth C <siddharthcibi@icloud.com>
+kernel/bpf/cpumap.c:cpu_map_bpf_prog_run_xdp() {
+	rxq.dev = xdpf->dev_rx;
+	rxq.mem.type = xdpf->mem_type;
+	/* TODO: report queue_index to xdp_rxq_info */
+	...
+}
 
-bpf: preserve rx_queue_index across XDP redirects
+That synthetic xdp_rxq_info, with the missing queue_index and the TODO,
+came in when cpu_map_bpf_prog_run_xdp() was added.  Should this carry:
 
-Store rx_queue_index in struct xdp_frame during xdp_buff to xdp_frame
-conversion and restore it when rebuilding xdp_rxq_info for cpumap and
-devmap execution paths. This preserves ingress RX queue information for
-XDP programs executed after redirect.
+  Fixes: 9216477449f3 ("bpf: cpumap: Add the possibility to attach an eBPF program to cpumap")
 
-> diff --git a/include/net/xdp.h b/include/net/xdp.h
-> index aa742f413c358..90318b2b76dcb 100644
-> --- a/include/net/xdp.h
-> +++ b/include/net/xdp.h
-> @@ -301,6 +301,7 @@ struct xdp_frame {
->  	 */
->  	enum xdp_mem_type mem_type:32;
->  	struct net_device *dev_rx; /* used by cpumap */
-> +	u32 rx_queue_index;
+The devmap path (dev_map_bpf_prog_run) shares the same missing
+queue_index, which was added in fbee97feed9b ("bpf: Add support to attach
+bpf program to a devmap entry").
 
-[Severity: High]
-Does adding rx_queue_index here introduce a kernel memory leak in the BPF
-test_run framework?
 
-Looking at net/bpf/test_run.c, both xdp_test_run_init_page() and reset_ctx()
-manually construct an xdp_frame using xdp_update_frame_from_buff().
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Because xdp_update_frame_from_buff() does not copy rx_queue_index, and the
-test_run code does not explicitly initialize it, frm->rx_queue_index appears
-to retain uninitialized kernel memory from the page pool allocation.
-
-If a test BPF program returns XDP_REDIRECT to a cpumap or devmap, will this
-uninitialized rx_queue_index be exposed to the secondary BPF program via the
-ctx->rx_queue_index context field, leaking 4 bytes of kernel memory per pac=
-ket?
-
-[Severity: Critical]
-This is a pre-existing issue, but could manually duplicating the xdp_frame
-cause uninitialized flags usage in the DPAA driver?
-
-In drivers/net/ethernet/freescale/dpaa/dpaa_eth.c, dpaa_a050385_wa_xdpf()
-manually duplicates an xdp_frame into a newly allocated buffer using
-dev_alloc_pages(0).
-
-It appears to leave several fields uninitialized, particularly flags. Since
-the allocated page is not zeroed, new_xdpf->flags contains uninitialized
-memory.
-
-When xdp_return_frame() is later called on this frame, it checks for
-XDP_FLAGS_HAS_FRAGS. If the uninitialized memory happens to have this flag
-set, won't xdp_return_frame() read a bogus skb_shared_info from the end of
-the page and attempt to free random memory addresses as fragments?
-
->  	u32 frame_sz;
->  	u32 flags; /* supported values defined in xdp_buff_flags */
->  };
-
-[ ... ]
-
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> index 9890a30584ba7..9691d8dfadf3c 100644
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-> @@ -606,6 +606,7 @@ struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct =
-xdp_buff *xdp)
->  	xdpf->metasize =3D metasize;
->  	xdpf->frame_sz =3D PAGE_SIZE;
->  	xdpf->mem_type =3D MEM_TYPE_PAGE_ORDER0;
-> +	xdpf->rx_queue_index =3D xdp->rxq->queue_index;
-
-[Severity: Critical]
-This isn't a bug introduced by this patch, but will setting headroom to 0
-instead of metasize here cause an out-of-bounds write later?
-
-Looking at xdp_convert_zc_to_xdp_frame(), it sets xdpf->headroom =3D 0 and
-calculates the data offset using metasize.
-
-Later, when __xdp_build_skb_from_frame() processes this frame, it calculate=
-s:
-
-hard_start =3D xdpf->data - (sizeof(*xdpf) + xdpf->headroom)
-
-which evaluates to page_virt + metasize. It then calls
-build_skb_around(skb, hard_start, PAGE_SIZE).
-
-This places the skb_shared_info structure at hard_start + PAGE_SIZE (minus
-alignment). Because hard_start is offset by metasize, wouldn't the end of t=
-he
-skb_shared_info overlap into the adjacent physical page by metasize bytes,
-corrupting memory when the kernel zero-initializes this out-of-bounds area?
-
-> =20
->  	xsk_buff_free(xdp);
->  	return xdpf;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260619195759.4125=
-4-1-siddharthcibi@icloud.com?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27846609854
+--===============5507353603011061172==--
