@@ -1,74 +1,81 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0A133FE36
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 18:32:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353F534753C
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 19:28:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781893970; cv=none; b=sbvYpX0X5IcqIz2E2h8asgJqNWf/fcT9XA9e9gxUjvTsAjcCy25oFs24kJe9zpw9piFKPRnqoaKsixGVvF9LhRnO7Z0YLj3dMWyzhljUPSkvBFoyQs/hMTzt3Acc8fn0/3bSB+TEajusMPT0UtTTFv04JYKLQRifoq4D7CqG3Do=
+	t=1781897334; cv=none; b=WpsbmiPKXbxoMPYJdgqmgOYvmMz9qsaG3ilLV4JBuIdPTftsyPnbbk9PoVmpcyKLFtMR4/hTmuNLG2IvdzFY8LjVcY2wibB3+RqZVdF2iEX8pPmk1W4YO5BPzXgxc2w+43LfC1E+mqmJ9BzJKyUWk2DInvkV3bQ+236lHvCNOuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781893970; c=relaxed/simple;
-	bh=MRikFyOt+Z+9KskamX/Piwxe18I7k/0vTqp7ubH2UfE=;
+	s=arc-20240116; t=1781897334; c=relaxed/simple;
+	bh=FlqRMTgwnEYTgwBo0M4QMzzgXOiGkRJeDRkX7I5vYZo=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LULynplsQF1eVuyYRXhetyF8lDUhiYzDdtal5NEv+jyFKWcMrYp+oSYOmMpBvaaiCnls/5+sUP3JUAZI3umxmyfmaxYaSVVrXvJRvFVXGL0kE8yZgiEou+kongz4GkUeVT0ODBpk4bt2LLVdKJWua4WY8EvJq0wTZyGmDc2UkoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HhBEhgFU; arc=none smtp.client-ip=209.85.210.175
+	 Content-Type:MIME-Version; b=oIKmWp/PASNfkwHbG3REvhDfBfY50OeZJg2moYCU8ElE0tP5qOxbsXaQuiryuUUKoQoAXyDCqru+ZUE2DpWbALQrH8fiQv7xh4iAs3SuiWI0aFFZYTtivhmJ0qFm6wV0V3N6bxGrp0d8Di30lJYHNj9UEYH89DnENtOyF+jr+MI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IU5dTAWH; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HhBEhgFU"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-84226d0f1d2so1690114b3a.1
-        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 11:32:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IU5dTAWH"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-36b8e1760ccso1244889a91.0
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 12:28:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781893969; x=1782498769; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781897332; x=1782502132; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=cEb6cMeL9zrv839ZEgK5GghTYMMas14NtTvMWavtAx0=;
-        b=HhBEhgFUovrHZODD5NRhDBt2tq1Fbcev/h9XK2X0dmpDon5q1Pq1LUZvX1v0OSUnI6
-         pdMSKZlyRVF8JmTJk9UVrkElGRJKVhsL2hWU/JP3yWAj8/YbAy4m8TxRFW4PnzwDBlhA
-         TJK0zohvam1ox79f5Dx3YVRL0On178FuwHpQ5r5+V4rdH5nDLCZ7rGDE12NUjjbq6bsi
-         XpreIYyXsyvW+H+X+3twa0GKXEHFBrivRn22HjwuG9Ed3C9eZFKunMJzUItNDkk6hJue
-         rnZkTAQ9c8/QR+F9k7n/mfX20LiKX20Flbiz5/2OXsEgE22dmYqZNqBWUFWQrjNrq1z4
-         nFDw==
+        bh=tdZietZ1vzrwOz+XYJNjMrGChV39Xfbmkh2IyU4ikh0=;
+        b=IU5dTAWHKzT+NpMVAP6hRKK/sKAoftG0M/mm5M/H1j+X4sLT3vGFFGrzOgn+RM8rVV
+         BtrxrsTm4X7szyrrTTDhfanHHQF7HUY2w4q+QJGnOlO3K0RmC+Ok/BNZcybnxzq12ono
+         J7KZK2e7R7ka2iniVazPTLwv3zlwuwcKGSV5u0aMubReFj1vX81fIxrp8ccz7u/e4Yey
+         KeCI9Uy6GFMJheUU6CmhePlFm2tT0QJwl++2V1jZHqO0oJOoGGEET3XaxpgxJXsnC+0S
+         9XbEjNXTK2z+9qegr4zQeWwgSAneIqbNLqPZ1jXHeN2unmYBcKB6jE/X1TZ0fvOjrh8A
+         fHcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781893969; x=1782498769;
+        d=1e100.net; s=20251104; t=1781897332; x=1782502132;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cEb6cMeL9zrv839ZEgK5GghTYMMas14NtTvMWavtAx0=;
-        b=MMzx3UnovN3t3G8NBipAGI+Al9VuFqKVB/+iry12nWbvuzAZ1BoUMwcS6hEudLTm6b
-         CUshtKux3R0buAeUqVL0PWnv2KXoMYzW2QrmcdKEWrsBJ89QeKcS06L7Zd0NyWGEhgJ/
-         PPuPJRyFENohuxGFkj9Zpm2uQFQsSUj6n8MVrPM+zOu2Z5LLasj5cd+hmcPuPQrLM+tT
-         hOmPlkgovq4Z2g8dY10Ww7dNzVA9FKNHtZy4daK+cu2f/zl0YC0Ei2Fn9GP6Q7SkuA4g
-         7MOX8sN2BHHAUn8UUyADsHQHcCh175WgKoxn13QmWTqjV+7oCEgWNM3j0v8Q3sXXoHVa
-         m60A==
-X-Forwarded-Encrypted: i=1; AFNElJ+0HC/pMfxcshmJ7/J9wFSw+78LfjBymAH82q5vflnQMYPVXNRyVy66wRBYe4IHTsl6lNg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydiRdqhf4hSqMaxHwRXpr9rXU3K9tQ1CC209JO7k/VJAmmo0fw
-	+I2qZ/u6g8b7DomiBnxxgLThp1lU8pHnUWfv3fYWT9WqfnhaBPveo6fM
-X-Gm-Gg: AfdE7ckZ/FRqRw0MI1rfI0zt5mFW2hFsbQwiwztq7658UpCH9HJc5yC33Vo8m1d/sIt
-	+0C/QGhbg2f4xLpcCf/XkOHJiIE4P7pr/DN8ewP4bb8qd1/In5dDJQYr6eb/xQafmb/R2j8MPMN
-	mgwDKQgTS+PupRiDkLSyrcBnyZrhh0XahbYC15RA64IRO0w+Ixet4JIRj43iIybtv5zyoMEvlPR
-	CWvwHktoI0FExwPdOrpT20Y9pvA4CkOKO3Bou7cM+S1TUIQiw7igiN4n7bzdKSR+HxLKKoSemKk
-	AwbSb816R9nfAVFa0MMt2ZXUwfDXkYGLwry1bRMQTGlOzTL6KuVvlgalwwawPcFghTPTxYvNlx1
-	Mw8v+OZLVJsrHwVXsF9Z+yVRXGFn6c8QFJL8VtWcR6wCiC2f2gRTtvRDOkSIAladDwElfLkwkkv
-	kxyeWSS4BWajSRKqkVuTNJNQ21m2/lIPSyZ3CcXeQEHw==
-X-Received: by 2002:a05:6a00:1816:b0:845:4f08:17eb with SMTP id d2e1a72fcca58-845561b8924mr3755898b3a.46.1781893968619;
-        Fri, 19 Jun 2026 11:32:48 -0700 (PDT)
+        bh=tdZietZ1vzrwOz+XYJNjMrGChV39Xfbmkh2IyU4ikh0=;
+        b=sAB+LreHn+1HLeW8MEMoR6FAPGiTYe3F6lPavfTmH78vZrbYOoehzVGJhDeb2B2xio
+         nh2F4j8rBugkPIm6vjXzDmuaOh32NGGa3Xgno3Z3KYSwlf75E5x+dQnCpJDw7z54sQdw
+         YDN0eC7kBGALv4zfCSgGQMbs95ArufGQfyb2jxskzXOd3UqafDtE9RInkBy5Q79xJESM
+         G7R4pBA6GtPxAq2fy85/+fjcb4ddzUbYT6gAr/XjtLZjPEdDDEHFIKKJsNL82YSMjxqm
+         fb3h4A5276zV0Uts/XCNN2SxqGob9gRhlscrhVs//bS8yLp83bKKOk3rV1nttUuc2sdq
+         Gb2g==
+X-Forwarded-Encrypted: i=1; AFNElJ/UEcijHMSlquxCLggOxPkZqZm2/iYuPOsAIpX8TegURTQrhgqL455iODSJibEP/Bqw/b8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiQbpI7EpaJ/CX2Zc8/ah3fzp/eZhhXA7bm38auTUm3ireo3yh
+	r4+JD9R0Zd5XzQLbkD6HQeBAXgkR2/4PexxBC4PwCPnTNKvvLTSvYyUZ
+X-Gm-Gg: AfdE7cmaqMhM4Vs0COcyPY5mYSFjrt+6NaLgXLdq5LjDHtHVgRcYUYd4VKaj+eGILbG
+	zQCqfah1NftcXZcigPKLSpBbT86UC4HjwMjHx9LD3ivYU+7ojVLBYjV9/cowLgFGLOvSL99SKde
+	cGFtcHfK7oUjq6ntPsmXS8mhSiQl2Z0hLiy75q5NUxpUqomBTWzHLaC3G46Iq5NKuZ3cOdpsXXF
+	ZQNNheUNGq4dej7SxZiXGwbFIfph35lKYh6MPwvAoX9ianPwa5vu8fNV4bkr6Ykr27yPtE05y81
+	4BNqy1W7EEhM82u1L/0gjbkJYQT4+pzpEKg1TvHyERf8g+YSu7OBaEEti36CSmxYjGwjTE/dI1C
+	thOOdiRBY+QGjqzNDvod+Q3pdKOCbPhaOhUroA9b3cgjY6YHgwZrzgThzrpCM9CfIrLiUv9Ugz1
+	FOUoqFZjgDANGrgna8+gK7t5PZN+j5mxmQQCGuKjdM8g==
+X-Received: by 2002:a17:90b:4a90:b0:366:10f1:3d91 with SMTP id 98e67ed59e1d1-37d160bec36mr4958120a91.1.1781897332384;
+        Fri, 19 Jun 2026 12:28:52 -0700 (PDT)
 Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8455382b766sm3776281b3a.47.2026.06.19.11.32.47
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37d4f225870sm363308a91.8.2026.06.19.12.28.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2026 11:32:48 -0700 (PDT)
-Message-ID: <4eae275e93d8eb165da8485a127a1fd0e7f91510.camel@gmail.com>
-Subject: Re: [PATCH bpf v2] bpf: Reset register bounds before narrowing
- retval range in check_mem_access()
+        Fri, 19 Jun 2026 12:28:51 -0700 (PDT)
+Message-ID: <5986dad827772fb0060f7c4adfb811ad93755a52.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Reject offset refcount acquire
+ arguments
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Tristan Madani <tristmd@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, 	andrii@kernel.org
-Cc: xukuohai@huawei.com, jolsa@kernel.org, bpf@vger.kernel.org, 
-	stable@vger.kernel.org, tristan@talencesecurity.com
-Date: Fri, 19 Jun 2026 11:32:45 -0700
-In-Reply-To: <20260619110251.2576334-1-tristmd@gmail.com>
-References: <20260619110251.2576334-1-tristmd@gmail.com>
+To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
+	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+	 <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	
+ <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, Viktor Malik	
+ <vmalik@redhat.com>, Leon Hwang <leon.hwang@linux.dev>, Dave Marchevsky	
+ <davemarchevsky@fb.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, 	linux-kernel@vger.kernel.org
+Date: Fri, 19 Jun 2026 12:28:48 -0700
+In-Reply-To: <fa2336b329055908a401ec3b18f8498ebc03846f.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
+References: <cover.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
+	 <fa2336b329055908a401ec3b18f8498ebc03846f.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
@@ -79,72 +86,59 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Fri, 2026-06-19 at 11:02 +0000, Tristan Madani wrote:
-> From: Tristan Madani <tristan@talencesecurity.com>
+On Fri, 2026-06-19 at 07:59 +0000, Yiyang Chen wrote:
+> bpf_refcount_acquire() increments the refcount at the caller-supplied
+> pointer plus the refcount field offset, then returns the caller-supplied
+> pointer unchanged.
 >=20
-> When the BPF verifier processes a context load of an LSM hook return
-> value, it calls __mark_reg_s32_range() to narrow the register to the
-> hook's valid range. However, __mark_reg_s32_range() intersects the new
-> range with the register's existing bounds using max_t()/min_t() rather
-> than replacing them.
+> The verifier records the return value as a base pointer to the refcounted
+> object.
 >=20
-> If the destination register carries stale bounds from a prior instruction
-> (e.g. BPF_MOV64_IMM), the intersection can produce a range narrower than
-> reality. The verifier then believes it knows the register's exact value,
-> while at runtime the actual hook return value is loaded, creating a
-> verifier/runtime mismatch that can be used to bypass BPF memory safety
-> checks.
+> bpf_list_pop_front() and bpf_rbtree_remove() can return embedded graph-no=
+de
+> pointers as PTR_TO_BTF_ID | MEM_ALLOC with a fixed offset equal to the no=
+de
+> field offset. Passing such a pointer directly to bpf_refcount_acquire()
+> currently passes the refcounted-kptr type check.
 >=20
-> The else branch already calls mark_reg_unknown() to reset register state
-> before any narrowing. Apply the same reset in the is_retval path so
-> stale bounds are cleared before __mark_reg_s32_range() intersects.
+> That makes the runtime operation start from base + node_off while the
+> verifier models the returned pointer as the object base.
 >=20
-> Fixes: 5d99e198be27 ("bpf, lsm: Add check for BPF LSM return value")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Tristan Madani <tristan@talencesecurity.com>
+> Require refcount-acquire arguments to have zero offset. Programs can stil=
+l
+> acquire a refcount from a graph-node-derived pointer after normalizing it
+> with container_of().
+>=20
+> Fixes: 7c50b1cb76aca ("bpf: Add bpf_refcount_acquire kfunc")
+> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 > ---
-> Changes in v2:
->   - Use [PATCH bpf] subject prefix per Jiri Olsa review
->   - Rebased on bpf/master
->   - No code change from v1
->=20
->  kernel/bpf/verifier.c | 1 +
->  1 file changed, 1 insertion(+)
+
+Hi Yiyang,
+
+thank you for the bug report.
+
+>  kernel/bpf/verifier.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 >=20
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 2abc79dbf281..6de9af4115dd 100644
+> index 2abc79dbf..4510fe0b4 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-> @@ -6196,6 +6196,7 @@ static int check_mem_access(struct bpf_verifier_env=
- *env, int insn_idx, struct b
->  			 */
->  			if (info.reg_type =3D=3D SCALAR_VALUE) {
->  				if (info.is_retval && get_func_retval_range(env->prog, &range)) {
-> +					mark_reg_unknown(env, regs, value_regno);
+> @@ -12392,6 +12392,11 @@ static int check_kfunc_args(struct bpf_verifier_=
+env *env, struct bpf_kfunc_call_
+>  					reg_arg_name(env, argno));
+>  				return -EINVAL;
+>  			}
+> +			if (reg->var_off.value !=3D 0) {
 
-This seem to be a real bug, could you please add a selftest
-demonstrating the issue and post v3?
-Something like this in the tools/testing/selftests/bpf/progs/verifier_lsm.c=
-:
+I think this check should be handled by check_func_arg_reg_off() /
+__check_ptr_off_reg(), could you please reorganize the code such that
+it is handled there?
 
-/* lsm bpf prog retval load must reset stale register bounds */
-SEC("lsm/file_mprotect")
-__failure __msg("div by zero")
-__naked int retval_load_resets_bounds(void)
-{
-        asm volatile (
-        "r6 =3D 0;"
-        "r6 =3D *(u64 *)(r1 + 24);"	/* return value of the LSM_HOOK(...file=
-_mprotect...) */
-        "if r6 =3D=3D 0 goto +1;"           /* r6 value should not be predi=
-ctable here */
-        "r6 /=3D 0;"
-        "r0 =3D 0;"
-        "exit;"
-        ::: __clobber_all);
-}
-
-
->  					err =3D __mark_reg_s32_range(env, regs, value_regno,
->  								   range.minval, range.maxval);
->  					if (err)
+> +				verbose(env, "%s must have zero offset when passed to %s\n",
+> +					reg_arg_name(env, argno), meta->func_name);
+> +				return -EINVAL;
+> +			}
+>  			if (!type_is_non_owning_ref(reg->type))
+>  				meta->arg_owning_ref =3D true;
+> =20
