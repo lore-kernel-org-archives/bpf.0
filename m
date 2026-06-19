@@ -1,62 +1,62 @@
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0884346E50
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 06:35:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525BC346E50
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 06:35:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781850928; cv=none; b=S19lq3Em7+mp72/7ht3fhjS5lTVQHUBCNSfstg+3yKpvG9Vo+OR/QrbMKx4K57L2e+A0e1ksZYLMeWYCXD9sL6nTQJx+DeFWqlissNgXhsWi20zc8p9i05bi5tWyEBELWJY7prY7MkgRcwmnbd1MnTkPwc4eyPVxzN99U5B0s9w=
+	t=1781850930; cv=none; b=VXvzEz4qL2jcQhRt6sOVL0h0pgWXnJWS5CQG37c+VJaeCr4dsWvj8Z7265Ys2NeLvXWvyccVPHEnHWK6vfjhq/H7TQOWbZr/BDETKmaeROh7VKKmW+rxUbjWJ8sqedS7gcjmafVwvp4V0pl5bw8MELk5ovqHYPRsX0k8iruqPCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781850928; c=relaxed/simple;
-	bh=c/1lQw13Z6SaqMdh4gDprI52HKUbdupeJojzC492Mdk=;
+	s=arc-20240116; t=1781850930; c=relaxed/simple;
+	bh=hk9DdqhfwheJu/mYJkcTkLeSGtlSNrFOdTvBRuYkBFM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PSA4vBUn8sFboprwoKtOaLedoLwR6KFoLQG4ixJbXHxM/UCtJjHTTY6u6GcCWwRGWurcROAZ2AQTcJrW6dKCJ8aqOYBAeKrIfWbU+yMNREy2je50GAVr/HMjgcfWFikywHmp1xpwmXvtfkneyCEoIzvMMlfP1zzPnsgEInIi2/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JYlSHDse; arc=none smtp.client-ip=209.85.160.46
+	 MIME-Version:Content-Type; b=SMO3khu7ibiM4zc9x7FORiDaOUacmPXzq4MAVuROp+413jXw/UEh88JQpUYpQ7GvnwPqhW/nV2moJwQGCJ4kvMFnN3s2I3JCRWqQYqNEPlifbbqeYyPsEOTaFqzCHpRvGfq/UD1mtzcd4SS5NmpjmkMHXuJ28xOiA+BzHCnwsPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qkxqO4Zw; arc=none smtp.client-ip=209.85.161.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JYlSHDse"
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-4471c2ae049so100095fac.2
-        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 23:35:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qkxqO4Zw"
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-6a0a38a013eso1538977eaf.0
+        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 23:35:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781850926; x=1782455726; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781850928; x=1782455728; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Tuj95EF89FDAMYVWMynXRlU9hPX5pVM7AbkW3h9U94c=;
-        b=JYlSHDseF8+fSB1wUiEjeSbivbcDzT+gz8pzATCSUjUbLLZO4tdIjCQADaJUBB/xeF
-         2wLiuZG6AI/VXHztD/wt8qmGRmpDlJEERmG+FHzTb0pxFO53jBFm2wCKlMKZpncwwpnJ
-         xFdeAyuPJ9yi8jNKQg7bBHJbwv/GtXgbnQyIgP4igKHRA24mosQJjUIy9kxdLQJg46VD
-         Tzw1uCLvNYwQpv2JLdG4+D/qW8MxeeVfcxI7QX93UVhf1K6IxyGpnN58fHAViAZZRTu3
-         E9cx7QZVMlGEkdDodKRNqbiwP/NQItcoauPP33TiFF5dTWkttorX2EyVaiWvt9KSx7bk
-         jq3w==
+        bh=Us+DduHyKbwQNzBW1kJHsZjXnClMSjCwfH6t54+9lEs=;
+        b=qkxqO4ZwNySrScQtl3FPmWNQr0zAiJRRHrobWXE4Or2zyb4rPVi/uqqaX8FL+1e/P4
+         B3xZQhB8Y0lIeQtEjdITdYqrwf3dllmp0QAkTZHzk8XWHHH83yXYLom1Gjz7IGcw5MU0
+         91odacbqOcfPBtlsbSVsb22kAmhJgI8kOD0BhB0ICBMpXwDLBiidvyBaUSvBF6s4DTYL
+         l3KkdNGQuBDcHzAOCX40wt5udFx9hAvVjUtrQ5j6ypDQ2aogda184HljaRqwbz2iEeFX
+         47jfgI4qjfIEtCQhD/8LLftz3MOeMEsrhZ/fPo2Sftxbrao8Q6FjhI9hi/FjQg8ZEzM0
+         QZaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781850926; x=1782455726;
+        d=1e100.net; s=20251104; t=1781850928; x=1782455728;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Tuj95EF89FDAMYVWMynXRlU9hPX5pVM7AbkW3h9U94c=;
-        b=JcP8FlZPq5/SBNbyRjgWEGMR6P9hZ0F7uTE3v8C/50l1xhh4wT8fkGQscUHbvMusGc
-         egdZmpvwr7QhJxBnj5Ni7Gz8kEMsmjIvJdJYO+J6044WaQNcAsDbz9kBuprWgWxvUyIG
-         i9zDoV4rjkEz/4e8x+/DX2j+L/0Rbel7gVYnhdr++NdqTGqamRhclQ5AOSo5slAEn1+L
-         689aeRECJtqTPA086BXuICA2hSzpmqFpjJzXK4p+XMfuVJeRiQy0ggl1527RlTOkH1a0
-         RpSvlukShoVtVNwcBR8b7FCmaeCga592LDr/YdwBBm8d4RprhnKrRN0LYsYWeyeWPX/t
-         qLLg==
-X-Gm-Message-State: AOJu0Yz2zWmR2A2NXfy1h1bpWn1hzK28rCXiGr75C7H+RmtNYXpMT9ea
-	ySe0UyWbk+m2cIFy/2oMEdnpmslWXgO4DNnv4SVOPKz90O9BAkArv/zsje0HnQ==
-X-Gm-Gg: AfdE7clMNN6wXLngnwSqqNXD2R9qv2Vi0qF6NCvq3Td/1U9Rqrn9cj3FxuEREzCf0LF
-	LYqE98+zPpRPyIE8iJA+pnY1S7R8dFELKc7LcIVZ8gwL1qMAKLvJ2BpKcOr33Sr83znfOdyTB9h
-	Q75g3i2zfTy4riLnln+0ezhfq/EfktHrKz4IJYl13p+xDGqO24yC1Xd/+TAoySZbno1KRT1X01S
-	vcoy/TfBB/1+RJXH6fzrVz0ux2dR5R9RqiBHn+FvoO37X5TTcewQMRNqTXPM8+Hx8qnf8QOweRT
-	9lFxLZDADXLyYYFTwCPNEggZPshJ3qrTceCfMk9ziOZxjxSwzC5867pStZWGqcx5wM5TPXtQZxV
-	WDjt8JMdG+perqYi9Yo2ld/SHh+hDJMjwqVOtLHB4b1jYyrKyXs5q5bKJIXNXDHSwymQGSEVL25
-	V0Tg==
-X-Received: by 2002:a05:6808:5296:b0:486:45c7:34bf with SMTP id 5614622812f47-4896aa680f6mr2367703b6e.16.1781850925816;
-        Thu, 18 Jun 2026 23:35:25 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:5::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e92e4ffa89sm1207225a34.12.2026.06.18.23.35.25
+        bh=Us+DduHyKbwQNzBW1kJHsZjXnClMSjCwfH6t54+9lEs=;
+        b=oJFZcpwYeG9lYDG/rDm9VboC/W7BI/mYwURooE9TiRETa1svsrT9T5z7ksLT8qXz2u
+         L/bgWQky219d5pR8I95hg5GlWjAnW36CDo+Y6u8emmNR09vaGebq5AZ9u9GVkB97BR7Y
+         3epAz3IvcwoQPSWcW5AvU+wVc09wDUb9uECLZgdkfA/in2ZxSGp88ZXwUJB8oh/iqK4i
+         ACa3IUuQex08Zf0ozkP736ABKv/EVnJv3y5yUPsac5dJkL5giWUrGM2tXamfpTkm9iH8
+         7vyCXXu44ljPxTcbzbknHtkhBgVwQhpHvwUEs7cfkTqI09Gb9ab5il8I1UWIwJfLD9cT
+         7afA==
+X-Gm-Message-State: AOJu0YyU2P1TulK7rdiAgHgmAyvAEHLIoiKysh2mwLqIQUfz0FE4GLJ6
+	55TElXX+ciAHwp2oEtjRyR26PyiAeAcujeaepTZNCbUOl/xJ5vh2bv4iDvv5WQ==
+X-Gm-Gg: AfdE7cmKIBgTRvfXP+1MAjkoIMUkJN/MsCa3RWBONjdAvOsEsGf9F3X+E/e0Hvf5Piy
+	0c2JqekdDVDwHdo2TCYq204X8OLJG6q9PqCrtsAEOP4oORb8GqonwKgYfSrX556HxXEuF/pU7Ss
+	shqkho5Ut0a3EciOUS2OtVzpKayiHwXBnqnMSLwbprtu1m/cKpPC5q6S9Bik9V+8c1971Y/sUX6
+	JQVw8Fdft/xWgOkMmxUAy+KIcLGOT0b5+3e6vgdakt/vblFTEmxSiiZiiMntyA7feMR2MZAf0XY
+	I+PxDcFtuPn+R9NX3QFJeIuivx56oVVfPwnKMc7IzkyHM7ws9vgv8e5DXupw3tDxDM0XjfV4Hx/
+	A4eWPmH9EI4G5aPA0G9hPPdLIh3Ka1bOoy/inbH/lQ0aa4VCz/+sOy+afdyf3l5+dL9sQOxNajo
+	zakJhB7hhAuNaFJQ==
+X-Received: by 2002:a05:6820:4c84:b0:69e:88f3:14ac with SMTP id 006d021491bc7-6a0da0254e9mr1440053eaf.18.1781850927866;
+        Thu, 18 Jun 2026 23:35:27 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:59::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-44709c76d2csm1533775fac.3.2026.06.18.23.35.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2026 23:35:25 -0700 (PDT)
+        Thu, 18 Jun 2026 23:35:27 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -67,9 +67,9 @@ Cc: alexei.starovoitov@gmail.com,
 	martin.lau@kernel.org,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v2 1/2] bpf: Fix effective prog array index with BPF_F_PREORDER
-Date: Thu, 18 Jun 2026 23:35:19 -0700
-Message-ID: <20260619063520.2690547-2-ameryhung@gmail.com>
+Subject: [PATCH bpf v2 2/2] selftests/bpf: Test cgroup link replace with BPF_F_PREORDER
+Date: Thu, 18 Jun 2026 23:35:20 -0700
+Message-ID: <20260619063520.2690547-3-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260619063520.2690547-1-ameryhung@gmail.com>
 References: <20260619063520.2690547-1-ameryhung@gmail.com>
@@ -79,210 +79,116 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-replace_effective_prog() and purge_effective_progs() located the slot in
-the effective array by walking the program hlist and counting entries
-linearly. That count does not match the array layout: compute_effective_
-progs() places BPF_F_PREORDER programs at the front (ancestor cgroup
-first, attach order within a cgroup) and the rest after them (descendant
-cgroup first). So when a preorder program is present, the linear hlist
-position no longer equals the program's index in the effective array.
+Add a cgroup_preorder case that attaches a normal and a BPF_F_PREORDER
+program to a cgroup (effective order [2, 1]), then replaces the normal
+link's program via bpf_link_update() and checks the effective order
+becomes [2, 3] — i.e. only the non-preorder slot changes. Without the
+replace_effective_prog() fix the array is corrupted and the order is
+wrong.
 
-For replace_effective_prog() (bpf_link_update()) this overwrote the
-wrong slot, corrupting the effective order. For purge_effective_progs(),
-it could dummy out a slot belonging to a different program and leave the
-detached program in the array while bpf_prog_put() drops its reference,
-i.e. a use-after-free.
-
-Fix both by replaying compute_effective_progs()'s placement (including
-the per-cgroup preorder reversal) in a shared effective_prog_pos()
-helper. Identify the entry by its struct bpf_prog_list pointer rather
-than by (prog, link) value, so the lookup resolves to exactly the
-attachment the syscall selected even when the same bpf_prog is attached
-to several cgroups in the hierarchy.
-
-Fixes: 4b82b181a26c ("bpf: Allow pre-ordering for bpf cgroup progs")
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- kernel/bpf/cgroup.c | 108 +++++++++++++++++++++++++-------------------
- 1 file changed, 62 insertions(+), 46 deletions(-)
+ .../bpf/prog_tests/cgroup_preorder.c          | 77 +++++++++++++++++++
+ 1 file changed, 77 insertions(+)
 
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 83ce66296ac1..4355ccb78a9c 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -939,19 +939,65 @@ static int cgroup_bpf_attach(struct cgroup *cgrp,
- 	return ret;
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_preorder.c b/tools/testing/selftests/bpf/prog_tests/cgroup_preorder.c
+index d4d583872fa2..d2ccf409dfe3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/cgroup_preorder.c
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_preorder.c
+@@ -102,6 +102,82 @@ static int run_getsockopt_test(int cg_parent, int cg_child, int sock_fd, bool al
+ 	return err;
  }
  
-+static int effective_prog_pos(struct cgroup *cgrp,
-+			      enum cgroup_bpf_attach_type atype,
-+			      struct bpf_prog_list *target_pl)
++/*
++ * Replacing a link's program (bpf_link_update) must target the correct slot in
++ * the effective array even when a BPF_F_PREORDER program is attached to the
++ * same cgroup. All programs here are attached to a single cgroup; "parent" is
++ * reused only as a third distinct program.
++ *
++ * Attach child(1) normally and child_2(2) with BPF_F_PREORDER, so the effective
++ * order is [2, 1]. Then replace child(1)'s program with parent(3): only the
++ * non-preorder slot changes, giving [2, 3].
++ */
++static int run_link_replace_test(int cgroup_fd, int sock_fd)
 +{
-+	int cnt = 0, preorder_cnt = 0, fstart, bstart, init_bstart, pos = -1;
-+	struct bpf_prog_list *pl;
-+	struct cgroup *p = cgrp;
++	LIBBPF_OPTS(bpf_link_create_opts, create_opts);
++	int err = 0, normal_link = -1, preorder_link = -1;
++	struct cgroup_preorder *skel = NULL;
++	enum bpf_attach_type atype;
++	__u8 *result, buf = 0x00;
++	socklen_t optlen = 1;
 +
-+	/* count effective programs to find where the preorder region ends */
-+	do {
-+		if (cnt == 0 || (p->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
-+			cnt += prog_list_length(&p->bpf.progs[atype], &preorder_cnt);
-+		p = cgroup_parent(p);
-+	} while (p);
++	skel = cgroup_preorder__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "cgroup_preorder__open_and_load"))
++		return -1;
 +
-+	/* replay compute_effective_progs() placement and record target's slot */
-+	cnt = 0;
-+	p = cgrp;
-+	fstart = preorder_cnt;
-+	bstart = preorder_cnt - 1;
-+	do {
-+		if (cnt > 0 && !(p->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
-+			continue;
++	err = setsockopt(sock_fd, SOL_IP, IP_TOS, &buf, 1);
++	if (!ASSERT_OK(err, "setsockopt"))
++		goto close_skel;
 +
-+		init_bstart = bstart;
-+		hlist_for_each_entry(pl, &p->bpf.progs[atype], node) {
-+			if (!prog_list_prog(pl))
-+				continue;
++	atype = bpf_program__expected_attach_type(skel->progs.child);
 +
-+			if (pl->flags & BPF_F_PREORDER) {
-+				if (pl == target_pl)
-+					pos = bstart;
-+				bstart--;
-+			} else {
-+				if (pl == target_pl)
-+					pos = fstart;
-+				fstart++;
-+			}
-+			cnt++;
-+		}
++	create_opts.flags = 0;
++	normal_link = bpf_link_create(bpf_program__fd(skel->progs.child),
++				      cgroup_fd, atype, &create_opts);
++	if (!ASSERT_GE(normal_link, 0, "create_normal_link")) {
++		err = normal_link;
++		goto close_skel;
++	}
 +
-+		/* reverse pre-ordering progs at this cgroup level */
-+		if (pos >= bstart + 1 && pos <= init_bstart)
-+			pos = bstart + 1 + init_bstart - pos;
-+	} while ((p = cgroup_parent(p)));
++	create_opts.flags = BPF_F_PREORDER;
++	preorder_link = bpf_link_create(bpf_program__fd(skel->progs.child_2),
++					cgroup_fd, atype, &create_opts);
++	if (!ASSERT_GE(preorder_link, 0, "create_preorder_link")) {
++		err = preorder_link;
++		goto close_links;
++	}
 +
-+	return pos;
++	result = skel->bss->result;
++	skel->bss->idx = 0;
++	memset(result, 0, 4);
++
++	err = getsockopt(sock_fd, SOL_IP, IP_TOS, &buf, &optlen);
++	if (!ASSERT_OK(err, "getsockopt-before"))
++		goto close_links;
++	ASSERT_TRUE(result[0] == 2 && result[1] == 1, "order before update");
++
++	/* Replace the normal link's program child(1) -> parent(3). */
++	err = bpf_link_update(normal_link, bpf_program__fd(skel->progs.parent), NULL);
++	if (!ASSERT_OK(err, "bpf_link_update"))
++		goto close_links;
++
++	skel->bss->idx = 0;
++	memset(result, 0, 4);
++
++	err = getsockopt(sock_fd, SOL_IP, IP_TOS, &buf, &optlen);
++	if (!ASSERT_OK(err, "getsockopt-after"))
++		goto close_links;
++	ASSERT_TRUE(result[0] == 2 && result[1] == 3, "order after update");
++
++close_links:
++	if (preorder_link >= 0)
++		close(preorder_link);
++	close(normal_link);
++close_skel:
++	cgroup_preorder__destroy(skel);
++	return err;
 +}
 +
- /* Swap updated BPF program for given link in effective program arrays across
-  * all descendant cgroups. This function is guaranteed to succeed.
-  */
- static void replace_effective_prog(struct cgroup *cgrp,
- 				   enum cgroup_bpf_attach_type atype,
--				   struct bpf_cgroup_link *link)
-+				   struct bpf_prog_list *pl)
+ void test_cgroup_preorder(void)
  {
- 	struct bpf_prog_array_item *item;
- 	struct cgroup_subsys_state *css;
- 	struct bpf_prog_array *progs;
--	struct bpf_prog_list *pl;
--	struct hlist_head *head;
--	struct cgroup *cg;
- 	int pos;
+ 	int cg_parent = -1, cg_child = -1, sock_fd = -1;
+@@ -120,6 +196,7 @@ void test_cgroup_preorder(void)
  
- 	css_for_each_descendant_pre(css, &cgrp->self) {
-@@ -960,27 +1006,15 @@ static void replace_effective_prog(struct cgroup *cgrp,
- 		if (percpu_ref_is_zero(&desc->bpf.refcnt))
- 			continue;
+ 	ASSERT_OK(run_getsockopt_test(cg_parent, cg_child, sock_fd, false), "getsockopt_test_1");
+ 	ASSERT_OK(run_getsockopt_test(cg_parent, cg_child, sock_fd, true), "getsockopt_test_2");
++	ASSERT_OK(run_link_replace_test(cg_child, sock_fd), "link_replace_test");
  
--		/* find position of link in effective progs array */
--		for (pos = 0, cg = desc; cg; cg = cgroup_parent(cg)) {
--			if (pos && !(cg->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
--				continue;
-+		pos = effective_prog_pos(desc, atype, pl);
-+		if (WARN_ON_ONCE(pos < 0))
-+			continue;
- 
--			head = &cg->bpf.progs[atype];
--			hlist_for_each_entry(pl, head, node) {
--				if (!prog_list_prog(pl))
--					continue;
--				if (pl->link == link)
--					goto found;
--				pos++;
--			}
--		}
--found:
--		BUG_ON(!cg);
- 		progs = rcu_dereference_protected(
- 				desc->bpf.effective[atype],
- 				lockdep_is_held(&cgroup_mutex));
- 		item = &progs->items[pos];
--		WRITE_ONCE(item->prog, link->link.prog);
-+		WRITE_ONCE(item->prog, pl->link->link.prog);
- 	}
- }
- 
-@@ -1024,7 +1058,7 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
- 
- 	cgrp->bpf.revisions[atype] += 1;
- 	old_prog = xchg(&link->link.prog, new_prog);
--	replace_effective_prog(cgrp, atype, link);
-+	replace_effective_prog(cgrp, atype, pl);
- 	bpf_prog_put(old_prog);
- 	return 0;
- }
-@@ -1091,19 +1125,14 @@ static struct bpf_prog_list *find_detach_entry(struct hlist_head *progs,
-  *                           recomputing the array in place.
-  *
-  * @cgrp: The cgroup which descendants to travers
-- * @prog: A program to detach or NULL
-- * @link: A link to detach or NULL
-+ * @pl: The prog_list entry being detached
-  * @atype: Type of detach operation
-  */
--static void purge_effective_progs(struct cgroup *cgrp, struct bpf_prog *prog,
--				  struct bpf_cgroup_link *link,
-+static void purge_effective_progs(struct cgroup *cgrp, struct bpf_prog_list *pl,
- 				  enum cgroup_bpf_attach_type atype)
- {
- 	struct cgroup_subsys_state *css;
- 	struct bpf_prog_array *progs;
--	struct bpf_prog_list *pl;
--	struct hlist_head *head;
--	struct cgroup *cg;
- 	int pos;
- 
- 	/* recompute effective prog array in place */
-@@ -1113,24 +1142,11 @@ static void purge_effective_progs(struct cgroup *cgrp, struct bpf_prog *prog,
- 		if (percpu_ref_is_zero(&desc->bpf.refcnt))
- 			continue;
- 
--		/* find position of link or prog in effective progs array */
--		for (pos = 0, cg = desc; cg; cg = cgroup_parent(cg)) {
--			if (pos && !(cg->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
--				continue;
--
--			head = &cg->bpf.progs[atype];
--			hlist_for_each_entry(pl, head, node) {
--				if (!prog_list_prog(pl))
--					continue;
--				if (pl->prog == prog && pl->link == link)
--					goto found;
--				pos++;
--			}
--		}
--
-+		pos = effective_prog_pos(desc, atype, pl);
- 		/* no link or prog match, skip the cgroup of this layer */
--		continue;
--found:
-+		if (pos < 0)
-+			continue;
-+
- 		progs = rcu_dereference_protected(
- 				desc->bpf.effective[atype],
- 				lockdep_is_held(&cgroup_mutex));
-@@ -1196,7 +1212,7 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
- 		/* if update effective array failed replace the prog with a dummy prog*/
- 		pl->prog = old_prog;
- 		pl->link = link;
--		purge_effective_progs(cgrp, old_prog, link, atype);
-+		purge_effective_progs(cgrp, pl, atype);
- 	}
- 
- 	/* now can actually delete it from this cgroup list */
+ out:
+ 	close(sock_fd);
 -- 
 2.53.0-Meta
 
