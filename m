@@ -1,107 +1,149 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2054D3B4E9F;
-	Fri, 19 Jun 2026 16:02:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
+Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 701ED381B0A;
+	Fri, 19 Jun 2026 16:04:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781884966; cv=none; b=jlysphCJutM0Fkv6aZWxsbT7IkwSlHogMaKP6aeDYDJ/KPvlUAy6fcQ/QCdtMF6p4ZPZNgFZBpVnACrc0Kje0DPioF60j3H9tw9spmepG+U8j9yMVJD98WOe1KIkw3A1UyBPPiGygDtOO9yvdFqEcuj/T2oEBQQPTbKbu7eUmu4=
+	t=1781885085; cv=none; b=BgbVo5e6fs6qntFNTqZ54aqC8T3O34pjy7zEbix75y5GUXEL1ksFCpmFrFCNMTgs8XqXp/Pfv8j23/wlEOgpx3VfcBRvVy+RFCKtmqMbtVOQ3uR5IV0HdsidOQUt0ZO/Fre/X7Heyl/zWxTJwmlOnaJbT2U3L5f00iU6DUNx/sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781884966; c=relaxed/simple;
-	bh=eBmalbFwvezsu6JqPrRtaeiAUEkMDlAo27YCsl8U1rE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=BhIZZmmq+sFkm6H1fWfUkR8Nsq5gbPK01NKYEk3wysLo/02vFcw8jWYVdXys5yAuWwYzVUqen8AscxzWAbgL+HA9ZP3h7I8hdASMSz6z2elvfpputJp3txyyB3RAj3aBkxX8ypsOXbcCV8JnVuBicCdAedWNpNOX7y+HOtMNgfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=fail (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=LBLMKbBB reason="signature verification failed"; arc=none smtp.client-ip=13.76.78.106
+	s=arc-20240116; t=1781885085; c=relaxed/simple;
+	bh=+ALnsabsfDw796u9v7VhMx3HaQ/hih2C+iNPiz96QNs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=u7IyVp/pJuueanyO1hG3f9B28rkntvvboZwdqLO+Sua12GTro4TaM9N7WZ5h7qNsjCzr0opV6dV478E05jilEoI4I+iAXiHnBdWxD332Xvckaf/PH9GrjCL1vZyZk1NwCq29viMuVJITM5mniUXiMgi6GmjKfNYkaQkgRs+f0cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=pu4qPx09; arc=none smtp.client-ip=209.97.182.222
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="LBLMKbBB"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="pu4qPx09"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:Date:From:To:Cc:
-	Subject:In-Reply-To:References:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-ID; bh=3ZSZ1GJmN9Ykp3wkoNvUZXy
-	ZqxRc7nzDIIQpdknRQQU=; b=LBLMKbBBbjkmvmut3ar1p8RP5gqml8Ua9qO/PMg
-	jQ8jIKbltGIQD8mOXxTEgudwjVhzso10qrgv0OKP0fgv4rCe6kgSRUcnf6lfwVWt
-	eO4LQfOWxcw6BOtAh2JE7/Ly6xG6WgMy4z0jx4scjBlZsdw/o0F9xYUQBe8fKQQX
-	+LyY=
-Received: from gnq25$mails.tsinghua.edu.cn ( [183.172.62.193] ) by
- ajax-webmail-web2 (Coremail) ; Sat, 20 Jun 2026 00:02:14 +0800 (GMT+08:00)
-Date: Sat, 20 Jun 2026 00:02:14 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
-To: "Christian Loehle" <christian.loehle@arm.com>
-Cc: "Tejun Heo" <tj@kernel.org>, "David Vernet" <void@manifault.com>,
-	"Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Andrea Righi" <arighi@nvidia.com>,
-	"Changwoo Min" <changwoo@igalia.com>,
-	"Shuah Khan" <shuah@kernel.org>, sched-ext@lists.linux.dev,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH bpf-next 0/2] sched_ext: Mark scx_bpf_cpu_rq()
- nullable
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
- 20250909(015d6f0a) Copyright (c) 2002-2026 www.mailtech.cn
- mispb-4df55a87-4b50-4a66-85a0-70f79cb6c8b5-tsinghua.edu.cn
-In-Reply-To: <1b75c8ce-19c1-4a35-8747-d63e28dbbc16@arm.com>
-References: <20260619-f01-14-scx-cpu-rq-ret-null-v1-0-3b4281cdf0da@mails.tsinghua.edu.cn>
- <1b75c8ce-19c1-4a35-8747-d63e28dbbc16@arm.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	References:In-Reply-To:To:Cc; bh=n4Z5foOXU961pSMWUAwF7GkXTuYcfGs
+	U2F6wupf6PWU=; b=pu4qPx09zzSAiPsRKInO9Rq4RHkAtviXvuDU/LgNw7FDM1y
+	8SAvEJvCubLTKS21XUjcxjrcPLAMUe8dFE/bY6PGlWs/NdumRWvy0UvUXAmqCC3F
+	Gw6K3LB5nr0EFXm89v1KWFE3RZYrfJ3GhMnx6EIoA0OpYiAd7o7SvaZZNFBc=
+Received: from [127.0.0.1] (unknown [101.6.30.195])
+	by web3 (Coremail) with SMTP id ygQGZQCn8o+RaDVqIeaPAg--.58650S4;
+	Sat, 20 Jun 2026 00:04:34 +0800 (CST)
+From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Date: Sat, 20 Jun 2026 00:04:28 +0800
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Cover pseudo-BTF ksym load
+ capability
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <41898842.82354.19ee09e5a42.Coremail.gnq25@mails.tsinghua.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID:yQQGZQC3k5sGaDVqDXtpAg--.741W
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQMDA2o0b7D0-AA
-	BsK
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-2-f950f69fe60c@mails.tsinghua.edu.cn>
+References: <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-0-f950f69fe60c@mails.tsinghua.edu.cn>
+In-Reply-To: <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-0-f950f69fe60c@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Hao Luo <haoluo@google.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781885075; l=2145;
+ i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
+ bh=+ALnsabsfDw796u9v7VhMx3HaQ/hih2C+iNPiz96QNs=;
+ b=C0r7Pk8rXNzglQotCY+ndSSlK+Ga6yP3f83oYxLv0Myss8P+Ggiagkkf95mlnKjhXBRLQkyAo
+ sAx6xzt3YASAzLF6FNC0Ni1CzFNkYAhWImBnV0RDzJrDuS0RR8zg9SU
+X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
+ pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
+X-CM-TRANSID:ygQGZQCn8o+RaDVqIeaPAg--.58650S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7WFWfCw4DtFy8Jr1fGrW7urg_yoW8uw45pa
+	4kJ3sxCr1kGr4SgF93AFWUCFy5WFs7uw43Ja10vr15Aa13urn7tws2kF4UGFn5Aw4vvw1F
+	vanrA3sxuw1DAFJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPm1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l
+	84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAaw2AFwI0_JF0_Jw1lnxkEFVAIw20F6c
+	xK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+	Yx0E74AGY7Cv6cx26r4rKr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+	8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kK
+	e7AKxVW8ZVWrXwCY02Avz4vE14v_JwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6c
+	x26r4rKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2Iq
+	xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
+	4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY
+	6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
+	AFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZE
+	Xa7VUj-B_UUUUUU==
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQQDA2o0b7D6BwAEs9
 
-CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiQ2hyaXN0aWFuIExvZWhs
-ZSIgPGNocmlzdGlhbi5sb2VobGVAYXJtLmNvbT4KPiBTZW5kIHRpbWU6RnJpZGF5LCAxOS8wNi8y
-MDI2IDIzOjMxOjU5Cj4gVG86ICJOdW9xaSBHdWkiIDxnbnEyNUBtYWlscy50c2luZ2h1YS5lZHUu
-Y24+LCAiVGVqdW4gSGVvIiA8dGpAa2VybmVsLm9yZz4sICJEYXZpZCBWZXJuZXQiIDx2b2lkQG1h
-bmlmYXVsdC5jb20+LCAiQWxleGVpIFN0YXJvdm9pdG92IiA8YXN0QGtlcm5lbC5vcmc+LCAiRGFu
-aWVsIEJvcmttYW5uIiA8ZGFuaWVsQGlvZ2VhcmJveC5uZXQ+LCAiQW5kcmlpIE5ha3J5aWtvIiA8
-YW5kcmlpQGtlcm5lbC5vcmc+Cj4gQ2M6ICJBbmRyZWEgUmlnaGkiIDxhcmlnaGlAbnZpZGlhLmNv
-bT4sICJDaGFuZ3dvbyBNaW4iIDxjaGFuZ3dvb0BpZ2FsaWEuY29tPiwgIlNodWFoIEtoYW4iIDxz
-aHVhaEBrZXJuZWwub3JnPiwgc2NoZWQtZXh0QGxpc3RzLmxpbnV4LmRldiwgYnBmQHZnZXIua2Vy
-bmVsLm9yZywgbGludXgta3NlbGZ0ZXN0QHZnZXIua2VybmVsLm9yZywgbGludXgta2VybmVsQHZn
-ZXIua2VybmVsLm9yZwo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggYnBmLW5leHQgMC8yXSBzY2hlZF9l
-eHQ6IE1hcmsgc2N4X2JwZl9jcHVfcnEoKSBudWxsYWJsZQo+IAo+IE9uIDYvMTkvMjYgMTU6NDUs
-IE51b3FpIEd1aSB3cm90ZToKPiA+IHNjeF9icGZfY3B1X3JxKCkgY2FuIHJldHVybiBOVUxMIGZv
-ciBpbnZhbGlkIENQVSBpbnB1dCBvciB3aGVuIG5vIFNDWAo+ID4gc2NoZWR1bGVyIGlzIGFjdGl2
-ZSwgYnV0IGl0cyBrZnVuYyByZWdpc3RyYXRpb24gZG9lcyBub3QgYWR2ZXJ0aXNlIHRoZQo+ID4g
-bnVsbGFibGUgcmV0dXJuIHRvIHRoZSB2ZXJpZmllci4KPiA+IAo+ID4gQWRkIEtGX1JFVF9OVUxM
-IHRvIHNjeF9icGZfY3B1X3JxKCksIG1hdGNoaW5nIHRoZSBudWxsYWJsZSBtZXRhZGF0YSBhbHJl
-YWR5Cj4gPiBwcmVzZW50IG9uIG5laWdoYm9yaW5nIFNDWCBhY2Nlc3NvcnMsIGFuZCBhZGQgYSBz
-Y2hlZF9leHQgc2VsZnRlc3QgdGhhdCByZWplY3RzCj4gPiBhbiB1bmNoZWNrZWQgZGlyZWN0IHJ1
-bnF1ZXVlIGZpZWxkIHJlYWQuCj4gPiAKPiAKPiBTZWUgNWM0OGQ4OGZlMDA0ICgic2NoZWRfZXh0
-OiBkZXByZWNhdGlvbiB3YXJuIGZvciBzY3hfYnBmX2NwdV9ycSgpIikKPiBJIGd1ZXNzIEkgY2Fu
-IHNlbmQgYSBwYXRjaCB0byByZW1vdmUgdGhlIGZ1bmN0aW9uLCBpdCdzIGJlZW4gYSB3aGlsZS4K
-PiAKPiA+IFRoaXMgZml4ZXMgYSByZWdyZXNzaW9uIGludHJvZHVjZWQgYnkgNjIwM2VmNzNmYTVj
-ICgic2NoZWQvZXh0OiBBZGQgQlBGCj4gPiBmdW5jdGlvbiB0byBmZXRjaCBycSIpLgo+IAo+IEhv
-dyBzbz8KPiAKPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogTnVvcWkgR3VpIDxnbnEyNUBtYWlscy50
-c2luZ2h1YS5lZHUuY24+Cj4gPiAtLS0KPiA+IE51b3FpIEd1aSAoMik6Cj4gPiAgICAgICBzY2hl
-ZF9leHQ6IE1hcmsgc2N4X2JwZl9jcHVfcnEoKSBhcyBudWxsYWJsZQo+ID4gICAgICAgc2VsZnRl
-c3RzL3NjaGVkX2V4dDogQ292ZXIgc2N4X2JwZl9jcHVfcnEoKSBudWxsIHJldHVybgo+ID4gCj4g
-PiAga2VybmVsL3NjaGVkL2V4dC5jICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAg
-MiArLQo+ID4gIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3NjaGVkX2V4dC9NYWtlZmlsZSAgICAg
-ICAgIHwgIDEgKwo+ID4gIC4uLi9zZWxmdGVzdHMvc2NoZWRfZXh0L2NwdV9ycV9yZXRfbnVsbC5i
-cGYuYyAgICAgIHwgMjcgKysrKysrKysrKysrKysrCj4gPiAgLi4uL3Rlc3Rpbmcvc2VsZnRlc3Rz
-L3NjaGVkX2V4dC9jcHVfcnFfcmV0X251bGwuYyAgfCAzOCArKysrKysrKysrKysrKysrKysrKysr
-Cj4gPiAgNCBmaWxlcyBjaGFuZ2VkLCA2NyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4g
-PiAtLS0KPiA+IGJhc2UtY29tbWl0OiBlNDI4N2JmMzRmOTdhODhjN2Q5MzIyZjViZGU4Mjg3MjRj
-MDczYTZiCj4gPiBjaGFuZ2UtaWQ6IDIwMjYwNjE3LWYwMS0xNC1zY3gtY3B1LXJxLXJldC1udWxs
-LTJlNzk1MzVhY2Q1Nwo+ID4gCj4gPiBCZXN0IHJlZ2FyZHMsCj4gPiAtLSAgCj4gPiBOdW9xaSBH
-dWkgPGducTI1QG1haWxzLnRzaW5naHVhLmVkdS5jbj4KPiA+IAo+ID4gCgpUaGFua3MsIHlvdSdy
-ZSByaWdodC4gIlJlZ3Jlc3Npb24iIHdhcyBpbmFjY3VyYXRlOyB0aGUgbWlzc2luZyBLRl9SRVRf
-TlVMTAptZXRhZGF0YSBoYXMgYmVlbiB0aGVyZSBzaW5jZSB0aGUga2Z1bmMgd2FzIGludHJvZHVj
-ZWQgYnkgNjIwM2VmNzNmYTVjLgoKSWYgdGhlIHByZWZlcnJlZCBkaXJlY3Rpb24gaXMgdG8gcmVt
-b3ZlIHNjeF9icGZfY3B1X3JxKCksIEknbGwgZHJvcCB0aGlzIApzZXJpZXMuCg==
+Add verifier_unpriv cases for a raw socket-filter load of the typed ksym
+bpf_prog_active.
+
+The first case verifies that a program without CAP_BPF is rejected before
+the pseudo-BTF ksym is materialized. The second case grants CAP_BPF in
+the unprivileged test-loader mode and verifies that the same load remains
+accepted when the capability requirement is satisfied.
+
+Declare the typed ksym in verifier_unpriv.c so these raw verifier tests do
+not need a separate selftest header.
+
+Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+---
+ .../testing/selftests/bpf/progs/verifier_unpriv.c  | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+index c16f8382cf17..90e7ffc426ae 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
++++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+@@ -6,6 +6,8 @@
+ #include "../../../include/linux/filter.h"
+ #include "bpf_misc.h"
+ 
++extern const int bpf_prog_active __ksym;
++
+ #define BPF_SK_LOOKUP(func) \
+ 	/* struct bpf_sock_tuple tuple = {} */ \
+ 	"r2 = 0;"			\
+@@ -77,6 +79,36 @@ __naked void dummy_prog_loop1_socket(void)
+ 	: __clobber_all);
+ }
+ 
++SEC("socket")
++__description("unpriv: pseudo btf id ksym requires CAP_BPF")
++__success __failure_unpriv
++__msg_unpriv("BPF_PSEUDO_BTF_ID loads require CAP_BPF")
++__retval(0)
++__naked void pseudo_btf_id_ksym_requires_cap_bpf(void)
++{
++	asm volatile ("r1 = %[bpf_prog_active] ll;"
++		      "r0 = 0;"
++		      "exit;"
++	:
++	: __imm_addr(bpf_prog_active)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("unpriv: pseudo btf id ksym works with CAP_BPF")
++__success_unpriv
++__caps_unpriv(CAP_BPF)
++__retval_unpriv(0)
++__naked void pseudo_btf_id_ksym_with_cap_bpf(void)
++{
++	asm volatile ("r1 = %[bpf_prog_active] ll;"
++		      "r0 = 0;"
++		      "exit;"
++	:
++	: __imm_addr(bpf_prog_active)
++	: __clobber_all);
++}
++
+ SEC("socket")
+ __description("unpriv: return pointer")
+ __success __failure_unpriv __msg_unpriv("R0 leaks addr")
+
+-- 
+2.34.1
+
