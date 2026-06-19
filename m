@@ -1,194 +1,146 @@
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525BC346E50
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 06:35:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB090352C2C
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 06:35:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781850930; cv=none; b=VXvzEz4qL2jcQhRt6sOVL0h0pgWXnJWS5CQG37c+VJaeCr4dsWvj8Z7265Ys2NeLvXWvyccVPHEnHWK6vfjhq/H7TQOWbZr/BDETKmaeROh7VKKmW+rxUbjWJ8sqedS7gcjmafVwvp4V0pl5bw8MELk5ovqHYPRsX0k8iruqPCA=
+	t=1781850934; cv=none; b=mVuNoPLM5new85CIBVcDnWQaO/JDf20I7Ac75Q5IA0W3vvR+CUPeIlJPg4U1UdP8BYuRR+XdvztCyqGu22P8kLpDxmda8QNtp4KF5dSUO7UH+j4Ou0kQVdiRtrUudmEr96nu2Sw88LKNzVlj8RTwjGZbZu1iard/xHCWu7N0NPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781850930; c=relaxed/simple;
-	bh=hk9DdqhfwheJu/mYJkcTkLeSGtlSNrFOdTvBRuYkBFM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SMO3khu7ibiM4zc9x7FORiDaOUacmPXzq4MAVuROp+413jXw/UEh88JQpUYpQ7GvnwPqhW/nV2moJwQGCJ4kvMFnN3s2I3JCRWqQYqNEPlifbbqeYyPsEOTaFqzCHpRvGfq/UD1mtzcd4SS5NmpjmkMHXuJ28xOiA+BzHCnwsPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qkxqO4Zw; arc=none smtp.client-ip=209.85.161.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781850934; c=relaxed/simple;
+	bh=RNjabRwXK1Z7FZ9lk2kM6y2NStALK3Vm+iaCUMQeBWE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DgfTTfh9Gg4wDtgg10dcCkkggNyj4YQvxAXJinTkRjkvD/aUpkVuckBCn59G1QUqeWum2JFToSlGwMaLBM710dGmD0WuCuWVnLyDqWIbwYQwmKioe2YA4mQnGseYN28P9QnTN/uS0qEa/EgtsXQ53cdPQQvG0NxSSjl//RDnKyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=J4eR327p; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qkxqO4Zw"
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-6a0a38a013eso1538977eaf.0
-        for <bpf@vger.kernel.org>; Thu, 18 Jun 2026 23:35:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781850928; x=1782455728; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Us+DduHyKbwQNzBW1kJHsZjXnClMSjCwfH6t54+9lEs=;
-        b=qkxqO4ZwNySrScQtl3FPmWNQr0zAiJRRHrobWXE4Or2zyb4rPVi/uqqaX8FL+1e/P4
-         B3xZQhB8Y0lIeQtEjdITdYqrwf3dllmp0QAkTZHzk8XWHHH83yXYLom1Gjz7IGcw5MU0
-         91odacbqOcfPBtlsbSVsb22kAmhJgI8kOD0BhB0ICBMpXwDLBiidvyBaUSvBF6s4DTYL
-         l3KkdNGQuBDcHzAOCX40wt5udFx9hAvVjUtrQ5j6ypDQ2aogda184HljaRqwbz2iEeFX
-         47jfgI4qjfIEtCQhD/8LLftz3MOeMEsrhZ/fPo2Sftxbrao8Q6FjhI9hi/FjQg8ZEzM0
-         QZaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781850928; x=1782455728;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Us+DduHyKbwQNzBW1kJHsZjXnClMSjCwfH6t54+9lEs=;
-        b=oJFZcpwYeG9lYDG/rDm9VboC/W7BI/mYwURooE9TiRETa1svsrT9T5z7ksLT8qXz2u
-         L/bgWQky219d5pR8I95hg5GlWjAnW36CDo+Y6u8emmNR09vaGebq5AZ9u9GVkB97BR7Y
-         3epAz3IvcwoQPSWcW5AvU+wVc09wDUb9uECLZgdkfA/in2ZxSGp88ZXwUJB8oh/iqK4i
-         ACa3IUuQex08Zf0ozkP736ABKv/EVnJv3y5yUPsac5dJkL5giWUrGM2tXamfpTkm9iH8
-         7vyCXXu44ljPxTcbzbknHtkhBgVwQhpHvwUEs7cfkTqI09Gb9ab5il8I1UWIwJfLD9cT
-         7afA==
-X-Gm-Message-State: AOJu0YyU2P1TulK7rdiAgHgmAyvAEHLIoiKysh2mwLqIQUfz0FE4GLJ6
-	55TElXX+ciAHwp2oEtjRyR26PyiAeAcujeaepTZNCbUOl/xJ5vh2bv4iDvv5WQ==
-X-Gm-Gg: AfdE7cmKIBgTRvfXP+1MAjkoIMUkJN/MsCa3RWBONjdAvOsEsGf9F3X+E/e0Hvf5Piy
-	0c2JqekdDVDwHdo2TCYq204X8OLJG6q9PqCrtsAEOP4oORb8GqonwKgYfSrX556HxXEuF/pU7Ss
-	shqkho5Ut0a3EciOUS2OtVzpKayiHwXBnqnMSLwbprtu1m/cKpPC5q6S9Bik9V+8c1971Y/sUX6
-	JQVw8Fdft/xWgOkMmxUAy+KIcLGOT0b5+3e6vgdakt/vblFTEmxSiiZiiMntyA7feMR2MZAf0XY
-	I+PxDcFtuPn+R9NX3QFJeIuivx56oVVfPwnKMc7IzkyHM7ws9vgv8e5DXupw3tDxDM0XjfV4Hx/
-	A4eWPmH9EI4G5aPA0G9hPPdLIh3Ka1bOoy/inbH/lQ0aa4VCz/+sOy+afdyf3l5+dL9sQOxNajo
-	zakJhB7hhAuNaFJQ==
-X-Received: by 2002:a05:6820:4c84:b0:69e:88f3:14ac with SMTP id 006d021491bc7-6a0da0254e9mr1440053eaf.18.1781850927866;
-        Thu, 18 Jun 2026 23:35:27 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:59::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-44709c76d2csm1533775fac.3.2026.06.18.23.35.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2026 23:35:27 -0700 (PDT)
-From: Amery Hung <ameryhung@gmail.com>
-To: bpf@vger.kernel.org
-Cc: alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@kernel.org,
-	ameryhung@gmail.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf v2 2/2] selftests/bpf: Test cgroup link replace with BPF_F_PREORDER
-Date: Thu, 18 Jun 2026 23:35:20 -0700
-Message-ID: <20260619063520.2690547-3-ameryhung@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260619063520.2690547-1-ameryhung@gmail.com>
-References: <20260619063520.2690547-1-ameryhung@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="J4eR327p"
+Message-ID: <28f794e5-2fe8-4594-a19c-d4c936350cb5@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781850930;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Vw5G3TGXS5qxXLkjU6JHXsllZyv22COyQsCV1sVQgss=;
+	b=J4eR327paA+7AvoqSL7vpQ3TXaGM0kVFEpRCU5gyUrEK1Ytj+yBIAM5KhgKBdNXh1jBH4g
+	zI1Gf7J23TZFCy5ir2QTywJ1WW895bSEuNw4GI+1iGnSiUhmY1vixlSBgntAyJRXFUr7IX
+	X+8uKsRA3MyoZOA/8qzCT6reRSLBIJQ=
+Date: Fri, 19 Jun 2026 14:35:20 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v4 2/3] bpf, sockmap: reject a packet-modifying SK_SKB
+ stream parser
+To: Sechang Lim <rhkrqnwk98@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, "David S . Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn
+ <willemb@google.com>, Shuah Khan <shuah@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Simon Horman <horms@kernel.org>, Bobby Eshleman <bobbyeshleman@gmail.com>,
+ Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260619062959.3277612-1-rhkrqnwk98@gmail.com>
+ <20260619062959.3277612-3-rhkrqnwk98@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260619062959.3277612-3-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Add a cgroup_preorder case that attaches a normal and a BPF_F_PREORDER
-program to a cgroup (effective order [2, 1]), then replaces the normal
-link's program via bpf_link_update() and checks the effective order
-becomes [2, 3] — i.e. only the non-preorder slot changes. Without the
-replace_effective_prog() fix the array is corrupted and the order is
-wrong.
 
-Signed-off-by: Amery Hung <ameryhung@gmail.com>
----
- .../bpf/prog_tests/cgroup_preorder.c          | 77 +++++++++++++++++++
- 1 file changed, 77 insertions(+)
+On 6/19/26 2:29 PM, Sechang Lim wrote:
+> sk_psock_strp_parse() runs the BPF_PROG_TYPE_SK_SKB stream-parser program
+> to find the length of the next message. strparser assembles a message out
+> of several received skbs by chaining them onto the head's frag_list and
+> recording where to append the next one in strp->skb_nextp:
+>
+> 	*strp->skb_nextp = skb;
+> 	strp->skb_nextp = &skb->next;
+>
+> and then calls the parser on the head:
+>
+> 	len = (*strp->cb.parse_msg)(strp, head);
+>
+> The parser is only meant to inspect the skb, but the program may call
+> bpf_skb_change_tail() -- or the sibling bpf_skb_pull_data(),
+> bpf_skb_change_head(), bpf_skb_adjust_room(), all allowed for SK_SKB.
+> Once the head carries a frag_list these go
+>
+> 	... -> skb_ensure_writable -> pskb_may_pull -> __pskb_pull_tail
+>
+> and __pskb_pull_tail() frees the frag_list skbs that strparser still
+> tracks through skb_nextp:
+>
+> 	while ((list = skb_shinfo(skb)->frag_list) != insp) {
+> 		skb_shinfo(skb)->frag_list = list->next;
+> 		consume_skb(list);
+> 	}
+>
+> strp->skb_nextp now points into a freed sk_buff. The next segment of
+> the same message arrives in __strp_recv(), which links it with
+> *strp->skb_nextp = skb, an 8-byte write into the freed skb. The free
+> and the write happen in different __strp_recv() calls, so the message
+> has to span at least three segments before it triggers.
+>
+>    BUG: KASAN: slab-use-after-free in __strp_recv+0x447/0xda0
+>    Write of size 8 at addr ffff88810db86140 by task repro/349
+>
+>    Call Trace:
+>     <IRQ>
+>     __strp_recv+0x447/0xda0
+>     __tcp_read_sock+0x13d/0x590
+>     tcp_bpf_strp_read_sock+0x195/0x320
+>     strp_data_ready+0x267/0x340
+>     sk_psock_strp_data_ready+0x1ce/0x350
+>     tcp_data_queue+0x1364/0x2fd0
+>     tcp_rcv_established+0xe07/0x1640
+>     [...]
+>
+>    Allocated by task 349:
+>     skb_clone+0x17b/0x210
+>     __strp_recv+0x2c3/0xda0
+>     __tcp_read_sock+0x13d/0x590
+>     [...]
+>
+>    Freed by task 349:
+>     kmem_cache_free+0x150/0x570
+>     __pskb_pull_tail+0x57b/0xc20
+>     skb_ensure_writable+0x236/0x260
+>     __bpf_skb_change_tail+0x1d4/0x590
+>     sk_skb_change_tail+0x2a/0x40
+>     bpf_prog_1b285dcd6c41373e+0x27/0x30
+>     bpf_prog_run_pin_on_cpu+0xf3/0x260
+>     sk_psock_strp_parse+0x118/0x1e0
+>     __strp_recv+0x4f6/0xda0
+>     [...]
+>
+> The same resize also leaves the head's length inconsistent with its
+> frags, so a later __pskb_pull_tail() can instead hit the
+> BUG_ON(skb_copy_bits(...)) in net/core/skbuff.c.
+>
+> A stream parser is only meant to measure the next message, not to modify
+> the packet. Reject a parser whose program can change packet data
+> (prog->aux->changes_pkt_data) at attach time. The check is shared by
+> sock_map_prog_update() and sock_map_link_update_prog(), which between them
+> cover prog attach, link create and link update. Verdict programs are
+> unaffected and may still modify the skb.
+>
+> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_preorder.c b/tools/testing/selftests/bpf/prog_tests/cgroup_preorder.c
-index d4d583872fa2..d2ccf409dfe3 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_preorder.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_preorder.c
-@@ -102,6 +102,82 @@ static int run_getsockopt_test(int cg_parent, int cg_child, int sock_fd, bool al
- 	return err;
- }
- 
-+/*
-+ * Replacing a link's program (bpf_link_update) must target the correct slot in
-+ * the effective array even when a BPF_F_PREORDER program is attached to the
-+ * same cgroup. All programs here are attached to a single cgroup; "parent" is
-+ * reused only as a third distinct program.
-+ *
-+ * Attach child(1) normally and child_2(2) with BPF_F_PREORDER, so the effective
-+ * order is [2, 1]. Then replace child(1)'s program with parent(3): only the
-+ * non-preorder slot changes, giving [2, 3].
-+ */
-+static int run_link_replace_test(int cgroup_fd, int sock_fd)
-+{
-+	LIBBPF_OPTS(bpf_link_create_opts, create_opts);
-+	int err = 0, normal_link = -1, preorder_link = -1;
-+	struct cgroup_preorder *skel = NULL;
-+	enum bpf_attach_type atype;
-+	__u8 *result, buf = 0x00;
-+	socklen_t optlen = 1;
-+
-+	skel = cgroup_preorder__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "cgroup_preorder__open_and_load"))
-+		return -1;
-+
-+	err = setsockopt(sock_fd, SOL_IP, IP_TOS, &buf, 1);
-+	if (!ASSERT_OK(err, "setsockopt"))
-+		goto close_skel;
-+
-+	atype = bpf_program__expected_attach_type(skel->progs.child);
-+
-+	create_opts.flags = 0;
-+	normal_link = bpf_link_create(bpf_program__fd(skel->progs.child),
-+				      cgroup_fd, atype, &create_opts);
-+	if (!ASSERT_GE(normal_link, 0, "create_normal_link")) {
-+		err = normal_link;
-+		goto close_skel;
-+	}
-+
-+	create_opts.flags = BPF_F_PREORDER;
-+	preorder_link = bpf_link_create(bpf_program__fd(skel->progs.child_2),
-+					cgroup_fd, atype, &create_opts);
-+	if (!ASSERT_GE(preorder_link, 0, "create_preorder_link")) {
-+		err = preorder_link;
-+		goto close_links;
-+	}
-+
-+	result = skel->bss->result;
-+	skel->bss->idx = 0;
-+	memset(result, 0, 4);
-+
-+	err = getsockopt(sock_fd, SOL_IP, IP_TOS, &buf, &optlen);
-+	if (!ASSERT_OK(err, "getsockopt-before"))
-+		goto close_links;
-+	ASSERT_TRUE(result[0] == 2 && result[1] == 1, "order before update");
-+
-+	/* Replace the normal link's program child(1) -> parent(3). */
-+	err = bpf_link_update(normal_link, bpf_program__fd(skel->progs.parent), NULL);
-+	if (!ASSERT_OK(err, "bpf_link_update"))
-+		goto close_links;
-+
-+	skel->bss->idx = 0;
-+	memset(result, 0, 4);
-+
-+	err = getsockopt(sock_fd, SOL_IP, IP_TOS, &buf, &optlen);
-+	if (!ASSERT_OK(err, "getsockopt-after"))
-+		goto close_links;
-+	ASSERT_TRUE(result[0] == 2 && result[1] == 3, "order after update");
-+
-+close_links:
-+	if (preorder_link >= 0)
-+		close(preorder_link);
-+	close(normal_link);
-+close_skel:
-+	cgroup_preorder__destroy(skel);
-+	return err;
-+}
-+
- void test_cgroup_preorder(void)
- {
- 	int cg_parent = -1, cg_child = -1, sock_fd = -1;
-@@ -120,6 +196,7 @@ void test_cgroup_preorder(void)
- 
- 	ASSERT_OK(run_getsockopt_test(cg_parent, cg_child, sock_fd, false), "getsockopt_test_1");
- 	ASSERT_OK(run_getsockopt_test(cg_parent, cg_child, sock_fd, true), "getsockopt_test_2");
-+	ASSERT_OK(run_link_replace_test(cg_child, sock_fd), "link_replace_test");
- 
- out:
- 	close(sock_fd);
--- 
-2.53.0-Meta
+
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
