@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB633149C7B;
-	Fri, 19 Jun 2026 00:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B644186331;
+	Fri, 19 Jun 2026 00:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781828841; cv=none; b=dh4auvoXMp5193ufcAnG7C+45bR1W0UmCCGu6rautNZnj8SuHGafHT7v79TEuHOcUK56CprVkqkcSEVvp8pdGYcaJRWJ5cchS9G2KiAvmX8r2ayuzdW9GVWmsx7pQu37w8s8GLq/7VEUn+XYdqnbhyx/gRtsDByNXiBhlfw9qWU=
+	t=1781828846; cv=none; b=NDeiVxWrgrruuqianujaSIACcZm2H2LBIU91Q2gm8ZX6swB3rzmxQAJQS3RiFIxPTJu/5mP40fifrDnDCsw9PPdWiEJEh3GsMHY9IeLGIgeXrKxvkMXQoShBsc4HUO1lQuCYTLw99lmkptFDkON1ACakiVq0lWMB24GgmNxA+XQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781828841; c=relaxed/simple;
-	bh=yUP/e3S1IasxSSC+l8MbmGByA6qKHvo0Payyw9pmHsY=;
+	s=arc-20240116; t=1781828846; c=relaxed/simple;
+	bh=UPUdDUPbs7iMCbosBePwRY2ube8h1ghRx+S84Le3f4M=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eZyHGzsIG46YVAWFaDD6wCAKf9gjN2I8GT1g41aRdSwO4AhuzB9N4iQv37aGK+e2EyQ6vrBjF2MwMPdb9EeiC6FCL234dTDBFSZFJg18kXrxZ/3bCVDeikcCE02qiugR6luGu+4pnt+j9Cl76SsMBNDRZuENvIOQM9ca0qZ+fqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YdpvIn5W; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=IMZ5lnwPi1r6LEtKDrFlzoc1nXvG/qbF+i8Ok1KVXxIfdWokooqVFx5qMGtM01jd2gtKKCz99NKEpoU05WquiC8Aw+C7IAX824SQfJDkuBLE4vsjArMBqTBH3gUKUXZ7qlbs0DuFWdzJtZapvMT/l68fnWmbhaMjSVPSzVpLPGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RQUCoSHA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YdpvIn5W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C3111F00A3A;
-	Fri, 19 Jun 2026 00:27:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RQUCoSHA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA0231F000E9;
+	Fri, 19 Jun 2026 00:27:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781828840;
-	bh=9gkWDD2gPdq1QfEMDU2X58H7vi83eZmunCXcycM/P2s=;
+	s=k20260515; t=1781828843;
+	bh=Rl3hLtJHPeTaw8xSqhav/Hnte+I7t3W/3SaZAlb6uVE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=YdpvIn5WO+Xduy60ynoSmWKMsB7lwPivWSf+I/HpHdohh/tTAuNyIYKvJrioT0VrP
-	 Mi1A9m9wRBxK0javsT62OylNzZGMj2NGufpLnWz77+RB//4FAEY8y86TXhUn2Tf2P1
-	 BNn4CP3M/7nN78Ch3kNBwmX1i964xpnOqjL1foACEiPx0BpiqmVsO8Mw1CpS7sFi4b
-	 r8+bLAMN7krv7094jzTFheZprrEYSLb+0wNr+oDiEkgbzRnuU2rNNUERM9K2LhZx8X
-	 QrAil9a/7SR3F62BTLwlw0LavSfA552NGH9LPLjgzWACYO3mKj+TpQfxII3hlw8y4D
-	 /2jj862aLrr1Q==
+	b=RQUCoSHAUw52HHxuEgx5BDyy9Pu2ou3w2V4JqcBDUFKbQo0sb7haWmRB6JoOcxuvN
+	 pTaz+Tk4aaxDp8ND7ewCQxPAMRmXrPZnKe6qe6eibpN0KqoxR2OZ8NovKoyqynWeMd
+	 RqhEiPacj90fl6FCT0QP1Xm9vzCILmsdQ3ArvFGcKt9x9VW00J3vaRgXnIWYevBJsL
+	 6ulB7ladT/5uupqfEnjttP9+9XiuEPy8UIqTmor4X0+YljwBKNf5TGzr+yEq41n2oW
+	 vvo48pdBwUG6GvyS17rJIIwpGhHvqpTRlqe+UhW08r7zPPIHLUnA1Q4J+GNcWuGKq3
+	 B05u7AgM2V0oA==
 From: Tamir Duberstein <tamird@kernel.org>
-Date: Thu, 18 Jun 2026 20:26:43 -0400
-Subject: [PATCH bpf v2 5/8] bpf: ringbuf: Handle pending position wrap
+Date: Thu, 18 Jun 2026 20:26:44 -0400
+Subject: [PATCH bpf v2 6/8] bpf: user_ringbuf: Handle position wrap
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,7 +37,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260618-bpf-ringbuf-fixes-v2-5-33fde039ddf3@kernel.org>
+Message-Id: <20260618-bpf-ringbuf-fixes-v2-6-33fde039ddf3@kernel.org>
 References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org>
 In-Reply-To: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -56,45 +56,73 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  Emil Tsalapatis <emil@etsalapatis.com>, 
  Tamir Duberstein <tamird@kernel.org>, Sashiko <sashiko-bot@kernel.org>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1316; i=tamird@kernel.org;
- h=from:subject:message-id; bh=yUP/e3S1IasxSSC+l8MbmGByA6qKHvo0Payyw9pmHsY=;
- b=owGbwMvMwCV2wYdPVfy60HTG02pJDFkmPdebz2lIZhltKkjnaujbfbR80pH5+TmiN3q8u13cV
- 0iYHw3tmMjCIMbFYCmmyJIoemhveurtPbKZ747DzGFlAhkiLdLAAAQsDHy5iXmlRjpGeqbahnqG
- RjoGOsYMXJwCMNXd3YwMG+0rTmduOhLprLNokcSdXV/UVtnVrN6dElwSLfZ0R+eF+wy/mGrfLNx
- TY9PEse7hmQi12t9Rcaw9OtI/bvpV/6rf85qHCQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2544; i=tamird@kernel.org;
+ h=from:subject:message-id; bh=UPUdDUPbs7iMCbosBePwRY2ube8h1ghRx+S84Le3f4M=;
+ b=owGbwMvMwCV2wYdPVfy60HTG02pJDFkmPdc/r/re2HisceVK6eC/Yvxni81WpMvJbl3T9oXlx
+ nznuPqvHRNZGMS4GCzFFFkSRQ/tTU+9vUc2891xmDmsTCBDpEUaGICAhYEvNzGv1EjHSM9U21DP
+ 0EjHQMeYgYtTAKY61JWRYU7pbL5P5+uU/0zpC0oMSPkz9/ozvWPC929Mdq4wMtJr7GP4Z7rq/Ny
+ n/s6rK50En/NFLOlc+rDgzdeTTld/tRjtMF6ZwgcA
 X-Developer-Key: i=tamird@kernel.org; a=openpgp;
  fpr=5A6714204D41EC844C50273C19D6FF6092365380
 
-Ring buffer positions are unsigned long counters and can wrap on 32-bit
-systems. __bpf_ringbuf_reserve() stops advancing pending_pos after
-producer_pos wraps because it compares the counters by magnitude.
+User ring buffer positions are unsigned long counters, but
+__bpf_user_ringbuf_peek() widens them to u64 before comparing and
+subtracting them. On 32-bit systems, producer_pos wrapping below
+consumer_pos therefore appears to move backwards and permanently stalls
+the ring. The widened subtraction can also bypass the advertised-window
+check.
 
-Compare the positions for equality instead. The pending position cannot
-logically move ahead of the producer position.
+Keep the positions word-sized and derive the available data with
+word-sized subtraction so the arithmetic wraps with the counters. Treat
+a zero span as empty and reject spans larger than the ring before
+reading a record header.
 
-Fixes: cfa1a2329a69 ("bpf: Fix overrunning reservations in ringbuf")
+Fixes: 205715673844 ("bpf: Add bpf_user_ringbuf_drain() helper")
 Reported-by: Sashiko <sashiko-bot@kernel.org>
 Closes: https://lore.kernel.org/bpf/20260614020552.022A11F000E9@smtp.kernel.org/
 Assisted-by: Codex:gpt-5.5
 Signed-off-by: Tamir Duberstein <tamird@kernel.org>
 ---
- kernel/bpf/ringbuf.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ kernel/bpf/ringbuf.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-index 35ae64ade36b..909880031fd3 100644
+index 909880031fd3..19cbb9b74ee7 100644
 --- a/kernel/bpf/ringbuf.c
 +++ b/kernel/bpf/ringbuf.c
-@@ -482,7 +482,8 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
- 	prod_pos = rb->producer_pos;
- 	new_prod_pos = prod_pos + len;
+@@ -748,9 +748,9 @@ const struct bpf_func_proto bpf_ringbuf_discard_dynptr_proto = {
  
--	while (pend_pos < prod_pos) {
-+	/* Positions wrap; pending_pos cannot logically pass producer_pos. */
-+	while (pend_pos != prod_pos) {
- 		hdr = (void *)rb->data + (pend_pos & rb->mask);
- 		hdr_len = READ_ONCE(hdr->len);
- 		if (hdr_len & BPF_RINGBUF_BUSY_BIT)
+ static int __bpf_user_ringbuf_peek(struct bpf_ringbuf *rb, void **sample, u32 *size)
+ {
++	unsigned long avail, cons_pos, prod_pos;
+ 	int err;
+ 	u32 hdr_len, sample_len, total_len, flags, *hdr;
+-	u64 cons_pos, prod_pos;
+ 
+ 	/* Synchronizes with smp_store_release() in user-space producer. */
+ 	prod_pos = smp_load_acquire(&rb->producer_pos);
+@@ -759,8 +759,11 @@ static int __bpf_user_ringbuf_peek(struct bpf_ringbuf *rb, void **sample, u32 *s
+ 
+ 	/* Synchronizes with smp_store_release() in __bpf_user_ringbuf_sample_release() */
+ 	cons_pos = smp_load_acquire(&rb->consumer_pos);
+-	if (cons_pos >= prod_pos)
++	avail = prod_pos - cons_pos;
++	if (!avail)
+ 		return -ENODATA;
++	if (avail > ringbuf_total_data_sz(rb))
++		return -EINVAL;
+ 
+ 	hdr = (u32 *)((uintptr_t)rb->data + (uintptr_t)(cons_pos & rb->mask));
+ 	/* Synchronizes with smp_store_release() in user-space producer. */
+@@ -770,7 +773,7 @@ static int __bpf_user_ringbuf_peek(struct bpf_ringbuf *rb, void **sample, u32 *s
+ 	total_len = round_up(sample_len + BPF_RINGBUF_HDR_SZ, 8);
+ 
+ 	/* The sample must fit within the region advertised by the producer position. */
+-	if (total_len > prod_pos - cons_pos)
++	if (total_len > avail)
+ 		return -EINVAL;
+ 
+ 	/* The sample must fit within the data region of the ring buffer. */
 
 -- 
 2.55.0.rc0.159.gbe5d7338c2
