@@ -1,157 +1,148 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF682D7DE9
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 08:03:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1170334D385
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 08:30:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781856206; cv=none; b=NDzhDGiIQr+tQB4v8hHY9zwT2ggF2ILAFTWmLtOm/p2H+89UzKTKqmkvk2/At2lpjsDbC3nSo5XLAsBFWD6/ErRfGqL7/XRDPUjs1BVoigV2fInAqCaTa3GbBwkQ8fbylBEGiX93RrLAbYKMTFqQ3XDjwYG6oMk0eARa9LmtfhA=
+	t=1781857861; cv=none; b=sIWE+UeGhydtrueLWerMVTTNbhw0kLjhOVdxx+ZHgQeaBP7wcJxfSd//W1ubb+E2RFPA7BlzryImvTNFlFpPy4MAnSoytAzsIUv1KOE0CY+Q4OLnEXyV8D28HO2xXK3WtEomMwLosGa1uT6E6RBMwFFhYUXqVuevBuCekbfYpmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781856206; c=relaxed/simple;
-	bh=zB4TCxIDgStDFP1rlZaKRZHke2hrvj4RkhmGkk6WUC0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sM0Bu/KODmu7z8KxwUmLwyXcJwT/pYXHGSvLhvC2jNDTu6oogKNSmnjZjjT8bEj1gjjCQcXxnq4snHN2Ns0KeAcvz8X5cm20mBaRbuKwoPDUaWaGniV14RO6psOn8hsXseZofqGQqOMGGrcCesSMAR6AtIeL3grzTIVX5BBTvY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n6+KcSfr; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781857861; c=relaxed/simple;
+	bh=MzP2SJQm41disgu1F5DLjgUW0NXcf1kPeCEpR50nHQM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=iNRyWzOL1RqwLHNOBqzIMOuosKAmn533yfNYogSyHS0mHTfKueXtm6arlrxeI53EUAiMqQlymVwa6PeyG+ARyJZ2Qwv9TymCV8dfsFaltu1E0j19BGgeG9uhdsXz2uwvtxkQTc8g7/sjd8OCByKozkVpnBcwzydq96hbq1FOEMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QNQzWAd/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n6+KcSfr"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4921e4dd62dso13484925e9.0
-        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 01:03:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781856203; x=1782461003; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=kpJwL24GNas0k68J2nJFxWElqOxVpyI/1xu9RZENp00=;
-        b=n6+KcSfraEgMTfhU1nMSD52t73wf191Fox8ivGsan2CAFJJyh9JoolTMEusK23HO/I
-         lbT3xxPqErAZoARh39+fW6BZe5FK1LWAxy8jNJWCsB80dx1nxtIYTNeuiTdShj3NnYDz
-         ms1z8rIPfzZBT3hQfMw94hwfCYuxFTwCh7AbnL0vvRrASxxxq4NccP4YcSweBZklSdxy
-         muVGQVLMBHQhHfpumWoqVeTl/v+dkMbUxlPT7leVOKdzDTjDfzlZdQyBeJOQaKxfj35y
-         9g+9ykIn1c68jILcHdzqXtcre7ZuVoSf2CvkDI9L3ILlwpp8Xnc3Xgz1Y0b/xuxA9lVX
-         NKDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781856203; x=1782461003;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kpJwL24GNas0k68J2nJFxWElqOxVpyI/1xu9RZENp00=;
-        b=KFe3aiSmRswBxCuWx9OyJyZAJNMOHszFbbvG7IOVchnD0bUaegI8eucFRHwHPmv0qZ
-         uyDL8Z4jJ1An89CAe7c525LD1iqgZQPUtzuUCW+yCCsR8XYlFH6f+YDapoaEuu/dF/1b
-         MDLoKJSaeaCWVijQZ7bxSBqLhJDQFEvPsqHUNc7kR3OEjAc2iOkOt8BoJyTK2u6KqO5+
-         aXzf49l0Lvs9WKsPj7PKCfmu5l4doELDz1iUSsqiuAGQVi5K9uo14iOk+UF/aQZuqLKd
-         XLMK3P5CuUwhXnBRD449WKZWLXgiGTGW6eCHDT9SXUWnhtNNzQ781DUbuW1vnFVXvwah
-         zgEg==
-X-Forwarded-Encrypted: i=1; AFNElJ95UVgK56K6BP9KfASTawQpzCjSwaV1aWhqO0QhYg1E2e0YcUXdHgLbDVUfUBPDSnH53LU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywfcu+WUFVX9BVPFqnr8Q/99GEYYQUNk0ah1vOksURHvBnGpwiA
-	bn5QrRT1X8ZUI3zH591GfR4pqrLpyvVohD4CNH8h1uH1z45arWK/9HpB9h7RBXnm
-X-Gm-Gg: AfdE7ckcFXRhVG4+W3oxGab8RKzk9bAKWCQvOD+6CU1x/DpY3EMdb6GoaHNgmNpknRz
-	bBVctiUeq8REBJrJIyUtNdS5Df7XygQUr2iUK5/NxSivBUmYX69njn+Pd8OlADHDJankdxbwqq4
-	k9Uhnk/nYM8wrYW0Tw4XlE7JOFYR2T2xDzN60h/d8uTD034RAcZS+0q5tHmKhiEm33NzQE2PSu5
-	GZ8qyW8EfnZqi3SZpCyWSW8VZ6uIaEFKTUVE0FmHS/FSva92+q7uXuM9FPk0eq4auPWXCzZK1ep
-	G1vPJtZ448zBwHriLE/aFSwKZ4f2TntIRa4GLSJ3ThIL76bF1vKw89JJvpFZzCtWIYaFekvlzSO
-	2r4QaLHcuOL1lQdNrvKbOUAF+PNFS67GMj62UvxarWKI2Q++UZ5Oan9+avJXMRQRVYv51RY4nI9
-	Q+vylGLCP2Xvs0bkQt4slWC5QbiKY/gaPOubZpSDVGsJfempJiWKhBtwxDrhweqYdACqTfcd/Px
-	j7q6vTMV4h7YonubtA/SYVO1g2Bwfd4VzvlALoNxcKAJ8WN86kqXfrnq9GZnBlAq1nLzuBf7jQ/
-	Kl9ZPKDvqgSxxQXkAY+S3sfF28O+5ufG
-X-Received: by 2002:a05:600c:4583:b0:490:3cf0:8d81 with SMTP id 5b1f17b1804b1-49240a44b63mr31293065e9.13.1781856202842;
-        Fri, 19 Jun 2026 01:03:22 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e002f165db642aa45e9.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:2f16:5db6:42aa:45e9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4923fd1fe8esm55234915e9.13.2026.06.19.01.03.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2026 01:03:21 -0700 (PDT)
-Date: Fri, 19 Jun 2026 10:03:19 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: sun jian <sun.jian.kdev@gmail.com>
-Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-	hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
-	toke@redhat.com, lorenzo@kernel.org, martin.lau@kernel.org,
-	clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Cover partial copy of
- non-linear test_run output
-Message-ID: <ajT3x2H0swzg4yhm@mail.gmail.com>
-References: <20260617093557.63880-3-sun.jian.kdev@gmail.com>
- <2dad9b5c184fa101d7cffa1d8f5eea5b5df60f53533d98c68175c9e3ec5ee6ac@mail.kernel.org>
- <CABFUUZFeh18OjQ6EhjD17ZwQKb1aiVNkYKv-hAkVGrHhPpjE4Q@mail.gmail.com>
- <ajOv_oOd1zInaW1b@mail.gmail.com>
- <CABFUUZHCr=4kb7kSaaPGpc4nkyn32i-svD9v7ONF+TYrrQ-xaQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QNQzWAd/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 985F21F000E9;
+	Fri, 19 Jun 2026 08:30:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781857859;
+	bh=i+P4O+nVuf8VvQPLR09Oa3sGFx75KJdc6vJb1lMvysM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=QNQzWAd/VLbMoTfqq7bfB3+fwd7+My6bh23qYfvX4aGSYw+3dueIj6qNSJCRqVqbl
+	 DiPCR+Qu5LkrYhmlKGBKxFXnfEw0bz3Plb9R7z8w5nWmCDD3boC5ZVDu5WgOXF6Wz/
+	 AAZ7zVx8rQGXgt1kmz6dNBNHVk/1v5xImkGoLLGgRTWMyWeniJ9GwP9AhO3rHdNcad
+	 usrGY64sCk5mPOS5KSVFoUuL3AK5t11QCTnMQoFhlBAX2JajoiHiRwSWXVvU/80Kev
+	 SfkEMKCOLXyGUVAEqlT/7JLSO4PEOAHTQZ/ZvjaxhgdoF8R+H0OEr0UI8nvpsXjOyf
+	 0Vc1/j7Vybm7Q==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover refcount acquire node
+ offsets
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <264dd4a10d3abdd037e01ccc6da44e5a5758dee2.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
+References: <cover.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
+ <264dd4a10d3abdd037e01ccc6da44e5a5758dee2.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 19 Jun 2026 08:30:59 +0000
+Message-Id: <20260619083059.985F21F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABFUUZHCr=4kb7kSaaPGpc4nkyn32i-svD9v7ONF+TYrrQ-xaQ@mail.gmail.com>
 
-On Thu, Jun 18, 2026 at 06:45:18PM +0800, sun jian wrote:
-> On Thu, Jun 18, 2026 at 4:44 PM Paul Chaignon <paul.chaignon@gmail.com> wrote:
-> >
-> > On Wed, Jun 17, 2026 at 10:19:52PM +0800, sun jian wrote:
-> > > On Wed, Jun 17, 2026 at 6:31 PM <bot+bpf-ci@kernel.org> wrote:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Logical double-free and verifier rejection in bpf_list_push_fron=
+t error paths.
+--
 
-[...]
+commit 822cb053457c04aa9becab9c713d49977dc74582
+Author: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 
-> > > I tried reusing pkt_v4 and the existing TC program, but they do not fit
-> > > the skb case this test is trying to cover.
-> > >
-> > > For skb test_run, IPv4/IPv6 inputs with a too-short L3 header in the
-> > > linear area are rejected before bpf_test_finish(). With pkt_v4 and a
-> > > linear area of ETH_HLEN, the test fails with -EINVAL before reaching the
-> > > partial copy-out path. If the linear area is increased enough to pass the
-> > > IPv4 check, pkt_v4 is too small to both trigger the old
-> > > copy_size - frag_size path and verify that the copied prefix spans the
-> > > linear data and the first fragment. pkt_v6 has the same issue: after
-> > > making the IPv6 header linear, only 20 bytes remain in frags.
-> > >
-> > > The existing test_pkt_access program has its own packet-access coverage
-> > > goals and is not just a pass-through carrier. With such a short linear
-> > > area or small packet fixture, it can fail before the test hits the
-> > > bpf_test_finish()'s partial copy-out path. A pass-through TC program is
-> > > therefore a better fit, because it keeps the test focused on the
-> > > bpf_test_finish() copy-out semantics.
-> >
-> > If we're keeping tc_pass_prog() then can't we use pkt_v4 and get rid of
-> > init_pkt?
-> >
-> 
-> pkt_v4 is too small to construct a meaningful nonlinear skb with a stable
-> linear/frag split while still exercising the partial copy-out boundary in
-> bpf_test_finish().
-> 
-> With pkt_v4, we either do not reach a fragmented layout, or lose control over
-> the linear/frag boundary needed to exercise the regression path.
+selftests/bpf: Cover refcount acquire node offsets
 
-I think I'm missing something. Why can't we use pkt_v4 with
-tc_pass_prog() and a linear area of ETH_HLEN? That would leave 42 bytes
-of non-linear area, so a SHORT_OUT_LEN of 30 should work to trigger the
-bug, no?
+This commit adds regression tests for bpf_refcount_acquire() when used
+with graph-node-derived pointers. It includes both accepted cases with
+normalized pointers and rejected cases with non-zero fixed offsets.
 
-> 
-> This test uses a 9000B packet so it does not depend on small-packet
-> allocation details. Smaller packets might work depending on allocation
-> state, but 9000B reliably gives us a non-linear skb with page frags and a
-> stable linear/frag boundary for the copy-out regression.
-> 
-> init_pkt() is needed to ensure deterministic byte content across both linear
-> and fragmented regions so that the memcmp-based validation is stable.
-> 
-> Thanks,
-> Sun Jian
-> 
-> 
-> > >
-> > > For XDP, this object does not have an existing xdp.frags pass-through
-> > > program, so the small XDP frags program is needed to cover the other
-> > > caller of the shared bpf_test_finish() path.
-> > >
-> > > Thanks,
-> > > Sun Jian
+> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/=
+testing/selftests/bpf/progs/refcounted_kptr.c
+> index 61906f48025cc..7955a997316e0 100644
+> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+[ ... ]
+> +SEC("tc")
+> +__description("refcount_acquire_list_pop_container: acquire normalized l=
+ist pop")
+> +__success __retval(0)
+> +int refcount_acquire_list_pop_container(void *ctx)
+> +{
+> +	struct node_data *node, *base, *ref;
+> +	struct bpf_list_node *list_node;
+> +	long err;
+> +
+> +	node =3D bpf_obj_new(typeof(*node));
+> +	if (!node)
+> +		return -1;
+> +
+> +	bpf_spin_lock(&lock);
+> +	err =3D bpf_list_push_front(&head, &node->l);
+> +	if (err) {
+> +		bpf_spin_unlock(&lock);
+> +		bpf_obj_drop(node);
+
+[Severity: Medium]
+Does this cause a double-free and verifier rejection?=20
+
+Since bpf_list_push_front() consumes the referenced object unconditionally,
+its reference ID is cleared upon return. The verifier treats the return val=
+ue
+as an unknown scalar and explores both branches of the error check.
+
+Because calling bpf_obj_drop() requires an owning reference, dropping the
+already-consumed node here might cause the __success test to fail loading
+with a 'release kfunc expects referenced PTR_TO_BTF_ID' error.
+
+> +		return -2;
+> +	}
+> +
+> +	list_node =3D bpf_list_pop_front(&head);
+> +	bpf_spin_unlock(&lock);
+[ ... ]
+> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/t=
+ools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+> index 7247a20c0a3bf..f6cb084af16aa 100644
+> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+[ ... ]
+> +SEC("?tc")
+> +__failure __msg("R1 must have zero offset when passed to bpf_refcount_ac=
+quire")
+> +long refcount_acquire_list_node_offset(void *ctx)
+> +{
+> +	struct node_refcounted *node, *base, *ref;
+> +	struct bpf_list_node *list_node;
+> +	long err;
+> +
+> +	node =3D bpf_obj_new(typeof(*node));
+> +	if (!node)
+> +		return 1;
+> +
+> +	bpf_spin_lock(&lock);
+> +	err =3D bpf_list_push_front(&head, &node->list);
+> +	if (err) {
+> +		bpf_spin_unlock(&lock);
+> +		bpf_obj_drop(node);
+
+[Severity: Medium]
+Similarly here in refcount_acquire_list_node_offset(), does dropping the
+node after bpf_list_push_front() cause the same issue?
+
+Depending on the verifier's branch evaluation order, this double-free logic
+might cause the test to fail verification for the wrong reason, which would
+break the expected __msg check.
+
+> +		return 2;
+> +	}
+> +
+> +	list_node =3D bpf_list_pop_front(&head);
+> +	bpf_spin_unlock(&lock);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1781852308.gi=
+t.chenyy23@mails.tsinghua.edu.cn?part=3D2
