@@ -1,123 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D33DB322A2E
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 06:51:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C82340D579;
+	Fri, 19 Jun 2026 07:08:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781851913; cv=none; b=bPL83hXYImblpCkO5F7VTs8xADu4PXG07oZIDtYYeInrb+upSVOKrKqb37HCzfbR267a7yiO0NxlkEw9Yghi2wOuq8r7RMQo/EgN47McWh7Zs88cXQrCNigUN/LeN1KxOFoZOKpYt9EZ/vyKFUkWlkzDslsQeuXQLDQZpNEShhQ=
+	t=1781852939; cv=none; b=LbA7zSrla01gbt1C+wJGlugzVtYbzwRMe9ptqc+AZ1W0hctp8K4NYusIlUl3JpOV7WCUWU3T35yWPWuqmCW8w1E3cWYZPv4nf4dOHq2BPyPHlUB49r63gqBSDKAJfILy0vIy+LhyrNfvRYhfOCkON3moNVr6NGg1Jh6n1eU7mJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781851913; c=relaxed/simple;
-	bh=ON9RJBIeqM3G3vmzgfB1fU91uLoBv1dKuwo/tr4ZvT8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=YhA+pZxzJnOOEkT05O8mTar6w9Kb9GYprYmbVBBWpydTFhoE/n3FSvgFFnu7Fy9Agk6lPZrjXCMx2L7D2UJWKEC0EWtXUWRDs2vVBARrDdLZ+yMkkhVrLpBSe7b+QLWPOaUt+Jd6LNY3Y/c7l+H/Agdn5BjObtKvW0ZnAwk47Ro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LF+74JQJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781852939; c=relaxed/simple;
+	bh=J3TsOZyALZLv2Ge9eOw7b/RW9oDRDk51X8FkIq5J53A=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=UmBdGIgd+OaLmFqemToMyixryCLwV8+9VfcqboFVp6vuVOT0xT2JFwiYsEN6hgmmFhSe4RidJ8YZhrTJaWVFk4ROigICziiqJuoom0xzgxgLweqQ+dmZrqnKacjuhvbnR0/2b7bCNeqPXKaJQWfhca6BDW7bkDV8NijoCfUjXU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fs+GLxc3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LF+74JQJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CDA31F000E9;
-	Fri, 19 Jun 2026 06:51:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fs+GLxc3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79AAF1F000E9;
+	Fri, 19 Jun 2026 07:08:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781851912;
-	bh=9GZC83BLpL/PGsRP3PASf+sc5JP0x2bnQEl7OYUkcoo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=LF+74JQJqZHdPZ2ng54FL9t2nXoejaya9J/W0ixP+29er+0vo94Ihzj5w0Msp2QND
-	 Nr9UPLvEUvMidlQnjwH4csnD2+iGCVnDFWOEcx81+mJwO1cUcQvpD6IPFaBWElidoJ
-	 0SGYlIiqo+LFxqJ3Hr5Afaj8/qyKWEtElRKhcf5SyUu050rJJsZNlGZO0t/PrC5u/T
-	 V2FCQC2AjSlxof+NemeV0egZxZxnu7jQYekNQtXu/fX3l2oh1paeKnS3UCbMf5TGF9
-	 NwrOkW356dKLomDh14UukUiLxqFkeyD72YyBXk8TDLQGAVVidp6emDT0whLqoao6J4
-	 JxKemaDYX0Tvg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v4 2/3] bpf, sockmap: reject a packet-modifying
- SK_SKB stream parser
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sechang Lim" <rhkrqnwk98@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260619062959.3277612-3-rhkrqnwk98@gmail.com>
-References: <20260619062959.3277612-1-rhkrqnwk98@gmail.com>
- <20260619062959.3277612-3-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 19 Jun 2026 06:51:51 +0000
-Message-Id: <20260619065152.4CDA31F000E9@smtp.kernel.org>
+	s=k20260515; t=1781852937;
+	bh=RIMQb1yKuHonfOKSP0klQ3dfROBzfdEbzclWDXcbWek=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Fs+GLxc3OUyph1MNj30Soz3TdK4Onl90fcB5kJ1XqOP/gM5N2AjdYeWiGC/Nun6wg
+	 WCXX92qO1JIAjPSs/29HKhywK3UXqKGPJX73WIDN+IhEzSHXfFESMKxRw8Mamh7fIZ
+	 dUX6IL08/yjwmSJhle8R34jB2SkqyUPX1MjPhI5ntYa4HzjdST5326x4CaoEm3ikS3
+	 +eQBkvJLGsMWW0Spx2t+zFWAA3DxfV5K61I9Jjc4MZeEJjZstbTBa6wM/JGnhiwdQt
+	 m93MbA/ZQWxZ/ma7GAlwtlO30P43TbxgNj9iNdMwgSoGIjs2DCVcmM+3LCWkVmKEbu
+	 K0fpXUd2dsIjg==
+Content-Type: multipart/mixed; boundary="===============3794738048082045466=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <3166d652f38d3acdda9304a12482191496434a5c0b706318b4f0d6e194de8658@mail.kernel.org>
+In-Reply-To: <20260619062959.3277612-4-rhkrqnwk98@gmail.com>
+References: <20260619062959.3277612-4-rhkrqnwk98@gmail.com>
+Subject: Re: [PATCH bpf v4 3/3] selftests/bpf: test rejection of a packet-modifying SK_SKB stream parser
+From: bot+bpf-ci@kernel.org
+To: rhkrqnwk98@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,john.fastabend@gmail.com,jakub@cloudflare.com,davem@davemloft.net,kuba@kernel.org,edumazet@google.com,pabeni@redhat.com,kuniyu@google.com,willemb@google.com,shuah@kernel.org
+Cc: jolsa@kernel.org,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,horms@kernel.org,bobbyeshleman@gmail.com,jiayuan.chen@linux.dev,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 19 Jun 2026 07:08:57 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+--===============3794738048082045466==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Pre-existing issues:
-- [High] Incomplete mitigation for a Use-After-Free in the stream parser. T=
-he newly added attach-time check can be bypassed using `bpf_dynptr_write()`.
---
+> selftests/bpf: test rejection of a packet-modifying SK_SKB stream parser
+>
+> Verify that attaching an SK_SKB stream parser that can modify the packet
+> is rejected, while a read-only parser still attaches.
+>
+> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 
-commit 045eed2578465803e8813874d62e6ec53c4a01de
-Author: Sechang Lim <rhkrqnwk98@gmail.com>
+This test exercises the rejection of a stream parser that resizes the skb,
+which is the use-after-free path introduced when sk_skb programs gained
+access to packet data. An earlier single-patch version of this work
+carried a Fixes: tag pointing at that commit, and it appears to have been
+dropped when the series was split into multiple patches.
 
-bpf, sockmap: reject a packet-modifying SK_SKB stream parser
+Should this commit include:
 
-sk_psock_strp_parse() runs the BPF_PROG_TYPE_SK_SKB stream-parser program
-to find the length of the next message. strparser assembles a message out
-of several received skbs by chaining them onto the head's frag_list and
-recording where to append the next one in strp->skb_nextp. A stream parser
-is only meant to measure the next message, so this patch rejects a parser
-whose program can change packet data at attach time.
+  Fixes: 8a31db561566 ("bpf: add access to sock fields and pkt data from sk_skb programs")
 
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index 99e3789492a09..c60ba6d292f9a 100644
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
 
-[ ... ]
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-> @@ -1515,6 +1515,17 @@ static int sock_map_prog_link_lookup(struct bpf_ma=
-p *map, struct bpf_prog ***ppr
->  	return 0;
->  }
-> =20
-> +static int sock_map_prog_attach_check(enum bpf_attach_type attach_type,
-> +				      struct bpf_prog *prog)
-> +{
-> +	/* A stream parser must not modify the skb, only measure it. */
-> +	if (prog && attach_type =3D=3D BPF_SK_SKB_STREAM_PARSER &&
-> +	    prog->aux->changes_pkt_data)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[Severity: High]
-This isn't a bug introduced by this patch, but could this attach-time check=
- be
-bypassed by using bpf_dynptr_write()?
-
-Because BPF_FUNC_dynptr_write is missing from the
-bpf_helper_changes_pkt_data() switch statement in net/core/filter.c, and
-bpf_dynptr_from_skb() is not flagged by bpf_is_kfunc_pkt_changing(), the
-verifier never sets changes_pkt_data for programs using dynptrs to modify
-the packet.
-
-If a BPF program obtains a writable dynptr to the SKB using the
-bpf_dynptr_from_skb() kfunc, it can modify the packet using the
-bpf_dynptr_write() helper.
-
-For SKB dynptrs, bpf_dynptr_write() calls __bpf_dynptr_write() in
-kernel/bpf/helpers.c:
-
-	case BPF_DYNPTR_TYPE_SKB:
-		return __bpf_skb_store_bytes(dst->data, dst->offset + offset, src, len,
-					     flags);
-
-This modifies the SKB and triggers skb_ensure_writable(). If the write
-exceeds skb_headlen(skb), this invokes __pskb_pull_tail() and unconditional=
-ly
-frees the frag_list skbs, causing the exact use-after-free in the stream
-parser that this patch intends to fix.
-
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-> +
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260619062959.3277=
-612-1-rhkrqnwk98@gmail.com?part=3D2
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27809861429
+--===============3794738048082045466==--
