@@ -1,138 +1,106 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3B331E823
-	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 20:05:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9459933F58C
+	for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 20:07:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781899528; cv=none; b=imvLWPpVZp+sKrhsEcbO6O7kDrjo1nvQaDlTFGGmF/h7q7qJqmp6rIqmf6RQuRUu132T2mqLcHQl5NgdIyQz7HWkpgmYk1g3HGS2WM7RyqfUJJlGhCYChG6C1c2p20mbdRHGce0hgOW0ioz0Tesklh3DYRjh6pvEs8qC0ZF2v/w=
+	t=1781899642; cv=none; b=UcZ6Pv+aidmtertYlvlXNtgtdf77D8XV2HbOeXoqVCUou1OiuyJdp2wX5tR52UUT5aoZ3zxx9vcQFe+4XxLW3UkP2GO/lZ1Hnuqds69TeVPZnK6J5B+qL/xa1dU10HMq8QquFPUhlSKqLRsLK3bTDffMcYC5vKWypW0Bkur/Mg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781899528; c=relaxed/simple;
-	bh=0T4Z7K/rb2nHa13lr/ex8NbDdCu91yZhRTr7Sid9GFM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hNAtc+qpESyODV06N1At67NqHuFVaLTEhxmuYZPgf9evCf+0Z45AG0RN7KdhwJ8Gj+pgJCDTngINb6dETgH+Dpvxv0rlnTN8bDEi46eA9VcRDzEg8JCgWsp650lzBqXlXTr4ucS0Wa6tgZJZJYfROrIUs9gTwGcfvoCr1MzYbxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O4On/ejR; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781899642; c=relaxed/simple;
+	bh=M7bo/MeYtDVHXWxGqs+aqqWl2r5fAtIWu/YTcu2ruXk=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=qIStRl7XdiK/tvFsWIHxTQA1zD/NiWHisUlrpTss1IwanZXyR4qz+1ECAdNpaFm0V051mqAujdeYgfRUDqXYLV0trUdukfYuLKYXMhMYxIXlbSd4JxwCb7V7otBatHTB52MiS2hHQYH1vCzQkLLF6/h4Y5eNzlBmbmvuT87qW+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dqhWuG1u; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O4On/ejR"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2c68190ade4so25559025ad.0
-        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 13:05:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781899527; x=1782504327; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zH4OXFXG3GUtu3xSOVczzw0mmgwnoj/HVff9AySNWfk=;
-        b=O4On/ejRCxff79FXdpvy8qxPlHq67Q/v64j/KfEDq7ma+IR6aJSodNYEVpXxJp2z8/
-         ZJTJCwJVzTAdv5HoCCVkTbdCDSw7XW6ukrd9rMm6sobdxTsmqHVQatZUPxqfqX9oZfXc
-         BSAPxyFGSXe4dz+9iU8TaUHSc2kPL/zmoQEkHosdwXWgLxzXuo0SVxWGRFuCtDUeGazO
-         WZQVrQska7zYxBkUBQXIDc+LIoa7A3sYc/YZ5o+SCcwKog58/5E2hQPhY5+19gplz+LU
-         ORCQLy2MhqBUe/ZWEp84T2+tfj3WXGjBkNYhLPT4frlf7DL17UrAFLlh7F9JieHdfAKf
-         JF8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781899527; x=1782504327;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zH4OXFXG3GUtu3xSOVczzw0mmgwnoj/HVff9AySNWfk=;
-        b=FTU7FOfoWUMNJ1mDwgqhsmS3HK4vcKAJ0btwh2FKwDOnXH1YlWTSJwpSgaBELJVbOH
-         aKmh+9sgpQMkIqMthWyY3wu3qYQsEq1SGr/3FCxCh98ew4j3W6OjRe/y8swF7lEDJKwl
-         Ma8wgEwP++CM3LLGokjjzxh/L7Fyghs8KT32gVuSPHq7ycfO2vTnunGgY1ILCVQBqHZw
-         i8/aFMWlJJqBzjfYBU8VNLi57+2tyyyVhXqn6Ummjtuz/antpPYEmEFgoOHaoUh/Lp2R
-         US6Fzuvn+hBmc3qIcBIkBZTJpf0n6HEg0XhrbqXsTBXGBplgfFadKqh1/QxEq8gz9CH6
-         Qg9Q==
-X-Forwarded-Encrypted: i=1; AFNElJ9zqysDhSorN5Hmrkh4+iA4/PApotn9B2AwwTP4dOoBvnSUX53tVLOZ+JjnBYApaaYF5OY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlL0xAz9KGedfbJmvli8InbgMCLH5mmYfBSEMfsJL13eXMx1bf
-	Z1jJRcpcsBL7+yBRMLw1/fsrTzYNprYPGXJcu9VzBny62hY7qs1wZG9Z
-X-Gm-Gg: AfdE7ckttixmxQviW2rGyef1TE6mWtYPKodqsSNiPw567WK4Whc0eBC9zmsVm6QLeGK
-	7+ybcdTwuUJIomzzuW/Bw9ONVpXa2Aw6y+et8PgXjaewHEGVuQgH8bNDaZza1wC6VD1Crzj2pt3
-	X2jAAWkvcRNVhx5pAnM9VJL7lmwg8KTif+ToFKUE/E5l7zESb+9I+gP6iG2gOWquncVBw79Y+1/
-	v/BTZfSHlaivvM0LD+bbv1n05Z6fj88PooLeALoJLXLDcvdUjGDtP8ev5SeOhU10g+aAv875e+L
-	fzik/XJ9udJazeAz+AfjmULZcskc6mLNSu/rPQ7VGBFQhEMIvAlAC8Ug+OeYgsXk08RsoPfi5eN
-	+hMPCHM3+Yb9yEyOupinfJ34BA9y4FKAgP2Jpd4X3CgXxMQer7RBzLNwdVwQlmlerIB6GG4sHxT
-	1mlOsv5GwBE5H8qmDZfS+tcT+fv9AU/v8uuqXr5nnOCg==
-X-Received: by 2002:a17:902:c401:b0:2bc:ac76:c1d0 with SMTP id d9443c01a7336-2c719626ed0mr40699335ad.17.1781899526920;
-        Fri, 19 Jun 2026 13:05:26 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7439f8d1dsm2592035ad.51.2026.06.19.13.05.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2026 13:05:25 -0700 (PDT)
-Message-ID: <a15079723c8834a2baf3f35c6a8ed52c63addeb9.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Require CAP_BPF for pseudo-BTF ksym
- loads
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>, Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song	 <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Emil Tsalapatis	 <emil@etsalapatis.com>, Hao Luo
- <haoluo@google.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
- <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
- 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Fri, 19 Jun 2026 13:05:22 -0700
-In-Reply-To: <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-1-f950f69fe60c@mails.tsinghua.edu.cn>
-References: 
-	<20260620-f01-13-pseudo-btf-id-cap-bpf-v1-0-f950f69fe60c@mails.tsinghua.edu.cn>
-	 <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-1-f950f69fe60c@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dqhWuG1u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07AD51F000E9;
+	Fri, 19 Jun 2026 20:07:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781899641;
+	bh=4Y1Lh134q/e7DGq8OxcIe3D+ur3Dl/tCpB7kUCwdVBc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=dqhWuG1ukRKmDG8JLAKOTPZGmOhZxAdKkYrUlE4KC3++ofVbN8nDrJg3Yac44cyw7
+	 aj/3BdQyj5lFaK84H/RJQFUCXoGHtn0WzEgIs7ITPl9XrSYQ2yqLzKGrA4vQ0ilAP7
+	 WyMMF9ohz9OMw7Jz0Wkn546GeoK3DlU0U6hFIM2D+0gPzG4LCP+JnT0YoWk13EWSE3
+	 VuRwhn6IWB9cJ/MPzYgOYcNNX4vcij36peMzQjUqB8lYqK2aKZ8Y844AHCylPskK+e
+	 077kQO1aE+SpWlt3+hsXS0xoATqOGId95gREly8BEDnOvNTRM7ZJGr5d5WADkVMhuX
+	 56DbeQi3J9qtA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 2/2] selftests/bpf: validate rx_queue_index in
+ xdp_metadata
+Reply-To: sashiko-reviews@lists.linux.dev
+To: Siddharth_Cibi <siddharthcibi@icloud.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260619195759.41254-3-siddharthcibi@icloud.com>
+References: <20260619195759.41254-1-siddharthcibi@icloud.com>
+ <20260619195759.41254-3-siddharthcibi@icloud.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+Date: Fri, 19 Jun 2026 20:07:20 +0000
+Message-Id: <20260619200721.07AD51F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Sat, 2026-06-20 at 00:04 +0800, Nuoqi Gui wrote:
-> BPF_PSEUDO_BTF_ID is resolved before the main verifier pass. The resolver
-> looks up the referenced kernel symbol through kallsyms and rewrites the
-> ldimm64 immediate to the concrete address that later becomes verifier
-> state.
->=20
-> Require CAP_BPF before doing that materialization. This keeps typed ksym
-> address resolution on the privileged side and prevents loaders without
-> CAP_BPF from receiving a verifier log that contains the resolved address.
->=20
-> Fixes: 4976b718c3551 ("bpf: Introduce pseudo_btf_id")
-> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-> ---
->  kernel/bpf/verifier.c | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index ed7ba0e6a9ce..dbf5df995fc2 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -17639,6 +17639,11 @@ static int check_pseudo_btf_id(struct bpf_verifi=
-er_env *env,
->  	int btf_fd;
->  	int err;
-> =20
-> +	if (!env->bpf_capable) {
-> +		verbose(env, "BPF_PSEUDO_BTF_ID loads require CAP_BPF\n");
-> +		return -EACCES;
-> +	}
-> +
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] ABI / Struct Layout Mismatch on 32-bit platforms
+- [Medium] Uninitialized Memory Leak in `xdp_hw_metadata` BPF Program
+--
 
-Thank you for identifying this issue.
-I think the correct way to fix it is to extend the `is_ptr && !allow_ptr_le=
-aks`
-logic in kernel/bpf/disasm.c:print_bpf_insn().
-Note that it seems there are additional cases that are not covered,
-something like below seem warranted:
+commit 601fd9ffcc49bcd779869ed0a9069b48be1a4a14
+Author: Siddharth_Cibi <siddharthcibi@icloud.com>
 
+selftests/bpf: validate rx_queue_index in xdp_metadata
 
-  bool is_ptr =3D insn->src_reg =3D=3D BPF_PSEUDO_MAP_FD    ||
-                insn->src_reg =3D=3D BPF_PSEUDO_MAP_VALUE  ||
-                insn->src_reg =3D=3D BPF_PSEUDO_MAP_IDX    ||
-                insn->src_reg =3D=3D BPF_PSEUDO_MAP_IDX_VALUE ||
-                insn->src_reg =3D=3D BPF_PSEUDO_BTF_ID;
+This commit extends the xdp_metadata selftest to validate that
+rx_queue_index is preserved after an XDP redirect. It captures the
+queue index in the metadata and asserts it matches the expected queue ID.
 
-Could you please double check?
+> diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/s=
+elftests/bpf/xdp_metadata.h
+> index 87318ad1117a1..1f0ae4c00091b 100644
+> --- a/tools/testing/selftests/bpf/xdp_metadata.h
+> +++ b/tools/testing/selftests/bpf/xdp_metadata.h
+> @@ -49,4 +49,5 @@ struct xdp_meta {
+>  		__s32 rx_vlan_tag_err;
+>  	};
+>  	enum xdp_meta_field hint_valid;
+> +	__u32 rx_queue_index;
+>  };
 
->  	btf_fd =3D insn[1].imm;
->  	if (btf_fd) {
->  		btf =3D btf_get_by_fd(btf_fd);
+[Severity: High]
+Will adding this 4-byte field without explicit padding cause an ABI layout
+mismatch between 64-bit BPF programs and 32-bit user-space test environment=
+s?
+
+On 64-bit architectures, the __u64 members force the struct alignment to
+8 bytes, causing the compiler to implicitly pad the struct size to 40 bytes.
+However, on 32-bit architectures like i386, __u64 only requires 4-byte
+alignment, meaning the struct size remains exactly 36 bytes.
+
+When verify_xsk_metadata() calculates the user-space pointer:
+
+    meta =3D data - sizeof(struct xdp_meta);
+
+Could this subtract 36 bytes instead of the 40 bytes reserved by the BPF
+program on 32-bit platforms, shifting all metadata fields and causing the
+user-space program to read corrupted values?
+
+[Severity: Medium]
+Does increasing the size of this struct expose uninitialized memory in
+the xdp_hw_metadata BPF program?
+
+Because struct xdp_meta is shared, xdp_hw_metadata.c now allocates more
+headroom via bpf_xdp_adjust_meta().
+
+Since xdp_hw_metadata.c wasn't updated to initialize rx_queue_index or
+the new implicit padding, does this leave uninitialized packet headroom
+memory exposed to user space via the AF_XDP socket?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260619195759.4125=
+4-1-siddharthcibi@icloud.com?part=3D2
