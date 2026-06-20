@@ -1,135 +1,193 @@
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0140624DCF9
-	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 17:48:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D0933F591
+	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 17:53:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781977698; cv=none; b=eUP2dD/hQVfjSMz8lHfwdZirjG5h75zWTQZRMowWH5Kel2obZlN2NDcl+56Pvb6k7oErMs+A+u/rdabTIKgMUSL3UCKB5LPEQzREZ5uWkutH6gWbcCDA9GG9q23b/3/K9DXEhdSE3085HxO1hu/t6WRxLmv2uFyoanedTVuLzjw=
+	t=1781978022; cv=none; b=abHrb3Ed1xBJf5H/fr8O6TeEAlycnaz3+PwmnZecQgpRfpVsaD0kNb5ZncQN6HU5kw4r2wNNjvzaXVIou02oTdVdTsKxv/iuiKEOfAVevHm8vggdUx0e8lLcMGIBdLPoLhC0mAS+x/BELu8DHn9AvO2olA/yiGELxdrX8GeAJLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781977698; c=relaxed/simple;
-	bh=7/oFG6inbFJ1U+fOeljq4apG//LM5FHDCawn0uBqltw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=TKJUVnbpjN3oLqDB9UgT7vha9BITJxYu7I3vfsJtWj/wYaodhbTiQbgcJFpBTY+Ba6fTsDTQ9noL7jWjIgz//Lz3+ClulJEJObC84NglbSDfe516qoM/nIBE9gCv+azuYVoiLFdt53rf5Vxsb/mVdXU8hdt90kG+nAN1RzRWE/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bz9n9NJu; arc=none smtp.client-ip=209.85.160.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781978022; c=relaxed/simple;
+	bh=OB+K36Bn91JFhcjMiwQQVfC1O3Jid3HjJTbNH9Ejm14=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XJwdoiFwStXwR3qKyF+63k6De1d4+ME4/i/fRTQ25bfbumAHNRmbqUjErGvmG6HvdHKadXhmWF6tjVRbJZOrsEEG339wqCrC4VN6bN+xvrN+epDIMhlShNMXQRqEH5i7ejHFEn2LG+nmkrDedbueSlkfO63mKCnrJ16sZyyGIsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lRd0rsHB; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bz9n9NJu"
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-4474073fa81so359155fac.3
-        for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 10:48:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781977696; x=1782582496; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+cLs5VtWni2+vY/ypzHPByb/qpr24QSiCWnes7mK8Z8=;
-        b=Bz9n9NJuwCbyU2R6uR7LfzuMmNYsIE6V+tC/fp44FF7SOkPfy3m2P6jm5bTPDX90v5
-         RK+Hig3ilxqQAjiUootHFkUa4bwEVlbddogAq2mwbCrlGnAe2flFd8VgfLOhK08akLqk
-         TKteom5BpzJcpesJ/idOv3SpoG95BwyIZugimPwbw07gz/F4FWxaYdAjgcSWjXkkoGUd
-         x+9bpbB2gq3d8bcmwlxDjerDMWkgkptKjYL5z6+7q0yxs2SmaEStIPjPK+X9JV6yk9hV
-         riiqCk+ziLzi6/93l/E26Lr7LnB31NM//baKmJPe7ObBhLf5YMCiaZ+YPQlpMJSk2PgI
-         3pYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781977696; x=1782582496;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+cLs5VtWni2+vY/ypzHPByb/qpr24QSiCWnes7mK8Z8=;
-        b=BHbMKDhUpVzvjP62Dgb0AuzK5tQqfDPaHA1Eu07oT3ooai2Crp/ZG38RPpMa8LhiHw
-         w29uyoqudd0ZoZRMJ5s9cB+ytNDvqljl/NDQNGnLYNwi0sjjBw4HJ8MhrVYq++invkiV
-         X7SV7UkyOxrCjKoojrqYqQ4/R4wMsoeMgZfSzjhWrHi24++QHzNwIot5PmHfh3uJQr6D
-         FUoBZ/oaKSJBIkJqN79l7IHSJYG/v7NZhdi9azlcRM2+F72GxMR0kAWmTwWdATu0K1Hy
-         snjBFuUtviUsaQ/H8I8E1NzZxKJAlPrwYNGKmrHsaqF0hs+lwdD0jv1WGHmrahv/Dl2L
-         Nu3g==
-X-Forwarded-Encrypted: i=1; AFNElJ+Xh8PXSXDCowyMMAWL4SI+Dtlvlyph5/LiKm9sSLcNkeUu5qjxkQzKL9Li/iQfOfu6i3g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy28kP5+V1CG6miCGaEjRJlqn36JXa2JfOdKNeTF/Pxn7t+Tw4f
-	oCs8Mbi3nS0ZcsWIg4cIJEtdKOW46XylouGcaUphMoYhp9m2OHdqPQyc
-X-Gm-Gg: AfdE7cnm6/4vnSsq5s/m1jGgP2+d0lzI9TNTbkPODIZn3HwkUpWFgoD7qC//XM/Acuj
-	uzl7wduEw8qk9pa7S5HopJ/SW0ivhZIecv6tJXACoM0ipj5gjeEMs2K31+cE68meJhtARgTiFXx
-	1MQ/URAd2CsoNAKIrPrjWU9wL5R+gnESmBpM5yUjoEeERiLWp1bgsT7TfRKtggKvKg4W3AWIJGI
-	t6toR2r9TpdmyUlBGvlCpNJ3FtzqWYOrSBT9yfyV6ujzR70n/zpBGNZABgo9kf/wprTTPfvMTqy
-	mUBKdseOuzLyWgq1QswBKhR4d68QE1fL4D504Ls35x6tIcBi314aakKMhcRYWH7gZkQyBwkGRRt
-	I9N3LLtrMT2MWGh2qXCkSNSBBbXpxish+B4Fkke5anjZLMOJVZGsJmnlfoZVIBzWQHdM8phQfOm
-	1bxMOcniMbvxygF+QLDcEOmQv4uJ2UKU/t7zqcWfMdAU/RN9Z2itEtjzEYnaJIHrCZ9dsc1uZV3
-	wBnE00=
-X-Received: by 2002:a05:6870:d306:b0:43c:4fbc:d08c with SMTP id 586e51a60fabf-44707f03eebmr6820925fac.24.1781977695917;
-        Sat, 20 Jun 2026 10:48:15 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:48::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4472efb37fesm2451299fac.10.2026.06.20.10.48.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 20 Jun 2026 10:48:15 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lRd0rsHB"
+Message-ID: <173eddc1-22d3-4edc-8561-b4614bb13278@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781978017;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MNKVQCh3T6Uw40yD3OB3B2LeMgBhIBxgFvI2mCEQ3us=;
+	b=lRd0rsHBKeUX2mAMquiB4zRG7tESkz3SP7haa23CYqO4fjTeaoGPE36jkd6QbZ2hEaCS4h
+	QQO1S018Mv0faWLi4GfRxzuYsab5GQYfXtHoITvkT8eDVsT5xXk674ntbDsY/NhZ1DXlUW
+	1eTdGOjVz+VicXetMvuj5BcKmfjavio=
+Date: Sat, 20 Jun 2026 10:53:32 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 20 Jun 2026 10:48:14 -0700
-Message-Id: <DJE2DFJT0246.6W0FDJ3LH8CP@gmail.com>
-Cc: "John Fastabend" <john.fastabend@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>,
- "Viktor Malik" <vmalik@redhat.com>, "Leon Hwang" <leon.hwang@linux.dev>,
- "Dave Marchevsky" <davemarchevsky@fb.com>, <bpf@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Reject offset refcount acquire
- arguments
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-X-Mailer: aerc
-References: <cover.1781852308.git.chenyy23@mails.tsinghua.edu.cn>
- <cover.1781963957.git.chenyy23@mails.tsinghua.edu.cn>
- <faad6ed6ab46008e1b0ca5c490a706dbebb80ea8.1781963957.git.chenyy23@mails.tsinghua.edu.cn>
-In-Reply-To: <faad6ed6ab46008e1b0ca5c490a706dbebb80ea8.1781963957.git.chenyy23@mails.tsinghua.edu.cn>
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v2] bpf: Allow type tag BTF records to succeed
+ other modifier records
+Content-Language: en-GB
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, memxor@gmail.com,
+ daniel@iogearbox.net, eddyz87@gmail.com, mattbobrowski@google.com,
+ Vineet Gupta <vineet.gupta@linux.dev>,
+ "Jose E. Marchesi" <jose.marchesi@oracle.com>,
+ David Faust <david.faust@oracle.com>
+References: <20260616061454.7869-1-emil@etsalapatis.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260616061454.7869-1-emil@etsalapatis.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sat Jun 20, 2026 at 8:04 AM PDT, Yiyang Chen wrote:
-> bpf_refcount_acquire() increments the refcount at the caller-supplied
-> pointer plus the refcount field offset, then returns the caller-supplied
-> pointer unchanged.
+
+
+On 6/15/26 11:14 PM, Emil Tsalapatis wrote:
+> As of recently, Clang is able to attach type tag records to modifier BTF
+> records. This is useful for using typedefs that encompass a base type
+
+Please add the following link in the commit message:
+     https://github.com/llvm/llvm-project/pull/203089
+
+The above 'clang is able to attach type tag records to modifier BTF records'
+is not precise. The context for this requires typedef.
+
+> and a type tag, e.g.:
 >
-> The verifier records the return value as a base pointer to the refcounted
-> object.
+> typedef struct rbtree __arena rbtree_t;
 >
-> bpf_list_pop_front() and bpf_rbtree_remove() can return embedded
-> graph-node pointers as PTR_TO_BTF_ID | MEM_ALLOC with a fixed offset equa=
-l
-> to the node field offset. Passing such a pointer directly to
-> bpf_refcount_acquire() currently passes the refcounted-kptr type check.
+> Modify btf_check_type_tags() so that it allows this sequence of records.
+> The function now only checks for record loops in BTF modifier record
+> chains. Rename to btf_check_modifier_chain_length to reflect this.
+
+Currently, for clang, the typetag is always right after typedef, e.g.,
+
+     typedef struct rbtree __arena const rbtree_t
+        => typedef -> __arena -> const -> struct rbtree
+     typedef const struct rbtree __arena rbtree_t
+        => typedef -> __arena -> const -> struct rbtree
+     typedef struct rbtree const __arena rbtree_t
+        => typedef -> __arena -> const -> struct rbtree
+
+gcc has not yet implemented this (typedef struct rbtree __arena rbtree_t).
+Not sure whether gcc will follow the above clang pattern or
+it may generate something like
+     typedef -> const -> __arena -> struct rbbree
+or not.
+
+But considering gcc also follows pattern like
+     ptr -> __arena -> const -> struct rbtree
+likely in the future they may support like
+     typedef -> __arena -> const -> struct rbtree
+
+Maybe we should keep similar ordering ('ptr -> __arena' => 'typedef -> __arena')?
+
+Jose, David, what do you think?
+
 >
-> That makes the runtime operation start from base + node_off while the
-> verifier models the returned pointer as the object base.
+> Also expand the BTF modifier traversal code to take into account that
+> type record can be interleaved with other modifier records. In effect
+> this means traversing all modifiers to collect the type tags.
 >
-> Require refcount-acquire arguments to have zero fixed offset by carrying
-> the requirement through check_func_arg_reg_off() to __check_ptr_off_reg()=
-.
-> Programs can still acquire a refcount from a graph-node-derived pointer
-> after normalizing it with container_of().
+> Also modify existing selftests to now accept modifier records (const,
+> typedef) that point to type tag records.
 >
-> Fixes: 7c50b1cb76aca ("bpf: Add bpf_refcount_acquire kfunc")
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+> Cc: Yonghong Song <yonghong.song@linux.dev>
+> Cc: Vineet Gupta <vineet.gupta@linux.dev>
+> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 > ---
->  include/linux/bpf.h   |  3 +++
->  kernel/bpf/verifier.c | 18 +++++++++++-------
->  2 files changed, 14 insertions(+), 7 deletions(-)
 >
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 7719f6528..b9b7d19cb 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -859,6 +859,9 @@ enum bpf_type_flag {
->  	/* DYNPTR points to file */
->  	DYNPTR_TYPE_FILE	=3D BIT(20 + BPF_BASE_TYPE_BITS),
-> =20
-> +	/* PTR argument cannot have a fixed offset. */
-> +	PTR_ZERO_OFF		=3D BIT(21 + BPF_BASE_TYPE_BITS),
+> Changelog v1->v2:
+>
+> - Factor main type tag walk into a separate function (Eduard). The
+>    change makes certain code paths now more permissive (unrecognized tags
+>    do not cause an error for kptrs, and we can have multiple instances of
+>    the same tag), but imo handling those edge cases was a grey area in the
+>    first place and it is better to consistently scan type tags the same
+>    way everywhere.
+>
+>   kernel/bpf/btf.c                             | 209 +++++++++++--------
+>   tools/testing/selftests/bpf/prog_tests/btf.c |  12 +-
+>   2 files changed, 125 insertions(+), 96 deletions(-)
+>
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index ef4402274786..4ba2ff132503 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -28,6 +28,7 @@
+>   #include <linux/string.h>
+>   #include <linux/sysfs.h>
+>   #include <linux/overflow.h>
+> +#include <linux/bitops.h>
+>   
+>   #include <net/netfilter/nf_bpf_link.h>
+>   
+> @@ -3472,12 +3473,69 @@ static int btf_find_struct(const struct btf *btf, const struct btf_type *t,
+>   	return BTF_FIELD_FOUND;
+>   }
+>   
+> +struct btf_type_tag_match {
+> +	const char *name;
+> +	u32 flag;
+> +};
+> +
+> +struct btf_type_tag_walk_ctx {
+> +	const struct btf_type *t;	/* Input/Output */
+> +	u32 id;				/* Output */
+> +	u32 res;			/* Output */
+> +};
+> +
+> +static int btf_type_tag_walk(const struct btf *btf,
+> +			     struct btf_type_tag_walk_ctx *ctx,
+> +			     const struct btf_type_tag_match *matches,
+> +			     u32 match_cnt)
+> +{
+> +	const struct btf_type *t = ctx->t;
+> +	u32 res = 0;
+> +	const char *tag;
+> +	u32 id, i;
+> +
+> +	do {
+> +		id = t->type;
+> +		t = btf_type_by_id(btf, id);
+> +
+> +		if (!btf_type_is_modifier(t))
+> +			break;
+> +
+> +		if (!btf_type_is_type_tag(t) || btf_type_kflag(t))
+> +			continue;
+> +
+> +		tag = __btf_name_by_offset(btf, t->name_off);
+> +		for (i = 0; i < match_cnt; i++) {
+> +			if (strcmp(tag, matches[i].name))
+> +				continue;
+> +			res |= matches[i].flag;
+> +			break;
+> +		}
+> +	} while (true);
+> +
+> +	/* We only support a single tag. */
+> +	if (hweight32(res) > 1)
+> +		return -EINVAL;
+> +
+> +	ctx->t = t;
+> +	ctx->id = id;
+> +	ctx->res = res;
+> +
+> +	return 0;
+> +}
+> +
 
-No. We're not going to burn the bit.
+[...]
 
-pw-bot: cr
