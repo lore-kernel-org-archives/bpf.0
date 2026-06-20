@@ -1,141 +1,148 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BAC618A92F
-	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 20:54:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618A836D9E6
+	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 21:38:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781988892; cv=none; b=dXko3fIC3uvX574igknIRfVNwcSdfUUHc/DtFUrv3USko0QNITFhKrqVT/tkt86x6Qw/ywigP7nePMmo14TgZmDjkjNuX9+6NCfPzdqd5AvURZDO13wXbbjeslwuK81qUDC7iyu6l1X9NI/Z1T/9Oby1velfWtZwUxQNcCnQ7Ow=
+	t=1781991484; cv=none; b=qUmgXD7Cqb/nzEwNLI8/czesMDDcDzmkAS45bou0AoVCvm/cDZRmQLCZVf6W2bl2TOcxx4e1BdMZBD9yqsHsHqc+B/y6EOa6r2AKV/ZOgueNe2qA9DyXgpMUj0mrVIh8kkGEGzsUMXH2DTzrRPa0zPYON1LTs0GgJQuE2JqZTdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781988892; c=relaxed/simple;
-	bh=hoyWPSh53vkdoKN1ko25Ca+FPJMsXh3cNqjZJxcRRrY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Pm7inmeuBfOXSevtDCYzA3ttnqrtZvwZy1+TWfjJEi3kng2miLBQwqkyLoxJ5149k/gMncPXEath5LpeUlP1E+ktqpuWiYHDLZdrhqBAWztT4T4rAGs1ncA4cyZKIAXy5bdkqTvCSAte9CwPNSxCtWs0zg8bM4b+l8/q4teaT/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jb29XCiN; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781991484; c=relaxed/simple;
+	bh=ZEJ92BXzs7uxFvZ8o+bk+yvRtMFQ80qmq1Smsi3caog=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nOOIZRiUGrlUDmE0g5JWlGMA8SQY/t7yB+19jiGy6DG1ZbdErUkC2eHaTZbQFkAslJmhU9WOlIswLs7zhbUm/SeUam7IC2kmslPmewgfiXKb8kttVpFIG0hWByuN4Ygmn4P0SYOgBqL09/DwwAXi60JmN1UA1fzhJzbw18tdX1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oGTB73hC; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jb29XCiN"
-Message-ID: <125e95fe-36f0-48f5-8888-ccfd944606a1@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781988888;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aiHXj3HckvwS/mpx9wfuAVXvq6RrK1VlpJ2FZCgggxc=;
-	b=jb29XCiNDn9BPRTH0uNqkOA3cUxq2HUD/12OWZq3kPHTbgAgpYpUbhO04wkzPNPNWw550x
-	Tc+G90Inx1+bOOZERITsjgEXN9akFwiddy09DU9gR7DUyqbaIwvtripZX+wxepYtNbp4MR
-	7JVs+tSxjQjfh+p1UpLCRErF8wpiEr8=
-Date: Sat, 20 Jun 2026 13:54:39 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oGTB73hC"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-464192ab2e1so1917737f8f.0
+        for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 14:38:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781991482; x=1782596282; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kyy19G3UAGpqNpZJRFtz4WPWcaaqaP4tOOJJnrBVNEo=;
+        b=oGTB73hCBI+aKbmNhcNbDN1rb//FBS5ylOmcoCekAH4r7Y7tCe1MDtDGwCSkOviot2
+         ZGPB7KVzU3avkexN+WsVTNAxrle9TSRc+jeBraiSgJcw5ViwObsxrgGyQpWEm9sYTEiI
+         rOhdnKTwV4GJWFR3ToAUpg+vwg40SNDF26cE7/oXlQreosRMeWiubQ1qSP3SDMvg2kFJ
+         UP7piEUg7cPmhEG8ZFLD/oI91soqxjwRXRBcHC9or4dDTUYHoW50+m2Ue7vEDR1K1jjx
+         +dcM0PwSh7P9/kjQFCc1y8bRFXlrGL19Q2G6biHG8c8caKtiY14UhUhpDQqNsbMkBPLn
+         k+fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781991482; x=1782596282;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kyy19G3UAGpqNpZJRFtz4WPWcaaqaP4tOOJJnrBVNEo=;
+        b=tLxq0r/Klrj2UgBO9duUBk57rtS8GuVvDW48m4nhnu2w5h3dbqY/RLDDzvUiZN0663
+         b0lBNJy9Li3OtcJY7ksIwhopr/GzJJRcKr8xFtYq17pEUtoXKjNPlpG9bKc0x5vVu85t
+         iUvXSJB29oz3G3KfKGk+X+OiZb7YAyv/567jRpIN2rdjSTWcLtisOqbwDu8layZybRXG
+         msEu70PW0RafJFAGBB22s+SU5+dgisHxkJ3V0bO5I6JFBnu7tei5UO6rxhk2Lhn+Tm/g
+         nFO8KDqsOvixdejytb+sXsSGtALM1475DleY7MG8lx7ciuFann78qaAyaeN29Kzg/11v
+         f8ng==
+X-Forwarded-Encrypted: i=1; AHgh+RpaHzj8GxR5TjxIzureulemKA22gvuM7EGFr9GCRb3vaVhDJ4MTmJ5TAhI9swce5jGEh/M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxc0fRxxGT8ClvW5rczvZaRLIuvdmL3VI9zK6TqPaANmU+yOI55
+	asryRNjSTA9en7keCz5kK+D3Zyu4e5bQLFsfxk/ULe3vXFlGsUXW5Z2w
+X-Gm-Gg: AfdE7cnfMuHupypZAkUcOli6qO1Bvj3xgL87iTPhteiE85YSIHVwvchQ+hlivQQUohj
+	cNsTw3vt048GM/ePUKr6jeGeghlq7KusJv+2UvSaTtO5u9XlLj5suI5KJyHGUvL7fZuXWI/Kmki
+	aQwEJGewYm9ci0S8ZojV3er4Uj33nK6IW6RQqQJhspf2BaPpf4UPL862YYv8TBwX/mtywUcShvj
+	Ce5eHMv0K84KRR46wcKk+Ta1k9D2Mr/oVBkXzO2rfRu10wYw2TCJS4R0UsmHMM7FH0xovm3abBk
+	qd3NNHxuE5syg5PPs52K4+QYatGyowgaA+qAv08oD6pqhWn5ywDrqB+UM657P1WXfhwli+6psBC
+	eyxKlw/Yg6y9UbDN8atqSTAbeplhXXSvZCyD4J2fj9Pdi27/6SGJLn4bVSNMdOuYLXC9mSdd2q2
+	kXd1deodz5IzVPHq2x7wWdj9Ie1CvOETD/AVHazHJj0hk9CG+bmnvFnMdiV1ktdVlEhYNJg2iU
+X-Received: by 2002:a05:6000:2b01:b0:45e:e1a4:c4c3 with SMTP id ffacd0b85a97d-4650043b85amr9392338f8f.15.1781991481496;
+        Sat, 20 Jun 2026 14:38:01 -0700 (PDT)
+Received: from dohko.chello.ie (188-141-5-72.dynamic.upc.ie. [188.141.5.72])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-466648c698dsm12128189f8f.16.2026.06.20.14.38.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Jun 2026 14:38:01 -0700 (PDT)
+From: David Carlier <devnexen@gmail.com>
+To: danishanwar@ti.com,
+	rogerq@kernel.org,
+	andrew+netdev@lunn.ch,
+	netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	m-malladi@ti.com,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
+	David Carlier <devnexen@gmail.com>
+Subject: [PATCH net] net: ti: icssg-prueth: fix XDP_TX from the AF_XDP zero-copy RX path
+Date: Sat, 20 Jun 2026 22:37:56 +0100
+Message-ID: <20260620213756.87499-1-devnexen@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v2 1/2] bpf: Fix effective prog array index with
- BPF_F_PREORDER
-Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev, Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org
-References: <20260619063520.2690547-1-ameryhung@gmail.com>
- <20260619063520.2690547-2-ameryhung@gmail.com>
- <20260619064625.545CE1F000E9@smtp.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260619064625.545CE1F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
+On XDP_TX from the zero-copy RX path, emac_run_xdp() converts the xsk
+buffer via xdp_convert_zc_to_xdp_frame(), which clones the data into a
+fresh MEM_TYPE_PAGE_ORDER0 page that is not DMA mapped. Transmitting it
+as PRUETH_TX_BUFF_TYPE_XDP_TX derives the DMA address with
+page_pool_get_dma_addr(), reading an uninitialized page->dma_addr, so
+the device DMAs from a bogus address (corrupt TX, or an IOMMU fault).
 
+Pick the TX buffer type from the frame's memory type: keep
+PRUETH_TX_BUFF_TYPE_XDP_TX for page_pool frames and use
+PRUETH_TX_BUFF_TYPE_XDP_NDO for the cloned zero-copy frame. The
+completion path already unmaps PRUETH_SWDATA_XDPF buffers.
 
-On 6/18/26 11:46 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
->
-> Pre-existing issues:
-> - [Critical] This problem wasn't introduced by this patch, but replace_effective_prog() erroneously uses the logical index returned by effective_prog_pos() as a direct physical index into the effective BPF program array. If previous detach operations failed to reallocate the array and left dummy_bpf_prog elements in place, the physical index does not match the logical index. This causes bpf_link_update() to overwrite the wrong program slot (e.g., the dummy) leaving the original program untouched in the active array while its reference is dropped by __cgroup_bpf_replace(). Once the RCU grace period expires, this leads to a Use-After-Free when the kernel executes the freed program.
-> --
->
-> commit f837441f68b1fdb520696422a141ec421e2d50ae
-> Author: Amery Hung <ameryhung@gmail.com>
->
-> bpf: Fix effective prog array index with BPF_F_PREORDER
->
-> This commit introduces a shared helper effective_prog_pos() to accurately
-> determine a program's position in the effective array by replaying the
-> placement logic. This fixes an issue where preorder programs caused
-> replace_effective_prog() and purge_effective_progs() to access incorrect
-> slots, corrupting the array or causing a use-after-free.
->
->> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
->> index 83ce66296ac19..4355ccb78a9c6 100644
->> --- a/kernel/bpf/cgroup.c
->> +++ b/kernel/bpf/cgroup.c
-> [ ... ]
->
->> @@ -960,27 +1006,15 @@ static void replace_effective_prog(struct cgroup *cgrp,
->>   		if (percpu_ref_is_zero(&desc->bpf.refcnt))
->>   			continue;
->>   
->> -		/* find position of link in effective progs array */
->> -		for (pos = 0, cg = desc; cg; cg = cgroup_parent(cg)) {
->> -			if (pos && !(cg->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
->> -				continue;
->> -
->> -			head = &cg->bpf.progs[atype];
->> -			hlist_for_each_entry(pl, head, node) {
->> -				if (!prog_list_prog(pl))
->> -					continue;
->> -				if (pl->link == link)
->> -					goto found;
->> -				pos++;
->> -			}
->> -		}
->> -found:
->> -		BUG_ON(!cg);
->> +		pos = effective_prog_pos(desc, atype, pl);
->> +		if (WARN_ON_ONCE(pos < 0))
->> +			continue;
->>   
->>   		progs = rcu_dereference_protected(
->>   				desc->bpf.effective[atype],
->>   				lockdep_is_held(&cgroup_mutex));
->>   		item = &progs->items[pos];
->> -		WRITE_ONCE(item->prog, link->link.prog);
->> +		WRITE_ONCE(item->prog, pl->link->link.prog);
-> [Severity: Critical]
-> This isn't a bug introduced by this patch, but does replace_effective_prog()
-> erroneously use the logical index returned by effective_prog_pos() as a direct
-> physical index into the effective BPF program array?
->
-> If previous detach operations failed to reallocate the array and left
-> dummy_bpf_prog elements in place, the physical index would not match the
-> logical index. This could cause bpf_link_update() to overwrite the wrong
-> program slot (e.g., the dummy), leaving the original program untouched in the
-> active array while its reference is dropped by __cgroup_bpf_replace().
->
-> Once the RCU grace period expires, could this lead to a Use-After-Free when
-> the kernel executes the freed program? Should this instead use
-> bpf_prog_array_update_at(progs, pos, pl->link->link.prog) to correctly handle
-> the presence of dummy programs?
+Fixes: 7a64bb388df3 ("net: ti: icssg-prueth: Add AF_XDP zero copy for RX")
+Cc: stable@vger.kernel.org
+Signed-off-by: David Carlier <devnexen@gmail.com>
+---
+ drivers/net/ethernet/ti/icssg/icssg_common.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-Indeed this is a prefixing bug and can be fixed in another patch. If I undersand
-correctly, the logic like below:
-    __cgroup_bpf_detach
-      update_effective_progs
-        failed doe to out-of-memory:
-           purge_effective_progs
-               ...
-               bpf_prog_array_delete_safe_at(...)
-               /* dummy prog is in the effective array */
-    __cgroup_bpf_replace
-      replace_effective_prog
-        ...
-        item = &progs->items[pos];
-        WRITE_ONCE(item->prog, pl->link->link.prog);
-        /* dummy prog in effective array, but pos may ignore dummy prog during accouting. */
-
-So for in replace_effective_prog(), bpf_prog_array_update_at() is the right way to fix.
+diff --git a/drivers/net/ethernet/ti/icssg/icssg_common.c b/drivers/net/ethernet/ti/icssg/icssg_common.c
+index 82ddef9c17d5..302e700ea17d 100644
+--- a/drivers/net/ethernet/ti/icssg/icssg_common.c
++++ b/drivers/net/ethernet/ti/icssg/icssg_common.c
+@@ -804,6 +804,7 @@ EXPORT_SYMBOL_GPL(emac_xmit_xdp_frame);
+  */
+ static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp, u32 *len)
+ {
++	enum prueth_tx_buff_type tx_buff_type;
+ 	struct net_device *ndev = emac->ndev;
+ 	struct netdev_queue *netif_txq;
+ 	int cpu = smp_processor_id();
+@@ -826,11 +827,21 @@ static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp, u32 *len
+ 			goto drop;
+ 		}
+ 
++		/* In AF_XDP zero-copy mode xdp_convert_buff_to_frame()
++		 * clones the xsk buffer into a fresh MEM_TYPE_PAGE_ORDER0
++		 * page that is not DMA mapped. Such a frame must be mapped
++		 * via the NDO path; only a page pool-backed frame already
++		 * carries a usable page_pool DMA address.
++		 */
++		tx_buff_type = xdpf->mem_type == MEM_TYPE_PAGE_POOL ?
++				PRUETH_TX_BUFF_TYPE_XDP_TX :
++				PRUETH_TX_BUFF_TYPE_XDP_NDO;
++
+ 		q_idx = cpu % emac->tx_ch_num;
+ 		netif_txq = netdev_get_tx_queue(ndev, q_idx);
+ 		__netif_tx_lock(netif_txq, cpu);
+ 		result = emac_xmit_xdp_frame(emac, xdpf, q_idx,
+-					     PRUETH_TX_BUFF_TYPE_XDP_TX);
++					     tx_buff_type);
+ 		__netif_tx_unlock(netif_txq);
+ 		if (result == ICSSG_XDP_CONSUMED) {
+ 			ndev->stats.tx_dropped++;
+-- 
+2.53.0
 
