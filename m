@@ -1,168 +1,129 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2A4C34D929;
-	Sat, 20 Jun 2026 14:22:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4894A33;
+	Sat, 20 Jun 2026 15:04:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781965377; cv=none; b=PbfzN1FjcCKY+8STtnoeJSR3kmALAUigUKafifAc3Z8cagkaxtbWyPRGWcepzyY1TJ3e+hgdi67cKFKxIZsbnz/hIUMW/wOF1nRynaQgbP2BrlBy/s0ycN/iInCc22n50gPRFm1aeMRKdxxVtplAkTODtFfEXBGsKzviWM4WdvY=
+	t=1781967843; cv=none; b=NgP2rAlG6eoAO2sXchYB/RBavmXL4UDp/pAGHwi9fW3q70ou397K1lse5//9iGZ8tIFxtBeVFu00jK1znGKQ7MilYZX106IsXsVZ37+JiZg1tWDWOksx5uRJimyke/ESBdJuy4QzASXPQoGUHGj2jAu99oCsxugYnxkedup6maM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781965377; c=relaxed/simple;
-	bh=B65Lh6PadKju0SWWR9qKz2yLlabSJ8sxyPdsw+djKjE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QEX8r6tezbD1ApPuVBc5txLWKxaCKWgTPm0cVurX/vi6L+jg0TUjvw0vunVzKsqmwf3ZO3GyrIzADuD21d+bbY3BUn0Mi9eLQJFB5MaVXzmQgkuvf0/WgWJmqXsXY+wNjYGpB5nDrf4iQThP9B66VNv074LsxNcYbyTfdYg6f60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=bPSvXlg9; arc=none smtp.client-ip=4.193.249.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781967843; c=relaxed/simple;
+	bh=1Fb2V5n37y0TpUPKkRa3aIW+N2BFKNzCFpC+CnDdOOQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=bk7C+Z2qWDhOeGiQarWhZ8Rbi8wf7Pr0sQtkA9QYiYJIqnAV6WW/OM+ecu/d/SiAH1ZvDb3SpfJa94s13Kiqa9ltqAN/jW5quhieQxrRJhV/+an2l0SlRXxp20T72vtGhrAsRKzXZC6l6NvIwEvJ0uVjFyEaCmckpr1/C0lj+P0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OHFqepYO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="bPSvXlg9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=R17qIS+w3Fx9Z592MNUs5Q3CeenYZjfPYT
-	AsB5BRNBI=; b=bPSvXlg97vPU5ak+sR0HqWc7L6gDH7YLdkvfLeKmh0YYaBR48y
-	lDptVJXeyfVsGypSkujykviaAjP4giL1lYsAbwAIn/hQxx4Nedl4d3W1dEaRYKfz
-	BxOCJQ3eqEeTWfTyNkopwysHRE3G8jQSfeyemqoUhK/B2FvI7zzlA002g=
-Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web5 (Coremail) with SMTP id zAQGZQBH0bsbojZqXHGQAg--.53711S4;
-	Sat, 20 Jun 2026 22:22:39 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-To: Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-input@vger.kernel.org
-Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests/hid: Cover hid_bpf_get_data() size overflow
-Date: Sat, 20 Jun 2026 14:22:17 +0000
-Message-Id: <b9c4b268b403e2b41362dd678dca8feb35d34a9c.1781964949.git.chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1781964949.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1781627122.git.chenyy23@mails.tsinghua.edu.cn> <cover.1781964949.git.chenyy23@mails.tsinghua.edu.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OHFqepYO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 716451F000E9;
+	Sat, 20 Jun 2026 15:04:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781967841;
+	bh=NMNxP7dFFt/5T3vnJmpDKH4x27qF05pdQQn6o6Hpwxg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=OHFqepYOxHYYXszdhMU9TUywOpMqYf7ZyyEsq+DhYwxKFrXUZcXWLAZGSEQoXuUc+
+	 LKsnti6F4bFh3aPDkwmHx4cpo2YxJfGtPsUH/HRJDhI3VU6uO6N1U+Mo2TAdwrSn3s
+	 TbHAIO6t3Zp9jnJNn9IqvIbitXgHHPb0ynKqodNoqy+1gtUgSlXIDe70OEfecDC0oE
+	 31HBf2IYEULWlyxeG7+1sYZ9X3E+ZQBbKiHrhQRxLXOXIsCtT9iI2T+Y+BLLSEQ6qQ
+	 Mejhlwceian65HqHlnKeyjiHvAwMwjKdhW44AQD10xo30upypDGPK2bT0fJd2NQLHW
+	 ie+W379/vSF5Q==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net v2] net/smc: fix out-of-bounds read when
+ sk_user_data holds a sk_psock
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sechang Lim" <rhkrqnwk98@gmail.com>
+Cc: "Heiko Carstens" <hca@linux.ibm.com>, bpf@vger.kernel.org, linux-s390@vger.kernel.org, "Vasily
+ Gorbik" <gor@linux.ibm.com>, "Alexander Gordeev" <agordeev@linux.ibm.com>
+In-Reply-To: <20260619150342.3626224-1-rhkrqnwk98@gmail.com>
+References: <20260619150342.3626224-1-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 20 Jun 2026 15:04:01 +0000
+Message-Id: <20260620150401.716451F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zAQGZQBH0bsbojZqXHGQAg--.53711S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxGFy8XF4xJFyruF4DZF1DWrg_yoW5tr1xpa
-	95Zan0kF1ktFn7Ww18Gr4DuFWrGF1kXrW0qryxAFW5ZwsavrWkXr1xtFWjqF13CrZ09wnx
-	ua4IgasrZ3WxX3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHj14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-	8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vY
-	z4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
-	02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE
-	4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4
-	IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxkIecxEwVAFwVW5XwCF
-	04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-	18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vI
-	r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr
-	1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-	6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRtsqWUUUUU
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-Add a HID-BPF regression check for hid_bpf_get_data() requests whose
-size would overflow when added to the offset.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-The new rdesc fixup callback asks for offset 2 and size ~0ULL, then
-records whether the helper returns NULL. A vulnerable kernel returns a
-non-NULL pointer because the runtime check wraps the addition. A fixed
-kernel rejects the request. The test only checks the helper result and
-does not dereference the returned pointer.
+Pre-existing issues:
+- [Critical] Overwriting `sk_user_data` during SMC fallback destroys BPF `p=
+sock` tags, leading to an infinite loop in `sock_map_close`.
+--
 
-Also add KHDR_INCLUDES to the HID selftest build so hid_bpf.c sees the
-current kernel UAPI HID definitions on systems whose installed headers do
-not provide enum hid_report_type.
+commit cfd1a0bff0746ee614e26837804e04bb4e94ae6c
+Author: Sechang Lim <rhkrqnwk98@gmail.com>
 
-Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
----
- tools/testing/selftests/hid/Makefile    |  2 +-
- tools/testing/selftests/hid/hid_bpf.c   | 11 +++++++++++
- tools/testing/selftests/hid/progs/hid.c | 15 +++++++++++++++
- 3 files changed, 27 insertions(+), 1 deletion(-)
+net/smc: fix out-of-bounds read when sk_user_data holds a sk_psock
 
-diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
-index 50ec9e0406aba..357c6eb5ff5ee 100644
---- a/tools/testing/selftests/hid/Makefile
-+++ b/tools/testing/selftests/hid/Makefile
-@@ -24,7 +24,7 @@ CXX ?= $(CROSS_COMPILE)g++
- 
- HOSTPKG_CONFIG := pkg-config
- 
--CFLAGS += -g -O0 -rdynamic -Wall -Werror -I$(OUTPUT)
-+CFLAGS += -g -O0 -rdynamic -Wall -Werror -I$(OUTPUT) $(KHDR_INCLUDES)
- CFLAGS += -I$(OUTPUT)/tools/include
- 
- LDLIBS += -lelf -lz -lrt -lpthread
-diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
-index 1e979fb3542ba..f0a210900e63d 100644
---- a/tools/testing/selftests/hid/hid_bpf.c
-+++ b/tools/testing/selftests/hid/hid_bpf.c
-@@ -887,6 +887,17 @@ TEST_F(hid_bpf, test_rdesc_fixup)
- 	ASSERT_EQ(rpt_desc.value[4], 0x42);
- }
- 
-+TEST_F(hid_bpf, test_rdesc_fixup_get_data_overflow)
-+{
-+	const struct test_program progs[] = {
-+		{ .name = "hid_rdesc_fixup_get_data_overflow" },
-+	};
-+
-+	LOAD_PROGRAMS(progs);
-+
-+	ASSERT_EQ(self->skel->bss->get_data_overflow_check, 1);
-+}
-+
- static int libbpf_print_fn(enum libbpf_print_level level,
- 			   const char *format, va_list args)
- {
-diff --git a/tools/testing/selftests/hid/progs/hid.c b/tools/testing/selftests/hid/progs/hid.c
-index 5ecc845ef7921..b21fbb13c926f 100644
---- a/tools/testing/selftests/hid/progs/hid.c
-+++ b/tools/testing/selftests/hid/progs/hid.c
-@@ -13,6 +13,7 @@ struct attach_prog_args {
- 
- __u64 callback_check = 52;
- __u64 callback2_check = 52;
-+__u64 get_data_overflow_check;
- 
- SEC("?struct_ops/hid_device_event")
- int BPF_PROG(hid_first_event, struct hid_bpf_ctx *hid_ctx, enum hid_report_type type)
-@@ -240,6 +241,20 @@ struct hid_bpf_ops rdesc_fixup = {
- 	.hid_rdesc_fixup = (void *)hid_rdesc_fixup,
- };
- 
-+SEC("?struct_ops.s/hid_rdesc_fixup")
-+int BPF_PROG(hid_rdesc_fixup_get_data_overflow, struct hid_bpf_ctx *hid_ctx)
-+{
-+	if (!hid_bpf_get_data(hid_ctx, 2 /* offset */, ~0ULL /* size */))
-+		get_data_overflow_check = 1;
-+
-+	return 0;
-+}
-+
-+SEC(".struct_ops.link")
-+struct hid_bpf_ops rdesc_fixup_get_data_overflow = {
-+	.hid_rdesc_fixup = (void *)hid_rdesc_fixup_get_data_overflow,
-+};
-+
- SEC("?struct_ops/hid_device_event")
- int BPF_PROG(hid_test_insert1, struct hid_bpf_ctx *hid_ctx, enum hid_report_type type)
- {
--- 
-2.34.1
+This commit modifies smc_clcsock_user_data() and its RCU variant to
+only return the smc_sock when the sk_user_data field carries SMC's tag
+alone. This prevents SMC from interpreting a sk_psock structure placed
+in sk_user_data by sockmap as an smc_sock, which was leading to
+out-of-bounds reads.
 
+> diff --git a/net/smc/smc.h b/net/smc/smc.h
+> index 52145df83f6e7..88dfb459b7cc4 100644
+> --- a/net/smc/smc.h
+> +++ b/net/smc/smc.h
+> @@ -342,13 +342,25 @@ static inline void smc_init_saved_callbacks(struct =
+smc_sock *smc)
+> =20
+>  static inline struct smc_sock *smc_clcsock_user_data(const struct sock *=
+clcsk)
+>  {
+> -	return (struct smc_sock *)
+> -	       ((uintptr_t)clcsk->sk_user_data & ~SK_USER_DATA_NOCOPY);
+> +	uintptr_t data =3D (uintptr_t)clcsk->sk_user_data;
+> +
+> +	/*
+> +	 * Return the smc_sock only if the slot carries SMC's tag alone.
+> +	 * sockmap stores a sk_psock here tagged SK_USER_DATA_PSOCK; it is
+> +	 * not an smc_sock and must not be dereferenced as one.
+> +	 */
+> +	if ((data & ~SK_USER_DATA_PTRMASK) !=3D SK_USER_DATA_NOCOPY)
+> +		return NULL;
+> +	return (struct smc_sock *)(data & SK_USER_DATA_PTRMASK);
+>  }
+
+[Severity: Critical]
+This isn't a bug introduced by this patch, but the patch fails to address
+the interaction between SMC and sockmap during fallback.
+
+When an SMC socket falls back to TCP, smc_fback_replace_callbacks()
+unconditionally overwrites the inner TCP socket's sk_user_data:
+
+net/smc/af_smc.c:smc_fback_replace_callbacks() {
+    ...
+    __rcu_assign_sk_user_data_with_flags(clcsk, smc, SK_USER_DATA_NOCOPY);
+    ...
+}
+
+If a BPF sock_ops program had previously attached the inner TCP socket to a
+sockmap, this overwrite erases the SK_USER_DATA_PSOCK tag and leaks the
+psock pointer.
+
+Later, when the inner TCP socket is closed, its sk_prot->close function
+(modified by BPF to sock_map_close) is executed. Inside sock_map_close(),
+sk_psock_get(sk) returns NULL because the tag is missing, and the function
+evaluates saved_close =3D READ_ONCE(sk->sk_prot)->close:
+
+net/core/sock_map.c:sock_map_close() {
+    ...
+    if (unlikely(saved_close =3D=3D sock_map_close))
+        goto retry;
+    ...
+}
+
+Since the protocol was never restored via sk_psock_drop, saved_close
+evaluates to sock_map_close.
+
+Could this cause an infinite goto retry loop and a lockup if triggered by
+userspace? Is there a way to handle the fallback case without dropping the
+existing psock tag?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260619150342.3626=
+224-1-rhkrqnwk98@gmail.com?part=3D1
