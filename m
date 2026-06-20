@@ -1,64 +1,63 @@
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C078D21ABC9
-	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 03:27:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 436311F1537
+	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 03:29:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781926075; cv=none; b=EDtRt1w2Y0dhc/yWW0ssmFaPkdq3hXPg/jzibt6zSgCIkXZa3TAsuwtZXLKKRkDpRB0DuaMuaykUxjPZ3B5N8Iji8bPn2fsmfZy7YQm1dZqgqABJHUwmyATo8BQc9BHacwpLMcWWCvSk0vYoagYDa8VHis1uaavnhPMLkLYBbIQ=
+	t=1781926188; cv=none; b=e5xUCYZf8VyR7fIqMTsCvMALYbjfCEfSYR+FtqijmEwS7TfW5SrDqzZQtjCSMBDbtly/N99C1MCUSHRorxHlVqCsvdeadShS/BB14HMSvGP8SeCkooSMP9sMLo3cr/jyfj5X+Sh/DvkMbSna+kVDt5v+243mn3a87SqRszdJA0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781926075; c=relaxed/simple;
-	bh=8+IqhYsmbBGClBl1Opw3cYjz1bT4b9L2+OvSn38h03A=;
+	s=arc-20240116; t=1781926188; c=relaxed/simple;
+	bh=V4fEGk23ufHa6RDD3ITKwuQgnoDx8CZs/Ah+IFbxtfM=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=qyfqpbFTGkImGLrCzAyPCWlngA+YP6G0MwgVR4BcfAof2jrgZwDROTb6yirV5YLV9cv8HunatgIcnFrrMsdfxi7CRkbMOcH5/4rB5sIQ09WrImN7i+0gKoJLnknHBVc9JXX4H98eRYlJVoFF4YAXGE0XVkw/O7BkljahkrpKia4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qb0aQTYF; arc=none smtp.client-ip=209.85.161.44
+	 References:In-Reply-To; b=eumrAN0CLCWR5znT0XRGUnXLjva4rWEJ2Fnica0cxy8R/oPum1lmPhpMqlW+rwtXYWmZlnd6qWEI+exVImAnAr++OGECA42saEVQmEYc0EJ8NcOTGSUIFipluyj+o7nM0C0HBSEz8XlmGgCcrmknyr9+MyKNbEc9BXaGgpchOjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e0CC6auw; arc=none smtp.client-ip=209.85.160.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qb0aQTYF"
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-69e1eba21a6so2312367eaf.3
-        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 20:27:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e0CC6auw"
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-43ccd4f6f6eso1837405fac.0
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 20:29:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781926073; x=1782530873; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781926186; x=1782530986; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p/1/Mg7emQaBENUuGSJ+5NebjL57uLeYV751FIXQTYs=;
-        b=qb0aQTYF8FeU1fICr0TrlN2r1sYnGeaQQbh79UuETf4gAfq+bJQXNiEIFRMxLsm0yk
-         V4MLxFEdQ5P2SMmI+cmW/c5QNYq683FQfPde8BsHID1+/5t5MTMRAxj9I+RvO2nVrY3Z
-         gw4YrA7p1ySx7HfctJ+S9TGIZZPPyP8HhHrf4gK6JLcYN/e+Lm6ayjtgq/4u5sCBv5zA
-         4Rv3BRSxjSCJZV25nS8UnyfQUiaygSKMJ32KocLGzKMaxSEOUILjyXeylKRAkxSLaJfW
-         /hTthXLantFORKTv8F/A8K1SfRNkn3yJrM70jkWoaXU2HCBn2Chb53nvYmFf1arstM7z
-         Rt0Q==
+        bh=+TnvN+8UuJTY/MiJiIrk1qDxzqryb2D2zBpSi70DDYw=;
+        b=e0CC6auwM1CRGR3O3gQUSvT4f++0PbcZBaB4LaYLG0BhcJmYenW8nhf+uGJyz6t+gA
+         eijtyP38SqBIHzuSx3kQzW+Nax7Llro6jcHaoD/we9yNWCihV6ozNII/ns80DFg0xZY/
+         YWO4jkXqv9elInO3wDifLItkjUC1Hi80TM8jgsx2WYMyL0p54gsAo06Bl60+Pv7lcLds
+         iauwtp4TIbIkQgYkxT1aHuDpXwPWNJrLKzWLJMaD+TqGAJqsP12sav1qGN/pHoboswKI
+         Y09tZD7HP5ZjVFCj8T6oZcKOs3KqmgcrvUASnXoNYZBYX164Poigk/yUQH/iyB/0dDcf
+         fhTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781926073; x=1782530873;
+        d=1e100.net; s=20251104; t=1781926186; x=1782530986;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=p/1/Mg7emQaBENUuGSJ+5NebjL57uLeYV751FIXQTYs=;
-        b=KVrGFh+fTIeZqOuj1ii1iJ68QLuq7C/FmioCyOUE8IK2JOtzwDeqQfxRSG4G86yfo2
-         kpyiFQ2dWEPDuf/Fzuv9Y8XX++Ql/fT8WjeGtquz3Pvm98LZIfqBimZNiIK/VPSiWume
-         Il5bb9mFkY4jrfmsE3L4d7NKJ+QIu/Lsnqh6fFJ8ax5b885bthbeCw5cFf4RGYppXyao
-         iFAha/m+n/dhXHf5TC38WJO+sYfTba2Tyv/LHuquMnQcKS87ii/z7rJfBzqpzYBfXuOR
-         FDZ3k6NzcfQe/BuR+42OMQGo6HDBYb0OPzwuveIzcw7swBxbBS5oDng9bKlS4BxNtKul
-         yrhQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+NGa2Rg7zHLLJs2YFhbdeaH/J4cBx3HmKGqwbfPVcUxDpBYJU8lrgYQ/+TpywijTRsNus=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcgXW/kzgqTdvopgtlHF8JuP41/+lIeNlVUo2kHoBYP2xGxQNn
-	cDgJXSJl1+UszqsLsv2E47NrPra0mOPIRf8czRXJkFD8AEqWJF6qKe4o
-X-Gm-Gg: AfdE7ck5Qm9BG8uOahvWms/iWkz1Fs0Z2GFSzugchw2jFtdXdKx2YHnSD9FwmlzpQEA
-	54BgiUpEUJqgs7Hs3TvmybQkjHer3Epw/Qhpsc2BLG7edzAZqN3xeNHjwGx2O/8wP8vZjx1o3zA
-	+6+iK70xEHdaNx2GvX3F4p0zfTdSKRmRqvrNf796ztZZmRrP7rAa6knlbFTBOBcp89QQbJTz1DN
-	wiFTDeLJeZ2m88lQMPE13pEba9sRzhQhaSqiEnT9HGx9uOZig97HqWOIZXmcgpqKZtCUn640UD4
-	IE+twf680zQOLYVIdVryZQ5+rW7MUcQN9aLBapIcckDeylVSYWmrIChH3giea5+NOHm8P3r65bW
-	u20ip1Kxh0bPKB93cUPcbBUNifq/R5ULDnt6N0pdtapvNiF87aoKI2i+X9+LIdmJIMH7XHVeidk
-	oXfC48Sp0g5Y4hsDtVq3LtVNXGNG5fF7OB93TYAV1bdPNVy6HFam34JM95B+x6Mi+B0eI+pp1L/
-	ruBmOX+UDYY8KRIqw==
-X-Received: by 2002:a05:6820:189a:b0:696:573c:9f0b with SMTP id 006d021491bc7-6a0d8da24d7mr4814286eaf.14.1781926072536;
-        Fri, 19 Jun 2026 20:27:52 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:73::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4472ecd3de2sm1275554fac.8.2026.06.19.20.27.50
+        bh=+TnvN+8UuJTY/MiJiIrk1qDxzqryb2D2zBpSi70DDYw=;
+        b=e85fAsJBqa18B+ODcYjOGgNP6ijUVSQK02YcbPLrLVd3Y4/vrJgTGhx/jQqwVMEMTO
+         RVIHxaXrMw2rs3bwBnp8GmFqsw+DMyNkia9Ni0wPaG+cRSueU/6ZG1owtB5ARewe1TfL
+         SIQeg+j5NR5xnK3ao46baGuuAnNNpbX7GodtgKlg4yqoDLFcQg1RNPIL8TfoCwnMR+B+
+         iS0Bj/dCHe7S2yd4pkIRo5T7b452mqcr0qzFcy+YbSwCp+09UVy1XsG+H+EeFS8ibeRf
+         RPSYkndyb+j4mwxCTlbL1/+9dJjPBggolLPpjkF3hVL3WcHJWzBNKgu4TzOSefelEoLI
+         w+yA==
+X-Gm-Message-State: AOJu0YyuswcBmugtTaVeYL+/yj49T/SOmt4y1dyT+WqxGsRj7IN7I2nE
+	j79s6dwmW3PdX62hl0FWTqlEOFKeVvW9HPS1OODbhJE3juAIQ2C40Fqo
+X-Gm-Gg: AfdE7ckGNt75u5BcxZSuzxOAahh6G5DgUsrnj0e1l3taGrD/JlgLliYNoVtDE5sRkMx
+	voOvZwQP4vRtnuytpwxsGrVD6yMowXGx24EmY0ZZml36fqGRXueF+9zDF4SRDIBIHUy/Jo/7UZS
+	poQK1fMDGTrP/b4gJhShnL39MELpvNmJSpr9yJjznzORakxFL4pc7SDuOGtdtS+0HBs10+6gweX
+	QKkNvYFK8eAB0/U46UUeO3EnF8tWjVS6TNB1EVUHS8eqKuoal49m5NYJztvsQ6OLeB2XbAAqKzd
+	528FmEob/RBIJJAox2DGXiZ7Lzwjj0/YI5TPDPdCmr0mXggrjtemlv1qfS9cA+WnPYMBZK4Xbj5
+	tbvDJMaK/iKdAf1HlkRxY0MiOrkabACQ1O2sgWAAMggOPwr34MteEKsjWil+xohv9HsIaCb6s9s
+	LGSwGbk7wkI898nf9RqFyhLmI0sW/KlTmrSnSxIRlvkIdzFa+KyIeqRLJWdmoSOxzQSAl+9wrO9
+	zLy/ww=
+X-Received: by 2002:a05:6820:81d3:b0:69d:fd96:c3e with SMTP id 006d021491bc7-6a0d8d14caemr5089817eaf.41.1781926186124;
+        Fri, 19 Jun 2026 20:29:46 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:53::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6a0e9da0e34sm1194869eaf.0.2026.06.19.20.29.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Jun 2026 20:27:51 -0700 (PDT)
+        Fri, 19 Jun 2026 20:29:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,113 +66,101 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 19 Jun 2026 20:27:50 -0700
-Message-Id: <DJDK2NVO8903.19LWKQ3ST3U89@gmail.com>
-Cc: "JP Kobryn" <jp.kobryn@linux.dev>, "Shakeel Butt"
- <shakeel.butt@linux.dev>, "Andrew Morton" <akpm@linux-foundation.org>,
- "Alexei Starovoitov" <ast@kernel.org>, "bpf" <bpf@vger.kernel.org>,
- "linux-mm" <linux-mm@kvack.org>, "LKML" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mm/bpf_memcontrol: mark BPF memcg kfuncs static
+Date: Fri, 19 Jun 2026 20:29:43 -0700
+Message-Id: <DJDK43Q9Y1RJ.3SDUVLSC5I50E@gmail.com>
+Cc: "bpf" <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Quentin Monnet" <qmo@kernel.org>, "Shuah Khan"
+ <shuah@kernel.org>, "LKML" <linux-kernel@vger.kernel.org>, "open
+ list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ <kernel-patches-bot@fb.com>
+Subject: Re: [PATCH bpf-next v6 11/12] selftests/bpf: Add test to verify
+ xlated insns for global percpu data
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Roman Gushchin" <roman.gushchin@linux.dev>
+To: "Leon Hwang" <leon.hwang@linux.dev>
 X-Mailer: aerc
-References: <20260617202147.78347-1-jp.kobryn@linux.dev>
- <CAADnVQJ=q7hJkt=ekLD_a5KjJ_+icdwgsY61rujjLMKAKByvWw@mail.gmail.com>
- <7ia4cxxosss5.fsf@castle.c.googlers.com>
-In-Reply-To: <7ia4cxxosss5.fsf@castle.c.googlers.com>
+References: <20260615152646.27639-1-leon.hwang@linux.dev>
+ <20260615152646.27639-12-leon.hwang@linux.dev>
+ <DJ9XY0Y2D2R8.16S9E0QFFMLQS@gmail.com>
+ <d9eaffaa-6bbd-4af1-97cd-e5e37917c526@linux.dev>
+ <CAADnVQLnnSrHDbw4OQCPrXz38wZ15PC1HuS1-aSB7LZxOQhd1g@mail.gmail.com>
+ <b1efbbb0-d2ea-4050-aef7-e35db35bd8d9@linux.dev>
+In-Reply-To: <b1efbbb0-d2ea-4050-aef7-e35db35bd8d9@linux.dev>
 
-On Wed Jun 17, 2026 at 3:31 PM PDT, Roman Gushchin wrote:
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
->
->> On Wed, Jun 17, 2026 at 1:22=E2=80=AFPM JP Kobryn <jp.kobryn@linux.dev> =
-wrote:
+On Mon Jun 15, 2026 at 9:33 PM PDT, Leon Hwang wrote:
+> On 16/6/26 12:23, Alexei Starovoitov wrote:
+>> On Mon, Jun 15, 2026 at 9:19=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev=
+> wrote:
 >>>
->>> The kfuncs in bpf_memcontrol.c are not called by in-kernel C code. They=
- are
->>> only referenced by BPF programs and resolved through BTF.
+>>> On 16/6/26 05:29, Alexei Starovoitov wrote:
+>>>> On Mon Jun 15, 2026 at 8:26 AM PDT, Leon Hwang wrote:
+>>> [...]
+>>>>> +    ASSERT_EQ(ld_imm64_xlated[0].code, ld_imm64_raw[0].code, "ld_imm=
+64 opcode");
+>>>>> +    ASSERT_TRUE(ld_imm64_xlated[0].dst_reg =3D=3D ld_imm64_raw[0].ds=
+t_reg, "ld_imm64 dst_reg");
+>>>>> +    /*
+>>>>> +     * The xlated instruction has the map ID in imm and the offset
+>>>>> +     * in the next instruction's imm. The raw instruction just has
+>>>>> +     * the offset in its imm.
+>>>>> +     */
+>>>>> +    ASSERT_EQ(ld_imm64_xlated[1].imm, ld_imm64_to_u64(ld_imm64_raw),=
+ "ld_imm64 off");
+>>>>> +
+>>>>> +    mov64_percpu_reg =3D BPF_MOV64_PERCPU_REG(ld_imm64_raw[0].dst_re=
+g, ld_imm64_raw[0].dst_reg);
+>>>>> +    ASSERT_MEMEQ(&insns[idx + 2], &mov64_percpu_reg, insn_sz, "mov64=
+_percpu_reg");
+>>>>
+>>>> If the point of the test was to check that percpu_array_map_direct_val=
+ue_meta()
+>>>> computes 'off' correctly then it failed to achieve that goal.
 >>>
->>> Since no external linkage is needed, mark these functions static.
+>>> It was to check the 'off' and the mov64_percpu_reg insn.
 >>>
->>> Fixes: 5904db9891f8 ("mm: introduce BPF kfuncs to deal with memcg point=
-ers")
->>> Fixes: 5c7db3239c9f ("mm: introduce bpf_get_root_mem_cgroup() BPF kfunc=
-")
->>> Fixes: 99430ab8b804 ("mm: introduce BPF kfuncs to access memcg statisti=
-cs and events")
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Closes: https://lore.kernel.org/oe-kbuild-all/202606150332.Xy4Egd9s-lkp=
-@intel.com/
->>> Signed-off-by: JP Kobryn <jp.kobryn@linux.dev>
->>> ---
->>>  mm/bpf_memcontrol.c | 21 +++++++++++----------
->>>  1 file changed, 11 insertions(+), 10 deletions(-)
+>>> To avoid relying on the insns loaded from ELF obj, use raw insns to
+>>> check the 'off' with a percpu_array map:
 >>>
->>> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
->>> index 716df49d7647..eff79bb2c758 100644
->>> --- a/mm/bpf_memcontrol.c
->>> +++ b/mm/bpf_memcontrol.c
->>> @@ -20,7 +20,7 @@ __bpf_kfunc_start_defs();
->>>   *
->>>   * Return: A pointer to the root memory cgroup.
->>>   */
->>> -__bpf_kfunc struct mem_cgroup *bpf_get_root_mem_cgroup(void)
->>> +__bpf_kfunc static struct mem_cgroup *bpf_get_root_mem_cgroup(void)
->>
->> sashiko disappoints. It couldn't notice that kfuncs should not be static=
-.
->> We have few "__bpf_kfunc static" in net/ipv4/
->> that work by sort-of "luck", since their addresses are taken.
->>
->> In general kfuncs cannot be declared static.
+>>>         struct bpf_insn raw_insns[] =3D {
+>>>                 BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0),
+>>>                 BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1, 0),
+>>>                 BPF_EXIT_INSN(),
+>>>         };
+>>>
+>>>         skel =3D test_global_percpu_data__open_and_load();
+>>>         exp_off =3D offsetof(struct test_global_percpu_data__percpu,
+>>> struct_data.nums[6]);
+>>>         raw_insns[0].imm =3D bpf_map__fd(skel->maps.percpu);
+>>>         raw_insns[1].imm =3D exp_off;
+>>>
+>>>         prog_fd =3D bpf_prog_load(...);
+>>>         err =3D get_xlated_program(prog_fd, &insns, &cnt);
+>>>         idx =3D find_percpu_ld_imm64(insns, cnt);
+>>>
+>>>         ASSERT_EQ(insns[idx + 1].imm, exp_off, "exp_off");
+>>>
+>>> Would this achieve that goal?
+>>=20
+>> Hmm. There is nothing like that in the patch.
+>> What are you talking about?
+>> Some future improvement to the patch?
 >
-> It seems like it thought hard on it but failed based on the existing
-> code and a bit vague documentation in Documentation/bpf/kfuncs.rst:
+> It is future improvement to the patch. Sorry, it is too far from the patc=
+h.
 >
->   kfunc definitions should also always be annotated with the ``__bpf_kfun=
-c``
->   macro. This prevents issues such as the compiler inlining the kfunc if =
-it's a
->   static kernel function, or the function ...
+>> My question was about the patch you posted.
+>> What was the point of it?
 >
-> So it reads like bpf kfuncs can be static.
->
-> This is the reasoning from the logs (a dismissed concern, to be precise):
-> {
->       "type": "Dead Code / Linker Error",
->
->       "description": "Marking kfuncs as static could cause the compiler
->       to optimize them away, breaking BPF verifier BTF resolution.",
->
->       "reasoning": "The patch adds `static` to multiple `__bpf_kfunc`
->       annotated functions that are not called anywhere in C
->       code. Normally, a compiler would remove unused static functions or
->       fail to expose them in object files, which could prevent the BTF
->       ID generation logic (`resolve_btfids`) from finding them. However,
->       the `__bpf_kfunc` macro expands to include `__used` and
->       `__retain`, which strictly instructs the compiler and linker to
->       preserve the functions in the object file regardless of
->       usage. Additionally, `resolve_btfids` and `BTF_ID_FLAGS`
->       successfully parse and resolve `STB_LOCAL` static symbols, making
->       this change completely safe and correct.",
+> The point of the patch was to check that
+> percpu_array_map_direct_value_meta() computes 'off' correctly against
+> the 'off' encoded in ELF obj, and a mov64_percpu_reg insn should be
+> added after loading the prog.
 
-Almost, except it's not clear what takes priority for the compiler.
-__bpf_kfunc used to have '__used' and it was enough until clang
-got too aggressive in LTO mode. So we added '__retain' and so far
-it seems to be holding, but sashiko is missing that both of these
-attributes don't say anything about _name_ of the function.
-'static' keyword means that compiler is free to rename it and
-compilers do take advantage of that from time to time,
-while __used and __retain don't add 'do-not-rename' restriction
-to the compiler.
-
-Also look at it from the other angle.. why anyone would add
-'static' when the function is clearly not static to this particular
-compilation unit. It will be used outside of it by bpf progs
-that are obviuosly not part of this .c file.
-
-Documentation/bpf/kfuncs.rst needs to be updated.
-
-JP,
-pls send a patch to update the docs and include few words
-to ignore sparse.
+If that was the goal then it wasn't achieved. Just test manually
+that the 'off' is updated correctly and skip such selftest.
+There is little value.
 
