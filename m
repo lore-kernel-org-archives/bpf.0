@@ -1,129 +1,177 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4894A33;
-	Sat, 20 Jun 2026 15:04:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 565584A33;
+	Sat, 20 Jun 2026 15:04:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781967843; cv=none; b=NgP2rAlG6eoAO2sXchYB/RBavmXL4UDp/pAGHwi9fW3q70ou397K1lse5//9iGZ8tIFxtBeVFu00jK1znGKQ7MilYZX106IsXsVZ37+JiZg1tWDWOksx5uRJimyke/ESBdJuy4QzASXPQoGUHGj2jAu99oCsxugYnxkedup6maM=
+	t=1781967889; cv=none; b=jRVcQyFAKVgEjjdFe3MJljCvek6/ez3yF1JeetrGebp4Cm0OjccRdUOHcx9NxlUsjMVpOfcrw8okJMhwhStc+WkEyl9Bt8HP9SCc+syrK6dWYRbGZJhlJNCf1haIJYYCo4cC14eNFTZNkmv8PbNVxmwlVBAZpWMu5e9O2Ao2lOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781967843; c=relaxed/simple;
-	bh=1Fb2V5n37y0TpUPKkRa3aIW+N2BFKNzCFpC+CnDdOOQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=bk7C+Z2qWDhOeGiQarWhZ8Rbi8wf7Pr0sQtkA9QYiYJIqnAV6WW/OM+ecu/d/SiAH1ZvDb3SpfJa94s13Kiqa9ltqAN/jW5quhieQxrRJhV/+an2l0SlRXxp20T72vtGhrAsRKzXZC6l6NvIwEvJ0uVjFyEaCmckpr1/C0lj+P0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OHFqepYO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781967889; c=relaxed/simple;
+	bh=YuGasS3D3LRWWFlLtX5EqsC5xUidBHqBp+10GdwPc30=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=OYboes+fgOZS4p/budQix30FlIQFMsXvEQiMF04IivYL3TaWmsnhpuLbXaem5JoQsxIKOn9Jhp2w45D0AcB6EQjly6rhFw5/YzbMLv0S5iCWSmXxNEd4lfXuFzGpP1avgrDC555APmUljIeGQZDcZsIS88U5xjf16SUUD0aKMFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=pknDpS4t; arc=none smtp.client-ip=162.243.164.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OHFqepYO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 716451F000E9;
-	Sat, 20 Jun 2026 15:04:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781967841;
-	bh=NMNxP7dFFt/5T3vnJmpDKH4x27qF05pdQQn6o6Hpwxg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=OHFqepYOxHYYXszdhMU9TUywOpMqYf7ZyyEsq+DhYwxKFrXUZcXWLAZGSEQoXuUc+
-	 LKsnti6F4bFh3aPDkwmHx4cpo2YxJfGtPsUH/HRJDhI3VU6uO6N1U+Mo2TAdwrSn3s
-	 TbHAIO6t3Zp9jnJNn9IqvIbitXgHHPb0ynKqodNoqy+1gtUgSlXIDe70OEfecDC0oE
-	 31HBf2IYEULWlyxeG7+1sYZ9X3E+ZQBbKiHrhQRxLXOXIsCtT9iI2T+Y+BLLSEQ6qQ
-	 Mejhlwceian65HqHlnKeyjiHvAwMwjKdhW44AQD10xo30upypDGPK2bT0fJd2NQLHW
-	 ie+W379/vSF5Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v2] net/smc: fix out-of-bounds read when
- sk_user_data holds a sk_psock
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sechang Lim" <rhkrqnwk98@gmail.com>
-Cc: "Heiko Carstens" <hca@linux.ibm.com>, bpf@vger.kernel.org, linux-s390@vger.kernel.org, "Vasily
- Gorbik" <gor@linux.ibm.com>, "Alexander Gordeev" <agordeev@linux.ibm.com>
-In-Reply-To: <20260619150342.3626224-1-rhkrqnwk98@gmail.com>
-References: <20260619150342.3626224-1-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 20 Jun 2026 15:04:01 +0000
-Message-Id: <20260620150401.716451F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="pknDpS4t"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:In-Reply-To:References:MIME-Version:
+	Content-Transfer-Encoding; bh=1S3qMxpVdADiN+oMZfZhz1ytC8296YyNSG
+	AdCQBpK+c=; b=pknDpS4tvciQJ6MOwn9KMfCIQBmyBb5UFagvGJMFYIyHsPGc0g
+	dyv6ZrO9jN7b8oddbQo0214fOy2Sc+3PzDFF/k+89xuNsyUWWcMrsa38mDtUU3PW
+	tBDTCibphvPCE6uCsxjYyBxuvpdwB513TC2vr2TCxlYFmdt0HUyVyUHgE=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web4 (Coremail) with SMTP id ywQGZQBnep_zqzZqVGBnAg--.37531S3;
+	Sat, 20 Jun 2026 23:04:28 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Viktor Malik <vmalik@redhat.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Dave Marchevsky <davemarchevsky@fb.com>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 1/2] bpf: Reject offset refcount acquire arguments
+Date: Sat, 20 Jun 2026 15:04:17 +0000
+Message-Id: <faad6ed6ab46008e1b0ca5c490a706dbebb80ea8.1781963957.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1781963957.git.chenyy23@mails.tsinghua.edu.cn>
+References: <cover.1781852308.git.chenyy23@mails.tsinghua.edu.cn> <cover.1781963957.git.chenyy23@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:ywQGZQBnep_zqzZqVGBnAg--.37531S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxurW3uryfZF17Cr15ZF4DCFg_yoWrXFyUpa
+	n5Gr97ArWktFWS93WqyFn7ZryrCw1vq3yakF1vkw1xZFy3Jw1kJa909r1Uta4Sk3Wvyw1q
+	qF1j9rW3Zwn8ZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUdjb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
+	8067AKxVWUGwA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF
+	64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcV
+	CY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIE
+	c7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2
+	xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2
+	jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5V
+	A0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_
+	Wrylc2xSY4AK67AK6ryrMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
+	8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
+	xVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
+	8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280
+	aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
+	ZEXa7xRAl19UUUUUU==
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+bpf_refcount_acquire() increments the refcount at the caller-supplied
+pointer plus the refcount field offset, then returns the caller-supplied
+pointer unchanged.
 
-Pre-existing issues:
-- [Critical] Overwriting `sk_user_data` during SMC fallback destroys BPF `p=
-sock` tags, leading to an infinite loop in `sock_map_close`.
---
+The verifier records the return value as a base pointer to the refcounted
+object.
 
-commit cfd1a0bff0746ee614e26837804e04bb4e94ae6c
-Author: Sechang Lim <rhkrqnwk98@gmail.com>
+bpf_list_pop_front() and bpf_rbtree_remove() can return embedded
+graph-node pointers as PTR_TO_BTF_ID | MEM_ALLOC with a fixed offset equal
+to the node field offset. Passing such a pointer directly to
+bpf_refcount_acquire() currently passes the refcounted-kptr type check.
 
-net/smc: fix out-of-bounds read when sk_user_data holds a sk_psock
+That makes the runtime operation start from base + node_off while the
+verifier models the returned pointer as the object base.
 
-This commit modifies smc_clcsock_user_data() and its RCU variant to
-only return the smc_sock when the sk_user_data field carries SMC's tag
-alone. This prevents SMC from interpreting a sk_psock structure placed
-in sk_user_data by sockmap as an smc_sock, which was leading to
-out-of-bounds reads.
+Require refcount-acquire arguments to have zero fixed offset by carrying
+the requirement through check_func_arg_reg_off() to __check_ptr_off_reg().
+Programs can still acquire a refcount from a graph-node-derived pointer
+after normalizing it with container_of().
 
-> diff --git a/net/smc/smc.h b/net/smc/smc.h
-> index 52145df83f6e7..88dfb459b7cc4 100644
-> --- a/net/smc/smc.h
-> +++ b/net/smc/smc.h
-> @@ -342,13 +342,25 @@ static inline void smc_init_saved_callbacks(struct =
-smc_sock *smc)
-> =20
->  static inline struct smc_sock *smc_clcsock_user_data(const struct sock *=
-clcsk)
->  {
-> -	return (struct smc_sock *)
-> -	       ((uintptr_t)clcsk->sk_user_data & ~SK_USER_DATA_NOCOPY);
-> +	uintptr_t data =3D (uintptr_t)clcsk->sk_user_data;
-> +
-> +	/*
-> +	 * Return the smc_sock only if the slot carries SMC's tag alone.
-> +	 * sockmap stores a sk_psock here tagged SK_USER_DATA_PSOCK; it is
-> +	 * not an smc_sock and must not be dereferenced as one.
-> +	 */
-> +	if ((data & ~SK_USER_DATA_PTRMASK) !=3D SK_USER_DATA_NOCOPY)
-> +		return NULL;
-> +	return (struct smc_sock *)(data & SK_USER_DATA_PTRMASK);
->  }
+Fixes: 7c50b1cb76aca ("bpf: Add bpf_refcount_acquire kfunc")
+Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+---
+ include/linux/bpf.h   |  3 +++
+ kernel/bpf/verifier.c | 18 +++++++++++-------
+ 2 files changed, 14 insertions(+), 7 deletions(-)
 
-[Severity: Critical]
-This isn't a bug introduced by this patch, but the patch fails to address
-the interaction between SMC and sockmap during fallback.
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 7719f6528..b9b7d19cb 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -859,6 +859,9 @@ enum bpf_type_flag {
+ 	/* DYNPTR points to file */
+ 	DYNPTR_TYPE_FILE	= BIT(20 + BPF_BASE_TYPE_BITS),
+ 
++	/* PTR argument cannot have a fixed offset. */
++	PTR_ZERO_OFF		= BIT(21 + BPF_BASE_TYPE_BITS),
++
+ 	__BPF_TYPE_FLAG_MAX,
+ 	__BPF_TYPE_LAST_FLAG	= __BPF_TYPE_FLAG_MAX - 1,
+ };
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2abc79dbf..b41aee8c6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7994,8 +7994,11 @@ static int check_func_arg_reg_off(struct bpf_verifier_env *env,
+ 				  const struct bpf_reg_state *reg, argno_t argno,
+ 				  enum bpf_arg_type arg_type)
+ {
++	bool fixed_off_ok = !(arg_type & PTR_ZERO_OFF);
+ 	u32 type = reg->type;
+ 
++	arg_type &= ~PTR_ZERO_OFF;
++
+ 	/* When referenced register is passed to release function, its fixed
+ 	 * offset must be 0.
+ 	 *
+@@ -8048,13 +8051,12 @@ static int check_func_arg_reg_off(struct bpf_verifier_env *env,
+ 	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF:
+ 	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU:
+ 		/* When referenced PTR_TO_BTF_ID is passed to release function,
+-		 * its fixed offset must be 0. In the other cases, fixed offset
+-		 * can be non-zero. This was already checked above. So pass
+-		 * fixed_off_ok as true to allow fixed offset for all other
+-		 * cases. var_off always must be 0 for PTR_TO_BTF_ID, hence we
+-		 * still need to do checks instead of returning.
++		 * or when the argument type requires zero fixed offset, its
++		 * fixed offset must be 0. In the other cases, fixed offset can
++		 * be non-zero. var_off always must be 0 for PTR_TO_BTF_ID,
++		 * hence we still need to do checks instead of returning.
+ 		 */
+-		return __check_ptr_off_reg(env, reg, argno, true);
++		return __check_ptr_off_reg(env, reg, argno, fixed_off_ok);
+ 	case PTR_TO_CTX:
+ 		/*
+ 		 * Allow fixed and variable offsets for syscall context, but
+@@ -12114,7 +12116,6 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 		case KF_ARG_PTR_TO_MEM:
+ 		case KF_ARG_PTR_TO_MEM_SIZE:
+ 		case KF_ARG_PTR_TO_CALLBACK:
+-		case KF_ARG_PTR_TO_REFCOUNTED_KPTR:
+ 		case KF_ARG_PTR_TO_CONST_STR:
+ 		case KF_ARG_PTR_TO_WORKQUEUE:
+ 		case KF_ARG_PTR_TO_TIMER:
+@@ -12128,6 +12129,9 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 		case KF_ARG_PTR_TO_CTX:
+ 			arg_type = ARG_PTR_TO_CTX;
+ 			break;
++		case KF_ARG_PTR_TO_REFCOUNTED_KPTR:
++			arg_type = ARG_PTR_TO_BTF_ID | PTR_ZERO_OFF;
++			break;
+ 		default:
+ 			verifier_bug(env, "unknown kfunc arg type %d", kf_arg_type);
+ 			return -EFAULT;
+-- 
+2.34.1
 
-When an SMC socket falls back to TCP, smc_fback_replace_callbacks()
-unconditionally overwrites the inner TCP socket's sk_user_data:
-
-net/smc/af_smc.c:smc_fback_replace_callbacks() {
-    ...
-    __rcu_assign_sk_user_data_with_flags(clcsk, smc, SK_USER_DATA_NOCOPY);
-    ...
-}
-
-If a BPF sock_ops program had previously attached the inner TCP socket to a
-sockmap, this overwrite erases the SK_USER_DATA_PSOCK tag and leaks the
-psock pointer.
-
-Later, when the inner TCP socket is closed, its sk_prot->close function
-(modified by BPF to sock_map_close) is executed. Inside sock_map_close(),
-sk_psock_get(sk) returns NULL because the tag is missing, and the function
-evaluates saved_close =3D READ_ONCE(sk->sk_prot)->close:
-
-net/core/sock_map.c:sock_map_close() {
-    ...
-    if (unlikely(saved_close =3D=3D sock_map_close))
-        goto retry;
-    ...
-}
-
-Since the protocol was never restored via sk_psock_drop, saved_close
-evaluates to sock_map_close.
-
-Could this cause an infinite goto retry loop and a lockup if triggered by
-userspace? Is there a way to handle the fallback case without dropping the
-existing psock tag?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260619150342.3626=
-224-1-rhkrqnwk98@gmail.com?part=3D1
