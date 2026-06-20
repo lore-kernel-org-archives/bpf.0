@@ -1,166 +1,154 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41BBD33F58C
-	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 13:25:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C331B31E85C
+	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 14:07:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781961930; cv=none; b=DNHQhm+avajd7ZD7OTfqGAQmsLvNoydE1q1DfAgsxp+z3ww9NtUthtp+UGMvVQBCL/GGSahu7WKIPUEmZ/VnmZgyA1hB/DNzjq/ps4dEB2ez3tIFas5xwdnmpqAm3TEh4bJv25+n6ZB4sUraCr5Mk9raqM7slv2PH2cXVm82S9g=
+	t=1781964454; cv=none; b=iFqOP0pjzX+z6mm1JbpR/eoclQNo2LC9obuTJerT/Df6cOpDIbDqgghZOA7kj2gPGPRpoJjZYIkxEvbx0+PIUFuLnunPrVrRFuHONkEJE+M9lw5gGmGeMdwQ1JeBQbyqnRIFmyDqu3oOOZY2U8G/Sy01k7ltoHg7Qes2ZX0XQNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781961930; c=relaxed/simple;
-	bh=Asuxszf/bAwC9ualoko64JrOS2xrhOR5jGL/gDpMV/c=;
+	s=arc-20240116; t=1781964454; c=relaxed/simple;
+	bh=kQoC3+53mxvsoMCxdX1jN1XmvLUZhAauBoctIev/5SY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jv2Ata/7iRD4C2YYPHzEfEzseUOGQAxtKtq4gIf97lnPMl3jUKNOn8c20pOXgq1cUAhIiB6bp6PzA/LYUPAwNfmF5yDjcs9zqrBqPx+xaowEiiOzOFM0F//FyPHKgxsCLyEWl4n6QE4FBZUZIraXbEmHoW2wxtPOjLfZdpD90TU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jHcV0dZI; arc=none smtp.client-ip=95.215.58.178
+	 In-Reply-To:Content-Type; b=KJ8rabpuUnAdmoxQo+FPeL2TItBw1YvRKROmCJkDhIZhiGkLOO14PF3Iro6vQM2zfcjwaj+zXrRWacnLBVF9V0ra1E5mJO03rBlQlGPnx0JWlfki/js3Q/p1uQG2+OxLIedgaKRYx/nW/gUC1uD88YPeUgadTjVbWtdgMHdPRfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ax3sJYRj; arc=none smtp.client-ip=95.215.58.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jHcV0dZI"
-Message-ID: <6f34efb8-c7e7-490c-bef1-c4c7da9a706e@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ax3sJYRj"
+Message-ID: <2c8ca8f1-a08b-47fb-a675-dd8c7975d1a1@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781961915;
+	t=1781964441;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=afi4i6B2BdOEvMjupBy9U4sefc34AGzac9BLN7m560Q=;
-	b=jHcV0dZIrmogmx86GXkj6i17E67BCMvSa6cyRpNc4KlXMAYX27kdbi6PHog1WPauMz7Rdu
-	UtwvBrU2Dpc2yPJZcmAnxTJJlSu2cQN4jAh3qgdD/J6lTov9gVmYNVgtIBvQGSBpS5Pon1
-	f+/56RKU3j9aFs3d2/DvXynaIjF54gc=
-Date: Sat, 20 Jun 2026 21:24:50 +0800
+	bh=L55hBgBPhek+J5BD81/5VRyCzAYzeVaP0SnRXv3ngGg=;
+	b=Ax3sJYRjIJpkCJwaQWhtsGfiEcDIc9WJl6yxMbSA+6BltiV9ZZu7k0MYsczkpgO/ielblf
+	+iFU0G7yFYext1exz29dpfYHrSWr/mzp9oEZaNgQA0937PSF5GMO1uxw9KxsK+RPUsbE+x
+	W/eHSB/J3qVz4r4VxsHLXF+4SwJCVDQ=
+Date: Sat, 20 Jun 2026 22:06:58 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v2] bpf, sockmap: disallow update and delete from tc,
- xdp and flow_dissector
-To: Sechang Lim <rhkrqnwk98@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Lorenz Bauer <lmb@cloudflare.com>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-References: <20260620034632.2308-1-rhkrqnwk98@gmail.com>
+Subject: Re: [PATCH bpf] bpf: tcp: Fix use-after-free in
+ bpf_iter_tcp_established_batch()
+To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>,
+ Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, Martin KaFai Lau <martin.lau@linux.dev>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, Ben Cressey <ben@cressey.dev>
+References: <20260620-bpf-iter-tcp-refcnt-v1-1-883bf9e69495@linux.dev>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260620034632.2308-1-rhkrqnwk98@gmail.com>
+In-Reply-To: <20260620-bpf-iter-tcp-refcnt-v1-1-883bf9e69495@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 
-On 6/20/26 11:46 AM, Sechang Lim wrote:
-> sock_map_update_common() and __sock_map_delete() hold stab->lock and call
-> sock_map_unref() -> sock_map_del_link(), which takes sk_callback_lock for
-> write. That gives the order stab->lock -> sk_callback_lock.
+On 6/20/26 8:32 AM, Jose Fernandez (Anthropic) wrote:
+> reqsk_queue_hash_req() publishes a TCP_NEW_SYN_RECV request_sock onto
+> the ehash chain (via inet_ehash_insert(), which drops the bucket lock on
+> return) and only afterwards refcount_set()s rsk_refcnt to 3.
 >
-> The reverse order comes from the SK_SKB stream parser.
-> sk_psock_strp_data_ready() holds sk_callback_lock for read, and after the
-> verdict tcp_bpf_strp_read_sock() acks the consumed data inline via
-> __tcp_cleanup_rbuf(). The ACK goes out egress, where a sched_cls program
-> deletes from the sockmap and takes stab->lock:
+> Lockless readers such as __inet_lookup_established() account for this by
+> using refcount_inc_not_zero(), but bpf_iter_tcp_established_batch() uses
+> plain sock_hold() while holding the bucket lock, on the assumption that
+> the lock guarantees sk_refcnt > 0. That assumption does not hold for
+> request_sock:
 >
->    WARNING: possible circular locking dependency detected
->    7.1.0-rc6 Not tainted
->    ------------------------------------------------------
->    syz.9.8824 is trying to acquire lock:
->    (&stab->lock){+.-.}-{3:3}, at: __sock_map_delete net/core/sock_map.c:421
->    but task is already holding lock:
->    (clock-AF_INET){++.-}-{3:3}, at: sk_psock_strp_data_ready net/core/skmsg.c:1173
+>    CPU 0                                CPU 1
+>    -----                                -----
+>    tcp_conn_request()
+>     reqsk_queue_hash_req()
+>      inet_ehash_insert(req)
+>       spin_lock(bucket)
+>       __sk_nulls_add_node_rcu(req)      // rsk_refcnt == 0
+>       spin_unlock(bucket)
+>                                         bpf_iter_tcp_established_batch()
+>                                          spin_lock(bucket)
+>                                          sock_hold(req)   <-- addition on 0
+>                                          spin_unlock(bucket)
+>      refcount_set(&req->rsk_refcnt, 3)  // clobbers saturated value
 >
->    -> #1 (clock-AF_INET){++.-}-{3:3}:
->           _raw_write_lock_bh
->           sock_map_del_link net/core/sock_map.c:167
->           sock_map_unref net/core/sock_map.c:184
->           sock_map_update_common net/core/sock_map.c:509
->           sock_map_update_elem_sys net/core/sock_map.c:588
->           map_update_elem kernel/bpf/syscall.c:1805
+> which surfaces as:
 >
->    -> #0 (&stab->lock){+.-.}-{3:3}:
->           _raw_spin_lock_bh
->           __sock_map_delete net/core/sock_map.c:421
->           sock_map_delete_elem net/core/sock_map.c:452
->           bpf_prog_06044d24140080b6
->           tcx_run net/core/dev.c:4451
->           sch_handle_egress net/core/dev.c:4541
->           __dev_queue_xmit net/core/dev.c:4808
->           ...
->           tcp_bpf_strp_read_sock net/ipv4/tcp_bpf.c:701
->           strp_data_ready net/strparser/strparser.c:402
->           sk_psock_strp_data_ready net/core/skmsg.c:1174
->           tcp_data_queue net/ipv4/tcp_input.c:5661
+>    refcount_t: addition on 0; use-after-free.
+>    WARNING: lib/refcount.c:25 at refcount_warn_saturate+0x48/0x90, CPU#1
+>    Call Trace:
+>     bpf_iter_tcp_established_batch+0x14e/0x170
+>     bpf_iter_tcp_batch+0x53/0x200
+>     bpf_iter_tcp_seq_next+0x27/0x70
+>     bpf_seq_read+0x107/0x410
+>     vfs_read+0xb9/0x380
 >
->    Possible unsafe locking scenario:
+> refcount_warn_saturate() then saturates the count, the publishing CPU's
+> refcount_set() clobbers it, and the socket is left one reference short.
+> When the last legitimate owner drops its reference the reqsk is freed
+> while still reachable, leading to use-after-free panics in e.g.
+> inet_csk_accept() or inet_csk_listen_stop().
 >
->           CPU0                    CPU1
->           ----                    ----
->      rlock(clock-AF_INET);
->                                   lock(&stab->lock);
->                                   lock(clock-AF_INET);
->      lock(&stab->lock);
+> This reproduces in seconds with tcp_syncookies=0, a handful of threads
+> doing connect()/close() to a local listener while others read an
+> iter/tcp link in a tight loop.
 >
->     *** DEADLOCK ***
+> Use refcount_inc_not_zero() and skip the socket on failure, the same way
+> every other ehash walker does. The listening hash is unaffected as
+> listeners are always inserted into lhash2 with sk_refcnt >= 1, so
+> bpf_iter_tcp_listening_batch() is left as-is.
 >
-> A tc, xdp or flow_dissector program has no reason to update or delete a
-> sockmap, and redirect does not go through here. Drop them from
-> may_update_sockmap() so the verifier rejects it. It also closes the
-> matching sockhash inversion.
+> If every matching socket in a bucket is mid-init, end_sk can stay at 0;
+> advance to the next bucket in that case rather than terminating the
+> whole iteration on a stale batch[0].
 >
-> Fixes: 0126240f448d ("bpf: sockmap: Allow update from BPF")
-> Suggested-by: John Fastabend <john.fastabend@gmail.com>
-> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+> Fixes: 04c7820b776f ("bpf: tcp: Bpf iter batching and lock_sock")
+> Reviewed-by: Ben Cressey <ben@cressey.dev>
+> Assisted-by: Claude:unspecified
+> Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+
+
+LGTM.
+
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+
+
 > ---
-> v2:
->   - reject sockmap update/delete from tc, xdp and flow_dissector (John
->     Fastabend)
->   - fix the changelog (Jiayuan Chen)
+>   net/ipv4/tcp_ipv4.c | 35 ++++++++++++++++++++---------------
+>   1 file changed, 20 insertions(+), 15 deletions(-)
 >
-> v1:
->   - https://lore.kernel.org/all/20260616091153.2966617-1-rhkrqnwk98@gmail.com/
->
->   kernel/bpf/verifier.c | 4 ----
->   1 file changed, 4 deletions(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7fb88e1cd7c4..94d225521b5a 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -8766,11 +8766,7 @@ static bool may_update_sockmap(struct bpf_verifier_env *env, int func_id)
->   			return true;
->   		break;
->   	case BPF_PROG_TYPE_SOCKET_FILTER:
-> -	case BPF_PROG_TYPE_SCHED_CLS:
-> -	case BPF_PROG_TYPE_SCHED_ACT:
-> -	case BPF_PROG_TYPE_XDP:
->   	case BPF_PROG_TYPE_SK_REUSEPORT:
-> -	case BPF_PROG_TYPE_FLOW_DISSECTOR:
->   	case BPF_PROG_TYPE_SK_LOOKUP:
->   		return true;
->   	default:
-
-CI failed.
-
-https://github.com/kernel-patches/bpf/actions/runs/27859622337/job/82454035306
-
-Please drop or change such trigger.
+> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+> index fdc81150ff6c..92342dcc6892 100644
+> --- a/net/ipv4/tcp_ipv4.c
+> +++ b/net/ipv4/tcp_ipv4.c
+> @@ -3074,25 +3074,25 @@ static unsigned int bpf_iter_tcp_established_batch(struct seq_file *seq,
+>   {
+>   	struct bpf_tcp_iter_state *iter = seq->private;
+>   	struct hlist_nulls_node *node;
+> -	unsigned int expected = 1;
+> -	struct sock *sk;
+> +	unsigned int expected = 0;
+> +	struct sock *sk = *start_sk;
+>   
+> -	sock_hold(*start_sk);
+> -	iter->batch[iter->end_sk++].sk = *start_sk;
+> -
+> -	sk = sk_nulls_next(*start_sk);
 
 
-Also, please drop Fixes tag and target to bpf-next for the same reason 
-in you another thread.
+
+Folding the open-coded first *start_sk into the loop is a good
+cleanup — it was the one socket that bypassed the refcnt check.
 
 
-Nit:
+The double-put on the realloc-failure path reported by ai is a separate,
+pre-existing issue and can be addressed in a follow-up.
 
-You can also manually fork and create pull request against
-
-https://github.com/kernel-patches/bpf/ to run full test to run the full
-
-test and make sure all tests pass before you send patch.
 
