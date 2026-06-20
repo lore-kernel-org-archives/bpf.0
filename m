@@ -1,64 +1,64 @@
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7221F91E3
-	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 03:20:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C078D21ABC9
+	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 03:27:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781925644; cv=none; b=oH7TIsSBbY//Dy/5uHS1BLyDQYQsWVOWL0ridS3xHQ4LYvaBZKDAd7QWvOqThoG2AMLP0h2aBSLL/ydpwWIz+HhtvgszNKIEwa8ftSAe5RHtsv78/P9NA0eYthVLZyJANdaGwyM0eEG/BTeXVxZrI6BXc2E6zjI9wic6jyXaHPs=
+	t=1781926075; cv=none; b=EDtRt1w2Y0dhc/yWW0ssmFaPkdq3hXPg/jzibt6zSgCIkXZa3TAsuwtZXLKKRkDpRB0DuaMuaykUxjPZ3B5N8Iji8bPn2fsmfZy7YQm1dZqgqABJHUwmyATo8BQc9BHacwpLMcWWCvSk0vYoagYDa8VHis1uaavnhPMLkLYBbIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781925644; c=relaxed/simple;
-	bh=BBwuWlfyu6CpmJmaqQ7OqRxdrmBAG4TceRywkJvwz4g=;
+	s=arc-20240116; t=1781926075; c=relaxed/simple;
+	bh=8+IqhYsmbBGClBl1Opw3cYjz1bT4b9L2+OvSn38h03A=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=jOf4Wh0ouaFCbtHOb7Cdi4QJxhJGr7rUW6OodilLDtM1eIC3HuZnGI2bVBfQfylW4uNBpb9gJRSznCMeaSxWcqdO+MluGgHzenXoLLrbxvxHHUoHwuGzi5qppT0s/ke/qprXcpwJ0ocLKYd/504cLoKvsKhTiNnqJFM5aLrngeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xfmq/JWu; arc=none smtp.client-ip=209.85.160.46
+	 References:In-Reply-To; b=qyfqpbFTGkImGLrCzAyPCWlngA+YP6G0MwgVR4BcfAof2jrgZwDROTb6yirV5YLV9cv8HunatgIcnFrrMsdfxi7CRkbMOcH5/4rB5sIQ09WrImN7i+0gKoJLnknHBVc9JXX4H98eRYlJVoFF4YAXGE0XVkw/O7BkljahkrpKia4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qb0aQTYF; arc=none smtp.client-ip=209.85.161.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xfmq/JWu"
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-442ce0c2770so2334455fac.0
-        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 20:20:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qb0aQTYF"
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-69e1eba21a6so2312367eaf.3
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 20:27:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781925642; x=1782530442; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781926073; x=1782530873; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+gQJghkrz5Uwqrbb7kMScA7hnholHzLSlGz8SYwIGNg=;
-        b=Xfmq/JWu8RgMml2H+X96O7Wra0CrJfKC2VMDzA9CaPrw3nVnIXVSaxIICXMEskZ0Xz
-         FPh88uISvkVkc6jYlrXx+otqiBeLiDoUq727DepPulBk15I8UuwnGTcpzlGvaRdYCgst
-         6WPR7TUT85mlBtli8ZnhNVyoKmSnA8QaQaLl/rcjShvbWI6V0nM39/8OqvfWMM9uDQaa
-         uEffoUrSll4tBL8Ec/mIuyU3feM44SGJreTzNFRP2cdb9i2IH6ZX47YeV9XAbvfyKfiy
-         MhVFVl3hEQ2i48WC4F1gway6jHVCG4a6gLmZCo8D5B+qtCymlGf5zEMYK9qrUkG9taek
-         jNqg==
+        bh=p/1/Mg7emQaBENUuGSJ+5NebjL57uLeYV751FIXQTYs=;
+        b=qb0aQTYF8FeU1fICr0TrlN2r1sYnGeaQQbh79UuETf4gAfq+bJQXNiEIFRMxLsm0yk
+         V4MLxFEdQ5P2SMmI+cmW/c5QNYq683FQfPde8BsHID1+/5t5MTMRAxj9I+RvO2nVrY3Z
+         gw4YrA7p1ySx7HfctJ+S9TGIZZPPyP8HhHrf4gK6JLcYN/e+Lm6ayjtgq/4u5sCBv5zA
+         4Rv3BRSxjSCJZV25nS8UnyfQUiaygSKMJ32KocLGzKMaxSEOUILjyXeylKRAkxSLaJfW
+         /hTthXLantFORKTv8F/A8K1SfRNkn3yJrM70jkWoaXU2HCBn2Chb53nvYmFf1arstM7z
+         Rt0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781925642; x=1782530442;
+        d=1e100.net; s=20251104; t=1781926073; x=1782530873;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+gQJghkrz5Uwqrbb7kMScA7hnholHzLSlGz8SYwIGNg=;
-        b=bJvS/Z/tLiEBbk06SK54JP1CGeXStWzlnilngmfZzwtdAxQaIZ2S6am6JNE0YNTqgU
-         AXJiFa4VA2Gooo4zkcRDANvxW7x+lB00n6Upk/XKQNZdiCNAJ1Nzy2taICiWwEWd9I4b
-         9z7DyrS/VMK6+TCHMSeyibllYM847e1XUNm3Yv8mTG1fKVevanogkacPMfGSMPTj8rPg
-         Oeig6b8W+ZPRGnIvI2p1NRVuPTBmBrXSnztWcmqPyAA2PAwrSZgyMqy2EWrSinvZvFzy
-         r9fO9jRbWuxx0BJJzTzbL5MTVFBMtJ0VI2kwRnBX4ed4Og/hPcpraE5ykTbmYPmXDU7A
-         NHLg==
-X-Forwarded-Encrypted: i=1; AFNElJ/fbLrHshrgIQ1tqvIUwQQxnj44cXPCFFEYtpKo/ypVIUdwVxBbjZHm+/5PCGvA17fi714=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXwPdZQ8E9lkDowdQ+hGr9x5xIaD26Cj1AgBzb6+Wicp2TT8Y4
-	oUpUo9PdLzNhjaMXMKEVHwVvQozbWTcz0kuVenmTLKdQf+SEiSZgnuni
-X-Gm-Gg: AfdE7clui8LEayxoF7J4+wK65ngV/E1AkuK1BgolgvV8kNky4zl6iybwepFOLXsBOQc
-	mbKyOHtKLwoSlKzRlwO7cw42r+Kat7CwWfOnTZ3CzGjYnxf8pST58OtJO+1qGDhiGNIRmOzODM3
-	/CfoXPv8xzx/3N1PZhb5OWePfJ4K2NP06xf5eISrxmkCbjJgwX30txFbgzR/THbjzjL4HK49OYl
-	blSjXGTSNsUUCF3XFX8FGeZczcKS3tq26dw34YIax1fw0LizR+g0MXSvL0YQZ5N0sLXrk9DmAth
-	8DO0luuI8WtKgh375oijvIcBJam3+trQ0a/gtD00Sp9Ig53Z72DtXY+AOI6+qroXtrmNAYouLeL
-	RJhT4VTEK9d1u5+B23Vqj+GLKqN6tSyBUHE6ptJDkTfC6ByRNXEugLgoO+Miztn9Gr61vPyIGPk
-	wNuONRfKjrjzzFuuK1zMem22x+Boa52ea6i4JXJel4aXzZBfooPAoIRCOdx3Nvf9kiXgkqUzpqc
-	Jvh2u8=
-X-Received: by 2002:a05:6870:ac86:b0:439:b99e:4414 with SMTP id 586e51a60fabf-4470a6fa4famr3750999fac.6.1781925642205;
-        Fri, 19 Jun 2026 20:20:42 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:58::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4472f04236fsm1099930fac.14.2026.06.19.20.20.40
+        bh=p/1/Mg7emQaBENUuGSJ+5NebjL57uLeYV751FIXQTYs=;
+        b=KVrGFh+fTIeZqOuj1ii1iJ68QLuq7C/FmioCyOUE8IK2JOtzwDeqQfxRSG4G86yfo2
+         kpyiFQ2dWEPDuf/Fzuv9Y8XX++Ql/fT8WjeGtquz3Pvm98LZIfqBimZNiIK/VPSiWume
+         Il5bb9mFkY4jrfmsE3L4d7NKJ+QIu/Lsnqh6fFJ8ax5b885bthbeCw5cFf4RGYppXyao
+         iFAha/m+n/dhXHf5TC38WJO+sYfTba2Tyv/LHuquMnQcKS87ii/z7rJfBzqpzYBfXuOR
+         FDZ3k6NzcfQe/BuR+42OMQGo6HDBYb0OPzwuveIzcw7swBxbBS5oDng9bKlS4BxNtKul
+         yrhQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+NGa2Rg7zHLLJs2YFhbdeaH/J4cBx3HmKGqwbfPVcUxDpBYJU8lrgYQ/+TpywijTRsNus=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcgXW/kzgqTdvopgtlHF8JuP41/+lIeNlVUo2kHoBYP2xGxQNn
+	cDgJXSJl1+UszqsLsv2E47NrPra0mOPIRf8czRXJkFD8AEqWJF6qKe4o
+X-Gm-Gg: AfdE7ck5Qm9BG8uOahvWms/iWkz1Fs0Z2GFSzugchw2jFtdXdKx2YHnSD9FwmlzpQEA
+	54BgiUpEUJqgs7Hs3TvmybQkjHer3Epw/Qhpsc2BLG7edzAZqN3xeNHjwGx2O/8wP8vZjx1o3zA
+	+6+iK70xEHdaNx2GvX3F4p0zfTdSKRmRqvrNf796ztZZmRrP7rAa6knlbFTBOBcp89QQbJTz1DN
+	wiFTDeLJeZ2m88lQMPE13pEba9sRzhQhaSqiEnT9HGx9uOZig97HqWOIZXmcgpqKZtCUn640UD4
+	IE+twf680zQOLYVIdVryZQ5+rW7MUcQN9aLBapIcckDeylVSYWmrIChH3giea5+NOHm8P3r65bW
+	u20ip1Kxh0bPKB93cUPcbBUNifq/R5ULDnt6N0pdtapvNiF87aoKI2i+X9+LIdmJIMH7XHVeidk
+	oXfC48Sp0g5Y4hsDtVq3LtVNXGNG5fF7OB93TYAV1bdPNVy6HFam34JM95B+x6Mi+B0eI+pp1L/
+	ruBmOX+UDYY8KRIqw==
+X-Received: by 2002:a05:6820:189a:b0:696:573c:9f0b with SMTP id 006d021491bc7-6a0d8da24d7mr4814286eaf.14.1781926072536;
+        Fri, 19 Jun 2026 20:27:52 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:73::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4472ecd3de2sm1275554fac.8.2026.06.19.20.27.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Jun 2026 20:20:41 -0700 (PDT)
+        Fri, 19 Jun 2026 20:27:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,138 +67,113 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 19 Jun 2026 20:20:40 -0700
-Message-Id: <DJDJX62AS415.2BVILN08QK149@gmail.com>
-Cc: "Alexander Viro" <viro@zeniv.linux.org.uk>, "Jan Kara" <jack@suse.cz>,
- "Simon Horman" <horms@kernel.org>, "Kuniyuki Iwashima" <kuniyu@google.com>,
- "Willem de Bruijn" <willemb@google.com>, <linux-fsdevel@vger.kernel.org>,
- <netdev@vger.kernel.org>, <bpf@vger.kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>
-Subject: Re: [PATCH 1/2] fs: Add bpf_sock_read_xattr() kfunc to read socket
- xattrs
+Date: Fri, 19 Jun 2026 20:27:50 -0700
+Message-Id: <DJDK2NVO8903.19LWKQ3ST3U89@gmail.com>
+Cc: "JP Kobryn" <jp.kobryn@linux.dev>, "Shakeel Butt"
+ <shakeel.butt@linux.dev>, "Andrew Morton" <akpm@linux-foundation.org>,
+ "Alexei Starovoitov" <ast@kernel.org>, "bpf" <bpf@vger.kernel.org>,
+ "linux-mm" <linux-mm@kvack.org>, "LKML" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm/bpf_memcontrol: mark BPF memcg kfuncs static
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Christian Brauner" <brauner@kernel.org>, "David S. Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>
+To: "Roman Gushchin" <roman.gushchin@linux.dev>
 X-Mailer: aerc
-References: <20260617-work-bpf-sock-xattr-v1-0-a1276f7c9da3@kernel.org>
- <20260617-work-bpf-sock-xattr-v1-1-a1276f7c9da3@kernel.org>
-In-Reply-To: <20260617-work-bpf-sock-xattr-v1-1-a1276f7c9da3@kernel.org>
+References: <20260617202147.78347-1-jp.kobryn@linux.dev>
+ <CAADnVQJ=q7hJkt=ekLD_a5KjJ_+icdwgsY61rujjLMKAKByvWw@mail.gmail.com>
+ <7ia4cxxosss5.fsf@castle.c.googlers.com>
+In-Reply-To: <7ia4cxxosss5.fsf@castle.c.googlers.com>
 
-On Wed Jun 17, 2026 at 4:18 AM PDT, Christian Brauner wrote:
-> In c8db08110cbe ("Merge tag 'vfs-7.1-rc1.xattr' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/vfs/vfs")
-> we added support for extended attributes for sockets. This comes in two
-> flavors: sockfs and non-sockfs/filesystem sockets. Filesystem sockets
-> are actual filesystem objects so reading xattrs must use dedicated fs
-> helpers such as bpf_get_dentry_xattr() and bpf_get_file_xattr(). Those
-> are inherently sleeping operations. Sockfs sockets on the other hand
-> don't need to use sleeping operations as the underlying data structure
-> is lockless. In addition, retrieval of sockfs extended attributes often
-> happens from LSM hooks that only provide struct socket and it's
-> completely nonsensical to grab a reference to a file, then force a
-> sleeping operation to retrieve the xattr and drop the reference. We know
-> that the sockfs file cannot go away while the LSM hook runs.
+On Wed Jun 17, 2026 at 3:31 PM PDT, Roman Gushchin wrote:
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 >
-> This series adds a bpf_sock_read_xattr() kfunc that, given a struct
-> socket, reads a user.* extended attribute from the socket's sockfs inode
-> into a bpf_dynptr. Together with fsetxattr() from userspace this lets a
-> process label a socket with a user.* xattr and have a BPF LSM program
-> retrieve that label locklessly. The kfunc mirrors the existing
-> bpf_cgroup_read_xattr(), including the restriction to the user.*
-> namespace.
->
-> systemd uses user.* xattrs on sockets to implement socket rate limiting
-> and to tag sockets for other purposes [1] such as implementing a varlink
-> registry. There is currently no efficient way for a BPF program to read
-> those labels back. The new helper allows a listening socket marked with
-> an extended attribute to be read back during bind/connect and then act
-> on the connect()ing socket. Extended attributes make it possible to
-> allow an unprivileged user manager such as systemd --user to mark
-> sockets from userspace and then rediscover them or implement policies.
->
-> The kfunc is registered KF_RCU and only for BPF LSM programs. A struct
-> socket is only guaranteed to live in sockfs when an LSM socket hook hands
-> it out, which is what keeps SOCK_INODE() valid. Sockets that embed struct
-> socket outside sockfs (tun, tap) are only reachable from tracing programs
-> and are excluded by the registration. (Btw, for consistency it would
-> be nice to force allocation of struct socket from sockfs instead of
-> simply embedding it in e.g., struct tun_file which makes the SOCKFS_I()
-> pattern a hazard - at least outside of sockfs functions.)
->
-> The read never sleeps and takes no lock. For sockfs the value lives in
-> the inode's in-memory xattr store and simple_xattr_get() resolves it
-> with an RCU-protected rhashtable lookup, taking neither the inode lock
-> nor any xattr lock. The kfunc is therefore usable from both sleepable
-> and non-sleepable LSM hooks.
->
-> Link: https://github.com/systemd/systemd/pull/40559 [1]
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
-> ---
->  fs/bpf_fs_kfuncs.c  | 37 +++++++++++++++++++++++++++++++++++++
->  include/linux/net.h |  1 +
->  net/socket.c        | 25 +++++++++++++++++++++++++
->  3 files changed, 63 insertions(+)
->
-> diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
-> index 11841c3d4260..85fc9519d1ff 100644
-> --- a/fs/bpf_fs_kfuncs.c
-> +++ b/fs/bpf_fs_kfuncs.c
-> @@ -11,6 +11,7 @@
->  #include <linux/file.h>
->  #include <linux/kernfs.h>
->  #include <linux/mm.h>
-> +#include <linux/net.h>
->  #include <linux/xattr.h>
-> =20
->  __bpf_kfunc_start_defs();
-> @@ -359,6 +360,39 @@ __bpf_kfunc int bpf_cgroup_read_xattr(struct cgroup =
-*cgroup, const char *name__s
->  }
->  #endif /* CONFIG_CGROUPS */
-> =20
-> +#ifdef CONFIG_NET
-> +/**
-> + * bpf_sock_read_xattr - read xattr of a socket's inode in sockfs
-> + * @sock: socket to get xattr from
-> + * @name__str: name of the xattr
-> + * @value_p: output buffer of the xattr value
-> + *
-> + * Get xattr *name__str* of *sock* and store the output in *value_p*.
-> + *
-> + * For security reasons, only *name__str* with prefix "user." is allowed=
+>> On Wed, Jun 17, 2026 at 1:22=E2=80=AFPM JP Kobryn <jp.kobryn@linux.dev> =
+wrote:
+>>>
+>>> The kfuncs in bpf_memcontrol.c are not called by in-kernel C code. They=
+ are
+>>> only referenced by BPF programs and resolved through BTF.
+>>>
+>>> Since no external linkage is needed, mark these functions static.
+>>>
+>>> Fixes: 5904db9891f8 ("mm: introduce BPF kfuncs to deal with memcg point=
+ers")
+>>> Fixes: 5c7db3239c9f ("mm: introduce bpf_get_root_mem_cgroup() BPF kfunc=
+")
+>>> Fixes: 99430ab8b804 ("mm: introduce BPF kfuncs to access memcg statisti=
+cs and events")
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> Closes: https://lore.kernel.org/oe-kbuild-all/202606150332.Xy4Egd9s-lkp=
+@intel.com/
+>>> Signed-off-by: JP Kobryn <jp.kobryn@linux.dev>
+>>> ---
+>>>  mm/bpf_memcontrol.c | 21 +++++++++++----------
+>>>  1 file changed, 11 insertions(+), 10 deletions(-)
+>>>
+>>> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+>>> index 716df49d7647..eff79bb2c758 100644
+>>> --- a/mm/bpf_memcontrol.c
+>>> +++ b/mm/bpf_memcontrol.c
+>>> @@ -20,7 +20,7 @@ __bpf_kfunc_start_defs();
+>>>   *
+>>>   * Return: A pointer to the root memory cgroup.
+>>>   */
+>>> -__bpf_kfunc struct mem_cgroup *bpf_get_root_mem_cgroup(void)
+>>> +__bpf_kfunc static struct mem_cgroup *bpf_get_root_mem_cgroup(void)
+>>
+>> sashiko disappoints. It couldn't notice that kfuncs should not be static=
 .
-> + *
-> + * Return: length of the xattr value on success, a negative value on err=
-or.
-> + */
-> +__bpf_kfunc int bpf_sock_read_xattr(struct socket *sock, const char *nam=
-e__str,
-> +				    struct bpf_dynptr *value_p)
-> +{
-> +	struct bpf_dynptr_kern *value_ptr =3D (struct bpf_dynptr_kern *)value_p=
-;
-> +	u32 value_len;
-> +	void *value;
-> +
-> +	/* Only allow reading "user.*" xattrs */
-> +	if (strncmp(name__str, XATTR_USER_PREFIX, XATTR_USER_PREFIX_LEN))
-> +		return -EPERM;
-> +
-> +	value_len =3D __bpf_dynptr_size(value_ptr);
-> +	value =3D __bpf_dynptr_data_rw(value_ptr, value_len);
-> +	if (!value)
-> +		return -EINVAL;
-> +
-> +	return sock_read_xattr(sock, name__str, value, value_len);
-> +}
-> +#endif /* CONFIG_NET */
+>> We have few "__bpf_kfunc static" in net/ipv4/
+>> that work by sort-of "luck", since their addresses are taken.
+>>
+>> In general kfuncs cannot be declared static.
+>
+> It seems like it thought hard on it but failed based on the existing
+> code and a bit vague documentation in Documentation/bpf/kfuncs.rst:
+>
+>   kfunc definitions should also always be annotated with the ``__bpf_kfun=
+c``
+>   macro. This prevents issues such as the compiler inlining the kfunc if =
+it's a
+>   static kernel function, or the function ...
+>
+> So it reads like bpf kfuncs can be static.
+>
+> This is the reasoning from the logs (a dismissed concern, to be precise):
+> {
+>       "type": "Dead Code / Linker Error",
+>
+>       "description": "Marking kfuncs as static could cause the compiler
+>       to optimize them away, breaking BPF verifier BTF resolution.",
+>
+>       "reasoning": "The patch adds `static` to multiple `__bpf_kfunc`
+>       annotated functions that are not called anywhere in C
+>       code. Normally, a compiler would remove unused static functions or
+>       fail to expose them in object files, which could prevent the BTF
+>       ID generation logic (`resolve_btfids`) from finding them. However,
+>       the `__bpf_kfunc` macro expands to include `__used` and
+>       `__retain`, which strictly instructs the compiler and linker to
+>       preserve the functions in the object file regardless of
+>       usage. Additionally, `resolve_btfids` and `BTF_ID_FLAGS`
+>       successfully parse and resolve `STB_LOCAL` static symbols, making
+>       this change completely safe and correct.",
 
-lgtm.
-How do you want to route it? Thought vfs tree for the next merge window?
-If so
-Acked-by: Alexei Starovoitov <ast@kernel.org>
+Almost, except it's not clear what takes priority for the compiler.
+__bpf_kfunc used to have '__used' and it was enough until clang
+got too aggressive in LTO mode. So we added '__retain' and so far
+it seems to be holding, but sashiko is missing that both of these
+attributes don't say anything about _name_ of the function.
+'static' keyword means that compiler is free to rename it and
+compilers do take advantage of that from time to time,
+while __used and __retain don't add 'do-not-rename' restriction
+to the compiler.
+
+Also look at it from the other angle.. why anyone would add
+'static' when the function is clearly not static to this particular
+compilation unit. It will be used outside of it by bpf progs
+that are obviuosly not part of this .c file.
+
+Documentation/bpf/kfuncs.rst needs to be updated.
+
+JP,
+pls send a patch to update the docs and include few words
+to ignore sparse.
+
