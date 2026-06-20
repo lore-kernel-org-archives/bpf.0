@@ -1,176 +1,145 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2637E18A92F
-	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 02:44:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781923497; cv=none; b=ZCWcJK3qsZ8+d9pCMOBt1OlU7howXij6OyL83+5wOdU+QLNzmhTdQ48OfNnbUTUcfawkX3nZR12nrqxiXcxy3WlNpE4pvvMYZHgidTyCDaYP18wUwlG5vovgQjVYpoz5f7YwQfRXZtGMdMR2LQSoyJ9XB6E+FqaSLL+mTDyxXNs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781923497; c=relaxed/simple;
-	bh=YXXYvTua7xSnHRRQX7UMZYFBwjxqSm8D+R0Oz3PNVes=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ClnmQzwg67yj/LU2QkgxMqQIAo2qemycDIrMsD8YqYEKe+oSvW9Lh5sOJgBY3TIUskpsFDL4AZIA+x2nEmnsHf2OiiRQhwyyob0Y4loPoON+2jaI/n4nksneKu98igABevpn/IMGQfiGHdnLSdhJK97tGE0JQnkQObngRmrrFNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X7kWZhmU; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37F527453
+	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 02:48:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781923701; cv=pass; b=PzmKEKZ0WAB+CrHXNxfpQqkz3hSSEg8QdxbiVyGmL6f5LL4HtkIptUZlkJCRf1dXgyPoOsGFPNl0jzTQ7HC7xY6a0LxMyXbrB86/Hpo11ozl8DX23Fd43wKAxnVNX8Di78xrxI42vE4Gs4HWphRCxxoq2VKvTdF4i5i1F92TU7k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781923701; c=relaxed/simple;
+	bh=Rbg/9D2p6GpBvrY1UMJqOy+ElyFK+3pnY/Q7CDuq/GU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ceq9F4Gfqo+kRG21HWDDrBfwbhd2sfS2seSt+BIkFKG4u4wQKIG2GYK5NX/q1LWO8zLG58PhVakGW+BqjBX4NnDZ0/nZuEiJs3jczvd/S+5zh16V5A0dvJF7aJr72FyrHb3pccgeP0sNrMFl4aMonNUcBmZnIe8aTZsteGAoncw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iJSnCCOB; arc=pass smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X7kWZhmU"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-37c8e7c8137so1365922a91.1
-        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 19:44:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iJSnCCOB"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8453427d3f4so1550320b3a.3
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2026 19:48:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781923699; cv=none;
+        d=google.com; s=arc-20240605;
+        b=huVgypXEJtTnglJgXzHDhZZcg5ggmjw6v/a8sT0Z6Y0h/LyqGA8+BdHauevYv0cMxv
+         VwEgwCBYu4PBXXnuY9o9p5q5Vxsnv7HT/M4rha4B8T1Hd8WtrTZFGEvRtDqds0N8BFZ5
+         qQ4Goe3VLSdJfav5X/8XAoVWTFj3B3L/lCxSYm2Ql0rllHGH2dC+rcXlmWKsdc2EJdCE
+         S6binhbLVSez7Wyh8HgFf8KEVKaMecFIUifvE2p6K9BFOZNKOUGYluB0fVG+Z79WnsVv
+         PD1rETcBWyiukGX1omEdu8WtqZrGi0E//t5s9D6Ohur76p3E/jG8R6e/YLgcWKVg04Bl
+         28mA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=IMog6yoEoQ/G09JDykgX7Q2v6LAP6zMnUEkcv+/q5pA=;
+        fh=f5fVPZdnfewUSlpvMnKtU0ChZd/0xSI5vCZn+E3Rzss=;
+        b=ODzwxBBVtWb8m1KXU2G6lMhJo+qQtpWv03f2bVg/8qumvRJq+tvYBWsGOkvBSB3Ay+
+         7y5MzZrhKhjkUwEWxlomS45nzU+pMOLhbBVNuuAOhQL0fMgQjFbxc+y6Fy7sMHHYKVki
+         9GcGWNbCYHSOpM7r03/IlRQ7Mtk3ZOEG9nxWa+/qrc4/KTD8VSxUvVKxe8wEb/NvAtVV
+         8g9Wk7FVF8pbr9dsx66ZqjQrJSyC4zRvWEjr7tsniSOuSc/I33qxjQQ1cN0nXbvOS+Yt
+         A/nIzTRuE4MRuDOY6qYGNQp9Lp80Hl9KK+tLZI7WAquGJeagVG54vsy74l+dnqMksNw0
+         HUyA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781923495; x=1782528295; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1781923699; x=1782528499; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CoheuMpaBBYEB0ARICeSI4vr55A0uKbRHvd5QkzvWCs=;
-        b=X7kWZhmUZrK3J7H/3V5xmtseDKk5KU1sA4ueKvNdkrDLh0XT9ziaCP6RpzQgdI1eR3
-         8F4NdXcrVkGaypjvUKNMpoBJIJ90iDQRSuk7I5itD5E1rUsEr1Ed15/cN0+4N0MMefku
-         JSjZ2KAm6TMShnentWZJX1WBAyTvHgGz19baF+hoUtxpOgfX+x3KuL/ufZL1rO1mZCsv
-         FRND7ecxlhc0dpVOpYqtO5geqfCK6e84JD5QHgf53VBWDi4TwJjkvwjvddnoLOp2PtiQ
-         T/Jp4hVraSQD7bkuD675nOx0DVPosEvrNcLIpM/z1phLj0DndLtHogZ2xap7od4+9Dpd
-         wnXg==
+        bh=IMog6yoEoQ/G09JDykgX7Q2v6LAP6zMnUEkcv+/q5pA=;
+        b=iJSnCCOBrJJs23xs53Dx0T4m1lQoRApRehkE6yv4enWe/UVSEOk00SqB1CoaHH+PgF
+         tUKx9+i3mxRJpMS+sy7kNYOGfDYe0rSnEVTYc44k72aZq+ViIc4uMnGY4F/7SBSgp5c6
+         0mcNQf/daT2OAOHZg5TIcPWH1SWhlO/sReZol4RtwKJZLUeJun+txmPD0M9vteG22sWF
+         PLPl1V17i7gzdKa22iKovISn4ncG131M38fF5fCe1w/ByW7nZ5PEAoH3AIBK18fUW4eP
+         mCUKkafx4vVERMt8UledMxtJxToFw1IixoQ+DxpOqeeGXXJ4va6xIWgQGDj6wbxtLxqz
+         30EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781923495; x=1782528295;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1781923699; x=1782528499;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=CoheuMpaBBYEB0ARICeSI4vr55A0uKbRHvd5QkzvWCs=;
-        b=lhGRo5AvPq0rtUM15+j7Gkn4x0Tq+WF0/Ul8MXlGH8DFMiqjQoAht1giUcAY99UTpi
-         3EkPzNpyzedYiaxRPmoAVFMzU+Qwdjdzz9fPTUTlwnYOc4+SWM7tj5DJso3QeCRQXHQH
-         Qg3Pj4/B0PLV7UnAgYbYMKG76SS+xRv4dkcm2nPser13e7B+I9CAwRZlgId+YqF3E3E/
-         62Y6V4gO7p1yXzz2SWQHMiyfkK3Jy0qLgpBdEtH45p8pk5+TUMLzi2OuKx8lXQI8MdIW
-         cw8rClF1YiRIOed1dF7KXydmV3W5HoaUMusdsT1z6x3D6z+eHek7eU/uQE2rsl6QZbuu
-         OKZA==
-X-Forwarded-Encrypted: i=1; AFNElJ8w13VFfhbtTJ8i4Z8a7vKlor0/A856y5eatLMdExHXuTj1BJwkF41oQKuERO7KDk0NnGI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKVt0G0+p83GS3WtihY7TJOe8235fEMybZmusywvHBh6PTjxjv
-	xQ0RnnDsBtutP09vhkvjiFihti3uNO0eHbIjXe39A6RGlKfio5X+aAGG
-X-Gm-Gg: AfdE7cktD4igcDqNgfmxO+o4LNN1XZ1Xm0yikKv8OPIq/9TDIdPRlOOVPxYqSA3Sks7
-	KQ3OyUge5aS19hHQ9ikJpMTNQAad2YPXRzGvyJNfUdOisC9hL0w7BxmzJw9IEuLWX2xS/31CnWJ
-	VAHN+L20nF9SxvLiDWgnFjcCe2yV6COYWQ53OnZ1GrJKqS5wotXRPm8tH1MhXHvjXZSwT/c0jxb
-	/Ji4QYGurp5WE1MQIpAekixaQ244anEPzov1HQyXirlpMx0+tZijnxb9ITa7DWDnFZXW46ciyY6
-	PmnC4X1eZoMg92V7ggxPZ/VRnioMWl2/XkLFRQCWtUmlKhS5uyG+AzW+g13Dz66L2YtOUzU2zNv
-	yNfRC0dCfez6pSKqNsfWfv8WfmDTESBnuEqxd4QW6ghQWMpWjrB8Rseicx8BatlHh65Nuewik/t
-	nvnulUM5GQ6QiT0ADLPO0MMrDRkxqBluBZ/wc8n4hX/dn3jsz6jIc=
-X-Received: by 2002:a17:90b:4b84:b0:36d:5dbe:2a0d with SMTP id 98e67ed59e1d1-37d1e82238fmr4681205a91.7.1781923495427;
-        Fri, 19 Jun 2026 19:44:55 -0700 (PDT)
-Received: from cps-manycore-1.. ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37d1600975asm1087971a91.0.2026.06.19.19.44.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2026 19:44:55 -0700 (PDT)
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: Eric Dumazet <edumazet@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Willem de Bruijn <willemb@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Bobby Eshleman <bobby.eshleman@bytedance.com>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v5 3/3] selftests/bpf: test rejection of a packet-modifying SK_SKB stream parser
-Date: Sat, 20 Jun 2026 02:44:18 +0000
-Message-ID: <20260620024423.4141004-4-rhkrqnwk98@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260620024423.4141004-1-rhkrqnwk98@gmail.com>
-References: <20260620024423.4141004-1-rhkrqnwk98@gmail.com>
+        bh=IMog6yoEoQ/G09JDykgX7Q2v6LAP6zMnUEkcv+/q5pA=;
+        b=pw9XxJEjnM6Iii9HL9v9smQfcjuqKWszaOqUiesByjM7uVaFCSCHkVt7UMzSWeKPMO
+         CgBdZn1OFkIAgN1f4n0SbJQzzqglZ2zUkNKBaGpJ17n9v1G3O97HikuzUeEbGdRg8JFF
+         iHHqdBaTWRwBaWYAiB9goDAhkONrj891WBfjHTNsshtCJP7F9sn0ODDpbVMmqDdbvStd
+         TjkuAnwr0Q4CjdEop/hYPlMZBiRkzzp0yy/fsIZBXc7FUK8pCz283lf8qWDi6RPLb+aW
+         5sm/xstKyPrQDi8aryqw2wh+Zo4/O1MLS4xLZ+G6w4fzMkuyO6e5Ux4zA2riS7jGelY0
+         cOIQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/HmLtMviInG9Qy/y+pAkGMJrut2MgVw31NK9fjr4EU+Hh+3SdZ+VxZFfp+2tMqRSq1CDc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEa4cxPBTGxx5hxdIH3Em4PMNA4mHoNST7mx5rQONeqHxsCvYF
+	d8eSwdFtFM2choYYyQfbdbSi36SSZSfkuC74LX3302yelNbb0EGlrkiZbZi+/3p4aB5fMiMN7O4
+	0BIhbdW3KDaNYuTJsU/8ygMc1ibJd1JQ=
+X-Gm-Gg: AfdE7cn2mOXr2lMwEvvQN0Fy8OCwr0oxsGwJ9DT316NwYbJV+Zt8UkhJNLLm+acxNiy
+	bo1RpfvuHecF7v0msvPtLOI3zSCQvSkrkJeW4SEAKmPD18ydk2OpY1s3avg7W2cQbz/qkTLtCdJ
+	Me2V41kHO1QEwninvMLM+iR8gNCuixCw6rMx4v/mTKkJEARJLcZoC1AssAJh8mOVDBcAvZ0g7F7
+	bXGHQZvjbI7ETJZmGwWtNMRXORBvFWJMQ9tO2eCtii+XgGS7FDXQT5YCcu+o1diJ2SDQ9PhbCw5
+	08wBZBmZtoRbqDEigAMR5zL08d9kJsH9MNGNH50TD4hcFBC1Y5KgEcIGbHPnIJZUP2hHamXDJHK
+	6qwOV4xeUeFpAVh7i7pHoDkIh
+X-Received: by 2002:a05:6a00:1251:b0:845:352a:a207 with SMTP id
+ d2e1a72fcca58-845508aba72mr6261855b3a.34.1781923699092; Fri, 19 Jun 2026
+ 19:48:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org>
+ <20260618-bpf-ringbuf-fixes-v2-2-33fde039ddf3@kernel.org> <ajVKM9tJskwg9OFa@krava>
+ <130931685c8b2064325fc65a856ecd810c8a6b5c.camel@gmail.com>
+In-Reply-To: <130931685c8b2064325fc65a856ecd810c8a6b5c.camel@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 19 Jun 2026 19:48:07 -0700
+X-Gm-Features: AVVi8CfPILgC_aJbPc7RvcEnqlaV04eO7hG5z3eafsoNlcrC-2DekZ7AbCtJxFU
+Message-ID: <CAADnVQLuNSE5AM6Cqzs4yDFrhTyD=j-y5dfya3dLwk3si9v26w@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 2/8] libbpf: ringbuf: Prevent NULL callback crash
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Tamir Duberstein <tamird@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+	Andrea Righi <arighi@nvidia.com>, Xu Kuohai <xukuohai@huawei.com>, 
+	Andrea Righi <andrea.righi@canonical.com>, Bing-Jhong Billy Jheng <billy@starlabs.sg>, 
+	David Vernet <void@manifault.com>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Andrew Werner <awerner32@gmail.com>, 
+	Zvi Effron <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>, 
+	Emil Tsalapatis <emil@etsalapatis.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Verify that attaching an SK_SKB stream parser that can modify the packet
-is rejected, while a read-only parser still attaches.
+On Fri, Jun 19, 2026 at 2:12=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
+>
+> > >     int *len_ptr, len, err;
+> > > @@ -240,6 +260,9 @@ static int64_t ringbuf_process_ring(struct ring *=
+r, size_t n)
+> > >     bool got_new_data;
+> > >     void *sample;
+> > >
+> > > +   err =3D ringbuf_validate(r);
+> > > +   if (err)
+> > > +           return err;
+> >
+> > as Emil noted in first version, this seems like overkill, could you
+> > just check sample_cb !=3D NULL before it's actualy called?
+> >
+> > in [1] you mentioned you plan to add some feature that won't use sample=
+_cb,
+> > it'd be easier to review/suggest the solution with more details on that
+> >
+> > jirka
+>
+> As-is it appears that the simplest thing to do is to error out in
+> ring_buffer__new() and ring_buffer__add() when callback is NULL or
+> when overwrite map flag is present.
+> I checked our internal usage for then __new/__add functions,
+> and it seems there are no cases when NULL is passed as a callback.
 
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
----
- .../selftests/bpf/prog_tests/sockmap_strp.c   | 31 +++++++++++++++++++
- .../selftests/bpf/progs/test_sockmap_strp.c   |  7 +++++
- 2 files changed, 38 insertions(+)
+Even such an early check is probably unnecessary.
+A valid callback is a part of api today.
+In general we don't add defensive programing checks for NULL
+here and in other places.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c b/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
-index 621b3b71888e..1d7231728eaf 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
-@@ -431,6 +431,35 @@ static void test_sockmap_strp_verdict(int family, int sotype)
- 	test_sockmap_strp__destroy(strp);
- }
- 
-+static void test_sockmap_strp_parser_reject(void)
-+{
-+	struct test_sockmap_strp *strp = NULL;
-+	int parser_mod, parser_ro, link;
-+	int err, map;
-+
-+	strp = test_sockmap_strp__open_and_load();
-+	if (!ASSERT_OK_PTR(strp, "test_sockmap_strp__open_and_load"))
-+		return;
-+
-+	map = bpf_map__fd(strp->maps.sock_map);
-+	parser_mod = bpf_program__fd(strp->progs.prog_skb_parser_resize);
-+	parser_ro = bpf_program__fd(strp->progs.prog_skb_parser);
-+
-+	err = bpf_prog_attach(parser_mod, map, BPF_SK_SKB_STREAM_PARSER, 0);
-+	ASSERT_ERR(err, "bpf_prog_attach parser_mod");
-+
-+	link = bpf_link_create(parser_ro, map, BPF_SK_SKB_STREAM_PARSER, NULL);
-+	if (!ASSERT_GE(link, 0, "bpf_link_create parser_ro"))
-+		goto out;
-+
-+	err = bpf_link_update(link, parser_mod, NULL);
-+	ASSERT_ERR(err, "bpf_link_update parser_mod");
-+out:
-+	if (link >= 0)
-+		close(link);
-+	test_sockmap_strp__destroy(strp);
-+}
-+
- void test_sockmap_strp(void)
- {
- 	if (test__start_subtest("sockmap strp tcp pass"))
-@@ -451,4 +480,6 @@ void test_sockmap_strp(void)
- 		test_sockmap_strp_multiple_pkt(AF_INET, SOCK_STREAM);
- 	if (test__start_subtest("sockmap strp tcp dispatch"))
- 		test_sockmap_strp_dispatch_pkt(AF_INET, SOCK_STREAM);
-+	if (test__start_subtest("sockmap strp parser reject pkt mod"))
-+		test_sockmap_strp_parser_reject();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_strp.c b/tools/testing/selftests/bpf/progs/test_sockmap_strp.c
-index dde3d5bec515..fe88fa6d40bc 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_strp.c
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_strp.c
-@@ -50,4 +50,11 @@ int prog_skb_parser_partial(struct __sk_buff *skb)
- 	return 10;
- }
- 
-+SEC("sk_skb/stream_parser")
-+int prog_skb_parser_resize(struct __sk_buff *skb)
-+{
-+	bpf_skb_change_tail(skb, skb->len, 0);
-+	return skb->len;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.43.0
-
+Sounds like there is a follow up to add callback-less api.
+Let's see how it looks. If there is a need to check
+callback nullness it's better to discuss altogether.
