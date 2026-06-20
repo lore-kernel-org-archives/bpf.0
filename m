@@ -1,124 +1,116 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4890914BF92
-	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 12:31:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4391F09A8
+	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 12:36:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781958663; cv=none; b=d+mPab0xMdqRIX6izWmyLvolL556dAIN7UQKSf+6nocl507dxTCFlbn4FqDxdvo4vGCxSY0EV4tuLUFVbNccv6ZZX8m7shcmBRXmGfw0CRmGi3JpiIcjag6sNALOdqSinY8MxgITtq4ZlIiGCktFIdpaHK5GbYlQLsyG3A3U4aU=
+	t=1781959012; cv=none; b=WVmjyuaSPR7faWOOUWvxFrrKOYCDYk3IurM1Yoi64k6RICZoWVWDTyHDg40axjQVMEe+UhDsqKANaTJ1+8ZMBl6gvnd3IUxxTiODXFez+I7GuaaHwp2LUhjnLkzmlINJ+oIlq/ZrLPE9STuljVidULZJVWmJRqPR7KJ1gX2j6qc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781958663; c=relaxed/simple;
-	bh=haSHfzm3mu15Uw3ds1HN5ftXE6i3IZD+XBUTI8x2V7Q=;
+	s=arc-20240116; t=1781959012; c=relaxed/simple;
+	bh=HSlyYi2Ice+jZZeXUz527v8KmNgufwfuaNDE3D+uvGY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mp5WnFXkgI3V9gzdYf3OSQQ0cLi/HW7wydJLndJzdhQDdUopiK5EKP89xsE4ehC9d+1dIVbur2G2RbVu9kmk85G0a9M+C9nZCcx+WNrD+HSJexvbNQ9H/w4mjYftjB73s6aw7zjD1A5v/CvwpRv86YhxsY+TmwmSXGbJs9+ym1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BfMTd+Vi; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=R4oTY8gatCCqDH395vc1ScOfTqRMMddC9OP1BRCBECJ/7jlHQazi4CKFby0cGU3A+CRjvR25csr/MkyAcO9Quojh4/t6MadSf5pwPUpeZFYskg8/Rt4Y8OBpJNNd/h6Yh/s1j4akX7WNdwqpJX7XwPmx7OmQI8PKavaXYCEZB9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HJVT/sBu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BfMTd+Vi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEC651F000E9;
-	Sat, 20 Jun 2026 12:31:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HJVT/sBu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B20DA1F000E9;
+	Sat, 20 Jun 2026 12:36:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781958661;
-	bh=TqMEAXJK3T/5u/KjokGP/7RtoQFgb4yWvF8IUjn97Mk=;
+	s=k20260515; t=1781959010;
+	bh=HCm7zkOCRCQJcciA+JeGtlDivRciQmzX7Ux9dLHaYRY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=BfMTd+Vi5cj7EV2hMzYdoZcEnAeLNjWvRJ7ORQf3z+SiX2+SzLwJcmQ+oXPmWC9KJ
-	 uz3KnOWyg+2myUGEUKYH0sWZr5w8y6BrjdC6O4PfpKo8L8oUS65Hfblsiqq1lQ6VQC
-	 Wwi4GbquPfb8FJfG9YKHJJ8jXKpjZEABJvhrs+MGTXgvoRUZvgdAyZcKTLinv0LiEN
-	 qqjt4eIOLrL04dT/2FIbmkKx7WkxbSU3O7NiLf2kpsdpX2hw8BBEh2xsMJGCVLoqnA
-	 VgXpawAA4ZY2LAgojHsAjaQny5hOhKnfqiDvbNfKhlRlS24Q3B/X5fr67vMecjlinx
-	 G571r6JBADABg==
+	b=HJVT/sBuvSaQcASiR7db/d+suEf9swE/fpVhTnjMowV9QACNoJfNOUhHAUzLCtg/+
+	 Sq0e6wXCw5J2D+xCLfMwdk2AHHaS5T6x92UoLguiq1tH/eXnwZ8zmVbCXpRJWVPVB7
+	 Vu7ATM6arFa8Qdv92Y0ifdW3ZqkFUQJwE0pUTfOsKyTpkM+ZwDynzwEaG+mZh3mkz+
+	 aVKO6kJqEoljwY5S1Nzn1IOXPabKNHjXlorABH4Xeq7NrwToEaTew6rUp9AWmDXvFE
+	 1rsFrknlxo1LiDbSUsuk5xHZrp10KsSoNxQ38ZiuT93iM6ZptOrQ0AWLO5u/64c5Ax
+	 +/DN2F2Y1QBXA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/2] bpf: preserve rx_queue_index across XDP redirects
+Subject: Re: [PATCH 2/2] selftests/bpf: validate rx_queue_index in
+ xdp_metadata
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Siddharth C" <siddharthcibi@icloud.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260620121321.45227-2-siddharthcibi@icloud.com>
+In-Reply-To: <20260620121321.45227-3-siddharthcibi@icloud.com>
 References: <20260620121321.45227-1-siddharthcibi@icloud.com>
- <20260620121321.45227-2-siddharthcibi@icloud.com>
+ <20260620121321.45227-3-siddharthcibi@icloud.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 20 Jun 2026 12:31:01 +0000
-Message-Id: <20260620123101.AEC651F000E9@smtp.kernel.org>
+Date: Sat, 20 Jun 2026 12:36:50 +0000
+Message-Id: <20260620123650.B20DA1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] Uninitialized `rx_queue_index` in `struct xdp_frame` constructed b=
-y the BPF testing framework causes a kernel memory information leak.
+- [Medium] Adding `rx_queue_index` changes `struct xdp_meta` size to 36 byt=
+es, causing implicit padding to 40 bytes on 64-bit systems but not on 32-bi=
+t systems. This creates a BPF-to-userspace metadata offset mismatch on 32-b=
+it hosts.
+- [Low] The newly added assertion returns directly with incorrect space-bas=
+ed indentation.
 --
 
-commit f1285cd92bd58ea552eb0b340894db477870968e
-Author: Siddharth C <siddharthcibi@icloud.com>
-Date:   Sat Jun 20 12:13:13 2026 +0000
+commit 5d50c9ea90d4f7a83d1f9562df723456d7ed8e43
+Author: Siddharth_Cibi <siddharthcibi@icloud.com>
 
-    bpf: preserve rx_queue_index across XDP redirects
-   =20
-    Store rx_queue_index in struct xdp_frame during xdp_buff to
-    xdp_frame conversion and restore it when rebuilding xdp_rxq_info
-    for cpumap and devmap execution paths.
-   =20
-    This preserves ingress RX queue information for XDP programs
-    executed after redirect, allowing access to the original
-    rx_queue_index instead of losing queue context.
-   =20
-    Also propagate rx_queue_index for zero-copy XDP frame conversion.
-   =20
-    Signed-off-by: Siddharth_Cibi <siddharthcibi@icloud.com>
+selftests/bpf: validate rx_queue_index in xdp_metadata
 
-> diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-> index 5e59ab896f058..8f2d7013620f7 100644
-> --- a/kernel/bpf/cpumap.c
-> +++ b/kernel/bpf/cpumap.c
-> @@ -197,7 +197,7 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_ma=
-p_entry *rcpu,
+This commit extends the xdp_metadata selftest to capture and validate
+the rx_queue_index field. It adds the index to the xdp_meta structure and
+asserts its value matches the expected queue during packet verification.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tool=
+s/testing/selftests/bpf/prog_tests/xdp_metadata.c
+> --- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+> @@ -309,7 +309,8 @@ static int verify_xsk_metadata(struct xsk *xsk, bool =
+sent_from_af_xdp)
 > =20
->  		rxq.dev =3D xdpf->dev_rx;
->  		rxq.mem.type =3D xdpf->mem_type;
-> -		/* TODO: report queue_index to xdp_rxq_info */
-> +		rxq.queue_index =3D xdpf->rx_queue_index;
+>  	if (!ASSERT_NEQ(meta->rx_hash, 0, "rx_hash"))
+>  		return -1;
+> -
+> +	if (!ASSERT_EQ(meta->rx_queue_index, QUEUE_ID, "rx_queue_index"))
+> +        	return -1;
 
-[Severity: High]
-Can this leak uninitialized kernel page memory via ctx->rx_queue_index when
-using BPF_PROG_TEST_RUN?
+[Severity: Low]
+This isn't a bug, but does this return statement use spaces for indentation
+instead of tabs?
 
-The BPF testing framework uses xdp_update_frame_from_buff() to initialize
-mock frames in net/bpf/test_run.c. Because xdp_update_frame_from_buff()=20
-only copies sizes and pointers, test_run manually copies mem_type but was
-not updated by this patch to initialize rx_queue_index:
+[ ... ]
 
-net/bpf/test_run.c:xdp_test_run_init_page() {
-    ...
-    xdp_update_frame_from_buff(new_ctx, frm);
-    frm->mem_type =3D new_ctx->rxq->mem.type;
-    /* Missing: frm->rx_queue_index =3D new_ctx->rxq->queue_index; */
-    ...
-}
+> diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/s=
+elftests/bpf/xdp_metadata.h
+> --- a/tools/testing/selftests/bpf/xdp_metadata.h
+> +++ b/tools/testing/selftests/bpf/xdp_metadata.h
+> @@ -49,4 +49,5 @@ struct xdp_meta {
+>  		__s32 rx_vlan_tag_err;
+>  	};
+>  	enum xdp_meta_field hint_valid;
+> +	__u32 rx_queue_index;
+>  };
 
-It is also missed in the context reset path:
+[Severity: Medium]
+Does adding rx_queue_index cause a structure size mismatch between the BPF
+target and 32-bit hosts?
 
-net/bpf/test_run.c:reset_ctx() {
-    ...
-    xdp_update_frame_from_buff(&head->ctx, head->frame);
-    head->frame->mem_type =3D head->orig_ctx.rxq->mem.type;
-    /* Missing: head->frame->rx_queue_index =3D head->orig_ctx.rxq->queue_i=
-ndex; */
-}
+The xdp_meta struct contains __u64 fields, so on the BPF target and 64-bit
+hosts, the 36-byte structure will be padded to 40 bytes to maintain 8-byte
+alignment. In the BPF program, bpf_xdp_adjust_meta() will then allocate 40
+bytes.
 
-If a tested BPF program returns XDP_REDIRECT to a cpumap or devmap, the
-map execution reconstructs the xdp_rxq_info using the uninitialized
-xdpf->rx_queue_index field. A chained BPF program executing on the map
-could then read ctx->rx_queue_index, exposing 4 bytes of uninitialized
-kernel page memory.
+However, on 32-bit hosts where __u64 only requires 4-byte alignment, the
+compiler will evaluate the structure size as 36 bytes. The userspace test
+then reads the metadata pointer exactly 4 bytes after the start of the
+BPF-populated metadata, leading to misaligned reads for all fields.
 
-Should net/bpf/test_run.c be updated to initialize rx_queue_index?
-
-> =20
->  		xdp_convert_frame_to_buff(xdpf, &xdp);
->
+Should an explicit 4-byte padding field be added at the end of the struct,
+or an explicit alignment attribute be used?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260620121321.4522=
-7-1-siddharthcibi@icloud.com?part=3D1
+7-1-siddharthcibi@icloud.com?part=3D2
