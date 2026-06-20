@@ -1,193 +1,140 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D0933F591
-	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 17:53:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71FB340D587
+	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 20:16:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781978022; cv=none; b=abHrb3Ed1xBJf5H/fr8O6TeEAlycnaz3+PwmnZecQgpRfpVsaD0kNb5ZncQN6HU5kw4r2wNNjvzaXVIou02oTdVdTsKxv/iuiKEOfAVevHm8vggdUx0e8lLcMGIBdLPoLhC0mAS+x/BELu8DHn9AvO2olA/yiGELxdrX8GeAJLI=
+	t=1781986576; cv=none; b=hUGPBsHdNqB7tA0j4r3uGIL4GkzniUasQ7m0guF0ks9pcKX0BTpeGuYbHt/LN7phmUYWn56SSJEeH5v8qwN/VBo53fq3aadG2EzUQsGrlA8BjuKY3H71/PlRteDIJTg8OpktwWFALWJkQgjscFuuGRVnwPv7uXL0M44Ruj3MD5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781978022; c=relaxed/simple;
-	bh=OB+K36Bn91JFhcjMiwQQVfC1O3Jid3HjJTbNH9Ejm14=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XJwdoiFwStXwR3qKyF+63k6De1d4+ME4/i/fRTQ25bfbumAHNRmbqUjErGvmG6HvdHKadXhmWF6tjVRbJZOrsEEG339wqCrC4VN6bN+xvrN+epDIMhlShNMXQRqEH5i7ejHFEn2LG+nmkrDedbueSlkfO63mKCnrJ16sZyyGIsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lRd0rsHB; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781986576; c=relaxed/simple;
+	bh=LIsuuVFh9rqAnffRRLX7EYaWLpMggrVjylfB5CZ81L8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FPEHCq4KW9WeqZxHnYbgF8zJJ2boMKMGQvS4XWCidejSZJeKlrKjW1P5kml/6BqU+jgrT4yQL9i8zPMaqZWRNMfqW8txA+M/boNKWEkn0o6uJ5C71XTTYfnLLnt2bonpzZ3fLGAP70TrSRLkzK6BK3kwIRGRlFk+QuVB8A3/GZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asu.edu; spf=pass smtp.mailfrom=asu.edu; dkim=pass (2048-bit key) header.d=asu.edu header.i=@asu.edu header.b=LfyoDid7; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asu.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=asu.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lRd0rsHB"
-Message-ID: <173eddc1-22d3-4edc-8561-b4614bb13278@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781978017;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MNKVQCh3T6Uw40yD3OB3B2LeMgBhIBxgFvI2mCEQ3us=;
-	b=lRd0rsHBKeUX2mAMquiB4zRG7tESkz3SP7haa23CYqO4fjTeaoGPE36jkd6QbZ2hEaCS4h
-	QQO1S018Mv0faWLi4GfRxzuYsab5GQYfXtHoITvkT8eDVsT5xXk674ntbDsY/NhZ1DXlUW
-	1eTdGOjVz+VicXetMvuj5BcKmfjavio=
-Date: Sat, 20 Jun 2026 10:53:32 -0700
+	dkim=pass (2048-bit key) header.d=asu.edu header.i=@asu.edu header.b="LfyoDid7"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2c6c57c5c07so21425905ad.1
+        for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 13:16:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=asu.edu; s=google; t=1781986575; x=1782591375; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=z3UyEb8OkZcV7i25lPmBZwX/buS6tC9WTgQg7YwJuto=;
+        b=LfyoDid7QHot4e6k7UtzS7ssahbMK9p6kByJryBmu3Nc2OmBH8OzZNFmIa0ksiLs+h
+         ZPU3Tx47DZ7vi5/smoXzx/mCAHg4JacGsTR6/XOCn9/J8tozSMJQL3yXhVJEZJL07ylg
+         5hV1aWtk7UMQQBBP30VIMDWYCzrVEsCTkcHa4iZkr+jgG0e7uOIrAxtGg2AU11VeFewv
+         m8f9fSRzggjIlmbxk3eGcpWdfc29ZqvXA2H5Gxp1N5sIK9ffgKlGxIdDTxF2UwwWwrIW
+         7O6HLkb9y/A4EGNmHjDrjlPMrFQwGmxzXoS1Ae2pZqVbxqLZdbcGnYJPO92d5ggTUUaN
+         gHsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781986575; x=1782591375;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z3UyEb8OkZcV7i25lPmBZwX/buS6tC9WTgQg7YwJuto=;
+        b=az9qaLqiFMNXd2tL+udthRQg5izpMFxjcbXmQ2ojR2xu3sc0J6+iGzeky0bCI/t/am
+         vyxJ+kOWeoHPSMPHPnCRJ1XpoQVpBOj4Xs2TPeoftzcReuB1R+7iUu/EwiiiV3IqARGC
+         FbWEJ0ieS46Xq39Pj6pwdTQc0HEKT5OKzSVzXeLLT0Vm7MBP7EgW9x95H4vnM6sk8bjq
+         apU/ZbJNPZE3xlJK3O1LcK8Bpub+rJymbFDJpvmoVn0+V78m/CRSh+Av7LF6baIGUEUX
+         6BvaJ7KkeZ12EZRG8MqCd+4BNKpta/FC4NdRLbWWvJWpSoQt+BIlRE9vUM0rlXXDa1ZY
+         Xb6w==
+X-Forwarded-Encrypted: i=1; AHgh+RpDAvC9odi4SWI3K5Xx2myege1ieIGp8xGt+42KYdLOId8+0QpConYX5U5xjpFci+QzfmE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUVux/PHB8gmjSkMTFnbY+UzYDO8NEifco1wmj885k8eWiWp/5
+	lXYKMHZPQpGh1BB5tZwJ1C+dTXKGHiHWRpYTYA8k39rZj1onr7AD4Dz/7ID+FpqAhA==
+X-Gm-Gg: AfdE7clsWwHuxYyfcr+rhTscqo6bKlrlYex/rZb+8stdmJUGm86OKR04ze39OCRm/ch
+	8iXsvSEtjUYw88lLqK6bNl1Nu0590R9dkQWlp6JlWnRPP9kxFWpLnzXhQ/201idGjRRq9/imgTP
+	KYv5wheADcaH4fHP/KdIPXW2yqnKcq5dhKRxU9XszrQxBuSF9L5dNom+1KM3VbViof4R3KilVOb
+	oJidGGz+B35g6NMFGXB347QasHlVWBS7WC9w22A/LvOopJeOM1wbpsKRx2gHRPVloHqz5FSKvLO
+	n/dN4FE7WZrIwUV3u8Syg+bKmvHdkF6Ry2XHdNyIy7vwdoaXhsqs6PVQksbiyl7vcwm9IW7BCeI
+	kQI+YyVZ6FwRI08kPJjExEDzCzlwwLam+I1PgaAiHyD+cevLthb2bUTHmbQ/3nhn8RooGQThYlQ
+	==
+X-Received: by 2002:a17:902:d509:b0:2c0:b35d:ed54 with SMTP id d9443c01a7336-2c718fc247amr88629605ad.35.1781986574669;
+        Sat, 20 Jun 2026 13:16:14 -0700 (PDT)
+Received: from p1.. ([172.56.104.24])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7439f85a4sm31747095ad.54.2026.06.20.13.16.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Jun 2026 13:16:14 -0700 (PDT)
+From: Xiang Mei <xmei5@asu.edu>
+To: Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Jussi Maki <joamaki@gmail.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Weiming Shi <bestswngs@gmail.com>,
+	Xiang Mei <xmei5@asu.edu>
+Subject: [PATCH net] net, bpf: check master for NULL in xdp_master_redirect()
+Date: Sat, 20 Jun 2026 13:15:31 -0700
+Message-ID: <20260620201531.180123-1-xmei5@asu.edu>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2] bpf: Allow type tag BTF records to succeed
- other modifier records
-Content-Language: en-GB
-To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, memxor@gmail.com,
- daniel@iogearbox.net, eddyz87@gmail.com, mattbobrowski@google.com,
- Vineet Gupta <vineet.gupta@linux.dev>,
- "Jose E. Marchesi" <jose.marchesi@oracle.com>,
- David Faust <david.faust@oracle.com>
-References: <20260616061454.7869-1-emil@etsalapatis.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260616061454.7869-1-emil@etsalapatis.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+xdp_master_redirect() dereferences the result of
+netdev_master_upper_dev_get_rcu() without a NULL check, but that helper
+returns NULL when the receiving device has no upper-master adjacency.
 
+The reach guard only checks netif_is_bond_slave(). On bond slave release
+bond_upper_dev_unlink() drops the upper-master adjacency before clearing
+IFF_SLAVE, so an XDP_TX reaching xdp_master_redirect() in that window
+still passes netif_is_bond_slave() while master is already NULL, and
+faults on master->flags at offset 0xb0:
 
-On 6/15/26 11:14 PM, Emil Tsalapatis wrote:
-> As of recently, Clang is able to attach type tag records to modifier BTF
-> records. This is useful for using typedefs that encompass a base type
+  BUG: kernel NULL pointer dereference, address: 00000000000000b0
+  RIP: 0010:xdp_master_redirect (net/core/filter.c:4432)
+  Call Trace:
+   xdp_master_redirect (net/core/filter.c:4432)
+   bpf_prog_run_generic_xdp (include/net/xdp.h:700)
+   do_xdp_generic (net/core/dev.c:5608)
+   __netif_receive_skb_one_core (net/core/dev.c:6204)
+   process_backlog (net/core/dev.c:6319)
+   __napi_poll (net/core/dev.c:7729)
+   net_rx_action (net/core/dev.c:7792)
+   handle_softirqs (kernel/softirq.c:622)
+   __dev_queue_xmit (include/linux/bottom_half.h:33)
+   packet_sendmsg (net/packet/af_packet.c:3082)
+   __sys_sendto (net/socket.c:2252)
+  Kernel panic - not syncing: Fatal exception in interrupt
 
-Please add the following link in the commit message:
-     https://github.com/llvm/llvm-project/pull/203089
+The missing check dates back to the original code; commit 1921f91298d1
+("net, bpf: fix null-ptr-deref in xdp_master_redirect() for down master")
+later added the master->flags read where the fault now lands but kept the
+unconditional deref. Check master for NULL before use; a NULL master is
+treated the same as one that is not up.
 
-The above 'clang is able to attach type tag records to modifier BTF records'
-is not precise. The context for this requires typedef.
+Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
+Reported-by: Weiming Shi <bestswngs@gmail.com>
+Assisted-by: Claude:claude-opus-4-8
+Signed-off-by: Xiang Mei <xmei5@asu.edu>
+---
+ net/core/filter.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> and a type tag, e.g.:
->
-> typedef struct rbtree __arena rbtree_t;
->
-> Modify btf_check_type_tags() so that it allows this sequence of records.
-> The function now only checks for record loops in BTF modifier record
-> chains. Rename to btf_check_modifier_chain_length to reflect this.
-
-Currently, for clang, the typetag is always right after typedef, e.g.,
-
-     typedef struct rbtree __arena const rbtree_t
-        => typedef -> __arena -> const -> struct rbtree
-     typedef const struct rbtree __arena rbtree_t
-        => typedef -> __arena -> const -> struct rbtree
-     typedef struct rbtree const __arena rbtree_t
-        => typedef -> __arena -> const -> struct rbtree
-
-gcc has not yet implemented this (typedef struct rbtree __arena rbtree_t).
-Not sure whether gcc will follow the above clang pattern or
-it may generate something like
-     typedef -> const -> __arena -> struct rbbree
-or not.
-
-But considering gcc also follows pattern like
-     ptr -> __arena -> const -> struct rbtree
-likely in the future they may support like
-     typedef -> __arena -> const -> struct rbtree
-
-Maybe we should keep similar ordering ('ptr -> __arena' => 'typedef -> __arena')?
-
-Jose, David, what do you think?
-
->
-> Also expand the BTF modifier traversal code to take into account that
-> type record can be interleaved with other modifier records. In effect
-> this means traversing all modifiers to collect the type tags.
->
-> Also modify existing selftests to now accept modifier records (const,
-> typedef) that point to type tag records.
->
-> Cc: Yonghong Song <yonghong.song@linux.dev>
-> Cc: Vineet Gupta <vineet.gupta@linux.dev>
-> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
-> ---
->
-> Changelog v1->v2:
->
-> - Factor main type tag walk into a separate function (Eduard). The
->    change makes certain code paths now more permissive (unrecognized tags
->    do not cause an error for kptrs, and we can have multiple instances of
->    the same tag), but imo handling those edge cases was a grey area in the
->    first place and it is better to consistently scan type tags the same
->    way everywhere.
->
->   kernel/bpf/btf.c                             | 209 +++++++++++--------
->   tools/testing/selftests/bpf/prog_tests/btf.c |  12 +-
->   2 files changed, 125 insertions(+), 96 deletions(-)
->
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index ef4402274786..4ba2ff132503 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -28,6 +28,7 @@
->   #include <linux/string.h>
->   #include <linux/sysfs.h>
->   #include <linux/overflow.h>
-> +#include <linux/bitops.h>
->   
->   #include <net/netfilter/nf_bpf_link.h>
->   
-> @@ -3472,12 +3473,69 @@ static int btf_find_struct(const struct btf *btf, const struct btf_type *t,
->   	return BTF_FIELD_FOUND;
->   }
->   
-> +struct btf_type_tag_match {
-> +	const char *name;
-> +	u32 flag;
-> +};
-> +
-> +struct btf_type_tag_walk_ctx {
-> +	const struct btf_type *t;	/* Input/Output */
-> +	u32 id;				/* Output */
-> +	u32 res;			/* Output */
-> +};
-> +
-> +static int btf_type_tag_walk(const struct btf *btf,
-> +			     struct btf_type_tag_walk_ctx *ctx,
-> +			     const struct btf_type_tag_match *matches,
-> +			     u32 match_cnt)
-> +{
-> +	const struct btf_type *t = ctx->t;
-> +	u32 res = 0;
-> +	const char *tag;
-> +	u32 id, i;
-> +
-> +	do {
-> +		id = t->type;
-> +		t = btf_type_by_id(btf, id);
-> +
-> +		if (!btf_type_is_modifier(t))
-> +			break;
-> +
-> +		if (!btf_type_is_type_tag(t) || btf_type_kflag(t))
-> +			continue;
-> +
-> +		tag = __btf_name_by_offset(btf, t->name_off);
-> +		for (i = 0; i < match_cnt; i++) {
-> +			if (strcmp(tag, matches[i].name))
-> +				continue;
-> +			res |= matches[i].flag;
-> +			break;
-> +		}
-> +	} while (true);
-> +
-> +	/* We only support a single tag. */
-> +	if (hweight32(res) > 1)
-> +		return -EINVAL;
-> +
-> +	ctx->t = t;
-> +	ctx->id = id;
-> +	ctx->res = res;
-> +
-> +	return 0;
-> +}
-> +
-
-[...]
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 40037413dd4e..6037860d5283 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4430,7 +4430,7 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
+ 	struct net_device *master, *slave;
+ 
+ 	master = netdev_master_upper_dev_get_rcu(xdp->rxq->dev);
+-	if (unlikely(!(master->flags & IFF_UP)))
++	if (unlikely(!master || !(master->flags & IFF_UP)))
+ 		return XDP_ABORTED;
+ 	slave = master->netdev_ops->ndo_xdp_get_xmit_slave(master, xdp);
+ 	if (slave && slave != xdp->rxq->dev) {
+-- 
+2.43.0
 
