@@ -1,166 +1,82 @@
-Received: from tsinghua.edu.cn (smtp46.tsinghua.edu.cn [101.6.4.70])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1312C1C84D0;
-	Sat, 20 Jun 2026 15:22:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.6.4.70
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F597394E8A
+	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 15:27:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781968956; cv=none; b=kksnRggr3wY04YtHSyOgXIy0gvjqbW2/9u45p6TeLssvQH20/3/L63X6i1dWdvUcW7TGGo4W0hgVuGYqWZkHIwroWHcs4w42aL4t5ZQkzvVpHMTPNOGP7Vwv3gcKV4vNNilt3u4dmZAgf3cH97cEFBh1+S6x04U32OnvxZG55sM=
+	t=1781969256; cv=none; b=HMqxACJHHmoE6e7ATRZCDqHQJ73e5GPYOrxzT1tbPgxJQI/2lbvvOa5WCwQTIhcpyd7HmVuFp4pndOZdayy46bhOmq7+AhXmvNQ5VjWxdsf1wHoKV66g5gxIngSLNVY1m6jwxhbnOdsvLIU19wfQSiaDWuKXYuaceNd5zeEWJJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781968956; c=relaxed/simple;
-	bh=4p9m1msDK3bU97evrCsQ+r7S4l8iMW+v2i8aGdToC3o=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Ig1Xzz0mn2ZCe1RkVLVo2ca8VO3aUi7tLBHS+sHEcVKb/grpXM5vIEbd3Wi2bsplnq0dtwqL4NsabK7W/6E9O9WeeVu1xFIQh4CDCyzgcw1mKpHhvfG+a/D7bY+njMZRhvSCwIaRLK2tOyF0Nau3IDkhyqbDvGxWkuA/J5DR8fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=S/iMc0Yp; arc=none smtp.client-ip=101.6.4.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781969256; c=relaxed/simple;
+	bh=LKgl2yGCAeXGesvUL7VMfbYsGCy8mUh34Xh+N14+g3M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Akx1ojmjAzr9sU0KVmSHExXuHQ96/RfpExNK2oleQKrQiJfSJbIeeZodli18iV/3i5CC9tBkDK7OWpGTojD+hkxGPY11sjRjRHlzc+bV0Tb01NsUK5jQwmzLvADFYNUwQ3j37GCcksARG3ZxTsuCiDR96CqoldMHmuVOS5c2Ub8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aytbJl7i; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="S/iMc0Yp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=teNqo3kD4fT6mrgdsjswaezWS+UsEK7JM6
-	6SyQLcJZI=; b=S/iMc0YpNUy/Q3E0r8Dtbqck581pEBMvtQkmYPUKX8YsfGiGTC
-	V5SImMeo90Nq6agn9+TBmgTNGsRkNoNNCccUSP2eJYkzF7ZJysF+PSx/3EWbKIAB
-	rWfwNT+ivxrhB5aeqlzjwjgKyZ+qR293RWB1Jit+ozhYSRrvh9OMfwMXw=
-Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web3 (Coremail) with SMTP id ygQGZQD3Q5EbrzZq3PmUAg--.8562S4;
-	Sat, 20 Jun 2026 23:17:56 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Cover nullable RCU pointer use after unlock
-Date: Sat, 20 Jun 2026 15:17:45 +0000
-Message-Id: <ed2b303079d5955af859daaae94dfde5d29bd64d.1781968391.git.chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1781968391.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1781968391.git.chenyy23@mails.tsinghua.edu.cn>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aytbJl7i"
+Message-ID: <fe2b54bf-8201-41a1-bc3e-cef2e68582d1@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781969242;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VL+yRD+WzB33/gwPxUctl39fBtkl41WGXKHo680bMpU=;
+	b=aytbJl7ivnL0oX5WGY8RnpzkmFllxNqKwTMIfkZmsiZ4CtrxoYmW2kvqIuxQrxK6PJJxgq
+	7J6Kc33H4+3dTELWpnRUxlGxaPIFFp4dujsY3dFhV19fMBHharXulkbx3A1xmmiktbuh2Q
+	0Ht1BFWbzJTOyuPWULuHgq23oNaUVR0=
+Date: Sat, 20 Jun 2026 23:27:03 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:ygQGZQD3Q5EbrzZq3PmUAg--.8562S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF1UWFWxtryfXr4DGr13twb_yoW5Aw4Upa
-	ykZ345tr1rWFnIvw17C3srWF4ruwnYq3yayw48Wwn7Cr1DJr1fX3yxKFyaqFn8G393Zwn8
-	Za4SgwsxCr4UA3JanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHF14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAa
-	c4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
-	Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
-	6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxw
-	ACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY02Avz4vE14v_XrWl
-	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
-	I48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
-	WxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
-	0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRC1v3UUUUU
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
+Subject: Re: [PATCH bpf-next v6 11/12] selftests/bpf: Add test to verify
+ xlated insns for global percpu data
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ kernel-patches-bot@fb.com
+References: <20260615152646.27639-1-leon.hwang@linux.dev>
+ <20260615152646.27639-12-leon.hwang@linux.dev>
+ <DJ9XY0Y2D2R8.16S9E0QFFMLQS@gmail.com>
+ <d9eaffaa-6bbd-4af1-97cd-e5e37917c526@linux.dev>
+ <CAADnVQLnnSrHDbw4OQCPrXz38wZ15PC1HuS1-aSB7LZxOQhd1g@mail.gmail.com>
+ <b1efbbb0-d2ea-4050-aef7-e35db35bd8d9@linux.dev>
+ <DJDK43Q9Y1RJ.3SDUVLSC5I50E@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <DJDK43Q9Y1RJ.3SDUVLSC5I50E@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Add coverage for nullable BTF pointers that are read under
-bpf_rcu_read_lock() and then used after bpf_rcu_read_unlock().
+On 2026/6/20 11:29, Alexei Starovoitov wrote:
+[...]
+>>
+>> The point of the patch was to check that
+>> percpu_array_map_direct_value_meta() computes 'off' correctly against
+>> the 'off' encoded in ELF obj, and a mov64_percpu_reg insn should be
+>> added after loading the prog.
+> 
+> If that was the goal then it wasn't achieved. Just test manually
+> that the 'off' is updated correctly and skip such selftest.
+> There is little value.
+> 
 
-The unchecked skb->sk dereference should be rejected because the pointer
-can still be NULL after it loses MEM_RCU trust. The matched control
-performs an explicit NULL check after unlock and should keep loading
-successfully.
+Got it. Will drop this patch.
 
-Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
----
- .../selftests/bpf/prog_tests/rcu_read_lock.c  | 17 ++++++++++++++++
- .../selftests/bpf/progs/rcu_read_lock.c       | 20 +++++++++++++++++++
- 2 files changed, 37 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c b/tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c
-index 246eb259c..be0317a47 100644
---- a/tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c
-+++ b/tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c
-@@ -72,6 +72,20 @@ static void test_rcuptr_acquire(void)
- 	rcu_read_lock__destroy(skel);
- }
- 
-+static void test_rcuptr_null_check(void)
-+{
-+	struct rcu_read_lock *skel;
-+
-+	skel = rcu_read_lock__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	bpf_program__set_autoload(skel->progs.rcu_null_check_after_unlock, true);
-+	ASSERT_OK(rcu_read_lock__load(skel), "skel_load");
-+
-+	rcu_read_lock__destroy(skel);
-+}
-+
- static const char * const inproper_region_tests[] = {
- 	"miss_lock",
- 	"no_lock",
-@@ -113,6 +127,7 @@ static void test_inproper_region(void)
- static const char * const rcuptr_misuse_tests[] = {
- 	"task_untrusted_rcuptr",
- 	"cross_rcu_region",
-+	"rcu_null_deref_after_unlock",
- };
- 
- static void test_rcuptr_misuse(void)
-@@ -150,6 +165,8 @@ void test_rcu_read_lock(void)
- 		test_success();
- 	if (test__start_subtest("rcuptr_acquire"))
- 		test_rcuptr_acquire();
-+	if (test__start_subtest("rcuptr_null_check"))
-+		test_rcuptr_null_check();
- 	if (test__start_subtest("negative_tests_inproper_region"))
- 		test_inproper_region();
- 	if (test__start_subtest("negative_tests_rcuptr_misuse"))
-diff --git a/tools/testing/selftests/bpf/progs/rcu_read_lock.c b/tools/testing/selftests/bpf/progs/rcu_read_lock.c
-index b4e073168..b78542706 100644
---- a/tools/testing/selftests/bpf/progs/rcu_read_lock.c
-+++ b/tools/testing/selftests/bpf/progs/rcu_read_lock.c
-@@ -372,6 +372,26 @@ int cross_rcu_region(void *ctx)
- 	return 0;
- }
- 
-+SEC("?tp_btf/net_dev_queue")
-+int BPF_PROG(rcu_null_check_after_unlock, struct sk_buff *skb)
-+{
-+	bpf_rcu_read_lock();
-+	bpf_rcu_read_unlock();
-+
-+	if (!skb->sk)
-+		return 0;
-+	return skb->sk->__sk_common.skc_daddr;
-+}
-+
-+SEC("?tp_btf/net_dev_queue")
-+int BPF_PROG(rcu_null_deref_after_unlock, struct sk_buff *skb)
-+{
-+	bpf_rcu_read_lock();
-+	bpf_rcu_read_unlock();
-+
-+	return skb->sk->__sk_common.skc_daddr;
-+}
-+
- __noinline
- static int static_subprog(void *ctx)
- {
--- 
-2.34.1
+Thanks,
+Leon
 
