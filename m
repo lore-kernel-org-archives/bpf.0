@@ -1,140 +1,232 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71FB340D587
-	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 20:16:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A1553B7A8
+	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 20:46:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781986576; cv=none; b=hUGPBsHdNqB7tA0j4r3uGIL4GkzniUasQ7m0guF0ks9pcKX0BTpeGuYbHt/LN7phmUYWn56SSJEeH5v8qwN/VBo53fq3aadG2EzUQsGrlA8BjuKY3H71/PlRteDIJTg8OpktwWFALWJkQgjscFuuGRVnwPv7uXL0M44Ruj3MD5k=
+	t=1781988377; cv=none; b=Lg8F61I4bNo0+/ktoodxAiiYSbgZSpEDC+mgEVoCPVT2ZMQjH1jfdqhH0p6PNIiSDxevlS2iEQYmmPAa9HHscx6k0oN7eSLKFfCL+uhVwW4+r9cY8yq7D0XudMQCsaOJ7fCn8O3AST53i+3LL0UuALVpSzNCwwYO3RtiMGJb1/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781986576; c=relaxed/simple;
-	bh=LIsuuVFh9rqAnffRRLX7EYaWLpMggrVjylfB5CZ81L8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FPEHCq4KW9WeqZxHnYbgF8zJJ2boMKMGQvS4XWCidejSZJeKlrKjW1P5kml/6BqU+jgrT4yQL9i8zPMaqZWRNMfqW8txA+M/boNKWEkn0o6uJ5C71XTTYfnLLnt2bonpzZ3fLGAP70TrSRLkzK6BK3kwIRGRlFk+QuVB8A3/GZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asu.edu; spf=pass smtp.mailfrom=asu.edu; dkim=pass (2048-bit key) header.d=asu.edu header.i=@asu.edu header.b=LfyoDid7; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asu.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=asu.edu
+	s=arc-20240116; t=1781988377; c=relaxed/simple;
+	bh=xrEsjbtHIeRgZH7OTyiNdSguF1JxmZ+H5KcIMZRwq10=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BqFhiDs6gNcvDCXxXnVfWJa6oRChB6ZtuDfRPw4nqvyOHenhx4B94rNkRrgksO/OsEERSqz2+0OoKqDlgxIsjw2ot53KSBlJswvqGpKlq+lPBjarSZ4/MEFbZmYJxykB81dsiDLa5jarD/cCth2tM9wqlNfq/Ma54CnHufIGDsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ox1aI2q2; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=asu.edu header.i=@asu.edu header.b="LfyoDid7"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2c6c57c5c07so21425905ad.1
-        for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 13:16:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=asu.edu; s=google; t=1781986575; x=1782591375; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=z3UyEb8OkZcV7i25lPmBZwX/buS6tC9WTgQg7YwJuto=;
-        b=LfyoDid7QHot4e6k7UtzS7ssahbMK9p6kByJryBmu3Nc2OmBH8OzZNFmIa0ksiLs+h
-         ZPU3Tx47DZ7vi5/smoXzx/mCAHg4JacGsTR6/XOCn9/J8tozSMJQL3yXhVJEZJL07ylg
-         5hV1aWtk7UMQQBBP30VIMDWYCzrVEsCTkcHa4iZkr+jgG0e7uOIrAxtGg2AU11VeFewv
-         m8f9fSRzggjIlmbxk3eGcpWdfc29ZqvXA2H5Gxp1N5sIK9ffgKlGxIdDTxF2UwwWwrIW
-         7O6HLkb9y/A4EGNmHjDrjlPMrFQwGmxzXoS1Ae2pZqVbxqLZdbcGnYJPO92d5ggTUUaN
-         gHsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781986575; x=1782591375;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z3UyEb8OkZcV7i25lPmBZwX/buS6tC9WTgQg7YwJuto=;
-        b=az9qaLqiFMNXd2tL+udthRQg5izpMFxjcbXmQ2ojR2xu3sc0J6+iGzeky0bCI/t/am
-         vyxJ+kOWeoHPSMPHPnCRJ1XpoQVpBOj4Xs2TPeoftzcReuB1R+7iUu/EwiiiV3IqARGC
-         FbWEJ0ieS46Xq39Pj6pwdTQc0HEKT5OKzSVzXeLLT0Vm7MBP7EgW9x95H4vnM6sk8bjq
-         apU/ZbJNPZE3xlJK3O1LcK8Bpub+rJymbFDJpvmoVn0+V78m/CRSh+Av7LF6baIGUEUX
-         6BvaJ7KkeZ12EZRG8MqCd+4BNKpta/FC4NdRLbWWvJWpSoQt+BIlRE9vUM0rlXXDa1ZY
-         Xb6w==
-X-Forwarded-Encrypted: i=1; AHgh+RpDAvC9odi4SWI3K5Xx2myege1ieIGp8xGt+42KYdLOId8+0QpConYX5U5xjpFci+QzfmE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUVux/PHB8gmjSkMTFnbY+UzYDO8NEifco1wmj885k8eWiWp/5
-	lXYKMHZPQpGh1BB5tZwJ1C+dTXKGHiHWRpYTYA8k39rZj1onr7AD4Dz/7ID+FpqAhA==
-X-Gm-Gg: AfdE7clsWwHuxYyfcr+rhTscqo6bKlrlYex/rZb+8stdmJUGm86OKR04ze39OCRm/ch
-	8iXsvSEtjUYw88lLqK6bNl1Nu0590R9dkQWlp6JlWnRPP9kxFWpLnzXhQ/201idGjRRq9/imgTP
-	KYv5wheADcaH4fHP/KdIPXW2yqnKcq5dhKRxU9XszrQxBuSF9L5dNom+1KM3VbViof4R3KilVOb
-	oJidGGz+B35g6NMFGXB347QasHlVWBS7WC9w22A/LvOopJeOM1wbpsKRx2gHRPVloHqz5FSKvLO
-	n/dN4FE7WZrIwUV3u8Syg+bKmvHdkF6Ry2XHdNyIy7vwdoaXhsqs6PVQksbiyl7vcwm9IW7BCeI
-	kQI+YyVZ6FwRI08kPJjExEDzCzlwwLam+I1PgaAiHyD+cevLthb2bUTHmbQ/3nhn8RooGQThYlQ
-	==
-X-Received: by 2002:a17:902:d509:b0:2c0:b35d:ed54 with SMTP id d9443c01a7336-2c718fc247amr88629605ad.35.1781986574669;
-        Sat, 20 Jun 2026 13:16:14 -0700 (PDT)
-Received: from p1.. ([172.56.104.24])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7439f85a4sm31747095ad.54.2026.06.20.13.16.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Jun 2026 13:16:14 -0700 (PDT)
-From: Xiang Mei <xmei5@asu.edu>
-To: Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Jussi Maki <joamaki@gmail.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Weiming Shi <bestswngs@gmail.com>,
-	Xiang Mei <xmei5@asu.edu>
-Subject: [PATCH net] net, bpf: check master for NULL in xdp_master_redirect()
-Date: Sat, 20 Jun 2026 13:15:31 -0700
-Message-ID: <20260620201531.180123-1-xmei5@asu.edu>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ox1aI2q2"
+Message-ID: <bc9a4f26-2a1a-4e56-aaa4-05c209463324@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781988372;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cvpEnrHsIZaNcpYyFldb4rX4EnYH+26JgKdV6+Gzcr8=;
+	b=ox1aI2q2/G47GW8R/Iuyu1Z/7+xZt6YpmqZ4/niRVv/hhq2qhFOUqDuqVUh/ljv4bjX16J
+	7bHLvb6ix4LQr3qJu0rLLOYUg7w/LLepPWrJ+440VRXgUZk6t7N/4zoPrjR+pNmKEKX/IO
+	40fC3t4KAGCOlKbdwQlQe1lII5hWfw8=
+Date: Sat, 20 Jun 2026 13:45:56 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf v2 1/2] bpf: Fix effective prog array index with
+ BPF_F_PREORDER
+Content-Language: en-GB
+To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@kernel.org,
+ kernel-team@meta.com
+References: <20260619063520.2690547-1-ameryhung@gmail.com>
+ <20260619063520.2690547-2-ameryhung@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260619063520.2690547-2-ameryhung@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-xdp_master_redirect() dereferences the result of
-netdev_master_upper_dev_get_rcu() without a NULL check, but that helper
-returns NULL when the receiving device has no upper-master adjacency.
 
-The reach guard only checks netif_is_bond_slave(). On bond slave release
-bond_upper_dev_unlink() drops the upper-master adjacency before clearing
-IFF_SLAVE, so an XDP_TX reaching xdp_master_redirect() in that window
-still passes netif_is_bond_slave() while master is already NULL, and
-faults on master->flags at offset 0xb0:
 
-  BUG: kernel NULL pointer dereference, address: 00000000000000b0
-  RIP: 0010:xdp_master_redirect (net/core/filter.c:4432)
-  Call Trace:
-   xdp_master_redirect (net/core/filter.c:4432)
-   bpf_prog_run_generic_xdp (include/net/xdp.h:700)
-   do_xdp_generic (net/core/dev.c:5608)
-   __netif_receive_skb_one_core (net/core/dev.c:6204)
-   process_backlog (net/core/dev.c:6319)
-   __napi_poll (net/core/dev.c:7729)
-   net_rx_action (net/core/dev.c:7792)
-   handle_softirqs (kernel/softirq.c:622)
-   __dev_queue_xmit (include/linux/bottom_half.h:33)
-   packet_sendmsg (net/packet/af_packet.c:3082)
-   __sys_sendto (net/socket.c:2252)
-  Kernel panic - not syncing: Fatal exception in interrupt
+On 6/18/26 11:35 PM, Amery Hung wrote:
+> replace_effective_prog() and purge_effective_progs() located the slot in
+> the effective array by walking the program hlist and counting entries
+> linearly. That count does not match the array layout: compute_effective_
+> progs() places BPF_F_PREORDER programs at the front (ancestor cgroup
+> first, attach order within a cgroup) and the rest after them (descendant
+> cgroup first). So when a preorder program is present, the linear hlist
+> position no longer equals the program's index in the effective array.
+>
+> For replace_effective_prog() (bpf_link_update()) this overwrote the
+> wrong slot, corrupting the effective order. For purge_effective_progs(),
+> it could dummy out a slot belonging to a different program and leave the
+> detached program in the array while bpf_prog_put() drops its reference,
+> i.e. a use-after-free.
+>
+> Fix both by replaying compute_effective_progs()'s placement (including
+> the per-cgroup preorder reversal) in a shared effective_prog_pos()
+> helper. Identify the entry by its struct bpf_prog_list pointer rather
+> than by (prog, link) value, so the lookup resolves to exactly the
+> attachment the syscall selected even when the same bpf_prog is attached
+> to several cgroups in the hierarchy.
+>
+> Fixes: 4b82b181a26c ("bpf: Allow pre-ordering for bpf cgroup progs")
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
 
-The missing check dates back to the original code; commit 1921f91298d1
-("net, bpf: fix null-ptr-deref in xdp_master_redirect() for down master")
-later added the master->flags read where the fault now lands but kept the
-unconditional deref. Check master for NULL before use; a NULL master is
-treated the same as one that is not up.
+LGTM with a nit below.
 
-Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
-Reported-by: Weiming Shi <bestswngs@gmail.com>
-Assisted-by: Claude:claude-opus-4-8
-Signed-off-by: Xiang Mei <xmei5@asu.edu>
----
- net/core/filter.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 40037413dd4e..6037860d5283 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4430,7 +4430,7 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
- 	struct net_device *master, *slave;
- 
- 	master = netdev_master_upper_dev_get_rcu(xdp->rxq->dev);
--	if (unlikely(!(master->flags & IFF_UP)))
-+	if (unlikely(!master || !(master->flags & IFF_UP)))
- 		return XDP_ABORTED;
- 	slave = master->netdev_ops->ndo_xdp_get_xmit_slave(master, xdp);
- 	if (slave && slave != xdp->rxq->dev) {
--- 
-2.43.0
+> ---
+>   kernel/bpf/cgroup.c | 108 +++++++++++++++++++++++++-------------------
+>   1 file changed, 62 insertions(+), 46 deletions(-)
+>
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index 83ce66296ac1..4355ccb78a9c 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+> @@ -939,19 +939,65 @@ static int cgroup_bpf_attach(struct cgroup *cgrp,
+>   	return ret;
+>   }
+>   
+> +static int effective_prog_pos(struct cgroup *cgrp,
+> +			      enum cgroup_bpf_attach_type atype,
+> +			      struct bpf_prog_list *target_pl)
+> +{
+> +	int cnt = 0, preorder_cnt = 0, fstart, bstart, init_bstart, pos = -1;
+> +	struct bpf_prog_list *pl;
+> +	struct cgroup *p = cgrp;
+> +
+> +	/* count effective programs to find where the preorder region ends */
+> +	do {
+> +		if (cnt == 0 || (p->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
+> +			cnt += prog_list_length(&p->bpf.progs[atype], &preorder_cnt);
+> +		p = cgroup_parent(p);
+> +	} while (p);
+> +
+> +	/* replay compute_effective_progs() placement and record target's slot */
+> +	cnt = 0;
+> +	p = cgrp;
+> +	fstart = preorder_cnt;
+> +	bstart = preorder_cnt - 1;
+> +	do {
+> +		if (cnt > 0 && !(p->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
+> +			continue;
+> +
+> +		init_bstart = bstart;
+> +		hlist_for_each_entry(pl, &p->bpf.progs[atype], node) {
+> +			if (!prog_list_prog(pl))
+> +				continue;
+> +
+> +			if (pl->flags & BPF_F_PREORDER) {
+> +				if (pl == target_pl)
+> +					pos = bstart;
+> +				bstart--;
+> +			} else {
+> +				if (pl == target_pl)
+> +					pos = fstart;
+> +				fstart++;
+> +			}
+> +			cnt++;
+> +		}
+> +
+> +		/* reverse pre-ordering progs at this cgroup level */
+> +		if (pos >= bstart + 1 && pos <= init_bstart)
+> +			pos = bstart + 1 + init_bstart - pos;
+
+Here, if pos is not -1, we could break out of loop since each pl is unique.
+But since this is not in a performance critical path, probably the current
+implementation is okay.
+
+> +	} while ((p = cgroup_parent(p)));
+> +
+> +	return pos;
+> +}
+> +
+>   /* Swap updated BPF program for given link in effective program arrays across
+>    * all descendant cgroups. This function is guaranteed to succeed.
+>    */
+>   static void replace_effective_prog(struct cgroup *cgrp,
+>   				   enum cgroup_bpf_attach_type atype,
+> -				   struct bpf_cgroup_link *link)
+> +				   struct bpf_prog_list *pl)
+>   {
+>   	struct bpf_prog_array_item *item;
+>   	struct cgroup_subsys_state *css;
+>   	struct bpf_prog_array *progs;
+> -	struct bpf_prog_list *pl;
+> -	struct hlist_head *head;
+> -	struct cgroup *cg;
+>   	int pos;
+>   
+>   	css_for_each_descendant_pre(css, &cgrp->self) {
+> @@ -960,27 +1006,15 @@ static void replace_effective_prog(struct cgroup *cgrp,
+>   		if (percpu_ref_is_zero(&desc->bpf.refcnt))
+>   			continue;
+>   
+> -		/* find position of link in effective progs array */
+> -		for (pos = 0, cg = desc; cg; cg = cgroup_parent(cg)) {
+> -			if (pos && !(cg->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
+> -				continue;
+> +		pos = effective_prog_pos(desc, atype, pl);
+> +		if (WARN_ON_ONCE(pos < 0))
+> +			continue;
+>   
+> -			head = &cg->bpf.progs[atype];
+> -			hlist_for_each_entry(pl, head, node) {
+> -				if (!prog_list_prog(pl))
+> -					continue;
+> -				if (pl->link == link)
+> -					goto found;
+> -				pos++;
+> -			}
+> -		}
+> -found:
+> -		BUG_ON(!cg);
+>   		progs = rcu_dereference_protected(
+>   				desc->bpf.effective[atype],
+>   				lockdep_is_held(&cgroup_mutex));
+>   		item = &progs->items[pos];
+> -		WRITE_ONCE(item->prog, link->link.prog);
+> +		WRITE_ONCE(item->prog, pl->link->link.prog);
+>   	}
+>   }
+>   
+> @@ -1024,7 +1058,7 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
+>   
+>   	cgrp->bpf.revisions[atype] += 1;
+>   	old_prog = xchg(&link->link.prog, new_prog);
+> -	replace_effective_prog(cgrp, atype, link);
+> +	replace_effective_prog(cgrp, atype, pl);
+>   	bpf_prog_put(old_prog);
+>   	return 0;
+>   }
+> @@ -1091,19 +1125,14 @@ static struct bpf_prog_list *find_detach_entry(struct hlist_head *progs,
+>    *                           recomputing the array in place.
+>    *
+>    * @cgrp: The cgroup which descendants to travers
+> - * @prog: A program to detach or NULL
+> - * @link: A link to detach or NULL
+> + * @pl: The prog_list entry being detached
+>    * @atype: Type of detach operation
+>    */
+> -static void purge_effective_progs(struct cgroup *cgrp, struct bpf_prog *prog,
+> -				  struct bpf_cgroup_link *link,
+> +static void purge_effective_progs(struct cgroup *cgrp, struct bpf_prog_list *pl,
+>   				  enum cgroup_bpf_attach_type atype)
+>   {
+>   	struct cgroup_subsys_state *css;
+>   	struct bpf_prog_array *progs;
+> -	struct bpf_prog_list *pl;
+> -	struct hlist_head *head;
+> -	struct cgroup *cg;
+>   	int pos;
+>   
+>   	/* recompute effective prog array in place */
+
+[...]
 
