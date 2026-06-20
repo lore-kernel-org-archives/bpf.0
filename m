@@ -1,108 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E9733E36A;
-	Sat, 20 Jun 2026 15:11:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA6EB327BFB;
+	Sat, 20 Jun 2026 15:18:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781968269; cv=none; b=DwvIYTvsbsuJ1ZQlO5brZK29VYv64OhIMYs3Z9ljfHdGQ+ePv25paMC0u+JwBktOeTSJ+2ZhJFAAmc74hngw4QlIosQQODN+l4iCP/Xoepn2S/sNb6zrTw2V5s2EumhofSpSaPTMtIhqEprVBoTGsAXS4gN6vABOecy4ccGSWRk=
+	t=1781968686; cv=none; b=aipQRMGdHxYmC25fNpCtfedGaDdKY+Xa4CbmJzaB5oBrD3o3Jv+rEsSrcxrQJb3Kd8mrBQ+JRcprG5+lany1mlu7zEY6k2vHHs15Jc9xea6MbTQXG+UmUHrI5rGX0memWFgh4UgcytvYcPr3qV8IYNe/8HGKl0P62LlBytIO8nk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781968269; c=relaxed/simple;
-	bh=JSSy07a1fddV0ZEcUrT8Xs2OmKCf7cuJkbRuUvXWwg8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=qpapKnzwgv18YX61Z8yCa6oyG2WcbYROVZsUYUbMOSLKSRY+ocwqzVcKr4YLozmPnJmI9/hqRyuQkjr2fLU2Uc9q8TYOSZkEE4QyWsAmEqsQ8A/Ma41yvqs26M9Io4D5bdN81/U+qMeFHtgiaZJdsc8TkreY7nAL5V3w5aemTMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F+CAstK3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781968686; c=relaxed/simple;
+	bh=OpOjMdbQ8++TILHVWXC0YLsoz6GMhAAEpCYTX9eZP6Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KpeT1xuQoZaGPklPW8yhj7lWgl5c92HaiTxEaeUmlx+j6Wmh+uzgKUpQZdefqN68a4/sTmzxmpfYfxQCBaNzuo14waQRYmdr5cDanSI5Pj/nCENURSCdq87OTbDi6+bkB6E1VtoaHpHi1mWYWlVnhD0VEwXBUrvv8iU7SBpaZmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=IQxeVcFl; arc=none smtp.client-ip=4.193.249.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F+CAstK3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BECD71F00A3A;
-	Sat, 20 Jun 2026 15:11:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781968268;
-	bh=ukvHGq6sDhVLiCbcFdESl+aKas2jmQWGuLL7J0OAtjQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=F+CAstK3tdpZSW3Q6bkfVIycW48WP7zOAuSrYARXh4FjPaQeRSMSV/4VKrDXjdMRt
-	 b/lIINfF54mkxL/O9HPiTBmYLmQMh6GSLn+RvqajVDwbNhq3sPRvFNaXBeDIVeEojU
-	 QFfpxo8rUHbZg1qccgxn2XHHv5xUHIeMhtHlogTgqORBnbEojgkRX6r598kMZQ1nna
-	 RhUGn7rASzEmg5NJ0e9ui/CXLyN4yX7W0NR0RKkkxZKZrfFrNzSWcbvZqIIuYE6+z+
-	 s/sj0ZV4aSXBDgjJSU4+DF7DlKxsKISgtD+9Xtf6nfKMBF+Wjw0StUzKQKJnRAElKz
-	 4SoUu9WfwVecw==
-Content-Type: multipart/mixed; boundary="===============7268032707533913629=="
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="IQxeVcFl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=6NbRD
+	5BW7VWdRoHkhlmFlXIaRtETnANpowlq9Y+jZlw=; b=IQxeVcFlcJpWZg4QfQ5wZ
+	ECRGx8vd2jnUO5PahhqrDuz4Ns990iMUFRYjwXujvoPzmqoYM4urOVeBJzMZLtoz
+	2lAguhGQPt3sovDhOsycVxQlEnmg4KgoEhclY0mB8uzoj1/IO/4UYrmBwh3NPL+0
+	1xdr8f0VGMguTnF5h0BYbc=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web3 (Coremail) with SMTP id ygQGZQD3Q5EbrzZq3PmUAg--.8562S2;
+	Sat, 20 Jun 2026 23:17:52 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 0/2] bpf: Preserve RCU pointer nullness after unlock
+Date: Sat, 20 Jun 2026 15:17:43 +0000
+Message-Id: <cover.1781968391.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b3b148b42eb198ac7194c1c0547e47275b9f5d31133eececaf1389f17caed5af@mail.kernel.org>
-In-Reply-To: <b9c4b268b403e2b41362dd678dca8feb35d34a9c.1781964949.git.chenyy23@mails.tsinghua.edu.cn>
-References: <b9c4b268b403e2b41362dd678dca8feb35d34a9c.1781964949.git.chenyy23@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/hid: Cover hid_bpf_get_data() size overflow
-From: bot+bpf-ci@kernel.org
-To: chenyy23@mails.tsinghua.edu.cn,jikos@kernel.org,bentiss@kernel.org,bpf@vger.kernel.org,linux-input@vger.kernel.org
-Cc: chenyy23@mails.tsinghua.edu.cn,shuah@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 20 Jun 2026 15:11:07 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:ygQGZQD3Q5EbrzZq3PmUAg--.8562S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GF1DWF4rZw15WrW8JF4kXrb_yoWDWFX_ur
+	y0y34DJr1xAFn8KFW3Aw1fXrW09r4YkFyxJF4UGrnrtryUJr15ur4kXry5A3sF9ay8KwnI
+	yrs5G3ySyr1YgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbDAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+	6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+	0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr
+	1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
+	rcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Avz4vE14
+	v_XrWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AK
+	xVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrx
+	kI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v2
+	6F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+	1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUDkuxU
+	UUUU=
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
---===============7268032707533913629==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+bpf_rcu_read_unlock() converts MEM_RCU verifier registers to
+PTR_UNTRUSTED, but currently clears PTR_MAYBE_NULL at the same time.
 
-> selftests/hid: Cover hid_bpf_get_data() size overflow
->
->     Add a HID-BPF regression check for hid_bpf_get_data() requests whose
->     size would overflow when added to the offset.
->
->     The new rdesc fixup callback asks for offset 2 and size ~0ULL, then
->     records whether the helper returns NULL. A vulnerable kernel returns a
->     non-NULL pointer because the runtime check wraps the addition. A fixed
->     kernel rejects the request. The test only checks the helper result and
->     does not dereference the returned pointer.
->
->     Also add KHDR_INCLUDES to the HID selftest build so hid_bpf.c sees the
->     current kernel UAPI HID definitions on systems whose installed headers do
->     not provide enum hid_report_type.
->
->     Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+That loses the nullable state for BTF_TYPE_SAFE_RCU_OR_NULL fields such as
+skb->sk. A program can read skb->sk while in an RCU read-side critical
+section, unlock RCU, and then dereference the pointer directly without the
+verifier requiring an explicit NULL check.
 
-This adds a regression test for the hid_bpf_get_data() size-overflow
-bug, where the range check wrapped on a large size and returned an
-out-of-bounds pointer.
+Patch 1 preserves PTR_MAYBE_NULL when removing MEM_RCU.
+Patch 2 adds a focused regression test for the unchecked dereference and a
+matched null-checked control.
 
-That wrapping check was introduced in 658ee5a64fcf, and the fix commit
-carries a Fixes: tag for it. Should this test commit carry the same tag?
+Yiyang Chen (2):
+  bpf: Preserve nullable RCU pointer state on unlock
+  selftests/bpf: Cover nullable RCU pointer use after unlock
 
-  Fixes: 658ee5a64fcf ("HID: bpf: allocate data memory for device_event BPF programs")
-
-> diff --git a/tools/testing/selftests/hid/progs/hid.c b/tools/testing/selftests/hid/progs/hid.c
-> index 5ecc845ef792..b21fbb13c926 100644
-> --- a/tools/testing/selftests/hid/progs/hid.c
-> +++ b/tools/testing/selftests/hid/progs/hid.c
-> @@ -240,6 +241,20 @@ struct hid_bpf_ops rdesc_fixup = {
->  	.hid_rdesc_fixup = (void *)hid_rdesc_fixup,
->  };
->
-> +SEC("?struct_ops.s/hid_rdesc_fixup")
-> +int BPF_PROG(hid_rdesc_fixup_get_data_overflow, struct hid_bpf_ctx *hid_ctx)
-> +{
-> +	if (!hid_bpf_get_data(hid_ctx, 2 /* offset */, ~0ULL /* size */))
-> +		get_data_overflow_check = 1;
-> +
-> +	return 0;
-> +}
-
-This was raised on an earlier posting and does not look addressed:
-the callback stores the result in the get_data_overflow_check global
-and always returns 0, while the userspace test asserts on that global
-rather than on the callback return value.
-
-Could the callback just return the helper result so the test can check
-the return value directly, instead of routing it through a separate
-global?
+ kernel/bpf/verifier.c                         |  2 +-
+ .../selftests/bpf/prog_tests/rcu_read_lock.c  | 17 ++++++++++++++++
+ .../selftests/bpf/progs/rcu_read_lock.c       | 20 +++++++++++++++++++
+ 3 files changed, 38 insertions(+), 1 deletion(-)
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+base-commit: a975094bf98ca97be9146f9d3b5681a6f9cf5ce3
+-- 
+2.34.1
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27874238868
---===============7268032707533913629==--
