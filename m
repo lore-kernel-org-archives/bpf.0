@@ -1,120 +1,106 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68DC81799F;
-	Sat, 20 Jun 2026 15:34:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D5A970818;
+	Sat, 20 Jun 2026 15:47:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.229.168.213
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781969701; cv=none; b=rCXF2FpEtmpmfvPqH6qYYgcl9InfojxZtF00qixLvrWzEGIcZVVWJqruSQgls1gsssK6NRmChY+F05ywxH2rRC76MmAx+/CiukqXKDD36xnbBth3qYpk/JzQ5eymkDp9g6OZGr12Q5A7Z4/qdqgNMi9U7foW236xm4H8KptCMAg=
+	t=1781970443; cv=none; b=DMUSdepVqlR68Uh60GO0ikcO0qoR8L5NswHWgnbGDej3HoolVGiIxqjbaTjHWhYwldoMIEZmlEXvYmJTLFZYDVIRnnOaYpB1xFAAzceumJsRwxRyHobMflsdTs3MQHeY28tVLiVrio5AB8kfW9QGcRHCUNWPMJWaO7XYIadgNa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781969701; c=relaxed/simple;
-	bh=cXnS4WTJpdUdpO3YNL4uAfLDYuzcAD+7TDHztoN6plE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=IsabaIoF72767wmhZ3pYd7FU1E5sEkmkXSIUXzIqlvarvTVu0PfGyJgnb6spXInXIR1BMjUcYLnUBsoSbqtSKLmTk9EDt+FLn2t0dfZiTi5I0MVLORyhbxDxdlFooFlh4fqaggYn6/B8Phv68IUYGPrMRIoRQMxAoLonoiCFmO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=fail (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=I1W6KfE1 reason="signature verification failed"; arc=none smtp.client-ip=13.75.44.102
+	s=arc-20240116; t=1781970443; c=relaxed/simple;
+	bh=c1ZxSKRcHiaox6YeJRrtknih2uUYDTIj5peP+zd1sF8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=R0XPCMCOM5AiyYT1kcxMvDlMMzzaZdKN7CTlnyH2QZVLPA7k3hFM3ePmv/K5fo/eYEyhKtZ0neolf6F0wDyMLWDRiBkF+QChHC3jJWh59vVcqcgUb+l6A2PsnP+pUaonhiplgMytszGAYvDVY2OjK1H8NsEufhPzk8gP46lQDM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=d/M+qReR; arc=none smtp.client-ip=52.229.168.213
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="I1W6KfE1"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="d/M+qReR"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:Date:From:To:Cc:
-	Subject:In-Reply-To:References:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-ID; bh=RB2L/5sJ4lHGv9B2ahqS5kJ
-	Ha3I8hfyX8JrE8eZGv3Q=; b=I1W6KfE1c1WlFeIVLosQloVufDAsK6A0oyj9Ek9
-	xV1Zx6y8mOSkMlxFv9YTKsJx+xFrKR4ED2WweeJckn7ka7CgVjxVmxVFUWXaRNBH
-	RXuWGpsLOjdjmWpUQhuUR7GnG28Re3YoEtViyJWzQzHHbIcbOZ7pHY1YKBruu+Mw
-	A1g4=
-Received: from gnq25$mails.tsinghua.edu.cn ( [223.91.120.5] ) by
- ajax-webmail-web2 (Coremail) ; Sat, 20 Jun 2026 23:34:38 +0800 (GMT+08:00)
-Date: Sat, 20 Jun 2026 23:34:38 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
-To: "Eduard Zingerman" <eddyz87@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-	"Song Liu" <song@kernel.org>,
-	"Yonghong Song" <yonghong.song@linux.dev>,
-	"Jiri Olsa" <jolsa@kernel.org>,
-	"Emil Tsalapatis" <emil@etsalapatis.com>,
-	"Hao Luo" <haoluo@google.com>,
-	"John Fastabend" <john.fastabend@gmail.com>,
-	"Martin KaFai Lau" <martin.lau@linux.dev>,
-	"Shuah Khan" <shuah@kernel.org>, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH bpf-next 1/2] bpf: Require CAP_BPF for pseudo-BTF
- ksym loads
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
- 20250909(015d6f0a) Copyright (c) 2002-2026 www.mailtech.cn
- mispb-4df55a87-4b50-4a66-85a0-70f79cb6c8b5-tsinghua.edu.cn
-In-Reply-To: <a15079723c8834a2baf3f35c6a8ed52c63addeb9.camel@gmail.com>
-References: <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-0-f950f69fe60c@mails.tsinghua.edu.cn>
- <20260620-f01-13-pseudo-btf-id-cap-bpf-v1-1-f950f69fe60c@mails.tsinghua.edu.cn>
- <a15079723c8834a2baf3f35c6a8ed52c63addeb9.camel@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
+	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	To:Cc; bh=z/mTYN9Iwoh9TDKa2PE8H0fySLhVFJyk4E3fYGKRD7w=; b=d/M+qR
+	eRe/y//0dXKCM/FzPCqxoLW5MgFkmKEfoisW7rwNxhtd3Hz8RLLP2isVO7DuHCSV
+	2Tev2MM1lXiyxYUUhHkgrqN0y77rqC19IU+xo1ZThblBXPIXSBswNdsDAesIEdC8
+	W7DZ2VrBF0FSxQba2cc1aonhSpN8gT2T2T2UA=
+Received: from [127.0.0.1] (unknown [101.6.30.195])
+	by web2 (Coremail) with SMTP id yQQGZQCHY5v_tTZqCNRtAg--.19521S2;
+	Sat, 20 Jun 2026 23:47:11 +0800 (CST)
+From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Subject: [PATCH bpf 0/2] bpf: Mark bpf_get_kmem_cache() as nullable
+Date: Sat, 20 Jun 2026 23:47:08 +0800
+Message-Id: <20260620-f01-16-kmem-cache-ret-null-v1-0-c146154a2816@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <7f299d22.8290e.19ee5ab7010.Coremail.gnq25@mails.tsinghua.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID:yQQGZQC3k5sOszZqb8ltAg--.1293W
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQEEA2o1wTCwjQA
-	AsU
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPy1NmoC/yXMTQ6CMBBA4auQWTtJW9L6cxXDopQZGYVKWjAmh
+ LtTdPne4lshUxLKcKtWSPSRLO9YQp8qCL2PD0LpSoNRximnz8hKo3b4GmnE4ENPmGjGuAwD2tp
+ f2RruLrWFAkyJWL4//A7txND8Z17aJ4X5YGHbdkfl3meDAAAA
+X-Change-ID: 20260617-f01-16-kmem-cache-ret-null-53a9f52fd835
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781970433; l=1097;
+ i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
+ bh=c1ZxSKRcHiaox6YeJRrtknih2uUYDTIj5peP+zd1sF8=;
+ b=X0MCjmb0E680coVAwrwYKH8xuNkA9PER1RgIIkNPhoy18Esc1QbFXKiLqyDNsqr3491RNggKQ
+ uNymIQBHIU5BDDgyphlXeGgH4UIxoKDPRHUodDq0iMeaK0x3wJolQoX
+X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
+ pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
+X-CM-TRANSID:yQQGZQCHY5v_tTZqCNRtAg--.19521S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKrWftr1Dtw1fJr13Jr4DCFg_yoWDtFX_Xa
+	1FyF9rAw4Iqa1IkFy5Cry8ZrW8Cw48Ary3CF4qyry3J34Yva17ur4vqF1Yv3sIvF48Krs5
+	ur4aq3s2kr17ujkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb-AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kI
+	II0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7
+	xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
+	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4
+	CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26r4r
+	Kr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc
+	8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Av
+	z4vE14v_XrWl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMxC20s
+	026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+	JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+	v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
+	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr
+	0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JjzSoXUUUUU=
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgIEA2o1wh2yXQABsp
 
-CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiRWR1YXJkIFppbmdlcm1h
-biIgPGVkZHl6ODdAZ21haWwuY29tPgo+IFNlbmQgdGltZTpTYXR1cmRheSwgMjAvMDYvMjAyNiAw
-NDowNToyMgo+IFRvOiAiTnVvcWkgR3VpIiA8Z25xMjVAbWFpbHMudHNpbmdodWEuZWR1LmNuPiwg
-IkFsZXhlaSBTdGFyb3ZvaXRvdiIgPGFzdEBrZXJuZWwub3JnPiwgIkRhbmllbCBCb3JrbWFubiIg
-PGRhbmllbEBpb2dlYXJib3gubmV0PiwgIkFuZHJpaSBOYWtyeWlrbyIgPGFuZHJpaUBrZXJuZWwu
-b3JnPiwgIkt1bWFyIEthcnRpa2V5YSBEd2l2ZWRpIiA8bWVteG9yQGdtYWlsLmNvbT4sICJTb25n
-IExpdSIgPHNvbmdAa2VybmVsLm9yZz4sICJZb25naG9uZyBTb25nIiA8eW9uZ2hvbmcuc29uZ0Bs
-aW51eC5kZXY+LCAiSmlyaSBPbHNhIiA8am9sc2FAa2VybmVsLm9yZz4sICJFbWlsIFRzYWxhcGF0
-aXMiIDxlbWlsQGV0c2FsYXBhdGlzLmNvbT4sICJIYW8gTHVvIiA8aGFvbHVvQGdvb2dsZS5jb20+
-Cj4gQ2M6ICJKb2huIEZhc3RhYmVuZCIgPGpvaG4uZmFzdGFiZW5kQGdtYWlsLmNvbT4sICJNYXJ0
-aW4gS2FGYWkgTGF1IiA8bWFydGluLmxhdUBsaW51eC5kZXY+LCAiU2h1YWggS2hhbiIgPHNodWFo
-QGtlcm5lbC5vcmc+LCBicGZAdmdlci5rZXJuZWwub3JnLCBsaW51eC1rc2VsZnRlc3RAdmdlci5r
-ZXJuZWwub3JnLCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnCj4gU3ViamVjdDogUmU6IFtQ
-QVRDSCBicGYtbmV4dCAxLzJdIGJwZjogUmVxdWlyZSBDQVBfQlBGIGZvciBwc2V1ZG8tQlRGIGtz
-eW0gbG9hZHMKPiAKPiBPbiBTYXQsIDIwMjYtMDYtMjAgYXQgMDA6MDQgKzA4MDAsIE51b3FpIEd1
-aSB3cm90ZToKPiA+IEJQRl9QU0VVRE9fQlRGX0lEIGlzIHJlc29sdmVkIGJlZm9yZSB0aGUgbWFp
-biB2ZXJpZmllciBwYXNzLiBUaGUgcmVzb2x2ZXIKPiA+IGxvb2tzIHVwIHRoZSByZWZlcmVuY2Vk
-IGtlcm5lbCBzeW1ib2wgdGhyb3VnaCBrYWxsc3ltcyBhbmQgcmV3cml0ZXMgdGhlCj4gPiBsZGlt
-bTY0IGltbWVkaWF0ZSB0byB0aGUgY29uY3JldGUgYWRkcmVzcyB0aGF0IGxhdGVyIGJlY29tZXMg
-dmVyaWZpZXIKPiA+IHN0YXRlLgo+ID4gCj4gPiBSZXF1aXJlIENBUF9CUEYgYmVmb3JlIGRvaW5n
-IHRoYXQgbWF0ZXJpYWxpemF0aW9uLiBUaGlzIGtlZXBzIHR5cGVkIGtzeW0KPiA+IGFkZHJlc3Mg
-cmVzb2x1dGlvbiBvbiB0aGUgcHJpdmlsZWdlZCBzaWRlIGFuZCBwcmV2ZW50cyBsb2FkZXJzIHdp
-dGhvdXQKPiA+IENBUF9CUEYgZnJvbSByZWNlaXZpbmcgYSB2ZXJpZmllciBsb2cgdGhhdCBjb250
-YWlucyB0aGUgcmVzb2x2ZWQgYWRkcmVzcy4KPiA+IAo+ID4gRml4ZXM6IDQ5NzZiNzE4YzM1NTEg
-KCJicGY6IEludHJvZHVjZSBwc2V1ZG9fYnRmX2lkIikKPiA+IFNpZ25lZC1vZmYtYnk6IE51b3Fp
-IEd1aSA8Z25xMjVAbWFpbHMudHNpbmdodWEuZWR1LmNuPgo+ID4gLS0tCj4gPiAga2VybmVsL2Jw
-Zi92ZXJpZmllci5jIHwgNSArKysrKwo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMo
-KykKPiA+IAo+ID4gZGlmZiAtLWdpdCBhL2tlcm5lbC9icGYvdmVyaWZpZXIuYyBiL2tlcm5lbC9i
-cGYvdmVyaWZpZXIuYwo+ID4gaW5kZXggZWQ3YmEwZTZhOWNlLi5kYmY1ZGY5OTVmYzIgMTAwNjQ0
-Cj4gPiAtLS0gYS9rZXJuZWwvYnBmL3ZlcmlmaWVyLmMKPiA+ICsrKyBiL2tlcm5lbC9icGYvdmVy
-aWZpZXIuYwo+ID4gQEAgLTE3NjM5LDYgKzE3NjM5LDExIEBAIHN0YXRpYyBpbnQgY2hlY2tfcHNl
-dWRvX2J0Zl9pZChzdHJ1Y3QgYnBmX3ZlcmlmaWVyX2VudiAqZW52LAo+ID4gIAlpbnQgYnRmX2Zk
-Owo+ID4gIAlpbnQgZXJyOwo+ID4gIAo+ID4gKwlpZiAoIWVudi0+YnBmX2NhcGFibGUpIHsKPiA+
-ICsJCXZlcmJvc2UoZW52LCAiQlBGX1BTRVVET19CVEZfSUQgbG9hZHMgcmVxdWlyZSBDQVBfQlBG
-XG4iKTsKPiA+ICsJCXJldHVybiAtRUFDQ0VTOwo+ID4gKwl9Cj4gPiArCj4gCj4gVGhhbmsgeW91
-IGZvciBpZGVudGlmeWluZyB0aGlzIGlzc3VlLgo+IEkgdGhpbmsgdGhlIGNvcnJlY3Qgd2F5IHRv
-IGZpeCBpdCBpcyB0byBleHRlbmQgdGhlIGBpc19wdHIgJiYgIWFsbG93X3B0cl9sZWFrc2AKPiBs
-b2dpYyBpbiBrZXJuZWwvYnBmL2Rpc2FzbS5jOnByaW50X2JwZl9pbnNuKCkuCj4gTm90ZSB0aGF0
-IGl0IHNlZW1zIHRoZXJlIGFyZSBhZGRpdGlvbmFsIGNhc2VzIHRoYXQgYXJlIG5vdCBjb3ZlcmVk
-LAo+IHNvbWV0aGluZyBsaWtlIGJlbG93IHNlZW0gd2FycmFudGVkOgo+IAo+IAo+ICAgYm9vbCBp
-c19wdHIgPSBpbnNuLT5zcmNfcmVnID09IEJQRl9QU0VVRE9fTUFQX0ZEICAgIHx8Cj4gICAgICAg
-ICAgICAgICAgIGluc24tPnNyY19yZWcgPT0gQlBGX1BTRVVET19NQVBfVkFMVUUgIHx8Cj4gICAg
-ICAgICAgICAgICAgIGluc24tPnNyY19yZWcgPT0gQlBGX1BTRVVET19NQVBfSURYICAgIHx8Cj4g
-ICAgICAgICAgICAgICAgIGluc24tPnNyY19yZWcgPT0gQlBGX1BTRVVET19NQVBfSURYX1ZBTFVF
-IHx8Cj4gICAgICAgICAgICAgICAgIGluc24tPnNyY19yZWcgPT0gQlBGX1BTRVVET19CVEZfSUQ7
-Cj4gCj4gQ291bGQgeW91IHBsZWFzZSBkb3VibGUgY2hlY2s/Cj4gCj4gPiAgCWJ0Zl9mZCA9IGlu
-c25bMV0uaW1tOwo+ID4gIAlpZiAoYnRmX2ZkKSB7Cj4gPiAgCQlidGYgPSBidGZfZ2V0X2J5X2Zk
-KGJ0Zl9mZCk7CgpUaGFua3MgZm9yIHRoZSBndWlkYW5jZS4gwqBJJ2xsIHJld29yayB0aGlzIHRv
-IGV4dGVuZCB0aGUgcG9pbnRlci1saWtlIApsZGltbTY0IHNhbml0aXphdGlvbiBpbiBwcmludF9i
-cGZfaW5zbigpLgo=
+bpf_get_kmem_cache() can return NULL when the supplied address is not a
+valid kernel address or when no slab is found for it. Its kfunc
+registration does not currently advertise that to the verifier.
+
+Add KF_RET_NULL to the registration and add verifier coverage for the direct
+field-read case. The selftest rejects a read of s->size after
+bpf_get_kmem_cache(0) without a null check, while the null-checked variant
+remains accepted.
+
+The issue dates back to a992d7a397912 ("mm/bpf: Add bpf_get_kmem_cache()
+kfunc").
+
+Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+---
+Nuoqi Gui (2):
+      bpf: Mark bpf_get_kmem_cache() as nullable
+      selftests/bpf: Cover bpf_get_kmem_cache() null return
+
+ kernel/bpf/helpers.c                               |  2 +-
+ .../bpf/progs/verifier_kfunc_prog_types.c          | 29 ++++++++++++++++++++++
+ 2 files changed, 30 insertions(+), 1 deletion(-)
+---
+base-commit: 76f62d237538b456354a44e796a541cde03c6e28
+change-id: 20260617-f01-16-kmem-cache-ret-null-53a9f52fd835
+
+Best regards,
+--  
+Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+
