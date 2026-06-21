@@ -1,136 +1,78 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3756224F3;
-	Sun, 21 Jun 2026 15:32:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB83140D592
+	for <bpf@vger.kernel.org>; Sun, 21 Jun 2026 15:38:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782055954; cv=none; b=pybHqiL9FiK1WFVa8WwD+BWaTGO0HeiWrt80j3ixPuxTI+cykBBvcOCNmqAIuZJEHrHyVLa1CF3v1dXVANBbEOZF7vWvj8KxCElLVGw0VhpAdmQc1wV+iOVzBXZDnXrJRaIPtNyLUcNMsf2RilErU1DJRZNsJFzB7x0vlAx2Le0=
+	t=1782056319; cv=none; b=vDbq5JbE8H8V6wfUa51czLqQVVlDFXI1qT8hegUEvEuzXTMxjqoRcUOfs9Ct9d+qa22ywazbUca5OqUardYWSAc9LtYpICj3BxjpVzYNC3ATlnSDYNu4PjKI/dhHqVrvQpLuCWSnb7+4CiI3ipQhWI+eu+8pskRbrQnx8n63opA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782055954; c=relaxed/simple;
-	bh=QoCxHWSClVF8gY9o2yqG9O25RXq8OnAprTtaMIKtQM4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=fqZRCEL/g2h3UyB294XfCS5Mn8qlAb628HSUFOBwavDEVgWc/Ks8xyGxei4yAoSNLUj3m1wn8QSYObaoUyd3fniSk+z5kvHFa2kcEHZHX6AJPmnt2GLqP+NfHxE8RWQtN8FMmVATR4VKDY1OtxAfSyoyU1k+cj85rVtF5S40rtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B7RDxXYt; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782056319; c=relaxed/simple;
+	bh=TKVqp4Bjdv6zsaFFfojBFe/y3vjoX7IqaH2F78T3//U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FvhIq70njgRrauH3vTjtd8q4CteGnZMlB5aUdd83cvAZy3EHy5UdWTI9mIE0nZ3+HuIGaZvGbrUA7vfvT65UpRXTawk3ndWoF8ErwtHK83gb7fvRY24hjlajnOZ6Y+jpPnCim/GfPtQkFqYIP0fnDP0vKodsMz8mTHJDMC+/MDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dLRQY+ut; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B7RDxXYt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D29D01F000E9;
-	Sun, 21 Jun 2026 15:32:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782055953;
-	bh=Gvc449anW/TaW87Tk/rh+DmBQXANxwCVNZsSYVPpmO4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=B7RDxXYtRElE/JdSxTx6BaUqtINa0eNmbhY+qoPRpskg4k14RGxKO9bZKMzSpQ6Xq
-	 UtKoEupVVjcXJtlKqmQO5QIVoh6LHVlivtljHzB+QUXyvXD4fexbFPYgwJcl1Ubmwe
-	 p/yfOq6X4iHFQXGrJYdXw+lVgQpJh4eZd4vibG8wIdsXaaJY65GGxzfDUVnQD2fpuM
-	 C4cmPhUHOmrIeXYtmz/Bjzq25RFi3uBzf+uSwq85dpMQYr4QPyvfh7BHTlAkK7CtND
-	 jhGBHYCewnIR3pyFsMJRaXwrbSN9Humqq9ABtenxz6S/mzDYX6WX1ED0oqwfU3dooX
-	 Oscq12rZmlazw==
-Content-Type: multipart/mixed; boundary="===============5443670299775155235=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dLRQY+ut"
+Message-ID: <3d2c5cd7-1159-4e0d-b294-6106decc04a7@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782056316;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cjuhakBRdZfrfMuL+GgSiUD5exlCzqH5bVT4cQh5Vuk=;
+	b=dLRQY+utOY4gFUZ9QqV5GCijtAqGvLNb95qm1ueZFDeu99icnrpDD0Vj0bhoIrR33rQOnp
+	88hJsxWi5BIATmdLGyQhXARUWctSbzD9GXh49iYJ2p/dRJA9TWtHIhFo+5BzTcFaXGZJxv
+	YuEPqoPOfnQJ8qyMUsT2I20W5TUvet0=
+Date: Sun, 21 Jun 2026 08:38:30 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <950216803ac2380e0537b27c94ff87dd2ae0dc689fe320c51d96b9095cefc614@mail.kernel.org>
-In-Reply-To: <20260621144259.288135-3-varunrmallya@gmail.com>
-References: <20260621144259.288135-3-varunrmallya@gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] riscv, bpf: Add support for BPF exceptions
-From: bot+bpf-ci@kernel.org
-To: varunrmallya@gmail.com,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,bjorn@kernel.org
-Cc: alex@ghiti.fr,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,pulehui@huawei.com,puranjay@kernel.org,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,varunrmallya@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun, 21 Jun 2026 15:32:32 +0000 (UTC)
-
---===============5443670299775155235==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next] bpf: Emit verbose message when prog-specific
+ btf_struct_access rejects a write
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com,
+ eddyz87@gmail.com
+References: <20260615232146.5491-1-alexei.starovoitov@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260615232146.5491-1-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-> index c03c1de16b79..eafac0655dab 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
 
-[ ... ]
 
-> @@ -2002,11 +2043,61 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->  void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
->  {
->  	int i, stack_adjust = 0, store_offset, bpf_stack_adjust;
-> +	struct bpf_prog_aux *aux = ctx->prog->aux;
+On 6/15/26 4:21 PM, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
 >
->  	bpf_stack_adjust = round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
->  	if (bpf_stack_adjust)
->  		mark_fp(ctx);
+> When BPF_WRITE goes through a PTR_TO_BTF_ID register, check_ptr_to_btf_access()
+> delegates to env->ops->btf_struct_access(). Most implementations
+> (bpf_scx_btf_struct_access, tc_cls_act_btf_struct_access, etc.) return
+> -EACCES for disallowed fields without logging anything, so the verifier
+> rejects the program with an empty message. For example a scx program doing
 >
-> +	if (aux->exception_boundary || aux->exception_cb) {
-> +		/*
-> +		 * A program acting as an exception boundary saves the full set
-> +		 * of riscv callee saved registers (ra, s0-s11).
-> +		 */
-> +		stack_adjust = round_up(ARRAY_SIZE(rv_exception_csave_regs) * 8,
-> +					STACK_ALIGN);
-> +		stack_adjust += bpf_stack_adjust;
-> +		store_offset = stack_adjust - 8;
-> +
-> +		/* emit kcfi type preamble immediately before the first insn */
-> +		emit_kcfi(is_subprog ? cfi_bpf_subprog_hash : cfi_bpf_hash, ctx);
-> +
-> +		/* nops reserved for auipc+jalr pair */
-> +		for (i = 0; i < RV_FENTRY_NINSNS; i++)
-> +			emit(rv_nop(), ctx);
-> +
-> +		/* First instruction is always setting the tail-call-counter
-> +		 * (TCC) register. This instruction is skipped for tail calls.
-> +		 * Force using a 4-byte (non-compressed) instruction.
-> +		 */
-> +		emit(rv_addi(RV_REG_TCC, RV_REG_ZERO, MAX_TAIL_CALL_CNT), ctx);
+>    1: R1=trusted_ptr_task_struct()
+>    ...
+>    4: (7b) *(u64 *)(r1 +0) = r2
+>    verification time 83 usec
+>    the program is rejected
+>
+> leaves the user guessing which field is off-limits.
+> Emit verbose message.
+>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-This isn't a bug, but could the kcfi preamble, fentry-nops loop, and
-TCC-init instruction be emitted once before the exception_boundary /
-exception_cb branch instead of being duplicated? The same three-part
-sequence appears again below in the non-exception path, and the two copies
-must stay byte-for-byte identical since the tail-call epilogue skip offset
-depends on this fixed layout.
+Indeed, e.g. bpf_scx_btf_struct_access() does not emit any verifier log
+for failure. So it makes sense to have a generic verifier log after
+env->ops->btf_struct_access().
 
-> +
-> +		if (!aux->exception_cb && aux->exception_boundary) {
-> +			/*
-> +			 * Boundary program: allocate the frame and save the
-> +			 * full callee-saved set, capturing the caller's values.
-> +			 */
-> +			emit_addi(RV_REG_SP, RV_REG_SP, -stack_adjust, ctx);
-> +			for (i = 0; i < ARRAY_SIZE(rv_exception_csave_regs); i++) {
-> +				emit_sd(RV_REG_SP, store_offset,
-> +					rv_exception_csave_regs[i], ctx);
-> +				store_offset -= 8;
-> +			}
-> +			emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
-> +		} else {
-> +			/*
-> +			 * Exception callback, reuse the boundary program's
-> +			 * frame, whose frame pointer is passed in a2. Setting
-> +			 * SP = FP - stack_adjust lines the epilogue's loads up
-> +			 * with the registers the boundary saved.
-> +			 */
-> +			emit_mv(RV_REG_FP, RV_REG_A2, ctx);
-> +			emit_addi(RV_REG_SP, RV_REG_FP, -stack_adjust, ctx);
-> +		}
-> +
-> +		goto tail_setup;
-> +	}
-> +
->  	if (seen_reg(RV_REG_RA, ctx))
->  		stack_adjust += 8;
->  	stack_adjust += 8; /* RV_REG_FP */
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27908252575
---===============5443670299775155235==--
