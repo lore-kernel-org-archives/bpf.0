@@ -1,116 +1,126 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80E1636F8EB
-	for <bpf@vger.kernel.org>; Sun, 21 Jun 2026 14:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3E326980F
+	for <bpf@vger.kernel.org>; Sun, 21 Jun 2026 14:56:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782053022; cv=none; b=LarMEiGoeb6oAc4mDXq3NPyU400vVks0kpmdu0/c+76wvxmE3iBCD1hZ4gznpL8jE+//T5XQlHaUXTGZpbgXgJd+yL2ndrf0U6i+2rlGfzWjwXy13vAhHeKM1J+0DW0ZLd4XSsS5mhicfTSWWYCZAo02lN7a69nopmXiivHNXSM=
+	t=1782053820; cv=none; b=SnGm8xN3aQpMIpUux8HeiiRhYnvKNR6PYNIXXQRuSF6EB0F4rcpGdXtssNdvi3ur5MhL5lDfx8vQWCjYv7QcDTDeLpdP7m8KJ8qYWZEf+UIBLoq9S2E0nhgdaS/Xpm8hZ1yPkHJ7BRfESC3AQp5B6vD7u4Gqy6ds1zoPfb4TgEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782053022; c=relaxed/simple;
-	bh=y4Z/Chbl8d1fW8FeQ7mLZsT8Hhkc5v336Kn293SDZZA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tkHupCqXP3kLzQJ5SZdQ7OSTzcZQxC2wfGnL/jocUAA7vyaH1E0eCLfBOZ+7gfjOESb+kZAW5nMN5L2N2VWRWg+JguMwSkuxwY/jzP9lIEfPyLrZTsUpsIyMbz6QS1Shr223M+TCz3SQw3nNqjiN/aWKlXgOlPS9WgKLlU307Sk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eOZnn2rs; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782053820; c=relaxed/simple;
+	bh=V9s7De55ejIuxpcxzHMxr70y0w0gccvxM88ltWUQB9M=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=pSNyJjuu1d/uEipF23nOHG/+cdRl0s0q2yn5WwpHd3XlNi7YkwoAQfLO/JnmhF7wv/+JkvPj/vR6oXGST5Oe1ccUM31msfh1c9alQ68iNo615c09+W0O9ipT+NJvpp2s6ibTnaUJGTqfCZR9OhUA58s6C0UGdFbbnHdbmHJot+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AuShWB2I; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eOZnn2rs"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-845385adf4cso1569902b3a.0
-        for <bpf@vger.kernel.org>; Sun, 21 Jun 2026 07:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782053020; x=1782657820; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xdV1fV0Fid/R2q9Vczf4SGtHhC3UkfiLS8XxvVVRGDM=;
-        b=eOZnn2rs4WyGTVJWlz4pcHsKfd4vCu2zoFY0Khii+cQM8InNGlMbbY4m02ZiOaJ1f1
-         XbGF/8D5ZE4jQTJvohk3w8yA2Gpvw+vSVecz3ZRSbrneTachoKZSHw7VvlO4Q99k9m7z
-         D43Vj7tEOc3Qx+R7Hvz+IPutFjM4hQnisQ7+rGuTzze+YG0deS4MoaQhsPxBQ/UeXJOc
-         tOP+zMWdpMNpTpA+zjwgEbPDZpRb/xMau4d8aXcqO5jC+1tseGhbNG8Gw77yEnY8Z/xW
-         VEoPRyGt8T5atp6At/yKMJwyVJfMyNQRCEh7I4hMzSQXrFX3HQI3UpSKfgvtUslq+p91
-         A99Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782053020; x=1782657820;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=xdV1fV0Fid/R2q9Vczf4SGtHhC3UkfiLS8XxvVVRGDM=;
-        b=UwjqKyRXuh+azZSSC/OQTdPQCYmv+/ryuoLXi6vojrl4yqqEEk8Fhzo4z4+IxtJn6A
-         m5IgRyuhqeAUS/4aXRqEOzb9hkjVqVubdqShz5kA7yx9LAe+H/XZ5Mc+QIEOzTBdERdE
-         SDL9Ds4DdmR6uEaZ91EI65WcK45Keoi2kORNhuP1UXIYyzS8n5Wr5ii+/B44LtftZtN6
-         QWmPlKZO3jY0PyW61CApdsxw8QBo/aneZnrm0YMOhvFthkzm5/R6hrmOxiTOBcOIGlaf
-         /kMlDIEeznptanf+QPqqCpezPwAt3bQ5APYv17/fv6ZIXnk4V3RjuRhb3gtYypFTdqc/
-         rP0g==
-X-Forwarded-Encrypted: i=1; AFNElJ+nbYNBwCxU0ymPvi+PvYd9JiKyBaAEEIZxDVmjL3t1tvqczTYV9BgL07rjprI5hLxjurU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySJ2I3SKIAkw+m4f6KkO0QXcM2FtCZqmYO+1ihL3U8castyYPr
-	El0wf3eFo0VgtnACUB8Uks2ESlJqpU9VvfrkR2QwoilWsvei8YnDtnlQ
-X-Gm-Gg: AfdE7ck5GXgAIL7r14yuh989o3gqDj2KklD62j62q+0AFuQdqPlruqlCBoEX1Ng+zzR
-	F5t/Vl3kd19PfYOdsyszAjpGLU8+43d2M/QdgprHHVduQIvS6IAtPHrmquFpQ6kepJ1wTJ5DVsa
-	bxESf8pzMlGlKZmCnNAaWAHGzrDYTS9a4hN+sKoMwF4WwClcfPUSZWkE6sPbUM6U/5wXBKkjq3x
-	b1fbe6Oce0EbGpeV0+Q93cuCdEvKUIl7ZcDT7C84OAhkJuxTAuws+mH1W22txPkYc/cPDFvb9Ph
-	VRe2zzzoke0tGrd+gCgYQGbtBRWzqhpBKWgjaO7ioDZYugtRDgGpq2YyD42wHzuoqlawn9tQeUZ
-	jjGiKWc69GPC8+333qzk9Poncuv5lHH1BmB+IrGSPiWw8qnGnNGS79bf+1E/EiolorA4cFv1U/2
-	7AP/0evcwO8rLX1lTbPoCJWkYJ5qtT
-X-Received: by 2002:a05:6a00:1d97:b0:838:c01a:7a50 with SMTP id d2e1a72fcca58-845508a70c9mr10966516b3a.30.1782053019778;
-        Sun, 21 Jun 2026 07:43:39 -0700 (PDT)
-Received: from computer ([2a09:bac5:3b4a:8aa::dd:17])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84564e7687csm4963254b3a.35.2026.06.21.07.43.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Jun 2026 07:43:39 -0700 (PDT)
-From: Varun R Mallya <varunrmallya@gmail.com>
-To: pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	bjorn@kernel.org
-Cc: alex@ghiti.fr,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	pulehui@huawei.com,
-	puranjay@kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	varunrmallya@gmail.com
-Subject: [PATCH bpf-next 3/3] riscv, bpf: Remove BPF exceptions from BPF CI denylist
-Date: Sun, 21 Jun 2026 20:12:59 +0530
-Message-ID: <20260621144259.288135-4-varunrmallya@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260621144259.288135-1-varunrmallya@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AuShWB2I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8CBD1F000E9;
+	Sun, 21 Jun 2026 14:56:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782053818;
+	bh=ewfK1ZbwQ65/nt7XiE0QfVfrGzi6IwCZkfc1jxeSfdw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=AuShWB2ICQflHU15KP8IhPyjiQKKzEYTa0+gTys7e+cWu2SaWnMCJkXL1tUqDTF/s
+	 W0QtqgngCTyoiCPZlgcOqRzE4kGhnBzn5ELPeEytEt6STUNHuXpSOGJMnDj4qwTbIE
+	 QJ2LBIFuXFBXD9Q4Vu/feWQle+HYRnuNteBF8VNwKGgxaoOxCrEhR7orDbeQOl4ffl
+	 EkNEgvvDUOfRa3POQl0CSSXCbBsJZASjGhzyc4wRw6kRzXVVQemBt4fuRQIxHXjysz
+	 CMQvwalQNdjb18qpn0JfWik4ReP0qFigrZNfSdhzcLPOdkaXyzCoJ/OU+wAIpvjMTp
+	 +JDUGohGrtBnA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/3] riscv: stacktrace: Implement
+ arch_bpf_stack_walk() for BPF
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Varun R Mallya" <varunrmallya@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260621144259.288135-2-varunrmallya@gmail.com>
 References: <20260621144259.288135-1-varunrmallya@gmail.com>
+ <20260621144259.288135-2-varunrmallya@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 21 Jun 2026 14:56:58 +0000
+Message-Id: <20260621145658.C8CBD1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-This patch removes BPF exceptions from riscv64 denylist on
-BPF selftests since support for exceptions has been added now.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Missing `ftrace_graph_ret_addr()` resolution in `arch_bpf_stack_wa=
+lk()` breaks BPF exception unwinding when the ftrace function graph tracer =
+is enabled.
+--
 
-Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
----
- tools/testing/selftests/bpf/DENYLIST.riscv64 | 1 -
- 1 file changed, 1 deletion(-)
+commit 18f97d2c8c3fdcb52341a066f5cdbb33e67828f4
+Author: Varun R Mallya <varunrmallya@gmail.com>
 
-diff --git a/tools/testing/selftests/bpf/DENYLIST.riscv64 b/tools/testing/selftests/bpf/DENYLIST.riscv64
-index 4fc4dfdde293..9268351ce4c1 100644
---- a/tools/testing/selftests/bpf/DENYLIST.riscv64
-+++ b/tools/testing/selftests/bpf/DENYLIST.riscv64
-@@ -1,3 +1,2 @@
- # riscv64 deny list for BPF CI and local vmtest
--exceptions					# JIT does not support exceptions
- tailcalls/tailcall_bpf2bpf*			# JIT does not support mixing bpf2bpf and tailcalls
--- 
-2.54.0
+riscv: stacktrace: Implement arch_bpf_stack_walk() for BPF
+   =20
+This commit implements arch_bpf_stack_walk() for RISC-V when
+CONFIG_FRAME_POINTER is enabled. It allows unwinding the stack up to the
+program marked as the exception boundary, which is required to support BPF
+exceptions on this architecture.
 
+> diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrac=
+e.c
+> index b41b6255751cb..a4c2411f4038b 100644
+> --- a/arch/riscv/kernel/stacktrace.c
+> +++ b/arch/riscv/kernel/stacktrace.c
+
+[ ... ]
+
+> @@ -102,6 +103,33 @@ void notrace walk_stackframe(struct task_struct *tas=
+k, struct pt_regs *regs,
+>  	}
+>  }
+> =20
+> +void notrace arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip=
+, u64 sp, u64 bp),
+> +				 void *cookie)
+> +{
+> +	unsigned long fp, sp, pc;
+> +
+> +	fp =3D (unsigned long)__builtin_frame_address(0);
+> +	sp =3D current_stack_pointer;
+> +	pc =3D (unsigned long)arch_bpf_stack_walk;
+> +
+> +	for (;;) {
+> +		struct stackframe *frame;
+> +
+> +		if (unlikely(!__kernel_text_address(pc)))
+> +			break;
+> +		/* pc belongs to the function whose frame pointer is fp */
+> +		if (!consume_fn(cookie, pc, sp, fp))
+> +			break;
+> +		if (unlikely(!fp_is_valid(fp, sp)))
+> +			break;
+> +
+> +		frame =3D (struct stackframe *)fp - 1;
+> +		sp =3D fp;
+> +		fp =3D READ_ONCE_TASK_STACK(current, frame->fp);
+> +		pc =3D READ_ONCE_TASK_STACK(current, frame->ra);
+
+[Severity: High]
+Does this code need to resolve the ftrace trampoline address?
+
+Looking at the generic unwinder walk_stackframe() in the same file, it uses
+ftrace_graph_ret_addr() to recover the real instruction pointer when the
+ftrace function graph tracer is active.
+
+If a kernel function in the unwinding chain is traced by ftrace, frame->ra
+will point to return_to_handler on the stack. Because return_to_handler is a
+core kernel text address rather than a BPF program address, the stack walker
+might silently skip the caller's frame and miss the BPF exception boundary.
+This would leave the context uninitialized and trigger a kernel panic in
+bpf_throw() when it validates the missing boundary.
+
+Could pc be passed through ftrace_graph_ret_addr() here to ensure the real
+return address is consumed?
+
+> +	}
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260621144259.2881=
+35-1-varunrmallya@gmail.com?part=3D1
