@@ -1,148 +1,167 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618A836D9E6
-	for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 21:38:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F1C1F0E29
+	for <bpf@vger.kernel.org>; Sun, 21 Jun 2026 00:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781991484; cv=none; b=qUmgXD7Cqb/nzEwNLI8/czesMDDcDzmkAS45bou0AoVCvm/cDZRmQLCZVf6W2bl2TOcxx4e1BdMZBD9yqsHsHqc+B/y6EOa6r2AKV/ZOgueNe2qA9DyXgpMUj0mrVIh8kkGEGzsUMXH2DTzrRPa0zPYON1LTs0GgJQuE2JqZTdc=
+	t=1782001785; cv=none; b=HHFoxq6P3E+iD+Fn8PZ1LFcMXDy84Ov45vra9sWsg4mpA7y6q6tj/MZG/SquJKtuZxtUoroRNgeOFq9nwNzE5i9zmbjTNvsUSBbgl006ahwv1wzGGHMvFHsutmgC2oGBQE72t1J/35a20xXmHdx7NVJinGn/ZMjXiStU4eh7K8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781991484; c=relaxed/simple;
-	bh=ZEJ92BXzs7uxFvZ8o+bk+yvRtMFQ80qmq1Smsi3caog=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nOOIZRiUGrlUDmE0g5JWlGMA8SQY/t7yB+19jiGy6DG1ZbdErUkC2eHaTZbQFkAslJmhU9WOlIswLs7zhbUm/SeUam7IC2kmslPmewgfiXKb8kttVpFIG0hWByuN4Ygmn4P0SYOgBqL09/DwwAXi60JmN1UA1fzhJzbw18tdX1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oGTB73hC; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782001785; c=relaxed/simple;
+	bh=1MnWNqh0Ih//0t81t9oNMlb5t06OUcy7Zz/BNBFXUT0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HZICoooemh+LCE2U9KHkeoKKxRmagEKDTb2nJHSFfnr4d/qvqA4FtdDuqtt4zefjHPp+WdOM7wc4L7D+1655hsI52Kng6Sj8AlZ8vi4gc7rkrdvDFvfvqA5kxjtCiH8/PaMBN8Eb0mCmC/vZb5CKDmf2dg0/c0K4lEvTl5uFk9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=wwydNH/N; arc=none smtp.client-ip=43.163.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oGTB73hC"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-464192ab2e1so1917737f8f.0
-        for <bpf@vger.kernel.org>; Sat, 20 Jun 2026 14:38:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781991482; x=1782596282; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kyy19G3UAGpqNpZJRFtz4WPWcaaqaP4tOOJJnrBVNEo=;
-        b=oGTB73hCBI+aKbmNhcNbDN1rb//FBS5ylOmcoCekAH4r7Y7tCe1MDtDGwCSkOviot2
-         ZGPB7KVzU3avkexN+WsVTNAxrle9TSRc+jeBraiSgJcw5ViwObsxrgGyQpWEm9sYTEiI
-         rOhdnKTwV4GJWFR3ToAUpg+vwg40SNDF26cE7/oXlQreosRMeWiubQ1qSP3SDMvg2kFJ
-         UP7piEUg7cPmhEG8ZFLD/oI91soqxjwRXRBcHC9or4dDTUYHoW50+m2Ue7vEDR1K1jjx
-         +dcM0PwSh7P9/kjQFCc1y8bRFXlrGL19Q2G6biHG8c8caKtiY14UhUhpDQqNsbMkBPLn
-         k+fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781991482; x=1782596282;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kyy19G3UAGpqNpZJRFtz4WPWcaaqaP4tOOJJnrBVNEo=;
-        b=tLxq0r/Klrj2UgBO9duUBk57rtS8GuVvDW48m4nhnu2w5h3dbqY/RLDDzvUiZN0663
-         b0lBNJy9Li3OtcJY7ksIwhopr/GzJJRcKr8xFtYq17pEUtoXKjNPlpG9bKc0x5vVu85t
-         iUvXSJB29oz3G3KfKGk+X+OiZb7YAyv/567jRpIN2rdjSTWcLtisOqbwDu8layZybRXG
-         msEu70PW0RafJFAGBB22s+SU5+dgisHxkJ3V0bO5I6JFBnu7tei5UO6rxhk2Lhn+Tm/g
-         nFO8KDqsOvixdejytb+sXsSGtALM1475DleY7MG8lx7ciuFann78qaAyaeN29Kzg/11v
-         f8ng==
-X-Forwarded-Encrypted: i=1; AHgh+RpaHzj8GxR5TjxIzureulemKA22gvuM7EGFr9GCRb3vaVhDJ4MTmJ5TAhI9swce5jGEh/M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxc0fRxxGT8ClvW5rczvZaRLIuvdmL3VI9zK6TqPaANmU+yOI55
-	asryRNjSTA9en7keCz5kK+D3Zyu4e5bQLFsfxk/ULe3vXFlGsUXW5Z2w
-X-Gm-Gg: AfdE7cnfMuHupypZAkUcOli6qO1Bvj3xgL87iTPhteiE85YSIHVwvchQ+hlivQQUohj
-	cNsTw3vt048GM/ePUKr6jeGeghlq7KusJv+2UvSaTtO5u9XlLj5suI5KJyHGUvL7fZuXWI/Kmki
-	aQwEJGewYm9ci0S8ZojV3er4Uj33nK6IW6RQqQJhspf2BaPpf4UPL862YYv8TBwX/mtywUcShvj
-	Ce5eHMv0K84KRR46wcKk+Ta1k9D2Mr/oVBkXzO2rfRu10wYw2TCJS4R0UsmHMM7FH0xovm3abBk
-	qd3NNHxuE5syg5PPs52K4+QYatGyowgaA+qAv08oD6pqhWn5ywDrqB+UM657P1WXfhwli+6psBC
-	eyxKlw/Yg6y9UbDN8atqSTAbeplhXXSvZCyD4J2fj9Pdi27/6SGJLn4bVSNMdOuYLXC9mSdd2q2
-	kXd1deodz5IzVPHq2x7wWdj9Ie1CvOETD/AVHazHJj0hk9CG+bmnvFnMdiV1ktdVlEhYNJg2iU
-X-Received: by 2002:a05:6000:2b01:b0:45e:e1a4:c4c3 with SMTP id ffacd0b85a97d-4650043b85amr9392338f8f.15.1781991481496;
-        Sat, 20 Jun 2026 14:38:01 -0700 (PDT)
-Received: from dohko.chello.ie (188-141-5-72.dynamic.upc.ie. [188.141.5.72])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-466648c698dsm12128189f8f.16.2026.06.20.14.38.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Jun 2026 14:38:01 -0700 (PDT)
-From: David Carlier <devnexen@gmail.com>
-To: danishanwar@ti.com,
-	rogerq@kernel.org,
-	andrew+netdev@lunn.ch,
-	netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	m-malladi@ti.com,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	David Carlier <devnexen@gmail.com>
-Subject: [PATCH net] net: ti: icssg-prueth: fix XDP_TX from the AF_XDP zero-copy RX path
-Date: Sat, 20 Jun 2026 22:37:56 +0100
-Message-ID: <20260620213756.87499-1-devnexen@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="wwydNH/N"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1782001776; bh=tV+HkNoqzvKpgSRnvGC6RmogVfBvelOvm7aH4UT4sWE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=wwydNH/N/FlJkbysIxkx2U1DuTaZe1a8sWH0i1aPf6jpaOTAWU0BfWQvx7e+hP/aD
+	 msFG6CtnKQt6VQxuevmwWUCkApnD5PIqH+syaXZTI0rnug4CdT9llNSkbnuy7XdyRr
+	 6Dy0tt1wau1g0nEu9fdPW7qHKW119k4MgTlFyg78=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+X-QQ-XMAILINFO: MF2s0TKt0BDQ/rAu5/bVF6ZNILrc10mr2NDK5So5PZea2C0ouyc6T0AU7Lv/0m
+	 M+tiChHuvcTMkEr7KxEG8VnMxxBZg/FL2VWvaGR+PVbmIS213R4X2rMZTUn0tTK8tqPcAkg54H8hm
+	 MolsdFNAM21nSu+sGsS6BwabyTIUlI87LRHTYv6OC+bpdKnIYgkHyx1/8aIg+QOWQKCsFrCuAEOO2
+	 ikeK44vqRz3+kEZjQZYtGJHxm7o3OOGlLSLYGaQwguUUo+5isE5F3rdwiQiijWZjrFNcwDinft0xJ
+	 uk7SlLwRsMpfemvZf2tyJ/wRtmyJ42c5xoan+9jdHzbu0Fpn0ukU/uLfWzm8UBXVLWgLW68OtxZ+s
+	 s7UubAhyGi2OXhd37kt3OG1hB0sUBXP2GDdavSpB4w/mabdznQ6reeBY0HrU5tjSNazw2ZvnH+27l
+	 uqBEdF9IFVj65f8p9WJFtt4qO67/4cTjlD03/NsuvHON5OvsdOYj3DQLKVX3cxKysLMUcrFUicMfa
+	 FRz+GSBnNjRJtKh047QqHUJ6ONmwAQ7sKinwsMjiHzBWJDzh6flXhZLfD7Qc9nuYS/aj9/xuI2mwd
+	 KUiC9lDTKL4D0Tp1LKzldI1FK8ChtHutDuZSilufRP37SnjVKthlobfWZuOgNjb/kWKeFtChGZuoH
+	 NIuCGmd2y1PzzrJZyjDT55awvUINzzRpq7VIEjGHNkMHYJL9ZLN8GzWrfqZupeaUNdKg9Q7aljomT
+	 czs0HD+4/Bo9RHbKxfmm5qwKbCx0TrClmnshOdZFSxwK3i/Vi8XplgVonX78ZqRHzeRM9wJaZo5jW
+	 GxQ+316YYUksIkDpl25GrCh8UrMjB8JQwBbhcROpPiidgoCq8VTZCJuvrlJ0NGU5k2oFk5jd4bI3/
+	 x/v8/Sb9BSVlp2QtLRfJYGnW3htAUjy+MT2fam177lsNCnPgb3wNlAgG1RkN3yTeR27g8bfs7+efn
+	 +N3w9NvhV6ONr0SHy1f06fEgazvq7hkv5k/ZVjvYsP/w0D4rwV+tYIpXyvr7/g6mJv4/wHNOA9YYv
+	 81WKVzAZj0/KqNn4jFku/Aso0866oBomlIAXyY7yYVbBfVMCMRV4ITq3GnogfuCWqPonFdPZgNvcK
+	 jcjUlIxFvNXuePoauHAU+5rTvg95QwdWsFBdxMzP9IYHeg==
+Received: from [192.168.1.100] ([183.94.22.181])
+	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
+	id 75E2FA1F; Sun, 21 Jun 2026 08:29:30 +0800
+X-QQ-mid: xmsmtpt1782001770t17vm1vd5
+Message-ID: <tencent_45CAE878B5922990DB102BE05A1BAD50DA09@qq.com>
+X-OQ-MSGID: <213501bc-74e7-43ef-b72e-83ed5976371b@qq.com>
+Date: Sun, 21 Jun 2026 08:29:30 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH for-next v3 7/9] mm/slab: introduce kfree_rcu_nolock()
+To: "Harry Yoo (Oracle)" <harry@kernel.org>,
+ Vlastimil Babka <vbabka@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-7-70a54f3775bb@kernel.org>
+From: XIAO WU <xiaowu.417@qq.com>
+In-Reply-To: <20260615-kfree_rcu_nolock-v3-7-70a54f3775bb@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On XDP_TX from the zero-copy RX path, emac_run_xdp() converts the xsk
-buffer via xdp_convert_zc_to_xdp_frame(), which clones the data into a
-fresh MEM_TYPE_PAGE_ORDER0 page that is not DMA mapped. Transmitting it
-as PRUETH_TX_BUFF_TYPE_XDP_TX derives the DMA address with
-page_pool_get_dma_addr(), reading an uninitialized page->dma_addr, so
-the device DMAs from a bogus address (corrupt TX, or an IOMMU fault).
+Hi,
 
-Pick the TX buffer type from the frame's memory type: keep
-PRUETH_TX_BUFF_TYPE_XDP_TX for page_pool frames and use
-PRUETH_TX_BUFF_TYPE_XDP_NDO for the cloned zero-copy frame. The
-completion path already unmaps PRUETH_SWDATA_XDPF buffers.
+I noticed the Sashiko AI review [1] in this thread flagged that
+kfree_call_rcu_nolock() dereferences slab->slab_cache even when
+virt_to_slab() returns NULL (for large kmalloc objects that bypass
+SLUB, or vmalloc addresses).  The VM_WARN_ON_ONCE fires but does not
+stop execution, and the subsequent NULL dereference is deterministic.
 
-Fixes: 7a64bb388df3 ("net: ti: icssg-prueth: Add AF_XDP zero copy for RX")
-Cc: stable@vger.kernel.org
-Signed-off-by: David Carlier <devnexen@gmail.com>
----
- drivers/net/ethernet/ti/icssg/icssg_common.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+I was able to reproduce this in QEMU with KASAN.  The trigger is as
+simple as passing a large (>8KB) kmalloc buffer to the new function.
 
-diff --git a/drivers/net/ethernet/ti/icssg/icssg_common.c b/drivers/net/ethernet/ti/icssg/icssg_common.c
-index 82ddef9c17d5..302e700ea17d 100644
---- a/drivers/net/ethernet/ti/icssg/icssg_common.c
-+++ b/drivers/net/ethernet/ti/icssg/icssg_common.c
-@@ -804,6 +804,7 @@ EXPORT_SYMBOL_GPL(emac_xmit_xdp_frame);
-  */
- static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp, u32 *len)
- {
-+	enum prueth_tx_buff_type tx_buff_type;
- 	struct net_device *ndev = emac->ndev;
- 	struct netdev_queue *netif_txq;
- 	int cpu = smp_processor_id();
-@@ -826,11 +827,21 @@ static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp, u32 *len
- 			goto drop;
- 		}
- 
-+		/* In AF_XDP zero-copy mode xdp_convert_buff_to_frame()
-+		 * clones the xsk buffer into a fresh MEM_TYPE_PAGE_ORDER0
-+		 * page that is not DMA mapped. Such a frame must be mapped
-+		 * via the NDO path; only a page pool-backed frame already
-+		 * carries a usable page_pool DMA address.
-+		 */
-+		tx_buff_type = xdpf->mem_type == MEM_TYPE_PAGE_POOL ?
-+				PRUETH_TX_BUFF_TYPE_XDP_TX :
-+				PRUETH_TX_BUFF_TYPE_XDP_NDO;
-+
- 		q_idx = cpu % emac->tx_ch_num;
- 		netif_txq = netdev_get_tx_queue(ndev, q_idx);
- 		__netif_tx_lock(netif_txq, cpu);
- 		result = emac_xmit_xdp_frame(emac, xdpf, q_idx,
--					     PRUETH_TX_BUFF_TYPE_XDP_TX);
-+					     tx_buff_type);
- 		__netif_tx_unlock(netif_txq);
- 		if (result == ICSSG_XDP_CONSUMED) {
- 			ndev->stats.tx_dropped++;
--- 
-2.53.0
+On Tue, Jun 16, 2026 at 12:06:14AM +0800, Harry Yoo (Oracle) wrote:
+ > This commit introduces kfree_rcu_nolock(), a variant of kfree_rcu()
+ > designed to be safely called from unknown contexts without falling
+ > back to batched processing.
+...
+ > +void kfree_call_rcu_nolock(struct rcu_head *head, void *ptr)
+ > +{
+ > +    struct slab *slab;
+ > +    struct kmem_cache *s;
+ > +
+ > +    VM_WARN_ON_ONCE(is_vmalloc_addr(ptr) || !virt_to_slab(ptr));
+ > +
+ > +    slab = virt_to_slab(ptr);
+ > +    s = slab->slab_cache;
+
+The problem: if ptr is a large kmalloc object (> KMALLOC_MAX_CACHE_SIZE,
+which is 8 KB on x86_64), the allocation bypasses SLUB and comes from
+the page allocator.  virt_to_slab() returns NULL.  VM_WARN_ON_ONCE
+prints a warning but does NOT return, and the next line dereferences
+NULL->slab_cache at offset 0x8.
+
+[Reproduction]
+
+I rebuilt the kernel with CONFIG_KASAN=y and added a small late_initcall
+that allocates a 16 KB buffer and passes it to kfree_call_rcu_nolock():
+
+   static int __init kfree_rcu_nolock_poc_trigger(void)
+   {
+       void *p = kmalloc(16384, GFP_KERNEL);
+       struct rcu_head *head = kmalloc(sizeof(*head), GFP_KERNEL);
+       kfree_call_rcu_nolock(head, p);
+       return 0;
+   }
+   late_initcall(kfree_rcu_nolock_poc_trigger);
+
+[Crash log — kernel 6.19.0-rc5, CONFIG_KASAN=y, CONFIG_DEBUG_VM=y]
+
+   kfree_rcu_nolock PoC: calling kfree_call_rcu_nolock on large obj 
+ffff888026c5c000
+
+   WARNING: mm/slab_common.c:1271 at kfree_call_rcu_nolock+0x1e/0xc0
+   VM_WARN_ON_ONCE(is_vmalloc_addr(ptr) || !virt_to_slab(ptr))
+
+   BUG: kernel NULL pointer dereference, address: 0000000000000008
+   #PF: supervisor read access in kernel mode
+   #PF: error_code(0x0000) - not-present page
+
+   RIP: 0010:kfree_call_rcu_nolock+0x5c/0xc0
+   Call Trace:
+    <TASK>
+    poc_trigger_init+0x2a/0x40
+    do_one_initcall+0x131/0x730
+    kernel_init_freeable+0x471/0x7e0
+    kernel_init+0x28/0x300
+    ret_from_fork+0x2c/0xc0
+    </TASK>
+
+   Kernel panic - not syncing: Fatal exception
+
+The crash is at offset 0x5c inside kfree_call_rcu_nolock(), which
+corresponds to `s = slab->slab_cache`.  The fault address 0x8 is
+exactly offsetof(struct slab, slab_cache).
+
+
+[1] 
+https://sashiko.dev/#/patchset/20260615-kfree_rcu_nolock-v3-0-70a54f3775bb%40kernel.org
+     (Sashiko AI code review — "Null Pointer Dereference", Severity: 
+Critical)
+
+Thanks,
+XIAO
+
 
