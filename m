@@ -1,134 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5304D25B09D
-	for <bpf@vger.kernel.org>; Sun, 21 Jun 2026 17:47:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B592840D587
+	for <bpf@vger.kernel.org>; Sun, 21 Jun 2026 20:45:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782064025; cv=none; b=u3USMNN101vcqCz+jz0HGvgTrM3WEUFZPqi/tuO4JVIDxJD2QAKEIOLmbmQVe/5ww/+hWo3SDVZLjNLUt3ZuJwhXA88R2+hzwgBRc6H1pBs9vN3v10XkBoJ0zC/TSCcxQH43FJB73o1SigfBoaW37GFswYmwWVKiuvQrxKilSEY=
+	t=1782074730; cv=none; b=GdMOSQFJWeE0MZaR72pS0fQFx3bLYfxfit63UboMmkMrLP5BjUkeqU43HEtT8q17hdmPLsZrM8cpBK4FvbkI5NK7psuyDEPf0P5u+Q9AESpaaPaqhBilEGzx9p/e3wteeCB5rgfsYZ2FxhdnDG564VZSxBC5rBh3GpAkq4UdMpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782064025; c=relaxed/simple;
-	bh=HwMuvAu6YigLLbWfaIL7lYgTs9jyri8MlmZ9Tus4GSo=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=nZMahxZ4mHWaMnWS7moyyfeSgVUst3XwPHfgVtg9LCSp1P7GCnuXp77id+dzvgMbv0ZLQ/sWDxSkzM5MmLuKXFXwFtv9+shibwMvDPd7RRHKeu3H6aCYeUDlBrx2jcln1GhMw+VQBVjT3SYk6WHLhWzaoi2CIqN/vdUCemAPreE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ntf9V8Rf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782074730; c=relaxed/simple;
+	bh=6A2Yu0LvTUbDAmjiNLejIucUCoJubQ33wgMN4uXhdOQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ctkhh52NsBC+TJFed0SyJvVWrAoWLEy6jil9hZFtyqnrBnhxN1bZaoLmbKB81wyJBn/ytxBpj0z0he2j9pXdtLbfYqOL6nybKhOcEqedSKYQeR4k42QrBl3l8yrR+I8HEepap6E7O36TKDH83mth2Jkh8Z9BBjUVtExpCnvF5q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JKFT49p8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ntf9V8Rf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D08CB1F000E9;
-	Sun, 21 Jun 2026 17:47:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JKFT49p8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36DBC1F000E9;
+	Sun, 21 Jun 2026 20:45:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782064024;
-	bh=pOdNh5dCsE0M4ZwmRbzxKo1adeiMmSitPgfM7sCHXvU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ntf9V8RfFlfylp5R2CV53xwbGM+wBJQ4d9H7QC45TkP5mT0YCeqrOJNuq1GJJrvmQ
-	 bWB9kGQ7ljjT3nMzmIL6LgFeSVjMLsagCbF6xvx0Wp+6/vSuq9YXjlhphgCCX6OO2w
-	 qcVS3A7p47ZxqCeecDBtoaQzfMr18Wnc6HP2hKdjxMirOESmidQu5c6r7nh9Jy5srD
-	 iH7se9ky2RC6reXDJXa8TF3nlWWpE0wW33Gkou83UzqJeDEjLv7vLSJe3pUZPfMuLL
-	 8C9MWSB1+ED2WBO65eUpNOjjbll0b/KsCOl2N5Tc/yfvRoxk+aDbtmVs2C4fSDNxNw
-	 cRCUheJCHG5aA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH stable 6.6.y v4 1/4] bpf: Track equal scalars history on
- per-instruction level
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Zhenzhong Wu" <jt26wzz@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260621172735.409355-2-jt26wzz@gmail.com>
-References: <20260621172735.409355-1-jt26wzz@gmail.com>
- <20260621172735.409355-2-jt26wzz@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 21 Jun 2026 17:47:03 +0000
-Message-Id: <20260621174703.D08CB1F000E9@smtp.kernel.org>
+	s=k20260515; t=1782074729;
+	bh=fdS09Z56jc07JvN0EDd9zdXAMgSKOS1/VNrQLcKMzTo=;
+	h=From:To:Cc:Subject:Date;
+	b=JKFT49p8vdXIBKpDWORJoLNzNMlFD1BJ3e4Gv8zqDt9yDW2XPLAoiSzuaOLytRZQp
+	 63M/RG8zoytwDJ2Pug6Qfnu7KCx4hn/GiLFTlXAsrkmpw5g51DoDFimAa80+r4gya8
+	 gDQXZY2YDP7oIJvpe73KCvDEuSoJzhqFh6LZ+MZ5t7cUOzJAHSn7/nc17CA3lr3JBz
+	 n4ADAQKUt/tdC7s6a28Hh4NIRDNodzes2WbJOPbB3k7tMhQILoGhSTeWhu+oWZHGza
+	 5I1V0ezg48vcURl8/WiA5FDAvU991U6/o8lXpSRZ2J0eRmBVv1PaHtC7QbzKoTSdDj
+	 53Zbs8If2Fzeg==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	Quentin Monnet <qmo@kernel.org>
+Subject: [PATCH bpf-next 0/3] bpf: tracing_multi link info support
+Date: Sun, 21 Jun 2026 22:45:21 +0200
+Message-ID: <20260621204524.61067-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Duplicate collection of linked registers in conditional jumps ca=
-uses spurious ID clearing.
---
+hi,
+adding link info support for tracing_multi link.
 
-commit 230babf3871a45ea95a0dbe311f04085bef2de62
-Author: Eduard Zingerman <eddyz87@gmail.com>
+Adding the kernel support with related selftests and bpftool support
+to display the tracing_multi link info, the output looks like:
 
-bpf: Track equal scalars history on per-instruction level
+  # bpftool link
+  ...
+  27: tracing_multi  prog 93
+          attach_type trace_fentry_multi  obj_id 1  count 3
+          btf_id           addr             cookie           func [module]
+          91984            ffffffff824f4a24 a                bpf_fentry_test1
+          91986            ffffffff824f6a84 1e               bpf_fentry_test2
+          91987            ffffffff824f6a94 14               bpf_fentry_test3
+          pids test_progs(1462)
 
-Use bpf_verifier_state->jmp_history to track which registers were
-updated by find_equal_scalars() (renamed to collect_linked_regs())
-when conditional jump was verified.
+thanks,
+jirka
 
-Link: https://lore.kernel.org/bpf/20240718202357.1746514-2-eddyz87@gmail.com
-Closes: https://lore.kernel.org/bpf/CAEf4BzZ0xidVCqB47XnkXcNhkPWF6_nTV7yt+_=
-Lf0kcFEut2Mg@mail.gmail.com/
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 0d90236d0ad94..2268f095203e2 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+---
+Jiri Olsa (3):
+      bpf: Add tracing_multi link info support
+      selftests/bpf: Add tracing_multi link info tests
+      bpftool: Add tracing_multi link info output
 
-[ ... ]
-
-> @@ -14704,6 +14896,21 @@ static int check_cond_jmp_op(struct bpf_verifier=
-_env *env,
->  		return 0;
->  	}
-> =20
-> +	/* Push scalar registers sharing same ID to jump history,
-> +	 * do this before creating 'other_branch', so that both
-> +	 * 'this_branch' and 'other_branch' share this history
-> +	 * if parent state is created.
-> +	 */
-> +	if (BPF_SRC(insn->code) =3D=3D BPF_X && src_reg->type =3D=3D SCALAR_VAL=
-UE && src_reg->id)
-> +		collect_linked_regs(this_branch, src_reg->id, &linked_regs);
-> +	if (dst_reg->type =3D=3D SCALAR_VALUE && dst_reg->id)
-> +		collect_linked_regs(this_branch, dst_reg->id, &linked_regs);
-
-[Severity: Medium]
-Could this result in duplicate entries and spurious ID clearing if
-src_reg->id =3D=3D dst_reg->id?
-
-If the condition compares two scalars that share the same ID,
-collect_linked_regs() is called twice with the identical ID. Since it
-appends all matching registers indiscriminately, this duplicates the
-entries in the linked_regs array.
-
-If the number of duplicated entries exceeds LINKED_REGS_MAX (6) (which
-happens if there are 4 or more registers with this ID),
-linked_regs_push() fails. In __collect_linked_regs(), the failure
-path explicitly clears reg->id to 0:
-
-kernel/bpf/verifier.c:__collect_linked_regs() {
-    ...
-    e =3D linked_regs_push(reg_set);
-    if (e) {
-        ...
-    } else {
-        reg->id =3D 0;
-    }
-}
-
-This unintentionally breaks the precision tracking link for these
-registers. This causes the verifier to unnecessarily lose bounds
-information and potentially reject safe programs.
-
-Additionally, if only 1 distinct register shares the ID, the duplicate
-collection artificially increases the count to 2, causing an unnecessary
-push_jmp_history memory allocation because of the check below.
-
-> +	if (linked_regs.cnt > 1) {
-> +		err =3D push_jmp_history(env, this_branch, 0, linked_regs_pack(&linked=
-_regs));
-> +		if (err)
-> +			return err;
-> +	}
-> +
->  	other_branch =3D push_stack(env, *insn_idx + insn->off + 1, *insn_idx,
->  				  false);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260621172735.4093=
-55-1-jt26wzz@gmail.com?part=3D1
+ include/uapi/linux/bpf.h                                |   9 +++
+ kernel/trace/bpf_trace.c                                |  55 +++++++++++++++++
+ tools/bpf/bpftool/link.c                                | 135 ++++++++++++++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h                          |   9 +++
+ tools/testing/selftests/bpf/prog_tests/fill_link_info.c | 242 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_fill_link_info.c |   6 ++
+ 6 files changed, 456 insertions(+)
