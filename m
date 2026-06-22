@@ -1,32 +1,32 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5243ACEF1
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 14:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46BAE3BADB2
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 14:37:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782139020; cv=none; b=WBhk2UB+x+A/2sxGnhp71QBdEzXRU8vVxyDvMLyJ5ElAaIOiRgviDOqMeUkrhpIkVIqU9vMjfPLqrCNrk6FRF9kNJGYN4BFlYIB/BYJ1del7oA0dp7TjNpc4sinL9tmKe9syzRzMWeMdTFpBQfBNXWrbiDPx+gsU2Dk21gg1bEI=
+	t=1782139026; cv=none; b=ZKeY/wS6hCKIIJzhk/Fu0+Uf7YhZLza+IlXCwwiG8/h3WdVvUJxlhS3UcM5rAwBpIGjuxbr6Sg95d7emYm6ud8S0ysW2+XoTtLlvlkdA24tIMqHDcoqiTseFqGMTRAtBSop+GhAP5e89u0I9Iu8TYJj45aR4rSblg1W4bGXZWLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782139020; c=relaxed/simple;
-	bh=fjZudWesO1UlAp53hzZRyS8evEAa3LCYMqIqufGTmHk=;
+	s=arc-20240116; t=1782139026; c=relaxed/simple;
+	bh=Fq3WYTnSqZS5zJK7JL8kP38nBrMaU9mMaFvCQOx9saI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FUkWJAvQVeP0oN9Xka398ynL6MNw2gqi2EmikFG1bNoRj97wyc6Aa5tjpfEEo2ZTJTMuWu+UqXbQGPuXW/2VAYF6u3fJt1gklkDpz4XQ6GKT/ME48IlrdcuxhBk32BjTwut54riVcnqpD3psWaWASc6olid8Yhxxj2X89LPFSFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iGYd0Gup; arc=none smtp.client-ip=91.218.175.173
+	 MIME-Version; b=T9fBMtyZs2wAihwH1wCAISeEV08/qSMOKkiKS/V1Poy8zycxEHY5/lzCzJObhqgy9bR5Ec2ZxRkblWX76hAeOLEwULD/2RDExTD6WTUmq8KAMh98f/9J96hn6Ki8QUoUTCOR6+Kdc7nok1Ca+08tFpf3v6SY4v3GMOS9c7MJtE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ID4pRR07; arc=none smtp.client-ip=91.218.175.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iGYd0Gup"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ID4pRR07"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782139016;
+	t=1782139022;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=E68CDBhjchU1RM2SbBPGlwnnz5USBgSAl5d6YNwvDtE=;
-	b=iGYd0Gupushm0yTVKwvuAdUg8r8ex6U8KwseQ2zvQ6KsNTOgSPMkZcZytIznluxRd25yaU
-	uzrK+XIQvCBHWoykrvBtyFVa6kxcrl80JVhIi+eKuZ4gILxEPdmIeQcl/AI/sS5qMuNViK
-	pq/FzEs3/R5uwzC8bvUUPtPVCSQz5hM=
+	bh=yCMiiSAWxWBXgCBfZXqftEZxdWrpCAJoKV6Pf7Wc5UA=;
+	b=ID4pRR07awIdlZljgbBCNhQC8LQXSLSRcfBttXFVF8QUp13Y3VlDUd4WC39YU+Ls+I6eQs
+	V+iqNG5LK+P+QrjS38B/DnkGcYFx/NJzmJ+YpQkw9VCTZmhNdnT6DCiLJoiFVz2I6ZSPdT
+	bHSIlsDBgX8zjSk0OGx0iL41efOZPqA=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -45,9 +45,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v7 01/11] bpf: Drop duplicate blank lines in verifier
-Date: Mon, 22 Jun 2026 22:35:47 +0800
-Message-ID: <20260622143557.22955-2-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v7 02/11] bpf: Disallow interpreter fallback for user BPF_ADDR_SPACE_CAST insn
+Date: Mon, 22 Jun 2026 22:35:48 +0800
+Message-ID: <20260622143557.22955-3-leon.hwang@linux.dev>
 In-Reply-To: <20260622143557.22955-1-leon.hwang@linux.dev>
 References: <20260622143557.22955-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -59,128 +59,54 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-There are many adjacent blank lines in the verifier that have accumulated
-over time.
+Since interpreter is unable to handle the 'insn_is_cast_user()' insn,
+require JIT in __bpf_prog_select_runtime() when the prog has the insn.
 
-Drop them for cleanup.
-
-No functional changes intended.
-
+Fixes: 142fd4d2dcf5 ("bpf: Add x86-64 JIT support for bpf_addr_space_cast instruction.")
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- kernel/bpf/verifier.c | 15 ---------------
- 1 file changed, 15 deletions(-)
+ include/linux/bpf.h | 1 +
+ kernel/bpf/core.c   | 1 +
+ kernel/bpf/fixups.c | 2 ++
+ 3 files changed, 4 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2abc79dbf281..721f883bf640 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -652,7 +652,6 @@ static void __mark_dynptr_reg(struct bpf_reg_state *reg,
- 			      enum bpf_dynptr_type type,
- 			      bool first_slot, int id, int parent_id);
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 7719f6528445..5e1843d2859e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1781,6 +1781,7 @@ struct bpf_prog_aux {
+ 	bool changes_pkt_data;
+ 	bool might_sleep;
+ 	bool kprobe_write_ctx;
++	bool has_addr_space_cast_insn;
+ 	struct {
+ 		s32 keyring_serial;
+ 		u8 keyring_type;
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 649cce41e13f..49398b5bd172 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2620,6 +2620,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
+ 		goto finalize;
  
--
- static void mark_dynptr_stack_regs(struct bpf_verifier_env *env,
- 				   struct bpf_reg_state *sreg1,
- 				   struct bpf_reg_state *sreg2,
-@@ -1689,7 +1688,6 @@ static bool same_callsites(struct bpf_verifier_state *a, struct bpf_verifier_sta
- 	return true;
- }
+ 	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
++	    fp->aux->has_addr_space_cast_insn ||
+ 	    bpf_prog_has_kfunc_call(fp))
+ 		jit_needed = true;
  
--
- void bpf_free_backedges(struct bpf_scc_visit *visit)
- {
- 	struct bpf_scc_backedge *backedge, *next;
-@@ -2309,7 +2307,6 @@ static struct bpf_verifier_state *push_async_cb(struct bpf_verifier_env *env,
- 	return &elem->st;
- }
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 3cf2cc6e3ab6..2d5958774b61 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -1523,6 +1523,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 				insn->off = 0;
+ 				insn->imm = 0;
+ 			} /* cast from as(0) to as(1) should be handled by JIT */
++			if (insn_is_cast_user(insn))
++				prog->aux->has_addr_space_cast_insn = true;
+ 			goto next_insn;
+ 		}
  
--
- static int cmp_subprogs(const void *a, const void *b)
- {
- 	return ((struct bpf_subprog_info *)a)->start -
-@@ -3331,7 +3328,6 @@ static bool is_spillable_regtype(enum bpf_reg_type type)
- 	}
- }
- 
--
- /* check if register is a constant scalar value */
- static bool is_reg_const(struct bpf_reg_state *reg, bool subreg32)
- {
-@@ -3993,7 +3989,6 @@ static int check_stack_read(struct bpf_verifier_env *env,
- 	return err;
- }
- 
--
- /* check_stack_write dispatches to check_stack_write_fixed_off or
-  * check_stack_write_var_off.
-  *
-@@ -4788,7 +4783,6 @@ static int check_sock_access(struct bpf_verifier_env *env, int insn_idx,
- 		valid = false;
- 	}
- 
--
- 	if (valid) {
- 		env->insn_aux_data[insn_idx].ctx_field_size =
- 			info.ctx_field_size;
-@@ -6608,7 +6602,6 @@ static int check_stack_range_initialized(
- 	if (err)
- 		return err;
- 
--
- 	if (tnum_is_const(reg->var_off)) {
- 		min_off = max_off = reg->var_off.value + off;
- 	} else {
-@@ -7322,7 +7315,6 @@ static bool is_iter_new_kfunc(struct bpf_kfunc_call_arg_meta *meta)
- 	return meta->kfunc_flags & KF_ITER_NEW;
- }
- 
--
- static bool is_iter_destroy_kfunc(struct bpf_kfunc_call_arg_meta *meta)
- {
- 	return meta->kfunc_flags & KF_ITER_DESTROY;
-@@ -11465,7 +11457,6 @@ static int process_irq_flag(struct bpf_verifier_env *env, struct bpf_reg_state *
- 	return 0;
- }
- 
--
- static int ref_set_non_owning(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
- {
- 	struct btf_record *rec = reg_btf_record(reg);
-@@ -16357,7 +16348,6 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 	return 0;
- }
- 
--
- static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_range *range)
- {
- 	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
-@@ -18251,8 +18241,6 @@ static void release_insn_arrays(struct bpf_verifier_env *env)
- 		bpf_insn_array_release(env->insn_array_maps[i]);
- }
- 
--
--
- /* The verifier does more data flow analysis than llvm and will not
-  * explore branches that are dead at run time. Malicious programs can
-  * have dead code too. Therefore replace all dead at-run-time code
-@@ -18280,8 +18268,6 @@ static void sanitize_dead_code(struct bpf_verifier_env *env)
- 	}
- }
- 
--
--
- static void free_states(struct bpf_verifier_env *env)
- {
- 	struct bpf_verifier_state_list *sl;
-@@ -18563,7 +18549,6 @@ static int do_check_main(struct bpf_verifier_env *env)
- 	return ret;
- }
- 
--
- static void print_verification_stats(struct bpf_verifier_env *env)
- {
- 	/* Skip over hidden subprogs which are not verified. */
 -- 
 2.54.0
 
