@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1CD23E330
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 01:07:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09DB11DF75B;
+	Mon, 22 Jun 2026 01:10:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782090440; cv=none; b=ne2Wz722TUa01bb/TI+xe1K9tX7RUgyMPcCyVLSX+3fpLYg0Y8978hMFWUcP/NXr3Xh4uM58wmYUKXk8QwM59BVehEfA5EzEM2UL7UAw97vuhAW/URWL+6/vZwOcB5OlzouH6LRdKkPmBAWkFNKvq5JK0RlWIDwDHj1ZjgPWmEo=
+	t=1782090624; cv=none; b=Eiyx98hgNtsC9LpbtJJbFS4NfTVFPLsomvfsyXXTpSaO2eV1FE1sSe8YSwxFRAIZCxtZK7dvlykwyw+UuuL+1KDFBcMUs3s8TdhrcT6gHb7ExfxErKmV1vD4bFZ81NlHhNtY9Jhq4p0RH2CPvPYzVHs0HdfP13w+ME5waGi1Cwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782090440; c=relaxed/simple;
-	bh=1Z0Hhzojj3Z17NyO0LQLSQukYkk/M7OzUNxjTsGs2ZI=;
+	s=arc-20240116; t=1782090624; c=relaxed/simple;
+	bh=hNgwj2CtWJOIz4/Crp4yMBFqaqG7JCX9MQe/jc1WQV8=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=WIZ3UZTTty23ufoRf8zzN7DoqtIbQ+MymVOtcHkB9u8WAW9njTZNyTWqBnFUcsL3FUKtbEy2Kbdzw/zeR7g3Zw7v3PIKBWj3XHJ/l87hNQ3GzB25fs5aQBx/ee6uBGBhMqTFxKoBUydTritTQ/3mQZc3aUS7faC2SDoUTyWvVTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mg8UoFan; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=DRACgTGtUmDl9Z+gXZB6MRG+81IvFpru4i00IqAIg1WoUylHOdhNtpCb1Kg13u1J+HEL/JnUsqCn4Fshqk0oss3QcHJX3V0neO5OCrBKy4uF+dTu+h6yQWIyFcIbyPdMZSeyB92/XDH6veGzhvTxMjZWmT8U82ZOicd6rxbX78k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VAa4dljL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mg8UoFan"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 361101F000E9;
-	Mon, 22 Jun 2026 01:07:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VAa4dljL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B03491F000E9;
+	Mon, 22 Jun 2026 01:10:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782090439;
-	bh=CeQ5wZcYnkR7EhiNqAkoKyFA750SuMcBWYF8rJwrq1M=;
+	s=k20260515; t=1782090623;
+	bh=V2flqI0IXEn2UaMSOMyQ4oI71syaSztiL53xPPDD8Ps=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Mg8UoFanmlkj8SzkQ8px4ooUwp2Wx1Fx/A2DrqeQ9/EUI7kvc8iATXn8xxaqP0qZF
-	 iHvWn5ThaISVCQQ28A4+Qj565U4hIXttIUVHgIDqhIOlzLNSgtaLAmS4A/glEWFW6T
-	 sN7hPUV277Iqgp5XNNfpuBLyfQvGg0t0r8hdjn2tUh2nDsrQPufIe3LW6dqZP9Aszp
-	 5BNZKr0EV0oA1BqOhPCZbUt5SYsyjdZqKfrRnaM2+PDe3KfRNVnMtSNYySgssIkjhg
-	 iGR0n+Sox0h1wrs89pGYj4dlXMwHO6YtoQsmdyXgOcRzbtIRJ1a+Ltm0wqpsDMqHng
-	 hN3Sdio7IQkow==
+	b=VAa4dljLCvSaNdjowLmsBHwzbVQzPxIu2Wty2UOOR0E2Qbrad/EsPvWEauWlVghYD
+	 wa7rb16tlLjCGc+FOlwSaULxCREKZw24J1GcbmrNgkh1qMBr5S9GSBMHZyO3H76BuC
+	 bkSogG4x+9u+xB4/JS7ckh6XmO7BKGlV0W8BmH0HQvi2O8Cj5U5KUoZCoCiH7xkkww
+	 WIXZbqouNdNN5P5Uk76jQ12gcsVIsIGZstA46j/rsoGGrt7rWMuKnJRZvNaUiTbKd+
+	 BSGrK7MqGRHR+GzUjafyE8+XOO6w8M7McU1G6nxNa3V4BbnPVBJfj25xcEEzJx2I6Y
+	 HSlIzNaaxierg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 939423AAA6EF;
-	Mon, 22 Jun 2026 01:07:11 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 198293AAA6EF;
+	Mon, 22 Jun 2026 01:10:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,37 +37,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: Emit verbose message when prog-specific
- btf_struct_access rejects a write
+Subject: Re: [PATCH] tools/bpf/bpftool: Fix vmlinux BTF leak in cgroup
+ commands
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <178209043027.554493.551476022387640129.git-patchwork-notify@kernel.org>
-Date: Mon, 22 Jun 2026 01:07:10 +0000
-References: <20260615232146.5491-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20260615232146.5491-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- memxor@gmail.com, eddyz87@gmail.com
+ <178209061474.558026.16457667469698870550.git-patchwork-notify@kernel.org>
+Date: Mon, 22 Jun 2026 01:10:14 +0000
+References: 
+ <24357C69B4405079+20260617090117.280222-1-chenyichong@uniontech.com>
+In-Reply-To: 
+ <24357C69B4405079+20260617090117.280222-1-chenyichong@uniontech.com>
+To: Yichong Chen <chenyichong@uniontech.com>
+Cc: qmo@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, sdf@fomichev.me,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 
 Hello:
 
 This patch was applied to bpf/bpf.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Mon, 15 Jun 2026 16:21:46 -0700 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
+On Wed, 17 Jun 2026 17:01:17 +0800 you wrote:
+> bpftool cgroup show and tree call libbpf_find_kernel_btf() to
+> resolve attach_btf names, but never release the returned BTF object.
 > 
-> When BPF_WRITE goes through a PTR_TO_BTF_ID register, check_ptr_to_btf_access()
-> delegates to env->ops->btf_struct_access(). Most implementations
-> (bpf_scx_btf_struct_access, tc_cls_act_btf_struct_access, etc.) return
-> -EACCES for disallowed fields without logging anything, so the verifier
-> rejects the program with an empty message. For example a scx program doing
+> For cgroup tree, do_show_tree_fn() is called once for each cgroup
+> visited by nftw(). When more than one cgroup has attached programs,
+> each callback overwrites btf_vmlinux with a new object and loses the
+> previous allocation.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next] bpf: Emit verbose message when prog-specific btf_struct_access rejects a write
-    https://git.kernel.org/bpf/bpf/c/a933bade82b9
+  - tools/bpf/bpftool: Fix vmlinux BTF leak in cgroup commands
+    https://git.kernel.org/bpf/bpf/c/bda6a7308ef8
 
 You are awesome, thank you!
 -- 
