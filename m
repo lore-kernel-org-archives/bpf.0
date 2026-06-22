@@ -1,185 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFFF13AF2
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 03:11:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DBBC3368B6;
+	Mon, 22 Jun 2026 03:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782097866; cv=none; b=M3pgRmq6dzS9zZ/5xQUEO2kVcqQqwvy5AmSpbaY/8wsu0h07dkRqbXpRFZvLhz66pw2srM1b7F6tJ2wW62zWoQuaGL16eapWzad3px7sWlOZTJwB/WFZLvDDFCj5wyWKlKX9KXYwZAYI7XXyPzHvxG4YpM0PXLNuQxgQgmy+YeA=
+	t=1782097996; cv=none; b=e+39hlwzTFp5m0dJ6iqTdKPHfOpsDVoKeMGm23v4cgl2C+ZfTGTq8qXd5XxBUxQ4KnX/+alg6I+Q0fVA4r2Vvs9hPt5zwcERfqMOiSUKgb05s5VENWe36FmrGJjoe/Rc0cBDTO3kftC8osC/IROtIOb9CnTW27izaSLZ36ttN+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782097866; c=relaxed/simple;
-	bh=EyJ+JTGSwvQeOygqestQg2r99z6RqYaM2U6YOU5/Ng0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=oaBrDrkECTyG+hO2B6m9y826LKddEsAI9PhhFlK5OHpVrceEvssATwRgnWdb64PLH1PqwC4OGM4V+iGDdGiFIpDoZY8xL7pvQb6xQvAOI7PwxboI8jeqCZ5LwtIqsoaLFfxMTKPJkluJeDeYm09m0i/wiBKtaFdnkP9gDSHMfZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n1l+9bn2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782097996; c=relaxed/simple;
+	bh=/ZPDUYBCyykfDe/GWG5nPCxfj6v6YGZ/DhiC2J7XtCg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OkvdHyXj5DA+lY5z66a1NRj7xSmPzuBsMt1TeHxLz2TsmKstWwyp+7uawf0RNj1Y7HDGff3dDbfIjBVGBQF1upLMrLCp7T+Y4+CyLnry+iQYTPvoCajAwyxKzu/YjuvHxNXI2RzjyMR/+nj3p+8qJvpZKPCXTCXDPkjGJd0gQM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Wyku1RBz; arc=none smtp.client-ip=54.204.34.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n1l+9bn2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 105941F000E9;
-	Mon, 22 Jun 2026 03:11:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782097865;
-	bh=MCCFpdJC4Gh+yrpEWxYeSGT5W2rPLNrKMpImet72lKI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=n1l+9bn2DR5IFNHgr+bNZMzzDfbBUnW26gmxVCgLwdFIZctZumviZRt4BFc7WRuS1
-	 VyXP4YlWs1dBZ7t7JdJ9OsZOLkwz3DDMtMnn9ihSnakNuxFK1tQMrc9SHCt4nHk8oa
-	 ZpNtvCNymgx4ApVW44JyWGWET7ME3yFGzD3O9lsZMxsM/BTQlDYvsS7mCwYHX2grxV
-	 uG+5OJy1dFgZyWYmfc5XsZGlZHeQTLJfitNIwx3Z0GHau9UtRl1EqbZGEa5n4o0xny
-	 Kw/el5Ts/S4ZT+AGXjrGh1CpKHAziLTOkuO4/MojOYd3Vjg36BV0Ic0Q9LCXVLLW8X
-	 vmhL1VjCT4oAg==
-From: sashiko-bot@kernel.org
-Subject: Re: [stable/linux-6.12.y 1/2] lsm: add backing_file LSM hooks
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Cai Xinchen" <caixinchen1@huawei.com>
-Cc: bpf@vger.kernel.org, paul@paul-moore.com
-In-Reply-To: <20260622031509.2663919-2-caixinchen1@huawei.com>
-References: <20260622031509.2663919-1-caixinchen1@huawei.com>
- <20260622031509.2663919-2-caixinchen1@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 22 Jun 2026 03:11:04 +0000
-Message-Id: <20260622031105.105941F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Wyku1RBz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1782097983;
+	bh=tPEowK0ZkHkwOk56ELXAy+PdSCs06XVG9EsK4Wk4bJU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=Wyku1RBz1V8VE2M1pKdjzqKgDWwYPbx5yYiAztGaxoUafMtoEd34UyF/KrPczh8mK
+	 xBZcjDXowM3W68hZL2uruOiMXNfchbxd3bqS5q/4EEAXk7b0pHBs01MEfbKpLxOxit
+	 A5MdxpuwGTZumVVIBvmvaiqbjWHHOL7GjPcTm0wM=
+X-QQ-mid: esmtpgz12t1782097979t783dc95b
+X-QQ-Originating-IP: XgxM0bTzdLVfcl1H/SToUVsVa+i7D2eL7+rhhsCt7yA=
+Received: from Shurima ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 22 Jun 2026 11:12:57 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 9971594127160575059
+EX-QQ-RecipientCnt: 13
+From: Yichong Chen <chenyichong@uniontech.com>
+To: qmo@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Cc: martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	chenyichong@uniontech.com
+Subject: [PATCH v2 0/2] tools/bpf/bpftool: Fix vmlinux BTF state cleanup
+Date: Mon, 22 Jun 2026 11:12:53 +0800
+Message-ID: <51C3B0A22437ACC1+20260622031255.1160657-1-chenyichong@uniontech.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpgz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: MglA7JX7t2v3sXUpAPbysoh2zudoCtU58ATe3n/fl8rbqHB27uvYgcny
+	8DguTBYVIbpM4ABfQlcLiVrQQbnA+NbScKHrrfz8QZsmQCXNLkbxZY8g5HtNxHkr4asCTa7
+	W72ntCKbheOzmuQZuYVaUy7ap+FkncahvlYZ4Us8nrkqy1RJK3QMdlmUAuPzrZJAbDgebtz
+	XGvNzAOFDCnORSN4ptMEpua+/XYQruHVbkBpG9s8tbNVIhIDoG5RgVdLp3T+Zz7WaFjvUz2
+	xJzZ+tUYg+iKiQhjTM5wfqxAMyp+iKZQHxKbaagsx22OOnvQUl5Xi8q7yd+vg2VHkZ1r/a8
+	zl0KGuRwN8MRWhpe1QTBd1mlWFnN3I8dnf8ljeQXM4yzNvqckXaBzRT3rMyhak0VbWI5J2t
+	lfqTEgGyQFifhuTGE1fkl9i249c4rZtYpj7pTPM1cWjmJJbMYDBmWJtovzrrSOTofvxdMb4
+	GSKyAsNEtAKbuUu8mD/w2VBJsuJoawfi8CtzqpYMASbIgYsKl7GNLz+KSP6l6MP9Wr+a8xN
+	JEB0yPPqpnblNW3UIIusCl9j0XMQoGO6775+lrA2AWqQ0aZRvu+K0yVavmFaOcx968wp8oH
+	cnQa8MU1mHQfZt2rgcYc7X49O2ngOdYLZXI1T9OLlAi/F4eRKxN64Mam0HIy+KRQ84/fOAR
+	ddRibFLiIDZGdFX9seRGyQKqYwTHV8njXqnFRveTXk6gFmoLpKnK2+wQ4pXzu2jwGwu3ZSt
+	flLQlX54Li30X0cFU4UEsLJMq0Ggz36pBFNau9mA1fnQ8vLJuZ2AJmCePyRP9Xo1f3BfpZh
+	A3tZmtQzB9YQgBRh97oCWaZQjf8QvFzLzM2Exf1a5XHdjfkppzhNetKmse96Q4rUM1GgmYi
+	brScDUmsfpziA/2UDUPYep3vJd5eObAfLC4ZBUBoTUwTWL7ycr5YquyIyB7mVciprnk7Xky
+	NDSBZ2eDORCaQC60QsRddJY7eP25WAbstOvofJ+jh+4xeszjuSWH4Mq2RARfByscyL/ZuBm
+	aLcrNK2pc7zrbQzfhxCZ7wlqpPoWpddO2hqzSjcZvzVXs/qy9f
+X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+X-QQ-RECHKSPAM: 0
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Double-free and NULL pointer dereference in backing_file error pat=
-h.
-- [Low] Compiler warning due to pointer signedness mismatch in `lsm_blob_si=
-zes`.
---
+This series fixes stale vmlinux BTF state in bpftool batch mode.
 
-commit c06a83c8499b5a2cfb9d2bf689d02826faee9cb1
-Author: Paul Moore <paul@paul-moore.com>
-Subject: lsm: add backing_file LSM hooks
+Patch 1 resets the map command cached vmlinux BTF pointer when the
+command releases it, and avoids freeing the cached object from the
+map lookup path.
 
-This commit adds a new LSM security blob to the backing_file struct and
-introduces three new LSM hooks to manage its lifecycle and authorize mmap()
-operations. These changes provide the necessary mechanisms for LSMs to
-enforce access controls on mmap() and mprotect() for stacked filesystems.
+Patch 2 resets the struct_ops command cached vmlinux BTF pointer and
+dependent cached map info state after each struct_ops command.
 
-> diff --git a/fs/file_table.c b/fs/file_table.c
-> index 2a08bc93b0b9c..a771be30eb43d 100644
-> --- a/fs/file_table.c
-> +++ b/fs/file_table.c
-[ ... ]
-> @@ -289,7 +308,7 @@ struct file *alloc_empty_backing_file(int flags, cons=
-t struct cred *cred)
-> =20
->  	/* The f_mode flags must be set before fput(). */
->  	ff->file.f_mode |=3D FMODE_BACKING | FMODE_NOACCOUNT;
-> -	error =3D init_backing_file(ff);
-> +	error =3D init_backing_file(ff, user_file);
->  	if (unlikely(error)) {
->  		fput(&ff->file);
+Changes in v2:
+- Fold the map lookup path fix into patch 1.
+- Update patch 1 subject and commit message to cover map commands
+  rather than only map dump.
 
-[Severity: High]
-Does this fput() trigger a double-free on the error path?
+Yichong Chen (2):
+  tools/bpf/bpftool: Reset vmlinux BTF after map commands
+  tools/bpf/bpftool: Reset vmlinux BTF after struct_ops commands
 
-FMODE_BACKING is set on the file before init_backing_file() is called.
-If init_backing_file() fails (which delegates to
-security_backing_file_alloc()), this fput() will eventually call
-backing_file_free() and then security_backing_file_free().
+ tools/bpf/bpftool/map.c        | 12 +++++++++---
+ tools/bpf/bpftool/struct_ops.c | 11 ++++++++++-
+ 2 files changed, 19 insertions(+), 4 deletions(-)
 
-However, security_backing_file_alloc() already cleans up after itself on
-failure by calling security_backing_file_free() explicitly, leading to it
-being called twice.
+-- 
+2.51.0
 
->  		return ERR_PTR(error);
->  	}
-[ ... ]
-> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> index 090d1d3e19fed..12b1576d5b027 100644
-> --- a/include/linux/lsm_hooks.h
-> +++ b/include/linux/lsm_hooks.h
-> @@ -104,6 +104,7 @@ struct security_hook_list {
->  struct lsm_blob_sizes {
->  	int lbs_cred;
->  	int lbs_file;
-> +	unsigned int lbs_backing_file;
-
-[Severity: Low]
-Does this cause a compiler warning due to a pointer signedness mismatch?
-
-The other fields in struct lsm_blob_sizes are declared as int, but this
-is unsigned int. When passed to lsm_set_blob_size() in security.c, it
-expects an int pointer, which could break builds configured with -Werror.
-
->  	int lbs_ib;
->  	int lbs_inode;
-[ ... ]
-> diff --git a/security/security.c b/security/security.c
-> index 6e4deac6ec073..aef71585d49ef 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-[ ... ]
-> @@ -2893,6 +2925,57 @@ void security_file_free(struct file *file)
->  	}
->  }
-> =20
-> +/**
-> + * security_backing_file_alloc() - Allocate and setup a backing file blob
-> + * @backing_file: the backing file
-> + * @user_file: the associated user visible file
-> + *
-[ ... ]
-> + */
-> +int security_backing_file_alloc(struct file *backing_file,
-> +				const struct file *user_file)
-> +{
-> +	int rc;
-> +
-> +	rc =3D lsm_backing_file_alloc(backing_file);
-> +	if (rc)
-> +		return rc;
-> +	rc =3D call_int_hook(backing_file_alloc, backing_file, user_file);
-> +	if (unlikely(rc))
-> +		security_backing_file_free(backing_file);
-
-[Severity: High]
-This explicit cleanup on failure seems to conflict with the fput() in
-alloc_empty_backing_file() mentioned above. Will this result in
-security_backing_file_free() being called twice for the same file?
-
-> +
-> +	return rc;
-> +}
-> +
-> +/**
-> + * security_backing_file_free() - Free a backing file blob
-> + * @backing_file: the backing file
-> + *
-> + * Free any LSM state associate with a backing file's LSM blob, includin=
-g the
-> + * blob itself.
-> + */
-> +void security_backing_file_free(struct file *backing_file)
-> +{
-> +	void *blob =3D backing_file_security(backing_file);
-> +
-> +	call_void_hook(backing_file_free, backing_file);
-
-[Severity: High]
-Can this unconditionally trigger an invalid pointer dereference?
-
-If security_backing_file_free() is called on an error path where the blob
-allocation failed (or on the second call of a double-free), the security
-blob will be NULL.
-
-Calling the LSM free hooks before checking if the blob is NULL can cause
-LSMs to dereference a NULL pointer when calculating their internal state
-pointers.
-
-> +
-> +	if (blob) {
-> +		backing_file_set_security(backing_file, NULL);
-> +		kmem_cache_free(lsm_backing_file_cache, blob);
-> +	}
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260622031509.2663=
-919-2-caixinchen1@huawei.com?part=3D1
