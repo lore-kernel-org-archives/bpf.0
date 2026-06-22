@@ -1,264 +1,178 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD3B24677B
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 03:04:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3DE2853E0
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 03:08:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782097498; cv=none; b=pYpPyoe02Jj0pnsJQpl7UFRVtgqAfjhFbhmpZIiY/Qb2hJMNnQDSbTELRlEGscLXyEJC+Q0JB6fcfJkREaaT4SQ9CWJ3tnzfFQvQaLFYpRH/1KXhhAk0uIJ10x6NfxOhrCtKfz5f0rgSzaGZH1j/s/5WS8BeboUjz+HHaOpsje0=
+	t=1782097724; cv=none; b=d4WUHk47eyqSfgGeAnKPnq7jBTFtHrx3enUXjVItmEJB4juYN/icJUCx1xPMma6taK3rt8XAbOZl/v6OdBwtuFsBKCBelpnnwf0NYuncrlVOFYtegmWQ1ogNQow0cr8lg4mK7qT8+LG+uBPSP+dx+t4vZwIW7SNZI5GFOEh0iIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782097498; c=relaxed/simple;
-	bh=frr0UCdufQNqnZlio0HjTiMLpc1NaPKc6r04qGf6adE=;
+	s=arc-20240116; t=1782097724; c=relaxed/simple;
+	bh=qo2cSk9OeYyX8Rvcx+3kLHdAvgsBDDJlw8vDrjFxEzQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=GL8hLDpnMzGxucnEB9/w+pEOPykzxzCsTOhHLnY4NISIU5zO0MQrWDoAsqvURnCh7soCQb4ZXMs8Q0bFNQKTculkh47lwGjvljiK0RcAK64V0QHmk7n+NyTiV4Twau7PHxcjum5IBJXHLZ6cCat3rXblzCkUQ+CK0RmjkMBzUN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RZd7rtPz; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=rA/lcee5qXxKYrHZqIstZbqpNvxpHgw9ilGYTxbZWp2n9a8jHIltCyGebkLVF+4JHkGW1IeHQaSfM/swkj3mX856ix5GBi0nF08yz5m/kgY+0L1gVhCqtj9LPS2SLg6KtEodi7cFuJ6XBvHrgGSephtFkBjx6L07dXlfs7ESXes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FwmzCAT0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RZd7rtPz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B043E1F000E9;
-	Mon, 22 Jun 2026 03:04:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FwmzCAT0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D61F81F000E9;
+	Mon, 22 Jun 2026 03:08:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782097496;
-	bh=QRg/3gVcvWYTquffdFmZWj3pMbmLgll1TxMbBeuoMuU=;
+	s=k20260515; t=1782097723;
+	bh=pbc8df8pRgd6c3bGOvuHXWYLnoL6bVDFb0uBLQPNia8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=RZd7rtPzTR7FgkyGMNm2PQbFxpWXX3kq6QPh2XGIGJpeRrtcZ9NCFS2PBjIOWcfZq
-	 hM9OSeoLyq6wRUsFKkI6+1THYqwCtcS/sHvz3ttDAUOZuMxUgsQb8j6Xl8U0rLzwYV
-	 41e30tWmnC3Db0I1DKyzHD2/akSgjAYYHDSl87o41PGK8nmXkgr4n6uBEzJu9Sk5c0
-	 JZ3/XsY0twvS4Rqmo24AhCYg71em/inhx79jE7lwiGuTkgCO556PIazTH+Ijev7tAM
-	 UxabLo6mIULg9vuB7tXCI5v9mJbjwI/wrbCYg1FhfgTr0e/nIaI8eUJR4wPV6d3cXO
-	 t5ZZ6K/GE+q6g==
+	b=FwmzCAT0nDD3uTvGQ+YeE0ztuLHw6kyygOmHI2wyvJv1tdSzXKi9WdXEXso+Jl9Av
+	 PC0+Xcd7eajf8oL14FI8PG+hAtmWq47xuzyDXNamtgIyxSNoy6WZfN0XCidGUGea7p
+	 wpSOHdcF4gOMmsHlsV3qSOLgyEtnY7fZZ9vogG4Ay+1hrq1lHQeRP9t3fYD0TeDCLr
+	 k5P51KlbwOkrkHHCi9zhYh2/yZjGTkc5C/GRojNdUtnYzrOkOWxsQXPMI0bvkkhSXJ
+	 yP/UKX6Rqp0qR3ClHe0SL1KAQvTh6j/bStboh48QVX3PC42EG18yFinhkLfL3zszGr
+	 avVZ9Y/V5Qb0Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [stable/linux-6.12.y 2/2] selinux: fix overlayfs mmap() and
- mprotect() access checks
+Subject: Re: [stable/linux-6.18.y 1/2] lsm: add backing_file LSM hooks
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Cai Xinchen" <caixinchen1@huawei.com>
-Cc: paul@paul-moore.com, bpf@vger.kernel.org
-In-Reply-To: <20260622031509.2663919-3-caixinchen1@huawei.com>
-References: <20260622031509.2663919-1-caixinchen1@huawei.com>
- <20260622031509.2663919-3-caixinchen1@huawei.com>
+Cc: bpf@vger.kernel.org, paul@paul-moore.com
+In-Reply-To: <20260622031416.2663747-2-caixinchen1@huawei.com>
+References: <20260622031416.2663747-1-caixinchen1@huawei.com>
+ <20260622031416.2663747-2-caixinchen1@huawei.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 22 Jun 2026 03:04:56 +0000
-Message-Id: <20260622030456.B043E1F000E9@smtp.kernel.org>
+Date: Mon, 22 Jun 2026 03:08:42 +0000
+Message-Id: <20260622030842.D61F81F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-
-New issues:
-- [High] The PROCESS__EXECMEM permission is incorrectly evaluated against t=
-he mounter's credentials instead of the executing task when mapping a backi=
-ng file.
-- [Low] The patch references undefined struct members, functions, and LSM h=
-ooks, causing a build failure.
-- [Low] Calling `backing_file_user_path()` with a `const struct file *` dis=
-cards the `const` qualifier.
-
-Pre-existing issues:
-- [High] The code incorrectly uses `!file` to determine if a VMA is an anon=
-ymous stack mapping, creating a potential SELinux bypass.
+- [High] Error paths in backing file allocation cause the `backing_file_fre=
+e` LSM hooks to be invoked twice or with uninitialized state, and violate t=
+eardown ordering.
+- [Medium] `lbs_backing_file` is defined as `unsigned int` instead of `int`=
+, causing `-Wincompatible-pointer-types` warnings.
+- [Low] `lsm_backing_file_cache` is missing the `static` keyword, polluting=
+ the global namespace and contradicting the commit message.
 --
 
-commit ad3233d429cee42bb2ed783a8bd563912a4bf6bd
+commit c7ac34e119da0f05f75151b3feefa3ded48b06cb
 Author: Paul Moore <paul@paul-moore.com>
 
-selinux: fix overlayfs mmap() and mprotect() access checks
+lsm: add backing_file LSM hooks
 
-This patch updates SELinux to enforce backing file access controls for
-mmap() and mprotect() operations on overlayfs. It introduces checks using
-the newly created security_mmap_backing_file() LSM hook and backing file
-APIs.
+Stacked filesystems such as overlayfs do not currently provide the
+necessary mechanisms for LSMs to properly enforce access controls on the
+mmap() and mprotect() operations. In order to resolve this gap, a LSM
+security blob is being added to the backing_file struct.
 
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index 8e31d3b60fc62..1b89c8d5fa2fc 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-
-[ ... ]
-
-> @@ -1724,49 +1724,72 @@ static inline int file_path_has_perm(const struct=
- cred *cred,
-> +static int __file_has_perm(const struct cred *cred, const struct file *f=
-ile,
-> +			   u32 av, bool bf_user_file)
-> +
->  {
-> -	struct file_security_struct *fsec =3D selinux_file(file);
-> -	struct inode *inode =3D file_inode(file);
->  	struct common_audit_data ad;
-> -	u32 sid =3D cred_sid(cred);
-> +	struct inode *inode;
-> +	u32 ssid =3D cred_sid(cred);
-> +	u32 tsid_fd;
->  	int rc;
-> =20
-> -	ad.type =3D LSM_AUDIT_DATA_FILE;
-> -	ad.u.file =3D file;
-> +	if (bf_user_file) {
-> +		struct backing_file_security_struct *bfsec;
-> +		const struct path *path;
-> +
-> +		if (WARN_ON(!(file->f_mode & FMODE_BACKING)))
-> +			return -EIO;
-> +
-> +		bfsec =3D selinux_backing_file(file);
-> +		path =3D backing_file_user_path(file);
+> Mainline declares lsm_backing_file_cache in security/lsm.h.  Linux 6.18.y
+> does not have security/lsm_init.c or security/lsm.h; the cache variable
+> is defined locally as static struct kmem_cache *lsm_backing_file_cache in
+> security/security.c.
 
 [Severity: Low]
-Does this discard the const qualifier from the file pointer?
-__file_has_perm() accepts a const struct file pointer, but
-backing_file_user_path() expects a mutable pointer. This might trigger a
-compiler warning.
+This isn't a bug, but the commit message explicitly states the cache
+variable is defined locally as static, yet the actual definition in
+security/security.c omits the static keyword.
 
+> diff --git a/fs/file_table.c b/fs/file_table.c
+> index 762f03dcbcd77..987e01da99389 100644
+> --- a/fs/file_table.c
+> +++ b/fs/file_table.c
 [ ... ]
-
-> -static int file_map_prot_check(struct file *file, unsigned long prot, in=
-t shared)
-> +static int __file_map_prot_check(const struct cred *cred,
-> +				 const struct file *file, unsigned long prot,
-> +				 bool shared, bool bf_user_file)
+> @@ -301,7 +319,8 @@ static int init_backing_file(struct backing_file *ff)
+>   * This is only for kernel internal use, and the allocate file must not =
+be
+>   * installed into file tables or such.
+>   */
+> -struct file *alloc_empty_backing_file(int flags, const struct cred *cred)
+> +struct file *alloc_empty_backing_file(int flags, const struct cred *cred,
+> +				      const struct file *user_file)
 >  {
-> -	const struct cred *cred =3D current_cred();
-> -	u32 sid =3D cred_sid(cred);
-> -	int rc =3D 0;
-> +	struct inode *inode =3D NULL;
-> +	bool prot_exec =3D prot & PROT_EXEC;
-> +	bool prot_write =3D prot & PROT_WRITE;
-> +
-> +	if (file) {
-> +		if (bf_user_file)
-> +			inode =3D d_inode(backing_file_user_path(file)->dentry);
-> +		else
-> +			inode =3D file_inode(file);
-> +	}
-> +
-> +	if (default_noexec && prot_exec &&
-> +	    (!file || IS_PRIVATE(inode) || (!shared && prot_write))) {
-> +		int rc;
-> +		u32 sid =3D cred_sid(cred);
+>  	struct backing_file *ff;
+>  	int error;
+> @@ -318,7 +337,7 @@ struct file *alloc_empty_backing_file(int flags, cons=
+t struct cred *cred)
 > =20
-> -	if (default_noexec &&
-> -	    (prot & PROT_EXEC) && (!file || IS_PRIVATE(file_inode(file)) ||
-> -				   (!shared && (prot & PROT_WRITE)))) {
->  		/*
-> -		 * We are making executable an anonymous mapping or a
-> -		 * private file mapping that will also be writable.
-> -		 * This has an additional check.
-> +		 * We are making executable an anonymous mapping or a private
-> +		 * file mapping that will also be writable.
->  		 */
-> -		rc =3D avc_has_perm(sid, sid, SECCLASS_PROCESS,
-> -				  PROCESS__EXECMEM, NULL);
-> +		rc =3D avc_has_perm(sid, sid, SECCLASS_PROCESS, PROCESS__EXECMEM,
-> +				  NULL);
+>  	/* The f_mode flags must be set before fput(). */
+>  	ff->file.f_mode |=3D FMODE_BACKING | FMODE_NOACCOUNT;
+> -	error =3D init_backing_file(ff);
+> +	error =3D init_backing_file(ff, user_file);
+>  	if (unlikely(error)) {
+>  		fput(&ff->file);
+>  		return ERR_PTR(error);
+>  	}
 
 [Severity: High]
-Does this evaluate the PROCESS__EXECMEM permission against the mounter's
-credentials instead of the executing task?
+Can this error path cause a double-free regression or execute
+uninitialized hooks?
 
-When mapping a backing file, selinux_mmap_backing_file() and
-selinux_file_mprotect() pass the mounter's credentials (file->f_cred) to th=
-is
-function. Because PROCESS__EXECMEM is a subject-centric privilege that
-governs the executing task's memory, evaluating it against the mounter's SID
-could incorrectly require the mounter to possess execmem privileges, causing
-legitimate executable mappings to fail.
+If init_backing_file() fails because a security module hook returns an
+error, security_backing_file_alloc() internally rolls back the state by
+calling security_backing_file_free() before returning the error.
 
-[ ... ]
+When the error is returned here, fput(&ff->file) is called.
 
->  static int selinux_file_mprotect(struct vm_area_struct *vma,
->  				 unsigned long reqprot __always_unused,
->  				 unsigned long prot)
->  {
-> +	int rc;
->  	const struct cred *cred =3D current_cred();
->  	u32 sid =3D cred_sid(cred);
-> +	const struct file *file =3D vma->vm_file;
-> +	bool backing_file;
-> +	bool shared =3D vma->vm_flags & VM_SHARED;
-> +
-> +	/* check if we need to trigger the "backing files are awful" mode */
-> +	backing_file =3D file && (file->f_mode & FMODE_BACKING);
+Since the file mode already contains the backing bit, fput() triggers
+a cleanup cascade that calls file_free(), which in turn calls
+backing_file_free().
+
+This sequence invokes security_backing_file_free() a second time on the
+same file with a null blob.
+
+If the initial blob allocation fails instead and lsm_backing_file_alloc()
+returns an out of memory error, it skips the internal free but still
+returns an error. The fput() call still drives the cleanup, and the
+backing_file_free void hooks are executed unconditionally despite the
+allocation hook never having run.
+
+Additionally, in the teardown sequence inside file_free(),
+security_file_free(f) is called before backing_file_free().
+
+Does destroying the base object's security state before the backing
+file's state expose any security hooks to a use-after-free, if they
+attempt to access the base file state during backing file teardown?
+
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index 79ec5a2bdcca7..e0707ec5a76dc 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -104,6 +104,7 @@ struct security_hook_list {
+>  struct lsm_blob_sizes {
+>  	int lbs_cred;
+>  	int lbs_file;
+> +	unsigned int lbs_backing_file;
+
+[Severity: Medium]
+Is this intentional? The other blob size fields in struct lsm_blob_sizes
+are declared as int.
+
+In security/security.c:lsm_set_blob_sizes(), the address of this field
+is passed to lsm_set_blob_size(int *need, int *lbs):
+
+lsm_set_blob_size(&needed->lbs_backing_file, &blob_sizes.lbs_backing_file);
+
+Could passing an unsigned int pointer to an int pointer generate a
+pointer type warning that could break builds configured to treat warnings
+as errors?
+
+> diff --git a/security/security.c b/security/security.c
+> index 603c3c6d5635d..5d5ad55dbca76 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -94,6 +94,7 @@ const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIA=
+LITY_MAX + 1] =3D {
+>  static BLOCKING_NOTIFIER_HEAD(blocking_lsm_notifier_chain);
 > =20
->  	if (default_noexec &&
->  	    (prot & PROT_EXEC) && !(vma->vm_flags & VM_EXEC)) {
-> -		int rc =3D 0;
->  		/*
->  		 * We don't use the vma_is_initial_heap() helper as it has
->  		 * a history of problems and is currently broken on systems
-> @@ -3864,11 +3955,15 @@ static int selinux_file_mprotect(struct vm_area_s=
-truct *vma,
->  		    vma->vm_end <=3D vma->vm_mm->brk) {
->  			rc =3D avc_has_perm(sid, sid, SECCLASS_PROCESS,
->  					  PROCESS__EXECHEAP, NULL);
-> -		} else if (!vma->vm_file && (vma_is_initial_stack(vma) ||
-> +			if (rc)
-> +				return rc;
-> +		} else if (!file && (vma_is_initial_stack(vma) ||
->  			    vma_is_stack_for_current(vma))) {
-
-[Severity: High]
-This is a pre-existing issue, but does this incorrectly use !file to determ=
-ine
-if a VMA is an anonymous stack mapping?
-
-Using !file as a proxy for an anonymous VMA can be bypassed. If a stack
-mapping is backed by a file (e.g., a private mapping of /dev/zero), the !fi=
-le
-check evaluates to false. This skips the PROCESS__EXECSTACK check and falls
-through to the FILE__EXECMOD check, potentially allowing a bypass. Should t=
-his
-be updated to use vma_is_anonymous(vma) instead?
-
-[ ... ]
-
-> @@ -6960,6 +7071,7 @@ static void selinux_bpf_token_free(struct bpf_token=
- *token)
->  struct lsm_blob_sizes selinux_blob_sizes __ro_after_init =3D {
->  	.lbs_cred =3D sizeof(struct task_security_struct),
->  	.lbs_file =3D sizeof(struct file_security_struct),
-> +	.lbs_backing_file =3D sizeof(struct backing_file_security_struct),
->  	.lbs_inode =3D sizeof(struct inode_security_struct),
->  	.lbs_ipc =3D sizeof(struct ipc_security_struct),
+>  static struct kmem_cache *lsm_file_cache;
+> +struct kmem_cache *lsm_backing_file_cache;
 
 [Severity: Low]
-Does this cause a build failure? It looks like lbs_backing_file (along with
-the backing_file_alloc and mmap_backing_file LSM hooks registered below) do=
-es
-not exist in the core LSM framework at this commit.
+Would this missing static modifier pollute the global symbol namespace?
 
-[ ... ]
-
-> diff --git a/security/selinux/include/objsec.h b/security/selinux/include=
-/objsec.h
-> index c88cae81ee4c5..dc42282a2c052 100644
-> --- a/security/selinux/include/objsec.h
-> +++ b/security/selinux/include/objsec.h
-
-[ ... ]
-
-> @@ -159,6 +163,13 @@ static inline struct file_security_struct *selinux_f=
-ile(const struct file *file)
->  	return file->f_security + selinux_blob_sizes.lbs_file;
->  }
-> =20
-> +static inline struct backing_file_security_struct *
-> +selinux_backing_file(const struct file *backing_file)
-> +{
-> +	void *blob =3D backing_file_security(backing_file);
-> +	return blob + selinux_blob_sizes.lbs_backing_file;
-> +}
-> +
-
-[Severity: Low]
-Is backing_file_security() defined anywhere? Similar to the LSM hook and bl=
-ob
-size additions, this appears to be missing from the tree and will likely
-prevent compilation.
+As mentioned in the commit message, this was intended to be locally
+defined.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260622031509.2663=
-919-3-caixinchen1@huawei.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260622031416.2663=
+747-2-caixinchen1@huawei.com?part=3D1
