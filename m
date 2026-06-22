@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 017B325B0B3;
-	Mon, 22 Jun 2026 01:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE561E515
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 01:20:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782090629; cv=none; b=JKhj09qZqYs1qFgbvh6ITkJ8WxVl06oSSy6Mm1REP4HLz4AB2xbKHvhgw3yviq3gHz/x093XO5bd2oVpH/v1hdqu9tjavN6XV1UErftA5WXmZletIH3O9fxnxfegyR4mV3PATgmBYWtThaO26Nk3aHV171ZIcDxOmI+FI8EOY38=
+	t=1782091225; cv=none; b=l6cQ90crvr4aE1wbPX3BQMZxWfR+5HxGQ1J0c1r147JHNTbXfosBHAx8DpodJBnN9PcHb37vO9OlFUery6lpsZo6QB1B1WtrneyqebVs20xMtH58+1sMaGl+e6RmmgpoojUkooEIpCxqSFQPk1uAK2qQ7x94Ddvylc3wpBU5Vd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782090629; c=relaxed/simple;
-	bh=okaSSlX2zsK2EKljbfqrXB/8Wg3kzVTvhcqstVdOm/4=;
+	s=arc-20240116; t=1782091225; c=relaxed/simple;
+	bh=hkvK8fF/FhVYsLO+91RyGeSLBKZFRhHbbPmKcKO1/PA=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=TZ09dwh2wor09uHyxPiz25V9wblCsnW5vrn1HZvcu/9501Q9DWBgdCYXhK5oBZQ2XmMLH7EhwGkoScpfUYrKl/Dlj6mP2PFNh6y71r9mL9Xf+dObVf+prIoHUaR1+8bULdT0kglO1rVZoE9q/4xf+qa7PkvfRLSlmYpsTMONt2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ir4eCmZX; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=XE/3IjPoukEjS3LbYjuNnpdtSzEH9cngbWfM2oC//CvilsQ8VLfeHyz6mdsT98sof2/FaqcRMHZtwxSqCsaHVLgyDOdhdmAZUBnldUSHWhmQMAIh+42jSkOq0PuCghuirl7nN3ZPFEfqUHZmmBML/hP1gccA6huGsJXTNaH9dyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TqzmyW0d; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ir4eCmZX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B15001F000E9;
-	Mon, 22 Jun 2026 01:10:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TqzmyW0d"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73CC11F000E9;
+	Mon, 22 Jun 2026 01:20:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782090628;
-	bh=qhQqOjUJLNnukTok9daW+cbWuP9q9NoA69dCM5QadKk=;
+	s=k20260515; t=1782091224;
+	bh=FsZjqlX8m+KNh0tOtUaSb8Gsvi4aSeyTjD4fTxR2gwI=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=ir4eCmZXm8TLRm8b+CSh0LRopvfjXgXE6DNwe5/U//XDydxAd2PWLp1DnXm10tWIj
-	 +KAu7Xd8Fm+J3DRwkye8DSl8DfpXTxdcemwlxcbxvJaA1WMVlUvpavOZeh/D0BMCuq
-	 rL9zBhxbf6/gAe5wNy43GYFEnQlC6ZWTARGuT0ao0cP7az3UV9JHfyw0rHVWi2CtU2
-	 wPqtm7x7PWCKvef5I0ULccpS54VoCPyti3GqiwukvSx/a2z4k3hNdi0QbDVka9Mdzb
-	 cs5bJcHPNG/FJX9XyJ07dGJY26vxZ8z6TfnrP7DIjKLPrbRwZnKJiRIa9d6y729DIW
-	 jwjPc1TeoGssw==
+	b=TqzmyW0dkDvXdaN+Up7BnSAUTUN1sAe534l6WtpHYqIXis53D9dqW6iZhIt8+J4QR
+	 O2V6M1iCuz96yOngutv2Y8Lg6nAFUai+0XwKuXk7Qf44ekJSOcM/wA0OM993jmeuws
+	 IqdBN6MLsEj+f5e55cpqa1AnCsvhAL3bk7JKzKy7vGLAsv435l6CXRqDPrFqv/EY+o
+	 SFqKUUIqQjgkM1baDMSdfyBA3jk78TVWQbWewgQOzdPZDwbnNgbhmrUutTLCPit44/
+	 2CXON80TNITPh87Z5WYynjxVx9AT7SMqw0qMLDRWJZtpiAywJAwgWYf/F8YbLau7KD
+	 hls8ODnanQRqw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 197C13AAA6EF;
-	Mon, 22 Jun 2026 01:10:21 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0ADA3AAA6EF;
+	Mon, 22 Jun 2026 01:20:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,42 +37,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] bpf: Add missing access_ok call to copy_user_syms
+Subject: Re: [PATCH bpf v2 0/2] Fix effective prog array indexing with
+ BPF_F_PREORDER
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <178209061954.558026.1860128949099362401.git-patchwork-notify@kernel.org>
-Date: Mon, 22 Jun 2026 01:10:19 +0000
-References: <20260616083056.405652-1-jolsa@kernel.org>
-In-Reply-To: <20260616083056.405652-1-jolsa@kernel.org>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- stable@vger.kernel.org, sashiko-bot@kernel.org, bpf@vger.kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, songliubraving@fb.com, yhs@fb.com
+ <178209121548.561199.15322460203791260492.git-patchwork-notify@kernel.org>
+Date: Mon, 22 Jun 2026 01:20:15 +0000
+References: <20260619063520.2690547-1-ameryhung@gmail.com>
+In-Reply-To: <20260619063520.2690547-1-ameryhung@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
+ martin.lau@kernel.org, kernel-team@meta.com
 
 Hello:
 
-This patch was applied to bpf/bpf.git (master)
+This series was applied to bpf/bpf.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Tue, 16 Jun 2026 10:30:56 +0200 you wrote:
-> As reported by sashiko we use __get_user without prior access_ok call on the
-> user space pointer. Adding the missing call for the whole pointer array.
+On Thu, 18 Jun 2026 23:35:18 -0700 you wrote:
+> Hi,
 > 
-> Plus removing the err check in the error path, because it's not needed and
-> also we can return -ENOMEM directly from the first kvmalloc_array fail path.
-> 
-> Cc: stable@vger.kernel.org
-> [1] https://lore.kernel.org/bpf/20260611115503.AC16D1F00893@smtp.kernel.org/
-> Fixes: 0236fec57a15 ("bpf: Resolve symbols with ftrace_lookup_symbols for kprobe multi link")
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/bpf/20260611115503.AC16D1F00893@smtp.kernel.org/
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> This patchset fixes a cgroup effective-array indexing bug where
+> replace_effective_prog() and purge_effective_progs() used a linear hlist
+> position that doesn't match the array layout when BPF_F_PREORDER
+> programs are present, corrupting the array on link update and risking a
+> use-after-free in the detach fallback. It computes the slot via a shared
+> effective_prog_pos() helper and adds a cgroup_preorder selftest.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf] bpf: Add missing access_ok call to copy_user_syms
-    https://git.kernel.org/bpf/bpf/c/d5dc200c3a3f
+  - [bpf,v2,1/2] bpf: Fix effective prog array index with BPF_F_PREORDER
+    https://git.kernel.org/bpf/bpf/c/f08aaee3152d
+  - [bpf,v2,2/2] selftests/bpf: Test cgroup link replace with BPF_F_PREORDER
+    https://git.kernel.org/bpf/bpf/c/a6ff26f360c8
 
 You are awesome, thank you!
 -- 
