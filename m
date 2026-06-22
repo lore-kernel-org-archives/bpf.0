@@ -1,72 +1,76 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C90C9371877
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 10:36:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D35F27603C
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 10:36:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782124564; cv=none; b=Uf6PkianiVCnGiY0Lgm99fOpnzh2B0HqiCkw4v2/8hVRuGwg4x6+MscSGGtWvtsGPqOpAVksgAk6x1VlsJpVLznHjRr2tjZsOPUI3X/9C0imx4LGY6/GarTFFuKxYGkgfAlz1omzV6etds0MxhtX+komLh1Kv8XQEmM0/Evkhao=
+	t=1782124571; cv=none; b=J2zJ+zkSMPA7iMjwu3G6ZKW0uOPKlOjRHiFkrgcNncNLfbHdOhXIZYzjbF7kJze1MdUOac1/d+7ObG0CRBBpr/rh8tyYQ1yR0AVXKjrYCYxXBS32Tynyuiwsc2Vl5R9I4XMSQMinG7/IXC6xlGFO9LyltjLacFTCtzKZhPpBmCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782124564; c=relaxed/simple;
-	bh=CdhzNEvEzeM4Cb2Q3ggY+4SMLj+7QqizoqUamE9SWhQ=;
+	s=arc-20240116; t=1782124571; c=relaxed/simple;
+	bh=OvYPEeWWOCgcnGFDoNFhYb7bWcI6Jz/ZEJb8J/xjWEY=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FQqMZQsCJeHc86rb6zSPq/K+oT70I5hBnMzzjeTJjL2u3r8xnp3ukLOPz0IqzwTTeCeaMsJaCpo36X/LPhqcrcqWF3nFkzIBAwhH2nPyYSKXFJnE9zvdlGbQpPDoFvHtgGpn1oTRYkvu43Wi2YqLwEW8KZaA+9vkb+Z/FNzLUkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qZyhun8D; arc=none smtp.client-ip=209.85.128.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=uSaeI6y4QxD8yGC0o5PpRvbQqPYr+619uGEYnvWQqcqWpN05Bs1QrLrGoWOQq7PkFpFlx09wY5EVAhjLws47ts8HO1SwW8ISw4EIPqSPrKqitrQHcnghGWq45aZcSdtqtkyKkWYo08yGk547wjtxv6hGUtTQdyvaYA8bsIg8I+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eMhNzA+d; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qZyhun8D"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-490b3637b90so32352135e9.3
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 03:36:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eMhNzA+d"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-4631679f204so2542658f8f.0
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 03:36:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782124561; x=1782729361; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782124569; x=1782729369; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3r1/tqF5BE50TrdY3pFWW8BNC9rn1rlUywnd4aQCIHY=;
-        b=qZyhun8DCeuZzqZs/lw6On90VI371A97ScfvVbN8iDFB2m1w1ddxiqNhPisByPYTjI
-         m381MoQedlAIPNCEfJQ1Ig9LMgSTJFv5uOg44q/CSiD2Rr9NbJBe5v47j7BdBUasyRMA
-         3CbicYGh3O4Ql2zK8BeD0GICbBhfs1E9wFr20hjYKTcrpuNmfNHdw8h7aqYvy6g4r4ru
-         MNEPt9Y1I2PsIJYu9EsN33SVqTSCCrvms75Q+eIon51Xl5r2OMpmqNggWOXcmrUarAZJ
-         lX7tX0yzVELJyEnl7OrkhyPW0BJvJ9YjL/JoVgOTf1pgLr3QeM834x32zU7OnsmznBNf
-         K+BQ==
+        bh=FxjEAfo9rVA/G6O87lJFQjPSDNrdm9bCVjEuvjNHF0Q=;
+        b=eMhNzA+dItMzVtbtNxBhtc4GKAHa4WRIeJEAgDgS16f1HLeMF/JKw8EvyR0gK5A85F
+         ejamALXxApNAwZlto6U0+RBnVYpWDKpD2zKtrjh2X7Jztbyxbf/mss50VG55lMR5bqHA
+         PieRHcf7p2w7Ku74n7bioHHNA1MC1/z1QKaa/5vSPjSnwdlAZwUk8sguv46IW26MLTvq
+         ds+dzr36Aoo6l5W1NlMlj9B2uA7cX+X3x0zV7vtRTblKaWD3b608h6QcR+t6gIwvSH91
+         kz3YG4fHhVmoukBmT15aM8dykYK4EZ8asIM+/M++57NzaaJm7DIxrSssRCdALkYKxuPq
+         IP7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782124561; x=1782729361;
+        d=1e100.net; s=20251104; t=1782124569; x=1782729369;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3r1/tqF5BE50TrdY3pFWW8BNC9rn1rlUywnd4aQCIHY=;
-        b=gxYTDO4jFJqFDTquQQ/23KbK68U07HB9ecgiluzusyhy3APLZZim1n0h8ZEV+5ay/L
-         4AcXPbHmvs6Vz3V7/KS6PRb62L92KL2uJULGQEx0xhoucIGLtETk331yGUjdbxiDqqnx
-         BXqngx3RRvqWA/jhKp+Lwr6s+XRoZUfqVAe7x7QKwMHEBtyUWqftjJW1nXHKR7ILyahE
-         xx96YtogbFBL5SJ5DstgKdKepjc65an7o4f2mK1R0v63zXSLS6GclXtv4o01BtHfxSM+
-         lWEs+TR1Hv0RQUI3QFA3+QVOx/s/c0j7Etx5+75PCicH/jUkOq3RVPhzCyOdMp0lduvm
-         LAaQ==
-X-Gm-Message-State: AOJu0YxaVblQoN+k4UMLIP5P7xfA6FPqOcnXWtAAloUrsrqPuleBFZ2q
-	XVnN6mKjxL6TL8i6bw+hBxaxqiB7G1KdpyUWlFZVCbG2j7C6toz9Rn8K
-X-Gm-Gg: AfdE7ckXyg9V4bcyi/rvc66GYDKzzd22RhD91gPmsmNJvz9g5FBjYXIvQ6ZNRpTYcrZ
-	PgKCWVr98zXX2P/obPxhxbVi0mSE/8+0GMxG96WC2fyVuu92HejS+RD80G78Q3x3N225NtExc17
-	NQT5MHi6UiZ4VWwZBQoQh012uAkQEhejN8jruBIJt1m4gupu1I8ttJq9hmc6dcTi9do9jBZ2CUL
-	wlEKzVvaDAvHu2FWNsDlw4i/oSJxbt/3bT8wI/AfqWznZWISsETQGnUfMI6+4+gnY5zhIJ9CnfB
-	sf5pOtScvzZUA8TpTt5Xg569JHDFhyJrqjHzpV0znqenFyRWB3hlSl0gXknZf1AmmY3Sle4FRRg
-	zIvxPbccozrJIWWqFjMGjlRScNvqZn2eSx75hBkUotCcZzbWn5MQdCLmiGo9Km1jNfKfTzU2Wsz
-	bVB2TtYpQ98KH1eCE=
-X-Received: by 2002:a05:600c:828a:b0:492:5297:e8a3 with SMTP id 5b1f17b1804b1-4925297f415mr85451635e9.20.1782124560915;
-        Mon, 22 Jun 2026 03:36:00 -0700 (PDT)
+        bh=FxjEAfo9rVA/G6O87lJFQjPSDNrdm9bCVjEuvjNHF0Q=;
+        b=jrsazP7NopWbm27J14q+d6C6G8o6o4kyszFwzc0nvswu2WhnK0nFTt5Thw9TB0CVQi
+         Dag1Ji++BlSH7HrG/oCZ3EqvpV7BZwITOcKVMNLmzQqfv6LG4+e6dILQh3Fe83TFuUhm
+         xGE9TvBxXUX8w6uVEcxzfizBsmx6Yz8vUI3PMxawUdCQzNQT+deMQprJcQsdGAzie4lV
+         BFdyUEe/X1Br0kq5E1iK2ICm939y9rmbrPb/OvuBgEpBYllbKHQv6DxXAshQZXMqXrlr
+         Lfx0AjPnhtWLh3l6AQnj6dwVTxlUIwnGvEXy+iY+2mxkG6qvtx5DSEVw7lLh6vk1o8hL
+         Whhw==
+X-Forwarded-Encrypted: i=1; AHgh+Ro9HapVKkt2tdiMiSzNBnqaF8j15aDnkoZNCRY1+tyQBw3zsQcJOcoFdkIkL54jLtGG6d0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmVR5lnpGFAmXYgOEuWHz9LSiRnz87XCy0gqv5wpOVEktX5ui3
+	Bp+4dplYG/Lin9kC/SFEnSB/bhFaBBadfHBMbE1EeBAPJrCV+hSqfcK8
+X-Gm-Gg: AfdE7cmEr1etvDvx/A5ct6Cmxt1pM56R+T5u+8oFc+EeG/lEXd8/ytCwLtqzNJC8pE6
+	Z+p2rNFoQW1KA4hSytV/6py5UYi78JfXJJCs0RjF8AiuNPisIWLbGp7gKG4ou4eu4QWNPRg5e1P
+	H8aCncJ6y5uIbSdLsWRUoTeO6M1JEygcU+HapOZCjqLhyaEX9ecSzVHk1N6PLlcb3uAmK8cCJSr
+	XUWUnY4f0bAHBCA+kDG017BgQA9Q3bv8ersswwUXIvpmAnBspoC2P+yudflfKco00TIyCGfEq67
+	li4fSEw2MUs4fYEj1XsSbH+TyhzGJkyBJXH/SJPnF2EAxdKdon8T10Axq32Wt8OS+IwTtfvzA5m
+	kaAMltuHI63iIDheEb5wlvW95WBdnqqlnkOiVn/+SxxXB6atWO5Q0P4IFP1giPkBxcmUbJ7FTLY
+	LppSi0
+X-Received: by 2002:a5d:584b:0:b0:463:21c3:dc2a with SMTP id ffacd0b85a97d-4651bc7c252mr20784378f8f.1.1782124568542;
+        Mon, 22 Jun 2026 03:36:08 -0700 (PDT)
 Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4924594f8fasm184523775e9.0.2026.06.22.03.36.00
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-466648c5ddbsm26412655f8f.12.2026.06.22.03.36.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2026 03:36:00 -0700 (PDT)
+        Mon, 22 Jun 2026 03:36:08 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 22 Jun 2026 12:35:58 +0200
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
+Date: Mon, 22 Jun 2026 12:36:06 +0200
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	bpf@vger.kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+	songliubraving@fb.com, yhs@fb.com, qmo@kernel.org,
+	martin.lau@kernel.org, yonghong.song@linux.dev, clm@meta.com,
+	ihor.solodrai@linux.dev
 Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: Add tracing_multi link info
  tests
-Message-ID: <ajkQDtC2PGX-gqLN@krava>
-References: <20260621204524.61067-1-jolsa@kernel.org>
- <20260621204524.61067-3-jolsa@kernel.org>
- <20260621205350.ED2741F000E9@smtp.kernel.org>
+Message-ID: <ajkQFjlb94newiT1@krava>
+References: <20260621204524.61067-3-jolsa@kernel.org>
+ <cb2607f92eea9b6470e906a22ad2148eda290f6f1389d6bebf155075566f5c33@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -75,58 +79,72 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260621205350.ED2741F000E9@smtp.kernel.org>
+In-Reply-To: <cb2607f92eea9b6470e906a22ad2148eda290f6f1389d6bebf155075566f5c33@mail.kernel.org>
 
-On Sun, Jun 21, 2026 at 08:53:50PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] Incorrect assertion failure message tag for invalid `addrs` pointer test.
-> --
-> 
-> commit edec3b6e703fee4df106f0b3f019e87b22c606fc
-> Author: Jiri Olsa <jolsa@kernel.org>
-> 
-> selftests/bpf: Add tracing_multi link info tests
-> 
-> This commit adds new tests for tracing_multi link info. The tests follow the
-> existing logic used for kprobe_multi and uprobe_multi tests.
-> 
+On Sun, Jun 21, 2026 at 09:31:45PM +0000, bot+bpf-ci@kernel.org wrote:
 > > diff --git a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-> > index f589eefbf9fbd..969f04ee9ac6a 100644
+> > index f589eefbf9fb..969f04ee9ac6 100644
 > > --- a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
 > > +++ b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
 > 
 > [ ... ]
 > 
+> > @@ -396,6 +413,224 @@ static void test_kprobe_multi_fill_link_info(struct test_fill_link_info *skel,
+> >  	bpf_link__destroy(link);
+> >  }
+> >
 > > +static void verify_tracing_multi_invalid_user_buffer(int fd, const struct tmulti_target *targets)
 > > +{
 > > +	__u32 ids[TRACING_MULTI_CNT] = {};
 > > +	struct bpf_link_info info;
 > > +	__u32 len = sizeof(info);
 > > +	int err, i;
+> > +
+> > +	/* Wrong info setup (ids != NULL and cnt == 0) -> EINVAL */
+> > +	memset(&info, 0, sizeof(info));
+> > +	info.tracing_multi.ids = ptr_to_u64(ids);
+> > +	err = bpf_link_get_info_by_fd(fd, &info, &len);
+> > +	ASSERT_EQ(err, -EINVAL, "tracing_multi.invalid_count");
+> > +
+> > +	/* Smaller than actuall count provided -> ENOSPC */
+> 
+> This isn't a bug, but "actuall" is misspelled here (should be "actual").
+> 
+> > +	memset(ids, 0, sizeof(ids));
+> > +	memset(&info, 0, sizeof(info));
+> > +	info.tracing_multi.ids = ptr_to_u64(ids);
+> > +	info.tracing_multi.count = TRACING_MULTI_CNT - 1;
+> > +	err = bpf_link_get_info_by_fd(fd, &info, &len);
+> > +	ASSERT_EQ(err, -ENOSPC, "tracing_multi.small_count");
+> > +	for (i = 0; i < TRACING_MULTI_CNT - 1; i++)
+> > +		ASSERT_EQ(ids[i], targets[i].id, "tracing_multi.partial_ids");
+> > +	/* check that the last entry is not populated */
+> > +	ASSERT_EQ(ids[i], 0, "tracing_multi.partial_ids");
+> > +
+> > +	/* Bigger than actuall count provided -> OK */
+> 
+> The same typo appears here.
+
+yep, will fix both
+
+jirka
+
+> 
+> > +	memset(ids, 0, sizeof(ids));
+> > +	memset(&info, 0, sizeof(info));
+> > +	info.tracing_multi.ids = ptr_to_u64(ids);
+> > +	info.tracing_multi.count = TRACING_MULTI_CNT + 1;
+> > +	err = bpf_link_get_info_by_fd(fd, &info, &len);
+> > +	ASSERT_OK(err, "tracing_multi.big_count");
+> > +	for (i = 0; i < TRACING_MULTI_CNT; i++)
+> > +		ASSERT_EQ(ids[i], targets[i].id, "tracing_multi.ids");
 > 
 > [ ... ]
 > 
-> > +	/* Invalid cookies pointer -> EFAULT */
-> > +	memset(&info, 0, sizeof(info));
-> > +	info.tracing_multi.cookies = 0x1;
-> > +	info.tracing_multi.count = TRACING_MULTI_CNT;
-> > +	err = bpf_link_get_info_by_fd(fd, &info, &len);
-> > +	ASSERT_EQ(err, -EFAULT, "tracing_multi.bad_cookies");
-> > +
-> > +	/* Invalid addrs pointer -> EFAULT */
-> > +	memset(&info, 0, sizeof(info));
-> > +	info.tracing_multi.addrs = 0x1;
-> > +	info.tracing_multi.count = TRACING_MULTI_CNT;
-> > +	err = bpf_link_get_info_by_fd(fd, &info, &len);
-> > +	ASSERT_EQ(err, -EFAULT, "tracing_multi.bad_cookies");
 > 
-> [Severity: Low]
-> This isn't a bug, but is this tag a copy-paste error? The comment mentions
-> testing an invalid addrs pointer, but the assertion in
-> verify_tracing_multi_invalid_user_buffer() uses the
-> "tracing_multi.bad_cookies" tag rather than something like
-> "tracing_multi.bad_addrs".
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27917285330
 
-yep, will fix
-
-jirka
