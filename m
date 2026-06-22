@@ -1,83 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8641A228CB0;
-	Mon, 22 Jun 2026 05:45:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1074B2FE0F;
+	Mon, 22 Jun 2026 05:51:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782107117; cv=none; b=s9oKV3s8JcKuGB95jbiLdXRzPkBIOlIi3mxl6tcoLuqIrntPS3UUTJEkf7SgoqyJAB8uWgo229kmdS11wPcBIhX6DnoMIYncYG9SpU4z9WcCILtwawwTnifK2GAfiVaqBuSrdLdKc430D/HwZsc2ag+u7lxqXDFReL8UfoH6ghk=
+	t=1782107471; cv=none; b=l2xxR6PO1H40HxLUN1ZsI++qpm/FidoxD61oSGqV0QXQFxLvNjJd1zbDx4qRlUqXc7XGX5821sNhI9qL4h/w21gir5jj+KQIJq7o5mTjB3mRHeWbZS/alkuddjM9eNxWf6fapTxCQQhR8SzdmOiTACpS9yzOv5hxoH0ipRA9nX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782107117; c=relaxed/simple;
-	bh=nkZolzewDVt7wVgUKDXJ4Fu8fUcGEueJnMy/zKLise4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Z5gFnA2tGp2FGXJRl7us7Dbya4EdUEoie8hl2v7y9y0xBAwG85unrA3qZRxHueVH1Bhh8USBKKhMdJtuqvkmheryhjTJm9L5qj101zycaEGcghXjn/84o9pbZrkghEtQqhY8jJmrETI3Bw4TV6ZNYXN9KW/U1kQtSMNWT33JrWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WQtUkUXz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782107471; c=relaxed/simple;
+	bh=PjVTgdY6rEqsXENe70BI7SH0qlL2soygiWUC/3Citek=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=j0Sav+UniIPr2BlaWVk1FKIjlV/hH0epuERy1O2JgonBbX6ZKBsQSbndRFkX2QZbfnbLktSG08rNVOuaTAo2omw0jfVK4uRL9KuZglnK6spR/9fHHEDMsbX1fm2Ka9guUL4mCxobUOxTHrowJ8DsYdbL9sJlb8jKR8V2wzDMTII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=WlMEpfWT; arc=none smtp.client-ip=206.189.21.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WQtUkUXz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A28B1F00A3D;
-	Mon, 22 Jun 2026 05:45:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782107116;
-	bh=huZ5w/7Swsanuj7kuY72lXcYi/GUKNSXABklAVBl84Y=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=WQtUkUXzGMtBXRHQbhSeC5c0rBEX7JFynvkXNTevSk0hh8NsxJq+HEmArXGKrLkIZ
-	 BX6Ih/3myci3bOtuRCFC3YM3jIncCwRslr0aVaL93/lzOyK4ADTvTBFODvKQ2v5LnU
-	 n5c3jrKBG1JH5lGPlpy6ZE+8M7HWwRBVYRVguLSBTK7vW1Zab53C8HevcF6q4IuDaW
-	 648YMUTCiAcRvivv6/U47sqL7++Af4ElxDdPjR79FO0glmZrlRhihQt9AKkA1ikhKa
-	 zC30HpqjxbyxtMChBHpex/YFPrqWPhXx/wWSweGOZbRgm/Q+KxJ8/xXtknD13w89aW
-	 7HqPSznAHsvlw==
-Content-Type: multipart/mixed; boundary="===============2262182024979101694=="
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="WlMEpfWT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:In-Reply-To:References:MIME-Version:
+	Content-Transfer-Encoding; bh=5lDTCjNMcgKSqs9mk4C/OB6GQoEtmwOGp4
+	smLe5gbXg=; b=WlMEpfWTpkylM+kUGVphQ1yk3ldnH8hEYVkRUY4COSRIg5eU73
+	erYMFq8SxA/R9UIjHWfnLav0TYHqYUjstsKVVazZQyX5jK0Pvk1bLd77E/uwH3E5
+	gbBsn/bQwN2AV4nV5U1yzNEcRCl/hH1/IZ+JaY+nsulocHnm3YNZyi7Dw=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web5 (Coremail) with SMTP id zAQGZQDnnr4xzThqn6KaAg--.38470S2;
+	Mon, 22 Jun 2026 13:50:55 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: bot+bpf-ci@kernel.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bentiss@kernel.org,
+	bpf@vger.kernel.org,
+	chenyy23@mails.tsinghua.edu.cn,
+	clm@meta.com,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	ihor.solodrai@linux.dev,
+	jikos@kernel.org,
+	jolsa@kernel.org,
+	linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	martin.lau@kernel.org,
+	martin.lau@linux.dev,
+	memxor@gmail.com,
+	shuah@kernel.org,
+	song@kernel.org,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/hid: Cover hid_bpf_get_data() size overflow
+Date: Mon, 22 Jun 2026 05:50:40 +0000
+Message-Id: <20260622055040.1929254-1-chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <b3b148b42eb198ac7194c1c0547e47275b9f5d31133eececaf1389f17caed5af@mail.kernel.org>
+References: <b3b148b42eb198ac7194c1c0547e47275b9f5d31133eececaf1389f17caed5af@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0cef90e92e9f4a3054a75413f47254cad9d78a64f8bce5b8330b35935c8bc3f9@mail.kernel.org>
-In-Reply-To: <c230ebd7f2e28e0cc3820bcb2701ec517933063e.1782100805.git.chenyy23@mails.tsinghua.edu.cn>
-References: <c230ebd7f2e28e0cc3820bcb2701ec517933063e.1782100805.git.chenyy23@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Reject flexible-array allocation types
-From: bot+bpf-ci@kernel.org
-To: chenyy23@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: chenyy23@mails.tsinghua.edu.cn,john.fastabend@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 22 Jun 2026 05:45:16 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zAQGZQDnnr4xzThqn6KaAg--.38470S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw43tF4DZF4UGr1xZrWxtFb_yoW8tryfpr
+	y5uay7Kr1DKF1I9rnrAw18AF1FvFsxXF43Jr1kGFy5Cws8CF4Igry3WryYva1rCwsY934j
+	va1qva9xCa1kCaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPY14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+	F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+	4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
+	648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wrylc2xSY4AK67
+	AK6r4rMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc4
+	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
+	xVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+	1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0pRh2-OU
+	UUUU=
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
---===============2262182024979101694==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 2abc79dbf281..c3a574cc0d09 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-> @@ -12749,6 +12773,10 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_ca
->  			verbose(env, "bpf_obj_new/bpf_percpu_obj_new type ID argument must be of a struct\n");
->  			return -EINVAL;
->  		}
-> +		if (btf_type_has_trailing_flex_array(ret_btf, ret_t)) {
-> +			verbose(env, "bpf_obj_new type must not contain a flexible array\n");
-> +			return -EINVAL;
-> +		}
-
-This isn't a bug, but this branch handles both is_bpf_obj_new_kfunc and
-is_bpf_percpu_obj_new_kfunc, and the message just above uses the dual form
-"bpf_obj_new/bpf_percpu_obj_new".
-
-Should this new message also say "bpf_obj_new/bpf_percpu_obj_new" so it
-reads correctly when it fires for a bpf_percpu_obj_new() call?
-
+On Sat, Jun 20, 2026 at 03:11:00PM +0000, bot+bpf-ci@kernel.org wrote:
+> That wrapping check was introduced in 658ee5a64fcf, and the fix commit
+> carries a Fixes: tag for it. Should this test commit carry the same tag?
 >
->  		if (is_bpf_percpu_obj_new_kfunc(meta->func_id)) {
->  			if (ret_t->size > BPF_GLOBAL_PERCPU_MA_MAX_SIZE) {
+>   Fixes: 658ee5a64fcf ("HID: bpf: allocate data memory for device_event BPF programs")
 
+Yes, I will add the same Fixes tag to the selftest patch in v3 so the
+regression test is tied to the commit that introduced the wrapping check.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> This was raised on an earlier posting and does not look addressed:
+> the callback stores the result in the get_data_overflow_check global
+> and always returns 0, while the userspace test asserts on that global
+> rather than on the callback return value.
+>
+> Could the callback just return the helper result so the test can check
+> the return value directly, instead of routing it through a separate
+> global?
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27931273498
---===============2262182024979101694==--
+The callback's return value is not something the test can observe
+directly.  call_hid_bpf_rdesc_fixup() consumes it as a kernel-side
+contract: a negative value falls back to the original report descriptor,
+and a positive value becomes the new descriptor size (*size = ret).  Its
+only userspace-visible effect is therefore the report descriptor size,
+so checking the return value would amount to checking that size, which
+means perturbing it.
+
+Since the callback returns int and hid_bpf_get_data() returns a pointer,
+the only way to return the helper result is to convert it, e.g.
+
+	return !hid_bpf_get_data(hid_ctx, 2, ~0ULL);
+
+On a fixed kernel the helper returns NULL, so this returns 1 and the
+dispatch path truncates the report descriptor to 1 byte mid-test.  The
+BSS variable records that the helper rejected the overflowing range
+while the callback still returns 0 and leaves the descriptor untouched.
+
+This matches the existing convention in progs/hid.c: callback_check and
+callback2_check are BPF-side globals the userspace tests assert on, and
+the existing hid_rdesc_fixup callback returns a positive size only when
+it actually rewrites the descriptor (sizeof(rdesc) + 73).  The overflow
+probe does not rewrite anything, so it returns 0 and reports the
+helper's rejection through the BSS variable.
+
+Thanks,
+Yiyang
+
