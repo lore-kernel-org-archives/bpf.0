@@ -1,89 +1,82 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f193.google.com (mail-pg1-f193.google.com [209.85.215.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D2A3537F6;
-	Mon, 22 Jun 2026 04:07:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187213502A5
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 04:21:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782101229; cv=none; b=KL4R8gJk0gcrd4wnEH7kOoZle7/ltZqAEEymaORF+w8DNKQ8PqLOJMrUIgskzpZbrV5efMQdfprRh8SR6QnLq8eGYlpkJFXcqGp88p+pY1ZE6uXkiHtkZk0AXvNfBzziWbJhZvAVs1X8OSLkX+3w0x7R9ma0SgXG1qdAx/hQewc=
+	t=1782102079; cv=none; b=e4gcHHU6PWEDAuk3KrMyAziIWMVZmu5vsLV+Tz6dv5MOwP3fgknmPnOowbZoB9K+GAmbAYaY9/RR6WR1KouDdDehwVTtYiIhlbSLcGN1BIE8tNyC+WCDmwX57V32yNpUTf7iP8eSPac2C21HZFmBZRQbPWCBtroXwBnXdJQiBRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782101229; c=relaxed/simple;
-	bh=m2LLV+BA5spGIUzLab9tWQ1i0a9h7daxqjgqeVb30rU=;
+	s=arc-20240116; t=1782102079; c=relaxed/simple;
+	bh=rmWC5iPUXUuPyWJTQ8dUYsADCfuCqkBRWLMj90LWriQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=e8FswySvW4fe2WigvJDq2yhOKA+D/xf4CLlcvWwkHwq27QzV0MxpLyiobP0eLRRzl3JKS/st5Fj10yF8G+itSastOV8AjTUVePaoWtauHeYpCXBhHI1tX9rXve9dzVsDk2O3VAXJFFIPa5iRbnoaTDyskOwbrbzRV7txlkjh1no=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RKNYTOPI; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 MIME-Version; b=ABTjT5or1RkNXSVHcAYWizcobfmjcp6OdsVGiu7jWVMEM1NBjEcDadi2n+KfPP1AFQ81yLtMVCRM8d1btnzPs6/EfXnA6K4/amuGlhH//riZjCz6GQT7NnyvtPBvBxox3PeTN81D5zmS89Ob53AltjWsltHLw8aNSXp6x4cK5fU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EOeqAQT1; arc=none smtp.client-ip=209.85.215.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RKNYTOPI"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782101224;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vFaoYZTJfRDH9hDuVHVBgZkR1flChQcp5jR5STw0K2M=;
-	b=RKNYTOPII31SLlFemAcWqWE/TeS/HQJl7crveXc7GdzZz5I+TjbXRbbkZaQSvN3TmVtVYT
-	nSSDvsZk7jNyt6B/E4YmD4cYyLjd5RE2oOf/Hiy1FZ2NcIRHyitOaBZNUaYo6dvHseOLCi
-	TzRgynUCXY7wguiC8GKfv0LXaYiHBGc=
-From: Kaitao Cheng <kaitao.cheng@linux.dev>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	Tejun Heo <tj@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EOeqAQT1"
+Received: by mail-pg1-f193.google.com with SMTP id 41be03b00d2f7-c8857a27041so1618491a12.1
+        for <bpf@vger.kernel.org>; Sun, 21 Jun 2026 21:21:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782102077; x=1782706877; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9ARbcKkCZMrLR2Q0JBoKtVULOgS6L4oD2K2guHdXuRU=;
+        b=EOeqAQT1pPuhqGPmLX5JLWyZ6YQYRdJPzyR22GDCrmpZJrxNjfvLJpt8j4IF+fbqOP
+         Mk8YMsf+BxSGiU5knQ8WWztjvOfKc0IueyPbG4iynvqzxhmiMvqd/9VdCmr3OSvNJI19
+         ydUQBg2gQBJaCAY5By0E1nrDgUoZwq1J8AK3QHl/5to/Mx2jNNFl+GQBxEKa9yBxZLyk
+         MMpEAoBMTvqXlE1kbxkt1u0AVOMt4kQMSzUBNfh6hu2hZJkGMKRT2669rorSMlD3HDUP
+         HT4LFVbbe5UE757zOGuiNfLLABzrldPbmF31xe47lId7AAhHHR9lu3Nd17oeZxIlHhWT
+         U7Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782102077; x=1782706877;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9ARbcKkCZMrLR2Q0JBoKtVULOgS6L4oD2K2guHdXuRU=;
+        b=lb1zzqmgpsnLk+J8e8dnQ39aUxHBfZZy0vfoj+nXhc56Prp07URgVAwhroouJS54Mg
+         NK0sgTJByoTdKbg8cIf5Lf3q2ctINkAMuQVzsbZqDN2oD29YeBRARoUf10MyoZBg5SRJ
+         n7fUzuZvm3n3X27oF9ulvz58kdP0BiNmCjtSLNJQijfZz8e2/bZO5xhDRsT9tu7s9rst
+         r7Q3+QALykX+9w0/uEpPhOOG5uSibMztqKffoH9g47kxXQJJ7dVcIQPCyB502IgaKt40
+         nEw8e/e1VIOGQ62hppTwdUAlWRPPEz+fxuPA+WFAxzaq4LY88fR777x6rk0mtKwNLpbR
+         s4mw==
+X-Forwarded-Encrypted: i=1; AFNElJ8oPKPbva17V/yXx7RhRtqSDDtCZI3hAx3LugmxZdCekToeNlPdN1wTXRhqjY9MWce1J4U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywa+jPrdjmC6hZW1lr4Lfuyy3t2J/x1ubZpQDoxzgPbCHqdAq5+
+	SwIAHFjlVAnK6yF5Gw75qD9op7sDM43ymtMV+wrKNza3cQLyKj63Vbai
+X-Gm-Gg: AfdE7clmH/pXsFaAv21utBqjkAjl+qLhKs33JlLaeqpJu+NdZ/4HJtu/7qPiC7Yq/4l
+	0FGAa7Xh1x1PFwsk1MCGwprFGhM4KOEvOiuzOU9jLbsyUcRAwdXyNSN9ka4Rj+ti1IP+jerf/Xe
+	BbgY1r9NRmxvlJ5qIdn0+e45dqujHDICmdC/VL3Eo7OtnAJJEim3MLY7CvVsGgeM+mqVOX7RKhp
+	ODEZzknvdFZfePZvcvYnEi1Sc9QHx7HSTvuuio1w0Hp4U4vU7wem5sel2aYzMK9DCN1PKUyeCmx
+	cRXB/bca9x68UAHyUM/BlUhsieu2KQ+F7zC+cA4ObM1Qo8EEGCbdXomqmbykQl7SYVnanGpbATS
+	ZxIMHnwt92dmGN3aXx8NYIjq/E9lsHA4EzN8EQJBD1KawMTwBDKhh0uVkV0TYBrdUZYKvGtZ5Kc
+	rp5zphYeo9XlyI7Q+gg6vboaFutRTeEz3FRYN4
+X-Received: by 2002:a05:6a21:1b81:b0:3b4:b276:3650 with SMTP id adf61e73a8af0-3bb35062637mr14218495637.26.1782102077269;
+        Sun, 21 Jun 2026 21:21:17 -0700 (PDT)
+Received: from laptop.tail7c0f81.ts.net ([59.6.68.4])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c8bc2c8f0a7sm5886315a12.7.2026.06.21.21.21.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Jun 2026 21:21:16 -0700 (PDT)
+From: Woojin Ji <random6.xyz@gmail.com>
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Paul Moore <paul@paul-moore.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: David Howells <dhowells@redhat.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Philipp Stanner <phasta@kernel.org>,
-	linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-ntfs-dev@lists.sourceforge.net,
-	linux-fsdevel@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	audit@vger.kernel.org,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linux-perf-users@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	kexec@lists.infradead.org,
-	live-patching@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	rcu@vger.kernel.org,
-	sched-ext@lists.linux.dev,
-	linux-mm@kvack.org,
-	virtualization@lists.linux.dev,
-	damon@lists.linux.dev,
-	llvm@lists.linux.dev,
-	Kaitao Cheng <chengkaitao@kylinos.cn>
-Subject: [PATCH v3 2/7] llist: Add mutable iterator variants
-Date: Mon, 22 Jun 2026 12:05:32 +0800
-Message-ID: <20260622040533.29824-3-kaitao.cheng@linux.dev>
-In-Reply-To: <20260622040533.29824-1-kaitao.cheng@linux.dev>
-References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 0/2] bpf: Preserve scalar zero spills for var-offset stack reads
+Date: Mon, 22 Jun 2026 13:21:11 +0900
+Message-ID: <20260622042111.955752-1-random6.xyz@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <9256454d-6323-4eae-8a0a-e6bcecc92098@linux.dev>
+References: <9256454d-6323-4eae-8a0a-e6bcecc92098@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -91,154 +84,94 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-From: Kaitao Cheng <chengkaitao@kylinos.cn>
+On Sun, Jun 21, 2026 at 08:29:46AM -0700, Yonghong Song wrote:
+> Could you share your C code to desmonstrate patch 1? We can then check
+> whether the pattern is common and whether the code can be easliy worked
+> around with source code (e.g. barrier_var() etc.).
 
-llist_for_each_safe() and llist_for_each_entry_safe() require callers to
-provide a temporary cursor even when the cursor is only needed by the
-iterator itself.  This makes call sites noisier than necessary for the
-common case where the loop body may remove the current entry but does
-not otherwise inspect the saved next pointer.
+Sure. I don't have a confirmed production program hitting this, and I
+don't want to claim that the pattern is common. The reason I mentioned it
+in the cover letter is that it is reachable from normal C codegen, not
+only from hand-written verifier asm.
 
-Add llist_for_each_mutable() and llist_for_each_entry_mutable() variants
-that support both forms.  Callers may omit the temporary cursor and let
-the helper create an internal unique cursor, or keep passing an explicit
-cursor when the loop needs to inspect or reset it.
+This is the minimized single-slot reproducer I used:
 
-Keep the existing safe helpers as compatibility wrappers so current users
-continue to build unchanged while new code can use the shorter mutable
-form.
+  #include <linux/bpf.h>
+  #include <bpf/bpf_helpers.h>
 
-Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
----
- include/linux/llist.h | 81 ++++++++++++++++++++++++++++++++++---------
- 1 file changed, 65 insertions(+), 16 deletions(-)
+  struct {
+          __uint(type, BPF_MAP_TYPE_HASH);
+          __uint(max_entries, 1);
+          __type(key, __u64);
+          __type(value, __u8);
+  } single_some_map SEC(".maps");
 
-diff --git a/include/linux/llist.h b/include/linux/llist.h
-index 8846b7709669..1c6f12411d5e 100644
---- a/include/linux/llist.h
-+++ b/include/linux/llist.h
-@@ -49,6 +49,7 @@
-  */
- 
- #include <linux/atomic.h>
-+#include <linux/args.h>
- #include <linux/container_of.h>
- #include <linux/stddef.h>
- #include <linux/types.h>
-@@ -143,12 +144,33 @@ static inline bool llist_on_list(const struct llist_node *node)
- #define llist_for_each(pos, node)			\
- 	for ((pos) = (node); pos; (pos) = (pos)->next)
- 
-+/*
-+ * llist_for_each_safe is an old interface, use llist_for_each_mutable instead.
-+ */
-+#define llist_for_each_safe(pos, n, node)			\
-+	for ((pos) = (node); (pos) && ((n) = (pos)->next, true); (pos) = (n))
-+
-+#define __llist_for_each_mutable_internal(pos, tmp, node)		\
-+	for (typeof(pos) tmp = ((pos) = (node)) ? (pos)->next : NULL;	\
-+	     (pos);							\
-+	     (pos) = tmp, tmp = (pos) ? (pos)->next : NULL)
-+
-+#define __llist_for_each_mutable1(pos, node)				\
-+	__llist_for_each_mutable_internal(pos, __UNIQUE_ID(next), node)
-+
-+#define __llist_for_each_mutable2(pos, next, node)			\
-+	llist_for_each_safe(pos, next, node)
-+
- /**
-- * llist_for_each_safe - iterate over some deleted entries of a lock-less list
-- *			 safe against removal of list entry
-+ * llist_for_each_mutable - iterate over some deleted entries of a lock-less list
-+ *			    safe against removal of list entry
-  * @pos:	the &struct llist_node to use as a loop cursor
-- * @n:		another &struct llist_node to use as temporary storage
-- * @node:	the first entry of deleted list entries
-+ * @...:	either (node) or (next, node)
-+ *
-+ * next:	another &struct llist_node to use as optional temporary storage.
-+ *		The temporary cursor is internal unless explicitly supplied by
-+ *		the caller.
-+ * node:	the first entry of deleted list entries
-  *
-  * In general, some entries of the lock-less list can be traversed
-  * safely only after being deleted from list, so start with an entry
-@@ -159,8 +181,9 @@ static inline bool llist_on_list(const struct llist_node *node)
-  * you want to traverse from the oldest to the newest, you must
-  * reverse the order by yourself before traversing.
-  */
--#define llist_for_each_safe(pos, n, node)			\
--	for ((pos) = (node); (pos) && ((n) = (pos)->next, true); (pos) = (n))
-+#define llist_for_each_mutable(pos, ...)				\
-+	CONCATENATE(__llist_for_each_mutable, COUNT_ARGS(__VA_ARGS__))	\
-+		(pos, __VA_ARGS__)
- 
- /**
-  * llist_for_each_entry - iterate over some deleted entries of lock-less list of given type
-@@ -182,13 +205,41 @@ static inline bool llist_on_list(const struct llist_node *node)
- 	     member_address_is_nonnull(pos, member);			\
- 	     (pos) = llist_entry((pos)->member.next, typeof(*(pos)), member))
- 
-+/*
-+ * llist_for_each_entry_safe is an old interface, use llist_for_each_entry_mutable instead.
-+ */
-+#define llist_for_each_entry_safe(pos, n, node, member)			       \
-+	for (pos = llist_entry((node), typeof(*pos), member);		       \
-+	     member_address_is_nonnull(pos, member) &&			       \
-+	        (n = llist_entry(pos->member.next, typeof(*n), member), true); \
-+	     pos = n)
-+
-+#define __llist_for_each_entry_mutable_internal(pos, tmp, node, member)	\
-+	for (typeof(pos) tmp = ((pos) = llist_entry((node), typeof(*pos), member), \
-+		member_address_is_nonnull(pos, member) ?			\
-+		llist_entry((pos)->member.next, typeof(*pos), member) : NULL);	\
-+	     member_address_is_nonnull(pos, member);				\
-+	     (pos) = tmp, tmp = member_address_is_nonnull(pos, member) ?	\
-+		llist_entry((pos)->member.next, typeof(*pos), member) : NULL)
-+
-+#define __llist_for_each_entry_mutable2(pos, node, member)			\
-+	__llist_for_each_entry_mutable_internal(pos, __UNIQUE_ID(next), node, member)
-+
-+#define __llist_for_each_entry_mutable3(pos, next, node, member)		\
-+	llist_for_each_entry_safe(pos, next, node, member)
-+
- /**
-- * llist_for_each_entry_safe - iterate over some deleted entries of lock-less list of given type
-- *			       safe against removal of list entry
-+ * llist_for_each_entry_mutable - iterate over some deleted entries of
-+ *				  lock-less list of given type safe against
-+ *				  removal of list entry
-  * @pos:	the type * to use as a loop cursor.
-- * @n:		another type * to use as temporary storage
-- * @node:	the first entry of deleted list entries.
-- * @member:	the name of the llist_node with the struct.
-+ * @...:	either (node, member) or (next, node, member)
-+ *
-+ * next:	another type * to use as optional temporary storage. The
-+ *		temporary cursor is internal unless explicitly supplied by the
-+ *		caller.
-+ * node:	the first entry of deleted list entries.
-+ * member:	the name of the llist_node with the struct.
-  *
-  * In general, some entries of the lock-less list can be traversed
-  * safely only after being removed from list, so start with an entry
-@@ -199,11 +250,9 @@ static inline bool llist_on_list(const struct llist_node *node)
-  * you want to traverse from the oldest to the newest, you must
-  * reverse the order by yourself before traversing.
-  */
--#define llist_for_each_entry_safe(pos, n, node, member)			       \
--	for (pos = llist_entry((node), typeof(*pos), member);		       \
--	     member_address_is_nonnull(pos, member) &&			       \
--	        (n = llist_entry(pos->member.next, typeof(*n), member), true); \
--	     pos = n)
-+#define llist_for_each_entry_mutable(pos, ...)				\
-+	CONCATENATE(__llist_for_each_entry_mutable,			\
-+		COUNT_ARGS(__VA_ARGS__))(pos, __VA_ARGS__)
- 
- /**
-  * llist_empty - tests whether a lock-less list is empty
--- 
-2.43.0
+  struct {
+          __uint(type, BPF_MAP_TYPE_HASH);
+          __uint(max_entries, 1);
+          __type(key, __u32);
+          __type(value, __u8);
+  } single_one_byte_map SEC(".maps");
 
+  SEC("tc")
+  int helper_zero_single(struct __sk_buff *skb)
+  {
+          __u64 key = 0;
+          __u32 out_key = 0;
+          __u32 idx = skb->mark;
+          __u8 *out;
+          __u8 value;
+
+          if (idx > 7)
+                  return 0;
+
+          out = bpf_map_lookup_elem(&single_one_byte_map, &out_key);
+          if (!out)
+                  return 0;
+
+          bpf_map_lookup_elem(&single_some_map, &key);
+          value = ((__u8 *)&key)[idx];
+          out[value] = value;
+          return 0;
+  }
+
+  char LICENSE[] SEC("license") = "GPL";
+
+With clang 22.1.6, both -O2 and -O3 produce the relevant pattern:
+
+  *(u64 *)(r10 - 8) = r2
+  ...
+  call 1
+  r7 += r8
+  w1 = *(u8 *)(r7 + 0)
+  r6 += r1
+  *(u8 *)(r6 + 0) = w1
+
+The unpatched verifier rejects the object because the byte loaded from
+the spilled-zero key becomes var_off=(0x0; 0xff), so the following
+one-byte map-value write is considered possibly out of bounds. With the
+patch, the load is kept as const zero and the program is accepted.
+
+I also used a two-slot variant:
+
+  __u64 key[2] = {};
+  ...
+  if (idx > 15)
+          return 0;
+  ...
+  bpf_map_lookup_elem(&single_some_map, &key[0]);
+  value = ((__u8 *)key)[idx];
+  out[value] = value;
+
+That produces the same kind of variable-offset byte load over two
+spilled scalar-zero slots and shows the same base reject / patched accept
+behavior.
+
+I agree that this may be possible to work around at the C source level,
+depending on the program, for example by avoiding the variable byte read
+from the stack key or by otherwise forcing different codegen. That is why
+I kept this as bpf-next and did not claim a production regression.
+
+Thanks,
+Woojin
