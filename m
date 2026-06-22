@@ -1,84 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD4C72264C0;
-	Mon, 22 Jun 2026 22:58:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5023321B191
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 23:01:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782169137; cv=none; b=kt1ygrviOEa508UDXKG5oDTa4EpMstr9fYHi27u954VCA+fz/5RUK6fEr9M603Jwm1FSNjWJE8K0oXAgkNwtFGqMmGpvNu7R9GKCk5uSx1CdAR/rBxK/0KLvuil/0QTNnqOqz32PJb1CexjIN+1Km+TS3ounaFcf1nP3oJyd5m8=
+	t=1782169287; cv=none; b=Ukm7kUNTQxxL3+PiDyz8Yh+KamQ54Obsf+plFlfrgSF1LuMzbK6nLXy4q8Fmh1srrmo1v1HRt4sd9xB776mGY55JpTMI9qdirSBIAkHj2RpbkQNSOF/d1mWxC4L9Iyxy3WKabZCvHFC28q76MjP4QpJxS5WCXeu1B9x4BcCO0ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782169137; c=relaxed/simple;
-	bh=aRrJVhQclOJmF//g4+smCBLA0DaPcDpwIePt7tco7kk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SxNIAH5+BpcyUeEP9nxfOmAmYuOkEYp60kLjahGg1lgM7yXhv2nKkzLvu3dilpzDA5xB3h48wVqBbp6Go1ISoUNklgcVble0+/LvECZtuFx0MUAJoi9JCNua0FGoDC2lq7hAHP4Pl7alVV0AhO5gnea6W1Y/UdvZRjY+NQ7MsFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NN06kNND; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782169287; c=relaxed/simple;
+	bh=3JBxGBnmq2p2FDhnDtI4+aT0V6p9eLbBXeAWbVZXxEk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NVqTehNEBZM78eUzZ1ypxzmDleCK9QQHVsednvx3SOCfC0SK52cUOw0dMR+4WeUNz9YEwxoK8XDvpc7DcdcV5H0w9NUPZZMJVaxdLg3QQQQICfqAnBp2H81QQPWNbTsu/SZUYMR+ICKURPq2x+WWnxrS7Q/OHHIHTKJWW2TMuBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dhXwrePV; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NN06kNND"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9EED1F000E9;
-	Mon, 22 Jun 2026 22:58:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782169136;
-	bh=cf8VFMdKAKyQGQAVq54fhWDFVL5UEpiUpHWH51/HhdY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=NN06kNND8KS4FEj3AmGiy6HruE4DdxRM45pxeV9AhqRglDlV9ogNIZ/6H5HuvNEhq
-	 6/5sBQ8wRfewVea9KM2gx0Og0HdpoJsPqYiA8WvzmdFy37t28KtQ4xRA7z/CXlUUwU
-	 Vog1Cy7kzzay7E+a+Qe/8xj/QjzzvzfZ6OPIaIHakTq7CubW9/WsAckg/M6hGbNjo+
-	 i9XhBM13YpnqTwoHce0w+XBMphexZEkVVqFUX7kvtP6HcPl0v3ughvgM2psvjqb9Wf
-	 JwU+GZE/uUTAxacyoqeHxWhhI6Cg+bvwFOY0KN5rcJka9C72x5+k0FIaL8xYHgJasn
-	 TJZzGjoWbL2fg==
-Date: Mon, 22 Jun 2026 15:58:54 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Xiang Mei <xmei5@asu.edu>
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, Daniel Borkmann
- <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Jesper
- Dangaard Brouer <hawk@kernel.org>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>, Stanislav
- Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>, Jussi Maki
- <joamaki@gmail.com>, Paolo Abeni <pabeni@redhat.com>, Weiming Shi
- <bestswngs@gmail.com>, Ido Schimmel <idosch@idosch.org>, David Ahern
- <dsahern@gmail.com>
-Subject: Re: [PATCH net] net, bpf: check master for NULL in
- xdp_master_redirect()
-Message-ID: <20260622155854.75977aac@kernel.org>
-In-Reply-To: <CAPpSM+TRJaqSSUs6tBp_CBSVUJMiDZm01o5BK6aCNak8vuQi+w@mail.gmail.com>
-References: <20260620201531.180123-1-xmei5@asu.edu>
-	<7791b9cc-86f4-424b-aa1a-d1a869814130@linux.dev>
-	<CAPpSM+TRJaqSSUs6tBp_CBSVUJMiDZm01o5BK6aCNak8vuQi+w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dhXwrePV"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-492329c5514so1624075e9.1
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 16:01:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782169285; x=1782774085; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8raFnbe3ZmeHv8tNWRCnm2r9ziZZ3BplUai93sgg1aI=;
+        b=dhXwrePVrgWJMf7swRp3i6C6yO+u2zGdcKDz78TNmC/kQkjWoshMQMIAVdXBzalLdx
+         AIdI9p4tHT+ixmNpPg6EmcRKqU+P1FOWDSc0HcQ0KiyemwMqXmww67JbtUirTA+iTlR9
+         795HT62uRbQmUxt5TxIpagalXgJQ3AccDwsJyaiH71Mef2yrNKY4goAULFLGCe/DnfjO
+         5rOLccpftkTdBWbbzEQrGF49lrJI0CQWnFyPPml4oUFzl64u/b0ZJuuKaKxs0cOfANu8
+         bR7CsokQWPRdIIaC+p8lv8dBG/n2sYmH08YZRxzW7zVwA2BJ6clfqxJIKSLEBeVBtWdU
+         4oBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782169285; x=1782774085;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8raFnbe3ZmeHv8tNWRCnm2r9ziZZ3BplUai93sgg1aI=;
+        b=LaVts/raj4ic7kfPRAPmJyZDEyzRYlKRTzxvP/kqw0QgmuXJV85WTkqy1MNI3+++n8
+         uVRA/CqglDVLZspxgAOQWD58fik6joKHrxbcSsDNj7t55N4IGe7z+mnfzLCMkPp/nJ17
+         j6Am1F/J+Y0hiMrallKbM2kTeT8QwsZt+myfAgqiDmxCSifErkw05yuFbQyT7q6FOPpD
+         SF7GKtHp4ukrIZxx9ROEARA0kKqLhD3+1xYmctzDhqrioPV4CC7b0iEY2/TbUoc0U4z7
+         CXCJan7qoPrN7Ixq3GU0fVJdmLW1CYJJaW4kKR6bz+YPJY1bXHC2askb+OBp2SW+ehQ0
+         MBww==
+X-Forwarded-Encrypted: i=1; AFNElJ9B6W82MpR1b0IWhfrkWo1TZBTR5Vog0mSUP4inrkHLWuDfahELxpDEsu0edfYr57lviqU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4+U11y5L097JO37J1nSfOf6laVU1EigUYVWI56TbWWJfeL1iV
+	5cScvQAAU9IkyBQo676gIg6z1/qVdd6M1tcAoMwMyP9dgnn3kPnQdpA=
+X-Gm-Gg: AfdE7cnknHUILw2Q1Tk5A0t46x35psPsEAFZW/yNPsgFkm/DBj4iMQfQuSLk+swLy7k
+	INVu4lgXyWCdkdkolZBD4CDvE0UnxIOqQED4g1ezbYJqPh6aZ4vh8uEKIxKmu0v838u/THhu1Bn
+	lZPn3gKuEG7imUCEEX0NOQFn0W/fQs6o34zazSDgDwItbwnvsxhII2iNdHKPa3E7tQ0oZ6n4kWA
+	h5FZp0V75Atv+d0zN2V0mSErVB/oUrxGyKyHGh0+dILQnkNDSRPkslEJUn7PmYi9iejMgq5bkBM
+	f6pTrTD+8a7Qpaor0X9rab6JN9U/vpSvTpDqFDvwM0jgVAr2IYSROKrxbYphajfm3TwfDXqKeRX
+	mnc3g1RL4Oaae6FR+86VNbK2gKx2YuiYWSzOcjcN2Q09vktS/S0kApzmUK3uBj6uHkjPQ
+X-Received: by 2002:a05:600c:3e0a:b0:489:32b:ac0b with SMTP id 5b1f17b1804b1-4925a0a9ad9mr16515335e9.6.1782169284668;
+        Mon, 22 Jun 2026 16:01:24 -0700 (PDT)
+Received: from debian.. ([2001:41d0:303:db6b::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4923fd1fa34sm371339255e9.5.2026.06.22.16.01.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jun 2026 16:01:24 -0700 (PDT)
+From: Tristan Madani <tristmd@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Xu Kuohai <xukuohai@huawei.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	bpf@vger.kernel.org,
+	stable@vger.kernel.org,
+	tristan@talencesecurity.com
+Subject: [PATCH bpf v3 0/2] Fix stale register bounds on LSM retval context load
+Date: Mon, 22 Jun 2026 23:01:21 +0000
+Message-ID: <20260622230123.3695446-1-tristmd@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Sun, 21 Jun 2026 18:28:09 -0700 Xiang Mei wrote:
-> > > diff --git a/net/core/filter.c b/net/core/filter.c
-> > > index 40037413dd4e..6037860d5283 100644
-> > > --- a/net/core/filter.c
-> > > +++ b/net/core/filter.c
-> > > @@ -4430,7 +4430,7 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
-> > >       struct net_device *master, *slave;
-> > >
-> > >       master = netdev_master_upper_dev_get_rcu(xdp->rxq->dev);
-> > > -     if (unlikely(!(master->flags & IFF_UP)))
-> > > +     if (unlikely(!master || !(master->flags & IFF_UP)))
-> > >               return XDP_ABORTED;  
-> >
-> >
-> > I recall that when I previously modified this code, I removed the
-> > !master check
-> >
-> > because this is on the fastpath. However, since this is a triggerable bug,
-> > I think adding it here is fine.
->
-> Thanks for the review. It's difficult to hit under normal statue, but
-> the bug is real.
-> We have triggered this bug with a PoC plus GDB to pause one thread (no
-> other `cheating').
+From: Tristan Madani <tristan@talencesecurity.com>
 
-Can you double-confirm that this triggers on current HEAD
-of linux/master ? I thought commit 2674d603a9e6 ("vrf: Fix a potential
-NPD when removing a port from a VRF") was supposed to prevent all the
-torn master fetches. Adding VRF folks to CC.
+check_mem_access() calls __mark_reg_s32_range() to narrow a register to
+the LSM hook retval range, but the intersection preserves stale bounds
+from prior instructions. Add mark_reg_unknown() before narrowing (same
+pattern as the else branch) and a selftest that catches the mismatch.
+
+Changes in v3:
+- Add selftest demonstrating the issue (Eduard Zingerman)
+- No code change in patch 1 from v2
+
+Tristan Madani (2):
+  bpf: Reset register bounds before narrowing retval range in
+    check_mem_access()
+  selftests/bpf: Add test for stale bounds on LSM retval context load
+
+ kernel/bpf/verifier.c                            |  1 +
+ tools/testing/selftests/bpf/progs/verifier_lsm.c | 15 +++++++++++++++
+ 2 files changed, 16 insertions(+)
+
+-- 
+2.47.3
+
