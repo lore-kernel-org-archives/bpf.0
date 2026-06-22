@@ -1,145 +1,96 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D295E3A75A3
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 12:32:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4647377543;
+	Mon, 22 Jun 2026 12:41:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782131543; cv=none; b=uH5PdGHmJFWj0kWL2/z3AlfwMYuO5FClcwfVT97gIRQgH5MN17CaZiEm0aU6s7nIRwlT0Unn2hyPSw18S4WJYrv7HUL/HgucuLS6SAUq5ZdNwK5Bdb7XO7//rSuJ54dJhx8krHmQRsePBKTRm/AxF8u10YmXZ60OYhML2Vr6uWA=
+	t=1782132111; cv=none; b=Lg0p+1cp+UwDa1k1o4QqP49lDVBdJq/0321Ez6IyNH0RY5GmWZonDxnzfGVdQlu6RgpqqO7aWRdTQCIyDeDBv3Ps+ugKzlxKwt8a9SKNZ/lluNO69J/tzPVM7h/RfidCXrxZffJZx8jVV8yBa2h4CMLQRNrMjai2zfkwLbgligc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782131543; c=relaxed/simple;
-	bh=5TTtO0wucTcd0iEQK6eGiDMWrIZYca54tqoO1m3xrLI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=OmiiewQrkY0i0rnmPCBy+NUV7IxyaMzUJwQn1eTL5dm0qaObTiPyfmwDuwnjHyqi9A0aIVYiNft/5agcyD2NnruBZE6kQMY41KJmsv7Dp++7p6Lqf4RqIzzqTTOiX4/FxClhqweW6/Mp3Z0LrmfnjL26dOTr9z0A76ts8XnSxzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ERywxlDn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782132111; c=relaxed/simple;
+	bh=jfDMjVa+wKbuMF1RPWDXVqXHPxX0b8oTycJboxEMxfc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=n9Plxk/Y/cfVBFvOMttDZpOj7Xray9bGaRhTNYiGQd1XbGU2WI7mmFPHIxpGiHdSTUtyKviOd7evTNgvipqWNBX7B6h8iHqAcbNH/hiCbXVXvOSxHkDchrc4n/Kk/YN/ftCYtVDfkHVMkwETB6I+CfuQGVXO6znhx2uDtIyQU9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TgWuS52l; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ERywxlDn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AE7F1F000E9;
-	Mon, 22 Jun 2026 12:32:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TgWuS52l"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 307BF1F000E9;
+	Mon, 22 Jun 2026 12:41:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782131542;
-	bh=Avlqmo5pum/fDEGVjKzqIJjdh/UMRpX+L/1R5bnGKkw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ERywxlDnSH4CqxY4voP8by9PpUWAPyaY9zGky8RKwW1ptRIANig8wVMUlBKkSKJj2
-	 nCbYG1KPOp2ZvselZbrh/7l2ZNrA9NIWyKpa2FKJfRMjyTPF+6biDbwnDhjDVMazBk
-	 Zi14GNne86G6pdIvdmBKJKrB4ZkTkc+THpC/n5h31P96exxWpH4x3T6bTjUW1ZL9ki
-	 dkFqYEfY/Rros1vbw475hVzFWrZEjHAds9MaKfDXjwNmLf2iSch40awvnFtbYysBDC
-	 ESZo4FeqDeRCZbAFC5n080YIhs1wo35oeav4onXjK8g25yyAXOC/t3R+ngBZmS+1YE
-	 97E/ZkpnHazuA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v8 3/7] bpf: add bpf_icmp_send kfunc
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mahe Tardy" <mahe.tardy@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260622120515.137082-4-mahe.tardy@gmail.com>
-References: <20260622120515.137082-1-mahe.tardy@gmail.com>
- <20260622120515.137082-4-mahe.tardy@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 22 Jun 2026 12:32:22 +0000
-Message-Id: <20260622123222.5AE7F1F000E9@smtp.kernel.org>
+	s=k20260515; t=1782132110;
+	bh=4iLJSoipRtnfr7If0YiOJXIrBoD2V1Vbzf8qdLxnze8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=TgWuS52l663sbBK8AHbsx0sACO/DY6gtEPvAMGDD52zZjBnTurCqDCAV3umZJYBMI
+	 db2MUkFiQvD1HC4OHteQXFXL6LOmRgSdcuf3U86tcZCsHg8Jw2MkS/m+PDcuDIy50P
+	 cAVUKxf++43rr+ZXz2U4l3aj3yLj+WIVRcNQlydgghCcb6YwzvlC3PkbDy0eqF68dF
+	 EDdlV1NKJ+FaoPlLbeMtgbhucF9UOevE4qNZmgdj9QMzhluU9rUsOSaYzUv6F4srUs
+	 ebx/An9RumMHSSbIju0SSEH0Vm9uYiZul73qVRbrOrbumDixsMCH265p0y6dzm9KTE
+	 jo/1zZnvQg13g==
+Content-Type: multipart/mixed; boundary="===============6336517358572342155=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <91d16e0bd3107b1ecd332465cb9b68bb1655446bfc17eb06748457b2f02a73ef@mail.kernel.org>
+In-Reply-To: <20260622120515.137082-5-mahe.tardy@gmail.com>
+References: <20260622120515.137082-5-mahe.tardy@gmail.com>
+Subject: Re: [PATCH bpf-next v8 4/7] selftests/bpf: add bpf_icmp_send kfunc cgroup_skb tests
+From: bot+bpf-ci@kernel.org
+To: mahe.tardy@gmail.com,bpf@vger.kernel.org
+Cc: andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,edumazet@google.com,john.fastabend@gmail.com,jordan@jrife.io,kuba@kernel.org,martin.lau@linux.dev,netdev@vger.kernel.org,netfilter-devel@vger.kernel.org,pabeni@redhat.com,yonghong.song@linux.dev,mahe.tardy@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 22 Jun 2026 12:41:50 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf_icmp_send() causes __icmp_send() to bypass broadcast checks an=
-d spoof the source address for TC ingress packets.
---
+--===============6336517358572342155==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 2acddb10f02b54c09816af3432bc928c87824069
-Author: Mahe Tardy <mahe.tardy@gmail.com>
-
-bpf: add bpf_icmp_send kfunc
-
-This commit adds the bpf_icmp_send kfunc to allow cgroup_skb and tc programs
-to send ICMP error messages in response to packets. It clones the original
-packet, optionally assigns a route using ip_route_reply_fill_dst for
-unrouted ingress packets, and invokes the standard icmp_send or icmpv6_send
-functions.
-
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+> new file mode 100644
+> index 000000000000..f4e5b883d4c8
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
 
 [ ... ]
 
-> @@ -12546,6 +12548,101 @@ __bpf_kfunc int bpf_xdp_pull_data(struct xdp_md=
- *x, u32 len)
-> +__bpf_kfunc int bpf_icmp_send(struct __sk_buff *skb_ctx, int type, int c=
-ode)
+> +static void read_icmp_errqueue(int sockfd, int expected_code)
 > +{
-> +	struct sk_buff *skb =3D (struct sk_buff *)skb_ctx;
-> +	struct sk_buff *nskb;
-> +	struct sock *sk;
 
 [ ... ]
 
-> +	switch (skb->protocol) {
-> +#if IS_ENABLED(CONFIG_INET)
-> +	case htons(ETH_P_IP):
-> +		if (type !=3D ICMP_DEST_UNREACH)
-> +			return -EOPNOTSUPP;
-> +		if (code < 0 || code > NR_ICMP_UNREACH)
-> +			return -EINVAL;
-> +
-> +		nskb =3D skb_clone(skb, GFP_ATOMIC);
-> +		if (!nskb)
-> +			return -ENOMEM;
-> +
-> +		if (!pskb_network_may_pull(nskb, sizeof(struct iphdr))) {
-> +			kfree_skb(nskb);
-> +			return -EBADMSG;
-> +		}
-> +
-> +		if (!skb_dst(nskb) && ip_route_reply_fill_dst(nskb) < 0) {
-                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[Severity: High]
-Does using ip_route_reply_fill_dst() here cause regressions with how
-__icmp_send() evaluates routing flags?
-
-For TC ingress packets where skb_dst(nskb) is NULL, this attaches an output
-route. However, __icmp_send() expects the SKB to have an input route when
-evaluating rt_flags:
-
-net/ipv4/icmp.c:__icmp_send() {
-        ...
-        if (rt->rt_flags & (RTCF_BROADCAST | RTCF_MULTICAST))
-                goto out;
-        ...
-        saddr =3D iph->daddr;
-        if (!(rt->rt_flags & RTCF_LOCAL)) {
-                ...
-                saddr =3D 0;
-        }
-        ...
-}
-
-Because the attached route is an output route, it lacks RTCF_BROADCAST,
-which might incorrectly allow ICMP replies to broadcast traffic.
-
-Additionally, because RTCF_LOCAL is missing on the output route,
-__icmp_send() clears saddr. This causes icmp_route_lookup() to select the
-primary IP of the outgoing interface rather than the specific IP the packet
-was originally addressed to, violating RFC 1122 requirements for ICMP error
-source addresses.
-
-> +			kfree_skb(nskb);
-> +			return -EHOSTUNREACH;
-> +		}
-> +
-> +		memset(IPCB(nskb), 0, sizeof(struct inet_skb_parm));
-> +
-> +		icmp_send(nskb, type, code, 0);
-> +		consume_skb(nskb);
-> +		break;
-> +#endif
+> +	for (; cm; cm = CMSG_NXTHDR(&msg, cm)) {
+> +		if (cm->cmsg_level != IPPROTO_IP || cm->cmsg_type != IP_RECVERR)
+> +			continue;
 
 [ ... ]
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260622120515.1370=
-82-1-mahe.tardy@gmail.com?part=3D3
+> +	}
+> +
+> +	ASSERT_FAIL("no IP_RECVERR/IPV6_RECVERR control message found");
+
+This isn't a bug, but the failure string names both IP_RECVERR and
+IPV6_RECVERR:
+
+	ASSERT_FAIL("no IP_RECVERR/IPV6_RECVERR control message found");
+
+while the loop above only matches IPv4:
+
+	if (cm->cmsg_level != IPPROTO_IP || cm->cmsg_type != IP_RECVERR)
+		continue;
+
+and the caller is AF_INET only (start_server(AF_INET, ...) with a
+struct sockaddr_in).
+
+Should the IPV6_RECVERR part of the string be dropped to match what the
+code actually inspects?
+
+> +}
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27951892371
+--===============6336517358572342155==--
