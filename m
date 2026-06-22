@@ -1,127 +1,148 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4A329CB24
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 23:01:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6959529DB86
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 23:04:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782169289; cv=none; b=RdbjW8gFANO4XbN9u9GNQ/SA7N5WROd5VjarEZppizdYsPCYzpn7tZcidTrmhflLs4tPCnerhjmNyC1cawYOm5sVZFNEF8/SJOA3PFkQBKqwglTMpOEs2dD9Cj8wrz/5/EHi3qZxnkzOCTlLS8klanHjTylXL1EJWvQUJdGZFnc=
+	t=1782169474; cv=none; b=jDLJ1647vluCU7OYXuVwMLJTx+l/1R5sQEW6tEm9pmYUnKgeBqrdrwtjEzQxNpCK2a11Abz5Om5StM4vhw+Amgtb78lZFvWjfNP8AhMasqxH7BKwoY97DPXrFv60vqlGOcxPFenPLAnZGwSBuTYEfA8/cFTwwe5ZwXJptWCyPx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782169289; c=relaxed/simple;
-	bh=AY0KwQ4uOXbD9Hbywkfxc8PNp9Pydpf1VKVhjJyGU+8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NvD6i8zU7AHMGS6b57APzdy2a7W1eC/lys5GA+XJy3eszaGOfQhUxAqPWn/UMVPfXniZhNPVNP4BOJANLWL1UDs73NuMXZyUOL4AmbBiq54oXHQ+BcHs/2iR5q0U5qsaPWsjCDR0jX4scDwIcZMP0HtCQkM+N24+ApG6zo3D7Qk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TiTRBng4; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782169474; c=relaxed/simple;
+	bh=ftQG/1RMgrIeRs6dP3PxPeGzz5fOmUvEfdk5pZF/azM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=PRQw2BK+vw7BFLOYN8ZmH7Nsd8LbuKQ5ALOLXlhPaBSj3tD3dE1tAoYNJgWFQOQKh1lg6Bx0/RJR3rFwpQqU57gB/gbzgF1VyE7znwVEW2Ov3xFQy+4Km3gn713iLVhpZfsmH2J1MBpqxuDD8ZwgcOiB6fD88U1cdUqN6zEBUl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HIbVCABf; arc=none smtp.client-ip=209.85.208.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TiTRBng4"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-490bc6a7958so2403245e9.1
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 16:01:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HIbVCABf"
+Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-69576b83dc2so4420125a12.1
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 16:04:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782169287; x=1782774087; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KMJlbIB7pXSZcrQfPPwy0Yezg5A38/CdVpGKj5pZHB0=;
-        b=TiTRBng417C0+eIglfcvBswRl9l+YNl+EKfYxUBYV/Bey1TtQ1Fzk5bCXYSPyHemnA
-         po2rXEgF4qCKoOI1FQfOVS4BaOuKT0RXL7Wh7VWBT62U8B4jCZkYY+RGE+f1B0CcWrwV
-         YtPvQTx1JRDRn8VokrSkKtpQN65liUGGGLHAFc63jPPhaiN6rwpJjPhiWSBOh5vWBq5a
-         1rptsnCL6sYA75O0557QuVtwNxLZR+4MtR/1GTchYx+nuQ8PYT2HTAie+0gVXU8JZHyA
-         9qWndTdcpCN/Zg2Mvetym70Lhd+ElkXAFJxtiioDwe2TRRzXQ9vKaQDnq4IgtWo/DLVj
-         9iaA==
+        d=google.com; s=20251104; t=1782169470; x=1782774270; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=K6tdVkbifnmy4OpS0s5hYsfsTMfjK8C0RXIohZaEO8A=;
+        b=HIbVCABfFsksOb1OCX9IQEAFPKLA9OtNlEzdu6hdjPQH/spRwzkPbkfibfdwnV/JfG
+         oe7CE3NmbQq+kCHPFxurBFh8L15G7q5976IBB7SUHTz+S4S7PUEMJLtGKRU8M0P3uehl
+         iuv9DaOs7tpGd5Yxeqv8itdwLOQr0ShC1epczlvl0yCqKe+FrkXbFBXWs2OZdMMukyLt
+         BIORr04kQb8/nDmrDPa44esC4US/5m1v9+987qsTxxZfkfC6qcN4uQj7x/Tkx0G0J6oO
+         dq/ZAeclKkzJ2fK3+dbJVx1aus6cbqwuhJaIRqm1P1LSkoDnaFeBdq4OsYvtKrM61bvY
+         ByzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782169287; x=1782774087;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=KMJlbIB7pXSZcrQfPPwy0Yezg5A38/CdVpGKj5pZHB0=;
-        b=KmDtGsDDwWCP04H0nUVQa9pBG7/k9SIRkHf1sUrMS+KNiZFWUyrB1rkvlwTowzhX/U
-         JnskaxndVMKNS75sEQ/iRTl4got9xRjVo0lxqZG6hwJkoVegPd/ulAdjQFVf7E1GlyPk
-         rL1HsMSqRtekIoOmDvJfBFNX3AUfNC0ve+yYB+dHz5DEX2r+J+WdNdBz9+dvW7k7+wL7
-         v/OcO4YIg+R4usF/T8SYtZCjsI3+Bw1kKrGv8AHBlncikZZbRtLP5SF8w7mcLkr0krD7
-         GldGlYcetpYD2XFchiR5UUhVi2GZL8Msok5ahEbVWeRZ/BGl9RzkWBMX3gtjaIfwCh/6
-         zBJQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+GxKZyP+5zmvKZzfkGNtshDoIRYvxDAZhDqwW6mHPrW+sms0HpL34YPiRRXZY6mX2jpkY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywi3E0GQRlgceHzRNnOWtWGiJiN6puCKPu7gp6qRhUvrrJeXG49
-	zs6TBfgeJmVKZc50j4jt/mDnk69u6DMmIBnQFzKvb3tb2YDXbhRmI40=
-X-Gm-Gg: AfdE7cmzX660OSQzjyG0k0gFd/gSGtYUHeONxVCQUfOIwXKxeV5xPwriacVklGEcDJs
-	mzM7D5Q3eLc90PNwvLGh8NJiCBcnbkIuHpBWkZt5e8j7JGBLGMF+VMbknDtkEn5WOSoy3GKJaV0
-	k80e1NDIgGT+eG0DoyGxKgJlDk5Vqx93fB2y4mdupNFmadqVbE1QRYLsfYhclW7mR8Fi19WLxz3
-	mQIUCJnb9gwzuRkmiAFtzYQDBO7Kav9sC1N2WoOxPjdxleDJYTet/7DivtOXLMeyPNgKxLzHBKw
-	XPpZ+LxS/ttfDhYvKyFm2B4ik2J0iASrP3xDNrsN0w22ILD2A2PwqlwAlNf9nYNoR4vrmJpjek2
-	fjDo1Gzxn14/MQ9QOqZY7iu9G+tlGVDdgr1BuO8MC4mwTr7v7CQgW3S24qw==
-X-Received: by 2002:a05:600c:480f:b0:490:3cf0:8d81 with SMTP id 5b1f17b1804b1-4925a0c4f1cmr10788635e9.13.1782169286603;
-        Mon, 22 Jun 2026 16:01:26 -0700 (PDT)
-Received: from debian.. ([2001:41d0:303:db6b::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4923fd1fa34sm371339255e9.5.2026.06.22.16.01.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2026 16:01:26 -0700 (PDT)
-From: Tristan Madani <tristmd@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Xu Kuohai <xukuohai@huawei.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	bpf@vger.kernel.org,
-	stable@vger.kernel.org,
-	tristan@talencesecurity.com
-Subject: [PATCH bpf v3 2/2] selftests/bpf: Add test for stale bounds on LSM retval context load
-Date: Mon, 22 Jun 2026 23:01:23 +0000
-Message-ID: <20260622230123.3695446-3-tristmd@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260622230123.3695446-1-tristmd@gmail.com>
-References: <20260622230123.3695446-1-tristmd@gmail.com>
+        d=1e100.net; s=20251104; t=1782169470; x=1782774270;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K6tdVkbifnmy4OpS0s5hYsfsTMfjK8C0RXIohZaEO8A=;
+        b=FqcGvTWmVas6AL6Am4LpKr4S/KTLxcAMN8WY1c1d8teEueX8Q6bcfKwqTD3L3Rwhkr
+         FYqHzz9XVMntqgxYRFCJDlgtbKg6nGXhoQGruO+7qetJPEybVXiMaqFxjsPuYO70VUDI
+         /wG/FxpO2E7VEarqdN60mB5gKGTo0ZrFC53QrHNFy/gimSm9Buo3DwwDv20pJMj/y7Ew
+         1XyUfAtEP/klrQcWKVIVfMwOIAgKD1ztmTJxZZ+vVTg9spbCdplDaI6eJvryKLO5Zg05
+         KexkwJBQ0C6KtMCBHSh+zCYVICNGDl847YiH9KBzn40o6rk5COFpy16PMmMqmaDOy7bv
+         t/dg==
+X-Gm-Message-State: AOJu0YwLvN3AH+fg/M6TYbu/Rh4w/aoEtkWI+ZYF3xV9DJos8ib7u4TL
+	N3qoUIA8Tch7+tS1/tA2A0UMx6lLJSiZy/fLUOKxeR6QjzX333+bJ7+iffNUS5ELTv2R+7WNWWM
+	eUgPoQRDtJ1yzkCQ8eA==
+X-Received: from edr1.prod.google.com ([2002:a05:6402:44c1:b0:697:bd42:cb2a])
+ (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6402:42c4:b0:687:7fc4:1ea5 with SMTP id 4fb4d7f45d1cf-697dbb654bfmr67219a12.23.1782169469462;
+ Mon, 22 Jun 2026 16:04:29 -0700 (PDT)
+Date: Mon, 22 Jun 2026 23:04:25 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAHi/OWoC/x3LSwqAMAwA0atI1gbaiNV6FXHhJ2pQVBoQoXh3i
+ 8vHMBGUg7BCk0UIfIvKeSTYPINx7Y+FUaZkIEPOOCIcrhl33XjHWR5WJKzK2hSuZ++thfRdgf+ UtrZ73w9JWegbYwAAAA==
+X-Change-Id: 20260622-bpf-lskel-fixes-2-758036ae9911
+X-Mailer: b4 0.14.3
+Message-ID: <20260622-bpf-lskel-fixes-2-v1-1-004d72cba5c2@google.com>
+Subject: [PATCH] libbpf: poison unresolved weak kfuncs in light skeletons
+From: Siddharth Nayyar <sidnayyar@google.com>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Giuliano Procida <gprocida@google.com>, Matthias Maennich <maennich@google.com>, 
+	Tiffany Yang <ynaffit@google.com>, Neill Kapron <nkapron@google.com>, 
+	Siddharth Nayyar <sidnayyar@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-From: Tristan Madani <tristan@talencesecurity.com>
+When the light skeleton generator (gen_loader) fails to find a BTF ID
+for a weak kfunc, it correctly clears the immediate value (imm = 0) to
+convert the pseudo kfunc call into an invalid instruction.
 
-Add a verifier test that catches the stale-bounds issue fixed in the
-previous patch. The test sets r6 = 0 to create known bounds, then loads
-the LSM hook return value into r6 from the context. Without the fix,
-the verifier intersects the retval range with the stale bounds and
-incorrectly narrows r6 to a single value, pruning the fall-through
-branch as dead code and missing the div-by-zero.
+However, the generator fails to clear src_reg (which is set to
+BPF_PSEUDO_KFUNC_CALL). This leaves the instruction looking like a valid
+pseudo kfunc call with a zero BTF ID. When the target verifier's
+add_subprog_and_kfunc encounters this, it unconditionally scans all
+BPF_PSEUDO_KFUNC_CALL instructions, sees imm == 0, and panics or
+fails the load (e.g. bpf_unspec#0 or -EINVAL). This entirely breaks
+the verifier's dead-code elimination logic which expects to cleanly prune
+branches protected by bpf_ksym_exists().
 
-Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Tristan Madani <tristan@talencesecurity.com>
+Furthermore, when the generator processes subsequent references to the
+same unresolved weak kfunc, it copies the imm and off fields from
+the first occurrence but skips the src_reg field, meaning subsequent
+calls also retain the poisonous BPF_PSEUDO_KFUNC_CALL flag.
+
+This patch fixes the issue by explicitly clearing src_reg for both the
+initial occurrence and all subsequent occurrences of unresolved weak
+kfuncs, converting them into standard invalid helper calls that the
+verifier's dead-code eliminator can safely recognize and discard.
+
+Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
 ---
- tools/testing/selftests/bpf/progs/verifier_lsm.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ tools/lib/bpf/gen_loader.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_lsm.c b/tools/testing/selftests/bpf/progs/verifier_lsm.c
-index 2f8103bfa14e..c724bf389f5c 100644
---- a/tools/testing/selftests/bpf/progs/verifier_lsm.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_lsm.c
-@@ -197,4 +197,19 @@ int BPF_PROG(sleepable_lsm_cgroup)
- 	return 0;
- }
- 
-+SEC("lsm/file_mprotect")
-+__description("lsm retval load must reset stale register bounds")
-+__failure __msg("div by zero")
-+__naked int retval_load_resets_bounds(void *ctx)
-+{
-+	asm volatile (
-+	"r6 = 0;"
-+	"r6 = *(u64 *)(r1 + 24);"
-+	"if r6 == 0 goto +1;"
-+	"r6 /= 0;"
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
+diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+index d79695f01c87..a08071114347 100644
+--- a/tools/lib/bpf/gen_loader.c
++++ b/tools/lib/bpf/gen_loader.c
+@@ -783,10 +783,17 @@ static void emit_relo_kfunc_btf(struct bpf_gen *gen, struct ksym_relo_desc *relo
+ 		return;
+ 	/* try to copy from existing bpf_insn */
+ 	if (kdesc->ref > 1) {
+-		move_blob2blob(gen, insn + offsetof(struct bpf_insn, imm), 4,
+-			       kdesc->insn + offsetof(struct bpf_insn, imm));
+ 		move_blob2blob(gen, insn + offsetof(struct bpf_insn, off), 2,
+ 			       kdesc->insn + offsetof(struct bpf_insn, off));
++		move_blob2blob(gen, insn + offsetof(struct bpf_insn, imm), 4,
++			       kdesc->insn + offsetof(struct bpf_insn, imm));
++		/*
++		 * jump over src_reg adjustment if imm (btf_id) is not 0, reuse BPF_REG_0 from
++		 * move_blob2blob. If btf_id is zero, clear BPF_PSEUDO_KFUNC_CALL flag in src_reg
++		 * of call insn.
++		 */
++		emit(gen, BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1));
++		emit(gen, BPF_ST_MEM(BPF_B, BPF_REG_8, 1, 0));
+ 		goto log;
+ 	}
+ 	/* remember insn offset, so we can copy BTF ID and FD later */
+@@ -804,10 +811,12 @@ static void emit_relo_kfunc_btf(struct bpf_gen *gen, struct ksym_relo_desc *relo
+ 	}
+ 	kdesc->off = btf_fd_idx;
+ 	/* jump to success case */
+-	emit(gen, BPF_JMP_IMM(BPF_JSGE, BPF_REG_7, 0, 3));
++	emit(gen, BPF_JMP_IMM(BPF_JSGE, BPF_REG_7, 0, 4));
+ 	/* set value for imm, off as 0 */
+ 	emit(gen, BPF_ST_MEM(BPF_W, BPF_REG_8, offsetof(struct bpf_insn, imm), 0));
+ 	emit(gen, BPF_ST_MEM(BPF_H, BPF_REG_8, offsetof(struct bpf_insn, off), 0));
++	/* clear src_reg (and dst_reg) to convert pseudo kfunc call into invalid helper call */
++	emit(gen, BPF_ST_MEM(BPF_B, BPF_REG_8, 1, 0));
+ 	/* skip success case for ret < 0 */
+ 	emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, 10));
+ 	/* store btf_id into insn[insn_idx].imm */
+
+---
+base-commit: e771677c937da5808f7b6c1f0e4a97ec1a84f8a8
+change-id: 20260622-bpf-lskel-fixes-2-758036ae9911
+
+Best regards,
 -- 
-2.47.3
+Siddharth Nayyar <sidnayyar@google.com>
 
