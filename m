@@ -1,74 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5804023643F
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 01:20:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5B722B594
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 01:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782091227; cv=none; b=bb4wKgDStiAdKZVoZ7hQyq/uI5et3wnD9RGCTQc+BKb7utdcyVg8VXefRR/iIecTRoQE52+EtksxyKSsNWpP7x5Q34Wtph2OqnDTARxNL/MMkSDVp+GruEMxAzN5kWmCH1/NbrtrgZvCbr4tW3YXMQTkmxgSof0oxLEHQ9M+eJo=
+	t=1782091284; cv=none; b=URUtfklbTudVn5AcDooQ26GrdslbCmHY+iT3tuoq2tz5HBPri7HUqZLhYzl1PwwVKRiWNyjl5R7FWopng4B7TGqJCD93fYka5kbCZpv/uiiFzwqIDslUWXf3rOAI6iwxzOMxmJqHVdbwmkpmoCwJn+zCSJOVBX0F7XyT0Icjj3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782091227; c=relaxed/simple;
-	bh=El5knFlLWFMkEL3LzuJu+Pdbz1zKoe4HzYlvYYLdVCM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=GmffeRqGADGS2EzEOwExwpjMD7eAz3Cdgy/gCVGvJ0FS6Ihwg12+yZ2Z+k4MLVVEh5jW7ZdUAzl+wsj8O8mFj3QAjLvFjNPRVTWK+ohB7hHUoY3nalc0agTMqZB1/fA7Oimzjlg9xMXw+8XJxBpt1IUM9t8dXTGfW/cjcBO69Dc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X1XiVTH6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782091284; c=relaxed/simple;
+	bh=Jmc1eoXsgZDimuJgTelp6JB8lwcJG7/8AmTws2Cg8RQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T11wOU6GqDwX7LYfSfXm0zPdvAEUOngo3LjftW/wnP+qjDcYADHpKvgiqjaGDoUxIjEhRS9lOvR8xcSKssUE7F9nd8jb63+oj53kkETqdEpaIP+wHkHQK1X0sOgn4wgQ3O9+vKWXfFLjFUBx/J0IK5iOKDHDqzmMDq6NuJmwikc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=T9yoE8hC; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X1XiVTH6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE1801F000E9;
-	Mon, 22 Jun 2026 01:20:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782091226;
-	bh=WWMuUM1gqdoXPA64UHlmr7N5X8ukPgYDfUTkH7UnL9U=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=X1XiVTH6YnXmJYIaKbpJTdqrnH3bondVilifeHBwGz0BdKfRE4ta61/YpzzZq6u7H
-	 kk1YmoccCm+IGkJ1Oz/Asvp+pUDwEQEwVUPFqvnsixVFcpTexrLFj9AWXV9etc7Jdf
-	 41kMRqbNzNXO0HbsRFab4/9bHWdooVbGwnllWs9X4Hii5qTnwlGvfM3uVMen1owLyW
-	 CWUTtH7C0qd2zRMnqH0vEIMWowi8A+VIU89y9Spp6D4klrJefpR9GZ9kLSLi3MlGeo
-	 W2oAwgjr5bLfOoK61+LOP4EV/8Xq5AIWERwKNE93kT/ZvZEB9aXxh/9uRM+JIM7n5X
-	 CL+nY7I5/D+wA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 568E93AAA6EF;
-	Mon, 22 Jun 2026 01:20:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="T9yoE8hC"
+Message-ID: <7791b9cc-86f4-424b-aa1a-d1a869814130@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782091279;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9QpWB7h+OAc4xw9YXh649wA7kd08Md/GJlPTwgijKks=;
+	b=T9yoE8hCwBtPkDuxJ6uCh0Q1MfjVBZ+b2cspeZ+ElPapbtFlxWZhvf5NU1FvY6WWVoE+Xo
+	AP/n0fpxX5T5eSHUiju0lgDpCx/wKZrUyuVXC1XdtH3kAvyFzeuBVTc/NENNlx/95E3xsS
+	s9DRXX+Y7R1qhpgZ9EyM2JENFx8Mnqs=
+Date: Mon, 22 Jun 2026 09:21:04 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpf: Fix BPF_PROG_ASSOC_STRUCT_OPS last field check
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178209121702.561199.16045263806045910621.git-patchwork-notify@kernel.org>
-Date: Mon, 22 Jun 2026 01:20:17 +0000
-References: <20260618040934.4113938-1-tweek@google.com>
-In-Reply-To: <20260618040934.4113938-1-tweek@google.com>
-To: =?utf-8?q?Thi=C3=A9baud_Weksteen_=3Ctweek=40google=2Ecom=3E?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org
+Subject: Re: [PATCH net] net, bpf: check master for NULL in
+ xdp_master_redirect()
+To: Xiang Mei <xmei5@asu.edu>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org
+Cc: John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
+ Jussi Maki <joamaki@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
+ Weiming Shi <bestswngs@gmail.com>
+References: <20260620201531.180123-1-xmei5@asu.edu>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260620201531.180123-1-xmei5@asu.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
 
-This patch was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+On 6/21/26 4:15 AM, Xiang Mei wrote:
+> xdp_master_redirect() dereferences the result of
+> netdev_master_upper_dev_get_rcu() without a NULL check, but that helper
+> returns NULL when the receiving device has no upper-master adjacency.
+>
+> The reach guard only checks netif_is_bond_slave(). On bond slave release
+> bond_upper_dev_unlink() drops the upper-master adjacency before clearing
+> IFF_SLAVE, so an XDP_TX reaching xdp_master_redirect() in that window
+> still passes netif_is_bond_slave() while master is already NULL, and
+> faults on master->flags at offset 0xb0:
+>
+>    BUG: kernel NULL pointer dereference, address: 00000000000000b0
+>    RIP: 0010:xdp_master_redirect (net/core/filter.c:4432)
+>    Call Trace:
+>     xdp_master_redirect (net/core/filter.c:4432)
+>     bpf_prog_run_generic_xdp (include/net/xdp.h:700)
+>     do_xdp_generic (net/core/dev.c:5608)
+>     __netif_receive_skb_one_core (net/core/dev.c:6204)
+>     process_backlog (net/core/dev.c:6319)
+>     __napi_poll (net/core/dev.c:7729)
+>     net_rx_action (net/core/dev.c:7792)
+>     handle_softirqs (kernel/softirq.c:622)
+>     __dev_queue_xmit (include/linux/bottom_half.h:33)
+>     packet_sendmsg (net/packet/af_packet.c:3082)
+>     __sys_sendto (net/socket.c:2252)
+>    Kernel panic - not syncing: Fatal exception in interrupt
+>
+> The missing check dates back to the original code; commit 1921f91298d1
+> ("net, bpf: fix null-ptr-deref in xdp_master_redirect() for down master")
+> later added the master->flags read where the fault now lands but kept the
+> unconditional deref. Check master for NULL before use; a NULL master is
+> treated the same as one that is not up.
+>
+> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
+> Reported-by: Weiming Shi <bestswngs@gmail.com>
+> Assisted-by: Claude:claude-opus-4-8
+> Signed-off-by: Xiang Mei <xmei5@asu.edu>
+> ---
+>   net/core/filter.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 40037413dd4e..6037860d5283 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -4430,7 +4430,7 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
+>   	struct net_device *master, *slave;
+>   
+>   	master = netdev_master_upper_dev_get_rcu(xdp->rxq->dev);
+> -	if (unlikely(!(master->flags & IFF_UP)))
+> +	if (unlikely(!master || !(master->flags & IFF_UP)))
+>   		return XDP_ABORTED;
 
-On Thu, 18 Jun 2026 14:09:33 +1000 you wrote:
-> When struct prog_assoc_struct_ops was added,
-> BPF_PROG_ASSOC_STRUCT_OPS_LAST_FIELD referenced prog_fd instead of the
-> actual last field, flags.
-> 
-> Fixes: b5709f6d26d6 ("bpf: Support associating BPF program with struct_ops")
-> Signed-off-by: Thiébaud Weksteen <tweek@google.com>
-> 
-> [...]
 
-Here is the summary with links:
-  - bpf: Fix BPF_PROG_ASSOC_STRUCT_OPS last field check
-    https://git.kernel.org/bpf/bpf/c/8405c4626460
+I recall that when I previously modified this code, I removed the 
+!master check
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+because this is on the fastpath. However, since this is a triggerable bug,
+I think adding it here is fine.
 
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
