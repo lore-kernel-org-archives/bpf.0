@@ -1,58 +1,60 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5023321B191
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 23:01:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5321643B
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 23:01:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782169287; cv=none; b=Ukm7kUNTQxxL3+PiDyz8Yh+KamQ54Obsf+plFlfrgSF1LuMzbK6nLXy4q8Fmh1srrmo1v1HRt4sd9xB776mGY55JpTMI9qdirSBIAkHj2RpbkQNSOF/d1mWxC4L9Iyxy3WKabZCvHFC28q76MjP4QpJxS5WCXeu1B9x4BcCO0ec=
+	t=1782169288; cv=none; b=NwhEBMKhW5Ch5aNInqpWpD9oWMhNh/cYdCwneWLtcJLKC/M3zdlLvb6hgXQZ3S5QvabQzTVgFiVztL0/X5HFYx6k31Qj1JQsIQza1iWH4T5vfY63eCXh8GYR29y/B5aslRsYE8tSo02tbUsimtOpxx8gVVGDapxVGXoAHm2Jc74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782169287; c=relaxed/simple;
-	bh=3JBxGBnmq2p2FDhnDtI4+aT0V6p9eLbBXeAWbVZXxEk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NVqTehNEBZM78eUzZ1ypxzmDleCK9QQHVsednvx3SOCfC0SK52cUOw0dMR+4WeUNz9YEwxoK8XDvpc7DcdcV5H0w9NUPZZMJVaxdLg3QQQQICfqAnBp2H81QQPWNbTsu/SZUYMR+ICKURPq2x+WWnxrS7Q/OHHIHTKJWW2TMuBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dhXwrePV; arc=none smtp.client-ip=209.85.128.51
+	s=arc-20240116; t=1782169288; c=relaxed/simple;
+	bh=M6hXi84S5gmVIUuWj+KozD+bYt5YW3hsLAnkoVvRJf0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=l6C4T/Enic9TnuCVzIOhe11FSgQX9uXez91fvskn2eSoYht1o3kwBQw0obPWtIu3fOKlmPYnoSnBUx4dIWYPqTjV3KffedK+ovnJcYW0623Phpi6Cr6J8xsV9pTROiwb51iEdq9V/Zup62YTU/DzNZx243RMwr/nEpgw38EqKIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=siuOBNh8; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dhXwrePV"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-492329c5514so1624075e9.1
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 16:01:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="siuOBNh8"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4924f8db066so11606265e9.2
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 16:01:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782169285; x=1782774085; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8raFnbe3ZmeHv8tNWRCnm2r9ziZZ3BplUai93sgg1aI=;
-        b=dhXwrePVrgWJMf7swRp3i6C6yO+u2zGdcKDz78TNmC/kQkjWoshMQMIAVdXBzalLdx
-         AIdI9p4tHT+ixmNpPg6EmcRKqU+P1FOWDSc0HcQ0KiyemwMqXmww67JbtUirTA+iTlR9
-         795HT62uRbQmUxt5TxIpagalXgJQ3AccDwsJyaiH71Mef2yrNKY4goAULFLGCe/DnfjO
-         5rOLccpftkTdBWbbzEQrGF49lrJI0CQWnFyPPml4oUFzl64u/b0ZJuuKaKxs0cOfANu8
-         bR7CsokQWPRdIIaC+p8lv8dBG/n2sYmH08YZRxzW7zVwA2BJ6clfqxJIKSLEBeVBtWdU
-         4oBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782169285; x=1782774085;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1782169286; x=1782774086; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8raFnbe3ZmeHv8tNWRCnm2r9ziZZ3BplUai93sgg1aI=;
-        b=LaVts/raj4ic7kfPRAPmJyZDEyzRYlKRTzxvP/kqw0QgmuXJV85WTkqy1MNI3+++n8
-         uVRA/CqglDVLZspxgAOQWD58fik6joKHrxbcSsDNj7t55N4IGe7z+mnfzLCMkPp/nJ17
-         j6Am1F/J+Y0hiMrallKbM2kTeT8QwsZt+myfAgqiDmxCSifErkw05yuFbQyT7q6FOPpD
-         SF7GKtHp4ukrIZxx9ROEARA0kKqLhD3+1xYmctzDhqrioPV4CC7b0iEY2/TbUoc0U4z7
-         CXCJan7qoPrN7Ixq3GU0fVJdmLW1CYJJaW4kKR6bz+YPJY1bXHC2askb+OBp2SW+ehQ0
-         MBww==
-X-Forwarded-Encrypted: i=1; AFNElJ9B6W82MpR1b0IWhfrkWo1TZBTR5Vog0mSUP4inrkHLWuDfahELxpDEsu0edfYr57lviqU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4+U11y5L097JO37J1nSfOf6laVU1EigUYVWI56TbWWJfeL1iV
-	5cScvQAAU9IkyBQo676gIg6z1/qVdd6M1tcAoMwMyP9dgnn3kPnQdpA=
-X-Gm-Gg: AfdE7cnknHUILw2Q1Tk5A0t46x35psPsEAFZW/yNPsgFkm/DBj4iMQfQuSLk+swLy7k
-	INVu4lgXyWCdkdkolZBD4CDvE0UnxIOqQED4g1ezbYJqPh6aZ4vh8uEKIxKmu0v838u/THhu1Bn
-	lZPn3gKuEG7imUCEEX0NOQFn0W/fQs6o34zazSDgDwItbwnvsxhII2iNdHKPa3E7tQ0oZ6n4kWA
-	h5FZp0V75Atv+d0zN2V0mSErVB/oUrxGyKyHGh0+dILQnkNDSRPkslEJUn7PmYi9iejMgq5bkBM
-	f6pTrTD+8a7Qpaor0X9rab6JN9U/vpSvTpDqFDvwM0jgVAr2IYSROKrxbYphajfm3TwfDXqKeRX
-	mnc3g1RL4Oaae6FR+86VNbK2gKx2YuiYWSzOcjcN2Q09vktS/S0kApzmUK3uBj6uHkjPQ
-X-Received: by 2002:a05:600c:3e0a:b0:489:32b:ac0b with SMTP id 5b1f17b1804b1-4925a0a9ad9mr16515335e9.6.1782169284668;
-        Mon, 22 Jun 2026 16:01:24 -0700 (PDT)
+        bh=gl7x5/Ly0sc1rwSAjd0rqRNSTSQbeRuLQa2LMGScITQ=;
+        b=siuOBNh8g0yWlcpVkpkGAcldwx1oAYYM2L8BeAQCS8RkgvQY/jDfo23ANv3MV2Jy+6
+         Ucv2Vs/EcZqAENPWHGSUpM57CTNR1tAvq48HgF6W6v8EbEU6e15LNm0e+UBhrqEu4PrX
+         2piNXHSN6wmpEa6lBwarP67fMzKUM8SBHk4bFc5aE5PcqQEWfxNfZiVaVH6l+tKXpW1/
+         YcVslVgWIh7ttehfaGFAWL2GpzU+L+v1wJz8hVzvEDN0oWieSBPgpZdxCH7evn7k/K3+
+         oZOVXLpmLQDaRm1z5cl8PQi+4U2YG1DNKjnoe05fjFid9pFzn7ve3Dy3qtSs8EP/C6kY
+         dhRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782169286; x=1782774086;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=gl7x5/Ly0sc1rwSAjd0rqRNSTSQbeRuLQa2LMGScITQ=;
+        b=CRAI6D5furuL1/yf2XCXArq9CjMgulWCtRUB9lIvoU34P2kj6JZViX/PzVJpjBY3Pg
+         fSBChzxsh4skwtjYXacWzp5+RaQhV1qB7UjpNkglu62DM/8XkO4Vo/CO5DELrGTEX/AX
+         enRkTrP5ngIWqSc854+hZv/G9ZCSwOaxoOQKRdkLzX+lRD5tn9foCeankRAMUau0diZ0
+         08g5vr6uEC0RUFJAOCg7s7hniqq5pDSExFYWLJFVW7YCCPzsIR8jLGuZO6BOoHH9rLVE
+         xVNcL8Njn4A10CW6XvoZoYZLltKyNsEgnLPZO0aOXydLwGrC3Gy2QITJ+wbGYMPDSG3K
+         N86A==
+X-Forwarded-Encrypted: i=1; AFNElJ9P74V8ysUTfzdPsMDe2oGsjwBNtCNwago3B5DaoFW6QXiVN5pvtx/xX6j5bru8I971qCo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPBm4CgQk5LtAFYRtK0gcqwotWGsa19L1lB0Bq3bxHLKfxbdjw
+	XJD7TCFa0V3wi4M4TWnZdZcOAlQMjXfopGvDGg9WnmCUYjM33+LyeCw=
+X-Gm-Gg: AfdE7ck2/CeqtxQycBJvhV9R58WwyINjf9oNJPAoz/t/p0QUK0T3OMnnxTLe4yUeaHF
+	LW2rnb1lWId9AldoESNezWnsZvKI1060jgg5hBas+vt06FJXRu3RU8+a64okaYMVxngBkS600te
+	WjTGLtbZAfrzsoOHyoRltkLcBSAGZuSqt7rHIwxe1I78z+zPXQB/5UhnRWr1kjDGi7ZeV2Gy2PJ
+	miF9OVCojQt1RcfKa9WYDQoHPFGf+IVpSxVlsWud1UVwUGM/3HAa5lYz1xjf/z3OD/v7Zs9AQyW
+	bGqQl/tPUApYFAAlMwrcvkMmozJnEx0fEvEu7XEgJzjbotrnbMTqp8kmgz7N2rTx8uw/dKCT0lv
+	ubZ17LzW0US4xxVIz/uY8jyKAbXWfftcJk5Qez0+lRX7/r5TKMabrGqL3TA==
+X-Received: by 2002:a05:600c:8b77:b0:492:4911:8a with SMTP id 5b1f17b1804b1-4925b35a0f9mr2465495e9.12.1782169285687;
+        Mon, 22 Jun 2026 16:01:25 -0700 (PDT)
 Received: from debian.. ([2001:41d0:303:db6b::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4923fd1fa34sm371339255e9.5.2026.06.22.16.01.23
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4923fd1fa34sm371339255e9.5.2026.06.22.16.01.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 22 Jun 2026 16:01:24 -0700 (PDT)
 From: Tristan Madani <tristmd@gmail.com>
@@ -67,10 +69,12 @@ Cc: Eduard Zingerman <eddyz87@gmail.com>,
 	bpf@vger.kernel.org,
 	stable@vger.kernel.org,
 	tristan@talencesecurity.com
-Subject: [PATCH bpf v3 0/2] Fix stale register bounds on LSM retval context load
-Date: Mon, 22 Jun 2026 23:01:21 +0000
-Message-ID: <20260622230123.3695446-1-tristmd@gmail.com>
+Subject: [PATCH bpf v3 1/2] bpf: Reset register bounds before narrowing retval range in check_mem_access()
+Date: Mon, 22 Jun 2026 23:01:22 +0000
+Message-ID: <20260622230123.3695446-2-tristmd@gmail.com>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260622230123.3695446-1-tristmd@gmail.com>
+References: <20260622230123.3695446-1-tristmd@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,24 +85,42 @@ Content-Transfer-Encoding: 8bit
 
 From: Tristan Madani <tristan@talencesecurity.com>
 
-check_mem_access() calls __mark_reg_s32_range() to narrow a register to
-the LSM hook retval range, but the intersection preserves stale bounds
-from prior instructions. Add mark_reg_unknown() before narrowing (same
-pattern as the else branch) and a selftest that catches the mismatch.
+When the BPF verifier processes a context load of an LSM hook return
+value, it calls __mark_reg_s32_range() to narrow the register to the
+hook's valid range. However, __mark_reg_s32_range() intersects the new
+range with the register's existing bounds using max_t()/min_t() rather
+than replacing them.
 
-Changes in v3:
-- Add selftest demonstrating the issue (Eduard Zingerman)
-- No code change in patch 1 from v2
+If the destination register carries stale bounds from a prior instruction
+(e.g. BPF_MOV64_IMM), the intersection can produce a range narrower than
+reality. The verifier then believes it knows the register's exact value,
+while at runtime the actual hook return value is loaded, creating a
+verifier/runtime mismatch that can be used to bypass BPF memory safety
+checks.
 
-Tristan Madani (2):
-  bpf: Reset register bounds before narrowing retval range in
-    check_mem_access()
-  selftests/bpf: Add test for stale bounds on LSM retval context load
+The else branch already calls mark_reg_unknown() to reset register state
+before any narrowing. Apply the same reset in the is_retval path so
+stale bounds are cleared before __mark_reg_s32_range() intersects.
 
- kernel/bpf/verifier.c                            |  1 +
- tools/testing/selftests/bpf/progs/verifier_lsm.c | 15 +++++++++++++++
- 2 files changed, 16 insertions(+)
+Fixes: 5d99e198be27 ("bpf, lsm: Add check for BPF LSM return value")
+Cc: stable@vger.kernel.org
+Signed-off-by: Tristan Madani <tristan@talencesecurity.com>
+---
+ kernel/bpf/verifier.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index a2b348f98080..21a365d436a5 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6201,6 +6201,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
+ 			 */
+ 			if (info.reg_type == SCALAR_VALUE) {
+ 				if (info.is_retval && get_func_retval_range(env->prog, &range)) {
++					mark_reg_unknown(env, regs, value_regno);
+ 					err = __mark_reg_s32_range(env, regs, value_regno,
+ 								   range.minval, range.maxval);
+ 					if (err)
 -- 
 2.47.3
 
