@@ -1,150 +1,135 @@
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DBA0347FE1
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 19:03:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
+Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.38])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4F4C349B1F;
+	Mon, 22 Jun 2026 19:39:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.80.4.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782155036; cv=none; b=t7lkYsC9uM4SmOLmh9XxrEyK2RkWPKB5BRdn5iVF//sl3s0ONOIsgcm2sngosXAzUHliaoHUKk/5T4GkzfiGlnrkKmb7TrsA12dvcXpQEzP1jBSwIKLPl3hHtLVrBYlWrKEeJ6fY73uocbmDuKDMHKu0N0wAKdE2Aw+4Zv2jmGM=
+	t=1782157165; cv=none; b=LMLSE3yqgidCo14m2N/HGpw5B+7/d+V+opsy2CreZEON4kohiJXuEw25v/rt/WlnEOF1vJ9zQOeTxo5d5hY/3U7JEU18lJkDrBMWzMkkHbY2mR3X667jPExBmbOZvsv6rlEAUcxwEE0xPEZ8Guv+tBThGzyvkLbSqopnfo20Haw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782155036; c=relaxed/simple;
-	bh=uM6rjwv+rWrcNEl8KjTKnVcDSG3oUNpsPUMqnFOcLeE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PdhP0mbb7Bt6kl/eOrcP/054iSE/N1T3otV7WefP3qpblwzbs6r0eoInL4pWnQ4N0l2/RsU2Rl9Xde+HiW5/cscOLm7KkDVyOu/dw7mJuQSiG7JHKg5mBdaGyis4utNUTe3jo+JEPCEPkekS1edQpO0XxTrhaTCRSx1QWV37lsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LFiZE21b; arc=none smtp.client-ip=74.125.82.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782157165; c=relaxed/simple;
+	bh=KXzvtIZAttyKcEUFWqV4fPB6Epwr2+B3Qzu2JEI8KjQ=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Ae/peinlq398Mhrw4x4z+ELk1NLAXeGIEi7FomdEz8JssB+8fj16J18WbEG6qFe1p+DYlxqEKs1eOrVUdHfVsrMkBAUvyGxaYINjjOFkqm6T4aOCX3O5vIsdqvgNWKRoX5UxCmHTbKZPprSY85Df9mIxTtaHVo7wyHi0LeqgGcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=+lPOqnqy; dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=nQIS70fJ; arc=none smtp.client-ip=160.80.4.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LFiZE21b"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-3042a388168so186229eec.1
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 12:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782155033; x=1782759833; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=uM6rjwv+rWrcNEl8KjTKnVcDSG3oUNpsPUMqnFOcLeE=;
-        b=LFiZE21bJOd27mvhUeQY65zQorGfroSNylZhnl5pr3qjxqG/eN1p6cReYMi7Y8XHb0
-         7P2yUKScTc7SL9KBMwdl8WT1nEKnGZf9ur45NKJJuEmRNsVr4TarSwghnJCBC39U5FT/
-         hbLMbAuZB7Uhid7P768tqQ5oB5rNa0UgEghjqL8I6E/OiecFdkW7XXJUCVzAvM2Bcvqj
-         aAAg70ofC8G+A3+uW7Vx2nk3e0tc12ATFJvEbWA6+4EjPe4CrUqJXP2Emg2HT57KZ67b
-         LsX6aiKqdjYFThFXLMKvM5eHENHiOf+kS4D8rdkQabgcObx3aWN/R9FVWrU0LGgqTlRe
-         mYGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782155033; x=1782759833;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uM6rjwv+rWrcNEl8KjTKnVcDSG3oUNpsPUMqnFOcLeE=;
-        b=U/X8glYo1sJFK0WDpPqgMxlLfaqenEifvRDp4VdlYgcN+rImoSfp6LycdoE7YsWlkx
-         dcEP4LOVknqxKYj4RkBk6eVhsHIupthNDX87qK9fhjARQU7zn6zpDJ88V18jRzh+IBKz
-         ZW2yixQnwh/ovlvAYrA2NqDSZNCSIL0IMg1suhkXBylrobCa2jnKBnI2hotvBCOk8b8t
-         eSJPjEaDhI70Kyh0en1FDBrqAsOsspYyw5FaGATJ8Y99TWIL/AJzkaIQx3LwL+3Q9H1q
-         Zz90kc5Nkc6fZdIqk0j8E81fyqvAmp5TlkSJXor15OiaM6oCIiQ7S+VzHw5Ybq8Fyx+T
-         S5IA==
-X-Forwarded-Encrypted: i=1; AHgh+Rqq5hKiAoQA04ca9Wr3xv4xvU9usQwMvIxikru8CprOj9sSzsHbDo7ZySuF+/3LMpG9V1I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxP+E1rYZntq8dIyC6uT3qXqhyfXZD8OHkA5OIMMDe6FVxSUeak
-	OJXosUWZdgz9DAIT78oHatOQxPeBIo5zwC6NmNShjfjye/QQy1bzXBqL
-X-Gm-Gg: AfdE7clAVwm2Elphmj5+qR4lACzGMwL+k/R028ElGj8hFlOZKZOoGmrfMZ1IHrtNKam
-	mV/JdDGxh6+IpFkqQsEveBs2K4b4rKUaDhz3A2hcUaGVXo260asK2BC+ncr9lM+J+mYi6Lq24fv
-	LO7hZ7/K2vE1Gmt2bshE4yUmqhQR5ERgEb2Ze3lKNk4TGOFYCTa9nlX5fUWzo99rOIit/b4frs2
-	crOt1fUovOv3r8U1QLGQfTMdbMpIVE105V7Fg5n83kI3VXMjqzcoDmUDzZ+tcytrky/Uv1E0xOs
-	AcV8Mc9pPk+dVJeDC6ieSMwugf0m+tj01A5ROxPCSCX43cNI70cQKBPeVZUpV62m592Hx+n28t0
-	9U/0MK5vNoOOlPOAK8t2XL+HKszjtWTXlkZ0IYU14b0MjTJv3jsOEqjU2j1N2msu8+NfaUN0u5u
-	5XkgQbZaO9mEv8u1UPuCeyefVpAcQrC0w0OTg08ZOkfmU/SZcPwoYwlwIpLLrMn9n6bGk=
-X-Received: by 2002:a05:693c:2887:b0:30b:cc4e:6396 with SMTP id 5a478bee46e88-30c5553b105mr382073eec.7.1782155033135;
-        Mon, 22 Jun 2026 12:03:53 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:6e2:c699:67c:63fe? ([2620:10d:c090:500::1:5387])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1be4967fsm10549199eec.26.2026.06.22.12.03.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2026 12:03:52 -0700 (PDT)
-Message-ID: <1979fc81ae7bdaabda8616cd9698a40ef8bbfaee.camel@gmail.com>
-Subject: Re: [PATCH v3 5/7] kernel: Use mutable list iterators
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kaitao Cheng <kaitao.cheng@linux.dev>, Paul Moore <paul@paul-moore.com>,
-  Eric Paris <eparis@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann	 <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, "David S.
- Miller" <davem@davemloft.net>, Jakub Kicinski	 <kuba@kernel.org>, Jesper
- Dangaard Brouer <hawk@kernel.org>, John Fastabend	
- <john.fastabend@gmail.com>, Tejun Heo <tj@kernel.org>, Johannes Weiner	
- <hannes@cmpxchg.org>, Michal =?ISO-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>, 
- Maarten Lankhorst	 <dev@lankhorst.se>, Maxime Ripard <mripard@kernel.org>,
- Natalie Vock	 <natalie.vock@gmx.de>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar	 <mingo@redhat.com>, Arnaldo Carvalho de Melo
- <acme@kernel.org>, Namhyung Kim	 <namhyung@kernel.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Oleg Nesterov	 <oleg@redhat.com>, Peter
- Oberparleiter <oberpar@linux.ibm.com>, Andrew Morton	
- <akpm@linux-foundation.org>, Baoquan He <baoquan.he@linux.dev>, Mike
- Rapoport	 <rppt@kernel.org>, Pasha Tatashin <pasha.tatashin@soleen.com>,
- Pratyush Yadav	 <pratyush@kernel.org>, Naveen N Rao <naveen@kernel.org>,
- Josh Poimboeuf	 <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
- Miroslav Benes	 <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, Will
- Deacon <will@kernel.org>,  Boqun Feng <boqun@kernel.org>, Luis Chamberlain
- <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,  Daniel Gomez
- <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Steffen
- Klassert	 <steffen.klassert@secunet.com>, Daniel Jordan
- <daniel.m.jordan@oracle.com>,  "Rafael J. Wysocki"	 <rafael@kernel.org>,
- Davidlohr Bueso <dave@stgolabs.net>, "Paul E. McKenney"	
- <paulmck@kernel.org>, Josh Triplett <josh@joshtriplett.org>, Frederic
- Weisbecker <frederic@kernel.org>, Neeraj Upadhyay
- <neeraj.upadhyay@kernel.org>, Joel Fernandes	 <joelagnelf@nvidia.com>,
- Uladzislau Rezki <urezki@gmail.com>, Juri Lelli	 <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>, Kees Cook <kees@kernel.org>,
- Balbir Singh <bsingharora@gmail.com>, Anna-Maria Behnsen	
- <anna-maria@linutronix.de>, Thomas Gleixner <tglx@kernel.org>, John Stultz	
- <jstultz@google.com>, KP Singh <kpsingh@kernel.org>, Matt Bobrowski	
- <mattbobrowski@google.com>, Nathan Chancellor <nathan@kernel.org>, Martin
- KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>,  Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Dietmar Eggemann
- <dietmar.eggemann@arm.com>, David Vernet	 <void@manifault.com>, Steven
- Rostedt <rostedt@goodmis.org>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, 	netdev@vger.kernel.org, cgroups@vger.kernel.org,
- dri-devel@lists.freedesktop.org, 	linux-perf-users@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, 	kexec@lists.infradead.org,
- live-patching@vger.kernel.org, 	linux-modules@vger.kernel.org,
- linux-crypto@vger.kernel.org, 	linux-pm@vger.kernel.org,
- rcu@vger.kernel.org, sched-ext@lists.linux.dev, 	llvm@lists.linux.dev,
- Kaitao Cheng <chengkaitao@kylinos.cn>
-Date: Mon, 22 Jun 2026 12:03:46 -0700
-In-Reply-To: <20260622042811.31684-1-kaitao.cheng@linux.dev>
-References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
-	 <20260622042811.31684-1-kaitao.cheng@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="+lPOqnqy";
+	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="nQIS70fJ"
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 65MJXMAD014072;
+	Mon, 22 Jun 2026 21:33:28 +0200
+Received: from lubuntu-18.04 (host-87-20-62-86.retail.telecomitalia.it [87.20.62.86])
+	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id AB73F1208DB;
+	Mon, 22 Jun 2026 21:33:17 +0200 (CEST)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
+	s=ed201904; t=1782156797; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Pr3an2wgYQSi7AarT7nB9dLtZRX7n36XJpJJA0kYbMc=;
+	b=+lPOqnqyi6sNTSbMQKHyMI1M0rIsuWQreXimUpWyPbGjoMhnI45ZrYwzzHYbzPhkXfMSmq
+	jFEvP5Ualuppa6Cg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
+	t=1782156797; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Pr3an2wgYQSi7AarT7nB9dLtZRX7n36XJpJJA0kYbMc=;
+	b=nQIS70fJfKpaWaRqc7xgLUGfyfUV2CIEP/Ob52JQk6iBGdTLuUKFsy+qdeO/O4wUJ+vkAI
+	ojfU0I9PlW0JUceTAQNNc4xsMswPgmMhyWctAuxoZbb/PbDE7xnT5P/uuvII/Gof7v53b5
+	k8v+Gok0dqHWKoPO4IqJfkp1w+qGlG1kUP9lv03EalJQ20P9pR1vS3STtIFlfz+9D8Hu8i
+	CV+xXNLp+EG3NVE0XUzTWJccWBWyn18V7s9EB4rTFZI5pD6zVeOenRbxHeS8il2b2trh79
+	XTPQLUD8d+mCB+ds+Ua5gw2hyack7jcaiShMTcQUeKbwCPa2aRk0RigLPfF4BA==
+Date: Mon, 22 Jun 2026 21:33:17 +0200
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Cc: "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stefano.salsano@uniroma2.it,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+Subject: Re: [PATCH net] seg6: validate SRH length before reading fixed
+ fields
+Message-Id: <20260622213317.52c8b5a38b88d4ccc3849e22@uniroma2.it>
+In-Reply-To: <20260620-f01-17-seg6-srh-len-v1-1-36cbb29c12f1@mails.tsinghua.edu.cn>
+References: <20260620-f01-17-seg6-srh-len-v1-1-36cbb29c12f1@mails.tsinghua.edu.cn>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 
-On Mon, 2026-06-22 at 12:28 +0800, Kaitao Cheng wrote:
-> From: Kaitao Cheng <chengkaitao@kylinos.cn>
->=20
-> The safe list iteration helpers require callers to provide a temporary
-> cursor even when the cursor is only used internally by the loop. This
-> leaves many functions with otherwise unused variables whose only purpose
-> is to satisfy the old iterator interface.
->=20
-> Use the mutable list iteration helpers for those cases. The mutable
-> helpers keep the same removal-safe traversal semantics, while allowing
-> the temporary cursor to be internal to the macro when the caller does
-> not need to observe it.
->=20
-> Convert list, hlist and llist users under kernel/ where the temporary
-> cursor is not used outside the iteration. Keep the explicit cursor form
-> where the next entry is still needed by the surrounding code.
->=20
-> No functional change intended.
->=20
-> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+On Sat, 20 Jun 2026 23:55:51 +0800
+Nuoqi Gui <gnq25@mails.tsinghua.edu.cn> wrote:
+
+Hi Nuoqi,
+Thanks for the patch.
+
+> seg6_validate_srh() reads fixed SRH fields such as srh->type and
+> srh->hdrlen before checking that the supplied length covers the fixed
+> struct ipv6_sr_hdr fields.  Callers that pass a length smaller than
+> sizeof(struct ipv6_sr_hdr) therefore expose those reads to memory
+> outside the validated range.
+>
+> The BPF SEG6 encap path (bpf_lwt_push_encap() -> bpf_push_seg6_encap())
+> is one such caller: it forwards a BPF program-supplied pointer and
+> length straight to seg6_validate_srh() with no minimum-size guard, so a
+> 2-byte SEG6 encap header lets the validator read srh->type at offset 2
+> beyond the caller-supplied buffer.
+
+Besides the BPF use case, is there a caller that can reach it with
+len < sizeof(*srh)? The ones I found all pass at least the fixed header.
+
+>
+> Reject lengths shorter than the fixed SRH at the top of
+> seg6_validate_srh(), before any field is read.  This fixes the BPF helper
+> path and hardens the common validator for any other caller that reaches it
+> with a too-short SRH.
+>
+> Fixes: fe94cc290f53 ("bpf: Add IPv6 Segment Routing helpers")
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 > ---
+>  net/ipv6/seg6.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/net/ipv6/seg6.c b/net/ipv6/seg6.c
+> index 1c3ad25700c4c..d2cb32a1058af 100644
+> --- a/net/ipv6/seg6.c
+> +++ b/net/ipv6/seg6.c
+> @@ -29,6 +29,9 @@ bool seg6_validate_srh(struct ipv6_sr_hdr *srh, int len, bool reduced)
+>       int max_last_entry;
+>       int trailing;
+>
+> +     if (len < (int)sizeof(*srh))
+> +             return false;
+> +
 
-Beside the fact that this does not apply,
-I don't see a reason why is this needed for BPF sub-tree.
+The (int) cast only changes the result when len < 0, which is not a meaningful
+byte length. Plain "len < sizeof(*srh)" would be enough.
 
-[...]
+>       if (srh->type != IPV6_SRCRT_TYPE_4)
+>               return false;
+>
+>
+> ---
+> base-commit: 96e7f9122aae0ed000ee321f324b812a447906d9
+> change-id: 20260619-f01-17-seg6-srh-len-a85f35427e0b
+>
+> Best regards,
+> --
+> Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+>
+
+Regards,
+Andrea
