@@ -1,44 +1,44 @@
-Received: from cvsmtppost03.nmdf.navercorp.com (cvsmtppost03.nmdf.navercorp.com [114.111.35.182])
+Received: from cvsmtppost01.nmdf.navercorp.com (cvsmtppost01.nmdf.navercorp.com [114.111.35.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5ABF37881E
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 07:47:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.111.35.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C652B36F91C
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 07:47:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.111.35.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782114446; cv=none; b=pvOIUBZ6E4UrDrEOv5uRfwfZJZC2uIe7IV7fGaGubDta2/uFXfCRK6diS4BsVOcDXggbsU+EgskNEiHuSH5qqKkbHHkk+fjZ9iwpw9AKMC7ZHwMgGCxWzTg/R/KThm3X8T8q6OFRLdvnylmPCxm7ZyQNbLZYf06DDKPwyHnBVBQ=
+	t=1782114449; cv=none; b=M14JOqEqdJB2bTOZRqqUg1njyx5FO+i+c6p4pREOXOiVQI6p9kjE9H2U8Ic6Ut1tetx6ukS+0ubUcNO9HkCeJjwDNfTqOtRr7Rb5f0jLDu/tb3OR1u1EOJnfc8eJm9lHFkaeodifdF9iFnb8QAPhGH22+jC4tN9SwgrnMOw9ypc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782114446; c=relaxed/simple;
-	bh=z/cFibn1bQGfsWd6sEKBUE+7Caj17UOCdL5MGEGC7kI=;
+	s=arc-20240116; t=1782114449; c=relaxed/simple;
+	bh=mjmw6ab1USiMlNDTYflqoideVRVwKJWagHj67KUCJOU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kKf+nskkyiQyUqBvoNJ9djuzSgW8ctdQDuRAd/UJH37sFX/ORkKStdU+7//GaS/c0OvClbkfYkeNcWogGz0JXUmD0yErG42mHN18AjwyFdJK2/cr6O453xTCwORGxPkNaMfinNRPZopDAK+q7jXgSHIHaNzgftHzzDZD5kTQpFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=navercorp.com; spf=pass smtp.mailfrom=navercorp.com; dkim=pass (2048-bit key) header.d=navercorp.com header.i=@navercorp.com header.b=XzFNAfSD; arc=none smtp.client-ip=114.111.35.182
+	 MIME-Version; b=dF/+6BY4O3ALg+L7qZzVAt700R4gVLNIT7EF2zrO4t5D+PrYqNhK+YcU5LtdCE5Qb2Es0dQVGSiSwUdL80gZxHmIVakZVYQQYd4CnUaEX4fIs5pO7qqi2EXKzAyOIiEIXQ7UNjpw6mtvVPL6+TcKDuic2qlYIQ84s0MdmRfDKEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=navercorp.com; spf=pass smtp.mailfrom=navercorp.com; dkim=pass (2048-bit key) header.d=navercorp.com header.i=@navercorp.com header.b=jvjm2ZSh; arc=none smtp.client-ip=114.111.35.57
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=navercorp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=navercorp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=navercorp.com header.i=@navercorp.com header.b="XzFNAfSD"
-Received: from kr0m-real-1 ([10.111.46.243])
-  by cvsmtppost03.nmdf.navercorp.com with ESMTP id xaV66ESAQNySU9+5v+7svQ
+	dkim=pass (2048-bit key) header.d=navercorp.com header.i=@navercorp.com header.b="jvjm2ZSh"
+Received: from kr0m-real-2 ([10.111.46.243])
+  by cvsmtppost01.nmdf.navercorp.com with ESMTP id F8twi8o0SEKKK5o8ydp8rw
   for <bpf@vger.kernel.org>;
-  Mon, 22 Jun 2026 07:17:00 -0000
+  Mon, 22 Jun 2026 07:17:04 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=navercorp.com;
-	s=s20171120; t=1782112620;
-	bh=z/cFibn1bQGfsWd6sEKBUE+7Caj17UOCdL5MGEGC7kI=;
+	s=s20171120; t=1782112624;
+	bh=mjmw6ab1USiMlNDTYflqoideVRVwKJWagHj67KUCJOU=;
 	h=From:To:Subject:Date:Message-Id:From:Subject:Feedback-ID:
 	 X-Works-Security;
-	b=XzFNAfSDINkgVOtcSzL5N1DM46z1VUWWquk/P7H/CarqT7yTrV8KvGZznQ80DDtCH
-	 h/hav4Y1lbW7BucmFWIufp3SOuw4MeeWgtHs+SowMFEJEoipdISJLyg4fR/dE5d3Q/
-	 hBxNQwA6hHdVhRIN0NNZDLhS91PDoi3sNV34NpQrRbU1ejt3IX0PrLJKoxAniHTvIy
-	 +RvHPt9Wgo/d1Y1pYwthRDeVyPsA6/iZSg1b67B/V8rvqOkdHr9rVo+NtiWFBxIMlt
-	 BQzyAZgWkBoJU+po+dAAhmBhXTe8aFazGvzlPBQ3xnC6uEXpDl2Kh3MBsyRmJf1i9R
-	 nOWttK8Sg/SDw==
-X-Session-ID: DdIOxQejRgSKkF4yUeKqew
+	b=jvjm2ZShWQCDH3TjFtM7RW4FAf/jQxvdG6tbjYnSUazogojDJMK2PkW9dNun7ClbB
+	 HemCbIek3JIpuIzrE8QdC0P7ijQ8jGmYyj7A5WLCcnAr3DshRXsmqZqE55rBTX80H1
+	 VKY55+2yu8fFVYyky77AB2gAnPE78geQsOEDWn16H8bnOHeSf9SbX2kdSXnWw+Hojb
+	 Pghe3E4bXKR+Ah8YHhPckzLrnWVkQjpFbS+E5n6fCigd15oTpdhYwBU7S2Ty8KqWC9
+	 hdlPNq5EQCHFjuGDI4jEyXH00ZJnPBo29m0HRj4ddZ6Fh2YaQz85r2UewJ0l/4Q/cF
+	 8mnk6vP8cGKkQ==
+X-Session-ID: GZPCApOEQCemHW0dlH-qBQ
 X-Works-Send-Opt: T9YwjAumKAumKAbZjAgmKqKXKoJYFHmwFBwYjHmm
-X-Works-Smtp-Source: PZK/KAU/FqJZ+HmlKxUm+6E=
+X-Works-Smtp-Source: PwK/KAU/FqJZ+HmdKoUm+6E=
 Received: from localhost.localdomain ([10.25.121.184])
-  by cvnsmtp02.nmdf.navercorp.com with ESMTP id DdIOxQejRgSKkF4yUeKqew
+  by cvnsmtp02.nmdf.navercorp.com with ESMTP id GZPCApOEQCemHW0dlH-qBQ
   for <multiple recipients>
   (version=TLSv1.3 cipher=TLS_CHACHA20_POLY1305_SHA256);
-  Mon, 22 Jun 2026 07:16:59 -0000
+  Mon, 22 Jun 2026 07:17:04 -0000
 From: Gyutae Bae <gyutae.opensource@navercorp.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -59,9 +59,9 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
 	Siwan Kim <siwan.kim@navercorp.com>,
 	Jonghyeon Kim <jong-hyeon.kim@navercorp.com>,
 	Gyutae Bae <gyutae.bae@navercorp.com>
-Subject: [RFC bpf-next 1/3] bpf: add BPF_F_COMPARE flag and compare fields to map elem UAPI
-Date: Mon, 22 Jun 2026 16:16:47 +0900
-Message-Id: <20260622071649.31541-2-gyutae.opensource@navercorp.com>
+Subject: [RFC bpf-next 3/3] selftests/bpf: test BPF_F_COMPARE compare-and-delete
+Date: Mon, 22 Jun 2026 16:16:49 +0900
+Message-Id: <20260622071649.31541-4-gyutae.opensource@navercorp.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <20260622071649.31541-1-gyutae.opensource@navercorp.com>
 References: <20260622071649.31541-1-gyutae.opensource@navercorp.com>
@@ -75,11 +75,17 @@ Content-Transfer-Encoding: 8bit
 
 From: Gyutae Bae <gyutae.bae@navercorp.com>
 
-Introduce the UAPI surface for a compare-and-delete primitive: a new map
-flag BPF_F_COMPARE plus compare/compare_offset/compare_size fields let
-a delete request name an expected value region.  Behaviour is wired up in
-the following patch; this adds the flag and fields (kernel + tools/ copy)
-only.
+Add a test for compare-and-delete on a hash map. There is no libbpf
+wrapper yet, so it issues the request through the raw bpf() syscall and
+compares against a revision field stored in the value.
+
+A matching expected value deletes the element, a stale one leaves it in
+place and returns -EBUSY, and deleting an already-removed key returns
+-ENOENT. A compare window that reaches past value_size is rejected with
+-EINVAL, as are compare fields passed without BPF_F_COMPARE, so a dropped
+flag cannot silently turn into an unconditional delete. Running the same
+call on an array map, which has no compare-and-delete handler, returns
+-EOPNOTSUPP.
 
 Co-developed-by: Minsu Jeon <minsu.jeon@navercorp.com>
 Signed-off-by: Minsu Jeon <minsu.jeon@navercorp.com>
@@ -89,72 +95,122 @@ Co-developed-by: Jonghyeon Kim <jong-hyeon.kim@navercorp.com>
 Signed-off-by: Jonghyeon Kim <jong-hyeon.kim@navercorp.com>
 Signed-off-by: Gyutae Bae <gyutae.bae@navercorp.com>
 ---
- include/uapi/linux/bpf.h       | 6 +++++-
- tools/include/uapi/linux/bpf.h | 6 +++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/map_cmp_delete.c | 106 ++++++++++++++++++
+ 1 file changed, 106 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/map_cmp_delete.c
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 89b36de5fdbb..4705b02fb6a4 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1397,7 +1397,7 @@ enum bpf_addr_space_cast {
- 	BPF_ADDR_SPACE_CAST = 1,
- };
- 
--/* flags for BPF_MAP_UPDATE_ELEM command */
-+/* flags for BPF_MAP_UPDATE_ELEM / BPF_MAP_DELETE_ELEM commands */
- enum {
- 	BPF_ANY		= 0, /* create new element or update existing */
- 	BPF_NOEXIST	= 1, /* create new element if it didn't exist */
-@@ -1405,6 +1405,7 @@ enum {
- 	BPF_F_LOCK	= 4, /* spin_lock-ed map_lookup/map_update */
- 	BPF_F_CPU	= 8, /* cpu flag for percpu maps, upper 32-bit of flags is a cpu number */
- 	BPF_F_ALL_CPUS	= 16, /* update value across all CPUs for percpu maps */
-+	BPF_F_COMPARE	= 32, /* compare-and-delete: delete elem only if value region == compare */
- };
- 
- /* flags for BPF_MAP_CREATE command */
-@@ -1586,6 +1587,9 @@ union bpf_attr {
- 			__aligned_u64 next_key;
- 		};
- 		__u64		flags;
-+		__aligned_u64	compare;	/* user ptr to expected bytes (BPF_F_COMPARE) */
-+		__u32		compare_offset;	/* start offset within value */
-+		__u32		compare_size;	/* bytes to compare; 0 == whole value */
- 	};
- 
- 	struct { /* struct used by BPF_MAP_*_BATCH commands */
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 89b36de5fdbb..4705b02fb6a4 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1397,7 +1397,7 @@ enum bpf_addr_space_cast {
- 	BPF_ADDR_SPACE_CAST = 1,
- };
- 
--/* flags for BPF_MAP_UPDATE_ELEM command */
-+/* flags for BPF_MAP_UPDATE_ELEM / BPF_MAP_DELETE_ELEM commands */
- enum {
- 	BPF_ANY		= 0, /* create new element or update existing */
- 	BPF_NOEXIST	= 1, /* create new element if it didn't exist */
-@@ -1405,6 +1405,7 @@ enum {
- 	BPF_F_LOCK	= 4, /* spin_lock-ed map_lookup/map_update */
- 	BPF_F_CPU	= 8, /* cpu flag for percpu maps, upper 32-bit of flags is a cpu number */
- 	BPF_F_ALL_CPUS	= 16, /* update value across all CPUs for percpu maps */
-+	BPF_F_COMPARE	= 32, /* compare-and-delete: delete elem only if value region == compare */
- };
- 
- /* flags for BPF_MAP_CREATE command */
-@@ -1586,6 +1587,9 @@ union bpf_attr {
- 			__aligned_u64 next_key;
- 		};
- 		__u64		flags;
-+		__aligned_u64	compare;	/* user ptr to expected bytes (BPF_F_COMPARE) */
-+		__u32		compare_offset;	/* start offset within value */
-+		__u32		compare_size;	/* bytes to compare; 0 == whole value */
- 	};
- 
- 	struct { /* struct used by BPF_MAP_*_BATCH commands */
+diff --git a/tools/testing/selftests/bpf/prog_tests/map_cmp_delete.c b/tools/testing/selftests/bpf/prog_tests/map_cmp_delete.c
+new file mode 100644
+index 000000000000..6d6df13adcc4
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/map_cmp_delete.c
+@@ -0,0 +1,106 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Copyright (c) 2026 NAVER Corp.
++ *
++ * Author: Gyutae Bae <gyutae.bae@navercorp.com>
++ */
++
++#include <test_progs.h>
++#include <sys/syscall.h>
++
++struct val {
++	__u64 revision;	/* synchronization field we compare on */
++	__u64 payload;
++};
++
++/* libbpf has no wrapper that passes the compare-and-delete fields, so
++ * issue bpf() directly. 'flags' is a parameter so tests can also
++ * exercise the no-BPF_F_COMPARE case.
++ */
++static int cmp_delete_flags(int fd, const void *key, const void *compare,
++			    __u32 off, __u32 size, __u64 flags)
++{
++	union bpf_attr attr;
++	int ret;
++
++	memset(&attr, 0, sizeof(attr));
++	attr.map_fd = fd;
++	attr.key = (__u64)(unsigned long)key;
++	attr.flags = flags;
++	attr.compare = (__u64)(unsigned long)compare;
++	attr.compare_offset = off;
++	attr.compare_size = size;
++	ret = syscall(__NR_bpf, BPF_MAP_DELETE_ELEM, &attr, sizeof(attr));
++	return ret < 0 ? -errno : ret;
++}
++
++static int cmp_delete(int fd, const void *key, const void *compare,
++		      __u32 off, __u32 size)
++{
++	return cmp_delete_flags(fd, key, compare, off, size, BPF_F_COMPARE);
++}
++
++static int hash_map(void)
++{
++	return bpf_map_create(BPF_MAP_TYPE_HASH, "cmp_hash",
++			      sizeof(__u32), sizeof(struct val), 64, NULL);
++}
++
++static void test_contract(void)
++{
++	const __u32 off = offsetof(struct val, revision);
++	const __u32 sz = sizeof(((struct val *)0)->revision);
++	struct val v = { .revision = 10, .payload = 0xabc };
++	struct val snap = v;
++	__u32 k = 1;
++	int fd = hash_map();
++
++	if (!ASSERT_GE(fd, 0, "map_create"))
++		return;
++	ASSERT_OK(bpf_map_update_elem(fd, &k, &v, BPF_ANY), "insert");
++
++	/* mismatch -> -EBUSY, entry preserved */
++	snap.revision = 9;
++	ASSERT_EQ(cmp_delete(fd, &k, &snap, off, sz), -EBUSY, "mismatch_ebusy");
++	ASSERT_OK(bpf_map_lookup_elem(fd, &k, &v), "still_present");
++
++	/* compare fields set but BPF_F_COMPARE omitted -> -EINVAL, entry preserved
++	 * (a dropped flag must not silently become an unconditional delete)
++	 */
++	ASSERT_EQ(cmp_delete_flags(fd, &k, &snap, off, sz, 0), -EINVAL,
++		  "cmp_fields_no_flag_einval");
++	ASSERT_OK(bpf_map_lookup_elem(fd, &k, &v), "preserved_no_flag");
++
++	/* match -> 0, entry gone */
++	snap.revision = 10;
++	ASSERT_OK(cmp_delete(fd, &k, &snap, off, sz), "match_deletes");
++	ASSERT_EQ(bpf_map_lookup_elem(fd, &k, &v), -ENOENT, "gone");
++
++	/* absent -> -ENOENT */
++	ASSERT_EQ(cmp_delete(fd, &k, &snap, off, sz), -ENOENT, "absent_enoent");
++
++	/* bad window -> -EINVAL */
++	ASSERT_EQ(cmp_delete(fd, &k, &snap, 0, sizeof(struct val) + 8), -EINVAL,
++		  "oversize_einval");
++
++	/* unsupported map type (no map_delete_elem_cmp op) -> -EOPNOTSUPP */
++	{
++		int afd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "cmp_arr",
++					 sizeof(__u32), sizeof(struct val), 4, NULL);
++		__u32 ak = 0;
++
++		if (ASSERT_GE(afd, 0, "array_create")) {
++			ASSERT_EQ(cmp_delete(afd, &ak, &snap, off, sz),
++				  -EOPNOTSUPP, "array_eopnotsupp");
++			close(afd);
++		}
++	}
++	close(fd);
++}
++
++void test_map_cmp_delete(void)
++{
++	if (test__start_subtest("contract"))
++		test_contract();
++}
 -- 
 2.39.5 (Apple Git-154)
 
