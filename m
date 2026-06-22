@@ -1,109 +1,134 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB5634C130
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 20:24:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2EA23612F1
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 21:03:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782159842; cv=none; b=Im/1RPdAdurGb53tc9swQn8RFPuRH0YLPtT5o6QWppGL/HSHGpIdHgBTGEvDNcaQlVt2MOpUqqbXJNnY6OV+FSqJdh0T5ivTpw4UhqmU40BHJ935MFuyyhY1Z7bdIersaql9sAP2Z7lq+wWa3AlY4qsNKcjPExFi8nzPzXwlrGU=
+	t=1782162218; cv=none; b=X6+EEfUCKv1W8m3s4xOo6R6dJmIEDO78Nv2EiU5VJnew4RXl2cuL1YCfX85baf3T+2id/PYMNxPCF+oxNZhP5wcB6IeDi4oi94gn/ys4dKviFuyYHHxwwnDq6bHuEMy92WD2KDqN16kEoFDllv2369yffmh8NOv7H1xQXY4ej+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782159842; c=relaxed/simple;
-	bh=H5cpwCepsxhixKLNTuJkp0Y44Iv6O2UiPDuOJDmxpRw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=URWy5TmTfLpsBvO94v1/vXg9VasVjP6aZsptls6uhdwbn8tht1auwprLxc1VDNK/j10oL0Aer1rtjqJhnJUoiUnSUipvGaCokNz3PEsUVuHr3lfWZRPKsg6hy8AYR6fez/72/+qeomc08bVnMn5PcM51yfFhCtv0bI0fygs4bBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=QNFstsFm; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1782162218; c=relaxed/simple;
+	bh=zQluGuRRtApwDFp21xqhzyryik4r/ZAKOi+ORg3NjAY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=lKWTj6SiQ/rEkADvHnlrNsLuuvbLDRQKjMc2kjDtclViwF0NTrDNuGi3gsYspZ5wYddvFl/M/5dRo9n0AwIDvUmCeO0nQOirMhVtRCwOXlyKdFXpa6dZ3OOfrM5xk5nxZPndI8VE61lFE9Vj88HRNCacDOz4xGzdEhQo2ZEV3iU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QXB70ym4; arc=none smtp.client-ip=209.85.208.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="QNFstsFm"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-696bf0e7c9cso657998a12.1
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 13:24:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QXB70ym4"
+Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-697bd74b960so1224222a12.1
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 14:03:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1782159839; x=1782764639; darn=vger.kernel.org;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/IySwbjdjXdYnWQzeR8fepg9364jfucwrDIdGzLDupY=;
-        b=QNFstsFmVAHKlcPRfWohAHiPOQvVIdo2TmyS8FBnmQe0qE13iQXfKI4PbXJJt/E628
-         IsJpjN2cWcYnTiwwhEBoRRztKYAOW1gih8KeVZ/PDycG5RMNcMUc5+wE5qOHlY1BuILo
-         hTRXKXHgk1/l7wl7WzkB8ySa+4uRTVXc7umBaiRwzJUBywC0Jn67py0C+YRzfKI0G22n
-         avngiBFBWBRQ8Ri+RPVjnOaGuBpYXt+Jg0YXwGOUZ3soD+7L7NuT+eRaU1IpTJiG1hAQ
-         LhN6JJ9MAXo3RSTsUTgXw6DTSFvKOqem4GFwex1tnrg3p7fp4mL/1TB7/C6VcohbNr89
-         t6Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782159839; x=1782764639;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+        d=google.com; s=20251104; t=1782162214; x=1782767014; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=/IySwbjdjXdYnWQzeR8fepg9364jfucwrDIdGzLDupY=;
-        b=BPQ8rg5HNPNliIA4Ov0EZrfbXr3YJt8UUTaiHPPfPmTGoO1Us66DtVBeoc4nTcY2IZ
-         BFSOAwatJzvmAV98Y5XIpPn8ES7vyfHbmSBXcx1KlALZeQ6NwgOIe7+OF03NkMx02Y9U
-         5H5lABaq2gEYYQXK7RnoCvtRkPK8KvgSAgHoSX8is8a5ik/Vais6VxLaKPf43KbC0uig
-         MJXemtBA9PEbRU+Wfhdt7CoseUDwqxjPDQdZdOHIhASqOp2IZsFndAHRiR4LEl976MN2
-         Ng8ORH7mEvX4lAEca9yLexUvvYhvUURXLBUNE2nMD0Zeh6/vuOa0TuiPWt7iEe5jQoFt
-         l9Gg==
-X-Forwarded-Encrypted: i=1; AFNElJ/uwtRLmLdyLaBzgDcvHMGJi4QkhtyjMfmTGgKZhA2CdIqeAOU0fykWj20yTLoAgMg47uk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7923fE2bv/VB3p2CUsYWRxtD1wt2GxMS0ujgU/Hfn44VGlFjV
-	LtBsryXX1m7ya1IeBEalVdkUo3XDWTyIoEj/4RVy9WNva9CD1fC2sBANKpB3S/vXwas=
-X-Gm-Gg: AfdE7ckjebwkcfYTMc3oDEP0pBTFFOo1z/JlqkCAKXoyTOTUjmzBKqC7i8Ot/vVoWlc
-	oBeJK24ZHbPHy4YCgRNzd2vX52R75mbd1n6vKGGITwd7MzF08ln0c3OKwYwwbE5RB26khpDPzlQ
-	Y8sFabix8xW1VhNqNCX8su2PcdGMP+LIdTHwqpMbvHJe3A6i/rkriX2//QLqY3aCxrdlOLaVim3
-	pA3I/da8w1gbPSg0KBcHNcSaN+nR4oZTuG1qDNZV/jYlmHl/1q3Qf1ZAq8qLkp0G30WvwqvqRU+
-	YNAy3qS83VmWwiE5ncrj3N2xnzHN6URbk5FICL0oNfnYxujp3NzWiHF69DQmrWwcms+YA8onsyy
-	oNNZ9fkQqrY2vwtHzWtWv9dyACGFwsfYTOz72ibBKDbPTVGRJ3L6+7fk3JqTS9AePQxRKD83o3f
-	8dwlza2K5baDbhxNo=
-X-Received: by 2002:a05:6402:278c:b0:697:83e1:5ef3 with SMTP id 4fb4d7f45d1cf-697d4317020mr518300a12.14.1782159839361;
-        Mon, 22 Jun 2026 13:23:59 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6977be31ca1sm3633269a12.19.2026.06.22.13.23.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2026 13:23:58 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: ast@kernel.org,  bpf@vger.kernel.org,  daniel@iogearbox.net,
-  jiayuan.chen@linux.dev,  john.fastabend@gmail.com,
-  kernel-team@cloudflare.com,  kuba@kernel.org,  netdev@vger.kernel.org
-Subject: Re: [PATCH bpf-next] bpf, unix: Guard sk_msg-dependent code behind
- CONFIG_NET_SOCK_MSG
-In-Reply-To: <20260622161221.1742161-1-kuniyu@google.com> (Kuniyuki Iwashima's
-	message of "Mon, 22 Jun 2026 16:11:40 +0000")
-References: <20260622-bpf-sk_msg-split-unix-v1-1-d7e0cb7bb03b@cloudflare.com>
-	<20260622161221.1742161-1-kuniyu@google.com>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Mon, 22 Jun 2026 22:23:57 +0200
-Message-ID: <877bnq4942.fsf@cloudflare.com>
+        bh=Ns5X+D71ZxXVm0DrzK3nQabza2bvz+El2s+KZqwRgy0=;
+        b=QXB70ym4TGxmocB5bnmOaaGloGZiUr8G2kUirUAZJzetnW9JBb6s6+CC+5t4GfU72E
+         6NOKMCaFdy6odvg35XOKZyGayzQZnaba47uv6uOq3lSR2yAHNRLJe2KlgKvjRSTKSmiF
+         yaQ+mO2sW0kPUFsC4ZabKbzd2eehsacUEb3Fiekz8Zq8Jxjs5hCK2III6I5/1EoD21wc
+         xvVzbZLj1mQYRE7hs3e4I4lDa7PzRma72M3d3T6DHfZHGq/xSUaWqG87iM+YhBM7JHsK
+         4BfWF/SlJlE+G6qhckPBV28mB1+TB5gd3NHApnbMFOxptF5C3Q89U47tjIjCp6JhYbz5
+         lRqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782162214; x=1782767014;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ns5X+D71ZxXVm0DrzK3nQabza2bvz+El2s+KZqwRgy0=;
+        b=s34tJZpfHfeyxfRbU/Iye6votNtgavXfimg+CGWOFYqVCTbNy16lGlIFDE5cTo526Q
+         RU37bjoyeiM7oo5IYEis5QZg6w1NfFIvbqTSX7CNbmcKJTOro+5oMT9IKgRq0IwgKZxj
+         t7NXsVdZfmjktOt0mpum0NqRizQPZEKcqAkRbrn5upGX8B7I2P2IgcKobhAHlSXgS7Wh
+         2WWasb824BlsRYoiRRkbrK609z2+9Kvp5fGL+Wmq4bsvzj9DHoGo+YnhgFeBIFJtCAh/
+         mXV1cnSFJsqPSaieIOP4odnFAwakbL7ZCU5jurf4nq4njw+psitSaToSLb9Qkd62iwgA
+         hDIw==
+X-Gm-Message-State: AOJu0YzdpmRcCzbNoJHGmdE8UHcQejRQRKGL1kbk/NYLTnl/ZTqnGTbo
+	rL51O4XF+Vczkj2sC8F1A5PF557T4GIbDXUo/DBmR0EkaTwJbUD4EzHBODA5j+KvbO3oU2FuKau
+	CvIibODw8VJB0eDlVqA==
+X-Received: from edfg24-n2.prod.google.com ([2002:a05:6402:a258:20b0:695:f68c:74f4])
+ (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6402:a291:10b0:697:7f69:306 with SMTP id 4fb4d7f45d1cf-6977f6904e1mr3125965a12.7.1782162214287;
+ Mon, 22 Jun 2026 14:03:34 -0700 (PDT)
+Date: Mon, 22 Jun 2026 21:03:20 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIABejOWoC/x3LQQqAIBBA0avErBuoCSS6SrQwHWtILByIILx70
+ vLx+S8oZ2GFqXkh8y0qZ6ro2wbcbtPGKL4aqCPTGSJcr4BRD44Y5GFFZ4Pv7Th4dgT1ujL/oU7 zUsoHC6oHyWEAAAA=
+X-Change-Id: 20260622-bpf-lskel-fixes-cafd1a83dec2
+X-Mailer: b4 0.14.3
+Message-ID: <20260622-bpf-lskel-fixes-v1-1-7c09a1585ba4@google.com>
+Subject: [PATCH] libbpf: fix weak kfunc name suffix resolution for light skeletons
+From: Siddharth Nayyar <sidnayyar@google.com>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Giuliano Procida <gprocida@google.com>, Matthias Maennich <maennich@google.com>, 
+	Tiffany Yang <ynaffit@google.com>, Neill Kapron <nkapron@google.com>, 
+	Siddharth Nayyar <sidnayyar@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Mon, Jun 22, 2026 at 04:11 PM GMT, Kuniyuki Iwashima wrote:
-> From: Jakub Sitnicki <jakub@cloudflare.com>
-> Date: Mon, 22 Jun 2026 14:58:34 +0200
->> Prepare to decouple BPF_SYSCALL config option from NET_SOCK_MSG.
->> 
->> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
->> ---
->>  net/unix/unix_bpf.c | 6 ++++++
->
-> AFAIU, everyhing in this file is for BPF_SYSCALL && NET_SOCK_MSG,
-> or am I missing something ?
->
-> I feel that it would be cleaner to add a new Kconfig that depends
-> on BPF_SYSCALL and NET_SOCK_MSG, change Makefile obj-$(CONFIG_XXX),
-> and guard .psock_update_sk_prot in af_unix.c
+When generating a light skeleton, libbpf currently records the
+unstripped name (e.g., `func___compat`) of kfuncs into the external
+symbol records.  However, the kernel's verifier strips suffixes and
+expects the essential name to resolve `bpf_ksym_exists()` correctly.
 
-What I'm aiming for is to have all code for sockmap-based redirects
-behind BPF_SYSCALL && NET_SOCK_MSG, and the rest, which is the
-implementation of sockmap container for socket refs, behind just
-BPF_SYSCALL.
+This breaks backwards-compatibility fallback logic in light skeletons,
+as the kernel fails to resolve the suffixed kfunc and evaluates
+`bpf_ksym_exists()` to 0, falsely assuming the kfunc is absent.
 
-You're right that in the unix_bpf case, the whole file could be behind
-BPF_SYSCALL && NET_SOCK_MSG because while you can keep refs to Unix
-sockets in sockmap without doing redirects, it won't be of much use
-(there's no sk_lookup or tc-sk_assign).
+Fix this by passing `ext->essent_name` when calling
+`bpf_gen__record_extern()` for BTF_KIND_FUNC. For BTF_KIND_VAR, the
+behavior is unchanged, preserving suffix compatibility.
 
-We can add a new config but I won't be able to follow that pattern for
-either tcp_bpf and udp_bpf, which are next in line.
+Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
+---
+ tools/lib/bpf/libbpf.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 1368752aa13c..421bfd5e159d 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -8309,19 +8309,25 @@ static int bpf_program_record_relos(struct bpf_program *prog)
+ 		struct reloc_desc *relo = &prog->reloc_desc[i];
+ 		struct extern_desc *ext = &obj->externs[relo->ext_idx];
+ 		int kind;
++		const char *name;
+ 
+ 		switch (relo->type) {
+ 		case RELO_EXTERN_LD64:
+ 			if (ext->type != EXT_KSYM)
+ 				continue;
+-			kind = btf_is_var(btf__type_by_id(obj->btf, ext->btf_id)) ?
+-				BTF_KIND_VAR : BTF_KIND_FUNC;
+-			bpf_gen__record_extern(obj->gen_loader, ext->name,
++			if (btf_is_var(btf__type_by_id(obj->btf, ext->btf_id))) {
++				kind = BTF_KIND_VAR;
++				name = ext->name;
++			} else {
++				kind = BTF_KIND_FUNC;
++				name = ext->essent_name ?: ext->name;
++			}
++			bpf_gen__record_extern(obj->gen_loader, name,
+ 					       ext->is_weak, !ext->ksym.type_id,
+ 					       true, kind, relo->insn_idx);
+ 			break;
+ 		case RELO_EXTERN_CALL:
+-			bpf_gen__record_extern(obj->gen_loader, ext->name,
++			bpf_gen__record_extern(obj->gen_loader, ext->essent_name ?: ext->name,
+ 					       ext->is_weak, false, false, BTF_KIND_FUNC,
+ 					       relo->insn_idx);
+ 			break;
+
+---
+base-commit: e771677c937da5808f7b6c1f0e4a97ec1a84f8a8
+change-id: 20260622-bpf-lskel-fixes-cafd1a83dec2
+
+Best regards,
+-- 
+Siddharth Nayyar <sidnayyar@google.com>
+
