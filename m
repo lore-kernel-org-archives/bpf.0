@@ -1,103 +1,172 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0882B30F7F7
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 14:57:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9BFF3101B6
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 14:58:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782140255; cv=none; b=KYkH/EJ3zLXcnvQsrlMVJVHw9OJRCQlUxejonpRSoBqq5dzVCWIBYEfRgG9Lg0cFRcZNar/xqNoJ02BzUV/2RnWFhTWhxZGdugIys6bqct/JyNyReAN14anGgpe4914RzsGrs5hVCUJ16so9I7UddwDYK4jQ5luDZIJgHgw3prk=
+	t=1782140289; cv=none; b=XqB51oS/LVyIFIr4Jr1LwDsf4YSLttV33vdcQ9QFmXyPO2nq7pFNUb7S1oVbfKbxghkHShFYpyqCr+tCuVnnqDOIrmFZ5VmlkDEApdDoJPxerA/d6R0Wqh/dPxQC5wzzWIyyXjVMuhWrzaNhtBsSbNB07y0jhvWEyIZR/oYegco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782140255; c=relaxed/simple;
-	bh=z0/b1Wfu09daVxeumHgbLNLbRiwx5WXEvPR26gNSeZg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gJRInbKVY/NRJ6sH3ZLkWyZ3GWz9OEUVFVgVGJcmzZyWJPbR0PNCKGzYuUQVlXsi0C2vGCkGZKj619XyqQGNPdF+6Bl74uWfK5u6cn/LEVpjlUwdxOoKMn0Iv8wvF9BsoA4t+OO2F22KoMGhQfOsxBpAqzf/2qvVT/9NavtnBRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gfhp9bnu; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782140289; c=relaxed/simple;
+	bh=k28+ZIV2l5YWcgHsEzl4opaw1tbnkXbA/EEb1aiO1qQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iK9zXuAjNBHXojo4H52J0/Kr1h7QcdrWALP1AAc3ceP60gHo/QLy/YDCEuoiqI+5EzBp6GYx3zEvfokeNCt99liVjTy6JErrkEaeH9mXArvGM1qY/Y1twkxnc90qkQ0Oh1G8Z08nKuVK6dYC0NMSHi0KfxlDAlHdFDp+RIUliz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ssml1LFe; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gfhp9bnu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A049A1F000E9;
-	Mon, 22 Jun 2026 14:57:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782140253;
-	bh=W2HvmBnMTAnMqz1eHk6tEuUfNC5VYBiKax2Z9+q15r0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gfhp9bnuIM2xw8VPe4BqxCYk8t/rXtQ2wNKqsphuCfi9SY7VT5iMaWhE6oRVCGMCV
-	 ETT/wslAn7tFG5rFD3phdB1AQv/8DHUhvOMaJXjPHB+Vu5igUrHb7eLr/b33XbMOib
-	 TZQL4SQX8gQSWHI/xfiObp4sWzlgxQGOX9sO84qbVXAm4tYZyDUCwfrscwA5ozGwwW
-	 Bxi8ePiF3zX+Vr21A/JeMEd0HayC4d2t55ayDpvm6ZKeoQkiO2U9O4G41WcZ4cVYt6
-	 5D+VsKICy0tBzpatM1GVwQle5RP/QfJa1cWKagl+gJE5HCKWT7WbamEXSxN1CdsnFN
-	 M6DCB4gnSXs9w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v7 08/11] selftests/bpf: Add tests to verify
- global percpu data
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Leon Hwang" <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260622143557.22955-9-leon.hwang@linux.dev>
-References: <20260622143557.22955-1-leon.hwang@linux.dev>
- <20260622143557.22955-9-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 22 Jun 2026 14:57:33 +0000
-Message-Id: <20260622145733.A049A1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ssml1LFe"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-490ace40f4bso46808165e9.3
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 07:58:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782140286; x=1782745086; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9fezmz/BGRlRBwNLlrK8/Pu93nh9Kq6eKRwwsJESYo0=;
+        b=Ssml1LFeFKEqZ0sDnVVK2+DjoK+Wc5rOcLsSGE74gwnFinoQGlvQkDnfNg1OUBLSHi
+         CYfaZPny3LDPqzgyfee248VGqhcCaR9fGQDqJOkCl62nga6Z0Q2sMVFsvr3P6mI3YRDh
+         9Zmc0Dd0xxs81HNCCbRin4wB77sCVEw5VndivQWwgjuLhzC6Bt02ualjT9+iWQD/vit/
+         ahPLqqRbCMdI1S1LDtjF5T+xD4umZPgv8lLm0/kXFYQCATnT7sORkpsCK5M8IjRd9nuV
+         mg6mMnr8wizcT7pk36fG83buqBMX2XGP/vmFQKmUd1Jd4sn47CH/jfe76B6ZIwk1MhOo
+         kyvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782140286; x=1782745086;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9fezmz/BGRlRBwNLlrK8/Pu93nh9Kq6eKRwwsJESYo0=;
+        b=X6WCja6rAyQJp9Yd06CfI+Hsb+bkOhU0hb1qS6VJjcOAmuEGRObfQeXE0/pvcop12h
+         q1UcPmyDpEplS0vO77UOVJFyJj6aXTgI1NC+VbUTMrDuw7lZxFDqYzOn9XwTYjPQSP2p
+         eyx3iZVLSbo3QQJs5lbrUbqFaHqrYINGgZ3BAx10SHT5GuayvDNz7str+YbaY7wJaMxM
+         ndHfi+4gy0a3NNg+5E9k06CR2OSmWxndNCwPVaP/28SBrDdtsY8XAXFTJZY0LCUJT72M
+         0UotMhOL3ktGoitSjdlwdRiyvm0/9U7C+Vkqu484u2m2d0INr3mNPqV2LKGJeKqWkxmM
+         o3WQ==
+X-Gm-Message-State: AOJu0Yxh1ZzfrCtUk3ggt1uFghvGrDdXn6vDo2/V3+1dwlIdsjk9tsPS
+	ZgNDt5Hmhk3vYWdB68J48F06dQG7Q9KElgnSfucZV0ONzCY0ADakfIqm
+X-Gm-Gg: AfdE7cmWELb4SbsrLhWqDVOBFJixKhQwIZtd7xNBSyHE4kmjeiXGHaVlva+cVZ6dZB+
+	VTkpZPVM+HLQj0yi+/fVvZ4dHLvihzHolJpW66xcRdHtBK0b5rRg1e2ZfuDJ9OvjeiQA3czPSdk
+	ekLfdGRBRAo/JaMKdzusDWJft+CyIf2YAYbUVOqvW5soAI0U4eqHyeIhbuznLEQ0wZYz7FVI7Wz
+	f5PSCjOjKbtyWinqDxcT49Dp5gVZZz/sE2L9kyLsmm2n9QY/Y330BUqgyJEFYCTNIKkP7wG7ohg
+	xjEbURq9pAzdcDI2ubHDR6WLZHxoAu1tbuFHthWphK+HtyQJI2FpfwkRVouFkQBPa8Ml0DC1CdE
+	vbypo77w1fdv4UyVTgz3Ru+U5ehwX7JzIAyE5Uc5S7Ot0s8x0+YPSty7IRzePUIDj5UPQzpCLWf
+	n6KaSDQdVb+13Pq/so7JiDsw==
+X-Received: by 2002:a05:600c:5489:b0:492:4668:27b5 with SMTP id 5b1f17b1804b1-4924668299emr206920795e9.6.1782140286009;
+        Mon, 22 Jun 2026 07:58:06 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46667221da1sm26522740f8f.36.2026.06.22.07.58.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jun 2026 07:58:05 -0700 (PDT)
+Date: Mon, 22 Jun 2026 15:08:03 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Enforce gotox targets against
+ subprog bounds
+Message-ID: <ajlP057yizpEQJ0r@mail.gmail.com>
+References: <20260613-f01-02-gotox-bpf-next-v2-send-v2-0-ff980bc5a329@mails.tsinghua.edu.cn>
+ <20260613-f01-02-gotox-bpf-next-v2-send-v2-1-ff980bc5a329@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260613-f01-02-gotox-bpf-next-v2-send-v2-1-ff980bc5a329@mails.tsinghua.edu.cn>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The subskel test incorrectly asserts that `var_cnt > 0`, causing=
- the test to reliably fail.
---
+On 26/06/13 05:33PM, Nuoqi Gui wrote:
+> CFG construction records the modeled gotox target set in
+> insn_aux_data->jt. It includes INSN_ARRAY maps based on whether the map
+> target is in the current subprog. check_indirect_jump() later validates and
+> follows the current PTR_TO_INSN register's actual INSN_ARRAY map. The
+> verifier does not check that targets copied from that map stay inside the
+> same subprog as the gotox instruction.
+> 
+> This lets one gotox instruction observe two different INSN_ARRAY maps. CFG
+> can select a map whose target is in the current subprog. Another path to
+> the same gotox can carry a PTR_TO_INSN value from a map whose target points
+> at a different subprog. The verifier then accepts a cross-subprog edge that
+> CFG construction did not allow for this gotox instruction.
 
-commit 55ee2a40d2c9fa6afdbccf30892e0d5b8f148c44
-Author: Leon Hwang <leon.hwang@linux.dev>
+Functionally, the patch is ok. But IMHO the commit message is too complex.
+Please consider making it shorter, if it will be respinned.
 
-selftests/bpf: Add tests to verify global percpu data
+> On x86, gotox becomes a raw indirect jump in the JIT image. Accepting a
+> target outside the gotox subprog can enter another subprog without a
+> matching BPF call frame and crash when executed. Validation observed a GPF
+> in bpf_test_run().
+> 
+> Fix this by requiring every target copied from the actual PTR_TO_INSN
+> map to stay within the subprog that contains the current gotox instruction.
 
-This commit adds tests to verify global percpu data using libbpf APIs.
-It also introduces a subskeleton test to ensure that the live variables
-of a subskel do not include variables for global percpu data.
+'the subprog that contains the current gotox instruction' -> 'the calling subprog'?
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/global_percpu_subskel=
-.c b/tools/testing/selftests/bpf/prog_tests/global_percpu_subskel.c
-> new file mode 100644
-> index 0000000000000..8aebd533d86b5
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/global_percpu_subskel.c
-[ ... ]
-> +void test_global_percpu_data_subskel(void)
-> +{
-> +	struct test_global_percpu_data *subskel =3D NULL;
-> +	struct bpf_object *obj;
-> +	int i;
-[ ... ]
-> +	if (!ASSERT_OK_PTR(subskel->subskel, "subskel"))
-> +		goto out;
-> +	if (!ASSERT_OK_PTR(subskel->maps.percpu, "maps.percpu"))
-> +		goto out;
-> +	ASSERT_EQ(bpf_map__type(subskel->maps.percpu), BPF_MAP_TYPE_PERCPU_ARRA=
-Y,
-> +		  "percpu_map_type");
-> +	ASSERT_GT(subskel->subskel->var_cnt, 0, "var_cnt");
+> Reject the program before pushing verifier states for any cross-subprog
+> target.
 
-[Severity: Medium]
-Will this assertion cause the test to unconditionally fail?
+Is this sentence needed at all? ^
 
-Looking at test_global_percpu_data.c, all defined variables are placed
-in the .percpu section. Since bpftool explicitly skips .percpu maps when
-generating subskeletons, there appear to be no non-percpu maps with BTF
-variables present.
-
-If that is the case, subskel->subskel->var_cnt will be exactly 0, causing
-this check to evaluate to ASSERT_GT(0, 0) and reliably fail the test.
-
+> 
+> Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> ---
+>  kernel/bpf/verifier.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index eb46a81a8c51..98d3fa2f162a 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -17145,9 +17145,11 @@ static int indirect_jump_min_max_index(struct bpf_verifier_env *env,
+>  static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>  {
+>  	struct bpf_verifier_state *other_branch;
+> +	struct bpf_subprog_info *subprog;
+>  	struct bpf_reg_state *dst_reg;
+>  	struct bpf_map *map;
+>  	u32 min_index, max_index;
+> +	int subprog_start, subprog_end;
+>  	int err = 0;
+>  	int n;
+>  	int i;
+> @@ -17188,6 +17190,25 @@ static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *in
+>  		return -EINVAL;
+>  	}
+>  
+> +	subprog = bpf_find_containing_subprog(env, env->insn_idx);
+> +	if (verifier_bug_if(!subprog, env,
+> +			    "gotox insn %d is outside subprog bounds\n",
+> +			    env->insn_idx))
+> +		return -EFAULT;
+> +	subprog_start = subprog->start;
+> +	subprog_end = (subprog + 1)->start;
 > +
-> +	for (i =3D 0; i < subskel->subskel->var_cnt; i++) {
-> +		const struct bpf_var_skeleton *var;
-[ ... ]
+> +	for (i = 0; i < n; i++) {
+> +		u32 target = env->gotox_tmp_buf->items[i];
+> +
+> +		if (target < subprog_start || target >= subprog_end) {
+> +			verbose(env,
+> +				"gotox target %u from map id=%d is outside subprog [%d,%d)\n",
+> +				target, map->id, subprog_start, subprog_end);
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260622143557.2295=
-5-1-leon.hwang@linux.dev?part=3D8
+This could have been a helper to share code with create_jt(),
+but looks small enough to keep it as is.
+
+Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
+
+>  	for (i = 0; i < n - 1; i++) {
+>  		mark_indirect_target(env, env->gotox_tmp_buf->items[i]);
+>  		other_branch = push_stack(env, env->gotox_tmp_buf->items[i],
+> 
+> -- 
+> 2.34.1
+> 
