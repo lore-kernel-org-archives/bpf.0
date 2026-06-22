@@ -1,112 +1,105 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F2BF1DF26E;
-	Mon, 22 Jun 2026 09:22:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D72D39E6C6;
+	Mon, 22 Jun 2026 10:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782120177; cv=none; b=Itd2BrCQ9UBHdDRMwZ8+ZMnNvSzAcPZL6j8OkuCUCsZM6vQ/WbM2wsSNDjLd0TbsBtmEdErjmyKq5o1hDUp+WpZPUCkLkrREyOIIy1nSM4vYEVZRInSSiurqCyWIgN/prWSN2p9k5QRw3XNmncOMF9Q3k4akaZnknyRP033GpB4=
+	t=1782122576; cv=none; b=alPIIjMDzrgDsUaGFkCyH+ejavjDGIG60Um9M6kmsH+JExU570EG10jcPl+yVZi8Lj0stn3tWEwmX5lHsmasBDDBzqGn6c28QB6XD16g6cNXLn1VWyuBIHqVEypu2GfI4jtrykDGk9vyzbf4UzU47P2ZUwYSzwT9utTxT3CVb1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782120177; c=relaxed/simple;
-	bh=xVycPYykyw3Y0P2xXz0awhZzfh0Q1lkfzy4JSzhI4iE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IDqXmnryMC3jkHzQU44Sk8JHu0/tq+hr1TW/qZTOhRsgpLcVkk1kPPZtfjJrQQcORu9tznLXebHLd+4ZjQHtuZG0D1JiWVBBHLmUP3Tffb5GWaDXx93j/lyvkRxM9vpIvQkFu54tGS/nNRqup61+BXdcwXppbE2fT6AORj7zPrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Y2k20Rkl; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1782122576; c=relaxed/simple;
+	bh=dKfybWohSASsPe89t8jIARC8460aGoHyag7Mc6QBxl8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=lE0K6B3BIJHg4b+IPTMl9nb70APU4ZX8B51k2kWN7CS57qHSIDnLGxZBA5cyswHJMqDjEO0SG13BdGwArOVBuA8b7bq9Xck0ulz2m4j+GiraD/mqT5+kJYTXfQ74gY6cIfz5pSVJI27+MPaWhG6Tv+Dgcjq90EJSlOo6RiEo+pM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SG2XRnqq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Y2k20Rkl"
-Received: by linux.microsoft.com (Postfix, from userid 1173)
-	id 4CF9220B7169; Mon, 22 Jun 2026 02:22:46 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4CF9220B7169
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1782120166;
-	bh=J5SP7ni7yTXEtYqDAz4nNpa5nvIK+uBx0r5BsVdU8Uk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Y2k20Rkl3IQ3EqPPrmSwGcBRpAY+7lMQjr4d0Ub/mYIEmLy0UfXHdqRjdIQAiPZLI
-	 geoYFZ+08BjiBZC/zI6fdO/kWf9guJHi2FiiY74DWqReJcOnZlb20v5iqMz4dCGxxj
-	 xP7PxRuG8ZndYmJEXIZpTidGpfZkWvKfB1jPfM0A=
-Date: Mon, 22 Jun 2026 02:22:46 -0700
-From: Erni Sri Satya Vennela <ernis@linux.microsoft.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-hyperv@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net] net: mana: Fall back to standard MTU when PF reports
- adapter_mtu of 0
-Message-ID: <ajj+5mhswcqhI2z7@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20260619055348.467224-1-ernis@linux.microsoft.com>
- <20260620055406.C564C1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SG2XRnqq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EE481F000E9;
+	Mon, 22 Jun 2026 10:02:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782122575;
+	bh=mWZmZTPHZ8K22xz/s5/6k7OT/phab6SxzhtQKKn0a68=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=SG2XRnqqvokDNzDx2mq+5l610+XuOv5eMkLiPssVytSN4KqhJFA0TmRSTSLEzUNcp
+	 2fvbI6l+zo3R+g4sFvKdCQ2m2Vw/+nyAXjyYn4FEEoO6KMrFWPHwDMnM23X6QNEsOC
+	 HaNd992VCic3RZjRITPlOpNfbc4WiN5PvDuzC5NXJIV34RnSracu8hga3oc4JRpFgP
+	 TTBdO44HMEnHCbOV6dfaXOjQy5Z3LjQS3a3AnXTVhbIryboMKAURqwPvH92ze43qZf
+	 eEJGiPxfKSWRtWHzjKU+LpqvmGXyeMNsxdix0PS2dpr9YKTqMMpCnHvCpoiBpneG+F
+	 dsj6ezs/xx7hg==
+From: Christian Brauner <brauner@kernel.org>
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Christian Brauner <brauner@kernel.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+ Simon Horman <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, 
+ Willem de Bruijn <willemb@google.com>, linux-fsdevel@vger.kernel.org, 
+ netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>
+In-Reply-To: <20260617-work-bpf-sock-xattr-v1-0-a1276f7c9da3@kernel.org>
+References: <20260617-work-bpf-sock-xattr-v1-0-a1276f7c9da3@kernel.org>
+Subject: Re: [PATCH 0/2] Add bpf_sock_read_xattr() kfunc to read socket
+ xattrs
+Message-Id: <20260622-giraffe-zahntechnik-gepfercht-f9953c9d4a75@brauner>
+Date: Mon, 22 Jun 2026 12:02:35 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260620055406.C564C1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.16-dev-7d9ce
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1939; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=dKfybWohSASsPe89t8jIARC8460aGoHyag7Mc6QBxl8=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWRZcnhFzpY161QOS0/5Jzsvf5NRsUuN8tQq3cJ3EdfYq
+ nZXL37aUcrCIMbFICumyOLQbhIut5ynYrNRpgbMHFYmkCEMXJwCMJG9Mgz/HYzsEvy1rGYkdBpd
+ 9OObxqEobtAoYL110/6T9x+9LtJKYfgrKbv+cJJwya0jT3xDJi/Vtd2yYV7GjIN1ry0zXzrsznr
+ CBQA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Sat, Jun 20, 2026 at 05:54:06AM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+On Wed, 17 Jun 2026 13:18:26 +0200, Christian Brauner wrote:
+> Add bpf_sock_read_xattr() kfunc to read socket xattrs
 > 
-> Pre-existing issues:
-> - [High] Preexisting error handling bug in XDP set path leaves apc->bpf_prog pointing to a freed BPF program, leading to a Use-After-Free/Double Free.
-> --
+> In c8db08110cbe ("Merge tag 'vfs-7.1-rc1.xattr' of git://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs")
+> we added support for extended attributes for sockets. This comes in two
+> flavors: sockfs and non-sockfs/filesystem sockets. Filesystem sockets
+> are actual filesystem objects so reading xattrs must use dedicated fs
+> helpers such as bpf_get_dentry_xattr() and bpf_get_file_xattr(). Those
+> are inherently sleeping operations. Sockfs sockets on the other hand
+> don't need to use sleeping operations as the underlying data structure
+> is lockless. In addition, retrieval of sockfs extended attributes often
+> happens from LSM hooks that only provide struct socket and it's
+> completely nonsensical to grab a reference to a file, then force a
+> sleeping operation to retrieve the xattr and drop the reference. We know
+> that the sockfs file cannot go away while the LSM hook runs.
 > 
-> commit 425f6bf5274f2172e13cdc649ea2288d8dc1ad72
-> Author: Erni Sri Satya Vennela <ernis@linux.microsoft.com>
-> 
-> net: mana: Fall back to standard MTU when PF reports adapter_mtu of 0
-> 
-> This commit fixes a regression for older PF firmware versions by allowing
-> an adapter_mtu of 0 to fall back to the standard ETH_FRAME_LEN. It also
-> updates MTU bounds checks for XDP limits.
-> 
-> > diff --git a/drivers/net/ethernet/microsoft/mana/mana_bpf.c b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
-> > index b5e9bb184a1dd..53308e139cbe9 100644
-> > --- a/drivers/net/ethernet/microsoft/mana/mana_bpf.c
-> > +++ b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
-> > @@ -237,7 +237,8 @@ static int mana_xdp_set(struct net_device *ndev, struct bpf_prog *prog,
-> >  		bpf_prog_put(old_prog);
-> >  
-> >  	if (prog)
-> > -		ndev->max_mtu = MANA_XDP_MTU_MAX;
-> > +		ndev->max_mtu = min_t(unsigned int, MANA_XDP_MTU_MAX,
-> > +				      gc->adapter_mtu - ETH_HLEN);
-> 
-> [Severity: High]
-> This isn't a bug introduced by this patch, but while reviewing the changes
-> to mana_xdp_set(), I noticed a pre-existing issue on an error path earlier
-> in this function.
-> 
-> Earlier in mana_xdp_set(), the program is assigned:
-> 
->     apc->bpf_prog = prog;
-> 
-> If the port is up, it then allocates rx buffers:
-> 
->     err = mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queues);
->     if (err) {
->         ...
->         return err;
->     }
-> 
-> If mana_pre_alloc_rxbufs() fails, it returns directly rather than jumping
-> to the err_dealloc_rxbuffs label. This bypasses the cleanup step that
-> restores apc->bpf_prog = old_prog.
-> 
-> Since the networking core frees the bpf program on error, does this leave
-> apc->bpf_prog pointing to a freed program?
-> 
-> If mana_xdp_set() is called again later, could fetching old_prog lead to a
-> use-after-free or double-free when calling bpf_prog_put(old_prog)?
-> 
-> >  	else
-> >  		ndev->max_mtu = gc->adapter_mtu - ETH_HLEN;
-> >
-> 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260619055348.467224-1-ernis@linux.microsoft.com?part=1
+> [...]
 
-I'll take this up in a different patch.
+Applied to the vfs-7.3.kfunc branch of the vfs/vfs.git tree.
+Patches in the vfs-7.3.kfunc branch should appear in linux-next soon.
 
-Thankyou,
-Vennela
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
+
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
+
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs-7.3.kfunc
+
+[1/2] fs: Add bpf_sock_read_xattr() kfunc to read socket xattrs
+      https://git.kernel.org/vfs/vfs/c/f80386e3838e
+[2/2] selftests/bpf: Add test for bpf_sock_read_xattr() kfunc
+      https://git.kernel.org/vfs/vfs/c/99a63a6aff40
+
