@@ -1,116 +1,109 @@
-Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
+Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C18937A48A
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 11:09:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782126582; cv=none; b=S7PNx3GfITVPPwD+i2IRLlZKoZ3w439Q+vUziXP5bIexedLXAVoKCHHZI9ch5s75ALMEd+fIRFl8c+1Si1d0FkDxZDeYLBaOZZisfSrjU/FUP7giywpkXEruhS48y92UOlkKHNjpuAML3a3b+DmuSylzVOdbxalhr8zpS3VlJIw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782126582; c=relaxed/simple;
-	bh=tYPP06dJbplDehUpPstvRgVcRmR8WzCL5yROKuM5Fyc=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=B30+0CfsWNh7sfDXZVhx/0SjHANqCFheQxWHctQWvIbV8WxFprKntGNTENFGiVb34OJxO9V0E4InylWjBGTa5ShWPPlE4gZwsDTfMhnycaGEU3H9NEuF4UtKgirs8SeDAehL2nNrLjgwmL9px4045CMaYIN8ffumXfYfOt49doc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jxbmo+dS; arc=none smtp.client-ip=74.125.82.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C6AD37267E
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 11:13:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782126812; cv=pass; b=s847pmrXe0rX98iLxuqUlQYOM5UDcRxDgmkEDVRxNpZTQ1C5TPy6PoxCQjB63otZzOAA6VLxI2N8XYeZyPs9br99FOybKHKajZ/uxYj9HcgkcvWAGkrrN9bTCvRJW3+HRprDN0NmIIpEjn7yb0deIONsdkt6yW/GwoY75+6W2A8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782126812; c=relaxed/simple;
+	bh=ayL7NDVLPdIB6IO71jX5DL6LLM8P5NIhHXQx77l7nEo=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=VytZ8N+Mf4xggBWhYuK4whNpydr7YXa0rmCkKXfMMgRlf+Q0LIz2j2twa2gqE521i+j3YtnrTIiQIMV9MYdshn1ZyfIMlyMLzDApiysGN6qqcjCPx/EzG4gyl/6LrFvODcPosY8kpWCzWLD9kAG0vTLvhHCvBxjbkBdIR4Nlzh8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GMsEySCi; arc=pass smtp.client-ip=74.125.224.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jxbmo+dS"
-Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-139a5f4ca15so2732478c88.1
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 04:09:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GMsEySCi"
+Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-66077e888b2so3992070d50.3
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 04:13:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782126810; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FFwNPK1vOxTU+mOASU6nIfBLsa0AiSP4gqK78bGCFy76i5aPqULZA2CIc1JH9DOvNM
+         feUv17BoZTTP4PQFBo3RbsjP5rM9tzh307R8OxXx8XFF7iTERme//W8PNbN1c2VK9ql9
+         WA8faanqWyrUAWSuJZrLifRMVUpjH8G9qu4sINlH+uEykzfkqf12kWahp6g2dzhwCrfA
+         1GZKlTs8V2yNwJyo4NATPQk3TlXA6U5MmG3dXsCEDjmCq6JP2EgPK7IYr/XTBcH0tY+r
+         u/zGrQ1XKOqW912EgFmTzE0qXEUeOVetXOWTbWu70I/fOSYsYeVZ0oYL/Af0fXqjq7nS
+         YswA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=ayL7NDVLPdIB6IO71jX5DL6LLM8P5NIhHXQx77l7nEo=;
+        fh=xcfiJbAMYym/uG4UVf7hkYEk7wvDwEamUHlPuuOKhS8=;
+        b=AdQuiODLz3t2gswvihjgfXi4vZydHaZBe38dD6NZcMTg8vkL1PBKeQhuBmHlmqU/Lo
+         njMfY5nXLSrHUX9m7StbRbiNiryuQ2tJlL0Kqu7A5CUWF2ABND7CVenn9uB0vfAk4O2o
+         7LKWjCMkJDkOk9hd8B5zaHGSRfokG2VH0BQHarUN6RlvHLkJ06j/zQwIysUwfvVdijP4
+         a0XEi/XBhHBhI0nIT3ERXsLegk+snOb95CYgyxEo9jGimebYad5YbznSSAazFGgk/x/n
+         shg6L5uzHLbCR1bP4TMxiPZiUSdnUBKHRUFknaW2pQG2R8TPCuolnpLJ7RFtikaq+bVg
+         F0og==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782126580; x=1782731380; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1782126810; x=1782731610; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=xIWdbLLEg9dBfFSLqVtIUmlfUVdjnpVzN85B4SdiLpU=;
-        b=jxbmo+dS1Mbbbwk5YD1ce9M8jzlGsXK+lfOkm4C7FmdPQahzPKIAeWcSoaknlr5Cdy
-         r6NFHT/2gPkBtwOpxU69Wtxu8uI05QIrWoyVikfJFAcsF+yLJU1eiLjuLvof2JBQAGvS
-         +kYhUUF2zxbXPUku1B/qyWIOpUjyl2tFvp9TlnIskrMn4yZPCNlEl8sK2/cLAeUepxfa
-         vNA/OLNrKel7bg/xRJzY8G1iHzqC1TXuCEKF7oUi+J6Zss3lXBoLzQOXeaoyJqv+BZMF
-         4FtzcwJ/z/x76g56rHtbIlQJZ8wIKlUm/UTw0by4soR32OAz5Cba6e581r8VU/1Dwa1M
-         tKRw==
+        bh=ayL7NDVLPdIB6IO71jX5DL6LLM8P5NIhHXQx77l7nEo=;
+        b=GMsEySCiwIf9sIUrzbIqLh0FbnoIoogOcTbiJH08UIBRCf3+uKJd7w93b01+3KcCNl
+         qEVfhJyxl+MFA9OlNpI560ly+i/R1V149PbnrSTfrJ/aEf0UyLtCpBvVEHZsM4gzVqMl
+         E2jwI6Vth8tuOrUW7ir2/m6WTRvM4UtXsVoqZY6uzqgzyRanhuX0tqFTGSF2Y12JZMAc
+         +SoBQtG50yHeueIMfOERzj4InNpTZxKOaQkp5Ibpk3aIEy8/j0dvHxAdmz7ij+leHhpF
+         UkXd6fu6DpzKH1dyN8veQAN+brttnbTj+SjAEOHBLoIeJMk8ahQlm+9XUUmKOBKzQv/M
+         VPHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782126580; x=1782731380;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1782126810; x=1782731610;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xIWdbLLEg9dBfFSLqVtIUmlfUVdjnpVzN85B4SdiLpU=;
-        b=U/Fqc5fcHIO1Z7MOACN/z3S7GXhrfx/HodwbCG7ladDtmOoJ3rVqkx/qD19rB4mg8i
-         XZpx+bTa61hWmmGqUVXxTBQloQMUOoPEPX22dEVtGdqDs/NoPIQ0oQFdHiGmPNpvdAgV
-         RkyijwRuWwg3O+CbSaqM2HBRjFokVUOEVu9x8Bu+FYMLKpz2h/ZybMoZEebmSPpMMyhi
-         PBQsDrRtRzQFoiZebo6AAZaMob5ZG6tEo7O76ESFdYV7pytmvGhB7CoPTCqzj57wpa/m
-         PHocvJX8+pDz8wPYuchESzCd/RpSQU0R/K2UvVQsu98XTrmgD0ONw8E0CoUtsjyxOfjg
-         pn+Q==
-X-Forwarded-Encrypted: i=1; AHgh+RpDY2S9bCYXxAZ9jW/RNiNraRzt+hAdyhIhENL8lyR1SNAioreJqSi7PQmiVCvijMqPFiU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKg+AjXq/nstf1OWy9CJquMND+lcNrfe3fErFLvnhNcguUUfcg
-	lZtCqiA5Z1G24KKJV8II00f7Cwmo2W5Zf03U/xIYsmZtqCBzWzg2w/P8
-X-Gm-Gg: AfdE7cmJOw52N8BJcxNJ/auArcvuADHdNeNuKqyx1qLQoJ8uLjlJyYYOEQqd9WsM2fQ
-	+8SaHIrQK7klUuVbJ7qDvkLH56FxDFluPN/hN7z0zYN3CJKlkYMxB/1GtBnWB9D7bt6FFUz27TP
-	S6x1SOsxSeC/VfqksYIYxsBVZ/BBQFFRU8htUnvwom32DJaoUXSv8Q0j1myXCg57sisxkMcpRsA
-	ArhJcHhISYQx0Y2bKOdwHAgqPitBqY3xsk0KuBNKhh+DeLXWZWUjxunvncRLNFsD9Jha/Tmr5JS
-	wZfI7nmMVGbgretFUCKohpxHD0HdRNqjdx+fjx1XHyS8SsmNkX1ktyZotWy/MWHquiWZOYzmSX+
-	xFYVxnhFpzj3nagglywYZko7NcCZfc3O+2yozBEU3gv4VY4jJZ3EJxlzJoTFEVNp//IwTrAtyiH
-	OHDuE+RuzT0vTrGVk97XgzK4wR/7DQgg==
-X-Received: by 2002:a05:7301:38a4:b0:2f2:6dde:df66 with SMTP id 5a478bee46e88-30c06e303ddmr10114940eec.22.1782126579977;
-        Mon, 22 Jun 2026 04:09:39 -0700 (PDT)
-Received: from ehlo.thunderbird.net ([2804:2bf0:60e7:ae00:61b2:c320:bcb9:eac0])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1bd8d6c7sm10643390eec.16.2026.06.22.04.09.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Jun 2026 04:09:39 -0700 (PDT)
-Date: Mon, 22 Jun 2026 08:09:33 -0300
-From: Arnaldo Melo <arnaldo.melo@gmail.com>
-To: Mark Brown <broonie@kernel.org>, Alan Maguire <alan.maguire@oracle.com>
-CC: peterz@infradead.org, acme@kernel.org, mingo@redhat.com, namhyung@kernel.org,
- mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
- irogers@google.com, adrian.hunter@intel.com, james.clark@linaro.org,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-Subject: Re: [PATCH perf] perf: Fix btf_vlen() signedness errors
-User-Agent: Thunderbird for Android
-In-Reply-To: <ffdbf003-5f08-4db8-b633-7ed053a738f1@sirena.org.uk>
-References: <20260622103418.579115-1-alan.maguire@oracle.com> <ffdbf003-5f08-4db8-b633-7ed053a738f1@sirena.org.uk>
-Message-ID: <A52F0C17-9617-4F5F-9537-C9643F5EF347@gmail.com>
+        bh=ayL7NDVLPdIB6IO71jX5DL6LLM8P5NIhHXQx77l7nEo=;
+        b=MxsGmjoZDCe9kW61bzs7+aPJ4cAhiPwDizK8UV1kKE9K6xWgdjr+QHzjfjaAwMKrY9
+         EhNiUSZsKtsSNFMwhjayzlDcbIXavTsjuyVeazWuO8eRCWxprqpYVGNMFPWPclcNJJJg
+         vbBNXuuBM55GNz24FyEvXKW+a+x2Xpa0Ipm/FQ2gL0MtbgnqeMvpvnF8zd1OMh4D6pg6
+         6cCw+gZzOqrYhHdQie+lCDA8X7S/qh+qWdoNkkdGRmbASeqSzGFL0/pzcpbz7w3hTNXy
+         Haslc3BWKtGXwcxiGrUxkgSmU0BLhIiQPRDkvj75oVxvqfe9S+6xhXE1rRFNZiaNw1JM
+         mq8g==
+X-Gm-Message-State: AOJu0Yyr66B8OqR3CyhOj59fT3iocilbkCbbEBH2e+Bk7cT524ArI1kO
+	X9D24ad6OxdUzgsE7qLhpXvCswsu+ND0lgVH8moOT9q6gGkcXYTndrp5UoupFmpynTyEisRBhak
+	xe02K0am/HhpXqzNu8mw+5DbxzywtLrADwRiD
+X-Gm-Gg: AfdE7cmP3HeUvqBrJKu/BgWgYytm2Sy9y/QrEWD7LJ73n4fxdwgO5xdSH0DTg+d261G
+	zqJ3OM49xWd0ZizNi84uvrFiR7XGVhU6PZM3q36UnX6VI9w/VVxmAw+b5YMyYpFvsF2nFrdL/yK
+	TR1TxcPKW9ZKXmZTx38ZNv4DzlYs7E0ATR0GjBu27kRR1f/bCenTogNxsXEne9juOyhDeWrUm4d
+	c2wmUbK7ZQ8CEGE1mj7XRFb0J+gx49HsRVDsM6Lk+N8HDVCUfGKZSAMYA0apCk1Z1cvnQQ=
+X-Received: by 2002:a05:690e:c4d:b0:660:eff6:fdfe with SMTP id
+ 956f58d0204a3-66302ef7ef8mr10859398d50.2.1782126810078; Mon, 22 Jun 2026
+ 04:13:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+From: Mahnur A <s.mahnur.a@gmail.com>
+Date: Mon, 22 Jun 2026 13:13:19 +0200
+X-Gm-Features: AVVi8CfUMND5nY0ngfXBdmlF7GbOHX3f9QXr79sEl9JGFhB8zZLJVdBKdwJVBpc
+Message-ID: <CAJ-umGR4Ut4KG6kLA=gG8GdL_eWdf72AHdRaAo25VgCrzYgnvA@mail.gmail.com>
+Subject: [BUG] bpf: verifier bug, no program to jit at insn (subprog < 0)
+To: ast@kernel.org, daniel@iogearbox.net
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Hi,
 
+This has been tested and reproduced on the latest kernel 7.1
 
-On June 22, 2026 7:53:40 AM GMT-03:00, Mark Brown <broonie@kernel=2Eorg> w=
-rote:
->On Mon, Jun 22, 2026 at 11:34:18AM +0100, Alan Maguire wrote:
->> Commit f7a6b9eaff3e6 ("bpf: Extend BTF UAPI vlen, kinds to use unused b=
-its")
->>=20
->> extended the return value for btf_vlen() to __u32, triggering
->> errors for cases where an int was used to store return value=2E
->> Fix these cases for perf as was done for other libbpf consumers=2E
->
->I already sent:
->
->  https://lore=2Ekernel=2Eorg/r/20260617130038=2E34534-1-broonie@kernel=
-=2Eorg
->
->which I have been using as a fixup since I originally reported the issue
->since Linus' tree is broken, Arnaldo said he'd applied it to the
->perf-tools-next branch but it has not yet appeared in Linus' tree (and
->it looks like he forgot to push it so his copy isn't getting picked up
->in the merge either, the last update was on the 15th)=2E
+I have a bpf program that should pass the verifier, but fails with:
+verifier bug: No program to jit at insn 16 (subprog < 0).
+The bug occurs when bpf_loop callback function
+is eliminated as dead code due to nr_loops=0, but a reference
+to it is still alive.
 
-Its here:
+It only happens under certain conditions:
+1. bpf_loop is called at least twice.
+2. The first bpf_loop does not have nr_loops=0.
+3. The second bpf_loop calls a function with nr_loops=0.
+4. The second bpf_loop calls a function that has not been called before.
 
-<https://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/perf/perf-tools-next=
-=2Egit/commit/?h=3Dperf-tools-next&id=3D776bd9ac834556ab6ff6b7ef74b71ac53d3=
-7855e>
+Please find the bpf program, verifier log and kernel config here:
+https://gist.github.com/MahnurA/939198e276db4d833a45193d71533711
 
-I think Alan's latest patch has one more hunk, I'll get that one in and th=
-en send the pull request to Linus today,
+Happy to help with any other details required.
 
-- Arnaldo 
+Best regards,
+Mahnur
