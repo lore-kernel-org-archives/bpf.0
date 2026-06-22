@@ -1,36 +1,36 @@
-Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B21B613959D;
-	Mon, 22 Jun 2026 02:34:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F83213959D;
+	Mon, 22 Jun 2026 02:34:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782095656; cv=none; b=PhCzgsxLXwaW+Z3T/A5rYMwcbiBGrtFRPsWByqnGrkAr6YbrT/uobib2uhK2PJap7EpGQfht3UG+1/x3KT4yL6vEuahW/q9AJw2HDVCeAnURH7wa+IUqCaPALGHIiVnetFwcTWS+F58/2psIyZnVKrZtEPXxt6MGmjZ8PASjmpg=
+	t=1782095674; cv=none; b=FR69keypT5W85ansGhTU8xGI+tuePQE64EHIFd3Xh227KPfAClhI8REuBCdKOxj3T9sZSxjrpzMQpIYxcJSsNxoryhkpp4YDqiaSkDdcU+ZRc2Kw0YaPvAQpPPXgEr1xEdG4CR+DxtGmyNjjcfFSIRDSVcrpc3bnwivqhfnMOfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782095656; c=relaxed/simple;
-	bh=5pLaXpi9ta0wJh8y99pP4SfNdJSepAWpdPLfg40Ic4A=;
+	s=arc-20240116; t=1782095674; c=relaxed/simple;
+	bh=FFXerJr+VNoZX+lCjKYXG5q3iyJOvurkFx7TtADP1Yo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PPpqYDCenXR5QZnJ5oIlpHVDF0Mq0e1LinT1G948nbkUCRVKC+pBu8xNSbRafByJrQjZJsclqIuW2hNwBkhFxPa5vnmbR/GD0HaCePLPAmQLSowqVs3IVlQ0YF7gydzAj7PGEJc6YCXvHFCBfLJAHsdvrXK/5MA+1rcAg1Vg/Fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=etpqybiF; arc=none smtp.client-ip=54.254.200.128
+	 MIME-Version; b=OKNBjC3GdPO0kp1W0H/K/IZvixL+UsDDgIJ9WBgArFtDThKXyrvtXOCrqHpuNqr7da534RqioZsx65uohTO6ej2a0tKAsVqnhA80gjK6dT9VhCNlTCuXkPOswrEwUtMYlZ27qnLdR2iz9BggobK4Zs2jrccLBkH+0zWIMQ6c7Ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=G6qdXHqj; arc=none smtp.client-ip=54.206.16.166
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="etpqybiF"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="G6qdXHqj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1782095646;
-	bh=1sRKdeOKdBSdB4sudZ16ZGQ9XfNvCZgI9lgpnqbMA3U=;
+	s=onoh2408; t=1782095661;
+	bh=a4/LDFCeSh/CtEmBczCiOIPnMouaPDoUWWVbHGIwmfM=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=etpqybiF577QVaAtyB6GCb+HCFHjhc7Jckc+rIXdMAQI059p53FdXbM4M/YInPu3X
-	 pVqbopidbd3I5vZadtnwHqUsPUZcVfW+KQmi1L41GQXBpOZP9Ck1UVIfpg7K9rFx+K
-	 DpTdW6koWgA4DKSa/t1KRr7SiDGMiWD6YnGYBFsw=
-X-QQ-mid: zesmtpgz6t1782095642t7fde8a4d
-X-QQ-Originating-IP: ByrAPzw7depav/XIWkWc4fah7cXVhtpMfXbK+3ltQ0w=
+	b=G6qdXHqjoYi7dtEBRtZeXhfST/xNOadHk37SIbMCHbWV6sS3TfDVwU6kTarkiYzWA
+	 OOmLAH3m1gB64ksSsucpYOA8lZdCgIP/MOBO8YXqxV3d9vmB3pzeV+kTpgehBYZ92u
+	 AdRQFZySPGYDH8n10o1oTBOvizk5LoaqdbeHbFRQ=
+X-QQ-mid: zesmtpgz6t1782095656tded5225e
+X-QQ-Originating-IP: Q3l6BFPVbzAczNYj45l5DRVwI7lnsADO+hwCgWGBpeA=
 Received: from Shurima ( [113.57.152.160])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 22 Jun 2026 10:33:55 +0800 (CST)
+	id ; Mon, 22 Jun 2026 10:34:04 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 946799312610904517
+X-BIZMAIL-ID: 9066787468411026779
 EX-QQ-RecipientCnt: 13
 From: Yichong Chen <chenyichong@uniontech.com>
 To: qmo@kernel.org,
@@ -46,9 +46,9 @@ Cc: martin.lau@linux.dev,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	chenyichong@uniontech.com
-Subject: [PATCH 1/2] tools/bpf/bpftool: Reset vmlinux BTF after map dump
-Date: Mon, 22 Jun 2026 10:33:44 +0800
-Message-ID: <E369B37D2D3B6B9D+20260622023345.1135373-2-chenyichong@uniontech.com>
+Subject: [PATCH 2/2] tools/bpf/bpftool: Reset vmlinux BTF after struct_ops commands
+Date: Mon, 22 Jun 2026 10:33:45 +0800
+Message-ID: <507ECA61416703FC+20260622023345.1135373-3-chenyichong@uniontech.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260622023345.1135373-1-chenyichong@uniontech.com>
 References: <20260622023345.1135373-1-chenyichong@uniontech.com>
@@ -61,62 +61,65 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpgz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: McoPngcDBvM5NHG7zpQxGq/CgoKCnSV2XhsqAcIVW93ckwuAcdHoCv/v
-	tjWvlCeoBnWrbNhKtbk0E4f36zGDhc0z96MU5dpO9Vf9TsePd49TH3xkwAnkMsp4Ha+qucF
-	0HrJp/npsV7LYDq48lJ2fAjp+HQHEupDhwV6h+lDLlDmoLuZys8tE0BkMrwR4nOanYzmvD6
-	NZpM1TRE86Nqt4kgAM3cnWbYacZfREpWnYkcqaYVfVqctoTfLiqBCHYeWnOcejk7hFfBayG
-	PdCeAfjqPcM0OVufGfP+wBVGGKVKP9yLYAViLODjH8ZtKj4Nhv6PNOC2O5APfddlRTXOaoh
-	dJG+D8W/7gR5Gmf+0t4Xt3WjGDE2sIZ2ToA9r0T+QXC7Yw2GKoYTlKUczIiCCdyK6UQ0w9y
-	ztlufV9GJNSV27SOP8UsjupGi6IJFBNy9nHIWlxSGFzatBzbaI4KEX+IV6i83v5xc6vH5WR
-	5AiUWgcpASjCQm0iSyYFkT8cl3phT5dVv/7Sy4OrvsjQgdF2GNGKnRoz6i52YYgsLviONID
-	L1b3p5eH4ZICPHrjPz4YLLl5FpoQfwzn5KBrfV3IsP/YJsBjWclTRn4FB+8fukVQ9TocJ2o
-	6I6mI/SRMyHu1xIxomKXo2oiFE/nbo9wzfCBryIhsvzMvsrKEQrRjn+m0qhCB33v6a5X1TA
-	em4e2LvpCr5J+gBy2ZtTH8khTZCFlYJyxRFXwUBWZvtmAuEDWJmDcUgfPPeOrGA0Aa9jKv1
-	NhdhDNhXcdxVKESqgCktfg3FZ85LymNGzXwPIAwp/5ZExQUWLsP3emzi/bcEgOG3H7GLG/j
-	OEfAbOo/Ew4DsVoQc+iSY218lWYNVm92FxbZCxdKO3YyYzHO0f6QbaJSpcrvh/NThv0BLG9
-	dCPdhqBv08Prn4kDw0uTXfHQIujLRdmg0A21E7KxqMahNriJRDmPrBlhPSJ+r+taBYeV0t/
-	393ZiMnPknIugMNj9y2WypjM75pJ4q4T++l2f2fespLmobwjNXXy3VHhiNrHuTRvpB4kCJd
-	FeClD0QMg7Cy3YG7Hl4qdnCc+D7kQMONtcduFSY4o/9D7T9dIc
-X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
+X-QQ-XMAILINFO: NiG+iAFIVXAyI4BX5iNDzweWPGVA166FlL+y/jJvTxagxP55Fq9xeDBA
+	JoBteLTubWx+bKCQJgWEjEfo84jleIc1XcIrcIiFPi6uVo+h1/6zedmimcj1whUh04Qlhz5
+	MuGdHAs48cxoWYRO1vrSpSR8YCsuIZeDyaRX5oyiIJQzEIsLxC17j+mBnN2700iZIIzHSIV
+	KOMx66H+1KIfeeo1/PXp+qhXcsti5U+scJyYRx15rf1TVi/VVGH5+LkPFn4ZGpmNE0LuNHR
+	Y7cQ6/fxk2Ewj93vjeimcm7EGFnK5jhovnOOZD0K7IgIC4zyRyo76IbWr1Ny5pnUGELVGHi
+	/FcMLL86Q6sUz+0vNrsMzX5mFDY/ZMyEex692cfvZoO+/yxln0W1mZMIaHK/OYlEQ8Lv4Ke
+	DfswgUFiOYWlQYwNEp3zsSnH08IXmhheVLvuOupo34RnRhc2TSlLgXIFzzbJz6DYbeURg/J
+	B0XtigrMXtn67E4cs1swlrugNgdxiOBQtYOqKbtBnMjYXHNehhGm7mhiVCE3QjO960birTj
+	IVSsYw/VKgnPhoHMkatGAHGyoRDy7bxu+h2ozWR4XwJ5SQbzypqc6hGc58Sw2IJzY4eud8U
+	YduMSkkc5ieb1rFXo+smCNHbzuzD0Q/osSV1v0hV44tS2HO/y16rZLwjVXOHZ4hMrKcFq05
+	PXJ9+TRTDhB6ZJVIpXG2d1lzgYzsY/LjW+BS7+7wGDcyk5toCW0NP1GuVffSWSM3Gg8PIES
+	sTya1JV0gjVsyAUYa4DEjaifKdrRvjtxZxR1+2azVh/5CY4EVzZDpdWf8/NEcZCT8S9LncV
+	kSy78q/YBzeqtAbOkFKO8JyV/ISb1790DCJcL8MYBoJIXCv87WDtGFjP//mxDHSrU8jyIyd
+	/YTJz9kyG3UdYiCOwcErX3uH5YuoMku/dE3RK/H/vrnClocb4IINGNTNkybjdskTe2MvxbV
+	GSk9rTmVSyirVJIeXZiHZ9GcAIJjqND/23Ro/hFe4ogSQI8XO5Co/6NqdphAwhh78qe2ajA
+	XmCV5M4hvEo7bvuocIcel1yevc7nLCQEpprjP0+bgUFfIk00/w
+X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
 X-QQ-RECHKSPAM: 0
 
-map dump frees the global btf_vmlinux object.
+struct_ops frees the global btf_vmlinux object.
 
-In batch mode, a later map dump can reuse the stale pointer.
+In batch mode, a later struct_ops command can reuse stale state.
 
-Reset the global pointer after freeing it.
+Reset the BTF pointer and cached map info state.
 
 Signed-off-by: Yichong Chen <chenyichong@uniontech.com>
 ---
- tools/bpf/bpftool/map.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ tools/bpf/bpftool/struct_ops.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 7ebf7dbcfba4..8aab9ce743cb 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -790,6 +790,12 @@ static int maps_have_btf(int *fds, int nb_fds)
- 
+diff --git a/tools/bpf/bpftool/struct_ops.c b/tools/bpf/bpftool/struct_ops.c
+index aa43dead249c..4dba7c96e5f6 100644
+--- a/tools/bpf/bpftool/struct_ops.c
++++ b/tools/bpf/bpftool/struct_ops.c
+@@ -21,6 +21,15 @@ static __u32 map_info_alloc_len;
  static struct btf *btf_vmlinux;
+ static __s32 map_info_type_id;
  
 +static void free_btf_vmlinux(void)
 +{
 +	btf__free(btf_vmlinux);
 +	btf_vmlinux = NULL;
++	map_info_type = NULL;
++	map_info_alloc_len = 0;
++	map_info_type_id = 0;
 +}
 +
- static int get_map_kv_btf(const struct bpf_map_info *info, struct btf **btf)
- {
- 	int err = 0;
-@@ -958,7 +964,7 @@ static int do_dump(int argc, char **argv)
- 		close(fds[i]);
- exit_free:
- 	free(fds);
+ struct res {
+ 	unsigned int nr_maps;
+ 	unsigned int nr_errs;
+@@ -642,7 +651,7 @@ int do_struct_ops(int argc, char **argv)
+ 
+ 	err = cmd_select(cmds, argc, argv, do_help);
+ 
 -	btf__free(btf_vmlinux);
 +	free_btf_vmlinux();
+ 
  	return err;
  }
- 
 -- 
 2.51.0
 
