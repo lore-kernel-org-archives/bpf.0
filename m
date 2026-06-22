@@ -1,32 +1,32 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E333B3BE1
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 14:38:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4586A3BB669
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 14:38:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782139108; cv=none; b=PAhitoX/NkwWzgOulEaTZZwuqmUjIRv0PWPlqY8RjBCPCmcklbuxXRaeudJiGDGyGHE1jTtkFtKY0zLhGqmhWSRN/bT7qoZoa945Amiel8uXIRQ3nnJ5fZPFbw6ioVMpt0LrMpSMXyk2Q+oAQQXUEXnfxz73OiSQp05Y9WrgMtY=
+	t=1782139113; cv=none; b=HqzRknjHL+MF5q/8bATftz71xPWJMRsvTmvcYFljT1THaWkw8LrhUy23IZLjkMrhP1Gmosy0GRZqiXspT39aIHKNvqZ7uaZfuXMcPXkLb7FzYZpdHDVfRsmbHn7CU0PEsMpxtAQJAg4T/j97SJhJgvRs+ApGH0oZGGD/fwujzTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782139108; c=relaxed/simple;
-	bh=k5ztgXjyH2GDbXXyA2xUsORRkWUozVJfGvu0SpgqIl4=;
+	s=arc-20240116; t=1782139113; c=relaxed/simple;
+	bh=fUlHDhqMND/+L5o8UANvRTu5cPuiJV9GP64c+IU43TU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KOwMURTqiB6oL8aOPqYSksYiMZROJkQxTnjAkaN/IpPto0pvfFGAKZx1cixtr+eBL0r+Niahlg+8WM4D0g2n/tKL/okqhKCM8P1Y5fgRTSDWfvaBWGYUphlA0Zlbxs47opjrRQ9g7wjGBCz9lyyvdOus+lrtwxYmfxcdD/EiTWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gG+8UUkb; arc=none smtp.client-ip=91.218.175.179
+	 MIME-Version; b=M0+MhrSksL+oG3m0ZyA7bwCERw2RAGWpR+th5BGtuZPbWDak5Uf9TZsbrjYlgcAntdRt5/BtXpObSSe4GendrIrYysmWDo/K62NfUX0kZFE3TJRXDP7GpKTUFFiLBrlnbBZlX2oTfJA0OTdtfttLzeNUSrdz1P9tHBhjeKWFBs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PS1b7DfH; arc=none smtp.client-ip=91.218.175.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gG+8UUkb"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PS1b7DfH"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782139103;
+	t=1782139110;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=30dXQAh3Rbv5muJHoTPKyMD8bLBAM+/VUDQA6uzCiDA=;
-	b=gG+8UUkbJncXHfUcgAA4ImouzqoQ2EDe/nB3Wbyv2JbAwDX+3sH/RZhO+THP+1AwO8T/3x
-	8UqpS/n0iRoC9/bLtBqvwd3y3IT/NrcS31J8SCLMngLck0pa/m+MCYZlGV5BXgob0hhIVT
-	/ypASjqDangEPAX+Zn8XamKg9YRvgdI=
+	bh=oL91VbNPZmNAnrvPuLt4rbdhEqEsR9yfGCAnPPhy9Oc=;
+	b=PS1b7DfHY5caMB7qEPJvwqkCXQIL9KW4nbMR0TJT2ENDj/Zb24jv4MdztkvXNvpHcV6sh8
+	S9m28zUbPLRGh3LACxB47M5CiYGWgj4PWtnAPTeB5YUU83zW+rDM1ficwjPQK+ixVaKl6m
+	CVAbpUKFQF/OH5+ytaOjeYzUsKFV5+I=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -45,9 +45,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v7 10/11] selftests/bpf: Add tests to verify verifier log for global percpu data
-Date: Mon, 22 Jun 2026 22:35:56 +0800
-Message-ID: <20260622143557.22955-11-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v7 11/11] selftests/bpf: Add test to verify bpf_iter for global percpu data
+Date: Mon, 22 Jun 2026 22:35:57 +0800
+Message-ID: <20260622143557.22955-12-leon.hwang@linux.dev>
 In-Reply-To: <20260622143557.22955-1-leon.hwang@linux.dev>
 References: <20260622143557.22955-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -59,65 +59,113 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Add two tests to verify the verifier log
-"R%d points to percpu_array map which cannot be used as const string\n".
+Add a test to verify that it is OK to iter the percpu_array map used for
+global percpu data.
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- .../bpf/prog_tests/global_data_init.c         |  6 +++++
- .../bpf/progs/test_global_percpu_data.c       | 23 +++++++++++++++++++
- 2 files changed, 29 insertions(+)
+ .../bpf/prog_tests/global_data_init.c         | 52 +++++++++++++++++++
+ .../bpf/progs/test_global_percpu_data.c       | 25 +++++++++
+ 2 files changed, 77 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-index f59d83919058..e4c290492ff8 100644
+index e4c290492ff8..32734e1dbfb0 100644
 --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
 +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-@@ -274,6 +274,11 @@ static void test_global_percpu_data_rdonly_direct_read(void)
- 	close(map_fd);
+@@ -279,6 +279,56 @@ static void test_global_percpu_data_verifier_log(void)
+ 	RUN_TESTS(test_global_percpu_data);
  }
  
-+static void test_global_percpu_data_verifier_log(void)
++static void test_global_percpu_data_iter(void)
 +{
-+	RUN_TESTS(test_global_percpu_data);
++	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
++	struct test_global_percpu_data *skel;
++	union bpf_iter_link_info linfo = {};
++	struct bpf_link *link = NULL;
++	int fd, num_cpus, len, err;
++	char buf[16];
++
++	num_cpus = libbpf_num_possible_cpus();
++	if (!ASSERT_GT(num_cpus, 0, "libbpf_num_possible_cpus"))
++		return;
++
++	skel = test_global_percpu_data__open();
++	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
++		return;
++
++	skel->rodata->num_cpus = num_cpus;
++	skel->rodata->offsetof_num = offsetof(struct test_global_percpu_data__percpu, struct_data);
++	skel->rodata->offsetof_num += sizeof(skel->percpu->struct_data) - sizeof(int);
++	skel->rodata->elem_sz = roundup(sizeof(struct test_global_percpu_data__percpu), 8);
++	skel->percpu->struct_data.nums[6] = 0xc0de;
++
++	err = test_global_percpu_data__load(skel);
++	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
++		goto out;
++
++	linfo.map.map_fd = bpf_map__fd(skel->maps.percpu);
++	opts.link_info = &linfo;
++	opts.link_info_len = sizeof(linfo);
++	link = bpf_program__attach_iter(skel->progs.dump_percpu_data, &opts);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
++		goto out;
++
++	fd = bpf_iter_create(bpf_link__fd(link));
++	if (!ASSERT_GE(fd, 0, "bpf_iter_create"))
++		goto out;
++
++	while ((len = read(fd, buf, sizeof(buf))) > 0)
++		do { } while (0);
++	ASSERT_EQ(len, 0, "read iter");
++	ASSERT_TRUE(skel->bss->run_iter, "run_iter");
++	ASSERT_EQ(skel->bss->percpu_data_sum, 0xc0de * num_cpus, "percpu_data_sum");
++
++	close(fd);
++out:
++	bpf_link__destroy(link);
++	test_global_percpu_data__destroy(skel);
 +}
 +
  void test_global_percpu_data(void)
  {
  	if (!feat_supported(NULL, FEAT_PERCPU_DATA)) {
-@@ -287,4 +292,5 @@ void test_global_percpu_data(void)
- 		test_global_percpu_data_lskel();
+@@ -293,4 +343,6 @@ void test_global_percpu_data(void)
  	if (test__start_subtest("rdonly_direct_read"))
  		test_global_percpu_data_rdonly_direct_read();
-+	test_global_percpu_data_verifier_log();
+ 	test_global_percpu_data_verifier_log();
++	if (test__start_subtest("iter"))
++		test_global_percpu_data_iter();
  }
 diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-index ba92ffb0ca49..a6109e835948 100644
+index a6109e835948..eef88fd61af5 100644
 --- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
 +++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-@@ -28,4 +28,27 @@ int update_percpu_data(void *ctx)
+@@ -51,4 +51,29 @@ int verifier_snprintf(void *ctx)
  	return 0;
  }
  
-+static const char fmt[] SEC(".percpu.fmt") = "data %d\n";
++volatile const __u32 num_cpus = 0;
++volatile const int offsetof_num;
++volatile const int elem_sz;
++__u32 percpu_data_sum = 0;
++bool run_iter = false;
 +
-+SEC("?kprobe")
-+__failure __msg("R{{[0-9]+}} points to percpu_array map which cannot be used as const string")
-+int verifier_strncmp(void *ctx)
++SEC("iter/bpf_map_elem")
++__auxiliary
++int dump_percpu_data(struct bpf_iter__bpf_map_elem *ctx)
 +{
-+	return bpf_strncmp("test", 5, fmt);
-+}
++	void *pptr = ctx->value;
++	int i;
 +
-+SEC("?kprobe")
-+__failure __msg("R{{[0-9]+}} points to percpu_array map which cannot be used as const string")
-+int verifier_snprintf(void *ctx)
-+{
-+	u64 args[] = { data };
-+	char buf[128];
-+	int len;
++	if (!pptr)
++		return 0;
 +
-+	len = bpf_snprintf(buf, sizeof(buf), fmt, args, sizeof(args));
-+	if (len > 0)
-+		bpf_printk("snprintf: %s\n", buf);
++	run_iter = true;
++
++	for (i = 0; i < num_cpus; i++) {
++		percpu_data_sum += *(int *) (pptr + offsetof_num);
++		pptr += elem_sz;
++	}
 +	return 0;
 +}
 +
