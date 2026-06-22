@@ -1,289 +1,189 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F23370D54
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 21:26:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A2C23D7F0
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 21:28:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782163592; cv=none; b=aOvA7cV01tTVM58Y0WtsciGTFE4ACq9GMvjL7ZmTWd6R5bpiT3wn65awPZsEfOqztkn68mp2qancPA3qNevQtoRgMQsl+1e6L6YAl6tk/TbDFAtMGiRXRhhLIzxQJr39d6tCmWcYQTQ7NB+kcmv9/fTEsMua6o4FdVALQv19kao=
+	t=1782163690; cv=none; b=onncRlDL/alZM1WMx/I/N3FkZ956KSQgX3rmzhup4SRyjmHQ6daFEjLlEgQ2JWmJJIc/phrnyuYNPL+56srlKYtOISEfgf+auymltHroDgO3P8zeHtpu0j+PwZ7++s1eSSMvcxcvVG/T2s/TvYTptZFDF6mAEOrVd1cWjuJPxeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782163592; c=relaxed/simple;
-	bh=ykgkBwtgk1xwVAtt+5KpHiE085orCB/U6qmobZAqZTU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=p0I873XQ5o7AU8kjGXLOlAaf4+FFO56Eb3iJFtyZyRl3wNUP+sXqV8IMn6QvRFTrC2V/L0EnBYwayxxD81XGD+YfAHu8o2tWi/PCvvCVF6uBY36NLM1j2BFLEmx2TSbiQYLsnY2puyy958dzv00x1I8/wMYUd/9jpVSmXqJ558o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d3+naxBu; arc=none smtp.client-ip=74.125.82.42
+	s=arc-20240116; t=1782163690; c=relaxed/simple;
+	bh=mYxsFEqatuqfwcXdCizKKI1fhpC8U1gkSogJsK7qKaE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LFbrgmNTJ/koKrITsB6oBv1QsxEJ78cXicJwdQ/O/8i7EuX5Nd84pNEvuuabx9MPoTAsBKPi4PzJPXckk7eqHQx7Di05lyFo9d212ftaBmTYQ/DsXsEsAhQgiPErbpv/Sg/IGzWMyrFsG7NNG8Gsk0Pmd9aYQu380DfejDsBj1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HzT4cL7d; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d3+naxBu"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-139a5f4ca15so3524236c88.1
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 14:26:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HzT4cL7d"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-84231305a80so3020889b3a.0
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 14:28:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782163589; x=1782768389; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=8cba5HQyQGiPh0UO5Bpgei15e2Wrxc2IeZ3m6b4CTFE=;
-        b=d3+naxBuSQyOVKL/RI4uhrvMQc+SQojUXGU1pWsYtcHaLtOOPB4pXbtapg9Okv7zAL
-         E30CAH+Ek89ZxHcpcD+x4VCORtBY9bkDI4XnY5kk4kko3CQ1w+0+fidf1ouNmLAuaGw0
-         ZC6YHbhGzaPR6z05BxSrl4N5wR1xyU7j7K1JDN2T5fe6VqpyGtKnQze0Npq5jNfJmu1h
-         OyIWQ5llfJRLt7z4Lis7fsD9Hc/XxY8au9pvToeQQyNb8nqSvgK+t1ndgu1w6fcA5oPJ
-         jJiUGZk2RXQtpOdfD7kJ7fxY9M5yp221gdjNYL6blEqiue/wLH9Iuf/Q9/Bv4YTPb1eH
-         Lt8A==
+        d=gmail.com; s=20251104; t=1782163689; x=1782768489; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JuqJabFFbQmPGzhmB4FLpo8sCHROklOUvbmq7PrEhNo=;
+        b=HzT4cL7dY6KirZcZuIrqais75sr+JShVwwL7E1a1EKRB6Bj+8ULM54QFAMo1FjMAJZ
+         ZJ4yYBgJNutECiFrgSoO7MWR+LCxOXDJcXIkh+aSYxkdm16/F3lFdX7Gt+qQvjAQu8Jp
+         lwN1apRP16rWqkRV384NKgm4uRishIK26hBOyjmUowBAc5xYyYAIr7OyIWZ0Xtx5n8dM
+         kfmQessewmGfmu8wJM9j1RU2plwp0kx/rt81jYpTd3JaUaSWInHawBUC3U1XaSR+UZP3
+         HNhlu9cYX30z0rzCKv8XjiN8/GnhYFCnzGZD9DF+rpx8cZCPbb8DOEJiUI2uM8ZF4GAL
+         jgKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782163589; x=1782768389;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8cba5HQyQGiPh0UO5Bpgei15e2Wrxc2IeZ3m6b4CTFE=;
-        b=Tg1FkRHOCxznlj476gERnmP/zneTqlNRiVuzpYU/LEBzxw39WL4kxYTY/TL6m2hGiQ
-         0QiTyJCKNfQrwOw6xxURNfcqSaMnt/6A3ZYt14dT1/2DZ6JBqLFhbtov13LJF5Xnq+9Z
-         0HbmPkXi/i+kWld01EgqPJ03AbXo+2P7MAKozfLve2ADcG7UJ1YdaR3JQ2gG6zX+LCp7
-         kdxLI+zAlTDuK2ZHwk8jUdDcE89QM2IgtY+04CIt3cAvZGTHT2v8Cz+WqP/L4jVoY00a
-         x1LPDY5OmWCgNcvwqdr2rHKuacX/nwOX36BPqDFZrfprlgIMEeTQUVJ4F7iBV1/zxL30
-         AAiQ==
-X-Gm-Message-State: AOJu0YwJiNCvSHMeWOH4+3X/cXIpCseoqwv4PcHEl0fXuqgv9UFNCtsR
-	GLb11yYab3xBMkBr3G2zI8T2NS0ainm9vmoh2aWGK672wl42zMk52DnV
-X-Gm-Gg: AfdE7cmjtShgJLolCcvuubVWJ82onIJOY6tFerQQt/AQjDUnwYJGaktsk/y54FqYor0
-	WJfkhXRMzM8v2MeYTJVQWJQehDjrZrcB/2FFwTPggRD2IgjECL//JiHFtENnEyh2cTnQoHWePeo
-	XrQgGzg6hPOf/g22D0ktl4Wv/lvg9fqOzqW75BXGT9ytHfCoJTcGuAfza5Wu1Smd9OGF0F0bV/f
-	8rRCdiIHG2xgILadD39M+jcx3jgmgtTC9dylWU8KEnOL6HDs683YDztHqtJu45BxIe3sc1yh+4d
-	IPsYzGjZQ+FScjf+FTLM7Zlm72U+leeyAldFPwyprd9QslJOXFwPiK5nGBjDv2hHtuerEtz4A4W
-	T6FD4l0ur+t7aO8ifq6ca+RpF8kRCnT+QuZEPruBo5GCfjO+63vFNUAXMNYXCKIQy64tXnLSipW
-	y2bqdPo0EbPD7sNjTJdaMyfS6e9GRTTYrAgIrFRZ6DLGANkI+LYpfyYE3bJATX8i1ZQpQAFw==
-X-Received: by 2002:a05:7301:678c:b0:304:54d6:20f3 with SMTP id 5a478bee46e88-30c06d4b6c2mr10278702eec.4.1782163588310;
-        Mon, 22 Jun 2026 14:26:28 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:e520:295b:47ea:ebb1? ([2620:10d:c090:500::2:e7b3])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1bd8d799sm11031846eec.19.2026.06.22.14.26.27
+        d=1e100.net; s=20251104; t=1782163689; x=1782768489;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JuqJabFFbQmPGzhmB4FLpo8sCHROklOUvbmq7PrEhNo=;
+        b=j7NGb9dVBvJj5H3RjiQWbd1JTOmM2zLl5gpPaORebhg8rVWB+H3i1BjQDEELDq05zu
+         IRxJG+4sm89e0g+UyFMO6yEX1QGI+uaofx3x2+0JcTkA9TVjvTGrM4BbuKDbYhDASZhf
+         dXXWXq2+gvI67MwpOdzxDDZ5lDboqwneftS+tFZz9NzDP/1dkymOlK0vhKkNYFZxC2sC
+         mdlpSqYFeOib0sbikzHy+MaatTwnWwM8XRg0qAHHCvBtgoXLwKQAVvVPGwbJtSj9iykl
+         5WN97T+lmjAkqW/psHRA7nMo3Sjvm6BmWlP+eCYFYMeFGIu7CsODdxLC3OopQiMrAKHc
+         iieA==
+X-Forwarded-Encrypted: i=1; AFNElJ/BZvd5JU4VD5HXLbmYO20Xc384pD7IXjGk+6MUuBNJSCXXwIAbQfKtgrko3dlWWPom7qc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw88YIOBbDvdWXmL/BlavG0UQaaRSf1UDWD9p1pyFkwCkuU4KiV
+	jQOBsUtSIgUVpnD5RQUm0TdqG2TALCusFrvzNGX5LmvI9DIWh7tPzGtT
+X-Gm-Gg: AfdE7clYLtqpfDU+lcRmKxkjmyI3a88tkcsVjU6q0rzrMZ7Gvp9JToZrI1qNbEtVEp+
+	QSL9sCQp7U7dAzIMnH9niZ0eKWw++P7Gp1RlVSDoo/xhB4NzqQNSFUc0MIKRjJ9yeSnA5IWfzVQ
+	GvpbFq9bYkTRiV2xoGccyuTb/8sGCYeEEDu+AqrrWRt/zRIJfmnwdyPgKetlV6d9kU6SA1AXnRz
+	blGwwMiBOuKG7lPF3n8GBmVHVRqQuUiZRDlv9QJq5s+Y6oRZQln0NPJp866vNFZ7iqP8g2IHNHY
+	Sdi0a6VqJEkBlb5CJR9T7Xi2lAHze1cyaetIKAQDikwveJAE1+kpW5wPRTwea+shmYOeW17YVi2
+	jOzf1T+GqPSkhGropDZieveiT5yOxog4Qj4fESs9E+GG0TAAMOPDTYkBBbkTq20xUcIm3eeF+H6
+	BH6mK+Bi7MRLngw5enGrJZrno=
+X-Received: by 2002:a05:6a00:181d:b0:82f:8e9f:bdd5 with SMTP id d2e1a72fcca58-8455075f2c1mr16724772b3a.1.1782163688727;
+        Mon, 22 Jun 2026 14:28:08 -0700 (PDT)
+Received: from google.com ([118.150.148.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84564ec335csm8459379b3a.49.2026.06.22.14.28.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2026 14:26:27 -0700 (PDT)
-Message-ID: <8a14129295fdbcfe16e811455317108b7b029884.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Cover var-offset stack
- reads from zero spills
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Woojin Ji <random6.xyz@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>, Martin
- KaFai Lau <martin.lau@linux.dev>, Song Liu	 <song@kernel.org>, Yonghong
- Song <yonghong.song@linux.dev>, Jiri Olsa	 <jolsa@kernel.org>, Emil
- Tsalapatis <emil@etsalapatis.com>, John Fastabend	
- <john.fastabend@gmail.com>
-Cc: bpf@vger.kernel.org
-Date: Mon, 22 Jun 2026 14:26:26 -0700
-In-Reply-To: <20260613-bpf-stack-var-off-zero-v1-v2-2-a324af0f00ea@gmail.com>
-References: <20260613-bpf-stack-var-off-zero-v1-v2-0-a324af0f00ea@gmail.com>
-	 <20260613-bpf-stack-var-off-zero-v1-v2-2-a324af0f00ea@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+        Mon, 22 Jun 2026 14:28:08 -0700 (PDT)
+Date: Tue, 23 Jun 2026 05:28:01 +0800
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: Pu Lehui <pulehui@huawei.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com, luke.r.nels@gmail.com,
+	xi.wang@gmail.com, pjw@kernel.org, palmer@dabbelt.com,
+	aou@eecs.berkeley.edu, martin.lau@linux.dev, song@kernel.org,
+	yonghong.song@linux.dev, jolsa@kernel.org, alex@ghiti.fr,
+	jserv@ccns.ncku.edu.tw, eleanor15x@gmail.com, marscheng@google.com,
+	bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 2/3] riscv, bpf: Fix support for BPF_MOVSX in
+ RV32 JIT
+Message-ID: <ajmo4VeTykr5ozBw@google.com>
+References: <20260511221648.3251464-1-visitorckw@gmail.com>
+ <20260511221648.3251464-3-visitorckw@gmail.com>
+ <2ca2a85a-d4a9-4459-a534-6159de6e5890@huawei.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2ca2a85a-d4a9-4459-a534-6159de6e5890@huawei.com>
 
-On Sat, 2026-06-13 at 20:16 +0900, Woojin Ji wrote:
-> Add verifier_var_off coverage for variable-offset stack reads from
-> spilled scalar constant zero values.
->=20
-> Cover single-slot and cross-slot spilled zero reads, a sub-8-byte spill
-> with neighbouring STACK_ZERO bytes, and a sub-8-byte spill with
-> neighbouring STACK_MISC bytes that must not be treated as zero. Add a
-> state-pruning negative test to ensure the verifier marks the spilled
-> zero stack slot precise before using it to derive a const-zero register.
->=20
-> Use verifier log assertions to check both the zero result and the
-> precision backtracking trail.
->=20
-> Assisted-by: opencode:gpt-5.5
-> Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
+Hi Lehui,
 
-Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
+On Wed, Jun 17, 2026 at 03:30:03PM +0800, Pu Lehui wrote:
+> 
+> 
+> On 2026/5/12 6:16, Kuan-Wei Chiu wrote:
+> > The current rv32 bpf jit compiler incorrectly treats BPF_MOVSX as a
+> > standard zero-extended move operation. The bpf instruction set allows
+> > sign-extension moves by reusing the BPF_MOV opcode with the instruction
+> > offset set to 8, 16, or 32.
+> > 
+> > Update the bpf_jit_emit_insn() function to check the offset field for
+> > both ALU and ALU64 MOV operations. If the offset is non-zero, emit the
+> > correct slli and srai instructions to perform the sign extension.
+> > 
+> > Before this patch:
+> > [   19.549705] test_bpf: #82 ALU_MOVSX | BPF_B jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
+> > [   19.551354] test_bpf: #83 ALU_MOVSX | BPF_H jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
+> > [   19.552576] test_bpf: #84 ALU64_MOVSX | BPF_B jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
+> > [   19.553542] test_bpf: #85 ALU64_MOVSX | BPF_H jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
+> > [   19.554807] test_bpf: #86 ALU64_MOVSX | BPF_W jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
+> > 
+> > After this patch:
+> > [   17.931172] test_bpf: #82 ALU_MOVSX | BPF_B jited:1 125 PASS
+> > [   17.932198] test_bpf: #83 ALU_MOVSX | BPF_H jited:1 124 PASS
+> > [   17.933039] test_bpf: #84 ALU64_MOVSX | BPF_B jited:1 124 PASS
+> > [   17.933918] test_bpf: #85 ALU64_MOVSX | BPF_H jited:1 124 PASS
+> > [   17.934751] test_bpf: #86 ALU64_MOVSX | BPF_W jited:1 122 PASS
+> > 
+> > Fixes: 8100928c8814 ("bpf: Support new sign-extension mov insns")
+> 
+> not a fix, the fixes tag should remove. And the title should `Add support
+> for xxx`
 
-Could you please fix a few nits below?
-pw-bot: cr.
+Thanks for the review.
 
+I did consider using 'Add support' instead of 'Fix' for the title. I
+went with 'Fix' because when the JIT doesn't support a BPF instruction,
+it's supposed to return an error code to trigger a fallback to the
+interpreter. Right now, it doesn't return an error code and just
+executes it anyway, producing results that violate the spec and
+breaking bpf_test.
 
-> ---
->  .../testing/selftests/bpf/progs/verifier_var_off.c | 148 +++++++++++++++=
-++++++
->  1 file changed, 148 insertions(+)
->=20
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_var_off.c b/tools=
-/testing/selftests/bpf/progs/verifier_var_off.c
-> index f345466bc..f0052d831 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_var_off.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_var_off.c
-> @@ -59,6 +59,154 @@ __naked void stack_read_priv_vs_unpriv(void)
->  "	::: __clobber_all);
->  }
-> =20
-> +SEC("cgroup/skb")
-> +__description("variable-offset stack read preserves spilled zero")
-> +__success
-> +__log_level(2)
-> +__msg("mark_precise: frame0: regs=3D stack=3D-8")
-> +__msg("R3=3D0")
-> +__failure_unpriv __msg_unpriv("R2 variable stack access prohibited for !=
-root")
+Regards,
+Kuan-Wei
 
-Nit: can drop the __failure_unpriv check
-
-> +__retval(0)
-> +__naked void stack_read_var_off_preserves_spilled_zero(void)
-> +{
-> +	asm volatile ("\
-                      ^^^ please keep these similar to other tests in the f=
-ile.
-> +	r0 =3D 0;\
-> +	*(u64*)(r10 - 8) =3D r0;\
-> +	r2 =3D *(u32*)(r1 + 0);\
-> +	r2 &=3D 7;\
-> +	r2 -=3D 8;\
-> +	r2 +=3D r10;\
-> +	r3 =3D *(u8*)(r2 + 0);\
-> +	r1 =3D r10;\
-> +	r1 +=3D -1;\
-> +	r1 +=3D r3;\
-> +	*(u8*)(r1 + 0) =3D r3;\
-> +	r0 =3D 0;\
-> +	exit;\
-> +"	::: __clobber_all);
-> +}
-> +
-> +SEC("cgroup/skb")
-> +__description("variable-offset stack read preserves spilled zero across =
-slots")
-> +__success
-> +__log_level(2)
-> +__msg("mark_precise: frame0: regs=3D stack=3D-8,-16")
-> +__msg("R3=3D0")
-> +__failure_unpriv __msg_unpriv("R2 variable stack access prohibited for !=
-root")
-> +__retval(0)
-> +__naked void stack_read_var_off_preserves_spilled_zero_across_slots(void=
-)
-> +{
-> +	asm volatile ("\
-> +	r0 =3D 0;\
-> +	*(u64*)(r10 - 8) =3D r0;\
-> +	*(u64*)(r10 - 16) =3D r0;\
-> +	r2 =3D *(u32*)(r1 + 0);\
-> +	r2 &=3D 15;\
-> +	r2 -=3D 16;\
-> +	r2 +=3D r10;\
-> +	r3 =3D *(u8*)(r2 + 0);\
-> +	r1 =3D r10;\
-> +	r1 +=3D -1;\
-> +	r1 +=3D r3;\
-> +	*(u8*)(r1 + 0) =3D r3;\
-> +	r0 =3D 0;\
-> +	exit;\
-> +"	::: __clobber_all);
-> +}
-> +
-> +SEC("cgroup/skb")
-> +__description("variable-offset stack read preserves partial spilled zero=
-")
-> +__success
-> +__log_level(2)
-> +__msg("mark_precise: frame0: regs=3D stack=3D-8")
-> +__msg("R3=3D0")
-> +__failure_unpriv __msg_unpriv("R2 variable stack access prohibited for !=
-root")
-> +__retval(0)
-> +__naked void stack_read_var_off_preserves_partial_spilled_zero(void)
-> +{
-> +	asm volatile ("\
-> +	r0 =3D 0;\
-> +	*(u8*)(r10 - 9) =3D r0;\
-> +	*(u8*)(r10 - 10) =3D r0;\
-> +	*(u8*)(r10 - 11) =3D r0;\
-> +	*(u8*)(r10 - 12) =3D r0;\
-> +	*(u8*)(r10 - 13) =3D r0;\
-> +	*(u8*)(r10 - 14) =3D r0;\
-> +	*(u8*)(r10 - 15) =3D r0;\
-> +	*(u32*)(r10 - 8) =3D r0;\
-> +	r2 =3D *(u32*)(r1 + 0);\
-> +	r2 &=3D 15;\
-> +	if r2 > 10 goto l0_%=3D;\
-> +	r2 -=3D 15;\
-> +	r2 +=3D r10;\
-> +	r3 =3D *(u8*)(r2 + 0);\
-> +	r1 =3D r10;\
-> +	r1 +=3D -1;\
-> +	r1 +=3D r3;\
-> +	*(u8*)(r1 + 0) =3D r3;\
-> +l0_%=3D: r0 =3D 0;\
-> +	exit;\
-> +"	::: __clobber_all);
-> +}
-> +
-> +SEC("cgroup/skb")
-> +__description("variable-offset stack read partial spill with misc data")
-> +__failure
-> +__msg("invalid variable-offset write to stack R1")
-> +__failure_unpriv __msg_unpriv("R2 variable stack access prohibited for !=
-root")
-> +__naked void stack_read_var_off_partial_spill_with_misc_data(void)
-> +{
-> +	asm volatile ("\
-> +	r0 =3D 0;\
-> +	*(u32*)(r10 - 8) =3D r0;\
-> +	r2 =3D *(u32*)(r1 + 0);\
-> +	r2 &=3D 7;\
-> +	r2 -=3D 8;\
-> +	r2 +=3D r10;\
-> +	r3 =3D *(u8*)(r2 + 0);\
-> +	r1 =3D r10;\
-> +	r1 +=3D -1;\
-> +	r1 +=3D r3;\
-> +	*(u8*)(r1 + 0) =3D 0;\
-> +	r0 =3D 0;\
-> +	exit;\
-> +"	::: __clobber_all);
-> +}
-> +
-> +SEC("cgroup/skb")
-> +__description("variable-offset stack read tracks spilled zero precisely"=
-)
-> +__failure
-> +__flag(BPF_F_TEST_STATE_FREQ)
-> +__log_level(2)
-> +__msg("mark_precise: frame0: regs=3D stack=3D-8")
-> +__msg("invalid variable-offset write to stack R1")
-> +__failure_unpriv __msg_unpriv("R2 variable stack access prohibited for !=
-root")
-> +__naked void stack_read_var_off_tracks_spilled_zero_precisely(void)
-
-I don't think this test is necessary, tbh.
-
-> +{
-> +	asm volatile ("\
-> +	r6 =3D *(u32*)(r1 + 0);\
-> +	r6 &=3D 1;\
-> +	r0 =3D 0;\
-> +	if r6 !=3D 0 goto l0_%=3D;\
-> +	*(u64*)(r10 - 8) =3D r0;\
-> +	goto l1_%=3D;\
-> +l0_%=3D: r0 =3D 1;\
-> +	*(u64*)(r10 - 8) =3D r0;\
-> +l1_%=3D: r0 =3D 0;\
-> +	r2 =3D *(u32*)(r1 + 4);\
-> +	r2 &=3D 7;\
-> +	r2 -=3D 8;\
-> +	r2 +=3D r10;\
-> +	r3 =3D *(u8*)(r2 + 0);\
-> +	r1 =3D r10;\
-> +	r1 +=3D -1;\
-> +	r1 +=3D r3;\
-> +	*(u8*)(r1 + 0) =3D 0;\
-> +	r0 =3D 0;\
-> +	exit;\
-> +"	::: __clobber_all);
-> +}
-> +
->  SEC("cgroup/skb")
->  __description("variable-offset stack read, uninitialized")
->  __success
+> 
+> others lgtm,
+> 
+> Reviewed-by: Pu Lehui <pulehui@huawei.com>
+> 
+> > Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+> > ---
+> >   arch/riscv/net/bpf_jit_comp32.c | 32 ++++++++++++++++++++++++++++++++
+> >   1 file changed, 32 insertions(+)
+> > 
+> > diff --git a/arch/riscv/net/bpf_jit_comp32.c b/arch/riscv/net/bpf_jit_comp32.c
+> > index 7396899ea276..f8509950fed4 100644
+> > --- a/arch/riscv/net/bpf_jit_comp32.c
+> > +++ b/arch/riscv/net/bpf_jit_comp32.c
+> > @@ -974,6 +974,24 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+> >   	switch (code) {
+> >   	case BPF_ALU64 | BPF_MOV | BPF_X:
+> > +		if (insn->off != 0) {
+> > +			const s8 *rd = bpf_get_reg64(dst, tmp1, ctx);
+> > +			const s8 *rs = bpf_get_reg64(src, tmp2, ctx);
+> > +
+> > +			if (insn->off == 8) {
+> > +				emit(rv_slli(lo(rd), lo(rs), 24), ctx);
+> > +				emit(rv_srai(lo(rd), lo(rd), 24), ctx);
+> > +			} else if (insn->off == 16) {
+> > +				emit(rv_slli(lo(rd), lo(rs), 16), ctx);
+> > +				emit(rv_srai(lo(rd), lo(rd), 16), ctx);
+> > +			} else {
+> > +				emit(rv_addi(lo(rd), lo(rs), 0), ctx);
+> > +			}
+> > +			emit(rv_srai(hi(rd), lo(rd), 31), ctx);
+> > +			bpf_put_reg64(dst, rd, ctx);
+> > +			break;
+> > +		}
+> > +		fallthrough;
+> >   	case BPF_ALU64 | BPF_ADD | BPF_X:
+> >   	case BPF_ALU64 | BPF_ADD | BPF_K:
+> > @@ -1024,6 +1042,20 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+> >   			emit_zext64(dst, ctx);
+> >   			break;
+> >   		}
+> > +		if (insn->off != 0) {
+> > +			const s8 *rd = bpf_get_reg32(dst, tmp1, ctx);
+> > +			const s8 *rs = bpf_get_reg32(src, tmp2, ctx);
+> > +
+> > +			if (insn->off == 8) {
+> > +				emit(rv_slli(lo(rd), lo(rs), 24), ctx);
+> > +				emit(rv_srai(lo(rd), lo(rd), 24), ctx);
+> > +			} else if (insn->off == 16) {
+> > +				emit(rv_slli(lo(rd), lo(rs), 16), ctx);
+> > +				emit(rv_srai(lo(rd), lo(rd), 16), ctx);
+> > +			}
+> > +			bpf_put_reg32(dst, rd, ctx);
+> > +			break;
+> > +		}
+> >   		fallthrough;
+> >   	case BPF_ALU | BPF_ADD | BPF_X:
