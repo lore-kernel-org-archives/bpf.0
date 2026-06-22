@@ -1,146 +1,236 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FED1270EC3;
-	Mon, 22 Jun 2026 10:34:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7012427603C
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 10:35:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782124484; cv=none; b=ucNFSCUV/RXomHbTdFroSCbY5ZfkfuTq2o47oVH5mO5atZawIK5OrjyERdzBXS/XFqcvAgEoPpFGKhbB6MPjB5kbNouFq6LBN+AvEZWbNfstSu7gBc+tepaGU8WGTUFT37UmjaRBDXMtwy+6HRB4RZhKn9oGhbbrcKuOFm9AOgc=
+	t=1782124558; cv=none; b=nTPYzYeKv/qo28+RghG7boYM0z+O0T15S3OUV/xc02o8wcUEG4OnpfGscbR4JKCuhd3YNQnLYKscbK+JjjmkdVfYYjXHJKx//xbp4jlzfd5jqmMDWjJUt5MGytnQoJ3gBIwbuF7xePkYNQP9HvTDAuRqL4/qWcS4T7moD4Vj7Yc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782124484; c=relaxed/simple;
-	bh=DesorlLzRm3VRMrt3mBXPnHHcOqRF4LtCLG/l6RuPaY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M8MFmZShNRFvQmv9z613+xohm8g2KRlCdrfs5Ure5z3E1MxfA+pfBu2ds7XIaFDhIPS0QyqWw/JAByJHt/YkuEAwxP+imk/UBd5BKDEINVH3pSyWY1iMG3g7qR0qQbv9LOi3UBpxeMTrHrE4z3iud/OHeb3iG7u/HCWc0175C98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=rA9SWMKX; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1782124558; c=relaxed/simple;
+	bh=joqOw3r3l/AriAm5lzRC9enLA0DafnLfJyrYSdfa6sc=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L7DUWOYL6RyF37arMqkDbE/0Am9AEQSHb8K0dBUqlUMTytHgAUL41SYUh0EMHOEdHdvQfPQHCVnl5/60cPJKFMlkgwEvKpUTv3hdt7TR9MHMMzrDj9JTOlqHS26Urgt1imwaeVyiXi9CH7OuRzwV5ANBH8mv1ZXjeU793z8VL0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mzY2S+bT; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="rA9SWMKX"
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65M9NpjC1433093;
-	Mon, 22 Jun 2026 10:34:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=corp-2025-04-25; bh=1DYOunAByr7eEbTA81uowPjUCc6bF
-	2l3iupFX2dUSQk=; b=rA9SWMKX+/7kAO/t2BYc9gCfqzFCRLg3VS6Sa0V+TZjx/
-	Wyfy+9s0z38HQIbBFs8Pjq5Oyc2MowUYEhm9CyKNAWaJvs4D1pTRqqDrI+w2eIeL
-	V8onMkNN5nE01+lwEKOZPdjvYyOH8K6FPb4GMisltvk4g0q3FHuKqEyxG4GTbsLI
-	dsGlOvAAhgQA3xvliCv5OhTdv5TYhLK7JN266GvXNm4KoqRecHMmBaP0qS+4NyKg
-	1T3Z2MHjdIIWIoxVQbcO3pEbkbq75k/6PoHP8+oIjljmKkWbkFLbG+EBB1UJEDI2
-	vIINTRFc1eKE0S2MMKumevIsQnAoA8+t1Pvx5qaXg==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4ewhs91qed-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 22 Jun 2026 10:34:22 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 65MAXTR2023014;
-	Mon, 22 Jun 2026 10:34:21 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4ewhanj2wm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 22 Jun 2026 10:34:21 +0000 (GMT)
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 65MAYKT9026740;
-	Mon, 22 Jun 2026 10:34:20 GMT
-Received: from bpf.uk.oracle.com (dhcp-10-154-57-160.vpn.oracle.com [10.154.57.160])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4ewhanj2vd-1;
-	Mon, 22 Jun 2026 10:34:20 +0000 (GMT)
-From: Alan Maguire <alan.maguire@oracle.com>
-To: peterz@infradead.org, acme@kernel.org
-Cc: mingo@redhat.com, namhyung@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, james.clark@linaro.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH perf] perf: Fix btf_vlen() signedness errors
-Date: Mon, 22 Jun 2026 11:34:18 +0100
-Message-ID: <20260622103418.579115-1-alan.maguire@oracle.com>
-X-Mailer: git-send-email 2.43.5
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mzY2S+bT"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-490b64c8311so40421865e9.3
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 03:35:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782124555; x=1782729355; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aZ6i2HAhckG7aWM48BWlDJy30pPlvkRBinVIai6SZpM=;
+        b=mzY2S+bTSgnNEt3pPem/deeydQwq3zikNGJMDToRmc5UHD8mi00w4h9ujbQ1fwhqqG
+         W5nwc3kkduV3VmB1eaO2B9PdSXXHfn9/rbuiiKVWR90xMOSLIfpHxpUMnb/PUVvjMZys
+         6k6Z2yNYOUzIBc2sKu//7YlG+9Nni7t1AEbl0GoLMjvOcsTk2Ngdjun2M3Re0Q4y9Bja
+         DNXFiP+vhV46bSpAZSU+tE/9VCSnyLT5RdCdZ8gkTWerulNDzPwn5blR+Iz8tnvBHbVn
+         B9XkPduWh0ze/sStDpuprZv3bcn6qPsNWYOqVvK4poV6HeUHgGw33pEk4rGwMZYbsoqm
+         +C+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782124555; x=1782729355;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aZ6i2HAhckG7aWM48BWlDJy30pPlvkRBinVIai6SZpM=;
+        b=DTcFBva48qgLmcI6G+M4jX6M3sjvagwUuzLYLWNcxwupHIcVeVbrJ5QnGC37NyvIbk
+         6Okgioehz+oTfCacEUeli5lm87XWqsuDKEB6FRyCqNWDMCjjRfy5xPh7bd/Y86Idb6vl
+         rH5FozEfFnLuEQ/G0e/G6hlsocYByKBNxEY0OaVRkmiFx5jahrkcz10HsIWQ6HuVh07S
+         1w2piKWYAvCISHocFcKk2J7j77WAK9wThgeMi3scmh2OPgQ2SJjYPnUcQFvjXjdhI1e+
+         go+fk+rwWC/350daz988GjNXWpbFXtM2NIsL2/HplrJ9CK7cufXUGiDiZX9g0s6yJz2f
+         O8jw==
+X-Gm-Message-State: AOJu0YyxfGFjqhit5DGJqfvSitU7czyP6hlu6e0x1qHU5LZ236aV8fD0
+	n4qVyWk1IdaUpVO5gdQIc+6qas7fIkZVG0CeEDqh97PFPFq9HKPJqTHE
+X-Gm-Gg: AfdE7cl9xrG3mC4boeyTrclHJnwkTGaJjM3hy+ykTe+bex+3kgEuaDIVWmqLBoVftbA
+	DmPmXNfMO+wkDGGnyCu2NLyvl4Lopj1JPW3mZYVMLiwgV6cJLVnv5wsIAZNkPQ8jc11SQzwCMJo
+	OE3xBfripU8LlSofyUf9c9Oc0mrxfPw0PG86nHQ1/CmXW/NCd0B737l/jZvzSSZXfYZuKBRztDM
+	O0/b1KwdB4ZgQgNHzUfLcp+0E01wfxs3kF5T2OdDn0Su24oo1uxhUcSt0MohqG1eyY7Jt/Bofis
+	coFD7qjgnw3CT1XYWGYH9aqxHwVTUPbHaJXxff38e2Y+xBnMltEDyGdn4IVavRmu9YB7dQmol1q
+	cQDxTrHPw7+tyMinkQn9xCq1y1wHZ6Bwa+KAYooTsG/Pf7JvTj0aAfmuEjTD9cjxYCRir+srnfc
+	8Ka31QLoEBtAAFkR8=
+X-Received: by 2002:a05:600c:37c3:b0:490:e19b:bd99 with SMTP id 5b1f17b1804b1-49240e768acmr228789805e9.30.1782124554425;
+        Mon, 22 Jun 2026 03:35:54 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49245a69f81sm252844535e9.1.2026.06.22.03.35.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jun 2026 03:35:53 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 22 Jun 2026 12:35:52 +0200
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next 3/3] bpftool: Add tracing_multi link info output
+Message-ID: <ajkQCLW3k0cIEuut@krava>
+References: <20260621204524.61067-1-jolsa@kernel.org>
+ <20260621204524.61067-4-jolsa@kernel.org>
+ <20260621205628.2920D1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-22_01,2026-06-18_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
- suspectscore=0 mlxlogscore=999 adultscore=0 phishscore=0 mlxscore=0
- spamscore=0 lowpriorityscore=0 malwarescore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.19.0-2606160000 definitions=main-2606220104
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjIyMDEwNCBTYWx0ZWRfXxXnu3AFeouzW
- 0tf6tvWZ9EbUs7bCFDicEhQZaAdlo911hMgbe1+XaplBjbAgf5ghDtBz+C3Ys1zQ7BEDj20rFVj
- qeI98n3CmIY647Ku5MctIAnHdestj5HodbNkjISz1eah1qsLCqHV3dCOoJSALa5j7eLAB5vbAKp
- 6JAKzozveSjHANHbr/DwgZ3J8Uu7Oo2WFpus2we/TF82I4yI5U+jQd2IK99Feo5JmR/Hnng5ozD
- Dhgh/FJ+Md0l2flJPz79+2pVvqxD6AFPDeDdg4T8AoPqfU85qbF6N4mGh3lqBYAcSM7RURaa+Mi
- QgkdUjnq5kIErPFuRUiSIxL1j+XsPze9kjUFpaVk+6rAMYxtz8NoRTK+1oXQjKVW8qtt1kFj5vq
- Rqe4xulndaT3qOUH51wT1uAiJsTVoewHNMleUAr0YGne2qNvoakZkZ6J5ec2iofowlqFwAFOKsj
- 8RkjiIGb1sT/Ivwwbu2Q/0vy4O++p7m7vOflPF6E=
-X-Proofpoint-ORIG-GUID: SE3XHrudSzrYM23J0YiOzPq4BQr4ycoR
-X-Authority-Analysis: v=2.4 cv=Wokb99fv c=1 sm=1 tr=0 ts=6a390fae b=1 cx=c_pps
- a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
- a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=x0eKOSpe3m1H3M0S9YoZ:22 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8
- a=NJn8BqKIbz5wdmeMu50A:9 a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22
- cc=ntf awl=host:13723
-X-Proofpoint-GUID: SE3XHrudSzrYM23J0YiOzPq4BQr4ycoR
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjIyMDEwNCBTYWx0ZWRfX1Fqk6SUhhUkE
- 9okkQq4p8WDl3BB+w+Pg9vXZ4Jpf02I0wpSVB5F8c2wGaqDypI1QrpniuzpAuTvxcFoYjFFeHa2
- jq8yf7cFatSFenPzl+FsgmVMJ8d5FyoN87sEIgDcC7wsY++4NbDp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260621205628.2920D1F000E9@smtp.kernel.org>
 
-Commit f7a6b9eaff3e6 ("bpf: Extend BTF UAPI vlen, kinds to use unused bits")
+On Sun, Jun 21, 2026 at 08:56:27PM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] Repeated parsing of `/proc/kallsyms` in an O(N) loop when symbol loading fails.
+> --
+> 
+> commit 0f11f8e705a95b6aa483a05374ffb9b22bcb78c0
+> Author: Jiri Olsa <jolsa@kernel.org>
+> 
+> bpftool: Add tracing_multi link info output
+> 
+> This commit adds bpftool support to show tracing_multi link details for both
+> plain and JSON outputs.
+> 
+> > diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
+> > index bdcd717b0348f..58dadee984a07 100644
+> > --- a/tools/bpf/bpftool/link.c
+> > +++ b/tools/bpf/bpftool/link.c
+> > @@ -377,6 +377,31 @@ static __u64 *u64_to_arr(__u64 val)
+> >  	return (__u64 *) u64_to_ptr(val);
+> >  }
+> >  
+> > +static __u32 *u64_to_u32_arr(__u64 val)
+> > +{
+> > +	return (__u32 *)u64_to_ptr(val);
+> > +}
+> > +
+> > +static struct kernel_sym *find_kernel_sym_by_addr(__u64 addr, bool is_ibt_enabled)
+> > +{
+> > +	struct kernel_sym *sym;
+> > +
+> > +	if (!addr)
+> > +		return NULL;
+> > +
+> > +	/* Load it once for all. */
+> > +	if (!dd.sym_count)
+> > +		kernel_syms_load(&dd);
+> > +	if (!dd.sym_count)
+> > +		return NULL;
+> > +
+> > +	sym = kernel_syms_search(&dd, addr);
+> > +	if (!sym && is_ibt_enabled && addr >= 4)
+> > +		sym = kernel_syms_search(&dd, addr - 4);
+> > +
+> > +	return sym;
+> > +}
+> 
+> [ ... ]
+> 
+> > @@ -403,6 +428,43 @@ show_uprobe_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
+> >  	jsonw_end_array(json_wtr);
+> >  }
+> >  
+> > +static void
+> > +show_tracing_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
+> > +{
+> > +	bool is_ibt_enabled = is_x86_ibt_enabled();
+> > +	__u32 i;
+> > +
+> > +	show_link_attach_type_json(info->tracing_multi.attach_type, wtr);
+> > +	jsonw_uint_field(wtr, "func_cnt", info->tracing_multi.count);
+> > +	jsonw_uint_field(wtr, "obj_id", info->tracing_multi.obj_id);
+> > +	jsonw_name(wtr, "funcs");
+> > +
+> > +	jsonw_start_array(wtr);
+> > +
+> > +	for (i = 0; i < info->tracing_multi.count; i++) {
+> > +		__u64 addr = u64_to_arr(info->tracing_multi.addrs)[i];
+> > +		struct kernel_sym *sym;
+> > +
+> > +		sym = find_kernel_sym_by_addr(addr, is_ibt_enabled);
+> 
+> [Severity: Medium]
+> If kernel_syms_load() fails (for example, due to kernel.kptr_restrict or
+> a lack of read permissions for /proc/kallsyms), dd.sym_count remains 0.
+> 
+> Since find_kernel_sym_by_addr() checks !dd.sym_count to decide whether to load
+> symbols, won't this cause /proc/kallsyms to be repeatedly opened and parsed on
+> every iteration of this loop if the initial load fails?
+> 
+> This loop occurs here in show_tracing_multi_json() as well as in
+> show_tracing_multi_plain(). For tracing_multi links with potentially thousands
+> of targets, could this result in a significant performance hang for bpftool?
 
-extended the return value for btf_vlen() to __u32, triggering
-errors for cases where an int was used to store return value.
-Fix these cases for perf as was done for other libbpf consumers.
+ok, I think we can make sure the parsing happens just once with
+the change below, will do that in next version
 
-Reported-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+jirka
+
+
 ---
- tools/perf/builtin-trace.c | 6 +++---
- tools/perf/util/btf.c      | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
-index 48615ddccd93..9903d79c4b77 100644
---- a/tools/perf/builtin-trace.c
-+++ b/tools/perf/builtin-trace.c
-@@ -964,7 +964,7 @@ static bool syscall_arg__strtoul_btf_enum(char *bf, size_t size, struct syscall_
- 	struct btf *btf = arg->trace->btf;
- 	struct btf_enum *be = btf_enum(bt);
+diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
+index 58dadee984a0..db780ee39820 100644
+--- a/tools/bpf/bpftool/link.c
++++ b/tools/bpf/bpftool/link.c
+@@ -389,12 +389,6 @@ static struct kernel_sym *find_kernel_sym_by_addr(__u64 addr, bool is_ibt_enable
+ 	if (!addr)
+ 		return NULL;
  
--	for (int i = 0; i < btf_vlen(bt); ++i, ++be) {
-+	for (unsigned int i = 0; i < btf_vlen(bt); ++i, ++be) {
- 		const char *name = btf__name_by_offset(btf, be->name_off);
- 		int max_len = max(size, strlen(name));
- 
-@@ -1009,9 +1009,9 @@ static bool syscall_arg__strtoul_btf_type(char *bf, size_t size, struct syscall_
- static size_t btf_enum_scnprintf(const struct btf_type *type, struct btf *btf, char *bf, size_t size, int val)
+-	/* Load it once for all. */
+-	if (!dd.sym_count)
+-		kernel_syms_load(&dd);
+-	if (!dd.sym_count)
+-		return NULL;
+-
+ 	sym = kernel_syms_search(&dd, addr);
+ 	if (!sym && is_ibt_enabled && addr >= 4)
+ 		sym = kernel_syms_search(&dd, addr - 4);
+@@ -431,9 +425,13 @@ show_uprobe_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
+ static void
+ show_tracing_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
  {
- 	struct btf_enum *be = btf_enum(type);
--	const int nr_entries = btf_vlen(type);
-+	const unsigned int nr_entries = btf_vlen(type);
+-	bool is_ibt_enabled = is_x86_ibt_enabled();
++	bool is_ibt_enabled = is_x86_ibt_enabled(), show_symbol;
+ 	__u32 i;
  
--	for (int i = 0; i < nr_entries; ++i, ++be) {
-+	for (unsigned int i = 0; i < nr_entries; ++i, ++be) {
- 		if (be->val == val) {
- 			return scnprintf(bf, size, "%s",
- 					 btf__name_by_offset(btf, be->name_off));
-diff --git a/tools/perf/util/btf.c b/tools/perf/util/btf.c
-index bb163fe87767..1716b49d3568 100644
---- a/tools/perf/util/btf.c
-+++ b/tools/perf/util/btf.c
-@@ -14,7 +14,7 @@ const struct btf_member *__btf_type__find_member_by_name(struct btf *btf,
++	if (!dd.sym_count)
++		kernel_syms_load(&dd);
++	show_symbol = !!dd.sym_count;
++
+ 	show_link_attach_type_json(info->tracing_multi.attach_type, wtr);
+ 	jsonw_uint_field(wtr, "func_cnt", info->tracing_multi.count);
+ 	jsonw_uint_field(wtr, "obj_id", info->tracing_multi.obj_id);
+@@ -445,7 +443,7 @@ show_tracing_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
+ 		__u64 addr = u64_to_arr(info->tracing_multi.addrs)[i];
+ 		struct kernel_sym *sym;
+ 
+-		sym = find_kernel_sym_by_addr(addr, is_ibt_enabled);
++		sym = show_symbol ? find_kernel_sym_by_addr(addr, is_ibt_enabled) : NULL;
+ 
+ 		jsonw_start_object(wtr);
+ 		jsonw_uint_field(wtr, "id", u64_to_u32_arr(info->tracing_multi.ids)[i]);
+@@ -900,12 +898,16 @@ static void show_uprobe_multi_plain(struct bpf_link_info *info)
+ 
+ static void show_tracing_multi_plain(struct bpf_link_info *info)
  {
- 	const struct btf_type *t = btf__type_by_id(btf, type_id);
- 	const struct btf_member *m;
--	int i;
-+	unsigned int i;
+-	bool is_ibt_enabled = is_x86_ibt_enabled();
++	bool is_ibt_enabled = is_x86_ibt_enabled(), show_symbol;
+ 	__u32 i;
  
- 	for (i = 0, m = btf_members(t); i < btf_vlen(t); i++, m++) {
- 		const char *current_member_name = btf__name_by_offset(btf, m->name_off);
--- 
-2.47.3
-
+ 	if (!info->tracing_multi.count)
+ 		return;
+ 
++	if (!dd.sym_count)
++		kernel_syms_load(&dd);
++	show_symbol = !!dd.sym_count;
++
+ 	printf("\n\t");
+ 	show_link_attach_type_plain(info->tracing_multi.attach_type);
+ 	printf("obj_id %u  ", info->tracing_multi.obj_id);
+@@ -917,7 +919,7 @@ static void show_tracing_multi_plain(struct bpf_link_info *info)
+ 		__u64 addr = u64_to_arr(info->tracing_multi.addrs)[i];
+ 		struct kernel_sym *sym;
+ 
+-		sym = find_kernel_sym_by_addr(addr, is_ibt_enabled);
++		sym = show_symbol ? find_kernel_sym_by_addr(addr, is_ibt_enabled) : NULL;
+ 
+ 		printf("\n\t%-16u %016llx %-16llx",
+ 		       u64_to_u32_arr(info->tracing_multi.ids)[i],
