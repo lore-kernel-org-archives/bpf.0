@@ -1,76 +1,70 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from cvsmtppost02.nmdf.navercorp.com (cvsmtppost02.nmdf.navercorp.com [114.111.35.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA253624D7;
-	Mon, 22 Jun 2026 07:13:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F1436167E
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 07:17:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.111.35.60
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782112385; cv=none; b=kwwlCV4PcE1QULaiMYCJ/XFhyE32T/ontJcORcFems3YsCQac0TJrSRRssqx3fw59pN4MTKIWFwVQGbRt0iFfqgZQfJgUMdb95v4t/u/jODyo7fjo1WLSCVY5s+h5ReudkTRD5LuMIDjX7kgTr/QUaXiMV3FcM3nA22XKTh3p9E=
+	t=1782112628; cv=none; b=oFtY9YBEQ5lTfDjxDqwqbMINgM6qNVNvSI5mnTYgfyZ15A/cslAM/JpgRfcvZD1LwdsUq+zO3l31RBx1t4BvJAtw3b9JjmphTorVVTVue235W9SldjvUPOKEyPt3e5HF8kgq3OvwQ3WwrEss3CDC7mV9P1+2SHLJ7XiW2vWyz+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782112385; c=relaxed/simple;
-	bh=WC825aoE/QYs39iGJwGJPVkqGPyeyDgnTB/voJks2k0=;
+	s=arc-20240116; t=1782112628; c=relaxed/simple;
+	bh=h+DzAsJa7hv5asI+paF0edZJsKW8tnFqF6EqOQnPl7I=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=M8qaKg7UkL2uRN4W6PD/6Vn4RGD9hUZGnM9UUmLoU4hSM8RjAs3l+Y6M41bU6KIxryXofdyPseQy8QNnPXEuEm4MHxJ0wal0U5hx0LldJZSBlgnu1povffAVPSi42NH8rg3AztN31j/uWlpxS987kbXeJ77WIkgF2Fn61JLaS6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: cb8ad3a26e0911f1aa26b74ffac11d73-20260622
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
-	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
-	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:9180a7df-694e-48d5-bef4-91724c8e2c55,IP:10,
-	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:5
-X-CID-INFO: VERSION:1.3.12,REQID:9180a7df-694e-48d5-bef4-91724c8e2c55,IP:10,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:5
-X-CID-META: VersionHash:e7bac3a,CLOUDID:9197166142425cdb517d5290b4e29a6c,BulkI
-	D:260622151259ZE4WMJFI,BulkQuantity:0,Recheck:0,SF:10|38|66|78|81|82|102|1
-	27|850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,B
-	ulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR
-	:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: cb8ad3a26e0911f1aa26b74ffac11d73-20260622
-X-User: zhaochenguang@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <zhaochenguang@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 37353235; Mon, 22 Jun 2026 15:12:57 +0800
-From: Chenguang Zhao <zhaochenguang@kylinos.cn>
-To: chenhuacai@kernel.org,
-	kernel@xen0n.name,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	yangtiezhu@loongson.cn
-Cc: hengqi.chen@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
+	 MIME-Version; b=Ds4rfxXdBnr9UXVDYlpWtMnP3SytqOVHOoLfeWh1QaUxLFYFY84U9LNql7zHyXJzy4XpDJeNqsU0C4MqIeBMxsdHrYKNZpyOHHHoP107AUH8BAx4Q+AVxD3SnIWS46QNfC9QLuTaY3tAG1MXN2SUqjgplT4eAtMb6+q+EIKnH90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=navercorp.com; spf=pass smtp.mailfrom=navercorp.com; dkim=pass (2048-bit key) header.d=navercorp.com header.i=@navercorp.com header.b=VNa9X6cs; arc=none smtp.client-ip=114.111.35.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=navercorp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=navercorp.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=navercorp.com header.i=@navercorp.com header.b="VNa9X6cs"
+Received: from kr0m-real-1 ([10.111.46.243])
+  by cvsmtppost02.nmdf.navercorp.com with ESMTP id aR0Bj3ncSbOjuGHO5DuPyQ
+  for <bpf@vger.kernel.org>;
+  Mon, 22 Jun 2026 07:17:02 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=navercorp.com;
+	s=s20171120; t=1782112622;
+	bh=h+DzAsJa7hv5asI+paF0edZJsKW8tnFqF6EqOQnPl7I=;
+	h=From:To:Subject:Date:Message-Id:From:Subject:Feedback-ID:
+	 X-Works-Security;
+	b=VNa9X6cs/rip5h4s96xi/nF0RNuKBbkGjMkeYoPSxc2e+nF7MuET9ALAQiAk6ye7w
+	 kg7MD3zwdavrN15uMhCATlXNygfslGs2wOjIVgHBx7GQcBDW6N0NSAh4ECa00zaxYJ
+	 WfRn1k5jOZPsVJlwvuJ9TVEhrZmRI0ty9MK3Uq2Dcywyb26eEf9a9rCa1OIRdEwuX6
+	 9mzv/YuvepOYdUZWA/MTReXaUGh15JINi33uPmi0+Zs5YPMDQfV4PJ+oDWtY/PIqfx
+	 aMiZDLotwo3dm9CFBeoNci/XDNoFCJ2O/hgolpKsGMG1xaW9vNSbvAuaRjiJhVy+Gj
+	 F018b1RPKB1Tw==
+X-Session-ID: g4nwRDNJRB6op9m5mXb8fQ
+X-Works-Send-Opt: T9YwjAumKAumKAbZjAgmKqKXKoJYFHmwFBwYjHmm
+X-Works-Smtp-Source: Pmn/KAU/FqJZ+HmZKoUm+6E=
+Received: from localhost.localdomain ([10.25.121.184])
+  by cvnsmtp02.nmdf.navercorp.com with ESMTP id g4nwRDNJRB6op9m5mXb8fQ
+  for <multiple recipients>
+  (version=TLSv1.3 cipher=TLS_CHACHA20_POLY1305_SHA256);
+  Mon, 22 Jun 2026 07:17:02 -0000
+From: Gyutae Bae <gyutae.opensource@navercorp.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org
+Cc: John Fastabend <john.fastabend@gmail.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org,
-	Chenguang Zhao <zhaochenguang@kylinos.cn>
-Subject: [PATCH v3 4/4] selftests/bpf: Add kptr-xchg benchmark
-Date: Mon, 22 Jun 2026 15:12:34 +0800
-Message-Id: <20260622071234.1410830-5-zhaochenguang@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260622071234.1410830-1-zhaochenguang@kylinos.cn>
-References: <20260622071234.1410830-1-zhaochenguang@kylinos.cn>
+	linux-kernel@vger.kernel.org,
+	Minsu Jeon <minsu.jeon@navercorp.com>,
+	Siwan Kim <siwan.kim@navercorp.com>,
+	Jonghyeon Kim <jong-hyeon.kim@navercorp.com>,
+	Gyutae Bae <gyutae.bae@navercorp.com>
+Subject: [RFC bpf-next 2/3] bpf: implement compare-and-delete (BPF_F_COMPARE) for BPF_MAP_TYPE_HASH
+Date: Mon, 22 Jun 2026 16:16:48 +0900
+Message-Id: <20260622071649.31541-3-gyutae.opensource@navercorp.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20260622071649.31541-1-gyutae.opensource@navercorp.com>
+References: <20260622071649.31541-1-gyutae.opensource@navercorp.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,216 +73,213 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a bpf selftest benchmark that exercises bpf_kptr_xchg() in a tight loop
-so helper vs inlined JIT paths can be compared on supported architectures.
+From: Gyutae Bae <gyutae.bae@navercorp.com>
 
-Signed-off-by: Chenguang Zhao <zhaochenguang@kylinos.cn>
+map_delete_elem() now honours BPF_F_COMPARE: it copies the expected
+bytes, validates the compare window against value_size, and dispatches to a
+new ->map_delete_elem_cmp().  The hash-map implementation, under the bucket
+lock, memcmps the [off, off+size) window of the live value and unlinks only
+on a match (mismatch -EBUSY, absent -ENOENT), making the compare and the
+delete atomic w.r.t. every bucket-lock holder.  Only BPF_MAP_TYPE_HASH
+wires up the op; every other map type lacks it and returns -EOPNOTSUPP.
+
+Atomicity boundary: the compare is read under the bucket lock, so it is
+atomic against every other bucket-lock holder (concurrent deletes,
+element-replacing updates).  It is NOT mutual exclusion against a BPF
+program that writes the value in place via the pointer from
+bpf_map_lookup_elem(), which takes no bucket lock; against such a writer
+the compare may observe a torn value within the locked section.  For a
+meaningful result the compared region should be a synchronization variable
+-- written with a single aligned store such as a monotonic revision, or
+replaced via an update -- not a multi-field blob mutated in place.
+
+It compares the raw stored value, so maps whose value carries BTF-managed
+fields (bpf_spin_lock, bpf_timer, kptr, ...) are also rejected with
+-EOPNOTSUPP: those bytes are sanitised on lookup, so a raw compare would
+never match the caller's snapshot and could expose kernel-internal bytes.
+
+BPF_MAP_DELETE_ELEM_LAST_FIELD now reaches compare_size, so the compare*
+fields pass CHECK_ATTR even without BPF_F_COMPARE.  Reject that combination
+with -EINVAL: a dropped flag must not silently turn a compare-and-delete
+into an unconditional delete.
+
+Co-developed-by: Minsu Jeon <minsu.jeon@navercorp.com>
+Signed-off-by: Minsu Jeon <minsu.jeon@navercorp.com>
+Co-developed-by: Siwan Kim <siwan.kim@navercorp.com>
+Signed-off-by: Siwan Kim <siwan.kim@navercorp.com>
+Co-developed-by: Jonghyeon Kim <jong-hyeon.kim@navercorp.com>
+Signed-off-by: Jonghyeon Kim <jong-hyeon.kim@navercorp.com>
+Signed-off-by: Gyutae Bae <gyutae.bae@navercorp.com>
 ---
- tools/testing/selftests/bpf/Makefile          |  2 +
- tools/testing/selftests/bpf/bench.c           |  2 +
- .../selftests/bpf/benchs/bench_kptr_xchg.c    | 96 +++++++++++++++++++
- .../selftests/bpf/progs/kptr_xchg_bench.c     | 49 ++++++++++
- 4 files changed, 149 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c
- create mode 100644 tools/testing/selftests/bpf/progs/kptr_xchg_bench.c
+ include/linux/bpf.h  |  2 ++
+ kernel/bpf/hashtab.c | 39 ++++++++++++++++++++++++++++++++
+ kernel/bpf/syscall.c | 54 +++++++++++++++++++++++++++++++++++++++++---
+ 3 files changed, 92 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 6ef6872adbc3..ea4c22e20f3c 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -866,6 +866,7 @@ $(OUTPUT)/bench_htab_mem.o: $(OUTPUT)/htab_mem_bench.skel.h
- $(OUTPUT)/bench_bpf_crypto.o: $(OUTPUT)/crypto_bench.skel.h
- $(OUTPUT)/bench_sockmap.o: $(OUTPUT)/bench_sockmap_prog.skel.h
- $(OUTPUT)/bench_lpm_trie_map.o: $(OUTPUT)/lpm_trie_bench.skel.h $(OUTPUT)/lpm_trie_map.skel.h
-+$(OUTPUT)/bench_kptr_xchg.o: $(OUTPUT)/kptr_xchg_bench.skel.h
- $(OUTPUT)/bench.o: bench.h testing_helpers.h $(BPFOBJ)
- $(OUTPUT)/bench: LDLIBS += -lm
- $(OUTPUT)/bench: $(OUTPUT)/bench.o \
-@@ -888,6 +889,7 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 		 $(OUTPUT)/bench_bpf_crypto.o \
- 		 $(OUTPUT)/bench_sockmap.o \
- 		 $(OUTPUT)/bench_lpm_trie_map.o \
-+		 $(OUTPUT)/bench_kptr_xchg.o \
- 		 $(OUTPUT)/usdt_1.o \
- 		 $(OUTPUT)/usdt_2.o \
- 		 #
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index 029b3e21f438..2b6dd8aec282 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -575,6 +575,7 @@ extern const struct bench bench_lpm_trie_insert;
- extern const struct bench bench_lpm_trie_update;
- extern const struct bench bench_lpm_trie_delete;
- extern const struct bench bench_lpm_trie_free;
-+extern const struct bench bench_kptr_xchg;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 7719f6528445..2e858272f7a7 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -110,6 +110,8 @@ struct bpf_map_ops {
+ 	void *(*map_lookup_elem)(struct bpf_map *map, void *key);
+ 	long (*map_update_elem)(struct bpf_map *map, void *key, void *value, u64 flags);
+ 	long (*map_delete_elem)(struct bpf_map *map, void *key);
++	long (*map_delete_elem_cmp)(struct bpf_map *map, void *key,
++				    const void *compare, u32 off, u32 size);
+ 	long (*map_push_elem)(struct bpf_map *map, void *value, u64 flags);
+ 	long (*map_pop_elem)(struct bpf_map *map, void *value);
+ 	long (*map_peek_elem)(struct bpf_map *map, void *value);
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 9f394e1aa2e8..8fc3ab938b9e 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1534,6 +1534,44 @@ static long htab_map_delete_elem(struct bpf_map *map, void *key)
+ 	return ret;
+ }
  
- static const struct bench *benchs[] = {
- 	&bench_count_global,
-@@ -653,6 +654,7 @@ static const struct bench *benchs[] = {
- 	&bench_lpm_trie_update,
- 	&bench_lpm_trie_delete,
- 	&bench_lpm_trie_free,
-+	&bench_kptr_xchg,
- };
++static long htab_map_delete_elem_cmp(struct bpf_map *map, void *key,
++				     const void *compare, u32 off, u32 size)
++{
++	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
++	struct hlist_nulls_head *head;
++	struct bucket *b;
++	struct htab_elem *l;
++	unsigned long flags;
++	u32 hash, key_size;
++	int ret;
++
++	WARN_ON_ONCE(!bpf_rcu_lock_held());
++
++	key_size = map->key_size;
++
++	hash = htab_map_hash(key, key_size, htab->hashrnd);
++	b = __select_bucket(htab, hash);
++	head = &b->head;
++
++	ret = htab_lock_bucket(b, &flags);
++	if (ret)
++		return ret;
++
++	l = lookup_elem_raw(head, hash, key, key_size);
++	if (!l)
++		ret = -ENOENT;
++	else if (memcmp(htab_elem_value(l, key_size) + off, compare, size) != 0)
++		ret = -EBUSY;
++	else
++		hlist_nulls_del_rcu(&l->hash_node);
++
++	htab_unlock_bucket(b, flags);
++
++	if (!ret)
++		free_htab_elem(htab, l);	/* ret==0 implies we unlinked l */
++	return ret;
++}
++
+ static long htab_lru_map_delete_elem(struct bpf_map *map, void *key)
+ {
+ 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
+@@ -2366,6 +2404,7 @@ const struct bpf_map_ops htab_map_ops = {
+ 	.map_lookup_and_delete_elem = htab_map_lookup_and_delete_elem,
+ 	.map_update_elem = htab_map_update_elem,
+ 	.map_delete_elem = htab_map_delete_elem,
++	.map_delete_elem_cmp = htab_map_delete_elem_cmp,
+ 	.map_gen_lookup = htab_map_gen_lookup,
+ 	.map_seq_show_elem = htab_map_seq_show_elem,
+ 	.map_set_for_each_callback_args = map_set_for_each_callback_args,
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index b44106c8ea75..42fc432f82e1 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1892,18 +1892,30 @@ static int map_update_elem(union bpf_attr *attr, bpfptr_t uattr)
+ 	return err;
+ }
  
- static void find_benchmark(void)
-diff --git a/tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c b/tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c
-new file mode 100644
-index 000000000000..b8a0d346fda6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c
-@@ -0,0 +1,96 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2026. Loongson Technology Corporation Limited */
-+#include <argp.h>
-+#include "bench.h"
-+#include "kptr_xchg_bench.skel.h"
+-#define BPF_MAP_DELETE_ELEM_LAST_FIELD key
++#define BPF_MAP_DELETE_ELEM_LAST_FIELD compare_size
+ 
+ static int map_delete_elem(union bpf_attr *attr, bpfptr_t uattr)
+ {
+ 	bpfptr_t ukey = make_bpfptr(attr->key, uattr.is_kernel);
+ 	struct bpf_map *map;
+-	void *key;
++	void *key, *compare = NULL;
++	u32 off = 0, size = 0;
+ 	int err;
+ 
+ 	if (CHECK_ATTR(BPF_MAP_DELETE_ELEM))
+ 		return -EINVAL;
+ 
++	if (attr->flags & ~BPF_F_COMPARE)
++		return -EINVAL;
 +
-+static struct ctx {
-+	struct kptr_xchg_bench *skel;
-+} ctx;
++	/* The compare* fields are meaningful only with BPF_F_COMPARE.  Reject them
++	 * when the flag is absent so a dropped BPF_F_COMPARE cannot silently turn a
++	 * compare-and-delete into an unconditional delete.
++	 */
++	if (!(attr->flags & BPF_F_COMPARE) &&
++	    (attr->compare || attr->compare_offset || attr->compare_size))
++		return -EINVAL;
 +
-+static struct {
-+	__u32 nr_loops;
-+} args = {
-+	.nr_loops = 256,
-+};
+ 	CLASS(fd, f)(attr->map_fd);
+ 	map = __bpf_map_get(f);
+ 	if (IS_ERR(map))
+@@ -1920,6 +1932,38 @@ static int map_delete_elem(union bpf_attr *attr, bpfptr_t uattr)
+ 		goto err_put;
+ 	}
+ 
++	if (attr->flags & BPF_F_COMPARE) {
++		bpfptr_t ucmp = make_bpfptr(attr->compare, uattr.is_kernel);
 +
-+enum {
-+	ARG_NR_LOOPS = 7000,
-+};
-+
-+static const struct argp_option opts[] = {
-+	{ "nr_loops", ARG_NR_LOOPS, "nr_loops", 0,
-+	  "Set number of bpf_kptr_xchg() calls per trigger"},
-+	{},
-+};
-+
-+static error_t parse_arg(int key, char *arg, struct argp_state *state)
-+{
-+	switch (key) {
-+	case ARG_NR_LOOPS:
-+		args.nr_loops = strtol(arg, NULL, 10);
-+		break;
-+	default:
-+		return ARGP_ERR_UNKNOWN;
++		off = attr->compare_offset;
++		size = attr->compare_size ?: map->value_size;
++		/* off + size must fit in value_size, overflow-safe */
++		if (size > map->value_size || off > map->value_size - size) {
++			err = -EINVAL;
++			goto out;
++		}
++		if (!map->ops->map_delete_elem_cmp) {
++			err = -EOPNOTSUPP;
++			goto out;
++		}
++		/* Compare-and-delete reads the raw stored value.  Maps whose value carries
++		 * BTF-managed fields (bpf_spin_lock, bpf_timer, kptr, ...) have
++		 * those bytes sanitised on lookup, so a raw compare would never
++		 * match the caller's snapshot and could expose kernel-internal
++		 * bytes.  Reject such maps for now.
++		 */
++		if (!IS_ERR_OR_NULL(map->record)) {
++			err = -EOPNOTSUPP;
++			goto out;
++		}
++		compare = kvmemdup_bpfptr(ucmp, size);
++		if (IS_ERR(compare)) {
++			err = PTR_ERR(compare);
++			compare = NULL;
++			goto out;
++		}
 +	}
 +
-+	return 0;
-+}
-+
-+static const struct argp bench_kptr_xchg_argp = {
-+	.options = opts,
-+	.parser = parse_arg,
-+};
-+
-+static void validate(void)
-+{
-+	if (env.consumer_cnt != 0) {
-+		fprintf(stderr, "benchmark doesn't support consumer!\n");
-+		exit(1);
-+	}
-+}
-+
-+static void *producer(void *input)
-+{
-+	while (true)
-+		syscall(__NR_getpgid);
-+
-+	return NULL;
-+}
-+
-+static void measure(struct bench_res *res)
-+{
-+	res->hits = atomic_swap(&ctx.skel->bss->hits, 0);
-+}
-+
-+static void setup(void)
-+{
-+	struct bpf_link *link;
-+
-+	setup_libbpf();
-+
-+	ctx.skel = kptr_xchg_bench__open_and_load();
-+	if (!ctx.skel) {
-+		fprintf(stderr, "failed to open skeleton\n");
-+		exit(1);
-+	}
-+
-+	ctx.skel->data->nr_loops = args.nr_loops;
-+
-+	link = bpf_program__attach(ctx.skel->progs.benchmark);
-+	if (!link) {
-+		fprintf(stderr, "failed to attach program!\n");
-+		exit(1);
-+	}
-+}
-+
-+const struct bench bench_kptr_xchg = {
-+	.name = "kptr-xchg",
-+	.argp = &bench_kptr_xchg_argp,
-+	.validate = validate,
-+	.setup = setup,
-+	.producer_thread = producer,
-+	.measure = measure,
-+	.report_progress = ops_report_progress,
-+	.report_final = ops_report_final,
-+};
-diff --git a/tools/testing/selftests/bpf/progs/kptr_xchg_bench.c b/tools/testing/selftests/bpf/progs/kptr_xchg_bench.c
-new file mode 100644
-index 000000000000..363883073e2c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kptr_xchg_bench.c
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2026. Loongson Technology Corporation Limited */
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+#include "bpf_experimental.h"
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+#define MAX_XCHG_LOOPS 4096
-+
-+struct bin_data {
-+	char blob[32];
-+};
-+
-+#define private(name) SEC(".bss." #name) __hidden __attribute__((aligned(8)))
-+
-+private(kptr) struct bin_data __kptr *ptr;
-+u32 nr_loops = 256;
-+long hits;
-+
-+SEC("fentry/" SYS_PREFIX "sys_getpgid")
-+int benchmark(void *ctx)
-+{
-+	struct bin_data *old;
-+	u32 i;
-+
-+	for (i = 0; i < MAX_XCHG_LOOPS; i++) {
-+		if (i >= nr_loops)
-+			break;
-+
-+		old = bpf_kptr_xchg(&ptr, NULL);
-+		if (old)
-+			bpf_obj_drop(old);
-+	}
-+
-+	__sync_add_and_fetch(&hits, i);
-+	return 0;
-+}
-+
-+/*
-+ * BTF FUNC records are not generated for kfuncs referenced only through
-+ * optimized paths. Keep bpf_obj_drop() visible to libbpf's kfunc linker.
-+ */
-+void __btf_root(void)
-+{
-+	bpf_obj_drop(NULL);
-+}
+ 	if (bpf_map_is_offloaded(map)) {
+ 		err = bpf_map_offload_delete_elem(map, key);
+ 		goto out;
+@@ -1932,12 +1976,16 @@ static int map_delete_elem(union bpf_attr *attr, bpfptr_t uattr)
+ 
+ 	bpf_disable_instrumentation();
+ 	rcu_read_lock();
+-	err = map->ops->map_delete_elem(map, key);
++	if (compare)
++		err = map->ops->map_delete_elem_cmp(map, key, compare, off, size);
++	else
++		err = map->ops->map_delete_elem(map, key);
+ 	rcu_read_unlock();
+ 	bpf_enable_instrumentation();
+ 	if (!err)
+ 		maybe_wait_bpf_programs(map);
+ out:
++	kvfree(compare);
+ 	kvfree(key);
+ err_put:
+ 	bpf_map_write_active_dec(map);
 -- 
-2.25.1
+2.39.5 (Apple Git-154)
 
