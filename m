@@ -1,114 +1,230 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F15A2D7386
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 11:31:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F780378818
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 12:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782127909; cv=none; b=r7gB81CV2nCKm0RG36j29YxtmPVq3fa1FJqn2HF7JZo1ERaLQCn6P8ENfrQy2Q2QVNdaySE6RjvCnfCFLE81HkSgWkO52rpJK3IF2MwvmgPiZmKoZM2iA4IxMozz7aFePvUPNnvA3Pi/PGpO8rMq/8oqirSS9eQn4OZW43cMj+o=
+	t=1782129931; cv=none; b=OLXvOgrFtIJM5K2YgiW3RxCxj/5FvZDCEytaBuMEKQbfo67rQV8u5spKDW/Yrcox0uTE5gW5oxEhmJXi+94lE4vE9DFVrF65+U6PgE/yvObDP0QG6SYGA9qkaZRO4AwvUfPW+YVS1hPdKDRRBol5rzcaUOtgrdt4wIx/DoDjr88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782127909; c=relaxed/simple;
-	bh=KDRTustqNurCNZREaf1pCPYcaui3zDoqOsKxZ4GWsPI=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=HueOG51Dh2MeuygtP8t4P7rhw2S1bsA548qX8naHTxwERWgR+O3DD0EgSUe2trJTWsb7tNdTaewz51u6pNUw6+/JGt/JiTc28T/8VndZgrJfLhLeh3Kc2dWlESvP10j2QH47xsGAZ0bAIIaK58bKX22Ym6sPeHii5D7IFS7CM1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g+hOA6DI; arc=none smtp.client-ip=74.125.82.174
+	s=arc-20240116; t=1782129931; c=relaxed/simple;
+	bh=dN1pLmbmed/NC96M/cd4Xbam1n1B1pvbnIxNHE495dY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bY1Ziqu2BQ9uqFYdLBKsI0TyBJcA+vtYCqgjdTS3hJSQWkpmlp+Ql5tmV0K6N5fYruCEF4ufM9KjA0VJwOSO0o7d4oiRWrBJzIJHvKCIuCySn2KdFvr+8KLoRC9+1A8RP3Sc/VL2Xu/fql2/+S3EP3mHE/uu8EZRTzgDuPS3i8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VpgilBJt; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g+hOA6DI"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-3078e0dcd67so4807566eec.0
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 04:31:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VpgilBJt"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-490ace40f4bso44783955e9.3
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 05:05:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782127907; x=1782732707; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=cKiQyyK2YqfLKDVDbtobty9TrjuyTTupcskU2j0RRiU=;
-        b=g+hOA6DICGp1AdtQ0pe09HsN1+XKzy8wBQDXb9jjeTfzN45DMBIYcBxppTSzveIHb9
-         p/x0Cy88P29ZjwgTvzRIO6gGQSnD14JY+d1s1+ZMJPf76Qu075PtQmipjNalPUeqCAV5
-         WC6n8P3PJlEL6LKtbzY1utL3xax1a+BiTIgqLzSPyUmRnNVFXYdPK/MszNZAzC0Diaoa
-         NyXE67bJKaJR5jWJ1Oeohief151Rg1Nb86+wvT3GMTu/23vA7ac6x1bqc6iFeN9p14Xs
-         GBQXX5NCLSY3H+LPth66ykNDJKAhcmrMHZUAOAOfXimce1SQ8C/b4BqmBxHar3HUsPdo
-         6Etw==
+        d=gmail.com; s=20251104; t=1782129928; x=1782734728; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=w2RuwhHXabj+ww9YZldGbi29RRzljhvrbTpiXJqZXhE=;
+        b=VpgilBJtDgaddZDKBYB8FCWGyakbkOEhIeKFl4cWdHUoRscX34cbGzLCYaMH2rWQvL
+         LkO4W49QJUFmXa9VyZ/uP+GigiaL9vmYFjcUGUCoLFEcTfJhwgDi6qwXEU1qGLXxBTX+
+         9B3FYKorl+Y9W4LhRH9R6A0sOerHTyQECCidEQpyz4g/6QwnEfjAe5A6caj8MuxKF6aU
+         AE/DqNNC1mQgH7Fcpv5njVHa2Yzq3uNitDRhZEDqBagkdcF8ovDm/iXb0wba3eVXu5NM
+         7u7jZ1a0zRL+8fsFFPhGM2hrWiohsMGAzeV/6AlsJFi39FtzLn8w+3xaLcNuGh5RVtUu
+         nCKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782127907; x=1782732707;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cKiQyyK2YqfLKDVDbtobty9TrjuyTTupcskU2j0RRiU=;
-        b=FVEs9FNt3eRbEd2tqMtp/DouoKpEWv3azVsQDvu4MDwiUaY39k5Da/cMCo4w7CMfkH
-         rjeAd3bKl3e2hawK/MPg9bnLDirvEkQG5mqlwfmhT/nHOGitXvcvzorPpUmOsYmMF0Pw
-         pZvFyr5xivV7pM85bq2ol7YQkYMe0nLHMB2VkjVjSM2ZwGMpi8xvIPl/jmOR9QhXB6/Q
-         OHH1ogfDA8Z/pT9os08KUvDZCtlxELFAfOjEiFcDJoaAfcsxTU6iEY/tWWGx3JU9FsIK
-         iZINfqeQh2r3uh266h+vioxCetmv3NzECYR5Df5N4ZZzmvwZYc3LIt6bk4YNjfHi2hRk
-         3Cqw==
-X-Forwarded-Encrypted: i=1; AHgh+Rr6em+E0gg/Kl1vKyrJKfOUbWGX8MZUqiSbsRlfcAyE48oc0/MT6CXffGgTwgFjGx136fU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YybueCJ//jHIg1dLIG7o4x3b+ParRrRcRhl91oZmHkNc4Flus1V
-	a6iv6biBA24LhDLcI+ZwIQo2oNRHr6fQbEGOzsjHj1VFL9U0HF0P+uxH
-X-Gm-Gg: AfdE7cnNZ+RzXJR957ywSemXh7EMH9054r7+QWeN/UO3BRrcKQIpSBl8KuwEq6SXcJt
-	8eBnya4kaOyyk4gQiVvbKaXcPCrQ7tTinYlLzR8VY13t5uFwyipCuAQrFNJuvaQcqJM5fiqZVZu
-	jDSs8bcIPRgDo1RAdKNHRWt79kzy9YREW1Klr7+NWZuW2yHvLSQYjDMH5uqUc1KzK1MBbME/qQO
-	RDc+UaHmCwTRrDDJIb30mtH8xxXwtxjP50t1gmN1Lmib/o9iqx1jI1oniejnymcaojGGVpmgZAA
-	nOf0y9X49vX0pENrj+lKq35kX19xV1iUO2/YBtGLLkl7H71VQIu6EMS2LUEL3bqni8X/MHB+1T5
-	9F7jTRz42X9kfIttce1PeRkFmgydJapqjN8SvShkn/D6cRbNi6P+FdHoBmSoS9jUaWgGvKDLhdl
-	A4aWG0c+H/6XG4QqTY9zNd4Pr0eGSXkw==
-X-Received: by 2002:a05:7300:3b1a:b0:2da:a813:a5fd with SMTP id 5a478bee46e88-30c07156e55mr8418040eec.22.1782127907348;
-        Mon, 22 Jun 2026 04:31:47 -0700 (PDT)
-Received: from ehlo.thunderbird.net ([2804:2bf0:60e7:ae00:61b2:c320:bcb9:eac0])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1ba1c32csm10815274eec.6.2026.06.22.04.31.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Jun 2026 04:31:46 -0700 (PDT)
-Date: Mon, 22 Jun 2026 08:31:43 -0300
-From: Arnaldo Melo <arnaldo.melo@gmail.com>
-To: Mark Brown <broonie@kernel.org>
-CC: Alan Maguire <alan.maguire@oracle.com>, peterz@infradead.org, acme@kernel.org,
- mingo@redhat.com, namhyung@kernel.org, mark.rutland@arm.com,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, james.clark@linaro.org,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-Subject: Re: [PATCH perf] perf: Fix btf_vlen() signedness errors
-User-Agent: Thunderbird for Android
-In-Reply-To: <ab95c312-061f-47ae-9202-432aa48afa70@sirena.org.uk>
-References: <20260622103418.579115-1-alan.maguire@oracle.com> <ffdbf003-5f08-4db8-b633-7ed053a738f1@sirena.org.uk> <A52F0C17-9617-4F5F-9537-C9643F5EF347@gmail.com> <ab95c312-061f-47ae-9202-432aa48afa70@sirena.org.uk>
-Message-ID: <B9C3897F-AE35-44B1-8608-49178BB2E629@gmail.com>
+        d=1e100.net; s=20251104; t=1782129928; x=1782734728;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w2RuwhHXabj+ww9YZldGbi29RRzljhvrbTpiXJqZXhE=;
+        b=pFZUpCIQ5IAHmisnfqAkKdBWPHMmUFWkEwhlgSA1kOv3fmnqmHpRNeS+A5H4MnZ/ld
+         z9ACBdbhF4WwVMMezQmWwkZUHBj67F81LQNcSYKJYitAJ1ROrk11QcyGrqISLXwnX38l
+         SS5aDwaG2QPHSn7zrSbzOn3etzq1z6qIzRExNlelu1P2fFICkvmFXB+VPyU9tcqWTcJv
+         OExBT8YYwHa8bmEfHnn1eOiSQN8xK7xQSjWondY7OdShSLyTmFFPhle+ZTTGzOe95pio
+         6lJrS5Cyn3lkHfg+o+ygla4nJcSm3GrGpCw55oiRUDXcRXgpNEj16NLOCl0jSZUlY0T6
+         nIrw==
+X-Gm-Message-State: AOJu0YzqGWLxt+IcIyeuCghdQuIHLQvxx0J7G8jBlgZyi2d/dj01KEnv
+	n/4J3PdEHqMdDrbGMmfmHCrlSwp+Lb1vQvRH8XWo+PoJFyO8yct/6We/bO9gXtnX
+X-Gm-Gg: AfdE7cmP5D7tJ4QK3M5N6N3V6pu4Njabpwk7rsh4TDGGD+eXHt+pNe5g5R1C3mKSMyU
+	z9OekJCPR30lTXdfpFKN6PSn1RXZLIuvgGgn5v3GG3wyjsN2uhdPplK1vqiu3GKpoQJWiKa29Hz
+	AYk+Wu822nnrp6u8x12yeA/IG3TTLUL4yqCCRTF+8rtLUci/wZyJeZ8mlU0Iq83ypySkW6UH3LL
+	0q6Plz8gP8JKVkAvQCDd94XQ1DzlZwl51la79mLTQge1ifQRSnoN2p1yZMlIl23y4VBpw+rIEyJ
+	sMrnvBdF9n0GuX4btXZ+eRBOcA+knCycVPp6fPYaxPG988nTLmRNocA3qEBnM7pWYgF8MZNBwt+
+	6U92nTMiIPb1LMiI+Ax3441Fxe8mHRTaH+J2Xaa2GZ+pAcWv0904e90wfctZXvMn7kcyReJDiuX
+	4Qz8bqH9Jwa001QoH1
+X-Received: by 2002:a05:600c:6386:b0:492:3763:aeb9 with SMTP id 5b1f17b1804b1-4923f6d2ff1mr234328755e9.21.1782129927618;
+        Mon, 22 Jun 2026 05:05:27 -0700 (PDT)
+Received: from mtardy-friendly-lvh-runner.local ([2600:1900:4010:1a8::])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4923fc47720sm491083105e9.0.2026.06.22.05.05.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jun 2026 05:05:27 -0700 (PDT)
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	edumazet@google.com,
+	john.fastabend@gmail.com,
+	jordan@jrife.io,
+	kuba@kernel.org,
+	martin.lau@linux.dev,
+	netdev@vger.kernel.org,
+	netfilter-devel@vger.kernel.org,
+	pabeni@redhat.com,
+	yonghong.song@linux.dev,
+	Mahe Tardy <mahe.tardy@gmail.com>
+Subject: [PATCH bpf-next v8 0/7] bpf: add icmp_send kfunc
+Date: Mon, 22 Jun 2026 12:05:08 +0000
+Message-Id: <20260622120515.137082-1-mahe.tardy@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+
+Hello,
+
+This is v8 of adding the icmp_send kfunc, as suggested during LSF/MM/BPF
+2025[^1]. The goal is to allow cgroup_skb programs to actively reject
+east-west traffic, similarly to what is possible to do with netfilter
+reject target. Applications can receive early feedback that something
+went wrong during the TCP handshake.
+
+The first step to implement this is using ICMP control messages, with
+the ICMP_DEST_UNREACH type with various code ICMP_NET_UNREACH,
+ICMP_HOST_UNREACH, ICMP_PROT_UNREACH, etc. This is easier to implement
+than a TCP RST reply and will already hint the client TCP stack to abort
+the connection and not retry extensively.
+
+Note that this is different than the sock_destroy kfunc, that along
+calls tcp_abort and thus sends a reset, destroying the underlying
+socket.
+
+Caveats of this kfunc design are that a program can call this function N
+times, thus send N ICMP unreach control messages and that the program
+can return from the BPF filter with pass leading to a potential
+confusing situation where the TCP connection was established while the
+client received ICMP_DEST_UNREACH messages.
+
+v2 updates:
+- fix a build error from a missing function call rename;
+- avoid changing return line in bpf_kfunc_init;
+- return SK_DROP from the kfunc (similarly to bpf_redirect);
+- check the return value in the selftest.
+
+v3 update:
+- fix an undefined reference build error.
+
+v4 updates:
+- prevent the kfunc to be called recursively and add a test (thanks to
+  Martin).
+- do not fetch dst route when unnecessary (thanks to Martin).
+- extend the test for IPv6 (thanks to Martin).
+- use SK_DROP in examples and use non blocking sockets for testing
+  (thanks to Martin).
+- test when the kfunc returns -EINVAL (thanks to Jordan).
+- add the kfunc to bpf_kfunc_set_skb as suggested by Alexei.
+- guard the IPv4 parts with IS_ENABLED(CONFIG_INET).
+- fix a wrong initial value for client_fd (thanks to Yonghong).
+- add documentation to the kfunc.
+- to Jordan: I couldn't include <linux/icmp.h> because of redefines from
+  <network_helpers.h>.
+
+v5 updates:
+- kfunc name is now icmp_send and takes the control message type as
+  parameter for future potential extension (daniel)
+- drop the net patches to route packet since now the kfunc is limited to
+  cgroup_skb and tc progs (daniel & martin)
+- linearize skb headers (sashiko)
+- zero SKB control block (sashiko)
+- bind to port 0 instead of fixed port (sashiko)
+- poll to wait for POLLERR event (sashiko)
+- do not use ASSERT_EQ in CMSG_NXTHDR loop (sashiko)
+- fix comment about byte order (sashiko)
+- fix endianness IP address issue (sashiko)
+- add forgotten cleanup_cgroup_environment (sashiko)
+- let packets pass in recursion test (sashiko)
+- clarify evaluation order for recursion test (sashiko)
+
+v6 updates (all from sashiko):
+- bring back the net patches to route packet since tc ingress needs it.
+- rename the ip_route_reply helpers from fetch to fill.
+- call pskb_network_may_pull on the cloned pkt.
+- check explicitly that we received one and only one ICMP err ctrl msg.
+
+v7 updates:
+- use consume_skb on success path (stanislav)
+- replace recursion protection with CPU_ARRAY by checking the nature of
+  the sk (daniel, offline)
+- use reverse xmas tree in read_icmp_errqueue (jordan)
+- use ASSERT_OK_FD instead of ASSERT_GE whenever possible (jordan)
+- add a test for tc (jordan)
+- better filtering from host cgroup test progs (sashiko)
+
+v8 updates:
+- mostly a resend as it's been sitting as "New" in the queue for almost
+  one month, fixed a few nits.
+- on new bpf_icmp_send kfunc cgroup_skb test (patch 4/7):
+  - guard a close fd with fd >= 0 (jordan)
+  - use ASSERT_OK_FD instead of ASSERT_GE (jordan)
+  - fixed comment style (sashiko)
+- on recursion test (patch 7/7):
+  - guard a close fd with fd >= 0 (jordan)
+  - fixed comments style (sashiko)
+  - filter bpf prog on pid and ICMP message types (sashiko)
+
+[^1]: https://lwn.net/Articles/1022034/
+
+Link to v7: https://lore.kernel.org/bpf/20260526153708.279717-1-mahe.tardy@gmail.com/
+
+Mahe Tardy (7):
+  net: move netfilter nf_reject_fill_skb_dst to core ipv4
+  net: move netfilter nf_reject6_fill_skb_dst to core ipv6
+  bpf: add bpf_icmp_send kfunc
+  selftests/bpf: add bpf_icmp_send kfunc cgroup_skb tests
+  selftests/bpf: add bpf_icmp_send kfunc cgroup_skb IPv6 tests
+  selftests/bpf: add bpf_icmp_send kfunc tc tests
+  selftests/bpf: add bpf_icmp_send recursion test
+
+ include/net/ip6_route.h                       |   2 +
+ include/net/route.h                           |   1 +
+ net/core/filter.c                             | 109 ++++++++
+ net/ipv4/netfilter/nf_reject_ipv4.c           |  19 +-
+ net/ipv4/route.c                              |  15 ++
+ net/ipv6/netfilter/nf_reject_ipv6.c           |  17 +-
+ net/ipv6/route.c                              |  18 ++
+ .../bpf/prog_tests/icmp_send_kfunc.c          | 248 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/icmp_send.c | 184 +++++++++++++
+ 9 files changed, 580 insertions(+), 33 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/progs/icmp_send.c
+
+--
+2.34.1
 
 
+Mahe Tardy (7):
+  net: move netfilter nf_reject_fill_skb_dst to core ipv4
+  net: move netfilter nf_reject6_fill_skb_dst to core ipv6
+  bpf: add bpf_icmp_send kfunc
+  selftests/bpf: add bpf_icmp_send kfunc cgroup_skb tests
+  selftests/bpf: add bpf_icmp_send kfunc cgroup_skb IPv6 tests
+  selftests/bpf: add bpf_icmp_send kfunc tc tests
+  selftests/bpf: add bpf_icmp_send recursion test
 
-On June 22, 2026 8:18:43 AM GMT-03:00, Mark Brown <broonie@kernel=2Eorg> w=
-rote:
->On Mon, Jun 22, 2026 at 08:09:33AM -0300, Arnaldo Melo wrote:
->> On June 22, 2026 7:53:40 AM GMT-03:00, Mark Brown <broonie@kernel=2Eorg=
-> wrote:
->
->> >which I have been using as a fixup since I originally reported the iss=
-ue
->> >since Linus' tree is broken, Arnaldo said he'd applied it to the
->> >perf-tools-next branch but it has not yet appeared in Linus' tree (and
->> >it looks like he forgot to push it so his copy isn't getting picked up
->> >in the merge either, the last update was on the 15th)=2E
->
->> Its here:
->
->> <https://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/perf/perf-tools-ne=
-xt=2Egit/commit/?h=3Dperf-tools-next&id=3D776bd9ac834556ab6ff6b7ef74b71ac53=
-d37855e>
->
->Ah, so it is - I missed it because Ian's series was applied on top of it
->and doesn't look at all like fixes so I stopped reading the log (should
->it be in -next given the merge window?)=2E
+ include/net/ip6_route.h                       |   2 +
+ include/net/route.h                           |   1 +
+ net/core/filter.c                             | 109 ++++++++
+ net/ipv4/netfilter/nf_reject_ipv4.c           |  19 +-
+ net/ipv4/route.c                              |  15 ++
+ net/ipv6/netfilter/nf_reject_ipv6.c           |  17 +-
+ net/ipv6/route.c                              |  18 ++
+ .../bpf/prog_tests/icmp_send_kfunc.c          | 250 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/icmp_send.c | 184 +++++++++++++
+ 9 files changed, 582 insertions(+), 33 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/progs/icmp_send.c
 
-Ian's series? Yeah, I was unsure about having it in this merge window, it =
-went thru many versions, but your question is a fair one, I'll move it to t=
-he next merge window and send only up to your fix (+ Alan's missing hunk),
+--
+2.34.1
 
-- Arnaldo 
