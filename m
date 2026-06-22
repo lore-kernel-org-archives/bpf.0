@@ -1,189 +1,121 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A2C23D7F0
-	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 21:28:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782163690; cv=none; b=onncRlDL/alZM1WMx/I/N3FkZ956KSQgX3rmzhup4SRyjmHQ6daFEjLlEgQ2JWmJJIc/phrnyuYNPL+56srlKYtOISEfgf+auymltHroDgO3P8zeHtpu0j+PwZ7++s1eSSMvcxcvVG/T2s/TvYTptZFDF6mAEOrVd1cWjuJPxeo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782163690; c=relaxed/simple;
-	bh=mYxsFEqatuqfwcXdCizKKI1fhpC8U1gkSogJsK7qKaE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LFbrgmNTJ/koKrITsB6oBv1QsxEJ78cXicJwdQ/O/8i7EuX5Nd84pNEvuuabx9MPoTAsBKPi4PzJPXckk7eqHQx7Di05lyFo9d212ftaBmTYQ/DsXsEsAhQgiPErbpv/Sg/IGzWMyrFsG7NNG8Gsk0Pmd9aYQu380DfejDsBj1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HzT4cL7d; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41A2A346E60
+	for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 21:43:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782164635; cv=pass; b=Tf4Q3OTUzIJl5IbtXhLe5QDfMY6fh2xg7T/LzgTKucDd6KbptFzWG1aQf51JAiXz11FxbeUdMurKpcXRw0u5351Su4E4wgLecSNgCsJPECzuOKIVvKOdcMcR7zhd63fZuv+cvaKCzjzS9YE8cZ+TTXChMg86b24b9AJP+33ozvE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782164635; c=relaxed/simple;
+	bh=wf84bPY7I1+ImnhrSvbM0tdlcZ3ffRCzi0z00dHXq2U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CFEZV0an3H5DydxpW615UXrbezmw18Ze12+623rD2jLBy5qxVgrGTjruU+wiyuBYalUf6bLXEBMseBsuZrRJHjqetPZZxFrxx02dfOYDo8QA9YgJaIKGaWDshqeRUsqGaiyDyMnUdZwx2T20lQpaSH1R33d8WKJ64V45WbF9OFc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rOlYHAsl; arc=pass smtp.client-ip=209.85.215.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HzT4cL7d"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-84231305a80so3020889b3a.0
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 14:28:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rOlYHAsl"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c892935bcdeso1927735a12.3
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 14:43:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782164633; cv=none;
+        d=google.com; s=arc-20240605;
+        b=PBYRnUMaTXK1qQUJ3eSkR4T76kztMgJ2q8joTukOvxq/Xs2iGVqRn3u2saejy69+FG
+         Cbccy3vc4/gwcDrnacE+mtedXwChrZRMSytJ2EpQJyKE5A3XibocFasZNOBfx7b5SzJL
+         I0qKX1yDr4wRVeNRCmrlehPmprWRgJC3wGj0Mw1dvcfcEsdQ1XNubrqnyBIkud0fpbRC
+         dLstVWgI+nN8L19SA+rHApopOJijUW1UulJ3LizdKTB5fczeK/u5qvwMpunrdoD8/Zjg
+         L7aWvFfmX56aRCnrx9tAS6wDX4pFibLTy2vhobW8yhwXfzXIxDq0VyHTTsPUB6vyjkId
+         fOWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=UBL+cTr6RyMgkLyRYl63IsYVsAB6dBdpm8WHhEM/Z8Y=;
+        fh=nlqc8vJShjwcotQJH6LCCtNT8MpYrzAdW79WCv+HvZY=;
+        b=iuQJe8ZUod70xQAW/sB13yNokvXreKQ1F9XvTy/KOK6E+Epq9lQ21pQHpO/KCuJ6cH
+         4yQJRJ8Ox4wRu1DCUdTDBc4V2fCDO9gTcQwsIBsFyU7cDd42kNsDSQV6n44Yb0vmYaBW
+         9ypcm9Ud7EsZzYv+yVz1HGuJ78baU0MMkWJ+M3rfmQCoi2xvcefOPai05OoP/OuWqtgF
+         cpSDUo3EYWbin/FJu2fo7J5EI0Dlgm6U4o/z0OGHeidkLP/LCD0GpqUkL7WHxTBkwvc6
+         e4PvcYqvLhs06/H+c9fDM8mJuZrS24x83SmFOQaB61NGXwUUkgHweRZjj0vSZXGZt64F
+         F2Fw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782163689; x=1782768489; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JuqJabFFbQmPGzhmB4FLpo8sCHROklOUvbmq7PrEhNo=;
-        b=HzT4cL7dY6KirZcZuIrqais75sr+JShVwwL7E1a1EKRB6Bj+8ULM54QFAMo1FjMAJZ
-         ZJ4yYBgJNutECiFrgSoO7MWR+LCxOXDJcXIkh+aSYxkdm16/F3lFdX7Gt+qQvjAQu8Jp
-         lwN1apRP16rWqkRV384NKgm4uRishIK26hBOyjmUowBAc5xYyYAIr7OyIWZ0Xtx5n8dM
-         kfmQessewmGfmu8wJM9j1RU2plwp0kx/rt81jYpTd3JaUaSWInHawBUC3U1XaSR+UZP3
-         HNhlu9cYX30z0rzCKv8XjiN8/GnhYFCnzGZD9DF+rpx8cZCPbb8DOEJiUI2uM8ZF4GAL
-         jgKg==
+        d=gmail.com; s=20251104; t=1782164633; x=1782769433; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UBL+cTr6RyMgkLyRYl63IsYVsAB6dBdpm8WHhEM/Z8Y=;
+        b=rOlYHAslJAKtp7tMGmw0qM9xaGYPQW2DLpCSta+zaOStk1QU8cZVaelTXyMYFpTC5z
+         136eVxkPiV5z2zk/6HwUfWz3QwNNF/zZYGmzetLVPq8pSTHhpYTpIUwwl4u+jnlxedmn
+         i4KH3YJF7afn1C7g6ZoJZIaXKczX/yApUGj3ZtBXDUkdiWv4cORcwGUskd2W8BwevHX/
+         BBDvq+3Rc1mLqflzR+3j1DqKYFGWIcWdEbTlKfQ1YTsAyKozTh3AS0h5+sDSEnF5nVEf
+         oZVXodjkeeJA6DNgjQ0MpMyCLlLovpZJ2J0fVWqWjA5yC/4Y0KlTNE0CGJqWWhXVApGy
+         nmPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782163689; x=1782768489;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JuqJabFFbQmPGzhmB4FLpo8sCHROklOUvbmq7PrEhNo=;
-        b=j7NGb9dVBvJj5H3RjiQWbd1JTOmM2zLl5gpPaORebhg8rVWB+H3i1BjQDEELDq05zu
-         IRxJG+4sm89e0g+UyFMO6yEX1QGI+uaofx3x2+0JcTkA9TVjvTGrM4BbuKDbYhDASZhf
-         dXXWXq2+gvI67MwpOdzxDDZ5lDboqwneftS+tFZz9NzDP/1dkymOlK0vhKkNYFZxC2sC
-         mdlpSqYFeOib0sbikzHy+MaatTwnWwM8XRg0qAHHCvBtgoXLwKQAVvVPGwbJtSj9iykl
-         5WN97T+lmjAkqW/psHRA7nMo3Sjvm6BmWlP+eCYFYMeFGIu7CsODdxLC3OopQiMrAKHc
-         iieA==
-X-Forwarded-Encrypted: i=1; AFNElJ/BZvd5JU4VD5HXLbmYO20Xc384pD7IXjGk+6MUuBNJSCXXwIAbQfKtgrko3dlWWPom7qc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw88YIOBbDvdWXmL/BlavG0UQaaRSf1UDWD9p1pyFkwCkuU4KiV
-	jQOBsUtSIgUVpnD5RQUm0TdqG2TALCusFrvzNGX5LmvI9DIWh7tPzGtT
-X-Gm-Gg: AfdE7clYLtqpfDU+lcRmKxkjmyI3a88tkcsVjU6q0rzrMZ7Gvp9JToZrI1qNbEtVEp+
-	QSL9sCQp7U7dAzIMnH9niZ0eKWw++P7Gp1RlVSDoo/xhB4NzqQNSFUc0MIKRjJ9yeSnA5IWfzVQ
-	GvpbFq9bYkTRiV2xoGccyuTb/8sGCYeEEDu+AqrrWRt/zRIJfmnwdyPgKetlV6d9kU6SA1AXnRz
-	blGwwMiBOuKG7lPF3n8GBmVHVRqQuUiZRDlv9QJq5s+Y6oRZQln0NPJp866vNFZ7iqP8g2IHNHY
-	Sdi0a6VqJEkBlb5CJR9T7Xi2lAHze1cyaetIKAQDikwveJAE1+kpW5wPRTwea+shmYOeW17YVi2
-	jOzf1T+GqPSkhGropDZieveiT5yOxog4Qj4fESs9E+GG0TAAMOPDTYkBBbkTq20xUcIm3eeF+H6
-	BH6mK+Bi7MRLngw5enGrJZrno=
-X-Received: by 2002:a05:6a00:181d:b0:82f:8e9f:bdd5 with SMTP id d2e1a72fcca58-8455075f2c1mr16724772b3a.1.1782163688727;
-        Mon, 22 Jun 2026 14:28:08 -0700 (PDT)
-Received: from google.com ([118.150.148.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84564ec335csm8459379b3a.49.2026.06.22.14.28.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2026 14:28:08 -0700 (PDT)
-Date: Tue, 23 Jun 2026 05:28:01 +0800
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: Pu Lehui <pulehui@huawei.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	eddyz87@gmail.com, memxor@gmail.com, luke.r.nels@gmail.com,
-	xi.wang@gmail.com, pjw@kernel.org, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, martin.lau@linux.dev, song@kernel.org,
-	yonghong.song@linux.dev, jolsa@kernel.org, alex@ghiti.fr,
-	jserv@ccns.ncku.edu.tw, eleanor15x@gmail.com, marscheng@google.com,
-	bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 2/3] riscv, bpf: Fix support for BPF_MOVSX in
- RV32 JIT
-Message-ID: <ajmo4VeTykr5ozBw@google.com>
-References: <20260511221648.3251464-1-visitorckw@gmail.com>
- <20260511221648.3251464-3-visitorckw@gmail.com>
- <2ca2a85a-d4a9-4459-a534-6159de6e5890@huawei.com>
+        d=1e100.net; s=20251104; t=1782164633; x=1782769433;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UBL+cTr6RyMgkLyRYl63IsYVsAB6dBdpm8WHhEM/Z8Y=;
+        b=N97FjKCz8BKCcMoUXXpHUG+qMmvwdgAK0r7RxrK4FdUqi7ktiHrjGZ3k4sbr02V+PA
+         p1KC0velOP1xnorFzze9Ahf1ebmJGHr9SVwexgYA0OyRnahMx6v746nb1G12YTObM2Ta
+         bGF9qLmJYL07CPad0j/ijrFugWlgaSzCTgCp/HYss1OgObmzzzh6zeVEO75J5Z1S/jKb
+         1HdzLhOsZ/eCrJ2ppE3DPg19KkWc9bH0FTWkKdID6EL36kY2i2b89qtqSTstobCtEETf
+         1fRXM8MD72QtIkTCpve8JfedOG27sPhdt1XeApgwqDXBuU0SzvkqLNRDs5KopfUYWpH/
+         BKpg==
+X-Forwarded-Encrypted: i=1; AFNElJ9/yO8xq8OGjeLvnGBxR0y4226asX510pIgvDMdPQy2S/Meu7wIRE3Kq8gzyCMKPegtNcs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxoCKbffGQ1cpYFiffTDmT/AgVdkt+zAjZun+EcnaWDAXyp41z
+	2ZDaorr0i3/RAD6hR1CT7dlxn8bwOb0IiW11em1GN+wvI10mVpTyqsDPdkPdHhY/kGzBOXqr/Lz
+	azXImVHq541whVRmyT799YqYvkGfWvE0=
+X-Gm-Gg: AfdE7cligswrkknALDT5hTDW1EfyTOhmpRfo20FHrQCEWIA2MVQgMor9qWi2G9tZiQP
+	k9NG2pOENWu0T5oQ3l0nZOrNM2yMbj/ddERHCJihti/m3mg5GuxBk0hZpMWNghX1VVHfEZPQhin
+	LJjmu1r40p9HMmEY1Yg7Fh0+wuHvlKn9RxpPuS7dE2KPZiwY1nPbaNapocCPJHoPCnrEyAOcao5
+	gejLscC5aiizOVq3sv5sWV37nTtYNLXXq8wQlBaZFUgLKrLINpAqt2CX34QypNQbt7BQfu3j8Ca
+	cNkHzZTbWauyuc857VhiN9ORadV7lZ5JRJsjhzDBe6AvdHlIy99ZmxYpAO9aERsOD3oQv+GV/mM
+	nrylt5ZwQQ6pcNA==
+X-Received: by 2002:a05:6a21:6e88:b0:3b4:9168:d9e6 with SMTP id
+ adf61e73a8af0-3bb35b6b968mr16851568637.37.1782164633345; Mon, 22 Jun 2026
+ 14:43:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2ca2a85a-d4a9-4459-a534-6159de6e5890@huawei.com>
+References: <20260613-bpf-stack-var-off-zero-v1-v2-0-a324af0f00ea@gmail.com> <20260613-bpf-stack-var-off-zero-v1-v2-1-a324af0f00ea@gmail.com>
+In-Reply-To: <20260613-bpf-stack-var-off-zero-v1-v2-1-a324af0f00ea@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 22 Jun 2026 14:43:41 -0700
+X-Gm-Features: AVVi8Cdz3tMh9NzejKFvKITuc2AJTPEzadbZTaXrUGp8E_33Bi-gM3Rly2cmQaE
+Message-ID: <CAADnVQKTMkHwnZb-VjCErqmoe4O4=aT1vjMU8XcZiWpNG-LhVQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Preserve scalar zero spills for
+ var-offset stack reads
+To: Woojin Ji <random6.xyz@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, John Fastabend <john.fastabend@gmail.com>, 
+	bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Lehui,
+On Sat, Jun 13, 2026 at 4:16=E2=80=AFAM Woojin Ji <random6.xyz@gmail.com> w=
+rote:
+>
+>
+> Keep fixed-offset stack reads out of this eager precision marking path,
+> as the new behaviour is only needed when filling a register from a
+> variable-offset stack byte range.
 
-On Wed, Jun 17, 2026 at 03:30:03PM +0800, Pu Lehui wrote:
-> 
-> 
-> On 2026/5/12 6:16, Kuan-Wei Chiu wrote:
-> > The current rv32 bpf jit compiler incorrectly treats BPF_MOVSX as a
-> > standard zero-extended move operation. The bpf instruction set allows
-> > sign-extension moves by reusing the BPF_MOV opcode with the instruction
-> > offset set to 8, 16, or 32.
-> > 
-> > Update the bpf_jit_emit_insn() function to check the offset field for
-> > both ALU and ALU64 MOV operations. If the offset is non-zero, emit the
-> > correct slli and srai instructions to perform the sign extension.
-> > 
-> > Before this patch:
-> > [   19.549705] test_bpf: #82 ALU_MOVSX | BPF_B jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
-> > [   19.551354] test_bpf: #83 ALU_MOVSX | BPF_H jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
-> > [   19.552576] test_bpf: #84 ALU64_MOVSX | BPF_B jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
-> > [   19.553542] test_bpf: #85 ALU64_MOVSX | BPF_H jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
-> > [   19.554807] test_bpf: #86 ALU64_MOVSX | BPF_W jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
-> > 
-> > After this patch:
-> > [   17.931172] test_bpf: #82 ALU_MOVSX | BPF_B jited:1 125 PASS
-> > [   17.932198] test_bpf: #83 ALU_MOVSX | BPF_H jited:1 124 PASS
-> > [   17.933039] test_bpf: #84 ALU64_MOVSX | BPF_B jited:1 124 PASS
-> > [   17.933918] test_bpf: #85 ALU64_MOVSX | BPF_H jited:1 124 PASS
-> > [   17.934751] test_bpf: #86 ALU64_MOVSX | BPF_W jited:1 122 PASS
-> > 
-> > Fixes: 8100928c8814 ("bpf: Support new sign-extension mov insns")
-> 
-> not a fix, the fixes tag should remove. And the title should `Add support
-> for xxx`
+...
 
-Thanks for the review.
+> +static int mark_reg_stack_read(struct bpf_verifier_env *env,
+> +                              /* func where src register points to */
+> +                              struct bpf_func_state *ptr_state,
+> +                              int min_off, int max_off, int dst_regno,
+> +                              bool mark_zero_spills)
 
-I did consider using 'Add support' instead of 'Fix' for the title. I
-went with 'Fix' because when the JIT doesn't support a BPF instruction,
-it's supposed to return an error code to trigger a fallback to the
-interpreter. Right now, it doesn't return an error code and just
-executes it anyway, producing results that violate the spec and
-breaking bpf_test.
+why differentiate fixed vs var-off with this flag?
 
-Regards,
-Kuan-Wei
-
-> 
-> others lgtm,
-> 
-> Reviewed-by: Pu Lehui <pulehui@huawei.com>
-> 
-> > Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
-> > ---
-> >   arch/riscv/net/bpf_jit_comp32.c | 32 ++++++++++++++++++++++++++++++++
-> >   1 file changed, 32 insertions(+)
-> > 
-> > diff --git a/arch/riscv/net/bpf_jit_comp32.c b/arch/riscv/net/bpf_jit_comp32.c
-> > index 7396899ea276..f8509950fed4 100644
-> > --- a/arch/riscv/net/bpf_jit_comp32.c
-> > +++ b/arch/riscv/net/bpf_jit_comp32.c
-> > @@ -974,6 +974,24 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
-> >   	switch (code) {
-> >   	case BPF_ALU64 | BPF_MOV | BPF_X:
-> > +		if (insn->off != 0) {
-> > +			const s8 *rd = bpf_get_reg64(dst, tmp1, ctx);
-> > +			const s8 *rs = bpf_get_reg64(src, tmp2, ctx);
-> > +
-> > +			if (insn->off == 8) {
-> > +				emit(rv_slli(lo(rd), lo(rs), 24), ctx);
-> > +				emit(rv_srai(lo(rd), lo(rd), 24), ctx);
-> > +			} else if (insn->off == 16) {
-> > +				emit(rv_slli(lo(rd), lo(rs), 16), ctx);
-> > +				emit(rv_srai(lo(rd), lo(rd), 16), ctx);
-> > +			} else {
-> > +				emit(rv_addi(lo(rd), lo(rs), 0), ctx);
-> > +			}
-> > +			emit(rv_srai(hi(rd), lo(rd), 31), ctx);
-> > +			bpf_put_reg64(dst, rd, ctx);
-> > +			break;
-> > +		}
-> > +		fallthrough;
-> >   	case BPF_ALU64 | BPF_ADD | BPF_X:
-> >   	case BPF_ALU64 | BPF_ADD | BPF_K:
-> > @@ -1024,6 +1042,20 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
-> >   			emit_zext64(dst, ctx);
-> >   			break;
-> >   		}
-> > +		if (insn->off != 0) {
-> > +			const s8 *rd = bpf_get_reg32(dst, tmp1, ctx);
-> > +			const s8 *rs = bpf_get_reg32(src, tmp2, ctx);
-> > +
-> > +			if (insn->off == 8) {
-> > +				emit(rv_slli(lo(rd), lo(rs), 24), ctx);
-> > +				emit(rv_srai(lo(rd), lo(rd), 24), ctx);
-> > +			} else if (insn->off == 16) {
-> > +				emit(rv_slli(lo(rd), lo(rs), 16), ctx);
-> > +				emit(rv_srai(lo(rd), lo(rd), 16), ctx);
-> > +			}
-> > +			bpf_put_reg32(dst, rd, ctx);
-> > +			break;
-> > +		}
-> >   		fallthrough;
-> >   	case BPF_ALU | BPF_ADD | BPF_X:
+It seems the fixed offset reads would benefit as well?
