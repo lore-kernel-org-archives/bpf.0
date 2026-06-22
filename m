@@ -1,35 +1,36 @@
-Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DBBC3368B6;
-	Mon, 22 Jun 2026 03:13:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142513385BE;
+	Mon, 22 Jun 2026 03:13:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782097996; cv=none; b=e+39hlwzTFp5m0dJ6iqTdKPHfOpsDVoKeMGm23v4cgl2C+ZfTGTq8qXd5XxBUxQ4KnX/+alg6I+Q0fVA4r2Vvs9hPt5zwcERfqMOiSUKgb05s5VENWe36FmrGJjoe/Rc0cBDTO3kftC8osC/IROtIOb9CnTW27izaSLZ36ttN+s=
+	t=1782097999; cv=none; b=OLZNb5wSdecEqDAjyrtjM4wYHDgwWNk0TJLBLZfQ9wXeRZBvfbkf5J9uvgADwIeI9qDl5KTIUPhbFpZpSGIsOLpNlG8bc6AxdSyndQRG2drEFH5aOL4YRRfPpgOjoBUlXkvCh2Rg4e66tIdy+YtfPFLBBB73iSwpBZDrCJwOlro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782097996; c=relaxed/simple;
-	bh=/ZPDUYBCyykfDe/GWG5nPCxfj6v6YGZ/DhiC2J7XtCg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OkvdHyXj5DA+lY5z66a1NRj7xSmPzuBsMt1TeHxLz2TsmKstWwyp+7uawf0RNj1Y7HDGff3dDbfIjBVGBQF1upLMrLCp7T+Y4+CyLnry+iQYTPvoCajAwyxKzu/YjuvHxNXI2RzjyMR/+nj3p+8qJvpZKPCXTCXDPkjGJd0gQM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Wyku1RBz; arc=none smtp.client-ip=54.204.34.130
+	s=arc-20240116; t=1782097999; c=relaxed/simple;
+	bh=FFXerJr+VNoZX+lCjKYXG5q3iyJOvurkFx7TtADP1Yo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NShMlkrwhONgTW6zslnwxpR38AYzJIjP4612cDPxn+KYVUr0g1jwv9SDYG9h0CtrqSow0s1zfm5SuGn+SYPNQpyFEy3fMmqNgaam59CqtKg0T6IBeT82X5cAuCMaQjeXm+7myh3cvNcnrDP8WlaanRhVXZc6aP6PC3X9cXgVX5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Te+8BOsc; arc=none smtp.client-ip=54.206.16.166
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Wyku1RBz"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Te+8BOsc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1782097983;
-	bh=tPEowK0ZkHkwOk56ELXAy+PdSCs06XVG9EsK4Wk4bJU=;
+	s=onoh2408; t=1782097994;
+	bh=a4/LDFCeSh/CtEmBczCiOIPnMouaPDoUWWVbHGIwmfM=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=Wyku1RBz1V8VE2M1pKdjzqKgDWwYPbx5yYiAztGaxoUafMtoEd34UyF/KrPczh8mK
-	 xBZcjDXowM3W68hZL2uruOiMXNfchbxd3bqS5q/4EEAXk7b0pHBs01MEfbKpLxOxit
-	 A5MdxpuwGTZumVVIBvmvaiqbjWHHOL7GjPcTm0wM=
-X-QQ-mid: esmtpgz12t1782097979t783dc95b
-X-QQ-Originating-IP: XgxM0bTzdLVfcl1H/SToUVsVa+i7D2eL7+rhhsCt7yA=
+	b=Te+8BOscuwHIchCQNGj+46SM0PZxvGp/n2d7cAKL9+CS6A89tWtF5EroLV4dBIpC7
+	 tRAT0F3RgtsQj5htoJ76tTIOSnW2eDD/gbyMs8GpAEKgoYICBfsRaYlTyaupHonz5G
+	 UoowT3j0jNG/LpS4QpQeE+nwdaKbm0zviXvsGYHY=
+X-QQ-mid: esmtpgz12t1782097990tb0789c82
+X-QQ-Originating-IP: b+UM1+mZDq/HcRXEbLHX3eybMLdfLYwtzAr56pR9tvs=
 Received: from Shurima ( [113.57.152.160])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 22 Jun 2026 11:12:57 +0800 (CST)
+	id ; Mon, 22 Jun 2026 11:13:07 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 9971594127160575059
+X-BIZMAIL-ID: 6638219374528715177
 EX-QQ-RecipientCnt: 13
 From: Yichong Chen <chenyichong@uniontech.com>
 To: qmo@kernel.org,
@@ -45,10 +46,12 @@ Cc: martin.lau@linux.dev,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	chenyichong@uniontech.com
-Subject: [PATCH v2 0/2] tools/bpf/bpftool: Fix vmlinux BTF state cleanup
-Date: Mon, 22 Jun 2026 11:12:53 +0800
-Message-ID: <51C3B0A22437ACC1+20260622031255.1160657-1-chenyichong@uniontech.com>
+Subject: [PATCH v2 2/2] tools/bpf/bpftool: Reset vmlinux BTF after struct_ops commands
+Date: Mon, 22 Jun 2026 11:12:55 +0800
+Message-ID: <70577DC64C69EA1B+20260622031255.1160657-3-chenyichong@uniontech.com>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260622031255.1160657-1-chenyichong@uniontech.com>
+References: <20260622031255.1160657-1-chenyichong@uniontech.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -58,47 +61,66 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: esmtpgz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: MglA7JX7t2v3sXUpAPbysoh2zudoCtU58ATe3n/fl8rbqHB27uvYgcny
-	8DguTBYVIbpM4ABfQlcLiVrQQbnA+NbScKHrrfz8QZsmQCXNLkbxZY8g5HtNxHkr4asCTa7
-	W72ntCKbheOzmuQZuYVaUy7ap+FkncahvlYZ4Us8nrkqy1RJK3QMdlmUAuPzrZJAbDgebtz
-	XGvNzAOFDCnORSN4ptMEpua+/XYQruHVbkBpG9s8tbNVIhIDoG5RgVdLp3T+Zz7WaFjvUz2
-	xJzZ+tUYg+iKiQhjTM5wfqxAMyp+iKZQHxKbaagsx22OOnvQUl5Xi8q7yd+vg2VHkZ1r/a8
-	zl0KGuRwN8MRWhpe1QTBd1mlWFnN3I8dnf8ljeQXM4yzNvqckXaBzRT3rMyhak0VbWI5J2t
-	lfqTEgGyQFifhuTGE1fkl9i249c4rZtYpj7pTPM1cWjmJJbMYDBmWJtovzrrSOTofvxdMb4
-	GSKyAsNEtAKbuUu8mD/w2VBJsuJoawfi8CtzqpYMASbIgYsKl7GNLz+KSP6l6MP9Wr+a8xN
-	JEB0yPPqpnblNW3UIIusCl9j0XMQoGO6775+lrA2AWqQ0aZRvu+K0yVavmFaOcx968wp8oH
-	cnQa8MU1mHQfZt2rgcYc7X49O2ngOdYLZXI1T9OLlAi/F4eRKxN64Mam0HIy+KRQ84/fOAR
-	ddRibFLiIDZGdFX9seRGyQKqYwTHV8njXqnFRveTXk6gFmoLpKnK2+wQ4pXzu2jwGwu3ZSt
-	flLQlX54Li30X0cFU4UEsLJMq0Ggz36pBFNau9mA1fnQ8vLJuZ2AJmCePyRP9Xo1f3BfpZh
-	A3tZmtQzB9YQgBRh97oCWaZQjf8QvFzLzM2Exf1a5XHdjfkppzhNetKmse96Q4rUM1GgmYi
-	brScDUmsfpziA/2UDUPYep3vJd5eObAfLC4ZBUBoTUwTWL7ycr5YquyIyB7mVciprnk7Xky
-	NDSBZ2eDORCaQC60QsRddJY7eP25WAbstOvofJ+jh+4xeszjuSWH4Mq2RARfByscyL/ZuBm
-	aLcrNK2pc7zrbQzfhxCZ7wlqpPoWpddO2hqzSjcZvzVXs/qy9f
-X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+X-QQ-XMAILINFO: NX+V370L36ibhwvG64/ulmdXRqxdSd3qqJZyT+DevIBVdc8y+XbnGxEb
+	QR0Du69yxMc6eKvU0t/SIlpu2cwIHftBz+yubwGyBEuDJcz6Mescm8TiA3oElL9LUdETzVa
+	tvHegrGaRnQf9JbpwoqtUO72P6VpOmrI0VqI/ZGoUTL7DffeAfTv7AJ/xfpfz8zTFjePvhQ
+	I5UhvqLmVRb5FC7OY+ceNHIurhAt4iWoMfpLgfDgV8fgrFvw8vdps2e2nq7j8BixBwCpWDi
+	tAeptgrw/YtW94sTStGTMc1lhmrlsBEgS/aGREULTe6l3tSQBCUyIDuW9b7L3haoqOmLEUs
+	RUcpqNuimhKp+skFWucg3F5wcIs+DIIoK24TtzCdt+iQGH7h+EmHGPEDT3iRGi/g1L1tPYt
+	qYS0BnkiFL/aRUMWtxd0zMeiOqYE/7EJh8Ko/dKCU617XwDyA7dQ4/kWpdSY1Vv5Fq8mLeP
+	FI0U/Rdbqas0245rNYcOAQthkyAkOa9J2DRez0/AbMt8FoAh5lHR/jA0EpKeMKCqTjXPZ7o
+	wnKJcSk2wWMGgvPNwiaJXz9TY5PieJasXnugmazvV/FhYnil2h7csyFfgzwAQ60hw6LjvyZ
+	gEtiIg1u8K3Euc0GkkN//pjqPkZ9R95h904VEGu1/8MDqEVi9ec0gOzn7EcD78apAiNAZMr
+	rWQg7FGzdSphKlfh1obWf9Nq8K43M7tejfrTjiQQ8g1OyFq6a9mUi/VqNvMoo/Ebotd+I5U
+	Le2z1q3JnfAT5WaCiT+4+Y9GuOss2ZKQ10L1RM3qzm3k3IUM9ZM6kk8brjVXwm+M84dXP5L
+	VshftETUUmN4pp2rSy7S4/qaaGVXg40GSnQ5kWBg8KbdF4zCp7bl3Lcf9yqtKuElTD1Rmyc
+	opQPGDS4iTnII+Fc/bBsoXIXQrGiVBKcw4PSpuo7DgaxqYAlJTXVBn0W/mPkKoGJtlSkebo
+	lTRJh+ZB+1Txmy3XHWPWOWF/00UVoaZ1hOed5tJjT6iMToqdvASC9T7xFyHW9bByovASstx
+	+7Xi3r5hTYom4QBH9LUWP1pK5e9PoB0ZxV8oN9Ux6xBZ3X9wsw44SyjGXfeqGbFg+m3+TOQ
+	Ye8sNbfVCkHfkdrpXC+1loeKQAmxB0z+6OvVRcrPNA0
+X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
 X-QQ-RECHKSPAM: 0
 
-This series fixes stale vmlinux BTF state in bpftool batch mode.
+struct_ops frees the global btf_vmlinux object.
 
-Patch 1 resets the map command cached vmlinux BTF pointer when the
-command releases it, and avoids freeing the cached object from the
-map lookup path.
+In batch mode, a later struct_ops command can reuse stale state.
 
-Patch 2 resets the struct_ops command cached vmlinux BTF pointer and
-dependent cached map info state after each struct_ops command.
+Reset the BTF pointer and cached map info state.
 
-Changes in v2:
-- Fold the map lookup path fix into patch 1.
-- Update patch 1 subject and commit message to cover map commands
-  rather than only map dump.
-
-Yichong Chen (2):
-  tools/bpf/bpftool: Reset vmlinux BTF after map commands
-  tools/bpf/bpftool: Reset vmlinux BTF after struct_ops commands
-
- tools/bpf/bpftool/map.c        | 12 +++++++++---
+Signed-off-by: Yichong Chen <chenyichong@uniontech.com>
+---
  tools/bpf/bpftool/struct_ops.c | 11 ++++++++++-
- 2 files changed, 19 insertions(+), 4 deletions(-)
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
+diff --git a/tools/bpf/bpftool/struct_ops.c b/tools/bpf/bpftool/struct_ops.c
+index aa43dead249c..4dba7c96e5f6 100644
+--- a/tools/bpf/bpftool/struct_ops.c
++++ b/tools/bpf/bpftool/struct_ops.c
+@@ -21,6 +21,15 @@ static __u32 map_info_alloc_len;
+ static struct btf *btf_vmlinux;
+ static __s32 map_info_type_id;
+ 
++static void free_btf_vmlinux(void)
++{
++	btf__free(btf_vmlinux);
++	btf_vmlinux = NULL;
++	map_info_type = NULL;
++	map_info_alloc_len = 0;
++	map_info_type_id = 0;
++}
++
+ struct res {
+ 	unsigned int nr_maps;
+ 	unsigned int nr_errs;
+@@ -642,7 +651,7 @@ int do_struct_ops(int argc, char **argv)
+ 
+ 	err = cmd_select(cmds, argc, argv, do_help);
+ 
+-	btf__free(btf_vmlinux);
++	free_btf_vmlinux();
+ 
+ 	return err;
+ }
 -- 
 2.51.0
 
