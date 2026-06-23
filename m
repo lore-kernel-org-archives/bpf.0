@@ -1,33 +1,33 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843FB2853FD
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 16:49:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC17329C6D
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 16:58:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782233396; cv=none; b=hw9KtkZxpSK5EwfAWiiLsztAannepoAQfT0XsavLQdhDqzGgjPlsaIFXqqumWQggCOZi04TFyBGplQEFiO/p2YLpE56bOSNoycVDVbW+LyIeVQ65CjNEr2yFEsQfqkv2SHP9AJFPfwaFRaYyK5ck/eau8H3chxum/cpaji1vNa4=
+	t=1782233899; cv=none; b=D3GIHXiFcl7Ih7ClQe1j69vP56XsUjKuV5zCWQaSzcgkCsAfxSNfFR4KgJma81oRxY0zFnPe8RRSrYxXfcU7rz/0fkyUsVjWXznUJx+B56vUKipaQpVQ6OFjFB+DRcUucQ4jqZu4uuiWZlqPWl642DZwR6BdB45+0Mj2zXrE2FI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782233396; c=relaxed/simple;
-	bh=iNwO/rNKTXc/JKA2rRfx1omqBrvnxFZT+GDqXf7z4cQ=;
+	s=arc-20240116; t=1782233899; c=relaxed/simple;
+	bh=zbihmV5fN6T4FGaMdZgH9ffanOLhmr6LKZsXgivivqc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RnApndVuvKZjvMrBew92LiALux2D88Fa++w/ZNKx/Ft3LBQAsc1svgM83yo0WIsdCYpoOODacNQn9ZMtjiwFLKFswz/1wPAIclcrG5lGyLUYFDxE7/3XXq4bSTqlVh3IfN062IwZJkfT/9zEglZ8/24eQjY3F3cViUp4McL8ooA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rfhJQ/cp; arc=none smtp.client-ip=91.218.175.181
+	 In-Reply-To:Content-Type; b=T2hMJ7ksUgPON3AcfevRZ7F3UvqcgWnyuO9TOu/IYkK8X2vMnt36jB4Lisz+6i759ldyETbrTkFhBCyrunTAWr7X0L2TVLyE4Ns3jfENY9eeB8H4QoFLJ4dh+Ym2eQjiTkPsX8tlbN4jdLSK6PzO7/OoYvUGdr+Jkvkh4/n0MiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eN0lJ5L5; arc=none smtp.client-ip=91.218.175.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rfhJQ/cp"
-Message-ID: <60d2b741-b520-4f63-99ea-5a5e9825fcc5@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eN0lJ5L5"
+Message-ID: <16c3840e-80e1-44ba-9415-fa4ec9ca5785@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782233382;
+	t=1782233895;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FNd2N44ZnRaRe2kqiXc4lON/BYcZH0gC3XHUQm4SpBc=;
-	b=rfhJQ/cpswPY1vMT2Et27GLVGiOUn4gDmEgUMZ5kXWWM6a8xc4L0mGxTfIfzvDtMzA0aPZ
-	HWzqxQ3VhbDEvWjYbDcxtil0k8/jAbg29NfMq6ZEi58IIFjCYNwi38rVrxTtQc40GVS+Xi
-	9x6WqVn5Qsn+DxuVMiIXOiFLE3Apkjs=
-Date: Tue, 23 Jun 2026 09:49:35 -0700
+	bh=1mVuApoJqVlXdBFnkM86bPf6Noqutb0vDxs2yW0qefI=;
+	b=eN0lJ5L5goL+49Ur6QrX3h5aJ3OZ1JWVqzvONcXBVWnCe2so5JrlJqReu8dWX34E8t5pdy
+	ILfizv0nITXScXcLYg8dCnwaOXdp63+0TPNHo+sljtI5KmDqn6HH2AKBjWaewKiVTgY/4a
+	1jivx4sv8bwwEwir3/GFVEqJrYyN7ic=
+Date: Tue, 23 Jun 2026 09:58:09 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -162,91 +162,24 @@ On 6/23/26 9:02 AM, Alan Maguire wrote:
 > actually sorry that patch leaked true signature partial names for gcc; updated
 > patch attached.
 
-Thanks, Alan. I think we should preserve the previous change in dwarf_loader.c
-(the patch you applied Jiri).
+The whole clang signature_changed thing can be removed.
 
-The following is a dwarf example in clang built kernel:
+I want to see whether cu->producer_clang can be removed in
 
-0x053c4bb4:   DW_TAG_subprogram
-                 DW_AT_low_pc    (0xffffffff828bce90)
-                 DW_AT_high_pc   (0xffffffff828bde6d)
-                 DW_AT_frame_base        (DW_OP_reg6 RBP)
-                 DW_AT_call_all_calls    (true)
-                 DW_AT_name      ("ZSTD_buildSequencesStatistics")
-                 DW_AT_decl_file ("/home/yhs/work/bpf-next/lib/zstd/compress/zstd_compress.c")
-                 DW_AT_decl_line (2677)
-                 DW_AT_prototyped        (true)
-                 DW_AT_type      (0x053c46b5 "ZSTD_symbolEncodingTypeStats_t")
-                     
-0x053c4bc6:     DW_TAG_formal_parameter
-                   DW_AT_location        (indexed (0x8e8) loclist = 0x00e1597f:
-                      [0xffffffff828bce99, 0xffffffff828bcf3d): DW_OP_reg4 RSI
-                      [0xffffffff828bcf3d, 0xffffffff828bd045): DW_OP_reg12 R12
-                      [0xffffffff828bd045, 0xffffffff828bd562): DW_OP_breg7 RSP+40
-                      [0xffffffff828bd5bd, 0xffffffff828bdb0e): DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
-                      [0xffffffff828bdb0e, 0xffffffff828bdbdc): DW_OP_breg7 RSP+40
-                      [0xffffffff828bdbdc, 0xffffffff828bdbff): DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
-                      [0xffffffff828bdbff, 0xffffffff828bdcfd): DW_OP_breg7 RSP+40
-                      [0xffffffff828bdcfd, 0xffffffff828bde6d): DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value)
-                   DW_AT_name    ("seqStorePtr")
-                   DW_AT_decl_file       ("/home/yhs/work/bpf-next/lib/zstd/compress/zstd_compress.c")
-                   DW_AT_decl_line       (2678)
-                   DW_AT_type    (0x053c4697 "const SeqStore_t *")
-                 
-0x053c4bd2:     DW_TAG_formal_parameter
-                   DW_AT_location        (indexed (0x8e9) loclist = 0x00e159d4:
-                      [0xffffffff828bce99, 0xffffffff828bcec1): DW_OP_reg1 RDX
-                      [0xffffffff828bcec1, 0xffffffff828bd58b): DW_OP_breg7 RSP+72
-                      [0xffffffff828bd5bd, 0xffffffff828bd5e8): DW_OP_breg7 RSP+72
-                      [0xffffffff828bd61b, 0xffffffff828bd72d): DW_OP_breg7 RSP+72
-                      [0xffffffff828bd76d, 0xffffffff828bd799): DW_OP_breg7 RSP+72
-                      [0xffffffff828bd7cb, 0xffffffff828bd8d8): DW_OP_breg7 RSP+72
-                      [0xffffffff828bd91b, 0xffffffff828bd943): DW_OP_breg7 RSP+72
-                      [0xffffffff828bd974, 0xffffffff828bdafe): DW_OP_breg7 RSP+72
-                      [0xffffffff828bdb0e, 0xffffffff828bde6d): DW_OP_breg7 RSP+72)
-                   DW_AT_name    ("nbSeq")
-                   DW_AT_decl_file       ("/home/yhs/work/bpf-next/lib/zstd/compress/zstd_compress.c")
-                   DW_AT_decl_line       (2678)
-                   DW_AT_type    (0x053be0a9 "size_t")
-0x053c4bde:     DW_TAG_formal_parameter
-                   DW_AT_location        (indexed (0x8ea) loclist = 0x00e15a36:
-                      [0xffffffff828bce99, 0xffffffff828bcf0d): DW_OP_reg2 RCX
-                      [0xffffffff828bcf0d, 0xffffffff828bd037): DW_OP_reg15 R15
-                      [0xffffffff828bd037, 0xffffffff828bd58b): DW_OP_breg7 RSP+88
-                      [0xffffffff828bd5bd, 0xffffffff828bd5e8): DW_OP_breg7 RSP+88
-                      [0xffffffff828bd61b, 0xffffffff828bd72d): DW_OP_breg7 RSP+88
-                      [0xffffffff828bd76d, 0xffffffff828bd799): DW_OP_breg7 RSP+88
-                      [0xffffffff828bd7cb, 0xffffffff828bd8d8): DW_OP_breg7 RSP+88
-                      [0xffffffff828bd91b, 0xffffffff828bd943): DW_OP_breg7 RSP+88
-                      [0xffffffff828bd974, 0xffffffff828bdafe): DW_OP_breg7 RSP+88
-                      [0xffffffff828bdb0e, 0xffffffff828bde6d): DW_OP_breg7 RSP+88)
-                   DW_AT_name    ("prevEntropy")
-                   DW_AT_decl_file       ("/home/yhs/work/bpf-next/lib/zstd/compress/zstd_compress.c")
-                   DW_AT_decl_line       (2679)
-                   DW_AT_type    (0x053c46a1 "const ZSTD_fseCTables_t *")
+                 } else if (pos->has_const_value && !cu->producer_clang) {
+                         pos->optimized = 1;
+                 } else if (true_sig_enabled) {
+                         if (regs_available &&
+                             ftype__next_parameter_preserves_slots(ftype, pos, reg_idx, slots, cu)) {
+                                 reg_idx += slots;
+                                 continue;
+                         }
+                         
+                         pos->optimized = 1;
+                         consumes_register = false;
+                 }
 
-0x053c4bea:     DW_TAG_formal_parameter
-                   DW_AT_location        (indexed (0x8eb) loclist = 0x00e15aa1:
-                      [0xffffffff828bce99, 0xffffffff828bceb9): DW_OP_reg8 R8
-                      [0xffffffff828bceb9, 0xffffffff828bd58b): DW_OP_breg7 RSP+48
-                      [0xffffffff828bd5bd, 0xffffffff828bd5e8): DW_OP_breg7 RSP+48
-                      [0xffffffff828bd61b, 0xffffffff828bd72d): DW_OP_breg7 RSP+48
-                      [0xffffffff828bd76d, 0xffffffff828bd799): DW_OP_breg7 RSP+48
-                      [0xffffffff828bd7cb, 0xffffffff828bd8aa): DW_OP_breg7 RSP+48
-                      [0xffffffff828bd91b, 0xffffffff828bda06): DW_OP_entry_value(DW_OP_reg8 R8), DW_OP_stack_value
-                      [0xffffffff828bda06, 0xffffffff828bda86): DW_OP_breg7 RSP+48
-                      [0xffffffff828bda86, 0xffffffff828bdb0e): DW_OP_entry_value(DW_OP_reg8 R8), DW_OP_stack_value
-                      [0xffffffff828bdb0e, 0xffffffff828bdbfa): DW_OP_breg7 RSP+48
-                      [0xffffffff828bdbfa, 0xffffffff828bdbff): DW_OP_entry_value(DW_OP_reg8 R8), DW_OP_stack_value
-                      [0xffffffff828bdbff, 0xffffffff828bde15): DW_OP_breg7 RSP+48
-                      [0xffffffff828bde15, 0xffffffff828bde6d): DW_OP_entry_value(DW_OP_reg8 R8), DW_OP_stack_value)
-                   DW_AT_name    ("nextEntropy")
-                   DW_AT_decl_file       ("/home/yhs/work/bpf-next/lib/zstd/compress/zstd_compress.c")
-                   DW_AT_decl_line       (2679)
-                   DW_AT_type    (0x053c46ab "ZSTD_fseCTables_t *")
 
-...
+For clang, we cannot just do pos->optimized = 1 just due to pos->has_const_value though.
 
-In this example, signature is not changed with compiler optimization so there does not have 'nocall'.
-But the corresponding registers do not conform ABI's. So we have to reject such functions in BTF.
 
