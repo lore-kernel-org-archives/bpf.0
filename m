@@ -1,29 +1,29 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABB1638C2DE;
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 578752F7F1B;
 	Tue, 23 Jun 2026 17:34:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782236087; cv=none; b=hDxjElvz1sLNgHcdB3h+NS5vk4hOr1LEFOVOgxvarakah0UECmtcU03TTddJxDMRlNqT5+LGYzSydw1PaKSIzKFo1UYOT5KhATbAXjxoUfmBlsF9QY+x6izS18YXqyAqPhJhbEAS3RI+tIm2WKADYXTbj1fMgj/RoWlgioLBSEU=
+	t=1782236087; cv=none; b=UkaJfKKe7kDrV8jeZ9IdMBjac5JYlHEbOvu0zATkZ3zSBE5NDDFBRcTHsAfSE9nIYPdTCy5HwcISagpkY7HOJn73NiyLB/RBjvkgNwJD715FJ0iOJnGLydz+T4Pz7s1UgeCuimG7olgzSqYPPwDMLm4bUtZCcard9uWwnlEsO/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1782236087; c=relaxed/simple;
-	bh=tGc+DsLWLVZmsJ8f7Q3mGERneX4bO2jZXgT1g+kgfaw=;
+	bh=X0mL+MCWFGQ8o3bjWYJPdAks9bEruodMkT8VS1n2P7w=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZaPnyNyncyub8r1QhnJ295wWXaGkTLxvLnyyctzWbRh4Lo314yLzzARgljlacs6QCLa4rpTITRabEaNRHzvDX2+YAo1ehmgs8jV8nQk2yJBx/HIZOD5kLPqplYLcObF5thgJxAe/NxxUyVr3fK2GRQZZeWzrEIoosBqIS7dsJAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=qpwKUVoh; arc=none smtp.client-ip=4.193.249.245
+	 MIME-Version; b=jbeKPox7kGIlapmpP7VsmJ+R7XBoUhZbDrMO8hPmCxbQXb46b/R2CQv4LTWyGl7tentQVGsTtZGeILCjoh7W9/sBNAUTjky8xQPNDpjq/jo3U6vrF2Qhg3wBqLNj9oFMdorD8edmIcgpvWlaniLiro51MU2EKegDZnukGOGIFeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=Awj3WMhF; arc=none smtp.client-ip=162.243.164.118
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="qpwKUVoh"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="Awj3WMhF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
 	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=gvK1xxyab+zPTlurcKxkwrhGybVNMZI6D4
-	DqAPghVhQ=; b=qpwKUVohrJSvAI8NyHLCtnXczD0t2IyzPh/CMgfwlukjAxg/i9
-	8A6Laxd6R/qwt8k/Qcbu0sTWBgaedbn5tBowEdpe1QRe8lnQ1HX0CUGTKTvyI5nN
-	7stIYfKh2eVGcUYVbXrodeUj8K0eY/7svw6/zaPUrXpiNKcu5wkdSmFQE=
+	Content-Transfer-Encoding; bh=UfDTMYjnftXRRhLuKDKW3+ZZLn8Bg6qoGh
+	/+Kq2sSmI=; b=Awj3WMhFgmjJT7oC9/3PMFu43EG66ofusgVlQ78SAVHxDqDPLR
+	G340vmzdbiBKCQVN46aQCbuLilZd3JefR3beNeS2OXhbv6u5PLap5ym1F6h4D8QC
+	78AlUdiyXzKGofyDfmoQ7KV7H1f/j9uwmHUwLwgPwK9/EI0b2KL5OGjGs=
 Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web2 (Coremail) with SMTP id yQQGZQBnP5eYwzpqIo19Ag--.49585S3;
-	Wed, 24 Jun 2026 01:34:35 +0800 (CST)
+	by web2 (Coremail) with SMTP id yQQGZQBnP5eYwzpqIo19Ag--.49585S4;
+	Wed, 24 Jun 2026 01:34:38 +0800 (CST)
 From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -41,9 +41,9 @@ Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/2] bpf: Reject MEM_ALLOC BTF accesses past object bounds
-Date: Tue, 23 Jun 2026 17:34:12 +0000
-Message-Id: <703a2cbfeb17ae707fa4a003b795c5326cc0abb8.1782197377.git.chenyy23@mails.tsinghua.edu.cn>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Cover MEM_ALLOC access past object bounds
+Date: Tue, 23 Jun 2026 17:34:13 +0000
+Message-Id: <db76fcbfb38f2baa03f9a06efbdc2ad74df872b6.1782197377.git.chenyy23@mails.tsinghua.edu.cn>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1782197377.git.chenyy23@mails.tsinghua.edu.cn>
 References: <cover.1782197377.git.chenyy23@mails.tsinghua.edu.cn>
@@ -54,13 +54,13 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:yQQGZQBnP5eYwzpqIo19Ag--.49585S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7CrWfWFy8XF1fWrWxXrykAFb_yoW8KFWUpF
-	4rK3srArWFyrWxu3ZxJa15uF4ftFs5Xa1UCF98t34Fvrs0qr1qqF4kKry7Z34Yyr4DC3WI
-	qr1qg398ua1xJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:yQQGZQBnP5eYwzpqIo19Ag--.49585S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFyxuFykCw4rZF1fuF17Jrb_yoW5JFy5p3
+	WkK34Yya4fKr42qF9xWF47Wr4rWa1vqrySy345CryUAr43XryDXr4xWFW0vF1fArZa9rn3
+	Za4IgF9xWr4UJ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUHY14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-	x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
 	Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
 	8EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4U
 	JwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0V
@@ -71,75 +71,76 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7CrWfWFy8XF1fWrWxXrykAFb_yoW8KFWUpF
 	1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij
 	64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr
 	0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-	0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0pRLiSJUUUUU=
+	0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUznQUUUUUU=
 X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-BTF struct walks relax the struct-size check for accesses through a
-trailing flexible array. That is valid for ordinary BTF type walking, but
-PTR_TO_BTF_ID | MEM_ALLOC values point to objects allocated with the static
-BTF type size.
+Add a linked_list negative loader case for a program-BTF type whose last
+member is a zero-length flexible array. The program writes through the
+first flexible-array element of an object allocated by bpf_obj_new().
 
-When walking a MEM_ALLOC object, reject the access before applying the
-flexible-array relaxation if the access range extends past the struct size.
-This keeps verifier-approved BTF accesses within the bytes provided by the
-allocation kfunc.
+The verifier should reject the access when the BTF walk reaches beyond the
+static size of the allocated object.
 
-Fixes: 958cf2e273f0 ("bpf: Introduce bpf_obj_new")
-Fixes: 36d8bdf75a93 ("bpf: Add alloc/xchg/direct_access support for local percpu kptr")
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 ---
- kernel/bpf/btf.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ .../selftests/bpf/prog_tests/linked_list.c    |  1 +
+ .../selftests/bpf/progs/linked_list_fail.c    | 23 +++++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 15ae7c43f..3e68af9c1 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -7069,7 +7069,7 @@ enum bpf_struct_walk_result {
- static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
- 			   const struct btf_type *t, int off, int size,
- 			   u32 *next_btf_id, enum bpf_type_flag *flag,
--			   const char **field_name)
-+			   const char **field_name, bool is_alloc)
+diff --git a/tools/testing/selftests/bpf/prog_tests/linked_list.c b/tools/testing/selftests/bpf/prog_tests/linked_list.c
+index 8defea025..c3d133c6a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/linked_list.c
++++ b/tools/testing/selftests/bpf/prog_tests/linked_list.c
+@@ -68,6 +68,7 @@ static struct {
+ 	{ "obj_type_id_oor", "local type ID argument must be in range [0, U32_MAX]" },
+ 	{ "obj_new_no_composite", "bpf_obj_new/bpf_percpu_obj_new type ID argument must be of a struct" },
+ 	{ "obj_new_no_struct", "bpf_obj_new/bpf_percpu_obj_new type ID argument must be of a struct" },
++	{ "obj_new_flex_array", "access beyond struct obj_new_flex" },
+ 	{ "obj_drop_non_zero_off", "R1 must have zero offset when passed to release func" },
+ 	{ "new_null_ret", "R0 invalid mem access 'ptr_or_null_'" },
+ 	{ "obj_new_acq", "Unreleased reference id=" },
+diff --git a/tools/testing/selftests/bpf/progs/linked_list_fail.c b/tools/testing/selftests/bpf/progs/linked_list_fail.c
+index ddd26d1a0..031e77a28 100644
+--- a/tools/testing/selftests/bpf/progs/linked_list_fail.c
++++ b/tools/testing/selftests/bpf/progs/linked_list_fail.c
+@@ -167,6 +167,16 @@ CHECK_OP(push_back);
+ #undef CHECK_OP
+ #undef INIT
+ 
++struct obj_new_flex_elem {
++	int lo;
++	int hi;
++};
++
++struct obj_new_flex {
++	int hdr;
++	struct obj_new_flex_elem cells[];
++};
++
+ SEC("?kprobe/xyz")
+ int map_compat_kprobe(void *ctx)
  {
- 	u32 i, moff, mtrue_end, msize = 0, total_nelems = 0;
- 	const struct btf_type *mtype, *elem_type = NULL;
-@@ -7096,11 +7096,14 @@ static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
- 		*flag |= PTR_UNTRUSTED;
+@@ -230,6 +240,19 @@ int obj_new_no_struct(void *ctx)
+ 	return 0;
+ }
  
- 	if (off + size > t->size) {
-+		struct btf_array *array_elem;
++SEC("?tc")
++int obj_new_flex_array(void *ctx)
++{
++	struct obj_new_flex *p;
 +
-+		if (is_alloc)
-+			goto error;
++	p = bpf_obj_new_impl(bpf_core_type_id_local(struct obj_new_flex), NULL);
++	if (!p)
++		return 0;
++	p->cells[0].hi = 42;
++	bpf_obj_drop_impl(p, NULL);
++	return 0;
++}
 +
- 		/* If the last element is a variable size array, we may
- 		 * need to relax the rule.
- 		 */
--		struct btf_array *array_elem;
--
- 		if (vlen == 0)
- 			goto error;
- 
-@@ -7363,7 +7366,8 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 
- 	t = btf_type_by_id(btf, id);
- 	do {
--		err = btf_struct_walk(log, btf, t, off, size, &id, &tmp_flag, field_name);
-+		err = btf_struct_walk(log, btf, t, off, size, &id, &tmp_flag,
-+				      field_name, type_is_alloc(reg->type));
- 
- 		switch (err) {
- 		case WALK_PTR:
-@@ -7441,7 +7445,7 @@ bool btf_struct_ids_match(struct bpf_verifier_log *log,
- 	type = btf_type_by_id(btf, id);
- 	if (!type)
- 		return false;
--	err = btf_struct_walk(log, btf, type, off, 1, &id, &flag, NULL);
-+	err = btf_struct_walk(log, btf, type, off, 1, &id, &flag, NULL, false);
- 	if (err != WALK_STRUCT)
- 		return false;
- 
+ SEC("?tc")
+ int obj_drop_non_zero_off(void *ctx)
+ {
 -- 
 2.34.1
 
