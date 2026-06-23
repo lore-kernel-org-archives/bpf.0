@@ -1,141 +1,217 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D76E337BAC;
-	Tue, 23 Jun 2026 03:39:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782185994; cv=none; b=JOLtR/AprX5ek0+Tp5SpWB61bly4RiQAFJEIxT6gcMA3wrAz9Mc2cI0kOLf4GJisTYg6pNqvIfyo6LzajhlhTqcYzbRJfSnpIQBnBBAYDxXVU7ERouRM7pbOtyDvJa5JusTxYrTU374NnjdDKQaiFEdH/Haxnk7PXHk6hdcJl9s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782185994; c=relaxed/simple;
-	bh=4rDFDSWIPN+GaR3KuHk5JKqQr8cXRoTADue0mfXb99k=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=cRX7XtPOJSnjyC0INsDFm48lwmlI3qP2qBXo9Y4aM+US4xh4wwvClEfTPhWr9T2r7MtztXyGe/8edwAVs4dEqK5vs/r3O8sU3QceLiu1c7OgWCJsn0B1InE4KztUCGX7DHc6hbgkj7x5WtB/j4QbN02mJMSOxWXc60t8FPHPQqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UE+cMsR1; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3776A2010EE
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 03:49:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782186569; cv=pass; b=TketOP273eZZOt/WhH546ZQlA9DpC88/pDdyrh1VyOffRFdvT2oSI1PB7xaEisZrtbIFWfr+cU6UDvaCfmQkmQqf+UEPW0OfwwPTgvd/4Dc+oemt7uYCZB27MqOMx7P2Oh2Vq2e77oXTsRU3OhJEd5foh79EfeydFBaunX2294U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782186569; c=relaxed/simple;
+	bh=RR1hHV2J785WpEVHL0k8zZuvODXfgsvw/MD1CpAaxyE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cwAbSoXelZB8JYKWpbI+fYsYNb164cktPiKpDMv+QAjNs5DH1hd7NuK0aTBNXV/c7+meRV9kW6dHLPyonomly83oPtv4C+qRUyokeScazBxd2FJT/JU42mV4ggqtH/pupD7QkfjjM6w3O7uXYCMXIC23COWh4jJGfXd5MmX5WoM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f2VXEIsq; arc=pass smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UE+cMsR1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5772A1F000E9;
-	Tue, 23 Jun 2026 03:39:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782185992;
-	bh=X6sng07jg3BJFP9zD+bLGFxsbWYewF/i5x/VM+aUpb8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=UE+cMsR12FbJmKUyPZnM2m//3XJEePFGV8KxLAOykD7wnKf8dJYTOcd5x7ekwJrcG
-	 JsiR69tTYC2XNsCVGG9S2Ji1p4ZMk0mvmYDcDIzNJEayhxcMdl6INzlicl8sZvFCHN
-	 hKSOjCx0xAo3q2RO9OzQuyYcPcFyWBnS+rBlQ8vcMIXVhmGHXhHSvkAkU0i06R/hTc
-	 r9PuxGx1/GxC6qo4L5MYP2/ol/0Y3vbzBSa96ZSk619fK+BuX8FpnztMNKsxsgDvk8
-	 hNJVABPkZ9bxvMC/i0r+pI83beTeXJHgA/vwzosc6xTV5ZqKPYNrOwUgBfwFNYMfWA
-	 PffxLPuEjZkHQ==
-Content-Type: multipart/mixed; boundary="===============6750014670296811348=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f2VXEIsq"
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-8dc544dda2fso45262766d6.1
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 20:49:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782186566; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Ae7E/jxAJqUdOANaQofRrOV/X1YikTo7xjWRgp+0wcQm4azIuk5UpjAuJ3Ii/DCfBb
+         rJp3JvfvgozlcsFwDikSvOqogCWyzix3sU1QOIC/KxYu1XTN09dLus7/XI4CgEK2YGTI
+         JfT3jrIWQp9pzErpudq3NgZ5PyJjlnPkH0Y4eRm97LBwttl1d7EER+mkP16Lcah5x1hM
+         GWZR39eH3C7feWjX6w3fhhmGVzgXJHQcdrYUvOWra9ejd5XGmIMr1Ktzs2sOB/yz0jsH
+         kFPxr15aet7R9h3VTf6JvN4Ro82e9ToXZR8b7PzH1FFrBWZimLQBXYUYXlHcHlO9T0oE
+         Ew0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Hg2qvAeQyfTz4Manlgss62I8/Xh54jm/4GmfoVCRIRc=;
+        fh=nKQMyIsx4bng9N6kb3usbo1vFfQmzmOwYNL9TITmzHQ=;
+        b=W9FWQyarJFw+cp+6b2MReRvTjCnu7NH9aqFsrsY0tsVfw987DyiGYPZzgT77q+2Urt
+         Rh/lv65oIipO/7IjA8v6qZvFlvrGoFXuD4Oo8TjziFEHwAx6FibelfKg6CBuNrKg5Vp9
+         CB9ac3whPt601gmxWn3QqcGE3kusDO7JOSfr94MfFcjIAyS2QiWhsUTBTSfK0J9Kn4jG
+         Q9dSswGnZ+kWGYStW1Au2kqlTiJIrYn8yBR4Q2giZ4tBeRjaImXM0hXTvC1ojVtYqHSu
+         AjlJiTeDCVhrvjPYtT0yBbjXKLKtp0goEL82IeANHgN9a6KuQEEwPsKMBtamDzjkK5e/
+         BIvg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782186566; x=1782791366; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Hg2qvAeQyfTz4Manlgss62I8/Xh54jm/4GmfoVCRIRc=;
+        b=f2VXEIsqUPpQtjzWk0AALYcAw5dv8DgPoC1lxGm4F7afw/MKVYqNjJNlgIpQXVMtgB
+         dW5+xn/gyQj5jdqGUMXn+Jfp+EpOjWIh47APFF4MBi94JfvRNK62E0uyJceJpIZ8f19v
+         NZAIB1LF6TxkN29Hp/30I1I+5xCSibfaWZpgPvb1wuPYAHHQ5QX1y5Bnz6TsJHlZbeec
+         ufbpPfihOBmn6fcoPthWWE8D+UgNn1K1XFX8Jyfer0Y29qAdXkbr53xdgWpZ+JI1oEyX
+         GB0KzvLZRKvJfuNkCb8lVZE0sn5SavxJfY1+yCEH7FZuZMAv9zqTicbx1jkwweQl5SyK
+         1Cfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782186566; x=1782791366;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Hg2qvAeQyfTz4Manlgss62I8/Xh54jm/4GmfoVCRIRc=;
+        b=UrCCfcPgR8Tosepksconn423+4C54gCqoLH+D/77e9BaAP3+iwMbpmjCMUVBCaHthe
+         m309weq1er4/InXsARA4+qUf52IH6j0sFRfvBLlhd3zN2b/fd0dKvAWOjtrkjvCIng4A
+         Qak/V2/8KQFWavJeu1wSwmSjqNmr19wqiUWL1ZTXSf2kbqMbmfN9DVXJ6qtkIX4UEllT
+         4i2rkmYjqDxY6/8Zc/GayuTuI2g8c03Lp1NYegoB550O+1goHZQ5j91BiHwj8pLFi2qq
+         onJsutirdBNGiOHlLqksfhbgu2e2noAXRmFASt8IhLaOttwCnPTN3lwrPYA+RYw6O2sB
+         qlWQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rq78X36Z/Nf+Xs39q0y9t2Y0Nrss8Yby8d/1inYGP3wxmBYzPFmV/LdIgjwbt+q5phGPMI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMKteRT7Xqdplx7SbRzbJ7Fu1X6pDjbM3bV1RVp/A/doCkS4YJ
+	QBooIvU7TkSYYtJcy3MuA/8iLJ+sC8BoZNV641tVUS0Hp9ocYU6DZvQNz82BvRtsUGx2zGh+wqH
+	2yMdD9/eAogAvBvTsudeFW5qlKobo60U=
+X-Gm-Gg: AfdE7cl8Q2SuoyVJKsDAF54DaL1RKL9TlSo1xFc2O9spQ0LFN7UonLgYxB9kJFhnIey
+	qtDB/DGWSB53ps4q245XVZQp9kjEgqvtZDlDQeS2AACyi8PoLNq+cKGzuR7gG5X0UvpKlY/doba
+	7cjA/aXRHKnW7KwMEqvQ51o3sOSAvThtvo0JMmj3U1nK+Dqm15QA2ueg5mEqpT2EZicT6s+MYbG
+	EvfVKO4mxU/qJ73mIb31UUVMDbKKNnFJTEs44gwJG1+p4h0zcT81AF2fJ4n9gucAT4l6fJ3ulVB
+	e/EwECxSOydwMf6eA8s4U+vWByM=
+X-Received: by 2002:a05:6214:c4a:b0:8dd:a358:ee8c with SMTP id
+ 6a1803df08f44-8df91338058mr230818586d6.23.1782186566075; Mon, 22 Jun 2026
+ 20:49:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <7d7ccd7fa70ea8bf65dfbe87cd55c796c40088e4b2cb8dd690ad9a8681385168@mail.kernel.org>
-In-Reply-To: <20260623025147.1001664-4-avinash.duduskar@gmail.com>
-References: <20260623025147.1001664-4-avinash.duduskar@gmail.com>
-Subject: Re: [PATCH bpf-next v4 3/3] selftests/bpf: Add bpf_fib_lookup() VLAN flag tests
-From: bot+bpf-ci@kernel.org
-To: avinash.duduskar@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,john.fastabend@gmail.com,sdf@fomichev.me,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,shuah@kernel.org,hawk@kernel.org,yatsenko@meta.com,leon.hwang@linux.dev,kpsingh@kernel.org,a.s.protopopov@gmail.com,ameryhung@gmail.com,rongtao@cestc.cn,eyal.birger@gmail.com,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,toke@redhat.com,dsahern@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 23 Jun 2026 03:39:52 +0000 (UTC)
+References: <20260618203411.73917-1-dwindsor@gmail.com> <20260618203411.73917-2-dwindsor@gmail.com>
+ <DJFZGYZFMN73.1799LMXW49WZO@gmail.com>
+In-Reply-To: <DJFZGYZFMN73.1799LMXW49WZO@gmail.com>
+From: David Windsor <dwindsor@gmail.com>
+Date: Mon, 22 Jun 2026 23:49:14 -0400
+X-Gm-Features: AVVi8CcisxKRwafLGJbgn3FDnILUrTQohjbGOcGFK09DM9CZwfDUyuni252s2_0
+Message-ID: <CAEXv5_jVXS4JoExcd71YkXEE2WXPJ0_9STO-uCwgNF+Eia_h5w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: add bpf_init_inode_xattr kfunc for
+ atomic inode labeling
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, ast@kernel.org, 
+	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, 
+	eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	kpsingh@kernel.org, mattbobrowski@google.com, paul@paul-moore.com, 
+	jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
+	roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, 
+	stephen.smalley.work@gmail.com, omosnace@redhat.com, casey@schaufler-ca.com, 
+	shuah@kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============6750014670296811348==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Mon, Jun 22, 2026 at 7:57=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu Jun 18, 2026 at 1:34 PM PDT, David Windsor wrote:
+> > +
+> > +static int __bpf_init_inode_xattr(struct xattr_ctx *xattr_ctx,
+> > +                               const char *name__str,
+> > +                               const struct bpf_dynptr *value_p)
+> > +{
+> > +     struct bpf_dynptr_kern *value_ptr =3D (struct bpf_dynptr_kern *)v=
+alue_p;
+> > +     size_t name_len;
+> > +     void *xattr_value;
+> > +     struct xattr *xattr;
+> > +     struct xattr *xattrs;
+> > +     int *xattr_count;
+> > +     const void *value;
+> > +     u32 value_len;
+> > +
+> > +     if (!xattr_ctx || !name__str)
+> > +             return -EINVAL;
+> > +
+> > +     xattrs =3D xattr_ctx->xattrs;
+> > +     xattr_count =3D xattr_ctx->xattr_count;
+> > +     if (!xattrs || !xattr_count)
+> > +             return -EINVAL;
+> > +     if (bpf_xattrs_used(xattr_ctx) >=3D BPF_LSM_INODE_INIT_XATTRS)
+> > +             return -ENOSPC;
+>
+> This check is good to have, but it's enough. No need to duplicate it.
+> More below.
+>
 
->     selftests/bpf: Add bpf_fib_lookup() VLAN flag tests
+> > +
+> >  static int bpf_fs_kfuncs_filter(const struct bpf_prog *prog, u32 kfunc=
+_id)
+> >  {
+> >       if (!btf_id_set8_contains(&bpf_fs_kfunc_set_ids, kfunc_id) ||
+> > -         prog->type =3D=3D BPF_PROG_TYPE_LSM)
+> > +         prog->type =3D=3D BPF_PROG_TYPE_LSM) {
+> > +             /* bpf_init_inode_xattr only attaches to inode_init_secur=
+ity. */
+> > +             if (kfunc_id =3D=3D bpf_init_inode_xattr_btf_ids[0] &&
+> > +                 prog->aux->attach_btf_id !=3D bpf_lsm_inode_init_secu=
+rity_btf_ids[0])
+> > +                     return -EACCES;
 >
->     Cover both directions of the new VLAN flags in the fib_lookup test,
->     38 table cases plus dedicated cross-netns and XDP-redirect subtests.
+> This is unnecessary. Only one hook will have xattr_ctx type.
+> The normal verifier type enforcement will do its work.
 >
->     For BPF_FIB_LOOKUP_VLAN the egress cases assert: without the flag the
->     lookup returns the VLAN netdev's ifindex and zeroed vlan fields, with
->     the flag it returns the parent's ifindex plus the tag (including via
->     a neighbour resolved on the VLAN device, in OUTPUT mode, over a bond,
->     and through a DIRECT|TBID table), with the flag on a non-VLAN egress
->     it changes nothing, for a stacked VLAN (QinQ) it returns
->     BPF_FIB_LKUP_RET_VLAN_FAILURE with params->ifindex left at the input, a
->     lookup without the flag returns the inner VLAN device's ifindex, and
->     a frag-needed return reports the route mtu in mtu_result while leaving
->     the swap unwritten.
->
->     The VLAN_FAILURE arms are IPv4. bpf_ipv6_fib_lookup() restores
->     params->ifindex with the same save/restore the IPv4 arms exercise, so an
->     IPv6 VLAN_FAILURE arm would only re-test shared code.
->
->     For BPF_FIB_LOOKUP_VLAN_INPUT, an iif rule on the subinterface routes
->     the same destination to a different gateway, so the asserted gateway
->     shows which device the lookup used as ingress: without the flag the
->     main table answers, with a matching tag the subinterface's table
->     does, with or without SKIP_NEIGH, and BPF_FIB_LOOKUP_SRC selects the
->     subinterface's address. A VRF-enslaved subinterface selects the VRF
->     table through the l3mdev rule and, with DIRECT, through
->     l3mdev_fib_table_rcu(). One case sets BPF_FIB_LOOKUP_VLAN as well and
->     asserts both directions work in a single lookup. Resolution semantics
->     are pinned: an 802.1ad tag resolves its device, PCP and DEI bits in
->     h_vlan_TCI are ignored, a VLAN ifindex resolves the inner QinQ
->     device, a tag on a bond master resolves while the same tag on the
->     bond port does not.
->
->     The error cases assert -EINVAL for an invalid h_vlan_proto on both
->     address families, for the TBID and OUTPUT flag combinations and for
->     an unknown flag bit, and BPF_FIB_LKUP_RET_NOT_FWDED for a VID with no
->     configured device on both families, for a VID-0 priority tag and for
->     a device that exists but is down. The failure cases also assert that
->     params is left untouched. By contrast, a no-neighbour case whose
->     input and egress devices differ asserts NO_NEIGH reports the egress
->     ifindex, not the input: only VLAN_FAILURE rewinds params->ifindex to
->     the input.
->
->     A separate subtest moves a VLAN device into a second netns while it
->     stays registered on its parent, and checks both directions refuse to
->     cross the boundary: the input flag fails closed with the tag and
->     ifindex untouched, and the egress flag returns
->     BPF_FIB_LKUP_RET_VLAN_FAILURE without publishing the foreign parent's
->     ifindex.
->
->     The tbid read-back check is skipped for DIRECT cases that set
->     BPF_FIB_LOOKUP_VLAN, since a successful swap packs the vlan fields
->     into the union the check reads.
->
->     Re-run the cases through bpf_xdp_fib_lookup() as well: the egress flag
->     exists because VLAN devices have no XDP xmit, so XDP is the primary
->     consumer. bpf_prog_test_run uses the netns' loopback for the xdp context's
->     device, so the lookup runs against the test netns' FIB, and the
->     path-independent results (return code, swapped ifindex, vlan tag, gateway)
->     are asserted to match the skb path.
->
->     A live-frames subtest (test_fib_lookup_vlan_redirect) drives real
->     frames through the XDP redirect path with BPF_F_TEST_XDP_LIVE_FRAMES, the
->     native xdp_do_redirect() plus xdp_do_flush() path. A reducible VLAN
->     egress is redirected to the physical parent and delivered to its peer;
->     a QinQ egress returns VLAN_FAILURE and is passed to the stack, since
->     redirecting to the VLAN device would drop the frame at xdp_do_flush()
->     (no ndo_xdp_xmit). The redirect program distinguishes SUCCESS from not;
->     the table and netns arms pin the exact VLAN_FAILURE value.
 
-This isn't a bug, but could the changelog be tightened?
+Good point, thanks.
 
-The description runs roughly seven paragraphs that walk through what each
-group of test arms asserts: the egress arms with and without the flag,
-the input arms and VRF table selection, the error arms and their failure
-modes, the netns subtest boundary checks, and the XDP redirect subtest
-behaviour.
+> > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> > index 1a721fc4bef5..b41b02173e24 100644
+> > --- a/kernel/bpf/trampoline.c
+> > +++ b/kernel/bpf/trampoline.c
+> > @@ -859,6 +859,9 @@ static int bpf_trampoline_add_prog(struct bpf_tramp=
+oline *tr,
+> >       }
+> >       if (cnt >=3D BPF_MAX_TRAMP_LINKS)
+> >               return -E2BIG;
+> > +     if (node->link->prog->aux->attach_limit &&
+> > +         tr->progs_cnt[kind] >=3D node->link->prog->aux->attach_limit)
+> > +             return -E2BIG;
+>
+> No need. The check inside kfunc is enough.
+>
 
-Much of it carries rationale, so this is a soft observation, but someone
-wanting to understand the per-case behaviour can read it more quickly from
-the test table itself. Could the summary focus on the why (the two new
-flags and the invariants worth pinning) and lean on the test table for the
-per-arm specifics?
+Paul wanted this check because it occurs at bpf prog attach time,
+whereas the one in the kfunc is at inode creation time.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27999579457
---===============6750014670296811348==--
+> >       if (!hlist_unhashed(&node->tramp_hlist))
+> >               /* prog already linked */
+> >               return -EBUSY;
+> > diff --git a/security/bpf/hooks.c b/security/bpf/hooks.c
+> > index 40efde233f3a..d7c44c5c0e30 100644
+> > --- a/security/bpf/hooks.c
+> > +++ b/security/bpf/hooks.c
+> > @@ -30,6 +30,7 @@ static int __init bpf_lsm_init(void)
+> >
+> >  struct lsm_blob_sizes bpf_lsm_blob_sizes __ro_after_init =3D {
+> >       .lbs_inode =3D sizeof(struct bpf_storage_blob),
+> > +     .lbs_xattr_count =3D BPF_LSM_INODE_INIT_XATTRS,
+> >  };
+> >
+> >  DEFINE_LSM(bpf) =3D {
+> > diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm=
+/evm_main.c
+> > index b59e3f121b8a..e0a05162accc 100644
+> > --- a/security/integrity/evm/evm_main.c
+> > +++ b/security/integrity/evm/evm_main.c
+> > @@ -1062,14 +1062,16 @@ static int evm_inode_copy_up_xattr(struct dentr=
+y *src, const char *name)
+> >   * evm_inode_init_security - initializes security.evm HMAC value
+> >   */
+> >  int evm_inode_init_security(struct inode *inode, struct inode *dir,
+> > -                         const struct qstr *qstr, struct xattr *xattrs=
+,
+> > -                         int *xattr_count)
+> > +                         const struct qstr *qstr,
+> > +                         struct xattr_ctx *xattr_ctx)
+>
+> the rest looks good.
+> Pls split the patch. Introduce xattr_ctx first across the LSMs.
+> Then another patch with a new kfunc.
+>
+> pw-bot: cr
