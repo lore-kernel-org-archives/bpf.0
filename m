@@ -1,205 +1,76 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4523A6B85
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 20:36:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127AE3A6B9C;
+	Tue, 23 Jun 2026 20:36:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782246967; cv=none; b=hc6/SvIyP/IqP7gvEh8L8EK3pJAqDG5JO4gvOXphPiRzlJxS3EEmz8rtH3+VxhDOlcHKOmX15hPJwUyMscHh8Atbzv3nIYqBybfk6aVsypLKcKpkQWl6xWibdsVhAksONJdeRLb+xDt4dKbh7L6t81Rfos9Gm6V+jKR2VOOL57M=
+	t=1782246996; cv=none; b=o/isvaYZMJdhSwSKOOuTAS6NpTyoD8Yxmp1H8ChJZ56/wnTS04Hs5HLy/hIoKwjwxK3B6EnMEm6FaKweEOxf8xeenpVHQBnOwy5OUgxAKzXeB6OV2sZnuuhu4r4YKf7m0REHmkiHKbnOcHXANxXFlGOjl3Ls5qE7bLhwyquOJmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782246967; c=relaxed/simple;
-	bh=/GRGD1MLD4X5/6xzuqcyhlzMs7a2/Xib0LBHx4kotfU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=S2jswhI9JlbvTaYNFUjlo5qVm61ttrLh9ZYBi/e+9V7nACecmN80JZCQXNjveMuYl3xMDYo1s85qby078VHVS+XEnbDev9wolv/+yttWPZmne8zYWFqmTnuyo0726+XgHvLTSuvw8SbckKkawQSgclyPKZTGztV5iPcJNwpPovs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=UBpCpzx8; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1782246996; c=relaxed/simple;
+	bh=2Gyr82snPt9y2zAFsuCqcD8MRiMv0Xzu72h1HyGDZls=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=j0kdZ4SV34eYOFNRx1XHo/boz4OV1fYMrLDiiu9xDBEsxjmmbS+C+TEO6Cbj0MW1FQBtSY2ywaFgWSwsO9GhJER2QUnng3ot0MbDf3gqg3EX4FNysLkXXZTVjgLIpRXaNDLGw7DDaMx6Re+MsZBH5VCO7yf+rLk7tBsCaOz2BK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QY3skTBh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="UBpCpzx8"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6974a6e54dbso427791a12.2
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 13:36:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1782246964; x=1782851764; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:user-agent
-         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zpP2TgAWS6LY05FhT2gkiNjZjpsX/XmOaS8W6L/6Guw=;
-        b=UBpCpzx82ReHPrbiYxd+lsYYyboAMrBhFygsPg3LAmBQRpmS6OO4CWf5qIrzHyxaBo
-         2c8Z1MviLoEkDxi5t/hyuz1ZgFozfMO4gFLSqngf6Kykg6AGHAzr4EV3IXVnLoAJyYM+
-         zFEv0nCnHFvsR9MMdLtZUdEDxaX0yOsQeNA3PodV7qx46PnC47HicKsLgaKsQ1moN1bJ
-         mqoxjrPDPQ3g0nZVGYIav5WWjThsFMQWFthEfJCa4B5virf5i7NMA+Q9l5qkmtjp6H77
-         vilRyiCpFwp/4JDYmfI0UZpj5bnNQ2rSzZJAu2K4oaaGRAbmDOcAxgqWRtt3XwliYI5S
-         mu5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782246964; x=1782851764;
-        h=content-transfer-encoding:mime-version:message-id:date:user-agent
-         :references:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zpP2TgAWS6LY05FhT2gkiNjZjpsX/XmOaS8W6L/6Guw=;
-        b=b4vxWj+lzK7MSU0C/4mozUwnLXVZJ5sq7McNxr5Dv/wpNJvYfBDhsth/sQy6O3bMt9
-         jG7qIakonsPYtvDz+Ye6IlqU5uoMaHc4sAWdDma8dEb51GuWvrICPc81QIzAOdtB4CrR
-         hpdBtJbhRXyNRZoqaWlFdz+J4M8gHoiqkSV+462dmEFfY5GOTQof+lweY/QTHT6UTD3H
-         I/8mG8HuJKTLaRI7P/8H+z+tj4Tql2pJFH8AMg1A7Igr/wj7j/89h/MjGqPsyvB6uuRK
-         hFa8ogL0SOkCW5nDPJTtNXL0LxAlyBU8ZVMQ6AinBrR554vyfJbPmRamXrQmhCo6Sm8D
-         bKbw==
-X-Forwarded-Encrypted: i=1; AFNElJ+hpqxF5J+hEFM/7Jh88BYht+v8AG88ARqmm3v5WQk9yIA5jF1WdPrBQjj71Ut2OcG8dS8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuLq/S660+HW40vAtapWsU29agDSbBKRRdXRoZjjRp8vE0NZEk
-	3M5saf5M78blRir84wiOVUA7UNtdgOgOlf5E8Xn9eGaryjg2/Xi8vLoHEbWCWwtqq7Q=
-X-Gm-Gg: AfdE7cniM4YIVZErvQGsmKxjeLsPoCG/WsgcJLHs5seU/EMWcsZzB2M2bV4VokQfhn/
-	swEoYfa/J2klt+fir9rxHCVSpVofe2ESpQKxveUxk+wIoBTCZzi83H0cktm77yjSR9/XnxZY6Fg
-	ENScbEC9KRrU3IxYZAnQOmljVP1sS7EQP9pVkpg4jmXHzbEQHqxRocDxS/llub4UjGtE8jaJbYP
-	64eva5Ddv2V/Q6IIc4FVvQHhhgCHd5FvpJzgj/817avozA7GYknOu78OouC2FzuxYHl/qXv9U3/
-	fpALkUpCINBoBLcCB3VxU6qkdJOD4J4dzViD7qAyrOm4ZRiUlPA1zp+2qGvwCjEJXU3fV9EpUPj
-	8Nk7LI2RYWQovsSv8hlPEO0T20ggrPYLjPcXMd1FPVRuUfQo6N5AcjBqk6IpUPXJEmxX+mnou6C
-	OQfM0i0smTZlNSFW7l+4ZjRBbwYg==
-X-Received: by 2002:a05:6402:538c:b0:697:8341:9e40 with SMTP id 4fb4d7f45d1cf-697f376fe8cmr98020a12.5.1782246964455;
-        Tue, 23 Jun 2026 13:36:04 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-697f4bc8016sm16312a12.25.2026.06.23.13.36.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2026 13:36:04 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Amery Hung <ameryhung@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,  Kuniyuki Iwashima
- <kuniyu@google.com>,  bpf <bpf@vger.kernel.org>,  Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,  Jakub Kicinski
- <kuba@kernel.org>,  Jiayuan Chen <jiayuan.chen@linux.dev>,  John Fastabend
- <john.fastabend@gmail.com>,  Network Development <netdev@vger.kernel.org>,
-  kernel-team <kernel-team@cloudflare.com>
-Subject: Re: [PATCH bpf-next v2] bpf, unix: Guard sk_msg-dependent code
- behind CONFIG_NET_SOCK_MSG
-In-Reply-To: <CAMB2axMVhJJpP5HZtDFyQLLbKoRxhW08rj1zGRtWtgDkfYaVNA@mail.gmail.com>
-	(Amery Hung's message of "Tue, 23 Jun 2026 13:22:38 -0700")
-References: <20260623-bpf-sk_msg-split-unix-v2-1-ca7a626a94a5@cloudflare.com>
-	<CAAVpQUBsQFFxJFDnJzxmsER3bOjm=zqJ5P5MSeW_T9v-4639cw@mail.gmail.com>
-	<87v7b9ysep.fsf@cloudflare.com>
-	<CAAVpQUBARp1qCEomgzWXVe35WatdaswujVLku+RESm_LW0dE7Q@mail.gmail.com>
-	<CAADnVQL2pfQ0BoN-vWcuCpbOBBKq_rM7Bp7P4XdLMFER5LGSDg@mail.gmail.com>
-	<87mrwlyqg4.fsf@cloudflare.com>
-	<CAMB2axMVhJJpP5HZtDFyQLLbKoRxhW08rj1zGRtWtgDkfYaVNA@mail.gmail.com>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Tue, 23 Jun 2026 22:36:02 +0200
-Message-ID: <878q85yoy5.fsf@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QY3skTBh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A071F000E9;
+	Tue, 23 Jun 2026 20:36:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782246994;
+	bh=xpg/nHxXH9DlFY0d8gQErFvMzvxfYuzDRVc9FFshC90=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=QY3skTBhCHtOu23oGQCl4jM38Td9r6cSBj/iGhYxKEiUhLZ1uaboezkJdGfBHkN83
+	 3JmGdOHcO8mV0V5Dg+Mo3O6V7z/MRyhzSdTrgkgbo7E7YS2lyosssgjOw4HJcxSjIJ
+	 9+Ixcc6Nip6a1jcbiKXII5FMHvKaeSFCxJXL2c5WQQnfJLTOBsIjHiUqeHUtKpeDns
+	 kBKD+NmVvBMMAM3KXSyefHhJ23ttzPmO6WnncAjp9RylR9VJURbcYpuLCkZcBNAjuD
+	 QOpiZsaBIlVGcDip3STrDaUiZbk66/GlV/CeUCKGlrRQqwr+p2Uvj5kg0fUgP0WSDt
+	 lNfGociHc36Kg==
+Date: Tue, 23 Jun 2026 13:36:33 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: Jason Xing <kerneljasonxing@gmail.com>, Tushar Vyavahare
+ <tushar.vyavahare@intel.com>, <netdev@vger.kernel.org>,
+ <magnus.karlsson@intel.com>, <stfomichev@gmail.com>,
+ <kernelxing@tencent.com>, <davem@davemloft.net>, <pabeni@redhat.com>,
+ <ast@kernel.org>, <daniel@iogearbox.net>, <tirthendu.sarkar@intel.com>,
+ <bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next 0/3] selftests/xsk: stabilize timeout test
+ behavior
+Message-ID: <20260623133633.34c6fad7@kernel.org>
+In-Reply-To: <ajqfDYznpCU18C2P@boxer>
+References: <20260616154955.1492560-1-tushar.vyavahare@intel.com>
+	<CAL+tcoDr0gtCPeGi1yOUtg+ZD2YxEbjAy41LBgG63b8-=CStcw@mail.gmail.com>
+	<ajJsMj0QMOF5I8qq@boxer>
+	<20260622160706.0b4a27bf@kernel.org>
+	<ajpLuDNCu2PHS78l@boxer>
+	<ajqfDYznpCU18C2P@boxer>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jun 23, 2026 at 01:22 PM -07, Amery Hung wrote:
-> On Tue, Jun 23, 2026 at 1:04=E2=80=AFPM Jakub Sitnicki <jakub@cloudflare.=
-com> wrote:
->>
->> On Tue, Jun 23, 2026 at 12:33 PM -07, Alexei Starovoitov wrote:
->> > On Tue, Jun 23, 2026 at 12:31=E2=80=AFPM Kuniyuki Iwashima <kuniyu@goo=
-gle.com> wrote:
->> >>
->> >> On Tue, Jun 23, 2026 at 12:21=E2=80=AFPM Jakub Sitnicki <jakub@cloudf=
-lare.com> wrote:
->> >> >
->> >> > On Tue, Jun 23, 2026 at 09:08 AM -07, Kuniyuki Iwashima wrote:
->> >> > > On Tue, Jun 23, 2026 at 4:20=E2=80=AFAM Jakub Sitnicki <jakub@clo=
-udflare.com> wrote:
->> >> > >>
->> >> > >> Prepare to decouple BPF_SYSCALL config option from NET_SOCK_MSG.=
- When
->> >> > >> completed all code paths related to sockmap-based redirects shou=
-ld be
->> >> > >> guarded by BPF_SYSCALL && NET_SOCK_MSG to allow users to opt out=
- by
->> >> > >> disabling NET_SOCK_MSG. The implementation of sockmap as a conta=
-iner for
->> >> > >> socket references would remain under BPF_SYSCALL.
->> >> > >>
->> >> > >> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
->> >> > >> ---
->> >> > >> Changes in v2:
->> >> > >> - Handle prot->recvmsg being NULL (Sashiko)
->> >> > >> - Elaborate on the end goal in description
->> >> > >> - Link to v1: https://patch.msgid.link/20260622-bpf-sk_msg-split=
--unix-v1-1-d7e0cb7bb03b@cloudflare.com
->> >> > >> ---
->> >> > >>  net/unix/af_unix.c  | 4 ++--
->> >> > >>  net/unix/unix_bpf.c | 6 ++++++
->> >> > >>  2 files changed, 8 insertions(+), 2 deletions(-)
->> >> > >>
->> >> > >> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
->> >> > >> index f7a9d55eee8a..84c11c60c75f 100644
->> >> > >> --- a/net/unix/af_unix.c
->> >> > >> +++ b/net/unix/af_unix.c
->> >> > >> @@ -2675,7 +2675,7 @@ static int unix_dgram_recvmsg(struct socke=
-t *sock, struct msghdr *msg, size_t si
->> >> > >>  #ifdef CONFIG_BPF_SYSCALL
->> >> > >>         const struct proto *prot =3D READ_ONCE(sk->sk_prot);
->> >> > >>
->> >> > >> -       if (prot !=3D &unix_dgram_proto)
->> >> > >> +       if (prot->recvmsg)
->> >> > >
->> >> > > There is no reason to have this dead branch when
->> >> > > CONFIG_BPF_SYSCALL && !NET_SOCK_MSG.
->> >> > >
->> >> > > Let's compile out all sockmap code when both configs
->> >> > > are not enabled.
->> >> > >
->> >> > > Since AF_UNIX differs from TCP/UDP, it can take the
->> >> > > simpler approach.
->> >> >
->> >> > Okay, will put the whole file behind hidden config option like so:
->> >> >
->> >> > --- a/net/unix/Kconfig
->> >> > +++ b/net/unix/Kconfig
->> >> > @@ -30,3 +30,8 @@ config UNIX_DIAG
->> >> >         help
->> >> >           Support for UNIX socket monitoring interface used by the =
-ss tool.
->> >> >           If unsure, say Y.
->> >> > +
->> >> > +config UNIX_BPF
->> >>
->> >> Maybe UNIX_BPF_SOCKMAP or something.
->> >> bpf_iter is supported without this config.
->> >
->> > I don't like where it's going.
->> > I strongly dislike new config knobs.
->> > I'd rather remove existing knobs.
->> > What is the motivation?
->>
->> The goal is to compile out sockmap bits that use sk_msg.
->> NET_SOCK_MSG is natural, exisiting candidate.
->> New knob wasn't my idea.
->
-> I'm also missing the big picture here.
->
-> sockmap already holds socket references today. You can store and look
-> up sockets without attaching any verdict/parser program, and no
-> redirect happens. So if the goal is to use sockmap purely as a socket
-> container without the sk_msg fast-path overhead, what does a
-> compile-time NET_SOCK_MSG knob add over the runtime checks?
+On Tue, 23 Jun 2026 16:58:21 +0200 Maciej Fijalkowski wrote:
+> On Tue, Jun 23, 2026 at 11:02:48AM +0200, Maciej Fijalkowski wrote:
+> > last refactor from Tushar broke BIDIRECTIONAL test case when HW is test
+> > target, but not on veth, so let me test these changes locally and then get
+> > back to you.
+> > 
+> > BPF CI runs xskxceiver on veth so this has not been caught. Seems my/our
+> > focus should be to enable xskxceiver HW tests on any kind of
+> > environment/infrastructure.
+> > 
+> > Gonna get back to you by the EOD.
+> > Maciej  
+> 
+> Ah I replied on other thread I guess, so let me repeat:
+> 
+> Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> Tested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-Sure, let me clarify. It's about the maintenance overhead.
+Great, thanks!
 
-sockmap-based redirects are a rather niche feature with few users, for
-which we've been getting quite a few bug reports since AI came along.
-
-We're not using it internally at Cloudflare, so I don't really have a
-good reason to justify time spent on these bug reports.
-
-Hence the move to put sockmap-based redirect behind a config option,
-which you can enable at your own risk. Or which we can deprecate, but
-that's not really my call.
-
-> I am also not sure if NET_SOCK_MSG is right. It is broader than
-> "sockmap redirect". It is selected by TLS and {INET,INET6}_ESPINTCP.
-> Because those select it, it can't be toggled independently.
-
-Once the sockmap redirect bits are behind _some_ config option, it will
-be easy to replace it with a more granular one that depends on
-NET_SOCK_MSG. But we're not there yet. One step at a time.
-
-> Could you share the concrete use case you have in mind, and whether
-> this came out of an earlier discussion or thread upstream?
-
-This is a follow up from discussions at BPF summit with Alexei & John.
