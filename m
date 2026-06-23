@@ -1,92 +1,93 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21AF8370D71
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 22:46:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F0736F426
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 22:46:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.174
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782254761; cv=pass; b=AmdlpkjMllWccg9Mn8jNaorj0lPWoQLMpX91ZwnmrgEaNJVTxwpVPClJ7dCacC17R/lpuzidyQhPcOTlIH9TKHIaVAFqgW5v1WE/RaAD+c2z4cVNYRsnCX7cZd3q39gYFtzFIm0G3/qYnn3FnIkd/RkIqTvHKZzLLvVXOU0AQvE=
+	t=1782254784; cv=pass; b=TliYKIOQo/f3gGLQ/tBrA+cTrYoDBLuPKnjKgeAyVl0jdtokqt1pWXzEjdov6z0tuweq3MqJEY/Dpy0zyydRlJ078L4GO62hIkB9pE1sj7kGvxM7HtB1RVCTu2zEAUfYJfuCJ2B+8HZu2GyQj5HCtwksOOdiJqPZnMni5O1VTSM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782254761; c=relaxed/simple;
-	bh=Z6NTdCIJZ1DmGGq9Tvl3c3bGMH1qcZhg1rY2c+290yo=;
+	s=arc-20240116; t=1782254784; c=relaxed/simple;
+	bh=2KfuZmVM/gMcaXgErOb5bxKkcTPuwXT7L/88bA0HkXA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RpaJ9KfCSB1WYzPzbntHEA78jmv4Vtqq2sK+k/anmscoT3kh1OfSjrlQXqKqvuPCMjkbQpFl94b8koPPUrMM65CN4HkTKpV9TZmwUDxGM7spS5OA0+5q9KZZkQccuWkNBYHcSZYx3zIVZUYpaDwCzZUsPD/zPEKX66KYI4ORX2E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gj34D3S3; arc=pass smtp.client-ip=209.85.214.175
+	 To:Cc:Content-Type; b=tURt7oLvlaVVZOAnAK/7hsvuZPpgCEIJbDpu7rtJJUR9G4kcQ3Yveq9G5Sbafxx34TPV34B3e6Pssc4Nh70LZzuysjKwuCKXoubyNbtLImzA/yHKGCx4rfvOn1eWvhpyldzFwN+eVbj5cypGwuCWvwOOIEZldIB2At7mMAH7BnQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R/A32Cje; arc=pass smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gj34D3S3"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2c6bb8a5980so1935635ad.2
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 15:46:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782254759; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R/A32Cje"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2c7d329fe93so2002655ad.3
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 15:46:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782254782; cv=none;
         d=google.com; s=arc-20240605;
-        b=cHRC3cDyOku0bHnQ3oj5z5dd4ZespT8g5Pjjiz89G+MCBGo63FTAgP0UItZJ+ArH64
-         mvELfM46Yq6ikKF6iXsMh1NgOuAkdhj28WlHciBAAtDRY2qrS3FIABDBvxsPA4KhnvGq
-         L3jr+Bnb5gKNIHOAvv5FgLnU17KC7EnTeikHdSEe8M8OUxB9zFCUWSXik5cYU6xGKFWD
-         tI9stYQpPwk8fos/HTaR2HV3EKbS+boiG6aCxxUnbO5/VnwP3KsyoI/aRdcPluWr/qGG
-         xZfI0sCnHw1PpNYnfR37Czp54p8+HA8YElR+7ot2lfUHqQKfp6n5D16QLAgnI+zdUl7X
-         Jjpw==
+        b=WRUhfc6l4KkUOzN8K/Dv/EdViOIOpqJtNQUw3ImQWnD7EB1tT/Bm6R3OJ056Ij3dft
+         sMLBF/SQkT0FMtOXCHium46RasN/O7GQpXUHw0HebBHuSTxQBpGEetfXTaQF0DoiDdte
+         uYN0iDfSmhEW2ow8vl8/6uS2/mq8NdgXub0oMdRx57rAASkOxcyJko2R7wORFZqPvXPD
+         sUhC/upCU3BC09+J4nYjPX5a+sLHLdJ+gLySkXvGkVcgaWfi4gP8UBJ2X1qUgsawy1OF
+         TF34walBj+wEaDfHThi0g9DasDqF7w5UEOoMnHGCSNlbfCvPb6LdOIhJd3MjI/c50np7
+         ri2g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=il77AzCwLeUfUqsM2Aaw4XWs0P8wSa8dmYuURo+uFyU=;
+        bh=LG2kX0FyH0fi9b0fEy2d9lpzMp4yF/LqqDGrDnJk65A=;
         fh=IqI/Cp1xYGcfpyBgkhc6h3oFTMbeXOsSrhhlFByRLHg=;
-        b=g2R6Mnxa4A7Hw6QbagoA4YwqTn0bslqxsHsQ/ZVgru13P4z/jr0qo7r5vAU0Sa6l6t
-         OwrCOXK6DYZaJfwL1szCsx2f24iTtJqNGYvWd9VinGHlREesDMrQ/EBVuLj7FAhFBGmS
-         52mdK5kLbKo1ZcZ/zrVS/CzPavqxucplY3kMIP8XX8vqwczqR9S6eEOdZAjsz4IhzdTx
-         BETc34ci1+TBIcuGle7IeNu26IZq4059DbvFQpKGya12/FxxYXoTXQzAd9gGVZKrtF3B
-         iNJSl72f0MBAr8qaiBtUGdprMlgw92HGW+m3i1y9a70VZfp83bq/bwu28HA/Vu03+j3T
-         KG0Q==;
+        b=kpa8go0Nkb2VdCX/Gn+aPCoP94STcRvwsTP9C/NIwqKTRnn8P547ryA9b0wunGlIZJ
+         +oFAz7ImBJi+62E4iFFcdshIgMb6exW1V+V4XyirjVyIo0ZMrWTpr2qzsRG0Qhy2GB9Y
+         F6hAV6/V484K1Lt54puSPLI7dGJJM9J+/Nh0kBmwqzxMs+UZ2C1xMSAFdNFDlCrjgRAw
+         wWupwHIzR/KjwC1o/Fn4N5bTtfTLyghpe8OFA1gDTgwmWCo8KKf3agBYTNcJqfuYvtum
+         C1ZsdCWLmya178aZFmBK/w9JL77kYYfH+MMuKvbAFrdFxzyvVcNSduc9xsqP1w2JeguD
+         v/ww==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782254759; x=1782859559; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782254782; x=1782859582; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=il77AzCwLeUfUqsM2Aaw4XWs0P8wSa8dmYuURo+uFyU=;
-        b=Gj34D3S3aT4vPls4Mk54C/VsiGu4nVAjDom+l7AkWDTmp/wMUtRo0tTmQVTX4MF8q4
-         9uAsAuHi3ki59sQ9JP+f7xhyyLRds1XZJwyr4C1pEFhqeCkOf6Ink+KV9Vh5Hj397QOv
-         8eVuYQAKzXpVC+1BT90IgaLtmvmIyhdUvnib78ocSkaRl8TsIrrNqLCrkLhs7UVr5sK2
-         lfBhJrJF6Qs5ai+hRYu0uzkZQNyZCvBK6S8EfKEl//uK7TO7ORUoK0Dzp4kla7w+K2cY
-         M9CtfA2PLG1yU4orEiXAHrLdd6wSWmhtI4gNUOgkWmzZghAKfCxnV4IzZzqFqF9rfKim
-         qfsw==
+        bh=LG2kX0FyH0fi9b0fEy2d9lpzMp4yF/LqqDGrDnJk65A=;
+        b=R/A32Cjerpc/032rWMm9ZS/T7o81vkYKOWDTydhy9ANYA2qxavW5TBtMTGjJoBGvtP
+         4yGMoPH+QZ4vmoYsdIvVQ6URjxoHeTwSBX8ghkUDj663WQrN5xmMxxxqdsjk/ed8TEXV
+         nYQuDLHx/zJ8p3o6V3iLTiJcVXToj74tEadXEqplabrf7iOUvSHoQPIlbKw6KV26EXVJ
+         cqxo2lJ5sLqZJ26+5yxX8l/Y+4gGUnPF5mqCD0COYIgcON9oojB/YGWiPfr6xLXQjqRk
+         ZlBOyg1rbaUtcZMBqL50f50X5ghX6FdNXmtaQbyaPNNiXbX0e5dS3eAGfUraVhTetPoA
+         9Vuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782254759; x=1782859559;
+        d=1e100.net; s=20251104; t=1782254782; x=1782859582;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=il77AzCwLeUfUqsM2Aaw4XWs0P8wSa8dmYuURo+uFyU=;
-        b=d2Tf+QlCVWvwoCKDFBzd+aYjFj8WMUAhGwQ1vaxQYMQ/warYxAYtJSthrWH1nuKXAL
-         1B+q+xBc9A6D6xVCQU4/d6Mg800/MSO72bCRTujByCGaAx4nwZOC8bzI9Nc9ZraMwqKh
-         oHXMFU0/hZtAweD5Nx96/IfLoPFPUuclVy1TFBVc6Bvb0aqWq3DVZf9E9mXSla0S0TOZ
-         /LvpIsGNXBBTWhl1JL/IddyEKNxupSzYbf6UgT4ew6PPFDayrkkbkIfMzy+qmXOkSBAf
-         myYDWNbYugm40ILouzJmic1lhYqVvpjRH9bP+BOlsPaOR6usFFG/NaKjFBO18NNpYuac
-         hBkQ==
-X-Gm-Message-State: AOJu0YyzloPXIo/V9kpIir5oTHazcFKuNCmGnR4EnX6JlUGeZzcX+Mxp
-	34zxgFtf4pemPAGLiysJ7vt26oml4k7/lfLBoklM5NmHIxOclDOAnmQlip8dB0h8O8Nt1Ggn6jX
-	//M2cPvPXBfazu1XuPEL8jea+JGxEIzg=
-X-Gm-Gg: AfdE7ckEp1nmNFfqm1XgTTqebE83uKqx3gbU38Q/OWGaD3W3HQ8MWcCFxf/I0PJD9pF
-	oylokPmKKAp20XnarsV6g3aOMlB+QyXDZBuephBHvXIehfqLQbVYZ/0YAyLtcmmG5ZtzM93xWjE
-	Fbhu52RRBoqg1Tp72fOnOVhRxDVlfyVbwZK/vFUqk4fCNWQeh9a5bTnBu5SenNqIYYSQtMeKRoc
-	S6lyK7yFHB3zyojSFs//gqJ9S+kAP8Hl+NUopVQriIHXtV2V9FyVplL8raChMTdp5hKvGnTI+Zn
-	Zk6PWf/2/aozSKBDfuM2jpRbXAEWE1iNS3NrjcbmNlOrbR0nac9v2hyjp7gFkLJ1Kc6P/Q==
-X-Received: by 2002:a17:902:e5cd:b0:2c0:baaa:db94 with SMTP id
- d9443c01a7336-2c7e1598ed7mr7885055ad.22.1782254759435; Tue, 23 Jun 2026
- 15:45:59 -0700 (PDT)
+        bh=LG2kX0FyH0fi9b0fEy2d9lpzMp4yF/LqqDGrDnJk65A=;
+        b=bU8YjP4+5U8lDBu+Ywro/K2/dOazayUe86LIiLhsXBZRfF0fRtV9ukMi3oPiifBllR
+         KM4cPZFxo8z2P8O1ydFlxeGJ1fVQZk93haIgHceTxO+GK0AgYn2fc+TY58SssRkMOZe2
+         KZwbXUUcxn6H1y12nfyuEbWSWG51d6n5eXIw3EAaAsMOQawJJ557KPBlu7bwPeGKK9Rf
+         ax0mO7tywothH/APa5Tyj9uyZw+yKirkCab3uJJD0l/ysPUOcsuwgskU0y2Mga1lpqp0
+         vZlDjdkeFUnW+/nVMKXoq5rbRHL/oFrAixKlNUimNWOxj9p7pkL7vkLfaU7YIta9Ed0A
+         //bQ==
+X-Gm-Message-State: AOJu0YxZjhhc2DjYKNEdDTP71QoJ0NZo9YDoP/Cn9XZ8nhmqWgi6PxHp
+	96yZ5Gptj5/O+yM+v+llnRWnIBA8RNBQ4HILoQdHocpMk2wbrjf0m0oCTBRz4vjJGK1QZ6coNIM
+	6hVXJT6hGvEaUXEXrCLYiwf9BOLFb5Fk=
+X-Gm-Gg: AfdE7cl+RZeDxnhfvseHObCqDlIoJlS0PpO9+SGMPptaPnfz+phGJ+Qhhohm92grKYM
+	GfC/srdJCDxS9eL6qB6MTmzhLBxgdDSTkStuzljaytNQlF2xORex5Lh1lemV5s4zL21cM3p8Tax
+	3YYHeF1xTm40ru9UUAltIwRcBM3kCBMyNd4rJ8D2p1byId5eWcPE4KuGmE9QjtTnnjO/sRQObUF
+	dWNssEKvj+DZG9T+qpwuApYm1AWJM0nYU1z9zTIHwJfRgN4v3ztoORnlvPUyWxpnL3Ft8UNQAm3
+	db6GXeGFGX9sVlH93RaxB0OokfmyHz9lkstw4aJ1arJUhFzB6Atdny2xdmpyWPVKFkTvAw==
+X-Received: by 2002:a17:902:ccca:b0:2bd:9803:9308 with SMTP id
+ d9443c01a7336-2c7e1599b6bmr7966225ad.36.1782254782100; Tue, 23 Jun 2026
+ 15:46:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260622143557.22955-1-leon.hwang@linux.dev> <20260622143557.22955-7-leon.hwang@linux.dev>
-In-Reply-To: <20260622143557.22955-7-leon.hwang@linux.dev>
+References: <20260622143557.22955-1-leon.hwang@linux.dev> <20260622143557.22955-8-leon.hwang@linux.dev>
+In-Reply-To: <20260622143557.22955-8-leon.hwang@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 23 Jun 2026 15:45:44 -0700
-X-Gm-Features: AVVi8Cfz_AMiTjXuQaT2PnUupoQgQnU88wU1V3erLQ3ZDJb97JINyEDYr3KT8Go
-Message-ID: <CAEf4BzZSeMSMnuYdLvEfb7-pmbthjU3J7W3QB4q9-WN_4+QrbA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 06/11] libbpf: Add support for global percpu data
+Date: Tue, 23 Jun 2026 15:46:03 -0700
+X-Gm-Features: AVVi8CcgnEvwwbjcYZujttXeSs_xcAFmcG2-55vXm4A13ZgA43xyrkXYm4hX8Rw
+Message-ID: <CAEf4Bzay2Wssj1J4fEq3T7iTOBDswEZunm1OQNDJvPr2Cz2Usg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 07/11] bpftool: Generate skeleton for global
+ percpu data
 To: Leon Hwang <leon.hwang@linux.dev>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -102,92 +103,114 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Jun 22, 2026 at 7:37=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
 rote:
 >
-> Add support for global percpu data in libbpf by adding a new ".percpu"
-> section, similar to ".data". It enables efficient handling of percpu
-> global variables in bpf programs.
+> Enhance bpftool to generate skeletons that properly handle global percpu
+> variables. The generated skeleton now includes a dedicated structure for
+> percpu data, allowing users to initialize and access percpu variables mor=
+e
+> efficiently.
 >
-> When generating loader for lightweight skeleton, update the percpu_array
-> map used for global percpu data using BPF_F_ALL_CPUS, in order to update
-> values across all CPUs using one value slot.
+> For global percpu variables, the skeleton now includes a nested
+> structure, e.g.:
 >
-> Unlike global data, the mmaped data for global percpu data will be marked
-> as read-only after populating the percpu_array map. Thereafter, users can
-> read those initialized percpu data after loading prog. If they want to
-> update the percpu data after loading prog, they have to update the
-> percpu_array map using key=3D0 instead.
+> struct test_global_percpu_data {
+>         struct bpf_object_skeleton *skeleton;
+>         struct bpf_object *obj;
+>         struct {
+>                 struct bpf_map *percpu;
+>         } maps;
+>         // ...
+>         struct test_global_percpu_data__percpu {
+>                 int data;
+>                 char run;
+>                 struct {
+>                         char set;
+>                         int i;
+>                         int nums[7];
+>                 } struct_data;
+>                 int nums[7];
+>         } *percpu;
 >
+>         // ...
+> };
+>
+>   * The "struct test_global_percpu_data__percpu *percpu" points to
+>     initialized data, which is actually "maps.percpu->mmaped".
+>   * Before loading the skeleton, updating the
+>     "struct test_global_percpu_data__percpu *percpu" modifies the initial
+>     value of the corresponding global percpu variables.
+>   * After loading the skeleton, "maps.percpu->mmaped" has been marked as
+>     read-only in libbpf. If users want to update the global percpu
+>     variables, they have to update the "maps.percpu" map instead.
+>   * For lightweight skeleton, "lskel->percpu" will be protected by
+>     "mprotect(p, sz, PROT_READ)".
+>   * For subskeleton, those variables of global percpu data will be
+>     skipped.
+>
+> Assisted-by: Codex:gpt-5.5-xhigh
 > Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 > ---
->  tools/lib/bpf/bpf_gen_internal.h |  3 +-
->  tools/lib/bpf/gen_loader.c       |  3 +-
->  tools/lib/bpf/libbpf.c           | 68 ++++++++++++++++++++++++++------
->  3 files changed, 60 insertions(+), 14 deletions(-)
+>  tools/bpf/bpftool/gen.c       | 43 +++++++++++++++++++++++++++--------
+>  tools/lib/bpf/skel_internal.h | 24 +++++++++++++++++--
+>  2 files changed, 56 insertions(+), 11 deletions(-)
 >
 
 [...]
 
-> @@ -5353,6 +5387,13 @@ bpf_object__populate_internal_map(struct bpf_objec=
-t *obj, struct bpf_map *map)
->                         return err;
->                 }
->                 map->mmaped =3D mmaped;
-> +       } else if (is_percpu) {
-> +               if (mprotect(map->mmaped, mmap_sz, PROT_READ)) {
-> +                       err =3D -errno;
-> +                       pr_warn("map '%s': failed to mprotect() contents:=
- %s\n",
-> +                               bpf_map__name(map), errstr(err));
-> +                       return err;
-> +               }
-
-hm... do we need to do this? what happens for LIBBPF_MAP_KCONFIG, do
-we just null out the initial image? should we just do that here?
-Basically what I am asking is how important it is to access initial
-per-CPU image after load? What's the realistic use case for that?
-
->         } else if (map->mmaped) {
->                 munmap(map->mmaped, mmap_sz);
->                 map->mmaped =3D NULL;
-> @@ -10806,16 +10847,19 @@ int bpf_map__fd(const struct bpf_map *map)
+> @@ -263,13 +268,12 @@ static bool is_mmapable_map(const struct bpf_map *m=
+ap, char *buf, size_t sz)
+>                 return true;
+>         }
 >
->  static bool map_uses_real_name(const struct bpf_map *map)
->  {
-> -       /* Since libbpf started to support custom .data.* and .rodata.* m=
-aps,
-> -        * their user-visible name differs from kernel-visible name. User=
-s see
-> -        * such map's corresponding ELF section name as a map name.
-> -        * This check distinguishes .data/.rodata from .data.* and .rodat=
-a.*
-> -        * maps to know which name has to be returned to the user.
-> +       /*
-> +        * Since libbpf started to support custom .data.*, .rodata.* and
-> +        * .percpu.* maps, their user-visible name differs from
-> +        * kernel-visible name. Users see such map's corresponding ELF se=
-ction
-> +        * name as a map name. This check distinguishes plain .data/.roda=
-ta/.percpu
-> +        * from .data.*, .rodata.* and .percpu.* to choose which name to =
-return.
->          */
->         if (map->libbpf_type =3D=3D LIBBPF_MAP_DATA && strcmp(map->real_n=
-ame, DATA_SEC) !=3D 0)
->                 return true;
->         if (map->libbpf_type =3D=3D LIBBPF_MAP_RODATA && strcmp(map->real=
-_name, RODATA_SEC) !=3D 0)
->                 return true;
-> +       if (map->libbpf_type =3D=3D LIBBPF_MAP_PERCPU && strcmp(map->real=
-_name, PERCPU_SEC) !=3D 0)
+> -       if (!bpf_map__is_internal(map) || !(bpf_map__map_flags(map) & BPF=
+_F_MMAPABLE))
+> -               return false;
+> -
+> -       if (!get_map_ident(map, buf, sz))
+> -               return false;
+> +       if (bpf_map__is_internal(map) &&
+> +           ((bpf_map__map_flags(map) & BPF_F_MMAPABLE) || bpf_map_is_per=
+cpu_data(map)) &&
+> +           get_map_ident(map, buf, sz))
 > +               return true;
+>
 
-um... this is extra logic for DATA/RODATA is supposed to be backwards
-compatible legacy stuff. We shouldn't need this for PERCPU_SEC. It
-should actually be called just ".percpu", not "<object_name>.percpu".
+just add `if (bpf_map_is_percpu_data(map) return true;`? maybe also
+move get_map_ident check a bit earlier. I think that will be a bit
+cleaner, this condition is quite hard to follow
 
->         return false;
+> -       return true;
+> +       return false;
 >  }
+>
+>  static int codegen_datasecs(struct bpf_object *obj, const char *obj_name=
+)
+> @@ -343,6 +347,9 @@ static int codegen_subskel_datasecs(struct bpf_object=
+ *obj, const char *obj_name
+>                 if (!is_mmapable_map(map, map_ident, sizeof(map_ident)))
+>                         continue;
+>
+> +               if (bpf_map_is_percpu_data(map))
+> +                       continue;
+> +
+>                 sec =3D find_type_for_map(btf, map_ident);
+>                 if (!sec)
+>                         continue;
+> @@ -669,7 +676,7 @@ static void codegen_destroy(struct bpf_object *obj, c=
+onst char *obj_name)
+>                 if (!get_map_ident(map, ident, sizeof(ident)))
+>                         continue;
+>                 if (bpf_map__is_internal(map) &&
+> -                   (bpf_map__map_flags(map) & BPF_F_MMAPABLE))
+> +                   ((bpf_map__map_flags(map) & BPF_F_MMAPABLE) || bpf_ma=
+p_is_percpu_data(map)))
 
->
-> --
-> 2.54.0
->
+also we can add a helper to check if it's an internal map with a
+dedicated data section in the skeleton (too lazy to think of a good
+name right now.. ;)
+
+>                         printf("\tskel_free_map_data(skel->%1$s, skel->ma=
+ps.%1$s.initial_value, %2$zu);\n",
+>                                ident, bpf_map_mmap_sz(map));
+>                 codegen("\
+
+[...]
