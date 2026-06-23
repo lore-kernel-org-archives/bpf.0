@@ -1,102 +1,251 @@
-Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E607125A0
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 00:08:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3AC2030A;
+	Tue, 23 Jun 2026 00:11:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782173328; cv=none; b=QE8j9nJTvi5MLxzvJgtd796ceHEDMib9wGnbaAgOlI3qr9WI37s/n6Ym4MehmXZvtvGxdY2ISOIYls09L7I3hoVW1NjAwurB84OaC+D67eWoJNBCRFvRWAX/YPrR2cgfRcZvdX3Ljjzfch0Pzo1icCOyYUGN6itme7w/VT0SMHI=
+	t=1782173508; cv=none; b=NC3/RMynl8BbkJLBzRkxr7HbkcUx1MhcusmHKlRT7T9YC2D8Jumqi59iUhXnCoTYtsZWWrFPQ2/DS1Vbt6PQNWwNAMEI7C6/2OxvOtWD65b1J+aiqfHCxW9b7jj8xDYIbJuI+92cJQxLqOGsfL+g6ak6npg3hUKEoscrN8RzqtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782173328; c=relaxed/simple;
-	bh=icuTFQPXGAsYRe0MUVQcIakHaKWLZBH+fggtc0IRHCw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=kFxe1fwjjhDuYDtvGuOwVDRlyTErmgU32/4fmaR1/cxZ215zx6SPUfDQmkMqLBpu2glivHJgIiSpSTTWTiKkujOYtUWJHaFYdEaQ/gZC3B2uFi/rvCvZ/Ig4w7dsS9glAzUMVQWblXqithsEF4nt0KEawQNUKJ6DsRZRApI78dk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C/cLEmTM; arc=none smtp.client-ip=74.125.82.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782173508; c=relaxed/simple;
+	bh=J+4qy6yUt2qsjFzgWyqN9qlFurVR2nEFmDDhPoK6F0Y=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=pcd0+X4MphOHHXdM89mbsVOCQPYW/tomVBCRzvijqSCrJlbwDkfjp3gYLg6LFkdF65i2cGwOwJBbXFrrtjSNNPKDDTk3idaJwTL2p3l7t0xxDnwLzU/ICMIavL7ViwYaiSSiBwVEGRBXpmMkBL0rkHiRU4wHO5Y8MHnMDFeYWBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S2FK96HX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C/cLEmTM"
-Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-137335bc3caso8182349c88.0
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 17:08:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782173327; x=1782778127; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=icuTFQPXGAsYRe0MUVQcIakHaKWLZBH+fggtc0IRHCw=;
-        b=C/cLEmTMsM1JTmbGA4eDqKl5Jge8eXjVq8l1UmqzN1eMzw93DGlJWiCOo68x60FIho
-         CN6lxWFu/BZSL/0KhhG97Uh8r5QSPdY2f0k1sguTU2L+WRHVRIL6yUVJC0hJZu06rqEW
-         AvuZti1c+Pyj+svxCuUol5Joe1zWrmlKJtLwGP25YFkMDnr4thMMq6rQ8SqriECDO7bO
-         vSukCt0HokW8A+YYsGocol8P3zI7CwkvSYK318gTdYVS+BNkYPg4kBXnhix+gPH6t5jQ
-         sEvLC5DuJIqZB8GTdYk6ccwiIYDJryvnvy/+V9U8pcHeWME7fnbXY73lcX5eqIxhOXJQ
-         jHBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782173327; x=1782778127;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=icuTFQPXGAsYRe0MUVQcIakHaKWLZBH+fggtc0IRHCw=;
-        b=HOXa4eyTHZeRXN47m1J9T34LoGVbiYktEWphlhjppmBpstnBzy2x5X9aVhwwyCWYyo
-         5C/AwfKAs3J8iLpgB5cYj9qw9yBJtWvjE/fVuewwyLcOEo/POItnvDqgYzEYI4CJNPRD
-         NqZATstNK1djxrlKkNsGf2lVH1SBp8mqoiy7rf9XFZSXmfPaEQ4uP0IlernZBF0PVjCn
-         OYa2TAtHglPNc7iCbDIufdbrSOD3qHuYfxJ2WBWPSsqZ1a7J+V2M0A4/hsy2+FtxOiJ0
-         3vx0ZXoTH+qWW9q9NH5kzqX1RvsWzkX4S1D2XyfK5wwaP7JBu6NkvZcMtyvB++L9s5eU
-         MV2Q==
-X-Forwarded-Encrypted: i=1; AFNElJ88nceq2reOISRekU/MBH5Uhs6Esw7O7ouxoCC4QCdGpCVqJG9pX0vM4egyj6FZgjiuk1Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqtB1hKxyS1K+ZbrJYZ7KdIVWCVgL+dT0N7TVy0H/dLQrbJ+5u
-	YP6Hp7C5k7VoDlDuRGyOfTVUbLLDEwhV3C1E2nRa/+XTicnDUV0XBSNY
-X-Gm-Gg: AfdE7cmFFeXO1mTL8y4wLb9mvd1YtmAyrlLnb9jjyDRLpEhro99RkY+VaK/NTc4gw7R
-	L0oqRwiYsPrZWQuUk1TRrmzsqCHTTxyUl/2aZmUS7ATrPsicZTpxZzev0RLWRdVETULQLb9A0hn
-	O0wyby0MRrzbwqPuLFovLMBUGDf7Z5hvlJnFbQZvixb4BvluQEP+B7FDMO1/S6uoZ4CG8MUp6XF
-	JRFettp/e+ymAeKsJvHRmtVR2LEBm/nu/yGmainWmODypoPgoZfMwvgjjH9PQtAo/T/N3Io6w9u
-	i/cFkgW5yw4iEDsnGaq4jJvWLR/yTzTvzZTrYovm5JO+wm4WRntimAwDw5bI6EuKNg8ByufzGqQ
-	qCcocgTMr2DXr5pMUpYQcl1SU7T6jFgT93ZMqoKvPqeDscy7pcxdY/CpxMxEVWFHAeSwlQmz/Ec
-	n9hJ2XFs2zlBajPZDRSSL29j2+7ym03Mkb2vPIwBWgPeqELqiOXvaCVRYDH6ZB4PR2bcEpXmaoJ
-	q6IAh94
-X-Received: by 2002:a05:701b:4592:b0:139:c4e3:9496 with SMTP id a92af1059eb24-139c4e398bfmr436341c88.13.1782173326499;
-        Mon, 22 Jun 2026 17:08:46 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:c4f4:7a34:78e2:a600? ([2620:10d:c090:500::2:e8d1])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1be5c5desm12569328eec.28.2026.06.22.17.08.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2026 17:08:45 -0700 (PDT)
-Message-ID: <6c8cb4e03a3c626b0e37c7e4d95ea111e4116e4d.camel@gmail.com>
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Add test for stale bounds on
- LSM retval context load
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Tristan Madani <tristmd@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
-  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
-Cc: Xu Kuohai <xukuohai@huawei.com>, Jiri Olsa <jolsa@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, bpf@vger.kernel.org, 	stable@vger.kernel.org,
- tristan@talencesecurity.com
-Date: Mon, 22 Jun 2026 17:08:44 -0700
-In-Reply-To: <20260622230123.3695446-3-tristmd@gmail.com>
-References: <20260622230123.3695446-1-tristmd@gmail.com>
-	 <20260622230123.3695446-3-tristmd@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S2FK96HX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D1DF1F000E9;
+	Tue, 23 Jun 2026 00:11:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782173507;
+	bh=u3G2k+vNcbri1rsk1r3PRgx76PxVv/AgsF6Bes4pFjM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=S2FK96HXBIX3IPeJ+oZ+SNyzCBmlrHdG6N2svUdBYGhnEYbgAgySvVd89aSUQ9fnC
+	 93MwaMEK5/axFm+LBDZo+MQfBMBOKRC5Ff4UcRsKEfGBls2A/E8HU7YZwM/6jRHxlB
+	 j5quk/9D7CLDIBvB2NRf42cn6YBkstPBqgMZi2KdY/7Radc37xHX9hLpsSH0stVxBm
+	 SfTVcLEHJi3nfl5V0fO/OhEmkt6RVY+m9pYTgr3aqY+mgGK6SZVJn2YX2pa11TGM/h
+	 c45+UZjfog9s3Pg96f/p+3AM7kD0/kRk0WEkASFv7pvcA4Sy2YNBLV5DLJTZDbrZx8
+	 ffTyN0RLDkp7w==
+Date: Tue, 23 Jun 2026 09:11:41 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor
+ <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav
+ Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v4 6/7] Documentation: bootconfig: document build-time
+ cmdline rendering
+Message-Id: <20260623091141.384913aa7eb0cb3c5db01e9d@kernel.org>
+In-Reply-To: <ajkfTQwmmVo0DvFx@gmail.com>
+References: <20260609-bootconfig_using_tools-v4-0-73c463f03a97@debian.org>
+	<20260609-bootconfig_using_tools-v4-6-73c463f03a97@debian.org>
+	<20260610233720.82fe59cf42aa57659c2e5697@kernel.org>
+	<ail6rQnRYKsXPxyF@gmail.com>
+	<ajJu2KlfVyuUH-VA@gmail.com>
+	<20260618094719.17bf5448351adc2e56c267fb@kernel.org>
+	<ajkfTQwmmVo0DvFx@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, 2026-06-22 at 23:01 +0000, Tristan Madani wrote:
-> From: Tristan Madani <tristan@talencesecurity.com>
->=20
-> Add a verifier test that catches the stale-bounds issue fixed in the
-> previous patch. The test sets r6 =3D 0 to create known bounds, then loads
-> the LSM hook return value into r6 from the context. Without the fix,
-> the verifier intersects the retval range with the stale bounds and
-> incorrectly narrows r6 to a single value, pruning the fall-through
-> branch as dead code and missing the div-by-zero.
->=20
-> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-> Signed-off-by: Tristan Madani <tristan@talencesecurity.com>
-> ---
+Hi Breno,
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+On Mon, 22 Jun 2026 05:30:53 -0700
+Breno Leitao <leitao@debian.org> wrote:
 
-[...]
+> On Thu, Jun 18, 2026 at 09:47:19AM +0900, Masami Hiramatsu wrote:
+> > On Wed, 17 Jun 2026 02:56:23 -0700
+> > Breno Leitao <leitao@debian.org> wrote:
+> > 
+> > > On Wed, Jun 10, 2026 at 07:58:10AM -0700, Breno Leitao wrote:
+> > > > On Wed, Jun 10, 2026 at 11:37:20PM +0900, Masami Hiramatsu wrote:
+> > > > > To avoid confusion, when this option is used, shouldn't we treat it
+> > > > > the same way as if embedded command lines were enabled, and either
+> > > > > not display it in /proc/bootconfig (or always display it, by merging
+> > > > > the rendered string)?
+> > > > 
+> > > > You're right that EMBED_CMDLINE breaks it: the embedded kernel.* keys
+> > > > are already in boot_command_line before setup_boot_config() ever sees
+> > > > the initrd bconf, so a user reading /proc/bootconfig would see only
+> > > > the initrd keys while parse_early_param() acted on the embedded ones.
+> > > > That's exactly the split-state Sashiko was circling around.
+> > > > 
+> > > > Both options you suggest work for me, but they pull in opposite
+> > > > directions and I'd rather not guess wrong on the user-facing
+> > > > contract.  Which do you prefer for v5?
+> > > > 
+> > > >   (a) Don't display embedded in /proc/bootconfig -- keep the current
+> > > >       "file shows the active bootconfig source" behavior and document
+> > > >       that with EMBED_CMDLINE=y, the kernel.* subtree may have been
+> > > >       applied separately via the cmdline.
+> > > > 
+> > > >   (b) Always display embedded by merging the rendered string into
+> > > >       /proc/bootconfig when EMBED_CMDLINE=y, so the file reflects
+> > > >       what was actually applied.
+> > > > 
+> > > > Happy to go either way
+> > > 
+> > > Following up on my own mail rather than leaving it fully open: after
+> > > looking at the code more, I'd like to recommend (a).
+> > 
+> > Agreed. Sorry for replying late.
+> 
+> No problem, thanks. Quick heads-up: v5 already went out and crossed with
+> this mail. It takes (a) and extends bootconfig.rst to walk through the
+> four sources (bootloader cmdline, embedded cmdline, initrd bootconfig,
+> embedded bootconfig), so that part is already in flight:
+> 
+>   https://lore.kernel.org/r/20260617-bootconfig_using_tools-v5-0-fd589a9cc5e3@debian.org
+> 
+> The naming/mutual-exclusion rework below I'll fold into v6.
+
+Yeah, thanks for updating!
+
+> 
+> > Indeed. So I think this EMBED_CMDLINE is more like CMDLINE set by
+> > bootconfig file, instead of embedded string. That is useful for reusing
+> > the boot options. We need to change the explanation and clarify it.
+> 
+> Agreed, that's a much clearer model. v6 will reframe the Kconfig help and
+> bootconfig.rst around "this is CONFIG_CMDLINE, sourced from a bootconfig
+> file at build time" rather than "an embedded bootconfig that also feeds
+> the cmdline".
+
+Nice!
+
+> 
+> It also matches what the code already does precedence-wise: the rendered
+> "kernel" string is prepended to boot_command_line in setup_arch(), so it
+> sits in front of the bootloader args and parse_args() last-wins lets the
+> bootloader override it -- i.e. exactly CONFIG_CMDLINE without _OVERRIDE.
+> So this is mostly a rename + dependency + docs change, not a behavioral
+> one. (A _FORCE/_EXTEND-style variant could come later if there's demand;
+> the current behavior is the plain "overridable default" one.)
+
+OK. Yeah, for the first step, I think current behavior is enough.
+
+> 
+> > Thus we should those configs mutual exclusive. If user already sets the
+> > CONFIG_CMDLINE, EMBED_CMDLINE should not be enabled.
+> 
+> Makes sense -- two built-in cmdline sources at once is confusing. I'll
+> make them mutually exclusive in v6. I'm thinking:
+> 
+>   depends on CMDLINE = ""
+> 
+> on the new symbol. On x86 CONFIG_CMDLINE is a string that depends on
+> CMDLINE_BOOL and defaults to "", so this reads as "only offer the
+> bootconfig-rendered cmdline when no static CONFIG_CMDLINE is configured",
+> and it works the same on other arches that define CMDLINE as a string.
+> Does that match what you had in mind, or would you rather gate it the
+> other way (CMDLINE depends on !the-new-symbol)?
+
+No, this looks good and enough clear to me.
+
+> 
+> > So you can see CONFIG_BOOT_CONFIG_EMBED_CMDLINE is a bit special.
+> > I think it maybe natual that we call it CONFIG_CMDLINE_BOOT_CONFIG.
+> > In this case, we render the cmdline string from bootconfig build-time
+> > and set CONFIG_CMDLINE with the rendered cmdline string.
+> > So you can see CONFIG_BOOT_CONFIG_EMBED_CMDLINE is a bit special.
+> > I think it maybe natual that we call it CONFIG_CMDLINE_BOOT_CONFIG.
+> > In this case, we render the cmdline string from bootconfig build-time
+> > and set CONFIG_CMDLINE with the rendered cmdline string.
+> 
+> I'll rename it for v6. One nit: the arch opt-in symbol is already
+> ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG, so CONFIG_CMDLINE_FROM_BOOTCONFIG would
+> pair with it verbatim. I'll use CONFIG_CMDLINE_FROM_BOOTCONFIG I'll rename it
+> for v6.
+
+Yeah, thanks!
+
+> 
+> Another nit: the arch opt-in symbol is already
+> ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG, so CONFIG_CMDLINE_FROM_BOOTCONFIG would
+> pair with it verbatim. I'll use CONFIG_CMDLINE_FROM_BOOTCONFIG unless you'd
+> rather keep CONFIG_CMDLINE_BOOT_CONFIG -- either is fine by me.
+
+I think it should use the same pattern to avoid confusion.
+
+> 
+> One clarification on "set CONFIG_CMDLINE with the rendered string":
+> CONFIG_CMDLINE is a Kconfig string fixed when .config is read, while the
+> render happens later during the build, so we can't literally store the
+> rendered text into CONFIG_CMDLINE. The mechanism stays "render into
+> .init.rodata, merge into boot_command_line in setup_arch()"; what changes
+> is how we name and document it, plus the mutual exclusion above. Let me
+
+Yes, it is fine to me because it does not change the current behavior.
+
+> 
+> > So you can see CONFIG_BOOT_CONFIG_EMBED_CMDLINE is a bit special.
+> > I think it maybe natual that we call it CONFIG_CMDLINE_BOOT_CONFIG.
+> 
+> I'll rename it for v6. One nit: the arch opt-in symbol is already
+> ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG, so CONFIG_CMDLINE_FROM_BOOTCONFIG
+> would pair with it verbatim. I'll use CONFIG_CMDLINE_FROM_BOOTCONFIG
+
+Yes, that's better to be renamed.
+
+> > In this case, we render the cmdline string from bootconfig build-time
+> > and set CONFIG_CMDLINE with the rendered cmdline string.
+> 
+> CONFIG_CMDLINE is a Kconfig string fixed when .config is read, while the
+> render happens later during the build, so we can't literally store the
+> rendered text into CONFIG_CMDLINE?  let me know if you can envision a way to
+> get it done.
+
+Ah, ok. Nevermind, as far as it is shown in /proc/cmdline, I think it is OK.
+(BTW, if we use the embedded bootconfig, the file path is shown in
+ /proc/config.gz, maybe I need to notice it.)
+
+> > I think we can proceed it without rendering it in /proc/bootconfig
+> > at this point. And later we find the way to detect early parameters
+> > correctly, we can fix it.
+> 
+> Sounds good. I'll document the sharp edge (with both an embedded cmdline and an
+> initrd bootconfig, early params reflect the embedded values because the initrd
+> isn't parsed yet) and leave the early-param-aware override detection as the
+> follow-up you describe.
+
+Thanks for the documenting :)
+
+> 
+> > (BTW, early parameter problem is a bit complicated. It is not hard
+> > to distinguish early parameters, but kernel accepts the same key
+> > for early parameter and normal parameter. e.g. "console=")
+> 
+> Right, console= being both is the awkward case. Agreed that's better as
+> its own series once we have a reliable way to detect early params.
+> 
+> So the v6 plan:
+>   - rename CONFIG_BOOT_CONFIG_EMBED_CMDLINE -> CONFIG_CMDLINE_FROM_BOOTCONFIG
+>     (or _BOOT_CONFIG, your call)
+>   - make it mutually exclusive with CONFIG_CMDLINE (depends on CMDLINE = "")
+>   - reframe the Kconfig help + bootconfig.rst as "CONFIG_CMDLINE from a
+>     bootconfig file"
+>   - keep (a): no rendering in /proc/bootconfig; document the early-param
+>     sharp edge
+>   - defer early-param-aware override detection to a follow-up
+> 
+> Thanks for the direction,
+
+Thanks for working on this feature!
+
+Thank you,
+
+> --breno
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
