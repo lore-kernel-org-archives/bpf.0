@@ -1,85 +1,134 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73EC62BE05F
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 03:08:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782184120; cv=none; b=nZvlORJ/wOjnBsz4I5ZSG9PYGpm2jj5QGUfCdt3xKwyFTwYm3B7b1nZiXl540xvE9j603q/1biZCmiHQnsk63hM+LglI9gqtJhlJ0BwdhvaADsk33QKmDG/ooFrz/N+37Slihq5joLhKdesL1IuhfslO4Xit7sY+bU0DUNnbeXs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782184120; c=relaxed/simple;
-	bh=9mZbYIjg6RD66RtjZ3wC3T16LnEe9uXlGO8uH+5VPqk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Tmj1bjqnq/Mo6SZG+SLAeOq6nbykuLJEokuGFHk1HbUKE/VC05gKtZp5HoXF6qQiEI/ftIsnIZAt5vYIkc1xU9w4lAcyp8+6qzzfhLNaDRgy6xvpk4rLwoR+2dS/5WTcuU4V8XitGKm+viuNUhRLoOjD1ruMngYqfMJyPIGCjGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=HLmTFjvu; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCD138887C
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 03:11:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782184282; cv=pass; b=iwpHhMN+KoheQPq0EUtlOIhY2WxtIoRhWH9AH7+4y5w+nqK2DAUR8Hpp97tk7Ruph/GECnaQUds7y/SblWJlLF5wA4vz5lkGxqQywmCGPOO+vr10Jz6jaOXRDRtmMbzQSogJ30Css1NpFyRyz+xGh/zlyNAXHj4JT+2OsKk55EE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782184282; c=relaxed/simple;
+	bh=5tsJG8K11FH33t75X0aMZwkwKArLiDR3LlMxbCGTaK0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JuMJaDV45yfUBWlvwkqxv9c7/ebBNq9d7XmSOvDyr8chyZIvG4TkrBvjqmtBPMXMEp+ps9eyu5VfTZuvR8tF4R5+UgtoxccbsfdzqRxLahOaCkNi9hw6hy/AOsxLWG76mziwxyR3i75Kv96jRL5CTuB4JlESHnMNM30cTE+I+8U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rIvU5v10; arc=pass smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="HLmTFjvu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=up
-	oPx/JXwnJsrNPaYFzIh3VDycK1ZXHwsZAVcpqGyAo=; b=HLmTFjvuQbIv27aAKg
-	VH1dtApxxsIZYGxmLXp0ASZ/6Hqg+QTtkApbDF3gwXZI7ojV2mMleQ0AZK5mx9aU
-	Si9eJQVcZpdGLgAiEQjuj0kLy+kecuQC5sJqSPLp1anAqKQzWX36W5S0i5gIYYkm
-	U3mxUc7GgLUO3/DlA5kaHnRkM=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id PigvCgD3iwOT+DlqkRWbDw--.6101S2;
-	Tue, 23 Jun 2026 11:08:05 +0800 (CST)
-From: Longjun Tang <lange_tang@163.com>
-To: ast@kernel.org,
-	andrii@kernel.org
-Cc: yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	bpf@vger.kernel.org,
-	tanglongjun@kylinos.cn,
-	lange_tang@163.com
-Subject: [PATCH bpf-next 0/5] bpf: add bpf_memcmp and bpf_strpbrk kfuncs
-Date: Tue, 23 Jun 2026 11:07:57 +0800
-Message-Id: <20260623030803.44798-1-lange_tang@163.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rIvU5v10"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c86307c4e6bso1918291a12.0
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 20:11:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782184277; cv=none;
+        d=google.com; s=arc-20240605;
+        b=M7CyeD5WiOQFBRxGDYp+816TgrfEUdZOhGVhO3AXtU/iANRyUh9HZ3YY5Dc9PdLeAW
+         V3VfNFggHXmQyuf2W21QYQPL+1Rl2PE7YIB4qg5oA0Jk/8+xVC5ustZRhYdT7dfFf4ZB
+         Tib3WnR8qZ5r+4QH6O4stWtwuZU9nCNWD9TkFxLTnYHMlxm8PIZLoNYQWvuMIT22rOdi
+         5l838GNjalyy3AOdl6/aIZ24h39a6I+FylWdcB+nT2mzBrtrz0tVssYXsSs3SMdzEBc7
+         CykEohKUmxX7Kxhxq5d2/sHUO2n/Rx4Tqa5N11KM8pa5JEVQeuSqA3y6Vy/E43uBuio+
+         R7yQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=BjtwR7xlZwTKzwmfKPGdqr9b1raakaR85K+/MxsMuxQ=;
+        fh=ApGGcOjPPYnwOpl1ZkMZoYGpXHVmAu0NOAOtt7Wnpgw=;
+        b=KvZ+PX5MlB17UwKJppc8kzK1l0wKwo5zShnSMnx/TJlk7bCbOhCql7tQ10L3O3dITQ
+         dTtMCnuScfW4QsqNIliPExvoZwNKE6/aZGrqIsKCYCKeQj5s4mj8AJhAwjEMmnAz+KLK
+         6MZL2FaVV+pXLXOY10S3KNvsNqfJHyR/hxl99FCyRdxMuinmsiVz25fpBBEKob/z917w
+         uoXzv2ZjPVBmeS2kgl+NJoY6MCIhlqUQE/zZ7Hl+SlHJ8EUpRmhc1wIbJ6ZZfB6NuDbI
+         xmA+5VylZU702wB9Key7tzCIKzOIHwsfL5Vz7JT7y5/USEaG5kZRwuSJQPiFdgMgIpnz
+         zmoQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782184277; x=1782789077; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BjtwR7xlZwTKzwmfKPGdqr9b1raakaR85K+/MxsMuxQ=;
+        b=rIvU5v10tYjFohKj2Ab21hSM3Rt0+B/gvpNfbrNGzoFmcE23woP0/R7tRHgqvq0pbu
+         fWsy2FYn2yCdppbXd2PHnmvuSfNnszKQ+EY3RvnrPLWXPYNSy9HkHmeGnLYYu8+aofor
+         zp8jXP2KEs7UlXnORd5Z2drcxT6t1tGkVsMyaeL50dAQav5rMZSfi+7RIqIibh4CEyek
+         dlYHRm+sv86RcPbLWgkEwqcmvd/j89h+IWW7gjI9rF25y/Xsr/wyk61DRf1KtbUofBpT
+         h4UcHQceGY+w2tKlRM4K8Ek/BM39XdoG3GAjDTaTZ7r36IdnjgofTTxXpFfI/rBBpxRd
+         dxUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782184277; x=1782789077;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=BjtwR7xlZwTKzwmfKPGdqr9b1raakaR85K+/MxsMuxQ=;
+        b=RjSBZowk1dI3sstK92P8980mGKo+Ss5C4w4UuGWhKytRiCxLfU2iujjhz9KhI4Siwe
+         I/fhdvkYT1rlcAFhvJQxaYIpEWQqPyCF2UZSTcc9OXqraxzsfHBs2nSPGqgp6GTXqjVO
+         pf9TH8BiMv7i5jdCkWfMJB9UR7uhUBH9zktargRxD4bkkIZma2qzGzM7U3+afr2+TSDq
+         hobb9HCy+Z41+GCupC9D8o8SwAkniXhF0tSsE7b0X+8tCm7moeJN0LjI6bt6dFX0B9Qt
+         Us8dcwvM1/+arpil66RtZ/hVMGebnXyDl41cZzbGDOTANyADP4P/BLoPhEFXO8y16LIL
+         3ZwQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/LDvD2j8oMbyjjiIZg+qVTbNnh5/+6WBkB/WeiGWxpJJcZDvNwJ09sPX+USq6kvdpXN4M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNorhMtRk5LlA9/aDI+HY+rFKmpD4yYLD7OdbIuaA7OJ092NNN
+	KOx9lcwe6NE+9OW2bB6W9/rIJ1nh6hhwRkcYyc9kRt8puPwKTwHl49JM88b/ctr6ksmcQhfigCs
+	1ludzOpARksLqLFJXnWySZlemLFOvYOM=
+X-Gm-Gg: AfdE7ckqbrPzLDS/snb6MybwrxQVQxZp6W3s7FqZsZCYYG1FhAUoIZW2n2Y5iddkXjY
+	ljyg4nqspNdu9tcwkqfExfiW3fY/79vT3Z3BEk6UfFTEwBY00X8t9rtObFLz6JPOAeWb/oulzFX
+	H0sd6ghlax2KhsM5Ng535NATqIuPvidykdYNaEo+CLwLfmaUJh2+13BjQLWgYHG1MNNef1JeTm1
+	DWOqkniTZW8nBvS6zD8pe7QZDabiYIl45islixS3pA5iKI76V9gvCNMlf17Knf5UC3QZZapv8EG
+	bcmaZEjnCiPfln0Vhjde2wLhxXNoQJDXuMORGvcn7Kl4PaMNtIYdO12LBYu+5LYu6Gm6a6LDLm9
+	8utn0qdhU/Y4SxA==
+X-Received: by 2002:a05:6a21:6915:b0:3b4:5c70:ca3e with SMTP id
+ adf61e73a8af0-3bc531af581mr15488925637.25.1782184276701; Mon, 22 Jun 2026
+ 20:11:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PigvCgD3iwOT+DlqkRWbDw--.6101S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWrurW3AryfJryxCr4UuF4xtFb_yoW8Jr18pF
-	4Fgw1Ykr1kJF1fJ3ZxZayxW3W5XwnYkr4UJryxt3sYy34vqFy8Xr4fKr1Ygwn8GrWUua1Y
-	v34vgrya93WUAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pR-4SnUUUUU=
-X-CM-SenderInfo: 5odqwvxbwd0wi6rwjhhfrp/xtbC-hVMemo5+JUdoQAA3f
+References: <20260619130305.27779-1-include@grrlz.net>
+In-Reply-To: <20260619130305.27779-1-include@grrlz.net>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 22 Jun 2026 20:11:04 -0700
+X-Gm-Features: AVVi8Cf1oIzvdtEGICckV061Q81IswIClpWIZQWhYHurLRYhBKU5VvvDzlC6Veg
+Message-ID: <CAADnVQJ4rpEMdj3jq9d0AFNcZterObQpJQiQ8VLwcYUph_M+sg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] bpf: lsm: disable xfrm_decode_session hook attachment
+To: include@grrlz.net
+Cc: LSM List <linux-security-module@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, stable <stable@vger.kernel.org>, 
+	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Florent Revest <revest@google.com>, 
+	Brendan Jackman <jackmanb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Longjun Tang <tanglongjun@kylinos.cn>
+On Fri, Jun 19, 2026 at 6:03=E2=80=AFAM Bradley Morgan <include@grrlz.net> =
+wrote:
+>
+> BPF LSM programs can currently attach to xfrm_decode_session(). That
+> hook may return an error, but security_skb_classify_flow() calls it
+> from a void path and triggers BUG_ON() if an error is returned.
+>
+> Disable BPF attachment to the hook to prevent a BPF LSM program from
+> turning packet classification into a full panic.
+>
+> Fixes: 9e4e01dfd325 ("bpf: lsm: Implement attach, detach and execution")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Bradley Morgan <include@grrlz.net>
+> ---
+>  kernel/bpf/bpf_lsm.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> index 564071a92d7d..1433809bb166 100644
+> --- a/kernel/bpf/bpf_lsm.c
+> +++ b/kernel/bpf/bpf_lsm.c
+> @@ -51,6 +51,9 @@ BTF_ID(func, bpf_lsm_key_getsecurity)
+>  #ifdef CONFIG_AUDIT
+>  BTF_ID(func, bpf_lsm_audit_rule_match)
+>  #endif
+> +#ifdef CONFIG_SECURITY_NETWORK_XFRM
+> +BTF_ID(func, bpf_lsm_xfrm_decode_session)
+> +#endif
 
-This series adds two new BPF kfuncs to kernel/bpf/helpers.c:
-
-- bpf_memcmp(): Binary memory comparison, unlike bpf_strcmp null
-  bytes do not terminate the comparison. Returns 0, -1, or 1 with
-  standard error codes (-EFAULT, -E2BIG, -ERANGE).
-
-- bpf_strpbrk(): Find the first occurrence of any character from an
-  accept set in a string. Complements the existing strspn/strcspn
-  kfuncs for string tokenization use cases.
-
-All kfuncs are registered in common_btf_ids, making them available
-to all BPF program types. Selftests cover functional correctness
-(equality, ordering, edge cases) and negative paths (NULL, user,
-and invalid kernel pointers).
-
-Longjun Tang (5):
-  bpf: add bpf_memcmp kfunc
-  selftests/bpf: rename local bpf_memcmp to avoid conflict
-  selftests/bpf: add tests for bpf_memcmp
-  bpf: add bpf_strpbrk kfunc
-  selftests/bpf: add tests for bpf_strpbrk
-
- kernel/bpf/helpers.c                          | 105 ++++++++++++++++++
- .../selftests/bpf/progs/dynptr_success.c      |  30 ++---
- .../bpf/progs/string_kfuncs_failure1.c        |  16 +++
- .../bpf/progs/string_kfuncs_success.c         |  25 +++++
- 4 files changed, 161 insertions(+), 15 deletions(-)
-
--- 
-2.25.1
-
+Applied this fix to bpf tree.
