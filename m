@@ -1,203 +1,107 @@
-Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B7972D739C
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 15:34:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D56F21255A;
+	Tue, 23 Jun 2026 15:46:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782228844; cv=none; b=RtD0dulkRXzcKi86b+CJ5admqY6TcXPsQSuh4c+ZgmVMRBYTRZN4AbeilBff4WCRHOFcgac6SwoHbeevutf9YH7pstK7r+h5X615y4gYMoOWf/hw/khuKAjVbnpm8K1XgC2Sci2QeDR3ebgzPn16yAauVbdP22slnozSDBtR6Aw=
+	t=1782229562; cv=none; b=hVIiSMBuv7+ohJMcs8TzsMaWdRAddz8PpMvc82VlM0NXGvZ41ZWxi3Jz2V/ibgvf1mXQQyyufMONYUbAFzVhI11n/s2jDZncz2h72ELgmdnz3hQyK83tpkha4PtYIKBjBsKmfgyyCr3Ul9sN7sXrYiBKjhiSy2tGqM2uDSif8M4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782228844; c=relaxed/simple;
-	bh=4orO0kBbRGysRZb4FYdyVW/U4nlYAY4iwKrnckB+/Bs=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=giMS0ztUgg4MCYw6cM4bcDamq5GIyDn3sAgjmJUKOxHlyz2iIULtXgumVlUr323RkkA4lvSH9UHmBdFZ3bDFQNNHc2TzgneDDJLfhWInACnYJ53H0vJcHkfzEweNP+c2eU43LQUkw53xJ9lpfdjTNlJCzVDGJ0MTsPDLKQwa6rE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZCwnNmT7; arc=none smtp.client-ip=209.85.221.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
+	s=arc-20240116; t=1782229562; c=relaxed/simple;
+	bh=3bvzU5bXJ+CLiGk2PE303KNEwq96TiaewCU0WdkUfWA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MOTzQ/++qghkDwayI81vfaY5y9i4OzDAvwoZJf7bRJo83qDkgy2oFrf5FEqGPHcOgKs/uodrjeLyocMec1dxblS/Lewxa1t4vYlm1IN+z691YAX7QUVN+XC4Kq8otSMwpCL6bs82QHjYelZzbgxW9QlKqD6p2Mwvft+11ZPQP/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=j6Cdtdj1; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZCwnNmT7"
-Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-45ef616db45so8465f8f.2
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 08:34:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782228841; x=1782833641; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=DQXipYJwwAnz5pv6rxzKuPhxUsrLIL8tTRQ6WSQQphk=;
-        b=ZCwnNmT7Do/auPnXbfTLi+TRJwqW0qPOyHfTPdG1CsxutwLJ2NYfRCRS4DrbpfZH9k
-         mnRF1L+K7jODRvXLIDYYew0kT7bxQRwuDpA46ksrzYNd/d6PUsJU2bNoBhID2lr8ZV0F
-         Ys/DfGy2A5QK0xxy4OSbGsP+oRCrPc52bNU+hysW/kA+mBXWkwM9fIofHJBQxtRYhxTe
-         LjkK6c77o2f/C1ZVer5JjRzHRLCarxH1h25s8VnQVTW9UfKZVgK0anzLSxcp+hrD2YjA
-         gei0Y73dYajSB1u/ZnY1C60IM+0lku7adWmiiMbQW78VRkcW/NkQ/eOkS2vGIoOkNer3
-         7KLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782228841; x=1782833641;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DQXipYJwwAnz5pv6rxzKuPhxUsrLIL8tTRQ6WSQQphk=;
-        b=UbczV4E8o61YfCwJGLZZJNrd93Sa2L4jo9dES6XV8VV/dBECW2rw0kijxAB0knzgrK
-         8nJaPhrVlu3gXVb20Ea9j9T3TX9VaoQXp3CrSOeAqN6tts7xgqBr5rOnutRQRjQDAimV
-         NsRW2fKq6s8THIdYyVHm6lVzq+O+z/plnQlW6lbQe6Ub9wewvGw5//Eff5caoYO0wRpK
-         MqUCFlb3D9JW1diK9AEhjiyvv+9nQv1z/u3O23BG8Lu0zgCmb/Emsg7JBj35vkUDijjp
-         PmFSBFmSzmZLQ6KzX61fOmJ0hHmzhPEOok8i2UUHAwQxHa1qlx6uBKiCvYUurVlzchq4
-         qF7A==
-X-Gm-Message-State: AOJu0Yx02Xc24g6T9s1TJcEUPSrAzcrw93SmgGDW6ZY5rzIQT/a8uTJL
-	ScqIkYJGTDl2O2scDDn2vNTtMqZ14oMJVPA203jgrKjMCXDwtVm/M6Bf1rrkEXJm5Gs0A0Oz/P8
-	qncCwvhQWRKEeNwvJdQ==
-X-Received: from wrvz1.prod.google.com ([2002:a5d:6541:0:b0:45f:60d0:5158])
- (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6000:4a1e:b0:452:273:5cd6 with SMTP id ffacd0b85a97d-46adafbd2c6mr5226828f8f.1.1782228841110;
- Tue, 23 Jun 2026 08:34:01 -0700 (PDT)
-Date: Tue, 23 Jun 2026 15:33:55 +0000
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="j6Cdtdj1"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2CA5E1758;
+	Tue, 23 Jun 2026 08:45:56 -0700 (PDT)
+Received: from [10.1.27.69] (e127648.arm.com [10.1.27.69])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 52C833F62B;
+	Tue, 23 Jun 2026 08:45:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1782229560; bh=3bvzU5bXJ+CLiGk2PE303KNEwq96TiaewCU0WdkUfWA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=j6Cdtdj1VI3Gw0KVPlxmi7gT4c56LqNWoE3c7pyoJQWYwAyx5OOOW22DuRgDlTomx
+	 4QNd2bVbr7uQ7n0eEJt/Y+vP1W3bM8HZ9VJGor+P90JaTCY9WjRUd/pH+Q0MUgwn7U
+	 R2VyuCv2DZ3+YaI3Tf6lH1OzFzVJ2B2YEQdCG8VM=
+Message-ID: <43d5e4e0-eddb-4a7a-87df-180b9048a038@arm.com>
+Date: Tue, 23 Jun 2026 16:45:55 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAGKnOmoC/3WNQQ7CIBREr9L8td8A2lq78h6mCwofSsTSgCGah
- ruL3bt8M3kzGySKjhIMzQaRsksuLBX4oQE1y8USOl0ZBBMd64TAaTXo04M8GvemhEoazWV/0qQ EVGuNtBdVuo+VZ5deIX72g8x/6f+tzJHjRbGr5G3fTvJ8syFYT0cVnjCWUr6VKP5TrwAAAA==
-X-Change-Id: 20260622-bpf-lskel-fixes-cafd1a83dec2
-X-Mailer: b4 0.14.3
-Message-ID: <20260623-bpf-lskel-fixes-v1-1-90600b40e7cb@google.com>
-Subject: [PATCH] bpf: allow BPF_LOG_KERNEL from kernel space
-From: Siddharth Nayyar <sidnayyar@google.com>
-To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, John Fastabend <john.fastabend@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Giuliano Procida <gprocida@google.com>, Matthias Maennich <maennich@google.com>, 
-	Tiffany Yang <ynaffit@google.com>, Neill Kapron <nkapron@google.com>, 
-	Siddharth Nayyar <sidnayyar@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] sched_ext: Print deprecation warnings only once
+To: Breno Leitao <leitao@debian.org>, Tejun Heo <tj@kernel.org>,
+ David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
+ Changwoo Min <changwoo@igalia.com>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>
+Cc: sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, kernel-team@meta.com
+References: <20260623-scx_warning-v1-1-14bf218f4bd9@debian.org>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <20260623-scx_warning-v1-1-14bf218f4bd9@debian.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-When loading a BPF program or BTF from kernel space (e.g. using a
-light skeleton generated loader module), the kernel module may want
-to output verifier logs to dmesg by setting attr->log_level =
-BPF_LOG_KERNEL (16).
+On 6/23/26 15:38, Breno Leitao wrote:
+> The deprecation notices for direct p->scx.slice/dsq_vtime writes and for
+> ops->cpu_acquire/release() use plain pr_warn(), so they repeat on every
+> scheduler (re)load and flood the kernel log.
+> > The slice/dsq_vtime notice is emitted from the BPF verifier's
+> btf_struct_access callback, which runs once per write access and is
+> re-evaluated as the verifier explores paths, so loading a single
+> scheduler can print it several times. The cpu_acquire/release notice is
+> printed on every scheduler enable.
+> 
+> Switch both to pr_warn_once() so each deprecation is reported a single
+> time, and add the missing newline to the slice/dsq_vtime message.
 
-Currently, any attempt to do this through the standard syscall path
-(kern_sys_bpf -> bpf_vlog_init) fails with -EINVAL because
-bpf_verifier_log_attr_valid() rejects any log_level bit outside
-BPF_LOG_MASK. This prevents in-kernel loaders from successfully
-using BPF_LOG_KERNEL, causing silent failures if the BPF object
-is rejected by the verifier.
+I guess this should be warned for once per BPF scheduler like
+sch->warned_deprecated_rq
 
-This patch modifies bpf_vlog_init() to accept a new 'is_kernel'
-boolean (propagated from uattr.is_kernel) and allows BPF_LOG_KERNEL
-to pass the validation check strictly when invoked from kernel space.
-
-Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
----
- include/linux/bpf_verifier.h |  2 +-
- kernel/bpf/btf.c             |  3 ++-
- kernel/bpf/log.c             | 17 +++++++++++------
- kernel/bpf/verifier.c        |  3 ++-
- 4 files changed, 16 insertions(+), 9 deletions(-)
-
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 39a851e690ec..eb9d2a556c0e 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1059,7 +1059,7 @@ __printf(2, 3) void bpf_verifier_log_write(struct bpf_verifier_env *env,
- __printf(2, 3) void bpf_log(struct bpf_verifier_log *log,
- 			    const char *fmt, ...);
- int bpf_vlog_init(struct bpf_verifier_log *log, u32 log_level,
--		  char __user *log_buf, u32 log_size);
-+		  char __user *log_buf, u32 log_size, bool is_kernel);
- void bpf_vlog_reset(struct bpf_verifier_log *log, u64 new_pos);
- int bpf_vlog_finalize(struct bpf_verifier_log *log, u32 *log_size_actual);
- 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 15ae7c43f594..69ec32f99457 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -5926,7 +5926,8 @@ static struct btf *btf_parse(const union bpf_attr *attr, bpfptr_t uattr,
- 	/* user could have requested verbose verifier output
- 	 * and supplied buffer to store the verification trace
- 	 */
--	err = bpf_vlog_init(&env->log, attr_log->level, attr_log->ubuf, attr_log->size);
-+	err = bpf_vlog_init(&env->log, attr_log->level, attr_log->ubuf, attr_log->size,
-+			    uattr.is_kernel);
- 	if (err)
- 		goto errout_free;
- 
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index b740fa73ee26..92584a314129 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -13,8 +13,12 @@
- 
- #define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##args)
- 
--static bool bpf_verifier_log_attr_valid(u32 log_level, char __user *log_buf, u32 log_size)
-+static bool bpf_verifier_log_attr_valid(u32 log_level, char __user *log_buf, u32 log_size,
-+					 bool is_kernel)
- {
-+	if (log_level == BPF_LOG_KERNEL && is_kernel)
-+		return true;
-+
- 	/* ubuf and len_total should both be specified (or not) together */
- 	if (!!log_buf != !!log_size)
- 		return false;
-@@ -29,14 +33,14 @@ static bool bpf_verifier_log_attr_valid(u32 log_level, char __user *log_buf, u32
- }
- 
- int bpf_vlog_init(struct bpf_verifier_log *log, u32 log_level,
--		  char __user *log_buf, u32 log_size)
-+		  char __user *log_buf, u32 log_size, bool is_kernel)
- {
- 	log->level = log_level;
- 	log->ubuf = log_buf;
- 	log->len_total = log_size;
- 
- 	/* log attributes have to be sane */
--	if (!bpf_verifier_log_attr_valid(log_level, log_buf, log_size))
-+	if (!bpf_verifier_log_attr_valid(log_level, log_buf, log_size, is_kernel))
- 		return -EINVAL;
- 
- 	return 0;
-@@ -831,8 +835,9 @@ int bpf_log_attr_init(struct bpf_log_attr *log, u64 log_buf, u32 log_size, u32 l
- 	char __user *ubuf_common = u64_to_user_ptr(common->log_buf);
- 	char __user *ubuf = u64_to_user_ptr(log_buf);
- 
--	if (!bpf_verifier_log_attr_valid(common->log_level, ubuf_common, common->log_size) ||
--	    !bpf_verifier_log_attr_valid(log_level, ubuf, log_size))
-+	if (!bpf_verifier_log_attr_valid(common->log_level, ubuf_common,
-+					 common->log_size, uattr_common.is_kernel) ||
-+	    !bpf_verifier_log_attr_valid(log_level, ubuf, log_size, uattr.is_kernel))
- 		return -EINVAL;
- 
- 	if (ubuf && ubuf_common && (ubuf != ubuf_common || log_size != common->log_size ||
-@@ -878,7 +883,7 @@ struct bpf_verifier_log *bpf_log_attr_create_vlog(struct bpf_log_attr *attr_log,
- 		return ERR_PTR(-ENOMEM);
- 
- 	err = bpf_vlog_init(log, common->log_level, u64_to_user_ptr(common->log_buf),
--			    common->log_size);
-+			    common->log_size, uattr.is_kernel);
- 	if (err) {
- 		kfree(log);
- 		return ERR_PTR(err);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2abc79dbf281..9e76a02323e8 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19755,7 +19755,8 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	/* user could have requested verbose verifier output
- 	 * and supplied buffer to store the verification trace
- 	 */
--	ret = bpf_vlog_init(&env->log, attr_log->level, attr_log->ubuf, attr_log->size);
-+	ret = bpf_vlog_init(&env->log, attr_log->level, attr_log->ubuf, attr_log->size,
-+			    uattr.is_kernel);
- 	if (ret)
- 		goto err_unlock;
- 
-
----
-base-commit: 502d801f0ab03e4f32f9a33d203154ce84887921
-change-id: 20260622-bpf-lskel-fixes-cafd1a83dec2
-
-Best regards,
--- 
-Siddharth Nayyar <sidnayyar@google.com>
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  kernel/sched/ext/ext.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+> index 691d53fe0f648..708eb9024cb25 100644
+> --- a/kernel/sched/ext/ext.c
+> +++ b/kernel/sched/ext/ext.c
+> @@ -6988,7 +6988,7 @@ static int validate_ops(struct scx_sched *sch, const struct sched_ext_ops *ops)
+>  	 * run past the BPF allocation. Skip for cid-form.
+>  	 */
+>  	if (!sch->is_cid_type && (ops->cpu_acquire || ops->cpu_release))
+> -		pr_warn("ops->cpu_acquire/release() are deprecated, use sched_switch TP instead\n");
+> +		pr_warn_once("ops->cpu_acquire/release() are deprecated, use sched_switch TP instead\n");
+>  
+>  	/*
+>  	 * Sub-scheduler support is tied to the cid-form struct_ops. A sub-sched
+> @@ -7806,7 +7806,7 @@ static int bpf_scx_btf_struct_access(struct bpf_verifier_log *log,
+>  		     off + size <= offsetofend(struct task_struct, scx.slice)) ||
+>  		    (off >= offsetof(struct task_struct, scx.dsq_vtime) &&
+>  		     off + size <= offsetofend(struct task_struct, scx.dsq_vtime))) {
+> -			pr_warn("sched_ext: Writing directly to p->scx.slice/dsq_vtime is deprecated, use scx_bpf_task_set_slice/dsq_vtime()");
+> +			pr_warn_once("sched_ext: Writing directly to p->scx.slice/dsq_vtime is deprecated, use scx_bpf_task_set_slice/dsq_vtime()\n");
+>  			return SCALAR_VALUE;
+>  		}
+>  
+> 
+> ---
+> base-commit: 4e5dfb7c84012007c3c7061126491bbc92d71bf1
+> change-id: 20260623-scx_warning-0df49c442afb
+> 
+> Best regards,
 
