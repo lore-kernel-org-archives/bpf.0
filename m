@@ -1,125 +1,176 @@
 Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432D53B8130
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 21:52:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BAC33955CF
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 21:57:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782251550; cv=none; b=npQquFt4VeVj8c8A7EIXHt31Sj800kpvotUJfEhvA5aauYwRiHCc1cUcxnqITminielQw35UPyEhfNV7c7XU6wkIuDRn5m/LEqYLG6Qu2M1TKsIYJY5QfNmfPfTdcRNoP2R0o93GML//EpCReaIjWIGwB3qBI4fCxKr7haEXJqs=
+	t=1782251829; cv=none; b=O/HNiiDWfs1G5fgaCBZlUeOjh4X98/oy0tx6LkqgBSZgeba7T+q6/5M+gHq7zCwhdeNC3VezbDK/5jnbuVpx9D0DnmAK9rI/9jhk2L8DkcTXuxslcfxR66324/pXwezWICoRbEBPgTgByMBqHJr2HMaAO6fy8JWkLM7fp0vY2pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782251550; c=relaxed/simple;
-	bh=DEcLyTmhwS+RlC8yglBZkBjdWRmROimrD2+mka7sjzw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=aCEAmrDMTkllHTx6DZxpdqlvnYQmg4SWZFp8IW3fsKKWnky5lv29hfsDoW8UzvkGXwK+Co2rMCvD3F42Y+wiaxvh7vWo3Bj+yHEMdvmsmZyI4abKdnFRw4+NHk9TfeFCC+0rus2eA5a+8+O8NrSp5ikeo1aBPVfQ+wSFUzhOrgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=wVPOfHJ8; arc=none smtp.client-ip=74.125.82.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1782251829; c=relaxed/simple;
+	bh=zxaht1ET26HBoVtBIwwAtbc05sEEPno2VMLGk/tK6k4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qvExwOaWnWLHK+dlnyD7HSsDNHZkc4qNFg+Evrp3hDrCsr9DZDV61dZx/ducC8AFbcoXjeJ6UXBkWFZXYqnGiyW8B7LU+OD6dpGmVgzjBQIem30XqyNp9L0AZEhWxalReniLF0uWuscghIkAxWUQtrPlJpQyyH+CYz/4zuspDZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A89Ra3T+; arc=none smtp.client-ip=74.125.82.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="wVPOfHJ8"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-13986d61b4fso560787c88.0
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 14:52:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A89Ra3T+"
+Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-137335bc3caso612352c88.0
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 14:57:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782251548; x=1782856348; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GFlyRL2o4sdMxWc71sn5UWmBL09Nr89DIg0wWzeHTvA=;
-        b=wVPOfHJ8GFlKHbzbrbCUAocTF2i11vPx6ZLMqBWzdCl2UNW4s109kduJYQj7REuCcb
-         9eBOdO28GUeCLE8dzzLdfYBwWuaslwMSktvoN7jqQmtEbATK32rb3g9x+5KFSgfxnIek
-         cvlAtt5iAjzuYGqWfgQYViKWe/MwUdF8LPR8Mre3nWDepAC8tpvf3JjHhsQdYRZfu+dz
-         Jcm1RGPiGGBNSBD/6QKCU9uGix+Uz1t4zbUvO5yQTfSdf8q9qCl01pND+kdP8suzx+l2
-         qxrrZR8n7LN72KFVZS1UBHs20lRa3892d6OEeDzDGz+dVmHIzclb4kOO9CjD6r1OtKlr
-         UKRQ==
+        d=gmail.com; s=20251104; t=1782251828; x=1782856628; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=uWE4Wa8PVJ+yWZdtXpFN351hVNpU3NirdT/O2ctygmQ=;
+        b=A89Ra3T+S7b5kMZkB4V+bx+5EUqtjLVTSKKpZkzlo/M4hsTCO4ZzDXQ5VVUzuKPVnS
+         MTcK3PY9A2j/KjsdY68rbenpfat8Tni2gbn9PO1XaVLKXGPiaSO3wekFsq1KjDIt/NzW
+         9s/haiKBSCDtC3sb2/CNLR7JOrdWj9HbPZUjthKFEyxbuL9NrMQpT34nL0AtSlj5n/hm
+         qzkOC//xpXXAwnyygvsQJFcPw5I9/9vx9kFJSTMOrGsr3fGF/H5OrFuLN6urhOvgeLov
+         0SEj21osv63lFRgNBc5pnTiY6cUao5PjV6Iunf+3MnOwUMaQw5oQCtjXi9bPzY/n5VqN
+         NjSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782251548; x=1782856348;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GFlyRL2o4sdMxWc71sn5UWmBL09Nr89DIg0wWzeHTvA=;
-        b=qRghTEL/yX99V93jNrVVGhGeEdjSGFL1l+X83xb38hbwdU8rB94HxKiZDeEg2H5ZvB
-         CdOzSveK5HQQye2l148X25gUn9vpfyTtqrhkDrG7k5zQDU5orGLGcYOC5jFG7zIYAaDJ
-         1RdoyH8/dDofqUEEuRaIHRuWzPMRVhlrcyYcLtO2KFLvSmQWeaUXKk+xl5GKXlFGIXHZ
-         qKvT1LqkKFi0oYVn/UqSM03BqaOVv+vyRfJot0rw8ZYOTKvzRLDpe6TqAtBTwp1Q1K78
-         y8OvqILeYLG5/7FCpM59fQScvnzixpWgeTDEUU4jDtDAvAEBTSTyAfW/iwupymOM9pfJ
-         njpA==
-X-Forwarded-Encrypted: i=1; AFNElJ8cKgrLIXIwMIN+aRDFwgGvkGenLlFhAc7zcVuzeB2i7pLgR08nDCd+cySIj6Vp8LZR46s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfuKndA39eqCiK0TZCb2/nx8Gko6gyjafqm3aeLhohv3DnbwfS
-	D9N0dWdZdARd4cMr4xbl+fu3m3ZGll1GoMXuXpFdeCiCjYHN9nZGsY8+8t+6e/M2Tjc=
-X-Gm-Gg: AfdE7cl6kflx1NOzrfXlCHQ1wbd8W1g11q14rMII8sPxXAdAMjTj/GF8zi3rseVqUdl
-	qC1hJmtZWDCaKvQPpIXVyNax2EGOwLG51XiARgNYVojz1Rr1FInYpvmQlM2LEa0AccM4jCK8BRZ
-	wUzhYx5B5cDyBqyKUYVzLhRx6cHG68rvSpywBnUcedJkvjH77FgJ08CjzU5Apn+jv3V63PzfQs6
-	/96U6J6i2PFplAoJdbGYlpJ26WJcO3BzhM1UVjMHrHbodV6cmFRpdRJD9mZso+nocxDBVX9hDZ2
-	mPHLwyE7bTz0to4a1pqwSgEujIKwIkzW9D5eLLFq7nljMi0qXCAtZ6cv3RKqK6NvsNqjaDty62x
-	g417LsHYKI/mvYktV4lsqRW2GGoiewjQchwaTQXcFVZsTh6bfgbGleh3eH4K5TC7fzrBfNQ==
-X-Received: by 2002:a05:7022:410:b0:11a:342e:8a98 with SMTP id a92af1059eb24-139d0b58d17mr456804c88.0.1782251548209;
-        Tue, 23 Jun 2026 14:52:28 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::2526])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-139adcce488sm14516255c88.8.2026.06.23.14.52.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jun 2026 14:52:27 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782251828; x=1782856628;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uWE4Wa8PVJ+yWZdtXpFN351hVNpU3NirdT/O2ctygmQ=;
+        b=TDivDhew8JU3U4AwYQSAj1lV+xzyR2dUXP/Ggsh65hKI0tDjvE3nzmST3d/rmIrTca
+         iL+yKwYiV4AvdUP/Tp3K7COr/zUqK7WSdwpgBczjMdYSkbAhRgJtxmW9SaU8j0Aysn/V
+         rlW4AWnTjSwn0Bw1yEE62Ie6u1S20Pfhpe5lbZSnjVyEvTjYTE0t8a8+aCzqrfUphRMy
+         8eWCoa8iaojq6DglMlxhp6wnje5NTA8Qt8xtEqJTd2KtUsT83HhaKhVChRyH0HsRYK15
+         Mdq1pLf6guu2hEdBL5wlVK7Xy3ttXwZ6Npzab2lEL0k0HqPaKzybB4lCpf9NwrER09qA
+         FlLw==
+X-Forwarded-Encrypted: i=1; AHgh+Rqa9nB2rzkjJFqEHz4OqdxI/n9M7cozT/wQQxco9gt4XaOY6eoSMbLh7/CUwiVb73sSpjE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeIuEiVU0NG8afKXKipLwzGHXJtwgxBl4p1zuVKE1kc+VkLJ3b
+	riDJ9pmTQe/t572ysGLQXdT+UY1UCIO+S6KF4ztaMXGckT8MjxghJVns
+X-Gm-Gg: AfdE7cmFSmdf5L+kYNMSgw8SU3b/hgJth5ZB/1lwUfLjYbleZ6aAQlqZ33etCsgyB/h
+	dGYg4fScCWp0i5c5WWmmxm247Q6LnnPZhaYq68iqP0tjKr/SutVCRPWY95zt166qNQfTKgRfVEa
+	Vq9/TbsI0/1Biw2h84D6YaXJHJIpfji5OWeXaNnGdkUd85uBrTYxwUO+tUItS4DeJBXedHn9YuU
+	Ug3fd2FZBZThzI+CwzLlQ0xKFTI9lVKFLBJwexJN7AJ1ZFU6fSxYL6j2gylvS4JtqcDisDbSgtm
+	hcQSOkSXFpC7Pe/+N+XWH1U+ebsarOqOWDAQhSAWqNUK6b8J5Du+EtNKKRPcbbSTX9e4MBz84p9
+	OoR5VeoaDKfZXTnJOZ34k0mqy3ockrbnno3wxyibjkQ3hss2JG94Eqp6z7DO5+bc4HcoEnSdSE3
+	+0jNuaD0ch8IxUN5CACgBh9A/kQaTlrJRcLheUWBS+KFtvg8khySV/6VeFgKgcS79j+aH+SOGbm
+	R6n
+X-Received: by 2002:a05:7300:434e:b0:30a:e530:ebc6 with SMTP id 5a478bee46e88-30c691cac71mr1041968eec.12.1782251827517;
+        Tue, 23 Jun 2026 14:57:07 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:20e3:c15b:de5e:66e6? ([2620:10d:c090:500::e22])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1b4f7d81sm18411106eec.0.2026.06.23.14.57.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jun 2026 14:57:07 -0700 (PDT)
+Message-ID: <2e01e2580cee612d458f99253b3e9c91d4a75e98.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 04/17] bpf: Prune verifier diagnostics on
+ backtracking
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
+Date: Tue, 23 Jun 2026 14:57:05 -0700
+In-Reply-To: <20260619205934.1312876-5-memxor@gmail.com>
+References: <20260619205934.1312876-1-memxor@gmail.com>
+	 <20260619205934.1312876-5-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 23 Jun 2026 17:52:25 -0400
-Message-Id: <DJGRG0VRFCK4.KCEHW637D645@etsalapatis.com>
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: Reject offset refcount acquire
- arguments
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: <bot+bpf-ci@kernel.org>, <chenyy23@mails.tsinghua.edu.cn>,
- <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <eddyz87@gmail.com>, <memxor@gmail.com>
-Cc: <john.fastabend@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
- <shuah@kernel.org>, <vmalik@redhat.com>, <leon.hwang@linux.dev>,
- <davemarchevsky@fb.com>, <bpf@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <martin.lau@kernel.org>, <clm@meta.com>, <ihor.solodrai@linux.dev>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <2f894647f56f71838fdddeb97a3e057ed35ea92e.1782192383.git.chenyy23@mails.tsinghua.edu.cn> <2c2797dac0dc56bf183087ed97aed819d1184568d2249b11439ab542afa43b4a@mail.kernel.org>
-In-Reply-To: <2c2797dac0dc56bf183087ed97aed819d1184568d2249b11439ab542afa43b4a@mail.kernel.org>
+MIME-Version: 1.0
 
-On Tue Jun 23, 2026 at 3:01 AM EDT, bot+bpf-ci wrote:
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 2abc79dbf281..f65eff28ecd2 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->
-> [ ... ]
->
->> @@ -12135,7 +12146,8 @@ static int check_kfunc_args(struct bpf_verifier_=
-env *env, struct bpf_kfunc_call_
->>
->>  		if (regno =3D=3D meta->release_regno)
->>  			arg_type |=3D OBJ_RELEASE;
->> -		ret =3D check_func_arg_reg_off(env, reg, argno, arg_type);
->> +		ret =3D __check_func_arg_reg_off(env, reg, argno, arg_type,
->> +					       btf_id_fixed_off_ok);
->
-> This isn't a bug, but does this call need to be split across two lines?
-> The line length limit is 100 characters, and it looks like it would fit
-> on a single line:
-
-Bot is right, we don't split diagnostics across lines.
-
->
-> 		ret =3D __check_func_arg_reg_off(env, reg, argno, arg_type, btf_id_fixe=
-d_off_ok);
->
->>  		if (ret < 0)
->>  			return ret;
->
->
+On Fri, 2026-06-19 at 22:59 +0200, Kumar Kartikeya Dwivedi wrote:
+> Save the diagnostic event-log position with each verifier stack entry and
+> reset the environment-owned stream together with the normal verifier log
+> when a queued state is popped. Also reset the diagnostic stream after
+> successful subprogram verification even when level-2 logging preserves th=
+e
+> normal verifier log.
+>=20
+> Record branch outcomes as true or false. Later reports use those
+> events to show the path that reached a verifier error. For queued branche=
+s,
+> append the queued outcome before push_stack() so the saved diagnostic
+> position includes it, then reset back to the active path before continuin=
+g.
+>=20
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 > ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/280072=
-09948
 
+Nit: Let's not use the word "backtracking" as a subject for this
+     patch, as in verifier it is easy to confuse with precision
+     tracking backtracking.
+
+>  kernel/bpf/verifier.c | 44 +++++++++++++++++++++++++++++++++++++------
+>  1 file changed, 38 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index e81fdb0e22ae..ca4bba163418 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -192,6 +192,9 @@ struct bpf_verifier_stack_elem {
+>  	struct bpf_verifier_stack_elem *next;
+>  	/* length of verifier log at the time this state was pushed on stack */
+>  	u32 log_pos;
+> +	u64 diag_log_pos;
+
+log_pos is u32, can we use u32 for diag_log_pos as well?
+
+> +	bool diag_branch_valid;
+> +	bool diag_branch_cond_true;
+
+There is a 1 byte hole after 'st' and before 'insn_idx',
+these two flags can fit there as bitfields.
+
+Together this will remove the 6-byte padding and a 4-bytes hole from
+this structure.
+
+[...]
+
+> @@ -1786,6 +1794,21 @@ static struct bpf_verifier_state *push_stack(struc=
+t bpf_verifier_env *env,
+>  	return &elem->st;
+>  }
+> =20
+> +static struct bpf_verifier_state *
+> +push_stack_with_branch_diag(struct bpf_verifier_env *env, int insn_idx,
+> +			    int prev_insn_idx, bool speculative,
+> +			    bool cond_true)
+> +{
+> +	struct bpf_verifier_state *st;
+> +
+> +	st =3D push_stack(env, insn_idx, prev_insn_idx, speculative);
+> +	if (!IS_ERR(st)) {
+> +		env->head->diag_branch_valid =3D true;
+> +		env->head->diag_branch_cond_true =3D cond_true;
+
+Tbh, I'd infer these flags instead of storing them.
+If the state's prev_insn_idx is a conditional jump one can check if
+this state's insn_idx is a target or a falltrhough. Would break for
+'if ... goto +0' but I'd argue that it does not matter.
+This would allow to move the
+
+  bpf_diag_record_branch(env, head->prev_insn_idx, head->diag_branch_cond_t=
+rue);
+
+call from pop_stack to do_check(), near the:
+
+  if (env->log.level & BPF_LOG_LEVEL2 && do_print_state) {
+     verbose(env, "\nfrom %d to %d%s:", ...);
+     ...
+  }
+
+and to make do with the activate_diag_branch flag in the pop_stack().
+
+> +	}
+> +	return st;
+> +}
+> +
+>  static const char *reg_arg_name(struct bpf_verifier_env *env, argno_t ar=
+gno)
+>  {
+>  	char *buf =3D env->tmp_arg_name;
+
+[...]
