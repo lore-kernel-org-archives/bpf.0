@@ -1,62 +1,62 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD793ACEE2
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 21:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8313F3AEF37
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 21:19:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782249539; cv=none; b=bkKDdvEKwTdMctGwWwxw+TotbYJPMobzrwb9lM9YCCK7rI/mjXUlSBrtKAayJVe/nHUGBBnpneX9Rcp81ZsOZF2Xi3dN9U4hKCfQjJg34CBxS2bCBL8qrXvIfrDzBCrgmdfDoEly/jSNuelkUrBuoG0JEF6Ve3gw6KNm+JjfDog=
+	t=1782249555; cv=none; b=gB2bz9j8eoVQVssO1oJzvM/7n2lsEDRD1+BUlgN7mjDVV2/EjtY4NwithQ9hAR6/OX5jHSfP7S5ECsbS466eewaqj0K11AP2mFctpRiHqlMOG24ghAj0q8EtGKZSq4ehMZiq7NjTl0COY/hJVQKHlWg8aY4m3RYI/H8VtMgDZRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782249539; c=relaxed/simple;
-	bh=S1eJV4kJ7nmlMKv2y9bZFvkIcCAM5Cr9BpnHbu8WxKk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=mRR1u1gdT6w/1QSunUqH2KYZ9ynoKYkxGXKYyp/5n0txq1G6XKiupZa9ARSrQRVw/BJs2r2fuMpFh0Z7qNJHqpvzHjkbj0MRVLgz6BevVXgC6XntCCsgaxe2DFnebAwZwb36dZzPxYJ2dDzgWVMA8BrnUgkHhgFfL3sWj0HWHyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=H4IMWqok; arc=none smtp.client-ip=74.125.82.180
+	s=arc-20240116; t=1782249555; c=relaxed/simple;
+	bh=wjU+QQV4ZbhrClmDZG0wh2L8aqWrT43sZmShel/LIuw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=W8J8v66VSXgYjlWiqs2qI7bjT3+gjoRJKMeYLzZ+NFjcmmUuOOyQWzByfXZWlJvOEOIqWlCz2RDIpB1kAeYCrKftlNGTUSooa2+R2TZk8XXFQaRNK8LAsfkG+Z3ggsQNv7LoYnWJzLBhIv73nKTb+AmK3bJ6+/Y0V4GKLFnIPyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=XBhaFr3g; arc=none smtp.client-ip=74.125.82.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="H4IMWqok"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-30b9e755555so643537eec.1
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 14:18:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="XBhaFr3g"
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-30c6874d295so214383eec.1
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 14:19:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782249537; x=1782854337; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782249554; x=1782854354; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=J5BgpTjoZgaJ0PY0iyE7wkUjb4+de8IJta3bMQcWgWQ=;
-        b=H4IMWqokzreXoxF6LhqOcwkZ4vx+rw+H0FX7qiAwN/J1zBaJLHXXaQ+sstJscd5NKE
-         ev3girfSTJ6ykmomwCNCuBdSuAdhdSLdb0K42mPZXTvKKW52Fa2OT+WcdA5cb2uBs5O4
-         J5+n5o7ExL4Vr569d5xX06ItFCu0Xkau+PpLv4EBVAhuu97+FK5G6QovaiCqi+6E6bwH
-         QgYdn8jFiY3RuXd9V1DQypoOC5Fb1Kvnpaxa49ZR+9aR5SShTVjfHaPvxeWOAq3lM6v+
-         UUZYE8Hms+UNxdm9o3nRfn0yfKIMhLTKPUk/m88G9/XZT+EPzO0+HeLfzMdzw4+YKUQQ
-         Iiyg==
+        bh=YdxmerIAihadrns5k6AeCU+dX7jwGWrd5Ynsr92j6uE=;
+        b=XBhaFr3gRyUgr3akoYHpuKyF/S6FyR4zDIpUJZzvE6L+RDzhxBFzCRRJwJTOViKwQY
+         PhaFT5Zqd6w0Q+iFrBhRPwOJljeT1MMiDhc0hYr8NU9vTUYocB7E07KBWxvV0xmwV2u3
+         T7Qs0z9mPTehQYRn0OMGK5VcaBu+IFA1Z+VSXOBIVPEfFIKM8Qrl1dHWSY8uqsmksNFT
+         xjRxFEsyLMiF1uVFVwAExfQOUZ+FeCSiLuxwhIsQTKlwjIMfJ6TPgDe1dUm9P1zabfqC
+         ITJGAmD6MC/4jyWlKnV6eJIH+3VUoztvFNo9N41u6D3kaZAkSZwjS0kMvvwSFKmlS3nz
+         D7sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782249537; x=1782854337;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
+        d=1e100.net; s=20251104; t=1782249554; x=1782854354;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=J5BgpTjoZgaJ0PY0iyE7wkUjb4+de8IJta3bMQcWgWQ=;
-        b=cUGGiYH17IxhHTeYC/M26tmHMRJpYHhwsxRuKPzaL2/u9jFReHMfFD8ACUVv+OAy+I
-         6hbZgfcyhMuV8tcw9LV2yPLfoeR1lUTaKCveV5cxaoE/LN0u2sZvKPOzBFg3iBnCs514
-         d7v6LswuhQeCPTqyfxy9WSwmDmhbZRvw8Poc4p08l0cgSp9/gaG+Db99e4vZu1GzJAuV
-         7kasiOodMsdy3yiGCsEeixiRgA6SIFxHGufqbFir9ANAqB5tmKc9CIm6U7Y5DXozF3Pm
-         fHjm0G7kbOZ73BCxyXFsYK7bVq/TZLnScKp/4PhK4IEnVoWM3LGODP1attUwlmpCIWhW
-         uLRw==
-X-Gm-Message-State: AOJu0Yxj2d1Bep6wbU6wrBkAh2f7npMEchhQckdMWVAe8umj+qBROUaT
-	WX0ZcHelJjGn1V9bQ9ukmM064tlziEQktgQJVoTM8ki506L8A3r/9CNVSUoLkOxU2BZJu8/elNW
-	fuABfCD8sQQ==
-X-Gm-Gg: AfdE7cmXBLniGKGj1BFmGSRLYezAlmguGTQtX9lER8KvjXQwGE9sE0V8ZGIjSFfq6zD
-	K7DaVhTGx2Pc09nuuV2X3vgojb1iK8+/11G2Vf35u0EuoYaEzw11SEM87aJ4Pzs0a6BINzeGscI
-	6YDZljY2sjasRrFNi2JiPwTD3eALVND9ImBAdjAcX34IFjkQFTVamhWTxOqS6KCC0fU+fvSMNea
-	3KJajvUNWYAh3iu9WKVLKwiucMFifSn8PnwT9ERgxzAho4SaGblXkRgTzA9CfdtiqhPbKx5cyYj
-	RLEYUhK14WHVDR0dEi8gCFFSTm49h+3t42d1d0Zc4VnTyKbR06ccldov8d42W9LqgLXXK3py47Y
-	h0QQWDoAqNqFhvbW8H7i6yXtfiBN9yTK5Va+yqyWiOp6nHNfwvD6zUFRvK1er6WwfNOlvmg==
-X-Received: by 2002:a05:7300:8b14:b0:30c:5534:e6f1 with SMTP id 5a478bee46e88-30c68df3b11mr792681eec.29.1782249536721;
-        Tue, 23 Jun 2026 14:18:56 -0700 (PDT)
+        bh=YdxmerIAihadrns5k6AeCU+dX7jwGWrd5Ynsr92j6uE=;
+        b=Er0+kHnBO/dqtWS8NnWQ9+2Q4haZb8Nfq+I0ol4Dh1XkSOj8qQwIO+kpbNSGUgSyK1
+         rOVQDwjTCC7F/le73Kz7uKgrTZIULwGTvxkVoZPHVU3easx5PacjVmGRJaoDnqDmqV2e
+         F8EOHbTSfqcs8CxVioOzGOq87Z4gvFyqRYGiRQjA8qwA/eUtVCQmMBoH9h6ae/FoG2dp
+         LZI6SiZ3v+Tp5YfzWkFleJZibGmgeLVOTBeSsKlFxhrvSdJv69gEMoPcilwoqnW2RUja
+         TBUDPVKWRoj45ikY+GXhK6PCSJj1vdLJHskgueYdgqUr2B5rY7rhQOU5aLFaQRcFNZPu
+         L2qg==
+X-Forwarded-Encrypted: i=1; AHgh+RqRrlwG3WrD/l3CfdxbFdBvwsNHXqrthaavcCBOpLrl4gyvwYoA9b3hUXekpFOxpF5Ezsk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqZlA+cP+3R6/cgTDXcHDzI2udO17gfM4taFORwW1ds61PVNPs
+	XaZwpn7SikB/PMXnTlRSNjJpYtDtG0OQ62NG4Q602Pe0ay/YrjLeq1HGodO5e5yP7bY=
+X-Gm-Gg: AfdE7ckLsf5Xy7BeygEijOeIeeC4yK6MTmTsMyg9kJ5fc4H77oAySCOU3iSJAyyXHn2
+	cSyaxeb11qcl2awded+gd5CjyY3WgJ7WDFOXVrzNjfnERw2Wss/Ky1XWgvwdUUOWlJF61SE+yjP
+	K01P7AHqqhfbPvGQm+PwCnbz+0DfObcb88m/Q+eoUSNtqUwOMh72ZQwKyyZskyYoLgXfaCSw4Qy
+	cyG/zX61l2L/dO4JBN5LrK1DJNWIxaIj1M6kkQrvFs9RmOJqT8NqdNOOLzLBFeBv7NlM21r1xYm
+	DljVSnxZwRYqk3a3ZxmecjrGllJnbPas4Eoh3OikQXjdxj452eTJg8XgGIgXDeUYkHGDdS9ndWv
+	q7RmU3aPhP/EE3ITDjXQCPOpURwZEXWccfZIeKhlGYXAVnc3HuHlvU60gVkPSqTL2y29tsw==
+X-Received: by 2002:a05:7301:3e0b:b0:30a:e52f:9b99 with SMTP id 5a478bee46e88-30c553f5be2mr4493143eec.0.1782249553428;
+        Tue, 23 Jun 2026 14:19:13 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:600::2526])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1ba1f14fsm18297838eec.5.2026.06.23.14.18.55
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1be4967fsm17804817eec.26.2026.06.23.14.19.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jun 2026 14:18:56 -0700 (PDT)
+        Tue, 23 Jun 2026 14:19:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -65,195 +65,88 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 23 Jun 2026 17:18:55 -0400
-Message-Id: <DJGQQDCXHU7C.8HTXC4NI0134@etsalapatis.com>
+Date: Tue, 23 Jun 2026 17:19:10 -0400
+Message-Id: <DJGQQKCPFMSC.19R6QFGHXVMQ5@etsalapatis.com>
+Cc: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf 1/2] bpf, sockmap: Don't leak UDP socks on
+ lookup-bind-release
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: <sashiko-reviews@lists.linux.dev>, "Michal Luczaj" <mhal@rbox.co>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Add test for UDP sock leak on
- sockmap lookup-bind-release
+To: "Michal Luczaj" <mhal@rbox.co>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Jakub Sitnicki" <jakub@cloudflare.com>,
+ "Jiayuan Chen" <jiayuan.chen@linux.dev>, "David S. Miller"
+ <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Cong
+ Wang" <cong.wang@bytedance.com>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
 References: <20260623-sockmap-lookup-udp-leak-v1-0-05804f9308e4@rbox.co>
- <20260623-sockmap-lookup-udp-leak-v1-2-05804f9308e4@rbox.co>
- <20260623190018.2B5A11F000E9@smtp.kernel.org>
-In-Reply-To: <20260623190018.2B5A11F000E9@smtp.kernel.org>
+ <20260623-sockmap-lookup-udp-leak-v1-1-05804f9308e4@rbox.co>
+In-Reply-To: <20260623-sockmap-lookup-udp-leak-v1-1-05804f9308e4@rbox.co>
 
-On Tue Jun 23, 2026 at 3:00 PM EDT, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential issu=
-e(s) to consider:
+On Tue Jun 23, 2026 at 2:03 PM EDT, Michal Luczaj wrote:
+> UDP sockets get SOCK_RCU_FREE set when (auto-)bound. This means
+> sk_is_refcounted(unbound) =3D true, while sk_is_refcounted(bound) =3D fal=
+se.
 >
-> New issues:
-> - [Medium] The cgroup file descriptor `cg` is leaked because it is never =
-closed in `test_sockmap_lookup_bind_release()`.
-> - [Low] The `struct sockaddr_in sa` is passed to the kernel via `xconnect=
-` with uninitialized bytes in its `sin_zero` padding.
+> Because sockmap accepts unbound UDP sockets, a BPF program can increment =
+a
+> socket's refcount via lookup. If the socket is subsequently bound, the
+> transition from unbound to bound causes bpf_sk_release() to skip the
+> decrement of the refcount, causing a memory leak.
 >
-> Pre-existing issues:
-> - [High] Calling `bpf_bind()` between `bpf_map_lookup_elem()` and `bpf_sk=
-_release()` on a UDP socket mutates the socket's `SOCK_RCU_FREE` state, cau=
-sing `bpf_sk_release()` to silently skip decrementing the reference count.
-> --
+> unreferenced object 0xffff88810bc2eb40 (size 1984):
+>   comm "test_progs", pid 2451, jiffies 4295320596
+>   hex dump (first 32 bytes):
+>     7f 00 00 01 7f 00 00 01 d2 04 1b b7 04 d2 00 00  ................
+>     02 00 01 40 00 00 00 00 00 00 00 00 00 00 00 00  ...@............
+>   backtrace (crc bdee079d):
+>     kmem_cache_alloc_noprof+0x557/0x660
+>     sk_prot_alloc+0x69/0x240
+>     sk_alloc+0x30/0x460
+>     inet_create+0x2ce/0xf80
+>     __sock_create+0x25b/0x5c0
+>     __sys_socket+0x119/0x1d0
+>     __x64_sys_socket+0x72/0xd0
+>     do_syscall_64+0xa1/0x5f0
+>     entry_SYSCALL_64_after_hwframe+0x76/0x7e
 >
-> commit f32ef88a53a5c519bf4b22a337fa782c27f0ecda
-> Author: Michal Luczaj <mhal@rbox.co>
+> Maintain balanced refcounts across sk lookup/release: (re-)set
+> SOCK_RCU_FREE on proto update to treat the socket (whether bound or
+> unbound) as not requiring a refcount increment on (a RCU protected) looku=
+p.
 >
-> selftests/bpf: Add test for UDP sock leak on sockmap lookup-bind-release
->
-> This patch adds a selftest to reproduce a UDP socket leak. It sets up a c=
-group,
-> attaches a connect4 BPF program, and triggers a sequence of socket operat=
-ions
-> (lookup, bind, release) that leaks the socket on an unpatched kernel.
->
->> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/to=
-ols/testing/selftests/bpf/prog_tests/sockmap_basic.c
->> index cb3229711f93a..11972ffdb16ed 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
->
-> [ ... ]
->
->> @@ -1373,6 +1375,52 @@ static void test_sockmap_multi_channels(int sotyp=
-e)
->>  	test_sockmap_pass_prog__destroy(skel);
->>  }
->> =20
->> +#define LOOKUP_BIND_RELEASE_CG	"/sockmap_lookup-bind-release"
->> +#define LOOKUP_BIND_RELEASE_REP	64
->> +
->> +static void test_sockmap_lookup_bind_release(void)
->> +{
->> +	struct test_sockmap_lookup_bind_release *skel;
->> +	struct sockaddr_in sa;
->> +	int cg, i;
->> +
->> +	cg =3D cgroup_setup_and_join(LOOKUP_BIND_RELEASE_CG);
->
-> [Severity: Medium]
-> Does this leak the cgroup file descriptor?=20
->
-> The fd is acquired here and stored in cg, but close(cg) doesn't appear to=
- be
-> called on either the success or error paths before the function returns. =
-The
-> cleanup_cgroup_environment() function cleans up directories but doesn't c=
-lose
-> the test's held file descriptors.
->
->> +	if (!ASSERT_OK_FD(cg, "cgroup_setup_and_join"))
->> +		return;
->> +
->> +	skel =3D test_sockmap_lookup_bind_release__open_and_load();
->> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
->> +		goto cleanup;
->> +
->> +	skel->links.connect =3D bpf_program__attach_cgroup(skel->progs.connect=
-, cg);
->> +	if (!ASSERT_OK_PTR(skel->links.connect, "attach_cgroup"))
->> +		goto destroy;
->> +
->> +	sa.sin_family =3D AF_INET;
->> +	sa.sin_port =3D bpf_htons(1234);
->> +	sa.sin_addr.s_addr =3D bpf_htonl(INADDR_LOOPBACK);
->
-> [Severity: Low]
-> Does this leave the sin_zero padding of the sa structure uninitialized?
->
-> It looks like this partially initializes the struct on the stack.
->
-> [ ... ]
->
->> +		if (xbpf_map_update_elem(bpf_map__fd(skel->maps.sockmap), &u32(0),
->> +					 &sk, BPF_ANY))
->> +			break;
->> +
->> +		if (xconnect(sk, (struct sockaddr *)&sa, sizeof(sa)))
->
-> When sa is passed to xconnect() here, can it leak the uninitialized paddi=
-ng
-> bytes from the userspace stack to the kernel?=20
->
-> Would it be better to fully initialize it using "struct sockaddr_in sa =
-=3D {};"
-> or explicitly zero it?
->
->> +			break;
->> +	}
->> +
->> +destroy:
->> +	test_sockmap_lookup_bind_release__destroy(skel);
->> +cleanup:
->> +	cleanup_cgroup_environment();
->> +}
->
-
-I think these issues are borderline cosmetic but valid.
-
-> [ ... ]
->
->> diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_lookup_bind_=
-release.c b/tools/testing/selftests/bpf/progs/test_sockmap_lookup_bind_rele=
-ase.c
->> new file mode 100644
->> index 0000000000000..cc77b193893bd
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/test_sockmap_lookup_bind_release=
-.c
->> @@ -0,0 +1,37 @@
->
-> [ ... ]
->
->> +SEC("cgroup/connect4")
->> +int connect(struct bpf_sock_addr *ctx)
->> +{
->> +	struct bpf_sock *sk;
->> +	int ret =3D SK_DROP;
->> +
->> +	sk =3D bpf_map_lookup_elem(&sockmap, &(int){0});
->> +	if (sk) {
->> +		if (sk =3D=3D ctx->sk) {
->> +			struct sockaddr_in sa =3D {
->> +				.sin_family =3D ctx->user_family,
->> +				.sin_port =3D ctx->user_port,
->> +				.sin_addr.s_addr =3D ctx->user_ip4
->> +			};
->> +
->> +			ret =3D !bpf_bind(ctx, (struct sockaddr *)&sa, sizeof(sa));
->> +		}
->> +
->> +		bpf_sk_release(sk);
->
-> [Severity: High]
-> This is a pre-existing issue, but does calling bpf_bind() here mutate the
-> SOCK_RCU_FREE state and cause bpf_sk_release() to skip decrementing the
-> reference count?
->
-> If bpf_map_lookup_elem() looks up a newly created UDP socket, SOCK_RCU_FR=
-EE
-> is not yet set, so sk_is_refcounted() evaluates to true and the reference
-> count is incremented.
->
-> Then bpf_bind() resolves to udp_v4_get_port(), which dynamically sets the
-> SOCK_RCU_FREE flag on the socket.
->
-> When bpf_sk_release() is called, it evaluates sk_is_refcounted() again. B=
-ecause
-> SOCK_RCU_FREE is now set, it evaluates to false, causing bpf_sk_release()=
- to
-> skip the sock_gen_put() call and permanently leak the socket reference.
->
-
-AFAICT this is actually not a problem for this specific test, because we
-fix it in patch 1/2. We have already added the socket to the sockmap so
-udp_bpf_update_proto should have triggered. It looks like Sashiko missed
-this?
-
-Specifically for UDP, I think the code is fine.
+> Fixes: 0c48eefae712 ("sock_map: Lift socket state restriction for datagra=
+m sockets")
+> Signed-off-by: Michal Luczaj <mhal@rbox.co>
 
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
->> +	}
->> +
->> +	return ret;
->> +}
+> ---
+> Note: this issue is related to commit 67312adc96b5 ("bpf: reject unhashed
+> sockets in bpf_sk_assign").
+> ---
+>  net/ipv4/udp_bpf.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
+> index ad57c4c9eaab..970327b59582 100644
+> --- a/net/ipv4/udp_bpf.c
+> +++ b/net/ipv4/udp_bpf.c
+> @@ -173,6 +173,9 @@ int udp_bpf_update_proto(struct sock *sk, struct sk_p=
+sock *psock, bool restore)
+>  	if (sk->sk_family =3D=3D AF_INET6)
+>  		udp_bpf_check_v6_needs_rebuild(psock->sk_proto);
+> =20
+> +	/* Treat all sockets as non-refcounted, regardless of binding state. */
+> +	sock_set_flag(sk, SOCK_RCU_FREE);
+> +
+>  	sock_replace_proto(sk, &udp_bpf_prots[family]);
+>  	return 0;
+>  }
 
