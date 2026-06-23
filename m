@@ -1,155 +1,129 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B60DA38B150;
-	Tue, 23 Jun 2026 17:47:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3720C26E165;
+	Tue, 23 Jun 2026 17:49:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782236836; cv=none; b=ozg29KJRhRC4UUiekS62YjL5hOtgFWMGdbGed0acBXxQH6yO1/qNLNyESWrpYiFX3GIKHb0U+JDdjjud1zSTJvI3djVMO1aBDgVTiHKTvLp/XMCXZ3TQFxk8e4NmRWqE4lJfcq/VurtQBp93DAhwoK3Qiw6BHr14zRMVdhegnrw=
+	t=1782236979; cv=none; b=BSNI8LLJrTO5AmLS0aVhPrcUabvQi3HrL5/ZJdqglHIUu5/cu0U9+5JiRUfEwUsi/dpRPbr9I4fg9o3OPCFU9KVZayYBPZ3nUXhwKRyI9wzfpaQbRY0i+mnkQEneuR9BLMN0KsfLDqwU7CINGziCfyCuhLHOgRIhoYPFKTVUKJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782236836; c=relaxed/simple;
-	bh=luxajsNjZsUbxrGJGK2OJmkO9pmiwrgoF40lM0gV2p0=;
+	s=arc-20240116; t=1782236979; c=relaxed/simple;
+	bh=g2y4wjRL+EF21fcYYfF51xqYTu/Iw6eL3J9ytA02wPE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gcfOoagmN6y2Bm3+Zw2UKH/SGOVkgMIVLeB6PcMloeMDKDZEFFJ4Hmwvo9/XRj197wAWmtkbtbW4TvFbqlNA3gYkmlMZQyAejjK9EtS1fzhUbmzk7IUb+w0/WEb1jpg/aam6Avo3gAG+85LIyRZMB+iU8TTnzFViWXUDFWwacWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L/2iA8mW; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=aTjCQnVFdKH8hMyIEVEZ0P3Scc4oJuHQLnTqW5TDrBaQ+k7B020XLE2XkMsHHaesY5MJXAGKA1teSpodrkl/wa56b8TfWeSZAxwVxfLIQnnTf7CRTQ+xd3Utey4duTZaxcn47RYJzl08PKaoErco0eq3+ZciAIGzE6FzbEkEVH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iyjKrXQZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L/2iA8mW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48B501F000E9;
-	Tue, 23 Jun 2026 17:47:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iyjKrXQZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2F1F1F000E9;
+	Tue, 23 Jun 2026 17:49:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782236835;
-	bh=/V+SueDvc6LfehwgOUdNFUz8FmtvDhyvsKHe7e2pCUM=;
+	s=k20260515; t=1782236977;
+	bh=m0BlYAjC4y1xPTA0tggkdt/va89eyWJsjZJi6vyGLCM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=L/2iA8mWjkiKTw839AhMzkD6Y6oli8jlh0QCIEH9aEIoTrj44M3M4jZBCeqNZYzAt
-	 5jvv7xNoG9yXBB1OgGREhGnchBhKz5gGaA+uN9vR1f7sDWUCInqDLx9eRijzkQU432
-	 1o6XmC+aoRDJJmX7UI53KREATePYY7GGMI4CeeRYnl/KFQL0ualj6mxJ/WP7tpo81l
-	 wy/F1QGqij3tW8NnTpjehpX6Hc0mx2JGPzLU9UULo6gQ99LDpK+axgaohAefsflltN
-	 7JVDjRFT3s6g1b7hrh4XHwl4webAdnt12ZF2KaequZphFa0tZjERtmQcEUhAGRDqiX
-	 9/9SSVJmkusSQ==
+	b=iyjKrXQZotKQolK8ZFZPA2mVInwY/OyV9jqypSLnkN4Cc7k8ncklFkgfatnOxy7Mb
+	 Pbn+Pbgwt0Bvj4LMGDCgKjVxnX7XyCJ77Z7E8yx0qst0cGM+aowQ8XT/wipJnPFrhs
+	 pbmk5ll95WYd6EBDG6bn8cCrmMe/NOvCivDrqazNUIf5gxMcelCZb8fVx2S8P4QdAz
+	 IEolODBnVoNbBoGO/d005u8DZY+tCC5SKPvDzk0QD7t3ZHiPM1NDTWr5a6JZjcyOTq
+	 H5kmS9GgBGHQizQSHpNRu4jFNS61tM6eJi7l7GA7EMsBeRJSz0pvG9asYVtxyFqQwB
+	 UvXe6Ru6o1Wow==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v12 09/12] x86/vmscape: Use static_call() for predictor
- flush
+Subject: Re: [PATCH v12 10/12] x86/vmscape: Deploy BHB clearing mitigation
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Pawan Gupta" <pawan.kumar.gupta@linux.intel.com>
-Cc: kvm@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260622-vmscape-bhb-v12-9-76cbda0ae3e5@linux.intel.com>
+Cc: bpf@vger.kernel.org, kvm@vger.kernel.org
+In-Reply-To: <20260622-vmscape-bhb-v12-10-76cbda0ae3e5@linux.intel.com>
 References: <20260622-vmscape-bhb-v12-0-76cbda0ae3e5@linux.intel.com>
- <20260622-vmscape-bhb-v12-9-76cbda0ae3e5@linux.intel.com>
+ <20260622-vmscape-bhb-v12-10-76cbda0ae3e5@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 23 Jun 2026 17:47:14 +0000
-Message-Id: <20260623174715.48B501F000E9@smtp.kernel.org>
+Date: Tue, 23 Jun 2026 17:49:37 +0000
+Message-Id: <20260623174937.A2F1F1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] The patch introduces unconditional memory reads on the highly se=
-nsitive kernel-to-user exit and KVM VM-enter fast paths, penalizing all sys=
-tems where the VMSCAPE mitigation is disabled.
-- [Low] The removal of `X86_FEATURE_IBPB_EXIT_TO_USER` from the kernel CPU =
-features header was not mirrored to the corresponding tools header, causing=
- code drift.
-- [Low] Usage of `static_call_cond()` without including `<linux/static_call=
-.h>` makes the header non-self-contained.
+- [High] VMSCAPE mitigation downgrades from IBPB to BHB clear without verif=
+ying eIBRS is active, leaving host userspace vulnerable to BTB injection.
+- [High] The BHB clearing sequence `clear_bhb_loop_nofence` lacks a specula=
+tion barrier (LFENCE), allowing speculative bypass of the BHI mitigation.
 --
 
-commit 6813e9ba3f5da52dd0859a742860cd03837d50a7
+commit 23a617eeb2c65912ce9fd14bc20dacfa19110ed4
 Author: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 
-x86/vmscape: Use static_call() for predictor flush
-
-This patch replaces the flag-based mitigation selector for VMSCAPE with a
-static_call() to the mitigating function. This avoids adding more feature
-flags and multiple checks, freeing the X86_FEATURE_IBPB_EXIT_TO_USER flag.
-
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cp=
-ufeatures.h
-> index 1d506e5d6f46a..09f956b72637c 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -504,7 +504,7 @@
->  #define X86_FEATURE_TSA_SQ_NO		(21*32+11) /* AMD CPU not vulnerable to T=
-SA-SQ */
->  #define X86_FEATURE_TSA_L1_NO		(21*32+12) /* AMD CPU not vulnerable to T=
-SA-L1 */
->  #define X86_FEATURE_CLEAR_CPU_BUF_VM	(21*32+13) /* Clear CPU buffers usi=
-ng VERW before VMRUN */
-> -#define X86_FEATURE_IBPB_EXIT_TO_USER	(21*32+14) /* Use IBPB on exit-to-=
-userspace, see VMSCAPE bug */
-> +/* Free */
-
-[Severity: Low]
-Does this removal also need to be synced to the tools copy in
-tools/arch/x86/include/asm/cpufeatures.h? Leaving them out of sync typically
-triggers a 'Kernel ABI header differs' build warning when compiling tools
-like perf.
-
-[ ... ]
+x86/vmscape: Deploy BHB clearing mitigation
+   =20
+IBPB mitigation for VMSCAPE is an overkill on CPUs that are only affected
+by the BHI variant of VMSCAPE. On such CPUs, eIBRS already provides
+indirect branch isolation between guest and host userspace. However, branch
+history from guest may also influence the indirect branches in host
+userspace. To mitigate the BHI aspect, use the BHB clearing sequence.
 
 > diff --git a/arch/x86/include/asm/entry-common.h b/arch/x86/include/asm/e=
 ntry-common.h
-> index 3be6d4c356ed2..d5b390c76f000 100644
 > --- a/arch/x86/include/asm/entry-common.h
 > +++ b/arch/x86/include/asm/entry-common.h
-> @@ -4,6 +4,7 @@
-> =20
->  #include <linux/randomize_kstack.h>
->  #include <linux/user-return-notifier.h>
-> +#include <linux/static_call_types.h>
-
-[Severity: Low]
-Should this include <linux/static_call.h> instead? The static_call_cond()
-macro is used below but isn't defined in static_call_types.h, which could
-cause build failures if relying on implicit dependencies from downstream C
-files.
-
-> =20
->  #include <asm/nospec-branch.h>
->  #include <asm/io_bitmap.h>
-> @@ -82,10 +83,8 @@ static inline void arch_exit_to_user_mode_prepare(stru=
+[ ... ]
+> @@ -84,6 +84,10 @@ static inline void arch_exit_to_user_mode_prepare(stru=
 ct pt_regs *regs,
->  	current_thread_info()->status &=3D ~(TS_COMPAT | TS_I386_REGS_POKED);
 >  #endif
 > =20
-> -	/* Avoid unnecessary reads of 'x86_predictor_flush_exit_to_user' */
-> -	if (cpu_feature_enabled(X86_FEATURE_IBPB_EXIT_TO_USER) &&
-> -	    this_cpu_read(x86_predictor_flush_exit_to_user)) {
-> -		write_ibpb();
-> +	if (unlikely(this_cpu_read(x86_predictor_flush_exit_to_user))) {
+>  	if (unlikely(this_cpu_read(x86_predictor_flush_exit_to_user))) {
+> +		/*
+> +		 * Since the mitigation is for userspace, an explicit
+> +		 * speculation barrier is not required after flush.
+> +		 */
+>  		static_call_cond(vmscape_predictor_flush)();
 
-[Severity: Medium]
-Will this unconditional per-CPU memory read add overhead on the kernel to
-user exit fast path for unaffected CPUs? The previous cpu_feature_enabled()
-check used alternative patching to compile out to zero instructions when the
-mitigation was disabled.
+[Severity: High]
+Does omitting the speculation barrier here allow the BHB clearing loop to be
+speculatively bypassed?
 
-> +		static_call_cond(vmscape_predictor_flush)();
->  		this_cpu_write(x86_predictor_flush_exit_to_user, false);
->  	}
->  }
+Since SYSRET, IRET, and SWAPGS do not serialize the processor, it appears an
+attacker could poison the branch predictor to predict an early exit from the
+BHB clearing loop itself.
+
+If the CPU speculatively bypasses the loop, wouldn't it speculatively
+execute host userspace indirect branches with the guest's poisoned branch
+history buffer still intact?
 
 [ ... ]
+> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+> --- a/arch/x86/kernel/cpu/bugs.c
+> +++ b/arch/x86/kernel/cpu/bugs.c
+[ ... ]
+> @@ -3114,7 +3117,17 @@ static void __init vmscape_select_mitigation(void)
+>  		break;
+> =20
+>  	case VMSCAPE_MITIGATION_AUTO:
+> -		if (boot_cpu_has(X86_FEATURE_IBPB))
+> +		/*
+> +		 * CPUs with BHI_CTRL(ADL and newer) can avoid the IBPB and use
+> +		 * BHB clear sequence. These CPUs are only vulnerable to the BHI
+> +		 * variant of the VMSCAPE attack, and thus they do not require a
+> +		 * full predictor flush.
+> +		 *
+> +		 * Note, in 32-bit mode BHB clear sequence is not supported.
+> +		 */
+> +		if (boot_cpu_has(X86_FEATURE_BHI_CTRL) && IS_ENABLED(CONFIG_X86_64))
+> +			vmscape_mitigation =3D VMSCAPE_MITIGATION_BHB_CLEAR_EXIT_TO_USER;
 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 721ff7667dc0b..fcd61c47653fa 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -11556,7 +11556,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  	 * set for the CPU that actually ran the guest, and not the CPU that it
->  	 * may migrate to.
->  	 */
-> -	if (cpu_feature_enabled(X86_FEATURE_IBPB_EXIT_TO_USER))
-> +	if (static_call_query(vmscape_predictor_flush))
+[Severity: High]
+Should vmscape_select_mitigation() also verify that eIBRS is currently
+active before making this downgrade?
 
-[Severity: Medium]
-Does replacing cpu_feature_enabled() with static_call_query() penalize the
-KVM VM-enter fast path for unaffected hosts by introducing an unconditional
-global memory read?
+The commit message mentions that eIBRS already provides indirect branch
+isolation. However, if a system boots with vmscape=3Dauto and spectre_v2 is
+set to retpoline or off, this logic changes the mitigation from
+IBPB to BHB_CLEAR based solely on the BHI_CTRL hardware capability.
+
+Without eIBRS enabled, would this leave host userspace vulnerable to
+guest-to-host BTB injection (the non-BHI variant of VMSCAPE)?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260622-vmscape-bh=
-b-v12-0-76cbda0ae3e5@linux.intel.com?part=3D9
+b-v12-0-76cbda0ae3e5@linux.intel.com?part=3D10
