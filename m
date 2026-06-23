@@ -1,119 +1,104 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-ed1-f68.google.com (mail-ed1-f68.google.com [209.85.208.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65213A4F2F
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 07:54:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC733C769D
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 08:01:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782201252; cv=none; b=ZgY9SLhE8cHnVnNf7d4p+vFcqwarKH040JWC2+3z2peg09np5SaGHNGC5VBtD6BwScS2umx6X59G9Q47oBRrVS28bxga4F/j1gKYMsifHk1oGdPYSSol2Heind7W92jrLnmhg+CCrrL94fz4oWhzDdzLiJppeVfI5QQY5QTXMEM=
+	t=1782201673; cv=none; b=lviMIhvchA2G/ZtSTXPfpYoHDnCaYGJxPD6o4/bEle/Mp+CjpIpK2CJGCXwv146A+KHTTCH4qrNj6KMoAiHmi5/VGamzVH9yNzQT3kWtZqFLw00bzraeQ4bv3bNCRkK9qQt5mllYQglBTSFjI8DCDg6/+8shh+rg5odUpuroQC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782201252; c=relaxed/simple;
-	bh=CH3Kk+RE3zK+JE4ex1pQs1Am2dF4T9f6gymStnlzduQ=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=L6haUniIEJLMMhc1DfG4ZTm8q7dYMohoJR4DyMNXtZ+kOAA5b1O9wgbmiDwrpCA+VP3Idf71G+COyTvvMmxh9KOmftDEPAbDe2D+BAwXrlPkqBKlgzobMj1WIN0/wxVJ6NSl6mFe9wnIkQTJO8eJgZqgI72+CHuRwcFJjAmtmSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=digiscrypt.com; spf=pass smtp.mailfrom=digiscrypt.com; dkim=pass (2048-bit key) header.d=digiscrypt.com header.i=@digiscrypt.com header.b=mnrQLCJ/; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=digiscrypt.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digiscrypt.com
+	s=arc-20240116; t=1782201673; c=relaxed/simple;
+	bh=dWiw7xAXVl3BEWFURqU4U1zcYKrwaJqJO88flZd8yhQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sndiL5h5ogBID2RjY5tWYYcpLL22j8lcosodBUIiLKkaxNoi47yEGPXfOewVk7EWuAKRUoCnNfDRU5rqFCD7y8AvX/xcwu0xj8ChceB6KtnpoAIF9Br3Y5gPKZ+OX3Q6eYCjl/lJCnaYWb/VSprKZsuAFnpC6pZaTJJQ6MENPME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=E5q+yEEd; arc=none smtp.client-ip=209.85.208.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=digiscrypt.com header.i=@digiscrypt.com header.b="mnrQLCJ/"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2c77d52bec4so3856205ad.1
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 00:54:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="E5q+yEEd"
+Received: by mail-ed1-f68.google.com with SMTP id 4fb4d7f45d1cf-697bd21fdc2so3170549a12.1
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 01:01:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=digiscrypt.com; s=google; t=1782201250; x=1782806050; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7YfaQEDj+sWd4M7f7+/67tnUelacnVmKPVOLI4jLTSg=;
-        b=mnrQLCJ/M1uUN/hWTIGPVrNgG+o6AioEuYdKmxGLzkzgsXTLzcnChJYTujqUqd9UcC
-         HaGi7XjWWpBVvF80WxCnHdOlO2BYMjxhy9DJnZBFGhUHIax19MezQVaiyjSWT9YiJ3AS
-         0du9GA56jtPpNbkPUCqIVFbDYbp9Td56xoiil+pBT6qpLXUGa9yJo7XINNRVLO/Y/Cwa
-         44AiZ0g02Hj5TzxW2pqUtnF234MNzKwWs9USY8vBLK28rEZNXXWq6x/ynH/evabPTRb3
-         3gLw6QIBzV+UGVyK37z+oV1dYFkR5J6K6wT3EVtKcN8YcCL8+71gFSWq7gpMLjwSs3Ru
-         mJJQ==
+        d=suse.com; s=google; t=1782201671; x=1782806471; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q0sFKF/thZYYlvAYL1rZr93jnB4PDyGa3rfNNqi/jw0=;
+        b=E5q+yEEdZhCE3eBYhE5xKE0IwjtD4+qlV+lvmlGn2MQ/9v8KJmpFQ0IucE2bqxtDVG
+         0jLzGiaOXVJDzOlsmbhy5v1gHgItV0M9EMkcGkM8QyKuakth1tfBcVM6L1HMrtJL6cPh
+         CPuqQf5xas0gOnhwVYDN9hcoHUNl+USf7/TzZL2tUvdNfegYA+Co2mvdAYiachKYQDF7
+         DKPp5L+mAG+gcmGozLiWyHZKnWPhUzRaIJY7NRGVFcEZUg5WTvYzJMSRjnkxLqHtzX5q
+         dfoaeHYjFiz4dzf7BKwxrrTWR81SSYqbt9Q3JbDp2rZUqQifuW+277CgBTJZDS0/uSUT
+         r53g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782201250; x=1782806050;
-        h=mime-version:content-transfer-encoding:message-id:date:subject:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7YfaQEDj+sWd4M7f7+/67tnUelacnVmKPVOLI4jLTSg=;
-        b=lh6L0rWHyjJEC6uX1FMAg3RgZGRYE3EuoOVQ69BZdqb8LGqxXoN7oiDkKXqm5hzXlD
-         bxJ35w8xY8QdKitol7Papeg3Vng934ZHraXHrxcTZinXXOzlJowSofXFGKC4ulGQXlR+
-         jAn+2laJIVw09nD2hpUicwCqSjn/RdiJhQy9EgRwwsC3jfw+uLQdGbTaOD/Ud1rLKtxX
-         ZY+tdjGoyxd6NSuGg2k/HElfNFxh6Ft/jKnGiti6fgWANoxmSlsMNY8kj4iU8+wTjIXa
-         mZpCnvLzAAotDmY27/7r/BjJwWuM+w0qqoAbBO5VWpbfRnnKdShbz82QvRQFCbWSVpPT
-         tTAQ==
-X-Gm-Message-State: AOJu0Yycm/i3T+yYGSVgcFOmVTCH6DcrEEmZBGR00k2A8bMIRtbLnoO0
-	+lzfbz1DVFuvrwjnL/5LNFdyC4+y9XDJE4TAJ47Yik6akG7T50G+XiiKFiLxx5qWa479xJ7dXyp
-	R1i3dEj1rpXE=
-X-Gm-Gg: AfdE7cnGA2iMar6ATfm2uEHt095VHHpKBn5wwWqTYSVx2a7hZQatoqLetfYY00RrAtz
-	pKEg9u2A0YhwR+OlYbtKUZT3Bx/R0Ktoqu0daGCgtsvzyZImen4+df7aq3JzbZiWkrHnUILsvav
-	yROniw4RdhsfoE59PNAeeNOxommwgr9jgxHJuV8J5mr6bllqVwlVt5NeHM4tIT0du6ONWsP74ik
-	Pdj6eWKfpWmXHwVba0HPpSDy+Lkk1Rt9hdkgUbJaeSsfPryNfbjT0Vc9mfAbUvUv9XttMGMOVkF
-	QDGUJWAEUTeDL7ZRjR1oZE83IeS/Dfe5C74JdtSAq/GTsoxswOPWVIO0nOpI6kSvF+x1dIyEwD4
-	YCUJnR6IynhggKg8qKxhQ+KDsK81pbp7uxitk6vn0RcNKtMRYTSNpRsSgWgI6VI57/Pu1ytQdaj
-	aF8up9VcFOieengfsnn/lVMtS5h1araMGxOH8u9TVN5nu/la+r+mQtCA1DP8E2A+EjzCXbvidmW
-	ipJJysBg5j86Kc4kV+BUJ9PbKIAXS4o8kyJ+Nifhew5UFhU4c13/6+vTjFMiRdPOji0yF3dflqa
-	pfcAWDM6UvK5NrfNos65+i6qWFMkDLs=
-X-Received: by 2002:a17:903:1984:b0:2bd:2c3a:2a36 with SMTP id d9443c01a7336-2c7c3b98118mr23342005ad.0.1782201249709;
-        Tue, 23 Jun 2026 00:54:09 -0700 (PDT)
-Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2401:4900:1c07:46d8:110b:11b8:fb24:5255])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c743bfe4fasm99531365ad.59.2026.06.23.00.54.08
-        for <bpf@vger.kernel.org>
+        d=1e100.net; s=20251104; t=1782201671; x=1782806471;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q0sFKF/thZYYlvAYL1rZr93jnB4PDyGa3rfNNqi/jw0=;
+        b=mvkK2coe9gGmeaX8EjiCacV9NoLKe7aqvopGRXfZlCHZcNH5Np1DvU+mIxkXyUp3Pk
+         juDN7wqa8E9jAkrp/hdp8V27dXxj/b7JxNY9t7PKVlDNTlelyiIhIJVznNJIHAxDjbPs
+         qsxVCq62dG3K5X035DJXcZ8/rwjd0BAY3ZfzH/v92Hh5xmqDVpy2bwiBIsr5USQIAjQx
+         1c/qVXViGOfMAwzBadiMYFt4YFbRsZ+EX0t11DSHggouMdDQhQwuDLgp03NsAmJdbIwd
+         cexGKhvVFnuwepe2eRUap+nkugC6mK2MQcsBXVxtcR1Pjbt2dqePYoqUMQGuPlXKePS+
+         Q5dg==
+X-Gm-Message-State: AOJu0YwCr8SHd10fRJHAPVwgDDRfdr04y1nUlWVN9hbVF7+ZMgXNiMg3
+	JlGn+1kkpzkab4dLTFWHA/5CiW9L7bXC8EeXI04g0zUloyypLGL/HJIhMVrWVtX3Dbs=
+X-Gm-Gg: AfdE7cmeeB0GeBqCvJoSaI+W4aDshwJCIt3EKa1TAPAbmENO1jrY7xgve+DsJW1t6z3
+	XILs8sRW2ZFxtSWieozGKflTBIiO2bZ1MwwEfBxmMZCUI0EKqN+Efsu4g3Iyso0ZInxpb8I6thR
+	lzXftNOpSiXTVpy60BCKW+nzEwPFGFqi5iip6aQKxPebN3tJ2QYa/Lo0rP8lNh6jZLZwXMr+rOQ
+	cAKMfuF1MYYbZyCS39mxKMyUFQF8bIoIvqp8y2oYy8QEtMvvVxse7Y40ZFdKVVQiXgVPpoiv3L0
+	PcgFIdktiiIvXeu/R7pz23njxsSixpwkbV1tCnG0i8M2lYz4qUc8OjuNdNM4NmrQSCZUw8glZbL
+	luG59U0ms4RE0w+EC87o4IY0EWmr82vzYNDCjwSXHjoIAVf8rKZKrzR8ge359cwkCDFLETIYlqF
+	BgSJyIPYtKo1o56cmkUYfi4Rho1D27g4+yDDg=
+X-Received: by 2002:a17:907:60cc:b0:c0d:5466:ce4c with SMTP id a640c23a62f3a-c0d5466d9dcmr659024566b.1.1782201669904;
+        Tue, 23 Jun 2026 01:01:09 -0700 (PDT)
+Received: from u94a (110-28-10-168.adsl.fetnet.net. [110.28.10.168])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e9442ea144sm8148221a34.27.2026.06.23.01.01.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2026 00:54:09 -0700 (PDT)
-From: Naveed Khan <naveed@digiscrypt.com>
-To: bpf@vger.kernel.org
-Subject: [PATCH] libbpf: bounds-check float size in btf_dump_float_data()
-Date: Tue, 23 Jun 2026 13:24:05 +0530
-Message-ID: <178220124597.31744.3595561672327420327@digiscrypt.com>
-X-CodeOps-Marker: a5ec7c2c8fa640678803dfc5d3b179aa
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Tue, 23 Jun 2026 01:01:07 -0700 (PDT)
+Date: Tue, 23 Jun 2026 16:00:51 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Zhenzhong Wu <jt26wzz@gmail.com>, stable@vger.kernel.org
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
+	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	kpsingh@kernel.org, haoluo@google.com, jolsa@kernel.org, menglong8.dong@gmail.com, 
+	eddyz87@gmail.com, mykolal@fb.com, tamird@kernel.org
+Subject: Re: [PATCH stable 6.6.y v4 0/4] bpf: linked scalar precision fixes
+Message-ID: <ajo7j-XkfwzB-mUA@u94a>
+References: <20260621172735.409355-1-jt26wzz@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260621172735.409355-1-jt26wzz@gmail.com>
 
-btf_dump_float_data() copies t->size bytes from the object being dumped
-into a fixed-size 16-byte on-stack union float_data whenever the source
-data is not naturally aligned:
+On Mon, Jun 22, 2026 at 01:27:31AM +0800, Zhenzhong Wu wrote:
+> Hi,
+> 
+> This v4 targets 6.6.y and keeps the v3 backport strategy: use the full
+> upstream linked-scalar precision-tracking series, instead of the earlier
+> d028f87517d6/9e314f5d8682 not-equal refinement backport path.
+[...]
+> Relevant selftest results on 6.6.y with this v4 backport:
+> 
+>   test_verifier:
+>     788 PASSED, 0 SKIPPED, 0 FAILED
+> 
+>   test_progs -t verifier_scalar_ids:
+>     all 18 verifier_scalar_ids subtests passed
 
-	union float_data fl;
-	int sz = t->size;
-	...
-	if (!ptr_is_aligned(d->btf, type_id, data)) {
-		memcpy(&fl, data, sz);
-		flp = &fl;
-	}
+LGTM, thanks!
 
-sz comes straight from the BTF type and is never bounded. libbpf does not
-validate the size of a BTF_KIND_FLOAT type while parsing BTF
-(btf_validate_type() just breaks for it), and
-btf_dump_type_data_check_overflow() accepts any size below INT_MAX. A BTF
-blob describing a FLOAT larger than sizeof(union float_data) therefore
-makes the memcpy() write past fl and smash the stack when such a value is
-formatted via btf_dump__dump_type_data().
+I can confirm that all flavors of test_progs in BPF selftests are still
+passing on x86_64[1] with this patchset applied on top of stable 6.6.
+Not sure if stable gather these tags/trailers, but fwiw
 
-btf_dump_int_data() already rejects out-of-range sizes before its copy;
-add the same check to the float path.
+Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Tested-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
 
-Signed-off-by: Naveed Khan <naveed@digiscrypt.com>
----
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index cc1ba65bb6..922c8ce32c 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -1983,6 +1983,11 @@ static int btf_dump_float_data(struct btf_dump *d,
- 	union float_data fl;
- 	int sz = t->size;
- 
-+	if (sz < 0 || sz > sizeof(fl)) {
-+		pr_warn("unexpected size %d for id [%u]\n", sz, type_id);
-+		return -EINVAL;
-+	}
-+
- 	/* handle unaligned data; copy to local union */
- 	if (!ptr_is_aligned(d->btf, type_id, data)) {
- 		memcpy(&fl, data, sz);
--- 
-2.52.0
+1: https://github.com/kernel-patches/linux-stable/actions/runs/28008870143/job/82897081824
