@@ -1,115 +1,89 @@
-Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2B38367B86;
-	Tue, 23 Jun 2026 09:53:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F7C936E484
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 10:08:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782208392; cv=none; b=Suki0gd8oj/+gGqaFsYuOEAyWwjkMBQANemoZzVDRAxVQn9NzJ/DS6UpMIiISssPQ3WEkIFCHHmPFoG8/yt2AvX3NZUy3eXPu/8vvqxSAKTsSDGH4EOgLsOV6fsD3QLblvq/l/iVWgZAB2IWrd0CHFsL7i/YEW2tvk1eSYI1Z6A=
+	t=1782209327; cv=none; b=F/pYLecLJySZQtwWHTAXVx6HlSFRMZczgjYgnvDLn8k5OaFzNYwkgMx4bgpBehwisQdeT1TugW7JAxD6m7q8Yg7LTtJXaa0EmycktaNqzLK7h/8sC8BTqroZWCUXg3qwSOGyKp9EKVAzOA/c0FARaetALq9M3zvulkYpvvCM0T8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782208392; c=relaxed/simple;
-	bh=eNQlh6VTYUAKPQ97pC9x8ZewizrBKpooOvT6XjmDkN8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=Dnbs8Tnujg6zNQa0UjUDsTFsc3Xli6cvSvBBfjDYNFA2N4UHJKJoNpFDmCV9E7aMYwr/Sm4Tzz9mQBDdD7wIMQpJGbxzfZk4OgcSax9J4NixPYjYPX23no09Ew/fsD2bLKzmTnt1JIeqveIM5YCnSkzvZIlRJUO6WvPm7uejjvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=fail (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=nX9l4qUY reason="signature verification failed"; arc=none smtp.client-ip=162.243.161.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1782209327; c=relaxed/simple;
+	bh=pZkGyJopL74VE7VjsYav1R6gjjaDsoahje4YVAHTnSM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rFX1SgOUkeZ1XvWyqQ8OhdQbRgzMIhFWSQE+ZerKPqFHhA45a1X1TWfoCGQQv7sVksigFpT/0F/pPxrc2yo7mbQBpYfYihOJNx48OGf+rwDm4jUgYrBp6Zl77WIcbkd2Xw0O4dy0iLPpyJSdxD5Xv2tGE9uwZtJTrMY641/Bkws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r91+eaR0; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="nX9l4qUY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:Date:From:To:Cc:
-	Subject:In-Reply-To:References:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-ID; bh=V6A2nlb9Nrrq7OFjAEP17y0
-	JGlpwkRwFoeWr9x4c8k4=; b=nX9l4qUY+RelK+T6BAfYDwdVlS7rVY8UaQ8FM5w
-	iH4QE3jweQuI94LtrEjx+BSBQduZhOYSn/RDB69gQD46dplpUS/6JXuNoex+ZJZt
-	tDDCuVopFCwS5Gx5jU6DKPidU9Am7lehG6fJzWhdlQMTTbXYIlySx7fqkDvnHsw2
-	77X0=
-Received: from gnq25$mails.tsinghua.edu.cn ( [223.91.120.130] ) by
- ajax-webmail-web2 (Coremail) ; Tue, 23 Jun 2026 17:52:52 +0800 (GMT+08:00)
-Date: Tue, 23 Jun 2026 17:52:52 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
-To: "Andrea Mayer" <andrea.mayer@uniroma2.it>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	"Eric Dumazet" <edumazet@google.com>,
-	"Jakub Kicinski" <kuba@kernel.org>,
-	"Paolo Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
-	netdev@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stefano.salsano@uniroma2.it
-Subject: Re: Re: [PATCH net] seg6: validate SRH length before reading fixed
- fields
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
- 20250909(015d6f0a) Copyright (c) 2002-2026 www.mailtech.cn
- mispb-4df55a87-4b50-4a66-85a0-70f79cb6c8b5-tsinghua.edu.cn
-In-Reply-To: <20260622213317.52c8b5a38b88d4ccc3849e22@uniroma2.it>
-References: <20260620-f01-17-seg6-srh-len-v1-1-36cbb29c12f1@mails.tsinghua.edu.cn>
- <20260622213317.52c8b5a38b88d4ccc3849e22@uniroma2.it>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r91+eaR0"
+Message-ID: <3953e554-9bc4-419e-ac9f-aea3b9fd7b80@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782209313;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lFD9Jph6crM5nRNftF28H4XfKyHcXZ2YzNtJaYuppo4=;
+	b=r91+eaR0Nr0qBjKAaIQNfjey8g1pvhMtE6060+u+/4sxIjmf49565VJ6VfPj5dZttupYHV
+	zM/D7QCVFqHmq5f8eB7nx1yxlVJkJ0tTpdeMbsvP18UebzM5PUE2LIGyk6uMLXgmqXAH2w
+	Dd2HaygB9kXSGGrslxF8VMxUS+tbKDM=
+Date: Tue, 23 Jun 2026 18:08:19 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <5cd4ac55.850d6.19ef3e59eab.Coremail.gnq25@mails.tsinghua.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID:yQQGZQCXcZl0VzpqmpR8Ag--.26140W
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgIHA2o6NDlGngA
-	CsD
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Subject: Re: [PATCH net] net, bpf: check master for NULL in
+ xdp_master_redirect()
+To: Ido Schimmel <idosch@nvidia.com>, Xiang Mei <xmei5@asu.edu>
+Cc: Jakub Kicinski <kuba@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
+ Jussi Maki <joamaki@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
+ Weiming Shi <bestswngs@gmail.com>, Ido Schimmel <idosch@idosch.org>,
+ David Ahern <dsahern@gmail.com>
+References: <20260620201531.180123-1-xmei5@asu.edu>
+ <7791b9cc-86f4-424b-aa1a-d1a869814130@linux.dev>
+ <CAPpSM+TRJaqSSUs6tBp_CBSVUJMiDZm01o5BK6aCNak8vuQi+w@mail.gmail.com>
+ <20260622155854.75977aac@kernel.org>
+ <CAPpSM+Q4O704OaUAXqKpL6ffvudTfqzzLzLExziUExgvxQWmxw@mail.gmail.com>
+ <20260623065218.GA378121@shredder>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260623065218.GA378121@shredder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiQW5kcmVhIE1heWVyIiA8
-YW5kcmVhLm1heWVyQHVuaXJvbWEyLml0Pgo+IFNlbmQgdGltZTpUdWVzZGF5LCAyMy8wNi8yMDI2
-IDAzOjMzOjE3Cj4gVG86ICJOdW9xaSBHdWkiIDxnbnEyNUBtYWlscy50c2luZ2h1YS5lZHUuY24+
-Cj4gQ2M6ICJEYXZpZCBTLiBNaWxsZXIiIDxkYXZlbUBkYXZlbWxvZnQubmV0PiwgIkVyaWMgRHVt
-YXpldCIgPGVkdW1hemV0QGdvb2dsZS5jb20+LCAiSmFrdWIgS2ljaW5za2kiIDxrdWJhQGtlcm5l
-bC5vcmc+LCAiUGFvbG8gQWJlbmkiIDxwYWJlbmlAcmVkaGF0LmNvbT4sICJTaW1vbiBIb3JtYW4i
-IDxob3Jtc0BrZXJuZWwub3JnPiwgbmV0ZGV2QHZnZXIua2VybmVsLm9yZywgYnBmQHZnZXIua2Vy
-bmVsLm9yZywgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZywgc3RlZmFuby5zYWxzYW5vQHVu
-aXJvbWEyLml0LCAiQW5kcmVhIE1heWVyIiA8YW5kcmVhLm1heWVyQHVuaXJvbWEyLml0Pgo+IFN1
-YmplY3Q6IFJlOiBbUEFUQ0ggbmV0XSBzZWc2OiB2YWxpZGF0ZSBTUkggbGVuZ3RoIGJlZm9yZSBy
-ZWFkaW5nIGZpeGVkIGZpZWxkcwo+IAo+IE9uIFNhdCwgMjAgSnVuIDIwMjYgMjM6NTU6NTEgKzA4
-MDAKPiBOdW9xaSBHdWkgPGducTI1QG1haWxzLnRzaW5naHVhLmVkdS5jbj4gd3JvdGU6Cj4gCj4g
-SGkgTnVvcWksCj4gVGhhbmtzIGZvciB0aGUgcGF0Y2guCj4gCj4gPiBzZWc2X3ZhbGlkYXRlX3Ny
-aCgpIHJlYWRzIGZpeGVkIFNSSCBmaWVsZHMgc3VjaCBhcyBzcmgtPnR5cGUgYW5kCj4gPiBzcmgt
-PmhkcmxlbiBiZWZvcmUgY2hlY2tpbmcgdGhhdCB0aGUgc3VwcGxpZWQgbGVuZ3RoIGNvdmVycyB0
-aGUgZml4ZWQKPiA+IHN0cnVjdCBpcHY2X3NyX2hkciBmaWVsZHMuICBDYWxsZXJzIHRoYXQgcGFz
-cyBhIGxlbmd0aCBzbWFsbGVyIHRoYW4KPiA+IHNpemVvZihzdHJ1Y3QgaXB2Nl9zcl9oZHIpIHRo
-ZXJlZm9yZSBleHBvc2UgdGhvc2UgcmVhZHMgdG8gbWVtb3J5Cj4gPiBvdXRzaWRlIHRoZSB2YWxp
-ZGF0ZWQgcmFuZ2UuCj4gPgo+ID4gVGhlIEJQRiBTRUc2IGVuY2FwIHBhdGggKGJwZl9sd3RfcHVz
-aF9lbmNhcCgpIC0+IGJwZl9wdXNoX3NlZzZfZW5jYXAoKSkKPiA+IGlzIG9uZSBzdWNoIGNhbGxl
-cjogaXQgZm9yd2FyZHMgYSBCUEYgcHJvZ3JhbS1zdXBwbGllZCBwb2ludGVyIGFuZAo+ID4gbGVu
-Z3RoIHN0cmFpZ2h0IHRvIHNlZzZfdmFsaWRhdGVfc3JoKCkgd2l0aCBubyBtaW5pbXVtLXNpemUg
-Z3VhcmQsIHNvIGEKPiA+IDItYnl0ZSBTRUc2IGVuY2FwIGhlYWRlciBsZXRzIHRoZSB2YWxpZGF0
-b3IgcmVhZCBzcmgtPnR5cGUgYXQgb2Zmc2V0IDIKPiA+IGJleW9uZCB0aGUgY2FsbGVyLXN1cHBs
-aWVkIGJ1ZmZlci4KPiAKPiBCZXNpZGVzIHRoZSBCUEYgdXNlIGNhc2UsIGlzIHRoZXJlIGEgY2Fs
-bGVyIHRoYXQgY2FuIHJlYWNoIGl0IHdpdGgKPiBsZW4gPCBzaXplb2YoKnNyaCk/IFRoZSBvbmVz
-IEkgZm91bmQgYWxsIHBhc3MgYXQgbGVhc3QgdGhlIGZpeGVkIGhlYWRlci4KPiAKTm8sIEkgZG9u
-J3Qgc2VlIGFub3RoZXIgY3VycmVudCBjYWxsZXIgdGhhdCBjYW4gcmVhY2ggc2VnNl92YWxpZGF0
-ZV9zcmgoKSAKd2l0aCBsZW4gPCBzaXplb2YoKnNyaCkuIEknbGwgbmFycm93IHRoZSBjb21taXQg
-bWVzc2FnZSBhY2NvcmRpbmdseS4KCj4gPgo+ID4gUmVqZWN0IGxlbmd0aHMgc2hvcnRlciB0aGFu
-IHRoZSBmaXhlZCBTUkggYXQgdGhlIHRvcCBvZgo+ID4gc2VnNl92YWxpZGF0ZV9zcmgoKSwgYmVm
-b3JlIGFueSBmaWVsZCBpcyByZWFkLiAgVGhpcyBmaXhlcyB0aGUgQlBGIGhlbHBlcgo+ID4gcGF0
-aCBhbmQgaGFyZGVucyB0aGUgY29tbW9uIHZhbGlkYXRvciBmb3IgYW55IG90aGVyIGNhbGxlciB0
-aGF0IHJlYWNoZXMgaXQKPiA+IHdpdGggYSB0b28tc2hvcnQgU1JILgo+ID4KPiA+IEZpeGVzOiBm
-ZTk0Y2MyOTBmNTMgKCJicGY6IEFkZCBJUHY2IFNlZ21lbnQgUm91dGluZyBoZWxwZXJzIikKPiA+
-IFNpZ25lZC1vZmYtYnk6IE51b3FpIEd1aSA8Z25xMjVAbWFpbHMudHNpbmdodWEuZWR1LmNuPgo+
-ID4gLS0tCj4gPiAgbmV0L2lwdjYvc2VnNi5jIHwgMyArKysKPiA+ICAxIGZpbGUgY2hhbmdlZCwg
-MyBpbnNlcnRpb25zKCspCj4gPgo+ID4gZGlmZiAtLWdpdCBhL25ldC9pcHY2L3NlZzYuYyBiL25l
-dC9pcHY2L3NlZzYuYwo+ID4gaW5kZXggMWMzYWQyNTcwMGM0Yy4uZDJjYjMyYTEwNThhZiAxMDA2
-NDQKPiA+IC0tLSBhL25ldC9pcHY2L3NlZzYuYwo+ID4gKysrIGIvbmV0L2lwdjYvc2VnNi5jCj4g
-PiBAQCAtMjksNiArMjksOSBAQCBib29sIHNlZzZfdmFsaWRhdGVfc3JoKHN0cnVjdCBpcHY2X3Ny
-X2hkciAqc3JoLCBpbnQgbGVuLCBib29sIHJlZHVjZWQpCj4gPiAgICAgICBpbnQgbWF4X2xhc3Rf
-ZW50cnk7Cj4gPiAgICAgICBpbnQgdHJhaWxpbmc7Cj4gPgo+ID4gKyAgICAgaWYgKGxlbiA8IChp
-bnQpc2l6ZW9mKCpzcmgpKQo+ID4gKyAgICAgICAgICAgICByZXR1cm4gZmFsc2U7Cj4gPiArCj4g
-Cj4gVGhlIChpbnQpIGNhc3Qgb25seSBjaGFuZ2VzIHRoZSByZXN1bHQgd2hlbiBsZW4gPCAwLCB3
-aGljaCBpcyBub3QgYSBtZWFuaW5nZnVsCj4gYnl0ZSBsZW5ndGguIFBsYWluICJsZW4gPCBzaXpl
-b2YoKnNyaCkiIHdvdWxkIGJlIGVub3VnaC4KPiAKSSdsbCB1c2UgcGxhaW4gbGVuIDwgc2l6ZW9m
-KCpzcmgpLgoKPiA+ICAgICAgIGlmIChzcmgtPnR5cGUgIT0gSVBWNl9TUkNSVF9UWVBFXzQpCj4g
-PiAgICAgICAgICAgICAgIHJldHVybiBmYWxzZTsKPiA+Cj4gPgo+ID4gLS0tCj4gPiBiYXNlLWNv
-bW1pdDogOTZlN2Y5MTIyYWFlMGVkMDAwZWUzMjFmMzI0YjgxMmE0NDc5MDZkOQo+ID4gY2hhbmdl
-LWlkOiAyMDI2MDYxOS1mMDEtMTctc2VnNi1zcmgtbGVuLWE4NWYzNTQyN2UwYgo+ID4KPiA+IEJl
-c3QgcmVnYXJkcywKPiA+IC0tCj4gPiBOdW9xaSBHdWkgPGducTI1QG1haWxzLnRzaW5naHVhLmVk
-dS5jbj4KPiA+Cj4gCj4gUmVnYXJkcywKPiBBbmRyZWEK
+
+On 6/23/26 2:52 PM, Ido Schimmel wrote:
+> On Mon, Jun 22, 2026 at 04:34:06PM -0700, Xiang Mei wrote:
+>> On Mon, Jun 22, 2026 at 3:58 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>>> Can you double-confirm that this triggers on current HEAD
+>>> of linux/master ? I thought commit 2674d603a9e6 ("vrf: Fix a potential
+>>> NPD when removing a port from a VRF") was supposed to prevent all the
+>>> torn master fetches. Adding VRF folks to CC.
+>> Yes.
+>>
+>> We have triggered the crash on 56abdaebbf0da304b860bed1f2b5a85f5a6a16a0,
+>> which is the latest for net.git, and 2674d603a9e6 was applied. We can
+>> still trigger the crash:
+> 2674d603a9e6 was only for VRF ports, so it doesn't help with this case
+> (bond port). Also, the problem that 2674d603a9e6 fixed is a bit
+> different. We had a NULL check after netdev_master_upper_dev_get_rcu(),
+> but the issue was that this master device was not necessarily a VRF
+> master.
+Agree, it seems that 2674d603a9e6 only focus on VRF side.
+
+>
+> Looking at __bond_release_one(), assuming that
+> netdev_master_upper_dev_get_rcu() returned a master device, I believe it
+> must be a bond because you have a synchronize_rcu() after
+> bond_upper_dev_unlink().
+Right, synchronize_rcu() only guarantees that the master device is not freed
+while our RCU reader is operating on it, but it does not guarantee that
+we can successfully acquire the master device. We still need NULL check 
+here.
