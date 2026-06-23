@@ -1,179 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584E738C2B8;
-	Tue, 23 Jun 2026 17:34:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F43D30BF69;
+	Tue, 23 Jun 2026 17:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782236083; cv=none; b=B/8WiAspwGlN8D7jo5yHxa337iUBK1gx3fh8tAQjC+SU7J2zJx3BiIERfwwvbkLgzPPzvyq5QHPIjdtjfq/TWdW+2SaEKIo/KxFtJtZuIBbeb8KE1OHFluV6w4+C08CFebhUphHVnNuTBtCizPPl0Z+y7EoVyJ7r3uHl5yfi3Fw=
+	t=1782236086; cv=none; b=hMhhA1xtUALGwvrANoaKerIXPQwZEFuM434WlCOVwXquMAFsqmQtWEPtLrtGgBPB5JSCTMPSEpbGQ5ydNDQsD8Mf0AAF4dLKBxeHmL6MZ7iyfrIV4dGxr88HOsqMxhwowqarTmz03TjBLcsSNs5bV1L4vg/cUe+E1EAOm0HWX20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782236083; c=relaxed/simple;
-	bh=z/sNUYaIrPTPe86EjpLm5BGVrpojz7obnEIgESIDYQQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o6Ic+swF2KefUI/EwrX3/gbwcMWuRu3lb4rmzGdcxtlu99PjmYHfAMkj1mbT+plJO1B1LIkfbHmWkTBn5uPcMN/OLNgl8YqW6UhF73KcwbFwMH97i+VYhZjvgoSpWp06rBD02Az5VJbQoLsnSoOAzAGyGctqb8OyL0QPFji6x1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hXFrhRGn; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1782236086; c=relaxed/simple;
+	bh=PYCRYsLrIsR4tx3VA5k/UtpRuiBcUN4bCCsX/cOyCrw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=P9jCjB5ST9CDzE/bnd5/G6mo5rNWsr7Pl41418o/DnH7UfRvHgstiJeNCzITEu0lYvIUnfVADTS0WxX5JSd29UOofngzS4LFAmM/4nMSkiBpUMS9JbWkIrVfRT+kdH6NVgYXschadev9xVsOkDJ8Spw1tihdap/HbJDQT8DeN2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=C4ZeqRDm; arc=none smtp.client-ip=207.46.229.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hXFrhRGn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782236082; x=1813772082;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=z/sNUYaIrPTPe86EjpLm5BGVrpojz7obnEIgESIDYQQ=;
-  b=hXFrhRGnl2UniOGQWDEsqhAuNiMntTi2dEmg7qJdMnyT2dTnXudVhuof
-   9ApnSR+9Ic4SVP+VXgRjzG92TgxudSzHxNdlO+5soa6214EZkLfkFYKxa
-   EU00U6zsqpyilTirN2dGyBhcwkMmkbUjZ6azxJ/FccM9FwoI3R50pGDrn
-   OGwtZnYkUudHPBte73FugnGrPMsoAR1D6d6oASZpe7aSmrZoa7H8cavBI
-   Z8cK8yzlGlX9k7enIxJrj/JzjXDI5QFyuBYOEiAHzftaEOa8dIl2CixjO
-   EmxmZJPyzubmC12noAvmMailIf6mFP8Y/9GpiYuJZYlzh5WYuqK5fMvHy
-   w==;
-X-CSE-ConnectionGUID: yXtpioI1TDyv33wTqISp0Q==
-X-CSE-MsgGUID: yb4yGPZmSsSuOb950KFPrQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11826"; a="100414986"
-X-IronPort-AV: E=Sophos;i="6.24,221,1774335600"; 
-   d="scan'208";a="100414986"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 10:34:41 -0700
-X-CSE-ConnectionGUID: 65kKS9OBRXKCxe0IHEOtwA==
-X-CSE-MsgGUID: dZylsM7yQC25fVOamVuTGw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,221,1774335600"; 
-   d="scan'208";a="249687621"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 10:34:42 -0700
-Date: Tue, 23 Jun 2026 10:34:41 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	David Kaplan <david.kaplan@amd.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="C4ZeqRDm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=SImGT
+	Daeemmk9Ot9FDkfdNXfdAxQdSFL1gE6A0cL9Zk=; b=C4ZeqRDm8jmp9bG/HG3RZ
+	qEsfojzLePMAP7uf1D4Z1auLEJPCNxRUUs6SQZWrXagniCDVpY6vs5rqSlfInnIw
+	dHWxTg13KX7YTrBg2jBojPt1yYGYqWgN6XucqUTUUq8kep/LUC9btBfyDWo5h1PQ
+	i9zqZ7bcJE7n61zILTqSSY=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web2 (Coremail) with SMTP id yQQGZQBnP5eYwzpqIo19Ag--.49585S2;
+	Wed, 24 Jun 2026 01:34:31 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
 	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Jason Baron <jbaron@akamai.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	Asit Mallick <asit.k.mallick@intel.com>,
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v12 08/12] KVM: Define EXPORT_STATIC_CALL_FOR_KVM()
-Message-ID: <20260622-vmscape-bhb-v12-8-76cbda0ae3e5@linux.intel.com>
-X-Mailer: b4 0.16-dev
-References: <20260622-vmscape-bhb-v12-0-76cbda0ae3e5@linux.intel.com>
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/2] bpf: Reject MEM_ALLOC BTF accesses past bounds
+Date: Tue, 23 Jun 2026 17:34:11 +0000
+Message-Id: <cover.1782197377.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260622-vmscape-bhb-v12-0-76cbda0ae3e5@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:yQQGZQBnP5eYwzpqIo19Ag--.49585S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZry7uF4UurWfCw1kury7GFg_yoWkKwb_ua
+	y8trWDurs8XF15Aa4vkF1fAa95Cr45Gr97AFWqqr43GrnxCry5Xw4kJr13A34jqanayry3
+	Zrs5ua40yF17tjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbDkFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
+	0_Cr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+	Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
+	W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI2
+	0VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxkIecxEwV
+	AFwVW8MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc4
+	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
+	xVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+	1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjb_-DUU
+	UUU==
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-EXPORT_SYMBOL_FOR_KVM() exists to export symbols to KVM modules. Static
-calls need the same treatment when the core kernel defines a static_call
-that KVM needs access to (e.g. from a VM-exit path).
+BTF struct walks can relax the top-level struct-size check for trailing
+flexible arrays. That relaxation must not let a PTR_TO_BTF_ID | MEM_ALLOC
+access escape the bytes allocated by bpf_obj_new() or bpf_percpu_obj_new().
 
-Define EXPORT_STATIC_CALL_FOR_KVM() as the static_call analogue of
-EXPORT_SYMBOL_FOR_KVM(). The same three-way logic applies:
+Patch 1 rejects MEM_ALLOC BTF walks whose access range reaches past the
+current struct size before applying the flexible-array relaxation. Patch 2
+adds a linked_list negative loader case for this path.
 
-  - KVM_SUB_MODULES defined: export to "kvm," plus all sub-modules
-  - KVM=m, no sub-modules: export to "kvm" only
-  - KVM built-in: no export needed (noop)
+Changes in v2:
+- Move the check from bpf_obj_new() type validation to BTF struct walking.
+- Reject MEM_ALLOC accesses that reach past the allocated object bounds.
+- Update the selftest expected verifier error and carry Eduard's Acked-by.
 
-  As with EXPORT_SYMBOL_FOR_KVM(), allow architectures to override both
-  macros (e.g. to suppress the export when kvm.ko itself will not be
-  built despite CONFIG_KVM=m). Add the x86 no-op overrides in
-  arch/x86/include/asm/kvm_types.h for that case. To keep the pair in
-  sync, EXPORT_STATIC_CALL_FOR_KVM() is defined inside the
-  EXPORT_SYMBOL_FOR_KVM #ifndef block; an arch that defines
-  EXPORT_SYMBOL_FOR_KVM must also define EXPORT_STATIC_CALL_FOR_KVM or the
-  build will fail with a compile-time error.
+v1:
+https://lore.kernel.org/bpf/cover.1782100805.git.chenyy23@mails.tsinghua.edu.cn/
 
-As with EXPORT_SYMBOL_FOR_KVM(), allow architectures to override
-EXPORT_STATIC_CALL_FOR_KVM definition (e.g. to suppress the export when
-kvm.ko itself will not be built despite CONFIG_KVM=m). Add the x86 no-op
-override in arch/x86/include/asm/kvm_types.h for that case.
+Yiyang Chen (2):
+  bpf: Reject MEM_ALLOC BTF accesses past object bounds
+  selftests/bpf: Cover MEM_ALLOC access past object bounds
 
-Architectures must also define EXPORT_STATIC_CALL_FOR_KVM when they define
-EXPORT_SYMBOL_FOR_KVM.
+ kernel/bpf/btf.c                              | 14 +++++++----
+ .../selftests/bpf/prog_tests/linked_list.c    |  1 +
+ .../selftests/bpf/progs/linked_list_fail.c    | 23 +++++++++++++++++++
+ 3 files changed, 33 insertions(+), 5 deletions(-)
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Acked-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
----
- arch/x86/include/asm/kvm_types.h |  1 +
- include/linux/kvm_types.h        | 10 +++++++++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/kvm_types.h b/arch/x86/include/asm/kvm_types.h
-index d7c704ed1be9..bceeaed2940e 100644
---- a/arch/x86/include/asm/kvm_types.h
-+++ b/arch/x86/include/asm/kvm_types.h
-@@ -15,6 +15,7 @@
-  * at least one vendor module is enabled.
-  */
- #define EXPORT_SYMBOL_FOR_KVM(symbol)
-+#define EXPORT_STATIC_CALL_FOR_KVM(symbol)
- #endif
- 
- #define KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE 40
-diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
-index a568d8e6f4e8..be602d3f287e 100644
---- a/include/linux/kvm_types.h
-+++ b/include/linux/kvm_types.h
-@@ -13,6 +13,8 @@
- 	EXPORT_SYMBOL_FOR_MODULES(symbol, __stringify(KVM_SUB_MODULES))
- #define EXPORT_SYMBOL_FOR_KVM(symbol) \
- 	EXPORT_SYMBOL_FOR_MODULES(symbol, "kvm," __stringify(KVM_SUB_MODULES))
-+#define EXPORT_STATIC_CALL_FOR_KVM(symbol) \
-+	EXPORT_STATIC_CALL_FOR_MODULES(symbol, "kvm," __stringify(KVM_SUB_MODULES))
- #else
- #define EXPORT_SYMBOL_FOR_KVM_INTERNAL(symbol)
- /*
-@@ -23,11 +25,17 @@
- #ifndef EXPORT_SYMBOL_FOR_KVM
- #if IS_MODULE(CONFIG_KVM)
- #define EXPORT_SYMBOL_FOR_KVM(symbol) EXPORT_SYMBOL_FOR_MODULES(symbol, "kvm")
-+#define EXPORT_STATIC_CALL_FOR_KVM(symbol) EXPORT_STATIC_CALL_FOR_MODULES(symbol, "kvm")
- #else
- #define EXPORT_SYMBOL_FOR_KVM(symbol)
-+#define EXPORT_STATIC_CALL_FOR_KVM(symbol)
- #endif /* IS_MODULE(CONFIG_KVM) */
--#endif /* EXPORT_SYMBOL_FOR_KVM */
-+#else
-+#ifndef EXPORT_STATIC_CALL_FOR_KVM
-+#error Must #define EXPORT_STATIC_CALL_FOR_KVM if #defining EXPORT_SYMBOL_FOR_KVM
- #endif
-+#endif /* EXPORT_SYMBOL_FOR_KVM */
-+#endif /* KVM_SUB_MODULES */
- 
- #ifndef __ASSEMBLER__
- 
-
+base-commit: a975094bf98ca97be9146f9d3b5681a6f9cf5ce3
 -- 
 2.34.1
-
 
