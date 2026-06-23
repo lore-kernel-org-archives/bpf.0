@@ -1,117 +1,151 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C1452DCF6C;
-	Tue, 23 Jun 2026 09:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 470CC33D4E4;
+	Tue, 23 Jun 2026 09:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782205822; cv=none; b=hYvqnla0eSRlB/ywbGt94ZZ42dVeqDrWrdflUJrbgspMh3JIhGTw4XCslUkzeJRPeqqiW+qIxurAb+/PYvx4HcrPkZSCkI6ZyOQDrqhzGXmhEsgISJnTrBnxjxuvs+bXubJsiH33bK8yUt6QbmSCicE8BnBR5aWCWjMG3tllhYw=
+	t=1782205897; cv=none; b=L5EDE7u6YaiBgN9DiIxNXhaONFVcnGgLO6tRH1VPJQz5sQtY/96n1tkdaRlc9FpAfzAWMdMyQD8wyTvj0huowZFYlAAgsulFG7RS+VbeVu95p5DvslEbcfUACmSBEeG63vKBfeS6OWQxi/Ueoe1Yr8w+7NTKZarBkh+7ZON/qg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782205822; c=relaxed/simple;
-	bh=8T7a6XFiQW5FjXNXf6ApxxXet+uPYOEeejpkCBZrULw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Trvx7g0ud/Yg/Rrh0u5pDnHD9KbFhLlmAi/x/oE73dYfoISfEIGcX2HGnXe3CvyC9+peBdlNiOs4p1rCdRZplNj7cUQuAo8ucWmBEjjfQ56o6aSdPLBuYE7PLsIeuM3aidnjLPdP/s6O32aiOOfydQNOfkAdXNT9c0dWDS3s9RA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NS0aC2s7; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782205897; c=relaxed/simple;
+	bh=drVpq5ixh0ZtB3QR1l0QXjWiNCXRTRa1ZsIzbA4gmCs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=J5Twey69NLqjVAClAuIIOEZ10vy633j3G0uJkzXq23T8h8ZTD6oKynAaDO88zjUyXFvPSVmvncvi2o6Ht+a3K7Vww/QDmBW9B27SoHTpdVN+IfoKSA8D1hChN1zJlIPz4Vetp8ZssdVoQ4IhEvZlrrxsey8YEBejFtn2YFJOljA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=dzkkDtLm; arc=none smtp.client-ip=207.46.229.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NS0aC2s7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782205822; x=1813741822;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8T7a6XFiQW5FjXNXf6ApxxXet+uPYOEeejpkCBZrULw=;
-  b=NS0aC2s7Ix8bjfH3I4LuKgduuz1uFtXcbZoSkWgzpRRb0pYN3ocydETq
-   DdUleqywTRfdlXs/AfCvggdwH/3XiSkL659oHI0fk6Idy8RdUpuw6odMq
-   0A2WTnPffwiSo/zm0YAIdOzzV3I0Sxp5gHF/3iLdHVBATlwc/wzXiQf+3
-   UWhasM8dJCYlAv3ChxzhgQ3QehyNzH/MhBqMeQPP1lGcmAGqqRhLuf+RP
-   sWdYoT+jpLQffTjIYXlS92viAqjgox0RQF5TsO/TyoCQlQF9k/18YbS/3
-   xb+08mIJn7Q/QapCINePpz7lprWyMCppGFtwiDTD1NftjZRcyLKhyE2Nc
-   g==;
-X-CSE-ConnectionGUID: ol27wEWjTCOlw/d7HtTjOg==
-X-CSE-MsgGUID: n4QE3Gx+QBWaGNazRTfL0Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11825"; a="94438659"
-X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
-   d="scan'208";a="94438659"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 02:10:21 -0700
-X-CSE-ConnectionGUID: dupOZkCyS2a+pS+w5rAh9A==
-X-CSE-MsgGUID: iUStIykWTUeTmRtyp4ctsA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
-   d="scan'208";a="249505933"
-Received: from boxer.igk.intel.com ([10.102.20.173])
-  by orviesa007.jf.intel.com with ESMTP; 23 Jun 2026 02:10:19 -0700
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	magnus.karlsson@intel.com,
-	stfomichev@gmail.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	tushar.vyavahare@intel.com,
-	kerneljasonxing@gmail.com,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH net-next] selftests/xsk: preserve UMEM view in bidi test
-Date: Tue, 23 Jun 2026 11:10:08 +0200
-Message-Id: <20260623091008.1046547-1-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.38.1
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="dzkkDtLm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:Date:From:To:Cc:
+	Subject:In-Reply-To:References:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-ID; bh=drVpq5ixh0ZtB3QR1l0QXjW
+	iNCXRTRa1ZsIzbA4gmCs=; b=dzkkDtLm3rGpu7+baOLBbZ1l5ZrXd7XAk/QVpo2
+	/Ck70WoMKyHAP/oVhcZXlZK/UhVmjfjkfRJ6Er/iHsIdt7Smcrtgp7kgHAfBiwV9
+	bVyB6o1dCpQn1cHK6mnsHRCKnH9CUSwis88LLXOcQIrGJ1ghG8272T9EmNnTQvzq
+	bXG0=
+Received: from gnq25$mails.tsinghua.edu.cn ( [223.91.120.130] ) by
+ ajax-webmail-web2 (Coremail) ; Tue, 23 Jun 2026 17:11:25 +0800 (GMT+08:00)
+Date: Tue, 23 Jun 2026 17:11:25 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
+To: "Anton Protopopov" <a.s.protopopov@gmail.com>
+Cc: bpf@vger.kernel.org, "Alexei Starovoitov" <ast@kernel.org>,
+	"Daniel Borkmann" <daniel@iogearbox.net>,
+	"Andrii Nakryiko" <andrii@kernel.org>,
+	"Eduard Zingerman" <eddyz87@gmail.com>,
+	"Shuah Khan" <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add cross-subprog
+ gotox target coverage
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
+ 20250909(015d6f0a) Copyright (c) 2002-2026 www.mailtech.cn
+ mispb-4df55a87-4b50-4a66-85a0-70f79cb6c8b5-tsinghua.edu.cn
+In-Reply-To: <ajlJQUmKUBkNcezW@mail.gmail.com>
+References: <20260613-f01-02-gotox-bpf-next-v2-send-v2-0-ff980bc5a329@mails.tsinghua.edu.cn>
+ <20260613-f01-02-gotox-bpf-next-v2-send-v2-2-ff980bc5a329@mails.tsinghua.edu.cn>
+ <ajlJQUmKUBkNcezW@mail.gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-ID: <4ca30c94.85012.19ef3bfae0f.Coremail.gnq25@mails.tsinghua.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID:yQQGZQBH1Zy+TTpqRnZ8Ag--.63140W
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgIHA2o6NDlGngA
+	AsB
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-The UMEM state refactor made __send_pkts() use xsk->umem for Tx
-address generation. At the same time, the shared-UMEM Tx setup copies the
-Rx UMEM state into a Tx-local state object and resets base_addr and
-next_buffer before configuring the Tx socket.
-
-Passing that Tx-local object to xsk_configure() makes xsk->umem point to
-the zero-based Tx allocator state. This breaks the BIDIRECTIONAL test once
-the roles are switched: the same socket is then used for Rx validation, but
-received descriptors from the other logical UMEM half are checked against
-base_addr == 0. With the new UMEM bounds check, a valid address such as
-base_addr + XDP_PACKET_HEADROOM is rejected as being outside the UMEM
-window.
-
-Keep xsk->umem as the shared/Rx UMEM view used for socket configuration
-and Rx validation. Use the ifobject-local UMEM copy only for Tx descriptor
-address generation, preserving the BIDIRECTIONAL test's intent of using
-the proper logical UMEM half after the direction switch.
-
-Fixes: b17631032769 ("selftests/xsk: Move UMEM state from ifobject to xsk_socket_info")
-Signed-off-by: Maciej Fijalkowski maciej.fijalkowski@intel.com
----
- tools/testing/selftests/bpf/prog_tests/test_xsk.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-index d8a1c0d40e5a..50a8dbacb63d 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-@@ -1169,8 +1169,8 @@ static int receive_pkts(struct test_spec *test)
- static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk, bool timeout)
- {
- 	u32 i, idx = 0, valid_pkts = 0, valid_frags = 0, buffer_len;
-+	struct xsk_umem_info *umem = ifobject->xsk_arr[0].umem_real;
- 	struct pkt_stream *pkt_stream = xsk->pkt_stream;
--	struct xsk_umem_info *umem = xsk->umem;
- 	bool use_poll = ifobject->use_poll;
- 	struct pollfd fds = { };
- 	int ret;
-@@ -1524,7 +1524,7 @@ static int thread_common_ops_tx(struct test_spec *test, struct ifobject *ifobjec
- 	umem_tx->base_addr = 0;
- 	umem_tx->next_buffer = 0;
- 
--	ret = xsk_configure(test, ifobject, umem_tx, true);
-+	ret = xsk_configure(test, ifobject, umem_rx, true);
- 	if (ret)
- 		return ret;
- 	ifobject->xsk = &ifobject->xsk_arr[0];
--- 
-2.43.0
+CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiQW50b24gUHJvdG9wb3Bv
+diIgPGEucy5wcm90b3BvcG92QGdtYWlsLmNvbT4KPiBTZW5kIHRpbWU6TW9uZGF5LCAyMi8wNi8y
+MDI2IDIyOjQwOjAxCj4gVG86ICJOdW9xaSBHdWkiIDxnbnEyNUBtYWlscy50c2luZ2h1YS5lZHUu
+Y24+Cj4gQ2M6IGJwZkB2Z2VyLmtlcm5lbC5vcmcsICJBbGV4ZWkgU3Rhcm92b2l0b3YiIDxhc3RA
+a2VybmVsLm9yZz4sICJEYW5pZWwgQm9ya21hbm4iIDxkYW5pZWxAaW9nZWFyYm94Lm5ldD4sICJB
+bmRyaWkgTmFrcnlpa28iIDxhbmRyaWlAa2VybmVsLm9yZz4sICJFZHVhcmQgWmluZ2VybWFuIiA8
+ZWRkeXo4N0BnbWFpbC5jb20+LCAiU2h1YWggS2hhbiIgPHNodWFoQGtlcm5lbC5vcmc+LCBsaW51
+eC1rc2VsZnRlc3RAdmdlci5rZXJuZWwub3JnLCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3Jn
+Cj4gU3ViamVjdDogUmU6IFtQQVRDSCBicGYtbmV4dCB2MiAyLzJdIHNlbGZ0ZXN0cy9icGY6IEFk
+ZCBjcm9zcy1zdWJwcm9nIGdvdG94IHRhcmdldCBjb3ZlcmFnZQo+IAo+IE9uIDI2LzA2LzEzIDA1
+OjMzUE0sIE51b3FpIEd1aSB3cm90ZToKPiA+IEFkZCBhIGdvdG94IHJlZ3Jlc3Npb24gdGVzdCB3
+aXRoIHR3byBvbmUtZW50cnkgSU5TTl9BUlJBWSBtYXBzLiBDRkcgY2FuCj4gPiBtb2RlbCBhIG1h
+cCB3aG9zZSB0YXJnZXQgc3RheXMgaW4gdGhlIG1haW4gc3VicHJvZywgd2hpbGUgdGhlIHZlcmlm
+aWVkIHBhdGgKPiA+IGNhbiBsb2FkIGEgZGlmZmVyZW50IG1hcCB3aG9zZSB0YXJnZXQgaXMgdGhl
+IGZpcnN0IGluc3RydWN0aW9uIG9mIGFub3RoZXIKPiA+IHN1YnByb2cuCj4gPiAKPiA+IFRoYXQg
+c2Vjb25kIHRhcmdldCBpcyBvdXRzaWRlIHRoZSBzdWJwcm9nIHRoYXQgY29udGFpbnMgdGhpcyBn
+b3RveAo+ID4gaW5zdHJ1Y3Rpb24sIHNvIHByb2dyYW0gbG9hZCBtdXN0IGJlIHJlamVjdGVkIHdp
+dGggLUVJTlZBTC4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogTnVvcWkgR3VpIDxnbnEyNUBtYWls
+cy50c2luZ2h1YS5lZHUuY24+Cj4gCj4gU29ycnksIHdhcyBBRksgdGhlIGxhc3Qgd2Vlay4gVGhl
+IGxvb2tzIGJldHRlciBub3cuIEEgZmV3IHNtYWxsIG5pdHMuCj4gCj4gPiAtLS0KPiA+ICB0b29s
+cy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9icGZfZ290b3guYyB8IDczICsrKysr
+KysrKysrKysrKysrKysrKysKPiA+ICAxIGZpbGUgY2hhbmdlZCwgNzMgaW5zZXJ0aW9ucygrKQo+
+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVz
+dHMvYnBmX2dvdG94LmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9i
+cGZfZ290b3guYwo+ID4gaW5kZXggNzNkYzYzODgyYjdkLi41MjUyY2EwOTY4OWMgMTAwNjQ0Cj4g
+PiAtLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9icGZfZ290b3gu
+Ywo+ID4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvYnBmX2dv
+dG94LmMKPiA+IEBAIC0yNTUsNiArMjU1LDMwIEBAIHN0YXRpYyBpbnQgY3JlYXRlX2p0X21hcChf
+X3UzMiBtYXhfZW50cmllcykKPiA+ICAJCQkgICAgICBrZXlfc2l6ZSwgdmFsdWVfc2l6ZSwgbWF4
+X2VudHJpZXMsIE5VTEwpOwo+ID4gIH0KPiA+ICAKPiA+ICtzdGF0aWMgaW50IGNyZWF0ZV9qdF9t
+YXBfd2l0aF90YXJnZXQoX191MzIgdGFyZ2V0KQo+ID4gK3sKPiA+ICsJc3RydWN0IGJwZl9pbnNu
+X2FycmF5X3ZhbHVlIHZhbCA9IHsgLm9yaWdfb2ZmID0gdGFyZ2V0IH07Cj4gPiArCV9fdTMyIGtl
+eSA9IDA7Cj4gPiArCWludCBtYXBfZmQ7Cj4gPiArCj4gPiArCW1hcF9mZCA9IGNyZWF0ZV9qdF9t
+YXAoMSk7Cj4gPiArCWlmICghQVNTRVJUX0dFKG1hcF9mZCwgMCwgImNyZWF0ZV9qdF9tYXAiKSkK
+PiA+ICsJCXJldHVybiAtMTsKPiA+ICsKPiA+ICsJaWYgKCFBU1NFUlRfRVEoYnBmX21hcF91cGRh
+dGVfZWxlbShtYXBfZmQsICZrZXksICZ2YWwsIDApLAo+ID4gKwkJICAgICAgIDAsICJicGZfbWFw
+X3VwZGF0ZV9lbGVtIikpIHsKPiA+ICsJCWNsb3NlKG1hcF9mZCk7Cj4gPiArCQlyZXR1cm4gLTE7
+Cj4gPiArCX0KPiA+ICsKPiA+ICsJaWYgKCFBU1NFUlRfRVEoYnBmX21hcF9mcmVlemUobWFwX2Zk
+KSwgMCwgImJwZl9tYXBfZnJlZXplIikpIHsKPiA+ICsJCWNsb3NlKG1hcF9mZCk7Cj4gPiArCQly
+ZXR1cm4gLTE7Cj4gPiArCX0KPiA+ICsKPiA+ICsJcmV0dXJuIG1hcF9mZDsKPiA+ICt9Cj4gPiAr
+Cj4gPiAgc3RhdGljIGludCBwcm9nX2xvYWQoc3RydWN0IGJwZl9pbnNuICppbnNucywgX191MzIg
+aW5zbl9jbnQpCj4gPiAgewo+ID4gIAlyZXR1cm4gYnBmX3Byb2dfbG9hZChCUEZfUFJPR19UWVBF
+X1JBV19UUkFDRVBPSU5ULCBOVUxMLCAiR1BMIiwgaW5zbnMsIGluc25fY250LCBOVUxMKTsKPiA+
+IEBAIC0zOTMsNiArNDE3LDUyIEBAIHJlamVjdF9vZmZzZXRzKHN0cnVjdCBicGZfaW5zbiAqaW5z
+bnMsIF9fdTMyIGluc25fY250LCBpbnQgb2ZmMSwgaW50IG9mZjIsIGludCBvCj4gPiAgCQljbG9z
+ZShwcm9nX2ZkKTsKPiA+ICB9Cj4gPiAgCj4gPiArc3RhdGljIHZvaWQKPiA+ICtjaGVja19jcm9z
+c19zdWJwcm9nX2dvdG94X3RhcmdldChzdHJ1Y3QgYnBmX2dvdG94ICpza2VsIF9fYWx3YXlzX3Vu
+dXNlZCkKPiAKPiBXaHkgdG8gcGFzcyB0aGUgc2tlbCBwb2ludGVyIGF0IGFsbD8KPiAKPiA+ICt7
+Cj4gPiArCXN0cnVjdCBicGZfaW5zbiBpbnNuc1tdID0gewo+ID4gKwkJLyogbWFpbiBzdWJwcm9n
+IFswLDE0KSAqLwo+ID4gKwkJQlBGX01PVjY0X1JFRyhCUEZfUkVHXzYsIEJQRl9SRUdfMSksCj4g
+PiArCQlCUEZfUkFXX0lOU04oQlBGX0pNUCB8IEJQRl9DQUxMLCAwLCBCUEZfUFNFVURPX0NBTEws
+IDAsIDEyKSwKPiA+ICsJCUJQRl9MRFhfTUVNKEJQRl9XLCBCUEZfUkVHXzcsIEJQRl9SRUdfNiwg
+MCksCj4gPiArCQlCUEZfSk1QX0lNTShCUEZfSkVRLCBCUEZfUkVHXzcsIDAsIDQpLAo+ID4gKwkJ
+QlBGX0xEX0lNTTY0X1JBVyhCUEZfUkVHXzIsIEJQRl9QU0VVRE9fTUFQX1ZBTFVFLCAwKSwKPiA+
+ICsJCUJQRl9MRFhfTUVNKEJQRl9EVywgQlBGX1JFR18yLCBCUEZfUkVHXzIsIDApLAo+ID4gKwkJ
+QlBGX0pNUF9BKDMpLAo+ID4gKwkJQlBGX0xEX0lNTTY0X1JBVyhCUEZfUkVHXzIsIEJQRl9QU0VV
+RE9fTUFQX1ZBTFVFLCAwKSwKPiA+ICsJCUJQRl9MRFhfTUVNKEJQRl9EVywgQlBGX1JFR18yLCBC
+UEZfUkVHXzIsIDApLAo+ID4gKwkJQlBGX1JBV19JTlNOKEJQRl9KTVAgfCBCUEZfSkEgfCBCUEZf
+WCwgQlBGX1JFR18yLCAwLCAwLCAwKSwKPiA+ICsJCUJQRl9NT1Y2NF9JTU0oQlBGX1JFR18wLCAx
+KSwKPiA+ICsJCUJQRl9FWElUX0lOU04oKSwKPiA+ICsKPiA+ICsJCS8qIHN0YXRpYyBzdWJwcm9n
+IFsxNCwxNikgKi8KPiA+ICsJCUJQRl9NT1Y2NF9JTU0oQlBGX1JFR18wLCA0MiksCj4gPiArCQlC
+UEZfRVhJVF9JTlNOKCksCj4gPiArCX07Cj4gPiArCWludCBnb29kX2ZkLCBiYWRfZmQsIHByb2df
+ZmQ7Cj4gPiArCj4gPiArCWdvb2RfZmQgPSBjcmVhdGVfanRfbWFwX3dpdGhfdGFyZ2V0KDEyKTsK
+PiA+ICsJaWYgKCFBU1NFUlRfR0UoZ29vZF9mZCwgMCwgImNyZWF0ZV9nb29kX2p0X21hcCIpKQo+
+ID4gKwkJcmV0dXJuOwo+ID4gKwo+ID4gKwliYWRfZmQgPSBjcmVhdGVfanRfbWFwX3dpdGhfdGFy
+Z2V0KDE0KTsKPiA+ICsJaWYgKCFBU1NFUlRfR0UoYmFkX2ZkLCAwLCAiY3JlYXRlX2JhZF9qdF9t
+YXAiKSkgewo+ID4gKwkJY2xvc2UoZ29vZF9mZCk7Cj4gPiArCQlyZXR1cm47Cj4gPiArCX0KPiA+
+ICsKPiA+ICsJaW5zbnNbNF0uaW1tID0gYmFkX2ZkOwo+ID4gKwlpbnNuc1s4XS5pbW0gPSBnb29k
+X2ZkOwo+ID4gKwo+ID4gKwlwcm9nX2ZkID0gYnBmX3Byb2dfbG9hZChCUEZfUFJPR19UWVBFX1NP
+Q0tFVF9GSUxURVIsIE5VTEwsICJHUEwiLAo+ID4gKwkJCQlpbnNucywgQVJSQVlfU0laRShpbnNu
+cyksIE5VTEwpOwo+ID4gKwlpZiAoIUFTU0VSVF9FUShwcm9nX2ZkLCAtRUlOVkFMLCAiY3Jvc3Nf
+c3VicHJvZ19nb3RveF9wcm9nX2xvYWQiKSkKPiA+ICsJCWNsb3NlKHByb2dfZmQpOwo+ID4gKwo+
+ID4gKwljbG9zZShiYWRfZmQpOwo+ID4gKwljbG9zZShnb29kX2ZkKTsKPiA+ICt9Cj4gPiArCj4g
+PiAgLyoKPiA+ICAgKiBWZXJpZnkgYSBiaXQgbW9yZSBjb21wbGV4IHByb2dyYW1zIHdoaWNoIGlu
+Y2x1ZGUgaW5kaXJlY3QganVtcHMKPiA+ICAgKiBhbmQgd2l0aCBqdW1wIHRhYmxlcyBsb2FkZWQg
+d2l0aCBhIG5vbi16ZXJvIG9mZnNldAo+ID4gQEAgLTUzOCw2ICs2MDgsOSBAQCB2b2lkIHRlc3Rf
+YnBmX2dvdG94KHZvaWQpCj4gPiAgCWlmICh0ZXN0X19zdGFydF9zdWJ0ZXN0KCJjaGVjay1sZGlt
+bTY0LW9mZi1nb3RveCIpKQo+ID4gIAkJX19zdWJ0ZXN0KHNrZWwsIGNoZWNrX2xkaW1tNjRfb2Zm
+X2dvdG94KTsKPiA+ICAKPiA+ICsJaWYgKHRlc3RfX3N0YXJ0X3N1YnRlc3QoImNoZWNrLWNyb3Nz
+LXN1YnByb2ctZ290b3gtdGFyZ2V0IikpCj4gPiArCQljaGVja19jcm9zc19zdWJwcm9nX2dvdG94
+X3RhcmdldChza2VsKTsKPiA+ICsKPiA+ICAJaWYgKHRlc3RfX3N0YXJ0X3N1YnRlc3QoImNoZWNr
+LWxkaW1tNjQtb2ZmLWdvdG94LWxsdm0iKSkKPiA+ICAJCV9fc3VidGVzdChza2VsLCBjaGVja19s
+ZGltbTY0X29mZl9nb3RveF9sbHZtKTsKPiA+ICAKPiAKPiBXaHkgaGF2ZW4ndCB5b3UgYWRkIHRo
+ZSB0ZXN0IGFzIHRoZSBsYXN0IG9uZT8gRXNwZWNpYWxseSB0aGF0IGl0Cj4gZG9lc24ndCB1c2Ug
+dGhlIF9fc3VidGVzdCgpIGhlbHBlci4KPiAKPiA+IC0tIAo+ID4gMi4zNC4xCj4gPiAKCkkgd2ls
+bCBkcm9wIHRoZSB1bnVzZWQgc2tlbCBhcmd1bWVudCBhbmQga2VlcCB0aGlzIHJhdy1pbnNuCnRl
+c3QgaW5kZXBlbmRlbnQgZnJvbSB0aGUgc2tlbGV0b24tYmFzZWQgX19zdWJ0ZXN0KCkgcGF0aC4K
 
