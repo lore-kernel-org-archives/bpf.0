@@ -1,241 +1,792 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C3639E9BD
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 20:27:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782246439; cv=pass; b=bjY5OsVjHf788P2IX51RhKu2G7OkmsXBh3juAWoSeqQvbkYmUj7C707jdd+zMLUwEE8bRgSUpDcvWxGhSwb6DSv5oVo1K9UBKhlk1L/B680bLvVqNxghcPIHi3jW/y2mYfObc1tZSdPcFkMToQbyA/VSrXpLQftK2fEKo59GQCo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782246439; c=relaxed/simple;
-	bh=0givHChfCtgJoG3Jw5N8bUWO/zkCW2u8xflNqGJxbDo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cAdZ/nOvenLuHbxAUkcnnkA6rc4JtxS6YvA6XaAB0d4CBt9T+w7K65CIpx/+wcDu8ewQXb/0vLg4b0L4ZxGLTaYGZF8kLz+IgkLB3k3yHb6PNl3mdGDHP/1u1JsnHKTWeKBIBONLin0+yakDlOgnTmIup1roQL965yQYptd9Qrk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z9c1OcuF; arc=pass smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3931A3A4535
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 20:34:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782246857; cv=none; b=faHDMNShHfPs9ECZggfaDTAb7ZOzrHuSUMzjkBWgHqpVIQD86m9vKUVO5VQenxvfOujeWrzV+HP7laI/dqttcXGq7yTlLST17DyysigbKBZYqXo1C6S0qSMrkTSSjVelvEo6q/dCvdRBrVqaFr18yrNFvTZrAdp6+ICq4g8rO/I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782246857; c=relaxed/simple;
+	bh=EAGpH+AafZqNf1hG1ABrtcGlU+Q+4/PMKymriUIV1JI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=bOsbbOD19Dx4Mcvu6ereGerR2M8ljaFolvPhTL6zUhaIXBnT2AhUlFFf5QlC3AKxPytoLyd/ntG5AkTaRpVC0cy3G+19YnnQyMlCyYmYabYAOm9QbJXod1G40ApFw0F7xanNEt/p3GMcN8gerPsCnD1XZqOIFQtKBN3SW87sN+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HKe/pymh; arc=none smtp.client-ip=74.125.82.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z9c1OcuF"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2c6bc87f4d5so1121445ad.1
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 13:27:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782246438; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Qxq+v35tz3DX09qPSTOkEEdtJ10T43NQhbBsLrhjiDiXT5Gcx20DDrN2bfAWbWlZ2N
-         9J4HB3/U4QpScFUwPoTCyhf2sDrHG3C26xcNamdS6HrMBR2ITtcAwXmTRzrGSXVpFT8t
-         OIowRlxyvJF3i+YYmmi+qvOFIzeQDoR53h9URciWB0JIHUDtEwgckcGtSZFBpBKl00gH
-         eLezLXIdzT95LPZn8CpYDwDJwYymfUKX4PcxyTNGzUvolH1eXRTctdOvLXkCEQ/wSpbU
-         mvhIZKH48TrQKNhX/3zdMm0/6eZVyJqSraKptJtJEzIaaHvoHxRagwKGt6v/AnMSO7hG
-         m/mQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=A2p3VMqob0x6dZXFsBHs+SV7dY60+U6kj2FwO5qGa2o=;
-        fh=2T48NAExCdqyGJFWMVR7Vu4p3AzyPURhfoxoNNb1P4Q=;
-        b=SNPFqtRe2KaN8qKEG3E8TecVm7aZvtC+FKAypZRlA8zTDzvn3IM19uhb2zSnW79ciP
-         +tW5OHOSwdnr9vQ14vPrvTYyBpMvLV0Qtzu/+Znn1Xjb+72huxf1zep+SAmNR8epUEYB
-         of6Golx7vft+U9wfyirsr0y3L/V4RrO0msSitE/XnLqdyqfLuZf0WB6Ip1F46i6uBq5h
-         w81acO021yLkGVI4pSIM2hT1PEPNnFH17rqAiqwRvNuABxgASjHd33oTFx3ThTiBZ+7f
-         6p73IZgtHAEKdPh/2WHkkJ5esjGmzwsRyPZNbN7Krw6JraMRZ176s3oZqFx/tl73WUCC
-         FAgg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HKe/pymh"
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-139b914bab6so340317c88.1
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 13:34:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782246438; x=1782851238; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A2p3VMqob0x6dZXFsBHs+SV7dY60+U6kj2FwO5qGa2o=;
-        b=Z9c1OcuFHmBWV7Ua7iIv195QoBl60M5YfeP4Yx3FsIsMloirTWshGhrF7mUoYjQQ7F
-         UubvpL6zUTp9Lq64ALr60qaFrBSqFblKK3l7icw9Z8609FpXp1LJb6HhDjYS0oMOUnvp
-         Ezpk3fjyjIpCTOrGGGQUqxLEVkzC+idDV9PxUMNpRVE4jD9XIX1kjEHcWaZz2T3c32Yc
-         DfuQE8hx9gCbbZoZNZvAZ6/yIQsNWfCYVWrCUI2+gcMHgG8KOW0mVwOMI+hpKudiE2z1
-         9KpJkcMUpyR4SC64b+NEmHejaXNAQK00xBtW690qvssYszxKyiTz49ZcaSgr8MV2gXsa
-         hDSw==
+        d=gmail.com; s=20251104; t=1782246854; x=1782851654; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=V/iZmtdB11KqN+vGhwxB8gBb6HKZyejfBzhGJSiERq0=;
+        b=HKe/pymhZhPUtd8xvy5zDQeaiF7yBOjX/+bJcuGSSiT/xbfJ0w8ycaGYxCB15I2ZIl
+         NutijuixmYFPFfFkylyI4ICYu0L6Ti77HXiw/BoB3ZsAeI5VUMUpP40+kq5LJyy4OWWp
+         Qa4xlwJjgqihhdMCNNrng4NfU/GlAuBovlX8bcHCVfzT7NFv6Q0X1pE2A9ZVJhWtey4T
+         h4oKQJNp3gaeLdQTqyXtd4PmkSe6kSg7RyyOmj2J7C8eWDZMzrXQir6DPGcHPmewfrvB
+         YQWP3BSm6BjlD+M/yvCGnUQ5A2ci5gjqFvQk/f0AjZIBOxh4viagCJvIWlyyid9CwaUq
+         Qvbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782246438; x=1782851238;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=A2p3VMqob0x6dZXFsBHs+SV7dY60+U6kj2FwO5qGa2o=;
-        b=N8vASML7Zs9D1bf4wlHyGB9rUWPKjahYwJrX06ciV4NtriO6bkU8LJNJ+ZnOsfjbqw
-         9G4nalR0/AZ+Z4B2YCD7RoB1JJfui6G/Q+fGjozYa6q/OhrW0eJoVuYwDIzymF7q2KKE
-         hr+X8VUa1/QjvH8Q2LXdlQzkigFuQRQegBFkVwru0EXV2cAPZCQBhewgg55Eb+xEtJ7+
-         nKhRC9SSbo4PL88XxBzBwSeBne5HyIUuK5Ndu6RouLFKmHJU4DQE6bxOPvvFL/jvaJoS
-         US4bE8wE1P769uF2nsQ34GHCv8tOEQDHtypi2lBgwObVhf3x7ZxD63UmC38j2SiwbmVp
-         qEQQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rr8CBLFkHCHqXaUtVidFcHW5zXvG160+7JsYvqMEg9b4U/E+DwSLF55E8RWTRPy4fsOnpY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8nDEs/CTgNH9tbmQ6ovcFwL99QEfz3RvzLYv/Ymn7MQVjPWbU
-	gfqRj75j/0/fdXxbtiqNyIl3EOvDipUSTAUvlBvB54VE0g4rs9wRhdhw4o3VHmQDl2tZT+AtVhr
-	6Xt/XEOXe8It+YJ06YdnwPOh+xlssCGs=
-X-Gm-Gg: AfdE7ck2jYTcPc+VEmF4/T+CgnQi1OQuLPlHdciO2KO1zKtcXT8vTicjlKS4afULw3K
-	z6sIUtC3alSBhitIDjIivOoJaQTNTiKBnj6aYsJ6UWEIieJmzCRmDStY/t6fG+fpNeXdLLrt9fI
-	pHGahr818CWSdQdK1S86j2ZrUnRu6FdBhJF4008vcpGqUNZZilWS3lRyP40oPUradGuxgkoQVmY
-	g8LNRNmFhQ0FgiBcUDPii2n45hP94dSLSvzv+hhvwVRt3Uk/6KMbfgE510PgtjJ4FcNj5OqTsZx
-	HV2U01lPMN5EXMDdnYxe5XwhBsnIHGsxd3cOfa/hHBnsd0z8I8BmI3YzRm8VhZKp32xoUA==
-X-Received: by 2002:a17:902:d505:b0:2bf:23c3:34ba with SMTP id
- d9443c01a7336-2c742b3e10emr162283065ad.28.1782246437819; Tue, 23 Jun 2026
- 13:27:17 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782246854; x=1782851654;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V/iZmtdB11KqN+vGhwxB8gBb6HKZyejfBzhGJSiERq0=;
+        b=AdZBjy7YuKX+ukLiUBx82P8xE4TCPjcTjzrVt1JupQwqoaVoNy95wUjTdaSve33kRX
+         uH34tvsnwIiZ9JMBzwHiVxVui0UoBb8vTE2pHRTzBJsZNi31bKBB5oWXUHEi6o9k177G
+         zxE94qzdX4CPjokF6FWT+o4v6RoTBOmyWuZScuPxIxiv4508Xf7lBBCM5QrXxpCilCfj
+         LWgWhMbau/gz+p+HHmK2D+T4JlqTBRggOdx20KqK626ZbLtqgXhAlNyxc7INVvMcAf7X
+         E53W6nlEiG0qWpJ+t9XIOkRouQly+wfmRJ8wCgHx99dGhG/D5sR5gqB6m9o8wJFljJCY
+         bheg==
+X-Forwarded-Encrypted: i=1; AFNElJ8peBhJ5PP1AE15ql/oVyUyfdEd7pTtUo1Jlm+NvRqy1g2qnlatJq32hJGEfqHVinPPSlw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyyfp7Jias2UhNJ6S+xRCGesYTosLSW/v1F58pG/fYnPPQIFQme
+	N5PAsGt7gMML5rd0tTVkP+3aiz2/9IoVDqbpBlD66MqEW1/OLyelyA0t
+X-Gm-Gg: AfdE7cnPGBt4N226Zrw+a7GgApMCO5TRYYxuYIlX54oPIt7FO1FJ60auSPLpd2uZkR0
+	GD1cUFSRWJCxvmRps8VVbOD5uZKKJMuLc3ug23tjXIAVkJak1EwO0qWHcmjzGyONjfTDjjHr28B
+	Tsrr84Y4Ktd+5M8r6uqcAlD+D2el+XKJvzjRhjC1f9CtcdUbR3sFODi9rZZC+K4PZUEyZs3+1/5
+	r1okTw+B6ynfuBm7BQ5SX1JANgjWmHKfhQ8zgBNv9KQNyTgJzCoJbPQIvuhpNGGWlamTn4dHWvU
+	+AoqKliJEfI4iRh6F2tnTkscdCzhTSvupqlxZOF5HrzNhYUc+NDPNfSQWKGmQcp+QL0riDED6F3
+	hNxkzhM0Fr6c/ZReSCEmMXTfmgWlsr4r+7Lt2a3Q2FMLflmcSfVZqqti7OJug928zsTAXaZhM+r
+	Qk3aqbuilunTJwNClcBUw+D8Hujb2Fk/rsMkdno/gkx84CmcHSVNtQh3ekJu8tJ6X/aQ==
+X-Received: by 2002:a05:701b:4550:10b0:138:407c:1d1a with SMTP id a92af1059eb24-139d0cf79e4mr174252c88.38.1782246853842;
+        Tue, 23 Jun 2026 13:34:13 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:20e3:c15b:de5e:66e6? ([2620:10d:c090:500::e22])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-139adcc5f14sm16320799c88.6.2026.06.23.13.34.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jun 2026 13:34:13 -0700 (PDT)
+Message-ID: <30801da14c1f4a745623e4e2ce5b2d1d34e1b156.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 02/17] bpf: Add source and instruction
+ diagnostic context
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
+Date: Tue, 23 Jun 2026 13:34:11 -0700
+In-Reply-To: <20260619205934.1312876-3-memxor@gmail.com>
+References: <20260619205934.1312876-1-memxor@gmail.com>
+	 <20260619205934.1312876-3-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org> <20260618-bpf-ringbuf-fixes-v2-8-33fde039ddf3@kernel.org>
-In-Reply-To: <20260618-bpf-ringbuf-fixes-v2-8-33fde039ddf3@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 23 Jun 2026 13:27:03 -0700
-X-Gm-Features: AVVi8CeXtZ15zdMfAxyxFrRffuXWFGGoz7UAyF138iQEs558FIoN6NKA4iLQNGs
-Message-ID: <CAEf4BzYKewRUpOboOmPcxdX25731tF0w63V0Ha=_f4D_F-ie3w@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 8/8] libbpf: ringbuf: Prevent missed wakeups
-To: Tamir Duberstein <tamird@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Andrea Righi <arighi@nvidia.com>, Xu Kuohai <xukuohai@huawei.com>, 
-	Andrea Righi <andrea.righi@canonical.com>, Bing-Jhong Billy Jheng <billy@starlabs.sg>, 
-	David Vernet <void@manifault.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Andrew Werner <awerner32@gmail.com>, 
-	Zvi Effron <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Sashiko <sashiko-bot@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 18, 2026 at 5:27=E2=80=AFPM Tamir Duberstein <tamird@kernel.org=
-> wrote:
->
-> After consuming the last visible record, ringbuf_process_ring()
-> publishes the consumer position and checks the producer position. These
-> operations lack a full StoreLoad barrier. A producer can therefore
-> commit a new record but read the old consumer position while the
-> consumer reads the old producer position. The producer sends no
-> notification and the consumer waits despite a queued record.
->
-> Insert a full barrier between publishing a consumer position and the
-> next producer position load. When a record bound or callback ends the
-> current invocation first, execute the barrier before returning so the
-> load in a later invocation completes the same handshake.
->
-> Add an edge-triggered epoll test that drains one record per call while a
-> concurrent producer fills the ring. Without the barrier, a missed
-> notification leaves the producer dropping records from a full ring while
-> the consumer times out. Document that bounded consumers and callbacks
-> that terminate consumption must drain before waiting again.
->
-> Fixes: bf99c936f947 ("libbpf: Add BPF ring buffer support")
-> Reported-by: Andrew Werner <awerner32@gmail.com>
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/bpf/20260614015716.945AF1F000E9@smtp.kern=
-el.org/
-> Assisted-by: Codex:gpt-5.5
-> Signed-off-by: Tamir Duberstein <tamird@kernel.org>
+On Fri, 2026-06-19 at 22:59 +0200, Kumar Kartikeya Dwivedi wrote:
+> Teach verifier diagnostics to annotate an instruction with BTF source
+> line information and nearby BPF instructions. The renderer keeps source
+> text in a fixed-width lane and prints instructions in a stable right-hand
+> gutter.
+>=20
+> Wrap annotation text under the source line so long error labels remain
+> readable while the source and instruction lanes keep their fixed layout.
+>=20
+> Keeping source and instruction context in one commit preserves the visual
+> layout contract that later diagnostic reports rely on.
+>=20
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 > ---
->  tools/lib/bpf/libbpf.h                           | 23 +++++++
->  tools/lib/bpf/ringbuf.c                          | 24 +++++--
->  tools/testing/selftests/bpf/prog_tests/ringbuf.c | 83 ++++++++++++++++++=
-++++++
->  3 files changed, 123 insertions(+), 7 deletions(-)
->
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index ae46b17feaa6..3a649ed87034 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -1440,6 +1440,11 @@ struct ring;
->  struct user_ring_buffer;
->
->  /* Callback-based consumption is unsupported for BPF_F_RB_OVERWRITE maps=
-. */
-> +/*
-> + * A negative return stops consumption; non-negative values continue. St=
-opping
-> + * can leave records queued without a new readiness notification. Before
-> + * waiting for readiness again, consume until no records remain.
-> + */
->  typedef int (*ring_buffer_sample_fn)(void *ctx, void *data, size_t size)=
-;
->
->  struct ring_buffer_opts {
-> @@ -1456,6 +1461,20 @@ LIBBPF_API int ring_buffer__add(struct ring_buffer=
- *rb, int map_fd,
->                                 ring_buffer_sample_fn sample_cb, void *ct=
-x);
->  LIBBPF_API int ring_buffer__poll(struct ring_buffer *rb, int timeout_ms)=
-;
->  LIBBPF_API int ring_buffer__consume(struct ring_buffer *rb);
+
+[...]
+
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 15ae7c43f594..6f08bf383c11 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -8255,6 +8255,17 @@ int btf_type_snprintf_show(const struct btf *btf, =
+u32 type_id, void *obj,
+>  	return ssnprintf.len;
+>  }
+> =20
+> +int btf_type_snprintf_show_name(const struct btf *btf, u32 type_id,
+> +				char *buf, int len)
+> +{
+> +	struct btf_show show =3D {
+> +		.btf =3D btf,
+> +		.state.type_id =3D type_id,
+> +	};
+
+fwiw, this is a big structure (200 bytes), but we already have it used
+on stack in several places.
+
 > +
-> +/**
-> + * @brief **ring_buffer__consume_n()** consumes up to a requested number=
- of
-> + * records from a ring buffer manager without event polling.
-> + *
-> + * @param rb A ring buffer manager object.
-> + * @param n Maximum number of records to consume.
-> + * @return The number of records consumed, or a negative error code on f=
-ailure.
-> + *
-> + * Reaching the requested bound does not establish that every ring is em=
-pty.
-> + * Records can remain queued without a new readiness notification. Befor=
-e
-> + * calling ring_buffer__poll() or waiting on ring_buffer__epoll_fd(), ca=
-ll
-> + * ring_buffer__consume() until it returns 0.
-> + */
->  LIBBPF_API int ring_buffer__consume_n(struct ring_buffer *rb, size_t n);
->  LIBBPF_API int ring_buffer__epoll_fd(const struct ring_buffer *rb);
->
-> @@ -1538,6 +1557,10 @@ LIBBPF_API int ring__consume(struct ring *r);
->   * @param r A ringbuffer object.
->   * @param n Maximum number of records to consume.
->   * @return The number of records consumed, or a negative error code on f=
-ailure.
-> + *
-> + * Reaching the requested bound does not establish that the ring is empt=
-y.
-> + * Records can remain queued without a new readiness notification. Befor=
-e
-> + * waiting on ring__map_fd(), call ring__consume() until it returns 0.
->   */
->  LIBBPF_API int ring__consume_n(struct ring *r, size_t n);
->
-> diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-> index 141f2cbe56eb..0598f6c2f7da 100644
-> --- a/tools/lib/bpf/ringbuf.c
-> +++ b/tools/lib/bpf/ringbuf.c
-> @@ -271,7 +271,7 @@ static int64_t ringbuf_process_ring(struct ring *r, s=
-ize_t n)
->                 return 0;
->
->         cons_pos =3D __atomic_load_n(r->consumer_pos, __ATOMIC_ACQUIRE);
-> -       do {
-> +       for (;;) {
->                 got_new_data =3D false;
->                 prod_pos =3D __atomic_load_n(r->producer_pos, __ATOMIC_AC=
-QUIRE);
->                 /* Positions wrap; the consumer cannot logically pass the=
- producer. */
-> @@ -279,9 +279,9 @@ static int64_t ringbuf_process_ring(struct ring *r, s=
-ize_t n)
->                         len_ptr =3D r->data + (cons_pos & r->mask);
->                         len =3D __atomic_load_n(len_ptr, __ATOMIC_ACQUIRE=
-);
->
-> -                       /* sample not committed yet, bail out for now */
-> +                       /* Retry a busy record once after publishing prio=
-r records. */
->                         if (len & BPF_RINGBUF_BUSY_BIT)
-> -                               goto done;
-> +                               break;
+> +	return snprintf(buf, len, "%s", btf_show_name(&show));
+> +}
+> +
+>  #ifdef CONFIG_PROC_FS
+>  static void bpf_btf_show_fdinfo(struct seq_file *m, struct file *filp)
+>  {
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 649cce41e13f..7883449ead89 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
 
-so we do this one time retry just so that we can reuse the same memory
-barrier, is that right? and similarly all those error-returning
-conditions with cnt =3D err. Wouldn't it be cleaner and easier to
-mentally follow to have `goto done` which would just duplicate memory
-barrier and exit with whatever value err is?
+[...]
 
->
->                         got_new_data =3D true;
->                         cons_pos +=3D roundup_len(len);
+> @@ -3498,7 +3499,8 @@ int bpf_prog_get_file_line(struct bpf_prog *prog, u=
+nsigned long ip, const char *
+>  	if (idx =3D=3D -1)
+>  		return -ENOENT;
+> =20
+> -	bpf_get_linfo_file_line(btf, &linfo[idx], filep, linep, nump);
+> +	bpf_get_linfo_file_line(btf, &linfo[idx], filep, linep, nump,
+> +				BPF_LINFO_LINE_TRIM);
+
+Nit: line width limit is 100 characters.
+
+>  	return 0;
+>  }
+> =20
+> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+> index a18fd5aa395d..534a7bc58781 100644
+> --- a/kernel/bpf/diagnostics.c
+> +++ b/kernel/bpf/diagnostics.c
+> @@ -1,12 +1,16 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  // Copyright (c) 2026 Meta Platforms, Inc. and affiliates.
+> =20
+> +#include <linux/bpf.h>
+>  #include <linux/bpf_verifier.h>
+> +#include <linux/btf.h>
+>  #include <linux/ctype.h>
+> +#include <linux/kernel.h>
+>  #include <linux/slab.h>
+>  #include <linux/stdarg.h>
+>  #include <linux/string.h>
+> =20
+> +#include "disasm.h"
+>  #include "diagnostics.h"
+> =20
+>  #define BPF_DIAG_CATEGORY_MEMORY_SAFETY "Memory Safety"
+> @@ -21,12 +25,147 @@
+> =20
+>  #define BPF_DIAG_TEXT_WIDTH 100
+>  #define BPF_DIAG_TEXT_INDENT "  "
+> +#define BPF_DIAG_MSG_LEN 512
+> +#define BPF_DIAG_SOURCE_CONTEXT 2
+> +#define BPF_DIAG_SOURCE_LINE_CNT (1 + BPF_DIAG_SOURCE_CONTEXT * 2)
+> +#define BPF_DIAG_INSN_CONTEXT 2
+> +#define BPF_DIAG_INSN_CNT (1 + BPF_DIAG_INSN_CONTEXT * 2)
+> +#define BPF_DIAG_COLUMN_GAP 3
+> +#define BPF_DIAG_SOURCE_LANE_WIDTH 88
+> +#define BPF_DIAG_TAB_WIDTH 8
+> +#define BPF_DIAG_REG_DESC_LEN 512
+> +#define BPF_DIAG_REG_TMP_LEN 192
+> +#define BPF_DIAG_SCRATCH_STR_CNT 3
+> +#define BPF_DIAG_SCRATCH_STR_LEN 256
+> +#define BPF_DIAG_TEXT_LEN 160
+> +
+> +struct bpf_diag_source {
+> +	const char *file;
+> +	const char *line;
+> +	u32 file_name_off;
+> +	int line_num;
+> +	int line_col;
+> +};
+> +
+> +struct bpf_diag_source_line {
+> +	const char *line;
+> +	int line_num;
+> +};
+> +
+> +struct bpf_diag_insn {
+> +	char text[BPF_DIAG_TEXT_LEN];
+> +	int idx;
+> +	bool valid;
+> +};
+> +
+> +struct bpf_diag_insn_buf {
+> +	char *buf;
+> +	size_t size;
+> +	size_t len;
+> +};
+> +
+> +struct bpf_diag_insn_ctx {
+> +	struct bpf_verifier_env *env;
+> +	struct bpf_diag_insn_buf buf;
+> +};
+> +
+> +struct bpf_diag_scratch {
+> +	char str[BPF_DIAG_SCRATCH_STR_CNT][BPF_DIAG_SCRATCH_STR_LEN];
+> +	struct bpf_diag_source source;
+> +	struct bpf_diag_source_line source_lines[BPF_DIAG_SOURCE_LINE_CNT];
+> +	struct bpf_diag_insn insns[BPF_DIAG_INSN_CNT];
+> +};
+> +
+> +struct bpf_diag {
+> +	struct bpf_diag_scratch scratch;
+> +};
+> =20
+>  bool bpf_diag_enabled(const struct bpf_verifier_env *env)
+>  {
+>  	return env->log.level & BPF_LOG_LEVEL;
+>  }
+> =20
+> +static struct bpf_diag *bpf_diag_env(struct bpf_verifier_env *env)
+> +{
+> +	if (!bpf_diag_enabled(env))
+> +		return NULL;
+> +	if (env->diag)
+> +		return env->diag;
+> +
+> +	env->diag =3D kzalloc_obj(struct bpf_diag, GFP_KERNEL_ACCOUNT);
+
+Given that there is no way to report this allocation failure and that
+struct bpf_diag takes <4Kb, I'd suggest allocating it at the time of
+bpf_verifier_env creation.
+
+> +	return env->diag;
+> +}
+> +
+> +static struct bpf_diag_scratch *bpf_diag_scratch(struct bpf_verifier_env=
+ *env)
+> +{
+> +	struct bpf_diag *diag =3D bpf_diag_env(env);
+> +
+> +	return diag ? &diag->scratch : NULL;
+> +}
+> +
+> +char *bpf_diag_scratch_buf(struct bpf_verifier_env *env,
+> +			   unsigned int slot, size_t *size)
+> +{
+> +	struct bpf_diag_scratch *scratch =3D bpf_diag_scratch(env);
+> +	char *buf =3D NULL;
+> +	size_t buf_size =3D 0;
+> +
+> +	if (!scratch)
+> +		goto out;
+
+Nit: in case of a NULL exit, maybe set `*size =3D 0;`, just in case?
+
+> +
+> +	if ((unsigned int)slot >=3D BPF_DIAG_SCRATCH_STR_CNT)
+> +		goto out;
+> +
+> +	buf =3D scratch->str[slot];
+> +	buf_size =3D sizeof(scratch->str[slot]);
+> +
+> +out:
+> +	if (size)
+> +		*size =3D buf_size;
+> +	return buf;
+> +}
+> +
+> +const char *bpf_diag_scratch_strcpy(struct bpf_verifier_env *env,
+> +				    unsigned int slot,
+> +				    const char *str)
+> +{
+> +	size_t size;
+> +	char *buf =3D bpf_diag_scratch_buf(env, slot, &size);
+> +
+> +	if (!buf)
+> +		return "";
+> +	strscpy(buf, str ?: "", size);
+> +	return buf;
+> +}
+> +
+> +const char *bpf_diag_scratch_printf(struct bpf_verifier_env *env,
+> +				    unsigned int slot,
+> +				    const char *fmt, ...)
+> +{
+> +	size_t size;
+> +	va_list args;
+> +	char *buf =3D bpf_diag_scratch_buf(env, slot, &size);
+> +
+> +	if (!buf)
+> +		return "";
+> +
+> +	va_start(args, fmt);
+> +	vscnprintf(buf, size, fmt, args);
+> +	va_end(args);
+> +	return buf;
+> +}
+> +
+> +void bpf_diag_free(struct bpf_verifier_env *env)
+> +{
+> +	struct bpf_diag *diag =3D env->diag;
+> +
+> +	if (!diag)
+> +		return;
+> +
+> +	kfree(diag);
+> +	env->diag =3D NULL;
+> +}
+> +
+>  static void bpf_diag_log(struct bpf_verifier_env *env, const char *fmt, =
+...)
+>  {
+>  	va_list args;
+> @@ -38,7 +177,6 @@ static void bpf_diag_log(struct bpf_verifier_env *env,=
+ const char *fmt, ...)
+>  	bpf_verifier_vlog(&env->log, fmt, args);
+>  	va_end(args);
+>  }
+> -
+
+Looks like a squash/patch reordering artifact.
+
+>  static void bpf_diag_print_wrapped_prefixed(struct bpf_verifier_env *env=
+,
+>  					    const char *first_prefix,
+>  					    const char *next_prefix,
+> @@ -103,6 +241,287 @@ static void bpf_diag_vprint_indented(struct bpf_ver=
+ifier_env *env,
+>  	kfree(buf);
+>  }
+> =20
+> +static int bpf_diag_line_width(unsigned int line)
+> +{
+> +	int width =3D 1;
+> +
+> +	while (line >=3D 10) {
+> +		line /=3D 10;
+> +		width++;
+> +	}
+> +
+> +	return width;
+> +}
+> +
+> +static const char *bpf_diag_func_name(struct bpf_verifier_env *env, u32 =
+insn_idx)
+> +{
+> +	const struct bpf_subprog_info *subprog;
+> +	const struct bpf_func_info *info;
+> +	const struct btf_type *type;
+> +	int subprogno;
+> +
+> +	subprog =3D bpf_find_containing_subprog(env, insn_idx);
+> +	if (!subprog)
+> +		return NULL;
+> +	if (subprog->name && *subprog->name)
+> +		return subprog->name;
+
+The code below repeats what check_btf_func() does to compute
+subprogram names, would it be possible to move subprog->name
+initialization somewhere earlier? Or add an accessor that optionally
+populates the name?
+
+> +
+> +	if (!env->prog->aux->func_info || !env->prog->aux->btf)
+> +		return NULL;
+> +
+> +	subprogno =3D subprog - env->subprog_info;
+> +	if (subprogno < 0 || subprogno >=3D env->prog->aux->func_info_cnt)
+> +		return NULL;
+> +
+> +	info =3D &env->prog->aux->func_info[subprogno];
+> +	type =3D btf_type_by_id(env->prog->aux->btf, info->type_id);
+> +	if (!type)
+> +		return NULL;
+> +
+> +	return btf_name_by_offset(env->prog->aux->btf, type->name_off);
+> +}
+> +
+> +static bool bpf_diag_fill_source(struct bpf_verifier_env *env,
+> +				 const struct bpf_line_info *linfo,
+> +				 struct bpf_diag_source *src)
+> +{
+> +	const char *file, *line;
+> +	int line_num;
+> +
+> +	if (!env->prog->aux->btf)
+> +		return false;
+> +
+> +	bpf_get_linfo_file_line(env->prog->aux->btf, linfo, &file, &line,
+> +				&line_num, 0);
+
+Nit: I'd refactor bpf_get_linfo_file_line into a function that fills
+     bpf_diag_source (renamed to something generic) and used everywhere.
+
+> +	if (!file || !*file || !line || !*line)
+> +		return false;
+> +
+> +	src->file =3D file;
+> +	src->line =3D line;
+> +	src->file_name_off =3D linfo->file_name_off;
+> +	src->line_num =3D line_num;
+> +	src->line_col =3D BPF_LINE_INFO_LINE_COL(linfo->line_col);
+> +	return true;
+> +}
+> +
+> +static bool bpf_diag_get_source(struct bpf_verifier_env *env, u32 insn_i=
+dx,
+> +				struct bpf_diag_source *src)
+> +{
+> +	const struct bpf_line_info *linfo;
+> +
+> +	linfo =3D bpf_find_linfo(env->prog, insn_idx);
+> +	if (!linfo)
+> +		return false;
+> +
+> +	return bpf_diag_fill_source(env, linfo, src);
+> +}
+> +
+> +static void bpf_diag_fill_source_lines(struct bpf_verifier_env *env,
+> +				       const struct bpf_diag_source *src,
+> +				       int start_line, int end_line,
+> +				       struct bpf_diag_source_line *lines)
+> +{
+> +	const struct bpf_line_info *linfo =3D env->prog->aux->linfo;
+> +	struct btf *btf =3D env->prog->aux->btf;
+> +	u32 i;
+> +
+> +	for (i =3D 0; i < BPF_DIAG_SOURCE_LINE_CNT; i++)
+> +		lines[i].line_num =3D start_line + i;
+> +
+> +	if (!btf || !env->prog->aux->nr_linfo)
+> +		return;
+> +
+> +	for (i =3D 0; i < env->prog->aux->nr_linfo; i++) {
+> +		const char *file, *line;
+> +		int line_num, idx;
+> +
+> +		if (linfo[i].file_name_off !=3D src->file_name_off)
+> +			continue;
+> +
+> +		bpf_get_linfo_file_line(btf, &linfo[i], &file, &line,
+> +					&line_num, 0);
+> +		if (line_num < start_line || line_num > end_line)
+> +			continue;
+> +
+> +		idx =3D line_num - start_line;
+> +		if (lines[idx].line)
+> +			continue;
+> +		if (line && *line)
+> +			lines[idx].line =3D line;
+> +	}
+> +}
+> +
+> +static int bpf_diag_line_indent(const char *line)
+> +{
+> +	int indent =3D 0;
+> +
+> +	while (*line =3D=3D ' ' || *line =3D=3D '\t') {
+> +		if (*line =3D=3D '\t')
+> +			indent =3D round_up(indent + 1, BPF_DIAG_TAB_WIDTH);
+> +		else
+> +			indent++;
+> +		line++;
+> +	}
+> +
+> +	return indent;
+> +}
+> +
+> +static void bpf_diag_insn_print(void *private_data, const char *fmt, ...=
+)
+> +{
+> +	struct bpf_diag_insn_ctx *ctx =3D private_data;
+> +	struct bpf_diag_insn_buf *buf =3D &ctx->buf;
+> +	va_list args;
+> +
+> +	if (buf->len >=3D buf->size)
+> +		return;
+> +
+> +	va_start(args, fmt);
+> +	buf->len +=3D vscnprintf(buf->buf + buf->len, buf->size - buf->len,
+> +			       fmt, args);
+> +	va_end(args);
+> +}
+> +
+> +static const char *bpf_diag_disasm_kfunc_name(void *private_data,
+> +					      const struct bpf_insn *insn)
+> +{
+> +	struct bpf_diag_insn_ctx *ctx =3D private_data;
+> +
+> +	return bpf_disasm_kfunc_name(ctx->env, insn);
+> +}
+> +
+> +static void bpf_diag_format_insn(struct bpf_verifier_env *env, int insn_=
+idx,
+> +				 struct bpf_diag_insn *diag_insn)
+> +{
+> +	struct bpf_insn *insn;
+> +	struct bpf_diag_insn_ctx ctx =3D {
+> +		.env =3D env,
+> +		.buf =3D {
+> +			.buf =3D diag_insn->text,
+> +			.size =3D sizeof(diag_insn->text),
+> +		},
+> +	};
+> +	const struct bpf_insn_cbs cbs =3D {
+> +		.cb_call =3D bpf_diag_disasm_kfunc_name,
+> +		.cb_print =3D bpf_diag_insn_print,
+> +		.private_data =3D &ctx,
+> +	};
+> +
+> +	diag_insn->idx =3D insn_idx;
+> +	diag_insn->valid =3D false;
+> +	diag_insn->text[0] =3D '\0';
+> +
+> +	if (insn_idx < 0 || insn_idx >=3D env->prog->len)
+> +		return;
+> +
+> +	if (insn_idx > 0 && bpf_is_ldimm64(&env->prog->insnsi[insn_idx - 1]))
+> +		return;
+> +
+> +	insn =3D &env->prog->insnsi[insn_idx];
+> +	if (bpf_is_ldimm64(insn) && insn_idx + 1 >=3D env->prog->len)
+> +		return;
+> +
+> +	print_bpf_insn(&cbs, insn, env->allow_ptr_leaks);
+> +	while (ctx.buf.len && diag_insn->text[ctx.buf.len - 1] =3D=3D '\n')
+> +		diag_insn->text[--ctx.buf.len] =3D '\0';
+> +
+> +	diag_insn->valid =3D true;
+> +}
+> +
+> +static void bpf_diag_format_source_text(char *buf, size_t size,
+> +					const char *line, int width)
+> +{
+> +	int col =3D 0, len =3D 0;
+> +
+> +	if (!size)
+> +		return;
+> +	if (width <=3D 0) {
+> +		buf[0] =3D '\0';
+> +		return;
+> +	}
+> +
+> +	line =3D line ?: "...";
+> +	while (*line && col < width && len + 1 < size) {
+> +		if (*line =3D=3D '\t') {
+> +			int next =3D round_up(col + 1, BPF_DIAG_TAB_WIDTH);
+> +
+> +			while (col < next && col < width && len + 1 < size) {
+> +				buf[len++] =3D ' ';
+> +				col++;
+> +			}
+> +			line++;
+> +			continue;
+> +		}
+> +
+> +		buf[len++] =3D *line++;
+> +		col++;
+> +	}
+> +
+> +	if (*line) {
+> +		int ellipsis_len =3D min(3, width);
+> +
+> +		while (len > 0 && col > width - ellipsis_len) {
+> +			len--;
+> +			col--;
+> +		}
+> +		while (ellipsis_len-- && len + 1 < size) {
+> +			buf[len++] =3D '.';
+> +			col++;
+
+'col' unused.
+
+> +		}
+> +	}
+> +
+> +	buf[len] =3D '\0';
+> +}
+> +
+> +static void bpf_diag_format_source_lane(char *buf, size_t size,
+> +					const char *source_prefix,
+> +					int source_line_width,
+> +					int line_num, const char *line)
+> +{
+> +	int len, text_width;
+> +
+> +	if (line_num <=3D 0) {
+> +		buf[0] =3D '\0';
+> +		return;
+> +	}
+> +
+> +	len =3D scnprintf(buf, size, "%s%*d | ",
+> +			source_prefix, source_line_width, line_num);
+
+Please add a post-processing pass to claude, fixing the line width to 100.
+
+> +	if (len >=3D (int)size)
+> +		return;
+> +
+> +	text_width =3D BPF_DIAG_SOURCE_LANE_WIDTH - len;
+> +	bpf_diag_format_source_text(buf + len, size - len, line, text_width);
+> +}
+> +
+> +static void bpf_diag_print_source_insn_line(struct bpf_verifier_env *env=
+,
+> +					    const char *source_prefix,
+> +					    int source_line_width,
+> +					    const struct bpf_diag_source_line *line,
+> +					    const struct bpf_diag_insn *diag_insn,
+> +					    int focus_insn_idx,
+> +					    int insn_width)
+> +{
+> +	size_t source_lane_size;
+> +	char *source_lane;
+> +
+> +	source_lane =3D bpf_diag_scratch_buf(env, 0,
+> +					   &source_lane_size);
+> +	if (!source_lane)
+> +		return;
+> +
+> +	bpf_diag_format_source_lane(source_lane, source_lane_size,
+> +				    source_prefix, source_line_width,
+> +				    line->line_num, line->line);
+> +
+> +	bpf_diag_log(env, "  %-*s%*s", BPF_DIAG_SOURCE_LANE_WIDTH,
+> +		     source_lane, BPF_DIAG_COLUMN_GAP, "");
+> +	if (diag_insn->valid)
+> +		bpf_diag_log(env, "%s%*d | %s",
+> +			     diag_insn->idx =3D=3D focus_insn_idx ? ">>> " : "    ",
+> +			     insn_width, diag_insn->idx, diag_insn->text);
+> +	bpf_diag_log(env, "\n");
+> +}
+> +
+>  void bpf_diag_report_header(struct bpf_verifier_env *env,
+>  			    const char *category, const char *problem)
+>  {
+> @@ -168,3 +587,120 @@ static void bpf_diag_report_suggestion(struct bpf_v=
+erifier_env *env,
+>  	va_end(args);
+>  	bpf_diag_log(env, "\n");
+>  }
+
+Nit: it would be nice to have a comment here with a sample of what this
+     function actually prints (would be nice with other functions as well).
+
+> +static void bpf_diag_print_source_annotation(struct bpf_verifier_env *en=
+v,
+> +					     int line_width, int indent,
+> +					     const char *label,
+> +					     const char *msg)
+> +{
+> +	size_t first_prefix_size, next_prefix_size;
+> +	char *first_prefix, *next_prefix;
+> +	char *text;
+> +
+> +	first_prefix =3D bpf_diag_scratch_buf(env, 0,
+> +					    &first_prefix_size);
+> +	next_prefix =3D bpf_diag_scratch_buf(env,
+> +					   1,
+> +					   &next_prefix_size);
+> +	if (!first_prefix || !next_prefix)
+> +		return;
+> +
+> +	indent =3D min_t(int, indent,
+> +		       max_t(int, 0, BPF_DIAG_SOURCE_LANE_WIDTH -
+> +			     line_width - 8));
+> +	text =3D kasprintf(GFP_KERNEL_ACCOUNT, "%s: %s", label, msg);
+> +	if (!text) {
+> +		bpf_diag_log(env, "  %*s | %*s^-- %s\n",
+> +			     line_width + 4, "", indent, "", label);
+
+Should the error path print the 'msg' as well?
+
+> +		return;
+> +	}
+> +
+> +	scnprintf(first_prefix, first_prefix_size, "  %*s | %*s^-- ",
+> +		  line_width + 4, "", indent, "");
+> +	scnprintf(next_prefix, next_prefix_size, "  %*s | %*s    ",
+> +		  line_width + 4, "", indent, "");
+> +
+> +	bpf_diag_print_wrapped_prefixed(env, first_prefix, next_prefix, text);
+> +	kfree(text);
+> +}
+> +
+> +void bpf_diag_report_source(struct bpf_verifier_env *env, u32 insn_idx,
+> +			    const char *label, const char *fmt, ...)
+> +{
+> +	struct bpf_diag_scratch *scratch;
+> +	struct bpf_diag_source_line *source_lines;
+> +	struct bpf_diag_insn *diag_insn;
+> +	struct bpf_diag_source *src;
+> +	char *msg;
+> +	const char *func;
+> +	int start_line, end_line, width, indent, insn_width, i;
+> +	va_list args;
+> +
+> +	if (!bpf_diag_enabled(env))
+> +		return;
+> +
+> +	va_start(args, fmt);
+> +	msg =3D kvasprintf(GFP_KERNEL_ACCOUNT, fmt, args);
+> +	va_end(args);
+> +	if (!msg)
+> +		msg =3D kstrdup("<failed to allocate diagnostic text>",
+> +			      GFP_KERNEL_ACCOUNT);
+> +	if (!msg)
+> +		return;
+> +
+> +	label =3D label ?: "note";
+> +	scratch =3D bpf_diag_scratch(env);
+> +	if (!scratch)
+> +		goto out_free_msg;
+> +
+> +	src =3D &scratch->source;
+> +	source_lines =3D scratch->source_lines;
+> +	diag_insn =3D scratch->insns;
+> +	memset(source_lines, 0, sizeof(scratch->source_lines));
+> +	memset(diag_insn, 0, sizeof(scratch->insns));
+> +
+> +	if (!bpf_diag_get_source(env, insn_idx, src)) {
+> +		bpf_diag_log(env, "  insn %u\n", insn_idx);
+> +		bpf_diag_print_source_annotation(env, 0, 0, label, msg);
+> +		goto out_free_msg;
+> +	}
+> +
+> +	func =3D bpf_diag_func_name(env, insn_idx);
+> +	if (func && *func)
+> +		bpf_diag_log(env, "  %s @ %s:%d:%d\n", func, src->file,
+> +			     src->line_num, src->line_col);
+> +	else
+> +		bpf_diag_log(env, "  %s:%d:%d\n", src->file, src->line_num,
+> +			     src->line_col);
+> +
+> +	start_line =3D src->line_num - BPF_DIAG_SOURCE_CONTEXT;
+> +	end_line =3D src->line_num + BPF_DIAG_SOURCE_CONTEXT;
+> +	width =3D bpf_diag_line_width(end_line);
+> +	indent =3D bpf_diag_line_indent(src->line);
+> +	insn_width =3D bpf_diag_line_width(env->prog->len ? env->prog->len - 1 =
+: 0);
+> +	bpf_diag_fill_source_lines(env, src, start_line, end_line,
+> +				   source_lines);
+> +
+> +	for (i =3D 0; i < BPF_DIAG_INSN_CNT; i++) {
+> +		int row =3D i - BPF_DIAG_INSN_CONTEXT;
+> +
+> +		bpf_diag_format_insn(env, insn_idx + row, &diag_insn[i]);
+> +	}
+> +
+> +	for (i =3D 0; i < BPF_DIAG_SOURCE_LINE_CNT; i++) {
+
+This loop iterates both source_lines and diag_insn arrays,
+but these arrays are bounded by different constants: BPF_DIAG_INSN_CNT
+vs BPF_DIAG_SOURCE_LINE_CNT. Is there a reason to keep these constants
+separate?
+
+> +		const char *source_prefix;
+> +
+> +		source_prefix =3D source_lines[i].line_num =3D=3D src->line_num ?
+> +				">>> " : "    ";
+> +		bpf_diag_print_source_insn_line(env, source_prefix, width,
+> +						&source_lines[i],
+> +						&diag_insn[i],
+
+This is misleading, apart from the line corresponding to the insn_idx
+the source_lines[i] is not guaranteed to be aligned with diag_insn[i].
+Or I misread the intention and the goal is to just show some context?
+
+> +						insn_idx, insn_width);
+> +		if (source_lines[i].line_num =3D=3D src->line_num)
+> +			bpf_diag_print_source_annotation(env, width, indent,
+> +							 label, msg);
+> +	}
+> +
+> +out_free_msg:
+> +	kfree(msg);
+> +}
 
 [...]
