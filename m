@@ -1,197 +1,230 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D61F375AB5
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 22:46:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782254797; cv=pass; b=MmKlWfMPP7q3WXEWvWrOK4sRCtRSSSVRklp5Z6TOCXMFU+fQrko4LajH8IZROTvrqHh6gg0oOUjqxBBDlee6JbQL6OSdp7FpeECdFsAxFYyX6xlLtNZLspkHuKi7Crp/VSW3o3wKm111B3Xr+k6hJggjCnHiRMKF1pJsXz2mrJQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782254797; c=relaxed/simple;
-	bh=EoNa88wmRRzgNbTcw8bzW3CIxyyn/g31iBHhffrV7JI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p57CfcGfDzFgkHYNaYN9EaYwtDqRwYpPjTr38basZyQ538Emv1ww7wiVScJ9495JYLwkRXuHjlgR8Ja9WmbtLtz3v/34f3IJM2i01S90Xan6fOHOcVJfNIwJwnZMk1i+NT0LOlw5jcj3xDs4Pvfx8lcqvTjXmAPJnXcZPtzOx6w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ms6JfkGI; arc=pass smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A58F377ED2
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 22:53:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782255241; cv=none; b=oFyJ63PhCKZmWuiPC/T4xWVFbcqDxd2EjeV1AlwjIumzow3EJkHa63rEBNdcOguE562RqUxkrdZvsD6q+0E5M7jOoyS8TVg/hmaC3gkfxrqa0lPTApM6tseu8X7rFHfsoVlwnR+UibgvKnqEVM5zFasvVn2i4NJGRoE6U7F2WNc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782255241; c=relaxed/simple;
+	bh=Lj7yog85Qke2vlC0fDf2O9jwLY4c25K4y3Ykz/JsPQQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Mn0kqdchAqkNYGzuseMXXYZwHpMyo9Lu+zFwEjibjygEPYrzobaxWS1RDX034f9qEcTpK9+JmtnZyh0MFsvdZobKIo0drF0HA8BsIf4gtVuNo3/zXWjtY1XwxMpacfn2gY5CIJxp6/XBmaD+ISKKYo+fvB7pcEEHJDxK8HISR1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fU9tkf5q; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ms6JfkGI"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-37c8e7c8185so262964a91.3
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 15:46:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782254795; cv=none;
-        d=google.com; s=arc-20240605;
-        b=INQpsoXOLt2YHiQwmYaFCec+2NykFcMx57DUDX735/ggB7O4mlp53sIM+7oaj1KWwM
-         o07vpjkPSeB30tHzYYh56Uo61VRor0sMm1yxpn1NyzSQSivQQrfvgbtdd6k7DuWLsXk8
-         piMy0hRqNC3dLjiaxGqT92SiJcoRdWZ1PHUfbH2WI0tJjVzshlkHwXUvAQ7OxgETI9ay
-         NnuqDlo+yMSllxPm/YuxBEVrHJPssuINPwZ+gEoLmrMR57yrRAXYrME8FYHf4FhXLvpB
-         VMVdhiQEqcOo2QsZaeIfJtbJGd4uioEG7xFzwVUIBW6fJixBSTYQLqdaEQzAmjNh0gIj
-         /2KA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=4cQeF60kgONMVqNgnkSoiO81INVKj/yr1+GUEevj9iM=;
-        fh=IqI/Cp1xYGcfpyBgkhc6h3oFTMbeXOsSrhhlFByRLHg=;
-        b=J/lbPdvgVahGuBVhN2lIy8hYf8JDD3y33ma8yUFVIOZktLZfQcXmvXPrnufQyavO16
-         4KM8Hn8RevLaHIKpt5zIsLRo0IvdXr30obhsXbK0kW8RKdpiH5EjuTWUU30QVbmzr4gK
-         TQxAIXJRmXkDZMxfy1Bs8qhPdzNk+CyLlOrb8eEDRZL9tokofj14y4yUXrjEjJauCxgo
-         g392QuXdbU2yf3Z5/lQ8kKDv4/d9jZuKfHcn/F1SbKXaNGskD5XaD+fcl7hkOWX8GDxW
-         UQUByEb2evB9jAdINEeK3lMiagU36YfXjLkX+Qjz+Lx+dxO3NDnrCiDSCujPGNfyZZym
-         wfmA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782254795; x=1782859595; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4cQeF60kgONMVqNgnkSoiO81INVKj/yr1+GUEevj9iM=;
-        b=Ms6JfkGINuzIe/mAzUHh9cn/cBcZj33HtV9vrtrrkvMsfzNBLdv/IqRoGs3z1hYK0m
-         zhUMAScAwDEy5/y1J5CyXKTLiI54QqUc62/EuTbgKIl2VmqmJogpyS2bSH0bLvugw35L
-         +KU3g5cPJCvNCgWFgsDU99syulZhGZIIOMNzzdBK4C3IDybvXLDmQGNhE403korEy9Hx
-         uhBPBPx6Z0acExZRhWnskTKEYo1spzwf7PzhOcc4Q5g2Awy6gnTS7EplVtFDLtZjrmQU
-         3GCzuBvSRBBl1kPYJtgxzW53/BGkopJFqkVKVbIBrJYSVlV8Zis9e22oT4NKCW58/ax6
-         sqlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782254795; x=1782859595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=4cQeF60kgONMVqNgnkSoiO81INVKj/yr1+GUEevj9iM=;
-        b=Dd0Za5v/GzdKlZGFmOvXzWVdkCixgpOFmWy+Twp9HV3XSPNe9wlOmGkq/qYaJpy0o3
-         HBox2SAli2P+NaJ8pgKyh682DTRfYCkaQrSF4cCXPt5M/UR8FZNH6rYTDwXbvina8Tzu
-         o97UVMTD/5ZWMPP88B5JKZgRH3ikc3PfQgfE+u5tcEv9xapuve0RWWwY4zxTHwTs7pnn
-         iROhkM3NhzOAMUUsPNfnqgwksXK8t8Ia1gGahNOS+ezRcbCVfWi2S6UGvYWmKrqhNSQc
-         ruYDgvmtfxb51sbMxwjKhJCWPsJhK7E2J//2RfaqiZTSuIwlmk42KXLhyXUzp/mmhSHl
-         2X4A==
-X-Gm-Message-State: AOJu0YztC57IkWoIjhcdhlNxt5UVfdnX85TNsBm8XckRidc7UgsVtsyG
-	GpIXJDSUJelY+djmKL2Jg9O8ALjElNxwMC2lHmxoMepAEL9HuYaaoG5oa5wX1J1aY5nhzeHZ4C6
-	SRiZ6l/mG95GNSx4+oiqjwsIuZIFHSE8=
-X-Gm-Gg: AfdE7cmnhGL7kl73RMl+geZW04oLa+74tMOJNZudmq45SdIAIyFpJ2XuWA6FGccd2hG
-	rC2/LDmMwkI3/pfpVhjRgmzAJXQMWG5Pe9gfmJiMh+jAiS7XmBYPXKPfxrh5PzRB2q55huek5Fc
-	pVSUfpUOj4+KYoGRJ7skeCe3sKXFicvf2N/xqn6sGD1AMxIu0RBTOPJDTIjXUxXBXT22eqyQMQY
-	NQJVo/hE8O8OsOgDYbeLMt+LSds/ZIC+WCGqkKKEkRYYLsTdX6yqyHbb3ANb/wz0RNsHGWVuZVm
-	49LIfrUEVDV4SccKyeTDAQHqQdoZvgnh/QAp227r/AslbNmA3cfuyC8SZSL4KWc8eN2Hmg==
-X-Received: by 2002:a17:903:2450:b0:2c1:ed61:36ab with SMTP id
- d9443c01a7336-2c7e1538eb1mr8422395ad.19.1782254795349; Tue, 23 Jun 2026
- 15:46:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fU9tkf5q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77EE31F00A3A;
+	Tue, 23 Jun 2026 22:53:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782255239;
+	bh=NXgdQSWt+mP3gEijeXAwruBy9xJ+Js2SunMfDs6myls=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=fU9tkf5qAbvzUoj8SJKO0cNRsCNEBnK5OksG05q4dsKGrQgQnhO9Ryh263Nu7ZuEX
+	 w2nlEm48NGKwIsTi520AM+J6wwO0wDxqD+QqLxrEEDPp65FwMcaWS4nuM1r5qtoEb3
+	 G0mhB7YZTtXsaf1NjJUSDfJhBpHBN7zoffv6H8Nsd2aQCuTFEqT26aMXVRGL4Aycpd
+	 ZLjeD035HSOzarHHc5roK97S3r6f9LvsW+gtreuZ9jY2USvsUXNbBGRj28wYez98oh
+	 JVuDWpVShi+EMT6UeJdRSDrdI0bzMa0Kk+EvSvx7pEpEmKQencyUXVLz+cVChJ6u8X
+	 +b78aMTQF4YMg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 09/15] bpf: Add infrastructure to support
+ attaching struct_ops to cgroups
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Amery Hung" <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260623175006.3136053-10-ameryhung@gmail.com>
+References: <20260623175006.3136053-1-ameryhung@gmail.com>
+ <20260623175006.3136053-10-ameryhung@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 23 Jun 2026 22:53:59 +0000
+Message-Id: <20260623225359.77EE31F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260622143557.22955-1-leon.hwang@linux.dev> <20260622143557.22955-10-leon.hwang@linux.dev>
-In-Reply-To: <20260622143557.22955-10-leon.hwang@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 23 Jun 2026 15:46:15 -0700
-X-Gm-Features: AVVi8CeDV0iyWUJxT8tqR7wuW7mpOknFgq_TU9la-Qich4uiJgyQft90YUTPtII
-Message-ID: <CAEf4Bzbmj-ekwYQ6oGW-BRnzLBDvWgLyn_QsU5g1yNt_8A0H3g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 09/11] selftests/bpf: Add test to verify
- accessing rdonly percpu_array
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kernel-patches-bot@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 22, 2026 at 7:38=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
-> Since percpu_array supports direct-read, it should not break accessing
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
 
-what does "it" refer to here?
+New issues:
+- [High] The `bpf_cgroup_struct_ops_foreach` macro does not filter out dumm=
+y sentinel elements, leading to type confusion and kernel panics.
+- [High] Strict `rcu_dereference()` in `bpf_cgroup_struct_ops_foreach` caus=
+es lockdep splats or panics for sleepable struct_ops.
+- [High] Array truncation during `purge_effective_progs` if the struct_ops =
+type was registered without `cfi_stubs`.
 
-> rdonly percpu_array.
->
-> Add a test to verify that adding '.map_direct_value_addr' to percpu_array
-> won't break the case.
+Pre-existing issues:
+- [High] `bpf_cgroup_array_copy_to_user()` incorrectly returns -ENOSPC when=
+ trailing dummy elements exist, breaking userspace queries.
+--
 
-what case?
+commit a3bccbe6dc639128f470580a5e6281248194eb4e
+Author: Martin KaFai Lau <martin.lau@kernel.org>
 
-I think you are testing (read-only) direct access to read-only per-CPU
-array, is that right? Just write that out? Though, really, negative
-test (we *cannot* access read-only per-cpu map for write operation)
-would be more trustworthy for this...
+bpf: Add infrastructure to support attaching struct_ops to cgroups
 
+This patch adds necessary infrastructure to attach a struct_ops map to a
+cgroup. It reuses existing cgroup bpf structures and logic to handle the
+attachment, hierarchy, and ordering of struct_ops maps. It also implements
+a separate struct bpf_link_ops for cgroup's struct_ops link.
 
->
-> Assisted-by: Codex:gpt-5.5-xhigh
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  .../bpf/prog_tests/global_data_init.c         | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/=
-tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> index ea7e4e3d91cf..f59d83919058 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> @@ -232,6 +232,48 @@ static void test_global_percpu_data_lskel(void)
->         free(online);
->  }
->
-> +static void test_global_percpu_data_rdonly_direct_read(void)
+> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+> index 4d0cc65976a14..8a75a6cd73096 100644
+> --- a/include/linux/bpf-cgroup.h
+> +++ b/include/linux/bpf-cgroup.h
+> @@ -110,6 +112,18 @@ struct bpf_prog_list {
+>  	u32 flags;
+>  };
+> =20
+> +#define bpf_cgroup_struct_ops_foreach(var, item, cgrp, atype)		\
+> +	for (item =3D rcu_dereference((cgrp)->bpf.effective[atype])->items;\
+> +	     ((var) =3D READ_ONCE(item->kdata));				\
+> +	     item++)
+
+[Severity: High]
+Does this macro fail to filter out dummy sentinel elements?
+
+When update_effective_progs() fails under memory pressure, the kernel falls
+back to purge_effective_progs(), which overwrites the detached link's point=
+er
+with a dummy sentinel value (struct_ops_cfi_stubs[atype]).
+
+Since the macro yields every non-NULL element to the caller subsystem,
+including these dummy sentinels, could this cause type confusion and kernel
+panics if the subsystem accesses data fields on the dummy struct?
+
+[Severity: High]
+Will this strict rcu_dereference() cause lockdep splats or panics for
+sleepable struct_ops?
+
+The patch introduces free_after_mult_rcu_gp to support sleepable struct_ops,
+meaning a subsystem executing a sleepable bpf program must hold
+rcu_read_lock_trace() instead of the standard rcu_read_lock(). However,
+rcu_dereference() rigidly enforces that rcu_read_lock() is held.
+
+If the subsystem holds rcu_read_lock_trace(), lockdep will splat, and if
+it erroneously holds rcu_read_lock(), the kernel will crash when the
+sleepable bpf program actually sleeps.
+
+Should this use rcu_dereference_check() or similar to accommodate sleepable
+contexts?
+
+> +
+> +static inline bool cgroup_bpf_is_struct_ops_atype(enum cgroup_bpf_attach=
+_type atype)
 > +{
-> +       LIBBPF_OPTS(bpf_map_create_opts, map_opts,
-> +                   .map_flags =3D BPF_F_RDONLY_PROG,
-> +       );
-> +       struct bpf_insn insns[] =3D {
-> +               BPF_ST_MEM(BPF_W, BPF_REG_10, -8, 0),
-> +               BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-> +               BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-> +               BPF_LD_MAP_FD(BPF_REG_1, 0),
-> +               BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lo=
-okup_elem),
-> +               BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
-> +               BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, 0),
-> +               BPF_EXIT_INSN(),
-> +       };
-> +       int key =3D 0, map_fd, prog_fd =3D -1, err;
-> +       __u64 value =3D 0;
-> +
-> +       map_fd =3D bpf_map_create(BPF_MAP_TYPE_PERCPU_ARRAY, "percpu_ro_m=
-ap", sizeof(int),
-> +                               sizeof(__u64), 1, &map_opts);
-> +       if (!ASSERT_GE(map_fd, 0, "bpf_map_create"))
-> +               return;
-> +
-> +       err =3D bpf_map_update_elem(map_fd, &key, &value, BPF_F_ALL_CPUS)=
-;
-> +       if (!ASSERT_OK(err, "bpf_map_update_elem"))
-> +               goto out;
-> +
-> +       err =3D bpf_map_freeze(map_fd);
-> +       if (!ASSERT_OK(err, "bpf_map_freeze"))
-> +               goto out;
-> +
-> +       insns[3].imm =3D map_fd;
-> +       prog_fd =3D bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, "percpu_ro=
-_prog", "GPL", insns,
-> +                               ARRAY_SIZE(insns), NULL);
-> +       ASSERT_GE(prog_fd, 0, "bpf_prog_load");
-> +
-> +out:
-> +       if (prog_fd >=3D 0)
-> +               close(prog_fd);
-> +       close(map_fd);
+> +	return atype =3D=3D CGROUP_TCP_SOCK_OPS;
 > +}
+> +void cgroup_bpf_struct_ops_register(int atype, u32 type_id, void *cfi_st=
+ubs, bool mult_trace);
+> +int cgroup_bpf_struct_ops_attach(struct bpf_map *map, const union bpf_at=
+tr *attr);
 > +
->  void test_global_percpu_data(void)
->  {
->         if (!feat_supported(NULL, FEAT_PERCPU_DATA)) {
-> @@ -243,4 +285,6 @@ void test_global_percpu_data(void)
->                 test_global_percpu_data_init();
->         if (test__start_subtest("lskel"))
->                 test_global_percpu_data_lskel();
-> +       if (test__start_subtest("rdonly_direct_read"))
-> +               test_global_percpu_data_rdonly_direct_read();
->  }
-> --
-> 2.54.0
->
+>  void __init cgroup_bpf_lifetime_notifier_init(void);
+
+[ ... ]
+
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 64572f85edc83..d591f306ace52 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+
+[ ... ]
+
+> @@ -9868,6 +9872,23 @@ btf_add_struct_ops(struct btf *btf, struct bpf_str=
+uct_ops *st_ops,
+>  	if (err)
+>  		return err;
+> =20
+> +	if (cgroup_atype) {
+> +		if (!cgroup_bpf_is_struct_ops_atype(cgroup_atype) ||
+> +		    st_ops->reg || st_ops->unreg || st_ops->free_after_tasks_rcu_gp) {
+> +			bpf_struct_ops_desc_release(&tab->ops[btf->struct_ops_tab->cnt]);
+> +			return -EINVAL;
+> +		}
+> +
+> +		/* There is no need to unregister from cgroup when the
+> +		 * btf_free(). No struct_ops map and its cgroup link
+> +		 * can be created once its btf is gone.
+> +		 */
+> +		cgroup_bpf_struct_ops_register(cgroup_atype,
+> +					       tab->ops[btf->struct_ops_tab->cnt].type_id,
+> +					       st_ops->cfi_stubs,
+> +					       st_ops->free_after_mult_rcu_gp);
+
+[Severity: High]
+Does this path accept st_ops->cfi_stubs without validating that it is non-N=
+ULL?
+
+If a struct_ops type is registered without providing cfi_stubs (e.g., if
+CONFIG_CFI_CLANG is disabled), struct_ops_cfi_stubs[atype] will be NULL.
+
+Later, if a link is detached and update_effective_progs() fails due to memo=
+ry
+pressure, the fallback bpf_cgroup_array_delete_safe_at() overwrites the
+detached program's slot with bpf_cgroup_array_dummy().
+
+Because cfi_stubs is NULL, it writes NULL into the middle of the array.
+
+Since NULL is used as the array terminator, won't this prematurely truncate
+the array and silently bypass all attached bpf programs that follow the
+detached one?
+
+> +	}
+> +
+>  	btf->struct_ops_tab->cnt++;
+> =20
+>  	return 0;
+
+[ ... ]
+
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index 081d81de18163..a808d2a31f11d 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+
+[ ... ]
+
+> @@ -355,7 +407,12 @@ static int bpf_cgroup_array_copy_to_user(struct bpf_=
+prog_array *array,
+>  	for (item =3D array->items; item->prog && i < cnt; item++) {
+>  		if (item->prog =3D=3D bpf_cgroup_array_dummy(atype))
+>  			continue;
+> -		id =3D item->prog->aux->id;
+> +
+> +		if (cgroup_bpf_is_struct_ops_atype(atype))
+> +			id =3D bpf_struct_ops_kdata_map_id(item->kdata);
+> +		else
+> +			id =3D item->prog->aux->id;
+> +
+>  		if (copy_to_user(prog_ids + i, &id, sizeof(id)))
+>  			return -EFAULT;
+>  		i++;
+
+[Severity: High]
+This is a pre-existing issue, but does bpf_cgroup_array_copy_to_user()
+incorrectly return -ENOSPC when trailing dummy elements exist?
+
+If a cgroup link is detached under memory pressure, it leaves a trailing du=
+mmy
+sentinel in the array.
+
+When userspace calls bpf_prog_query with an exact-sized buffer, the loop
+breaks via "i < cnt" exactly when i =3D=3D cnt, leaving "item" pointing to =
+the
+dummy element.
+
+Since item->prog is non-NULL (it is the dummy), the function evaluates
+"return item->prog ? -ENOSPC : 0;" and erroneously returns -ENOSPC.
+
+This breaks userspace queries, causing userspace tools to continually recei=
+ve
+-ENOSPC and attempt to allocate larger buffers, eventually exhausting memor=
+y.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623175006.3136=
+053-1-ameryhung@gmail.com?part=3D9
