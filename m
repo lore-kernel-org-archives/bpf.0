@@ -1,216 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5C528C874
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 23:40:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD9F1DE4FB
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 23:42:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782258060; cv=none; b=H09nR3pa/72v+MRQHbwoE3yTVKp3V7BEdMdkRIKPaIeAl6BKw0H7gg6luJuzz2ejND2uDq8xa8zjqTB6CDtNyfO8YNRDxXlXPckH/3sMxNjxBRIBUC6hiGLWY8WESIIRGn/Mq016+svs1Pfz/YdP/E1wH1OhV0Nsmzcn25JPlwQ=
+	t=1782258178; cv=none; b=rx8zuROC+XlRkQN4z4gO8axxQRwNKlyUtCr5o+tkudHy9r1quBzsk1jtKLfyAdFOp2Cp7VeQ4IfxfcWPKwdX8+9HHgUJ6CcQ/ewWF7sIPi9u6FnmGchVkQej2sYJoVdm9qiB85f+IdNEv8G4L0Cv7GXmYeqi1guKUIzmgZpt+r4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782258060; c=relaxed/simple;
-	bh=qiVK0E34mqnruXUYv4a/qcg+BCtkaDCQugkJTK56W5Y=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=k/ltaRfyGtSfMv9J/1px8IK73v/sTRu6QBYHQuUcMEgVUmCi1ck056aYuUHlXPpPhz1B+7sEavK9DHQ1DeMEJQMAlKQLWg9dJsr8Kvoqy/A6SHmxejAT1naes7jO1U5eI7IWbB2qxu/eduCGYCTqE/szi76Au1Lnx++YsnBFpXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cZKDFtrp; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782258178; c=relaxed/simple;
+	bh=qhoPAfQeG4qnFQmUNASdln+cz56oe6Buv10Jhv6L54o=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=RFFvS886qjz4IPSRz1HvTa8ldtOvRmscf7JCpWq+0W9Z/zAro0BC1fGBJFKR+8XvKsvJuNMhN2FvHOVMzmMztSdAHy1I1UaVfptoVt/8mgUji06yXXMUNN9YlarDkfZ03rlXdyv2sxPHHAir95B6GP6PWez/zyHA1G+3CBTtEz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=OwQAgP0S; arc=none smtp.client-ip=74.125.82.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cZKDFtrp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 132101F000E9;
-	Tue, 23 Jun 2026 23:40:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782258059;
-	bh=tltvtaufnYpwCylMgGssnHjYt4vS62Sm+xqqPG/1NbE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cZKDFtrpQsystduPj/++QOQ+gZHIO/6Rw+/8YENtdfS8XLKmEER0BLqVY5YyX8uv9
-	 0evR5V3l9sku+0fT/gGsfHH8Lw7EgrdZiRdY2XCwqYiRZTkwf28AvpJdYTJGzJ6U1N
-	 WlE8Y6S/e87blSOEQ3b3m1Pqr9UIFRZ5QNeQSN0YBlA5/g5bryN77fbv33Rwm9zSqz
-	 N+2FPFNTIu6TS0Mihn3IM1/xA3Y+SdPxYP7N/7zL/wzA+QpRN37DlDzp8VehRDJTP0
-	 snMJIl2rjDImiPu8UJap6qmXnxcp//S4CDybffz3eQhu2DiT2X/V5XKBWtdzgR+oYA
-	 lDpecVpyUkIFw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 12/15] bpf: tcp: Support parse/len/write
- header option hooks in bpf_tcp_ops
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Amery Hung" <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260623175006.3136053-13-ameryhung@gmail.com>
-References: <20260623175006.3136053-1-ameryhung@gmail.com>
- <20260623175006.3136053-13-ameryhung@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 23 Jun 2026 23:40:58 +0000
-Message-Id: <20260623234059.132101F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="OwQAgP0S"
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-13981833e13so504690c88.1
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 16:42:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782258176; x=1782862976; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1GKhSNnJ4cBq/7w4xkjirABVDHsqyagldA7cY6Lkw5k=;
+        b=OwQAgP0SALX8CxPI+yg0K0kunV4CjBAwjreQZ3Ke2Ul/xSolt0wU95niSJCr9gaJ95
+         oaOlgyR25UhwNXwhzAw+9R/4HcJeqLpYswHEt1lBIRQ4NuJRgE24k4hwKDxWcjCi5qpA
+         64mRF/i/gHmKEgdxRIXe7UMDsGH59NhNSiCjdgvgHs4q9PA0C2EVjcz1I+hsH7mX9IpU
+         T8a71K2zsEjONOklkk/0XXBpifrE3ouQKUXBaWfLoIKtFhqHqGKYC4M4dC9KdqyoHKJ8
+         NiKrOgjhRAPza8Y0WOcnCRO6pd3TS1QhcKUeFSTMyfyPGhRkKmZ1SuYIfsCp4R7gHlrn
+         /sSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782258176; x=1782862976;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1GKhSNnJ4cBq/7w4xkjirABVDHsqyagldA7cY6Lkw5k=;
+        b=Ja4ZPhVJGbRVXQL+waXTEGIqxc+zA0OlvPYbGlnK6Ipn6ndvsehDw9b6rOsI98luqs
+         ngqS9oriohpcN6bkWdDnL1gedgC3u/pHiwW59P856Kp2xC0Nse3nqpw5qM0a4YbeMs1m
+         F1i6x0jH/4+XehLRHsXwKW1lr/37H+2b5K4jP6cNRm9V1BpBb983pt0wayFJhYDi4uTi
+         VcQge2gu231rgHfugG66z6ZqETtHTSiMX8qR99IGcHkCy8a7KpgqYlTLvv9uxq/CgwoZ
+         Y4g6wqpzFnZy9bWYeEBh/AC9kuohVv3M8upKoprgpRMuxJTh6uXlwtP5skZx7lApmqym
+         sS1Q==
+X-Forwarded-Encrypted: i=1; AHgh+RqZc7QxA8dclnb1hVL8MGlHcOQJNL6W57yztApiJ16TvlEjFE5waWtVkkPoFMK8yKh4USI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6JdgPAORwxB2AkW374+1XIyrHTXnBZ6R6uMhhzDlWBGoD0yo5
+	yK+qSO5o7B/JvT1/xwCdiq7BQRbFwtPyXeOFLF4A+JBJzUR/WUFkjFXjh+VHOq8GpeZspO0XX2D
+	ruXZF2RT06g==
+X-Gm-Gg: AfdE7ckt8HTM+9fXCxkRZEaWaF7eZwZONQ9EWdmxJgiLjiH40c4JNnHne674nzQWCIV
+	3c8hO2PysafZ7wMqJz90FnMJtx0dGZTOtOywvleyKF3y+jWm9WcSZb9JgmFVTXzmNtd3kfsBGwO
+	duBYqKS01s4PjulUyLJPVioiT9CBVNO9/oRtqIMi2ddvHfJ+5uwtT21voPnw5QmccRC5AnHb/bC
+	JWRWb+M/KhFLE56AuN06TgmMk3okOFBIcEmRGDyZZ+0+szQnfYQAdSUxhxalnnrxrFweNdxHnjF
+	YhrwZhHaryayBK3z5EHiUxaIQMzhlNqkPiPjJRvIKwz4f4WeBWoTOnHaRCaMbtA8FdwnzpDU3eY
+	n49eT+7CVzSGJ4tIVRuiyyYNAqAex5t6wJqAao0Wiy7nrXuRv3UGGVvjjCJvyS4W9NbCJsQ==
+X-Received: by 2002:a05:7300:2384:b0:30c:57ae:2cbf with SMTP id 5a478bee46e88-30c58d33b73mr6294766eec.35.1782258176311;
+        Tue, 23 Jun 2026 16:42:56 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::2526])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1ba1f0a9sm19776660eec.2.2026.06.23.16.42.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Jun 2026 16:42:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 23 Jun 2026 19:42:53 -0400
+Message-Id: <DJGTSLYKSIWE.B58OC67S6FHA@etsalapatis.com>
+Cc: <ast@kernel.org>, <andrii@kernel.org>, <memxor@gmail.com>,
+ <daniel@iogearbox.net>, <eddyz87@gmail.com>, <mattbobrowski@google.com>,
+ <song@kernel.org>, <martin.lau@kernel.org>, <yonghong.song@linux.dev>,
+ <clm@meta.com>, <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next 3/5] selftests/bpf: libarena: Clean up
+ allocation state before buddy tests
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: <bot+bpf-ci@kernel.org>, <emil@etsalapatis.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260618085626.19633-4-emil@etsalapatis.com>
+ <52707834463b9ad1861552674b98bcb2f92d6601295548454770d883c8c43536@mail.kernel.org>
+In-Reply-To: <52707834463b9ad1861552674b98bcb2f92d6601295548454770d883c8c43536@mail.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
-- [High] Incorrect pointer arithmetic on the BPF context array causes NULL =
-pointer dereferences on 32-bit architectures.
-- [High] A missing bounds check in TCP option parsing combined with a TOCTO=
-U double-fetch allows a malicious BPF program to cause a heap buffer overfl=
-ow.
-- [Medium] The struct_ops TCP option reservation is gated by a completely u=
-nrelated cgroup BPF static key, breaking the feature for established connec=
-tions.
-- [Low] Multi-line comments in BPF subsystem files violate the required com=
-ment style.
---
+On Thu Jun 18, 2026 at 5:47 AM EDT, bot+bpf-ci wrote:
+>> Summary: The buddy allocator requires the global BPF buddy allocator
+>> to not be already initialized. However, the test currently merely resets
+>> the allocator before the buddy tests instead of destroying it, and the
+>> test worked because the buddy test happened to run first. Properly
+>> destroy the allocator instead of resetting it.
+>>
+>> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+>
+> This looks like a bug fix for the buddy test harness, where the
+> run_libarena_test()/run_libarena_asan_test() path only reset the
+> allocator rather than destroying it.  Should this include a Fixes: tag?
+>
+>   Fixes: b1487dc1b181 ("selftests/bpf: Add selftests for libarena buddy a=
+llocator")
+>
 
-commit d91122a96beff2abb78548435a7fd30a3c89c2ac
-Author: Amery Hung <ameryhung@gmail.com>
+Not triggerable until we add the tests in this patchset.
 
-Add the TCP header option callbacks to the bpf_tcp_ops struct_ops type
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/277496=
+30149
 
-This patch exposes TCP header option callbacks as struct_ops members to
-allow BPF programs to parse, reserve, and write TCP header options. It
-mirrors the legacy BPF_SOCK_OPS callbacks and shares the reserved window.
-
-> The hdr_opt_len fast path in tcp_established_options() is gated by
-> cgroup_bpf_enabled(CGROUP_TCP_SOCK_OPS). Note this is a global,
-> per-attach-type static branch: it is enabled whenever any bpf_tcp_ops is
-> attached, even one that does not implement hdr_opt_len or that is attached
-> to a different cgroup.
-
-[Severity: Medium]
-Is this description accurate? Struct_ops do not enable this cgroup static
-key. Will this check evaluate to false in non-cgroup-bpf deployments,
-skipping space reservation for established connections but still calling
-write_hdr_opt later?
-
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-[ ... ]
-> @@ -3005,6 +3005,45 @@ struct bpf_tcp_ops {
-> =20
->  	/* Called on listen(2), right after the socket enters TCP_LISTEN. */
->  	void (*listen)(struct sock *sk);
-> +
-[Severity: Low]
-This isn't a bug, but does the BPF subsystem prefer the opening /* to be on
-its own line for multi-line comments?
-
-> +	/* Parse the TCP header options of an incoming skb received on an
-> +	 * established connection. Use bpf_dynptr_from_skb()/bpf_skb_load_bytes=
-()
-> +	 * to access the options.
-> +	 */
-> +	void (*parse_hdr)(struct sock *sk, struct sk_buff *skb);
-> +
-[ ... ]
-> diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
-> --- a/net/ipv4/bpf_tcp_ops.c
-> +++ b/net/ipv4/bpf_tcp_ops.c
-[ ... ]
-> @@ -66,6 +87,99 @@ static struct bpf_tcp_ops __bpf_tcp_ops =3D {
->  	.retrans =3D retrans_stub,
->  	.connect =3D connect_stub,
->  	.listen =3D listen_stub,
-> +	.parse_hdr =3D parse_hdr_stub,
-> +	.hdr_opt_len =3D hdr_opt_len_stub,
-> +	.write_hdr_opt =3D write_hdr_opt_stub,
-> +};
-> +
-> +BPF_CALL_4(bpf_tcp_ops_store_hdr_opt, void *, ctx, const void *, from,
-> +	   u32, len, u64, flags)
-> +{
-[Severity: High]
-Can this pointer cast lead to reading the wrong offset on 32-bit systems?
-The ctx array contains 64-bit integers, so casting directly to a pointer
-array might result in reading the upper 32 bits (which are zero) on
-little-endian architectures, causing a NULL pointer dereference.
-
-> +	struct sk_buff *skb =3D ((struct sk_buff **)ctx)[1];
-> +	struct bpf_sock_ops_kern sock_ops =3D {};
-> +	u32 opt_off =3D ((u64 *)ctx)[5];
-> +	u8 *op, *opend;
-> +
-[Severity: Low]
-This isn't a bug, but multi-line comments in the BPF subsystem typically
-place the opening /* on a separate line.
-
-> +	/* bpf_tcp_ops does not keep track of the end of the written TCP header
-> +	 * options, so search for it every time the helper is called. The free
-> +	 * space is NOP-filled, so a TCPOPT_NOP ends the search rather than bei=
-ng
-> +	 * skipped as in a normal option walk in sockops.
-> +	 */
-> +	op =3D skb->data + opt_off;
-> +	opend =3D skb->data + tcp_hdrlen(skb);
-> +	while (op < opend && *op !=3D TCPOPT_NOP) {
-[Severity: High]
-Does this loop prevent op from advancing past opend if the option length
-byte is forged? If op[1] is maliciously modified concurrently in the BPF
-map memory before __bpf_sock_ops_store_hdr_opt() does its memcpy, could
-the next call to bpf_tcp_ops_store_hdr_opt() advance op past opend and
-cause an out-of-bounds memcpy?
-
-> +		if (*op =3D=3D TCPOPT_EOL || op + 1 >=3D opend || op[1] < 2)
-> +			break;
-> +		op +=3D op[1];
-> +	}
-> +
-> +	sock_ops.skb =3D skb;
-> +	sock_ops.skb_data_end =3D op;
-> +	sock_ops.remaining_opt_len =3D opend - op;
-> +
-> +	return __bpf_sock_ops_store_hdr_opt(&sock_ops, from, len, flags);
-> +}
-[ ... ]
-> +BPF_CALL_4(bpf_tcp_ops_load_hdr_opt, void *, ctx, void *, search_res,
-> +	   u32, len, u64, flags)
-> +{
-[Severity: High]
-Will this cast misalign the array index on 32-bit architectures? Treating
-the 64-bit integer array as an array of 32-bit pointers will cause the
-wrong bytes to be read for the context argument.
-
-> +	struct sk_buff *skb =3D ((struct sk_buff **)ctx)[1];
-> +	struct bpf_sock_ops_kern sock_ops =3D {};
-[ ... ]
-> +BPF_CALL_3(bpf_tcp_ops_reserve_hdr_opt, void *, ctx, u32, len, u64, flag=
-s)
-> +{
-[Severity: High]
-Could casting ctx to a pointer array here also lead to a NULL pointer
-dereference on 32-bit systems due to reading the upper 32 bits of the
-previous 64-bit argument?
-
-> +	unsigned int *remaining =3D ((unsigned int **)ctx)[5];
-> +
-> +	if (flags || len < 2)
-> +		return -EINVAL;
-[ ... ]
-> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-> --- a/net/ipv4/tcp_output.c
-> +++ b/net/ipv4/tcp_output.c
-[ ... ]
-> @@ -1244,6 +1281,15 @@ static unsigned int tcp_established_options(struct=
- sock *sk, struct sk_buff *skb
->  		size =3D MAX_TCP_OPTION_SPACE - remaining;
->  	}
-> =20
-[Severity: Medium]
-Does this cgroup check evaluate to false for struct_ops in non-cgroup-bpf
-deployments? If so, does it silently skip reserving space in
-bpf_tcp_ops_hdr_opt_len() for established connections, while still calling
-write_hdr_opt unconditionally later?
-
-> +	if (cgroup_bpf_enabled(CGROUP_TCP_SOCK_OPS)) {
-> +		unsigned int remaining =3D MAX_TCP_OPTION_SPACE - size;
-> +
-> +		remaining =3D bpf_tcp_ops_hdr_opt_len(sk, skb, NULL, NULL, 0, opts,
-> +						    remaining);
-> +
-> +		size =3D MAX_TCP_OPTION_SPACE - remaining;
-> +	}
-> +
->  	return size;
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623175006.3136=
-053-1-ameryhung@gmail.com?part=3D12
