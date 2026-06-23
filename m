@@ -1,151 +1,139 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 470CC33D4E4;
-	Tue, 23 Jun 2026 09:11:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE38370AFB;
+	Tue, 23 Jun 2026 09:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782205897; cv=none; b=L5EDE7u6YaiBgN9DiIxNXhaONFVcnGgLO6tRH1VPJQz5sQtY/96n1tkdaRlc9FpAfzAWMdMyQD8wyTvj0huowZFYlAAgsulFG7RS+VbeVu95p5DvslEbcfUACmSBEeG63vKBfeS6OWQxi/Ueoe1Yr8w+7NTKZarBkh+7ZON/qg0=
+	t=1782207155; cv=none; b=ikpm49DSffntQJOU/vo9Ir+1BjlCCfOxRxBq57M+9QdKBKhXK2g7zaaba50GXMq5RXA63BIOirpLqe4pyx8YpXwrkz4ytJ8lnIky5WnmHVxHnERcb+jfjQHFqbbo5Zfaqrw5I+ht+U79xOuY9Jrg85rXK4VEgupHu+Bc1q9TAfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782205897; c=relaxed/simple;
-	bh=drVpq5ixh0ZtB3QR1l0QXjWiNCXRTRa1ZsIzbA4gmCs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=J5Twey69NLqjVAClAuIIOEZ10vy633j3G0uJkzXq23T8h8ZTD6oKynAaDO88zjUyXFvPSVmvncvi2o6Ht+a3K7Vww/QDmBW9B27SoHTpdVN+IfoKSA8D1hChN1zJlIPz4Vetp8ZssdVoQ4IhEvZlrrxsey8YEBejFtn2YFJOljA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=dzkkDtLm; arc=none smtp.client-ip=207.46.229.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1782207155; c=relaxed/simple;
+	bh=STm7jH09D99Mjllu9NSRKcTd9KuDTMiKMLWylsZX04M=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=V+7t8sBSFYhZ82vIuvFhXKUoJyyfzvK5UcJLr9i7mD9bDiFEDn6vAIumvQ493+iffQZSnwDxLrPkEH7UR11ekzxCPi1x3qse5JFcanvTlhTdqno4eP2Ibir3m4SD9i3z5cjnJiDN9OzdoBXNwZbKdg/ataM04o9jmrapGK1ip9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EwzP4J2V; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="dzkkDtLm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:Date:From:To:Cc:
-	Subject:In-Reply-To:References:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-ID; bh=drVpq5ixh0ZtB3QR1l0QXjW
-	iNCXRTRa1ZsIzbA4gmCs=; b=dzkkDtLm3rGpu7+baOLBbZ1l5ZrXd7XAk/QVpo2
-	/Ck70WoMKyHAP/oVhcZXlZK/UhVmjfjkfRJ6Er/iHsIdt7Smcrtgp7kgHAfBiwV9
-	bVyB6o1dCpQn1cHK6mnsHRCKnH9CUSwis88LLXOcQIrGJ1ghG8272T9EmNnTQvzq
-	bXG0=
-Received: from gnq25$mails.tsinghua.edu.cn ( [223.91.120.130] ) by
- ajax-webmail-web2 (Coremail) ; Tue, 23 Jun 2026 17:11:25 +0800 (GMT+08:00)
-Date: Tue, 23 Jun 2026 17:11:25 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
-To: "Anton Protopopov" <a.s.protopopov@gmail.com>
-Cc: bpf@vger.kernel.org, "Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Eduard Zingerman" <eddyz87@gmail.com>,
-	"Shuah Khan" <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add cross-subprog
- gotox target coverage
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
- 20250909(015d6f0a) Copyright (c) 2002-2026 www.mailtech.cn
- mispb-4df55a87-4b50-4a66-85a0-70f79cb6c8b5-tsinghua.edu.cn
-In-Reply-To: <ajlJQUmKUBkNcezW@mail.gmail.com>
-References: <20260613-f01-02-gotox-bpf-next-v2-send-v2-0-ff980bc5a329@mails.tsinghua.edu.cn>
- <20260613-f01-02-gotox-bpf-next-v2-send-v2-2-ff980bc5a329@mails.tsinghua.edu.cn>
- <ajlJQUmKUBkNcezW@mail.gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EwzP4J2V"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C66C71F00A3D;
+	Tue, 23 Jun 2026 09:32:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782207154;
+	bh=vps8ys9ng9ec0/LH06KpU4OGpxNPWI6t7qEIv2BmAz0=;
+	h=From:Date:Subject:To:Cc;
+	b=EwzP4J2VhTJJxu0jrHViuMQw/RtMATu9PsPDfT+O8F5/rgPJZ9AVwYNbTjH0/YZEJ
+	 A2VCVu1pq9BxRb858xRE/YHZ7UI6zFY9y3H3ohJSFziIu/UPtfVlvSZB2X6EgCXKHZ
+	 XbU6bz1rn6tpuMFxdFjDtmzv2tzb2Ya41ZDj/We7J+RQnlMdL8dgU97p7QQitq5Sv0
+	 vkAU4PR4Pdifrw15x1MCNGjXB1EO3zQWIjP8hFZgO/bBfkQAG+PlxMy+8N5+llXZvi
+	 VnGMtJdEfuaZtJVKWO4ASkOXVDpCH7Rf5twciFdw3rBriuFxUOyCbHqxJyihGpC03g
+	 T8zPWnrjJAong==
+From: Christian Brauner <brauner@kernel.org>
+Date: Tue, 23 Jun 2026 11:32:27 +0200
+Subject: [PATCH v2] bpf: have bpf_real_data_inode() take a struct file
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <4ca30c94.85012.19ef3bfae0f.Coremail.gnq25@mails.tsinghua.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID:yQQGZQBH1Zy+TTpqRnZ8Ag--.63140W
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgIHA2o6NDlGngA
-	AsB
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260623-work-bpf-real_inode-v2-1-8e8b57dd25f7@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAKpSOmoC/32O0W7DIAxFf6XiuVRAEiL61P+YqskG07C2UJks2
+ 1Tl3xe69z0e+/r4PkUlTlTFcfcUTEuqqeQNzH4n/AT5QjKFjYVRxiprjPwqfJX4iJIJbu8pl0D
+ Sd9s6IEQFKLbLB1NM3y/r2/mP6yd+kJ+bqiUQKklkyH5qozvUmfgwYNdFb3tnYMQRrOkGp4cxo
+ IrOxAEtOYjWqWaYUp0L/7yKL7p9+r/joqWWvdI9Ye+RYjhdiTPdDoUv4ryu6y9yC/8PCwEAAA=
+ =
+X-Change-ID: 20260622-work-bpf-real_inode-c3202dbaf0ab
+To: bpf@vger.kernel.org
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+ Amir Goldstein <amir73il@gmail.com>, linux-fsdevel@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+X-Mailer: b4 0.16-dev-9f537
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3523; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=STm7jH09D99Mjllu9NSRKcTd9KuDTMiKMLWylsZX04M=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWRZBW3gkKvN/3SpYeF5tfwE3j+K9dG2ksvqbDb5lqvIb
+ UmbVfqno5SFQYyLQVZMkcWh3SRcbjlPxWajTA2YOaxMIEMYuDgFYCIRzYwM60q16nXsxD+/urNS
+ WOnbBkupC84xfXMn8IYv4OVeOuHfNEaGnyfUui9lP/UumvVWuSNX2j7F/vXDzq/TEgxXfJxeXpX
+ OAAA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiQW50b24gUHJvdG9wb3Bv
-diIgPGEucy5wcm90b3BvcG92QGdtYWlsLmNvbT4KPiBTZW5kIHRpbWU6TW9uZGF5LCAyMi8wNi8y
-MDI2IDIyOjQwOjAxCj4gVG86ICJOdW9xaSBHdWkiIDxnbnEyNUBtYWlscy50c2luZ2h1YS5lZHUu
-Y24+Cj4gQ2M6IGJwZkB2Z2VyLmtlcm5lbC5vcmcsICJBbGV4ZWkgU3Rhcm92b2l0b3YiIDxhc3RA
-a2VybmVsLm9yZz4sICJEYW5pZWwgQm9ya21hbm4iIDxkYW5pZWxAaW9nZWFyYm94Lm5ldD4sICJB
-bmRyaWkgTmFrcnlpa28iIDxhbmRyaWlAa2VybmVsLm9yZz4sICJFZHVhcmQgWmluZ2VybWFuIiA8
-ZWRkeXo4N0BnbWFpbC5jb20+LCAiU2h1YWggS2hhbiIgPHNodWFoQGtlcm5lbC5vcmc+LCBsaW51
-eC1rc2VsZnRlc3RAdmdlci5rZXJuZWwub3JnLCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3Jn
-Cj4gU3ViamVjdDogUmU6IFtQQVRDSCBicGYtbmV4dCB2MiAyLzJdIHNlbGZ0ZXN0cy9icGY6IEFk
-ZCBjcm9zcy1zdWJwcm9nIGdvdG94IHRhcmdldCBjb3ZlcmFnZQo+IAo+IE9uIDI2LzA2LzEzIDA1
-OjMzUE0sIE51b3FpIEd1aSB3cm90ZToKPiA+IEFkZCBhIGdvdG94IHJlZ3Jlc3Npb24gdGVzdCB3
-aXRoIHR3byBvbmUtZW50cnkgSU5TTl9BUlJBWSBtYXBzLiBDRkcgY2FuCj4gPiBtb2RlbCBhIG1h
-cCB3aG9zZSB0YXJnZXQgc3RheXMgaW4gdGhlIG1haW4gc3VicHJvZywgd2hpbGUgdGhlIHZlcmlm
-aWVkIHBhdGgKPiA+IGNhbiBsb2FkIGEgZGlmZmVyZW50IG1hcCB3aG9zZSB0YXJnZXQgaXMgdGhl
-IGZpcnN0IGluc3RydWN0aW9uIG9mIGFub3RoZXIKPiA+IHN1YnByb2cuCj4gPiAKPiA+IFRoYXQg
-c2Vjb25kIHRhcmdldCBpcyBvdXRzaWRlIHRoZSBzdWJwcm9nIHRoYXQgY29udGFpbnMgdGhpcyBn
-b3RveAo+ID4gaW5zdHJ1Y3Rpb24sIHNvIHByb2dyYW0gbG9hZCBtdXN0IGJlIHJlamVjdGVkIHdp
-dGggLUVJTlZBTC4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogTnVvcWkgR3VpIDxnbnEyNUBtYWls
-cy50c2luZ2h1YS5lZHUuY24+Cj4gCj4gU29ycnksIHdhcyBBRksgdGhlIGxhc3Qgd2Vlay4gVGhl
-IGxvb2tzIGJldHRlciBub3cuIEEgZmV3IHNtYWxsIG5pdHMuCj4gCj4gPiAtLS0KPiA+ICB0b29s
-cy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9icGZfZ290b3guYyB8IDczICsrKysr
-KysrKysrKysrKysrKysrKysKPiA+ICAxIGZpbGUgY2hhbmdlZCwgNzMgaW5zZXJ0aW9ucygrKQo+
-ID4gCj4gPiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVz
-dHMvYnBmX2dvdG94LmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9i
-cGZfZ290b3guYwo+ID4gaW5kZXggNzNkYzYzODgyYjdkLi41MjUyY2EwOTY4OWMgMTAwNjQ0Cj4g
-PiAtLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9icGZfZ290b3gu
-Ywo+ID4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvYnBmX2dv
-dG94LmMKPiA+IEBAIC0yNTUsNiArMjU1LDMwIEBAIHN0YXRpYyBpbnQgY3JlYXRlX2p0X21hcChf
-X3UzMiBtYXhfZW50cmllcykKPiA+ICAJCQkgICAgICBrZXlfc2l6ZSwgdmFsdWVfc2l6ZSwgbWF4
-X2VudHJpZXMsIE5VTEwpOwo+ID4gIH0KPiA+ICAKPiA+ICtzdGF0aWMgaW50IGNyZWF0ZV9qdF9t
-YXBfd2l0aF90YXJnZXQoX191MzIgdGFyZ2V0KQo+ID4gK3sKPiA+ICsJc3RydWN0IGJwZl9pbnNu
-X2FycmF5X3ZhbHVlIHZhbCA9IHsgLm9yaWdfb2ZmID0gdGFyZ2V0IH07Cj4gPiArCV9fdTMyIGtl
-eSA9IDA7Cj4gPiArCWludCBtYXBfZmQ7Cj4gPiArCj4gPiArCW1hcF9mZCA9IGNyZWF0ZV9qdF9t
-YXAoMSk7Cj4gPiArCWlmICghQVNTRVJUX0dFKG1hcF9mZCwgMCwgImNyZWF0ZV9qdF9tYXAiKSkK
-PiA+ICsJCXJldHVybiAtMTsKPiA+ICsKPiA+ICsJaWYgKCFBU1NFUlRfRVEoYnBmX21hcF91cGRh
-dGVfZWxlbShtYXBfZmQsICZrZXksICZ2YWwsIDApLAo+ID4gKwkJICAgICAgIDAsICJicGZfbWFw
-X3VwZGF0ZV9lbGVtIikpIHsKPiA+ICsJCWNsb3NlKG1hcF9mZCk7Cj4gPiArCQlyZXR1cm4gLTE7
-Cj4gPiArCX0KPiA+ICsKPiA+ICsJaWYgKCFBU1NFUlRfRVEoYnBmX21hcF9mcmVlemUobWFwX2Zk
-KSwgMCwgImJwZl9tYXBfZnJlZXplIikpIHsKPiA+ICsJCWNsb3NlKG1hcF9mZCk7Cj4gPiArCQly
-ZXR1cm4gLTE7Cj4gPiArCX0KPiA+ICsKPiA+ICsJcmV0dXJuIG1hcF9mZDsKPiA+ICt9Cj4gPiAr
-Cj4gPiAgc3RhdGljIGludCBwcm9nX2xvYWQoc3RydWN0IGJwZl9pbnNuICppbnNucywgX191MzIg
-aW5zbl9jbnQpCj4gPiAgewo+ID4gIAlyZXR1cm4gYnBmX3Byb2dfbG9hZChCUEZfUFJPR19UWVBF
-X1JBV19UUkFDRVBPSU5ULCBOVUxMLCAiR1BMIiwgaW5zbnMsIGluc25fY250LCBOVUxMKTsKPiA+
-IEBAIC0zOTMsNiArNDE3LDUyIEBAIHJlamVjdF9vZmZzZXRzKHN0cnVjdCBicGZfaW5zbiAqaW5z
-bnMsIF9fdTMyIGluc25fY250LCBpbnQgb2ZmMSwgaW50IG9mZjIsIGludCBvCj4gPiAgCQljbG9z
-ZShwcm9nX2ZkKTsKPiA+ICB9Cj4gPiAgCj4gPiArc3RhdGljIHZvaWQKPiA+ICtjaGVja19jcm9z
-c19zdWJwcm9nX2dvdG94X3RhcmdldChzdHJ1Y3QgYnBmX2dvdG94ICpza2VsIF9fYWx3YXlzX3Vu
-dXNlZCkKPiAKPiBXaHkgdG8gcGFzcyB0aGUgc2tlbCBwb2ludGVyIGF0IGFsbD8KPiAKPiA+ICt7
-Cj4gPiArCXN0cnVjdCBicGZfaW5zbiBpbnNuc1tdID0gewo+ID4gKwkJLyogbWFpbiBzdWJwcm9n
-IFswLDE0KSAqLwo+ID4gKwkJQlBGX01PVjY0X1JFRyhCUEZfUkVHXzYsIEJQRl9SRUdfMSksCj4g
-PiArCQlCUEZfUkFXX0lOU04oQlBGX0pNUCB8IEJQRl9DQUxMLCAwLCBCUEZfUFNFVURPX0NBTEws
-IDAsIDEyKSwKPiA+ICsJCUJQRl9MRFhfTUVNKEJQRl9XLCBCUEZfUkVHXzcsIEJQRl9SRUdfNiwg
-MCksCj4gPiArCQlCUEZfSk1QX0lNTShCUEZfSkVRLCBCUEZfUkVHXzcsIDAsIDQpLAo+ID4gKwkJ
-QlBGX0xEX0lNTTY0X1JBVyhCUEZfUkVHXzIsIEJQRl9QU0VVRE9fTUFQX1ZBTFVFLCAwKSwKPiA+
-ICsJCUJQRl9MRFhfTUVNKEJQRl9EVywgQlBGX1JFR18yLCBCUEZfUkVHXzIsIDApLAo+ID4gKwkJ
-QlBGX0pNUF9BKDMpLAo+ID4gKwkJQlBGX0xEX0lNTTY0X1JBVyhCUEZfUkVHXzIsIEJQRl9QU0VV
-RE9fTUFQX1ZBTFVFLCAwKSwKPiA+ICsJCUJQRl9MRFhfTUVNKEJQRl9EVywgQlBGX1JFR18yLCBC
-UEZfUkVHXzIsIDApLAo+ID4gKwkJQlBGX1JBV19JTlNOKEJQRl9KTVAgfCBCUEZfSkEgfCBCUEZf
-WCwgQlBGX1JFR18yLCAwLCAwLCAwKSwKPiA+ICsJCUJQRl9NT1Y2NF9JTU0oQlBGX1JFR18wLCAx
-KSwKPiA+ICsJCUJQRl9FWElUX0lOU04oKSwKPiA+ICsKPiA+ICsJCS8qIHN0YXRpYyBzdWJwcm9n
-IFsxNCwxNikgKi8KPiA+ICsJCUJQRl9NT1Y2NF9JTU0oQlBGX1JFR18wLCA0MiksCj4gPiArCQlC
-UEZfRVhJVF9JTlNOKCksCj4gPiArCX07Cj4gPiArCWludCBnb29kX2ZkLCBiYWRfZmQsIHByb2df
-ZmQ7Cj4gPiArCj4gPiArCWdvb2RfZmQgPSBjcmVhdGVfanRfbWFwX3dpdGhfdGFyZ2V0KDEyKTsK
-PiA+ICsJaWYgKCFBU1NFUlRfR0UoZ29vZF9mZCwgMCwgImNyZWF0ZV9nb29kX2p0X21hcCIpKQo+
-ID4gKwkJcmV0dXJuOwo+ID4gKwo+ID4gKwliYWRfZmQgPSBjcmVhdGVfanRfbWFwX3dpdGhfdGFy
-Z2V0KDE0KTsKPiA+ICsJaWYgKCFBU1NFUlRfR0UoYmFkX2ZkLCAwLCAiY3JlYXRlX2JhZF9qdF9t
-YXAiKSkgewo+ID4gKwkJY2xvc2UoZ29vZF9mZCk7Cj4gPiArCQlyZXR1cm47Cj4gPiArCX0KPiA+
-ICsKPiA+ICsJaW5zbnNbNF0uaW1tID0gYmFkX2ZkOwo+ID4gKwlpbnNuc1s4XS5pbW0gPSBnb29k
-X2ZkOwo+ID4gKwo+ID4gKwlwcm9nX2ZkID0gYnBmX3Byb2dfbG9hZChCUEZfUFJPR19UWVBFX1NP
-Q0tFVF9GSUxURVIsIE5VTEwsICJHUEwiLAo+ID4gKwkJCQlpbnNucywgQVJSQVlfU0laRShpbnNu
-cyksIE5VTEwpOwo+ID4gKwlpZiAoIUFTU0VSVF9FUShwcm9nX2ZkLCAtRUlOVkFMLCAiY3Jvc3Nf
-c3VicHJvZ19nb3RveF9wcm9nX2xvYWQiKSkKPiA+ICsJCWNsb3NlKHByb2dfZmQpOwo+ID4gKwo+
-ID4gKwljbG9zZShiYWRfZmQpOwo+ID4gKwljbG9zZShnb29kX2ZkKTsKPiA+ICt9Cj4gPiArCj4g
-PiAgLyoKPiA+ICAgKiBWZXJpZnkgYSBiaXQgbW9yZSBjb21wbGV4IHByb2dyYW1zIHdoaWNoIGlu
-Y2x1ZGUgaW5kaXJlY3QganVtcHMKPiA+ICAgKiBhbmQgd2l0aCBqdW1wIHRhYmxlcyBsb2FkZWQg
-d2l0aCBhIG5vbi16ZXJvIG9mZnNldAo+ID4gQEAgLTUzOCw2ICs2MDgsOSBAQCB2b2lkIHRlc3Rf
-YnBmX2dvdG94KHZvaWQpCj4gPiAgCWlmICh0ZXN0X19zdGFydF9zdWJ0ZXN0KCJjaGVjay1sZGlt
-bTY0LW9mZi1nb3RveCIpKQo+ID4gIAkJX19zdWJ0ZXN0KHNrZWwsIGNoZWNrX2xkaW1tNjRfb2Zm
-X2dvdG94KTsKPiA+ICAKPiA+ICsJaWYgKHRlc3RfX3N0YXJ0X3N1YnRlc3QoImNoZWNrLWNyb3Nz
-LXN1YnByb2ctZ290b3gtdGFyZ2V0IikpCj4gPiArCQljaGVja19jcm9zc19zdWJwcm9nX2dvdG94
-X3RhcmdldChza2VsKTsKPiA+ICsKPiA+ICAJaWYgKHRlc3RfX3N0YXJ0X3N1YnRlc3QoImNoZWNr
-LWxkaW1tNjQtb2ZmLWdvdG94LWxsdm0iKSkKPiA+ICAJCV9fc3VidGVzdChza2VsLCBjaGVja19s
-ZGltbTY0X29mZl9nb3RveF9sbHZtKTsKPiA+ICAKPiAKPiBXaHkgaGF2ZW4ndCB5b3UgYWRkIHRo
-ZSB0ZXN0IGFzIHRoZSBsYXN0IG9uZT8gRXNwZWNpYWxseSB0aGF0IGl0Cj4gZG9lc24ndCB1c2Ug
-dGhlIF9fc3VidGVzdCgpIGhlbHBlci4KPiAKPiA+IC0tIAo+ID4gMi4zNC4xCj4gPiAKCkkgd2ls
-bCBkcm9wIHRoZSB1bnVzZWQgc2tlbCBhcmd1bWVudCBhbmQga2VlcCB0aGlzIHJhdy1pbnNuCnRl
-c3QgaW5kZXBlbmRlbnQgZnJvbSB0aGUgc2tlbGV0b24tYmFzZWQgX19zdWJ0ZXN0KCkgcGF0aC4K
+bpf_real_data_inode() must be usable from the bprm_check_security,
+mmap_file and file_mprotect hooks for systemd's RestrictFilesystemAccess
+BPF LSM program, so have it take a struct file instead of a dentry.
+
+Amir Goldstein <amir73il@gmail.com> suggests:
+
+  While doing so, rename it from bpf_real_inode() to
+  bpf_real_data_inode(). For a regular file on a union/overlay
+  filesystem it resolves to the underlying inode that hosts the data,
+  but for a non-regular file it returns the overlay inode. The new name
+  makes the "inode hosting the data" intent explicit and avoids the
+  ambiguity of "the real inode backing a file". Document the
+  non-regular-file behavior in the kfunc too.
+
+Both the signature change and the rename are safe because the kfunc
+landed this cycle and has no released users.
+
+Fixes: 9af8c8a54f6e ("bpf: add bpf_real_inode() kfunc")
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+Changes in v2:
+- Rename bpf_real_inode() -> bpf_real_data_inode() (Amir); the new name
+  makes the "inode hosting the data" intent explicit.
+- Document that the kfunc returns the overlay inode for non-regular files.
+- Link to v1: https://patch.msgid.link/20260622-work-bpf-real_inode-v1-1-4014eb4cbefd@kernel.org
+---
+ fs/bpf_fs_kfuncs.c | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
+
+diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
+index 768aca2dc0f0..f1863a891db6 100644
+--- a/fs/bpf_fs_kfuncs.c
++++ b/fs/bpf_fs_kfuncs.c
+@@ -360,18 +360,23 @@ __bpf_kfunc int bpf_cgroup_read_xattr(struct cgroup *cgroup, const char *name__s
+ #endif /* CONFIG_CGROUPS */
+ 
+ /**
+- * bpf_real_inode - get the real inode backing a dentry
+- * @dentry: dentry to resolve
++ * bpf_real_data_inode - get the real inode hosting a file's data
++ * @file: file to resolve
+  *
+- * If the dentry is on a union/overlay filesystem, return the underlying, real
+- * inode that hosts the data.  Otherwise return the inode attached to the
+- * dentry itself.
++ * Resolve @file to the inode that hosts its data. For a regular file on a
++ * union/overlay filesystem this is the underlying (upper or lower) inode that
++ * stores the data, not the overlay inode.
+  *
+- * Return: The real inode backing the dentry, or NULL for a negative dentry.
++ * Data resolution only applies to regular files. For a non-regular file (e.g.
++ * a device node, fifo or socket) on a union/overlay filesystem the overlay
++ * inode itself is returned; for any file on a non-union filesystem the inode
++ * attached to @file is returned.
++ *
++ * Return: The inode hosting @file's data, or NULL.
+  */
+-__bpf_kfunc struct inode *bpf_real_inode(struct dentry *dentry)
++__bpf_kfunc struct inode *bpf_real_data_inode(struct file *file)
+ {
+-	return d_real_inode(dentry);
++	return d_real_inode(file_dentry(file));
+ }
+ 
+ __bpf_kfunc_end_defs();
+@@ -384,7 +389,7 @@ BTF_ID_FLAGS(func, bpf_get_dentry_xattr, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_get_file_xattr, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_set_dentry_xattr, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_remove_dentry_xattr, KF_SLEEPABLE)
+-BTF_ID_FLAGS(func, bpf_real_inode, KF_SLEEPABLE | KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_real_data_inode, KF_SLEEPABLE | KF_RET_NULL)
+ BTF_KFUNCS_END(bpf_fs_kfunc_set_ids)
+ 
+ static int bpf_fs_kfuncs_filter(const struct bpf_prog *prog, u32 kfunc_id)
+
+---
+base-commit: 5b33fc6492a7b7a62359157db0f92f5b6e9af690
+change-id: 20260622-work-bpf-real_inode-c3202dbaf0ab
 
