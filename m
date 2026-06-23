@@ -1,138 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B161B1F3B85
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 14:38:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B30395AE3;
+	Tue, 23 Jun 2026 14:39:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782225507; cv=none; b=Dp9sD81x1s3a8ORWiUQlIuOvRXpcO+ZLnuh1VlaO5OmQSU2DUwqSRksTtmNdZeiDo1eGcbbudiuE+GQJhNMbSiieOZ9SE5v7b+FAsK4Q9zCMYXfN5Pi02H7IMHqrmdQ2OawE8rsowpcP/TQplPm5KTkHNtMY6RGXDIEfKaKRkKo=
+	t=1782225551; cv=none; b=YarZSGOEaadyG0Yjvskts+alpmyaeTZC+hDvGE18FD9b/IHUWxIvL5DtpoBrXlS5ArV3Q6OMeekxo69uXWnnWHVl/irQSpqInObApu6mXpx2qJ+mxXVzs5r9V9gWQghwgEZQ2ts2vpY1k7m3kzM+rZUBVNSMVrGF8E1y6tSjPi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782225507; c=relaxed/simple;
-	bh=JixWKG5hMVqnbOVUvjkIdNhhEuV8yU/XT6SQBVk9vDI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=C0tQ1gRr07WWrRVsRfDO6cFdj6YYUvpnrmy9qrTnTx8CZBD3O8YB9oDohmEQnZbGF/OWsp3x1TNodbEx1W5rSVd3WE4d7IxBF8s40ntw1ihl+4OJuIVG9cQqoun7OKrB3H0dA379JAIu7XEFmqbMAj+R7zTzMBi0/Y5sfsTR4xc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=odHo5esB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782225551; c=relaxed/simple;
+	bh=TzACNddQ5TEQEyWSbfIt2z0l1PscuTuMebn0ZJeptR8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=gOEwlyHEZvmf2zwN4BDkkL9+N6DPfqnOW6UkxvSYmapgTmxn9JWnLWRyN9KpJjhQCjEOVhZxpPNVfni1VVKwwyneRgOGFphBZcEHqA5B48iU/N0iiw1wvfLax4VGoOxA4G0sTi4ssYKloIwkd2TMH7t2CB7XwUiUIZG/rjIfceo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Tyy0e45K; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="odHo5esB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 336821F000E9;
-	Tue, 23 Jun 2026 14:38:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782225506;
-	bh=+csNI7uZjeO7dJhmov/zQRf0TAeXmm1Ln5+6v+x5/SE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=odHo5esB9LDAgYhsbfBnD+rHbdlaaTm3uBx52Cb938jMt6OkQtDDYQsclUoQ23O73
-	 vwcs+OKRU1y2K5ulRoXtr0S9AQX+MCrgqbPE2X0OR2t9/bBL6p4dAb/RzvKlVcHqiT
-	 N4cC3AH6H826Njq4mA75/ohYdYR1JQk0iAsyCnCHEHOaE5W/tml9L2ChYKSjyGPrvf
-	 f2acAKOin3aWoabQ5tcWzWUF6B93wY6m8YQc324EDa4EgZnDpOj5P66ezYodq/1Lhi
-	 OA8lBFvJXMIKaSmFZohSrRnYKUxqHMy3SjgL4zsZtGL9DfNQOrDIoxaF5B7vPVpOJE
-	 OJkE2UNgk0lAw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv2 bpf-next 3/3] bpftool: Add tracing_multi link info
- output
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiri Olsa" <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260623142417.275892-4-jolsa@kernel.org>
-References: <20260623142417.275892-1-jolsa@kernel.org>
- <20260623142417.275892-4-jolsa@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 23 Jun 2026 14:38:25 +0000
-Message-Id: <20260623143826.336821F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Tyy0e45K"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
+	Reply-To:Content-ID:Content-Description:In-Reply-To:References;
+	bh=kGMuDCEzBXBnfsspPsVSaErTuPATwEoz6IFYrK+CMM8=; b=Tyy0e45KTxWjxBYib/8hlb0Tev
+	vA1XVCxPwQYRTK6VuwUccK0pkXkCaXCJEjj5iafNUZLOFR89J5h47mR009FORgyl4NIcGV2wRjQsx
+	S44lW6tV3Kqwl2aTyrR6FN2vAP9PAYyZEdRs6Jd3BmjygjQ5ri709DSFWmfSqF8RWS5z5Pj/wi6vd
+	99vo9q7HTa6QiXOX9xCjzSrgtEoWPwPzFphlBlLLjjj/W4l9UXxEL3gDaVSpTT5O5k78n8UmCe2vo
+	BTneAkh84ZGn0KbAzWqvmsTFjTIaygc1gmPCIKCXWm/o2kbba6IsFVdNrQDZwVtiKk4gAVn4GPJzK
+	JP0rXLNA==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wc2H4-001ic7-2a;
+	Tue, 23 Jun 2026 14:38:51 +0000
+From: Breno Leitao <leitao@debian.org>
+Date: Tue, 23 Jun 2026 07:38:43 -0700
+Subject: [PATCH] sched_ext: Print deprecation warnings only once
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260623-scx_warning-v1-1-14bf218f4bd9@debian.org>
+X-B4-Tracking: v=1; b=H4sIAHOaOmoC/x3MUQqAIBAFwKss7zvBTIK8SkSYrbU/FgoVSHcPm
+ gNMReEsXOCoIvMlRY4ER21DCLtPGytZ4QhGm173plMlPPPtc5K0Kb1GOwRrjY8LGsKZOcrzb+P
+ 0vh9EJBTWXQAAAA==
+X-Change-ID: 20260623-scx_warning-0df49c442afb
+To: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
+ Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
+ Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Juri Lelli <juri.lelli@redhat.com>, 
+ Vincent Guittot <vincent.guittot@linaro.org>, 
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
+ K Prateek Nayak <kprateek.nayak@amd.com>
+Cc: sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, kernel-team@meta.com, Breno Leitao <leitao@debian.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2203; i=leitao@debian.org;
+ h=from:subject:message-id; bh=TzACNddQ5TEQEyWSbfIt2z0l1PscuTuMebn0ZJeptR8=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqOpp1hDCIqrDFGN47l61dAWMctxN5R+WYn/2Qb
+ ZXXLtObrH6JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCajqadQAKCRA1o5Of/Hh3
+ bQxOD/0UyZhJeorO+MxcCmbjzGsMVjA6nZ9JWmKA0zG5Y5RVEqdcMORmpX+h9rmeQd3Kse2B2kb
+ bm+DWxbsUWh+Z2DPNq9qobj+wPz6uME75jk7e23Lt8m5brwAxJ29SClxwWriKSOnR9CS1ajLxN+
+ 0SF0LAtlY0ZPYLS6cC7I4DL3bcXkc/vhjo2D//EvUcFYY+LwMdQvAtyTWoF2YlMqMYyIZ7iyF3w
+ XTybvE2sKyNMkmBL6Crzz4/urJmqiRJsDe/T2ND0gWrGHOisZFEZb6mRSdL9JysDmYUUXwjjLBj
+ nXJgtJ/dq+lBwq1nB3MZjNOat63cq3nVV8OYGyH8eGOWDFpERKTGfg+4qFJkart4vt3qb3TR1Bs
+ t4dU9Tt++zzAn8wr/unnmysqMIhyYyJt3WgpHiGtjKQXAiYJ/jJGeeZNDLMW4tcfajrQuEvaPRH
+ 9TsoHPDXN2uwtlqv4rA+L4+1Y2z5acis+6i6/fbyxCPPoLXHv+TDLXynSWaXkT22gUBCPVi1BPY
+ zdh3Khn2eTr9TYhLL9wZ4BzqAF8RcA31eUepfotdGTUq9Vh5rzRwPRvgp6L08zB6eEhYvC6er/j
+ 2QIuneDlYSdKnUtK/solt/+OCxvhSxo2LPXbUTtK2JlvTxlrdghMx+n7/Ru2pQkfR3EAzwqoFGr
+ OHCHMKQ9HYehL5w==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] The patch references non-existent `tracing_multi` fields in `str=
-uct bpf_link_info` causing a build failure, and the corresponding kernel `.=
-fill_link_info` callback is missing.
-- [Medium] Dynamically allocated memory for `ids`, `addrs`, and `cookies` a=
-rrays is leaked if the subsequent `bpf_link_get_info_by_fd()` call fails.
---
+The deprecation notices for direct p->scx.slice/dsq_vtime writes and for
+ops->cpu_acquire/release() use plain pr_warn(), so they repeat on every
+scheduler (re)load and flood the kernel log.
 
-commit 1c150871ddc705d0719c83498c9983e353211882
-Author: Jiri Olsa <jolsa@kernel.org>
+The slice/dsq_vtime notice is emitted from the BPF verifier's
+btf_struct_access callback, which runs once per write access and is
+re-evaluated as the verifier explores paths, so loading a single
+scheduler can print it several times. The cpu_acquire/release notice is
+printed on every scheduler enable.
 
-bpftool: Add tracing_multi link info output
+Switch both to pr_warn_once() so each deprecation is reported a single
+time, and add the missing newline to the slice/dsq_vtime message.
 
-This patch adds support to bpftool to display tracing_multi link details.
-It updates both the JSON and plain text output formats to show attached
-functions, addresses, and cookies.
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ kernel/sched/ext/ext.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-> index bdcd717b0348f..db780ee398206 100644
-> --- a/tools/bpf/bpftool/link.c
-> +++ b/tools/bpf/bpftool/link.c
-[ ... ]
-> @@ -1114,6 +1217,39 @@ static int do_show_link(int fd)
->  			goto again;
->  		}
->  	}
-> +	if (info.type =3D=3D BPF_LINK_TYPE_TRACING_MULTI &&
-> +	    !info.tracing_multi.ids) {
+diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+index 691d53fe0f648..708eb9024cb25 100644
+--- a/kernel/sched/ext/ext.c
++++ b/kernel/sched/ext/ext.c
+@@ -6988,7 +6988,7 @@ static int validate_ops(struct scx_sched *sch, const struct sched_ext_ops *ops)
+ 	 * run past the BPF allocation. Skip for cid-form.
+ 	 */
+ 	if (!sch->is_cid_type && (ops->cpu_acquire || ops->cpu_release))
+-		pr_warn("ops->cpu_acquire/release() are deprecated, use sched_switch TP instead\n");
++		pr_warn_once("ops->cpu_acquire/release() are deprecated, use sched_switch TP instead\n");
+ 
+ 	/*
+ 	 * Sub-scheduler support is tied to the cid-form struct_ops. A sub-sched
+@@ -7806,7 +7806,7 @@ static int bpf_scx_btf_struct_access(struct bpf_verifier_log *log,
+ 		     off + size <= offsetofend(struct task_struct, scx.slice)) ||
+ 		    (off >= offsetof(struct task_struct, scx.dsq_vtime) &&
+ 		     off + size <= offsetofend(struct task_struct, scx.dsq_vtime))) {
+-			pr_warn("sched_ext: Writing directly to p->scx.slice/dsq_vtime is deprecated, use scx_bpf_task_set_slice/dsq_vtime()");
++			pr_warn_once("sched_ext: Writing directly to p->scx.slice/dsq_vtime is deprecated, use scx_bpf_task_set_slice/dsq_vtime()\n");
+ 			return SCALAR_VALUE;
+ 		}
+ 
 
-[Severity: Medium]
-Will this break the build? It appears the tracing_multi struct is missing
-from the bpf_link_info union in include/uapi/linux/bpf.h.
+---
+base-commit: 4e5dfb7c84012007c3c7061126491bbc92d71bf1
+change-id: 20260623-scx_warning-0df49c442afb
 
-Also, it seems the kernel side might be missing the .fill_link_info
-callback in bpf_tracing_multi_link_lops (in kernel/trace/bpf_trace.c)
-to export this data to userspace.
+Best regards,
+-- 
+Breno Leitao <leitao@debian.org>
 
-> +		count =3D info.tracing_multi.count;
-> +		if (count) {
-> +			ids =3D calloc(count, sizeof(__u32));
-> +			if (!ids) {
-> +				p_err("mem alloc failed");
-> +				close(fd);
-> +				return -ENOMEM;
-> +			}
-> +			info.tracing_multi.ids =3D ptr_to_u64(ids);
-> +
-> +			addrs =3D calloc(count, sizeof(__u64));
-> +			if (!addrs) {
-> +				p_err("mem alloc failed");
-> +				free(ids);
-> +				close(fd);
-> +				return -ENOMEM;
-> +			}
-> +			info.tracing_multi.addrs =3D ptr_to_u64(addrs);
-> +
-> +			cookies =3D calloc(count, sizeof(__u64));
-> +			if (!cookies) {
-> +				p_err("mem alloc failed");
-> +				free(addrs);
-> +				free(ids);
-> +				close(fd);
-> +				return -ENOMEM;
-> +			}
-> +			info.tracing_multi.cookies =3D ptr_to_u64(cookies);
-> +			goto again;
-
-[Severity: Medium]
-If the execution jumps to again: and the subsequent call to
-bpf_link_get_info_by_fd() fails, does this leak the memory allocated
-for ids, addrs, and cookies?
-
-Looking at the error path earlier in do_show_link():
-
-again:
-	err =3D bpf_link_get_info_by_fd(fd, &info, &len);
-	if (err) {
-		p_err("can't get link info: %s",
-		      strerror(errno));
-		close(fd);
-		return err;
-	}
-
-It returns immediately without freeing these arrays if the second
-syscall fails (e.g., due to a concurrent increase in function count
-or link destruction).
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623142417.2758=
-92-4-jolsa@kernel.org?part=3D1
