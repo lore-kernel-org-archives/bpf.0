@@ -1,203 +1,77 @@
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46F193090E8
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 16:08:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782230902; cv=pass; b=uJyNd7Vyb29+Xb0ECp5TrQjy29WLBttUCp/HQ6DAPLylFG82HAYbPUa8OK93f3K9B5SpRUsLUcfFklhMjmeVMe1vdQoULXHx8GYLVc2nMPUsPd9imGuMYCyid9vW/S3TFKKOnpGEQ19MPYyrJoFZczvTYPaIKHF3Gvt2r4zyw2Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782230902; c=relaxed/simple;
-	bh=efDqvwMKjO5LEpENsH6RsfoLlos+OcUFj5FOVKihLxg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kQOEyp1VDBWF5CUQxej42ueddNYHEib3wXGiS2Zst7Sq6icR2PiXJbMvv2SrJ/Be7qDRGY3OtnNVymMMpqTrwiTDc8fBuA6E1bFPsNw2jbgCQS4tSrmJ8vPYu5BbDPue8CnJAOAVFxVC1jLZgSbH6BspRr1JbEcG/z582rOaKbA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S6uZlRhC; arc=pass smtp.client-ip=74.125.82.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF75F30CDBC;
+	Tue, 23 Jun 2026 16:09:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782230959; cv=none; b=Z39irX9sPf8DYBC/fmgq0gm7EFIh8dI7/uu1DoJSde3HxfzcSI6waz/84/eTgH7GWN1eipCpkEIbmWDpFCsB+GUK93sPlZKRnMYHlZz3IQr0/MsQXAxPvDSvrfYttiPndFyI28Wo0pn5ADX3JnObl8K55kYh72umc6aMQuCXOLQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782230959; c=relaxed/simple;
+	bh=CInh8XAA2fhGHng22WiBPloY+8C8sPP8xHVrV0jplks=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=UPu3D0/PEW7TS3is/m69WmjBhck4tdBHiDZOY6WkJru1758o8rjflbD+DRzOQshDS4fFHvZ8shRUfTqPoVr4Yj8xfOnkvfdDGmRDRX/q4SyTF5Lc5MMgoOIUzemjI9iDEuR3st4nrTwMbMM/BTCFfBN6ZBUqFOpxlFb0lMmJtis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zb8IXfwb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S6uZlRhC"
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-139986373b8so22903c88.0
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 09:08:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782230898; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Kq4jdxX0V/Lowm/IWCZGnSJl4bPNDaTUFF2D9jlKpfZpan9hPQJrtnL9vK5YdS5hOF
-         kE15au1jYUUXMArgrS3dkoK20TJRAfuVzpiRifY3iZ5Q7NtcVN9rard9p8iAzWabq09+
-         dEEeVp1Ov451bCzyMQHJoV1ZY/4mGLuVMrlqIhuAEYz0uULlxUac1ccrLeiYg6qyfRLg
-         TB3GbkgqReMr87LE8eSYKJi+xZMUbE2sxcMmlWVZovyFjh7bPonLNPthx2DqSbhF6MEg
-         vq5T4SlCkUsX1yqE1Kywo8XsKYWzzxNsv+iPrzvwziJWJzr+KdV5oIDvXhhAjG59ZNjD
-         O4oA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=QDEmqsxEFgmNDu79H8L8WmTiCEfrH+mtXrKKg7q/FzY=;
-        fh=eHpjKHrsPBLFAo6qmWotK/iSi5qSGhcL42Rz33h0Ek8=;
-        b=bVAu/UZbPZpWfqxWw2yJ5SujmwBy/Yy0TtMPlcn7uFOE6+5F5R1IiFvsUd1aPu3iXB
-         mFBtYWK9A9I650oB0pcHG+hWCkD8ObObZAJT00JornrQ7BNNXuymRx8lAS2UOYib4HUz
-         u46DvjW4utgdk441yzoMN1Pe/anwMoV40YsRDDvrW6cJxKSHd9UtHw9MK+eVoiR6VxBs
-         W8O2DNRLHEdBgX2T6pUYJMc9Vf/+mInhb9pVqRbWf8bB8eUqbRbH6AMsXrte6Tl/6HI3
-         RG3CUeX7vaGWkBmrrsxl37Gn+35OSDViG2/PteefTZ0kfcd++WgpOO+sH6G6Vs0bzlVD
-         Pe3g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782230898; x=1782835698; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QDEmqsxEFgmNDu79H8L8WmTiCEfrH+mtXrKKg7q/FzY=;
-        b=S6uZlRhC91gyDu5/r6RLRvDFOdU0lWsEckTBDa2Q2gtCsxUolI8yMXdRUttF5kTHdC
-         SLJmoNhBuhGVxoPM0bNmzACH0r7gcE4MynEExyaxGTVViaoXr3MIZ6yDgcpArTZyIpOm
-         rD/JfRYz4l+0c53G2fKTliv4dotDajyqavEPm6OidvI7+jtBBdKMPQZU9zqWtcsklBhH
-         Dik0wNX7/BaXR7ZDvSbs+Lv9VnutEWzXP5KlNt2bKbrA4MAkwPeASNOc+Uxt4RIULLTh
-         c6qDjwR9YgxEM7JK3nxu5H78FKRYwcX6k0TFA6CDfEv9Mbap/Kl52coiQT/A7kt7PqKd
-         f/Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782230898; x=1782835698;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=QDEmqsxEFgmNDu79H8L8WmTiCEfrH+mtXrKKg7q/FzY=;
-        b=nYmDY4aW80JbivT+e/3S4RSMdSV9JQle6YNMVtPVRRWK5gXghdkXX/TC+NbMw63sB0
-         E652HhnIdbpIENucNdHpZ23r6U3yv25bpD4wY3wV5veaKDmoT9ycxmnRYjjBss8B9Rp7
-         1kBoKrDjCBcXP2UPDALunVqEM87WNCiH+vArUNON6NIQniCSqRw41aH87UpO/gR0fUz5
-         B6ZrzHGA0PcY+nPB373cKWR7LxCrPiKbDzGeaWvaLyKtGwaFkMDa5NMPrv+DC+cGg/ML
-         YAW+3X7/l0iZHxdPwQuwbfEpw3d+kKd+8ZxrhEtwE/DCA0mfJqROd4d+mpZ1SroUldCy
-         WymQ==
-X-Gm-Message-State: AOJu0Yywd6JcPEGUJlt4s9QWBmab0CeJl5xmmQuLl1eC2oAckIzAT1VD
-	tB17WSQ/tCJexYJ0en+vdt6/lZu+tk80+Okvkr0xtJS8gdez3arwlslJvg0jVlPyU8bCMxF0na8
-	wAGmKQhhG6FXrFAtQFmOHa9N0bWz1EvwB16Ntp2nc
-X-Gm-Gg: AfdE7clmDY3uXt2TxkN7Yk3UnRpkDgsMm8ZYeBBSx4McBPAj0sEYLCqy9gnzqXUTaL7
-	JUFbfrODqqhf8SKfpDi7CABbzwk1GjhvJyzgrbfrNKO2JbS9mTi1lgASpgRLtwoa6natozDrBYO
-	CFlged6t2kszWJWwwbi9uI2EhNjjU++6ArjbmJJbig3gaEYODGVAF59/ws7dPvaqUEEExq6F1/j
-	921aI7d3xBr3IBdkByLrPbMz52aPMTv+ieObSrwpg7lrad1O2LvGOxv8MweoUKTZAwkc0hEtM5x
-	IjDm37NeQcylRUxFwOIujTJLuJNPEO1yCVLiXaC3Cfybwf9Whi4r1tRhH1zZXBzwISDZj4fxrVj
-	T6IILgjie0M1NDix35dXbhGkFelpSTjH4o9QZLFs=
-X-Received: by 2002:a05:7022:101:b0:137:64ad:a636 with SMTP id
- a92af1059eb24-139c6f4f350mr2671104c88.27.1782230897470; Tue, 23 Jun 2026
- 09:08:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zb8IXfwb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC4891F000E9;
+	Tue, 23 Jun 2026 16:09:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782230958;
+	bh=2PguWsrlG4iSkEVEQsCsbjDTmr4CughENgFDBtKEPs0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=Zb8IXfwb8IV6Z09cqcfLOU3HmBDF/EznroGhn1/Fw0BaOITdZjBz9Jws7Nrbgi7S+
+	 FJ8eFwBx1G/G2oOLVLO17n6JdS0o/XerVqlFjdf6PN5ez3dtBGKZAJrUgiVglFWz/i
+	 NNHaoxosuTbPj06dtLmnjDcCNQdIDrXXygiOAq3k+gdfCGieIfEbVKUfZ9pMT1HPiI
+	 f8mWRIbwj6ugVZL/khyULUScj0sYa2fq7WqKs5lf/4I7firtDcPQrDhbi+CIGd2DTY
+	 OfJyAcGE/q13O/czDaOv+ZpsyJDY22BXLIH6/RnP+UCYSPvMRy+InkfO6E7NoIHF7I
+	 ogYsDUFXzZLxQ==
+From: Christian Brauner <brauner@kernel.org>
+To: bpf@vger.kernel.org, Christian Brauner <brauner@kernel.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+ Amir Goldstein <amir73il@gmail.com>, linux-fsdevel@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20260623-work-bpf-real_inode-v2-1-8e8b57dd25f7@kernel.org>
+References: <20260623-work-bpf-real_inode-v2-1-8e8b57dd25f7@kernel.org>
+Subject: Re: [PATCH v2] bpf: have bpf_real_data_inode() take a struct file
+Message-Id: <20260623-meinung-herzrasen-gewarnt-e3a56bca3df9@brauner>
+Date: Tue, 23 Jun 2026 18:09:09 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260623-bpf-sk_msg-split-unix-v2-1-ca7a626a94a5@cloudflare.com>
-In-Reply-To: <20260623-bpf-sk_msg-split-unix-v2-1-ca7a626a94a5@cloudflare.com>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Tue, 23 Jun 2026 09:08:04 -0700
-X-Gm-Features: AVVi8Ce9xskQNam5h2s9SZz03OnfDUSiMjXUPhtZCQHvy-a98A3NZ4_p7YLSNqA
-Message-ID: <CAAVpQUBsQFFxJFDnJzxmsER3bOjm=zqJ5P5MSeW_T9v-4639cw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf, unix: Guard sk_msg-dependent code behind CONFIG_NET_SOCK_MSG
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jiayuan Chen <jiayuan.chen@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	netdev@vger.kernel.org, kernel-team@cloudflare.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.16-dev-5fdb0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=881; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=CInh8XAA2fhGHng22WiBPloY+8C8sPP8xHVrV0jplks=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWRZrV/T+TiOyVs0XGf2FbMVc2fze03nNmE7/mHeWduTf
+ 160hAre6ShlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZiIpgLD/9juP/c/mnPO2hF2
+ 9PhJht0xEQ0GMkkL3lk7qrldfDq/kJ2RYVdtWP1EoQ0WPdtqc6/q+k43/9FxvnJeSOm15VG/OFi
+ M+AE=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Tue, Jun 23, 2026 at 4:20=E2=80=AFAM Jakub Sitnicki <jakub@cloudflare.co=
-m> wrote:
->
-> Prepare to decouple BPF_SYSCALL config option from NET_SOCK_MSG. When
-> completed all code paths related to sockmap-based redirects should be
-> guarded by BPF_SYSCALL && NET_SOCK_MSG to allow users to opt out by
-> disabling NET_SOCK_MSG. The implementation of sockmap as a container for
-> socket references would remain under BPF_SYSCALL.
->
-> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-> ---
-> Changes in v2:
-> - Handle prot->recvmsg being NULL (Sashiko)
-> - Elaborate on the end goal in description
-> - Link to v1: https://patch.msgid.link/20260622-bpf-sk_msg-split-unix-v1-=
-1-d7e0cb7bb03b@cloudflare.com
-> ---
->  net/unix/af_unix.c  | 4 ++--
->  net/unix/unix_bpf.c | 6 ++++++
->  2 files changed, 8 insertions(+), 2 deletions(-)
->
-> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-> index f7a9d55eee8a..84c11c60c75f 100644
-> --- a/net/unix/af_unix.c
-> +++ b/net/unix/af_unix.c
-> @@ -2675,7 +2675,7 @@ static int unix_dgram_recvmsg(struct socket *sock, =
-struct msghdr *msg, size_t si
->  #ifdef CONFIG_BPF_SYSCALL
->         const struct proto *prot =3D READ_ONCE(sk->sk_prot);
->
-> -       if (prot !=3D &unix_dgram_proto)
-> +       if (prot->recvmsg)
+On Tue, 23 Jun 2026 11:32:27 +0200, Christian Brauner wrote:
+> bpf: have bpf_real_data_inode() take a struct file
 
-There is no reason to have this dead branch when
-CONFIG_BPF_SYSCALL && !NET_SOCK_MSG.
+Applied to the vfs.fixes branch of the vfs/vfs.git tree.
+Patches in the vfs.fixes branch should appear in linux-next soon.
 
-Let's compile out all sockmap code when both configs
-are not enabled.
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-Since AF_UNIX differs from TCP/UDP, it can take the
-simpler approach.
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
 
->                 return prot->recvmsg(sk, msg, size, flags);
->  #endif
->         return __unix_dgram_recvmsg(sk, msg, size, flags);
-> @@ -3152,7 +3152,7 @@ static int unix_stream_recvmsg(struct socket *sock,=
- struct msghdr *msg,
->         struct sock *sk =3D sock->sk;
->         const struct proto *prot =3D READ_ONCE(sk->sk_prot);
->
-> -       if (prot !=3D &unix_stream_proto)
-> +       if (prot->recvmsg)
->                 return prot->recvmsg(sk, msg, size, flags);
->  #endif
->         return unix_stream_read_generic(&state, true);
-> diff --git a/net/unix/unix_bpf.c b/net/unix/unix_bpf.c
-> index f86ff19e9764..5289a04b4993 100644
-> --- a/net/unix/unix_bpf.c
-> +++ b/net/unix/unix_bpf.c
-> @@ -7,6 +7,7 @@
->
->  #include "af_unix.h"
->
-> +#ifdef CONFIG_NET_SOCK_MSG
->  #define unix_sk_has_data(__sk, __psock)                                 =
-       \
->                 ({      !skb_queue_empty(&__sk->sk_receive_queue) ||    \
->                         !skb_queue_empty(&__psock->ingress_skb) ||      \
-> @@ -94,6 +95,7 @@ static int unix_bpf_recvmsg(struct sock *sk, struct msg=
-hdr *msg,
->         sk_psock_put(sk, psock);
->         return copied;
->  }
-> +#endif /* CONFIG_NET_SOCK_MSG */
->
->  static struct proto *unix_dgram_prot_saved __read_mostly;
->  static DEFINE_SPINLOCK(unix_dgram_prot_lock);
-> @@ -107,8 +109,10 @@ static void unix_dgram_bpf_rebuild_protos(struct pro=
-to *prot, const struct proto
->  {
->         *prot        =3D *base;
->         prot->close  =3D sock_map_close;
-> +#ifdef CONFIG_NET_SOCK_MSG
->         prot->recvmsg =3D unix_bpf_recvmsg;
->         prot->sock_is_readable =3D sk_msg_is_readable;
-> +#endif
->  }
->
->  static void unix_stream_bpf_rebuild_protos(struct proto *prot,
-> @@ -116,8 +120,10 @@ static void unix_stream_bpf_rebuild_protos(struct pr=
-oto *prot,
->  {
->         *prot        =3D *base;
->         prot->close  =3D sock_map_close;
-> +#ifdef CONFIG_NET_SOCK_MSG
->         prot->recvmsg =3D unix_bpf_recvmsg;
->         prot->sock_is_readable =3D sk_msg_is_readable;
-> +#endif
->         prot->unhash  =3D sock_map_unhash;
->  }
->
->
->
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.fixes
+
+[1/1] bpf: have bpf_real_data_inode() take a struct file
+      https://git.kernel.org/vfs/vfs/c/c99895a8cbee
+
