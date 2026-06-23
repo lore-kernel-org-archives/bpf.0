@@ -1,253 +1,251 @@
-Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6508F14B977
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 02:03:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782180242; cv=pass; b=KQswmPB7J5W328GvtEAxk08fTCFqi1mKRjTJBTVoaXrNpxy6DHoHs4N9cJ+xAo75ELZ3NtwZPpi4kNWsdh6zp4JHGx9pFGKMdIANo+21KkfHSZLZ/KCTXejxdZ/0VBtR0BbjxCmKaew/BdcggxhIYu1fANmcy6Dws/E3uI9aArY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782180242; c=relaxed/simple;
-	bh=yfz/p2GvdAEBen0CxmAM1laTTtAt4iZdMa8fFT8fzAw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uCIC9wNBCahSC982/DfSGuPzOagJUvE9tKPkdnHbKLScW1bxciAbX/2vTKbZ6XXKgPOEPWYEQg5936HyJ9799FxHxZAPvZNUx/dHpYcsdZQvdUjOlbZeyczADTDhtCacj+RAdNrxhC1s14O2vth6vxnVYnC9+flhZP9pPySRaKo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b/X0sfh1; arc=pass smtp.client-ip=74.125.224.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0027F30D3E0;
+	Tue, 23 Jun 2026 02:12:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782180726; cv=none; b=N/TGQLh1SjHUSKrccVhgRi9LJ1u7flOS1OBByb44jheuAzCHK0xv9Qjbrj5y9vrql1Qj0wXM6NW+u6q6phxHZnpie47h0jEdxKsDLDvcwEkkDV//oCY2Lxaa1p+u1QxBXt8W9zCkp/xCBI9/b8xOZwSELabGIyDCYOo4qvtYduk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782180726; c=relaxed/simple;
+	bh=l9oyzbXNcsHmt1DmxFt6zVwM/N2xIVgjz/nadnI1CNw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=VDwqdstYtQ/mEljUF21KDkDdjPRVZnHPryR2KZ6Q4lFTgWYQAQPIeKLP9Zt7F7K4YJoc7CsFdNNbxLZVgh/bo0a6fMKEsn2vj/KPwT1dStJOZF9JruMtDesVaCahVj5As+fGAZCTRi5kB/aiwRFw9wORhAtUrgz3ZAwq9d39Jq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=XnjYqRCM; arc=none smtp.client-ip=113.46.200.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b/X0sfh1"
-Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-662df6a4fe4so6250782d50.2
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 19:03:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782180238; cv=none;
-        d=google.com; s=arc-20240605;
-        b=KPD2H3sdyF1a0FT7sUcpk5FjW7wVW7Qr2Vy7lFLhK+bH2yYKIATBV9x6sFJFVqeZKR
-         HJqsuPLZI/nLSO5sXJtwGhK/HdArk6CDKaVqj17uZ1mVWx3wBWaHnWH2WvYpWIct1WX5
-         mvP6cVLz7dqmD7rxCh2QIs35a1e47OoNWfoPdXoFDrktba5qbQx9u+VqWtgrOCCitqeF
-         RSG5W+Q9B37N6d9yHffM7E5vZYI5hlz4rmuYN0A6erlR2xp6oiQOdFe3J4b7K67Ib8WA
-         2uAnwXpkpiW29FrwRf86FhSE58dBvKEbdLH0PjmqsctiQJqaYKzW4TD8gE2A2CCAKtb4
-         MuMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=mt39b+CDA1UqkI46nSmJGTg6k30239R4rmDIdfyhkmg=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=MxSIreckmBNeM4Z4rWtOjBpu7W5GKIIUXsfmMnPwDtNxfhgEC7le37+E82xvFuTuGH
-         w492xo1ICRcir/8a7dR1p4BnCJpg1sy6GUUbKcHqi8bOJbilHJ7iVzv597fAjDyjR2pO
-         vq7ASp7BFRRpdXtAFXYV8qXnG7s6esE5ao8/gjtG24JSIxfj5XjBOtlPDYZ1kKHORxaa
-         B0XgvO0prXkniNg0WoywA2m5WAThINs8XtibuIZSdKsBAH8FFlXTSKgy3WMQvdxirVnS
-         drcDqqTD2lyOXK4Tes16SOOtQPxGUs62p7Ayfv/QezHY8cz3eOHf8NW938gL2ZonTxNm
-         3TeA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782180238; x=1782785038; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mt39b+CDA1UqkI46nSmJGTg6k30239R4rmDIdfyhkmg=;
-        b=b/X0sfh1V12Ktf5K+Vp9AI8wXqN/d1xsKZe4gRXQhXZ7LNNDZZLX6UYLV1lryCM2TI
-         y1Er1J/swY+uJWn+wK16zO1W4JyUHlrGf7v27ax7S8Jze9nc1aVGce2KsoKGFZ4bQPIl
-         TxkzXgUBP2ZgCa3surXIDvZqyrapAcWS94ZqZzcssqYqfn97KX/QsEzIHL6l+5ii5UnG
-         6DQWtyDVS0fMFF3jwyzakWqYhX86ykXPgXauzbmp4m9D2k+hLwSrB2tLJY9VTNX8+MSy
-         1cqnRmeJGbRmeBgdeM8oNjRpZ87SsLzsOvXgCsFlBeYGTePtKe2gVHXfqd7X6iNAYdl9
-         sguQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782180238; x=1782785038;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=mt39b+CDA1UqkI46nSmJGTg6k30239R4rmDIdfyhkmg=;
-        b=c+i5k2/26KGeij2+jQ1SoUiTijcymzKcDMFGW48jj6U1heddFSm5/3Z0f31fvIzvFG
-         0uZ7y9H8Fbe3rbJ+AgSd5Ns7qRagjRPAzUykbpKzD9tNkNt6mX5tbAPSis5DCYctTknE
-         X9mb2EpMle+7dteumZXBxsmg1H/7eq+SI0ljedjuwbpSfagwxMr0ufPecepvcI29m6zR
-         +5fkLwyqUjhm4Gbm8q4nYc4PocK3t8qxOJ8LDA8+JzlsK9HnKv7c6ljuENUR7pSWEfxJ
-         u6dYISgM94wU15EpCZcxDN43KA06t6oEVm8tgT9wwdl22l1wgfCKNn86CSOlPdd920Ks
-         tatQ==
-X-Gm-Message-State: AOJu0Yz40kRsicBCCHXQzVxnTx4dUlKB8+2rz0oWAgBtC7QTlHVhHWDM
-	1L+Zv6OsqcC/yGYJ+ffMN/r8KtUnS7ropI16JJ9unuSEDtA9qQfd0UTPGqHOwZOlDm1c+3ZlXbU
-	c/SO7pYKxunmNZ2abMJpi6ING8nPWfPaarutR8/dpbQ==
-X-Gm-Gg: AfdE7cl8+cGi36KN1qLw1LKsfZ1THM8YR9tUZWxG1Yvv/zn1OVXGR0rJ7fMKBaDVuNe
-	ZxGGX9nleO7oCsSrhh0Bhl/JzFteAgT8o6Gd6hz+Fv+1GocWKa1o0cNbCCZtPKcZR0Twxqh/BTP
-	oKIUZZpTQe4K2I8cYCZX2Is3r7XToBiJkoYDe8GTP3ZgqAVL/UMRWsR3+ULjI65K+tFeFXDko7X
-	iM3MzYLc26oUoPnjJMv28P5FdKdsJNdmAkbniBJ7UsoJhq++UaEX1uUE+axQtxrmc31ZF2yiYL7
-	yZkr0hCloedTQNhOzplbLs/kk2lFLUzMN4knaqKREIHm3+sgFRU=
-X-Received: by 2002:a05:690e:14cf:b0:65e:3df3:1c30 with SMTP id
- 956f58d0204a3-66359e1c2bdmr866674d50.7.1782180238233; Mon, 22 Jun 2026
- 19:03:58 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="XnjYqRCM"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=AGsszw77KlcZ5rp/LEwZTApNpU8N3RBDg6T3bY4aWNs=;
+	b=XnjYqRCMLgZPQ4C2MokrD8cBJJFFd/fIMgHXNY0qWJci8OUgEcIvf7WOEaEQ9lg2aQSEPRfas
+	w25DK6f5MY2Ba3yjTgcKNwc79KAmp1cIPkyl9WRWNzub1pVrgW/0G3vxzxGqI+op1G5621dGnJI
+	diWXGxh8DBe7JCkNqduJIa4=
+Received: from mail.maildlp.com (unknown [172.19.163.200])
+	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gkpJ15JYPznTVX;
+	Tue, 23 Jun 2026 10:03:13 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id 60A244055B;
+	Tue, 23 Jun 2026 10:11:58 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
+ (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Tue, 23 Jun
+ 2026 10:11:57 +0800
+Message-ID: <b6e8c677-5fff-4de1-8483-fc23361898dc@huawei.com>
+Date: Tue, 23 Jun 2026 10:11:57 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260623014027.402820-1-sun.jian.kdev@gmail.com> <20260623015325.2F2D31F000E9@smtp.kernel.org>
-In-Reply-To: <20260623015325.2F2D31F000E9@smtp.kernel.org>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Tue, 23 Jun 2026 10:03:48 +0800
-X-Gm-Features: AVVi8CcrcdC8SK0ck24XjoJflK84MKqPtrnYp0MVTlRgZUmrjwG6UcuRpikinWE
-Message-ID: <CABFUUZFH=qx7e7mT=GSepdk_XUGhPtJEzuFf-qjUUMLRaEv0kQ@mail.gmail.com>
-Subject: Re: [PATCH bpf v4] selftests/bpf: Cover partial copy of non-linear
- test_run output
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/3] riscv, bpf: Add support for BPF exceptions
+Content-Language: en-US
+To: Varun R Mallya <varunrmallya@gmail.com>, <pjw@kernel.org>,
+	<palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+	<memxor@gmail.com>, <bjorn@kernel.org>
+CC: <alex@ghiti.fr>, <martin.lau@linux.dev>, <song@kernel.org>,
+	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+	<puranjay@kernel.org>, <linux-riscv@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20260621144259.288135-1-varunrmallya@gmail.com>
+ <20260621144259.288135-3-varunrmallya@gmail.com>
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <20260621144259.288135-3-varunrmallya@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
-On Tue, Jun 23, 2026 at 9:53=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [High] The newly added selftests `test_skb_nonlinear_data_out_partial` =
-and `test_xdp_nonlinear_data_out_partial` will unconditionally fail due to =
-an unaddressed arithmetic bug in the kernel's `bpf_test_finish` function, b=
-reaking the selftest suite.
-> --
->
-> commit 99284be8e441ba5ead251137597e96ebcee998f4
-> Author: Sun Jian <sun.jian.kdev@gmail.com>
->
-> selftests/bpf: Cover partial copy of non-linear test_run output
->
-> This commit adds selftests to cover the partial copy of non-linear test_r=
-un
-> output for both TC and XDP programs. It uses a 9000-byte packet with a 64=
--byte
-> linear data area and a 100-byte output buffer.
->
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c b/t=
-ools/testing/selftests/bpf/prog_tests/prog_run_opts.c
-> > index 01f1d1b6715a6..beb6fa78fd949 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
->
-> [ ... ]
->
-> > @@ -20,6 +24,69 @@ static void check_run_cnt(int prog_fd, __u64 run_cnt=
-)
-> >             "incorrect number of repetitions, want %llu have %llu\n", r=
-un_cnt, info.run_cnt);
-> >  }
-> >
-> > +static void init_pkt(__u8 *pkt, size_t len)
-> > +{
-> > +     size_t i;
-> > +
-> > +     for (i =3D 0; i < len; i++)
-> > +             pkt[i] =3D i & 0xff;
-> > +}
-> > +
-> > +static void test_skb_nonlinear_data_out_partial(struct test_pkt_access=
- *skel)
-> > +{
-> > +     LIBBPF_OPTS(bpf_test_run_opts, topts);
-> > +     __u8 pkt[NONLINEAR_PKT_LEN];
-> > +     __u8 out[SHORT_OUT_LEN] =3D {};
-> > +     struct __sk_buff skb =3D {};
-> > +     int prog_fd, err;
-> > +
-> > +     init_pkt(pkt, sizeof(pkt));
-> > +
-> > +     skb.data_end =3D NONLINEAR_LINEAR_DATA_LEN;
-> > +
-> > +     topts.data_in =3D pkt;
-> > +     topts.data_size_in =3D sizeof(pkt);
-> > +     topts.data_out =3D out;
-> > +     topts.data_size_out =3D sizeof(out);
-> > +     topts.ctx_in =3D &skb;
-> > +     topts.ctx_size_in =3D sizeof(skb);
-> > +
-> > +     prog_fd =3D bpf_program__fd(skel->progs.tc_pass_prog);
-> > +     err =3D bpf_prog_test_run_opts(prog_fd, &topts);
-> > +
-> > +     ASSERT_EQ(err, -ENOSPC, "skb_partial_err");
-> > +     ASSERT_EQ(topts.data_size_out, sizeof(pkt), "skb_partial_size");
-> > +     ASSERT_OK(memcmp(out, pkt, sizeof(out)), "skb_partial_data");
->
-> [Severity: High]
-> Will these assertions fail unconditionally due to an existing arithmetic
-> bug in the kernel?
->
-> In net/bpf/test_run.c:bpf_test_finish(), the length is calculated as:
->
->     int len =3D sinfo ? copy_size - frag_size : copy_size;
->
->     if (len < 0) {
->         err =3D -ENOSPC;
->         goto out;
->     }
->
 
-This looks like a false positive based on the old bpf_test_finish()
-implementation.
 
-The fix patch has already been applied to bpf/master as:
+On 2026/6/21 22:42, Varun R Mallya wrote:
+> Add the JIT support required for BPF exceptions (bpf_throw()) on riscv64.
+> 
+> Two kinds of program need special prologue/epilogue handling:
+> 
+>    - A program acting as an exception boundary must save the full set of
+>      riscv callee-saved GP registers (ra, s0-s11), not just the ones it
+>      happens to clobber, so that the exception callback can restore the
+>      state that was live at the boundary. ra and fp are stored first so
+>      the saved ra/fp pair forms a valid stackframe record for the
+>      unwinder.
+> 
+>    - The exception callback (exception_cb) does not allocate its own
+>      frame. It reuses the boundary program's frame, whose frame pointer
+>      is passed in a2, by setting SP = FP - stack_adjust. This lines the
+>      epilogue's loads up with the registers the boundary saved, so both
+>      paths restore the same order.
+> 
+> Wire up bpf_jit_support to be true only when CONFIG_FRAME_POINTER is
+> enabled.
+> 
+> Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
+> ---
+>   arch/riscv/net/bpf_jit_comp64.c | 102 ++++++++++++++++++++++++++++++++
+>   1 file changed, 102 insertions(+)
+> 
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+> index c03c1de16b79..eafac0655dab 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -56,6 +56,30 @@ static const int pt_regmap[] = {
+>   	[RV_REG_T0] = offsetof(struct pt_regs, t0),
+>   };
+>   
+> +/*
+> + * Full set of RISC-V callee-saved GP registers (ra, s0-s11) saved by a program
+> + * acting as an exception boundary, in the order they are stored on the stack.
+> + * RA and FP come first so the saved ra/fp pair forms a valid stackframe record
+> + * at [FP-8]/[FP-16] for the unwinder. The exception callback reuses the
+> + * boundary program's frame and restores this same set in its epilogue, so both
+> + * paths must agree on the contents and ordering of this list.
+> + */
+> +static const int rv_exception_csave_regs[] = {
+> +	RV_REG_RA,
+> +	RV_REG_FP,
+> +	RV_REG_S1,
+> +	RV_REG_S2,
+> +	RV_REG_S3,
+> +	RV_REG_S4,
+> +	RV_REG_S5,
+> +	RV_REG_S6,
+> +	RV_REG_S7,
+> +	RV_REG_S8,
+> +	RV_REG_S9,
+> +	RV_REG_S10,
+> +	RV_REG_S11,
+> +};
+> +
+>   enum {
+>   	RV_CTX_F_SEEN_TAIL_CALL =	0,
+>   	RV_CTX_F_SEEN_CALL =		RV_REG_RA,
+> @@ -231,6 +255,22 @@ static void emit_imm(u8 rd, s64 val, struct rv_jit_context *ctx)
+>   static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
+>   {
+>   	int stack_adjust = ctx->stack_size, store_offset = stack_adjust - 8;
+> +	struct bpf_prog_aux *aux = ctx->prog->aux;
+> +	int i;
+> +
+> +	if (aux->exception_boundary || aux->exception_cb) {
+> +		/*
+> +		 * An exception boundary saved the full callee-saved register
+> +		 * set and the exception callback restores it from the boundary's
+> +		 * frame. Both restore the same fixed set, in the same order it
+> +		 * was stored by bpf_jit_build_prologue().
+> +		 */
+> +		for (i = 0; i < ARRAY_SIZE(rv_exception_csave_regs); i++) {
+> +			emit_ld(rv_exception_csave_regs[i], store_offset, RV_REG_SP, ctx);
+> +			store_offset -= 8;
+> +		}
+> +		goto epilogue_tail;
+> +	}
+>   
+>   	if (seen_reg(RV_REG_RA, ctx)) {
+>   		emit_ld(RV_REG_RA, store_offset, RV_REG_SP, ctx);
+> @@ -267,6 +307,7 @@ static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
+>   		store_offset -= 8;
+>   	}
+>   
+> +epilogue_tail:
+>   	emit_addi(RV_REG_SP, RV_REG_SP, stack_adjust, ctx);
+>   	/* Set return value. */
+>   	if (!is_tail_call)
+> @@ -2002,11 +2043,61 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+>   {
+>   	int i, stack_adjust = 0, store_offset, bpf_stack_adjust;
+> +	struct bpf_prog_aux *aux = ctx->prog->aux;
+>   
+>   	bpf_stack_adjust = round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
+>   	if (bpf_stack_adjust)
+>   		mark_fp(ctx);
+>   
+> +	if (aux->exception_boundary || aux->exception_cb) {
+> +		/*
+> +		 * A program acting as an exception boundary saves the full set
+> +		 * of riscv callee saved registers (ra, s0-s11).
+> +		 */
+> +		stack_adjust = round_up(ARRAY_SIZE(rv_exception_csave_regs) * 8,
+> +					STACK_ALIGN);
+> +		stack_adjust += bpf_stack_adjust;
+> +		store_offset = stack_adjust - 8;
+> +
+> +		/* emit kcfi type preamble immediately before the first insn */
+> +		emit_kcfi(is_subprog ? cfi_bpf_subprog_hash : cfi_bpf_hash, ctx);
+> +
+> +		/* nops reserved for auipc+jalr pair */
+> +		for (i = 0; i < RV_FENTRY_NINSNS; i++)
+> +			emit(rv_nop(), ctx);
+> +
+> +		/* First instruction is always setting the tail-call-counter
+> +		 * (TCC) register. This instruction is skipped for tail calls.
+> +		 * Force using a 4-byte (non-compressed) instruction.
+> +		 */
+> +		emit(rv_addi(RV_REG_TCC, RV_REG_ZERO, MAX_TAIL_CALL_CNT), ctx);
 
-b5f3534268e3 ("bpf: Fix partial copy of non-linear test_run output")
+We don't need to duplicate code. Please merge it.
 
-That commit removes the old copy_size - frag_size calculation and computes
-the linear copy length from the packet layout instead:
+> +
+> +		if (!aux->exception_cb && aux->exception_boundary) {
+> +			/*
+> +			 * Boundary program: allocate the frame and save the
+> +			 * full callee-saved set, capturing the caller's values.
+> +			 */
+> +			emit_addi(RV_REG_SP, RV_REG_SP, -stack_adjust, ctx);
+> +			for (i = 0; i < ARRAY_SIZE(rv_exception_csave_regs); i++) {
+> +				emit_sd(RV_REG_SP, store_offset,
+> +					rv_exception_csave_regs[i], ctx);
+> +				store_offset -= 8;
+> +			}
+> +			emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
+> +		} else {
+> +			/*
+> +			 * Exception callback, reuse the boundary program's
+> +			 * frame, whose frame pointer is passed in a2. Setting
 
-head_len =3D size - frag_size
-len =3D min(copy_size, head_len)
+something confused—why is it A2? I feel like I missed something.
 
-This v4 only resends the remaining selftest patch on top of current
-bpf/master, where the fix is already present.
+> +			 * SP = FP - stack_adjust lines the epilogue's loads up
+> +			 * with the registers the boundary saved.
+> +			 */
+> +			emit_mv(RV_REG_FP, RV_REG_A2, ctx);
+> +			emit_addi(RV_REG_SP, RV_REG_FP, -stack_adjust, ctx);
+> +		}
+> +
+> +		goto tail_setup;
+> +	}
+> +
+>   	if (seen_reg(RV_REG_RA, ctx))
+>   		stack_adjust += 8;
+>   	stack_adjust += 8; /* RV_REG_FP */
+> @@ -2082,6 +2173,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+>   
+>   	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
+>   
+> +tail_setup:
+>   	if (bpf_stack_adjust)
+>   		emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
+>   
+> @@ -2157,3 +2249,13 @@ bool bpf_jit_supports_fsession(void)
+>   {
+>   	return true;
+>   }
+> +
+> +bool bpf_jit_supports_exceptions(void)
+> +{
+> +	/*
+> +	 * bpf_throw() unwinds by walking the frame-pointer chain from inside
+> +	 * the kernel back into the BPF frames (see arch_bpf_stack_walk()), so
+> +	 * exceptions require the frame-pointer unwinder to be enabled.
+> +	 */
+> +	return IS_ENABLED(CONFIG_FRAME_POINTER);
 
-I also verified the tests on current bpf/master:
+riscv select ARCH_WANT_FRAME_POINTERS, so this will always true
 
-./test_progs -t prog_run_opts -v
-./test_progs -t skb_load_bytes -v
-./test_progs -t xdp_pull_data -v
-
-All passed.
-
-Thanks,
-Sun Jian
-
-> Since the packet length is 9000 bytes with a 64 byte linear area, frag_si=
-ze
-> is 8936. When copy_size is 100, this yields a negative length of -8836.
->
-> This triggers an early error exit, completely bypassing both the partial
-> data copy to the userspace out buffer and the update of data_size_out.
->
-> > +}
->
-> [ ... ]
->
-> > +static void test_xdp_nonlinear_data_out_partial(struct test_pkt_access=
- *skel)
-> > +{
-> > +     LIBBPF_OPTS(bpf_test_run_opts, topts);
-> > +     __u8 pkt[NONLINEAR_PKT_LEN];
-> > +     __u8 out[SHORT_OUT_LEN] =3D {};
-> > +     struct xdp_md ctx =3D {};
-> > +     int prog_fd, err;
-> > +
-> > +     init_pkt(pkt, sizeof(pkt));
-> > +
-> > +     ctx.data =3D 0;
-> > +     ctx.data_end =3D NONLINEAR_LINEAR_DATA_LEN;
-> > +
-> > +     topts.data_in =3D pkt;
-> > +     topts.data_size_in =3D sizeof(pkt);
-> > +     topts.data_out =3D out;
-> > +     topts.data_size_out =3D sizeof(out);
-> > +     topts.ctx_in =3D &ctx;
-> > +     topts.ctx_size_in =3D sizeof(ctx);
-> > +
-> > +     prog_fd =3D bpf_program__fd(skel->progs.xdp_frags_pass_prog);
-> > +     err =3D bpf_prog_test_run_opts(prog_fd, &topts);
-> > +
-> > +     ASSERT_EQ(err, -ENOSPC, "xdp_partial_err");
-> > +     ASSERT_EQ(topts.data_size_out, sizeof(pkt), "xdp_partial_size");
-> > +     ASSERT_OK(memcmp(out, pkt, sizeof(out)), "xdp_partial_data");
->
-> [Severity: High]
-> Will this XDP test also unconditionally fail for the same reason?
->
-> > +}
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623014027.40=
-2820-1-sun.jian.kdev@gmail.com?part=3D1
+> +}
