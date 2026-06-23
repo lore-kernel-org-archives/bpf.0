@@ -1,33 +1,33 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5FB935E1CE;
-	Tue, 23 Jun 2026 10:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD37C3D0927;
+	Tue, 23 Jun 2026 10:43:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782211435; cv=none; b=o+bY3NBKeFie8LflTAJH/rsy3EHVn+PLfZiSG2Ysd6JvYAywC+TuBlkNI5xovBi/6fL2DVUjmycR6H3llUYAYJILY5MljhyELTZhH+SxJ/oHGHBwoZrmAhzGo8whzpGBsdLFYvObnOz6QBItvDsMJ69tiZMD1cNayk/mQHGHG3s=
+	t=1782211438; cv=none; b=IeOLX5/Ks/kSpAgNLUEaw2JybXHuKAIWRJ6pcZ96xM3MA3kz5Cg0y70o6qCMwtds80EhZfJ91mcsHYH5gn5xn8eTG0NZkpGtZvl/K743re9ODQfvL43SS2L6AflGh3gww97Ym8sncQbt+tTgFuou0Bk4ILmDeuTyb8Me9t/aknc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782211435; c=relaxed/simple;
-	bh=4hImI9muLGOWjtHbw9wXBYXS8B+t82nmuOekNU7+OL4=;
+	s=arc-20240116; t=1782211438; c=relaxed/simple;
+	bh=P90/nQWLBFgBW/bQMpXUIz8zBfHF/V2eZjQ1j7cTdiw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=O2KLCd2V+ysvAXh0m4pXNstq275LwqTaMYbDM+LSUkTcOk8c8ROTnw061L2uxoLnzGdSt3kneHyOi0djbc/FF5zYSiEcRLZDPiXwrEM81OpgLnGLiIIpCewPfowkE/3ruZFclSO7xH4Lt6wmUE2K1LMDS/cDiO3/1EKVlPFjQPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=BUemMeGL; arc=none smtp.client-ip=13.76.78.106
+	 In-Reply-To:To:Cc; b=Eg3325A6oORn0SlpLhjNzArDH3TxbRzjCmzMb/6aR9ZqTSUIX2E2FnhsH+Mr0AXF6yoR6WGZkeCuNb7hXSnu/Sod5oPr81dYJxuLZ2rnEJnDHzgwdESnaAAffJ0b8c7EL/c96R0+aJrKjH9DGkan12cJ5z0YbxVWJ1InrJ0+f9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=i7waSXMG; arc=none smtp.client-ip=4.193.249.245
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="BUemMeGL"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="i7waSXMG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
 	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=wqDq6XmZpV6jbPwxHCl+8hTpBr7pghp
-	Vo1eO+QXH9sU=; b=BUemMeGLdYSLfzYrcpMM8jXGcNvACoGc/O1WQpbK1Abh+4w
-	CW5Fe9yo7+UI0UdL1nZWIQp0FZGBKZhNp5UeeiZ7uyh6ftSndhq8LydIx2Mv3JN3
-	a4Wo448YPsChyqefzBMzQHqvqpzZpIGSVx87liIrvLlUIgG83vYRbj7h6nok=
+	References:In-Reply-To:To:Cc; bh=pKlqd1vPObc0GFvIwFLpczCo1z5jMKr
+	ZGHHKGY959oc=; b=i7waSXMGwbAyBl5S+dsvL5eEG3kyl4gWi31JK4R+juHFh2Q
+	ulPwpf8kpttTbyAUTr7j6kpSVTgl9WQMchgZHRVhnf/TMEAKvQ9VLL4btQnIO+2t
+	5m/wsyWCIOi4z08mtHUJ97os9L46tKz+3hQUFLKrMKXCllk7etA8mzK0THUY=
 Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web3 (Coremail) with SMTP id ygQGZQAHU5BbYzpq5jGnAg--.34960S4;
+	by web3 (Coremail) with SMTP id ygQGZQAHU5BbYzpq5jGnAg--.34960S3;
 	Tue, 23 Jun 2026 18:43:40 +0800 (CST)
 From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Tue, 23 Jun 2026 18:43:39 +0800
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Cover pseudo-BTF ksym log
- masking
+Date: Tue, 23 Jun 2026 18:43:38 +0800
+Subject: [PATCH bpf-next v2 1/2] bpf: Mask pseudo pointer values in
+ verifier logs
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -36,7 +36,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260623-f01-13-pseudo-btf-id-cap-bpf-v2-2-a190ebb8f3e2@mails.tsinghua.edu.cn>
+Message-Id: <20260623-f01-13-pseudo-btf-id-cap-bpf-v2-1-a190ebb8f3e2@mails.tsinghua.edu.cn>
 References: <20260623-f01-13-pseudo-btf-id-cap-bpf-v2-0-a190ebb8f3e2@mails.tsinghua.edu.cn>
 In-Reply-To: <20260623-f01-13-pseudo-btf-id-cap-bpf-v2-0-a190ebb8f3e2@mails.tsinghua.edu.cn>
 To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
@@ -51,18 +51,18 @@ Cc: Andrii Nakryiko <andriin@fb.com>, bpf@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1782211420; l=1618;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1782211420; l=1395;
  i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=4hImI9muLGOWjtHbw9wXBYXS8B+t82nmuOekNU7+OL4=;
- b=8khwAfKg++3IJbRUt5zE4EkvKP7Q9CTBLuwYK+0lrGwPqcZNgZkPO0L/I2xDSRB3VM/F+C6/6
- juBKEkk3PbwDegpD4pDgLcztzeIMRoVNTL8zfbZpdDtEIvltp159Exb
+ bh=P90/nQWLBFgBW/bQMpXUIz8zBfHF/V2eZjQ1j7cTdiw=;
+ b=WjHmM8kiiOtQJh2lQk3CnHihE3w3hm+QWmFu6NKNEVCoswClXmlRL55ezmOJj6s0w5FsiTLp2
+ pIyHr25WtmUCOvTIuIF5/wBmVujTVlqbrMRrjWkY4z6N9E4BKvwEiCT
 X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
  pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:ygQGZQAHU5BbYzpq5jGnAg--.34960S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFy5XFWkXry5uFyftFW7CFg_yoW8WFyxpa
-	4kC343CrykCr4Sg3Z3AF4UGFy5JFn7uw4Yya1Iyw15Zanxur1xt392ka17JFn8Ars5Xw1F
-	vFn7tw13ur1DAFJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBv1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+X-CM-TRANSID:ygQGZQAHU5BbYzpq5jGnAg--.34960S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7WF1xJryDXr1xXF45GrykXwb_yoW8GrW5pr
+	s3Gry0kF4DAr1j93yDJwn7Ja4Fg3yUG3WfCF9rArWfAw17Xws0q3ZFgryxJF1ak340gw1k
+	tryDZ3yFq34Uuw7anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBq1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
 	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
 	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
 	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kKe7AKxVWUXVWUAwAac4AC62xK8xCEY4
@@ -74,56 +74,41 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7ZFy5XFWkXry5uFyftFW7CFg_yoW8WFyxpa
 	0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMI
 	IF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI
 	42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z2
-	80aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUCdgAUUUUU=
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgQHA2o6NDluRAABs0
+	80aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1sXo7UUUUU==
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQIHA2o6M-xuXwADsq
 
-Add verifier_unpriv coverage for a raw socket-filter load of the
-bpf_prog_active typed ksym. The test verifies that the unprivileged load
-remains accepted and that the verbose verifier log prints the ldimm64
-immediate as 0x0 instead of exposing a nonzero kernel address.
+print_bpf_insn() masks ldimm64 immediates for pointer-bearing pseudo
+sources when pointer leaks are not allowed, but the mask only covers
+BPF_PSEUDO_MAP_FD and BPF_PSEUDO_MAP_VALUE.
 
+BPF_PSEUDO_MAP_IDX, BPF_PSEUDO_MAP_IDX_VALUE, and BPF_PSEUDO_BTF_ID can
+also be resolved to kernel pointer values before the verifier log prints
+the instruction. Include them in the existing pointer classification so
+the log prints 0x0 instead of the rewritten address.
+
+Fixes: 4976b718c355 ("bpf: Introduce pseudo_btf_id")
+Fixes: 387544bfa291 ("bpf: Introduce fd_idx")
 Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 ---
- tools/testing/selftests/bpf/progs/verifier_unpriv.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ kernel/bpf/disasm.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-index c16f8382cf17..16de1595f015 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -6,6 +6,8 @@
- #include "../../../include/linux/filter.h"
- #include "bpf_misc.h"
+diff --git a/kernel/bpf/disasm.c b/kernel/bpf/disasm.c
+index f8a3c7eb451e..0391b3bc0073 100644
+--- a/kernel/bpf/disasm.c
++++ b/kernel/bpf/disasm.c
+@@ -323,7 +323,10 @@ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
+ 			 */
+ 			u64 imm = ((u64)(insn + 1)->imm << 32) | (u32)insn->imm;
+ 			bool is_ptr = insn->src_reg == BPF_PSEUDO_MAP_FD ||
+-				      insn->src_reg == BPF_PSEUDO_MAP_VALUE;
++				      insn->src_reg == BPF_PSEUDO_MAP_VALUE ||
++				      insn->src_reg == BPF_PSEUDO_MAP_IDX ||
++				      insn->src_reg == BPF_PSEUDO_MAP_IDX_VALUE ||
++				      insn->src_reg == BPF_PSEUDO_BTF_ID;
+ 			char tmp[64];
  
-+extern const int bpf_prog_active __ksym;
-+
- #define BPF_SK_LOOKUP(func) \
- 	/* struct bpf_sock_tuple tuple = {} */ \
- 	"r2 = 0;"			\
-@@ -77,6 +79,23 @@ __naked void dummy_prog_loop1_socket(void)
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("unpriv: pseudo btf id log masks address")
-+__success_unpriv
-+__msg_unpriv("0: (18) r1 = 0x0")
-+__not_msg_unpriv("0: (18) r1 = 0x{{[1-9a-f][0-9a-f]*}}")
-+__retval_unpriv(0)
-+__log_level(2)
-+__naked void pseudo_btf_id_log_masks_address(void)
-+{
-+	asm volatile ("r1 = %[bpf_prog_active] ll;"
-+		      "r0 = 0;"
-+		      "exit;"
-+	:
-+	: __imm_addr(bpf_prog_active)
-+	: __clobber_all);
-+}
-+
- SEC("socket")
- __description("unpriv: return pointer")
- __success __failure_unpriv __msg_unpriv("R0 leaks addr")
+ 			if (is_ptr && !allow_ptr_leaks)
 
 -- 
 2.34.1
