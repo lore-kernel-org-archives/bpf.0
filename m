@@ -1,179 +1,169 @@
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82D43390C85
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 22:41:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B01325A2DD
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 22:45:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.171
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782254511; cv=pass; b=ijyu+p3B02w9djD8SgyXHJBXUcOZJIElWAqy27zoxTV/8So8SHLQ6VJutsAqo4bDlMcnFaeKS3P00PH3j0SOTAvQ0szxyXOL4+NdNH2OLFkpEwm4jmbCsfLc7ZjLZFVd0ipQHhMSXAP0+6xdmCAMqCNcS/s6aPgvJL0mlhz1sX4=
+	t=1782254729; cv=pass; b=GF0fAlGCQrDfV33TWSqbXqysdLh534Xj9m5mGfMA0ujfQDpkTzaFzpjF3xB9so3oEq76Yg8t9CpWLRp+BHhWEiUJgOdjrOZlrJq4/SmF3bWztSQQdP3eKeM1877Al5mI8ynUSJP6zQE1lU1Y9JL/GuHc8YLhvNr4D16u/uPB+D0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782254511; c=relaxed/simple;
-	bh=soLQGPwr2c20lUfAI4ad57Az8Rz3HH/aJVeIfGJALkk=;
+	s=arc-20240116; t=1782254729; c=relaxed/simple;
+	bh=LGD3xPl8+3E8efhfIb47wFuRS4vHkc4WTgX0GgWHECw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=T8iuZwqvSytSw3RWQS5BPIbVBtgxXw2/HscSqFVhyGZP6p9FUCgD8d+FRNlfwr6tVLx5gVrVPyQgO4mq1on8TS3iOsm01TP7FosHRX4KxfqseAhTFkjVhbMdyF0SBo+US3/sXTgtEVCp+Rpmg3rJmVivtiOD3dDDwWTr6cDDTH4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NS0wxFni; arc=pass smtp.client-ip=209.85.128.171
+	 To:Cc:Content-Type; b=nKrjgzXgryaW0GELPD1liwoFNM95sAkzZ1HJ3fH6r8hx3yh9TpIEMls3QcD2/FFZKSrwfgOycfNBamr9xAt7eJSBtbsVPBbSLUFGxHwk/RwkUquhT9DBys6ysK1+UnMFtsuKKCLC00/u8q6nlZs2Wbn8hostvorBZ/KyOGnRQEc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SV/DL5Jv; arc=pass smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NS0wxFni"
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-7fe8bc0a01bso4870127b3.1
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 15:41:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782254509; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SV/DL5Jv"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2c40397e746so2008925ad.3
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 15:45:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782254726; cv=none;
         d=google.com; s=arc-20240605;
-        b=AR/+wtTCPf6lndyO3zLcCHhY5IjrE3qLjDSmJVqqBJstp7OoyJA4hMfe3i0P/bcpla
-         OREuaLSSIYEh/ni+Tcdl/K/CPkTtm7o2aY/PS/dj/lYSpHFSWkG7fqyP3HUDHHHHD5tW
-         5yV0ksZZRA+BdHfLwGhOV4QovfNGIulMOHgrjR7wiI8T2SEcRzDb9w9j5ilf0JVbn3wH
-         Y3moR+TQyg79GHSzVAlAXQoRDBSRoUsIw33mZtIJtDKBdSRBe6P+jxUCRQTRsvh8e6JK
-         3+j3bW7gRHvhV3X9TEPlXyqbcIoz5yq+6QvKcRHfVrm/GS6Ht96RspjO/xkQO025khb/
-         sUqw==
+        b=LWrnDu6Y5sOyGiyGZGRE/BC1lIf27A8swVgAofyhORWiaoW2PgoIpMHfJeFWBn2uQC
+         I+otS8MzDUnSy3C6NnDjX2up0BO+ja/Jc8nQ/sgxU2BzqPQBbURQzXCJPpgxS3uQNHxy
+         Zy9eIGZYADkLOt2U/Ght1g4Tj04p7Bh5+lVivyKFdr63buQgY+VSF/TUTsO7bgmvZOod
+         PfrGJ0aqXeZ5qlykeWyzABXraJUPjeXGPqZtcW8ajMRlq4xhg8GnzRxkb/N81p6KOsRo
+         hYY4+F76dMn8NIG+z+sGF6inDkwUsoDDY8MdsnYxRfs8O9PSVajXX7lI7vBTR6EqBIcq
+         asPQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=jAGeEZmnsjWX0hms7jmjKIy+6+2pgzHwJvr4zj2qgIk=;
-        fh=CF9paNkmUPRynj9CAyYxGK1ISE6SckLy4rjMEGufe80=;
-        b=NUscHNx0KV60RN9p3JuWZOeKokayikovYwl737Wc62/bd3M2e/ytALy4gjD+KX2Nb1
-         lRoL/xg21B0QOFJ28Z7WDEy4JYyhRy06qxRIqtIfkDJm0uCF9cRxCiJ5OjiJdL3JLAcq
-         1iY8Z0R6EYgtpaKtVgQl56DxVF/7uO2MD6nEE84pW84LIqrt1Bw4lXsrTj4ZB85LzxsG
-         B8VJ/UvqNkQWRpmLmxuQgRwGSnTaxI+oUylXagnBASfMXF181T8gy4Lh3YDxZ4LmhnaW
-         RmQ8Of9l1utyQes53CrfDDY3WRqbrQVyJETW3Il+r7vh1IT9UKffG9jCouHt2+ChGEmy
-         hBvw==;
+        bh=7mEjHYXmjDXroNGYVpTIt6qxLgh9zdJjaDbvnTecPAo=;
+        fh=IqI/Cp1xYGcfpyBgkhc6h3oFTMbeXOsSrhhlFByRLHg=;
+        b=kGhKExhVHFVyuicrbEvPaG9wKyyHQPZIRz2QoJsC/S/0zQZi+yt5fbYH8HkWHMiGTx
+         UqEINE3OawM3foltj9l50gYNA1M4iQ0ZjjHlTK5IG4wePAMuum0at6yzTaC5fjkqUEBu
+         7FD4E1RJ+Rx88IUOZA/Z94E54KgNlHRQ3pq/dRAavYcEpG2Hm9CTp5LA/nvlCCst66R6
+         6WKYwCSpeQrr62ea3IC7KaohnKjaL963ZoOjMp5D+G7288zvtQdYnNHbfS03TimNdLgm
+         pebCguwc1MtCVUP48Ol+bvvjfggHFv289NVolArmQjyjJDuG0TcUP9+SRjbFmtJWnRsg
+         J3Fg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782254509; x=1782859309; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782254726; x=1782859526; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jAGeEZmnsjWX0hms7jmjKIy+6+2pgzHwJvr4zj2qgIk=;
-        b=NS0wxFni95qZEfBmWb5YKN+Y2ltDuH7aYSI+YRArmEcDpxQKjnJxIdsfIMr71VlUgF
-         4aA5Pc02CNmoMAQ3yqOK9FZFsY3H+ANiiGBhOySjFrpyZiWAKXY37pWxHICZxXwrSxkQ
-         Z8x9qVA3bIXS3kYzMoAI2rKLZh2hmu2oty5SBPL0uihdFuxcE0apulufZ0N2OgMcf7Yw
-         IvCGVf2W/BgVnxIOjc+CJQZgxC1GUegKwondn5WLL7/DgY36PjgAHdiQKVaMIhrJi857
-         37pkaynWVn53R37aa6tfEAZOv4kXUhlkL9EDUGkfjlLfOTjy2nE9t+h2gUXya6jxylTj
-         7h+A==
+        bh=7mEjHYXmjDXroNGYVpTIt6qxLgh9zdJjaDbvnTecPAo=;
+        b=SV/DL5JvInw71gIGsmUGsVNi+hnXolR3aBudhkMiD4VcHg2lOfdqmaQP78GG9H4k8v
+         0ZtgYmdOZLTZ6DeHnB5yTnam6mW+2DVGpTYR3ieGBVB6fNjGgUdjHCw5SerJoACP3j9J
+         sAOzvp+hKGQX7zoxob2zKJIJs/Uh+/PGOjhmoBcwwTvFSg1sHyvljZK8XRjqpDPTRu0W
+         4/l7dpN8hmmioRzX+GjP+zqruDxC2GPw949P1Uk7id1UmWlZPQ1lixHOaQUtQqYMiXqY
+         HhZbptdanPqqI7Ix7+z7bkJo4Wn3ZRTAr0tbHMwq6qmz8VrQNqQDOuHUYN+L0sPdMQFW
+         kmKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782254509; x=1782859309;
+        d=1e100.net; s=20251104; t=1782254726; x=1782859526;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=jAGeEZmnsjWX0hms7jmjKIy+6+2pgzHwJvr4zj2qgIk=;
-        b=ILVvl8CVcBV531Dukw6I17I+ZcftDZDZNm+ozURV5nLarcjPxwIIeuCMiBU1loZZqZ
-         f/A/WLycZobdyNkp9RJtvTpM6BHb8n5I67fyLcsWojuZ4d4zo6wIuG9KewmBH+NbHEOg
-         uOVbLoIAWxE0N4Vxz2MgyScpCQ05RHj3kzZpRgAwCL1u7ynbcYn6eojv3tX/LdHNjGQp
-         sLQSb+Cmv9VsHhPJWvM2jfiLf9/2LSKUqDKReLpSSN0VRyJQXUvzDCOCGztmodTO7PoD
-         ZpX8MWslYiBMZMayH8/LejT/XgQfieFF3zX5IC7keMfwsKMRaXEYITMK+rX7ntIr+FVm
-         W2kg==
-X-Forwarded-Encrypted: i=1; AHgh+RqCxU+0yI0GWpRRF0OvQ5RZWQW9LQSqWz2Pj35Nxis8Xo1v1EAbJYQDy+R1XXSYlcyFHg0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+HiyXpUEEi8mz00OgeJ5ZpgDoA0/HLsWoH9443bB3T++MXqu/
-	CxWj33KfTBE/AdhVTMLv3vw3VDmn1DSVgEAneREuUz+Yh0e3agfptxiPbT63YlcTFiR7g/yyRaB
-	nK1jm1qkhiYjAMBqcrewGowlfC5ZB1ISfWbj0
-X-Gm-Gg: AfdE7cm97dyTRwYDlYEQFIW9jDaU1kK+acQbX3+9a3InrOJKJbIDxYOyyO0CHQskF+z
-	IBIdWxqtsP8MA1K52N4eO+OwM0iWLRtAMYNSwE9/CJyhtblUC5t1VQsUuZI07tyIWWpyFWYUh90
-	RvTcsa6JZ0m36wKFACq3JWHUD7mRXC/gyNBcDNJrnCtaipSoHwAicGCUFWnCv65jj8UW10asHPI
-	h3Hm3dXOdJAlb2iHn3QnWLp0UiyTpK97ZiRJltPelwUFBdbTHP+Ml3jXVysvUzgUH8Lfzd1zTqB
-	pS8+srPJ/YoR
-X-Received: by 2002:a05:690c:3705:b0:7c7:5111:5ee1 with SMTP id
- 00721157ae682-807ef05acf7mr9868217b3.26.1782254509418; Tue, 23 Jun 2026
- 15:41:49 -0700 (PDT)
+        bh=7mEjHYXmjDXroNGYVpTIt6qxLgh9zdJjaDbvnTecPAo=;
+        b=VTqo2nX2tyPi8p+DSx14P4+ElPsrSKV5+TcJUg3x1wT5czDkotYxjuiIFcFYD+gbBg
+         6hDExw5e5mo0Truq1ivwx9nUxksCt/ZDfzGvOy7VNuZbl8NYZM+l5E5g3zPnWdWDKSfr
+         Ku4hdHeIRY9rXydky3lDg7/IJu2ToNWyaPRESC44U7ebpnSp99fJ3uDD2b3pKu1S++XB
+         cBXxCdSmVFLqjzqayLTbMWiPbt6lzY0CsbadFnzwdZ7YlV5RnFbQLyDliX02+vFui3KB
+         qACBnaJkjWBmG9yTJ6Lp67ibuedIYKCsnAl3ycLphpWZp842Vi59Nc/9NQjxGgt3oDB4
+         54jw==
+X-Gm-Message-State: AOJu0YxcgFLRp+qufyqXNY4Jyw9XAsUsoJ4wKeGaYuMXEsxFdf4EXpgP
+	GyeMF59nu6nnd/n9RFdbuQDWebe4u6XHjIlxEoDf4aecVsElCfvOWt/mbs8/ADTHBkOEUMQQHkR
+	/brsYc8Pq3wW7/9qDoHtGNqmC5FWmzKM=
+X-Gm-Gg: AfdE7cnKpSeVZHr/cWPhZxzVOzrd8iyYJMPj9ggwF5PTScgbc4aHS4JWrLP4VRfyalo
+	s1nAIiYd6lSzjByz8NKlejQSxnX3votRp861yc2TqZBuXIAIl0l7EuHC7ncFAk5hmn6nhgcr0xs
+	xYXIS8TH3Ba2Oo2U7pftpoShLpgZgd3ThY5x3hfIivEVv1qZ2illfO9bYmAlw/evF3Lh0mpgO43
+	aT26LY/GfRGYYKdc6mmuPMNF41sUKNOcgQlvnwaa1fWfG9n+xEeWFrkPlzbaKgFwwStGUMqx95F
+	IT6gP/Z6PNZ0zN09GRYkqB8TJmbXEOwnMeUmK81kw7XrpnBS9pXYD+FNGeGxMAfqOqtlGg0Swus
+	gm0DW
+X-Received: by 2002:a17:902:db08:b0:2c0:b5c1:8e22 with SMTP id
+ d9443c01a7336-2c7425cae26mr174343105ad.12.1782254726243; Tue, 23 Jun 2026
+ 15:45:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1782197377.git.chenyy23@mails.tsinghua.edu.cn>
- <703a2cbfeb17ae707fa4a003b795c5326cc0abb8.1782197377.git.chenyy23@mails.tsinghua.edu.cn>
- <20260623175111.60F761F000E9@smtp.kernel.org>
-In-Reply-To: <20260623175111.60F761F000E9@smtp.kernel.org>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Tue, 23 Jun 2026 15:41:36 -0700
-X-Gm-Features: AVVi8Cec7cFVv1FF8R5GRl1xYjWOl9PIIv4i0xy-Ury4tbYTOhCK-P6LigvfSzE
-Message-ID: <CAMB2axMN6UWE8G_GEQ6S2RE0ajiti+uTa+6OZY=HCMZUp-mrKA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Reject MEM_ALLOC BTF accesses past
- object bounds
-To: sashiko-reviews@lists.linux.dev
-Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, bpf@vger.kernel.org
+References: <20260622143557.22955-1-leon.hwang@linux.dev> <20260622143557.22955-3-leon.hwang@linux.dev>
+In-Reply-To: <20260622143557.22955-3-leon.hwang@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 23 Jun 2026 15:45:07 -0700
+X-Gm-Features: AVVi8Cfrddz_H5TXjjUkIYgYR3GXOiBk8OG9TWZVN7_Qjb0DR56O-SDqCq1vbJE
+Message-ID: <CAEf4Bzbx5xB9sA5vpe0Y37DXeJLRYsbSHpvHTca6uw5Tj7jBAQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 02/11] bpf: Disallow interpreter fallback for
+ user BPF_ADDR_SPACE_CAST insn
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-patches-bot@fb.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 23, 2026 at 10:58=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
+On Mon, Jun 22, 2026 at 7:37=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
 >
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
+> Since interpreter is unable to handle the 'insn_is_cast_user()' insn,
+> require JIT in __bpf_prog_select_runtime() when the prog has the insn.
 >
-> Pre-existing issues:
-> - [High] btf_struct_ids_match() hardcodes `is_alloc=3Dfalse`, bypassing t=
-he MEM_ALLOC bounds protection and allowing out-of-bounds kfunc accesses.
-> --
->
-> commit ea4066197ea8dc72df56252849c8752b81c506d6
-> Author: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
->
-> bpf: Reject MEM_ALLOC BTF accesses past object bounds
->
-> This patch modifies the BTF struct walk logic to reject memory accesses p=
-ast
-> the object bounds when dealing with MEM_ALLOC objects. It disables the
-> trailing flexible array relaxation for these allocated objects, keeping
-> verifier-approved BTF accesses strictly within the bytes provided by the
-> allocation kfunc.
->
-> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > index 15ae7c43f594b..3e68af9c1a5eb 100644
-> > --- a/kernel/bpf/btf.c
-> > +++ b/kernel/bpf/btf.c
->
-> [ ... ]
->
-> > @@ -7441,7 +7445,7 @@ bool btf_struct_ids_match(struct bpf_verifier_log=
- *log,
-> >       type =3D btf_type_by_id(btf, id);
-> >       if (!type)
-> >               return false;
-> > -     err =3D btf_struct_walk(log, btf, type, off, 1, &id, &flag, NULL)=
-;
-> > +     err =3D btf_struct_walk(log, btf, type, off, 1, &id, &flag, NULL,=
- false);
->
-> [Severity: High]
-> This isn't a bug introduced by this patch, but hardcoding false for the
-> is_alloc parameter here completely bypasses the newly introduced strict
-> bounds check for MEM_ALLOC types during struct matching.
->
-> Can this allow a BPF program to obtain a pointer to unallocated slab memo=
-ry
-> and pass it to a kernel kfunc or store it in a map kptr?
->
-> For example, in kernel/bpf/verifier.c:check_kfunc_args(), it calls
-> btf_struct_ids_match() with reg->var_off.value without conveying that
-> the register possesses the MEM_ALLOC flag:
->
-> kernel/bpf/verifier.c:check_kfunc_args() {
->         ...
->         struct_same =3D btf_struct_ids_match(&env->log, reg_btf, reg_ref_=
-id,
->                                            reg->var_off.value, meta->btf,
->                                            ref_id, strict_type_match);
->         ...
-> }
->
-> A similar path exists in map_kptr_match_type() when storing into
-> unreferenced kptrs (where strict is false).
->
-> Does btf_struct_ids_match() need a way to know if the register type is
-> MEM_ALLOC so it can properly apply the bounds protection here as well?
->
-> >       if (err !=3D WALK_STRUCT)
-> >               return false;
-> >
+> Fixes: 142fd4d2dcf5 ("bpf: Add x86-64 JIT support for bpf_addr_space_cast=
+ instruction.")
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  include/linux/bpf.h | 1 +
+>  kernel/bpf/core.c   | 1 +
+>  kernel/bpf/fixups.c | 2 ++
+>  3 files changed, 4 insertions(+)
 >
 
-Sashiko has a valid point. While hardcoding is_alloc=3Dfalse in
-btf_struct_ids_match() will likely not introduce triggerable bugs, it
-is logically incorrect and fragile. I think it will need to come from
-btf_struct_ids_match() callers.
+apologies if this was discussed before, but this seems unrelated to
+the main patch set, why not send it as its own fix separately? same
+for the next patch, no?
 
+
+
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 7719f6528445..5e1843d2859e 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1781,6 +1781,7 @@ struct bpf_prog_aux {
+>         bool changes_pkt_data;
+>         bool might_sleep;
+>         bool kprobe_write_ctx;
+> +       bool has_addr_space_cast_insn;
+>         struct {
+>                 s32 keyring_serial;
+>                 u8 keyring_type;
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 649cce41e13f..49398b5bd172 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2620,6 +2620,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct b=
+pf_verifier_env *env, struct
+>                 goto finalize;
+>
+>         if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
+> +           fp->aux->has_addr_space_cast_insn ||
+>             bpf_prog_has_kfunc_call(fp))
+>                 jit_needed =3D true;
+>
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index 3cf2cc6e3ab6..2d5958774b61 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+> @@ -1523,6 +1523,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env=
+)
+>                                 insn->off =3D 0;
+>                                 insn->imm =3D 0;
+>                         } /* cast from as(0) to as(1) should be handled b=
+y JIT */
+> +                       if (insn_is_cast_user(insn))
+> +                               prog->aux->has_addr_space_cast_insn =3D t=
+rue;
+>                         goto next_insn;
+>                 }
+>
 > --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1782197377.=
-git.chenyy23@mails.tsinghua.edu.cn?part=3D1
+> 2.54.0
 >
