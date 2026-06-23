@@ -1,125 +1,259 @@
-Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E32242D65
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 21:12:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782249134; cv=pass; b=Cb+e8zxb8wQ8RkOvU/epXDeGbw6sb5dq5Op3Mh+sKanFQZp8wLNCz1OWU5pIc0AL8m6Rd3ofc+4toiawtNGzuS2gHV1favPnZsnVi/iNVpYc/4tSlXjSakkp0rFup38rcd4g7C3y3G8wqegAHkfQb2BNrnkbKk/w1b5IjmlhL3E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782249134; c=relaxed/simple;
-	bh=kZfxy9FfiF7uVIj+9jfG6dLWC2emcUn5RI5hh2mcd/c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QRACj9KAJKTkyXUxNaDuHDsl+YrIG9Ri9MzD3lFlQRoyFYp8bXk9+DcNYlyrShl+tQNHqwyLJD6ntBjBWUmgmNCN9E6I7lQ1/BuPxKIo5W9JaJstt3uPOEGMjRiHWUW8z8L63EIs3UBgFLa62lKW67NahVjrGxrmZeCdhQmYFPU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RPnj+PWI; arc=pass smtp.client-ip=74.125.224.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD793ACEE2
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 21:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782249539; cv=none; b=bkKDdvEKwTdMctGwWwxw+TotbYJPMobzrwb9lM9YCCK7rI/mjXUlSBrtKAayJVe/nHUGBBnpneX9Rcp81ZsOZF2Xi3dN9U4hKCfQjJg34CBxS2bCBL8qrXvIfrDzBCrgmdfDoEly/jSNuelkUrBuoG0JEF6Ve3gw6KNm+JjfDog=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782249539; c=relaxed/simple;
+	bh=S1eJV4kJ7nmlMKv2y9bZFvkIcCAM5Cr9BpnHbu8WxKk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=mRR1u1gdT6w/1QSunUqH2KYZ9ynoKYkxGXKYyp/5n0txq1G6XKiupZa9ARSrQRVw/BJs2r2fuMpFh0Z7qNJHqpvzHjkbj0MRVLgz6BevVXgC6XntCCsgaxe2DFnebAwZwb36dZzPxYJ2dDzgWVMA8BrnUgkHhgFfL3sWj0HWHyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=H4IMWqok; arc=none smtp.client-ip=74.125.82.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RPnj+PWI"
-Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-6607048fa62so281217d50.1
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 14:12:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782249133; cv=none;
-        d=google.com; s=arc-20240605;
-        b=K64NxydO4pnSxHEn/VusQjlGGYUv7/LBj4BERsj4kHBx7z8++taoSk5CFWYjB+eUVr
-         lriObgMs8/i7W1+Dkv31eiAfxskfTUKZBL8QrG9Jrmim1JryJcOLkN4kq1COzGHQy9W2
-         gX7j/XlDQJ3NoGuYxx84qm1FVxoVg9TLQ/gGHyRe4uwh4sl5YA1Y0OnvzmhYoL6S+ts5
-         8SbsxyU0gs8t7hVv5dvYvZXpB8QZSyZz8/372kwxn1Iase/8lrQKYqQxnqWWvFEN3l+6
-         K/HgRNBRJtndjIS8t3kOfzYd5NLPZyN752ZTfn61rL2Yak8jxlYsg7YvJz4PbvTt2EpQ
-         MPxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=xCOjxkz8u6ep0mmkWFDHxDwi4eYC48rTpGsOqnivmT0=;
-        fh=O0lH+17YwoIuJaddJiTq03pK5Q9LaNFy76MUHdsyzZY=;
-        b=Kxt4o9SS/M7hbN2cfQxfeT56P2alNwBiPDakdrOKhbMH+GpCVaa8Qie+J3QZCCH93u
-         0RF/uToJIiWQ0qUSjHgSMz5eNN7Tx648FzTEOheRfJgTsUQvtQqzKDKXd99PT7CsLnej
-         AQybAJOSsDeAWlAQ6uTsxrN9Wd9QwZ7aWEhCNJvo97SRFQCYTNHMEmqdpJufEIvN7ESR
-         W964d/nywPr+jIlkBAQL8Cg4LFSmCojH/b8Eh6O8QARTSv5XDMAAC0c/wEmMQdYYmgPh
-         AqZmu1c/pLN5KDuVRYdV9EWBFqwtR7O17KhCPOQbUYcbKj5SgrKeo8U3EkVAFRdYs8V2
-         PVYQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="H4IMWqok"
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-30b9e755555so643537eec.1
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 14:18:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782249133; x=1782853933; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782249537; x=1782854337; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xCOjxkz8u6ep0mmkWFDHxDwi4eYC48rTpGsOqnivmT0=;
-        b=RPnj+PWIp8HL//gz50L3w4x54MeNRWOT+rucaegQCQLaIXtvXkabyxQtp0qCrBxlCF
-         7NUFMOkhCwZ/osUJ0z209QvTVKAkKiLq2ro3Itfs1xVt7Kr+LDhgEXioYaVZyHWux4au
-         8fVroHqAy4sheCwH2KpCLT+WADMVUpU2kv1Tk3HKIYEMKmIldHyz8Xf2+aVm3I1ifTq5
-         7ihlPaucwxxuJO9Mpj43HlYwlTmcBIyJ8Pur87jdOIFTU+Zy3b00vTQW06HpNE0MZSG0
-         qKbnt5SsdhPyl/p0Cf+8Z/VgVnlR5OdPX/F/M0p6i2UGuxQpoMGGLaja7fqhr5L9XIog
-         PkmA==
+        bh=J5BgpTjoZgaJ0PY0iyE7wkUjb4+de8IJta3bMQcWgWQ=;
+        b=H4IMWqokzreXoxF6LhqOcwkZ4vx+rw+H0FX7qiAwN/J1zBaJLHXXaQ+sstJscd5NKE
+         ev3girfSTJ6ykmomwCNCuBdSuAdhdSLdb0K42mPZXTvKKW52Fa2OT+WcdA5cb2uBs5O4
+         J5+n5o7ExL4Vr569d5xX06ItFCu0Xkau+PpLv4EBVAhuu97+FK5G6QovaiCqi+6E6bwH
+         QgYdn8jFiY3RuXd9V1DQypoOC5Fb1Kvnpaxa49ZR+9aR5SShTVjfHaPvxeWOAq3lM6v+
+         UUZYE8Hms+UNxdm9o3nRfn0yfKIMhLTKPUk/m88G9/XZT+EPzO0+HeLfzMdzw4+YKUQQ
+         Iiyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782249133; x=1782853933;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=xCOjxkz8u6ep0mmkWFDHxDwi4eYC48rTpGsOqnivmT0=;
-        b=b/44IenQAQemGAQE9CsSIP+TM2mE899gNRjvkrBbkvjqpGULsxm0fzO1uaPc0L+uZI
-         YSWoBAU9o5x40th2puEcEq5IhCXMFQMWcqyMQ+orH60CyLeWH1ph1FNGKNzLq7WPk1jT
-         Uy5p7GFvoFF+6ZJKoaT9N+Rfh+OB/mwYDjVHrPkVPsPe/cH4xgtgNn+MYtnH/RKH7DH0
-         4NoCR0/y+nfUnQsbno9iTwYrCPlnQCpYRvzcBfyc68R2tIPSk2XHcw7x31i0L46AcSL8
-         THe9j5MVhWwr1CAqwk0ZAYeucnbLRCxRegOpuRre5TbZOTa3wkD7w94hfutJtKq+13eP
-         J98w==
-X-Forwarded-Encrypted: i=1; AHgh+Rqu592uI4EM1RA0yzYLf1g4+BUj3cxQTr+EnLtGwWbFjsOg8ia/D6vF1/JNtPXBoRbz1Wk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqsjRHv8gml6YhxtK3hATxvqn1krhCUs24zP7EPPkCXdk3CD4Y
-	A2Es3sQHne7L/Kz4vCSTJQp8q8BbVJ0aI59SctuDU3IJPp01KBvscbgDgASDkHkbUXDpeeo7Fqm
-	1SR28isBgleuOjNfaSRBqqr5GuR5Ic3g=
-X-Gm-Gg: AfdE7cl0/QvXSsngFEybeJT0pbP/maz9alrHY0FwAke2SZu7R5qEZex4nXDKavextWW
-	mh4KTquYv57G369tuTtRHc6eH9jQ1/vRZbRAGC0SkJsFf+vwOV7u/K5BpgCYba68D8zc6CKkCG4
-	vPTzuMGtAiCq/2Lu7w6oPVGva+y3yPfUDZ9Sj2uVqlTdPmkLrrlNIhJwspMF2iE6vs2ooDvY9IU
-	kjrdi7THlj1MftenwcfB7Un1+8GdTZ32kejkBahh1yBLr0aWGiuwz4Jlz2IMRfFZLnwc1GhpX9u
-	nPNVvFAKNftU
-X-Received: by 2002:a53:ac9a:0:b0:651:b40a:d6ce with SMTP id
- 956f58d0204a3-66312db1a4amr16014170d50.14.1782249132774; Tue, 23 Jun 2026
- 14:12:12 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782249537; x=1782854337;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J5BgpTjoZgaJ0PY0iyE7wkUjb4+de8IJta3bMQcWgWQ=;
+        b=cUGGiYH17IxhHTeYC/M26tmHMRJpYHhwsxRuKPzaL2/u9jFReHMfFD8ACUVv+OAy+I
+         6hbZgfcyhMuV8tcw9LV2yPLfoeR1lUTaKCveV5cxaoE/LN0u2sZvKPOzBFg3iBnCs514
+         d7v6LswuhQeCPTqyfxy9WSwmDmhbZRvw8Poc4p08l0cgSp9/gaG+Db99e4vZu1GzJAuV
+         7kasiOodMsdy3yiGCsEeixiRgA6SIFxHGufqbFir9ANAqB5tmKc9CIm6U7Y5DXozF3Pm
+         fHjm0G7kbOZ73BCxyXFsYK7bVq/TZLnScKp/4PhK4IEnVoWM3LGODP1attUwlmpCIWhW
+         uLRw==
+X-Gm-Message-State: AOJu0Yxj2d1Bep6wbU6wrBkAh2f7npMEchhQckdMWVAe8umj+qBROUaT
+	WX0ZcHelJjGn1V9bQ9ukmM064tlziEQktgQJVoTM8ki506L8A3r/9CNVSUoLkOxU2BZJu8/elNW
+	fuABfCD8sQQ==
+X-Gm-Gg: AfdE7cmXBLniGKGj1BFmGSRLYezAlmguGTQtX9lER8KvjXQwGE9sE0V8ZGIjSFfq6zD
+	K7DaVhTGx2Pc09nuuV2X3vgojb1iK8+/11G2Vf35u0EuoYaEzw11SEM87aJ4Pzs0a6BINzeGscI
+	6YDZljY2sjasRrFNi2JiPwTD3eALVND9ImBAdjAcX34IFjkQFTVamhWTxOqS6KCC0fU+fvSMNea
+	3KJajvUNWYAh3iu9WKVLKwiucMFifSn8PnwT9ERgxzAho4SaGblXkRgTzA9CfdtiqhPbKx5cyYj
+	RLEYUhK14WHVDR0dEi8gCFFSTm49h+3t42d1d0Zc4VnTyKbR06ccldov8d42W9LqgLXXK3py47Y
+	h0QQWDoAqNqFhvbW8H7i6yXtfiBN9yTK5Va+yqyWiOp6nHNfwvD6zUFRvK1er6WwfNOlvmg==
+X-Received: by 2002:a05:7300:8b14:b0:30c:5534:e6f1 with SMTP id 5a478bee46e88-30c68df3b11mr792681eec.29.1782249536721;
+        Tue, 23 Jun 2026 14:18:56 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::2526])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1ba1f14fsm18297838eec.5.2026.06.23.14.18.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Jun 2026 14:18:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260623175006.3136053-1-ameryhung@gmail.com> <0e6fb8d7eca4b5494e08a2230056e333bdd814d97c16784b3e1f7687b3640990@mail.kernel.org>
-In-Reply-To: <0e6fb8d7eca4b5494e08a2230056e333bdd814d97c16784b3e1f7687b3640990@mail.kernel.org>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Tue, 23 Jun 2026 14:11:59 -0700
-X-Gm-Features: AVVi8CdPATuIkHZtw8dh-ablNsRiSfhN7U9w3x8Tvd-D-AMkpVHnC8gqPCRqJmI
-Message-ID: <CAMB2axNtddR1ON592gTuVSLmR02zgYeY4Z9yEy2o_XJtd9NXJQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 00/15] bpf: A common way to attach struct_ops
- to a cgroup
-To: bot+bpf-ci@kernel.org, bpf <bpf@vger.kernel.org>
-Cc: kernel-ci@meta.com, andrii@kernel.org, daniel@iogearbox.net, 
-	martin.lau@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 23 Jun 2026 17:18:55 -0400
+Message-Id: <DJGQQDCXHU7C.8HTXC4NI0134@etsalapatis.com>
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: <sashiko-reviews@lists.linux.dev>, "Michal Luczaj" <mhal@rbox.co>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf 2/2] selftests/bpf: Add test for UDP sock leak on
+ sockmap lookup-bind-release
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260623-sockmap-lookup-udp-leak-v1-0-05804f9308e4@rbox.co>
+ <20260623-sockmap-lookup-udp-leak-v1-2-05804f9308e4@rbox.co>
+ <20260623190018.2B5A11F000E9@smtp.kernel.org>
+In-Reply-To: <20260623190018.2B5A11F000E9@smtp.kernel.org>
 
-On Tue, Jun 23, 2026 at 11:07=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
+On Tue Jun 23, 2026 at 3:00 PM EDT, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential issu=
+e(s) to consider:
 >
-> Dear patch submitter,
+> New issues:
+> - [Medium] The cgroup file descriptor `cg` is leaked because it is never =
+closed in `test_sockmap_lookup_bind_release()`.
+> - [Low] The `struct sockaddr_in sa` is passed to the kernel via `xconnect=
+` with uninitialized bytes in its `sin_zero` padding.
 >
-> CI has tested the following submission:
-> Status:     CONFLICT
-> Name:       [bpf-next,v2,00/15] bpf: A common way to attach struct_ops to=
- a cgroup
-> Patchwork:  https://patchwork.kernel.org/project/netdevbpf/list/?series=
-=3D1115527&state=3D*
-> PR:         https://github.com/kernel-patches/bpf/pull/12604
+> Pre-existing issues:
+> - [High] Calling `bpf_bind()` between `bpf_map_lookup_elem()` and `bpf_sk=
+_release()` on a UDP socket mutates the socket's `SOCK_RCU_FREE` state, cau=
+sing `bpf_sk_release()` to silently skip decrementing the reference count.
+> --
 >
-> Please rebase your submission onto the most recent upstream change and re=
-submit
-> the patch to get it tested again.
+> commit f32ef88a53a5c519bf4b22a337fa782c27f0ecda
+> Author: Michal Luczaj <mhal@rbox.co>
+>
+> selftests/bpf: Add test for UDP sock leak on sockmap lookup-bind-release
+>
+> This patch adds a selftest to reproduce a UDP socket leak. It sets up a c=
+group,
+> attaches a connect4 BPF program, and triggers a sequence of socket operat=
+ions
+> (lookup, bind, release) that leaks the socket on an unpatched kernel.
+>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/to=
+ols/testing/selftests/bpf/prog_tests/sockmap_basic.c
+>> index cb3229711f93a..11972ffdb16ed 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+>
+> [ ... ]
+>
+>> @@ -1373,6 +1375,52 @@ static void test_sockmap_multi_channels(int sotyp=
+e)
+>>  	test_sockmap_pass_prog__destroy(skel);
+>>  }
+>> =20
+>> +#define LOOKUP_BIND_RELEASE_CG	"/sockmap_lookup-bind-release"
+>> +#define LOOKUP_BIND_RELEASE_REP	64
+>> +
+>> +static void test_sockmap_lookup_bind_release(void)
+>> +{
+>> +	struct test_sockmap_lookup_bind_release *skel;
+>> +	struct sockaddr_in sa;
+>> +	int cg, i;
+>> +
+>> +	cg =3D cgroup_setup_and_join(LOOKUP_BIND_RELEASE_CG);
+>
+> [Severity: Medium]
+> Does this leak the cgroup file descriptor?=20
+>
+> The fd is acquired here and stored in cg, but close(cg) doesn't appear to=
+ be
+> called on either the success or error paths before the function returns. =
+The
+> cleanup_cgroup_environment() function cleans up directories but doesn't c=
+lose
+> the test's held file descriptors.
+>
+>> +	if (!ASSERT_OK_FD(cg, "cgroup_setup_and_join"))
+>> +		return;
+>> +
+>> +	skel =3D test_sockmap_lookup_bind_release__open_and_load();
+>> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
+>> +		goto cleanup;
+>> +
+>> +	skel->links.connect =3D bpf_program__attach_cgroup(skel->progs.connect=
+, cg);
+>> +	if (!ASSERT_OK_PTR(skel->links.connect, "attach_cgroup"))
+>> +		goto destroy;
+>> +
+>> +	sa.sin_family =3D AF_INET;
+>> +	sa.sin_port =3D bpf_htons(1234);
+>> +	sa.sin_addr.s_addr =3D bpf_htonl(INADDR_LOOPBACK);
+>
+> [Severity: Low]
+> Does this leave the sin_zero padding of the sa structure uninitialized?
+>
+> It looks like this partially initializes the struct on the stack.
+>
+> [ ... ]
+>
+>> +		if (xbpf_map_update_elem(bpf_map__fd(skel->maps.sockmap), &u32(0),
+>> +					 &sk, BPF_ANY))
+>> +			break;
+>> +
+>> +		if (xconnect(sk, (struct sockaddr *)&sa, sizeof(sa)))
+>
+> When sa is passed to xconnect() here, can it leak the uninitialized paddi=
+ng
+> bytes from the userspace stack to the kernel?=20
+>
+> Would it be better to fully initialize it using "struct sockaddr_in sa =
+=3D {};"
+> or explicitly zero it?
+>
+>> +			break;
+>> +	}
+>> +
+>> +destroy:
+>> +	test_sockmap_lookup_bind_release__destroy(skel);
+>> +cleanup:
+>> +	cleanup_cgroup_environment();
+>> +}
 >
 
-In case anyone is interested in trying out. This patchset is based on
-bpf/master, 3d8e6fef15db ("Merge branch
-'fix-effective-prog-array-indexing-with-bpf_f_preorder'"). The
-selftest in this patchset relies on a bug fix currently only carried
-in bpf.
+I think these issues are borderline cosmetic but valid.
 
+> [ ... ]
 >
-> Please note: this email is coming from an unmonitored mailbox. If you hav=
-e
-> questions or feedback, please reach out to the Meta Kernel CI team at
-> kernel-ci@meta.com.
+>> diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_lookup_bind_=
+release.c b/tools/testing/selftests/bpf/progs/test_sockmap_lookup_bind_rele=
+ase.c
+>> new file mode 100644
+>> index 0000000000000..cc77b193893bd
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/test_sockmap_lookup_bind_release=
+.c
+>> @@ -0,0 +1,37 @@
+>
+> [ ... ]
+>
+>> +SEC("cgroup/connect4")
+>> +int connect(struct bpf_sock_addr *ctx)
+>> +{
+>> +	struct bpf_sock *sk;
+>> +	int ret =3D SK_DROP;
+>> +
+>> +	sk =3D bpf_map_lookup_elem(&sockmap, &(int){0});
+>> +	if (sk) {
+>> +		if (sk =3D=3D ctx->sk) {
+>> +			struct sockaddr_in sa =3D {
+>> +				.sin_family =3D ctx->user_family,
+>> +				.sin_port =3D ctx->user_port,
+>> +				.sin_addr.s_addr =3D ctx->user_ip4
+>> +			};
+>> +
+>> +			ret =3D !bpf_bind(ctx, (struct sockaddr *)&sa, sizeof(sa));
+>> +		}
+>> +
+>> +		bpf_sk_release(sk);
+>
+> [Severity: High]
+> This is a pre-existing issue, but does calling bpf_bind() here mutate the
+> SOCK_RCU_FREE state and cause bpf_sk_release() to skip decrementing the
+> reference count?
+>
+> If bpf_map_lookup_elem() looks up a newly created UDP socket, SOCK_RCU_FR=
+EE
+> is not yet set, so sk_is_refcounted() evaluates to true and the reference
+> count is incremented.
+>
+> Then bpf_bind() resolves to udp_v4_get_port(), which dynamically sets the
+> SOCK_RCU_FREE flag on the socket.
+>
+> When bpf_sk_release() is called, it evaluates sk_is_refcounted() again. B=
+ecause
+> SOCK_RCU_FREE is now set, it evaluates to false, causing bpf_sk_release()=
+ to
+> skip the sock_gen_put() call and permanently leak the socket reference.
+>
+
+AFAICT this is actually not a problem for this specific test, because we
+fix it in patch 1/2. We have already added the socket to the sockmap so
+udp_bpf_update_proto should have triggered. It looks like Sashiko missed
+this?
+
+Specifically for UDP, I think the code is fine.
+
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+>> +	}
+>> +
+>> +	return ret;
+>> +}
+
