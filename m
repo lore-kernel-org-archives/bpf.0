@@ -1,93 +1,94 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF0B331230
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 20:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D713AA1A8
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 21:01:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.169
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782247906; cv=pass; b=UEHn6EyCYKU0Ntubm3U5BusnYVTUDMBABQN+7TLuu9Sfwj2p/DbQcgYU0Wvj4kQ69LzL85O51evs6gkGBngWs7YRdgO0qGZWNI/xw2KOChMnUZv6UwVPOfq/dCgLaT6pMUAdzcjMMzQRwttu+v5ncplc57orsOkvxiwHVqIbPGA=
+	t=1782248485; cv=pass; b=SXhRLW8kgpSIsw6L/hosAfvSkwZv/bt8OKx0vXBdgJ92HNZjqpCkUEA5260C+S/2a+iLGGnoi/Hhl/7qzAFnv2IxVgLt4D0iq/vGNSTnRwG46ejGmwsUV96hoReMbrwhOgZPe0IEoiFjkDrZVE4CMlStKrPdrJvoKVoZs7ekbrw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782247906; c=relaxed/simple;
-	bh=zcOi5pAYVsc/hsTK1xDiyom948aKELRynzk9lrxwUvQ=;
+	s=arc-20240116; t=1782248485; c=relaxed/simple;
+	bh=7T/6V1SFMpqdmkLBplAd/Ku+9PmkK2UkbtvMC8A9z3k=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JwEbtTOWWdLXRq+VawW525oXWcd9paWZkczqf8AYvWR0vV2s9euSy1eHW3FphI/ZzHys4LyqtMGuUWH3UprA1IeqtGdzRG5tp5y7Dv/u3MRKac8I6dfcrjkAZOyRV2gy2iVDQcYVWHbe3okLfINymMsZAtA7IK1byt9yXR2Kvno=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mGbSTwVT; arc=pass smtp.client-ip=209.85.214.171
+	 To:Cc:Content-Type; b=ZZLZiv9EHi/2TGQpa1FQNH0yQxXFmrKGaeqzEU0AH4N3pv1qi6KIziHCwYFjBPzXUgyBT5+qzhwBdsa9qQ4x0TfdfcLom1noVOIBG2FaCnsDjAiIPjheMvHyDu50MdJdHJlgLc7IIc4q932xDDDfeFiFuEB9UyRo7IWWi99Zsh0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ffrQsnC3; arc=pass smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mGbSTwVT"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2c0aa420401so1505895ad.3
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 13:51:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782247905; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ffrQsnC3"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2c74383c93cso2392375ad.1
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 14:01:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782248484; cv=none;
         d=google.com; s=arc-20240605;
-        b=KkS0VKwyBhd0mOqQaQ5n/Vpne+ZIyainJjdTB33xvzDH9a/KLXLVCijx51bTEksdLo
-         SK/5ng5hqXd9uWUs/rh8RehmHQzVLrQUgnW4G6R5RvE8cbiXw2hO95nTDtV/ew65b/rh
-         rYwP/NknSSNyWGFQJkRkhoKIiVqn42weJiI3Ht8EmjWagdrDJsGxAL2CDt2TqSEC4UGt
-         lzycuQp0xbPub5NwthoWMtqJJojmEwd1oHh1igiAMP/cI5FZJYcVlPb7S+A/UtdLDk6A
-         afMmSAgz1mh5ofPXjlRBGVphUpDXmIB40U7xlN++PRVOvmj/H46l35u6TGmln/9cFd43
-         m9oQ==
+        b=I/djemVemMMpU9lWme0Fr7I3z6R190HSQGtqgu6yaiRXH1W/Wqt803PDh3JyBot1QI
+         iqoQsjsg9eVw3LWh5SO7EiHq4/TJp8MYPkjBAf6P4yqdf4mdppNGwpqWjhz6kQ7vuNb3
+         UbExZQvZBwS0oiDgRj3g4NMQWQRt68GKSAWLbc4NpCHzt7HwaqHd6EQR/PtE8ur3IKJT
+         xMWrT4lTh3cMpmPE0VZaRsSysjzrl7fLZihJir8Yfhj4xF+ggHfiNRTvPOYMd2M40vw9
+         vTedKvDeFLAl8rW9PH3olIYIftyKJrPLujflTK7tKpHa/mbrx77n0cJ9BOt8XKfgzXEF
+         TmBg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=RY/5an4ETMzEUBOvE3ubJ5aCycET4G5V0gmFurpfXt8=;
-        fh=66dHoCoTWtBkAGKRNzBfbuDx9+fMMhAfMDs0FamWEXQ=;
-        b=bVTLPs/UQqzE897iavGNV2rYYGqiIhBusHVMPfK5bfq/dWEfYYQEMjUwd3xmGXQd3E
-         EOsKFXykhpmSbVbwv2w4krhhMPRAX8PSCmHVlf7B6J6uz5UVzI68WRbqaKYOfCZ4jeUB
-         C4S+iuupWsWX+831py4ZkzQjemb/q44aQRcVLhOCjYkD7EUwO/wQiWXZ2bnwBi9+DrtM
-         PrbVQAJ0ezMP0yYLgW6hJ2F4Tkqx/zYnZVcU5KEoe6wYS4DfAnDB+zHW2TN1C+9GhPWY
-         6FRTuq17nLaEqLXOnyFzHNDoYzISznhmzeX9OkOxgTEaBlSmepXKdrEF/fwrAreiWhPs
-         w/dQ==;
+        bh=fv7Koq2XgnVxWRydV+PSc8mxcORJr0BM/BkCsXVSp0w=;
+        fh=m3sBHM7lRgVtGSSCXZ6GNFC5i7W9vuSNmSsiGueNmyM=;
+        b=JtG0/VKbs2tMVBxum0cUhkD4w/gnoFWMdRPc6CCMx9JScsTpUgkqU90yLyViNQPLge
+         Hbi1U9MautwcOEZoL9Qwe2Rmuv9p8Av3kJG7vOPo9xL1j+l7vG4tyHcbTsamNcfcDrUv
+         vrvdu7nMkh0LQw8ul7MYmIUfCOANzOjMlcCYr3qacrgoo02+SXY+Ctpk3kW4e4QzJqHW
+         2y5wD34ibbn//ltUavqwH8crdyd3OgQBuLiAbDrEYBahgYYlGnilYBy+gumtLPjI2bDE
+         y1/M170jisVBIdRXxvGtti3GiTcwlHjwes+MXVTD/C+mBvdRy55wqH1k1HbN7Tqps5d3
+         dxvQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782247905; x=1782852705; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782248484; x=1782853284; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RY/5an4ETMzEUBOvE3ubJ5aCycET4G5V0gmFurpfXt8=;
-        b=mGbSTwVTipY29BzqztQRnSiyhnbINUYrRMdzzAiahmEQU6ksUCcHzQ63SM7moc6VV2
-         HMjTk04GscOVcFBLH0FMHmrX2rJq+94H3naIe541D/0u/2jrCws1/LzceL7Xl64lXl/c
-         IlbE/QT70OyyNsq3AKlmKIVuKy7riKK4qmGntNJ6GlK27tj+tStbBCQzmWYxH6ldtkX5
-         XitTXRHlAzYRrnzHzBbWnAO5kj5Hq+ii7aRltPJKkybE20v12y6U7N3I2e1Jp6oREnKS
-         ye7G5eXgDDjwOXubanI+AbQyI9cgp6xHYglUIMDNIJCftnGwlexdmsBbtkMlA/5jcbFZ
-         M+cA==
+        bh=fv7Koq2XgnVxWRydV+PSc8mxcORJr0BM/BkCsXVSp0w=;
+        b=ffrQsnC3MC+7ro+wXXrqJ7LfiLg54UNU+F2aTjZ8CVUJ1PFSOkObfGYZbpO+zhieiL
+         gEw7WMJjn5uPhMg28kCjvagivl/rtpP2jaYTKXrgU8dveFH5afQXJMiNAeV/JPGw4iPJ
+         o0f6b5pgmlm3pdftgq9B8dwjVYMIxaFHLdAUo05rTvRRco0ywsidtVDztcqGpXD6ztzm
+         lHnO5Qg09cgL2cL96Krsvd0G2QAo/f2ghqbbDNe8hwN5M7TOlONMnk+GfjMBkiqKe42X
+         FdeATVF5RWgphRTfnEtCdTNvA1Yhkx96tFevkrkBNbwly5xQGK6m7B0dqADdcTbLg/Y+
+         zHHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782247905; x=1782852705;
+        d=1e100.net; s=20251104; t=1782248484; x=1782853284;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=RY/5an4ETMzEUBOvE3ubJ5aCycET4G5V0gmFurpfXt8=;
-        b=J/KHCiI7w6KQaTzEc1NWsoqmpmk2Sm1L6H4cUdTpDem5qFGF/YQbsCbvyRssaD8/JR
-         J6jjM7psPaNvWgIw3wpa4Ay+I6YWQdGbCZC/eEapkNvKqr09DW/350BjDRr9IukYX9Mu
-         g/QlSxsY5PZNHRslyziUdU/D0DG67rZdA0CbP43e+2voyDkPNl10wUEc9+SbisJF/WIt
-         xSZuAK9/I2+jPconSf/mA3ZwIQE+2VPAcefTTjyPVdBaOkpchvqhFpmVDc0d/NrSqPKD
-         f/bXb87N6Anq4UfxyFEeWkINbSqhgEW7qiRB+1OhJ/kM8s0Mkiiggn8t96SdhF954Bg6
-         FmSQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoT/CN3gcFenARUF7A81jQYDaxzN1UlzLP2LdciiFVgom39c2XTmsDdAdjQufpFb9YjDSg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5rzve40KUzq1Xr3h4I/LWh+/7pxHNY5XKd55DEp0LJSWUsqha
-	7fMqQs4Qz04QmfmJKaJ0Te39YGeK/MitvvYUWYmXVcd8QFRAU/Q0UrCYKWvDoh4YqQtOlmfv+Uq
-	6dJHzMiaZZU44BYMMNEjf7l/rtBpdVlQ=
-X-Gm-Gg: AfdE7ckTv4O9cx1OGGnMrdWdi52iw3DYxBuJaS5ZklcYSU2dX1XjhSMfzWrzWlNXLuH
-	HJj4tGfS2NXVHPVKEUF8xlOiRqvxo3cgZaovxy+vhVD8AMdbPKIY86hcUfphc4D0mdQWS0Zcoi7
-	OLjbpexXQJteBb1qzmKmCLdmLmwHz4qKY38zFiHu2x4J1a0cq2w+BDGuPvQRJgWOt3WQIqznN+L
-	ZhM+KuNXtTfKEGMnwU1G3pI2WZjMi0e1HeUabhgooqc6a6/uOJc45UrsFZKGc81Mgmf9lkalz4D
-	pfTGg91I4bSGdGPypzQfbA6zLXRRrQEgUBKvafwClOv2awgG+p08/+kZApjeCz9JNCC49Q==
-X-Received: by 2002:a17:902:ea0d:b0:2c6:abaf:85fb with SMTP id
- d9443c01a7336-2c7c771ddc3mr45558515ad.32.1782247904789; Tue, 23 Jun 2026
- 13:51:44 -0700 (PDT)
+        bh=fv7Koq2XgnVxWRydV+PSc8mxcORJr0BM/BkCsXVSp0w=;
+        b=pTnR02OPq5K9TFbBpQwixuElyid2bW47SRULfGZD8HKWCBl/lIMBXenazsQCgDo8gN
+         ur4MDkn/MEgJxmEW6lsom9HaE8YZHaTJU4ZERtCUyudoa68pWn77ZODl/GexvL+8+DSg
+         LxRl1a3NQjqyv8LqmZYxvlmHpKesUqMalsARqVDxUiTvukyUwtcCd8OMR/C3ezZ5xD7b
+         6xWoEefcO+uxlZGUuqc6vxv/KzCD6IGlPY+48UHtchnvRLOjIGWjMkSTmrHXwj1zMKHr
+         +xS/Gd9bdSqxF7GZI6PzyDlVKNk8Y3OKHTiiZ6nM8U+4kAmzX8/ruOl0XaLIUqWST7dv
+         JBww==
+X-Forwarded-Encrypted: i=1; AHgh+RqXUO11qPKKlJLeYUUtXuKCfPYIATQqfYjz9Xc1bdT4u1paz4xIS817PTcl80cMTREjG/w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywsv8Gh5rE4U0/JucDQ2Z1c8me/jtIPJyvcP4FXFkZXT4Do3nKu
+	MP6nLRM+N2l5CjqjJhlmNK+c9CVAcsy2Gih3FcyiR8HEK+WQTAhuVCs1x8Mnp+Y9K+GL7qm6OKX
+	RghG07zzVdhwiBjVrz4OfshBiuPklvR8=
+X-Gm-Gg: AfdE7clilRcZHK5QULlv7yW6UJHph9BS/Fll/T7eCVzc8UedMtbjlgOct/tCFT7XdU9
+	/GWFBnthxm0mhz/pQuwtERhtAoj+4DEWyjB9UlHH0rclhF0QdyNj69aKum07lOHxBE3rSJf4Tpr
+	wJfYYf9dssowwJ635DHwVA+CJ/9fazfVGfpACPmQWMhmKzRsantv0igRz0RmbaI1JUWGpToztfD
+	DIC3Q7VlcOiqBMWw/sdPS2WhF7bfugBPzCJ6g0ppB9pDK0euiy1eJvKZWu9f2JWkIj0k+rhknak
+	WWiD50pxU93kHFPPatJ0f3hApob11uBCaVVYBmYEMOC1WJS6h6tHqTtBdJQRlSddQPJpDt9Czy1
+	BgJ3G
+X-Received: by 2002:a17:902:d505:b0:2c0:bff4:96a7 with SMTP id
+ d9443c01a7336-2c7e149a8b7mr5784275ad.12.1782248483664; Tue, 23 Jun 2026
+ 14:01:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260623142417.275892-1-jolsa@kernel.org>
-In-Reply-To: <20260623142417.275892-1-jolsa@kernel.org>
+References: <20260623142417.275892-1-jolsa@kernel.org> <20260623142417.275892-2-jolsa@kernel.org>
+In-Reply-To: <20260623142417.275892-2-jolsa@kernel.org>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 23 Jun 2026 13:51:29 -0700
-X-Gm-Features: AVVi8Cfsa0wqDzjdaHi8V-3VPuU7JNaubI7fCcB26V9KuFplrNJaqyqc91hcUHQ
-Message-ID: <CAEf4BzbLUzTfvf4pVTOCoOM5AdiS1wkbmuK3R3L+fFZLuF7n+g@mail.gmail.com>
-Subject: Re: [PATCHv2 bpf-next 0/3] bpf: tracing_multi link info support
+Date: Tue, 23 Jun 2026 14:01:08 -0700
+X-Gm-Features: AVVi8CcXleoXsgMegctqxkoXOhkCD-CpnLrf6-waSmx86hOAYM1yRO9mYi76Qg4
+Message-ID: <CAEf4BzYVjf4PfJUedkzRUteNOsb7kHafAbndaaNHBbVHqtOEPw@mail.gmail.com>
+Subject: Re: [PATCHv2 bpf-next 1/3] bpf: Add tracing_multi link info support
 To: Jiri Olsa <jolsa@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
@@ -98,54 +99,67 @@ Content-Transfer-Encoding: quoted-printable
 
 On Tue, Jun 23, 2026 at 7:24=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
 >
-> hi,
-> adding link info support for tracing_multi link.
+> Adding BPF_OBJ_GET_INFO_BY_FD support for tracing_multi links.
 >
-> Adding the kernel support with related selftests and bpftool support
-> to display the tracing_multi link info, the output looks like:
+> We expose following tracing_multi link data:
+> - attach_type of the program
+> - number of ids
+> - array of BTF ids
+> - array of its related kernel addresses
+> - array of cookies
 >
->   # bpftool link
->   ...
->   27: tracing_multi  prog 93
->           attach_type trace_fentry_multi  obj_id 1  count 3
->           btf_id           addr             cookie           func [module=
-]
->           91984            ffffffff824f4a24 a                bpf_fentry_t=
-est1
->           91986            ffffffff824f6a84 1e               bpf_fentry_t=
-est2
->           91987            ffffffff824f6a94 14               bpf_fentry_t=
-est3
-
-kernel's bpf_tracing_link_show_fdinfo() emits cookie as decimal
-number, why go with hex here?
-
->           pids test_progs(1462)
+> The change follows the kprobe_multi and uprobe_multi link-info convention
+> of optional output arrays with an in/out count,
 >
-> thanks,
-> jirka
+> On top of standard tracing link data we also expose addresses, because th=
+ey
+> are useful info for user (especially when the attachment was done via pat=
+tern).
+> This data is hidden when kallsyms does not allow exposing kernel pointer =
+values.
 >
->
-> v1: https://lore.kernel.org/bpf/20260621204524.61067-1-jolsa@kernel.org/
->
-> v2 changes:
-> - fix kernel symbol search logic [sashiko]
-> - typo fixes [bots]
->
->
+> Assisted-by: Codex:GPT-5
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > ---
-> Jiri Olsa (3):
->       bpf: Add tracing_multi link info support
->       selftests/bpf: Add tracing_multi link info tests
->       bpftool: Add tracing_multi link info output
+>  include/uapi/linux/bpf.h       |  9 ++++++
+>  kernel/trace/bpf_trace.c       | 55 ++++++++++++++++++++++++++++++++++
+>  tools/include/uapi/linux/bpf.h |  9 ++++++
+>  3 files changed, 73 insertions(+)
 >
->  include/uapi/linux/bpf.h                                |   9 +++
->  kernel/trace/bpf_trace.c                                |  55 ++++++++++=
-+++++++
->  tools/bpf/bpftool/link.c                                | 137 ++++++++++=
-+++++++++++++++++++++++++++++++
->  tools/include/uapi/linux/bpf.h                          |   9 +++
->  tools/testing/selftests/bpf/prog_tests/fill_link_info.c | 242 ++++++++++=
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  tools/testing/selftests/bpf/progs/test_fill_link_info.c |   6 ++
->  6 files changed, 458 insertions(+)
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 89b36de5fdbb..80423ccc6b57 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -6839,6 +6839,15 @@ struct bpf_link_info {
+>                         __u32 flags;
+>                         __u32 pid;
+>                 } uprobe_multi;
+> +               struct {
+> +                       __u32 attach_type;
+> +                       __u32 count; /* in/out: tracing_multi target coun=
+t */
+> +                       __u32 obj_id;
+
+we have attach_btf_obj_id in bpf_prog_info, but target_obj_id in
+bpf_link_info for tracing programs. The latter, though, is actually
+not always BTF object ID (it can be prog_id for PROG_EXT)...
+
+So, me personally, I was confused what "obj_id" here mean, it would be
+more obvious if it was called "btf_obj_id", tbh. But that's a minor
+nit/confusion, not feeling strongly.
+
+everything else LGTM
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+
+> +                       __u32 :32;
+> +                       __aligned_u64 ids;
+> +                       __aligned_u64 addrs;
+> +                       __aligned_u64 cookies;
+> +               } tracing_multi;
+>                 struct {
+>                         __u32 type; /* enum bpf_perf_event_type */
+>                         __u32 :32;
+
+[...]
