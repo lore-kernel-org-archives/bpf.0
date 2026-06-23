@@ -1,89 +1,141 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F7C936E484
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 10:08:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B5D42E7389;
+	Tue, 23 Jun 2026 10:32:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782209327; cv=none; b=F/pYLecLJySZQtwWHTAXVx6HlSFRMZczgjYgnvDLn8k5OaFzNYwkgMx4bgpBehwisQdeT1TugW7JAxD6m7q8Yg7LTtJXaa0EmycktaNqzLK7h/8sC8BTqroZWCUXg3qwSOGyKp9EKVAzOA/c0FARaetALq9M3zvulkYpvvCM0T8=
+	t=1782210778; cv=none; b=ICkDWjddGzYkwglBkNwWhHqO0J/BRrsq9f9l+OsYkpT5Q4yIBpPVXzzudo1QZoH39UgPHrX7xSPcx9KheJhTijD79ryQ6DLX6HESsI+rI43U0tdnFKleIgNzG6GCeufKv5NPOvho+hyvh2FQSzFYYOv0Y12rIfgxsl36euDuRzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782209327; c=relaxed/simple;
-	bh=pZkGyJopL74VE7VjsYav1R6gjjaDsoahje4YVAHTnSM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rFX1SgOUkeZ1XvWyqQ8OhdQbRgzMIhFWSQE+ZerKPqFHhA45a1X1TWfoCGQQv7sVksigFpT/0F/pPxrc2yo7mbQBpYfYihOJNx48OGf+rwDm4jUgYrBp6Zl77WIcbkd2Xw0O4dy0iLPpyJSdxD5Xv2tGE9uwZtJTrMY641/Bkws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r91+eaR0; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782210778; c=relaxed/simple;
+	bh=92VbNPJTkjdEBtbdvlNU+3BxeLMswukvLPMH/Wxhr7U=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pczcaKWcZhoTYDlUpVaf6UA5XVhFszPCXzFRGqccWS8lqv8JJoTA6DMwPDxpcQqCUdudQSudbUeRHiAcilXIFVWKGh0pDeTfOfovXFMZdhmv/Nf4KhLaJ78Sj6bBndyg2yiULXizUseFq/Y5185GgbmVZAddyWrmrBYmxHiMbYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=mRQA1o9q; arc=none smtp.client-ip=13.76.78.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r91+eaR0"
-Message-ID: <3953e554-9bc4-419e-ac9f-aea3b9fd7b80@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782209313;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lFD9Jph6crM5nRNftF28H4XfKyHcXZ2YzNtJaYuppo4=;
-	b=r91+eaR0Nr0qBjKAaIQNfjey8g1pvhMtE6060+u+/4sxIjmf49565VJ6VfPj5dZttupYHV
-	zM/D7QCVFqHmq5f8eB7nx1yxlVJkJ0tTpdeMbsvP18UebzM5PUE2LIGyk6uMLXgmqXAH2w
-	Dd2HaygB9kXSGGrslxF8VMxUS+tbKDM=
-Date: Tue, 23 Jun 2026 18:08:19 +0800
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="mRQA1o9q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	To:Cc; bh=d9d0le26UbuID8At9QM8NwqEIEAx0X81rJCUP5FPzYA=; b=mRQA1o
+	9q6mCQKCeBfc0yvmSRZexyXsKsJmjL95JhhsWeTXZFJK0JtBCxKS0YSMGICCUIvo
+	bZptNVex97qmAM2gyWJ7IebLMqrNAHDOH8Fopq7o8MpLZollxUibWUcaPtjDWJ91
+	SzP07yOk2Fg5nNGIZKMZDYxzy56Y32GaIfarw=
+Received: from [127.0.0.1] (unknown [101.6.30.195])
+	by web4 (Coremail) with SMTP id ywQGZQBHWJ3AYDpqOMt3Ag--.50276S2;
+	Tue, 23 Jun 2026 18:32:32 +0800 (CST)
+From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Date: Tue, 23 Jun 2026 18:32:31 +0800
+Subject: [PATCH net v2] seg6: validate SRH length before reading fixed
+ fields
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net] net, bpf: check master for NULL in
- xdp_master_redirect()
-To: Ido Schimmel <idosch@nvidia.com>, Xiang Mei <xmei5@asu.edu>
-Cc: Jakub Kicinski <kuba@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Jesper Dangaard Brouer <hawk@kernel.org>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
- Jussi Maki <joamaki@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
- Weiming Shi <bestswngs@gmail.com>, Ido Schimmel <idosch@idosch.org>,
- David Ahern <dsahern@gmail.com>
-References: <20260620201531.180123-1-xmei5@asu.edu>
- <7791b9cc-86f4-424b-aa1a-d1a869814130@linux.dev>
- <CAPpSM+TRJaqSSUs6tBp_CBSVUJMiDZm01o5BK6aCNak8vuQi+w@mail.gmail.com>
- <20260622155854.75977aac@kernel.org>
- <CAPpSM+Q4O704OaUAXqKpL6ffvudTfqzzLzLExziUExgvxQWmxw@mail.gmail.com>
- <20260623065218.GA378121@shredder>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260623065218.GA378121@shredder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260623-f01-17-seg6-srh-len-v2-1-2edc40e9e3e1@mails.tsinghua.edu.cn>
+X-B4-Tracking: v=1; b=H4sIAL5gOmoC/22NwQ6CMBBEf4Xs2ZK2CKgn/8NwoGULa7CYLhAN4
+ d8tcPU4LzPzFmAMhAy3ZIGAMzENPgZ9SsB2tW9RUBMzaKkLWaircFIJVQrGthAcOtGjF/Uld1l
+ +1iVKA3H5Dujos78+wOMI1QF5Mk+04/a31TricQjf3T2rvXxotPyrmSMSWWGN0VertFP3V009p
+ yOTb7upTrGZUuuhWtf1B7r5cnPZAAAA
+X-Change-ID: 20260619-f01-17-seg6-srh-len-a85f35427e0b
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>, 
+ Mathieu Xhonneux <m.xhonneux@gmail.com>, 
+ Daniel Borkmann <daniel@iogearbox.net>, David Lebrun <dlebrun@google.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1782210753; l=2240;
+ i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
+ bh=92VbNPJTkjdEBtbdvlNU+3BxeLMswukvLPMH/Wxhr7U=;
+ b=dh6mR3KdjJPZ52OQuPdFNWGIGvtdFm2uuulipqIRfslz1/Ucql/ca3QUpbNC/tWn43yteNtSk
+ aVDl2zlmwTyDBj1wI1U7S+mg7CnTEgtUCY58eMz3iEJGkkvhwxspfbZ
+X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
+ pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
+X-CM-TRANSID:ywQGZQBHWJ3AYDpqOMt3Ag--.50276S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFy7Zryfuw4kXw1DAF4rGrg_yoW8tw1Dp3
+	WrGr4aqFWkGF97Zrn7K3Wjya4Du398GF1rXr95Aas5Crn0q3WxWr409w4YgFWYy398GF4a
+	y3y0qrWaq34DZaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9v1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
+	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4
+	CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26r4r
+	Kr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc
+	8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Av
+	z4vE14v_Gw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMxC20s
+	026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+	JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+	v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
+	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
+	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU0kWrtUUUUU==
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQQHA2o6M-xrbwAAsa
 
+seg6_validate_srh() reads fixed SRH fields such as srh->type and
+srh->hdrlen before checking that the supplied length covers the fixed
+struct ipv6_sr_hdr fields.
 
-On 6/23/26 2:52 PM, Ido Schimmel wrote:
-> On Mon, Jun 22, 2026 at 04:34:06PM -0700, Xiang Mei wrote:
->> On Mon, Jun 22, 2026 at 3:58 PM Jakub Kicinski <kuba@kernel.org> wrote:
->>> Can you double-confirm that this triggers on current HEAD
->>> of linux/master ? I thought commit 2674d603a9e6 ("vrf: Fix a potential
->>> NPD when removing a port from a VRF") was supposed to prevent all the
->>> torn master fetches. Adding VRF folks to CC.
->> Yes.
->>
->> We have triggered the crash on 56abdaebbf0da304b860bed1f2b5a85f5a6a16a0,
->> which is the latest for net.git, and 2674d603a9e6 was applied. We can
->> still trigger the crash:
-> 2674d603a9e6 was only for VRF ports, so it doesn't help with this case
-> (bond port). Also, the problem that 2674d603a9e6 fixed is a bit
-> different. We had a NULL check after netdev_master_upper_dev_get_rcu(),
-> but the issue was that this master device was not necessarily a VRF
-> master.
-Agree, it seems that 2674d603a9e6 only focus on VRF side.
+The BPF SEG6 encap path reaches this with a BPF program-supplied pointer
+and length: bpf_lwt_push_encap() and the SEG6 local BPF END_B6 and
+END_B6_ENCAP actions call bpf_push_seg6_encap(), which forwards the
+length to seg6_validate_srh() with no minimum-size guard.  A 2-byte SEG6
+encap header can therefore make the validator read srh->type at offset 2
+beyond the caller-supplied buffer.
 
->
-> Looking at __bond_release_one(), assuming that
-> netdev_master_upper_dev_get_rcu() returned a master device, I believe it
-> must be a bond because you have a synchronize_rcu() after
-> bond_upper_dev_unlink().
-Right, synchronize_rcu() only guarantees that the master device is not freed
-while our RCU reader is operating on it, but it does not guarantee that
-we can successfully acquire the master device. We still need NULL check 
-here.
+Reject lengths shorter than the fixed SRH at the top of
+seg6_validate_srh(), before any field is read.  This fixes the BPF helper
+path and keeps the common validator robust.
+
+Fixes: fe94cc290f53 ("bpf: Add IPv6 Segment Routing helpers")
+Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+---
+Changes in v2:
+- Narrowed the commit message to the BPF encap callers that can supply a
+  too-short SRH length.
+- Dropped the unnecessary cast in the minimum SRH length check.
+- Link to v1: https://patch.msgid.link/20260620-f01-17-seg6-srh-len-v1-1-36cbb29c12f1@mails.tsinghua.edu.cn
+
+To: Andrea Mayer <andrea.mayer@uniroma2.it>
+To: "David S. Miller" <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Simon Horman <horms@kernel.org>
+To: Mathieu Xhonneux <m.xhonneux@gmail.com>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: David Lebrun <dlebrun@google.com>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: bpf@vger.kernel.org
+---
+ net/ipv6/seg6.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/net/ipv6/seg6.c b/net/ipv6/seg6.c
+index 1c3ad25700c4c..62a7eb7792026 100644
+--- a/net/ipv6/seg6.c
++++ b/net/ipv6/seg6.c
+@@ -29,6 +29,9 @@ bool seg6_validate_srh(struct ipv6_sr_hdr *srh, int len, bool reduced)
+ 	int max_last_entry;
+ 	int trailing;
+ 
++	if (len < sizeof(*srh))
++		return false;
++
+ 	if (srh->type != IPV6_SRCRT_TYPE_4)
+ 		return false;
+ 
+
+---
+base-commit: 96e7f9122aae0ed000ee321f324b812a447906d9
+change-id: 20260619-f01-17-seg6-srh-len-a85f35427e0b
+
+Best regards,
+--  
+Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+
