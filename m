@@ -1,144 +1,208 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F83175A79
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 00:16:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074E8377EBC
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 00:29:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782173800; cv=none; b=iydhwBGiGCd4MLfhd2QfE91u1GVdcXCto8ob27QM07U434Puz8SxDmH9ZX0oKF2/WysqIUj/tclsRLxBuxtHn4ksjI6rBYy2yLj8AKI/Kp2Zwyt8mwQQm0S0f0jjwFMZxcgo4RrGiK6MGxb6jYmTO0GKUqRb48um/OQ61b0FDbU=
+	t=1782174573; cv=none; b=nVmyHqvE8ue4h4zjCbv3SGc9+9tfTN3qXba0kX+b1hlCFFzwLag1l18FOeZ3pvGKzpfUbFsGhITaQLhbgg86hzSxZN1IdMQY7ROF36cNdoGOhx8/ML2UgzLBSnC6oSvUzqpxSn1/OenZPkRLTpNev72xLHFimnnXyDgPSyft2qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782173800; c=relaxed/simple;
-	bh=A9k/De2Tfc5Y4psiflVWQIwhMTnFgBl0DSkO1O8fypQ=;
+	s=arc-20240116; t=1782174573; c=relaxed/simple;
+	bh=2guNGex4qcI1TQ71JHbLIsLYH6GejGcGE4pdluu90do=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kDXyyqQ2RkaPDOb1/64LaPa9jkATvDTVNHpmqgsgMqcyyU6S+Dg5YIN10XAK+ywwijNDZx03txM2lb0lu86mWuXqWhgzXbQf9O+flcTbvXuGL3NEe6oJeu5Sa2vOK+VVgkEw+o9TWmQAeJ2IyZqVxydmQY7zL3htzIbilhcWHis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ica8PoBm; arc=none smtp.client-ip=95.215.58.182
+	 In-Reply-To:Content-Type; b=pF6vpDeIVf95yWxL7c930XswFHQKibwFKtlUaQ4urPhJG87tfsH+xsUD6km0gdpG6ZD2LDOvS1wPUmP4nx9Z/Gw8wTWmVKmf4tMcsZ2SprYbZvIEZJB6Lg41748k2V/YvfuMykfHfpR4ch0Og6JwSq+pnknNpp/tmvZNsPhYbHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZtCd3XDx; arc=none smtp.client-ip=95.215.58.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ica8PoBm"
-Message-ID: <407fc549-1363-4b22-b6aa-b85283873433@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZtCd3XDx"
+Message-ID: <87643862-e32e-43c7-8c81-7186f30059ea@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782173795;
+	t=1782174559;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=qQ/tN8LPB9pbsNYKwXHKXdDuCRbHVz4A0BWR4CadjWs=;
-	b=ica8PoBmlvFDqhLY70+zIqEUwaYq/9kKUcVfUDNxWB09L92DemTjVMJ0rHXgj829Y1NjsO
-	5cFVokuTTuxBahVAoa3o7pjhmaPnT4HnqwxUWLOJbF0GDL2fX9WdUJVmdSaKHasrgzxUOV
-	aUuEWZr3c8n4kTnCJFV10GC6YIPUNYU=
-Date: Mon, 22 Jun 2026 17:16:26 -0700
+	bh=Lef+zbZlC2cznmfkqDRBusiikF7Bb2MGAD4tRP3lvcI=;
+	b=ZtCd3XDxWg0myslgDTzVk2YO2R3BnwFZmpAoKhA9z0ZIMsOrDnQFedfzaW0FuaQqSny/iB
+	XYlbpSnXAQeic22gwrkLt2R1F+7zT6puwWjkHkLl5TFtCsOwVRS72C9j/kCFMUDkbruCSU
+	VyCQm9v69Zf0f83gU9SARBWTZqxzVHE=
+Date: Mon, 22 Jun 2026 17:29:12 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] mm/bpf_memcontrol: mark BPF memcg kfuncs static
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Shakeel Butt <shakeel.butt@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
- linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20260617202147.78347-1-jp.kobryn@linux.dev>
- <CAADnVQJ=q7hJkt=ekLD_a5KjJ_+icdwgsY61rujjLMKAKByvWw@mail.gmail.com>
- <7ia4cxxosss5.fsf@castle.c.googlers.com>
- <DJDK2NVO8903.19LWKQ3ST3U89@gmail.com>
+Subject: Re: [PATCH v1] kasan: Fix false-positive wild-memory-access on x86
+ under 5-level paging
+To: Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@intel.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, bpf@vger.kernel.org,
+ kasan-dev@googlegroups.com, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>
+References: <20260610175651.647515-1-ihor.solodrai@linux.dev>
+ <326b85af-c41a-4387-90a0-60720111934d@linux.dev>
+ <20260618170913.GBajQmOQyOiBLqopUl@fat_crate.local>
+ <3207a706-354c-4e9d-ba53-dded1abb1842@intel.com>
+ <20260618183815.GDajQ7F-bqTHnrakoi@fat_crate.local>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: JP Kobryn <jp.kobryn@linux.dev>
-In-Reply-To: <DJDK2NVO8903.19LWKQ3ST3U89@gmail.com>
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260618183815.GDajQ7F-bqTHnrakoi@fat_crate.local>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-On 6/19/26 8:27 PM, Alexei Starovoitov wrote:
-> On Wed Jun 17, 2026 at 3:31 PM PDT, Roman Gushchin wrote:
->> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
->>
->>> On Wed, Jun 17, 2026 at 1:22 PM JP Kobryn <jp.kobryn@linux.dev> wrote:
->>>>
->>>> The kfuncs in bpf_memcontrol.c are not called by in-kernel C code. They are
->>>> only referenced by BPF programs and resolved through BTF.
->>>>
->>>> Since no external linkage is needed, mark these functions static.
->>>>
->>>> Fixes: 5904db9891f8 ("mm: introduce BPF kfuncs to deal with memcg pointers")
->>>> Fixes: 5c7db3239c9f ("mm: introduce bpf_get_root_mem_cgroup() BPF kfunc")
->>>> Fixes: 99430ab8b804 ("mm: introduce BPF kfuncs to access memcg statistics and events")
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>> Closes: https://lore.kernel.org/oe-kbuild-all/202606150332.Xy4Egd9s-lkp@intel.com/
->>>> Signed-off-by: JP Kobryn <jp.kobryn@linux.dev>
->>>> ---
->>>>  mm/bpf_memcontrol.c | 21 +++++++++++----------
->>>>  1 file changed, 11 insertions(+), 10 deletions(-)
->>>>
->>>> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
->>>> index 716df49d7647..eff79bb2c758 100644
->>>> --- a/mm/bpf_memcontrol.c
->>>> +++ b/mm/bpf_memcontrol.c
->>>> @@ -20,7 +20,7 @@ __bpf_kfunc_start_defs();
->>>>   *
->>>>   * Return: A pointer to the root memory cgroup.
->>>>   */
->>>> -__bpf_kfunc struct mem_cgroup *bpf_get_root_mem_cgroup(void)
->>>> +__bpf_kfunc static struct mem_cgroup *bpf_get_root_mem_cgroup(void)
+On 6/18/26 11:38 AM, Borislav Petkov wrote:
+> On Thu, Jun 18, 2026 at 11:12:09AM -0700, Dave Hansen wrote:
+>> On 6/18/26 10:09, Borislav Petkov wrote:
+>>> On Wed, Jun 17, 2026 at 03:13:33PM -0700, Ihor Solodrai wrote:
+>>>> So my question to maintainers is what approach seems best?
+>>> The CPUID stuff is being rewritten currently and it should address your issue
+>>> too. If not, then we need to rewrite it better.
 >>>
->>> sashiko disappoints. It couldn't notice that kfuncs should not be static.
->>> We have few "__bpf_kfunc static" in net/ipv4/
->>> that work by sort-of "luck", since their addresses are taken.
+>>> Can you reproduce with this set applied ontop:
 >>>
->>> In general kfuncs cannot be declared static.
+>>> https://lore.kernel.org/r/20260528153923.403473-1-darwi@linutronix.de
 >>
->> It seems like it thought hard on it but failed based on the existing
->> code and a bit vague documentation in Documentation/bpf/kfuncs.rst:
+>> Thinking about this a bit more... If Ahmed's series does fix this, I
+>> think it will be accidental. It still uses identify_cpu() and also does
+>> a memset() of the new c->cpuid structure in addition to the old
+>> c->x86_capability structure.
 >>
->>   kfunc definitions should also always be annotated with the ``__bpf_kfunc``
->>   macro. This prevents issues such as the compiler inlining the kfunc if it's a
->>   static kernel function, or the function ...
+>> I'm not knocking Ahmed's series by any means. It just probably won't fix
+>> this issue.
 >>
->> So it reads like bpf kfuncs can be static.
+>> In a perfect world early_identify_cpu() and identify_cpu() would either
+>> get consolidated into one thing. Or at least become two discrete things
+>> that initialize two completely disjoint sets of data. That way,
+>> identify_cpu() wouldn't memset() anything.
 >>
->> This is the reasoning from the logs (a dismissed concern, to be precise):
->> {
->>       "type": "Dead Code / Linker Error",
->>
->>       "description": "Marking kfuncs as static could cause the compiler
->>       to optimize them away, breaking BPF verifier BTF resolution.",
->>
->>       "reasoning": "The patch adds `static` to multiple `__bpf_kfunc`
->>       annotated functions that are not called anywhere in C
->>       code. Normally, a compiler would remove unused static functions or
->>       fail to expose them in object files, which could prevent the BTF
->>       ID generation logic (`resolve_btfids`) from finding them. However,
->>       the `__bpf_kfunc` macro expands to include `__used` and
->>       `__retain`, which strictly instructs the compiler and linker to
->>       preserve the functions in the object file regardless of
->>       usage. Additionally, `resolve_btfids` and `BTF_ID_FLAGS`
->>       successfully parse and resolve `STB_LOCAL` static symbols, making
->>       this change completely safe and correct.",
+>> Isn't that the _real_ fix? Instead of trying to hide the inconsistency
+>> when good data is blown away, we stop blowing it away in the first place?
 > 
-> Almost, except it's not clear what takes priority for the compiler.
-> __bpf_kfunc used to have '__used' and it was enough until clang
-> got too aggressive in LTO mode. So we added '__retain' and so far
-> it seems to be holding, but sashiko is missing that both of these
-> attributes don't say anything about _name_ of the function.
-> 'static' keyword means that compiler is free to rename it and
-> compilers do take advantage of that from time to time,
-> while __used and __retain don't add 'do-not-rename' restriction
-> to the compiler.
+> early_ is only on the BSP and you want to scan all CPUs.
 > 
-> Also look at it from the other angle.. why anyone would add
-> 'static' when the function is clearly not static to this particular
-> compilation unit. It will be used outside of it by bpf progs
-> that are obviuosly not part of this .c file.
+> AFAIR, the last time I was looking at how we scan the CPUID leafs, we do have
+> cases where there's blips in time when cap bits get disappeared to be
+> rescanned again. The toggling of MSR bits which control feature flags is one
+> thing that comes to mind.
 > 
-> Documentation/bpf/kfuncs.rst needs to be updated.
-> 
-> JP,
-> pls send a patch to update the docs and include few words
-> to ignore sparse.
-> 
+> But I'm with you on the consolidation approach. I think this is what we should
 
-Sounds good. I'll get that out this week.
+Hello Dave, Boris. Thank you for the input.
+
+I tried a slight refactoring of the identify_cpu() machinery to
+eliminate the memset(x86_capability) from the boot cpu, and it fixes
+the splat that I reported.
+
+identify_cpu() is split into two parts:
+  * identify_cpu_scan() - the top part, up to and including the
+    generic_identify() call
+  * identify_cpu() proper with the rest, no memset here
+
+Then (gated on x86_64) identify_boot_cpu() *skips* the
+identify_cpu_scan() call, only executing the bottom part of current
+identify_cpu(). We can do that because boot cpu already did the _scan
+part in early_identify_cpu(), when interrupts are still disabled.
+
+One caveat: get_model_name() is moved from generic_identify() into
+identify_cpu(), otherwise it wouldn't be called on boot cpu. Same for
+c->loops_per_jiffy = loops_per_jiffy; - it's moved to the "bottom"
+identify_cpu().
+
+The behavior for secondary cpus is unchanged: identify_secondary_cpu()
+calls identify_cpu_scan() then immediately identify_cpu().
+
+Please take a look at the diff below and let me know if this is a good
+way to proceed. I don't know exactly what I'm doing, so concerns and
+corrections are welcome.
+
+
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index a4268c47f2bc..4a655109cacf 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -1978,8 +1978,6 @@ static void generic_identify(struct cpuinfo_x86 *c)
+ 
+ 	get_cpu_address_sizes(c);
+ 
+-	get_model_name(c); /* Default name */
+-
+ 	/*
+ 	 * ESPFIX is a strange bug.  All real CPUs have it.  Paravirt
+ 	 * systems that run Linux at CPL > 0 may or may not have the
+@@ -1999,13 +1997,12 @@ static void generic_identify(struct cpuinfo_x86 *c)
+ }
+ 
+ /*
+- * This does the hard work of actually picking apart the CPU stuff...
++ * Rebuild capability set from CPUID and re-apply the forced-cap overrides
++ * through generic_identify(). This *should* run with interrupts off, otherwise
++ * an interrupt handler might see the capability bits cleared.
+  */
+-static void identify_cpu(struct cpuinfo_x86 *c)
++static void identify_cpu_scan(struct cpuinfo_x86 *c)
+ {
+-	int i;
+-
+-	c->loops_per_jiffy = loops_per_jiffy;
+ 	c->x86_cache_size = 0;
+ 	c->x86_vendor = X86_VENDOR_UNKNOWN;
+ 	c->x86_model = c->x86_stepping = 0;	/* So far unknown... */
+@@ -2028,6 +2025,19 @@ static void identify_cpu(struct cpuinfo_x86 *c)
+ #endif
+ 
+ 	generic_identify(c);
++}
++
++/*
++ * This is safe to run with interrupts on.
++ * The boot CPU can run just this from arch_cpu_finalize_init(), because
++ * the scan part already happened in early_identify_cpu().
++ */
++static void identify_cpu(struct cpuinfo_x86 *c)
++{
++	int i;
++
++	c->loops_per_jiffy = loops_per_jiffy;
++	get_model_name(c); /* Default name */
+ 
+ 	cpu_parse_topology(c);
+ 
+@@ -2154,6 +2164,17 @@ void enable_sep_cpu(void)
+ 
+ static __init void identify_boot_cpu(void)
+ {
++	/*
++	 * The boot CPU's capabilities were already scanned by early_identify_cpu().
++	 * Here identify_cpu() only finalizes them.
++	 *
++	 * 32-bit still needs the full scan here: it sets X86_BUG_ESPFIX (via
++	 * generic_identify()) and the no-CPUID cpuid_level default, which the early
++	 * path does not.
++	 */
++#ifndef CONFIG_X86_64
++	identify_cpu_scan(&boot_cpu_data);
++#endif
+ 	identify_cpu(&boot_cpu_data);
+ 	if (HAS_KERNEL_IBT && cpu_feature_enabled(X86_FEATURE_IBT))
+ 		pr_info("CET detected: Indirect Branch Tracking enabled\n");
+@@ -2178,6 +2199,7 @@ void identify_secondary_cpu(unsigned int cpu)
+ 		*c = boot_cpu_data;
+ 	c->cpu_index = cpu;
+ 
++	identify_cpu_scan(c);
+ 	identify_cpu(c);
+ #ifdef CONFIG_X86_32
+ 	enable_sep_cpu();
+-- 
+2.53.0-Meta
+
