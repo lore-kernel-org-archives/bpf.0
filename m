@@ -1,208 +1,205 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C49D395AD3
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 20:17:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06BC3932FF
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 20:22:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782245837; cv=pass; b=Abr8JDy9UHZkN2mOophxpgwuDqob7e3qLB+FI2EB+hAkcN6AL4hR2kn1pJVksRELI0UjXFai4yiQkfrGoo5Q/FSSM2iJ5Wcxypo/+u9766bnoKoLaAAuFPvbWkeLGEBVMOoBi/VcVSRoPOPzqMqv5/UOQmM0TRilXXbhhVQ8SKY=
+	t=1782246174; cv=pass; b=qbqFZNouYj9h/X+GJ8x2ooNgySqetoVy/0NEpChGI0N/eSLbWrfX36sZJo8vvF+PcT5dHpi7rEWmTKAi7sac+zYHUYtTDfl8+zEE+RcvRBU6rcOcLOzKPmap1k341kd1efSYJ2uM/2HvsSDKCfiucauOJcq1ZIqtLygvfjRIJEs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782245837; c=relaxed/simple;
-	bh=BSYiNfjcqtbilpf9G77ON89zIBv60yDWhHNpR43RcG4=;
+	s=arc-20240116; t=1782246174; c=relaxed/simple;
+	bh=0MzRaeA3gAz8QYO7u/KFgEphT3lY2mqcohRfwTGlkDE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qJX8ZC/d6yi4Vhjpq3TE8A1W3gdKJ/y9xg1Q8wUSayvwzjaiqOv49MFr888+hd7BJAha7ukRbnkv5NFEMgwLdd/LF5yflkW9WgIplqrsv8YQ+o/4ggokyxeadmn5ORnRnU7kjt1hPoY92xra7lguOZbVfeUL0Pq+gS78Hg1msFQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rwflqy9l; arc=pass smtp.client-ip=209.85.214.182
+	 To:Cc:Content-Type; b=trOBYr1DcmNVGn8BWEOb+BpGkHZlNFcAXFtu4j38sEY+8zVwQCqeEoSkaNc7KumUwRRuZhYVQHtrpX6dnhVtdYHkiJ2KTjYz4kThsCEs3FvIIrvPBaATB8PseNj2eoqVQP3ec+UGU/f70lB4bSoDRRUiGmDD5K73jRcUI90P9IQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qQcXQ22h; arc=pass smtp.client-ip=74.125.224.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rwflqy9l"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2c168baac83so1089405ad.2
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 13:17:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782245834; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qQcXQ22h"
+Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-662b95934dcso246818d50.3
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 13:22:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782246172; cv=none;
         d=google.com; s=arc-20240605;
-        b=QAP67PhUranZiZ+Ev1wnE3Uja+v+62ydbmjsSn0DneCbWnDWsatC5hMKd1K5UZzx+L
-         5Jpt6oCkjt58YkQRUUVQYKFSX/mCkX6aiFS7xXP6YIlU0cvAJvI8ecTQSu7/PJGpdsrd
-         wITYv1WZsf7eE1Tsa6AmI8jPOEgsyIa0UO5fjwyUhXpQ+XNq2mVWFXKkWXcqBpi4Ngf0
-         sAH6DdC8DO0tmgoBdsffxWsjD4n0WS75Dy/TFjCzpJtpfCSdUcuiRpgWUtIlXZWmRZcS
-         hbVJ2rd8JTk6C7QctoVbOrluY3f6ozKXg9DHxVavzze7Ws9MMFTHk9Abc9dAYSsIg6SP
-         98/A==
+        b=H0h6bGpDBiinkUhLLuyA5u4AldYLLkRl+jozO7fsV/52NBjy04gV4h3+dDrhbngO08
+         yPDnkOsyF4NGbfpCUq5OWyWn7Iak65SseelW+TQrLoObhe6K7fTE9MuAccE1/z0DLeA2
+         WiRsnqNp3gg7JzOzQQrD6Znae8MzRTAILbn/HoRiLVEziR0UWi2dBdpL9Vf7mkx/VmUO
+         0wYlxNer8oNCpxgfpQLH030d9XZRM33h4E5bybGFuXbWo9nC1ZHiKWGteUtFkv+ps9Kx
+         OYlZlOz7ZPXbvGOmvOSwt/t+RnRexkXk/93BQ4neoo6tIkHKKmbjFr9FOETem6ssT9xL
+         LR2g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=TDkRS+tM+X5MLSQAw7MXiKZlq+UbE5KS08f6slGFBtE=;
-        fh=tqKeuO58RK2Cx/jtvuxN9FLmd5V3oWJE+Bte2phCuE4=;
-        b=Ry2/o2lAOgcP5DyujtJd8wYciR9ZJyQYr2AVGGRHz5eN6vxAhvIICYDG7koqahDeXZ
-         caqo5eCmmsn0w5wkx+vPFF0sqLnqnmWNjvWqZGK2DfwCu92zM/YMKqpyUMihzAgKOYde
-         mV9/HXqME82I/IwTQ2SXgy9vWLBxC3qw2lty0ekmEs1aXl71SB7ghJ1uhnUtl3qVQASw
-         yMxAB1wP+zz3CgCN8q4fr9/9I9bQd6ZvDdFaJ9D6LtzLICdydHj3ZXgVUinNVtBd+SNC
-         dB/V5GH5uwaqq++UkFE3XgCv94vpQJH5R/8o8rZ4lBsOwE/KzMfLXH+oiIXYFUN6YbZ7
-         PGDw==;
+        bh=Z+qPE3ZLfrrjwShyrsUwND+Pow1Vtpy5cQfWnnfwlCg=;
+        fh=YdOyphViGm7HZt5XcIzmxb1QtRqOujuIXjIql2ApGI4=;
+        b=KLDRhKE2or4s4OnMGBi8uYxcpzCkEKkPNg7wCUGbqZ5CnweiFwRJhrSMm5U08NjYfw
+         UdZ0hb91nU263VaI84/S+BU82Bm/v0tlbqYwyCNy+5TDoMlyNZ+3AZgrq3ode2uLuLI9
+         JHNP8TysqWKDtjQZi1IGv+7tSC3Zwa9HqGYyhc5DfMyUz+IEo0osM3qYSlO9rIZiJtaZ
+         Vfz0f6vLif8jqI6DjTvCMUXVAxa2NErdFF4v+/jRCvp9dNIGM6fxs4e4MeV2Rt1Dc6+c
+         EzRb1tcgjz0HIpgrL2otDlTWGEl+NfeCS7PHBinpIArCMGdqv/2pQVT7rUNS258aQ6WW
+         DMLg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782245834; x=1782850634; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782246172; x=1782850972; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TDkRS+tM+X5MLSQAw7MXiKZlq+UbE5KS08f6slGFBtE=;
-        b=Rwflqy9l6lYwnnxOg9tXuY35ffQE6+rinuzNxdVF6gyi+dm6/E8ZE7SKHDkRQVxnR1
-         DNq0KkOjZJiog4cnkOQfxrm27gS9tiQdZJZIiK5knmx5sJjdsh3zCTnKcQrihGkQWwk3
-         gws8mV+zd2m4klHsDCY9V7+y9LtGEQWfqLlPgbrXzxk1E7JXTAJr2mujI8poBeeBjEDx
-         nKq3qVyhccHZSCKsqiN969SBOffc7yPWSeVT9Z2LhIEtGNOT+YoEPIFQDUCajxFXYIFn
-         72C2PaJ9APgAFgxxH+aMhaiAr4bD2dgoIjalq0rxJ2HFqkcjLmKCyAUkmRJsCsHJ5GQq
-         ojZw==
+        bh=Z+qPE3ZLfrrjwShyrsUwND+Pow1Vtpy5cQfWnnfwlCg=;
+        b=qQcXQ22hWZJ7F1UQ0BH1Y4R3nZB9kSEsDq1gYLUJY3CnNPM6fh8iBqcE6Fe+ML9rmu
+         4XalIbl6IOtY+dcwIwRAHAlNr4sB2I05SAelm8LDqhUwNIbiGkIOaEHcujNV4wdwZhxt
+         WW48KOrE/BygQcLIF0MpXlDA63r0AR8Vi1RN8KGUS+9R67kF8JazwpVBzK/mMzXstFLG
+         hxHjYEem1d8H/Ur0glQuTo/NO+s4VP1hHq3pSgBWeL8Tj656SfXobPgjICd4ScBYCUr3
+         NBRrdRGAI/azHHTpmaQ02Ikprqg6Vc985/XzGvXuEDRX+9IpAqwSu6XVd9IhXDVL8xdq
+         g3sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782245834; x=1782850634;
+        d=1e100.net; s=20251104; t=1782246172; x=1782850972;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=TDkRS+tM+X5MLSQAw7MXiKZlq+UbE5KS08f6slGFBtE=;
-        b=qlbJrf8aBoL/46m0wPzT7KAmMRGDZWWqKWGQBI+Wej1IHPOLH4QOSZSGxEDxesg6MG
-         xojfLnZko7sTnFMIjbSZj12k5ZO+RJEiaI54Bv1H7nVHmpQb1imcpxfVOSSHke90qAmO
-         U62OCIbXwpAn+XB5+b/gVwMOjLSn36Wxif2g7rNJynh8T7i58S46EpaAs5aIiy9Oeqx3
-         aadaRjOQLo6KEYX7etvNn9n1yedUkuxSocXPDNZN4bVmRPk97q2aK2OKcEMJkYOrCAWK
-         e+GdrUP00Kkvn5vON6GuMxEWzSTDx9uEHpRhrSBOR7jeKnslzyFgohJZP53RI3ND/ZGw
-         nicw==
-X-Forwarded-Encrypted: i=1; AHgh+RqQ0bGYs8E4DPLi3NYlxNJEqdnsHKk/nJrRat1aLZy+MzODKvEuwEVE0c7wFAXdogb3BeY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxO4kr4UfYvToPvcPKCgVlPo3qO/98919v+8wqpxp1vKpwIVhgu
-	intTxfPF6PnoHW6b9KYVZeG3ZQpkk51ZLV3x/J6CBZqY9ViG/woYOWzlM9omHdIS53cKW/+fsnZ
-	skXFk2qOlEjUWyifJhuauWeDyTRb8a+g=
-X-Gm-Gg: AfdE7cltJrOHCoS/hqtC3DGyanv9VNBeeIX+E/tZ9adBC/LPMBsnSy4CFGn9k10AWI0
-	bPHZaTYZ2iLP1uGBQd8DE0QMwRAT7L6ZNQ0z1IZ6eIeeg6ODXPjMKrCu7GSPXfS0E9kU8NWl8Ce
-	TKh/V/rmZEeppxG720RxRmhh4du/yyhQGdohihBxKi3J6JCJnyVLXbPKkTdCgFnZoxEWHDk3TOj
-	RD2eHYLYfZi4oPn+sCRwlCYBMrBdxxjf0aqwswInsMXZVq7tWtfVx5qDaHyNxWd5nakLdKUhaAs
-	wiyVGMDxdRGqgVsGF1NcVYLu0R7sNrraTViLhJOLwuKhNZ5hWk2SYCGHuyYnfi93PkhQ0w==
-X-Received: by 2002:a17:903:41cf:b0:2bf:bd17:90d4 with SMTP id
- d9443c01a7336-2c7e151d8d2mr4280125ad.28.1782245833593; Tue, 23 Jun 2026
- 13:17:13 -0700 (PDT)
+        bh=Z+qPE3ZLfrrjwShyrsUwND+Pow1Vtpy5cQfWnnfwlCg=;
+        b=YJ1o8NS+VqA/kBGphOYa8aQMhvLrkekvxMGYOMyf/PuixfOza1CC3cOfWavpUEAeUf
+         hwxsCRIZRkHn6m49h4OZMAQLIJluO3OE97cGTQAivV2d0dt/o4F1w9DNmBoVxUKDrd5p
+         YMaDzLikut7sVWHl6+p/Ro5ohD68KjT+/bMrZm4isFxVvktdyTN6MsvU7GTEAzY7mF+e
+         FHo/jAS6HrC/VJer3jLNIlcPmPfjzQBrgIcw1QkZ/4Aw0kFLWfPm5ghLjk0C1F0Az9ha
+         1Y9y0UY5paDp2DTPE59PaixqiUxUshu4WOGh16TG/1anCD2AYAWicfn2LrnMF3RyTTH9
+         Kzow==
+X-Forwarded-Encrypted: i=1; AHgh+Rq501C72WQmjUb3ctccuY9NrcxNH3Gqqf/HBw0vSRbL6M6svW3ihTZ7sQdJWKoX8o4z0Lo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJGGoefbPjIBuLWpUhMmQaPop8GPsI8OjPbRBK5Rusvg190LKw
+	Lti/8Thlm3k9fjMQ0Jpk/N7qTBxI5a7NvCJTlRKi0x3huUB8Sz3zccFT0hTr63QfCdJ+b9u5YJB
+	cOgZlAuXqNDMsgfS9Jz+Cx/SYaMHF6Ne3KB2Z
+X-Gm-Gg: AfdE7ck6WecGUN4edCeZ9UpARWw0s5W73IzJ3rBCXzPCehqINB4vW36RM8B16LWeECN
+	SZ1VNLMrZ9O9UwbAfgLENgwZCJXE+wyVWV+q+SDGNSjyo/r+KvZW2nqIaoTVErrfovPniXuaIGt
+	aQP5t7h/8ehrKhuE4OLZY7zjhTHbMwr1w+SjKhuCGu7Hxd3PBFy8kBaJz3ycWk0w/uVpvfHoqVc
+	DiG7N1usPOntulW2gxh/hpLEYSiWfb8+deGDRwN8VLkfUOGg/UR5h6p5rwLDpAsuqs8ft/wjoxS
+	+OZYyWPZ2AwQ
+X-Received: by 2002:a05:690e:1685:b0:661:1669:b784 with SMTP id
+ 956f58d0204a3-66359e1b367mr4192169d50.10.1782246171839; Tue, 23 Jun 2026
+ 13:22:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org> <20260618-bpf-ringbuf-fixes-v2-7-33fde039ddf3@kernel.org>
-In-Reply-To: <20260618-bpf-ringbuf-fixes-v2-7-33fde039ddf3@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 23 Jun 2026 13:16:58 -0700
-X-Gm-Features: AVVi8CdEpGZ38igQlR0_mWtEWrlfHpdcY4rIGcGw_cXgZ0_cBsNYkoAZNe89-1w
-Message-ID: <CAEf4Bzay6HokFa2CTsoQt2SLQ-3WWC+EUe0b9KpT4Ju2TvBg4A@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 7/8] libbpf: ringbuf: Use compiler atomics
-To: Tamir Duberstein <tamird@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Andrea Righi <arighi@nvidia.com>, Xu Kuohai <xukuohai@huawei.com>, 
-	Andrea Righi <andrea.righi@canonical.com>, Bing-Jhong Billy Jheng <billy@starlabs.sg>, 
-	David Vernet <void@manifault.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Andrew Werner <awerner32@gmail.com>, 
-	Zvi Effron <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>
+References: <20260623-bpf-sk_msg-split-unix-v2-1-ca7a626a94a5@cloudflare.com>
+ <CAAVpQUBsQFFxJFDnJzxmsER3bOjm=zqJ5P5MSeW_T9v-4639cw@mail.gmail.com>
+ <87v7b9ysep.fsf@cloudflare.com> <CAAVpQUBARp1qCEomgzWXVe35WatdaswujVLku+RESm_LW0dE7Q@mail.gmail.com>
+ <CAADnVQL2pfQ0BoN-vWcuCpbOBBKq_rM7Bp7P4XdLMFER5LGSDg@mail.gmail.com> <87mrwlyqg4.fsf@cloudflare.com>
+In-Reply-To: <87mrwlyqg4.fsf@cloudflare.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Tue, 23 Jun 2026 13:22:38 -0700
+X-Gm-Features: AVVi8Cc_kvY2-hiFq-rqmW8Jf1KhrQ23ATZsBbzS0ewBwc43J2MEhRPb9SEpfFU
+Message-ID: <CAMB2axMVhJJpP5HZtDFyQLLbKoRxhW08rj1zGRtWtgDkfYaVNA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpf, unix: Guard sk_msg-dependent code behind CONFIG_NET_SOCK_MSG
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Jiayuan Chen <jiayuan.chen@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Network Development <netdev@vger.kernel.org>, kernel-team <kernel-team@cloudflare.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 18, 2026 at 5:27=E2=80=AFPM Tamir Duberstein <tamird@kernel.org=
-> wrote:
+On Tue, Jun 23, 2026 at 1:04=E2=80=AFPM Jakub Sitnicki <jakub@cloudflare.co=
+m> wrote:
 >
-> Consumer-side ring buffer code uses architecture-specific smp_* helpers
-> for shared memory accesses.
+> On Tue, Jun 23, 2026 at 12:33 PM -07, Alexei Starovoitov wrote:
+> > On Tue, Jun 23, 2026 at 12:31=E2=80=AFPM Kuniyuki Iwashima <kuniyu@goog=
+le.com> wrote:
+> >>
+> >> On Tue, Jun 23, 2026 at 12:21=E2=80=AFPM Jakub Sitnicki <jakub@cloudfl=
+are.com> wrote:
+> >> >
+> >> > On Tue, Jun 23, 2026 at 09:08 AM -07, Kuniyuki Iwashima wrote:
+> >> > > On Tue, Jun 23, 2026 at 4:20=E2=80=AFAM Jakub Sitnicki <jakub@clou=
+dflare.com> wrote:
+> >> > >>
+> >> > >> Prepare to decouple BPF_SYSCALL config option from NET_SOCK_MSG. =
+When
+> >> > >> completed all code paths related to sockmap-based redirects shoul=
+d be
+> >> > >> guarded by BPF_SYSCALL && NET_SOCK_MSG to allow users to opt out =
+by
+> >> > >> disabling NET_SOCK_MSG. The implementation of sockmap as a contai=
+ner for
+> >> > >> socket references would remain under BPF_SYSCALL.
+> >> > >>
+> >> > >> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+> >> > >> ---
+> >> > >> Changes in v2:
+> >> > >> - Handle prot->recvmsg being NULL (Sashiko)
+> >> > >> - Elaborate on the end goal in description
+> >> > >> - Link to v1: https://patch.msgid.link/20260622-bpf-sk_msg-split-=
+unix-v1-1-d7e0cb7bb03b@cloudflare.com
+> >> > >> ---
+> >> > >>  net/unix/af_unix.c  | 4 ++--
+> >> > >>  net/unix/unix_bpf.c | 6 ++++++
+> >> > >>  2 files changed, 8 insertions(+), 2 deletions(-)
+> >> > >>
+> >> > >> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+> >> > >> index f7a9d55eee8a..84c11c60c75f 100644
+> >> > >> --- a/net/unix/af_unix.c
+> >> > >> +++ b/net/unix/af_unix.c
+> >> > >> @@ -2675,7 +2675,7 @@ static int unix_dgram_recvmsg(struct socket=
+ *sock, struct msghdr *msg, size_t si
+> >> > >>  #ifdef CONFIG_BPF_SYSCALL
+> >> > >>         const struct proto *prot =3D READ_ONCE(sk->sk_prot);
+> >> > >>
+> >> > >> -       if (prot !=3D &unix_dgram_proto)
+> >> > >> +       if (prot->recvmsg)
+> >> > >
+> >> > > There is no reason to have this dead branch when
+> >> > > CONFIG_BPF_SYSCALL && !NET_SOCK_MSG.
+> >> > >
+> >> > > Let's compile out all sockmap code when both configs
+> >> > > are not enabled.
+> >> > >
+> >> > > Since AF_UNIX differs from TCP/UDP, it can take the
+> >> > > simpler approach.
+> >> >
+> >> > Okay, will put the whole file behind hidden config option like so:
+> >> >
+> >> > --- a/net/unix/Kconfig
+> >> > +++ b/net/unix/Kconfig
+> >> > @@ -30,3 +30,8 @@ config UNIX_DIAG
+> >> >         help
+> >> >           Support for UNIX socket monitoring interface used by the s=
+s tool.
+> >> >           If unsure, say Y.
+> >> > +
+> >> > +config UNIX_BPF
+> >>
+> >> Maybe UNIX_BPF_SOCKMAP or something.
+> >> bpf_iter is supported without this config.
+> >
+> > I don't like where it's going.
+> > I strongly dislike new config knobs.
+> > I'd rather remove existing knobs.
+> > What is the motivation?
 >
-> Use compiler atomics instead. They provide equivalent acquire and
-> release ordering through a portable userspace interface and allow the
-> next commit to use compiler fences in the wakeup protocol without mixing
-> atomic interfaces.
->
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-> Assisted-by: Codex:gpt-5.5
-> Signed-off-by: Tamir Duberstein <tamird@kernel.org>
-> ---
->  tools/lib/bpf/ringbuf.c | 20 +++++++++++---------
->  1 file changed, 11 insertions(+), 9 deletions(-)
->
-> diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-> index 1c5bce2b5e12..141f2cbe56eb 100644
-> --- a/tools/lib/bpf/ringbuf.c
-> +++ b/tools/lib/bpf/ringbuf.c
-> @@ -270,14 +270,14 @@ static int64_t ringbuf_process_ring(struct ring *r,=
- size_t n)
->         if (n =3D=3D 0)
->                 return 0;
->
-> -       cons_pos =3D smp_load_acquire(r->consumer_pos);
-> +       cons_pos =3D __atomic_load_n(r->consumer_pos, __ATOMIC_ACQUIRE);
->         do {
->                 got_new_data =3D false;
-> -               prod_pos =3D smp_load_acquire(r->producer_pos);
-> +               prod_pos =3D __atomic_load_n(r->producer_pos, __ATOMIC_AC=
-QUIRE);
->                 /* Positions wrap; the consumer cannot logically pass the=
- producer. */
->                 while (cons_pos !=3D prod_pos) {
->                         len_ptr =3D r->data + (cons_pos & r->mask);
-> -                       len =3D smp_load_acquire(len_ptr);
-> +                       len =3D __atomic_load_n(len_ptr, __ATOMIC_ACQUIRE=
-);
->
->                         /* sample not committed yet, bail out for now */
->                         if (len & BPF_RINGBUF_BUSY_BIT)
-> @@ -291,14 +291,16 @@ static int64_t ringbuf_process_ring(struct ring *r,=
- size_t n)
->                                 err =3D r->sample_cb(r->ctx, sample, len)=
-;
->                                 if (err < 0) {
->                                         /* update consumer pos and bail o=
-ut */
-> -                                       smp_store_release(r->consumer_pos=
-,
-> -                                                         cons_pos);
-> +                                       __atomic_store_n(r->consumer_pos,
-> +                                                        cons_pos,
-> +                                                        __ATOMIC_RELEASE=
-);
+> The goal is to compile out sockmap bits that use sk_msg.
+> NET_SOCK_MSG is natural, exisiting candidate.
+> New knob wasn't my idea.
 
-this almost fits 100 characters, I'd keep it as single line
+I'm also missing the big picture here.
 
->                                         return err;
->                                 }
->                                 cnt++;
->                         }
->
-> -                       smp_store_release(r->consumer_pos, cons_pos);
-> +                       __atomic_store_n(r->consumer_pos, cons_pos,
-> +                                        __ATOMIC_RELEASE);
+sockmap already holds socket references today. You can store and look
+up sockets without attaching any verdict/parser program, and no
+redirect happens. So if the goal is to use sockmap purely as a socket
+container without the sk_msg fast-path overhead, what does a
+compile-time NET_SOCK_MSG knob add over the runtime checks?
 
-this definitely fits 100 characters, let's keep single line for readability
+I am also not sure if NET_SOCK_MSG is right. It is broader than
+"sockmap redirect". It is selected by TLS and {INET,INET6}_ESPINTCP.
+Because those select it, it can't be toggled independently.
+
+Could you share the concrete use case you have in mind, and whether
+this came out of an earlier discussion or thread upstream?
 
 >
->                         if (cnt >=3D n)
->                                 goto done;
-> @@ -413,8 +415,8 @@ struct ring *ring_buffer__ring(struct ring_buffer *rb=
-, unsigned int idx)
+> Alternatively, we can do this to avoid the extra knob:
 >
->  unsigned long ring__consumer_pos(const struct ring *r)
->  {
-> -       /* Synchronizes with smp_store_release() in ringbuf_process_ring(=
-). */
-> -       return smp_load_acquire(r->consumer_pos);
-> +       /* Synchronizes with the release store in ringbuf_process_ring().=
- */
-> +       return __atomic_load_n(r->consumer_pos, __ATOMIC_ACQUIRE);
->  }
->
->  unsigned long ring__producer_pos(const struct ring *r)
-> @@ -422,7 +424,7 @@ unsigned long ring__producer_pos(const struct ring *r=
-)
->         /* Synchronizes with smp_store_release() in __bpf_ringbuf_reserve=
-() in
->          * the kernel.
->          */
-> -       return smp_load_acquire(r->producer_pos);
-> +       return __atomic_load_n(r->producer_pos, __ATOMIC_ACQUIRE);
->  }
->
->  size_t ring__avail_data_size(const struct ring *r)
->
-> --
-> 2.55.0.rc0.159.gbe5d7338c2
+> ifdef CONFIG_BPF_SYSCALL
+> unix-$(CONFIG_NET_SOCK_MSG) +=3D unix_bpf.o
+> endif
 >
