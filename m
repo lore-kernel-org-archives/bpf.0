@@ -1,274 +1,232 @@
-Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D961D3AEF37
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 21:20:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782249635; cv=none; b=uE5Yz81VNZS9rcNtYkJWSqYbZPfvuRFsYRq3Nn0XgVb3DAYY9tOB9zwV5F1nmVlWghxKu8SBRK9Sr+5aYKnAi+2G0Jiwp1bx+74yakKSmm9LmGe2cQ6TpuKxpy27p565xRXNfurxXjxdRRkLfYXY8xnMiSMyFN4T8WBKqJw4UM8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782249635; c=relaxed/simple;
-	bh=heCvUk4cU6TW11kyzlttDxEAlLuvzwLEKepx1ZO1aQ0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Nsna/ld+vG3kZjqNiMma2g2VuRPnSIbXRt8+9Sq+HZPhQhm8F6/wji6CM9JWsZpGATf3t1/oq6XEV8Oy2tOov20MTT1nZu3kFUKxEcJBKPPqHLduactvQMva3K0Pjag2fa9OJaJ0FmVkWkRTZyMWiyE0l8FRzUweSNOwyosc1b0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GjVVS/PS; arc=none smtp.client-ip=74.125.82.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811953AD530
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 21:26:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782249980; cv=pass; b=QUAGJYGcIrgnYcRXXUTRPjNjRrOAEz0g4x5nXBbCRMrQFzu1X4+3JLFWJdCWHqPlkozbG/HVKJcvq0Fj8646WYrDIMr3uqgFhCuUpuKciHVhr6I8jV40CRmIQIGshWhhyeq0tBY1SBQTED0V0OpXteLcoRLzC31MQMOPwvlzeSI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782249980; c=relaxed/simple;
+	bh=kmbhr2XiGYBwOOko7mqYKlF/rFd5r96q8J/WiCcO8aY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hvC+qu0L46H1uRgA+rEavsRgEYzaFqfG9yiCe6L+RWl7SgRXjRJWNRXJ90VOtV1yh+jPJluCEtlwQzp1gU6RReQNwnCXgW7FuHTVbfY9RyEVrJWb8D/7zEEj9vbUwpRFa6o+ZAg222BTOlfdgLJJE259aYS0ZUMcs9Q8XUuQ110=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LDpawnYy; arc=pass smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GjVVS/PS"
-Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-30bcdf8232fso619531eec.0
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 14:20:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LDpawnYy"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-37c64d34032so765190a91.0
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 14:26:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782249978; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Lc8qEiLDIPEnFODgRavoPr/5pbi1rjdRIR8qqXOvu8q0YyCyOAuj1Owst1CionFAFb
+         m63PUnDi7XkENjoADvnA1JkqxXN85RM3c48gRgSOQE4FqrqBhl2IZ9YLjKmyQDZQ/wIP
+         xIOg2uvyupgZ/2At921tp/BnwjQe2huldsia5Iu33wvYADG0sJzkV22IjUGdim37lrD8
+         eklZp/vzg0txT8zEdGSiloLYaJGgtp6ZwJVwhUy4ZdEV/x1Smqo5Ci7+q/l7cDi8QENh
+         LiHka1Z5cCNpQg9CGwiG03Wkk11DooZrXdtb496spIJ/2gUmqm9MHCarzk2mINDiQqEl
+         21kw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=USp7TphAsEpxVcFBP5z7GL6uCnYY56XN4R2T/hQLw10=;
+        fh=ryI4X5W60VdA5eqVqHSJUMx3x3JDjcPZJ67QrR6w5aQ=;
+        b=S5RV/ziUbb+3S4ILyyxuf36lKz1zm8c6c/BtO5YfPKcSGiWCWcR9PLdmqDMamCueyl
+         d3Qitu/fnWx/cQAMUgTRPOjU71aADwXdpDQyiZfK9E2sMiH8IaoDM4buvjTDNHSPJAMs
+         ILmfZOVwrVDido6qai8zVle5o9UEjdUxnkFkr/KIu5OJNZFCRwFe9hnhgg3y21QXQ+uU
+         v+sjbciYftmgUkpS8f+idRmaiPBqUF3AAtNRpeC6pRUn4zl+sDKzVuT/18VxoDX/C8ns
+         vKV5yr6i9t9ofEEL4w10l+1LWdYlXVTuETCbnvDdiIHOafHYrQMm5+tcp/yxJlwAWqw0
+         xRKg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782249633; x=1782854433; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=a/+S9qr7nE6bK+Cd6tfPFb7vlgszY5h4mIVFvhxbHBA=;
-        b=GjVVS/PSNDhi9esajvw/ZTrZG0DFllBLlb+xLtfWFscctMLGODGp8/VBwtlxOSAPko
-         DoQ14RUyWPAwLRw3M8PvHxqNZDkIbkBupR1U/WopKZpC9V2tNs3ocXzQBW0ivi44yjXR
-         mJlv0QOTkovhZFEuujawmRlnE3+htoJNr6IVGSq8t1fHfKtiplWzx8W/7J+hrWl/xGG2
-         jUefL4Ol7dHdcUMGLexpEklgspihn9XeiZVoxJs/su3RpfHjcv7KL1bNMkE7PzmC4N1T
-         R0r2x28b6ZkPOiBUoiQUw4MTDm9hSSzIDjcc19V/nNSMzKPdmq1dFyNgtXDmbAoA04VL
-         FwGg==
+        d=gmail.com; s=20251104; t=1782249978; x=1782854778; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=USp7TphAsEpxVcFBP5z7GL6uCnYY56XN4R2T/hQLw10=;
+        b=LDpawnYyvALN7qgjd3o4/rpDjz25DIhZwCS6M8RjOO4tryuhSPM6CNoMBbpTbKm7v5
+         bwwMa7k+LdSBZcqZ9pUOUFdkyvmgbfRzLhcK+ko7NjIDNCHpGaGEcXy0TOF5+X2Kw/dK
+         CW3Cxm3egBXCgMrHn4dhv6rcjdKTdOP8JIVTvvFvN/hQsaWR4SYQ4BA7+vnmfCSesbVv
+         UNexP89a4xEWR81PgWXpuRvXiPwEfzxeot2VOlTaPrd7v3hkXauFXPp+1a7ECiwokcqA
+         szvLevkL2FSt83IiHyw3bXvOQOnSeGks/UxZho9GFtFXeNGXgNBbmd/zr21XUxA034Ae
+         uASw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782249633; x=1782854433;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a/+S9qr7nE6bK+Cd6tfPFb7vlgszY5h4mIVFvhxbHBA=;
-        b=kzD+ztPWdP/7GlrvPQ0i/vnn3ct+ykscTSjgb8fZIMn3S80ylZRgaQi/Hc1uVNp74k
-         mMWk3RMSZDwSlRbrvyB1OJ0C8vhI55h48s+eisMhnDk8I9sq5sN8lJPE6XkMtsODlw4B
-         w2e97HNWnsD3eUNpt4IpRq7MlZvWipInydFFQTEuR1J3fBkguH16lv5nRGqr619zFoNr
-         lnqQph63uiots0ePqMhsb+RUBQyk/ysVi6VMAMpHoQiX9p6ztnN2MABW0Ir52cjZ1z4f
-         ZLMMFL0KqHAJJiQc9zNUtWT+FTjh6xr6jPt66sV7qvgBkb0KPSMXL+aKtcKFj0sww32k
-         lvSQ==
-X-Forwarded-Encrypted: i=1; AHgh+Ro6M5uVfwRfLXTTjemlK2p6jO0pf2yxomDAVo0QIQ2s94pa8CJkLKiSxbEw98hBE8s/XpA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyzKddcIqOYQY7r3EHnuPM5OmPrhw5qDL5WW4hUta5vf2IOcjeh
-	OAM1O2jgdQfGMMIQiZlA1cW8o6Ns+ZJrnWlNfQu2tQ+jNCYdCl+jFyG6
-X-Gm-Gg: AfdE7ck6RInKlGQ/cGJxbL3D11HK6Ls3WcoNGz0YWyvGaPsMA16y63EZmufYAmmY951
-	o7ZDue6Ey7Ny6DS6D0Aap79HCaPMBrAliPdfS7DRwFQGEOyM3iNLt4WEK8HaMVe4R+P3AhXSToQ
-	+mnPUN7UAv8/d0tXf6CtVTNBYALKWBd/5BnD4A7psWLV84VjNAzb0sC8cdSPniqUamk6TIkU3Fn
-	3I3N4+HJPMMqRC1ia1rjYlC/zXrzChF1+y7S0brbn24IST9IS+yY0bakdJT8Xpkpzw0r3IyWYVR
-	+WFqrkFGImROO00iSe+OT0YMs6QY5IeiZG4bUGHJ94XdSRz4gxnygK6UeCluKVgcMSdTYw7JRNs
-	A4gL37NHfRsPtyRTCB/FMlV5gXwv3Oi7RAAoQFwm67co3PXnsCJ50G6+33LrNdREdMDaTBx1iHV
-	GVfwxWknEvp4vgBtrTUprjPAYr8gfuc/EYujCHEVo3m6h5ih84U7Pa0hcDzM6rYgCtZniShVmAD
-	bKb
-X-Received: by 2002:a05:7300:2d15:b0:30c:52c5:6e52 with SMTP id 5a478bee46e88-30c6930b55fmr969763eec.22.1782249632833;
-        Tue, 23 Jun 2026 14:20:32 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:20e3:c15b:de5e:66e6? ([2620:10d:c090:500::e22])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1be5c5desm18886627eec.28.2026.06.23.14.20.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2026 14:20:32 -0700 (PDT)
-Message-ID: <58241a30cf4ca5caf71ecde235c0d1967086fbd5.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 03/17] bpf: Add verifier diagnostic event log
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
- Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Tue, 23 Jun 2026 14:20:30 -0700
-In-Reply-To: <20260619205934.1312876-4-memxor@gmail.com>
-References: <20260619205934.1312876-1-memxor@gmail.com>
-	 <20260619205934.1312876-4-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+        d=1e100.net; s=20251104; t=1782249978; x=1782854778;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=USp7TphAsEpxVcFBP5z7GL6uCnYY56XN4R2T/hQLw10=;
+        b=EoA+S7NwFLKg3YP8q4M+OLIlkEds/wAfVg3zJzRE/W8baR2UHwpwWmjTWV57ZHg83A
+         8nztOksFJ53/PP0VOH/cB+aoBt4eILjQHIkoH/DV0+ypLIyJrpCRBxXI/zS731rYIaCI
+         HFOcaaKPW498dwQXKb8BAUOv1lD0bUo6KrT6DOnohHR51aLysfDuE+Q1IT6Mk4DKRWyo
+         lrLIv4wG2YT2IqNZmfvMw87UcxJ25Ez2e6pzojjjVZGayDSyfq1O509sjJo96j20BVSl
+         L2q1UsuwL24QonyLAXc38+z8zZj8m36g2Bbn2luDyABQT5RQJlRfeit7HTDArYft5KG2
+         strQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpCcG4COlw6bRzQWjMlTscXW0jfMbYSIkjN//2UmY284WGD+iCz2ZCee/dlBmW3Lb8j61s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywq47hpvAZ+xmNX2unVgFoaoRpiHdOPba/rSkNNqg5smoS81tVi
+	pCvj+xui/Y42C1sDqbwld6yYVPLOBWuvm1heB7/r04pCpEva+RYQcB8AWIrM/nhbSZC7OyT/XCq
+	/F0WL1Qo//P/GAh8A2zHleY4aPF+ctFk=
+X-Gm-Gg: AfdE7ck8+ny7DPWrsTQxbKVkVU5q/ZEwlNvjCKl7qzsRqziVeV99oNknLASqyuI6Wyg
+	uy9a9mK3mrSH6uuPgPozoi+IT1DBhqnCG1TOtKsAWbffPGQFBKZE5+ZLU9aTXkUG/sqnPrPWAw/
+	pB3cqpXsmNlbOA/K0e/89x9+FR5ZrTfV3yp5Z4gFio+9sFz2ABVfG/104QZ4g5B9iMRiiOC7FM1
+	LyC59S/HL8mN4ILDLkRtNnXXds2MNsoRBTd4JrsQXxbQB0IJMrXqqrQ8zilCGxAGMFt9WfEdf5L
+	Qy/1ZxW3F/V6lLuDAGNWH/Q+p4QJU02pzc4Wpapeu5hitZXoSg/a84Ve043bYeevq/fvDOf9Iw/
+	GlgUMnWyEUZvhvsTmXY87q/lA
+X-Received: by 2002:a17:903:1a0f:b0:2b2:4bbc:14b0 with SMTP id
+ d9443c01a7336-2c7c3ff8e25mr45033955ad.20.1782249977555; Tue, 23 Jun 2026
+ 14:26:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260623-bpf-sk_msg-split-unix-v2-1-ca7a626a94a5@cloudflare.com>
+ <CAAVpQUBsQFFxJFDnJzxmsER3bOjm=zqJ5P5MSeW_T9v-4639cw@mail.gmail.com>
+ <87v7b9ysep.fsf@cloudflare.com> <CAAVpQUBARp1qCEomgzWXVe35WatdaswujVLku+RESm_LW0dE7Q@mail.gmail.com>
+ <CAADnVQL2pfQ0BoN-vWcuCpbOBBKq_rM7Bp7P4XdLMFER5LGSDg@mail.gmail.com>
+ <87mrwlyqg4.fsf@cloudflare.com> <CAMB2axMVhJJpP5HZtDFyQLLbKoRxhW08rj1zGRtWtgDkfYaVNA@mail.gmail.com>
+ <878q85yoy5.fsf@cloudflare.com>
+In-Reply-To: <878q85yoy5.fsf@cloudflare.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 23 Jun 2026 14:26:06 -0700
+X-Gm-Features: AVVi8CeY7z9Rj08nBW_kFc0hpBI6wW6ndWShy7Xbr0q7dvXzSQPEb0mb2mBVoEs
+Message-ID: <CAADnVQKr1XisnigNsBw7CsXxY3Xn5KOGtX_YDdXmNMZyJy4_Cw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpf, unix: Guard sk_msg-dependent code behind CONFIG_NET_SOCK_MSG
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Amery Hung <ameryhung@gmail.com>, Kuniyuki Iwashima <kuniyu@google.com>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Jiayuan Chen <jiayuan.chen@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Network Development <netdev@vger.kernel.org>, kernel-team <kernel-team@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2026-06-19 at 22:59 +0200, Kumar Kartikeya Dwivedi wrote:
+On Tue, Jun 23, 2026 at 1:36=E2=80=AFPM Jakub Sitnicki <jakub@cloudflare.co=
+m> wrote:
+>
+> On Tue, Jun 23, 2026 at 01:22 PM -07, Amery Hung wrote:
+> > On Tue, Jun 23, 2026 at 1:04=E2=80=AFPM Jakub Sitnicki <jakub@cloudflar=
+e.com> wrote:
+> >>
+> >> On Tue, Jun 23, 2026 at 12:33 PM -07, Alexei Starovoitov wrote:
+> >> > On Tue, Jun 23, 2026 at 12:31=E2=80=AFPM Kuniyuki Iwashima <kuniyu@g=
+oogle.com> wrote:
+> >> >>
+> >> >> On Tue, Jun 23, 2026 at 12:21=E2=80=AFPM Jakub Sitnicki <jakub@clou=
+dflare.com> wrote:
+> >> >> >
+> >> >> > On Tue, Jun 23, 2026 at 09:08 AM -07, Kuniyuki Iwashima wrote:
+> >> >> > > On Tue, Jun 23, 2026 at 4:20=E2=80=AFAM Jakub Sitnicki <jakub@c=
+loudflare.com> wrote:
+> >> >> > >>
+> >> >> > >> Prepare to decouple BPF_SYSCALL config option from NET_SOCK_MS=
+G. When
+> >> >> > >> completed all code paths related to sockmap-based redirects sh=
+ould be
+> >> >> > >> guarded by BPF_SYSCALL && NET_SOCK_MSG to allow users to opt o=
+ut by
+> >> >> > >> disabling NET_SOCK_MSG. The implementation of sockmap as a con=
+tainer for
+> >> >> > >> socket references would remain under BPF_SYSCALL.
+> >> >> > >>
+> >> >> > >> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+> >> >> > >> ---
+> >> >> > >> Changes in v2:
+> >> >> > >> - Handle prot->recvmsg being NULL (Sashiko)
+> >> >> > >> - Elaborate on the end goal in description
+> >> >> > >> - Link to v1: https://patch.msgid.link/20260622-bpf-sk_msg-spl=
+it-unix-v1-1-d7e0cb7bb03b@cloudflare.com
+> >> >> > >> ---
+> >> >> > >>  net/unix/af_unix.c  | 4 ++--
+> >> >> > >>  net/unix/unix_bpf.c | 6 ++++++
+> >> >> > >>  2 files changed, 8 insertions(+), 2 deletions(-)
+> >> >> > >>
+> >> >> > >> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+> >> >> > >> index f7a9d55eee8a..84c11c60c75f 100644
+> >> >> > >> --- a/net/unix/af_unix.c
+> >> >> > >> +++ b/net/unix/af_unix.c
+> >> >> > >> @@ -2675,7 +2675,7 @@ static int unix_dgram_recvmsg(struct soc=
+ket *sock, struct msghdr *msg, size_t si
+> >> >> > >>  #ifdef CONFIG_BPF_SYSCALL
+> >> >> > >>         const struct proto *prot =3D READ_ONCE(sk->sk_prot);
+> >> >> > >>
+> >> >> > >> -       if (prot !=3D &unix_dgram_proto)
+> >> >> > >> +       if (prot->recvmsg)
+> >> >> > >
+> >> >> > > There is no reason to have this dead branch when
+> >> >> > > CONFIG_BPF_SYSCALL && !NET_SOCK_MSG.
+> >> >> > >
+> >> >> > > Let's compile out all sockmap code when both configs
+> >> >> > > are not enabled.
+> >> >> > >
+> >> >> > > Since AF_UNIX differs from TCP/UDP, it can take the
+> >> >> > > simpler approach.
+> >> >> >
+> >> >> > Okay, will put the whole file behind hidden config option like so=
+:
+> >> >> >
+> >> >> > --- a/net/unix/Kconfig
+> >> >> > +++ b/net/unix/Kconfig
+> >> >> > @@ -30,3 +30,8 @@ config UNIX_DIAG
+> >> >> >         help
+> >> >> >           Support for UNIX socket monitoring interface used by th=
+e ss tool.
+> >> >> >           If unsure, say Y.
+> >> >> > +
+> >> >> > +config UNIX_BPF
+> >> >>
+> >> >> Maybe UNIX_BPF_SOCKMAP or something.
+> >> >> bpf_iter is supported without this config.
+> >> >
+> >> > I don't like where it's going.
+> >> > I strongly dislike new config knobs.
+> >> > I'd rather remove existing knobs.
+> >> > What is the motivation?
+> >>
+> >> The goal is to compile out sockmap bits that use sk_msg.
+> >> NET_SOCK_MSG is natural, exisiting candidate.
+> >> New knob wasn't my idea.
+> >
+> > I'm also missing the big picture here.
+> >
+> > sockmap already holds socket references today. You can store and look
+> > up sockets without attaching any verdict/parser program, and no
+> > redirect happens. So if the goal is to use sockmap purely as a socket
+> > container without the sk_msg fast-path overhead, what does a
+> > compile-time NET_SOCK_MSG knob add over the runtime checks?
+>
+> Sure, let me clarify. It's about the maintenance overhead.
+>
+> sockmap-based redirects are a rather niche feature with few users, for
+> which we've been getting quite a few bug reports since AI came along.
+>
+> We're not using it internally at Cloudflare, so I don't really have a
+> good reason to justify time spent on these bug reports.
+>
+> Hence the move to put sockmap-based redirect behind a config option,
+> which you can enable at your own risk. Or which we can deprecate, but
+> that's not really my call.
 
-> Add an environment-owned diagnostic history for verifier reports. Event
-> payloads keep the user-facing branch history shape, but storage lives in
-> bpf_verifier_env instead of verifier states so explored states do not cop=
-y
-> diagnostic buffers.
+This is wishful thinking that a config knob will stop
+the bug reports.
+Just disable it for real instead.
 
-Nit: the line about "do not copy ..." is an implementation detail from v1.
+> > I am also not sure if NET_SOCK_MSG is right. It is broader than
+> > "sockmap redirect". It is selected by TLS and {INET,INET6}_ESPINTCP.
+> > Because those select it, it can't be toggled independently.
+>
+> Once the sockmap redirect bits are behind _some_ config option, it will
+> be easy to replace it with a more granular one that depends on
+> NET_SOCK_MSG. But we're not there yet. One step at a time.
 
-[...]
+No. That's not workable.
 
-> @@ -162,21 +214,46 @@ void bpf_diag_free(struct bpf_verifier_env *env)
->  	if (!diag)
->  		return;
-> =20
-> +	kfree(diag->log.events);
->  	kfree(diag);
->  	env->diag =3D NULL;
->  }
-> =20
-> -static void bpf_diag_log(struct bpf_verifier_env *env, const char *fmt, =
-...)
-> +static const struct bpf_diag_history_event *
-> +bpf_diag_history_event(const struct bpf_diag_log *log, u32 idx)
->  {
-> -	va_list args;
-> +	return &log->events[idx];
-> +}
-> =20
-> -	if (!bpf_diag_enabled(env))
-> +static void bpf_diag_append_history(struct bpf_verifier_env *env,
-> +				    const struct bpf_diag_history_event *event)
-> +{
-> +	struct bpf_diag_history_event *events;
-> +	struct bpf_diag_log *log;
-> +	u32 cap;
-> +
-> +	log =3D bpf_diag_event_log(env);
-> +	if (!log)
->  		return;
-> =20
-> -	va_start(args, fmt);
-> -	bpf_verifier_vlog(&env->log, fmt, args);
-> -	va_end(args);
-> +	if (log->cnt < log->cap) {
-> +		log->events[log->cnt++] =3D *event;
-> +		return;
-> +	}
-> +
-> +	cap =3D log->cap ? log->cap * 2 : 64;
-> +	if (cap < log->cap)
-> +		return;
-> +
-> +	events =3D krealloc_array(log->events, cap, sizeof(*events),
-> +				GFP_KERNEL_ACCOUNT);
+> > Could you share the concrete use case you have in mind, and whether
+> > this came out of an earlier discussion or thread upstream?
+>
+> This is a follow up from discussions at BPF summit with Alexei & John.
 
-I think we should report -ENOMEM here and in callers. If the execution
-gets to this point the user had requested the logging explicitly.
-
-> +	if (!events)
-> +		return;
-> +	log->events =3D events;
-> +	log->cap =3D cap;
-> +	log->events[log->cnt++] =3D *event;
->  }
-> +
->  static void bpf_diag_print_wrapped_prefixed(struct bpf_verifier_env *env=
-,
->  					    const char *first_prefix,
->  					    const char *next_prefix,
-> @@ -203,7 +280,7 @@ static void bpf_diag_print_wrapped_prefixed(struct bp=
-f_verifier_env *env,
->  		    last_space > 0)
->  			len =3D last_space;
-> =20
-> -		bpf_diag_log(env, "%s%.*s\n", prefix, len, line);
-> +		bpf_diag_write(env, "%s%.*s\n", prefix, len, line);
-
-This is probably a merge/squash/reorder artifact.
-Let's pick the name and use it throughout the series.
-
-> =20
->  		text =3D line + len;
->  		while (*text =3D=3D ' ')
-> @@ -232,8 +309,8 @@ static void bpf_diag_vprint_indented(struct bpf_verif=
-ier_env *env,
-> =20
->  	buf =3D kvasprintf(GFP_KERNEL_ACCOUNT, fmt, args);
->  	if (!buf) {
-> -		bpf_diag_log(env, "%s<failed to allocate diagnostic text>\n",
-> -			     BPF_DIAG_TEXT_INDENT);
-> +		bpf_diag_write(env, "%s<failed to allocate diagnostic text>\n",
-> +			       BPF_DIAG_TEXT_INDENT);
->  		return;
->  	}
-> =20
-
-[...]
-
-> @@ -704,3 +782,53 @@ void bpf_diag_report_source(struct bpf_verifier_env =
-*env, u32 insn_idx,
->  out_free_msg:
->  	kfree(msg);
->  }
-> +
-> +void bpf_diag_record_branch(struct bpf_verifier_env *env, u32 insn_idx,
-> +			    bool cond_true)
-> +{
-> +	struct bpf_diag_history_event event =3D {
-> +		.insn_idx =3D insn_idx,
-> +		.kind =3D BPF_DIAG_HISTORY_BRANCH,
-> +		.branch.cond_true =3D cond_true,
-> +	};
-> +
-> +	bpf_diag_append_history(env, &event);
-> +}
-> +
-> +void bpf_diag_print_history(struct bpf_verifier_env *env)
-> +{
-> +	const struct bpf_diag_history_event *event;
-> +	const struct bpf_diag_log *log;
-> +	bool printed =3D false;
-> +	u32 i;
-> +
-> +	bpf_diag_report_section(env, "Causal path");
-> +
-> +	if (!env->diag) {
-> +		bpf_diag_write(env, "  no recorded diagnostic events on this path\n");
-> +		return;
-> +	}
-> +	log =3D &env->diag->log;
-> +
-> +	for (i =3D 0; i < log->cnt; i++) {
-> +		event =3D bpf_diag_history_event(log, i);
-> +
-> +		switch (event->kind) {
-> +		case BPF_DIAG_HISTORY_BRANCH:
-> +			bpf_diag_report_source(env, event->insn_idx, "branch",
-> +					       "explored as %s, goto %s",
-> +					       event->branch.cond_true ? "true" :
-> +					       "false",
-> +					       event->branch.cond_true ? "followed" :
-> +					       "not followed");
-
-Nit: "the true branch of" / "the false branch of" ?
-
-> +			printed =3D true;
-> +			break;
-> +		default:
-> +			break;
-> +		}
-> +	}
-> +
-> +	if (!printed)
-> +		bpf_diag_write(env,
-> +			       "  no retained diagnostic events on this path\n");
-> +}
-> diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
-> index 7f1380508789..4bc44be757c4 100644
-> --- a/kernel/bpf/diagnostics.h
-> +++ b/kernel/bpf/diagnostics.h
-> @@ -9,6 +9,20 @@
-> =20
->  struct bpf_verifier_env;
-> =20
-> +struct bpf_diag_history_event {
-> +	u32 insn_idx;
-> +	u8 kind;
-
-Nit: pahole report for this structure (in it's final form) shows a lot
-     of holes, maybe declare this as:
-
-       u32 insn_idx:24;
-       u32 kind:8;
-
-     for now?
-
-> +	union {
-> +		struct {
-> +			bool cond_true;
-> +		} branch;
-> +	};
-> +};
-> +
-> +enum bpf_diag_history_kind {
-> +	BPF_DIAG_HISTORY_BRANCH,
-
-Nit: it looks like this enum is private for diagnostics.c,
-     maybe put it there and drop the BPF_DIAG_ prefix?
-
-[...]
+Not quite. The discussion was to disable pieces of sockmap
+that are causing trouble.
+Not to move them under config knobs, but disable them.
