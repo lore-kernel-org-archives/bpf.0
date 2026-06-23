@@ -1,171 +1,113 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9CFC31A570
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 20:03:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B5353932FF;
+	Tue, 23 Jun 2026 20:07:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782245024; cv=none; b=hap1zWlSY4w//A0y9cmxmnUpFQcOiVqkOYBjNUvrX+vLPQ6F2fMg4E9GPXCzpxpzpLmPqKzVurfX3xcAyvRJYxI721ZL8H63DjjbjIpfJKF1XXIqepvd7GlfUdSgqIPTEqPWV1lL3bgX1L+xnSgsHpIjpJIFk5ry1ACnN0KAXRY=
+	t=1782245260; cv=none; b=On8moalM0hXDNuU5MDli4gDN2nSvVDBBBixBGF4etvVQpfeJdw+fhH6TlMq6EnkbHj9iC0Hu0AUoHcaH5PAVh7ogciddONji3IV7E184qIJMEV49rjqjXjhRodumZXnff3JjR1cAWhjiUGyQ63r92WENRpunqvVGCh0U3fay3SQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782245024; c=relaxed/simple;
-	bh=pSaanlwtBbeInvRpU6KeexNfjPmfeqm+bZK18BkZANc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Ke6oSftzBRmNHNTXVe2cJV860ry6S959t+c9SaY+wpLNjBWfgy8iS7M2H/AuQlOlt7qUdTTF5vS4FErBVxwDrYeMlgQAGjNtaLTUgL5czcGaIf0ofsjA/gNayfgqD6w5yenpFnO5T72TsjUObPYaRMw9HxYt9IXc+9AfuHkfnL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=c5ypY7F4; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1782245260; c=relaxed/simple;
+	bh=peScxMWlzri2gAH8LnxIQmX7XQWXWeurIYU2L4wVMiY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Ij6W3/K1abu8vbgxKC7V0kiCDoLGCRZ3fQ8R+yYuMFByMsEZy9tSuSTkJYCvXuCl+/ZDapJSIVuUXaLjTV2Z0cGNqaBuEdz1Tl26wBGWZdAzNQ9wZyYzr1yuUmxHTwBn7guJbn98PsNP79OgsDISvNoMO76UkcKA+6uLs5oXM1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mtgC7vu1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="c5ypY7F4"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-697564cb69eso424488a12.0
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 13:03:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1782245021; x=1782849821; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:user-agent
-         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a6SzrCo7H7iOgBc7gPmXFJSVTMaa0i98zxr3jzUeDCQ=;
-        b=c5ypY7F4bTWGvo/DFcIWK5U6o0PJCS52+zpyrgV+rX78rAHrKkRguMf+dLNpSA+9Ej
-         RhthrpBU8u9jeZ/wzrx56pdKRiW7nIwnEPlDQ839bwxwA6U0GzzwTlfx77280llyVKw0
-         OINGdHcYZMZ3Zqc/0ts/5gMhqkLh7CcrS/m52FKAz9tl9TueRHvFMXfm23V+xDX+1bB+
-         AdZIFSqicYz2YfOoScEawaT5FpzyVfSBdu6a4r46+G5rHB6fxewdPBcz6yEJyZFEZzvq
-         kVNnyXMrZ2TtTzmtZApe0kXx0zLsaG8NkNYIBKlQYyFljQDoezVvMntQ1AhVUfv0/zdQ
-         JNSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782245021; x=1782849821;
-        h=content-transfer-encoding:mime-version:message-id:date:user-agent
-         :references:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a6SzrCo7H7iOgBc7gPmXFJSVTMaa0i98zxr3jzUeDCQ=;
-        b=lOpr2ZK+JVZhrQFRkX9Elji4QAFug6QegyGU8fYb3lWLaii0f7dOZylP9ABKToexqf
-         6CV+JAyWGFr7CDl+sp85UG9iEK9Os4KITwjg3mIoGcVgzqi88Ok858ufP1BXr6KwHOws
-         r/kS48pbuLV4k72xrRfFSu91ADGaQjrDayl2Gd26gqB9dETgsVXT3youqqsG74JrhOQz
-         Ydf7UgjJmDhzxATU6Vmz39LBqND9thJl90qj+DXxE3BiuEZv+vAfyEOwx/e5Ga1BMy5N
-         bGct56/I+PazjWyzvXUNQk7vh2QYGONIJfinRzds4m6RV7d4E8ONWAj8z5mokW/WqNn6
-         Lhaw==
-X-Forwarded-Encrypted: i=1; AFNElJ8FbCXbO7xa8x5nkFqE7PW/EFLrBj052vQU1E2wlul7vfeAU/eY5awH5hjPz0S63f9/ihA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIFXCRJI+rs76l6H2FGZB1zWHEEN8LpLZGdPuXlmInfYGQUj3G
-	3NqbyMWTpSne1EULFKaZTpzmHGOlaLSs/2AqXsBam8LDvGjvDeCeHsDOBT0cQMx4mpg=
-X-Gm-Gg: AfdE7cmKCIxZdqsm9waOO7cwo6FnNGdCvoaOfpkD53yM1nI26sJZhiUan8tTNX7SaQP
-	q3Fy1g4FW3WgT1YoQ2nYA5RZ0R1T6vSPUKTxXfKbCO9KX7Ci0FEyOG9Wyx1NHrpFvN0rhQAE+QQ
-	PNSMnQzg966GfGnHslelHY1BTzVx0R666B1iwhtmeOqDAmyGRSznL9DrFov1hoUHjrUorfhxU4Q
-	bcDP9I5VrRAI9r6ffJn1pscDZUHH5J5G7+CLOUtv2VVlBktrS4CkuVgfLBgy5GTqZqdZ2cji8Pc
-	LBoak8Ec3DhiwubyLclT31DPHEiFdohnnt7ETBT3935GTiMDzTxeU69gfTK1dnUld6YSB7NGLhL
-	4e6T79UBJ9WJiEpvGE5+ublXlT3Xqvji5jmaGbETjHh9Z8Q8toegwKM1Uz5Oxrei/vaLXH6Is8G
-	zpGdugLm7WgNVruTs=
-X-Received: by 2002:a05:6402:5190:b0:671:a18b:32b8 with SMTP id 4fb4d7f45d1cf-697f305a514mr61658a12.0.1782245021176;
-        Tue, 23 Jun 2026 13:03:41 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6977be32083sm5237099a12.14.2026.06.23.13.03.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2026 13:03:40 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>,  bpf <bpf@vger.kernel.org>,
-  Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
- <daniel@iogearbox.net>,  Jakub Kicinski <kuba@kernel.org>,  Jiayuan Chen
- <jiayuan.chen@linux.dev>,  John Fastabend <john.fastabend@gmail.com>,
-  Network Development <netdev@vger.kernel.org>,  kernel-team
- <kernel-team@cloudflare.com>
-Subject: Re: [PATCH bpf-next v2] bpf, unix: Guard sk_msg-dependent code
- behind CONFIG_NET_SOCK_MSG
-In-Reply-To: <CAADnVQL2pfQ0BoN-vWcuCpbOBBKq_rM7Bp7P4XdLMFER5LGSDg@mail.gmail.com>
-	(Alexei Starovoitov's message of "Tue, 23 Jun 2026 12:33:33 -0700")
-References: <20260623-bpf-sk_msg-split-unix-v2-1-ca7a626a94a5@cloudflare.com>
-	<CAAVpQUBsQFFxJFDnJzxmsER3bOjm=zqJ5P5MSeW_T9v-4639cw@mail.gmail.com>
-	<87v7b9ysep.fsf@cloudflare.com>
-	<CAAVpQUBARp1qCEomgzWXVe35WatdaswujVLku+RESm_LW0dE7Q@mail.gmail.com>
-	<CAADnVQL2pfQ0BoN-vWcuCpbOBBKq_rM7Bp7P4XdLMFER5LGSDg@mail.gmail.com>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Tue, 23 Jun 2026 22:03:39 +0200
-Message-ID: <87mrwlyqg4.fsf@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mtgC7vu1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996831F000E9;
+	Tue, 23 Jun 2026 20:07:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782245258;
+	bh=6Kmx0mi/Yz50Wgq4l7LEOUoM/N7dSVgue1OpRg96emw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=mtgC7vu1b8rxzkq0Xdavu/GlMTv+4n+D8qxXWeiHmpga4P5LNvQ+nuoGfBcpM26H3
+	 wO3+BzB8wKxaKvlsUJtBxNgrH2jEstdh/SdmR9z6IrIIsdvCI53xkjq1dCQpwAARVh
+	 B8MU+/b9X+U2/x4UGI5LsTpbfWU2x9AwlmvrGQ9n2qUFTdNPjxlLITg2lc6nKgPjqB
+	 xt7XlyKXMvc5ZDJDvJlIIRTl5+dIhrLWBmYKLyi/2uxG8t8KcHn9awaeka8cGHVMXI
+	 W6nk+bo/vE0TuIxyVYOohVX9QRtMEe/PEc+fM+qrwWsL8UZmGBBCvEtRQ/3crbym7P
+	 mdNsp6XLBIZTQ==
+Content-Type: multipart/mixed; boundary="===============2442528478780633523=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <979553f5ed74dcb555e9aba6aad660ad2a208c643ab7aeac6d5e74992427f362@mail.kernel.org>
+In-Reply-To: <20260623231411.6216-4-adubey@linux.ibm.com>
+References: <20260623231411.6216-4-adubey@linux.ibm.com>
+Subject: Re: [PATCH bpf v9 3/8] selftest/bpf: Fixing powerpc JIT disassembly failure
+From: bot+bpf-ci@kernel.org
+To: adubey@linux.ibm.com,bpf@vger.kernel.org
+Cc: hbathini@linux.ibm.com,linuxppc-dev@lists.ozlabs.org,maddy@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,shuah@kernel.org,linux-kselftest@vger.kernel.org,stable@vger.kernel.org,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 23 Jun 2026 20:07:38 +0000 (UTC)
 
-On Tue, Jun 23, 2026 at 12:33 PM -07, Alexei Starovoitov wrote:
-> On Tue, Jun 23, 2026 at 12:31=E2=80=AFPM Kuniyuki Iwashima <kuniyu@google=
-.com> wrote:
->>
->> On Tue, Jun 23, 2026 at 12:21=E2=80=AFPM Jakub Sitnicki <jakub@cloudflar=
-e.com> wrote:
->> >
->> > On Tue, Jun 23, 2026 at 09:08 AM -07, Kuniyuki Iwashima wrote:
->> > > On Tue, Jun 23, 2026 at 4:20=E2=80=AFAM Jakub Sitnicki <jakub@cloudf=
-lare.com> wrote:
->> > >>
->> > >> Prepare to decouple BPF_SYSCALL config option from NET_SOCK_MSG. Wh=
-en
->> > >> completed all code paths related to sockmap-based redirects should =
-be
->> > >> guarded by BPF_SYSCALL && NET_SOCK_MSG to allow users to opt out by
->> > >> disabling NET_SOCK_MSG. The implementation of sockmap as a containe=
-r for
->> > >> socket references would remain under BPF_SYSCALL.
->> > >>
->> > >> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
->> > >> ---
->> > >> Changes in v2:
->> > >> - Handle prot->recvmsg being NULL (Sashiko)
->> > >> - Elaborate on the end goal in description
->> > >> - Link to v1: https://patch.msgid.link/20260622-bpf-sk_msg-split-un=
-ix-v1-1-d7e0cb7bb03b@cloudflare.com
->> > >> ---
->> > >>  net/unix/af_unix.c  | 4 ++--
->> > >>  net/unix/unix_bpf.c | 6 ++++++
->> > >>  2 files changed, 8 insertions(+), 2 deletions(-)
->> > >>
->> > >> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
->> > >> index f7a9d55eee8a..84c11c60c75f 100644
->> > >> --- a/net/unix/af_unix.c
->> > >> +++ b/net/unix/af_unix.c
->> > >> @@ -2675,7 +2675,7 @@ static int unix_dgram_recvmsg(struct socket *=
-sock, struct msghdr *msg, size_t si
->> > >>  #ifdef CONFIG_BPF_SYSCALL
->> > >>         const struct proto *prot =3D READ_ONCE(sk->sk_prot);
->> > >>
->> > >> -       if (prot !=3D &unix_dgram_proto)
->> > >> +       if (prot->recvmsg)
->> > >
->> > > There is no reason to have this dead branch when
->> > > CONFIG_BPF_SYSCALL && !NET_SOCK_MSG.
->> > >
->> > > Let's compile out all sockmap code when both configs
->> > > are not enabled.
->> > >
->> > > Since AF_UNIX differs from TCP/UDP, it can take the
->> > > simpler approach.
->> >
->> > Okay, will put the whole file behind hidden config option like so:
->> >
->> > --- a/net/unix/Kconfig
->> > +++ b/net/unix/Kconfig
->> > @@ -30,3 +30,8 @@ config UNIX_DIAG
->> >         help
->> >           Support for UNIX socket monitoring interface used by the ss =
-tool.
->> >           If unsure, say Y.
->> > +
->> > +config UNIX_BPF
->>
->> Maybe UNIX_BPF_SOCKMAP or something.
->> bpf_iter is supported without this config.
+--===============2442528478780633523==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/tools/testing/selftests/bpf/jit_disasm_helpers.c b/tools/testing/selftests/bpf/jit_disasm_helpers.c
+> index 3558fe10e28c..11428cad5b2d 100644
+> --- a/tools/testing/selftests/bpf/jit_disasm_helpers.c
+> +++ b/tools/testing/selftests/bpf/jit_disasm_helpers.c
+> @@ -178,10 +178,12 @@ int get_jited_program_text(int fd, char *text, size_t text_sz)
+>  {
+>  	struct bpf_prog_info info = {};
+>  	__u32 info_len = sizeof(info);
+> -	__u32 jited_funcs, len, pc;
+> +	__u32 jited_funcs, len, pc, disasm_len;
+> +	__u32 trunc_len = 0;
+>  	__u32 *func_lens = NULL;
+>  	FILE *text_out = NULL;
+>  	uint8_t *image = NULL;
+> +	char *triple = NULL;
+
+This isn't a bug, but would it be clearer to follow the traditional C
+style by grouping related variables together? The disasm_len variable
+could be declared closer to where it's used along with trunc_len, and
+adding a blank line before the fprintf() statement in the loop might
+improve readability.
+
+[ ... ]
+
+> @@ -225,9 +227,30 @@ int get_jited_program_text(int fd, char *text, size_t text_sz)
+>  	if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd #2"))
+>  		goto out;
 >
-> I don't like where it's going.
-> I strongly dislike new config knobs.
-> I'd rather remove existing knobs.
-> What is the motivation?
+> +	/*
+> +	 * last 8 bytes contains dummy_trampoline address in JIT
+> +	 * output on 64-bit and last 4 bytes on 32-bit powerpc,
+> +	 * which can't disassemble to a valid instruction.
+> +	 */
+> +	triple = LLVMGetDefaultTargetTriple();
+> +	if (triple) {
+> +		if (strstr(triple, "powerpc64") || strstr(triple, "ppc64"))
+> +			trunc_len = 8;
+> +		else if (strstr(triple, "powerpc") || strstr(triple, "ppc"))
+> +			trunc_len = 4;
+> +		LLVMDisposeMessage(triple);
+> +	}
+> +
+>  	for (pc = 0, i = 0; i < jited_funcs; ++i) {
+> +
+>  		fprintf(text_out, "func #%d:\n", i);
+> -		disasm_one_func(text_out, image + pc, func_lens[i]);
+> +		/*
+> +		 * Disabled JIT have zero func_lens, hence underflow
+> +		 */
+> +		disasm_len = func_lens[i] > trunc_len ?
+> +					func_lens[i] - trunc_len : 0;
+> +		disasm_one_func(text_out, image + pc, disasm_len);
+> +
+>  		fprintf(text_out, "\n");
+>  		pc += func_lens[i];
+>  	}
 
-The goal is to compile out sockmap bits that use sk_msg.
-NET_SOCK_MSG is natural, exisiting candidate.
-New knob wasn't my idea.
 
-Alternatively, we can do this to avoid the extra knob:
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-ifdef CONFIG_BPF_SYSCALL
-unix-$(CONFIG_NET_SOCK_MSG) +=3D unix_bpf.o
-endif
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28051760380
+--===============2442528478780633523==--
