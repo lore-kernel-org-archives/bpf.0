@@ -1,176 +1,139 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BAC33955CF
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 21:57:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9242438A706
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 22:02:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782251829; cv=none; b=O/HNiiDWfs1G5fgaCBZlUeOjh4X98/oy0tx6LkqgBSZgeba7T+q6/5M+gHq7zCwhdeNC3VezbDK/5jnbuVpx9D0DnmAK9rI/9jhk2L8DkcTXuxslcfxR66324/pXwezWICoRbEBPgTgByMBqHJr2HMaAO6fy8JWkLM7fp0vY2pg=
+	t=1782252175; cv=none; b=Zc13hUdFZq+6i+4xuSCZkEaZxuGPFpklcn9uRcHrOifDUY32rPSwRXDmfcIVocwogJnrtF9tScIB1NQdMYiR8Z3A0jLbOCQwtTkHMVTRjPc5hwxOBCuPCwm5UCXly1GTEwKIUF0fYAghY+B7es6Dd0C042buOU3C/v/Wgyt1WdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782251829; c=relaxed/simple;
-	bh=zxaht1ET26HBoVtBIwwAtbc05sEEPno2VMLGk/tK6k4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qvExwOaWnWLHK+dlnyD7HSsDNHZkc4qNFg+Evrp3hDrCsr9DZDV61dZx/ducC8AFbcoXjeJ6UXBkWFZXYqnGiyW8B7LU+OD6dpGmVgzjBQIem30XqyNp9L0AZEhWxalReniLF0uWuscghIkAxWUQtrPlJpQyyH+CYz/4zuspDZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A89Ra3T+; arc=none smtp.client-ip=74.125.82.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782252175; c=relaxed/simple;
+	bh=xq5djj0W/T3XU2XiMBUB+GCk0MW6WY3vdw4kRbhWy94=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=DQSXl6OBqt3QJjWDie/aKX2aKbEoYCGqi2PiLtur5oD8z/ckQZbLbtmClocj5MI/DnxzREB36Hgr4GmbcLE4YxGs3SPWCKAs2JRDG/5gFmY13+0RvCc872vYvq3lWJ2zLWqBZQ1TGT8IiK6pw1IOmVpSJvtHpzxSkFNP4vyxeKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V3cqDgX3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A89Ra3T+"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-137335bc3caso612352c88.0
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 14:57:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782251828; x=1782856628; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=uWE4Wa8PVJ+yWZdtXpFN351hVNpU3NirdT/O2ctygmQ=;
-        b=A89Ra3T+S7b5kMZkB4V+bx+5EUqtjLVTSKKpZkzlo/M4hsTCO4ZzDXQ5VVUzuKPVnS
-         MTcK3PY9A2j/KjsdY68rbenpfat8Tni2gbn9PO1XaVLKXGPiaSO3wekFsq1KjDIt/NzW
-         9s/haiKBSCDtC3sb2/CNLR7JOrdWj9HbPZUjthKFEyxbuL9NrMQpT34nL0AtSlj5n/hm
-         qzkOC//xpXXAwnyygvsQJFcPw5I9/9vx9kFJSTMOrGsr3fGF/H5OrFuLN6urhOvgeLov
-         0SEj21osv63lFRgNBc5pnTiY6cUao5PjV6Iunf+3MnOwUMaQw5oQCtjXi9bPzY/n5VqN
-         NjSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782251828; x=1782856628;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uWE4Wa8PVJ+yWZdtXpFN351hVNpU3NirdT/O2ctygmQ=;
-        b=TDivDhew8JU3U4AwYQSAj1lV+xzyR2dUXP/Ggsh65hKI0tDjvE3nzmST3d/rmIrTca
-         iL+yKwYiV4AvdUP/Tp3K7COr/zUqK7WSdwpgBczjMdYSkbAhRgJtxmW9SaU8j0Aysn/V
-         rlW4AWnTjSwn0Bw1yEE62Ie6u1S20Pfhpe5lbZSnjVyEvTjYTE0t8a8+aCzqrfUphRMy
-         8eWCoa8iaojq6DglMlxhp6wnje5NTA8Qt8xtEqJTd2KtUsT83HhaKhVChRyH0HsRYK15
-         Mdq1pLf6guu2hEdBL5wlVK7Xy3ttXwZ6Npzab2lEL0k0HqPaKzybB4lCpf9NwrER09qA
-         FlLw==
-X-Forwarded-Encrypted: i=1; AHgh+Rqa9nB2rzkjJFqEHz4OqdxI/n9M7cozT/wQQxco9gt4XaOY6eoSMbLh7/CUwiVb73sSpjE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxeIuEiVU0NG8afKXKipLwzGHXJtwgxBl4p1zuVKE1kc+VkLJ3b
-	riDJ9pmTQe/t572ysGLQXdT+UY1UCIO+S6KF4ztaMXGckT8MjxghJVns
-X-Gm-Gg: AfdE7cmFSmdf5L+kYNMSgw8SU3b/hgJth5ZB/1lwUfLjYbleZ6aAQlqZ33etCsgyB/h
-	dGYg4fScCWp0i5c5WWmmxm247Q6LnnPZhaYq68iqP0tjKr/SutVCRPWY95zt166qNQfTKgRfVEa
-	Vq9/TbsI0/1Biw2h84D6YaXJHJIpfji5OWeXaNnGdkUd85uBrTYxwUO+tUItS4DeJBXedHn9YuU
-	Ug3fd2FZBZThzI+CwzLlQ0xKFTI9lVKFLBJwexJN7AJ1ZFU6fSxYL6j2gylvS4JtqcDisDbSgtm
-	hcQSOkSXFpC7Pe/+N+XWH1U+ebsarOqOWDAQhSAWqNUK6b8J5Du+EtNKKRPcbbSTX9e4MBz84p9
-	OoR5VeoaDKfZXTnJOZ34k0mqy3ockrbnno3wxyibjkQ3hss2JG94Eqp6z7DO5+bc4HcoEnSdSE3
-	+0jNuaD0ch8IxUN5CACgBh9A/kQaTlrJRcLheUWBS+KFtvg8khySV/6VeFgKgcS79j+aH+SOGbm
-	R6n
-X-Received: by 2002:a05:7300:434e:b0:30a:e530:ebc6 with SMTP id 5a478bee46e88-30c691cac71mr1041968eec.12.1782251827517;
-        Tue, 23 Jun 2026 14:57:07 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:20e3:c15b:de5e:66e6? ([2620:10d:c090:500::e22])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1b4f7d81sm18411106eec.0.2026.06.23.14.57.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2026 14:57:07 -0700 (PDT)
-Message-ID: <2e01e2580cee612d458f99253b3e9c91d4a75e98.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 04/17] bpf: Prune verifier diagnostics on
- backtracking
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
- Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Tue, 23 Jun 2026 14:57:05 -0700
-In-Reply-To: <20260619205934.1312876-5-memxor@gmail.com>
-References: <20260619205934.1312876-1-memxor@gmail.com>
-	 <20260619205934.1312876-5-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V3cqDgX3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05A131F000E9;
+	Tue, 23 Jun 2026 22:02:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782252174;
+	bh=bmOYeRrCSesGnKZyJUoRUH3p3FrbNjkxMNN770EpDpQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=V3cqDgX3fVj4cFrqPisqdfkX9DXjm6VKyAXAPGzQhRwZFwB3XsYAV7oHwAmom+oOe
+	 /khhlzj03ecv1SKxl29Z32V+9uAjekSh7KgCLLCtoCpza7FtoOi244x+6cr5SZkhpn
+	 0VCWfQHgg89har9Rq1i6anB4KXaoazz2IgoUfQznD46xP+wCMjwjUWfJ33mXF2DsqR
+	 wyYnI825Y9sHj75f58apvzYuhzjYGfL3liKEdUfP2iete1O+Jyc1w1ZrWJCiZqLBQC
+	 wG+BSxZRq+P7+mTJhrDpNK6jcSnfs17amj7LPP/ZF9wZGCxrrhlOa6m3j36JmYiyTx
+	 BJt1dHLyhWO/Q==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v9 6/8] selftest/bpf: Add tailcall verifier selftest
+ for powerpc64
+Reply-To: sashiko-reviews@lists.linux.dev
+To: adubey@linux.ibm.com
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260623231411.6216-7-adubey@linux.ibm.com>
+References: <20260623231411.6216-1-adubey@linux.ibm.com>
+ <20260623231411.6216-7-adubey@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+Date: Tue, 23 Jun 2026 22:02:53 +0000
+Message-Id: <20260623220254.05A131F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Fri, 2026-06-19 at 22:59 +0200, Kumar Kartikeya Dwivedi wrote:
-> Save the diagnostic event-log position with each verifier stack entry and
-> reset the environment-owned stream together with the normal verifier log
-> when a queued state is popped. Also reset the diagnostic stream after
-> successful subprogram verification even when level-2 logging preserves th=
-e
-> normal verifier log.
->=20
-> Record branch outcomes as true or false. Later reports use those
-> events to show the path that reached a verifier error. For queued branche=
-s,
-> append the queued outcome before push_stack() so the saved diagnostic
-> position includes it, then reset back to the active path before continuin=
-g.
->=20
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] JIT disasm regex for loading 64-bit immediates strictly expects =
+'oris' and 'ori' instructions, but the PowerPC JIT conditionally omits them.
+- [Medium] JIT disasm regex for BPF-to-BPF tail calls fails on PowerPC kern=
+els with CONFIG_PPC_KERNEL_PCREL enabled.
+--
 
-Nit: Let's not use the word "backtracking" as a subject for this
-     patch, as in verifier it is easy to confuse with precision
-     tracking backtracking.
+commit b4e7d4404702ca69adf00490d083d127f762e2ed
+Author: Abhishek Dubey <adubey@linux.ibm.com>
 
->  kernel/bpf/verifier.c | 44 +++++++++++++++++++++++++++++++++++++------
->  1 file changed, 38 insertions(+), 6 deletions(-)
->=20
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index e81fdb0e22ae..ca4bba163418 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -192,6 +192,9 @@ struct bpf_verifier_stack_elem {
->  	struct bpf_verifier_stack_elem *next;
->  	/* length of verifier log at the time this state was pushed on stack */
->  	u32 log_pos;
-> +	u64 diag_log_pos;
+selftest/bpf: Add tailcall verifier selftest for powerpc64
 
-log_pos is u32, can we use u32 for diag_log_pos as well?
+This commit adds a tailcall verifier selftest targeting the powerpc64
+architecture. It introduces __arch_powerpc64 JIT regex matches for both
+regular function calls and tail calls.
 
-> +	bool diag_branch_valid;
-> +	bool diag_branch_cond_true;
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c b/=
+tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
+> index 48fa34d2959f4..09d7e92c84910 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
+> @@ -91,6 +91,75 @@ __jited("	popq	%rax")
+>  __jited("	jmp	{{.*}}")		/* jump to tail call tgt   */
+>  __jited("L0:	leave")
+>  __jited("	{{(retq|jmp	0x)}}")		/* return or jump to rethunk */
+> +__arch_powerpc64
+> +/* program entry for main(), regular function prologue */
+> +__jited("	nop")
+> +__jited("...")                          /* ld 2, 16(13) absent with CONF=
+IG_PPC_KERNEL_PCREL */
+> +__jited("	li 9, 0")
+> +__jited("	std 9, -8(1)")
+> +__jited("	mflr 0")
+> +__jited("	std 0, 16(1)")
+> +__jited("	stdu 1, {{.*}}(1)")
+> +/* load address and call sub() via count register */
+> +__jited("	lis 12, {{.*}}")
+> +__jited("	sldi 12, 12, 32")
+> +__jited("	oris 12, 12, {{.*}}")
+> +__jited("	ori 12, 12, {{.*}}")
 
-There is a 1 byte hole after 'st' and before 'insn_idx',
-these two flags can fit there as bitfields.
+[Severity: Medium]
+Will this strict absolute 64-bit load match fail on Power10 and other
+kernels with CONFIG_PPC_KERNEL_PCREL enabled?
 
-Together this will remove the 6-byte padding and a 4-bytes hole from
-this structure.
+It appears that when CONFIG_PPC_KERNEL_PCREL is enabled,
+bpf_jit_emit_func_call_rel() checks if the relative offset between the
+call site and the target is within 8GB. Since main() and sub() are BPF
+programs allocated close to each other in vmalloc space, the offset should
+fit within 8GB.
 
-[...]
+This means the JIT would emit a PC-relative load (pla r12, addr followed
+by paddi) instead of the absolute load sequence expected here. Does the test
+need a fallback or PCREL-specific wildcard block?
 
-> @@ -1786,6 +1794,21 @@ static struct bpf_verifier_state *push_stack(struc=
-t bpf_verifier_env *env,
->  	return &elem->st;
->  }
-> =20
-> +static struct bpf_verifier_state *
-> +push_stack_with_branch_diag(struct bpf_verifier_env *env, int insn_idx,
-> +			    int prev_insn_idx, bool speculative,
-> +			    bool cond_true)
-> +{
-> +	struct bpf_verifier_state *st;
-> +
-> +	st =3D push_stack(env, insn_idx, prev_insn_idx, speculative);
-> +	if (!IS_ERR(st)) {
-> +		env->head->diag_branch_valid =3D true;
-> +		env->head->diag_branch_cond_true =3D cond_true;
+> +__jited("	mtctr 12")
+> +__jited("	bctrl")
 
-Tbh, I'd infer these flags instead of storing them.
-If the state's prev_insn_idx is a conditional jump one can check if
-this state's insn_idx is a target or a falltrhough. Would break for
-'if ... goto +0' but I'd argue that it does not matter.
-This would allow to move the
+[ ... ]
 
-  bpf_diag_record_branch(env, head->prev_insn_idx, head->diag_branch_cond_t=
-rue);
+> +/* tail call prologue for subprogram */
+> +__jited("	ld 10, 0(1)")
+> +__jited("	ld 9, -8(10)")
+> +__jited("	cmpldi	9, 33")
+> +__jited("	bt	{{.*}}, {{.*}}")
+> +__jited("	addi 9, 10, -8")
+> +__jited("	std 9, -8(1)")
+> +__jited("	lis {{.*}}, {{.*}}")
+> +__jited("	sldi {{.*}}, {{.*}}, 32")
+> +__jited("	oris {{.*}}, {{.*}}, {{.*}}")
+> +__jited("	ori {{.*}}, {{.*}}, {{.*}}")
 
-call from pop_stack to do_check(), near the:
+[Severity: Medium]
+Can this strict expectation for oris and ori cause test failures depending
+on the page size?
 
-  if (env->log.level & BPF_LOG_LEVEL2 && do_print_state) {
-     verbose(env, "\nfrom %d to %d%s:", ...);
-     ...
-  }
+The PPC_LI64 macro optimizes 64-bit immediate loads by omitting the ori
+instruction if the lowest 16 bits are zero, and oris if bits 16-31 are zero.
 
-and to make do with the activate_diag_branch flag in the pop_stack().
+Because the test loads the address of the jmp_table map, which is allocated
+via vmalloc() and is page-aligned, on PowerPC64 systems with a 64KB page si=
+ze
+the lowest 16 bits will always be zero. This would cause the ori instruction
+to be omitted entirely, resulting in a regex mismatch.
 
-> +	}
-> +	return st;
-> +}
-> +
->  static const char *reg_arg_name(struct bpf_verifier_env *env, argno_t ar=
-gno)
->  {
->  	char *buf =3D env->tmp_arg_name;
+> +__jited("	li {{.*}}, 0")
+> +__jited("	lwz 9, {{.*}}({{.*}})")
 
-[...]
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623231411.6216=
+-1-adubey@linux.ibm.com?part=3D6
