@@ -1,185 +1,295 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC17329C6D
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 16:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ECA530C164;
+	Tue, 23 Jun 2026 17:10:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782233899; cv=none; b=D3GIHXiFcl7Ih7ClQe1j69vP56XsUjKuV5zCWQaSzcgkCsAfxSNfFR4KgJma81oRxY0zFnPe8RRSrYxXfcU7rz/0fkyUsVjWXznUJx+B56vUKipaQpVQ6OFjFB+DRcUucQ4jqZu4uuiWZlqPWl642DZwR6BdB45+0Mj2zXrE2FI=
+	t=1782234612; cv=none; b=rRMHQBXYbvPZPcMjeBd0ekCYmG/exBHVPmwRwchP/MghxvINTYSSEs5rJwymfOs9kS44UkTkTXIPyS425PeYeSctIEp/DmPJTLI2vxbM3OTO8F1b+147qlc4qYHnDYagP9g+tJoOChnDBffbFp4Qp2wC3JbyApg1P0zfqvg99O4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782233899; c=relaxed/simple;
-	bh=zbihmV5fN6T4FGaMdZgH9ffanOLhmr6LKZsXgivivqc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T2hMJ7ksUgPON3AcfevRZ7F3UvqcgWnyuO9TOu/IYkK8X2vMnt36jB4Lisz+6i759ldyETbrTkFhBCyrunTAWr7X0L2TVLyE4Ns3jfENY9eeB8H4QoFLJ4dh+Ym2eQjiTkPsX8tlbN4jdLSK6PzO7/OoYvUGdr+Jkvkh4/n0MiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eN0lJ5L5; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782234612; c=relaxed/simple;
+	bh=G2juHNm0MQSkesq1JQVu2orcc7IIrgmx+oXkd4LHWFc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GX1HiVwNsOOPfcIiOMkUr8x7GmgzDSEMaSsnrztJQZfnFtZze19qHt18PWlYAjKy96Xqeaq/It3Ns8SLv3v30qj7CWtcK0zSO/MPeZ63SSGKSokC8yxvxamr6EWCZQpXS3NmBnVygTym7IhUTDdK2DnewP6DcMYNkxQ1O0Pb0sc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ieednaGG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eN0lJ5L5"
-Message-ID: <16c3840e-80e1-44ba-9415-fa4ec9ca5785@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782233895;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1mVuApoJqVlXdBFnkM86bPf6Noqutb0vDxs2yW0qefI=;
-	b=eN0lJ5L5goL+49Ur6QrX3h5aJ3OZ1JWVqzvONcXBVWnCe2so5JrlJqReu8dWX34E8t5pdy
-	ILfizv0nITXScXcLYg8dCnwaOXdp63+0TPNHo+sljtI5KmDqn6HH2AKBjWaewKiVTgY/4a
-	1jivx4sv8bwwEwir3/GFVEqJrYyN7ic=
-Date: Tue, 23 Jun 2026 09:58:09 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ieednaGG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD771F000E9;
+	Tue, 23 Jun 2026 17:10:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782234611;
+	bh=WDvdzY1ErQFnk/RK+FkTuVAjD4osJ5TRcU6EtvGfSxg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ieednaGGvYm2myJJqbDa4a12RAoxTEbph0h036DThaLkxKy8+88OP8D9jqmPrWkwM
+	 01V+i/rkY+XNLsY5VStIr/7otCQcFVI8wNNFqnBepeqEso4vTP9l7Wa3PcSX0jKrHL
+	 SEeOfdVL12UoCq6lSenY/0hy+7liT+WdYP/I3GClj3a5K3D+5KXKEmYTwOkDv311Az
+	 vy5hch/wNQh5KNeZ7ZTFT2jCGOuJI8etMF3RKLnSBS1lZfbSorNno8uPE96Ju6rx/w
+	 gmJp8+l5VLxeFyJU0dj5g9EINushzC+23dCws8Rrwr8nUQdW1kb9jzDrNqlYOX0GZg
+	 +CujLJOl3V1/Q==
+Date: Tue, 23 Jun 2026 10:10:09 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Viktor Malik <vmalik@redhat.com>, linux-perf-users@vger.kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, Michael Petlan <mpetlan@redhat.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] perf trace: Refactor augmented_raw_syscalls using
+ bpf_loop
+Message-ID: <ajq98dm4gAwEzkMb@google.com>
+References: <20260623112533.1151502-1-vmalik@redhat.com>
+ <DJGJ9F6WQZV9.2W4WBIHYLJQ97@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves v7 0/5] pahole: Encode true signatures in kernel
- BTF
-Content-Language: en-GB
-To: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <olsajiri@gmail.com>
-Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
- dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, kernel-team@fb.com
-References: <20260623040704.2732530-1-yonghong.song@linux.dev>
- <ajp70MRjHvCJNeyv@krava> <d270a215-264f-4c5c-9d7f-0b1568815e31@oracle.com>
- <b1b73cef-f25a-443d-8557-4cfe92938b46@oracle.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <b1b73cef-f25a-443d-8557-4cfe92938b46@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <DJGJ9F6WQZV9.2W4WBIHYLJQ97@gmail.com>
 
+Hello,
 
+On Tue, Jun 23, 2026 at 08:27:39AM -0700, Alexei Starovoitov wrote:
+> On Tue Jun 23, 2026 at 4:25 AM PDT, Viktor Malik wrote:
+> > The loop for processing syscall args in augment_raw_syscalls has a
+> > history of breaking with Clang updates, see e.g. commit 013eb043f37b
+> > ("perf trace: Fix BPF loading failure (-E2BIG)") from Clang 15 to 16.
+> >
+> > Now, a similar thing happened between Clang 21 and 22. While the issue
+> > is mitigated on the main line by a recent verifier update, it remains
+> > broken on the 6.12 and 6.18 stable branches:
+> >
+> >     [linux-6.18.y]# sudo perf trace true
+> >     libbpf: prog 'sys_enter': BPF program load failed: -E2BIG
+> >     libbpf: prog 'sys_enter': -- BEGIN PROG LOAD LOG --
+> >     [...]
+> >     BPF program is too large. Processed 1000001 insn
+> >     processed 1000001 insns (limit 1000000) max_states_per_insn 40 total_states 37941 peak_states 232 mark_read 0
+> >     -- END PROG LOAD LOG --
+> >     libbpf: prog 'sys_enter': failed to load: -E2BIG
+> >     libbpf: failed to load object 'augmented_raw_syscalls_bpf'
+> >     libbpf: failed to load BPF skeleton 'augmented_raw_syscalls_bpf': -E2BIG
+> >     Error: failed to get syscall or beauty map fd
+> >     [...]
+> >
+> > The reason is that the loop is quite complex and the BPF verifier often
+> > struggles to prove that it terminates.
+> >
+> > Fix the issue by refactoring the loop body into a callback function and
+> > calling the bpf_loop helper. This should prevent future breakages of
+> > this kind since the callback function has no loops. It also allows to
+> > drop a few artificial checks to help the verifier, including the changes
+> > introduced by 013eb043f37b.
 
-On 6/23/26 9:02 AM, Alan Maguire wrote:
-> On 23/06/2026 14:11, Alan Maguire wrote:
->> On 23/06/2026 13:28, Jiri Olsa wrote:
->>> On Mon, Jun 22, 2026 at 09:07:04PM -0700, Yonghong Song wrote:
->>>> Current vmlinux BTF encoding is based on the source level signatures.
->>>> But the compiler may do some optimization and changed the signature.
->>>> If the user tried with source level signature, their initial implementation
->>>> may have wrong results and then the user need to check what is the
->>>> problem and work around it, e.g. through kprobe since kprobe does not
->>>> need vmlinux BTF.
->>>>
->>>> Majority of changed signatures are due to dead argument elimination.
->>>> The following is a more complex one. The original source signature:
->>>>    typedef struct {
->>>>          union {
->>>>                  void            *kernel;
->>>>                  void __user     *user;
->>>>          };
->>>>          bool            is_kernel : 1;
->>>>    } sockptr_t;
->>>>    typedef sockptr_t bpfptr_t;
->>>>    static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
->>>> After compiler optimization, the signature becomes:
->>>>    static int map_create(union bpf_attr *attr, bool uattr__is_kernel) { ... }
->>>> In the above, uattr__is_kernel corresponds to 'is_kernel' field in sockptr_t.
->>>> This makes it easier for developers to understand what changed.
->>>>
->>>> The new signature needs to properly follow ABI specification based on
->>>> locations. Otherwise, that signature should be discarded. For example,
->>>>
->>>>      0x0242f1f7:   DW_TAG_subprogram
->>>>                      DW_AT_name      ("memblock_find_in_range")
->>>>                      DW_AT_calling_convention        (DW_CC_nocall)
->>>>                      DW_AT_type      (0x0242decc "phys_addr_t")
->>>>                      ...
->>>>      0x0242f22e:     DW_TAG_formal_parameter
->>>>                        DW_AT_location        (indexed (0x14a) loclist = 0x005595bc:
->>>>                           [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_reg5 RDI
->>>>                           [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_reg14 R14
->>>>                           [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
->>>>                           [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg14 R14)
->>>>                        DW_AT_name    ("start")
->>>>                        DW_AT_type    (0x0242decc "phys_addr_t")
->>>>                        ...
->>>>      0x0242f239:     DW_TAG_formal_parameter
->>>>                        DW_AT_location        (indexed (0x14b) loclist = 0x005595e6:
->>>>                           [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_reg4 RSI
->>>>                           [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_reg3 RBX
->>>>                           [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
->>>>                           [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg3 RBX)
->>>>                        DW_AT_name    ("end")
->>>>                        DW_AT_type    (0x0242decc "phys_addr_t")
->>>>                        ...
->>>>      0x0242f245:     DW_TAG_formal_parameter
->>>>                        DW_AT_location        (indexed (0x14c) loclist = 0x00559610:
->>>>                           [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_breg4 RSI+0)
->>>>                        DW_AT_name    ("size")
->>>>                        DW_AT_type    (0x0242decc "phys_addr_t")
->>>>                        ...
->>>>      0x0242f250:     DW_TAG_formal_parameter
->>>>                        DW_AT_const_value     (4096)
->>>>                        DW_AT_name    ("align")
->>>>                        DW_AT_type    (0x0242decc "phys_addr_t")
->>>>                        ...
->>>>
->>>> The third argument should correspond to RDX for x86_64. But the location suggests that
->>>> the parameter value is stored in the address with 'RSI + 0'. It is not clear whether
->>>> the parameter value is stored in RDX or not. So we have to discard this funciton in
->>>> vmlinux BTF to avoid incorrect true signatures.
->>>>
->>>> For llvm, any function having
->>>>    DW_AT_calling_convention        (DW_CC_nocall)
->>>> in dwarf DW_TAG_subprogram will indicate that this function has signature changed.
->>>> I did experiment with latest bpf-next. For x86_64, there are 69103 kernel functions
->>>> and 875 kernel functions having signature changed. A series of patches are intended
->>>> to ensure true signatures are properly represented. Eventually, only 20 functions
->>>> cannot have true signatures due to locations.
->>> hi,
->>> I tried to get the numbers from my setup and noticed that some new
->>> functions were included in BTF compared to the current version
->>> (functions diff attached below)
->>>
->>> like for "arp_process" function the current pahole gives me:
->>>
->>>    arp_process : skipping BTF encoding of function due to unexpected register usage for parameter
->>>
->>> but it's included in BTF generated with the new pahole.
->>>
->>> in addition to your explanation above also one of the commit says:
->>>
->>>       - a parameter with no location, a constant value, or (for non-clang) no
->>>         register found is marked optimized out
->>>
->>> please check below, it seems like 2nd argument of arp_process has no location,
->>> so iiuc it should not be included in BTF, right?
->>>
->>> thanks,
->>> jirka
->>>
->>>
->> thanks for catching this; it looks like we return a bit early before detecting
->> missing locations in the non-true-signature code. If you get a chance, would you
->> mind trying the attached patch to see if it fixes the problem?
->>
->> If the fix works and Yonghong is happy with it we can add it as a followup
->> and land the true signature series to save another round.
-> actually sorry that patch leaked true signature partial names for gcc; updated
-> patch attached.
+Thanks for working on this.  I encountered this issue before and never
+found time to take a deeper look yet.
 
-The whole clang signature_changed thing can be removed.
+> >
+> > Signed-off-by: Viktor Malik <vmalik@redhat.com>
+> > Fixes: a68fd6a6cdd3 ("perf trace: Collect augmented data using BPF")
+> > Fixes: 013eb043f37b ("perf trace: Fix BPF loading failure (-E2BIG)")
+> > Cc: stable@vger.kernel.org
+> > ---
+> >  .../bpf_skel/augmented_raw_syscalls.bpf.c     | 157 +++++++++++-------
+> >  1 file changed, 96 insertions(+), 61 deletions(-)
+> >
+> > diff --git a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+> > index 2a6e61864ee0..6d553ed3ac23 100644
+> > --- a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+> > +++ b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+> > @@ -429,15 +429,96 @@ static bool pid_filter__has(struct pids_filtered *pids, pid_t pid)
+> >  	return bpf_map_lookup_elem(pids, &pid) != NULL;
+> >  }
+> >  
+> > +struct args_loop_ctx {
+> > +	struct syscall_enter_args *args;
+> > +	unsigned int *beauty_map;
+> > +	void *payload_offset;
+> > +	int value_size;
+> > +	u64 *output;
+> > +	bool *do_output;
+> > +};
+> > +
+> > +static long process_arg_cb(u64 i, void *ctx)
+> > +{
+> > +	/*
+> > +	 * Determine what type of argument and how many bytes to read from user space, using the
+> > +	 * value in the beauty_map. This is the relation of parameter type and its corresponding
+> > +	 * value in the beauty map, and how many bytes we read eventually:
+> > +	 *
+> > +	 * string: 1			      -> size of string
+> > +	 * struct: size of struct	      -> size of struct
+> > +	 * buffer: -1 * (index of paired len) -> value of paired len (maximum: TRACE_AUG_MAX_BUF)
+> > +	 */
+> > +	struct augmented_arg *augmented_arg;
+> > +	struct args_loop_ctx *loop_ctx;
+> > +	int aug_size, size, index;
+> > +	bool augmented;
+> > +	void *arg;
+> > +
+> > +	/* Bounds check for the below map access to help the verifier */
+> > +	if (i < 0 || i >= 6)
+> > +		return 1;
+> > +
+> > +	loop_ctx = (struct args_loop_ctx *)ctx;
+> > +	arg = (void *)loop_ctx->args->args[i];
+> > +	augmented = false;
+> > +	size = loop_ctx->beauty_map[i];
+> > +	aug_size = size; /* size of the augmented data read from user space */
+> > +	augmented_arg = (struct augmented_arg *)loop_ctx->payload_offset;
+> > +
+> > +	if (size == 0 || arg == NULL)
+> > +		return 0; /* continue */
+> > +
+> > +	if (size == 1) { /* string */
+> > +		aug_size = bpf_probe_read_user_str(augmented_arg->value, loop_ctx->value_size, arg);
+> > +		augmented = true;
+> > +	} else if (size > 0 && size <= loop_ctx->value_size) { /* struct */
+> > +		if (!bpf_probe_read_user(augmented_arg->value, size, arg))
+> > +			augmented = true;
+> > +	} else if (size < 0 && size >= -6) { /* buffer */
+> > +		index = -(size + 1);
+> > +		barrier_var(index); // Prevent clang (noticed with v18) from removing the &= 7 trick.
+> > +		index &= 7;	    // Satisfy the bounds checking with the verifier in some kernels.
+> > +		aug_size = loop_ctx->args->args[index];
+> > +
+> > +		if (aug_size > TRACE_AUG_MAX_BUF)
+> > +			aug_size = TRACE_AUG_MAX_BUF;
+> > +
+> > +		if (aug_size > 0) {
+> > +			if (!bpf_probe_read_user(augmented_arg->value, aug_size, arg))
+> > +				augmented = true;
+> > +		}
+> > +	}
+> > +
+> > +	/* Augmented data size is limited to sizeof(augmented_arg->unnamed union with value field) */
+> > +	if (aug_size > loop_ctx->value_size)
+> > +		aug_size = loop_ctx->value_size;
+> > +
+> > +	/* write data to payload */
+> > +	if (augmented) {
+> > +		int written = offsetof(struct augmented_arg, value) + aug_size;
+> > +
+> > +		if (written < 0 || written > sizeof(struct augmented_arg))
+> > +			return 1; /* break */
+> > +
+> > +		augmented_arg->size = aug_size;
+> > +		*loop_ctx->output += written;
+> > +		loop_ctx->payload_offset += written;
+> > +		*loop_ctx->do_output = true;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static int augment_sys_enter(void *ctx, struct syscall_enter_args *args)
+> >  {
+> > -	bool augmented, do_output = false;
+> > -	int zero = 0, index, value_size = sizeof(struct augmented_arg) - offsetof(struct augmented_arg, value);
+> > +	bool do_output = false;
+> > +	int zero = 0, value_size = sizeof(struct augmented_arg) - offsetof(struct augmented_arg, value);
+> >  	u64 output = 0; /* has to be u64, otherwise it won't pass the verifier */
+> > -	s64 aug_size, size;
+> >  	unsigned int nr, *beauty_map;
+> >  	struct beauty_payload_enter *payload;
+> > -	void *arg, *payload_offset;
+> > +	void *payload_offset;
+> > +	long iters;
+> >  
+> >  	/* fall back to do predefined tail call */
+> >  	if (args == NULL)
+> > @@ -457,63 +538,17 @@ static int augment_sys_enter(void *ctx, struct syscall_enter_args *args)
+> >  	/* copy the sys_enter header, which has the syscall_nr */
+> >  	__builtin_memcpy(&payload->args, args, sizeof(struct syscall_enter_args));
+> >  
+> > -	/*
+> > -	 * Determine what type of argument and how many bytes to read from user space, using the
+> > -	 * value in the beauty_map. This is the relation of parameter type and its corresponding
+> > -	 * value in the beauty map, and how many bytes we read eventually:
+> > -	 *
+> > -	 * string: 1			      -> size of string
+> > -	 * struct: size of struct	      -> size of struct
+> > -	 * buffer: -1 * (index of paired len) -> value of paired len (maximum: TRACE_AUG_MAX_BUF)
+> > -	 */
+> > -	for (int i = 0; i < 6; i++) {
+> > -		arg = (void *)args->args[i];
+> > -		augmented = false;
+> > -		size = beauty_map[i];
+> > -		aug_size = size; /* size of the augmented data read from user space */
+> > -
+> > -		if (size == 0 || arg == NULL)
+> > -			continue;
+> > -
+> > -		if (size == 1) { /* string */
+> > -			aug_size = bpf_probe_read_user_str(((struct augmented_arg *)payload_offset)->value, value_size, arg);
+> > -			/* minimum of 0 to pass the verifier */
+> > -			if (aug_size < 0)
+> > -				aug_size = 0;
+> > -
+> > -			augmented = true;
+> > -		} else if (size > 0 && size <= value_size) { /* struct */
+> > -			if (!bpf_probe_read_user(((struct augmented_arg *)payload_offset)->value, size, arg))
+> > -				augmented = true;
+> > -		} else if ((int)size < 0 && size >= -6) { /* buffer */
+> > -			index = -(size + 1);
+> > -			barrier_var(index); // Prevent clang (noticed with v18) from removing the &= 7 trick.
+> > -			index &= 7;	    // Satisfy the bounds checking with the verifier in some kernels.
+> > -			aug_size = args->args[index] > TRACE_AUG_MAX_BUF ? TRACE_AUG_MAX_BUF : args->args[index];
+> > -
+> > -			if (aug_size > 0) {
+> > -				if (!bpf_probe_read_user(((struct augmented_arg *)payload_offset)->value, aug_size, arg))
+> > -					augmented = true;
+> > -			}
+> > -		}
+> > -
+> > -		/* Augmented data size is limited to sizeof(augmented_arg->unnamed union with value field) */
+> > -		if (aug_size > value_size)
+> > -			aug_size = value_size;
+> > -
+> > -		/* write data to payload */
+> > -		if (augmented) {
+> > -			int written = offsetof(struct augmented_arg, value) + aug_size;
+> > -
+> > -			if (written < 0 || written > sizeof(struct augmented_arg))
+> > -				return 1;
+> > -
+> > -			((struct augmented_arg *)payload_offset)->size = aug_size;
+> > -			output += written;
+> > -			payload_offset += written;
+> > -			do_output = true;
+> > -		}
+> > -	}
+> > +	struct args_loop_ctx loop_ctx = {
+> > +		.args = args,
+> > +		.beauty_map = beauty_map,
+> > +		.payload_offset = payload_offset,
+> > +		.value_size = value_size,
+> > +		.output = &output,
+> > +		.do_output = &do_output
+> > +	};
+> > +	iters = bpf_loop(6, process_arg_cb, &loop_ctx, 0);
+> 
+> bpf_loop() is old and generally not recommended.
+> Please use bpf_for() then the diff will be one line change and
+> can scale to any number of args. Not just 6.
+ 
+One thing we should take care is to support old kernels.  The oldest
+LTS kernel in the kernel.org is 5.10 and bpf_loop() was introduced in
+5.17 and bpf_for (bpf_iter_num) was 6.4.
 
-I want to see whether cu->producer_clang can be removed in
+Maybe we can factor out the loop body and call it from different
+mechanisms like open-coded loop, bpf_loop or bpf_for depending on the
+kernel version.  But not sure it'd fix the verifier issue though.
 
-                 } else if (pos->has_const_value && !cu->producer_clang) {
-                         pos->optimized = 1;
-                 } else if (true_sig_enabled) {
-                         if (regs_available &&
-                             ftype__next_parameter_preserves_slots(ftype, pos, reg_idx, slots, cu)) {
-                                 reg_idx += slots;
-                                 continue;
-                         }
-                         
-                         pos->optimized = 1;
-                         consumes_register = false;
-                 }
-
-
-For clang, we cannot just do pos->optimized = 1 just due to pos->has_const_value though.
-
+Thanks,
+Namhyung
 
