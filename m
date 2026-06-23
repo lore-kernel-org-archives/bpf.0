@@ -1,45 +1,47 @@
 Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C11BC359A91;
-	Tue, 23 Jun 2026 18:32:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5826C61FFE;
+	Tue, 23 Jun 2026 18:38:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782239530; cv=none; b=knlSaSx+rS03wCTTBWxEm5+KB+N44bEeSydIHnSkn2HJPM1zfvnAjPKkDfsnMym7gy5alUAszAGP8zUT9kjCNTgJHajcr2q7DQdhjV6eEsfI5WSxx5rkK4llbjhg4x/5K15iQ/L3v8lEtk05fg9LthqZqDgQRYs1dXt4xzu0MMw=
+	t=1782239924; cv=none; b=QgIHngDUF6r/Rxxtz7Z+SV+X/qoaBNk0GX845ULjgpuCm0uYlFwQEn9BDa7T396iqglc1BcMaioQ6ejfBl1ZjsdX3vWO0TIfxN6q8PwAdfgcGrcVcsKHS34uqZ+50NF4+nSIM8yRqxQsHR7em5oqOXv6VKUNAwMHJtvZuD4A1vY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782239530; c=relaxed/simple;
-	bh=o2SHWTofhxRkanpNrEO5U0csdR5JtfU2ZtOrfn/cyTg=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=as9PWETdxuQ0VdiJxQwvzhQVkvyTcuGOlcBEgOD936CHoh+RXv2dg/ucK0wEaoMlHVI4mETu7JpjtNfmY2lad9BCCetee0fOWA++vgtiAvSZx4B11hNbTTzNkvJtBrJnzGnvK0udOWsIdFmbAKhHmn+gPuvfxXuaq9PTASYWS0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=pJPxf0sC; arc=none smtp.client-ip=185.226.149.37
+	s=arc-20240116; t=1782239924; c=relaxed/simple;
+	bh=hGOZXg+4Pj8RgWzRgCiRrOv/zxm78ySvax8WAt5dwHU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=T2HdQ/nYq2kvkBB2p4Yv35sYB1AMaliicNOty5JY0c0CMrvMgKxB5CNcxvtXBcg6oocAM7f0H31dVkQzZJNEw2/z6ihIsu8jzVEmY6LnDZMVhhwUjijE3KrsFtObkMEnGwjDqct8XnYtioKAQNwgdHib0GhAmzb8cN48b6nqAwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=WYuYfGVK; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="pJPxf0sC"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="WYuYfGVK"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
 	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1wc5Td-001WV9-98; Tue, 23 Jun 2026 20:04:01 +0200
+	id 1wc5Td-001WVB-Bm; Tue, 23 Jun 2026 20:04:01 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
-	Message-Id:Date:Subject:From; bh=JtRtCSPn/CTA9bmTH0wClGxUVvAD6YfA42NZj2PW6vk=
-	; b=pJPxf0sCT8cUrRE9FLGbkiDjDuK9KioNF844/jQBReWzPg9O4OSPitDSou+KY9qvLQow4fsEM
-	dkJuGAxSUKT+Wcs0lY2SlSF/tCUharPdWIOIods9vp7Y1pDHYYOuzrmI0+AFFn6gcocfgdYFDPzpJ
-	b67riQiClwNrTfrnpLw8wXPZDh8cy0+K6ixjQKkYIJNiZK4ndB6Km2ASVugFYhMcf3jOqy/x1JkzM
-	qNeYPULiNgWANfvdVdlbQWTs245q4jEgs6N6FCCCiBO+y04rWYUOWoNUn9IPveXcUg8eTRmj/aA+V
-	f40Yg5niCsNgk41EdwHFos6U59Fg1rX5JWBd2Q==;
+	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
+	bh=Sti1jCguCRpBBBvquWfU5zjAjdyTJJuitKusSD+nWeE=; b=WYuYfGVKfcZK7LOuvf/wVgI8UH
+	xSolqAAnvanY6Z6qpu5Mr+gcjtL6wZBxRQNpL+wsHFI+CoR5XC7yLc34WeUYgCv+kDtjuGsmfM7QX
+	KK3Weo+fU51M5TaKgfBf4yAqngUIzqkfD4CEc434J0ift7ltmwICTGljlghBI13IBXVKbr2AlQlxq
+	p3GPD++CYVHrGyDu9vRIuka0ggWSahI6r4n1BhQxDw6ZP2z+bB+oS78SAAOpqRv7eQpMONgZ7Mf4p
+	WgaX/piN7nBQwszlExV8zK3ON6mRqOxaLYDm71BPuN3vcFIRl8zV81nNI7WE+yPvaHKCLajaXP3Cb
+	RAzfLUiw==;
 Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1wc5TW-0006hG-O0; Tue, 23 Jun 2026 20:03:55 +0200
+	id 1wc5TX-0006Rz-HL; Tue, 23 Jun 2026 20:03:55 +0200
 Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.95)
-	id 1wc5TO-00GZY0-Jl;
-	Tue, 23 Jun 2026 20:03:46 +0200
+	id 1wc5TR-00GZY0-9K;
+	Tue, 23 Jun 2026 20:03:49 +0200
 From: Michal Luczaj <mhal@rbox.co>
-Subject: [PATCH bpf 0/2] bpf, sockmap: Fix sockmap leaking UDP socks
-Date: Tue, 23 Jun 2026 20:03:08 +0200
-Message-Id: <20260623-sockmap-lookup-udp-leak-v1-0-05804f9308e4@rbox.co>
+Date: Tue, 23 Jun 2026 20:03:10 +0200
+Subject: [PATCH bpf 2/2] selftests/bpf: Add test for UDP sock leak on
+ sockmap lookup-bind-release
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,10 +50,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMywrCMBBFf6XM2oGm9CH+irhIJlMdo03INCKU/
- rtRd/dcOGcD5SyscGo2yPwSlbhUMIcG6GaXK6P4ytC13diOZkKNFJ424SPGUBIWXyfbgI56Hmj
- oj8ZPUO2UeZb3r3wGl2a4/E8t7s60fpuw7x8EZoOBgAAAAA==
-X-Change-ID: 20260617-sockmap-lookup-udp-leak-bc4e5c5481d7
+Message-Id: <20260623-sockmap-lookup-udp-leak-v1-2-05804f9308e4@rbox.co>
+References: <20260623-sockmap-lookup-udp-leak-v1-0-05804f9308e4@rbox.co>
+In-Reply-To: <20260623-sockmap-lookup-udp-leak-v1-0-05804f9308e4@rbox.co>
 To: John Fastabend <john.fastabend@gmail.com>, 
  Jakub Sitnicki <jakub@cloudflare.com>, 
  Jiayuan Chen <jiayuan.chen@linux.dev>, 
@@ -69,24 +70,144 @@ Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
  Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.15.2
 
-Fix for UDP sockets refcount asymmetry in sockmap lookup/release.
-Accompanied by a selftest.
+Setup and join a cgroup, then attach a cgroup/connect4 program that runs
+
+   sk = bpf_map_lookup_elem(sockmap, 0)
+   bpf_bind(ctx, sa, sizeof(sa))
+   bpf_sk_release(sk)
+
+Unpatched kernel leaks the socket.
 
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
-Michal Luczaj (2):
-      bpf, sockmap: Don't leak UDP socks on lookup-bind-release
-      selftests/bpf: Add test for UDP sock leak on sockmap lookup-bind-release
-
- net/ipv4/udp_bpf.c                                 |  3 ++
  .../selftests/bpf/prog_tests/sockmap_basic.c       | 50 ++++++++++++++++++++++
  .../bpf/progs/test_sockmap_lookup_bind_release.c   | 37 ++++++++++++++++
- 3 files changed, 90 insertions(+)
----
-base-commit: 12091470c6b4c1c14b2de12dcbae2ada6cb6d20b
-change-id: 20260617-sockmap-lookup-udp-leak-bc4e5c5481d7
+ 2 files changed, 87 insertions(+)
 
-Best regards,
---  
-Michal Luczaj <mhal@rbox.co>
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index cb3229711f93..11972ffdb16e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -7,6 +7,7 @@
+ 
+ #include "test_progs.h"
+ #include "test_skmsg_load_helpers.skel.h"
++#include "test_sockmap_lookup_bind_release.skel.h"
+ #include "test_sockmap_update.skel.h"
+ #include "test_sockmap_invalid_update.skel.h"
+ #include "test_sockmap_skb_verdict_attach.skel.h"
+@@ -17,6 +18,7 @@
+ #include "test_sockmap_msg_pop_data.skel.h"
+ #include "bpf_iter_sockmap.skel.h"
+ 
++#include "cgroup_helpers.h"
+ #include "sockmap_helpers.h"
+ 
+ #define TCP_REPAIR		19	/* TCP sock is under repair right now */
+@@ -1373,6 +1375,52 @@ static void test_sockmap_multi_channels(int sotype)
+ 	test_sockmap_pass_prog__destroy(skel);
+ }
+ 
++#define LOOKUP_BIND_RELEASE_CG	"/sockmap_lookup-bind-release"
++#define LOOKUP_BIND_RELEASE_REP	64
++
++static void test_sockmap_lookup_bind_release(void)
++{
++	struct test_sockmap_lookup_bind_release *skel;
++	struct sockaddr_in sa;
++	int cg, i;
++
++	cg = cgroup_setup_and_join(LOOKUP_BIND_RELEASE_CG);
++	if (!ASSERT_OK_FD(cg, "cgroup_setup_and_join"))
++		return;
++
++	skel = test_sockmap_lookup_bind_release__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		goto cleanup;
++
++	skel->links.connect = bpf_program__attach_cgroup(skel->progs.connect, cg);
++	if (!ASSERT_OK_PTR(skel->links.connect, "attach_cgroup"))
++		goto destroy;
++
++	sa.sin_family = AF_INET;
++	sa.sin_port = bpf_htons(1234);
++	sa.sin_addr.s_addr = bpf_htonl(INADDR_LOOPBACK);
++
++	for (i = 0; i < LOOKUP_BIND_RELEASE_REP; ++i) {
++		__close_fd int sk;
++
++		sk = xsocket(AF_INET, SOCK_DGRAM, 0);
++		if (sk < 0)
++			break;
++
++		if (xbpf_map_update_elem(bpf_map__fd(skel->maps.sockmap), &u32(0),
++					 &sk, BPF_ANY))
++			break;
++
++		if (xconnect(sk, (struct sockaddr *)&sa, sizeof(sa)))
++			break;
++	}
++
++destroy:
++	test_sockmap_lookup_bind_release__destroy(skel);
++cleanup:
++	cleanup_cgroup_environment();
++}
++
+ void test_sockmap_basic(void)
+ {
+ 	if (test__start_subtest("sockmap create_update_free"))
+@@ -1451,4 +1499,6 @@ void test_sockmap_basic(void)
+ 		test_sockmap_multi_channels(SOCK_STREAM);
+ 	if (test__start_subtest("sockmap udp multi channels"))
+ 		test_sockmap_multi_channels(SOCK_DGRAM);
++	if (test__start_subtest("sockmap lookup-bind-release"))
++		test_sockmap_lookup_bind_release();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_lookup_bind_release.c b/tools/testing/selftests/bpf/progs/test_sockmap_lookup_bind_release.c
+new file mode 100644
+index 000000000000..cc77b193893b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sockmap_lookup_bind_release.c
+@@ -0,0 +1,37 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <linux/in.h>
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, int);
++} sockmap SEC(".maps");
++
++SEC("cgroup/connect4")
++int connect(struct bpf_sock_addr *ctx)
++{
++	struct bpf_sock *sk;
++	int ret = SK_DROP;
++
++	sk = bpf_map_lookup_elem(&sockmap, &(int){0});
++	if (sk) {
++		if (sk == ctx->sk) {
++			struct sockaddr_in sa = {
++				.sin_family = ctx->user_family,
++				.sin_port = ctx->user_port,
++				.sin_addr.s_addr = ctx->user_ip4
++			};
++
++			ret = !bpf_bind(ctx, (struct sockaddr *)&sa, sizeof(sa));
++		}
++
++		bpf_sk_release(sk);
++	}
++
++	return ret;
++}
++
++char _license[] SEC("license") = "GPL";
+
+-- 
+2.54.0
 
