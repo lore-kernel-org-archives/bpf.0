@@ -1,540 +1,151 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8D039DBFD
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 04:07:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D4C331EB8;
+	Tue, 23 Jun 2026 06:02:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782187663; cv=none; b=sb/dgcJvnveHSB5VHpizEThW5sXsoXkphByc6uX3RitPJEGo4Fq74hhD2RrT97cvQpwx5g8UDUKrBtElomCqTT63QWLjiP/cr6LhVDhCGAAIL25mcd2uR+ppMs37EhulA+yLqQv77IZb+7DVKzXPiZdjnYEp+YxQZhMWleqxcAI=
+	t=1782194551; cv=none; b=GPnnoC+Gp4ucLnPAmh7NgQf0fx6ygvjrruuwPa4QEWLcZn4ceGzWTVO6pc+ubZEoQB7EgxVJ2CrOE1UQrag8JdWVgKFkUltLbPaYvtSMxPMXS1PTy5Ngc4lACYCuefnUhyJ8/MOJGDwlhKPhe7Nbu4hIhl5N7aQcDIpzSa0Zjqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782187663; c=relaxed/simple;
-	bh=RHUpcEQ9cC/JLnGje3X3mR5wICD/1jlwxC12zP/h/9g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Jn3q0K9PAiBH+EBCI+rnpWH74Rt6oYANttvQYgNaE2iT1mtixw74okSSuttYXREZ2N+Ej80poaSnepBGYydFuhie5U52yXi1qdFwHEMtbAkiDBD+0T0jQ0A4P+vhz7B9SD7W2Wi71+E6cfUy8QhRZ/lTT8U2ex/Hm6NFDzY3X88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 84494192FFDCA6; Mon, 22 Jun 2026 21:07:30 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org,
-	kernel-team@fb.com
-Subject: [PATCH dwarves v7 5/5] tests: Add BTF true_signature encoding tests
-Date: Mon, 22 Jun 2026 21:07:30 -0700
-Message-ID: <20260623040730.2738104-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260623040704.2732530-1-yonghong.song@linux.dev>
-References: <20260623040704.2732530-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1782194551; c=relaxed/simple;
+	bh=Ohl8H5CIdVJ0LZVBp5/kkC99ycMWv9vhyOY2FRSkPyc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M5NJdIBsjhoREWewXt3UKF+B+4o2Y7VYdAzmw6q9SyF1TLn5Rrwyl6YcTHS16L7ffFUDs6x9SnKeYLMgCA7d5Yp23A9h3YLF2kgo82/oi1bhimGRwOp+8n923FWLfOnDKwIBtEN5jmWQyviHDZxFq6Tk7qLSn9Eydzs8JmU1bIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Y9vekp61; arc=none smtp.client-ip=115.124.30.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Y9vekp61"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1782194539; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	bh=5D6qSgcvkXY5fZhgXS+3C6PguwJ4UnErXlSfTf6hK/0=;
+	b=Y9vekp61xn2XhxSvykk9bYtq5TyJ6bTyOa86OlMAzzOKGVp7HLoKyayz+2iRlV0yUWUgJ0rpjkJJiltf4J4gpnu6HSfSAtR+g96UMf83HyOIfEEbjwR2ogbGhYzTS5E+NVe9Cx/IVg0vVDkKqVHGhMd9/lRUH+wK+EgmWBuHjjc=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=alibuda@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0X5SwrVe_1782194538;
+Received: from localhost(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0X5SwrVe_1782194538 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 23 Jun 2026 14:02:18 +0800
+Date: Tue, 23 Jun 2026 14:02:18 +0800
+From: "D. Wythe" <alibuda@linux.alibaba.com    >
+To: Sechang Lim <rhkrqnwk98@gmail.com>
+Cc: "D . Wythe" <alibuda@linux.alibaba.com>,
+	Dust Li <dust.li@linux.alibaba.com>,
+	Sidraya Jayagond <sidraya@linux.ibm.com>,
+	Wenjia Zhang <wenjia@linux.ibm.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Mahanta Jambigi <mjambigi@linux.ibm.com>,
+	Tony Lu <tonylu@linux.alibaba.com>,
+	Wen Gu <guwen@linux.alibaba.com>, Simon Horman <horms@kernel.org>,
+	Ursula Braun <ubraun@linux.ibm.com>,
+	Karsten Graul <kgraul@linux.ibm.com>,
+	Guvenc Gulce <guvenc@linux.ibm.com>, linux-rdma@vger.kernel.org,
+	linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net v2] net/smc: fix out-of-bounds read when sk_user_data
+ holds a sk_psock
+Message-ID: <20260623060218.GA29925@j66a10360.sqa.eu95>
+References: <20260619150342.3626224-1-rhkrqnwk98@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260619150342.3626224-1-rhkrqnwk98@gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 
-Add five tests exercising true_signature BTF encoding for clang-built,
-signature-changed (DW_CC_nocall) functions:
+On Fri, Jun 19, 2026 at 03:03:41PM +0000, Sechang Lim wrote:
+> SMC stores its smc_sock in the clcsock's sk_user_data tagged
+> SK_USER_DATA_NOCOPY and reads it back with smc_clcsock_user_data(), which
+> only strips that flag. sockmap stores a sk_psock in the same field tagged
+> SK_USER_DATA_NOCOPY | SK_USER_DATA_PSOCK. Nothing keeps both off one
+> socket, and SMC then casts the sk_psock to an smc_sock.
+> 
+> A passive-open child hits this. It inherits the listener's
+> smc_clcsock_data_ready(), but sk_clone_lock() clears its NOCOPY
+> sk_user_data, and a BPF sock_ops program then adds the child to a sockmap,
+> installing a sk_psock in that field. The inherited callback reads it as an
+> smc_sock and dereferences a clcsk_* pointer past the end of the sk_psock:
+> 
+>   BUG: KASAN: slab-out-of-bounds in smc_clcsock_data_ready+0x84/0x200 net/smc/af_smc.c:2637
+>   Read of size 8 at addr ffff8880013b8674 by task syz.6.12484/67930
+>    <IRQ>
+>    smc_clcsock_data_ready+0x84/0x200 net/smc/af_smc.c:2637
+>    tcp_urg+0x24d/0x360 net/ipv4/tcp_input.c:6264
+>    tcp_rcv_state_process+0x280d/0x4940 net/ipv4/tcp_input.c:7336
+>    tcp_child_process+0x371/0xa50 net/ipv4/tcp_minisocks.c:1002
+>    tcp_v4_rcv+0x1eaa/0x2a00 net/ipv4/tcp_ipv4.c:2186
+>    [...]
+>    </IRQ>
+> 
+>   Allocated by task 67930:
+>    sk_psock_init+0x142/0x740 net/core/skmsg.c:766
+>    sock_hash_update_common+0xd3/0x990 net/core/sock_map.c:1010
+>    bpf_sock_hash_update+0x114/0x170 net/core/sock_map.c:1229
+>    __cgroup_bpf_run_filter_sock_ops+0x74/0xa0 kernel/bpf/cgroup.c:1727
+>    tcp_init_transfer+0x1085/0x1100 net/ipv4/tcp_input.c:6693
+>    [...]
+> 
+> sk_psock() already guards the other side, returning NULL unless
+> SK_USER_DATA_PSOCK is set. Make smc_clcsock_user_data() and its RCU
+> variant return the smc_sock only when sk_user_data carries SMC's tag
+> alone. A sk_psock then reads back as NULL, which the data_ready and
+> fallback callbacks already handle.
+> 
+> Fixes: a60a2b1e0af1 ("net/smc: reduce active tcp_listen workers")
+> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+> ---
+>  net/smc/smc.h | 18 +++++++++++++++---
+>  1 file changed, 15 insertions(+), 3 deletions(-)
+> 
+> diff --git a/net/smc/smc.h b/net/smc/smc.h
+> index 52145df83f6e..88dfb459b7cc 100644
+> --- a/net/smc/smc.h
+> +++ b/net/smc/smc.h
+> @@ -342,13 +342,25 @@ static inline void smc_init_saved_callbacks(struct smc_sock *smc)
+>  
+>  static inline struct smc_sock *smc_clcsock_user_data(const struct sock *clcsk)
+>  {
+> -	return (struct smc_sock *)
+> -	       ((uintptr_t)clcsk->sk_user_data & ~SK_USER_DATA_NOCOPY);
+> +	uintptr_t data = (uintptr_t)clcsk->sk_user_data;
+> +
+> +	/*
+> +	 * Return the smc_sock only if the slot carries SMC's tag alone.
+> +	 * sockmap stores a sk_psock here tagged SK_USER_DATA_PSOCK; it is
+> +	 * not an smc_sock and must not be dereferenced as one.
+> +	 */
+> +	if ((data & ~SK_USER_DATA_PTRMASK) != SK_USER_DATA_NOCOPY)
+> +		return NULL;
+> +	return (struct smc_sock *)(data & SK_USER_DATA_PTRMASK);
+>  }
+>  
+>  static inline struct smc_sock *smc_clcsock_user_data_rcu(const struct sock *clcsk)
+>  {
+> -	return (struct smc_sock *)rcu_dereference_sk_user_data(clcsk);
+> +	uintptr_t data = (uintptr_t)rcu_dereference(__sk_user_data(clcsk));
+> +
+> +	if ((data & ~SK_USER_DATA_PTRMASK) != SK_USER_DATA_NOCOPY)
+> +		return NULL;
+> +	return (struct smc_sock *)(data & SK_USER_DATA_PTRMASK);
+>  }
+>  
+>  /* save target_cb in saved_cb, and replace target_cb with new_cb */
 
- - clang_parm_optimized: an unused scalar parameter is dropped from the
-   true signature.
- - clang_parm_optimized_stack: with more arguments than argument register=
-s,
-   optimized-out parameters (including stack-passed ones) are dropped.
- - clang_parm_aggregate_1: a two-register aggregate that is only partiall=
-y
-   used is rewritten to its single used member, while a fully-used
-   aggregate is preserved.
- - clang_parm_aggregate_2: like aggregate_1 but with an extra unused scal=
-ar
-   parameter; additionally checks that the first argument name is preserv=
-ed.
- - clang_parm_memory: a large aggregate classified MEMORY and passed on t=
-he
-   stack is kept while an unused parameter is dropped.  A union is used s=
-o
-   the struct-parameter exception in cu__resolve_func_ret_types_optimized=
-()
-   does not mask a wrong unexpected_reg.
+No. The core issue is how to resolve the ownership conflict between
+sockmap and SMC over sk_user_data, which can by no means be solved by
+adding runtime checks on the read path.
 
-Each test compares the BTF signature against the DWARF signature.  Since
-clang only emits DW_CC_nocall on some architectures, the per-arch handlin=
-g
-differs between the tests:
+Following sk_psock_init(), the simplest approach would be to always
+explicitly set sk_user_data or ulp_ops during the active/passive
+creation of smc->clcsock, thereby avoiding the conflict at its root.
 
- - clang_parm_optimized and clang_parm_optimized_stack skip when no
-   optimization is observed and otherwise assert the signatures differ.
- - clang_parm_aggregate_1 asserts the signatures differ on x86_64, expect=
-s
-   them equal on aarch64, and skips elsewhere.
- - clang_parm_aggregate_2 asserts the signatures differ on both x86_64 an=
-d
-   aarch64, and skips elsewhere.
- - clang_parm_memory asserts a true signature is produced and that it
-   differs on x86_64, and skips elsewhere.
+Additionally, compatibility with sockmap in the fallback path needs to
+be considered, though that can be addressed later.
 
-The following is an example to dump BTF vs. Dwarf:
-
-  $ VERBOSE=3D1 ./clang_parm_memory.sh
-  Validation of BTF encoding of true_signatures.
-     BTF: long foo(union big u, int x); DWARF: long foo(union big u, int =
-dead, int x);
-  Test ./clang_parm_memory.sh passed
-
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- tests/clang_parm_aggregate_1.sh     | 85 ++++++++++++++++++++++++++++
- tests/clang_parm_aggregate_2.sh     | 88 +++++++++++++++++++++++++++++
- tests/clang_parm_memory.sh          | 77 +++++++++++++++++++++++++
- tests/clang_parm_optimized.sh       | 63 +++++++++++++++++++++
- tests/clang_parm_optimized_stack.sh | 63 +++++++++++++++++++++
- 5 files changed, 376 insertions(+)
- create mode 100755 tests/clang_parm_aggregate_1.sh
- create mode 100755 tests/clang_parm_aggregate_2.sh
- create mode 100755 tests/clang_parm_memory.sh
- create mode 100755 tests/clang_parm_optimized.sh
- create mode 100755 tests/clang_parm_optimized_stack.sh
-
-diff --git a/tests/clang_parm_aggregate_1.sh b/tests/clang_parm_aggregate=
-_1.sh
-new file mode 100755
-index 0000000..9502f8b
---- /dev/null
-+++ b/tests/clang_parm_aggregate_1.sh
-@@ -0,0 +1,85 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+source test_lib.sh
-+
-+outdir=3D$(make_tmpdir)
-+
-+# Comment this out to save test data.
-+trap cleanup EXIT
-+
-+title_log "Validation of BTF encoding of true_signatures."
-+
-+clang_true=3D"${outdir}/clang_true"
-+CC=3D$(which clang 2>/dev/null)
-+
-+if [[ -z "$CC" ]]; then
-+	info_log "skip: clang not available"
-+	test_skip
-+fi
-+
-+cat > ${clang_true}.c << EOF
-+struct t { long f1; long f2; };
-+__attribute__((noinline)) static long foo(struct t a, struct t b, int i)
-+{
-+        return a.f1 + b.f1 + b.f2 + i;
-+}
-+
-+struct t p1, p2;
-+int i;
-+int main()
-+{
-+        return (int)foo(p1, p2, i);
-+}
-+EOF
-+
-+CFLAGS=3D"$CFLAGS -g -O2"
-+${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not compile ${clang_true}.c"
-+	test_fail
-+fi
-+LLVM_OBJCOPY=3Dobjcopy pahole -J --btf_features=3D+true_signature $clang=
-_true
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not encode BTF for $clang_true"
-+	test_fail
-+fi
-+
-+btf_optimized=3D$(pfunct --all --format_path=3Dbtf $clang_true |grep "fo=
-o")
-+if [[ -z "$btf_optimized" ]]; then
-+	info_log "skip: no optimizations applied."
-+	test_skip
-+fi
-+
-+btf_cmp=3D$btf_optimized
-+dwarf=3D$(pfunct --all $clang_true |grep "foo")
-+
-+verbose_log "BTF: $btf_optimized  DWARF: $dwarf"
-+
-+arch=3D$(uname -m)
-+
-+if [[ "$arch" =3D=3D "x86_64" ]]; then
-+	# On x86_64, clang emits DW_CC_nocall for optimized functions,
-+	# so pahole should detect the optimization and produce a
-+	# different BTF signature.
-+	if [[ "$btf_cmp" =3D=3D "$dwarf" ]]; then
-+		error_log "BTF and DWARF signatures should be different and they are n=
-ot: BTF: $btf_optimized ; DWARF $dwarf"
-+		test_fail
-+	fi
-+elif [[ "$arch" =3D=3D "aarch64" ]]; then
-+	# On arm64, clang does not emit DW_CC_nocall, so pahole cannot
-+	# detect the optimization. BTF and DWARF signatures are expected
-+	# to be the same.
-+	if [[ "$btf_cmp" !=3D "$dwarf" ]]; then
-+		error_log "On arm64, BTF and DWARF signatures should be the same but t=
-hey are not: BTF: $btf_optimized ; DWARF $dwarf"
-+		test_fail
-+	fi
-+else
-+	# On other architectures, skip if we cannot determine the
-+	# expected behavior.
-+	if [[ "$btf_cmp" =3D=3D "$dwarf" ]]; then
-+		info_log "skip: no optimization detected on $arch"
-+		test_skip
-+	fi
-+fi
-+test_pass
-diff --git a/tests/clang_parm_aggregate_2.sh b/tests/clang_parm_aggregate=
-_2.sh
-new file mode 100755
-index 0000000..ae03369
---- /dev/null
-+++ b/tests/clang_parm_aggregate_2.sh
-@@ -0,0 +1,88 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+source test_lib.sh
-+
-+outdir=3D$(make_tmpdir)
-+
-+# Comment this out to save test data.
-+trap cleanup EXIT
-+
-+title_log "Validation of BTF encoding of true_signatures."
-+
-+clang_true=3D"${outdir}/clang_true"
-+CC=3D$(which clang 2>/dev/null)
-+
-+if [[ -z "$CC" ]]; then
-+	info_log "skip: clang not available"
-+	test_skip
-+fi
-+
-+cat > ${clang_true}.c << EOF
-+struct t { long f1; long f2; };
-+__attribute__((noinline)) static long foo(struct t a, struct t b, int i,=
- int j)
-+{
-+        return a.f1 + b.f1 + b.f2 + i;
-+}
-+
-+struct t p1, p2;
-+int i;
-+int main()
-+{
-+        return (int)foo(p1, p2, i, i + 1);
-+}
-+EOF
-+
-+CFLAGS=3D"$CFLAGS -g -O2"
-+${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not compile ${clang_true}.c"
-+	test_fail
-+fi
-+LLVM_OBJCOPY=3Dobjcopy pahole -J --btf_features=3D+true_signature $clang=
-_true
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not encode BTF for $clang_true"
-+	test_fail
-+fi
-+
-+btf_optimized=3D$(pfunct --all --format_path=3Dbtf $clang_true |grep "fo=
-o")
-+if [[ -z "$btf_optimized" ]]; then
-+	info_log "skip: no optimizations applied."
-+	test_skip
-+fi
-+
-+btf_cmp=3D$btf_optimized
-+dwarf=3D$(pfunct --all $clang_true |grep "foo")
-+
-+verbose_log "BTF: $btf_optimized  DWARF: $dwarf"
-+
-+arch=3D$(uname -m)
-+
-+if [[ "$arch" =3D=3D "x86_64" ]]; then
-+	# On x86_64, clang emits DW_CC_nocall for optimized functions (dead cod=
-e elimination),
-+	# so pahole should detect the optimization and produce a different BTF =
-signature.
-+	if [[ "$btf_cmp" =3D=3D "$dwarf" ]]; then
-+		error_log "BTF and DWARF signatures should be different and they are n=
-ot: BTF: $btf_optimized ; DWARF $dwarf"
-+		test_fail
-+	fi
-+elif [[ "$arch" =3D=3D "aarch64" ]]; then
-+	# On arm64, clang emits DW_CC_nocall for optimized functions (dead code=
- elimination),
-+	# so pahole should detect the optimization and produce a different BTF =
-signature.
-+	if [[ "$btf_cmp" =3D=3D "$dwarf" ]]; then
-+		error_log "BTF and DWARF signatures should be different and they are n=
-ot: BTF: $btf_optimized ; DWARF $dwarf"
-+		test_fail
-+	fi
-+
-+	if [[ "$btf_cmp" =3D=3D *"__"* ]]; then
-+		error_log "The first argument name a should be preserved and they are =
-not: BTF: $btf_optimized ; DWARF $dwarf"
-+		test_fail
-+	fi
-+else
-+	# On other architectures, skip if we cannot determine the
-+	# expected behavior.
-+	if [[ "$btf_cmp" =3D=3D "$dwarf" ]]; then
-+		info_log "skip: no optimization detected on $arch"
-+		test_skip
-+	fi
-+fi
-+test_pass
-diff --git a/tests/clang_parm_memory.sh b/tests/clang_parm_memory.sh
-new file mode 100755
-index 0000000..d0d798d
---- /dev/null
-+++ b/tests/clang_parm_memory.sh
-@@ -0,0 +1,77 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+source test_lib.sh
-+
-+outdir=3D$(make_tmpdir)
-+
-+# Comment this out to save test data.
-+trap cleanup EXIT
-+
-+title_log "Validation of BTF encoding of true_signatures."
-+
-+clang_true=3D"${outdir}/clang_true"
-+CC=3D$(which clang 2>/dev/null)
-+
-+if [[ -z "$CC" ]]; then
-+	info_log "skip: clang not available"
-+	test_skip
-+fi
-+
-+# the expected true signature: long foo(union big u, int x).
-+cat > ${clang_true}.c << EOF
-+union big { long a; char buf[24]; };
-+__attribute__((noinline)) static long foo(union big u, int dead, int x)
-+{
-+        return u.a + x;
-+}
-+
-+union big g;
-+int dead, x;
-+int main()
-+{
-+        return (int)foo(g, dead, x);
-+}
-+EOF
-+
-+CFLAGS=3D"$CFLAGS -g -O2"
-+${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not compile ${clang_true}.c"
-+	test_fail
-+fi
-+LLVM_OBJCOPY=3Dobjcopy pahole -J --btf_features=3D+true_signature $clang=
-_true
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not encode BTF for $clang_true"
-+	test_fail
-+fi
-+
-+btf_optimized=3D$(pfunct --all --format_path=3Dbtf $clang_true |grep "fo=
-o")
-+dwarf=3D$(pfunct --all $clang_true |grep "foo")
-+
-+verbose_log "BTF: $btf_optimized  DWARF: $dwarf"
-+
-+arch=3D$(uname -m)
-+
-+if [[ "$arch" =3D=3D "x86_64" ]]; then
-+	# On x86_64, clang emits DW_CC_nocall for optimized functions.  The
-+	# stack-passed aggregate must remain present and 'dead' must be
-+	# dropped, so a true signature must be produced and it must differ
-+	# from the DWARF signature.
-+	if [[ -z "$btf_optimized" ]]; then
-+		error_log "BTF for foo missing; the stack-passed aggregate was likely =
-rejected"
-+		test_fail
-+	fi
-+	if [[ "$btf_optimized" =3D=3D "$dwarf" ]]; then
-+		error_log "BTF and DWARF signatures should be different and they are n=
-ot: BTF: $btf_optimized ; DWARF $dwarf"
-+		test_fail
-+	fi
-+else
-+	# On other architectures clang may not emit DW_CC_nocall, so we
-+	# cannot assert the optimization was detected.
-+	if [[ -z "$btf_optimized" ]]; then
-+		info_log "skip: no optimization detected on $arch"
-+		test_skip
-+	fi
-+fi
-+test_pass
-diff --git a/tests/clang_parm_optimized.sh b/tests/clang_parm_optimized.s=
-h
-new file mode 100755
-index 0000000..81d50af
---- /dev/null
-+++ b/tests/clang_parm_optimized.sh
-@@ -0,0 +1,63 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+source test_lib.sh
-+
-+outdir=3D$(make_tmpdir)
-+
-+# Comment this out to save test data.
-+trap cleanup EXIT
-+
-+title_log "Validation of BTF encoding of true_signatures."
-+
-+clang_true=3D"${outdir}/clang_true"
-+CC=3D$(which clang 2>/dev/null)
-+
-+if [[ -z "$CC" ]]; then
-+	info_log "skip: clang not available"
-+	test_skip
-+fi
-+
-+cat > ${clang_true}.c << EOF
-+__attribute__((noinline)) static int foo(int a, int b, int c)
-+{
-+	return a * c - a - c;
-+}
-+
-+int a, b, c;
-+int main()
-+{
-+	return foo(a, b, c);
-+}
-+EOF
-+
-+CFLAGS=3D"$CFLAGS -g -O2"
-+${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not compile ${clang_true}.c"
-+	test_fail
-+fi
-+LLVM_OBJCOPY=3Dobjcopy pahole -J --btf_features=3D+true_signature $clang=
-_true
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not encode BTF for $clang_true"
-+	test_fail
-+fi
-+
-+btf_optimized=3D$(pfunct --all --format_path=3Dbtf $clang_true |grep "fo=
-o")
-+if [[ -z "$btf_optimized" ]]; then
-+	info_log "skip: no optimizations applied."
-+	test_skip
-+fi
-+
-+btf_cmp=3D$btf_optimized
-+dwarf=3D$(pfunct --all $clang_true |grep "foo")
-+
-+if [[ -n "$VERBOSE" ]]; then
-+	printf "   BTF: %s  DWARF: %s\n" "$btf_optimized" "$dwarf"
-+fi
-+
-+if [[ "$btf_cmp" =3D=3D "$dwarf" ]]; then
-+	error_log "BTF and DWARF signatures should be different and they are no=
-t: BTF: $btf_optimized ; DWARF $dwarf"
-+	test_fail
-+fi
-+test_pass
-diff --git a/tests/clang_parm_optimized_stack.sh b/tests/clang_parm_optim=
-ized_stack.sh
-new file mode 100755
-index 0000000..afdc355
---- /dev/null
-+++ b/tests/clang_parm_optimized_stack.sh
-@@ -0,0 +1,63 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+source test_lib.sh
-+
-+outdir=3D$(make_tmpdir)
-+
-+# Comment this out to save test data.
-+trap cleanup EXIT
-+
-+title_log "Validation of BTF encoding of true_signatures."
-+
-+clang_true=3D"${outdir}/clang_true"
-+CC=3D$(which clang 2>/dev/null)
-+
-+if [[ -z "$CC" ]]; then
-+	info_log "skip: clang not available"
-+	test_skip
-+fi
-+
-+cat > ${clang_true}.c << EOF
-+__attribute__((noinline)) static int foo(int a, int b, int c, int d, int=
- e, int f, int g, int h, int i)
-+{
-+        return a * i - a - i;
-+}
-+
-+int a, b, c, d, e, f, g, h, i;
-+int main()
-+{
-+        return foo(a, b, c, d, e, f, g, h, i);
-+}
-+EOF
-+
-+CFLAGS=3D"$CFLAGS -g -O2"
-+${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not compile ${clang_true}.c"
-+	test_fail
-+fi
-+LLVM_OBJCOPY=3Dobjcopy pahole -J --btf_features=3D+true_signature $clang=
-_true
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not encode BTF for $clang_true"
-+	test_fail
-+fi
-+
-+btf_optimized=3D$(pfunct --all --format_path=3Dbtf $clang_true |grep "fo=
-o")
-+if [[ -z "$btf_optimized" ]]; then
-+	info_log "skip: no optimizations applied."
-+	test_skip
-+fi
-+
-+btf_cmp=3D$btf_optimized
-+dwarf=3D$(pfunct --all $clang_true |grep "foo")
-+
-+if [[ -n "$VERBOSE" ]]; then
-+	printf "   BTF: %s  DWARF: %s\n" "$btf_optimized" "$dwarf"
-+fi
-+
-+if [[ "$btf_cmp" =3D=3D "$dwarf" ]]; then
-+	error_log "BTF and DWARF signatures should be different and they are no=
-t: BTF: $btf_optimized ; DWARF $dwarf"
-+	test_fail
-+fi
-+test_pass
---=20
-2.53.0-Meta
-
+> -- 
+> 2.43.0
