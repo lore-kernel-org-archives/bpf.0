@@ -1,128 +1,128 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B30395AE3;
-	Tue, 23 Jun 2026 14:39:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0629F3AEF49
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 14:39:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782225551; cv=none; b=YarZSGOEaadyG0Yjvskts+alpmyaeTZC+hDvGE18FD9b/IHUWxIvL5DtpoBrXlS5ArV3Q6OMeekxo69uXWnnWHVl/irQSpqInObApu6mXpx2qJ+mxXVzs5r9V9gWQghwgEZQ2ts2vpY1k7m3kzM+rZUBVNSMVrGF8E1y6tSjPi0=
+	t=1782225587; cv=none; b=sXwtG/ZE9WdOc5W6tNMjp7LhOkPt9Bi9w7qJA86+99GDpVktaKaoi2yUMyG4Oz3j+Fy1bS8biDes8xOVLynmoZ+tD23hDp+zU1gQFhyfSGYIyELYdJxLUVIV+Inu0vLc/LMaBCz2+n5PygiVNS5Mp47bjni2qqLfen2FWdnanGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782225551; c=relaxed/simple;
-	bh=TzACNddQ5TEQEyWSbfIt2z0l1PscuTuMebn0ZJeptR8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=gOEwlyHEZvmf2zwN4BDkkL9+N6DPfqnOW6UkxvSYmapgTmxn9JWnLWRyN9KpJjhQCjEOVhZxpPNVfni1VVKwwyneRgOGFphBZcEHqA5B48iU/N0iiw1wvfLax4VGoOxA4G0sTi4ssYKloIwkd2TMH7t2CB7XwUiUIZG/rjIfceo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Tyy0e45K; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1782225587; c=relaxed/simple;
+	bh=mFZBSEOcJUdrGKcR0R8U+0AQ/0E9Wn0s2b/+PKoTLo0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ZYhG94qa8u+PSlb33sagnQRYgbaehx/qui1f9zL98bQ6nuGsqXz2ImwVWTn0oAzsUoywjiDTKYALxgD/hYivi5iiz+ufTOisiCsJaMveNJvznZ79K5EgyTwrZrtcEonHi3OZa1ewgvGPPFMtAsORwRj7tIIP8VJTxtZKc1BAn3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SMotK1ul; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Tyy0e45K"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
-	Reply-To:Content-ID:Content-Description:In-Reply-To:References;
-	bh=kGMuDCEzBXBnfsspPsVSaErTuPATwEoz6IFYrK+CMM8=; b=Tyy0e45KTxWjxBYib/8hlb0Tev
-	vA1XVCxPwQYRTK6VuwUccK0pkXkCaXCJEjj5iafNUZLOFR89J5h47mR009FORgyl4NIcGV2wRjQsx
-	S44lW6tV3Kqwl2aTyrR6FN2vAP9PAYyZEdRs6Jd3BmjygjQ5ri709DSFWmfSqF8RWS5z5Pj/wi6vd
-	99vo9q7HTa6QiXOX9xCjzSrgtEoWPwPzFphlBlLLjjj/W4l9UXxEL3gDaVSpTT5O5k78n8UmCe2vo
-	BTneAkh84ZGn0KbAzWqvmsTFjTIaygc1gmPCIKCXWm/o2kbba6IsFVdNrQDZwVtiKk4gAVn4GPJzK
-	JP0rXLNA==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wc2H4-001ic7-2a;
-	Tue, 23 Jun 2026 14:38:51 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Tue, 23 Jun 2026 07:38:43 -0700
-Subject: [PATCH] sched_ext: Print deprecation warnings only once
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SMotK1ul"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54C6F1F000E9;
+	Tue, 23 Jun 2026 14:39:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782225584;
+	bh=1OcXKnQQEoobBJMbrFrQW9R4hUr3hVazvKUQFFpToUI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=SMotK1ulZubSZPKkG4EzztvcePvu+vpA9X6smwjaS3S1eM+vATswPAfwJl2VmjL/h
+	 +q0QQIFRpaLz8dJSIql31bPTfMYmQOlNNTifjb8d9EYS2T1sK9CXfnRFaXTM8/XS9v
+	 3GAK7WqVbHO+0exIstDQPenJCy2CQ59qACjEDw52kslxSO8cW+tKj32fUSaT1uoCGI
+	 63y8wpTU+7Q2LNP43XcflJSNf+hBIt02zC4kwUOJm7L1hRCooBl8b6BRJAXpCZYcGU
+	 ivoVpT7iUcHcFN1LTBuOfoN78c2Qug+aRKfpsh7omBnwUS3D4ZHUnDoyKf0w7QQOfi
+	 PcrLsLScu5Zfg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCHv2 bpf-next 2/3] selftests/bpf: Add tracing_multi link
+ info tests
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiri Olsa" <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260623142417.275892-3-jolsa@kernel.org>
+References: <20260623142417.275892-1-jolsa@kernel.org>
+ <20260623142417.275892-3-jolsa@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 23 Jun 2026 14:39:43 +0000
+Message-Id: <20260623143944.54C6F1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260623-scx_warning-v1-1-14bf218f4bd9@debian.org>
-X-B4-Tracking: v=1; b=H4sIAHOaOmoC/x3MUQqAIBAFwKss7zvBTIK8SkSYrbU/FgoVSHcPm
- gNMReEsXOCoIvMlRY4ER21DCLtPGytZ4QhGm173plMlPPPtc5K0Kb1GOwRrjY8LGsKZOcrzb+P
- 0vh9EJBTWXQAAAA==
-X-Change-ID: 20260623-scx_warning-0df49c442afb
-To: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
- Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
- Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
- K Prateek Nayak <kprateek.nayak@amd.com>
-Cc: sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, kernel-team@meta.com, Breno Leitao <leitao@debian.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2203; i=leitao@debian.org;
- h=from:subject:message-id; bh=TzACNddQ5TEQEyWSbfIt2z0l1PscuTuMebn0ZJeptR8=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqOpp1hDCIqrDFGN47l61dAWMctxN5R+WYn/2Qb
- ZXXLtObrH6JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCajqadQAKCRA1o5Of/Hh3
- bQxOD/0UyZhJeorO+MxcCmbjzGsMVjA6nZ9JWmKA0zG5Y5RVEqdcMORmpX+h9rmeQd3Kse2B2kb
- bm+DWxbsUWh+Z2DPNq9qobj+wPz6uME75jk7e23Lt8m5brwAxJ29SClxwWriKSOnR9CS1ajLxN+
- 0SF0LAtlY0ZPYLS6cC7I4DL3bcXkc/vhjo2D//EvUcFYY+LwMdQvAtyTWoF2YlMqMYyIZ7iyF3w
- XTybvE2sKyNMkmBL6Crzz4/urJmqiRJsDe/T2ND0gWrGHOisZFEZb6mRSdL9JysDmYUUXwjjLBj
- nXJgtJ/dq+lBwq1nB3MZjNOat63cq3nVV8OYGyH8eGOWDFpERKTGfg+4qFJkart4vt3qb3TR1Bs
- t4dU9Tt++zzAn8wr/unnmysqMIhyYyJt3WgpHiGtjKQXAiYJ/jJGeeZNDLMW4tcfajrQuEvaPRH
- 9TsoHPDXN2uwtlqv4rA+L4+1Y2z5acis+6i6/fbyxCPPoLXHv+TDLXynSWaXkT22gUBCPVi1BPY
- zdh3Khn2eTr9TYhLL9wZ4BzqAF8RcA31eUepfotdGTUq9Vh5rzRwPRvgp6L08zB6eEhYvC6er/j
- 2QIuneDlYSdKnUtK/solt/+OCxvhSxo2LPXbUTtK2JlvTxlrdghMx+n7/Ru2pQkfR3EAzwqoFGr
- OHCHMKQ9HYehL5w==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
 
-The deprecation notices for direct p->scx.slice/dsq_vtime writes and for
-ops->cpu_acquire/release() use plain pr_warn(), so they repeat on every
-scheduler (re)load and flood the kernel log.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] The patch adds selftests for `tracing_multi` link info (`BPF_LIN=
+K_TYPE_TRACING_MULTI`), but the required kernel-side implementation is enti=
+rely missing.
+- [Low] The patch references `info.tracing_multi` inside `struct bpf_link_i=
+nfo`, but this field does not exist in the UAPI headers.
+--
 
-The slice/dsq_vtime notice is emitted from the BPF verifier's
-btf_struct_access callback, which runs once per write access and is
-re-evaluated as the verifier explores paths, so loading a single
-scheduler can print it several times. The cpu_acquire/release notice is
-printed on every scheduler enable.
+commit 23bb30d6d6d285433f08e70bf1a166ecfd023a7d
+Author: Jiri Olsa <jolsa@kernel.org>
 
-Switch both to pr_warn_once() so each deprecation is reported a single
-time, and add the missing newline to the slice/dsq_vtime message.
+selftests/bpf: Add tracing_multi link info tests
+   =20
+Adding tracing_multi link info tests that follow the kprobe_multi
+and uprobe_multi tests logic.
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- kernel/sched/ext/ext.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c b/to=
+ols/testing/selftests/bpf/prog_tests/fill_link_info.c
+> index f589eefbf9fbd..4d021e9b0129c 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
+[ ... ]
+> +static int verify_tracing_multi_link_info(int fd, const struct bpf_progr=
+am *prog,
+> +					  const struct tmulti_target *targets,
+> +					  __u32 obj_id, bool has_cookies)
+> +{
+[ ... ]
+> +	err =3D bpf_link_get_info_by_fd(fd, &info, &len);
+> +	if (!ASSERT_OK(err, "bpf_link_get_info_by_fd"))
+> +		return -1;
+> +
+> +	if (!ASSERT_EQ(info.type, BPF_LINK_TYPE_TRACING_MULTI, "info.type"))
+> +		return -1;
+> +
+> +	ASSERT_EQ(info.tracing_multi.attach_type, attach_type, "info.tracing_mu=
+lti.attach_type");
 
-diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
-index 691d53fe0f648..708eb9024cb25 100644
---- a/kernel/sched/ext/ext.c
-+++ b/kernel/sched/ext/ext.c
-@@ -6988,7 +6988,7 @@ static int validate_ops(struct scx_sched *sch, const struct sched_ext_ops *ops)
- 	 * run past the BPF allocation. Skip for cid-form.
- 	 */
- 	if (!sch->is_cid_type && (ops->cpu_acquire || ops->cpu_release))
--		pr_warn("ops->cpu_acquire/release() are deprecated, use sched_switch TP instead\n");
-+		pr_warn_once("ops->cpu_acquire/release() are deprecated, use sched_switch TP instead\n");
- 
- 	/*
- 	 * Sub-scheduler support is tied to the cid-form struct_ops. A sub-sched
-@@ -7806,7 +7806,7 @@ static int bpf_scx_btf_struct_access(struct bpf_verifier_log *log,
- 		     off + size <= offsetofend(struct task_struct, scx.slice)) ||
- 		    (off >= offsetof(struct task_struct, scx.dsq_vtime) &&
- 		     off + size <= offsetofend(struct task_struct, scx.dsq_vtime))) {
--			pr_warn("sched_ext: Writing directly to p->scx.slice/dsq_vtime is deprecated, use scx_bpf_task_set_slice/dsq_vtime()");
-+			pr_warn_once("sched_ext: Writing directly to p->scx.slice/dsq_vtime is deprecated, use scx_bpf_task_set_slice/dsq_vtime()\n");
- 			return SCALAR_VALUE;
- 		}
- 
+[Severity: Low]
+Does the tracing_multi field exist in struct bpf_link_info within the UAPI
+headers?
 
----
-base-commit: 4e5dfb7c84012007c3c7061126491bbc92d71bf1
-change-id: 20260623-scx_warning-0df49c442afb
+It doesn't seem to be present in include/uapi/linux/bpf.h yet, which would
+cause a build failure here when accessing info.tracing_multi.attach_type.
 
-Best regards,
--- 
-Breno Leitao <leitao@debian.org>
+> +	ASSERT_EQ(info.tracing_multi.count, TRACING_MULTI_CNT, "info.tracing_mu=
+lti.count");
 
+[Severity: Medium]
+Is the kernel-side implementation for filling this link info missing?
+
+Without a .fill_link_info callback defined in bpf_tracing_multi_link_lops in
+kernel/trace/bpf_trace.c, bpf_link_get_info_by_fd() will leave the
+tracing_multi struct zero-initialized, causing this assertion to fail.
+
+[ ... ]
+> +static void verify_tracing_multi_invalid_user_buffer(int fd, const struc=
+t tmulti_target *targets)
+> +{
+> +	__u32 ids[TRACING_MULTI_CNT] =3D {};
+> +	struct bpf_link_info info;
+> +	__u32 len =3D sizeof(info);
+> +	int err, i;
+> +
+> +	/* Wrong info setup (ids !=3D NULL and cnt =3D=3D 0) -> EINVAL */
+> +	memset(&info, 0, sizeof(info));
+> +	info.tracing_multi.ids =3D ptr_to_u64(ids);
+> +	err =3D bpf_link_get_info_by_fd(fd, &info, &len);
+> +	ASSERT_EQ(err, -EINVAL, "tracing_multi.invalid_count");
+
+[Severity: Medium]
+Will this return the expected -EINVAL error?
+
+Since the kernel doesn't appear to implement .fill_link_info for this link
+type yet, the validation that would return -EINVAL won't execute, causing
+this assertion to fail.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623142417.2758=
+92-3-jolsa@kernel.org?part=3D1
