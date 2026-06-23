@@ -1,93 +1,93 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D71134752F
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 20:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C49D395AD3
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 20:17:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.182
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782245722; cv=pass; b=smkQYYEN5eiS91zQIEQH+RsDVYJiDOkH3KcPSlSdqb3jaj9eviDQDMq4iR6mvvrnfZ90AmA9zzHhE38NWk+83KzJqjB2Jjj6IcSUOvvJ9OCsYDJyzU6CQKrzB5SW4nzQHHtCRj8Qlfq+rJXiSVxbVQpj7GEAweCk9is3FqD+cTA=
+	t=1782245837; cv=pass; b=Abr8JDy9UHZkN2mOophxpgwuDqob7e3qLB+FI2EB+hAkcN6AL4hR2kn1pJVksRELI0UjXFai4yiQkfrGoo5Q/FSSM2iJ5Wcxypo/+u9766bnoKoLaAAuFPvbWkeLGEBVMOoBi/VcVSRoPOPzqMqv5/UOQmM0TRilXXbhhVQ8SKY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782245722; c=relaxed/simple;
-	bh=VyUN5kc8pY9zeZGfxVG9I72IM00S38DsQj8XPbrh/jY=;
+	s=arc-20240116; t=1782245837; c=relaxed/simple;
+	bh=BSYiNfjcqtbilpf9G77ON89zIBv60yDWhHNpR43RcG4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WfphmyLMEpmYbW8SsMwFquFC+18ysh3bySKHdOG+XbkBCS3up/Vilz8Ta2Ezu2XhbOiUyx9cW3sQp6LewNOE7gXZPUNKhqGXcwisiQyODaVfuXPwLZGSxoN/R72qgmiLgixq2BjuPhkBroK2sqS1+4OTUoEuzR+lFRCT2fba9mg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GjLLGfF4; arc=pass smtp.client-ip=209.85.216.52
+	 To:Cc:Content-Type; b=qJX8ZC/d6yi4Vhjpq3TE8A1W3gdKJ/y9xg1Q8wUSayvwzjaiqOv49MFr888+hd7BJAha7ukRbnkv5NFEMgwLdd/LF5yflkW9WgIplqrsv8YQ+o/4ggokyxeadmn5ORnRnU7kjt1hPoY92xra7lguOZbVfeUL0Pq+gS78Hg1msFQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rwflqy9l; arc=pass smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GjLLGfF4"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-37c8e7c8185so208176a91.3
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 13:15:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782245720; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rwflqy9l"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2c168baac83so1089405ad.2
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 13:17:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782245834; cv=none;
         d=google.com; s=arc-20240605;
-        b=j0J1uZXmuL9Lbumoqh5lXcWTUeyNHOneshgaszRw7HOJG8j1n3rZqHe2v0ysnyphPW
-         L9AQUAnzy7O+jvve7g9n6bfNGSwqMxRgDDWc58ztrH6XMCbCZi8RmBhQ2l7CoEDxBU16
-         KUSMmIvgk/iMFRo6mhbZSsviNkJs4P5dZt4t0jvMHYZV6z8tpJBjFEPZY51kFTMcn4cr
-         J2zjmih8B3qoJD+nHN7eHE6uXln5aWaqaxdp8GfRJ60el7B96+kaF/dTaU0VLZ6qo2M4
-         liLOGdvVGLetuWb/DMwAkkxS5p3u028mL4vqQcCK+Bd+owc9Cp3lQJp5zafC1X4ujZZG
-         KY7g==
+        b=QAP67PhUranZiZ+Ev1wnE3Uja+v+62ydbmjsSn0DneCbWnDWsatC5hMKd1K5UZzx+L
+         5Jpt6oCkjt58YkQRUUVQYKFSX/mCkX6aiFS7xXP6YIlU0cvAJvI8ecTQSu7/PJGpdsrd
+         wITYv1WZsf7eE1Tsa6AmI8jPOEgsyIa0UO5fjwyUhXpQ+XNq2mVWFXKkWXcqBpi4Ngf0
+         sAH6DdC8DO0tmgoBdsffxWsjD4n0WS75Dy/TFjCzpJtpfCSdUcuiRpgWUtIlXZWmRZcS
+         hbVJ2rd8JTk6C7QctoVbOrluY3f6ozKXg9DHxVavzze7Ws9MMFTHk9Abc9dAYSsIg6SP
+         98/A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=j+Z9M3ZKDsrVtD4vMbDb1w1q1I4K+UTdIQhD7+XfBGo=;
-        fh=m8bICFzORG+5bBA8erOyyJH+XDBj7WhxueYcLPZHrXo=;
-        b=BvKDxGIdmmN4mvLutj+ISdSOOrSJHXy2rUF/x22JkQfd8Autl+W/PW1vevDEPk/8hl
-         hQc6LWzo4wb4GpJ75J2Zma0CTz7o7kZ3gt8WrnEmr1ViLG15TOFtzxe6kfL0GyGKS7HF
-         zBiifn0k96nomNFQs9q59QwNE2PisPT2ypTBOhXSnAV4vvs6DYTySAu16TwEJ0kGTN3I
-         AZ+dWEneEna7GOeIi5nT5i138YsOtAmt5SHchBYARbU8OIhnLkmLpjJnFodeXkScXfOY
-         rhJBh4gYdTaRyesYR3rpY5PgeMxSPaNyiXAArNEeto/Cml8LNjaRGbLBfadqAB7+qz7e
-         jIuw==;
+        bh=TDkRS+tM+X5MLSQAw7MXiKZlq+UbE5KS08f6slGFBtE=;
+        fh=tqKeuO58RK2Cx/jtvuxN9FLmd5V3oWJE+Bte2phCuE4=;
+        b=Ry2/o2lAOgcP5DyujtJd8wYciR9ZJyQYr2AVGGRHz5eN6vxAhvIICYDG7koqahDeXZ
+         caqo5eCmmsn0w5wkx+vPFF0sqLnqnmWNjvWqZGK2DfwCu92zM/YMKqpyUMihzAgKOYde
+         mV9/HXqME82I/IwTQ2SXgy9vWLBxC3qw2lty0ekmEs1aXl71SB7ghJ1uhnUtl3qVQASw
+         yMxAB1wP+zz3CgCN8q4fr9/9I9bQd6ZvDdFaJ9D6LtzLICdydHj3ZXgVUinNVtBd+SNC
+         dB/V5GH5uwaqq++UkFE3XgCv94vpQJH5R/8o8rZ4lBsOwE/KzMfLXH+oiIXYFUN6YbZ7
+         PGDw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782245720; x=1782850520; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782245834; x=1782850634; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j+Z9M3ZKDsrVtD4vMbDb1w1q1I4K+UTdIQhD7+XfBGo=;
-        b=GjLLGfF4L8j+VK+0ZoajA4d5fc7wimo/cHSiWRUdfXvZ6mN15oM3m8zKhWoXu6MM4L
-         aYWtEM+Ecp6k9hFolJ+RPTzOffw6rGvPkeKXs8LV6zwpVSZsBD86dtLB0wm4x89lLXUw
-         qUYtEcZ+vkWEEZ2cVGyjD+q9a2YcqUOHRtPDFQTEgcxMNjFXBcydRqaX3Hprwn/WqWAE
-         THdgXuT/yQ3vFD23cKbIqm0Thby5m4fE9SjAJxBhlF8kZqItyfiXdL53gXOolhLJdikE
-         f048qFRZ4tkVkRbd1TDjdR3nw0v0G/QSZcl0xYnkkChHHzPxKODs5N+CUiYkOQp4oIg+
-         X0SQ==
+        bh=TDkRS+tM+X5MLSQAw7MXiKZlq+UbE5KS08f6slGFBtE=;
+        b=Rwflqy9l6lYwnnxOg9tXuY35ffQE6+rinuzNxdVF6gyi+dm6/E8ZE7SKHDkRQVxnR1
+         DNq0KkOjZJiog4cnkOQfxrm27gS9tiQdZJZIiK5knmx5sJjdsh3zCTnKcQrihGkQWwk3
+         gws8mV+zd2m4klHsDCY9V7+y9LtGEQWfqLlPgbrXzxk1E7JXTAJr2mujI8poBeeBjEDx
+         nKq3qVyhccHZSCKsqiN969SBOffc7yPWSeVT9Z2LhIEtGNOT+YoEPIFQDUCajxFXYIFn
+         72C2PaJ9APgAFgxxH+aMhaiAr4bD2dgoIjalq0rxJ2HFqkcjLmKCyAUkmRJsCsHJ5GQq
+         ojZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782245720; x=1782850520;
+        d=1e100.net; s=20251104; t=1782245834; x=1782850634;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=j+Z9M3ZKDsrVtD4vMbDb1w1q1I4K+UTdIQhD7+XfBGo=;
-        b=q8MCiZGyVd6w75i4EMqQdMytZ8NoWv3nLDsIXLvSQ2t0mJjAIcvpU+nTzrjlHy9Kxq
-         sL7uXyxGe8gB/ibDs8MblrTPXaGLyPPUMgkxGozx1PWDfxRAn4+bGYZoOWfwmEIQWWox
-         5Ge2DZbYFnE2kw82xEGGohlc0cMahkI7ZDcHWs0wEcx9jAr0ZzsPbHxGqghtF612SZvt
-         GYnDJU7bG078pjhYT6eHuUFizMRY0+dj6WvaPLVy9CPGklsmupyYlozHB1fxtWxsxlHN
-         CnjGskhjjoXhky92N/55JvDsT6dObQUZFQ/hgWkwcQO1DOvfYzI47ibBRB7CyDI5D3js
-         5EjQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoBKe6uL2XEl9TloXtUqoI+qH4EVqoFJr9vXve/FyRwXwFOlNrClV1jvgYhEjPeCK/N/HU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxDcuBXb6vtYjOY9KjSEZH6XX2Hsr7zs91XenOmh7bQg4S5K9t
-	1vvKtCxl3dMzzr07I7ytNef3NKo9+eBp1gyclqksTyWz8LTHQpLWAWC5Kx9fziF0sA0t/0gUaUn
-	/HhiTffld30ySA/Y7dAJSibYda3XYR3Y=
-X-Gm-Gg: AfdE7ckkoudQxAEJjIQidVJats7cGfP7EdpiVA0vQOtNBanFA0z+OiHeiVYODQzT3q/
-	JK1Vk2apN5gsSUGASv1yEVoAgy8akKd2zIPRLJzpCBLJzjqqYiBqianYVz2xrlN7CiFIfFTad7o
-	+Mdm9KKstWNMXotq90SPwJr33aQ7+0ysuEXMf7jzWmiZYINF21d4oZ0ZjzEZAw5xPrW4yX9wlX4
-	LEHJ3kE5xECACifc8ukUbD1pVwUpmv7GxaNAvqzsShso9C17M08BOcKPaNceO0so8Hn3CtF0rF8
-	usSPwCIfxmqNY8nnAuzzgaQZdXG+g7gtBB0J/2TEN+Q4naVdsFddB11PFIstM8tBSkr5iA==
-X-Received: by 2002:a17:902:c947:b0:2c0:c3ac:4af3 with SMTP id
- d9443c01a7336-2c7e14be9d1mr3830645ad.15.1782245720502; Tue, 23 Jun 2026
- 13:15:20 -0700 (PDT)
+        bh=TDkRS+tM+X5MLSQAw7MXiKZlq+UbE5KS08f6slGFBtE=;
+        b=qlbJrf8aBoL/46m0wPzT7KAmMRGDZWWqKWGQBI+Wej1IHPOLH4QOSZSGxEDxesg6MG
+         xojfLnZko7sTnFMIjbSZj12k5ZO+RJEiaI54Bv1H7nVHmpQb1imcpxfVOSSHke90qAmO
+         U62OCIbXwpAn+XB5+b/gVwMOjLSn36Wxif2g7rNJynh8T7i58S46EpaAs5aIiy9Oeqx3
+         aadaRjOQLo6KEYX7etvNn9n1yedUkuxSocXPDNZN4bVmRPk97q2aK2OKcEMJkYOrCAWK
+         e+GdrUP00Kkvn5vON6GuMxEWzSTDx9uEHpRhrSBOR7jeKnslzyFgohJZP53RI3ND/ZGw
+         nicw==
+X-Forwarded-Encrypted: i=1; AHgh+RqQ0bGYs8E4DPLi3NYlxNJEqdnsHKk/nJrRat1aLZy+MzODKvEuwEVE0c7wFAXdogb3BeY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxO4kr4UfYvToPvcPKCgVlPo3qO/98919v+8wqpxp1vKpwIVhgu
+	intTxfPF6PnoHW6b9KYVZeG3ZQpkk51ZLV3x/J6CBZqY9ViG/woYOWzlM9omHdIS53cKW/+fsnZ
+	skXFk2qOlEjUWyifJhuauWeDyTRb8a+g=
+X-Gm-Gg: AfdE7cltJrOHCoS/hqtC3DGyanv9VNBeeIX+E/tZ9adBC/LPMBsnSy4CFGn9k10AWI0
+	bPHZaTYZ2iLP1uGBQd8DE0QMwRAT7L6ZNQ0z1IZ6eIeeg6ODXPjMKrCu7GSPXfS0E9kU8NWl8Ce
+	TKh/V/rmZEeppxG720RxRmhh4du/yyhQGdohihBxKi3J6JCJnyVLXbPKkTdCgFnZoxEWHDk3TOj
+	RD2eHYLYfZi4oPn+sCRwlCYBMrBdxxjf0aqwswInsMXZVq7tWtfVx5qDaHyNxWd5nakLdKUhaAs
+	wiyVGMDxdRGqgVsGF1NcVYLu0R7sNrraTViLhJOLwuKhNZ5hWk2SYCGHuyYnfi93PkhQ0w==
+X-Received: by 2002:a17:903:41cf:b0:2bf:bd17:90d4 with SMTP id
+ d9443c01a7336-2c7e151d8d2mr4280125ad.28.1782245833593; Tue, 23 Jun 2026
+ 13:17:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org> <20260618-bpf-ringbuf-fixes-v2-6-33fde039ddf3@kernel.org>
-In-Reply-To: <20260618-bpf-ringbuf-fixes-v2-6-33fde039ddf3@kernel.org>
+References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org> <20260618-bpf-ringbuf-fixes-v2-7-33fde039ddf3@kernel.org>
+In-Reply-To: <20260618-bpf-ringbuf-fixes-v2-7-33fde039ddf3@kernel.org>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 23 Jun 2026 13:15:06 -0700
-X-Gm-Features: AVVi8CfqHtnBLCweM7eX_1wpYpE6gYHvPw60CrJ-FzxF11Iv983c2apGCEnWOa8
-Message-ID: <CAEf4BzattX9GherSPJ7DBeKksfxsX_uKz4y4tYNU=gUjqkJP_A@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 6/8] bpf: user_ringbuf: Handle position wrap
+Date: Tue, 23 Jun 2026 13:16:58 -0700
+X-Gm-Features: AVVi8CdEpGZ38igQlR0_mWtEWrlfHpdcY4rIGcGw_cXgZ0_cBsNYkoAZNe89-1w
+Message-ID: <CAEf4Bzay6HokFa2CTsoQt2SLQ-3WWC+EUe0b9KpT4Ju2TvBg4A@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 7/8] libbpf: ringbuf: Use compiler atomics
 To: Tamir Duberstein <tamird@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -98,86 +98,110 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
 	David Vernet <void@manifault.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org, Andrew Werner <awerner32@gmail.com>, 
 	Zvi Effron <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Sashiko <sashiko-bot@kernel.org>
+	Emil Tsalapatis <emil@etsalapatis.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Thu, Jun 18, 2026 at 5:27=E2=80=AFPM Tamir Duberstein <tamird@kernel.org=
 > wrote:
 >
-> User ring buffer positions are unsigned long counters, but
-> __bpf_user_ringbuf_peek() widens them to u64 before comparing and
-> subtracting them. On 32-bit systems, producer_pos wrapping below
-> consumer_pos therefore appears to move backwards and permanently stalls
-> the ring. The widened subtraction can also bypass the advertised-window
-> check.
+> Consumer-side ring buffer code uses architecture-specific smp_* helpers
+> for shared memory accesses.
 >
-> Keep the positions word-sized and derive the available data with
-> word-sized subtraction so the arithmetic wraps with the counters. Treat
-> a zero span as empty and reject spans larger than the ring before
-> reading a record header.
+> Use compiler atomics instead. They provide equivalent acquire and
+> release ordering through a portable userspace interface and allow the
+> next commit to use compiler fences in the wakeup protocol without mixing
+> atomic interfaces.
 >
-> Fixes: 205715673844 ("bpf: Add bpf_user_ringbuf_drain() helper")
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/bpf/20260614020552.022A11F000E9@smtp.kern=
-el.org/
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 > Assisted-by: Codex:gpt-5.5
 > Signed-off-by: Tamir Duberstein <tamird@kernel.org>
 > ---
->  kernel/bpf/ringbuf.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+>  tools/lib/bpf/ringbuf.c | 20 +++++++++++---------
+>  1 file changed, 11 insertions(+), 9 deletions(-)
 >
-> diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-> index 909880031fd3..19cbb9b74ee7 100644
-> --- a/kernel/bpf/ringbuf.c
-> +++ b/kernel/bpf/ringbuf.c
-> @@ -748,9 +748,9 @@ const struct bpf_func_proto bpf_ringbuf_discard_dynpt=
-r_proto =3D {
+> diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
+> index 1c5bce2b5e12..141f2cbe56eb 100644
+> --- a/tools/lib/bpf/ringbuf.c
+> +++ b/tools/lib/bpf/ringbuf.c
+> @@ -270,14 +270,14 @@ static int64_t ringbuf_process_ring(struct ring *r,=
+ size_t n)
+>         if (n =3D=3D 0)
+>                 return 0;
 >
->  static int __bpf_user_ringbuf_peek(struct bpf_ringbuf *rb, void **sample=
-, u32 *size)
+> -       cons_pos =3D smp_load_acquire(r->consumer_pos);
+> +       cons_pos =3D __atomic_load_n(r->consumer_pos, __ATOMIC_ACQUIRE);
+>         do {
+>                 got_new_data =3D false;
+> -               prod_pos =3D smp_load_acquire(r->producer_pos);
+> +               prod_pos =3D __atomic_load_n(r->producer_pos, __ATOMIC_AC=
+QUIRE);
+>                 /* Positions wrap; the consumer cannot logically pass the=
+ producer. */
+>                 while (cons_pos !=3D prod_pos) {
+>                         len_ptr =3D r->data + (cons_pos & r->mask);
+> -                       len =3D smp_load_acquire(len_ptr);
+> +                       len =3D __atomic_load_n(len_ptr, __ATOMIC_ACQUIRE=
+);
+>
+>                         /* sample not committed yet, bail out for now */
+>                         if (len & BPF_RINGBUF_BUSY_BIT)
+> @@ -291,14 +291,16 @@ static int64_t ringbuf_process_ring(struct ring *r,=
+ size_t n)
+>                                 err =3D r->sample_cb(r->ctx, sample, len)=
+;
+>                                 if (err < 0) {
+>                                         /* update consumer pos and bail o=
+ut */
+> -                                       smp_store_release(r->consumer_pos=
+,
+> -                                                         cons_pos);
+> +                                       __atomic_store_n(r->consumer_pos,
+> +                                                        cons_pos,
+> +                                                        __ATOMIC_RELEASE=
+);
+
+this almost fits 100 characters, I'd keep it as single line
+
+>                                         return err;
+>                                 }
+>                                 cnt++;
+>                         }
+>
+> -                       smp_store_release(r->consumer_pos, cons_pos);
+> +                       __atomic_store_n(r->consumer_pos, cons_pos,
+> +                                        __ATOMIC_RELEASE);
+
+this definitely fits 100 characters, let's keep single line for readability
+
+>
+>                         if (cnt >=3D n)
+>                                 goto done;
+> @@ -413,8 +415,8 @@ struct ring *ring_buffer__ring(struct ring_buffer *rb=
+, unsigned int idx)
+>
+>  unsigned long ring__consumer_pos(const struct ring *r)
 >  {
-> +       unsigned long avail, cons_pos, prod_pos;
->         int err;
->         u32 hdr_len, sample_len, total_len, flags, *hdr;
-> -       u64 cons_pos, prod_pos;
->
->         /* Synchronizes with smp_store_release() in user-space producer. =
-*/
->         prod_pos =3D smp_load_acquire(&rb->producer_pos);
-> @@ -759,8 +759,11 @@ static int __bpf_user_ringbuf_peek(struct bpf_ringbu=
-f *rb, void **sample, u32 *s
->
->         /* Synchronizes with smp_store_release() in __bpf_user_ringbuf_sa=
-mple_release() */
->         cons_pos =3D smp_load_acquire(&rb->consumer_pos);
-> -       if (cons_pos >=3D prod_pos)
-> +       avail =3D prod_pos - cons_pos;
-> +       if (!avail)
->                 return -ENODATA;
-> +       if (avail > ringbuf_total_data_sz(rb))
-> +               return -EINVAL;
-
-hm, should we use long and then replace cons_pos >=3D prod_pos checks
-with `cons_pos - prod_pos >=3D 0`, this will handle wrap correctly
-
->
->         hdr =3D (u32 *)((uintptr_t)rb->data + (uintptr_t)(cons_pos & rb->=
-mask));
->         /* Synchronizes with smp_store_release() in user-space producer. =
-*/
-> @@ -770,7 +773,7 @@ static int __bpf_user_ringbuf_peek(struct bpf_ringbuf=
- *rb, void **sample, u32 *s
->         total_len =3D round_up(sample_len + BPF_RINGBUF_HDR_SZ, 8);
->
->         /* The sample must fit within the region advertised by the produc=
-er position. */
-> -       if (total_len > prod_pos - cons_pos)
-> +       if (total_len > avail)
->                 return -EINVAL;
->
->         /* The sample must fit within the data region of the ring buffer.=
+> -       /* Synchronizes with smp_store_release() in ringbuf_process_ring(=
+). */
+> -       return smp_load_acquire(r->consumer_pos);
+> +       /* Synchronizes with the release store in ringbuf_process_ring().=
  */
+> +       return __atomic_load_n(r->consumer_pos, __ATOMIC_ACQUIRE);
+>  }
+>
+>  unsigned long ring__producer_pos(const struct ring *r)
+> @@ -422,7 +424,7 @@ unsigned long ring__producer_pos(const struct ring *r=
+)
+>         /* Synchronizes with smp_store_release() in __bpf_ringbuf_reserve=
+() in
+>          * the kernel.
+>          */
+> -       return smp_load_acquire(r->producer_pos);
+> +       return __atomic_load_n(r->producer_pos, __ATOMIC_ACQUIRE);
+>  }
+>
+>  size_t ring__avail_data_size(const struct ring *r)
 >
 > --
 > 2.55.0.rc0.159.gbe5d7338c2
