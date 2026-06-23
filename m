@@ -1,65 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A32637AA7E;
-	Tue, 23 Jun 2026 13:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD62C384CF6
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 14:24:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782221617; cv=none; b=MWfK+bF1kghKAFEYc0vyubg6mq9M88fL/maqXzqkJHHD9MmmDfRs4Ewpt2vLNuRQDFTibCGjR2RUWFbYaAmiRXztRrYbEwRC+ZeIi4NYAOuQzWc2ipMc+nIEo74Hr//9K/yTXwhUi76c/uvLKXIgwCNtqSmQzPVBhjn/8YcF/Sg=
+	t=1782224663; cv=none; b=bu2bZBxIYwTj90a1YGnxFt2yjgq8B7IIrT8Y2QSr9PdfBJw7Y3Czcoo5iFmPiVPjEwCyhJnJut2ttkUIGbo1CASGrrZ9nrT1OJ1nyzyqNlKUvYC7kEvi10YMe/AlArQm9jSzhqtkjSy/RP2pOqa2/l+EFq9mbKX3UjmWWRJBxC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782221617; c=relaxed/simple;
-	bh=ugBugMzgnTy9Yawq2bQBj5ExNvZJ/cWT9ydK3VWeOMo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=aA5IYh3sV7d0+jP8US6olAwp0ALu3P88dg2otOMXqbFFUrClfg8bR2oE+OPB+nzIi/WNixSz2a/lh4cs+wkMOR7prnp8JnzRGuDbFCdP+UcGSGQvzmv6XdHfwUR6Fr8gNYcvoINC/nKfP2iTznKjsOohyiSmoiKcy55j/oiPvXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BS/z188g; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782224663; c=relaxed/simple;
+	bh=c7+uUjKq0Kn3DX5pnYiw5pPNnw73KqEGRZznlbon9ow=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bZghYdp8MvKqqykck+bEI3OF28Ou3A4EHlmY6Rs0NdrnIhjAAezlq2IAoJfYSmSW46jP6LZzja9H5cxs1LZosA1kkgnoGvITs9l31Uz+mIMJSiXuRgTRKfAkMssOAd2d/WnPUxi/ucPUwJplVm9wSf5uTI0DEOZ3vvW0UlK9JUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jF5o/n23; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BS/z188g"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782221615; x=1813757615;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ugBugMzgnTy9Yawq2bQBj5ExNvZJ/cWT9ydK3VWeOMo=;
-  b=BS/z188g1FdZI/131zSNOuuA59Oba1bShnSUNxjNHyzatxaG6k+OfMkv
-   yI7wkYRk+wHPQjqHztjOyp8GqUj43eeXRM+QHTvwvr61XgsfxFPdmcjDE
-   9Q/ylxY5BObRb3iSoRfUGY9GTJbWsD4KDviGLLUHWvjReoFih04Jp74vd
-   Sc8uBrIPTu3N5NRPjWMGXZt3LNvLQtjZ+tyBYDm+oEnlbT3bSJ0isaVzh
-   8S9RTrAAAOVl+J33Jbl/g/ulpg6JGqcP71J8x3fVYvAbc7TyuBn1F5AND
-   UtkqTgh1uykNCUUYxbGfrZ7pIvlEHyqYSL0lHl+8BVWSOcNobZxgUS2Wo
-   Q==;
-X-CSE-ConnectionGUID: HyBMveZbQ3yrEbL3Hzd47g==
-X-CSE-MsgGUID: Yg88FJAURFKO+whrUXFb+Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11826"; a="83153581"
-X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
-   d="scan'208";a="83153581"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 06:33:35 -0700
-X-CSE-ConnectionGUID: DRPw5OzvT5WpxhIWyrrKgg==
-X-CSE-MsgGUID: Wu0boihJSneCpayhqJULbg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
-   d="scan'208";a="251447530"
-Received: from boxer.igk.intel.com ([10.102.20.173])
-  by fmviesa004.fm.intel.com with ESMTP; 23 Jun 2026 06:33:32 -0700
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: netdev@vger.kernel.org
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jF5o/n23"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14DAF1F000E9;
+	Tue, 23 Jun 2026 14:24:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782224662;
+	bh=cn5PLGdOt8ITXiLMJqaoVEA2UkG8y2PoyGnjW6tmhHY=;
+	h=From:To:Cc:Subject:Date;
+	b=jF5o/n23RrkgL2YCI96d9xBG7q8dslHiVBxJps4JyHcmapSu87VDFegU/+AbKWzaj
+	 dH1DzlPCk4xpsJtkme6BOZvJLsn4WUWTiiWa+828XPCXjgOenchl2GRLwT2nfny9er
+	 BhQdhWieuqITI+h64E9wQ1mC9Vzy6jkRkrUC8s+FOn5MfeJj3kqVL27vapM+AR5Sjd
+	 TB0ncAB55DeJrjIGWjtFOhBC5chSlHFJmX3VfJWiXWaynzt/1lJCqdBWY+188t4e2L
+	 ZLISn35SeHpMnrgU8NpWXQ/lvCFgC1ZiSJbvKLsB2XbMdOue3+2Sp1EFFnyPmjJNn8
+	 x8jbywpZeoaDw==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
 Cc: bpf@vger.kernel.org,
-	magnus.karlsson@intel.com,
-	stfomichev@gmail.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	kerneljasonxing@gmail.com,
-	bjorn@kernel.org,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH net 7/7] selftests/xsk: account invalid multi-buffer Tx descriptors
-Date: Tue, 23 Jun 2026 15:32:40 +0200
-Message-Id: <20260623133240.1048434-8-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20260623133240.1048434-1-maciej.fijalkowski@intel.com>
-References: <20260623133240.1048434-1-maciej.fijalkowski@intel.com>
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	Quentin Monnet <qmo@kernel.org>
+Subject: [PATCHv2 bpf-next 0/3] bpf: tracing_multi link info support
+Date: Tue, 23 Jun 2026 16:24:14 +0200
+Message-ID: <20260623142417.275892-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,109 +47,43 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Invalid descriptors in the middle of a multi-buffer packet still belong
-to the packet being consumed from the Tx ring. The tests should therefore
-count the whole invalid packet as outstanding in verbatim mode, even
-though the packet must not be expected on the Rx side.
+hi,
+adding link info support for tracing_multi link.
 
-Make fragment counting follow the packet boundary instead of stopping at
-the first invalid fragment. Update custom stream generation so invalid
-middle fragments terminate the generated Rx packet while Tx accounting
-still covers all descriptors consumed from the invalid multi-buffer
-packet.
+Adding the kernel support with related selftests and bpftool support
+to display the tracing_multi link info, the output looks like:
 
-Also add explicit end fragments after invalid middle descriptors. This
-exercises the kernel drain logic and verifies that subsequent valid
-packets are not interpreted as continuations of the invalid packet.
+  # bpftool link
+  ...
+  27: tracing_multi  prog 93
+          attach_type trace_fentry_multi  obj_id 1  count 3
+          btf_id           addr             cookie           func [module]
+          91984            ffffffff824f4a24 a                bpf_fentry_test1
+          91986            ffffffff824f6a84 1e               bpf_fentry_test2
+          91987            ffffffff824f6a94 14               bpf_fentry_test3
+          pids test_progs(1462)
 
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+thanks,
+jirka
+
+
+v1: https://lore.kernel.org/bpf/20260621204524.61067-1-jolsa@kernel.org/
+
+v2 changes:
+- fix kernel symbol search logic [sashiko]
+- typo fixes [bots]
+
+
 ---
- .../selftests/bpf/prog_tests/test_xsk.c       | 24 ++++++++++++-------
- 1 file changed, 15 insertions(+), 9 deletions(-)
+Jiri Olsa (3):
+      bpf: Add tracing_multi link info support
+      selftests/bpf: Add tracing_multi link info tests
+      bpftool: Add tracing_multi link info output
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-index de1e63c3fdf6..d8a1c0d40e5a 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-@@ -433,14 +433,14 @@ static u32 pkt_nb_frags(u32 frame_size, struct pkt_stream *pkt_stream, struct pk
- 	}
- 
- 	/* Search for the end of the packet in verbatim mode */
--	if (!pkt_continues(pkt->options) || !pkt->valid)
-+	if (!pkt_continues(pkt->options))
- 		return nb_frags;
- 
- 	next_frag = pkt_stream->current_pkt_nb;
- 	pkt++;
- 	while (next_frag++ < pkt_stream->nb_pkts) {
- 		nb_frags++;
--		if (!pkt_continues(pkt->options) || !pkt->valid)
-+		if (!pkt_continues(pkt->options))
- 			break;
- 		pkt++;
- 	}
-@@ -671,11 +671,11 @@ static struct pkt_stream *__pkt_stream_generate_custom(struct ifobject *ifobj, s
- 			if (!frame->valid || !pkt_continues(frame->options))
- 				payload++;
- 		} else {
--			if (frame->valid)
-+			if (frame->valid) {
- 				len += frame->len;
--			if (frame->valid && pkt_continues(frame->options))
--				continue;
--
-+				if (pkt_continues(frame->options))
-+					continue;
-+			}
- 			pkt->pkt_nb = pkt_nb;
- 			pkt->len = len;
- 			pkt->valid = frame->valid;
-@@ -1214,6 +1214,7 @@ static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk, b
- 	for (i = 0; i < xsk->batch_size; i++) {
- 		struct pkt *pkt = pkt_stream_get_next_tx_pkt(pkt_stream);
- 		u32 nb_frags_left, nb_frags, bytes_written = 0;
-+		struct pkt *first_pkt = pkt;
- 
- 		if (!pkt)
- 			break;
-@@ -1258,6 +1259,8 @@ static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk, b
- 		if (pkt && pkt->valid) {
- 			valid_pkts++;
- 			valid_frags += nb_frags;
-+		} else if (pkt_stream->verbatim && pkt_continues(first_pkt->options)) {
-+			valid_frags += nb_frags;
- 		}
- 	}
- 
-@@ -2104,13 +2107,16 @@ int testapp_invalid_desc_mb(struct test_spec *test)
- 		{0, 0, 0, false, 0},
- 		/* Invalid address in the second frame */
- 		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
--		{umem_sz, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
-+		{umem_sz * 2, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
-+		{0, MIN_PKT_SIZE, 0, false, 0},
- 		/* Invalid len in the middle */
- 		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
- 		{0, XSK_UMEM__INVALID_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
-+		{0, MIN_PKT_SIZE, 0, false, 0},
- 		/* Invalid options in the middle */
- 		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
- 		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XSK_DESC__INVALID_OPTION},
-+		{0, MIN_PKT_SIZE, 0, false, 0},
- 		/* Transmit 2 frags, receive 3 */
- 		{0, XSK_UMEM__MAX_FRAME_SIZE, 0, true, XDP_PKT_CONTD},
- 		{0, XSK_UMEM__MAX_FRAME_SIZE, 0, true, 0},
-@@ -2122,8 +2128,8 @@ int testapp_invalid_desc_mb(struct test_spec *test)
- 
- 	if (umem->unaligned_mode) {
- 		/* Crossing a chunk boundary allowed */
--		pkts[12].valid = true;
--		pkts[13].valid = true;
-+		pkts[15].valid = true;
-+		pkts[16].valid = true;
- 	}
- 
- 	test->mtu = MAX_ETH_JUMBO_SIZE;
--- 
-2.43.0
-
+ include/uapi/linux/bpf.h                                |   9 +++
+ kernel/trace/bpf_trace.c                                |  55 +++++++++++++++++
+ tools/bpf/bpftool/link.c                                | 137 +++++++++++++++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h                          |   9 +++
+ tools/testing/selftests/bpf/prog_tests/fill_link_info.c | 242 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_fill_link_info.c |   6 ++
+ 6 files changed, 458 insertions(+)
