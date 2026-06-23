@@ -1,114 +1,143 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5461DD0D4
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 03:19:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782184789; cv=pass; b=IX08H9+IHye5T+YEI9oOqHgZFj8IuKCbTTfEN0h/KCXJsj2MKUUrvdypw/b5kKXyss2DIX5R6+BdLtvOwi+XNZdLrrW6Mcs0WbdEc80G1c0u8N9sj3zF7ytC3Y8Qj9XSjdBsrzOlR3ThTQ6BBvvwhNQVrev7c8OnKsVPHrBz/X4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782184789; c=relaxed/simple;
-	bh=sIVOcjT140xkpvRwGIeYXrMxj/eSYgFIXMfkLtskuUE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hNdVq0CUVgbP6V4HWlVtcV9IG2VNQprPOmviR0iflHqfUEDrHFADXp17PXwJWyb6JDWMqdmGlQHL1G+2KwcGQ2J7WSCzJ6lGaZt/xmh5zFp3Hj/8Oc2OzuKzG+IbJlvt9CdvXkxi7QV/ged5EOEwg1CKKUBxrOjb1dijaV/rY44=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JCE+9AFc; arc=pass smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4008C2749DF
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 03:19:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782184800; cv=none; b=IWAjHbVSUUISACPzgbAJ//VY+ESwLVE6wh0CgnK7THmE0NX3xRlz70JDIfUmq4V/4CJDIaGsMD1KnGOtDuLcKl6GWnmyyTUIJRGOv/QaF68+mIW+OFCmVs9+9JucmGZZdpTD/2OYIUwOtXkG4LIoC1BFFUax0JUixq1WDOsKQpE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782184800; c=relaxed/simple;
+	bh=OOSMfNjFt3o9qUGdMd1J/xkeHs/ddacbeCw6/NyiNDI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=uqZUl33dVr575B4eJ9L+28rlnCWliIW46wUM9CuRcBRxTWUUreJxuAVfG0ZBkY4iETShZpWanN2LHcfQrCEMCqZKZy5cMYj24OYJ7VdHdCJBlmyZV6wSil3DS2WjY9sRQIo7aoO5c7cWWgda6237jAfOt6FP6pO6M72GhJ9I79M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f1iZ2Zzs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JCE+9AFc"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c890110acdaso2063841a12.3
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2026 20:19:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782184787; cv=none;
-        d=google.com; s=arc-20240605;
-        b=KztZ2nib6d6+Aoo0FmWi1C/xbFUbgGgCwfFxa2n64X8VBs2BOWNEvAotMlK3A6CN4/
-         nhdlgPwHYMyRELGdXojQvoLtsLmJp8bS8OtSaMR5NLElIoSUqOfPFQGAUA6pHSzm6d4N
-         ISArcxjVFjeMo6/+Jrl38t3RpCx7GyHAi4IGTLt+0dvzT5lRYbKH+MGCySLKD5F43yH0
-         CpQP3EOG++LuZC85SWJ3da2jT7ByipsfyznB9zSL7Yky/xlmepVMZMhP8PfCrxtOQ7Xu
-         GX5zgdnmSok7QCLp4JvdbMWwEwvexomHXyjSRrA7k+r4DovbB7G3yMx9sua6jHYXuVfw
-         EhLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=C0YM4STa5CSZfl8sa2TQS+jhPmvki32XUV7a7gLhpB8=;
-        fh=6fcGoMU8zgDGuyXY9sUxMfTACU2Ul5WBbg6U3r/YvPY=;
-        b=c5SwqKZbKHl6mL6Ef6noiC2PvjCvi0CYte6CERZ7tmzAkx7/AlfyG2BC7jeIUC5uOg
-         TSAY0IflmTIVxxiw9AU/fVA5BJdT/13UyhcfoWI3bRvYdGGy+XHk2Yr0ID2PujLt0LFe
-         7jWalKndkViRBzbAwOtJmulJ+famr4Q8dL+P9063uADZ7k/mbcYZf7i06U3eoa88PleB
-         IM6lt3TfcD4o2FN8005AOgBtOYAOK2Nz7Ufz6wH+e6sAGL3oomrmjaFA6GcXrkG/RcXq
-         nOXTYSj4l3u5ULVMXmz6BgZYa7QZWNjlguNt2n4mqODmCODc1KZYT1dTuSC/7Q88Qomp
-         KtIg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782184787; x=1782789587; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C0YM4STa5CSZfl8sa2TQS+jhPmvki32XUV7a7gLhpB8=;
-        b=JCE+9AFc+78Pnz+KCkGLPsDbiel+QwHK8zfywCBse/C5BP36nRdMsx9mbY4NksL7Dm
-         r+eqkVokmq7UQ/iQVeS2eQkytnf77h3Pf7Sr7s14h3y1gicqtnje9AVFQIqVebD5Nha7
-         Adfiv1+Z4XniJnE4UHKgTFrmITFGGvW/W3+3dquH4pgNTxHiZ+AGp4rtHppiXuwPyNfj
-         7iqQW2iiB33AJR0Mez2M2eCfefJIH4l9AT/OekozDGXnz5aIqoh5M4o2p578/BRNNg+R
-         xlpZjzeEwCKft19rEDXB63TKVGQgP9kU2Hu+cSgnr+CpIB2ZMGB4BOEkBm0paDdvh3sR
-         Czkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782184787; x=1782789587;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=C0YM4STa5CSZfl8sa2TQS+jhPmvki32XUV7a7gLhpB8=;
-        b=X3P5MblQoDzGxkGVHqyPSxqZSPN1OTevlbSCBflM80XCQM0bpl0UzOaaE43Z2K5GDm
-         Uh9XMa2LKBj1MU8wa1z7VhbwQ0Y5kWe5UhVo6hmMBK4L8KOkraaEYHBbG0IAsGnw5jcs
-         Lm2sCzFsAqi5eWd9hRVEPnECQKKDROiyHiajdvDOZUubn4uZ4SYkS1uOdXZgneVKPQJ5
-         EGfUZzQVVSP6zZEuqvXDk7pDKS1v4ZDrgRAGxOy/7gdg6xlGS1jZSqaR+7ZXgycMOWOE
-         RZHAQc0JvGuMpWsbUOgvpAvoGC741FEIiPK1FpExh5V9VmMDRc3aulv/0XiTkNuwOsPZ
-         Vt6w==
-X-Forwarded-Encrypted: i=1; AFNElJ+/bXKjhP118Jr3bEiQqC4gGi1ABOigqdOzxL+WJ2chAxcnIqF2749aIRULZenZcYEBllo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuJ98ionELS6VfATr12vnv3sS3ytL7rx5Cwd17A/2F98ExrbLK
-	gdtfST4p3lwAHpz9AJQbMUyUzuEZ40+ezCzh2iW16t3lhkE33dpg3eU/rwyfoacffA5Emr9ycpk
-	aezcj3NZSWfS+1kVgsTc27bkrYoHAvoM=
-X-Gm-Gg: AfdE7cmZrel2Hx5rc//WABvo3t86+I4nS36UhEiaYTymFSDNPeBi1xdSmJujfQXEcKd
-	FD4hSrJ36rRnHsr4URc9YSPQP4y7/sv0xaQuoB1YsxyozCnuxJUWqR8hP5QYsZ8bwAcQsv+QrLC
-	ghZXwfq1SKNNX7vq16ZlT03sK/JyXEAV6PBp46JvEaxRIa1XF4D7cSmdkLUT+ldJbpgFdImKQ1T
-	rR/s+kVOzeTFf9iRK2Hx1Sj0Sws9lCO/JMzzI0BW6pkTqHxuujXTT15why2FZkUMbT4uAjuY3Lf
-	mHOLYHDze9sEsQHpuKGlFZ2rwBYYWa5/NFYq2smGWpiKzAsEaKc8JoIEfBExjm5n5dblhDfTvOs
-	6AXA1CrH9I6nxQQ==
-X-Received: by 2002:a05:6a21:6915:b0:3b4:5c70:ca3e with SMTP id
- adf61e73a8af0-3bc531af581mr15521263637.25.1782184787384; Mon, 22 Jun 2026
- 20:19:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f1iZ2Zzs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFEC01F000E9;
+	Tue, 23 Jun 2026 03:19:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782184798;
+	bh=rgebdMnAAYnELcJvvXyUk0/dRqmVIRY7aMwH0zUJQBA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=f1iZ2ZzsPvESF76skb1j+aF5Idl5KRNBJulmCMAVYKRP+5BP+UNaO9HSgYhxnog05
+	 S1Vxp3eHgt5mXYpDRmhKTc9jLNazbNRuOyGMj8LhL4pC91k2iC6kyaqIUnfobZcLK1
+	 brqAtXUAaHWLIRLkeOfvBkQT+Sz+wmPYl0PVx9TGVS9+SmeQ0jDGiu0L9KagLpkqsk
+	 N2o6kNeKCs1vVoxQ2lmJGNj6h4r22KMhTtXCIYQnxWnKpcB0Qgpn1uDRlLTqjn8L6C
+	 rxEmzWYTenJ68H/AftwsaM/KhXkscC2mM8sMYhqz7Us6SINMUJRVIaRFjtnqDNp/dJ
+	 qpy5nHZDFPDhg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 5/5] selftests/bpf: add tests for bpf_strpbrk
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Longjun Tang" <lange_tang@163.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260623030803.44798-6-lange_tang@163.com>
+References: <20260623030803.44798-1-lange_tang@163.com>
+ <20260623030803.44798-6-lange_tang@163.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 23 Jun 2026 03:19:58 +0000
+Message-Id: <20260623031958.AFEC01F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260623030803.44798-1-lange_tang@163.com>
-In-Reply-To: <20260623030803.44798-1-lange_tang@163.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 22 Jun 2026 20:19:34 -0700
-X-Gm-Features: AVVi8CdAruZLPIMFu_h3yH8syznvXwZwTobkc-arx_UU6umzIYouwwshplDtSXQ
-Message-ID: <CAADnVQJTXdNUsLxEHZPg9V356XfuqrSTwSE3W9EaOuMjMznMEA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/5] bpf: add bpf_memcmp and bpf_strpbrk kfuncs
-To: Longjun Tang <lange_tang@163.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	tanglongjun@kylinos.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 22, 2026 at 8:08=E2=80=AFPM Longjun Tang <lange_tang@163.com> w=
-rote:
->
-> From: Longjun Tang <tanglongjun@kylinos.cn>
->
-> This series adds two new BPF kfuncs to kernel/bpf/helpers.c:
->
-> - bpf_memcmp(): Binary memory comparison, unlike bpf_strcmp null
->   bytes do not terminate the comparison. Returns 0, -1, or 1 with
->   standard error codes (-EFAULT, -E2BIG, -ERANGE).
->
-> - bpf_strpbrk(): Find the first occurrence of any character from an
->   accept set in a string. Complements the existing strspn/strcspn
->   kfuncs for string tokenization use cases.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-The patch explains "what", but doesn't answer "why".
+New issues:
+- [Low] The selftests for bpf_strpbrk lack negative tests for the -E2BIG (t=
+oo long string) error paths, leaving this core logic completely untested.
+- [Low] The test `test_strpbrk_found_multiple` does not actually test a mul=
+tiple-match scenario as claimed in the commit message.
+
+Pre-existing issues:
+- [High] O(N*M) algorithmic complexity in string kfuncs (bpf_strpbrk, bpf_s=
+trspn, bpf_strcspn) allows a malicious BPF program to stall the CPU and cau=
+se a Denial of Service.
+--
+
+commit a3423f682404351839c3773b03881a48a31cc20c
+Author: Longjun Tang <tanglongjun@kylinos.cn>
+
+selftests/bpf: add tests for bpf_strpbrk
+   =20
+Add functional tests for first-match, multiple-match, not-found, and
+empty-accept cases. Add negative tests for NULL, user-space, and
+invalid kernel pointer arguments.
+
+> diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/=
+tools/testing/selftests/bpf/progs/string_kfuncs_success.c
+> index c2be9edcd2821..e67b80ab3cd2c 100644
+> --- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
+> +++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
+[ ... ]
+> @@ -63,6 +64,13 @@ __test(-ENOENT) int test_strncasestr_notfound2(void *c=
+tx) { return bpf_strncases
+>  __test(-ENOENT) int test_strncasestr_notfound3(void *ctx) { return bpf_s=
+trncasestr("", "a", 0); }
+>  __test(0) int test_strncasestr_empty(void *ctx) { return bpf_strncasestr=
+(str, "", 1); }
+> =20
+> +/* bpf_strpbrk - functional tests */
+> +__test(0) int test_strpbrk_found_first(void *ctx) { return bpf_strpbrk(s=
+tr, "h"); }
+> +__test(4) int test_strpbrk_found_middle(void *ctx) { return bpf_strpbrk(=
+str, "ow"); }
+> +__test(6) int test_strpbrk_found_multiple(void *ctx) { return bpf_strpbr=
+k(str, "w"); }
+
+[Severity: Low]
+Does this test actually verify a multiple-match scenario?
+
+The target string "hello world" only contains a single 'w', and the accept
+string is just "w". Would it be better to test with a character that appears
+multiple times, such as "l" or "o"?
+
+> +__test(-ENOENT) int test_strpbrk_notfound(void *ctx) { return bpf_strpbr=
+k(str, "xyz"); }
+> +__test(-ENOENT) int test_strpbrk_empty_accept(void *ctx) { return bpf_st=
+rpbrk(str, ""); }
+> +
+>  /* bpf_memcmp - functional tests */
+
+[Severity: Low]
+Are we missing negative tests for the -E2BIG (too long string) error paths?
+
+It appears that the test_cases array in prog_tests/string_kfuncs.c was
+not updated to include "strpbrk", and string_kfuncs_failure2.c is missing
+the corresponding BPF programs for bpf_strpbrk.
+
+Could this leave the bounds-checking logic untested?
+
+[Severity: High]
+This is a pre-existing issue, but does the algorithmic complexity in the
+underlying string kfuncs allow for a Denial of Service?
+
+Looking at kernel/bpf/helpers.c, functions like bpf_strpbrk(), bpf_strspn(),
+and bpf_strcspn() use nested loops bounded by XATTR_SIZE_MAX (64KB):
+
+kernel/bpf/helpers.c:bpf_strpbrk() {
+    ...
+	for (i =3D 0; i < XATTR_SIZE_MAX; i++) {
+		__get_kernel_nofault(&cs, s__ign, char, err_out);
+		if (cs =3D=3D '\0')
+			return -ENOENT;
+		for (j =3D 0; j < XATTR_SIZE_MAX; j++) {
+			__get_kernel_nofault(&ca, accept__ign + j, char, err_out);
+    ...
+}
+
+If a BPF program calls one of these kfuncs with two strings up to 64KB in
+length that do not share any characters, the loops will execute O(N*M)
+times, resulting in up to 4.29 billion memory reads.
+
+Since the verifier is unaware of this internal kfunc complexity, can this
+deliberately stall the CPU for tens of seconds and trigger RCU stalls or
+watchdog lockup panics?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623030803.4479=
+8-1-lange_tang@163.com?part=3D5
