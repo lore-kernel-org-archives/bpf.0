@@ -1,87 +1,66 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501193D412C
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 11:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF833D3CE3
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 11:25:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782213752; cv=none; b=ZAcAZFtNXbDvenLw+VAcRWJFlND93xCkzmrXaK3lPPfNAr2y/PM0Y++sYDsclyL/fTiSm6HZc3KURMjmgAlkOCCYAP5qsJZ+TBClpODBJRWrZ92oaW7bbcvOwnWVoLuzE8l53NDbSbIFvWuP8rdE6Y7uJj4MZmIxBoGECMAxl5Y=
+	t=1782213950; cv=none; b=qb8Skt66DmLsJnn/kAnjEkm7i9YpxWG4XEa23a+QUCm+IzkbarwwtCVpmjuCq/ekuLkEh+OrI1puYFBc7TGZ3XTVQ13rxE4rkmd2BdUEfI2qD06EU9s/D9S2G3qmjUCtd++LNZLyYHmvq4/HE1ftNv1PSP8WbibQkE3zFjZXp7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782213752; c=relaxed/simple;
-	bh=S2wixHTY5PpR7xzLsbG2IqKF1SaBjFwr2zTAieLWxXw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GAGAQ4csOFmh+JGSPVVslkMRGTQfDCrQhwuJkCr6JojNV0kbWu2tjfspzrD0tMscGc1neKb+xjjhkhVqy57DEd8/Y8eSiGRqgASc64hE7sFRG2mUT5h0DPGEKDtJCXSjMVfrpcYQEC3YCwKIaX+IIGslOXlA2rS8rRRXCvpPcGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bsfX8BvI; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782213950; c=relaxed/simple;
+	bh=m+E3TjkE6dn/6fKKHYHpYC0iGcTgTNTIlGlR5oO/3lo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OJwksAp6iLizFLL634G6azT2IoTfKJjsimfoS9jJuosSU3Flrq2OCvCzBTlTfrR1vhxlwSY1Y8yqbF1GW+DvpB39UZZzQb3PRBLARlVmz/l30eZo7PIrk56wS36bQ/VR/tDVdCtJn3aH/6gdBj1RB3cGQVkaadK9gogHywnDCgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gVUXCLlF; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bsfX8BvI"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4923139e940so31970045e9.3
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 04:22:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782213750; x=1782818550; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4Ll5fGvrULmASpVjjrUyqyYpgppQmeYjrRkuEZdoatc=;
-        b=bsfX8BvIuCEJWba8m1oEiK+IB3M/pO6Hb9OkWi3LFatWpOwH6zdPW1gfbPSAGYekuk
-         d2V8hs6mhViIsZY/k5wlGzxMjbZOHDfbaC9GbSSTCusqGoIjlBoEmU7RNwMPq78CrrHf
-         RDoowpBFRIufmJ00nvJm2NjjK6SR7M3uOymZB3Fo4uWVTH+cSC3s6WKRIeOru4z7wJAi
-         mK6AEZ9I0AY7DzVDhCPgc2VX374u0JtFT8G0+WKPc4KLGH3cnvVcqh1Tv7lhqpnLKTA+
-         O/2RZ8HuVXcvNUwlEYH5ECjeLpyINra7PtGrBhY6S0D86JuVuZidCIHmpfiMQlLZYDeC
-         h85Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782213750; x=1782818550;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4Ll5fGvrULmASpVjjrUyqyYpgppQmeYjrRkuEZdoatc=;
-        b=kuUHSS9zrgT0yfQlBguMc0lIOn+6kTyLkeG6H9JYI9Z5UNxhm+8ZMZ3twvDc5MaEnh
-         9Y9VilE24naHFAG2wE6+sm51quCjEagTSidhFUOvap4nPzyMTcAw0qF7Su4Yrp0bjgOb
-         uTKuENCn/v/cMmH3j+lkDOB3/OVJbmOBCuT32ULZI7ohGixXz3Wc9FYGhre92QTV7CcN
-         GMEfRXQUUDR5wWrT69ScV11vnb/ARwnq5oDj1byNC7/ou34nz0c8VwtZL/VsH9Mi07bi
-         W2X9eKyB2HbkdkontXjdMQMrGyfOwvaZ3PzN/6QapjS07clWnWaqYoicbQ7Q0goaMlRP
-         HQ9Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+4Nv/7eKiNxUM+YmDfp0iMLSU7NTTVOKPIdXJRzfMP+gio4o6Qat2hpkPDjN1aww56rjM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6ILkyOf2NRRbtb2RrinucQP0FZ4OV95VkzAuE2Kvaf8U3H1kM
-	zenOzx8+kkfpr/xwI8nak2LLsFk+8JModAPv79wcZGVh9/B83Zdxowaw
-X-Gm-Gg: AfdE7cnNSGMispHNrBak1yxrNjLq9XvoHVqwYJcRAiEfnDBKo9DA2oERPPh6ukPKOrY
-	FmwA+q7wx/tp1eLkc89xRt3GPK795v2QpozU39ZnpV/jLfq+JJAqUCoq7kB2Hzt2xoAZ2WZBe5F
-	AD2v4avJB/rxpWtw1xpG49vBI60/ytckPcHVlorr6gUGZa0F8zvPCujqC4kkL71xUqcFDyGT3/+
-	o9tL9N8YE1OGQxInI28sNzoA3d+TCjmHexQ8bIdYSmt5d7/UawDt7UyTQpbpMTyU0t/PFisPtFD
-	1iR4mtgDKNFo5/QOsGQr4iOduP4AR7cvwA7ids8o85wrw0SmEJrJucXqlN3VAflAcuiUzfx00OJ
-	45LxqGwYP+SgdK900lEdrUODzfrV7kAaaV4YtvCnILWdo8upveOvQouceZ2cUnA7iWj/0+k1i1I
-	doKPrIsw5mAq20ddPECwzyhypBcY/wASyxXZYeU+TKtJrXaYmFboppwziwBnaTsjTLkfFmpTSKF
-	vjKRh2PH+k=
-X-Received: by 2002:a05:600c:4455:b0:492:40f2:4d78 with SMTP id 5b1f17b1804b1-4925b34a2e6mr33035365e9.2.1782213749442;
-        Tue, 23 Jun 2026 04:22:29 -0700 (PDT)
-Received: from dohko.chello.ie (188-141-5-72.dynamic.upc.ie. [188.141.5.72])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4924923cbe7sm272220715e9.8.2026.06.23.04.22.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2026 04:22:29 -0700 (PDT)
-From: David Carlier <devnexen@gmail.com>
-To: danishanwar@ti.com,
-	rogerq@kernel.org,
-	andrew+netdev@lunn.ch,
-	netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	m-malladi@ti.com,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gVUXCLlF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782213947;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XCMI4TR7QFtDkc3LYw54gkw6mxhFRqeq79UUiIMDTNY=;
+	b=gVUXCLlFmaru3RWhpIfuzFjnaYJsiI6WiOu+43wqfkl2cZOKWfJEx6+VAkQ/S2L7xKQjdh
+	6TXAFmXwotNE9rtFcwn4YJqvxAOznOOl/Gly+EpU0mYDkS1EGy4QCh/LW5wSYknLi69hwC
+	B8y9ZeoNWKTef7boulYpS4bocBTu7GU=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-549-3Diog-vuNYuzkEiwpJDqLQ-1; Tue,
+ 23 Jun 2026 07:25:44 -0400
+X-MC-Unique: 3Diog-vuNYuzkEiwpJDqLQ-1
+X-Mimecast-MFC-AGG-ID: 3Diog-vuNYuzkEiwpJDqLQ_1782213942
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C71771955E9C;
+	Tue, 23 Jun 2026 11:25:41 +0000 (UTC)
+Received: from vmalik-fedora.brq.redhat.com (unknown [10.43.17.131])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6D3D31800597;
+	Tue, 23 Jun 2026 11:25:37 +0000 (UTC)
+From: Viktor Malik <vmalik@redhat.com>
+To: linux-perf-users@vger.kernel.org
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Howard Chu <howardchu95@gmail.com>,
+	Viktor Malik <vmalik@redhat.com>,
 	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	David Carlier <devnexen@gmail.com>
-Subject: [PATCH net v2] net: ti: icssg-prueth: fix XDP_TX from the AF_XDP zero-copy RX path
-Date: Tue, 23 Jun 2026 12:22:25 +0100
-Message-ID: <20260623112225.303930-1-devnexen@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	bpf@vger.kernel.org,
+	Michael Petlan <mpetlan@redhat.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] perf trace: Refactor augmented_raw_syscalls using bpf_loop
+Date: Tue, 23 Jun 2026 13:25:33 +0200
+Message-ID: <20260623112533.1151502-1-vmalik@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -89,127 +68,226 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On XDP_TX from the zero-copy RX path, emac_run_xdp() converts the xsk
-buffer via xdp_convert_zc_to_xdp_frame(), which clones the data into a
-fresh MEM_TYPE_PAGE_ORDER0 page that is not DMA mapped. Transmitting it
-as PRUETH_TX_BUFF_TYPE_XDP_TX derives the DMA address with
-page_pool_get_dma_addr(), reading an uninitialized page->dma_addr, so
-the device DMAs from a bogus address (corrupt TX, or an IOMMU fault).
+The loop for processing syscall args in augment_raw_syscalls has a
+history of breaking with Clang updates, see e.g. commit 013eb043f37b
+("perf trace: Fix BPF loading failure (-E2BIG)") from Clang 15 to 16.
 
-Pick the TX buffer type from the frame's memory type: keep
-PRUETH_TX_BUFF_TYPE_XDP_TX for page_pool frames and use
-PRUETH_TX_BUFF_TYPE_XDP_NDO for the cloned zero-copy frame, which is then
-DMA mapped through the NDO path and unmapped on completion.
+Now, a similar thing happened between Clang 21 and 22. While the issue
+is mitigated on the main line by a recent verifier update, it remains
+broken on the 6.12 and 6.18 stable branches:
 
-While at it, fix the page_pool XDP_TX completion path. A
-PRUETH_TX_BUFF_TYPE_XDP_TX frame carries a page_pool-owned DMA mapping
-(established against rx_chn->dma_dev), yet prueth_xmit_free()
-unconditionally calls dma_unmap_single() on it with tx_chn->dma_dev,
-tearing down a mapping the driver does not own; xdp_return_frame()
-already recycles the page back to the pool. Tag such frames with a
-dedicated PRUETH_SWDATA_XDPF_TX type so the completion path skips the
-unmap, the same way PRUETH_SWDATA_XSK buffers are handled.
+    [linux-6.18.y]# sudo perf trace true
+    libbpf: prog 'sys_enter': BPF program load failed: -E2BIG
+    libbpf: prog 'sys_enter': -- BEGIN PROG LOAD LOG --
+    [...]
+    BPF program is too large. Processed 1000001 insn
+    processed 1000001 insns (limit 1000000) max_states_per_insn 40 total_states 37941 peak_states 232 mark_read 0
+    -- END PROG LOAD LOG --
+    libbpf: prog 'sys_enter': failed to load: -E2BIG
+    libbpf: failed to load object 'augmented_raw_syscalls_bpf'
+    libbpf: failed to load BPF skeleton 'augmented_raw_syscalls_bpf': -E2BIG
+    Error: failed to get syscall or beauty map fd
+    [...]
 
-Fixes: 7a64bb388df3 ("net: ti: icssg-prueth: Add AF_XDP zero copy for RX")
-Fixes: 62aa3246f462 ("net: ti: icssg-prueth: Add XDP support")
+The reason is that the loop is quite complex and the BPF verifier often
+struggles to prove that it terminates.
+
+Fix the issue by refactoring the loop body into a callback function and
+calling the bpf_loop helper. This should prevent future breakages of
+this kind since the callback function has no loops. It also allows to
+drop a few artificial checks to help the verifier, including the changes
+introduced by 013eb043f37b.
+
+Signed-off-by: Viktor Malik <vmalik@redhat.com>
+Fixes: a68fd6a6cdd3 ("perf trace: Collect augmented data using BPF")
+Fixes: 013eb043f37b ("perf trace: Fix BPF loading failure (-E2BIG)")
 Cc: stable@vger.kernel.org
-Signed-off-by: David Carlier <devnexen@gmail.com>
 ---
-v2:
- - fold in the page_pool XDP_TX completion-path unmap fix raised by
-   Meghana Malladi: tag page_pool TX frames with PRUETH_SWDATA_XDPF_TX
-   so prueth_xmit_free() skips dma_unmap_single() on a pool-owned
-   mapping; xdp_return_frame() already recycles the page.
- - add Fixes: 62aa3246f462 for that path.
- - no change to the original zero-copy fix.
-v1: https://lore.kernel.org/netdev/20260620213756.87499-1-devnexen@gmail.com
- drivers/net/ethernet/ti/icssg/icssg_common.c | 20 +++++++++++++++++---
- drivers/net/ethernet/ti/icssg/icssg_prueth.h |  1 +
- 2 files changed, 18 insertions(+), 3 deletions(-)
+ .../bpf_skel/augmented_raw_syscalls.bpf.c     | 157 +++++++++++-------
+ 1 file changed, 96 insertions(+), 61 deletions(-)
 
-diff --git a/drivers/net/ethernet/ti/icssg/icssg_common.c b/drivers/net/ethernet/ti/icssg/icssg_common.c
-index 82ddef9c17d5..96c8bf5ef671 100644
---- a/drivers/net/ethernet/ti/icssg/icssg_common.c
-+++ b/drivers/net/ethernet/ti/icssg/icssg_common.c
-@@ -185,7 +185,7 @@ void prueth_xmit_free(struct prueth_tx_chn *tx_chn,
- 	first_desc = desc;
- 	next_desc = first_desc;
- 	swdata = cppi5_hdesc_get_swdata(first_desc);
--	if (swdata->type == PRUETH_SWDATA_XSK)
-+	if (swdata->type == PRUETH_SWDATA_XSK || swdata->type == PRUETH_SWDATA_XDPF_TX)
- 		goto free_pool;
+diff --git a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+index 2a6e61864ee0..6d553ed3ac23 100644
+--- a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
++++ b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+@@ -429,15 +429,96 @@ static bool pid_filter__has(struct pids_filtered *pids, pid_t pid)
+ 	return bpf_map_lookup_elem(pids, &pid) != NULL;
+ }
  
- 	cppi5_hdesc_get_obuf(first_desc, &buf_dma, &buf_dma_len);
-@@ -259,6 +259,7 @@ int emac_tx_complete_packets(struct prueth_emac *emac, int chn,
- 			napi_consume_skb(skb, budget);
- 			break;
- 		case PRUETH_SWDATA_XDPF:
-+		case PRUETH_SWDATA_XDPF_TX:
- 			xdpf = swdata->data.xdpf;
- 			dev_sw_netstats_tx_add(ndev, 1, xdpf->len);
- 			total_bytes += xdpf->len;
-@@ -769,7 +770,8 @@ u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
- 	k3_udma_glue_tx_dma_to_cppi5_addr(tx_chn->tx_chn, &buf_dma);
- 	cppi5_hdesc_attach_buf(first_desc, buf_dma, xdpf->len, buf_dma, xdpf->len);
- 	swdata = cppi5_hdesc_get_swdata(first_desc);
--	swdata->type = PRUETH_SWDATA_XDPF;
-+	swdata->type = buff_type == PRUETH_TX_BUFF_TYPE_XDP_TX ?
-+		PRUETH_SWDATA_XDPF_TX : PRUETH_SWDATA_XDPF;
- 	swdata->data.xdpf = xdpf;
- 
- 	/* Report BQL before sending the packet */
-@@ -804,6 +806,7 @@ EXPORT_SYMBOL_GPL(emac_xmit_xdp_frame);
-  */
- static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp, u32 *len)
- {
-+	enum prueth_tx_buff_type tx_buff_type;
- 	struct net_device *ndev = emac->ndev;
- 	struct netdev_queue *netif_txq;
- 	int cpu = smp_processor_id();
-@@ -826,11 +829,21 @@ static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp, u32 *len
- 			goto drop;
- 		}
- 
-+		/* In AF_XDP zero-copy mode xdp_convert_buff_to_frame()
-+		 * clones the xsk buffer into a fresh MEM_TYPE_PAGE_ORDER0
-+		 * page that is not DMA mapped. Such a frame must be mapped
-+		 * via the NDO path; only a page pool-backed frame already
-+		 * carries a usable page_pool DMA address.
-+		 */
-+		tx_buff_type = xdpf->mem_type == MEM_TYPE_PAGE_POOL ?
-+				PRUETH_TX_BUFF_TYPE_XDP_TX :
-+				PRUETH_TX_BUFF_TYPE_XDP_NDO;
++struct args_loop_ctx {
++	struct syscall_enter_args *args;
++	unsigned int *beauty_map;
++	void *payload_offset;
++	int value_size;
++	u64 *output;
++	bool *do_output;
++};
 +
- 		q_idx = cpu % emac->tx_ch_num;
- 		netif_txq = netdev_get_tx_queue(ndev, q_idx);
- 		__netif_tx_lock(netif_txq, cpu);
- 		result = emac_xmit_xdp_frame(emac, xdpf, q_idx,
--					     PRUETH_TX_BUFF_TYPE_XDP_TX);
-+					     tx_buff_type);
- 		__netif_tx_unlock(netif_txq);
- 		if (result == ICSSG_XDP_CONSUMED) {
- 			ndev->stats.tx_dropped++;
-@@ -1395,6 +1408,7 @@ void prueth_tx_cleanup(void *data, dma_addr_t desc_dma)
- 		dev_kfree_skb_any(skb);
- 		break;
- 	case PRUETH_SWDATA_XDPF:
-+	case PRUETH_SWDATA_XDPF_TX:
- 		xdpf = swdata->data.xdpf;
- 		xdp_return_frame(xdpf);
- 		break;
-diff --git a/drivers/net/ethernet/ti/icssg/icssg_prueth.h b/drivers/net/ethernet/ti/icssg/icssg_prueth.h
-index df93d15c5b78..00bb760d68a9 100644
---- a/drivers/net/ethernet/ti/icssg/icssg_prueth.h
-+++ b/drivers/net/ethernet/ti/icssg/icssg_prueth.h
-@@ -153,6 +153,7 @@ enum prueth_swdata_type {
- 	PRUETH_SWDATA_CMD,
- 	PRUETH_SWDATA_XDPF,
- 	PRUETH_SWDATA_XSK,
-+	PRUETH_SWDATA_XDPF_TX,
- };
++static long process_arg_cb(u64 i, void *ctx)
++{
++	/*
++	 * Determine what type of argument and how many bytes to read from user space, using the
++	 * value in the beauty_map. This is the relation of parameter type and its corresponding
++	 * value in the beauty map, and how many bytes we read eventually:
++	 *
++	 * string: 1			      -> size of string
++	 * struct: size of struct	      -> size of struct
++	 * buffer: -1 * (index of paired len) -> value of paired len (maximum: TRACE_AUG_MAX_BUF)
++	 */
++	struct augmented_arg *augmented_arg;
++	struct args_loop_ctx *loop_ctx;
++	int aug_size, size, index;
++	bool augmented;
++	void *arg;
++
++	/* Bounds check for the below map access to help the verifier */
++	if (i < 0 || i >= 6)
++		return 1;
++
++	loop_ctx = (struct args_loop_ctx *)ctx;
++	arg = (void *)loop_ctx->args->args[i];
++	augmented = false;
++	size = loop_ctx->beauty_map[i];
++	aug_size = size; /* size of the augmented data read from user space */
++	augmented_arg = (struct augmented_arg *)loop_ctx->payload_offset;
++
++	if (size == 0 || arg == NULL)
++		return 0; /* continue */
++
++	if (size == 1) { /* string */
++		aug_size = bpf_probe_read_user_str(augmented_arg->value, loop_ctx->value_size, arg);
++		augmented = true;
++	} else if (size > 0 && size <= loop_ctx->value_size) { /* struct */
++		if (!bpf_probe_read_user(augmented_arg->value, size, arg))
++			augmented = true;
++	} else if (size < 0 && size >= -6) { /* buffer */
++		index = -(size + 1);
++		barrier_var(index); // Prevent clang (noticed with v18) from removing the &= 7 trick.
++		index &= 7;	    // Satisfy the bounds checking with the verifier in some kernels.
++		aug_size = loop_ctx->args->args[index];
++
++		if (aug_size > TRACE_AUG_MAX_BUF)
++			aug_size = TRACE_AUG_MAX_BUF;
++
++		if (aug_size > 0) {
++			if (!bpf_probe_read_user(augmented_arg->value, aug_size, arg))
++				augmented = true;
++		}
++	}
++
++	/* Augmented data size is limited to sizeof(augmented_arg->unnamed union with value field) */
++	if (aug_size > loop_ctx->value_size)
++		aug_size = loop_ctx->value_size;
++
++	/* write data to payload */
++	if (augmented) {
++		int written = offsetof(struct augmented_arg, value) + aug_size;
++
++		if (written < 0 || written > sizeof(struct augmented_arg))
++			return 1; /* break */
++
++		augmented_arg->size = aug_size;
++		*loop_ctx->output += written;
++		loop_ctx->payload_offset += written;
++		*loop_ctx->do_output = true;
++	}
++
++	return 0;
++}
++
+ static int augment_sys_enter(void *ctx, struct syscall_enter_args *args)
+ {
+-	bool augmented, do_output = false;
+-	int zero = 0, index, value_size = sizeof(struct augmented_arg) - offsetof(struct augmented_arg, value);
++	bool do_output = false;
++	int zero = 0, value_size = sizeof(struct augmented_arg) - offsetof(struct augmented_arg, value);
+ 	u64 output = 0; /* has to be u64, otherwise it won't pass the verifier */
+-	s64 aug_size, size;
+ 	unsigned int nr, *beauty_map;
+ 	struct beauty_payload_enter *payload;
+-	void *arg, *payload_offset;
++	void *payload_offset;
++	long iters;
  
- enum prueth_tx_buff_type {
+ 	/* fall back to do predefined tail call */
+ 	if (args == NULL)
+@@ -457,63 +538,17 @@ static int augment_sys_enter(void *ctx, struct syscall_enter_args *args)
+ 	/* copy the sys_enter header, which has the syscall_nr */
+ 	__builtin_memcpy(&payload->args, args, sizeof(struct syscall_enter_args));
+ 
+-	/*
+-	 * Determine what type of argument and how many bytes to read from user space, using the
+-	 * value in the beauty_map. This is the relation of parameter type and its corresponding
+-	 * value in the beauty map, and how many bytes we read eventually:
+-	 *
+-	 * string: 1			      -> size of string
+-	 * struct: size of struct	      -> size of struct
+-	 * buffer: -1 * (index of paired len) -> value of paired len (maximum: TRACE_AUG_MAX_BUF)
+-	 */
+-	for (int i = 0; i < 6; i++) {
+-		arg = (void *)args->args[i];
+-		augmented = false;
+-		size = beauty_map[i];
+-		aug_size = size; /* size of the augmented data read from user space */
+-
+-		if (size == 0 || arg == NULL)
+-			continue;
+-
+-		if (size == 1) { /* string */
+-			aug_size = bpf_probe_read_user_str(((struct augmented_arg *)payload_offset)->value, value_size, arg);
+-			/* minimum of 0 to pass the verifier */
+-			if (aug_size < 0)
+-				aug_size = 0;
+-
+-			augmented = true;
+-		} else if (size > 0 && size <= value_size) { /* struct */
+-			if (!bpf_probe_read_user(((struct augmented_arg *)payload_offset)->value, size, arg))
+-				augmented = true;
+-		} else if ((int)size < 0 && size >= -6) { /* buffer */
+-			index = -(size + 1);
+-			barrier_var(index); // Prevent clang (noticed with v18) from removing the &= 7 trick.
+-			index &= 7;	    // Satisfy the bounds checking with the verifier in some kernels.
+-			aug_size = args->args[index] > TRACE_AUG_MAX_BUF ? TRACE_AUG_MAX_BUF : args->args[index];
+-
+-			if (aug_size > 0) {
+-				if (!bpf_probe_read_user(((struct augmented_arg *)payload_offset)->value, aug_size, arg))
+-					augmented = true;
+-			}
+-		}
+-
+-		/* Augmented data size is limited to sizeof(augmented_arg->unnamed union with value field) */
+-		if (aug_size > value_size)
+-			aug_size = value_size;
+-
+-		/* write data to payload */
+-		if (augmented) {
+-			int written = offsetof(struct augmented_arg, value) + aug_size;
+-
+-			if (written < 0 || written > sizeof(struct augmented_arg))
+-				return 1;
+-
+-			((struct augmented_arg *)payload_offset)->size = aug_size;
+-			output += written;
+-			payload_offset += written;
+-			do_output = true;
+-		}
+-	}
++	struct args_loop_ctx loop_ctx = {
++		.args = args,
++		.beauty_map = beauty_map,
++		.payload_offset = payload_offset,
++		.value_size = value_size,
++		.output = &output,
++		.do_output = &do_output
++	};
++	iters = bpf_loop(6, process_arg_cb, &loop_ctx, 0);
++	if (iters != 6)
++		return 1;
+ 
+ 	if (!do_output || (sizeof(struct syscall_enter_args) + output) > sizeof(struct beauty_payload_enter))
+ 		return 1;
 -- 
-2.53.0
+2.54.0
 
