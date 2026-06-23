@@ -1,63 +1,62 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 593183955CF
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 21:50:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432D53B8130
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 21:52:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782251459; cv=none; b=ktapqBAYubPcDSN5k6x1jODlMnuWmVO1TqcU3gwKkpOXtsw8RSr1sdDejiFblNz0dkDWg2OuAQSUeq5kumxpnC2Ak6ZAs9A45OIx9WL56Um7b/7Vj/wVcCUue1Ne97mBQIDfvvhfSCED1mfwyBKufo46X7OGbEmICeyrPN9JW9Y=
+	t=1782251550; cv=none; b=npQquFt4VeVj8c8A7EIXHt31Sj800kpvotUJfEhvA5aauYwRiHCc1cUcxnqITminielQw35UPyEhfNV7c7XU6wkIuDRn5m/LEqYLG6Qu2M1TKsIYJY5QfNmfPfTdcRNoP2R0o93GML//EpCReaIjWIGwB3qBI4fCxKr7haEXJqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782251459; c=relaxed/simple;
-	bh=AfKLgzwWQGEaXCQiwOYFEnHu532Ob2PVTdOP9IlN0+c=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=hvgPLK+8a4GLLJ+2mYWzwsjnRBt7aZQ7+px0l7oZgQ9nGOWhrIVTOqRrAy2RagQ5aCws/UNjfKJbpSlcmmmU7YbvugaJzfJSaa1JT7N6y7AQrxou8DzkZ4YCqHJ/wR4ql7YuU7lOTHwikXRrJ2F2BFwW6l+9WXKCajObfV/U4gU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=CHFKymLZ; arc=none smtp.client-ip=74.125.82.175
+	s=arc-20240116; t=1782251550; c=relaxed/simple;
+	bh=DEcLyTmhwS+RlC8yglBZkBjdWRmROimrD2+mka7sjzw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=aCEAmrDMTkllHTx6DZxpdqlvnYQmg4SWZFp8IW3fsKKWnky5lv29hfsDoW8UzvkGXwK+Co2rMCvD3F42Y+wiaxvh7vWo3Bj+yHEMdvmsmZyI4abKdnFRw4+NHk9TfeFCC+0rus2eA5a+8+O8NrSp5ikeo1aBPVfQ+wSFUzhOrgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=wVPOfHJ8; arc=none smtp.client-ip=74.125.82.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="CHFKymLZ"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-30bf8b2bd20so666187eec.0
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 14:50:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="wVPOfHJ8"
+Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-13986d61b4fso560787c88.0
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 14:52:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782251457; x=1782856257; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782251548; x=1782856348; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CI0m2Bkca3T9X1wUQjN9Y3sphEwKAETg9MfJKMjr+2M=;
-        b=CHFKymLZwff5cCj2b+xeC4NCzSVy6PxiCy64IMkGhBvk2tRgkGX5cclnXwLZG+f2/R
-         +zOG+gqLo2KuDED2IBjwxrq6V5tGHCtaWaez1qYzisfPz+Nv/3gYBj1WYysxpFJfLI+G
-         vClXBrc3xttcwFcnHvq2kjC3Izu3BC9On1v9CKtddDmv/XWPurifTj3KMrgfdCDDjpZO
-         eG8RgJ+GB0Nbefz83l2pYp1jzt/ldFQ9W48uDgxpgg/7ugNLVgjKRU//zCQboYC5cMMb
-         saDI0rd2E4BVoTXQ6Qdq1w5yDFJ14AVdWP18AMnr2Rm6aDRDDafsKV4LekBFotYz0/Ri
-         KlUQ==
+        bh=GFlyRL2o4sdMxWc71sn5UWmBL09Nr89DIg0wWzeHTvA=;
+        b=wVPOfHJ8GFlKHbzbrbCUAocTF2i11vPx6ZLMqBWzdCl2UNW4s109kduJYQj7REuCcb
+         9eBOdO28GUeCLE8dzzLdfYBwWuaslwMSktvoN7jqQmtEbATK32rb3g9x+5KFSgfxnIek
+         cvlAtt5iAjzuYGqWfgQYViKWe/MwUdF8LPR8Mre3nWDepAC8tpvf3JjHhsQdYRZfu+dz
+         Jcm1RGPiGGBNSBD/6QKCU9uGix+Uz1t4zbUvO5yQTfSdf8q9qCl01pND+kdP8suzx+l2
+         qxrrZR8n7LN72KFVZS1UBHs20lRa3892d6OEeDzDGz+dVmHIzclb4kOO9CjD6r1OtKlr
+         UKRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782251457; x=1782856257;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20251104; t=1782251548; x=1782856348;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=CI0m2Bkca3T9X1wUQjN9Y3sphEwKAETg9MfJKMjr+2M=;
-        b=ikf7N5pJq92G2Oh+qWPFvVWrzGI3Rl+IkWiwVWccC9LDTBohgipNNWo5SPU4MgsVzx
-         Jy3PZ7NQjF3LFndEAIiMHRnQ1dPIHBQlJnEsGD5u3ERgTihW/OMoUjdtfRTz/AvXihQL
-         Og7uftMTtPqK0afNMMRbIRqu5xcLas2wtixFXIDKFSnO2agP6BTPvSlYtB5OCRu55A4e
-         DMU9PhyOq585BbEpH2RieQqnpMKUBXHu1deIU5+M60bhWROiGgakmgfrHEmaIt5rifAO
-         tZ2KBpLXkRPHvKN+O3BpW9cht9M+gI5c+Qc+oJRv1Yy0sNTzRnrA1eBPTrtquIWON/A9
-         Wxfg==
-X-Forwarded-Encrypted: i=1; AHgh+RpDtrHNVHl1scgh1MP6ehy+SGj80i2vy8FhPyc5RPzExqQpf6BA3h4fePmP8Q7i8JZSWhA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWEaJG60Wn+EtKMsMfwekieF+2Mf/XU+OM93EbJ0XX/mwaYhGq
-	+IoWpPB382hmgaO7XTq85lWFudogH5lzSHk/gEH9XDdEA9aVZJlzW0KrVMwMRSSYQGI=
-X-Gm-Gg: AfdE7cmUV5rL4A8Iejh83UfTv+re3lcV3pGi4mSgtENkWXeUYjEYvmyNL4yoD70E3jM
-	MKnTvOSTvq8ap95LAjc/DhgTsRaZb/9jr7ghiGOHB0nbXY8U5xMEuYFAVKqICbozOmox70zjEbC
-	RsNLyOj3M94XUdeSLL3PkUsLl/qnBdvoRAlpzBfcdHI8UTa9BseKRV84QCuxvwMP6FqPHvBc+Lj
-	P0RS1IGI0X76th0MMA0MJriWXzYE/ad4Zy8f6snAZQx3MHmgWVKr+/lXtPzpZ7iJdvdhrjMII/b
-	n3xdgAHlvyw9GC3lK6CuRSyuKGjrFiYeUhTaGtsgDiag1TMC3TaiJWNHbguN+jS+ecvT96diKsi
-	M27UCvZ0nVs+W/HCZ58sTEfJpiI8Aw4GZyhresqCXw6OuDmzTmj9WtU2xgmZ3ffNcqLfsUNFzGQ
-	wxhXDv
-X-Received: by 2002:a05:7300:23cf:b0:30c:1865:d9e0 with SMTP id 5a478bee46e88-30c1dbd9a00mr15340344eec.16.1782251457361;
-        Tue, 23 Jun 2026 14:50:57 -0700 (PDT)
+        bh=GFlyRL2o4sdMxWc71sn5UWmBL09Nr89DIg0wWzeHTvA=;
+        b=qRghTEL/yX99V93jNrVVGhGeEdjSGFL1l+X83xb38hbwdU8rB94HxKiZDeEg2H5ZvB
+         CdOzSveK5HQQye2l148X25gUn9vpfyTtqrhkDrG7k5zQDU5orGLGcYOC5jFG7zIYAaDJ
+         1RdoyH8/dDofqUEEuRaIHRuWzPMRVhlrcyYcLtO2KFLvSmQWeaUXKk+xl5GKXlFGIXHZ
+         qKvT1LqkKFi0oYVn/UqSM03BqaOVv+vyRfJot0rw8ZYOTKvzRLDpe6TqAtBTwp1Q1K78
+         y8OvqILeYLG5/7FCpM59fQScvnzixpWgeTDEUU4jDtDAvAEBTSTyAfW/iwupymOM9pfJ
+         njpA==
+X-Forwarded-Encrypted: i=1; AFNElJ8cKgrLIXIwMIN+aRDFwgGvkGenLlFhAc7zcVuzeB2i7pLgR08nDCd+cySIj6Vp8LZR46s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfuKndA39eqCiK0TZCb2/nx8Gko6gyjafqm3aeLhohv3DnbwfS
+	D9N0dWdZdARd4cMr4xbl+fu3m3ZGll1GoMXuXpFdeCiCjYHN9nZGsY8+8t+6e/M2Tjc=
+X-Gm-Gg: AfdE7cl6kflx1NOzrfXlCHQ1wbd8W1g11q14rMII8sPxXAdAMjTj/GF8zi3rseVqUdl
+	qC1hJmtZWDCaKvQPpIXVyNax2EGOwLG51XiARgNYVojz1Rr1FInYpvmQlM2LEa0AccM4jCK8BRZ
+	wUzhYx5B5cDyBqyKUYVzLhRx6cHG68rvSpywBnUcedJkvjH77FgJ08CjzU5Apn+jv3V63PzfQs6
+	/96U6J6i2PFplAoJdbGYlpJ26WJcO3BzhM1UVjMHrHbodV6cmFRpdRJD9mZso+nocxDBVX9hDZ2
+	mPHLwyE7bTz0to4a1pqwSgEujIKwIkzW9D5eLLFq7nljMi0qXCAtZ6cv3RKqK6NvsNqjaDty62x
+	g417LsHYKI/mvYktV4lsqRW2GGoiewjQchwaTQXcFVZsTh6bfgbGleh3eH4K5TC7fzrBfNQ==
+X-Received: by 2002:a05:7022:410:b0:11a:342e:8a98 with SMTP id a92af1059eb24-139d0b58d17mr456804c88.0.1782251548209;
+        Tue, 23 Jun 2026 14:52:28 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:600::2526])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c52daf89dsm8970595eec.31.2026.06.23.14.50.55
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-139adcce488sm14516255c88.8.2026.06.23.14.52.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jun 2026 14:50:56 -0700 (PDT)
+        Tue, 23 Jun 2026 14:52:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,102 +65,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 23 Jun 2026 17:50:53 -0400
-Message-Id: <DJGREUPJQM5T.3H08R7F3GNYVR@etsalapatis.com>
-Cc: "John Fastabend" <john.fastabend@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>,
- "Viktor Malik" <vmalik@redhat.com>, "Leon Hwang" <leon.hwang@linux.dev>,
- "Dave Marchevsky" <davemarchevsky@fb.com>, <bpf@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: Cover refcount acquire
- node offsets
+Date: Tue, 23 Jun 2026 17:52:25 -0400
+Message-Id: <DJGRG0VRFCK4.KCEHW637D645@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: Reject offset refcount acquire
+ arguments
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: <bot+bpf-ci@kernel.org>, <chenyy23@mails.tsinghua.edu.cn>,
+ <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <memxor@gmail.com>
+Cc: <john.fastabend@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+ <shuah@kernel.org>, <vmalik@redhat.com>, <leon.hwang@linux.dev>,
+ <davemarchevsky@fb.com>, <bpf@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <martin.lau@kernel.org>, <clm@meta.com>, <ihor.solodrai@linux.dev>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <cover.1782192383.git.chenyy23@mails.tsinghua.edu.cn>
- <bf2a2033ced272106292de4465b8ef3fb991c912.1782192383.git.chenyy23@mails.tsinghua.edu.cn>
-In-Reply-To: <bf2a2033ced272106292de4465b8ef3fb991c912.1782192383.git.chenyy23@mails.tsinghua.edu.cn>
+References: <2f894647f56f71838fdddeb97a3e057ed35ea92e.1782192383.git.chenyy23@mails.tsinghua.edu.cn> <2c2797dac0dc56bf183087ed97aed819d1184568d2249b11439ab542afa43b4a@mail.kernel.org>
+In-Reply-To: <2c2797dac0dc56bf183087ed97aed819d1184568d2249b11439ab542afa43b4a@mail.kernel.org>
 
-On Tue Jun 23, 2026 at 2:11 AM EDT, Yiyang Chen wrote:
-> Add regression coverage for bpf_refcount_acquire() on graph-node-derived
-> pointers.
+On Tue Jun 23, 2026 at 3:01 AM EDT, bot+bpf-ci wrote:
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 2abc79dbf281..f65eff28ecd2 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
 >
-> The rejected case passes a popped list node pointer directly to
-> bpf_refcount_acquire(), which must fail because the pointer carries a
-> non-zero fixed offset.
+> [ ... ]
 >
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+>> @@ -12135,7 +12146,8 @@ static int check_kfunc_args(struct bpf_verifier_=
+env *env, struct bpf_kfunc_call_
+>>
+>>  		if (regno =3D=3D meta->release_regno)
+>>  			arg_type |=3D OBJ_RELEASE;
+>> -		ret =3D check_func_arg_reg_off(env, reg, argno, arg_type);
+>> +		ret =3D __check_func_arg_reg_off(env, reg, argno, arg_type,
+>> +					       btf_id_fixed_off_ok);
+>
+> This isn't a bug, but does this call need to be split across two lines?
+> The line length limit is 100 characters, and it looks like it would fit
+> on a single line:
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Bot is right, we don't split diagnostics across lines.
 
+>
+> 		ret =3D __check_func_arg_reg_off(env, reg, argno, arg_type, btf_id_fixe=
+d_off_ok);
+>
+>>  		if (ret < 0)
+>>  			return ret;
+>
+>
 > ---
->  .../bpf/progs/refcounted_kptr_fail.c          | 34 +++++++++++++++++++
->  1 file changed, 34 insertions(+)
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
 >
-> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/t=
-ools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-> index 7247a20c0..024ef2aae 100644
-> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-> @@ -13,12 +13,20 @@ struct node_acquire {
->  	struct bpf_refcount refcount;
->  };
-> =20
-> +struct node_refcounted {
-> +	long key;
-> +	struct bpf_list_node list;
-> +	struct bpf_refcount refcount;
-> +};
-> +
->  extern void bpf_rcu_read_lock(void) __ksym;
->  extern void bpf_rcu_read_unlock(void) __ksym;
-> =20
->  #define private(name) SEC(".data." #name) __hidden __attribute__((aligne=
-d(8)))
->  private(A) struct bpf_spin_lock glock;
->  private(A) struct bpf_rb_root groot __contains(node_acquire, node);
-> +private(B) struct bpf_spin_lock lock;
-> +private(B) struct bpf_list_head head __contains(node_refcounted, list);
-> =20
->  static bool less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
->  {
-> @@ -93,6 +101,32 @@ long rbtree_refcounted_node_ref_escapes_owning_input(=
-void *ctx)
->  	return 0;
->  }
-> =20
-> +SEC("?tc")
-> +__failure __msg("dereference of modified ptr_ ptr R1")
-> +long refcount_acquire_list_node_offset(void *ctx)
-> +{
-> +	struct node_refcounted *node, *base, *ref;
-> +	struct bpf_list_node *list_node;
-> +
-> +	node =3D bpf_obj_new(typeof(*node));
-> +	if (!node)
-> +		return 1;
-> +
-> +	bpf_spin_lock(&lock);
-> +	bpf_list_push_front(&head, &node->list);
-> +	list_node =3D bpf_list_pop_front(&head);
-> +	bpf_spin_unlock(&lock);
-> +	if (!list_node)
-> +		return 2;
-> +
-> +	base =3D container_of(list_node, struct node_refcounted, list);
-> +	ref =3D bpf_refcount_acquire(list_node);
-> +	if (ref)
-> +		bpf_obj_drop(ref);
-> +	bpf_obj_drop(base);
-> +	return 0;
-> +}
-> +
->  SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
->  __failure __msg("function calls are not allowed while holding a lock")
->  int BPF_PROG(rbtree_fail_sleepable_lock_across_rcu,
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/280072=
+09948
 
