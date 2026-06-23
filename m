@@ -1,104 +1,109 @@
-Received: from mail-ed1-f68.google.com (mail-ed1-f68.google.com [209.85.208.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC733C769D
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 08:01:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1F83C4B93
+	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 08:03:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782201673; cv=none; b=lviMIhvchA2G/ZtSTXPfpYoHDnCaYGJxPD6o4/bEle/Mp+CjpIpK2CJGCXwv146A+KHTTCH4qrNj6KMoAiHmi5/VGamzVH9yNzQT3kWtZqFLw00bzraeQ4bv3bNCRkK9qQt5mllYQglBTSFjI8DCDg6/+8shh+rg5odUpuroQC0=
+	t=1782201782; cv=none; b=kvdL9gUAgX9kaUIcXv2PDPD1mlS9MYVRAO+YBF1bvJ/YOHd5rlhH33kYVCninGiGv5si8sqU1CzQ5dfOAFTawincf+toJMMTj11BvKPa8xp7b0atzJi/l502jC0Z/o2WXCFbkmPu6SkkBvpTz50tcr1m75mccKtbAeoVvt5/Hos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782201673; c=relaxed/simple;
-	bh=dWiw7xAXVl3BEWFURqU4U1zcYKrwaJqJO88flZd8yhQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sndiL5h5ogBID2RjY5tWYYcpLL22j8lcosodBUIiLKkaxNoi47yEGPXfOewVk7EWuAKRUoCnNfDRU5rqFCD7y8AvX/xcwu0xj8ChceB6KtnpoAIF9Br3Y5gPKZ+OX3Q6eYCjl/lJCnaYWb/VSprKZsuAFnpC6pZaTJJQ6MENPME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=E5q+yEEd; arc=none smtp.client-ip=209.85.208.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1782201782; c=relaxed/simple;
+	bh=IbZnz/sAbGOahsL/ZV3OPTBrm6X4EBZdUCGEX4wIa9w=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=norknSnXbNs63EWNkG99VhUVBzfbI21sanOoBWDEfKd1wKBIOJ/d2Sg5FUsbEIJ1BraTnMr7sD2XJ+M2d5GhhC2NiuKxh2jmgEwHJ9xtqUjgDP6ASAG+R7+qCw/JDH3A7pKK3jmhJH/yR/LYalTrQbqV9fK44ykpiE2fse0U0Ok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LZApq34O; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="E5q+yEEd"
-Received: by mail-ed1-f68.google.com with SMTP id 4fb4d7f45d1cf-697bd21fdc2so3170549a12.1
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 01:01:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1782201671; x=1782806471; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q0sFKF/thZYYlvAYL1rZr93jnB4PDyGa3rfNNqi/jw0=;
-        b=E5q+yEEdZhCE3eBYhE5xKE0IwjtD4+qlV+lvmlGn2MQ/9v8KJmpFQ0IucE2bqxtDVG
-         0jLzGiaOXVJDzOlsmbhy5v1gHgItV0M9EMkcGkM8QyKuakth1tfBcVM6L1HMrtJL6cPh
-         CPuqQf5xas0gOnhwVYDN9hcoHUNl+USf7/TzZL2tUvdNfegYA+Co2mvdAYiachKYQDF7
-         DKPp5L+mAG+gcmGozLiWyHZKnWPhUzRaIJY7NRGVFcEZUg5WTvYzJMSRjnkxLqHtzX5q
-         dfoaeHYjFiz4dzf7BKwxrrTWR81SSYqbt9Q3JbDp2rZUqQifuW+277CgBTJZDS0/uSUT
-         r53g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782201671; x=1782806471;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q0sFKF/thZYYlvAYL1rZr93jnB4PDyGa3rfNNqi/jw0=;
-        b=mvkK2coe9gGmeaX8EjiCacV9NoLKe7aqvopGRXfZlCHZcNH5Np1DvU+mIxkXyUp3Pk
-         juDN7wqa8E9jAkrp/hdp8V27dXxj/b7JxNY9t7PKVlDNTlelyiIhIJVznNJIHAxDjbPs
-         qsxVCq62dG3K5X035DJXcZ8/rwjd0BAY3ZfzH/v92Hh5xmqDVpy2bwiBIsr5USQIAjQx
-         1c/qVXViGOfMAwzBadiMYFt4YFbRsZ+EX0t11DSHggouMdDQhQwuDLgp03NsAmJdbIwd
-         cexGKhvVFnuwepe2eRUap+nkugC6mK2MQcsBXVxtcR1Pjbt2dqePYoqUMQGuPlXKePS+
-         Q5dg==
-X-Gm-Message-State: AOJu0YwCr8SHd10fRJHAPVwgDDRfdr04y1nUlWVN9hbVF7+ZMgXNiMg3
-	JlGn+1kkpzkab4dLTFWHA/5CiW9L7bXC8EeXI04g0zUloyypLGL/HJIhMVrWVtX3Dbs=
-X-Gm-Gg: AfdE7cmeeB0GeBqCvJoSaI+W4aDshwJCIt3EKa1TAPAbmENO1jrY7xgve+DsJW1t6z3
-	XILs8sRW2ZFxtSWieozGKflTBIiO2bZ1MwwEfBxmMZCUI0EKqN+Efsu4g3Iyso0ZInxpb8I6thR
-	lzXftNOpSiXTVpy60BCKW+nzEwPFGFqi5iip6aQKxPebN3tJ2QYa/Lo0rP8lNh6jZLZwXMr+rOQ
-	cAKMfuF1MYYbZyCS39mxKMyUFQF8bIoIvqp8y2oYy8QEtMvvVxse7Y40ZFdKVVQiXgVPpoiv3L0
-	PcgFIdktiiIvXeu/R7pz23njxsSixpwkbV1tCnG0i8M2lYz4qUc8OjuNdNM4NmrQSCZUw8glZbL
-	luG59U0ms4RE0w+EC87o4IY0EWmr82vzYNDCjwSXHjoIAVf8rKZKrzR8ge359cwkCDFLETIYlqF
-	BgSJyIPYtKo1o56cmkUYfi4Rho1D27g4+yDDg=
-X-Received: by 2002:a17:907:60cc:b0:c0d:5466:ce4c with SMTP id a640c23a62f3a-c0d5466d9dcmr659024566b.1.1782201669904;
-        Tue, 23 Jun 2026 01:01:09 -0700 (PDT)
-Received: from u94a (110-28-10-168.adsl.fetnet.net. [110.28.10.168])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e9442ea144sm8148221a34.27.2026.06.23.01.01.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2026 01:01:07 -0700 (PDT)
-Date: Tue, 23 Jun 2026 16:00:51 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Zhenzhong Wu <jt26wzz@gmail.com>, stable@vger.kernel.org
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	kpsingh@kernel.org, haoluo@google.com, jolsa@kernel.org, menglong8.dong@gmail.com, 
-	eddyz87@gmail.com, mykolal@fb.com, tamird@kernel.org
-Subject: Re: [PATCH stable 6.6.y v4 0/4] bpf: linked scalar precision fixes
-Message-ID: <ajo7j-XkfwzB-mUA@u94a>
-References: <20260621172735.409355-1-jt26wzz@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LZApq34O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DE491F00A3A;
+	Tue, 23 Jun 2026 08:03:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782201781;
+	bh=5r8JbHcNCIKEagM0LpASy2VLMcunC5nCbbm+gq3RRNs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=LZApq34O063Ztq8P1ZnqH0uqCRqQxDXfeFczesi3cS6KegUDwmbJvXBlbmsb0zuU1
+	 YMqypx6OlyB/Ms4ZJikvcvUcCzvS5ojQwUH9QLAOIKpATFLdtTJueWOYjrql4/r1Yk
+	 dlitfmXN1ns9qG3iEBMKMEz2g/sx+0Q9tFmR+bI9S7X/yLIQ/9YAHdjRI2G45DDfXr
+	 /C7koaZPIicBw2UKeGxlbX6Un1PIWnaDYoqss2ASnBbf8FrnIYs3ay3qOlTsf5Oa1a
+	 AP3FDAElb8WctLi2rtk/9a9YTn26u6YcHNEQKnHijsfVdq06Im/oKytas++YpIvulv
+	 qEI6slJGchoOA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] libbpf: bounds-check float size in
+ btf_dump_float_data()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Naveed Khan" <naveed@digiscrypt.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <178220124597.31744.3595561672327420327@digiscrypt.com>
+References: <178220124597.31744.3595561672327420327@digiscrypt.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 23 Jun 2026 08:03:01 +0000
+Message-Id: <20260623080301.8DE491F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260621172735.409355-1-jt26wzz@gmail.com>
 
-On Mon, Jun 22, 2026 at 01:27:31AM +0800, Zhenzhong Wu wrote:
-> Hi,
-> 
-> This v4 targets 6.6.y and keeps the v3 backport strategy: use the full
-> upstream linked-scalar precision-tracking series, instead of the earlier
-> d028f87517d6/9e314f5d8682 not-equal refinement backport path.
-[...]
-> Relevant selftest results on 6.6.y with this v4 backport:
-> 
->   test_verifier:
->     788 PASSED, 0 SKIPPED, 0 FAILED
-> 
->   test_progs -t verifier_scalar_ids:
->     all 18 verifier_scalar_ids subtests passed
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Architecture-dependent bounds check breaks dumping of 16-byte fl=
+oats on 32-bit architectures
+--
 
-LGTM, thanks!
+commit 31fd1a7664b926003f6e360a24ed9cc2bcd8b9c5
+Author: Naveed Khan <naveed@digiscrypt.com>
 
-I can confirm that all flavors of test_progs in BPF selftests are still
-passing on x86_64[1] with this patchset applied on top of stable 6.6.
-Not sure if stable gather these tags/trailers, but fwiw
+libbpf: bounds-check float size in btf_dump_float_data()
 
-Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Tested-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+This commit adds a bounds check to btf_dump_float_data() in libbpf to
+prevent a stack buffer overflow. It ensures the size of the float type from
+the BTF data doesn't exceed the size of the local union used for unaligned
+copies.
 
-1: https://github.com/kernel-patches/linux-stable/actions/runs/28008870143/job/82897081824
+> diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+> index cc1ba65bb6c5a..922c8ce32c2ff 100644
+> --- a/tools/lib/bpf/btf_dump.c
+> +++ b/tools/lib/bpf/btf_dump.c
+> @@ -1983,6 +1983,11 @@ static int btf_dump_float_data(struct btf_dump *d,
+>  	union float_data fl;
+>  	int sz =3D t->size;
+> =20
+> +	if (sz < 0 || sz > sizeof(fl)) {
+> +		pr_warn("unexpected size %d for id [%u]\n", sz, type_id);
+> +		return -EINVAL;
+> +	}
+> +
+
+[Severity: Medium]
+Does this bounds check prevent dumping 16-byte floats when running on 32-bit
+architectures?
+
+On 32-bit architectures, sizeof(union float_data) may be 8 or 12 depending =
+on
+the size of long double. If we process a valid float type with sz =3D 16, t=
+his
+check will evaluate to true and return -EINVAL.
+
+Looking further down in btf_dump_float_data(), the function has a handler f=
+or
+16-byte floats:
+
+	switch (sz) {
+	case 16:
+		btf_dump_type_values(d, "%Lf", flp->ld);
+		break;
+
+Because sz =3D=3D 16 is expected, this check makes the case 16: statement
+unreachable on those platforms.
+
+Should this code allocate a fixed 16-byte stack buffer to receive the
+memcpy() instead of relying on the architecture-dependent size of
+union float_data?
+
+>  	/* handle unaligned data; copy to local union */
+>  	if (!ptr_is_aligned(d->btf, type_id, data)) {
+>  		memcpy(&fl, data, sz);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/178220124597.31744.=
+3595561672327420327@digiscrypt.com?part=3D1
