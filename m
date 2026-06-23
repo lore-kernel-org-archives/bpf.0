@@ -1,152 +1,223 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4775F3C9EED
-	for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 14:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782225906; cv=none; b=m9eYhYIbE448jjoj29j8XY7Cb7M8Rho1ZQ1ATkBmzuZXTdgmRCyFUlNNX2tJRgUMgkwUFZaWqpTxIw95ZytKD4WipJ+HG2QLvlWJBOmR5pbDAJAcgrtkLuvpdfm3r8ZR2sk2O4lAmEgeGCtCheT+G/tkr/GHr0pjSPgL1+od6gg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782225906; c=relaxed/simple;
-	bh=sZNi6xg9sflBEGhOc7EN8IGrWBPWKS1LHIHSe3Ram6M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IhVvVSfwz5itWmMUkBay/3hH7rN4c7HqiNpS9b0AIzb3BNGnFMifSU2DF9QSU23/AQQ67q7grWrFgW9ICKIL8P5KIlhj3xMT6c4zpxx4NTq/mUHWVqKQjNQL2OvUUgAgOpewfB71rSrNHGAWow7Jj3vAmmsoO7QrJUfeWouDx20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LCW8H1+H; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AD263D6475;
+	Tue, 23 Jun 2026 14:58:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782226713; cv=fail; b=DTweKywmhbKiW99N6dpJ1GgYDhuqXJbUJBDgBWagzvnt6Hovg2rUfPgPfYMCr1+WcER5QmxULl+dbLfCg3fAoytOxmB4HpKEKmFISDT2gKY3pHrUZxoBJ2C/Vpx6+M4YOXwvb0X+sKyL8d1MMieklkkZQbjuuhVgY07gUrdJKKw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782226713; c=relaxed/simple;
+	bh=CRJfAz4h9iOQF8k8FLkW9jzFYogfpPkTZzEJwoyqFdw=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=SF0j4lFn5Lh/Qe93ka3Ut98/+e8Pwz2sUmWx/nztVOjlMjQGFpOLDZnWoAQMpXBkSaUxwiUsm15tiG6spaJK02ohbZNy7LRBoT4fE8OXvhzelPibmCX5968L+tXlLFcXunA4H741REO1ePJow09qKrQWR8T3hiDD9xhg4tqo388=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MYgXKzQk; arc=fail smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LCW8H1+H"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c858014845aso620808a12.1
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 07:45:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782225904; x=1782830704; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2cAvGjsb7kwxKnrggDL0ESG1XH4uHWWvpVFC+MpwI9o=;
-        b=LCW8H1+HnWXkd8L8LdOLweY1uEVX+0ymxJJ8yQnr94l0NhEKz86L5K/d9L3+VzjY9L
-         t/Ayf9cUwfboJXLY+y/Ez6wmoEoR3ty3JXMYK1EW4R1F/ZsLyT/3PnXcm5DA37Mt6kmn
-         Wx1C1mwnMwd9N8WlqWckjABIFHy7+rURt8vKWQF2XvKU+5Pd1ZfhDf1W+281gLncamdg
-         dezVz32wbvHxCwA2qtluzKXvYVHSRxIPWCRFstM0n3DQCSt4NKCmvB3Y6rYWGxJv9kDf
-         qYWKwfNeE2LQbdz0b0JMKgJdiS0kKI6E+vctTxQT5MFCEuYMat633DXM6FBdURwradB6
-         S34g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782225904; x=1782830704;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2cAvGjsb7kwxKnrggDL0ESG1XH4uHWWvpVFC+MpwI9o=;
-        b=h6lptorPORXcj948yQ5GA8IhqAJCsqmGY5ZO6njr8mdy1E4gWfoYEZ3W8ew9XQ+VkP
-         P3DfsUBdbdU7SlxxuUzIKRgwV5uc+2k6jy+ZSPRLcnSUcznMW9wWHSnN8z1xDvez8C6I
-         jgZV3RhErnbhtjh1FbinYz491uZ/Rhygy8ZIG5eoCVf78MdcC402LMmSlreFAeaLbk7Y
-         7hh7q33+sm/kHPs2Xm3mvCVnrOVXePHGQG5sNcyy4OFoa0hVnemZxHjWpV2v5WgLEScN
-         wH/pWk2gf8IAyDh3u9QXdvVDCsUvDM1Zk3cwoe3M4F2bcQZ6T4dDgR9DMq0dMnrP/OAU
-         5JiA==
-X-Forwarded-Encrypted: i=1; AFNElJ9iWK/wPa6W4ke/ziN9q6Rs2rY2wf3GPyo9w4NeLDeQwqL1rhusRYDLLtLOHMgFI8WCpaQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyh6TCiouL9GHm/d6DNFLzIANWWvN8/jl8PxjtDrhwgW+RqYf69
-	nUx6VSXiz+52B0S986GzzbdeIHmnaG5N9AdF559UAiMCjk9EdoJOnIqq
-X-Gm-Gg: AfdE7ckkzv9Sylgbw/jrQgaml6p9SZxuUcaYRVF5Kg+NE0JxTVI1orrvlkESn1RS0VX
-	pU2oS6fxXkwddcO81lp81iEDSHzBi1YDcruUmCyQfbxHEjUOWVP9fg6XsXXlknqyxoQsScbj+WG
-	A0yZ6EBtygoz0IPVhnXVqWm/b1UBJWto74jc+4DQt1tMbpnfFabmx9Fl0ZBP0pjQU5c6PK6MM2P
-	GMvHB7HUH8xjATYm+EMsbxzbPl8f1WeoVW7QuQ38gB0alFmVl28P+nLxru4FI1V2uJ2AtssOGVn
-	uC3nWH77u/jVlph7h913nAb/lzH4S1Ia6GIvfpkOuxDECwMBggZIb2dIDziT/JIkez+9TQ2Jm9W
-	PgmwpsP1Z2z4qTBHdZxIDHX1nJRtbYIb4atSXVkVRIOOKZzwgT1AQIzYxTkjr9pUY/6ObRrMFGG
-	YpDJ0aCMb7AEZRw09HHcl+
-X-Received: by 2002:a05:6300:8811:b0:3a0:c246:bb98 with SMTP id adf61e73a8af0-3bd10b3de08mr4191736637.29.1782225904306;
-        Tue, 23 Jun 2026 07:45:04 -0700 (PDT)
-Received: from i386.168.1.127 ([150.107.232.166])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c8bc5a1dc13sm10229638a12.26.2026.06.23.07.44.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2026 07:45:03 -0700 (PDT)
-From: Hrushiraj Gandhi <hrushirajg23@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MYgXKzQk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782226711; x=1813762711;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=CRJfAz4h9iOQF8k8FLkW9jzFYogfpPkTZzEJwoyqFdw=;
+  b=MYgXKzQkNc1AL4HK6BQn7kkHEYRLtVGCnm0mdwNdEVnSqamQrcFyNrZ7
+   5k1XMOwDqhGanenXFHcmGa1RxuZXQaaiqkYKDyGaAKs6Q82AiHv92HqS3
+   HjG9fu6FGKOL4pgmx2qpvNHMRZWTR859B/VhYCRFPLmJ3a9Y33uDg8UWp
+   DWKIsrhzNDbuf0H4HgTgGJ/qkbMEEJAaNFxHyo8OpGeqoX1tQE1gSEqVh
+   xTzkLScRI6DhtSrLdh4jXuDVHaZ7s/7CATYHj38JuHWy27ItB8Nm01S0Y
+   jrgKOfCRtGXxjO0RqY/QWc6Ez9nmPzb0GFrE8FhqXaXJkB5S3upO0GmpJ
+   Q==;
+X-CSE-ConnectionGUID: H3p6Ub7vQeqCl6ZrvHroEQ==
+X-CSE-MsgGUID: 4PkxMKENQheW7M+Ny9WTZg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11826"; a="93560612"
+X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
+   d="scan'208";a="93560612"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 07:58:30 -0700
+X-CSE-ConnectionGUID: +DaKcmcES2ifof+tKY0JlQ==
+X-CSE-MsgGUID: VVCMJTKHRBOepvEhkdQvqQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
+   d="scan'208";a="245404400"
+Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
+  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 07:58:30 -0700
+Received: from FMSMSX901.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Tue, 23 Jun 2026 07:58:29 -0700
+Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
+ FMSMSX901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Tue, 23 Jun 2026 07:58:29 -0700
+Received: from MW6PR02CU001.outbound.protection.outlook.com (52.101.48.35) by
+ edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Tue, 23 Jun 2026 07:58:29 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=tjKo9GWpOOtLGirdikvquHAvjrsEPg7cYGwwsdt4ERYJiHli8IrAHo4flHjks1/toJIGFnBgKD147X3WI5SE99Zayc5gKOiZZJt+K8C2o0WWmM5pk0b1SiGe7Oiv+Yn3dXrk5U8Z/Pdsvd6G2cd2CRLH/RPpnnIHR6VNhKrWlr0Ape74iIXLWQ18/sOBV7wxAFxJRJQls3EidfyElDQFtP1jvcniiVYIbNiGlYYz4KCyPmpU8FFDQO00ccm2KmHsx6FgykuHAasVrN58cI2fwNG7V5Y9r1okZEJVsenOU3uLnrNyD/ayz4nXMtRAx0SBNxTRylKaZJ7DLFkOvDP1Tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iDaKncsvUGq+r8tqj/+Qgx53nbc/GKHXNvTdo5qp7K4=;
+ b=WvK3xgy55JQxzc5+yKtdtsMfxt1116Wfu4aKJ8S5uAhIW6FEACSmqOPlqd+wKoroBdjZ5lhefmljrThButqHMeW+fgmx3teCNeNsTEMj+lfiY2vzV7VWmwBXYystVZNV9PsmNtPtBqwk9WEEXEmsPkurNB1heuZwUZdsBrAPJiwjlBMo1wAtiFi4XT+VlROdm8QR0UCfCh5YCkW+E7vEPeySYjl7Ib0HIPbGq5uw8EoL4Sjbl462rFHnJDgzZ3tJs+bEZAWWby9ymPiHm+hyB1JEOu3eghsKOsdNV1RVCuwAPG5yKvknQtaSTOxowDzpL2s+SB/5+FJfuw1M+tNXRA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from IA1PR11MB6097.namprd11.prod.outlook.com (2603:10b6:208:3d7::17)
+ by PH3PPF1AF044E07.namprd11.prod.outlook.com (2603:10b6:518:1::d0c) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.139.20; Tue, 23 Jun
+ 2026 14:58:27 +0000
+Received: from IA1PR11MB6097.namprd11.prod.outlook.com
+ ([fe80::61e9:afe6:c2c0:722]) by IA1PR11MB6097.namprd11.prod.outlook.com
+ ([fe80::61e9:afe6:c2c0:722%3]) with mapi id 15.21.0139.018; Tue, 23 Jun 2026
+ 14:58:27 +0000
+Date: Tue, 23 Jun 2026 16:58:21 +0200
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To: Jakub Kicinski <kuba@kernel.org>
-Cc: Simon Horman <horms@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	syzbot+6c25f4750230faf70be9@syzkaller.appspotmail.com,
-	Hrushiraj Gandhi <hrushirajg23@gmail.com>
-Subject: [PATCH v2] netdevsim: fix use-after-free in nsim_create and __nsim_dev_port_del
-Date: Tue, 23 Jun 2026 20:14:47 +0530
-Message-ID: <20260623144447.255326-1-hrushirajg23@gmail.com>
-X-Mailer: git-send-email 2.47.3
+CC: Jason Xing <kerneljasonxing@gmail.com>, Tushar Vyavahare
+	<tushar.vyavahare@intel.com>, <netdev@vger.kernel.org>,
+	<magnus.karlsson@intel.com>, <stfomichev@gmail.com>,
+	<kernelxing@tencent.com>, <davem@davemloft.net>, <pabeni@redhat.com>,
+	<ast@kernel.org>, <daniel@iogearbox.net>, <tirthendu.sarkar@intel.com>,
+	<bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next 0/3] selftests/xsk: stabilize timeout test
+ behavior
+Message-ID: <ajqfDYznpCU18C2P@boxer>
+References: <20260616154955.1492560-1-tushar.vyavahare@intel.com>
+ <CAL+tcoDr0gtCPeGi1yOUtg+ZD2YxEbjAy41LBgG63b8-=CStcw@mail.gmail.com>
+ <ajJsMj0QMOF5I8qq@boxer>
+ <20260622160706.0b4a27bf@kernel.org>
+ <ajpLuDNCu2PHS78l@boxer>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ajpLuDNCu2PHS78l@boxer>
+X-ClientProxiedBy: DB8PR04CA0022.eurprd04.prod.outlook.com
+ (2603:10a6:10:110::32) To IA1PR11MB6097.namprd11.prod.outlook.com
+ (2603:10b6:208:3d7::17)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR11MB6097:EE_|PH3PPF1AF044E07:EE_
+X-MS-Office365-Filtering-Correlation-Id: e55aef15-9120-4e8f-040f-08ded137e1cd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|23010399003|7416014|376014|4143699003|6133799003|56012099006|11063799006|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info: bnZ8BbUQ4RZ5xEdgnbYZL51dDsk29yZK/pVnbmBS+m4AQ12bkJ/TGroc0JHqIZf8vYgp/pMwzCMwQCHxDYvMlaPV8tpI/pRo6XIT4fooH+DIIjWNat896WSDX+TPyl4yvlbRcLz6weLcvE7AeMg55vCD+9wCgBJDdxrYTA6X6148RxulzNAAqkdctrB0fls4GMb9NyJ4a5DllhEf10vTYHBnI5EcncSTSEyHLVHLCl6DQr4cYlbUSWxBvDAVUgJyLnBK6DPDLhJNVUKs2JnBd5ayvjytCDqd7wwyCZiK7S9qsZwZDtuaYFkM0PrckXSX+lZSJHuRpSmtLrAVUJhBrBKK75bqBE9zcEn4vOs0aL23pO9EL3mX1fkmYH5Gw9U3uel1ALx1s+hd8IQWU6ZmAHuRiNC7fYXZywa4hZiIJyod1o1/RhHktwan+HWKLIWfV/d1DrLuJIZ9RGl4H8p425giBvM3fsrv8LpfydVMJ+fOlXMDVrWNVkFgZ0rJP0ovrCEXid9AnH0rLPGdz8BFURRHlk4/0xE+tDlSIW6kuIpNVbUrKW+qgtYc7kQr0FBFtCIU0AIOIg1y0oaANJ8dlfcaLuQyJI8p+bZvX85GvFpe1DE5Rgv2LdrvPNYtJ+2HNHiozF+OmP5PS8mI3OkB0QhaN2GXCUmSpUqKNTnagP4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB6097.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(23010399003)(7416014)(376014)(4143699003)(6133799003)(56012099006)(11063799006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?clAvSDVhZHgrR0lpRlZiMVBvRnhuMVg2YnBSejk0MnFVVHg0WWFZVTJRaGlG?=
+ =?utf-8?B?OXh3Rk5sV1ZqbkZtSVBsZ2sxWlloc2tjbUs1Ylloc29lVzBscnB1S0Exd1Y3?=
+ =?utf-8?B?MmpBYWJKMFhSTDM2SnNRd0V5RTB5OWxYMit2RmhtNmpoU1BhaTZSM1FvRVdu?=
+ =?utf-8?B?dkx1anMxeEFmMmNIM0ZscjFpcDJWRlBBcFlSRHR0dWxEclM5alNGcTJmRmh3?=
+ =?utf-8?B?a2pwR1Ryaks2VkQ3ZlMrdlRwRkI0YlVYdzMxZUx6TTJaTzhtNjZlM0VDY3dU?=
+ =?utf-8?B?Rk5nMDlrendxeGpMRzd0M3dDRklCRGVITHRDZ292R2djLytNV01RdmhkZ0NK?=
+ =?utf-8?B?QWJjK2J2emhaaTBaZWVvam5ZejE3bEozRVVoU3o4UVAwWEF2ZmE1RmtiTUUy?=
+ =?utf-8?B?a05WR0dDY1l4OTZjRHpQQW9hbkRhblVnYVF0SmhOVjN3amRXYmNPd3JRTGF1?=
+ =?utf-8?B?cUdoNXF2ZGhGMklVRWFwOFFjZ1hCcXY5MlQ4aERhUEdLMVZMai9vcVppSng4?=
+ =?utf-8?B?L1BHQzUzR09ZYVoxL0Y3ME5PaFVJNkxubHh6NXArQmtjaHBKekJ0VG5XWGk3?=
+ =?utf-8?B?QjVkSDFoRzk3TUZQMUhLd0lkWFNVOWV3QjJKeGVmdlFMNEtOWFVpOVBrOG83?=
+ =?utf-8?B?V0FvOUJlWEE5ZW03cElmajRJS0VVRHBtbmJWSlZQZ21Pb1I5aEVPSmYvbWth?=
+ =?utf-8?B?TnhvUml2VEhrM1NlY1ZlY1VMRHdLTWkrVm1sd3dOOElaallHeWRtWWw1dUcy?=
+ =?utf-8?B?Ym55c0FwMG1uM0RxenUvc1gycHEvMEJkMVF2TzJjRllPTy92S0w3YmcrTzNl?=
+ =?utf-8?B?ZDN3c2djc1JycXZzcS9ZajR5c2JleEVwN3JwZVNrS29RQ3lBYjlBSGs5ak9p?=
+ =?utf-8?B?ZHc2SVRRMDkzMXdSK2VTUVlDN2FETEVwVXNNTzByQ1NLWFUyT25vVUgrU3lQ?=
+ =?utf-8?B?OC81WkljbHltWnNCclJsd295eWduajhDQTV0cHhZUlQ4T3RpWnVWL0EvYjRU?=
+ =?utf-8?B?REFyamdVU0FnMUhFb1lVKy9IQStrZzNvWlQxUXN2eXFQZ0VObHlSMEtDR0lP?=
+ =?utf-8?B?TndmTzc2WWdycEpCWUJYWEx3aTJ0WkFNelcrUEZFclJmZk5sRGRIWUtJUkJX?=
+ =?utf-8?B?RmpZU1c1anFhNC9HczYzcVROOFh4MjIyUU5mNVhzNW10QXF4QUpZUkpOU3Na?=
+ =?utf-8?B?azBMYXkyajdpaGRYSWtLZEY1RVBpQUdPL0ttK25yWERneE5qT3Z4aWhKWlRN?=
+ =?utf-8?B?N2FqM24xWXN4b3lFY0lWK0I2bFN0NmpaZnBoM2N3WWRXSDVOL1NkdmtCTmg1?=
+ =?utf-8?B?OUh2UU1aaW4yMU4wZFJwVGxMUWlUY2hZSG90T1FobTVIOEdhYUdnWVg5L1Ny?=
+ =?utf-8?B?THV2cEFaVUNvVm03MGVNSlRPem53MUlpeE1RNTN6MUdIb2xSQm5EcDg2akNk?=
+ =?utf-8?B?MWM2WmI5NW1qUUU1TS9UeW5JK0c1VEo1TGhGaHNQa2VNOC80RjBjTzVxN1RH?=
+ =?utf-8?B?alRmMm0vNlBwUDhVVnBNditoejZKelFZL2laZXZ2NWJDZUJYK3VRZ3pJNDQx?=
+ =?utf-8?B?YnowV0hyMVIwdDFJQmhiVzJSSXZIeGtuTGREbEJvYUhnQzBTWEtpbVRuTm1I?=
+ =?utf-8?B?NXZhdCtOb0lWdFp4ODJ4cS9STzBwb3ZlNUdNMFM4L3V2WWFCNEpQYmRjZzNs?=
+ =?utf-8?B?Q08zRmE4YWlzMFZHY2lWbXdiR21ua2cyaUt1TG9mZlB5b2RCRG1QY09XZVNy?=
+ =?utf-8?B?a0UrbnoydGU0ZnpINm1oV3pNREZMNlZTellWbVdtUm4rU2xUdndjTHNBUXJv?=
+ =?utf-8?B?dTFOVGdYa2hvZWg5QWdDdjZ4ZnhVZStwYXZNZUo1Mzl0Zm5EZDJaL0VEbGV1?=
+ =?utf-8?B?Yk0zU3luaHVrUjkwNE9mT1FHR1hxbVV2OW9mYy8rMUxuN2VielJhSDQ3N0li?=
+ =?utf-8?B?bzczY1BhZ21DQmhoeXVxei9Lbm9jZ0hjc3FSVTgwTFJCSWgxcC9KcmdSVGQ1?=
+ =?utf-8?B?MHdyNFJQUkF1SThBUndrSzdCMXpVdFpSL3F5RldRZGtHNnBGZXg1dEJXVHA2?=
+ =?utf-8?B?b2dRdGw0ZE8xdlYxWnM1MTV5YkJ4YUJYREZ5dFBHcW1WR1FvN29jVk11OHNT?=
+ =?utf-8?B?bE9EQVRBdHowdlB0K2xVQ2ltZXhzbndKRzhoYkYrdTEyOXArS3lKRG9JN1NR?=
+ =?utf-8?B?Vklid3BiS3VNMG5hTlcyRS9WaGVibndEd1hidnNZV1pST2Fod2dsN0NSblpI?=
+ =?utf-8?B?WEQ0a2VJcm1MZDRGTEFtRDRHUkhxVWJ1QjRzN3FKNkJpT3kzck1nWWtGMjlB?=
+ =?utf-8?B?eHoyRFpBbkN4K1B1UCtmQTluMVFucU5Fa01ENU5wak41MEZnUFR2bDdKTFIx?=
+ =?utf-8?Q?Xfa1HaK/6ZCaHISg=3D?=
+X-Exchange-RoutingPolicyChecked: T17C237FRVpHlX2gyxDGjIgGLIURw2kOK6gqyq0VfSm5G1OrrCtqRzLthJt+IbyYLAIGmiYNQM43aQbBAm8eGeI0pen4I9oH8mNPrsyCcBZS6dHJ02b212Atfsf7cs4ThWtZn+lzVFr220GWwv3VPGJzxb/dOykJSJ4QUZmYAIGoASBGSyl4EGwBRlB3MFSOrwU0QLmDWd3RJf1kpmiR/wZKbTsznapfvnNZcEzBVHC7xqzxmYruBFWv3IxDyuFKQvVziuLzde0VeM+yNHBEFspz6o/mFz1EmZWKW3OCHiVDRddel2DnOnecfS0nhE13jAQsGRj48ac0LY/ozjEltQ==
+X-MS-Exchange-CrossTenant-Network-Message-Id: e55aef15-9120-4e8f-040f-08ded137e1cd
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB6097.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2026 14:58:27.6163
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0iugyHLG4r9dZGOKA7J4qKj+u4BmtOME3lMSPwqmRjOtSelk3p/E7aXSBg3p0H+NmsbgxjTBYalMv6bRn+uEw5EzTlzYB6dbJKz+Eq034Z4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH3PPF1AF044E07
+X-OriginatorOrg: intel.com
 
-debugfs files created under a port's ddir (ethtool/get_err,
-ethtool/set_err, ring params, bpf_offloaded_id, udp_ports/inject_error,
-etc.) store raw pointers directly into the netdevsim struct, which lives
-in the net_device private data kmalloc slab.
+On Tue, Jun 23, 2026 at 11:02:48AM +0200, Maciej Fijalkowski wrote:
+> On Mon, Jun 22, 2026 at 04:07:06PM -0700, Jakub Kicinski wrote:
+> > On Wed, 17 Jun 2026 11:43:14 +0200 Maciej Fijalkowski wrote:
+> > > > On Tue, Jun 16, 2026 at 11:50 PM Tushar Vyavahare
+> > > > <tushar.vyavahare@intel.com> wrote:  
+> > > > >
+> > > > > This series improves AF_XDP selftests by making timeout handling
+> > > > > explicit and fixing sources of non-determinism in xsk timeout tests.
+> > > > >
+> > > > > Patch 1 introduces test_spec::poll_tmout and removes implicit
+> > > > > dependence on RX UMEM setup state for timeout behavior.
+> > > > >
+> > > > > Patch 2 fixes thread harness sequencing by attaching XDP programs
+> > > > > before worker startup, removing signal-based termination, and using
+> > > > > barrier synchronization only for dual-thread runs.
+> > > > >
+> > > > > Patch 3 restores shared_umem after POLL_TXQ_FULL so test-local
+> > > > > configuration does not leak into subsequent cases on shared-netdev
+> > > > > runs.
+> > > > >
+> > > > > Together these changes make timeout handling easier to follow and
+> > > > > improve selftest stability, especially on real NIC runs.  
+> > > > 
+> > > > net-next is closed, but in the meantime I'll review the series ASAP.
+> > > > 
+> > > > BTW, another thing about selftests I had in my mind is that are you
+> > > > planning to work on this [1]?  
+> > > 
+> > > This one is on me. I took your changes Jason and aligned ZC batching side
+> > > to this behavior, followed by xskxceiver adjustment. I am planning to send
+> > > this today EOD, however let's see how badly internal Sashiko will kick my
+> > > ass.
+> > 
+> > Hi Maciej, do you want these applied? If they help make the tests less
+> > flaky I think that it's fine to take them during the merge window.
+> 
+> Hi Jakub,
+> 
+> last refactor from Tushar broke BIDIRECTIONAL test case when HW is test
+> target, but not on veth, so let me test these changes locally and then get
+> back to you.
+> 
+> BPF CI runs xskxceiver on veth so this has not been caught. Seems my/our
+> focus should be to enable xskxceiver HW tests on any kind of
+> environment/infrastructure.
+> 
+> Gonna get back to you by the EOD.
+> Maciej
 
-If these files outlive the netdevsim struct, a concurrent reader can
-trigger a slab-use-after-free by passing debugfs_file_get() (which only
-checks dentry lifetime) and then dereferencing the freed data pointer
-in debugfs_u32_get().
+Ah I replied on other thread I guess, so let me repeat:
 
-In __nsim_dev_port_del(), nsim_destroy() is called before
-nsim_dev_port_debugfs_exit(). However, nsim_destroy() calls free_netdev()
-at its end, while nsim_dev_port_debugfs_exit() removes the port's
-debugfs directory. This means the slab is freed before the debugfs
-files are removed.
-
-The same window exists on nsim_create()'s error path:
-nsim_ethtool_init() creates debugfs files under ddir with pointers into
-ns before nsim_init_netdevsim()/nsim_init_netdevsim_vf() which can fail,
-and the err_free_netdev label calls free_netdev() while those debugfs
-entries are still live.
-
-Fix both paths by calling debugfs_remove_recursive() on the port's
-ddir before every free_netdev() call. The subsequent
-nsim_dev_port_debugfs_exit() calls become harmless no-ops since ddir is
-set to NULL.
-
-Reported-by: syzbot+6c25f4750230faf70be9@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=6c25f4750230faf70be9
-Fixes: e05b2d141fef ("netdevsim: move netdev creation/destruction to dev probe")
-Signed-off-by: Hrushiraj Gandhi <hrushirajg23@gmail.com>
----
-v2:
-- Also fix the same use-after-free window on the error path of nsim_create() as suggested by Simon Horman.
-- Shorten the code comment in nsim_destroy() to be more concise.
-
- drivers/net/netdevsim/netdev.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-index 27e5f109f933..f2824e75cddd 100644
---- a/drivers/net/netdevsim/netdev.c
-+++ b/drivers/net/netdevsim/netdev.c
-@@ -1165,6 +1165,8 @@ struct netdevsim *nsim_create(struct nsim_dev *nsim_dev,
- 	return ns;
- 
- err_free_netdev:
-+	debugfs_remove_recursive(nsim_dev_port->ddir);
-+	nsim_dev_port->ddir = NULL;
- 	free_netdev(dev);
- 	return ERR_PTR(err);
- }
-@@ -1214,6 +1216,13 @@ void nsim_destroy(struct netdevsim *ns)
- 		ns->page = NULL;
- 	}
- 
-+	/*
-+	 * Remove per-port debugfs files before free_netdev() releases the
-+	 * netdevsim struct to prevent use-after-free in concurrent readers.
-+	 */
-+	debugfs_remove_recursive(ns->nsim_dev_port->ddir);
-+	ns->nsim_dev_port->ddir = NULL;
-+
- 	free_netdev(dev);
- }
- 
--- 
-2.47.3
-
+Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Tested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
