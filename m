@@ -1,161 +1,113 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC40230BD9
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 13:41:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720DD368D5E
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 13:53:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782308498; cv=none; b=hO7F6k7HDdGPGxpplCkopNblZNDBplmgF9Ek7H6HnL0tk0NcP27An+TE/ISgPxX08PdW5RFbFplrdthS7PmyI+SwL9ApUDl69sgJ2kQR7h/tUwIqnAg0ugQkb19q6C2YKDQzDXqCwmxnh5V8NG8ejVCa173KYy3RmrQ7f0g+y3I=
+	t=1782309184; cv=none; b=MhCSwvKprNjgZPM53HHHAvk9ECkS19R+Q1y412zuq4AsTjAMorJXriSohVsZt9SyyYvwLDGt2jtGmJ8EWMDuUkDJUTppjIcQqc3r60BOzCdP8gJ9IvBxc9rU6qhZFeN/mz4yiNjSTgbDWHQbWgQan1EgMpnF73Dr8pxBXJBXiOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782308498; c=relaxed/simple;
-	bh=V4baC9XDLxXBojAV6zUUjxYzzXqcwXtx1rIYrUbzjew=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gD0Cm2/qi6fhwlUsyVK7SU4+ilSYYz9IYj0KhMnVn0NNW2r0NsvKqhb4abQKbf3pM+i/+oPi7/KW74+LQ+uv7ZZt//PGdI4yHxjuZlXv7t+WOoH2YMM0yebRq8LiYzOltD6xXIrtsKspCWg4gJwt/55h4Gl6ib5QojTUpM8qXQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ojTLct+B; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=jsl310v6; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ojTLct+B; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=jsl310v6; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1782309184; c=relaxed/simple;
+	bh=zkgzcPiM97rc0S6TjcXijaCroXS3ki3QLJ2F7L4B3OI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EPbm376P+Z8KcR9SOe1vevy+/nMPkEoF7qm0GNyW8cfWrkuSWzFo2wFFGC0IbdTdS0Py38vbiViBbttGgZlEkVSKw2MROE7noIBsEfHUiKOoYAWkNS9CzHejByM8MbuJqmKiCbYxU91jb55PP3RdXL7iT9zsqNwZJJJ+mBSqTss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CFqzbUvc; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ojTLct+B";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="jsl310v6";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ojTLct+B";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="jsl310v6"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id F2F8971425;
-	Wed, 24 Jun 2026 13:41:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1782308485; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CFqzbUvc"
+Message-ID: <d520bda3-4eca-4ea6-b423-990935a0d3c8@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782309180;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=sR3sJGwujfNLRWW+1TBYQaHSIL+b0DW9aOFZ/atPQkc=;
-	b=ojTLct+B6Q134cNmxEmKnlNW4Pb1dd55qKYAkyXLnMwKcccVDVIAbU53kcQXsWUTFNxcZU
-	f3AbFAVyVqVrPvoh/v1yXrWpnaZg1fGcg77FzYPvMRF/JM06fkneXi6LHW0hCO0+sKSA3t
-	+gcNyr7zjUk1MLR5OIZYRAhlxe+cWA8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1782308485;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sR3sJGwujfNLRWW+1TBYQaHSIL+b0DW9aOFZ/atPQkc=;
-	b=jsl310v6c3qVx+TvswUZhMgyeTEJklTDi6CIYB/IJ9khWjX18P2wLJVMQVkAAHNFRDtTjH
-	3W6gTUn2NJX1VlCg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1782308485; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sR3sJGwujfNLRWW+1TBYQaHSIL+b0DW9aOFZ/atPQkc=;
-	b=ojTLct+B6Q134cNmxEmKnlNW4Pb1dd55qKYAkyXLnMwKcccVDVIAbU53kcQXsWUTFNxcZU
-	f3AbFAVyVqVrPvoh/v1yXrWpnaZg1fGcg77FzYPvMRF/JM06fkneXi6LHW0hCO0+sKSA3t
-	+gcNyr7zjUk1MLR5OIZYRAhlxe+cWA8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1782308485;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sR3sJGwujfNLRWW+1TBYQaHSIL+b0DW9aOFZ/atPQkc=;
-	b=jsl310v6c3qVx+TvswUZhMgyeTEJklTDi6CIYB/IJ9khWjX18P2wLJVMQVkAAHNFRDtTjH
-	3W6gTUn2NJX1VlCg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 22AC3779A8;
-	Wed, 24 Jun 2026 13:41:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id FeK3BIPeO2q0FQAAD6G6ig
-	(envelope-from <pfalcato@suse.de>); Wed, 24 Jun 2026 13:41:23 +0000
-Date: Wed, 24 Jun 2026 14:41:20 +0100
-From: Pedro Falcato <pfalcato@suse.de>
-To: "Harry Yoo (Oracle)" <harry@kernel.org>
-Cc: Vlastimil Babka <vbabka@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>, 
-	David Rientjes <rientjes@google.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Clark Williams <clrkwllms@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
-	Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett <josh@joshtriplett.org>, 
-	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>, 
-	Zqiang <qiang.zhang@linux.dev>, Suren Baghdasaryan <surenb@google.com>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, 
-	bpf@vger.kernel.org
-Subject: Re: [PATCH for-next v3 2/9] mm/slab, slub_kunit: register kprobe to
- trigger _nolock APIs
-Message-ID: <ajvczSpMOGWFhe30@pedro-suse>
-References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
- <20260615-kfree_rcu_nolock-v3-2-70a54f3775bb@kernel.org>
+	bh=R/9pZJlHpMdXgadRpz+8VRUR/QVFe1YS13n2B65x7Qc=;
+	b=CFqzbUvcgf6rD+0uLkTBOTlrbupg70NmWia/ySyd0lJb8UY2sRuYyr1Fjd8CtVYJniv09V
+	eSWZ/p01MccP8v1cbSahz/xz2z3YzLEoqTuPSrvJF+vnOh0OC32nQYtc6q525jSRj+sEVf
+	Lh+rdLEPtZLienXKyCyK8ylVRYl7Afs=
+Date: Wed, 24 Jun 2026 06:52:54 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260615-kfree_rcu_nolock-v3-2-70a54f3775bb@kernel.org>
-X-Spam-Flag: NO
-X-Spam-Score: -3.80
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[30];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	R_RATELIMIT(0.00)[to_ip_from(RLg9nrgqsibwm9ympc34uc4grz)];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,linux-foundation.org,linux.dev,gentwo.org,google.com,gmail.com,linutronix.de,goodmis.org,nvidia.com,joshtriplett.org,efficios.com,kvack.org,vger.kernel.org,lists.linux.dev];
-	RCVD_TLS_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
-X-Spam-Level: 
+Subject: Re: [PATCH dwarves v7 0/5] pahole: Encode true signatures in kernel
+ BTF
+Content-Language: en-GB
+To: Jiri Olsa <olsajiri@gmail.com>, Alan Maguire <alan.maguire@oracle.com>
+Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+ dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, kernel-team@fb.com
+References: <20260623040704.2732530-1-yonghong.song@linux.dev>
+ <ajp70MRjHvCJNeyv@krava> <d270a215-264f-4c5c-9d7f-0b1568815e31@oracle.com>
+ <b1b73cef-f25a-443d-8557-4cfe92938b46@oracle.com> <ajujJM9N0_QpB_3d@krava>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <ajujJM9N0_QpB_3d@krava>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Jun 15, 2026 at 08:05:56PM +0900, Harry Yoo (Oracle) wrote:
-> Since kmalloc_nolock() always fails in NMI and hardirq contexts on
-> PREEMPT_RT, slub_kunit cannot properly test _nolock() APIs.
-> 
-> Register a kprobe pre-handler to invoke kmalloc_nolock() and
-> kfree_nolock() in the middle of the slab allocator. However, do not
-> register the handler on UP kernels [1].
 
-Maybe explain in the commit message why that is?
- 
-> To attach the pre-handler while s->cpu_sheaves->lock or n->list_lock
-> is held, add a wrapper function for lockdep_assert_held() that calls
-> a no-op function slab_attach_kprobe_locked() on debug builds. The
 
-Why lockdep? Wouldn't it make more sense to add these triggers after
-locking these locks?
+On 6/24/26 2:28 AM, Jiri Olsa wrote:
+> On Tue, Jun 23, 2026 at 05:02:30PM +0100, Alan Maguire wrote:
+>
+> SNIP
+>
+>>>> hi,
+>>>> I tried to get the numbers from my setup and noticed that some new
+>>>> functions were included in BTF compared to the current version
+>>>> (functions diff attached below)
+>>>>
+>>>> like for "arp_process" function the current pahole gives me:
+>>>>
+>>>>    arp_process : skipping BTF encoding of function due to unexpected register usage for parameter
+>>>>
+>>>> but it's included in BTF generated with the new pahole.
+>>>>
+>>>> in addition to your explanation above also one of the commit says:
+>>>>
+>>>>       - a parameter with no location, a constant value, or (for non-clang) no
+>>>>         register found is marked optimized out
+>>>>
+>>>> please check below, it seems like 2nd argument of arp_process has no location,
+>>>> so iiuc it should not be included in BTF, right?
+>>>>
+>>>> thanks,
+>>>> jirka
+>>>>
+>>>>
+>>> thanks for catching this; it looks like we return a bit early before detecting
+>>> missing locations in the non-true-signature code. If you get a chance, would you
+>>> mind trying the attached patch to see if it fixes the problem?
+>>>
+>>> If the fix works and Yonghong is happy with it we can add it as a followup
+>>> and land the true signature series to save another round.
+>> actually sorry that patch leaked true signature partial names for gcc; updated
+>> patch attached.
+> hum, I can't apply either of them, but I see that change on top of:
+>    alan-maguire/dwarves-true-sig-v7
+>
+> but on that branch I can still see arp_process function in the btf
+>
+> please let me know if I should try some other branch
 
-> function is optimized away when neither CONFIG_PROVE_LOCKING nor
-> CONFIG_DEBUG_VM is selected and register_kprobe() fails.
-> 
-> The function calls barrier() to prevent the compiler from optimizing
-> away its callsites. Otherwise, the compiler may consider the function
-> does not have any side effect and remove callsites.
+Jiri,
 
-My wider comment is the following: this looks very useful but perhaps should
-be lifted to Kunit itself? There's already function redirection (which could
-be used for this as well). I don't know if that suits your purposes?
-Choosing to say "I want to hook this random function using kprobe and give
-it custom behavior" sounds lovely for all sorts of testing.
+Please take a look at v9: https://lore.kernel.org/bpf/20260624052553.3139112-1-yonghong.song@linux.dev/
 
--- 
-Pedro
+It has version 7 plus Alan's changes in version 7 comments. I forther added a
+few changes related to llvm and another patch to resolve some inconsistency.
+
+Thanks!
+
+Yonghong
+
+>
+> thanks,
+> jirka
+
