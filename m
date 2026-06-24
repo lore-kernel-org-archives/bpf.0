@@ -1,144 +1,141 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA461346E43
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 09:36:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5111A3A3E8B
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 09:37:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782293813; cv=none; b=M9YyICzSbXVN2Ya0qJtlyJYyh9fuwX5nTLgLYh9uRcSKF3InJrKEtOY0v5PCxGPqK8aYkWs/hmAdD6jVRctudxSnyoM6anLpmr3vKcnR5L5KqCsWtlGrU+oFQw5B/Z4gNS0dyxK7grT1htp+UFSY33tFk1fzye0/0j5cHUe/tH8=
+	t=1782293829; cv=none; b=Od/Gbv5rhKappc5fzdlmJVaHf5Q3C87AXRM3+pr9cVRWjYysNJkXi0UCZNpAIlBB22ZcEK3BBZEl6S+nA+aoC4oxyi14MZ9Nw3NkGHZdpRCxDbT/dLP3wmRW6x6pBbnDVhG55AQZlym0JZF/CpCkLNnPSORDjeGrLgNOnDBXvyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782293813; c=relaxed/simple;
-	bh=H7MvCwSwiGAOyf7wrR2Uxn2Q+p2d/30Iiv4HI9AUo5c=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pb5/I4iCSXm4oTIct63+MWU02zexDg9JrjekWnkhRVBWYjTnhVrROIwmtGvZKZJfo2xmfem1HMh5t4KvSobu99tePHIdXZ9L8AepjLeRphAcKhohyK9xOjCABtHjJJYBnP7qFTVIUQ5Y6wUSAZxtUkZZ1WIAf8ypgPHufOm3nbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sl8LvnxZ; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782293829; c=relaxed/simple;
+	bh=6OxTWhOm+yt0DzJLqo8chP5ZQ7zuWsFfW/3PtTSuqeU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=IEdRxwVj+GTxfKgs4hm0A6I3/lRHfxI5LfgVKYe9i8LI/KphQHGrMU1ZVAU3dlQjTvXnnoFUqRA/OltD2JEZ3wpiguQnKab7z5udDKpY2TwvqtguE16YDqyOMmKArFlWdNq6k5sbozPH7nG7fvRdqyELsq7PqUEEuX6wsol/Ic8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=elM6puFm; arc=none smtp.client-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sl8LvnxZ"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4923139e940so5108255e9.3
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 02:36:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782293804; x=1782898604; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1wJNxSD3/+hWC52NiyTfSDgbYf4w4rvYHBQaUdLdSz8=;
-        b=Sl8LvnxZhcO5eQfwc6sUFKfGwoZERyjEc3Skog8mDZaI1F3a+kFjcx2ANW2uqpjtiT
-         j2T8rTdRL4/L8+Y1xrlp+cnk5mAvxWCffxKW8l9Y7XyaMlmNCnQhdxt7s30Twq3UdKJ8
-         3jlwQ4gfievddZuyvY9su59DCi/MDMmJ4Tf8gpSp9YbYT4RLuldagdtmg/MrwEP8REIV
-         LkzhD8uHpryIpMCyvSLmZBHRf6EshdBbOoTN+fgo5mG9wybjUDQzeKIwmTIW1AQYfXYm
-         ZsI1QNa1p4My73hqaEs3X8t5VssTtY758agZ+M30NUZmiJ3y0bSCCaOw8XF/6YC0SAK0
-         jhxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782293804; x=1782898604;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1wJNxSD3/+hWC52NiyTfSDgbYf4w4rvYHBQaUdLdSz8=;
-        b=Sy+/G3QRGiuZb3E4rrn/LENTQSZbPnJHu+tWy+xg4nTtOI9uX7Tdh6KSy51vI9hJJV
-         7N+Xv2peL2bxd9921pHbgaNJsh5hjQJslkDNj/VA9TFEp6Wlcx+2IjZtuLvvE9AaiSfI
-         qAbcxKgrjhX783Ua9e4Xy0QNCWI9Fr8YzyKgelNCBlQgZ0+8UDDbssO/IeYym0U8zfyX
-         txoA1J5tfL6Gq91XyPPHihSvqTQ+hHHn0NpWaC1rbylHT+f4HmyGVzrcpGc9wX6qwGDt
-         te7zkGlgfUk2LJvbw/iHf796qAnLavQK2hlE3XjM/QgpLFIm/HdXmvSBX+GM6xNmb6JC
-         ZDmQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9CWIEGR3jUYZWyibYW/f8VVu5RCz1dLZnAT4LJx0s3A2KNxyLWgpnacWkx2zXixuc0rbs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1cMuSUpS/y/nUwrdNB3DahyoNUG880BEWCTNwems+53+JDM+I
-	Hqo7V1ezD/V61VQAlh/wNBEIAdce3BVuARzAbkwJ3CSElDcLCt8CZ8WW
-X-Gm-Gg: AfdE7ckGfmKlzenD/Oy856PTzpxALxHvwORRReIpEy1cMupa0upILoOCQmiUJfoDctr
-	Ur7jF2yk0YE5uPlkLzObwLxxqAmrBRDrXzHA+KwFIG8/xeo6YIIkJFmc7WNmOVWrGBfME2Y5CPU
-	95EtqzYN8Mp5zqu9q0klz1UfHseHdpg5BOlIlbGnuGMK9e91nc6ZXnRL2zxlOPFWVvKzjbn6aDL
-	OVBMDMR2muXlCSaP6Dy1TzOmpqhhFLWyeVHxUK6bIMqJertt49uiARsmWBIlCF/ZQRLmhjCeTrX
-	8SI8dnhpWT965eK46YuDCMhCkvJOP0yFfohUjf4cbxcM8AZNUGyfkCFfIECDG5rW10UBn0WVWgV
-	hQBjgqrna6boMTH8xVxg8K6NWceGNq/s5ed7jEF0Wme65gItj+yDrH8k/E8c8gUsN3MFBID7NEe
-	hstUcyQv6hSX0=
-X-Received: by 2002:a05:600c:6207:b0:492:523f:a3df with SMTP id 5b1f17b1804b1-4925b34a37fmr101182075e9.5.1782293804006;
-        Wed, 24 Jun 2026 02:36:44 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4923fd30078sm440991485e9.7.2026.06.24.02.36.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 02:36:43 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 24 Jun 2026 11:36:42 +0200
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	Quentin Monnet <qmo@kernel.org>
-Subject: Re: [PATCHv2 bpf-next 1/3] bpf: Add tracing_multi link info support
-Message-ID: <ajulKn0pB-Nh19yx@krava>
-References: <20260623142417.275892-1-jolsa@kernel.org>
- <20260623142417.275892-2-jolsa@kernel.org>
- <CAEf4BzYVjf4PfJUedkzRUteNOsb7kHafAbndaaNHBbVHqtOEPw@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="elM6puFm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=y2
+	kUsQ39pWzEBzSdD+RRk5WJvJqKF++NyoyWiTgBO18=; b=elM6puFmQRJj2bdBXo
+	pDF8aMT7/g1NwAJIcKigDhe+Jk8t+NjwB80drdyZh4HyFCq2shP4qxdKS7JogjNJ
+	1wD+QrFsbpIsLRd6QMcm6p9RTfG2piiv3W2Z4V27KLYkf6I8mRj5bTDLh6j6B4yz
+	VCeAEhMaAfpZNJZQfVKE4NYjg=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wD3lwonpTtqwoMPFQ--.6915S3;
+	Wed, 24 Jun 2026 17:36:40 +0800 (CST)
+From: Longjun Tang <lange_tang@163.com>
+To: ast@kernel.org,
+	andrii@kernel.org
+Cc: yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	bpf@vger.kernel.org,
+	tanglongjun@kylinos.cn,
+	lange_tang@163.com
+Subject: [PATCH bpf-next v2 1/5] bpf: add bpf_memcmp kfunc
+Date: Wed, 24 Jun 2026 17:36:34 +0800
+Message-Id: <20260624093638.117062-2-lange_tang@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20260624093638.117062-1-lange_tang@163.com>
+References: <20260624093638.117062-1-lange_tang@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzYVjf4PfJUedkzRUteNOsb7kHafAbndaaNHBbVHqtOEPw@mail.gmail.com>
+X-CM-TRANSID:_____wD3lwonpTtqwoMPFQ--.6915S3
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGrW8tF4UGFyxGr47Jry5Arb_yoW5Ar1xpw
+	4UGw1Ykr4ktF93J3WfGan5ua95Jwn5ur4jgrZIyr95urs8Xa4DZr48Kry8KasxJryUAryj
+	vF4qgrZI93W3WaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRY0P3UUUUU=
+X-CM-SenderInfo: 5odqwvxbwd0wi6rwjhhfrp/xtbC-QjcC2o7pSj-QAAA3B
 
-On Tue, Jun 23, 2026 at 02:01:08PM -0700, Andrii Nakryiko wrote:
-> On Tue, Jun 23, 2026 at 7:24 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > Adding BPF_OBJ_GET_INFO_BY_FD support for tracing_multi links.
-> >
-> > We expose following tracing_multi link data:
-> > - attach_type of the program
-> > - number of ids
-> > - array of BTF ids
-> > - array of its related kernel addresses
-> > - array of cookies
-> >
-> > The change follows the kprobe_multi and uprobe_multi link-info convention
-> > of optional output arrays with an in/out count,
-> >
-> > On top of standard tracing link data we also expose addresses, because they
-> > are useful info for user (especially when the attachment was done via pattern).
-> > This data is hidden when kallsyms does not allow exposing kernel pointer values.
-> >
-> > Assisted-by: Codex:GPT-5
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  include/uapi/linux/bpf.h       |  9 ++++++
-> >  kernel/trace/bpf_trace.c       | 55 ++++++++++++++++++++++++++++++++++
-> >  tools/include/uapi/linux/bpf.h |  9 ++++++
-> >  3 files changed, 73 insertions(+)
-> >
-> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > index 89b36de5fdbb..80423ccc6b57 100644
-> > --- a/include/uapi/linux/bpf.h
-> > +++ b/include/uapi/linux/bpf.h
-> > @@ -6839,6 +6839,15 @@ struct bpf_link_info {
-> >                         __u32 flags;
-> >                         __u32 pid;
-> >                 } uprobe_multi;
-> > +               struct {
-> > +                       __u32 attach_type;
-> > +                       __u32 count; /* in/out: tracing_multi target count */
-> > +                       __u32 obj_id;
-> 
-> we have attach_btf_obj_id in bpf_prog_info, but target_obj_id in
-> bpf_link_info for tracing programs. The latter, though, is actually
-> not always BTF object ID (it can be prog_id for PROG_EXT)...
-> 
-> So, me personally, I was confused what "obj_id" here mean, it would be
-> more obvious if it was called "btf_obj_id", tbh. But that's a minor
-> nit/confusion, not feeling strongly.
+From: Longjun Tang <tanglongjun@kylinos.cn>
 
-ok, btf_obj_id si better choice, will change
+Add bpf_memcmp() for binary memory comparison. Unlike bpf_strcmp,
+null bytes do not terminate the comparison, making it suitable for
+comparing fixed-size binary data.
 
-> 
-> everything else LGTM
-> 
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+BPF programs frequently need to compare raw binary buffers such as:
+- MAC addresses (6 bytes) in XDP/TC for L2 filtering and forwarding;
+- UUIDs (16 bytes) and hash digests in security policies;
 
-thanks,
-jirka
+Currently there is no safe way to do this:
+- bpf_strncmp (helper) stops at null bytes, corrupting binary data;
+- __builtin_memcmp may be used in some cases but is not verifier-safe
+  for arbitrary kernel memory;
+- hand-rolled loops are fragile and slow, as evidenced by the
+  local_memcmp() workaround in selftests/bpf/progs/dynptr_success.c.
+
+Signed-off-by: Longjun Tang <tanglongjun@kylinos.cn>
+---
+ kernel/bpf/helpers.c | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index b5314c9fed3c..aadcc4bfbee6 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -3971,6 +3971,48 @@ __bpf_kfunc int bpf_strcspn(const char *s__ign, const char *reject__ign)
+ 	return -EFAULT;
+ }
+ 
++/**
++ * bpf_memcmp - Compare two memory regions byte by byte
++ * @ptr1__ign: First memory region
++ * @ptr2__ign: Second memory region
++ * @size: Number of bytes to compare
++ *
++ * Compares the first @size bytes of the memory areas @ptr1__ign and
++ * @ptr2__ign. Unlike bpf_strcmp, null bytes do not terminate the comparison.
++ *
++ * Return:
++ * * %0       - The memory regions are equal
++ * * %-1      - @ptr1__ign is less than @ptr2__ign
++ * * %1       - @ptr1__ign is greater than @ptr2__ign
++ * * %-EFAULT - Cannot read one of the memory regions
++ * * %-E2BIG  - @size exceeds the maximum allowed size
++ * * %-ERANGE - One of the memory regions is outside of kernel address space
++ */
++__bpf_kfunc int bpf_memcmp(const void *ptr1__ign, const void *ptr2__ign,
++			   size_t size)
++{
++	const unsigned char *p1 = ptr1__ign, *p2 = ptr2__ign;
++	unsigned char c1, c2;
++	size_t i;
++
++	if (size > XATTR_SIZE_MAX)
++		return -E2BIG;
++	if (!copy_from_kernel_nofault_allowed(p1, size) ||
++	    !copy_from_kernel_nofault_allowed(p2, size))
++		return -ERANGE;
++
++	guard(pagefault)();
++	for (i = 0; i < size; i++) {
++		__get_kernel_nofault(&c1, p1 + i, char, err_out);
++		__get_kernel_nofault(&c2, p2 + i, char, err_out);
++		if (c1 != c2)
++			return c1 < c2 ? -1 : 1;
++	}
++	return 0;
++err_out:
++	return -EFAULT;
++}
++
+ static int __bpf_strnstr(const char *s1, const char *s2, size_t len,
+ 			 bool ignore_case)
+ {
+@@ -4850,6 +4892,7 @@ BTF_ID_FLAGS(func, bpf_strlen);
+ BTF_ID_FLAGS(func, bpf_strnlen);
+ BTF_ID_FLAGS(func, bpf_strspn);
+ BTF_ID_FLAGS(func, bpf_strcspn);
++BTF_ID_FLAGS(func, bpf_memcmp);
+ BTF_ID_FLAGS(func, bpf_strstr);
+ BTF_ID_FLAGS(func, bpf_strcasestr);
+ BTF_ID_FLAGS(func, bpf_strnstr);
+-- 
+2.25.1
+
