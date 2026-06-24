@@ -1,151 +1,189 @@
-Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4825C3998BE
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 08:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45B8399004;
+	Wed, 24 Jun 2026 08:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782290533; cv=none; b=QHdF50itfU3AG8W0vc9wtz8vgWIs6Q3/iwwRDtKuSq7gP/9Zz9B2itQjQLwueZf96UeXKi9DUJ/jThqc2oqJddouzyoyxsQOaeG0rzSdp+kx5yN39OKKl8MkxPgC7yNwBvrlq4u/eoa36Ki8vvYlTFA28TQVMHr5k6Ll823t9eQ=
+	t=1782290842; cv=none; b=D83yb23PqoJAtt7BnOJxJTpuOmld3OM5Qrl6HP5MiTvOZtbmbd4wX1/pm0fk6ODLnYBO3RxkNHqA3XhAbEnBc3UoSPxeS+wH1QAQqTP2v0DcxynAQewUIpQeeyEbZjdCS0X1fiP/OlIYenwfrlrd5thzK2/KQE9VEICJtS4lL3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782290533; c=relaxed/simple;
-	bh=HNZpg/xHJqTSWZQlg89/3FcDfzRQN09lT4Z4fHDr8Fw=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=WqE4G1smCuVbuBesRBPyjXWhbAYPnkWYKTm4xbuHV5PWFe5e3qNux+COJJpKdR16kJuMc1YHxVeQK2EIlXXPT1gMuePd+LhE+4u3dWoG4wBWnoC5uErDTdmq2BfSz9MZSWF2J0BfEoQUw2Ko9nxQXhnMF6eZDKoQFxjqN1Pils4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--clecigne.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Xu8BNEiE; arc=none smtp.client-ip=209.85.208.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--clecigne.bounces.google.com
+	s=arc-20240116; t=1782290842; c=relaxed/simple;
+	bh=jE3gcUhZN5QjpxvUi4aBQycrshUHzLYz8Pu/BFvb4mc=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=UMirwwO0VMcqaG2h30vz7/geFR6KrK+bdf6wnaBUsIa7BfqexiJykgPyHHACi/+OXnfUxkKyTHgx61Xp7CYxnRWzMIvnK6XnxSRIdszhqpw5I0fnSd2lCOJtW6HJ0ObhO4HpGfg5zNmT/EyVNdPjnsxF91DeUTB4pNHi0vOcN/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D02WJZsE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Xu8BNEiE"
-Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-69763fd5cbcso618504a12.2
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 01:42:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782290527; x=1782895327; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=h9DLExDC59vueux7nw5wKkiU+KpHE7tOm4pNwHPghH8=;
-        b=Xu8BNEiEFbaqf+rzbTRpeBdQ6YYtGS7j+tZHQrUjUDYIMmRZ1CYt540O1qdfsCsfF3
-         uz6OwPhg6rvDkVF4u0tIwg3I4xrFxUS8v1uzIx/9DDFDpvIU8WZcQ2fzCPgTiAZzMgN8
-         Ck/GBZQ0DoS/q6hFCMcVdylIxmcbXOAYSbKWqm4QRwkHnqgesaOuc8yyp6GIPMc7EY2b
-         sEJ1yxSbddRiqGWA7A1omPjmy1lMV+JAg8gNOjnBKhgxWGZLC9cmI20HhXhMRcyIGoVi
-         T4LHPgT+QoaNNo3YQ093MyaPkEXbQP3GI8lwGllRjbcuqKjNqEGP12FqASh3EG/PNCKm
-         0pmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782290527; x=1782895327;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h9DLExDC59vueux7nw5wKkiU+KpHE7tOm4pNwHPghH8=;
-        b=BJHys9d4YcwPDdmxI3jjXdMMdiI+OTWrUUoSfhKkudbYI5WSFXqdziMBDLKDeCBB5B
-         reLnAIPsbfDWCCgEYGBhhvL+lgS3ya7omlXqyyycLQga6B9hylOtWf2J7nKPO4oArdJn
-         fiG6qbFj9sz+u30IVTy25VNt3pVjJor6XTbx//S3/U6x75WVlVuU0B5WskEd3tZ240bn
-         DWNbRGbr+o6fhDBREzYu4KkghIVAg7damed1sqc4EpRc4Mpe+/WAvjHNKedfWpGCXthe
-         oF6/VTulthKR5TmBzSHzLiwV0XwqwwlSlu5787R/IR36QVuZgTH6eE4qKj09CYnxh0/x
-         pBxA==
-X-Forwarded-Encrypted: i=1; AHgh+RoXWc9JMRQxN2mxIHxazDPKOZoL0eYG8cAUUa9My4SAvL5hjzfAmAol9/pi/BaRbwffwyw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyzI9ufC3FDkne3amZKDiXcjCwrQKjVobBnxYyOTJnReVzWQzv7
-	9toFK4egLxD+xamvSsP1KFycEOk7SMhVkiaHctcTk3wPHmLMNWcPl0HKMaQMBsy1olhK7kpV/Gn
-	iowdtzjhIV0gCQg==
-X-Received: from edxu18.prod.google.com ([2002:a05:6402:652:b0:697:7bf0:5a7d])
- (user=clecigne job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:2714:b0:697:d34f:2667 with SMTP id 4fb4d7f45d1cf-697f3aa4acamr1109823a12.13.1782290527068;
- Wed, 24 Jun 2026 01:42:07 -0700 (PDT)
-Date: Wed, 24 Jun 2026 08:41:28 +0000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D02WJZsE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B22711F00A3A;
+	Wed, 24 Jun 2026 08:47:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782290841;
+	bh=06XkZ5y3O4hhqWJxqfZyjIWWTZjCTfUMB2iMcf/ToR8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=D02WJZsEa+kSPjocd0o/QLIlV9uqWdqi7pYolOxa+PleLrxk3CM9+TRfO33s00L/9
+	 fp/QGrlGY4kwceOZ33LlBpz8QvkGYDdeHBtRIHMC0UXvRHSgnv6OIeTOiE+NqePXfC
+	 4bKTWrzRm9Bbv0YkvKsfc7yr06aUTcHEEzg5385LDMd6QRzjVvc65ZwZB+hE+eIoJV
+	 rHgmIlNv6VZw7ZeYYs0EJp0Cvs2fwJApX2eqbQzfk/OPkAd7NRQ9vICKGYsy13fqd4
+	 3Jk1XwnjwC87j9gSxbzFBDpeqdNJn5rUVieBN+Jr1wCRqaR7g+Y7SDjozY8iIGjmyk
+	 kTZGNmYlkSMEg==
+Date: Wed, 24 Jun 2026 17:47:17 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor
+ <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner
+ <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+ <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ bpf@vger.kernel.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org,
+ kernel-team@meta.com
+Subject: Re: [PATCH v6 8/8] x86/setup: prepend embedded bootconfig cmdline
+ before parse_early_param
+Message-Id: <20260624174717.7230a3e18e2f8f7d3698055a@kernel.org>
+In-Reply-To: <20260623-bootconfig_using_tools-v6-8-640c2f587a3c@debian.org>
+References: <20260623-bootconfig_using_tools-v6-0-640c2f587a3c@debian.org>
+	<20260623-bootconfig_using_tools-v6-8-640c2f587a3c@debian.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-Mailer: git-send-email 2.55.0.rc0.799.gd6f94ed593-goog
-Message-ID: <20260624084130.2382335-1-clecigne@google.com>
-Subject: [PATCH] xsk: fix memory corruptions in net/core/xdp.c
-From: Clement Lecigne <clecigne@google.com>
-To: aleksander.lobakin@intel.com, edumazet@google.com, netdev@vger.kernel.org
-Cc: clecigne@google.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kuba@kernel.org, sdf@fomichev.me, horms@kernel.org, john.fastabend@gmail.com, 
-	ast@kernel.org, daniel@iogearbox.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Cl=C3=A9ment Lecigne <clecigne@google.com>
+On Tue, 23 Jun 2026 09:15:35 -0700
+Breno Leitao <leitao@debian.org> wrote:
 
-Commit 560d958c6c68 ("xsk: add generic XSk &xdp_buff -> skb conversion")
-introduced a vulnerability in the handling of XDP_PASS for AF_XDP zero-copy
-frames.
+> Call xbc_prepend_embedded_cmdline() in setup_arch() right after the
+> CONFIG_CMDLINE merge and before strscpy(command_line, ...) so the
+> build-time-rendered embedded bootconfig "kernel" subtree is part of
+> boot_command_line by the time parse_early_param() runs. early_param()
+> handlers (mem=, earlycon=, loglevel=, ...) now see values supplied via
+> CONFIG_BOOT_CONFIG_EMBED_FILE without parsing bootconfig at runtime.
+> 
+> Gate the prepend on the same opt-in the runtime parser uses: prepend
+> when "bootconfig" is present on the command line, or when
+> CONFIG_BOOT_CONFIG_FORCE is set. Detect it with parse_args(), exactly
+> as setup_boot_config() does, so both agree on what counts as opt-in:
+> any "bootconfig" key regardless of value (bare, =0, =1, ...), and only
+> before the "--" that separates init arguments. Sharing the parser keeps
+> the early and late paths from diverging -- e.g. "bootconfig=0" or a
+> "-- bootconfig" meant for init must not apply the embedded keys early
+> while the runtime parser skips them.
+> 
+> The prepend necessarily runs before setup_boot_config() detects an
+> initrd bootconfig, so an initrd cannot override the embedded "kernel"
+> keys for early_param(). This is intentional: the embedded cmdline acts
+> like a build-time CONFIG_CMDLINE. An initrd bootconfig's "kernel" keys
+> never reached early_param() anyway (they apply late via
+> extra_command_line), so nothing is lost -- the initrd keys still apply
+> late, with last-wins keeping the embedded values in effect.
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  arch/x86/Kconfig        |  1 +
+>  arch/x86/kernel/setup.c | 43 +++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 44 insertions(+)
+> 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 0de23e6471973..8ab11199c16d5 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -127,6 +127,7 @@ config X86
+>  	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
+>  	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <= 4096
+>  	select ARCH_SUPPORTS_CFI		if X86_64
+> +	select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG
+>  	select ARCH_USES_CFI_TRAPS		if X86_64 && CFI
+>  	select ARCH_SUPPORTS_LTO_CLANG
+>  	select ARCH_SUPPORTS_LTO_CLANG_THIN
+> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+> index 46882ce79c3a4..c973a2cebcd04 100644
+> --- a/arch/x86/kernel/setup.c
+> +++ b/arch/x86/kernel/setup.c
+> @@ -6,6 +6,7 @@
+>   * parts of early kernel initialization.
+>   */
+>  #include <linux/acpi.h>
+> +#include <linux/bootconfig.h>
+>  #include <linux/console.h>
+>  #include <linux/cpu.h>
+>  #include <linux/crash_dump.h>
+> @@ -881,6 +882,37 @@ static void __init x86_report_nx(void)
+>   * Note: On x86_64, fixmaps are ready for use even before this is called.
+>   */
+>  
+> +#ifdef CONFIG_CMDLINE_FROM_BOOTCONFIG
+> +static int __init bootconfig_optin(char *param, char *val,
+> +				   const char *unused, void *arg)
+> +{
+> +	if (!strcmp(param, "bootconfig"))
+> +		*(bool *)arg = true;
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Did the user opt in to bootconfig on the kernel command line? Use
+> + * parse_args() so this matches setup_boot_config() exactly, including
+> + * stopping at the "--" that separates init arguments.
+> + */
+> +static bool __init bootconfig_cmdline_requested(void)
+> +{
+> +	static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
+> +	bool found = false;
+> +
+> +	if (IS_ENABLED(CONFIG_BOOT_CONFIG_FORCE))
+> +		return true;
+> +
+> +	strscpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+> +	if (IS_ERR(parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0,
+> +			      &found, bootconfig_optin)))
+> +		return false;
+> +
+> +	return found;
+> +}
 
-Note: Currently, this specific AF_XDP zero-copy conversion path is only
-reachable from the drivers/net/ethernet/intel/ice driver.
+It seems that this should be placed in a common place because it will
+be used from other architectures (and init/main.c too). Maybe we can
+introduce something like this?
 
-When building an skb, xdp_build_skb_from_zc() uses the chunk size
-(xdp->frame_sz) for the allocation. However, napi_build_skb() automatically
-reserves space at the end of the allocation for the skb_shared_info
-structure.=20
+bool __init bootconfig_cmdline_requested(const char *boot_cmdline, int *end_offset);
 
-Most high performance UMEM applications use 4K chunks, where the
-corruption cannot happen. However, if the UMEM is configured with 2KB
-chunks (a very common configuration to maximize packet density in memory),
-a standard 1500 MTU packet will trigger the corruption because the required
-space exceeds the 2048 byte chunk size:
+Thanks,
 
-Headroom (256) + Packet (1514) + skb_shared_info (320) =3D 2090 bytes
+> +#endif
+> +
+>  void __init setup_arch(char **cmdline_p)
+>  {
+>  #ifdef CONFIG_X86_32
+> @@ -924,6 +956,17 @@ void __init setup_arch(char **cmdline_p)
+>  	builtin_cmdline_added = true;
+>  #endif
+>  
+> +#ifdef CONFIG_CMDLINE_FROM_BOOTCONFIG
+> +	/*
+> +	 * Prepend the build-time-rendered embedded "kernel" keys here so
+> +	 * parse_early_param() below sees them, gating on the same opt-in
+> +	 * as the runtime parser (see bootconfig_cmdline_requested()).
+> +	 */
+> +	if (bootconfig_cmdline_requested())
+> +		xbc_prepend_embedded_cmdline(boot_command_line,
+> +					     COMMAND_LINE_SIZE);
+> +#endif
+> +
+>  	strscpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
+>  	*cmdline_p = command_line;
+>  
+> 
+> -- 
+> 2.53.0-Meta
+> 
 
-Because 2090 bytes > 2048 bytes and __skb_put() does not perform bounds
-checking, the memcpy() writes past the available linear data area and
-corrupts the skb_shared_info structure. This can lead to arbitrary code
-execution if pointers like destructor_arg are overwritten.
 
-Additionally, in xdp_copy_frags_from_zc(), the allocation size is set
-strictly to the fragment size (len), but the subsequent memcpy() uses
-LARGEST_ALIGN(len). This mismatch results in an out-of-bounds write of
-up to 7 bytes, which triggers KASAN warnings and is unsafe despite typical
-page pool allocator padding.
-
-Fix the skb allocation in xdp_build_skb_from_zc() by dynamically
-calculating the exact truesize required: the sum of the headroom, the
-packet length, and the skb_shared_info overhead, properly aligned via
-SKB_DATA_ALIGN.
-
-Fix the out-of-bounds write in xdp_copy_frags_from_zc() by rounding up
-the allocation request using LARGEST_ALIGN(len) to match the copy
-operation.
-
-Fixes: 560d958c6c68 ("xsk: add generic XSk &xdp_buff -> skb conversion")
-CC: Alexander Lobakin <aleksander.lobakin@intel.com>
-CC: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Cl=C3=A9ment Lecigne <clecigne@google.com>
----
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 9890a30584ba..f36d1fb875ab 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -699,7 +699,7 @@ static noinline bool xdp_copy_frags_from_zc(struct sk_b=
-uff *skb,
- 	for (u32 i =3D 0; i < nr_frags; i++) {
- 		const skb_frag_t *frag =3D &xinfo->frags[i];
- 		u32 len =3D skb_frag_size(frag);
--		u32 offset, truesize =3D len;
-+		u32 offset, truesize =3D LARGEST_ALIGN(len);
- 		struct page *page;
-=20
- 		page =3D page_pool_dev_alloc(pp, &offset, &truesize);
-@@ -740,7 +740,9 @@ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *=
-xdp)
- {
- 	const struct xdp_rxq_info *rxq =3D xdp->rxq;
- 	u32 len =3D xdp->data_end - xdp->data_meta;
--	u32 truesize =3D xdp->frame_sz;
-+	u32 headroom =3D xdp->data_meta - xdp->data_hard_start;
-+	u32 truesize =3D SKB_DATA_ALIGN(headroom + len) +
-+		       SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
- 	struct sk_buff *skb =3D NULL;
- 	struct page_pool *pp;
- 	int metalen;
-@@ -762,7 +764,7 @@ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *=
-xdp)
- 	}
-=20
- 	skb_mark_for_recycle(skb);
--	skb_reserve(skb, xdp->data_meta - xdp->data_hard_start);
-+	skb_reserve(skb, headroom);
-=20
- 	memcpy(__skb_put(skb, len), xdp->data_meta, LARGEST_ALIGN(len));
-=20
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
