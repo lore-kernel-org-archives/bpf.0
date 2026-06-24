@@ -1,306 +1,161 @@
-Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E7F7308F26
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 19:37:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782329872; cv=pass; b=mqMQqGNqs+HkHplzC1+DwZnE0Q0Yp7HlG+jJKSk5QRBLi4MDuz/Dbj9/E+H9dXNXGD+5OZgPmzA8PRW9eOeXOIKxGckOUClChgkd6rNPeYCWi+q8Zp4rknoCCM6S3ilLqClMqhvhismvIa/ofRHeIuUPEKRrEpV3z9LIDC7NHN8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782329872; c=relaxed/simple;
-	bh=GllgBcs7itEW4894JZAopXwN8/rtekGyTgYh7QSrd3o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fGuHofknZoZu4cLvNVY/U7fhbeTK1mjvDTpXMDblE5rBunfLEoDUZ6yfNpdup5ooWnqmDvAtJrHRhnMEWwgSbGZvZjw3eMs+RWZN49d7y6a0KHvaAIY4ErnUYMMkikct5oXTQagiNXYWijn7RbECoopcqpWfIx4WXgsnhpdXugY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b8gC3kdz; arc=pass smtp.client-ip=74.125.224.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A54305E28
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 19:49:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782330569; cv=none; b=jmD4ESWLz56MtrkKjD7lruGz19D/8IayMiFvU4gceL0m5EoO6dctKe7zT4UA7QftKUCTctJFw65NdskkvmB+QGNQ7sL9EK9AidiNNngsimRvowrUVKU3Y1ONFC2SeVtHaq1UxvjjdnFbaw37GQN4qpMcqawu+VLY2kVqv82L9yY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782330569; c=relaxed/simple;
+	bh=0oMU3uK9IwWmaU8jQtMqaCl2EVZdYxk5BUMpcRcQof0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WiJMZ2Ot71mG1fEmKvFoLHz/y+9aJt6QRLnALS5HUW40mDJYj/Sx2y9mcSYguERk06mo99n6B+Z4j+swja2X7oHdiPv5hnXtPp0tKFqoVNRU4nTQMUscc5WxdiVIOwq6/stnPa8u/Agw0TOw0FTy2NfrtP9b2QIb4qnEUwgbPQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HQNEnNTg; arc=none smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b8gC3kdz"
-Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-662b95934dcso1699702d50.3
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 12:37:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782329870; cv=none;
-        d=google.com; s=arc-20240605;
-        b=JijmQnkmWHAVdyMhYiYpQdnEmNPR5hbcFI8HyqdVVCePU6kTC7c8/nwEe61anAEl7A
-         ity1jUdSF4YyG4pIkmYgvgB2DkCemc6dFk3HND/efdzp6XnBtYa7C8gjG14R1727tZsv
-         yIXXurtf15NpZBc0Fil16p/h4rq8CzqEtjruIdrMV4meSrMgk6xOuiZ28VfFdpcgMPWh
-         1u0nfJ7F+dEfnXTlsbyI1mfiO2er99dM8mNaHnpGDIE8cWkdZ86lLVm+ebDTKe/NnzOW
-         eFkBfV9xfy0iIeXwvlQaIamzJpKojCdnRQJRKwJ50R6y+LZP0Hbcqog0awUzflQ76Gbp
-         M8Zg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=URp0L1lYBHGwRqyQw+KN67MjI1sc7tNut0CrqAxYvkI=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=hAzTolWTPy3rZysAWKusEu0gYtQ+XxOfI0MNWswGezbaPLCroM50Gwg8v23Zy2ujjL
-         2HS4VFV28Bix1TrnAwSTOzKsulce9Qtg6ZdIlrWlIbytAipYqBLKrxOOrAwBXroESVgV
-         oo7P0Jerfaht4aExZd8bVJeSqzC+ZCegZ6r+YXoNmMJOt92cpH6LGKnc9VJlxmDond6E
-         7Si9Yu55l52lVc9oODiwn2fVHq8+M5UFGs39O6Fzq/AQYCP4wYVHtRkq0J/ZifKB+lzh
-         pwFrC8hVvoqA6uxwLxwhOtsetCh9nC8YBdltRvG46BsudEpeKDRnmkJuv1N4A94iGRvs
-         Hlsw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HQNEnNTg"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-37de8008910so631382a91.0
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 12:49:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782329870; x=1782934670; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=URp0L1lYBHGwRqyQw+KN67MjI1sc7tNut0CrqAxYvkI=;
-        b=b8gC3kdzFZ5D7SWDtPkR4QmuMxkaAUXDPt7HIXOyTJqD5Coyxcj+HJY04nCwXk+NPh
-         fjQ2f9rcm3ZbJVcNOc+P3ciAFKZS3IaQYHQOMc9WJ/YfHHEZrzXXHJvZujumKRDbKKt4
-         XQyGBnoOwXMdYu0sIGb7hcAsYS7WbR8/UJMHUFWCgu8vJ7Dt+HoIesPDtQLKTHICK/hv
-         Msuw57LK4EQDsNcy+alAsq26urJA4MHdF6/qilFQaxsHYnTfp7yvqQ2BkehOsNHnCjd8
-         6PXfr77xTWyNZ6SFKzN6Ocp8IIqklBTePiVzyjSfQErBtMcbVs7qIJ0GJ6Ne4KE9W+zQ
-         X1tQ==
+        d=gmail.com; s=20251104; t=1782330567; x=1782935367; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=chnBHK2BDYEEN5dW/1bTJPFgMn/1nZToeYO5HSTFJ4w=;
+        b=HQNEnNTg8jBGJKiZiCWpJkE6dHvbGfNuIDdjDHBuJNc+D95vHGbca+y3kI2s9vZMjK
+         fZzH6L5Rsn3Ij9qpe1soR9Q/j0Udef30rIBYN3qkIN0sNpF87i/XbCT17FBwZPAk6Be3
+         HlTdw0nuIBLdq+txfHnNbj9NPSA4KIJYJ6AQwzG66K3Mcm56g4KMZUXh8PXiHML29JDp
+         lPZVHf7m6vcZqhtn+34LqhIXsh2kCZhuKgMxSYP4Wzj76v/nKAcxlsRoS/Zl4G5CGFr2
+         lkaN7c0A3KfDHH4OFl3Kozwt+W9j0Q6OLfBWxRpqH31Ub1IFOFOrTWd5kIfEelLgwJe/
+         POGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782329870; x=1782934670;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=URp0L1lYBHGwRqyQw+KN67MjI1sc7tNut0CrqAxYvkI=;
-        b=EwUnHfvUir5pjNh5c7zwOtyA0JNqIKykFDtcJ19o+dwJOpM661LWwPyPTfiNABDunG
-         +QTd1Iq5YVm2JZc51rUEdAyi86RU3KMSAkjgSYXuOwHqSRGQ8fZcjDOs03XqdKVY5Ebk
-         iew6kdzrKXMkMqMUn1hysZuyEiKATxJCtiQUtfSjrqQfVPRC89xs6QWAH8ajg3kzsxsn
-         G4NsdCtiHbY0CL6qgHVheAykrOweYJ3Pfb9gSLIE3N1axq/Jg8WqCJ7XMJVpwuHsHMEw
-         JjQxjq89ir+qP8qnAp5pE+WA41yL239MD/WbhWi16DkCaTvJXT5GK5Z9P2boBvmQhzjr
-         GXEw==
-X-Gm-Message-State: AOJu0Yw0ht5PL4z2Z/G01m/Ge7JrWVuyy6yT0AW+0rzDQ/fF8yHNb10g
-	3+t9mADAjLLt8wHGjSrZ8nsBlxFwATp0fx/o4s3x/X3PEKIDdgKSg9Spbf4BOgEdlOiviX3NKIp
-	qrlkjXWZWQ03j/gFkjuod1wa5aCFbm++f1TiT
-X-Gm-Gg: AfdE7cmuS3qdfe3HNNcrLP0iJo3xFqB4LjtG3EsWk3kE7lVuCo7BWMx7ccv9p4/drRq
-	GqOOx92agYxTKSGppMamMn2+qKMsJyy/qDlEtuzv2cyktfKG3+GHUtbZfgOK28RVTRXlRQooTe6
-	CS000WfkOlqvPFNuyyLlhAlN6H3Lf7LmZKzKuCenHJgn5pkmBcT2TzBvNrMpxhcKzPregAo7pSS
-	j349C1XD0bd5+6xI/RGeFnWgWTnvc/KxQ8sUgDe6/vX4sy7OMYHcbj6rX2pEv7iCaTezhlC
-X-Received: by 2002:a05:690e:124a:b0:660:e09c:d57 with SMTP id
- 956f58d0204a3-66359eda206mr7571115d50.29.1782329870009; Wed, 24 Jun 2026
- 12:37:50 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782330567; x=1782935367;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=chnBHK2BDYEEN5dW/1bTJPFgMn/1nZToeYO5HSTFJ4w=;
+        b=OUYOJb4oJm8lwJVW4lZzQhU9OeqVNZAYIJBu89ZZVo814qN9rZLeCz0QjW9mn78FRk
+         QrKGevv7ITNzGRxYMIfaFscSfhTgIFJd3V9GLy8M0fDokjY5UQeE0Nkw5oHa4dqZuNFs
+         WShD0v8YDIwweHNNMAkGr1TKPx2eIWBc4Fgkx+Y7kIRhkbkpntdjyQYiDWbHwKHwa6lc
+         z2yIaChcYOW/DWZzmIXOHXtpe/1oEaDy3U6BB58sKgGkfheAPNDwBB36rZVxEJy0N7qe
+         AeC/DG6MUL4O/JX/ySfmNXZWySaihqh5FkpB1QsJPwq3dlCs0AD4p0xNkd5hYz9tEr1o
+         vDEA==
+X-Forwarded-Encrypted: i=1; AHgh+RqJ2zVyNx39mRNb4B0xrjB3dKWE0UcRRx5bdsM+Uja9CBgV+Ftea8bcIebBODpG9Z3NRNk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtOSWiQCOdZLKnhAx7lpp/g38BVyucgNszHUAuC1RagPPOzYWN
+	zyBV15G0Ws/qdprNkEswJVa2M+OBzZOZ+psPQKvbqE9FxNNs0Ri8cXCM
+X-Gm-Gg: AfdE7cnpKWrOoInyUoAtEhEotq+hOrF15tnp+lkMbhdNwAmhsxKMY2Arjg4iWIwkAOB
+	d34vUgQkm/8djduv2qTtJp1T1CCGDFY7KdRNHDDdIaJkmjtS3+9XkRkJ40LU1gAWQJy23VCKtnh
+	mkAwwzkoz3cLuTzY6ZvpE4AO/7ZUpkzCAtdMmMENiylcGJjhPSoRBFf7WcrlgF/TyCvgyFWyA0v
+	JQE69tAFRosA+gT5MlJDMYDX6n0F4Nc+QUVfm10nlleW80fmbp/eX3Cz+8MRR8MtxMRIR7Rev3/
+	WhAU/tGnbFDHtQO/yVzU1V5rIAk6HizhciumKrjMF1ydphrJMnYcVJfDdGL4ASHXUh7q92K2aJM
+	0If79A+Rat1swlR59SCSJ2AlSX67vGfdzWePXqpiq5uaeuBEFr82q/ZFX65sReyG1HWWf4ZC8pL
+	gEyLMyeiV1PCfxLrhfOuC1xxNaDfoS3O94hEj6cYYBvw==
+X-Received: by 2002:a17:90b:524a:b0:37d:f4c1:ad82 with SMTP id 98e67ed59e1d1-37df4c1aff5mr607553a91.15.1782330567098;
+        Wed, 24 Jun 2026 12:49:27 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37df3b41406sm423213a91.8.2026.06.24.12.49.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2026 12:49:26 -0700 (PDT)
+Message-ID: <df2bf4c0205f8c8395736c687aa4e293850311e2.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 06/17] bpf: Track verifier reference
+ diagnostic events
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
+Date: Wed, 24 Jun 2026 12:49:21 -0700
+In-Reply-To: <20260619205934.1312876-7-memxor@gmail.com>
+References: <20260619205934.1312876-1-memxor@gmail.com>
+	 <20260619205934.1312876-7-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260623175006.3136053-1-ameryhung@gmail.com> <20260623175006.3136053-13-ameryhung@gmail.com>
- <20260623234059.132101F000E9@smtp.kernel.org>
-In-Reply-To: <20260623234059.132101F000E9@smtp.kernel.org>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Wed, 24 Jun 2026 12:37:39 -0700
-X-Gm-Features: AVVi8CePzLI1GItTni-IRcFpJEANx5x0teJCdRQsOaLFcwXMDm4RX1VHNkz46nw
-Message-ID: <CAMB2axO0UnZDC6Ea0y8fL0cxz8qmXzU5UdqAarL_JVLfcOn29Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 12/15] bpf: tcp: Support parse/len/write
- header option hooks in bpf_tcp_ops
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 23, 2026 at 4:41=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 4 potential issu=
-e(s) to consider:
-> - [High] Incorrect pointer arithmetic on the BPF context array causes NUL=
-L pointer dereferences on 32-bit architectures.
-> - [High] A missing bounds check in TCP option parsing combined with a TOC=
-TOU double-fetch allows a malicious BPF program to cause a heap buffer over=
-flow.
-> - [Medium] The struct_ops TCP option reservation is gated by a completely=
- unrelated cgroup BPF static key, breaking the feature for established conn=
-ections.
-> - [Low] Multi-line comments in BPF subsystem files violate the required c=
-omment style.
-> --
->
-> commit d91122a96beff2abb78548435a7fd30a3c89c2ac
-> Author: Amery Hung <ameryhung@gmail.com>
->
-> Add the TCP header option callbacks to the bpf_tcp_ops struct_ops type
->
-> This patch exposes TCP header option callbacks as struct_ops members to
-> allow BPF programs to parse, reserve, and write TCP header options. It
-> mirrors the legacy BPF_SOCK_OPS callbacks and shares the reserved window.
->
-> > The hdr_opt_len fast path in tcp_established_options() is gated by
-> > cgroup_bpf_enabled(CGROUP_TCP_SOCK_OPS). Note this is a global,
-> > per-attach-type static branch: it is enabled whenever any bpf_tcp_ops i=
-s
-> > attached, even one that does not implement hdr_opt_len or that is attac=
-hed
-> > to a different cgroup.
->
-> [Severity: Medium]
-> Is this description accurate? Struct_ops do not enable this cgroup static
-> key. Will this check evaluate to false in non-cgroup-bpf deployments,
-> skipping space reservation for established connections but still calling
-> write_hdr_opt later?
+On Fri, 2026-06-19 at 22:59 +0200, Kumar Kartikeya Dwivedi wrote:
+> Add reference acquire and release events to diagnostic history so Resourc=
+e
+> Lifetime Safety reports can show the lifetime of a specific reference id =
+along
+> the path.
+>=20
+> Record acquisitions after the verifier assigns the reference id. Record
+> releases only after release_reference_nomark() succeeds, including the
+> kptr_xchg RCU conversion path and owning-to-non-owning conversion path th=
+at
+> consume an owning reference.
+>=20
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
 
-See reply at the end.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
->
-> > diff --git a/include/net/tcp.h b/include/net/tcp.h
-> > --- a/include/net/tcp.h
-> > +++ b/include/net/tcp.h
-> [ ... ]
-> > @@ -3005,6 +3005,45 @@ struct bpf_tcp_ops {
-> >
-> >       /* Called on listen(2), right after the socket enters TCP_LISTEN.=
- */
-> >       void (*listen)(struct sock *sk);
-> > +
-> [Severity: Low]
-> This isn't a bug, but does the BPF subsystem prefer the opening /* to be =
-on
-> its own line for multi-line comments?
->
-> > +     /* Parse the TCP header options of an incoming skb received on an
-> > +      * established connection. Use bpf_dynptr_from_skb()/bpf_skb_load=
-_bytes()
-> > +      * to access the options.
-> > +      */
-> > +     void (*parse_hdr)(struct sock *sk, struct sk_buff *skb);
-> > +
-> [ ... ]
-> > diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
-> > --- a/net/ipv4/bpf_tcp_ops.c
-> > +++ b/net/ipv4/bpf_tcp_ops.c
-> [ ... ]
-> > @@ -66,6 +87,99 @@ static struct bpf_tcp_ops __bpf_tcp_ops =3D {
-> >       .retrans =3D retrans_stub,
-> >       .connect =3D connect_stub,
-> >       .listen =3D listen_stub,
-> > +     .parse_hdr =3D parse_hdr_stub,
-> > +     .hdr_opt_len =3D hdr_opt_len_stub,
-> > +     .write_hdr_opt =3D write_hdr_opt_stub,
-> > +};
-> > +
-> > +BPF_CALL_4(bpf_tcp_ops_store_hdr_opt, void *, ctx, const void *, from,
-> > +        u32, len, u64, flags)
-> > +{
-> [Severity: High]
-> Can this pointer cast lead to reading the wrong offset on 32-bit systems?
-> The ctx array contains 64-bit integers, so casting directly to a pointer
-> array might result in reading the upper 32 bits (which are zero) on
-> little-endian architectures, causing a NULL pointer dereference.
+[...]
 
-struct_ops is backed by trampoline which is only on 64-bit arches so
-NULL pointer dereference should be a non-issue.
+> @@ -1536,6 +1570,20 @@ static void bpf_diag_print_stack_slot(struct bpf_v=
+erifier_env *env,
+>  			       off, fmt->old_buf, fmt->new_buf);
+>  }
+> =20
+> +static void bpf_diag_print_ref_event(struct bpf_verifier_env *env,
+> +				     const struct bpf_diag_history_event *event)
+> +{
+> +	if (event->kind =3D=3D BPF_DIAG_HISTORY_REF_ACQUIRE) {
+> +		bpf_diag_report_source(env, event->insn_idx, "acquired",
+> +				       "owned resource (id=3D%u)",
+> +				       event->ref.ref_id);
+> +		return;
+> +	}
+> +
+> +	bpf_diag_report_source(env, event->insn_idx, "released",
+> +			       "owned resource (id=3D%u)", event->ref.ref_id);
 
-I will still change bpf_tcp_ops_{load, store, reserve}_hdr_opt to the
-following style to silence -Wint-to-pointer-cast warning on 32-bit.
+Nit:
 
-u64 *args =3D (u64 *)ctx;
+		char *label =3D event->kind =3D=3D BPF_DIAG_HISTORY_REF_ACQUIRE ? "acquir=
+ed" : "released";
 
-struct sk_buff *skb =3D (void *)(unsigned long)args[1];
+		bpf_diag_report_source(env, event->insn_idx, label,
+                		       "owned resource (id=3D%u)", event->ref.ref_id);
 
->
-> > +     struct sk_buff *skb =3D ((struct sk_buff **)ctx)[1];
-> > +     struct bpf_sock_ops_kern sock_ops =3D {};
-> > +     u32 opt_off =3D ((u64 *)ctx)[5];
-> > +     u8 *op, *opend;
-> > +
-> [Severity: Low]
-> This isn't a bug, but multi-line comments in the BPF subsystem typically
-> place the opening /* on a separate line.
->
-> > +     /* bpf_tcp_ops does not keep track of the end of the written TCP =
-header
-> > +      * options, so search for it every time the helper is called. The=
- free
-> > +      * space is NOP-filled, so a TCPOPT_NOP ends the search rather th=
-an being
-> > +      * skipped as in a normal option walk in sockops.
-> > +      */
-> > +     op =3D skb->data + opt_off;
-> > +     opend =3D skb->data + tcp_hdrlen(skb);
-> > +     while (op < opend && *op !=3D TCPOPT_NOP) {
-> [Severity: High]
-> Does this loop prevent op from advancing past opend if the option length
-> byte is forged? If op[1] is maliciously modified concurrently in the BPF
-> map memory before __bpf_sock_ops_store_hdr_opt() does its memcpy, could
-> the next call to bpf_tcp_ops_store_hdr_opt() advance op past opend and
-> cause an out-of-bounds memcpy?
 
-OOB is not possible here. The loop only walks the BPF-reserved option
-region, and that region is NOP-filled and written exclusively by the
-store_hdr_opt helper. __bpf_sock_ops_store_hdr_opt() rejects any option
-that doesn't fit.
+[...]
 
->
-> > +             if (*op =3D=3D TCPOPT_EOL || op + 1 >=3D opend || op[1] <=
- 2)
-> > +                     break;
-> > +             op +=3D op[1];
-> > +     }
-> > +
-> > +     sock_ops.skb =3D skb;
-> > +     sock_ops.skb_data_end =3D op;
-> > +     sock_ops.remaining_opt_len =3D opend - op;
-> > +
-> > +     return __bpf_sock_ops_store_hdr_opt(&sock_ops, from, len, flags);
-> > +}
-> [ ... ]
-> > +BPF_CALL_4(bpf_tcp_ops_load_hdr_opt, void *, ctx, void *, search_res,
-> > +        u32, len, u64, flags)
-> > +{
-> [Severity: High]
-> Will this cast misalign the array index on 32-bit architectures? Treating
-> the 64-bit integer array as an array of 32-bit pointers will cause the
-> wrong bytes to be read for the context argument.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index fedabb6bb515..93941deb2cd8 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-Not a bug. Will change silence compilation warning on 32-bit arch.
+[...]
 
->
-> > +     struct sk_buff *skb =3D ((struct sk_buff **)ctx)[1];
-> > +     struct bpf_sock_ops_kern sock_ops =3D {};
-> [ ... ]
-> > +BPF_CALL_3(bpf_tcp_ops_reserve_hdr_opt, void *, ctx, u32, len, u64, fl=
-ags)
-> > +{
-> [Severity: High]
-> Could casting ctx to a pointer array here also lead to a NULL pointer
-> dereference on 32-bit systems due to reading the upper 32 bits of the
-> previous 64-bit argument?
+> @@ -9140,8 +9141,12 @@ static int release_reference(struct bpf_verifier_e=
+nv *env, int id)
+>  	if (err)
+>  		return err;
+> =20
+> -	if (find_reference_state(vstate, id))
+> -		WARN_ON_ONCE(release_reference_nomark(vstate, id));
+> +	if (find_reference_state(vstate, id)) {
+> +		err =3D release_reference_nomark(vstate, id);
 
-Not a bug. Will change silence compilation warning on 32-bit arch.
+I'd say that bpf_diag_record_ref_release() should go inside
+release_reference_nomark(), but there is one odd case with
+mark_ptr_or_null_regs(). Almost like we want __release_reference_nomark().
 
->
-> > +     unsigned int *remaining =3D ((unsigned int **)ctx)[5];
-> > +
-> > +     if (flags || len < 2)
-> > +             return -EINVAL;
-> [ ... ]
-> > diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-> > --- a/net/ipv4/tcp_output.c
-> > +++ b/net/ipv4/tcp_output.c
-> [ ... ]
-> > @@ -1244,6 +1281,15 @@ static unsigned int tcp_established_options(stru=
-ct sock *sk, struct sk_buff *skb
-> >               size =3D MAX_TCP_OPTION_SPACE - remaining;
-> >       }
-> >
-> [Severity: Medium]
-> Does this cgroup check evaluate to false for struct_ops in non-cgroup-bpf
-> deployments? If so, does it silently skip reserving space in
-> bpf_tcp_ops_hdr_opt_len() for established connections, while still callin=
-g
-> write_hdr_opt unconditionally later?
+> +		WARN_ON_ONCE(err);
+> +		if (!err)
+> +			bpf_diag_record_ref_release(env, env->insn_idx, id);
+> +	}
+> =20
+>  	while ((id =3D idstack_pop(idstack))) {
+>  		/*
 
-No. CGROUP_TCP_SOCK_OPS hooks are turned on and off all together.
-write_hdr_opt is also guarded by
-cgroup_bpf_enabled(CGROUP_TCP_SOCK_OPS).
-
->
-> > +     if (cgroup_bpf_enabled(CGROUP_TCP_SOCK_OPS)) {
-> > +             unsigned int remaining =3D MAX_TCP_OPTION_SPACE - size;
-> > +
-> > +             remaining =3D bpf_tcp_ops_hdr_opt_len(sk, skb, NULL, NULL=
-, 0, opts,
-> > +                                                 remaining);
-> > +
-> > +             size =3D MAX_TCP_OPTION_SPACE - remaining;
-> > +     }
-> > +
-> >       return size;
-> >  }
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623175006.31=
-36053-1-ameryhung@gmail.com?part=3D12
+[...]
