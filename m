@@ -1,445 +1,312 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F1937106A
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 17:19:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B0E33D6F7
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 17:24:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782321586; cv=pass; b=G9hMp3cAH/a/tmQA9kqBY5FL4UMtJUSw4Gq4bor5ZHoGaszRFY/N1XXBJXJvxmDEhd8hWyVNRwYUEkSCGqe+Mz1/tCyJfSpozMGl5C3eTvoxOcn1RqaVFwTbg2dDgLIu+jw7RGjHrR8MVba3i2wfYK2ZPTc4jTdMsk2V3B+YbG4=
+	t=1782321884; cv=pass; b=Fuj324r0DE7Fs19bUNZJv79PCi2dU1hAGDXOye/Kx1t9i+Sd0SIDP21lUdhfeE8HygYm01HFaun2fPpMP/hRJt5O0kBpB9+eRSSCroZ+vzzqdSSYWtg138Gavl+xZHFm00QLIcVxeG0tKeprSX3KO9i+b8FmYRKFMA0CPoISBno=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782321586; c=relaxed/simple;
-	bh=wzLc2OkCm9weL3b5pE63K0skzjOdso0L8VqRwRaStvY=;
+	s=arc-20240116; t=1782321884; c=relaxed/simple;
+	bh=CgaZvZGY4e/EKVwuFfxFMZAVMcCg1E+jJOW3/B10q0o=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ASbvYfXIYGVDHPChI7GRnImnoEnyPcbNb3gTknCsvAYfdzZhiOk8sQJ8WNpyDorV5/Y2Xkc8gr8ZbM6ULI80/1iGD1ozbLzAOZVcPaOEKepmsfOgUpiVhkH/D3LZZ77AAEmBk/dtGDBHUnwAV5Fym8AnsqcoQSjtw17Lmlwjpu8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H7RPfFS3; arc=pass smtp.client-ip=209.85.214.169
+	 To:Cc:Content-Type; b=p8bWnB4zSmPjN5kPqNgJ8RtUa1VWcRxfZiVUc6B6GvEQ02dUdEzzhkAvJyxh3gd4nDW3cVnUoyffoKEUNK07huhhozLb2Y3jxA5a31xkn2ffmv+1ZH6s6oALVFEAzSwM9+9CtWajYJXD6MqsoRZnTxWhqG2lYASwgIE6RDSSHcE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GrOk1KXN; arc=pass smtp.client-ip=74.125.224.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H7RPfFS3"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2c6bb8a5980so8323795ad.2
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 10:19:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782321584; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GrOk1KXN"
+Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-66388bf3793so902728d50.2
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 10:24:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782321881; cv=none;
         d=google.com; s=arc-20240605;
-        b=gf+35jF3eDnWYkfjB4Wph2q7jVZ5wMXTYN6Sru4JR90ooQMczZnuU1F9AGTnpJYzmA
-         +bLAX6tzGJU4gPIawi1ZRwUUicdDcGuiWrGDlFLp0zIkUe7m3or7Rcz5johGoOXBluJ/
-         rHyxkPrZC1kZu3hujFmdPAQSixGAVj8GjIaBiCDi0qc1WP4YtYa3oAe9XmVgtikL25u7
-         kIjJ4fWyEI+ej/Wc8ak04pEeyXBaYHASGPl+x+K9ur1M3RfhqMO8AKmmcoFvzY1M3CoE
-         rpSpMCa8yCNTGNIYSCKxBrivqRBKBstj9HGpCW/qj4YXZER9IBebxrZlkY9dCEz+2UF0
-         e5zg==
+        b=B0TMY3XPxdPSFN+dJyIQCkamigL7/AizdYR2IEw3l7Fn05nWtGBSmonLiExj6dEaSk
+         3cS5W3Ja0EgvlMgDS4IH6QkvKCqJIZRA1BGW8lV2sNFu7aYFyhPQ+auuh3WMx4FBS9kf
+         rZpy1TscKZTxXqtklqbLnt8NKCxbty1m81xnhvOJxa+E+BX8BOuG3FiVFTjV4Kfk7Nnr
+         WjXklz4dKx+TKWjypALiqznX8+T/yQEADcfpwFkq0Zj0XnpUyaIjbWlGMeMauAK5+/lo
+         j1k8mdXjqqkijVysD+NyandgHxfz8EySVFJzQAWlsFEUrmuVeQ90J9hXK6FA2DPhFqDm
+         NIhg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Ghs4wflZYD0Pok4qX6gZ3SS9J+36xiGOGnFYsFbNQ2s=;
-        fh=cWkILPn7NLNjl/Z99bCMXn1GdI5kN0x/9k5OyuwDmEY=;
-        b=fAoyPPmKrnxHzRnwKiTUEthoBv3VlPiurbn7DyptCuFoSFr06f+Qm6VzRM7JwYbTVD
-         NWh0T5kBYPmHTaQ1Uq9R5CbOb3JB58PiPVVRw0+JhVjZVtEBjdnKROacdMaWHSCz7Oyi
-         kBOBkXVnJkhg0/em3ydoEkX4omk2sK0hfU6yOmxnJyeuR1GFfT6yZcOzIUYjyX+mCENA
-         3fLZC7z75scKTlbCL6GaQuBK6pRHKOywPjKSy1CP2RdD9fWrJcjHlC+zSwZjk3FwW7sv
-         dRjcty7PimumymGzNiQDx/oumVqsvTMwUbjQByGAXEvwfWkJSD9jZhoVWLaM0m64mU0T
-         OU/g==;
+        bh=E1wkuHZkbsib5kIV/a5Yk3B4Y1qMn1xPyrOQ/gPCTXM=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=cC+XsYgnkjIwvK97joHRErnXvBWE55XDvGJdz0urSgU+KYdARUi6eB8N+41OZzG/1R
+         7t2lpfLMHrY6u0n/kdpd+GWuHAKBeeJ+7N/yFhaUcWnp/9eXJjWwcRttUy34vTWsLfX7
+         mW1oVnSgsVvhn6OaTC1I4XPWiLWt+QUE/pe5VVnWHC59Nbu20GKVpgkkNhg5gPeEGVez
+         p/uw0SCpDGkDUGZx1PFx4ET4mgZnwm/31ZPYrzZqpx9dIaIuZkhMF8dGHvmWfuU4R3f9
+         Z5OpICDrV0ORDCaVwgHerOxkMUOZDLuTg6lzk6e/fPNoKmVhb0x8qVY8qZTxq3ebckR9
+         DPfw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782321584; x=1782926384; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782321881; x=1782926681; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ghs4wflZYD0Pok4qX6gZ3SS9J+36xiGOGnFYsFbNQ2s=;
-        b=H7RPfFS3FrhYVi5JE6Ci5x6kZ6Xh93MsewxOdnCs3VFz040QCHgn8VPIRizrx9LVV4
-         LHot0xpKqiDLAsXZ+yAiiPSuBC7BkaJeCuHNor18pDVSv7HcPTjUDOEhcf24JID3N91d
-         XU5r5ATI8gvpg/CGovTIVfwkWoiaMDJCzvIMJczv6Lbm3b4yxv+GkBotC2+D9XtRz8PD
-         sFtkQb4dnUaF6hRJGTZhIN3wqFM3+RH0KoUP/gfiymdNQZUDrGXbnoiW1gHJliUN3hfB
-         AOaSmY2qKbjTP+XAJTEyNZHapRG4v7GeCyenN/O2ltaglP9BBeUJPcJYWzAA4DCFIFh9
-         woDQ==
+        bh=E1wkuHZkbsib5kIV/a5Yk3B4Y1qMn1xPyrOQ/gPCTXM=;
+        b=GrOk1KXNFjujVIRq0WGAuOFzhIC9LQX7D6ho3H39V2LHM3pgJtvkhO5uKeKsNKdA/H
+         EyWAbNDiJQIhQMXGIEHbs06+POT0DKy2qlyGBe1ko+OysVUTxmAVCDsEYXODZoGK39RF
+         nZ10rW2TBIdh6sfEKVZJtku9VrWBV/bMSU0KIFYGOdS/PyIMN+GuG7RJ24jKSwTMfM03
+         ew2SEbKfFop4QwPsQw0qxS3ib46O45dYGsNxcYhtHB6n8pQmrdzQunFK9w83+vfZva8a
+         K9y26WVsWEvC4ifaL6uMQaWR6RVSLBQa1AXe9tYtsZ/2Hwji/3nJ6FulYxQxRrIl3uCM
+         4ObQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782321584; x=1782926384;
+        d=1e100.net; s=20251104; t=1782321881; x=1782926681;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Ghs4wflZYD0Pok4qX6gZ3SS9J+36xiGOGnFYsFbNQ2s=;
-        b=R/d+uK10/UKmKksP9td0DAhlxmoTqoumsNPVuwk0YwiypoXAcPUhANrayPI+JIE8ex
-         97l7KRd5ZSHPdx3n+t3i82YSnLGn0BApCn3JRU2in4u+LxMQ0Rzyw4hKU+sJs7U8fira
-         hBQ4Bl6xRWrTQXS/1hErzYWfzIuNX8rkZZn59OEqJLRiik4/7deSSnB4BNd4t1awVwYl
-         QqUwyZJ++jE7eTkdBMGgtWy/v13+TQQArjwwdE4BIPI+VShNyXqAFZNlFGDdBEGYIowW
-         TDXbb4Cuwh8RBKHuQryMCel0813zS6KR1SVxgwvXFIDe30DstXCHKFqT578mv8W/55S2
-         L2Ww==
-X-Forwarded-Encrypted: i=1; AHgh+RqWM4qcW0wTOcXGBCe2hR+lR4wKaU0DpkxV7zhUTxpu5eelx/qVbZvGVuepqsGmrE/1qWw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyATo04MNizrOQHiUUopc4H2Ol96eGOJbtugTT05u1zSs1wkXPn
-	t4zdSVRgHn6z0ZypCPvh/mBsNIoOOPney7kDvHypO2WDYViUuqmVXFBJEiQ1wfvx0HCAD5CegMf
-	IJxAfqJjbsNGqOo5nu52598EIUFB+mXM=
-X-Gm-Gg: AfdE7cnHC9kJp7KMkQgEKmg94gaiQd/6g3dfPscDzsuWSxi0dpO5fJuN1nE4Ki6HzZ3
-	VdF6U2IrwdUStmESBMuruvMoTaUIIitt4nQg9ttBAdPzJzo202vwidHBDz6Jv0jEN0AwFcahhcm
-	wcjjfJ3YBjCf+39O/Q9vL/xbfuoeCc7AH1AKQ7LSPBiPYsoTPYrcjC8kx703Vti8WJNu5hwp1Yi
-	lWgrkt+caEiwxES8R9xtKsdD/EM+Z61yXNTtISTHGdScAKlfDUpAX/pJnzY6ZICwSewPBVjxhxP
-	c4uTnfrbCbFSBfOH0ox0DWoSIHw/svCz2Yosj7mF1JgY1OeZrRmJduhEJ4+AKEO7niM=
-X-Received: by 2002:a17:902:b908:b0:2c0:a373:89bf with SMTP id
- d9443c01a7336-2c7e14429aemr33795255ad.1.1782321583747; Wed, 24 Jun 2026
- 10:19:43 -0700 (PDT)
+        bh=E1wkuHZkbsib5kIV/a5Yk3B4Y1qMn1xPyrOQ/gPCTXM=;
+        b=rveLBmOph65A8Y1Het948/YGxTJFeX5iEryYC/u3F5WA75lrjrjQu8dUehpwlM5ZeN
+         oZwu5b3XwElVuAHgTucnHk3tFIcNqV8gZc2pIyGAR3xtBh3BDXkrHreLIuGSuOeNH8Qt
+         5jB01QGApYcxRyerXPepf74rg2KD0IUQJ0yDF2/7NAJoLshmzA5+lCLJtZB2x7BokTJj
+         DVz8TqgMrQQd7b8kREQpa8P4cfP7biCIk02ZuHVZoOXHcAP+lCz/DB7u9e3f6Uo6n2XL
+         pY60a2bgVlwlRe7cOqvVW+Xx143nBZPF/+qBVSqCOHMzP/aXGHjvJR49D5m4sokSDqv7
+         4K6w==
+X-Gm-Message-State: AOJu0YyDAAxatcEWG1eNN/rn4bboxBP8Du90OYJGGj3YZUuSjQw7Dl4T
+	+LAbU1cPsieFBrkypcYmUq2zibMm5B1+lvzxmge0HiW79xQdGdxZoDjlCr0DlM8vSXhuuHRgN95
+	dgJ2vxuk4zTPca2kaNvb8Pm2se0qqFcc=
+X-Gm-Gg: AfdE7cleqaCw6JHlDm96gAxyDqFaWl04YuzsojpgBVh3ZukoSU6+FZ05ziz2CK9fCTa
+	bni2cVaC1RTk3+Fo13SfMrFnWNmckSwJfg8f77tKLf3MIr5XgSogS2L1hOErnwo7dfbhHHKg3f8
+	Kp434al1yhhYK8HQWYlRGS4wdN9FmyUIs0E0xbBDZuRduDNTvIcGfnpoN1s11LTGuiSBPQMpg5J
+	7H0yN3lLRlcf5dSbfU0KB5cZWF9XEI6+P7P1a01lklYCILjpRVjMihTd9JNSfZ4xyPhTE1U
+X-Received: by 2002:a05:690e:130d:b0:65c:2208:8c6a with SMTP id
+ 956f58d0204a3-6635a305368mr7227481d50.42.1782321881331; Wed, 24 Jun 2026
+ 10:24:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260623112533.1151502-1-vmalik@redhat.com> <DJGJ9F6WQZV9.2W4WBIHYLJQ97@gmail.com>
- <ajq98dm4gAwEzkMb@google.com> <c2f4e45e-d5c9-42e9-a46b-25fb0cacb267@redhat.com>
- <93e70dc7-e52f-444e-b57e-09d149dc4808@redhat.com>
-In-Reply-To: <93e70dc7-e52f-444e-b57e-09d149dc4808@redhat.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 24 Jun 2026 10:19:31 -0700
-X-Gm-Features: AVVi8Cdx9XvjJm3rGt5g4frCGp-zftomP5RJdiB6o2xiZ4f1MI-b0EFRFOr5O8A
-Message-ID: <CAEf4BzYWdsBDQ3D41=+n_oCO68bVOtKuqQCqZOEVo=j7nK9Ozg@mail.gmail.com>
-Subject: Re: [PATCH] perf trace: Refactor augmented_raw_syscalls using bpf_loop
-To: Viktor Malik <vmalik@redhat.com>
-Cc: Namhyung Kim <namhyung@kernel.org>, Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	linux-perf-users@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, Howard Chu <howardchu95@gmail.com>, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	Michael Petlan <mpetlan@redhat.com>, stable@vger.kernel.org
+References: <20260623175006.3136053-1-ameryhung@gmail.com> <20260623175006.3136053-10-ameryhung@gmail.com>
+ <20260623225359.77EE31F00A3A@smtp.kernel.org>
+In-Reply-To: <20260623225359.77EE31F00A3A@smtp.kernel.org>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Wed, 24 Jun 2026 10:24:30 -0700
+X-Gm-Features: AVVi8CfocQt9hWr32v2QEQ80f9bKIfkVHJv2cXBIKPpLa-2WNtpQNV5_4ic1_XQ
+Message-ID: <CAMB2axMA9GuQDitxDQiirPDD3pbw2z1U=pM2P+=8hm_WF8HJWg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 09/15] bpf: Add infrastructure to support
+ attaching struct_ops to cgroups
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 24, 2026 at 3:27=E2=80=AFAM Viktor Malik <vmalik@redhat.com> wr=
-ote:
+On Tue, Jun 23, 2026 at 3:54=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
-> On 6/24/26 08:47, Viktor Malik wrote:
-> > On 6/23/26 19:10, Namhyung Kim wrote:
-> >> Hello,
-> >>
-> >> On Tue, Jun 23, 2026 at 08:27:39AM -0700, Alexei Starovoitov wrote:
-> >>> On Tue Jun 23, 2026 at 4:25 AM PDT, Viktor Malik wrote:
-> >>>> The loop for processing syscall args in augment_raw_syscalls has a
-> >>>> history of breaking with Clang updates, see e.g. commit 013eb043f37b
-> >>>> ("perf trace: Fix BPF loading failure (-E2BIG)") from Clang 15 to 16=
-.
-> >>>>
-> >>>> Now, a similar thing happened between Clang 21 and 22. While the iss=
-ue
-> >>>> is mitigated on the main line by a recent verifier update, it remain=
+> Thank you for your contribution! Sashiko AI review found 4 potential issu=
+e(s) to consider:
+>
+> New issues:
+> - [High] The `bpf_cgroup_struct_ops_foreach` macro does not filter out du=
+mmy sentinel elements, leading to type confusion and kernel panics.
+> - [High] Strict `rcu_dereference()` in `bpf_cgroup_struct_ops_foreach` ca=
+uses lockdep splats or panics for sleepable struct_ops.
+> - [High] Array truncation during `purge_effective_progs` if the struct_op=
+s type was registered without `cfi_stubs`.
+>
+> Pre-existing issues:
+> - [High] `bpf_cgroup_array_copy_to_user()` incorrectly returns -ENOSPC wh=
+en trailing dummy elements exist, breaking userspace queries.
+> --
+>
+> commit a3bccbe6dc639128f470580a5e6281248194eb4e
+> Author: Martin KaFai Lau <martin.lau@kernel.org>
+>
+> bpf: Add infrastructure to support attaching struct_ops to cgroups
+>
+> This patch adds necessary infrastructure to attach a struct_ops map to a
+> cgroup. It reuses existing cgroup bpf structures and logic to handle the
+> attachment, hierarchy, and ordering of struct_ops maps. It also implement=
 s
-> >>>> broken on the 6.12 and 6.18 stable branches:
-> >>>>
-> >>>>     [linux-6.18.y]# sudo perf trace true
-> >>>>     libbpf: prog 'sys_enter': BPF program load failed: -E2BIG
-> >>>>     libbpf: prog 'sys_enter': -- BEGIN PROG LOAD LOG --
-> >>>>     [...]
-> >>>>     BPF program is too large. Processed 1000001 insn
-> >>>>     processed 1000001 insns (limit 1000000) max_states_per_insn 40 t=
-otal_states 37941 peak_states 232 mark_read 0
-> >>>>     -- END PROG LOAD LOG --
-> >>>>     libbpf: prog 'sys_enter': failed to load: -E2BIG
-> >>>>     libbpf: failed to load object 'augmented_raw_syscalls_bpf'
-> >>>>     libbpf: failed to load BPF skeleton 'augmented_raw_syscalls_bpf'=
-: -E2BIG
-> >>>>     Error: failed to get syscall or beauty map fd
-> >>>>     [...]
-> >>>>
-> >>>> The reason is that the loop is quite complex and the BPF verifier of=
-ten
-> >>>> struggles to prove that it terminates.
-> >>>>
-> >>>> Fix the issue by refactoring the loop body into a callback function =
-and
-> >>>> calling the bpf_loop helper. This should prevent future breakages of
-> >>>> this kind since the callback function has no loops. It also allows t=
-o
-> >>>> drop a few artificial checks to help the verifier, including the cha=
-nges
-> >>>> introduced by 013eb043f37b.
-> >>
-> >> Thanks for working on this.  I encountered this issue before and never
-> >> found time to take a deeper look yet.
-> >>
-> >>>>
-> >>>> Signed-off-by: Viktor Malik <vmalik@redhat.com>
-> >>>> Fixes: a68fd6a6cdd3 ("perf trace: Collect augmented data using BPF")
-> >>>> Fixes: 013eb043f37b ("perf trace: Fix BPF loading failure (-E2BIG)")
-> >>>> Cc: stable@vger.kernel.org
-> >>>> ---
-> >>>>  .../bpf_skel/augmented_raw_syscalls.bpf.c     | 157 +++++++++++----=
----
-> >>>>  1 file changed, 96 insertions(+), 61 deletions(-)
-> >>>>
-> >>>> diff --git a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c b=
-/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-> >>>> index 2a6e61864ee0..6d553ed3ac23 100644
-> >>>> --- a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-> >>>> +++ b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-> >>>> @@ -429,15 +429,96 @@ static bool pid_filter__has(struct pids_filter=
-ed *pids, pid_t pid)
-> >>>>    return bpf_map_lookup_elem(pids, &pid) !=3D NULL;
-> >>>>  }
-> >>>>
-> >>>> +struct args_loop_ctx {
-> >>>> +  struct syscall_enter_args *args;
-> >>>> +  unsigned int *beauty_map;
-> >>>> +  void *payload_offset;
-> >>>> +  int value_size;
-> >>>> +  u64 *output;
-> >>>> +  bool *do_output;
-> >>>> +};
-> >>>> +
-> >>>> +static long process_arg_cb(u64 i, void *ctx)
-> >>>> +{
-> >>>> +  /*
-> >>>> +   * Determine what type of argument and how many bytes to read fro=
-m user space, using the
-> >>>> +   * value in the beauty_map. This is the relation of parameter typ=
-e and its corresponding
-> >>>> +   * value in the beauty map, and how many bytes we read eventually=
-:
-> >>>> +   *
-> >>>> +   * string: 1                          -> size of string
-> >>>> +   * struct: size of struct             -> size of struct
-> >>>> +   * buffer: -1 * (index of paired len) -> value of paired len (max=
-imum: TRACE_AUG_MAX_BUF)
-> >>>> +   */
-> >>>> +  struct augmented_arg *augmented_arg;
-> >>>> +  struct args_loop_ctx *loop_ctx;
-> >>>> +  int aug_size, size, index;
-> >>>> +  bool augmented;
-> >>>> +  void *arg;
-> >>>> +
-> >>>> +  /* Bounds check for the below map access to help the verifier */
-> >>>> +  if (i < 0 || i >=3D 6)
-> >>>> +          return 1;
-> >>>> +
-> >>>> +  loop_ctx =3D (struct args_loop_ctx *)ctx;
-> >>>> +  arg =3D (void *)loop_ctx->args->args[i];
-> >>>> +  augmented =3D false;
-> >>>> +  size =3D loop_ctx->beauty_map[i];
-> >>>> +  aug_size =3D size; /* size of the augmented data read from user s=
-pace */
-> >>>> +  augmented_arg =3D (struct augmented_arg *)loop_ctx->payload_offse=
-t;
-> >>>> +
-> >>>> +  if (size =3D=3D 0 || arg =3D=3D NULL)
-> >>>> +          return 0; /* continue */
-> >>>> +
-> >>>> +  if (size =3D=3D 1) { /* string */
-> >>>> +          aug_size =3D bpf_probe_read_user_str(augmented_arg->value=
-, loop_ctx->value_size, arg);
-> >>>> +          augmented =3D true;
-> >>>> +  } else if (size > 0 && size <=3D loop_ctx->value_size) { /* struc=
-t */
-> >>>> +          if (!bpf_probe_read_user(augmented_arg->value, size, arg)=
-)
-> >>>> +                  augmented =3D true;
-> >>>> +  } else if (size < 0 && size >=3D -6) { /* buffer */
-> >>>> +          index =3D -(size + 1);
-> >>>> +          barrier_var(index); // Prevent clang (noticed with v18) f=
-rom removing the &=3D 7 trick.
-> >>>> +          index &=3D 7;         // Satisfy the bounds checking with=
- the verifier in some kernels.
-> >>>> +          aug_size =3D loop_ctx->args->args[index];
-> >>>> +
-> >>>> +          if (aug_size > TRACE_AUG_MAX_BUF)
-> >>>> +                  aug_size =3D TRACE_AUG_MAX_BUF;
-> >>>> +
-> >>>> +          if (aug_size > 0) {
-> >>>> +                  if (!bpf_probe_read_user(augmented_arg->value, au=
-g_size, arg))
-> >>>> +                          augmented =3D true;
-> >>>> +          }
-> >>>> +  }
-> >>>> +
-> >>>> +  /* Augmented data size is limited to sizeof(augmented_arg->unname=
-d union with value field) */
-> >>>> +  if (aug_size > loop_ctx->value_size)
-> >>>> +          aug_size =3D loop_ctx->value_size;
-> >>>> +
-> >>>> +  /* write data to payload */
-> >>>> +  if (augmented) {
-> >>>> +          int written =3D offsetof(struct augmented_arg, value) + a=
-ug_size;
-> >>>> +
-> >>>> +          if (written < 0 || written > sizeof(struct augmented_arg)=
-)
-> >>>> +                  return 1; /* break */
-> >>>> +
-> >>>> +          augmented_arg->size =3D aug_size;
-> >>>> +          *loop_ctx->output +=3D written;
-> >>>> +          loop_ctx->payload_offset +=3D written;
-> >>>> +          *loop_ctx->do_output =3D true;
-> >>>> +  }
-> >>>> +
-> >>>> +  return 0;
-> >>>> +}
-> >>>> +
-> >>>>  static int augment_sys_enter(void *ctx, struct syscall_enter_args *=
-args)
-> >>>>  {
-> >>>> -  bool augmented, do_output =3D false;
-> >>>> -  int zero =3D 0, index, value_size =3D sizeof(struct augmented_arg=
-) - offsetof(struct augmented_arg, value);
-> >>>> +  bool do_output =3D false;
-> >>>> +  int zero =3D 0, value_size =3D sizeof(struct augmented_arg) - off=
-setof(struct augmented_arg, value);
-> >>>>    u64 output =3D 0; /* has to be u64, otherwise it won't pass the v=
-erifier */
-> >>>> -  s64 aug_size, size;
-> >>>>    unsigned int nr, *beauty_map;
-> >>>>    struct beauty_payload_enter *payload;
-> >>>> -  void *arg, *payload_offset;
-> >>>> +  void *payload_offset;
-> >>>> +  long iters;
-> >>>>
-> >>>>    /* fall back to do predefined tail call */
-> >>>>    if (args =3D=3D NULL)
-> >>>> @@ -457,63 +538,17 @@ static int augment_sys_enter(void *ctx, struct=
- syscall_enter_args *args)
-> >>>>    /* copy the sys_enter header, which has the syscall_nr */
-> >>>>    __builtin_memcpy(&payload->args, args, sizeof(struct syscall_ente=
-r_args));
-> >>>>
-> >>>> -  /*
-> >>>> -   * Determine what type of argument and how many bytes to read fro=
-m user space, using the
-> >>>> -   * value in the beauty_map. This is the relation of parameter typ=
-e and its corresponding
-> >>>> -   * value in the beauty map, and how many bytes we read eventually=
-:
-> >>>> -   *
-> >>>> -   * string: 1                          -> size of string
-> >>>> -   * struct: size of struct             -> size of struct
-> >>>> -   * buffer: -1 * (index of paired len) -> value of paired len (max=
-imum: TRACE_AUG_MAX_BUF)
-> >>>> -   */
-> >>>> -  for (int i =3D 0; i < 6; i++) {
-> >>>> -          arg =3D (void *)args->args[i];
-> >>>> -          augmented =3D false;
-> >>>> -          size =3D beauty_map[i];
-> >>>> -          aug_size =3D size; /* size of the augmented data read fro=
-m user space */
-> >>>> -
-> >>>> -          if (size =3D=3D 0 || arg =3D=3D NULL)
-> >>>> -                  continue;
-> >>>> -
-> >>>> -          if (size =3D=3D 1) { /* string */
-> >>>> -                  aug_size =3D bpf_probe_read_user_str(((struct aug=
-mented_arg *)payload_offset)->value, value_size, arg);
-> >>>> -                  /* minimum of 0 to pass the verifier */
-> >>>> -                  if (aug_size < 0)
-> >>>> -                          aug_size =3D 0;
-> >>>> -
-> >>>> -                  augmented =3D true;
-> >>>> -          } else if (size > 0 && size <=3D value_size) { /* struct =
-*/
-> >>>> -                  if (!bpf_probe_read_user(((struct augmented_arg *=
-)payload_offset)->value, size, arg))
-> >>>> -                          augmented =3D true;
-> >>>> -          } else if ((int)size < 0 && size >=3D -6) { /* buffer */
-> >>>> -                  index =3D -(size + 1);
-> >>>> -                  barrier_var(index); // Prevent clang (noticed wit=
-h v18) from removing the &=3D 7 trick.
-> >>>> -                  index &=3D 7;         // Satisfy the bounds check=
-ing with the verifier in some kernels.
-> >>>> -                  aug_size =3D args->args[index] > TRACE_AUG_MAX_BU=
-F ? TRACE_AUG_MAX_BUF : args->args[index];
-> >>>> -
-> >>>> -                  if (aug_size > 0) {
-> >>>> -                          if (!bpf_probe_read_user(((struct augment=
-ed_arg *)payload_offset)->value, aug_size, arg))
-> >>>> -                                  augmented =3D true;
-> >>>> -                  }
-> >>>> -          }
-> >>>> -
-> >>>> -          /* Augmented data size is limited to sizeof(augmented_arg=
-->unnamed union with value field) */
-> >>>> -          if (aug_size > value_size)
-> >>>> -                  aug_size =3D value_size;
-> >>>> -
-> >>>> -          /* write data to payload */
-> >>>> -          if (augmented) {
-> >>>> -                  int written =3D offsetof(struct augmented_arg, va=
-lue) + aug_size;
-> >>>> -
-> >>>> -                  if (written < 0 || written > sizeof(struct augmen=
-ted_arg))
-> >>>> -                          return 1;
-> >>>> -
-> >>>> -                  ((struct augmented_arg *)payload_offset)->size =
-=3D aug_size;
-> >>>> -                  output +=3D written;
-> >>>> -                  payload_offset +=3D written;
-> >>>> -                  do_output =3D true;
-> >>>> -          }
-> >>>> -  }
-> >>>> +  struct args_loop_ctx loop_ctx =3D {
-> >>>> +          .args =3D args,
-> >>>> +          .beauty_map =3D beauty_map,
-> >>>> +          .payload_offset =3D payload_offset,
-> >>>> +          .value_size =3D value_size,
-> >>>> +          .output =3D &output,
-> >>>> +          .do_output =3D &do_output
-> >>>> +  };
-> >>>> +  iters =3D bpf_loop(6, process_arg_cb, &loop_ctx, 0);
-> >>>
-> >>> bpf_loop() is old and generally not recommended.
-> >>> Please use bpf_for() then the diff will be one line change and
-> >>> can scale to any number of args. Not just 6.
+> a separate struct bpf_link_ops for cgroup's struct_ops link.
+>
+> > diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+> > index 4d0cc65976a14..8a75a6cd73096 100644
+> > --- a/include/linux/bpf-cgroup.h
+> > +++ b/include/linux/bpf-cgroup.h
+> > @@ -110,6 +112,18 @@ struct bpf_prog_list {
+> >       u32 flags;
+> >  };
 > >
-> > Thanks Alexei, I didn't know about this preference.
-> >
-> >> One thing we should take care is to support old kernels.  The oldest
-> >> LTS kernel in the kernel.org is 5.10 and bpf_loop() was introduced in
-> >> 5.17 and bpf_for (bpf_iter_num) was 6.4.
-> >
-> > The problematic loop was introduced in 6.12 by a68fd6a6cdd3 ("perf
-> > trace: Collect augmented data using BPF") so we should be good using
-> > bpf_for. Or is perf from 7.2 supposed to work on 5.10 LTS kernels?
-> >
-> > I'll refactor with bpf_for and will send v2.
+> > +#define bpf_cgroup_struct_ops_foreach(var, item, cgrp, atype)         =
+       \
+> > +     for (item =3D rcu_dereference((cgrp)->bpf.effective[atype])->item=
+s;\
+> > +          ((var) =3D READ_ONCE(item->kdata));                         =
+ \
+> > +          item++)
 >
-> Or I won't. It turns out that just swapping the for loop for bpf_for
-> leads to -E2BIG from the verifier again. Looking at the verifier log, it
-> fails to find equivalence between states at the loop head:
+> [Severity: High]
+> Does this macro fail to filter out dummy sentinel elements?
 >
->     [...]
->     78: (85) call bpf_iter_num_next#84922 [...]
-> fp-56=3Dmap_value(map=3Dbeauty_payload_,ks=3D4,vs=3D24688,imm=3D112)
->     [...]
->     78: (85) call bpf_iter_num_next#84922 [...]
-> fp-56=3Dmap_value(map=3Dbeauty_payload_,ks=3D4,vs=3D24688,imm=3D120)
->     [...]
+> When update_effective_progs() fails under memory pressure, the kernel fal=
+ls
+> back to purge_effective_progs(), which overwrites the detached link's poi=
+nter
+> with a dummy sentinel value (struct_ops_cfi_stubs[atype]).
 >
-> IMHO, the reason is that payload_offset, which points to the
-> beauty_payload_enter_map entry, gets updated in every iteration.
->
-> This could be probably fixed on the perf side by reworking how augmented
-> args are stored but at this point, bpf_loop sounds like an easier and
-> more reliable approach.
->
-> Let me know if anyone has objections, otherwise I'll send v2 of the
-> bpf_loop approach, with suggestions from Sashiko incorporated.
+> Since the macro yields every non-NULL element to the caller subsystem,
+> including these dummy sentinels, could this cause type confusion and kern=
+el
+> panics if the subsystem accesses data fields on the dummy struct?
 >
 
-I'd still try to adapt bpf_for(), it's a much better code structure.
-You probably need to add a bounding checking/confirming `if ()`
-condition validating that offset at which you access map_value is
-always correct. And/or you might need barrier_var() before using i,
-because bpf_for() macro does bounds checking (check the macro itself),
-but compiler often will reorder instructions leading to verifier
-complaints.
+Already replied in v1. Short version here again: cfi_stubs are used as
+dummy struct_ops. They are safe to call and not filtered out for
+performance reasons.
 
-> Thanks,
-> Viktor
+> [Severity: High]
+> Will this strict rcu_dereference() cause lockdep splats or panics for
+> sleepable struct_ops?
 >
-> > It should be then
-> > backported to stable kernels down to 6.12 LTS.
+> The patch introduces free_after_mult_rcu_gp to support sleepable struct_o=
+ps,
+> meaning a subsystem executing a sleepable bpf program must hold
+> rcu_read_lock_trace() instead of the standard rcu_read_lock(). However,
+> rcu_dereference() rigidly enforces that rcu_read_lock() is held.
+>
+> If the subsystem holds rcu_read_lock_trace(), lockdep will splat, and if
+> it erroneously holds rcu_read_lock(), the kernel will crash when the
+> sleepable bpf program actually sleeps.
+>
+> Should this use rcu_dereference_check() or similar to accommodate sleepab=
+le
+> contexts?
+>
+
+Already replied in v1. The macro is only intended for non-sleepable
+struct_ops. A sleepable version can be added later when the new
+struct_ops is added.
+
+> > +
+> > +static inline bool cgroup_bpf_is_struct_ops_atype(enum cgroup_bpf_atta=
+ch_type atype)
+> > +{
+> > +     return atype =3D=3D CGROUP_TCP_SOCK_OPS;
+> > +}
+> > +void cgroup_bpf_struct_ops_register(int atype, u32 type_id, void *cfi_=
+stubs, bool mult_trace);
+> > +int cgroup_bpf_struct_ops_attach(struct bpf_map *map, const union bpf_=
+attr *attr);
+> > +
+> >  void __init cgroup_bpf_lifetime_notifier_init(void);
+>
+> [ ... ]
+>
+> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> > index 64572f85edc83..d591f306ace52 100644
+> > --- a/kernel/bpf/btf.c
+> > +++ b/kernel/bpf/btf.c
+>
+> [ ... ]
+>
+> > @@ -9868,6 +9872,23 @@ btf_add_struct_ops(struct btf *btf, struct bpf_s=
+truct_ops *st_ops,
+> >       if (err)
+> >               return err;
 > >
-> > Viktor
+> > +     if (cgroup_atype) {
+> > +             if (!cgroup_bpf_is_struct_ops_atype(cgroup_atype) ||
+> > +                 st_ops->reg || st_ops->unreg || st_ops->free_after_ta=
+sks_rcu_gp) {
+> > +                     bpf_struct_ops_desc_release(&tab->ops[btf->struct=
+_ops_tab->cnt]);
+> > +                     return -EINVAL;
+> > +             }
+> > +
+> > +             /* There is no need to unregister from cgroup when the
+> > +              * btf_free(). No struct_ops map and its cgroup link
+> > +              * can be created once its btf is gone.
+> > +              */
+> > +             cgroup_bpf_struct_ops_register(cgroup_atype,
+> > +                                            tab->ops[btf->struct_ops_t=
+ab->cnt].type_id,
+> > +                                            st_ops->cfi_stubs,
+> > +                                            st_ops->free_after_mult_rc=
+u_gp);
+>
+> [Severity: High]
+> Does this path accept st_ops->cfi_stubs without validating that it is non=
+-NULL?
+>
+> If a struct_ops type is registered without providing cfi_stubs (e.g., if
+> CONFIG_CFI_CLANG is disabled), struct_ops_cfi_stubs[atype] will be NULL.
+>
+> Later, if a link is detached and update_effective_progs() fails due to me=
+mory
+> pressure, the fallback bpf_cgroup_array_delete_safe_at() overwrites the
+> detached program's slot with bpf_cgroup_array_dummy().
+>
+> Because cfi_stubs is NULL, it writes NULL into the middle of the array.
+>
+> Since NULL is used as the array terminator, won't this prematurely trunca=
+te
+> the array and silently bypass all attached bpf programs that follow the
+> detached one?
+>
+
+Seems like a false positive. bpf_struct_ops_desc_init() already
+rejects struct_ops registration with NULL cfi_stubs.
+
+> > +     }
+> > +
+> >       btf->struct_ops_tab->cnt++;
 > >
-> >>
-> >> Maybe we can factor out the loop body and call it from different
-> >> mechanisms like open-coded loop, bpf_loop or bpf_for depending on the
-> >> kernel version.  But not sure it'd fix the verifier issue though.
-> >>
-> >> Thanks,
-> >> Namhyung
-> >>
+> >       return 0;
 >
+> [ ... ]
 >
+> > diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> > index 081d81de18163..a808d2a31f11d 100644
+> > --- a/kernel/bpf/cgroup.c
+> > +++ b/kernel/bpf/cgroup.c
+>
+> [ ... ]
+>
+> > @@ -355,7 +407,12 @@ static int bpf_cgroup_array_copy_to_user(struct bp=
+f_prog_array *array,
+> >       for (item =3D array->items; item->prog && i < cnt; item++) {
+> >               if (item->prog =3D=3D bpf_cgroup_array_dummy(atype))
+> >                       continue;
+> > -             id =3D item->prog->aux->id;
+> > +
+> > +             if (cgroup_bpf_is_struct_ops_atype(atype))
+> > +                     id =3D bpf_struct_ops_kdata_map_id(item->kdata);
+> > +             else
+> > +                     id =3D item->prog->aux->id;
+> > +
+> >               if (copy_to_user(prog_ids + i, &id, sizeof(id)))
+> >                       return -EFAULT;
+> >               i++;
+>
+> [Severity: High]
+> This is a pre-existing issue, but does bpf_cgroup_array_copy_to_user()
+> incorrectly return -ENOSPC when trailing dummy elements exist?
+>
+> If a cgroup link is detached under memory pressure, it leaves a trailing =
+dummy
+> sentinel in the array.
+>
+> When userspace calls bpf_prog_query with an exact-sized buffer, the loop
+> breaks via "i < cnt" exactly when i =3D=3D cnt, leaving "item" pointing t=
+o the
+> dummy element.
+>
+> Since item->prog is non-NULL (it is the dummy), the function evaluates
+> "return item->prog ? -ENOSPC : 0;" and erroneously returns -ENOSPC.
+>
+> This breaks userspace queries, causing userspace tools to continually rec=
+eive
+> -ENOSPC and attempt to allocate larger buffers, eventually exhausting mem=
+ory.
+
+This issue is pre-existing and the severity should be low. This is an
+unlikely path when the system is under pressure. Can be fixed later
+with bpf_prog_array_copy_core() if really needed.
+
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623175006.31=
+36053-1-ameryhung@gmail.com?part=3D9
