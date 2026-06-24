@@ -1,115 +1,177 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEAD3E5595
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 21:07:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782335236; cv=pass; b=OsSmDkFCVZ9AeOLDbGItCGDa4bcif5WAgpgVvU8Wdxe4BlrpRYRHKBIV1uWgx3DnhmNvY2vafYLm2bd2+bbFCWBM1dnjdTQ/8ek8eadPzOeaPUVc1dNDuGjW7wTkSRY5VyVK+y/EZXkh/zQ0pGRUsgYtrUShxMkTyKLpA2LJZ6g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782335236; c=relaxed/simple;
-	bh=41gHxPt7HUxFBkNkDE3LM0TVD4IOiCpFU2mOz/M/aAM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ee7vO9mNR2prkD87egeQTNrnghDiVLQ/DMrq+qkqS8UDXKhObrC1HcGSDPLzrCrjqEMmLfZDaWKl3vCv0794dl/dVhW2XR1XD7VZksnNfeW9+4oE+chfRRwBDuIG6/k3QPvlm8X+MN/FP7ahmMAdquzPPqnBVFpKKnSS6wSWmrU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T9HZZ5Ym; arc=pass smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B903E559B
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 21:21:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782336089; cv=none; b=TO+78b2iMCfSgQtndmk9j/xPA/fhgd5t/+b3AP4hTXuxg8rC/0wAin+YqtjBfh/7SONSZRips1k/+1RI1iZYzCAHaaX/ubMINOC9WWxY1KlBb8xSuKkV82PfqdV2rT2ohk3B1XRez71JGDmAoery3WMXMj4u1ddlh/9gaCMVsg8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782336089; c=relaxed/simple;
+	bh=qLNdIIj/JvVaNBCTqq+YG15H3trBnTJQi92dfAZg9CQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RnWBRwjEIKjxfK561jxC0Hq+RYCEUGuOrEAh0TtMYkdXiUwmkbExC99BsIBWrbSzDn+W5MDY1I6mZO/pvm+WMDn9i1fePhhmFjkMmQ2KYvENkAq8qJ8fmUW9jkRdfJ9MogtfGCwOEDrbQkxsjs4tiHh0Oeq37CRBn0rmP0/u3Ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gG1yDttX; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T9HZZ5Ym"
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-7e1916922b9so20645797b3.1
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 14:07:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782335234; cv=none;
-        d=google.com; s=arc-20240605;
-        b=gd7XsDT3To3O42/V4B03b96XJ7ExRqHBUbfh/STpM+ZZpFQOgGukbBMRa0Ky+YemsO
-         Yxm/WVjIwWiTMa8wzz0co8z871+WB3jAL37/trJxBuDBf81tG5x3iI4PHIEXNf+CTe/v
-         9HemIcmpPVdFvgsPZJhSrrUpNYsxRtjBmGnZKzJTym/FlGuwlm7J0OEoZkDoQr3py9ol
-         Uuh8BwOHsGEFgGvQB76UfS+2RNGVCFPI3oZTdLmLF7sp/nwOjb7IAx0HoBI/NYv7HRIO
-         o+B9Nl0XmC5uzL6+PQYhrfTFlL2UvkPEAB0GxczOsx9dLCIL5EpHqJO2lsExJ12ZyQXe
-         JPoA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=41gHxPt7HUxFBkNkDE3LM0TVD4IOiCpFU2mOz/M/aAM=;
-        fh=AERbmmtxEMERBwt7nbL/4bLHOsye09k8YqdNOw/FY04=;
-        b=TqucFEFJ+wq++LEjIVzobYp0Zw1pxRjPNfOHHHLLA+x81+A2QNfjaM2uFNc/pJPDmu
-         bZLSrsr2NGRETlEbgGPzIKvrI9aWzP80EVOrlZQC8IVvorkkgjaLgowpoMW3HKYSXVwb
-         iO7ZyX8Bq2zQlnE6qalcNsqrQWdd4n5+v7lkLRHsK8AKN5G/JNmkBa/82e8Qvlz1Q4h/
-         van6VADpuSWly4cT1DNayqNGrdOUUk0fbCKScpYgehI/v0L1SftPUSq8lIcJttVF5u7D
-         qmG7VKG9MqwKW9732TJUrVdmzibxp9muB+R6jl2hOAtqs+jWywilwtBhMsMbH+pxTB3y
-         rI5g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gG1yDttX"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-84532e3dbf7so1071923b3a.1
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 14:21:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782335234; x=1782940034; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=41gHxPt7HUxFBkNkDE3LM0TVD4IOiCpFU2mOz/M/aAM=;
-        b=T9HZZ5YmOOOZgwyzkdu5Dtbhv05J5avNeVJfym5W6tEmiuBDqUX3/RHonzKsmEOGSF
-         2WpylLzEHNs/9+zkIohmRSiHtfN2YGqs6R+NIzwKsDpNfds70g++/b1veqA6K1D2mIkz
-         OGzxTquXH1fBDSq+gAD0rOQQ8vrPOSXSyPWxlKu3qQHZ59hPlu87BIMCtfPfSgxqsnqv
-         M3bglf9IUyn4t/CLDaEzneA/GTcQoLU89rBowBbLUpfXIBCEV+zFpDzC9qPNRFFAvBky
-         9H6HxJBZzu6KNjjgaJfV6K8LfyrWc/SGyiSkjkHYzsbHoRHOz1z1XC1JwcebZOM2zIgB
-         t9Qw==
+        d=gmail.com; s=20251104; t=1782336087; x=1782940887; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=buNDbduFwbOUAFrol7dKMbEVeEkYFIdGPoeEAIPuuDQ=;
+        b=gG1yDttXcYmj1pgJ7tZz1AP6ot4cq3cdVPSzMfe3ALvKm5IkqguNJpP8QcVrGZUZau
+         U2yCbzyzCBywjNO1b0PyUR2P9vkfJrGH3Ij3EWzxK2WYKO5VffEpd68yUgQJGeqEQ/zV
+         McvCTD2vHxFfnzYAyDKMlO7yae8A9/DaHQQAIyNs0ph7UCrgNW5HLglfRskTv6v2i6eW
+         mCKJLTThXkUa1tUbdFQZ6PcR5dLGyulELeF6JvdGIRZprCRA75R6ieDlVnIHvuMcPwj3
+         ZBOECjbgi2w//CqyWLNtpSTMgbQBunKaZvg7SlKXa0KEk6Dr5frSLXbgITjlQ/nSVCv5
+         mZ0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782335234; x=1782940034;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=41gHxPt7HUxFBkNkDE3LM0TVD4IOiCpFU2mOz/M/aAM=;
-        b=RLE+T8hsY78NPJFUGZMmBLw3hRVA6ZoQGxME1ychbS/ApktDc2t2aLghm3WgEbzDnc
-         4bjT48XZXpwUjFuEwngBaOJjfJJlmibJD1+wvnPeecrSn5HF0nXjkjhbNfOApnv+3Nul
-         hQxIeRuipuiOnmClDJYcu+VR5BoQ1EQCzIv/AP6b4ePNYGJUgpTecutMMNaVERZeQo4p
-         egvPOM58S0V1tqltOwTSFha3f9vUxi/8irk8vOpF+jYgrCZcBExhYVM8XMmGGzPUFqpp
-         Lhbj7IA7Iv08EAub1PGUvaZBQWEK3DktlQc9X0nuA7jSohVZsIFlxDMTvPIVQH9+QPfi
-         GzrA==
-X-Forwarded-Encrypted: i=1; AHgh+RpIkHtvcw3hviRIIuxrK5SyK28ihvM32CTINsh6V0C8e0TDZJYj5PKYjcLaBF+HIlvSw0I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbE11ZyR4uKITC77DZAuWiGlilMk5s3UsufaSxJq9lwNMD4iIU
-	dBWmKGwOr0L/MT1PP8eIrmnzNMmSNi2qkbp8k6Kh78P+6MsxHHHAez8ZWi1JW08hmo/TP+DVDxI
-	YEksiD4fpZdjA2+ztDs1sQpgLmQ34lgU5cg==
-X-Gm-Gg: AfdE7cnqDojGtYitvD6AGz6JqENMBy/yHbi0qb8kYo7eth6geTE5MGWR5f8dvULsnaY
-	2Yo3oKm3w8FfRWSc5yP9dC0Vhmf3qk3+HiDSJuCDk/EQI0Ig000dEHVrHhngyFD+RN/BsizzV6a
-	hhAVY+HRTysWdJP4gr9w63AfFK4LpA9PVyGab4gZ4Et+v4y50eJHF1hS1dKdPBXNxfekX0Fm2x9
-	7OWq+vQKGo3jJu9wo2LsEATe/vo9312YZKOC6Vx+MgvKTHQ4wxn3ABX2TQa9ODZ46uQP/4asaYV
-	x6leTav0hCoLOET3xzSepNkGKKH8bXhxfOa4MsOVUtL2CbPvbmYShRro9HU=
-X-Received: by 2002:a05:690c:e3eb:b0:7b2:bf20:cdc3 with SMTP id
- 00721157ae682-807eeb6f49dmr52477487b3.0.1782335233754; Wed, 24 Jun 2026
- 14:07:13 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782336087; x=1782940887;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=buNDbduFwbOUAFrol7dKMbEVeEkYFIdGPoeEAIPuuDQ=;
+        b=peGWICsPjqa8spvXMa0IkPKMq45ideYUIW0YwbGNzy4cqt+Lh7j0K6OJqxtmTzV4eu
+         nSgxk+a+Ih0lX9ffXPhfBWD0JGTtq0VIiGqwt05AxztUzen3yoj9TtAIiTXcoqmJe+0N
+         l+ULrawYMk8XhSAmMBEl8Prk9nALvz0bMFZaLwnP+FfIiV3sj2/qZgnnZMi6eCCj34Sj
+         S6QF8xqaYXY5dSL5YN1p0c2iYr4b9Rq7PHF8sHMfl9/7iKoZgAWlyBImMZ08RdkxVWY+
+         cyeC/NM/mm6/DqJXbZqNtPtIS6nvPkMVePuosFpBgGnUYogVjqvkrGPi43xqB28SybNv
+         kTMg==
+X-Forwarded-Encrypted: i=1; AHgh+Rq5jckfx+ogCvTV4+AJbu0mDu4oW+f7Pk6/W6PDJTyWdZfYNVdRhHz2MlktgmfrXLE7Fgs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLnYaAPadOfJNoMiTJfcL37nJc/pZ6MzAfaWeSw6vTLnkLynwq
+	zelOnILllZ4Wir1FrGiStCsKSsD95FpwUx3QnNb0llQpzWZd6TenE2G6
+X-Gm-Gg: AfdE7ckOEqfC0eevtvEXQvs+I5EPufpy/q5ZL/K1bc+XAhuSyrEcra+Va+gXjVC5Xhd
+	T11FV5stH3K2rnJ9UUT8jh0aVhgqgrjRQ4j4jlVTd1x+oiS4LLE9dKoy4r6yWjXVT+1fbI6sR6K
+	y/YszwUmXaCTTGpDK9hnEo48rMDVWOEQzerS32WFjEG/VJMW+ScK1gZUzhLm3zc1BKExoIxZyde
+	uTZfRGnl4Kozafnu6HGCvUH5HuYEGFMrsTPQCDjJgHw6jOvTmiBMCwvU9WfHJvX+PTi25gr1Za5
+	igpmD6P42T/+d6YH36i3jgaoMHEbtEMP5qJwl8RqfPUG6uLh+jIoDYwWZnEvVWL+u3OOXmVdgE3
+	NorIKjL4cqle+onusS8mZFKvnIorDY0MnbYqOPMKp2r9GSm19xx9n9xwRLPC1qYbS3hMw1e2lfH
+	B5rORGVfOxLCh9tWartpgYJJvztXMwENMGQ3TYGMP9c5cUGrWWjV1Y
+X-Received: by 2002:a05:6a00:b91:b0:845:18b6:1154 with SMTP id d2e1a72fcca58-845a26dbe62mr6320351b3a.8.1782336087351;
+        Wed, 24 Jun 2026 14:21:27 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845a3fcc7f0sm3003897b3a.2.2026.06.24.14.21.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2026 14:21:27 -0700 (PDT)
+Message-ID: <1f2823d22e0877738ee3e562b792cdd56de3426c.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 07/17] bpf: Track verifier context
+ diagnostic events
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
+Date: Wed, 24 Jun 2026 14:21:19 -0700
+In-Reply-To: <20260619205934.1312876-8-memxor@gmail.com>
+References: <20260619205934.1312876-1-memxor@gmail.com>
+	 <20260619205934.1312876-8-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260625-bpf-htab-task-work-uaf-v1-1-31e711ccb159@cherr.cc>
- <20260624193149.3EE921F000E9@smtp.kernel.org> <ajxEE59cuz9XUWMV@pve.cherr>
-In-Reply-To: <ajxEE59cuz9XUWMV@pve.cherr>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 24 Jun 2026 14:07:00 -0700
-X-Gm-Features: AVVi8CdU58htoB5Js73L8sSmYdKMl6WQEpVsEYhmQ9JMyh58gXCYVNgBn07RzCk
-Message-ID: <CAADnVQJeMsZWpJavHz-X0h3VKEMRN-xhHy-wpOOqFB3dA=pfDA@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Fix use-after-free in htab elem with bpf_task_work
-To: Shengzhuo Wei <me@cherr.cc>
-Cc: sashiko-reviews@lists.linux.dev, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 24, 2026 at 1:55=E2=80=AFPM Shengzhuo Wei <me@cherr.cc> wrote:
->
-> On 2026-06-24 19:31, sashiko-bot@kernel.org wrote:
-> > Thank you for your contribution! Sashiko AI review found 5 potential is=
-sue(s) to consider:
-> >
-> > New issues:
-> > - [Critical] Unconditional call to `check_and_init_map_value` on inline=
- element memory causes out-of-bounds writes for per-CPU maps.
-> > - [High] Dynamic memory allocation (`kmalloc(GFP_ATOMIC)`) in the eleme=
-nt free path breaks NMI safety and causes memory exhaustion.
-> > - [High] Permanent bricking of `BPF_TASK_WORK` fields during in-place m=
-ap updates.
-> >
-> Will try to fix in v2
+On Fri, 2026-06-19 at 22:59 +0200, Kumar Kartikeya Dwivedi wrote:
+> Record verifier context transitions in the diagnostic history so later re=
+ports
+> can anchor causal paths to the critical section that made an operation in=
+valid.
+>=20
+> This covers lock, IRQ, RCU, and preempt regions without adding any new
+> verifier error reports. Category-specific commits decide where those reco=
+rded
+> events should be rendered.
+>=20
+> Use context depth when selecting scoped history so nested regions anchor =
+at the
+> outer active region, and fall back to the earliest retained event when th=
+e
+> matching entry was pruned.
+>=20
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
 
-Do not. There is nothing to fix in the first place.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-pw-bot: cr
+>  kernel/bpf/diagnostics.c | 85 +++++++++++++++++++++++++++++++++++++++-
+>  kernel/bpf/diagnostics.h | 20 ++++++++++
+>  kernel/bpf/verifier.c    | 35 ++++++++++++++---
+>  3 files changed, 133 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+> index 58cc7c18cf98..d6a9a2315f54 100644
+> --- a/kernel/bpf/diagnostics.c
+> +++ b/kernel/bpf/diagnostics.c
+> @@ -1041,6 +1041,53 @@ void bpf_diag_record_ref_release(struct bpf_verifi=
+er_env *env, u32 insn_idx,
+>  			    ref_id);
+>  }
+> =20
+> +void bpf_diag_record_context(struct bpf_verifier_env *env, u32 insn_idx,
+> +			     enum bpf_diag_context_kind ctx_kind, bool enter,
+> +			     u32 depth)
+> +{
+> +	/* Keep leave events so context rendering can stop at a depth-zero exit
+> +	 * and show nested-region depth accurately for the active path.
+> +	 */
+> +	struct bpf_diag_history_event event =3D {
+> +		.insn_idx =3D insn_idx,
+> +		.kind =3D BPF_DIAG_HISTORY_CONTEXT,
+> +		.ctx.kind =3D ctx_kind,
+> +		.ctx.enter =3D enter,
+> +		.ctx.depth =3D depth,
+> +	};
+> +
+> +	if (ctx_kind =3D=3D BPF_DIAG_CONTEXT_NONE)
+> +		return;
+
+Nit: Is the NONE case really necessary?
+     The constructor is never called with NONE.
+
+> +
+> +	bpf_diag_append_history(env, &event);
+> +}
+> +
+
+Nit: maybe drop a comment here:
+
+    /* search for the most recent outermost context entry or an exit w/o th=
+e context */
+
+> +static int bpf_diag_history_context_start_idx(const struct bpf_diag_log =
+*log,
+> +					      const struct bpf_diag_history_opts *opts)
+> +{
+> +	int i;
+> +
+> +	if (!opts->ctx_depth)
+> +		return 0;
+> +
+> +	for (i =3D log->cnt; i > 0; i--) {
+> +		const struct bpf_diag_history_event *event;
+> +
+> +		event =3D bpf_diag_history_event(log, i - 1);
+> +
+> +		if (event->kind !=3D BPF_DIAG_HISTORY_CONTEXT ||
+> +		    event->ctx.kind !=3D opts->ctx_kind)
+> +			continue;
+> +
+> +		if (event->ctx.enter && event->ctx.depth =3D=3D 1)
+> +			return i - 1;
+> +		if (!event->ctx.enter && event->ctx.depth =3D=3D 0)
+> +			return 0;
+> +	}
+> +
+> +	return 0;
+> +}
+
+[...]
