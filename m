@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C423B2D1A
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 09:48:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5029730E0F8
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 09:48:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782294503; cv=none; b=b/goJZG1z+bYPMpp/ubn16m3pg+WHC3X7pWtXsess0ueBhlU+ql/GRo49YjCeXLjGQOWTQEwNMoA7wMXgE9CZhJTeGpQK4ExlsF3xKX8dBSDeZg6cmNNTg+nYPR08vpP7xkhgEQgDtA690+pJhW9qvvCafhv418AgGdGQqFXFUQ=
+	t=1782294539; cv=none; b=IB2RsLnTA+nMucfm+KBspBlvAbaLKpf2HcjECJHUPbmvXZvpR1jiW4HCYmpxGDR6EeC4OnoRVYHxxhSbxX6pUDv0TJ7QKrN8tKxcc0ac8eP2RNZ5ViCiuFBmU5qFyuMV762zK+DsSyzcCmBF7Q8/txKjXd9+NFxxNB3rXZf16Jc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782294503; c=relaxed/simple;
-	bh=kggxYFwc6rACgy7NXjbxK+d3AyyEil2M1fE0SmCNlO8=;
+	s=arc-20240116; t=1782294539; c=relaxed/simple;
+	bh=JVdaLswED9na2XKTEv1pKV9EYP40W6EY711U8zhN0E4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=evSBOFkZ818SwyZJU7nyzzTHRY6z+yVDzcCtF7NeKJXFBA9tIPyHeji7LhT0IpnfLc+hTUGL5UdHSJO902NXt6OSGc7Tn84s7z3jwNaEsmaljA195SE70zbKl5WF7Hq++xf21akremd40LY8RD7mcn8k7mIqvtw2n2NejuxyKxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WFSGwkvs; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=b0XqanVsCnneZAhcpnBg77zGGAOCBRkmvN0XEXRaYWpEt60ecke9jeBRhrZewrm6/YQw5nb9BtqSIbKpbIbyGsNPTsCPswVGPUd2wYctNjfZEKOylpY4kduM1dAYr+6DjJtHF7aONxhJoN4ft1e2aXG7F0yiLnv2292y8tGJoSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZVC05Hwj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WFSGwkvs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C37EB1F000E9;
-	Wed, 24 Jun 2026 09:48:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZVC05Hwj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79E4F1F000E9;
+	Wed, 24 Jun 2026 09:48:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782294501;
-	bh=FhNpx8C3BaITcny0Fd21ZwqseKGawOiEPedoWDh69J0=;
+	s=k20260515; t=1782294536;
+	bh=ZvON/XjCTknn7EOtxrI8atfDXlTHocOBD5haEGgwoWw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=WFSGwkvsdnr+sTTWJVYsnIqYDVgHBdqiJ5tnhIeI+8vIUm2orXYMCEXd2EQtkMfKA
-	 kTa/IF7r7lvJynQ+uYEI8SuLisPuQSleKsK7YCn3RO0yJX58NawYz2+LiMR8ORbveK
-	 cl3Wf5p7BSMV09zZ0AF9kXGCRZigcY2JZFXotbf90SkS2ZDAyTvI2pQzqiy3paSx6v
-	 Ik8qzcgTmcah5eOAQr6fMiwn0KNZr1H0eO+UYkm3/D5D8xWbyI0oPKg4otmeiJ9hdA
-	 uaHti4bbKfZHYEcrgtZnjJ4NvhTgxFeVvFED5STRXV7ZGh39vSmkiAF7jtKPNVNULf
-	 dKgAPk6waxOOw==
+	b=ZVC05HwjyB/UcTP43YOcTS5a9XB4x2bAcYsI6YeMJuZfQJetSoEjzPT4R5X/GehW2
+	 BN7mbjH/f1K21zKArNxymY4HuOErDKrdmoHrvfZq5ISwPlZygxyXduhUTJUih0/KTt
+	 vTlMY+zG269PcR5OkuUuQFZ9k8KJs7Fu1JNINI48kDxcosn/4g0dgvtUnfvNEhH4EE
+	 lAmsNW7StgrMgNji5IR5OmFoz5hCg11z9zKeY1bPABJ+TJQSzhOo0es8suseJ4y4mU
+	 rc0NWwFGs2ZvcQWYL14MgswG5eOCTB9ESiXeBP982Y4b9KfG9AGFSrCwgHI+7bNFwD
+	 ASi69EYapQvNw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 5/5] selftests/bpf: add tests for
- bpf_strpbrk
+Subject: Re: [PATCH bpf-next v2 1/5] bpf: add bpf_memcmp kfunc
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Longjun Tang" <lange_tang@163.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260624093638.117062-6-lange_tang@163.com>
+In-Reply-To: <20260624093638.117062-2-lange_tang@163.com>
 References: <20260624093638.117062-1-lange_tang@163.com>
- <20260624093638.117062-6-lange_tang@163.com>
+ <20260624093638.117062-2-lange_tang@163.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 24 Jun 2026 09:48:20 +0000
-Message-Id: <20260624094820.C37EB1F000E9@smtp.kernel.org>
+Date: Wed, 24 Jun 2026 09:48:56 +0000
+Message-Id: <20260624094856.79E4F1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,70 +46,73 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] The string search kfuncs (bpf_strpbrk, bpf_strspn, bpf_strcspn) ha=
-ve an O(N*M) algorithmic complexity that can trigger up to 4.29 billion mem=
-ory reads in the kernel, stalling the CPU. The newly added tests explicitly=
- mask this vulnerability.
+- [Critical] bpf_memcmp bypasses verifier memory bounds checking by using _=
+_ign arguments, creating an arbitrary kernel memory read oracle.
 --
 
-commit 8efd73628e6ad8d84061c17ed578ece973a232c2
+commit 29136173f7ef78c9e1fa53cea458359e9ef94899
 Author: Longjun Tang <tanglongjun@kylinos.cn>
 
-selftests/bpf: add tests for bpf_strpbrk
-   =20
-Add functional tests for first-match, multiple-match, not-found, and
-empty-accept cases. Add negative tests for NULL, user-space, and
-invalid kernel pointer arguments.
+bpf: add bpf_memcmp kfunc
 
-> diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c b=
-/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-> index 412c53b87b182..d3b978e453bd7 100644
-> --- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-> +++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-> @@ -19,6 +19,8 @@ SEC("syscall") int test_strspn_str_too_long(void *ctx) =
-{ return bpf_strspn(long_
->  SEC("syscall") int test_strspn_accept_too_long(void *ctx) { return bpf_s=
-trspn("b", long_str); }
->  SEC("syscall") int test_strcspn_str_too_long(void *ctx) { return bpf_str=
-cspn(long_str, "b"); }
->  SEC("syscall") int test_strcspn_reject_too_long(void *ctx) { return bpf_=
-strcspn("b", long_str); }
-> +SEC("syscall") int test_strpbrk_str_too_long(void *ctx) { return bpf_str=
-pbrk(long_str, "z"); }
-> +SEC("syscall") int test_strpbrk_accept_too_long(void *ctx) { return bpf_=
-strpbrk("b", long_str); }
+This commit adds a new bpf_memcmp kfunc for binary memory comparison in BPF
+programs. Unlike bpf_strcmp, null bytes do not terminate the comparison,
+making it suitable for comparing fixed-size binary data like MAC addresses
+and UUIDs.
 
-[Severity: High]
-This is a pre-existing issue, but by only testing a single large string
-against a 1-byte string, do these tests mask an O(N*M) algorithmic
-complexity in the underlying implementation?
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 8e196c9b7c50f..897e8d71eae45 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
 
-Looking at the nested loops in bpf_strpbrk():
+[ ... ]
 
-kernel/bpf/helpers.c:bpf_strpbrk() {
-	...
-	for (i =3D 0; i < XATTR_SIZE_MAX; i++) {
-		__get_kernel_nofault(&cs, s__ign, char, err_out);
-		if (cs =3D=3D '\0')
-			return -ENOENT;
-		for (j =3D 0; j < XATTR_SIZE_MAX; j++) {
-			__get_kernel_nofault(&ca, accept__ign + j, char, err_out);
-	...
-}
+> @@ -4070,6 +4070,48 @@ __bpf_kfunc int bpf_strcspn(const char *s__ign, co=
+nst char *reject__ign)
+>  	return -EFAULT;
+>  }
+> =20
+> +/**
+> + * bpf_memcmp - Compare two memory regions byte by byte
+> + * @ptr1__ign: First memory region
+> + * @ptr2__ign: Second memory region
+> + * @size: Number of bytes to compare
+> + *
+> + * Compares the first @size bytes of the memory areas @ptr1__ign and
+> + * @ptr2__ign. Unlike bpf_strcmp, null bytes do not terminate the compar=
+ison.
+> + *
+> + * Return:
+> + * * %0       - The memory regions are equal
+> + * * %-1      - @ptr1__ign is less than @ptr2__ign
+> + * * %1       - @ptr1__ign is greater than @ptr2__ign
+> + * * %-EFAULT - Cannot read one of the memory regions
+> + * * %-E2BIG  - @size exceeds the maximum allowed size
+> + * * %-ERANGE - One of the memory regions is outside of kernel address s=
+pace
+> + */
+> +__bpf_kfunc int bpf_memcmp(const void *ptr1__ign, const void *ptr2__ign,
+> +			   size_t size)
 
-Since XATTR_SIZE_MAX is 65536, if a BPF program passes two 64KB buffers
-constructed to avoid early loop termination (e.g., no matching characters
-and a null-terminator only at the very end of the inner string), couldn't
-the function perform up to 4.29 billion calls to __get_kernel_nofault()?
+[Severity: Critical]
+Does the __ign suffix on the pointer arguments bypass the verifier's memory
+bounds checking?
 
-Could this stall the CPU for several seconds, bypassing BPF execution time
-limits and potentially triggering a watchdog soft-lockup?
+If the verifier skips type and bounds checking for ptr1__ign and ptr2__ign,
+could this regression allow passing arbitrary scalars as pointers?
 
-Would it be worth adding a test case that passes long_str for both arguments
-to expose how the kernel handles this worst-case scenario?
+Since the function reads from these addresses using __get_kernel_nofault
+and returns a byte-by-byte comparison result, can this be used as an
+arbitrary kernel memory read oracle via binary search?
+
+Would it be safer to use KF_ARG_PTR_TO_MEM (for example, by using a __sz
+suffix) to enforce static verifier bounds checking instead of relying on
+runtime nofault reads?
+
+> +{
+> +	const unsigned char *p1 =3D ptr1__ign, *p2 =3D ptr2__ign;
+> +	unsigned char c1, c2;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260624093638.1170=
-62-1-lange_tang@163.com?part=3D5
+62-1-lange_tang@163.com?part=3D1
