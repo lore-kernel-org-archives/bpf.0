@@ -1,30 +1,30 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 879AF23EAB3
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 09:37:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665DD3A8723
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 09:37:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782293834; cv=none; b=BKurCSecMz2qOHZdGduZ663YYK7kuQus8jV/aJ7rUznUURJWYZWphHO5SVAf5f0T+GUotmf9XhJ4D0/tIOra3JCpc8XE+aMiaCeuY9koc9Cc7jMebStJFFAKJk+Xx9boyYuTNJhBhSp3OaTgypP7plme8eLlz3WVKkBNKZQK0BE=
+	t=1782293837; cv=none; b=lWRf8bcImx1O6EXV/a6vktoayOKggmddDMG8cg4VM5br0F9rCPNibiuu4onVu3IbyZJkj5IuC6B7KluGYhvGkAfLHhm5CuVocZD3MCmgTuX3Lyu0t/n/D7Hza4PyboynuE+eg/N2oK9f845qON3gM8MGcsFQGzS9Xu+R26IISHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782293834; c=relaxed/simple;
-	bh=GVv8LmlIk664CQVQyXc0uRAh8KwFMGrbt4r/9uAefWA=;
+	s=arc-20240116; t=1782293837; c=relaxed/simple;
+	bh=o18X25zWg3pp3FhVZoTa3lbm2/dv1sV/7C8NZ2n36n8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XU/zF/tH74OSCJJGq5gDCSoRO8HF2/bhb/9unvZaN1Vfz6vZiWuVXB8tMEpcalAF1GboV0NPtfK26tUH9TCOMbVnWFttfNyKlozovp+C9CfcQHSZYDxSNGLDRX3txgzjeIRA5B+OmC9tIcVJw7OUckJodX6aSaaMTIFM7hG31jI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=KPTrTTR/; arc=none smtp.client-ip=220.197.31.2
+	 MIME-Version; b=p4RX4yt+Gml7HMNXMDWFUyeTlphMrUwTYqWgfeYwRsuhDX1sWe8U/Pit54Nojg8mljokEZKOvSOqYbjVjct5bTo5W9DaU0RfsqTb/lPVv6zyyJckTP6xH6wi3d+p5SB1VwJUsFHVpTycYN5S+Vx/oF+QD89GRMguTC9LnyJHWxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Jgmukero; arc=none smtp.client-ip=117.135.210.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="KPTrTTR/"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Jgmukero"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Ug
-	E79Ukhqx2JYOIVJ2Q+iuWMoNcBPRbNXihKS57J9ew=; b=KPTrTTR/lRUiab29qR
-	QuY5olXq3bY0ybaVAtbGHmwuk78Jk6laKzTB/Z7EUQzM9QTRRsoHwOnwnBP1Tbkc
-	D2SIvTY1aPLE2wXEGeIDH2Ig5K89GH/HNitEwshZ2BzVelyTQ3zh08DfLle18t/f
-	kWkdqabIDGDHcpAg3h0hvqUTw=
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Xs
+	+Xd1ImGn0c+LBdQYr0EUqAyMSFGrnAn8hCEzgKceA=; b=JgmukeroFUp/KhHJ4b
+	ciUdDDnVNh7JzH5x3awi7RGE8El+CTTVnvZ/5zMikvBqkVVIqhWOwSAKm/bm6Z63
+	bAfxSkqWQZ8DFSXzqYu0zm1V7sLkPNsH7DQUHxfiqop1FrTro/04A+w05qADSGtg
+	3SxzpD/kDcnnCH4TFkKLhKn38=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wD3lwonpTtqwoMPFQ--.6915S4;
-	Wed, 24 Jun 2026 17:36:41 +0800 (CST)
+	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wD3lwonpTtqwoMPFQ--.6915S5;
+	Wed, 24 Jun 2026 17:36:42 +0800 (CST)
 From: Longjun Tang <lange_tang@163.com>
 To: ast@kernel.org,
 	andrii@kernel.org
@@ -33,9 +33,9 @@ Cc: yonghong.song@linux.dev,
 	bpf@vger.kernel.org,
 	tanglongjun@kylinos.cn,
 	lange_tang@163.com
-Subject: [PATCH bpf-next v2 2/5] selftests/bpf: rename local bpf_memcmp to avoid conflict
-Date: Wed, 24 Jun 2026 17:36:35 +0800
-Message-Id: <20260624093638.117062-3-lange_tang@163.com>
+Subject: [PATCH bpf-next v2 3/5] selftests/bpf: add tests for bpf_memcmp
+Date: Wed, 24 Jun 2026 17:36:36 +0800
+Message-Id: <20260624093638.117062-4-lange_tang@163.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20260624093638.117062-1-lange_tang@163.com>
 References: <20260624093638.117062-1-lange_tang@163.com>
@@ -46,160 +46,98 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3lwonpTtqwoMPFQ--.6915S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW3WrWDGFy5Jr1kCFyUXr15XFb_yoW7Cw1fpF
-	yxC3429r4xtFy3trn2kws2vayFy34kWr45Gr4jvF97Zan8Zr9Yvr45Kry8trs8trs8G3yU
-	AFy5JrWYqr1ktF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zR04EtUUUUU=
-X-CM-SenderInfo: 5odqwvxbwd0wi6rwjhhfrp/xtbC4gncC2o7pSm78gAA3o
+X-CM-TRANSID:_____wD3lwonpTtqwoMPFQ--.6915S5
+X-Coremail-Antispam: 1Uf129KBjvJXoWxtFy8XFyxZrWxGryDJr4UXFb_yoW7Cw15pa
+	4xuw1avr1rGr1rJ3yxuw1xKa1rXr97tr45Gr1jq3ZFvF1Fvan2qrn29ay3GwnxKrsF9wsI
+	vFWrJrW3ZF4UtaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRGXdUUUUUU=
+X-CM-SenderInfo: 5odqwvxbwd0wi6rwjhhfrp/xtbC4QrcC2o7pSo6wQAA3Z
 
 From: Longjun Tang <tanglongjun@kylinos.cn>
 
-The dynptr_success test defines a local inline bpf_memcmp() which
-conflicts with the newly added bpf_memcmp kfunc when vmlinux.h
-includes the kfunc declaration. Rename it to local_memcmp.
+Add functional tests for equality, ordering, zero-size, and null-byte
+handling. Add negative tests for NULL, user-space, and invalid kernel
+pointer arguments.
 
 Signed-off-by: Longjun Tang <tanglongjun@kylinos.cn>
 ---
- .../selftests/bpf/progs/dynptr_success.c      | 30 +++++++++----------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ .../bpf/progs/string_kfuncs_failure1.c          |  9 +++++++++
+ .../selftests/bpf/progs/string_kfuncs_success.c | 17 +++++++++++++++++
+ 2 files changed, 26 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/testing/selftests/bpf/progs/dynptr_success.c
-index e0d672d93adf..071581ff0833 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_success.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
-@@ -624,7 +624,7 @@ int BPF_PROG(test_dynptr_skb_tp_btf, void *skb, void *location)
- 	return 1;
- }
+diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
+index bddc4e8579d2..a85d64605d0e 100644
+--- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
++++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
+@@ -9,6 +9,9 @@
+ char *user_ptr = (char *)1;
+ char *invalid_kern_ptr = (char *)-1;
  
--static inline int bpf_memcmp(const char *a, const char *b, u32 size)
-+static inline int local_memcmp(const char *a, const char *b, u32 size)
- {
- 	int i;
++extern int bpf_memcmp(const void *ptr1__ign, const void *ptr2__ign,
++		      size_t size) __ksym;
++
+ /*
+  * When passing userspace pointers, the error code differs based on arch:
+  *   -ERANGE on arches with non-overlapping address spaces
+@@ -53,6 +56,8 @@ SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null1(void *ctx) { return
+ SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null2(void *ctx) { return bpf_strnstr("hello", NULL, 1); }
+ SEC("syscall")  __retval(USER_PTR_ERR)int test_strncasestr_null1(void *ctx) { return bpf_strncasestr(NULL, "hello", 1); }
+ SEC("syscall")  __retval(USER_PTR_ERR)int test_strncasestr_null2(void *ctx) { return bpf_strncasestr("hello", NULL, 1); }
++SEC("syscall")  __retval(USER_PTR_ERR)int test_memcmp_null1(void *ctx) { return bpf_memcmp(NULL, "x", 1); }
++SEC("syscall")  __retval(USER_PTR_ERR)int test_memcmp_null2(void *ctx) { return bpf_memcmp("x", NULL, 1); }
  
-@@ -650,12 +650,12 @@ int test_dynptr_copy(void *ctx)
- 	err = bpf_dynptr_write(&src, 0, data, sz, 0);
- 	err = err ?: bpf_dynptr_copy(&dst, 0, &src, 0, sz);
- 	err = err ?: bpf_dynptr_read(buf, sz, &dst, 0, 0);
--	err = err ?: bpf_memcmp(data, buf, sz);
-+	err = err ?: local_memcmp(data, buf, sz);
+ /* Passing userspace ptr to string kfuncs */
+ SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_user_ptr1(void *ctx) { return bpf_strcmp(user_ptr, "hello"); }
+@@ -79,6 +84,8 @@ SEC("syscall") __retval(USER_PTR_ERR) int test_strnstr_user_ptr1(void *ctx) { re
+ SEC("syscall") __retval(USER_PTR_ERR) int test_strnstr_user_ptr2(void *ctx) { return bpf_strnstr("hello", user_ptr, 1); }
+ SEC("syscall") __retval(USER_PTR_ERR) int test_strncasestr_user_ptr1(void *ctx) { return bpf_strncasestr(user_ptr, "hello", 1); }
+ SEC("syscall") __retval(USER_PTR_ERR) int test_strncasestr_user_ptr2(void *ctx) { return bpf_strncasestr("hello", user_ptr, 1); }
++SEC("syscall") __retval(USER_PTR_ERR) int test_memcmp_user_ptr1(void *ctx) { return bpf_memcmp(user_ptr, "x", 1); }
++SEC("syscall") __retval(USER_PTR_ERR) int test_memcmp_user_ptr2(void *ctx) { return bpf_memcmp("x", user_ptr, 1); }
  
- 	/* Test that offsets are handled correctly */
- 	err = err ?: bpf_dynptr_copy(&dst, 3, &src, 5, sz - 5);
- 	err = err ?: bpf_dynptr_read(buf, sz - 5, &dst, 3, 0);
--	err = err ?: bpf_memcmp(data + 5, buf, sz - 5);
-+	err = err ?: local_memcmp(data + 5, buf, sz - 5);
+ #endif /* __TARGET_ARCH_s390 */
  
- 	bpf_ringbuf_discard_dynptr(&src, 0);
- 	bpf_ringbuf_discard_dynptr(&dst, 0);
-@@ -692,7 +692,7 @@ int test_dynptr_copy_xdp(struct xdp_md *xdp)
- 		err = bpf_dynptr_read(&buf, len, &ptr_xdp, i * len, 0);
- 		if (err)
- 			goto out;
--		if (bpf_memcmp(data, buf, len) != 0)
-+		if (local_memcmp(data, buf, len) != 0)
- 			goto out;
- 	}
+@@ -107,5 +114,7 @@ SEC("syscall") __retval(-EFAULT) int test_strnstr_pagefault1(void *ctx) { return
+ SEC("syscall") __retval(-EFAULT) int test_strnstr_pagefault2(void *ctx) { return bpf_strnstr("hello", invalid_kern_ptr, 1); }
+ SEC("syscall") __retval(-EFAULT) int test_strncasestr_pagefault1(void *ctx) { return bpf_strncasestr(invalid_kern_ptr, "hello", 1); }
+ SEC("syscall") __retval(-EFAULT) int test_strncasestr_pagefault2(void *ctx) { return bpf_strncasestr("hello", invalid_kern_ptr, 1); }
++SEC("syscall") __retval(-EFAULT) int test_memcmp_pagefault1(void *ctx) { return bpf_memcmp(invalid_kern_ptr, "x", 1); }
++SEC("syscall") __retval(-EFAULT) int test_memcmp_pagefault2(void *ctx) { return bpf_memcmp("x", invalid_kern_ptr, 1); }
  
-@@ -713,7 +713,7 @@ int test_dynptr_copy_xdp(struct xdp_md *xdp)
- 		err = bpf_dynptr_read(&buf, len, &ptr_buf, i * len, 0);
- 		if (err)
- 			goto out;
--		if (bpf_memcmp(data, buf, len) != 0)
-+		if (local_memcmp(data, buf, len) != 0)
- 			goto out;
- 	}
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
+index f65b1226a81a..c2be9edcd282 100644
+--- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
++++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
+@@ -7,6 +7,9 @@
  
-@@ -727,7 +727,7 @@ int test_dynptr_copy_xdp(struct xdp_md *xdp)
- 		err = bpf_dynptr_read(&buf, len, &ptr_xdp, 2 + i * len, 0);
- 		if (err)
- 			goto out;
--		if (bpf_memcmp(data, buf, len) != 0)
-+		if (local_memcmp(data, buf, len) != 0)
- 			goto out;
- 	}
+ char str[] = "hello world";
  
-@@ -750,7 +750,7 @@ int test_dynptr_memset_zero(void *ctx)
++extern int bpf_memcmp(const void *ptr1__ign, const void *ptr2__ign,
++		      size_t size) __ksym;
++
+ #define __test(retval) SEC("syscall") __success __retval(retval)
  
- 	err = bpf_dynptr_from_mem(memset_zero_data, data_sz, 0, &ptr);
- 	err = err ?: bpf_dynptr_memset(&ptr, 0, data_sz, 0);
--	err = err ?: bpf_memcmp(zeroes, memset_zero_data, data_sz);
-+	err = err ?: local_memcmp(zeroes, memset_zero_data, data_sz);
+ /* Functional tests */
+@@ -60,4 +63,18 @@ __test(-ENOENT) int test_strncasestr_notfound2(void *ctx) { return bpf_strncases
+ __test(-ENOENT) int test_strncasestr_notfound3(void *ctx) { return bpf_strncasestr("", "a", 0); }
+ __test(0) int test_strncasestr_empty(void *ctx) { return bpf_strncasestr(str, "", 1); }
  
- 	return 0;
- }
-@@ -770,7 +770,7 @@ int test_dynptr_memset_notzero(void *ctx)
- 
- 	err = bpf_dynptr_from_mem(memset_notzero_data, data_sz, 0, &ptr);
- 	err = err ?: bpf_dynptr_memset(&ptr, 0, data_sz, DYNPTR_MEMSET_VAL);
--	err = err ?: bpf_memcmp(expected, memset_notzero_data, data_sz);
-+	err = err ?: local_memcmp(expected, memset_notzero_data, data_sz);
- 
- 	return 0;
- }
-@@ -786,7 +786,7 @@ int test_dynptr_memset_zero_offset(void *ctx)
- 
- 	err = bpf_dynptr_from_mem(memset_zero_offset_data, data_sz, 0, &ptr);
- 	err = err ?: bpf_dynptr_memset(&ptr, 8, 4, 0);
--	err = err ?: bpf_memcmp(expected, memset_zero_offset_data, data_sz);
-+	err = err ?: local_memcmp(expected, memset_zero_offset_data, data_sz);
- 
- 	return 0;
- }
-@@ -803,7 +803,7 @@ int test_dynptr_memset_zero_adjusted(void *ctx)
- 	err = bpf_dynptr_from_mem(memset_zero_adjusted_data, data_sz, 0, &ptr);
- 	err = err ?: bpf_dynptr_adjust(&ptr, 4, 8);
- 	err = err ?: bpf_dynptr_memset(&ptr, 0, bpf_dynptr_size(&ptr), 0);
--	err = err ?: bpf_memcmp(expected, memset_zero_adjusted_data, data_sz);
-+	err = err ?: local_memcmp(expected, memset_zero_adjusted_data, data_sz);
- 
- 	return 0;
- }
-@@ -898,7 +898,7 @@ int test_dynptr_memset_xdp_chunks(struct xdp_md *xdp)
- 		err = bpf_dynptr_read(&buf, chunk_sz, &ptr_xdp, offset, 0);
- 		if (err)
- 			goto out;
--		err = bpf_memcmp(buf, expected_buf, sizeof(buf));
-+		err = local_memcmp(buf, expected_buf, sizeof(buf));
- 		if (err)
- 			goto out;
- 	}
-@@ -952,7 +952,7 @@ static __always_inline void test_dynptr_probe(void *ptr, bpf_read_dynptr_fn_t bp
- 			break;
- 		err = err ?: bpf_dynptr_read(&buf, len, &ptr_buf, 0, 0);
- 
--		if (err || bpf_memcmp(expected_str, buf, len))
-+		if (err || local_memcmp(expected_str, buf, len))
- 			err = 1;
- 
- 		/* Reset buffer and dynptr */
-@@ -986,7 +986,7 @@ static __always_inline void test_dynptr_probe_str(void *ptr,
- 		err = err ?: bpf_dynptr_read(&buf, len, &ptr_buf, 0, 0);
- 		if (!len)
- 			continue;
--		if (err || bpf_memcmp(expected_str, buf, len - 1) || buf[len - 1] != '\0')
-+		if (err || local_memcmp(expected_str, buf, len - 1) || buf[len - 1] != '\0')
- 			err = 1;
- 	}
- 	bpf_ringbuf_discard_dynptr(&ptr_buf, 0);
-@@ -1012,7 +1012,7 @@ static __always_inline void test_dynptr_probe_xdp(struct xdp_md *xdp, void *ptr,
- 		if (len > sizeof(buf))
- 			continue;
- 		err = err ?: bpf_dynptr_read(&buf, len, &ptr_xdp, off, 0);
--		if (err || bpf_memcmp(expected_str, buf, len))
-+		if (err || local_memcmp(expected_str, buf, len))
- 			err = 1;
- 		/* Reset buffer and dynptr */
- 		__builtin_memset(buf, 0, sizeof(buf));
-@@ -1048,7 +1048,7 @@ static __always_inline void test_dynptr_probe_str_xdp(struct xdp_md *xdp, void *
- 
- 		if (!len)
- 			continue;
--		if (err || bpf_memcmp(expected_str, buf, len - 1) || buf[len - 1] != '\0')
-+		if (err || local_memcmp(expected_str, buf, len - 1) || buf[len - 1] != '\0')
- 			err = 1;
- 
- 		__builtin_memset(buf, 0, sizeof(buf));
++/* bpf_memcmp - functional tests */
++char data1[] = "hello world";
++char data2[] = "hello world";
++char data3[] = "hello worle";
++__test(0) int test_memcmp_eq(void *ctx) { return bpf_memcmp(data1, data2, sizeof(data1)); }
++__test(-1) int test_memcmp_neq_less(void *ctx) { return bpf_memcmp(data1, data3, sizeof(data1)); }
++__test(1) int test_memcmp_neq_greater(void *ctx) { return bpf_memcmp(data3, data1, sizeof(data1)); }
++__test(0) int test_memcmp_size_zero(void *ctx) { return bpf_memcmp(data1, data3, 0); }
++/* memcmp should NOT stop at null byte - compare past '\0' */
++char bin1[] = { 'a', '\0', 'c' };
++char bin2[] = { 'a', '\0', 'd' };
++__test(0) int test_memcmp_null_byte_eq(void *ctx) { return bpf_memcmp(bin1, bin1, sizeof(bin1)); }
++__test(-1) int test_memcmp_null_byte_neq(void *ctx) { return bpf_memcmp(bin1, bin2, sizeof(bin1)); }
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.25.1
 
