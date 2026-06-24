@@ -1,312 +1,235 @@
-Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
+Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B0E33D6F7
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 17:24:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D893DD516
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 17:39:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.173
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782321884; cv=pass; b=Fuj324r0DE7Fs19bUNZJv79PCi2dU1hAGDXOye/Kx1t9i+Sd0SIDP21lUdhfeE8HygYm01HFaun2fPpMP/hRJt5O0kBpB9+eRSSCroZ+vzzqdSSYWtg138Gavl+xZHFm00QLIcVxeG0tKeprSX3KO9i+b8FmYRKFMA0CPoISBno=
+	t=1782322750; cv=pass; b=eOmNO9g+bp0KXEeuK0w/N+y+z4u/fM3E/TvRnvR0ifUYwHR++BPyUBiKV8Pn63Pd2u3vqSvgBUU3zMLbUEZ4hSeKOStWwYypN4qh6bHLsEmsr0HXmYnbGrl85PUEeQUFdeH+hoQ9MHkjToyuAxprh9Jh3hiQuwRPbTwHamnXD6c=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782321884; c=relaxed/simple;
-	bh=CgaZvZGY4e/EKVwuFfxFMZAVMcCg1E+jJOW3/B10q0o=;
+	s=arc-20240116; t=1782322750; c=relaxed/simple;
+	bh=kwlxJfc06DoM2YGHAFfTB131HftcWrPWROTz4nYANrc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p8bWnB4zSmPjN5kPqNgJ8RtUa1VWcRxfZiVUc6B6GvEQ02dUdEzzhkAvJyxh3gd4nDW3cVnUoyffoKEUNK07huhhozLb2Y3jxA5a31xkn2ffmv+1ZH6s6oALVFEAzSwM9+9CtWajYJXD6MqsoRZnTxWhqG2lYASwgIE6RDSSHcE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GrOk1KXN; arc=pass smtp.client-ip=74.125.224.51
+	 To:Cc:Content-Type; b=pGUU3L011aC8g3qZaVujACR9k/sBkAj3v18zsUosNaFMeulCHQuTygU+Ik+YyxZ6urtT+VhSCMylcrh8MdyA822EKj6Gz4n2VcRJm6pd8uxhP0hCmOVk7WFZzf8BCH9fBzll/x6gpp4i/ngRX4fZjFcvngh4p0ksD2yKowU+MZI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DywN9WWS; arc=pass smtp.client-ip=209.85.221.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GrOk1KXN"
-Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-66388bf3793so902728d50.2
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 10:24:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782321881; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DywN9WWS"
+Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-59ccf81e74bso513162e0c.3
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 10:39:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782322747; cv=none;
         d=google.com; s=arc-20240605;
-        b=B0TMY3XPxdPSFN+dJyIQCkamigL7/AizdYR2IEw3l7Fn05nWtGBSmonLiExj6dEaSk
-         3cS5W3Ja0EgvlMgDS4IH6QkvKCqJIZRA1BGW8lV2sNFu7aYFyhPQ+auuh3WMx4FBS9kf
-         rZpy1TscKZTxXqtklqbLnt8NKCxbty1m81xnhvOJxa+E+BX8BOuG3FiVFTjV4Kfk7Nnr
-         WjXklz4dKx+TKWjypALiqznX8+T/yQEADcfpwFkq0Zj0XnpUyaIjbWlGMeMauAK5+/lo
-         j1k8mdXjqqkijVysD+NyandgHxfz8EySVFJzQAWlsFEUrmuVeQ90J9hXK6FA2DPhFqDm
-         NIhg==
+        b=ANq+rXcnBJB2vsIh71+nypUIFuC6hEQQMOv08BGQ9a37q4I/W+Oh8MUyb6Cn3yrf3n
+         O9iKUaDZMe58bpWr13lI/hxn4wbt8GTLvHAtEIxLknZf4/7dUnxEu8x4McfYB54u2wzL
+         JryxNOxWeQjhLR7tlVNP7oA6hVvXfgFAdYOoO7Pzsxu2jdknUMbkLcJjYVHCwJDUoRzb
+         H3+z1dsRVZhlzFj1y6H+0Aca5l55o4uIutvaDvagbHZ5/dEvLDU7tP7iW5x6RW8mjRH0
+         Hiy0cqpRQhptd9WzBvwG8VxlEV0BQosZvu70iPuREQJSmv3qWsRYhEDlWXSgnCeVcF+Y
+         00yA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=E1wkuHZkbsib5kIV/a5Yk3B4Y1qMn1xPyrOQ/gPCTXM=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=cC+XsYgnkjIwvK97joHRErnXvBWE55XDvGJdz0urSgU+KYdARUi6eB8N+41OZzG/1R
-         7t2lpfLMHrY6u0n/kdpd+GWuHAKBeeJ+7N/yFhaUcWnp/9eXJjWwcRttUy34vTWsLfX7
-         mW1oVnSgsVvhn6OaTC1I4XPWiLWt+QUE/pe5VVnWHC59Nbu20GKVpgkkNhg5gPeEGVez
-         p/uw0SCpDGkDUGZx1PFx4ET4mgZnwm/31ZPYrzZqpx9dIaIuZkhMF8dGHvmWfuU4R3f9
-         Z5OpICDrV0ORDCaVwgHerOxkMUOZDLuTg6lzk6e/fPNoKmVhb0x8qVY8qZTxq3ebckR9
-         DPfw==;
+        bh=iZ50S9EWe03a9OjAtFp4LAKWjUA195rU05MVKuNQvgU=;
+        fh=v1rW0cNYkd3xXDNsvnhjYG2iGeqY6TIhoFka300Kbh4=;
+        b=cBz74TTbxTIk2eIIgsyJlD7715bPbnJVhWqHWNU8NjqHPMFnLfSGdOm7JgAiJUmOlA
+         5MbcEIyaPGJBrxWXvwwdC6QqI2MJAIbRcAZo5rRDWf7ksOcJSvfT6LtFAUlz/i0+GVki
+         ZlJtbcdApLoAOIgesvgRvEypkXB0AV6HIbHltTIXSWzLW6ULurl7QAdSoLuzX3gRokj8
+         XaeFi8q9xEkHmrqFYhcIjc/EYrQSNN6cCpSpWxQKegnJIYzoKiUnxxvPWuxr0m7KP6Kd
+         gdoeuqSsk/YvgvFqo/o4PNlU0UX4+Ss4cCzS32DNelz20WGy9Fkub1RJqNIMxg6BYhe2
+         VxCg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782321881; x=1782926681; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782322747; x=1782927547; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=E1wkuHZkbsib5kIV/a5Yk3B4Y1qMn1xPyrOQ/gPCTXM=;
-        b=GrOk1KXNFjujVIRq0WGAuOFzhIC9LQX7D6ho3H39V2LHM3pgJtvkhO5uKeKsNKdA/H
-         EyWAbNDiJQIhQMXGIEHbs06+POT0DKy2qlyGBe1ko+OysVUTxmAVCDsEYXODZoGK39RF
-         nZ10rW2TBIdh6sfEKVZJtku9VrWBV/bMSU0KIFYGOdS/PyIMN+GuG7RJ24jKSwTMfM03
-         ew2SEbKfFop4QwPsQw0qxS3ib46O45dYGsNxcYhtHB6n8pQmrdzQunFK9w83+vfZva8a
-         K9y26WVsWEvC4ifaL6uMQaWR6RVSLBQa1AXe9tYtsZ/2Hwji/3nJ6FulYxQxRrIl3uCM
-         4ObQ==
+        bh=iZ50S9EWe03a9OjAtFp4LAKWjUA195rU05MVKuNQvgU=;
+        b=DywN9WWSBDi5f/syse6BIJ1fxp3KlHFm4pKjtIZW0cb9u+yBnKRusSCGlKY9qNF22x
+         MsFC95oDnadyGZPeX1rwbZtXY10Q3TF4Jy0QKgL3cfmLIYbvcAT+LW+h1SiO0hulyJDf
+         S4DBzDc5itrIC88evtsB8bDVIflBG3eHpSj6PhfTp9idf/5ZDKSFQNDj2LVVKuP0yrVZ
+         6i5PZCI/hwnw6XUfztRekhsHHenCPQt2uxrsSAN+Oqu6d9aIRa8s+6GSvzdoHoRh7qNj
+         ub1+WfYbdh1pY3DIYd0l6x5O8LgQNzH9VZXiQiVn+qSj697WY+f912s0QN52m5E9A9DE
+         nYqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782321881; x=1782926681;
+        d=1e100.net; s=20251104; t=1782322747; x=1782927547;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=E1wkuHZkbsib5kIV/a5Yk3B4Y1qMn1xPyrOQ/gPCTXM=;
-        b=rveLBmOph65A8Y1Het948/YGxTJFeX5iEryYC/u3F5WA75lrjrjQu8dUehpwlM5ZeN
-         oZwu5b3XwElVuAHgTucnHk3tFIcNqV8gZc2pIyGAR3xtBh3BDXkrHreLIuGSuOeNH8Qt
-         5jB01QGApYcxRyerXPepf74rg2KD0IUQJ0yDF2/7NAJoLshmzA5+lCLJtZB2x7BokTJj
-         DVz8TqgMrQQd7b8kREQpa8P4cfP7biCIk02ZuHVZoOXHcAP+lCz/DB7u9e3f6Uo6n2XL
-         pY60a2bgVlwlRe7cOqvVW+Xx143nBZPF/+qBVSqCOHMzP/aXGHjvJR49D5m4sokSDqv7
-         4K6w==
-X-Gm-Message-State: AOJu0YyDAAxatcEWG1eNN/rn4bboxBP8Du90OYJGGj3YZUuSjQw7Dl4T
-	+LAbU1cPsieFBrkypcYmUq2zibMm5B1+lvzxmge0HiW79xQdGdxZoDjlCr0DlM8vSXhuuHRgN95
-	dgJ2vxuk4zTPca2kaNvb8Pm2se0qqFcc=
-X-Gm-Gg: AfdE7cleqaCw6JHlDm96gAxyDqFaWl04YuzsojpgBVh3ZukoSU6+FZ05ziz2CK9fCTa
-	bni2cVaC1RTk3+Fo13SfMrFnWNmckSwJfg8f77tKLf3MIr5XgSogS2L1hOErnwo7dfbhHHKg3f8
-	Kp434al1yhhYK8HQWYlRGS4wdN9FmyUIs0E0xbBDZuRduDNTvIcGfnpoN1s11LTGuiSBPQMpg5J
-	7H0yN3lLRlcf5dSbfU0KB5cZWF9XEI6+P7P1a01lklYCILjpRVjMihTd9JNSfZ4xyPhTE1U
-X-Received: by 2002:a05:690e:130d:b0:65c:2208:8c6a with SMTP id
- 956f58d0204a3-6635a305368mr7227481d50.42.1782321881331; Wed, 24 Jun 2026
- 10:24:41 -0700 (PDT)
+        bh=iZ50S9EWe03a9OjAtFp4LAKWjUA195rU05MVKuNQvgU=;
+        b=jUJP/LJkVp+Xtn0KI76hSjDWgGfAUZe5UkhzlXGcbZty9CfDBNQr2vykP0MVZjJ9dE
+         x+ef6H3R7bpt5onfsVLvkLH20GUfYIm+0dKGoPmbJ1769Mrknsx1bB/m8Ijd4O80lDNE
+         P7MmCXuBiHnyww5NTTUfwuKYNZmdJzdCVxTQfy+vHJ/yCxzXu9QSNfPXFqJKhxl2UMSc
+         DEWlOoTJDgX2+ST14S0jDUh6Y0mfujH/aQpNl4xl/1F3UwtqgW5LV5dmWhOSKWDYlDNV
+         NyhutlUuc1vNLu+z0gAkzwY3VY5bsgpxsLPK7Au/vOPjKohmdem0T1M8Wbur6i3xMorS
+         xlxA==
+X-Forwarded-Encrypted: i=1; AHgh+Rr0i98jx0WyLxvMn28eDBkugG1CQ6dzRw3R/UVFMnIjUabyxImEsU+lTmDScHeu4Rg5oD4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWdjmVcD/HIVq4AIkv9JOteF+1lcswZBi6D9sT1czauj3Lh99M
+	QlcaEJ7WRqZSS5XUc2Z4axj8xaLLaMVYRSfp73D6a59AHBlEaudHnFeR9yZ4rbmwapbfCWH9+rH
+	F6/u1NK1IGweifsuVqLvGkgTTElgwiFkBW5CHd+o=
+X-Gm-Gg: AfdE7cnL+y9AxfFyNVtX8rs/eWkiK3Gx+IkdnUXq3f4xQaojugy6SWmfH5T/CbA9pSE
+	2Z9UiNL5zN/0JO6eJXxFVDbT6U7ZJGSpAaWaJJ+DXsZlamxxTnQcrDsEVpVDk+nXtSXS7oHi7Lq
+	Wm0tTC6fHW8/eS7G8yunNnwD3W+fuyEusF01ULzakROlumOSSpDdzAiHEiICupJLJbe/0ZUt71T
+	xmHAl6iryoT4UHesrTr/YQK7YilbF1N+035qJSQtx3qC8cydS3ToG/VhWU7YHtmGedvqJNwXeFd
+	kykW59o45KB2y9mpRK9WlUBpoxgUj9rTY/ZENATs6bv29q00qBHKXVe4a8FTQpyekyHSAQ==
+X-Received: by 2002:a05:6102:3746:b0:6c5:d55d:c095 with SMTP id
+ ada2fe7eead31-72fd81606bcmr5073940137.26.1782322747359; Wed, 24 Jun 2026
+ 10:39:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260623175006.3136053-1-ameryhung@gmail.com> <20260623175006.3136053-10-ameryhung@gmail.com>
- <20260623225359.77EE31F00A3A@smtp.kernel.org>
-In-Reply-To: <20260623225359.77EE31F00A3A@smtp.kernel.org>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Wed, 24 Jun 2026 10:24:30 -0700
-X-Gm-Features: AVVi8CfocQt9hWr32v2QEQ80f9bKIfkVHJv2cXBIKPpLa-2WNtpQNV5_4ic1_XQ
-Message-ID: <CAMB2axMA9GuQDitxDQiirPDD3pbw2z1U=pM2P+=8hm_WF8HJWg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 09/15] bpf: Add infrastructure to support
- attaching struct_ops to cgroups
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
+References: <178004391665.3522.4865582628003357086@gmail.com> <DIVM9YXYJV5N.2TEM951JWKD95@gmail.com>
+In-Reply-To: <DIVM9YXYJV5N.2TEM951JWKD95@gmail.com>
+From: L0 <hyeon3125@gmail.com>
+Date: Thu, 25 Jun 2026 02:38:56 +0900
+X-Gm-Features: AVVi8CeqJD4TC_z7LGXIn576_IwTjNKdkby4r6WV8YMQhh6RbUhiuOFOGSqIshM
+Message-ID: <CACvzRyD2ScyBt-6eS2FoWPRN5o1ZK-4RYruKY0k7QTSuohzbzA@mail.gmail.com>
+Subject: Re: [PATCH RFC] bpf: add DAG fast-path in verifier to skip redundant
+ state pruning
+To: ast@kernel.org
+Cc: daniel@iogearbox.net, eddyz87@gmail.com, paul.chaignon@gmail.com, 
+	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 23, 2026 at 3:54=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+Alexei,
+
+I know you're deep in the review backlog and the prototype share is still
+pending. Rather than waiting, I'm sending this ahead -- apologies for
+jumping the queue.
+
+You said the DAG specialization isn't interesting (fair -- loops are
+everywhere now), but that do_check_insn() as a transfer function in the
+dataflow analysis is viable, and that merge_verifier_state() is the key.
+I agree it's the key, and it's where I started -- one level down. A join is
+only as sound as the domain it operates on, so before the join itself I
+pinned down that domain: the scalar state merge_verifier_state() combines,
+tnum x cnum, as it stands in bpf-next (a975094bf).
+
+I built a small, self-contained Rust model of it -- the tnum bit domain
+(tnum.c), the cnum circular-number range domain (cnum.c / cnum_defs.h), and
+the reduced-product reduction in reg_bounds_sync(). Three results, all
+machine-checked (10 harnesses, Kani 0.67.0 / CBMC):
+
+1. Soundness. Each harness states the abstraction is sound -- for every
+concrete x in gamma(a) and y in gamma(b), f(x,y) lies in gamma(f#(a,b))
+-- and Kani discharges it over the full bit-vector input space (not
+sampled). Covered: tnum add/sub/and/or/xor, tnum_in, the cnum subset
+order, and cnum64_cnum32_intersect.
+
+2. Faithfulness. The differential test links the *unmodified* kernel
+tnum.c + cnum.c against userspace stub headers (the .c is byte-for-byte
+bpf-next, no kernel build needed) and fuzzes them against the Rust model,
+N=3D2000 x 11 ops, 0 mismatch. So (1) carries over to the C, not just the
+model.
+
+3. A question this raised (for Eduard/Paul as much as anyone). On the model
+Kani proves the cross-width reduction idempotent -- one __reg_deduce_bounds=
+()
+pass reaches the fixpoint over all inputs -- which surprised me, since
+9e5fcb003aec ("bpf: Avoid one round of bounds deduction") established two
+rounds as the minimum, with verifier_bounds/"cross sign boundary, negative
+overlap" failing at one.
+
+But that analysis predates the circular-number refactor (256f0071f9b6),
+which collapsed the four deduce sub-steps into two. So the honest question:
+did cnum make the second __reg_deduce_bounds() in reg_bounds_sync()
+(verifier.c:2082) redundant, or does the cross-sign case still rely on it
+and my isolated model simply misses that state? I haven't built the tree to
+run that selftest at one call yet -- curious whether the round count was
+revisited after cnum landed.
+
+Scope, honestly: this is only the scalar tnum/cnum transfer and reduction
+math, not the whole verifier, and I'm not claiming any over-conservative
+(false-reject) bug -- none turned up here. The security boundary
+(regsafe/stacksafe) stays in the kernel; this is a verification model, the
+PCC split we talked about -- a checker that produces a proof, not a
+replacement for the kernel's check.
+
+Everything is in one ~600-line crate and reproduces from scratch with a
+single script -- ./reproduce.sh runs the 11 unit tests, the differential,
+and all 10 Kani proofs:
+
+https://github.com/hyeon3125-dev/bpf-verifier-rs (against bpf-next a975094b=
+f)
+
+so you can re-run the soundness checks and the diff against C directly,
+rather than taking my word for any of it.
+
+And when you share the transfer + join prototype, the part I'd most like to
+compare is exactly the representation it uses for the abstract state, and
+how merge_verifier_state() joins it.
+
+- Seunghyeon
+
+
+On Sat, May 30, 2026 at 10:23=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Thank you for your contribution! Sashiko AI review found 4 potential issu=
-e(s) to consider:
->
-> New issues:
-> - [High] The `bpf_cgroup_struct_ops_foreach` macro does not filter out du=
-mmy sentinel elements, leading to type confusion and kernel panics.
-> - [High] Strict `rcu_dereference()` in `bpf_cgroup_struct_ops_foreach` ca=
-uses lockdep splats or panics for sleepable struct_ops.
-> - [High] Array truncation during `purge_effective_progs` if the struct_op=
-s type was registered without `cfi_stubs`.
->
-> Pre-existing issues:
-> - [High] `bpf_cgroup_array_copy_to_user()` incorrectly returns -ENOSPC wh=
-en trailing dummy elements exist, breaking userspace queries.
-> --
->
-> commit a3bccbe6dc639128f470580a5e6281248194eb4e
-> Author: Martin KaFai Lau <martin.lau@kernel.org>
->
-> bpf: Add infrastructure to support attaching struct_ops to cgroups
->
-> This patch adds necessary infrastructure to attach a struct_ops map to a
-> cgroup. It reuses existing cgroup bpf structures and logic to handle the
-> attachment, hierarchy, and ordering of struct_ops maps. It also implement=
-s
-> a separate struct bpf_link_ops for cgroup's struct_ops link.
->
-> > diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-> > index 4d0cc65976a14..8a75a6cd73096 100644
-> > --- a/include/linux/bpf-cgroup.h
-> > +++ b/include/linux/bpf-cgroup.h
-> > @@ -110,6 +112,18 @@ struct bpf_prog_list {
-> >       u32 flags;
-> >  };
+> On Fri May 29, 2026 at 1:38 AM PDT, Seunghyeon Lee wrote:
+> > bpf: add DAG fast-path in verifier to skip redundant state pruning
 > >
-> > +#define bpf_cgroup_struct_ops_foreach(var, item, cgrp, atype)         =
-       \
-> > +     for (item =3D rcu_dereference((cgrp)->bpf.effective[atype])->item=
-s;\
-> > +          ((var) =3D READ_ONCE(item->kdata));                         =
- \
-> > +          item++)
->
-> [Severity: High]
-> Does this macro fail to filter out dummy sentinel elements?
->
-> When update_effective_progs() fails under memory pressure, the kernel fal=
-ls
-> back to purge_effective_progs(), which overwrites the detached link's poi=
-nter
-> with a dummy sentinel value (struct_ops_cfi_stubs[atype]).
->
-> Since the macro yields every non-NULL element to the caller subsystem,
-> including these dummy sentinels, could this cause type confusion and kern=
-el
-> panics if the subsystem accesses data fields on the dummy struct?
->
-
-Already replied in v1. Short version here again: cfi_stubs are used as
-dummy struct_ops. They are safe to call and not filtered out for
-performance reasons.
-
-> [Severity: High]
-> Will this strict rcu_dereference() cause lockdep splats or panics for
-> sleepable struct_ops?
->
-> The patch introduces free_after_mult_rcu_gp to support sleepable struct_o=
-ps,
-> meaning a subsystem executing a sleepable bpf program must hold
-> rcu_read_lock_trace() instead of the standard rcu_read_lock(). However,
-> rcu_dereference() rigidly enforces that rcu_read_lock() is held.
->
-> If the subsystem holds rcu_read_lock_trace(), lockdep will splat, and if
-> it erroneously holds rcu_read_lock(), the kernel will crash when the
-> sleepable bpf program actually sleeps.
->
-> Should this use rcu_dereference_check() or similar to accommodate sleepab=
-le
-> contexts?
->
-
-Already replied in v1. The macro is only intended for non-sleepable
-struct_ops. A sleepable version can be added later when the new
-struct_ops is added.
-
-> > +
-> > +static inline bool cgroup_bpf_is_struct_ops_atype(enum cgroup_bpf_atta=
-ch_type atype)
-> > +{
-> > +     return atype =3D=3D CGROUP_TCP_SOCK_OPS;
-> > +}
-> > +void cgroup_bpf_struct_ops_register(int atype, u32 type_id, void *cfi_=
-stubs, bool mult_trace);
-> > +int cgroup_bpf_struct_ops_attach(struct bpf_map *map, const union bpf_=
-attr *attr);
-> > +
-> >  void __init cgroup_bpf_lifetime_notifier_init(void);
->
-> [ ... ]
->
-> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > index 64572f85edc83..d591f306ace52 100644
-> > --- a/kernel/bpf/btf.c
-> > +++ b/kernel/bpf/btf.c
->
-> [ ... ]
->
-> > @@ -9868,6 +9872,23 @@ btf_add_struct_ops(struct btf *btf, struct bpf_s=
-truct_ops *st_ops,
-> >       if (err)
-> >               return err;
+> > The BPF verifier's state-equivalence loop (is_state_visited /
+> > states_equal) dominates load time for programs with acyclic control
+> > flow graphs (DAGs). In a DAG, every instruction is reached via exactly
+> > one path: no state is ever revisited, making state-pruning comparisons
+> > mathematically vacuous.
 > >
-> > +     if (cgroup_atype) {
-> > +             if (!cgroup_bpf_is_struct_ops_atype(cgroup_atype) ||
-> > +                 st_ops->reg || st_ops->unreg || st_ops->free_after_ta=
-sks_rcu_gp) {
-> > +                     bpf_struct_ops_desc_release(&tab->ops[btf->struct=
-_ops_tab->cnt]);
-> > +                     return -EINVAL;
-> > +             }
-> > +
-> > +             /* There is no need to unregister from cgroup when the
-> > +              * btf_free(). No struct_ops map and its cgroup link
-> > +              * can be created once its btf is gone.
-> > +              */
-> > +             cgroup_bpf_struct_ops_register(cgroup_atype,
-> > +                                            tab->ops[btf->struct_ops_t=
-ab->cnt].type_id,
-> > +                                            st_ops->cfi_stubs,
-> > +                                            st_ops->free_after_mult_rc=
-u_gp);
->
-> [Severity: High]
-> Does this path accept st_ops->cfi_stubs without validating that it is non=
--NULL?
->
-> If a struct_ops type is registered without providing cfi_stubs (e.g., if
-> CONFIG_CFI_CLANG is disabled), struct_ops_cfi_stubs[atype] will be NULL.
->
-> Later, if a link is detached and update_effective_progs() fails due to me=
-mory
-> pressure, the fallback bpf_cgroup_array_delete_safe_at() overwrites the
-> detached program's slot with bpf_cgroup_array_dummy().
->
-> Because cfi_stubs is NULL, it writes NULL into the middle of the array.
->
-> Since NULL is used as the array terminator, won't this prematurely trunca=
-te
-> the array and silently bypass all attached bpf programs that follow the
-> detached one?
->
-
-Seems like a false positive. bpf_struct_ops_desc_init() already
-rejects struct_ops registration with NULL cfi_stubs.
-
-> > +     }
-> > +
-> >       btf->struct_ops_tab->cnt++;
+> > This RFC proposes three components:
 > >
-> >       return 0;
+> > 1. compute_dag_topo() -- replaces a simple is_acyclic_dag() bool.
+> >    Uses Kahn's algorithm (O(V+E), O(V) space, no recursion) to detect
+> >    back-edges AND preserve the topological visit order for use in (2).
+> >    Handles BPF_JMP32, BPF_LD_IMM64 wide instructions, and falls back
+> >    conservatively on BPF-to-BPF subprogram calls.
+> >
+> > 2. do_check_dag() -- fast-path verifier for confirmed-DAG programs.
+> >    Critical correctness property: maintains a per-instruction state
+> >    table (states[insn_cnt]) and, at every join point (in_degree > 1),
+> >    calls merge_verifier_state() to conservatively merge all incoming
+> >    paths BEFORE processing the instruction. This ensures the verifier
+> >    never sees a register as initialized when any predecessor path left
+> >    it NOT_INIT.
+> >
+> >    Skips is_state_visited() / states_equal() entirely; provably safe
+> >    because topological order guarantees each instruction is processed
+> >    exactly once.
+> >
+> > 3. Full fallback: if compute_dag_topo() returns NULL (cyclic program,
+> >    subprog, or allocation failure), or if do_check_dag() returns an
+> >    error, the unmodified do_check() runs unchanged.
+> >
+> > Register-state correctness at join points
+> > -----------------------------------------
+> > When paths A and B converge at instruction N, the verifier must hold
+> > the least precise state that is safe for both paths.
+> >
+> >   Path A arrives at insn N: R2 =3D scalar [0, 5]
+> >   Path B arrives at insn N: R2 =3D NOT_INIT
+> >   merge_verifier_state() result: R2 =3D NOT_INIT
+> >   -> verifier correctly rejects any use of R2 at N
+> >
+> > Without this merge (a flaw in naive linear-scan approaches), the
+> > verifier would see only the state from whichever path was processed
+> > last in memory order, potentially accepting a program that
+> > dereferences an uninitialized register at runtime.
+> >
+> > RFC design question:
+> > --------------------
+> > do_check_dag()'s inner per-instruction verification step requires
+> > calling into do_check()'s inner loop logic, which is not currently
+> > factored as a callable sub-function. We propose two integration
+> > options and request maintainer guidance:
+> >
+> >   Option A: Extract a verify_one_insn() helper from do_check()'s
+> >             inner loop; do_check_dag() calls it per topological step.
 >
-> [ ... ]
->
-> > diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> > index 081d81de18163..a808d2a31f11d 100644
-> > --- a/kernel/bpf/cgroup.c
-> > +++ b/kernel/bpf/cgroup.c
->
-> [ ... ]
->
-> > @@ -355,7 +407,12 @@ static int bpf_cgroup_array_copy_to_user(struct bp=
-f_prog_array *array,
-> >       for (item =3D array->items; item->prog && i < cnt; item++) {
-> >               if (item->prog =3D=3D bpf_cgroup_array_dummy(atype))
-> >                       continue;
-> > -             id =3D item->prog->aux->id;
-> > +
-> > +             if (cgroup_bpf_is_struct_ops_atype(atype))
-> > +                     id =3D bpf_struct_ops_kdata_map_id(item->kdata);
-> > +             else
-> > +                     id =3D item->prog->aux->id;
-> > +
-> >               if (copy_to_user(prog_ids + i, &id, sizeof(id)))
-> >                       return -EFAULT;
-> >               i++;
->
-> [Severity: High]
-> This is a pre-existing issue, but does bpf_cgroup_array_copy_to_user()
-> incorrectly return -ENOSPC when trailing dummy elements exist?
->
-> If a cgroup link is detached under memory pressure, it leaves a trailing =
-dummy
-> sentinel in the array.
->
-> When userspace calls bpf_prog_query with an exact-sized buffer, the loop
-> breaks via "i < cnt" exactly when i =3D=3D cnt, leaving "item" pointing t=
-o the
-> dummy element.
->
-> Since item->prog is non-NULL (it is the dummy), the function evaluates
-> "return item->prog ? -ENOSPC : 0;" and erroneously returns -ENOSPC.
->
-> This breaks userspace queries, causing userspace tools to continually rec=
-eive
-> -ENOSPC and attempt to allocate larger buffers, eventually exhausting mem=
-ory.
-
-This issue is pre-existing and the severity should be low. This is an
-unlikely path when the system is under pressure. Can be fixed later
-with bpf_prog_array_copy_core() if really needed.
-
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623175006.31=
-36053-1-ameryhung@gmail.com?part=3D9
+> Specializing the verifier for DAG only case is not interesting.
+> Almost all programs now contain loops.
+> But the approach to use do_check_insn() as a transfer function
+> in the data flow analysis is totally viable.
+> I've been prototyping such transfer + join verifier for some time.
+> Will share soon. What merge_verifier_state() does is a key.
