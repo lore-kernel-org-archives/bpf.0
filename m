@@ -1,262 +1,141 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607452765E2
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 11:45:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74243288C30
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 11:54:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782301514; cv=none; b=FXmDr6yXFp+GlM4Mrg4tmAuUOsUTqAh+auBWSLeWjn0VHF2EBakWzl8RqP+Z4CeG4/Xcr1q4Pq1gjtbHBWQhecgKKohtNtBMsET+7AP6GxzPJ88WVyzSPkVLNT0Czt/7BDMWroaTQ8989njeZuhJRKnKNoEqiGCR6uPN+9DyMt8=
+	t=1782302096; cv=none; b=om664v9E5kVLZ6z7lZQNqMfblfuDLS6pBfAWx4VYHZm8T5hcLD5mZrG1K+/lGJuO9sJfLwxDdXgrW9SCqK/3aokIt1iexzt9hBpkIJLlcZGEu3lBBq3UeY2sM4yjp8psbhH5AeExOpqp4SbuzBhdcdHzP+kX5bdDdnyBCB09HYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782301514; c=relaxed/simple;
-	bh=H0MRJG2B1K/Bvnq9zsM3jp2THI6jTdOIvZbAQF4IfXc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cHNfokIod+bz+qg5hGVmKEzn0CXiHB3dg1DKNxwaGSJydhNnU0hCxOq8/mFXOtDpnBY+ozjjsU2LhRv4AKQrmmA/S6XlWHTaZwVVFxd38BuG0uil5PhGPqxtBdR9LwXgzszYnpO22ZFvC1Gp4/XsOZAGk7vepuNCw9Vo1+4ac+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TLNIv8rC; arc=none smtp.client-ip=209.85.128.50
+	s=arc-20240116; t=1782302096; c=relaxed/simple;
+	bh=TMWGjgzhMSCfw5zila1yJHv6X+TiVrsYoTVEXvWsB08=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qZTYwJgCImwuLjM3MVNgJPnIp2KYYyUPTZUZbbeQYT0S6mcZHFFjtR+d5on8n9cZPh2K3H06b2IaCAZXbmKov9Olp9YMei8KwAGnunpNITc8VnQO+NXJHjfVYlCYjbHIWfXC/1djNWHylys+acLGHpDIDq8W8eEKTkUNkQTScx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s6FK7+8v; arc=none smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TLNIv8rC"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4921eed3fa2so6936065e9.0
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 04:45:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s6FK7+8v"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c88cc025f54so470089a12.1
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 04:54:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782301511; x=1782906311; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eDHdE2/Ft54Y11URM0gtdL1NQZS1frqRaxNwltOdGA0=;
-        b=TLNIv8rCVLkYh+LyX0Ix7lUnkuVLsy1hJMyWWMgnbfdaig4Zc4iTEdlvN9fMDYc74y
-         rC93pcEeh+ZwKCYTqrUR9tq8WDoNAHb47TJhHbeVi3nb8FHfJIvIjBGA4UGcAttZnhIL
-         so9A0HPk16ttKoLS+t/i9BHdscAVBqT6/lB6kJhDXtnb4q+h9ISL+ma5yJOKbNSfA/VZ
-         9dSZrieI8GcoZkEM89x7xIZWAdW0iiOgnAIxKcosB+tciKSGFZU1ufZA4q33LxbUlbio
-         0nPj5eK6fFkfoRYDMP3WxJw9a1BlfRWtXwYuIvEpSuw0DxjNCFtYBnW5+o50bi8gocTz
-         q33g==
+        d=gmail.com; s=20251104; t=1782302095; x=1782906895; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z8Vn96XVnW2krHp7V5/fKbqoj2TgGkav7pxGg+ctypU=;
+        b=s6FK7+8vdlP/evJWM8aQW2cyHOMsflq8dKm8WwRbi+F7V8VLeElkpZxFrPZBVC6pqW
+         Bs3+6AGNzUCzjWFhm7z3y4mKcDT4SkInzd+tYK1tPxdwOy/Oh12ASZQRtlWFSR9HOJII
+         ZW3rkC6prJLPzeeKTmOj5q2ZJ58oKJSS4SYVphU7HGrcuriGpgTZtTsa7gGGOmL9x9Yp
+         gtCI92QTrZn9ic5MvuqW2Uz3GeTuR4J0lo09dNXZBFDE6ztKrAA5gE9I/KCbUvh2sbN6
+         FGVV4FOKOWT8R9UW6aed3gndS+nfCvR84R+MrFMG7PgHeeNbCOHnsjaZvD7zPRX+leM4
+         DDGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782301511; x=1782906311;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eDHdE2/Ft54Y11URM0gtdL1NQZS1frqRaxNwltOdGA0=;
-        b=MstdwPmKOnn0LyPkv6tlB/45AHZxGN7xo7uDkudK3IiBMtL5ZP4d4SrejsEykAv5LU
-         /zJgxWGW/wriK4TIm461c85e0enfRDW9rAXfqGpj+LXBFio3cAjnkHBkgAaWeUeZyF5T
-         EdiS+iBYdhpKQ3lYpip5MI+YvYdgfvbCWIWoZ1Rc5b25XmXUAwZWJSmnRRglPFXaidVZ
-         hQCHMlIxH3l7Csy/7jqam0vna/BTHyzDcf/Kps4+dP8uzXAxG+d7YU3C80ssdeqi5bXF
-         9yBrwPMg+YcPINkl+c+Kh+Lc0KthK9pcYeMDzwRypgEMig6u06++GpTu4BY/PHn895h/
-         655w==
-X-Gm-Message-State: AOJu0YzO5oq1fX7YSAqq1H1ocs8GIm4CypQdmKGjppuIcGiD3CCu7v7N
-	kF1mLMO0AYOY7jLh3d2Bb+7SZAng+7q04OQEIalBGSJMrBy51SAMqkPK0uf9X09L
-X-Gm-Gg: AfdE7cnQCanX3XNPVBiXn1kTuMuQUwAyRboARajvoacnYqAnkgtfBWR39c+XOwPEHHr
-	so7S17lQsmzLpdnPV+BbVq0i5RHQ0lbWol466XGDJQ6j0U5kDJV8UfW91nHNBeo2+bQ0xdI1QsJ
-	XXIUmlS7yMVfSTaM31Bif+Az5VkJLqsIGhW4MgGNZNQhqUs+lVk2BFBfwgdten7kI+XkKHqrcRg
-	ZDuzAhnJbVl9kvGSlLjHvW2FuxgEsB4ih0xEqtpwsbNOMSM1nwOwRuvf5Z6h0Rvrup8vl9fxSo1
-	QGvAM/WJtAk/GpNrWecrI6lRiUkfzhzxOfPMZbquLl6l+dfWG2L0h52CzhqCryhC4Lw9GCmeFSn
-	uEiAxnDh+jkNFZ6UtkU8VIeAmQf+wQULBsrYFCY9igj/PZUcNd9u25wY2t+AZi8xYwxKvN1N6CE
-	jNOfrqRxjTRcWL67YDEv89vIqfxzNIjjnPquQfK/EtTGIj
-X-Received: by 2002:a05:600c:1d0a:b0:492:409d:b7c3 with SMTP id 5b1f17b1804b1-4925b359fc2mr103143745e9.13.1782301510374;
-        Wed, 24 Jun 2026 04:45:10 -0700 (PDT)
-Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46c225b2988sm5854285f8f.25.2026.06.24.04.45.09
+        d=1e100.net; s=20251104; t=1782302095; x=1782906895;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Z8Vn96XVnW2krHp7V5/fKbqoj2TgGkav7pxGg+ctypU=;
+        b=mavU+JzBY+CDZZuQb+2SBaXMf74ebPpFfXrn/VIz8ab6u8uaEAeaQDJtPXHpStJxhX
+         eM9+otx3puMplt3bePfjNkqmM/NDp+0Uk/HTgvcOt2kTQL+bUPQJvIMyu6kOs+ju6BB+
+         3a2/0NZK5Me7vGM/pWfbMUpjJJEW52zX1JqvL/Mm4NRRgjpfzUoP7B91aLTTsLLNkQy0
+         6+fDecknoV2iXIM4FOOyZrivd+BlE3CjjLGDIPZKzJTXWflJ75JlD5SnlCH0ncqZJ3s3
+         yprtZi6gJrnh925GTqFxrIFJIvwVcd5E/lxLEBbihJv5yqp9D8JI05KGgu1tYO2UJT/g
+         hqdg==
+X-Forwarded-Encrypted: i=1; AFNElJ91WtlnxOzoKgzQhtrgl1JpsrcXIfcibkyZ15NPUfcBa5N8gcGqOdbl9HofVm1lD3fKp8U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhBnTj2xxefFa9WoLgnoxK6s7eK6yDWQLtXCeRWklKqMDyA0/K
+	d1AJ7hKK7rL9y9ScbQsBmVCV7dzhPmqgX5BsP1/H5Yo+deXe04vBoKJB
+X-Gm-Gg: AfdE7cnzX/RrY61JWlnzQ2QaLcglSlZRom0Ylwl5l5HixWbjoNsPtyyL75ZI7Fa4iYP
+	e0z1HAoQNiUjJMVQPVask6br9HJujoApzlrK55ESMFPFQC+lVbwGfiIUs081W+XKbBMQUqPqgEE
+	06smY7huSwcoblyIpIXMVwc+5EajIEGSENRN0b9ZjoDe7qIMfDVvda5l0eZ6EuGIVUpiWSzZ9Su
+	5K2FTaf9HcHwBD0SKZ5mVWmUb4sn7JLbHHEVecU/yVibVz/+cXOMbSf4QvfWIKc7/qAzYtzUPj1
+	XgBr0iarzUX0naxrkTlC595ocPzMtsjOzfbdArm02itN9XsfizXoeV91E1ntjhbRRAi1cV4KoIL
+	aUhBdoeCDg3eO9cJu/Px52GWSODVe/osJ1ogVZnBrk/23ujk7g+imeM9KjcqVgx1KgKK5E3B3AY
+	z54gw9gEDC8SdsD4xj0dwYWYp8ENdtvztwsXeKrZMIrhZquiCUnwndmb5s4tIy
+X-Received: by 2002:a05:6a20:b7a7:b0:3b3:f46:1ef3 with SMTP id adf61e73a8af0-3bd15239141mr9670702637.41.1782302094539;
+        Wed, 24 Jun 2026 04:54:54 -0700 (PDT)
+Received: from r912.tailbb6e1e.ts.net ([182.70.116.80])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c8bc563c168sm12708560a12.20.2026.06.24.04.54.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 04:45:09 -0700 (PDT)
-Date: Wed, 24 Jun 2026 13:45:08 +0200
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
-	daniel@iogearbox.net, edumazet@google.com, john.fastabend@gmail.com,
-	jordan@jrife.io, kuba@kernel.org, martin.lau@linux.dev,
-	netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
-	pabeni@redhat.com, yonghong.song@linux.dev
-Subject: Re: [PATCH bpf-next v8 3/7] bpf: add bpf_icmp_send kfunc
-Message-ID: <ajvDRCw8cPqXAqQq@gmail.com>
-References: <20260622120515.137082-1-mahe.tardy@gmail.com>
- <20260622120515.137082-4-mahe.tardy@gmail.com>
- <DJGWWQQD3B0P.2O1D9MO17YRK4@etsalapatis.com>
- <ajuqZMzqACLOijoC@gmail.com>
+        Wed, 24 Jun 2026 04:54:54 -0700 (PDT)
+From: Avinash Duduskar <avinash.duduskar@gmail.com>
+To: toke@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org
+Cc: eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	hawk@kernel.org,
+	yatsenko@meta.com,
+	leon.hwang@linux.dev,
+	kpsingh@kernel.org,
+	a.s.protopopov@gmail.com,
+	ameryhung@gmail.com,
+	rongtao@cestc.cn,
+	eyal.birger@gmail.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	dsahern@kernel.org
+Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to bpf_fib_lookup() helper
+Date: Wed, 24 Jun 2026 17:24:42 +0530
+Message-ID: <20260624115442.4112419-1-avinash.duduskar@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <87pl1gcmgf.fsf@toke.dk>
+References: <20260624030530.3342884-1-avinash.duduskar@gmail.com> <20260624030530.3342884-2-avinash.duduskar@gmail.com> <87pl1gcmgf.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ajuqZMzqACLOijoC@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jun 24, 2026 at 11:59:00AM +0200, Mahe Tardy wrote:
-> On Tue, Jun 23, 2026 at 10:09:20PM -0400, Emil Tsalapatis wrote:
-> > On Mon Jun 22, 2026 at 8:05 AM EDT, Mahe Tardy wrote:
-> 
-> [...]
-> 
-> > > +#if IS_ENABLED(CONFIG_IPV6)
-> > > +	case htons(ETH_P_IPV6):
-> > > +		if (type != ICMPV6_DEST_UNREACH)
-> > > +			return -EOPNOTSUPP;
-> > > +		if (code < 0 || code > ICMPV6_REJECT_ROUTE)
-> > > +			return -EINVAL;
-> > > +
-> > > +		nskb = skb_clone(skb, GFP_ATOMIC);
-> > > +		if (!nskb)
-> > > +			return -ENOMEM;
-> > > +
-> > > +		if (!pskb_network_may_pull(nskb, sizeof(struct ipv6hdr))) {
-> > 
-> > Minor nit, but this may also fail with SKB_DROP_REASON_NOMEM. Now this is only
-> > possible if the IP header is not in the linear space which may well be
-> > impossible (?), but do we want to differentiate with
-> > pskb_network_may_pull_reason()?
-> 
-> Indeed, I think for the IP header is should be fine, but I replaced it
-> with the reason variant. Thanks!
->  
-> > > +			kfree_skb(nskb);
-> > > +			return -EBADMSG;
-> > > +		}
-> > > +
-> 
-> [...]
-> 
-> > >  static int __init bpf_kfunc_init(void)
-> > >  {
-> > >  	int ret;
-> > > @@ -12639,6 +12745,9 @@ static int __init bpf_kfunc_init(void)
-> > >  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
-> > >  					       &bpf_kfunc_set_sock_addr);
-> > >  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_kfunc_set_tcp_reqsk);
-> > > +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SKB, &bpf_kfunc_set_icmp_send);
-> > > +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_kfunc_set_icmp_send);
-> > > +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_ACT, &bpf_kfunc_set_icmp_send);
-> > 
-> > Based on Sashiko's feedback, since we mostly care about cgroup_skb
-> > should we just make it exclusive to them and drop CLS_ACT?
-> 
-> This would indeed simplify this patchset, I could drop most of the
-> complication induced by tc ingress routing. But I think having both
-> cgroup_skb and tc support would be nice as a first implem. I'll try
-> again in a new version as I added a test for ingress tc and could
-> actually fix the routing based on sashiko's feedback (this also drop the
-> first two patches that were partially wrong).
+> > +	if (flags & BPF_FIB_LOOKUP_VLAN)
+> > +		return -EINVAL;
+> > +
+>
+> This is fine, but we should probably reject the input flag as well in
+> the next patch (for symmetry).
 
-tl;dr: I'll remove the tc support as it feels difficult (impossible
-without major plumbing changes?) to get right.
+I dug into this and I don't think the two are symmetric. The egress
+reject is right for exactly the reason you gave: in tc you can redirect
+to the VLAN device directly, so reducing the egress to the physical
+parent is only needed for XDP. But that is a transmit argument, and
+VLAN_INPUT never touches the egress or redirect side. It only sets the
+lookup's ingress (flowi_iif), which picks the iif policy rule and the VRF
+table, and there is no XDP-only constraint there for the symmetry to
+mirror.
 
-Here are the details:
+tc also has a real user for it. In __netif_receive_skb_core() the tcx
+ingress hook runs before vlan_do_receive() demuxes the frame, so a clsact
+program on the physical port sees a tagged frame with skb->dev still the
+physical device and the tag in skb->vlan_tci. That is exactly the
+physical-ifindex-plus-tag input VLAN_INPUT takes, and it wants the
+subinterface-scoped answer. The 2/3 selftest already runs the VLAN_INPUT
+cases on the tc path, including the VRF-table-selection ones, and they
+pass, so this isn't a theoretical tc path.
 
-Initially I ended up removing the first two patch set as they were
-technically wrong (see explanations after), I added this small helper:
+So I would keep VLAN_INPUT allowed on both. If you would rather hold a
+uniform "both VLAN flags are XDP-only" line under the same
+restrict-now-relax-later rule as the TBID and OUTPUT combos, I will add
+the reject, but unlike the egress case it removes a working tc path
+rather than one tc cannot use. Happy either way, just let me know.
 
-	#if IS_ENABLED(CONFIG_INET) || IS_ENABLED(CONFIG_IPV6)
-	static bool skb_dst_validate_and_hold(struct sk_buff *skb)
-	{
-	       bool ret;
+Thanks for the review.
 
-	       rcu_read_lock();
-	       ret = skb_valid_dst(skb) && skb_dst_force(skb);
-	       rcu_read_unlock();
-
-	       return ret;
-	}
-	#endif
-
-And then the body of the kfunc would do something like this (instead of
-calling the removed helpers):
-
-	reason = pskb_network_may_pull_reason(nskb, sizeof(struct iphdr));
-	if (reason) {
-		kfree_skb_reason(nskb, reason);
-		return -EBADMSG;
-	}
-
-	memset(IPCB(nskb), 0, sizeof(struct inet_skb_parm));
-	IPCB(nskb)->iif = nskb->skb_iif;
-
-	if (!skb_dst_validate_and_hold(nskb)) {
-		if (!nskb->dev) {
-			kfree_skb(nskb);
-			return -ENODEV;
-		}
-
-		iph = ip_hdr(nskb);
-		reason = ip_route_input(nskb, iph->daddr, iph->saddr,
-					ip4h_dscp(iph), nskb->dev);
-		if (reason) {
-			kfree_skb_reason(nskb, reason);
-			return -EHOSTUNREACH;
-		}
-	}
-
-	icmp_send(nskb, type, code, 0);
-
-Then I added a tc ingress test to showcase the issue with the previous
-helpers and trigger the routing in the kfunc, with this steup:
-
-	  client ns:                    test ns:
-	  icmp_peer                     ns_icmp_send_unreach_route_ingress
-	+------------+                +-------------------------+
-	| icmp_cli   |                | icmp_srv                |
-	| 198.18.0.1 |--------------->| primary:   198.18.0.254 |
-	+------------+ TCP SYN        | local dst: 198.18.0.2   |
-		       dst=198.18.0.2 +-------------------------+
-					  | tc ingress BPF
-					  | calls bpf_icmp_send()
-					  | -> icmp src=198.18.0.2
-					  v
-
-With the previous helpers, the icmp would route by reverting the daddr
-immediately, and then asking for the route. Thus we would "forget" about
-the actual source address, and in this case we would end up with the
-icmp control message src IP being the primary address and not the one we
-wanted: 198.18.9.2. Turns out route input was sufficient to give the
-needed _correct_ information to icmp_send that would invert the address
-for us and route the packet again.
-
-Then I submitted that for more review by sashiko and it found this new
-thing (which is orthogonal to the previous issue):
-
-	> @@ -12639,6 +12788,9 @@ static int __init bpf_kfunc_init(void)
-	>  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
-	>  					       &bpf_kfunc_set_sock_addr);
-	>  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_kfunc_set_tcp_reqsk);
-	> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SKB, &bpf_kfunc_set_icmp_send);
-	> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_kfunc_set_icmp_send);
-	> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_ACT, &bpf_kfunc_set_icmp_send);
-
-	Can exposing net/core/filter.c:bpf_icmp_send() to sched_cls and sched_act
-	deadlock a non-lockless qdisc?
-
-	A cls_bpf program can run from a qdisc enqueue classifier while the qdisc
-	root lock is held.  If it calls bpf_icmp_send(), the kfunc synchronously
-	goes through icmp_send()/icmpv6_send() and then normal transmit.  If the
-	reply routes back through the same qdisc, the inner transmit can try to take
-	the same root lock again.
-
-	One possible path is:
-
-	__dev_xmit_skb()
-	  q->enqueue()
-	  prio_enqueue()
-	  tcf_classify()
-	  cls_bpf_classify()
-	  bpf_icmp_send()
-	  icmp_send()/icmpv6_send()
-	  dev_queue_xmit()
-	  __dev_xmit_skb()
-
-	Is this kfunc safe in enqueue classifier/action contexts, or should this
-	registration be limited to contexts that cannot run under the qdisc root
-	lock?
-
-I managed to indeed reproduce this deadlock. So I think there's no way
-to implement this safely, we would either need:
-- make the kfunc only available to tcx only (and then prevent program
-  verified as TCX from being reused as legacy qdisc classifiers...)
-- do some crazy runtime guard, exposing the lock.
-
-So I will give up on tc support for now as it's more difficult than
-expected.
-
-> 
-> > >  	return ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SOCK_OPS, &bpf_kfunc_set_sock_ops);
-> > >  }
-> > >  late_initcall(bpf_kfunc_init);
-> > > --
-> > > 2.34.1
-> > 
+-Avinash
