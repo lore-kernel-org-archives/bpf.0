@@ -1,113 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B2E25B092;
-	Wed, 24 Jun 2026 08:47:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A400230B525
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 08:53:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782290862; cv=none; b=Ts7qa0D45Jm2CyF01/1arDbd9jc51bW6JUKKOQJl9d3GRLX8ks9h7IpuWWkFwH3y/PkkijyMvv7d5A4kyVvOoAc/eRD9uAu1n2FgkhPp31tz8wADXOA0sg9dGWDrsmtTURCig52khc3dEXKUHy4BI+eOjV+LOl8q+CZSDVTBHXs=
+	t=1782291214; cv=none; b=g+qugEtvySkJ9tssXTkxqchtfEjZ1lqkS/ESWw0H2IHF1aCKS2ZAkqDOWIa6myf59bZSDHOwGw4TZxR4wTTZloAaEk8RzG30bS0gMkpsqwp3H2psp3ooYPPwvKCbr885HEbVODHFUEkLoAZvSgsHD7+bJAiSxJPaZivFeCFICu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782290862; c=relaxed/simple;
-	bh=b116FrQSfFgK6uDYvZxPIGTwSn7qgoOY6QcZ7jz/mRQ=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=aZzOllbz9Ih9LuHESLFFmJjXRt2QAWU8lgWihSX6AA7Z0on37q3/RHh3A/h0JjYtbwIVsyJJ1OlDMbldyyacjy5RIQuKJkDnrfHXVBsmJdeqh3AyIhugqpkaMrdsUUfx4SqfJwQmg4So4zIOEkQ5tL9qZUD3Lqu15tGfyWXnKVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S/jTbya3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782291214; c=relaxed/simple;
+	bh=SDzKE+BzWvKCG/y7mDCWLkl8Vt+H9YSOa7s84s2z0iE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=DL7qrhmrI/irIczDqpsQeIcED6R1KpAOjRo+YpO+a7WA4YIBDE0Y5t2l0xF6+otBrZMqBXbt67N+oEWJXCI90iCJGp/1Nn6lsEIf+a18SpRSqnv4ZNNgOFnFzVBPhq0EFgz+4Q8UbSuySdQImIhDKymXQ30e9WW2yKH/f3Brg7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jf1mK1HO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S/jTbya3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CB841F000E9;
-	Wed, 24 Jun 2026 08:47:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jf1mK1HO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2380B1F000E9;
+	Wed, 24 Jun 2026 08:53:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782290861;
-	bh=kryu94ZiuoJZhJYlAoyQe46C2YsO062c3BH0CTq4xAk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=S/jTbya37hcllfQ/CxBn33/dgOBxA+WxIvjKnDnL5VrDy3rR4TbPCQS/s+EJC0Pd8
-	 3YxRplgdwuSJqtLfUYbQGnbPI2CSumWWF+SQ2bmE9RFfqL8egDaNqH34Ipejrdx+c/
-	 xgxXEx4whOK+FbZhHHIkQMsTCkPlv8Y/ER+efHSScdC2bpNybRlUmsXK4Fkd6TBfqS
-	 yNYK0Rv3clLc0LnDsiJTEaCjeis1gbt5MvbFRb9ge4CzH+lBvVJMta9xNEKhBKeiM1
-	 4R7vXShuMfu/KWCQqDrcUHHC+eF3hkFvvSI0rW4xKh1OxlSYAkuLpI3I/me+4mM4fa
-	 w5AR4ihTcPLvg==
-Date: Wed, 24 Jun 2026 17:47:37 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor
- <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner
- <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- bpf@vger.kernel.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org,
- kernel-team@meta.com
-Subject: Re: [PATCH v6 6/8] Documentation: bootconfig: document build-time
- cmdline rendering
-Message-Id: <20260624174737.a4862dcd86f3d746b788d197@kernel.org>
-In-Reply-To: <20260623-bootconfig_using_tools-v6-6-640c2f587a3c@debian.org>
-References: <20260623-bootconfig_using_tools-v6-0-640c2f587a3c@debian.org>
-	<20260623-bootconfig_using_tools-v6-6-640c2f587a3c@debian.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=k20260515; t=1782291213;
+	bh=K3AMMan4XeGDCQSQm1iwlbusohxgfo2ss3OGCL7PnA0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Jf1mK1HOOGHXa2g5svu0wR9Pvg4uWyQgLnUE84vIb9v2bfrZ9rO+MlexC7PPHVECM
+	 GDdi5XKhXxDRhCWmhEd6IivPFXxu4gWq8nSZkvdTZ2oTllRJ6ijo0rI99XEXbpjMYO
+	 ra21gknOL9o3ZuNTmhpmAao54jmiSISijISWR708t+SIw5Ob78f8mHHU4jX4ySXTxI
+	 ey0jNS8G6D/bB/kp2EjQIG+gsAWAnRKWyL5T+QMZo03scfVEkdOX5hIFU489kEyfLR
+	 AI1/eQJuhdLOlgclkzeYPctYqwJzuY1PoU9MdpTlr+MWEwgcGGj1S6NkNfCZOlhD+S
+	 G57y9t7lrFhDQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] xsk: fix memory corruptions in net/core/xdp.c
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Clement Lecigne" <clecigne@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260624084130.2382335-1-clecigne@google.com>
+References: <20260624084130.2382335-1-clecigne@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 24 Jun 2026 08:53:32 +0000
+Message-Id: <20260624085333.2380B1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Tue, 23 Jun 2026 09:15:33 -0700
-Breno Leitao <leitao@debian.org> wrote:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Critical] The new dynamic `truesize` calculation tightly bounds the skb =
+linear buffer size but fails to account for the `LARGEST_ALIGN(len)` paddin=
+g used in the subsequent `memcpy()`. This leads to an out-of-bounds write t=
+hat corrupts the `skb_shared_info` structure.
+--
 
-> Add a section describing CONFIG_CMDLINE_FROM_BOOTCONFIG: what it
-> does (renders the embedded "kernel" subtree to a flat cmdline at
-> build time so early_param() handlers see the values), what it
-> requires (BOOT_CONFIG_EMBED, a non-empty BOOT_CONFIG_EMBED_FILE,
-> and ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG -- currently x86 only),
-> the bootconfig opt-in semantics, the initrd-vs-embedded precedence,
-> and the soft-error overflow behavior.
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
->  Documentation/admin-guide/bootconfig.rst | 81 ++++++++++++++++++++++++++++++++
->  1 file changed, 81 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/bootconfig.rst b/Documentation/admin-guide/bootconfig.rst
-> index f712758472d5c..349cefbb2bbcd 100644
-> --- a/Documentation/admin-guide/bootconfig.rst
-> +++ b/Documentation/admin-guide/bootconfig.rst
-> @@ -234,6 +234,87 @@ Kconfig option selected.
->  Note that even if you set this option, you can override the embedded
->  bootconfig by another bootconfig which attached to the initrd.
->  
-> +Rendering Embedded kernel.* Keys at Build Time
-> +----------------------------------------------
-> +
-> +By default, the embedded bootconfig (``CONFIG_BOOT_CONFIG_EMBED=y``) is
-> +parsed at runtime, after ``parse_early_param()`` has already run. Early
-> +parameter handlers (``mem=``, ``earlycon=``, ``loglevel=``, ...) therefore
-> +cannot see values supplied via the embedded ``kernel`` subtree.
-> +
-> +``CONFIG_CMDLINE_FROM_BOOTCONFIG`` resolves this by rendering the
-> +``kernel`` subtree of ``CONFIG_BOOT_CONFIG_EMBED_FILE`` into a flat cmdline
-> +string at kernel build time (via ``tools/bootconfig -C``) and prepending
-> +it to ``boot_command_line`` during early architecture setup, so the keys
-> +are visible to ``parse_early_param()``.
-> +
-> +The option requires ``CONFIG_BOOT_CONFIG_EMBED=y``, a non-empty
-> +``CONFIG_BOOT_CONFIG_EMBED_FILE``, and an architecture that selects
-> +``CONFIG_ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG``. Currently only x86
-> +selects it; on other architectures the embedded bootconfig still works,
-> +but only through the late runtime parser.
+commit f8cfaa75cd9fcfb65c25981d740b6eedecb19f7b
+Author: Cl=C3=A9ment Lecigne <clecigne@google.com>
 
-As commented by Sashiko, here we need to mention that this option requires
-CONFIG_CMDLINE to be empty. This means user can NOT set both option
-at once (This also means user doesn't have to worry about configuration
-conflicts.)
+xsk: fix memory corruptions in net/core/xdp.c
 
-Thanks,
+This commit attempts to fix a memory corruption in AF_XDP zero-copy handling
+by dynamically calculating the truesize for skb allocation. It also fixes a
+mismatch in xdp_copy_frags_from_zc() between allocation and copy sizes.
 
+> diff --git a/net/core/xdp.c b/net/core/xdp.c
+> index 9890a30584ba7..f36d1fb875ab8 100644
+> --- a/net/core/xdp.c
+> +++ b/net/core/xdp.c
+[ ... ]
+> @@ -740,7 +740,9 @@ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff=
+ *xdp)
+>  {
+>  	const struct xdp_rxq_info *rxq =3D xdp->rxq;
+>  	u32 len =3D xdp->data_end - xdp->data_meta;
+> -	u32 truesize =3D xdp->frame_sz;
+> +	u32 headroom =3D xdp->data_meta - xdp->data_hard_start;
+> +	u32 truesize =3D SKB_DATA_ALIGN(headroom + len) +
+> +		       SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
 
+[Severity: Critical]
+Does this tight allocation size account for the LARGEST_ALIGN(len) padding
+used during the memcpy() below?
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+If an XDP program modifies the packet data making headroom unaligned, and=20
+headroom + len is close to a multiple of SMP_CACHE_BYTES, napi_build_skb()
+will place the skb_shared_info structure exactly at=20
+SKB_DATA_ALIGN(headroom + len).
+
+Could the LARGEST_ALIGN(len) size in the memcpy() below write past this
+linear data area and corrupt the adjacent skb_shared_info structure?
+
+>  	struct sk_buff *skb =3D NULL;
+>  	struct page_pool *pp;
+>  	int metalen;
+[ ... ]
+> @@ -762,7 +764,7 @@ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff=
+ *xdp)
+>  	}
+> =20
+>  	skb_mark_for_recycle(skb);
+> -	skb_reserve(skb, xdp->data_meta - xdp->data_hard_start);
+> +	skb_reserve(skb, headroom);
+> =20
+>  	memcpy(__skb_put(skb, len), xdp->data_meta, LARGEST_ALIGN(len));
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260624084130.2382=
+335-1-clecigne@google.com?part=3D1
