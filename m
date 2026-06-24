@@ -1,113 +1,118 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720DD368D5E
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 13:53:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782309184; cv=none; b=MhCSwvKprNjgZPM53HHHAvk9ECkS19R+Q1y412zuq4AsTjAMorJXriSohVsZt9SyyYvwLDGt2jtGmJ8EWMDuUkDJUTppjIcQqc3r60BOzCdP8gJ9IvBxc9rU6qhZFeN/mz4yiNjSTgbDWHQbWgQan1EgMpnF73Dr8pxBXJBXiOc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782309184; c=relaxed/simple;
-	bh=zkgzcPiM97rc0S6TjcXijaCroXS3ki3QLJ2F7L4B3OI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EPbm376P+Z8KcR9SOe1vevy+/nMPkEoF7qm0GNyW8cfWrkuSWzFo2wFFGC0IbdTdS0Py38vbiViBbttGgZlEkVSKw2MROE7noIBsEfHUiKOoYAWkNS9CzHejByM8MbuJqmKiCbYxU91jb55PP3RdXL7iT9zsqNwZJJJ+mBSqTss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CFqzbUvc; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 106BC3B893C
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 13:57:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.181
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782309456; cv=pass; b=R/l4JXQ0+UW4ahoQJALibq7YEtzKyt2deqBI51rer4aKoj7prPa/64jXbGdiNriK/9w/nZhkUekZv0efxtdR8r+AUD56q6ppzfiGt0TKwMAov84RQyPs5JsGucCCoinpOL0imvWBlim30WJyMMKxjKSPplnlkkhcTOUUlGGK5+I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782309456; c=relaxed/simple;
+	bh=uGIoMiwB2AyMib6mxd71XC+AdlwasVD8+0Z4/dxNlcw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WLlEe02Zdj8yZ5ZG+NwsZ40SCzD43a7Q+h0qGhbuZkaTSETnRBtHEPzQM4e5U9FevRxG9z+z3Uw5sWSjBMUobVxCmQiXLJ3yxRBovnZNKvYznUV9rJ3I6MILbXpBB3OGeSnV+KeLDnpdjHQDTeUqvPK2pyez6ztsvB40uiz9m6g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CSJ6nSw7; arc=pass smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CFqzbUvc"
-Message-ID: <d520bda3-4eca-4ea6-b423-990935a0d3c8@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782309180;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=R/9pZJlHpMdXgadRpz+8VRUR/QVFe1YS13n2B65x7Qc=;
-	b=CFqzbUvcgf6rD+0uLkTBOTlrbupg70NmWia/ySyd0lJb8UY2sRuYyr1Fjd8CtVYJniv09V
-	eSWZ/p01MccP8v1cbSahz/xz2z3YzLEoqTuPSrvJF+vnOh0OC32nQYtc6q525jSRj+sEVf
-	Lh+rdLEPtZLienXKyCyK8ylVRYl7Afs=
-Date: Wed, 24 Jun 2026 06:52:54 -0700
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CSJ6nSw7"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-809ee64a490so913577b3.0
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 06:57:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782309454; cv=none;
+        d=google.com; s=arc-20240605;
+        b=leI16/wyaBnxZoFyyXbSQA4O/xWzIvAzU+ofMiSDPKkkZGohsjMl5tpHx40cMOYGid
+         KhQ70PpiGSlKHYyDaoY9JF+Q0QzgSywPJE/L2P5T2zFULgGXzJfRKM+pbezY5VMzW0dS
+         JuBJc6UfIa4QB3LI86HqbHXGYMx0DsvZQ8RPnRP2mBtk/498F+yEsy2g+1qFhvQZ5zEs
+         aIJmdCp/IxOuZnPd5ApnMvhVnWoDNX6t0Gka13hHaEqgUMO1+HqddOXxTuTwUPxqgB3F
+         yijD4KWz2tBOY9gsXrtJqBf2DR1mF0jxY0BmQlmmFI4R//fuTqLk+3mijnZ6rK26hVhn
+         5y4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=uGIoMiwB2AyMib6mxd71XC+AdlwasVD8+0Z4/dxNlcw=;
+        fh=T0Zz0a8T2XSqPlWSyoyzoqZRBnKxZGwcft7+/IZiMns=;
+        b=UG4NoGWgS+LSVbq7kuQRsRDGoUxpgbf6XBEWSn3q/w8mR5Y2nnCawoeidu+A6Mh8Sx
+         yavyVURoy1x7zCBUHkVxIMy70zQ0TU1sEeTAAZX7lbw7Rw4KPe9mjqrWLagZQYPmBBxE
+         eiFGo/JZbl5eDEmyHvOI4V4yPbdH71Gnr2+lnfBAZoG9KVPjzsC2QrOlG/8Ts71YSPqD
+         3lNRuNQc9uvWX4g8TxtqOuNEgM3fNOpqO5Ulqxsh9Jo8HdUtlaVYA76nLh8eDMQysEwk
+         /CLzMgNXAyeWlViKynzUA21m9y6N+PrDXi95HpAMgbKut2X6FFI5aLrSWS8gunqwPitO
+         HDeg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1782309454; x=1782914254; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uGIoMiwB2AyMib6mxd71XC+AdlwasVD8+0Z4/dxNlcw=;
+        b=CSJ6nSw7okKcLtPLZg7CHIyQ9GwPj26MgSh0cBV7nHw3eavhtpkmDjyKq2OmpO1EDf
+         f62uIfzjq9AVP6a0CGultDm21IVNYwpRJqMEzkoEh3YZgeYlYdUT9VnrcUfVfaIbWwxb
+         lI9RBCzysCd+teroH+chPTmMV23Xq0jbKj6Ow1A1Lfg/axV3jd/jXglN86iAXXYZWSK2
+         O7mubnqsVvh747m5HKRZUm5fxuLPuGKKcptJj4MGiiJ1YEQZqRiDnzWubimHawETaoNj
+         I348iLIsQw1Yi/9L163MWrhzD5xgJs0SRo3cnJk26/zuQ2M4VcP144Qk3vVU0NKnXMAp
+         NILg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782309454; x=1782914254;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=uGIoMiwB2AyMib6mxd71XC+AdlwasVD8+0Z4/dxNlcw=;
+        b=IyQlivqJ0fQWvr4ROOg/X7BWR/PnsENd1g8Ftb9x/eAwELhOtLm11IXuE3m9ug3/4g
+         aGJyP1TWNNa9Yl80Z4SYmzfAgfpcuCzIveqCdXaWi3Ha5Cpv8ILKmLI74RyBwevgfnvj
+         BCqZg/Wbi6v+VC4N431SxRLwuvjwB8nPHzs1rcA0UHjKVJC065WqBYmby8ln6Pfm16d3
+         hj1DMKao9OP4O4aRuPHa9QWNDHIOzjIMwnQ7LMjofD7IX/wOUQ7zmhfuYpfRL9T2I8hm
+         jq4l91kKQnA33U2gj50N5ZsBDAszmNf3OfTO7lPFFvI3aJOfbmU9/rtwPxobWoUCqfLj
+         DFUw==
+X-Forwarded-Encrypted: i=1; AHgh+RpOwi+14KgiTPs4LX3I5xnbqHv2L9EyYXGRDVI5+PlFCmiLEXym/tEyceABGYM1L9dp/WA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkIq8+/Bw2vUcAEWKuS0Xm8aQdkLQvf0D794iYDe264WvFfSJw
+	cUj7NJ5iyje77LHtxKvLzyGGQv3w4nUFb4zCepQ2ofzvB/FEpnodNXm2ezmu4KyKHNDqiayJzSm
+	TlO1og3D1rPwBasdDVkjAAlqsm4OKuDP7DeqAqpjIycTlp8uqHr+FThnZg0FqQn/7
+X-Gm-Gg: AfdE7cmD9GhINO0FRhFg54UpWZeTaq8X6gp7iKVSeil6TCMq9qdL+4K/TIKEkTf+rTi
+	U9x+u5kTR5HVqnJYgXwd4oDXSzwu2dPX4VA8uR3qrRccdD8mTibPz88e8LDUmKKAmyK25vcBUOI
+	245A6zB28B/tB8uSiSVbzcbYlqmV4ur1SN6bFtXHpdGsuGdAfcljO/Z851j5vxCioJLbCZqV/Ci
+	/HKMVk2kMCHLXffnCNVrtZ8JnHvW/SC17URYTYo/NAk6A8B969dxoKROFUX0XoH7X/E0v1bBVSL
+	Oqz3+0j/NLUhQM9MFXQ4xbG8Z+M=
+X-Received: by 2002:a05:690c:680c:b0:7f2:9d64:991e with SMTP id
+ 00721157ae682-807f211f18cmr30285457b3.9.1782309453687; Wed, 24 Jun 2026
+ 06:57:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves v7 0/5] pahole: Encode true signatures in kernel
- BTF
-Content-Language: en-GB
-To: Jiri Olsa <olsajiri@gmail.com>, Alan Maguire <alan.maguire@oracle.com>
-Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
- dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, kernel-team@fb.com
-References: <20260623040704.2732530-1-yonghong.song@linux.dev>
- <ajp70MRjHvCJNeyv@krava> <d270a215-264f-4c5c-9d7f-0b1568815e31@oracle.com>
- <b1b73cef-f25a-443d-8557-4cfe92938b46@oracle.com> <ajujJM9N0_QpB_3d@krava>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <ajujJM9N0_QpB_3d@krava>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260623-bpf-lskel-fixes-v1-1-90600b40e7cb@google.com> <CAEf4BzYBwi5V0XPMEczdKxjW6N7xT0wZk1Q8cvH6UceyoJP+gQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzYBwi5V0XPMEczdKxjW6N7xT0wZk1Q8cvH6UceyoJP+gQ@mail.gmail.com>
+From: Sid Nayyar <sidnayyar@google.com>
+Date: Wed, 24 Jun 2026 14:57:22 +0100
+X-Gm-Features: AVVi8CeeK8hhqdWlixg3QvzAz10RuPIkQgJt-nVtGag48Ox91OrPF8ssvc3njPs
+Message-ID: <CA+OvW8Zxcfa2knGB3AvT_nMa=fY-DbKL_JmbfwgkYBOt2oVRLw@mail.gmail.com>
+Subject: Re: [PATCH] bpf: allow BPF_LOG_KERNEL from kernel space
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Giuliano Procida <gprocida@google.com>, 
+	Matthias Maennich <maennich@google.com>, Tiffany Yang <ynaffit@google.com>, 
+	Neill Kapron <nkapron@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Jun 23, 2026 at 9:50=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+> This feels a bit dirty. We already have BPF_LOG_KERNEL which is passed
+> through log_level, so wouldn't it be better to just make sure that
+> BPF_LOG_KERNEL is not rejected when program is loaded from inside the
+> kernel, instead of passing along extra bool everywhere?
 
+I was concerned about userspace loaders exploiting this to spam the
+kernel logs, hence decided to implement this way. I guess I can
+enforce a privilege check at the syscall boundary points to prevent
+that.
 
-On 6/24/26 2:28 AM, Jiri Olsa wrote:
-> On Tue, Jun 23, 2026 at 05:02:30PM +0100, Alan Maguire wrote:
->
-> SNIP
->
->>>> hi,
->>>> I tried to get the numbers from my setup and noticed that some new
->>>> functions were included in BTF compared to the current version
->>>> (functions diff attached below)
->>>>
->>>> like for "arp_process" function the current pahole gives me:
->>>>
->>>>    arp_process : skipping BTF encoding of function due to unexpected register usage for parameter
->>>>
->>>> but it's included in BTF generated with the new pahole.
->>>>
->>>> in addition to your explanation above also one of the commit says:
->>>>
->>>>       - a parameter with no location, a constant value, or (for non-clang) no
->>>>         register found is marked optimized out
->>>>
->>>> please check below, it seems like 2nd argument of arp_process has no location,
->>>> so iiuc it should not be included in BTF, right?
->>>>
->>>> thanks,
->>>> jirka
->>>>
->>>>
->>> thanks for catching this; it looks like we return a bit early before detecting
->>> missing locations in the non-true-signature code. If you get a chance, would you
->>> mind trying the attached patch to see if it fixes the problem?
->>>
->>> If the fix works and Yonghong is happy with it we can add it as a followup
->>> and land the true signature series to save another round.
->> actually sorry that patch leaked true signature partial names for gcc; updated
->> patch attached.
-> hum, I can't apply either of them, but I see that change on top of:
->    alan-maguire/dwarves-true-sig-v7
->
-> but on that branch I can still see arp_process function in the btf
->
-> please let me know if I should try some other branch
+I will follow up with that implementation.
 
-Jiri,
-
-Please take a look at v9: https://lore.kernel.org/bpf/20260624052553.3139112-1-yonghong.song@linux.dev/
-
-It has version 7 plus Alan's changes in version 7 comments. I forther added a
-few changes related to llvm and another patch to resolve some inconsistency.
-
-Thanks!
-
-Yonghong
-
->
-> thanks,
-> jirka
-
+Regards,
+Siddharth Nayyar
