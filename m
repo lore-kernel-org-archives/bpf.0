@@ -1,108 +1,270 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5057E105
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 04:16:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6E26317158
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 05:26:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782274574; cv=none; b=O/iqfmmuawH5rasqfCaM27ePPXDPpTp1NiHwdR1kv1ilta3zjcC6U7ggY/rZml7VS5t0wOGjNINgZJGPRoXyTZBP+/ZtEts/gsWmLSHulwJpNL1glvBGhFjS1EU2ozEIHtWf7pgYd8R0hOpqaxvbwgIC5HXaeBuanwZjSzSFinc=
+	t=1782278771; cv=none; b=BUuxBiSQgOnyBFigvGijkAF6vGeRgi3eh+P1HPiZ8a0UshkUuigWsmUNgoMceqlekqDffYzOnErJbZTNa6yJEgqoH7eMVFMoFJppLCpC0YS44uojFv+O99S9wB0aKjlYm9MAsn/2XG6rGVRwMS42kEXepBRMkG3z674GBv+Z3kE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782274574; c=relaxed/simple;
-	bh=G/0upb5pD8s0T4yFFw4uscyF6E9BxFzTAwOKlEOmtH8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gUSD6sDsYIih0uyN6ZyLlDf/FaBDsI4rcYymwJ3PXC6W61RhJgoQxM+Ghv1EcRawSHXrufbPB3ZEYORqrWPn8PGIEBednBzoLG28TZCvtCJwIKiGfqBskG6he6WDO9BzR4xDBT+Jv8Aj/G+iU8Yp/WCnBE4cOPs9jsZRwhe5tzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Bjm1cPvW; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Bjm1cPvW"
-Message-ID: <d6bd1b3c-17eb-40bd-af02-e7135db07fd5@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782274570;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=U2+DA39nrhHiWdlgSJHaUeBl0G5vMQ788v0kMi4/43U=;
-	b=Bjm1cPvWTuuryH8v87J0HibzVfzV4MCq1xy3S3lJ5pb0yt+i5dyvPsyuKguK6p2Sfo6Wwd
-	uCp8NWGnZBHduIWgapjjn0IL33YL0c9mHH/SCfr3PPI8gUiu+/YKQd0OXw+aBLJFxkQMgy
-	BTE6RDVj+y6vT9wZCcXbGTc8hS1Rm6c=
-Date: Wed, 24 Jun 2026 12:16:01 +0800
+	s=arc-20240116; t=1782278771; c=relaxed/simple;
+	bh=I3E8HUZwC7iV2kVvPXY8G0sb9zwSguHt4AnE9gi16Y4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hyrwDXgYlj0KBPWBIFmRsP8/BbbpEmJd0bjRC+gBhns0K/yLXXKhIxAbLnalplPiFRk2d9R72g+rb/pn0cGCal3CmH8hAsYAlO7ExeURMvYxzHneBGQ6OfEjPLO3XAnSAb0gF18aGkWzTDDOGk1kTzySgk9f+6GuunERzS6DOUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 8F0EC198D3D038; Tue, 23 Jun 2026 22:25:53 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: Alan Maguire <alan.maguire@oracle.com>,
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org,
+	kernel-team@fb.com
+Subject: [PATCH dwarves v9 0/6] pahole: Encode true signatures in kernel BTF
+Date: Tue, 23 Jun 2026 22:25:53 -0700
+Message-ID: <20260624052553.3139112-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v7 09/11] selftests/bpf: Add test to verify
- accessing rdonly percpu_array
-Content-Language: en-US
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-patches-bot@fb.com
-References: <20260622143557.22955-1-leon.hwang@linux.dev>
- <20260622143557.22955-10-leon.hwang@linux.dev>
- <CAEf4Bzbmj-ekwYQ6oGW-BRnzLBDvWgLyn_QsU5g1yNt_8A0H3g@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAEf4Bzbmj-ekwYQ6oGW-BRnzLBDvWgLyn_QsU5g1yNt_8A0H3g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
 
-On 24/6/26 06:46, Andrii Nakryiko wrote:
-> On Mon, Jun 22, 2026 at 7:38 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->> Since percpu_array supports direct-read, it should not break accessing
-> 
-> what does "it" refer to here?
-> 
->> rdonly percpu_array.
->>
->> Add a test to verify that adding '.map_direct_value_addr' to percpu_array
->> won't break the case.
-> 
-> what case?
-> 
-> I think you are testing (read-only) direct access to read-only per-CPU
-> array, is that right? Just write that out? Though, really, negative
+Current vmlinux BTF encoding is based on the source level signatures.
+But the compiler may do some optimization and changed the signature.
+If the user tried with source level signature, their initial implementati=
+on
+may have wrong results and then the user need to check what is the
+problem and work around it, e.g. through kprobe since kprobe does not
+need vmlinux BTF.
 
-Right, will update the commit msg.
+Majority of changed signatures are due to dead argument elimination.
+The following is a more complex one. The original source signature:
+  typedef struct {
+        union {
+                void            *kernel;
+                void __user     *user;
+        };
+        bool            is_kernel : 1;
+  } sockptr_t;
+  typedef sockptr_t bpfptr_t;
+  static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
+After compiler optimization, the signature becomes:
+  static int map_create(union bpf_attr *attr, bool uattr__is_kernel) { ..=
+. }
+In the above, uattr__is_kernel corresponds to 'is_kernel' field in sockpt=
+r_t.
+This makes it easier for developers to understand what changed.
 
-It was to test the change of patch #4:
+The new signature needs to properly follow ABI specification based on
+locations. Otherwise, that signature should be discarded. For example,
 
-@@ -6113,6 +6115,7 @@ static int check_mem_access(struct
-bpf_verifier_env *env, int insn_idx, struct b
- 			if (tnum_is_const(reg->var_off) &&
- 			    bpf_map_is_rdonly(map) &&
- 			    map->ops->map_direct_value_addr &&
-+			    map->map_type != BPF_MAP_TYPE_PERCPU_ARRAY &&
- 			    map->map_type != BPF_MAP_TYPE_INSN_ARRAY) {
- 				int map_off = off + reg->var_off.value;
- 				u64 val = 0;
+    0x0242f1f7:   DW_TAG_subprogram
+                    DW_AT_name      ("memblock_find_in_range")
+                    DW_AT_calling_convention        (DW_CC_nocall)
+                    DW_AT_type      (0x0242decc "phys_addr_t")
+                    ...
+    0x0242f22e:     DW_TAG_formal_parameter
+                      DW_AT_location        (indexed (0x14a) loclist =3D =
+0x005595bc:
+                         [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_=
+reg5 RDI
+                         [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_=
+reg14 R14
+                         [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_=
+entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
+                         [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_=
+reg14 R14)
+                      DW_AT_name    ("start")
+                      DW_AT_type    (0x0242decc "phys_addr_t")
+                      ...
+    0x0242f239:     DW_TAG_formal_parameter
+                      DW_AT_location        (indexed (0x14b) loclist =3D =
+0x005595e6:
+                         [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_=
+reg4 RSI
+                         [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_=
+reg3 RBX
+                         [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_=
+entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
+                         [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_=
+reg3 RBX)
+                      DW_AT_name    ("end")
+                      DW_AT_type    (0x0242decc "phys_addr_t")
+                      ...
+    0x0242f245:     DW_TAG_formal_parameter
+                      DW_AT_location        (indexed (0x14c) loclist =3D =
+0x00559610:
+                         [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_=
+breg4 RSI+0)
+                      DW_AT_name    ("size")
+                      DW_AT_type    (0x0242decc "phys_addr_t")
+                      ...
+    0x0242f250:     DW_TAG_formal_parameter
+                      DW_AT_const_value     (4096)
+                      DW_AT_name    ("align")
+                      DW_AT_type    (0x0242decc "phys_addr_t")
+                      ...
 
-> test (we *cannot* access read-only per-cpu map for write operation)
-> would be more trustworthy for this...
->
+The third argument should correspond to RDX for x86_64. But the location =
+suggests that
+the parameter value is stored in the address with 'RSI + 0'. It is not cl=
+ear whether
+the parameter value is stored in RDX or not. So we have to discard this f=
+unciton in
+vmlinux BTF to avoid incorrect true signatures.
 
-Makes sense.
+For llvm, any function having
+  DW_AT_calling_convention        (DW_CC_nocall)
+in dwarf DW_TAG_subprogram will indicate that this function has signature=
+ changed.
+But for non DW_CC_nocall functions, it is possible that true signature st=
+ill not
+available due to locations. So every functions will be checked.
 
-I think it is worth testing both positive and negative cases:
+I did experiment with latest bpf-next. For x86_64, there are 69103 kernel=
+ functions
+and 875 kernel functions having signature changed. A series of patches ar=
+e intended
+to ensure true signatures are properly represented. Eventually, only 20 f=
+unctions
+cannot have true signatures due to locations.
 
-1. (read-only) direct access the data of read-only percpu data's
-   percpu_array map to test the above change.
-2. direct writing the data of read-only percpu data's percpu_array map
-   is disallowed.
+For arm64, there are 863 kernel functions having signature changed, and
+108 functions cannot have true signatures due to locations. I checked tho=
+se
+functions and look like llvm arm64 backend more relaxed to compute parame=
+ter
+values.
 
-Thanks,
-Leon
+For full testing, I enabled true signature support in kernel scripts/Make=
+file.btf like below:
+  -pahole-flags-$(call test-ge, $(pahole-ver), 131) +=3D --btf_features=3D=
+attributes
+  +pahole-flags-$(call test-ge, $(pahole-ver), 131) +=3D --btf_features=3D=
+attributes --btf_features=3D+true_signature
 
-> 
->> [...]
+See individual patches for details.
+
+Changelog:
+  v8 -> v9:
+    - v8: https://lore.kernel.org/bpf/20260623222850.3290612-1-yonghong.s=
+ong@linux.dev/
+    - v8 made a mistake where all functions go through main loop in
+      function__analyze_parameter_locations(). This is not correct as it =
+includes functions
+      whose signature is not changed. See function
+      function__match_clang_parameter_locations().
+    - Add a change in btf_encoder to avoid comparing inlined and out-of-l=
+ine function prototypes.
+      This allows some functions to be in btf.
+    - Add one more test, clang_parm_optimized_stack_2, where a global fun=
+ction, with
+      many unused parameters, gets properly handling in location checking=
+.
+  v7 -> v8:
+    - v7: https://lore.kernel.org/bpf/20260623040704.2732530-1-yonghong.s=
+ong@linux.dev/
+    - Both Check and Analyze phases go through all functions.
+    - Require true_signature in btf_encoder to have name like <paramName>=
+__<field>.
+    - Remove signature_changed (from nocall). It is possible that functio=
+n signatures
+      are not changed but the location reigsters do not match.
+  v6 -> v7:
+    - v6: https://lore.kernel.org/bpf/20260618011358.632394-1-yonghong.so=
+ng@linux.dev/
+    - Ensure that 'collect' and 'analyze' have the same location checking=
+.
+    - In 'analyze' stage, undo true_sig_member_name if the next expected =
+register
+      matches the previous source type although the previous parameter ma=
+y
+      only use half of the value.
+  v5 -> v6:
+    - v5: https://lore.kernel.org/bpf/20260523165712.1225231-1-yonghong.s=
+ong@linux.dev/
+    - The previous change relies on parameter__new() to collect and analy=
+ze each
+      parameter to decide true signatures. The new one separates collecti=
+ng and
+      analyzing phase from Alan. This two-phase makes logic easy to under=
+stand.
+    - In btf_encoder.c, remove usage of skip_idx to simplify the code.
+  v4 -> v5:
+    - v4: https://lore.kernel.org/bpf/20260326013144.2901265-1-yonghong.s=
+ong@linux.dev/
+    - Check info.signature_changed only under clang.
+    - Fix an uninitialized varable issue (var reg_dix) for gcc.
+  v3 -> v4:
+    - v3: https://lore.kernel.org/bpf/20260320190917.1970524-1-yonghong.s=
+ong@linux.dev/
+    - Add simple prescan of parameter registers in order to get true sign=
+atures
+      for those functions where optimization could happen but compiler di=
+dn't do it.
+    - Do not create a new name (e.g. "uattr__is_kernel") with malloc at p=
+arameter_reg()
+      stage. Instead remember both "uattr" and "is_kernel" and later gene=
+rate the
+      name "uattr_is_kernel" in btf encoder.
+    - Add comments to explain how to handle parameters which may take two=
+ registers.
+    - Fix some test failures on aarch64.
+  v2 -> v3:
+    - v2: https://lore.kernel.org/bpf/20260309153215.1917033-1-yonghong.s=
+ong@linux.dev/
+    - Change tests by using newly added test_lib.sh.
+    - Simplify to get bool variable producer_clang.
+    - Try to avoid producer_clang appearance in dwarf_loader.c in order t=
+o avoid
+      clear separation between clang and gcc.
+  v1 -> v2:
+    - v1: https://lore.kernel.org/bpf/20260305225455.1151066-1-yonghong.s=
+ong@linux.dev/
+    - Added producer_clang guarding in btf_encoder. Otherwise, gcc kernel=
+ build
+      will crash pahole.
+    - Fix an early return in parameter__reg() which didn't do pthread_mut=
+ex_unlock()
+      which caused the deadlock for arm64.
+    - Add a few more places to guard with producer_clang and conf->true_s=
+ignature
+      to maintain the previous behavior if not clang or conf->true_signat=
+ure is false.
+
+Yonghong Song (6):
+  dwarf_loader: Detect aggregate ABI register usage and signature
+    changes
+  dwarf_loader: Collect per-parameter information
+  dwarf_loader: Analyze per-parameter information for true signatures
+  btf_encoder: Emit true function signatures
+  btf_encoder: Avoid comparing inlined and out-of-line function
+    prototypes
+  tests: Add BTF true_signature encoding tests
+
+ btf_encoder.c                         |  53 ++-
+ dwarf_loader.c                        | 603 +++++++++++++++++++++++---
+ dwarves.h                             |  14 +
+ tests/clang_parm_aggregate_1.sh       |  85 ++++
+ tests/clang_parm_aggregate_2.sh       |  88 ++++
+ tests/clang_parm_memory.sh            |  77 ++++
+ tests/clang_parm_optimized.sh         |  63 +++
+ tests/clang_parm_optimized_stack_1.sh |  63 +++
+ tests/clang_parm_optimized_stack_2.sh |  63 +++
+ 9 files changed, 1042 insertions(+), 67 deletions(-)
+ create mode 100755 tests/clang_parm_aggregate_1.sh
+ create mode 100755 tests/clang_parm_aggregate_2.sh
+ create mode 100755 tests/clang_parm_memory.sh
+ create mode 100755 tests/clang_parm_optimized.sh
+ create mode 100755 tests/clang_parm_optimized_stack_1.sh
+ create mode 100755 tests/clang_parm_optimized_stack_2.sh
+
+--=20
+2.53.0-Meta
+
