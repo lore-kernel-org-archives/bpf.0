@@ -1,80 +1,60 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A3CF3C660C
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 14:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99693BCD38
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 14:36:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782311423; cv=none; b=T9o3lSW1ZuDyaSjmI/jWvsrSG84mYL8DY2XjXGs9x22xFS2Ft1ZBMnhr+aU1dolSaqSeCfF44GTe6daSmSNcXZ4UjoH83UMj4dAsWYHJXVUXn9/J0oQqH6Ane5+MAchMfn4QIro1GM9qMxzT8BfOxbLgSv4q5AqbNM4q2l9LtTw=
+	t=1782311802; cv=none; b=onjYZ/CQgD8pYVihIQwj1eQ/guKDK2PXqJcjfIdup6sMJ8W4z3syIl69ib7HLBSdAf1J8S4Bhb+g5mNqfBmU4fEkxpovLXFMK9NzoKaCYoT7agjiHnlRYSb4hqFgg/ESqNZXWtr5B/Gqp08V79nWQleY/6SVaQh9g8Xqq2NUYAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782311423; c=relaxed/simple;
-	bh=KoWe6UXQcGkc7eC1e9eX8LnRAnByM41+YqqVWINHa4k=;
+	s=arc-20240116; t=1782311802; c=relaxed/simple;
+	bh=BLvwlESbQuCEDSXzS5tqvFwFYU3vidOruIhHVHNdGfA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GKZFDT/sLITTCwefbrcRE436iqH+LtctxiFF+sa1KUoxKKTaMXWYQSzVIUQsCbS2DPDUwtKzQCw/nswOCOUVSrfgmpqYFrc0iyg5r1nWxcH1yyxVCX/l7lyiBJwELNCCcopFuJdUsLWipzzLLMBNgTbkutJ5JD3tkm3tcMyrqs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z73v+dbV; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=h3O7TvCBTBz8MyUB1r/CK+KBSEeI2ZKAMbCfOGMdgr8HMMSEQ1m5OK2XQkTFeehAGXnb1vhizRXfAWyIGo3tnD4MTIVtyc5pmsS8Q3KX379GLl6Y2I9mskBtswxCoDX5NdlzIY50g7l3OTsOhMgRQZAlrvyrYr7VTeN02j/wIRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UmAd/CUC; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z73v+dbV"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-490c0c92cffso8255295e9.2
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 07:30:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782311421; x=1782916221; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QjZV9Qb2AkMoZfJai0fOLUEBrkdApMQQXM97idv5pdw=;
-        b=Z73v+dbVyeSDJO54YbXrOS3LWFslCZbKbgrYxDKqRUBNC5MFYBOd2aRrxyy3wRBdeR
-         vbCOw28ANZWUWWoMt+VOwHqqxwZNjRshmJQgtwYtYDXeHG3glZ//Zqr38F5H3EpCYUgb
-         tyvezYeo2UQBFdM7UYVSJn756ovVGaVUMX/VKqs+FKZeZxvGpYVlviBH6r6Wd7AUJmxn
-         6HvOLNncu9uCy/y7rm0vbYy+QKzkR2w/XagdV0zKYJioiIT7aaJfuSTdq2pTB2uV41SY
-         FA9DhR4+j47psyUMSHTEJKKrSmwP1xa5fm5q87rKYosoQRsyUh7gAp/Tlhm8Uy6ekgFx
-         QmWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782311421; x=1782916221;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QjZV9Qb2AkMoZfJai0fOLUEBrkdApMQQXM97idv5pdw=;
-        b=EWkbZmK4mJdemSYyR7b+fMHLTn74dHtLxY527VlvPpqGr32x4UhQJ2Hr7h+tK8dhyE
-         yeNQh7RQRsqieETzllimMFvSS/cfjOWJJkU9wv9Fs9t0mjHkZrXLzCxXSYrmUARzw3e+
-         sihfxOxszHL3rsI40Hr1X94A4KxEv9u5AgmViRGw5oVAwiCVHLOZHPDlkbUMJ66EVbDg
-         rLs+//YPPYFZBPqbBq9jpVfUJp/2EyDjmdDTbg0bXaj1ljM6zb/aYz0oW/cNyhLlO7WS
-         7LrJmYRSbUwqn/HZSdLzrSxgM5hGsWoSRlzBq31rzxNdPeDridJwHa8nArXvtqyMLdqQ
-         Efpg==
-X-Forwarded-Encrypted: i=1; AFNElJ8YxYgfRMc11XzXpApJaxzni4JV5MAY8rHsA95GrGvMANvCK/2qH0dhF3i2ORDnjWNh2XE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwoM+dZ13hWzBlyIDOcwh9KdtpniN/B8GOcvQcFjsv8y4Q94EcW
-	idrmPkMDyDlItfxqzMNTLYPGcnV+Zk9sCNiUmy//SdstkBMuDCfm73kY
-X-Gm-Gg: AfdE7cmxH0+gupOW/0Vqsot0omlirXwkjMDzCR84i0rDx+ApP/RJtPY+FOir+Xifu4s
-	uUG/5myz5iO+i+w2FQTRxlva76ZXtNLZzpgIJ6ehTESloofU+lF4iaASQWUzmAt+lJ9THCXwYFO
-	cXTAzwpOQNIZZBnL92cSJn686LaWojhjJQ+yyo/6jss/uZWsroIErizuXUg4znwMbwh0SEsaWY1
-	ua/HCY4A3oWxRzaCWSkwt0dzo3z11hAcQOWKrLwJqqdW6Z2CmDBQEeOvDXlpTUbjIM7anlfv2L6
-	4gkgs2PkRM4F0u95SdMrYiDArgBWu5hZ5+oEIRCnPB7GBlsfesak13Xx8+v1WzZZK8Brn6p6rZV
-	PC5ydO+Qc03wWa2Z+8hA1osNUKfgB9nqFGNN7wqggWWbDjViOn4LfSsr4GUF1QdQzHx+PPMAuu+
-	nvznXZN2FA7GNirc7ozxy2kA==
-X-Received: by 2002:a05:600c:a010:b0:492:3754:15f2 with SMTP id 5b1f17b1804b1-492608794b0mr46291025e9.32.1782311420284;
-        Wed, 24 Jun 2026 07:30:20 -0700 (PDT)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46c221d93cdsm8310445f8f.18.2026.06.24.07.30.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 07:30:19 -0700 (PDT)
-Date: Wed, 24 Jun 2026 14:40:19 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: KaFai Wan <kafai.wan@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf 1/1] bpf: Fix insn_aux_data leak on verifier
- err_free_env path
-Message-ID: <ajvsUyhJlIeiHudw@mail.gmail.com>
-References: <20260624123536.114757-1-kafai.wan@linux.dev>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UmAd/CUC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782311795;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tjzQ5iUZx4dqlG760rsAJ6ErKlvbzuwirIpLM5sBmLQ=;
+	b=UmAd/CUCAYWI5M/wDlDsCe/xc5H0RU25wUu/FDmkpnWCZ+n6cOCbpbsIyXMzhudkQLnJfp
+	Uh5KuaW+EohuvSNn12CwoKE43uKP7/LiqzqEhkylK+A10qUAmwJhzUjHt1fu6ke0yDY4WM
+	JIjaX5ukespkvAmIwSr1OYmUqFskfB4=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-678-fuOYshRCM3Ol80Tmq2a6-w-1; Wed,
+ 24 Jun 2026 10:36:29 -0400
+X-MC-Unique: fuOYshRCM3Ol80Tmq2a6-w-1
+X-Mimecast-MFC-AGG-ID: fuOYshRCM3Ol80Tmq2a6-w_1782311788
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 10C6D1955DD8;
+	Wed, 24 Jun 2026 14:36:28 +0000 (UTC)
+Received: from fedora (unknown [10.44.33.191])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 1BFD8180049F;
+	Wed, 24 Jun 2026 14:36:24 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Wed, 24 Jun 2026 16:36:27 +0200 (CEST)
+Date: Wed, 24 Jun 2026 16:36:23 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 02/13] uprobes/x86: Remove struct uprobe_trampoline
+ object
+Message-ID: <ajvrZ_mMXnKrWf7h@redhat.com>
+References: <20260526205840.173790-1-jolsa@kernel.org>
+ <20260526205840.173790-3-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,48 +63,91 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260624123536.114757-1-kafai.wan@linux.dev>
+In-Reply-To: <20260526205840.173790-3-jolsa@kernel.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On 26/06/24 08:35PM, KaFai Wan wrote:
-> When bpf_check() allocates env->insn_aux_data successfully but later
-> fails to allocate env->succ, it jumps directly to err_free_env.
-> 
-> The existing vfree(env->insn_aux_data) sits before the err_free_env
-> label, so that direct jump bypasses it and leaks insn_aux_data.
-> 
-> Move vfree(env->insn_aux_data) into err_free_env so all early and late
-> exit paths release it consistently.
-> 
-> Fixes: 2f69c5685427 ("bpf: make bpf_insn_successors to return a pointer")
-> Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
-> ---
->  kernel/bpf/verifier.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 21a365d436a5..3ccea8985946 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -19994,13 +19994,13 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
->  	if (!is_priv)
->  		mutex_unlock(&bpf_verifier_lock);
->  	bpf_clear_insn_aux_data(env, 0, env->prog->len);
-> -	vfree(env->insn_aux_data);
->  err_free_env:
->  	bpf_stack_liveness_free(env);
->  	kvfree(env->cfg.insn_postorder);
->  	kvfree(env->scc_info);
->  	kvfree(env->succ);
->  	kvfree(env->gotox_tmp_buf);
-> +	vfree(env->insn_aux_data);
+On 05/26, Jiri Olsa wrote:
+>
+> Removing struct uprobe_trampoline object and it's tracking code,
+> because it's not needed. We can do same thing directly on top of
+> struct vm_area_struct objects.
+>
+> This makes the code simpler and allows easy propagation of the
+> trampoline vma object into child process in following change.
+>
+> Note the original code called destroy_uprobe_trampoline if the
+> optimiation failed, but it only freed the struct uprobe_trampoline
+> object, not the vma. The new vma leak is fixed in following change.
+>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
-Thanks!
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 
-Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
+---------------------------------------------------------------------
+Although I can't convince myself I fully understand this code with or
+without this patch ;)
 
->  	kvfree(env);
->  	return ret;
->  }
-> -- 
-> 2.43.0
-> 
+A couple of questions below...
+
+> -static struct uprobe_trampoline *create_uprobe_trampoline(unsigned long vaddr)
+> +static struct vm_area_struct *get_uprobe_trampoline(struct mm_struct *mm, unsigned long vaddr)
+>  {
+> -	struct pt_regs *regs = task_pt_regs(current);
+> -	struct mm_struct *mm = current->mm;
+> -	struct uprobe_trampoline *tramp;
+> +	VMA_ITERATOR(vmi, mm, 0);
+>  	struct vm_area_struct *vma;
+>
+> -	if (!user_64bit_mode(regs))
+> -		return NULL;
+> +	if (vaddr > TASK_SIZE || vaddr < PAGE_SIZE)
+> +		return ERR_PTR(-EINVAL);
+
+Do we really need this check? It looks a bit confusing to me...
+vaddr is bp_vaddr from handle_swbp(), it should be valid?
+
+> +
+> +	for_each_vma(vmi, vma) {
+> +		if (!vma_is_special_mapping(vma, &tramp_mapping))
+> +			continue;
+> +		if (is_reachable_by_call(vma->vm_start, vaddr))
+> +			return vma;
+> +	}
+
+Perhaps we can later optimize this code a bit? I mean something like
+
+	start_reachable = ...;
+	end_reachable = ...;
+
+	VMA_ITERATOR(vmi, mm, start_reachable);
+
+	for_each_vma(vmi, vma) {
+		if (!vma_is_special_mapping(...))
+			continue;
+		if (vma->vm_start > end_reachable)
+			break;
+		return vma;
+	}
+
+>  static int __arch_uprobe_optimize(struct arch_uprobe *auprobe, struct mm_struct *mm,
+>  				  unsigned long vaddr)
+>  {
+> -	struct uprobe_trampoline *tramp;
+> -	struct vm_area_struct *vma;
+> -	bool new = false;
+> -	int err = 0;
+> +	struct pt_regs *regs = task_pt_regs(current);
+> +	struct vm_area_struct *vma, *tramp;
+>
+> +	if (!user_64bit_mode(regs))
+> +		return -EINVAL;
+>  	vma = find_vma(mm, vaddr);
+>  	if (!vma)
+>  		return -EINVAL;
+
+I guess find_vma() can't fail, the caller arch_uprobe_optimize() has called
+copy_from_vaddr() under mmap_write_lock()... Nevermind.
+
+Oleg.
+
