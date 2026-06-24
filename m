@@ -1,182 +1,109 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A213CC7EA
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 15:51:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C34A2F360A
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 16:30:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782316317; cv=none; b=m7wKsGaGn/Q3QQIz8aIMkrdkeiW08ez/10DrBywvifjJk/y0/Fq/6HBXYWEpLXtxvMh5UzZwEdN9r1mW18O9QROnEJwXQkAc9b3lkKF+kT+77HHwSFg4NoPfEIRbDbg/5z6YCbNolEwgaskNz57iUJfeliWLNPDPMscU9c2a4RY=
+	t=1782318612; cv=none; b=lf76uDP+CAnOJP88c9spCGjq/etr1LVbqw4ydY1qc7/nDOhcObQ3bdvr6TP5tnpb3RB8or4bnLQtLoT4YYTZRWkUzdHTflNE4FAUqdRVyT7I0DjKg9V4Lxd3970uMfg0XyGvan/7L2A3TMtJeAwgrApqsqyzWrclbD0oY+c0b0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782316317; c=relaxed/simple;
-	bh=ACgMkvfmEc1Du6kXBxMo7LXKK2kfropLYMu+Tc5Qzy0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kx3DCP0JIvRvarHHPMJh7QCcDwkCAFTELg9XIa6d6H4EE9/9aoMc2/oTlFI4HH1mizCcows4UYs0D+t9N0nXtexXyGK9AHO6hBbcciQxKRQoJvwwI9ln2Pfabc42NvXeJRs31OBVh4N5CDbhfHH0ayzK47ON8BO/h5bkelE8S1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VHN57J/v; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782318612; c=relaxed/simple;
+	bh=f4Q5tTzUw3dIHq5IKDitX92kWGt0Qu9vdWkJH7Q35Jk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=J/k7X69W1Ie+KPPLF2j+adZOOsh3YM+F5OSLWTbDQRgr4W7I36q+YJVhh8CdWrBz0qVGE0Zq4g76aD0jV9iIfAUjGpaCNbBFVbsEu6IJlgI/DgHm6muamUaJ17H2P8uWnTz5iqz2MQPUgZQvrW4HhNwMu//yLEvzfvaZfPgpv28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=crhrza/W; arc=none smtp.client-ip=209.85.161.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VHN57J/v"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782316312;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1ze9qZ3a8YugA2kBDoxW5t8vr06YezliA5Bf3Xo9qEE=;
-	b=VHN57J/vF0VmW5RHyeHhuJiO5BGWUpAU2ieMfTf5sy0M1HUI5UaaX6GTmCdtyligsu7l4t
-	jIPpDhC+CkErSciwCz0LFFkrF3wUpsOdmEgBoNBDtt81VuZ+az24OYtcWfNtOoR4dIFhF2
-	yp7p7SG0Yg076096GI53CjLtl83P5Vw=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf 2/2] selftests/bpf: Verify no non-zeroed kernel heap memory exposure
-Date: Wed, 24 Jun 2026 23:51:15 +0800
-Message-ID: <20260624155115.85196-3-leon.hwang@linux.dev>
-In-Reply-To: <20260624155115.85196-1-leon.hwang@linux.dev>
-References: <20260624155115.85196-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="crhrza/W"
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-69e46524711so879905eaf.0
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 09:30:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782318610; x=1782923410; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f4Q5tTzUw3dIHq5IKDitX92kWGt0Qu9vdWkJH7Q35Jk=;
+        b=crhrza/WLbngnIdRw1HQJ79XUYHZFtLWbF0EM6sZ/LoOZmBi6ofUu9+JNlpZ/zmgc+
+         7xXmTqgsKxkzc96de9zXLHYR+aiFYHVxbjsryE/PjvrUZXHVYsCu/wIPXoqu/PiSKYIt
+         SidqLIkqaVLKz9rvu6VPB87BMQ+/TYGjg/kH6M/QJsY+WkJIJDNq61KtC795r4xgbIAr
+         1otyGQ14zLVmWV3GtNwvSwsNde8J8c6fULMHYAR1QGFd6z47Rkl38GeUPDMcUWceg4Y9
+         abg+mck+Dks+FhHACpBA9b4QDXyXOj3gKLOwGw7xdRvEDKRd9Zm/Oa9cjKTp3o+CLMxe
+         N/2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782318610; x=1782923410;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f4Q5tTzUw3dIHq5IKDitX92kWGt0Qu9vdWkJH7Q35Jk=;
+        b=OTDIbB1gERF7l62fFiGi6k8O8mzafsj7gdE35zL23I7Fbv8iE+VV8I1qW3u3tGIs5+
+         ak7q39PfFJJvnVj0/8cDU6vFyg/+jsWU+5+3OrKBLRqtrIlI+hKoE/BLNPLvVT3Fa9M8
+         HhuL55RveD89tX0AmIDfpqQXijpgvbTZ+zRpr27vG0OUVmtatc33Ju39LTm9TrY7wqTQ
+         GkfsMzC0MKjE0DLaavcGdBHmWmLMyh5G8nFyLn0Qx8rWmOzyPW98IgGC95UY8MGmcAZV
+         b3mDgohuaEU0laufpdqVEiOkU9TsKf7J2eV6rkDzDtIkFFPAganUWLf00MXstaYX4knJ
+         tWkA==
+X-Forwarded-Encrypted: i=1; AFNElJ87lZMaPjcW7A9cnQAv9lgHcMGDI4d3lRXzKldCqxF3r4mxphW7LEt27ZRzDQrPbWnnPWA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YznJSNs77DUKDR/RM+6mp47zI7ycaGvPuOnHbR4FHcmwC2G2e1D
+	p0TWnAUS7OdVQKB7oWeEDSc5tQRU4d7xMeRdKQOi79MNhWmt6UIMzejg
+X-Gm-Gg: AfdE7ckBL5Hy2E1yJ5zrPxbVj0UXNTN6+S8iEAPRHhEgTnIUjI95GTFGHfpnv/k0MQi
+	cFOlRbXTfQuoaYJDGJ3O9GSDzstLdAI+N1FmEEZg6wYeFgaBZTCnkeIpGXLN1/QyOM5zCV5lykY
+	z92BjGRbJgs7ldkIPODATJqTILfWw6NUxF6tn4zco6WIlBiZMvY+r06OnCOjAUSLuJrrCL+kivr
+	7Df4iZn1ClviIxxbXFp4Y3qVpqP0ZmsIICVBYyOzP+TFTDfR3bsC9PPMxQ8aQxgLEZgucL0iT0A
+	uvZT5EY+LBUIa8TAkPd6xtVhDt4rwzFK8DSKSnKDE8pZ4Khs3z9YcKW+bXqMsL+7urVoK/WUxDU
+	cMjuRpYdLcnYZCb/b+msm7zy9/N6Ehzz5q1T44se2bWhAKap2+hUJwmQl5DPB+yNdqZ/8tiRSXf
+	E7WkkyaVdPyqaysjpiMo6u6CjNKtzKYZVlfi3FDgQPNMtXeFHkSVaQpJisIwOutLZY2vWh5ajz2
+	pZIQnE=
+X-Received: by 2002:a05:6820:906:b0:696:1e45:9011 with SMTP id 006d021491bc7-6a1231f9adbmr2366325eaf.28.1782318610157;
+        Wed, 24 Jun 2026 09:30:10 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:70::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6a0e9faf29asm9654118eaf.8.2026.06.24.09.30.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Jun 2026 09:30:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 24 Jun 2026 09:30:05 -0700
+Message-Id: <DJHF7S039QNX.KNVMFISSMLMU@gmail.com>
+Subject: Re: [PATCH RFC 0/4] memcg,slab: kmalloc_nolock() fixes
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Harry Yoo (Oracle)" <harry@kernel.org>, "Johannes Weiner"
+ <hannes@cmpxchg.org>, "Michal Hocko" <mhocko@kernel.org>, "Roman Gushchin"
+ <roman.gushchin@linux.dev>, "Shakeel Butt" <shakeel.butt@linux.dev>,
+ "Muchun Song" <muchun.song@linux.dev>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "Vlastimil Babka" <vbabka@kernel.org>, "Hao
+ Li" <hao.li@linux.dev>, "Christoph Lameter" <cl@gentwo.org>, "David
+ Rientjes" <rientjes@google.com>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Pedro Falcato" <pfalcato@suse.de>
+Cc: <cgroups@vger.kernel.org>, <linux-mm@kvack.org>,
+ <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+X-Mailer: aerc
+References: <20260624-kmalloc-nolock-fixes-v1-0-fdf4d17351dd@kernel.org>
+In-Reply-To: <20260624-kmalloc-nolock-fixes-v1-0-fdf4d17351dd@kernel.org>
 
-When lookup element from those per-CPU maps, which have special field
-in their values and their value size is not equal to roundup(value_sz, 8),
-the padding size of temporary non-zeroed kernel heap memory allocated by
-kvmalloc should not be exposed to user space.
+On Wed Jun 24, 2026 at 6:11 AM PDT, Harry Yoo (Oracle) wrote:
+>
+> Bug 1 was reported by lockdep, and bugs 2 [2] and 3 [3] were
+> reported by Sashiko.
 
-Without the fix:
+... and in fixes for sashiko complains sashiko finds more issues.
+I don't think it will ever end. I suggest to fix realistic scenarios
+instead of one out of billion cases that sashiko think is plausible
+but will never be hit in reality. The chance of server crashing
+due to cosmic rays are higher than such bugs. Hence do not fix them.
 
-test_map_uninit_mem_exposure:FAIL:zeroed tail bytes unexpected memory mismatch
-actual:
-	2B 2B 2B 2B
-expected:
-	00 00 00 00
+> To BPF folks: do we need to backport kmalloc_nolock() support
+> for architectures without __CMPXCHG_DOUBLE to v6.18?
 
-Assisted-by: Codex:gpt-5.5
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../bpf/prog_tests/test_map_uninit.c          | 68 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/map_kptr.c  | 12 ++++
- 2 files changed, 80 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/test_map_uninit.c
+nope.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_map_uninit.c b/tools/testing/selftests/bpf/prog_tests/test_map_uninit.c
-new file mode 100644
-index 000000000000..d0ba2ca587b0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/test_map_uninit.c
-@@ -0,0 +1,68 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+
-+#include "map_kptr.skel.h"
-+
-+void test_map_uninit_mem_exposure(void)
-+{
-+	size_t value_sz, slot_sz, lookup_sz, tail_sz;
-+	int err, key, nr_cpus, cpu, map_fd;
-+	__u8 *value = NULL, *zero = NULL;
-+	struct bpf_program *prog;
-+	struct map_kptr *skel;
-+
-+	nr_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	skel = map_kptr__open();
-+	if (!ASSERT_OK_PTR(skel, "map_kptr__open"))
-+		return;
-+
-+	bpf_object__for_each_program(prog, skel->obj) {
-+		err = bpf_program__set_autoload(prog, false);
-+		if (!ASSERT_OK(err, "bpf_program__set_autoload"))
-+			goto out;
-+	}
-+
-+	err = map_kptr__load(skel);
-+	if (!ASSERT_OK(err, "map_kptr__load"))
-+		goto out;
-+
-+	value_sz = bpf_map__value_size((skel)->maps.pcpu_array);
-+	slot_sz = roundup(value_sz, 8);
-+	tail_sz = slot_sz - value_sz;
-+	if (!ASSERT_NEQ(tail_sz, 0, "tail_sz"))
-+		goto out;
-+
-+	lookup_sz = slot_sz * nr_cpus;
-+	map_fd = bpf_map__fd(skel->maps.pcpu_array);
-+
-+	value = malloc(lookup_sz);
-+	zero = calloc(1, tail_sz);
-+	if (!ASSERT_OK_PTR(value, "malloc value") || !ASSERT_OK_PTR(zero, "calloc zero"))
-+		goto out;
-+
-+	key = 0;
-+	memset(value, 0x2B, lookup_sz);
-+	err = bpf_map_update_elem(map_fd, &key, value, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+		goto out;
-+
-+	memset(value, 0xFF, lookup_sz);
-+	err = bpf_map_lookup_elem(map_fd, &key, value);
-+	if (!ASSERT_OK(err, "bpf_map_lookup_elem"))
-+		goto out;
-+
-+	for (cpu = 0; cpu < nr_cpus; cpu++) {
-+		__u8 *tail = value + cpu * slot_sz + value_sz;
-+
-+		if (!ASSERT_MEMEQ(tail, zero, tail_sz, "zeroed tail bytes"))
-+			goto out;
-+	}
-+
-+out:
-+	free(zero);
-+	free(value);
-+	map_kptr__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/map_kptr.c b/tools/testing/selftests/bpf/progs/map_kptr.c
-index 3fbefc568e0a..0d87c97dac99 100644
---- a/tools/testing/selftests/bpf/progs/map_kptr.c
-+++ b/tools/testing/selftests/bpf/progs/map_kptr.c
-@@ -4,6 +4,18 @@
- #include <bpf/bpf_helpers.h>
- #include "../test_kmods/bpf_testmod_kfunc.h"
- 
-+struct map_uninit_value {
-+	struct prog_test_ref_kfunc __kptr_untrusted *unref_ptr;
-+	__u32 data;
-+} __attribute__((packed));
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__type(key, int);
-+	__type(value, struct map_uninit_value);
-+	__uint(max_entries, 1);
-+} pcpu_array SEC(".maps");
-+
- struct map_value {
- 	struct prog_test_ref_kfunc __kptr_untrusted *unref_ptr;
- 	struct prog_test_ref_kfunc __kptr *ref_ptr;
--- 
-2.54.0
+> There are still few users in v6.18, but I can't tell whether it is
+> necessary to backport it to v6.18 (hopefully not as urgent as other
+> bugfixes).
+
+imo none of these 'fixes' are necessary. Humans are not hitting them.
 
