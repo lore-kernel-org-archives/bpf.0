@@ -1,115 +1,296 @@
-Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 030F827A91D;
-	Wed, 24 Jun 2026 02:51:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.19.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23EC22857CC;
+	Wed, 24 Jun 2026 02:58:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782269502; cv=none; b=JzFMviMd1JN0HFYASzG6uifr4L86MItAtAE56ZBmIbqSBZsSTB3oJgyZN2ju8wIHW9J3SCNknU0Tf4lXulzAoml41SRacAWRJn1y7SPgfUUfhZY4/oQwfJa6kMLmBHSzWsL9/AFrNpdPBo0cnjwpo9gB4gU8etyLGZkPFxZ33W0=
+	t=1782269891; cv=none; b=czoD1Z9cA2wiXjucrtBY32eFb19tOexl2zDp9DoG9krcJh9agZgz0dQff0EXNqPcHUxW/JYuJUh3HEGAevCa+6u+blt7HUUmZ4fEEmcsb014A2rm7G+DvvTn6RXw178X3bHq4WX7Yi410zAiT3gBjtA6Oh9peVx7HCMfOMqLUIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782269502; c=relaxed/simple;
-	bh=sgupEhadXMBHZAvbeYLxPrEfFCHpwBSIGiQBKC22W7I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UFq39EmKSJKpRxiKnIMcZEfvMHRD45X3tu9E2lVUtDLFxwhRt88Vyzo2UMOJJR89pwEeksoW5b2OkxP/YuuLmLckqKT72Qo5+8tpRdVmcm4TkZr0inJcsstkSAyTM3ODQXSi8fy18VCEXCSbZCF/oI6UIp2hVs/jJOpJwtCThRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=VPPpGiyj; arc=none smtp.client-ip=54.207.19.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1782269891; c=relaxed/simple;
+	bh=tN51X41k19tYODr6QWUfgWuk2w33f2hnoSTexYjmjhc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HDuo2Ck6TqPep1VuHqnsScZKM4TTkKtFE+G7aidhxKhY0LOl6htdM95NtwknNxuprbxkOr/D4gU+YGdYH3kKGlbr4+AeGckPn4wC5vB/7DUZudTC6bNBG3UKDxYuoXQ+Jnphr5LyK/HotaljiUibvVYQn+KfGGQ/EwI/ORbhGs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=I/gzYan9; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="VPPpGiyj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1782269488;
-	bh=o2/Dqf9hn4yIq5OPcv/EP0vd56PjWw7mwuSSm2nxWd0=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=VPPpGiyjH91D4jNzJ1d4Fsjmzra/JpjnfaYNeCXz4sOIa6A37dFNqfxutRICz1vyo
-	 /28C1YajIQLjqev4G313Co5jLPPLq/SZZoxc2nFJsW5FYGkE8L+q8pZ3dw8Na7ffDq
-	 zvLg6RyIOPZUOu4hUpQv4ofCXwHLylsu5tctGCio=
-X-QQ-mid: zesmtpsz7t1782269472te33b325e
-X-QQ-Originating-IP: Muud9pHUTh9RXd2k9TgI7zf/I46iixaLgNyWnnA9ZZY=
-Received: from Shurima ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 24 Jun 2026 10:51:09 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 7962279032744178501
-EX-QQ-RecipientCnt: 15
-From: Yichong Chen <chenyichong@uniontech.com>
-To: emil@etsalapatis.com,
-	qmo@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Cc: chenyichong@uniontech.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	jiayuan.chen@linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 2/2] tools/bpf/bpftool: Reset vmlinux BTF after struct_ops commands
-Date: Wed, 24 Jun 2026 10:50:55 +0800
-Message-ID: <9F9017160ABE125F+20260624025055.1574875-3-chenyichong@uniontech.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260624025055.1574875-1-chenyichong@uniontech.com>
-References: <20260624025055.1574875-1-chenyichong@uniontech.com>
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="I/gzYan9"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id E1F8640E01B4;
+	Wed, 24 Jun 2026 02:58:06 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 8vuomES7BQRE; Wed, 24 Jun 2026 02:57:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1782269876; bh=5pumt3ZhtXEP5A7/txAfIN/pYRRHkq0RSi/yjC0QK9o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=I/gzYan9dcc6f59zVNBMGNtm/lLomcAVoGlaPz1ae8J6kyyj6uXQmVNPmUw/MN8Vt
+	 p5bGnG2qc2TTMgLuWGwlECt+NhzNaySoj9ZEhew7KRUDjxnqDfZxuzhgYc/lfTMZAQ
+	 116Uk+agAeqMxfWbCdPs/kVQX5hosdAi6J/gUW0npNcbdPjy5Ns78UjY0bWUmY6vpz
+	 iVsjgcNy9rN0DrpdaREln6E/ZT/O28XkiqTEQEc35HCZcTc0ErbuxgdThqxpwJe9B7
+	 EDNMkED9gLY29DO3zk3q7rH5+2duDr2nfOFOdMa/4mIHnMmLddAnIcd2M3HBJSrQWj
+	 jPoENq3LRaqRXeEsgQLTCoViLDi0px8FGlQKTs4nBaj3sxkKEo+1eT5Gxb2wB6YWtr
+	 HWs4w7x4m38HvzPVUJ39gx/WW+JlvEdp68o1HzFrgpCleOBOPD8cJ3sOiEpb8fr7Wn
+	 bhdf9h/R6XvNpMuthunauRLcsrn5zC4MsYHRDn7JnXt4XOiL7EhaOG+cqPFxDU3ZtC
+	 cra+nhHpMGujdSjuHpPQfyZ3lniFLRsAlVTKP4OZc05Ja7N/nZIhjrPQZRe+Lnrr/0
+	 ZWGgX9lFYYgzNR0TNWSdSFkBWL9zKK4A1ATqi+SmQ1irlJkONoopGICFJqeB47j9Hi
+	 xLcF2/yl9isC+GGRCGLjxNYw=
+Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::1a])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2A2E340E0031;
+	Wed, 24 Jun 2026 02:57:37 +0000 (UTC)
+Date: Tue, 23 Jun 2026 19:57:32 -0700
+From: Borislav Petkov <bp@alien8.de>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Dave Hansen <dave.hansen@intel.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>, bpf@vger.kernel.org,
+	kasan-dev@googlegroups.com, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>
+Subject: Re: [PATCH v1] kasan: Fix false-positive wild-memory-access on x86
+ under 5-level paging
+Message-ID: <20260624025732.GDajtHnB1Jc21kQnl_@fat_crate.local>
+References: <20260610175651.647515-1-ihor.solodrai@linux.dev>
+ <326b85af-c41a-4387-90a0-60720111934d@linux.dev>
+ <20260618170913.GBajQmOQyOiBLqopUl@fat_crate.local>
+ <3207a706-354c-4e9d-ba53-dded1abb1842@intel.com>
+ <20260618183815.GDajQ7F-bqTHnrakoi@fat_crate.local>
+ <87643862-e32e-43c7-8c81-7186f30059ea@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: NRkWGnbnkwTmDJQJfbJbANKU/B+kSohIpLP36Vvyhc9Vsb3JitzR0/3A
-	cKadVijDr34lLnbUgeTUcMkXBjEl6kQOJDp6DTKk+nLlFlxs8OhENklwaVI/M4g2Y3h3p/m
-	DTHPfOoWyDnG2ye7BxaJBXDq30ohAIdZl3v3kuSLvvODJ11N59VFzTgisOUI5/b/69OCnW3
-	NWoGg3aV7/J/cSzolSvER06kH7Een2U0NqXvCNwJEn/c/rpx6+VKgj2mPAa9qKH7Uevzsot
-	see+EPyF1seEec5hr9aM62VX6/O6UaEIENBIY4KbiEeQse4Psv2bqS1EDofVHFdOTO585Dy
-	RgRWvson9gBjXA73FVkr2OSa/x1Od7r7uuiLIU/VzNgsIPFkWlpy0+HQOICgEWjEbj9WSBp
-	sOYxLFQtC/TA1Huv0r1+Cfgqh/vAQ+Z9O/PEBnbTxITK5w7cQ7bK10pijglvs6NffiLIMx8
-	Su6B+Uu9o1BDKcbdw6tjAi5p2A+OmhtC1HGxmy3JJ+fP729sI0nGHueK13fwMQ9k0sWN2he
-	VYMX7UXo/uYsqHe8Wu2ZUJL7FQrqRpHP4j4wadJLxPYffxnR/nM6u4LbZ8VAKyGXXbk/yui
-	FdeEmokgp7wzQbALq4saMjRDwCuMu0sK9+B76c++9fdfa0jOq1xNwTwnNpXM0/cDGcdMXXS
-	UGjlDZXXh5j98LRljU5DK2tWouIWG5oZMYjww5ra1eTiL3/9RaFhtrOdzeRcwLiHEB6zrb0
-	kxe73RppsSKe6mQyKtx15mcZJU229Isjz+VD7HAM+8qsonND7z8EEWp5h1dtET2MQWu1pGy
-	UIxd9lY9CTMKbaOR5dOb/VHkah5GzVY5z7rneLLxLQxnJ7cuccO0ZL9ttwZ9YUdwjXajtxd
-	fj975Dp+OBSbF3w9zF5L7w4W8BpzJSXhWtvJdtHJWFgjlvQ1jNS4gF0VBeicMyJUUPszQ+C
-	yVyZQ6XxvkG7ikSJJxMUPgORYAepBONdv5Fmn2nN0ZYlzq78/HeLSU0B4uhDQdj7b4QL06J
-	B4CT5fJaxQ9EQza771HlO5QBLZ9g+pDYCcrVlqCHwbaW8EOtIwoLWQxqhh5poLXnG5HU4aE
-	oinJfYuBI3Bz3Ogi/+jx1FBWm6554xQ+0zMJiI7emtPq0pDUDvAZ5M=
-X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87643862-e32e-43c7-8c81-7186f30059ea@linux.dev>
 
-struct_ops frees the global btf_vmlinux object.
+On Mon, Jun 22, 2026 at 05:29:12PM -0700, Ihor Solodrai wrote:
+> On 6/18/26 11:38 AM, Borislav Petkov wrote:
+> > On Thu, Jun 18, 2026 at 11:12:09AM -0700, Dave Hansen wrote:
+> >> On 6/18/26 10:09, Borislav Petkov wrote:
+> >>> On Wed, Jun 17, 2026 at 03:13:33PM -0700, Ihor Solodrai wrote:
+> >>>> So my question to maintainers is what approach seems best?
+> >>> The CPUID stuff is being rewritten currently and it should address your issue
+> >>> too. If not, then we need to rewrite it better.
+> >>>
+> >>> Can you reproduce with this set applied ontop:
+> >>>
+> >>> https://lore.kernel.org/r/20260528153923.403473-1-darwi@linutronix.de
+> >>
+> >> Thinking about this a bit more... If Ahmed's series does fix this, I
+> >> think it will be accidental. It still uses identify_cpu() and also does
+> >> a memset() of the new c->cpuid structure in addition to the old
+> >> c->x86_capability structure.
+> >>
+> >> I'm not knocking Ahmed's series by any means. It just probably won't fix
+> >> this issue.
+> >>
+> >> In a perfect world early_identify_cpu() and identify_cpu() would either
+> >> get consolidated into one thing. Or at least become two discrete things
+> >> that initialize two completely disjoint sets of data. That way,
+> >> identify_cpu() wouldn't memset() anything.
+> >>
+> >> Isn't that the _real_ fix? Instead of trying to hide the inconsistency
+> >> when good data is blown away, we stop blowing it away in the first place?
+> > 
+> > early_ is only on the BSP and you want to scan all CPUs.
+> > 
+> > AFAIR, the last time I was looking at how we scan the CPUID leafs, we do have
+> > cases where there's blips in time when cap bits get disappeared to be
+> > rescanned again. The toggling of MSR bits which control feature flags is one
+> > thing that comes to mind.
+> > 
+> > But I'm with you on the consolidation approach. I think this is what we should
+> 
+> Hello Dave, Boris. Thank you for the input.
+> 
+> I tried a slight refactoring of the identify_cpu() machinery to
+> eliminate the memset(x86_capability) from the boot cpu, and it fixes
+> the splat that I reported.
+> 
+> identify_cpu() is split into two parts:
+>   * identify_cpu_scan() - the top part, up to and including the
+>     generic_identify() call
+>   * identify_cpu() proper with the rest, no memset here
+> 
+> Then (gated on x86_64) identify_boot_cpu() *skips* the
+> identify_cpu_scan() call, only executing the bottom part of current
+> identify_cpu(). We can do that because boot cpu already did the _scan
+> part in early_identify_cpu(), when interrupts are still disabled.
+> 
+> One caveat: get_model_name() is moved from generic_identify() into
+> identify_cpu(), otherwise it wouldn't be called on boot cpu. Same for
+> c->loops_per_jiffy = loops_per_jiffy; - it's moved to the "bottom"
+> identify_cpu().
+> 
+> The behavior for secondary cpus is unchanged: identify_secondary_cpu()
+> calls identify_cpu_scan() then immediately identify_cpu().
+> 
+> Please take a look at the diff below and let me know if this is a good
+> way to proceed. I don't know exactly what I'm doing, so concerns and
+> corrections are welcome.
+> 
+> 
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index a4268c47f2bc..4a655109cacf 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
+> @@ -1978,8 +1978,6 @@ static void generic_identify(struct cpuinfo_x86 *c)
+>  
+>  	get_cpu_address_sizes(c);
+>  
+> -	get_model_name(c); /* Default name */
+> -
+>  	/*
+>  	 * ESPFIX is a strange bug.  All real CPUs have it.  Paravirt
+>  	 * systems that run Linux at CPL > 0 may or may not have the
+> @@ -1999,13 +1997,12 @@ static void generic_identify(struct cpuinfo_x86 *c)
+>  }
+>  
+>  /*
+> - * This does the hard work of actually picking apart the CPU stuff...
+> + * Rebuild capability set from CPUID and re-apply the forced-cap overrides
+> + * through generic_identify(). This *should* run with interrupts off, otherwise
+> + * an interrupt handler might see the capability bits cleared.
 
-In batch mode, a later struct_ops command can reuse stale state.
+And yet it doesn't run with IRQs off. So that comment doesn't need to be here.
+The point of the whole exercise is to not disable ugly interrupts in that path
+at all.
 
-Reset the BTF pointer and cached map info state.
+>   */
+> -static void identify_cpu(struct cpuinfo_x86 *c)
+> +static void identify_cpu_scan(struct cpuinfo_x86 *c)
+>  {
+> -	int i;
+> -
+> -	c->loops_per_jiffy = loops_per_jiffy;
+>  	c->x86_cache_size = 0;
+>  	c->x86_vendor = X86_VENDOR_UNKNOWN;
+>  	c->x86_model = c->x86_stepping = 0;	/* So far unknown... */
+> @@ -2028,6 +2025,19 @@ static void identify_cpu(struct cpuinfo_x86 *c)
+>  #endif
+>  
+>  	generic_identify(c);
+> +}
+> +
+> +/*
+> + * This is safe to run with interrupts on.
+> + * The boot CPU can run just this from arch_cpu_finalize_init(), because
+> + * the scan part already happened in early_identify_cpu().
+> + */
+> +static void identify_cpu(struct cpuinfo_x86 *c)
+> +{
+> +	int i;
+> +
+> +	c->loops_per_jiffy = loops_per_jiffy;
+> +	get_model_name(c); /* Default name */
+>  
+>  	cpu_parse_topology(c);
+>  
+> @@ -2154,6 +2164,17 @@ void enable_sep_cpu(void)
+>  
+>  static __init void identify_boot_cpu(void)
+>  {
+> +	/*
+> +	 * The boot CPU's capabilities were already scanned by early_identify_cpu().
+> +	 * Here identify_cpu() only finalizes them.
+> +	 *
+> +	 * 32-bit still needs the full scan here: it sets X86_BUG_ESPFIX (via
+> +	 * generic_identify()) and the no-CPUID cpuid_level default, which the early
+> +	 * path does not.
+> +	 */
+> +#ifndef CONFIG_X86_64
+> +	identify_cpu_scan(&boot_cpu_data);
+> +#endif
+>  	identify_cpu(&boot_cpu_data);
+>  	if (HAS_KERNEL_IBT && cpu_feature_enabled(X86_FEATURE_IBT))
+>  		pr_info("CET detected: Indirect Branch Tracking enabled\n");
+> @@ -2178,6 +2199,7 @@ void identify_secondary_cpu(unsigned int cpu)
+>  		*c = boot_cpu_data;
+>  	c->cpu_index = cpu;
+>  
+> +	identify_cpu_scan(c);
+>  	identify_cpu(c);
+>  #ifdef CONFIG_X86_32
+>  	enable_sep_cpu();
+> -- 
 
-Fixes: 65c93628599d ("bpftool: Add struct_ops support")
-Signed-off-by: Yichong Chen <chenyichong@uniontech.com>
----
- tools/bpf/bpftool/struct_ops.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Ok, thanks for that, that's a good first try. I did poke at it a bit and
+here's what I think should happen:
 
-diff --git a/tools/bpf/bpftool/struct_ops.c b/tools/bpf/bpftool/struct_ops.c
-index aa43dead249c..835e5e561f7f 100644
---- a/tools/bpf/bpftool/struct_ops.c
-+++ b/tools/bpf/bpftool/struct_ops.c
-@@ -643,6 +643,10 @@ int do_struct_ops(int argc, char **argv)
- 	err = cmd_select(cmds, argc, argv, do_help);
- 
- 	btf__free(btf_vmlinux);
-+	btf_vmlinux = NULL;
-+	map_info_type = NULL;
-+	map_info_alloc_len = 0;
-+	map_info_type_id = 0;
- 
- 	return err;
- }
+1. The part which initializes struct cpuinfo_x86 up and including the memsets
+   should be one function called init_cpu_info() or so.
+
+2. Then, generic_identify() should be merged into identify_cpu() basically
+   turning the latter into a single function which does a generic CPU
+   identification both on the BSP and on the APs.
+
+3. #ifdef CONFIG_X86_32
+        enable_sep_cpu();
+#endif 
+	that gunk should be stuck into a function called identify_cpu_32() and
+	you'll have at the beginning of it
+
+	if (!IS_ENABLED(CONFIG_X86_32))
+		return;
+
+   and then you call that function both in identify_boot_cpu() and
+   identify_secondary_cpu(). This way you streamline the paths and drop all
+   that ugly ifdeffery.
+
+4. When you do 3. above, you should be able to move this gunk
+
+	#ifdef CONFIG_X86_32
+        set_cpu_bug(c, X86_BUG_ESPFIX);
+	#endif
+
+to it too. And now everything is nicely encapsulated and straight-forward.
+
+5. The above will allow you to have the init_cpu_info() only on 32-bit.
+
+Oh and, looking at the ifdeffery on identify_cpu():
+
+	#ifdef CONFIG_X86_64
+	        c->x86_clflush_size = 64;
+	        c->x86_phys_bits = 36;
+	        c->x86_virt_bits = 48;
+	#else
+
+you could probably add a identify_cpu_64() too. Or maybe the init parts should
+be called separately init_cpu_info_32() and init_cpu_info_64(). You probably
+need to see how it looks like when you write it.
+
+Oh, and each 1., 2., ...step above is a single patch. This'll make the review
+very easy too.
+
+How does that sound? Willing to give it a try? :-)
+
+If not, I could try to find some time and do it myself but I thought you might
+be willing to try it...
+
+:-)
+
+Thx.
+
 -- 
-2.51.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
