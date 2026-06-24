@@ -1,133 +1,135 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607FF3AD524
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 09:28:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A63B3B47E2;
+	Wed, 24 Jun 2026 09:28:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782293304; cv=none; b=l1S0jlpj71CcO/PmlWK+MC5FIwXezn8pU0SteE6R7sgS7ZkMs5wkWS5h5P/2YplWHkW+Pe+JaA2fll1SP8Als83f9Kbtlf4gzfKH7tDjnVVLHjTraZEhyVozmsqiDMSqvbbgh7pIuR6xcVIHnqSvTQttNIRsxsxcaKKDWczJtQc=
+	t=1782293315; cv=none; b=KSSeL5jdylSsXc432m6fWJtih5L7hkvvgAfS4jF/a2Z/APeJGCrQR4wyGSph+dXa5x3fZKTdFFPXWAHNwdHdKQ1B0X/ps+OOV47Q843lUkmfEbMOJLxQ2yVi0XAiDZ8y9/fV/DigokDolRB17kiVZtG3ZMXUzM5sFnUOmSFaNjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782293304; c=relaxed/simple;
-	bh=9c+jD2z2sETY12oFY277uAmbAaajDUjpcHK99y+prCM=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rPU14ZV/NllB0OR4tdy4O/KRdH9cVmkugwxz23+wm5w0PG6xvnQ4t4wrWdoNQuscoOdiKXT6T+KQRYGeCDgUT/RgUsMPKrL05hXSgSEVu6z/uk2F0687V+z4sAP7R7ZXt0mgKQkoVP5z+NVr45XKO9mwEfQznEABLwobWjkLwIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k+ioyn+t; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782293315; c=relaxed/simple;
+	bh=66af4jtR1ivMYaCroXmndu4LXkF04xDbWL+8wFZS4aE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=hwG3c5m8b5UEf0CdK41XJXyrLudofq29c92oXgXx6GX8pUADAWb0KKaSSr6iIMxM39qITxmFKx0p2MkWxiDMsd/9NVDRLBGKGm9f88XQd6TVaFo+XR/AOhQUO+15lPdGI4B2dwHf1uD+7PIVeKwiVtawyxJoPPiy64CmpR4TehA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Hfaw+mKI; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k+ioyn+t"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4924f8db066so4608225e9.2
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 02:28:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782293286; x=1782898086; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rFKkTvWOSQrcXuCFTLZ8S0fbWlO1anbu3cbJE6d9vEQ=;
-        b=k+ioyn+tAHpKei88ufuesbR+DFyXU8J69zS9oSco1n6/IQLOHzQb89F4iSkaWXeBHL
-         ldcny0p1IbAFHVE65L7q6eUmeeyMdjjz3cqz+qyw8tf98SZ9J305zYY2NwAwQO/iakJG
-         YoCQa4KM3fXW6bGZ7VNhE34smVe+VCVm2DxjeKgTzf7dPcnaU8nrnZX544uz6dMm8HB+
-         V0JtwE9AgcwG7qQ1kOpMLamXhRO9NQJEDx4pAJIajE9KhWuf/iBV2uJTE22h+TnP2jrW
-         IAxQ2a6nGmSBs8fKrBsta9pMrMhqTyDj7LMN4C8BTIK/Mafg92l6dE42MU9TEDNSSKDb
-         bTig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782293286; x=1782898086;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rFKkTvWOSQrcXuCFTLZ8S0fbWlO1anbu3cbJE6d9vEQ=;
-        b=Esjw8D0FAKXI3+4JlbeH0P1uEAaT6yoGvWf6+67NM+OuDwCJ8yWvP5mczzWSN9wQrF
-         JGvK3YHiRcX8kIXeoYMYVxWRtYlMkLrh+NtlkHk+HpmEjZhphofewcODBdWhz3nqGsmW
-         PYCVFfJ1SsMHUzX6DcKmlkCq5sjM8nU8B92HcNQ81LRSvfE9RtZkgs7RuFnUALfIgTz4
-         TWnVMsa2l7AUuQdDgxdW9mc0TIVnMiMuPqdShdYdOuiyXvBG80TZNLpvSGRCx7onu3Po
-         eikDf+Hy6mrfRBboeSjf42XFVeyyNQIZ+X6N6T4YmBr1EZEjcx+O6xyOPP0i6bUySn2a
-         0YhA==
-X-Forwarded-Encrypted: i=1; AFNElJ/xZz0M+lc61X4MiEux/pQUVx2e4WxnZ+HDBmOaylt4V05z4cSYygenIt4ajpbp9EFKFbQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlkQVR0z19uwPs/PeprpN8Ryeh3WUZZSjP+DZzSa4j9VvFYqI/
-	ti8HNwnnBHUKeAp6H27a3jUiXvd42ojFEQpGNiHBRY6lzPR+pC2Nmyf1
-X-Gm-Gg: AfdE7clu0SdAyhKiD5LfnrNoR3E1rnj04lOGtygyt7vdSrJWiUDakY30HI2dyPCCq8E
-	fO9Ko3iDYjcbGryrFYQf87mVrz/74wbm6VC1zwZoE/w8j4eaphQCFMzzNmjvLinxuf2ute/JD5o
-	XICSbePFwnysBX4vZssyJamXBm/7dsKNBRR9SliLDPq6ncMzSDXaLmddIXK3+U8lL+mBcPrLfY/
-	Z5/Asbu4j5FDC4Q9CyYCCtOIbh3Nh77NUl6v8uFPMulOWHAwEz0wClD7HMrfjgnu+py88lnWx+d
-	5tJ3h/9oqWX/rr9ZrFEyCybsBUums0sh8+9MNh915Qzb3q1M4NOCJjHB2OpZeyc35xSQyfx5Uz4
-	2m99699fkSDagv+XlsPDlHnEHoFZHN4GTr6EAH/ZW18Y62o38BtmFFoophP2UGndYBGw/z4Zjxv
-	st
-X-Received: by 2002:a05:600c:81c5:b0:490:a1dc:e542 with SMTP id 5b1f17b1804b1-4925b34ee58mr88244475e9.6.1782293286012;
-        Wed, 24 Jun 2026 02:28:06 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4923ff821aasm466328435e9.12.2026.06.24.02.28.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 02:28:05 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 24 Jun 2026 11:28:04 +0200
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Yonghong Song <yonghong.song@linux.dev>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	kernel-team@fb.com
-Subject: Re: [PATCH dwarves v7 0/5] pahole: Encode true signatures in kernel
- BTF
-Message-ID: <ajujJM9N0_QpB_3d@krava>
-References: <20260623040704.2732530-1-yonghong.song@linux.dev>
- <ajp70MRjHvCJNeyv@krava>
- <d270a215-264f-4c5c-9d7f-0b1568815e31@oracle.com>
- <b1b73cef-f25a-443d-8557-4cfe92938b46@oracle.com>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Hfaw+mKI"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
+	Reply-To:Content-ID:Content-Description:In-Reply-To:References;
+	bh=PHUJ0DhKQJLvQy2H4SuK9sKs0CUhgKdbb/J50pvlPqc=; b=Hfaw+mKInMq3c+vTj/vUZSlJQM
+	K9W5RsWDsADXEsB2y9BpLeV/yP/SI4vKzy2lhREFdow+0S8AnQ6xHWwAypc1CHLHI8yyVsv0Xt1Su
+	AHOXgXT4GpcS4Rke2ywSKvF/LboTO71NkPxlEM+v27zvQwubvKpUP66JDFGFhdxspRC6uFWKiTu4Y
+	CWBqHL0yJm8nagTA46Oqh92ULZ/q0KM7r7EtCw6/aEySJiLlTZ3R41OLhjCCgUbnrhxtlqHd5Dkrl
+	rRSUuA7FOSoW6tUHBXm2RfiP/g/zqBFqAjh4He5c463zWOtMn8enXe46bplABZTr3ZputMEpHN/V9
+	lxEXcAbg==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wcJto-002KCs-2N;
+	Wed, 24 Jun 2026 09:28:01 +0000
+From: Breno Leitao <leitao@debian.org>
+Date: Wed, 24 Jun 2026 02:27:43 -0700
+Subject: [PATCH v2] sched_ext: Avoid flooding the log with deprecation
+ warnings
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b1b73cef-f25a-443d-8557-4cfe92938b46@oracle.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260624-scx_warning-v2-1-07d0d48b0d01@debian.org>
+X-B4-Tracking: v=1; b=H4sIAA+jO2oC/23Muw7CIBQA0F8hdwYDSBrL5H+YxvDuXcBAgzUN/
+ 27s7HqGc0ALFUMDTQ6ooWPDkkETSQm41eQUGHrQBCSXE5/klTW3P9+mZsyJcR/V7JSSJlqgBF4
+ 1RNzP7bFQAiu2rdTPmXfx0/9PF0wwoWyU4haV9fPdB4smX0pNsIwxvn4wfTWnAAAA
+X-Change-ID: 20260623-scx_warning-0df49c442afb
+To: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
+ Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
+ Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Juri Lelli <juri.lelli@redhat.com>, 
+ Vincent Guittot <vincent.guittot@linaro.org>, 
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
+ K Prateek Nayak <kprateek.nayak@amd.com>
+Cc: sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, kernel-team@meta.com, Breno Leitao <leitao@debian.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2472; i=leitao@debian.org;
+ h=from:subject:message-id; bh=66af4jtR1ivMYaCroXmndu4LXkF04xDbWL+8wFZS4aE=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqO6Mb2qSCp8SaqaXn4fp4GTYl5OGK8x/GOwJyq
+ w747KZ0u96JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCajujGwAKCRA1o5Of/Hh3
+ bc4dD/9tiDpM3ZcRzU5a2N3j4DsVC8V2G9AeUICWxEfRLXZUX7vG9ky6aTi6OwAKIv0q0JWfkYg
+ rIr5xrHfLqirW92h1+2/lchwl7IFFnwyYlRXd3/zuaZTpQCO75IytUhQym4JBwueh9pK4Gb0v8x
+ Sgx38jQC6WlmVmLt/tF2OuYt9+osRtiONtsJCTGAfSMtsEYSA6ZwRbbeBNgppALLcEL4xln4TAS
+ u4+Iumr1qA31PvfaPnNbwJOLoFhz3SK3s9JQrIXnXeWFe5aqkOhRvJZcsOxp2W36IA7d3TPWJil
+ AVEZWnWHsSy8m2XWNjrbVUBaNvBPMODVtEL2oGziSMtfGyBX2IKyl9qC/DjwFWIP+pjYUq5iMdA
+ u+vy/y9+OOplqryVwyh9zo7f/jsAAZPDqnNpkytMm/pmDfSmTb1sZ6WegBs9q55pZwW6fGS+9tE
+ J4Y00SAUpor0Z/zin8Nh6B74YkbLVQ0vUwk+S1dczB9XXiE8rZRN6T2K2gk2++IF4HKRTPk2Ioi
+ 0JxP5aZoFfsICRuXHvvU6je6ZQS2/SrBmx9joZY67MG+vrFuqfvaEDyz/hmqjs7XcLLnFAtNnSs
+ ZLfecptyUMIRUHsGdXBBgGEmM8ubhyBNQAdlRGsAgjYW9311O2Bgb5bxP0IPRNyuRVH2eByUwYV
+ RdX49yk1EpdJoxQ==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-On Tue, Jun 23, 2026 at 05:02:30PM +0100, Alan Maguire wrote:
+The deprecation notices for direct p->scx.slice/dsq_vtime writes and for
+ops->cpu_acquire/release() use plain pr_warn(), so they repeat on every
+scheduler (re)load and can flood the kernel log.
 
-SNIP
+The slice/dsq_vtime notice is the worst offender: it is emitted from the
+BPF verifier's btf_struct_access callback, which is re-evaluated as the
+verifier explores program paths, so a single scheduler load can print it
+many times -- hundreds of lines on some hosts, dozens within the same
+second.
 
-> >>
-> >> hi,
-> >> I tried to get the numbers from my setup and noticed that some new
-> >> functions were included in BTF compared to the current version
-> >> (functions diff attached below)
-> >>
-> >> like for "arp_process" function the current pahole gives me:
-> >>
-> >>   arp_process : skipping BTF encoding of function due to unexpected register usage for parameter
-> >>
-> >> but it's included in BTF generated with the new pahole.
-> >>
-> >> in addition to your explanation above also one of the commit says:
-> >>
-> >>      - a parameter with no location, a constant value, or (for non-clang) no
-> >>        register found is marked optimized out
-> >>
-> >> please check below, it seems like 2nd argument of arp_process has no location,
-> >> so iiuc it should not be included in BTF, right?
-> >>
-> >> thanks,
-> >> jirka
-> >>
-> >>
-> > 
-> > thanks for catching this; it looks like we return a bit early before detecting
-> > missing locations in the non-true-signature code. If you get a chance, would you 
-> > mind trying the attached patch to see if it fixes the problem?
-> > 
-> > If the fix works and Yonghong is happy with it we can add it as a followup
-> > and land the true signature series to save another round.
-> 
-> actually sorry that patch leaked true signature partial names for gcc; updated
-> patch attached.
+Switch both notices to pr_warn_ratelimited() so each deprecation is still
+reported but bursts no longer spam the log, and add the missing newline
+to the slice/dsq_vtime message.
 
-hum, I can't apply either of them, but I see that change on top of:
-  alan-maguire/dwarves-true-sig-v7
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Changes in v2:
+- Switch both deprecation notices from pr_warn_once() to
+  pr_warn_ratelimited() (Christian, Andrea)
+- Link to v1: https://lore.kernel.org/r/20260623-scx_warning-v1-1-14bf218f4bd9@debian.org
+---
+ kernel/sched/ext/ext.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-but on that branch I can still see arp_process function in the btf
+diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+index 691d53fe0f648..d62b93f48a854 100644
+--- a/kernel/sched/ext/ext.c
++++ b/kernel/sched/ext/ext.c
+@@ -6988,7 +6988,7 @@ static int validate_ops(struct scx_sched *sch, const struct sched_ext_ops *ops)
+ 	 * run past the BPF allocation. Skip for cid-form.
+ 	 */
+ 	if (!sch->is_cid_type && (ops->cpu_acquire || ops->cpu_release))
+-		pr_warn("ops->cpu_acquire/release() are deprecated, use sched_switch TP instead\n");
++		pr_warn_ratelimited("ops->cpu_acquire/release() are deprecated, use sched_switch TP instead\n");
+ 
+ 	/*
+ 	 * Sub-scheduler support is tied to the cid-form struct_ops. A sub-sched
+@@ -7806,7 +7806,7 @@ static int bpf_scx_btf_struct_access(struct bpf_verifier_log *log,
+ 		     off + size <= offsetofend(struct task_struct, scx.slice)) ||
+ 		    (off >= offsetof(struct task_struct, scx.dsq_vtime) &&
+ 		     off + size <= offsetofend(struct task_struct, scx.dsq_vtime))) {
+-			pr_warn("sched_ext: Writing directly to p->scx.slice/dsq_vtime is deprecated, use scx_bpf_task_set_slice/dsq_vtime()");
++			pr_warn_ratelimited("sched_ext: Writing directly to p->scx.slice/dsq_vtime is deprecated, use scx_bpf_task_set_slice/dsq_vtime()\n");
+ 			return SCALAR_VALUE;
+ 		}
+ 
 
-please let me know if I should try some other branch
+---
+base-commit: 4e5dfb7c84012007c3c7061126491bbc92d71bf1
+change-id: 20260623-scx_warning-0df49c442afb
 
-thanks,
-jirka
+Best regards,
+-- 
+Breno Leitao <leitao@debian.org>
+
