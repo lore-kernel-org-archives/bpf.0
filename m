@@ -1,172 +1,322 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D321939B944
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 07:21:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6EC538B7B4
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 07:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782285672; cv=none; b=rkTPCazkT6YPZf43qNw7MyYzejuVyzPbQbAZeSHm0YR+sv9Ds0hGyx/O2eVENptDpIr/3nVTwH0lG4HrVGhXQ5PrtspmAgC9Qxv6XsEXw9w6r04wBUnvJP+j0BPhHaCVszpYVx3tD63iufoVhqqHkBsvzyms1gEugec6QBOCCHs=
+	t=1782286026; cv=none; b=K+sPEJL5XzVocKPOljXB01jMyySgIoEwMduTy56V7SrtmfCcsrkpkSIdanDd/fh8PKEsqsBdVV+G78t4ZV7bULl8puyc+7Num8lmPp/lT4IhBbzIkgyC6n3tohvmFRe1I5Ad0g9RbP2qv3o7EiOuZlvGhThUvpi5jzZHO+Kj7OI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782285672; c=relaxed/simple;
-	bh=qO+g6GQpV6aFlIxqo0yG0p024slXcrAoJ12MOHIcRwA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jMRK5J5Xu35ZshcykNrKPPIVzlTUbswWwEHkpSZC4LxkqNv/hpXEYVlHUC9QGmVER0ucofTPwL2TSqBoVO+NvbsC6THV+/SmmiOE/2cCGEgHbVD5ojk8/krj84KFgARj1KvFmnvBjvS/beVUAdA2yaFwD8V7OfvNB5TXWz1EWaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fyLzigKU; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782286026; c=relaxed/simple;
+	bh=bnoyGYJMDBVFbDfUSkAtARl3V5hhLS9NnQHYiRCxY6U=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=aIrhOGRWz/u+DpPofB+koyV+Qc7g4KAI3c4WPM755DzDElS/q7h9Kh3/gDkKA0peZ7EN7TCJuFovnpyXQTLGw9weTfaEN874SusmfNdw2VBZyHujXJmZvyX02cDL2VaPpfsh4kAQxJRvt2O0X0Bce1NEq+zgX2pxgJVIn5eU+PA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=avn9lc4X; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fyLzigKU"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-845385adf4cso519629b3a.0
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 00:21:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="avn9lc4X"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-37c6cd1ac98so664787a91.0
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 00:27:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782285665; x=1782890465; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782286022; x=1782890822; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6dUh+3hu7+3YOFigDkyuoP/RqrqgTKFXSD3jKDVwGwY=;
-        b=fyLzigKUluiB+9+U2qCvMTegEaIiBnTOnyK4f5GCtG43bW/4tE7viovvXEz8viztQI
-         fSgCm+Fs5/Uq8nYG67OdgUBnGm04ijXT24gMZodkd7gK6WPWiH5kqAHgSSPrk6xeh8ql
-         m3av2KHNS5yZm/wZiS6C4nRIUZtJY6ox7qiL+X84FhaRDmG6pGplSNeW+XzGrkygW5W6
-         Zb9yxS67qMXx5/qO/Y7KPW6whCnZiElxVmY8nN4K/BIvR5eigXV6RQkqt1LGBwJ3bIvV
-         nfvOvuAOSj4W3+uo0lNJSD977GUarOFIaTBQu2kF8UU34ZJgXC3V6UGEJTAR0EsqJHeP
-         ziPQ==
+        bh=MPgaXsZyiXshNUs2vS4qI9K7MIRRsE6MqEYsD1oXwCE=;
+        b=avn9lc4XDP9i0zPicksbmmA09BKMBAV/cnBFbb6V7V0hMk+eho1WNYKWP4afu0EFMO
+         /RiQxc+Smas8T/zLBJsAkF/GwhFPEKn1/ShMV+qLMEwTOavBKS72Nx6IGeFte7K0Mp56
+         3pnNz3X9UhD/CaDH2+OG94LQnqTzUWeL+MQS55rMNvQxVpZcBw/WIGai0dqKcVuOSFHo
+         +tJLuOXZRkV5bAbo7NPvMbqeK6lFzdkoK9iyCe2KnwDaPkjIgfxi6jshy94Cgv2uaQ77
+         C9dHjgVx3vGiDN9IccOwH/DZVfJXXg+BM2CIScCJF2ax5cIt2/J/avKIaykRlB8I/+7B
+         CmrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782285665; x=1782890465;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6dUh+3hu7+3YOFigDkyuoP/RqrqgTKFXSD3jKDVwGwY=;
-        b=GBKpu8SdAfyznFU7O67gnGv7kZpkCJ096yUnMhDc/UPrijNpYyZ0DXVSQje6SYeXOD
-         gqBWqTVRKUoRm+hnDKDKOC+/2fBdLSHnXvg7LKBUHNhX2Tf4n0I25BMCH21BI7aY/nFF
-         BqyZWh6JXlt5UVVAO51A3alw3B0lwFMiQMjuorT81kPDKDPo83S10Tlwnr4PIiGBbFMm
-         KShUH7xHJqwXRXeB3PHcehr2F8FDvYe0zWww31uX/c2CGqBUeUWBqTqqnm1ErzydDHRR
-         s+ykLD7B816T43sU9L36xjdbA/qCzTnFqxKU7YCqxFPulK5c377hyd/STKewwKfLWyiA
-         vt0A==
-X-Gm-Message-State: AOJu0YzlF/RmBFhdBYNWGPdORmr4ACXUX3Oz8ghIaJxN2+HbyscwxARi
-	ahRu+rAa4HccqV0odclN8jOfXsRkL4/CFecSojTFUe0LKk8scpJ8dCYHJbh6sXSFgSXEwQ==
-X-Gm-Gg: AfdE7cnibsKgnwEZ0DEL/GrsVAIdV2jooxhVDaj0HaozD8r7PEQi0OWuL0PcN8lEn5G
-	7lCydF0TWii1F+BDrSzAGaOeVniYMshwsr+VMKw+yXkiEUNijXYkdulfknjSXLuDXXJ4c8AWDB5
-	v+51lOJPQNZF/eRnBhp0OadNS+M1XQC1xQi2IeyZAltCckntydfSuPnV1uOfhVqa4z4jtQSVyHj
-	AjaPLzHJ3D9Cd2f4yQnL9gZP2h13rg2MVveitPKrUupz26dPkQiCW7KUqZJjaRLntsAo0vLvzuH
-	Kjv+jrjtcrrJPOhpEL2UZA2WuUqyJrTBr4N6akyJHnpz3B86+vQm3y5/DTIKdnyLwUhkpsh0viA
-	gJdMNyykPp7gIdMSvB9svknPOWr5shX3g8N7dplS7ALdo6BxxajYu91wMZLETCay3Enn8Y0pFbU
-	jHqQtSLr6Z74+z86HjqExyMMmBDqJatNcK7Cke9ihdeEtJXw8bs9zKHWacjGD5kUevZ+8KeDSBU
-	gRFTlY+kRjvUmqewWZqpaRcPL+5wclWXiWZ+g==
-X-Received: by 2002:a05:6a00:22d4:b0:845:286d:468a with SMTP id d2e1a72fcca58-845a26febfcmr3101719b3a.13.1782285664853;
-        Wed, 24 Jun 2026 00:21:04 -0700 (PDT)
-Received: from u2404-VMware-Virtual-Platform.localdomain ([202.8.105.120])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845a413c7ecsm1498555b3a.56.2026.06.24.00.20.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 00:21:04 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org
-Cc: sun.jian.kdev@gmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	dxu@dxuuu.xyz
-Subject: [PATCH bpf 2/2] selftests/bpf: Add inner map template lookup NULLness test
-Date: Wed, 24 Jun 2026 15:20:31 +0800
-Message-ID: <20260624072031.735846-2-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260624072031.735846-1-sun.jian.kdev@gmail.com>
-References: <20260624072031.735846-1-sun.jian.kdev@gmail.com>
+        d=1e100.net; s=20251104; t=1782286022; x=1782890822;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MPgaXsZyiXshNUs2vS4qI9K7MIRRsE6MqEYsD1oXwCE=;
+        b=SpmpkKm3NmuaaK9KT5iMLFypNeTxbhgecI3mQhB26pbDpKu3e8XgiBrILAs3ba0VX4
+         oxC/w8OvpfWwh5G239vUx3NN/J9YN5ammoRtfxRAjoN8woYmMz2XlE1xqMZiPzQtLPWs
+         SVY2q2mydEYUB06oX6rtkyOeX9izY4ZX2Gtvcas/7C4ND2emtREyS76fgbapuoUcWNCl
+         X48lrt7ikBCIXV2K5k8H0MGdH/tbC9wC1FcxbjlmKG818Hqu1eIgHyb9sp2WEli6qisD
+         tHsv4RU6fsPDkHJj8akZnqOdxm1/o98aI8d0CRz08THdkXvKWUfYbSpf8GQk+RDrq7hC
+         nQvg==
+X-Forwarded-Encrypted: i=1; AHgh+RqNJHlGkulavYRBBaqvFZYyCkuJtIT+p7M46HXf62EPsNXXyva1u3LtGdrdPIf4X3jFFcE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUgJNS5LKlFL9ChXFBT4ivc38DvWHABWlHKe2MatKokLrdFE6S
+	q7gUor0KaFzKF1PwbRT6s/1rj3lf4gBHCW7rM8KNa6VVQmLc0fnk3UBrgrc3wQl+JNA=
+X-Gm-Gg: AfdE7cmQZA2MoTB2qV7mO0QPG23DZT0iM0G0HVIAJ6FP1pBSGuIJXDO5pYtTBjTEzTQ
+	Mj4bS7yn89nD5cNCjSG72W/pA388vfwng3SuZsg3uLp3a56ZxryqvbUzEOOF4EkKOM/t1Xm014E
+	65WkWRYdR59HuTkScpOLEACY7Ie1pMcWrm9C0ZxWHa82zDyesVsVwKz8BEryn99i8Y8X7EawS8P
+	qK3jRPzS9ZSftD2+yIFPmhwj25bv+9gHQ5dG++53ryqwFACGmu59iLjCzDBPFxwhqKcbeVcbztz
+	JcHIyX+z8NAWgsO3e8VuRN1GZfYmQ1YzR8oZ94RUvTZ520ctIE/I7Ao/hjpDynMbXX54ZvtuxBO
+	vmykmGS3+7lj1PApCiTIOyupPkRD5BssyiLVd8/Yv5A9oVuZgePzd9vfqO1/Fs0QdzG/tZ/qsw6
+	un0ht9Udd12U5cM8HAM3KVaZO9
+X-Received: by 2002:a17:90b:3f08:b0:377:23bb:9b88 with SMTP id 98e67ed59e1d1-37dd0db3e05mr6817189a91.12.1782286022013;
+        Wed, 24 Jun 2026 00:27:02 -0700 (PDT)
+Received: from localhost ([2605:8d80:5c40:7b14:89ba:fd93:9852:c9eb])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37de3b8396fsm1719932a91.12.2026.06.24.00.27.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Jun 2026 00:27:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 24 Jun 2026 03:26:59 -0400
+Message-Id: <DJH3NYA1TIXA.MM8QYB5HQOXJ@etsalapatis.com>
+Cc: <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <edumazet@google.com>, <john.fastabend@gmail.com>, <jordan@jrife.io>,
+ <kuba@kernel.org>, <martin.lau@linux.dev>, <netdev@vger.kernel.org>,
+ <netfilter-devel@vger.kernel.org>, <pabeni@redhat.com>,
+ <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v8 4/7] selftests/bpf: add bpf_icmp_send kfunc
+ cgroup_skb tests
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Mahe Tardy" <mahe.tardy@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260622120515.137082-1-mahe.tardy@gmail.com>
+ <20260622120515.137082-5-mahe.tardy@gmail.com>
+In-Reply-To: <20260622120515.137082-5-mahe.tardy@gmail.com>
 
-Add a verifier test that performs an inner array lookup with a constant
-key that is within the template's max_entries, and then dereferences the
-lookup result without a NULL check.
+On Mon Jun 22, 2026 at 8:05 AM EDT, Mahe Tardy wrote:
+> This test opens a server and client, enters a new cgroup, attach a
+> cgroup_skb program on egress and calls the bpf_icmp_send function from
+> the client egress so that an ICMP unreach control message is sent back
+> to the client. It then fetches the message from the error queue to
+> confirm the correct ICMP unreach code has been sent.
+>
+> Note that, for the client, we have to connect in non-blocking mode to
+> let the test execute faster. Otherwise, we need to wait for the TCP
+> three-way handshake to timeout in the kernel before reading the errno.
+>
+> Also note that we don't set IP_RECVERR on the socket in
+> connect_to_fd_nonblock since the error will be transferred anyway in our
+> test because the connection is rejected at the beginning of the TCP
+> handshake. See in net/ipv4/tcp_ipv4.c:tcp_v4_err for more details.
+>
+> Reviewed-by: Jordan Rife <jordan@jrife.io>
+> Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
 
-The test covers array maps used as inner map templates, where the
-template's max_entries does not prove that a runtime lookup against a
-concrete inner map cannot return NULL.
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-The verifier should reject the program because the lookup result must
-remain PTR_TO_MAP_VALUE_OR_NULL.
-
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
- .../selftests/bpf/progs/verifier_map_in_map.c | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_map_in_map.c b/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
-index 16b761e510f0..c650731c6151 100644
---- a/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
-@@ -18,6 +18,20 @@ struct {
- 	});
- } map_in_map SEC(".maps");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, int);
-+	__array(values, struct {
-+		__uint(type, BPF_MAP_TYPE_ARRAY);
-+		__uint(max_entries, 8);
-+		__uint(map_flags, BPF_F_INNER_MAP);
-+		__type(key, int);
-+		__type(value, int);
-+	});
-+} map_in_map_inner_array SEC(".maps");
-+
- SEC("socket")
- __description("map in map access")
- __success __success_unpriv __retval(0)
-@@ -139,6 +153,36 @@ __naked void on_the_inner_map_pointer(void)
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("inner array lookup requires null check")
-+__failure __msg("invalid mem access 'map_value_or_null'")
-+__failure_unpriv
-+__naked void inner_array_lookup_requires_null_check(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u32*)(r10 - 4) = r1;				\
-+	r2 = r10;					\
-+	r2 += -4;					\
-+	r1 = %[map_in_map_inner_array] ll;		\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l0_%=;				\
-+	r1 = 6;						\
-+	*(u32*)(r10 - 4) = r1;				\
-+	r2 = r10;					\
-+	r2 += -4;					\
-+	r1 = r0;					\
-+	call %[bpf_map_lookup_elem];			\
-+	r0 = *(u32*)(r0 + 0);				\
-+	exit;						\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_in_map_inner_array)
-+	: __clobber_all);
-+}
-+
- SEC("socket")
- __description("map_ptr is never null")
- __success
--- 
-2.43.0
+> ---
+>  .../bpf/prog_tests/icmp_send_kfunc.c          | 151 ++++++++++++++++++
+>  tools/testing/selftests/bpf/progs/icmp_send.c |  38 +++++
+>  2 files changed, 189 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/icmp_send_kfun=
+c.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/icmp_send.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c b/t=
+ools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+> new file mode 100644
+> index 000000000000..f4e5b883d4c8
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+> @@ -0,0 +1,151 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include <network_helpers.h>
+> +#include <linux/errqueue.h>
+> +#include <poll.h>
+> +#include "icmp_send.skel.h"
+> +
+> +#define TIMEOUT_MS 1000
+> +
+> +#define ICMP_DEST_UNREACH 3
+> +
+> +#define ICMP_FRAG_NEEDED 4
+> +#define NR_ICMP_UNREACH 15
+> +
+> +static int connect_to_fd_nonblock(int server_fd)
+> +{
+> +	struct sockaddr_storage addr;
+> +	socklen_t len =3D sizeof(addr);
+> +	int fd, err;
+> +
+> +	if (getsockname(server_fd, (struct sockaddr *)&addr, &len))
+> +		return -1;
+> +
+> +	fd =3D socket(addr.ss_family, SOCK_STREAM | SOCK_NONBLOCK, 0);
+> +	if (fd < 0)
+> +		return -1;
+> +
+> +	err =3D connect(fd, (struct sockaddr *)&addr, len);
+> +	if (err < 0 && errno !=3D EINPROGRESS) {
+> +		close(fd);
+> +		return -1;
+> +	}
+> +
+> +	return fd;
+> +}
+> +
+> +static void read_icmp_errqueue(int sockfd, int expected_code)
+> +{
+> +	struct sock_extended_err *sock_err;
+> +	char ctrl_buf[512];
+> +	struct msghdr msg =3D {
+> +		.msg_control =3D ctrl_buf,
+> +		.msg_controllen =3D sizeof(ctrl_buf),
+> +	};
+> +	struct pollfd pfd =3D {
+> +		.fd =3D sockfd,
+> +		.events =3D POLLERR,
+> +	};
+> +	struct cmsghdr *cm;
+> +	ssize_t n;
+> +
+> +	if (!ASSERT_GE(poll(&pfd, 1, TIMEOUT_MS), 1, "poll_errqueue"))
+> +		return;
+> +
+> +	n =3D recvmsg(sockfd, &msg, MSG_ERRQUEUE);
+> +	if (!ASSERT_GE(n, 0, "recvmsg_errqueue"))
+> +		return;
+> +
+> +	cm =3D CMSG_FIRSTHDR(&msg);
+> +	if (!ASSERT_NEQ(cm, NULL, "cm_firsthdr_null"))
+> +		return;
+> +
+> +	for (; cm; cm =3D CMSG_NXTHDR(&msg, cm)) {
+> +		if (cm->cmsg_level !=3D IPPROTO_IP || cm->cmsg_type !=3D IP_RECVERR)
+> +			continue;
+> +
+> +		sock_err =3D (struct sock_extended_err *)CMSG_DATA(cm);
+> +
+> +		if (!ASSERT_EQ(sock_err->ee_origin, SO_EE_ORIGIN_ICMP,
+> +			       "sock_err_origin_icmp"))
+> +			return;
+> +		if (!ASSERT_EQ(sock_err->ee_type, ICMP_DEST_UNREACH,
+> +			       "sock_err_type_dest_unreach"))
+> +			return;
+> +		ASSERT_EQ(sock_err->ee_code, expected_code, "sock_err_code");
+> +		return;
+> +	}
+> +
+> +	ASSERT_FAIL("no IP_RECVERR/IPV6_RECVERR control message found");
+> +}
+> +
+> +static void trigger_prog_read_icmp_errqueue(struct icmp_send *skel, int =
+code)
+> +{
+> +	int srv_fd =3D -1, client_fd =3D -1;
+> +	struct sockaddr_in addr;
+> +	socklen_t len =3D sizeof(addr);
+> +
+> +	srv_fd =3D start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, TIMEOUT_M=
+S);
+> +	if (!ASSERT_OK_FD(srv_fd, "start_server"))
+> +		return;
+> +
+> +	if (getsockname(srv_fd, (struct sockaddr *)&addr, &len)) {
+> +		close(srv_fd);
+> +		return;
+> +	}
+> +	skel->bss->server_port =3D ntohs(addr.sin_port);
+> +	skel->bss->unreach_code =3D code;
+> +
+> +	client_fd =3D connect_to_fd_nonblock(srv_fd);
+> +	if (!ASSERT_OK_FD(client_fd, "client_connect_nonblock")) {
+> +		close(srv_fd);
+> +		return;
+> +	}
+> +
+> +	/* Skip reading ICMP error queue if code is invalid */
+> +	if (code >=3D 0 && code <=3D NR_ICMP_UNREACH)
+> +		read_icmp_errqueue(client_fd, code);
+> +
+> +	close(client_fd);
+> +	close(srv_fd);
+> +}
+> +
+> +void test_icmp_send_unreach_cgroup(void)
+> +{
+> +	struct icmp_send *skel;
+> +	int cgroup_fd =3D -1;
+> +
+> +	skel =3D icmp_send__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "skel_open"))
+> +		goto cleanup;
+> +
+> +	cgroup_fd =3D test__join_cgroup("/icmp_send_unreach_cgroup");
+> +	if (!ASSERT_OK_FD(cgroup_fd, "join_cgroup"))
+> +		goto cleanup;
+> +
+> +	skel->links.egress =3D
+> +		bpf_program__attach_cgroup(skel->progs.egress, cgroup_fd);
+> +	if (!ASSERT_OK_PTR(skel->links.egress, "prog_attach_cgroup"))
+> +		goto cleanup;
+> +
+> +	for (int code =3D 0; code <=3D NR_ICMP_UNREACH; code++) {
+> +		/*
+> +		 * The TCP stack reacts differently when asking for
+> +		 * fragmentation, let's ignore it for now.
+> +		 */
+> +		if (code =3D=3D ICMP_FRAG_NEEDED)
+> +			continue;
+> +
+> +		trigger_prog_read_icmp_errqueue(skel, code);
+> +		ASSERT_EQ(skel->data->kfunc_ret, 0, "kfunc_ret");
+> +	}
+> +
+> +	/* Test an invalid code */
+> +	trigger_prog_read_icmp_errqueue(skel, -1);
+> +	ASSERT_EQ(skel->data->kfunc_ret, -EINVAL, "kfunc_ret");
+> +
+> +cleanup:
+> +	icmp_send__destroy(skel);
+> +	if (cgroup_fd >=3D 0)
+> +		close(cgroup_fd);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/icmp_send.c b/tools/testin=
+g/selftests/bpf/progs/icmp_send.c
+> new file mode 100644
+> index 000000000000..6d0be0a9afe1
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/icmp_send.c
+> @@ -0,0 +1,38 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_endian.h>
+> +
+> +/* 127.0.0.1 in host byte order */
+> +#define SERVER_IP 0x7F000001
+> +
+> +#define ICMP_DEST_UNREACH 3
+> +
+> +__u16 server_port =3D 0;
+> +int unreach_code =3D 0;
+> +int kfunc_ret =3D -1;
+> +
+> +SEC("cgroup_skb/egress")
+> +int egress(struct __sk_buff *skb)
+> +{
+> +	void *data =3D (void *)(long)skb->data;
+> +	void *data_end =3D (void *)(long)skb->data_end;
+> +	struct iphdr *iph;
+> +	struct tcphdr *tcph;
+> +
+> +	iph =3D data;
+> +	if ((void *)(iph + 1) > data_end || iph->version !=3D 4 ||
+> +	    iph->protocol !=3D IPPROTO_TCP || iph->daddr !=3D bpf_htonl(SERVER_=
+IP))
+> +		return SK_PASS;
+> +
+> +	tcph =3D (void *)iph + iph->ihl * 4;
+> +	if ((void *)(tcph + 1) > data_end ||
+> +	    tcph->dest !=3D bpf_htons(server_port))
+> +		return SK_PASS;
+> +
+> +	kfunc_ret =3D bpf_icmp_send(skb, ICMP_DEST_UNREACH, unreach_code);
+> +
+> +	return SK_DROP;
+> +}
+> +
+> +char LICENSE[] SEC("license") =3D "Dual BSD/GPL";
+> --
+> 2.34.1
 
