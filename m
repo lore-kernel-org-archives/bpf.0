@@ -1,188 +1,144 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f67.google.com (mail-pj1-f67.google.com [209.85.216.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0459E175A67;
-	Wed, 24 Jun 2026 15:37:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0693F30BF68
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 15:38:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782315442; cv=none; b=haa3f+VxxhRhtcjV1NHJ8/66CylGO09f/El2BxETVoHBIaeAo7HbojB31f1TjX3Rsug0YO+qS0RqPbvRXs815RKA4gUiZxprBmgYCyBUPsKt3NB6ij32WjKJa5UqAFrVIf9vtT2Etc9cSWSWFi4990CqXRVUNmUgn2K9gyYQZzM=
+	t=1782315509; cv=none; b=RmYj5ponL9LQlkPXaBd+QHtMeSBwCDkZzMO1TK2ExLtuaJYESJNcVtKvGEpv8ZxOcnzGMSS7v8zSuxHHjrvPVtFoR0TQVVshMxGbTaM+rtldAwp+ifRvttCWGdQ6XAk+Xat3TnGR+0ctPP82mb5MG72JmBcPZ8Yn7v2khSZBTis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782315442; c=relaxed/simple;
-	bh=2F6qL5Nb1fcp4TeFOqfbcqOswzxRHQNQcRf6ac/IRBE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SyR6UHgeMNFhV5RPd0rFjTT/CCH4NXTrdlEZbWFJRAt3CF6wp2hbQp19kZ1KBglW2tiCevzj4S7WZrJeB4WzndqZ8LDrrlOXMaVZK6hAdEYQRT+t0Dw/5s3UU9LpIE4amQty58OXyZQz+SZ596BwWxjyF6y2qKoa3NGz2Aura4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=FQIMIgDg; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1782315509; c=relaxed/simple;
+	bh=jMQMrzTbpWoy7qpTtCXjVhtjJmgz81CeZ3D3zItZ9+Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IVgcPe2ZWoOseqEvPwtf51uERQJekfi0A11XN4XY4RzpXTUVijpXcj27N6BIol17BqRUFQpCQGdwWMMUHRcXI76ZyUsrXnjzz7oQZOeQ1l0IOJNNkqwI0s3GqqRvtuXuWMpR3swDWTqasPlcQQ2WrKH1qvZpaGOFEZGFXpch9JU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XjTFPpK7; arc=none smtp.client-ip=209.85.216.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="FQIMIgDg"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=a+siFv2WANfaJo2mFkXJRFCoMVklUtYPOBRiRPigEvo=; b=FQIMIgDg8V10Vv5nHR4lw8Cj18
-	Y4Jx+rEmR2mDgsWgNPNFzbtOIxfJ+jUXn2/VTpfgNs9Ow6x1x70vw3RzrjNeEOLhN1KcIZAyxYLvh
-	/tRnFMasbyqxMdbEDPAuefNeLwE1uuSgQGMwypQhFBvBxELs3F07BMQQ//pQetuquPbqRysQIEvYn
-	NW++RH68Gdb0LTOHUFvczhPH9Rj9BHM2sBzP5NXyL11xJF2x53BM14wYhHgS73P+Zgr3+C22nx1Ae
-	6SjG53ICJBjm5Mdeo/QO6DuurCRKjfaVKdH9gUXL8N6Omq6Pz/mmTkTSYmDb2fQ5dbikGBEsupwQX
-	VVsH+Jkg==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wcPfC-0004Up-2p;
-	Wed, 24 Jun 2026 17:37:18 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wcPeE-000GFA-05;
-	Wed, 24 Jun 2026 17:37:18 +0200
-Message-ID: <603d0f6f-bf02-48ec-af90-f16a239bad85@iogearbox.net>
-Date: Wed, 24 Jun 2026 17:37:17 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XjTFPpK7"
+Received: by mail-pj1-f67.google.com with SMTP id 98e67ed59e1d1-36d630c0e35so1473240a91.3
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 08:38:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782315507; x=1782920307; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=m7clZiyk0OMH0b3QigtKufFqqXyOmFKPxCwbw/xgdsM=;
+        b=XjTFPpK7vXbY+OUV01tCzO23vHIyZAfrmUS4rnp13/dy/6Zl+doCiAotAJhGstxheF
+         92Uzv50TZaTv7ouvyKi1p9InndEYZSLrZt8O83biCyzp69yOQ94naHRjBxCyY6cIV5nz
+         zAvCduRyXgfTpX4isF+OA2tCldxR6t6l8LsP/Q1yevf4rAMvL2muKh9quYHYDQIAWOcs
+         lE0jRxcssk3KwWTk0qIkd821wtqC6MExVHHYsoAxUYECQvrQI6cl5kq9iYwBdkXxcU80
+         o5UNLHwCvzLW9RIb4SYSiuOCtXVEN3wA1G3JSenPCL4SPgw/255Ey8Ygc8i5iqYU9SHL
+         dNyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782315507; x=1782920307;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m7clZiyk0OMH0b3QigtKufFqqXyOmFKPxCwbw/xgdsM=;
+        b=ZhYAJ4j5PbwLy5Rjz8tGTkoJaxnzfpfcuV0kzm0jRrZRWknQK3G5maJD+XnkhZYRz6
+         aIfCCcLtXJoCq3omRkw9E6/cxVcDFteyM064D4fedYdmf+8kSCTNVQQJwYJxx5jVsAEC
+         /f2H8drNKOMt4YwPggJRkdUJN5wtiXF7p4R1CU07VHxP3D0AlRem+/1BjZudiDQWujA4
+         Xmm5y4wTWqa3eZW4Wa+goz+xC3BkqWpIIzyu8vCqUD1qVmqgpVcoDiPap2Udgn4S9+bP
+         8o36Klhrfdolw9nBe4qCtn21wqDlF2K9lURUZ2JlXMkcTdQGZflzBHsSRwEUazDctseO
+         F0TA==
+X-Forwarded-Encrypted: i=1; AHgh+RoGv4Gnmgd+D9C5PvjwJRfaBg6xVDQJKDftGKApTNZy7UAh65sIcVGKlS4OulKv7aplXF4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7fX38wKAEI3SFtgJHzlty8Hf2vQ8nk6NJGmtlxVUMvIb9b49f
+	nSUlRkyEnkfIViY+wTa3+iYOz9sRY6ioqAIahX0Hp1IyKnDRPpR5oYOo
+X-Gm-Gg: AfdE7cnySalNLxAexqI2i2fQzm4H/8vhMYJ6iA9MdoQwiw4iYKyU1NVb9NM1yQ42DXl
+	yK/s3Z7ifBNgXcC6H3M7M7tjHTP0hgzuYfKrMCzkL4S8SU+JbkWvtvPt+PLT+aL24ASYKVLDTqz
+	zLQSgpBVlE+i+OZt9j/bjT4V2TVhoGmQqpBzHzgutfUHVHyNgYy0WyJcRqxb/Fgmrrb24l1gMHX
+	c34r0g+Kanf5tzi8GAHUU3zki586ei3HdpLFmUYGymZQHpETsiHBZTRMayazD3d61W9iblmCPRv
+	J4UQgKYEeJXmwhZQpkpUu0sT40aQJxCBoK3hgwEo03PNWTUSe4Rx6D0buoqDyJ0ZJZOKa22RQKJ
+	HtDRYc2i63WIp7phYjp+UFyyz+yosAZXMGK8xT60FDrRIr/IhIN2douOT6O212G4NZ+qtvGg7oX
+	DRlfieE8gjxCFdqxDe
+X-Received: by 2002:a17:90b:44:b0:36a:5d1f:7ac with SMTP id 98e67ed59e1d1-37de429f053mr4028561a91.3.1782315506896;
+        Wed, 24 Jun 2026 08:38:26 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:43::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37df39db8dfsm26648a91.2.2026.06.24.08.38.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2026 08:38:25 -0700 (PDT)
+Date: Wed, 24 Jun 2026 08:38:20 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com, 
+	stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
+	kerneljasonxing@gmail.com, bjorn@kernel.org
+Subject: Re: [PATCH net 0/7] xsk: fix AF_XDP multi-buffer Tx descriptor
+ reclaim
+Message-ID: <ajv23_r4M3FGrFNN@devvm7509.cco0.facebook.com>
+References: <20260623133240.1048434-1-maciej.fijalkowski@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/5] bpf: Verify signed loader metadata at
- load time
-To: Paul Moore <paul@paul-moore.com>
-Cc: ast@kernel.org, kpsingh@kernel.org,
- James.Bottomley@hansenpartnership.com, bboscaccy@linux.microsoft.com,
- memxor@gmail.com, torvalds@linux-foundation.org, bpf@vger.kernel.org,
- linux-security-module@vger.kernel.org
-References: <20260624140301.93421-1-daniel@iogearbox.net>
- <20260624140301.93421-2-daniel@iogearbox.net>
- <CAHC9VhRar1x7kyjhgdmJ=Mfz4Msarv=wQ1821v723CaVdk1uTA@mail.gmail.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <CAHC9VhRar1x7kyjhgdmJ=Mfz4Msarv=wQ1821v723CaVdk1uTA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28041/Wed Jun 24 08:24:54 2026)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260623133240.1048434-1-maciej.fijalkowski@intel.com>
 
-Hi Paul,
+On 06/23, Maciej Fijalkowski wrote:
+> Hi,
+> 
+> This series fixes several AF_XDP multi-buffer Tx paths where descriptors
+> consumed from the Tx ring are not consistently returned to userspace
+> through the completion ring when the packet is later dropped as invalid.
+> 
+> The affected cases are invalid or oversized multi-buffer Tx packets in
+> both the generic and zero-copy paths. In these cases, the kernel can
+> consume one or more Tx descriptors while building or validating a
+> multi-buffer packet, then drop the packet before it reaches the device.
+> Userspace still owns the UMEM buffers only after the corresponding
+> addresses are returned through the CQ. Missing completions therefore
+> make userspace lose track of those buffers.
+> 
+> The generic path fixes cover three related cases:
+> * partially built multi-buffer skbs dropped by xsk_drop_skb();
+>   continuation descriptors left in the Tx ring after xsk_build_skb()
+>   reports overflow;
+> * invalid descriptors encountered in the middle of a multi-buffer
+>   packet, including the offending invalid descriptor itself.
+> 
+> The zero-copy path is handled separately. The batched Tx parser now
+> distinguishes descriptors that can be passed to the driver from
+> descriptors that are consumed only because they belong to an invalid
+> multi-buffer packet. Reclaim-only descriptors are written to the CQ
+> address area and published in completion order, after any earlier
+> driver-visible Tx descriptors.
+> 
+> The ZC batching path can also retain drain state when userspace has not
+> yet provided the end of an invalid multi-buffer packet. To keep this
+> state local to the singular batched path, the series prevents a second
+> Tx socket from joining the same pool while such drain state exists.
+> During the singular-to-shared transition, Tx batching is gated,
+> pre-existing readers are waited out, and bind fails with -EAGAIN if the
+> existing socket still has pending drain state. This avoids adding
+> multi-buffer drain handling to the shared-UMEM fallback path.
+> 
+> The last two patches update xskxceiver so the tests account invalid
+> multi-buffer Tx packets as descriptors that must be reclaimed, while
+> still not expecting those invalid packets on the Rx side.
+> 
+> This is a follow-up to Jason's changes [0] which were addressing generic
+> xmit only and this set allows me to pass full xskxceiver test suite run
+> against ice driver.
 
-On 6/24/26 5:12 PM, Paul Moore wrote:
-> On Wed, Jun 24, 2026 at 10:03 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
-[...]
->>   include/linux/bpf_verifier.h |   1 +
->>   kernel/bpf/syscall.c         |  76 +---------------
->>   kernel/bpf/verifier.c        | 163 ++++++++++++++++++++++++++++++++++-
->>   3 files changed, 165 insertions(+), 75 deletions(-)
-> 
-> ...
-> 
->> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
->> index b44106c8ea75..026b61d78bdb 100644
->> --- a/kernel/bpf/syscall.c
->> +++ b/kernel/bpf/syscall.c
->> @@ -3189,10 +3121,6 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, struct bpf_log_at
->>          if (err < 0)
->>                  goto free_prog;
->>
->> -       err = security_bpf_prog_load(prog, attr, token, uattr.is_kernel);
->> -       if (err)
->> -               goto free_prog;
->> -
->>          /* run eBPF verifier */
->>          err = bpf_check(&prog, attr, uattr, attr_log);
->>          if (err < 0)
-> 
-> We must preserve the existing location of the call into the
-> security_bpf_prog_load() hook as some users rely on this hook being
-> called *before* the verifier runs.
+There is a fair amount of feedback from sashiko already :-( So the meta
+question from me is: is it time to scrap our current approach where
+we parse descriptor by descriptor? (and maintain half-baked skb and
+half-consumed descriptor queues)
 
-Keep in mind that the verifier /at this point/ of the new location did
-_not_ verify anything. So there is no heavy-duty work happening yet at
-security_bpf_prog_load. The work that is done before security_bpf_prog_load
-is basically setting up the env, initializing the verifier log, and doing
-the process_fd_array which is resolving the map/BTF objects. But it did
-not walk any instructions etc, so semantics of the security_bpf_prog_load
-hook did not change from a user PoV.
+Should we:
 
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 2abc79dbf281..9cd2b62da380 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -19758,11 +19895,28 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
->>          ret = bpf_vlog_init(&env->log, attr_log->level, attr_log->ubuf, attr_log->size);
->>          if (ret)
->>                  goto err_unlock;
->> +       if (env->check_signature) {
->> +               ret = bpf_prog_calc_tag(env->prog);
->> +               if (ret < 0)
->> +                       goto skip_full_check;
->> +       }
->>
->>          ret = process_fd_array(env, attr, uattr);
->>          if (ret)
->>                  goto skip_full_check;
->>
->> +       if (env->check_signature) {
->> +               ret = bpf_prog_verify_signature(env, attr, uattr.is_kernel);
->> +               if (ret)
->> +                       goto skip_full_check;
->> +               signed_map_cnt = env->used_map_cnt;
->> +       }
->> +
->> +       ret = security_bpf_prog_load(env->prog, attr, env->prog->aux->token,
->> +                                    uattr.is_kernel);
->> +       if (ret)
->> +               goto skip_full_check;
-> 
-> We can always create a new LSM hook for this call site, e.g.
-> security_bpf_prog_verify_signature(...).
-> 
->>          mark_verifier_state_clean(env);
->>
->>          if (IS_ERR(btf_vmlinux)) {
-> 
+1. do desc[MAX_SKB_FRAGS] and xskq_cons_peek_desc until we exhaust
+PKT_CONT (if the last packet has PKT_CONT, return EOVERFLOW to userspace
+and do a full stop here)
+2. now that we really know the number of valid descriptors -> reserve
+the cq space (if not -> EAGAIN)
+3. pre-allocate everything here (if at any point we have ENOMEM -> cleanup
+locally, don't ever create semi-initialized skb)
+4. construct the skb
+5. xmit
 
+If at any point there is an issue, the cleanup is straightforward. That
+whole xk->skb goes away, no state between syscalls. Thoughts?
