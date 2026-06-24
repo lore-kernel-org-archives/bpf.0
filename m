@@ -1,299 +1,100 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAF1175A9A
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 01:21:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843773BB4A
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 01:30:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782264109; cv=none; b=QsnRNo1fdQnpgLeCaIKVrIqQzg7v/vbjZU+4oRx8TrQGAwsNZk+vDhjsvuYzZYYZwQPNL6AyEma9UzfAK4H9TaSDofUCsgWN5gJEYfdUTfQfjsP07scpsYZPMf62w1lr5akcE9lKtszZELMW82Ytcz9xazjy4xko65THmKf7ib4=
+	t=1782264647; cv=none; b=DCtY/Kvp2IKTxZz3aIdLH1z7DH73LsJ7flRnoZkL/yyG4ZMbTN3r+QeKezEsr/TgglAXPa11BJsKe13eSoUjV5Wk4PoSf9l8YRDRe8wADPAh3ke7FYHHiIrSmi1ybigSEhlAX3siwryQAPfYq3TTRC7U5l+GIyPmTSUtOaXGIio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782264109; c=relaxed/simple;
-	bh=OE3fSHufB/LuEgmF/EsVYwiZMhTsMj64DJi1OHdsRis=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=uoZPfNT+MHQMa0V7383X7qIUODhg48L3IuYJLx4r0I7lx45o/9JfU3J71YxOGCch+oOGWshTkb3PMGETBgqMQhssR1LKyQ1jzG+IeByfhSIZ6XmiBjjjzgJdCUkxUjgYxfw4NktlfXowctO65GvCv747krOCsrSEozULoZSRgDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DIrh1rnV; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782264647; c=relaxed/simple;
+	bh=m3F5jJvz3N2o9ug4jmktsKSaAZEIXs0u6bohCyBxKjc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=ClANDzVM7TZnld4EOMoLmJ3Mox/1XUwKi2VVcYwzpwyHeyV2VfN+Fg38umptYfCCiIK1CBhyvuwIDX/sBhHxR51qHMcBwPQu1vNqImP5Cy7tP3x7hMwCvLZlVSdymn00H1B2qzBacgeSX497kDrqyCWP1bqzLDR3uI0AYssr2L4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DeWiY1ZA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DIrh1rnV"
-Message-ID: <7e2960f3-cad7-46a5-a691-29228fb696c6@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782264096;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=f/QG5bAo3i7DHmVc1k0D7c5ENPcyHrpmZqoruK2f0jA=;
-	b=DIrh1rnVmXjCLJRMlXl4ZBHifdfRPyYo6n3aBipvJTixr/cm/bCeAzTAGC5qVGGqD2gKcg
-	DGtl3J4EEerJh5RvP7ucE+Mk2hpI1hqeY+OkX0d7JPHQsKALed7C8wtbVG3zMoGPTV5m6S
-	OeExji84K8N1I+XRgAUSw+X5YMWF/uk=
-Date: Tue, 23 Jun 2026 18:21:16 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DeWiY1ZA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0162F1F000E9;
+	Wed, 24 Jun 2026 01:30:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782264646;
+	bh=Jz9vH98au60T7dk0yuWSxllyQVRlOIRwIsgPRWyZiKI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=DeWiY1ZAAvJWzc9hA0b8RpzCkRLvT4brOy3A1avCn/MyQOcAgI7unVrZ/an2KbHja
+	 zAERP+hTOcKM5vqdb8RF2iJf9wxXpd2XlEVOdv6Jt3VRvEh35Vq5WmfAqN0RTyIdQ2
+	 gp36C7O/hQftYEhRWvSxHcmEGj5niKO+epVichFWoMF8BxG1kNf93ikBjjcSdA+jkt
+	 Hwfv+HRxlDO+feJ2H0vqa8Kkt2fNBoMCIitUfF5diJNHBLPsKpxwDdWOv+cYgIuZ9G
+	 F78jJo9bAzwNquIfxfUUgA3RigUxkO/y7Y8g6qWfaidO8vu2ErfZDV6BYHrOfoEifS
+	 UA9pqmsgYEmow==
+Content-Type: multipart/mixed; boundary="===============3601710770784757655=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves v8 3/5] dwarf_loader: Analyze per-parameter
- information for true signatures
-Content-Language: en-GB
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-To: Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, kernel-team@fb.com
-References: <20260623222850.3290612-1-yonghong.song@linux.dev>
- <20260623222906.3293063-1-yonghong.song@linux.dev>
-In-Reply-To: <20260623222906.3293063-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <ed03f2e59e5758800d95063c6be4df9edb75abdcaede6eee364ce2ede357e674@mail.kernel.org>
+In-Reply-To: <20260624005546.1818483-4-ihor.solodrai@linux.dev>
+References: <20260624005546.1818483-4-ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v2 3/4] selftests/bpf: Fix resolve_btfids test reads of BTF ID sets in PIE builds
+From: bot+bpf-ci@kernel.org
+To: ihor.solodrai@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com
+Cc: alan.maguire@oracle.com,jolsa@kernel.org,emil@etsalapatis.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 24 Jun 2026 01:30:45 +0000 (UTC)
 
+--===============3601710770784757655==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-
-On 6/23/26 3:29 PM, Yonghong Song wrote:
-> Add a function-level pass, function__analyze_parameter_locations(), run
-> from cu__resolve_func_ret_types_optimized() which walks a function's
-> parameters in ABI argument-register order and consumes the location state
-> decoded by parameter__decode_location() in the previous commit. Each
-> parameter advances the expected-register index by the number of argument
-> registers it occupies (parameter__abi_slots(), e.g. a two-eightbyte
-> aggregate consumes two registers).
+>     selftests/bpf: Fix resolve_btfids test reads of BTF ID sets in PIE builds
 >
-> For every producer it keeps the existing bookkeeping, now driven by the
-> decoded fields:
->   - a parameter with no location, a constant value, or (for non-clang) no
->     register found is marked optimized out
->   - a parameter found in a register other than the expected one is marked
->     unexpected_reg
+>     TL;DR
 >
-> When true_signature is enabled it reconstructs the real register-level
-> signature:
->   - parameters that were optimized out are dropped from the signature
->   - a parameter whose location cannot be tied to its expected register,
->     wrong register, no register found, or a non-aggregate sitting on the
->     stack - marks the function unexpected_reg so no untrustworthy signature
->     is emitted;
->   - an aggregate genuinely passed on the stack (passed_in_memory) is kept;
->   - an aggregate split across registers via DW_OP_piece is kept whole when
->     it is fully used or the next parameter still lands on its expected
->     register, otherwise it is rewritten to the single member actually passed
->     in a register (true_sig_*).
+>     On aarch64 with gcc toolchain, when test_progs is linked as a PIE,
+>     reads of BTF ID array by C name return garbage because the GNU
+>     assembler on aarch64 unconditionally folds .local symbol references
+>     into section+addend form, and GOT slots cannot carry an addend per the
+>     AArch64 ELF spec.
 >
-> Together with the decoding commit this replaces the previous inline,
-> per-parameter register check in parameter__new().
+>     Fix by marking the test's BTF ID objects with hidden visibility, which
+>     makes gcc emit a direct access that bypasses the GOT entirely.
 >
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->   dwarf_loader.c | 152 ++++++++++++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 149 insertions(+), 3 deletions(-)
+>     Details below.
 >
-> diff --git a/dwarf_loader.c b/dwarf_loader.c
-> index 01954c6..7ccad93 100644
-> --- a/dwarf_loader.c
-> +++ b/dwarf_loader.c
-> @@ -3013,6 +3013,150 @@ static void ftype__recode_dwarf_types(struct tag *tag, struct cu *cu)
->   	}
->   }
->   
-> +static struct parameter *ftype__next_parameter(struct ftype *ftype, struct parameter *parm)
-> +{
-> +	if (parm->tag.node.next == &ftype->parms)
-> +		return NULL;
-> +	return list_entry(parm->tag.node.next, struct parameter, tag.node);
-> +}
-> +
-> +static int parameter__abi_slots(const struct parameter *parm, const struct cu *cu)
-> +{
-> +	int slots;
-> +
-> +	if (!cu->agg_use_two_regs || parm->type_byte_size <= cu->addr_size)
-> +		return 1;
-> +
-> +	slots = (parm->type_byte_size + cu->addr_size - 1) / cu->addr_size;
-> +	return slots > 0 ? slots : 1;
-> +}
-> +
-> +static bool parameter__has_piece_info(const struct parameter *parm)
-> +{
-> +	return parm->first_reg_fields || parm->second_reg_fields;
-> +}
-> +
-> +static bool parameter__uses_full_aggregate(const struct parameter *parm)
-> +{
-> +	return parm->first_reg_fields && parm->second_reg_fields;
-> +}
-> +
-> +static bool ftype__next_parameter_preserves_slots(struct ftype *ftype, struct parameter *parm,
-> +						  int reg_idx, int slots, struct cu *cu)
-> +{
-> +	struct parameter *next = ftype__next_parameter(ftype, parm);
-> +	int next_reg_idx;
-> +
-> +	if (!next || next->loc_reg == PARAMETER_UNKNOWN_REG)
-> +		return false;
-> +
-> +	next_reg_idx = reg_idx + slots;
-> +	return next_reg_idx < cu->nr_register_params &&
-> +	       next->loc_reg == cu->register_params[next_reg_idx];
-> +}
-> +
-> +static bool parameter__apply_true_sig_member(struct parameter *parm, struct cu *cu)
-> +{
-> +	struct dwarf_tag tmp = {};
-> +	struct dwarf_tag *dtype;
-> +
-> +	if (!parm->true_sig_member_name || parm->true_sig_type == 0)
-> +		return false;
-> +
-> +	tmp.type = parm->true_sig_type;
-> +	tmp.from_types_section.type = parm->true_sig_type_from_types;
-> +	dtype = __dwarf_cu__find_type_by_ref(cu->priv, tmp.type, tmp.from_types_section.type);
-> +	if (!dtype)
-> +		return false;
-> +
-> +	parm->tag.type = dtype->small_id;
-> +	return true;
-> +}
-> +
-> +static void function__analyze_parameter_locations(struct function *fn, struct cu *cu,
-> +						  struct conf_load *conf)
-> +{
-> +	struct ftype *ftype = &fn->proto;
-> +	struct parameter *pos;
-> +	bool true_sig_enabled = conf->true_signature;
-> +	int reg_idx = 0;
-> +
-> +	ftype__for_each_parameter(ftype, pos) {
-> +		bool consumes_register = true;
-> +		bool regs_available = reg_idx < cu->nr_register_params;
-> +		int slots = parameter__abi_slots(pos, cu);
-> +		int expected_reg = regs_available ? cu->register_params[reg_idx] : -1;
-> +		int reg_slots = pos->passed_in_memory ? 1 : slots;
-> +
-> +		if (pos->has_loc) {
-> +			if (true_sig_enabled && pos->loc_const_value) {
-> +				pos->optimized = 1;
-> +				consumes_register = false;
-> +				goto next;
-> +			}
-> +
-> +			if (!regs_available) {
-> +				consumes_register = false;
-> +				goto next;
-> +			}
-> +
-> +			if (true_sig_enabled && pos->loc_stack) {
-> +				if (pos->passed_in_memory)
-> +					consumes_register = false;
-> +				else
-> +					pos->unexpected_reg = 1;
-> +				goto next;
-> +			}
-> +
-> +			if (pos->loc_reg == PARAMETER_UNKNOWN_REG) {
-> +				if (true_sig_enabled)
-> +					pos->unexpected_reg = 1;
-> +				else
-> +					pos->optimized = 1;
-> +				goto next;
-> +			}
-> +
-> +			if (expected_reg >= 0 && expected_reg != pos->loc_reg) {
-> +				pos->unexpected_reg = 1;
-> +				goto next;
-> +			}
-> +
-> +			if (true_sig_enabled && parameter__has_piece_info(pos)) {
-> +				if (parameter__uses_full_aggregate(pos)) {
-> +					reg_idx += slots;
-> +					continue;
-> +				}
-> +
-> +				if (ftype__next_parameter_preserves_slots(ftype, pos, reg_idx, slots, cu)) {
-> +					pos->true_sig_member_name = 0;
-> +					reg_idx += slots;
-> +					continue;
-> +				}
-> +
-> +				if (parameter__apply_true_sig_member(pos, cu)) {
-> +					reg_idx++;
-> +					continue;
-> +				}
-> +			}
-> +		} else if (pos->has_const_value && !cu->producer_clang) {
-> +			pos->optimized = 1;
-> +		} else if (true_sig_enabled) {
-> +			if (regs_available &&
-> +			    ftype__next_parameter_preserves_slots(ftype, pos, reg_idx, slots, cu)) {
-> +				reg_idx += slots;
-> +				continue;
-> +			}
-> +
-> +			pos->optimized = 1;
-> +			consumes_register = false;
-> +		}
-> +
-> +next:
-> +		if (consumes_register)
-> +			reg_idx += reg_slots;
-> +	}
-> +}
-> +
->   static void lexblock__recode_dwarf_types(struct lexblock *tag, struct cu *cu)
->   {
->   	struct tag *pos;
-> @@ -3288,7 +3432,7 @@ static bool param__is_struct(struct cu *cu, struct tag *tag)
->   	}
->   }
->   
-> -static int cu__resolve_func_ret_types_optimized(struct cu *cu)
-> +static int cu__resolve_func_ret_types_optimized(struct cu *cu, struct conf_load *conf)
->   {
->   	struct ptr_table *pt = &cu->functions_table;
->   	uint32_t i;
-> @@ -3299,6 +3443,8 @@ static int cu__resolve_func_ret_types_optimized(struct cu *cu)
->   		struct function *fn = tag__function(tag);
->   		bool has_unexpected_reg = false, has_struct_param = false;
->   
-> +		function__analyze_parameter_locations(fn, cu, conf);
-> +
->   		/* mark function as optimized if parameter is, or
->   		 * if parameter does not have a location; at this
->   		 * point location presence has been marked in
-> @@ -3477,7 +3623,7 @@ static int die__process_and_recode(Dwarf_Die *die, struct cu *cu, struct conf_lo
->   	if (ret != 0)
->   		return ret;
->   
-> -	return cu__resolve_func_ret_types_optimized(cu);
-> +	return cu__resolve_func_ret_types_optimized(cu, conf);
->   }
->   
->   static int class_member__cache_byte_size(struct tag *tag, struct cu *cu,
-> @@ -4240,7 +4386,7 @@ static int cus__merge_and_process_cu(struct cus *cus, struct conf_load *conf,
->   	 * encoded in another subprogram through abstract_origin
->   	 * tag. Let us visit all subprograms again to resolve this.
->   	 */
-> -	if (cu__resolve_func_ret_types_optimized(cu) != LSK__KEEPIT)
-> +	if (cu__resolve_func_ret_types_optimized(cu, conf) != LSK__KEEPIT)
->   		goto out_abort;
->   
->   	cu__finalize(cu, cus, conf);
+>     The subsequent patches adding kfunc checks to resolve_btfids test may
+>     cause test failures on aarch64 / gcc-15:
+>
+>       test_resolve_btfids:FAIL:kfunc_set_flags  actual 13 != expected 1
+>       test_resolve_btfids:FAIL:kfunc_set_cnt    actual 0  != expected 4
+>
+>     The test defines its BTF ID sets with the same macros as the kernel
+>     and reads them back directly by C name (in the same way as the kernel
+>     code does).
+>
+>     [ ... ]
+>
+>     To mitigate this issue, mark the test's .local BTF ID objects
+>     (test_list_local and test_set) hidden with a visibility pragma so that
+>     gcc treats them as non-interposable and emits a direct access instead
+>     of a GOT load. test_list_global is .globl, which the assembler does not
+>     fold into section+addend, so it is left at default visibility. This
+>     keeps the natural by-name access, works in both PIE and non-PIE builds,
+>     and needs no change to the BTF_ID macros or resolve_btfids.
+>
+>     Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-Okay, I think there exists a problem here.
-For example, if there is function without nocall:
-      foo(a, b, c, d)
-where a: RDI, b/c: no locations, d: RCX
+This reads like a fix for a bug that has been present since the test
+first started reading these .local BTF ID symbols by C name. Should it
+carry a Fixes: tag pointing at the commit that introduced that read-by-name
+pattern, something like:
 
-of another function with nocall:
-      bar(a, b, c, d)
-where a: RDI, b/c: no locations, d: RSI
+  Fixes: cc15a20d5f3a ("selftests/bpf: Add test for resolve_btfids")
 
-Without nocall, we expect the next argument e.g. 'b' will stay.
-Here, no-nocall means source signatures are not changed (although locations may differ from ABI).
 
-With nocall, we expect the next argument e.g., 'b' will be optimized.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-I will fix it in the next revision.
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28067752662
+--===============3601710770784757655==--
