@@ -1,343 +1,262 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63788370AED
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 11:32:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607452765E2
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 11:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782300727; cv=none; b=D1qUFFFUjNyclu2c4PK8qeAfMR+wbTvAH0aHAlNwvRfTgith4oJ8XrwlxLX/69FbYtiftQm8uynzjBs9Kgja9FbxU3Pvn3fob50HpvANqlyoCF+SfYy0lAQjyLh+quf3fb4l+EHQgitNvIUWW0kb1AzevAnwreZz8QWc14zuPec=
+	t=1782301514; cv=none; b=FXmDr6yXFp+GlM4Mrg4tmAuUOsUTqAh+auBWSLeWjn0VHF2EBakWzl8RqP+Z4CeG4/Xcr1q4Pq1gjtbHBWQhecgKKohtNtBMsET+7AP6GxzPJ88WVyzSPkVLNT0Czt/7BDMWroaTQ8989njeZuhJRKnKNoEqiGCR6uPN+9DyMt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782300727; c=relaxed/simple;
-	bh=YvSM8pnFbxuSwAi30PgGRYhXBcb2L5toaafaAdfDhw8=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K7uGxtgZ3rqTnqdkk60vL+bzMOeCHeW+9THdBvJ+luPOla4Hpd6YskP+v3k+EFOpOVLtlk95UzHfP53+1sOz1aYGvFtAHbzTIaoaMphhRr88ISi79ILGHuPT9mjvafDRuAwE0urNYYcawLrIdgKVg/KNFtZ/jdMFfrDjrEXLXg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FIF0hDGJ; arc=none smtp.client-ip=209.85.221.49
+	s=arc-20240116; t=1782301514; c=relaxed/simple;
+	bh=H0MRJG2B1K/Bvnq9zsM3jp2THI6jTdOIvZbAQF4IfXc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cHNfokIod+bz+qg5hGVmKEzn0CXiHB3dg1DKNxwaGSJydhNnU0hCxOq8/mFXOtDpnBY+ozjjsU2LhRv4AKQrmmA/S6XlWHTaZwVVFxd38BuG0uil5PhGPqxtBdR9LwXgzszYnpO22ZFvC1Gp4/XsOZAGk7vepuNCw9Vo1+4ac+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TLNIv8rC; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FIF0hDGJ"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-463b2f6fc9dso1055948f8f.2
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 04:32:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TLNIv8rC"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4921eed3fa2so6936065e9.0
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 04:45:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782300724; x=1782905524; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sjVeJSoMDec/+ZIyIKAxSgNSUrLIMLUS71Qvnw5ri3g=;
-        b=FIF0hDGJT+fnw6B0LMOjwtEl4LmMx+NhXzTvWK277oiGkq+EGwMx1cHbcxWZO0Z00U
-         SeFA+4u3eFTRRAv8CITsuvJS1+WtI35l7zqS+gy0ObbXiGhhKDMLL2m8tQFoPjM3Wnbl
-         0HGU/yN/zFwhwdZtRKWK0fOy4F9+C+5JSKUcuJy5S+896nXJan25JXjl2ttUQrbSY1tW
-         +5lOG5x8JPOu6BHOb9RHX3Byw0IiRLZKcW8BkSOTnrd7WfUpopHIGaQ/K2eUajkFGowS
-         RK4jz5diVUS5bW8nkGQm0+jLo8q75SoZQPzkPVerwlcBO3UmL9IZjcOJlOIi2L37oBln
-         iZHA==
+        d=gmail.com; s=20251104; t=1782301511; x=1782906311; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eDHdE2/Ft54Y11URM0gtdL1NQZS1frqRaxNwltOdGA0=;
+        b=TLNIv8rCVLkYh+LyX0Ix7lUnkuVLsy1hJMyWWMgnbfdaig4Zc4iTEdlvN9fMDYc74y
+         rC93pcEeh+ZwKCYTqrUR9tq8WDoNAHb47TJhHbeVi3nb8FHfJIvIjBGA4UGcAttZnhIL
+         so9A0HPk16ttKoLS+t/i9BHdscAVBqT6/lB6kJhDXtnb4q+h9ISL+ma5yJOKbNSfA/VZ
+         9dSZrieI8GcoZkEM89x7xIZWAdW0iiOgnAIxKcosB+tciKSGFZU1ufZA4q33LxbUlbio
+         0nPj5eK6fFkfoRYDMP3WxJw9a1BlfRWtXwYuIvEpSuw0DxjNCFtYBnW5+o50bi8gocTz
+         q33g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782300724; x=1782905524;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sjVeJSoMDec/+ZIyIKAxSgNSUrLIMLUS71Qvnw5ri3g=;
-        b=bjGxYQsNOZnb0PQ6OrQEblbIwunVvwQ5cSRQRVOuE+Bm3u1tyqQOqs6gfilyu72LS2
-         kW8txjtYYY9lY8BJV/OgLMW5MDqvBUSP1cpxy/KWg4ZfPyjnRHZwFwRAZqbz9kYbaJxU
-         1p6qH9Df7YHapeYCBB3qDoGMWOYM8bV+baZR7XzosCuPozXPT9KdnInVyiar6ipJhR+8
-         AWHbHL1IjBpygDTfx1S7TA8xqzzyX5IQI8JC8zSPRHfuxI4U6nXWWMiEDUlQcIAVhigi
-         cv6wSkqjozA26QvDLbh2JrTMcI7eayMCSYbjZGe6ylvHa44K5Qm7QMHxC4RK39aKOIyS
-         dlmQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoDWrJfT9wHKaEs0OJhcfstayKxxHg0EQzb+x0DI8Mx6rhcoJd7l4G9XGMM6V9yq4y6kTw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpOb5kd8FMU3zMVbMD3NYrMmAMgurt2aR7vdgxkNWYT1CeXmDh
-	30ESsA/m87Vqp5xQER7mtlLJ3ZF3pTDgYwoqQGaim5SlKbFZLKKlQKTS
-X-Gm-Gg: AfdE7ckRFRbI6lqgKTFq7zkW9twSg8hD6wuPiG9qoEqj2MSU51g8QSCV/E1EcnBxAow
-	lgiC298ko0aWHUkDr0fxEzDaJ+5a/DxjMDM+gEXZShp0JKeMIbTscaRwk0ufuINqmbbzo9Ex91z
-	AAioz4ElEa5YA570/B2EEt98L55ApkkQPa+vwbo/TDf2tjzsONPjbtWhdHoolh6gcyLT0wWpJfs
-	n6fmBgu8dOp+mkLserq4Ur9ZPTGUtTqSax63IqyRwX+GnmxoHWMX8MB07tiOXsFAsp+xihipCx1
-	h/3DF9UuJhAxu3ZZpJgCJD7NQnSezMbGhOnbSXVEszHMfBSe5TJ1hoDB7hEQOYf84oJIG2J30GV
-	7F9BTM1kdjEEeUm8Vwm4g2qJnyH5cn7QKkS16sRKq6jAPLMypliHfh3gqUyOWnACTxOQtapC70f
-	AX
-X-Received: by 2002:a05:6000:4313:b0:452:6aaf:76cb with SMTP id ffacd0b85a97d-46c0951d960mr5215888f8f.1.1782300723443;
-        Wed, 24 Jun 2026 04:32:03 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46c1b754471sm5982646f8f.0.2026.06.24.04.32.02
+        d=1e100.net; s=20251104; t=1782301511; x=1782906311;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eDHdE2/Ft54Y11URM0gtdL1NQZS1frqRaxNwltOdGA0=;
+        b=MstdwPmKOnn0LyPkv6tlB/45AHZxGN7xo7uDkudK3IiBMtL5ZP4d4SrejsEykAv5LU
+         /zJgxWGW/wriK4TIm461c85e0enfRDW9rAXfqGpj+LXBFio3cAjnkHBkgAaWeUeZyF5T
+         EdiS+iBYdhpKQ3lYpip5MI+YvYdgfvbCWIWoZ1Rc5b25XmXUAwZWJSmnRRglPFXaidVZ
+         hQCHMlIxH3l7Csy/7jqam0vna/BTHyzDcf/Kps4+dP8uzXAxG+d7YU3C80ssdeqi5bXF
+         9yBrwPMg+YcPINkl+c+Kh+Lc0KthK9pcYeMDzwRypgEMig6u06++GpTu4BY/PHn895h/
+         655w==
+X-Gm-Message-State: AOJu0YzO5oq1fX7YSAqq1H1ocs8GIm4CypQdmKGjppuIcGiD3CCu7v7N
+	kF1mLMO0AYOY7jLh3d2Bb+7SZAng+7q04OQEIalBGSJMrBy51SAMqkPK0uf9X09L
+X-Gm-Gg: AfdE7cnQCanX3XNPVBiXn1kTuMuQUwAyRboARajvoacnYqAnkgtfBWR39c+XOwPEHHr
+	so7S17lQsmzLpdnPV+BbVq0i5RHQ0lbWol466XGDJQ6j0U5kDJV8UfW91nHNBeo2+bQ0xdI1QsJ
+	XXIUmlS7yMVfSTaM31Bif+Az5VkJLqsIGhW4MgGNZNQhqUs+lVk2BFBfwgdten7kI+XkKHqrcRg
+	ZDuzAhnJbVl9kvGSlLjHvW2FuxgEsB4ih0xEqtpwsbNOMSM1nwOwRuvf5Z6h0Rvrup8vl9fxSo1
+	QGvAM/WJtAk/GpNrWecrI6lRiUkfzhzxOfPMZbquLl6l+dfWG2L0h52CzhqCryhC4Lw9GCmeFSn
+	uEiAxnDh+jkNFZ6UtkU8VIeAmQf+wQULBsrYFCY9igj/PZUcNd9u25wY2t+AZi8xYwxKvN1N6CE
+	jNOfrqRxjTRcWL67YDEv89vIqfxzNIjjnPquQfK/EtTGIj
+X-Received: by 2002:a05:600c:1d0a:b0:492:409d:b7c3 with SMTP id 5b1f17b1804b1-4925b359fc2mr103143745e9.13.1782301510374;
+        Wed, 24 Jun 2026 04:45:10 -0700 (PDT)
+Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46c225b2988sm5854285f8f.25.2026.06.24.04.45.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 04:32:02 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 24 Jun 2026 13:32:01 +0200
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	Quentin Monnet <qmo@kernel.org>
-Subject: Re: [PATCHv2 bpf-next 3/3] bpftool: Add tracing_multi link info
- output
-Message-ID: <ajvAMSeIxsHGBXOw@krava>
-References: <20260623142417.275892-1-jolsa@kernel.org>
- <20260623142417.275892-4-jolsa@kernel.org>
- <CAEf4BzaCnTNo5dmYGRVWGWn+tUCP279Owbg54MuVqQrZTx=rQQ@mail.gmail.com>
+        Wed, 24 Jun 2026 04:45:09 -0700 (PDT)
+Date: Wed, 24 Jun 2026 13:45:08 +0200
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, edumazet@google.com, john.fastabend@gmail.com,
+	jordan@jrife.io, kuba@kernel.org, martin.lau@linux.dev,
+	netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+	pabeni@redhat.com, yonghong.song@linux.dev
+Subject: Re: [PATCH bpf-next v8 3/7] bpf: add bpf_icmp_send kfunc
+Message-ID: <ajvDRCw8cPqXAqQq@gmail.com>
+References: <20260622120515.137082-1-mahe.tardy@gmail.com>
+ <20260622120515.137082-4-mahe.tardy@gmail.com>
+ <DJGWWQQD3B0P.2O1D9MO17YRK4@etsalapatis.com>
+ <ajuqZMzqACLOijoC@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzaCnTNo5dmYGRVWGWn+tUCP279Owbg54MuVqQrZTx=rQQ@mail.gmail.com>
+In-Reply-To: <ajuqZMzqACLOijoC@gmail.com>
 
-On Tue, Jun 23, 2026 at 02:11:34PM -0700, Andrii Nakryiko wrote:
-> On Tue, Jun 23, 2026 at 7:24 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > Adding bpftool support to show tracing_multi link details,
-> > the new output looks like:
-> >
-> >   # bpftool link
-> >   ...
-> >   27: tracing_multi  prog 93
-> >           attach_type trace_fentry_multi  obj_id 1  count 3
-> >           btf_id           addr             cookie           func [module]
-> >           91984            ffffffff824f4a24 a                bpf_fentry_test1
-> >           91986            ffffffff824f6a84 1e               bpf_fentry_test2
-> >           91987            ffffffff824f6a94 14               bpf_fentry_test3
-> >           pids test_progs(1462)
-> >
-> > Assisted-by: Codex:GPT-5
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  tools/bpf/bpftool/link.c | 137 +++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 137 insertions(+)
-> >
-> > diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-> > index bdcd717b0348..db780ee39820 100644
-> > --- a/tools/bpf/bpftool/link.c
-> > +++ b/tools/bpf/bpftool/link.c
-> > @@ -377,6 +377,25 @@ static __u64 *u64_to_arr(__u64 val)
-> >         return (__u64 *) u64_to_ptr(val);
-> >  }
-> >
-> > +static __u32 *u64_to_u32_arr(__u64 val)
-> > +{
-> > +       return (__u32 *)u64_to_ptr(val);
-> > +}
-> > +
-> > +static struct kernel_sym *find_kernel_sym_by_addr(__u64 addr, bool is_ibt_enabled)
-> > +{
-> > +       struct kernel_sym *sym;
-> > +
-> > +       if (!addr)
-> > +               return NULL;
-> > +
-> > +       sym = kernel_syms_search(&dd, addr);
-> > +       if (!sym && is_ibt_enabled && addr >= 4)
-> > +               sym = kernel_syms_search(&dd, addr - 4);
+On Wed, Jun 24, 2026 at 11:59:00AM +0200, Mahe Tardy wrote:
+> On Tue, Jun 23, 2026 at 10:09:20PM -0400, Emil Tsalapatis wrote:
+> > On Mon Jun 22, 2026 at 8:05 AM EDT, Mahe Tardy wrote:
 > 
-> if is_ibt_enabled, can we match addr with kernel_syms_search at all?
-> I.e., can addr sometimes be resolvable without - 4 adjustment? If not,
-> why is this not if/else and instead "try this, if not, try that"?
-
-I followed the symbol_matches_target logic and assumed we could have functions
-with and without endbr instruction at the entry.. but I can't find any example
-of such traceable function
-
+> [...]
 > 
-> > +
-> > +       return sym;
-> > +}
-> > +
-> >  static void
-> >  show_uprobe_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
-> >  {
-> > @@ -403,6 +422,47 @@ show_uprobe_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
-> >         jsonw_end_array(json_wtr);
-> >  }
-> >
-> > +static void
-> > +show_tracing_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
-> > +{
-> > +       bool is_ibt_enabled = is_x86_ibt_enabled(), show_symbol;
-> > +       __u32 i;
-> > +
-> > +       if (!dd.sym_count)
-> > +               kernel_syms_load(&dd);
-> > +       show_symbol = !!dd.sym_count;
-> > +
-> > +       show_link_attach_type_json(info->tracing_multi.attach_type, wtr);
-> > +       jsonw_uint_field(wtr, "func_cnt", info->tracing_multi.count);
-> > +       jsonw_uint_field(wtr, "obj_id", info->tracing_multi.obj_id);
-> > +       jsonw_name(wtr, "funcs");
-> > +
-> > +       jsonw_start_array(wtr);
-> > +
-> > +       for (i = 0; i < info->tracing_multi.count; i++) {
-> > +               __u64 addr = u64_to_arr(info->tracing_multi.addrs)[i];
-> > +               struct kernel_sym *sym;
-> > +
-> > +               sym = show_symbol ? find_kernel_sym_by_addr(addr, is_ibt_enabled) : NULL;
-> > +
-> > +               jsonw_start_object(wtr);
-> > +               jsonw_uint_field(wtr, "id", u64_to_u32_arr(info->tracing_multi.ids)[i]);
+> > > +#if IS_ENABLED(CONFIG_IPV6)
+> > > +	case htons(ETH_P_IPV6):
+> > > +		if (type != ICMPV6_DEST_UNREACH)
+> > > +			return -EOPNOTSUPP;
+> > > +		if (code < 0 || code > ICMPV6_REJECT_ROUTE)
+> > > +			return -EINVAL;
+> > > +
+> > > +		nskb = skb_clone(skb, GFP_ATOMIC);
+> > > +		if (!nskb)
+> > > +			return -ENOMEM;
+> > > +
+> > > +		if (!pskb_network_may_pull(nskb, sizeof(struct ipv6hdr))) {
+> > 
+> > Minor nit, but this may also fail with SKB_DROP_REASON_NOMEM. Now this is only
+> > possible if the IP header is not in the linear space which may well be
+> > impossible (?), but do we want to differentiate with
+> > pskb_network_may_pull_reason()?
 > 
-> nit, here and for cookies, do the cast outside of the loop into local
-> variable? seems cleaner as an approach
-
-ok
-
+> Indeed, I think for the IP header is should be fine, but I replaced it
+> with the reason variant. Thanks!
+>  
+> > > +			kfree_skb(nskb);
+> > > +			return -EBADMSG;
+> > > +		}
+> > > +
 > 
-> > +               jsonw_uint_field(wtr, "addr", addr);
-> > +               if (sym) {
-> > +                       jsonw_string_field(wtr, "func", sym->name);
-> > +                       if (sym->module[0] == '\0') {
-> > +                               jsonw_name(wtr, "module");
-> > +                               jsonw_null(wtr);
+> [...]
 > 
-> just curious, is it cleaner to have "module: null" instead of just not
-> emitting "module:" field at all?
-
-I followed what we do for kprobe_multi, not sure what's preffered,
-but I think it's better to be consistent.. at least somewhere ;-)
-
+> > >  static int __init bpf_kfunc_init(void)
+> > >  {
+> > >  	int ret;
+> > > @@ -12639,6 +12745,9 @@ static int __init bpf_kfunc_init(void)
+> > >  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
+> > >  					       &bpf_kfunc_set_sock_addr);
+> > >  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_kfunc_set_tcp_reqsk);
+> > > +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SKB, &bpf_kfunc_set_icmp_send);
+> > > +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_kfunc_set_icmp_send);
+> > > +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_ACT, &bpf_kfunc_set_icmp_send);
+> > 
+> > Based on Sashiko's feedback, since we mostly care about cgroup_skb
+> > should we just make it exclusive to them and drop CLS_ACT?
 > 
-> > +                       } else {
-> > +                               jsonw_string_field(wtr, "module", sym->module);
-> > +                       }
-> > +               }
-> > +               jsonw_uint_field(wtr, "cookie", u64_to_arr(info->tracing_multi.cookies)[i]);
-> > +               jsonw_end_object(wtr);
-> > +       }
-> > +       jsonw_end_array(wtr);
-> > +}
-> > +
-> >  static void
-> >  show_perf_event_kprobe_json(struct bpf_link_info *info, json_writer_t *wtr)
-> >  {
-> > @@ -589,6 +649,9 @@ static int show_link_close_json(int fd, struct bpf_link_info *info)
-> >         case BPF_LINK_TYPE_UPROBE_MULTI:
-> >                 show_uprobe_multi_json(info, json_wtr);
-> >                 break;
-> > +       case BPF_LINK_TYPE_TRACING_MULTI:
-> > +               show_tracing_multi_json(info, json_wtr);
-> > +               break;
-> >         case BPF_LINK_TYPE_PERF_EVENT:
-> >                 switch (info->perf_event.type) {
-> >                 case BPF_PERF_EVENT_EVENT:
-> > @@ -833,6 +896,42 @@ static void show_uprobe_multi_plain(struct bpf_link_info *info)
-> >         }
-> >  }
-> >
-> > +static void show_tracing_multi_plain(struct bpf_link_info *info)
-> > +{
-> > +       bool is_ibt_enabled = is_x86_ibt_enabled(), show_symbol;
-> > +       __u32 i;
-> > +
-> > +       if (!info->tracing_multi.count)
-> > +               return;
-> > +
-> > +       if (!dd.sym_count)
-> > +               kernel_syms_load(&dd);
-> > +       show_symbol = !!dd.sym_count;
-> > +
-> > +       printf("\n\t");
-> > +       show_link_attach_type_plain(info->tracing_multi.attach_type);
-> > +       printf("obj_id %u  ", info->tracing_multi.obj_id);
-> > +       printf("count %u  ", info->tracing_multi.count);
-> > +
-> > +       printf("\n\t%-16s %-16s %-16s %s",
-> > +              "btf_id", "addr", "cookie", "func [module]");
-> > +       for (i = 0; i < info->tracing_multi.count; i++) {
-> > +               __u64 addr = u64_to_arr(info->tracing_multi.addrs)[i];
-> > +               struct kernel_sym *sym;
-> > +
-> > +               sym = show_symbol ? find_kernel_sym_by_addr(addr, is_ibt_enabled) : NULL;
-> > +
-> > +               printf("\n\t%-16u %016llx %-16llx",
-> > +                      u64_to_u32_arr(info->tracing_multi.ids)[i],
-> > +                      addr, u64_to_arr(info->tracing_multi.cookies)[i]);
-> 
-> As I mentioned, it surprised me that we emit cookie as hex. Kernel
-> doesn't in fdinfo output. And at least in my experience cookie is some
-> small compact index into some additional lookup array, so decimal
-> makes most sense. I see now that we have hex for uprobe_multi, but
-> decimal for perf link, so ugh, goodbye consistency. But still, decimal
-> will be much more useful in practice, IMO.
+> This would indeed simplify this patchset, I could drop most of the
+> complication induced by tc ingress routing. But I think having both
+> cgroup_skb and tc support would be nice as a first implem. I'll try
+> again in a new version as I added a test for ingress tc and could
+> actually fix the routing based on sashiko's feedback (this also drop the
+> first two patches that were partially wrong).
 
-agreed
+tl;dr: I'll remove the tc support as it feels difficult (impossible
+without major plumbing changes?) to get right.
+
+Here are the details:
+
+Initially I ended up removing the first two patch set as they were
+technically wrong (see explanations after), I added this small helper:
+
+	#if IS_ENABLED(CONFIG_INET) || IS_ENABLED(CONFIG_IPV6)
+	static bool skb_dst_validate_and_hold(struct sk_buff *skb)
+	{
+	       bool ret;
+
+	       rcu_read_lock();
+	       ret = skb_valid_dst(skb) && skb_dst_force(skb);
+	       rcu_read_unlock();
+
+	       return ret;
+	}
+	#endif
+
+And then the body of the kfunc would do something like this (instead of
+calling the removed helpers):
+
+	reason = pskb_network_may_pull_reason(nskb, sizeof(struct iphdr));
+	if (reason) {
+		kfree_skb_reason(nskb, reason);
+		return -EBADMSG;
+	}
+
+	memset(IPCB(nskb), 0, sizeof(struct inet_skb_parm));
+	IPCB(nskb)->iif = nskb->skb_iif;
+
+	if (!skb_dst_validate_and_hold(nskb)) {
+		if (!nskb->dev) {
+			kfree_skb(nskb);
+			return -ENODEV;
+		}
+
+		iph = ip_hdr(nskb);
+		reason = ip_route_input(nskb, iph->daddr, iph->saddr,
+					ip4h_dscp(iph), nskb->dev);
+		if (reason) {
+			kfree_skb_reason(nskb, reason);
+			return -EHOSTUNREACH;
+		}
+	}
+
+	icmp_send(nskb, type, code, 0);
+
+Then I added a tc ingress test to showcase the issue with the previous
+helpers and trigger the routing in the kfunc, with this steup:
+
+	  client ns:                    test ns:
+	  icmp_peer                     ns_icmp_send_unreach_route_ingress
+	+------------+                +-------------------------+
+	| icmp_cli   |                | icmp_srv                |
+	| 198.18.0.1 |--------------->| primary:   198.18.0.254 |
+	+------------+ TCP SYN        | local dst: 198.18.0.2   |
+		       dst=198.18.0.2 +-------------------------+
+					  | tc ingress BPF
+					  | calls bpf_icmp_send()
+					  | -> icmp src=198.18.0.2
+					  v
+
+With the previous helpers, the icmp would route by reverting the daddr
+immediately, and then asking for the route. Thus we would "forget" about
+the actual source address, and in this case we would end up with the
+icmp control message src IP being the primary address and not the one we
+wanted: 198.18.9.2. Turns out route input was sufficient to give the
+needed _correct_ information to icmp_send that would invert the address
+for us and route the packet again.
+
+Then I submitted that for more review by sashiko and it found this new
+thing (which is orthogonal to the previous issue):
+
+	> @@ -12639,6 +12788,9 @@ static int __init bpf_kfunc_init(void)
+	>  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
+	>  					       &bpf_kfunc_set_sock_addr);
+	>  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_kfunc_set_tcp_reqsk);
+	> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SKB, &bpf_kfunc_set_icmp_send);
+	> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_kfunc_set_icmp_send);
+	> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_ACT, &bpf_kfunc_set_icmp_send);
+
+	Can exposing net/core/filter.c:bpf_icmp_send() to sched_cls and sched_act
+	deadlock a non-lockless qdisc?
+
+	A cls_bpf program can run from a qdisc enqueue classifier while the qdisc
+	root lock is held.  If it calls bpf_icmp_send(), the kfunc synchronously
+	goes through icmp_send()/icmpv6_send() and then normal transmit.  If the
+	reply routes back through the same qdisc, the inner transmit can try to take
+	the same root lock again.
+
+	One possible path is:
+
+	__dev_xmit_skb()
+	  q->enqueue()
+	  prio_enqueue()
+	  tcf_classify()
+	  cls_bpf_classify()
+	  bpf_icmp_send()
+	  icmp_send()/icmpv6_send()
+	  dev_queue_xmit()
+	  __dev_xmit_skb()
+
+	Is this kfunc safe in enqueue classifier/action contexts, or should this
+	registration be limited to contexts that cannot run under the qdisc root
+	lock?
+
+I managed to indeed reproduce this deadlock. So I think there's no way
+to implement this safely, we would either need:
+- make the kfunc only available to tcx only (and then prevent program
+  verified as TCX from being reused as legacy qdisc classifiers...)
+- do some crazy runtime guard, exposing the lock.
+
+So I will give up on tc support for now as it's more difficult than
+expected.
 
 > 
-> > +               if (sym) {
-> > +                       printf(" %s", sym->name);
-> > +                       if (sym->module[0] != '\0')
-> > +                               printf(" [%s]", sym->module);
-> > +               }
-> > +       }
-> > +}
-> > +
-> >  static void show_perf_event_kprobe_plain(struct bpf_link_info *info)
-> >  {
-> >         const char *buf;
-> > @@ -989,6 +1088,9 @@ static int show_link_close_plain(int fd, struct bpf_link_info *info)
-> >         case BPF_LINK_TYPE_UPROBE_MULTI:
-> >                 show_uprobe_multi_plain(info);
-> >                 break;
-> > +       case BPF_LINK_TYPE_TRACING_MULTI:
-> > +               show_tracing_multi_plain(info);
-> > +               break;
-> >         case BPF_LINK_TYPE_PERF_EVENT:
-> >                 switch (info->perf_event.type) {
-> >                 case BPF_PERF_EVENT_EVENT:
-> > @@ -1029,6 +1131,7 @@ static int show_link_close_plain(int fd, struct bpf_link_info *info)
-> >  static int do_show_link(int fd)
-> >  {
-> >         __u64 *ref_ctr_offsets = NULL, *offsets = NULL, *cookies = NULL;
-> > +       __u32 *ids = NULL;
-> >         struct bpf_link_info info;
-> >         __u32 len = sizeof(info);
-> >         char path_buf[PATH_MAX];
-> > @@ -1114,6 +1217,39 @@ static int do_show_link(int fd)
-> >                         goto again;
-> >                 }
-> >         }
-> > +       if (info.type == BPF_LINK_TYPE_TRACING_MULTI &&
-> > +           !info.tracing_multi.ids) {
-> 
-> why wrap?
-
-I followed the previous code style
-
-> 
-> > +               count = info.tracing_multi.count;
-> > +               if (count) {
-> > +                       ids = calloc(count, sizeof(__u32));
-> > +                       if (!ids) {
-> > +                               p_err("mem alloc failed");
-> > +                               close(fd);
-> > +                               return -ENOMEM;
-> > +                       }
-> > +                       info.tracing_multi.ids = ptr_to_u64(ids);
-> > +
-> > +                       addrs = calloc(count, sizeof(__u64));
-> > +                       if (!addrs) {
-> > +                               p_err("mem alloc failed");
-> > +                               free(ids);
-> > +                               close(fd);
-> > +                               return -ENOMEM;
-> > +                       }
-> > +                       info.tracing_multi.addrs = ptr_to_u64(addrs);
-> > +
-> > +                       cookies = calloc(count, sizeof(__u64));
-> > +                       if (!cookies) {
-> > +                               p_err("mem alloc failed");
-> > +                               free(addrs);
-> > +                               free(ids);
-> > +                               close(fd);
-> > +                               return -ENOMEM;
-> > +                       }
-> 
-> ugh... do three calloc()s in a row, check that all succeeded, if not -
-> free and close(fd)? shorter and just as good
-
-ah right.. I guess I followed the previous kprobe/uprobe code style,
-but as you said, we can simplify the error path, will change
-
-thanks,
-jirka
+> > >  	return ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SOCK_OPS, &bpf_kfunc_set_sock_ops);
+> > >  }
+> > >  late_initcall(bpf_kfunc_init);
+> > > --
+> > > 2.34.1
+> > 
