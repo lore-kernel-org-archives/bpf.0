@@ -1,100 +1,197 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843773BB4A
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 01:30:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377C13BB4A
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 01:32:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782264647; cv=none; b=DCtY/Kvp2IKTxZz3aIdLH1z7DH73LsJ7flRnoZkL/yyG4ZMbTN3r+QeKezEsr/TgglAXPa11BJsKe13eSoUjV5Wk4PoSf9l8YRDRe8wADPAh3ke7FYHHiIrSmi1ybigSEhlAX3siwryQAPfYq3TTRC7U5l+GIyPmTSUtOaXGIio=
+	t=1782264758; cv=none; b=qIM0Y9AiboWwYHL3FDlzEhePHiJ3t3wsh8IUbpxrgfLXpbKyvgz6dTvfsqk5mijYEi/aukTC3mubrH7QwBhnktFRTnG7ZL6r73Q4lPBB5Qz7fUGdUPWEdRnLb9s7sGqka+goSfhckA4SCNR+0F6QYSgCpPHZpMK8Wigj+Pu4jR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782264647; c=relaxed/simple;
-	bh=m3F5jJvz3N2o9ug4jmktsKSaAZEIXs0u6bohCyBxKjc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ClANDzVM7TZnld4EOMoLmJ3Mox/1XUwKi2VVcYwzpwyHeyV2VfN+Fg38umptYfCCiIK1CBhyvuwIDX/sBhHxR51qHMcBwPQu1vNqImP5Cy7tP3x7hMwCvLZlVSdymn00H1B2qzBacgeSX497kDrqyCWP1bqzLDR3uI0AYssr2L4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DeWiY1ZA; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782264758; c=relaxed/simple;
+	bh=RJsGpGQRVwr+JtNwlB8ZsFkHFjOC72SBkJgXJW5OVMQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OXBUC+9oHYR1dJxg1FehSMklrymD5PlmfB/mYvkHkWvhLyyHWn6fzmMdt0cnBNuXbyb9VAjdxt0AawkWzEv0QetQ4nyBovufyweDFRHomr7rbYN3H4n4leMUf94kgP6KoiZXVZCXsqmtSRXT1spZiB+xSEejbk5jRL6m/roKi7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iOQ1dmnr; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DeWiY1ZA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0162F1F000E9;
-	Wed, 24 Jun 2026 01:30:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782264646;
-	bh=Jz9vH98au60T7dk0yuWSxllyQVRlOIRwIsgPRWyZiKI=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=DeWiY1ZAAvJWzc9hA0b8RpzCkRLvT4brOy3A1avCn/MyQOcAgI7unVrZ/an2KbHja
-	 zAERP+hTOcKM5vqdb8RF2iJf9wxXpd2XlEVOdv6Jt3VRvEh35Vq5WmfAqN0RTyIdQ2
-	 gp36C7O/hQftYEhRWvSxHcmEGj5niKO+epVichFWoMF8BxG1kNf93ikBjjcSdA+jkt
-	 Hwfv+HRxlDO+feJ2H0vqa8Kkt2fNBoMCIitUfF5diJNHBLPsKpxwDdWOv+cYgIuZ9G
-	 F78jJo9bAzwNquIfxfUUgA3RigUxkO/y7Y8g6qWfaidO8vu2ErfZDV6BYHrOfoEifS
-	 UA9pqmsgYEmow==
-Content-Type: multipart/mixed; boundary="===============3601710770784757655=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iOQ1dmnr"
+Message-ID: <a50cef70-d8fe-4f42-a89b-2c63c33a72ef@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782264754;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZzBFoRi1EjW63O+lDY8B7JDNKdt4cYcrugVV0eKFoqw=;
+	b=iOQ1dmnrNcKk5R+/Bwqb99gm9pehbaVHV0XivtkX0NsExbboFt6U8FnQQNlT0iuuCqE9kS
+	ZDfE1IbSw7TFIQkMBJHHqCYKUpW3K+gyPWMMEUHDWA3/Q92HgofX6WF0MjCu8bAPGal2pg
+	ROKpprz62nAV+pj97AGs2NUHTRnRmC4=
+Date: Wed, 24 Jun 2026 09:32:25 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <ed03f2e59e5758800d95063c6be4df9edb75abdcaede6eee364ce2ede357e674@mail.kernel.org>
-In-Reply-To: <20260624005546.1818483-4-ihor.solodrai@linux.dev>
-References: <20260624005546.1818483-4-ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v2 3/4] selftests/bpf: Fix resolve_btfids test reads of BTF ID sets in PIE builds
-From: bot+bpf-ci@kernel.org
-To: ihor.solodrai@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com
-Cc: alan.maguire@oracle.com,jolsa@kernel.org,emil@etsalapatis.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 24 Jun 2026 01:30:45 +0000 (UTC)
-
---===============3601710770784757655==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
->     selftests/bpf: Fix resolve_btfids test reads of BTF ID sets in PIE builds
->
->     TL;DR
->
->     On aarch64 with gcc toolchain, when test_progs is linked as a PIE,
->     reads of BTF ID array by C name return garbage because the GNU
->     assembler on aarch64 unconditionally folds .local symbol references
->     into section+addend form, and GOT slots cannot carry an addend per the
->     AArch64 ELF spec.
->
->     Fix by marking the test's BTF ID objects with hidden visibility, which
->     makes gcc emit a direct access that bypasses the GOT entirely.
->
->     Details below.
->
->     The subsequent patches adding kfunc checks to resolve_btfids test may
->     cause test failures on aarch64 / gcc-15:
->
->       test_resolve_btfids:FAIL:kfunc_set_flags  actual 13 != expected 1
->       test_resolve_btfids:FAIL:kfunc_set_cnt    actual 0  != expected 4
->
->     The test defines its BTF ID sets with the same macros as the kernel
->     and reads them back directly by C name (in the same way as the kernel
->     code does).
->
->     [ ... ]
->
->     To mitigate this issue, mark the test's .local BTF ID objects
->     (test_list_local and test_set) hidden with a visibility pragma so that
->     gcc treats them as non-interposable and emits a direct access instead
->     of a GOT load. test_list_global is .globl, which the assembler does not
->     fold into section+addend, so it is left at default visibility. This
->     keeps the natural by-name access, works in both PIE and non-PIE builds,
->     and needs no change to the BTF_ID macros or resolve_btfids.
->
->     Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-
-This reads like a fix for a bug that has been present since the test
-first started reading these .local BTF ID symbols by C name. Should it
-carry a Fixes: tag pointing at the commit that introduced that read-by-name
-pattern, something like:
-
-  Fixes: cc15a20d5f3a ("selftests/bpf: Add test for resolve_btfids")
+Subject: Re: [PATCH bpf-next v2] bpf, unix: Guard sk_msg-dependent code behind
+ CONFIG_NET_SOCK_MSG
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Amery Hung <ameryhung@gmail.com>, Kuniyuki Iwashima <kuniyu@google.com>,
+ bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Jakub Kicinski <kuba@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Network Development <netdev@vger.kernel.org>,
+ kernel-team <kernel-team@cloudflare.com>
+References: <20260623-bpf-sk_msg-split-unix-v2-1-ca7a626a94a5@cloudflare.com>
+ <CAAVpQUBsQFFxJFDnJzxmsER3bOjm=zqJ5P5MSeW_T9v-4639cw@mail.gmail.com>
+ <87v7b9ysep.fsf@cloudflare.com>
+ <CAAVpQUBARp1qCEomgzWXVe35WatdaswujVLku+RESm_LW0dE7Q@mail.gmail.com>
+ <CAADnVQL2pfQ0BoN-vWcuCpbOBBKq_rM7Bp7P4XdLMFER5LGSDg@mail.gmail.com>
+ <87mrwlyqg4.fsf@cloudflare.com>
+ <CAMB2axMVhJJpP5HZtDFyQLLbKoRxhW08rj1zGRtWtgDkfYaVNA@mail.gmail.com>
+ <878q85yoy5.fsf@cloudflare.com>
+ <CAADnVQKr1XisnigNsBw7CsXxY3Xn5KOGtX_YDdXmNMZyJy4_Cw@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <CAADnVQKr1XisnigNsBw7CsXxY3Xn5KOGtX_YDdXmNMZyJy4_Cw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+On 6/24/26 5:26 AM, Alexei Starovoitov wrote:
+> On Tue, Jun 23, 2026 at 1:36 PM Jakub Sitnicki <jakub@cloudflare.com> wrote:
+>> On Tue, Jun 23, 2026 at 01:22 PM -07, Amery Hung wrote:
+>>> On Tue, Jun 23, 2026 at 1:04 PM Jakub Sitnicki <jakub@cloudflare.com> wrote:
+>>>> On Tue, Jun 23, 2026 at 12:33 PM -07, Alexei Starovoitov wrote:
+>>>>> On Tue, Jun 23, 2026 at 12:31 PM Kuniyuki Iwashima <kuniyu@google.com> wrote:
+>>>>>> On Tue, Jun 23, 2026 at 12:21 PM Jakub Sitnicki <jakub@cloudflare.com> wrote:
+>>>>>>> On Tue, Jun 23, 2026 at 09:08 AM -07, Kuniyuki Iwashima wrote:
+>>>>>>>> On Tue, Jun 23, 2026 at 4:20 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
+>>>>>>>>> Prepare to decouple BPF_SYSCALL config option from NET_SOCK_MSG. When
+>>>>>>>>> completed all code paths related to sockmap-based redirects should be
+>>>>>>>>> guarded by BPF_SYSCALL && NET_SOCK_MSG to allow users to opt out by
+>>>>>>>>> disabling NET_SOCK_MSG. The implementation of sockmap as a container for
+>>>>>>>>> socket references would remain under BPF_SYSCALL.
+>>>>>>>>>
+>>>>>>>>> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+>>>>>>>>> ---
+>>>>>>>>> Changes in v2:
+>>>>>>>>> - Handle prot->recvmsg being NULL (Sashiko)
+>>>>>>>>> - Elaborate on the end goal in description
+>>>>>>>>> - Link to v1: https://patch.msgid.link/20260622-bpf-sk_msg-split-unix-v1-1-d7e0cb7bb03b@cloudflare.com
+>>>>>>>>> ---
+>>>>>>>>>   net/unix/af_unix.c  | 4 ++--
+>>>>>>>>>   net/unix/unix_bpf.c | 6 ++++++
+>>>>>>>>>   2 files changed, 8 insertions(+), 2 deletions(-)
+>>>>>>>>>
+>>>>>>>>> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+>>>>>>>>> index f7a9d55eee8a..84c11c60c75f 100644
+>>>>>>>>> --- a/net/unix/af_unix.c
+>>>>>>>>> +++ b/net/unix/af_unix.c
+>>>>>>>>> @@ -2675,7 +2675,7 @@ static int unix_dgram_recvmsg(struct socket *sock, struct msghdr *msg, size_t si
+>>>>>>>>>   #ifdef CONFIG_BPF_SYSCALL
+>>>>>>>>>          const struct proto *prot = READ_ONCE(sk->sk_prot);
+>>>>>>>>>
+>>>>>>>>> -       if (prot != &unix_dgram_proto)
+>>>>>>>>> +       if (prot->recvmsg)
+>>>>>>>> There is no reason to have this dead branch when
+>>>>>>>> CONFIG_BPF_SYSCALL && !NET_SOCK_MSG.
+>>>>>>>>
+>>>>>>>> Let's compile out all sockmap code when both configs
+>>>>>>>> are not enabled.
+>>>>>>>>
+>>>>>>>> Since AF_UNIX differs from TCP/UDP, it can take the
+>>>>>>>> simpler approach.
+>>>>>>> Okay, will put the whole file behind hidden config option like so:
+>>>>>>>
+>>>>>>> --- a/net/unix/Kconfig
+>>>>>>> +++ b/net/unix/Kconfig
+>>>>>>> @@ -30,3 +30,8 @@ config UNIX_DIAG
+>>>>>>>          help
+>>>>>>>            Support for UNIX socket monitoring interface used by the ss tool.
+>>>>>>>            If unsure, say Y.
+>>>>>>> +
+>>>>>>> +config UNIX_BPF
+>>>>>> Maybe UNIX_BPF_SOCKMAP or something.
+>>>>>> bpf_iter is supported without this config.
+>>>>> I don't like where it's going.
+>>>>> I strongly dislike new config knobs.
+>>>>> I'd rather remove existing knobs.
+>>>>> What is the motivation?
+>>>> The goal is to compile out sockmap bits that use sk_msg.
+>>>> NET_SOCK_MSG is natural, exisiting candidate.
+>>>> New knob wasn't my idea.
+>>> I'm also missing the big picture here.
+>>>
+>>> sockmap already holds socket references today. You can store and look
+>>> up sockets without attaching any verdict/parser program, and no
+>>> redirect happens. So if the goal is to use sockmap purely as a socket
+>>> container without the sk_msg fast-path overhead, what does a
+>>> compile-time NET_SOCK_MSG knob add over the runtime checks?
+>> Sure, let me clarify. It's about the maintenance overhead.
+>>
+>> sockmap-based redirects are a rather niche feature with few users, for
+>> which we've been getting quite a few bug reports since AI came along.
+>>
+>> We're not using it internally at Cloudflare, so I don't really have a
+>> good reason to justify time spent on these bug reports.
+>>
+>> Hence the move to put sockmap-based redirect behind a config option,
+>> which you can enable at your own risk. Or which we can deprecate, but
+>> that's not really my call.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28067752662
---===============3601710770784757655==--
+
+Hi Alexei and Jakub,
+
+skmsg is actually still pretty useful for gateways.
+I started with bpf by integrating skmsg into nginx as a module and envoy 
+has something similar.
+The usual setup is cgroup/sk for L4 bypass (reject SYN), and skmsg for 
+L7, redirecting
+between local apps by looking at the payload. So there are real users.
+
+
+> This is wishful thinking that a config knob will stop
+> the bug reports.
+> Just disable it for real instead.
+
+
+About the AI bug reports - yeah, I've seen them too. I think it just 
+comes from the complexity
+of networking plus how programmable bpf is. Reviewing AI-written patches 
+is often painful,
+the commit message is frequently wrong, once it took me a whole day just 
+to reproduce and
+confirm the issue. But I do believe these reports will converge eventually.
+
+
+>>> I am also not sure if NET_SOCK_MSG is right. It is broader than
+>>> "sockmap redirect". It is selected by TLS and {INET,INET6}_ESPINTCP.
+>>> Because those select it, it can't be toggled independently.
+>> Once the sockmap redirect bits are behind _some_ config option, it will
+>> be easy to replace it with a more granular one that depends on
+>> NET_SOCK_MSG. But we're not there yet. One step at a time.
+> No. That's not workable.
+>
+>>> Could you share the concrete use case you have in mind, and whether
+>>> this came out of an earlier discussion or thread upstream?
+>> This is a follow up from discussions at BPF summit with Alexei & John.
+> Not quite. The discussion was to disable pieces of sockmap
+> that are causing trouble.
+> Not to move them under config knobs, but disable them.
+
+Agree, just like we remove skmsg from KTLS which is rarely used.
+
+
+I think the motivation of this patch - making the boundary between skmsg 
+and sockmap clear - is worthwhile.
+
+Hope not have skmsg disabled by default.
+I don't work on that upper-layer software anymore, but I really don't 
+want my ex-colleagues to
+upgrade their kernel some day, find the feature I wrote broken, and come 
+curse me :) (selfish)
+
