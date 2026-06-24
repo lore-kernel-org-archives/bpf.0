@@ -1,139 +1,196 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B87173
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 00:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E15F3A1DB
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 00:09:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782259394; cv=none; b=MPC/VWp2BbKdDYEvbp2zDwUPmBPyzhq1DPN2bmUGYu42a+AmVKFB6lx0DGwvt2l5JUlSuXEQsViuYiFkpuUihUPpJeLIlJ7WEGtORfR49nmM4cGJYlxFFEYdKPGbKeO+A0oWegYTBqFzxPEKw3kKls8ekCra3ceTeE9sVVUv1ng=
+	t=1782259799; cv=none; b=gReleWg9fvvD4F6/RxVeO3rHC7tDgRZdOc3oCOvBxQBcojAQFpvuCFObN+R6mj0rQPI/bJFUXEMlioA6RLsOwCm05bkxBntRn/VQ0AVexbEKUWHGQArWI+075bpjQjC82s2PlN4lE8LT1vIu/BSy9uVR5HzxwQ9zIIBJNv5RZfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782259394; c=relaxed/simple;
-	bh=zkZvD+UYKje+3xKPYO81GrzxG1VQ/g65EXXpKj16XwU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=nVPQbsM7pm+a6dopCrRovyOpzhdVhj61HEhxkDaFNVTuJ2SKlPUlQEH+mQ29ew0IIxeFE2xYTOJR36TrDT2PV/FSSJ9+S4Q3OVZIUruZEoKmRYBSeGlHEhdoD1idMaekJOLSLR2CQS1gj3wRZivOhdP6gsLIiT5/rHoE6SbyO2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bTwv5qAv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782259799; c=relaxed/simple;
+	bh=0XYbSaKDOoQduMhTFPk0faWObl2M7CF+88yrRNTkwwc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=ORX7rDo8wsOcHcQegy6Tui+8tWZNtKvqrrOkEr38kmrcEE2zIpMvGhiaCXHQbF+2FXiGq2lQkduxwChxRjQCUzNr2bcMhzhPfjpQan4vC457lJq8c6TdK+nMIBqWcl0rMG3sLGatM72qu9LmzoTTdmsnRgk1vV8gP2G6vOT+sDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=yPdDeSi/; arc=none smtp.client-ip=74.125.82.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bTwv5qAv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD6581F000E9;
-	Wed, 24 Jun 2026 00:03:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782259392;
-	bh=4N2gJ9qPXIRZUXaK7xZ9aBBv68PUQA9QYFwVqxzbQSA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=bTwv5qAv408TCUdFBzvdmARCQWqQLBNhNCVJClgz2brUv/p3avMtDaaa9wO7Sribp
-	 QGMzkNEw7oxscpyQ87bphmomHm+gIhn900bJkEwPZKf8uK3/gadWyIcgD5qD3bV2gb
-	 WZkxDFtGa4rFMfQkC7molo0di27IqssHt+WPD6ArssH0dKHxx4nXcCwIvn3MGfD8Y7
-	 xgYURYCwT7Dlff26KLZjMxa4bB4vel7meQWeZ41pfRwOeCxRlmAAaV/wFWh2oh2Y+S
-	 wqYMBwjPkd7U9VR4QrWcZtpTnN3IQVj9Z3PHz//jgV3mINLHtUlRufb10NQDMZXURB
-	 io/Lmhze3VrTg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 14/15] selftests/bpf: Test attaching
- struct_ops to a cgroup
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Amery Hung" <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260623175006.3136053-15-ameryhung@gmail.com>
-References: <20260623175006.3136053-1-ameryhung@gmail.com>
- <20260623175006.3136053-15-ameryhung@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 24 Jun 2026 00:03:12 +0000
-Message-Id: <20260624000312.AD6581F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="yPdDeSi/"
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-30c6c8d7503so294970eec.0
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2026 17:09:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782259797; x=1782864597; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G8oF7gaI866b4fh2rX0QoDVma7OKpRu/EkO3XgX53kE=;
+        b=yPdDeSi/Tr2gqG/UpLxRu4RJ50CYw3+LqV6ACLBjLE1IOtJtXqrpVP3/DdMdC+B94H
+         kD7KHfaSURNiYzFNnGLcmk8gNKTJj/LInMItHkrFVqwxKijDy5UIRubGoh4l8so+C93o
+         LfXAQrquRhj8tu/uTtxh2IrFOKVSPbexuHKP/ZZI2JnT0kdGhYeKmDpV23JvOBFud9QH
+         gifvsRKPxhCum00TvuENKCiPO5fkPeSu6wce/9EagyD6A8a0Ol3tRc0szeTJ/8fL4Qgb
+         KNvBfkoQQ7B3o8fX+PFSDuxif6j6tKUwApS1Io2XmWxzrY4Teh/EabxvXppwXEUjPJAx
+         87SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782259797; x=1782864597;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G8oF7gaI866b4fh2rX0QoDVma7OKpRu/EkO3XgX53kE=;
+        b=b8KImu3p+mm6ra+JhSAWpUN0+9kO9Wr0BgSdssZKztXi3x9u+1LnWA0fkbI9aygZya
+         vYFKFNucyPOzyot97QJrN0Ic6Tku2QL68wTGThSQDB90wz1mWGnwy/j/CsvUhRbG7uom
+         ORMj/hapHov45HkJNuSAvSsj7/6ND7lUXXyXkC67HqGXyoQEneqN0/TmRJKwgxSvAMfi
+         uyiqsiUbAEmj01nHziX8ZTEQzOqiRx+Y6P6FUlxAdqsUds5U8a/oVFWFZBPSd/GWwNup
+         BSvHnXfR7xM4fNbxs68jf1lwmKuNwFJZIv0luszPihf9Pwlgce58jRSWFzc/dpSuppMc
+         Hmaw==
+X-Forwarded-Encrypted: i=1; AHgh+RqsgVA1Pz20FjRkMtGLeCn9wVWM7zPkRZVTCQEd5udDHnRSnY1AEIuBoEZp9BV77kSUVcI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUda0oFM6Sg74xV6Tnv0xIYcrTR5ijUhrHqHeOU5XUU0R9W+l2
+	hVdUMXlroGpAPaxsud9MOF/Thgv+Pkk2q7nyxo84Zw4S7LS+U+ODPz0bIKrzJSIBb48=
+X-Gm-Gg: AfdE7cmr4zhkiiqckOIn4e5R9NuxnBOBEbWekjun8NhNPZ/7FFyD7gb2hIkDemTYX93
+	1Ky0vg76OEatQmXTv7YsU/I+gBR5P+v6Jf/mpvnxol7fPSm63mNr53XIrmnahypnZUlnJ1ORI4f
+	r36FWJeqZJh0FUJN63sGufgOB9gAQuZ9IlyFzP29Wjmh2CUo3bTPMK4AEGlXZSCitrTapgMhktw
+	gS1ej6r0G4OupmCp8Z7yIBHOiHvtG6Vl3hcUvoyUYm9y3777ZjcT4G7f9cSz8tuFOYR+jvi6PSi
+	b+8k3atescbLv10WVacHSYDoftiSb3fL519uM0R+zrQBNgthLvLKI/35WgFhLHGH7uiavVWnUaQ
+	25oh/5JT0J2kUNUUpOTXbBQlNFmw77CZXHbLElI6XU9sQGdIOXeCz/6inx0Jx8+A3OShMBUDjX7
+	G6qlGS
+X-Received: by 2002:a05:7300:4304:b0:304:d14b:b706 with SMTP id 5a478bee46e88-30c6937271bmr1341249eec.27.1782259797305;
+        Tue, 23 Jun 2026 17:09:57 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::2526])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c52daf89dsm9570073eec.31.2026.06.23.17.09.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Jun 2026 17:09:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 23 Jun 2026 20:09:54 -0400
+Message-Id: <DJGUDAI4O70K.38X2CYVLBBLI7@etsalapatis.com>
+Cc: <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <edumazet@google.com>, <john.fastabend@gmail.com>, <jordan@jrife.io>,
+ <kuba@kernel.org>, <martin.lau@linux.dev>, <netdev@vger.kernel.org>,
+ <netfilter-devel@vger.kernel.org>, <pabeni@redhat.com>,
+ <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v8 1/7] net: move netfilter
+ nf_reject_fill_skb_dst to core ipv4
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Mahe Tardy" <mahe.tardy@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260622120515.137082-1-mahe.tardy@gmail.com>
+ <20260622120515.137082-2-mahe.tardy@gmail.com>
+In-Reply-To: <20260622120515.137082-2-mahe.tardy@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Test state pollution in the `inherit` subtest bypasses the inten=
-ded `cgroup_bpf_inherit()` testing path because the child cgroup persists f=
-rom the previous `hierarchy` subtest.
---
+On Mon Jun 22, 2026 at 8:05 AM EDT, Mahe Tardy wrote:
+> Move and rename nf_reject_fill_skb_dst from
+> ipv4/netfilter/nf_reject_ipv4 to ip_route_reply_fill_dst in ipv4/route.c
+> so that it can be reused in the following patches by BPF kfuncs.
+>
+> Netfilter uses nf_ip_route that is almost a transparent wrapper around
+> ip_route_output_key so this patch inlines it.
+>
+> Reviewed-by: Jordan Rife <jordan@jrife.io>
+> Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
 
-commit 9dd80df6f86c72623dac7d2f203da4036e4e8827
-Author: Martin KaFai Lau <martin.lau@kernel.org>
-Subject: selftests/bpf: Test bpf_tcp_ops cgroup generic link
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-This commit adds selftests for attaching bpf_tcp_ops struct_ops to cgroups =
-via
-the generic cgroup link infrastructure. The tests validate various behaviors
-including execution order, query interfaces, updates, and inheritance.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops.c b/tools=
-/testing/selftests/bpf/prog_tests/bpf_tcp_ops.c
-> new file mode 100644
-> index 000000000000..4d087bdc4613
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops.c
-
-[ ... ]
-
-> +static void run_hierarchy_subtest(void)
+> ---
+>  include/net/route.h                 |  1 +
+>  net/ipv4/netfilter/nf_reject_ipv4.c | 19 ++-----------------
+>  net/ipv4/route.c                    | 15 +++++++++++++++
+>  3 files changed, 18 insertions(+), 17 deletions(-)
+>
+> diff --git a/include/net/route.h b/include/net/route.h
+> index f90106f383c5..300d292cd9a1 100644
+> --- a/include/net/route.h
+> +++ b/include/net/route.h
+> @@ -173,6 +173,7 @@ struct rtable *ip_route_output_flow(struct net *, str=
+uct flowi4 *flp,
+>  				    const struct sock *sk);
+>  struct dst_entry *ipv4_blackhole_route(struct net *net,
+>  				       struct dst_entry *dst_orig);
+> +int ip_route_reply_fill_dst(struct sk_buff *skb);
+>
+>  static inline struct rtable *ip_route_output_key(struct net *net, struct=
+ flowi4 *flp)
+>  {
+> diff --git a/net/ipv4/netfilter/nf_reject_ipv4.c b/net/ipv4/netfilter/nf_=
+reject_ipv4.c
+> index fecf6621f679..c1c0724e4d4d 100644
+> --- a/net/ipv4/netfilter/nf_reject_ipv4.c
+> +++ b/net/ipv4/netfilter/nf_reject_ipv4.c
+> @@ -252,21 +252,6 @@ static void nf_reject_ip_tcphdr_put(struct sk_buff *=
+nskb, const struct sk_buff *
+>  	nskb->csum_offset =3D offsetof(struct tcphdr, check);
+>  }
+>
+> -static int nf_reject_fill_skb_dst(struct sk_buff *skb_in)
+> -{
+> -	struct dst_entry *dst =3D NULL;
+> -	struct flowi fl;
+> -
+> -	memset(&fl, 0, sizeof(struct flowi));
+> -	fl.u.ip4.daddr =3D ip_hdr(skb_in)->saddr;
+> -	nf_ip_route(dev_net(skb_in->dev), &dst, &fl, false);
+> -	if (!dst)
+> -		return -1;
+> -
+> -	skb_dst_set(skb_in, dst);
+> -	return 0;
+> -}
+> -
+>  /* Send RST reply */
+>  void nf_send_reset(struct net *net, struct sock *sk, struct sk_buff *old=
+skb,
+>  		   int hook)
+> @@ -279,7 +264,7 @@ void nf_send_reset(struct net *net, struct sock *sk, =
+struct sk_buff *oldskb,
+>  	if (!oth)
+>  		return;
+>
+> -	if (!skb_dst(oldskb) && nf_reject_fill_skb_dst(oldskb) < 0)
+> +	if (!skb_dst(oldskb) && ip_route_reply_fill_dst(oldskb) < 0)
+>  		return;
+>
+>  	if (skb_rtable(oldskb)->rt_flags & (RTCF_BROADCAST | RTCF_MULTICAST))
+> @@ -352,7 +337,7 @@ void nf_send_unreach(struct sk_buff *skb_in, int code=
+, int hook)
+>  	if (iph->frag_off & htons(IP_OFFSET))
+>  		return;
+>
+> -	if (!skb_dst(skb_in) && nf_reject_fill_skb_dst(skb_in) < 0)
+> +	if (!skb_dst(skb_in) && ip_route_reply_fill_dst(skb_in) < 0)
+>  		return;
+>
+>  	if (skb_csum_unnecessary(skb_in) ||
+> diff --git a/net/ipv4/route.c b/net/ipv4/route.c
+> index 3f3de5164d6e..f24609933fbe 100644
+> --- a/net/ipv4/route.c
+> +++ b/net/ipv4/route.c
+> @@ -2942,6 +2942,21 @@ struct rtable *ip_route_output_flow(struct net *ne=
+t, struct flowi4 *flp4,
+>  }
+>  EXPORT_SYMBOL_GPL(ip_route_output_flow);
+>
+> +int ip_route_reply_fill_dst(struct sk_buff *skb)
 > +{
-> +	struct bpf_tcp_ops *skel =3D NULL;
-> +	struct netns_obj *ns =3D NULL;
-> +	int parent_fd, child_fd =3D -1;
+> +	struct rtable *rt;
+> +	struct flowi4 fl4 =3D {
+> +		.daddr =3D ip_hdr(skb)->saddr
+> +	};
 > +
-> +	parent_fd =3D test__join_cgroup(CGROUP_PATH);
-> +	if (!ASSERT_GE(parent_fd, 0, "join_parent_cgroup"))
-> +		return;
-> +
-> +	child_fd =3D create_and_get_cgroup(CGROUP_PATH "/child");
-> +	if (!ASSERT_GE(child_fd, 0, "create_child_cgroup"))
-> +		goto done;
-> +
-> +	if (!ASSERT_OK(join_cgroup(CGROUP_PATH "/child"), "join_child_cgroup"))
-> +		goto done;
-> +
-> +	ns =3D netns_new(TEST_NETNS, true);
-> +	if (!ASSERT_OK_PTR(ns, "netns_new"))
-> +		goto done;
-> +
-> +	skel =3D bpf_tcp_ops__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-> +		goto done;
-> +
-> +	test_hierarchy(parent_fd, child_fd, skel);
-> +
-> +done:
-> +	bpf_tcp_ops__destroy(skel);
-> +	netns_free(ns);
-> +	if (child_fd >=3D 0)
-> +		close(child_fd);
-> +	close(parent_fd);
+> +	rt =3D ip_route_output_key(dev_net(skb->dev), &fl4);
+> +	if (IS_ERR(rt))
+> +		return PTR_ERR(rt);
+> +	skb_dst_set(skb, &rt->dst);
+> +	return 0;
 > +}
-
-[Severity: Medium]
-Does this code leak the child cgroup and pollute the state for the inherit
-subtest?
-
-Because the child cgroup is not explicitly removed here (e.g., via
-remove_cgroup()), the directory persists in the filesystem after the file
-descriptor is closed.
-
-When test_inherit() runs immediately afterward, its call to
-create_and_get_cgroup() will re-open this existing cgroup instead of creati=
-ng a
-new one. This causes test_inherit() to silently bypass the intended
-cgroup_bpf_inherit() testing path, and instead exercise the
-cgroup_bpf_update_effective() path during the parent attachment.
-
-[ ... ]
-
-> +static void test_inherit(int parent_fd, struct bpf_tcp_ops *skel)
-> +{
-> +	struct bpf_link *plink =3D NULL;
-> +	int child_fd =3D -1;
+> +EXPORT_SYMBOL_GPL(ip_route_reply_fill_dst);
 > +
-> +	plink =3D bpf_map__attach_cgroup_opts(skel->maps.tcp_ops1, parent_fd, N=
-ULL);
-> +	if (!ASSERT_OK_PTR(plink, "attach_parent"))
-> +		goto done;
-> +
-> +	child_fd =3D create_and_get_cgroup(CGROUP_PATH "/child");
+>  /* called with rcu_read_lock held */
+>  static int rt_fill_info(struct net *net, __be32 dst, __be32 src,
+>  			struct rtable *rt, u32 table_id, dscp_t dscp,
+> --
+> 2.34.1
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623175006.3136=
-053-1-ameryhung@gmail.com?part=3D14
