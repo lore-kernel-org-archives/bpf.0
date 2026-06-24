@@ -1,105 +1,79 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C4B3B775E
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 09:33:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA461346E43
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 09:36:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782293600; cv=none; b=RLfZuT93jfdrU5AFOQ31jecUApnBIAU2tde3pT6/aa4q1XZqMy2QqfK1/HPRgs5DufCzN/qF7SdRludagYU4/HwtFv8UUQ4FHuW4D8I2AzGOiQnFeEQ01mI2DCU8KWC2qA5Q7EqaVCBUdspaNoSSCsK9+14cVue5WieGwtKN/l4=
+	t=1782293813; cv=none; b=M9YyICzSbXVN2Ya0qJtlyJYyh9fuwX5nTLgLYh9uRcSKF3InJrKEtOY0v5PCxGPqK8aYkWs/hmAdD6jVRctudxSnyoM6anLpmr3vKcnR5L5KqCsWtlGrU+oFQw5B/Z4gNS0dyxK7grT1htp+UFSY33tFk1fzye0/0j5cHUe/tH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782293600; c=relaxed/simple;
-	bh=zVTzcAhu2sh1noRCqYQ5+3ri+BgXa4QWy0Rkq9VVdAo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=j3jpbH2cS9dz56Dazmsb5an/p2VEilUHLmPQaax7fykX7cYZKeF08uvuZCUljHqWVB3CBKzqQnJx+rEr/HXAyRmdar7id6BT6IDSqDzNd1UyyBP7RH2lcjPAAzTEjx2jjQSRzOWrO5XKsWN/+PmrO4CV5DGUwLjYtdpC3zXz7t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IB3Ezxp4; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=AzhYsAwN; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782293813; c=relaxed/simple;
+	bh=H7MvCwSwiGAOyf7wrR2Uxn2Q+p2d/30Iiv4HI9AUo5c=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pb5/I4iCSXm4oTIct63+MWU02zexDg9JrjekWnkhRVBWYjTnhVrROIwmtGvZKZJfo2xmfem1HMh5t4KvSobu99tePHIdXZ9L8AepjLeRphAcKhohyK9xOjCABtHjJJYBnP7qFTVIUQ5Y6wUSAZxtUkZZ1WIAf8ypgPHufOm3nbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sl8LvnxZ; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IB3Ezxp4";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="AzhYsAwN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782293589;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oScmgVBAZdYqdklOiG9pSCq/MuJ7qIw0aEjZWIJM3Ks=;
-	b=IB3Ezxp497OV0SOxfh+33MwswDQoRgitVx0RixvPp4nPgmb2azyAlBJhSifhUQeqWFcSvH
-	2W5swbAMlIWzGnLhRVepYGeFreGZQQI6norbZ7parII3aInv24PykbcXSkxt019Na/z0vW
-	rr8LRWf/f03ElcNcb+IZ48581/wZYVI=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-500-7z9meUH1O-ixk6HAsUCAWw-1; Wed, 24 Jun 2026 05:33:08 -0400
-X-MC-Unique: 7z9meUH1O-ixk6HAsUCAWw-1
-X-Mimecast-MFC-AGG-ID: 7z9meUH1O-ixk6HAsUCAWw_1782293587
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-490ace40f13so3295665e9.3
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 02:33:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sl8LvnxZ"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4923139e940so5108255e9.3
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 02:36:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1782293587; x=1782898387; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oScmgVBAZdYqdklOiG9pSCq/MuJ7qIw0aEjZWIJM3Ks=;
-        b=AzhYsAwNr4C/fkY66dsoT2NUSL7zKlX9cXwHIWgOsiaBQPNybQ6R5nUSVR3LRk7vQa
-         haW8mhIYq4ZBMR3voaLUosC1g3+LZ/NUd3RIsKEzexF0YeOvgsjr8t75DQFxpUflhHk0
-         6XdqHGbu0BlgzY2+lFOJ4RE1GA/fz2jQNmxyPYUzVAegOemrytq0y+4R/Z6diV3+WRPc
-         qFCIGv7k9G6OqLo0cjX/Fhaq/iXpemM4V8dQibKyH3QT8HBBCVFJb80uVAQVGn3rlBKi
-         h5ab7TURLmAc2fYp0bC4l9KMDynhHVLaX5MbgWt2wUNbVH7hru35pe3uW70r8d3myQqV
-         AT9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782293587; x=1782898387;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+        d=gmail.com; s=20251104; t=1782293804; x=1782898604; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=oScmgVBAZdYqdklOiG9pSCq/MuJ7qIw0aEjZWIJM3Ks=;
-        b=eAPy9sO+XMZP/c+z9ABty8kXZDsd8MI2AGI37+4S2eEMhNnJxm4eqR0Dahcup77HLR
-         nFz2LN7alOKerci+JSscA3266UwgLcAm99e5rSo5eZxooiYeuj6m7kN8gYG7wmf0NHzZ
-         NoV0jGKV02VFjyumho/0a7DV42f4tVNAA4lbOYElWgk4MO55cb05awFpToZ8dgMd93X9
-         BxLCQTOXhw/o93MbDyIRS/btu9XsWgovCt3F3hi/6iplnJeU44pBfMJB+KzJzKMTM4/S
-         MeHa7+MGfWv6grCA/LSlun+C/7L3ZnveM1eJm9/QS4+QsFyuYOcai+y1XKAKJ6N6z6hr
-         YT6w==
-X-Forwarded-Encrypted: i=1; AFNElJ9/zsK07im6OK9eVjaGSD/vDK8b5q5yNuJtxxhXhzOLZ35vUnCgjRf4XU06YLNuRL2O+Z8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGIzvh2ZOz15+XdCMtEifgAmcXbD+EYnPYwFLjiviuBGdxsIoU
-	NHZtLoaF36sp7ZCDZP5zRqSyB44AwaZV8kmOLnyF7DPBEKNMRVDSFi0j1D1f5t7623vsCZuj162
-	/qPgNDGxoYichoZcCr2vIFQN1x/fEehr5vjgQkiYNC2484aoJ9yuDoQ==
-X-Gm-Gg: AfdE7cnsYltYj6ISqb5DPbwyNq9UutLaNA3kWaHc9C+8L2Ps7WGZDpH3XKGiZZ0XwXG
-	cJxXQSjJqQyTroU+qQ8R4E+qKtX1JcS2ovVcoTYXdGcEzbX0YM0SZ86O9n8LZk2hpSQsGB1SUbi
-	Jd8QNOXlBPdwXQ5Djm9aivQ/gj02LVl+6RTlXvRgzvzhBXj7XYVZBMbs4wHmplW7P2T4OVkCcv0
-	Voh4lldCFyQNBmwpzBGI/0ne/9hFfdCdFV1RQIUpfW4+S77xfmOjZn5dwfjWqCui9O7ywGbWki5
-	zRi+kxegdrVC6KIdQvM+HS2utJDG7iW1yvbjne83/eaRhQvS5XXvAF/9ECjmQFJkVlDcnzo9fWi
-	mtNjt4v0BbXQdD7Du6ZfHevyLWbQ3eoCQMN4=
-X-Received: by 2002:a05:600c:a012:b0:492:2e1c:1d19 with SMTP id 5b1f17b1804b1-49260875bbamr34892845e9.31.1782293586992;
-        Wed, 24 Jun 2026 02:33:06 -0700 (PDT)
-X-Received: by 2002:a05:600c:a012:b0:492:2e1c:1d19 with SMTP id 5b1f17b1804b1-49260875bbamr34892125e9.31.1782293586482;
-        Wed, 24 Jun 2026 02:33:06 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49261063d6esm26451795e9.2.2026.06.24.02.33.04
+        bh=1wJNxSD3/+hWC52NiyTfSDgbYf4w4rvYHBQaUdLdSz8=;
+        b=Sl8LvnxZhcO5eQfwc6sUFKfGwoZERyjEc3Skog8mDZaI1F3a+kFjcx2ANW2uqpjtiT
+         j2T8rTdRL4/L8+Y1xrlp+cnk5mAvxWCffxKW8l9Y7XyaMlmNCnQhdxt7s30Twq3UdKJ8
+         3jlwQ4gfievddZuyvY9su59DCi/MDMmJ4Tf8gpSp9YbYT4RLuldagdtmg/MrwEP8REIV
+         LkzhD8uHpryIpMCyvSLmZBHRf6EshdBbOoTN+fgo5mG9wybjUDQzeKIwmTIW1AQYfXYm
+         ZsI1QNa1p4My73hqaEs3X8t5VssTtY758agZ+M30NUZmiJ3y0bSCCaOw8XF/6YC0SAK0
+         jhxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782293804; x=1782898604;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1wJNxSD3/+hWC52NiyTfSDgbYf4w4rvYHBQaUdLdSz8=;
+        b=Sy+/G3QRGiuZb3E4rrn/LENTQSZbPnJHu+tWy+xg4nTtOI9uX7Tdh6KSy51vI9hJJV
+         7N+Xv2peL2bxd9921pHbgaNJsh5hjQJslkDNj/VA9TFEp6Wlcx+2IjZtuLvvE9AaiSfI
+         qAbcxKgrjhX783Ua9e4Xy0QNCWI9Fr8YzyKgelNCBlQgZ0+8UDDbssO/IeYym0U8zfyX
+         txoA1J5tfL6Gq91XyPPHihSvqTQ+hHHn0NpWaC1rbylHT+f4HmyGVzrcpGc9wX6qwGDt
+         te7zkGlgfUk2LJvbw/iHf796qAnLavQK2hlE3XjM/QgpLFIm/HdXmvSBX+GM6xNmb6JC
+         ZDmQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9CWIEGR3jUYZWyibYW/f8VVu5RCz1dLZnAT4LJx0s3A2KNxyLWgpnacWkx2zXixuc0rbs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1cMuSUpS/y/nUwrdNB3DahyoNUG880BEWCTNwems+53+JDM+I
+	Hqo7V1ezD/V61VQAlh/wNBEIAdce3BVuARzAbkwJ3CSElDcLCt8CZ8WW
+X-Gm-Gg: AfdE7ckGfmKlzenD/Oy856PTzpxALxHvwORRReIpEy1cMupa0upILoOCQmiUJfoDctr
+	Ur7jF2yk0YE5uPlkLzObwLxxqAmrBRDrXzHA+KwFIG8/xeo6YIIkJFmc7WNmOVWrGBfME2Y5CPU
+	95EtqzYN8Mp5zqu9q0klz1UfHseHdpg5BOlIlbGnuGMK9e91nc6ZXnRL2zxlOPFWVvKzjbn6aDL
+	OVBMDMR2muXlCSaP6Dy1TzOmpqhhFLWyeVHxUK6bIMqJertt49uiARsmWBIlCF/ZQRLmhjCeTrX
+	8SI8dnhpWT965eK46YuDCMhCkvJOP0yFfohUjf4cbxcM8AZNUGyfkCFfIECDG5rW10UBn0WVWgV
+	hQBjgqrna6boMTH8xVxg8K6NWceGNq/s5ed7jEF0Wme65gItj+yDrH8k/E8c8gUsN3MFBID7NEe
+	hstUcyQv6hSX0=
+X-Received: by 2002:a05:600c:6207:b0:492:523f:a3df with SMTP id 5b1f17b1804b1-4925b34a37fmr101182075e9.5.1782293804006;
+        Wed, 24 Jun 2026 02:36:44 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4923fd30078sm440991485e9.7.2026.06.24.02.36.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 02:33:05 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 42FAF808FBD; Wed, 24 Jun 2026 11:33:04 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
- yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
- a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
- eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- dsahern@kernel.org
-Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
- bpf_fib_lookup() helper
-In-Reply-To: <20260624030530.3342884-2-avinash.duduskar@gmail.com>
-References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
- <20260624030530.3342884-2-avinash.duduskar@gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Wed, 24 Jun 2026 11:33:04 +0200
-Message-ID: <87pl1gcmgf.fsf@toke.dk>
+        Wed, 24 Jun 2026 02:36:43 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 24 Jun 2026 11:36:42 +0200
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	Quentin Monnet <qmo@kernel.org>
+Subject: Re: [PATCHv2 bpf-next 1/3] bpf: Add tracing_multi link info support
+Message-ID: <ajulKn0pB-Nh19yx@krava>
+References: <20260623142417.275892-1-jolsa@kernel.org>
+ <20260623142417.275892-2-jolsa@kernel.org>
+ <CAEf4BzYVjf4PfJUedkzRUteNOsb7kHafAbndaaNHBbVHqtOEPw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -107,83 +81,64 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzYVjf4PfJUedkzRUteNOsb7kHafAbndaaNHBbVHqtOEPw@mail.gmail.com>
 
-Avinash Duduskar <avinash.duduskar@gmail.com> writes:
+On Tue, Jun 23, 2026 at 02:01:08PM -0700, Andrii Nakryiko wrote:
+> On Tue, Jun 23, 2026 at 7:24 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > Adding BPF_OBJ_GET_INFO_BY_FD support for tracing_multi links.
+> >
+> > We expose following tracing_multi link data:
+> > - attach_type of the program
+> > - number of ids
+> > - array of BTF ids
+> > - array of its related kernel addresses
+> > - array of cookies
+> >
+> > The change follows the kprobe_multi and uprobe_multi link-info convention
+> > of optional output arrays with an in/out count,
+> >
+> > On top of standard tracing link data we also expose addresses, because they
+> > are useful info for user (especially when the attachment was done via pattern).
+> > This data is hidden when kallsyms does not allow exposing kernel pointer values.
+> >
+> > Assisted-by: Codex:GPT-5
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  include/uapi/linux/bpf.h       |  9 ++++++
+> >  kernel/trace/bpf_trace.c       | 55 ++++++++++++++++++++++++++++++++++
+> >  tools/include/uapi/linux/bpf.h |  9 ++++++
+> >  3 files changed, 73 insertions(+)
+> >
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index 89b36de5fdbb..80423ccc6b57 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -6839,6 +6839,15 @@ struct bpf_link_info {
+> >                         __u32 flags;
+> >                         __u32 pid;
+> >                 } uprobe_multi;
+> > +               struct {
+> > +                       __u32 attach_type;
+> > +                       __u32 count; /* in/out: tracing_multi target count */
+> > +                       __u32 obj_id;
+> 
+> we have attach_btf_obj_id in bpf_prog_info, but target_obj_id in
+> bpf_link_info for tracing programs. The latter, though, is actually
+> not always BTF object ID (it can be prog_id for PROG_EXT)...
+> 
+> So, me personally, I was confused what "obj_id" here mean, it would be
+> more obvious if it was called "btf_obj_id", tbh. But that's a minor
+> nit/confusion, not feeling strongly.
 
-> bpf_fib_lookup() returns the FIB-resolved egress ifindex straight
-> from the fib result. When the egress is a VLAN device, the returned
-> ifindex is the VLAN netdev's, which has no XDP xmit handler; XDP
-> programs that want to forward the frame (e.g. xdp-forward) must
-> instead target the underlying physical device and push the VLAN tag
-> themselves. Today the program has no way to learn either the
-> underlying ifindex or the VLAN tag without maintaining its own
-> VLAN-to-ifindex map in userspace and refreshing it on netlink
-> events.
->
-> Add BPF_FIB_LOOKUP_VLAN. When the caller sets this flag and the fib
-> result is a VLAN device whose immediate parent is a real (non-VLAN)
-> device in the same network namespace, populate the existing output
-> fields params->h_vlan_proto and params->h_vlan_TCI from the VLAN
-> device and replace params->ifindex with the parent's ifindex.
-> params->h_vlan_TCI carries the VID only, with PCP and DEI bits zero; a
-> consumer wanting to set egress priority writes PCP itself.
-> params->smac is the VLAN device's own address, which can differ from
-> the parent's.
->
-> Only the immediate parent is resolved, via vlan_dev_priv(dev)->real_dev
-> and not vlan_dev_real_dev(), which walks to the bottom of a stack. When
-> the immediate parent is not a real device in the same namespace, the
-> lookup returns BPF_FIB_LKUP_RET_VLAN_FAILURE and leaves params->ifindex
-> at the input. This covers a stacked VLAN (QinQ), where the immediate
-> parent is itself a VLAN device and one h_vlan_proto/h_vlan_TCI pair
-> cannot describe two tags, and a parent in another network namespace (a
-> VLAN device can be moved while its parent stays), whose ifindex would
-> be meaningless in the caller's namespace. A program that wants the VLAN
-> device's own ifindex re-issues the lookup without BPF_FIB_LOOKUP_VLAN,
-> so the unreducible case stays distinct from a physical egress. That
-> distinction matters for XDP: a program cannot xmit on a VLAN device, so
-> a success carrying the VLAN ifindex would make it redirect to a device
-> with no ndo_xdp_xmit and drop the frame at xdp_do_flush(). The swap and
-> the vlan fields are written only on the reduce path; other output
-> fields keep their existing behaviour, so a frag-needed result still
-> reports the route mtu in params->mtu_result.
->
-> BPF_FIB_LOOKUP_VLAN is only useful to XDP, which cannot redirect to a
-> VLAN device. A tc program can redirect to the VLAN device directly, so
-> bpf_skb_fib_lookup() rejects the flag with -EINVAL; bpf_xdp_fib_lookup()
-> accepts it. When the flag is not set, behaviour is unchanged:
-> h_vlan_proto and h_vlan_TCI are zeroed and ifindex is left at the FIB
-> result.
->
-> The new block is compiled only under CONFIG_VLAN_8021Q since
-> vlan_dev_priv() is not defined otherwise; without that config
-> is_vlan_dev() is constant false and the flag is accepted but never
-> acts. That is safe because no VLAN device can exist there, so every
-> egress is already physical.
->
-> This lets an XDP redirect target the physical device and learn the
-> tag to push in a single lookup, which xdp-forward's optional VLAN
-> mode (xdp-project/xdp-tools#504) wants from the kernel side.
->
-> The helper's input semantics are unchanged; the reverse direction
-> (supplying a tag as lookup input) is added in the following patch.
->
-> Suggested-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> Signed-off-by: Avinash Duduskar <avinash.duduskar@gmail.com>
+ok, btf_obj_id si better choice, will change
 
-Yes, this is way nicer - thanks! One nit below, otherwise LGTM:
+> 
+> everything else LGTM
+> 
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-
-[..]
-
-> +	if (flags & BPF_FIB_LOOKUP_VLAN)
-> +		return -EINVAL;
-> +
-
-This is fine, but we should probably reject the input flag as well in
-the next patch (for symmetry).
-
--Toke
-
+thanks,
+jirka
