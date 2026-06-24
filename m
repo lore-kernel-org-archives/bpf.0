@@ -1,178 +1,106 @@
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0473876CF
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 07:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782286936; cv=pass; b=dIsmwL6NFlTwscvPnVUfR9NqsSdk53yeTnjziCz0edX09kds9pKUe7+IXmHDl7Au/roPbenw94WlVyUIi6Ak3Oz35f4T7FS1V2g0eArk9Ky5LLC/+eUb0svKy8f7MyzZr0/xMAukIUK+XWbjYbyIkMbXNulFixySdL+Avu9qilU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782286936; c=relaxed/simple;
-	bh=QR4Wy0tL8cCx/yg2BbocD46eH1jIHB4yYuylS36en84=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bKXyCl9djZ+UjyqBdBeoEmTzcPBfBZuR2CyY860utJbv+o6F9RDfgyJfz4CYGBrcmsTCI1+fy2qrAuTktm5yDgeP2cf7t0p3TGiW7rvDCdaM0Un36kXJtI5Q9t8Ohi4HnP3RxwJCaEN2ZocHUAj/xPrYeucPqelFyl/5bRSpCw8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gSFzCiXz; arc=pass smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC972571B8;
+	Wed, 24 Jun 2026 08:25:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782289557; cv=none; b=now39ysVslsnMskJZOCAJRgLrL4Y9oCx81zo1QEW2Ea0nlOGMJmRPfzV1OtLwUxaEvdZju4uHozpsONMVu7ss20zB+x3ceOTo0PZGuCHV2oX9fsr5zau+/qe/vJjRG+kbJJIUp7anPN9ryG5OqiDLVFrqWLwLv4qoMXrrKgDBaY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782289557; c=relaxed/simple;
+	bh=eBO/yePEDeXk3iLmCd4SWVFTSeR7fvQhiLDH98yg4fw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i2iu25pq3uayUwMU+fv41+ow9F0UV9mOEFoaZmzCQEP66IkW0FVvhZ/9LD73UZ17pG4lMXV2dTtSCRCukkgDRIjsf5ptxF9WjS+/zTb4i4YFXWMSm7LUTjG6KRawHGxMwV0YxloBdMarNFcOWiurMUqeOiw93NZPi9npmzjzyNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=D4odM0VH; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gSFzCiXz"
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-8041a8fd711so25323047b3.1
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 00:42:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782286931; cv=none;
-        d=google.com; s=arc-20260327;
-        b=r3ZG6APVGtbRHp56d15poj/YLEX4Gc2aXzMi7QHc5dne77bkifcAkHLQ2eZpXLu2OS
-         h5DIHi8es0H/kEDluFVFKnfig+B3QO8rz+j+8/u39ZmSCgyYrqnzW7Fm49gq2bMWpetn
-         u+WSWPJz9sSygU+yrNaww87za/u70ZFsn9TH5jaMvqN14hBGeo6aFHctNrM3JDxU2UIB
-         HmtQuySteoBzwhza808EiUVUSe4MuAEBRhJgrM6OA5uoZCoJJlgqDmQFb07pQqXPM20U
-         gXfsmLmUU0ximBrQm0pxjb9ylmGsXMl1Gm0tRuNbDUC9WYS97V9p69T0GslB7o//LU7X
-         rXVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=0+yTRolSITyDjcXP+5W2UVcOpjVAsvKMU8I2YD9YKI0=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=Lfg2wFdYcQxRKlyyk3dov07XtLel2ApMNnikBsL2ewbA4N9gnNefZIqnJBEccbDY3X
-         WWfKgNXNqp33oH90Rd5iCpprpRUZMEPslBMOKJtbzSY/1xeNAldFi7X68MiGS2KML9WE
-         oI31GZskzmfh1hqf5UkgrA4QA1UY/nGf/czjXYJcUK/37QnTEik+CICog0+rhsWW/zNA
-         o2TmZapNF9eKYSNryIKFHcXi8s14/ZOWaUF+w2MBInwb6YMmPClEpfqmDOecKFa3bgh+
-         nsIpNCVzJHuIc44L23k95If0YwdMY1kMb1NQVX2jEBC5tiZol7Ko7kr0ExkxzTzXQ+Q6
-         /vAg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782286931; x=1782891731; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0+yTRolSITyDjcXP+5W2UVcOpjVAsvKMU8I2YD9YKI0=;
-        b=gSFzCiXz+teHKhXH0zs2Reguikj8B+X5KwBCw2Fdg3W3eUvJXG5b7E1b1794psXqLR
-         F53e1kTt9MjHgrEePFm1LNum22lZDrLyVOgxq1Qb25pGF3M5NxrnR8DgeSkdhQVsalkp
-         ZBHoWOOe1KniCuwd6pYLL9vm6lAcfwBuZMJ3yxDQdBllxTxKxv9uiRAvtEtFzLVOH0Jn
-         Cb9sCJOKk9P+9dUBeWUkS7GRiwOZUBr95CYE5qUjZuGzk+RPMW11G7Ben0YTfEEXPWr5
-         uN8smRVWN4EOwEPoNu5AgvuIluF/dscgAYroZ41qwNSfGlDcVV4DohBQgk7YImCuQfge
-         DtDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782286931; x=1782891731;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0+yTRolSITyDjcXP+5W2UVcOpjVAsvKMU8I2YD9YKI0=;
-        b=TbPrYww1f7hV8uHsHwuCSH3N314XpopJ9qtY46DLxVtJmRCd+hOzNsA/6frwOD4ZRc
-         xyVzBvsv2GaO3O1p55MDWOysbOrJFmSS6aDB5N4+gQB2LJXM/oV6RpZqBvRP3RkJep2r
-         9HIOOoSlei/r+ZSPua4G0HN73/OPj/gVdBE8OMJ7GFPGV68rQGlJ92n/SfuiM15+99Ll
-         EwHbHdj7c1QHSqGdjjaM9sKeKyToJR/yFt/fuXcQ5vBb9pWLTrI+tlroSffyioOO8GPz
-         s/RZ717j+2vFjWlejolGCU6/VuCvGOVWob0vJrwh4i6iMjv+mshG4ZKQC629oRnErzI9
-         n9LA==
-X-Gm-Message-State: AOJu0YwbQEpkFocQ443na4inLO5m/fevQiLOaV44K8Ka0Z8rNXALC/fQ
-	Q2b2GnglzmvaffOj2mAF617Ytlat8AeCKhFvtGtr1O/CHAKhLz1oPzAW8CPPGtCR7FksPRyPkNV
-	DIdzYwR2HXpTvyMYwafbqjCkIkFDGzh350cZpfARQwk/y
-X-Gm-Gg: AfdE7cnilQpVoYmpd7trh3W8vS99QVAX0rpnrUdaWrLrWM8SQDpqoNNRDGmu9AjkbaQ
-	YF4qiDU7+QVaRNDSvuCvuGMV0Dk4D3xjnksc6fAaIWttpUAfLSIyWGvby1ftDD6GAJHw0aFHM1q
-	6WGa7lluuZ270EGSqztnmfcU/9KcFLYEc7BXYJpUdiVR3RfuO/U4Kxrpcr0V+lQ2w+2a05Rfmlm
-	Li5igQ8KR8ArVVGN1tnI8UcbsH8CyJyZba9CqQLvxMxNKLMVfCCMjcD1RAeCGkJtPni5ZNnMpP3
-	3GqjfXB7fjW/0G5MYsNgGcfa9OrI8+95Hek9IMmD
-X-Received: by 2002:a05:690c:660b:b0:7b1:9036:a23a with SMTP id
- 00721157ae682-80672115b07mr70122167b3.14.1782286931474; Wed, 24 Jun 2026
- 00:42:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="D4odM0VH"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=Z7CfbDyWZhn3cEnMkiWiKB1KlydRS3eCFOENPv2RnOk=; b=D4odM0VHZTkVQOyEMH4xvYd8fk
+	64TJVmhTkzFUQJV+bByVo24er9pKGRsRD50fmT8Fjd5+NinwvQYlh45fUzEx01S/mE4KbiBLLlhh+
+	ycP3wRsZHsE4opJVe87C8hpkP9/VnCWJ5u5kntDZ98UmBykmCYaSllA/NjlWGS1qzlgS9Sf+V2cpk
+	xazdTobR5dwIINgo5A4/EIUjZmbm+UVsXVYo/XNdvaej3JUlpLcbbBhra5aOJS8h1zSncor4yktAY
+	4LQ+0ApokWx36cRXPlRU0Cb2tE0A0YJOaa25hvR0k67x0S3LbO07enq20eiZ8vVzzowv/bAQDzZjf
+	CYye2PWA==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wcIvN-002IDE-1y;
+	Wed, 24 Jun 2026 08:25:33 +0000
+Date: Wed, 24 Jun 2026 01:25:27 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Andrea Righi <arighi@nvidia.com>
+Cc: Christian Loehle <christian.loehle@arm.com>, Tejun Heo <tj@kernel.org>, 
+	David Vernet <void@manifault.com>, Changwoo Min <changwoo@igalia.com>, 
+	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	kernel-team@meta.com
+Subject: Re: [PATCH] sched_ext: Print deprecation warnings only once
+Message-ID: <ajuTUNjgdHjjx2dB@gmail.com>
+References: <20260623-scx_warning-v1-1-14bf218f4bd9@debian.org>
+ <43d5e4e0-eddb-4a7a-87df-180b9048a038@arm.com>
+ <ajqr_biPOFkugwIx@gpd4>
+ <ajq30ImUfS9hQV0a@gmail.com>
+ <ajrDgwLnu9_FWPUp@gpd4>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260624072031.735846-1-sun.jian.kdev@gmail.com> <20260624073738.86F361F000E9@smtp.kernel.org>
-In-Reply-To: <20260624073738.86F361F000E9@smtp.kernel.org>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Wed, 24 Jun 2026 15:41:58 +0800
-X-Gm-Features: AVVi8CeAGESJLiZKG7OzP6_ac3ToJrHzDDedwPDcUfl7iYoO0CEiUoore4N-_u4
-Message-ID: <CABFUUZFSwaQoq6_uRA0qwsuSO7hxfvyn9jmD-i-iUer7QZ_eSQ@mail.gmail.com>
-Subject: Re: [PATCH bpf 1/2] bpf: Avoid eliding lookup NULLness for inner map templates
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ajrDgwLnu9_FWPUp@gpd4>
+X-Debian-User: leitao
 
-On Wed, Jun 24, 2026 at 3:37=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
->
-> Pre-existing issues:
-> - [Critical] The patch relies on the `BPF_F_INNER_MAP` flag to prevent un=
-safe NULL-check elision for inner map templates. However, this fix is funda=
-mentally incomplete because `BPF_MAP_TYPE_PERCPU_ARRAY` explicitly rejects =
-the `BPF_F_INNER_MAP` flag during creation. This leaves per-CPU arrays vuln=
-erable to out-of-bounds memory accesses and NULL pointer dereferences.
-> --
->
-> commit 3ab30507af620d9da556d3b2d80a1f172474785b
-> Author: Sun Jian <sun.jian.kdev@gmail.com>
->
-> bpf: Avoid eliding lookup NULLness for inner map templates
->
-> This commit prevents the verifier from eliding NULLness checks for array =
-maps
-> used as inner map templates. It achieves this by requiring that the
-> BPF_F_INNER_MAP flag is not set on the map before clearing the PTR_MAYBE_=
-NULL
-> flag from the register.
->
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 69d75515ed3f7..a32704bb5e058 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -10577,6 +10577,7 @@ static int check_helper_call(struct bpf_verifie=
-r_env *env, struct bpf_insn *insn
-> >
-> >               if (func_id =3D=3D BPF_FUNC_map_lookup_elem &&
-> >                   can_elide_value_nullness(meta.map.ptr->map_type) &&
-> > +                 !(meta.map.ptr->map_flags & BPF_F_INNER_MAP) &&
->
-> [Severity: Critical]
-> This isn't a bug introduced by this patch, but does this check completely
-> prevent NULL-check elision for all inner map templates?
->
-> Looking at can_elide_value_nullness(), it allows both BPF_MAP_TYPE_ARRAY
-> and BPF_MAP_TYPE_PERCPU_ARRAY.
->
-> However, in array_map_alloc_check(), the BPF_F_INNER_MAP flag is
-> explicitly rejected for per-CPU arrays:
->
-> kernel/bpf/arraymap.c:array_map_alloc_check() {
->     if (attr->map_type !=3D BPF_MAP_TYPE_ARRAY &&
->         attr->map_flags & (BPF_F_MMAPABLE | BPF_F_INNER_MAP))
->         return -EINVAL;
->     ...
-> }
->
-> Since BPF_MAP_TYPE_PERCPU_ARRAY can never have the BPF_F_INNER_MAP flag
-> set, won't this allow the verifier to still incorrectly elide NULLness
-> checks for per-CPU arrays used as inner map templates?
->
-> If a per-CPU array with a large max_entries is used as an inner map
-> template, and a concrete map with a smaller max_entries is inserted at
-> runtime (which is possible because percpu_array_map_ops.map_meta_equal us=
-es
-> bpf_map_meta_equal() which ignores max_entries checks), couldn't this
-> lead to an out-of-bounds access or NULL pointer dereference?
->
-> Additionally, since percpu_array_map_gen_lookup() also relies on
-> BPF_F_INNER_MAP to skip JIT inlining, will it inline the lookup with the
-> template's excessively large bounds hardcoded, resulting in out-of-bounds
-> heap reads on the concrete inner map?
->
-> >                   meta.const_map_key >=3D 0 &&
-> >                   meta.const_map_key < meta.map.ptr->max_entries)
-> >                       ret_flag &=3D ~PTR_MAYBE_NULL;
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260624072031.73=
-5846-1-sun.jian.kdev@gmail.com?part=3D1
+Hello Andrea,
 
-Please ignore this series.
+On Tue, Jun 23, 2026 at 07:33:55PM +0200, Andrea Righi wrote:
 
-I just noticed that Nuoqi Gui's "[PATCH bpf v2 0/2] Keep dynamic inner
-array lookups nullable" already covers the same verifier issue and
-selftest.
+> Hm... actually thinking more about it, the existing behavior seems fine already.
 
-Sorry for the noise.
+I have very few hosts in the Meta fleet that are unnecessarily spammy:
+
+	# dmesg | grep -c "ops->cpu_acquire/release() are deprecated, use sched_switch TP instead"
+	73
+	# dmesg | grep -c "sched_ext: Writing directly to p->scx.slice/dsq_vtime is deprecated, use scx_bpf_task_set_slice/dsq_vtime()"
+	855
+
+And they are unnecessary, given they show up many times within the same
+second, like, 42x times in last second:
+
+
+	# dmesg | grep "sched_ext: Writing directly to p->scx.slice/dsq_vtime is deprecated" | grep 806105 | wc -l
+	42
+	# dmesg | grep "sched_ext: Writing directly to p->scx.slice/dsq_vtime is deprecated" | grep 806105 | head
+	# [806105.018400] sched_ext: Writing directly to p->scx.slice/dsq_vtime is deprecated, use scx_bpf_task_set_slice/dsq_vtime()
+	# [806105.042160] sched_ext: Writing directly to p->scx.slice/dsq_vtime is deprecated, use scx_bpf_task_set_slice/dsq_vtime()
+	# [806105.065668] sched_ext: Writing directly to p->scx.slice/dsq_vtime is deprecated, use scx_bpf_task_set_slice/dsq_vtime()
+	...
+>
+> The ops->cpu_acquire/release() warning is only emitted from validate_ops(),
+> which runs when the scheduler is registered. It's not in the runtime callback
+> path, so we should already get one warning per scheduler registration. That
+> means we don't need a warned_deprecated_cpu_rel flag.
+> 
+> For slice/dsq_vtime, the warning is emitted when the verifier sees write
+> accesses to those fields. It can fire multiple times while loading one sched_ext
+> scheduler, depending on how many such accesses the verifier observes, but this
+> also seems correct.
+> 
+> If we want to prevent potential log spam maybe we can just change those
+> pr_warn() to pr_warn_ratelimited()?
+
+Ack, let me transform these pr_warn() in pr_warn_ratelimted() then.
+
+THanks
+
