@@ -1,161 +1,180 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A54305E28
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 19:49:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782330569; cv=none; b=jmD4ESWLz56MtrkKjD7lruGz19D/8IayMiFvU4gceL0m5EoO6dctKe7zT4UA7QftKUCTctJFw65NdskkvmB+QGNQ7sL9EK9AidiNNngsimRvowrUVKU3Y1ONFC2SeVtHaq1UxvjjdnFbaw37GQN4qpMcqawu+VLY2kVqv82L9yY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782330569; c=relaxed/simple;
-	bh=0oMU3uK9IwWmaU8jQtMqaCl2EVZdYxk5BUMpcRcQof0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WiJMZ2Ot71mG1fEmKvFoLHz/y+9aJt6QRLnALS5HUW40mDJYj/Sx2y9mcSYguERk06mo99n6B+Z4j+swja2X7oHdiPv5hnXtPp0tKFqoVNRU4nTQMUscc5WxdiVIOwq6/stnPa8u/Agw0TOw0FTy2NfrtP9b2QIb4qnEUwgbPQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HQNEnNTg; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8AF350D74
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 19:54:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782330864; cv=pass; b=KJLsSiOPbeoWUwET6TyXlIoE9UKalvMHg6Gyy/GSmr3Yx7wGUN3SgLpTVtXup5cHa/d8GwcbiU7rPfR4Klz6YC7YTUjaKY6APpMtN+v7kQDKcfoLURp6l14SLh5cGYNz94el6QozKW31CIUxTl90cszilPYD/pzeeFPA10c49ZQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782330864; c=relaxed/simple;
+	bh=yGW+rfVoYBJACn5bz7D625MSTBsjlPbEBqkQTyAh0S4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=szTxte+6dxHvIt5RbhpmHJRSfFcrV94DnZwCQFH3kbk5TR9zJtTPJLNwROwHLYmVWZWp7cqQcv3+wcCGbpV4bhBq0RGOuO5AFsJf0WgoFA1HpnDT/md2ifmBPuKM8EJA2YpnyeOQ6SbxF/wGUM+uMtM5M9EXPRqSS0T/yylLI28=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZA6YQS2c; arc=pass smtp.client-ip=209.85.128.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HQNEnNTg"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-37de8008910so631382a91.0
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 12:49:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZA6YQS2c"
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-7fe723ca5e5so15956277b3.2
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 12:54:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782330861; cv=none;
+        d=google.com; s=arc-20240605;
+        b=lDbycKhj3c85g3cbvpTFL2I1swlf+PmPIjRuU5sHIjSq6ftcDe/rT1vNplRkJQLoIK
+         UNPK+CoAS1/FSLIoCXvc8eetnvIkz7YrwUD+j5G4ox4l/kcC9WwskSscQn0Lej7GMcK7
+         frX/VYRuZuj9c5A4ZtKtmtGKvnlmrSaErZrCTSjwctwg/JaOT/8+R6+d4mWYbwZWp4Dm
+         90yjSJn+b/JD5R2N2hSCasZX+5sOA7R3fiSb1T2Cf5/zC7dQXIi0voHSGn828/gZK1NU
+         g5pjEAvhl2w/QMFhpUkINgtqgQ0UpbV0pLOcOFjHO3I3yUEakUDgQ781zyhosLvEs0/y
+         R5vQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=9zi8vt2Jkqw/BXMyJ0QyA2n/KwDWooYawhwWLuXdEns=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=hQx4NKCVpprLc5A46uQHYUh4H/qa6qFzahlB1Wr7v/l2/T9WNcZt4wzhxCBq/S5QwG
+         v/4SQHThYTEIuCEJhUubKE3I2Fc31nKWctlxHSB+BNdy0O3c/vfClOT1IAuNtacbr1/p
+         3UUAc7fYdQKoJ4KHZjYtOD7XtceNj3UsXi0Xh7ne/vINSOfclBqUCxd5WeZct/CIWUKn
+         af9MCI8042u+bmYQ+lssSGSUy3CfAE8FQ1mOBimIg2zApe7TE4CW3dbr1cFffUL9vOe+
+         FbYlwtMAvwbhJBpGvg/5K1pvr9lGU+CUNeA1OX2sFQn/SI0MZ3ZOhMbpHsLkDHy9qyhG
+         5o7Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782330567; x=1782935367; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=chnBHK2BDYEEN5dW/1bTJPFgMn/1nZToeYO5HSTFJ4w=;
-        b=HQNEnNTg8jBGJKiZiCWpJkE6dHvbGfNuIDdjDHBuJNc+D95vHGbca+y3kI2s9vZMjK
-         fZzH6L5Rsn3Ij9qpe1soR9Q/j0Udef30rIBYN3qkIN0sNpF87i/XbCT17FBwZPAk6Be3
-         HlTdw0nuIBLdq+txfHnNbj9NPSA4KIJYJ6AQwzG66K3Mcm56g4KMZUXh8PXiHML29JDp
-         lPZVHf7m6vcZqhtn+34LqhIXsh2kCZhuKgMxSYP4Wzj76v/nKAcxlsRoS/Zl4G5CGFr2
-         lkaN7c0A3KfDHH4OFl3Kozwt+W9j0Q6OLfBWxRpqH31Ub1IFOFOrTWd5kIfEelLgwJe/
-         POGg==
+        d=gmail.com; s=20251104; t=1782330861; x=1782935661; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9zi8vt2Jkqw/BXMyJ0QyA2n/KwDWooYawhwWLuXdEns=;
+        b=ZA6YQS2cEhV5VAVwj4YTfMmB3XTuX4RbZYKG6jAbGyYQwtg8SZJ3FcxzZ2Kup9f4TS
+         BqtnkjX30IDAEVXpKfFQQrk0tSkhXCcUgixyDiujmKC8uuw+E1SMZV5LLViU+lm+yDmo
+         6mQ7+sc3YO+9ugRgYEe0Hw75uuHI6id2xOOBjbtUDPNfz5c4j8yyIq9QoNcZeFdkOHm1
+         zXzK3MMjaOSnm3R9BbNx80E/lSb2hkQFOwGHWzkOqs+Hb/5fmM7cbGHsWott9K+rUfrY
+         EmEvjTxO6J2sYrxPWgOL9Cp9l8JDgt+WJpeJFXZoRLmgMLOkVMV7tI5f6KSi70uC4tIF
+         mTWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782330567; x=1782935367;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=chnBHK2BDYEEN5dW/1bTJPFgMn/1nZToeYO5HSTFJ4w=;
-        b=OUYOJb4oJm8lwJVW4lZzQhU9OeqVNZAYIJBu89ZZVo814qN9rZLeCz0QjW9mn78FRk
-         QrKGevv7ITNzGRxYMIfaFscSfhTgIFJd3V9GLy8M0fDokjY5UQeE0Nkw5oHa4dqZuNFs
-         WShD0v8YDIwweHNNMAkGr1TKPx2eIWBc4Fgkx+Y7kIRhkbkpntdjyQYiDWbHwKHwa6lc
-         z2yIaChcYOW/DWZzmIXOHXtpe/1oEaDy3U6BB58sKgGkfheAPNDwBB36rZVxEJy0N7qe
-         AeC/DG6MUL4O/JX/ySfmNXZWySaihqh5FkpB1QsJPwq3dlCs0AD4p0xNkd5hYz9tEr1o
-         vDEA==
-X-Forwarded-Encrypted: i=1; AHgh+RqJ2zVyNx39mRNb4B0xrjB3dKWE0UcRRx5bdsM+Uja9CBgV+Ftea8bcIebBODpG9Z3NRNk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtOSWiQCOdZLKnhAx7lpp/g38BVyucgNszHUAuC1RagPPOzYWN
-	zyBV15G0Ws/qdprNkEswJVa2M+OBzZOZ+psPQKvbqE9FxNNs0Ri8cXCM
-X-Gm-Gg: AfdE7cnpKWrOoInyUoAtEhEotq+hOrF15tnp+lkMbhdNwAmhsxKMY2Arjg4iWIwkAOB
-	d34vUgQkm/8djduv2qTtJp1T1CCGDFY7KdRNHDDdIaJkmjtS3+9XkRkJ40LU1gAWQJy23VCKtnh
-	mkAwwzkoz3cLuTzY6ZvpE4AO/7ZUpkzCAtdMmMENiylcGJjhPSoRBFf7WcrlgF/TyCvgyFWyA0v
-	JQE69tAFRosA+gT5MlJDMYDX6n0F4Nc+QUVfm10nlleW80fmbp/eX3Cz+8MRR8MtxMRIR7Rev3/
-	WhAU/tGnbFDHtQO/yVzU1V5rIAk6HizhciumKrjMF1ydphrJMnYcVJfDdGL4ASHXUh7q92K2aJM
-	0If79A+Rat1swlR59SCSJ2AlSX67vGfdzWePXqpiq5uaeuBEFr82q/ZFX65sReyG1HWWf4ZC8pL
-	gEyLMyeiV1PCfxLrhfOuC1xxNaDfoS3O94hEj6cYYBvw==
-X-Received: by 2002:a17:90b:524a:b0:37d:f4c1:ad82 with SMTP id 98e67ed59e1d1-37df4c1aff5mr607553a91.15.1782330567098;
-        Wed, 24 Jun 2026 12:49:27 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37df3b41406sm423213a91.8.2026.06.24.12.49.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 12:49:26 -0700 (PDT)
-Message-ID: <df2bf4c0205f8c8395736c687aa4e293850311e2.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 06/17] bpf: Track verifier reference
- diagnostic events
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
- Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Wed, 24 Jun 2026 12:49:21 -0700
-In-Reply-To: <20260619205934.1312876-7-memxor@gmail.com>
-References: <20260619205934.1312876-1-memxor@gmail.com>
-	 <20260619205934.1312876-7-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+        d=1e100.net; s=20251104; t=1782330861; x=1782935661;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9zi8vt2Jkqw/BXMyJ0QyA2n/KwDWooYawhwWLuXdEns=;
+        b=Sih3GXfZGEzmdV4BYuaHrASWrwUzk5WdpEwkFvLeeF4S5ggscuonxWkjtGlGRsYG0v
+         VoE3F5rRoMB4KeyGANoN2xeahiSgid9rBBCkzUGTxvY8owly5pPcbjgTwQUm0eGWB/T6
+         gv89RqGBOyFK+XFpdX1CELTkZGxhUtOxl8qGncn2BLw3xGIxTWIp/gUPIsswWmJFB3Qc
+         Rm925Li+O4FuSATpKWC3W/u7qqAHaRmsJ1LmroKNLl/5CERB5/Y9rbQdYi1V1hHwRkK8
+         P6EobUaW7ulUeTVL0XO4+CScHGTIDmMSA5JHCV52bavFoyqcqQgQhQ5unvP9sKsIdpKU
+         gXww==
+X-Gm-Message-State: AOJu0YxDsvxnFkzWJJOGrLW3YcHkETkWgxaRiv+DraCcUT2p3fUFOnGb
+	gGwd5B0De2X+WFE1c+kxFUXTl27ctGC3JVK0Vfvtr6JkARppuy5YjzKi5zJjF4dVL1JdYOnkwxS
+	yucxZer5Grjtuxb4i4tnZSx5zHP++UHM=
+X-Gm-Gg: AfdE7cnIn1zB3d5vdVn4qZnmQPeZktKwtWUXOmZPMCsropJGX7B6qoDknZ7FpqtoC7/
+	G3pWOmHz1fKbYDylBdsk6q20pHzH2nwp/m+plxDu90gUaDGf54Z0kCHTTNRKuW4Bjvvd73660eG
+	p/V4mSY6pHOH0ok8/fkzz59E4dYVpq3wAAvKt6Qop8NbV3fZ9yZaTJvOTa7ZgJVnx7zKb5CfBXV
+	euTgDGKxv9MIv3DkEt+Vl/q4NSXKIouD206ttAq951ZciuCvk99rXg41qGwe8iwOW0IZtwh
+X-Received: by 2002:a05:690e:169e:b0:660:5b90:b426 with SMTP id
+ 956f58d0204a3-6636e53e726mr4172564d50.46.1782330860995; Wed, 24 Jun 2026
+ 12:54:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260623175006.3136053-1-ameryhung@gmail.com> <20260623175006.3136053-14-ameryhung@gmail.com>
+ <20260623235342.01B1D1F000E9@smtp.kernel.org>
+In-Reply-To: <20260623235342.01B1D1F000E9@smtp.kernel.org>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Wed, 24 Jun 2026 12:54:09 -0700
+X-Gm-Features: AVVi8CfmwNMUdiauR6BDPeoAXHl3owOZ2zx-8waBBUKlemLLZK7trk5sd6GrhxQ
+Message-ID: <CAMB2axMG5W+48gmPHZ=vgg_LT7YwostYT9NboV=J77XBCEOscQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 13/15] libbpf: Support attaching struct_ops to
+ a cgroup
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2026-06-19 at 22:59 +0200, Kumar Kartikeya Dwivedi wrote:
-> Add reference acquire and release events to diagnostic history so Resourc=
-e
-> Lifetime Safety reports can show the lifetime of a specific reference id =
-along
-> the path.
->=20
-> Record acquisitions after the verifier assigns the reference id. Record
-> releases only after release_reference_nomark() succeeds, including the
-> kptr_xchg RCU conversion path and owning-to-non-owning conversion path th=
-at
-> consume an owning reference.
->=20
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
+On Tue, Jun 23, 2026 at 4:53=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [High] bpf_map__attach_cgroup_opts() does not verify that the map has B=
+PF_F_LINK set before calling bpf_map_update_elem(), leading to unintended g=
+lobal registration of the struct_ops map.
+> --
+>
+> commit 4549a23db01bbdf38f2f884251281fc0a75a8c97
+> Author: Martin KaFai Lau <martin.lau@kernel.org>
+> Subject: Add bpf_map__attach_cgroup_opts() to attach a struct_ops map to =
+a cgroup
+>
+> This commit introduces bpf_map__attach_cgroup_opts() to allow attaching a
+> struct_ops map to a cgroup via a BPF link. It also extends
+> bpf_prog_query_opts with a type_id field to select the struct_ops type
+> during a BPF_STRUCT_OPS query.
+>
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index 1368752aa13c..17f8466e33fa 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> [ ... ]
+> > @@ -14104,6 +14104,65 @@ struct bpf_link *bpf_map__attach_struct_ops(co=
+nst struct bpf_map *map)
+> >       return &link->link;
+> >  }
+> >
+> > +struct bpf_link *bpf_map__attach_cgroup_opts(const struct bpf_map *map=
+, int cgroup_fd,
+> > +                                          const struct bpf_cgroup_opts=
+ *opts)
+> > +{
+> [ ... ]
+> > +     link =3D calloc(1, sizeof(*link));
+> > +     if (!link)
+> > +             return libbpf_err_ptr(-ENOMEM);
+> > +
+> > +     err =3D bpf_map_update_elem(map->fd, &zero, map->st_ops->kern_vda=
+ta, 0);
+>
+> [Severity: High]
+> Does this function need to verify that the map has the BPF_F_LINK flag
+> set before calling bpf_map_update_elem()?
+>
+> If a user passes a struct_ops map without the BPF_F_LINK flag to
+> bpf_map__attach_cgroup_opts(), bpf_map_update_elem() will globally
+> register the struct_ops.
+>
+> The subsequent bpf_link_create() call will then fail because
+> BPF_STRUCT_OPS links require BPF_F_LINK. This results in the struct_ops
+> remaining globally active on the system despite the API returning an erro=
+r.
+>
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Agree. bpf_map__attach_cgroup_opts() does bpf_map_update_elem() before
+bpf_link_create(). For a map without BPF_F_LINK that update takes the
+non-link path and registers the struct_ops globally, which can't be
+undone once the subsequent bpf_link_create() fails. I'll add an
+explicit BPF_F_LINK check.
 
-[...]
-
-> @@ -1536,6 +1570,20 @@ static void bpf_diag_print_stack_slot(struct bpf_v=
-erifier_env *env,
->  			       off, fmt->old_buf, fmt->new_buf);
->  }
-> =20
-> +static void bpf_diag_print_ref_event(struct bpf_verifier_env *env,
-> +				     const struct bpf_diag_history_event *event)
-> +{
-> +	if (event->kind =3D=3D BPF_DIAG_HISTORY_REF_ACQUIRE) {
-> +		bpf_diag_report_source(env, event->insn_idx, "acquired",
-> +				       "owned resource (id=3D%u)",
-> +				       event->ref.ref_id);
-> +		return;
-> +	}
-> +
-> +	bpf_diag_report_source(env, event->insn_idx, "released",
-> +			       "owned resource (id=3D%u)", event->ref.ref_id);
-
-Nit:
-
-		char *label =3D event->kind =3D=3D BPF_DIAG_HISTORY_REF_ACQUIRE ? "acquir=
-ed" : "released";
-
-		bpf_diag_report_source(env, event->insn_idx, label,
-                		       "owned resource (id=3D%u)", event->ref.ref_id);
-
-
-[...]
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index fedabb6bb515..93941deb2cd8 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[...]
-
-> @@ -9140,8 +9141,12 @@ static int release_reference(struct bpf_verifier_e=
-nv *env, int id)
->  	if (err)
->  		return err;
-> =20
-> -	if (find_reference_state(vstate, id))
-> -		WARN_ON_ONCE(release_reference_nomark(vstate, id));
-> +	if (find_reference_state(vstate, id)) {
-> +		err =3D release_reference_nomark(vstate, id);
-
-I'd say that bpf_diag_record_ref_release() should go inside
-release_reference_nomark(), but there is one odd case with
-mark_ptr_or_null_regs(). Almost like we want __release_reference_nomark().
-
-> +		WARN_ON_ONCE(err);
-> +		if (!err)
-> +			bpf_diag_record_ref_release(env, env->insn_idx, id);
-> +	}
-> =20
->  	while ((id =3D idstack_pop(idstack))) {
->  		/*
-
-[...]
+> > +     if (err && err !=3D -EBUSY) {
+> > +             free(link);
+> > +             return libbpf_err_ptr(err);
+> > +     }
+> > +
+> > +     link->link.detach =3D bpf_link__detach_struct_ops;
+> > +
+> > +     fd =3D bpf_link_create(map->fd, cgroup_fd, BPF_STRUCT_OPS, &link_=
+create_opts);
+> > +     if (fd < 0) {
+> > +             free(link);
+> > +             return libbpf_err_ptr(fd);
+> > +     }
+> > +
+> > +     link->link.fd =3D fd;
+> > +     link->map_fd =3D map->fd;
+> > +
+> > +     return &link->link;
+> > +}
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623175006.31=
+36053-1-ameryhung@gmail.com?part=3D13
