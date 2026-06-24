@@ -1,189 +1,190 @@
-Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACABC3254BB
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 16:38:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA45226ED41
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 16:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.177
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782319115; cv=pass; b=b8v0eLIoVGIr8LVuD6ahd7ikPJoFUhBqRj9i9InDiAfCkXea17gJm6Ohnf6tkbbghLMZ69XFIpVvr7gVkDsivYmPKWE/KIGAhvvyNyZIFUROS3dwY4edgmspyMEpYYKzi2w5sfV19nv5gWUGc1OWoj8Gjo9Rp3uN6BDWQVr1H7k=
+	t=1782319530; cv=pass; b=lC9UzR7Rcv3h+lK74VqHo13O3dJwj5YIxN2vc7rE/CjJlbs885uXfiF5ln0R8PJrFMfb9Z5MQUquTQk+OVFmwfKNZllTISWggngKQxMtSCRMZLUJpXYAoRrzJ91x+4QvUFUGH+jYatg9y+RkdxC0rjDs3zHhRiDAxX2/HbblFig=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782319115; c=relaxed/simple;
-	bh=H9W1dEJDPyRKl2sfdT8dO28enMeQoXfFCCRppVuhqnY=;
+	s=arc-20240116; t=1782319530; c=relaxed/simple;
+	bh=zrrYeWBHDDGWjTExsqEpofVdxdF0k85t4o5bFUXX2yk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nsBxOJhy10uXoQvRoK3M3y6BIBuVtOzL9en6Jw8rjLRFCVCY1dBWeDXlMUf4mBukZUerSRJTRoP6P7qnI8aoQId6dqoweEPijW3Q0HMOzjeEjxdBnopROSFN42e5pE63VV0zTV/zCSJ2kJdzansl7qpD8UByNY9x7DrNpZ8d9lQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dLVE/Jga; arc=pass smtp.client-ip=74.125.224.45
+	 To:Cc:Content-Type; b=pCU9btLMVqgqAY9/oGGPpgwW5EM90E4DaHhNO5nPxFiop5rifHYbJAqfSM3modHI+THfgRNUXWHAkdU4FU4GCWS4HFbqIJP9ln3AYCvid1w4VJYebeGnKEyCU4fLw9/QErNI9LgFPjKIBlJNovl8YTcFZ26dQpPDRpJ/7A6Pcq0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HhKLo4ZY; arc=pass smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dLVE/Jga"
-Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-662c360aa73so1365095d50.3
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 09:38:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782319113; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HhKLo4ZY"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2c7ebfbf2d4so5641085ad.2
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 09:45:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782319529; cv=none;
         d=google.com; s=arc-20240605;
-        b=WW0ekLGTMQMKv7xbM+H0vtJ8c7bpZ57/I5iYFmUd2Q9m3K3DZkljir1S3S2BpEYkOk
-         Y5FqRshgLNzndQchn5zFdnbJ/KNtSudceKLQrdov1OzQWYdDl5DPmobQTJtNLgQVmiBb
-         /pw9ngIw8e5/geEsrgFZedh8PuuYTQdebApGEv+o0lCRwfjPRg3y5Ql4XSZHt7ZAV41L
-         z5vurXDuSUpT8DvCCnMTbh5GKylCM+UVm5dGqJms9qO9SzWxWI0Y7tdc/vjulcEleubR
-         byLGTyjDZGqCg/JkxjHI2TW7CsXLMKfOG5mqC2NCqJhcShrg+NJ2ukgiKjMjHrAafVo7
-         1W0g==
+        b=DBYuxy2wBiNsfXAuW5vFy856J28L5sDRoUAjjUCnyHWI2tg8P3n6zYu/OwljecF4Bi
+         K0E6qLlM/OPhQz30/P+uPYhJ9bdeHlFyYZ3JVnmdqsV27COThLzG92aChz1EbdPnU5v3
+         Rve38TJs04ZeRVGZpkdhmYcEXQl1nSrp4RODsIMWMWaG/dye1RXXETuIvQb2078kDzjD
+         RA9Qyx9C+z4DHO4TWA9JIZDx7dh56mpZ+LudO+cF3tjNfVD2697edGW9KGS1CrIRxL2L
+         wJ+xaFgHA7mjAloS1ORKctsWLzPlSowacL4aYbQ+JKOtPSK3rBaAxcdsmLaF6Dygn3+b
+         FuLg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=GSu9YbZfMzCAQKitxFaYWjlM2XOAqBeVNR6Gv9gvDe8=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=JqvW5csA729++QBgtmCwMEZbWtZF4Qkn8jyGWWzCi4uJ81CuAj/Rr0c39Ad7utTC8H
-         oPD9Iw6/YxZ5VKUqdMqFafkxRzbEWw3mlBpP9xLj/6qY2MBoqZDYTajIU8VyFEUrbuI1
-         dQsAH2vrOUy6UPAjt/tVl9AUCgOYuThVDo3zmiHlzMMfNE+PkBOJkcJtu5XPl2yxi03c
-         5zkeDdXQsSvT+N7QInC0CmS14XYMxzPXaTgYeU/sgkrnMIqT6f6Mokt+hc9pEeuRwK3Z
-         dQHIlzI2ENt5kt+TJAQGqKDVjt5Je3hAIYBHS3+1W53VOZK+hzpUeIGiATrS58umGQWa
-         qVuw==;
+        bh=J6g8zlR3bX6SfriD41wvS0CpkSZcHdCCa8ZsLdTLE0Q=;
+        fh=IqI/Cp1xYGcfpyBgkhc6h3oFTMbeXOsSrhhlFByRLHg=;
+        b=ODKD0HWaQNThHdm6Vst01UJC1abe4Ltj+ShSs9gMwziImXPgQ1K94YwEmQGUoufYtR
+         jHuQNJ8Z5WXhTYlWz7CIwq8nKq15A3L2Hm+P5x7UiantnbbL9hC1XfhWtbODwEXNGql3
+         mp17itIJVvP3m/ISna4U8ZnzAETufm8C4EceJsy4xDkv53zXbQe/HGjaZXur+jvvIQ09
+         Xp7uVhxhlQPWSxHIGywNbxi+G8ptzjMzT0r1UL+1HNOA8g1qpq6gdM949C7zbmGI92h7
+         /VDHI8G0iUAgRLBpbQy3nUNXHEjGaa8wq6nXkeTN3gC+zZvnocMzQaIu3ThqR15Xx0fC
+         NTfA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782319113; x=1782923913; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782319529; x=1782924329; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GSu9YbZfMzCAQKitxFaYWjlM2XOAqBeVNR6Gv9gvDe8=;
-        b=dLVE/Jga5YP1U1N3EMJFv2Qt7GikyRus/bHpyAsjuW97fKL7ujr9cLs9Zx/3+bjkGB
-         Z4U9iDcVK1tDysMdp9onOhNb25UEC0DZQn41aOq44DJ1xrdjQFUtl8MNsn6Ugs53os0s
-         69o8JYrRPKKpOcYVKSKbbLKYstlGpnkY1n1rvUwF3fnWEHT3rqWMyHo+WhEu0KBemtOf
-         SfW6J7Ko9vYxAaLglR78hOHjvzE7GYXoz5eBJ6TPRK0i0Uof9Pl2IkN1amrSH26hl6iL
-         XImkmgFfqWwqOHSqfRPs9n8qX1RV8HgO80g6Se4uvkAOwhOLeZF0jr4fXKdxZ7qvNLDA
-         +vIw==
+        bh=J6g8zlR3bX6SfriD41wvS0CpkSZcHdCCa8ZsLdTLE0Q=;
+        b=HhKLo4ZY3enLkbc9s2V0idXE4pAKCYEwdZ/IzkuTHZfhLk2hD8mgDAEm5DbesQlRNj
+         Rvpaz3qUEclpipgpmauaul+RDKGgno5SekC9XIVPWN7Os2rUiSzyqB5AVRJFHGWix1Jh
+         8CzJcqdWnxKl1qRDr9MogsP5Ex4vEG2lvpE/HxpX6F8qrhHyd3MoLXMDa7b5Mj5krI6R
+         fv98tVEDbhgOQJhr+qCOrfG5UD4CymccVelifQxs74/9rvwSgIp9IugyWZmPAjSnusYO
+         UVYGO3O3l1SZTznM/cn4DjQDDWGhfAwUkwSyrpQOidVg0T9/gf1Bs2SeWMtgusWdojac
+         Cq7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782319113; x=1782923913;
+        d=1e100.net; s=20251104; t=1782319529; x=1782924329;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=GSu9YbZfMzCAQKitxFaYWjlM2XOAqBeVNR6Gv9gvDe8=;
-        b=FPcv4sgiY6yZqBTRBSoADrv0CiNMGgKtpMl+dmyuY9CTOQSlmllNwFp84bUotkcNPE
-         cawIrJZE9/r9Lw5F6ATvhJw4Ez9b9nm+ERIE6bnVhy/4hK//AiiEu2SMDtQVjlam2hrj
-         w1gxVgsoy42s491hfvwb3qAYswpt9mDzeUf5FHB3sW0GMf9FQzp9zdICeVIavQvd2tM+
-         GfaPC0f0Dpf+cYcDXDrRelhVhIZy5KGnBH/cvAzPcM0uyzd/OnTiKJsqvr2iDIqxDAJl
-         koLt2gYlJe4momJ0tDx1XV56Mm68DL69TvuOqz6QMT+6aRJqgEPX8NjzUUeVSGSYUT5r
-         X6zg==
-X-Gm-Message-State: AOJu0Yy4kBZKKTcV5g3SOfNkc72bkKbm7eKpyg+qS1fG1TAnCyLk5FTJ
-	olWec6AQkLe8EigPFlKt2Osb0xZEFPGnqo1BHicmglTcVugkBHptLSXA+uJivAHw7lgUEmXkMAm
-	OJp1Eif0t1WLlzbjmnGjq6GAR7yxoO70=
-X-Gm-Gg: AfdE7ckQGImRap30uZhqHhOAm2CYygycyUXAJaZv0znqGs1beh/G/567CehhJOxrClF
-	4M6Q+RN6dR2az46yCwTgx79b2PSw7UmcTmL3diwXMTz7jL5K059DNPDiobCj1EUMIdT7qvq9Sdc
-	Ql+ififd/g5eE53Ugc9GBwAm8paLBab1IldpkcYiuZpRmhsJNnsN/BU+cl/4QEolCpjQtP9tBgs
-	XJv6N5pG80Jwc/ZPGFUsU7NSYEofR2absID2qKU2P8OaBJ2Rz3g4ZPkEBJkmC7/mdbWcIOgASjS
-	cEala7M=
-X-Received: by 2002:a53:ac8d:0:b0:660:460e:2559 with SMTP id
- 956f58d0204a3-6636e423652mr3698458d50.39.1782319112490; Wed, 24 Jun 2026
- 09:38:32 -0700 (PDT)
+        bh=J6g8zlR3bX6SfriD41wvS0CpkSZcHdCCa8ZsLdTLE0Q=;
+        b=QryI8cVamnfnsBuTbtDgZEYcuKF3w0XJp66Sctz5qnRU1NvXuDzHTaUB7kg/NoEmoz
+         5yFCB+9F6oFlDxMBSDxCinQn0Sa6OM05Y2pPQjMMUAo3Aw7bopAEF3jFYOcIMrgDjPkI
+         mzZF92O5Euaz6MxIiJ6V8obXCy7UU89wDFbPpMWgbGofIR9QkNikscn/MFHYEGrUF/K1
+         J1Ja4KbiP/OR0VxsGFseJ6ewIHjq+4SbAuJp+4nGpYdqDpnuA9rNFu8nA+I8Mt9LJg/t
+         P6zoRDGTJmkJ9JuXDuwy8FlZ9LiMwvxaULVbyYffu5WeZWsLs7lQiw1Q0O8R5tJITjXE
+         sdrw==
+X-Gm-Message-State: AOJu0Yyof2SRjGdYR/BD2Kf0olkri7dxOKQBAy5SkSNmIIWhpMsi/TDN
+	xbGZMXYL+UszP251iYHOjsy9cr2L05XROzSqYqw6IhJv6E7zDr4ucDYw+sk1KT5Q/bqeYhwmty5
+	G8o1oMK1y1G8cM8V91Su2EjCabR984ns=
+X-Gm-Gg: AfdE7cm5zAnFxstLlCL2dcsYZRWaMgJFHYM3cpMNnpcLjaTtYrPHGswxB/30rlw8TUN
+	ky12gfOb0ksn4fCPsjDbUZ/d7lVXfdEho4cD0c7hSNQV7HRf4ieHn7Kr79L4DPgdNKApvbx3K3J
+	2nCKjJPEx8iefqpiGNLwyNmIwyXWi2E2yEbfDHmSOPLzrHKRqnXpezH8BWdHZNbiQ7NvGhn7c9O
+	9d9QDF1a8epc/SxNFiydzn91AZYd1STPqqr4GBYRpX8h117JBurIrrmcVUjjl/kNVh0evux+tGF
+	xn4RMFR9z8TX8O2nkoyZlIDsF4sPzGYkMyxnkUsTNdZZh/j8rV8LSY2bRD3iiLlTuU0=
+X-Received: by 2002:a17:902:dace:b0:2c0:b6c7:227e with SMTP id
+ d9443c01a7336-2c7e13bb1f5mr44272285ad.5.1782319528887; Wed, 24 Jun 2026
+ 09:45:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260623175006.3136053-1-ameryhung@gmail.com> <20260623175006.3136053-4-ameryhung@gmail.com>
- <20260623214054.909821F000E9@smtp.kernel.org>
-In-Reply-To: <20260623214054.909821F000E9@smtp.kernel.org>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Wed, 24 Jun 2026 09:38:21 -0700
-X-Gm-Features: AVVi8CcrW35Pmper7ivcINQsaPKGZjDfSdaMkwiJLsQ4RNi_3YmC0K5FQFU7oAI
-Message-ID: <CAMB2axNYMbRZcBJaa=hZEM_NU-P3SxrfMopE6zAc9DrTKW=Aww@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 03/15] bpf: Add bpf_struct_ops accessor helpers
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
+References: <20260622143557.22955-1-leon.hwang@linux.dev> <20260622143557.22955-7-leon.hwang@linux.dev>
+ <CAEf4BzZSeMSMnuYdLvEfb7-pmbthjU3J7W3QB4q9-WN_4+QrbA@mail.gmail.com> <8f06ad4d-d003-4671-9dd4-24b5c7e4b806@linux.dev>
+In-Reply-To: <8f06ad4d-d003-4671-9dd4-24b5c7e4b806@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 24 Jun 2026 09:45:15 -0700
+X-Gm-Features: AVVi8Cdf78ZgoYKESUy8YUCIw2YTyUohkT4mFfY3GqXDnAEYhtmPxYu-66MKFQU
+Message-ID: <CAEf4BzYc5n9GQEBoSs3kqzM7DuPaYuZ5q+BzXNMbrF6sV1DLmA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 06/11] libbpf: Add support for global percpu data
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-patches-bot@fb.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 23, 2026 at 2:40=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+On Tue, Jun 23, 2026 at 9:14=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
 >
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Low] The newly added bpf_struct_ops_kdata_map_id function is an exact =
-duplicate of the pre-existing bpf_struct_ops_id function.
-> --
->
-> commit d1f80ae7e459b35d14e3b364a031f8d29bf9da8e
-> Author: Martin KaFai Lau <martin.lau@kernel.org>
->
-> bpf: Add bpf_struct_ops accessor helpers
->
-> This commit adds several helper functions in bpf_struct_ops.c to be used
-> for creating a struct_ops to cgroup attachment link. It also refactors
-> link update validation into a reusable function.
->
-> > diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-> > index c422ce41873ee..1ca44584ed17c 100644
-> > --- a/kernel/bpf/bpf_struct_ops.c
-> > +++ b/kernel/bpf/bpf_struct_ops.c
->
-> [ ... ]
->
-> > @@ -1236,7 +1236,33 @@ int bpf_struct_ops_for_each_prog(const void *kda=
-ta,
-> >  }
-> >  EXPORT_SYMBOL_GPL(bpf_struct_ops_for_each_prog);
+> On 24/6/26 06:45, Andrii Nakryiko wrote:
+> > On Mon, Jun 22, 2026 at 7:37=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
+v> wrote:
+> [...]
+> >> @@ -5353,6 +5387,13 @@ bpf_object__populate_internal_map(struct bpf_ob=
+ject *obj, struct bpf_map *map)
+> >>                         return err;
+> >>                 }
+> >>                 map->mmaped =3D mmaped;
+> >> +       } else if (is_percpu) {
+> >> +               if (mprotect(map->mmaped, mmap_sz, PROT_READ)) {
+> >> +                       err =3D -errno;
+> >> +                       pr_warn("map '%s': failed to mprotect() conten=
+ts: %s\n",
+> >> +                               bpf_map__name(map), errstr(err));
+> >> +                       return err;
+> >> +               }
 > >
-> > -static bool bpf_struct_ops_valid_to_reg(struct bpf_map *map)
-> > +void *bpf_struct_ops_map_kdata(struct bpf_map *map)
-> > +{
-> > +     struct bpf_struct_ops_map *st_map;
-> > +
-> > +     st_map =3D container_of(map, struct bpf_struct_ops_map, map);
-> > +     return st_map->kvalue.data;
-> > +}
-> > +
-> > +u32 bpf_struct_ops_kdata_map_id(void *kdata)
-> > +{
-> > +     struct bpf_struct_ops_value *kvalue =3D
-> > +             container_of(kdata, struct bpf_struct_ops_value, data);
-> > +     struct bpf_struct_ops_map *st_map =3D
-> > +             container_of(kvalue, struct bpf_struct_ops_map, kvalue);
-> > +
-> > +     return st_map->map.id;
-> > +}
+> > hm... do we need to do this? what happens for LIBBPF_MAP_KCONFIG, do
+> > we just null out the initial image? should we just do that here?
+> > Basically what I am asking is how important it is to access initial
+> > per-CPU image after load? What's the realistic use case for that?
+> >
 >
-> [Severity: Low]
-> This isn't a bug, but does bpf_struct_ops_kdata_map_id() duplicate the
-> pre-existing bpf_struct_ops_id() function?
+> This was suggested by you in v3:
+> https://lore.kernel.org/bpf/CAEf4BzY9KeVeo2+6Ht1v3rL6UdwNxABZCSK1OZ_sD8qh=
+pYZaeQ@mail.gmail.com/
 >
-> Looking at bpf_struct_ops_id() which is already exported in the same file=
-:
->
-> u32 bpf_struct_ops_id(const void *kdata)
-> {
->         struct bpf_struct_ops_value *kvalue;
->         struct bpf_struct_ops_map *st_map;
->
->         kvalue =3D container_of(kdata, struct bpf_struct_ops_value, data)=
-;
->         st_map =3D container_of(kvalue, struct bpf_struct_ops_map, kvalue=
-);
->
->         return st_map->map.id;
-> }
->
-> Both functions perform the exact same series of container_of macros to re=
-trieve
-> the id from the map field of a bpf_struct_ops_map. The only difference is=
- the
-> parameter type (void * vs const void *). Could the external caller direct=
-ly
-> invoke the already exported bpf_struct_ops_id() instead of adding this ne=
-w
-> helper?
 
-Yes. I missed the same comment in v1 also raised by sashiko. I will
-remove bpf_struct_ops_kdata_map_id().
+ah, the dangling pointer in skeleton that needs clearing, I forgot
+already :) ok, I don't mind mprotect(), it just was a new case that no
+other map followed, so I was curious if we can avoid deviations. But
+that brings back the KCONFIG map question, can you please check what's
+happening for it? Maybe we should do the same mprotect instead of
+dangling pointer (if we have dangling pointer, of course).
 
+> >>         } else if (map->mmaped) {
+> >>                 munmap(map->mmaped, mmap_sz);
+> >>                 map->mmaped =3D NULL;
+> >> @@ -10806,16 +10847,19 @@ int bpf_map__fd(const struct bpf_map *map)
+> >>
+> >>  static bool map_uses_real_name(const struct bpf_map *map)
+> >>  {
+> >> -       /* Since libbpf started to support custom .data.* and .rodata.=
+* maps,
+> >> -        * their user-visible name differs from kernel-visible name. U=
+sers see
+> >> -        * such map's corresponding ELF section name as a map name.
+> >> -        * This check distinguishes .data/.rodata from .data.* and .ro=
+data.*
+> >> -        * maps to know which name has to be returned to the user.
+> >> +       /*
+> >> +        * Since libbpf started to support custom .data.*, .rodata.* a=
+nd
+> >> +        * .percpu.* maps, their user-visible name differs from
+> >> +        * kernel-visible name. Users see such map's corresponding ELF=
+ section
+> >> +        * name as a map name. This check distinguishes plain .data/.r=
+odata/.percpu
+> >> +        * from .data.*, .rodata.* and .percpu.* to choose which name =
+to return.
+> >>          */
+> >>         if (map->libbpf_type =3D=3D LIBBPF_MAP_DATA && strcmp(map->rea=
+l_name, DATA_SEC) !=3D 0)
+> >>                 return true;
+> >>         if (map->libbpf_type =3D=3D LIBBPF_MAP_RODATA && strcmp(map->r=
+eal_name, RODATA_SEC) !=3D 0)
+> >>                 return true;
+> >> +       if (map->libbpf_type =3D=3D LIBBPF_MAP_PERCPU && strcmp(map->r=
+eal_name, PERCPU_SEC) !=3D 0)
+> >> +               return true;
+> >
+> > um... this is extra logic for DATA/RODATA is supposed to be backwards
+> > compatible legacy stuff. We shouldn't need this for PERCPU_SEC. It
+> > should actually be called just ".percpu", not "<object_name>.percpu".
+> >
+> Understand the backwards compatibility after reading the comment in
+> internal_map_name().
 >
-> > +
-> > +void *bpf_struct_ops_map_cfi_stubs(struct bpf_map *map)
-> > +{
-> > +     struct bpf_struct_ops_map *st_map;
-> > +
-> > +     st_map =3D container_of(map, struct bpf_struct_ops_map, map);
-> > +     return st_map->st_ops_desc->st_ops->cfi_stubs;
-> > +}
+> Will drop this hunk, and set "map->name" as ".percpu" in
+> bpf_object__init_internal_map().
 >
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623175006.31=
-36053-1-ameryhung@gmail.com?part=3D3
+> Thanks,
+> Leon
+>
