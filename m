@@ -1,35 +1,36 @@
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447EF301704;
-	Wed, 24 Jun 2026 02:51:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5163016FB;
+	Wed, 24 Jun 2026 02:51:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782269489; cv=none; b=sVOHGu0w4r8QMTIiKZITM3NmNXg9yP5ZpEhgFIvcnRrXZ7JlHKEolId6xM17urD94mAyVCcRMbEs2+NbpSb/mtKXmo+8mRypFM4sbpXWARPSeOO7oOQbYofGTvNNvD+cJs6uIXAZfbZCryGe12Ndq+MeBkPBOIAFSu4Gxbmi5TU=
+	t=1782269494; cv=none; b=nL9jEkgFL4fpwCQu/PthCtYGW3KlZBNQznQjUxGNUQDH0h9HLvbKvX+J83LIqKsr2EqWmE2nGcAM7gv4igq+RcYIoGs4W9virq74KRelU4DP0ERJOdgRZ0vKYcHGf7OUkARb93YgqPHwv2RKNrUYNtj/ZJis+PeHQUPcqx+E2x4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782269489; c=relaxed/simple;
-	bh=YuQBgLGrwbt5NNoK2TXmxbbRe+g0od69APdfoxypd00=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sSm7brmN/mZKTyWP5lZHe3s/FrhlJMqTVPSQIAQkheZ2PFeut4Xwxh6HslvSXKc1abKHmrCBS+83hR22R4fnNXyrLHkJGdiBHZdZjcceL6WxvOIY/nxIlIAMbisqwcK8ER8NUM/lX9wWQTPNwyVftPbOtGYh+y/Z+1SMj+SVWRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=oCG29XjO; arc=none smtp.client-ip=54.254.200.92
+	s=arc-20240116; t=1782269494; c=relaxed/simple;
+	bh=fPIVqSJCcsQScP7TwUl9phR8iELY/moKdlQw1aH1uJk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=SfajpxD8b4WIzt87vUtX1eOElwvGGUaFhFZuNxnLjQCBgAmrz5YfzyWwZv6y1Ms8p3ADwYiaXF11ew9VKxzc7coiYPBxbsvvTd12r50LdIhakbwizhtVre4jOYBZaV08szuHxO0d/i7ry89C52kfK9g2rQigjNzxZQIq4JQHMns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=nNI1FJRE; arc=none smtp.client-ip=54.204.34.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="oCG29XjO"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="nNI1FJRE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1782269477;
-	bh=8NInJpv0Z8RquFijf09Q/SEffYTUfzHVXU/Cv1tWaYg=;
+	s=onoh2408; t=1782269483;
+	bh=5yxN/1IvKThw1JjCQd/IZSHv2Hia7xyKRgYH0O7xbk8=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=oCG29XjOuKVkXdISkAwfytG9z2pdbWRtYrYl2wIWgCNkolBq75TNpaphW82UruVW9
-	 FkxTNelntFZWts7p4qRrx0LM39I4PbMnsXZClEu0Us6mGcZzrMuvzCi+aci9AvtDrE
-	 9biSGBJbE6GlmKdsA+Jxyx+OvluLHs0XWrhRN4+U=
-X-QQ-mid: zesmtpsz7t1782269460t4de4c060
-X-QQ-Originating-IP: sWVUMBflyXRMWaj25iJXY4fXP6QKPyR7u/cQONtP1aU=
+	b=nNI1FJRE3iFmmiWMDiWyKirR3WvrgHoc7WaTRrLfWqKfYRLnN0s/8zCrMMXiHZO+9
+	 hlROGqDeNKryLvSrAMLOqj0p1FKrQDXYYs81aTeSNvyoGdmlDnV1GWCr7mPa3j3HZR
+	 dXRM1NXQd0bSYPG4A5vFCBDYB4HobXvb97UA6VD8=
+X-QQ-mid: zesmtpsz7t1782269466tb05932f9
+X-QQ-Originating-IP: g+DCklIsC0piJMh3ka51JXJyT44tBqh6xQ1mjjnfyT4=
 Received: from Shurima ( [113.57.152.160])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 24 Jun 2026 10:50:57 +0800 (CST)
+	id ; Wed, 24 Jun 2026 10:51:02 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 12875591471964563957
+X-BIZMAIL-ID: 3230630873348648636
 EX-QQ-RecipientCnt: 15
 From: Yichong Chen <chenyichong@uniontech.com>
 To: emil@etsalapatis.com,
@@ -47,10 +48,12 @@ Cc: chenyichong@uniontech.com,
 	jiayuan.chen@linux.dev,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 0/2] tools/bpf/bpftool: Fix vmlinux BTF state cleanup
-Date: Wed, 24 Jun 2026 10:50:53 +0800
-Message-ID: <12A35C14DA710D2E+20260624025055.1574875-1-chenyichong@uniontech.com>
+Subject: [PATCH v4 1/2] tools/bpf/bpftool: Reset vmlinux BTF after map commands
+Date: Wed, 24 Jun 2026 10:50:54 +0800
+Message-ID: <9072F43B3F74DF91+20260624025055.1574875-2-chenyichong@uniontech.com>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260624025055.1574875-1-chenyichong@uniontech.com>
+References: <20260624025055.1574875-1-chenyichong@uniontech.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -60,55 +63,89 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: MXqQCeYgv6iWDTzphdTGrXuSd6UJqE2dG8r5TPx0ixU+8PS67HRGsn4a
-	LTZPZNHu1iELBSf1uJbB549GSAFToa8/cahUecLRFkcojj8/xwAMsmQgVEqa3ITfgmsrqR6
-	ZwAzsbOx01jKYHgiTTWxJG0bE49LdwoUBSEaxl0JW7zxnnBe3WAEAfpOcUK/3DDNZC8oXJ/
-	CK8/EGHQDyLZOvdurb+sF8R4tkO0FBFUCaPxak5hDYat0CtR0cc9/p8lq/H9eGW4DvU8scK
-	yANgNP9inp6ApBZxVKMxdMqawCxeXXQwwZkM+zdr0drnrG4AASHzit5XYjpeei1xy9Ys5pY
-	SrZIkwcin1gIKoex4ptdzxPU+hsfeXBL5BUiDFSA2Zc0ruGQRystAP6byn4Cig3ZVkHNnkF
-	r2tLahpLi7R1Q8h9LxcDFWpMIpQ8QXjn6K6nq7WrmTMeygjBsHszX7tvTeuukGGAQb16Mgq
-	4UMsDSTkrKP8krGU+cXmrn08+fUncpjprB6/t4SI83Xxp80P052+MBYHmsf9SdDPxOhhIvv
-	IODXusxhRZ6d8PNEP65HW0ATNJKvihmnbEd93znUUlPC7jHzVGJ726+GiKWXB7KfMai6YXT
-	v4rYqZMem25PKG2aRBkdRX0xAdyJ3Rw2qHPFj86LaASVmkMqAMyaZX68198jWLgUVnQJCh7
-	vC9cOf4WtIovnzg+r0Oe6ygn7QqeQwruv3GEYODYDWgcAsKcUas5pn/P6V4w99X3+/Jqdyh
-	1d/ZObz4M4Czulfczj5SwNd/CYcZ+5TldsvsKsYYM8lWZr0AAxRs8dbb/jAxpha3NmtwKH9
-	xkoUp8zC9lSsuW4sC5lqOOjEl+dg3UyeLRx8SD5z3SzgFHelY6ITalyfqiw6hAgvG56EUuo
-	KLzt3W6vqtqqYz1zsllSXTWG65hKPhml6a3Cks/K89xz3+EiFfqkiXkYfMutC2toEpguzhv
-	4gPiZBszb6gThikuI+gi2M7ptq4EXM4JRWw1zP5JaC8BEXumuSA2eAfa25z8P1F834MsL4Y
-	QMKDz3JA9DnBM2IM3dK5xSv2uXS4b08lih+gpekmxwitajOeRr8grHTw8Av1uLDuL3KbHaY
-	RsydPXZapD5P2b+EBXOzME=
-X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+X-QQ-XMAILINFO: MSyoPQEuxKCufXIAQmOtfcb0ubui4IBKhnp7POCzjyEGqgLBioo/QjrR
+	5ewTDviRy15qivWEh9HDnEst6Yq9f2B9OjjweA48OfiYv9Jm39UI+zxM21nlU+yUT9wZzOm
+	3Na/4ZZpbBaVXRnvCffA61szCkGjrWTuSSw0yIefY9dK+gajdH1sFbnxNLNLAh4nG+tZKSu
+	2KAhJ9W30nE7usZzZ3F2tyvF6jfYOaT5gJxgMxcU611eTTX2+q/m6FJfnieHPvrYysrd/Dt
+	D38DXgoSF/t3LBSzIsJ7O0beqrAcmg43h+15b5hzNCdqcdANrjAfOfylaE2gBRm6/wfHGQ/
+	PD0kDkuLFoSAb6tDlWawiJ4REvmA1OJRfYigLSvpSG9IbWWMr7BGXVcX+ai/xCoBq/rqLZb
+	rH8rP3OCNrax6hiHGVnzpx99UPRInQxyWIlqBu/TiTlPnGf4+MtQ76afcV1qG7MhO+5EMC9
+	m0vJjt8LbpIm1n7cKUUnCbrtxFxw1VdbeGZdAOn3NWaQBhgyJHy6viOldXDqoEAiypBe/LP
+	WAyHbekRq34nORpKIvqeRh39urc8XZdzTVsV3Wez/TF86jCRShAL/dEkhPoUUnbyQryLv44
+	+AHa6JLAErjRjhgBcfRN2Leipxj7iNVvXQHbMegScEsCyNFhsCEXJ7GJQfBXbkSVkeAYhXP
+	MCZsKOb5utFBH1ZuYdZ0ZpVWpHlojmIPTinFJFNqY/37iTW6+7bL1+w5m0sTIPGZYuftybF
+	9OgLqipmt2n1WCxXG7MfXVnBLUkqXWFE9oWYV/Cww7Dpfliz0oFC8ylpipFkm5o/W8xcAW7
+	/j3qAcNCeZueFVLGuVaUCq/3HDS+Jy3dl66PI6vjd7NpEt06DkGe10hl8cbr2Exof2xnE9Q
+	LViiQaRQazlvTY++51K2/xLCuNQq8Bk6UN8KyCOn8qK7JNLHmC66OFk8hjBIU6sbhRGNMKD
+	e7nznI8GTlqgS1kwVtuXb7EZ5up3MVzyAJMsojQW0kVEr7H3ulm7554dHSdLQ7BVyiR5tSx
+	sLY8way8CYsyncbG8qPuHFSJL2Mb7eJdoJNdXVeqV3lwdAVDpocgoJIFTVB1sQISbX0NWrR
+	hRsOGFtM2SMmpHG6C1m/3E=
+X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
 X-QQ-RECHKSPAM: 0
 
-This series fixes stale vmlinux BTF state in bpftool batch mode.
+get_map_kv_btf() caches the vmlinux BTF object when a map uses
+btf_vmlinux_value_type_id. map dump released that object when the
+command completed, but left the global pointer stale.
 
-Patch 1 resets the map command cached vmlinux BTF pointer when the
-command releases it, and avoids freeing the cached object from the
-map lookup path.
+The same cached object can also be returned to print_key_value(), which
+freed it directly. That leaves btf_vmlinux dangling before the command
+cleanup path runs.
 
-Patch 2 resets the struct_ops command cached vmlinux BTF pointer and
-dependent cached map info state after each struct_ops command.
+Use free_map_kv_btf() for per-entry cleanup, and reset the cached
+btf_vmlinux pointer when the map command releases the object. This keeps
+batch mode from reusing a freed BTF object.
 
-Changes in v4:
-- Add Emil's Reviewed-by tag to patch 1.
-- Inline the struct_ops cleanup instead of adding a helper.
+Fixes: 4e1ea33292ff ("bpftool: Support dumping a map with btf_vmlinux_value_type_id")
+Signed-off-by: Yichong Chen <chenyichong@uniontech.com>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+---
+ tools/bpf/bpftool/map.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-Changes in v3:
-- Add Fixes tags to both patches.
-
-Changes in v2:
-- Fold the map lookup path fix into patch 1.
-- Update patch 1 subject and commit message to cover map commands
-  rather than only map dump.
-
-Yichong Chen (2):
-  tools/bpf/bpftool: Reset vmlinux BTF after map commands
-  tools/bpf/bpftool: Reset vmlinux BTF after struct_ops commands
-
- tools/bpf/bpftool/map.c        | 12 +++++++++---
- tools/bpf/bpftool/struct_ops.c |  4 ++++
- 2 files changed, 13 insertions(+), 3 deletions(-)
-
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index 7ebf7dbcfba4..a265ad3afbb0 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -790,6 +790,12 @@ static int maps_have_btf(int *fds, int nb_fds)
+ 
+ static struct btf *btf_vmlinux;
+ 
++static void free_btf_vmlinux(void)
++{
++	btf__free(btf_vmlinux);
++	btf_vmlinux = NULL;
++}
++
+ static int get_map_kv_btf(const struct bpf_map_info *info, struct btf **btf)
+ {
+ 	int err = 0;
+@@ -958,7 +964,7 @@ static int do_dump(int argc, char **argv)
+ 		close(fds[i]);
+ exit_free:
+ 	free(fds);
+-	btf__free(btf_vmlinux);
++	free_btf_vmlinux();
+ 	return err;
+ }
+ 
+@@ -1049,7 +1055,7 @@ static void print_key_value(struct bpf_map_info *info, void *key,
+ 		btf_wtr = get_btf_writer();
+ 		if (!btf_wtr) {
+ 			p_info("failed to create json writer for btf. falling back to plain output");
+-			btf__free(btf);
++			free_map_kv_btf(btf);
+ 			btf = NULL;
+ 			print_entry_plain(info, key, value);
+ 		} else {
+@@ -1065,7 +1071,7 @@ static void print_key_value(struct bpf_map_info *info, void *key,
+ 	} else {
+ 		print_entry_plain(info, key, value);
+ 	}
+-	btf__free(btf);
++	free_map_kv_btf(btf);
+ }
+ 
+ static int do_lookup(int argc, char **argv)
 -- 
 2.51.0
 
