@@ -1,180 +1,190 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8AF350D74
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 19:54:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782330864; cv=pass; b=KJLsSiOPbeoWUwET6TyXlIoE9UKalvMHg6Gyy/GSmr3Yx7wGUN3SgLpTVtXup5cHa/d8GwcbiU7rPfR4Klz6YC7YTUjaKY6APpMtN+v7kQDKcfoLURp6l14SLh5cGYNz94el6QozKW31CIUxTl90cszilPYD/pzeeFPA10c49ZQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782330864; c=relaxed/simple;
-	bh=yGW+rfVoYBJACn5bz7D625MSTBsjlPbEBqkQTyAh0S4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=szTxte+6dxHvIt5RbhpmHJRSfFcrV94DnZwCQFH3kbk5TR9zJtTPJLNwROwHLYmVWZWp7cqQcv3+wcCGbpV4bhBq0RGOuO5AFsJf0WgoFA1HpnDT/md2ifmBPuKM8EJA2YpnyeOQ6SbxF/wGUM+uMtM5M9EXPRqSS0T/yylLI28=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZA6YQS2c; arc=pass smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3709B383C7C
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 20:01:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782331273; cv=none; b=RFbhci7Wo7ckDVjc52w+fW+GfcHVheuLT5XCIw53f2i1kJy8pLzqQDtCXh4uyhs/rPoyY0SW3ozw9LCJwZ3SVpYE2YdooQCxVSUvGLPzw+Au8muwNG0XsxScPI/yYdj0GpnHR3tr9Kml8pb2GITD8BsxQMVX8eNT0RJY9smkAFU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782331273; c=relaxed/simple;
+	bh=EKxSlgEBSBkAM5+htBMrWemn3+ErZ8FA7IixhRa/dSI=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=gCpxx2V44rERmvTqlf2Sy3T9XFFfYszu0CPqyvgHTzcdTkEjc5tP06nur9VMyhUBahwKD5xALHdhJ/8ExoCgfphIhpy5+gN3qf+Ouc016U4VCxT9H3MoKXVDWk9NCNXfQFhMqENKL123v+n1gweiNrfgA2hn1WIeG2hbVEe7h9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZwdMobqj; arc=none smtp.client-ip=74.125.224.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZA6YQS2c"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-7fe723ca5e5so15956277b3.2
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 12:54:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782330861; cv=none;
-        d=google.com; s=arc-20240605;
-        b=lDbycKhj3c85g3cbvpTFL2I1swlf+PmPIjRuU5sHIjSq6ftcDe/rT1vNplRkJQLoIK
-         UNPK+CoAS1/FSLIoCXvc8eetnvIkz7YrwUD+j5G4ox4l/kcC9WwskSscQn0Lej7GMcK7
-         frX/VYRuZuj9c5A4ZtKtmtGKvnlmrSaErZrCTSjwctwg/JaOT/8+R6+d4mWYbwZWp4Dm
-         90yjSJn+b/JD5R2N2hSCasZX+5sOA7R3fiSb1T2Cf5/zC7dQXIi0voHSGn828/gZK1NU
-         g5pjEAvhl2w/QMFhpUkINgtqgQ0UpbV0pLOcOFjHO3I3yUEakUDgQ781zyhosLvEs0/y
-         R5vQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=9zi8vt2Jkqw/BXMyJ0QyA2n/KwDWooYawhwWLuXdEns=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=hQx4NKCVpprLc5A46uQHYUh4H/qa6qFzahlB1Wr7v/l2/T9WNcZt4wzhxCBq/S5QwG
-         v/4SQHThYTEIuCEJhUubKE3I2Fc31nKWctlxHSB+BNdy0O3c/vfClOT1IAuNtacbr1/p
-         3UUAc7fYdQKoJ4KHZjYtOD7XtceNj3UsXi0Xh7ne/vINSOfclBqUCxd5WeZct/CIWUKn
-         af9MCI8042u+bmYQ+lssSGSUy3CfAE8FQ1mOBimIg2zApe7TE4CW3dbr1cFffUL9vOe+
-         FbYlwtMAvwbhJBpGvg/5K1pvr9lGU+CUNeA1OX2sFQn/SI0MZ3ZOhMbpHsLkDHy9qyhG
-         5o7Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZwdMobqj"
+Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-66319257aa1so1780910d50.2
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 13:01:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782330861; x=1782935661; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1782331271; x=1782936071; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9zi8vt2Jkqw/BXMyJ0QyA2n/KwDWooYawhwWLuXdEns=;
-        b=ZA6YQS2cEhV5VAVwj4YTfMmB3XTuX4RbZYKG6jAbGyYQwtg8SZJ3FcxzZ2Kup9f4TS
-         BqtnkjX30IDAEVXpKfFQQrk0tSkhXCcUgixyDiujmKC8uuw+E1SMZV5LLViU+lm+yDmo
-         6mQ7+sc3YO+9ugRgYEe0Hw75uuHI6id2xOOBjbtUDPNfz5c4j8yyIq9QoNcZeFdkOHm1
-         zXzK3MMjaOSnm3R9BbNx80E/lSb2hkQFOwGHWzkOqs+Hb/5fmM7cbGHsWott9K+rUfrY
-         EmEvjTxO6J2sYrxPWgOL9Cp9l8JDgt+WJpeJFXZoRLmgMLOkVMV7tI5f6KSi70uC4tIF
-         mTWg==
+        bh=X2A8EKBL3N7BN+s6tAkTzPMXNdRY8rqNJI+vtC/7pCo=;
+        b=ZwdMobqjUPsGo8LE+n+nM5S8ddB2K481rM2YXvRTlZ505ci9yGifHg+gt5MYNxfMPB
+         S+L0gDss0iYi9r1lYUDac8g86JTt+88aGXWL1x2Jpx4WoRWJjOS787sM0YBHvbbJltPx
+         yW6t/b1RNv256eGRL47SKNFYsSi3Fno6nU2/FElT8xzozEIOU6w9iOBvw+uMBL/c+Tms
+         cGLK26Nya42GtqrkIrO0MEjwvmWcRQUxmLaThPXj9sOKFbT5fZ3rBhRu9v177IUk9OXb
+         dRAgQH+mD8GX5N3W0phJvSPehqQExV4MLN43I1JFZvSBXWLA2IgqSmhgtCyt2bicuxXy
+         UDYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782330861; x=1782935661;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9zi8vt2Jkqw/BXMyJ0QyA2n/KwDWooYawhwWLuXdEns=;
-        b=Sih3GXfZGEzmdV4BYuaHrASWrwUzk5WdpEwkFvLeeF4S5ggscuonxWkjtGlGRsYG0v
-         VoE3F5rRoMB4KeyGANoN2xeahiSgid9rBBCkzUGTxvY8owly5pPcbjgTwQUm0eGWB/T6
-         gv89RqGBOyFK+XFpdX1CELTkZGxhUtOxl8qGncn2BLw3xGIxTWIp/gUPIsswWmJFB3Qc
-         Rm925Li+O4FuSATpKWC3W/u7qqAHaRmsJ1LmroKNLl/5CERB5/Y9rbQdYi1V1hHwRkK8
-         P6EobUaW7ulUeTVL0XO4+CScHGTIDmMSA5JHCV52bavFoyqcqQgQhQ5unvP9sKsIdpKU
-         gXww==
-X-Gm-Message-State: AOJu0YxDsvxnFkzWJJOGrLW3YcHkETkWgxaRiv+DraCcUT2p3fUFOnGb
-	gGwd5B0De2X+WFE1c+kxFUXTl27ctGC3JVK0Vfvtr6JkARppuy5YjzKi5zJjF4dVL1JdYOnkwxS
-	yucxZer5Grjtuxb4i4tnZSx5zHP++UHM=
-X-Gm-Gg: AfdE7cnIn1zB3d5vdVn4qZnmQPeZktKwtWUXOmZPMCsropJGX7B6qoDknZ7FpqtoC7/
-	G3pWOmHz1fKbYDylBdsk6q20pHzH2nwp/m+plxDu90gUaDGf54Z0kCHTTNRKuW4Bjvvd73660eG
-	p/V4mSY6pHOH0ok8/fkzz59E4dYVpq3wAAvKt6Qop8NbV3fZ9yZaTJvOTa7ZgJVnx7zKb5CfBXV
-	euTgDGKxv9MIv3DkEt+Vl/q4NSXKIouD206ttAq951ZciuCvk99rXg41qGwe8iwOW0IZtwh
-X-Received: by 2002:a05:690e:169e:b0:660:5b90:b426 with SMTP id
- 956f58d0204a3-6636e53e726mr4172564d50.46.1782330860995; Wed, 24 Jun 2026
- 12:54:20 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782331271; x=1782936071;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X2A8EKBL3N7BN+s6tAkTzPMXNdRY8rqNJI+vtC/7pCo=;
+        b=h9Ee6zyBQElCPzHQ5Q5hf+e2oVzd8kGBb1HUkxkwEOpeviGLEXqbEXcmIXaY1A0rdf
+         NG7+GweYwIuI7fTZVIMzW2GtEvm8YO74tEkGAcDgn48iOZ7texlddNvvdZVotFI7N1X2
+         FkCHuRLxUqHgdphNwf+7oElI4B2Sadwwwn2nYo796PfC1gpfo7V786zXym6xh4Zh0dqe
+         36g4ZP/OWHjyJ+PlhUDm48Gw9FL+jaEg8teicjwWNmw3CtKLcf9ugi78221m983KM9G/
+         lBmSd66IGncAGj3T8bEDkWSVddLDvRSuXcHJ77zqchqlp4cujPhZDbSvo1bpYHMw6/Kx
+         d3rw==
+X-Forwarded-Encrypted: i=1; AHgh+RpR3R3yDa+nnPacTQtadvz8NKKk2O1SXsWxE3vvrFXQNIsUO8+dDclTuj7w8yYN1hdhIzs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzswREgK7RHx12IMxH8p/xOp9Na8LcF4JzdUx3H8xuVdOeH683o
+	J9U0Fl/yDEUfFLvrUgVjUJU+NEwmLz0DevwexVnmxbAhet3MHRpqxgEv
+X-Gm-Gg: AfdE7cnt36/4fi/tP099NBLYHZAK2V+Rj0/IwhqQZby/+KLX9wwc3AL3gf1eozZDbf3
+	tKgweE1P+qlZGAPt6HQvdm1c+bioYyD1oKsWcHQ3GzV67O8XXg2TDWapXJjmgtLXN34sh1lniJq
+	VPw6Jh8EAW9MxNYeOO+PpHulVCTwTJm4aThgEvxIag21I31rA8Y43Rg/95zNqaMPTj//s2DubE0
+	rFMj9TLh9CqcfoROZvd//4smHFl8ds7c+6i5fyT4hQmqxZz1ZM7mdWJtpxhQV21UgHvZJCEFqAc
+	4K/TWYw641HU/lHjeO5gg1OUSiHdfqponzPorzLC2dzPwrJXr9JBh1SA37y9LA+EyFYY2OZtthI
+	z3grk6B1koduaPrCjrfTpmTHMUpfUA0+etXO29yHWqe8AV2qMpHK4IcaDu6ZyDf4fWV2HH8Y/9L
+	PEz4ah37z/ce4neQXlUX/GcsBHW2urV1ppBdX1azRUnlsyWUzEdVe4hjhcKUlSOncQG/Jc
+X-Received: by 2002:a05:690e:1909:b0:660:56ee:ebf1 with SMTP id 956f58d0204a3-6636e489415mr4425430d50.22.1782331270986;
+        Wed, 24 Jun 2026 13:01:10 -0700 (PDT)
+Received: from gmail.com (141.139.145.34.bc.googleusercontent.com. [34.145.139.141])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6647f99b601sm351024d50.20.2026.06.24.13.01.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2026 13:01:10 -0700 (PDT)
+Date: Wed, 24 Jun 2026 16:01:09 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Sitnicki <jakub@cloudflare.com>, 
+ Michal Luczaj <mhal@rbox.co>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, 
+ Jiayuan Chen <jiayuan.chen@linux.dev>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>, 
+ Cong Wang <cong.wang@bytedance.com>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Shuah Khan <shuah@kernel.org>, 
+ netdev@vger.kernel.org, 
+ bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ kuniyu@google.com
+Message-ID: <willemdebruijn.kernel.24d11e11d5dc0@gmail.com>
+In-Reply-To: <87wlvoxdq1.fsf@cloudflare.com>
+References: <20260623-sockmap-lookup-udp-leak-v1-0-05804f9308e4@rbox.co>
+ <20260623-sockmap-lookup-udp-leak-v1-1-05804f9308e4@rbox.co>
+ <87wlvoxdq1.fsf@cloudflare.com>
+Subject: Re: [PATCH bpf 1/2] bpf, sockmap: Don't leak UDP socks on
+ lookup-bind-release
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260623175006.3136053-1-ameryhung@gmail.com> <20260623175006.3136053-14-ameryhung@gmail.com>
- <20260623235342.01B1D1F000E9@smtp.kernel.org>
-In-Reply-To: <20260623235342.01B1D1F000E9@smtp.kernel.org>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Wed, 24 Jun 2026 12:54:09 -0700
-X-Gm-Features: AVVi8CfmwNMUdiauR6BDPeoAXHl3owOZ2zx-8waBBUKlemLLZK7trk5sd6GrhxQ
-Message-ID: <CAMB2axMG5W+48gmPHZ=vgg_LT7YwostYT9NboV=J77XBCEOscQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 13/15] libbpf: Support attaching struct_ops to
- a cgroup
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jun 23, 2026 at 4:53=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [High] bpf_map__attach_cgroup_opts() does not verify that the map has B=
-PF_F_LINK set before calling bpf_map_update_elem(), leading to unintended g=
-lobal registration of the struct_ops map.
-> --
->
-> commit 4549a23db01bbdf38f2f884251281fc0a75a8c97
-> Author: Martin KaFai Lau <martin.lau@kernel.org>
-> Subject: Add bpf_map__attach_cgroup_opts() to attach a struct_ops map to =
-a cgroup
->
-> This commit introduces bpf_map__attach_cgroup_opts() to allow attaching a
-> struct_ops map to a cgroup via a BPF link. It also extends
-> bpf_prog_query_opts with a type_id field to select the struct_ops type
-> during a BPF_STRUCT_OPS query.
->
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index 1368752aa13c..17f8466e33fa 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> [ ... ]
-> > @@ -14104,6 +14104,65 @@ struct bpf_link *bpf_map__attach_struct_ops(co=
-nst struct bpf_map *map)
-> >       return &link->link;
-> >  }
+Jakub Sitnicki wrote:
+> On Tue, Jun 23, 2026 at 08:03 PM +02, Michal Luczaj wrote:
+> > UDP sockets get SOCK_RCU_FREE set when (auto-)bound. This means
+> > sk_is_refcounted(unbound) = true, while sk_is_refcounted(bound) = false.
 > >
-> > +struct bpf_link *bpf_map__attach_cgroup_opts(const struct bpf_map *map=
-, int cgroup_fd,
-> > +                                          const struct bpf_cgroup_opts=
- *opts)
-> > +{
-> [ ... ]
-> > +     link =3D calloc(1, sizeof(*link));
-> > +     if (!link)
-> > +             return libbpf_err_ptr(-ENOMEM);
+> > Because sockmap accepts unbound UDP sockets, a BPF program can increment a
+> > socket's refcount via lookup. If the socket is subsequently bound, the
+> > transition from unbound to bound causes bpf_sk_release() to skip the
+> > decrement of the refcount, causing a memory leak.
+> >
+> > unreferenced object 0xffff88810bc2eb40 (size 1984):
+> >   comm "test_progs", pid 2451, jiffies 4295320596
+> >   hex dump (first 32 bytes):
+> >     7f 00 00 01 7f 00 00 01 d2 04 1b b7 04 d2 00 00  ................
+> >     02 00 01 40 00 00 00 00 00 00 00 00 00 00 00 00  ...@............
+> >   backtrace (crc bdee079d):
+> >     kmem_cache_alloc_noprof+0x557/0x660
+> >     sk_prot_alloc+0x69/0x240
+> >     sk_alloc+0x30/0x460
+> >     inet_create+0x2ce/0xf80
+> >     __sock_create+0x25b/0x5c0
+> >     __sys_socket+0x119/0x1d0
+> >     __x64_sys_socket+0x72/0xd0
+> >     do_syscall_64+0xa1/0x5f0
+> >     entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> >
+> > Maintain balanced refcounts across sk lookup/release: (re-)set
+> > SOCK_RCU_FREE on proto update to treat the socket (whether bound or
+> > unbound) as not requiring a refcount increment on (a RCU protected) lookup.
+> >
+> > Fixes: 0c48eefae712 ("sock_map: Lift socket state restriction for datagram sockets")
+> > Signed-off-by: Michal Luczaj <mhal@rbox.co>
+> > ---
+> > Note: this issue is related to commit 67312adc96b5 ("bpf: reject unhashed
+> > sockets in bpf_sk_assign").
+> > ---
+> >  net/ipv4/udp_bpf.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
+> > index ad57c4c9eaab..970327b59582 100644
+> > --- a/net/ipv4/udp_bpf.c
+> > +++ b/net/ipv4/udp_bpf.c
+> > @@ -173,6 +173,9 @@ int udp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
+> >  	if (sk->sk_family == AF_INET6)
+> >  		udp_bpf_check_v6_needs_rebuild(psock->sk_proto);
+> >  
+> > +	/* Treat all sockets as non-refcounted, regardless of binding state. */
+> > +	sock_set_flag(sk, SOCK_RCU_FREE);
 > > +
-> > +     err =3D bpf_map_update_elem(map->fd, &zero, map->st_ops->kern_vda=
-ta, 0);
->
-> [Severity: High]
-> Does this function need to verify that the map has the BPF_F_LINK flag
-> set before calling bpf_map_update_elem()?
->
-> If a user passes a struct_ops map without the BPF_F_LINK flag to
-> bpf_map__attach_cgroup_opts(), bpf_map_update_elem() will globally
-> register the struct_ops.
->
-> The subsequent bpf_link_create() call will then fail because
-> BPF_STRUCT_OPS links require BPF_F_LINK. This results in the struct_ops
-> remaining globally active on the system despite the API returning an erro=
-r.
->
+> >  	sock_replace_proto(sk, &udp_bpf_prots[family]);
+> >  	return 0;
+> >  }
+> 
+> There is a side effect that an unhashed (unbound) UDP socket can now be
+> selected in sk_lookup with bpf_sk_assign.
 
-Agree. bpf_map__attach_cgroup_opts() does bpf_map_update_elem() before
-bpf_link_create(). For a map without BPF_F_LINK that update takes the
-non-link path and registers the struct_ops globally, which can't be
-undone once the subsequent bpf_link_create() fails. I'll add an
-explicit BPF_F_LINK check.
+The commit does mention a related fix, beneath the ---, commit
+67312adc96b5 ("bpf: reject unhashed sockets in bpf_sk_assign").
+That fixes a similar issue by exactly disallowing this:
 
-> > +     if (err && err !=3D -EBUSY) {
-> > +             free(link);
-> > +             return libbpf_err_ptr(err);
-> > +     }
-> > +
-> > +     link->link.detach =3D bpf_link__detach_struct_ops;
-> > +
-> > +     fd =3D bpf_link_create(map->fd, cgroup_fd, BPF_STRUCT_OPS, &link_=
-create_opts);
-> > +     if (fd < 0) {
-> > +             free(link);
-> > +             return libbpf_err_ptr(fd);
-> > +     }
-> > +
-> > +     link->link.fd =3D fd;
-> > +     link->map_fd =3D map->fd;
-> > +
-> > +     return &link->link;
-> > +}
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260623175006.31=
-36053-1-ameryhung@gmail.com?part=3D13
+    Fix the problem by rejecting unhashed sockets in bpf_sk_assign().
+    This matches the behaviour of __inet_lookup_skb which is ultimately
+    the goal of bpf_sk_assign().
+
+So ..
+
+> Though perhaps that's for the
+> better because TC bpf_sk_assign doesn't reject non-refcounted UDP
+> sockets either, so we would have both socket dispatch sites behave the
+> same way.
+
+.. there are two conflicting types of consistency here? Consistent with
+__inet_lookup_skb or the TC bpf hook. Of those the first is the more
+canonical.
+
+> Also, with this patch, if we insert & remove an unhashed UDP socket
+> into/from a sockmap, we end up with an unhashed non-refcounted UDP
+> socket. Not entirely sure if that is actually a problem or not.
+> 
+> Willem, what is your take on having unhashed non-refcoted UDP sockets?
+
+I don't immediately see a problem, but I'm not an expert on SOCK_RCU_FREE.
+
