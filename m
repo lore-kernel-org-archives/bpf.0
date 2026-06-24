@@ -1,156 +1,161 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE883B47D7
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 13:36:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC40230BD9
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 13:41:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782308171; cv=none; b=Td+kpJ4PgCLXYsPy2hojO0j/yK5RLezR02T2ClmcsaqCrxlk1mdK00OpiwfbT9gJ29Z7WPxngSLfpmffEcQpkiYF9BdhoxkXUasAdUzQ07a1TzUqZv6lNM/tIyjYK9tr9KvkNPyTS6/92A50B0rDPkjZMV2yjbTMeAO00nNxXTc=
+	t=1782308498; cv=none; b=hO7F6k7HDdGPGxpplCkopNblZNDBplmgF9Ek7H6HnL0tk0NcP27An+TE/ISgPxX08PdW5RFbFplrdthS7PmyI+SwL9ApUDl69sgJ2kQR7h/tUwIqnAg0ugQkb19q6C2YKDQzDXqCwmxnh5V8NG8ejVCa173KYy3RmrQ7f0g+y3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782308171; c=relaxed/simple;
-	bh=i/PjI4m04aPw0PQLU5HQ2rF0LE8MVaue1ZoAwrK1SYE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=tixXYjiD9gkzET5XH7V/tbc4G4Bv6r2l3Z6DyxKsieuDhiZXCM/5J4WoVR/LxndHyylExrKIu9bRkjk9Ps+TVyxNk56YycdKu1vGVvQykCmpNH0tgiul6paNLCoetx2JUhETYyeZ7VWK0Z7CDx1qp9EmPpApJxuHTwQnAgKxGdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=HpUn2zPj; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1782308498; c=relaxed/simple;
+	bh=V4baC9XDLxXBojAV6zUUjxYzzXqcwXtx1rIYrUbzjew=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gD0Cm2/qi6fhwlUsyVK7SU4+ilSYYz9IYj0KhMnVn0NNW2r0NsvKqhb4abQKbf3pM+i/+oPi7/KW74+LQ+uv7ZZt//PGdI4yHxjuZlXv7t+WOoH2YMM0yebRq8LiYzOltD6xXIrtsKspCWg4gJwt/55h4Gl6ib5QojTUpM8qXQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ojTLct+B; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=jsl310v6; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ojTLct+B; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=jsl310v6; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="HpUn2zPj"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-697763eeafcso1638468a12.3
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 06:36:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1782308167; x=1782912967; darn=vger.kernel.org;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RvxFHr+pWEoc4bhYu8JwbhnPbjylaRVmeM2W41MKswU=;
-        b=HpUn2zPjP4mX6UAQRBTOkdF3i/ZQkh+OBP5R9zfZr4UV1ikejir6e27iIYyUjgSoOE
-         dydBVdYbDakXnIAcNbvMc34cqvyItyiDGLgHyWZYHJtDf9DtE2KY0rh1VqcQec7BPaQ7
-         VO+r1TEbGMNQKxrGX+7HcqyAcfIiuuvNi/7fzx5DKIZqi/sBPKIJDmxbUIX/2+IbgcwX
-         kPFggf+LXSmiiQUrgfNAjgv31sEpcUndyONlCE+p2mhtJIQtfUaqhLC6uJUe5A9f1NRe
-         vw0/X/Yc2ZSTrTtGxeHoSKuvUYx2yYk5yQJOYr1NbY6f/8kXw3/STbSUZ3WFKpYNolsl
-         xCHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782308167; x=1782912967;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=RvxFHr+pWEoc4bhYu8JwbhnPbjylaRVmeM2W41MKswU=;
-        b=geEkJLDw265aQPNejS8D/fQs3mV5AAAWVEMI+NXj1AHosixoQkJt2tSkLVlfeR0GYg
-         9F1a+mh3evRPa6z5j3BnC06k0M4PVdXcafnRNu3H9798MM1p6Qn3+GKMiJWqLWT7xSHa
-         CTrMI+1mS4c53B5das1rz2tX3c8FAjRzo1bhYmYghZk6koJs+qLuZB/1Uix3JHj1cK2w
-         AodpFQzzyJIJuuCNr2KYF6WUDyYsjU30Ih/Rxa84TG7zYso7HYK4dHuxtbZRqbmlXTeb
-         Qxr0D5wvs9zMs89md8cixyUGWkKwKpE501RtftZP7Bro+J6OK2Fkq519sHo/oePh5ayt
-         JTjQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpLVWCwtZR53v68OcSc7G3KEWwiD3oeeBnQZMR0lPcnenS9fmHxV1nYYfiSe0nt6vZDrbg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/nz6vjBdRPdj9ZyG5rrs1t3i5lbBeMNyuN51GIIYtT/UGvNtj
-	ShGdb7rFpm+DujBp5QJ5zMwbVLtziT8xTykEnSOZmiLUSGV+mc/SqwU055BOowcv41I=
-X-Gm-Gg: AfdE7cl0oTiNb8Sd1ADd1IiDSz05zGfL/Tr1btb9AY+uzpFIp+1ewWOuW0QLHe3PnrU
-	2SiQkAYkKpHOEKyVcc9Z0rLpP18fNkvvXaAF1X9ZN7vumvxqXLZbuGVEgmE/2eSJET0rNEEEQxF
-	ucWW+89ZhTmnUc4pHKXheiGAFzuDOI+VP6KSwfrDdzX7rZND0spyotKyI+XmaX/+WoJJUM1ul81
-	fXD0Yzy/9elb1gwGd7fs7LUOVtpsWMBGHbs+D7lXFN7CNq09tYuqMKhLtMQvkA9itF0QTgJt08h
-	cGN8D6uFAdOQrZkRH9vpKj18tnMVcMO6chXdippIs5eur0og/yezwGP0IirCM/q4oc9m/qOPnVV
-	r3WKgCwDfzdbxQ0qosJdM1TkruILdIsnfZ6+w9k5ZmWrsBsSEAT1Ls0RR4WG2eE6KTmYzS5gvWT
-	EyY5BySeuXcgIwCzc=
-X-Received: by 2002:a05:6402:1e91:b0:697:de64:ae9a with SMTP id 4fb4d7f45d1cf-697f376fafamr1997570a12.6.1782308167524;
-        Wed, 24 Jun 2026 06:36:07 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-697f4bd36adsm1202161a12.27.2026.06.24.06.36.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 06:36:07 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Michal Luczaj <mhal@rbox.co>, Willem de Bruijn
- <willemdebruijn.kernel@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>,  Jiayuan Chen
- <jiayuan.chen@linux.dev>,  "David S. Miller" <davem@davemloft.net>,  Eric
- Dumazet <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo
- Abeni <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Alexei
- Starovoitov <ast@kernel.org>,  Cong Wang <cong.wang@bytedance.com>,
-  Daniel Borkmann <daniel@iogearbox.net>,  Andrii Nakryiko
- <andrii@kernel.org>,  Eduard Zingerman <eddyz87@gmail.com>,  Kumar
- Kartikeya Dwivedi <memxor@gmail.com>,  Martin KaFai Lau
- <martin.lau@linux.dev>,  Song Liu <song@kernel.org>,  Yonghong Song
- <yonghong.song@linux.dev>,  Jiri Olsa <jolsa@kernel.org>,  Emil Tsalapatis
- <emil@etsalapatis.com>,  Shuah Khan <shuah@kernel.org>,
-  netdev@vger.kernel.org,  bpf@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf 1/2] bpf, sockmap: Don't leak UDP socks on
- lookup-bind-release
-In-Reply-To: <20260623-sockmap-lookup-udp-leak-v1-1-05804f9308e4@rbox.co>
-	(Michal Luczaj's message of "Tue, 23 Jun 2026 20:03:09 +0200")
-References: <20260623-sockmap-lookup-udp-leak-v1-0-05804f9308e4@rbox.co>
-	<20260623-sockmap-lookup-udp-leak-v1-1-05804f9308e4@rbox.co>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Wed, 24 Jun 2026 15:36:06 +0200
-Message-ID: <87wlvoxdq1.fsf@cloudflare.com>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ojTLct+B";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="jsl310v6";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ojTLct+B";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="jsl310v6"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id F2F8971425;
+	Wed, 24 Jun 2026 13:41:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1782308485; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sR3sJGwujfNLRWW+1TBYQaHSIL+b0DW9aOFZ/atPQkc=;
+	b=ojTLct+B6Q134cNmxEmKnlNW4Pb1dd55qKYAkyXLnMwKcccVDVIAbU53kcQXsWUTFNxcZU
+	f3AbFAVyVqVrPvoh/v1yXrWpnaZg1fGcg77FzYPvMRF/JM06fkneXi6LHW0hCO0+sKSA3t
+	+gcNyr7zjUk1MLR5OIZYRAhlxe+cWA8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1782308485;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sR3sJGwujfNLRWW+1TBYQaHSIL+b0DW9aOFZ/atPQkc=;
+	b=jsl310v6c3qVx+TvswUZhMgyeTEJklTDi6CIYB/IJ9khWjX18P2wLJVMQVkAAHNFRDtTjH
+	3W6gTUn2NJX1VlCg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1782308485; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sR3sJGwujfNLRWW+1TBYQaHSIL+b0DW9aOFZ/atPQkc=;
+	b=ojTLct+B6Q134cNmxEmKnlNW4Pb1dd55qKYAkyXLnMwKcccVDVIAbU53kcQXsWUTFNxcZU
+	f3AbFAVyVqVrPvoh/v1yXrWpnaZg1fGcg77FzYPvMRF/JM06fkneXi6LHW0hCO0+sKSA3t
+	+gcNyr7zjUk1MLR5OIZYRAhlxe+cWA8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1782308485;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sR3sJGwujfNLRWW+1TBYQaHSIL+b0DW9aOFZ/atPQkc=;
+	b=jsl310v6c3qVx+TvswUZhMgyeTEJklTDi6CIYB/IJ9khWjX18P2wLJVMQVkAAHNFRDtTjH
+	3W6gTUn2NJX1VlCg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 22AC3779A8;
+	Wed, 24 Jun 2026 13:41:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id FeK3BIPeO2q0FQAAD6G6ig
+	(envelope-from <pfalcato@suse.de>); Wed, 24 Jun 2026 13:41:23 +0000
+Date: Wed, 24 Jun 2026 14:41:20 +0100
+From: Pedro Falcato <pfalcato@suse.de>
+To: "Harry Yoo (Oracle)" <harry@kernel.org>
+Cc: Vlastimil Babka <vbabka@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>, 
+	David Rientjes <rientjes@google.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Clark Williams <clrkwllms@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett <josh@joshtriplett.org>, 
+	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>, 
+	Zqiang <qiang.zhang@linux.dev>, Suren Baghdasaryan <surenb@google.com>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, 
+	bpf@vger.kernel.org
+Subject: Re: [PATCH for-next v3 2/9] mm/slab, slub_kunit: register kprobe to
+ trigger _nolock APIs
+Message-ID: <ajvczSpMOGWFhe30@pedro-suse>
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-2-70a54f3775bb@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260615-kfree_rcu_nolock-v3-2-70a54f3775bb@kernel.org>
+X-Spam-Flag: NO
+X-Spam-Score: -3.80
+X-Spamd-Result: default: False [-3.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[30];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	R_RATELIMIT(0.00)[to_ip_from(RLg9nrgqsibwm9ympc34uc4grz)];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,linux-foundation.org,linux.dev,gentwo.org,google.com,gmail.com,linutronix.de,goodmis.org,nvidia.com,joshtriplett.org,efficios.com,kvack.org,vger.kernel.org,lists.linux.dev];
+	RCVD_TLS_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+X-Spam-Level: 
 
-On Tue, Jun 23, 2026 at 08:03 PM +02, Michal Luczaj wrote:
-> UDP sockets get SOCK_RCU_FREE set when (auto-)bound. This means
-> sk_is_refcounted(unbound) = true, while sk_is_refcounted(bound) = false.
->
-> Because sockmap accepts unbound UDP sockets, a BPF program can increment a
-> socket's refcount via lookup. If the socket is subsequently bound, the
-> transition from unbound to bound causes bpf_sk_release() to skip the
-> decrement of the refcount, causing a memory leak.
->
-> unreferenced object 0xffff88810bc2eb40 (size 1984):
->   comm "test_progs", pid 2451, jiffies 4295320596
->   hex dump (first 32 bytes):
->     7f 00 00 01 7f 00 00 01 d2 04 1b b7 04 d2 00 00  ................
->     02 00 01 40 00 00 00 00 00 00 00 00 00 00 00 00  ...@............
->   backtrace (crc bdee079d):
->     kmem_cache_alloc_noprof+0x557/0x660
->     sk_prot_alloc+0x69/0x240
->     sk_alloc+0x30/0x460
->     inet_create+0x2ce/0xf80
->     __sock_create+0x25b/0x5c0
->     __sys_socket+0x119/0x1d0
->     __x64_sys_socket+0x72/0xd0
->     do_syscall_64+0xa1/0x5f0
->     entry_SYSCALL_64_after_hwframe+0x76/0x7e
->
-> Maintain balanced refcounts across sk lookup/release: (re-)set
-> SOCK_RCU_FREE on proto update to treat the socket (whether bound or
-> unbound) as not requiring a refcount increment on (a RCU protected) lookup.
->
-> Fixes: 0c48eefae712 ("sock_map: Lift socket state restriction for datagram sockets")
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> ---
-> Note: this issue is related to commit 67312adc96b5 ("bpf: reject unhashed
-> sockets in bpf_sk_assign").
-> ---
->  net/ipv4/udp_bpf.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
-> index ad57c4c9eaab..970327b59582 100644
-> --- a/net/ipv4/udp_bpf.c
-> +++ b/net/ipv4/udp_bpf.c
-> @@ -173,6 +173,9 @@ int udp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
->  	if (sk->sk_family == AF_INET6)
->  		udp_bpf_check_v6_needs_rebuild(psock->sk_proto);
->  
-> +	/* Treat all sockets as non-refcounted, regardless of binding state. */
-> +	sock_set_flag(sk, SOCK_RCU_FREE);
-> +
->  	sock_replace_proto(sk, &udp_bpf_prots[family]);
->  	return 0;
->  }
+On Mon, Jun 15, 2026 at 08:05:56PM +0900, Harry Yoo (Oracle) wrote:
+> Since kmalloc_nolock() always fails in NMI and hardirq contexts on
+> PREEMPT_RT, slub_kunit cannot properly test _nolock() APIs.
+> 
+> Register a kprobe pre-handler to invoke kmalloc_nolock() and
+> kfree_nolock() in the middle of the slab allocator. However, do not
+> register the handler on UP kernels [1].
 
-There is a side effect that an unhashed (unbound) UDP socket can now be
-selected in sk_lookup with bpf_sk_assign. Though perhaps that's for the
-better because TC bpf_sk_assign doesn't reject non-refcounted UDP
-sockets either, so we would have both socket dispatch sites behave the
-same way.
+Maybe explain in the commit message why that is?
+ 
+> To attach the pre-handler while s->cpu_sheaves->lock or n->list_lock
+> is held, add a wrapper function for lockdep_assert_held() that calls
+> a no-op function slab_attach_kprobe_locked() on debug builds. The
 
-Also, with this patch, if we insert & remove an unhashed UDP socket
-into/from a sockmap, we end up with an unhashed non-refcounted UDP
-socket. Not entirely sure if that is actually a problem or not.
+Why lockdep? Wouldn't it make more sense to add these triggers after
+locking these locks?
 
-Willem, what is your take on having unhashed non-refcoted UDP sockets?
+> function is optimized away when neither CONFIG_PROVE_LOCKING nor
+> CONFIG_DEBUG_VM is selected and register_kprobe() fails.
+> 
+> The function calls barrier() to prevent the compiler from optimizing
+> away its callsites. Otherwise, the compiler may consider the function
+> does not have any side effect and remove callsites.
+
+My wider comment is the following: this looks very useful but perhaps should
+be lifted to Kunit itself? There's already function redirection (which could
+be used for this as well). I don't know if that suits your purposes?
+Choosing to say "I want to hook this random function using kprobe and give
+it custom behavior" sounds lovely for all sorts of testing.
+
+-- 
+Pedro
