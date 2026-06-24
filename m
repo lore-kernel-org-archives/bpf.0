@@ -1,88 +1,78 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D290713B7AE;
-	Wed, 24 Jun 2026 21:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA84E28D8D0
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 21:58:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782337805; cv=none; b=Jj2eC1m5hjyXr13eOXT9J15P7bTc7v2n0QT0hwDtrYQ89ROuKz1sKNzmMZWvmnrbm8gWNR1Sw9e2fi+8aGMOGf6ap5z3XqddnU82gBvwwul6KL1ukuNNukSmyylHMl4FrEDvieyoOW7s8AXS8AnWkONAaE9RdKm5psOdLg9t6ME=
+	t=1782338337; cv=none; b=HjkFpvI1vS9s01bsnSe1PX9c5JARpBEIj8VDsa89Gi9COPqDa7fPNCGbGMRpKKbF9ioD/BkeV9w1ENJWVkAMClFF2PAKQp5ndKW2ju0BviSWRfSnMQ2SbID0lHtsQ2Np5W06xzSPIdBmwi7GsqDub2N6yH2Jh/2bkHqmW5Y6UyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782337805; c=relaxed/simple;
-	bh=iG783dtOhFEuzZOm/uX3mLYVGqFljne8fQtBXrV9r0M=;
+	s=arc-20240116; t=1782338337; c=relaxed/simple;
+	bh=u6KB/aQRjtRyaDPBAhCjbndKCOsNWyShdAA5uAsRHNg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PoxHAT3OoB+GP8ALa+qPRPzoN0IYUg71+yhpIr7DIMzLz9KeXP6k8QfIj0XDeswl98X8oMswlQ7od7mfJlcU7QK6p9ghH8ZzqFDj1GJav7Nmyt/mtaCCYbYx2xKsURIfu/sIg386Q4cOK7NN6wqwNcgav4t8BoDUQcwASPvPKes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hmL4E3Yr; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=tkXbFU6K6Tkone+/FlPxZ7+Rp2uNGCCsstkrOanfO/Dnv6nnA3J4GWdyr0LbUETjFilvD7j+jjWVTkobkI/wRycTCGopmuOIruQaIvK4mm79iN5J4rwVvsNm9AkbG9JaI/vIYgHEPsFiljDn+YV5K07Gm0SP+j0wnBeribMV69c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gbCTZXP/; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hmL4E3Yr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782337804; x=1813873804;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iG783dtOhFEuzZOm/uX3mLYVGqFljne8fQtBXrV9r0M=;
-  b=hmL4E3YriX7mrnIR/fpkCZVj7qBIxK13OyuXBFCbJWHqFdYrTKac3K0K
-   du8C/9deFHtoaO+jBo+h6CkymU0tX7mdlm7BuWlMnrVhM5yHnCtT7PbuP
-   9FDJkz7W4ltCY3LRLDqb0usDMk/JYoxyFPjVUBf6IoUWusqDKhq6ORBcW
-   EUEK0dUmu+muYdJJRfdTXU/Bk4GUg2p4TFJysDnmqwGUHu+XkHLa0v/lo
-   QfHzhAUkKC/bUE1neCc/rhb+FCQ6/jDa6h86XDEHa9dfDEZkN4ihf0LlO
-   DW4GRvpWoXJnVHEhLVNV3K+e28IvfD/LfBVJnMx5hXirLEqBMA4i3bgrV
-   g==;
-X-CSE-ConnectionGUID: SuqTNehCTm6+ma9PhwCBkg==
-X-CSE-MsgGUID: BFL+aJInQVO2XnAbAsVABA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11827"; a="82881635"
-X-IronPort-AV: E=Sophos;i="6.24,223,1774335600"; 
-   d="scan'208";a="82881635"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2026 14:50:04 -0700
-X-CSE-ConnectionGUID: 9k7nQU13RXCIold5uacmXw==
-X-CSE-MsgGUID: ThShJhaySDOjX6gHyPEOPQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,223,1774335600"; 
-   d="scan'208";a="274230416"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2026 14:50:02 -0700
-Date: Wed, 24 Jun 2026 14:49:55 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	David Kaplan <david.kaplan@amd.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gbCTZXP/"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4903d730b1fso16686285e9.2
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 14:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782338334; x=1782943134; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pZBTGaYLCBIBUPlxKggwg9gC0pqSaTNynGlDCKqwrYI=;
+        b=gbCTZXP/V8yXX1oaWoENgHYVJ9Ahq2ZZFPUfPXn+FKMKG3FaFidP34s4PCIi1mhWcc
+         BNqMnCvxyzxTpQW9Ro/I+2d7huBQWIAKbS+ios6HpzCkl7VQV7SIzVD8aLNdw2qPAFmV
+         Lo7B4BxSooDzP2rF7U6u2/hI1qElZulcWRWIKHwGTSA20cY11tWnNGVxCvcXhPtN7zKh
+         5BBebvjdS8E7TZt/Ghb+H+pWqQlAT3QXlHL4U4Og3HUVZ+dd1ZIV21fjj0GvdicIqzEk
+         ipMGsP5oKdUykcCrDNbgxOHe27AdQONvg6tAXA1wF7zxa1fz9e72u6O5Qxfc+g/rYlBD
+         1NPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782338334; x=1782943134;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pZBTGaYLCBIBUPlxKggwg9gC0pqSaTNynGlDCKqwrYI=;
+        b=CBe+gHZmTTfr/KQ9xmEOLB/9jeVcByM/8QeoRRPJoajRJL5CGEsOJYIQWsdKPjm8xw
+         1KuiweU1lR3FmKF4gbHSKOOiWGdql4DuK6dzQ33KB3NOg1aQoO4dsYRjQskRneutwIZG
+         jvCvBZpnbTmNYT8ryRyjMBXR6JL+VtJO606E+U16DmKt9Vd8ZGW8h5RdhIl1WL0CthDG
+         7SnZD+/IlglnxJtTNPQfuU+WRebwuPsEQOLmhdyYjHvVt038fXbFByi6cMcUHchCeGYq
+         X/DC79FsK4Lm/0yEtfHkVRuXRxe5FINq4fUed6Vb2rwaSrVPimxIEy6CX24iSmHTKh+U
+         Lx0Q==
+X-Gm-Message-State: AOJu0YzIjPLDGhX/0pEMQhStLO2GasCUxw1bmjgXnIprHKiFL+ZN4atf
+	GSuxA6xdKbIBz/CJ8brWP+sXf5d98oFQrZxWmJokTkVkBkGxGjXe3Lil
+X-Gm-Gg: AfdE7cnFKcsudd5H1Qr5KErx1orDDce2w08CXwiguIahe0ev/AxMi5R9FxIHeYDOdmO
+	/zOI00aDEomwDGxV0NkezhkkKCeD+oQbsJDW8Tmju9qdJ2krYIcboEYwdVJ8mMu4J/tkGMpuuVC
+	RnJPNNCre9nYVn2C+Bgg+jo4hzv1+NGgj4Gfmxwb5DFEaxRFKsWk2uhBo0wkPSrfDQ2neMYcV57
+	KybEK7l5ZBq8jTpbmxa5j2NAsChWBfXeCkrA65PnE3fIe+ZHM2tzaJYBYIN+fFZh6tMuAfk+fvY
+	l+igYEzcHserz9xS4uig5bUpXxMxm2ew0MRoiMn5yg+SRYFW0Oo+dGR4SC0NfDxBrwH3KM4lLa5
+	2pr5UBj0wXf2UKKzQO8fVnPlevV+KbwkP+mYjlaSLQ+OfvxxTDW2Pr59fOOddfflZMBO+hgX04M
+	Adf8d9yzAzdhYPj5yKCHPR0HxvrhmobaeMVggM0yHLFhtt4Eg2DxZSfuRhdCy7GWm7mnmw1cRqT
+	fMYmDKZgIm5l6yV41gNtgHHS47H3J6MS9YpbriV8z0ImoSUb3SoIVnNjVkoq8cCa+st7ZYszjpM
+	n+xkAwlqUbmzpurnPiWlnjQAdD6XBBec
+X-Received: by 2002:a05:600c:1906:b0:490:d38c:7836 with SMTP id 5b1f17b1804b1-4926084aa9fmr73761465e9.3.1782338334090;
+        Wed, 24 Jun 2026 14:58:54 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e0046ffccb749d01d87.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:46ff:ccb7:49d0:1d87])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46c1ee018e8sm10741158f8f.11.2026.06.24.14.58.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2026 14:58:53 -0700 (PDT)
+Date: Wed, 24 Jun 2026 23:58:51 +0200
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Jordan Rife <jordan@jrife.io>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Jason Baron <jbaron@akamai.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	Asit Mallick <asit.k.mallick@intel.com>,
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v12 07/12] static_call: Define
- EXPORT_STATIC_CALL_FOR_MODULES()
-Message-ID: <20260624214955.6kkivefeuapcocib@desk>
-References: <20260622-vmscape-bhb-v12-0-76cbda0ae3e5@linux.intel.com>
- <20260622-vmscape-bhb-v12-7-76cbda0ae3e5@linux.intel.com>
- <ajvUp_kPJBRZ7k_p@google.com>
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>
+Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Support BPF_F_EGRESS with
+ bpf_redirect_peer
+Message-ID: <ajxTGwDo3VLnehWG@mail.gmail.com>
+References: <20260618182035.43811-1-jordan@jrife.io>
+ <20260618182035.43811-2-jordan@jrife.io>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -91,101 +81,114 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ajvUp_kPJBRZ7k_p@google.com>
+In-Reply-To: <20260618182035.43811-2-jordan@jrife.io>
 
-On Wed, Jun 24, 2026 at 05:59:19AM -0700, Sean Christopherson wrote:
-> On Tue, Jun 23, 2026, Pawan Gupta wrote:
-> > There is EXPORT_STATIC_CALL_TRAMP() that hides the static key from all
-> > modules. But there is no equivalent of EXPORT_SYMBOL_FOR_MODULES() to
-> > restrict symbol visibility to only certain modules.
-> > 
-> > Add EXPORT_STATIC_CALL_FOR_MODULES(name, mods) that wraps both the key and
-> > the trampoline with EXPORT_SYMBOL_FOR_MODULES(), allowing only a limited
-> > set of modules to see and update the static key.
-> > 
-> > The immediate user is KVM, in the following commit.
-> > 
-> > checkpatch reported below warnings with this change that I believe don't
-> > apply in this case:
-> > 
-> >   include/linux/static_call.h:219: WARNING: Non-declarative macros with multiple statements should be enclosed in a do - while loop
-> >   include/linux/static_call.h:220: WARNING: EXPORT_SYMBOL(foo); should immediately follow its function/variable
-> > 
-> > Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> > Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> > ---
-> >  include/linux/static_call.h | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> > 
-> > diff --git a/include/linux/static_call.h b/include/linux/static_call.h
-> > index 78a77a4ae0ea..b610afd1ed55 100644
-> > --- a/include/linux/static_call.h
-> > +++ b/include/linux/static_call.h
-> > @@ -216,6 +216,9 @@ extern long __static_call_return0(void);
-> >  #define EXPORT_STATIC_CALL_GPL(name)					\
-> >  	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name));			\
-> >  	EXPORT_SYMBOL_GPL(STATIC_CALL_TRAMP(name))
-> > +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
-> > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods);		\
-> > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_TRAMP(name), mods)
-> >  
-> >  /* Leave the key unexported, so modules can't change static call targets: */
-> >  #define EXPORT_STATIC_CALL_TRAMP(name)					\
-> > @@ -276,6 +279,9 @@ extern long __static_call_return0(void);
-> >  #define EXPORT_STATIC_CALL_GPL(name)					\
-> >  	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name));			\
-> >  	EXPORT_SYMBOL_GPL(STATIC_CALL_TRAMP(name))
-> > +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
-> > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods);		\
-> > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_TRAMP(name), mods)
-> >  
-> >  /* Leave the key unexported, so modules can't change static call targets: */
-> >  #define EXPORT_STATIC_CALL_TRAMP(name)					\
-> > @@ -346,6 +352,8 @@ static inline int static_call_text_reserved(void *start, void *end)
-> >  
-> >  #define EXPORT_STATIC_CALL(name)	EXPORT_SYMBOL(STATIC_CALL_KEY(name))
-> >  #define EXPORT_STATIC_CALL_GPL(name)	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name))
-> > +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
-> > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods)
-> >  
-> >  #endif /* CONFIG_HAVE_STATIC_CALL */
+On Thu, Jun 18, 2026 at 11:20:32AM -0700, Jordan Rife wrote:
+> We have several use cases where a pod injects traffic into the datapath
+> of another so that the traffic appears to have originated from that
+> pod. One such use case is a synthetic flow generator which injects
+> synthetic traffic into a pod's datapath to enable dynamic probing and
+> debugging. Another is a transparent proxy where connections originating
+> from one pod are redirected towards another which proxies that
+> connection. The new connection is bound to the IP of the original pod
+> using IP_TRANSPARENT and its traffic is injected into that pod's
+> datapath and handled as if it had originated there. This can be used for
+> mTLS, etc.
 > 
-> Drat, I forgot about this.  Exporting static call trampolines for KVM came up in
-> another conversation[*].  I had already put together patches to effectively default
-> to exporting only the trampoline, and also to deduplicate this code so that the
-> CONFIG_HAVE_STATIC_CALL_INLINE=y / CONFIG_HAVE_STATIC_CALL=y / CONFIG_HAVE_STATIC_CALL=n
-> implementations don't need to copy+paste the same lines of code.
+> We use bpf_redirect(BPF_F_INGRESS) to direct traffic leaving the proxy,
+> flow generator, etc. towards the target pod, ensuring that eBPF programs
+> that are meant to intercept traffic leaving that pod are executed.
+> However, this doesn't work with netkit.
 > 
-> The attached patches touch a lot more code, and will conflict mightily with KVM
-> changes I want to land in 7.3 (more use of a static_call in KVM).  But if we get
-> them applied (to tip tree) shortly after 7.2-rc1 and provide a topic branch/tag,
-> then there shouldn't be too much juggling needed?
+> With netkit, an ingress redirection from proxy to workload skips eBPF
+> programs that are meant to intercept traffic leaving the pod, since they
+> reside on the netkit peer device. One workaround is to attach the
+> same program to both the netkit peer device and the TCX ingress hook for
+> the netkit pair's primary interface, but
 > 
-> If we want to go with the more aggressive cleanup, I'll formally post the patches.
+> a) This seems hacky and we need to be careful not to run the same
+>    program twice for the same skb in cases where we want to pass that
+>    traffic to the host stack.
+> b) We're trying to keep the proxy redirection / traffic injection
+>    systems as modular and separated from Cilium as possible, the system
+>    that manages netkit setup and core eBPF programming.
 > 
-> [*] https://lore.kernel.org/all/ahhoDGUz39KSGZ6o@google.com
+> It would be handy if instead we could redirect traffic directly from
+> one netkit peer device to another. This patch proposes an extension
+> to bpf_redirect_peer to allow us to do just that.
+> 
+> With this patch, the BPF_F_EGRESS flag tells bpf_redirect_peer to emit
+> the skb in the egress direction of the target interface's peer device
+> While the main use case is netkit, I suppose you could also use this
+> mode with veth as well if, e.g., there were some eBPF programs attached
+> to that side of the veth pair that needed to intercept traffic.
+> 
+>  +---------------------------------------------------------------------+
+>  | +-------------------------+         6. bpf_redirect_neigh(eth0)     |
+>  | | pod (10.244.0.10)       |           ------------------------      |
+>  | |                         |          |                        |     |
+>  | |              +--------+ |          |      +---------+       |     |
+>  | | 1. packet -->|        | |          |      |         |       |     |
+>  | |    leaves ^  | netkit |<===========|======| netkit  |       |     |
+>  | |           |  | peer   |=======(eBPF)=====>| primary |       |     |
+>  | |           |  |        | |          |      |         |       |     |
+>  | |           |  +--------+ |          |      +---------+       |     |
+>  | |           |             |          | 2. bpf_redirect        v     |
+>  | +-----------|-------------+          |___________________   +-------|
+>  |             |                                            |  | eth0  |
+>  |             | 5. bpf_redirect_peer(BPF_F_EGRESS)         |  +-------|
+>  |             |________________________                    |          |
+>  | +-------------------------+          |                   |          |
+>  | | proxy (10.244.0.11)     |          |                   |          |
+>  | | IP_TRANSPARENT          |          |                   |          |
+>  | |              +--------+ |          |      +---------+  |          |
+>  | | 3. packet <--|        | |          |      |         |<--          |
+>  | |    enters    | netkit |<===========|======| netkit  |             |
+>  | |    [proxy]   | peer   |=======(eBPF)=====>| primary |             |
+>  | | 4. packet -->|        | |                 |         |             |
+>  | |    leaves    +--------+ |                 +---------+             |
+>  | |    sip=10.244.0.10      |                                         |
+>  | +-------------------------+                                         |
+>  +---------------------------------------------------------------------+
+> 
+> Using the proxy use case as an example, in step 5 we would redirect
+> traffic leaving the proxy towards the pod's peer device using
+> bpf_redirect_peer(BPF_F_EGRESS).
+> 
+> As a bonus, since the skb doesn't have to go through the backlog queue
+> it can take full advantage of netkit's performance benefits. I set up a
+> test where outgoing iperf3 traffic is injected into the datapath of
+> another pod using either bpf_redirect_peer(BPF_F_EGRESS) or
+> bpf_redirect(BPF_F_INGRESS). I used Cilium's eBPF host routing mode
+> which skips the host stack and uses BPF redirect helpers to do all the
+> routing.
+> 
+>   (net.ipv4.tcp_congestion_control=cubic,mtu=1500,100GiB link,Cilium
+>    eBPF host routing mode)
+> 
+> BASELINE [bpf_redirect(BPF_F_INGRESS)]
+>   1. [iperf pod] ==bpf_redirect([pod b], BPF_F_INGRESS)==> [pod b]
+>   2. [pod b]     ==bpf_redirect_neigh([eth0])==>           eth0
+>   3. eth0        ==over network==>                         [host b]
+> 
+>   [ ID] Interval           Transfer     Bitrate         Retr
+>   [  5]   0.00-60.00  sec   231 GBytes  33.0 Gbits/sec  12060     sender
+>   [  5]   0.00-60.00  sec   230 GBytes  33.0 Gbits/sec            receiver
+> 
+> TEST [bpf_redirect_peer(BPF_F_EGRESS)]
+>   1. [iperf pod] ==bpf_redirect_peer([pod b], BPF_F_EGRESS)==> [pod b]
+>   2. [pod b]     ==bpf_redirect_neigh([eth0])==>               eth0
+>   3. eth0        ==over network==>                             [host b]
+> 
+>   [ ID] Interval           Transfer     Bitrate         Retr
+>   [  5]   0.00-60.00  sec   272 GBytes  38.9 Gbits/sec    0       sender
+>   [  5]   0.00-60.00  sec   272 GBytes  38.9 Gbits/sec            receiver
+> 
+> In this test, using bpf_redirect_peer(BPF_F_EGRESS) for the hop from
+> [iperf pod] to [pod b] led to ~18% more throughput compared to
+> bpf_redirect(BPF_F_INGRESS).
+> 
+> Signed-off-by: Jordan Rife <jordan@jrife.io>
 
-Thanks for the context.
+Acked-by: Paul Chaignon <paul.chaignon@gmail.com>
 
-Earlier making the key ro-after-init came up as an option in a thread with
-Peter. Does it look like a good option to you?
-
-diff --git a/include/linux/static_call.h b/include/linux/static_call.h
-index b610afd1ed55..ea56da8fb446 100644
---- a/include/linux/static_call.h
-+++ b/include/linux/static_call.h
-@@ -200,6 +200,14 @@ extern long __static_call_return0(void);
- 	};								\
- 	ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)
- 
-+#define DEFINE_STATIC_CALL_NULL_RO_AFTER_INIT(name, _func)		\
-+	DECLARE_STATIC_CALL(name, _func);				\
-+	struct static_call_key STATIC_CALL_KEY(name) __ro_after_init = {\
-+		.func = _func,						\
-+		.type = 1,						\
-+	};								\
-+	ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)
-+
- #define DEFINE_STATIC_CALL_RET0(name, _func)				\
- 	DECLARE_STATIC_CALL(name, _func);				\
- 	struct static_call_key STATIC_CALL_KEY(name) = {		\
