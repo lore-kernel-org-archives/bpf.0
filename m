@@ -1,32 +1,33 @@
 Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33DE1389E1A;
-	Wed, 24 Jun 2026 08:39:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9B0238C2A0;
+	Wed, 24 Jun 2026 08:39:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782290386; cv=none; b=GA3hLLmHQl7F7rQAjfbKZdEbag+YLIaXD3d0sMiu9OLJ88i4SyLa80e5fqFM5/j2kLykGmIR2Q63J+cLC1/css+cySH0uRJhAp0rgJ4waqALYWvvcylE3C0CziVzXi1cB5JxUfv6TXm8d75mfodbpfjty5HFBH7j23lFrrUd/V4=
+	t=1782290386; cv=none; b=MXMuJmh4k2lfNA3lNAjV/qT31fiPeu8Jm2y8kPb0aXA/2rr1SHE5NILIvUMR0mFLNVnNOX5zyNZ+DJgb/RCG565QB/+TpttA19f4yk2AewGVG7rlpIqfKnPhG6fEJbHeSbLqcAgYenqNmPmuHsA+ruhyh3Fx03t/I5ulP0mPxi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1782290386; c=relaxed/simple;
-	bh=mMPadTpfViVxiqjJjC9KZKyMiSaBZktmUqUDWcl9xy8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=l3wCyt+J38Zht2zE4z7tQb6zxLeKKGZ+5Ydrg5C2I07aeqtcbYpFpkc/2i0flff+Rjytkl7FVy+19HW0l83NjKLW5R4Zx+SJmYoIvXifCK8TtSAb6wMwFqCnjQNQqbu6exvD3Xw4X0oE8b9Y8I0RH/IFWGiseO7UOOvTtyfUWdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=CfLrgoNj; arc=none smtp.client-ip=4.193.249.245
+	bh=wd0ZR1IJDcgV5XSXasa8q5qSsz2TrWaAlTN4JRi83ns=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jSy+V7pE2a/JY0fwf20Tvqh7AD9qUBHTSf/p2ZcR/BM5i69wXZDlrjCOuh+K+t1gc8JujszvkrIqjxg67zulQl/BOaa0TPg15iTuopAiAtmGak0H3Ed0KnUYlpimfe0Ydksr/4Jq2Fqb3POwoWsPItzqOtktta5XKclJ6407YHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=JXXFlJPX; arc=none smtp.client-ip=4.193.249.245
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="CfLrgoNj"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="JXXFlJPX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=PYpL6vwEBNdaYyq/TESmvHxh/8chgl8
-	3fT5RJbbrcfo=; b=CfLrgoNjK92Zxyfxy2lxEHJHoXyUL3c5deqsFeGLj7r6dBM
-	1axUao0rC4f3SU75MggBkg/AeYN/ASfMnm5j9YnGPG8aAJrxs2gsZRSrZy1a3fCl
-	hpqYNAhDDyx3ywVazdbIuUTn2fy4mB50DCFxjVvlmOVJAz4mbKVlMMxw86h4=
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
+	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	To:Cc; bh=9OEU5pgl0y7Xt1kiXJu8/Zc8TlT5M10JUk//V7iT2D0=; b=JXXFlJ
+	PXnn0XvAfWDhzkOcghW3PudxgU+wPgRaF4dxp8gvLi01RB3gdkBmWEwTlodjuYgJ
+	qW4EMAoXWzSW2SDV/GWVoSdYrTpibtV6YFbZk4QxJCX5AMr1qPHlZeIzGVWWEs/y
+	B0sB9dFnsYkpCzYBhCDlhRaPIHqm81V508p94=
 Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web2 (Coremail) with SMTP id yQQGZQCXcJjFlztqpEWBAg--.48810S3;
-	Wed, 24 Jun 2026 16:39:34 +0800 (CST)
+	by web2 (Coremail) with SMTP id yQQGZQCXcJjFlztqpEWBAg--.48810S2;
+	Wed, 24 Jun 2026 16:39:33 +0800 (CST)
 From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Wed, 24 Jun 2026 16:39:33 +0800
-Subject: [PATCH bpf 1/2] bpf: Keep fastcall spills for helper stack reads
+Subject: [PATCH bpf 0/2] bpf: Keep fastcall stack slots for helper stack
+ reads
+Date: Wed, 24 Jun 2026 16:39:32 +0800
+Message-Id: <20260624-f01-12-fastcall-helper-stack-read-v1-0-e0a86085ef77@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,9 +36,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260624-f01-12-fastcall-helper-stack-read-v1-1-e0a86085ef77@mails.tsinghua.edu.cn>
-References: <20260624-f01-12-fastcall-helper-stack-read-v1-0-e0a86085ef77@mails.tsinghua.edu.cn>
-In-Reply-To: <20260624-f01-12-fastcall-helper-stack-read-v1-0-e0a86085ef77@mails.tsinghua.edu.cn>
+X-B4-Tracking: v=1; b=H4sIAMSXO2oC/yWNyw7CIBAAf6XZs5sArRz8FeOBx65FSSUsNSZN/
+ 72ox5nDzAZCNZHAZdig0jtJei0d9GmAMLvlTphiZzDKWGXNhKw0aoPspAWXM86UC1WU5sITK7m
+ INk4xaGZ/1iP0TqnE6fN7XMEXhttfyuofFNq3Dvt+AEHwArWKAAAA
+X-Change-ID: 20260624-f01-12-fastcall-helper-stack-read-6d4dc1ffb513
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
@@ -47,69 +49,58 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1782290375; l=1604;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1782290375; l=1172;
  i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=mMPadTpfViVxiqjJjC9KZKyMiSaBZktmUqUDWcl9xy8=;
- b=vlZLku9e267Z3/EBGm5kGjfLsZE86iAs6E6kw+ROl2XbV0YOL6J33MrHWDWyyK+hWckCSvyfE
- oic/b18UNicClJxbgVGe1iNOppi67qFEwBsNqyZ665/ZXY4p06VDq/X
+ bh=wd0ZR1IJDcgV5XSXasa8q5qSsz2TrWaAlTN4JRi83ns=;
+ b=hfTB9qgKqBSxV9OB9NXHsSATEEfFw5UyHGYY00hI4+rqC82LxdfWNYMkaiDXy3O/5qwCkkIH3
+ ZhmjKfMdHW4CF2gnd2JMPsiPg7ich9v3wDr6NbCTFrrEvdddT6+yHB4
 X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
  pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:yQQGZQCXcJjFlztqpEWBAg--.48810S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cw1kAFWrArWUXw1DZFyxZrb_yoW8WF1Upr
-	97uFy2gr4kKa4vka12yr4xZa45Wrs5A3yxGryYyayYvrnxW34jgrWYgF4jyFyYyFZYvw1I
-	yF40vwsIyayUuaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9m1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
-	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
-	kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VW8
-	Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6I
-	AqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xS
-	Y4AK67AK6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
-	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-	6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-	AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-	s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-	0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JjcIDcUUUUU=
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgAIA2o7ifQ+0gAAsJ
+X-CM-TRANSID:yQQGZQCXcJjFlztqpEWBAg--.48810S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtFyxWF1xtrWrKr4fGr17ZFb_yoWkZFb_Za
+	1fAFyDZw47AFsayF9FkrnakryFk3yxGrW5JasFqr9xA34jqF43WrnYyF1UGFyUGwsrtr15
+	ur4qvw1xG34a9jkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb-kFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kI
+	II0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7
+	xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
+	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4
+	CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26r4r
+	Kr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc
+	8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Av
+	z4vE14v_GFyl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMxC20s
+	026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+	JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+	v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
+	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
+	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU0Ysj5UUUUU==
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQEIA2o7idQ5jAAFs3
 
-The fastcall spill/fill rewrite is only sound while the stack slots used by
-the pattern are not accessed outside the pattern. Direct stack loads and
-stores already call check_fastcall_stack_contract() to enforce this.
+Fastcall spill/fill elision is guarded by a stack contract: stack slots in
+the pattern may only be accessed by the pattern itself. Direct stack loads
+and stores enforce that contract, but helper and kfunc memory arguments can
+read from PTR_TO_STACK through check_stack_range_initialized() without
+disabling the post-verification elision.
 
-Helper and kfunc memory-argument checks can validate PTR_TO_STACK reads
-through check_stack_range_initialized() without applying the same contract.
-When such a read overlaps a fastcall spill slot,
-bpf_remove_fastcall_spills_fills() can still remove the spill/fill pair.
-It can then shrink the subprogram stack depth even though a helper or kfunc
-reads that stack address.
-
-Apply check_fastcall_stack_contract() from check_stack_range_initialized()
-after the concrete stack range is known. Zero-sized accesses do not read or
-write memory, so leave the fastcall optimization unchanged for those.
+Make helper/kfunc stack memory checks enforce the fastcall contract after
+resolving the range. Add a verifier selftest for a read-only helper access
+through bpf_csum_diff().
 
 Fixes: 5b5f51bff1b66 ("bpf: no_caller_saved_registers attribute for helper calls")
+
 Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 ---
- kernel/bpf/verifier.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Nuoqi Gui (2):
+      bpf: Keep fastcall spills for helper stack reads
+      selftests/bpf: Cover fastcall helper stack reads
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ff9b1f68ceca4..d77332eeab359 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6873,6 +6873,10 @@ static int check_stack_range_initialized(
- 		max_off = reg->smax_value + off;
- 	}
- 
-+	if (access_size)
-+		check_fastcall_stack_contract(env, state, env->insn_idx,
-+					      min_off);
-+
- 	if (meta && meta->raw_mode) {
- 		/* Ensure we won't be overwriting dynptrs when simulating byte
- 		 * by byte access in check_helper_call using meta.access_size.
+ kernel/bpf/verifier.c                              |  4 +++
+ .../selftests/bpf/progs/verifier_bpf_fastcall.c    | 32 ++++++++++++++++++++++
+ 2 files changed, 36 insertions(+)
+---
+base-commit: 76f62d237538b456354a44e796a541cde03c6e28
+change-id: 20260624-f01-12-fastcall-helper-stack-read-6d4dc1ffb513
 
--- 
-2.34.1
+Best regards,
+--  
+Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 
