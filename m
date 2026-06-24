@@ -1,122 +1,92 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 765901A3165
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 18:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D4232E72F;
+	Wed, 24 Jun 2026 18:35:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782326081; cv=none; b=Txp0WUursVGy4M0LarX3uOqRRHnWTRlmZLyrFm7aDq8Akt9BJewX0kAgFwYNrCnkTRkpfm7naI0vT6kh0cUUYOe/Ri2k3WhX9DOdp2ULzpngts+BQAHDohG0Hx1LBCn0P1a3kZSfC1GeoLgwX5KIi1ti366xcMhecaLxBOxDeNA=
+	t=1782326129; cv=none; b=rTC/0pf0i6KesRUpT9VDBBpCpOFvemX2nNM0F5HSr7JhL0pIyDObDGBUOH4hbIeBQ9/AFaIP5uuJJnE1B06sqYHm8cK6xQ5drq7U0zz3xTZtdDpCy0BzqaOnImzQr2VyEF1nYpFXLsVPFH8vqtnm+YHXjlgm+6DcfVElnyPTgVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782326081; c=relaxed/simple;
-	bh=cs9DUwYgF6jMuXggtpQa0iDOqKCEXF9LVCzrTTiV0Jc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=O69kfKU/1uQRiUjH4sZjhfgff0bY0tBb+cqMLrBXIO5u3DwnEdF/cdXz2PERdNn7gf4OGOIjfITzGNNbV/ikILD/HDe2WMde0nyqbYmk+urzeKx2efv9Jd9oi6gsU4OWHi4/ZtwCTafbzBSDwqPtoeT/Kf0cyixiIWICIjjmgcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RPaABYKs; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782326129; c=relaxed/simple;
+	bh=szrL9rlIGd2VV3QTTropIAV8m0dSeDv2Q//C8M6ZboI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FE06N3hjmWqKIaDsHB9y98gHQqgcGlgUUekFCYsFO/DikKOPI2h8rPeG5/f4PY96jXOiAV/O0m6sR2YMJ8xkDFdmxP1Xvxc4hbSi6N0oiVj1lwhmcg+N0nniCTjhUVAfUKVwi+29JuR5scbDbw/ugSRlJ88U3mma/++76mHKSH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AN8Mrxw+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RPaABYKs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E32C91F000E9;
-	Wed, 24 Jun 2026 18:34:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AN8Mrxw+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AEF51F000E9;
+	Wed, 24 Jun 2026 18:35:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782326080;
-	bh=tKxqq9w6GuZ+6UdY2fwgdcTTtHOm2sfLx1DAB/y4f4s=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=RPaABYKsnqwt9xyfdhAadmNW7jPiwq8pQX8BZJX9db7KjWSPlwyduR68UAL8j+Gyc
-	 EfehGF38QaJwT/EQ2CkftAB609sh1niSSX/66tUmBaBpCDt5+IQE4hbAZ8KozJo2wQ
-	 YNRFAKk6NO0awNCdSZ9jWa9r7pkqttByM4CnmrTbrOw9F/9J/jl6Ctc7RKBmBJRSMu
-	 +R0J/TSinzsVykUkqWxX5B/hdlxf5Em1FM56UqYN+HoQ+Yt1PtIgchnYS4UNPjNa0M
-	 bznJb6VApDnBwcfzOl5u69A89EouzIxEOKXMPoJY9X5NP8FCspoFaWvsQMWEDmfVgM
-	 lNRaoqu/LBWBw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] bpf: allow BPF_LOG_KERNEL from kernel space
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Siddharth Nayyar" <sidnayyar@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260624-bpf-lskel-fixes-v2-1-e8ac5974a72c@google.com>
-References: <20260624-bpf-lskel-fixes-v2-1-e8ac5974a72c@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 24 Jun 2026 18:34:39 +0000
-Message-Id: <20260624183439.E32C91F000E9@smtp.kernel.org>
+	s=k20260515; t=1782326128;
+	bh=YAboVfwc1QfQPVwIz2EVr8r9cLQ661xccsxlovsNOHI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=AN8Mrxw+02JiZzii1M+Z2aPTJsEF+RP8GjT86hmVJVBgr1t6Q6pPOgsJs0XRCoynm
+	 p05guQ906oXMDdqlW0DXIz93WDEg1V9GaFPdbr/qNv4KL4EAGXts2sh7pb19FxbL79
+	 hrFiQxqj2Y21J5tQZuLRksEeTR6poE83YsiUZcVshY7aZLhfr7QaJrBTlsRhFuzpz4
+	 sPH3awmgy30N0SoCDje+jUqL5r4XK4sw2l3UH+rocuMEYitdcFu70NBhVC1zIep1yF
+	 L6h1/fqYvfbc6YXeSunhaEecqg+8G7y+jZnxXLO51S/GAPWQyDp6qvLlb25cUH0nYZ
+	 WRla4BDfoh1+A==
+Date: Wed, 24 Jun 2026 19:35:24 +0100
+From: Simon Horman <horms@kernel.org>
+To: Hrushiraj Gandhi <hrushirajg23@gmail.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	syzbot+6c25f4750230faf70be9@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2] netdevsim: fix use-after-free in nsim_create and
+ __nsim_dev_port_del
+Message-ID: <20260624183524.GE1131256@horms.kernel.org>
+References: <20260623144447.255326-1-hrushirajg23@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260623144447.255326-1-hrushirajg23@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] BPF_LOG_KERNEL is silently ignored or overwritten when specified=
- via BPF_COMMON_ATTRS due to flawed null-buffer checks in bpf_log_attr_init.
---
+On Tue, Jun 23, 2026 at 08:14:47PM +0530, Hrushiraj Gandhi wrote:
+> debugfs files created under a port's ddir (ethtool/get_err,
+> ethtool/set_err, ring params, bpf_offloaded_id, udp_ports/inject_error,
+> etc.) store raw pointers directly into the netdevsim struct, which lives
+> in the net_device private data kmalloc slab.
+> 
+> If these files outlive the netdevsim struct, a concurrent reader can
+> trigger a slab-use-after-free by passing debugfs_file_get() (which only
+> checks dentry lifetime) and then dereferencing the freed data pointer
+> in debugfs_u32_get().
+> 
+> In __nsim_dev_port_del(), nsim_destroy() is called before
+> nsim_dev_port_debugfs_exit(). However, nsim_destroy() calls free_netdev()
+> at its end, while nsim_dev_port_debugfs_exit() removes the port's
+> debugfs directory. This means the slab is freed before the debugfs
+> files are removed.
+> 
+> The same window exists on nsim_create()'s error path:
+> nsim_ethtool_init() creates debugfs files under ddir with pointers into
+> ns before nsim_init_netdevsim()/nsim_init_netdevsim_vf() which can fail,
+> and the err_free_netdev label calls free_netdev() while those debugfs
+> entries are still live.
+> 
+> Fix both paths by calling debugfs_remove_recursive() on the port's
+> ddir before every free_netdev() call. The subsequent
+> nsim_dev_port_debugfs_exit() calls become harmless no-ops since ddir is
+> set to NULL.
+> 
+> Reported-by: syzbot+6c25f4750230faf70be9@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=6c25f4750230faf70be9
+> Fixes: e05b2d141fef ("netdevsim: move netdev creation/destruction to dev probe")
+> Signed-off-by: Hrushiraj Gandhi <hrushirajg23@gmail.com>
+> ---
+> v2:
+> - Also fix the same use-after-free window on the error path of nsim_create() as suggested by Simon Horman.
+> - Shorten the code comment in nsim_destroy() to be more concise.
 
-commit efd637812e314de99108496755489e9a7983fe49
-Author: Siddharth Nayyar <sidnayyar@google.com>
+Thanks for the updates.
 
-bpf: allow BPF_LOG_KERNEL from kernel space
+Reviewed-by: Simon Horman <horms@kernel.org>
 
-This commit allows kernel space loaders to output BPF verifier logs directly
-to dmesg by setting the log_level to BPF_LOG_KERNEL. It modifies
-bpf_verifier_log_attr_valid() to accept this level unconditionally and adds
-strict privilege checks at the syscall boundary points to prevent userspace
-from spamming the kernel log.
-
-> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-> index b740fa73ee26d..25a9f83409807 100644
-> --- a/kernel/bpf/log.c
-> +++ b/kernel/bpf/log.c
-
-[ ... ]
-
-> @@ -831,6 +840,11 @@ int bpf_log_attr_init(struct bpf_log_attr *log, u64 =
-log_buf, u32 log_size, u32 l
->  	char __user *ubuf_common =3D u64_to_user_ptr(common->log_buf);
->  	char __user *ubuf =3D u64_to_user_ptr(log_buf);
-> =20
-> +	if (common->log_level =3D=3D BPF_LOG_KERNEL && !uattr_common.is_kernel)
-> +		return -EINVAL;
-> +	if (log_level =3D=3D BPF_LOG_KERNEL && !uattr.is_kernel)
-> +		return -EINVAL;
-> +
->  	if (!bpf_verifier_log_attr_valid(common->log_level, ubuf_common, common=
-->log_size) ||
->  	    !bpf_verifier_log_attr_valid(log_level, ubuf, log_size))
->  		return -EINVAL;
-
-[Severity: Medium]
-Does this code handle BPF_LOG_KERNEL correctly when it is specified via
-BPF_COMMON_ATTRS?
-
-Since BPF_LOG_KERNEL outputs directly to dmesg, the user buffer is 0,
-meaning ubuf and ubuf_common will be NULL.
-
-Slightly further down in bpf_log_attr_init(), the mismatch checks and
-inheritance logic rely on these buffers being non-NULL:
-
-    if (ubuf && ubuf_common && (ubuf !=3D ubuf_common || ...))
-        return -EINVAL;
-
-    ...
-
-    if (!ubuf && ubuf_common) {
-        log->ubuf =3D ubuf_common;
-        log->level =3D common->log_level;
-        ...
-    }
-
-If a caller passes BPF_LOG_KERNEL via common attributes=20
-(ubuf_common =3D=3D NULL), it seems the inheritance condition=20
-(!ubuf && ubuf_common) will be false, and the common logging level will=20
-be silently ignored.
-
-Additionally, if a caller specifies BPF_LOG_KERNEL alongside a standard
-common log level (ubuf =3D=3D NULL, ubuf_common !=3D NULL), the mismatch ch=
-eck
-is bypassed, and the specific BPF_LOG_KERNEL is silently overwritten by
-the common attributes instead of returning -EINVAL.
-
-Could the null-buffer checks be updated to properly support inheriting=20
-and validating BPF_LOG_KERNEL?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260624-bpf-lskel-=
-fixes-v2-1-e8ac5974a72c@google.com?part=3D1
