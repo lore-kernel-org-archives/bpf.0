@@ -1,153 +1,97 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655B0262FF8
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 22:03:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E7D021638D
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 22:18:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782338608; cv=none; b=p/5o1Dbqn+5SgwdSw6ptQ2lXEwCx+vr2jIpTxzFtLovHoW03qsdr/zUP4dn+WrCSHu63LjohSDyzKBjcnboyIk6SWe6w5E4huLOL2fr8v3xSFVZ8PfLsLiBxm1aIZOMlqYZsmCqUp4DWebE9bCXB5l3C9tQjJrZjd9n0P3ed0WE=
+	t=1782339498; cv=none; b=skRTyHPXfNmmwPYtJqYBEqu00B40TmwsgTzyxrkiS7L0Ua/AafzCMebQKiZW+27GSnvk4PEuOUPMXRiq8CelyQZyDxRBwUKiHt79lS8hIsGQoA8r7UZ1vD9FAPuTvz96Wf3HOt1dzlIcTHKiDH/JESvhnOsjf3lVn5IDuzmuEC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782338608; c=relaxed/simple;
-	bh=r5g6+V2Amp0yxvechpGrRZ8S0WXq2V+a9zpffLkRRbs=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=jBab5BFwkjQih2/cSEMCafPTLKu8G/bi3vJSegNgz15gz55N0/W/3rNkk57ROn2r/3f6Wqx8uP76cRO/4T5mwVSGONRueKObQRJVQVTl02COFbU5WX6ueBBNLW7e4BNJswsxVRcV7bSh8RB1VwsxWTmyKcuZ77KwZboQq+sG+2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kt8Q55al; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kt8Q55al"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2c2d0a8b5beso12873755ad.1
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 15:03:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782338607; x=1782943407; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LrxdfhnpHc3n007Ugb6QRVTz2pRJtP7mIebzaELjk+Q=;
-        b=kt8Q55alaDwoCFWKoa5bV7LcIVUuvYZ+cxeB620+DGabur7nuY8PEpVyhUSxvSnco4
-         OSwgjFGL9Eu0eZVhBoN19wU18B6Zd8Ea0vlTaDTPYK4VpqcUoKGVSZdsrtK/VVYBxi3m
-         LOhFO78H2yV26E0pldjYBn/V1VvlesUVLbaVSI4LErRM9eVH488NhvbpjAglQjz3wxX2
-         F25V9ad6yPEW03J1fq69n5YEhpiMbb/ikzkY+aBne+O3cwFts9p045oRm2sQP4pem8LF
-         G7rXCZ8D0e3jIfuOEACMzP5ulS7A5gVxxS+BcFHQyMJZ4QTJ15nam/3pnnT8VQBwOQ8l
-         FZpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782338607; x=1782943407;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LrxdfhnpHc3n007Ugb6QRVTz2pRJtP7mIebzaELjk+Q=;
-        b=jcg+/bXBIE8MTe35h9SDoa6TZD3jbtG0dc2WCKwr/+JDr5SMk7iB5OnyT3MYs5RxqZ
-         PMKpQGMx4QbFlEf/Yd3aU9mS/2BnRgCVF9cKvCQfuCYJXYbB2NBP0sSytQgGmpanZd+g
-         wizNJBVm9KJxmRHg7Xo3t7t8o7T5H/HcO6+pYAKU4gmfkazDKMu+Vse1aI9JXulBOWig
-         BDwbDoGbaxGAam7g9G2z89f+e+kh4UeQ6/WoW3mGHKy9Iu6aQhGcNtef5dhj+zBvhynN
-         X48ugE+IT5vLKh8Z1t66r54fjiuApZLlv/oLQa6yGTaMaMU5bCf+WW3bvNP5IjnklCj2
-         2tZg==
-X-Forwarded-Encrypted: i=1; AHgh+RrbNy9W9+RpluL6OfJCq9o5KzuMngX0Zjtau0TejB83oPMl3qkmW+E/pRlCuNl9N8tzpo8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxoac4yYaDuxiQ9nMjSb6mgYa8X5hlmsTOVdnxbsoBhuMLqLDgt
-	RTlIzk0tfDw5gC6ItGh2jGPlRuWWiAkVxHx2++bxsREKINYD1fKVlEGHGmN1bWzMYGxt70BH7Vc
-	LLscvhQ==
-X-Received: from plbl20.prod.google.com ([2002:a17:902:eb14:b0:2c7:e126:e2ca])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d4d0:b0:2c2:21e9:5a7d
- with SMTP id d9443c01a7336-2c7fc8a9b4fmr173895ad.34.1782338606050; Wed, 24
- Jun 2026 15:03:26 -0700 (PDT)
-Date: Wed, 24 Jun 2026 22:03:25 +0000
-In-Reply-To: <20260624214955.6kkivefeuapcocib@desk>
+	s=arc-20240116; t=1782339498; c=relaxed/simple;
+	bh=+n08tj1EOwrvRXhAdjTQyU8ESor+gSj0Ef3eitEyJk4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=puPO7OhXLoHxlNbqzbnO1HFzzn33f3KRF7itLAdUKQzm7Sp05jeK2sNh64VUvHQF5elejrF2MCBHg6WOzLS2gXNW8TtgxxA/HefhiZoad6tSVmdWWUSyv5fTZOwjyarOI0MM6mjMF0a+GSyWrNZBE3NFRyUAm28gFczXPO1w/OQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [36.44.124.104])
+	by gateway (Coremail) with SMTP id _____8CxCHmkVzxqxpMXAA--.36116S3;
+	Thu, 25 Jun 2026 06:18:12 +0800 (CST)
+Received: from [192.168.0.111] (unknown [36.44.124.104])
+	by front1 (Coremail) with SMTP id qMiowJCxPMKhVzxq_xCyAA--.8437S3;
+	Thu, 25 Jun 2026 06:18:10 +0800 (CST)
+Message-ID: <8afb0401-9c53-f469-30d7-8e97e63c0189@loongson.cn>
+Date: Thu, 25 Jun 2026 06:18:13 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260622-vmscape-bhb-v12-0-76cbda0ae3e5@linux.intel.com>
- <20260622-vmscape-bhb-v12-7-76cbda0ae3e5@linux.intel.com> <ajvUp_kPJBRZ7k_p@google.com>
- <20260624214955.6kkivefeuapcocib@desk>
-Message-ID: <ajxULasZkCS57NPq@google.com>
-Subject: Re: [PATCH v12 07/12] static_call: Define EXPORT_STATIC_CALL_FOR_MODULES()
-From: Sean Christopherson <seanjc@google.com>
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, 
-	Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	David Laight <david.laight.linux@gmail.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, David Ahern <dsahern@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jason Baron <jbaron@akamai.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
-	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>, 
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH bpf-next v2 0/4] selftests/bpf: Add some tests for
+ LoongArch
+Content-Language: en-US
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Huacai Chen <chenhuacai@kernel.org>
+Cc: loongarch@lists.linux.dev, bpf@vger.kernel.org
+References: <20260615100506.19558-1-yangtiezhu@loongson.cn>
+ <DJ9QMPLAXOGG.2PDC3A2MUENPC@gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+In-Reply-To: <DJ9QMPLAXOGG.2PDC3A2MUENPC@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:qMiowJCxPMKhVzxq_xCyAA--.8437S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Gw48Xr47CF1rKF4kXF4rCrX_yoW8Jr1kp3
+	9a9F97Kr1kWryUAFsIgw1xuF17Xw13ur97G3WkGr1Yyr9I9F1Fqr97uFW5XFnrCryFk3W2
+	vr4vg34DKa4UtagCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Jr0_Gr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
+	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v2
+	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67
+	vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc4
+	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
+	xVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+	1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU25EfUUUU
+	U
 
-On Wed, Jun 24, 2026, Pawan Gupta wrote:
-> On Wed, Jun 24, 2026 at 05:59:19AM -0700, Sean Christopherson wrote:
-> > On Tue, Jun 23, 2026, Pawan Gupta wrote:
-> > > There is EXPORT_STATIC_CALL_TRAMP() that hides the static key from all
-> > > modules. But there is no equivalent of EXPORT_SYMBOL_FOR_MODULES() to
-> > > restrict symbol visibility to only certain modules.
-> > > 
-> > > Add EXPORT_STATIC_CALL_FOR_MODULES(name, mods) that wraps both the key and
-> > > the trampoline with EXPORT_SYMBOL_FOR_MODULES(), allowing only a limited
-> > > set of modules to see and update the static key.
-> > > 
-> > > The immediate user is KVM, in the following commit.
-> > > 
-> > > checkpatch reported below warnings with this change that I believe don't
-> > > apply in this case:
-> > > 
-> > >   include/linux/static_call.h:219: WARNING: Non-declarative macros with multiple statements should be enclosed in a do - while loop
-> > >   include/linux/static_call.h:220: WARNING: EXPORT_SYMBOL(foo); should immediately follow its function/variable
-> > > 
-> > > Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> > > Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> > > ---
-
-...
-
-> > Drat, I forgot about this.  Exporting static call trampolines for KVM came up in
-> > another conversation[*].  I had already put together patches to effectively default
-> > to exporting only the trampoline, and also to deduplicate this code so that the
-> > CONFIG_HAVE_STATIC_CALL_INLINE=y / CONFIG_HAVE_STATIC_CALL=y / CONFIG_HAVE_STATIC_CALL=n
-> > implementations don't need to copy+paste the same lines of code.
-> > 
-> > The attached patches touch a lot more code, and will conflict mightily with KVM
-> > changes I want to land in 7.3 (more use of a static_call in KVM).  But if we get
-> > them applied (to tip tree) shortly after 7.2-rc1 and provide a topic branch/tag,
-> > then there shouldn't be too much juggling needed?
-> > 
-> > If we want to go with the more aggressive cleanup, I'll formally post the patches.
-> > 
-> > [*] https://lore.kernel.org/all/ahhoDGUz39KSGZ6o@google.com
+On 6/15/26 23:45, Alexei Starovoitov wrote:
+> On Mon Jun 15, 2026 at 3:05 AM PDT, Tiezhu Yang wrote:
+>> This series is based on the latest master branch of bpf-next tree.
+>> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/
+>>
+>> Dependency Note:
+>> ================
+>> This series strictly depends on the following LoongArch core series,
+>> which moves thread_info into task_struct:
+>>
+>> "Move thread_info into task_struct for LoongArch"
+>> https://lore.kernel.org/loongarch/20260612011616.27771-1-yangtiezhu@loongson.cn/
 > 
-> Thanks for the context.
-> 
-> Earlier making the key ro-after-init came up as an option in a thread with
-> Peter. Does it look like a good option to you?
+> Pls repost when this patch appears in bpf-next.
 
-No, it won't work for KVM.  kvm.ko (owner of the keys) updates the keys only when
-a vendor module (kvm-intel.ko or kvm-amd.ko) is loaded, and updates keys *every*
-time a vendor module is loaded.  So for KVM, the static calls need to be __read_mostly,
-not __ro_after_init.
+OK, this is reasonable. I agree with you and plan to do this.
 
-> diff --git a/include/linux/static_call.h b/include/linux/static_call.h
-> index b610afd1ed55..ea56da8fb446 100644
-> --- a/include/linux/static_call.h
-> +++ b/include/linux/static_call.h
-> @@ -200,6 +200,14 @@ extern long __static_call_return0(void);
->  	};								\
->  	ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)
->  
-> +#define DEFINE_STATIC_CALL_NULL_RO_AFTER_INIT(name, _func)		\
-> +	DECLARE_STATIC_CALL(name, _func);				\
-> +	struct static_call_key STATIC_CALL_KEY(name) __ro_after_init = {\
-> +		.func = _func,						\
-> +		.type = 1,						\
-> +	};								\
-> +	ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)
-> +
->  #define DEFINE_STATIC_CALL_RET0(name, _func)				\
->  	DECLARE_STATIC_CALL(name, _func);				\
->  	struct static_call_key STATIC_CALL_KEY(name) = {		\
+But I noticed that this series has already been merged into
+the loongarch-next [1] tree, and there is something wrong
+between the code and commit message in the first patch [2].
+
+I think this is not proper. I suggest to drop them from the
+loongarch-next tree.
+
+Just FYI.
+
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git/
+
+[2] 
+https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git/commit/?h=loongarch-next&id=8796e11abddf
+
+Thanks,
+Tiezhu
+
