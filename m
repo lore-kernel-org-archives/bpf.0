@@ -1,32 +1,32 @@
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3483D30F55B
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 00:56:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C70530FC0F
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 00:56:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782262570; cv=none; b=I0ljluDsSRZr8x/2zqFTDoCiAzfRm29hkiujR1EUoi796TZJr05XlQKatUrEAnt/SWpGwYFacytcnBnAb3mfRdx79wV+HLJUb+CJflym8S5xceRz1ZpVmWLv0w6f8cSRgTmABJiIfpN1L7J9mJR/ybKfnlixh7R5mYyq3BXzE7o=
+	t=1782262575; cv=none; b=CC6Eg9PO4yKST7oEdLIAbyTACmCMZrV/ZWY9e6lgups6WBR85Vt5yKCPFHYtt8EdQ5zbs5yjkk9XKYdteo7HBxajNZ1MF/xjSxocibhvfORiinK8wjhFM+KrSDMYO6u9yuklqnhFqU6qJ9ngS/poBprNSwqsLA8mZ3KmvrRC4vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782262570; c=relaxed/simple;
-	bh=+7TkUY/zUWYPDsrx32FOFjIfpXHnbnVOpCRnlBVNDCU=;
+	s=arc-20240116; t=1782262575; c=relaxed/simple;
+	bh=1UmEgRiAxgzLPFJFx5DN0mIt4mrOkQgRNI7gx5kzzuE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aCGRgGtAakBDcthR33HVxo3fOEkrlqx0fR82Mo5q9syVC1548Nz++eT0fmRFSo8Kp860Eg8LWUIQIpFPwIqd1YzA6tKQVuxCGEHjWv1x3iP4p006OBvDVDSW9EkL8cTP/nan1Dyw62z5e2ozOF62SUrGnsBm2/zRjROEOazoVF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ext2MKSH; arc=none smtp.client-ip=95.215.58.183
+	 MIME-Version; b=evyTxaaIg0GWdlLNUAiQJ61W5UKuvO77JZTvAf4ilUWYys6imY3pGnIEaQ3XzT390Zpiu6wMyguThgmzY2Fm5b9OnBtGJhawcqR7u7vt6QzmPvRxQMNCG1l2VZ1tUZxtIfgkyRz3sbL3JLd5WjTzq+YgSWwdo+SXAvLcHKluKXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LwuIVglD; arc=none smtp.client-ip=95.215.58.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ext2MKSH"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LwuIVglD"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782262567;
+	t=1782262569;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pAZjiRbwpkyuNiWenvzRyt/YOz7UBDMwH7gPLMm4K8k=;
-	b=Ext2MKSHXv9Uf1RtUUENTPQfTYGPHA7+5Hht69Q2sKYrtTV9QDpX4rVbvl9vvIhE5EAMxr
-	2nqa3elEwTU53OAemHIBCEhXibz/35kw/9yVtNQOvA4UMhY4JvGyDtl9ianbuL1BIKoc2S
-	Uc5PXv1AvhpP9S9BqvhTwFvbP68Dnko=
+	bh=1yas7xYlyCRsVNgpiqg0BmqUJhodXU+tg4g+bzMOooI=;
+	b=LwuIVglD/fhZta6LMfYkN/BgYChyu095Eejg3IbhKcwi0uqNmsM/ZSCLfMPxP0AAtSBHTB
+	gjinYWRLfeTUeZ33Y8nQomkVNeV0QdO1eBxa9apS7yDSXF3vJGqMu/QGtRWQ+2HgjyVqUU
+	qZLW9BMC9wS00o8e31szknsBspypvsc=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -37,9 +37,9 @@ Cc: Alan Maguire <alan.maguire@oracle.com>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/4] selftests/bpf: Modernize resolve_btfids test scaffolding
-Date: Tue, 23 Jun 2026 17:55:44 -0700
-Message-ID: <20260624005546.1818483-3-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 3/4] selftests/bpf: Fix resolve_btfids test reads of BTF ID sets in PIE builds
+Date: Tue, 23 Jun 2026 17:55:45 -0700
+Message-ID: <20260624005546.1818483-4-ihor.solodrai@linux.dev>
 In-Reply-To: <20260624005546.1818483-1-ihor.solodrai@linux.dev>
 References: <20260624005546.1818483-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -51,141 +51,147 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Refactor resolve_btfids test in order to:
-  * use newer ASSERT_* macros instead of CHECK
-  * extend the lifetime of loaded BTF to enable additional checks
-  * cleanup unused/unnecessary code
+TL;DR
 
+On aarch64 with gcc toolchain, when test_progs is linked as a PIE,
+reads of BTF ID array by C name return garbage because the GNU
+assembler on aarch64 unconditionally folds .local symbol references
+into section+addend form, and GOT slots cannot carry an addend per the
+AArch64 ELF spec.
+
+Fix by marking the test's BTF ID objects with hidden visibility, which
+makes gcc emit a direct access that bypasses the GOT entirely.
+
+Details below.
+
+The subsequent patches adding kfunc checks to resolve_btfids test may
+cause test failures on aarch64 / gcc-15:
+
+  test_resolve_btfids:FAIL:kfunc_set_flags  actual 13 != expected 1
+  test_resolve_btfids:FAIL:kfunc_set_cnt    actual 0  != expected 4
+
+The test defines its BTF ID sets with the same macros as the kernel
+and reads them back directly by C name (in the same way as the kernel
+code does).
+
+test_kfunc_set is a .local symbol emitted into .BTF_ids by inline asm
+and declared to the compiler as a plain default-visibility
+extern, that is:
+    extern struct btf_id_set8 test_kfunc_set;
+
+Depending on the build environment, test_progs may be linked as a
+position-independent executable (for example, gcc defaults to -fpie
+[1]). In a PIE, taking the address of a default-visibility extern is
+routed through the GOT (Global Offset Table) [2].
+
+The GNU assembler's adjust_reloc_syms() pass (gas/write.c [3])
+replaces references to local symbols with the corresponding section
+symbol, folding the symbol's offset into the relocation addend.  On
+aarch64 this conversion is unconditional: tc_fix_adjustable() is
+defined to 1 for all fixups (gas/config/tc-aarch64.h [4]), so even
+GOT-generating relocations are subject to it.  The resulting object
+file therefore contains:
+
+  R_AARCH64_ADR_GOT_PAGE      .BTF_ids + 0x54
+  R_AARCH64_LD64_GOT_LO12_NC  .BTF_ids + 0x54
+
+However, the AArch64 ELF specification mandates that GOT-generating
+relocations must have a zero addend [5].  The +0x54 is therefore not
+honored: the linker creates a GOT slot pointing at the .BTF_ids base,
+and every access through that slot reads offset 0 instead of 0x54.
+
+This is purely a read-side problem, specific to the PIE test binary on
+aarch64 with gcc toolchain. resolve_btfids patches the set header
+correctly and the .BTF_ids bytes in test_progs are correct. vmlinux is
+unaffected because it is built with -fno-PIE [6] and reaches .BTF_ids
+with direct, addend-preserving relocations rather than the GOT. clang
+is unaffected because LLVM's assembler retains the original symbol for
+GOT relocations instead of converting to section+addend [7].
+
+To mitigate this issue, mark the test's .local BTF ID objects
+(test_list_local and test_set) hidden with a visibility pragma so that
+gcc treats them as non-interposable and emits a direct access instead
+of a GOT load. test_list_global is .globl, which the assembler does not
+fold into section+addend, so it is left at default visibility. This
+keeps the natural by-name access, works in both PIE and non-PIE builds,
+and needs no change to the BTF_ID macros or resolve_btfids.
+
+[1] https://gcc.gnu.org/onlinedocs/gnat_ugn/Position-Independent-Executable-PIE-Enabled-by-Default-on-Linux.html
+[2] https://gcc.gnu.org/wiki/Visibility
+[3] https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=gas/write.c#l922
+[4] https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=gas/config/tc-aarch64.h#l279
+[5] https://github.com/ARM-software/abi-aa/blob/main/aaelf64/aaelf64.rst#5733relocation-operations
+[6] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile?h=v7.1-rc6#n593
+[7] https://github.com/llvm/llvm-project/blob/4b3bc46d1d794b8ed78b75ccd35a6cc30235bf31/llvm/lib/MC/ELFObjectWriter.cpp#L1213-L1224
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Acked-by: Jiri Olsa <jolsa@kernel.org>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- .../selftests/bpf/prog_tests/resolve_btfids.c | 59 +++++++------------
- 1 file changed, 20 insertions(+), 39 deletions(-)
+ .../selftests/bpf/prog_tests/resolve_btfids.c | 29 +++++++++++++++----
+ 1 file changed, 24 insertions(+), 5 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-index 41dfaaabb73f..a26adf404d7e 100644
+index a26adf404d7e..98ce8fca2007 100644
 --- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
 +++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-@@ -10,7 +10,7 @@
- #include <linux/btf_ids.h>
- #include "test_progs.h"
+@@ -34,6 +34,24 @@ asm (
+ ".balign 4, 0;                            \n"
+ ".popsection;                             \n");
  
--static int duration;
-+#define BTF_DATA_FILE "resolve_btfids.test.o.BTF"
++/*
++ * test_list_local and test_set are .local symbols placed in .BTF_ids by
++ * inline asm, and are read here directly by C name. To the compiler they
++ * are plain, default-visibility extern objects.
++ *
++ * When test_progs is linked as a position-independent executable (PIE),
++ * taking the address of such an extern is routed through the GOT. The
++ * GNU assembler on aarch64 unconditionally converts references to .local
++ * symbols into section + addend form (".BTF_ids + <offset>"), but a GOT
++ * slot cannot carry an addend (the AArch64 ELF spec mandates zero), so
++ * the linker resolves it to the .BTF_ids base.
++ *
++ * Mark them hidden so the compiler treats them as non-interposable and
++ * emits a direct, addend-preserving PC-relative access instead of a GOT
++ * load, in both PIE and non-PIE builds. test_list_global is .globl and
++ * not affected, so it is left at default visibility.
++ */
++#pragma GCC visibility push(hidden)
+ BTF_ID_LIST(test_list_local)
+ BTF_ID_UNUSED
+ BTF_ID(typedef, S)
+@@ -43,24 +61,25 @@ BTF_ID(struct,  S)
+ BTF_ID(union,   U)
+ BTF_ID(func,    func)
  
- struct symbol {
- 	const char	*name;
-@@ -70,10 +70,8 @@ __resolve_symbol(struct btf *btf, int type_id)
- 	unsigned int i;
+-extern __u32 test_list_global[];
+-BTF_ID_LIST_GLOBAL(test_list_global, 1)
+-BTF_ID_UNUSED
++BTF_SET_START(test_set)
+ BTF_ID(typedef, S)
+ BTF_ID(typedef, T)
+ BTF_ID(typedef, U)
+ BTF_ID(struct,  S)
+ BTF_ID(union,   U)
+ BTF_ID(func,    func)
++BTF_SET_END(test_set)
++#pragma GCC visibility pop
  
- 	type = btf__type_by_id(btf, type_id);
--	if (!type) {
--		PRINT_FAIL("Failed to get type for ID %d\n", type_id);
-+	if (!ASSERT_OK_PTR(type, "btf__type_by_id"))
- 		return -1;
--	}
+-BTF_SET_START(test_set)
++extern __u32 test_list_global[];
++BTF_ID_LIST_GLOBAL(test_list_global, 1)
++BTF_ID_UNUSED
+ BTF_ID(typedef, S)
+ BTF_ID(typedef, T)
+ BTF_ID(typedef, U)
+ BTF_ID(struct,  S)
+ BTF_ID(union,   U)
+ BTF_ID(func,    func)
+-BTF_SET_END(test_set)
  
- 	for (i = 0; i < ARRAY_SIZE(test_symbols); i++) {
- 		if (test_symbols[i].id >= 0)
-@@ -83,10 +81,8 @@ __resolve_symbol(struct btf *btf, int type_id)
- 			continue;
- 
- 		str = btf__name_by_offset(btf, type->name_off);
--		if (!str) {
--			PRINT_FAIL("Failed to get name for BTF ID %d\n", type_id);
-+		if (!ASSERT_OK_PTR(str, "btf__name_by_offset"))
- 			return -1;
--		}
- 
- 		if (!strcmp(str, test_symbols[i].name))
- 			test_symbols[i].id = type_id;
-@@ -95,25 +91,15 @@ __resolve_symbol(struct btf *btf, int type_id)
- 	return 0;
- }
- 
--static int resolve_symbols(void)
-+static int resolve_symbols(struct btf *btf)
- {
--	struct btf *btf;
-+	__u32 nr = btf__type_cnt(btf);
- 	int type_id;
--	__u32 nr;
--
--	btf = btf__parse_raw("resolve_btfids.test.o.BTF");
--	if (CHECK(libbpf_get_error(btf), "resolve",
--		  "Failed to load BTF from resolve_btfids.test.o.BTF\n"))
--		return -1;
--
--	nr = btf__type_cnt(btf);
- 
- 	for (type_id = 1; type_id < nr; type_id++) {
- 		if (__resolve_symbol(btf, type_id))
--			break;
-+			return -1;
- 	}
--
--	btf__free(btf);
- 	return 0;
- }
- 
-@@ -121,25 +107,22 @@ void test_resolve_btfids(void)
- {
- 	__u32 *test_list, *test_lists[] = { test_list_local, test_list_global };
- 	unsigned int i, j;
--	int ret = 0;
-+	struct btf *btf;
- 
--	if (resolve_symbols())
-+	btf = btf__parse_raw(BTF_DATA_FILE);
-+	if (!ASSERT_OK_PTR(btf, "btf_parse"))
- 		return;
- 
-+	if (resolve_symbols(btf))
-+		goto out;
-+
- 	/* Check BTF_ID_LIST(test_list_local) and
- 	 * BTF_ID_LIST_GLOBAL(test_list_global) IDs
- 	 */
- 	for (j = 0; j < ARRAY_SIZE(test_lists); j++) {
- 		test_list = test_lists[j];
--		for (i = 0; i < ARRAY_SIZE(test_symbols); i++) {
--			ret = CHECK(test_list[i] != test_symbols[i].id,
--				    "id_check",
--				    "wrong ID for %s (%d != %d)\n",
--				    test_symbols[i].name,
--				    test_list[i], test_symbols[i].id);
--			if (ret)
--				return;
--		}
-+		for (i = 0; i < ARRAY_SIZE(test_symbols); i++)
-+			ASSERT_EQ(test_list[i], test_symbols[i].id, test_symbols[i].name);
- 	}
- 
- 	/* Check BTF_SET_START(test_set) IDs */
-@@ -153,15 +136,13 @@ void test_resolve_btfids(void)
- 			break;
- 		}
- 
--		ret = CHECK(!found, "id_check",
--			    "ID %d not found in test_symbols\n",
--			    test_set.ids[i]);
--		if (ret)
-+		if (!ASSERT_TRUE(found, "id_in_test_symbols"))
- 			break;
- 
--		if (i > 0) {
--			if (!ASSERT_LE(test_set.ids[i - 1], test_set.ids[i], "sort_check"))
--				return;
--		}
-+		if (i > 0)
-+			ASSERT_LE(test_set.ids[i - 1], test_set.ids[i], "sort_check");
- 	}
-+
-+out:
-+	btf__free(btf);
- }
+ static int
+ __resolve_symbol(struct btf *btf, int type_id)
 -- 
 2.54.0
 
