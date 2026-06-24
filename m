@@ -1,128 +1,97 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 817DF34E75E
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 19:19:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7501E1F03DE;
+	Wed, 24 Jun 2026 19:24:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782328771; cv=none; b=tNl2ceZcRgG2AEX4GbKS65OpO+2oXxcRUr6Jb7hx6eAU41p4CpRbXhK/kAc/aKwphMrrVj9rWbVqb5RADAz6O9NqQZwKjE1gqYy10jtw7r6WTNiIG5v6wp6IC/GjFsm/j9mh8IQrgKWMOohtG/TM00Yx/2qGvbG4woiJAsGuN4Y=
+	t=1782329075; cv=none; b=SYSo+YYjAHl1kGcwKyyyJJWtY7AOHTBTYy3FLHBVkKBInm8ErPQqcB217JtWtQ5/YVOBXIEqtXd8oU2UZJT1G6uGgkRa1rgFsyxv0JHXkVE2nOyVkjqW/cck0bpGj/Z4OW2Jh7PMJw0jswiFvCD4RT9X0JXLYPcsmzBm2xrwFuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782328771; c=relaxed/simple;
-	bh=cjs666VNWJUK9COjGZHBYjiwlVS7VrVGbeRMFtWUqcg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ZitTOFOp8VR/kDQ8MhWFIlDXZ/2CIfblBhyYWHMpne/YIMOt9TAaWF0FxiF6VkqgbwvLxNLvVvfyKLpbJSpfKSe5C3RsEjM2lZ3CYApQIFQ/7Qo+Y6AjnWpIS7+Axj2w3Ld1BKLCTQqDcJgUauUKVa9+vbr6lbkD8h/qwUBp134=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dHprnp4l; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782329075; c=relaxed/simple;
+	bh=ZAURbn3ahEuL4VCiXgoJsC/LIEGfbSYd9zlntFJWWpA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iBlVlXvwWdTjigN21kgPpxlG4ig0FWmbl9nx5WB+3UYYfYKD8vBTMgcXlJTrcxf1opvQUAr0ReI/vqSjrMHwuTilNr8WzQJ7Rjb4tX2hiSO9SMzmNTKA7wRfjh3QjjE01gYDh5l+WIJ5/a7jrXzVLc+jlzi43lkwKOfryW0D52I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C4yk8lpN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dHprnp4l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE72B1F000E9;
-	Wed, 24 Jun 2026 19:19:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C4yk8lpN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAFFB1F000E9;
+	Wed, 24 Jun 2026 19:24:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782328767;
-	bh=BVInnT7mBaIdqnP3SeeYe80Pd19x9tYs9CSd870sN00=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dHprnp4lLD9eTbtkZOJN3MLuX1Em0izqqKjeW6RilyIc56wGSBWq97/l8psM4ssJn
-	 eH7p42k/ZIZJbVIVTl0CCMd7v93nXaLQnjnGzNqZvAf3X/Upza9lDa1QF+HXCFjO0/
-	 y79ycPi/Mr/t87+y8bYiynMxSuN1SpvL08BY85bKkS9tbmPZSIIshQSTfO3qXux47c
-	 ZNwpJQEFcetF/0kQk+4BZwEmsZ4EqULso1zP0OrLlOanz1jkgLO5nSImOb1ddEFyh9
-	 jpK3rPkh99Cnm0DAu5L1DnhjpqGIoLMjh0on8tOg9mcAVUP817NPDCoXFiugiHrMzC
-	 XSj144MK1iKcw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v9 1/5] bpf: add bpf_icmp_send kfunc
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mahe Tardy" <mahe.tardy@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260624185554.362555-2-mahe.tardy@gmail.com>
-References: <20260624185554.362555-1-mahe.tardy@gmail.com>
- <20260624185554.362555-2-mahe.tardy@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 24 Jun 2026 19:19:26 +0000
-Message-Id: <20260624191927.BE72B1F000E9@smtp.kernel.org>
+	s=k20260515; t=1782329074;
+	bh=ztzgs5Aq+B+J2+KqdXSdfO03YP+nS8aAL3x7WZb8f34=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=C4yk8lpN2B3PwxEJL1Ck4S3gB3LSNeOTX6JRR522T1LkAFsFx9nNWDTw9eX+RtrTz
+	 KRKpWNxmJny167POayyxAVABFuuczKxYDI19L5KvzDsLB5OFZdidp2qrPfwqGs1gSB
+	 3FYSBrNx1dldr/1Y7YgjNmmo/WDyHnS0n29fUwG8Bgt2j2czsRgfkSXEB48YLQOmuW
+	 Qu7kAqKZEUX8s38GvXZQGlELOdQo1P6p2+MJRCaJHkguBpWQCf1P7g25PGXyDi1ozs
+	 LX0htGBmazy9AfhzIfpthmHjSBq7sEi7EgW5gbzv3iP3CPo8XNEEggfbGhB69r1eus
+	 QzRmsjY6+3LNA==
+Date: Wed, 24 Jun 2026 12:24:31 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Viktor Malik <vmalik@redhat.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	linux-perf-users@vger.kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, Michael Petlan <mpetlan@redhat.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] perf trace: Refactor augmented_raw_syscalls using
+ bpf_loop
+Message-ID: <ajwu7xR6V6MAQOFw@google.com>
+References: <20260623112533.1151502-1-vmalik@redhat.com>
+ <DJGJ9F6WQZV9.2W4WBIHYLJQ97@gmail.com>
+ <ajq98dm4gAwEzkMb@google.com>
+ <c2f4e45e-d5c9-42e9-a46b-25fb0cacb267@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <c2f4e45e-d5c9-42e9-a46b-25fb0cacb267@redhat.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Missing `skb_valid_dst()` check for IPv6 allows type confusion wit=
-h metadata dst entries, leading to an out-of-bounds read and kernel crash.
---
+On Wed, Jun 24, 2026 at 08:47:38AM +0200, Viktor Malik wrote:
+> On 6/23/26 19:10, Namhyung Kim wrote:
+> > Hello,
+> > 
+> > On Tue, Jun 23, 2026 at 08:27:39AM -0700, Alexei Starovoitov wrote:
+> >> On Tue Jun 23, 2026 at 4:25 AM PDT, Viktor Malik wrote:
+[SNIP]
+> >>> +	struct args_loop_ctx loop_ctx = {
+> >>> +		.args = args,
+> >>> +		.beauty_map = beauty_map,
+> >>> +		.payload_offset = payload_offset,
+> >>> +		.value_size = value_size,
+> >>> +		.output = &output,
+> >>> +		.do_output = &do_output
+> >>> +	};
+> >>> +	iters = bpf_loop(6, process_arg_cb, &loop_ctx, 0);
+> >>
+> >> bpf_loop() is old and generally not recommended.
+> >> Please use bpf_for() then the diff will be one line change and
+> >> can scale to any number of args. Not just 6.
+> 
+> Thanks Alexei, I didn't know about this preference.
+> 
+> > One thing we should take care is to support old kernels.  The oldest
+> > LTS kernel in the kernel.org is 5.10 and bpf_loop() was introduced in
+> > 5.17 and bpf_for (bpf_iter_num) was 6.4.
+> 
+> The problematic loop was introduced in 6.12 by a68fd6a6cdd3 ("perf
+> trace: Collect augmented data using BPF") so we should be good using
+> bpf_for. Or is perf from 7.2 supposed to work on 5.10 LTS kernels?
 
-commit a59a53956c9b8f69a9dfa47bc54cc9fbcd9759ec
-Author: Mahe Tardy <mahe.tardy@gmail.com>
+Yep, we'd like to support old kernels.
 
-bpf: add bpf_icmp_send kfunc
+Thanks,
+Namhyung
 
-This commit introduces a new bpf_icmp_send kfunc to allow BPF programs to
-generate ICMP error messages. It clones the original skb and invokes the
-underlying IPv4 or IPv6 ICMP send routines.
-
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 2e96b4b847ce1..f3aa494ed1053 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-
-[ ... ]
-
-> +__bpf_kfunc int bpf_icmp_send(struct __sk_buff *skb_ctx, int type, int c=
-ode)
-> +{
-> +	struct sk_buff *skb =3D (struct sk_buff *)skb_ctx;
-> +	struct sk_buff *nskb;
-> +	struct sock *sk;
-
-[ ... ]
-
-> +	switch (skb->protocol) {
-> +#if IS_ENABLED(CONFIG_INET)
-> +	case htons(ETH_P_IP): {
-> +		if (type !=3D ICMP_DEST_UNREACH)
-> +			return -EOPNOTSUPP;
-> +		if (code < 0 || code > NR_ICMP_UNREACH ||
-> +		    code =3D=3D ICMP_FRAG_NEEDED) /* needs a valid next-hop MTU */
-> +			return -EINVAL;
-> +
-> +		/* icmp_send requires a rtable; test-run synthetic skbs lack one. */
-> +		if (!skb_valid_dst(skb))
-> +			return -ENETUNREACH;
-> +
-> +		nskb =3D skb_clone(skb, GFP_ATOMIC);
-
-[ ... ]
-
-> +#if IS_ENABLED(CONFIG_IPV6)
-> +	case htons(ETH_P_IPV6):
-> +		if (type !=3D ICMPV6_DEST_UNREACH)
-> +			return -EOPNOTSUPP;
-> +		if (code < 0 || code > ICMPV6_REJECT_ROUTE)
-> +			return -EINVAL;
-> +
-
-[Severity: High]
-Should there be a check for skb_valid_dst(skb) here before cloning and
-sending the IPv6 ICMP message?
-
-It looks like the IPv4 branch validates the dst to prevent routing table
-lookups on synthetic or metadata-dst packets, but the IPv6 branch does not.
-
-If an IPv6 packet with a metadata_dst (e.g., from LWT or a tunnel) is
-passed to bpf_icmp_send(), could icmpv6_send() process the invalid dst and
-cast it to a struct rt6_info in icmp6_dev()? Dereferencing rt6->rt6i_idev
-might then read out of bounds from the metadata_dst struct and cause a
-kernel crash.
-
-> +		nskb =3D skb_clone(skb, GFP_ATOMIC);
-> +		if (!nskb)
-> +			return -ENOMEM;
-> +
-> +		memset(IP6CB(nskb), 0, sizeof(*IP6CB(nskb)));
-> +		icmpv6_send(nskb, type, code, 0);
-> +		consume_skb(nskb);
-> +		break;
-> +#endif
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260624185554.3625=
-55-1-mahe.tardy@gmail.com?part=3D1
