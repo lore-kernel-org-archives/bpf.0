@@ -1,309 +1,111 @@
-Received: from va-2-45.ptr.blmpb.com (va-2-45.ptr.blmpb.com [209.127.231.45])
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FDA3D6CA3
-	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 20:55:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.231.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7739E21638D
+	for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 20:57:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782334503; cv=none; b=lxqdEP8vAzGsiqZdjKUinjXfYVY14QCJjQcGydd6aRS86kBXO2MAGyCb21pxONWSgs+c7fuYSrUIvp5U1haL8tCqTC5025WJwn/Ye1iw/ThUuX3xnSY9UnhdWeb1gwBJWvOO+sF8lmc8UOAQWVTh1aBaInuPZa7Znd2CMikkOEY=
+	t=1782334631; cv=none; b=lF6F002hHRnigo03j9rQ6BARO+MBxKx7SBGSAaWVS/TJHwTfuC/hkfZJkrX0HcDanORPLRsnXiiVBqQ0D1e3r7qQcYVPF4c1dhcYwdsk5TbM00BeflGXfEkFo8zjvQMPJs/whKRxC7XS2LEp9QMDOHzSwb7VdMeWmR5/EKbp91o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782334503; c=relaxed/simple;
-	bh=+VztGOMbmVz+cbvQwKADZGsXIi9erdoPoYsZScBSziI=;
-	h=Subject:Mime-Version:Cc:In-Reply-To:To:From:Message-Id:References:
-	 Date:Content-Type:Content-Disposition; b=SjmD2oyMc3MtyDnaLse4YzRss7RT9ANtqT3cmLW0y2Qi8RKNGdHAm5d70NyAgHa9q2H2iz+DuYcGHsufAQQNC5tixhZ1AFEYOvLrKTfQqlJzC1lNGhOTdNbBEQ7nxx4UOyHcdLSrzlk0EinlB6KrEXU9jMKVImamnD/ovV1VdrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cherr.cc; spf=pass smtp.mailfrom=cherr.cc; dkim=pass (2048-bit key) header.d=cherr.cc header.i=@cherr.cc header.b=HupT1iVU; arc=none smtp.client-ip=209.127.231.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cherr.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cherr.cc
+	s=arc-20240116; t=1782334631; c=relaxed/simple;
+	bh=E1kSn3zA/cIoJ7ipzjSb5l55z352jUSBjqBw1lqnOFI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=YnBKBEmZw7Dlz3642BPN0sef8lA7/GmbabbEYlbXIiWvbTMdiQbJuytMPhOI0KuYvoD3E8pwEOvmUs/RC4YnWGALxVPJLUIubDiyc7gUfzse4QVQPbh1//vB7wP5pHu2RQqLZG+Um7qI5kxt8vWk4uEmdxBxXodDoLLKL1rbGSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XKBrZOQN; arc=none smtp.client-ip=209.85.160.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cherr.cc header.i=@cherr.cc header.b="HupT1iVU"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=feishu2604220257; d=cherr.cc; t=1782334488; h=from:subject:
- mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
- mime-version:in-reply-to:message-id;
- bh=+/gRR53Ag3PkcCwT4+m/ygvw6HUlnbklOOo9dl+Moag=;
- b=HupT1iVU4O3Pegg+FWHwqMFAiFlSqGG2zjeBRYjvoqVWP9ekOqv4hhMCflwKigvyZil49L
- IluWlgVV02Fi3vZVWsksx37IIOgdAP+OxA1C+sc7ixo6bRvhTSuRchO6JRdLS3sYLxe0gF
- Jfm5p5hiRAu2DbuuL+CGQv+/u4g/maa2dB5CNh1RlXAM+S0vBdAXaNEcYmEUpVLrwTbgbi
- 59FsoiIi/iBct+PbtY4RkFStqrU4vGmaQpxxx40fFDw/kH+ohHHlZifG8mvXpGGmjqKEfe
- MUJEu24SbQbAiy0lU1FnMshr2Lu5GdwdxuooMV/faEHMGUUVB4wVW0G6YsSZpA==
-Subject: Re: [PATCH] bpf: Fix use-after-free in htab elem with bpf_task_work
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XKBrZOQN"
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-4414d76270cso1017198fac.1
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 13:57:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782334629; x=1782939429; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E1kSn3zA/cIoJ7ipzjSb5l55z352jUSBjqBw1lqnOFI=;
+        b=XKBrZOQNHHOUfyCUySLyjBci1OrA/cmKd+bvJNK0wZl7lsowOA2eQfjYEIibwwKEPC
+         D/sBHnockiW9bRhIu+2+WigdCU3apn7/UUvZKC5n5rCKVG7axPNM2H5p/pnkyyxKmruO
+         usw88e3C0wgOyq3KhdQN1UvSkOx7BAQXJbPeWGUWAfL1qe2GseV/isQUBeOtDb0BrpFW
+         VHSpKvPO/yvjBtOjEFPJog7nCaOLBK5Tu7hPD666Z3Gxh2EVEb/mI8N4LhMQPT10CRI1
+         +cCbouRt+ZEZdibi36xP2pLTEVpi7ljdezlc0/zma8F+gd00A7YDoD7wD24xq9e2/gqS
+         o6Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782334629; x=1782939429;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E1kSn3zA/cIoJ7ipzjSb5l55z352jUSBjqBw1lqnOFI=;
+        b=Lt4JnwYtXIzVh8nZNxCo7miZAFqL8zV1WMrKtEKso5KCVzuutSHtZ5mtarE+dHWVVz
+         dVJN3qcamkDQZoeE5OPZEfSoCzein5lpLGxCZwHsNipiETde1n6ur+BHC+7UaBnqNOEb
+         FpWJ3jte1/e/RRIuWe4dE+vA98CtVeu3Vdh1M19xmWjh1PPLi0+2nLx4b4oQ7FZcm6BA
+         /ju3lzUTtm9Q5W5ve247OSiisR26IZm2Dqe7xK3aF5+YrIPiVJrmf6S8rrGugo7o9Mu+
+         jl/cueFX2uU5WKw0lcuXPHMo0E53QAEchBxjEs05e3lLJoHo7ArqRDPc+UdNmMr5z+a+
+         8x7A==
+X-Forwarded-Encrypted: i=1; AFNElJ92UlRR/gsHUkWIBOeW0OArOj5HZDsRIfMX9Nxlw4K48bUGf4pEe0zhPwx0TqWV/li/0fw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx84jvjkB1R12cmxGQ0H4d5wBG9GdzLOywVNT7Xt6OFmjDslPzM
+	TrAjzf+feEZbfexuqh3yV4IBbeBP8r5pYMZyS5PlvmgNEkVVAGXf7aAS
+X-Gm-Gg: AfdE7cmbnrcwkGCH7DG4B0Y24eAfAky6LjeafW5A0dVsxEd0Ibri1UZCZAlVfXm2O4C
+	np3VnN7e1UDyG2sbp1qC/mtEm2M6QnrKse+4EdCncO6tEkzypFtSTIJF1nI8eo5HZQCzTq5oA71
+	iRbd5Cazu4hy7XZ33O/5N+N6Gf8s++yHJc8pTAQPUARJRmNZ3gqokz3uLP9vWnCaaT1RIoTuGH1
+	yED26/mhUwQcqnIzmtRRVF8tWdTGmtF4fn7/iDgtd3m0m7ibwEHay9UDmjHaFgdyFfKTUOj1qfv
+	mZlbOwQlx4ER74J/IVIjSrsnfFwhYhiqLmbV7S3nRNjeGm1l2UyXRQYCC1gCWJji/V9LTtcj2HG
+	8f9x85U866+B007u+YUtHj09J8zzC3BNgIe1aboTaSKJAePyVagFStoeqxlQqeVrVqy6+PebC6L
+	JWYSZAPA2ipaCUaFwI0KU+N9QDY8ncvWMXC0eG6ZxLEUR4UkfehgII/VeA3Lg4UN1VebUOM/T2g
+	Z207xk=
+X-Received: by 2002:a05:6871:c8cc:b0:43d:2efa:77ee with SMTP id 586e51a60fabf-447b5e1b862mr6429226fac.21.1782334629398;
+        Wed, 24 Jun 2026 13:57:09 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:72::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4472f04236fsm10151743fac.14.2026.06.24.13.57.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Jun 2026 13:57:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-Lms-Return-Path: <lba+26a3c4416+aefd75+vger.kernel.org+me@cherr.cc>
-Cc: <bpf@vger.kernel.org>
-Received: from pve.cherr ([111.42.148.29]) by smtp.feishu.cn with ESMTPS; Thu, 25 Jun 2026 04:54:45 +0800
-X-Original-From: Shengzhuo Wei <me@cherr.cc>
-In-Reply-To: <20260624193149.3EE921F000E9@smtp.kernel.org>
-To: <sashiko-reviews@lists.linux.dev>, "Shengzhuo Wei" <me@cherr.cc>
-From: "Shengzhuo Wei" <me@cherr.cc>
-Message-Id: <ajxEE59cuz9XUWMV@pve.cherr>
-References: <20260625-bpf-htab-task-work-uaf-v1-1-31e711ccb159@cherr.cc> <20260624193149.3EE921F000E9@smtp.kernel.org>
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 25 Jun 2026 04:54:43 +0800
 Content-Type: text/plain; charset=UTF-8
-Content-Disposition: inline
+Date: Wed, 24 Jun 2026 13:57:07 -0700
+Message-Id: <DJHKW8E1F6PI.P3WUIG9DZE1K@gmail.com>
+Cc: "Amery Hung" <ameryhung@gmail.com>, "Kuniyuki Iwashima"
+ <kuniyu@google.com>, "bpf" <bpf@vger.kernel.org>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Jakub
+ Kicinski" <kuba@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Network Development" <netdev@vger.kernel.org>, "kernel-team"
+ <kernel-team@cloudflare.com>
+Subject: Re: [PATCH bpf-next v2] bpf, unix: Guard sk_msg-dependent code
+ behind CONFIG_NET_SOCK_MSG
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, "Jakub Sitnicki"
+ <jakub@cloudflare.com>
+X-Mailer: aerc
+References: <20260623-bpf-sk_msg-split-unix-v2-1-ca7a626a94a5@cloudflare.com> <CAAVpQUBsQFFxJFDnJzxmsER3bOjm=zqJ5P5MSeW_T9v-4639cw@mail.gmail.com> <87v7b9ysep.fsf@cloudflare.com> <CAAVpQUBARp1qCEomgzWXVe35WatdaswujVLku+RESm_LW0dE7Q@mail.gmail.com> <CAADnVQL2pfQ0BoN-vWcuCpbOBBKq_rM7Bp7P4XdLMFER5LGSDg@mail.gmail.com> <87mrwlyqg4.fsf@cloudflare.com> <CAMB2axMVhJJpP5HZtDFyQLLbKoRxhW08rj1zGRtWtgDkfYaVNA@mail.gmail.com> <878q85yoy5.fsf@cloudflare.com> <CAADnVQKr1XisnigNsBw7CsXxY3Xn5KOGtX_YDdXmNMZyJy4_Cw@mail.gmail.com> <a50cef70-d8fe-4f42-a89b-2c63c33a72ef@linux.dev>
+In-Reply-To: <a50cef70-d8fe-4f42-a89b-2c63c33a72ef@linux.dev>
 
-On 2026-06-24 19:31, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 5 potential issu=
-e(s) to consider:
->=20
-> New issues:
-> - [Critical] Unconditional call to `check_and_init_map_value` on inline e=
-lement memory causes out-of-bounds writes for per-CPU maps.
-> - [High] Dynamic memory allocation (`kmalloc(GFP_ATOMIC)`) in the element=
- free path breaks NMI safety and causes memory exhaustion.
-> - [High] Permanent bricking of `BPF_TASK_WORK` fields during in-place map=
- updates.
->=20
-Will try to fix in v2
-
-To be honest, I'm not entirely sure how to handle this UAF issue either,=20
-and my understanding of BPF isn't particularly deep. It might be necessary=
+On Tue Jun 23, 2026 at 6:32 PM PDT, Jiayuan Chen wrote:
+>
+> Hi Alexei and Jakub,
+>
+> skmsg is actually still pretty useful for gateways.
+> I started with bpf by integrating skmsg into nginx as a module and envoy=
 =20
-for the maintainer to propose a more comprehensive solution.
+> has something similar.
+> The usual setup is cgroup/sk for L4 bypass (reject SYN), and skmsg for=20
+> L7, redirecting
+> between local apps by looking at the payload. So there are real users.
 
-> Pre-existing issues:
-> - [Critical] LRU map eviction synchronously reuses elements containing `B=
-PF_TASK_WORK`, causing UAF and data corruption.
-> - [High] Incomplete fix for UAF in preallocated HASH maps due to `extra_e=
-lems` cache bypass.
-> --
->=20
-> commit 3d208f380a67702d8970ff27139db174f1482e4a
-> Author: Shengzhuo Wei <me@cherr.cc>
->=20
-> bpf: Fix use-after-free in htab elem with bpf_task_work
->=20
-> This commit attempts to fix a use-after-free vulnerability when deleting
-> hash map elements that embed a bpf_task_work. It defers recycling through
-> call_rcu_tasks_trace() to wait for rcu_read_lock_trace() readers. It also
-> changes the sentinel value in cancel_and_free() to ERR_PTR(-EBUSY).
->=20
-> Fixes: 38aa7003e369 ("bpf: task work scheduling kfuncs")
-> Signed-off-by: Shengzhuo Wei <me@cherr.cc>
->=20
-> > diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> > index 9f394e1aa2e85..19fa61909e4fe 100644
-> > --- a/kernel/bpf/hashtab.c
-> > +++ b/kernel/bpf/hashtab.c
-> > @@ -310,6 +310,7 @@ static struct htab_elem *prealloc_lru_pop(struct bp=
-f_htab *htab, void *key,
-> >  		bpf_map_inc_elem_count(&htab->map);
-> >  		l =3D container_of(node, struct htab_elem, lru_node);
-> >  		memcpy(l->key, key, htab->map.key_size);
->=20
-> [Severity: Critical]
-> This is a pre-existing issue, but does this synchronous eviction path in
-> kernel/bpf/hashtab.c:prealloc_lru_pop() leave LRU maps vulnerable to a
-> use-after-free?
->=20
-> When an LRU map is full, it triggers synchronous eviction. The victim nod=
-e is
-> removed and immediately returned for reuse.
->=20
-> Since there is no RCU tasks trace grace period between eviction and reuse=
-,
-> could a concurrent BPF program holding rcu_read_lock_trace() have its mem=
-ory
-> overwritten while still in use?
->=20
-> > +		check_and_init_map_value(&htab->map, htab_elem_value(l, htab->map.ke=
-y_size));
->=20
-> [Severity: Critical]
-> Can this unconditional initialization cause out-of-bounds memory corrupti=
-on
-> for per-CPU maps?
->=20
-> For per-CPU maps, the actual map values are allocated separately per CPU,=
- and
-> the inline memory returned by htab_elem_value() is only large enough to h=
-old
-> the 8-byte pointer to the per-CPU allocation.
->=20
-> If a per-CPU map contains a special field at an offset greater than 8, do=
-es
-> check_and_init_map_value() write zeroes out of bounds of the htab_elem
-> inline storage, corrupting adjacent slab memory?
->=20
-> >  		return l;
-> >  	}
-> > =20
->=20
-> [ ... ]
->=20
-> > @@ -950,12 +951,69 @@ static int htab_map_get_next_key(struct bpf_map *=
-map, void *key, void *next_key)
-> >  	return -ENOENT;
-> >  }
-> > =20
-> > +/* Deferred htab_elem free for bpf_task_work maps.  cancel_and_free()
-> > + * returns while the task_work callback may still be accessing map_val=
-;
-> > + * the callback holds guard(rcu_tasks_trace), so deferring the recycle
->=20
-> [ ... ]
->=20
-> > +static void htab_elem_defer_free(struct bpf_htab *htab, struct htab_el=
-em *l)
-> > +{
-> > +	struct htab_elem_free_rcu *fr;
-> > +
-> > +	fr =3D kmalloc_obj(*fr, GFP_ATOMIC);
->=20
-> [Severity: High]
-> Does this dynamic memory allocation break the strict NMI safety guarantee=
-s of
-> preallocated BPF maps?
->=20
-> Preallocated maps are designed to avoid runtime dynamic allocations, ensu=
-ring
-> they are safe for NMI contexts like perf events. By unconditionally calli=
-ng
-> htab_elem_defer_free() (which calls kmalloc) for elements with a task wor=
-k
-> field, does this introduce a risk of deadlocks in SLUB?
->=20
-> Additionally, during map destruction of non-preallocated maps,
-> delete_all_elements() loops over all elements and frees them:
->=20
-> kernel/bpf/hashtab.c:delete_all_elements() {
->     for (i =3D 0; i < htab->n_buckets; i++) {
->         ...
->         hlist_nulls_for_each_entry_safe(l, n, head, hash_node) {
->             htab_elem_free(htab, l);
->         }
->     }
-> }
->=20
-> For a map with millions of elements, could this tight loop exhaust atomic
-> memory reserves and risk an OOM panic?
->=20
-> > +	if (WARN_ON_ONCE(!fr)) {
-> > +		/* Fallback: immediate recycle, small UAF risk */
-> > +		htab_elem_recycle(htab, l);
-> > +		return;
-> > +	}
-> > +	fr->htab =3D htab;
-> > +	fr->elem =3D l;
-> > +	call_rcu_tasks_trace(&fr->rcu, htab_elem_free_rcu_cb);
-> > +}
->=20
-> [ ... ]
->=20
-> > @@ -1118,6 +1180,11 @@ static struct htab_elem *alloc_htab_elem(struct =
-bpf_htab *htab, void *key,
-> >  	}
-> > =20
-> >  	memcpy(l_new->key, key, key_size);
-> > +	/* Re-initialize special fields for recycled elements.  copy_map_valu=
-e()
-> > +	 * skips btf_record fields, so a stale ERR_PTR(-EBUSY) left by
-> > +	 * bpf_task_work_cancel_and_free would persist and block new scheduli=
-ng.
-> > +	 */
-> > +	check_and_init_map_value(&htab->map, htab_elem_value(l_new, key_size)=
-);
->=20
-> [Severity: Critical]
-> Are we at risk of out-of-bounds writes here as well for per-CPU maps?
->=20
-> As with the call in prealloc_lru_pop() above, if the map is a per-CPU
-> hash map, htab_elem_value() points to an 8-byte space.
->=20
-> If the map has special fields at a larger offset, check_and_init_map_valu=
-e()
-> might corrupt slab memory. If the offset is zero, could it overwrite the
-> per-CPU pointer itself and cause a NULL pointer dereference in
-> pcpu_init_value()?
->=20
-> [Severity: High]
-> This is a pre-existing issue, but does this allocation path bypass the ne=
-w
-> RCU tasks trace deferral for preallocated hash maps during element update=
-s?
->=20
-> When updating an existing element in a preallocated map, alloc_htab_elem(=
-)
-> stashes the old element synchronously into the CPU local cache:
->=20
-> kernel/bpf/hashtab.c:alloc_htab_elem() {
->     if (prealloc) {
->         if (old_elem) {
->             pl_new =3D this_cpu_ptr(htab->extra_elems);
->             l_new =3D *pl_new;
->             *pl_new =3D old_elem;
->         }
->     ...
-> }
->=20
-> Then, htab_map_update_elem() intentionally skips calling free_htab_elem()
-> for preallocated maps.
->=20
-> A subsequent update on the same CPU can immediately pop the old element f=
-rom
-> extra_elems and overwrite it. Does this entirely bypass the RCU grace per=
-iod
-> provided by htab_elem_defer_free(), leaving the original race condition
-> intact if a concurrent callback is executing?
->=20
-> >  	if (percpu) {
-> >  		if (prealloc) {
-> >  			pptr =3D htab_elem_get_ptr(l_new, key_size);
->=20
-> [ ... ]
->=20
-> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> > index c18f1e16edee4..07088ac1f0b2d 100644
-> > --- a/kernel/bpf/helpers.c
-> > +++ b/kernel/bpf/helpers.c
->=20
-> [ ... ]
->=20
-> > @@ -4784,8 +4787,8 @@ void bpf_task_work_cancel_and_free(void *val)
-> >  	struct bpf_task_work_ctx *ctx;
-> >  	enum bpf_task_work_state state;
-> > =20
-> > -	ctx =3D xchg(&twk->ctx, NULL);
-> > -	if (!ctx)
-> > +	ctx =3D xchg(&twk->ctx, ERR_PTR(-EBUSY));
->=20
-> [Severity: High]
-> Could this change permanently brick task work fields for map types that
-> update elements in place?
->=20
-> The patch relies on the newly added check_and_init_map_value() calls in h=
-ash
-> map element allocators to clear this ERR_PTR(-EBUSY) sentinel when an ele=
-ment
-> is reused.
->=20
-> However, map types that update elements in place, such as array maps, nev=
-er
-> allocate a new element. They use copy_map_value() followed by
-> bpf_obj_cancel_fields():
->=20
-> kernel/bpf/arraymap.c:array_map_update_elem() {
->     ...
->     copy_map_value(map, val, value);
->     bpf_obj_cancel_fields(map, val);
->     ...
-> }
->=20
-> Since check_and_init_map_value() is never called for these in-place updat=
-es,
-> twk->ctx appears permanently left in the ERR_PTR(-EBUSY) state. Would any
-> future bpf_task_work_schedule() calls on that element permanently fail?
->=20
-> > +	if (IS_ERR_OR_NULL(ctx))
-> >  		return;
-> > =20
-> >  	state =3D xchg(&ctx->state, BPF_TW_FREED);
->=20
-> --=20
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260625-bpf-htab=
--task-work-uaf-v1-1-31e711ccb159@cherr.cc?part=3D1
+...
+
+> Agree, just like we remove skmsg from KTLS which is rarely used.
+
+...
+
+> Hope not have skmsg disabled by default.
+
+I wasn't suggesting to delete the whole skmsg,
+but to disable combinations that are causing issues.
+Like what was done for skmsg and ktls.
+I'd allow plain tcp and udp sockets only.
+Allowing unix sockets was fishy. I think we should reject it too.
