@@ -1,92 +1,122 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41497221DB6
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 18:53:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861243446CA
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 19:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782413632; cv=none; b=BhigUJKR9oL02A/5MKQHUQYX489ldhI4CrRtdGzuagScPJUn+YNzUxAZBshpWUI2zJNCHghNbf0exWHEHgki5GxhVlcnQXUhUenmYwZauzjcsdm7/8chH2NLTY9k88SHy4viN/GQ4tvAfIqo01Jmgib0AcEEewNfMQIZZJT66lI=
+	t=1782414956; cv=none; b=AB4wtIGnjb1t10JQdewThnRYG4XZhTwa+cZTQ4YCNFwkIc2kzdMCYKqs6H/+gBlzEVXPLNAZFutr5V+aFqpdmQEwiWBeqCGUU8OTJZ4hsxE4Cfw5f+krSC+WtdJrvFhtgaXTmDalL2bnEM4dovQpBA4YOLn8pimBcNr1tYFhxTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782413632; c=relaxed/simple;
-	bh=zkJ8zk4nTUNkg2NsqT6TTNga18s7VlJoNpdgJlG+rX8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mwNioFYuKdGz7hU1lCzigM4YGvh3+CjvgEaqV1b5blMJa/5OnQqQ2dNwCNuuLyOA99WDm9bV2XbY4FfZEskhyJKOZ1Vd+V3QeHzEwu2k5LzUnsU6oL8e18Ud67wPZNJ/ajyWw+7ryHEwUCGddkBdJ9huXrca/5goy1YEqIOVZAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GmDrxDMB; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782414956; c=relaxed/simple;
+	bh=rXl1mT4uj7SK8qenD0vLrTZs/CQ0Ua50ArQkmKCzBMM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qe0HUYAt1VPCM8OSYYhigbMisOfZ0cHFm6YylxTl6TPgsUDTyU9Me+nmQbHiztMJsLVMDjo758RCdyXScwQcybowGiMr4Ks1mUxT04aw9l8YRyw1BNqZb/TYMMsXCn7t8VtWTUEEDJ2hEew8lGuccoBMHocZr+T6askx+Uyfazg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ao/7mdc8; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GmDrxDMB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782413630;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zkJ8zk4nTUNkg2NsqT6TTNga18s7VlJoNpdgJlG+rX8=;
-	b=GmDrxDMBfkU0GwNUlC1Hsc015F8ED2J/mv290Zq8Ndtyeg79dZ6pwl6w4Bg72mE2SQo25J
-	GFOS860HLKt5QyEy16TUIiUyfwzRFWtuBgFHfxK0Tiedhylo+d5By3Kzd8WeJa1XlJQHNT
-	4eBv90kRNYELZdQJ0JcJXlkDNGkHXH4=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-92-DjQzddgxMaiD0omi3szsOg-1; Thu,
- 25 Jun 2026 14:53:46 -0400
-X-MC-Unique: DjQzddgxMaiD0omi3szsOg-1
-X-Mimecast-MFC-AGG-ID: DjQzddgxMaiD0omi3szsOg_1782413625
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D2A0818600DF;
-	Thu, 25 Jun 2026 18:53:44 +0000 (UTC)
-Received: from fedora (unknown [10.44.33.191])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 2C5F5414;
-	Thu, 25 Jun 2026 18:53:40 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Thu, 25 Jun 2026 20:53:44 +0200 (CEST)
-Date: Thu, 25 Jun 2026 20:53:38 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 05/13] uprobes/x86: Move optimized uprobe from nop5 to
- nop10
-Message-ID: <aj15Mi3ZISFiU3v9@redhat.com>
-References: <20260526205840.173790-1-jolsa@kernel.org>
- <20260526205840.173790-6-jolsa@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ao/7mdc8"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-84532e3dbf7so63988b3a.1
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 12:15:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782414955; x=1783019755; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/n08+H8Tpjvupjxeo/7io0Vp1HXJGNBPMxNmTxvkgU0=;
+        b=ao/7mdc8sbo3BHAGDhaDoFgs9yW8eMUzC9HJ2ixLMsL4mqvXRs9rfo6elZr2mKK4E5
+         7wakguSJnJ20pV06PVZxRKPPTgcKLNNL2B0xHhe5wTfw67vJ5mPzwlh4/bQVOnlPtDOg
+         Sg4GUl8Z0G7fKhKlDMuwVN+LcmxHlsSldkXxmjs1E5vIsD9L1Lx7AL0QUvBwsCCeObL0
+         /huCrqjXn03vnMlxHrC5G+EQfCx9TH9rZce2zw+7WFz7HFG37CrfCgvQZUvC0+tN6ZQI
+         9jyJ1MeiFivUZhl0ekC30lYWj5EvMmL0eTXKMhIAEbo6yALGzBL8ngPUYEE6JGi0M5AR
+         bcJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782414955; x=1783019755;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/n08+H8Tpjvupjxeo/7io0Vp1HXJGNBPMxNmTxvkgU0=;
+        b=QBCgr8KCHxWQ9DKQtNlR/Chq/G0ZIcBOOEVeiu76gBNnIED6pH2JtIVXWksOTIRsFy
+         D+SOmVKc2C2lFiBqGmEYJViE4b8gWWkZrY/1Xz86Hknknw1vl0Zwwi/LrIthABu8QS0f
+         clIWKPV2Ajg0RyBnVz2cpUE4ft7u8MCBGQBd2MjwrgD2EpGZBxOaSerHr5KDIrKdyVd2
+         ixFyDRy43W3KsR5QTkG3u2bIyhyHrWyDj8YJq4KtrlT7VOR5+Zmivvze5GcyEvtFNQuc
+         HDiiXCjrtGaI0bgOUWgLjpDWfjP4tyohLvUCURG9g+Ah6LscRPjH/KvHfHz2aRp/R53i
+         XCAw==
+X-Forwarded-Encrypted: i=1; AHgh+RopdNhThM+MrEIU/mJlYUAZiKVAijMd1WalTgFhu/OgXHeuR+95YoGbobaf2JcahuKLUZU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmM4XOdhVYiacYBVk5FNlIWSD+H/+OpzhwiIJ5fRXuxan+FYrQ
+	eTDj456U3CZwqc7sRkyIHqio8OpbDENQmUMdtWxaQhsiMjw3yDpZev/g
+X-Gm-Gg: AfdE7clU77ZKwVndo2SQm8td3RdmNZODz0LjOUBXOKZHEN+atOuy/tG0UxOy5pgPLhz
+	laVRMXMWM98ISqZK0Sx3mw2FJASBYpUPl2Ts0HUxQHRYf6RFLS4aqD4DOsh4Hi7ZIineAgVKlyk
+	ZJs0Dy3k3WJrcVTmhQdWvIzP03KSlGmR0tj0REdaYVmdKZk75MaG2wDc6NLEQ354yf84+mFvcGv
+	dH3hoSJstbXVKtE3EJne/pc0L2DTsTtzOGwtJY5zIv01M3mwqtDYCkkVvVHfzR6RHTafBtqwCxZ
+	sS+V7X5lL2xLCNruxrqtFU17njDXSgKolc31tIl7sXKNXB3Af01LdMYqWRTC7OfM2yPTMNYBDvf
+	XXTZri1Osox7QmQm8aiXQDLJ1Bnn1v2jB36IVBMYYWfxZUZJsH+HxybLGurKjE1Ti6cer9Lxkvk
+	lztLaYrgImDyhTU0AYPmltytOZ6sNitZLBLjqJHX+mqA==
+X-Received: by 2002:a05:6a00:804:b0:82f:72e6:ed4 with SMTP id d2e1a72fcca58-845b382ec89mr5091236b3a.0.1782414954654;
+        Thu, 25 Jun 2026 12:15:54 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845c104113esm665045b3a.57.2026.06.25.12.15.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jun 2026 12:15:54 -0700 (PDT)
+Message-ID: <9e952ca4993577f5e45b5c17f5c80e42724063c8.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 2/5] selftests/bpf: libarena: Fix can-loop zero
+ variable definition
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, memxor@gmail.com,
+ daniel@iogearbox.net, 	mattbobrowski@google.com, song@kernel.org
+Date: Thu, 25 Jun 2026 12:15:43 -0700
+In-Reply-To: <20260618085626.19633-3-emil@etsalapatis.com>
+References: <20260618085626.19633-1-emil@etsalapatis.com>
+	 <20260618085626.19633-3-emil@etsalapatis.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260526205840.173790-6-jolsa@kernel.org>
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-On 05/26, Jiri Olsa wrote:
->
-> + * Note that unoptimization deliberately keeps the call opcode and displacement
-> + * in bytes 5..9. Those bytes become operands of the restored 10-byte NOP.
-> + *
-> + * Since there is only a single target uprobe-trampoline for the given nop10
-> + * instruction address, the CALL instruction will not be changed across
-> + * unoptimization/optimization cycles.
-> + * Therefore, any task that is preempted at the CALL instruction is guaranteed
-> + * to observe that CALL and not anything else.
+On Thu, 2026-06-18 at 04:56 -0400, Emil Tsalapatis wrote:
+> BPF can_loop based loops require the index variable to stay imprecise.
+> This means we must initialize them from a currently imprecise variable
+> instead of directly assigning 0 to them, like so:
+>=20
+> static volatile u32 zero =3D 0;
+>=20
+> for (i =3D zero; i < NUM_LOOPS; i++) {
+> 	/* loop body */
+> }
+>=20
+> The libarena implementation of this technique is currently faulty. For
+> the technique to work, the variable must not be in a map. This includes
+> the .rodata DATASEC map used for const variables. However, libarena
+> still defines the zero variable as constant.
+>=20
+> Modify the zero variable definition into a volatile variable. This
+> change adds a complication caused by the compiler optimizing array
+> derefences from
+>=20
+> for (i =3D zero; i < NUM_LOOPS; i++) {
+> 	val =3D *(ptr + i);
+> }
+>=20
+> into
+>=20
+> for (i =3D zero; i < NUM_LOOPS; i++) {
+> 	val =3D *ptr++;
+> }
+>=20
+> and causing verification failures. Use the barrier_var() clobber macro
+> to prevent this optimization from taking place. After that, remove the
+> bpf_for() invocations introduced in libarena for parallel spmc testing.
+>=20
+> Reported-by: Eduard Zingerman <eddyz87@gmail.com>
+> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+> ---
 
-Understand... and I guess synchronize_rcu_tasks() is too heavy.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-But this means that unregister/unapply will never discard the COW'ed anonymous page
-with optimized up; __uprobe_write() -> orig_page_is_identical() will never be true...
-Plus this means that we can never "gc" the unused tramp vma's, but this is minor.
-
-OK. This is not critical, and other than that I don't see any problems in yout patch.
-(but I am sure this is only because I don't understand this code/patch enough ;)
-
-So, FWIW
-
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
-
+[...]
