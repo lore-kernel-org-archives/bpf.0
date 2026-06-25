@@ -1,41 +1,41 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E1713D891;
-	Thu, 25 Jun 2026 02:45:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26CB127FB2A
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 02:47:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782355536; cv=none; b=QG37CAI9jBpl11gX9YyZA0u8QouxqjlZb4e9/1Ns1xMGKZbGlgBUaRZYfjJ/hc4kZoAEF8oZEXTThgNfKoWdhBEtw6eyW9aDOS5PBdQtYo9s2TjS2EUlwdvwYg/1Y+4NOjkeBZKYPtZZP0D7iUWmiBbg1pNsklRb/dvhnL09amw=
+	t=1782355653; cv=none; b=TPUgcmSPZ2nl2jgM6jiEvSme6LKwQnCHZHUUHbfoibLRM7BDBArXHalLf0JhMkacG+jcJG60NhRm/70eijef6JhC70q0Ht6nztTZey6CgK/q7WVdqXk6Wc+Pl3yTuNhKYkr9rHZcneYu4K1OlmqqaIidwjQF4LvRQwGAAqrCYxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782355536; c=relaxed/simple;
-	bh=HsIsvkCBdswzkkwm80TK52fKpjineNgdx3hZ57XP61E=;
+	s=arc-20240116; t=1782355653; c=relaxed/simple;
+	bh=ekZ5hEH2mFMqQume6ySdjrLotZSjBf5heSdddEZljjg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qDtmAHMy5pzjqOkw44ElB/zuP2L7bOjM5hm4O6KtH0G59ikGdmaQZVmRAd+qhHTU2500JhVD8cc8tEk864zYlOeNWbZxXbxqiGJi268s7eEl/RS63EBJEt1JBbI9vfKaQW9PHQALiya7RWxFlsudsDqsCe54MQsk1zM1QgfYiPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YQUiPYwC; arc=none smtp.client-ip=91.218.175.181
+	 In-Reply-To:Content-Type; b=JI4g9HUIZ9SLlizzC6aWAWSFvrKQm5ryXEps8q4jkv1AtrOd8Ix3TBRI0+UbuPMYCx+kAEuziA3jo1ahDriIvrWkwzQWw35IgcxxUCVt+K7tMxToI6xZQfd6cuVCDZREMS3z0nKKa3WL7mz84Bk6Ko9ULnJd/af1vw9YsJZ67Jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eLByWqDB; arc=none smtp.client-ip=95.215.58.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YQUiPYwC"
-Message-ID: <951feedc-4764-42a8-886a-b2e7dfe75cf9@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eLByWqDB"
+Message-ID: <d6bc3f2e-baab-480c-aa45-7c7ee9ba9f92@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782355532;
+	t=1782355640;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=j7zz5j64VzwH9RWYlZ65le/ZbRuht5ZmZ+Z29QkrcwI=;
-	b=YQUiPYwCeuFPWCjth8pOY+R+Q31ZyCVQY6g7m+VTKjgfCH2ifPfJy7Sb1Ynh5PpeI69KNz
-	9K0Em0MrhJb5JbZVppCTYs3A8t4IZNbjlNKomLlWS/RhcMhouW063WAXONcxou3FSoYKjd
-	MfTnJQ8E3A7DM0N0eg3TdZyJS36qvQ0=
-Date: Thu, 25 Jun 2026 10:45:22 +0800
+	bh=OcvEdPoWwW8h6fIjkmybDFsWwjAoRy7aNjzn3vle93k=;
+	b=eLByWqDB0l83nQU3jBECHR+LKGMHZ0Bw5Lux0p1+5KL/IwN2ugtwMNg0+w9LEhRJlD6OFN
+	zhZFY3ayeN3ujdnvhJkwE29K8uQ8O3BGN4AkomTSBkwT6UZ4+WADS+zJU0YUfocuiClu/t
+	dnIsV+vAW2ufGBOfMOvzjPzzYMjHMMM=
+Date: Thu, 25 Jun 2026 10:47:07 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v7 06/11] libbpf: Add support for global percpu
- data
+Subject: Re: [PATCH bpf-next v7 07/11] bpftool: Generate skeleton for global
+ percpu data
 Content-Language: en-US
 To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
@@ -48,45 +48,46 @@ Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  kernel-patches-bot@fb.com
 References: <20260622143557.22955-1-leon.hwang@linux.dev>
- <20260622143557.22955-7-leon.hwang@linux.dev>
- <CAEf4BzZSeMSMnuYdLvEfb7-pmbthjU3J7W3QB4q9-WN_4+QrbA@mail.gmail.com>
- <8f06ad4d-d003-4671-9dd4-24b5c7e4b806@linux.dev>
- <CAEf4BzYc5n9GQEBoSs3kqzM7DuPaYuZ5q+BzXNMbrF6sV1DLmA@mail.gmail.com>
+ <20260622143557.22955-8-leon.hwang@linux.dev>
+ <CAEf4Bzay2Wssj1J4fEq3T7iTOBDswEZunm1OQNDJvPr2Cz2Usg@mail.gmail.com>
+ <2330e6a8-c7eb-4296-8aa0-feaafd6b09cf@linux.dev>
+ <CAEf4BzaiYCAqSQgxeEv=8tmtNLYaghj8OBmRJdUDiUm2AKAwSg@mail.gmail.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAEf4BzYc5n9GQEBoSs3kqzM7DuPaYuZ5q+BzXNMbrF6sV1DLmA@mail.gmail.com>
+In-Reply-To: <CAEf4BzaiYCAqSQgxeEv=8tmtNLYaghj8OBmRJdUDiUm2AKAwSg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On 25/6/26 00:45, Andrii Nakryiko wrote:
-> On Tue, Jun 23, 2026 at 9:14 PM Leon Hwang <leon.hwang@linux.dev> wrote:
+On 25/6/26 00:47, Andrii Nakryiko wrote:
+> On Tue, Jun 23, 2026 at 9:15 PM Leon Hwang <leon.hwang@linux.dev> wrote:
 >>
->> This was suggested by you in v3:
->> https://lore.kernel.org/bpf/CAEf4BzY9KeVeo2+6Ht1v3rL6UdwNxABZCSK1OZ_sD8qhpYZaeQ@mail.gmail.com/
+>> Makes sense.
 >>
+>> With adding the helper bpf_map_is_skel_data(), will this change looks
+>> more readable?
+>>
+>>
+>> +static bool bpf_map_is_skel_data(const struct bpf_map *map)
+>> +{
+>> +       return bpf_map__is_internal(map) &&
+>> +               ((bpf_map__map_flags(map) & BPF_F_MMAPABLE) ||
+>> +                bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY);
 > 
-> ah, the dangling pointer in skeleton that needs clearing, I forgot
-> already :) ok, I don't mind mprotect(), it just was a new case that no
-> other map followed, so I was curious if we can avoid deviations. But
-> that brings back the KCONFIG map question, can you please check what's
-> happening for it? Maybe we should do the same mprotect instead of
-> dangling pointer (if we have dangling pointer, of course).
+> if (!bpf_map__is_internal(map))
+>     return false;
+> 
+> return (bpf_map__map_flags(map) & BPF_F_MMAPABLE) ||
+> bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY;
+> 
+> or just split that last return into two if (...) return true);
 > 
 
-Looking at prog_tests/skeleton.c, skel->kconfig is NULL before loading,
-then becomes a read-only mmaped pointer after loading.
-
-So, skel->kconfig is not a dangling pointer after loading.
-
-It looks good to mprotect() skel->percpu.
+Will follow your suggestion, and use two if (...) return true.
 
 Thanks,
 Leon
 
->>>>         } else if (map->mmaped) {
->>>>                 munmap(map->mmaped, mmap_sz);
->>>>                 map->mmaped = NULL;
->>>> @@ -10806,16 +10847,19 @@ int bpf_map__fd(const struct bpf_map *map)
->>>>
-
+> both work for me
+> 
+>> [...]
