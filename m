@@ -1,113 +1,130 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0664338906
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 13:39:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782394760; cv=none; b=kHfgayRV+IAX4lCWv/bSMFegj4j4pKPZKNv9rP33IthHR5xUsdGn4Fx1/07MbwWpfj1kF9CCjAy2fewEvGrXLePqUQvd1JIueciP+9ThOe0R+SguvAQoy8ZEaAJ9OpKkPzveARfQOagVWt3RIBUnEfjk1jZOLreZLf2yAYAqhTo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782394760; c=relaxed/simple;
-	bh=+kdBpGeCCh3VUHhZsZ/4EJAxob800T1QKFGk864OpTQ=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d1WahNxP4ITF+91mpnVve3b4a5FAGjJnJQ4fXNKUKX5OXAEOFZ1FCfwpHZxKkWOSmqwHbmpsou5ViTxxjtaARRDa2Kn7pM5U6U5CaBY+cfTFRpbPxMIohrrFidcu1EYK2gyeur9dH265n6lDw89ufhGYHS+jt04zCFA+UR4625s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fzucqzwi; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F10E331EA0
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 13:39:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782394768; cv=pass; b=t5C4Qk+hwdoP35zsE2orBhFTSZEipH3IFpFsWd2EXlt/PP9GKDP/pp3dgrMp8b57vXY0D6jkpm+UwqEbXIzV8mRHUrI5x/tsS2UO0xNdvCGhg4mGWn4c0JZCE5k8az+hVodURgW4gQCXVmjrW7kVrJ9z5l/5noBxMVSn42W4Rww=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782394768; c=relaxed/simple;
+	bh=OoFzKZW407yRUv5K0dGZKSk0BzM1rVvgeohYpJyht7s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uPnG0bwl0Cw5Gol3wjFm5y4XqUhBLdaMVkreyKDubP1IVf/jUTbeHE0r5Cbp4HGHgETUuDS1ABjrhI5ajiwScd1TD2bABS4sWyeLXOf38izoRIJfYZnczLPIo/3b6ltdX43r/Eqy0tKtMBm1ie7DmR1mZp3b+vau7j6fbIMvohk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FddRbWzi; arc=pass smtp.client-ip=209.85.208.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fzucqzwi"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-49249072f03so13070825e9.0
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 06:39:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FddRbWzi"
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-39ad188f6d8so5124031fa.3
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 06:39:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782394766; cv=none;
+        d=google.com; s=arc-20260327;
+        b=JLbIzuQvSqztIHMxJTvUcDG4pOeZqPORzIlOA3Y9IRaBp/x4D+MOJczAJiupBSKti0
+         LW7XqhjssYvsZfIvoSbtTIcMFSsZVARN5+7CA612gkIcN4F0JVcp7amWSfreVSeyTUyM
+         u52AadbpNeNaVtm8cuC41KpInih7o3Nzh5m4GGLY6I8u+klqQt8KgAZqa0iBOpeVdMmV
+         bPNdbYY0BFLG59it2I0nUrwbKu7LnFF41oYBGT4yFG4Z6SkpLbRLXkWDEVDs/yyQa/Wr
+         uL41QasQLwtfJuKWMbraUEZoguoQ+5gzQhvylidMAPKGmzoFa6N08qJw/VbUJeHM6DlM
+         9BTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=OoFzKZW407yRUv5K0dGZKSk0BzM1rVvgeohYpJyht7s=;
+        fh=85L0XP+WK3+ooWLcD0ahstyZ29Xo9kP2HtThziZHTF0=;
+        b=TbN0BOm9KKxHeaK1xck+BarDqBlQYQ/lnfiT31zjPR+irM/7/aVQHe/8X3qN9HkMse
+         RR0iodrL9V9+XbSki1Hvy6/eN2wLAgnJ2+D2IZ4QHXN+UjqEeui2z6lU2P93eUI+FMan
+         iTKvLh5YjXnUVKggxAIsy0QAwo5b2kLrRZa3nP/67zPj9IsPXomPtrcz+f4h6Q0EXXdS
+         /9DddBDIoPsHsf0fwaoDxAerTixtYrNz6pHfoPNEwlwRYrguDGXZWDlnctSo2LVKJvtZ
+         S9gx07QYhKwID3PmoU63VQjujzelR4kswBYJCCGMlMCYHobhHbvgm0l1lXbrq1zFU51k
+         efVg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782394757; x=1782999557; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=f4pR9K1dxaeISN5nLk9a9H7V77qeKeERtll7p7KH46E=;
-        b=FzucqzwivK8xmREkSS/Z/KLx4t7ifE8Tob6iXKXyzgvOnJThNRrxV1ajtiD6mwZO1O
-         Av672lmi+JIOZrwsCFWPlIALcvzzM69WH+Hlhr2P0X7kmZNWdLfzxTcpGzQD/j63ykGX
-         v3WcdVF8eRfvEAq+tNUxm3iUhw6zaaqFfXKdn/sUH5XdrmWBPHidvIJg6OGGWcyOv/QH
-         ac9bU4BVmEb6qVOkJkNas1Trzy+D+Rd8XQGr12rqZgJNcLHzVqpx0GZy8A3pbRWaDvAf
-         cYsHpFz/Gg5xr8bJl0Lo9ejJ3qpnngKUPBU9zAve0Ia/xVNSLR4s5o5doDxrtgStpJ1I
-         1yGA==
+        d=gmail.com; s=20251104; t=1782394766; x=1782999566; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OoFzKZW407yRUv5K0dGZKSk0BzM1rVvgeohYpJyht7s=;
+        b=FddRbWziEAG1zi7AR9eeHcojKvXKJ2vMFeloIRmqCrfmcedh29jerCXj5jMW7KWv+4
+         qn+bdXlrYuLyX413az9wASfs3768Pqpn1XTSP7pT02s7BGDc0fhuyZoZH03rRewWG1+M
+         sBb7TyBO0VurkvwAuF+ozARFzs0bz4JBGuG7HXVEWk2RGbGiTrf6cu5W4pXgyscXhP1A
+         HMZgmcJmSPV/6XJ88s2gHIHgLjcue0qjhHUms5X11636903RR2TIU4U8ZRsFw7KV2BZh
+         DEt6w/88ZzjvPCVj5+1N5BmwxGgPocJERuGzKpwcxDARrIuGcAwpW7ll4MmfG9xCgumG
+         VmHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782394757; x=1782999557;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f4pR9K1dxaeISN5nLk9a9H7V77qeKeERtll7p7KH46E=;
-        b=AAK4fL2p8bjYehCZDVZ17pTVLpy+4mhG0g7lXeoZFSrLv1zYznhomeossSYwk1eG82
-         wNkgEqU9YYv2xvRmqpViOhZS/aVYZBJ9H4W1RUESngFDGcYkP/EIJLOsBtceZHr0WkX8
-         T41cyEpMtficLvjgiZagv8PU/XZi4BkaKybs25kwx2K2+8wU8D/PwREEuQ3tKqsoNem4
-         orw3YxbGgpF/5CkJ4qo0IW7rOpTgNm1Q3iI+hkMYa+dZMTVv88/aG5xoIMJ4HGGh0Uph
-         X3fRNeXv+11fwn1PXn1RK3Bj7Wqhp56TBIpCO0BgJGN8qob16I06MdoFn67da9X+k5Zl
-         1h1A==
-X-Forwarded-Encrypted: i=1; AFNElJ/MlN6YXoR5Vz03wA4ov/5ycaXQ4u53SR/1HSOYU+80wmrd8FGBgooc0UbgG8BvpDOWreI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhiIbfyY+dZCcrtJFOCywlpeVxf8fKv8jQ6K7u9sb5XxuLqLD3
-	jiVtfbIiuCUHVhPtk6MK5m6RqJLQYPwVjlXLG280G0lfd4bhK/a42xDc
-X-Gm-Gg: AfdE7cnVTfU+6R8ner+X3GOft7+8PYikGpqzdRGTY+U5oazRRHnHJdp+qKodxiQ+Zqa
-	pv0tmhkaN2Ul9+ucqpCPEL1PRY0XnbieQEvmyxZualAW5gYr/ov/Aj4OlXaooH7/EfLoFuENr5Z
-	0Oo6P4WxB/LYcXBzyjzak0TzRs0YekYOhDV9m+p8XuGdf62pfKJb6QiY1kfn+tq0/8aw8GHVlCT
-	uLiYqkztfn2k8V9WHeWZWCRowMIW2qDI1YZWjFm5cL7NPtheM1bjR/qpV1QxIL6POj3MoBOuLh9
-	bap/PBo0E1hMe8RXnIeyHIHmmLI2TPEg/uBOqSOjnugy2p1ANs6yzvq1WgRNFS+GP3zqNKsp3pT
-	Pf6LS1zd1eriyJIKAjWRaZojxVe3w17tcUQyu3PFbCv90az2mSdhiMRTiqAztpLNidV9USpaQbP
-	2xs1yq
-X-Received: by 2002:a05:600c:a403:b0:492:4e1c:120 with SMTP id 5b1f17b1804b1-4926689988fmr31107965e9.32.1782394757186;
-        Thu, 25 Jun 2026 06:39:17 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-492660addddsm63819605e9.6.2026.06.25.06.39.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 06:39:16 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 25 Jun 2026 15:39:14 +0200
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 04/13] uprobes/x86: Unmap trampoline vma object in case
- it's unused
-Message-ID: <aj0vgiPpnmwrfL3H@krava>
-References: <20260526205840.173790-1-jolsa@kernel.org>
- <20260526205840.173790-5-jolsa@kernel.org>
- <ajv5lxWjNHBAUa9r@redhat.com>
+        d=1e100.net; s=20251104; t=1782394766; x=1782999566;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=OoFzKZW407yRUv5K0dGZKSk0BzM1rVvgeohYpJyht7s=;
+        b=Yu9ntaUSEwa0iL3NkH+SxSa3xvBx85IES0Zy9BeJGOmr4GT5/tyxhH6J2LRPWGx9QS
+         VlXKcAJ3hHzViN2aQiwEapmLxWr2eIDbcsSYkrVLWF7XvejVagqR/pCaWUD2J3Ollh4m
+         NAGNW2W9rk0tYuFTPHjqtGH8VxP353gkqi80/N3/m5WAzA+NFcrPEWyzCaUjnJRPx3dK
+         cBBctPIhfhMeElXbqdljwVPTG+pcjZUVgL9t0iJXnZsYMdL6ZYjHMNt7cMRA4A8IY/9l
+         Tv+VuRLaXtBoTfT0hcaIWjZ0ELALEVlsVxVKrOdXjMIjp2GqxG7Yrq2kIx2YIsMN+wy+
+         75Xg==
+X-Forwarded-Encrypted: i=1; AHgh+RpeWohIjUymiy4FJZCrPhTIV9eTGyaT+f/xd6i4NHbA1iiCRAG3uVbnBKSl2rrUjGw4O28=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNOoahi49h4fa8c2xWaB7qtgVkQfElluLzKzK3GrI8s+P49Hds
+	AuRE/EDBZSU5Vpf6csdCMnQDFahBiNdOF56aX8/kFVeJgpMmrrbx1C8I9jiJbVg4eiTouT0DC5N
+	SwRC5htt8dCh5uHyACnxYvWJz1XAHTbE=
+X-Gm-Gg: AfdE7cn0y4YHwaEDWcl4caqmJ15hZJgOaxKQ7NMvhZMS62jpLA4NjXbCzVjCEfa22Ms
+	kEEeQgT46p1dHdYar3mQ2QZ2SyZPuyECJ+bJ4yYWWBD1ZOhke14cZVfrv1PW5CjFgNC26baDeC8
+	DmPsOBzpHmEwweQfzaVWy+XXggzbY0btsd4ek99poQ4la3qQYXWlrPjdSMkZPeSiVpoVrd7XBqi
+	UsxZai/MjT5T0d07kWTDUPIo5Pq36NhMtXo/D3R1xqPmHsp9sXvoyS9JK4iBqwu5S6PvkENx0js
+	uKywjZV+Jzi+mnbgnm1H34MxDiA4HkSn86Xx4TGhS+ZRMPod4D7s4ygSAy99Mv9dl1yDcjSWWSo
+	iNMDTxV7i3w==
+X-Received: by 2002:a05:6512:3c90:b0:5aa:753c:d8d2 with SMTP id
+ 2adb3069b0e04-5aea1f41685mr1232020e87.17.1782394765560; Thu, 25 Jun 2026
+ 06:39:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ajv5lxWjNHBAUa9r@redhat.com>
+References: <20260623091008.1046547-1-maciej.fijalkowski@intel.com>
+In-Reply-To: <20260623091008.1046547-1-maciej.fijalkowski@intel.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Thu, 25 Jun 2026 21:38:46 +0800
+X-Gm-Features: AVVi8Ce4AOVQRSewG-fz9uEpHoqOhw7FutDh6vfdNCI-T3sJ1cbdoK4T5udzXc0
+Message-ID: <CAL+tcoAosQzMo+4YJ-F_4SJaos_gRpQsQRETYPqBS_hJzan4sA@mail.gmail.com>
+Subject: Re: [PATCH net-next] selftests/xsk: preserve UMEM view in bidi test
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com, 
+	stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
+	tushar.vyavahare@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 24, 2026 at 05:36:55PM +0200, Oleg Nesterov wrote:
-> On 05/26, Jiri Olsa wrote:
-> >
-> > In case the optimization fails, we leak new-ly created trampoline
-> > vma mapping (in case we just created it), let's unmap it.
-> >
-> > Fixes: ba2bfc97b462 ("uprobes/x86: Add support to optimize uprobes")
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> 
-> Reviewed-by: Oleg Nesterov <oleg@redhat.com>
-> 
-> 
-> but I am a bit confused... It seems that this change doesn't depend on
-> the previous 03/13 which removed VM_DONTCOPY ? So I think this patch
-> could come as 3/13 after "Remove struct uprobe_trampoline object".
+On Tue, Jun 23, 2026 at 5:10=E2=80=AFPM Maciej Fijalkowski
+<maciej.fijalkowski@intel.com> wrote:
+>
+> The UMEM state refactor made __send_pkts() use xsk->umem for Tx
+> address generation. At the same time, the shared-UMEM Tx setup copies the
+> Rx UMEM state into a Tx-local state object and resets base_addr and
+> next_buffer before configuring the Tx socket.
+>
+> Passing that Tx-local object to xsk_configure() makes xsk->umem point to
+> the zero-based Tx allocator state. This breaks the BIDIRECTIONAL test onc=
+e
+> the roles are switched: the same socket is then used for Rx validation, b=
+ut
+> received descriptors from the other logical UMEM half are checked against
+> base_addr =3D=3D 0. With the new UMEM bounds check, a valid address such =
+as
+> base_addr + XDP_PACKET_HEADROOM is rejected as being outside the UMEM
+> window.
+>
+> Keep xsk->umem as the shared/Rx UMEM view used for socket configuration
+> and Rx validation. Use the ifobject-local UMEM copy only for Tx descripto=
+r
+> address generation, preserving the BIDIRECTIONAL test's intent of using
+> the proper logical UMEM half after the direction switch.
+>
+> Fixes: b17631032769 ("selftests/xsk: Move UMEM state from ifobject to xsk=
+_socket_info")
+> Signed-off-by: Maciej Fijalkowski maciej.fijalkowski@intel.com
 
-ok, will move it
+Reviewed-by: Jason Xing <kerneljasonxing@gmail.com>
 
-> 
-> And the subject looks misleading to me. A tramp vma may become "unused"
-> if (say) we remove some optimized breakpoint, afaics it will be never
-> unmapped. Perhaps it should say something like "don't leak on failure".
-> 
-> But this all is really minor, please ignore.
-
-np, will change
-
-thanks,
-jirka
-
+Thanks!
