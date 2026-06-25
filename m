@@ -1,215 +1,299 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B466E3DF01A
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 16:49:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0688C30D414
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 16:59:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782406149; cv=none; b=Z+DFGpVKCB+tl4EtoXXRBmXQB9kkcjv4YjWP1ouo8jyiyewG86xGkdMKivkeBlBp3xyDD+H+E2x3+dzG3PTyuI6p9sVH5xW8YuKVNTRmpDV9C/AOasxTKHbTdgqOgF+Q5ew1RAECmB3vHKYKAiX7tYWLSl4uP0PaEP5iuhWz1FI=
+	t=1782406793; cv=none; b=mVLc1MHkABo+b/ANV6pAVX6UILPWhsJb86dytHju88KAfQO724bEt69wi3/vpTW4Q2i5awp1d20F0I2Kw7zfJtNgU4PeNHUrfjsy7KFdKahFGMRX1r4Al1jTzGx943wHV/L6Q005wXazRGYRt5Z30FFJChSYT1OzYJz7hhJ0Npw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782406149; c=relaxed/simple;
-	bh=dyMR9SXh8cqYMnjrQ4eOds7TKTpvnKMwfk3jRymNJ7Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ox5ORL+FeFGKs5c6CdlOhvtQ9x3PMh+94AmL5/djxin+rHcw30FkccAFi6Wf0daCHkBlQcVijac6a7qt72PAtVhqxBNaESLoz4PYU6EU02Oa4svUiMW1ZSBwDO+TJ/ra5wTwYDwuzIyQQlqX6Uzl1j/aP0g1HBnMENrRK1YwVEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GLC0HV0b; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782406793; c=relaxed/simple;
+	bh=hI6afDcN3uImdVb7J+at1rYPtofw2XIek++OLKQGlgI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LSKCxqyVTkD1um7gxgMXbDqS+A60GSjHPIIwXNOmrn1OP44l8PJDw8xoLxREYkY5U/VpWD//wb6o11Vhsuaa5lu+fp62FcZ8dN2VxoK0DPBA8SYeAnIGMPzX5gd9WkxImONnu2d16qVS8TdkCb96yjrYZMIZO/EH4+TonDwSdHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LebcXyiT; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GLC0HV0b"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-46caaa805b2so1353350f8f.0
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 09:49:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782406146; x=1783010946; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tO5LmLOW4bHmMm0NAxA5lcAnMw8WVq7U30lmG+IEp00=;
-        b=GLC0HV0bgCuwFgdvSJOAHTdqvHtrp1mXQVUMtR/d9Q+8MZgqs017LVQCx23JPhFKrK
-         ATFwnW+yzT7sl7jcsI7HnN+GVux7GhMCHwt5L0eo8dQiWzU7TIRiPwVg8Agoyn0si6jx
-         n5wTo22Saxgox2zBs/brZn1LTIo/o9dkYVIaMGPhwMAi8C7zBrd8c7bmBV229v3ZfSQr
-         M+Rs/lt0PF/hTxTI4foRGdJbvn1KF06lYtMrIJQUzsjAg0PioscBAAPHCZpiqvtrsKUw
-         /nKKfFNNd1JHWcy07T+wUvQiyt4S/K/E8PNby8L/AIEetXbJlENo9pQS5uifxx4Oi097
-         B0Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782406146; x=1783010946;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tO5LmLOW4bHmMm0NAxA5lcAnMw8WVq7U30lmG+IEp00=;
-        b=sX7plG09lFtWQixJwIefO8x2Ly3AE4re9/J2u59nZ8T28fccumkdQNyaeqGiS+5gBK
-         cG1z+RqOpFU66GIlxTcX+g48qW0fP/6wCzEGf7fWOhEgn9SmnsKFuObrWfQdrJwjD9kh
-         h/RlEZ/QReMlogjLSBRkmXE5qjP57WyNiK4fhgfmkeZNc7iRqOBVqsjZqMMmMYQJwdXb
-         WosOmJenJGNsF//XTYmBZqAwNrA0i9K+TADgj19zWYRyG9yBZ7Tk8vAFY1hnxzFNJ7Ja
-         jkDhSUehGs45/bjISjJwkH3LQlkg4g62fScmeBK3VGL9xWSD8pLUqmDwlxIU9aFS50lZ
-         QuZw==
-X-Gm-Message-State: AOJu0YwYBI+LidZfSe64rMVQRzI0dHBJJvm98pSm7y14RXUefmiUbcwh
-	FZaxCBiZ1svS2vrpiFt3/n/FiNFSuC3mrFRgtvhJvB6HTmTsEu0jonpE
-X-Gm-Gg: AfdE7clot7qrQASOPX4LgMFy3DZDFFcQMyljEuAd8roLzPlugbWvkeM7iyTcv6z0vNs
-	r/ake1x9gxUucpJqngzpNEinOyvHBdj2BYuOYzYYgBACbsBytvvXUakPNZMQCeXs2EpJqU6aKvZ
-	4gAeMjDXfoL2c3tXkWQWtInuvT/dLsLr0HaEyAGz3ctO1WPAc0oK/GrHYQyMOWLPJiY4nLrM+AT
-	ChkZHmo6+ozx9YrHtmEy3LMZ5L/9PN1xEaWrXqxE+6cgvZe/ZOG7W6SEVxElzlSb6XHJi7nnm4G
-	O8wru/95yX3fBN71VAMvE7bMB8rcxWqVNUc7xzRdy5lC91/uxSMZ2nlZFuuiTV1WuXuZosMWiFt
-	uiEv228k24fLvw54I7OLLVkovCsa8ceNlLFgbOTJ115CTHUMkaBqjSyuvPEaei7qDZWbmBUrdx0
-	GLKS58ImqYoRWW8uNiqiwns+iUD8GFRXXWmYnXVdB652ta
-X-Received: by 2002:a05:6000:400b:b0:45e:d6b2:e6a5 with SMTP id ffacd0b85a97d-46dc15c3c69mr5544430f8f.34.1782406145896;
-        Thu, 25 Jun 2026 09:49:05 -0700 (PDT)
-Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46c1ee018e8sm19245455f8f.11.2026.06.25.09.49.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 09:49:05 -0700 (PDT)
-Date: Thu, 25 Jun 2026 18:49:03 +0200
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
-	daniel@iogearbox.net, john.fastabend@gmail.com, jordan@jrife.io,
-	martin.lau@linux.dev, yonghong.song@linux.dev, emil@etsalapatis.com,
-	netdev@vger.kernel.org, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, davem@davemloft.net, horms@kernel.org
-Subject: Re: [PATCH bpf-next v10 1/5] bpf: add bpf_icmp_send kfunc
-Message-ID: <aj1b_z6h5xn42Hxe@gmail.com>
-References: <20260625110321.28236-1-mahe.tardy@gmail.com>
- <20260625110321.28236-2-mahe.tardy@gmail.com>
- <aj1V2ZdzY1EGtsma@devvm7509.cco0.facebook.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LebcXyiT"
+Message-ID: <fd9ebc32-1d31-4f85-9c39-c1e4100d985a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782406789;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LlTeYZ/7wBvBIqprf7XZ3sj7cme/8ojhsxcxkhsBq90=;
+	b=LebcXyiT0BkVl8rNTR3idFuAOMXy9lnE58+IcJZgfZ++csoHzBtr1HRWzIPmnDQ3BbAIlj
+	7XMhkGBVTbn2SRAOl8175m5wzZBIMy7yQrpQTsaFdHRxVTufRvhrBAyWucs0AETmrv7nqK
+	MjOyYltyntVDD4SFpUi6qVb0NQpfyNc=
+Date: Thu, 25 Jun 2026 09:59:42 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aj1V2ZdzY1EGtsma@devvm7509.cco0.facebook.com>
+Subject: Re: [PATCH dwarves v10 0/5] pahole: Encode true signatures in kernel
+ BTF
+Content-Language: en-GB
+To: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <olsajiri@gmail.com>
+Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+ dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, kernel-team@fb.com
+References: <20260625020148.1883082-1-yonghong.song@linux.dev>
+ <aj0KGx-5FwUbwGHc@krava> <1d7828aa-164f-4c36-9d5e-2eb2088ce5b4@oracle.com>
+ <906ec2c1-e62b-47d8-a0bd-4d88df26c0c3@linux.dev>
+ <3bdacbc7-8385-452a-9443-ee9cc03abd10@oracle.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <3bdacbc7-8385-452a-9443-ee9cc03abd10@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Jun 25, 2026 at 09:24:59AM -0700, Stanislav Fomichev wrote:
-> On 06/25, Mahe Tardy wrote:
 
-[...]
 
-> > +__bpf_kfunc int bpf_icmp_send(struct __sk_buff *skb_ctx, int type, int code)
-> > +{
-> > +	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
-> > +	struct sk_buff *nskb;
-> > +	struct sock *sk;
-> > +
-> > +	sk = skb_to_full_sk(skb);
-> > +	if (sk && sk->sk_kern_sock &&
-> > +	    (sk->sk_protocol == IPPROTO_ICMP || sk->sk_protocol == IPPROTO_ICMPV6))
-> > +		return -EBUSY;
-> > +
-> > +	switch (skb->protocol) {
-> > +#if IS_ENABLED(CONFIG_INET)
-> > +	case htons(ETH_P_IP): {
-> > +		if (type != ICMP_DEST_UNREACH)
-> > +			return -EOPNOTSUPP;
-> > +		if (code < 0 || code > NR_ICMP_UNREACH ||
-> > +		    code == ICMP_FRAG_NEEDED) /* needs a valid next-hop MTU */
-> > +			return -EINVAL;
-> > +
-> > +		/* icmp_send expects skb_dst to be a real rtable. */
-> > +		if (!skb_valid_dst(skb))
-> > +			return -ENETUNREACH;
-> > +
-> > +		nskb = skb_clone(skb, GFP_ATOMIC);
-> > +		if (!nskb)
-> > +			return -ENOMEM;
-> > +
-> > +		memset(IPCB(nskb), 0, sizeof(*IPCB(nskb)));
-> > +		icmp_send(nskb, type, code, 0);
-> > +		consume_skb(nskb);
-> > +		break;
-> > +	}
-> > +#endif
-> > +#if IS_ENABLED(CONFIG_IPV6)
-> > +	case htons(ETH_P_IPV6):
-> > +		if (type != ICMPV6_DEST_UNREACH)
-> > +			return -EOPNOTSUPP;
-> > +		if (code < 0 || code > ICMPV6_REJECT_ROUTE)
-> > +			return -EINVAL;
-> 
-> [..]
-> 
-> > +		/* icmpv6_send may treat skb_dst as rt6_info. */
-> > +		if (skb_metadata_dst(skb))
-> > +			return -ENETUNREACH;
-> 
-> A bit confused about this. Which part of icmpv6_send treats skb_dst as rt6_info?
-> (I see the original sashiko report about dst, but icmp6 seems to be not
-> requiring it)
+On 6/25/26 9:17 AM, Alan Maguire wrote:
+> On 25/06/2026 16:26, Yonghong Song wrote:
+>>
+>> On 6/25/26 6:22 AM, Alan Maguire wrote:
+>>> On 25/06/2026 11:59, Jiri Olsa wrote:
+>>>> On Wed, Jun 24, 2026 at 07:01:48PM -0700, Yonghong Song wrote:
+>>>>> Current vmlinux BTF encoding is based on the source level signatures.
+>>>>> But the compiler may do some optimization and changed the signature.
+>>>>> If the user tried with source level signature, their initial implementation
+>>>>> may have wrong results and then the user need to check what is the
+>>>>> problem and work around it, e.g. through kprobe since kprobe does not
+>>>>> need vmlinux BTF.
+>>>>>
+>>>>> Majority of changed signatures are due to dead argument elimination.
+>>>>> The following is a more complex one. The original source signature:
+>>>>>     typedef struct {
+>>>>>           union {
+>>>>>                   void            *kernel;
+>>>>>                   void __user     *user;
+>>>>>           };
+>>>>>           bool            is_kernel : 1;
+>>>>>     } sockptr_t;
+>>>>>     typedef sockptr_t bpfptr_t;
+>>>>>     static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
+>>>>> After compiler optimization, the signature becomes:
+>>>>>     static int map_create(union bpf_attr *attr, bool uattr__is_kernel) { ... }
+>>>>> In the above, uattr__is_kernel corresponds to 'is_kernel' field in sockptr_t.
+>>>>> This makes it easier for developers to understand what changed.
+>>>>>
+>>>>> The new signature needs to properly follow ABI specification based on
+>>>>> locations. Otherwise, that signature should be discarded. For example,
+>>>>>
+>>>>>       0x0242f1f7:   DW_TAG_subprogram
+>>>>>                       DW_AT_name      ("memblock_find_in_range")
+>>>>>                       DW_AT_calling_convention        (DW_CC_nocall)
+>>>>>                       DW_AT_type      (0x0242decc "phys_addr_t")
+>>>>>                       ...
+>>>>>       0x0242f22e:     DW_TAG_formal_parameter
+>>>>>                         DW_AT_location        (indexed (0x14a) loclist = 0x005595bc:
+>>>>>                            [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_reg5 RDI
+>>>>>                            [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_reg14 R14
+>>>>>                            [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
+>>>>>                            [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg14 R14)
+>>>>>                         DW_AT_name    ("start")
+>>>>>                         DW_AT_type    (0x0242decc "phys_addr_t")
+>>>>>                         ...
+>>>>>       0x0242f239:     DW_TAG_formal_parameter
+>>>>>                         DW_AT_location        (indexed (0x14b) loclist = 0x005595e6:
+>>>>>                            [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_reg4 RSI
+>>>>>                            [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_reg3 RBX
+>>>>>                            [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
+>>>>>                            [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg3 RBX)
+>>>>>                         DW_AT_name    ("end")
+>>>>>                         DW_AT_type    (0x0242decc "phys_addr_t")
+>>>>>                         ...
+>>>>>       0x0242f245:     DW_TAG_formal_parameter
+>>>>>                         DW_AT_location        (indexed (0x14c) loclist = 0x00559610:
+>>>>>                            [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_breg4 RSI+0)
+>>>>>                         DW_AT_name    ("size")
+>>>>>                         DW_AT_type    (0x0242decc "phys_addr_t")
+>>>>>                         ...
+>>>>>       0x0242f250:     DW_TAG_formal_parameter
+>>>>>                         DW_AT_const_value     (4096)
+>>>>>                         DW_AT_name    ("align")
+>>>>>                         DW_AT_type    (0x0242decc "phys_addr_t")
+>>>>>                         ...
+>>>>>
+>>>>> The third argument should correspond to RDX for x86_64. But the location suggests that
+>>>>> the parameter value is stored in the address with 'RSI + 0'. It is not clear whether
+>>>>> the parameter value is stored in RDX or not. So we have to discard this funciton in
+>>>>> vmlinux BTF to avoid incorrect true signatures.
+>>>>>
+>>>>> For llvm, any function having
+>>>>>     DW_AT_calling_convention        (DW_CC_nocall)
+>>>>> in dwarf DW_TAG_subprogram will indicate that this function has signature changed.
+>>>>> But for non DW_CC_nocall functions, it is possible that true signature still not
+>>>>> available due to locations. So every functions will be checked.
+>>>>>
+>>>>> I did experiment with latest bpf-next. For x86_64, there are 69103 kernel functions
+>>>>> and 875 kernel functions having signature changed. A series of patches are intended
+>>>>> to ensure true signatures are properly represented. Eventually, only 20 functions
+>>>>> cannot have true signatures due to locations.
+>>>>>
+>>>>> For arm64, there are 863 kernel functions having signature changed, and
+>>>>> 108 functions cannot have true signatures due to locations. I checked those
+>>>>> functions and look like llvm arm64 backend more relaxed to compute parameter
+>>>>> values.
+>>>>>
+>>>>> For full testing, I enabled true signature support in kernel scripts/Makefile.btf like below:
+>>>>>     -pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=attributes
+>>>>>     +pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=attributes --btf_features=+true_signature
+>>>>>
+>>>>> See individual patches for details.
+>>>> hi,
+>>>> I tried this version and had to choose another function, because "arp_process"
+>>>> suddenly started to show args registers in proper order ;-)
+>>>>
+>>>> now I checked "stop_cpus" function which is added to btf after this change,
+>>>> I attached the dwarf dump below
+>>>>
+>>>> "stop_cpus" has DW_CC_nocall set, so it has signature_changed=true and I see the
+>>>> function ends up in the btf_encoder with optimized_parms=1
+>>>>
+>>>> but we do not skip such functions now, it seems like we should?
+>>>>
+>>>> I tried the attached change below and it removes all the extra functions
+>>>> that were added in the btf with this change
+>>>>
+>>>> btw I can't see any other use for optimized_parms flag, it seems to be
+>>>> just set and never used.. so I wonder I'm missing something
+>>>>
+>>> Thanks for looking at this!
+>>>
+>>> Yonghong can correct me if I have this wrong, but I think optimized parameters
+>>> are okay, but only if true signature is enabled, so omitting functions with
+>>> optimized parameters should probably only happen if !true_signature. so for
+>>> the change below, the modification to btf_encoder__add_saved_funcs() is right
+>>> but I don't think the modification to btf_encoder__add_true_signature() is needed.
+>> I agree with Alan in the above.
+>>
+>> There is no need to make change in btf_encoder__add_true_signature().
+>> This is for true_signature, optimized parameters have been removed:
+>>
+>> +               /* No location info/optimized + reordered means optimized out. */
+>> +               if (ftype->reordered_parm && (!param->has_loc || param->optimized)) {
+>> +                       state->nr_parms--;
+>> +                       continue;
+>> +               }
+>>
+>> so we should not add true_state->optimized_parms checking in btf_encoder__add_true_signature().
+>>
+>> For adding state->optimized_parms in btf_encoder__add_saved_funcs(), with true_signature disabled,
+>> we already have a failure message:
+>>     stop_cpus : skipping BTF encoding of function due to unexpected register usage for parameter
+>> The expectation is for three parameters, the register usage should be
+>>     cpumask: RDI, fn: RSI, arg: RDX
+>> but since 'fn' is optimized away, the expected reg usage does not match the actual reg usage.
+>>
+>> We could add:
+>>    +        if (state->optimized_parms)
+>>    +            skip_reason = "optimized parms\n";
+>> to have another message to indicate possible reason is due to optimized parms.
+>> But it is not critical as we already have one message.
+>>
+>> I can have a follow up for this.
+>>
+> I tried pushing just the btf_encoder__add_saved_funcs() hunk from Jiri's diff to CI [1];
+> it looks like we end up omitting a lot more functions than before for aarch64 (including
+> some kfuncs) for both gcc and clang kernel builds, and we see an x86_64 test failure:
+>
+> 5: clang_parm_memory.sh
+> Validation of BTF encoding of true_signatures.
+>     BTF for foo missing; the stack-passed aggregate was likely rejected
+> Test ./clang_parm_memory.sh failed
+> Test data is in /tmp/clang_parm_memory.sh.DV7PyO
 
-Yeah I was also a bit confused because this came out of nowhere as soon
-as I put the skb_valid_dst only on the IPv4 path (for different
-reasons), but there is actually a potential trace in which we have type
-confusion indeed:
+I actually tried clang_parm_memory.sh with clang22 and clang23. Both of them
+passed in my local run. Not exactly sure what is the issue. Let me debug this.
 
-- icmp6_send() checks scoped source addresses and calls icmp6_iif() at net/ipv6/icmp.c:702
-- icmp6_iif() calls icmp6_dev() at net/ipv6/icmp.c:441
-- icmp6_dev() does skb_rt6_info(skb) for loopback/L3 master devices at net/ipv6/icmp.c:428
-- skb_rt6_info() casts any non-NULL dst to struct rt6_info at include/net/ip6_route.h:233
-- rt6->rt6i_idev is then dereferenced at net/ipv6/icmp.c:434
+Could you share how to test with pahole CI? So I can resolve all issues in CI
+before submit another revision if needed.
 
-When checking with pahole, we can find this on my local kernel:
+>
+> The optimized_parms flag is a bit too broad I think; it is set whenever we are
+> missing location info for _any_ parameter; this may be overly aggressive for clang in
+> particular which seems to have more missing location info.
+>
+> [1] https://github.com/alan-maguire/dwarves/actions/runs/28173261168
+>   
+>>>   
+>>>> jirka
+>>>>
+>>>>
+>>>> dwarfdump:
+>>>>
+>>>> 0x016f4b1b:   DW_TAG_subprogram
+>>>>                   DW_AT_low_pc    (0xffffffff813e0fc0)
+>>>>                   DW_AT_high_pc   (0xffffffff813e1133)
+>>>>                   DW_AT_frame_base        (DW_OP_reg7 RSP)
+>>>>                   DW_AT_GNU_all_call_sites        (true)
+>>>>                   DW_AT_name      ("stop_cpus")
+>>>>                   DW_AT_decl_file ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
+>>>>                   DW_AT_decl_line (464)
+>>>>                   DW_AT_prototyped        (true)
+>>>>                   DW_AT_calling_convention        (DW_CC_nocall)
+>>>>                   DW_AT_type      (0x016e94c5 "int")
+>>>>
+>>>> 0x016f4b36:     DW_TAG_formal_parameter
+>>>>                     DW_AT_location        (0x0065ad9e:
+>>>>                        [0xffffffff813e0fc5, 0xffffffff813e0fed): DW_OP_reg5 RDI
+>>>>                        [0xffffffff813e0fed, 0xffffffff813e111e): DW_OP_reg14 R14
+>>>>                        [0xffffffff813e111e, 0xffffffff813e1127): DW_OP_GNU_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
+>>>>                        [0xffffffff813e1127, 0xffffffff813e1133): DW_OP_reg14 R14)
+>>>>                     DW_AT_name    ("cpumask")
+>>>>                     DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
+>>>>                     DW_AT_decl_line       (464)
+>>>>                     DW_AT_type    (0x016f3242 "const cpumask *")
+>>>>
+>>>> 0x016f4b46:     DW_TAG_formal_parameter
+>>>>                     DW_AT_name    ("fn")
+>>>>                     DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
+>>>>                     DW_AT_decl_line       (464)
+>>>>                     DW_AT_type    (0x016f2ca5 "cpu_stop_fn_t")
+>>>>
+>>>> 0x016f4b52:     DW_TAG_formal_parameter
+>>>>                     DW_AT_location        (0x0065ae0d:
+>>>>                        [0xffffffff813e0fc5, 0xffffffff813e0ff2): DW_OP_reg4 RSI
+>>>>                        [0xffffffff813e0ff2, 0xffffffff813e10e4): DW_OP_reg3 RBX
+>>>>                        [0xffffffff813e10e4, 0xffffffff813e1127): DW_OP_GNU_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
+>>>>                        [0xffffffff813e1127, 0xffffffff813e112e): DW_OP_reg3 RBX
+>>>>                        [0xffffffff813e112e, 0xffffffff813e1133): DW_OP_GNU_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value)
+>>>>                     DW_AT_name    ("arg")
+>>>>                     DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
+>>>>                     DW_AT_decl_line       (464)
+>>>>                     DW_AT_type    (0x016e858f "void *")
+>>>>
+>>>>
+>>>>
+>>>>
+>>>> ---
+>>>> diff --git a/btf_encoder.c b/btf_encoder.c
+>>>> index 38455a4c6b6b..cbc5063a6280 100644
+>>>> --- a/btf_encoder.c
+>>>> +++ b/btf_encoder.c
+>>>> @@ -1564,7 +1564,8 @@ static int btf_encoder__add_true_signature(struct btf_encoder *encoder,
+>>>>             */
+>>>>            if (true_state->unexpected_reg ||
+>>>>                true_state->uncertain_parm_loc ||
+>>>> -            true_state->ambiguous_addr)
+>>>> +            true_state->ambiguous_addr ||
+>>>> +            true_state->optimized_parms)
+>>>>                continue;
+>>>>            err = btf_encoder__add_func(encoder, true_state);
+>>>>            if (err < 0)
+>>>> @@ -1656,6 +1657,8 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
+>>>>                skip_reason = "reordered parameters\n";
+>>>>            if (state->elf->ambiguous_addr)
+>>>>                skip_reason = "ambiguous address\n";
+>>>> +        if (state->optimized_parms)
+>>>> +            skip_reason = "optimized parms\n";
+>>>>              if (skip_reason) {
+>>>>                btf_encoder__log_func_skip(encoder, saved_fns[i].elf,
 
-struct rt6_info {
-	struct dst_entry           dst;                  /*     0   136 */
-	/* --- cacheline 2 boundary (128 bytes) was 8 bytes ago --- */
-	struct fib6_info *         from;                 /*   136     8 */
-	int                        sernum;               /*   144     4 */
-	struct rt6key              rt6i_dst;             /*   148    20 */
-	struct rt6key              rt6i_src;             /*   168    20 */
-	struct in6_addr            rt6i_gateway;         /*   188    16 */
-
-	/* XXX 4 bytes hole, try to pack */
-
-	/* --- cacheline 3 boundary (192 bytes) was 16 bytes ago --- */
-	struct inet6_dev *         rt6i_idev;            /*   208     8 */  <--- we dereference this
-	u32                        rt6i_flags;           /*   216     4 */
-	short unsigned int         rt6i_nfheader_len;    /*   220     2 */
-
-	/* size: 224, cachelines: 4, members: 9 */
-	/* sum members: 218, holes: 1, sum holes: 4 */
-	/* padding: 2 */
-	/* last cacheline: 32 bytes */
-};
-
-And the metadata_dst would look like this:
-
-struct metadata_dst {
-	struct dst_entry           dst;                  /*     0   136 */
-	/* --- cacheline 2 boundary (128 bytes) was 8 bytes ago --- */
-	enum metadata_type         type;                 /*   136     4 */
-
-	/* XXX 4 bytes hole, try to pack */
-
-	union {
-		struct ip_tunnel_info tun_info;          /*   144    96 */
-		struct hw_port_info port_info;           /*   144    16 */
-		struct macsec_info macsec_info;          /*   144     8 */
-		struct xfrm_md_info xfrm_info;           /*   144    16 */
-	} u;                                             /*   144    96 */  <--- we land on this union
-
-	/* size: 240, cachelines: 4, members: 3 */
-	/* sum members: 236, holes: 1, sum holes: 4 */
-	/* last cacheline: 48 bytes */
-};
-
-Let's say it's a struct ip_tunnel_info:
-
-struct ip_tunnel_info {
-	struct ip_tunnel_key       key;                  /*     0    64 */
-
-	/* XXX last struct has 7 bytes of padding */
-
-	/* --- cacheline 1 boundary (64 bytes) --- */
-	struct ip_tunnel_encap     encap;                /*    64     8 */  <--- 144 + 64 = 208 we land here
-	struct dst_cache           dst_cache;            /*    72    16 */
-	u8                         options_len;          /*    88     1 */
-	u8                         mode;                 /*    89     1 */
-
-	/* size: 96, cachelines: 2, members: 5 */
-	/* padding: 6 */
-	/* paddings: 1, sum paddings: 7 */
-	/* last cacheline: 32 bytes */
-};
-
-So I imagine this is fairly tricky to trigger but still a case of type
-confusion. I have actually no idea how likely this can happen from my
-call but the trace makes sense at least.
