@@ -1,82 +1,55 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB70119C54E
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 02:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74D11C861D;
+	Thu, 25 Jun 2026 02:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782354281; cv=none; b=Qqgr/GOxNsAU6lHBaHS2d6SsIFqseTJFiUPr+UiBapKumlihSXjTgg9IlHQ0Y5vD1Wu3kK9XcNSuf01JkVGdmBIbSaXvvKL8xPLbT7s3TGgKcWyUxs+/Y+cmeGPUxKN+7vl16T3LGVzMTN+6MrHEaYT7Z8iOfZC5x7E0NUjsibg=
+	t=1782354808; cv=none; b=ebv2HHnuVnFcE74Phas8ZNm+jFEuM+1AzC9K6JCWYu55BzdN3AeJd/4lAYwlZO1UBAg7QAEjBJO+u+axRH/yzkuEQS9O7BZ+PHGvwgniWK3CM/Mo1AsD9luv+yMbTnKaswySQxKyeBPVsH3pflFMQbOVt44abLpRvRcfHvYeXTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782354281; c=relaxed/simple;
-	bh=mpSudVXv29bchl6BkISiq7/mrsz2U3ZD/3HwOLpk9xA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=XpKckE6g6v02ChBeJC7dr3IOsetkgDfO71xCqd+8Vdyn9NwtrW+0RwGro4sR4kJKpAZ6acdz1ONSo7iYLqA5K+zE2/Eow7/8HY2GHTY5xbKZ84MrIh1gVYneboADhPqQ9U/pENxm8uGm+tewJOklZ1TVhh6gbIPTFUWWqDB80ZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=mkvLKn2r; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1782354808; c=relaxed/simple;
+	bh=WKlTbfrUNwUFyGpobav8CApD6v5B/qIAYIViXKGD7u8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iMVsSB+1a2bJzzZjQHBSWGNxSakGO3JTD7xuwG/e/2zKR2qKluDKK7PWWGBXN8uOTd3b1b5JNOio0fbqGkatPePB92tWLJPPMMOTPw+EPwz2/OBzAoSB1Agkd+y1RIblXej7py63/ZcWUAEYpMYxvK0Vi/mIzayL31M7thuUYzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYQocmNE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="mkvLKn2r"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=mpSudVXv29bchl6BkISiq7/mrsz2U3ZD/3HwOLpk9xA=; b=m
-	kvLKn2rfzxA9dCBs2LupkcKEBUU/G+ArsY9kPOn4xc1Arjm+PQD2M5QfGWwLxap1
-	/m0oa1rDplmnxaYZX5wOXdj1sEbyowx7lh3TXgqkk75rtmNcL1eBVJgq20AVeZV+
-	1sYPqvdc1wjKzTSTlro4ngstxQJooIcSECk6pR0oA8=
-Received: from lange_tang$163.com ( [116.128.244.169] ) by
- ajax-webmail-wmsvr-40-106 (Coremail) ; Thu, 25 Jun 2026 10:24:12 +0800
- (CST)
-Date: Thu, 25 Jun 2026 10:24:12 +0800 (CST)
-From: "Lange Tang" <lange_tang@163.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc: ast@kernel.org, andrii@kernel.org, yonghong.song@linux.dev,
-	jolsa@kernel.org, bpf@vger.kernel.org,
-	"Tang Longjun" <tanglongjun@kylinos.cn>
-Subject: Re:Re: [PATCH bpf-next v2 0/5] bpf: add bpf_memcmp and bpf_strpbrk
- kfuncs
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20260403(27802f6d) Copyright (c) 2002-2026 www.mailtech.cn 163com
-In-Reply-To: <DJHKZQ8DHCW5.QCBIXNEWDLEC@gmail.com>
-References: <20260624093638.117062-1-lange_tang@163.com>
- <DJHKZQ8DHCW5.QCBIXNEWDLEC@gmail.com>
-X-NTES-SC: AL_Qu2TAP+eu0ou5CaZYukcn08QhOo9Wsu0v/0u1YRQc+EEshDr4y0QV25BGnT54MK0KSOwoAO0WwNQ+tpZYKtfQWeB/IX62KI5+RascRaz5w==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYQocmNE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 303D71F000E9;
+	Thu, 25 Jun 2026 02:33:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782354807;
+	bh=gAp5DqBsrf+qqTJrCHBvd6moSshxYS3r3vVwtm7UlQU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=iYQocmNEMzyuFLh2RGCIPVlHqIqg1hTe+T8GaNwVV15IZwsj/PUgyaDpScjdfAwN9
+	 SuX2DwknSxTky/q3WUUiu9hPz7r9cSEC603Dz4r/ZPi9SyEwz5NA86awUWno0Pm8+6
+	 Jl5O/7nTg+qGtHq36kw8JUSNza+Neer8xIJQKZLpkb3aK0PA7tyW3tRyYcWolqcGiQ
+	 27aqd75O4senmoIaBXjd39TkFvNf37NHZtmWFkruUOt18UD/vLJKnsvl8SsfTGJce8
+	 1g/tTQs0tefhfnKwa+TOz/BIKI+CiNImeywAHhUEoOXmCgicsK5r/JS+gmjVQEwq6I
+	 LpFZ27jiS/JRQ==
+Date: Wed, 24 Jun 2026 19:33:26 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
+ stfomichev@gmail.com, pabeni@redhat.com, horms@kernel.org,
+ tushar.vyavahare@intel.com, kerneljasonxing@gmail.com
+Subject: Re: [PATCH net-next] selftests/xsk: preserve UMEM view in bidi test
+Message-ID: <20260624193326.295e3711@kernel.org>
+In-Reply-To: <20260623091008.1046547-1-maciej.fijalkowski@intel.com>
+References: <20260623091008.1046547-1-maciej.fijalkowski@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <59efbf7b.22b2.19efc979350.Coremail.lange_tang@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:aigvCgD3X2FNkTxqx3sQAA--.588W
-X-CM-SenderInfo: 5odqwvxbwd0wi6rwjhhfrp/xtbC4Q0hT2o8kU1Q1QAA3N
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-QXQgMjAyNi0wNi0yNSAwNTowMTo0MSwgIkFsZXhlaSBTdGFyb3ZvaXRvdiIgPGFsZXhlaS5zdGFy
-b3ZvaXRvdkBnbWFpbC5jb20+IHdyb3RlOgo+T24gV2VkIEp1biAyNCwgMjAyNiBhdCAyOjM2IEFN
-IFBEVCwgTG9uZ2p1biBUYW5nIHdyb3RlOgo+PiBGcm9tOiBMb25nanVuIFRhbmcgPHRhbmdsb25n
-anVuQGt5bGlub3MuY24+Cj4+Cj4+IFRoaXMgc2VyaWVzIGFkZHMgdHdvIG5ldyBCUEYga2Z1bmNz
-IHRvIGtlcm5lbC9icGYvaGVscGVycy5jLgo+Pgo+PiA9PT0gYnBmX21lbWNtcCgpID09PQo+Pgo+
-PiBCUEYgcHJvZ3JhbXMgZnJlcXVlbnRseSBuZWVkIHRvIGNvbXBhcmUgcmF3IGJpbmFyeSBidWZm
-ZXJzLCBzdWNoIGFzOgo+PiAtIE1BQyBhZGRyZXNzZXMgKDYgYnl0ZXMpIGluIFhEUC9UQyBmb3Ig
-TDIgZmlsdGVyaW5nIGFuZCBmb3J3YXJkaW5nOwo+PiAtIFVVSURzICgxNiBieXRlcykgYW5kIGhh
-c2ggZGlnZXN0cyBmb3IgYWxsb3dsaXN0L2RlbnlsaXN0IHBvbGljaWVzOwo+Pgo+PiBDdXJyZW50
-bHkgdGhlcmUgaXMgbm8gc2FmZSB3YXkgdG8gZG8gdGhpcyChqiBicGZfc3RybmNtcCAoaGVscGVy
-KSBzdG9wcwo+PiBhdCBudWxsIGJ5dGVzIHdoaWNoIGNvcnJ1cHRzIGJpbmFyeSBkYXRhLCBhbmQg
-aGFuZC1yb2xsZWQgbG9vcHMgYXJlCj4+IGZyYWdpbGUgd2l0aCB0aGUgdmVyaWZpZXIgKGFzIGV2
-aWRlbmNlZCBieSB0aGUgbG9jYWxfbWVtY21wKCkgd29ya2Fyb3VuZAo+PiBpbiBzZWxmdGVzdHMv
-YnBmL3Byb2dzL2R5bnB0cl9zdWNjZXNzLmMpLiBfX2J1aWx0aW5fbWVtY21wIG1heSB3b3JrIGlu
-Cj4+IHNvbWUgY2FzZXMgYnV0IGlzIG5vdCB2ZXJpZmllci1zYWZlIGZvciBhcmJpdHJhcnkga2Vy
-bmVsIG1lbW9yeS4KPgo+SGFuZCByb2xsZWQgbG9vcHMgd2VyZSBmcmFnaWxlIGluIHRoZSBwYXN0
-LCBidXQgbm90IGFueSBtb3JlLgo+V2l0aCBicGZfZm9yKCkgYW5kIG1heV9nb3RvL2Nhbl9sb29w
-IHRoZSBsb29wcyBjYW4gYmUgbGFyZ2UuCj5Gb3IgTUFDIGFuZCBVVUlEcyBldmVuIG9sZCB2ZXJp
-ZmllcnMgY2FuIGRlYWwganVzdCB3aXRoIHdpdGggImJvdW5kZWQgbG9vcCIuCj4KPlNvcnJ5LCBi
-dXQgSSBkb24ndCBzZWUgYSBodW1hbiBkcml2ZW4gbW90aXZhdGlvbiBpbiB0aGlzIHBhdGNoLgo+
-TG9va3MgbGlrZSBBSSBmbGFnZ2VkIHNvbWV0aGluZyBhbmQgQUkgc2xvcGVkIGEgcGF0Y2ggaW4g
-cmVzcG9uc2UuCgpBcG9sb2dpZXMsIHNvbWUgb2YgdGhlIGNvbnRlbnQsIGluY2x1ZGluZyB0aGUg
-Y292ZXIgbGV0dGVyLCB3YXMgaW5kZWVkIEFJLWdlbmVyYXRlZC4KVGhlIG1lbWNtcCBzdWJtaXR0
-ZWQgaGVyZSBtYXkgbm90IGJlIHN0cmljdGx5IG5lY2Vzc2FyeSwgYnV0IGl0IGNhbiBhdm9pZCBo
-YW5kIHJvbGxlZCBsb29wcyBmb3IKc2NlbmFyaW9zIGxpa2UgY29tcGFyaW5nIE1BQyBvciBVVUlE
-cy4KPgo+cHctYm90OiBjcgo=
+On Tue, 23 Jun 2026 11:10:08 +0200 Maciej Fijalkowski wrote:
+> Subject: [PATCH net-next] selftests/xsk: preserve UMEM view in bidi test
+
+Do you want it in net? Either way - we'll need a rebase
+
+> Signed-off-by: Maciej Fijalkowski maciej.fijalkowski@intel.com
+
+missing <> around the email 
