@@ -1,30 +1,32 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E20635DA5B
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 08:32:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EC5036EAAC
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 08:32:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782376356; cv=none; b=LY8otBnOwRYbeNUSZOH+IwLW5pM+tHbee6yzV1Urb62HIfaX/r5CAZakQXvI9hh0pmlz62DAh/TgLyawOmP+yUkNo1AFEZ8QBEuA0tgQUUeR83cLKWlUtwTge5SvdJdhWeil2yMFkO0MEB1CJyaKiSGu2srpdrTZp0FAmv7yuEA=
+	t=1782376366; cv=none; b=mRCv7EK9MhgI7qEPxaPZjKPYPzEFYWGQFg8FfVwIw5pIO3aIApHVmNxhs37mywckziP+LA8boGQplGdbanP/4UhbIs64+gf+nKE/O5VLDRPhlgtq+zR8k8ANb9EO4nwAXSl9TT8ILZkfsvvpQTdynVp/Ft+ZVVtyPNnMt4sqnm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782376356; c=relaxed/simple;
-	bh=BZZquw/jXmlgegwfN6ZKdryo2XXh+2ogII0Lar0RgTs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Dgu4IbxtxSFk3cUzcXCHzyG5aEkgfTtasJ1SVFa0i4BuGTdqpNyt6ENrqj/ra3BeNl6FjK1aa2gXjy8jgoi+6Ddub+AfNC6zfK8YhfnA6XXZvT6PYtTUWvHYxandktehMEESL67t+IwvwA8PEjK8eY9HTT3CwaKHizl7KaD2hGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XxeN9XOL; arc=none smtp.client-ip=95.215.58.178
+	s=arc-20240116; t=1782376366; c=relaxed/simple;
+	bh=wxg03im1f3YOJxcnQ0xXatdZvR3HwBAxP3yyQlUmdzY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=qTxHAJ3kLBJ8WCqmBczzdbnZG2FZ9AF6RcgCr5+jTmEnKQ+XFcZcUss1jGZ3egoSJp+vXW2390dYhZHaB89RXi9/w7kH2NUrTpmBX/EXhDl5b+w8h8VKQEKjLV+I7XJXSA5Knq2AaX3grHgq1igajq/InKIJt8cyJNhbQeOp+qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fREn7Gog; arc=none smtp.client-ip=95.215.58.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XxeN9XOL"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fREn7Gog"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782376342;
+	t=1782376363;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=vhqrTpONrLAKDeSNSKScdeEVuc9qz3WGSi76AN9w4mM=;
-	b=XxeN9XOLEMLSe6LZc1Cyojts7VeKZllWIK4sK7Jaf3imzJIC03UcjQt6t1PWp4eFIbDYtE
-	YL1IOyWqmvz3chwhIOfD79SZ8Pzqu/rDL0mTzC37bnrx24UbsFBZ5fCpNT8iHkOAFmRHtQ
-	d809qytT2t2Uv3uH6ZWwcUu/LfahFUU=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bdyWriMjR0iiOwFrvG83IYqEIicSTh+06bqz9e9I5vc=;
+	b=fREn7GogwWL7B+cks1Y5M33kzKuDc9NGT21iUUrSVqNU89LJaNzaLBRQcuRltPPxdtHr/c
+	YyR9EcWD8btzTadZ8js5jKswMfqbm1TVGrq+nfVaD1Kxuhn+yjrL8X5okLmMWaAlMNH1g7
+	p9ArhScvl+oaRuU/BxTjb3F6zmcrF+k=
 From: George Guo <dongtai.guo@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -42,10 +44,13 @@ Cc: WANG Xuerui <kernel@xen0n.name>,
 	George Guo <guodongtai@kylinos.cn>,
 	bpf@vger.kernel.org,
 	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf 0/2] LoongArch: BPF: Fix tail call count handling
-Date: Thu, 25 Jun 2026 16:32:10 +0800
-Message-Id: <20260625083212.277417-1-dongtai.guo@linux.dev>
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH bpf 1/2] LoongArch: BPF: Fix tail call count pointer offset for arena programs
+Date: Thu, 25 Jun 2026 16:32:11 +0800
+Message-Id: <20260625083212.277417-2-dongtai.guo@linux.dev>
+In-Reply-To: <20260625083212.277417-1-dongtai.guo@linux.dev>
+References: <20260625083212.277417-1-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,32 +60,82 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Two independent fixes for the LoongArch BPF JIT's tail call count (TCC)
-handling, both found while enabling the arena and tailcall selftests on
-LoongArch.
+From: George Guo <guodongtai@kylinos.cn>
 
-Patch 1 fixes memory corruption / a kernel panic. For an arena program the
-extra REG_ARENA slot in the prologue shifts the callee-saved area down by
-one word, but BPF_TAIL_CALL_CNT_PTR_STACK_OFF() did not account for it, so
-on every tail call or bpf2bpf call the JIT loaded the counter *value* and
-dereferenced it as the TCC pointer.
+The tail call count (TCC) and its pointer occupy the two deepest slots of
+the callee-saved area set up by build_prologue(). An arena program reserves
+one extra word for REG_ARENA (arena_vm_start) right above them:
 
-Patch 2 fixes an off-by-one: emit_bpf_tail_call() increments the tail call
-count before the NULL-slot check, so jumping through an empty prog_array
-slot is charged against MAX_TAIL_CALL_CNT and programs reach the limit one
-call early.
+    ra fp s0 s1 s2 s3 s4 s5      <- 8 words
+    [ REG_ARENA ]                <- only if ctx->arena_vm_start
+    tail_call_cnt
+    tail_call_cnt_ptr            <- loaded on tail call / bpf2bpf call
 
-Both carry Fixes: tags and Cc: stable. They touch only emit_bpf_tail_call()
-and the new offset helper; there is no functional dependency between them.
+BPF_TAIL_CALL_CNT_PTR_STACK_OFF() hardcodes the pointer at
+round_up(stack, 16) - 80, which is only correct when REG_ARENA is absent.
+For an arena program the extra word shifts every slot below it down by 8
+bytes, so the macro resolves to the tail_call_cnt slot (the counter value)
+instead of tail_call_cnt_ptr. The JIT then loads that small integer and
+dereferences it as the TCC pointer, corrupting memory or panicking the
+kernel whenever an arena program performs a tail call or a bpf2bpf call.
 
-George Guo (2):
-  LoongArch: BPF: Fix tail call count pointer offset for arena programs
-  LoongArch: BPF: Don't charge an empty prog_array slot to the tail call
-    count
+Replace the macro with a helper that accounts for the REG_ARENA slot,
+mirroring the reservation logic in build_prologue().
 
- arch/loongarch/net/bpf_jit.c | 34 +++++++++++++++++++++++++++++-----
- 1 file changed, 29 insertions(+), 5 deletions(-)
+Fixes: ef54c517a937 ("LoongArch: BPF: Implement PROBE_MEM32 pseudo instructions")
+Cc: stable@vger.kernel.org
+Signed-off-by: George Guo <guodongtai@kylinos.cn>
+---
+ arch/loongarch/net/bpf_jit.c | 22 +++++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 24913dc7f4e8..f705de099f23 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -18,7 +18,23 @@
+ 
+ #define REG_TCC		LOONGARCH_GPR_A6
+ #define REG_ARENA	LOONGARCH_GPR_S6 /* For storing arena_vm_start */
+-#define BPF_TAIL_CALL_CNT_PTR_STACK_OFF(stack) (round_up(stack, 16) - 80)
++
++static int tail_call_cnt_ptr_stack_off(struct jit_ctx *ctx)
++{
++	/* Ten words are pushed below the BPF stack: ra, fp, s0-s5, and the
++	 * tail call count plus its pointer, which occupy the two deepest
++	 * slots of the callee-saved area.
++	 */
++	int offset = sizeof(long) * 10;
++
++	/* An arena program reserves one extra word above them (REG_ARENA),
++	 * which pushes the tail call count pointer down by one slot.
++	 */
++	if (ctx->arena_vm_start)
++		offset += sizeof(long);
++
++	return round_up(ctx->stack_size, 16) - offset;
++}
+ 
+ static const int regmap[] = {
+ 	/* return value from in-kernel function, and exit value for eBPF program */
+@@ -278,7 +294,7 @@ bool bpf_jit_supports_far_kfunc_call(void)
+ static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
+ {
+ 	int off, tc_ninsn = 0;
+-	int tcc_ptr_off = BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size);
++	int tcc_ptr_off = tail_call_cnt_ptr_stack_off(ctx);
+ 	u8 a1 = LOONGARCH_GPR_A1;
+ 	u8 a2 = LOONGARCH_GPR_A2;
+ 	u8 t1 = LOONGARCH_GPR_T1;
+@@ -1153,7 +1169,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 			return ret;
+ 
+ 		if (insn->src_reg == BPF_PSEUDO_CALL) {
+-			tcc_ptr_off = BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size);
++			tcc_ptr_off = tail_call_cnt_ptr_stack_off(ctx);
+ 			emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, tcc_ptr_off);
+ 		}
+ 
 -- 
 2.25.1
 
