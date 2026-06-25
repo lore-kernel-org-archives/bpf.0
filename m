@@ -1,74 +1,76 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861243446CA
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 19:15:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13E6823A564
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 19:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782414956; cv=none; b=AB4wtIGnjb1t10JQdewThnRYG4XZhTwa+cZTQ4YCNFwkIc2kzdMCYKqs6H/+gBlzEVXPLNAZFutr5V+aFqpdmQEwiWBeqCGUU8OTJZ4hsxE4Cfw5f+krSC+WtdJrvFhtgaXTmDalL2bnEM4dovQpBA4YOLn8pimBcNr1tYFhxTI=
+	t=1782416943; cv=none; b=qBh6SPM8MRllEuEL9R8tiNVQ4Pl28M+0F7lHIEyBHuCEZF61GlysMGUvNAY/sN5CUzwjmpAnk2etswf6lxWJCgQs8bzYoDBR/ZfW7ibaFgSMLmHLCKFevlSi8DVOAt5rbGh4OSGGIY1ZUeVoSrNJuTkYxnJ7DWyHcqXyksshKy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782414956; c=relaxed/simple;
-	bh=rXl1mT4uj7SK8qenD0vLrTZs/CQ0Ua50ArQkmKCzBMM=;
+	s=arc-20240116; t=1782416943; c=relaxed/simple;
+	bh=16ZLkJ2LztQODTbG3O2U0cAW7v8gP6qg4h47Ihq6PP0=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qe0HUYAt1VPCM8OSYYhigbMisOfZ0cHFm6YylxTl6TPgsUDTyU9Me+nmQbHiztMJsLVMDjo758RCdyXScwQcybowGiMr4Ks1mUxT04aw9l8YRyw1BNqZb/TYMMsXCn7t8VtWTUEEDJ2hEew8lGuccoBMHocZr+T6askx+Uyfazg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ao/7mdc8; arc=none smtp.client-ip=209.85.210.171
+	 Content-Type:MIME-Version; b=MM5V6nhghGCyYOP5StOTklQj3DZbu2cmsJ+u/lx3JcqmqpiQQbH3gZDPGJZ6f2gbvP8CdWDmTIFDnublj1Ntp380K6wEbKRmKQNeyVUL/oPSqLaHykFtfXG0UKtkCSJKdTUMa0GZqol7oqQvWu4RUZWUQSfV5Fwu7ZxcLpf3WD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kjZ/qhRj; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ao/7mdc8"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-84532e3dbf7so63988b3a.1
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 12:15:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kjZ/qhRj"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-845b6f34873so106421b3a.1
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 12:49:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782414955; x=1783019755; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782416941; x=1783021741; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=/n08+H8Tpjvupjxeo/7io0Vp1HXJGNBPMxNmTxvkgU0=;
-        b=ao/7mdc8sbo3BHAGDhaDoFgs9yW8eMUzC9HJ2ixLMsL4mqvXRs9rfo6elZr2mKK4E5
-         7wakguSJnJ20pV06PVZxRKPPTgcKLNNL2B0xHhe5wTfw67vJ5mPzwlh4/bQVOnlPtDOg
-         Sg4GUl8Z0G7fKhKlDMuwVN+LcmxHlsSldkXxmjs1E5vIsD9L1Lx7AL0QUvBwsCCeObL0
-         /huCrqjXn03vnMlxHrC5G+EQfCx9TH9rZce2zw+7WFz7HFG37CrfCgvQZUvC0+tN6ZQI
-         9jyJ1MeiFivUZhl0ekC30lYWj5EvMmL0eTXKMhIAEbo6yALGzBL8ngPUYEE6JGi0M5AR
-         bcJA==
+        bh=16ZLkJ2LztQODTbG3O2U0cAW7v8gP6qg4h47Ihq6PP0=;
+        b=kjZ/qhRjCDq2eVygGbatzeojqVIKKjjOJ+lzfw0PuA6RMnKVWu5k8GWJVB+xZGGRs3
+         vsGtYnCAxUJuwkt+Mk7uMu6i5IVjpXUuvdyFJVJX2zqe2FO1/ddR5Odp7OCXC9GbjCGo
+         ekakoqx2Tua5B/mj2j0hBqCV5w/3o+/hzmssU1OtrSQw3M5Pfc/iUYME5mPShc18Yt1d
+         r9jQOKLA7PTCmbmucZisYUn4h0k/0elh/0MjeGTm7TXubC4GOFVAluocah7x8B1thjd4
+         P598ahrQxy2iCdaUlGFYf+J7d8E9/4epQyS5NqVlg90r9DzYIf03jcteidHH5KcDkjNW
+         0HFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782414955; x=1783019755;
+        d=1e100.net; s=20251104; t=1782416941; x=1783021741;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/n08+H8Tpjvupjxeo/7io0Vp1HXJGNBPMxNmTxvkgU0=;
-        b=QBCgr8KCHxWQ9DKQtNlR/Chq/G0ZIcBOOEVeiu76gBNnIED6pH2JtIVXWksOTIRsFy
-         D+SOmVKc2C2lFiBqGmEYJViE4b8gWWkZrY/1Xz86Hknknw1vl0Zwwi/LrIthABu8QS0f
-         clIWKPV2Ajg0RyBnVz2cpUE4ft7u8MCBGQBd2MjwrgD2EpGZBxOaSerHr5KDIrKdyVd2
-         ixFyDRy43W3KsR5QTkG3u2bIyhyHrWyDj8YJq4KtrlT7VOR5+Zmivvze5GcyEvtFNQuc
-         HDiiXCjrtGaI0bgOUWgLjpDWfjP4tyohLvUCURG9g+Ah6LscRPjH/KvHfHz2aRp/R53i
-         XCAw==
-X-Forwarded-Encrypted: i=1; AHgh+RopdNhThM+MrEIU/mJlYUAZiKVAijMd1WalTgFhu/OgXHeuR+95YoGbobaf2JcahuKLUZU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmM4XOdhVYiacYBVk5FNlIWSD+H/+OpzhwiIJ5fRXuxan+FYrQ
-	eTDj456U3CZwqc7sRkyIHqio8OpbDENQmUMdtWxaQhsiMjw3yDpZev/g
-X-Gm-Gg: AfdE7clU77ZKwVndo2SQm8td3RdmNZODz0LjOUBXOKZHEN+atOuy/tG0UxOy5pgPLhz
-	laVRMXMWM98ISqZK0Sx3mw2FJASBYpUPl2Ts0HUxQHRYf6RFLS4aqD4DOsh4Hi7ZIineAgVKlyk
-	ZJs0Dy3k3WJrcVTmhQdWvIzP03KSlGmR0tj0REdaYVmdKZk75MaG2wDc6NLEQ354yf84+mFvcGv
-	dH3hoSJstbXVKtE3EJne/pc0L2DTsTtzOGwtJY5zIv01M3mwqtDYCkkVvVHfzR6RHTafBtqwCxZ
-	sS+V7X5lL2xLCNruxrqtFU17njDXSgKolc31tIl7sXKNXB3Af01LdMYqWRTC7OfM2yPTMNYBDvf
-	XXTZri1Osox7QmQm8aiXQDLJ1Bnn1v2jB36IVBMYYWfxZUZJsH+HxybLGurKjE1Ti6cer9Lxkvk
-	lztLaYrgImDyhTU0AYPmltytOZ6sNitZLBLjqJHX+mqA==
-X-Received: by 2002:a05:6a00:804:b0:82f:72e6:ed4 with SMTP id d2e1a72fcca58-845b382ec89mr5091236b3a.0.1782414954654;
-        Thu, 25 Jun 2026 12:15:54 -0700 (PDT)
+        bh=16ZLkJ2LztQODTbG3O2U0cAW7v8gP6qg4h47Ihq6PP0=;
+        b=YFvNL+BEPhvAC8N5q2tTvqUjLSurwtvWq8XicZ45QFS8YhGRRPrmziRTIdVaXHS6eD
+         H2J3v7WqDXmciGsIpwdjNdrVt8odCHGf9k5zTklnivGuGwzy8yA8TlllVLF1selTJwx0
+         dOJAhZaUxffWEBChDEB0FGJ1SHsC1PJ1qJ8M6hdMvHs5crDjS0b27L6NzZhLnhjAaq2O
+         e4H1cAcUzqoPP8A5YetXW9tjeZIA0xclrnoEdGYvO8iwAY46hxemCinsp36UVJGUnOGY
+         R6Zxdi0PjSsBl2IaD4qUmz1RuxA3ZgXiA4c504hkBmy4vdCPknALCKigA6TKpQQocexy
+         XNyw==
+X-Forwarded-Encrypted: i=1; AHgh+RqmydSdoKHWoKih/YxwpTZ/fVPXQ0oMrCPT5u4lzRKXkW1c6ch7EeTJYvBhxFCGYL9ieYM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbF1Gk4PEtR7xwB6YJW49gRR67D8lcPSurkh+/dr7YRX2Sjrs3
+	jEKHXrj/SdcHH2odGlAkSgpkrq+V8C/gV/1JKVWVQzqgcYHbfO51HRVG
+X-Gm-Gg: AfdE7cm88n3/qpqYPHg+6/vJkEMh3EIgSf710PpiQJzIrENxdmjKMa5FDIqx1X6iu0W
+	AlVvhELpfpxbuUQWBpAlhgOy7uyMiPm58clW+Pat6xVWfBs7YQF4JGpU+xAY1l6KLI87sjLE1Dd
+	hOLk1BBXvjv7jNjiuo/N7CceK458X9bTkuF/Eq55FyUCrmGso6IWGgRkMXDBv4cUz/Wlcw407Fw
+	mVl0LNLFX+tgygoMlYmO26GlhwJ07qkU+mCGvDMFGXui2Q+RmNlJrdWAPTnNph/LoBTwazeY5ZN
+	xRCYUMRCZWHqejiHrZSjSCreZTICxw3OoGpQ6d5KEOGK5nQOpTwA731yXzHLoaL/ERYWWxGoXcD
+	PuPXQHIVrheKliL4U4QmxZLBV+LjRoVOMVB/YG9j0t7AiEd5WkP6p7OEYQFO4zMTz5+8bJWUTcj
+	eLh45bnfpDFXSkGIobcxh8Sg9RgP7c2GP8HZ8FIxV9Ig==
+X-Received: by 2002:a05:6a00:94e8:b0:842:2ddb:e303 with SMTP id d2e1a72fcca58-845b39d43aemr4839725b3a.12.1782416941271;
+        Thu, 25 Jun 2026 12:49:01 -0700 (PDT)
 Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845c104113esm665045b3a.57.2026.06.25.12.15.53
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845a413d2aasm5840852b3a.59.2026.06.25.12.49.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 12:15:54 -0700 (PDT)
-Message-ID: <9e952ca4993577f5e45b5c17f5c80e42724063c8.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 2/5] selftests/bpf: libarena: Fix can-loop zero
- variable definition
+        Thu, 25 Jun 2026 12:49:00 -0700 (PDT)
+Message-ID: <bc649ab9876ef71618d47fbfd581396c27a236c7.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/4] selftests/bpf: Add kfunc set test to
+ resolve_btfids
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, memxor@gmail.com,
- daniel@iogearbox.net, 	mattbobrowski@google.com, song@kernel.org
-Date: Thu, 25 Jun 2026 12:15:43 -0700
-In-Reply-To: <20260618085626.19633-3-emil@etsalapatis.com>
-References: <20260618085626.19633-1-emil@etsalapatis.com>
-	 <20260618085626.19633-3-emil@etsalapatis.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Date: Thu, 25 Jun 2026 12:48:50 -0700
+In-Reply-To: <20260624005546.1818483-5-ihor.solodrai@linux.dev>
+References: <20260624005546.1818483-1-ihor.solodrai@linux.dev>
+	 <20260624005546.1818483-5-ihor.solodrai@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
@@ -79,42 +81,16 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Thu, 2026-06-18 at 04:56 -0400, Emil Tsalapatis wrote:
-> BPF can_loop based loops require the index variable to stay imprecise.
-> This means we must initialize them from a currently imprecise variable
-> instead of directly assigning 0 to them, like so:
+On Tue, 2026-06-23 at 17:55 -0700, Ihor Solodrai wrote:
+> Extend the resolve_btfids selftest to cover kfunc sets defined with
+> BTF_KFUNCS_START/BTF_KFUNCS_END.
 >=20
-> static volatile u32 zero =3D 0;
+> The test verifies that resolve_btfids correctly processes BTF_ID_FLAGS,
+> resolves function IDs, and checks the kfunc set is sorted.
 >=20
-> for (i =3D zero; i < NUM_LOOPS; i++) {
-> 	/* loop body */
-> }
->=20
-> The libarena implementation of this technique is currently faulty. For
-> the technique to work, the variable must not be in a map. This includes
-> the .rodata DATASEC map used for const variables. However, libarena
-> still defines the zero variable as constant.
->=20
-> Modify the zero variable definition into a volatile variable. This
-> change adds a complication caused by the compiler optimizing array
-> derefences from
->=20
-> for (i =3D zero; i < NUM_LOOPS; i++) {
-> 	val =3D *(ptr + i);
-> }
->=20
-> into
->=20
-> for (i =3D zero; i < NUM_LOOPS; i++) {
-> 	val =3D *ptr++;
-> }
->=20
-> and causing verification failures. Use the barrier_var() clobber macro
-> to prevent this optimization from taking place. After that, remove the
-> bpf_for() invocations introduced in libarena for parallel spmc testing.
->=20
-> Reported-by: Eduard Zingerman <eddyz87@gmail.com>
-> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 > ---
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
