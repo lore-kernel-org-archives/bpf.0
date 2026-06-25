@@ -1,73 +1,63 @@
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 408D236165E
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 21:39:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA45823BD06
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 22:00:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782423578; cv=none; b=IhhdL7umG/YYn+NR53JFyQ8jiTp8aVJIt9pcgjtWgBtELEUmgatXgiw1z7Bs9kX/CxuJG9F+FPJYbKdHYD730YQK/gomgrin04NNJWd8m+ZDfCWg/IT2whCrESIDrMZfr2LwY7eycd4sBQmD9nnSakGjH3NWPEGLY/lVWe1bxM4=
+	t=1782424832; cv=none; b=BU6Gt/hGHdJNyXyy1NLboNqTs0m9ZDgZIB2R1Ba5IeCv5ezqwq9cgGbwjEN3hyLfsxq0jUbT8muhEVqVmtvWSbejAoUYfgv/erWs64gZFqt5CNVr76s9WZRvQSVzOEYxbgVh6wpCAR/yWDM1izmGvDGv1hK9uEAnsDnhF6ltn6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782423578; c=relaxed/simple;
-	bh=lsR19j1IBGECl1iTvnGDnFVZMGUdr970UxvcDFoKpdk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QXTG2pt1ddn39QI26DVemDgzyJEJSn274f4Xl+NhV3mwZ8WS02JBcwEzKbrEHOdSWwtmuN+TCk9PZuOmFZy86eymXkTmUyuNdqSyTPaD5GkdK8pVVcuda0wcRqzifM50y6hPedES6yn2jd9/v8IXcDo/kbFtZPe+shsSvxAYIP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sRbNF+/X; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782424832; c=relaxed/simple;
+	bh=jzie1bvO33li8TjYESL9cRn97fESiCT5Zy4/Rb+gD2k=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=pJsY7OpCCPjz+v2cbpFsZyvyHO04/OQ1C72+0ZwPV9P//rlI8Brvd8NmU8lkaStF3myLjlNuUcIjj2pmg8k3/L0YBdUnnB3p1jymZ149DAX384Z57ZFLlqP5Xe73s3CTJxRjzhmmiVKyGRt8gYpglFyxXGfqyeEh3lrIr+3pad0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XdD/2Nij; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sRbNF+/X"
-Message-ID: <91fb97e6-f6da-49c0-bd0b-3dc8390ca3ee@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782423564;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lsR19j1IBGECl1iTvnGDnFVZMGUdr970UxvcDFoKpdk=;
-	b=sRbNF+/XCdvmuy2b1AOxSuHwwTebFUephjd2GBUXM0gmLS1yeSrUSWhjV6SlHkqRfokKJn
-	LApeDhAisjTfViNbzajZUyQONMojdyZu9pZQNWEWcc559wWXqt22VtNh0AZdPy/zVhwFim
-	aCFYFJy1lQ02AOtR/FwVG2l4wiCl7k8=
-Date: Thu, 25 Jun 2026 14:39:09 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XdD/2Nij"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 602D91F000E9;
+	Thu, 25 Jun 2026 22:00:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782424831;
+	bh=5bk87c+bAHqpaJMa+0IwfrSZNpxakaH53MkndEQc2cE=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc;
+	b=XdD/2Nij1xZCvgOQTHzHABAm4io9Vn4ghvKA3Xchc1ecCCSNBFS2A2L9X0LNI/cSU
+	 62aGQEP6MP44CN4D7wHCyt9tzCFrfUnJBYOQrQ4VuswT3hUdDwCD9WxaYxyo72Z80U
+	 dRx0nHIvCBZfHW+3vUp6Qx53br07SeFy7SpOAA6V3XnJhd2Alsz5CxeDWzzJLFKpwd
+	 wJ9flIbNGWzIa+GIcaUsBgdUPM7Kcj2f2V+1e2hwENYCh4b7Iu1qMQluKBovjKJX0n
+	 urZYMDCzRfCKm1/yXS/4tdyF9DMARSmaxyO2hlf7PCr1fJypC0lRqLLufqv0W5DWPO
+	 JD69BH1GmBrMA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D37A23930AA1;
+	Thu, 25 Jun 2026 22:00:19 +0000 (UTC)
+Subject: Re: [GIT PULL] BPF fixes for 7.2-rc1
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20260625201934.54233-1-alexei.starovoitov@gmail.com>
+References: <20260625201934.54233-1-alexei.starovoitov@gmail.com>
+X-PR-Tracked-List-Id: <bpf.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20260625201934.54233-1-alexei.starovoitov@gmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
+X-PR-Tracked-Commit-Id: 12091470c6b4c1c14b2de12dcbae2ada6cb6d20b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4edcdefd4083ae04b1a5656f4be6cd83ae919ef4
+Message-Id: <178242481838.180402.15127841741743043419.pr-tracker-bot@kernel.org>
+Date: Thu, 25 Jun 2026 22:00:18 +0000
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: torvalds@linux-foundation.org, bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com, eddyz87@gmail.com
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: Cover refcount acquire
- node offsets
-Content-Language: en-GB
-To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
- Shuah Khan <shuah@kernel.org>, Viktor Malik <vmalik@redhat.com>,
- Leon Hwang <leon.hwang@linux.dev>, Dave Marchevsky <davemarchevsky@fb.com>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <cover.1782192383.git.chenyy23@mails.tsinghua.edu.cn>
- <bf2a2033ced272106292de4465b8ef3fb991c912.1782192383.git.chenyy23@mails.tsinghua.edu.cn>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <bf2a2033ced272106292de4465b8ef3fb991c912.1782192383.git.chenyy23@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
+The pull request you sent on Thu, 25 Jun 2026 13:19:32 -0700:
 
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
 
-On 6/22/26 11:11 PM, Yiyang Chen wrote:
-> Add regression coverage for bpf_refcount_acquire() on graph-node-derived
-> pointers.
->
-> The rejected case passes a popped list node pointer directly to
-> bpf_refcount_acquire(), which must fail because the pointer carries a
-> non-zero fixed offset.
->
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4edcdefd4083ae04b1a5656f4be6cd83ae919ef4
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
+Thank you!
 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
