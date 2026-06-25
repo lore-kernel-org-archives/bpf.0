@@ -1,242 +1,262 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A84E383C83
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 10:48:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5DB439D3EC
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 10:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782384540; cv=none; b=D+jBT6Su3vE77nT1hwrqauYAkr9m6ogQZrkElwe3ij5W4HgmyL0Qx0SVTia3c4tes/FiWALm4Xm5jIQkK8p5S+GpyEem2LW2qXM4SoPVLnOMpgOtT49lY4b5Fo3Fubs0VrvH0WUTbKX/3RXkgbKE3iCPKHNN6J2VFO3Di6ES7wo=
+	t=1782385188; cv=none; b=V6Fuy11HU+QkpCsiQba2G3gP6dc8JgFnubqknOX2lLeYEWun57Mgh/KRQ7mGWLGP1G6BYMBunHLG9RJU6umOgq1QojE4K1EYODadKuwwN33vQlElBAKEPqCgPmosn+7oK+0m66G2VkSUirJhG9AQ3WID9u4u33NjKFwQg3t4eAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782384540; c=relaxed/simple;
-	bh=Ps2PqFYe0uSu8kMn+2yUb7YCUrEj5lUz/Jd3hDbXnNY=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=rw+rdZRTeRzkFCCgBV23Q0TO73fIz5lCX1h2jEgf6ZrexU0kOOKBgEuYvvyWEh5ONm+C7JcNwxk8x1i2gsa14R66E/3LPTAE2mnBCFviIVfK4+0ynX1fdYhzhLiSSMgDdCgkj1K1k8NVPl5Ej6cJ/7aQLhAcJlT+51ENUFURGPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Wfwq5q4q; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1782385188; c=relaxed/simple;
+	bh=moIE8WbOhEUHpvRdK5YsoI+RWzG8UkN4U2u5ilig0s0=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LVnfRTuZFibyWnm3qO83szbhooFLpti95J9ZjNdSXrGdpzsEtCJ4K8RN3r0ywt/ovHKqOI7RZ6HypNsS/MEOQiY++hM4S6Cgyx/qTa4WbKgpG6nYBKpns8UP6g2LB3IrAu0AUXwAD94Vv3vT66fY+nH25qomCtYSTWE3oqKyZsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PRJVGucR; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Wfwq5q4q"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c03a466c96aso27787866b.3
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 03:48:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PRJVGucR"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4903d730b1fso22819075e9.2
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 03:59:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1782384537; x=1782989337; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:user-agent
-         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HhnTEE3eR7tyCRGO7cEDK/PBoNBoXGQu9h1tWf3iFxw=;
-        b=Wfwq5q4qdayb+YXK0COgNQ2Ux8sKEDn7v+K7FL2AbxFLROD9uVGJ0IrJIT0ZZZXExW
-         jdUSDZbz+aFUR+Eycmh3EZ5WwGMIOFf7WsfURBpfHixqwVqIFvaKryxh3CBCkTaZzIl6
-         KH+VObJOTcwPTRIAdogLRy3FnC3JXudHFYHh/g3xjZ3jOYj8BRdD+6PIkJb1+EobDmfP
-         2Zzu0zfy9C2pJ1wnYBU0k5ZBbQ1QsRiESjXFEO9SJ77+nhMHOv50zuHEkhQQ9V6XbUaQ
-         InCv6e0HSqaZd/RWI93UQK/m33dn8ns+34dxE3StIGhktRQvlbN20v/8vfrUtjXd27G+
-         PVSA==
+        d=gmail.com; s=20251104; t=1782385181; x=1782989981; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kYyoK0pGtkUSu+UWMOV/pLn1FeMe2RkvR+yVNGqpBWM=;
+        b=PRJVGucRvSY3dCerKZdhYqyMaYsT30nSc3n+IhLLlpiCvFD/Orhehv/Khvms7UVpLt
+         yo6qBI2cz5gLmVc+GeWlYwL9rueuPL2Mjpn7O0clo1w/ikcKbdA3Sa+4jnnOF8GMW3zK
+         BRlpb8nLDbVAFXDJVk+rO1mwF/OJZ1TcNtu3oiKXlgwKOLc0zsptA5YyRmO3Lek/i35H
+         6AqiLXgGNkAr7wWpSJRNsWmrgEpXcH7gR1ymzQyfr9rbDardZDSkL9BRJTLsodT+rGM0
+         3cIwWr4s5QendsWlckKxBRH34ipfHvoGk4DyDdV2w77aqNoFrRMb4EaN9cX9cxUVDLtf
+         HKQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782384537; x=1782989337;
-        h=content-transfer-encoding:mime-version:message-id:date:user-agent
-         :references:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HhnTEE3eR7tyCRGO7cEDK/PBoNBoXGQu9h1tWf3iFxw=;
-        b=GpearTOEmZ4O0c4l/dakwQ2WC9tUY7mTUUi8+sIjPGURzGBql8GPzLv8qLU6s3veOg
-         tZg/1EtO70P9NQT4vUrzuSDiroEJKYLjsP4xzTu195nc/fwmhplaRMh11uc6mqF+iEXu
-         HB0cmiKb7kd5rs2Oby7I8Q2ptcfdom5MjC+v+V7tQM5gcZ1prKB5T+UFffW0iIVXXtFK
-         wDzoTgMSXag1CTw+bEm35nxr8AQ8YMChlRrazg7pxjL7Ekvz7H+9nWuuuYQHbNpzPHwU
-         b5zmXSLnTW8OeLZZieY/z4dtuXfb2pMi5xb6M9GZByBRWaoyeQNLJ2nhU9Yow6xvYXcB
-         BPdg==
-X-Forwarded-Encrypted: i=1; AHgh+RpZ6fUZ9WbSRohjh/2sYEYWH4Z2TSyrdtBzmwbYNFFUgAUQBRYVy2sUEXTXFGNc9ijlcug=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxF5lpyCwIVuand5EC9T8eLfxDXYA20Za7rUQhHF0ZeyOe+TaOw
-	bh1ePZRJnJ+MfO22abE0SFg5MRUy7xdStw4/DJUTvPcifce4o4oNCsObqcBTdfBbT8E=
-X-Gm-Gg: AfdE7cnzUrbFXLpsjoS1VkgH4Dxz5y/8pyL0rsEhCmtcSIniZyIaYRJ7ytuf5MZ1xwU
-	zdvJ/BdcU76gKi1dut+WtLrwzBL9ug1kX4TELp2JZziq7eLVEwDyw6n0orYT1TzZHmfTJJ6CTiS
-	N+cKcWH/tcDxZQ9X7VpOsya/kdBctFiDy4yE64kAF85jHyy+tCbcw2WzTscoSJIIzRpreoWe3Jm
-	P6cuUnRR1cLxwNfLXbmK3eYbRuMZC+JXFopZUogETfMmbZiZHM06rM0c/OqD1ooE1PkohS7sn9g
-	0xGSH/CSTEAuMMeH6QPTSmVNWR5cWAnWEkrGthGImQEa1ICHPvl5Ex7KNqPy67E+MybAlQnPI8h
-	yaSfNNqsdpVYywGmh90SKS/yb19pqisQeIkSMZoz66K1Hg5xP2ZSvSdmcGTHiBw1bj5TgvT4moO
-	6NTqckOKYcsmavxDA=
-X-Received: by 2002:a17:907:dab:b0:baa:1d9:66ff with SMTP id a640c23a62f3a-c1205e1fe84mr141629266b.20.1782384536940;
-        Thu, 25 Jun 2026 03:48:56 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c11fbba862asm158442066b.9.2026.06.25.03.48.56
+        d=1e100.net; s=20251104; t=1782385181; x=1782989981;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kYyoK0pGtkUSu+UWMOV/pLn1FeMe2RkvR+yVNGqpBWM=;
+        b=db15KF8TlQJ8ilvW7PgE0wBKBCI8v9SdWv3m7UyTuLZ1bEwf0pyAbljU8YLzO1G75h
+         awGqQ0zVtJo1ZCqSl+9gle3U9fnWC8oFhN6cKzNAX2ipC1HyL5IYoq3+ruHYT0vzNstJ
+         DqVWCThSHbkmcIkn6rPK9C5m5r9K1TMimfXH7/fpwU0rqbvmpokHkZtDdtuvrVEuRaZw
+         5e5bA9VmnqHHTASr4eFdYpAQakunorYmQo/cl3huMMABBQdk72RyetTxSFn+M7outORW
+         LnSH2SjJQKsdkM+wxnF3vieVlohU9BGvox4PUcst9yxTppMzObXjGFTaxvZmh8qbb7+g
+         2PKw==
+X-Forwarded-Encrypted: i=1; AFNElJ8nGzhK8GMO9R507USh4pTs+EpBWBp4WFwhz1PffoC4MeVfmg4KnOsBpuedZs8tfK8/t3o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywk/HnQ81Mo+0xJS89U+bLbdibViGljhG3OJEdEAxcS1t+cDMVz
+	YJPWtqTIaUi1HkMY54rrKIJTwzh17bJHpWm3hMeAXDnUcQFfqka6gbURKRW4pQ==
+X-Gm-Gg: AfdE7cmDkbV4b1QWizG08pHevuoA75WhBx0UsvaMNSWfSRzZdaH3qs+oj9usVcsG1Hd
+	swJoG0x2j8iMy2Yzm+Zfn7edIufVJfJGV1v73Qn+QbKn8/LQF68bI51XRxVw1D9T5VHpfFrm4Sa
+	TyQVxFt9jTZFwGhNLKfTTd0HoM6CtVRIj+FUbiFRBPlTDflSsJ6bByDUFQJSKuv8NuXxEaQ/6PE
+	8FbDtTuxZ5WFuf2pP2emPnlqQJNL0XxjsbnUBt6+n+a3tq3VYnrp19pUdS7wL8/Q+YuaxqA3E3v
+	3mr1G3gGbxix5Wk7REvQzGnkuDr8/3W3NmqAkNbxm422hedEwkne/9fr7+0MnnO1+bUrh+dlOiU
+	nsq2dP9bMWorNm33O0t5n09T2I6jiKZ9COnwMpVEPFQHXHU1rtt8o7Za6m0WqHtVbvnLOegTPOm
+	ZuDhbt
+X-Received: by 2002:a05:600c:4e90:b0:492:4c9e:c95d with SMTP id 5b1f17b1804b1-4926687e737mr25869805e9.18.1782385181030;
+        Thu, 25 Jun 2026 03:59:41 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49266062fd6sm28644475e9.1.2026.06.25.03.59.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 03:48:56 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Michal Luczaj <mhal@rbox.co>,  Willem de Bruijn
- <willemdebruijn.kernel@gmail.com>,  John Fastabend
- <john.fastabend@gmail.com>,  Jiayuan Chen <jiayuan.chen@linux.dev>,
-  "David S. Miller" <davem@davemloft.net>,  Eric Dumazet
- <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni
- <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Alexei Starovoitov
- <ast@kernel.org>,  Cong Wang <cong.wang@bytedance.com>,  Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  Eduard
- Zingerman <eddyz87@gmail.com>,  Kumar Kartikeya Dwivedi
- <memxor@gmail.com>,  Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
- <song@kernel.org>,  Yonghong Song <yonghong.song@linux.dev>,  Jiri Olsa
- <jolsa@kernel.org>,  Emil Tsalapatis <emil@etsalapatis.com>,  Shuah Khan
- <shuah@kernel.org>,  netdev@vger.kernel.org,  bpf@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf 1/2] bpf, sockmap: Don't leak UDP socks on
- lookup-bind-release
-In-Reply-To: <CAAVpQUAy=EVZcZRmXJPr=neJh7Q+UbYML5L4+nBynVrDPidUkw@mail.gmail.com>
-	(Kuniyuki Iwashima's message of "Wed, 24 Jun 2026 14:39:35 -0700")
-References: <20260623-sockmap-lookup-udp-leak-v1-0-05804f9308e4@rbox.co>
-	<20260623-sockmap-lookup-udp-leak-v1-1-05804f9308e4@rbox.co>
-	<87wlvoxdq1.fsf@cloudflare.com>
-	<willemdebruijn.kernel.24d11e11d5dc0@gmail.com>
-	<dd065bfb-52ce-48fd-b1ef-9c6166f714ed@rbox.co>
-	<CAAVpQUBHMrSiWqn0Zo_D7sUCLFdkKggduoijRdFtHx5CPiSpsg@mail.gmail.com>
-	<CAAVpQUAy=EVZcZRmXJPr=neJh7Q+UbYML5L4+nBynVrDPidUkw@mail.gmail.com>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Thu, 25 Jun 2026 12:48:55 +0200
-Message-ID: <87o6gyyjxk.fsf@cloudflare.com>
+        Thu, 25 Jun 2026 03:59:40 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 25 Jun 2026 12:59:39 +0200
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	kernel-team@fb.com
+Subject: Re: [PATCH dwarves v10 0/5] pahole: Encode true signatures in kernel
+ BTF
+Message-ID: <aj0KGx-5FwUbwGHc@krava>
+References: <20260625020148.1883082-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260625020148.1883082-1-yonghong.song@linux.dev>
 
-On Wed, Jun 24, 2026 at 02:39 PM -07, Kuniyuki Iwashima wrote:
-> On Wed, Jun 24, 2026 at 2:33=E2=80=AFPM Kuniyuki Iwashima <kuniyu@google.=
-com> wrote:
->>
->> On Wed, Jun 24, 2026 at 2:26=E2=80=AFPM Michal Luczaj <mhal@rbox.co> wro=
-te:
->> >
->> > On 6/24/26 22:01, Willem de Bruijn wrote:
->> > > Jakub Sitnicki wrote:
->> > >> On Tue, Jun 23, 2026 at 08:03 PM +02, Michal Luczaj wrote:
->> > >>> UDP sockets get SOCK_RCU_FREE set when (auto-)bound. This means
->> > >>> sk_is_refcounted(unbound) =3D true, while sk_is_refcounted(bound) =
-=3D false.
->> > >>>
->> > >>> Because sockmap accepts unbound UDP sockets, a BPF program can inc=
-rement a
->> > >>> socket's refcount via lookup. If the socket is subsequently bound,=
- the
->> > >>> transition from unbound to bound causes bpf_sk_release() to skip t=
-he
->> > >>> decrement of the refcount, causing a memory leak.
->> > >>>
->> > >>> unreferenced object 0xffff88810bc2eb40 (size 1984):
->> > >>>   comm "test_progs", pid 2451, jiffies 4295320596
->> > >>>   hex dump (first 32 bytes):
->> > >>>     7f 00 00 01 7f 00 00 01 d2 04 1b b7 04 d2 00 00  .............=
-...
->> > >>>     02 00 01 40 00 00 00 00 00 00 00 00 00 00 00 00  ...@.........=
-...
->> > >>>   backtrace (crc bdee079d):
->> > >>>     kmem_cache_alloc_noprof+0x557/0x660
->> > >>>     sk_prot_alloc+0x69/0x240
->> > >>>     sk_alloc+0x30/0x460
->> > >>>     inet_create+0x2ce/0xf80
->> > >>>     __sock_create+0x25b/0x5c0
->> > >>>     __sys_socket+0x119/0x1d0
->> > >>>     __x64_sys_socket+0x72/0xd0
->> > >>>     do_syscall_64+0xa1/0x5f0
->> > >>>     entry_SYSCALL_64_after_hwframe+0x76/0x7e
->> > >>>
->> > >>> Maintain balanced refcounts across sk lookup/release: (re-)set
->> > >>> SOCK_RCU_FREE on proto update to treat the socket (whether bound or
->> > >>> unbound) as not requiring a refcount increment on (a RCU protected=
-) lookup.
->> > >>>
->> > >>> Fixes: 0c48eefae712 ("sock_map: Lift socket state restriction for =
-datagram sockets")
->> > >>> Signed-off-by: Michal Luczaj <mhal@rbox.co>
->> > >>> ---
->> > >>> Note: this issue is related to commit 67312adc96b5 ("bpf: reject u=
-nhashed
->> > >>> sockets in bpf_sk_assign").
->> > >>> ---
->> > >>>  net/ipv4/udp_bpf.c | 3 +++
->> > >>>  1 file changed, 3 insertions(+)
->> > >>>
->> > >>> diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
->> > >>> index ad57c4c9eaab..970327b59582 100644
->> > >>> --- a/net/ipv4/udp_bpf.c
->> > >>> +++ b/net/ipv4/udp_bpf.c
->> > >>> @@ -173,6 +173,9 @@ int udp_bpf_update_proto(struct sock *sk, stru=
-ct sk_psock *psock, bool restore)
->> > >>>     if (sk->sk_family =3D=3D AF_INET6)
->> > >>>             udp_bpf_check_v6_needs_rebuild(psock->sk_proto);
->> > >>>
->> > >>> +   /* Treat all sockets as non-refcounted, regardless of binding =
-state. */
->> > >>> +   sock_set_flag(sk, SOCK_RCU_FREE);
->> > >>> +
->> > >>>     sock_replace_proto(sk, &udp_bpf_prots[family]);
->> > >>>     return 0;
->> > >>>  }
->> > >>
->> > >> There is a side effect that an unhashed (unbound) UDP socket can no=
-w be
->> > >> selected in sk_lookup with bpf_sk_assign.
->> > >
->> > > The commit does mention a related fix, beneath the ---, commit
->> > > 67312adc96b5 ("bpf: reject unhashed sockets in bpf_sk_assign").
->> > > That fixes a similar issue by exactly disallowing this:
->> > >
->> > >     Fix the problem by rejecting unhashed sockets in bpf_sk_assign().
->> > >     This matches the behaviour of __inet_lookup_skb which is ultimat=
-ely
->> > >     the goal of bpf_sk_assign().
->> > >
->> > > So ..
->> > >
->> > >> Though perhaps that's for the
->> > >> better because TC bpf_sk_assign doesn't reject non-refcounted UDP
->> > >> sockets either, so we would have both socket dispatch sites behave =
-the
->> > >> same way.
->> > >
->> > > .. there are two conflicting types of consistency here? Consistent w=
-ith
->> > > __inet_lookup_skb or the TC bpf hook. Of those the first is the more
->> > > canonical.
->> > >
->> > >> Also, with this patch, if we insert & remove an unhashed UDP socket
->> > >> into/from a sockmap, we end up with an unhashed non-refcounted UDP
->> > >> socket. Not entirely sure if that is actually a problem or not.
->> > >>
->> > >> Willem, what is your take on having unhashed non-refcoted UDP socke=
-ts?
->> > >
->> > > I don't immediately see a problem, but I'm not an expert on SOCK_RCU=
-_FREE.
->> >
->> > Perhaps it's worth mentioning that unhashed non-refcounted UDP socket =
-is
->> > already possible: first auto-bind via connect(AF_INET) (which also sets
->> > SOCK_RCU_FREE), then unhash via connect(AF_UNSPEC).
->>
->> Setting SOCK_RCU_FREE itself should not cause a problem, but I think
->> we should take a step back.
->>
->> AFAIU, 0c48eefae712 was to allow putting AF_UNIX SOCK_DGRAM sockets
->> into sockmap, not to allow using unconnected UDP sockets in sk_lookup et=
-c.
->>
->> Actually, v4 of the patch was implemented as such but did not get any fe=
-edback,
->> https://lore.kernel.org/bpf/20210508220835.53801-9-xiyou.wangcong@gmail.=
-com/#t
->>
->> ... and v5 (the final commit) somehow removed the restriction for unconn=
-ected
->> UDP socket as well.
->> https://lore.kernel.org/bpf/20210704190252.11866-3-xiyou.wangcong@gmail.=
-com/
->>
->> Given the initial use case, sockmap redirect, is still blocked by
->> TCP_ESTABLISHED
->> check in sock_map_redirect_allowed(), I feel there is no point in suppor=
-ting
->> unconnected UDP sockets in sockmap.  It cannot get any skb from anywhere
->> (without buggy sk_lookup).
->
-> s/unconnected/unhashed/g :)
+On Wed, Jun 24, 2026 at 07:01:48PM -0700, Yonghong Song wrote:
+> Current vmlinux BTF encoding is based on the source level signatures.
+> But the compiler may do some optimization and changed the signature.
+> If the user tried with source level signature, their initial implementation
+> may have wrong results and then the user need to check what is the
+> problem and work around it, e.g. through kprobe since kprobe does not
+> need vmlinux BTF.
+> 
+> Majority of changed signatures are due to dead argument elimination.
+> The following is a more complex one. The original source signature:
+>   typedef struct {
+>         union {
+>                 void            *kernel;
+>                 void __user     *user;
+>         };
+>         bool            is_kernel : 1;
+>   } sockptr_t;
+>   typedef sockptr_t bpfptr_t;
+>   static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
+> After compiler optimization, the signature becomes:
+>   static int map_create(union bpf_attr *attr, bool uattr__is_kernel) { ... }
+> In the above, uattr__is_kernel corresponds to 'is_kernel' field in sockptr_t.
+> This makes it easier for developers to understand what changed.
+> 
+> The new signature needs to properly follow ABI specification based on
+> locations. Otherwise, that signature should be discarded. For example,
+> 
+>     0x0242f1f7:   DW_TAG_subprogram
+>                     DW_AT_name      ("memblock_find_in_range")
+>                     DW_AT_calling_convention        (DW_CC_nocall)
+>                     DW_AT_type      (0x0242decc "phys_addr_t")
+>                     ...
+>     0x0242f22e:     DW_TAG_formal_parameter
+>                       DW_AT_location        (indexed (0x14a) loclist = 0x005595bc:
+>                          [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_reg5 RDI
+>                          [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_reg14 R14
+>                          [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
+>                          [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg14 R14)
+>                       DW_AT_name    ("start")
+>                       DW_AT_type    (0x0242decc "phys_addr_t")
+>                       ...
+>     0x0242f239:     DW_TAG_formal_parameter
+>                       DW_AT_location        (indexed (0x14b) loclist = 0x005595e6:
+>                          [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_reg4 RSI
+>                          [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_reg3 RBX
+>                          [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
+>                          [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg3 RBX)
+>                       DW_AT_name    ("end")
+>                       DW_AT_type    (0x0242decc "phys_addr_t")
+>                       ...
+>     0x0242f245:     DW_TAG_formal_parameter
+>                       DW_AT_location        (indexed (0x14c) loclist = 0x00559610:
+>                          [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_breg4 RSI+0)
+>                       DW_AT_name    ("size")
+>                       DW_AT_type    (0x0242decc "phys_addr_t")
+>                       ...
+>     0x0242f250:     DW_TAG_formal_parameter
+>                       DW_AT_const_value     (4096)
+>                       DW_AT_name    ("align")
+>                       DW_AT_type    (0x0242decc "phys_addr_t")
+>                       ...
+> 
+> The third argument should correspond to RDX for x86_64. But the location suggests that
+> the parameter value is stored in the address with 'RSI + 0'. It is not clear whether
+> the parameter value is stored in RDX or not. So we have to discard this funciton in
+> vmlinux BTF to avoid incorrect true signatures.
+> 
+> For llvm, any function having
+>   DW_AT_calling_convention        (DW_CC_nocall)
+> in dwarf DW_TAG_subprogram will indicate that this function has signature changed.
+> But for non DW_CC_nocall functions, it is possible that true signature still not
+> available due to locations. So every functions will be checked.
+> 
+> I did experiment with latest bpf-next. For x86_64, there are 69103 kernel functions
+> and 875 kernel functions having signature changed. A series of patches are intended
+> to ensure true signatures are properly represented. Eventually, only 20 functions
+> cannot have true signatures due to locations.
+> 
+> For arm64, there are 863 kernel functions having signature changed, and
+> 108 functions cannot have true signatures due to locations. I checked those
+> functions and look like llvm arm64 backend more relaxed to compute parameter
+> values.
+> 
+> For full testing, I enabled true signature support in kernel scripts/Makefile.btf like below:
+>   -pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=attributes
+>   +pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=attributes --btf_features=+true_signature
+> 
+> See individual patches for details.
 
-Rejecting unhashed UDP sockets on insert to sockmap SGTM.
-It is also in line with disable-problematic-cases strategy.
+hi,
+I tried this version and had to choose another function, because "arp_process"
+suddenly started to show args registers in proper order ;-)
+
+now I checked "stop_cpus" function which is added to btf after this change,
+I attached the dwarf dump below
+
+"stop_cpus" has DW_CC_nocall set, so it has signature_changed=true and I see the
+function ends up in the btf_encoder with optimized_parms=1
+
+but we do not skip such functions now, it seems like we should?
+
+I tried the attached change below and it removes all the extra functions
+that were added in the btf with this change
+
+btw I can't see any other use for optimized_parms flag, it seems to be
+just set and never used.. so I wonder I'm missing something
+
+jirka
+
+
+dwarfdump:
+
+0x016f4b1b:   DW_TAG_subprogram
+                DW_AT_low_pc    (0xffffffff813e0fc0)
+                DW_AT_high_pc   (0xffffffff813e1133)
+                DW_AT_frame_base        (DW_OP_reg7 RSP)
+                DW_AT_GNU_all_call_sites        (true)
+                DW_AT_name      ("stop_cpus")
+                DW_AT_decl_file ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
+                DW_AT_decl_line (464)
+                DW_AT_prototyped        (true)
+                DW_AT_calling_convention        (DW_CC_nocall)
+                DW_AT_type      (0x016e94c5 "int")
+
+0x016f4b36:     DW_TAG_formal_parameter
+                  DW_AT_location        (0x0065ad9e:
+                     [0xffffffff813e0fc5, 0xffffffff813e0fed): DW_OP_reg5 RDI
+                     [0xffffffff813e0fed, 0xffffffff813e111e): DW_OP_reg14 R14
+                     [0xffffffff813e111e, 0xffffffff813e1127): DW_OP_GNU_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
+                     [0xffffffff813e1127, 0xffffffff813e1133): DW_OP_reg14 R14)
+                  DW_AT_name    ("cpumask")
+                  DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
+                  DW_AT_decl_line       (464)
+                  DW_AT_type    (0x016f3242 "const cpumask *")
+
+0x016f4b46:     DW_TAG_formal_parameter
+                  DW_AT_name    ("fn")
+                  DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
+                  DW_AT_decl_line       (464)
+                  DW_AT_type    (0x016f2ca5 "cpu_stop_fn_t")
+
+0x016f4b52:     DW_TAG_formal_parameter
+                  DW_AT_location        (0x0065ae0d:
+                     [0xffffffff813e0fc5, 0xffffffff813e0ff2): DW_OP_reg4 RSI
+                     [0xffffffff813e0ff2, 0xffffffff813e10e4): DW_OP_reg3 RBX
+                     [0xffffffff813e10e4, 0xffffffff813e1127): DW_OP_GNU_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
+                     [0xffffffff813e1127, 0xffffffff813e112e): DW_OP_reg3 RBX
+                     [0xffffffff813e112e, 0xffffffff813e1133): DW_OP_GNU_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value)
+                  DW_AT_name    ("arg")
+                  DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
+                  DW_AT_decl_line       (464)
+                  DW_AT_type    (0x016e858f "void *")
+
+
+
+
+---
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 38455a4c6b6b..cbc5063a6280 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -1564,7 +1564,8 @@ static int btf_encoder__add_true_signature(struct btf_encoder *encoder,
+ 		 */
+ 		if (true_state->unexpected_reg ||
+ 		    true_state->uncertain_parm_loc ||
+-		    true_state->ambiguous_addr)
++		    true_state->ambiguous_addr ||
++		    true_state->optimized_parms)
+ 			continue;
+ 		err = btf_encoder__add_func(encoder, true_state);
+ 		if (err < 0)
+@@ -1656,6 +1657,8 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
+ 			skip_reason = "reordered parameters\n";
+ 		if (state->elf->ambiguous_addr)
+ 			skip_reason = "ambiguous address\n";
++		if (state->optimized_parms)
++			skip_reason = "optimized parms\n";
+ 
+ 		if (skip_reason) {
+ 			btf_encoder__log_func_skip(encoder, saved_fns[i].elf,
