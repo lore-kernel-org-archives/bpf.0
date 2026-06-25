@@ -1,68 +1,68 @@
-Received: from mail-pg1-f193.google.com (mail-pg1-f193.google.com [209.85.215.193])
+Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406233D1A8E
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 10:26:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF40B3CDBC3
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 10:26:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782383166; cv=none; b=W4LV6Caote0Lk+mIHT9lfwvmg1BxKD+UpGwpgcyIpPEVxQHGH9agj/j2BEdVKNhWxgy6+GKrl8NMqQd8a4WPUe8ClQbKuDxjq+E4hBd72/DGaSatjTcexx3SlMHPGA8/v/0ejV7NtuK/SjCXgUNg5xcZzIjeuYQRztB4avbuDyU=
+	t=1782383172; cv=none; b=WJH5MFpz8h/LXl/T91STirLuAyVu92Epal1s6XWuLiGPeWAEjpnHghOAiqKktYiXgdOtU7+gHj8TJ+nKFQXLIwRLXMs5CQC3Dpt7J98Vt8yXmQzSWWUeZGcq3JZMcD+GG3XJDwFu0tg5MZ559wdVCc2Rl1JQpPGTjB23pKRvZQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782383166; c=relaxed/simple;
-	bh=gZJhMFqy4I6ezP2HT/LIbAUJXB+rj/D6Yp9nHhyBcCs=;
+	s=arc-20240116; t=1782383172; c=relaxed/simple;
+	bh=aHVy72cnaTQWBvDo57yCjWU084YZmq2VtcfiGWHBIXE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=t/+pdoSx5gmcVbO1EaLYJb/XRjK03DuvR6BDbBnYRHQ2K+kaHmhU48bEGHrx+JvU3Vji1TmElkA1ex7Ks1gqJiXDH9MAWv3etOaqD+vvPZvcS1BnR8Ig0Z2zx96JY6RX2btTfwUg2f97/irDyzpUG0yT2PxSlRIo1+Iy+a3KjCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IW8JAUfY; arc=none smtp.client-ip=209.85.215.193
+	 MIME-Version:Content-Type; b=UCBU8SK1nAxn0Fr/lUmOYeSAnT0/XFs6p+8e7HFvjyo8iUYZf57RR/56sA4/rYZyntCvK9iLuSiuL3No9Q6Ly+29aZ7XlVYIqr3LuVo5VaeT58uFREKzTqPmkfSJAtPFKoESyvmmuT/wH1/yn7QcEZ/C1qco16T+813VyyJsiwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X2HbKSTT; arc=none smtp.client-ip=209.85.216.68
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IW8JAUfY"
-Received: by mail-pg1-f193.google.com with SMTP id 41be03b00d2f7-c9254669d0cso742165a12.3
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 03:26:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X2HbKSTT"
+Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-36d98b9aa9aso1573921a91.3
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 03:26:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782383163; x=1782987963; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782383170; x=1782987970; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gZJhMFqy4I6ezP2HT/LIbAUJXB+rj/D6Yp9nHhyBcCs=;
-        b=IW8JAUfYHQ1Jm/9ZhE4pUtV7FFsyDLsN4l7rsB3yzK6i6NIhFMPfCxyVWspNP35PVg
-         lML1KBjNsR3kXwmCroVvKdOMowgnfNCP2DIA5sAJ4Auu9HObwueQhk5O+o9YawzoqQVI
-         Kw0yR299uONl/SXckJuNCEYwXwBX4KNRQ6Mtkn/gaQHhCrIGI6ROY0rB0Iklxz3yrNhk
-         V6DlPB9Uz0HO2015zICGCQsiy2I89j0AFVcuB7nxB/HNF+EU8vnp/W8ersAEZsKS5uRB
-         2YWHVMpjragD5XYJa7SzpemMKOTdEujQN6/J5qvj+OcyfnMliP0dLhG1tp+rx0YfFPQz
-         TWSw==
+        bh=aHVy72cnaTQWBvDo57yCjWU084YZmq2VtcfiGWHBIXE=;
+        b=X2HbKSTTMw1PAw37i2UNhwth0EPY6QMn9ZAPhgaHPL9zKnm3ZPmjNRtQFvVS8nxWt8
+         VGxwph/Cl8JeSl8N3jG7dDuH1l3XKehPhW0dh8speDPVhnHCo8tY9Dkz5H9VuibD5LoY
+         zqtfi9JcxAOl5UNNHsOydm9cGIUXJ2vu07yV7wbqmS+p4s+dEIViZTTuDavZAk8c42PX
+         f8JiMayN2ggPDjWCwkTb2TduuwYidccrmW+7pvUCwFSaoOFhg1jO1w8b6b1nKlz/giMg
+         rmSyjo28uboOy9S3gosn1oYUShLkTL2LK1stZNDQrhbvE1vjTgBvq0D10PRdhYBiefhM
+         g2GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782383163; x=1782987963;
+        d=1e100.net; s=20251104; t=1782383170; x=1782987970;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=gZJhMFqy4I6ezP2HT/LIbAUJXB+rj/D6Yp9nHhyBcCs=;
-        b=YQSkaeAL5Em8fOv6tQJ66VpmxKFXJAbMvGxWt/tgGLjnByiNddLB9gxe8zemc09IbX
-         K3XDsQNdoiYqlsE8o32qx3KP0+gopOIJxKCIULwcBw1FvcnRE0c2fZwHw5wb9/1YUMKi
-         vFcAMCfsT7RHUdg/E/243DcW2MoxNTtWbZLwJuBcalW3kooXQW3fxX9UDmaw5bMAE6iL
-         CwRzlE112U1DAWXNANYJlnul9zVawopi5EEDeLCCmuv5wSRVoNkpt7B2hVhr4u1RCACR
-         MgQ2n3SSS/ue9O62h7lmnxcoK8BS15Wj5VarCPwS7975JFbl4P5S1TvvHNTuO++UO42F
-         I3Qw==
-X-Forwarded-Encrypted: i=1; AFNElJ+kmHZa9wgbFSSlM0+i8Zp0zhZFyAfxjeaBJRiv59jMG5XdIGuWsFX7pKRUzcrx0r46YOk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGERJRUGJD5vaMU97Nx3ShxNS/AAYj02yrbJ7S89QPzcHjXoVA
-	Sdyc0TZRNlR66S1uLyxwaSyg9oRVbMTTIdtTOyfwZh+qroM8EJ2JeHDN
-X-Gm-Gg: AfdE7cm/3NXhDZWJf7oiN5FoiubbLMugHqwo7Whnot3zfqy2rrNHlworTISNIf/qFUF
-	IADNYECX3VSg++hIwcdWCpBtOYSYAmWhGvkw9+vYb/A5bUJfmrDUW6lm+EsHi7K6Zz5rOBKR2Uw
-	Gzrr5x7vfry9CnaAt/9hv/Dl9Dhonc3JkXyIx0PrBL52yEVcO4IVZLBIxI6f+mwR5To6Xw+s7Fb
-	Ma2ljFYoQQGwzz3IY5f0bqVrXCeMdes95Hibym58nRB7RN2xO1igTQIiiROnsKpzTMIWrnN/wJZ
-	OUXgeA0LgJxLwcLMvi2OKulHfeDEnQ4wVgpDJ4XUEdPWUt8I2WF5YfHjYqysLDM92FPYi0Z3usy
-	PD7fUsX0JV2yuDCPBGdQP90m1sDjHjX5UM7J5OIY2RJ6Hw36MRV3aTmkYz9o4lY2bWN+z5exxxy
-	OyrQ==
-X-Received: by 2002:a05:6a21:482:b0:3a0:adc5:52c1 with SMTP id adf61e73a8af0-3bd4ac9d9c0mr2281062637.11.1782383163370;
-        Thu, 25 Jun 2026 03:26:03 -0700 (PDT)
+        bh=aHVy72cnaTQWBvDo57yCjWU084YZmq2VtcfiGWHBIXE=;
+        b=sAiR3eJsQtO8WeJPScONU7tSmqvXR6ZLFzYWlvBbX1Hx5N4VujnlC7QsYA3gX6mAK6
+         7D02yq+lKwIFdmjVQkOnB2UogNUSsRrv1jCbf1wTZkbR+n3xTZWaY8AFZIs8bLiPeyS6
+         D8oTY3HyG8ljjLeVrXdJUUV8By/e+htYEi5f6lsZ6PJuufIwqBSou7RqdE+O0gQqn599
+         4INeKT9VS3WLwKayHoHyWcJRjBbhuJKcienR7Vt+HglKyitkDm/DQSHc+sEtD13HUzt5
+         G73ez5rWEXi87lJ1EmSISR/sA+82Ndq3pA4BdRCakUg0c+wlZh2u9CBIrnDtataeheQD
+         rsSg==
+X-Forwarded-Encrypted: i=1; AHgh+RrMbPyqsJ+vQrL6yGXafy7PVlNdfNu8DIImYSMVCbwYGLcKOUmFmx/hnTRIKE8lQ6srR4M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEabZwl70SXDmYMKWSnIw9aGTlCbmA0zkcKtMm7G1PKv8+FAp/
+	vjeWAbSZVskI+DWQyuY9DpAa34UVuEJqYSWBU1sbpwj+XxcazJGMOzcU
+X-Gm-Gg: AfdE7ck/oQCzuWTGg2bzBM1X36hKOh4HTek4QcVJv/rCBAE2oM9M1WDZ26hN334yces
+	LMvGhBU6uoZPoDTkcB8N3zxHzCnaMm7ve0j0h3ttzkCVpDrBsjrlvJ5qaFlz5B7vbhwj5UwktS2
+	T1yQMF+tlQaJ4697ZMN115G8Xr1KVvURKTtvjDYq/ghSTYvTEFT4TrRZhBgz5TbsVvlWafPll0L
+	5vmVYVvsNWZU3GpSlmQ38bnpiQUR4vaAMxSeN7zDZ1RrH1vtCViyl2o+1B6mta3Gwg4dkUr/5vQ
+	OOh8sD2v317RcE1ojNomggQydU4p0ztiOYCkFymOvz7r+dJwnttVdJfk+iV23EzxHtU97/FHtAf
+	riEFcI44xfxX/GRxdFI23xxeAjr2npxQ3qI2lP0B+/x34Fpydqe4k96/TpOyD6XzX9/Fge/Dx9k
+	F1JQ==
+X-Received: by 2002:a17:90b:1848:b0:37d:f737:d05e with SMTP id 98e67ed59e1d1-37dfa1a8b0emr1990181a91.9.1782383169817;
+        Thu, 25 Jun 2026 03:26:09 -0700 (PDT)
 Received: from laptop ([59.6.68.4])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c92b9cc8496sm1394077a12.8.2026.06.25.03.26.00
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37df3dfdb99sm1605505a91.11.2026.06.25.03.26.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 03:26:02 -0700 (PDT)
+        Thu, 25 Jun 2026 03:26:09 -0700 (PDT)
 From: Woojin Ji <random6.xyz@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>,
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Song Liu <song@kernel.org>,
@@ -71,12 +71,12 @@ Cc: Daniel Borkmann <daniel@iogearbox.net>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	John Fastabend <john.fastabend@gmail.com>,
 	bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Preserve scalar zero spills for var-offset stack reads
-Date: Thu, 25 Jun 2026 19:25:59 +0900
-Message-ID: <20260625102559.231045-1-random6.xyz@gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Cover var-offset stack reads from zero spills
+Date: Thu, 25 Jun 2026 19:26:05 +0900
+Message-ID: <20260625102605.231140-1-random6.xyz@gmail.com>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <CAADnVQKTMkHwnZb-VjCErqmoe4O4=aT1vjMU8XcZiWpNG-LhVQ@mail.gmail.com>
-References: <20260613-bpf-stack-var-off-zero-v1-v2-0-a324af0f00ea@gmail.com> <20260613-bpf-stack-var-off-zero-v1-v2-1-a324af0f00ea@gmail.com> <CAADnVQKTMkHwnZb-VjCErqmoe4O4=aT1vjMU8XcZiWpNG-LhVQ@mail.gmail.com>
+In-Reply-To: <8a14129295fdbcfe16e811455317108b7b029884.camel@gmail.com>
+References: <20260613-bpf-stack-var-off-zero-v1-v2-0-a324af0f00ea@gmail.com> <20260613-bpf-stack-var-off-zero-v1-v2-2-a324af0f00ea@gmail.com> <8a14129295fdbcfe16e811455317108b7b029884.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -86,17 +86,13 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Yes, good point.
+Thanks, fixed these in v3.
 
-I kept the eager precision marking limited to var-off reads because that was
-the original reproducer, but fixed-offset reads have the same mixed case as
-well. Pure scalar-zero spill reads are already handled, but a fixed read
-spanning both STACK_ZERO and scalar const-zero STACK_SPILL bytes, e.g.
-0000ssss, still falls back to unknown.
+I dropped the extra unpriv checks from the new tests, matched the existing asm
+formatting in the file, and removed the pruning-sensitive test.
 
-I removed the flag in v3, made the zero-spill handling common to both paths,
-kept the existing pure register-fill behavior intact, and added a fixed-offset
-selftest for the mixed case.
+I also added fixed-offset mixed zero/spill-zero coverage after Alexei's
+comment on patch 1.
 
 Thanks,
 Woojin
