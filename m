@@ -1,191 +1,130 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D045360745
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 20:19:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9303128CC
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 20:34:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782418778; cv=none; b=p955Q3ITzFvRME4Ruxcv+eysg+8siNQ5Q646qSGgaZzN/LNDfwm73VYqLK4IpcJmh8h6kCN53ZLM2TUrjvYwASIhdEMavIqc9T7NT15cFg5izjy49NzFm7M27INFaYCp/iLLcBymSWnIBvcV9Oo+4h+UlGD9wa4ep0YeXx6hhZo=
+	t=1782419678; cv=none; b=n4PfR1knAAaOuxit3X3gUrFtM48lzqSQIy86Pert9yAYXSNJfENzGbUdRDt1Yn3O8juYfdg4B06KB45VarzvnRvKESPyZvFNeTm9LtVAupydfAEsIo5Uj9M4ci87cjCZ9sV1G8qH3WvAUSISyPAvYBZG9s4EPrB/u1KpdNP89LA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782418778; c=relaxed/simple;
-	bh=CdkZiu95Ju3zRZKCZInYDz0DhZoKpH+gzbfejaMqk2I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BXXHH8vmJS0zIAnuiGPJqaSO2paX+T296qlnnXMzGhGaPwSe4PK7xNq7rlEBgtGeiG0imO53PsiBN9O5nGhO2v5VoCZopq1+h29aNF7Me43Ef77n2Yh3e1aC64DWMAZN9dqw5QZAR13jHzi1UF2DBLqW2z8CljyXdfvDFK5DPfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OElTnFzL; arc=none smtp.client-ip=209.85.215.181
+	s=arc-20240116; t=1782419678; c=relaxed/simple;
+	bh=jvefDCupa63B7z6ewc8630KRIlgmUwgjGlbSSSzOvhw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HoxXhchXpuPnM/SeKRihkgRpaOslrpSm2AjnOh0IfrZep7J0WTASmByIgqZlE0l1a3UGudebBeh5aXZncp6Gn2ESMozdhGxVo7w7M0laSyuShgeE1bOnW0S7YsB8Ly2HO6eGqe3iI7C6jt0sZr6+VOCYP2JM/HdZmLva5ZDqKr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q2ZBfBby; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OElTnFzL"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c89fa656ea1so83681a12.2
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 13:19:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q2ZBfBby"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-845bd3fcfa3so143174b3a.3
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 13:34:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782418776; x=1783023576; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QTizzMYsvK+QXxwaUCsIvsB96HTa7qAoU7wdsBC1yiA=;
-        b=OElTnFzLMjVqX9mArbtkpzO7U5bp0pltrttCFpvMN7UaBE+nzu0OZCRuwo513me7ef
-         urndJsQSpytIR45y3LH5HPBIsRZMq8DIFj/5T68UM7QDA0UPR0+brTfgYEbh2Y/k7mXC
-         vr9Yun4a2XgY1EVjKBX6xQCoChWrkRB4lliQEgbxvIKAUs5Ijqfjkwb5bAo+9fJ1VR0s
-         fJlN1HyEd1DdGEn52e5qi/3yKSxb/9oHgj/dFEBL8Da92it2d71B2H6QOHCl3CgPweP1
-         qLzbjVNlT3sMMR7OFEKcq7H8NUrl/RHYM/W2BnLcJoX2/eGvn5HyU6APMNtn8+tcCHtA
-         UeXw==
+        d=gmail.com; s=20251104; t=1782419676; x=1783024476; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=j4cziRsnOXU8udnzmTxz4VvnRIsHkxiDHnSiCu2+4Iw=;
+        b=Q2ZBfBbyP1DHdbTQM2KQsipfzQ3jCbx1FckHKtvFCFs57R0u3DHVOIj5rlKswpUKmE
+         EmQLfUQL9VmzKwe/zpd54DG2jlkBz2bUkLzaRxLuqGPYx6ebHNmcKrvKL0PdDIh+TIMG
+         5tfDyX76CJj8BUrvt6EX/+aLIjukAity0jpM1XCrN8fq1wdVlKW0+LYaCiwrliHyPJTc
+         kP+yXMUNB6RlHPfTjGK0c0hnPKk21QWyxKwTdG47jKFw3BLkdejTmo16QG5c0bd/flFa
+         xKW42k5cUxaPU2YzQE1kPGg3J/srKpHeQNU3zcZjhV7xyDynnGcn0hC9YiI/Hr1zSF2q
+         TXTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782418776; x=1783023576;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QTizzMYsvK+QXxwaUCsIvsB96HTa7qAoU7wdsBC1yiA=;
-        b=H8pNJlaWxPdThdxWSgK532+B4wKXHQ6aOKcklaD1pK3cUkxYfop6bLYZnT6dqO2DBj
-         Kacsqpx85jt/PGymy/DTRwmgIxSfhsgu/bgHX0VMJt7575N/JqOSYQAjg//j09hnbBBK
-         YSfV0gcK8ITgyv1gb+GMWdOJffFQG9+YpL1mT9geyQc2MoH6vGsnFP/6Z5AT9uEWj1mO
-         nDQDCUKqRMof4DEiprbmDwTPXCHE5zVpMgpBp55rW7wHmlja9lD682soPrmMs5y436Kx
-         zABFy3YkrlQJWqpmhAaoZD4DqVtSgE7aQ8yK4lMFLl6aUvL8Xx4ZPUGxXfoZHCCNnorx
-         dFiA==
-X-Gm-Message-State: AOJu0YwgjRz7CjE1ObAWFw0fZZ1RvSipeK+FQQmuDqyOiSt+j4es5O3g
-	cI47OaCHp+ZjwKxa466U5xWV/5MDqqqHVNk+p3HhCAPOKzq+djIIESEN
-X-Gm-Gg: AfdE7cmqw/QFFO4Fnd5vVZbQLfEq0v9thXL3rxMOkaOP9iHlzPt2Lq5PQA7rPhYEskx
-	gfKhI6E/A2dckJ4uvBN9GWSu3nxgrXohGHE6EgVyx7jctikJ5T5Ckpdvy41J5shPsMoJxanpxmN
-	hyps9BP1SDDL6vx/rIdorfK5Xs2M0XYgQYE1z3XIsdq4tMRvpNRd9SzOuMDPjkDCkivkN3oSUv8
-	SRnBouu3dFjNrAjkYG0eQxcJ00+gfsLJlzrORtXRNTfIrc9Zs8UGkhY3eff+tKxrgyAcvhX3ef7
-	PqT7DVYUhY2soPOvZsY0kJ98NSmKTI4BHTw5+wQQltSQ3lyXO/OBXbG8OTekbSglnF7d935WrAe
-	mFuZ3HoGS8Aih9LZJmiUCoksiPP8en+ZJ3EY3yshA+/PQXYaUOMuq0OxsQ1RXHKW0EaJ/a1MGBS
-	iC8HuM3zKu/drCFTfFd4lI7eXgZWvfZucCMPvZKvPwe1WTP4A/IyG8x/cAHhAFboTKqdIsfqjn/
-	63TdQsrqfDe+6TO+AkYOdlDgdi7eQ==
-X-Received: by 2002:a17:902:e744:b0:2c7:9b17:6676 with SMTP id d9443c01a7336-2c7fc75a664mr41820975ad.23.1782418776214;
-        Thu, 25 Jun 2026 13:19:36 -0700 (PDT)
-Received: from ast-mac ([2601:600:837f:c470:ce8:a3e7:263:95a6])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7f63b2bc8sm25834345ad.39.2026.06.25.13.19.35
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 25 Jun 2026 13:19:35 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: torvalds@linux-foundation.org
-Cc: bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	memxor@gmail.com,
-	eddyz87@gmail.com
-Subject: [GIT PULL] BPF fixes for 7.2-rc1
-Date: Thu, 25 Jun 2026 13:19:32 -0700
-Message-ID: <20260625201934.54233-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.50.1
+        d=1e100.net; s=20251104; t=1782419676; x=1783024476;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j4cziRsnOXU8udnzmTxz4VvnRIsHkxiDHnSiCu2+4Iw=;
+        b=ZeXo9iCrfJgU6jp07fL3vlazeBFFqJ3yQFjBi5F1l24WGg9L2zg1KTPzIc1MaeXzsS
+         zPUF6gBHElAjJVSUIWQRvj8drWxTVB8DAVZWrYyegbNou7vzTjG9GsHhh4qjxJwdh0mP
+         JFqIx4s0Om3ytfAYpY9Ge/zSwIGnk8DQfZL3Yw4NeBuQ44M8flCxbRqOMBbw1XmGjack
+         WP8GCgCXBmDj491erjx4DM/4GgeKGzBYuvpocfoiG4RRgwJolfKfwY+fI8PRHxZV4ho4
+         rA3x6xFX4YNSaz43XZuuFFyzhiPbNgf1810PHU6WECqgjEt2u4VLRpyFNhw2isL+/j03
+         kC8A==
+X-Forwarded-Encrypted: i=1; AHgh+RofjelOR3G4F/Rf7uNNhbN/RAZV1RnFZze25cq13REm8cDKl/xhuLCmkLaImgMkCl+LBgE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxG2NXuPIUPlR8ssdkuxqYLpTIqGnFqLMESGWFn7fD3gpiTj3NE
+	OS5rOhQmdYpBcCo7HiLwyP3yixM1i1qG397rZ5f6iRagQ7f4tCqjoV+I
+X-Gm-Gg: AfdE7cnolsO2EppS8TIE2rsCvR+YRRxDh5hvuTdZv96HD0LKfaE9+vgmpN/mDjgPVPS
+	H2DNIjXeHlGD1AL4HaYtHI6i9wTwIMIU2RxCYuAB4GUyndA8KPdTAP0NYD3BT28opZLyW+T2piu
+	jdm3NspK4p+MLVvYbg6X9/jXXo9nzcDs99rAyndH0J3x71tl0kl+t4jktmSFTbmqRF061/PHTN4
+	zDwbMkRQMmrjl7zj25t50IEB2peQIC/VI41X15kLBjg8K90buHZdDjI4khB4NKZsgIkNF5cIPQf
+	WT7yYUU5CoqOJuBGGf/GmzZ9k6WM8rJkFSgJRxbLepf2VH/pOSa9fFZ8g0g287MoWBsGspUS8qL
+	D8gVEww9+9QQIxObcHw1ePfQXvZfwB8wUDtZcvl4MONdOfnc+ZbpYZ4cGl9Zmuykg+wDsvLauEA
+	tcVhliAt51VrXbC+PqtN7Nn0c+QlJ276q/iAqMG2d16A==
+X-Received: by 2002:a05:6a00:b81:b0:842:7f81:8085 with SMTP id d2e1a72fcca58-845b39969a1mr5178575b3a.8.1782419676054;
+        Thu, 25 Jun 2026 13:34:36 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845ba19f72bsm1607019b3a.20.2026.06.25.13.34.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jun 2026 13:34:35 -0700 (PDT)
+Message-ID: <f1f1c8875b8ee2122aea8febafdc15d79898e6d2.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Reject MEM_ALLOC BTF accesses past
+ object bounds
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
+	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+	 <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	
+ <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
+ 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Thu, 25 Jun 2026 13:34:24 -0700
+In-Reply-To: <703a2cbfeb17ae707fa4a003b795c5326cc0abb8.1782197377.git.chenyy23@mails.tsinghua.edu.cn>
+References: <cover.1782197377.git.chenyy23@mails.tsinghua.edu.cn>
+	 <703a2cbfeb17ae707fa4a003b795c5326cc0abb8.1782197377.git.chenyy23@mails.tsinghua.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+On Tue, 2026-06-23 at 17:34 +0000, Yiyang Chen wrote:
+> BTF struct walks relax the struct-size check for accesses through a
+> trailing flexible array. That is valid for ordinary BTF type walking, but
+> PTR_TO_BTF_ID | MEM_ALLOC values point to objects allocated with the stat=
+ic
+> BTF type size.
+>=20
+> When walking a MEM_ALLOC object, reject the access before applying the
+> flexible-array relaxation if the access range extends past the struct siz=
+e.
+> This keeps verifier-approved BTF accesses within the bytes provided by th=
+e
+> allocation kfunc.
+>=20
+> Fixes: 958cf2e273f0 ("bpf: Introduce bpf_obj_new")
+> Fixes: 36d8bdf75a93 ("bpf: Add alloc/xchg/direct_access support for local=
+ percpu kptr")
+> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+> ---
 
-The following changes since commit ef0c9f75a19532d7675384708fc8621e10850104:
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-  lib: Add stale 'raid6' directory to .gitignore file (2026-06-21 14:09:49 -0700)
+>  kernel/bpf/btf.c | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 15ae7c43f..3e68af9c1 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -7069,7 +7069,7 @@ enum bpf_struct_walk_result {
+>  static int btf_struct_walk(struct bpf_verifier_log *log, const struct bt=
+f *btf,
+>  			   const struct btf_type *t, int off, int size,
+>  			   u32 *next_btf_id, enum bpf_type_flag *flag,
+> -			   const char **field_name)
+> +			   const char **field_name, bool is_alloc)
 
-are available in the Git repository at:
+Nit: 'walk_flex_arrays' would be a better name.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
+>  {
+>  	u32 i, moff, mtrue_end, msize =3D 0, total_nelems =3D 0;
+>  	const struct btf_type *mtype, *elem_type =3D NULL;
 
-for you to fetch changes up to 12091470c6b4c1c14b2de12dcbae2ada6cb6d20b:
-
-  bpf: Disable xfrm_decode_session hook attachment (2026-06-22 20:08:37 -0700)
-
-----------------------------------------------------------------
-- Fix effective prog array index with BPF_F_PREORDER (Amery Hung)
-
-- Zero-initialize the fib lookup flow struct (Avinash Duduskar)
-
-- Disable xfrm_decode_session hook attachment (Bradley Morgan)
-
-- Allow type tag BTF records to succeed other modifier records
-  (Emil Tsalapatis)
-
-- Fix build_id caching in stack_map_get_build_id_offset() (Ihor Solodrai)
-
-- Add missing access_ok call to copy_user_syms (Jiri Olsa)
-
-- Fix stack slot index in nospec checks (Nuoqi Gui)
-
-- Preserve pointer spill metadata during half-slot cleanup (Nuoqi Gui)
-
-- Fix partial copy of non-linear test_run output (Sun Jian)
-
-- Fix BPF_PROG_ASSOC_STRUCT_OPS last field check (Thiébaud Weksteen)
-
-- Reset register bounds before narrowing retval range (Tristan Madani)
-
-- Fix vmlinux BTF leak in bpftool cgroup commands (Yichong Chen)
-
-- Guard error writes in conntrack kfuncs (Yiyang Chen)
-
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-----------------------------------------------------------------
-Alexei Starovoitov (5):
-      Merge branch 'bpf-fix-stack-slot-index-for-spectre-v4-nospec-checks'
-      bpf: Emit verbose message when prog-specific btf_struct_access rejects a write
-      Merge branch 'fix-effective-prog-array-indexing-with-bpf_f_preorder'
-      Merge branch 'bpf-guard-conntrack-opts-error-writes'
-      Merge branch 'fix-stale-register-bounds-on-lsm-retval-context-load'
-
-Amery Hung (2):
-      bpf: Fix effective prog array index with BPF_F_PREORDER
-      selftests/bpf: Test cgroup link replace with BPF_F_PREORDER
-
-Avinash Duduskar (1):
-      bpf: zero-initialize the fib lookup flow struct
-
-Bradley Morgan (1):
-      bpf: Disable xfrm_decode_session hook attachment
-
-Emil Tsalapatis (1):
-      bpf: Allow type tag BTF records to succeed other modifier records
-
-Ihor Solodrai (1):
-      bpf: Fix build_id caching in stack_map_get_build_id_offset()
-
-Jiri Olsa (1):
-      bpf: Add missing access_ok call to copy_user_syms
-
-Nuoqi Gui (4):
-      bpf: Fix stack slot index in nospec checks
-      selftests/bpf: Cover stack nospec slot indexing
-      bpf: Preserve pointer spill metadata during half-slot cleanup
-      selftests/bpf: Cover half-slot cleanup of pointer spills
-
-Sun Jian (1):
-      bpf: Fix partial copy of non-linear test_run output
-
-Thiébaud Weksteen (1):
-      bpf: Fix BPF_PROG_ASSOC_STRUCT_OPS last field check
-
-Tristan Madani (2):
-      bpf: Reset register bounds before narrowing retval range in check_mem_access()
-      selftests/bpf: Add test for stale bounds on LSM retval context load
-
-Yichong Chen (1):
-      bpftool: Fix vmlinux BTF leak in cgroup commands
-
-Yiyang Chen (2):
-      bpf: Guard conntrack opts error writes
-      selftests/bpf: Cover small conntrack opts error writes
-
- kernel/bpf/bpf_lsm.c                               |   3 +
- kernel/bpf/btf.c                                   | 209 ++++++++++++---------
- kernel/bpf/cgroup.c                                | 108 ++++++-----
- kernel/bpf/stackmap.c                              | 183 ++++++++++++------
- kernel/bpf/states.c                                |  13 +-
- kernel/bpf/syscall.c                               |   2 +-
- kernel/bpf/verifier.c                              |   8 +-
- kernel/trace/bpf_trace.c                           |  11 +-
- net/bpf/test_run.c                                 |   8 +-
- net/core/filter.c                                  |   4 +-
- net/netfilter/nf_conntrack_bpf.c                   |  35 ++--
- tools/bpf/bpftool/cgroup.c                         |  14 +-
- tools/testing/selftests/bpf/prog_tests/bpf_nf.c    |   6 +
- tools/testing/selftests/bpf/prog_tests/btf.c       |  12 +-
- .../selftests/bpf/prog_tests/cgroup_preorder.c     |  77 ++++++++
- tools/testing/selftests/bpf/progs/test_bpf_nf.c    |  26 +++
- tools/testing/selftests/bpf/progs/verifier_lsm.c   |  15 ++
- .../selftests/bpf/progs/verifier_spill_fill.c      |  18 ++
- .../testing/selftests/bpf/progs/verifier_unpriv.c  |  22 +++
- 19 files changed, 535 insertions(+), 239 deletions(-)
+[...]
