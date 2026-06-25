@@ -1,111 +1,273 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B241F5EA
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 15:21:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 438403E866B
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 15:26:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782400919; cv=none; b=DdUcREuqF6zLimWvPUwQVKTTENwZ48lFA2fGA4lCCeBC6JmAoK84svuYBOdvvPT1q0/xBTx7uvPttGmb3n0J8N3LyroHEIlS18+2EYhnI9CxwIMNbbBHDQA0HRpw0bvbzn+9/PRxkgPJ+9HzU9gUilFNbCQ0isomzJbOis30A24=
+	t=1782401189; cv=none; b=h5qEeH5M9sNqehNSCaVGhSeGT3y4L3zGbMxexclWdLwfDCtlpvPTvPv//QtROMUUjBnAtK+8RqLOlCHp0rHMTOSnsma7O5sizKbT2Sh62QCgN2uOZ1ZWkpXSiThyKMnDkNO3es8MzSc+c6ufqST5vIpCZhuiiaLrBLuvsfOW+kA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782400919; c=relaxed/simple;
-	bh=C/BPMUie5BD4Jvkxs5HGQaycGen1h7/YnzVKpvjZL8k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=axL9l8nN1I62pQka2aIr4ud0k8nHrr1ucmwwrsxWs2WVfCsI/cF5rVjW7k40/MYawnmprKwv/tFpr3c8hqKYjK4OHvwS1dwadriG+ZAVS9mBZEaZ73IUIQ1q1Wqk+6g5uaSwh38f/gv6oL7eo8thjl51lOEVLFuJt1I9WtwNx2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=digiscrypt.com; spf=pass smtp.mailfrom=digiscrypt.com; dkim=pass (2048-bit key) header.d=digiscrypt.com header.i=@digiscrypt.com header.b=L7WjJwTD; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=digiscrypt.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digiscrypt.com
+	s=arc-20240116; t=1782401189; c=relaxed/simple;
+	bh=uhxIA/7TSbp1V/eSeGVh4WB1YzVWEe+zlTwCz3HI2Tw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VPkP81xhVe8VkGz79HGJJ7jT+BzkVWsVZiXoIbpR3bJGnJsEo4RH5r06Rk6MvqDAlwhpL5ndPHHjoC/80y/GF0CtG/s/Z6i2KPyYGqCVtV08uRZl7+8SODk3iqof4wlsmIAcZkB81qZRDZAgwuDyhSEO9TzsKtDUP3PUe9BSruE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Sh4/Ji8x; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=digiscrypt.com header.i=@digiscrypt.com header.b="L7WjJwTD"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2c80d215169so40795ad.3
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 08:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=digiscrypt.com; s=google; t=1782400917; x=1783005717; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C/BPMUie5BD4Jvkxs5HGQaycGen1h7/YnzVKpvjZL8k=;
-        b=L7WjJwTDlUjMQOcHixoH+B08Qc3HsQmuqIVPtHlJADRyXoldQ2nlZfDYDPO7xsLtlN
-         qKai8qMhUshLRcv3mG7YY2mm0PKTxdj6UPumfIrlaiE+NJTiJ59CMT2yAuOEjIIlJgEz
-         0q23cBG/e25SOeV5TsPG06b0zeEafQWbs1EEoOkhhtV2HuegMQFE+ELPR+Qryc4qp6P8
-         61cbigM2yo9iT2hQyjx6V/A+ry9ugDPfXan15XSdjdxM8RRseoJ+kQHI7lSafWNe3eqC
-         oarM3S3XgD8vuHlee2gA0PPUsU3tElZRexCsbFpkyNgNLB9sXekrifFRNe50+3OUEGbT
-         4TEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782400917; x=1783005717;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=C/BPMUie5BD4Jvkxs5HGQaycGen1h7/YnzVKpvjZL8k=;
-        b=KXEKeiKD307bbOM3koEQVswH5q5455lI0DDHYRgCWNbWNnNs0e8ZpB9KyRs5RCtHrK
-         ZdeLGN3bBuTLwzz3+sEiHptlIdR/DJMtOcKnGaDhjTsJOjcuxJTNPJfcq4gnrt0dJ2M3
-         B3kob/2i9WqAD7BKvEuxIyUMJJFeZEywXj+/FRPhnYay02Z6rDnBXRI2GrYCf2JNYGA9
-         2KM3rmdF7hnmoOnBrRPIi5ptmMLpun5h9Wcd6kxGrJSptIwee4bbJfd+hnYvRFfiED0o
-         JzxHFJSvKKpnA/Y5UzjxbeHYGUInCQx42kDO3G5f/ge+bU2VgRhXpyAt4wFytxHSKjP5
-         800g==
-X-Gm-Message-State: AOJu0YzPTvGgUozuQUM1ipXJH3pJ47oTQUQiiwhdAnB4YtkFDhtQNysR
-	Pm9zae2ERW5Pwwj4wEms2PJUVTh7HM/F84ccpXiAn3t2tOrcu+wTtoqguo2t71fDXMQW8d84pLv
-	kbe2LeJa6oMo=
-X-Gm-Gg: AfdE7ckF+KBSjpKscrchifez07Z8N0nh5w30rmzLBUUo8ZZnA7Vl/NoRN1kW2eJTJ5K
-	uqzx8nPRgGG/xJESPjfGlZiHBkqU20dzk+XVRI/FfueUyJYzmw48cmQSb9AOFeccWKamoL2ZBo3
-	SxPafvQFhHBvvmJ9yWMq1yKJc6kM2g/HXDj5WV2oCa61qnld6xQ+Aa93s68DZsVV2ltM1w7PdSA
-	2dr+QCILwiTlN11qRVpGeP3VbBapyOB8hbsEYjt7v+LprbpEWxVjJGLxXzAlDIVfIpnioFZ2YCb
-	g6AA0PkHaPpTOo7lbsLzrDMbQaZqRz0wWr0xs61RXKfUiXn+lTQivT8NlWrNeZ8irj4PQ1t17OG
-	GDbqU/k0h7iNv5/G/MNb5FdnyzN9czOj4xhqv1AZGXf49jWAf8Jz0DD5GC5N41XD+yKnNA2304j
-	IGpUMes2RHgXbI5L0DH8hL4AHUoDOn4vjYm2IR2JpbzPaFbe+HvJr9/I19fJ8e5r72qFbMUXOhz
-	Dtlfzy6odh4DN6eCmTmoJw08B68NhNLKXNalkmxtQw=
-X-Received: by 2002:a17:903:3b88:b0:2c6:9d3d:dfbd with SMTP id d9443c01a7336-2c7fc6785b1mr33272005ad.16.1782400917080;
-        Thu, 25 Jun 2026 08:21:57 -0700 (PDT)
-Received: from 3.1.168.192.in-addr.arpa ([2401:4900:1c07:46d8:d43a:b840:9e14:dade])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7f5ac897bsm23079455ad.5.2026.06.25.08.21.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 08:21:55 -0700 (PDT)
-From: Naveed Khan <naveed@digiscrypt.com>
-To: bpf@vger.kernel.org
-Cc: andrii.nakryiko@gmail.com
-Subject: Re: [PATCH] libbpf: bounds-check float size in btf_dump_float_data()
-Date: Thu, 25 Jun 2026 20:51:49 +0530
-Message-ID: <178240090908.83660.15272286240854949135@digiscrypt.com>
-In-Reply-To:
- <CAEf4BzZMfPBgN5j_qW7MsyyXp7Mt12j21+qvH53086CULqU6kA@mail.gmail.com>
-References:
- <CAEf4BzZMfPBgN5j_qW7MsyyXp7Mt12j21+qvH53086CULqU6kA@mail.gmail.com>
-X-CodeOps-Marker: 1deed4631a2e438fa0befcd3133062c6
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Sh4/Ji8x"
+Message-ID: <906ec2c1-e62b-47d8-a0bd-4d88df26c0c3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782401167;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1LYPKXNFKSJaNRU1eAtNcGvGy1tupIYCidSqTzAW5MY=;
+	b=Sh4/Ji8x2I/iRsR/dEn31Qc5K7OuhkvZ1zvecdRO7PhWXPXbfzznt97gHSQcPwa+Cz99jd
+	dVjggg8BjrKejsnMr0GfBO9As1Y+86uqDdn68z8HlGB1CMoG8QDr7ml8oXt9vP1BmfRjgJ
+	N4F3tpxZv3BfZSCdwfHidFIPuGWkxcE=
+Date: Thu, 25 Jun 2026 08:26:02 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH dwarves v10 0/5] pahole: Encode true signatures in kernel
+ BTF
+Content-Language: en-GB
+To: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <olsajiri@gmail.com>
+Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+ dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, kernel-team@fb.com
+References: <20260625020148.1883082-1-yonghong.song@linux.dev>
+ <aj0KGx-5FwUbwGHc@krava> <1d7828aa-164f-4c36-9d5e-2eb2088ce5b4@oracle.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <1d7828aa-164f-4c36-9d5e-2eb2088ce5b4@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Thanks for the review. Both of these are pre-existing and orthogonal to the
-stack overflow this patch fixes, so I'd rather not pull them into this change,
-but to answer the questions directly:
 
-> could a malicious BTF bypass size checks here by defining a FLOAT or PTR
-> member with a bitfield size? ... we unconditionally read t->size bytes from
-> data via memcpy above, which could lead to an out-of-bounds heap read
 
-This patch bounds the copy to <= sizeof(buf) (16), so it strictly reduces that
-exposure rather than introducing it: the old code memcpy'd an unbounded
-t->size, the new code copies at most 16 bytes. The remaining concern is the
-bit_sz short-circuit in btf_dump_type_data_check_overflow(), which validates
-nr_bytes derived from bit_sz instead of t->size on the source side. That check
-is independent of the float buffer and predates this change. A FLOAT/PTR member
-carrying a non-zero bitfield is malformed BTF to begin with; tightening
-check_overflow() to reject it is worth doing, but as a separate patch rather
-than widening the scope of this one.
+On 6/25/26 6:22 AM, Alan Maguire wrote:
+> On 25/06/2026 11:59, Jiri Olsa wrote:
+>> On Wed, Jun 24, 2026 at 07:01:48PM -0700, Yonghong Song wrote:
+>>> Current vmlinux BTF encoding is based on the source level signatures.
+>>> But the compiler may do some optimization and changed the signature.
+>>> If the user tried with source level signature, their initial implementation
+>>> may have wrong results and then the user need to check what is the
+>>> problem and work around it, e.g. through kprobe since kprobe does not
+>>> need vmlinux BTF.
+>>>
+>>> Majority of changed signatures are due to dead argument elimination.
+>>> The following is a more complex one. The original source signature:
+>>>    typedef struct {
+>>>          union {
+>>>                  void            *kernel;
+>>>                  void __user     *user;
+>>>          };
+>>>          bool            is_kernel : 1;
+>>>    } sockptr_t;
+>>>    typedef sockptr_t bpfptr_t;
+>>>    static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
+>>> After compiler optimization, the signature becomes:
+>>>    static int map_create(union bpf_attr *attr, bool uattr__is_kernel) { ... }
+>>> In the above, uattr__is_kernel corresponds to 'is_kernel' field in sockptr_t.
+>>> This makes it easier for developers to understand what changed.
+>>>
+>>> The new signature needs to properly follow ABI specification based on
+>>> locations. Otherwise, that signature should be discarded. For example,
+>>>
+>>>      0x0242f1f7:   DW_TAG_subprogram
+>>>                      DW_AT_name      ("memblock_find_in_range")
+>>>                      DW_AT_calling_convention        (DW_CC_nocall)
+>>>                      DW_AT_type      (0x0242decc "phys_addr_t")
+>>>                      ...
+>>>      0x0242f22e:     DW_TAG_formal_parameter
+>>>                        DW_AT_location        (indexed (0x14a) loclist = 0x005595bc:
+>>>                           [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_reg5 RDI
+>>>                           [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_reg14 R14
+>>>                           [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
+>>>                           [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg14 R14)
+>>>                        DW_AT_name    ("start")
+>>>                        DW_AT_type    (0x0242decc "phys_addr_t")
+>>>                        ...
+>>>      0x0242f239:     DW_TAG_formal_parameter
+>>>                        DW_AT_location        (indexed (0x14b) loclist = 0x005595e6:
+>>>                           [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_reg4 RSI
+>>>                           [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_reg3 RBX
+>>>                           [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
+>>>                           [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg3 RBX)
+>>>                        DW_AT_name    ("end")
+>>>                        DW_AT_type    (0x0242decc "phys_addr_t")
+>>>                        ...
+>>>      0x0242f245:     DW_TAG_formal_parameter
+>>>                        DW_AT_location        (indexed (0x14c) loclist = 0x00559610:
+>>>                           [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_breg4 RSI+0)
+>>>                        DW_AT_name    ("size")
+>>>                        DW_AT_type    (0x0242decc "phys_addr_t")
+>>>                        ...
+>>>      0x0242f250:     DW_TAG_formal_parameter
+>>>                        DW_AT_const_value     (4096)
+>>>                        DW_AT_name    ("align")
+>>>                        DW_AT_type    (0x0242decc "phys_addr_t")
+>>>                        ...
+>>>
+>>> The third argument should correspond to RDX for x86_64. But the location suggests that
+>>> the parameter value is stored in the address with 'RSI + 0'. It is not clear whether
+>>> the parameter value is stored in RDX or not. So we have to discard this funciton in
+>>> vmlinux BTF to avoid incorrect true signatures.
+>>>
+>>> For llvm, any function having
+>>>    DW_AT_calling_convention        (DW_CC_nocall)
+>>> in dwarf DW_TAG_subprogram will indicate that this function has signature changed.
+>>> But for non DW_CC_nocall functions, it is possible that true signature still not
+>>> available due to locations. So every functions will be checked.
+>>>
+>>> I did experiment with latest bpf-next. For x86_64, there are 69103 kernel functions
+>>> and 875 kernel functions having signature changed. A series of patches are intended
+>>> to ensure true signatures are properly represented. Eventually, only 20 functions
+>>> cannot have true signatures due to locations.
+>>>
+>>> For arm64, there are 863 kernel functions having signature changed, and
+>>> 108 functions cannot have true signatures due to locations. I checked those
+>>> functions and look like llvm arm64 backend more relaxed to compute parameter
+>>> values.
+>>>
+>>> For full testing, I enabled true signature support in kernel scripts/Makefile.btf like below:
+>>>    -pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=attributes
+>>>    +pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=attributes --btf_features=+true_signature
+>>>
+>>> See individual patches for details.
+>> hi,
+>> I tried this version and had to choose another function, because "arp_process"
+>> suddenly started to show args registers in proper order ;-)
+>>
+>> now I checked "stop_cpus" function which is added to btf after this change,
+>> I attached the dwarf dump below
+>>
+>> "stop_cpus" has DW_CC_nocall set, so it has signature_changed=true and I see the
+>> function ends up in the btf_encoder with optimized_parms=1
+>>
+>> but we do not skip such functions now, it seems like we should?
+>>
+>> I tried the attached change below and it removes all the extra functions
+>> that were added in the btf with this change
+>>
+>> btw I can't see any other use for optimized_parms flag, it seems to be
+>> just set and never used.. so I wonder I'm missing something
+>>
+> Thanks for looking at this!
+>
+> Yonghong can correct me if I have this wrong, but I think optimized parameters
+> are okay, but only if true signature is enabled, so omitting functions with
+> optimized parameters should probably only happen if !true_signature. so for
+> the change below, the modification to btf_encoder__add_saved_funcs() is right
+> but I don't think the modification to btf_encoder__add_true_signature() is needed.
 
-> could this cause an unaligned memory access crash ... If the host
-> architecture requires 16-byte alignment for a 16-byte long double, and the
-> data pointer is only 8-byte aligned
+I agree with Alan in the above.
 
-Also pre-existing, and this patch doesn't make it worse. btf__align_of()
-returns min(ptr_sz, t->size) for a float, so ptr_is_aligned() does cap at the
-target pointer size (8 on 64-bit). The case described is the *aligned* path,
-where flp->ld is read in place; that direct cast is unchanged here and is
-shared with the int/ptr/enum paths, so it should be hardened separately if
-needed. The *unaligned* path this patch touches now copies into a buffer
-declared __attribute__((aligned(16))), which is strictly better than the old
-union float_data fl that only had natural alignment.
+There is no need to make change in btf_encoder__add_true_signature().
+This is for true_signature, optimized parameters have been removed:
+
++               /* No location info/optimized + reordered means optimized out. */
++               if (ftype->reordered_parm && (!param->has_loc || param->optimized)) {
++                       state->nr_parms--;
++                       continue;
++               }
+
+so we should not add true_state->optimized_parms checking in btf_encoder__add_true_signature().
+
+For adding state->optimized_parms in btf_encoder__add_saved_funcs(), with true_signature disabled,
+we already have a failure message:
+    stop_cpus : skipping BTF encoding of function due to unexpected register usage for parameter
+The expectation is for three parameters, the register usage should be
+    cpumask: RDI, fn: RSI, arg: RDX
+but since 'fn' is optimized away, the expected reg usage does not match the actual reg usage.
+
+We could add:
+   +		if (state->optimized_parms)
+   +			skip_reason = "optimized parms\n";
+to have another message to indicate possible reason is due to optimized parms.
+But it is not critical as we already have one message.
+
+I can have a follow up for this.
+
+>   
+>> jirka
+>>
+>>
+>> dwarfdump:
+>>
+>> 0x016f4b1b:   DW_TAG_subprogram
+>>                  DW_AT_low_pc    (0xffffffff813e0fc0)
+>>                  DW_AT_high_pc   (0xffffffff813e1133)
+>>                  DW_AT_frame_base        (DW_OP_reg7 RSP)
+>>                  DW_AT_GNU_all_call_sites        (true)
+>>                  DW_AT_name      ("stop_cpus")
+>>                  DW_AT_decl_file ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
+>>                  DW_AT_decl_line (464)
+>>                  DW_AT_prototyped        (true)
+>>                  DW_AT_calling_convention        (DW_CC_nocall)
+>>                  DW_AT_type      (0x016e94c5 "int")
+>>
+>> 0x016f4b36:     DW_TAG_formal_parameter
+>>                    DW_AT_location        (0x0065ad9e:
+>>                       [0xffffffff813e0fc5, 0xffffffff813e0fed): DW_OP_reg5 RDI
+>>                       [0xffffffff813e0fed, 0xffffffff813e111e): DW_OP_reg14 R14
+>>                       [0xffffffff813e111e, 0xffffffff813e1127): DW_OP_GNU_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
+>>                       [0xffffffff813e1127, 0xffffffff813e1133): DW_OP_reg14 R14)
+>>                    DW_AT_name    ("cpumask")
+>>                    DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
+>>                    DW_AT_decl_line       (464)
+>>                    DW_AT_type    (0x016f3242 "const cpumask *")
+>>
+>> 0x016f4b46:     DW_TAG_formal_parameter
+>>                    DW_AT_name    ("fn")
+>>                    DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
+>>                    DW_AT_decl_line       (464)
+>>                    DW_AT_type    (0x016f2ca5 "cpu_stop_fn_t")
+>>
+>> 0x016f4b52:     DW_TAG_formal_parameter
+>>                    DW_AT_location        (0x0065ae0d:
+>>                       [0xffffffff813e0fc5, 0xffffffff813e0ff2): DW_OP_reg4 RSI
+>>                       [0xffffffff813e0ff2, 0xffffffff813e10e4): DW_OP_reg3 RBX
+>>                       [0xffffffff813e10e4, 0xffffffff813e1127): DW_OP_GNU_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
+>>                       [0xffffffff813e1127, 0xffffffff813e112e): DW_OP_reg3 RBX
+>>                       [0xffffffff813e112e, 0xffffffff813e1133): DW_OP_GNU_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value)
+>>                    DW_AT_name    ("arg")
+>>                    DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
+>>                    DW_AT_decl_line       (464)
+>>                    DW_AT_type    (0x016e858f "void *")
+>>
+>>
+>>
+>>
+>> ---
+>> diff --git a/btf_encoder.c b/btf_encoder.c
+>> index 38455a4c6b6b..cbc5063a6280 100644
+>> --- a/btf_encoder.c
+>> +++ b/btf_encoder.c
+>> @@ -1564,7 +1564,8 @@ static int btf_encoder__add_true_signature(struct btf_encoder *encoder,
+>>   		 */
+>>   		if (true_state->unexpected_reg ||
+>>   		    true_state->uncertain_parm_loc ||
+>> -		    true_state->ambiguous_addr)
+>> +		    true_state->ambiguous_addr ||
+>> +		    true_state->optimized_parms)
+>>   			continue;
+>>   		err = btf_encoder__add_func(encoder, true_state);
+>>   		if (err < 0)
+>> @@ -1656,6 +1657,8 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
+>>   			skip_reason = "reordered parameters\n";
+>>   		if (state->elf->ambiguous_addr)
+>>   			skip_reason = "ambiguous address\n";
+>> +		if (state->optimized_parms)
+>> +			skip_reason = "optimized parms\n";
+>>   
+>>   		if (skip_reason) {
+>>   			btf_encoder__log_func_skip(encoder, saved_fns[i].elf,
+
