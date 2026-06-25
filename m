@@ -1,66 +1,66 @@
-Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
+Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84243CFF4C
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 10:25:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 770423D1707
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 10:25:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782383148; cv=none; b=jjq42exEphSfJHekZiLcNjGeR31OigCweKdN9ozw0NNu99uK/Pu+dQpez/8bI6MHj/aVnjwze0OMg0af/UxkPA5GqLZG4x+Bwv5Q7SAAU6eGljXpDe3YxE0Nc0RllAVZ1Cs3BG3jykVf0UPSCmzgwpt2617tz5PWMysbdvlNNBE=
+	t=1782383150; cv=none; b=YCz15fxNzOkeggXbqfB9BYYoHbi0C3cRyp9w4JYPiZvhNbJvz7hzH+/g/SQ1CGnOqYxJojNn7fva9OHJeQjW+8zgIIOLCJ8pGsGhQWApnryfEFxvN3ikOIIiG3MKTHXSJUckZx7Dsc6FR9fjSf66gbiK5pvuvw3trvEDs90YDjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782383148; c=relaxed/simple;
-	bh=GVo2zFORq1i5WCY+svqdEMWXma1DeWDGgsbKEhEROBw=;
+	s=arc-20240116; t=1782383150; c=relaxed/simple;
+	bh=3OkZgyiYKFwZQmxhI8N3WUicqCT3HgcTjiK5HYw3yVg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lXu1IhyQH1Rb5D42KWsT7BRBCfI0ZTcwTLMZq1bRVdFlkZpIx3pwmWAsmNjHr8DwEQ459fdFnisJG9d3ay4XSA6T6dB4EU3jJg74mdKVtumaxpt7Se5Gg4ZXN088riw4WoxMDJEhreSA1H0PhawezVD9j1j216GvEsuSy0gBJmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NeRbKNeP; arc=none smtp.client-ip=209.85.210.194
+	 In-Reply-To:To:Cc; b=hDDzE4CsfTWGZPm1ILCPhElZ7PP0hV80Fcw5fDlQxjxSyw8Y0ZNJ3J0s3BZ0clqgl/uVnfsVJbjMNUEnslkypCqtTlURUlHaGaRiohaeNmNV/g6h3UvCzb0PUGcGstdDHZ3xALj5k0bsq44mZhHWeMFpFFZpz39hWHlbyNIqRYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bUMLaDSS; arc=none smtp.client-ip=209.85.210.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NeRbKNeP"
-Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-842338c18e0so1554723b3a.1
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 03:25:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bUMLaDSS"
+Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-845369f60faso1605803b3a.3
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 03:25:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782383146; x=1782987946; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782383149; x=1782987949; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uOeBJO1ngFpkfdJ+XCR82FKC3sVOUqcYBHCd6SF1Udk=;
-        b=NeRbKNePh0cvxHXm0HrvYUfUCQH6/J9Ik/Y3qKwD3YUG1wyhE8AhZyRANMi/yOGFrf
-         ggHXAeGDbX2JP2r8xoJCbK0++PjTvkNOHbzJzmuq7C45s5ugWY2aaRyETydMbiBokHYY
-         cm/vegnLveiZU7siosk8qPa4xidQ/g5EEo8Ux9BR4YvnRRCWQ+o2YpOwTfkcvsa4BQui
-         Rnp+31g0az4leqEqvVxzDO2hSoV+wDXah1W/ODesGSjxfS6acQYaSWpVom2zKi2ZrYnO
-         9psgP/drlmYWwKF89KpnIoDjzSIk2Muuat6Qbwr2MNswTZRtmM3HkVJivAweq7yN1CGU
-         Sn8g==
+        bh=gsorTzz+tm9XYLISdfxE2Q0EUcGbGVAxd8Z+bCfU5XA=;
+        b=bUMLaDSSyUie0J5dvC8Wvb7A+ATrxrE0ZPi/k3yWtMnfF74uhNjQKYChhqNEQH8zjQ
+         9wrTWVmZb1Jdv7c/KL20UoTUJs+n4zt9yUy0h3UI+1EeAcuOshI7QHnBU8XBqMg39jzZ
+         041EMkMeD3d760wbiLvjCIwOt1Mean69XRws5DxkbRPKFBYprh7BwBc7v1ETifvp9K83
+         Ib44lTzH14qJTifanlhhBc2M4TZCPYznwmcL3Cvf2T50CCDJ1HuWqzKBsMJ51dUEfIui
+         9s2RSj+zrkq4trKDfxX1h74B5yvoMmH4MXticSxSxztc1Zt5i6KMiJzANKxOAAziyoLW
+         ttLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782383146; x=1782987946;
+        d=1e100.net; s=20251104; t=1782383149; x=1782987949;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=uOeBJO1ngFpkfdJ+XCR82FKC3sVOUqcYBHCd6SF1Udk=;
-        b=U6C5cfi+8ZxEZSbMMBHoHg4MN15Y3AK9WAstg3/N87zM/fhZxBvz60YCLAhdYHUhwF
-         EA5ccqUU4voMXYAcD7cBU8eg7TOlAQ8oTGxTBN+hTHEtFEu7N7oHusAo53YwYky401Zv
-         Zau5VFIQFIICWdzF1cvZIeclM75cFmOIRgOLyaLYyIUMTdp10ZGMbE77y9nIaNG5jtpF
-         PhA/Vi13VtZvZsh9mue11XIV90hlhof8UufTrEA0bC6wdJt696MRdgAci7kwgg4cr+Or
-         HwtFSWCC2aOUWt32sQ4eeQVO4bpmnxs9euCexr3Dji84VOluu8WJM9nGopJN2RSrJhTo
-         uu/A==
-X-Gm-Message-State: AOJu0Yy/81VxxqMGru6tmXayUsFflW/HQ6m+eeJ9JxfRGiCjnRSXruyz
-	TwZgMiRYwmgNdrVQCH/E6BKP9G2l7gIW6cdFGhYUgrKGLNdeYJ4QBU6j
-X-Gm-Gg: AfdE7clpjuSO8Dm0sUrJJBhsKxbOUeRXjoDKCbCieXZ6dRR/StDG3YHjcxVKxHdEHLI
-	g4ZSntr74zb3dY51vg+xAG1e7/Ii1XwjnYVy0UQtsF5Z+hKldaWfAMRV6gQRYFBKrb7pngl24RO
-	8akV99BQFsu9xYeud7QBkdRITpsF8jfWtu0f85tF27CQV5AzlN08ixYwbUMAR7LXnI/xuBSCAsM
-	aegPZmEQ+vcn99vOOcyv0ePbEJ4PRKOg+r2+YfhtNJrHMbt0YEXaEHHNShcHUZP2RcCRyAq93cA
-	qgtIIWSIDryYkTV7GvqERfittppj+azZelfF7ErBkKlZAZXNp6mC5jKgxCHZMphN6bF6dklJhuQ
-	LAftwzrDAPGMJOzTs+2fKlCvw1bpW/HMkYwpBE6TLAfDce/ZkdYMDMlPvUqxCKSQqmYzRkntIHn
-	UuR3b9EWkxKm4=
-X-Received: by 2002:a05:6a00:2989:b0:842:708f:39a0 with SMTP id d2e1a72fcca58-845b39e15ecmr2457371b3a.8.1782383146002;
-        Thu, 25 Jun 2026 03:25:46 -0700 (PDT)
+        bh=gsorTzz+tm9XYLISdfxE2Q0EUcGbGVAxd8Z+bCfU5XA=;
+        b=iCW55pO+Ic75YEzQ+dx7MORJx4rMvAWnf0pg/El0WsIdH0zPuAkW1IE1+HacOa1ymm
+         ajJWKmaTg2OKzvqpw5JbhrjcTDYTWk8S0XgOYeYEKU13/CcKdXam/qP+kw5h0ycbauyT
+         JGOQlbSovPCAaGroyepn7q9CroRZeDQyJvkdNF/RnClzdFXqEwwQcPh80QFHRCVL3w3z
+         +uXPl1bpO3hhU8Zg/J7BE1K41iCkv9mKt1XoP+k984cVmOpBTeKjZ0a/sh9D+4o79Qe+
+         oa/AAFzSb3lCJSa7zXP+nM34xuZX51HMjIVhHl9IlMzPgV5rWMEfMzsTW/9MvQnj2J73
+         P8fw==
+X-Gm-Message-State: AOJu0YxMEoM1k92yO+hQcTcG1yDgrlXXeZ4CJJb0ukuRvjNY7QHvlyFg
+	wvcgSqwYf3OqalBM4QyqLNG6emKbnn6cj8G1V1bFTQs98lF8uvLPBHVe
+X-Gm-Gg: AfdE7cmfIUN5Ijg443SCzLNjIRW8ulFFzunxJyPVrcBSJNyaGKY1b1FtxBbzseeQXp5
+	dY1FL37yzT7rX6nLSiwk/TVEjMFOMxx/weU0MJaW9jGS4F+4ck/TVHkcqPNf23nZXjDA2lDmLwL
+	imquweSrZB65YBLGwecQUPRMyQgDsg0vgxVgRtPIySvro4lgkc0AzO5NlH/cqJpeb8KRofYr2Wt
+	coDdKvTvLg2in+00k4OxUpPfmQfYK8um9411+DrbF+mbe6D63XUQrhDsiXF7VONiEuARpJdZHBV
+	d4D9hf2FtFxfJWzp/QbW061vz9KmX4HCkK41Mr65AjKNayuml/RNaIHlzTTsDAeOErQzi6e7kDy
+	zWRSGvqC3VRgq50Uqql+3Gd6Ulg8QVUugrg1V+uZve4ioYRKxg4NozUcQQ4fOJ+zsh+yLI/JRV9
+	YbEeI9JDZPqqo=
+X-Received: by 2002:a05:6a00:1784:b0:842:380a:1ee8 with SMTP id d2e1a72fcca58-845b3af2035mr2529602b3a.17.1782383148652;
+        Thu, 25 Jun 2026 03:25:48 -0700 (PDT)
 Received: from [172.30.1.18] ([59.6.68.4])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845ba891314sm570708b3a.35.2026.06.25.03.25.43
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845ba891314sm570708b3a.35.2026.06.25.03.25.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 03:25:45 -0700 (PDT)
+        Thu, 25 Jun 2026 03:25:48 -0700 (PDT)
 From: Woojin Ji <random6.xyz@gmail.com>
-Date: Thu, 25 Jun 2026 19:25:37 +0900
-Subject: [PATCH bpf-next v3 1/2] bpf: Preserve scalar zero spills for stack
- reads
+Date: Thu, 25 Jun 2026 19:25:38 +0900
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Cover stack reads from zero
+ spills
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260625-bpf-stack-var-off-zero-v1-v3-1-a068210a761b@gmail.com>
+Message-Id: <20260625-bpf-stack-var-off-zero-v1-v3-2-a068210a761b@gmail.com>
 References: <20260625-bpf-stack-var-off-zero-v1-v3-0-a068210a761b@gmail.com>
 In-Reply-To: <20260625-bpf-stack-var-off-zero-v1-v3-0-a068210a761b@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -82,184 +82,201 @@ To: Alexei Starovoitov <ast@kernel.org>,
  John Fastabend <john.fastabend@gmail.com>
 Cc: bpf@vger.kernel.org, Woojin Ji <random6.xyz@gmail.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6430; i=random6.xyz@gmail.com;
- h=from:subject:message-id; bh=GVo2zFORq1i5WCY+svqdEMWXma1DeWDGgsbKEhEROBw=;
- b=owEBbQKS/ZANAwAKAUOXRMMVrfhrAcsmYgBqPQIk7dHe141odUtrmL+5fYctabCwCDG+oNTlq
- 0X5/dtWcvmJAjMEAAEKAB0WIQSrknTJbxUcAdPNt5BDl0TDFa34awUCaj0CJAAKCRBDl0TDFa34
- awocEACsk9wrQtIN6lo+7iiO/t5u+G0SaUrvwM3WOGaWs4YunESG1RCtGbVdT4QId/n1z5F/3pQ
- W8m352JgccnfGd1AZflTSuDYcqhlnj2FxYljSjqml6nNu6p6aIRvqYNxDe3nPPyO0M7xEHoTlne
- 7FRKJWPbIvBZmVoGxpRWuBOVeBwVahdxLa0WPFsXSCTEkwn1RBG6ROTOrQTqbuG8bZaodMCgVyr
- VpRpv398h2OCClGq+dxuKGmyt2ETi407zDzS/W00mv3Ys3VA5rJCJyf/Kl00WAICKvxRUZDTiwR
- tZ9zbJKxzdApeAspj22hXaednhlu3iGpUtHKntOAMNsYEiJCxfzXGsEDvsPgPAf18XEenqm0Cuw
- +UpWZS4CSO4QNgWADcY3V7cJH2ovDga5PxHKkwwzrVfpvbtiSn2q7wyBvYHzd5eKb7EL3AwGoAW
- 1TjeRF6JyNSHGHLuf5aHl/y69m6gUo7huJSrup5Ahmwp4v8dYpEl9mo3JpcY2RiPz3U9jEWKaVZ
- eu44r+CTBbtxfrSZMwVwHAuHXQrdbqKKBn8UM46s2rt41HFv4mxrUQ4mnr8mDX1yN1XNu6eSbA3
- gRUa7V4DTp9FThPGxB0RrFe3Ci/NJ9A3QW126GDV5agpWTcNTEnohqrWewBkW8+nYseZnp8jOB3
- QN5clemNSmvaCjg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5154; i=random6.xyz@gmail.com;
+ h=from:subject:message-id; bh=3OkZgyiYKFwZQmxhI8N3WUicqCT3HgcTjiK5HYw3yVg=;
+ b=owEBbQKS/ZANAwAKAUOXRMMVrfhrAcsmYgBqPQIkb47z2OY27pReai0WVx3mv6SY/6Mdrpp0n
+ dwcV5S8fhiJAjMEAAEKAB0WIQSrknTJbxUcAdPNt5BDl0TDFa34awUCaj0CJAAKCRBDl0TDFa34
+ a15pEACI87iEvcFYQQtkQOLiySBNNRU+VPwTM14ZJRZBHl8dqrC17q7RDGgJ5GaZmHbYaxfFzUo
+ AaN6+BcLuhNJjmm9xgviU00PjCu1sSo5v4EuS7hT4J7xSSUJYlPi5AZXsMN73SSMC4EBqGAm7UW
+ BDpvi0ra+MisrOVrANmoeA9rQ4jwhEgsuWt6PUFqVZoqCLjaqoRxmKHzJPxzBvOrKEI0kKgZn8t
+ 14A25X9Sbi52PwZUFRYBcqC6f/Y5ZPsc/T0EJ9ARrJ0Hnf/ZVZO0G27tvz90If8srpsXHYZKGVH
+ qgMXQ2JgPs4vIacDxiY/gluKr4qU81+xbqwPaiqG/VKcLob4MzLTnf3iWJZEar6BsRZxX6++aWm
+ TbU0cb90gaEs0NOPxHL4oNb9WGYSfTgbIcXjzyoMSgxOngvIQ44ejzXmkk5l7VBI0ssIm7OyVP9
+ KlHXsSEZmm0zzjRlsPfg9G8LoFB8tSdzh2UZ+QU9yhdZvh5pqt/X/bHQeAGg4Se8Vg56dWw2AJp
+ RVodpPbYqGOo/wzEgRBQZilVtJJET0xj0vYQTH5hQrSWpdTQ+TBsDpBDHR6JROry86wG8qq5B6w
+ 9JEyPA40eH4OeRCsD8w+3iEXP7XowM0HojzM5BXRIUO94lbBpS/VLbSNZMcEUgUlqryhU02DcQH
+ ZNwvhPQlRP4XhVA==
 X-Developer-Key: i=random6.xyz@gmail.com; a=openpgp;
  fpr=AB9274C96F151C01D3CDB790439744C315ADF86B
 
-Stack reads can read back bytes that belong to a previously spilled scalar
-constant zero. Today mark_reg_stack_read() only treats STACK_ZERO bytes as
-known zero bytes, so the destination register can become unknown even
-though every byte in the read range is known to be zero. This can lead to
-rejecting otherwise valid programs once the loaded byte is used as a
-pointer offset.
+Add verifier_var_off coverage for variable-offset stack reads from spilled
+scalar constant zero values.
 
-The original reproducer uses a variable-offset stack byte read emitted by
-clang 22.1.6 at -O2/-O3 from a small helper-based BPF C program. Fixed
-offset reads have a related mixed case as well: pure scalar-zero spill
-reads are already handled, but a fixed read spanning both STACK_ZERO and
-scalar const-zero STACK_SPILL bytes still falls back to unknown.
+Cover single-slot and cross-slot spilled zero reads, a sub-8-byte spill
+with neighbouring STACK_ZERO bytes, and a sub-8-byte spill with
+neighbouring STACK_MISC bytes that must not be treated as zero.
 
-Teach mark_reg_stack_read() to also consider STACK_SPILL bytes backed by a
-spilled scalar constant zero as zero bytes, and use that path for both
-variable-offset stack reads and fixed-offset mixed reads. Keep the existing
-pure register-fill behavior unchanged.
+Add verifier_spill_fill coverage for a fixed-offset stack read spanning
+both STACK_ZERO bytes and scalar const-zero STACK_SPILL bytes.
 
-When a zero result depends on such a spill, mark the contributing stack
-slots precise before accepting the const-zero result so pruning cannot
-reuse a zero-spill state for a later non-zero spill state.
-
-No deployed-program regression is currently known, so target bpf-next.
+Use verifier log assertions to check both the zero result and the precision
+backtracking trail.
 
 Assisted-by: opencode:gpt-5.5
 Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
 ---
- include/linux/bpf_verifier.h |  5 ++++
- kernel/bpf/verifier.c        | 54 +++++++++++++++++++++++++++++++++++---------
- 2 files changed, 48 insertions(+), 11 deletions(-)
+ .../selftests/bpf/progs/verifier_spill_fill.c      |  26 +++++
+ .../testing/selftests/bpf/progs/verifier_var_off.c | 110 +++++++++++++++++++++
+ 2 files changed, 136 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index d57b339a8..c2e665044 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1242,6 +1242,11 @@ static inline void bpf_bt_set_frame_slot(struct backtrack_state *bt, u32 frame,
- 	bt->stack_masks[frame] |= 1ull << slot;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+index 6bc721acc..34ea6c405 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
++++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+@@ -634,6 +634,32 @@ __naked void partial_stack_load_preserves_partial_zeros(void)
+ 	: __clobber_common);
  }
  
-+static inline void bpf_bt_set_frame_slot_mask(struct backtrack_state *bt, u32 frame, u64 mask)
++SEC("raw_tp")
++__log_level(2)
++__success
++__msg("mark_precise: frame0: regs= stack=-8")
++__msg("R2=0")
++__naked void stack_load_preserves_mixed_zero_and_zero_spill(void)
 +{
-+	bt->stack_masks[frame] |= mask;
++	asm volatile (
++		/* fp-8 has scalar const-zero spill bytes and STACK_ZERO bytes. */
++		".8byte %[fp4_st_zero];" /* LLVM-18+: *(u32 *)(r10 -4) = 0; */
++		"r0 = 0;"
++		"*(u32 *)(r10 -8) = r0;"
++
++		"r1 = %[single_byte_buf];"
++		"r2 = *(u64 *)(r10 -8);"
++		"r1 += r2;"
++		"*(u8 *)(r1 + 0) = r2;" /* this should be fine */
++
++		"r0 = 0;"
++		"exit;"
++	:
++	: __imm_ptr(single_byte_buf),
++	  __imm_insn(fp4_st_zero, BPF_ST_MEM(BPF_W, BPF_REG_FP, -4, 0))
++	: __clobber_common);
 +}
 +
- static inline void bt_set_frame_stack_arg_slot(struct backtrack_state *bt, u32 frame, u32 slot)
- {
- 	bt->stack_arg_masks[frame] |= 1 << slot;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index eb46a81a8..1d3d18235 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3696,14 +3696,21 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
-  * SCALAR. This function does not deal with register filling; the caller must
-  * ensure that all spilled registers in the stack range have been marked as
-  * read.
-+ *
-+ * STACK_SPILL bytes backed by spilled scalar const zeroes are also considered
-+ * zero bytes. In that case, mark the contributing stack slots precise so
-+ * pruning cannot reuse a zero-spill state for a later non-zero spill state.
-+ *
-+ * Returns an error if precision backtracking fails.
-  */
--static void mark_reg_stack_read(struct bpf_verifier_env *env,
--				/* func where src register points to */
--				struct bpf_func_state *ptr_state,
--				int min_off, int max_off, int dst_regno)
-+static int mark_reg_stack_read(struct bpf_verifier_env *env,
-+			       /* func where src register points to */
-+			       struct bpf_func_state *ptr_state,
-+			       int min_off, int max_off, int dst_regno)
- {
- 	struct bpf_verifier_state *vstate = env->cur_state;
- 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
-+	u64 zero_spill_mask = 0;
- 	int i, slot, spi;
- 	u8 *stype;
- 	int zeros = 0;
-@@ -3713,19 +3720,33 @@ static void mark_reg_stack_read(struct bpf_verifier_env *env,
- 		spi = slot / BPF_REG_SIZE;
- 		mark_stack_slot_scratched(env, spi);
- 		stype = ptr_state->stack[spi].slot_type;
--		if (stype[slot % BPF_REG_SIZE] != STACK_ZERO)
--			break;
--		zeros++;
-+		if (stype[slot % BPF_REG_SIZE] == STACK_ZERO) {
-+			zeros++;
-+			continue;
-+		}
-+		if (stype[slot % BPF_REG_SIZE] == STACK_SPILL &&
-+		    bpf_register_is_null(&ptr_state->stack[spi].spilled_ptr)) {
-+			zero_spill_mask |= 1ull << spi;
-+			zeros++;
-+			continue;
-+		}
-+		break;
- 	}
- 	if (zeros == max_off - min_off) {
- 		/* Any access_size read into register is zero extended,
- 		 * so the whole register == const_zero.
- 		 */
- 		__mark_reg_const_zero(env, &state->regs[dst_regno]);
-+		if (zero_spill_mask) {
-+			bpf_bt_set_frame_slot_mask(&env->bt, ptr_state->frameno, zero_spill_mask);
-+			return mark_chain_precision_batch(env, env->cur_state);
-+		}
- 	} else {
- 		/* have read misc data from the stack */
- 		mark_reg_unknown(env, state->regs, dst_regno);
- 	}
+ char two_byte_buf[2] SEC(".data.two_byte_buf");
+ 
+ SEC("raw_tp")
+diff --git a/tools/testing/selftests/bpf/progs/verifier_var_off.c b/tools/testing/selftests/bpf/progs/verifier_var_off.c
+index f345466bc..24cd0a763 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_var_off.c
++++ b/tools/testing/selftests/bpf/progs/verifier_var_off.c
+@@ -59,6 +59,116 @@ __naked void stack_read_priv_vs_unpriv(void)
+ "	::: __clobber_all);
+ }
+ 
++SEC("cgroup/skb")
++__description("variable-offset stack read preserves spilled zero")
++__success
++__log_level(2)
++__msg("mark_precise: frame0: regs= stack=-8")
++__msg("R3=0")
++__retval(0)
++__naked void stack_read_var_off_preserves_spilled_zero(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++	*(u64*)(r10 - 8) = r0;			\
++	r2 = *(u32*)(r1 + 0);				\
++	r2 &= 7;					\
++	r2 -= 8;					\
++	r2 += r10;					\
++	r3 = *(u8*)(r2 + 0);				\
++	r1 = r10;					\
++	r1 += -1;					\
++	r1 += r3;					\
++	*(u8*)(r1 + 0) = r3;			\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
 +
-+	return 0;
- }
- 
- /* Read the stack at 'off' and put the results into the register indicated by
-@@ -3747,6 +3768,7 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
- 	int i, slot = -off - 1, spi = slot / BPF_REG_SIZE;
- 	struct bpf_reg_state *reg;
- 	u8 *stype, type;
-+	int err;
- 	int insn_flags = INSN_F_STACK_ACCESS;
- 	int hist_spi = spi, hist_frame = reg_state->frameno;
- 
-@@ -3829,7 +3851,10 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
- 					__mark_reg_const_zero(env, &state->regs[dst_regno]);
- 					insn_flags = 0; /* not restoring original register state */
- 				} else {
--					mark_reg_unknown(env, state->regs, dst_regno);
-+					err = mark_reg_stack_read(env, reg_state, off, off + size,
-+								  dst_regno);
-+					if (err)
-+						return err;
- 					insn_flags = 0; /* not restoring original register state */
- 				}
- 			}
-@@ -3874,8 +3899,12 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
- 			}
- 			return -EACCES;
- 		}
--		if (dst_regno >= 0)
--			mark_reg_stack_read(env, reg_state, off, off + size, dst_regno);
-+		if (dst_regno >= 0) {
-+			err = mark_reg_stack_read(env, reg_state, off, off + size,
-+						  dst_regno);
-+			if (err)
-+				return err;
-+		}
- 		insn_flags = 0; /* we are not restoring spilled register */
- 	}
- 	if (insn_flags)
-@@ -3929,7 +3958,10 @@ static int check_stack_read_var_off(struct bpf_verifier_env *env, struct bpf_reg
- 
- 	min_off = reg_smin(reg) + off;
- 	max_off = reg_smax(reg) + off;
--	mark_reg_stack_read(env, ptr_state, min_off, max_off + size, dst_regno);
-+	err = mark_reg_stack_read(env, ptr_state, min_off, max_off + size,
-+				  dst_regno);
-+	if (err)
-+		return err;
- 	check_fastcall_stack_contract(env, ptr_state, env->insn_idx, min_off);
- 	return 0;
- }
++SEC("cgroup/skb")
++__description("variable-offset stack read preserves spilled zero across slots")
++__success
++__log_level(2)
++__msg("mark_precise: frame0: regs= stack=-8,-16")
++__msg("R3=0")
++__retval(0)
++__naked void stack_read_var_off_preserves_spilled_zero_across_slots(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++	*(u64*)(r10 - 8) = r0;			\
++	*(u64*)(r10 - 16) = r0;			\
++	r2 = *(u32*)(r1 + 0);				\
++	r2 &= 15;					\
++	r2 -= 16;					\
++	r2 += r10;					\
++	r3 = *(u8*)(r2 + 0);				\
++	r1 = r10;					\
++	r1 += -1;					\
++	r1 += r3;					\
++	*(u8*)(r1 + 0) = r3;			\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("cgroup/skb")
++__description("variable-offset stack read preserves partial spilled zero")
++__success
++__log_level(2)
++__msg("mark_precise: frame0: regs= stack=-8")
++__msg("R3=0")
++__retval(0)
++__naked void stack_read_var_off_preserves_partial_spilled_zero(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++	*(u8*)(r10 - 9) = r0;			\
++	*(u8*)(r10 - 10) = r0;			\
++	*(u8*)(r10 - 11) = r0;			\
++	*(u8*)(r10 - 12) = r0;			\
++	*(u8*)(r10 - 13) = r0;			\
++	*(u8*)(r10 - 14) = r0;			\
++	*(u8*)(r10 - 15) = r0;			\
++	*(u32*)(r10 - 8) = r0;			\
++	r2 = *(u32*)(r1 + 0);				\
++	r2 &= 15;					\
++	if r2 > 10 goto l0_%=;			\
++	r2 -= 15;					\
++	r2 += r10;					\
++	r3 = *(u8*)(r2 + 0);				\
++	r1 = r10;					\
++	r1 += -1;					\
++	r1 += r3;					\
++	*(u8*)(r1 + 0) = r3;			\
++l0_%=: r0 = 0;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("cgroup/skb")
++__description("variable-offset stack read partial spill with misc data")
++__failure
++__msg("invalid variable-offset write to stack R1")
++__naked void stack_read_var_off_partial_spill_with_misc_data(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++	*(u32*)(r10 - 8) = r0;			\
++	r2 = *(u32*)(r1 + 0);				\
++	r2 &= 7;					\
++	r2 -= 8;					\
++	r2 += r10;					\
++	r3 = *(u8*)(r2 + 0);				\
++	r1 = r10;					\
++	r1 += -1;					\
++	r1 += r3;					\
++	*(u8*)(r1 + 0) = 0;			\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
+ SEC("cgroup/skb")
+ __description("variable-offset stack read, uninitialized")
+ __success
 
 -- 
 2.54.0
