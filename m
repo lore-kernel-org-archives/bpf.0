@@ -1,223 +1,88 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30144342524
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 20:48:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782420485; cv=pass; b=FpuxAiWAgquNY4hBzVsTvDf1951NObJOeaHjH4h154f6QBpsci5a5g4Kx++7LesG84bWSyfwKPji7moz3UfAEPlba3ROcoCV+RhPJLkGOde/PP3D1OZbsbSa6Wq9bLYRbgxyWZDixW1LEMAPBX5FzUqTkWTg1dPX89m6q7aTqXc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782420485; c=relaxed/simple;
-	bh=f0Ceifmdtd+icWZEIGznyRsCS3GvzZoATmFU82jVusM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LP0KRlnYu6vKZFQojDS+Cy90Gx33O/DENJsvCHED4dmi5Ueu8IcsNMlClB+fvsHsVAMHO2P/LGODnyVmLcbVVTpjnsRFwB9NwKbqnh8A3+Spsv/GP94w+iBg0i+nuJQh9wTt/VUP5xmrAdt3Ck1IcyAi7xFkW5FNIt8uynqEV9A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=fGKpDWF+; arc=pass smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997B63BB4A
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 21:30:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782423041; cv=none; b=TLwhR/NQNSxsNwTUoL3nSzbPV3e17Y2cqUBheKa7wsBHC8LeZBo2iy4CAhUbKLLd8ROlLS0kcGZ8+2bgd3ZMJe3OaB2BXYQlTQN4jcbKLZhnn0aDOnPeymfcAJd/lUKqzTaHkdrhhzl9rzOgXArMC5WmHeS1UEOGQEet7YSoOlo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782423041; c=relaxed/simple;
+	bh=FAfGsS/vKMjiqWjBITTAkt5g8m2FD7Lkq/gg8IRItFc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FKnsEzVIfBVb1eJ2J7vvoKxBT0wolhcN4j4y9VpQOn5e0cpfS1/TON3vNW7/y3ANQxWtvGjHjmJb9ndpV6Ye5M3RptL7651pxPyXcyUJELQyG5/MWS9d1ZEHODcYKwmLNR8ZeBOVEGtwgKy6wJGjGNlm1drZlDuz/y9FaN8zABs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OUbTVyQ7; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="fGKpDWF+"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c86307c4e6bso124213a12.0
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 13:48:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782420483; cv=none;
-        d=google.com; s=arc-20260327;
-        b=M/5j6JluQebN7GsXcPuI8bAOe2xEtbm5wIE0u8DEgbxNZRCHKwqhHkFeGdK1k6hhmd
-         vJdnwNftdGPyFW71kLXU1ZNff++cfgnD2M1DAdIbRpSMo4+Wx12lHSpFaNOFuvypz3jK
-         4tpOA9r09e2B1NIu1HKS47gjiBhnXaGXLybMP4t7nS9PTdtwaYcxxDc9Zoklyb1ayavQ
-         WfvZwL8fZLVJHjWRusll3ISFdu/e2qf1ydCHX/fBXOsNjnqLA1M9swuytNAIxZ6gIOn5
-         wonMG0dUKHlOBI3yF/Xh9H16kurgf14af+oI/bnbr2LcC4xZPmQl4LU7DOBs10DqVDac
-         k6Lw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=azFpD8w+2tmcQpqU30ws2iQaaMKt3MV7jEBsuDhiaTo=;
-        fh=xGVXMoOYKDoSr91QWpxSdaYLpQcuuI0Kte83HeHBFBA=;
-        b=KIIVfzUdQ8kQZfrVs72e7t0hStgM4aOFk+MbsV2xv7i9YsR5E2kuRiJJAOHugnRuy8
-         2rle83MRJgKTQX7bAA6QnO4DK/sfMMz+Q7pBfgn5oUKg3VSkDIXx1HmRLauF/bmhLnkF
-         XwpUke30DfQG4CukiRJZRNTKSUZTMlTiHDqfldGb6tYyuL6vzWf+WjPt5MlluO8cl3+b
-         g5fpoMf8knWfs9v6IpdwSz8xHefYDEnKI5mC+rx/0gG5d0VTmMreYRwPdRaR/ebhIjb8
-         Y6aTdGDkL28NKtjfY92rAaCBZh5Gr8fU3wt+/54UZ2VAoSN/OAv7+CypwC1KkSHi2mij
-         k0ug==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1782420483; x=1783025283; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=azFpD8w+2tmcQpqU30ws2iQaaMKt3MV7jEBsuDhiaTo=;
-        b=fGKpDWF+vWPIG/vytG8etsjCv8EuM35t5u73k2ZExHfdTKfjs0WH9aQUC+5SHQsTXU
-         7XKkjqAFI+No2YeGYhxhXEpWdy+tkgGTMtrHEVo/P7M1ItNdX75HD6ENzdFCPDenV0mu
-         sNYTvX1XnP6xn4Kg8p4s1pxGT/G7wJtrroM7U9UQTbckWpT0IgzCLsGEfFfuWLIAtaru
-         NrCMb0Fk8COwaKcl6t7hrzjxdR0/6klXEduISzHACggR1j9s/V+bFEtowjy2qh6wMXJD
-         WcpTH+TrEiEiseu7pBceKl7/cy/MCNUvK11lmrdpupjfNRr9LKd3wXEY57fXp2XVzWGb
-         xUDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782420483; x=1783025283;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=azFpD8w+2tmcQpqU30ws2iQaaMKt3MV7jEBsuDhiaTo=;
-        b=kBi2QrUhNV5mDUzISNII+Ni9StRsZlkMxd+3bIU8eYWuv+5tKuupVVN5eWEghcImjj
-         /maCo4LeuEDBi2F2EUv5ERSlPqc2aZ/AD2QpAG1HBL9naNyeHCUxVf6OXyUQNmiCcZjN
-         6Lxft83uo3I9bOuy5L9pBxlrcfhWLXZ9q5QP8lKbn8VH2O0LTPwU05cd4OyeuFYJXux3
-         noQMnrA6UFMGQBB8cjbCkQTq9YTaSrsZ29bG/8ggnfAEGa7/n3l05IO9jisHCFMB3K1K
-         +8GaChjcdIIhbKj9RKsvU3WQ/0yZc7dITBbg8vVB9uRdSW7R6jRdGcfRSTiO/b1woLqI
-         HtIg==
-X-Forwarded-Encrypted: i=1; AFNElJ98hCA24zffuRLg1p5MzQJnZgarXAE2syNZhqu26A37s43H/saVamSjd5m5/4//8Lschis=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzrg9tq1yno1BcyUn7XVk2M3/6FvSnh7+lirZuXT+x6dm+71+MJ
-	34+eJslCW0TH/zPr9wQ7VVdbkFgYC0aaKgHrP55zX1xA8YA2LP9BJmCDzLUdDqzpGPEZJFwTM71
-	JXvXyCHLEgQvx42uIzr3h3YL+GsgDrrdZWg+Ffa+M
-X-Gm-Gg: AfdE7ckzI8LC47dtryqgClzdVOfA+IJ0b3IJU6HWiQ1Y6hqkqeSOLqflLc/H7007dzF
-	uZ7uPateykRVyp0us/qUhagQCVmQrqBIvD+aJQ2XoLXusREQmR327fVb1SE5jf9tht+PsOTeaUw
-	ZLs3mjjZWVjK5PTmXhUy4W5ldNkFzXErjixRw3jY/bjomecxj3xJOmh/LluF+J99Q6uqYABuDa8
-	2+s617YbyEgtxz50T6ApvuggJmYMxr+Yt44f00BxtMna1ZMCj45w7qH/JWxUNnRbf4MsyQK
-X-Received: by 2002:a05:6a20:258f:b0:398:bda8:d8cd with SMTP id
- adf61e73a8af0-3bd4ac850b6mr4962108637.7.1782420483450; Thu, 25 Jun 2026
- 13:48:03 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OUbTVyQ7"
+Message-ID: <eb9a74fe-bb22-4301-ba53-519463b4d117@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782423035;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FAfGsS/vKMjiqWjBITTAkt5g8m2FD7Lkq/gg8IRItFc=;
+	b=OUbTVyQ7WUf7GxwU7LhYcV1WsTM03Qc636p0aJn/vLvx5d4RJpXee9ZT0EqRdDt4usKmpv
+	+pYwuGaK6qZjb4alX7YIWgj3r6uhxzMYPyEtXaNo0HCLOwKssQdttKLcb4vO6CeQcE1ic/
+	zq9upf8gTjMB3Du+uHKWkLhyFHr/wE4=
+Date: Thu, 25 Jun 2026 14:30:17 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260618203411.73917-2-dwindsor@gmail.com> <75d39fd9847cca915d704235264ab474@paul-moore.com>
- <20260625-schnabel-rennmaschine-parieren-bcb352c3cf59@brauner>
- <CAADnVQKKr5cCYTj8qS7tU-Aeda1iexYUp5aquTjYXMEL656cJQ@mail.gmail.com>
- <CAHC9VhSXXHGRUmJ4YjQ6uEh6dbq7+h_0TwWiV+W5dUWXCTFcfg@mail.gmail.com> <CAADnVQJM15E0PwomdTiz8zvVMGkqs9mTSjYRdPBF6fgE=tsPCQ@mail.gmail.com>
-In-Reply-To: <CAADnVQJM15E0PwomdTiz8zvVMGkqs9mTSjYRdPBF6fgE=tsPCQ@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 25 Jun 2026 16:47:51 -0400
-X-Gm-Features: AVVi8CeSCq01YuOttlTLlYK8mdjCXHKn7_tsxEH2h9SOetfWd3DVlVdhg7KLIyU
-Message-ID: <CAHC9VhSm_yC7f1FRHJn0NE1-UwCOx7Nhc9dxVJXs8DFzzxNKQw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] bpf: add bpf_init_inode_xattr kfunc for atomic
- inode labeling
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: David Windsor <dwindsor@gmail.com>, Christian Brauner <brauner@kernel.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, KP Singh <kpsingh@kernel.org>, 
-	Matt Bobrowski <mattbobrowski@google.com>, James Morris <jmorris@namei.org>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, dmitry.kasatkin@gmail.com, 
-	eric.snowberg@oracle.com, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LSM List <linux-security-module@vger.kernel.org>, 
-	linux-integrity <linux-integrity@vger.kernel.org>, selinux@vger.kernel.org, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: Reject offset refcount acquire
+ arguments
+Content-Language: en-GB
+To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
+ Shuah Khan <shuah@kernel.org>, Viktor Malik <vmalik@redhat.com>,
+ Leon Hwang <leon.hwang@linux.dev>, Dave Marchevsky <davemarchevsky@fb.com>,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <cover.1782192383.git.chenyy23@mails.tsinghua.edu.cn>
+ <2f894647f56f71838fdddeb97a3e057ed35ea92e.1782192383.git.chenyy23@mails.tsinghua.edu.cn>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <2f894647f56f71838fdddeb97a3e057ed35ea92e.1782192383.git.chenyy23@mails.tsinghua.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Jun 25, 2026 at 4:44=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
-> On Thu, Jun 25, 2026 at 1:40=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
-wrote:
-> > On Thu, Jun 25, 2026 at 3:58=E2=80=AFPM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > > On Thu, Jun 25, 2026 at 7:23=E2=80=AFAM Christian Brauner <brauner@ke=
-rnel.org> wrote:
-> > > > On 2026-06-23 20:12:32-04:00, Paul Moore wrote:
-> > > > > On Jun 18, 2026 David Windsor <dwindsor@gmail.com> wrote:
-> > > > >
-> > > > > > Add bpf_init_inode_xattr() kfunc for BPF LSM programs to atomic=
-ally set
-> > > > > > xattrs via the inode_init_security hook using lsm_get_xattr_slo=
-t().
-> > > > > >
-> > > > > > The inode_init_security hook previously took the xattr array an=
-d count
-> > > > > > as two separate output parameters (struct xattr *xattrs, int
-> > > > > > *xattr_count), which BPF programs cannot write to. Pass the xat=
-tr state
-> > > > > > as a single context object (struct xattr_ctx) instead, and have
-> > > > > > bpf_init_inode_xattr() take that context directly. Update the e=
-xisting
-> > > > > > in-tree callers of inode_init_security to take and forward the =
-new
-> > > > > > xattr_ctx.
-> > > > > >
-> > > > > > A previous attempt [1] required a kmalloc string output protoco=
-l for
-> > > > > > the xattr name. Since commit 6bcdfd2cac55 ("security: Allow all=
- LSMs to
-> > > > > > provide xattrs for inode_init_security hook") [2], the xattr na=
-me is no
-> > > > > > longer allocated; it is a static constant.
-> > > > > >
-> > > > > > Because we rely on the hook-specific ctx layout, the kfunc is
-> > > > > > restricted to lsm/inode_init_security. Restrict the xattr names=
- that
-> > > > > > may be set via this kfunc to the bpf.* namespace.
-> > > > > >
-> > > > > > Link: https://kernsec.org/pipermail/linux-security-module-archi=
-ve/2022-October/034878.html [1]
-> > > > > > Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/=
-linux.git/commit/?id=3D6bcdfd2cac55 [2]
-> > > > > > Suggested-by: Song Liu <song@kernel.org>
-> > > > > > Signed-off-by: David Windsor <dwindsor@gmail.com>
-> > > > > > ---
-> > > > > >  fs/bpf_fs_kfuncs.c                | 106 ++++++++++++++++++++++=
-+++++++-
-> > > > > >  include/linux/bpf.h               |   1 +
-> > > > > >  include/linux/bpf_lsm.h           |   3 +
-> > > > > >  include/linux/evm.h               |   9 +--
-> > > > > >  include/linux/lsm_hook_defs.h     |   4 +-
-> > > > > >  include/linux/lsm_hooks.h         |  16 ++---
-> > > > > >  include/linux/security.h          |   5 ++
-> > > > > >  kernel/bpf/bpf_lsm.c              |  10 +++
-> > > > > >  kernel/bpf/trampoline.c           |   3 +
-> > > > > >  security/bpf/hooks.c              |   1 +
-> > > > > >  security/integrity/evm/evm_main.c |   8 ++-
-> > > > > >  security/security.c               |   7 +-
-> > > > > >  security/selinux/hooks.c          |   4 +-
-> > > > > >  security/smack/smack_lsm.c        |  27 ++++----
-> > > > > >  14 files changed, 166 insertions(+), 38 deletions(-)
-> > > > >
-> > > > > I have a few specific comments below, inline with the patch, but =
-I wanted
-> > > > > to make some general comments too.
-> > > > >
-> > > > > The kfunc additions really don't belong in the VFS kfunc file, pl=
-ease
-> > > > > create a LSM kfunc file (call it security/bpf_lsm_kfuncs.c) and a=
-dd the
-> > > > > kfunc code to this new file.
-> > > >
-> > > > We expose a bunch of VFS heavy operations for various security modu=
-les
-> > > > and this is really not different. For xattrs we have it all central=
-ized
-> > > > in the VFS and in general all VFS related bpf kfuncs should continu=
-e
-> > > > living there and be registered there. Anything that's just bpf infr=
-a
-> > > > specific can go to security/bpf/kfuncs.c instead. But anyway, it's =
-a bpf
-> > > > specific helper so it's the bpf maintainer's call.
-> > >
-> > > Completely agree. This is vfs related kfunc and has to be
-> > > in fs/bpf_fs_kfuncs.c to make sure vfs maintainers review it now
-> > > and all future changes to it.
-> >
-> > *laughs*
-> >
-> > Okay, then split out the LSM specific stuff into
-> > security/bpf_lsm_kfuncs.c; all the LSM macros/defines/calls should be
-> > in the LSM kfuncs file.
+
+
+On 6/22/26 11:11 PM, Yiyang Chen wrote:
+> bpf_refcount_acquire() increments the refcount at the caller-supplied
+> pointer plus the refcount field offset, then returns the caller-supplied
+> pointer unchanged.
 >
-> Paul,
+> The verifier records the return value as a base pointer to the refcounted
+> object.
 >
-> I'm sorry, but you didn't demonstrate the level of understanding
-> of bpf to be trusted to maintain any piece of it.
+> bpf_list_pop_front() and bpf_rbtree_remove() can return embedded
+> graph-node pointers as PTR_TO_BTF_ID | MEM_ALLOC with a fixed offset equal
+> to the node field offset. Passing such a pointer directly to
+> bpf_refcount_acquire() currently passes the refcounted-kptr type check.
+>
+> That makes the runtime operation start from base + node_off while the
+> verifier models the returned pointer as the object base.
+>
+> Require refcount-acquire arguments to have zero fixed offset by carrying
+> the requirement through check_func_arg_reg_off() to __check_ptr_off_reg().
+> Programs can still acquire a refcount from a graph-node-derived pointer
+> after normalizing it with container_of().
+>
+> Fixes: 7c50b1cb76aca ("bpf: Add bpf_refcount_acquire kfunc")
+> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-Alexei,
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
-You haven't demonstrated the understanding or decorum necessary to be
-entrusted with any part of the LSM framework.
-
---=20
-paul-moore.com
