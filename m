@@ -1,266 +1,215 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D0E01624D5
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 06:05:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AED3F2FF65F
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 06:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782367558; cv=none; b=oywbxMX1/2kptvaKJA+WaqKTutwoTIX2Dr5MGiyyW071wl+E5EzQRT+mT3gAciu8nSdkVzkaxNfs008AMg2aLvaosL9kW5hEYfIiZnaBtTMDr9Q/gTTubjGyG9jHgu/X7PD2U7YhExrSnR0Bq5PVCCBC6xrGdvTmT2QhwQUla1Y=
+	t=1782369089; cv=none; b=LgOP4d9pN2Esg8YuWW7NRcu9fz4Y6P1hZdZT7g9+q2FeRpLWAjaVJe3Wps+8Nm/kvkEUhk8DhmhmpU8g7a/FfMRqi755nmpoa+HxTSSCc7Gr04DQ4Em4qL7K89bUbDeKfBEaBACNx8HrHSaqrik+PMI+5WAq38GgW2iHL6DOYxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782367558; c=relaxed/simple;
-	bh=kvk0+MVwbaR4ux60aCHSzqr7yBusRk1ryvuniX7hjq8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=p/70H5wLn6KVxGB3UqzuaiG7ZqN4FfTftpNfqX0XFKnvn+dqEfeF3fBZ4loMPvA2XDCSz5su8Bum0Bk0PGRpW/KhrI4jYdVVzJSXp+c4egdWeKfdIPr2HJSiUH2KKTqeB3DpM0ZJOFEQXnsPcDztbiWzkAmnGXMqsSYowFY5CDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P4XdTp/L; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1782369089; c=relaxed/simple;
+	bh=h9ayyCO19b4D8SnctXO7asTtcaRk3bUGigIyeLr8zQk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=s0iNx9ctzKLKJBbtAeCTQtjYJn2hwfErd4EEN78cKD0IRxF0i9YPpFruMhdg7rPqYdKxfO6zdiSiUdtixn3GA0BROG0HWBOMkgKvKJSWTgnpBGsB959ItRu1ArSTM/Fa6f97x08sK6c2cDAu7YVGK2dIOUTA0CPdGyi0WPfSMWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Si/QbojX; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P4XdTp/L"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8422f395a4aso450760b3a.0
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 23:05:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Si/QbojX"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-490b3637b90so12126225e9.3
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 23:31:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782367556; x=1782972356; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=68KcRpJXcNL6iuSfsYKnlE4wSj5i2OanVCOHmJ6NHSU=;
-        b=P4XdTp/LNwlyk18iukOPt/vqvL0mvMwQK/2R4ANpblhkZGzEANA0ByGH1cXHdCcE81
-         wGoKo0M2n+kQF82zgnwn1Zk6BmUss60FC0VPtxELZ3ZRvrQz2nyaI1AxtDt2StY1cKEH
-         ScgygZAFO1TBEa3Q2K5tFbgRGrVpq28YiyvufJJTZGzi81VaL4eh3e77D2hOXCl6mPbg
-         WfLs+m1YUoHjC7CSnUregPE16s8UUAOL5t4x8JtaLcOCQbZJ36lscg8MBYg5jtouShDg
-         EOlqDV4+WjIxbinNKwSlaw6+KMvwdGlCOAB7m8G5tnFmHzDhg84VxuwhQ8n0jbgHE6hW
-         YFwA==
+        d=gmail.com; s=20251104; t=1782369086; x=1782973886; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/dL5E5/PAVvSoAmR+aoTsLP141NGqcao3RnOAEaH2u8=;
+        b=Si/QbojXaDFSHvSiVuRjKnLzhJbR+gerUCNc93mGkvSQkbbK/jEpa9E39iu6hbbfhY
+         aN9cWtvq4LdN6K4YqIF+T0POSlKQuW3Ilmb4mIhRji7uXwVcpXGosl27FfnDv59D2bSg
+         oUwC3nAw8htMCCLroCundv8Hn6rRzUVdLXBrrIIEIHTyGDz1GUwCNjOoaWgSLn1tQgGy
+         HIOs2mQ727C6Xd+sAgpll51lQl0000HqN83GtW9D/otXKQ//um2/znaHaJzrXGdY2Pz2
+         uLieHFZv6TSI+tS/Vofkr84qNGfsuGpIReTVi8Ks5tWQ3LrDTUKujQSQ2OfGpur0uF1y
+         He4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782367556; x=1782972356;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=68KcRpJXcNL6iuSfsYKnlE4wSj5i2OanVCOHmJ6NHSU=;
-        b=HdIhP1itoj3zwWIJIpj04Gyq9qiBWYKiafT1/oA17TdWZq5iKc1xhxs0phvHX9J7IP
-         /Z0odkoMdlff5Mn/vdAIemFOpNbXXfPEoOVnN8sj1I4SlRp1uE7SE7JW0XZUi0qiTi7Z
-         vVyIQyl2KpXEHhmB8QFZ+8t1tzqVMeuD1fg/ecFIeNSFSnT2U81+TVC9BBJshkSy6grB
-         u9uGVmHvadaK3tsbDNnxhv4m9tKR9AXl2gZNjlJ0PjqdcWFQ3xs5yllGxpLaYGWUG4vw
-         VqRAgeYapkGxD+nZQXSgQWHjLF6HA5CLs5LojvaeQQ28MKJg/2gJpUfUD6gq7LjYFrmt
-         Gl2Q==
-X-Forwarded-Encrypted: i=1; AHgh+RrB2eRh23KVpjkSDNFfw2nK3CgNyMluVrCOOf1qGbEK1gG8lshQ/Mv8MBAQ5OJ3TEEEqk0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7bsWA0jGXntnm/asrnAZ8J8+LeQJkuqrRV7B8imjg61Og0hB9
-	vKsLHSnQHR21WrXMIVfe11Y1N1gv4zySiz83PZEs3Hvceiev2AGgJa9Z
-X-Gm-Gg: AfdE7clSPr/CNa0FIjf3ZN4lo4dTfxvA1+q/YCeF/ICont8jIFF7wb/S3gJxf44b15x
-	q4SZhl9e4ZWr9loUourDTYYX+jwm2y5hVCqzaax5nnlSywczqtjkbEd20CpN6cWQl7AxTvyeBf3
-	hsqBToq9p3CQTpvIzOK8V0q4pF/b6mDzIcTW45CySMK241ACYsOLUfOoKZ4vWV8snnWaBG+rfNg
-	k40U2CFhhxyfShwMNaF7sVyod6SGtr0bxeB/VTHw/oBIcKr9bZMqVN8jh7YTml1+U8ZWi01QEqp
-	CuU6eZlxpARYOYGeKkekz3eKyV9xZk886UFfLQS39Wr3PqV/pEEabYMjEsx5qznTJGjlQ6ojgSa
-	+auRnkekvzJh0L5+1yWI4Bi9587BvKv66k1/o5VK9yuxnnSL6yNKvg8DJNh68t21Z7LcMEa23Ki
-	LRJM9wxyQSrZpP4MtAyTmde0KCZlmiexaXM1EDzBbjP/84MFA5havX
-X-Received: by 2002:a05:6a00:ab09:b0:7e8:3fcb:9b03 with SMTP id d2e1a72fcca58-84591cba65cmr10573267b3a.25.1782367555930;
-        Wed, 24 Jun 2026 23:05:55 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845a3ec0ec9sm3887798b3a.0.2026.06.24.23.05.55
+        d=1e100.net; s=20251104; t=1782369086; x=1782973886;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/dL5E5/PAVvSoAmR+aoTsLP141NGqcao3RnOAEaH2u8=;
+        b=TlzyUg8Mp1Sd5OUl0+pK8hcJv2pELRdtpUERd63e1ZaLXsw80kdi+dDf6c6bpwdXMn
+         /5FjQ8t9cb7HT6/XVzB5eqyNtc+48wpWBd60DlwZ4ZbTDAHP8JHl/YFNkCj6zX3JoE5a
+         Ec09P7u8vi/d8ahrdmp5ib2YWXXsMR61crDeRTXSb6/sQiTbW885ARghhg4hMTpnFhTN
+         mtRjYaiMDdSNazXU73wEHnAvXP7ZTVwhrmARN9ME0nYNzw8b3J5U2tBSOMEF6UHOZlDa
+         Uaj8dFy5LCLjTnedKMsa3ik27kiC32qEIZC1NWkQVVVX6ojXi01044P1qZ20bnIosNSS
+         pBHA==
+X-Forwarded-Encrypted: i=1; AFNElJ8++mwggDLT/93NnbXI1luex+wxRIgBW+p0WrteBjx+A1nUv/Q4vq/OJ9BmBQBR2TUDAjE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxS8463o7sOKQbAfQoWm/8/lFwFw4+M8I+8P/kZSEXsPraG3xdN
+	OQgZV+/UcMeZlFI4rv6ZQd3sVo7UKxCPQUw5D7u8Oe5+b2RhArntMn4x
+X-Gm-Gg: AfdE7cn0zboY5Q9RNqE8PQ3y44c21G4PSqjwSdllYAqDdLaP8B7PG3eXFyGT52lpnPr
+	0hJ/HN4SNX42akoStDLn/QqYz3Z1eGSKkY7Vtz0P7PmP11Vt6O5cZuhufJPbno3CoScUfYTZ0aJ
+	x9RhDBCsGzyVUKrSY7nc3NSWbQn1cQjd2Vky4BGvt9F26VeFL8lyBdMuLaPh6nhd824e33z2ANs
+	bo8OYKFTlzA1Qm3o8SuEG3GUmbpOwijgy/PY3555hAyiTTZ+qlA+hgJDZP+YKPZBb/GroT1uw6K
+	QXDehg7tNIZbT0vvyBt1Dwn5o2MqFfs++RO940JtO5fAG+RmlIlMgtOk+dtHp1IEbuDvmQqBC+s
+	LFXEvlSY8Zgnwmhf0/zgrlXZQzkNoMKsgrMe6leoA6j/noGkW3IA6aFAy+h3nFUNoM+1i1KFHHn
+	XxSUONAzIYd0m/4gMqEoUw1T/HNTDd2jL7LPekn7xi9AvqDL5nZ7BH+6x8z6eobUFfbbtpndJ/
+X-Received: by 2002:a05:600c:4e4b:b0:490:b724:5085 with SMTP id 5b1f17b1804b1-4926689ab05mr13119825e9.33.1782369085712;
+        Wed, 24 Jun 2026 23:31:25 -0700 (PDT)
+Received: from dohko.chello.ie (188-141-5-72.dynamic.upc.ie. [188.141.5.72])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46c1ee01c6csm13625247f8f.14.2026.06.24.23.31.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 23:05:55 -0700 (PDT)
-Message-ID: <40a445e92a18ba6325081ae2be784bf0bdd45052.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 11/17] bpf: Report Call Type Safety argument
- errors
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
- Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Wed, 24 Jun 2026 23:05:46 -0700
-In-Reply-To: <20260619205934.1312876-12-memxor@gmail.com>
-References: <20260619205934.1312876-1-memxor@gmail.com>
-	 <20260619205934.1312876-12-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+        Wed, 24 Jun 2026 23:31:25 -0700 (PDT)
+From: David Carlier <devnexen@gmail.com>
+To: danishanwar@ti.com,
+	rogerq@kernel.org,
+	andrew+netdev@lunn.ch,
+	netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	m-malladi@ti.com,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
+	David Carlier <devnexen@gmail.com>
+Subject: [PATCH net v3] net: ti: icssg-prueth: fix XDP_TX from the AF_XDP zero-copy RX path
+Date: Thu, 25 Jun 2026 07:31:21 +0100
+Message-ID: <20260625063121.24746-1-devnexen@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 2026-06-19 at 22:59 +0200, Kumar Kartikeya Dwivedi wrote:
-> Augment selected helper and kfunc argument-contract failures with Call Ty=
-pe
-> Safety reports. Keep the existing terse verifier messages and add reason,
-> source context, causal register or stack-argument history, and targeted
-> suggestions.
->=20
-> Cover helper register-type mismatch, helper and kfunc non-NULL pointer
-> requirements, release-helper ownership requirements, scalar and constant =
-kfunc
-> arguments, trusted and RCU pointer contracts, kfunc memory arguments,
-> memory/length pairs, refcounted kptrs, constant strings, and IRQ flag sta=
-ck
-> arguments.
->=20
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
+On XDP_TX from the zero-copy RX path, emac_run_xdp() converts the xsk
+buffer via xdp_convert_zc_to_xdp_frame(), which clones the data into a
+fresh MEM_TYPE_PAGE_ORDER0 page that is not DMA mapped. Transmitting it
+as PRUETH_TX_BUFF_TYPE_XDP_TX derives the DMA address with
+page_pool_get_dma_addr(), reading an uninitialized page->dma_addr, so
+the device DMAs from a bogus address (corrupt TX, or an IOMMU fault).
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Pick the TX buffer type from the frame's memory type: keep
+PRUETH_TX_BUFF_TYPE_XDP_TX for page_pool frames and use
+PRUETH_TX_BUFF_TYPE_XDP_NDO for the cloned zero-copy frame, which is then
+DMA mapped through the NDO path and unmapped on completion.
 
-[...]
+While at it, fix the page_pool XDP_TX completion path. A
+PRUETH_TX_BUFF_TYPE_XDP_TX frame carries a page_pool-owned DMA mapping
+(established against rx_chn->dma_dev), yet prueth_xmit_free()
+unconditionally calls dma_unmap_single() on it with tx_chn->dma_dev,
+tearing down a mapping the driver does not own; xdp_return_frame()
+already recycles the page back to the pool. Tag such frames with a
+dedicated PRUETH_SWDATA_XDPF_TX type so the completion path skips the
+unmap, the same way PRUETH_SWDATA_XSK buffers are handled.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index db151e6b8949..fdbf92bffc17 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -320,6 +320,15 @@ static int arg_idx_from_argno(argno_t a)
->  	return arg_from_argno(a) - 1;
->  }
-> =20
-> +static int bpf_diag_stack_arg_slot_from_argno(argno_t a)
+Fixes: 7a64bb388df3 ("net: ti: icssg-prueth: Add AF_XDP zero copy for RX")
+Fixes: 62aa3246f462 ("net: ti: icssg-prueth: Add XDP support")
+Cc: stable@vger.kernel.org
+Signed-off-by: David Carlier <devnexen@gmail.com>
+Reviewed-by: Meghana Malladi <m-malladi@ti.com>
+---
+v3:
+ - address Meghana Malladi review nits: split the prueth_xmit_free()
+   guard to stay under 80 columns, parenthesize the swdata->type
+   ternary (and the matching tx_buff_type one for consistency).
+ - no functional change; carry Reviewed-by.
+v2: https://lore.kernel.org/netdev/20260623112225.303930-1-devnexen@gmail.com
+v1: https://lore.kernel.org/netdev/20260620213756.87499-1-devnexen@gmail.com
+ drivers/net/ethernet/ti/icssg/icssg_common.c | 21 +++++++++++++++++---
+ drivers/net/ethernet/ti/icssg/icssg_prueth.h |  1 +
+ 2 files changed, 19 insertions(+), 3 deletions(-)
 
-Nit: drop the bpf_diag_ prefix (or just inline at the callsite?).
+diff --git a/drivers/net/ethernet/ti/icssg/icssg_common.c b/drivers/net/ethernet/ti/icssg/icssg_common.c
+index 82ddef9c17d5..64ae3704481e 100644
+--- a/drivers/net/ethernet/ti/icssg/icssg_common.c
++++ b/drivers/net/ethernet/ti/icssg/icssg_common.c
+@@ -185,7 +185,8 @@ void prueth_xmit_free(struct prueth_tx_chn *tx_chn,
+ 	first_desc = desc;
+ 	next_desc = first_desc;
+ 	swdata = cppi5_hdesc_get_swdata(first_desc);
+-	if (swdata->type == PRUETH_SWDATA_XSK)
++	if (swdata->type == PRUETH_SWDATA_XSK ||
++	    swdata->type == PRUETH_SWDATA_XDPF_TX)
+ 		goto free_pool;
+ 
+ 	cppi5_hdesc_get_obuf(first_desc, &buf_dma, &buf_dma_len);
+@@ -259,6 +260,7 @@ int emac_tx_complete_packets(struct prueth_emac *emac, int chn,
+ 			napi_consume_skb(skb, budget);
+ 			break;
+ 		case PRUETH_SWDATA_XDPF:
++		case PRUETH_SWDATA_XDPF_TX:
+ 			xdpf = swdata->data.xdpf;
+ 			dev_sw_netstats_tx_add(ndev, 1, xdpf->len);
+ 			total_bytes += xdpf->len;
+@@ -769,7 +771,8 @@ u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
+ 	k3_udma_glue_tx_dma_to_cppi5_addr(tx_chn->tx_chn, &buf_dma);
+ 	cppi5_hdesc_attach_buf(first_desc, buf_dma, xdpf->len, buf_dma, xdpf->len);
+ 	swdata = cppi5_hdesc_get_swdata(first_desc);
+-	swdata->type = PRUETH_SWDATA_XDPF;
++	swdata->type = (buff_type == PRUETH_TX_BUFF_TYPE_XDP_TX ?
++		PRUETH_SWDATA_XDPF_TX : PRUETH_SWDATA_XDPF);
+ 	swdata->data.xdpf = xdpf;
+ 
+ 	/* Report BQL before sending the packet */
+@@ -804,6 +807,7 @@ EXPORT_SYMBOL_GPL(emac_xmit_xdp_frame);
+  */
+ static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp, u32 *len)
+ {
++	enum prueth_tx_buff_type tx_buff_type;
+ 	struct net_device *ndev = emac->ndev;
+ 	struct netdev_queue *netif_txq;
+ 	int cpu = smp_processor_id();
+@@ -826,11 +830,21 @@ static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp, u32 *len
+ 			goto drop;
+ 		}
+ 
++		/* In AF_XDP zero-copy mode xdp_convert_buff_to_frame()
++		 * clones the xsk buffer into a fresh MEM_TYPE_PAGE_ORDER0
++		 * page that is not DMA mapped. Such a frame must be mapped
++		 * via the NDO path; only a page pool-backed frame already
++		 * carries a usable page_pool DMA address.
++		 */
++		tx_buff_type = (xdpf->mem_type == MEM_TYPE_PAGE_POOL ?
++				PRUETH_TX_BUFF_TYPE_XDP_TX :
++				PRUETH_TX_BUFF_TYPE_XDP_NDO);
++
+ 		q_idx = cpu % emac->tx_ch_num;
+ 		netif_txq = netdev_get_tx_queue(ndev, q_idx);
+ 		__netif_tx_lock(netif_txq, cpu);
+ 		result = emac_xmit_xdp_frame(emac, xdpf, q_idx,
+-					     PRUETH_TX_BUFF_TYPE_XDP_TX);
++					     tx_buff_type);
+ 		__netif_tx_unlock(netif_txq);
+ 		if (result == ICSSG_XDP_CONSUMED) {
+ 			ndev->stats.tx_dropped++;
+@@ -1395,6 +1409,7 @@ void prueth_tx_cleanup(void *data, dma_addr_t desc_dma)
+ 		dev_kfree_skb_any(skb);
+ 		break;
+ 	case PRUETH_SWDATA_XDPF:
++	case PRUETH_SWDATA_XDPF_TX:
+ 		xdpf = swdata->data.xdpf;
+ 		xdp_return_frame(xdpf);
+ 		break;
+diff --git a/drivers/net/ethernet/ti/icssg/icssg_prueth.h b/drivers/net/ethernet/ti/icssg/icssg_prueth.h
+index df93d15c5b78..00bb760d68a9 100644
+--- a/drivers/net/ethernet/ti/icssg/icssg_prueth.h
++++ b/drivers/net/ethernet/ti/icssg/icssg_prueth.h
+@@ -153,6 +153,7 @@ enum prueth_swdata_type {
+ 	PRUETH_SWDATA_CMD,
+ 	PRUETH_SWDATA_XDPF,
+ 	PRUETH_SWDATA_XSK,
++	PRUETH_SWDATA_XDPF_TX,
+ };
+ 
+ enum prueth_tx_buff_type {
+-- 
+2.53.0
 
-> +{
-> +	int arg =3D arg_from_argno(a);
-> +
-> +	if (arg <=3D MAX_BPF_FUNC_REG_ARGS)
-> +		return -1;
-> +	return arg - MAX_BPF_FUNC_REG_ARGS - 1;
-> +}
-> +
->  static const char *btf_type_name(const struct btf *btf, u32 id)
->  {
->  	return btf_name_by_offset(btf, btf_type_by_id(btf, id)->name_off);
-> @@ -8161,6 +8170,8 @@ static const char *bpf_diag_reg_type_plain(struct b=
-pf_verifier_env *env,
->  			return "a nullable memory pointer";
->  		return "a memory pointer";
->  	case PTR_TO_BTF_ID:
-> +		if (type_may_be_null(type))
-> +			return "a nullable kernel object pointer";
-
-Nit: move this hunk such that bpf_diag_reg_type_plain() is defined in
-     a single patch?
-
->  		if (type_is_non_owning_ref(type))
->  			return "a borrowed allocated object pointer";
->  		if (type_is_ptr_alloc_obj(type))
-> @@ -8173,6 +8184,60 @@ static const char *bpf_diag_reg_type_plain(struct =
-bpf_verifier_env *env,
-
-[...]
-
-> +static void diag_call_arg_fmt(struct bpf_verifier_env *env,
-> +			      u32 insn_idx, argno_t argno,
-> +			      const char *call_name,
-> +			      const char *suggestion,
-> +			      const char *fmt, ...) __printf(6, 7);
-
-Nit: Is this prototype necessary?
-
-> +static void diag_call_arg_fmt(struct bpf_verifier_env *env,
-> +			      u32 insn_idx, argno_t argno,
-> +			      const char *call_name,
-> +			      const char *suggestion,
-> +			      const char *fmt, ...)
-> +{
-> +	size_t size;
-> +	va_list args;
-> +	char *reason;
-> +
-> +	reason =3D bpf_diag_scratch_buf(env, 0, &size);
-
-An alternative to juggling the scratch slot numbers
-might be some kind of:
-
-  char *bpf_diag_fmt(env, fmt_string, ...)
-
-that would do the vaprintf behind the scene and accumulate
-the buffers in env->diag, to be freed after reporting.
-
-> +	if (reason) {
-> +		va_start(args, fmt);
-> +		vscnprintf(reason, size, fmt, args);
-> +		va_end(args);
-> +	} else {
-> +		reason =3D "";
-> +	}
-> +
-> +	bpf_diag_report_call_arg(env, insn_idx, argno, call_name, reason,
-> +				 suggestion);
-> +}
-> +
->  static int check_reg_type(struct bpf_verifier_env *env, struct bpf_reg_s=
-tate *reg, argno_t argno,
->  			  enum bpf_arg_type arg_type,
->  			  const u32 *arg_btf_id,
-> @@ -8226,6 +8291,32 @@ static int check_reg_type(struct bpf_verifier_env =
-*env, struct bpf_reg_state *re
->  	for (j =3D 0; j + 1 < i; j++)
->  		verbose(env, "%s, ", reg_type_str(env, compatible->types[j]));
->  	verbose(env, "%s\n", reg_type_str(env, compatible->types[j]));
-> +	{
-> +		size_t expected_size;
-> +		char *expected_buf;
-> +		const char *call_name;
-> +		int len =3D 0;
-> +
-> +		expected_buf =3D bpf_diag_scratch_buf(env, 1,
-> +						    &expected_size);
-> +		if (expected_buf) {
-> +			expected_buf[0] =3D '\0';
-> +			for (j =3D 0; j < i && len < expected_size; j++)
-> +				len +=3D scnprintf(expected_buf + len,
-> +						 expected_size - len,
-> +						 "%s%s", j ? ", " : "",
-> +						 reg_type_str(env, compatible->types[j]));
-
-Nit: this is a bit ugly, maybe hide it as a utility function?
-
-> +		} else {
-> +			expected_buf =3D "";
-> +		}
-> +
-> +		call_name =3D meta->func_id ? func_id_name(meta->func_id) : "callee";
-
-Nit: I'd avoid the defensive meta->func_id ? ... here.
-
-> +		diag_call_arg_fmt(env, env->insn_idx, argno, call_name,
-> +				  "Pass a value with one of the accepted pointer or scalar types for=
- this call.",
-> +				  "it has type %s, but this argument accepts %s",
-> +				  bpf_diag_reg_type_plain(env, reg->type),
-> +				  expected_buf);
-> +	}
->  	return -EACCES;
-> =20
->  found:
-
-[...]
-
-> @@ -11808,9 +11908,20 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *=
-env, struct bpf_func_state *call
->  	 */
->  	if (!btf_type_is_scalar(ref_t) && !__btf_type_is_scalar_struct(env, met=
-a->btf, ref_t, 0) &&
->  	    (arg_mem_size ? !btf_type_is_void(ref_t) : 1)) {
-> +		const char *expected_type;
-> +
-> +		expected_type =3D bpf_diag_format_btf_type_scratch(env,
-> +								 1,
-> +								 meta->btf,
-> +								 ref_id);
-
-Nit: isn't this exactly the diag_btf_type_name()?
-     (and in a few places below).
-
->  		verbose(env, "%s pointer type %s %s must point to %sscalar, or struct =
-with scalar\n",
->  			reg_arg_name(env, argno),
->  			btf_type_str(ref_t), ref_tname, arg_mem_size ? "void, " : "");
-> +		diag_call_arg_fmt(env, env->insn_idx, argno, meta->func_name,
-> +				  "Pass a verifier-tracked pointer to the expected kernel object typ=
-e, not a pointer to stack storage or another memory buffer.",
-> +				  "the kfunc expects a pointer to %s, but this argument is %s and ca=
-nnot be used as that kernel object pointer",
-> +				  expected_type,
-> +				  bpf_diag_reg_type_plain(env, reg->type));
->  		return -EINVAL;
->  	}
->  	return arg_mem_size ? KF_ARG_PTR_TO_MEM_SIZE : KF_ARG_PTR_TO_MEM;
-
-[...]
