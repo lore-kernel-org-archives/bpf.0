@@ -1,64 +1,33 @@
-Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48982F8EAB
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 03:56:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1E012C534;
+	Thu, 25 Jun 2026 05:27:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782359768; cv=none; b=lsb3uqoERBDBbeowpGSEau7YFbRqh06g8d/zt/f9yM/eiyJlry8qkN5SdZVYXvCpAlFRJP4ZYuqxLUFO+EpQAqy8xRopFFcYvExkpI1cYFgYNRgX0dlv1IbTv0vNn5WZIcNuKbKufjMSYjsi4FrHqZ+62YGGO+SQNKERaehAPB4=
+	t=1782365250; cv=none; b=Lk67M5mE6SWT6Qp28F5kt3qvND2VBbPl13YkZ0bixBWldViJiC2PV2JNUCaXn+GNm7kAVaZ6YI54xCtxzLMaTtQiV7Rmv6aJF1Eu8JAp4GIagyvx+1o9tdoWtdbFHmDrc8Clq5DA5biDAeMeo424y67BjRQPYY46UNqPUFvaZnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782359768; c=relaxed/simple;
-	bh=i0aRAUFtI7aqAzKD4q0jr5L562kAcIUmoKjS1lDhZP8=;
-	h=Message-ID:Date:MIME-Version:From:Subject:Cc:To:Content-Type; b=VTZ+heRLQ7/nJs4avFsCFNrTIT6SNJSzi67ax4RkcaOPwJX6K5Iju/6XJxnfLaqCdj1GUoxLuaO8DlPD2pxf9q9RUdEh1xJSvVTFexgPjda6wEu7pAy9zWvmRjkT3KDJimy23TVdoWzVWNHIKhkt1eVSuMmQlbMqWwCa4L20iDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tNwD1ur9; arc=none smtp.client-ip=74.125.82.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782365250; c=relaxed/simple;
+	bh=16gLOvVg1+I9vrM7P9jWzIPMeQh/IJhgDY9+aNOXBAM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JeJwlMdoSwLVyEJ8PhaDkltfAS5Iqn3ug6ymXeUjLIxnHRwe0brozLF1XHsMc4L3E2mpeJbD1R0Iaj7t4A0kqRpBhzRfCmZrL1gRllxinVP0WrICOIoLkExV3jcfw1bYTIdiq7mAvTqH3wloeB23JIUiFSeDCCT4yeTMx1cWDzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UMfGlucx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tNwD1ur9"
-Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-139d5c9a495so2440223c88.0
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 20:56:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782359766; x=1782964566; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:cc:subject:from:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=srhS5i90p9Ok5lxqwOHZkSzHn+Lf7VA0N+H4FT65HJA=;
-        b=tNwD1ur9T6rnXrFI83rv1VscADTwkgnGzWd3/8cXowET8MB7CWONP9LD8A1tY0SRrY
-         0EmYh2+rrXPC+ozviEK86lZvkL1Ur9WahRbH4RzjcJgLj3LhrOFqMznBQ4vpU5QNT2jb
-         oo+qFNzdsNXY3xQot7qGYa5aBYb2iLlmD+YpHbY/ch8gWEp8rrsrx/6pC/PcVKB0Gs1/
-         E4UvohwcSm00Zugh6iQO3yBuzJWcnrI2oNbEXIA8vb+ttIucKGc2bjektnJWj1IAs7La
-         AQB+ndJ7ShypndIVKhEx1nRanzRy5+2XZupX5GjytTV7PmRkzT6PCLtvrikUWPUxCKtx
-         GNDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782359766; x=1782964566;
-        h=content-transfer-encoding:to:cc:subject:from:content-language
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=srhS5i90p9Ok5lxqwOHZkSzHn+Lf7VA0N+H4FT65HJA=;
-        b=oU2w+QxuXGGtbylmXz5CURrTUdxYOSpD241GY/7ngNLG1GPCqgD9KmW0oJ7I98+u2p
-         U8TBh/bWRa3wyCIoWVYZez3phVkMoXho5Y34FP6RiZq0jec7O37RpLCLSr4gIEynNGzY
-         nMCxo9ft877JwDKldJhw1RPCIPFQPSwoWenbXy32GFycDXH6AYdMfcPMU2XIh6ItXzGL
-         yX1MzglE2ukScfWJ8rAq2/C03xoHJWiduBSQagmOfUmqdOKe4s3CyCPszNRUsGbRCcW7
-         sQ6+jjow+0RdfwqtnjnLcZBZYGT+SQigDekp/YxjtNKvW/KrSbb9QF8uluWX1V3LfBRO
-         yEwg==
-X-Forwarded-Encrypted: i=1; AHgh+RoMBeEjkr8+km6IF04d22G09bCh7fd2OWgUPEZPuXocrB/xbtpaR5vCsZ4Uq4UPNsrnKLA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJGmno0vwSoDVBhVoBqXohBrC1vqeZWZ1dphPrgmPQo2rMwBS/
-	Om/xK1OMnk4Mm+jUWqSmEykxEUlV8XNcTAUSBzxuRq4seuiR9DB2dbY8
-X-Gm-Gg: AfdE7clDdUa9tKOjSCeMAyQJfDqARxpAVic33dTQmQO7Cy8yFnMB9rdVa5TSOkEXVlq
-	rLOMfHlYquJgondKQR9L9gboBfMPco9lq6JOSfBSWpt/pDkiB5/oPOIfyE5hgFbfpzNY3RpXWyJ
-	hRAr/pMXbm0e7bqcch0tA+GOyH2oWUlT3C3UdTA/kWq+BFxm2taOWSj1xykuZnpSTWRUi5tK6Fh
-	bNFq2c8OZrlR3fyNhMr2MRZcarOOswKidA4d83J/N8swgOqSNzabLgMZurkOZeloV4JdVAZrl/C
-	OsLruadItCmahyV8LQI37qdw1L3K0iKHd6wm7d+86dK6G/K6Xc2C6jlk8WCA0NQcKDY56qVQXU8
-	wg+xCtxi08OoofA2kbXUHXgkXqOxV365QUBuco4aaoPa7kmqfSB9m5nMbVyc/QcXIS8Ac+JQPho
-	GoTmohenptZLeTBvOWr0aonIHQNg==
-X-Received: by 2002:a05:7300:23cb:b0:2c5:b23e:48a6 with SMTP id 5a478bee46e88-30c84dfad18mr1166720eec.23.1782359765690;
-        Wed, 24 Jun 2026 20:56:05 -0700 (PDT)
-Received: from [192.168.0.142] ([49.207.145.141])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c7c52c664sm3867938eec.8.2026.06.24.20.56.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Jun 2026 20:56:05 -0700 (PDT)
-Message-ID: <7959ba0b-c39d-4cb3-8269-482d1d593257@gmail.com>
-Date: Thu, 25 Jun 2026 09:25:58 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UMfGlucx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B7531F000E9;
+	Thu, 25 Jun 2026 05:27:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782365248;
+	bh=16gLOvVg1+I9vrM7P9jWzIPMeQh/IJhgDY9+aNOXBAM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=UMfGlucxjCtnoosPgwHb0AUMixwX+WJ+i4FsrBedZL55zbcOs5lBJ1+R0wNt9bZpG
+	 dw3r7UHuCmhwawC6FjPIAmf2C8GdgV33ptgxNQLw5nvQtfg1nO6WaMDDydxPYO1R9g
+	 wKJyo4XyGTUfN53RX0t1pMTaIuXOphmH+RM8POA26SvE223MFAZlj80wyphGDYEThn
+	 9p+HptNmFNo1hOvR7ECRYbnRBbHXb5JII4/BSBVdIB18aMom9YNoXfSd14Efu3oEO6
+	 94rcJ8AQR0hcYlEI0Vt9urNhvqUYiW307twuZR1kIuS95TicAFKMKO/TBgOXKfJisy
+	 glckMWm75eQog==
+Message-ID: <529a9856-4a0d-4db0-9c97-43c0c462e396@kernel.org>
+Date: Thu, 25 Jun 2026 14:27:17 +0900
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,97 +35,227 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH for-next v3 7/9] mm/slab: introduce kfree_rcu_nolock()
+To: XIAO WU <xiaowu.417@qq.com>, Vlastimil Babka <vbabka@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-7-70a54f3775bb@kernel.org>
+ <tencent_45CAE878B5922990DB102BE05A1BAD50DA09@qq.com>
+ <e54ce8be-9480-4583-9c6a-d0dbe1378f53@kernel.org>
+ <tencent_12A1049445F2CE248F20CB235AC111353A0A@qq.com>
 Content-Language: en-US
-From: Kamalesh Babulal <kamalesh.babulal@gmail.com>
-Subject: [ANNOUNCE/CFP] Linux Plumbers 2026 Containers and Checkpoint/Restore
- Microconference
-Cc: =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@stgraber.org>,
- Mike Rapoport <mike.rapoport@gmail.com>,
- Christian Brauner <christian@brauner.io>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Adrian Reber <adrian@lisas.de>,
- Kamalesh Babulal <kamalesh.babulal@oracle.com>
-To: cgroups@vger.kernel.org, containers@lists.linux.dev, bpf@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
- linux-integrity@vger.kernel.org, criu@lists.linux.dev,
- lxc-devel@lists.linuxcontainers.org, fuse-devel@lists.linux.dev
+From: Harry Yoo <harry@kernel.org>
+In-Reply-To: <tencent_12A1049445F2CE248F20CB235AC111353A0A@qq.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------HHB5JammkAG9i5v0ifUbiioD"
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------HHB5JammkAG9i5v0ifUbiioD
+Content-Type: multipart/mixed; boundary="------------5yZ5NYuEVU4HrXYvVZYNisDF";
+ protected-headers="v1"
+From: Harry Yoo <harry@kernel.org>
+To: XIAO WU <xiaowu.417@qq.com>, Vlastimil Babka <vbabka@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
+Message-ID: <529a9856-4a0d-4db0-9c97-43c0c462e396@kernel.org>
+Subject: Re: [PATCH for-next v3 7/9] mm/slab: introduce kfree_rcu_nolock()
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-7-70a54f3775bb@kernel.org>
+ <tencent_45CAE878B5922990DB102BE05A1BAD50DA09@qq.com>
+ <e54ce8be-9480-4583-9c6a-d0dbe1378f53@kernel.org>
+ <tencent_12A1049445F2CE248F20CB235AC111353A0A@qq.com>
+In-Reply-To: <tencent_12A1049445F2CE248F20CB235AC111353A0A@qq.com>
+
+--------------5yZ5NYuEVU4HrXYvVZYNisDF
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
 
-We are pleased to announce the Call for Proposals for the Containers and
-Checkpoint/Restore Microconference[0] at Linux Plumbers Conference 2026,
-taking place in Prague, Czechia, from October 5 to 7, 2026.
 
-This microconference will focus on current work and open problems in
-containers, checkpoint/restore, kernel interfaces, and related userspace
-tooling. We hope to bring together people working on container
-runtimes, CRIU, init systems, distributions, orchestration systems, and
-the kernel interfaces that make these pieces work together.
+On 6/22/26 11:56 PM, XIAO WU wrote:
+> Hi Harry,
+>=20
+> On Mon, Jun 22, 2026 at 02:28:44PM +0900, Harry Yoo wrote:
+>> On 6/21/26 9:29 AM, XIAO WU wrote:
+>> > I was able to reproduce this in QEMU with KASAN.=C2=A0 The trigger i=
+s as
+>> > simple as passing a large (>8KB) kmalloc buffer to the new function.=
 
-Topics of interest include, but are not limited to:
+>>
+>> Thanks for taking a look, but this was intentional.
+>>
+>> I should have documented that only kmalloc_nolock() ->
+>> kfree_rcu_nolock() is allowed and kmalloc() -> kfree_rcu_nolock()
+>> is not allowed (yet).
+>>
+>> Since kmalloc_nolock() does not support large kmalloc, the warning
+>> is not supposed to trigger. That is why I added only debug warnings.
+>=20
+> Thank you very much for taking the time to explain =E2=80=94 I really
+> appreciate it, especially since I'm still learning my way around the
+> mm/ subsystem.=C2=A0 You are absolutely right that kmalloc_nolock() ret=
+urns
+> NULL for sizes above KMALLOC_MAX_CACHE_SIZE, so a proper caller using
+> the kmalloc_nolock() =E2=86=92 kfree_rcu_nolock() pairing would never h=
+it this.
+>=20
+> I did notice one small thing that I wanted to gently bring up, though.
+> Please forgive me if I'm missing something obvious here.
+>=20
+> When I was reading through the surrounding code to understand the
+> pattern better, I noticed that kfree_nolock() =E2=80=94 which has the s=
+ame
+> "only for kmalloc_nolock()" constraint (documented in the comment at
+> mm/slub.c:6828-6835) =E2=80=94 actually does check for a NULL slab:
+>=20
+> =C2=A0 void kfree_nolock(const void *object)
+> =C2=A0 {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ...
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 slab =3D virt_to_slab(object);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (unlikely(!slab)) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 WARN_ONCE(1, "la=
+rge_kmalloc is not supported by kfree_nolock()");
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s =3D slab->slab_cache;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ...
+>=20
+> So kfree_nolock() gracefully returns with a warning even though it too
+> expects only kmalloc_nolock() callers.=C2=A0 That pattern seemed really=
 
-  - New VFS and syscall interfaces relevant to containers, including
-    work around idmapped mounts
+> sensible to me =E2=80=94 it costs almost nothing and prevents a panic i=
+f
+> someone ever passes the wrong pointer (which they shouldn't, but as you=
 
-  - Closing remaining gaps between cgroup v1 and cgroup v2, and making
-    migration easier
+> mentioned, the constraint isn't documented on kfree_call_rcu_nolock()
+> yet).
+>
+> I also wondered about the difference between WARN_ONCE (used in
+> kfree_nolock) and VM_WARN_ON_ONCE (used in kfree_call_rcu_nolock).=C2=A0=
+If
+> I understand correctly, VM_WARN_ON_ONCE compiles away entirely on
+> production kernels without CONFIG_DEBUG_VM, which would make the
+> subsequent NULL dereference completely silent =E2=80=94 no warning, jus=
+t a
+> panic.
 
-  - The growing role of eBPF in container runtimes, observability,
-    policy enforcement, and checkpoint/restore
+It would crash without debug option anyway, but warnings are there to
+make it easier to point what's gone wrong.
 
-  - Mechanisms for mediating and intercepting increasingly complex
-    system calls
+And not testing the code path at least once with debug option is a big
+problem :)
 
-  - Lowering the barriers to practical use of user namespaces
+> And since you mentioned that kmalloc() =E2=86=92 kfree_rcu_nolock() sup=
+port is
+> planned for the future (the "yet") =E2=80=94 wouldn't this code path ne=
+ed the
+> NULL check at that point anyway?
+>=20
+> I was thinking something like this would make the function consistent
+> with kfree_nolock() and also make it forward-compatible with the
+> planned kmalloc() support:
+>=20
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -1266,10 +1266,16 @@ void kfree_call_rcu_nolock(struct rcu_head
+> *head, void *ptr)
+> =C2=A0{
+> =C2=A0=C2=A0=C2=A0=C2=A0 struct slab *slab;
+> =C2=A0=C2=A0=C2=A0=C2=A0 struct kmem_cache *s;
+>=20
+> -=C2=A0=C2=A0=C2=A0 VM_WARN_ON_ONCE(is_vmalloc_addr(ptr) || !virt_to_sl=
+ab(ptr));
+> -
+> =C2=A0=C2=A0=C2=A0=C2=A0 slab =3D virt_to_slab(ptr);
+> +=C2=A0=C2=A0=C2=A0 /*
+> +=C2=A0=C2=A0=C2=A0=C2=A0 * kmalloc_nolock() never produces large-kmall=
+oc or vmalloc
+> +=C2=A0=C2=A0=C2=A0=C2=A0 * addresses, but be defensive: fall back to d=
+efer_kfree_rcu()
+> +=C2=A0=C2=A0=C2=A0=C2=A0 * for unsupported pointer types, consistent w=
+ith kfree_nolock().
+> +=C2=A0=C2=A0=C2=A0=C2=A0 */
+> +=C2=A0=C2=A0=C2=A0 if (unlikely(!slab))
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto fallback;
 
-  - Attestation, measurement, and other approaches to establishing
-    container integrity
+Just FYI, virt_to_slab() and virt_to_page()
+don't work correctly for vmalloc addresses.
 
-  - Better resource-control interfaces and limits for containerized
-    workloads
+And I don't think silently making it work is good.
 
-  - Keeping CRIU working smoothly on modern Linux distributions
+> +
+> =C2=A0=C2=A0=C2=A0=C2=A0 s =3D slab->slab_cache;
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0 if (__kfree_rcu_sheaf(s, ptr, /* allow_spin =3D=
+ */ false))
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return;
+>=20
+> +fallback:
+> =C2=A0=C2=A0=C2=A0=C2=A0 defer_kfree_rcu(head);
+> =C2=A0}
+>=20
+> Of course, this is just a suggestion =E2=80=94 you know this code far b=
+etter
+> than I do.=C2=A0 If you feel the current code is fine as-is with proper=
 
-  - Checkpoint/restore support for GPUs and similar accelerators
+> documentation, I completely understand and won't press the point
+> further.
+>=20
+> Either way, thank you again for the explanation, and for working on
+> this series =E2=80=94 having kfree_rcu_nolock() available for BPF and o=
+ther
+> contexts will be really valuable.
+>=20
+> Thanks,
+> XIAO
 
-  - Restoring FUSE daemons and related userspace services
+--------------5yZ5NYuEVU4HrXYvVZYNisDF--
 
-  - Handling restartable sequences correctly during checkpoint and
-    restore
+--------------HHB5JammkAG9i5v0ifUbiioD
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
-  - Support for newly added kernel features and interfaces
+-----BEGIN PGP SIGNATURE-----
 
-  - Shadow stack support on x86 and arm64
+iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCajy8NQAKCRCGXBN6rc5S
+1oG6AQDcpJmCoSOVmh6QBfAn7SSLAj/dCrCVdlDGkux+9WPEAAEAwzyj8gI9j//s
+tpMbnooH3cAwdhFTBanFE9AL924TWgk=
+=XwYR
+-----END PGP SIGNATURE-----
 
-  - Support for madvise(MADV_GUARD_INSTALL) and mseal()
-
-  - pidfd-based checkpoint/restore, including process-exit information
-
-We are also interested in additional topics that may emerge as work
-evolves over the coming months. Ongoing development work, operational
-experience, unresolved kernel API questions, and cross-project
-coordination topics are all welcome.
-
-We encourage you to bring open questions, unresolved issues, or problems
-that would benefit from input from others. In your proposal, please
-include a short description of the topic, what you would like to
-discuss, and what kind of feedback or collaboration would help move the
-work forward.
-
-Allocated time per session is expected to be between 15 and 30 minutes.
-
-Please submit proposals through the LPC 2026 abstracts page by August 7:
-
-        https://lpc.events/event/20/abstracts/
-
-Linux Plumbers Conference 2026 will be a hybrid event. While in-person
-presentation is preferred to help keep the sessions smooth and
-interactive, remote presentation will also be available.
-
-We are looking forward to your proposals and to seeing you in Prague.
-
-[0] https://lpc.events/event/20/contributions/2332/
-
-Thanks,
-Containers & Checkpoint/Restart Microconference Team
+--------------HHB5JammkAG9i5v0ifUbiioD--
