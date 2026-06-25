@@ -1,299 +1,139 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0688C30D414
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 16:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525351E7C18
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 17:33:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782406793; cv=none; b=mVLc1MHkABo+b/ANV6pAVX6UILPWhsJb86dytHju88KAfQO724bEt69wi3/vpTW4Q2i5awp1d20F0I2Kw7zfJtNgU4PeNHUrfjsy7KFdKahFGMRX1r4Al1jTzGx943wHV/L6Q005wXazRGYRt5Z30FFJChSYT1OzYJz7hhJ0Npw=
+	t=1782408821; cv=none; b=EgwZ8UBEhLrGdANGLHSXguYmxVG3rA14Ajh0MRMyGFqQQg3vYAevbjgQ5CkbN6VVQ6T0wrCOV5qhh4aBGFIfirIeLZ1mwsdcB9ctk2qon9seU8KXNbh5rX/C6LAh0lLpu3x381Q85wJ2WGBVkXhNdUS9hII0wZVS7FBIbtUSQi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782406793; c=relaxed/simple;
-	bh=hI6afDcN3uImdVb7J+at1rYPtofw2XIek++OLKQGlgI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LSKCxqyVTkD1um7gxgMXbDqS+A60GSjHPIIwXNOmrn1OP44l8PJDw8xoLxREYkY5U/VpWD//wb6o11Vhsuaa5lu+fp62FcZ8dN2VxoK0DPBA8SYeAnIGMPzX5gd9WkxImONnu2d16qVS8TdkCb96yjrYZMIZO/EH4+TonDwSdHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LebcXyiT; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782408821; c=relaxed/simple;
+	bh=ly7hL8qiSYuyFbLLMRZGkLc5DQfNAIPUtrzgZj1Xm8k=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=VPi6YJHCU0Z9KRJUu5o+Pn8RiRtZ4PFUYxSJq8kUGQcAWuc00jj5zzQiA7alAbsIKT85fS6+06GmI00LH2gMawBa3Qz2EYlCotMtI1n+Ve/6/CGJNYdYTCd2PsufYJ85+BenPMHpZvwXUFYGEfstCXzULxQm2Cyl8dfOg4SY9Fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=piVgzSz4; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LebcXyiT"
-Message-ID: <fd9ebc32-1d31-4f85-9c39-c1e4100d985a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782406789;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LlTeYZ/7wBvBIqprf7XZ3sj7cme/8ojhsxcxkhsBq90=;
-	b=LebcXyiT0BkVl8rNTR3idFuAOMXy9lnE58+IcJZgfZ++csoHzBtr1HRWzIPmnDQ3BbAIlj
-	7XMhkGBVTbn2SRAOl8175m5wzZBIMy7yQrpQTsaFdHRxVTufRvhrBAyWucs0AETmrv7nqK
-	MjOyYltyntVDD4SFpUi6qVb0NQpfyNc=
-Date: Thu, 25 Jun 2026 09:59:42 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="piVgzSz4"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-84536e2857eso8164b3a.0
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 10:33:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782408819; x=1783013619; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=RJbO/x3r5vmrTPfYiw8IE6/+MJhDPl08JbIGC6PUlYc=;
+        b=piVgzSz4ezsnxgKZp1Uk0rOpIV1PP2BXDhse8SbXwxti14vsAACnottafyfvNWZySd
+         vZHPhtuk5isFOh6FU3jNAkTvwaG0KxWxVe3WqxWDE/pPvUuBvZ1cyyyv5aQbrvGWM2JJ
+         ajHMceSfp6SfvjUdXDh9T/HHjfIszKHwFjxZD8uDEx9hG2pDeZYPcGEEFRitCdXAxS47
+         OH2jpkGwuoYb/d6NZ4v2L5s/aaFaQiem9mCA4ADPAHHXnf92myDORzG7PuKWkHC7U9at
+         EMwJ5xihz5diIDxmMmuZfwRspzjHenF2JsFnhYWsEhl37RrFn0QnnwwudFt5OQv8DxCy
+         WE/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782408819; x=1783013619;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RJbO/x3r5vmrTPfYiw8IE6/+MJhDPl08JbIGC6PUlYc=;
+        b=UkkzkjEMfdN3PODZa8AyfeReLZ3fKfg8d8kSiT7UfpL8BsITOD63XD7qhRrR4Kz3dh
+         HHIUZWyC5EglZhnwFZkFQ+1/jfrylJp2oeg2gpY6d7YwfA92MO/aslIGl3MNhDG9xcc6
+         5Nv+s9eTspo4Ewjx1LbGhPtpf9eMknlf4m+9y4jUffyf/DsTfFayfx80rTrJJri3IPmY
+         qDxvDeA1ygkARJUma/Yf6AHKqbe91pW3nBP9xKI+IYtnyeGiHgB4/AOy3IteGlMJIpNK
+         pD2bi+oGj2sWUIDKmjtyJjkFGEGQ0rhV3p32NF4zkPtrWM56vBmbqqt2Xp80HyArLzFH
+         hz8Q==
+X-Gm-Message-State: AOJu0YydethfBY8+aR4TmiqBjJBh3WqFtTfOS8vGritfrQu+o0COTuwB
+	qJX6YeE6k0stplQpSYmAJCM0LuUJ4AS86nFioJDRFctqQ8zvZTCg7zfv
+X-Gm-Gg: AfdE7cnRIPXrqZ/H+roytCCYJdF3+DQICa5z1PJwtdXzgGxwu72IgJTfsgqusEEBRZP
+	UN0CO4AdUqnpg1KnPpfobzr2JsdQw/yymELxAEOi4lsTtDlKF44TCuQKz/TL00x6TNnLqEu1Hob
+	LYoJlraTIdOpZuycPOtOzHnHpgy5L3OgPrnKSCZxZlui+Vr6xMS/1Sw8ylTFrPmHyhE0i898pzB
+	WKA7wVsAzO3NXy5lamO2nsKmwojYOSLPrP5i/1b4ISy5TGm9r7JOGj64BfY6hm3ABlpw7Kh9Kj/
+	f0rhxPJXdPhpw/nG9sV1MX+/Vqa091sF3tq2uFTFPEbWqEvp7WOfCTmQBfhcguabcbvpNRdT+YF
+	kMIxEGe2PwenCJnn0SrVFLCa7pmMijBTpz288RpmNkDTR1KAOCp4PrYgEilbw+dv3biYJSTVp7M
+	/zoUolNhloPqtTTtFXEHqrqP1hQnTWOqSl+ocJvDsFNw==
+X-Received: by 2002:a05:6a00:4c95:b0:842:432e:b7ff with SMTP id d2e1a72fcca58-845b3ac78ecmr4455346b3a.17.1782408819390;
+        Thu, 25 Jun 2026 10:33:39 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845a4121fdbsm5082163b3a.51.2026.06.25.10.33.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jun 2026 10:33:38 -0700 (PDT)
+Message-ID: <b3dffc1f523e078df20e9171b0bccc74ddae53e3.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Preserve scalar zero spills for
+ stack reads
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Woojin Ji <random6.xyz@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Song Liu	 <song@kernel.org>, Yonghong
+ Song <yonghong.song@linux.dev>, Jiri Olsa	 <jolsa@kernel.org>, Emil
+ Tsalapatis <emil@etsalapatis.com>, John Fastabend	
+ <john.fastabend@gmail.com>
+Cc: bpf@vger.kernel.org
+Date: Thu, 25 Jun 2026 10:33:28 -0700
+In-Reply-To: <20260625-bpf-stack-var-off-zero-v1-v3-1-a068210a761b@gmail.com>
+References: <20260625-bpf-stack-var-off-zero-v1-v3-0-a068210a761b@gmail.com>
+	 <20260625-bpf-stack-var-off-zero-v1-v3-1-a068210a761b@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH dwarves v10 0/5] pahole: Encode true signatures in kernel
- BTF
-Content-Language: en-GB
-To: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <olsajiri@gmail.com>
-Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
- dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, kernel-team@fb.com
-References: <20260625020148.1883082-1-yonghong.song@linux.dev>
- <aj0KGx-5FwUbwGHc@krava> <1d7828aa-164f-4c36-9d5e-2eb2088ce5b4@oracle.com>
- <906ec2c1-e62b-47d8-a0bd-4d88df26c0c3@linux.dev>
- <3bdacbc7-8385-452a-9443-ee9cc03abd10@oracle.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <3bdacbc7-8385-452a-9443-ee9cc03abd10@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+On Thu, 2026-06-25 at 19:25 +0900, Woojin Ji wrote:
+> Stack reads can read back bytes that belong to a previously spilled scala=
+r
+> constant zero. Today mark_reg_stack_read() only treats STACK_ZERO bytes a=
+s
+> known zero bytes, so the destination register can become unknown even
+> though every byte in the read range is known to be zero. This can lead to
+> rejecting otherwise valid programs once the loaded byte is used as a
+> pointer offset.
+>=20
+> The original reproducer uses a variable-offset stack byte read emitted by
+> clang 22.1.6 at -O2/-O3 from a small helper-based BPF C program. Fixed
+> offset reads have a related mixed case as well: pure scalar-zero spill
+> reads are already handled, but a fixed read spanning both STACK_ZERO and
+> scalar const-zero STACK_SPILL bytes still falls back to unknown.
+>=20
+> Teach mark_reg_stack_read() to also consider STACK_SPILL bytes backed by =
+a
+> spilled scalar constant zero as zero bytes, and use that path for both
+> variable-offset stack reads and fixed-offset mixed reads. Keep the existi=
+ng
+> pure register-fill behavior unchanged.
+>=20
+> When a zero result depends on such a spill, mark the contributing stack
+> slots precise before accepting the const-zero result so pruning cannot
+> reuse a zero-spill state for a later non-zero spill state.
+>=20
+> No deployed-program regression is currently known, so target bpf-next.
+>=20
+> Assisted-by: opencode:gpt-5.5
+> Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
+> ---
 
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-On 6/25/26 9:17 AM, Alan Maguire wrote:
-> On 25/06/2026 16:26, Yonghong Song wrote:
->>
->> On 6/25/26 6:22 AM, Alan Maguire wrote:
->>> On 25/06/2026 11:59, Jiri Olsa wrote:
->>>> On Wed, Jun 24, 2026 at 07:01:48PM -0700, Yonghong Song wrote:
->>>>> Current vmlinux BTF encoding is based on the source level signatures.
->>>>> But the compiler may do some optimization and changed the signature.
->>>>> If the user tried with source level signature, their initial implementation
->>>>> may have wrong results and then the user need to check what is the
->>>>> problem and work around it, e.g. through kprobe since kprobe does not
->>>>> need vmlinux BTF.
->>>>>
->>>>> Majority of changed signatures are due to dead argument elimination.
->>>>> The following is a more complex one. The original source signature:
->>>>>     typedef struct {
->>>>>           union {
->>>>>                   void            *kernel;
->>>>>                   void __user     *user;
->>>>>           };
->>>>>           bool            is_kernel : 1;
->>>>>     } sockptr_t;
->>>>>     typedef sockptr_t bpfptr_t;
->>>>>     static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
->>>>> After compiler optimization, the signature becomes:
->>>>>     static int map_create(union bpf_attr *attr, bool uattr__is_kernel) { ... }
->>>>> In the above, uattr__is_kernel corresponds to 'is_kernel' field in sockptr_t.
->>>>> This makes it easier for developers to understand what changed.
->>>>>
->>>>> The new signature needs to properly follow ABI specification based on
->>>>> locations. Otherwise, that signature should be discarded. For example,
->>>>>
->>>>>       0x0242f1f7:   DW_TAG_subprogram
->>>>>                       DW_AT_name      ("memblock_find_in_range")
->>>>>                       DW_AT_calling_convention        (DW_CC_nocall)
->>>>>                       DW_AT_type      (0x0242decc "phys_addr_t")
->>>>>                       ...
->>>>>       0x0242f22e:     DW_TAG_formal_parameter
->>>>>                         DW_AT_location        (indexed (0x14a) loclist = 0x005595bc:
->>>>>                            [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_reg5 RDI
->>>>>                            [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_reg14 R14
->>>>>                            [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
->>>>>                            [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg14 R14)
->>>>>                         DW_AT_name    ("start")
->>>>>                         DW_AT_type    (0x0242decc "phys_addr_t")
->>>>>                         ...
->>>>>       0x0242f239:     DW_TAG_formal_parameter
->>>>>                         DW_AT_location        (indexed (0x14b) loclist = 0x005595e6:
->>>>>                            [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_reg4 RSI
->>>>>                            [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_reg3 RBX
->>>>>                            [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
->>>>>                            [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg3 RBX)
->>>>>                         DW_AT_name    ("end")
->>>>>                         DW_AT_type    (0x0242decc "phys_addr_t")
->>>>>                         ...
->>>>>       0x0242f245:     DW_TAG_formal_parameter
->>>>>                         DW_AT_location        (indexed (0x14c) loclist = 0x00559610:
->>>>>                            [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_breg4 RSI+0)
->>>>>                         DW_AT_name    ("size")
->>>>>                         DW_AT_type    (0x0242decc "phys_addr_t")
->>>>>                         ...
->>>>>       0x0242f250:     DW_TAG_formal_parameter
->>>>>                         DW_AT_const_value     (4096)
->>>>>                         DW_AT_name    ("align")
->>>>>                         DW_AT_type    (0x0242decc "phys_addr_t")
->>>>>                         ...
->>>>>
->>>>> The third argument should correspond to RDX for x86_64. But the location suggests that
->>>>> the parameter value is stored in the address with 'RSI + 0'. It is not clear whether
->>>>> the parameter value is stored in RDX or not. So we have to discard this funciton in
->>>>> vmlinux BTF to avoid incorrect true signatures.
->>>>>
->>>>> For llvm, any function having
->>>>>     DW_AT_calling_convention        (DW_CC_nocall)
->>>>> in dwarf DW_TAG_subprogram will indicate that this function has signature changed.
->>>>> But for non DW_CC_nocall functions, it is possible that true signature still not
->>>>> available due to locations. So every functions will be checked.
->>>>>
->>>>> I did experiment with latest bpf-next. For x86_64, there are 69103 kernel functions
->>>>> and 875 kernel functions having signature changed. A series of patches are intended
->>>>> to ensure true signatures are properly represented. Eventually, only 20 functions
->>>>> cannot have true signatures due to locations.
->>>>>
->>>>> For arm64, there are 863 kernel functions having signature changed, and
->>>>> 108 functions cannot have true signatures due to locations. I checked those
->>>>> functions and look like llvm arm64 backend more relaxed to compute parameter
->>>>> values.
->>>>>
->>>>> For full testing, I enabled true signature support in kernel scripts/Makefile.btf like below:
->>>>>     -pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=attributes
->>>>>     +pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=attributes --btf_features=+true_signature
->>>>>
->>>>> See individual patches for details.
->>>> hi,
->>>> I tried this version and had to choose another function, because "arp_process"
->>>> suddenly started to show args registers in proper order ;-)
->>>>
->>>> now I checked "stop_cpus" function which is added to btf after this change,
->>>> I attached the dwarf dump below
->>>>
->>>> "stop_cpus" has DW_CC_nocall set, so it has signature_changed=true and I see the
->>>> function ends up in the btf_encoder with optimized_parms=1
->>>>
->>>> but we do not skip such functions now, it seems like we should?
->>>>
->>>> I tried the attached change below and it removes all the extra functions
->>>> that were added in the btf with this change
->>>>
->>>> btw I can't see any other use for optimized_parms flag, it seems to be
->>>> just set and never used.. so I wonder I'm missing something
->>>>
->>> Thanks for looking at this!
->>>
->>> Yonghong can correct me if I have this wrong, but I think optimized parameters
->>> are okay, but only if true signature is enabled, so omitting functions with
->>> optimized parameters should probably only happen if !true_signature. so for
->>> the change below, the modification to btf_encoder__add_saved_funcs() is right
->>> but I don't think the modification to btf_encoder__add_true_signature() is needed.
->> I agree with Alan in the above.
->>
->> There is no need to make change in btf_encoder__add_true_signature().
->> This is for true_signature, optimized parameters have been removed:
->>
->> +               /* No location info/optimized + reordered means optimized out. */
->> +               if (ftype->reordered_parm && (!param->has_loc || param->optimized)) {
->> +                       state->nr_parms--;
->> +                       continue;
->> +               }
->>
->> so we should not add true_state->optimized_parms checking in btf_encoder__add_true_signature().
->>
->> For adding state->optimized_parms in btf_encoder__add_saved_funcs(), with true_signature disabled,
->> we already have a failure message:
->>     stop_cpus : skipping BTF encoding of function due to unexpected register usage for parameter
->> The expectation is for three parameters, the register usage should be
->>     cpumask: RDI, fn: RSI, arg: RDX
->> but since 'fn' is optimized away, the expected reg usage does not match the actual reg usage.
->>
->> We could add:
->>    +        if (state->optimized_parms)
->>    +            skip_reason = "optimized parms\n";
->> to have another message to indicate possible reason is due to optimized parms.
->> But it is not critical as we already have one message.
->>
->> I can have a follow up for this.
->>
-> I tried pushing just the btf_encoder__add_saved_funcs() hunk from Jiri's diff to CI [1];
-> it looks like we end up omitting a lot more functions than before for aarch64 (including
-> some kfuncs) for both gcc and clang kernel builds, and we see an x86_64 test failure:
->
-> 5: clang_parm_memory.sh
-> Validation of BTF encoding of true_signatures.
->     BTF for foo missing; the stack-passed aggregate was likely rejected
-> Test ./clang_parm_memory.sh failed
-> Test data is in /tmp/clang_parm_memory.sh.DV7PyO
+[...]
 
-I actually tried clang_parm_memory.sh with clang22 and clang23. Both of them
-passed in my local run. Not exactly sure what is the issue. Let me debug this.
+> @@ -3929,7 +3958,10 @@ static int check_stack_read_var_off(struct bpf_ver=
+ifier_env *env, struct bpf_reg
+> =20
+>  	min_off =3D reg_smin(reg) + off;
+>  	max_off =3D reg_smax(reg) + off;
+> -	mark_reg_stack_read(env, ptr_state, min_off, max_off + size, dst_regno)=
+;
+> +	err =3D mark_reg_stack_read(env, ptr_state, min_off, max_off + size,
+> +				  dst_regno);
 
-Could you share how to test with pahole CI? So I can resolve all issues in CI
-before submit another revision if needed.
+Nit: no need to line break, the line width is 100 (here and elsewhere).
 
->
-> The optimized_parms flag is a bit too broad I think; it is set whenever we are
-> missing location info for _any_ parameter; this may be overly aggressive for clang in
-> particular which seems to have more missing location info.
->
-> [1] https://github.com/alan-maguire/dwarves/actions/runs/28173261168
->   
->>>   
->>>> jirka
->>>>
->>>>
->>>> dwarfdump:
->>>>
->>>> 0x016f4b1b:   DW_TAG_subprogram
->>>>                   DW_AT_low_pc    (0xffffffff813e0fc0)
->>>>                   DW_AT_high_pc   (0xffffffff813e1133)
->>>>                   DW_AT_frame_base        (DW_OP_reg7 RSP)
->>>>                   DW_AT_GNU_all_call_sites        (true)
->>>>                   DW_AT_name      ("stop_cpus")
->>>>                   DW_AT_decl_file ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
->>>>                   DW_AT_decl_line (464)
->>>>                   DW_AT_prototyped        (true)
->>>>                   DW_AT_calling_convention        (DW_CC_nocall)
->>>>                   DW_AT_type      (0x016e94c5 "int")
->>>>
->>>> 0x016f4b36:     DW_TAG_formal_parameter
->>>>                     DW_AT_location        (0x0065ad9e:
->>>>                        [0xffffffff813e0fc5, 0xffffffff813e0fed): DW_OP_reg5 RDI
->>>>                        [0xffffffff813e0fed, 0xffffffff813e111e): DW_OP_reg14 R14
->>>>                        [0xffffffff813e111e, 0xffffffff813e1127): DW_OP_GNU_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
->>>>                        [0xffffffff813e1127, 0xffffffff813e1133): DW_OP_reg14 R14)
->>>>                     DW_AT_name    ("cpumask")
->>>>                     DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
->>>>                     DW_AT_decl_line       (464)
->>>>                     DW_AT_type    (0x016f3242 "const cpumask *")
->>>>
->>>> 0x016f4b46:     DW_TAG_formal_parameter
->>>>                     DW_AT_name    ("fn")
->>>>                     DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
->>>>                     DW_AT_decl_line       (464)
->>>>                     DW_AT_type    (0x016f2ca5 "cpu_stop_fn_t")
->>>>
->>>> 0x016f4b52:     DW_TAG_formal_parameter
->>>>                     DW_AT_location        (0x0065ae0d:
->>>>                        [0xffffffff813e0fc5, 0xffffffff813e0ff2): DW_OP_reg4 RSI
->>>>                        [0xffffffff813e0ff2, 0xffffffff813e10e4): DW_OP_reg3 RBX
->>>>                        [0xffffffff813e10e4, 0xffffffff813e1127): DW_OP_GNU_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
->>>>                        [0xffffffff813e1127, 0xffffffff813e112e): DW_OP_reg3 RBX
->>>>                        [0xffffffff813e112e, 0xffffffff813e1133): DW_OP_GNU_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value)
->>>>                     DW_AT_name    ("arg")
->>>>                     DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
->>>>                     DW_AT_decl_line       (464)
->>>>                     DW_AT_type    (0x016e858f "void *")
->>>>
->>>>
->>>>
->>>>
->>>> ---
->>>> diff --git a/btf_encoder.c b/btf_encoder.c
->>>> index 38455a4c6b6b..cbc5063a6280 100644
->>>> --- a/btf_encoder.c
->>>> +++ b/btf_encoder.c
->>>> @@ -1564,7 +1564,8 @@ static int btf_encoder__add_true_signature(struct btf_encoder *encoder,
->>>>             */
->>>>            if (true_state->unexpected_reg ||
->>>>                true_state->uncertain_parm_loc ||
->>>> -            true_state->ambiguous_addr)
->>>> +            true_state->ambiguous_addr ||
->>>> +            true_state->optimized_parms)
->>>>                continue;
->>>>            err = btf_encoder__add_func(encoder, true_state);
->>>>            if (err < 0)
->>>> @@ -1656,6 +1657,8 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
->>>>                skip_reason = "reordered parameters\n";
->>>>            if (state->elf->ambiguous_addr)
->>>>                skip_reason = "ambiguous address\n";
->>>> +        if (state->optimized_parms)
->>>> +            skip_reason = "optimized parms\n";
->>>>              if (skip_reason) {
->>>>                btf_encoder__log_func_skip(encoder, saved_fns[i].elf,
-
+> +	if (err)
+> +		return err;
+>  	check_fastcall_stack_contract(env, ptr_state, env->insn_idx, min_off);
+>  	return 0;
+>  }
