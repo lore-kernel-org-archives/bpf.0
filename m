@@ -1,44 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887373B19B4;
-	Thu, 25 Jun 2026 11:07:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02272882BE
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 11:19:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782385671; cv=none; b=eOOcJVQnRhIzPcFr5dV6fRctKPtD35ZVaF6s+ISfnph7BsEtFJH/BLveUonL5XN13OnVHwgxQV9pYxk5venIuZZur3gI4FyvTbtaY+uqCp8i2WMs3uv4p9qeoMTyP0BMpm9708cX1h2M0Ss0iYGJ1L1bt/aXAntC1nWMHeJa9ao=
+	t=1782386374; cv=none; b=ckVkVlhjmdCf27t6YDr28VGmOyzLn4zPv7d8h+lwJ3uLLn7jWTS0xn8XCMkUCYV1uGXnxGT+gZ9zBQrfuHTlQ4mUTJt9J+iajPNEsuBXkEbAhTGsDMWRv6I02I6KJ3+hCrAsce1pLWlN2aF8lBAqdLJR6n7/TFq8lAvOQ8QSMI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782385671; c=relaxed/simple;
-	bh=ZaGQHrsu5B4E8/yrF6teUXrBsceqt6AC7Fd5+8dUGwQ=;
+	s=arc-20240116; t=1782386374; c=relaxed/simple;
+	bh=9GnjKZAAwWOJ6iOjqWFv8xkXbcwkJumenPFelkLST9E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cEwEU0AdN747eOeJ1dnp06Y3uHR6L5XKXZaR8f8nJdiGVwsR+hVWI2znjPMXmmQbmK0EyA3fAPA0Zs+96tYEvLMMuz4ERe5yNMOZxRKG44lTHZudxxsJfGDHTlLn4KeixKz7CfF8tPGcyLP8E8T3G06mNWW+SKXb6fGzr0IB9UQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0l8fEeLl; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=Up7ghjC+k8+KEebCgv+VA0IqMBmZfieug0jPHk/GSVMZTERmHCx9vWNr1mlWDxa9hv5Pp/B3pP2XpVcLD7t44X+x0MRrjyHAEzOmu9UsBe97VTLlXkW8nG5iwin+P84cXQhQEpAPjyyKo7Q6qvGlGXbWdVc85AUTWNetjodf4dY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=axDN3n54; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0l8fEeLl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9647D1F000E9;
-	Thu, 25 Jun 2026 11:07:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1782385670;
-	bh=/nHrn+mrSRVOJ20fuBj9leaUr9UbxIZAjuQRBG7RaB4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=0l8fEeLlQZLAeyv9XDhXjG1pgfb4Ad+Tu/Do4GcRbYF7+8CvGTZWEOpOy9yF05tuw
-	 srl0FXaUJMnsBIOSMOUX7uejKjbN6qQ3aQC66jZBMB8oXJrVAlZ+W8GOp4Jiz3vrS9
-	 OcNYqZ3kllMoc/yO/M1Kh1acKeX5xiNWwgXdYgrQ=
-Date: Thu, 25 Jun 2026 12:06:38 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Cai Xinchen <caixinchen1@huawei.com>
-Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
-	miklos@szeredi.hu, amir73il@gmail.com, paul@paul-moore.com,
-	jmorris@namei.org, serge@hallyn.com, stephen.smalley.work@gmail.com,
-	omosnace@redhat.com, bboscaccy@linux.microsoft.com,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-unionfs@vger.kernel.org,
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-	bpf@vger.kernel.org, lujialin4@huawei.com
-Subject: Re: [stable/linux-6.18.y 2/2] selinux: fix overlayfs mmap() and
- mprotect() access checks
-Message-ID: <2026062529-squealing-suffice-ed61@gregkh>
-References: <20260622031416.2663747-1-caixinchen1@huawei.com>
- <20260622031416.2663747-3-caixinchen1@huawei.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="axDN3n54"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782386372;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=52ni/i+jk3KpB5D9iOoetAdp8/OomJTmilYdSF0nb8k=;
+	b=axDN3n54i0K0kIcNIkGqHlD5OlGVacuXYZssGABlUs+pBfrdysOLW+jhXXo0CoHZcD596J
+	BcA02SDFJ0tWTKJcAZUHsEb3d/sfsqndSmCP7NE1OXKHUKrCM9xQT6TcwGr6ZgumYWl9So
+	vLvEh5LjeBCBDnuC0xOz7+E6eK/+z74=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-407-Nl7xn4FrNpmOfoP9vGStmg-1; Thu,
+ 25 Jun 2026 07:19:25 -0400
+X-MC-Unique: Nl7xn4FrNpmOfoP9vGStmg-1
+X-Mimecast-MFC-AGG-ID: Nl7xn4FrNpmOfoP9vGStmg_1782386364
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 658DF180897A;
+	Thu, 25 Jun 2026 11:19:24 +0000 (UTC)
+Received: from fedora (unknown [10.44.33.191])
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 0425330A8;
+	Thu, 25 Jun 2026 11:19:20 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Thu, 25 Jun 2026 13:19:23 +0200 (CEST)
+Date: Thu, 25 Jun 2026 13:19:19 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 02/13] uprobes/x86: Remove struct uprobe_trampoline
+ object
+Message-ID: <aj0Ot99QdU6luuGy@redhat.com>
+References: <20260526205840.173790-1-jolsa@kernel.org>
+ <20260526205840.173790-3-jolsa@kernel.org>
+ <ajvrZ_mMXnKrWf7h@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,35 +64,34 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260622031416.2663747-3-caixinchen1@huawei.com>
+In-Reply-To: <ajvrZ_mMXnKrWf7h@redhat.com>
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-On Mon, Jun 22, 2026 at 11:14:16AM +0800, Cai Xinchen wrote:
-> From: Paul Moore <paul@paul-moore.com>
-> 
-> The existing SELinux security model for overlayfs is to allow access if
-> the current task is able to access the top level file (the "user" file)
-> and the mounter's credentials are sufficient to access the lower
-> level file (the "backing" file).  Unfortunately, the current code does
-> not properly enforce these access controls for both mmap() and mprotect()
-> operations on overlayfs filesystems.
-> 
-> This patch makes use of the newly created security_mmap_backing_file()
-> LSM hook to provide the missing backing file enforcement for mmap()
-> operations, and leverages the backing file API and new LSM blob to
-> provide the necessary information to properly enforce the mprotect()
-> access controls.
-> 
-> Cc: stable@vger.kernel.org
-> Acked-by: Amir Goldstein <amir73il@gmail.com>
-> Signed-off-by: Paul Moore <paul@paul-moore.com>
-> Signed-off-by: Cai Xinchen <caixinchen1@huawei.com>
-> ---
->  security/selinux/hooks.c          | 242 ++++++++++++++++++++++--------
->  security/selinux/include/objsec.h |  11 ++
->  2 files changed, 189 insertions(+), 64 deletions(-)
+On 06/24, Oleg Nesterov wrote:
+>
+> Perhaps we can later optimize this code a bit? I mean something like
+>
+> 	start_reachable = ...;
+> 	end_reachable = ...;
+>
+> 	VMA_ITERATOR(vmi, mm, start_reachable);
+>
+> 	for_each_vma(vmi, vma) {
+> 		if (!vma_is_special_mapping(...))
+> 			continue;
+> 		if (vma->vm_start > end_reachable)
+> 			break;
+> 		return vma;
+> 	}
 
-Again, what is the git id?
+I have looked into include/linux/mm.h, we have for_each_vma_range(). So I guess
 
-thanks,
+	for_each_vma_range(vmi, vma, end_reachable) {
+		if (vma_is_special_mapping(...))
+			return vma;
+	}
 
-greg k-h
+should work.
+
+Oleg.
+
