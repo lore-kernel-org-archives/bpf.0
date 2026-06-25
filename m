@@ -1,55 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74D11C861D;
-	Thu, 25 Jun 2026 02:33:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E1713D891;
+	Thu, 25 Jun 2026 02:45:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782354808; cv=none; b=ebv2HHnuVnFcE74Phas8ZNm+jFEuM+1AzC9K6JCWYu55BzdN3AeJd/4lAYwlZO1UBAg7QAEjBJO+u+axRH/yzkuEQS9O7BZ+PHGvwgniWK3CM/Mo1AsD9luv+yMbTnKaswySQxKyeBPVsH3pflFMQbOVt44abLpRvRcfHvYeXTM=
+	t=1782355536; cv=none; b=QG37CAI9jBpl11gX9YyZA0u8QouxqjlZb4e9/1Ns1xMGKZbGlgBUaRZYfjJ/hc4kZoAEF8oZEXTThgNfKoWdhBEtw6eyW9aDOS5PBdQtYo9s2TjS2EUlwdvwYg/1Y+4NOjkeBZKYPtZZP0D7iUWmiBbg1pNsklRb/dvhnL09amw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782354808; c=relaxed/simple;
-	bh=WKlTbfrUNwUFyGpobav8CApD6v5B/qIAYIViXKGD7u8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iMVsSB+1a2bJzzZjQHBSWGNxSakGO3JTD7xuwG/e/2zKR2qKluDKK7PWWGBXN8uOTd3b1b5JNOio0fbqGkatPePB92tWLJPPMMOTPw+EPwz2/OBzAoSB1Agkd+y1RIblXej7py63/ZcWUAEYpMYxvK0Vi/mIzayL31M7thuUYzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYQocmNE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782355536; c=relaxed/simple;
+	bh=HsIsvkCBdswzkkwm80TK52fKpjineNgdx3hZ57XP61E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qDtmAHMy5pzjqOkw44ElB/zuP2L7bOjM5hm4O6KtH0G59ikGdmaQZVmRAd+qhHTU2500JhVD8cc8tEk864zYlOeNWbZxXbxqiGJi268s7eEl/RS63EBJEt1JBbI9vfKaQW9PHQALiya7RWxFlsudsDqsCe54MQsk1zM1QgfYiPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YQUiPYwC; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYQocmNE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 303D71F000E9;
-	Thu, 25 Jun 2026 02:33:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782354807;
-	bh=gAp5DqBsrf+qqTJrCHBvd6moSshxYS3r3vVwtm7UlQU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=iYQocmNEMzyuFLh2RGCIPVlHqIqg1hTe+T8GaNwVV15IZwsj/PUgyaDpScjdfAwN9
-	 SuX2DwknSxTky/q3WUUiu9hPz7r9cSEC603Dz4r/ZPi9SyEwz5NA86awUWno0Pm8+6
-	 Jl5O/7nTg+qGtHq36kw8JUSNza+Neer8xIJQKZLpkb3aK0PA7tyW3tRyYcWolqcGiQ
-	 27aqd75O4senmoIaBXjd39TkFvNf37NHZtmWFkruUOt18UD/vLJKnsvl8SsfTGJce8
-	 1g/tTQs0tefhfnKwa+TOz/BIKI+CiNImeywAHhUEoOXmCgicsK5r/JS+gmjVQEwq6I
-	 LpFZ27jiS/JRQ==
-Date: Wed, 24 Jun 2026 19:33:26 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
- stfomichev@gmail.com, pabeni@redhat.com, horms@kernel.org,
- tushar.vyavahare@intel.com, kerneljasonxing@gmail.com
-Subject: Re: [PATCH net-next] selftests/xsk: preserve UMEM view in bidi test
-Message-ID: <20260624193326.295e3711@kernel.org>
-In-Reply-To: <20260623091008.1046547-1-maciej.fijalkowski@intel.com>
-References: <20260623091008.1046547-1-maciej.fijalkowski@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YQUiPYwC"
+Message-ID: <951feedc-4764-42a8-886a-b2e7dfe75cf9@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782355532;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j7zz5j64VzwH9RWYlZ65le/ZbRuht5ZmZ+Z29QkrcwI=;
+	b=YQUiPYwCeuFPWCjth8pOY+R+Q31ZyCVQY6g7m+VTKjgfCH2ifPfJy7Sb1Ynh5PpeI69KNz
+	9K0Em0MrhJb5JbZVppCTYs3A8t4IZNbjlNKomLlWS/RhcMhouW063WAXONcxou3FSoYKjd
+	MfTnJQ8E3A7DM0N0eg3TdZyJS36qvQ0=
+Date: Thu, 25 Jun 2026 10:45:22 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH bpf-next v7 06/11] libbpf: Add support for global percpu
+ data
+Content-Language: en-US
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-patches-bot@fb.com
+References: <20260622143557.22955-1-leon.hwang@linux.dev>
+ <20260622143557.22955-7-leon.hwang@linux.dev>
+ <CAEf4BzZSeMSMnuYdLvEfb7-pmbthjU3J7W3QB4q9-WN_4+QrbA@mail.gmail.com>
+ <8f06ad4d-d003-4671-9dd4-24b5c7e4b806@linux.dev>
+ <CAEf4BzYc5n9GQEBoSs3kqzM7DuPaYuZ5q+BzXNMbrF6sV1DLmA@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAEf4BzYc5n9GQEBoSs3kqzM7DuPaYuZ5q+BzXNMbrF6sV1DLmA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 23 Jun 2026 11:10:08 +0200 Maciej Fijalkowski wrote:
-> Subject: [PATCH net-next] selftests/xsk: preserve UMEM view in bidi test
+On 25/6/26 00:45, Andrii Nakryiko wrote:
+> On Tue, Jun 23, 2026 at 9:14 PM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>
+>> This was suggested by you in v3:
+>> https://lore.kernel.org/bpf/CAEf4BzY9KeVeo2+6Ht1v3rL6UdwNxABZCSK1OZ_sD8qhpYZaeQ@mail.gmail.com/
+>>
+> 
+> ah, the dangling pointer in skeleton that needs clearing, I forgot
+> already :) ok, I don't mind mprotect(), it just was a new case that no
+> other map followed, so I was curious if we can avoid deviations. But
+> that brings back the KCONFIG map question, can you please check what's
+> happening for it? Maybe we should do the same mprotect instead of
+> dangling pointer (if we have dangling pointer, of course).
+> 
 
-Do you want it in net? Either way - we'll need a rebase
+Looking at prog_tests/skeleton.c, skel->kconfig is NULL before loading,
+then becomes a read-only mmaped pointer after loading.
 
-> Signed-off-by: Maciej Fijalkowski maciej.fijalkowski@intel.com
+So, skel->kconfig is not a dangling pointer after loading.
 
-missing <> around the email 
+It looks good to mprotect() skel->percpu.
+
+Thanks,
+Leon
+
+>>>>         } else if (map->mmaped) {
+>>>>                 munmap(map->mmaped, mmap_sz);
+>>>>                 map->mmaped = NULL;
+>>>> @@ -10806,16 +10847,19 @@ int bpf_map__fd(const struct bpf_map *map)
+>>>>
+
