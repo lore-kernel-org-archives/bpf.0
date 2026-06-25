@@ -1,261 +1,266 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1E012C534;
-	Thu, 25 Jun 2026 05:27:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D0E01624D5
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 06:05:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782365250; cv=none; b=Lk67M5mE6SWT6Qp28F5kt3qvND2VBbPl13YkZ0bixBWldViJiC2PV2JNUCaXn+GNm7kAVaZ6YI54xCtxzLMaTtQiV7Rmv6aJF1Eu8JAp4GIagyvx+1o9tdoWtdbFHmDrc8Clq5DA5biDAeMeo424y67BjRQPYY46UNqPUFvaZnQ=
+	t=1782367558; cv=none; b=oywbxMX1/2kptvaKJA+WaqKTutwoTIX2Dr5MGiyyW071wl+E5EzQRT+mT3gAciu8nSdkVzkaxNfs008AMg2aLvaosL9kW5hEYfIiZnaBtTMDr9Q/gTTubjGyG9jHgu/X7PD2U7YhExrSnR0Bq5PVCCBC6xrGdvTmT2QhwQUla1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782365250; c=relaxed/simple;
-	bh=16gLOvVg1+I9vrM7P9jWzIPMeQh/IJhgDY9+aNOXBAM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JeJwlMdoSwLVyEJ8PhaDkltfAS5Iqn3ug6ymXeUjLIxnHRwe0brozLF1XHsMc4L3E2mpeJbD1R0Iaj7t4A0kqRpBhzRfCmZrL1gRllxinVP0WrICOIoLkExV3jcfw1bYTIdiq7mAvTqH3wloeB23JIUiFSeDCCT4yeTMx1cWDzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UMfGlucx; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782367558; c=relaxed/simple;
+	bh=kvk0+MVwbaR4ux60aCHSzqr7yBusRk1ryvuniX7hjq8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=p/70H5wLn6KVxGB3UqzuaiG7ZqN4FfTftpNfqX0XFKnvn+dqEfeF3fBZ4loMPvA2XDCSz5su8Bum0Bk0PGRpW/KhrI4jYdVVzJSXp+c4egdWeKfdIPr2HJSiUH2KKTqeB3DpM0ZJOFEQXnsPcDztbiWzkAmnGXMqsSYowFY5CDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P4XdTp/L; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UMfGlucx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B7531F000E9;
-	Thu, 25 Jun 2026 05:27:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782365248;
-	bh=16gLOvVg1+I9vrM7P9jWzIPMeQh/IJhgDY9+aNOXBAM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=UMfGlucxjCtnoosPgwHb0AUMixwX+WJ+i4FsrBedZL55zbcOs5lBJ1+R0wNt9bZpG
-	 dw3r7UHuCmhwawC6FjPIAmf2C8GdgV33ptgxNQLw5nvQtfg1nO6WaMDDydxPYO1R9g
-	 wKJyo4XyGTUfN53RX0t1pMTaIuXOphmH+RM8POA26SvE223MFAZlj80wyphGDYEThn
-	 9p+HptNmFNo1hOvR7ECRYbnRBbHXb5JII4/BSBVdIB18aMom9YNoXfSd14Efu3oEO6
-	 94rcJ8AQR0hcYlEI0Vt9urNhvqUYiW307twuZR1kIuS95TicAFKMKO/TBgOXKfJisy
-	 glckMWm75eQog==
-Message-ID: <529a9856-4a0d-4db0-9c97-43c0c462e396@kernel.org>
-Date: Thu, 25 Jun 2026 14:27:17 +0900
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P4XdTp/L"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8422f395a4aso450760b3a.0
+        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 23:05:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782367556; x=1782972356; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=68KcRpJXcNL6iuSfsYKnlE4wSj5i2OanVCOHmJ6NHSU=;
+        b=P4XdTp/LNwlyk18iukOPt/vqvL0mvMwQK/2R4ANpblhkZGzEANA0ByGH1cXHdCcE81
+         wGoKo0M2n+kQF82zgnwn1Zk6BmUss60FC0VPtxELZ3ZRvrQz2nyaI1AxtDt2StY1cKEH
+         ScgygZAFO1TBEa3Q2K5tFbgRGrVpq28YiyvufJJTZGzi81VaL4eh3e77D2hOXCl6mPbg
+         WfLs+m1YUoHjC7CSnUregPE16s8UUAOL5t4x8JtaLcOCQbZJ36lscg8MBYg5jtouShDg
+         EOlqDV4+WjIxbinNKwSlaw6+KMvwdGlCOAB7m8G5tnFmHzDhg84VxuwhQ8n0jbgHE6hW
+         YFwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782367556; x=1782972356;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=68KcRpJXcNL6iuSfsYKnlE4wSj5i2OanVCOHmJ6NHSU=;
+        b=HdIhP1itoj3zwWIJIpj04Gyq9qiBWYKiafT1/oA17TdWZq5iKc1xhxs0phvHX9J7IP
+         /Z0odkoMdlff5Mn/vdAIemFOpNbXXfPEoOVnN8sj1I4SlRp1uE7SE7JW0XZUi0qiTi7Z
+         vVyIQyl2KpXEHhmB8QFZ+8t1tzqVMeuD1fg/ecFIeNSFSnT2U81+TVC9BBJshkSy6grB
+         u9uGVmHvadaK3tsbDNnxhv4m9tKR9AXl2gZNjlJ0PjqdcWFQ3xs5yllGxpLaYGWUG4vw
+         VqRAgeYapkGxD+nZQXSgQWHjLF6HA5CLs5LojvaeQQ28MKJg/2gJpUfUD6gq7LjYFrmt
+         Gl2Q==
+X-Forwarded-Encrypted: i=1; AHgh+RrB2eRh23KVpjkSDNFfw2nK3CgNyMluVrCOOf1qGbEK1gG8lshQ/Mv8MBAQ5OJ3TEEEqk0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7bsWA0jGXntnm/asrnAZ8J8+LeQJkuqrRV7B8imjg61Og0hB9
+	vKsLHSnQHR21WrXMIVfe11Y1N1gv4zySiz83PZEs3Hvceiev2AGgJa9Z
+X-Gm-Gg: AfdE7clSPr/CNa0FIjf3ZN4lo4dTfxvA1+q/YCeF/ICont8jIFF7wb/S3gJxf44b15x
+	q4SZhl9e4ZWr9loUourDTYYX+jwm2y5hVCqzaax5nnlSywczqtjkbEd20CpN6cWQl7AxTvyeBf3
+	hsqBToq9p3CQTpvIzOK8V0q4pF/b6mDzIcTW45CySMK241ACYsOLUfOoKZ4vWV8snnWaBG+rfNg
+	k40U2CFhhxyfShwMNaF7sVyod6SGtr0bxeB/VTHw/oBIcKr9bZMqVN8jh7YTml1+U8ZWi01QEqp
+	CuU6eZlxpARYOYGeKkekz3eKyV9xZk886UFfLQS39Wr3PqV/pEEabYMjEsx5qznTJGjlQ6ojgSa
+	+auRnkekvzJh0L5+1yWI4Bi9587BvKv66k1/o5VK9yuxnnSL6yNKvg8DJNh68t21Z7LcMEa23Ki
+	LRJM9wxyQSrZpP4MtAyTmde0KCZlmiexaXM1EDzBbjP/84MFA5havX
+X-Received: by 2002:a05:6a00:ab09:b0:7e8:3fcb:9b03 with SMTP id d2e1a72fcca58-84591cba65cmr10573267b3a.25.1782367555930;
+        Wed, 24 Jun 2026 23:05:55 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845a3ec0ec9sm3887798b3a.0.2026.06.24.23.05.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2026 23:05:55 -0700 (PDT)
+Message-ID: <40a445e92a18ba6325081ae2be784bf0bdd45052.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 11/17] bpf: Report Call Type Safety argument
+ errors
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
+Date: Wed, 24 Jun 2026 23:05:46 -0700
+In-Reply-To: <20260619205934.1312876-12-memxor@gmail.com>
+References: <20260619205934.1312876-1-memxor@gmail.com>
+	 <20260619205934.1312876-12-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH for-next v3 7/9] mm/slab: introduce kfree_rcu_nolock()
-To: XIAO WU <xiaowu.417@qq.com>, Vlastimil Babka <vbabka@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
-References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
- <20260615-kfree_rcu_nolock-v3-7-70a54f3775bb@kernel.org>
- <tencent_45CAE878B5922990DB102BE05A1BAD50DA09@qq.com>
- <e54ce8be-9480-4583-9c6a-d0dbe1378f53@kernel.org>
- <tencent_12A1049445F2CE248F20CB235AC111353A0A@qq.com>
-Content-Language: en-US
-From: Harry Yoo <harry@kernel.org>
-In-Reply-To: <tencent_12A1049445F2CE248F20CB235AC111353A0A@qq.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------HHB5JammkAG9i5v0ifUbiioD"
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------HHB5JammkAG9i5v0ifUbiioD
-Content-Type: multipart/mixed; boundary="------------5yZ5NYuEVU4HrXYvVZYNisDF";
- protected-headers="v1"
-From: Harry Yoo <harry@kernel.org>
-To: XIAO WU <xiaowu.417@qq.com>, Vlastimil Babka <vbabka@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
-Message-ID: <529a9856-4a0d-4db0-9c97-43c0c462e396@kernel.org>
-Subject: Re: [PATCH for-next v3 7/9] mm/slab: introduce kfree_rcu_nolock()
-References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
- <20260615-kfree_rcu_nolock-v3-7-70a54f3775bb@kernel.org>
- <tencent_45CAE878B5922990DB102BE05A1BAD50DA09@qq.com>
- <e54ce8be-9480-4583-9c6a-d0dbe1378f53@kernel.org>
- <tencent_12A1049445F2CE248F20CB235AC111353A0A@qq.com>
-In-Reply-To: <tencent_12A1049445F2CE248F20CB235AC111353A0A@qq.com>
-
---------------5yZ5NYuEVU4HrXYvVZYNisDF
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-
-
-On 6/22/26 11:56 PM, XIAO WU wrote:
-> Hi Harry,
+On Fri, 2026-06-19 at 22:59 +0200, Kumar Kartikeya Dwivedi wrote:
+> Augment selected helper and kfunc argument-contract failures with Call Ty=
+pe
+> Safety reports. Keep the existing terse verifier messages and add reason,
+> source context, causal register or stack-argument history, and targeted
+> suggestions.
 >=20
-> On Mon, Jun 22, 2026 at 02:28:44PM +0900, Harry Yoo wrote:
->> On 6/21/26 9:29 AM, XIAO WU wrote:
->> > I was able to reproduce this in QEMU with KASAN.=C2=A0 The trigger i=
-s as
->> > simple as passing a large (>8KB) kmalloc buffer to the new function.=
-
->>
->> Thanks for taking a look, but this was intentional.
->>
->> I should have documented that only kmalloc_nolock() ->
->> kfree_rcu_nolock() is allowed and kmalloc() -> kfree_rcu_nolock()
->> is not allowed (yet).
->>
->> Since kmalloc_nolock() does not support large kmalloc, the warning
->> is not supposed to trigger. That is why I added only debug warnings.
+> Cover helper register-type mismatch, helper and kfunc non-NULL pointer
+> requirements, release-helper ownership requirements, scalar and constant =
+kfunc
+> arguments, trusted and RCU pointer contracts, kfunc memory arguments,
+> memory/length pairs, refcounted kptrs, constant strings, and IRQ flag sta=
+ck
+> arguments.
 >=20
-> Thank you very much for taking the time to explain =E2=80=94 I really
-> appreciate it, especially since I'm still learning my way around the
-> mm/ subsystem.=C2=A0 You are absolutely right that kmalloc_nolock() ret=
-urns
-> NULL for sizes above KMALLOC_MAX_CACHE_SIZE, so a proper caller using
-> the kmalloc_nolock() =E2=86=92 kfree_rcu_nolock() pairing would never h=
-it this.
->=20
-> I did notice one small thing that I wanted to gently bring up, though.
-> Please forgive me if I'm missing something obvious here.
->=20
-> When I was reading through the surrounding code to understand the
-> pattern better, I noticed that kfree_nolock() =E2=80=94 which has the s=
-ame
-> "only for kmalloc_nolock()" constraint (documented in the comment at
-> mm/slub.c:6828-6835) =E2=80=94 actually does check for a NULL slab:
->=20
-> =C2=A0 void kfree_nolock(const void *object)
-> =C2=A0 {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ...
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 slab =3D virt_to_slab(object);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (unlikely(!slab)) {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 WARN_ONCE(1, "la=
-rge_kmalloc is not supported by kfree_nolock()");
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s =3D slab->slab_cache;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ...
->=20
-> So kfree_nolock() gracefully returns with a warning even though it too
-> expects only kmalloc_nolock() callers.=C2=A0 That pattern seemed really=
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
 
-> sensible to me =E2=80=94 it costs almost nothing and prevents a panic i=
-f
-> someone ever passes the wrong pointer (which they shouldn't, but as you=
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-> mentioned, the constraint isn't documented on kfree_call_rcu_nolock()
-> yet).
->
-> I also wondered about the difference between WARN_ONCE (used in
-> kfree_nolock) and VM_WARN_ON_ONCE (used in kfree_call_rcu_nolock).=C2=A0=
-If
-> I understand correctly, VM_WARN_ON_ONCE compiles away entirely on
-> production kernels without CONFIG_DEBUG_VM, which would make the
-> subsequent NULL dereference completely silent =E2=80=94 no warning, jus=
-t a
-> panic.
+[...]
 
-It would crash without debug option anyway, but warnings are there to
-make it easier to point what's gone wrong.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index db151e6b8949..fdbf92bffc17 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -320,6 +320,15 @@ static int arg_idx_from_argno(argno_t a)
+>  	return arg_from_argno(a) - 1;
+>  }
+> =20
+> +static int bpf_diag_stack_arg_slot_from_argno(argno_t a)
 
-And not testing the code path at least once with debug option is a big
-problem :)
+Nit: drop the bpf_diag_ prefix (or just inline at the callsite?).
 
-> And since you mentioned that kmalloc() =E2=86=92 kfree_rcu_nolock() sup=
-port is
-> planned for the future (the "yet") =E2=80=94 wouldn't this code path ne=
-ed the
-> NULL check at that point anyway?
->=20
-> I was thinking something like this would make the function consistent
-> with kfree_nolock() and also make it forward-compatible with the
-> planned kmalloc() support:
->=20
-> --- a/mm/slab_common.c
-> +++ b/mm/slab_common.c
-> @@ -1266,10 +1266,16 @@ void kfree_call_rcu_nolock(struct rcu_head
-> *head, void *ptr)
-> =C2=A0{
-> =C2=A0=C2=A0=C2=A0=C2=A0 struct slab *slab;
-> =C2=A0=C2=A0=C2=A0=C2=A0 struct kmem_cache *s;
->=20
-> -=C2=A0=C2=A0=C2=A0 VM_WARN_ON_ONCE(is_vmalloc_addr(ptr) || !virt_to_sl=
-ab(ptr));
-> -
-> =C2=A0=C2=A0=C2=A0=C2=A0 slab =3D virt_to_slab(ptr);
-> +=C2=A0=C2=A0=C2=A0 /*
-> +=C2=A0=C2=A0=C2=A0=C2=A0 * kmalloc_nolock() never produces large-kmall=
-oc or vmalloc
-> +=C2=A0=C2=A0=C2=A0=C2=A0 * addresses, but be defensive: fall back to d=
-efer_kfree_rcu()
-> +=C2=A0=C2=A0=C2=A0=C2=A0 * for unsupported pointer types, consistent w=
-ith kfree_nolock().
-> +=C2=A0=C2=A0=C2=A0=C2=A0 */
-> +=C2=A0=C2=A0=C2=A0 if (unlikely(!slab))
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto fallback;
-
-Just FYI, virt_to_slab() and virt_to_page()
-don't work correctly for vmalloc addresses.
-
-And I don't think silently making it work is good.
-
+> +{
+> +	int arg =3D arg_from_argno(a);
 > +
-> =C2=A0=C2=A0=C2=A0=C2=A0 s =3D slab->slab_cache;
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0 if (__kfree_rcu_sheaf(s, ptr, /* allow_spin =3D=
- */ false))
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return;
->=20
-> +fallback:
-> =C2=A0=C2=A0=C2=A0=C2=A0 defer_kfree_rcu(head);
-> =C2=A0}
->=20
-> Of course, this is just a suggestion =E2=80=94 you know this code far b=
-etter
-> than I do.=C2=A0 If you feel the current code is fine as-is with proper=
+> +	if (arg <=3D MAX_BPF_FUNC_REG_ARGS)
+> +		return -1;
+> +	return arg - MAX_BPF_FUNC_REG_ARGS - 1;
+> +}
+> +
+>  static const char *btf_type_name(const struct btf *btf, u32 id)
+>  {
+>  	return btf_name_by_offset(btf, btf_type_by_id(btf, id)->name_off);
+> @@ -8161,6 +8170,8 @@ static const char *bpf_diag_reg_type_plain(struct b=
+pf_verifier_env *env,
+>  			return "a nullable memory pointer";
+>  		return "a memory pointer";
+>  	case PTR_TO_BTF_ID:
+> +		if (type_may_be_null(type))
+> +			return "a nullable kernel object pointer";
 
-> documentation, I completely understand and won't press the point
-> further.
->=20
-> Either way, thank you again for the explanation, and for working on
-> this series =E2=80=94 having kfree_rcu_nolock() available for BPF and o=
-ther
-> contexts will be really valuable.
->=20
-> Thanks,
-> XIAO
+Nit: move this hunk such that bpf_diag_reg_type_plain() is defined in
+     a single patch?
 
---------------5yZ5NYuEVU4HrXYvVZYNisDF--
+>  		if (type_is_non_owning_ref(type))
+>  			return "a borrowed allocated object pointer";
+>  		if (type_is_ptr_alloc_obj(type))
+> @@ -8173,6 +8184,60 @@ static const char *bpf_diag_reg_type_plain(struct =
+bpf_verifier_env *env,
 
---------------HHB5JammkAG9i5v0ifUbiioD
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+[...]
 
------BEGIN PGP SIGNATURE-----
+> +static void diag_call_arg_fmt(struct bpf_verifier_env *env,
+> +			      u32 insn_idx, argno_t argno,
+> +			      const char *call_name,
+> +			      const char *suggestion,
+> +			      const char *fmt, ...) __printf(6, 7);
 
-iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCajy8NQAKCRCGXBN6rc5S
-1oG6AQDcpJmCoSOVmh6QBfAn7SSLAj/dCrCVdlDGkux+9WPEAAEAwzyj8gI9j//s
-tpMbnooH3cAwdhFTBanFE9AL924TWgk=
-=XwYR
------END PGP SIGNATURE-----
+Nit: Is this prototype necessary?
 
---------------HHB5JammkAG9i5v0ifUbiioD--
+> +static void diag_call_arg_fmt(struct bpf_verifier_env *env,
+> +			      u32 insn_idx, argno_t argno,
+> +			      const char *call_name,
+> +			      const char *suggestion,
+> +			      const char *fmt, ...)
+> +{
+> +	size_t size;
+> +	va_list args;
+> +	char *reason;
+> +
+> +	reason =3D bpf_diag_scratch_buf(env, 0, &size);
+
+An alternative to juggling the scratch slot numbers
+might be some kind of:
+
+  char *bpf_diag_fmt(env, fmt_string, ...)
+
+that would do the vaprintf behind the scene and accumulate
+the buffers in env->diag, to be freed after reporting.
+
+> +	if (reason) {
+> +		va_start(args, fmt);
+> +		vscnprintf(reason, size, fmt, args);
+> +		va_end(args);
+> +	} else {
+> +		reason =3D "";
+> +	}
+> +
+> +	bpf_diag_report_call_arg(env, insn_idx, argno, call_name, reason,
+> +				 suggestion);
+> +}
+> +
+>  static int check_reg_type(struct bpf_verifier_env *env, struct bpf_reg_s=
+tate *reg, argno_t argno,
+>  			  enum bpf_arg_type arg_type,
+>  			  const u32 *arg_btf_id,
+> @@ -8226,6 +8291,32 @@ static int check_reg_type(struct bpf_verifier_env =
+*env, struct bpf_reg_state *re
+>  	for (j =3D 0; j + 1 < i; j++)
+>  		verbose(env, "%s, ", reg_type_str(env, compatible->types[j]));
+>  	verbose(env, "%s\n", reg_type_str(env, compatible->types[j]));
+> +	{
+> +		size_t expected_size;
+> +		char *expected_buf;
+> +		const char *call_name;
+> +		int len =3D 0;
+> +
+> +		expected_buf =3D bpf_diag_scratch_buf(env, 1,
+> +						    &expected_size);
+> +		if (expected_buf) {
+> +			expected_buf[0] =3D '\0';
+> +			for (j =3D 0; j < i && len < expected_size; j++)
+> +				len +=3D scnprintf(expected_buf + len,
+> +						 expected_size - len,
+> +						 "%s%s", j ? ", " : "",
+> +						 reg_type_str(env, compatible->types[j]));
+
+Nit: this is a bit ugly, maybe hide it as a utility function?
+
+> +		} else {
+> +			expected_buf =3D "";
+> +		}
+> +
+> +		call_name =3D meta->func_id ? func_id_name(meta->func_id) : "callee";
+
+Nit: I'd avoid the defensive meta->func_id ? ... here.
+
+> +		diag_call_arg_fmt(env, env->insn_idx, argno, call_name,
+> +				  "Pass a value with one of the accepted pointer or scalar types for=
+ this call.",
+> +				  "it has type %s, but this argument accepts %s",
+> +				  bpf_diag_reg_type_plain(env, reg->type),
+> +				  expected_buf);
+> +	}
+>  	return -EACCES;
+> =20
+>  found:
+
+[...]
+
+> @@ -11808,9 +11908,20 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *=
+env, struct bpf_func_state *call
+>  	 */
+>  	if (!btf_type_is_scalar(ref_t) && !__btf_type_is_scalar_struct(env, met=
+a->btf, ref_t, 0) &&
+>  	    (arg_mem_size ? !btf_type_is_void(ref_t) : 1)) {
+> +		const char *expected_type;
+> +
+> +		expected_type =3D bpf_diag_format_btf_type_scratch(env,
+> +								 1,
+> +								 meta->btf,
+> +								 ref_id);
+
+Nit: isn't this exactly the diag_btf_type_name()?
+     (and in a few places below).
+
+>  		verbose(env, "%s pointer type %s %s must point to %sscalar, or struct =
+with scalar\n",
+>  			reg_arg_name(env, argno),
+>  			btf_type_str(ref_t), ref_tname, arg_mem_size ? "void, " : "");
+> +		diag_call_arg_fmt(env, env->insn_idx, argno, meta->func_name,
+> +				  "Pass a verifier-tracked pointer to the expected kernel object typ=
+e, not a pointer to stack storage or another memory buffer.",
+> +				  "the kfunc expects a pointer to %s, but this argument is %s and ca=
+nnot be used as that kernel object pointer",
+> +				  expected_type,
+> +				  bpf_diag_reg_type_plain(env, reg->type));
+>  		return -EINVAL;
+>  	}
+>  	return arg_mem_size ? KF_ARG_PTR_TO_MEM_SIZE : KF_ARG_PTR_TO_MEM;
+
+[...]
