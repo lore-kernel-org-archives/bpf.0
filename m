@@ -1,136 +1,191 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4633E2FB969
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 20:02:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782417725; cv=pass; b=bJmFHleWA3VvhGu77jkQkve3v5uIPigrj5uyyVlGI5PFzRtHw+PDT2fi0Sj1f7hJxac1zbkFI19a6kmvuOYzM1pGUjpNnSbKdFanew1YfMEuwRf0tLTBbzBjD8BObnxsM7Spn66KVY5L6KHg64cjhS+J/2z/wPJz9mgLf/nZGh0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782417725; c=relaxed/simple;
-	bh=4i+Jt2gLzMo/XoxVTGhsYzQiHBEBVYpA63kWSC8KzB0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RD0JYZTVq8fFUEWLDF7DzRUczSWopdGSNixrUD5wg0N+oXedXo8S27l8/Da2jPRdqdgSNJRhQaeGF/s8QsQ9dD30BLR/Tw0KEL7oXC2CN25rkZKLAlsmdCu+BIkLjcS7rzH+OozvT0nkzsdc7kD66jke/W1kpb5K6aCVrsCbJTw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pJ8/vB86; arc=pass smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D045360745
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 20:19:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782418778; cv=none; b=p955Q3ITzFvRME4Ruxcv+eysg+8siNQ5Q646qSGgaZzN/LNDfwm73VYqLK4IpcJmh8h6kCN53ZLM2TUrjvYwASIhdEMavIqc9T7NT15cFg5izjy49NzFm7M27INFaYCp/iLLcBymSWnIBvcV9Oo+4h+UlGD9wa4ep0YeXx6hhZo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782418778; c=relaxed/simple;
+	bh=CdkZiu95Ju3zRZKCZInYDz0DhZoKpH+gzbfejaMqk2I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BXXHH8vmJS0zIAnuiGPJqaSO2paX+T296qlnnXMzGhGaPwSe4PK7xNq7rlEBgtGeiG0imO53PsiBN9O5nGhO2v5VoCZopq1+h29aNF7Me43Ef77n2Yh3e1aC64DWMAZN9dqw5QZAR13jHzi1UF2DBLqW2z8CljyXdfvDFK5DPfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OElTnFzL; arc=none smtp.client-ip=209.85.215.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pJ8/vB86"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-37e0035aad3so118093a91.3
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 13:02:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782417723; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ed0HdNBqHI1LTK46WOTcLFI+c2NCFlKrWo9YJApJCF05vScLWqY+GvR0feqlyRjUq5
-         3ABY7ByQJcxiY0NG6jQjEE+84ZP7spFEGMjeuH+/ReoZOHw5Aum23NBGKWHECLfmwypZ
-         O/tK5Qc4kh1iycpCE8pY9RlxdatxK3fgow0MQaQbRfYGgmYFHGWol1w97crr+ufgo9Sg
-         XGqD9lcsNu4n5BtYEmhMuUg44MDcBaxbETu8GPsmkiwp6E0nWRZPLb1rJth4lqVpFKE+
-         BlSZlhWXjRnZZ6B+6vg3TDIHZdWr2UMLgQGR/YY5wwX3CcPzvu8es26iTxl5z1b9/0jd
-         8d2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=4i+Jt2gLzMo/XoxVTGhsYzQiHBEBVYpA63kWSC8KzB0=;
-        fh=/kuQpa2BoCNLU5rz8LGKLEs1ze06burEKPR7mVGvhHM=;
-        b=B1sytS4k8zomDkm3BJIIRyZYqferYxPJ5TJPyE8l8NM3vqP/mY3inGqWsmH0J7yUmy
-         5SvwdFvs+u/zn2Mj3aL9CTc9l55FAAPVpFbWOVe7SpnLtrNux+Kfdjucg9gZQUNaFVWx
-         NZVo6BfgoFnVKdegotBAA6MVUNdIXcKzq5hqgfzmLPwTk2aHHx/CSIG3BwYRwyzpfPNx
-         HrKQVwfa0rcKJgxr+G6Y5ln9LXnUbcDriacogU+4H9fU/Cc6UsUSyJipfdwr3DDRxQPC
-         dmbA/4WikQMC51njuRcgzfxzVEa/xFZJSaf/vZlO9tzOKF8ebjcZ6vsdtaW8UzoXRcZz
-         MmAA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OElTnFzL"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c89fa656ea1so83681a12.2
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 13:19:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782417723; x=1783022523; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4i+Jt2gLzMo/XoxVTGhsYzQiHBEBVYpA63kWSC8KzB0=;
-        b=pJ8/vB86bSEeqFQnid056mYV3Ex0b5JiNjMcNq/ibYCEPFoBqVAcwTmSeChBQayhgu
-         EpbkCxvf/AY+LfmdhyEFMUQvDClNpah4liBkolO4mAeud1mPrB8tQI6HRrhTNOpb9+wm
-         KmvRokxr1l25JItfBqr7IepHwJJGbEhOiCplFv/ROzAHxOHJskGi0TWE5QVq6Bt3S6DI
-         rZaaRKEFgJRhVJHN3Mm+Xo8wjYfu+cVU1Jb4IbQnSlWYdWIl6bOmBM20tcDpRLyleD0B
-         0KUYZH5WkUHRtz1hq2nmH9gj8QkMY7sr+1xvHZY5bGqzSliwtCSOe5If7giYcHjB977s
-         41EA==
+        d=gmail.com; s=20251104; t=1782418776; x=1783023576; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QTizzMYsvK+QXxwaUCsIvsB96HTa7qAoU7wdsBC1yiA=;
+        b=OElTnFzLMjVqX9mArbtkpzO7U5bp0pltrttCFpvMN7UaBE+nzu0OZCRuwo513me7ef
+         urndJsQSpytIR45y3LH5HPBIsRZMq8DIFj/5T68UM7QDA0UPR0+brTfgYEbh2Y/k7mXC
+         vr9Yun4a2XgY1EVjKBX6xQCoChWrkRB4lliQEgbxvIKAUs5Ijqfjkwb5bAo+9fJ1VR0s
+         fJlN1HyEd1DdGEn52e5qi/3yKSxb/9oHgj/dFEBL8Da92it2d71B2H6QOHCl3CgPweP1
+         qLzbjVNlT3sMMR7OFEKcq7H8NUrl/RHYM/W2BnLcJoX2/eGvn5HyU6APMNtn8+tcCHtA
+         UeXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782417723; x=1783022523;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=4i+Jt2gLzMo/XoxVTGhsYzQiHBEBVYpA63kWSC8KzB0=;
-        b=DdRyu2Mz8HuSKXzWdWpPt2u+q0jDbUDva5ZCmkL8uIzxnrHtBK/12HyVzWw/cHZdRo
-         AazuGl01KZs+f3+YtZJKdOkC8rZutu/O1woIpF4SP9rgZhyVkj6ei+wSDhH9tRAsoIz/
-         /Z0kvOG+ItozjcgOyiNnx1vQ8TWnoDhmyuBIN8pzG9KbbeFBVxnw9I0SE+kNzaZIXzMY
-         XC0mIRIJ2nherZFXlMEQSPa4MSgqHXa+wGIdkT6IYsqhGb7RoGPneCodJiWzwQiaisRi
-         9sFWlgr6NEXwdm7bzYxRycHYdzwjhspqNQUhaFxnoi8KIncNHy4i2ZAtydlVUnH/T1UG
-         rh/g==
-X-Forwarded-Encrypted: i=1; AHgh+Rrr49cYcAEz3WLqMjKwdHy+nAOuV+y8whga2HrrBhfTh/UewEBkNCYZ/kPha4h8HGLdbzU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5EJwUKlsyDZ4D/uLGYSLLjjJmCryfaBl1xSYGThCMn054dRb1
-	AtAtXYwxSSClXD0ZKBcnYCxrIGXRpfk+SiwPusW4uh+WlLxx6e+f8/by44H23iLddJqmmnKWmK2
-	IXIOFsCnN8Q5mjt9aIXJVxD/BKKMOFeM=
-X-Gm-Gg: AfdE7cnmOakTBn5fc8L5cp+r1AkHqP2zY+RFrpwxLV6jY066dkrgPNQFp/3SB10SAx1
-	s3qQBmBgxmKThhg2nfy1tra75dEwHI77bENFuqKcE95px0F43gCGd+ZQNYvDA7j14eEb8fQM8W2
-	LIXNygvY/QFj8W5Y9b578+MCzkHT0Fu82+bp01ut0b9/ZsOvFkqHiufFeNivxD8aZq9n3F5RLYo
-	6Lr1UPLdD+EcjPx0BR4LJszLz6YOetXc5FMUtuBA/HYqTGC8rrfiygO+uWmXHpCy+k3YDB2Cjcx
-	CBk+bl27KdUsOmKgpFmLor4kL+gDDzyoXFzwm0KgguS1ROsASSl6mf4OKsBklq/2qwNglCvpvVt
-	v4B4z4lSk8EjA
-X-Received: by 2002:a17:90a:d605:b0:37d:8849:a093 with SMTP id
- 98e67ed59e1d1-37dfa1eee13mr3874706a91.11.1782417723187; Thu, 25 Jun 2026
- 13:02:03 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782418776; x=1783023576;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QTizzMYsvK+QXxwaUCsIvsB96HTa7qAoU7wdsBC1yiA=;
+        b=H8pNJlaWxPdThdxWSgK532+B4wKXHQ6aOKcklaD1pK3cUkxYfop6bLYZnT6dqO2DBj
+         Kacsqpx85jt/PGymy/DTRwmgIxSfhsgu/bgHX0VMJt7575N/JqOSYQAjg//j09hnbBBK
+         YSfV0gcK8ITgyv1gb+GMWdOJffFQG9+YpL1mT9geyQc2MoH6vGsnFP/6Z5AT9uEWj1mO
+         nDQDCUKqRMof4DEiprbmDwTPXCHE5zVpMgpBp55rW7wHmlja9lD682soPrmMs5y436Kx
+         zABFy3YkrlQJWqpmhAaoZD4DqVtSgE7aQ8yK4lMFLl6aUvL8Xx4ZPUGxXfoZHCCNnorx
+         dFiA==
+X-Gm-Message-State: AOJu0YwgjRz7CjE1ObAWFw0fZZ1RvSipeK+FQQmuDqyOiSt+j4es5O3g
+	cI47OaCHp+ZjwKxa466U5xWV/5MDqqqHVNk+p3HhCAPOKzq+djIIESEN
+X-Gm-Gg: AfdE7cmqw/QFFO4Fnd5vVZbQLfEq0v9thXL3rxMOkaOP9iHlzPt2Lq5PQA7rPhYEskx
+	gfKhI6E/A2dckJ4uvBN9GWSu3nxgrXohGHE6EgVyx7jctikJ5T5Ckpdvy41J5shPsMoJxanpxmN
+	hyps9BP1SDDL6vx/rIdorfK5Xs2M0XYgQYE1z3XIsdq4tMRvpNRd9SzOuMDPjkDCkivkN3oSUv8
+	SRnBouu3dFjNrAjkYG0eQxcJ00+gfsLJlzrORtXRNTfIrc9Zs8UGkhY3eff+tKxrgyAcvhX3ef7
+	PqT7DVYUhY2soPOvZsY0kJ98NSmKTI4BHTw5+wQQltSQ3lyXO/OBXbG8OTekbSglnF7d935WrAe
+	mFuZ3HoGS8Aih9LZJmiUCoksiPP8en+ZJ3EY3yshA+/PQXYaUOMuq0OxsQ1RXHKW0EaJ/a1MGBS
+	iC8HuM3zKu/drCFTfFd4lI7eXgZWvfZucCMPvZKvPwe1WTP4A/IyG8x/cAHhAFboTKqdIsfqjn/
+	63TdQsrqfDe+6TO+AkYOdlDgdi7eQ==
+X-Received: by 2002:a17:902:e744:b0:2c7:9b17:6676 with SMTP id d9443c01a7336-2c7fc75a664mr41820975ad.23.1782418776214;
+        Thu, 25 Jun 2026 13:19:36 -0700 (PDT)
+Received: from ast-mac ([2601:600:837f:c470:ce8:a3e7:263:95a6])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7f63b2bc8sm25834345ad.39.2026.06.25.13.19.35
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 25 Jun 2026 13:19:35 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: torvalds@linux-foundation.org
+Cc: bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	eddyz87@gmail.com
+Subject: [GIT PULL] BPF fixes for 7.2-rc1
+Date: Thu, 25 Jun 2026 13:19:32 -0700
+Message-ID: <20260625201934.54233-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260624-bpf-lskel-fixes-v2-1-e8ac5974a72c@google.com>
-In-Reply-To: <20260624-bpf-lskel-fixes-v2-1-e8ac5974a72c@google.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 25 Jun 2026 13:01:51 -0700
-X-Gm-Features: AVVi8CerpP3JXnxWwj0kngfVf0cs_Uu0Z1eZKknvcduNBSzamBu1smQ9UnhuEWk
-Message-ID: <CAADnVQLURewU9wJ+4MTjCG9Uq0nR=c=oBbJ4vGbL-tRdp9YJBg@mail.gmail.com>
-Subject: Re: [PATCH v2] bpf: allow BPF_LOG_KERNEL from kernel space
-To: Siddharth Nayyar <sidnayyar@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, LKML <linux-kernel@vger.kernel.org>, 
-	bpf <bpf@vger.kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Giuliano Procida <gprocida@google.com>, Matthias Maennich <maennich@google.com>, 
-	Tiffany Yang <ynaffit@google.com>, Neill Kapron <nkapron@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jun 24, 2026 at 11:19=E2=80=AFAM Siddharth Nayyar <sidnayyar@google=
-.com> wrote:
->
-> When loading a BPF program or BTF from kernel space (e.g. using a
-> light skeleton generated loader module), the kernel module may want
-> to output verifier logs to dmesg by setting attr->log_level =3D
-> BPF_LOG_KERNEL (16).
->
-> Currently, any attempt to do this through the standard syscall path
-> (kern_sys_bpf -> bpf_vlog_init) fails with -EINVAL because
-> bpf_verifier_log_attr_valid() rejects any log_level bit outside
-> BPF_LOG_MASK. This prevents in-kernel loaders from successfully
-> using BPF_LOG_KERNEL, causing silent failures if the BPF object
-> is rejected by the verifier.
->
-> This patch modifies bpf_verifier_log_attr_valid() to accept
-> BPF_LOG_KERNEL unconditionally. To prevent userspace from exploiting
-> this to spam the kernel log, the patch enforces a strict privilege
-> check at the syscall boundary points (btf_parse, bpf_log_attr_init,
-> bpf_log_attr_create_vlog), ensuring BPF_LOG_KERNEL is only permitted
-> when uattr.is_kernel is true.
+Hi Linus,
 
-I don't think it's a good idea.
-BPF_LOG_KERNEL prints to dmesg and it's there for cases
-where BTF is corrupted in vmlinux or in the module.
-The verifier log can be large. It's never suitable for dmesg.
+The following changes since commit ef0c9f75a19532d7675384708fc8621e10850104:
 
-Let's step back and discuss the end goal.
-Not just this patch, but overall.
-You're sending a bunch of patches for various lskel things.
-Please explain the full picture.
+  lib: Add stale 'raid6' directory to .gitignore file (2026-06-21 14:09:49 -0700)
 
-pw-bot: cr
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
+
+for you to fetch changes up to 12091470c6b4c1c14b2de12dcbae2ada6cb6d20b:
+
+  bpf: Disable xfrm_decode_session hook attachment (2026-06-22 20:08:37 -0700)
+
+----------------------------------------------------------------
+- Fix effective prog array index with BPF_F_PREORDER (Amery Hung)
+
+- Zero-initialize the fib lookup flow struct (Avinash Duduskar)
+
+- Disable xfrm_decode_session hook attachment (Bradley Morgan)
+
+- Allow type tag BTF records to succeed other modifier records
+  (Emil Tsalapatis)
+
+- Fix build_id caching in stack_map_get_build_id_offset() (Ihor Solodrai)
+
+- Add missing access_ok call to copy_user_syms (Jiri Olsa)
+
+- Fix stack slot index in nospec checks (Nuoqi Gui)
+
+- Preserve pointer spill metadata during half-slot cleanup (Nuoqi Gui)
+
+- Fix partial copy of non-linear test_run output (Sun Jian)
+
+- Fix BPF_PROG_ASSOC_STRUCT_OPS last field check (Thiébaud Weksteen)
+
+- Reset register bounds before narrowing retval range (Tristan Madani)
+
+- Fix vmlinux BTF leak in bpftool cgroup commands (Yichong Chen)
+
+- Guard error writes in conntrack kfuncs (Yiyang Chen)
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+----------------------------------------------------------------
+Alexei Starovoitov (5):
+      Merge branch 'bpf-fix-stack-slot-index-for-spectre-v4-nospec-checks'
+      bpf: Emit verbose message when prog-specific btf_struct_access rejects a write
+      Merge branch 'fix-effective-prog-array-indexing-with-bpf_f_preorder'
+      Merge branch 'bpf-guard-conntrack-opts-error-writes'
+      Merge branch 'fix-stale-register-bounds-on-lsm-retval-context-load'
+
+Amery Hung (2):
+      bpf: Fix effective prog array index with BPF_F_PREORDER
+      selftests/bpf: Test cgroup link replace with BPF_F_PREORDER
+
+Avinash Duduskar (1):
+      bpf: zero-initialize the fib lookup flow struct
+
+Bradley Morgan (1):
+      bpf: Disable xfrm_decode_session hook attachment
+
+Emil Tsalapatis (1):
+      bpf: Allow type tag BTF records to succeed other modifier records
+
+Ihor Solodrai (1):
+      bpf: Fix build_id caching in stack_map_get_build_id_offset()
+
+Jiri Olsa (1):
+      bpf: Add missing access_ok call to copy_user_syms
+
+Nuoqi Gui (4):
+      bpf: Fix stack slot index in nospec checks
+      selftests/bpf: Cover stack nospec slot indexing
+      bpf: Preserve pointer spill metadata during half-slot cleanup
+      selftests/bpf: Cover half-slot cleanup of pointer spills
+
+Sun Jian (1):
+      bpf: Fix partial copy of non-linear test_run output
+
+Thiébaud Weksteen (1):
+      bpf: Fix BPF_PROG_ASSOC_STRUCT_OPS last field check
+
+Tristan Madani (2):
+      bpf: Reset register bounds before narrowing retval range in check_mem_access()
+      selftests/bpf: Add test for stale bounds on LSM retval context load
+
+Yichong Chen (1):
+      bpftool: Fix vmlinux BTF leak in cgroup commands
+
+Yiyang Chen (2):
+      bpf: Guard conntrack opts error writes
+      selftests/bpf: Cover small conntrack opts error writes
+
+ kernel/bpf/bpf_lsm.c                               |   3 +
+ kernel/bpf/btf.c                                   | 209 ++++++++++++---------
+ kernel/bpf/cgroup.c                                | 108 ++++++-----
+ kernel/bpf/stackmap.c                              | 183 ++++++++++++------
+ kernel/bpf/states.c                                |  13 +-
+ kernel/bpf/syscall.c                               |   2 +-
+ kernel/bpf/verifier.c                              |   8 +-
+ kernel/trace/bpf_trace.c                           |  11 +-
+ net/bpf/test_run.c                                 |   8 +-
+ net/core/filter.c                                  |   4 +-
+ net/netfilter/nf_conntrack_bpf.c                   |  35 ++--
+ tools/bpf/bpftool/cgroup.c                         |  14 +-
+ tools/testing/selftests/bpf/prog_tests/bpf_nf.c    |   6 +
+ tools/testing/selftests/bpf/prog_tests/btf.c       |  12 +-
+ .../selftests/bpf/prog_tests/cgroup_preorder.c     |  77 ++++++++
+ tools/testing/selftests/bpf/progs/test_bpf_nf.c    |  26 +++
+ tools/testing/selftests/bpf/progs/verifier_lsm.c   |  15 ++
+ .../selftests/bpf/progs/verifier_spill_fill.c      |  18 ++
+ .../testing/selftests/bpf/progs/verifier_unpriv.c  |  22 +++
+ 19 files changed, 535 insertions(+), 239 deletions(-)
