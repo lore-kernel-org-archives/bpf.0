@@ -1,68 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755113DD509;
-	Thu, 25 Jun 2026 11:45:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA5C3D8131;
+	Thu, 25 Jun 2026 11:52:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782387958; cv=none; b=gvGILitB7Y8bguFiEQmUbIiv2OhCtAVsTvIrddgNSV3AzPKhKxTwEWpe5+mFtalWcfgSP78Jn0kkj3Pv94L1ELI7bY+yW9OpdaTPfeM6KKlHmGPoHjJLlNyAOXz/hdPOVn6bwUO4IpmLBqwQKHT1jtG5tE8zR3QghtpWDQooD6U=
+	t=1782388343; cv=none; b=PgEGWkL2XF+GzRmf9FOYp529OsQm7FSHoMMouFLJsx6QV3y/w3vF6DQWkR0UxDJ9LRWSY7EGhVVs/JEHLriABdsIXx98TsHYiT5UdDj2AkE89GSvxBUiB59plfjY5GTXfyarEDnunMC9ofMxCOI5P1brD7WF6Sm3kWdQOtFniww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782387958; c=relaxed/simple;
-	bh=Nd8YdKOzt+Ca9w1TBuYqUtzZR7XwfY1USeE0VwvaT6I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u99wDeQiMpgSFgZsKatsufulilodh3dCvp83WYBjM59fEF8gkrV/Di9+1mrnz5malQqq4U6O13avo6RsI9nlvnBIL34x3Y2PMdcM8k6oKfkSnWg8vsiyOkayfTohe7jiMg7dFB6KVcjVihUZ5o8MZmLGqkngzI9bAIu0WJ2QZcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Znl0J5WX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782388343; c=relaxed/simple;
+	bh=1QgyVE0VKY8LGCv8Iung0ENYj2jFbspc8w9gsaoFru8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=umfLUMWw4nh3Pxe6Ay2nhZE9mVfGvGN0U8teTcSDk+hRt6uiux65F8p+L7GAgqGOfWOjZCcFlFWxS3foQU/HFc0ACzBViuE8znzQoaNXC3/g0xcorv3in00/CQGHOOzn49B4X6wJ89z1YStXDjuKt1hFROvZQgRK15e824ioLDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H06QXh4q; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Znl0J5WX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83B1F1F00A3A;
-	Thu, 25 Jun 2026 11:45:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1782387957;
-	bh=O5Nsrv7dbKI0TRU5J5+1J9WSCqQWpJP9oDy03m9SzNA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Znl0J5WXUw2BJePR4uI199t/XyfCjUR1y2S0ZdLOBKfKzFKxD0zqS/V8CB2IYvHNB
-	 d9HimkDYCBzFzBmV7ttG+L7jwRZALoWqvFG0jKBefPxxhwZqAvnbzahqYyj9sYsErX
-	 TfsI9prfOT9Apmv68QSqkDKVko2x38Kx4r0AYTcU=
-Date: Thu, 25 Jun 2026 12:37:31 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Maximilian Heyne <mheyne@amazon.de>
-Cc: stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	"Eric W. Biederman" <ebiederm@aristanetworks.com>,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 6.12.y] net: add missing ns_capable check for peer netns
-Message-ID: <2026062556-residue-anybody-e756@gregkh>
-References: <20260617-pats-coif-316245c6@mheyne-amazon>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H06QXh4q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782388342; x=1813924342;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1QgyVE0VKY8LGCv8Iung0ENYj2jFbspc8w9gsaoFru8=;
+  b=H06QXh4qvFx07Ube2LHt2/Ehjb8y502wS+r5yrAl5lAKjAC8JrU5xcGX
+   EvuzylOJXIYF0H8LGHoPCY8ulTcgL51/ZLQbpItXfKhhcXyHwbxO0+xMb
+   09XOZecRisffm2JF3/pMX/ASFhmSma5HH74QKUJeGg3SutI2kCiLAZBas
+   eXQ9Ilvb0Xk1vDoOgKBvGs6vGY0/y+h8W9HdJF2yhkGg8sbg6F70FYhlG
+   ACsvkRCy5fJyMINZhwa1hYf5Y6zidxJo2wc5nKDP6EnWxFEXAEql7Uf4Y
+   Z1F/0tAQJQ+2WfVFYxTvZ07ZD8rqV+nsze/6+plre1nrT4k9fE4d7I7gQ
+   A==;
+X-CSE-ConnectionGUID: WT4NOTUbQsK9QhNs80ckmg==
+X-CSE-MsgGUID: mGGOMtLGTZ2h+ZQDK/gpFg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11827"; a="83215155"
+X-IronPort-AV: E=Sophos;i="6.24,224,1774335600"; 
+   d="scan'208";a="83215155"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2026 04:52:21 -0700
+X-CSE-ConnectionGUID: LRe6WxBgSTOuxFWfSDddWw==
+X-CSE-MsgGUID: UxBhEGdRRXKBY1AI8DzgrQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,224,1774335600"; 
+   d="scan'208";a="246661084"
+Received: from boxer.igk.intel.com ([10.102.20.173])
+  by fmviesa010.fm.intel.com with ESMTP; 25 Jun 2026 04:52:19 -0700
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	magnus.karlsson@intel.com,
+	stfomichev@gmail.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	tushar.vyavahare@intel.com,
+	kerneljasonxing@gmail.com,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH v2 net-next] selftests/xsk: Preserve UMEM view in BIDIRECTIONAL test
+Date: Thu, 25 Jun 2026 13:52:15 +0200
+Message-Id: <20260625115215.1101928-1-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.38.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260617-pats-coif-316245c6@mheyne-amazon>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jun 17, 2026 at 08:25:31AM +0000, Maximilian Heyne wrote:
-> The upstream commit 7b735ef81286 ("rtnetlink: add missing
-> netlink_ns_capable() check for peer netns") doesn't apply on older
-> stable kernels due to refactoring. Therefore, this patch is an attempt
-> to implement the same capability check just directly in the respective
-> interface types.
+The UMEM state refactor made __send_pkts() use xsk->umem for Tx
+address generation. At the same time, the shared-UMEM Tx setup copies the
+Rx UMEM state into a Tx-local state object and resets base_addr and
+next_buffer before configuring the Tx socket.
 
-Why can't we take the full series of patches instead?  Otherwise this is
-going to be a pain over time for any other fixes/updates in this area,
-right?
+Passing that Tx-local object to xsk_configure() makes xsk->umem point to
+the zero-based Tx allocator state. This breaks the BIDIRECTIONAL test once
+the roles are switched: the same socket is then used for Rx validation, but
+received descriptors from the other logical UMEM half are checked against
+base_addr == 0. With the new UMEM bounds check, a valid address such as
+base_addr + XDP_PACKET_HEADROOM is rejected as being outside the UMEM
+window.
 
-And if not, then we need acks from the maintainers here...
+Keep xsk->umem as the shared/Rx UMEM view used for socket configuration
+and Rx validation. Use the ifobject-local UMEM copy only for Tx descriptor
+address generation, preserving the BIDIRECTIONAL test's intent of using
+the proper logical UMEM half after the direction switch.
 
-thanks,
+Fixes: b17631032769 ("selftests/xsk: Move UMEM state from ifobject to xsk_socket_info")
+Reviewed-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
+Tested-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+v2:
+- fix SoB line
+- rebase
+- add tags from Tushar
+---
+ tools/testing/selftests/bpf/prog_tests/test_xsk.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-greg k-h
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+index 72875071d4f1..26437d4bdc8e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+@@ -1169,8 +1169,8 @@ static int receive_pkts(struct test_spec *test)
+ static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk, bool timeout)
+ {
+ 	u32 i, idx = 0, valid_pkts = 0, valid_frags = 0, buffer_len;
++	struct xsk_umem_info *umem = ifobject->xsk_arr[0].umem_real;
+ 	struct pkt_stream *pkt_stream = xsk->pkt_stream;
+-	struct xsk_umem_info *umem = xsk->umem;
+ 	bool use_poll = ifobject->use_poll;
+ 	struct pollfd fds = { };
+ 	int ret;
+@@ -1521,7 +1521,7 @@ static int thread_common_ops_tx(struct test_spec *test, struct ifobject *ifobjec
+ 	umem_tx->base_addr = 0;
+ 	umem_tx->next_buffer = 0;
+ 
+-	ret = xsk_configure(test, ifobject, umem_tx, true);
++	ret = xsk_configure(test, ifobject, umem_rx, true);
+ 	if (ret)
+ 		return ret;
+ 	ifobject->xsk = &ifobject->xsk_arr[0];
+-- 
+2.43.0
+
