@@ -1,157 +1,84 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E249A1A680F
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 00:47:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE6C36A34E;
+	Thu, 25 Jun 2026 01:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782348474; cv=none; b=Sl8q5BfZBBlXdpD3FSCT+tlaqcaMrmcuMZeUIBzrlPiga+ByB+NEGqUOo/dJIu4QeFbIR0mAeLvhAxq2hHHBW1sJ0vlgJMKctwGiPsODeTM0MuYOqR9pQ31p7wKqQ5AulEXbRt8rcifY8F2AoswbciPQxm0B9+syRUmVG9ItRtw=
+	t=1782349750; cv=none; b=DuzlgaD5KltQrtPxRSkQgo/VtYzp1d4byrtTgtsGiHo0uTDPVVDzemWTa4bzmL+DWcVeWYEsWPSgU73v1aj15ec4486GZfiTV00rkTTnZ8qp1qqP2MW+vTsu5uJsyUK0GamrE9aP+GVUrQ+S+JqDASd5/4wIBjdrNE9puDF+F0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782348474; c=relaxed/simple;
-	bh=b91Vb0vfTqTmIx7XZCz2vJpvenmTrm70ehToTwR4yVo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iDZPr/X+ZbMVYImKq3SkGj/qQwQX8NoAJCXFicWgYVFe+Yu7dt9r/YJWq0RloI3u0QnusEmV3klSUmKlUpQlHsvTY4z+QwGg04kW/VChaTjE3YGL7tCn9nPBtbw4NFbTBUkki1truTx+33nGtJi0xZV0XUacnp4MHvopfwTHESk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AfMykjc3; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782349750; c=relaxed/simple;
+	bh=EhBWeBor7+3TLkCvfTysfZR/VPJ7nKtlH2rnA0Lob+k=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=txLxuMMfMUcGhT809pDbgyWDTWhvAm7XhW4U1CcF9yUNH+DYcf6QPvpyQhtxFwfO1PYCbs9PiuW5D4jN3VC5aFFJbkUKxjJ9tyC2zquXKOvRqeFXpuh7cgLUJZCdkO7t0iqHFEpXls+nAo3XOjWBr16qe8AG5E+IVuhrUD9gCCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DrRfq9DY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AfMykjc3"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8423f236418so1078408b3a.1
-        for <bpf@vger.kernel.org>; Wed, 24 Jun 2026 17:47:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782348472; x=1782953272; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=WdahB+I9NZOe5G0Lzjk9Wwsf1tc+Ghs7JEI7HU+xrKA=;
-        b=AfMykjc38WhmM6fEEGSxlG1chW78cu60EnqQFAm2mr1znFSBJBltIWjlTYPNJdeaM1
-         9fSiGkkz8aRExPpFuefwsnRm1QUX2Cv2yLc8LmGrIxQKpDONcqhFwdouTILtGrDt8CTE
-         Mh/gk8J8NOwxa+QsA0DLhWK1zwBfhj45UYRSuyO7HvbrYPfVf/lvE0k97PCJe+NSfryL
-         mkMFzz6m84YhGA1ccnGS8qxBbSC3fJ6UDuVKBEn8dRSOTGpL2JFIoAhRm+2dTxnuzscs
-         o0O0fAeN+zKYeVSW5XP56kCNMPID+A4tyvLR89beCQx0BM758Hz8FkudyREUQFyIKscV
-         R6Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782348472; x=1782953272;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WdahB+I9NZOe5G0Lzjk9Wwsf1tc+Ghs7JEI7HU+xrKA=;
-        b=qoQxQrpgfHP9y20twOGXEJASgzHqo88eokckVFtMg0YKWmhQLW+dt/E6bJBD4Ybfk2
-         d0zc/pUTtBTnj4id9XlWWrNJZ25sBaqzcK086y6gVdtKBTuh+6LtnW8ZL7ZuEOIVZo9i
-         JsMNqJ7m80lWihylwW5GkXwPh7Kgt1FV0tYYozaHO9kY2W3b7cBMCLFcIC1suOhXt6Iu
-         N9XQz43NoEM/XKcgvuWtVW1n9FwiZlXo3nXVPvI0q1959gXG33yWhswzMJt1ABqX0xMA
-         5IkDMkSW/uYmfBBI3dteLpS2i923xxMKG5GBOji4KXEytb2g16ge7401SQDGiOuMxU+p
-         HLdQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/4SXR2VF8CPlQvfeMyRnyAwCbDjd4FgmPLtoyrdb64QitfSQnyUOkNvlF4wJv2raZ9K9U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhW4GSt/IA6PXpiSu2j8vtnCvQuECnDjlWg3CvB/3tyPuTTUzz
-	bvZFI0+FJPyxr4Vr7wxFXmBpBsJbxcQOGaD5zEgO9ZUrSMnEzo6lJCmP
-X-Gm-Gg: AfdE7cnMuptbqD705D9ggeWm1L4pDdO/03BHf1UtGf5aNWZ57loKCAXX1WLcSqQL0Nj
-	L3PKTkU///78nx8/TaQ7Deq0QGrbpZhj/hS7xk54opuJImpsLSHxV2Ccf1D0VtfUCGIoM7kRTja
-	UwioCjzUK7kmUFLBW+coxgtRQoBsW3D62BDO7o41hNnRsg4OJU0p5lvsilDnMNaKyL0J8UxuUA6
-	U5HDcwi3AgObyzus1qznfJNHpo1Bt+tNzP9k/8Q/4/li5X2jAdP5euBztQzGQwxVXEqFJaQATtW
-	qiqy2ovJrx/wtcD9UGFSWUIaA1aAqyPnYapw0/UlVPR8ASspOgfptPDq0BtKxAEC8Fq63O+zMgn
-	u+zP+Bv3wIcSn6K4jge3SmHPjN07vclhiwnPDVKlpqixvBmoWeqeYZGZGklfDSa1afyNaMfMcQd
-	DZALzBYZnm8MuodCOPr4HkBJWoAI3vr0IfhBY0GA4/OQ==
-X-Received: by 2002:a05:6a00:b48f:b0:838:29b3:9ed1 with SMTP id d2e1a72fcca58-845b3bf5544mr547140b3a.41.1782348472212;
-        Wed, 24 Jun 2026 17:47:52 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845a3fcc371sm3544618b3a.12.2026.06.24.17.47.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 17:47:51 -0700 (PDT)
-Message-ID: <3f31912d549a6e99c1db812bccb93835d7087a3c.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 13/17] bpf: Report Program Structure CFG
- errors
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
- Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Wed, 24 Jun 2026 17:47:44 -0700
-In-Reply-To: <20260619205934.1312876-14-memxor@gmail.com>
-References: <20260619205934.1312876-1-memxor@gmail.com>
-	 <20260619205934.1312876-14-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DrRfq9DY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54BE01F000E9;
+	Thu, 25 Jun 2026 01:09:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782349749;
+	bh=u8uJ8GHJ07pejXcy4KRwPpXgXLjWoU2SgIbTVNpVTno=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=DrRfq9DYyT2ITNIiPP1cG2dYEFGN5wFRdae2H8DC497cS/AvP46JuNtDLPySpl5uo
+	 eZWnIID07v7aa693/lU2AjQGVwVunaKPvAHkk7nQ7ZCv9tMrHwmdyJFUYLm4GFDSLr
+	 1CbrrC2pWXNQCuJQKIz8JqXarlyWIbJ6Hz0BrsqgkxSFBvfZeSGUC55lrUJwyAsUDc
+	 Bfl9EaSIFBTu6Z+3wY78Wr3DSPberQcORbb5H6GaNI841acmdPpw4xJ+BbG2DzYAMl
+	 H6ShURy4ZY00ueODPnixTnKYJcaVHq+IaezdKlr9JAaGPsezylFQd+JazXHCXHqNEm
+	 qH4GKnOxPVaYg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0AC03AAA0F5;
+	Thu, 25 Jun 2026 01:08:58 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: mana: Fall back to standard MTU when PF reports
+ adapter_mtu of 0
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178234973748.3045401.8722834683122221137.git-patchwork-notify@kernel.org>
+Date: Thu, 25 Jun 2026 01:08:57 +0000
+References: <20260619055348.467224-1-ernis@linux.microsoft.com>
+In-Reply-To: <20260619055348.467224-1-ernis@linux.microsoft.com>
+To: Erni Sri Satya Vennela <ernis@linux.microsoft.com>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+ decui@microsoft.com, longli@microsoft.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ dipayanroy@linux.microsoft.com, ssengar@linux.microsoft.com,
+ jacob.e.keller@intel.com, horms@kernel.org, gargaditya@linux.microsoft.com,
+ kees@kernel.org, linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 
-On Fri, 2026-06-19 at 22:59 +0200, Kumar Kartikeya Dwivedi wrote:
-> Augment selected subprogram CFG validation failures with Program Structur=
-e
-> reports. These errors are structural rather than path-dependent, so the r=
-eport
-> focuses on source and instruction context instead of causal history.
->=20
-> Cover jumps that leave the current subprogram, subprograms whose last
-> instruction can fall through into the next subprogram, and recursive bpf2=
-bpf
-> call graph edges.
->=20
-> Format long jump-range reasons directly in diagnostics.c, and keep the
-> fallthrough suggestion aligned with the verifier check by suggesting exit=
- or
-> explicit jumps.
->=20
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
+Hello:
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-[...]
+On Thu, 18 Jun 2026 22:53:38 -0700 you wrote:
+> Commit d7709812e13d ("net: mana: hardening: Validate adapter_mtu from
+> MANA_QUERY_DEV_CONFIG") rejected any adapter_mtu value smaller than
+> ETH_MIN_MTU + ETH_HLEN, including 0, returning -EPROTO and failing
+> mana_probe().
+> 
+> Some older PF firmware versions still in the field report
+> adapter_mtu as 0 in the MANA_QUERY_DEV_CONFIG response. With the
+> hardening check in place, the MANA VF driver now fails to load on
+> those hosts, breaking networking entirely for guests.
+> 
+> [...]
 
-> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-> index 26d37066465f..032b3dc56f2e 100644
+Here is the summary with links:
+  - [net] net: mana: Fall back to standard MTU when PF reports adapter_mtu of 0
+    https://git.kernel.org/netdev/net/c/6bd81a5b4e0d
 
-[...]
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> @@ -136,6 +143,11 @@ static int push_insn(int t, int w, int e, struct bpf=
-_verifier_env *env)
->  		verbose_linfo(env, t, "%d: ", t);
->  		verbose_linfo(env, w, "%d: ", w);
->  		verbose(env, "back-edge from insn %d to %d\n", t, w);
-> +		bpf_diag_report_program_structure(env, t,
-> +						  "back-edge is not allowed",
-> +						  "Rewrite the control flow as a verifier-supported bounded loop, =
-or load with privileges that allow this back-edge.",
 
-As far as I understand, this error fires if a control flow graph loop
-is detected while loading a program in an unprivileged mode.
-In such a context suggestion to "Rewrite ... as verifier-supported ... loop=
-"
-is not actionable, I'd rephrase it as
-"Avoid loops for unprivileged programs or load with privileges ...".
-
-> +						  "Instruction %d branches back to instruction %d. This program is=
- being rejected without the privilege needed for this back-edge.",
-> +						  t, w);
->  		return -EINVAL;
->  	} else if (insn_state[w] =3D=3D EXPLORED) {
->  		/* forward- or cross-edge */
-> @@ -316,6 +328,11 @@ static struct bpf_iarray *jt_from_subprog(struct bpf=
-_verifier_env *env,
-> =20
->  	if (!jt) {
->  		verbose(env, "no jump tables found for subprog starting at %u\n", subp=
-rog_start);
-> +		bpf_diag_report_program_structure(env, subprog_start,
-> +						  "missing jump table",
-> +						  "Provide a jump table whose entries target this subprogram.",
-
-I'd rephrase it as "Make sure that subprograms containing gotox
-instructions are accompanied by jump tables referencing these
-subprograms.". (or "... derive jump target from a jump table
-referencing the subprogram"?).
-
-> +						  "No jump table was found for the subprogram that starts at instr=
-uction %u.",
-> +						  subprog_start);
->  		return ERR_PTR(-EINVAL);
->  	}
-> =20
-
-[...]
