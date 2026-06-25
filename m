@@ -1,262 +1,350 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5DB439D3EC
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 10:59:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9973A960F;
+	Thu, 25 Jun 2026 11:00:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782385188; cv=none; b=V6Fuy11HU+QkpCsiQba2G3gP6dc8JgFnubqknOX2lLeYEWun57Mgh/KRQ7mGWLGP1G6BYMBunHLG9RJU6umOgq1QojE4K1EYODadKuwwN33vQlElBAKEPqCgPmosn+7oK+0m66G2VkSUirJhG9AQ3WID9u4u33NjKFwQg3t4eAA=
+	t=1782385257; cv=none; b=gy3zmA9rq19Ifz1kgvRzpAFdluze481e/k+uH2t6uAeVyzKhKoYxJbqT3rQA2MTGr3WaJMfR1wjAD2Nk4nRgX2Oug4Ysz4XQsjaV9Woddub4m2gQUMN8ch/DsC8ssYxuf8jCrWjDbXU1lWp49ZQnm50llimyyY3wTm9OKfwdzeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782385188; c=relaxed/simple;
-	bh=moIE8WbOhEUHpvRdK5YsoI+RWzG8UkN4U2u5ilig0s0=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LVnfRTuZFibyWnm3qO83szbhooFLpti95J9ZjNdSXrGdpzsEtCJ4K8RN3r0ywt/ovHKqOI7RZ6HypNsS/MEOQiY++hM4S6Cgyx/qTa4WbKgpG6nYBKpns8UP6g2LB3IrAu0AUXwAD94Vv3vT66fY+nH25qomCtYSTWE3oqKyZsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PRJVGucR; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782385257; c=relaxed/simple;
+	bh=vUCknLxuUl+l9swTriiC6ceqP2YAiFjd4mW5kfnFb/U=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=iByqunH8HDRVjjf7KQRNwxjDiznJGJ1BgWHRuG+ivFRxfa1Z3pIKaRw1rslP+YPl94o6mZl1UCL0Y58mUmAWWt3C6c2Xgfc+hFjH/ntElQ71RFSOmjzeoQTZb1dcI+lvcjWfJ6VMjlonBe5kLfkccZigzE+nF7xZ7D2rAWwUARk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ft52+1SA; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PRJVGucR"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4903d730b1fso22819075e9.2
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 03:59:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782385181; x=1782989981; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kYyoK0pGtkUSu+UWMOV/pLn1FeMe2RkvR+yVNGqpBWM=;
-        b=PRJVGucRvSY3dCerKZdhYqyMaYsT30nSc3n+IhLLlpiCvFD/Orhehv/Khvms7UVpLt
-         yo6qBI2cz5gLmVc+GeWlYwL9rueuPL2Mjpn7O0clo1w/ikcKbdA3Sa+4jnnOF8GMW3zK
-         BRlpb8nLDbVAFXDJVk+rO1mwF/OJZ1TcNtu3oiKXlgwKOLc0zsptA5YyRmO3Lek/i35H
-         6AqiLXgGNkAr7wWpSJRNsWmrgEpXcH7gR1ymzQyfr9rbDardZDSkL9BRJTLsodT+rGM0
-         3cIwWr4s5QendsWlckKxBRH34ipfHvoGk4DyDdV2w77aqNoFrRMb4EaN9cX9cxUVDLtf
-         HKQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782385181; x=1782989981;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kYyoK0pGtkUSu+UWMOV/pLn1FeMe2RkvR+yVNGqpBWM=;
-        b=db15KF8TlQJ8ilvW7PgE0wBKBCI8v9SdWv3m7UyTuLZ1bEwf0pyAbljU8YLzO1G75h
-         awGqQ0zVtJo1ZCqSl+9gle3U9fnWC8oFhN6cKzNAX2ipC1HyL5IYoq3+ruHYT0vzNstJ
-         DqVWCThSHbkmcIkn6rPK9C5m5r9K1TMimfXH7/fpwU0rqbvmpokHkZtDdtuvrVEuRaZw
-         5e5bA9VmnqHHTASr4eFdYpAQakunorYmQo/cl3huMMABBQdk72RyetTxSFn+M7outORW
-         LnSH2SjJQKsdkM+wxnF3vieVlohU9BGvox4PUcst9yxTppMzObXjGFTaxvZmh8qbb7+g
-         2PKw==
-X-Forwarded-Encrypted: i=1; AFNElJ8nGzhK8GMO9R507USh4pTs+EpBWBp4WFwhz1PffoC4MeVfmg4KnOsBpuedZs8tfK8/t3o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywk/HnQ81Mo+0xJS89U+bLbdibViGljhG3OJEdEAxcS1t+cDMVz
-	YJPWtqTIaUi1HkMY54rrKIJTwzh17bJHpWm3hMeAXDnUcQFfqka6gbURKRW4pQ==
-X-Gm-Gg: AfdE7cmDkbV4b1QWizG08pHevuoA75WhBx0UsvaMNSWfSRzZdaH3qs+oj9usVcsG1Hd
-	swJoG0x2j8iMy2Yzm+Zfn7edIufVJfJGV1v73Qn+QbKn8/LQF68bI51XRxVw1D9T5VHpfFrm4Sa
-	TyQVxFt9jTZFwGhNLKfTTd0HoM6CtVRIj+FUbiFRBPlTDflSsJ6bByDUFQJSKuv8NuXxEaQ/6PE
-	8FbDtTuxZ5WFuf2pP2emPnlqQJNL0XxjsbnUBt6+n+a3tq3VYnrp19pUdS7wL8/Q+YuaxqA3E3v
-	3mr1G3gGbxix5Wk7REvQzGnkuDr8/3W3NmqAkNbxm422hedEwkne/9fr7+0MnnO1+bUrh+dlOiU
-	nsq2dP9bMWorNm33O0t5n09T2I6jiKZ9COnwMpVEPFQHXHU1rtt8o7Za6m0WqHtVbvnLOegTPOm
-	ZuDhbt
-X-Received: by 2002:a05:600c:4e90:b0:492:4c9e:c95d with SMTP id 5b1f17b1804b1-4926687e737mr25869805e9.18.1782385181030;
-        Thu, 25 Jun 2026 03:59:41 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49266062fd6sm28644475e9.1.2026.06.25.03.59.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 03:59:40 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 25 Jun 2026 12:59:39 +0200
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	kernel-team@fb.com
-Subject: Re: [PATCH dwarves v10 0/5] pahole: Encode true signatures in kernel
- BTF
-Message-ID: <aj0KGx-5FwUbwGHc@krava>
-References: <20260625020148.1883082-1-yonghong.song@linux.dev>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ft52+1SA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782385256; x=1813921256;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=vUCknLxuUl+l9swTriiC6ceqP2YAiFjd4mW5kfnFb/U=;
+  b=Ft52+1SATq1u9siZpCOShDXPUvQAEG9ceDn7d9ZMPuM0nNyneHaVsdhA
+   8PEM0RUVdQ2PaDACVwhwaAFzd7noGS03jnog8lD3zVPxeY7okREDQEVxE
+   qP9mAd3ifJyapa+aBDMAlWpOlGaiqn2rJCoVw5DJLjtx+ecHuzin0SWW3
+   4tR/vC28360JA6YUveloUPYzjUc2LWb5VZVZQNDNCOds2CJ6zGcjXzptW
+   JokMDaD019UtCfYUSjYdHqFr5zuA/Ug897IFsMtYRA7yxs2parB9ogQJR
+   izsOSKsHwdKywvHy89LMPAiQ9RRyCClmtT/a3AH4RExovS5Dt/1btygar
+   w==;
+X-CSE-ConnectionGUID: 2PvImUdiS8WGFHJi5Pa1Xw==
+X-CSE-MsgGUID: dIvq8SOKTQqtsgS9xAYFeA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11827"; a="86838512"
+X-IronPort-AV: E=Sophos;i="6.24,224,1774335600"; 
+   d="scan'208";a="86838512"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2026 04:00:55 -0700
+X-CSE-ConnectionGUID: vmMDYz3IR0yKtgcbLjpOxw==
+X-CSE-MsgGUID: owF9N6AWRaOmSHlf6kHSKg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,224,1774335600"; 
+   d="scan'208";a="254729051"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.126])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2026 04:00:42 -0700
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: Kaitao Cheng <kaitao.cheng@linux.dev>, David Laight
+ <david.laight.linux@gmail.com>, Christian =?utf-8?Q?K=C3=B6nig?=
+ <christian.koenig@amd.com>, "David Hildenbrand (Arm)" <david@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand
+ <david@kernel.org>, Jens Axboe <axboe@kernel.dk>, Tejun Heo
+ <tj@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, Christian
+ Brauner <brauner@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+ <namhyung@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Juri Lelli
+ <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>,
+ Paul Moore <paul@paul-moore.com>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, "Paul E. McKenney"
+ <paulmck@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>, David Howells
+ <dhowells@redhat.com>, Simona Vetter <simona.vetter@ffwll.ch>, Randy
+ Dunlap <rdunlap@infradead.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Philipp Stanner <phasta@kernel.org>, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+ linux-ntfs-dev@lists.sourceforge.net, linux-fsdevel@vger.kernel.org,
+ io-uring@vger.kernel.org, audit@vger.kernel.org, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-perf-users@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ kexec@lists.infradead.org, live-patching@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-crypto@vger.kernel.org,
+ linux-pm@vger.kernel.org, rcu@vger.kernel.org, sched-ext@lists.linux.dev,
+ linux-mm@kvack.org, virtualization@lists.linux.dev, damon@lists.linux.dev,
+ llvm@lists.linux.dev, Kaitao Cheng <chengkaitao@kylinos.cn>, Muchun Song
+ <muchun.song@linux.dev>
+Subject: Re: [PATCH v3 1/7] list: Add mutable iterator variants
+In-Reply-To: <0ed6b5c3-e955-46e2-9fc6-075a0dfd1c4f@linux.dev>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park,
+ 6 krs Bertel Jungin Aukio 5, 02600 Espoo, Finland
+References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
+ <20260622040533.29824-2-kaitao.cheng@linux.dev>
+ <20260622094242.64531b9a@pumpkin>
+ <351a6b67-b394-4c58-aee2-88b6c8089ad5@linux.dev>
+ <cf8467c7-b98f-44a5-9cf9-60b43b5da711@amd.com>
+ <20260624152324.3def88ce@pumpkin>
+ <0ed6b5c3-e955-46e2-9fc6-075a0dfd1c4f@linux.dev>
+Date: Thu, 25 Jun 2026 14:00:39 +0300
+Message-ID: <734f66ca51485ee3ec9788c0eaaead681e00664b@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260625020148.1883082-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 24, 2026 at 07:01:48PM -0700, Yonghong Song wrote:
-> Current vmlinux BTF encoding is based on the source level signatures.
-> But the compiler may do some optimization and changed the signature.
-> If the user tried with source level signature, their initial implementation
-> may have wrong results and then the user need to check what is the
-> problem and work around it, e.g. through kprobe since kprobe does not
-> need vmlinux BTF.
-> 
-> Majority of changed signatures are due to dead argument elimination.
-> The following is a more complex one. The original source signature:
->   typedef struct {
->         union {
->                 void            *kernel;
->                 void __user     *user;
->         };
->         bool            is_kernel : 1;
->   } sockptr_t;
->   typedef sockptr_t bpfptr_t;
->   static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
-> After compiler optimization, the signature becomes:
->   static int map_create(union bpf_attr *attr, bool uattr__is_kernel) { ... }
-> In the above, uattr__is_kernel corresponds to 'is_kernel' field in sockptr_t.
-> This makes it easier for developers to understand what changed.
-> 
-> The new signature needs to properly follow ABI specification based on
-> locations. Otherwise, that signature should be discarded. For example,
-> 
->     0x0242f1f7:   DW_TAG_subprogram
->                     DW_AT_name      ("memblock_find_in_range")
->                     DW_AT_calling_convention        (DW_CC_nocall)
->                     DW_AT_type      (0x0242decc "phys_addr_t")
->                     ...
->     0x0242f22e:     DW_TAG_formal_parameter
->                       DW_AT_location        (indexed (0x14a) loclist = 0x005595bc:
->                          [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_reg5 RDI
->                          [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_reg14 R14
->                          [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
->                          [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg14 R14)
->                       DW_AT_name    ("start")
->                       DW_AT_type    (0x0242decc "phys_addr_t")
->                       ...
->     0x0242f239:     DW_TAG_formal_parameter
->                       DW_AT_location        (indexed (0x14b) loclist = 0x005595e6:
->                          [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_reg4 RSI
->                          [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_reg3 RBX
->                          [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
->                          [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg3 RBX)
->                       DW_AT_name    ("end")
->                       DW_AT_type    (0x0242decc "phys_addr_t")
->                       ...
->     0x0242f245:     DW_TAG_formal_parameter
->                       DW_AT_location        (indexed (0x14c) loclist = 0x00559610:
->                          [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_breg4 RSI+0)
->                       DW_AT_name    ("size")
->                       DW_AT_type    (0x0242decc "phys_addr_t")
->                       ...
->     0x0242f250:     DW_TAG_formal_parameter
->                       DW_AT_const_value     (4096)
->                       DW_AT_name    ("align")
->                       DW_AT_type    (0x0242decc "phys_addr_t")
->                       ...
-> 
-> The third argument should correspond to RDX for x86_64. But the location suggests that
-> the parameter value is stored in the address with 'RSI + 0'. It is not clear whether
-> the parameter value is stored in RDX or not. So we have to discard this funciton in
-> vmlinux BTF to avoid incorrect true signatures.
-> 
-> For llvm, any function having
->   DW_AT_calling_convention        (DW_CC_nocall)
-> in dwarf DW_TAG_subprogram will indicate that this function has signature changed.
-> But for non DW_CC_nocall functions, it is possible that true signature still not
-> available due to locations. So every functions will be checked.
-> 
-> I did experiment with latest bpf-next. For x86_64, there are 69103 kernel functions
-> and 875 kernel functions having signature changed. A series of patches are intended
-> to ensure true signatures are properly represented. Eventually, only 20 functions
-> cannot have true signatures due to locations.
-> 
-> For arm64, there are 863 kernel functions having signature changed, and
-> 108 functions cannot have true signatures due to locations. I checked those
-> functions and look like llvm arm64 backend more relaxed to compute parameter
-> values.
-> 
-> For full testing, I enabled true signature support in kernel scripts/Makefile.btf like below:
->   -pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=attributes
->   +pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=attributes --btf_features=+true_signature
-> 
-> See individual patches for details.
-
-hi,
-I tried this version and had to choose another function, because "arp_process"
-suddenly started to show args registers in proper order ;-)
-
-now I checked "stop_cpus" function which is added to btf after this change,
-I attached the dwarf dump below
-
-"stop_cpus" has DW_CC_nocall set, so it has signature_changed=true and I see the
-function ends up in the btf_encoder with optimized_parms=1
-
-but we do not skip such functions now, it seems like we should?
-
-I tried the attached change below and it removes all the extra functions
-that were added in the btf with this change
-
-btw I can't see any other use for optimized_parms flag, it seems to be
-just set and never used.. so I wonder I'm missing something
-
-jirka
-
-
-dwarfdump:
-
-0x016f4b1b:   DW_TAG_subprogram
-                DW_AT_low_pc    (0xffffffff813e0fc0)
-                DW_AT_high_pc   (0xffffffff813e1133)
-                DW_AT_frame_base        (DW_OP_reg7 RSP)
-                DW_AT_GNU_all_call_sites        (true)
-                DW_AT_name      ("stop_cpus")
-                DW_AT_decl_file ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
-                DW_AT_decl_line (464)
-                DW_AT_prototyped        (true)
-                DW_AT_calling_convention        (DW_CC_nocall)
-                DW_AT_type      (0x016e94c5 "int")
-
-0x016f4b36:     DW_TAG_formal_parameter
-                  DW_AT_location        (0x0065ad9e:
-                     [0xffffffff813e0fc5, 0xffffffff813e0fed): DW_OP_reg5 RDI
-                     [0xffffffff813e0fed, 0xffffffff813e111e): DW_OP_reg14 R14
-                     [0xffffffff813e111e, 0xffffffff813e1127): DW_OP_GNU_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
-                     [0xffffffff813e1127, 0xffffffff813e1133): DW_OP_reg14 R14)
-                  DW_AT_name    ("cpumask")
-                  DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
-                  DW_AT_decl_line       (464)
-                  DW_AT_type    (0x016f3242 "const cpumask *")
-
-0x016f4b46:     DW_TAG_formal_parameter
-                  DW_AT_name    ("fn")
-                  DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
-                  DW_AT_decl_line       (464)
-                  DW_AT_type    (0x016f2ca5 "cpu_stop_fn_t")
-
-0x016f4b52:     DW_TAG_formal_parameter
-                  DW_AT_location        (0x0065ae0d:
-                     [0xffffffff813e0fc5, 0xffffffff813e0ff2): DW_OP_reg4 RSI
-                     [0xffffffff813e0ff2, 0xffffffff813e10e4): DW_OP_reg3 RBX
-                     [0xffffffff813e10e4, 0xffffffff813e1127): DW_OP_GNU_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
-                     [0xffffffff813e1127, 0xffffffff813e112e): DW_OP_reg3 RBX
-                     [0xffffffff813e112e, 0xffffffff813e1133): DW_OP_GNU_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value)
-                  DW_AT_name    ("arg")
-                  DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
-                  DW_AT_decl_line       (464)
-                  DW_AT_type    (0x016e858f "void *")
-
-
-
-
+On Thu, 25 Jun 2026, Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
+> =E5=9C=A8 2026/6/24 22:23, David Laight =E5=86=99=E9=81=93:
+>> On Wed, 24 Jun 2026 15:23:47 +0200
+>> Christian K=C3=B6nig <christian.koenig@amd.com> wrote:
+>>> On 6/24/26 15:14, Kaitao Cheng wrote:
+>>>> =E5=9C=A8 2026/6/22 16:42, David Laight =E5=86=99=E9=81=93:=20=20
+>>>>> On Mon, 22 Jun 2026 12:05:31 +0800
+>>>>> Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
+>>>>>=20=20
+>>>>>> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+>>>>>>
+>>>>>> The list_for_each*_safe() helpers are used when the loop body may
+>>>>>> remove the current entry.  Their API exposes the temporary cursor at
+>>>>>> every call site, even though most users only need it for the iterator
+>>>>>> implementation and never reference it in the loop body.
+>>>>>>
+>>>>>> Add *_mutable() variants for list and hlist iteration.  The new help=
+ers
+>>>>>> support both forms: callers may keep passing an explicit temporary c=
+ursor
+>>>>>> when they need to inspect or reset it, or omit it and let the helper=
+ use
+>>>>>> a unique internal cursor.=20=20
+>>>>>
+>>>>> I'm not really sure 'mutable' means anything either.
+>>>>> It is possible to make it valid for the loop body (or even other thre=
+ads)
+>>>>> to delete arbitrary list items - but that needs significant extra ove=
+rheads.
+>>>>>
+>>>>> It might be worth doing something that doesn't need the extra variabl=
+e,
+>>>>> but there is little point doing all the churn just to rename things.
+>>>>>=20=20
+>>>>>>
+>>>>>> This makes call sites that only mutate the list through the current =
+entry
+>>>>>> less noisy, while keeping the existing *_safe() helpers available for
+>>>>>> compatibility.
+>>>>>>
+>>>>>> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+>>>>>> ---
+>>>>>>  include/linux/list.h | 269 +++++++++++++++++++++++++++++++++++++---=
 ---
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 38455a4c6b6b..cbc5063a6280 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -1564,7 +1564,8 @@ static int btf_encoder__add_true_signature(struct btf_encoder *encoder,
- 		 */
- 		if (true_state->unexpected_reg ||
- 		    true_state->uncertain_parm_loc ||
--		    true_state->ambiguous_addr)
-+		    true_state->ambiguous_addr ||
-+		    true_state->optimized_parms)
- 			continue;
- 		err = btf_encoder__add_func(encoder, true_state);
- 		if (err < 0)
-@@ -1656,6 +1657,8 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
- 			skip_reason = "reordered parameters\n";
- 		if (state->elf->ambiguous_addr)
- 			skip_reason = "ambiguous address\n";
-+		if (state->optimized_parms)
-+			skip_reason = "optimized parms\n";
- 
- 		if (skip_reason) {
- 			btf_encoder__log_func_skip(encoder, saved_fns[i].elf,
+>>>>>>  1 file changed, 231 insertions(+), 38 deletions(-)
+>>>>>>
+>>>>>> diff --git a/include/linux/list.h b/include/linux/list.h
+>>>>>> index 09d979976b3b..1081def7cea9 100644
+>>>>>> --- a/include/linux/list.h
+>>>>>> +++ b/include/linux/list.h
+>>>>>> @@ -7,6 +7,7 @@
+>>>>>>  #include <linux/stddef.h>
+>>>>>>  #include <linux/poison.h>
+>>>>>>  #include <linux/const.h>
+>>>>>> +#include <linux/args.h>
+>>>>>>=20=20
+>>>>>>  #include <asm/barrier.h>
+>>>>>>=20=20
+>>>>>> @@ -763,28 +764,72 @@ static inline void list_splice_tail_init(struc=
+t list_head *list,
+>>>>>>  #define list_for_each_prev(pos, head) \
+>>>>>>  	for (pos =3D (head)->prev; !list_is_head(pos, (head)); pos =3D pos=
+->prev)
+>>>>>>=20=20
+>>>>>> -/**
+>>>>>> - * list_for_each_safe - iterate over a list safe against removal of=
+ list entry
+>>>>>> - * @pos:	the &struct list_head to use as a loop cursor.
+>>>>>> - * @n:		another &struct list_head to use as temporary storage
+>>>>>> - * @head:	the head for your list.
+>>>>>> +/*
+>>>>>> + * list_for_each_safe is an old interface, use list_for_each_mutabl=
+e instead.
+>>>>>>   */
+>>>>>>  #define list_for_each_safe(pos, n, head) \
+>>>>>>  	for (pos =3D (head)->next, n =3D pos->next; \
+>>>>>>  	     !list_is_head(pos, (head)); \
+>>>>>>  	     pos =3D n, n =3D pos->next)
+>>>>>>=20=20
+>>>>>> +#define __list_for_each_mutable_internal(pos, tmp, head)		\
+>>>>>> +	for (typeof(pos) tmp =3D (pos =3D (head)->next)->next;		\=20=20
+>>>>>
+>>>>> Use auto
+>>>>>=20=20
+>>>>>> +	     !list_is_head(pos, (head));				\
+>>>>>> +	     pos =3D tmp, tmp =3D pos->next)
+>>>>>> +
+>>>>>> +#define __list_for_each_mutable1(pos, head)				\
+>>>>>> +	__list_for_each_mutable_internal(pos, __UNIQUE_ID(next), head)
+>>>>>> +
+>>>>>> +#define __list_for_each_mutable2(pos, next, head)			\
+>>>>>> +	list_for_each_safe(pos, next, head)
+>>>>>> +
+>>>>>>  /**
+>>>>>> - * list_for_each_prev_safe - iterate over a list backwards safe aga=
+inst removal of list entry
+>>>>>> + * list_for_each_mutable - iterate over a list safe against entry r=
+emoval
+>>>>>>   * @pos:	the &struct list_head to use as a loop cursor.
+>>>>>> - * @n:		another &struct list_head to use as temporary storage
+>>>>>> - * @head:	the head for your list.
+>>>>>> + * @...:	either (head) or (next, head)
+>>>>>> + *
+>>>>>> + * next:	another &struct list_head to use as optional temporary sto=
+rage.
+>>>>>> + *		The temporary cursor is internal unless explicitly supplied by
+>>>>>> + *		the caller.
+>>>>>> + * head:	the head for your list.
+>>>>>> + */
+>>>>>> +#define list_for_each_mutable(pos, ...)					\
+>>>>>> +	CONCATENATE(__list_for_each_mutable, COUNT_ARGS(__VA_ARGS__))	\
+>>>>>> +		(pos, __VA_ARGS__)=20=20
+>>>>>
+>>>>> The variable argument count logic really just slows down compilation.
+>>>>> Maybe there aren't enough copies of this code to make that significan=
+t.
+>>>>> But just because you can do it doesn't mean it is a gooD idea.
+>>>>> I'm also not sure it really adds anything to the readability.
+>>>>>
+>>>>> And, it you are going to make the middle argument optional there is
+>>>>> no need to change the macro name.=20=20
+>>>>
+>>>> Christian K=C3=B6nig and Jani Nikula also disagree with the variadic-a=
+rgument
+>>>> implementation approach. If we abandon that method, it means we will
+>>>> inevitably need to add some new macros. If mutable is not a good name,
+>>>> suggestions for better alternatives would be welcome; coming up with a
+>>>> suitable name is indeed rather tricky.=20=20
+>>>
+>>> I don't think you need to add a new macro for the specific use case tha=
+t people want to modify the next element of the iteration.
+>>>
+>>> If I remember your numbers correctly that is a really corner case and k=
+eeping using the existing *_safe() macros for that sounds perfectly fine to=
+ me.
+>>=20
+>> IIRC currently you have a choice of either:
+>> 	define               Item that can't be deleted
+>> 	list_for_each()	     The current item.
+>> 	list_for_each_safe() The next item.
+>> There is also likely to be code that updates the variables to allow
+>> for other scenarios.
+>>=20
+>> Note that if increase a reference count and release a lock then list_for=
+_each()
+>> is likely safer than list_for_each_safe() :-)
+>>=20
+>> list.h has 9 variants of the 'safe' loop.
+>> The bloat of another 9 is getting excessive.
+>>=20
+>> It has to be said that this is one of my least favourite type of list...
+>
+> Hi Christian K=C3=B6nig, David Laight, Jani Nikula, David Hildenbrand,
+> Andy Shevchenko, Alexei Starovoitov
+>
+> For ease of discussion, I need to summarize the currently possible
+> approaches and briefly describe their respective pros and cons,
+> using the list_for_each_entry* interfaces as examples.
+>
+> 1. Add list_for_each_entry_mutable, while keeping list_for_each_entry
+> and list_for_each_entry_safe unchanged. list_for_each_entry_mutable
+> would be used specifically for safe deletion scenarios that do not
+> need to expose the temporary cursor externally. The code can refer to
+> the v1 version.
+>
+> Pros: Does not depend on immediate per-subsystem adaptation and can be
+>       merged directly.
+> Cons: Requires adding a whole set of mutable interfaces, which makes the
+>       code somewhat redundant.
+
+Seems fine, and the original _safe naming is ambiguous anyway.
+
+> 2. Directly optimize away the temporary cursor in list_for_each_entry_safe
+> and define it inside the loop instead, changing the interface from four
+> arguments to three.
+>
+> Pros: Does not add redundant interfaces.
+> Cons: (1) Users need to manually update special cases that use the
+>       traversal variable of list_for_each_entry_safe, the new
+>       list_for_each_entry_safe would no longer apply there and would
+>       need to be open-coded.
+>       (2) Because the macro arguments changes, all list_for_each_entry_sa=
+fe
+>       callers would need to be modified and merged together, making it
+>       difficult to merge such a large amount of code at once.
+
+This won't fly because there are literally thousands of
+list_for_each_entry_safe() users.
+
+> 3. Use a variadic macro approach to optimize list_for_each_entry_safe,
+> so that it supports both three and four arguments.
+>
+> Pros: (1) Does not add redundant interfaces.
+>       (2) Does not depend on immediate per-subsystem adaptation and can
+>       be merged directly.
+> Cons: (1) Increases compile time.
+>       (2) Makes the interface harder for users to use.
+
+Basically I'm against any variadic macro tricks where the optional
+argument is not the last argument. That's just way too surprising, and
+goes against common practice in just about all other languages.
+
+> 4. Optimize list_for_each_entry by defining the temporary cursor internal=
+ly,
+> making it compatible with the functionality of list_for_each_entry_safe.
+> The code can refer to the v2 version.
+>
+> Pros: (1) Does not add redundant interfaces.
+>       (2) The number of externally visible arguments of list_for_each_ent=
+ry
+>       remains unchanged, still three.
+> Cons: (1) list_for_each_entry and list_for_each_entry_safe would be merged
+>       into one, and list_for_each_entry_safe would gradually be deprecate=
+d.
+>       (2) Users need to manually update special cases that use the traver=
+sal
+>       variable of list_for_each_entry, the new list_for_each_entry would =
+no
+>       longer apply there and would need to be open-coded. There are 15 su=
+ch
+>       cases in total.
+
+This sounds good to me, though I take it there's some code size increase
+and/or performance penalty?
+
+Maybe the 15 cases are questionable anyway?
+
+> 5. Use a variadic macro approach to optimize list_for_each_entry, so that
+> it supports both three and four arguments.
+>
+> Pros: (1) Does not add redundant interfaces.
+>       (2) Does not depend on immediate per-subsystem adaptation and can be
+>       merged directly.
+> Cons: (1) Increases compile time.
+>       (2) list_for_each_entry and list_for_each_entry_safe would be merged
+>       into one, and list_for_each_entry_safe would gradually be deprecate=
+d.
+
+Please don't do the macro tricks.
+
+> 6. Make no changes, keep the current logic unchanged, and close the curre=
+nt
+> email discussion.
+
+I like hiding the temporary stuff when possible.
+
+
+BR,
+Jani.
+
+--=20
+Jani Nikula, Intel
