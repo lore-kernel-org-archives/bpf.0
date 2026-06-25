@@ -1,137 +1,287 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAECB30DEA3
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 14:47:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782398874; cv=none; b=VWflChQbwltvsYNPmjxyF0kbT2wrRg+6Qc4p7/hd8UmNA2ZWwPMcB6D9rVWT5TTRnPFUozdPc48BfgxufzIKs4DtpeG9YMPAGbgHqVpJdeXB30c7i7G/J0K/qCXBZOEn3JuZhYVjdJeImctGvzd7qQoLDLdIvUFzEzCNpDxbkPI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782398874; c=relaxed/simple;
-	bh=b7nIwf0SKHvAA694d5TUaIcATU4pgXwfs/ZG5hIaxnc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=bgscGNWbJWjc2j5ty3+9dJrIld7kvOYBWSyBXUuqw9gBoT4fuGg7L+TdEBkWvHH9Em8nDwzwpCbkakLRkhBAYB1KQqvdqTMOKR47u2MEPV7Ymnj3lQk+T0vEAASaRxCAofnMbNUiil6JZcW/iN+XQl1h6+/OgMeCG6712OLiSgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=R492jBKP; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4905F3E832B;
+	Thu, 25 Jun 2026 15:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.19
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782400494; cv=fail; b=tGs3w/jxMc8ACtZU7l+Vz6B26IhmtsXdvzKSfLPhb9bjDjNGt05rcOGdLzRzlYdOkpJFlBWUVqC7+sY/2nqghXa3MAPqVXZh4gnAIpfkJGKmzmCnI0ZpUVntaZ69oRIfYYo2qmgAAkuaMtUFR3rzRYBiPAj2BK/gV5Y12jz+S6s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782400494; c=relaxed/simple;
+	bh=zw5I0964Wlqso03QcGCHWePYFtbuYKne9fEP455vfH4=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=M+x5AhPEBKaW6b1NE37YAjb2J8L+n+xH17G7tlI6SECTQEv7gZknc8Udh+z8JZsTACvJ1IH8TeSFvuwPffpvLJuG9xvS8kDNfyU3lwArzXNeHwQfQ8xJunzZXxkpdUisk/YaVgwFO9qQsxyzqyskDm6qp24DCrNf3lfeZNnPt6g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aAueJ4nO; arc=fail smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="R492jBKP"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c07a6527453so454635666b.0
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 07:47:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1782398871; x=1783003671; darn=vger.kernel.org;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hjX8t8yDdLY9x6HuLiEfxlYrsR1V1WvMlKQA2gmlayI=;
-        b=R492jBKP2fpvlGY8fq+3L/OSSFmN52DBT+mYTgawpfy/+Uhaxzkf6JN/x4YpBm/XZt
-         IO3DkidqSnstVBzR1+yfFvwLMe0aMrWtosintTaZSrlokPVSoR+FTeD1Iic3NkDf3HHq
-         01dLEFBX8Nf23rxFEG+zHjs1AGgxoyDfipxE7b3vUsbNEbr8oZpVS4BUmkB3URXeyU/0
-         GOZBxUsY9PiTf8sEjnBlPTyqYzZhZNBMN6LrwdyKonhJ91c33q6N+HdV3X7eV5zlJgK5
-         7HRf2emy/reEZSfi0pfNW67XMV+acOHCmPaHhMVFNwObEK6Ld8cgHDsPnitigcsmfJTW
-         /jfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782398871; x=1783003671;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hjX8t8yDdLY9x6HuLiEfxlYrsR1V1WvMlKQA2gmlayI=;
-        b=NT/eArMKLfueuIQdd3Ya1x/jA+lpeLnI0QI0h2uhVEWxzCwuy5X88M3hseGe2Gx37p
-         tMpqqCZmw5UJpvfBg8KZY2C+GJRq7zuzgQvuQQTFWIncnFTrW0lRU4h9D8g9HKQzbgHF
-         RXnRwRgc70HFw2KNB3gktCKiSYTecGTzui9wdAEOHlXpusuujboBlVRT+OI2lxHXjD1Z
-         eSA2aMTSS37zxYecd1asgkFz47ZxHRL8Uw/GgEMM/3YTTePGmWXgnPQp8nLL4CtkqvCQ
-         o8SOkZ93TrXf6LwnyWeDoAXV+27HUl8DLE56VgxnB40vWY1ig1vwHmmjRz434RcG4MoD
-         yy7g==
-X-Forwarded-Encrypted: i=1; AHgh+RpmlvMQamKVMtcQnJnQdUOSc6We0QgRcHZHIF7rGmXtnJCft6JHEL1hXHf6YtaP4g4Fs8E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdDXjKdxN+yCzwDvjC4YyT5XG8Fol9BF5+lsIqKpULUMqLSmh/
-	GAlwSomvLRwCpJ2IWIhWcIQ1+k1+fgqRQCHv6dJiGUpvN7fHVZGWexmViksgDF62F4o=
-X-Gm-Gg: AfdE7cnb3SMC6YY4iL1ShvZeSUUoyrf+BQOESn3PfguPS7nSi6PTLcsCwlPaXBtanoQ
-	MDH9fD47iPU29a34PABEnGwb8UQIavsQ41Y0Gjuz6a8/NvraN9ilp+EFwI6gFWUFpc/IaQVYMzM
-	Nz3QmIZ4FRftCQJZuHm5by2ei8yvK/dt6ik8uzzzTYzPdSsdcbpPnFg2PGJxjlGfzBzYd/Phd33
-	+qNYYyW6gK/0hf08M5G4WojBIdeBYiQKFUyNv6pyc+8NgjL86aNUElAA9zuIUIVV6acB52DHT1D
-	qCFC+LrMvuz1s9hOQ7dmRfor2uhyQ7ZpSo+i1bhr5b21S8socEwygcQZ8B2WjNL6YEsh/eFlLI5
-	hDralXANvBl6sTPxxg7Os2Om9+vOQCF1nxgllJDSTCr4Rv+q+YKdoMerqAcEa7HWJqkgKeijtOd
-	OWbZNZ5GjDVwtbrxk=
-X-Received: by 2002:a17:906:478a:b0:c11:2380:567f with SMTP id a640c23a62f3a-c1205eed845mr209369466b.26.1782398871232;
-        Thu, 25 Jun 2026 07:47:51 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c11fbe05ed6sm199678766b.30.2026.06.25.07.47.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 07:47:50 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: netdev@vger.kernel.org,  bpf@vger.kernel.org,
-  magnus.karlsson@intel.com,  stfomichev@gmail.com,  kuba@kernel.org,
-  pabeni@redhat.com,  horms@kernel.org,  tushar.vyavahare@intel.com,
-  kerneljasonxing@gmail.com
-Subject: Re: [PATCH net-next] selftests/xsk: preserve UMEM view in bidi test
-In-Reply-To: <20260623091008.1046547-1-maciej.fijalkowski@intel.com> (Maciej
-	Fijalkowski's message of "Tue, 23 Jun 2026 11:10:08 +0200")
-References: <20260623091008.1046547-1-maciej.fijalkowski@intel.com>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Thu, 25 Jun 2026 16:47:49 +0200
-Message-ID: <87ik76y8ve.fsf@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aAueJ4nO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782400492; x=1813936492;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=zw5I0964Wlqso03QcGCHWePYFtbuYKne9fEP455vfH4=;
+  b=aAueJ4nOenqE/qR9Zun/e/ZJlUJkEF3mhwCz47IuE3tXZJCq0SleXe13
+   UyVZs7gaDgVzT4ZpgDnYJ3GVHi0y5ct0X/1ivedvAv9+aCB5imlnvUABA
+   Iwk7yozsX+RLI+MN9dzb0WNB9uoDBDVcBcHlxVbLFLGijs9NDIXH5voYN
+   PxLbi0r5q7/NVGji6+IY4XEBEU07peQ8+t4YBrFfCFTMi/uvYrXfakhgL
+   yq6dxJd/8aN1fOarz17yvBzmggxmnKTZqzoi1/GIVD9F1BrBmdfGLYYIe
+   0x9mVsZ5BkpsKaqkst8B6I6nPIZK1qqplfdFfjVcwbpogA0vD+Ynw9hUh
+   w==;
+X-CSE-ConnectionGUID: Bd0wu4QIStudGPxe1S9URw==
+X-CSE-MsgGUID: zbLg89hDQ8yqRLSR5n18Zg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11827"; a="83185801"
+X-IronPort-AV: E=Sophos;i="6.24,224,1774335600"; 
+   d="scan'208";a="83185801"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2026 08:14:49 -0700
+X-CSE-ConnectionGUID: AzLVO/7jRiu+1rQUzheuoA==
+X-CSE-MsgGUID: IGLSuSCxQ8mIHGphYHIKsA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,224,1774335600"; 
+   d="scan'208";a="252747186"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2026 08:14:49 -0700
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Thu, 25 Jun 2026 08:14:48 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Thu, 25 Jun 2026 08:14:48 -0700
+Received: from PH0PR06CU001.outbound.protection.outlook.com (40.107.208.41) by
+ edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Thu, 25 Jun 2026 08:14:48 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=HGonVFx2bXiC6beumzGax4NQth1JInk/l6QMovWEd1CpKp9uchC/cPt2KLnVhONeqBUnoQ53p6vKY/4GlJuW8dEaDfnZF0TjZRK/+GJpSfd083LrHVwCgmknQ2Ndn27chvh09kTfdbjbokHKcIXEPemYE2KQPLwa/o84Xz02DPdXVLpR2c6Ox2vCvXJQzl4UbWBvgLlfM0ZpXz/+plLbQcqb8YP2NzWMemrty8VzUSELNrQ8EtQqVDj7fcxvmwREM8EKG1lB68DBySBVpOJhKpbS6fY2FG1IP4PSAhD39U+PXq268xPEOF8SzOjvfPkUv14coJbGLp2KiFBDnfsg4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WMbEJMM5HHDaMsun9A6NY4J1Ldl1ws96hty2Pacnq/0=;
+ b=V/2S4b6ZsklJEQEdar+F3qUkPoLrq+7oWHXtuh8zahBisF3/C1A92gcXLOxjNisdMnVI3odzetOezsE7Ivn9UMhT+2fiC7vBBw+YTJg806mqAnEL/0gaGlVIn9EX/33U8Gx7Pr77zlSYHLzLfG/GrEZVrEuY3ZNt+4AEyPtuG6P1+QUeGbOEUro/cJi8mQ7Durtb1tcp0K5k+V2Bk/T1c+fPropX7lT9FZcv7wGgIQtYK5em2LfnB7rdR0AicKoOGwAJFYWpvkKXdE8LXyGsDSw2WL1R+PQeNKXx3RDf87Zdy+3XykalU9FERXslUWsf5ZnTT7938dmWexf9/PFQNQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
+ by SJ0PR11MB5150.namprd11.prod.outlook.com (2603:10b6:a03:2d4::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.17; Thu, 25 Jun
+ 2026 15:14:46 +0000
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::6aa:411d:4bfa:619c]) by DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::6aa:411d:4bfa:619c%4]) with mapi id 15.21.0159.015; Thu, 25 Jun 2026
+ 15:14:46 +0000
+Message-ID: <0922ce5d-48d8-44e7-983c-e547f3126ef4@intel.com>
+Date: Thu, 25 Jun 2026 17:14:06 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] xsk: fix memory corruptions in net/core/xdp.c
+To: Clement Lecigne <clecigne@google.com>
+CC: <edumazet@google.com>, <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <kuba@kernel.org>, <sdf@fomichev.me>,
+	<horms@kernel.org>, <john.fastabend@gmail.com>, <ast@kernel.org>,
+	<daniel@iogearbox.net>
+References: <20260624084130.2382335-1-clecigne@google.com>
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+Content-Language: en-US
+In-Reply-To: <20260624084130.2382335-1-clecigne@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: TL2P290CA0022.ISRP290.PROD.OUTLOOK.COM (2603:1096:950:3::6)
+ To DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|SJ0PR11MB5150:EE_
+X-MS-Office365-Filtering-Correlation-Id: f4226760-36af-47ba-db51-08ded2cc7dae
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|23010399003|376014|7416014|1800799024|366016|18002099003|22082099003|11063799006|56012099006|6133799003;
+X-Microsoft-Antispam-Message-Info: STdY5N86fvVHERjmRsbe9ZM0RkodCME1VFs9eGN5GWnJZryM76pe/MRdhuXWlHC4CFfKcu93XruwBGgvmTe84/q3iW/FBX2iNKenQ4hJo8pIoQ2dq/lTm0OAtJCDkaHgzATtAa0mHkmaYqhXtHsw4cVgjBEBxmEUCwPCYuam52xzQ1v+BRnOcIywP0RfiwRdh1Js0edWAgOlWawDuhusgWGygiVv7iF80Rs9Hh2Ik0UiZyB2iiKELmPlLlVHPKLjj31njfetO50zrM6Sl/5F+JuLxh9s1pVJv8zIKAA8xzVxe4RXs/eUPI/Dr+3SUh97igPJpQuQbV+4RsYQ8vLng0bJd/pmKwm0RBuNEltKVEICB6rAbsZo8koB3emewYY1kxu9ZmtVYq+RvmyfwmL8k7YH9mP7ii4UuMDVdiKfWqQEvanpJR17oT6GQ5fK6arnoeR6Y+PV78SZIAXt3afVsQknPFtdpCkAL+cMd+7s+7X5Xv/TKdPbDvKofP+ZKP6HwHbZnen6QojLTQM8QX51D3NHtQeWs1RA3GSujUrjTcfTtmV5P3KNJhYdqQaOnzBhtSnCXjeoG9JIRNNRebpKPcdxyfBKxZm+Ulrnl7XG4BqNh4J8yLwSPfztjZ5hUsLom3UfazZZCFEx7ZtsbPHKuHH59vvFhurQ3DQZ+Dxjp6g=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(7416014)(1800799024)(366016)(18002099003)(22082099003)(11063799006)(56012099006)(6133799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?clI0bjlMTUJOVFVrZVlGdmtaQ1ptdldmdExHUGpwekUvT2dmUXl1cVhsdFl6?=
+ =?utf-8?B?UFhXVkUrbHh4T2RBY1p3S2h1RVk4VGZNT1FDYmRQSEg1cUxDQmVRVEU2WVFw?=
+ =?utf-8?B?dmFQMmNNTGJUOFNlbHBLQVRGdmFCbEpqdlVwc0JUVjVrNGl0NEp2aVlKT1I0?=
+ =?utf-8?B?MU9kMVFPKzVxRXJIcDh4SUZRM1VSU0UvcFZBa1NhUWluUE9Ha21scjZraXZh?=
+ =?utf-8?B?RzlMU0pzdDJibjgxczVIdFdseCtmQmVtdEFNZ3pxeHlCUTNOR3NhUndESkc5?=
+ =?utf-8?B?V1UyaExVQkl6eU8zYjNvRWZSeW5WVm5XdzN4aGdCMzVVb01FVXBxVHVkWDhp?=
+ =?utf-8?B?dUkxeG5lWHZZOFZ3OVhFb3I2Mk9PMG1maTFpUWVUaHpPZHNuUmJxKzM5YlYv?=
+ =?utf-8?B?eVowbjljdGJqNzdnVWJTNHBDNEJycy9QSCtYeC9VWU91ZnNtVlFZbWNpZGRh?=
+ =?utf-8?B?Y0JrYmNNTGJYWmQ4L3k1MXdBc3MybnhsOVRDMkZmZ2ozbFk4a1V4ekJhbW0y?=
+ =?utf-8?B?SHpkbG1jZlJ0T29wNnc0ZFlON0dPMjBmdmlCMU16N1BnT3A4VWp6NkNJSWpo?=
+ =?utf-8?B?V1RzZ2dCTmpxSVg1c0w3QXA3c1ptWi9GRWdBS2tHb1R4TS9xbDdLbjBoSXhK?=
+ =?utf-8?B?Q2lsQTMwZlJrNk0vM3FhUmk2V1JISjZ1L09UaFJyUENQRVNzOEhEL081T0FB?=
+ =?utf-8?B?NmJ4SXgvTkxwR1V0MnltL2VXK21UMnRzZDFxb1Q2Q00rSjV3NUw5UW12ZDZj?=
+ =?utf-8?B?d3drekVNSFFFaGlTdVNrTDZURm1MMmZtWUU5TlAwVG9mdGhxa3BNbEVxcWh2?=
+ =?utf-8?B?dS9ER3U4Rkd3TmlyQnUrRXBtR05BSmtNWk9VWmFkTDQrN0VCd21XcGJHMXZT?=
+ =?utf-8?B?b1M4cnBSTTVwdndXa3hhY0Rid1lySURlVXhjR0JkTUJtcXRzNHdWVUQxZ2xM?=
+ =?utf-8?B?dFU2dHZhMjZ4aDR0SzlKZW5uLzU2UEtsaW5zUXdQQU1KMG5qL2dsWFhKZmxS?=
+ =?utf-8?B?RlhXVWJadVJxQklrT0Qza0tuK0ZLVUJLYnNoZ3B0TTNqa0MxVHUxOWdyUVlN?=
+ =?utf-8?B?VzBIMzBRbTlDUGtFUlBiSlowVjJOOEJRMEViQmNucFpqOTBCaUdxM3REeDFw?=
+ =?utf-8?B?b3hkTkVOUkZKMUtNOVdlNzhseWs5bkJhTHF3TExoNi9VNTAveEVodS9oTmpo?=
+ =?utf-8?B?eUk0b3VWNmtJcmpOY3YwRWUrV2FoYzJvbVp4OGErdTYra2YzdTBwcGxZcUgr?=
+ =?utf-8?B?WlJXbmkySEVOUHNKSTY0MzZoSnZ1cWFBNkttTzBVMkIxSHAwVlUwMWc3M0lQ?=
+ =?utf-8?B?TmVPOVBpTWYyUy9JdVlKa011dXdFTDl4RTUxVkRlQVcvMWNIVVAzRHhlajM5?=
+ =?utf-8?B?WmI3NDVYMXpia1ZRczR6THMxbmtyUmhyTW5kVmRKazg5LzEwSjU0YjBoYjRs?=
+ =?utf-8?B?ZzdWZGxXVWdBWVlVTStvNHhOYU1lNU5RMnpHTmlqamVMRUoyUExiNVJtZUFC?=
+ =?utf-8?B?TUFjdUphV21JYlJkVWw4a00xbWZWRktrOXcwbDFIQlRrU3lmVWRDOE9tdnhw?=
+ =?utf-8?B?amQzQUdXK1I5azUvTGpwSDQxdHNyY2ZKWE5IS09MVmUvZ0dkNWErWWUxUTBU?=
+ =?utf-8?B?QlFZWDNBamZ3MENuL0xVc1Y5elhtaWRCSjlzbXJnbTF0ZFVyNjhVZEYrdktI?=
+ =?utf-8?B?MDF1MlcrcXlFcFYrWnBWVWtyMHVMKzhFeHlxeTBqMW9OUHcybXhHOTYvelhl?=
+ =?utf-8?B?bVBRazlvYXM1RVhCMmxHV2lMNWRzdzFpdWttajFoZFQ5bkV2Z3BQQ2g3NGVk?=
+ =?utf-8?B?WmJ6dkpBTld6bFM2VnM5cHlWVjNmRFM4citXT1oyM1ZGaXBKdUNZc1N2ZDlw?=
+ =?utf-8?B?Q2RjdVFMdFNyTFJCTTRsek1Pbm51QlQydUNxYVJwbjZrcjMyUkdZUTdXanpl?=
+ =?utf-8?B?bnFBMWlRNmd6U2hMajArM0dvR2Qxdm9mWlg4MmI0cUFRVHZTeGRpNlRqMWJB?=
+ =?utf-8?B?MzVoME9vMjE4ejg5djJHTWtnZkxsZ2cwTU9YTzl2ZmpOSGlPRytYajRXUTJ6?=
+ =?utf-8?B?all1b09od0VXU0g1SDZKWEpQTHhyMHhTV0h4VU50QkkvVTExTFgvdmVDMnJt?=
+ =?utf-8?B?Y29yczhCMVd1ZUswODZCUCt5MVRvUWcybzJ0M3NRRks5MXE1cFB4LzdTOXFK?=
+ =?utf-8?B?ZitxZW1PMEVvQVFscWRibEVzWi9oR1FNQkhRSDJoeGg0V2xJa3VNV0pwVktQ?=
+ =?utf-8?B?Z042b2ZQNVVndmVTNmF1MnFobThxTlVhMFdrQmltNC9XUFVEZGlaVHkycjRt?=
+ =?utf-8?B?eS9HUTFwNDRNZWZ5bVNXUk82RTZObjhuK3VFVC91akVITlZSNW1FR25jZVdm?=
+ =?utf-8?Q?qeWLSliOMSRVeO5M=3D?=
+X-Exchange-RoutingPolicyChecked: LpM1iFWdiYHt+xB1488eqkhZZInY3PkkyweKdfOsC0BpvApVOGEIG/y85n55V/jFQNCmzweO/BcHgQAOkxxbs6Wz/j0BkGcdk8O0/jK1rRWbmGXN+4mM+bNmeVHMxOSq7T/O72TF0/rL/vUKpBVrM1C077+8+f2P7gur4w6Ag4V0hHdumSnc3/xZy+sKwJhqpHGsCw3yf4Cru78tUTK4dZ6aij/WwOGq4kwgILGPAjIUaXgo+7x4QQAlkHIfRCD5lYpvrcyVMyYynlOySmz366tIZ51qjB4ANlf0wJJv7/AXIn6V4Q1jaRfhr6zR57Dt5RU+YXTvwNUNn7hAu8ELKg==
+X-MS-Exchange-CrossTenant-Network-Message-Id: f4226760-36af-47ba-db51-08ded2cc7dae
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2026 15:14:45.9738
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wHLw9OtpSr/LHMQojuGYQqBeuFmzlF+PU8R7il3BTbY0E9rDovUgkHdRECM7AjSWhRDdm/v188RNhPyM+1uKIIPe+bdwqgMh4TTVlM1hCm0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5150
+X-OriginatorOrg: intel.com
 
-On Tue, Jun 23, 2026 at 11:10 AM +02, Maciej Fijalkowski wrote:
-> The UMEM state refactor made __send_pkts() use xsk->umem for Tx
-> address generation. At the same time, the shared-UMEM Tx setup copies the
-> Rx UMEM state into a Tx-local state object and resets base_addr and
-> next_buffer before configuring the Tx socket.
->
-> Passing that Tx-local object to xsk_configure() makes xsk->umem point to
-> the zero-based Tx allocator state. This breaks the BIDIRECTIONAL test once
-> the roles are switched: the same socket is then used for Rx validation, but
-> received descriptors from the other logical UMEM half are checked against
-> base_addr == 0. With the new UMEM bounds check, a valid address such as
-> base_addr + XDP_PACKET_HEADROOM is rejected as being outside the UMEM
-> window.
->
-> Keep xsk->umem as the shared/Rx UMEM view used for socket configuration
-> and Rx validation. Use the ifobject-local UMEM copy only for Tx descriptor
-> address generation, preserving the BIDIRECTIONAL test's intent of using
-> the proper logical UMEM half after the direction switch.
->
-> Fixes: b17631032769 ("selftests/xsk: Move UMEM state from ifobject to xsk_socket_info")
-> Signed-off-by: Maciej Fijalkowski maciej.fijalkowski@intel.com
+From: Clement Lecigne <clecigne@google.com>
+Date: Wed, 24 Jun 2026 08:41:28 +0000
+
+> From: Clément Lecigne <clecigne@google.com>
+> 
+> Commit 560d958c6c68 ("xsk: add generic XSk &xdp_buff -> skb conversion")
+> introduced a vulnerability in the handling of XDP_PASS for AF_XDP zero-copy
+> frames.
+> 
+> Note: Currently, this specific AF_XDP zero-copy conversion path is only
+> reachable from the drivers/net/ethernet/intel/ice driver.
+
+idpf uses this, too (every driver based on libeth_xdp in general,
+currently these two).
+
+> 
+> When building an skb, xdp_build_skb_from_zc() uses the chunk size
+> (xdp->frame_sz) for the allocation. However, napi_build_skb() automatically
+> reserves space at the end of the allocation for the skb_shared_info
+> structure. 
+> 
+> Most high performance UMEM applications use 4K chunks, where the
+> corruption cannot happen. However, if the UMEM is configured with 2KB
+> chunks (a very common configuration to maximize packet density in memory),
+> a standard 1500 MTU packet will trigger the corruption because the required
+> space exceeds the 2048 byte chunk size:
+> 
+> Headroom (256) + Packet (1514) + skb_shared_info (320) = 2090 bytes
+> 
+> Because 2090 bytes > 2048 bytes and __skb_put() does not perform bounds
+> checking, the memcpy() writes past the available linear data area and
+> corrupts the skb_shared_info structure. This can lead to arbitrary code
+> execution if pointers like destructor_arg are overwritten.
+> 
+> Additionally, in xdp_copy_frags_from_zc(), the allocation size is set
+> strictly to the fragment size (len), but the subsequent memcpy() uses
+> LARGEST_ALIGN(len). This mismatch results in an out-of-bounds write of
+> up to 7 bytes, which triggers KASAN warnings and is unsafe despite typical
+> page pool allocator padding.
+> 
+> Fix the skb allocation in xdp_build_skb_from_zc() by dynamically
+> calculating the exact truesize required: the sum of the headroom, the
+> packet length, and the skb_shared_info overhead, properly aligned via
+> SKB_DATA_ALIGN.
+> 
+> Fix the out-of-bounds write in xdp_copy_frags_from_zc() by rounding up
+> the allocation request using LARGEST_ALIGN(len) to match the copy
+> operation.
+> 
+> Fixes: 560d958c6c68 ("xsk: add generic XSk &xdp_buff -> skb conversion")
+> CC: Alexander Lobakin <aleksander.lobakin@intel.com>
+> CC: Eric Dumazet <edumazet@google.com>
+> Signed-off-by: Clément Lecigne <clecigne@google.com>
 > ---
->  tools/testing/selftests/bpf/prog_tests/test_xsk.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> index d8a1c0d40e5a..50a8dbacb63d 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> @@ -1169,8 +1169,8 @@ static int receive_pkts(struct test_spec *test)
->  static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk, bool timeout)
->  {
->  	u32 i, idx = 0, valid_pkts = 0, valid_frags = 0, buffer_len;
-> +	struct xsk_umem_info *umem = ifobject->xsk_arr[0].umem_real;
->  	struct pkt_stream *pkt_stream = xsk->pkt_stream;
-> -	struct xsk_umem_info *umem = xsk->umem;
->  	bool use_poll = ifobject->use_poll;
->  	struct pollfd fds = { };
->  	int ret;
+> diff --git a/net/core/xdp.c b/net/core/xdp.c
+> index 9890a30584ba..f36d1fb875ab 100644
+> --- a/net/core/xdp.c
+> +++ b/net/core/xdp.c
+> @@ -699,7 +699,7 @@ static noinline bool xdp_copy_frags_from_zc(struct sk_buff *skb,
+>  	for (u32 i = 0; i < nr_frags; i++) {
+>  		const skb_frag_t *frag = &xinfo->frags[i];
+>  		u32 len = skb_frag_size(frag);
+> -		u32 offset, truesize = len;
+> +		u32 offset, truesize = LARGEST_ALIGN(len);
 
-IIUC, this works because umem_real happens to point at shared/Tx UMEM
-view (base_addr=0).
+I think you need to re-sort this to keep RCT, now that the truesize
+initialization is way longer than it was.
 
-> @@ -1524,7 +1524,7 @@ static int thread_common_ops_tx(struct test_spec *test, struct ifobject *ifobjec
->  	umem_tx->base_addr = 0;
->  	umem_tx->next_buffer = 0;
+		const skb_frag_t *frag = &xinfo->frags[i];
+		u32 offset, len = skb_frag_size(frag);
+		u32 truesize = LARGEST_ALIGN(len);
+		struct page *page;
+
+>  		struct page *page;
 >  
-> -	ret = xsk_configure(test, ifobject, umem_tx, true);
-> +	ret = xsk_configure(test, ifobject, umem_rx, true);
->  	if (ret)
->  		return ret;
->  	ifobject->xsk = &ifobject->xsk_arr[0];
+>  		page = page_pool_dev_alloc(pp, &offset, &truesize);
 
-And this bit works because thread_common_ops_tx is only invoked in
-shared test case.
+BTW usually LARGEST_ALIGN() aligns to 16, I've never seen a bigger one.
+IIRC Page Pool never returns a truesize aligned to a smaller value. But
+if you're really able to trigger this, it probably does?
 
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+> @@ -740,7 +740,9 @@ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp)
+>  {
+>  	const struct xdp_rxq_info *rxq = xdp->rxq;
+>  	u32 len = xdp->data_end - xdp->data_meta;
+> -	u32 truesize = xdp->frame_sz;
+> +	u32 headroom = xdp->data_meta - xdp->data_hard_start;
+> +	u32 truesize = SKB_DATA_ALIGN(headroom + len) +
+> +		       SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+
+Ah now I get it: xdp->frame_sz doesn't account the shinfo for
+single-buffer frames, only for multi-buffer ones. The fix looks correct,
+but I'd use SKB_HEAD_ALIGN() since it does exactly what you're
+open-coding here and sort the declarations:
+
+{
+	u32 hr = xdp->data_meta - xdp->data_hard_start;
+	const struct xdp_rxq_info *rxq = xdp->rxq;
+	u32 len = xdp->data_end - xdp->data_meta;
+	u32 truesize = SKB_HEAD_ALIGN(hr + len);
+	struct sk_buff *skb = NULL;
+	struct page_pool *pp;
+	int metalen;
+	void *data;
+
+	if (!IS_ENABLED(CONFIG_PAGE_POOL))
+		return NULL;
+
+	...
+
+>  	struct sk_buff *skb = NULL;
+>  	struct page_pool *pp;
+>  	int metalen;
+> @@ -762,7 +764,7 @@ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp)
+>  	}
+>  
+>  	skb_mark_for_recycle(skb);
+> -	skb_reserve(skb, xdp->data_meta - xdp->data_hard_start);
+> +	skb_reserve(skb, headroom);
+>  
+>  	memcpy(__skb_put(skb, len), xdp->data_meta, LARGEST_ALIGN(len));
+
+Thanks,
+Olek
