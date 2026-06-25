@@ -1,139 +1,114 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525351E7C18
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 17:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 284973F0AB6
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 17:35:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782408821; cv=none; b=EgwZ8UBEhLrGdANGLHSXguYmxVG3rA14Ajh0MRMyGFqQQg3vYAevbjgQ5CkbN6VVQ6T0wrCOV5qhh4aBGFIfirIeLZ1mwsdcB9ctk2qon9seU8KXNbh5rX/C6LAh0lLpu3x381Q85wJ2WGBVkXhNdUS9hII0wZVS7FBIbtUSQi0=
+	t=1782408914; cv=none; b=f6ckumSPANLJRM9RPLOt4AMD9qx/jAJmLcAjWwXZoFadgb0IOHMaGRA+iSLawWq5dm3QOEd5vpubrykRSYhWPrOSOMAvocKtiRbjeyzEbkvDjFEtW3GQIgwghsftYkMmm/AjQOUxfowkzPhVQFLtpgzc400ziRjWWgLd4yVBy6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782408821; c=relaxed/simple;
-	bh=ly7hL8qiSYuyFbLLMRZGkLc5DQfNAIPUtrzgZj1Xm8k=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VPi6YJHCU0Z9KRJUu5o+Pn8RiRtZ4PFUYxSJq8kUGQcAWuc00jj5zzQiA7alAbsIKT85fS6+06GmI00LH2gMawBa3Qz2EYlCotMtI1n+Ve/6/CGJNYdYTCd2PsufYJ85+BenPMHpZvwXUFYGEfstCXzULxQm2Cyl8dfOg4SY9Fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=piVgzSz4; arc=none smtp.client-ip=209.85.210.182
+	s=arc-20240116; t=1782408914; c=relaxed/simple;
+	bh=CWcHyXL1nuFr2zBbxcD+I49gXR+BUjlAzdxCBWdkI8E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RYj/ZTrZsmChV6V/uQdv0TiLVn1PXLANKKQaowN65xOqDr8vhWUN6+gox0QBTeu/CHjYbGtIILlnUcjSju/JHM1fNpsYy1gEDnHRAwISqk98JWgoL1EN3paQhgaK+2QMRBtT+weeWVDQNeEVr7aEAZlQkxotbSMFJ8quYBii8Kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Stdkh4aZ; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="piVgzSz4"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-84536e2857eso8164b3a.0
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 10:33:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Stdkh4aZ"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-492438c79cdso114395e9.2
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 10:35:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782408819; x=1783013619; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=RJbO/x3r5vmrTPfYiw8IE6/+MJhDPl08JbIGC6PUlYc=;
-        b=piVgzSz4ezsnxgKZp1Uk0rOpIV1PP2BXDhse8SbXwxti14vsAACnottafyfvNWZySd
-         vZHPhtuk5isFOh6FU3jNAkTvwaG0KxWxVe3WqxWDE/pPvUuBvZ1cyyyv5aQbrvGWM2JJ
-         ajHMceSfp6SfvjUdXDh9T/HHjfIszKHwFjxZD8uDEx9hG2pDeZYPcGEEFRitCdXAxS47
-         OH2jpkGwuoYb/d6NZ4v2L5s/aaFaQiem9mCA4ADPAHHXnf92myDORzG7PuKWkHC7U9at
-         EMwJ5xihz5diIDxmMmuZfwRspzjHenF2JsFnhYWsEhl37RrFn0QnnwwudFt5OQv8DxCy
-         WE/Q==
+        d=gmail.com; s=20251104; t=1782408911; x=1783013711; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hfJs9w2lKJotpLjpMf0F1SfbJUWEBXoJkkJG2VjG/Js=;
+        b=Stdkh4aZqRfpjEo20uwKLo9PSk7NjBdJNHDhqI7RfXNgpMJMHszH6ey6s+vMvevgEU
+         FxecJgaftf9/fhtPN6St4eVRhStIQnKM0AGJZ21fO02zHgoeWBvyxIc0Cq7Pzyc8kMZN
+         32rLAGP7+05pkOiuC+gAbR+tAHY4mDNzd+iDDqYy52rTJM6q9rSZzMPZeaWGUyT1Wfmg
+         k3g7eZO7QypA0oXHk8ppmsOIhqnu055Mh0ykQnuApZs7nk2sZE8hC0p72rX+IEwpoFyB
+         8wZcgufD7/uJ52OwLuyS0XD82OJlRT6IYAt2w1SyODb9TmepFeM0F8lCdAgYZjvKPSwZ
+         4bLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782408819; x=1783013619;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RJbO/x3r5vmrTPfYiw8IE6/+MJhDPl08JbIGC6PUlYc=;
-        b=UkkzkjEMfdN3PODZa8AyfeReLZ3fKfg8d8kSiT7UfpL8BsITOD63XD7qhRrR4Kz3dh
-         HHIUZWyC5EglZhnwFZkFQ+1/jfrylJp2oeg2gpY6d7YwfA92MO/aslIGl3MNhDG9xcc6
-         5Nv+s9eTspo4Ewjx1LbGhPtpf9eMknlf4m+9y4jUffyf/DsTfFayfx80rTrJJri3IPmY
-         qDxvDeA1ygkARJUma/Yf6AHKqbe91pW3nBP9xKI+IYtnyeGiHgB4/AOy3IteGlMJIpNK
-         pD2bi+oGj2sWUIDKmjtyJjkFGEGQ0rhV3p32NF4zkPtrWM56vBmbqqt2Xp80HyArLzFH
-         hz8Q==
-X-Gm-Message-State: AOJu0YydethfBY8+aR4TmiqBjJBh3WqFtTfOS8vGritfrQu+o0COTuwB
-	qJX6YeE6k0stplQpSYmAJCM0LuUJ4AS86nFioJDRFctqQ8zvZTCg7zfv
-X-Gm-Gg: AfdE7cnRIPXrqZ/H+roytCCYJdF3+DQICa5z1PJwtdXzgGxwu72IgJTfsgqusEEBRZP
-	UN0CO4AdUqnpg1KnPpfobzr2JsdQw/yymELxAEOi4lsTtDlKF44TCuQKz/TL00x6TNnLqEu1Hob
-	LYoJlraTIdOpZuycPOtOzHnHpgy5L3OgPrnKSCZxZlui+Vr6xMS/1Sw8ylTFrPmHyhE0i898pzB
-	WKA7wVsAzO3NXy5lamO2nsKmwojYOSLPrP5i/1b4ISy5TGm9r7JOGj64BfY6hm3ABlpw7Kh9Kj/
-	f0rhxPJXdPhpw/nG9sV1MX+/Vqa091sF3tq2uFTFPEbWqEvp7WOfCTmQBfhcguabcbvpNRdT+YF
-	kMIxEGe2PwenCJnn0SrVFLCa7pmMijBTpz288RpmNkDTR1KAOCp4PrYgEilbw+dv3biYJSTVp7M
-	/zoUolNhloPqtTTtFXEHqrqP1hQnTWOqSl+ocJvDsFNw==
-X-Received: by 2002:a05:6a00:4c95:b0:842:432e:b7ff with SMTP id d2e1a72fcca58-845b3ac78ecmr4455346b3a.17.1782408819390;
-        Thu, 25 Jun 2026 10:33:39 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845a4121fdbsm5082163b3a.51.2026.06.25.10.33.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 10:33:38 -0700 (PDT)
-Message-ID: <b3dffc1f523e078df20e9171b0bccc74ddae53e3.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: Preserve scalar zero spills for
- stack reads
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Woojin Ji <random6.xyz@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>, Martin
- KaFai Lau <martin.lau@linux.dev>, Song Liu	 <song@kernel.org>, Yonghong
- Song <yonghong.song@linux.dev>, Jiri Olsa	 <jolsa@kernel.org>, Emil
- Tsalapatis <emil@etsalapatis.com>, John Fastabend	
- <john.fastabend@gmail.com>
-Cc: bpf@vger.kernel.org
-Date: Thu, 25 Jun 2026 10:33:28 -0700
-In-Reply-To: <20260625-bpf-stack-var-off-zero-v1-v3-1-a068210a761b@gmail.com>
-References: <20260625-bpf-stack-var-off-zero-v1-v3-0-a068210a761b@gmail.com>
-	 <20260625-bpf-stack-var-off-zero-v1-v3-1-a068210a761b@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+        d=1e100.net; s=20251104; t=1782408911; x=1783013711;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=hfJs9w2lKJotpLjpMf0F1SfbJUWEBXoJkkJG2VjG/Js=;
+        b=nUxx0VEDtbrRS/hCpruNJemXray3tMvvQ/otmo0ViWmq7/jlmz2B7ww5IvxK0+44q7
+         66jdWI5JLajaNvrbpUh+fA/Kp2xp/wCFcCaelMd2hxSVtocGTrt71F4ITf/IOJD2h1Np
+         Udp9++B+laEA+xuezPvu6QV3yha+fOpNVtnfLbJg7Rb4oVCbke3l58QNC25eCEQ8fcfL
+         1deUCWeeGJhUx3n6Uxt+6Hk9NmDph/jbqS5a8Raif4O4D3sb2tbN4RLpp/hvbxfo+s3u
+         ACcdVZhBLEGuxKJUsIjSw+ItwVkCxZabix7zCOpkSeSQhHHmydJHJ5I91S0jmALNRjA6
+         0Rqw==
+X-Forwarded-Encrypted: i=1; AHgh+RqgfVvTK4u/r305w0MWfDZ2pOOFXV9bwE08aaopCBwNky032UgxY0weiJUQGhLEkOT8tdQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrypEZa3vluna6SZg8/rmYhEmM64wCMI5sgi0ADishTy3pokDh
+	RdcTpKA0Y2UP/XaIeEoor4D/WsHM0dH3OJ6c/MdNpfrKlWmptpAuFWdh
+X-Gm-Gg: AfdE7cnrYVlNbpoPGt/L3uY6C4VIQFGx4yUwCTIUbkF0hyD+/PfiwZkbFIYqDaGmce5
+	Gu9Lp6n6DXJeZzIA5zrz0hf9ondoBeHQCV++DIwLRqyfZLqoHmWqj+xY9q1I2n46icX/pFMDrHg
+	ouGF93svVe9c0jbmPTl6ENmUP0IhwjXxlcqml7Kri7yUeFNs5y+7o7paqMGzhE74PYyrT9FKdMK
+	GZz7mDI5J4QVZr//MYPDeKKRFGUUoD1o+hN2Dzke+aaUPZ0IFEGPdNTk81jjBh02Uz3CwKQUPAL
+	1m6+gKdELOCIRvv9H9eloqFZ3Ib+chaMnW9cPO5PbxBigDtwLCL9M/QZRegXDiUdQYK2f/lOOpp
+	9Fx7Iu4HzFzULIP06zoSFh2nddpy8Hyit8u0Fcna8ypjFV4karmFmE/l9HOLmWzaGF/esSGVxSw
+	ICCOTgHeGGc4VmqJXdpGhrkr1W2uJiZw==
+X-Received: by 2002:a05:6000:2c08:b0:46a:8000:617a with SMTP id ffacd0b85a97d-46dc2733530mr2636381f8f.8.1782408911409;
+        Thu, 25 Jun 2026 10:35:11 -0700 (PDT)
+Received: from [192.168.1.135] ([165.50.1.138])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46c1ee0189esm18233741f8f.9.2026.06.25.10.35.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Jun 2026 10:35:10 -0700 (PDT)
+Message-ID: <cb5c9a44-2b05-46a2-958b-cafe368c5576@gmail.com>
+Date: Thu, 25 Jun 2026 19:35:02 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] bpf: preserve rx_queue_index across XDP redirects
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Jakub Kicinski <kuba@kernel.org>, Siddharth C <siddharthcibi@icloud.com>
+Cc: ast@kernel.org, hawk@kernel.org, andrii@kernel.org,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260620121321.45227-1-siddharthcibi@icloud.com>
+ <20260620121321.45227-2-siddharthcibi@icloud.com>
+ <20260624185432.32d90aa8@kernel.org> <DJIA58WBML8S.A897NKI06DV9@gmail.com>
+Content-Language: en-US
+From: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
+In-Reply-To: <DJIA58WBML8S.A897NKI06DV9@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, 2026-06-25 at 19:25 +0900, Woojin Ji wrote:
-> Stack reads can read back bytes that belong to a previously spilled scala=
-r
-> constant zero. Today mark_reg_stack_read() only treats STACK_ZERO bytes a=
-s
-> known zero bytes, so the destination register can become unknown even
-> though every byte in the read range is known to be zero. This can lead to
-> rejecting otherwise valid programs once the loaded byte is used as a
-> pointer offset.
->=20
-> The original reproducer uses a variable-offset stack byte read emitted by
-> clang 22.1.6 at -O2/-O3 from a small helper-based BPF C program. Fixed
-> offset reads have a related mixed case as well: pure scalar-zero spill
-> reads are already handled, but a fixed read spanning both STACK_ZERO and
-> scalar const-zero STACK_SPILL bytes still falls back to unknown.
->=20
-> Teach mark_reg_stack_read() to also consider STACK_SPILL bytes backed by =
-a
-> spilled scalar constant zero as zero bytes, and use that path for both
-> variable-offset stack reads and fixed-offset mixed reads. Keep the existi=
-ng
-> pure register-fill behavior unchanged.
->=20
-> When a zero result depends on such a spill, mark the contributing stack
-> slots precise before accepting the const-zero result so pruning cannot
-> reuse a zero-spill state for a later non-zero spill state.
->=20
-> No deployed-program regression is currently known, so target bpf-next.
->=20
-> Assisted-by: opencode:gpt-5.5
-> Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
-> ---
+On 6/25/26 5:44 PM, Alexei Starovoitov wrote:
+> On Wed Jun 24, 2026 at 6:54 PM PDT, Jakub Kicinski wrote:
+>> On Sat, 20 Jun 2026 12:13:13 +0000 Siddharth C wrote:
+>>> diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+>>> index 5e59ab896f05..8f2d7013620f 100644
+>>> --- a/kernel/bpf/cpumap.c
+>>> +++ b/kernel/bpf/cpumap.c
+>>> @@ -197,7 +197,7 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_map_entry *rcpu,
+>>>   
+>>>   		rxq.dev = xdpf->dev_rx;
+>>>   		rxq.mem.type = xdpf->mem_type;
+>>> -		/* TODO: report queue_index to xdp_rxq_info */
+>>> +		rxq.queue_index = xdpf->rx_queue_index;
+>>
+>> Do you actually need this or you're just trying to address the TODO?
+> 
+> It's a 3rd if not 4th attempt from various "people" to address this TODO.
+> We should just remove this line instead.
+> 
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+I was one of the people that tried this. And also I have already sent
+a patch to address the misleading comment to prevent future wasted 
+effort. My patch is still on hold (LINK: 
+https://lore.kernel.org/all/20251021114714.1757372-1-mehdi.benhadjkhelifa@gmail.com/).
 
-[...]
+Best Regards,
+Mehdi Ben Hadj Khelifa
 
-> @@ -3929,7 +3958,10 @@ static int check_stack_read_var_off(struct bpf_ver=
-ifier_env *env, struct bpf_reg
-> =20
->  	min_off =3D reg_smin(reg) + off;
->  	max_off =3D reg_smax(reg) + off;
-> -	mark_reg_stack_read(env, ptr_state, min_off, max_off + size, dst_regno)=
-;
-> +	err =3D mark_reg_stack_read(env, ptr_state, min_off, max_off + size,
-> +				  dst_regno);
-
-Nit: no need to line break, the line width is 100 (here and elsewhere).
-
-> +	if (err)
-> +		return err;
->  	check_fastcall_stack_contract(env, ptr_state, env->insn_idx, min_off);
->  	return 0;
->  }
