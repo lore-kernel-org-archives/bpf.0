@@ -1,548 +1,112 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 193D43EB111
-	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 17:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD83D2E7394
+	for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 18:16:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782410402; cv=none; b=XHy/wJrEk8SDZ+Q8qnpLriZDgZnGOL7oTBK2VE1J2IluQ4R4eKThJAmBK601GG1kqQSDJ5c5Zc765k5ALsCrFEYC+kef3WrwgQrBkOnghLTk4LcY5o2dxMlBlqJ4q7KiysnkIRplUtodX2ImIglv/MxJa9vwjiKf/WavlF+h8YQ=
+	t=1782411365; cv=none; b=FmgV5PkHUpoujsLlJ4no4WsjtvxaSOkQZGYIlycQ5Zox4k/6x3QAU4K6PyCkzu3T6Acw0k7LZWNvGFem+/01AK6D9mkBfBBG4aGtFCq7KUVTS9wWUDPy+KhVLfFmgQIJmeD08hwQJsxNig+jVGICKZsmIxGENxXcWZ+itHHgBtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782410402; c=relaxed/simple;
-	bh=9ieAEmsE4F+TTxRX3UXBvd11KxPm9KeJLSxiuMEzLl4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GaPr51uIvR/M/QZsZzflROQTxCxrPQ/sNXQmUoqZFbZ3oritPMOvesDBCOKJ5Urw6EXqDMWOVZonEhqw6Z79rMKO5nx45H6VN0tBHvbHUE9721hmwjEVfVHIjpQXXwqUJnh7xbjH8N2uRgLjuwsOxt8qG0i4oe4Wh6KvpJ+MWnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sTBmefPi; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782411365; c=relaxed/simple;
+	bh=R4zMRsC5dgEt3GQ1wY+GOgTcL+mtlusQkycwEbXBb0s=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=VmdpX1wsEjQbSeemKIw9sBL+RI9k1NGlHX3NkdTUtxivzNVno6o+/qOBvwHqJyiYf7Qu96FBC7oT62Oryr4/cIJ3vbt2eOwfqdG7m1bOn0Y7qgJBsqfLYarADgX54FgWu2vkK6hXXvZtEH7WO94xlAOxNyPT3WN7undCnSnJqig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uYvgCGwt; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sTBmefPi"
-Message-ID: <dd556546-23f4-43c0-b502-ec818afc7b3b@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782410388;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=slb7AKQlNLrcLwwsv70TJ8r+7Ia0z99x6w95rtvJbXo=;
-	b=sTBmefPiOAN+QkasoKBLnLRI0wSjp76O5Jfd3k+DMi4aIVnRsHn9skq1bg8EV2XxKX9EWe
-	aUbS3bIR35auSRYv0ogmzQHRWeEsYhoVWtOT/Hpmdvb0Pz2GAWZFlLVIitPn2vp/ud7BK1
-	muhWGxIUQYMmhty3pPKlyF1N7ija2wg=
-Date: Thu, 25 Jun 2026 10:59:41 -0700
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uYvgCGwt"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c856470fe9fso88830a12.2
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2026 11:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1782411364; x=1783016164; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Hbt4jAxuO3yIsMnFSQ/zOto2meD/sUjo/A+mTkmLM7Y=;
+        b=uYvgCGwt85R1MSPJg9ffGwiyALwqY/ladzGbWwfSFILpgyLHrrkfcuTXzGLzTTnnd3
+         Hk+wYStyrKokFa7eGH6722hearuTQVLF6uY9fHVMOi0b2X1nnAFBQcqZYhQzMgTzKnIe
+         0qrVQadYPxE9YkBcKqD0Po8aNZMdiUYfBXr72TM3LGvoCp1Lf0ehQPx/gbLDQRjRA2M7
+         V4nlN0jC22keZCOHTcnE3yjKoQaNf5XfYUtGMWjY8xcSDWFm5C40kUVwPGlH2yMdbNx6
+         unlIguNHENRUahx7hMGGh2v/Ts63ehEwRvJ0TtXPb93vc9oUw6UXrSMYs0VhOFCPss6F
+         g4Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782411364; x=1783016164;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Hbt4jAxuO3yIsMnFSQ/zOto2meD/sUjo/A+mTkmLM7Y=;
+        b=Hp33l+Ifz6Q3DW1RmAiEDb4/C80ZyykqXmrtJK+BR12pXGbQdweHz95vFD9NF4M5PS
+         5HC8l9b+q43CYmAe0kkKZWolJ+xsa+Py5CQNH2edn/B38yk1zfL5PYqrwtgcYUqkZCga
+         WTd6chOzrRm4s26cJ1LTkWPQgw4c8dDHiH+1AffuRjA+fogVDBWK4Q+ryAoadJyLX8Vf
+         8UO04zMStUYYNnh2ZQdQLNS7nvk82uQeFsjepKpEPrA+B0113BU44JpJTamqtYL5ITuR
+         g8pJSPV//dVtYa23sxZj43/LD2A1WXQ1hZeh9q3DjWX2if23jkmhiBLVI/ql/Fxw2ay8
+         15lw==
+X-Forwarded-Encrypted: i=1; AHgh+RpiTHVSlr0AB6jE+OliEFOr9QRqOxaNuP5xaLS/agEI+TstxQKP7vWanjr1ZcPfaPbWYCw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZoweQrsJH0LVScqFnidKQYjJiFt9VyMOsHIUiMgzoeXYeRh6C
+	AaU/TSKWXRY6l7Y18UUVoTMeUbvUeCXPIEqKV1P//UOWaA49CupgtlgVgnUBnI2+LLadhYWk4A4
+	3j12hRai78/pmUQ/C6g==
+X-Received: from pjqa10.prod.google.com ([2002:a17:90a:a50a:b0:36b:a5eb:cb3c])
+ (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:3509:b0:36b:b1f4:e0ac with SMTP id 98e67ed59e1d1-37dfa25191amr3459010a91.14.1782411363681;
+ Thu, 25 Jun 2026 11:16:03 -0700 (PDT)
+Date: Thu, 25 Jun 2026 11:15:55 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH dwarves v10 0/5] pahole: Encode true signatures in kernel
- BTF
-Content-Language: en-GB
-To: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <olsajiri@gmail.com>
-Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
- dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, kernel-team@fb.com
-References: <20260625020148.1883082-1-yonghong.song@linux.dev>
- <aj0KGx-5FwUbwGHc@krava> <1d7828aa-164f-4c36-9d5e-2eb2088ce5b4@oracle.com>
- <906ec2c1-e62b-47d8-a0bd-4d88df26c0c3@linux.dev>
- <3bdacbc7-8385-452a-9443-ee9cc03abd10@oracle.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <3bdacbc7-8385-452a-9443-ee9cc03abd10@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.55.0.rc0.799.gd6f94ed593-goog
+Message-ID: <20260625181557.1086105-1-tjmercier@google.com>
+Subject: [PATCH] selftests: Open /dev/udmabuf O_RDONLY
+From: "T.J. Mercier" <tjmercier@google.com>
+To: kraxel@redhat.com, vivek.kasireddy@intel.com, 
+	Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: "T.J. Mercier" <tjmercier@google.com>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Write permissions on the /dev/udmabuf device file are not required to
+issue ioctls and allocate udmabufs. Applications should be opening this
+file as O_RDONLY. The BPF dmabuf_iter selftest already does this. [1]
 
+Remove the write access mode from the drivers/dma-buf/udmabuf.c and
+drivers/net/hw/ncdevmem.c selftests.
 
-On 6/25/26 9:17 AM, Alan Maguire wrote:
-> On 25/06/2026 16:26, Yonghong Song wrote:
->>
->> On 6/25/26 6:22 AM, Alan Maguire wrote:
->>> On 25/06/2026 11:59, Jiri Olsa wrote:
->>>> On Wed, Jun 24, 2026 at 07:01:48PM -0700, Yonghong Song wrote:
->>>>> Current vmlinux BTF encoding is based on the source level signatures.
->>>>> But the compiler may do some optimization and changed the signature.
->>>>> If the user tried with source level signature, their initial implementation
->>>>> may have wrong results and then the user need to check what is the
->>>>> problem and work around it, e.g. through kprobe since kprobe does not
->>>>> need vmlinux BTF.
->>>>>
->>>>> Majority of changed signatures are due to dead argument elimination.
->>>>> The following is a more complex one. The original source signature:
->>>>>     typedef struct {
->>>>>           union {
->>>>>                   void            *kernel;
->>>>>                   void __user     *user;
->>>>>           };
->>>>>           bool            is_kernel : 1;
->>>>>     } sockptr_t;
->>>>>     typedef sockptr_t bpfptr_t;
->>>>>     static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
->>>>> After compiler optimization, the signature becomes:
->>>>>     static int map_create(union bpf_attr *attr, bool uattr__is_kernel) { ... }
->>>>> In the above, uattr__is_kernel corresponds to 'is_kernel' field in sockptr_t.
->>>>> This makes it easier for developers to understand what changed.
->>>>>
->>>>> The new signature needs to properly follow ABI specification based on
->>>>> locations. Otherwise, that signature should be discarded. For example,
->>>>>
->>>>>       0x0242f1f7:   DW_TAG_subprogram
->>>>>                       DW_AT_name      ("memblock_find_in_range")
->>>>>                       DW_AT_calling_convention        (DW_CC_nocall)
->>>>>                       DW_AT_type      (0x0242decc "phys_addr_t")
->>>>>                       ...
->>>>>       0x0242f22e:     DW_TAG_formal_parameter
->>>>>                         DW_AT_location        (indexed (0x14a) loclist = 0x005595bc:
->>>>>                            [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_reg5 RDI
->>>>>                            [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_reg14 R14
->>>>>                            [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
->>>>>                            [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg14 R14)
->>>>>                         DW_AT_name    ("start")
->>>>>                         DW_AT_type    (0x0242decc "phys_addr_t")
->>>>>                         ...
->>>>>       0x0242f239:     DW_TAG_formal_parameter
->>>>>                         DW_AT_location        (indexed (0x14b) loclist = 0x005595e6:
->>>>>                            [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_reg4 RSI
->>>>>                            [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_reg3 RBX
->>>>>                            [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
->>>>>                            [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg3 RBX)
->>>>>                         DW_AT_name    ("end")
->>>>>                         DW_AT_type    (0x0242decc "phys_addr_t")
->>>>>                         ...
->>>>>       0x0242f245:     DW_TAG_formal_parameter
->>>>>                         DW_AT_location        (indexed (0x14c) loclist = 0x00559610:
->>>>>                            [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_breg4 RSI+0)
->>>>>                         DW_AT_name    ("size")
->>>>>                         DW_AT_type    (0x0242decc "phys_addr_t")
->>>>>                         ...
->>>>>       0x0242f250:     DW_TAG_formal_parameter
->>>>>                         DW_AT_const_value     (4096)
->>>>>                         DW_AT_name    ("align")
->>>>>                         DW_AT_type    (0x0242decc "phys_addr_t")
->>>>>                         ...
->>>>>
->>>>> The third argument should correspond to RDX for x86_64. But the location suggests that
->>>>> the parameter value is stored in the address with 'RSI + 0'. It is not clear whether
->>>>> the parameter value is stored in RDX or not. So we have to discard this funciton in
->>>>> vmlinux BTF to avoid incorrect true signatures.
->>>>>
->>>>> For llvm, any function having
->>>>>     DW_AT_calling_convention        (DW_CC_nocall)
->>>>> in dwarf DW_TAG_subprogram will indicate that this function has signature changed.
->>>>> But for non DW_CC_nocall functions, it is possible that true signature still not
->>>>> available due to locations. So every functions will be checked.
->>>>>
->>>>> I did experiment with latest bpf-next. For x86_64, there are 69103 kernel functions
->>>>> and 875 kernel functions having signature changed. A series of patches are intended
->>>>> to ensure true signatures are properly represented. Eventually, only 20 functions
->>>>> cannot have true signatures due to locations.
->>>>>
->>>>> For arm64, there are 863 kernel functions having signature changed, and
->>>>> 108 functions cannot have true signatures due to locations. I checked those
->>>>> functions and look like llvm arm64 backend more relaxed to compute parameter
->>>>> values.
->>>>>
->>>>> For full testing, I enabled true signature support in kernel scripts/Makefile.btf like below:
->>>>>     -pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=attributes
->>>>>     +pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=attributes --btf_features=+true_signature
->>>>>
->>>>> See individual patches for details.
->>>> hi,
->>>> I tried this version and had to choose another function, because "arp_process"
->>>> suddenly started to show args registers in proper order ;-)
->>>>
->>>> now I checked "stop_cpus" function which is added to btf after this change,
->>>> I attached the dwarf dump below
->>>>
->>>> "stop_cpus" has DW_CC_nocall set, so it has signature_changed=true and I see the
->>>> function ends up in the btf_encoder with optimized_parms=1
->>>>
->>>> but we do not skip such functions now, it seems like we should?
->>>>
->>>> I tried the attached change below and it removes all the extra functions
->>>> that were added in the btf with this change
->>>>
->>>> btw I can't see any other use for optimized_parms flag, it seems to be
->>>> just set and never used.. so I wonder I'm missing something
->>>>
->>> Thanks for looking at this!
->>>
->>> Yonghong can correct me if I have this wrong, but I think optimized parameters
->>> are okay, but only if true signature is enabled, so omitting functions with
->>> optimized parameters should probably only happen if !true_signature. so for
->>> the change below, the modification to btf_encoder__add_saved_funcs() is right
->>> but I don't think the modification to btf_encoder__add_true_signature() is needed.
->> I agree with Alan in the above.
->>
->> There is no need to make change in btf_encoder__add_true_signature().
->> This is for true_signature, optimized parameters have been removed:
->>
->> +               /* No location info/optimized + reordered means optimized out. */
->> +               if (ftype->reordered_parm && (!param->has_loc || param->optimized)) {
->> +                       state->nr_parms--;
->> +                       continue;
->> +               }
->>
->> so we should not add true_state->optimized_parms checking in btf_encoder__add_true_signature().
->>
->> For adding state->optimized_parms in btf_encoder__add_saved_funcs(), with true_signature disabled,
->> we already have a failure message:
->>     stop_cpus : skipping BTF encoding of function due to unexpected register usage for parameter
->> The expectation is for three parameters, the register usage should be
->>     cpumask: RDI, fn: RSI, arg: RDX
->> but since 'fn' is optimized away, the expected reg usage does not match the actual reg usage.
->>
->> We could add:
->>    +        if (state->optimized_parms)
->>    +            skip_reason = "optimized parms\n";
->> to have another message to indicate possible reason is due to optimized parms.
->> But it is not critical as we already have one message.
->>
->> I can have a follow up for this.
->>
-> I tried pushing just the btf_encoder__add_saved_funcs() hunk from Jiri's diff to CI [1];
-> it looks like we end up omitting a lot more functions than before for aarch64 (including
-> some kfuncs) for both gcc and clang kernel builds, and we see an x86_64 test failure:
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c?h=v7.1#n49
 
-For clang, aarch64 has more werid locaitons compared to x86.
-Not sure whether this could be part of readon which will cause more failures.
+Signed-off-by: T.J. Mercier <tjmercier@google.com>
+---
+ tools/testing/selftests/drivers/dma-buf/udmabuf.c | 2 +-
+ tools/testing/selftests/drivers/net/hw/ncdevmem.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->
-> 5: clang_parm_memory.sh
-> Validation of BTF encoding of true_signatures.
->     BTF for foo missing; the stack-passed aggregate was likely rejected
-> Test ./clang_parm_memory.sh failed
-> Test data is in /tmp/clang_parm_memory.sh.DV7PyO
-
-The above claims the BTF encoding is missing even with true signature.
-
-The following is what I have in my local run with llvm22:
-
-$ cat t.c
-union big { long a; char buf[24]; };
-__attribute__((noinline)) static long foo(union big u, int dead, int x)
-{
-         return u.a + x;
-}
-
-union big g;
-int dead, x;
-int main()
-{
-         return (int)foo(g, dead, x);
-}
-
-$ /bin/clang --version
-clang version 22.1.3 (CentOS 22.1.3-1.el9)
-Target: x86_64-redhat-linux-gnu
-Thread model: posix
-InstalledDir: /usr/bin
-Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg
-
-$ /bin/clang -O2 -g -c t.c
-
-$ /bin/llvm-dwarfdump t.o
-t.o:    file format elf64-x86-64
-                                                                                                                                  
-.debug_info contents:
-0x00000000: Compile Unit: length = 0x00000117, format = DWARF32, version = 0x0004, abbr_offset = 0x0000, addr_size = 0x08 (next u
-nit at 0x0000011b)
-                                                                                                                                  
-0x0000000b: DW_TAG_compile_unit
-               DW_AT_producer    ("clang version 22.1.3 (CentOS 22.1.3-1.el9)")
-               DW_AT_language    (DW_LANG_C11)
-               DW_AT_name        ("t.c")
-               DW_AT_stmt_list   (0x00000000)
-               DW_AT_comp_dir    ("/home/yhs/tmp")
-               DW_AT_low_pc      (0x0000000000000000)
-               DW_AT_high_pc     (0x0000000000000039)
-                                                                                                                                  
-0x0000002a:   DW_TAG_variable
-                 DW_AT_name      ("g")
-                 DW_AT_type      (0x0000003f "big")
-                 DW_AT_external  (true)
-                 DW_AT_decl_file ("/home/yhs/tmp/t.c")
-                 DW_AT_decl_line (7)
-                 DW_AT_location  (DW_OP_addr 0x0)
-                                                                                                                                  
-0x0000003f:   DW_TAG_union_type
-                 DW_AT_name      ("big")
-                 DW_AT_byte_size (0x18)
-                 DW_AT_decl_file ("/home/yhs/tmp/t.c")
-                 DW_AT_decl_line (1)
-                                                                                                                                  
-0x00000047:     DW_TAG_member
-                   DW_AT_name    ("a")
-                   DW_AT_type    (0x00000060 "long")
-                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
-                   DW_AT_decl_line       (1)
-                   DW_AT_data_member_location    (0x00)
-                                                                                                                                  
-0x00000053:     DW_TAG_member
-                   DW_AT_name    ("buf")
-                   DW_AT_type    (0x00000067 "char[24]")
-                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
-                   DW_AT_decl_line       (1)
-                   DW_AT_data_member_location    (0x00)
-
-0x0000005f:     NULL
-
-0x00000060:   DW_TAG_base_type
-                 DW_AT_name      ("long")
-                 DW_AT_encoding  (DW_ATE_signed)
-                 DW_AT_byte_size (0x08)
-
-0x00000067:   DW_TAG_array_type
-                 DW_AT_type      (0x00000073 "char")
-
-0x0000006c:     DW_TAG_subrange_type
-                   DW_AT_type    (0x0000007a "__ARRAY_SIZE_TYPE__")
-                   DW_AT_count   (0x18)
-
-0x00000072:     NULL
-
-0x00000073:   DW_TAG_base_type
-                 DW_AT_name      ("char")
-                 DW_AT_encoding  (DW_ATE_signed_char)
-                 DW_AT_byte_size (0x01)
-
-0x0000007a:   DW_TAG_base_type
-                 DW_AT_name      ("__ARRAY_SIZE_TYPE__")
-                 DW_AT_byte_size (0x08)
-                 DW_AT_encoding  (DW_ATE_unsigned)
-
-0x00000081:   DW_TAG_variable
-                 DW_AT_name      ("dead")
-                 DW_AT_type      (0x00000096 "int")
-                 DW_AT_external  (true)
-                 DW_AT_decl_file ("/home/yhs/tmp/t.c")
-                 DW_AT_decl_line (8)
-                 DW_AT_location  (DW_OP_addr 0x0)
-
-0x00000096:   DW_TAG_base_type
-                 DW_AT_name      ("int")
-                 DW_AT_encoding  (DW_ATE_signed)
-                 DW_AT_byte_size (0x04)
-
-0x0000009d:   DW_TAG_variable
-                 DW_AT_name      ("x")
-                 DW_AT_type      (0x00000096 "int")
-                 DW_AT_external  (true)
-                 DW_AT_decl_file ("/home/yhs/tmp/t.c")
-                 DW_AT_decl_line (8)
-                 DW_AT_location  (DW_OP_addr 0x0)
-
-0x000000b2:   DW_TAG_subprogram
-                 DW_AT_low_pc    (0x0000000000000000)
-                 DW_AT_high_pc   (0x000000000000002b)
-                 DW_AT_frame_base        (DW_OP_reg7 RSP)
-                 DW_AT_GNU_all_call_sites        (true)
-                 DW_AT_name      ("main")
-                 DW_AT_decl_file ("/home/yhs/tmp/t.c")
-                 DW_AT_decl_line (9)
-                 DW_AT_type      (0x00000096 "int")
-                 DW_AT_external  (true)
-
-0x000000cb:     DW_TAG_GNU_call_site
-                   DW_AT_abstract_origin (0x000000d9 "foo")
-                   DW_AT_low_pc  (0x0000000000000026)
-
-0x000000d8:     NULL
-
-0x000000d9:   DW_TAG_subprogram
-                 DW_AT_low_pc    (0x0000000000000030)
-                 DW_AT_high_pc   (0x0000000000000039)
-                 DW_AT_frame_base        (DW_OP_reg7 RSP)
-                 DW_AT_GNU_all_call_sites        (true)
-                 DW_AT_name      ("foo")
-                 DW_AT_decl_file ("/home/yhs/tmp/t.c")
-                 DW_AT_decl_line (2)
-                 DW_AT_prototyped        (true)
-                 DW_AT_calling_convention        (DW_CC_nocall)
-                 DW_AT_type      (0x00000060 "long")
-
-0x000000f3:     DW_TAG_formal_parameter
-                   DW_AT_location        (DW_OP_fbreg +8)
-                   DW_AT_name    ("u")
-                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
-                   DW_AT_decl_line       (2)
-                   DW_AT_type    (0x0000003f "big")
-
-0x00000101:     DW_TAG_formal_parameter
-                   DW_AT_name    ("dead")
-                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
-                   DW_AT_decl_line       (2)
-                   DW_AT_type    (0x00000096 "int")
-
-0x0000010c:     DW_TAG_formal_parameter
-                   DW_AT_location        (DW_OP_reg5 RDI)
-                   DW_AT_name    ("x")
-                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
-                   DW_AT_decl_line       (2)
-                   DW_AT_type    (0x00000096 "int")
-
-0x00000119:     NULL
-
-0x0000011a:   NULL
-
-The following is the critical dwarf:
-
-0x000000d9:   DW_TAG_subprogram
-                 DW_AT_low_pc    (0x0000000000000030)
-                 DW_AT_high_pc   (0x0000000000000039)
-                 DW_AT_frame_base        (DW_OP_reg7 RSP)
-                 DW_AT_GNU_all_call_sites        (true)
-                 DW_AT_name      ("foo")
-                 DW_AT_decl_file ("/home/yhs/tmp/t.c")
-                 DW_AT_decl_line (2)
-                 DW_AT_prototyped        (true)
-                 DW_AT_calling_convention        (DW_CC_nocall)
-                 DW_AT_type      (0x00000060 "long")
-
-0x000000f3:     DW_TAG_formal_parameter
-                   DW_AT_location        (DW_OP_fbreg +8)
-                   DW_AT_name    ("u")
-                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
-                   DW_AT_decl_line       (2)
-                   DW_AT_type    (0x0000003f "big")
-
-0x00000101:     DW_TAG_formal_parameter
-                   DW_AT_name    ("dead")
-                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
-                   DW_AT_decl_line       (2)
-                   DW_AT_type    (0x00000096 "int")
-
-0x0000010c:     DW_TAG_formal_parameter
-                   DW_AT_location        (DW_OP_reg5 RDI)
-                   DW_AT_name    ("x")
-                   DW_AT_decl_file       ("/home/yhs/tmp/t.c")
-                   DW_AT_decl_line       (2)
-                   DW_AT_type    (0x00000096 "int")
-
-0x00000119:     NULL
-
-With true_signature:
-
-$ pahole -JV --btf_features=+true_signature t.o
-btf_encoder__new: 't.o' doesn't have '.data..percpu' section
-File t.o:
-[1] UNION big size=24
-         a type_id=2 bits_offset=0
-         buf type_id=3 bits_offset=0
-[2] INT long size=8 nr_bits=64 encoding=SIGNED
-[3] ARRAY (anon) type_id=4 index_type_id=6 nr_elems=24
-[4] INT char size=1 nr_bits=8 encoding=SIGNED
-[5] INT __ARRAY_SIZE_TYPE__ size=8 nr_bits=64 encoding=(none)
-[6] INT int size=4 nr_bits=32 encoding=SIGNED
-search cu 't.c' for percpu global variables.
-[7] FUNC_PROTO (anon) return=2 args=(1 u, 6 x)
-[8] FUNC foo type_id=7
-[9] FUNC_PROTO (anon) return=6 args=(void)
-[10] FUNC main type_id=9
-
-It succeeded with proper true signature.
-
-Without true_signature:
-
-$ pahole -JV t.o
-btf_encoder__new: 't.o' doesn't have '.data..percpu' section
-File t.o:
-[1] UNION big size=24
-         a type_id=2 bits_offset=0
-         buf type_id=3 bits_offset=0
-[2] INT long size=8 nr_bits=64 encoding=SIGNED
-[3] ARRAY (anon) type_id=4 index_type_id=6 nr_elems=24
-[4] INT char size=1 nr_bits=8 encoding=SIGNED
-[5] INT __ARRAY_SIZE_TYPE__ size=8 nr_bits=64 encoding=(none)
-[6] INT int size=4 nr_bits=32 encoding=SIGNED
-search cu 't.c' for percpu global variables.
-foo : skipping BTF encoding of function due to unexpected register usage for parameter
-[7] FUNC_PROTO (anon) return=6 args=(void)
-[8] FUNC main type_id=7
-
-The 'foo' will be missed due to mismatch between arg's and locations.
-
-Not exactly sure what CI has an issue for the test.
-
-
->
-> The optimized_parms flag is a bit too broad I think; it is set whenever we are
-> missing location info for _any_ parameter; this may be overly aggressive for clang in
-> particular which seems to have more missing location info.
->
-> [1] https://github.com/alan-maguire/dwarves/actions/runs/28173261168
->   
->>>   
->>>> jirka
->>>>
->>>>
->>>> dwarfdump:
->>>>
->>>> 0x016f4b1b:   DW_TAG_subprogram
->>>>                   DW_AT_low_pc    (0xffffffff813e0fc0)
->>>>                   DW_AT_high_pc   (0xffffffff813e1133)
->>>>                   DW_AT_frame_base        (DW_OP_reg7 RSP)
->>>>                   DW_AT_GNU_all_call_sites        (true)
->>>>                   DW_AT_name      ("stop_cpus")
->>>>                   DW_AT_decl_file ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
->>>>                   DW_AT_decl_line (464)
->>>>                   DW_AT_prototyped        (true)
->>>>                   DW_AT_calling_convention        (DW_CC_nocall)
->>>>                   DW_AT_type      (0x016e94c5 "int")
->>>>
->>>> 0x016f4b36:     DW_TAG_formal_parameter
->>>>                     DW_AT_location        (0x0065ad9e:
->>>>                        [0xffffffff813e0fc5, 0xffffffff813e0fed): DW_OP_reg5 RDI
->>>>                        [0xffffffff813e0fed, 0xffffffff813e111e): DW_OP_reg14 R14
->>>>                        [0xffffffff813e111e, 0xffffffff813e1127): DW_OP_GNU_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
->>>>                        [0xffffffff813e1127, 0xffffffff813e1133): DW_OP_reg14 R14)
->>>>                     DW_AT_name    ("cpumask")
->>>>                     DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
->>>>                     DW_AT_decl_line       (464)
->>>>                     DW_AT_type    (0x016f3242 "const cpumask *")
->>>>
->>>> 0x016f4b46:     DW_TAG_formal_parameter
->>>>                     DW_AT_name    ("fn")
->>>>                     DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
->>>>                     DW_AT_decl_line       (464)
->>>>                     DW_AT_type    (0x016f2ca5 "cpu_stop_fn_t")
->>>>
->>>> 0x016f4b52:     DW_TAG_formal_parameter
->>>>                     DW_AT_location        (0x0065ae0d:
->>>>                        [0xffffffff813e0fc5, 0xffffffff813e0ff2): DW_OP_reg4 RSI
->>>>                        [0xffffffff813e0ff2, 0xffffffff813e10e4): DW_OP_reg3 RBX
->>>>                        [0xffffffff813e10e4, 0xffffffff813e1127): DW_OP_GNU_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
->>>>                        [0xffffffff813e1127, 0xffffffff813e112e): DW_OP_reg3 RBX
->>>>                        [0xffffffff813e112e, 0xffffffff813e1133): DW_OP_GNU_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value)
->>>>                     DW_AT_name    ("arg")
->>>>                     DW_AT_decl_file       ("/home/jolsa/kernel/linux-qemu-2/kernel/stop_machine.c")
->>>>                     DW_AT_decl_line       (464)
->>>>                     DW_AT_type    (0x016e858f "void *")
->>>>
->>>>
->>>>
->>>>
->>>> ---
->>>> diff --git a/btf_encoder.c b/btf_encoder.c
->>>> index 38455a4c6b6b..cbc5063a6280 100644
->>>> --- a/btf_encoder.c
->>>> +++ b/btf_encoder.c
->>>> @@ -1564,7 +1564,8 @@ static int btf_encoder__add_true_signature(struct btf_encoder *encoder,
->>>>             */
->>>>            if (true_state->unexpected_reg ||
->>>>                true_state->uncertain_parm_loc ||
->>>> -            true_state->ambiguous_addr)
->>>> +            true_state->ambiguous_addr ||
->>>> +            true_state->optimized_parms)
->>>>                continue;
->>>>            err = btf_encoder__add_func(encoder, true_state);
->>>>            if (err < 0)
->>>> @@ -1656,6 +1657,8 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
->>>>                skip_reason = "reordered parameters\n";
->>>>            if (state->elf->ambiguous_addr)
->>>>                skip_reason = "ambiguous address\n";
->>>> +        if (state->optimized_parms)
->>>> +            skip_reason = "optimized parms\n";
->>>>              if (skip_reason) {
->>>>                btf_encoder__log_func_skip(encoder, saved_fns[i].elf,
+diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+index d78aec662586..ced0b95c876c 100644
+--- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
++++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
+ 	ksft_print_header();
+ 	ksft_set_plan(7);
+ 
+-	devfd = open("/dev/udmabuf", O_RDWR);
++	devfd = open("/dev/udmabuf", O_RDONLY);
+ 	if (devfd < 0) {
+ 		ksft_print_msg(
+ 			"%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
+diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+index e098d6534c3c..8114a29692fd 100644
+--- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
++++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+@@ -149,7 +149,7 @@ static struct memory_buffer *udmabuf_alloc(size_t size)
+ 
+ 	ctx->size = size;
+ 
+-	ctx->devfd = open("/dev/udmabuf", O_RDWR);
++	ctx->devfd = open("/dev/udmabuf", O_RDONLY);
+ 	if (ctx->devfd < 0) {
+ 		pr_err("[skip,no-udmabuf: Unable to access DMA buffer device file]");
+ 		goto err_free_ctx;
+-- 
+2.55.0.rc0.799.gd6f94ed593-goog
 
