@@ -1,101 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C6031F1534
-	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 20:41:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96893BB117;
+	Fri, 26 Jun 2026 20:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782506487; cv=none; b=WEaftgAUT55GxT6CJX2XtJtIsAsj+Sn+lGkEqdeeri5U6YhZGK6J1XEn4zTNwyIjdrUwDpFdEuNTuj/v/01ExshuKxMnMidYjUlw0M0ugtG48Cg5/XqJ3+98LGuchDiZVecHy27GGkvQLAm9JB/0TWX5KluEy1gLbSPZbCVDQ88=
+	t=1782506590; cv=none; b=tidVCxZCqiOBJj6c1xv1XjeXWYSZ+LmGj59epyWIfS+iQhJFoJS3JYUNsp0Hbki5hfIty04RI2gA18JT9PiVetEUyyq9xQbrg+kFC9IvlDSeX+RghokbdNOvLVlkgFn9bY9TSK7uEtC+pZ58SSc1DaifembxaZ8tqHF9o8d96Rg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782506487; c=relaxed/simple;
-	bh=i0A/Ox3WhbwZ8AonnfklU1LaEphaTGFGvTsmUgTFWlw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=N4TK3KnUZGeLd7EroyvS/OXQZRy2IG2mJBWY09Cr/D0YBnmMjq/79nSPVnuaA5OgKeV/kiQPzb/zU+mf53BlgC4jWFuUYMxSF3YYtc5zEeJ37n9+1hdpTZhQYm8PgkrS6nIZdrseZs91NqLlRT0EIXxMTAz2yJIrzdwk2FF0tl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LhSo1Q14; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782506590; c=relaxed/simple;
+	bh=8OIk93A1yIg8RtXTheftIilx7caQYAZJV41zNjm/1DA=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=q7btU/IaqBnNTeVwo4NIPbm38u/1cUj6KHzEQUCp4ZJPdAvxyd3zEVNUuJ1YwELG5BmZR/QYeEc6mL8BGhFajYX0lolUu8K+vxugliNyXpDRve8HvXXVvHFkhyyHOnnRVGiRXvdKRaUNQGTAevBijvQFCfzccDAZNVqzjlmR+Cs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=Oi8VJY/Z; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LhSo1Q14"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C75961F000E9;
-	Fri, 26 Jun 2026 20:41:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782506486;
-	bh=pZOV46DjW++6Rh2e6okShWF5Wv8h8pdOEAB3PHY/5Q4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=LhSo1Q140hvgDZVZIDwvb2iG4YlQXIOQ1i3Km9DVyGmS4rkAM0eielyCF5mcOi/Ov
-	 24zimH742/9N/JWMXueYs7gip8apOHfOFVLRmvso0PI2pD6AnVlq/JqwvPQcx1xAZj
-	 v3CeVAePFwStpJSWUY+4A9wyxR2UWXMb0DvHWvaCWaIKzACDWxvIv5fOVhDy2Q3vMi
-	 AX8SYJFiRtcFM5a1zfmMXHk9szVgzo/uHcUe0J0nIDTc0mviwlM6+sU/MR60oBd1se
-	 F6ssZrxx1XA7EhFQmnKPLdWi0Xc5o+Wj6O3DbKjOR/I7y/AIj04p7EKRScZcL5eWlb
-	 JlnTsru/p7krA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2 4/4] selftests/bpf: Fail unbound UDP on sockmap
- update
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Michal Luczaj" <mhal@rbox.co>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260626-sockmap-lookup-udp-leak-v2-4-7e7e201c951a@rbox.co>
-References: <20260626-sockmap-lookup-udp-leak-v2-0-7e7e201c951a@rbox.co>
- <20260626-sockmap-lookup-udp-leak-v2-4-7e7e201c951a@rbox.co>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 26 Jun 2026 20:41:25 +0000
-Message-Id: <20260626204125.C75961F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="Oi8VJY/Z"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1wdDO6-00DCO6-1T; Fri, 26 Jun 2026 22:42:58 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
+	bh=n/DYGvtv0ZMjSlvJQCCdtxc5LTPcQ2fzJLG4TjguW0s=; b=Oi8VJY/Zy1oeierb4nNV8eGQDF
+	9g4Jj8A5MI19pIms/GcJQdQwLMhjSkcEtj6tVbPlDEW5KXqq6M8AL1ywGt4JwBgJmx1yN5LdzMoGH
+	eSF2vjychtf7eIKnwvhx7tNroBAiUkV47ACgRsYlZSM+Sfn0M/VlcMyIlnLRnala2B3IwUyFRPBWy
+	9cjoxw+Up3XkJn0edJQwbn8c9yMkt7bQsCfSXttlaaAtNHoR2OMeLdd5/uJWToaFOOxNHdFsNQnJV
+	tkAdq9jkQekGBPHU9f8X5RveUQEF2KJ39uZx4mMsTqEwLHm60k2l3815uaTnciKUu7YiZVxQxCLVZ
+	BU5y1l1A==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1wdDO0-0003yQ-Cr; Fri, 26 Jun 2026 22:42:52 +0200
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.95)
+	id 1wdDNn-008BEG-3k;
+	Fri, 26 Jun 2026 22:42:39 +0200
+Message-ID: <c1b17849-e0dd-48a0-a624-db0bb0504041@rbox.co>
+Date: Fri, 26 Jun 2026 22:42:33 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Michal Luczaj <mhal@rbox.co>
+Subject: Re: [PATCH bpf 1/2] bpf, sockmap: Don't leak UDP socks on
+ lookup-bind-release
+To: Jakub Sitnicki <jakub@cloudflare.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Jiayuan Chen <jiayuan.chen@linux.dev>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Cong Wang <cong.wang@bytedance.com>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260623-sockmap-lookup-udp-leak-v1-0-05804f9308e4@rbox.co>
+ <20260623-sockmap-lookup-udp-leak-v1-1-05804f9308e4@rbox.co>
+ <87wlvoxdq1.fsf@cloudflare.com>
+ <willemdebruijn.kernel.24d11e11d5dc0@gmail.com>
+ <dd065bfb-52ce-48fd-b1ef-9c6166f714ed@rbox.co>
+ <CAAVpQUBHMrSiWqn0Zo_D7sUCLFdkKggduoijRdFtHx5CPiSpsg@mail.gmail.com>
+ <CAAVpQUAy=EVZcZRmXJPr=neJh7Q+UbYML5L4+nBynVrDPidUkw@mail.gmail.com>
+ <87o6gyyjxk.fsf@cloudflare.com>
+Content-Language: pl-PL, en-GB
+In-Reply-To: <87o6gyyjxk.fsf@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Missing check for `socket()` failure leads to a false positive t=
-est pass.
---
+On 6/25/26 12:48, Jakub Sitnicki wrote:
+> On Wed, Jun 24, 2026 at 02:39 PM -07, Kuniyuki Iwashima wrote:
+>> On Wed, Jun 24, 2026 at 2:33 PM Kuniyuki Iwashima <kuniyu@google.com> wrote:
+>>> ...
+>>> Setting SOCK_RCU_FREE itself should not cause a problem, but I think
+>>> we should take a step back.
+>>>
+>>> AFAIU, 0c48eefae712 was to allow putting AF_UNIX SOCK_DGRAM sockets
+>>> into sockmap, not to allow using unconnected UDP sockets in sk_lookup etc.
+>>>
+>>> Actually, v4 of the patch was implemented as such but did not get any feedback,
+>>> https://lore.kernel.org/bpf/20210508220835.53801-9-xiyou.wangcong@gmail.com/#t
+>>>
+>>> ... and v5 (the final commit) somehow removed the restriction for unconnected
+>>> UDP socket as well.
+>>> https://lore.kernel.org/bpf/20210704190252.11866-3-xiyou.wangcong@gmail.com/
+>>>
+>>> Given the initial use case, sockmap redirect, is still blocked by
+>>> TCP_ESTABLISHED
+>>> check in sock_map_redirect_allowed(), I feel there is no point in supporting
+>>> unconnected UDP sockets in sockmap.  It cannot get any skb from anywhere
+>>> (without buggy sk_lookup).
+>>
+>> s/unconnected/unhashed/g :)
+> 
+> Rejecting unhashed UDP sockets on insert to sockmap SGTM.
+> It is also in line with disable-problematic-cases strategy.
 
-commit 7f8484db13c3ae1f9676009ab7e283f2b68e4ae0
-Author: Michal Luczaj <mhal@rbox.co>
+OK, here's v2 with the sock_map_sk_state_allowed() check reintroduced:
+https://lore.kernel.org/bpf/20260626-sockmap-lookup-udp-leak-v2-0-7e7e201c951a@rbox.co/
 
-selftests/bpf: Fail unbound UDP on sockmap update
+Thanks,
+Michal
 
-This commit modifies test_maps to expect a failure when updating a sockmap
-with an unbound UDP socket. It effectively reverts a previous selftests
-change now that sockmap rejects unbound UDP sockets.
-
-> diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/self=
-tests/bpf/test_maps.c
-> --- a/tools/testing/selftests/bpf/test_maps.c
-> +++ b/tools/testing/selftests/bpf/test_maps.c
-> @@ -759,12 +759,12 @@ static void test_sockmap(unsigned int tasks, void *=
-data)
->  		goto out_sockmap;
->  	}
-> =20
-> -	/* Test update with unsupported UDP socket */
-> +	/* Test update with unsupported unbound UDP socket */
->  	udp =3D socket(AF_INET, SOCK_DGRAM, 0);
->  	i =3D 0;
->  	err =3D bpf_map_update_elem(fd, &i, &udp, BPF_ANY);
-
-[Severity: Medium]
-Will test_sockmap() in tools/testing/selftests/bpf/test_maps.c now silently
-pass if socket() fails to create a file descriptor?
-
-Because this patch changes the logic to expect an error from
-bpf_map_update_elem() by checking if (!err), if socket() returns -1 due to
-setup failures, bpf_map_update_elem() will fail with an error like -EBADF.
-
-This would cause the test to erroneously pass without actually testing the
-kernel's behavior for unbound UDP sockets. Does this test need a check to
-ensure the returned udp file descriptor is valid before proceeding with the
-map update?
-
-> -	if (err) {
-> -		printf("Failed socket update SOCK_DGRAM '%i:%i'\n",
-> +	if (!err) {
-> +		printf("Failed allowed unbound SOCK_DGRAM socket update '%i:%i'\n",
->  		       i, udp);
->  		goto out_sockmap;
->  	}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260626-sockmap-lo=
-okup-udp-leak-v2-0-7e7e201c951a@rbox.co?part=3D4
