@@ -1,165 +1,115 @@
-Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6A83E6392
-	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 08:52:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487303AA4E4
+	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 09:08:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782463957; cv=none; b=DBdFHXZBvetqIcqKOSz6NzVIoRXR83Dp1oNjVpKIUzaGJVSUE5kMozq3G9xDM1IwnzKymn4HuHFd+KFkBGZQg0SQjot4wr3tj8bs/h9KDMqMUUchl5LGz/PT5baEc4E3BcFGsO4T4JtRdYnwglaEf9fGR/8BPKZEQvkmQDJeaHM=
+	t=1782464940; cv=none; b=R8K8TY9n1ob1YTLTs75gQhvd8sITIUXyVDVe6NlE8K81jybVRyxZsReDISAncg9rfFoEXfCB4SkTwK85piWBP+xcLf8foza01n+dO6KNZFk3iDr/LbOukFOKR+Hmnh6UYCYoWB7xsVTeGrTuXV8pWXkxWm0AGYfmM8+/B8Rc/M0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782463957; c=relaxed/simple;
-	bh=4Q4kwEItPghZptzI7w7yAwAaOy5jEDXFyh70cxxpS7w=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ZT2P7KlawKtAHPyJi5ihdjlPXEjXZp0HC8nmT4EcwvBh1YTl5wgE9DzHMyOjguw1fA93uAAlwaLbzZn4vkLLh3SCUF5iKN1pm2RPK7fXX90l7Wxn3M0IL1qol6cw1bfe+uMD3bQJzmG3Eob5yjiEQ9ot5u1bxZkVMFIoo7bXh0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--clecigne.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=toOW+/kz; arc=none smtp.client-ip=209.85.208.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--clecigne.bounces.google.com
+	s=arc-20240116; t=1782464940; c=relaxed/simple;
+	bh=ISjDigds5McU5v7l3HrH4zvRsBc2//A/3e1t2Z/3OXQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=JB/me9uYM9c/DHEHUSqkewWAn1GyJvEDfDPBaNVAw4wGx+FNojRrerxUw1ZO3yBYgmHhN1Faf5E0mIwro4MEIRgyIpmYPLpmUMZ+ODLB4gESms7QtlJckoYH7aqzfX2K4gcfvq351F3AJhOq+h/bwJokqxdwX99pMpkeI2tW9NU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TVjkf8zL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="toOW+/kz"
-Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-697df3655d8so688601a12.2
-        for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 01:52:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1782463953; x=1783068753; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CMQwGfZ+4fg0c6+aiBQoHL3kx0Z8EfvRBL6AIlt5U1s=;
-        b=toOW+/kz+DBojB5RjZ2MgxrATvqJDfThot/OuWoeHvoFYeFqK/lWMgxXSuuw6+P2yf
-         aqGLZCuEpCLNJXZ12rELl935upCpYQxGidZQokYuzHQMDC1V68U58Wyk9RBn7mRq/OPs
-         /KC9S8b+cPrnHdlNKmI6VSOcbwyAAUbxmeGUciUueIfhJTb4D8/BfJ8G7RchAQU+Oy8v
-         TFF9msCFWnTcpuIOMHEEukNUagWTZWj2kDLqEakxI572s3p2UqCX6dKAFgYbXoP5abee
-         Ka5766O7Os/c9ttVnvnKiJBobS/iRB/yldtEwBy21DtWgbmG6kOaPcknUYPRsDgmBpMf
-         +pDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782463953; x=1783068753;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=CMQwGfZ+4fg0c6+aiBQoHL3kx0Z8EfvRBL6AIlt5U1s=;
-        b=W/sDMxUaVOP60IhKS6djZLPveuxf+LBKuCpG32laTy/GF9IzeZcT6tBiwW+al1uD9M
-         VYewRk9JIFErCHz7+gOfSPiKYVjPEWB5qyxVhs+mlisfg7Js1U2ZIh6AcCc7wd+Oty0Q
-         q//3cWFBuTNL/jHLBAkOL9ivormZdKoj018pjYJVd2ajMb6QbgkAeytANYq1eLwYEfmE
-         yw93sTvWgZZzzAf8zisBDqJRsfgsbug/NM5oG31HSBDVLOCnTnINCChwXetnjj1ua7US
-         /jinU5xa/xwFO1GnidMEzHCiIzykzgavRtPVI8yHHyi2jQf9ITMHItwNWt6UX2PISOcd
-         jbVA==
-X-Forwarded-Encrypted: i=1; AHgh+RoRXdd58KCfarv7HM/gSY6V9YetgFs2KBdRMBhfgouRCd5Zj6Gh6jPDCvfcFWcuydF915w=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7U6PcLo4zmjwHovK+LwgycCwcCwp1kLVEiA01tt0MX6XLfc3r
-	hhnwJybe5Xq5JRpFPmnVQIz95Tzroamh6BuE4hIiJiEiy4TEfc8w4dss4dBE3OcpBoiDcS4oSRj
-	v/68XD5DqUWSjrQ==
-X-Received: from edsx13.prod.google.com ([2002:aa7:dacd:0:b0:696:5e7:d0af])
- (user=clecigne job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:51d2:b0:697:750e:e9f5 with SMTP id 4fb4d7f45d1cf-69810ae06c1mr1512484a12.23.1782463952731;
- Fri, 26 Jun 2026 01:52:32 -0700 (PDT)
-Date: Fri, 26 Jun 2026 08:52:25 +0000
-In-Reply-To: <0922ce5d-48d8-44e7-983c-e547f3126ef4@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TVjkf8zL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BED261F000E9;
+	Fri, 26 Jun 2026 09:08:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782464938;
+	bh=q6F8XAJ21jw25GCHvweLyg6Kzn4aIk3kxdqtYt/q4cA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=TVjkf8zLJE8+X0xdGbt6OcOQ9WK0JQ+aIedKtWBzpyvllNYNHYH8iyhHdjJvUUdtT
+	 M6KR/DhZXxAqrgd7Mk4BbJtSuLxDIM4HN8GyrETml3p9lurO3T6xikyOd9dzQOE+oI
+	 M2vI5cxvLgT8pkbolTI0R/2OWkc9gw+3KZVDh9I1trAjj9ZLmWPgJD13R+LAGhuWZN
+	 xfGiRQ14kdPIC/WzcApVIjgsMMze2u9clruoGCvhBj7e8AHbqxCuKljJ6w3WFfvPZQ
+	 SBbRruQUY4xl7kJXiR71+n/RMIrqXIM4KH3Jpr0Ai76YvlV8rVVa1wpxluKFVimrgp
+	 MbZIoqrYRSkqQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2] xsk: fix memory corruptions in net/core/xdp.c
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Clement Lecigne" <clecigne@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260626085226.1765180-1-clecigne@google.com>
+References: <0922ce5d-48d8-44e7-983c-e547f3126ef4@intel.com>
+ <20260626085226.1765180-1-clecigne@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 26 Jun 2026 09:08:58 +0000
+Message-Id: <20260626090858.BED261F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <0922ce5d-48d8-44e7-983c-e547f3126ef4@intel.com>
-X-Mailer: git-send-email 2.55.0.rc0.799.gd6f94ed593-goog
-Message-ID: <20260626085226.1765180-1-clecigne@google.com>
-Subject: [PATCH v2] xsk: fix memory corruptions in net/core/xdp.c
-From: Clement Lecigne <clecigne@google.com>
-To: aleksander.lobakin@intel.com, edumazet@google.com, netdev@vger.kernel.org
-Cc: clecigne@google.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kuba@kernel.org, sdf@fomichev.me, horms@kernel.org, john.fastabend@gmail.com, 
-	ast@kernel.org, daniel@iogearbox.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-From: Cl=C3=A9ment Lecigne <clecigne@google.com>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Critical] The exact dynamic allocation sizing in xdp_build_skb_from_zc()=
+ combined with a rounded-up memcpy() introduces a reliable out-of-bounds wr=
+ite into skb_shared_info.
+--
 
-Commit 560d958c6c68 ("xsk: add generic XSk &xdp_buff -> skb conversion")
-introduced a vulnerability in the handling of XDP_PASS for AF_XDP zero-copy
-frames.
+commit 332575c8834e99019b6ead4fd6570c4662e36762
+Author: Cl=C3=A9ment Lecigne <clecigne@google.com>
 
-Note: Currently, this specific AF_XDP zero-copy conversion path is only
-reachable from the drivers/net/ethernet/intel/ice and
-drivers/net/ethernet/intel/idpf drivers.
+xsk: fix memory corruptions in net/core/xdp.c
 
-When building an skb, xdp_build_skb_from_zc() uses the chunk size
-(xdp->frame_sz) for the allocation. However, napi_build_skb() automatically
-reserves space at the end of the allocation for the skb_shared_info
-structure.=20
+This commit attempts to fix out of bounds writes during AF_XDP zero-copy
+frame conversions. It introduces dynamic truesize calculations using
+SKB_HEAD_ALIGN for the skb allocation and LARGEST_ALIGN for fragment
+allocations to properly account for required headroom and packet length.
 
-Most high performance UMEM applications use 4K chunks, where the
-corruption cannot happen. However, if the UMEM is configured with 2KB
-chunks (a very common configuration to maximize packet density in memory),
-a standard 1500 MTU packet will trigger the corruption because the required
-space exceeds the 2048 byte chunk size:
+> diff --git a/net/core/xdp.c b/net/core/xdp.c
+> index 9890a30584ba7..52546746378a0 100644
+> --- a/net/core/xdp.c
+> +++ b/net/core/xdp.c
+[ ... ]
+> @@ -738,9 +738,10 @@ static noinline bool xdp_copy_frags_from_zc(struct s=
+k_buff *skb,
+>   */
+>  struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp)
+>  {
+> +	u32 headroom =3D xdp->data_meta - xdp->data_hard_start;
+>  	const struct xdp_rxq_info *rxq =3D xdp->rxq;
+>  	u32 len =3D xdp->data_end - xdp->data_meta;
+> -	u32 truesize =3D xdp->frame_sz;
+> +	u32 truesize =3D SKB_HEAD_ALIGN(headroom + len);
 
-Headroom (256) + Packet (1514) + skb_shared_info (320) =3D 2090 bytes
+[Severity: Critical]
+Does this regression allocate enough linear space to handle a rounded-up
+memcpy when the headroom is unaligned?
 
-Because 2090 bytes > 2048 bytes and __skb_put() does not perform bounds
-checking, the memcpy() writes past the available linear data area and
-corrupts the skb_shared_info structure. This can lead to arbitrary code
-execution if pointers like destructor_arg are overwritten.
+If an XDP program adjusts data_meta such that headroom is not a multiple of
+64 (for example, 252 bytes), and a packet of 68 bytes is received, the
+allocated linear size from SKB_HEAD_ALIGN(320) would be 320.
 
-Additionally, in xdp_copy_frags_from_zc(), the allocation size is set
-strictly to the fragment size (len), but the subsequent memcpy() uses
-LARGEST_ALIGN(len). This mismatch results in an out-of-bounds write of
-up to 7 bytes, which triggers KASAN warnings and is unsafe despite typical
-page pool allocator padding.
+However, the later memcpy uses LARGEST_ALIGN(len) for the 68 bytes, which
+could round up to 96 bytes.  This means 252 + 96 =3D 348 bytes could be
+written into a 320 byte space.
 
-Fix the skb allocation in xdp_build_skb_from_zc() by dynamically
-calculating the exact truesize required using SKB_HEAD_ALIGN() to
-properly account for the headroom, the packet length, and the
-skb_shared_info overhead.
+[ ... ]
+> @@ -762,7 +763,7 @@ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff=
+ *xdp)
+>  	}
+> =20
+>  	skb_mark_for_recycle(skb);
+> -	skb_reserve(skb, xdp->data_meta - xdp->data_hard_start);
+> +	skb_reserve(skb, headroom);
+> =20
+>  	memcpy(__skb_put(skb, len), xdp->data_meta, LARGEST_ALIGN(len));
 
-Fix the out-of-bounds write in xdp_copy_frags_from_zc() by rounding up
-the allocation request using LARGEST_ALIGN(len) to match the copy
-operation.
+[Severity: Critical]
+Can this regression corrupt skb_shared_info?
 
-Fixes: 560d958c6c68 ("xsk: add generic XSk &xdp_buff -> skb conversion")
-CC: Alexander Lobakin <aleksander.lobakin@intel.com>
-CC: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Cl=C3=A9ment Lecigne <clecigne@google.com>
----
-Changes since v1:
- - Used SKB_HEAD_ALIGN to properly calculate the required allocation size
-   including the skb_shared_info overhead.
- - Re-ordered variable declarations.
+Since the linear space allocation might only be 320 bytes as shown above,
+but this memcpy could write up to 348 bytes, it appears this might write
+past the end of the linear data region.
 
----
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 9890a30584ba..52546746378a 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -698,8 +698,8 @@ static noinline bool xdp_copy_frags_from_zc(struct sk_b=
-uff *skb,
-=20
- 	for (u32 i =3D 0; i < nr_frags; i++) {
- 		const skb_frag_t *frag =3D &xinfo->frags[i];
--		u32 len =3D skb_frag_size(frag);
--		u32 offset, truesize =3D len;
-+		u32 offset, len =3D skb_frag_size(frag);
-+		u32 truesize =3D LARGEST_ALIGN(len);
- 		struct page *page;
-=20
- 		page =3D page_pool_dev_alloc(pp, &offset, &truesize);
-@@ -738,9 +738,10 @@ static noinline bool xdp_copy_frags_from_zc(struct sk_=
-buff *skb,
-  */
- struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp)
- {
-+	u32 headroom =3D xdp->data_meta - xdp->data_hard_start;
- 	const struct xdp_rxq_info *rxq =3D xdp->rxq;
- 	u32 len =3D xdp->data_end - xdp->data_meta;
--	u32 truesize =3D xdp->frame_sz;
-+	u32 truesize =3D SKB_HEAD_ALIGN(headroom + len);
- 	struct sk_buff *skb =3D NULL;
- 	struct page_pool *pp;
- 	int metalen;
-@@ -762,7 +763,7 @@ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *=
-xdp)
- 	}
-=20
- 	skb_mark_for_recycle(skb);
--	skb_reserve(skb, xdp->data_meta - xdp->data_hard_start);
-+	skb_reserve(skb, headroom);
-=20
- 	memcpy(__skb_put(skb, len), xdp->data_meta, LARGEST_ALIGN(len));
-=20
+Could this lead to overwriting destructor_arg and cause issues upon SKB
+free?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260626085226.1765=
+180-1-clecigne@google.com?part=3D1
