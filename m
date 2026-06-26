@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF3673F4DE0
-	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 12:28:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5892A3F54AC;
+	Fri, 26 Jun 2026 12:28:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782476886; cv=none; b=Vd1bc3ahSstQKOboQiApTgfmXwi8muiVztVWD7ntPYWvg8kphdAiv68ytjhkoHYhylvGTzQEaeE4lvM7kQwMkoC2Qk3PXRTSNrNXNNz3IJZobt+3cbeUkF7tFLcYzG5jhZyB5Jlmu04XakUwOX52YwCMTWWJz3De7JYE6xrz1G0=
+	t=1782476889; cv=none; b=ixL9JbGqH1o9n5Pc+9eXvHZUeFPfoArHDKmD8nyep6XDRoeojHG9/wyEbYHhMJHrdW4idzFH9BDAcAivf9iZsn5Bav6cVPJwMqSwUeCDbivUhM6zL26gjlHzcH5Sx4VL0npH9n/ZvO02Xj4hXRctWjLso4m2EToXsNubTHKku0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782476886; c=relaxed/simple;
-	bh=tuWvA/bslmiqHWt51T0uGddqFubKkBWYBxC5awGVNbY=;
+	s=arc-20240116; t=1782476889; c=relaxed/simple;
+	bh=koirBBT/qK2A9zaDXwaGZPBcn7D9UGYI9QUQHY8zqtg=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=sfgfOQ39pp1LXEnFn/XYcwtp+Yb1dTsnDzKrUs0Q+oPkh2/QIa9EIB+mxRrFeLjOOlA9OKxe/+3YzDqzF3bgvaI7Ula1X3JjnzUnxcCBR2OEmfphFFqk//FA34Z47z3DO4Z8Noi+kq2UTs7xkkqt9+u94o6XgzU/Z3/Ho0j+VOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ENbBZ6/l; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=o/SiE6jiRVGq5mGkRE247mvPzsOhhc9GjXnt24wtMEBx+pwW4PcBnMwEfbnQxf/IevC5IxUqeK7iJbHBRDE1qmNAo8xXId78N6f9jzLi0J7NCq2Vg5SzGckucrh3+HsUOYb4c+av2VrlE1qQe/38/mruSDWzapxcPl2rdV8Io6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=llGw7a99; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ENbBZ6/l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B232E1F000E9;
-	Fri, 26 Jun 2026 12:28:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="llGw7a99"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39CDC1F000E9;
+	Fri, 26 Jun 2026 12:28:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782476885;
-	bh=rzUyzRxrkqSTu7/4WmIu04VcEpaEmwfiGOKLnInNGZM=;
+	s=k20260515; t=1782476887;
+	bh=1JoY8aAZ1FpJcQAZiSMr5c9UvyVZ2LMJPzXpbzCvMYM=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=ENbBZ6/lhC4Dz1NYmcOPpwPFgWV1qGjvzmbT/scOoglgB1Jq6xIvGUTw8rB8KBB2S
-	 K2bnjvP5rbaiPy2x9YukSJuXrrmHF56fAND82mRqw/aWBj66QMWVjGn9q8aJIsIg3U
-	 5D+384vAzlNcHjuroSGNHm1uRpJTNkaHRUYFY2JB9/jnOQZPPn7Gz9myUjJj2YV/3+
-	 Lpi+5dsvoFQJon8oBcewOEf2FjGwvWcy5ktXXFjSZX8Gf8un3n4kXpmeFNGafix7pr
-	 7MgEBmbfb/jHv3TFzwdJnOHelU+gLk8tc8K95DaowQe+OI/6euWbK+APVeYGb/8XsH
-	 4B9Xq8fKb52Tg==
+	b=llGw7a99nz3mOvWfrA5TTxzCM5nSwx/FZycLp88XIyIXSTm2fmXWQohxIbTlo4M8L
+	 rJXlZe8et+Bx9pKXBt8a2r8629IXcnRNt/8ortATwO6655UfXkAR3iu5Re7udBSjlJ
+	 NMIRu9bThLW8rQ1l1wSGno8WpUvpS+KiSJz2M35XnG2LArtT+cp+YkfhgPpFjePjKV
+	 pC4H44dp4VAQ55EzfxtblGLoZpccSG664uX5CHIOqywDdH5F8TSiGwlak1UvPonvNO
+	 h7+zdb9JBaQI38Ge7yaqN1kObEszXNLSz9wB/by5dGVRBkpU8/J4l7QzkCeH2yH+YN
+	 vrAy9SrWe/rfQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0DF939389F8;
-	Fri, 26 Jun 2026 12:27:53 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56AD839389F8;
+	Fri, 26 Jun 2026 12:27:55 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,36 +37,48 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] BPF fixes for 7.2-rc1
+Subject: Re: [PATCH bpf-next v5 0/3] bpf,
+ sockmap: reject a packet-modifying SK_SKB stream parser
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <178247687248.457674.7317619493339785154.git-patchwork-notify@kernel.org>
-Date: Fri, 26 Jun 2026 12:27:52 +0000
-References: <20260625201934.54233-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20260625201934.54233-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: torvalds@linux-foundation.org, bpf@vger.kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, memxor@gmail.com, eddyz87@gmail.com
+ <178247687401.457674.14278516857626852476.git-patchwork-notify@kernel.org>
+Date: Fri, 26 Jun 2026 12:27:54 +0000
+References: <20260620024423.4141004-1-rhkrqnwk98@gmail.com>
+In-Reply-To: <20260620024423.4141004-1-rhkrqnwk98@gmail.com>
+To: Sechang Lim <rhkrqnwk98@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ john.fastabend@gmail.com, jakub@cloudflare.com, eddyz87@gmail.com,
+ edumazet@google.com, kuniyu@google.com, pabeni@redhat.com,
+ willemb@google.com, davem@davemloft.net, kuba@kernel.org,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, memxor@gmail.com, horms@kernel.org, shuah@kernel.org,
+ jiayuan.chen@linux.dev, bobby.eshleman@bytedance.com, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
 Hello:
 
-This pull request was applied to bpf/bpf.git (master)
-by Linus Torvalds <torvalds@linux-foundation.org>:
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-On Thu, 25 Jun 2026 13:19:32 -0700 you wrote:
-> Hi Linus,
+On Sat, 20 Jun 2026 02:44:15 +0000 you wrote:
+> A BPF_PROG_TYPE_SK_SKB stream parser runs on strparser's message head,
+> which can chain skbs through frag_list. A parser that resizes the skb
+> frees the frag_list segments that strparser still tracks through
+> skb_nextp, leading to a use-after-free.
 > 
-> The following changes since commit ef0c9f75a19532d7675384708fc8621e10850104:
-> 
->   lib: Add stale 'raid6' directory to .gitignore file (2026-06-21 14:09:49 -0700)
-> 
-> are available in the Git repository at:
+> A stream parser is only meant to measure the next message, not to modify
+> the packet, so reject a packet-modifying parser at attach time.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] BPF fixes for 7.2-rc1
-    https://git.kernel.org/bpf/bpf/c/4edcdefd4083
+  - [bpf-next,v5,1/3] selftests/bpf: don't modify the skb in the strparser parser prog
+    https://git.kernel.org/bpf/bpf/c/22a0cc10dacb
+  - [bpf-next,v5,2/3] bpf, sockmap: reject a packet-modifying SK_SKB stream parser
+    https://git.kernel.org/bpf/bpf/c/31e2f36d3821
+  - [bpf-next,v5,3/3] selftests/bpf: test rejection of a packet-modifying SK_SKB stream parser
+    https://git.kernel.org/bpf/bpf/c/05fb34384d20
 
 You are awesome, thank you!
 -- 
