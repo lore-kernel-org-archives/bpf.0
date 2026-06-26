@@ -1,261 +1,379 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B3823F7A94
-	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 14:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC6926A08F;
+	Fri, 26 Jun 2026 14:30:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782483772; cv=none; b=KBSRk55Wb12BLY5Hna1dhXAI5bV+WXOCpqPLaYYPhe4/e+DJFLRRQ7tEm6cbZJLwwWsiFdt68qxT09B3FqlSCOJcHJbP608jk/STIm+rq+TK+9/Sg/wau6gy2ghaEmT3cUEDuASW/aa7NNknjszCzQCK//ogIy7/Dp+jWc/pLFM=
+	t=1782484254; cv=none; b=mQMvkHSznikil5iHaFxp1kDwiItJwPP+cf8uL0cKSECZSYU8UEE3wb1QCbUIYSMRv+McYx4gYpIwpmBBoiea/dQFoN7ed8OcL23EKDGnQ+9LHja4HzNJ4ebiwmvq0yvro4RHF7y2VAQYnl8nxphcabcAEcFUVeTjIOi3v0owaQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782483772; c=relaxed/simple;
-	bh=cXaqsM1PpKfaMoOs9eaSaUzWG3Uc7ETrUGcmj3/0kIo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=lLjzYZVsmd6D//W+8bzPHKCQel6PcMnLcNM5cXOTXnQuQinMe5B2lI+4P0U8pkk5oXYJQhp9CfmmPbA0nn0Kf97LSZd5GbGcSFMWQWaboVQnuefKlhb1Em4z0m6xXRO5kAB1rROFLXIkJk4l8CSDt1KAi+lUDHQyrKiUNs3LzDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cmbGKR+a; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782484254; c=relaxed/simple;
+	bh=3XLmTiO6eadTaOv9ADltHdISY35t/Nox0ZgjOhRXpIM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iBXotUJ4ZL+KUtAO/6gHv1PVSxutP5vZnIKaIp+awoTJkgkZDnP7Zx99Knh+BW4S/ZPo901Y/xe290UHfr+Cv1d0+4+qxy5/s1vfCc6YJTSlKhltuJ4k1h4dqHQfDLZ7BcaXLXdhtPxZd3SjwzgNicpkTUcBo0owES8uGJj8hRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GDwsXadG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cmbGKR+a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GDwsXadG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C30871F000E9;
+	Fri, 26 Jun 2026 14:30:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782484253;
+	bh=vu8WzrwqApX7wsPkaWrxMrSifCAb56jkTiTB7+zyurI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=GDwsXadGCDqv1qq8R5wyE2mYy9bMCwO74e6g644EFGVGk8OCUpOgICLOZigXvg31l
+	 msYkZOAKKBaMsNkAoPdHAOL0y/JJ2DG0ZWG97k6CBMgNKKxC2LH4sVq1EtSQqSPv6e
+	 WomcAvBIFxWyzIL5IaliZZ2ahLx8xemr1KBnsrMOzmXpp8wDTY5WDHVZ1MGpwVcRz5
+	 mgltLTDa30yepVyh6w5NzhetDMxe2wfi3oKjgVwBHOK5I58qJQcTDnhFaF7/z5A+9T
+	 Crhks2tl+4q+ILFS2p4CopOCrQP4YclPdwyQl9bUX3AZSTEhNOV1GwgyhlkYTx3fV7
+	 7Hngm+Y4fB7XQ==
+Message-ID: <104794ff-9f04-48be-91e8-89d5d2269f95@kernel.org>
+Date: Fri, 26 Jun 2026 16:30:48 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782483765;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sXG8afNs3yklXPbprHmJENAjnx3o20Btd5uIVU420b8=;
-	b=cmbGKR+aou02UPg0yNfg6EUU0La0FotxxR6hFPLMLLx0i5lyy0uaFlAgbddgfY7BgaEqsZ
-	Avp7TJZOyigFd/b6E8iMjLcwLrplB8eRe2p1FXE6V2RLxfwUhMhmUh4RVdZbwmBV1PhoSu
-	DO+3c0Hx0lG9DdahENlsDEcvPZ/2SDM=
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 1/4] mm/memcontrol: do not drain objcg stock when
+ spinning is not allowed
+Content-Language: en-US
+To: "Harry Yoo (Oracle)" <harry@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Pedro Falcato <pfalcato@suse.de>
+Cc: cgroups@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20260624-kmalloc-nolock-fixes-v1-0-fdf4d17351dd@kernel.org>
+ <20260624-kmalloc-nolock-fixes-v1-1-fdf4d17351dd@kernel.org>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Autocrypt: addr=vbabka@kernel.org; keydata=
+ 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
+In-Reply-To: <20260624-kmalloc-nolock-fixes-v1-1-fdf4d17351dd@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 26 Jun 2026 14:22:35 +0000
-Message-Id: <DJJ1R8VB5H31.1XJ69GVCYMB87@linux.dev>
-Subject: Re: [PATCH v12 13/16] KVM: selftests: Add guest_memfd based
- vm_mem_backing_src_types
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Brendan Jackman" <brendan.jackman@linux.dev>
-To: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>, "kvm@vger.kernel.org"
- <kvm@vger.kernel.org>, "linux-doc@vger.kernel.org"
- <linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
- <kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
- <linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Cc: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
- <corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org"
- <oupton@kernel.org>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
- "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
- <yuzenghui@huawei.com>, "catalin.marinas@arm.com"
- <catalin.marinas@arm.com>, "will@kernel.org" <will@kernel.org>,
- "seanjc@google.com" <seanjc@google.com>, "tglx@kernel.org"
- <tglx@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de"
- <bp@alien8.de>, "dave.hansen@linux.intel.com"
- <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>,
- "hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>,
- "peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org"
- <willy@infradead.org>, "akpm@linux-foundation.org"
- <akpm@linux-foundation.org>, "david@kernel.org" <david@kernel.org>,
- "lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
- "vbabka@kernel.org" <vbabka@kernel.org>, "rppt@kernel.org"
- <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>,
- "mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>,
- "daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org"
- <andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>,
- "eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org"
- <song@kernel.org>, "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
- "john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org"
- <kpsingh@kernel.org>, "sdf@fomichev.me" <sdf@fomichev.me>,
- "haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org"
- <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>, "jhubbard@nvidia.com"
- <jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>,
- "jannh@google.com" <jannh@google.com>, "pfalcato@suse.de"
- <pfalcato@suse.de>, "skhan@linuxfoundation.org"
- <skhan@linuxfoundation.org>, "riel@surriel.com" <riel@surriel.com>,
- "ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jgross@suse.com"
- <jgross@suse.com>, "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
- "kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
- "ackerleytng@google.com" <ackerleytng@google.com>, "yosry@kernel.org"
- <yosry@kernel.org>, "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
- "maobibo@loongson.cn" <maobibo@loongson.cn>, "tabba@google.com"
- <tabba@google.com>, "prsampat@amd.com" <prsampat@amd.com>,
- "wu.fei9@sanechips.com.cn" <wu.fei9@sanechips.com.cn>,
- "mlevitsk@redhat.com" <mlevitsk@redhat.com>, "jmattson@google.com"
- <jmattson@google.com>, "jthoughton@google.com" <jthoughton@google.com>,
- "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>, "alex@ghiti.fr"
- <alex@ghiti.fr>, "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
- "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
- "chenhuacai@kernel.org" <chenhuacai@kernel.org>, "baolu.lu@linux.intel.com"
- <baolu.lu@linux.intel.com>, "dev.jain@arm.com" <dev.jain@arm.com>,
- "gor@linux.ibm.com" <gor@linux.ibm.com>, "hca@linux.ibm.com"
- <hca@linux.ibm.com>, "palmer@dabbelt.com" <palmer@dabbelt.com>,
- "pjw@kernel.org" <pjw@kernel.org>, "shijie@os.amperecomputing.com"
- <shijie@os.amperecomputing.com>, "svens@linux.ibm.com"
- <svens@linux.ibm.com>, "thuth@redhat.com" <thuth@redhat.com>,
- "yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
- "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com"
- <urezki@gmail.com>, "zhengqi.arch@bytedance.com"
- <zhengqi.arch@bytedance.com>, "gerald.schaefer@linux.ibm.com"
- <gerald.schaefer@linux.ibm.com>, "jiayuan.chen@shopee.com"
- <jiayuan.chen@shopee.com>, "lenb@kernel.org" <lenb@kernel.org>,
- "pavel@kernel.org" <pavel@kernel.org>, "rafael@kernel.org"
- <rafael@kernel.org>, "yangyicong@hisilicon.com" <yangyicong@hisilicon.com>,
- "vannapurve@google.com" <vannapurve@google.com>, "jackmanb@google.com"
- <jackmanb@google.com>, "patrick.roy@linux.dev" <patrick.roy@linux.dev>,
- "Itazuri, Takahiro" <itazur@amazon.co.uk>
-References: <20260410151746.61150-1-kalyazin@amazon.com>
- <20260410151746.61150-14-kalyazin@amazon.com>
-In-Reply-To: <20260410151746.61150-14-kalyazin@amazon.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 7bit
 
-On Fri Apr 10, 2026 at 3:20 PM UTC, Nikita Kalyazin wrote:
-> From: Patrick Roy <patrick.roy@linux.dev>
->
-> Allow selftests to configure their memslots such that userspace_addr is
-> set to a MAP_SHARED mapping of the guest_memfd that's associated with
-> the memslot. This setup is the configuration for non-CoCo VMs, where all
-> guest memory is backed by a guest_memfd whose folios are all marked
-> shared, but KVM is still able to access guest memory to provide
-> functionality such as MMIO emulation on x86.
->
-> Add backing types for normal guest_memfd, as well as direct map removed
-> guest_memfd.
->
-> Signed-off-by: Patrick Roy <patrick.roy@linux.dev>
-> Signed-off-by: Nikita Kalyazin <nikita.kalyazin@linux.dev>
+On 6/24/26 15:11, Harry Yoo (Oracle) wrote:
+> When kmalloc_nolock() drains objcg stock, the stock might be holding
+> the last reference to the objcg. Since obj_cgroup_release() is a
+> callback for percpu refcount and does not know whether spinning is
+> allowed, it is not safe to invoke obj_cgroup_put().
+> 
+> This was caught by lockdep on PREEMPT_RT because acquiring
+> a sleeping lock (objcg_lock) violates lock nesting rules:
+> 
+>   kernel: BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
+>   kernel: in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1267, name: systemd-resolve
+>   preempt_count: 1, expected: 0
+>   RCU nest depth: 3, expected: 3
+>   6 locks held by systemd-resolve/1267:
+>    #0: ffff888a8165fa20 ((&pcs->lock)){+.+.}-{3:3}, at: kmem_cache_alloc_noprof+0x185/0xa20
+>    #1: ffffffff9658a4c0 (rcu_read_lock){....}-{1:3}, at: rt_spin_trylock+0x74/0x2a0
+>    #2: ffff888a81648598 ((lock)#4){+.+.}-{3:3}, at: trylock_stock+0x118/0x380
+>    #3: ffffffff9658a4c0 (rcu_read_lock){....}-{1:3}, at: rt_spin_trylock+0x74/0x2a0
+>    #4: ffffffff9658a4c0 (rcu_read_lock){....}-{1:3}, at: percpu_ref_put_many.constprop.0+0x40/0x270
+>    #5: ffffffff96af11d8 (objcg_lock){+.+.}-{3:3}, at: obj_cgroup_release+0x8a/0x410
+>   [...]
+>   Call Trace:
+>    <TASK>
+>    dump_stack_lvl+0x8a/0xe0
+>    dump_stack+0x14/0x1c
+>    __might_resched.cold+0x233/0x2bb
+>    rt_spin_lock+0xd3/0x410
+>    obj_cgroup_release+0x8a/0x410
+>    percpu_ref_put_many.constprop.0+0x226/0x270
+>    drain_obj_stock_slot+0x27e/0x8d0
+>    __refill_obj_stock+0x409/0x6d0
+>    __memcg_slab_post_alloc_hook+0xa45/0x1500
+>    __kmalloc_nolock_noprof+0x988/0xc40
+>    [...]
+> 
+> However, this is illegal in !RT kernels too because the objcg release
+> callback acquires a spinlock even when spinning is not allowed.
+> 
+> To fix this issue, fall back to atomics when the cached objcg doesn't
+> match, but it is unsafe to drain because spinning is not allowed.
+> 
+> This is expected to affect performance of kmalloc_nolock() since
+> it can no longer drain and refill the stock and falls back to a
+> per-objcg atomic counter (objcg->nr_charged_bytes).
+
+Maybe it's not bad that the constrained operation will not do a drain? Could
+we say it's likely that both _nolock() and normal operations will likely be
+happening on the same cpu for the same memcg, so a normal one will soon
+handle it?
+
+> Fixes: af92793e52c3 ("slab: Introduce kmalloc_nolock() and kfree_nolock().")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
 > ---
->  .../testing/selftests/kvm/include/kvm_util.h  | 18 ++++++
->  .../testing/selftests/kvm/include/test_util.h |  7 +++
->  tools/testing/selftests/kvm/lib/kvm_util.c    | 61 ++++++++++---------
->  tools/testing/selftests/kvm/lib/test_util.c   |  8 +++
->  4 files changed, 65 insertions(+), 29 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testi=
-ng/selftests/kvm/include/kvm_util.h
-> index 8b39cb919f4f..056a003a63c0 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> @@ -664,6 +664,24 @@ static inline bool is_smt_on(void)
-> =20
->  void vm_create_irqchip(struct kvm_vm *vm);
-> =20
-> +static inline uint32_t backing_src_guest_memfd_flags(enum vm_mem_backing=
-_src_type t)
-> +{
-> +	uint32_t flags =3D 0;
-> +
-> +	switch (t) {
-> +	case VM_MEM_SRC_GUEST_MEMFD_NO_DIRECT_MAP:
-> +		flags |=3D GUEST_MEMFD_FLAG_NO_DIRECT_MAP;
-> +		fallthrough;
-> +	case VM_MEM_SRC_GUEST_MEMFD:
-> +		flags |=3D GUEST_MEMFD_FLAG_MMAP | GUEST_MEMFD_FLAG_INIT_SHARED;
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return flags;
-> +}
-> +
->  static inline int __vm_create_guest_memfd(struct kvm_vm *vm, uint64_t si=
-ze,
->  					uint64_t flags)
+>  mm/memcontrol.c | 34 +++++++++++++++++++++++-----------
+>  mm/slab.h       |  3 ++-
+>  mm/slub.c       | 29 +++++++++++++++++++----------
+>  3 files changed, 44 insertions(+), 22 deletions(-)
+> 
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 29390ba13baa..5bb5e75ef5b0 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -3316,18 +3316,19 @@ static bool obj_stock_flush_required(struct obj_stock_pcp *stock,
+>  static void __refill_obj_stock(struct obj_cgroup *objcg,
+>  			       struct obj_stock_pcp *stock,
+>  			       unsigned int nr_bytes,
+> -			       bool allow_uncharge)
+> +			       bool allow_uncharge,
+> +			       bool allow_spin)
 >  {
-> diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/test=
-ing/selftests/kvm/include/test_util.h
-> index 8140e59b59e5..ea6de20ce8ef 100644
-> --- a/tools/testing/selftests/kvm/include/test_util.h
-> +++ b/tools/testing/selftests/kvm/include/test_util.h
-> @@ -152,6 +152,8 @@ enum vm_mem_backing_src_type {
->  	VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB,
->  	VM_MEM_SRC_SHMEM,
->  	VM_MEM_SRC_SHARED_HUGETLB,
-> +	VM_MEM_SRC_GUEST_MEMFD,
-> +	VM_MEM_SRC_GUEST_MEMFD_NO_DIRECT_MAP,
->  	NUM_SRC_TYPES,
->  };
-> =20
-> @@ -184,6 +186,11 @@ static inline bool backing_src_is_shared(enum vm_mem=
-_backing_src_type t)
->  	return vm_mem_backing_src_alias(t)->flag & MAP_SHARED;
+>  	unsigned int nr_pages = 0;
+>  
+> -	if (!stock) {
+> -		nr_pages = nr_bytes >> PAGE_SHIFT;
+> -		nr_bytes = nr_bytes & (PAGE_SIZE - 1);
+> -		atomic_add(nr_bytes, &objcg->nr_charged_bytes);
+> -		goto out;
+> -	}
+> +	if (!stock)
+> +		goto fallback;
+>  
+>  	if (READ_ONCE(stock->cached_objcg) != objcg) { /* reset if necessary */
+> +		/* Not safe to drain since objcg release acquires spinlock */
+> +		if (unlikely(!allow_spin))
+> +			goto fallback;
+> +
+>  		drain_obj_stock(stock);
+>  		obj_cgroup_get(objcg);
+>  		stock->nr_bytes = atomic_read(&objcg->nr_charged_bytes)
+> @@ -3346,6 +3347,13 @@ static void __refill_obj_stock(struct obj_cgroup *objcg,
+>  out:
+>  	if (nr_pages)
+>  		obj_cgroup_uncharge_pages(objcg, nr_pages);
+> +	return;
+> +
+> +fallback:
+> +	nr_pages = nr_bytes >> PAGE_SHIFT;
+> +	nr_bytes = nr_bytes & (PAGE_SIZE - 1);
+> +	atomic_add(nr_bytes, &objcg->nr_charged_bytes);
+> +	goto out;
 >  }
-> =20
-> +static inline bool backing_src_is_guest_memfd(enum vm_mem_backing_src_ty=
-pe t)
-> +{
-> +	return t =3D=3D VM_MEM_SRC_GUEST_MEMFD || t =3D=3D VM_MEM_SRC_GUEST_MEM=
-FD_NO_DIRECT_MAP;
-> +}
-> +
->  static inline bool backing_src_can_be_huge(enum vm_mem_backing_src_type =
-t)
+>  
+>  static void refill_obj_stock(struct obj_cgroup *objcg,
+> @@ -3353,7 +3361,8 @@ static void refill_obj_stock(struct obj_cgroup *objcg,
+>  			     bool allow_uncharge)
 >  {
->  	return t !=3D VM_MEM_SRC_ANONYMOUS && t !=3D VM_MEM_SRC_SHMEM;
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/s=
-elftests/kvm/lib/kvm_util.c
-> index 5b0865683047..fa4a2fc236fe 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -1046,6 +1046,33 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_bac=
-king_src_type src_type,
->  	alignment =3D 1;
+>  	struct obj_stock_pcp *stock = trylock_stock();
+> -	__refill_obj_stock(objcg, stock, nr_bytes, allow_uncharge);
+> +	__refill_obj_stock(objcg, stock, nr_bytes, allow_uncharge,
+> +			   /* allow_spin = */ true);
+>  	unlock_stock(stock);
+>  }
+>  
+> @@ -3428,6 +3437,7 @@ bool __memcg_slab_post_alloc_hook(struct kmem_cache *s, struct list_lru *lru,
+>  				  size_t size, void **p)
+>  {
+>  	size_t obj_size = obj_full_size(s);
+> +	bool allow_spin = alloc_flags_allow_spinning(slab_alloc_flags);
+>  	struct obj_cgroup *objcg;
+>  	struct slab *slab;
+>  	unsigned long off;
+> @@ -3497,7 +3507,8 @@ bool __memcg_slab_post_alloc_hook(struct kmem_cache *s, struct list_lru *lru,
+>  				return false;
+>  			stock = trylock_stock();
+>  			if (remainder)
+> -				__refill_obj_stock(objcg, stock, remainder, false);
+> +				__refill_obj_stock(objcg, stock, remainder, false,
+> +						   allow_spin);
+>  		}
+>  		__account_obj_stock(objcg, stock, obj_size,
+>  				    slab_pgdat(slab), cache_vmstat_idx(s));
+> @@ -3516,7 +3527,8 @@ bool __memcg_slab_post_alloc_hook(struct kmem_cache *s, struct list_lru *lru,
+>  }
+>  
+>  void __memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
+> -			    void **p, int objects, unsigned long obj_exts)
+> +			    void **p, int objects, unsigned long obj_exts,
+> +			    bool allow_spin)
+>  {
+>  	size_t obj_size = obj_full_size(s);
+>  
+> @@ -3535,7 +3547,7 @@ void __memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
+>  		obj_ext->objcg = NULL;
+>  
+>  		stock = trylock_stock();
+> -		__refill_obj_stock(objcg, stock, obj_size, true);
+> +		__refill_obj_stock(objcg, stock, obj_size, true, allow_spin);
+>  		__account_obj_stock(objcg, stock, -obj_size,
+>  				    slab_pgdat(slab), cache_vmstat_idx(s));
+>  		unlock_stock(stock);
+> diff --git a/mm/slab.h b/mm/slab.h
+> index 281a65233795..a6b4ac298d08 100644
+> --- a/mm/slab.h
+> +++ b/mm/slab.h
+> @@ -660,7 +660,8 @@ bool __memcg_slab_post_alloc_hook(struct kmem_cache *s, struct list_lru *lru,
+>  				  gfp_t flags, unsigned int slab_alloc_flags,
+>  				  size_t size, void **p);
+>  void __memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
+> -			    void **p, int objects, unsigned long obj_exts);
+> +			    void **p, int objects, unsigned long obj_exts,
+> +			    bool allow_spin);
 >  #endif
-> =20
-> +	if (guest_memfd < 0) {
-> +		if ((flags & KVM_MEM_GUEST_MEMFD) || backing_src_is_guest_memfd(src_ty=
-pe)) {
-> +			uint32_t guest_memfd_flags =3D backing_src_guest_memfd_flags(src_type=
-);
+>  
+>  void kvfree_rcu_cb(struct rcu_head *head);
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 917635203f73..32672a92581b 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -2488,7 +2488,7 @@ bool memcg_slab_post_alloc_hook(struct kmem_cache *s, gfp_t flags,
+>  
+>  static __fastpath_inline
+>  void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab, void **p,
+> -			  int objects)
+> +			  int objects, bool allow_spin)
+>  {
+>  	unsigned long obj_exts;
+>  
+> @@ -2500,7 +2500,7 @@ void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab, void **p,
+>  		return;
+>  
+>  	get_slab_obj_exts(obj_exts);
+> -	__memcg_slab_free_hook(s, slab, p, objects, obj_exts);
+> +	__memcg_slab_free_hook(s, slab, p, objects, obj_exts, allow_spin);
+>  	put_slab_obj_exts(obj_exts);
+>  }
+>  
+> @@ -2575,7 +2575,7 @@ static inline bool memcg_slab_post_alloc_hook(struct kmem_cache *s,
+>  }
+>  
+>  static inline void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
+> -					void **p, int objects)
+> +					void **p, int objects, bool allow_spin)
+>  {
+>  }
+>  
+> @@ -2946,11 +2946,12 @@ static bool __rcu_free_sheaf_prepare(struct kmem_cache *s,
+>  	void **p = &sheaf->objects[0];
+>  	unsigned int i = 0;
+>  	bool pfmemalloc = false;
+> +	bool allow_spin = true;
+>  
+>  	while (i < sheaf->size) {
+>  		struct slab *slab = virt_to_slab(p[i]);
+>  
+> -		memcg_slab_free_hook(s, slab, p + i, 1);
+> +		memcg_slab_free_hook(s, slab, p + i, 1, allow_spin);
+>  		alloc_tagging_slab_free_hook(s, slab, p + i, 1);
+>  
+>  		if (unlikely(!slab_free_hook(s, p[i], init, true))) {
+> @@ -6215,12 +6216,13 @@ static void free_to_pcs_bulk(struct kmem_cache *s, size_t size, void **p)
+>  	struct node_barn *barn;
+>  	void *remote_objects[PCS_BATCH_MAX];
+>  	unsigned int remote_nr = 0;
+> +	bool allow_spin = true;
+>  
+>  next_remote_batch:
+>  	while (i < size) {
+>  		struct slab *slab = virt_to_slab(p[i]);
+>  
+> -		memcg_slab_free_hook(s, slab, p + i, 1);
+> +		memcg_slab_free_hook(s, slab, p + i, 1, allow_spin);
+>  		alloc_tagging_slab_free_hook(s, slab, p + i, 1);
+>  
+>  		if (unlikely(!slab_free_hook(s, p[i], init, false))) {
+> @@ -6398,13 +6400,16 @@ static __fastpath_inline
+>  void slab_free(struct kmem_cache *s, struct slab *slab, void *object,
+>  	       unsigned long addr)
+>  {
+> -	memcg_slab_free_hook(s, slab, &object, 1);
+> +	bool allow_spin = true;
 > +
-> +			TEST_ASSERT(!guest_memfd_offset,
-> +				    "Offset must be zero when creating new guest_memfd");
-> +			guest_memfd =3D vm_create_guest_memfd(vm, mem_size, guest_memfd_flags=
-);
-> +		}
-> +	} else {
-> +		/*
-> +		 * Install a unique fd for each memslot so that the fd
-> +		 * can be closed when the region is deleted without
-> +		 * needing to track if the fd is owned by the framework
-> +		 * or by the caller.
-> +		 */
-> +		guest_memfd =3D kvm_dup(guest_memfd);
-> +	}
+> +	memcg_slab_free_hook(s, slab, &object, 1, allow_spin);
+>  	alloc_tagging_slab_free_hook(s, slab, &object, 1);
+>  
+>  	if (unlikely(!slab_free_hook(s, object, slab_want_init_on_free(s), false)))
+>  		return;
+>  
+> -	if (likely(can_free_to_pcs(slab)) && likely(free_to_pcs(s, object, true)))
+> +	if (likely(can_free_to_pcs(slab)) &&
+> +			likely(free_to_pcs(s, object, allow_spin)))
+>  		return;
+>  
+>  	__slab_free(s, slab, object, object, 1, addr);
+> @@ -6429,7 +6434,9 @@ static __fastpath_inline
+>  void slab_free_bulk(struct kmem_cache *s, struct slab *slab, void *head,
+>  		    void *tail, void **p, int cnt, unsigned long addr)
+>  {
+> -	memcg_slab_free_hook(s, slab, p, cnt);
+> +	bool allow_spin = true;
 > +
-> +	if (guest_memfd >=3D 0) {
-> +		flags |=3D KVM_MEM_GUEST_MEMFD;
-> +
-> +		region->region.guest_memfd =3D guest_memfd;
-> +		region->region.guest_memfd_offset =3D guest_memfd_offset;
-> +	} else {
-> +		region->region.guest_memfd =3D -1;
-> +	}
-> +
+> +	memcg_slab_free_hook(s, slab, p, cnt, allow_spin);
+>  	alloc_tagging_slab_free_hook(s, slab, p, cnt);
 >  	/*
->  	 * When using THP mmap is not guaranteed to returned a hugepage aligned
->  	 * address so we have to pad the mmap. Padding is not needed for HugeTL=
-B
-> @@ -1061,10 +1088,13 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_ba=
-cking_src_type src_type,
->  	if (alignment > 1)
->  		region->mmap_size +=3D alignment;
-> =20
-> -	region->fd =3D -1;
-> -	if (backing_src_is_shared(src_type))
-> +	if (backing_src_is_guest_memfd(src_type))
-> +		region->fd =3D guest_memfd;
+>  	 * With KASAN enabled slab_free_freelist_hook modifies the freelist
+> @@ -6734,6 +6741,7 @@ void kfree_nolock(const void *object)
+>  	struct slab *slab;
+>  	struct kmem_cache *s;
+>  	void *x = (void *)object;
+> +	bool allow_spin = false;
+>  
+>  	if (unlikely(ZERO_OR_NULL_PTR(object)))
+>  		return;
+> @@ -6746,7 +6754,7 @@ void kfree_nolock(const void *object)
+>  
+>  	s = slab->slab_cache;
+>  
+> -	memcg_slab_free_hook(s, slab, &x, 1);
+> +	memcg_slab_free_hook(s, slab, &x, 1, allow_spin);
+>  	alloc_tagging_slab_free_hook(s, slab, &x, 1);
+>  	/*
+>  	 * Unlike slab_free() do NOT call the following:
+> @@ -6776,7 +6784,8 @@ void kfree_nolock(const void *object)
+>  	 */
+>  	kasan_slab_free(s, x, false, false, /* skip quarantine */true);
+>  
+> -	if (likely(can_free_to_pcs(slab)) && likely(free_to_pcs(s, x, false)))
+> +	if (likely(can_free_to_pcs(slab)) &&
+> +			likely(free_to_pcs(s, x, allow_spin)))
+>  		return;
+>  
+>  	/*
+> 
 
-This seems to cause a double-close in __vm_mem_region_delete() - it was
-fine when this patch was written but now we have kvm_free_fd() which
-crashes the test when this happens.
-
-AFAICS it's easy to fix we just need to enlighten
-__vm_mem_region_delete() that they might be the same FD.
