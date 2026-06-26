@@ -1,79 +1,78 @@
-Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
+Received: from mail-pj2-f1.google.com (mail-pj2-f1.google.com [74.125.227.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4FE83FBB4E
-	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 16:30:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE3A3FBEB0
+	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 16:30:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782491407; cv=none; b=ANEbjSt1dV2B9uA7Z0yf0Atzor6k5uon8xA9wdoNkccyVoowC3zhGKz3J48TeylGdJ3PG0OA5rdOa3KvFiL91Vxd0bpYDaER2A2tZJG2qh3QOZHdK7Ces0+cEU2PfLxeBskf0qlx/AWD3MNpLHXPiekxZBBncyM+5CnTprpBB30=
+	t=1782491408; cv=none; b=Ty+n4Vm0azorJuwT28x4ZdglPxOJFkXf6VfMQnnH3ZC+zHooYmy+UNbXYyi3gDSyipsEY4/WQfG/f94kllHuQMX2G3o2NbjH7eYoHbSKJKJ5efblH8Hwn85OQZyDde6cIEl8UlkY2xnO5sULDpplZNnVLoJXSTfrIwnGZRv/OIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782491407; c=relaxed/simple;
-	bh=toTWUZ9iNC7nG1ZtP7WDlr371fsTq7jI9H6/zCZ0eUQ=;
+	s=arc-20240116; t=1782491408; c=relaxed/simple;
+	bh=cHsycw6Dx/PvvgcoSTksoIIit6mKz6/9Xv9YLA3RYEk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FO6MwzvHlk49sK5rglHCSfpdViM9L6Ctz209svm9VQGb9VhRXhR/XYQiV6FdmHSW+t+aP7+yU18EiRgUqt28VLdubhQkMYY6rxpLgX+xVlR8NELtAKwLj/QTwEHQVbpX6tE9N2q74ScP0tqx48/DTNB3wRJzm5NMS1Mu3yT0xwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LMY4Uklj; arc=none smtp.client-ip=209.85.210.194
+	 Content-Type:Content-Disposition:In-Reply-To; b=i6S258RLC7x6K/etiQ+HpatKu1g9kRQu1zGrrWYbW74M1jem/BZt1jTuHv8sULq0obtehq3nwwMh7W4Cb6dJzQZvBXR4tlTPAMvYTLXamzWrHma7MChaiRwAZq+ROkAgr2sKoCApboW2ve7iuSIrWQfMddAhdKw5mK3NUvP1+As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q9U2onHz; arc=none smtp.client-ip=74.125.227.129
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LMY4Uklj"
-Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-8453f568e84so1067281b3a.0
-        for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 09:30:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q9U2onHz"
+Received: by mail-pj2-f1.google.com with SMTP id 98e67ed59e1d1-37c6cb02587so100312a91.0
+        for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 09:30:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782491405; x=1783096205; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782491406; x=1783096206; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=WuV0G7qVvdLlZJucQHB+lRJcWvMriN5mYBInGvXRWR8=;
-        b=LMY4Ukljruo8ft04XERnzLRzH+2vgzkgnXkT4/r6DiBAS08zIlLEgGBLjWFA/dB0An
-         M1LHzNNugChIttUnoA2H9C2U6H1RbIk/2EGDi4Gp6mklIMHmxHzTKlgiKfRea4i6u0eS
-         nxJSBwV1W3e3+fGGnj4ZXVylKwpw1ow2E3RYixbJYWx16zR5VS9WYzpNrjCkpRITINUm
-         So3PT6N2nii5uZXDSBsMAOnSsv3EanFeoOIe515BTPTKOwy5gMsEb1GYjJbSfQ58W4E0
-         RQAaN3mwSeFwp4mTnqGD0vP29HTX0UVMm4g/LCGL4seQ+bDXsZhGAArIrE5opCSQOiwO
-         MJaA==
+        bh=SmvSZXf/ou0b678tcR/y6c76H9T2F/pNhOOOVYqn/aA=;
+        b=Q9U2onHzSeDdr6/4Omm0icT039ESYXQe+d/7jidC5cmyeKXFf4XB+X6zvaNDm9/wJJ
+         9LiVVLx+5iGUNZEVo0XDynsch9EBo0ktpR/6xhSkDciirQXGw/KYTN5tGuqlbwvhXnQB
+         TZNuAxFk6PNVQaGt/XCns3o0SROoGxucAaexuGNjI/XJaFuHJX3YCDPk/KT5opZPasBN
+         Q8RqLA4p5RfOGej+3t067xZ/+R2QVI/8aztkFQuNUaQOagzmN1K0QQCHL2tHzpGIccYa
+         xCGIj4bFZUYZCalOsdTpY9/pHh+cnZoc4BMzqWMgjc+7Gd5jok9H24TLAtdPgR/vo4M6
+         2+yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782491405; x=1783096205;
+        d=1e100.net; s=20251104; t=1782491406; x=1783096206;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WuV0G7qVvdLlZJucQHB+lRJcWvMriN5mYBInGvXRWR8=;
-        b=d+9jXKVFAs1jE/ozTQCVLCM6N3duH1TdP7z22q1/XJwKjsc6AYzemED34A/w2ICnjf
-         +UQ0nYulSIiSCXoVqdclHeOTpK8AUWcbQ2tltTWNvWkaRStIKK4XsjWF4FasXOPQa3zg
-         8ZR2MWaE+zgUYwLeatkJelucxlnwmkVzRV8GVrPl0705EaGbi/Q/jamyBB4WVAp0gtmb
-         O2Sal3Gd0YX9v0G8ncNw3tQ6EiqgUuTNp659BhK0fmMyxmwD3dIC1XZYfcrXYZVU5Gi8
-         ERIbktn/2gIkSanUJP8NbiPWDUfVKs8VN6FEMdIitezYsefd4cuvsefw3m4TT+Gwhmaw
-         h3IA==
-X-Forwarded-Encrypted: i=1; AHgh+RpSUGzmcx+nQrlTfFr/J0elcFrk2J3U8L0xIc7FJiy3ev+GGdXsBX5qVSDE+m7dXTS8CPM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx35hM6O5rkQUxtMyTsfwWo7KMtYWUzWZPwKGVlp6FosNXdR1JT
-	eSxfToiud4xmgdjI6tCe5femmLoypetEbCI0XpY0uEIWeQQ8ANbmV2wG
-X-Gm-Gg: AfdE7cnwQL4RC8vG09ayIaIonGBDkIuCKhTaZj3+pqEMOuCAHMkknKelv5ocw0epn4B
-	yyRgLuZRYbTXO+DZ58RoebojksB8dWPrNk6hEK+Zl+YDspbEvkQViN9lwYu2Go7ij1R+w1aqEpb
-	1sB9/QtNASQGOl3gLJ0MIGMhQfheZCFyTTjcjS6QnbcM729IdCovLhibmdqaCE4uDBYGuJZwrVn
-	AIR+E/pgAx2j6gKFQJYMvw3QWrUIOC8xm9OXI8c/8203uJwCMBwUqnIPrF2bFzYB3O2DCVsAdBc
-	ZEGSGG5oLXs9M+tfI683UJlFQKyF7tXGJvAkxYpM+hSeweuaOjS/kd1Iow/zFdy36Jtbm87RBnL
-	4fLS0+LSIhuDeyUC655EfAStP0Yy/yk+nxIaJjSUbYPO6rRcfAxwA0lr4+T5/sVgauut0zPjcmJ
-	gMN/zZrQ==
-X-Received: by 2002:a05:6a00:22d3:b0:845:d274:bfa4 with SMTP id d2e1a72fcca58-845d274e643mr885786b3a.59.1782491405061;
-        Fri, 26 Jun 2026 09:30:05 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:40::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845a3fedaefsm7785461b3a.23.2026.06.26.09.30.04
+        bh=SmvSZXf/ou0b678tcR/y6c76H9T2F/pNhOOOVYqn/aA=;
+        b=iCzXpJz7Ousiq6C3Z+uhsPsrRWMhh6EAyQI/BmD3+60TaSR9nSJYcnoNQzw5Q6ledH
+         2cdowAAC+/HaJQr+nY7aNeVdIm/eBpgQzspmZHOmvVxKIzco1vweR18GOxC6GnZcP1rn
+         Pj0H1RoN8zVgOUbuFHkdTeEf/hfPpjlaOiQ1OOyts8AXwk97OBLHlXb96AA/CLszxtFz
+         uh6WkcBp8Ig4tXmwdHwE6Q9YDcx0XuFrIsJQ7fa8O6bIpvpwDEH46Y9joec/2iAxJ5Jz
+         LEvCBoOU9wXeMTnXS4Q+41v4wl778yt1FGgXgYXjuvafpgMVr8eFJ/c6AL/OyHGpMzsr
+         4LOA==
+X-Forwarded-Encrypted: i=1; AHgh+RpnufCmnr2mTl2VIxQzQvP3VSjatUXfvh7xD1sjv1+Nb4LM64XuApcLCzj/0T+/E0wC134=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaKb658y0KMmyObeVikEwjkjX/5yvwQSlMwtnVzEeYepHkk0Ou
+	incW+lOemPyConuS10bHH2fY/ClXDa017N34TELpKq0sgUbHwdZvWMPA
+X-Gm-Gg: AfdE7clYBe9UaPPGRsGnZHvAFMcu6tAJ39Nn3O5wbeOSMZRob57cb9BJ71ccegp3juj
+	D5iSA0vy9s4ujFuvRo7gQWDZg7mIICi9jvm0If7acZeCfJjbufTLcvBSkA6Fw4bQI60bZ7aajn0
+	RbOx5uDA0264+5Zd1ZlIlkItVppX4+BpnOrqn0KeBZ8vz3KZPVp/vCxQl3X+lqnzt/JLudto1dp
+	Ir6aNgwGOVKkJaTW045/Z/G8TgqGZjpxI0Xk/Lq+IKHGletveRmH6gdNOFHlvzrDzXJCQpXW35Q
+	hJuwtC7Snp94XUAZkBt3BILPzalCulYYDr5ZQtzVEPRtgpIGUpdSQXtzdTM+mqO8HkguNrt6L0N
+	yuqh2xL43pGjuC991Z26lWVf8BaUp7gw0y16mMGs/xDJwkMIFrz91l0aHwzouPoKLbvSGGC0C+p
+	I8VNjUmA==
+X-Received: by 2002:a17:90b:388a:b0:37e:a09:2640 with SMTP id 98e67ed59e1d1-37f7a5578e1mr953048a91.7.1782491406246;
+        Fri, 26 Jun 2026 09:30:06 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:44::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37e132ac1dbsm1496221a91.5.2026.06.26.09.30.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2026 09:30:04 -0700 (PDT)
-Date: Fri, 26 Jun 2026 09:25:03 -0700
+        Fri, 26 Jun 2026 09:30:05 -0700 (PDT)
+Date: Fri, 26 Jun 2026 09:30:00 -0700
 From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
-	netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com, 
-	stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	bjorn@kernel.org
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: Jason Xing <kerneljasonxing@gmail.com>, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, magnus.karlsson@intel.com, stfomichev@gmail.com, kuba@kernel.org, 
+	pabeni@redhat.com, horms@kernel.org, bjorn@kernel.org
 Subject: Re: [PATCH net 0/7] xsk: fix AF_XDP multi-buffer Tx descriptor
  reclaim
-Message-ID: <aj6mr-cIcF2Tg73r@devvm7509.cco0.facebook.com>
+Message-ID: <aj6n48QAqDP85_-Q@devvm7509.cco0.facebook.com>
 References: <20260623133240.1048434-1-maciej.fijalkowski@intel.com>
  <ajv23_r4M3FGrFNN@devvm7509.cco0.facebook.com>
  <ajwHuCp82SazSwKv@boxer>
  <CAL+tcoC789GrOXvvYVOfxhL4iLCdFEAZQ+WCENsMjbLrJnfiYw@mail.gmail.com>
  <aj1O4vKzCuodwgYL@devvm7509.cco0.facebook.com>
- <CAL+tcoDOFtTKavz8TWpU6BPrHCcL6TjY8xrmFA5y3P9Wn0T4ZA@mail.gmail.com>
+ <aj4tUMqAXmQskO6r@boxer>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,12 +82,10 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL+tcoDOFtTKavz8TWpU6BPrHCcL6TjY8xrmFA5y3P9Wn0T4ZA@mail.gmail.com>
+In-Reply-To: <aj4tUMqAXmQskO6r@boxer>
 
-On 06/26, Jason Xing wrote:
-> On Fri, Jun 26, 2026 at 12:05 AM Stanislav Fomichev
-> <sdf.kernel@gmail.com> wrote:
-> >
+On 06/26, Maciej Fijalkowski wrote:
+> On Thu, Jun 25, 2026 at 09:05:28AM -0700, Stanislav Fomichev wrote:
 > > On 06/25, Jason Xing wrote:
 > > > On Thu, Jun 25, 2026 at 12:37 AM Maciej Fijalkowski
 > > > <maciej.fijalkowski@intel.com> wrote:
@@ -164,47 +161,26 @@ On 06/26, Jason Xing wrote:
 > > > > I believe planned logistics were to get these fixes onto net and then
 > > > > Jason had an implementation of batching on generic xmit, directed towards
 > > > > -next and that's where we could address current flow.
-> > >
+> > > 
 > > > Agreed. That's what I'm hoping for. There would be much more
 > > > discussion on how to do batch xmit in an elegant way, I believe.
-> >
+> > 
 > > This doesn't have to depend on the batch rewrite, we should be able to rewrite
 > > this non-zc in net, this is still technically fixes, not feature work..
-> >
+> > 
 > > There was already a couple of revisions with this drain_cont approach
 > > and every time I look at it feels like the cure is worse than the
 > > decease :-( Obviously not gonna stop you from going with the current approach,
 > > but these fixes feel a bit of a wasted effort to me (since the bugs keep
 > > coming and we are piling more complexity).
 > 
-> I see your point, but rewriting is something that cannot be easily
-> applied to the stable branches? Until now, we fix issues one by one
-> which have an explicit target branch (because of the fixes tag). Cross
-> fingers :(
-> 
-> Sashiko has the magic to find out the hidden bugs more than ever and
-> AF_XDP is not the only place where a pile of reports are coming in.
+> Well this is my fault as I took Jason's patches as-is and did not realize
+> Sashiko had issues with it. I *think* I got ZC side almost right so I'd
+> like to have at least one last round with trying to make the generic side
+> right...
 
-net vs net-next is fixes vs feature work. If we can't fix the current
-code, I think we can justify a rewrite using a better approach and
-route it via net. This series is 7 patches anyway, it's not like
-it is a quick short fix :-) But I'm ok with pushing it as it, I'm just
-trying to see if someone on your side is fed up with that part as well
-and wants to fix it "properly" :-p
+You can have my ack on the series since I already did a few revisions
+on the original series from Jason, but it is still a very low confidence
+ack:
 
-> My take is that batch xmit has been appending too long and at least so
-> far less and less bugs are found by sashiko. I believe if the mode is
-> changed to batch xmit, there are likely to be new and challenging
-> problems to discuss. I prefer to solve questions of the batch xmit
-> series.
-
-We can redo this part separately, without batching. Move from "read
-one chunk at a time" to "pre-read all chunks". Batching vs current issue
-are separate.
-
-> BTW, would you both come to Netdev 0x1a next month? I believe we could
-> sit around the table and discuss some future plans there (in xdp
-> workshop?).
-> https://netdevconf.info/0x1A/sessions/workshop/xdp-workshop.html
-
-Yes, I plan to be there in person.
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
