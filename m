@@ -1,379 +1,189 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC6926A08F;
-	Fri, 26 Jun 2026 14:30:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1193F8248;
+	Fri, 26 Jun 2026 14:33:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782484254; cv=none; b=mQMvkHSznikil5iHaFxp1kDwiItJwPP+cf8uL0cKSECZSYU8UEE3wb1QCbUIYSMRv+McYx4gYpIwpmBBoiea/dQFoN7ed8OcL23EKDGnQ+9LHja4HzNJ4ebiwmvq0yvro4RHF7y2VAQYnl8nxphcabcAEcFUVeTjIOi3v0owaQI=
+	t=1782484415; cv=none; b=pmGevf6srCDO+moS0bA68TaPwJqIKvYJHeAvQ05xQt6hHAUXnd7BgF1p7++jV+schxxgvkfHKTE7S0tsUmXr+bvaWPi6EZ+bjs6OrgP2KZ2s9atBfoq+xUs34iiRffmPjHW4wH4gzFFm7DiKCi29jRw+MEtgVNAlQAVYfIGuFG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782484254; c=relaxed/simple;
-	bh=3XLmTiO6eadTaOv9ADltHdISY35t/Nox0ZgjOhRXpIM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iBXotUJ4ZL+KUtAO/6gHv1PVSxutP5vZnIKaIp+awoTJkgkZDnP7Zx99Knh+BW4S/ZPo901Y/xe290UHfr+Cv1d0+4+qxy5/s1vfCc6YJTSlKhltuJ4k1h4dqHQfDLZ7BcaXLXdhtPxZd3SjwzgNicpkTUcBo0owES8uGJj8hRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GDwsXadG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782484415; c=relaxed/simple;
+	bh=CA/9cuc4Xw92T+X815sAqsIVvXRLhqZME88G48Ncrg0=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=IZIgAHr5oRrG+Zf00fn4Z5efH9iDj6TAFJSe1uKmEDUOsEOlsvrgpu5L31Zm+dC3dkMdM1+oAqBF2lUuEsvdvIWsLMtY4iEx366igriDe76IvnkubeT81L6Em6i1pul/UGp+YBca12xzufIAvYen7htJbImGYAr6kdUcVVVMe9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PBwb7/ay; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GDwsXadG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C30871F000E9;
-	Fri, 26 Jun 2026 14:30:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PBwb7/ay"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0731A1F000E9;
+	Fri, 26 Jun 2026 14:33:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782484253;
-	bh=vu8WzrwqApX7wsPkaWrxMrSifCAb56jkTiTB7+zyurI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=GDwsXadGCDqv1qq8R5wyE2mYy9bMCwO74e6g644EFGVGk8OCUpOgICLOZigXvg31l
-	 msYkZOAKKBaMsNkAoPdHAOL0y/JJ2DG0ZWG97k6CBMgNKKxC2LH4sVq1EtSQqSPv6e
-	 WomcAvBIFxWyzIL5IaliZZ2ahLx8xemr1KBnsrMOzmXpp8wDTY5WDHVZ1MGpwVcRz5
-	 mgltLTDa30yepVyh6w5NzhetDMxe2wfi3oKjgVwBHOK5I58qJQcTDnhFaF7/z5A+9T
-	 Crhks2tl+4q+ILFS2p4CopOCrQP4YclPdwyQl9bUX3AZSTEhNOV1GwgyhlkYTx3fV7
-	 7Hngm+Y4fB7XQ==
-Message-ID: <104794ff-9f04-48be-91e8-89d5d2269f95@kernel.org>
-Date: Fri, 26 Jun 2026 16:30:48 +0200
+	s=k20260515; t=1782484413;
+	bh=/h6LR3ABkatbN/GtG7FgNY6HuHtEJ4oLgCHTfcl5Ty4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=PBwb7/ayqOgTyVoRNx1qUAPWVELhtYlBLYIr872nkQm9bycofsfBwBpaegtrdmeEo
+	 6lMGtBQC1mkZL5AbW2KXDREpSGWQ5ACkPOxf6D5AJ6MMLlvgw8W7D12TA6ycWshYCl
+	 5DuN1JPoJczrAPUZ5DzugfcaSO8GsbS08PMd+J/xwG8rN4Ocy1BSPjKqRaNRhGFtgs
+	 YYajj9lfeIOxAT4fjv/SZP0gFJ7it2U/6GXRMEUihunXDfd3B3QMp6o6XV1AX6odt9
+	 E0ckfEaDHY852mGnuakVna/OcEbEKehnGh+M8/5bd8QiRhMZVa83yGN/zQlaAZlgq5
+	 pHFAof6ugtI/Q==
+Date: Fri, 26 Jun 2026 23:33:27 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor
+ <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner
+ <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+ <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ bpf@vger.kernel.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org,
+ kernel-team@meta.com, Nicolas Schier <n.schier@fritz.com>
+Subject: Re: [PATCH v7 0/9] bootconfig: embed kernel.* cmdline at build time
+Message-Id: <20260626233327.b5c9c8de494acdde4ddf5c02@kernel.org>
+In-Reply-To: <20260626-bootconfig_using_tools-v7-0-24ab72139c29@debian.org>
+References: <20260626-bootconfig_using_tools-v7-0-24ab72139c29@debian.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 1/4] mm/memcontrol: do not drain objcg stock when
- spinning is not allowed
-Content-Language: en-US
-To: "Harry Yoo (Oracle)" <harry@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Pedro Falcato <pfalcato@suse.de>
-Cc: cgroups@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20260624-kmalloc-nolock-fixes-v1-0-fdf4d17351dd@kernel.org>
- <20260624-kmalloc-nolock-fixes-v1-1-fdf4d17351dd@kernel.org>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Autocrypt: addr=vbabka@kernel.org; keydata=
- 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
-In-Reply-To: <20260624-kmalloc-nolock-fixes-v1-1-fdf4d17351dd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 6/24/26 15:11, Harry Yoo (Oracle) wrote:
-> When kmalloc_nolock() drains objcg stock, the stock might be holding
-> the last reference to the objcg. Since obj_cgroup_release() is a
-> callback for percpu refcount and does not know whether spinning is
-> allowed, it is not safe to invoke obj_cgroup_put().
-> 
-> This was caught by lockdep on PREEMPT_RT because acquiring
-> a sleeping lock (objcg_lock) violates lock nesting rules:
-> 
->   kernel: BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
->   kernel: in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1267, name: systemd-resolve
->   preempt_count: 1, expected: 0
->   RCU nest depth: 3, expected: 3
->   6 locks held by systemd-resolve/1267:
->    #0: ffff888a8165fa20 ((&pcs->lock)){+.+.}-{3:3}, at: kmem_cache_alloc_noprof+0x185/0xa20
->    #1: ffffffff9658a4c0 (rcu_read_lock){....}-{1:3}, at: rt_spin_trylock+0x74/0x2a0
->    #2: ffff888a81648598 ((lock)#4){+.+.}-{3:3}, at: trylock_stock+0x118/0x380
->    #3: ffffffff9658a4c0 (rcu_read_lock){....}-{1:3}, at: rt_spin_trylock+0x74/0x2a0
->    #4: ffffffff9658a4c0 (rcu_read_lock){....}-{1:3}, at: percpu_ref_put_many.constprop.0+0x40/0x270
->    #5: ffffffff96af11d8 (objcg_lock){+.+.}-{3:3}, at: obj_cgroup_release+0x8a/0x410
->   [...]
->   Call Trace:
->    <TASK>
->    dump_stack_lvl+0x8a/0xe0
->    dump_stack+0x14/0x1c
->    __might_resched.cold+0x233/0x2bb
->    rt_spin_lock+0xd3/0x410
->    obj_cgroup_release+0x8a/0x410
->    percpu_ref_put_many.constprop.0+0x226/0x270
->    drain_obj_stock_slot+0x27e/0x8d0
->    __refill_obj_stock+0x409/0x6d0
->    __memcg_slab_post_alloc_hook+0xa45/0x1500
->    __kmalloc_nolock_noprof+0x988/0xc40
->    [...]
-> 
-> However, this is illegal in !RT kernels too because the objcg release
-> callback acquires a spinlock even when spinning is not allowed.
-> 
-> To fix this issue, fall back to atomics when the cached objcg doesn't
-> match, but it is unsafe to drain because spinning is not allowed.
-> 
-> This is expected to affect performance of kmalloc_nolock() since
-> it can no longer drain and refill the stock and falls back to a
-> per-objcg atomic counter (objcg->nr_charged_bytes).
+On Fri, 26 Jun 2026 05:50:09 -0700
+Breno Leitao <leitao@debian.org> wrote:
 
-Maybe it's not bad that the constrained operation will not do a drain? Could
-we say it's likely that both _nolock() and normal operations will likely be
-happening on the same cpu for the same memcg, so a normal one will soon
-handle it?
+> The userspace pieces (xbc_snprint_cmdline() in lib/, tools/bootconfig -C)
+> already landed; this series wires the rendered cmdline into the kernel.
+> 
+> Motivation: today the embedded bootconfig is parsed at runtime, after
+> parse_early_param() has already run, so early_param() handlers can't
+> see embedded values. Folding the kernel.* subtree into the cmdline at
+> build time gives a CONFIG_CMDLINE-equivalent for embedded-bootconfig
+> users without forcing them to maintain two cmdline sources.
+> 
+> Behaviorally, the "kernel" subtree is rendered to a flat string at
+> build time and stashed in .init.rodata. setup_arch() prepends it to
+> boot_command_line before parse_early_param() runs. Overflow is a soft
+> error: the helper logs and leaves boot_command_line untouched rather
+> than panicking, so an oversized embedded bconf cannot brick a boot.
+> 
 
-> Fixes: af92793e52c3 ("slab: Introduce kmalloc_nolock() and kfree_nolock().")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+Thanks for update!! This looks good to me.
+Let me pick it and test it.
+
+Thanks,
+
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 > ---
->  mm/memcontrol.c | 34 +++++++++++++++++++++++-----------
->  mm/slab.h       |  3 ++-
->  mm/slub.c       | 29 +++++++++++++++++++----------
->  3 files changed, 44 insertions(+), 22 deletions(-)
+> Changes in v7:
+> - The runtime opt-in now shares one helper instead of open-coding its
+>   own. (Masami)
+> - bootconfig_cmdline_requested() moved into generic lib code (Masami)
+> - Link to v6: https://lore.kernel.org/r/20260623-bootconfig_using_tools-v6-0-640c2f587a3c@debian.org
 > 
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 29390ba13baa..5bb5e75ef5b0 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -3316,18 +3316,19 @@ static bool obj_stock_flush_required(struct obj_stock_pcp *stock,
->  static void __refill_obj_stock(struct obj_cgroup *objcg,
->  			       struct obj_stock_pcp *stock,
->  			       unsigned int nr_bytes,
-> -			       bool allow_uncharge)
-> +			       bool allow_uncharge,
-> +			       bool allow_spin)
->  {
->  	unsigned int nr_pages = 0;
->  
-> -	if (!stock) {
-> -		nr_pages = nr_bytes >> PAGE_SHIFT;
-> -		nr_bytes = nr_bytes & (PAGE_SIZE - 1);
-> -		atomic_add(nr_bytes, &objcg->nr_charged_bytes);
-> -		goto out;
-> -	}
-> +	if (!stock)
-> +		goto fallback;
->  
->  	if (READ_ONCE(stock->cached_objcg) != objcg) { /* reset if necessary */
-> +		/* Not safe to drain since objcg release acquires spinlock */
-> +		if (unlikely(!allow_spin))
-> +			goto fallback;
-> +
->  		drain_obj_stock(stock);
->  		obj_cgroup_get(objcg);
->  		stock->nr_bytes = atomic_read(&objcg->nr_charged_bytes)
-> @@ -3346,6 +3347,13 @@ static void __refill_obj_stock(struct obj_cgroup *objcg,
->  out:
->  	if (nr_pages)
->  		obj_cgroup_uncharge_pages(objcg, nr_pages);
-> +	return;
-> +
-> +fallback:
-> +	nr_pages = nr_bytes >> PAGE_SHIFT;
-> +	nr_bytes = nr_bytes & (PAGE_SIZE - 1);
-> +	atomic_add(nr_bytes, &objcg->nr_charged_bytes);
-> +	goto out;
->  }
->  
->  static void refill_obj_stock(struct obj_cgroup *objcg,
-> @@ -3353,7 +3361,8 @@ static void refill_obj_stock(struct obj_cgroup *objcg,
->  			     bool allow_uncharge)
->  {
->  	struct obj_stock_pcp *stock = trylock_stock();
-> -	__refill_obj_stock(objcg, stock, nr_bytes, allow_uncharge);
-> +	__refill_obj_stock(objcg, stock, nr_bytes, allow_uncharge,
-> +			   /* allow_spin = */ true);
->  	unlock_stock(stock);
->  }
->  
-> @@ -3428,6 +3437,7 @@ bool __memcg_slab_post_alloc_hook(struct kmem_cache *s, struct list_lru *lru,
->  				  size_t size, void **p)
->  {
->  	size_t obj_size = obj_full_size(s);
-> +	bool allow_spin = alloc_flags_allow_spinning(slab_alloc_flags);
->  	struct obj_cgroup *objcg;
->  	struct slab *slab;
->  	unsigned long off;
-> @@ -3497,7 +3507,8 @@ bool __memcg_slab_post_alloc_hook(struct kmem_cache *s, struct list_lru *lru,
->  				return false;
->  			stock = trylock_stock();
->  			if (remainder)
-> -				__refill_obj_stock(objcg, stock, remainder, false);
-> +				__refill_obj_stock(objcg, stock, remainder, false,
-> +						   allow_spin);
->  		}
->  		__account_obj_stock(objcg, stock, obj_size,
->  				    slab_pgdat(slab), cache_vmstat_idx(s));
-> @@ -3516,7 +3527,8 @@ bool __memcg_slab_post_alloc_hook(struct kmem_cache *s, struct list_lru *lru,
->  }
->  
->  void __memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
-> -			    void **p, int objects, unsigned long obj_exts)
-> +			    void **p, int objects, unsigned long obj_exts,
-> +			    bool allow_spin)
->  {
->  	size_t obj_size = obj_full_size(s);
->  
-> @@ -3535,7 +3547,7 @@ void __memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
->  		obj_ext->objcg = NULL;
->  
->  		stock = trylock_stock();
-> -		__refill_obj_stock(objcg, stock, obj_size, true);
-> +		__refill_obj_stock(objcg, stock, obj_size, true, allow_spin);
->  		__account_obj_stock(objcg, stock, -obj_size,
->  				    slab_pgdat(slab), cache_vmstat_idx(s));
->  		unlock_stock(stock);
-> diff --git a/mm/slab.h b/mm/slab.h
-> index 281a65233795..a6b4ac298d08 100644
-> --- a/mm/slab.h
-> +++ b/mm/slab.h
-> @@ -660,7 +660,8 @@ bool __memcg_slab_post_alloc_hook(struct kmem_cache *s, struct list_lru *lru,
->  				  gfp_t flags, unsigned int slab_alloc_flags,
->  				  size_t size, void **p);
->  void __memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
-> -			    void **p, int objects, unsigned long obj_exts);
-> +			    void **p, int objects, unsigned long obj_exts,
-> +			    bool allow_spin);
->  #endif
->  
->  void kvfree_rcu_cb(struct rcu_head *head);
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 917635203f73..32672a92581b 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -2488,7 +2488,7 @@ bool memcg_slab_post_alloc_hook(struct kmem_cache *s, gfp_t flags,
->  
->  static __fastpath_inline
->  void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab, void **p,
-> -			  int objects)
-> +			  int objects, bool allow_spin)
->  {
->  	unsigned long obj_exts;
->  
-> @@ -2500,7 +2500,7 @@ void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab, void **p,
->  		return;
->  
->  	get_slab_obj_exts(obj_exts);
-> -	__memcg_slab_free_hook(s, slab, p, objects, obj_exts);
-> +	__memcg_slab_free_hook(s, slab, p, objects, obj_exts, allow_spin);
->  	put_slab_obj_exts(obj_exts);
->  }
->  
-> @@ -2575,7 +2575,7 @@ static inline bool memcg_slab_post_alloc_hook(struct kmem_cache *s,
->  }
->  
->  static inline void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
-> -					void **p, int objects)
-> +					void **p, int objects, bool allow_spin)
->  {
->  }
->  
-> @@ -2946,11 +2946,12 @@ static bool __rcu_free_sheaf_prepare(struct kmem_cache *s,
->  	void **p = &sheaf->objects[0];
->  	unsigned int i = 0;
->  	bool pfmemalloc = false;
-> +	bool allow_spin = true;
->  
->  	while (i < sheaf->size) {
->  		struct slab *slab = virt_to_slab(p[i]);
->  
-> -		memcg_slab_free_hook(s, slab, p + i, 1);
-> +		memcg_slab_free_hook(s, slab, p + i, 1, allow_spin);
->  		alloc_tagging_slab_free_hook(s, slab, p + i, 1);
->  
->  		if (unlikely(!slab_free_hook(s, p[i], init, true))) {
-> @@ -6215,12 +6216,13 @@ static void free_to_pcs_bulk(struct kmem_cache *s, size_t size, void **p)
->  	struct node_barn *barn;
->  	void *remote_objects[PCS_BATCH_MAX];
->  	unsigned int remote_nr = 0;
-> +	bool allow_spin = true;
->  
->  next_remote_batch:
->  	while (i < size) {
->  		struct slab *slab = virt_to_slab(p[i]);
->  
-> -		memcg_slab_free_hook(s, slab, p + i, 1);
-> +		memcg_slab_free_hook(s, slab, p + i, 1, allow_spin);
->  		alloc_tagging_slab_free_hook(s, slab, p + i, 1);
->  
->  		if (unlikely(!slab_free_hook(s, p[i], init, false))) {
-> @@ -6398,13 +6400,16 @@ static __fastpath_inline
->  void slab_free(struct kmem_cache *s, struct slab *slab, void *object,
->  	       unsigned long addr)
->  {
-> -	memcg_slab_free_hook(s, slab, &object, 1);
-> +	bool allow_spin = true;
-> +
-> +	memcg_slab_free_hook(s, slab, &object, 1, allow_spin);
->  	alloc_tagging_slab_free_hook(s, slab, &object, 1);
->  
->  	if (unlikely(!slab_free_hook(s, object, slab_want_init_on_free(s), false)))
->  		return;
->  
-> -	if (likely(can_free_to_pcs(slab)) && likely(free_to_pcs(s, object, true)))
-> +	if (likely(can_free_to_pcs(slab)) &&
-> +			likely(free_to_pcs(s, object, allow_spin)))
->  		return;
->  
->  	__slab_free(s, slab, object, object, 1, addr);
-> @@ -6429,7 +6434,9 @@ static __fastpath_inline
->  void slab_free_bulk(struct kmem_cache *s, struct slab *slab, void *head,
->  		    void *tail, void **p, int cnt, unsigned long addr)
->  {
-> -	memcg_slab_free_hook(s, slab, p, cnt);
-> +	bool allow_spin = true;
-> +
-> +	memcg_slab_free_hook(s, slab, p, cnt, allow_spin);
->  	alloc_tagging_slab_free_hook(s, slab, p, cnt);
->  	/*
->  	 * With KASAN enabled slab_free_freelist_hook modifies the freelist
-> @@ -6734,6 +6741,7 @@ void kfree_nolock(const void *object)
->  	struct slab *slab;
->  	struct kmem_cache *s;
->  	void *x = (void *)object;
-> +	bool allow_spin = false;
->  
->  	if (unlikely(ZERO_OR_NULL_PTR(object)))
->  		return;
-> @@ -6746,7 +6754,7 @@ void kfree_nolock(const void *object)
->  
->  	s = slab->slab_cache;
->  
-> -	memcg_slab_free_hook(s, slab, &x, 1);
-> +	memcg_slab_free_hook(s, slab, &x, 1, allow_spin);
->  	alloc_tagging_slab_free_hook(s, slab, &x, 1);
->  	/*
->  	 * Unlike slab_free() do NOT call the following:
-> @@ -6776,7 +6784,8 @@ void kfree_nolock(const void *object)
->  	 */
->  	kasan_slab_free(s, x, false, false, /* skip quarantine */true);
->  
-> -	if (likely(can_free_to_pcs(slab)) && likely(free_to_pcs(s, x, false)))
-> +	if (likely(can_free_to_pcs(slab)) &&
-> +			likely(free_to_pcs(s, x, allow_spin)))
->  		return;
->  
->  	/*
+> Changes in v6:
+> - renamed CONFIG_BOOT_CONFIG_EMBED_CMDLINE to
+>   CONFIG_CMDLINE_FROM_BOOTCONFIG
+> - prepend embedded bootconfig cmdline before parse_early_param
+> - Link to v5: https://lore.kernel.org/r/20260617-bootconfig_using_tools-v5-0-fd589a9cc5e3@debian.org
+> 
+> Changes in v5:
+> - Patch 3 (Kconfig): drop the redundant "depends on BOOT_CONFIG_EMBED"
+>   from CMDLINE_FROM_BOOTCONFIG; Julian Braha.
+> - Patch 6 (Documentation): spell out how the embedded cmdline interacts
+>   with the bootloader cmdline, an initrd bootconfig, and the embedded
+>   bootconfig
+> - Link to v4: https://lore.kernel.org/r/20260609-bootconfig_using_tools-v4-0-73c463f03a97@debian.org
+> 
+> Changes in v4:
+> - Patch 3 (build pipeline): clear CROSS_COMPILE= in the kernel-side
+>   tools/bootconfig sub-make. Without it, an LLVM=1 cross build
+>   inherits CROSS_COMPILE and tools/scripts/Makefile.include injects
+>   --target=/--sysroot= into the host clang, producing a target
+>   binary that fails to exec.
+> - Patch 3 (build pipeline): place embedded-cmdline.S in its own
+>   .init.rodata.embed_cmdline subsection ("a") so ld.lld does not
+>   see a section-type mismatch against lib/bootconfig-data.S's
+>   writable .init.rodata ("aw"). The linker's *(.init.rodata
+>   .init.rodata.*) glob still folds it into the init image.
+> - Patch 6 (x86/setup): also accept the bootconfig=<anything> form
+>   via cmdline_find_option(), matching the runtime parse_args() loop.
+>   Without it, bootconfig=0/=off would skip the early prepend but
+>   still trigger the late runtime apply -- a split-brain state.
+> - New patch 7: document CONFIG_CMDLINE_FROM_BOOTCONFIG in
+>   Documentation/admin-guide/bootconfig.rst (semantics, opt-in,
+>   precedence, overflow behavior, example).
+> - Link to v3: https://lore.kernel.org/r/20260608-bootconfig_using_tools-v3-0-4ddd079a0696@debian.org
+> 
+> Changes in v3:
+> - Patch 3: Move HOSTCC override to the kernel-side rule; tool keeps
+>   $(CC) for standalone/cross builds.
+> - Patch 6: Drop the false fail-safe wording; document the
+>   BOOT_CONFIG_FORCE=y default interaction.
+> - Link to v2:
+>   https://lore.kernel.org/r/20260605-bootconfig_using_tools-v2-0-d309f544b5f7@debian.org
+> 
+> Changes in v2 (addressing review of v1):
+> - Split out a standalone fix for the NULL-pointer arithmetic in
+>   xbc_snprint_cmdline() so the build-time render cannot trip host
+>   UBSan/FORTIFY_SOURCE.
+> - Rework the leaf-root handling: instead of returning early, skip @root
+>   inside the loop so a root carrying both a value and subkeys
+>   (kernel = x together with kernel.foo = bar) still renders its
+>   descendant keys.
+> - Build tools/bootconfig with $(HOSTCC) so cross-compiled (ARCH=...)
+>   builds render the cmdline on the build host instead of failing with
+>   "Exec format error".
+> - Mark the embedded cmdline section read-only (drop the "w" flag from
+>   .init.rodata).
+> - Add a make-clean hook so tools/bootconfig artifacts are removed by
+>   make clean.
+> - Gate the x86 prepend on "bootconfig" being present on the command
+>   line (or CONFIG_BOOT_CONFIG_FORCE), matching the init.* opt-in
+>   semantics documented in bootconfig.rst and preserving fail-safe
+>   recovery: dropping "bootconfig" from the bootloader cmdline now also
+>   disables the embedded kernel.* keys.
+> - Link to v1: https://patch.msgid.link/20260527-bootconfig_using_tools-v1-0-b6906a86e7d5@debian.org
+> 
+> ---
+> Breno Leitao (9):
+>       bootconfig: fix NULL-pointer arithmetic in xbc_snprint_cmdline()
+>       bootconfig: render descendant keys when xbc_snprint_cmdline() root has a value
+>       bootconfig: render embedded bootconfig as a kernel cmdline at build time
+>       bootconfig: clean build-time tools/bootconfig from make clean
+>       bootconfig: add xbc_prepend_embedded_cmdline() helper
+>       Documentation: bootconfig: document build-time cmdline rendering
+>       x86/setup: prepend embedded bootconfig cmdline before parse_early_param
+>       bootconfig: skip runtime kernel.* render once prepended early
+>       init/main.c: use bootconfig_cmdline_requested() for the runtime opt-in
+> 
+>  Documentation/admin-guide/bootconfig.rst |  81 ++++++++++++++++
+>  MAINTAINERS                              |   1 +
+>  Makefile                                 |  27 +++++-
+>  arch/x86/Kconfig                         |   1 +
+>  arch/x86/kernel/setup.c                  |  14 ++-
+>  include/linux/bootconfig.h               |  14 +++
+>  init/Kconfig                             |  36 +++++++
+>  init/main.c                              |  52 +++++-----
+>  lib/Makefile                             |  16 +++
+>  lib/bootconfig.c                         | 162 +++++++++++++++++++++++++++++--
+>  lib/embedded-cmdline.S                   |  16 +++
+>  tools/bootconfig/Makefile                |   4 +-
+>  12 files changed, 388 insertions(+), 36 deletions(-)
+> ---
+> base-commit: a87737435cfa134f9cdcc696ba3080759d04cf72
+> change-id: 20260508-bootconfig_using_tools-cfa7aa9d6a5a
+> 
+> Best regards,
+> -- 
+> Breno Leitao <leitao@debian.org>
 > 
 
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
