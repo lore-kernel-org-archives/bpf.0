@@ -1,173 +1,188 @@
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013016.outbound.protection.outlook.com [40.107.159.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111233DC852;
-	Fri, 26 Jun 2026 07:29:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782458978; cv=fail; b=HAh31kPsEpT0gdE74fARp8yOWNwrOaLgNqciOhUaODx9VH30v7kbHH9h7Pe1Ii0E2nP6g6c+8yDcGDeo9NUg3e/WEDseCLyehIU9jdcEXNbeaByI6dQLb8OF/KS0JQMGBYST+CWypjf6TCuQw7ejIouyBuvoAvl5tjmHS1GFdHo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782458978; c=relaxed/simple;
-	bh=z7WrdeABLrKvNP3fwxlOqdbE5rSrVnFzXKBCjyGlGUU=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=IM+weK1GchR8Y0geM8Wo7NOW6Y1UeHUJcgkr/Ecq5Etor4qlSSRpucps+o1kd6QHyUK5ZdMJ8KgyE2OVoeiG/D99vceu1e+GTe7mleniYLwAt3wkXUiqK/e2HuIE59apnShxwajf0E/vFanGutEHDfOd1Hu/KIjzjvXnYpLMGGk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=j449DEWu; arc=fail smtp.client-ip=40.107.159.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53FF13CE4A7;
+	Fri, 26 Jun 2026 07:31:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782459103; cv=none; b=rDANa8BpRfOlX0mCgL7DNtRtbfov+Pm0wcU0WTjrnClZde1yJZYHFuXSHrbnTteRaTWXqG0Lvchdm8MBL/pTX3BtQxG98x6vmfN27eEekwVuYr87Yh+pSVajerphtu+/34lBQUOuCjfK+wtt+qhO9NdvSwMBQh8wMeuN093rG4E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782459103; c=relaxed/simple;
+	bh=zAzVbOJUpBTp7NXmvND5zqcyggHP5okjwtnLGLVQYu8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Arwf65CrRUJTcqW/DUIQeQTus8blZ3sDVlk3IYDqHuS8gI/tQeYmUJU/h4AMj92crI0kc6eGieZn0W8eJgexeBZ3SyPqrRVOY0ZfsxYMHsYH3k8+GY4fj5AF/NMJkQp5y4vBW1ZTiRSBlM7xvnaAbNIZ49ioQKrEkMwk9c8ZggY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aS/XgVDu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="j449DEWu"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=gVSgtESzo/6LMwj0ManYqQSzjJ84ocULkaoZPE6FnpoMfdeVEyGgJ/WFf3cNV09waS7Tc0HzM5hmVKvm/I7Kj+8RXf1Y9g2qKnmcCIbrDd9utbhaL8G+M0bRIxnif2/nCd4qZA5Tux7r1hLVfg2fm4utUSxzZ3LXIGJPxxJTALdf1xm5CsQBcCWrYxTn81caIpBWivMnncLMHraOdJ04NlEWdbwbp2OV0LT3NV+xbxD+Sflx0GffnAoA7EgtUOb31AjQdhRfwSQuhEj1ZlVBETeu8hPt4248h7nILhVQVcntit73GbqrqCglaAqQGTPnFsXw1T+xIttnL/gFKZ8V4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T4g5GKPIBEGYb53j2SYgOKBPv01wPqZk9j1EsdHvkbM=;
- b=DZjw0gqgXEtavxmAeP5LTckZjK1TP0UxHr6gYErNqYmtHD38RNc13B5GnqV34uVlATkMAWlteMyg7JKjGWzfHtEHihd+5v/Z5COi/Ns1a/J91nBUEaVCDO2ErrHCVWbIPmpPoENZsU8SbMTMLkXmcP8LqU3JjPfZ3sIsw4oW+irSW/kmBgmCnV4yEKtZYE5G1NTWzNDuq2bOyawDnMhVXNPQa+6WQFr/CKqBHluhPghQRta0MNWuj7QRI07BQEi5UqxsORtSZCesa0KvT5RL3UTsfG0U0w85RMGTRLU6yhYJ5PU6S1wUZr4DyVARGVPFWcOPWjXMOQp2anQhBNjX3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=T4g5GKPIBEGYb53j2SYgOKBPv01wPqZk9j1EsdHvkbM=;
- b=j449DEWu7Zf2yTox9g57807o/0yXYB7VT5ODhmcT5VTwNavDgl86Ub1Dv73OtTPYjFjg5xrYIwKk9Be/RlYSN57UaaohA/ZcmnmVGy7N09i8Y1XhuxQTnKcddNG8jlbkg8yh8dK0Xm/EXwCSCY1mtMjBfd9HlHfl9vET22KKDNZ3EfrH0Q0kRValXbbFEk20LCRb3VYywUaNcm6p3GkSciElmctbbkFKcfqZc2z3Ya7lgjDnibPeQ91A4nnXEkzZx/PXyk+wlhF1SPRzC5boKLfVPcMj5twsg2681ZZfaESLLVsLYN/vnhZXhUwFhfGytSQuC+ligUcbI9O62KpRbQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from VE1PR04MB7216.eurprd04.prod.outlook.com (2603:10a6:800:1b0::22)
- by MIYPR04MB12597.eurprd04.prod.outlook.com (2603:10a6:290:7a::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.17; Fri, 26 Jun
- 2026 07:29:34 +0000
-Received: from VE1PR04MB7216.eurprd04.prod.outlook.com
- ([fe80::a9a5:cf83:dbe8:1f74]) by VE1PR04MB7216.eurprd04.prod.outlook.com
- ([fe80::a9a5:cf83:dbe8:1f74%3]) with mapi id 15.21.0159.016; Fri, 26 Jun 2026
- 07:29:34 +0000
-From: wei.fang@oss.nxp.com
-To: claudiu.manoil@nxp.com,
-	vladimir.oltean@nxp.com,
-	xiaoning.wang@nxp.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me
-Cc: wei.fang@nxp.com,
-	imx@lists.linux.dev,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net] net: enetc: check the number of BDs needed for xdp_frame
-Date: Fri, 26 Jun 2026 15:32:44 +0800
-Message-Id: <20260626073244.2168214-1-wei.fang@oss.nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MA5P287CA0285.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a01:221::8) To VE1PR04MB7216.eurprd04.prod.outlook.com
- (2603:10a6:800:1b0::22)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aS/XgVDu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2B981F000E9;
+	Fri, 26 Jun 2026 07:31:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782459102;
+	bh=KBBFzp2enCgah8OksQJupFfvoce0KGGVRIDzHZ1w708=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=aS/XgVDuV0s15iIuipTzGCBxlaMyAdwb0LNSB9qPIkVgt8IunvfMwEyGjIWSdcZQZ
+	 Woxy5PuQH1kbVYHE3Yhr0KRAW3I0l7Wi+jHhGTahrzehFLF8HLo08lPmva887/sSTE
+	 WTs6qLLq73emxlo10YCv/puMClY3BANycqx3jzPWTYR90EKj85EwzhtgsceJfGllOp
+	 627AU6Z2/KMFoau/a0+bb/HsxfpGIE6CsDHHW6vqt8cw0a3ZAmXzT6AzPIqoLw8mVE
+	 bz/2BIAmgpn3E5t5aIS+qNt09RXidZuOxwHpfCH+gK6tJh6VULxk4IsdYzia7tPZEx
+	 4Dj+tDCh2gmuA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 stable/linux-6.18.y 2/2] selinux: fix overlayfs
+ mmap() and mprotect() access checks
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Cai Xinchen" <caixinchen1@huawei.com>
+Cc: bpf@vger.kernel.org, selinux@vger.kernel.org
+In-Reply-To: <20260626075035.143419-3-caixinchen1@huawei.com>
+References: <20260626075035.143419-1-caixinchen1@huawei.com>
+ <20260626075035.143419-3-caixinchen1@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 26 Jun 2026 07:31:41 +0000
+Message-Id: <20260626073141.E2B981F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR04MB7216:EE_|MIYPR04MB12597:EE_
-X-MS-Office365-Filtering-Correlation-Id: b52eff9b-423e-4f0c-2acd-08ded354ab36
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|366016|7416014|1800799024|23010399003|376014|18002099003|11063799006|56012099006|921020;
-X-Microsoft-Antispam-Message-Info:
-	3ZBa4cGw6iusZJhTt4IzBKXo9SNXFJ9I7eME5cHLjT8lUdSXw8rOOtmkZtREW5M1xY0/BWojaK/THel6PHbSlPpq8sHtrgIOMpNXilQDOi9cRHNSW3LLJwcd3Sx5+X0snTXL7VcE5IZ+uvVHZ5pjsyGrxGJ2K2IOE88XCtc9sfOjJVClYSi42pzuJ+s+gi75DbYyxdOPDYyXGwyzVzGXdFqcmC/81az3UrMe3tFbda9MdIJ46o+CPLCAWpS/OMeyPDP246evbezOlhLVotd6VFtN2wzhURBN6RCqQf8iEUGfANgKso0OWEMcCfoZ6jCzJ2p5NUBxHW9xBixXa6mHf1Zjpo/g8gUy6okrdl/2GmQ6zV+5dzRAgElnowzt2Wwjz9BpPyGnn6MTwiwZ7VryydpM4bPm35gV3kj4WGKqIY4wJzUtceK+cOrSRzOC0w5DxHwVWE82qu4H1lis2Y6r9cRLc3b6cx19DQoyOa2wbzVQPUKlcKDfn616hRs+wiU4lsJbUra6gEp/pHqxoCLpbuzrqlEwnRAJ2vPU8wkixDC8MPLmse6w9w+oLGMvpOSLRX/UKOhNmSN0duACqiPsyGlPtvsPJgRmgvdLXgh0Gnsuvkl3jZ/xv25aaIWj37YRLZ7IlhUPr90bWEIQxjMbqr1KQOEIoha0LanQ6StyqD/t4gs/TuGRvZVgrXhwOWuuV3l7WDQkS4cnmxGkq+TSrw==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB7216.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(366016)(7416014)(1800799024)(23010399003)(376014)(18002099003)(11063799006)(56012099006)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?5c/YMb9kdOT9fHPsVrc+xXj4eEu/jEKVAtHRXIEy1bdg3m6QELLpAgQqWXhZ?=
- =?us-ascii?Q?22RRI+if4Nb2b1uIlZGgIV5SjJ8GwupILpZTaMTkeYj4SaDjw7mW5+W3PVbu?=
- =?us-ascii?Q?90KNMZwt6qQ22VRjeRfZQ1mJeerM/HImUedBh8Lg55UDmQr8o7O1moS25Xen?=
- =?us-ascii?Q?rFwK+TNE+BP8LU5VydjuMDHlZ+fQwV1kZltX+/InJSUmYoJsFN0LXgrdlf71?=
- =?us-ascii?Q?PLu5QsPuYIc+8JdQMml8p1Bjyu239RAUG7Y7sZA+/IIvf4dUDpO+1msPPqQu?=
- =?us-ascii?Q?o0r2DGO8jrAg7I9RsuxYcNl+LOvbShlqYGvlfWDCOYA18QJTnO3JHw6s/z0C?=
- =?us-ascii?Q?wTZtORIfDcHpoISd8NcNmFEdI1tbwAUvMo7m+kw6FDCkokGgWzBTDnZnDW5Z?=
- =?us-ascii?Q?io6ocHq6gM0frpEa7ZR/0hAApWs7C82GyMHsl4YsrxmGvOEPs6uL5A+kD3dB?=
- =?us-ascii?Q?TNXfiXwrP+y00mpp+16Fp+rDQ+L33YQxfVkC9iWrg5FgV1JJoLfBxuZiIRuN?=
- =?us-ascii?Q?6FfYZqCotbtvkQ39mWz/7uymAaJ7laDHVty/nFI2DbHFCm82YO3rXetUJGiX?=
- =?us-ascii?Q?3PM94TXa9mIE5W1B7vEyx2GM1PlzZwFWEGhE6t5uKs606PwwRR7F6wGOffx1?=
- =?us-ascii?Q?oA5OHXpBMRC2BBLVbgTV0RhGZEYvggU/rkxU914HWJ+fQ0hCXB9YDFNKcm2o?=
- =?us-ascii?Q?uvPvfC2OJRQ3g9MqZFCY7gFnOppZ2MrzlVzZR6kgZvM700mmSId+kzYOtJdB?=
- =?us-ascii?Q?nP27ds8WwsQhg0B7lEI7VqXJtU3TQd/pSso5MPJ5ZhGbJ8iWnJVrXAq9iHsO?=
- =?us-ascii?Q?bk3L06AlbL+wX/CZQ/z2rw+WwstumpwB6UOSn7GSD9W1+3mP0RreMHIt8aZn?=
- =?us-ascii?Q?sRwV4fwu44diT7ZE6lmf4LazHbsTQ9nO5x0TU5+nnoPTRrQBaz2YBetjedCb?=
- =?us-ascii?Q?/cZIPJAxGOljSf9UUCwB+nGQuR22eP78ieCM//dfagk1oemDsGrwEPkhykaE?=
- =?us-ascii?Q?0IYFY1NmTrbQqufE9OLbI438jUwHk21yZvLPdSkw9M7r650Yn9qPMJwTfg32?=
- =?us-ascii?Q?7bk5RTcMFlhdQABFk7fzqp0h9WF7JQvXxpf+feSB0SFv25eo/EWgaHwc4aNA?=
- =?us-ascii?Q?7BgdVzyE0Ihim9/PlH4Y6wMzeMAaPCQ/rC4ve/9rEDjh3jBo3mQhBIpZso3T?=
- =?us-ascii?Q?nzN5KskHBMMJ70bc97lGMaUwwc/p1Db7Frz6Q43S88/rYk6IlWEAEWKRBlFE?=
- =?us-ascii?Q?OBA+92mQe6/szfr2TPjy3JzxjOfOCVTN8UE0P03LQ/KpxTXBxvWo48hXG94u?=
- =?us-ascii?Q?HyQVVzPhQvTqmTbTN7n4RomWU4zvtrQWA3+OGikV/pN8Dl+5m26T/CyN6gmV?=
- =?us-ascii?Q?36yIN4zlgzjPhZ7C63NYKnYYDEGu6KB5jk3E4yciu68TgDwkXc1WMwYV0v+2?=
- =?us-ascii?Q?BcfCIbE+yT+RXrRlXE9BCk4zg+mkJ60g8Cq6JTlaOctcI9PB2uYnCTiJvXtF?=
- =?us-ascii?Q?NTjXiMyTY8Jeopr/MMueATnYaHvHI6XLg1mW9E5cizADdCG3Wgfjo5k1R0EY?=
- =?us-ascii?Q?IUuHSUkuYoGvvVAeTLyLQ9L2RB+cMiT/unD/TsfkVt/Lc+dKpRyoSvPlyyQL?=
- =?us-ascii?Q?MkMxj+V5ujGd5s05tF3gnYVhoyOfmdsbTFObGrS/09ZfYXFPYWybr5R407zG?=
- =?us-ascii?Q?AJ3XZSkXyd0GaMztbcfWdMmvg1v6WNK0s+u2vQh4XnC4WAoNy8u8MJhpY7WR?=
- =?us-ascii?Q?l75Od93LFINeM+MRrqPWs59N0LUdAApIzzp1k5bNBARXKV8t0WDa?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b52eff9b-423e-4f0c-2acd-08ded354ab36
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB7216.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2026 07:29:34.0572
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +oyZFZpDBuWsfp3f2grvX/awQfhEOEr2bxqy1tAvGLBXbtS+u0oWawMnl6ICFvZQKViAQLS/3EvYo9lyBvvRNK11SShSPqIFqpJdRE/+ec2UaAwhvnRD6dIf9a0prU0r
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MIYPR04MB12597
 
-From: Wei Fang <wei.fang@nxp.com>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] PROCESS__EXECMEM permission is incorrectly checked against the mou=
+nter's credentials instead of the executing process.
+--
 
-The size of xdp_redirect_arr array is ENETC_MAX_SKB_FRAGS. However, the
-number of fragments contained in xdp_frame may be greater than or equal
-to ENETC_MAX_SKB_FRAGS, which will cause the access to xdp_redirect_arr
-to be out of bounds.
+commit ff9b809022a43e85182f65f4fb0c497928b26b8d
+Author: Paul Moore <paul@paul-moore.com>
 
-Fixes: 9d2b68cc108d ("net: enetc: add support for XDP_REDIRECT")
-Signed-off-by: Wei Fang <wei.fang@nxp.com>
----
- drivers/net/ethernet/freescale/enetc/enetc.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+selinux: fix overlayfs mmap() and mprotect() access checks
 
-diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c b/drivers/net/ethernet/freescale/enetc/enetc.c
-index aa8a87124b10..8e3f345dd9aa 100644
---- a/drivers/net/ethernet/freescale/enetc/enetc.c
-+++ b/drivers/net/ethernet/freescale/enetc/enetc.c
-@@ -1783,6 +1783,7 @@ int enetc_xdp_xmit(struct net_device *ndev, int num_frames,
- {
- 	struct enetc_tx_swbd xdp_redirect_arr[ENETC_MAX_SKB_FRAGS] = {0};
- 	struct enetc_ndev_priv *priv = netdev_priv(ndev);
-+	struct skb_shared_info *shinfo;
- 	struct enetc_bdr *tx_ring;
- 	int xdp_tx_bd_cnt, i, k;
- 	int xdp_tx_frm_cnt = 0;
-@@ -1798,6 +1799,12 @@ int enetc_xdp_xmit(struct net_device *ndev, int num_frames,
- 	prefetchw(ENETC_TXBD(*tx_ring, tx_ring->next_to_use));
- 
- 	for (k = 0; k < num_frames; k++) {
-+		if (xdp_frame_has_frags(frames[k])) {
-+			shinfo = xdp_get_shared_info_from_frame(frames[k]);
-+			if (unlikely((shinfo->nr_frags + 1) > ENETC_MAX_SKB_FRAGS))
-+				break;
-+		}
-+
- 		xdp_tx_bd_cnt = enetc_xdp_frame_to_xdp_tx_swbd(tx_ring,
- 							       xdp_redirect_arr,
- 							       frames[k]);
--- 
-2.34.1
+The existing SELinux security model for overlayfs is to allow access if
+the current task is able to access the top level file (the "user" file)
+and the mounter's credentials are sufficient to access the lower
+level file (the "backing" file). This patch makes use of the newly created
+security_mmap_backing_file() LSM hook and the backing file API to provide
+backing file enforcement for mmap() and mprotect().
 
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index 3da3017ad2ca0..f96ee8f372e3b 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+
+[ ... ]
+
+> @@ -3916,42 +3950,55 @@ static int selinux_file_ioctl_compat(struct file =
+*file, unsigned int cmd,
+> =20
+>  static int default_noexec __ro_after_init;
+> =20
+> -static int file_map_prot_check(struct file *file, unsigned long prot, in=
+t shared)
+> +static int __file_map_prot_check(const struct cred *cred,
+> +				 const struct file *file, unsigned long prot,
+> +				 bool shared, bool bf_user_file)
+>  {
+> -	const struct cred *cred =3D current_cred();
+> -	u32 sid =3D cred_sid(cred);
+> -	int rc =3D 0;
+> +	struct inode *inode =3D NULL;
+> +	bool prot_exec =3D prot & PROT_EXEC;
+> +	bool prot_write =3D prot & PROT_WRITE;
+> +
+> +	if (file) {
+> +		if (bf_user_file)
+> +			inode =3D d_inode(backing_file_user_path(file)->dentry);
+> +		else
+> +			inode =3D file_inode(file);
+> +	}
+> +
+> +	if (default_noexec && prot_exec &&
+> +	    (!file || IS_PRIVATE(inode) || (!shared && prot_write))) {
+> +		int rc;
+> +		u32 sid =3D cred_sid(cred);
+> =20
+> -	if (default_noexec &&
+> -	    (prot & PROT_EXEC) && (!file || IS_PRIVATE(file_inode(file)) ||
+> -				   (!shared && (prot & PROT_WRITE)))) {
+>  		/*
+> -		 * We are making executable an anonymous mapping or a
+> -		 * private file mapping that will also be writable.
+> -		 * This has an additional check.
+> +		 * We are making executable an anonymous mapping or a private
+> +		 * file mapping that will also be writable.
+>  		 */
+> -		rc =3D avc_has_perm(sid, sid, SECCLASS_PROCESS,
+> -				  PROCESS__EXECMEM, NULL);
+> +		rc =3D avc_has_perm(sid, sid, SECCLASS_PROCESS, PROCESS__EXECMEM,
+> +				  NULL);
+
+[Severity: High]
+Will this check PROCESS__EXECMEM against the mounter's credentials instead =
+of
+the executing process?
+
+When called for a backing file in selinux_mmap_backing_file() or
+selinux_file_mprotect(), the cred passed in is file->f_cred (the mounter's
+credentials). Since PROCESS__EXECMEM is a property of the executing process,
+could checking it against the mounter cause spurious SELinux denials?
+
+For example, could this break legitimate unprivileged processes (like JIT
+compilers) attempting to create W+X private mappings on overlayfs, simply
+because the mount process lacks execmem privileges?
+
+> +		if (rc)
+> -			goto error;
+> +			return rc;
+>  	}
+
+[ ... ]
+
+> @@ -4010,11 +4101,15 @@ static int selinux_file_mprotect(struct vm_area_s=
+truct *vma,
+>  		    vma->vm_end <=3D vma->vm_mm->brk) {
+>  			rc =3D avc_has_perm(sid, sid, SECCLASS_PROCESS,
+>  					  PROCESS__EXECHEAP, NULL);
+> -		} else if (!vma->vm_file && (vma_is_initial_stack(vma) ||
+> +			if (rc)
+> +				return rc;
+> +		} else if (!file && (vma_is_initial_stack(vma) ||
+>  			    vma_is_stack_for_current(vma))) {
+>  			rc =3D avc_has_perm(sid, sid, SECCLASS_PROCESS,
+>  					  PROCESS__EXECSTACK, NULL);
+> -		} else if (vma->vm_file && vma->anon_vma) {
+> +			if (rc)
+> +				return rc;
+> +		} else if (file && vma->anon_vma) {
+>  			/*
+>  			 * We are making executable a file mapping that has
+>  			 * had some COW done. Since pages might have been
+> @@ -4022,13 +4117,29 @@ static int selinux_file_mprotect(struct vm_area_s=
+truct *vma,
+>  			 * modified content.  This typically should only
+>  			 * occur for text relocations.
+>  			 */
+> -			rc =3D file_has_perm(cred, vma->vm_file, FILE__EXECMOD);
+> +			rc =3D __file_has_perm(cred, file, FILE__EXECMOD,
+> +					     backing_file);
+> +			if (rc)
+> +				return rc;
+> +			if (backing_file) {
+> +				rc =3D file_has_perm(file->f_cred, file,
+> +						   FILE__EXECMOD);
+> +				if (rc)
+> +					return rc;
+> +			}
+>  		}
+> +	}
+> +
+> +	rc =3D __file_map_prot_check(cred, file, prot, shared, backing_file);
+> +	if (rc)
+> +		return rc;
+> +	if (backing_file) {
+> +		rc =3D file_map_prot_check(file->f_cred, file, prot, shared);
+>  		if (rc)
+>  			return rc;
+>  	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260626075035.1434=
+19-1-caixinchen1@huawei.com?part=3D2
