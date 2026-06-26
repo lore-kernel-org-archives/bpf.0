@@ -1,182 +1,221 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B502EF67A;
-	Fri, 26 Jun 2026 02:27:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5491B3A4508
+	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 05:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782440842; cv=none; b=WbjJy/jb44wTzdsbdTirQTsfYLcaSu7yZXD2jktmS4Nw34gQ5VOdrx18ctbB3vD78xgKrzNsTkqi3sk7VvBknuAjsYPcenDC1EhGkm/4qnfOgrZ+BAYPjE6WxQ5W3fCSzTj4IQKHqQlDVaNJhgzY5yjxoJjVOe9lenpZaZxlZyk=
+	t=1782451598; cv=none; b=lPuS0dMRSnPp2NCqisgMs3yX5x7A6LB4ofQbLx8pn8CyJgiJk4C5GgWNS/0JjX7cSp43360kp0aX02XlgQ9qAQDBo/18ShgVimjbO4+s0nrSl/SZdlxry40HtEUnEV3fmsRDttud4L6c7YFZ1jgbo++xyrvUVPi08W3SH638h4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782440842; c=relaxed/simple;
-	bh=qVqu0sFt61wgt09NIw8JN2rlV/60nvD353wFzU8etQI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gaYI6dBIexr5Z7ykMp21RWj7e7CNktk07QA3ZowTUYSDTc46CYr/odWI2y0hA2X7f+8kIsUXnU1enDTFDQcvAG5cW7Cel6/fVwtTM+3IqTb2RFk49W+OdkxiVnGOQMStUsHkK640KTxxcJUfc0apNw83wWgcnoHDMpYLKbkf9hI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dqvmGYqG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782451598; c=relaxed/simple;
+	bh=wIMYBNzbCTYNJg6+riZWhR0KhzT2IVa3ptHVo9K6HF8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tDOgvpaV2Z/KsY3OQZJ1pNHFZGnuHmOljQTXBYqX3U1Cx5T6ByKRpc0RA/4PeQeDCcBuDkMtNQkr2TAaC1kXgbYDnfsEFj5DXCU8oQSN52dnfsmozHQHXBD0q0UizO42vr5V9kpCIM+eKcL8XjttPsuQ8vcksNIM4Q7dcsskM4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jhMGRHxj; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dqvmGYqG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13A541F000E9;
-	Fri, 26 Jun 2026 02:27:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782440840;
-	bh=kCyjxsIvxVAQSkQ4j5mFCwlecTI/zTrv6CalreKqk+4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dqvmGYqGgdPw1jP9y+xhedZuQ1IFgoNigfceymngeQuQF8d0CU4M543wc1Fc/vfyy
-	 bNlT1q3gPpl6HpREBpuvfRGIVT6DPWcWp5RQ9d7tTlM693LRYcbSUnl88LnMj39CJP
-	 zwVo16yL1M64hG3vsdTGF/zJpXQ/sAm5VSHWxMN/layLWN58znGkLUINjjDuRNAz7G
-	 wpUaIJAAvjjHa8C5/QPiPx7j7Yz+fPkn+iWiTvT74fMuFjR0sRXUfR54OkGty1A3K0
-	 nhRz1h/0JkZM7+h8Thw3cpJKZXIBbXX3NFqHxAq1zSzdNYU0LMS16P6ONTY6ancJVN
-	 sWGYi7jsa1eGw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 stable/linux-6.18.y 1/2] lsm: add backing_file LSM
- hooks
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Cai Xinchen" <caixinchen1@huawei.com>
-Cc: bpf@vger.kernel.org, selinux@vger.kernel.org
-In-Reply-To: <20260626024058.3149217-2-caixinchen1@huawei.com>
-References: <20260626024058.3149217-1-caixinchen1@huawei.com>
- <20260626024058.3149217-2-caixinchen1@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 26 Jun 2026 02:27:19 +0000
-Message-Id: <20260626022720.13A541F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jhMGRHxj"
+Message-ID: <0606be50-1f21-438f-bf00-024f31b9eda8@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782451593;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=f96tZgeTHGA1Dh6puxOPPKcEg2Gpr+GaxDxTbuHkptY=;
+	b=jhMGRHxjwzss/eH0/NYvh90yIcjOq2DwneguhqofDolL1474zx0mY6/Dnfi22I4D3z/XNe
+	fmCkET4bNeJv9B98ThCD1/WPqM/z4AOM2N0HlSrR2zepz8lrLrr8nth5C+8b9Ir2FogGfU
+	VzpyGsYCSHT/1TMpYsk08yaZiRx3tiQ=
+Date: Thu, 25 Jun 2026 22:26:27 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH v2] resolve_btfids: preserve tag and parameter names when
+ processing implicit args
+To: Aelin Reidel <aelin@mainlining.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20260620-resolve-btfids-implicit-args-use-after-free-v2-1-4132e1f639f0@mainlining.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260620-resolve-btfids-implicit-args-use-after-free-v2-1-4132e1f639f0@mainlining.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Double execution of the `backing_file_free` LSM hook on allocati=
-on failure, causing potential NULL pointer dereferences.
---
+On 2026-06-19 3:49 p.m., Aelin Reidel wrote:
+> process_kfunc_with_implicit_args() obtains parameter names through
+> btf__name_by_offset() and passes them to btf__add_func_param() while
+> constructing a new function prototype. Tag names are processed in a
+> similar fashion.
+> 
+> The returned name pointer references memory owned by the BTF object.
+> btf__add_func_param(), btf__add_decl_tag(), etc. modify the same BTF and
+> may grow its internal storage, invalidating previously returned string
+> pointers.
+> 
+> This can result in btf__add_func_param(), btf__add_decl_tag(), etc.
+> dereferencing a stale pointer when copying the string, leading to crashes
+> in strset__add_str().
+> 
+> Duplicate the parameter name before calling btf__add_func_param() so it
+> remains valid across BTF updates.
+> 
+> Fixes: 9d199965990c ("resolve_btfids: Support for KF_IMPLICIT_ARGS")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Aelin Reidel <aelin@mainlining.org>
+> ---
+> We were noticing resolve_btfids crashing almost all the time when
+> building our kernels with BTF debuginfo in postmarketOS. I'm not sure
+> why specificially our environment triggered this extremely reliably, but
+> I'm glad I was able to track down the issue. With the patch, I haven't
+> seen any further issues and our kernel builds are succeeding again.
 
-commit 1113cc3ed88cd48b759f67dff14b8460d0d07970
-Author: Paul Moore <paul@paul-moore.com>
+Hi Aelin, thank you for the report and patch.
 
-lsm: add backing_file LSM hooks
+My first instinct was to dismiss the patch as over defensive, because
+libbpf gracefully handles reallocation of existing strings, and we
+don't add new strings here.
 
-This commit adds a security blob to the backing_file struct and
-introduces new LSM hooks (security_backing_file_alloc,
-security_backing_file_free, and security_mmap_backing_file) to
-allow LSMs to properly enforce access controls on mmap() and mprotect()
-operations for stacked filesystems.
+Take a look at strset_str_append() in libbpf (strset.c:131):
 
-> diff --git a/fs/file_table.c b/fs/file_table.c
-> index 762f03dcbcd77..987e01da99389 100644
-> --- a/fs/file_table.c
-> +++ b/fs/file_table.c
-[ ... ]
-> @@ -301,7 +319,8 @@ static int init_backing_file(struct backing_file *ff)
->   * This is only for kernel internal use, and the allocate file must not =
-be
->   * installed into file tables or such.
->   */
-> -struct file *alloc_empty_backing_file(int flags, const struct cred *cred)
-> +struct file *alloc_empty_backing_file(int flags, const struct cred *cred,
-> +				      const struct file *user_file)
->  {
->  	struct backing_file *ff;
->  	int error;
-> @@ -318,7 +337,7 @@ struct file *alloc_empty_backing_file(int flags, cons=
-t struct cred *cred)
-> =20
->  	/* The f_mode flags must be set before fput(). */
->  	ff->file.f_mode |=3D FMODE_BACKING | FMODE_NOACCOUNT;
-> -	error =3D init_backing_file(ff);
-> +	error =3D init_backing_file(ff, user_file);
->  	if (unlikely(error)) {
->  		fput(&ff->file);
+	static long strset_str_append(struct strset *set, const char *s)
+	{
+		[...]
 
-[Severity: Medium]
-Will this lead to a double execution of the backing_file_free hook?
+		/*
+		 * The set->strs_data might have reallocated and if 's' pointed
+		 * to an internal string within the old buffer, then it became
+		 * dangling and needs to be reconstructed before the copy.
+		 */
+		if (old_data && old_data != (uintptr_t)set->strs_data &&
+		    old_s >= old_data && old_s < old_data + old_data_len)
+			s = set->strs_data + (old_s - old_data);
 
-If security_backing_file_alloc() fails after successfully calling
-lsm_backing_file_alloc(), it internally calls security_backing_file_free() =
-to
-clean up. It then returns an error back through init_backing_file() to here.
+		memcpy(p, s, len);
 
-Because FMODE_BACKING is already set, this fput() triggers the VFS
-teardown via __fput() -> file_free() -> backing_file_free() ->
-security_backing_file_free(), which will call the free hook a second time.
+		return len;
+	}
 
->  		return ERR_PTR(error);
->  	}
-[ ... ]
-> diff --git a/security/security.c b/security/security.c
-> index 603c3c6d5635d..9285909908ab8 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-[ ... ]
-> @@ -2965,6 +2997,57 @@ void security_file_free(struct file *file)
->  	}
->  }
-> =20
-> +/**
-> + * security_backing_file_alloc() - Allocate and setup a backing file blob
-> + * @backing_file: the backing file
-> + * @user_file: the associated user visible file
-> + *
-> + * Allocate a backing file LSM blob and perform any necessary initializa=
-tion of
-> + * the LSM blob.  There will be some operations where the LSM will not h=
-ave
-> + * access to @user_file after this point, so any important state associa=
-ted
-> + * with @user_file that is important to the LSM should be captured in the
-> + * backing file's LSM blob.
-> + *
-> + * LSM's should avoid taking a reference to @user_file in this hook as i=
-t will
-> + * result in problems later when the system attempts to drop/put the file
-> + * references due to a circular dependency.
-> + *
-> + * Return: Return 0 if the hook is successful, negative values otherwise.
-> + */
-> +int security_backing_file_alloc(struct file *backing_file,
-> +				const struct file *user_file)
-> +{
-> +	int rc;
+In process_kfunc_with_implicit_args() both tag_name and param_name are
+read *after* the first btf__add_func() / btf__add_func_proto() has
+made the BTF modifiable, so btf__name_by_offset() should return a
+pointer into btf->strs_set. I don't see where the bad pointer comes
+from.
+
+However you have a stable reproducer, so your strdup() change probably
+covers a real UAF bug somewhere else (in libbpf?).
+
+Let's track this down before coming up with a fix.
+
+What version/commit of libbpf are you using in your kernel tree?
+
+You could build resolve_btfids with ASAN, or run it with valgrind.
+
+If you can share a reproducer that's easy to run, that would be
+great too.
+
+Thanks!
+
+> ---
+> Changes in v2:
+> - Apply the same fix to tag_name and adjust the commit message
+>    accordingly
+> - Fix the remaining use-after-free in the error handling path
+> - Link to v1: https://patch.msgid.link/20260619-resolve-btfids-implicit-args-use-after-free-v1-1-2af87d4704c8@mainlining.org
+> 
+> To: Alexei Starovoitov <ast@kernel.org>
+> To: Daniel Borkmann <daniel@iogearbox.net>
+> To: Andrii Nakryiko <andrii@kernel.org>
+> To: Eduard Zingerman <eddyz87@gmail.com>
+> To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> To: Martin KaFai Lau <martin.lau@linux.dev>
+> To: Song Liu <song@kernel.org>
+> To: Yonghong Song <yonghong.song@linux.dev>
+> To: Jiri Olsa <jolsa@kernel.org>
+> To: Emil Tsalapatis <emil@etsalapatis.com>
+> To: Ihor Solodrai <ihor.solodrai@linux.dev>
+> Cc: bpf@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+>   tools/bpf/resolve_btfids/main.c | 20 +++++++++++++++-----
+>   1 file changed, 15 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+> index f8a91fa7584f..94b89e9c942e 100644
+> --- a/tools/bpf/resolve_btfids/main.c
+> +++ b/tools/bpf/resolve_btfids/main.c
+> @@ -1113,6 +1113,7 @@ static int process_kfunc_with_implicit_args(struct btf2btf_context *ctx, struct
+>   {
+>   	s32 idx, new_proto_id, new_func_id, proto_id;
+>   	const char *param_name, *tag_name;
+> +	char *tmp_param_name, *tmp_tag_name;
+>   	const struct btf_param *params;
+>   	enum btf_func_linkage linkage;
+>   	char tmp_name[KSYM_NAME_LEN];
+> @@ -1163,18 +1164,22 @@ static int process_kfunc_with_implicit_args(struct btf2btf_context *ctx, struct
+>   		if (strcmp(tag_name, "bpf_kfunc") == 0)
+>   			continue;
+>   
+> +		tmp_tag_name = strdup(tag_name);
+>   		idx = btf_decl_tag(t)->component_idx;
+>   
+>   		if (btf_kflag(t))
+> -			err = btf__add_decl_attr(btf, tag_name, new_func_id, idx);
+> +			err = btf__add_decl_attr(btf, tmp_tag_name, new_func_id, idx);
+>   		else
+> -			err = btf__add_decl_tag(btf, tag_name, new_func_id, idx);
+> +			err = btf__add_decl_tag(btf, tmp_tag_name, new_func_id, idx);
+>   
+>   		if (err < 0) {
+>   			pr_err("ERROR: resolve_btfids: failed to add decl tag %s for %s\n",
+> -			       tag_name, tmp_name);
+> +			       tmp_tag_name, tmp_name);
+> +			free(tmp_tag_name);
+>   			return -EINVAL;
+>   		}
 > +
-> +	rc =3D lsm_backing_file_alloc(backing_file);
-> +	if (rc)
-> +		return rc;
-> +	rc =3D call_int_hook(backing_file_alloc, backing_file, user_file);
-> +	if (unlikely(rc))
-> +		security_backing_file_free(backing_file);
-> +
-> +	return rc;
-> +}
-> +
-> +/**
-> + * security_backing_file_free() - Free a backing file blob
-> + * @backing_file: the backing file
-> + *
-> + * Free any LSM state associate with a backing file's LSM blob, includin=
-g the
-> + * blob itself.
-> + */
-> +void security_backing_file_free(struct file *backing_file)
-> +{
-> +	void *blob =3D backing_file_security(backing_file);
-> +
-> +	call_void_hook(backing_file_free, backing_file);
+> +		free(tmp_tag_name);
+>   	}
+>   
+>   add_new_proto:
+> @@ -1193,12 +1198,17 @@ static int process_kfunc_with_implicit_args(struct btf2btf_context *ctx, struct
+>   		if (is_kf_implicit_arg(btf, &params[i]))
+>   			break;
+>   		param_name = btf__name_by_offset(btf, params[i].name_off);
+> -		err = btf__add_func_param(btf, param_name, params[i].type);
+> +		tmp_param_name = strdup(param_name);
+> +		if (!tmp_param_name)
+> +			return -ENOMEM;
+> +		err = btf__add_func_param(btf, tmp_param_name, params[i].type);
+>   		if (err < 0) {
+>   			pr_err("ERROR: resolve_btfids: failed to add param %s for %s\n",
+> -			       param_name, kfunc->name);
+> +			       tmp_param_name, kfunc->name);
+> +			free(tmp_param_name);
+>   			return err;
+>   		}
+> +		free(tmp_param_name);
+>   		t = (struct btf_type *)btf__type_by_id(btf, proto_id);
+>   	}
+>   
+> 
+> ---
+> base-commit: 598c7067dd8b65b93f3ccada47e9014a13137f1b
+> change-id: 20260619-resolve-btfids-implicit-args-use-after-free-16fc2939529e
+> 
+> Best regards,
+> --
+> Aelin Reidel <aelin@mainlining.org>
+> 
 
-[Severity: Medium]
-If the free hook is called twice (as mentioned above), or called after
-lsm_backing_file_alloc() returns ENOMEM without executing any alloc hooks,
-"blob" will be NULL.
-
-Could this cause a NULL pointer dereference if an LSM or BPF program
-implements the free hook and attempts to access the security blob?
-
-> +
-> +	if (blob) {
-> +		backing_file_set_security(backing_file, NULL);
-> +		kmem_cache_free(lsm_backing_file_cache, blob);
-> +	}
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260626024058.3149=
-217-1-caixinchen1@huawei.com?part=3D1
