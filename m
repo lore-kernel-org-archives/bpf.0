@@ -1,84 +1,166 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D312D5C7A;
-	Fri, 26 Jun 2026 14:54:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5674E30C166;
+	Fri, 26 Jun 2026 14:57:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782485653; cv=none; b=ZLXl+C282CUeSAwM0TFSiDJNAV6/0HZ5dtiw5NMPhT6H74rAaV6TpzcXQmIOip/tPOzYobgdaG5Vs8dvVRXv2wXuKhU8KJwPWUrSW12TaB0b8QHt2zDudDj+b4Q1TLeWJxrTrDHNwPlyWmQHXrtmoh4+JoxwZ/PdbXMefrbLHGI=
+	t=1782485836; cv=none; b=KFoiDYrSTqjOaphLbUxpwTSob6qlHBPyWAhnAUDucdV3nyPxIpvm4Ruu2Ye3KbNox9xsIQCiMK4cnm6yKmrB59Ypq/SBe9vZk0SVof1uqC0sNw2NrxzrRqqUetn9cOcbsI/RRPz1TaGVBMnIuGL/P76QnzlQ6Hg3EoHGuU93q1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782485653; c=relaxed/simple;
-	bh=4/zqp6G7zm1feI3SkgkRziJVevArgiCNJesjxpmTUSc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z04OIeeqD+dMc6SNidN2QcO/qSRLSjZheRdUqLfXZjyOdi+7ynxPAfFPSkUmMJnHHb0XWrS1QFADMCVWwkPH8O3XlKaTg5EK8EiT6X4Ck6L599mW4GhXS5SJbDq41iSYqmlFf6eFXYRJ5GsL8Jse76OktS5sVy+xxdRr3nVx5vw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=uCbvmUwP; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1782485836; c=relaxed/simple;
+	bh=08SBmbmt1es9nvO/KWBHGxYsF9F9B2UWNxL8xnBLHKM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QF3uo+WEFcbyoXqL51M4nbKG/mbigMYTgd6p8s9Hz8gdh0BRuMCaeMKuLnRd5xhWPlAH19/WvabLlenQCBn0MDhrYlOjLGauNL3O/Q5/SrCA02K4qtKTFUSwp/4U9hGYS1T5F3CfbpwsHF9Moqtc/KwRo+R/bxl7PDZzBMFGPXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ju6I4k07; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="uCbvmUwP"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=rqaQAqtRte520b74K9t083gmmRChi1kEVk9vgjlvgZY=; b=uCbvmUwPrXOg3IS6ymJYUE5jPg
-	BJ/quKovoNdYPPVymkuiyuPg9saySriEXgjWp00I8v9nbo5pJbioKTw9gntFfaHkcUaySDJRuWxMm
-	iYxm+gbk//05IaTJwbahbnd9DNbuI7wmUutI9iaWJ4gnhhCz+mAQVQjiJ08dyGo3Q+rRWyUfp1CY0
-	vx6Cp3hbxwjmr4OnRqZFKVbjvA7Bzk1ckT53BGmBU2CgYDHPkdPHhD5bHW7fP8DKyXc8V/Z2SThDS
-	AIUvQAZx5bRWDdC4lO3QaNorlkMHYcUyyJuK/bHgXppLtaGRW6n4FprkftQac+N3QdGuNpsCY3eov
-	sDp61/nw==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wd7wF-0042t0-0u;
-	Fri, 26 Jun 2026 14:53:51 +0000
-Date: Fri, 26 Jun 2026 07:53:45 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Nathan Chancellor <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org, 
-	kernel-team@meta.com, Nicolas Schier <n.schier@fritz.com>
-Subject: Re: [PATCH v7 0/9] bootconfig: embed kernel.* cmdline at build time
-Message-ID: <aj6SZrtZb6rfQUJZ@gmail.com>
-References: <20260626-bootconfig_using_tools-v7-0-24ab72139c29@debian.org>
- <20260626233327.b5c9c8de494acdde4ddf5c02@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ju6I4k07"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E031F00A3E;
+	Fri, 26 Jun 2026 14:57:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782485831;
+	bh=h4dEsq7eT0U+sy2EuGGNHMB1wu+Xu3EYpNjubxVfLcc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Ju6I4k07BJu2QU8MLzI4HFyVkm9JoCqL1MLjMne2NwFtUbN4pZqAK+duO/sguQ1Sm
+	 o6SovK2IKQM3F0Un8rewjt0ONXKYPlLEAEE/1Wd3ZmFOZ+Zbwzftm5xGyH9XzqRdRh
+	 L87MqYw9nlXGrMJUC2kOD3DCKNhfOI1vxTAW9f7sLsM7xhwUv01IUOWLlzWZ16W0cV
+	 AJKwS5fFWuvFPdi5r0qsrkvnNGslW1TXo8gt1tIf7Ds5powFNti/f3BwFEc/rwGh3v
+	 rrpok0p8p7P0gG8wWjkKWCW5TzlA8seaPoYHzGbhYd2t4uySesCQye9OQtKfYyKhe1
+	 0nrd4AekvsyQQ==
+Message-ID: <56b3e774-8866-4e0f-9746-b646a4b58fef@kernel.org>
+Date: Fri, 26 Jun 2026 16:57:06 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260626233327.b5c9c8de494acdde4ddf5c02@kernel.org>
-X-Debian-User: leitao
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 3/4] mm/slab: fix a deadlock in
+ memcg_alloc_abort_single()
+Content-Language: en-US
+To: "Harry Yoo (Oracle)" <harry@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Pedro Falcato <pfalcato@suse.de>
+Cc: cgroups@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20260624-kmalloc-nolock-fixes-v1-0-fdf4d17351dd@kernel.org>
+ <20260624-kmalloc-nolock-fixes-v1-3-fdf4d17351dd@kernel.org>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Autocrypt: addr=vbabka@kernel.org; keydata=
+ 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
+In-Reply-To: <20260624-kmalloc-nolock-fixes-v1-3-fdf4d17351dd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jun 26, 2026 at 11:33:27PM +0900, Masami Hiramatsu wrote:
-> > The userspace pieces (xbc_snprint_cmdline() in lib/, tools/bootconfig -C)
-> > already landed; this series wires the rendered cmdline into the kernel.
-> > 
-> > Motivation: today the embedded bootconfig is parsed at runtime, after
-> > parse_early_param() has already run, so early_param() handlers can't
-> > see embedded values. Folding the kernel.* subtree into the cmdline at
-> > build time gives a CONFIG_CMDLINE-equivalent for embedded-bootconfig
-> > users without forcing them to maintain two cmdline sources.
-> > 
-> > Behaviorally, the "kernel" subtree is rendered to a flat string at
-> > build time and stashed in .init.rodata. setup_arch() prepends it to
-> > boot_command_line before parse_early_param() runs. Overflow is a soft
-> > error: the helper logs and leaves boot_command_line untouched rather
-> > than panicking, so an oversized embedded bconf cannot brick a boot.
-> > 
+On 6/24/26 15:11, Harry Yoo (Oracle) wrote:
+> When kmalloc_nolock() successfully grabs a slab object but memcg aborts
+> the allocation, the object is freed via __slab_free(). Calling
+> __slab_free() in unknown context is not allowed and can lead to a
+> deadlock.
 > 
-> Thanks for update!! This looks good to me.
-> Let me pick it and test it.
+> Free the object via defer_free() when spinning is not allowed.
+> 
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Closes: https://sashiko.dev/#/patchset/20260610-slab_alloc_flags-v2-0-7190909db118%40kernel.org?part=9
+> Fixes: af92793e52c3 ("slab: Introduce kmalloc_nolock() and kfree_nolock().")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
 
-This is great. Thanks for it and for the support so far.
---breno
+Reviewed-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+
+> ---
+>  mm/slub.c | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 85760c8ff2e2..4a3618e3967e 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -2459,7 +2459,8 @@ alloc_tagging_slab_free_hook(struct kmem_cache *s, struct slab *slab, void **p,
+>  
+>  #ifdef CONFIG_MEMCG
+>  
+> -static void memcg_alloc_abort_single(struct kmem_cache *s, void *object);
+> +static void memcg_alloc_abort_single(struct kmem_cache *s, void *object,
+> +				     bool allow_spin);
+>  
+>  static __fastpath_inline
+>  bool memcg_slab_post_alloc_hook(struct kmem_cache *s, gfp_t flags,
+> @@ -2477,7 +2478,9 @@ bool memcg_slab_post_alloc_hook(struct kmem_cache *s, gfp_t flags,
+>  		return true;
+>  
+>  	if (likely(size == 1)) {
+> -		memcg_alloc_abort_single(s, *p);
+> +		bool allow_spin = alloc_flags_allow_spinning(ac->alloc_flags);
+> +
+> +		memcg_alloc_abort_single(s, *p, allow_spin);
+>  		*p = NULL;
+>  	} else {
+>  		kmem_cache_free_bulk(s, size, p);
+> @@ -6436,16 +6439,20 @@ void slab_free(struct kmem_cache *s, struct slab *slab, void *object,
+>  #ifdef CONFIG_MEMCG
+>  /* Do not inline the rare memcg charging failed path into the allocation path */
+>  static noinline
+> -void memcg_alloc_abort_single(struct kmem_cache *s, void *object)
+> +void memcg_alloc_abort_single(struct kmem_cache *s, void *object, bool allow_spin)
+>  {
+>  	struct slab *slab = virt_to_slab(object);
+>  	bool init = slab_want_init_on_free(s);
+> -	bool allow_spin = true;
+>  
+>  	alloc_tagging_slab_free_hook(s, slab, &object, 1);
+>  
+> -	if (likely(slab_free_hook(s, object, init, false, allow_spin)))
+> +	if (unlikely(!slab_free_hook(s, object, init, false, allow_spin)))
+> +		return;
+> +
+> +	if (likely(allow_spin))
+>  		__slab_free(s, slab, object, object, 1, _RET_IP_);
+> +	else
+> +		defer_free(s, object);
+>  }
+>  #endif
+>  
+> 
+
