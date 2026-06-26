@@ -1,68 +1,72 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07062D3733
-	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 21:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20BA30C16B
+	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 21:51:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782510678; cv=none; b=FrnGI6UYdX+bKbhNOZWODFIffF9uBaoEhql1u7p/NWr+ecVEXmylfuuo/cDQf3PAO7hZDAzueNlNNweWSCMjCITqfB+f54sf1A26K7FrtPO00alsCy9QhlnQHzMu4ekgJOxcZfqYb+ZZEoHLsvo+XvDqe4yDkivgfn7OYxxrpKw=
+	t=1782510679; cv=none; b=dlxUEBfl/C1toI260gn01+8Wf8OVWhoeINQjqTKypgNYHQYLiml6L1JqIHxNduUCY9xgSFlAtb8OFUR6SE+jeHL3gbT/ALpN83sS7vmbcCeZ/+wwbkEnIJ+VrhBIvGRkYtN5pxXkTr3tO80elFZib1jtYhGURaePdREsIWy6EEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782510678; c=relaxed/simple;
-	bh=xgj1fqSaty7d1w67uP5clpyIMX7/l3LQjR4zlkQ7jyI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=U7LB8gceN1QtXE0pl/Ts5glPeBsWNytfMZiRAjWWHBqMYVla1Egf/G0Ehn6uGY8M/XLBpG0cq6anzqorC7O8tlPHe8CfNeKsMonXtCVyc5fNAl8D4ojuSlkVdCvSD6aKQpsBYC9mIKD+qD2BG4Hes5kjGYUYkrFfYoTnxZGdR5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eSxKRzE6; arc=none smtp.client-ip=209.85.216.53
+	s=arc-20240116; t=1782510679; c=relaxed/simple;
+	bh=v6v3rVihR6ZnE+U0rUlf6Fe90h3KWGAa/tMBDsyIwf4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HvxE2l13BNlrjepoGeSaUYXbiy38Ec5yQmscFV7bnXIDjBorjo4TkpwJC4LvDz6DTdc+xcfUGDL/FbCKmPjLJwjb7nMFcMKUVlXVaaw+7IENprTJbF3x/QTJSckb2dCi4lrmEXPYekewm4ORmgMfZYHlx82nZFIxpq78Oq/iipE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LIkMyZ2o; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eSxKRzE6"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-37d70036426so751628a91.3
-        for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 14:51:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LIkMyZ2o"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c88973b6965so1241127a12.1
+        for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 14:51:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782510676; x=1783115476; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BFr7v/InQf8mH9/7LssCzsBvQ3fJSj/tv3rkGJ45ApU=;
-        b=eSxKRzE6cwzA43VxqHRypE0snXXTtDY8IptvXkmgjfMAIZy1WnyOxiV0ZOuDctI8yx
-         EK9bEnI8/acHnBykAhkbw3zx4AGEWy3u0RudOEpnVgV/5aWM4rLGU7XDV+yi3mRk4g5j
-         lqVCgZCC/jhvy3ry0qsY7WiTvUZNMS7lCTfN6I+eHKLYrsQ3eYEpPyhEsDm3fwL6Oebd
-         7SXk9fTn1ASXjMWgLmi+q1LIZ3uQnMb1tUmWuEpzwtvZql9glrn1wBgDeUl5bCz0EmcJ
-         8TCciGoytRwQY5vkQZLjO8jDMfTs3JSScajxlUR0Uk2v7P98EdnuCH/+jTO16v4M7R7h
-         ctZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782510676; x=1783115476;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1782510677; x=1783115477; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BFr7v/InQf8mH9/7LssCzsBvQ3fJSj/tv3rkGJ45ApU=;
-        b=Ku+TynVMiDgomKpfVKjZFJS+8NzoPN4gqj4AIwyz5MEgOWk+wSXKitNbKX8bl3fp0s
-         y7AfiNKyvm4q5QJgFm8qumw5v46mFt/JjpyhxHoSl8FHbz26U3mkuvQFSnHwcQioRlAE
-         C5kaGh0yrWqi3g9Uc7rY3lq3w6U4xEkvUtS7594iGL5TADd+1pg1d4RKbz5p0iRaRyeJ
-         8zG0cM6dsYcLJ68m28dFu8hHBrcpKtLroWBE0pTjWgikOfPTa1xD8zdVyzEvBAfuZoVc
-         lkaS25MvsDIpP05ez0uu5Sx5X4vVJHgCoPvei0uDNLXXU8YltXkUvF25aWYAjFb1l/J/
-         v5lA==
-X-Gm-Message-State: AOJu0Yyfi33WfMkCHanR+DUT2ye2WBIAlwv5FCXi46oNsJEQ7ZZZlZAc
-	9rhXjC5rdEffmvvU5zEhdzNhDcW6WrByOBTvvtyzVQOMdJVF6mWWjEhQZwLQew==
-X-Gm-Gg: AfdE7clUJGMmU+atQB0yxZk/GEIRfwof6XolifhBa2LzG0qrzHBIrf8bFfymbIdnKoT
-	1sABhB5a6ZCc03peL3nBBkkes+o5f0QgQJ4BYaPFGBGoGZp7OipU1vstzD1Y/iESq0NA0jR2ecW
-	gSBhxF11OZChCHWLK6NFzVblhJJeDcu4icPWrujUQArqWEeE6PAvNwmQuuFdhgX76fNjweM5ibC
-	8clSmTMC4HMXiOcTwXkfRrjRs6DlaVG4W6gbViDunN3ztsCwl/3fOuEawk4rPG+HzQU6y+r70+P
-	I4Rgc1/iuYwGFe2iznYo31/EN5wdJ1Z/kfdRtTyz4NmabQya0Oi10IQi0bPCMu4e+2SIla9fYXg
-	h5DfqWx6DH2IdsU/UbGGBrEvRlvkz51h2ZX6RLn0qlG035cBQNaElPmhr+1i38UryH7kVgI1YPp
-	KvyU8kdaQR4Bo=
-X-Received: by 2002:a05:6a20:6a20:b0:3bf:6c08:2b2a with SMTP id adf61e73a8af0-3bf6c084acemr1730132637.50.1782510675991;
-        Fri, 26 Jun 2026 14:51:15 -0700 (PDT)
+        bh=0tc75uA27tps6tP4iUSBy2Y0THPi4bf6/uC/yP+W8zA=;
+        b=LIkMyZ2oKu3hxZdsBjE1y2kSWp9J7JYHMbft0paxLiT3ZK9r4qcli/72TBiQxo7gFn
+         Dr+mQXDgy6OL2EI9nNsWBC/hJdmjWVCUoMZ3vL5qeB/DSC6JAlKYCcTH3UtKICivoWMu
+         P+JGmaGeLYEssQBiFr0Q6Yr5tfvMUBB3ZkToKs+DEcjx0hMGzbcZhPiZ8D57XPdR0Fdn
+         u/3EEL+AvXJ5a5qLQUJ4jjcypt7h/wSHhX/rxNmzqP/BchRoHKrUFN4j/wGM4/TWPJSH
+         yEDJUXxHlYHRL0BXPQ8fVcBCVq8gbkjyYHfzfWgmBZ+4oVEUap3TnVDGluM7vlFLc1qR
+         3Png==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782510677; x=1783115477;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0tc75uA27tps6tP4iUSBy2Y0THPi4bf6/uC/yP+W8zA=;
+        b=nzvWsobTTcgqm6FG5l39HJ45d/738pXK6Bu9F1NM4PspJhO5FH3o3HdPD8sMCMEQyg
+         j/VeRD/7NghGVdlRWvOFIERilyBhJAPISnGJK/38hO3lMpCVCB1ngNaUYh1fgjZSwlxS
+         EJkLki7I2Z3tANVLel23uuCUVziB2cwk2tPU2xHrtT9RCGO7uCDzT99Zw5No54nDSOp8
+         zbb00FDKyfNEorVk9P5lixMDzYGXY+gxcWQRCJgJFybyz92Wfau9RGIdUgWWMR92pGlx
+         8+HKrZNEze26WFscOgbPG9IqJIBDKxN1/X8uqzjeq40QP8gaqY/2OQuzFXgNXdS7vseT
+         s4SQ==
+X-Gm-Message-State: AOJu0Yzu2ywIxbMtH2/bQzHdW2jpsO9K89WrmBoSArk/GjXu0CZiEvhS
+	3yercQvIpNsbYb9Jss93VybhreAbOmPGSdgfVZ2+B3a3/rNTtj3P6g+pTOBD5A==
+X-Gm-Gg: AfdE7ckj47Uo6yirptxGAZoyqzqTQuytLo1bK0E9x85WDyd+X206Rn4ZdHInQVwSvd5
+	OS8dViUnA3ldIBIdviFPva4Bfxcz6MCFD7bbg6mBHW43WrAg5VdgCzeLVxRm6ulwmhykFqWNs0K
+	clQ0AFUzdshW1WMzNQmxZF39KNHBkq180KtbNrsOKW3oWsg6SHh4m/5ps5lLAhVsZvnte8zgoct
+	0tFZcFQn7o+dbowJb6S53mZzu0rJINYg2IZEXBB3NsZRJdlBf0SLB8sFJPGwGAZf7J/mMR6N4ky
+	jGzreS4mW5Gj9IJVOODpufC8FtxJhb87YkYSYwoibkNeHLxAMGnYd4U64c+oB/Dw+aA92sO0eDg
+	71B0rkNpJ19eju0LG3R9uvnruw9kYLfRH4sAn6rPGYmBA7xnmZCEYVimo1fd+44VMoDtE4d1OTC
+	/nivnn6O7kb6k=
+X-Received: by 2002:a05:6a21:3282:b0:39b:bc11:9ec5 with SMTP id adf61e73a8af0-3bd10a2cf4fmr16825619637.13.1782510677120;
+        Fri, 26 Jun 2026 14:51:17 -0700 (PDT)
 Received: from john-p8 ([98.97.43.120])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c92ba0a8666sm4110799a12.13.2026.06.26.14.51.14
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c92ba0a8666sm4110799a12.13.2026.06.26.14.51.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2026 14:51:15 -0700 (PDT)
+        Fri, 26 Jun 2026 14:51:16 -0700 (PDT)
 From: John Fastabend <john.fastabend@gmail.com>
 To: bpf@vger.kernel.org
 Cc: john.fastabend@gmail.com,
 	daniel@iogearbox.net
-Subject: [PATCH bpf-next 1/2] libbpf: add bpf_map__reuse_fd_from_loader_ctx() to allow shared maps
-Date: Fri, 26 Jun 2026 14:51:12 -0700
-Message-ID: <20260626215113.52273-1-john.fastabend@gmail.com>
+Subject: [PATCH bpf-next 2/2] libbpf: selftest for bpf_map__reuse_fd_from_loader_ctx()
+Date: Fri, 26 Jun 2026 14:51:13 -0700
+Message-ID: <20260626215113.52273-2-john.fastabend@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260626215113.52273-1-john.fastabend@gmail.com>
+References: <20260626215113.52273-1-john.fastabend@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -71,210 +75,155 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This lets the gen_loader use a map that may already be loaded/pinned on
-the target system. When we are loading many signed programs on the target
-we often need them to share maps to communicate/pass data between the
-programs.
-
-Note it is slightly complicated by needing to ensure on error/close that
-we only emit_sys_close_blob() for map ids that are not these shared
-type otherwise we could close a shared map unintentionally. To track this
-we added a borrowed_fd_array.
+Extend signed loader test case to exercise __reuse_fd_from_loader_ctx().
 
 Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 ---
- tools/lib/bpf/bpf_gen_internal.h |  2 ++
- tools/lib/bpf/gen_loader.c       | 50 ++++++++++++++++++++++++++++++--
- tools/lib/bpf/libbpf.c           | 11 +++++++
- tools/lib/bpf/libbpf.h           |  1 +
- tools/lib/bpf/libbpf.map         |  1 +
- 5 files changed, 63 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/signed_loader.c  | 115 ++++++++++++++++++
+ 1 file changed, 115 insertions(+)
 
-diff --git a/tools/lib/bpf/bpf_gen_internal.h b/tools/lib/bpf/bpf_gen_internal.h
-index 49af4260b8e6..e555c3165105 100644
---- a/tools/lib/bpf/bpf_gen_internal.h
-+++ b/tools/lib/bpf/bpf_gen_internal.h
-@@ -50,6 +50,7 @@ struct bpf_gen {
- 	struct ksym_desc *ksyms;
- 	__u32 nr_ksyms;
- 	int fd_array;
-+	int borrowed_fd_array;
- 	int nr_fd_array;
- 	int hash_insn_offset[SHA256_DWORD_SIZE];
- };
-@@ -62,6 +63,7 @@ void bpf_gen__map_create(struct bpf_gen *gen,
- 			 enum bpf_map_type map_type, const char *map_name,
- 			 __u32 key_size, __u32 value_size, __u32 max_entries,
- 			 struct bpf_map_create_opts *map_attr, int map_idx);
-+void bpf_gen__map_reuse_fd(struct bpf_gen *gen, int map_idx);
- void bpf_gen__prog_load(struct bpf_gen *gen,
- 			enum bpf_prog_type prog_type, const char *prog_name,
- 			const char *license, struct bpf_insn *insns, size_t insn_cnt,
-diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-index c7f2d2ac7bb3..1cb00e0244b5 100644
---- a/tools/lib/bpf/gen_loader.c
-+++ b/tools/lib/bpf/gen_loader.c
-@@ -47,6 +47,11 @@ static int blob_fd_array_off(struct bpf_gen *gen, int index)
- 	return gen->fd_array + index * sizeof(int);
+diff --git a/tools/testing/selftests/bpf/prog_tests/signed_loader.c b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
+index 5fc417e31fc6..0af33362ab1b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/signed_loader.c
++++ b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
+@@ -8,8 +8,10 @@
+ #include <sys/stat.h>
+ #include <fcntl.h>
+ #include <limits.h>
++#include <unistd.h>
+ #include <linux/keyctl.h>
+ #include <linux/bpf.h>
++#include <linux/if_ether.h>
+ 
+ #include "bpf/libbpf_internal.h" /* for libbpf_sha256() */
+ #include "bpf/skel_internal.h"	 /* for loader ctx layout (bpf_loader_ctx etc) */
+@@ -699,6 +701,117 @@ static void metadata_ctx_initial_value_ignored(void)
+ 	test_signed_loader_data__destroy(skel);
  }
  
-+static int blob_borrowed_fd_array_off(struct bpf_gen *gen, int index)
++static void loader_ctx_reuse_fd_shared_map(void)
 +{
-+	return gen->borrowed_fd_array + index * sizeof(int);
++	LIBBPF_OPTS(gen_loader_opts, gopts, .gen_hash = true);
++	struct test_signed_loader_map *skel = NULL;
++	struct bpf_map_info shared_info, reused_info;
++	__u32 shared_info_len, reused_info_len;
++	__u8 excl[SHA256_DIGEST_LENGTH];
++	__u8 pkt[ETH_HLEN] = {};
++	__u32 key = 0, expected_retval = 42;
++	__u64 shared_value = expected_retval;
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		.data_in = pkt,
++		.data_size_in = sizeof(pkt),
++		.repeat = 1,
++	);
++	int nr_maps = 0, nr_progs = 0, ctx_fd = -1, shared_fd = -1;
++	int supplied_fd, r;
++	struct bpf_prog_desc *pd;
++	struct bpf_map_desc *md;
++	struct bpf_program *p;
++	struct bpf_map *m;
++	unsigned char *blob = NULL;
++	__u32 ctx_sz, data_sz;
++	void *ctx = NULL;
++	bool ran;
++
++	skel = test_signed_loader_map__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		goto cleanup;
++	if (!ASSERT_OK(bpf_map__reuse_fd_from_loader_ctx(skel->maps.amap),
++		       "reuse_fd_from_loader_ctx"))
++		goto cleanup;
++	if (!ASSERT_OK(bpf_object__gen_loader(skel->obj, &gopts), "gen_loader"))
++		goto cleanup;
++	if (!ASSERT_OK(bpf_object__load(skel->obj), "gen_load"))
++		goto cleanup;
++
++	bpf_object__for_each_program(p, skel->obj)
++		nr_progs++;
++	bpf_object__for_each_map(m, skel->obj)
++		nr_maps++;
++	if (!ASSERT_EQ(nr_maps, 1, "one map") ||
++	    !ASSERT_EQ(nr_progs, 1, "one prog"))
++		goto cleanup;
++
++	shared_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "ctx_reuse",
++				   sizeof(__u32), sizeof(__u64), 4, NULL);
++	if (!ASSERT_OK_FD(shared_fd, "shared_map"))
++		goto cleanup;
++	if (!ASSERT_OK(bpf_map_update_elem(shared_fd, &key, &shared_value, BPF_ANY),
++		       "shared_map_update"))
++		goto cleanup;
++
++	ctx_sz = sizeof(struct bpf_loader_ctx) +
++		 nr_maps * sizeof(struct bpf_map_desc) +
++		 nr_progs * sizeof(struct bpf_prog_desc);
++	ctx = calloc(1, ctx_sz);
++	if (!ASSERT_OK_PTR(ctx, "ctx_alloc"))
++		goto cleanup;
++	((struct bpf_loader_ctx *)ctx)->sz = ctx_sz;
++
++	md = (struct bpf_map_desc *)((char *)ctx + sizeof(struct bpf_loader_ctx));
++	pd = (struct bpf_prog_desc *)(md + nr_maps);
++	ctx_fd = dup(shared_fd);
++	if (!ASSERT_OK_FD(ctx_fd, "ctx_map_fd"))
++		goto cleanup;
++	md[0].map_fd = ctx_fd;
++	ctx_fd = -1;
++	supplied_fd = md[0].map_fd;
++
++	libbpf_sha256(gopts.insns, gopts.insns_sz, excl);
++	data_sz = gopts.data_sz;
++	blob = malloc(data_sz);
++	if (!ASSERT_OK_PTR(blob, "blob_alloc"))
++		goto cleanup;
++	memcpy(blob, gopts.data, data_sz);
++
++	r = run_gen_loader(gopts.insns, gopts.insns_sz, blob, data_sz,
++			   excl, sizeof(excl), NULL, 0, true, ctx, ctx_sz, &ran);
++	if (!ASSERT_TRUE(ran, "loader ran") ||
++	    !ASSERT_EQ(r, 0, "loader retval"))
++		goto cleanup;
++
++	ASSERT_EQ(md[0].map_fd, supplied_fd, "ctx map fd preserved");
++	ASSERT_GT(pd[0].prog_fd, 0, "prog fd populated");
++	if (ASSERT_OK(bpf_prog_test_run_opts(pd[0].prog_fd, &topts),
++		      "shared map prog run"))
++		ASSERT_EQ(topts.retval, expected_retval, "shared map value");
++
++	memset(&shared_info, 0, sizeof(shared_info));
++	memset(&reused_info, 0, sizeof(reused_info));
++	shared_info_len = sizeof(shared_info);
++	reused_info_len = sizeof(reused_info);
++	if (ASSERT_OK(bpf_map_get_info_by_fd(shared_fd, &shared_info, &shared_info_len),
++		      "shared map info") &&
++	    ASSERT_OK(bpf_map_get_info_by_fd(md[0].map_fd, &reused_info, &reused_info_len),
++		      "reused map info"))
++		ASSERT_EQ(reused_info.id, shared_info.id, "shared map reused");
++
++cleanup:
++	if (ctx)
++		close_loader_ctx_fds(ctx, nr_maps, nr_progs);
++	if (ctx_fd >= 0)
++		close(ctx_fd);
++	if (shared_fd >= 0)
++		close(shared_fd);
++	free(blob);
++	free(ctx);
++	test_signed_loader_map__destroy(skel);
 +}
 +
- static int realloc_insn_buf(struct bpf_gen *gen, __u32 size)
- {
- 	size_t off = gen->insn_cur - gen->insn_start;
-@@ -111,6 +116,7 @@ static void emit2(struct bpf_gen *gen, struct bpf_insn insn1, struct bpf_insn in
- 
- static int add_data(struct bpf_gen *gen, const void *data, __u32 size);
- static void emit_sys_close_blob(struct bpf_gen *gen, int blob_off);
-+static void emit_sys_close_owned_blob(struct bpf_gen *gen, int map_idx);
- static void emit_signature_match(struct bpf_gen *gen);
- 
- void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps)
-@@ -119,6 +125,7 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps
- 	int i;
- 
- 	gen->fd_array = add_data(gen, NULL, MAX_FD_ARRAY_SZ * sizeof(int));
-+	gen->borrowed_fd_array = add_data(gen, NULL, nr_maps * sizeof(int));
- 	gen->log_level = log_level;
- 	/* save ctx pointer into R6 */
- 	emit(gen, BPF_MOV64_REG(BPF_REG_6, BPF_REG_1));
-@@ -137,9 +144,10 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps
- 			      /* size of cleanup code below (including map fd cleanup) */
- 			      (nr_progs_sz / 4) * 3 + 2 +
- 			      /* 6 insns for emit_sys_close_blob,
-+			       * 4 insns for borrowed fd check,
- 			       * 6 insns for debug_regs in emit_sys_close_blob
- 			       */
--			      nr_maps * (6 + (gen->log_level ? 6 : 0))));
-+			      nr_maps * (10 + (gen->log_level ? 6 : 0))));
- 
- 	/* remember the label where all error branches will jump to */
- 	gen->cleanup_label = gen->insn_cur - gen->insn_start;
-@@ -150,7 +158,7 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps
- 		emit(gen, BPF_EMIT_CALL(BPF_FUNC_sys_close));
- 	}
- 	for (i = 0; i < nr_maps; i++)
--		emit_sys_close_blob(gen, blob_fd_array_off(gen, i));
-+		emit_sys_close_owned_blob(gen, i);
- 	/* R7 contains the error code from sys_bpf. Copy it into R0 and exit. */
- 	emit(gen, BPF_MOV64_REG(BPF_REG_0, BPF_REG_7));
- 	emit(gen, BPF_EXIT_INSN());
-@@ -377,6 +385,17 @@ static void emit_sys_close_blob(struct bpf_gen *gen, int blob_off)
- 	__emit_sys_close(gen);
- }
- 
-+static void emit_sys_close_owned_blob(struct bpf_gen *gen, int map_idx)
-+{
-+	int close_insn_cnt = 6 + (gen->log_level ? 6 : 0);
-+
-+	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_0, BPF_PSEUDO_MAP_IDX_VALUE,
-+					 0, 0, 0, blob_borrowed_fd_array_off(gen, map_idx)));
-+	emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_0, 0));
-+	emit(gen, BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, close_insn_cnt));
-+	emit_sys_close_blob(gen, blob_fd_array_off(gen, map_idx));
-+}
-+
- static void compute_sha_update_offsets(struct bpf_gen *gen);
- 
- int bpf_gen__finish(struct bpf_gen *gen, int nr_progs, int nr_maps)
-@@ -460,6 +479,11 @@ void bpf_gen__free(struct bpf_gen *gen)
- 	_val;							\
- })
- 
-+static void set_blob_borrowed_fd_array_off(struct bpf_gen *gen, int index)
-+{
-+	*(__u32 *)(gen->data_start + blob_borrowed_fd_array_off(gen, index)) = tgt_endian(1);
-+}
-+
- static void compute_sha_update_offsets(struct bpf_gen *gen)
- {
- 	__u64 sha[SHA256_DWORD_SIZE];
-@@ -596,6 +620,28 @@ void bpf_gen__map_create(struct bpf_gen *gen,
- 		emit_sys_close_stack(gen, stack_off(inner_map_fd));
- }
- 
-+void bpf_gen__map_reuse_fd(struct bpf_gen *gen, int map_idx)
-+{
-+	int idx;
-+
-+	if (map_idx != gen->nr_maps) {
-+		gen->error = -EDOM;
-+		return;
-+	}
-+
-+	idx = add_map_fd(gen);
-+	if (gen->error)
-+		return;
-+
-+	set_blob_borrowed_fd_array_off(gen, idx);
-+	move_ctx2blob(gen, blob_fd_array_off(gen, idx), 4,
-+		      sizeof(struct bpf_loader_ctx) +
-+		      sizeof(struct bpf_map_desc) * map_idx +
-+		      offsetof(struct bpf_map_desc, map_fd),
-+		      false);
-+	pr_debug("gen: map_reuse_fd idx %d\n", map_idx);
-+}
-+
- static void emit_signature_match(struct bpf_gen *gen)
- {
- 	__s64 off;
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 7162146280a8..af1553e9d4df 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5085,6 +5085,15 @@ int bpf_map__reuse_fd(struct bpf_map *map, int fd)
- 	return libbpf_err(err);
- }
- 
-+int bpf_map__reuse_fd_from_loader_ctx(struct bpf_map *map)
-+{
-+	if (map_is_created(map))
-+		return libbpf_err(-EBUSY);
-+
-+	map->reused = true;
-+	return 0;
-+}
-+
- __u32 bpf_map__max_entries(const struct bpf_map *map)
- {
- 	return map->def.max_entries;
-@@ -5659,6 +5668,8 @@ bpf_object__create_maps(struct bpf_object *obj)
- 		}
- 
- 		if (map->reused) {
-+			if (obj->gen_loader)
-+				bpf_gen__map_reuse_fd(obj->gen_loader, map - obj->maps);
- 			pr_debug("map '%s': skipping creation (preset fd=%d)\n",
- 				 map->name, map->fd);
- 		} else {
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index b965ad571540..4145a16c8963 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -1135,6 +1135,7 @@ LIBBPF_API bool bpf_map__autoattach(const struct bpf_map *map);
-  */
- LIBBPF_API int bpf_map__fd(const struct bpf_map *map);
- LIBBPF_API int bpf_map__reuse_fd(struct bpf_map *map, int fd);
-+LIBBPF_API int bpf_map__reuse_fd_from_loader_ctx(struct bpf_map *map);
- /* get map name */
- LIBBPF_API const char *bpf_map__name(const struct bpf_map *map);
- /* get/set map type */
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index b731df19ae69..d6c2f1d75cda 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -458,6 +458,7 @@ LIBBPF_1.7.0 {
- 
- LIBBPF_1.8.0 {
- 	global:
-+		bpf_map__reuse_fd_from_loader_ctx;
- 		bpf_program__attach_tracing_multi;
- 		bpf_program__clone;
- 		btf__new_empty_opts;
+ /*
+  * The load-time signature must authenticate the loader instructions: a valid
+  * signature loads, and the very same signature over one-byte-tampered insns is
+@@ -1112,6 +1225,8 @@ void test_signed_loader(void)
+ 		metadata_ctx_max_entries_ignored();
+ 	if (test__start_subtest("metadata_ctx_initial_value_ignored"))
+ 		metadata_ctx_initial_value_ignored();
++	if (test__start_subtest("loader_ctx_reuse_fd_shared_map"))
++		loader_ctx_reuse_fd_shared_map();
+ 	if (test__start_subtest("signature_authenticates_insns"))
+ 		signature_authenticates_insns();
+ 	if (test__start_subtest("hash_requires_frozen"))
 -- 
 2.53.0
 
