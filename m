@@ -1,139 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACEAC303CAE
-	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 18:59:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988EF3403EC;
+	Fri, 26 Jun 2026 19:53:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782500386; cv=none; b=GTK6WtzeRH4+NDgqpU5QkdwoL/aLOVxqzrel6+18G2ZIyHxvwUbtfblC3MusPfVpQhWzE+Z7+HbFIfYyp2u7qb0CavHHrN1Q+ZIjiqs2o3PdpAXKuwQl5kjXKWiE0w7LCrtH+MN0t9GXfapewtXTO5nD+5zKbBkQ4fXMPCpBwLE=
+	t=1782503602; cv=none; b=amceza2bMCvhJsL8Gp6B6w+oYFCIeRidoMl2GWnvj2agoV22E+LtkjYhkMtueho4G7nrnSuCG9GtktG+jooJq6d98Hr25gEYkn1PA8DNmgz6hPLkqogzyAF450gyxroXulD954YhTg++Bi2rYAyqZjbo83PQUgh8mbN1irEzQ64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782500386; c=relaxed/simple;
-	bh=ha71gnuVzMy0RyA5NIoagyFttlt3hReVGi4jNt1BgEY=;
-	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Q23aUittdhbiuxaRt+qfNu9jGblxP7XCKaACBAK4SSvTlLLAmNCHHBghMxJcdQVwrn0Tcx6LymmMWYmvGjEK84COaepjyBFyp+uIEAbDFfG7QABB64PkzYluuVHBPg6mjCogYu5eW8uJPWY16iDClTfbS2MSjZTS8Zm5kl1fOco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZU44IL9/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782503602; c=relaxed/simple;
+	bh=NN9WDuDGSzdNDBHCxJqoO8gBoD7FqB1i1qJy1+GLFKs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BoTNU2ik6oePTDxNL97/eMFMluDhqGh8xWLEIWYGF6EpMX3dOhySkvPdwVl/2j0XCNHy0TwXTIpr0cALNV4YWu7/l5QP8H5qTUG2eAI2neJOtEYqZ2jguQPYN4xBqpMIP98X+7pq6GuIx59b2Phyefrf2zVUo5tlPoply4E1xw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=18cgYXPc; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZU44IL9/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F7BB1F000E9
-	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 18:59:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782500385;
-	bh=MFHSb3AZilXVsZwMIiVM98ebFRfIuN87/wuYOfXAZA8=;
-	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date;
-	b=ZU44IL9/ChmVdmFm0EnNPukvQqBZXCno3sB0ZZv5xYLxxtkwOPPx1NcC6oZxIv+yO
-	 S5XOS6Reiayt1a3EX431SSFmhFzm9PEC3YnWkjPviVljBRO6c+n0SV/GdozQZW1Ebb
-	 wrpSB30FtDNx9M1N2wM8I7cZbka2dinUG2UummCmC2zKFwH8WVOkSXjd3GjNwsYGr1
-	 7gd9eLLYLWXYtZyHwHcEuIxL/x7HCR4MdYn67VG5rAXfH/yKMMfN3nXoQZMBOMZ91I
-	 kCfLlPY8c7butDMLeFy8ecy7gXK1RXgT321vzb5Kuuxk40zxL4jbpzks8fmldkvn6T
-	 Xz85meaNpmOuQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 5/5] x86/bpf: enable EXECMEM_ROX_CACHE for BPF
- allocations
-Reply-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260626-execmem-x86-rox-bpf-v0-v1-5-45a0b0ed4fe9@kernel.org>
-References: <20260626-execmem-x86-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org>
- <20260626-execmem-x86-rox-bpf-v0-v1-5-45a0b0ed4fe9@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 26 Jun 2026 18:59:44 +0000
-Message-Id: <20260626185945.2F7BB1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="18cgYXPc"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=1fEEafuRv0ZfFVGSQlLhFd1iUhmIuBL5MeuWAryH8tY=; b=18cgYXPcaf9I9EQAO1oFzH6vo/
+	Kbz1X9HDkKdoV/oh+9w/r2S+nKl/DO1Azl1SxXdpHxFnprBGArfkJarTC44HS6yUop8ml3hK1odCy
+	esecIBC9NhcPmVMZyvMisSktjzSHIVQV9PITz2XlVgTp4+CTcu8NfKKOtSpWsB97PEJCYfJ+BTqce
+	2tsqBA8/jkF4SUjF5bp4jmQHZCKwoH3652+ZgbD3YLEaWqwBF5Qz8G+22NEl1hKvykDgP0Lj+Hr5P
+	zWLfw6jULz+FmAlV+ToUbx1dxNqc4bhAq1I+uHI5beSqfNaZDiefnd3BNJDerVGdRFqR9gTWxRH+9
+	5kN8tkDw==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wdCbu-0000000Bnyc-3hyz;
+	Fri, 26 Jun 2026 19:53:10 +0000
+Message-ID: <9dc3ca18-55c4-4642-aba2-679af2464c65@infradead.org>
+Date: Fri, 26 Jun 2026 12:53:09 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Documentation/bpf: make it clear that kfuncs should be
+ non-static
+To: JP Kobryn <jp.kobryn@linux.dev>, ast@kernel.org,
+ roman.gushchin@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ corbet@lwn.net, skhan@linuxfoundation.org, bpf@vger.kernel.org
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260626172026.7327-1-jp.kobryn@linux.dev>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20260626172026.7327-1-jp.kobryn@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
 
-Pre-existing issues:
-- [Critical] Pages freed from the ROX cache via vfree() are returned to the=
- page allocator with Read-Only permissions, causing kernel panics on subseq=
-uent allocations.
-- [High] The return value of execmem_restore_rox() is ignored in __execmem_=
-cache_free(), potentially leaving cached memory as Non-Executable (NX) and =
-crashing the kernel when BPF programs are executed.
---
 
-commit d59aa3f12b249d60a053835fa723486bb4d4f203
-Author: Mike Rapoport (Microsoft) <rppt@kernel.org>
+On 6/26/26 10:20 AM, JP Kobryn wrote:
+> The kfunc documentation mentions how the macro __bpf_kfunc prevents
+> inlining for static functions. This makes it sound like static kfuncs are
+> acceptable. Although static kfuncs may happen to work, it is by chance that
+> the compiler chose not to rename these functions and BTF resolution still
+> succeeds.
+> 
+> Make it clear in the documentation why kfuncs should not be declared
+> static. First, remove wording that makes it sound like static is ok. Then
+> point out the external naming needed for BTF resolution. Finally point out
+> that sparse may warn on unreferenced kfuncs and that this warning can be
+> ignored.
+> 
+> Signed-off-by: JP Kobryn <jp.kobryn@linux.dev>
+> ---
+>  Documentation/bpf/kfuncs.rst | 21 ++++++++++++++-------
+>  1 file changed, 14 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+> index 4c814ff6061e..1dbaff8d4805 100644
+> --- a/Documentation/bpf/kfuncs.rst
+> +++ b/Documentation/bpf/kfuncs.rst
+> @@ -276,19 +276,26 @@ This set encodes the BTF ID of each kfunc listed above, and encodes the flags
+>  along with it. Ofcourse, it is also allowed to specify no flags.
+>  
 
-x86/bpf: enable EXECMEM_ROX_CACHE for BPF allocations
-   =20
-BPF core and x86 JIT use text poking and temporary writable buffers and
-thus can handle ROX memory. Enable ROX cache for EXECMEM_BPF when
-configuration and CPU features allow that.
+Not part of this patch, but "Ofcourse," should be "Of course,"
+of course.
 
-> diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-> index fb67217fddcd3..079f8c7e9e3cd 100644
-> --- a/arch/x86/mm/init.c
-> +++ b/arch/x86/mm/init.c
-> @@ -1107,10 +1107,10 @@ struct execmem_info __init *execmem_arch_setup(vo=
-id)
->  				.alignment =3D MODULE_ALIGN,
->  			},
->  			[EXECMEM_BPF] =3D {
-> -				.flags	=3D EXECMEM_KASAN_SHADOW,
-> +				.flags	=3D flags,
->  				.start	=3D start,
->  				.end	=3D MODULES_END,
-> -				.pgprot	=3D PAGE_KERNEL,
-> +				.pgprot	=3D pgprot,
+-- 
+~Randy
 
-[Severity: Critical]
-This is a pre-existing issue, but enabling the ROX cache for BPF
-significantly increases the likelihood of triggering it. When memory is fre=
-ed
-back to the page allocator via vfree() from the ROX cache, it appears to
-retain Read-Only permissions.
-
-In mm/execmem.c:execmem_cache_populate_alloc(), memory is allocated without
-the VM_FLUSH_RESET_PERMS flag:
-
-    unsigned long vm_flags =3D VM_ALLOW_HUGE_VMAP;
-    ...
-    p =3D execmem_vmalloc(range, alloc_size, PAGE_KERNEL, vm_flags);
-
-When the block is later cleaned up in mm/execmem.c:execmem_cache_clean(), it
-is freed using vfree():
-
-    execmem_set_direct_map_valid(vm, true);
-    mas_store_gfp(&mas, NULL, GFP_KERNEL);
-    vfree(area);
-
-Since VM_FLUSH_RESET_PERMS was omitted, vfree() skips resetting the direct =
-map
-permissions. If a subsequent kernel subsystem allocates these same pages fr=
-om
-the buddy allocator and attempts to write to them, will this result in a Wr=
-ite
-Protection fault and kernel panic?
-
-[Severity: High]
-This is also a pre-existing issue exposed by enabling the ROX cache. In the
-error handling path, the return value of execmem_restore_rox() is ignored.
-
-Looking at mm/execmem.c:__execmem_cache_free():
-
-    execmem_fill_trapping_insns(ptr, size);
-    execmem_restore_rox(ptr, size);
-   =20
-    err =3D execmem_cache_add_locked(ptr, size, gfp_mask);
-
-If execmem_restore_rox() fails (for example, if set_memory_rox() returns
-ENOMEM when allocating page tables for direct map splitting), the memory is
-left as Non-Executable (NX).
-
-Since this error is ignored and the memory is still added to the free list,
-could BPF subsequently allocate this NX memory from the cache, assuming it =
-is
-executable, and crash the system when attempting to execute JIT code?
-
->  				.alignment =3D MODULE_ALIGN,
->  			},
->  			[EXECMEM_MODULE_DATA] =3D {
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260626-execmem-x8=
-6-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org?part=3D5
