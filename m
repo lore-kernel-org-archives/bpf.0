@@ -1,30 +1,32 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 259D63F822C
-	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 15:43:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618743F86F8
+	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 15:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782488642; cv=none; b=FoCWg5Y++lZVvtSNKct/4xR4Dw06abqyTYoVf+7HdTOvE0vNGUwMwupZXeGhubSoKkGXbdgZpM7LQQDlJ7kYY4hE1S/5r59Oicl7EWg96uMCTol1vvSVublBKoxNwyWnV/Qd2M+BTOuuP9HqpAAbQoMe+usTVKwBnyJci6hdyDU=
+	t=1782488649; cv=none; b=Y7RrxVXO0tTW/pOa1ZA+GCMPPWmiWNYzts6Q0tCWj1KHdwHKr42PjPvP88I/VOyYeyzMA2EjMpvB7NuH0oeGEBY5/+Bb18jyOO3Vqxf3VExUcMBzgbKC/a+Km27dIvqZeUDZKDDWSezcBeckFQkXTnPP/4xbRl0nbXQKxU9blF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782488642; c=relaxed/simple;
-	bh=wexs/pj5LbonN2tQ1OGP9sqY3ym9qJeio5P/023R3zU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f16O6p7OHX/jFP0Nr5PR41Zx8h8lAG5cafJ9eI/9nLmV9rImtlPqQE9H4v0GFvO3yiOTJ9tKcqEN6RtntjC4di8QKywQrrz4gQDBTijp7TSA38eVhnRgoWFv3gi97pSmRiK3UzqryOEQ9YP5tnBYHY7/5HZRyS9je5mZ7CwKCHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rZ38p/ge; arc=none smtp.client-ip=91.218.175.172
+	s=arc-20240116; t=1782488649; c=relaxed/simple;
+	bh=En6NdW5lgDrZ6eqXlcZQRog0X6qWVIPqHaGMPnQI4bc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cUvNeFN74kkWUKOgJOZQjt7FjUZWWGPeZeU6IRbii5vXsu8HpRq284TrC4XPWub4q77DaTUTDe83+czhwVsA+43U6JJR8y3yBRjozKgfHkgx8qBu3MVbPjUEC7DsQfNqHwt+PETQMNjjmqpN69fkVPuphwtxz4hhxYBIqWq7A58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ovA4XC6l; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rZ38p/ge"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ovA4XC6l"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782488636;
+	t=1782488643;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=avd+SKJ2HYmi6vTi8Dal1HBsaJoT5oKjLularkXSyaQ=;
-	b=rZ38p/geEHqsLGGof1c1cnSCJF0gDjLzpkjqxiM9JjhRay7VHLnNw32rdMivt/frPYCmXY
-	PztNmNPXuuaNzxxF6Qb8HrRAwdlN2f83rq4yBhTbpqLTPzbPBD8nuFabNbMKmk9WymdZ5f
-	F0wvxLj0c+mazzNZq8XcmK1FrOUT+k4=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iM/r5lYq63t/aatW7tqLH81Z/7odyMGKkwxtqtfR+X4=;
+	b=ovA4XC6lvFn128+/NR7+kf6mzPYFYlaALBak2ul5IxkCh1++kdP4Qo9AlbCW3t6nV+/eK0
+	oIRnzNv14zQvRQLGyRi2ysT2J2SCkGo6upQL14TkL1ARVKTf2rWhqxpaLG+rBuOcMXyDC5
+	hfR304qK24FdBJ8MmnDggWOM1+fO60o=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -45,9 +47,11 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Leon Hwang <leon.hwang@linux.dev>
-Subject: [RFC PATCH bpf 0/6] bpf: Disallow interpreter fallback for interpreter-unsupported insns
-Date: Fri, 26 Jun 2026 23:43:24 +0800
-Message-ID: <20260626154330.33619-1-leon.hwang@linux.dev>
+Subject: [RFC PATCH bpf 1/6] bpf: Disallow interpreter fallback for user BPF_ADDR_SPACE_CAST insn
+Date: Fri, 26 Jun 2026 23:43:25 +0800
+Message-ID: <20260626154330.33619-2-leon.hwang@linux.dev>
+In-Reply-To: <20260626154330.33619-1-leon.hwang@linux.dev>
+References: <20260626154330.33619-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,63 +61,98 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Sashiko reported two potential issues about interpreter fallback [1]
-[2].
+The interpreter is unable to handle the user BPF_ADDR_SPACE_CAST insn,
+whose '->off' is 1:
 
-After verifying them by patch #7, I think they are real issues. With
-LLM assistance, the interpreter does not support the internal
-BPF_PROBE_ATOMIC insn and the gotox insn (used for indirect jumps),
-either.
+static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+{
+	ALU64_MOV_X:
+		switch (OFF) {
+		case 0:
+			DST = SRC;
+			break;
+		case 8:
+			DST = (s8) SRC;
+			break;
+		case 16:
+			DST = (s16) SRC;
+			break;
+		case 32:
+			DST = (s32) SRC;
+			break;
+		}
+		CONT;
+}
 
-1) the user BPF_ADDR_SPACE_CAST insn
-   the interpreter just ignores it.
+On the fallback path from JIT in __bpf_prog_select_runtime(), reject
+the insn to avoid being ignored by interpreter.
 
-2) the arena ST/STX/LDX insn
-   the interpreter could hit the BUG_ON() in ___bpf_prog_run().
+Fixes: 142fd4d2dcf5 ("bpf: Add x86-64 JIT support for bpf_addr_space_cast instruction.")
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ kernel/bpf/core.c | 29 +++++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
 
-3) the BPF_MOV64_PERCPU_REG insn
-   the interpreter could hit page fault, due to loading memory from
-   invalid __percpu pointer.
-
-4) the internal BPF_PROBE_ATOMIC insn
-   the interpreter could hit the BUG_ON() in ___bpf_prog_run().
-
-5) the gotox insn used for indirect jumps
-   the interpreter could hit the BUG_ON() in ___bpf_prog_run(), too.
-
-Reject these insns on interpreter fallback path in
-__bpf_prog_select_runtime().
-
-This series is built on
-"bpf: Fix unaligned interpreter panic on JIT fallback path" [3]. The
-patch #7 is also able to verify the issue of un-JITed helper.
-
-However, The patch #7 aims to verify the issues. I think it is not
-proper to be applied to upstream, because it adds a stub
-'bpf_jit_test_fail_task' to bpf_prog_jit_compile() for the tests.
-
-I'd like to drop the patch #7 in the next revision.
-
-Link:
-[1] https://lore.kernel.org/bpf/20260608151347.2C77D1F00893@smtp.kernel.org/
-[2] https://lore.kernel.org/bpf/20260622150759.EC9071F000E9@smtp.kernel.org/
-[3] https://lore.kernel.org/bpf/20260615025316.24429-1-yangtiezhu@loongson.cn/
-
-Leon Hwang (6):
-  bpf: Disallow interpreter fallback for user BPF_ADDR_SPACE_CAST insn
-  bpf: Disallow interpreter fallback for arena insn
-  bpf: Disallow interpreter fallback for BPF_MOV64_PERCPU_REG insn
-  bpf: Disallow interpreter fallback for internal BPF_PROBE_ATOMIC insn
-  bpf: Disallow interpreter fallback for gotox insn
-  lib/test_bpf: Add interpreter-fallback tests
-
- include/linux/bpf.h                      |   1 +
- include/linux/filter.h                   |   4 +
- kernel/bpf/core.c                        |  69 +-
- lib/test_bpf.c                           | 800 ++++++++++++++++++++++-
- tools/lib/bpf/skel_internal.h            |   2 +
- tools/testing/selftests/bpf/test_kmod.sh |  39 +-
- 6 files changed, 903 insertions(+), 12 deletions(-)
-
---
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 0db6e55bad52..e92eb8b7f945 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2608,23 +2608,37 @@ static struct bpf_prog *bpf_prog_jit_compile(struct bpf_verifier_env *env, struc
+ 	return prog;
+ }
+ 
++static bool bpf_insn_requires_jit(struct bpf_insn *insn)
++{
++	if (insn_is_cast_user(insn))
++		return true;
++
++	return false;
++}
++
+ /* Fix up helper call offsets on JIT fallback path. */
+-static void bpf_fixup_fallback_helpers(struct bpf_verifier_env *env, struct bpf_prog *fp)
++static int bpf_fixup_fallback_helpers(struct bpf_verifier_env *env, struct bpf_prog *fp)
+ {
+ 	struct bpf_insn *insn = fp->insnsi;
+ 	const struct bpf_func_proto *fn;
+ 	int i;
+ 
+-	if (!env || !env->ops->get_func_proto)
+-		return;
++	if (!env)
++		return 0;
+ 
+ 	for (i = 0; i < fp->len; i++, insn++) {
+-		if (bpf_helper_call(insn) && bpf_jit_inlines_helper_call(insn->imm)) {
++		if (env->ops->get_func_proto && bpf_helper_call(insn) &&
++		    bpf_jit_inlines_helper_call(insn->imm)) {
+ 			fn = env->ops->get_func_proto(insn->imm, env->prog);
+ 			if (fn && fn->func)
+ 				insn->imm = fn->func - __bpf_call_base;
+ 		}
++
++		if (bpf_insn_requires_jit(insn))
++			return -EOPNOTSUPP;
+ 	}
++
++	return 0;
+ }
+ 
+ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct bpf_prog *fp,
+@@ -2663,8 +2677,11 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
+ 			return fp;
+ 		}
+ 
+-		if (!fp->jited)
+-			bpf_fixup_fallback_helpers(env, fp);
++		if (!fp->jited) {
++			*err = bpf_fixup_fallback_helpers(env, fp);
++			if (*err)
++				return fp;
++		}
+ 	} else {
+ 		*err = bpf_prog_offload_compile(fp);
+ 		if (*err)
+-- 
 2.54.0
+
