@@ -1,117 +1,139 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0827B303CAE
-	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 18:59:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACEAC303CAE
+	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 18:59:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782500381; cv=none; b=jtBwgqVuC3x/xm4XJm8vjYHwVgPZ2ZQdau1jxt8XDBmSfLdeF3LYCRS3t1Krdtdh5dzSjaj1e+vm0puxBorZDVEFVZPcDQb7TBRogbQda6C/mz9wCXVYfKjole0wQtXJ0YEHj8ZJO6UQgdRpdxgQlS0k50BB0BYqTrp9YdNGrnY=
+	t=1782500386; cv=none; b=GTK6WtzeRH4+NDgqpU5QkdwoL/aLOVxqzrel6+18G2ZIyHxvwUbtfblC3MusPfVpQhWzE+Z7+HbFIfYyp2u7qb0CavHHrN1Q+ZIjiqs2o3PdpAXKuwQl5kjXKWiE0w7LCrtH+MN0t9GXfapewtXTO5nD+5zKbBkQ4fXMPCpBwLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782500381; c=relaxed/simple;
-	bh=Sx0IEiOXa5BGTu9KA5Lgan2nFqNT/z27kWtbTL+V0BM=;
+	s=arc-20240116; t=1782500386; c=relaxed/simple;
+	bh=ha71gnuVzMy0RyA5NIoagyFttlt3hReVGi4jNt1BgEY=;
 	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=eLRLfWGpkfdiN4M9daj4gBZ64lUjZbsx2+ON8Xan/quG3yQ1kfBGMH1uwtoaAtjnxp8OVunBVBxSO8l//C6YihOcW4ERFeB1Pa5h7BAH67I2Wc6MeRb4eq9EKJOxC48t+zRs00UOdCU4eWqDsEnQUbo31kyoVdzw12RBB3NbV/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=anzvop4P; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Q23aUittdhbiuxaRt+qfNu9jGblxP7XCKaACBAK4SSvTlLLAmNCHHBghMxJcdQVwrn0Tcx6LymmMWYmvGjEK84COaepjyBFyp+uIEAbDFfG7QABB64PkzYluuVHBPg6mjCogYu5eW8uJPWY16iDClTfbS2MSjZTS8Zm5kl1fOco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZU44IL9/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="anzvop4P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 863571F000E9
-	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 18:59:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZU44IL9/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F7BB1F000E9
+	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 18:59:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782500379;
-	bh=zgMGXPKtf5ERUR337W2IMpG8FagnQPJM0fLEusvUxMA=;
+	s=k20260515; t=1782500385;
+	bh=MFHSb3AZilXVsZwMIiVM98ebFRfIuN87/wuYOfXAZA8=;
 	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date;
-	b=anzvop4PB62kPUMix1uCu7HJgxW/p6cK9LSCT+MLV73OSGXC77mvY6mEFRQLATxl/
-	 TwQ3wIeUDt5p9AFknIuqM4JeQ4qyPEOsqXSmZdBQJHqqIy1f0OcVhVNjpoFNZDcdNb
-	 VZPLALdK3L+KJvId1jKcWlu8pvdhayaO2XnDyqsW3wQE3wPQbrRR8JZhlELYktWTmk
-	 8/xIHFo/IYsOwDHEUFkqjEApIpV56736r3eiS00wgMgGSo85ZT5YO1ob+iDjG8ygpi
-	 T6EaGhP0bmzoKNRzFWuufeMXvcCseixhC2uaiBJBObz85syzYarT8iIPtAfuawrVXR
-	 uBYGCa4mwzKfg==
+	b=ZU44IL9/ChmVdmFm0EnNPukvQqBZXCno3sB0ZZv5xYLxxtkwOPPx1NcC6oZxIv+yO
+	 S5XOS6Reiayt1a3EX431SSFmhFzm9PEC3YnWkjPviVljBRO6c+n0SV/GdozQZW1Ebb
+	 wrpSB30FtDNx9M1N2wM8I7cZbka2dinUG2UummCmC2zKFwH8WVOkSXjd3GjNwsYGr1
+	 7gd9eLLYLWXYtZyHwHcEuIxL/x7HCR4MdYn67VG5rAXfH/yKMMfN3nXoQZMBOMZ91I
+	 kCfLlPY8c7butDMLeFy8ecy7gXK1RXgT321vzb5Kuuxk40zxL4jbpzks8fmldkvn6T
+	 Xz85meaNpmOuQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 1/5] bpf: dispatcher: allocate
- bpf_dispatcher->rw_image with vmalloc()
+Subject: Re: [PATCH bpf-next 5/5] x86/bpf: enable EXECMEM_ROX_CACHE for BPF
+ allocations
 Reply-To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260626-execmem-x86-rox-bpf-v0-v1-1-45a0b0ed4fe9@kernel.org>
+In-Reply-To: <20260626-execmem-x86-rox-bpf-v0-v1-5-45a0b0ed4fe9@kernel.org>
 References: <20260626-execmem-x86-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org>
- <20260626-execmem-x86-rox-bpf-v0-v1-1-45a0b0ed4fe9@kernel.org>
+ <20260626-execmem-x86-rox-bpf-v0-v1-5-45a0b0ed4fe9@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 26 Jun 2026 18:59:39 +0000
-Message-Id: <20260626185939.863571F000E9@smtp.kernel.org>
+Date: Fri, 26 Jun 2026 18:59:44 +0000
+Message-Id: <20260626185945.2F7BB1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Uninitialized vmalloc memory is copied into the executable BPF dis=
-patcher image, creating an information leak and potential W^X bypass.
+- [Critical] Pages freed from the ROX cache via vfree() are returned to the=
+ page allocator with Read-Only permissions, causing kernel panics on subseq=
+uent allocations.
+- [High] The return value of execmem_restore_rox() is ignored in __execmem_=
+cache_free(), potentially leaving cached memory as Non-Executable (NX) and =
+crashing the kernel when BPF programs are executed.
 --
 
-commit a818beebb25a7db7c07963818946c91a734b9050
+commit d59aa3f12b249d60a053835fa723486bb4d4f203
 Author: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-bpf: dispatcher: allocate bpf_dispatcher->rw_image with vmalloc()
+x86/bpf: enable EXECMEM_ROX_CACHE for BPF allocations
+   =20
+BPF core and x86 JIT use text poking and temporary writable buffers and
+thus can handle ROX memory. Enable ROX cache for EXECMEM_BPF when
+configuration and CPU features allow that.
 
-This patch changes the allocation of the temporary bpf_dispatcher->rw_image
-from bpf_jit_alloc_exec() to vmalloc(). This saves space in the module addr=
-ess
-range since the temporary buffer doesn't require executable permissions.
+> diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
+> index fb67217fddcd3..079f8c7e9e3cd 100644
+> --- a/arch/x86/mm/init.c
+> +++ b/arch/x86/mm/init.c
+> @@ -1107,10 +1107,10 @@ struct execmem_info __init *execmem_arch_setup(vo=
+id)
+>  				.alignment =3D MODULE_ALIGN,
+>  			},
+>  			[EXECMEM_BPF] =3D {
+> -				.flags	=3D EXECMEM_KASAN_SHADOW,
+> +				.flags	=3D flags,
+>  				.start	=3D start,
+>  				.end	=3D MODULES_END,
+> -				.pgprot	=3D PAGE_KERNEL,
+> +				.pgprot	=3D pgprot,
 
-> diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
-> index b77db7413f8c7..a7a6a375cdd31 100644
-> --- a/kernel/bpf/dispatcher.c
-> +++ b/kernel/bpf/dispatcher.c
-[ ... ]
-> @@ -148,7 +148,10 @@ void bpf_dispatcher_change_prog(struct bpf_dispatche=
-r *d, struct bpf_prog *from,
->  		d->image =3D bpf_prog_pack_alloc(PAGE_SIZE, bpf_jit_fill_hole_with_zer=
-o);
->  		if (!d->image)
->  			goto out;
-> -		d->rw_image =3D bpf_jit_alloc_exec(PAGE_SIZE);
-> +		/* d->rw_image doesn't need to be in module memory range, so we
-> +		 * can use vmalloc.
-> +		 */
-> +		d->rw_image =3D vmalloc(PAGE_SIZE);
+[Severity: Critical]
+This is a pre-existing issue, but enabling the ROX cache for BPF
+significantly increases the likelihood of triggering it. When memory is fre=
+ed
+back to the page allocator via vfree() from the ROX cache, it appears to
+retain Read-Only permissions.
+
+In mm/execmem.c:execmem_cache_populate_alloc(), memory is allocated without
+the VM_FLUSH_RESET_PERMS flag:
+
+    unsigned long vm_flags =3D VM_ALLOW_HUGE_VMAP;
+    ...
+    p =3D execmem_vmalloc(range, alloc_size, PAGE_KERNEL, vm_flags);
+
+When the block is later cleaned up in mm/execmem.c:execmem_cache_clean(), it
+is freed using vfree():
+
+    execmem_set_direct_map_valid(vm, true);
+    mas_store_gfp(&mas, NULL, GFP_KERNEL);
+    vfree(area);
+
+Since VM_FLUSH_RESET_PERMS was omitted, vfree() skips resetting the direct =
+map
+permissions. If a subsequent kernel subsystem allocates these same pages fr=
+om
+the buddy allocator and attempts to write to them, will this result in a Wr=
+ite
+Protection fault and kernel panic?
 
 [Severity: High]
-This is a pre-existing issue, but does allocating this temporary buffer wit=
-hout
-zeroing it leak uninitialized memory into the executable dispatcher image?
+This is also a pre-existing issue exposed by enabling the ROX cache. In the
+error handling path, the return value of execmem_restore_rox() is ignored.
 
-When bpf_dispatcher_update() updates the dispatcher, it unconditionally cop=
-ies
-PAGE_SIZE / 2 bytes (2048 bytes) from this buffer into the executable RO+X
-image:
+Looking at mm/execmem.c:__execmem_cache_free():
 
-kernel/bpf/dispatcher.c:bpf_dispatcher_update() {
-    ...
-    arch_prepare_bpf_dispatcher(d->rw_image, ...);
-    ...
-    if (IS_ERR(bpf_arch_text_copy(new, tmp, PAGE_SIZE / 2)))
-    ...
-}
+    execmem_fill_trapping_insns(ptr, size);
+    execmem_restore_rox(ptr, size);
+   =20
+    err =3D execmem_cache_add_locked(ptr, size, gfp_mask);
 
-Since arch_prepare_bpf_dispatcher() only writes a small number of
-instructions into the buffer, the rest of the 2048 bytes copied by
-bpf_arch_text_copy() comes from whatever was previously in this allocation.
+If execmem_restore_rox() fails (for example, if set_memory_rox() returns
+ENOMEM when allocating page tables for direct map splitting), the memory is
+left as Non-Executable (NX).
 
-Could this allow malicious gadgets to be sprayed into vmalloc space from
-userspace and then copied into executable memory, potentially bypassing W^X
-protections?
+Since this error is ignored and the memory is still added to the free list,
+could BPF subsequently allocate this NX memory from the cache, assuming it =
+is
+executable, and crash the system when attempting to execute JIT code?
 
-Would it be safer to use vzalloc() here to ensure the unused portions of the
-buffer are padded with zeroes?
-
->  		if (!d->rw_image) {
->  			bpf_prog_pack_free(d->image, PAGE_SIZE);
->  			d->image =3D NULL;
+>  				.alignment =3D MODULE_ALIGN,
+>  			},
+>  			[EXECMEM_MODULE_DATA] =3D {
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260626-execmem-x8=
-6-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org?part=3D1
+6-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org?part=3D5
