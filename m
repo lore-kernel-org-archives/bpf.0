@@ -1,90 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47AA13B8D41;
-	Fri, 26 Jun 2026 18:43:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E00E2F12AC
+	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 18:52:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782499398; cv=none; b=kSo/ugP8tXZZ5Oo/oEbxTj7AuuhhsrZTgy0e7foA4hGgh8+joLWUpskCf7sqOFSkufg7wfGJCpdMvru5si3jy38EpWzHX19fcLzOcc/BPQQwthrwBIlRDUFOxLmrajqTX5GENz+ClcXr072VC8yhWtUks8K6Ob2Qc3EK0Ze2iW8=
+	t=1782499931; cv=none; b=FLhxfHKLxelJkdpv41/yNzvAFMhdldMjscLYIpDne4qq0ECxWhXIJqczYjpbBJz5zbhnip8rEelZ8ly9PefAWQZbs4gsAh2qfSRj1ga4y9mcAvBXleVTR2nPI+jgtjeUzd4YegNBcKHXwNGZtEL786jVtURDlxl01uspxaWsGjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782499398; c=relaxed/simple;
-	bh=0ezK9nb6wN4qDm7eVfl3gFFuWiuh/XD1Fu96JdsDZY4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=g9FbvZVgPOWEW/CsPMWIoY2DzszFr9m/lI2oI67cGRGhWuziYT+k4UvXNhi/HkDTT8k+kpcy1luQh95mFj+xs02s/v3ba3ihp5tDeT94hlt6CcrvOI7++gQiWA0VSM0adjtpzD/85IArG+bVmYmNG1DaenioSQNk/D/chDRZoMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oDbCGXSR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782499931; c=relaxed/simple;
+	bh=faZnyJz2V87Mu/N0BovXnVc1f0xWT29HYoOHfcayBxA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=fCmC0Otw0z5AhAcooV6lj9+A+2PHNLWafGzI8edIeFx/4DVtsGDnb1vbEKuPkS53ilk+HFuKmFJMo/d+6s3bLrxRrpMpNRkfivJLZXRibyLmrDrsxTH6Vw609oyGhYZgL3uCpocRKj3vX5C34MqbbKyLB8+OjSpbQ7Fw3A7eaH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ku4SgX+g; arc=none smtp.client-ip=74.125.82.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oDbCGXSR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F2161F00A3A;
-	Fri, 26 Jun 2026 18:43:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782499396;
-	bh=bsCkJeKP215VVn4x62ogxT2jAVvGPVAbWkkJgMSjygg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=oDbCGXSRBXF015PBJJ47oyGZODdxVI5GhKNF77fm5HPXN3tN0yGYT2tPsMBv98RUw
-	 IrKtGhY8ICJm1moDVc7o7PkHsmT0e8F4sFJEwZgq3+Rkj8QJscKWCFqAkb2dksIT15
-	 EHgrw/lbVrjAGOfeRbr3BbeDp49bdg8HrQBGQLjmtbOb8PGcL4Z9xDcInHIU53JCjV
-	 feJ6uI8++3QKNEspTbK9nPq2WoNi/ocBHH6TbhXsPDCiQeJP/Wolaz19iNj1jRXihf
-	 rAfG/TkPX5q4L4CbsH1M/0mLEpUelAZ8/L+AXGifF2kbsW3QksmyGNGb7pZyQVVOH/
-	 x0Fob9R8LsGSA==
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-Date: Fri, 26 Jun 2026 21:42:32 +0300
-Subject: [PATCH bpf-next 5/5] x86/bpf: enable EXECMEM_ROX_CACHE for BPF
- allocations
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ku4SgX+g"
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-3078e0dcd67so2213572eec.0
+        for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 11:52:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782499930; x=1783104730; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=faZnyJz2V87Mu/N0BovXnVc1f0xWT29HYoOHfcayBxA=;
+        b=ku4SgX+ge/ieQoABdELk3oGWcUguzXbqwlGb4+8qkEIpt2dzPf4ILnVDKERukW1/c2
+         tm5xViCiTFG9unVQUB+zgOBMPjTbEziHT35YjbgZMRtGJj3DReGblw3JwV16J6RXiEQc
+         iqRBlMoeW1CGbcszLKq+n3vsHZRJQiBf+UJzNVrlmvPZOlhrzB3Zg7l+wMk9zoIpr4vl
+         82jIr0R156/TIaT0J4EGdgfPa8UDOAFzVjEpYncP644vA+11ONVVfPaQcHJpDr2dO5sF
+         M+Zj7lyUzy26PwCqH++djH9HoX6VYcTojShJ78GgLjOC4WujdWENMWbFrBvHhRWbqQeC
+         l24w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782499930; x=1783104730;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=faZnyJz2V87Mu/N0BovXnVc1f0xWT29HYoOHfcayBxA=;
+        b=WUrjNymfIMxxD+BSUHJ876p/HDawYC+PXSCCjSM+df9m0jy/EMXLsv2neV0YvD1Mly
+         nAap+OGNdqxa5YVDl5hA756hT30PM2jRmJx9hsdJIjW7vZvDKUJBSaUgGVwc8027uie3
+         anLfedjM+tTVH4JkaTWDxYTFqSdVx81/kxzSVWcWM9Qe/0RfCNckc3xQdxPBv/+ASDf6
+         fxN2OZso92tCXWkkyE1oO8z19ApRZcu9xoMkQ7G6V7CP52ycWWxNa4QT+Lh68wLO6oJ0
+         M7Zjto2Ten+A+lLgFLg9d6P07Ydxp7AVzdcbump8Md3XKWkKx934FVBv/Hsv5KyRMpcC
+         0bsQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrTiPtUTbAzUsPN+AnT8rteYjDDA5s2/0hfbzMiRkbqiiLkhVLqRzk2jEHQ0PqDUpraPEY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyoMf0qNo7yqKCzmHpBJ84vE/gIoTrrQWG3fY0Ga8FLoTVkegLH
+	KLiuXW55NHXcURvGvMpIRE+YwDcL4asyXidWchyjrTK9xuPVCMEo+jKA
+X-Gm-Gg: AfdE7cneg2rCCXnxOMDL0FzGLCZwH06CLroWxbiP8PMjguSITdC2KTSGChrFKXJeXiM
+	uy1F82fNF+/mhS2UbQ/2Mt79ysZvOlu5lOm1Q5vGcO491byxApnbl+G/UL2neUROv8Z8XN5Aow5
+	mnH52Jd7w/wUpDkMQC3OWG63eszuNpOFKTe1wVIpSMmwdL7XTzlwi1KuPZoWTu2+yTJLvf13MgH
+	VIiQwOIOK6+bHKX6R+uZwfj6YrORpGpgeyJ7YpsZYGcpreOhZiAK5rs4qk7BxHr+iAphNtKlNtN
+	I06K5mVCfdYcXdVl4c2fSh+5tdhtGi22vjcyRk/mTR8dStzrwvsEfLHfI7Lu7xTaU1YzBceeLgs
+	2kvH80817SoRBgDL181Simkc9wDNQLBtMRP5K9RBmBIieoLWUXI/l8o5eDiQYJXHz8XCpahj4zR
+	50vpIrytCt6wqEbKj4O2NscPQu3INTRcJQccwGHVki69IgHYGLtAmkWlj5H27AncxvfGSBZQ==
+X-Received: by 2002:a05:7300:760a:b0:30c:2d3d:7840 with SMTP id 5a478bee46e88-30c84e1987cmr7793381eec.35.1782499929291;
+        Fri, 26 Jun 2026 11:52:09 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:c002:b4e0:8df9:2e4a? ([2620:10d:c090:500::1:11ba])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c7ca8b918sm22125081eec.28.2026.06.26.11.52.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Jun 2026 11:52:08 -0700 (PDT)
+Message-ID: <dccb2602ea054f6fc8c54aba5e74c667be14ed2b.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 01/15] bpf: Remove __rcu tagging in
+ st_link->map
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
+ 	daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org, 
+	shakeel.butt@linux.dev, roman.gushchin@linux.dev, kuniyu@google.com, 
+	kerneljasonxing@gmail.com, kernel-team@meta.com
+Date: Fri, 26 Jun 2026 11:52:06 -0700
+In-Reply-To: <20260623175006.3136053-2-ameryhung@gmail.com>
+References: <20260623175006.3136053-1-ameryhung@gmail.com>
+	 <20260623175006.3136053-2-ameryhung@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260626-execmem-x86-rox-bpf-v0-v1-5-45a0b0ed4fe9@kernel.org>
-References: <20260626-execmem-x86-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org>
-In-Reply-To: <20260626-execmem-x86-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
- Borislav Petkov <bp@alien8.de>, Daniel Borkmann <daniel@iogearbox.net>, 
- Dave Hansen <dave.hansen@linux.intel.com>, 
- Eduard Zingerman <eddyz87@gmail.com>, Ingo Molnar <mingo@redhat.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>, 
- Thomas Gleixner <tglx@kernel.org>
-Cc: Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Mike Rapoport <rppt@kernel.org>, 
- "H. Peter Anvin" <hpa@zytor.com>, Yonghong Song <yonghong.song@linux.dev>, 
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org
-X-Mailer: b4 0.15.2
 
-BPF core and x86 JIT use text poking and temporary writable buffers and
-thus can handle ROX memory.
+On Tue, 2026-06-23 at 10:49 -0700, Amery Hung wrote:
+> From: Martin KaFai Lau <martin.lau@kernel.org>
+>=20
+> st_link->map is always written under update_mutex. The paths that read
+> st_link->map with rcu_read_lock() are not in the fast path, so they can
+> simply take update_mutex instead. Remove the __rcu annotation and replace
+> all RCU accessors with direct pointer reads under update_mutex. Use
+> READ_ONCE() in bpf_struct_ops_map_link_poll() which reads the pointer
+> without holding update_mutex.
+>=20
+> It is a simplification change.
+>=20
+> Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> ---
 
-Enable ROX cache for EXECMEM_BPF when configuration and CPU features allow
-that.
+Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
 
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
- arch/x86/mm/init.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index fb67217fddcd..079f8c7e9e3c 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -1107,10 +1107,10 @@ struct execmem_info __init *execmem_arch_setup(void)
- 				.alignment = MODULE_ALIGN,
- 			},
- 			[EXECMEM_BPF] = {
--				.flags	= EXECMEM_KASAN_SHADOW,
-+				.flags	= flags,
- 				.start	= start,
- 				.end	= MODULES_END,
--				.pgprot	= PAGE_KERNEL,
-+				.pgprot	= pgprot,
- 				.alignment = MODULE_ALIGN,
- 			},
- 			[EXECMEM_MODULE_DATA] = {
-
--- 
-2.53.0
-
+[...]
