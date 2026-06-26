@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5709839E178;
-	Fri, 26 Jun 2026 18:42:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB413B841D;
+	Fri, 26 Jun 2026 18:43:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782499377; cv=none; b=uzbkzLuOcfmuqw7Z/9++PwfhIxZq7kxzvOP2nGDpv1rohJxRC1fvx/qE7boWRIR2gEdEJyGcoIkVvFLeYOP85YWVcf8CGo1Nevitm9cRKoNrgRTLyZ8iQxsiM0jXHz2dIGwNFy3N5wg+fPDYVFJZUi1W7pjk3Mi796yFOZh3ZS4=
+	t=1782499382; cv=none; b=Jw4XQgWEu+LOERenraZVSEQBV6ZnuWRN4K016PKiqUdTV5DXa0bBIDpIIlUV3LvStPJXE9YUUcm1hG+lQNDG//PjvA6hNJxh8GR5ZQAnD1lSAX0r4e9ciNM78+yQ/RxMGgL+vm+HNNywpgBLizaUSlLrjKzomtMa4W8oo7XcP20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782499377; c=relaxed/simple;
-	bh=CS1DIDAnhfK7tLLsNkqV12v0RV3C5CtdsDybbxq5WUc=;
+	s=arc-20240116; t=1782499382; c=relaxed/simple;
+	bh=dLPl8HHzyB7kwUw9K4Mm349f5Js20B0KVkFY6+xrz3Q=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=L7GqEDvDxuXPNjoMpAt6c4wa4chejyarNtN+qd7WVAtyz0nbRlt3KyakcjOOeuQ7UAKcgTNqAX1p5IdwM+IYctSZuwgEKN2uNV3JE8JQDkeJI6ekHLOioAN4K1KQFbf8TCbhZd/1BA6rtpX4hU560bsZphJXshH82Wp0DgY6QWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mGQr1lj2; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=min6tyYqhL8eN7Hn3+8IxuGHd/BSAFhP6Di+46uaE7BemqavlSRW4WK7inauclkq4ejMaPBPdzE7mcKGxdCdynJtfzjbbGDRfNrO5U1ZtgyTm24IrEysrKs0kciOBJW8OECctdjJJtdyAlypWWMyL8YOCtwCjNd85zAFR4/idLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KwHrm8rR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mGQr1lj2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4051B1F00A3A;
-	Fri, 26 Jun 2026 18:42:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KwHrm8rR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 793481F000E9;
+	Fri, 26 Jun 2026 18:42:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782499376;
-	bh=HW4mOqYidO8DrjxLJx5hkm3Ir+iw5YbKcUZUovLZTeE=;
+	s=k20260515; t=1782499381;
+	bh=zwji2C9UpS5iv01GUsXzghQglk6tb9Yq1OcD3azZbTU=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=mGQr1lj2XO0Rb7PqiXofI8h5nCrrDo1sYTRJvuKGIp43o9ZFe5WnhDIuE3o+RTOgL
-	 CiEl52clo2cLS5OZA46IHcJOckQ4m8SDODo7Y363hXZySSslzruf44b0ItKJtgLCjI
-	 6Uzxr4D5ft/QL//OKfR9NjBULcbP7SiOaBLvNCe1aSNlBdhmzL9Vf7Zpc3u8Oc9Cy0
-	 e1XL4UsZVZQLXB0hSE5hVp3NL1yxxAQolxQMmgoEFoWKCqcYckTWhcexMOOzrzHYuU
-	 xqfT/8yKPIKspIv454tTtZo4gAVDE5rSbcAtfulJLz5Fkeopv3ZNTIb4Gwq9ve3YDU
-	 Fd7DZKvhGuxww==
+	b=KwHrm8rR6QXHn11peBBisxO//UgK3tluva0ZaF7GCLF7XqBXFeYnuAn8ZQfk1yYgA
+	 csZJ9ncBlz5bbi31L/UY1muMWPXomjM1l17ctQhaEHEiyhH8m3RFrlp+v7dnqdjUIr
+	 j+ri4Fouv9sxfVeXQKlUpVjmU9PSPy+SULRP3MsRGZcONb/djz0fnkHAIfX/SMdyl1
+	 sHZItl2mB+rKVXZL1dUs1wI4/Y4Q2gezyQGH4JjxwjExYcgsG3vKIIYtrNxFuejtw8
+	 DxELmdxG1JswdCBKBdSMfn/8TmdifAcQF68+9Vl1HGEZ696oV2rfRb6ubhlr3ttHda
+	 MIiOiik/+ZdCA==
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-Date: Fri, 26 Jun 2026 21:42:28 +0300
-Subject: [PATCH bpf-next 1/5] bpf: dispatcher: allocate
- bpf_dispatcher->rw_image with vmalloc()
+Date: Fri, 26 Jun 2026 21:42:29 +0300
+Subject: [PATCH bpf-next 2/5] bpf: drop __weak from bpf_jit_alloc_exec()
+ and bpf_jit_free_exec()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260626-execmem-x86-rox-bpf-v0-v1-1-45a0b0ed4fe9@kernel.org>
+Message-Id: <20260626-execmem-x86-rox-bpf-v0-v1-2-45a0b0ed4fe9@kernel.org>
 References: <20260626-execmem-x86-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org>
 In-Reply-To: <20260626-execmem-x86-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -56,39 +56,40 @@ Cc: Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>,
  bpf@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org
 X-Mailer: b4 0.15.2
 
-bpf_dispatcher->rw_image is a temporary writable buffer that
-arch_prepare_bpf_dispatcher() fills and then copies into
-bpf_dispatcher->image using bpf_arch_text_copy().
+bpf_jit_alloc_exec() and bpf_jit_free_exec() are wrappers for the
+corresponding execmem APIs.
 
-The rel32 offsets emitted by emit_bpf_dispatcher() are calculated against
-->image, so ->rw_image does not need to live in the module address range.
+Architectures define the properties of the memory range needed by BPF in
+their initialization of execmem and don't need to override neither of
+them.
 
-Allocate ->rw_image with vmalloc() to avoid permissions dance when
-EXECMEM_BPF will be backed by ROX caches.
-
-Also saves a bit of space in the more scarce module address space.
+Drop the __weak qualifier from bpf_jit_alloc_exec() and
+bpf_jit_free_exec().
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- kernel/bpf/dispatcher.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ kernel/bpf/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
-index b77db7413f8c..a7a6a375cdd3 100644
---- a/kernel/bpf/dispatcher.c
-+++ b/kernel/bpf/dispatcher.c
-@@ -148,7 +148,10 @@ void bpf_dispatcher_change_prog(struct bpf_dispatcher *d, struct bpf_prog *from,
- 		d->image = bpf_prog_pack_alloc(PAGE_SIZE, bpf_jit_fill_hole_with_zero);
- 		if (!d->image)
- 			goto out;
--		d->rw_image = bpf_jit_alloc_exec(PAGE_SIZE);
-+		/* d->rw_image doesn't need to be in module memory range, so we
-+		 * can use vmalloc.
-+		 */
-+		d->rw_image = vmalloc(PAGE_SIZE);
- 		if (!d->rw_image) {
- 			bpf_prog_pack_free(d->image, PAGE_SIZE);
- 			d->image = NULL;
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 649cce41e13f..2188f6b5a9e2 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1060,12 +1060,12 @@ void bpf_jit_uncharge_modmem(u32 size)
+ 	atomic_long_sub(size, &bpf_jit_current);
+ }
+ 
+-void *__weak bpf_jit_alloc_exec(unsigned long size)
++void *bpf_jit_alloc_exec(unsigned long size)
+ {
+ 	return execmem_alloc(EXECMEM_BPF, size);
+ }
+ 
+-void __weak bpf_jit_free_exec(void *addr)
++void bpf_jit_free_exec(void *addr)
+ {
+ 	execmem_free(addr);
+ }
 
 -- 
 2.53.0
