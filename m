@@ -1,90 +1,121 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9E030BB9B
-	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 09:43:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5675E3EA953
+	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 09:59:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782467012; cv=none; b=HPbpLtiQ9/Y2A4kw+kELdzlHvO/CCusnY64ueqxGWx9v8j8Ekjn7fnReU1oyDRGLlkVSArG9WjygeKFbHJGG/lw4IfO0xqQKuu6y/jKUIUssdeefFw994SVxjq3rj1W/HLfedwxO80qsK8sPIoQhW+2fzfQKrP1vUSKoZj8rytQ=
+	t=1782467991; cv=none; b=b//0RN22smDei3NGTGYtiavF5T9vFt76MN2A9HDStOmaINoVX8rxi2uZcy6fz74fxZW/LQ9vlhdfIf+TFaC2P1dHy6EdfrLjd59IrDiO4kgpx7OQER/JycF+TahWVhV7TMEkr2GSPkhcsA+Zuxl8cRHwjGsX90co5MvgffjPsU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782467012; c=relaxed/simple;
-	bh=e3Jz6bzrGgsvPdNYBZd1bmHaSP2o6lWN6RuOfpLQ3w4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hkrUHW3pfkJFHbIlcma8Q4CRRoZtIClzNq8wXCwyQFPWjZk6Xs1ANQxf++/Ohu+5dbTdJZfHZaEQ+fiwZWNwa4aCbiJOe8Baw6KGB2C4jm5qFFpnz6RYDDlsqnj8bu4r1gvVmgEMBWHIDJJnmzhFFQRHrppMX0xLbMgeXzf1QKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J2+i2mvH; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782467991; c=relaxed/simple;
+	bh=XEUWGZuZLXDbYAn76zs1blSZc8YDqsYiBH54j0Ycdb8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=HxqiqvsG31r1Tn34EUNpBDO3RCFeAiUvYUZFimzplq4XXE6awXlm90N+3KEqQV39SJF+mkr/e1PxWgRzX2BhM7HbJMJXhRFbpp/Nd+aoGIrMudpnBnGxqo3Iz6AggUJuSThwWW9wSlWtex//pupIzmxqpcrQ1/9J11EgCqjlAj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LZVYbgLN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J2+i2mvH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782467010;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jUw4pQtoHlo8dsSFitcZ7VE4SXE623RtWl2ctOayd9s=;
-	b=J2+i2mvH1i5HLcKxF3QZD9c9TLa1FylvnDH4rSECxo2VV8jG1Ct4HtkafcDo+d6Rzo+78D
-	LdT50OTzA0ve5GZdd2otriTTT8pqzow8rWNR+Fad+CfaPNHhD7AKzao2UY36/3nHqOfeTP
-	pX2y5HJCSyx48BmxNEM1ataSHZKg8nQ=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-610-rUhmtskUM5u2M0S8Qr4ivQ-1; Fri,
- 26 Jun 2026 05:43:26 -0400
-X-MC-Unique: rUhmtskUM5u2M0S8Qr4ivQ-1
-X-Mimecast-MFC-AGG-ID: rUhmtskUM5u2M0S8Qr4ivQ_1782467005
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 81FB11802668;
-	Fri, 26 Jun 2026 09:43:24 +0000 (UTC)
-Received: from fedora (unknown [10.44.33.126])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id F231118005A4;
-	Fri, 26 Jun 2026 09:43:20 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Fri, 26 Jun 2026 11:43:25 +0200 (CEST)
-Date: Fri, 26 Jun 2026 11:43:20 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 05/13] uprobes/x86: Move optimized uprobe from nop5 to
- nop10
-Message-ID: <aj5JuH6AtjDtWIVU@redhat.com>
-References: <20260526205840.173790-1-jolsa@kernel.org>
- <20260526205840.173790-6-jolsa@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LZVYbgLN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C88281F000E9;
+	Fri, 26 Jun 2026 09:59:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782467989;
+	bh=Jhm1v/N3GPqQ088Qys+NWB3isWJa7lJ4VevFh+fihkA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=LZVYbgLNDsAqd27NX3n8QdTeQklDbpvXByOq0IYT5poIR/qyBHgxM21sM+xwx5Hod
+	 Q+9V4vCm0A66WV73Vs0s/GYevMiZYEgDxbytOT/1EdQ/EolkNX41SNQ0JqMgoMZ63C
+	 XGouxhbgzhgNb8xAYUNcpIx8J3xBlCSGo+IAMiaGiYFRT7UvlOKTKFFsgDwoyRqP/f
+	 xW1rs1dIV7x93yS1gPuw9cpS0tu4oe5GdrOGRGfqHk7s2RVpGbNWcL6kce5eJ+sMP2
+	 T/ZY6m7apXnc9oQONY3dvMchtQvQeIZek3XmSj5/UfFBRXWq3Q8/5UqzprRxJQ+Xzr
+	 NqnyDzrFtP3Gg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf] bpf: move security_bpf_prog_free() out of RCU
+ callback
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sechang Lim" <rhkrqnwk98@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260626093711.2969648-1-rhkrqnwk98@gmail.com>
+References: <20260626093711.2969648-1-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 26 Jun 2026 09:59:49 +0000
+Message-Id: <20260626095949.C88281F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260526205840.173790-6-jolsa@kernel.org>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On 05/26, Jiri Olsa wrote:
->
-> which means we need to allow 0x2e prefix which maps to INAT_PFX_CS
-> attribute in is_prefix_bad function.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-...
+Pre-existing issues:
+- [High] The patch fails to fix the `BUG: sleeping function called from inv=
+alid context` because `security_bpf_prog_free()` can still execute synchron=
+ously in softirq contexts.
+- [High] Use-After-Free on `prog->aux` fields when traversing the `bpf_prog=
+` structure in the `bpf_prog_free` LSM hook.
+--
 
-> --- a/arch/x86/kernel/uprobes.c
-> +++ b/arch/x86/kernel/uprobes.c
-> @@ -266,7 +266,6 @@ static bool is_prefix_bad(struct insn *insn)
->  		attr = inat_get_opcode_attribute(p);
->  		switch (attr) {
->  		case INAT_MAKE_PREFIX(INAT_PFX_ES):
-> -		case INAT_MAKE_PREFIX(INAT_PFX_CS):
+commit ce00646a70b27dcf100e6bb9652d3943185fcac5
+Author: Sechang Lim <rhkrqnwk98@gmail.com>
 
-I know nothing about how x86 CPU works, so let me ask...
+bpf: move security_bpf_prog_free() out of RCU callback
 
-What if insn->x86_64 is false? Is it safe to allow the CS prefix in
-this case?
+This commit moves security_bpf_prog_free() from __bpf_prog_put_rcu() to
+__bpf_prog_put_noref() before the RCU deferral. This change is intended
+to prevent a BUG caused by sleeping LSM BPF programs executing in atomic
+context when attached to the bpf_prog_free hook.
 
-Oleg.
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 6db306d23b479..6d9a662241159 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
 
+[ ... ]
+
+> @@ -2457,6 +2456,7 @@ static void __bpf_prog_put_noref(struct bpf_prog *p=
+rog, bool deferred)
+>  	if (prog->aux->attach_btf)
+>  		btf_put(prog->aux->attach_btf);
+> =20
+> +	security_bpf_prog_free(prog);
+
+[Severity: High]
+This is a pre-existing issue, but does moving this hook here expose a
+use-after-free read if an attached LSM BPF program traverses the
+bpf_prog structure?
+
+The hook is invoked after several dynamically allocated fields in prog->aux
+(such as linfo, jited_linfo, and kfunc_tab) have been freed earlier in
+__bpf_prog_put_noref() via kvfree() and kfree(). An LSM BPF
+program attached to bpf_prog_free could read these dangling pointers.
+
+[Severity: High]
+This isn't a bug introduced by this patch, but will this placement actually
+resolve the "sleeping function called from invalid context" BUG?
+
+If a program refcount is dropped from an RCU softirq path, such as in
+__dev_map_entry_free() in kernel/bpf/devmap.c, it appears we still reach th=
+is
+hook synchronously in atomic context:
+
+kernel/bpf/syscall.c:__bpf_prog_put() {
+    ...
+	if (in_hardirq() || irqs_disabled()) {
+		INIT_WORK(&aux->work, bpf_prog_put_deferred);
+		schedule_work(&aux->work);
+	} else {
+		bpf_prog_put_deferred(&aux->work);
+	}
+}
+
+Because in_hardirq() and irqs_disabled() are both false in softirq context,
+bpf_prog_put_deferred() and consequently __bpf_prog_put_noref() will execute
+synchronously, firing the LSM hook and hitting the same BUG.
+
+>  	if (deferred) {
+>  		if (prog->sleepable)
+>  			call_rcu_tasks_trace(&prog->aux->rcu, __bpf_prog_put_rcu);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260626093711.2969=
+648-1-rhkrqnwk98@gmail.com?part=3D1
