@@ -1,189 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1193F8248;
-	Fri, 26 Jun 2026 14:33:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F66E3F86EE
+	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 14:38:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782484415; cv=none; b=pmGevf6srCDO+moS0bA68TaPwJqIKvYJHeAvQ05xQt6hHAUXnd7BgF1p7++jV+schxxgvkfHKTE7S0tsUmXr+bvaWPi6EZ+bjs6OrgP2KZ2s9atBfoq+xUs34iiRffmPjHW4wH4gzFFm7DiKCi29jRw+MEtgVNAlQAVYfIGuFG4=
+	t=1782484732; cv=none; b=s0SlyD5Fnn7mAqvcWM1Reqi9zdvZNXoPH2IxS3wX3SWLRnbWVerVoLffmQWasWDWHGNoRBfvk/Mql9SH2+RdvjxxUCh6R/Hu8GGa8b11j7KcB+cQSJjdc6tx2nYlSUbR9UMB2e+tsYTvxgURBc+Sj45ysXwTkNLHcXpzdcVrDos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782484415; c=relaxed/simple;
-	bh=CA/9cuc4Xw92T+X815sAqsIVvXRLhqZME88G48Ncrg0=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=IZIgAHr5oRrG+Zf00fn4Z5efH9iDj6TAFJSe1uKmEDUOsEOlsvrgpu5L31Zm+dC3dkMdM1+oAqBF2lUuEsvdvIWsLMtY4iEx366igriDe76IvnkubeT81L6Em6i1pul/UGp+YBca12xzufIAvYen7htJbImGYAr6kdUcVVVMe9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PBwb7/ay; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782484732; c=relaxed/simple;
+	bh=ywfVVfHIaMt446COgp92lwZKXn494SDuKzJCEPWrxoY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=np6I5Pol4dKYgWumHr2mYYs/+f9eKt7X0zEebnJ8m1kv0Xga4JKSdYFCiM80wtRis9iecy6cS/XgKPlGbkNd2JPcJpoaDGw3zj/ORF3Hx0Einu/lrd2UAgZvg1aQ0M7qeKVSAPOXjEDMBPzPUqZpuzK0uMnRL8EtVUgtay/i7ns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PhqJhoG7; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PBwb7/ay"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0731A1F000E9;
-	Fri, 26 Jun 2026 14:33:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782484413;
-	bh=/h6LR3ABkatbN/GtG7FgNY6HuHtEJ4oLgCHTfcl5Ty4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=PBwb7/ayqOgTyVoRNx1qUAPWVELhtYlBLYIr872nkQm9bycofsfBwBpaegtrdmeEo
-	 6lMGtBQC1mkZL5AbW2KXDREpSGWQ5ACkPOxf6D5AJ6MMLlvgw8W7D12TA6ycWshYCl
-	 5DuN1JPoJczrAPUZ5DzugfcaSO8GsbS08PMd+J/xwG8rN4Ocy1BSPjKqRaNRhGFtgs
-	 YYajj9lfeIOxAT4fjv/SZP0gFJ7it2U/6GXRMEUihunXDfd3B3QMp6o6XV1AX6odt9
-	 E0ckfEaDHY852mGnuakVna/OcEbEKehnGh+M8/5bd8QiRhMZVa83yGN/zQlaAZlgq5
-	 pHFAof6ugtI/Q==
-Date: Fri, 26 Jun 2026 23:33:27 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor
- <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner
- <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- bpf@vger.kernel.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org,
- kernel-team@meta.com, Nicolas Schier <n.schier@fritz.com>
-Subject: Re: [PATCH v7 0/9] bootconfig: embed kernel.* cmdline at build time
-Message-Id: <20260626233327.b5c9c8de494acdde4ddf5c02@kernel.org>
-In-Reply-To: <20260626-bootconfig_using_tools-v7-0-24ab72139c29@debian.org>
-References: <20260626-bootconfig_using_tools-v7-0-24ab72139c29@debian.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PhqJhoG7"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782484727;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ywfVVfHIaMt446COgp92lwZKXn494SDuKzJCEPWrxoY=;
+	b=PhqJhoG7u6ok3Ih9DjMgoZ6ovI2yjIinVBsySEs7Qw3RiK/Oq+Zc3N2SAZXs+yXqvd1E0l
+	e+iA7cqchVdYTpQQvBZjPyxy5YEfiGxVaOtpJD5Y08vSFQLRDl4gghkSy9NlCsT02LyeaD
+	kIpat7BwpGr6soNSeerUQ203dXuim8w=
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 26 Jun 2026 14:38:29 +0000
+Message-Id: <DJJ23EXF55VK.1EGQZS511HFB6@linux.dev>
+Cc: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "linux-doc@vger.kernel.org"
+ <linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>, "linux-mm@kvack.org"
+ <linux-mm@kvack.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "kernel@xen0n.name" <kernel@xen0n.name>, "linux-riscv@lists.infradead.org"
+ <linux-riscv@lists.infradead.org>, "pbonzini@redhat.com"
+ <pbonzini@redhat.com>, "corbet@lwn.net" <corbet@lwn.net>, "maz@kernel.org"
+ <maz@kernel.org>, "oupton@kernel.org" <oupton@kernel.org>,
+ "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
+ <yuzenghui@huawei.com>, "will@kernel.org" <will@kernel.org>,
+ "seanjc@google.com" <seanjc@google.com>, "mingo@redhat.com"
+ <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+ "luto@kernel.org" <luto@kernel.org>, "willy@infradead.org"
+ <willy@infradead.org>, "akpm@linux-foundation.org"
+ <akpm@linux-foundation.org>, "david@kernel.org" <david@kernel.org>,
+ "lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
+ "vbabka@kernel.org" <vbabka@kernel.org>, "rppt@kernel.org"
+ <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>,
+ "mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>,
+ "daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org"
+ <andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>,
+ "eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org"
+ <song@kernel.org>, "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+ "john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org"
+ <kpsingh@kernel.org>, "haoluo@google.com" <haoluo@google.com>,
+ "jolsa@kernel.org" <jolsa@kernel.org>, "jhubbard@nvidia.com"
+ <jhubbard@nvidia.com>, "jannh@google.com" <jannh@google.com>,
+ "pfalcato@suse.de" <pfalcato@suse.de>, "skhan@linuxfoundation.org"
+ <skhan@linuxfoundation.org>, "riel@surriel.com" <riel@surriel.com>,
+ "ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jgross@suse.com"
+ <jgross@suse.com>, "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
+ "kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
+ "ackerleytng@google.com" <ackerleytng@google.com>, "yosry@kernel.org"
+ <yosry@kernel.org>, "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
+ "maobibo@loongson.cn" <maobibo@loongson.cn>, "prsampat@amd.com"
+ <prsampat@amd.com>, "wu.fei9@sanechips.com.cn" <wu.fei9@sanechips.com.cn>,
+ "mlevitsk@redhat.com" <mlevitsk@redhat.com>, "jthoughton@google.com"
+ <jthoughton@google.com>, "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+ "alex@ghiti.fr" <alex@ghiti.fr>, "aou@eecs.berkeley.edu"
+ <aou@eecs.berkeley.edu>, "borntraeger@linux.ibm.com"
+ <borntraeger@linux.ibm.com>, "chenhuacai@kernel.org"
+ <chenhuacai@kernel.org>, "baolu.lu@linux.intel.com"
+ <baolu.lu@linux.intel.com>, "dev.jain@arm.com" <dev.jain@arm.com>,
+ "gor@linux.ibm.com" <gor@linux.ibm.com>, "hca@linux.ibm.com"
+ <hca@linux.ibm.com>, "palmer@dabbelt.com" <palmer@dabbelt.com>,
+ "pjw@kernel.org" <pjw@kernel.org>, "shijie@os.amperecomputing.com"
+ <shijie@os.amperecomputing.com>, "svens@linux.ibm.com"
+ <svens@linux.ibm.com>, "thuth@redhat.com" <thuth@redhat.com>,
+ "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com"
+ <urezki@gmail.com>, "zhengqi.arch@bytedance.com"
+ <zhengqi.arch@bytedance.com>, "pavel@kernel.org" <pavel@kernel.org>,
+ "yangyicong@hisilicon.com" <yangyicong@hisilicon.com>,
+ "vannapurve@google.com" <vannapurve@google.com>, "jackmanb@google.com"
+ <jackmanb@google.com>, "patrick.roy@linux.dev" <patrick.roy@linux.dev>,
+ "Thomson, Jack" <jackabt@amazon.co.uk>, "Itazuri, Takahiro"
+ <itazur@amazon.co.uk>, "Manwaring, Derek" <derekmn@amazon.com>
+Subject: Re: [PATCH v12 01/16] set_memory: set_direct_map_* to take address
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Brendan Jackman" <brendan.jackman@linux.dev>
+To: "Lorenzo Stoakes" <ljs@kernel.org>, "Kalyazin, Nikita"
+ <kalyazin@amazon.co.uk>
+References: <20260410151746.61150-1-kalyazin@amazon.com>
+ <20260410151746.61150-2-kalyazin@amazon.com> <aeeDvpDnGnY5n69n@lucifer>
+In-Reply-To: <aeeDvpDnGnY5n69n@lucifer>
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, 26 Jun 2026 05:50:09 -0700
-Breno Leitao <leitao@debian.org> wrote:
+On Tue Apr 21, 2026 at 2:43 PM UTC, Lorenzo Stoakes wrote:
+> On Fri, Apr 10, 2026 at 03:17:58PM +0000, Kalyazin, Nikita wrote:
+>> From: Nikita Kalyazin <nikita.kalyazin@linux.dev>
+>>
+>> Let's convert set_direct_map_*() to take an address instead of a page to
+>> prepare for adding helpers that operate on folios; it will be more
+>> efficient to convert from a folio directly to an address without going
+>> through a page first.
 
-> The userspace pieces (xbc_snprint_cmdline() in lib/, tools/bootconfig -C)
-> already landed; this series wires the rendered cmdline into the kernel.
-> 
-> Motivation: today the embedded bootconfig is parsed at runtime, after
-> parse_early_param() has already run, so early_param() handlers can't
-> see embedded values. Folding the kernel.* subtree into the cmdline at
-> build time gives a CONFIG_CMDLINE-equivalent for embedded-bootconfig
-> users without forcing them to maintain two cmdline sources.
-> 
-> Behaviorally, the "kernel" subtree is rendered to a flat string at
-> build time and stashed in .init.rodata. setup_arch() prepends it to
-> boot_command_line before parse_early_param() runs. Overflow is a soft
-> error: the helper logs and leaves boot_command_line untouched rather
-> than panicking, so an oversized embedded bconf cannot brick a boot.
-> 
+Why is this more efficient? Isn't it a purely compile-time conversion?
 
-Thanks for update!! This looks good to me.
-Let me pick it and test it.
+Indeed in the current implementation folio_address() is
+page_address(&folio->page) so it still goes through a page anyway, no?
 
-Thanks,
-
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
-> Changes in v7:
-> - The runtime opt-in now shares one helper instead of open-coding its
->   own. (Masami)
-> - bootconfig_cmdline_requested() moved into generic lib code (Masami)
-> - Link to v6: https://lore.kernel.org/r/20260623-bootconfig_using_tools-v6-0-640c2f587a3c@debian.org
-> 
-> Changes in v6:
-> - renamed CONFIG_BOOT_CONFIG_EMBED_CMDLINE to
->   CONFIG_CMDLINE_FROM_BOOTCONFIG
-> - prepend embedded bootconfig cmdline before parse_early_param
-> - Link to v5: https://lore.kernel.org/r/20260617-bootconfig_using_tools-v5-0-fd589a9cc5e3@debian.org
-> 
-> Changes in v5:
-> - Patch 3 (Kconfig): drop the redundant "depends on BOOT_CONFIG_EMBED"
->   from CMDLINE_FROM_BOOTCONFIG; Julian Braha.
-> - Patch 6 (Documentation): spell out how the embedded cmdline interacts
->   with the bootloader cmdline, an initrd bootconfig, and the embedded
->   bootconfig
-> - Link to v4: https://lore.kernel.org/r/20260609-bootconfig_using_tools-v4-0-73c463f03a97@debian.org
-> 
-> Changes in v4:
-> - Patch 3 (build pipeline): clear CROSS_COMPILE= in the kernel-side
->   tools/bootconfig sub-make. Without it, an LLVM=1 cross build
->   inherits CROSS_COMPILE and tools/scripts/Makefile.include injects
->   --target=/--sysroot= into the host clang, producing a target
->   binary that fails to exec.
-> - Patch 3 (build pipeline): place embedded-cmdline.S in its own
->   .init.rodata.embed_cmdline subsection ("a") so ld.lld does not
->   see a section-type mismatch against lib/bootconfig-data.S's
->   writable .init.rodata ("aw"). The linker's *(.init.rodata
->   .init.rodata.*) glob still folds it into the init image.
-> - Patch 6 (x86/setup): also accept the bootconfig=<anything> form
->   via cmdline_find_option(), matching the runtime parse_args() loop.
->   Without it, bootconfig=0/=off would skip the early prepend but
->   still trigger the late runtime apply -- a split-brain state.
-> - New patch 7: document CONFIG_CMDLINE_FROM_BOOTCONFIG in
->   Documentation/admin-guide/bootconfig.rst (semantics, opt-in,
->   precedence, overflow behavior, example).
-> - Link to v3: https://lore.kernel.org/r/20260608-bootconfig_using_tools-v3-0-4ddd079a0696@debian.org
-> 
-> Changes in v3:
-> - Patch 3: Move HOSTCC override to the kernel-side rule; tool keeps
->   $(CC) for standalone/cross builds.
-> - Patch 6: Drop the false fail-safe wording; document the
->   BOOT_CONFIG_FORCE=y default interaction.
-> - Link to v2:
->   https://lore.kernel.org/r/20260605-bootconfig_using_tools-v2-0-d309f544b5f7@debian.org
-> 
-> Changes in v2 (addressing review of v1):
-> - Split out a standalone fix for the NULL-pointer arithmetic in
->   xbc_snprint_cmdline() so the build-time render cannot trip host
->   UBSan/FORTIFY_SOURCE.
-> - Rework the leaf-root handling: instead of returning early, skip @root
->   inside the loop so a root carrying both a value and subkeys
->   (kernel = x together with kernel.foo = bar) still renders its
->   descendant keys.
-> - Build tools/bootconfig with $(HOSTCC) so cross-compiled (ARCH=...)
->   builds render the cmdline on the build host instead of failing with
->   "Exec format error".
-> - Mark the embedded cmdline section read-only (drop the "w" flag from
->   .init.rodata).
-> - Add a make-clean hook so tools/bootconfig artifacts are removed by
->   make clean.
-> - Gate the x86 prepend on "bootconfig" being present on the command
->   line (or CONFIG_BOOT_CONFIG_FORCE), matching the init.* opt-in
->   semantics documented in bootconfig.rst and preserving fail-safe
->   recovery: dropping "bootconfig" from the bootloader cmdline now also
->   disables the embedded kernel.* keys.
-> - Link to v1: https://patch.msgid.link/20260527-bootconfig_using_tools-v1-0-b6906a86e7d5@debian.org
-> 
-> ---
-> Breno Leitao (9):
->       bootconfig: fix NULL-pointer arithmetic in xbc_snprint_cmdline()
->       bootconfig: render descendant keys when xbc_snprint_cmdline() root has a value
->       bootconfig: render embedded bootconfig as a kernel cmdline at build time
->       bootconfig: clean build-time tools/bootconfig from make clean
->       bootconfig: add xbc_prepend_embedded_cmdline() helper
->       Documentation: bootconfig: document build-time cmdline rendering
->       x86/setup: prepend embedded bootconfig cmdline before parse_early_param
->       bootconfig: skip runtime kernel.* render once prepended early
->       init/main.c: use bootconfig_cmdline_requested() for the runtime opt-in
-> 
->  Documentation/admin-guide/bootconfig.rst |  81 ++++++++++++++++
->  MAINTAINERS                              |   1 +
->  Makefile                                 |  27 +++++-
->  arch/x86/Kconfig                         |   1 +
->  arch/x86/kernel/setup.c                  |  14 ++-
->  include/linux/bootconfig.h               |  14 +++
->  init/Kconfig                             |  36 +++++++
->  init/main.c                              |  52 +++++-----
->  lib/Makefile                             |  16 +++
->  lib/bootconfig.c                         | 162 +++++++++++++++++++++++++++++--
->  lib/embedded-cmdline.S                   |  16 +++
->  tools/bootconfig/Makefile                |   4 +-
->  12 files changed, 388 insertions(+), 36 deletions(-)
-> ---
-> base-commit: a87737435cfa134f9cdcc696ba3080759d04cf72
-> change-id: 20260508-bootconfig_using_tools-cfa7aa9d6a5a
-> 
-> Best regards,
-> -- 
-> Breno Leitao <leitao@debian.org>
-> 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+I might be missing context here about how this will look in the
+memdesc future.
