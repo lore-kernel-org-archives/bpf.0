@@ -1,107 +1,153 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139C337AA8C
-	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 22:01:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC273BF69D
+	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 22:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782511315; cv=none; b=HJU5f2TpLs/VqEfg+4zI2m7d7JwBw1v5ZcydkwJqqNRbEkdqZCbr6qrUMJLisG/BwmYqrM1xoO/hJXUCjLgolfdQqPuQLQuaRNcl1yjsHHuXDIzPBjCiughP0Ah36qRaz4THUHCbcI8rfFqEO2Vonmyu6vxObDW2P7jDyAdgpCQ=
+	t=1782512444; cv=none; b=c7GOASXYKFv4+pBFfF3iw3zNof1pPsh2eXy8MaunEefN89inrrnYVBUzTYTmBWsag+aJ7QtVXbSQLx2/kjxRfUWEv8hcFukOiOocwYwlFDN5NARjauraHbDh6nu5yf/Z6aCgbqkz2iHqgNbvt1w6wKrpV0oRJyD19oOi4QHzo9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782511315; c=relaxed/simple;
-	bh=oej/Pnu0/2wxm5A9H6A8eDRKR+CG5i8dBBxrtGUjicg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AHmNVcWTHM5foOc2LIXIdCCmKQ4M5+rIIFMjL5wyBBaEtklUi+hgq27sI6f0JDpuTu7N3M5WdbrgEzr9WfjU2ljbVKWcKanNwQReicGMR5pxtvrabqYQfIDSxISJDx3K9BDLH4OsK03CTQIvejNQ8hDVpnNdXAJ6T56N4FfEKAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nq85NxuL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782512444; c=relaxed/simple;
+	bh=thPGL7uRo/2HzUJFgnx7YqyT1JviNUojRclx/SbtywM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=e7yudo19bYSwP9krcRdUv2QEyFiL7rLG6RwGNap26VhOFodbk+mRwOvY/8s1BPjRXFFQQonOBj66l1AWFZFYT6aHXoZfblxdmjDzCvTVpssTBRzMs7EeHXi5qlwL6Z4VuJizsyT98lNEfLPk31AJPm/2CyuGgMNKtrGw7DZXeO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OecdhoDQ; arc=none smtp.client-ip=74.125.82.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nq85NxuL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DB3E1F00A3D
-	for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 22:01:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782511313;
-	bh=pa6DivPtjv8ukIBs+sewB41NxeosJsGE3DcS0Nbtie8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=Nq85NxuL4nxY5PP6Q+rT2paMCgcJQ1RdSDQieh7ofxvaTHPEeV5/SO/oj18zVUUIj
-	 yKSYYCnMo3QMZqKKRt1016rKVEF+O8UA7jA/Gzdm19HZM1laqdKLUrdgPHZeiRfdId
-	 52ztmiIHc/ZofDMGU04Bje9VCbC6SyFaVRLJgaFepWKbAkwieBD5Rq1+8GYkN+G8Cs
-	 KhvXb1S0NWBdA/puKQ5XeBKDdtJw123su2Xx0sDvVvy+UYp1QYY6gUgJPWFZJNfVZk
-	 k9ShTgUZPoqrj/17ZI0vVz/yXZZd49ob2vkXaNCl//ig5g1mOf2XrevOeh+fl93u1/
-	 qsUilrmW0qIcA==
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4924f8db066so7232385e9.2
-        for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 15:01:53 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ8+4kS8B3IDrzJlKMTqZH/misVo+4jnuKtCZNKSJwoUbf00ecH3uzv8P6+y68IEi5m/Pyo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8PsNq1Pstr8A/ny7W2RlbKE0a+LHKcCz7SQskg1scLADEli4G
-	NkGej+6eyQ7bPLXGKBdqbvMMcU6TtVnIoCdWtsvU4iad6Q0jGK/4Sz5bm67rpJWjpqKOM7PSpe0
-	xvmEIgf04t7RwHzRiHzSDYSlEmDHoSWg69p5J+83d
-X-Received: by 2002:a05:600c:4fc7:b0:492:3fb5:4697 with SMTP id
- 5b1f17b1804b1-492668628d6mr121259895e9.5.1782511312224; Fri, 26 Jun 2026
- 15:01:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OecdhoDQ"
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-30c99ccb1afso1513846eec.1
+        for <bpf@vger.kernel.org>; Fri, 26 Jun 2026 15:20:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782512442; x=1783117242; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rjHzRwZSz30dinLgqV6749iLHAxrchS05v62XyW/Tgo=;
+        b=OecdhoDQuQWdsn8Fso3amimWMbeuqRhDzxv00N1rfsw8TfvxBQHnqiNMFcNlXhhymG
+         Q0dphSNjFW03cF06OgI8zpWM9sjRe9tLdkBnTx4AI5TJ4DUaqgoshN+rQSjGDiPjvKVO
+         d7djzp4v+LEVv7bsS7jUfrMSX/3DBtgABpzTNgrdTVnr/oDG0k1Hx1ek+QP+9B3omsXt
+         7zjqWSEJm8a6t9M/x6OLLBKjRe1sJ7rrohMyV7fhOPvDLkT/Lt6cJtnfFCzkbeiaMVMp
+         9g0ZTWM8JJNyinLATyEzUGuzPnGytacaXAXBzBnOecmpWxJbL/3VG1xulLINdqAQ/OSu
+         zKHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782512442; x=1783117242;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rjHzRwZSz30dinLgqV6749iLHAxrchS05v62XyW/Tgo=;
+        b=iwatqFdxRv9GTOddJ9cW0H0SPQzbTePC4fgw/jsc8RAgfHUiJHGrKllRovlJT/BKjh
+         tHVI5c8qFG5s61KV84pEEAqfof0pNB24dcLZ6IWKphPolbw26hhjnQlLHsl03JJskWZG
+         yi9Dty4+Y69Z4iRcvw2gfw9VHuz2kKFbT2FRHGs+yY+unD1NMhSS2OgetCdjhuXUEgWF
+         mh94tvDHxAm2bniZMblXZT21Xv8UnpoWCWU5ZAQEq0Kn+MJAP5yAlYLkvMgA7h9NXvDb
+         Q3w9lGitnIQ3Wzw6s6U0NsFon0CuysrfMmyrnHremg949R+txlIn655s97dZkQ8pe+MC
+         6r2w==
+X-Forwarded-Encrypted: i=1; AHgh+Rq+DKaK7mRRT7b9AJT2hus2Zm2TzGKZvm1Fb+FxV5oAnzI54slBcJSaM+UpGRgOG6tFdfY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlIPEOO95RAKgJCcr0fs6Mqobu0hi7+3Rlv/zEpVJUiWxn/+w6
+	V/Aha/IrxAgd2RSHVf3CmBA8MCcuTDHD2N6eXIJC+qk5NyaTlhd2Zokj
+X-Gm-Gg: AfdE7ck1zEfE/tLjl+y1aZOtHAEOmBdYZu0QqH5VheA8L954k2aPDG9ZN8TfHMpNghJ
+	DbKz7PFDlZDO5f3Lw6mB/opwyGW+ZoPkPY++cbKWWBabhEryGsTRK6SD/3/och2PruKK10cvrhT
+	CDeWyHcC46eq6nVMZdeh0iMt7SWyvgbjN5UD5wR1f38HNw+iWDKBPd3xWjQlBTIQkYD0TtJJOhJ
+	4mW8sMzSMO4BPYAkcX/8tmGZtfDAU1/jJM3kySbZuXGow8mK0fOv0VSUy4Pg5Zq8Y67C9l0G28i
+	nROQHQnCMo9Oif7mSfPI0BrOctVsm/ct0QHtUDNih/um7tS9vlyia8GMDIOA3XNkPmJy091wYFx
+	31+zos3pro1hny485QK1ONZeSMqJNOIpNoorLoh1YvC3Q7SXLVCK+uKMgDt8j/AIB4oReKTg8TT
+	bRLhTK9slXqNpdvQL/r37ynXY2jpPfC+GuR6nmXiUURkr0yjp4ZcW/hx2nfwMBSQFyMKWuPA==
+X-Received: by 2002:a05:7300:1903:b0:304:819f:5029 with SMTP id 5a478bee46e88-30c84d109cbmr7151279eec.2.1782512442111;
+        Fri, 26 Jun 2026 15:20:42 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:c002:b4e0:8df9:2e4a? ([2620:10d:c090:500::1:11ba])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c7cac87dcsm24435824eec.31.2026.06.26.15.20.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Jun 2026 15:20:41 -0700 (PDT)
+Message-ID: <30d2edf636f25e16e7ea61bc1d549c915b38b356.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 02/15] bpf: Make struct_ops tasks_rcu grace
+ period optional
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
+ 	daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org, 
+	shakeel.butt@linux.dev, roman.gushchin@linux.dev, kuniyu@google.com, 
+	kerneljasonxing@gmail.com, kernel-team@meta.com
+Date: Fri, 26 Jun 2026 15:20:39 -0700
+In-Reply-To: <20260623175006.3136053-3-ameryhung@gmail.com>
+References: <20260623175006.3136053-1-ameryhung@gmail.com>
+	 <20260623175006.3136053-3-ameryhung@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260624140301.93421-1-daniel@iogearbox.net> <20260624140301.93421-2-daniel@iogearbox.net>
- <CAHC9VhRar1x7kyjhgdmJ=Mfz4Msarv=wQ1821v723CaVdk1uTA@mail.gmail.com>
- <603d0f6f-bf02-48ec-af90-f16a239bad85@iogearbox.net> <CAHC9VhTF6_VaSm0uOjW1eV05CvsaaL+2jimVuPTXHeLGEQcMPg@mail.gmail.com>
- <c4dc3117-ad84-4c94-952a-cf0642cb42e7@iogearbox.net> <CAHC9VhRV9jW+dwNf7mW+1zTCsZ1xstBAugWL-TJ-DVNARdzC=Q@mail.gmail.com>
- <DJIL18C2F40B.39U9WHD43SDBR@gmail.com>
-In-Reply-To: <DJIL18C2F40B.39U9WHD43SDBR@gmail.com>
-From: KP Singh <kpsingh@kernel.org>
-Date: Sat, 27 Jun 2026 00:01:41 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ64SxZj1Qvf1JRDfpoOWkg+bk_hpXcfGfPvecSfSu2jdA@mail.gmail.com>
-X-Gm-Features: AVVi8Ccv_2wm4PejHNAzKWiQvtyyGwE_Q2VYsfOe9Ea_5yVwT3-3Z_TBltiQkRw
-Message-ID: <CACYkzJ64SxZj1Qvf1JRDfpoOWkg+bk_hpXcfGfPvecSfSu2jdA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/5] bpf: Verify signed loader metadata at
- load time
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Paul Moore <paul@paul-moore.com>, Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org, 
-	James.Bottomley@hansenpartnership.com, bboscaccy@linux.microsoft.com, 
-	memxor@gmail.com, torvalds@linux-foundation.org, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 26, 2026 at 3:16=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu Jun 25, 2026 at 5:59 PM PDT, Paul Moore wrote:
-> >
-> > For all the reasons I gave previously, I can't support moving the
-> > existing security_bpf_prog_load() hook at this point in time.
->
-> Paul,
-> it's not up to you to approve or deny where security_bpf_prog_load()
-> is called within bpf subsystem as long as it doesn't affect behavior.
-> Daniel's patch doesn't change observable state from LSMs pov.
-> It merely moves the call from syscall.c to verifier.c.
-> So we're going to proceed.
->
-> > I'm guessing you still haven't looked at Blaise's patchset from last
-> > September.
->
-> Blaise approach was Nacked because you guys ignored TOCTOU issue.
-> I pointed it a year ago before AI was a thing. Then sashiko
-> pointed it again and the bot explained it in detail. It was again
-> ignored.
->
+On Tue, 2026-06-23 at 10:49 -0700, Amery Hung wrote:
+> From: Martin KaFai Lau <martin.lau@kernel.org>
+>=20
+> bpf_struct_ops_map_free() currently waits for both a regular RCU grace
+> period and a tasks RCU grace period for every struct_ops map through
+> synchronize_rcu_mult(call_rcu, call_rcu_tasks).
+>=20
+> A regular RCU grace period is still required for all struct_ops maps
+> because the struct_ops trampoline ksyms requires a rcu grace period
+> (take a look at the list_del_rcu in __bpf_ksym_del).
+> Add a map_free_pre_rcu() callback so the struct_ops map can remove
+> ksyms before bpf_map_put() wait for the regular rcu grace period.
+>=20
+> The tasks RCU grace period is only needed by tcp_congestion_ops.
+> Add free_after_tasks_rcu_gp only to struct bpf_struct_ops instead
+> of the bpf_map.
+>=20
+> When CONFIG_TASKS_RCU=3Dn, synchronize_rcu_tasks() is the same as
+> synchronize_rcu(). Since all struct_ops maps now complete a regular RCU
+> grace period before bpf_struct_ops_map_free() runs, skip the extra
+> synchronize_rcu_tasks() call in this case.
+>=20
+> This cleanup prepares for a later patch that needs to support
+> free_after_mult_rcu_gp.
+>=20
+> Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> ---
 
-Agreed, with Alexei: I like Daniel's solution because it avoids the
-complexity of machine independent BTF for loader programs and still
-addresses the signing goal, without the TOCTOU. I am okay with the
-current implementation as well. I think having kfuncs in loader
-programs would be useful, but we don't need to rush it or tie it to
-the signing effort.
+Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
 
-- KP
+[...]
 
-> Daniel's v1 sadly had the same issue and sashiko spotted it too.
-> Hence v2 is moving the location of security_bpf_prog_load().
->
-> > on-list.  As you can see from the lore archives, he has vehemently
-> > opposed the approach you are proposing for quite a while.
->
-> Exactly, because you kept ignoring TOCTOU issue.
-> Claiming support for signed bpf that can be easily defeated
-> is a shameless security scam.
->
+> @@ -997,24 +1006,8 @@ static void bpf_struct_ops_map_free(struct bpf_map =
+*map)
+> =20
+>  	bpf_struct_ops_map_dissoc_progs(st_map);
+> =20
+> -	bpf_struct_ops_map_del_ksyms(st_map);
+> -
+> -	/* The struct_ops's function may switch to another struct_ops.
+> -	 *
+> -	 * For example, bpf_tcp_cc_x->init() may switch to
+> -	 * another tcp_cc_y by calling
+> -	 * setsockopt(TCP_CONGESTION, "tcp_cc_y").
+> -	 * During the switch,  bpf_struct_ops_put(tcp_cc_x) is called
+> -	 * and its refcount may reach 0 which then free its
+> -	 * trampoline image while tcp_cc_x is still running.
+> -	 *
+> -	 * A vanilla rcu gp is to wait for all bpf-tcp-cc prog
+> -	 * to finish. bpf-tcp-cc prog is non sleepable.
+> -	 * A rcu_tasks gp is to wait for the last few insn
+> -	 * in the tramopline image to finish before releasing
+> -	 * the trampoline image.
+> -	 */
+> -	synchronize_rcu_mult(call_rcu, call_rcu_tasks);
+> +	if (tasks_rcu && IS_ENABLED(CONFIG_TASKS_RCU))
+> +		synchronize_rcu_tasks();
+
+As far as I understand, this removes the synchronize_rcu_tasks()
+for qdisk, sched_ext, smc and hid struct ops. As far as I can tell,
+each one of them employs separate means to guarantee that there won't
+be any pending BPF trampolines referring to the image being freed here.
+So, the change appears to be safe.
+
+> =20
+>  	__bpf_struct_ops_map_free(map);
+>  }
+
+[...]
