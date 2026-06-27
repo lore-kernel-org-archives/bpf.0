@@ -1,27 +1,27 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56570146D5A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6BE93AE193;
 	Sat, 27 Jun 2026 14:52:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782571973; cv=none; b=SnAMf7yHvBJIUaEM3JfW8wBun+tKHox9eQy4uI2TAHLe18WBaQcYdOqljeciDozuI3GpM9IrcnWC8dRXZaRoLp5Hs5UhI2pLYmSsWMC3BiDKHyNQwcMig/4EUv5l4P3lG/hUQW6TTj8nDIq4DeqQ0jouTjYTIkpVmA+Kk04krmg=
+	t=1782571974; cv=none; b=QTMW8guFHvb7VxSAhVCc2ITxdgHyLJE8axoYfkmllTsmDo+btG4zx39jL32eG6TkduqI9BjuniqDgsa5GlB8dWk4dw2M5a8QKLBNxAKwhWOxX79iDwzP5rwJQBw1m42egzCt+6dXQPFLkvlpx+KcsfFIlu8VMpCctKO5cF5370w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782571973; c=relaxed/simple;
-	bh=kbbHKVdcCrmuhh9vNlo3CLH+iKSgMmRw3nvFr5bpbPQ=;
+	s=arc-20240116; t=1782571974; c=relaxed/simple;
+	bh=D7PIKPgBLkeGljrx+zAKQVv+HQLpJcgZ3c+P/oTieUI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ehCyAo2hujbqd6NYVWEyIPHQ16/hNK80drcDK0ZHmGcHmm2xEqpvN3/wRVB+vWnE9S2Lcl7utGQalcGSpCH8xxHewif8IpjMJHIZGwhbd318KuxvpNTTRC6c4H6nFLdvwj8gw6C/oP8BQyTJwoVAQZW2l63wOJMOA0pUwU1m3mk=
+	 MIME-Version; b=PA5R4A5rbsR6c3K0Kp+/vc3UPtkGsQ3JukEDN+gzFBLrSt6t2xNd1iARm5XLNqO8NfyLc4LxbaJHEOkLQ+KNCu0aUx5vaM4aXmpVYy/NcsDapgtDMWJxtjv2R/dfc6ywqv8ZKXJAtUYd2lljxEqe3z8fWGfN5otOhIpQFbi18tc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gnb9C3QdZzYQtky;
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gnb9C2x1czYQtkw;
 	Sat, 27 Jun 2026 22:51:59 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 46A124056F;
+	by mail.maildlp.com (Postfix) with ESMTP id 35050408F6;
 	Sat, 27 Jun 2026 22:52:47 +0800 (CST)
 Received: from localhost.huawei.com (unknown [10.67.174.243])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgAHPCa94z9qh0oVAA--.10903S11;
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgAHPCa94z9qh0oVAA--.10903S10;
 	Sat, 27 Jun 2026 22:52:47 +0800 (CST)
 From: Xu Kuohai <xukuohai@huaweicloud.com>
 To: bpf@vger.kernel.org,
@@ -38,9 +38,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Amery Hung <ameryhung@gmail.com>,
 	Eyal Birger <eyal.birger@gmail.com>,
 	Rong Tao <rongtao@cestc.cn>
-Subject: [RFC PATCH bpf-next 09/12] bpf: Add kernel support to load SDT observer program
-Date: Sat, 27 Jun 2026 22:51:43 +0000
-Message-ID: <e5e991c7573600676c0de49b7b794e1f2b6d956a.1782571533.git.xukuohai@huawei.com>
+Subject: [RFC PATCH bpf-next 08/12] libbpf: Add libbpf support to load SDT observer program
+Date: Sat, 27 Jun 2026 22:51:42 +0000
+Message-ID: <b097ab082dc6cdde03ace4ad53e9e52b567a976d.1782571533.git.xukuohai@huawei.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1782571533.git.xukuohai@huawei.com>
 References: <cover.1782571533.git.xukuohai@huawei.com>
@@ -51,10 +51,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgAHPCa94z9qh0oVAA--.10903S11
-X-Coremail-Antispam: 1UD129KBjvJXoWfJrWrGF1ftr1UtF17urW3Jrb_yoWkWr1UpF
-	4kXr18Ar40q3y2qryqyayfu343tr4UW34UGFZrG34avayaqws5JayUGFWavFyY9FWDG3WS
-	vw1jvFZ0grW7ZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:_Ch0CgAHPCa94z9qh0oVAA--.10903S10
+X-Coremail-Antispam: 1UD129KBjvJXoWxtFWUuw4ruFy3tFWkWFy5CFg_yoW3WF15pF
+	s0qFWkCF4FqFW3urWkCayF934rCr1kWry2krZxJr4rua1fXw4rWr42kF4akry3XFWDAa1f
+	Z3WY9ryDW345ZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUmKb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
 	8IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAv
@@ -73,324 +73,219 @@ X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
 From: Xu Kuohai <xukuohai@huawei.com>
 
-Add kernel support to load SDT observer program. The program is
-verified as a normal tracing type program while the target FUNC_PROTO
-is resolved in the SDT map of the target program using the probe name
-passed by the user. The probe data is preserved in prog->aux->sdt_probe,
-so that the later attach can find the target probe information easily.
-
-Also introduce a returning false weak function bpf_jit_supports_sdt_probe()
-to hint if SDT probe is supported by the JIT.
+Add libbpf support to load SDT observer program. To ensure the
+verifier can find which probe the observer program is attached,
+the target bpf prog fd and probe name are passed to the kernel.
+Kernel looks up probe against the target program's SDT map using
+the probe name.
 
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- include/linux/bpf.h         | 15 +++++++
- include/linux/bpf_types.h   |  1 +
- include/linux/filter.h      |  1 +
- kernel/bpf/bpf_insn_array.c | 28 +++++++++++++
- kernel/bpf/core.c           |  5 +++
- kernel/bpf/syscall.c        | 78 ++++++++++++++++++++++++++++++-------
- kernel/bpf/verifier.c       | 19 +++++++++
- 7 files changed, 134 insertions(+), 13 deletions(-)
+ include/uapi/linux/bpf.h       |  7 +++++++
+ tools/include/uapi/linux/bpf.h |  7 +++++++
+ tools/lib/bpf/bpf.c            |  9 ++++++++-
+ tools/lib/bpf/bpf.h            |  7 ++++++-
+ tools/lib/bpf/libbpf.c         | 20 ++++++++++++++++++++
+ 5 files changed, 48 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index cb43792afdee..93c196f38b87 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1220,6 +1220,8 @@ struct btf_func_model {
- 	u8 nr_args;
- 	u8 arg_size[MAX_BPF_FUNC_ARGS];
- 	u8 arg_flags[MAX_BPF_FUNC_ARGS];
-+	/* argument registers for bpf SDT probe site */
-+	u8 arg_regs[MAX_BPF_FUNC_REG_ARGS];
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 95ca41bf7501..6490eb5dfb68 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1159,6 +1159,7 @@ enum bpf_attach_type {
+ 	BPF_TRACE_FENTRY_MULTI,
+ 	BPF_TRACE_FEXIT_MULTI,
+ 	BPF_TRACE_FSESSION_MULTI,
++	BPF_TRACE_SDT,
+ 	__MAX_BPF_ATTACH_TYPE
  };
  
- /* Restore arguments before returning from trampoline to let original function
-@@ -1419,6 +1421,15 @@ struct bpf_attach_target_info {
- 	const struct btf_type *tgt_type;
+@@ -1184,6 +1185,7 @@ enum bpf_link_type {
+ 	BPF_LINK_TYPE_NETKIT = 13,
+ 	BPF_LINK_TYPE_SOCKMAP = 14,
+ 	BPF_LINK_TYPE_TRACING_MULTI = 15,
++	BPF_LINK_TYPE_SDT,
+ 	__MAX_BPF_LINK_TYPE,
  };
  
-+/*
-+ * cached in prog->aux, used by the verifier to type the observer's context
-+ * arguments, and by link_create to build the trampoline without re-resolving
-+ */
-+struct bpf_sdt_probe_info {
-+	struct bpf_insn_array_value val;
-+	unsigned long probe_ip;
-+};
-+
- #define BPF_DISPATCHER_MAX 48 /* Fits in 2048B */
+@@ -1677,6 +1679,11 @@ union bpf_attr {
+ 		 * BPF_F_INSN_ARRAY_SDT, used for SDT probe
+ 		 */
+ 		__u32		sdt_map_fd;
++		/* Kernel looks up the probe using target prog and probe name */
++		struct {
++			__u32	target_prog_fd;
++			char	name[BPF_SDT_MAX_NAME_LEN]; /* probe name */
++		} sdt;
+ 	};
  
- struct bpf_dispatcher_prog {
-@@ -1762,6 +1773,7 @@ struct bpf_prog_aux {
- 	void __percpu *priv_stack_ptr;
- 	struct mutex dst_mutex; /* protects dst_* pointers below, *after* prog becomes visible */
- 	struct bpf_prog *dst_prog;
-+	struct bpf_sdt_probe_info *sdt_probe;
- 	struct bpf_trampoline *dst_trampoline;
- 	enum bpf_prog_type saved_dst_prog_type;
- 	enum bpf_attach_type saved_dst_attach_type;
-@@ -4159,6 +4171,9 @@ int bpf_insn_array_ready(struct bpf_map *map);
- void bpf_insn_array_release(struct bpf_map *map);
- void bpf_insn_array_adjust(struct bpf_map *map, u32 off, u32 len);
- void bpf_insn_array_adjust_after_remove(struct bpf_map *map, u32 off, u32 len);
-+int bpf_insn_array_get_sdt_probe_by_name(struct bpf_prog *prog, const char *name,
-+					 struct bpf_insn_array_value *val,
-+					 unsigned long *ip);
+ 	struct { /* anonymous struct used by BPF_OBJ_* commands */
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 95ca41bf7501..6490eb5dfb68 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1159,6 +1159,7 @@ enum bpf_attach_type {
+ 	BPF_TRACE_FENTRY_MULTI,
+ 	BPF_TRACE_FEXIT_MULTI,
+ 	BPF_TRACE_FSESSION_MULTI,
++	BPF_TRACE_SDT,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
  
- #ifdef CONFIG_BPF_SYSCALL
- void bpf_prog_update_insn_ptrs(struct bpf_prog *prog, u32 *offsets, void *image);
-diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
-index e5906829aa6f..1aac6bc71c6f 100644
---- a/include/linux/bpf_types.h
-+++ b/include/linux/bpf_types.h
-@@ -157,3 +157,4 @@ BPF_LINK_TYPE(BPF_LINK_TYPE_KPROBE_MULTI, kprobe_multi)
- BPF_LINK_TYPE(BPF_LINK_TYPE_STRUCT_OPS, struct_ops)
- BPF_LINK_TYPE(BPF_LINK_TYPE_UPROBE_MULTI, uprobe_multi)
- BPF_LINK_TYPE(BPF_LINK_TYPE_TRACING_MULTI, tracing_multi)
-+BPF_LINK_TYPE(BPF_LINK_TYPE_SDT, sdt)
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 67d337ede91b..ba4025160a6f 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1190,6 +1190,7 @@ bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena);
- bool bpf_jit_supports_private_stack(void);
- bool bpf_jit_supports_timed_may_goto(void);
- bool bpf_jit_supports_fsession(void);
-+bool bpf_jit_supports_sdt_probe(void);
- u64 bpf_arch_uaddress_limit(void);
- void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp), void *cookie);
- u64 arch_bpf_timed_may_goto(void);
-diff --git a/kernel/bpf/bpf_insn_array.c b/kernel/bpf/bpf_insn_array.c
-index a9564ef4b2ef..067cc1b817d5 100644
---- a/kernel/bpf/bpf_insn_array.c
-+++ b/kernel/bpf/bpf_insn_array.c
-@@ -263,6 +263,34 @@ void bpf_insn_array_release(struct bpf_map *map)
- 	atomic_set(&insn_array->used, 0);
- }
+@@ -1184,6 +1185,7 @@ enum bpf_link_type {
+ 	BPF_LINK_TYPE_NETKIT = 13,
+ 	BPF_LINK_TYPE_SOCKMAP = 14,
+ 	BPF_LINK_TYPE_TRACING_MULTI = 15,
++	BPF_LINK_TYPE_SDT,
+ 	__MAX_BPF_LINK_TYPE,
+ };
  
-+int bpf_insn_array_get_sdt_probe_by_name(struct bpf_prog *prog, const char *name,
-+					 struct bpf_insn_array_value *val,
-+					 unsigned long *ip)
-+{
-+	int i, j;
-+	struct bpf_map *map;
-+	struct bpf_insn_array *insn_array;
-+
-+	for (i = 0; i < prog->aux->used_map_cnt; i++) {
-+		map = prog->aux->used_maps[i];
-+		if (map->map_type != BPF_MAP_TYPE_INSN_ARRAY ||
-+		    !(map->map_flags & BPF_F_INSN_ARRAY_SDT))
-+			continue;
-+		insn_array = cast_insn_array(map);
-+		for (j = 0; j < map->max_entries; j++) {
-+			if (insn_array->values[j].xlated_off == INSN_DELETED)
-+				continue;
-+			if (!strcmp(insn_array->values[j].name, name)) {
-+				*val = insn_array->values[j];
-+				*ip = (unsigned long)insn_array->ips[j];
-+				return 0;
-+			}
-+		}
-+	}
-+
-+	return -EEXIST;
-+}
-+
- void bpf_insn_array_adjust(struct bpf_map *map, u32 off, u32 len)
+@@ -1677,6 +1679,11 @@ union bpf_attr {
+ 		 * BPF_F_INSN_ARRAY_SDT, used for SDT probe
+ 		 */
+ 		__u32		sdt_map_fd;
++		/* Kernel looks up the probe using target prog and probe name */
++		struct {
++			__u32	target_prog_fd;
++			char	name[BPF_SDT_MAX_NAME_LEN]; /* probe name */
++		} sdt;
+ 	};
+ 
+ 	struct { /* anonymous struct used by BPF_OBJ_* commands */
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index cb006bca97c6..adf951df6a3e 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -295,7 +295,7 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
+ 		  const struct bpf_insn *insns, size_t insn_cnt,
+ 		  struct bpf_prog_load_opts *opts)
  {
- 	struct bpf_insn_array *insn_array = cast_insn_array(map);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 649cce41e13f..78c7ad3b4e2f 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -3263,6 +3263,11 @@ bool __weak bpf_jit_supports_fsession(void)
- 	return false;
- }
+-	const size_t attr_sz = offsetofend(union bpf_attr, sdt_map_fd);
++	const size_t attr_sz = offsetofend(union bpf_attr, sdt.name);
+ 	void *finfo = NULL, *linfo = NULL;
+ 	const char *func_info, *line_info;
+ 	__u32 log_size, log_level, attach_prog_fd, attach_btf_obj_fd;
+@@ -303,6 +303,7 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
+ 	int fd, attempts;
+ 	union bpf_attr attr;
+ 	char *log_buf;
++	const char *sdt_name;
  
-+bool __weak bpf_jit_supports_sdt_probe(void)
-+{
-+	return false;
-+}
+ 	bump_rlimit_memlock();
+ 
+@@ -370,6 +371,11 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
+ 	attr.fd_array = ptr_to_u64(OPTS_GET(opts, fd_array, NULL));
+ 	attr.fd_array_cnt = OPTS_GET(opts, fd_array_cnt, 0);
+ 	attr.sdt_map_fd = OPTS_GET(opts, sdt_map_fd, 0);
++	attr.sdt.target_prog_fd = OPTS_GET(opts, sdt.target_prog_fd, 0);
 +
- u64 __weak bpf_arch_uaddress_limit(void)
- {
- #if defined(CONFIG_64BIT) && defined(CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE)
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index dc881e5ad411..8b2c73bb6c2a 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2454,6 +2454,7 @@ static void __bpf_prog_put_noref(struct bpf_prog *prog, bool deferred)
- 	kvfree(prog->aux->linfo);
- 	kfree(prog->aux->kfunc_tab);
- 	kfree(prog->aux->ctx_arg_info);
-+	kfree(prog->aux->sdt_probe);
- 	if (prog->aux->attach_btf)
- 		btf_put(prog->aux->attach_btf);
++	sdt_name = OPTS_GET(opts, sdt.name, NULL);
++	if (sdt_name)
++		snprintf(attr.sdt.name, sizeof(attr.sdt.name), "%s", sdt_name);
  
-@@ -2967,13 +2968,15 @@ int __init __used bpf_multi_func(void) { return 0; }
- BTF_ID_LIST_GLOBAL_SINGLE(bpf_multi_func_btf_id, func, bpf_multi_func)
- 
- /* last field in 'union bpf_attr' used by this command */
--#define BPF_PROG_LOAD_LAST_FIELD sdt_map_fd
-+#define BPF_PROG_LOAD_LAST_FIELD sdt.name
- 
- static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, struct bpf_log_attr *attr_log)
- {
- 	enum bpf_prog_type type = attr->prog_type;
-+	struct bpf_sdt_probe_info *prog_sdt_probe = NULL;
- 	struct bpf_prog *prog, *dst_prog = NULL;
- 	struct btf *attach_btf = NULL;
-+	u32 attach_btf_id = 0;
- 	struct bpf_token *token = NULL;
- 	bool bpf_cap;
- 	int err;
-@@ -3082,33 +3085,75 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, struct bpf_log_at
- 		btf_get(attach_btf);
- 	}
- 
-+	/*
-+	 * find the probe site in the target program at load time of the
-+	 * observer program, so the verifier can check the observer's context
-+	 * arguments from the probe's FUNC_PROTO.
-+	 */
-+	if (attr->expected_attach_type == BPF_TRACE_SDT) {
-+		struct bpf_insn_array_value sdt_val;
-+		struct bpf_sdt_probe_info *sdt_probe;
-+		unsigned long probe_ip;
-+
-+		if (!bpf_jit_supports_sdt_probe()) {
-+			err = -EOPNOTSUPP;
-+			goto put_token;
-+		}
-+		if (!attr->sdt.target_prog_fd) {
-+			err = -EINVAL;
-+			goto put_token;
-+		}
-+		dst_prog = bpf_prog_get(attr->sdt.target_prog_fd);
-+		if (IS_ERR(dst_prog)) {
-+			err = PTR_ERR(dst_prog);
-+			dst_prog = NULL;
-+			goto put_token;
-+		}
-+		err = bpf_insn_array_get_sdt_probe_by_name(dst_prog, attr->sdt.name,
-+							   &sdt_val, &probe_ip);
-+		if (err)
-+			goto put_sdt;
-+		sdt_probe = kzalloc_obj(struct bpf_sdt_probe_info, GFP_USER);
-+		if (!sdt_probe) {
-+			err = -ENOMEM;
-+			goto put_sdt;
-+		}
-+		sdt_probe->val = sdt_val;
-+		sdt_probe->probe_ip = probe_ip;
-+		prog_sdt_probe = sdt_probe;
-+		attach_btf_id = sdt_val.btf_id;
-+	}
-+
-+
- 	if (bpf_prog_load_check_attach(type, attr->expected_attach_type,
--				       attach_btf, attr->attach_btf_id,
-+				       attach_btf,
-+				       prog_sdt_probe ? attach_btf_id : attr->attach_btf_id,
- 				       dst_prog, multi_func)) {
--		if (dst_prog)
--			bpf_prog_put(dst_prog);
--		if (attach_btf)
--			btf_put(attach_btf);
- 		err = -EINVAL;
--		goto put_token;
-+		goto put_sdt;
- 	}
- 
- 	/* plain bpf_prog allocation */
- 	prog = bpf_prog_alloc(bpf_prog_size(attr->insn_cnt), GFP_USER);
- 	if (!prog) {
--		if (dst_prog)
--			bpf_prog_put(dst_prog);
--		if (attach_btf)
--			btf_put(attach_btf);
- 		err = -EINVAL;
--		goto put_token;
-+		goto put_sdt;
- 	}
- 
- 	prog->expected_attach_type = attr->expected_attach_type;
- 	prog->sleepable = !!(attr->prog_flags & BPF_F_SLEEPABLE);
- 	prog->aux->attach_btf = attach_btf;
--	prog->aux->attach_btf_id = multi_func ? bpf_multi_func_btf_id[0] : attr->attach_btf_id;
-+	if (prog_sdt_probe)
-+		prog->aux->attach_btf_id = attach_btf_id;
-+	else
-+		prog->aux->attach_btf_id =
-+			multi_func ? bpf_multi_func_btf_id[0] : attr->attach_btf_id;
- 	prog->aux->dst_prog = dst_prog;
-+	prog->aux->sdt_probe = prog_sdt_probe;
-+	/* ownership of dst_prog/attach_btf/prog_sdt_probe moved to prog->aux */
-+	dst_prog = NULL;
-+	attach_btf = NULL;
-+	prog_sdt_probe = NULL;
- 	prog->aux->dev_bound = !!attr->prog_ifindex;
- 	prog->aux->xdp_has_frags = attr->prog_flags & BPF_F_XDP_HAS_FRAGS;
- 
-@@ -3242,6 +3287,12 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, struct bpf_log_at
- 	if (prog->aux->attach_btf)
- 		btf_put(prog->aux->attach_btf);
- 	bpf_prog_free(prog);
-+put_sdt:
-+	kfree(prog_sdt_probe);
-+	if (attach_btf)
-+		btf_put(attach_btf);
-+	if (dst_prog)
-+		bpf_prog_put(dst_prog);
- put_token:
- 	bpf_token_put(token);
- 	return err;
-@@ -4507,6 +4558,7 @@ attach_type_to_prog_type(enum bpf_attach_type attach_type)
- 	case BPF_TRACE_FENTRY_MULTI:
- 	case BPF_TRACE_FEXIT_MULTI:
+ 	if (log_level) {
+ 		attr.log_buf = ptr_to_u64(log_buf);
+@@ -862,6 +868,7 @@ int bpf_link_create(int prog_fd, int target_fd,
  	case BPF_MODIFY_RETURN:
-+	case BPF_TRACE_SDT:
- 		return BPF_PROG_TYPE_TRACING;
+ 	case BPF_TRACE_FSESSION:
  	case BPF_LSM_MAC:
- 		return BPF_PROG_TYPE_LSM;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index bc972beb80cf..a875d64a0950 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -16451,6 +16451,7 @@ static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_
- 			break;
- 		case BPF_TRACE_RAW_TP:
- 		case BPF_MODIFY_RETURN:
-+		case BPF_TRACE_SDT:
- 			return false;
- 		case BPF_TRACE_ITER:
- 		default:
-@@ -19458,6 +19459,24 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
- 	    prog->type != BPF_PROG_TYPE_EXT)
- 		return 0;
++	case BPF_TRACE_SDT:
+ 		attr.link_create.tracing.cookie = OPTS_GET(opts, tracing.cookie, 0);
+ 		if (!OPTS_ZEROED(opts, tracing))
+ 			return libbpf_err(-EINVAL);
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 88294bb6b120..bf3665789420 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -130,9 +130,14 @@ struct bpf_prog_load_opts {
+ 	__u32 fd_array_cnt;
+ 	/* if set, FD of the program's BPF_MAP_TYPE_INSN_ARRAY SDT map */
+ 	__u32 sdt_map_fd;
++	/* target program fd and probe name for SDT observer program */
++	struct {
++		__u32 target_prog_fd;
++		const char *name;
++	} sdt;
+ 	size_t :0;
+ };
+-#define bpf_prog_load_opts__last_field sdt_map_fd
++#define bpf_prog_load_opts__last_field sdt.name
+ 
+ LIBBPF_API int bpf_prog_load(enum bpf_prog_type prog_type,
+ 			     const char *prog_name, const char *license,
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index dbc08a193101..273991b80f8f 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -139,6 +139,7 @@ static const char * const attach_type_name[] = {
+ 	[BPF_TRACE_FENTRY_MULTI]	= "trace_fentry_multi",
+ 	[BPF_TRACE_FEXIT_MULTI]		= "trace_fexit_multi",
+ 	[BPF_TRACE_FSESSION_MULTI]	= "trace_fsession_multi",
++	[BPF_TRACE_SDT]			= "trace_sdt",
+ };
+ 
+ static const char * const link_type_name[] = {
+@@ -158,6 +159,7 @@ static const char * const link_type_name[] = {
+ 	[BPF_LINK_TYPE_NETKIT]			= "netkit",
+ 	[BPF_LINK_TYPE_SOCKMAP]			= "sockmap",
+ 	[BPF_LINK_TYPE_TRACING_MULTI]		= "tracing_multi",
++	[BPF_LINK_TYPE_SDT]			= "sdt",
+ };
+ 
+ static const char * const map_type_name[] = {
+@@ -507,6 +509,7 @@ struct bpf_program {
+ 	__u32 attach_btf_obj_fd;
+ 	__u32 attach_btf_id;
+ 	__u32 attach_prog_fd;
++	char *sdt_probe_name;
+ 
+ 	void *func_info;
+ 	__u32 func_info_rec_size;
+@@ -836,6 +839,7 @@ static void bpf_program__exit(struct bpf_program *prog)
+ 	zfree(&prog->sec_name);
+ 	zfree(&prog->insns);
+ 	zfree(&prog->reloc_desc);
++	zfree(&prog->sdt_probe_name);
+ 
+ 	prog->nr_reloc = 0;
+ 	prog->insns_cnt = 0;
+@@ -8451,6 +8455,10 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
+ 	load_attr.fd_array = obj->fd_array;
+ 	if (prog->sdt_map_fd >= 0)
+ 		load_attr.sdt_map_fd = prog->sdt_map_fd;
++	if (prog->expected_attach_type == BPF_TRACE_SDT && prog->sdt_probe_name) {
++		load_attr.sdt.target_prog_fd = prog->attach_prog_fd;
++		load_attr.sdt.name = prog->sdt_probe_name;
++	}
+ 
+ 	load_attr.token_fd = obj->token_fd;
+ 	if (obj->token_fd)
+@@ -10587,6 +10595,7 @@ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("kretsyscall+",		KPROBE, 0, SEC_NONE, attach_ksyscall),
+ 	SEC_DEF("usdt+",		KPROBE,	0, SEC_USDT, attach_usdt),
+ 	SEC_DEF("usdt.s+",		KPROBE,	0, SEC_USDT | SEC_SLEEPABLE, attach_usdt),
++	SEC_DEF("bpf_sdt",		TRACING, BPF_TRACE_SDT, SEC_NONE),
+ 	SEC_DEF("tc/ingress",		SCHED_CLS, BPF_TCX_INGRESS, SEC_NONE), /* alias for tcx */
+ 	SEC_DEF("tc/egress",		SCHED_CLS, BPF_TCX_EGRESS, SEC_NONE),  /* alias for tcx */
+ 	SEC_DEF("tcx/ingress",		SCHED_CLS, BPF_TCX_INGRESS, SEC_NONE),
+@@ -15203,6 +15212,17 @@ int bpf_program__set_attach_target(struct bpf_program *prog,
+ 	if (prog->obj->state >= OBJ_LOADED)
+ 		return libbpf_err(-EINVAL);
  
 +	if (prog->expected_attach_type == BPF_TRACE_SDT) {
-+		const struct btf_type *sdt_t;
-+		struct btf *sdt_btf = tgt_prog ? tgt_prog->aux->btf : NULL;
-+
-+		if (!sdt_btf) {
-+			verbose(env, "SDT observer requires a target program with BTF\n");
-+			return -EINVAL;
-+		}
-+		sdt_t = btf_type_by_id(sdt_btf, btf_id);
-+		if (!sdt_t || !btf_type_is_func_proto(sdt_t)) {
-+			verbose(env, "SDT attach_btf_id %u is not a FUNC_PROTO\n", btf_id);
-+			return -EINVAL;
-+		}
-+		prog->aux->attach_func_proto = sdt_t;
-+		prog->aux->attach_func_name = "sdt_probe";
++		if (!attach_func_name)
++			return libbpf_err(-EINVAL);
++		free(prog->sdt_probe_name);
++		prog->sdt_probe_name = strdup(attach_func_name);
++		if (!prog->sdt_probe_name)
++			return libbpf_err(-ENOMEM);
++		prog->attach_prog_fd = attach_prog_fd;
 +		return 0;
 +	}
 +
- 	ret = bpf_check_attach_target(&env->log, prog, tgt_prog, btf_id, &tgt_info);
- 	if (ret)
- 		return ret;
+ 	if (attach_prog_fd && !attach_func_name) {
+ 		/* Store attach_prog_fd. The BTF ID will be resolved later during
+ 		 * the normal object/program load phase.
 -- 
 2.47.3
 
