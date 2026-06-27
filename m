@@ -1,27 +1,27 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 096D13B47FF;
-	Sat, 27 Jun 2026 14:52:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28A63B38A9;
+	Sat, 27 Jun 2026 14:52:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782571980; cv=none; b=D/5PXtpTtnhSiryIZvIzYihHjbpkX/3v/KYdMTGlQ/KhWd615q2nSBVqrm7UzFqNnuq82w7NssZPq6209sYOb59Tr5vol6kdvIlK7BbbUCOy9FRpJtFgnLFIlNw3OCAB3vKJuLLWz120frGRkFZuoo4merxcnzlEjT0LJKWH+C0=
+	t=1782571983; cv=none; b=ksfKoK9S8dSRPyOFmc47Cwaj6Ksn607ompYsLMc286XvgGALLbKwcpmUTYqkOpsc3jnrB4vJzvP02oac3G0zWlp0yp/41jRjoXYeFoYHkI92b1Ox3g6ftYLDEKU7hub2+xKfvdwVTxXQOem/5AouhhZl2GT21G12IMsi8coUCIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782571980; c=relaxed/simple;
-	bh=ZwKsvVvWgExkmPwmELKiA+kBr5AMM3KNewkdrMNESl0=;
+	s=arc-20240116; t=1782571983; c=relaxed/simple;
+	bh=gxYqQndsEeBWo3cmQebL49In3lLWpanpHT7DzKXRYgI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=f0SvXD9hbXdZGZo5lfHlkQy+mw0nJ5YtpZrf48geZRNByMMYHG8mFixWwITWDrlU7anzz0lC5jMherGIYV2vXxD7JY9J5q2xGmZH8X7JsbAn8xbZmRHNp5jWxS+UOg5P/1mCjuNe4Uwcd3Pjh4Nc8d5yKps6DiokC2dc3/qWlzU=
+	 MIME-Version; b=WNThcF93I1OVPHLq5hAEXTBU2TAv5mAVWAn5r92l49BTlFQIB+txfE7nrQhqFBvksBSmuwZEW207ESJ0HY+BkahT5dzNcweUKMMn4vXgN02C8Px6zm3oaiLNjHzdqu53J3dqvDtmjTKTcgmpRzXwPcWRgKp4mVV+QpO87epNHhQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gnbB346pyzKHMMy;
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gnbB33dpPzKHMMV;
 	Sat, 27 Jun 2026 22:52:43 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id E3CEB40635;
+	by mail.maildlp.com (Postfix) with ESMTP id D1D484058C;
 	Sat, 27 Jun 2026 22:52:46 +0800 (CST)
 Received: from localhost.huawei.com (unknown [10.67.174.243])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgAHPCa94z9qh0oVAA--.10903S6;
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgAHPCa94z9qh0oVAA--.10903S5;
 	Sat, 27 Jun 2026 22:52:46 +0800 (CST)
 From: Xu Kuohai <xukuohai@huaweicloud.com>
 To: bpf@vger.kernel.org,
@@ -38,9 +38,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Amery Hung <ameryhung@gmail.com>,
 	Eyal Birger <eyal.birger@gmail.com>,
 	Rong Tao <rongtao@cestc.cn>
-Subject: [RFC PATCH bpf-next 04/12] bpf: Create insn_array map for bpf SDT probe
-Date: Sat, 27 Jun 2026 22:51:38 +0000
-Message-ID: <809bd2ae46a0505a1f8fdaeacb4e1db489bfa641.1782571533.git.xukuohai@huawei.com>
+Subject: [RFC PATCH bpf-next 03/12] libbpf: Add bpf_sdt_notes section parser
+Date: Sat, 27 Jun 2026 22:51:37 +0000
+Message-ID: <5834001015dba4c202cbd141c4c8723e4983b196.1782571533.git.xukuohai@huawei.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1782571533.git.xukuohai@huawei.com>
 References: <cover.1782571533.git.xukuohai@huawei.com>
@@ -51,482 +51,398 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgAHPCa94z9qh0oVAA--.10903S6
-X-Coremail-Antispam: 1UD129KBjvAXoW3KFyUXFyfKr45Kw1rAF1fJFb_yoW8GFyUJo
-	WIgr45GF48G34xAFW8Jrn3GFZ5Zay8K39rJr4aqrn8Xa45G3sY9r4fGw4xZ3W2v348JF17
-	uF97Aas5Zws5CFyfn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUOf7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
-	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8Xw
-	A2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28l
-	Y4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr
-	1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl
-	6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv04
-	87Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280
-	aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6x
-	kF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s02
-	6xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_Jr
-	I_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v2
-	6r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7
-	xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_
-	Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jVUDXUUUUU=
+X-CM-TRANSID:_Ch0CgAHPCa94z9qh0oVAA--.10903S5
+X-Coremail-Antispam: 1UD129KBjvJXoW3tw4UXrW8WFy7CryftF4kXrb_yoWDAF1DpF
+	W3W34jkrW8Jr4fGrs3Jw48Ca1a9rs7WF47CFW5G343Ar1Fga95t3W8tryFyF98Aw4UuF13
+	Jayq9FZ8WryDZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUmvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
+	8IrcIa0xkI8VA2jI8067AKxVWUWwA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
+	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxV
+	A2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
+	6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
+	C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_
+	JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr
+	0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUv
+	cSsGvfC2KfnxnUUI43ZEXa7IU03CztUUUUU==
 X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
 From: Xu Kuohai <xukuohai@huawei.com>
 
-Create one BPF_MAP_TYPE_INSN_ARRAY map per program from the parsed
-SDT entries. Each map is tagged with BPF_F_INSN_ARRAY_SDT and
-populated with the instruction offset, argument count, and per-argument
-registers.
+Parse bpf_sdt_notes section to get probe call site index in the bpf
+prog, and argument registers for each probe.
 
-Since the SDT map is not explicitly referenced by any instruction in the
-bpf program, add a new sdt_map_fd attr field to pass the map fd to the
-kernel, so the verifier can bind it to the program's used_maps.
+Layout of SDT entry:
+      0: insn_off         // 64 bits of the NOP instruction offset
+      8: r1 = %[arg0_reg]  //  bpf move instruction for arg0
+     16: r2 = %[arg1_reg]  //  bpf move instruction for arg1
+    ...
+  8 * N: rN = %[argN_reg]  //  bpf move instruction for argN
+
+N + 1 is the argument number, up to 5.
+
+The argument number is calculated by walking the ELF symbol table
+for ___sdt_jt_* symbols that mark each probe entry boundary in the
+bpf_sdt_notes section: (next_off - off - 8) / sizeof(struct bpf_insn),
+where off is the current entry offset, next_off is the next entry
+offset.
+
+The owning program for each probe is identified by walking the relocation
+entries for each probe. Each relocation entry records the section index
+of the program that contains the probe.
 
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- include/uapi/linux/bpf.h       |  11 ++-
- kernel/bpf/bpf_insn_array.c    |  19 ++++-
- kernel/bpf/cfg.c               |   3 +
- kernel/bpf/syscall.c           |   2 +-
- kernel/bpf/verifier.c          |  23 ++++++
- tools/include/uapi/linux/bpf.h |  11 ++-
- tools/lib/bpf/bpf.c            |   3 +-
- tools/lib/bpf/bpf.h            |   4 +-
- tools/lib/bpf/libbpf.c         | 141 ++++++++++++++++++++++++++++++++-
- 9 files changed, 210 insertions(+), 7 deletions(-)
+ tools/lib/bpf/libbpf.c | 290 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 290 insertions(+)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index c91b5a4bda03..6a03e3f0506e 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1466,6 +1466,9 @@ enum {
- 
- /* Enable BPF ringbuf overwrite mode */
- 	BPF_F_RB_OVERWRITE	= (1U << 19),
-+
-+/* insn_array map is used for bpf SDT probe */
-+	BPF_F_INSN_ARRAY_SDT	= (1U << 20),
- };
- 
- /* Flags for BPF_PROG_QUERY. */
-@@ -1669,6 +1672,10 @@ union bpf_attr {
- 		 * verification.
- 		 */
- 		__s32		keyring_id;
-+		/* fd of the BPF_MAP_TYPE_INSN_ARRAY map created with
-+		 * BPF_F_INSN_ARRAY_SDT, used for SDT probe
-+		 */
-+		__u32		sdt_map_fd;
- 	};
- 
- 	struct { /* anonymous struct used by BPF_OBJ_* commands */
-@@ -7732,7 +7739,9 @@ struct bpf_insn_array_value {
- 	__u32 orig_off;
- 	__u32 xlated_off;
- 	__u32 jitted_off;
--	__u32 :32;
-+	__u8  nargs;		/* argument count (0..5) */
-+	__u8  arg_reg[5];	/* BPF register for each argument */
-+	__u8  pad[2];
- };
- 
- #endif /* _UAPI__LINUX_BPF_H__ */
-diff --git a/kernel/bpf/bpf_insn_array.c b/kernel/bpf/bpf_insn_array.c
-index a2f84afe6f7c..f43777c5cd07 100644
---- a/kernel/bpf/bpf_insn_array.c
-+++ b/kernel/bpf/bpf_insn_array.c
-@@ -7,6 +7,7 @@ struct bpf_insn_array {
- 	struct bpf_map map;
- 	atomic_t used;
- 	long *ips;
-+	int subtype;
- 	DECLARE_FLEX_ARRAY(struct bpf_insn_array_value, values);
- };
- 
-@@ -15,6 +16,11 @@ struct bpf_insn_array {
- 
- #define INSN_DELETED ((u32)-1)
- 
-+enum bpf_insn_array_subtype {
-+	BPF_INSN_ARRAY_SUBTYPE_JUMP_TABLE = 0,
-+	BPF_INSN_ARRAY_SUBTYPE_SDT = 1,
-+};
-+
- static inline u64 insn_array_alloc_size(u32 max_entries)
- {
- 	const u64 base_size = sizeof(struct bpf_insn_array);
-@@ -28,7 +34,8 @@ static int insn_array_alloc_check(union bpf_attr *attr)
- 	u32 value_size = sizeof(struct bpf_insn_array_value);
- 
- 	if (attr->max_entries == 0 || attr->key_size != 4 ||
--	    attr->value_size != value_size || attr->map_flags != 0)
-+	    attr->value_size != value_size ||
-+	    attr->map_flags & ~BPF_F_INSN_ARRAY_SDT)
- 		return -EINVAL;
- 
- 	return 0;
-@@ -55,6 +62,11 @@ static struct bpf_map *insn_array_alloc(union bpf_attr *attr)
- 
- 	bpf_map_init_from_attr(&insn_array->map, attr);
- 
-+	if (attr->map_flags & BPF_F_INSN_ARRAY_SDT)
-+		insn_array->subtype = BPF_INSN_ARRAY_SUBTYPE_SDT;
-+	else
-+		insn_array->subtype = BPF_INSN_ARRAY_SUBTYPE_JUMP_TABLE;
-+
- 	/* BPF programs aren't allowed to write to the map */
- 	insn_array->map.map_flags |= BPF_F_RDONLY_PROG;
- 
-@@ -90,6 +102,11 @@ static long insn_array_update_elem(struct bpf_map *map, void *key, void *value,
- 
- 	insn_array->values[index].orig_off = val.orig_off;
- 
-+	if (insn_array->subtype == BPF_INSN_ARRAY_SUBTYPE_SDT) {
-+		insn_array->values[index].nargs = val.nargs;
-+		memcpy(insn_array->values[index].arg_reg, val.arg_reg, sizeof(val.arg_reg));
-+	}
-+
- 	return 0;
- }
- 
-diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-index 26d37066465f..1b8734ee4bf3 100644
---- a/kernel/bpf/cfg.c
-+++ b/kernel/bpf/cfg.c
-@@ -251,6 +251,9 @@ static struct bpf_iarray *jt_from_map(struct bpf_map *map)
- 	int err;
- 	int n;
- 
-+	if (map->map_flags & BPF_F_INSN_ARRAY_SDT)
-+		return ERR_PTR(-EINVAL);
-+
- 	jt = bpf_iarray_realloc(NULL, map->max_entries);
- 	if (!jt)
- 		return ERR_PTR(-ENOMEM);
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 6db306d23b47..dc881e5ad411 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2967,7 +2967,7 @@ int __init __used bpf_multi_func(void) { return 0; }
- BTF_ID_LIST_GLOBAL_SINGLE(bpf_multi_func_btf_id, func, bpf_multi_func)
- 
- /* last field in 'union bpf_attr' used by this command */
--#define BPF_PROG_LOAD_LAST_FIELD keyring_id
-+#define BPF_PROG_LOAD_LAST_FIELD sdt_map_fd
- 
- static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, struct bpf_log_attr *attr_log)
- {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 25aea4271cd0..05734163650a 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19800,6 +19800,29 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	if (ret)
- 		goto skip_full_check;
- 
-+	if (attr->sdt_map_fd) {
-+		CLASS(fd, f)(attr->sdt_map_fd);
-+		struct bpf_map *sdt_map = __bpf_map_get(f);
-+
-+		if (IS_ERR(sdt_map)) {
-+			verbose(env, "sdt_map_fd %d is not a valid bpf_map\n",
-+				attr->sdt_map_fd);
-+			ret = PTR_ERR(sdt_map);
-+			goto skip_full_check;
-+		}
-+		if (sdt_map->map_type != BPF_MAP_TYPE_INSN_ARRAY) {
-+			verbose(env, "sdt_map_fd %d is not an INSN_ARRAY map\n",
-+				attr->sdt_map_fd);
-+			ret = -EINVAL;
-+			goto skip_full_check;
-+		}
-+		ret = __add_used_map(env, sdt_map);
-+		if (ret < 0) {
-+			verbose(env, "failed to bind SDT map to program: %d\n", ret);
-+			goto skip_full_check;
-+		}
-+	}
-+
- 	mark_verifier_state_clean(env);
- 
- 	if (IS_ERR(btf_vmlinux)) {
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index c91b5a4bda03..6a03e3f0506e 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1466,6 +1466,9 @@ enum {
- 
- /* Enable BPF ringbuf overwrite mode */
- 	BPF_F_RB_OVERWRITE	= (1U << 19),
-+
-+/* insn_array map is used for bpf SDT probe */
-+	BPF_F_INSN_ARRAY_SDT	= (1U << 20),
- };
- 
- /* Flags for BPF_PROG_QUERY. */
-@@ -1669,6 +1672,10 @@ union bpf_attr {
- 		 * verification.
- 		 */
- 		__s32		keyring_id;
-+		/* fd of the BPF_MAP_TYPE_INSN_ARRAY map created with
-+		 * BPF_F_INSN_ARRAY_SDT, used for SDT probe
-+		 */
-+		__u32		sdt_map_fd;
- 	};
- 
- 	struct { /* anonymous struct used by BPF_OBJ_* commands */
-@@ -7732,7 +7739,9 @@ struct bpf_insn_array_value {
- 	__u32 orig_off;
- 	__u32 xlated_off;
- 	__u32 jitted_off;
--	__u32 :32;
-+	__u8  nargs;		/* argument count (0..5) */
-+	__u8  arg_reg[5];	/* BPF register for each argument */
-+	__u8  pad[2];
- };
- 
- #endif /* _UAPI__LINUX_BPF_H__ */
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 96819c082c77..cb006bca97c6 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -295,7 +295,7 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
- 		  const struct bpf_insn *insns, size_t insn_cnt,
- 		  struct bpf_prog_load_opts *opts)
- {
--	const size_t attr_sz = offsetofend(union bpf_attr, keyring_id);
-+	const size_t attr_sz = offsetofend(union bpf_attr, sdt_map_fd);
- 	void *finfo = NULL, *linfo = NULL;
- 	const char *func_info, *line_info;
- 	__u32 log_size, log_level, attach_prog_fd, attach_btf_obj_fd;
-@@ -369,6 +369,7 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
- 
- 	attr.fd_array = ptr_to_u64(OPTS_GET(opts, fd_array, NULL));
- 	attr.fd_array_cnt = OPTS_GET(opts, fd_array_cnt, 0);
-+	attr.sdt_map_fd = OPTS_GET(opts, sdt_map_fd, 0);
- 
- 	if (log_level) {
- 		attr.log_buf = ptr_to_u64(log_buf);
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 7534a593edae..88294bb6b120 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -128,9 +128,11 @@ struct bpf_prog_load_opts {
- 
- 	/* if set, provides the length of fd_array */
- 	__u32 fd_array_cnt;
-+	/* if set, FD of the program's BPF_MAP_TYPE_INSN_ARRAY SDT map */
-+	__u32 sdt_map_fd;
- 	size_t :0;
- };
--#define bpf_prog_load_opts__last_field fd_array_cnt
-+#define bpf_prog_load_opts__last_field sdt_map_fd
- 
- LIBBPF_API int bpf_prog_load(enum bpf_prog_type prog_type,
- 			     const char *prog_name, const char *license,
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 327c9d412fe8..3f8b12a1eb8b 100644
+index 7162146280a8..327c9d412fe8 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -494,6 +494,7 @@ struct bpf_program {
- 	struct bpf_object *obj;
- 
- 	int fd;
-+	int sdt_map_fd;
- 	bool autoload;
- 	bool autoattach;
- 	bool sym_global;
-@@ -519,6 +520,9 @@ struct bpf_program {
- 
- 	struct bpf_light_subprog *subprogs;
- 	__u32 subprog_cnt;
-+
-+	/* index of the main program that absorbed this subprog */
-+	int absorbed_by;
+@@ -693,6 +693,7 @@ struct elf_state {
+ 	bool has_st_ops;
+ 	int arena_data_shndx;
+ 	int jumptables_data_shndx;
++	int sdt_notes_shndx;
  };
  
- struct bpf_struct_ops {
-@@ -879,7 +883,9 @@ bpf_object__init_prog(struct bpf_object *obj, struct bpf_program *prog,
+ struct usdt_manager;
+@@ -703,6 +704,15 @@ enum bpf_object_state {
+ 	OBJ_LOADED,
+ };
  
- 	prog->type = BPF_PROG_TYPE_UNSPEC;
- 	prog->fd = -1;
-+	prog->sdt_map_fd = -1;
- 	prog->exception_cb_idx = -1;
-+	prog->absorbed_by = -1;
++struct sdt_entry {
++	char *name;      /* probe name */
++	__u16 prog_idx;  /* resolved in bpf_object__resolve_sdt_progs */
++	__u16 sec_idx;   /* ELF section index of the probe site (from reloc) */
++	__u64 insn_idx;  /* insn index of probe site within its ELF section */
++	__u8 nargs;      /* how many arguments */
++	__u8 arg_reg[5]; /* which register the argument locates in */
++};
++
+ struct bpf_object {
+ 	char name[BPF_OBJ_NAME_LEN];
+ 	char license[64];
+@@ -768,6 +778,13 @@ struct bpf_object {
+ 	void *jumptables_data;
+ 	size_t jumptables_data_sz;
  
- 	/* libbpf's convention for SEC("?abc...") is that it's just like
- 	 * SEC("abc...") but the corresponding bpf_program starts out with
-@@ -6686,6 +6692,131 @@ static int create_jt_map(struct bpf_object *obj, struct bpf_program *prog, struc
- 	return err;
++	void *sdt_notes_data;
++	size_t sdt_notes_data_sz;
++
++	struct sdt_entry *sdt_entries;
++	size_t sdt_entry_cnt;
++	size_t sdt_entry_cap;
++
+ 	struct {
+ 		struct bpf_program *prog;
+ 		unsigned int sym_off;
+@@ -3892,6 +3909,254 @@ static int cmp_progs(const void *_a, const void *_b)
+ 	return a->sec_insn_off < b->sec_insn_off ? -1 : 1;
  }
  
-+static int bpf_object__resolve_sdt_progs(struct bpf_object *obj)
++static struct bpf_program *find_prog_by_sec_insn(const struct bpf_object *obj,
++						 size_t sec_idx, size_t insn_idx);
++
++struct sdt_sym {
++	const char *name;
++	size_t off; /* offset in the sdt entry section */
++};
++
++static int sdt_sym_cmp(const void *a, const void *b)
 +{
-+	int i, j;
-+	struct bpf_light_subprog *sp;
++	const struct sdt_sym *sym1 = a, *sym2 = b;
 +
-+	for (i = 0; i < obj->sdt_entry_cnt; i++) {
-+		struct sdt_entry *e = &obj->sdt_entries[i];
-+		struct bpf_program *prog, *subprog;
++	if (sym1->off == sym2->off)
++		return 0;
 +
-+		prog = find_prog_by_sec_insn(obj, e->sec_idx, e->insn_idx);
-+		if (!prog) {
-+			pr_warn("sdt: probe '%s' at sec %u insn %llu not found in any program\n",
-+				e->name, (unsigned)e->sec_idx, (unsigned long long)e->insn_idx);
-+			return -EINVAL;
-+		}
++	return sym1->off < sym2->off ? -1 : 1;
++}
 +
-+		/* resolve subprog probe in the main prog that absorbed the subprog */
-+		if (prog_is_subprog(obj, prog) && prog->absorbed_by != -1) {
-+			subprog = prog;
-+			prog = &obj->programs[prog->absorbed_by];
-+			for (j = 0; j < prog->subprog_cnt; j++) {
-+				sp = &prog->subprogs[j];
-+				if (sp->sec_insn_off == subprog->sec_insn_off) {
-+					e->insn_idx = sp->sub_insn_off +
-+						       (e->insn_idx - sp->sec_insn_off);
-+					break;
-+				}
-+			}
-+			if (j >= prog->subprog_cnt) {
-+				pr_warn("sdt: subprog probe '%s' not found\n", e->name);
-+				return -EINVAL;
-+			}
-+		}
++static Elf_Data *sdt_find_relo(struct bpf_object *obj)
++{
++	GElf_Shdr shdr;
++	Elf_Scn *scn = NULL;
 +
-+		e->prog_idx = prog - obj->programs;
++	while ((scn = elf_nextscn(obj->efile.elf, scn)) != NULL) {
++		if (!gelf_getshdr(scn, &shdr) || shdr.sh_type != SHT_REL)
++			continue;
++
++		if (shdr.sh_info == obj->efile.sdt_notes_shndx)
++			return elf_getdata(scn, NULL);
 +	}
++
++	return NULL;
++}
++
++static int sdt_collect_syms(struct bpf_object *obj, struct sdt_sym **sdt_syms)
++{
++	int i, err, cnt = 0;
++	size_t nr_syms;
++	size_t sym_cap = 0;
++	const char *name;
++	Elf64_Sym *sym, *syms;
++	struct sdt_sym *ssyms = NULL;
++
++	syms = obj->efile.symbols->d_buf;
++	nr_syms = obj->efile.symbols->d_size / sizeof(Elf64_Sym);
++
++	for (i = 0; i < nr_syms; i++) {
++		sym = &syms[i];
++		if (sym->st_shndx != obj->efile.sdt_notes_shndx)
++			continue;
++
++		if (ELF64_ST_TYPE(sym->st_info) != STT_NOTYPE)
++			continue;
++
++		name = elf_sym_str(obj, sym->st_name);
++		if (!name || strncmp(name, "___sdt_jt_", 10))
++			continue;
++
++		err = libbpf_ensure_mem((void **)&ssyms, &sym_cap, sizeof(*ssyms), cnt + 1);
++		if (err) {
++			free(ssyms);
++			return -ENOMEM;
++		}
++
++		ssyms[cnt].name = name;
++		ssyms[cnt].off = sym->st_value;
++		cnt++;
++	}
++
++	if (cnt)
++		qsort(ssyms, cnt, sizeof(*ssyms), sdt_sym_cmp);
++
++	*sdt_syms = ssyms;
++
++	return cnt;
++}
++
++/*
++ * Layout of SDT entry:
++ *
++ *   off + 0:  64 bits of the NOP instruction offset
++ *   off + 8:  r1 = %[arg0_reg]  //  bpf move instruction for arg0
++ *   off + 16: r2 = %[arg1_reg]  //  bpf move instruction for arg1
++ *       ...
++ *   off + 8 * N: rN = %[argN_reg]  //  bpf move instruction for argN
++ *
++ *   next_off + 0: // start of the next entry
++ *
++ *   so argument number N = (next_entry_off - off - 8) / sizeof(bpf_insn).
++ */
++static int sdt_calc_nargs(struct sdt_sym *syms, int sym_idx, size_t sym_cnt, size_t last_off)
++{
++	size_t off = syms[sym_idx].off;
++	size_t next_off = (sym_idx + 1 < sym_cnt) ? syms[sym_idx + 1].off : last_off;
++
++	if (next_off > last_off)
++		return -EINVAL;
++
++	if (off + 8 > next_off)
++		return -EINVAL;
++
++	if ((next_off - off - 8) % sizeof(struct bpf_insn))
++		return -EINVAL;
++
++	if ((next_off - off - 8) / sizeof(struct bpf_insn) > 5)
++		return -EINVAL;
++
++	return (next_off - off - 8) / sizeof(struct bpf_insn);
++}
++
++/*
++ * Look up the ELF section index of the code section containing the probe
++ * site, via the R_BPF_64_ABS64 relocation on this entry's .quad.  The
++ * target symbol's st_shndx is the code section; this is stored in the
++ * sdt_entry and used later (after subprogram linking) to resolve prog_idx.
++ *
++ * Returns the section index on success, -1 on failure.
++ */
++static int sdt_find_sec_idx(struct bpf_object *obj, Elf_Data *sdt_relo,
++			    size_t sdt_entry_off)
++{
++	int i;
++	Elf64_Sym *tgt;
++	Elf64_Rel *rel = sdt_relo->d_buf;
++	Elf64_Sym *elf_syms = obj->efile.symbols->d_buf;
++
++	for (i = 0; i < sdt_relo->d_size / sizeof(Elf64_Rel); i++, rel++) {
++		if (rel->r_offset != sdt_entry_off)
++			continue;
++		if (ELF64_R_TYPE(rel->r_info) != R_BPF_64_ABS64)
++			continue;
++
++		tgt = &elf_syms[ELF64_R_SYM(rel->r_info)];
++		return tgt->st_shndx;
++	}
++
++	return -1;
++}
++
++static int sdt_parse_arg(const void *data, int nargs, struct sdt_entry *e)
++{
++	int i;
++	const struct bpf_insn *insn;
++
++	insn = (const struct bpf_insn *)data;
++	for (i = 0; i < nargs; i++, insn++) {
++		if (insn->code != (BPF_ALU64 | BPF_MOV | BPF_X))
++			return -EINVAL;
++		e->arg_reg[i] = insn->src_reg;
++	}
++
 +	return 0;
 +}
 +
-+static int bpf_object__create_sdt_maps(struct bpf_object *obj)
-+{
-+	const __u32 value_size = sizeof(struct bpf_insn_array_value);
-+	struct bpf_insn_array_value val = {};
-+	struct bpf_program *prog;
-+	struct {
-+		__u32 sdt_cnt;
-+		__u32 next_key;
-+	} *prog_sdt;
-+	int i, err = 0;
 +
-+	if (!obj->sdt_entry_cnt)
++/*
++ * Parse .bpf_sdt_notes into per-probe SDT entries.
++ *
++ * Each entry starts at a ___sdt_jt_<name> label and contains .quad nop_off
++ * (8 bytes, with R_BPF_64_ABS64 reloc) followed by one 8-byte BPF_MOV
++ * instruction per argument whose src_reg field encodes the register.
++ *
++ * nargs is derived from the gap between consecutive labels: the assembler
++ * lays entries out sequentially, so nargs = (next_off - off - 8) / 8.
++ */
++static int bpf_object__collect_sdt_notes(struct bpf_object *obj)
++{
++	int i, sym_cnt, err = 0;
++	struct sdt_sym *sdt_syms = NULL;
++	Elf_Data *sdt_relo = NULL;
++	const void *data = obj->sdt_notes_data;
++
++	if (!obj->sdt_notes_data || !obj->sdt_notes_data_sz)
 +		return 0;
 +
-+	err = bpf_object__resolve_sdt_progs(obj);
-+	if (err)
-+		return err;
++	sdt_relo = sdt_find_relo(obj);
++	if (!sdt_relo)
++		return -EINVAL;
 +
-+	prog_sdt = calloc(obj->nr_programs, sizeof(*prog_sdt));
-+	if (!prog_sdt)
-+		return -ENOMEM;
++	sym_cnt = sdt_collect_syms(obj, &sdt_syms);
++	if (sym_cnt < 0)
++		return sym_cnt;
 +
-+	/* count entries per program */
-+	for (i = 0; i < obj->sdt_entry_cnt; i++)
-+		prog_sdt[obj->sdt_entries[i].prog_idx].sdt_cnt++;
++	for (i = 0; i < sym_cnt; i++) {
++		__u64 nop_idx;
++		int nargs, sec_idx;
++		struct sdt_entry *e;
++		size_t off = sdt_syms[i].off;
 +
-+	/* create insn_array maps per program and populate entries */
-+	for (i = 0; i < obj->sdt_entry_cnt; i++) {
-+		__u32 key;
-+		struct sdt_entry *e = &obj->sdt_entries[i];
-+		__u32 sdt_cnt = prog_sdt[e->prog_idx].sdt_cnt;
-+
-+		if (!sdt_cnt)
-+			continue;
-+
-+		prog = &obj->programs[e->prog_idx];
-+
-+		if (prog->sdt_map_fd < 0) {
-+			int map_fd;
-+			LIBBPF_OPTS(bpf_map_create_opts, map_opts);
-+
-+			map_opts.map_flags = BPF_F_INSN_ARRAY_SDT;
-+			map_fd = bpf_map_create(BPF_MAP_TYPE_INSN_ARRAY, ".bpf_sdt_notes",
-+						sizeof(key), value_size, sdt_cnt, &map_opts);
-+			if (map_fd < 0) {
-+				err = map_fd;
-+				goto out_free;
-+			}
-+			prog->sdt_map_fd = map_fd;
++		nargs = sdt_calc_nargs(sdt_syms, i, sym_cnt, obj->sdt_notes_data_sz);
++		if (nargs < 0) {
++			err = -EINVAL;
++			goto out;
 +		}
 +
-+		key = prog_sdt[e->prog_idx].next_key++;
++		memcpy(&nop_idx, data + off, sizeof(__u64));
++		nop_idx = nop_idx / sizeof(struct bpf_insn);
 +
-+		memset(&val, 0, sizeof(val));
-+		val.nargs = e->nargs;
-+		val.orig_off = e->insn_idx - prog->sec_insn_off;
-+		memcpy(val.arg_reg, e->arg_reg, sizeof(val.arg_reg));
-+
-+		err = bpf_map_update_elem(prog->sdt_map_fd, &key, &val, 0);
-+		if (err)
-+			goto out_free;
-+	}
-+
-+	/* freeze maps */
-+	for (i = 0; i < obj->nr_programs; i++) {
-+		prog = &obj->programs[i];
-+		if (prog->sdt_map_fd >= 0) {
-+			err = bpf_map_freeze(prog->sdt_map_fd);
-+			if (err)
-+				goto out_free;
++		/*
++		 * Record the ELF section index of the code section containing
++		 * the probe site.  prog_idx is resolved later in
++		 * bpf_object__resolve_sdt_progs(), after static subprograms
++		 * in .text have been absorbed into their calling main program;
++		 * resolving here would return the subprogram's own entry, not
++		 * the main program that ends up owning the probe site.
++		 */
++		sec_idx = sdt_find_sec_idx(obj, sdt_relo, off);
++		if (sec_idx < 0) {
++			err = -EINVAL;
++			goto out;
 +		}
++
++		/* Read arg_reg[] from cold instructions */
++		err = libbpf_ensure_mem((void **)&obj->sdt_entries, &obj->sdt_entry_cap,
++					sizeof(*obj->sdt_entries), i + 1);
++		if (err) {
++			err = -ENOMEM;
++			goto out;
++		}
++
++		e = &obj->sdt_entries[i];
++		err = sdt_parse_arg(data + off + 8, nargs, e);
++		if (err < 0)
++			goto out;
++
++		e->name = strdup(sdt_syms[i].name + 10); /* skip "___sdt_jt_" */
++		if (!e->name) {
++			err = -ENOMEM;
++			goto out;
++		}
++		e->sec_idx = sec_idx;
++		e->insn_idx = nop_idx;
++		e->nargs = nargs;
++		obj->sdt_entry_cnt++;
 +	}
 +
-+out_free:
-+	free(prog_sdt);
++out:
 +	if (err) {
-+		for (i = 0; i < obj->nr_programs; i++) {
-+			if (obj->programs[i].sdt_map_fd >= 0) {
-+				close(obj->programs[i].sdt_map_fd);
-+				obj->programs[i].sdt_map_fd = -1;
-+			}
-+		}
++		for (i = 0; i < obj->sdt_entry_cnt; i++)
++			free(obj->sdt_entries[i].name);
++		zfree(&obj->sdt_entries);
++		obj->sdt_entry_cnt = obj->sdt_entry_cap = 0;
 +	}
++
++	free(sdt_syms);
 +	return err;
 +}
 +
- /* Relocate data references within program code:
-  *  - map references;
-  *  - global variable references;
-@@ -7135,6 +7266,8 @@ bpf_object__reloc_code(struct bpf_object *obj, struct bpf_program *main_prog,
- 			err = bpf_object__append_subprog_code(obj, main_prog, subprog);
- 			if (err)
- 				return err;
-+			if (subprog->absorbed_by == -1)
-+				subprog->absorbed_by = main_prog - obj->programs;
- 			err = bpf_object__reloc_code(obj, main_prog, subprog);
- 			if (err)
- 				return err;
-@@ -8254,6 +8387,8 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
- 	load_attr.log_level = log_level;
- 	load_attr.prog_flags = prog->prog_flags;
- 	load_attr.fd_array = obj->fd_array;
-+	if (prog->sdt_map_fd >= 0)
-+		load_attr.sdt_map_fd = prog->sdt_map_fd;
+ static int bpf_object__elf_collect(struct bpf_object *obj)
+ {
+ 	struct elf_sec_desc *sec_desc;
+@@ -4034,6 +4299,13 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 				memcpy(obj->jumptables_data, data->d_buf, data->d_size);
+ 				obj->jumptables_data_sz = data->d_size;
+ 				obj->efile.jumptables_data_shndx = idx;
++			} else if (strcmp(name, SDT_NOTES_SEC) == 0) {
++				obj->sdt_notes_data = malloc(data->d_size);
++				if (!obj->sdt_notes_data)
++					return -ENOMEM;
++				memcpy(obj->sdt_notes_data, data->d_buf, data->d_size);
++				obj->sdt_notes_data_sz = data->d_size;
++				obj->efile.sdt_notes_shndx = idx;
+ 			} else {
+ 				pr_info("elf: skipping unrecognized data section(%d) %s\n",
+ 					idx, name);
+@@ -4087,6 +4359,13 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 	if (obj->nr_programs)
+ 		qsort(obj->programs, obj->nr_programs, sizeof(*obj->programs), cmp_progs);
  
- 	load_attr.token_fd = obj->token_fd;
- 	if (obj->token_fd)
-@@ -9343,6 +9478,7 @@ static int bpf_object_prepare(struct bpf_object *obj, const char *target_btf_pat
- 	err = err ? : bpf_object__relocate(obj, obj->btf_custom_path ? : target_btf_path);
- 	err = err ? : bpf_object__sanitize_and_load_btf(obj);
- 	err = err ? : bpf_object__create_maps(obj);
-+	err = err ? : bpf_object__create_sdt_maps(obj);
- 	err = err ? : bpf_object_prepare_progs(obj);
++	err = bpf_object__collect_sdt_notes(obj);
++	if (err) {
++		zfree(&obj->sdt_notes_data);
++		obj->sdt_notes_data_sz = 0;
++		return err;
++	}
++
+ 	return bpf_object__init_btf(obj, btf_data, btf_ext_data);
+ }
  
- 	if (err) {
-@@ -9893,8 +10029,11 @@ void bpf_object__close(struct bpf_object *obj)
- 	obj->nr_maps = 0;
+@@ -9629,6 +9908,17 @@ void bpf_object__close(struct bpf_object *obj)
+ 	zfree(&obj->jumptables_data);
+ 	obj->jumptables_data_sz = 0;
  
- 	if (obj->programs && obj->nr_programs) {
--		for (i = 0; i < obj->nr_programs; i++)
-+		for (i = 0; i < obj->nr_programs; i++) {
-+			if (obj->programs[i].sdt_map_fd >= 0)
-+				close(obj->programs[i].sdt_map_fd);
- 			bpf_program__exit(&obj->programs[i]);
-+		}
- 	}
- 	zfree(&obj->programs);
- 
++	zfree(&obj->sdt_notes_data);
++	obj->sdt_notes_data_sz = 0;
++
++	if (obj->sdt_entries) {
++		for (i = 0; i < obj->sdt_entry_cnt; i++)
++			free(obj->sdt_entries[i].name);
++		zfree(&obj->sdt_entries);
++		obj->sdt_entry_cnt = 0;
++		obj->sdt_entry_cap = 0;
++	}
++
+ 	for (i = 0; i < obj->jumptable_map_cnt; i++)
+ 		close(obj->jumptable_maps[i].fd);
+ 	zfree(&obj->jumptable_maps);
 -- 
 2.47.3
 
