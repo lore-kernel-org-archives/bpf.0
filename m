@@ -1,140 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52C64317161
-	for <bpf@vger.kernel.org>; Sat, 27 Jun 2026 16:52:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652358834
+	for <bpf@vger.kernel.org>; Sat, 27 Jun 2026 16:52:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782579141; cv=none; b=KOdSfjTX6EfkWpzzmRnN4Jt3qU5E9HZgKXDNzwIY2J/Z63j3jXlgegpi0hjRkwuiifAJm8Ioqlj4qxV8B4oiRLHFNnlOQW46wdRR3z7VP0Ms5SghPSVemHnY2TCKxT4UVl1eMfo6MYR2pLBX4UxeeQB3kfTiz6v7ORJEI5fhVOY=
+	t=1782579142; cv=none; b=mcgqX6Je+/7FsL5OoF+cl0VAOjfMUE0HifO+s4u8FmD7Q/FBQR6vWze/T35DmADRuHMUC0CamTXevq9pe69MP7S9KJXh5jD8dvLHdblXZrcSYNHv0EX8qqqqn5yYMqsKmQdR7My5dXAdP4pgYXjQ6/zS89FdOZ9fem9AqtF1xOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782579141; c=relaxed/simple;
-	bh=yHaq+Ak4DGEloDAPLt86jCrijEHVZclvMTwnLLiVZgQ=;
+	s=arc-20240116; t=1782579142; c=relaxed/simple;
+	bh=X0z0P0fwFMHqGMcKxLSWer/OE+l6j7WMhDlgM0fUgRA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=WilOzOABZk4ChHv8hAZhqCd7xKUe6N+w2Hyh6+LY4oQPPPDz3NJsyIPXyTyWZGwF2zFelXCE9r23Hl2+QIsm/NaR4V5dHeUAq92JuDtaGNyJ+fc3j1r8dlXM8rS0VUkwrh+e6EYq9KdLf04ExA34X207++U8sv30mHhL09CYg3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k235obVG; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=V+daDdD8S/TLc0+vje/dISbiwJ4xU/SSKqKy2pFn3i3KkKA0nAr82qT0kKwSAoLtZ08r5toKezhq0njH8kpq0ecCVEf+s/nA+kconBur3aW8bQQGHJQ9TJGIDvJ39YFDj01xPM+NCTYbqdHCOVUmjI+CJUZ/FWaw6NcCqI3I1p8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VhIRc0bZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k235obVG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 096B61F00A3A;
-	Sat, 27 Jun 2026 16:52:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VhIRc0bZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA0CD1F000E9;
+	Sat, 27 Jun 2026 16:52:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782579140;
-	bh=fHH9pEYau/b9GmcHWhMh38/FEQPZOuQToVtxKUVpmOI=;
+	s=k20260515; t=1782579141;
+	bh=raUkQLLAVj5N+BQMiiLWxPCwjbHCL62aH2eSTFpVUeM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=k235obVGx7e6L1/Qeb5DTy+W7GnODWTuhuAmE/kuGQmrnG8RaCU5z6KSQN4eArtGf
-	 0ZFi098AqvzpADvwoKholghmZ3oAjKRjXPhf5qZFKyVb2nX5KQ/9ylbnJWWrzE4ojy
-	 CHVtVfKZuzKbbBLZ5ALbgRPdDvMvQqnQW8w0mL1OJnonFowiIeQxuVklCAXBYW+16I
-	 eRN/YdO9OxNYuhueBHu+4U6MvFvBFr+cmrGuh3O+8wulHf2LEHZ5ANBx4ByezLt7mb
-	 DEjbUIKkzig2Y4bfV7N3Z9lDBM6Zik1AzZtyozZRVTT850VmDLm0W4zhXOuQTOzk9J
-	 NG44KCnBhEm9g==
+	b=VhIRc0bZjZmJWu0mzc9SwwJv2J4UjQqOrJH7L/AbT+ZWXTX8OwQe6A8903tci6nb2
+	 ERKECEQ2UdOZ3kJeOfqmacE36ioVDXo00vEkl7Pvcuanp+mIi6efbm/REqQ121wkZP
+	 VZbc/Lnk+lxgBV8oCBZQmBzLZCPSwuW6K7cx5XQwPuTQhHQp0mcV9YnjemJQ+DW/P7
+	 QiwTlfN1XI1HcTXW28xnWWNflfhh44r4eGEWJul8EFl29HTfwGCwGR/Fdpk8sF/YlI
+	 bnO7IVKElpG0iwt7gqYAXPnQol/O8sQDvQ7WIIlP0u2HFMavwpsaFgEsFf/6j85oYS
+	 i1H0nVstE0aPA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net 2/3] net/sched: Handle TC_ACT_REDIRECT from qdisc
- filter chains
+Subject: Re: [PATCH net 3/3] selftests/tc-testing: Verify bpf redirect on
+ RED block with preceding clsact (egress) classifier
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jamal Hadi Salim" <jhs@mojatatu.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260626165156.169012-3-jhs@mojatatu.com>
+In-Reply-To: <20260626165156.169012-4-jhs@mojatatu.com>
 References: <20260626165156.169012-1-jhs@mojatatu.com>
- <20260626165156.169012-3-jhs@mojatatu.com>
+ <20260626165156.169012-4-jhs@mojatatu.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 27 Jun 2026 16:52:18 +0000
-Message-Id: <20260627165220.096B61F00A3A@smtp.kernel.org>
+Date: Sat, 27 Jun 2026 16:52:20 +0000
+Message-Id: <20260627165220.CA0CD1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Removal of TC_ACT_REDIRECT support from qevents (tcf_qevent_handle=
-) breaks existing eBPF redirect functionality.
-- [Low] pr_warn_once() used inside a static inline function in a header fil=
-e will print multiple times.
+- [Medium] Hardcoded BPF object path 'action-ebpf' instead of using '$EBPFD=
+IR/action-ebpf'.
 --
 
-commit d96e142c03f9c1a1e9ac2e1d8c8fe26605053b10
-Author: Jamal Hadi Salim <jhs@mojatatu.com>
+commit f4ff308069725bd7a3b6c6f843ecb0fda5b73239
+Author: Victor Nogueira <victor@mojatatu.com>
 
-net/sched: Handle TC_ACT_REDIRECT from qdisc filter chains
+selftests/tc-testing: Verify bpf redirect on RED block with preceding clsac=
+t (egress) classifier
 
-When a TC filter attached to a qdisc filter chain returns TC_ACT_REDIRECT,
-the redirect is silently lost. This patch adds a tcf_classify_qdisc()
-wrapper to convert TC_ACT_REDIRECT to TC_ACT_SHOT and drops the packet.
-It also removes the TC_ACT_REDIRECT case from tcf_qevent_handle() since
-it is handled by the wrapper.
+This commit adds a test case to reproduce a NULL pointer dereference when a
+bpf filter attached to a RED block (which uses shared blocks) returns
+TC_ACT_REDIRECT while a preceding clsact egress classifier is present. The
+issue stems from a stack-allocated bpf_net_context being torn down before
+tcf_qevent_handle() calls skb_do_redirect().
 
-> diff --git a/include/net/pkt_cls.h b/include/net/pkt_cls.h
-> index 3bd08d7f39c18..3a542a72e9a55 100644
-> --- a/include/net/pkt_cls.h
-> +++ b/include/net/pkt_cls.h
+> diff --git a/tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.jso=
+n b/tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.json
+> index a1f97a4b606e8..762f86ceab1cd 100644
+> --- a/tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.json
+> +++ b/tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.json
 [ ... ]
-> @@ -159,6 +159,19 @@ static inline int tcf_classify(struct sk_buff *skb,
-> =20
->  #endif
-> =20
-> +static inline int tcf_classify_qdisc(struct sk_buff *skb,
-> +				     const struct tcf_proto *tp,
-> +				     struct tcf_result *res, bool compat_mode)
-> +{
-> +	int ret =3D tcf_classify(skb, NULL, tp, res, compat_mode);
-> +
-> +	if (unlikely(ret =3D=3D TC_ACT_REDIRECT)) {
-> +		pr_warn_once("TC_ACT_REDIRECT from qdisc filter chains is not supporte=
-d; use eBPF with clsact or mirred redirect instead\n");
+> @@ -1540,5 +1540,37 @@
+[ ... ]
+> +    {
+> +        "id": "fb8d",
+> +        "name": "Verify bpf redirect on RED block with preceding clsact =
+(egress) classifier",
+> +        "category": [
+> +            "qdisc",
+> +            "red",
+> +            "qevent",
+> +            "clsact"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP addr add 10.10.10.1/24 dev $DUMMY",
+> +            "$IP neigh add 10.10.10.2 lladdr 02:00:00:00:00:01 dev $DUMM=
+Y nud permanent",
+> +            "$TC qdisc add dev $DUMMY handle 1: root tbf rate 1Mbit burs=
+t 10K limit 1M",
+> +            "$TC qdisc add dev $DUMMY parent 1:1 handle 11: red limit 1M=
+ avpkt 1400 probability 1 burst 38 harddrop min 30000 max 30001 qevent earl=
+y_drop block 10",
+> +            "$TC qdisc add dev $DUMMY clsact",
+> +            "$TC filter add dev $DUMMY egress protocol ip prio 1 matchal=
+l action gact pass",
+> +            "$TC filter add block 10 protocol ip prio 1 matchall action =
+bpf obj action-ebpf sec action-redirect"
 
-[Severity: Low]
-Is this going to print multiple times instead of strictly once globally?
+[Severity: Medium]
+In the setup block for "Verify bpf redirect on RED block with preceding cls=
+act
+(egress) classifier", will this test fail with a file-not-found error when
+the tdc.py runner is executed in an out-of-tree build environment or with a
+customized $EBPFDIR?
 
-Because tcf_classify_qdisc() is a static inline function in a header file,
-each C file including it (like the various qdisc modules) will create its o=
-wn
-local instance of the static __already_done variable used by pr_warn_once().
+Should this path be updated to use $EBPFDIR/action-ebpf instead of the
+hardcoded action-ebpf so it aligns with other tests in the suite and finds
+the BPF object correctly?
 
-> +		ret =3D TC_ACT_SHOT;
-> +	}
-> +	return ret;
-> +}
-> +
->  static inline unsigned long
->  __cls_set_class(unsigned long *clp, unsigned long cl)
->  {
-> diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
-> index 3e67600a4a1a1..3ca56d060e28f 100644
-> --- a/net/sched/cls_api.c
-> +++ b/net/sched/cls_api.c
-> @@ -4033,7 +4033,7 @@ struct sk_buff *tcf_qevent_handle(struct tcf_qevent=
- *qe, struct Qdisc *sch, stru
-> =20
->  	fl =3D rcu_dereference_bh(qe->filter_chain);
-> =20
-> -	switch (tcf_classify(skb, NULL, fl, &cl_res, false)) {
-> +	switch (tcf_classify_qdisc(skb, fl, &cl_res, false)) {
-
-[Severity: High]
-Does this break existing eBPF redirect functionality for qevents?
-
-Prior to this patch, tcf_qevent_handle() correctly handled TC_ACT_REDIRECT
-by calling skb_do_redirect(skb). By using the tcf_classify_qdisc() wrapper
-here, TC_ACT_REDIRECT is unconditionally converted to TC_ACT_SHOT. This
-inadvertently drops packets that were legitimately redirecting from qevents.
-
->  	case TC_ACT_SHOT:
->  		qdisc_qstats_drop(sch);
->  		__qdisc_drop(skb, to_free);
-> @@ -4045,10 +4045,6 @@ struct sk_buff *tcf_qevent_handle(struct tcf_qeven=
-t *qe, struct Qdisc *sch, stru
->  		__qdisc_drop(skb, to_free);
->  		*ret =3D __NET_XMIT_STOLEN;
->  		return NULL;
-> -	case TC_ACT_REDIRECT:
-> -		skb_do_redirect(skb);
-> -		*ret =3D __NET_XMIT_STOLEN;
-> -		return NULL;
->  	case TC_ACT_CONSUMED:
->  		*ret =3D __NET_XMIT_STOLEN;
->  		return NULL;
+> +        ],
+> +        "cmdUnderTest": "bash -c 'data=3D$(head -c 1400 /dev/zero | tr \=
+"\\0\" \"x\"); exec 3>/dev/udp/10.10.10.2/12345; for i in $(seq 1 8000); do=
+ printf \"%s\" \"$data\" >&3; done; exit 0'",
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260626165156.1690=
-12-1-jhs@mojatatu.com?part=3D2
+12-1-jhs@mojatatu.com?part=3D3
