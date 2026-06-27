@@ -1,175 +1,182 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B5CB324B20
-	for <bpf@vger.kernel.org>; Sat, 27 Jun 2026 17:35:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782581701; cv=pass; b=pQbiwEialeuFd1A7Z6XW4emxO+hjPUd+L04b9d/0r5ZfZ5abIgphh8NXE5LktvW2auJD2ypoFbGLS7NcNJzqyGnqa0yKBsZdiHJ8CLZmKFv4aYRlpBTDBevx6GMr7wWYiNHZIfOo7d6f7LQg+dEj9NPgPpHNHEdvXqMRqcf8WvU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782581701; c=relaxed/simple;
-	bh=EtSa3a4s7pUIWy8W5ASP2Hk6Xhg7fEmw0EI/tsx6ptI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nTDwpph5ozJbtUxCBkaijOI8YNOYf7rm3o92XAMsg2OzoOqhxExTGf7Zt9K0Zmo3Cqp+Kxc0GFOLbDGvk+ZmoLP/3wAAXu/9ug5oyl3pTQF+ZwJsmzg3xNCvSt51DHyjPRymPYUFam6BKDxLgIv9xXfUWc/6Uj7NC5NgjkriJHU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rHMA200h; arc=pass smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rHMA200h"
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-80b9993928dso21966177b3.0
-        for <bpf@vger.kernel.org>; Sat, 27 Jun 2026 10:35:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782581699; cv=none;
-        d=google.com; s=arc-20260327;
-        b=XMcN6zyKZU3RaqWRuwdkkeY1pc238TXDUkNstJRICInKYAdLJZ3rEAhCfSJy12ksYJ
-         Uwak54lBrR9jSfVjnqbUr7uxHlD/wIAJP8a1YBACWyjPPUaJVXKq1gW9DrUXEfJyVUe0
-         MGOrN8sbKehyyi1K/nbA/8SgBoK/edYBYguTzyQTsENDAdDMpOC0BaHJCQYeRRLxGoqL
-         V7sPq5mMuHUfsTy4r+fUUO3SZ/AM3O7DRUWE/JgHX2pxncMzmCFmM16JTDFBgCfsH7K8
-         8iFGa0axzcpjsvHK8syjoai6iXOIG1JpkeGTq/aqy0akEmm4ahUHg+BxisXeMKETwc4c
-         TmOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Dgu34QrpNJdt6cwZYfvIh4PfqfTJtLR90pHZigkhqr8=;
-        fh=2aCXmKs/P3WiK4T1jeBRtuqx/1uh7EZk2x7W9SOGuV4=;
-        b=LyUDqCjU+YUuqvdIRi8ak8eGAOdls9oAC4vp2gqrMS2Wo4/gfhtZ10LAsKSfMF5cu1
-         dCHBN7pIEcwsfK7X2d1+lpmslFk5QdZAgTUtbnNZ0tfO4ensBdnQzkSfT5aAsXpnCxg6
-         mL01MzeXU3zt+xIVDVbrQMHlo+A12e+UHgZej0xlBbgG8660T/4r3YA7KscShOeTJeHv
-         6syisgOzm8WOUNYQWMuGgL8NRqreTTpYL0PHX2m6VR2XfVhr9tTSrFACxiVoTFHD1Wri
-         i9SsUeBO/woXnQXB9le2Ewn604kWRJpB82MJQQ8LjE82J7XAq1cTYcD/xEVtV491Qh6+
-         OwuQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782581699; x=1783186499; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dgu34QrpNJdt6cwZYfvIh4PfqfTJtLR90pHZigkhqr8=;
-        b=rHMA200h85kj5cgUDkXotqTcF9w2HC9z0SaL/mGqx7SI6VLThAmZXDrzzTQPc5hlK0
-         y53Wz1YwaZT0FqhF7aVKBGu0UGUu3B8i0hQuXd6Bi5qgoSCQ6e/NawDcvdKaL9DeyV7W
-         xNCd9PE3wRPCU3q5BophlCLtea/GkhQ3Ir5/XkBn7Rx6i/raJtK/rgmoFYfXRC2M6Y85
-         JFERMRi4gagYs/2mrf71a1yYqiRdwkRul66mFIdZXJnDO65wavzoAXkG90rgp2bpaZ36
-         PK8ehOMdTZtJ+xNqT4P02gv36vQAngW5JZsXpZBThPnFMw4G4dnk5MPUPD8SOKKmsVyz
-         LpKQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73702BE7DC
+	for <bpf@vger.kernel.org>; Sat, 27 Jun 2026 20:51:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.198
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782593510; cv=none; b=p0QS7gh9a0IeLW+QFQa/Zy/5vZHAlKgE0QSn0j9qWly7RR8NnQZTpHCzndfGtxAxdxcxETQK9IanihLGozi2Xxf+xwP0hkUWt1IWZ9hS/vK+n6bS5Vv32D5ZDeV8DaPlt8fD7b+4DZ6LrnVjpBGj4Ys1oFjZ3H1Q9Q/hXYE9IL0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782593510; c=relaxed/simple;
+	bh=EYOr+I1UR6hrKji8oTo3Po6OA/9JWWKwDQVbeWXGq0I=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=QmpxKtCUWn0/4In7vcwqlszzPk2Z6CAgMBrPks+zmtzbWwmwRcvqXqKZQEZQFnMdJQhv6L+V0O2jgSRUXfAhMacsY4J/EqO4diNXMQ1Mf95WIHhuMtIE60j1v2STDrZHmb21LQJWcIY0xZbG9f3lBQo7W+k5WleilgsR0I2pUuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-495b9aef82bso14592b6e.1
+        for <bpf@vger.kernel.org>; Sat, 27 Jun 2026 13:51:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782581699; x=1783186499;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Dgu34QrpNJdt6cwZYfvIh4PfqfTJtLR90pHZigkhqr8=;
-        b=Bj/seNtuqzX+EDHzeN4WTJ9j44goT/nGpgZe2IpiAEQmFmV/qoNd7grVPaTJTLMXB6
-         tbDUDq7uWfQEXyQ4TVCe8YGXOElpctbgaPiS+Ls6jVsW4GYc/fYU+eUgU24DrBKINNmb
-         s4q7CceknumUiSxsKbL9091fq/1yv5LagpoxL12DVPyeiSIuM2OMRq1Z+0IP1ej8UlZV
-         hxHtpx8jyW45hUJHjAB0l5pmxaU+NRmUiiIokcG/+XVnT9vcvQBaEZbaR9tg6yc07mLa
-         WF1KWf2hxgiFvebR4VBVfAUmvOb7KJpEONwBHIfeP9Xr22btE1rl4I6E79ukS95vjAm8
-         Xbzw==
-X-Forwarded-Encrypted: i=1; AHgh+RqqGlgcSDdWJmwTtst6rp0zBST988cpqVi1JDWzBABlHZ3KervbOjkyek7z10dUS+5Gwrs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxek8PFVCAmk7HJ0duya1cRX/7pUWiS+uWev6mYDnefT5qntC1r
-	c0MhDsr9d8Rnz8kXcKEKWaSDsCWz3UYxIsiUyEgCy1xwh16YRFHW3A3vilgA64lVy+1Zg3ZBpus
-	3wEyelDD2dYfODSgbTTXrPdLtosOlKbY=
-X-Gm-Gg: AfdE7ckV3rzY0ziAXqS4L2Ne8O6GTUCLd0MFxGcXsOUFBXi5seYnpw4M1xzT3N7Es2r
-	evD2vv/sneSUbXBdWz/CwhMI0p83KGk1FPtyl4ksLZ81OSWVEJE4vc4rnWIHNTl++EcgO3cypjW
-	djzsiFQ87CAsfum1MvM/eKau4t3rjx8nGnsI5OhOO3COVWLiSR6JX5Zb+J6xzLElHTUOzJqDcGy
-	7WRFZLyqmSDDn6EEHeR+xO8ftEfKszdCEUCJqVcaextJmyCU8YZi546hEht28Egew4GiHMmu3YP
-	/faL3KNd2fqHeBbOGZrJtj+NcuhehD6BVyuEYAxiX82AYeqZ
-X-Received: by 2002:a05:690c:e370:b0:7dc:1609:53ae with SMTP id
- 00721157ae682-80a6a09b112mr118115867b3.25.1782581699520; Sat, 27 Jun 2026
- 10:34:59 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782593508; x=1783198308;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pcvETmGL2+C/qu3TncN0uerG3p6eS94cOX3VfeI4Y3E=;
+        b=b2UtL5FBlLX2ThEdrEWJsypbvIkvMxyWS4GnqjiaQMdCFO66IGU/ffYDIxzY/22AMm
+         K3lJoy6xWuLcfsH2LhTl6y+gf87bMWuqNWm2JCAtaPXKosJP0o5vbjFZSU5+8qP52WCh
+         l+fIzrd5yFNGGfB2fer6QM4DIEu/xu1Qqm3l6CSLuw1F/puRF1hxAHqD//3HAGYImr3X
+         3bFCvWEc/BP8Y6KIRUQ49ca3KwZYhYEoWZxqJlXY9Uwb3KUpK5E7Uw1etZUyhTZHcjsx
+         kdIZHruFdkKwwIrsCPSXMY7vJUzKgl9wznsr6NnKcf4SMteNQFkcf+F1GdwPhW5NLwGv
+         F3LA==
+X-Forwarded-Encrypted: i=1; AFNElJ8f9a0RHpNAx62MxXsqWkQOBI1LtU+rE/tCBNumUsQdUj27hV2G3imsqe9rBlo0UzH+igY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgVw6m0d110fWeez7kbWgCZiAR5rUtiaNfS5YQXUbvZ60cmgHK
+	VmdyNkC/G5i+epQfnqvB/WaJHD9uD7IOIBzjvISwSFHJ0u4NjFN1AM30HOnHPJoisNfqt3QUVBm
+	ADZR0zIwkYoQfRrmzIO0kU30VOieH0uSpNDYT+hM3SDRH5nYzPaEsAGi8fzQ=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260626-sockmap-lookup-udp-leak-v2-0-7e7e201c951a@rbox.co>
-In-Reply-To: <20260626-sockmap-lookup-udp-leak-v2-0-7e7e201c951a@rbox.co>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Sun, 28 Jun 2026 01:34:48 +0800
-X-Gm-Features: AVVi8CdMPlgvdtTlopQ1G7HcBFTuPVL00FJZpDP6g1ISEPYbsnwP6Z4y-kISnc0
-Message-ID: <CABFUUZGg1B0vaw9DFX3uTHxpRyyGtvn04Ae=Ob-VmnuVJB4KLg@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 0/4] bpf, sockmap: Fix sockmap leaking UDP socks
-To: Michal Luczaj <mhal@rbox.co>
-Cc: Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>, 
-	John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Jiayuan Chen <jiayuan.chen@linux.dev>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Cong Wang <cong.wang@bytedance.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+X-Received: by 2002:a05:6808:c2b6:b0:490:315d:e0d5 with SMTP id
+ 5614622812f47-4921791c07bmr10799686b6e.16.1782593507863; Sat, 27 Jun 2026
+ 13:51:47 -0700 (PDT)
+Date: Sat, 27 Jun 2026 13:51:47 -0700
+In-Reply-To: <cover.1782571533.git.xukuohai@huawei.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6a4037e3.80e5668d.5d0ef.0011.GAE@google.com>
+Subject: [syzbot ci] Re: bpf: Introduce static-defined tracing probe for BPF
+From: syzbot ci <syzbot+cif1531a0a181338a9@syzkaller.appspotmail.com>
+To: a.s.protopopov@gmail.com, ameryhung@gmail.com, andrii@kernel.org, 
+	ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, 
+	eyal.birger@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
+	linux-kernel@vger.kernel.org, memxor@gmail.com, rongtao@cestc.cn, 
+	xukuohai@huaweicloud.com, yonghong.song@linux.dev
+Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 27, 2026 at 4:37=E2=80=AFAM Michal Luczaj <mhal@rbox.co> wrote:
->
-> Fix for UDP sockets getting leaked during sockmap lookup/release.
-> Accompanied by selftests updates.
->
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> ---
-> Changes in v2:
-> - selftest: drop the original, adapt old tests
-> - fix: change approach to rejecting unbound UDP [Kuniyuki]
-> - Link to v1: https://patch.msgid.link/20260623-sockmap-lookup-udp-leak-v=
-1-0-05804f9308e4@rbox.co
->
-> ---
-> Michal Luczaj (4):
->       bpf, sockmap: Reject unhashed UDP sockets on sockmap update
->       selftests/bpf: Ensure UDP sockets are bound
->       selftests/bpf: Adapt sockmap update error handling
->       selftests/bpf: Fail unbound UDP on sockmap update
->
->  net/core/sock_map.c                                     |  2 ++
->  tools/testing/selftests/bpf/prog_tests/sockmap_basic.c  |  6 +++---
->  tools/testing/selftests/bpf/prog_tests/sockmap_listen.c | 17 +++++++++--=
-------
->  tools/testing/selftests/bpf/test_maps.c                 |  6 +++---
->  4 files changed, 17 insertions(+), 14 deletions(-)
-> ---
-> base-commit: 26490a375cb9be9bac96b5171610fd85ca6c2305
-> change-id: 20260617-sockmap-lookup-udp-leak-bc4e5c5481d7
->
-> Best regards,
-> --
-> Michal Luczaj <mhal@rbox.co>
->
->
+syzbot ci has tested the following series
 
-Hi Michal,
+[v1] bpf: Introduce static-defined tracing probe for BPF
+https://lore.kernel.org/all/cover.1782571533.git.xukuohai@huawei.com
+* [RFC PATCH bpf-next 01/12] libbpf: Prepare bpf SDT probe section for the linker
+* [RFC PATCH bpf-next 02/12] libbpf: Introduce bpf SDT probe macros
+* [RFC PATCH bpf-next 03/12] libbpf: Add bpf_sdt_notes section parser
+* [RFC PATCH bpf-next 04/12] bpf: Create insn_array map for bpf SDT probe
+* [RFC PATCH bpf-next 05/12] bpf: Collect SDT probe BTF IDs from BTF decl tags
+* [RFC PATCH bpf-next 06/12] bpf: Add type check for SDT probe site
+* [RFC PATCH bpf-next 07/12] bpf: Record probe name in SDT map
+* [RFC PATCH bpf-next 08/12] libbpf: Add libbpf support to load SDT observer program
+* [RFC PATCH bpf-next 09/12] bpf: Add kernel support to load SDT observer program
+* [RFC PATCH bpf-next 10/12] bpf: Support attach and detach for SDT observer program
+* [RFC PATCH bpf-next 11/12] bpf, x86: Add JIT support SDT for probe
+* [RFC PATCH bpf-next 12/12] selftests/bpf: Add tests for bpf SDT probe
 
-I tested this series on bpf.git base commit:
-  26490a375cb9be9bac96b5171610fd85ca6c2305
-The test environment was virtme-ng x86_64.
+and found the following issue:
+general protection fault in do_jit
 
-Before, with only patches 2/4-4/4 applied:
-  sockmap_basic:  PASS
-  sockmap_listen: FAIL as expected
-    - UDP test_insert_opened failed on sockmap/sockhash,
-      both IPv4 and IPv6
-  test_maps:      FAIL as expected
-    - failed at the new unbound SOCK_DGRAM update check
+Full report is available here:
+https://ci.syzbot.org/series/86d21ab6-d0e1-4dd3-b7e1-af4571d27460
 
-After applying the full series:
-  sockmap_basic:  PASS
-  sockmap_listen: PASS
-  test_maps:      no longer failed at the unbound
-                  SOCK_DGRAM update check
-test_maps still later reported:
-  Failed sockmap unexpected timeout
+***
 
-However, I can reproduce the same timeout in three consecutive
-runs on the unmodified base commit, so this looks pre-existing or
-environmental in my virtme-ng setup rather than a regression from
-this series.
+general protection fault in do_jit
 
-I am not adding a Tested-by tag for now because test_maps does not
-fully pass in my setup. The targeted before/after behavior behaved as
-expected.
+tree:      bpf-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
+base:      53435562a725962e4de0c29653223129ba11643a
+arch:      amd64
+compiler:  Debian clang version 22.1.6 (++20260514074242+fc4aad7b5db3-1~exp1~20260514074407.73), Debian LLD 22.1.6
+config:    https://ci.syzbot.org/builds/549153a4-d4b8-46a4-8266-df26ad835e2f/config
+syz repro: https://ci.syzbot.org/findings/2efaa7e4-eae0-45d0-b336-f0e311f8356e/syz_repro
 
-Thanks,
-Sun Jian
+Oops: general protection fault, probably for non-canonical address 0xdffffc000000010e: 0000 [#1] SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x0000000000000870-0x0000000000000877]
+CPU: 1 UID: 0 PID: 5818 Comm: syz.2.19 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+RIP: 0010:do_jit+0x7c8c/0x12a90 arch/x86/net/bpf_jit_comp.c:2806
+Code: 49 83 c4 44 4c 89 e0 48 c1 e8 03 0f b6 04 10 84 c0 0f 85 0a 84 00 00 45 03 34 24 48 8b bc 24 a0 01 00 00 48 89 f8 48 c1 e8 03 <80> 3c 10 00 74 17 e8 49 30 b0 00 48 8b bc 24 a0 01 00 00 48 ba 00
+RSP: 0018:ffffc900038cf640 EFLAGS: 00010202
+RAX: 000000000000010e RBX: 000000000000001c RCX: 0000000000000000
+RDX: dffffc0000000000 RSI: 0000000000000000 RDI: 0000000000000870
+RBP: ffffc900038cfa00 R08: ffff88816bb0d940 R09: 0000000000000096
+R10: 00000000000000fb R11: 0000000000000000 R12: ffff8881749b8044
+R13: ffff88816c445450 R14: 0000000000000003 R15: 0000000000000000
+FS:  00007f06814986c0(0000) GS:ffff8882a9224000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f0680472780 CR3: 000000001cfc8000 CR4: 00000000000006f0
+Call Trace:
+ <TASK>
+ bpf_int_jit_compile+0x8af/0x1620 arch/x86/net/bpf_jit_comp.c:3946
+ bpf_prog_jit_compile kernel/bpf/core.c:2571 [inline]
+ __bpf_prog_select_runtime+0x4e2/0xb20 kernel/bpf/core.c:2640
+ bpf_migrate_filter net/core/filter.c:1318 [inline]
+ bpf_prepare_filter+0x10ef/0x1280 net/core/filter.c:1366
+ sk_attach_filter+0x24/0x140 net/core/filter.c:1550
+ tun_attach_filter+0x176/0x280 drivers/net/tun.c:2992
+ __tun_chr_ioctl+0x15f1/0x1e10 drivers/net/tun.c:3344
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:597 [inline]
+ __se_sys_ioctl+0xfc/0x170 fs/ioctl.c:583
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0x174/0x580 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f068059ce59
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f0681498028 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f0680815fa0 RCX: 00007f068059ce59
+RDX: 0000200000000300 RSI: 00000000401054d5 RDI: 0000000000000003
+RBP: 00007f0680632e6f R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f0680816038 R14: 00007f0680815fa0 R15: 00007fff056e7c98
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:do_jit+0x7c8c/0x12a90 arch/x86/net/bpf_jit_comp.c:2806
+Code: 49 83 c4 44 4c 89 e0 48 c1 e8 03 0f b6 04 10 84 c0 0f 85 0a 84 00 00 45 03 34 24 48 8b bc 24 a0 01 00 00 48 89 f8 48 c1 e8 03 <80> 3c 10 00 74 17 e8 49 30 b0 00 48 8b bc 24 a0 01 00 00 48 ba 00
+RSP: 0018:ffffc900038cf640 EFLAGS: 00010202
+RAX: 000000000000010e RBX: 000000000000001c RCX: 0000000000000000
+RDX: dffffc0000000000 RSI: 0000000000000000 RDI: 0000000000000870
+RBP: ffffc900038cfa00 R08: ffff88816bb0d940 R09: 0000000000000096
+R10: 00000000000000fb R11: 0000000000000000 R12: ffff8881749b8044
+R13: ffff88816c445450 R14: 0000000000000003 R15: 0000000000000000
+FS:  00007f06814986c0(0000) GS:ffff8882a9224000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f06805ea540 CR3: 000000001cfc8000 CR4: 00000000000006f0
+----------------
+Code disassembly (best guess):
+   0:	49 83 c4 44          	add    $0x44,%r12
+   4:	4c 89 e0             	mov    %r12,%rax
+   7:	48 c1 e8 03          	shr    $0x3,%rax
+   b:	0f b6 04 10          	movzbl (%rax,%rdx,1),%eax
+   f:	84 c0                	test   %al,%al
+  11:	0f 85 0a 84 00 00    	jne    0x8421
+  17:	45 03 34 24          	add    (%r12),%r14d
+  1b:	48 8b bc 24 a0 01 00 	mov    0x1a0(%rsp),%rdi
+  22:	00
+  23:	48 89 f8             	mov    %rdi,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	80 3c 10 00          	cmpb   $0x0,(%rax,%rdx,1) <-- trapping instruction
+  2e:	74 17                	je     0x47
+  30:	e8 49 30 b0 00       	call   0xb0307e
+  35:	48 8b bc 24 a0 01 00 	mov    0x1a0(%rsp),%rdi
+  3c:	00
+  3d:	48                   	rex.W
+  3e:	ba                   	.byte 0xba
+
+
+***
+
+If these findings have caused you to resend the series or submit a
+separate fix, please add the following tag to your commit message:
+  Tested-by: syzbot@syzkaller.appspotmail.com
+
+---
+This report is generated by a bot. It may contain errors.
+syzbot ci engineers can be reached at syzkaller@googlegroups.com.
+
+To test a patch for this bug, please reply with `#syz test`
+(should be on a separate line).
+
+The patch should be attached to the email.
+Note: arguments like custom git repos and branches are not supported.
