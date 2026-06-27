@@ -1,177 +1,235 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD7C40D57D
-	for <bpf@vger.kernel.org>; Sat, 27 Jun 2026 15:12:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843EA23EA8B
+	for <bpf@vger.kernel.org>; Sat, 27 Jun 2026 15:13:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782573151; cv=none; b=k6Pns6ZKs2NHWErz2H+ap3R4tK7si01Z8eZAX23fDNhPFZqc4wmlVLCMlXbgboXUxbrTi/6bkAEjleySsB/eQvBzFW/QqkSi+DMOjU7cRUi9fDdGap5D0Y49xL5gKjZLVjjqHCmTSUXDk1JxO/J34KUCMjWJ7NN6LatdCQEAPZw=
+	t=1782573217; cv=none; b=GJAG8HEWO8ihWFZwtKGx2W5Tk1w95oVXiU4YoXC1xsJ/NGo7i26elK88MqPIsO/SCGQn0BCvzjdee3iP+5tvUf07j5Lo1ZJvenHuQXgyb4FpfKPp6D6n7YwRiLuXfpBatDCXXqnaqDK8AI6p3Sr9UWF/RHMn8OafAM/kZKqtvsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782573151; c=relaxed/simple;
-	bh=dOofpu4BeBmujabaPNv2OVanQGo6zI5FSiAgCqRRcMw=;
+	s=arc-20240116; t=1782573217; c=relaxed/simple;
+	bh=R+4n81MJHTzIYUhc+IY4h7BKKbghu69QkEDEA8AO8+M=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Ay6MrPGz4LIwDQc1zKthVaGPlZUoUYeBZ/U0w7v1adSOalgU4W7hRzzm2rxjrR5+SQT/fT1lw4IJ8QRbvgIMK7Hlg4IYMEGXxn5cufwXCv9P0FnFgZs5ypngGIY/xQm29x/FQbt2kjk8TaW5eb0QFcdLB9oN5Vmr2xHjmCdt8hI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eD2JH0oQ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=g1ntPULPHEOduGLQFQnTvBCrvMDurR1/sSk4b+pZGOr+uqG4Z9vQ0H+Z2nWI5TaA8YyTFHN6LLm4bFTWQsmsrn76YoK8+sME/djsV5y2aOSxYzmE+BXHtdz62ZEpJHuo1nMjEa0QipAU8zd7eQmGkpuRJqPS1iBQUZifAHGCsFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EsnsiKcJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eD2JH0oQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED1B41F000E9;
-	Sat, 27 Jun 2026 15:12:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EsnsiKcJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A72721F000E9;
+	Sat, 27 Jun 2026 15:13:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782573148;
-	bh=R7r9Q70I63i7UB2+2z6o4iX2k3W/kVFfFIWBMM+hQ4k=;
+	s=k20260515; t=1782573214;
+	bh=p7LZMZaaotv9JfJG1yVEuko6Zht6GCxhZ0yMax2b4WA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=eD2JH0oQlhNWYky/Lg4JFdBh/nGO3WwP0H2XN/RyNPZehccY3thVV4F0+hMQHUt0n
-	 hLF5fnAaAKjdJUlIGIBqRdgKeygyaa3MkUjys34Xp3XtK8Onuq2FKxdbngKDeCngzC
-	 HucHtE9WWbuFckh9vy+l6rBwmNBIYYpiJ+wJGqycG6MDUn5YruS4/A/tFlSRp24PiI
-	 YzF4S15+FN2tc4/HnM9JpRBOMEAvtPCXQtb6s5KBQSLrXUdAq20+E/G249KtgXSJY7
-	 YLhKHu9N8dHyRBU+3Wfn9QTcuGeZtoSQ1Qv7eXfUCyXWcFAWB0g4agsRygeQ08dD2U
-	 ozddkp2MiweGw==
+	b=EsnsiKcJ0DPy+D89S2zHdqS4Ffxw7LOdSKfxqQJWN8lTqbvjvXPH+alrqEgxrYsHX
+	 GJgPKAPT8Qllu/yefrpq7Psoap8niNr6uupZgVazFwd6t7gf0uj0Jt1WvjO1OHiC/2
+	 c9AXhvCgRpJW11pGaphNG08nGibXoQOpMxHiwt+c9/kfMPFgs+qyUSCk+WLDC7Ap9Q
+	 +0BqCJuWtBVspa8XphhIJWFaVny0SMFth8UTPaLCDto17tMPxwlulhRv81wL6ceEYw
+	 z02yz5KVp0EEDre2yKDQNbroiihmzibpiQzQb/D6aDxJ7MZCKzUERzdwrf2HFdpH1U
+	 hVEHKNgWQxD5Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next 09/12] bpf: Add kernel support to load SDT
- observer program
+Subject: Re: [RFC PATCH bpf-next 11/12] bpf, x86: Add JIT support SDT for
+ probe
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Xu Kuohai" <xukuohai@huaweicloud.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <e5e991c7573600676c0de49b7b794e1f2b6d956a.1782571533.git.xukuohai@huawei.com>
+In-Reply-To: <48943c5608280cade48d459ca15fd156c7470209.1782571533.git.xukuohai@huawei.com>
 References: <cover.1782571533.git.xukuohai@huawei.com>
- <e5e991c7573600676c0de49b7b794e1f2b6d956a.1782571533.git.xukuohai@huawei.com>
+ <48943c5608280cade48d459ca15fd156c7470209.1782571533.git.xukuohai@huawei.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 27 Jun 2026 15:12:27 +0000
-Message-Id: <20260627151227.ED1B41F000E9@smtp.kernel.org>
+Date: Sat, 27 Jun 2026 15:13:34 +0000
+Message-Id: <20260627151334.A72721F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
 s) to consider:
-- [High] Reference count leak of `dst_prog` due to pointer overwrite in `bp=
-f_prog_load()`.
-- [High] Error paths in `BPF_TRACE_SDT` handling bypass `put_sdt` cleanup, =
-leaking `attach_btf` and `dst_prog`.
-- [High] Memory leak of `prog->aux->sdt_probe` on early load failures in `b=
-pf_prog_load()`.
-- [Medium] bpf_insn_array_get_sdt_probe_by_name returns an incorrect semant=
-ic error code when a probe is not found.
+- [Critical] NULL pointer dereference in the x86 JIT compiler for classic B=
+PF (cBPF) programs
+- [High] Stack buffer overflow in `bpf_sdt_link_attach()` due to unvalidate=
+d `nargs` field
+- [High] Out-of-bounds read in the Verifier and JIT compiler via unvalidate=
+d SDT argument registers
+- [High] The SDT probe trampoline clobbers x86 caller-saved registers, corr=
+upting the execution state of the target BPF program
+- [High] Verifier bypass of SDT probe constraints via duplicate `orig_off` =
+map entries
 --
 
-commit 02476bf5b9d80f3ff0471539243d877d096c0806
+commit e3ca8ab99711f4294e8b0182251c50473a63e6d7
 Author: Xu Kuohai <xukuohai@huawei.com>
+Subject: bpf, x86: Add JIT support SDT for probe
 
-bpf: Add kernel support to load SDT observer program
+This commit adds x86 JIT support for SDT probes. It jits SDT probe sites to
+a 5-byte NOP and patches them to a CALL instruction when attached to an
+observer program. It also modifies the BPF trampoline to save and restore
+arguments from the func_model's arg_regs instead of fixed BPF registers.
 
-Add kernel support to load SDT observer program. The program is
-verified as a normal tracing type program while the target FUNC_PROTO
-is resolved in the SDT map of the target program using the probe name
-passed by the user.
-
-> diff --git a/kernel/bpf/bpf_insn_array.c b/kernel/bpf/bpf_insn_array.c
-> index a9564ef4b2efa..067cc1b817d5f 100644
-> --- a/kernel/bpf/bpf_insn_array.c
-> +++ b/kernel/bpf/bpf_insn_array.c
-[ ... ]
-> +int bpf_insn_array_get_sdt_probe_by_name(struct bpf_prog *prog, const ch=
-ar *name,
-> +					 struct bpf_insn_array_value *val,
-> +					 unsigned long *ip)
-> +{
-[ ... ]
-> +		for (j =3D 0; j < map->max_entries; j++) {
-> +			if (insn_array->values[j].xlated_off =3D=3D INSN_DELETED)
-> +				continue;
-> +			if (!strcmp(insn_array->values[j].name, name)) {
-> +				*val =3D insn_array->values[j];
-> +				*ip =3D (unsigned long)insn_array->ips[j];
-> +				return 0;
-> +			}
-> +		}
-> +	}
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 054e043ffcd22..262f1bd74d53f 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -2797,6 +2797,16 @@ st:			insn_off =3D insn->off;
+>  			}
+> =20
+>  			if (!jmp_offset) {
+> +				int index =3D bpf_prog->aux->subprog_start + i - 1;
 > +
-> +	return -EEXIST;
+> +				/*
+> +				 * Emit a 5-byte NOP for SDT probe site, so it can be patched to
+> +				 * a CALL instruction when observer program is attached.
+> +				 */
+> +				if (env->insn_aux_data[index].sdt_entry) {
 
-[Severity: Medium]
-Is -EEXIST the correct error code when a probe is not found? Would -ENOENT =
-be
-more appropriate to indicate a missing entry?
+[Severity: Critical]
+Does this code dereference a NULL pointer when JIT compiling classic BPF
+programs?
 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index dc881e5ad4114..8b2c73bb6c2a8 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
+When an unprivileged user attaches a classic BPF filter containing a jump to
+the next instruction, the kernel translates it to eBPF and invokes
+bpf_int_jit_compile() with a NULL verifier environment.
+
+During compilation, do_jit() processes the jump with a zero offset and
+evaluates env->insn_aux_data[index].sdt_entry. Since env is NULL, could this
+lead to an immediate kernel panic?
+
+> +					emit_nops(&prog, X86_PATCH_SIZE);
+> +					break;
+> +				}
+>  				/*
+>  				 * If jmp_padding is enabled, the extra nops will
+>  				 * be inserted. Otherwise, optimize out nop jumps.
+
 [ ... ]
-> @@ -3082,33 +3085,75 @@ static int bpf_prog_load(union bpf_attr *attr, bp=
-fptr_t uattr, struct bpf_log_at
->  		btf_get(attach_btf);
+
+> @@ -3087,9 +3101,12 @@ static void restore_regs(const struct btf_func_mod=
+el *m, u8 **prog,
+>  		arg_regs =3D (m->arg_size[i] + 7) / 8;
+>  		if (nr_regs + arg_regs <=3D 6) {
+>  			for (j =3D 0; j < arg_regs; j++) {
+> -				emit_ldx(prog, BPF_DW,
+> -					 nr_regs =3D=3D 5 ? X86_REG_R9 : BPF_REG_1 + nr_regs,
+> -					 BPF_REG_FP,
+> +				u8 reg =3D (flags & BPF_TRAMP_F_SDT_PROBE)
+> +					? m->arg_regs[nr_regs]
+> +					: (nr_regs =3D=3D 5 ? X86_REG_R9
+> +					   : BPF_REG_1 + nr_regs);
+> +
+> +				emit_ldx(prog, BPF_DW, reg, BPF_REG_FP,
+
+[Severity: High]
+Can this lead to an out-of-bounds read if the register index is unvalidated?
+
+If a user provides an out-of-bounds value for arg_reg in an insn_array map
+entry, and the verifier is bypassed, could m->arg_regs[nr_regs] hold a value
+exceeding the expected register range?
+
+When this unvalidated index is passed to emit_ldx(), it appears to cause an
+out-of-bounds read on the reg2hex array during x86 opcode generation,
+potentially corrupting memory.
+
+Is there a similar issue in check_sdt_probe() during verification?
+
+kernel/bpf/verifier.c:check_sdt_probe() {
+    ...
+    u8 reg =3D val->arg_reg[i];
+    struct bpf_reg_state *rs =3D &regs[reg];
+    ...
+}
+
+If reg is unvalidated, could this also cause an out-of-bounds read on the
+verifier's regs array?
+
+>  					 -stack_size);
+>  				stack_size -=3D 8;
+>  				nr_regs++;
+
+[ ... ]
+
+> @@ -3603,7 +3620,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf=
+_tramp_image *im, void *rw_im
 >  	}
 > =20
-> +	/*
-> +	 * find the probe site in the target program at load time of the
-> +	 * observer program, so the verifier can check the observer's context
-> +	 * arguments from the probe's FUNC_PROTO.
-> +	 */
-> +	if (attr->expected_attach_type =3D=3D BPF_TRACE_SDT) {
-> +		struct bpf_insn_array_value sdt_val;
-> +		struct bpf_sdt_probe_info *sdt_probe;
-> +		unsigned long probe_ip;
-> +
-> +		if (!bpf_jit_supports_sdt_probe()) {
-> +			err =3D -EOPNOTSUPP;
-> +			goto put_token;
-> +		}
-> +		if (!attr->sdt.target_prog_fd) {
-> +			err =3D -EINVAL;
-> +			goto put_token;
+>  	if (flags & BPF_TRAMP_F_RESTORE_REGS)
+> -		restore_regs(m, &prog, regs_off);
+> +		restore_regs(m, &prog, regs_off, flags);
 
 [Severity: High]
-Does jumping to put_token here bypass the cleanup of attach_btf and dst_pro=
-g?
-If those resources were acquired earlier in bpf_prog_load(), it looks like
-they might be leaked since the put_sdt label is skipped.
+Does the SDT probe trampoline clobber x86 caller-saved registers here?
 
-> +		}
-> +		dst_prog =3D bpf_prog_get(attr->sdt.target_prog_fd);
+The verifier treats the 5-byte NOP as a jump with a zero offset, assuming a=
+ll
+BPF caller-saved registers remain intact. However, when an observer attache=
+s,
+the NOP is patched to call the BPF trampoline, which executes the observer
+program.
 
-[Severity: High]
-Could overwriting dst_prog here leak the BPF program reference? If the call=
-er
-populated both attr->attach_prog_fd and attr->sdt.target_prog_fd, dst_prog
-would already hold a reference that seems to get lost on this assignment.
+Could the observer program clobber the x86 caller-saved registers (RAX, RCX,
+RDX, RDI, RSI, R8)? Since restore_regs() only restores the explicitly track=
+ed
+SDT argument registers, the remaining caller-saved registers might remain
+corrupted when control returns to the target program, potentially corrupting
+its execution state.
 
-> +		if (IS_ERR(dst_prog)) {
-> +			err =3D PTR_ERR(dst_prog);
-> +			dst_prog =3D NULL;
-> +			goto put_token;
-> +		}
+> =20
+>  	/* This needs to be done regardless. If there were fmod_ret programs,
+>  	 * the return value is only updated on the stack and still needs to be
+
 [ ... ]
->  	prog->expected_attach_type =3D attr->expected_attach_type;
->  	prog->sleepable =3D !!(attr->prog_flags & BPF_F_SLEEPABLE);
->  	prog->aux->attach_btf =3D attach_btf;
-> -	prog->aux->attach_btf_id =3D multi_func ? bpf_multi_func_btf_id[0] : at=
-tr->attach_btf_id;
-> +	if (prog_sdt_probe)
-> +		prog->aux->attach_btf_id =3D attach_btf_id;
-> +	else
-> +		prog->aux->attach_btf_id =3D
-> +			multi_func ? bpf_multi_func_btf_id[0] : attr->attach_btf_id;
->  	prog->aux->dst_prog =3D dst_prog;
-> +	prog->aux->sdt_probe =3D prog_sdt_probe;
-> +	/* ownership of dst_prog/attach_btf/prog_sdt_probe moved to prog->aux */
-> +	dst_prog =3D NULL;
-> +	attach_btf =3D NULL;
-> +	prog_sdt_probe =3D NULL;
 
 [Severity: High]
-Will early load failures after this point leak prog->aux->sdt_probe?
+Is it possible to bypass the verifier's SDT probe constraints using duplica=
+te
+offsets in the insn_array map?
 
-On subsequent errors, the code jumps to free_prog which calls bpf_prog_free=
-().
-Since bpf_prog_free() and its deferred cleanup routines don't seem to free
-sdt_probe (unlike __bpf_prog_put_noref() which is bypassed on early failure=
-s),
-does this leave the probe info allocated?
+In bpf_insn_array_init(), multiple map entries with the same offset appear =
+to
+overwrite each other sequentially:
+
+kernel/bpf/bpf_insn_array.c:bpf_insn_array_init() {
+    ...
+    env->insn_aux_data[values[i].orig_off].sdt_entry =3D &values[i];
+    ...
+}
+
+This means the verifier might only validate the last matching element.
+However, bpf_insn_array_get_sdt_probe_by_name() seems to return the first
+matching element by scanning sequentially:
+
+kernel/bpf/bpf_insn_array.c:bpf_insn_array_get_sdt_probe_by_name() {
+    ...
+    if (!strcmp(insn_array->values[j].name, name)) {
+        *val =3D insn_array->values[j];
+    ...
+}
+
+Could this allow a malicious user to place a malformed, unverified probe
+entry before a valid one with the same offset, completely subverting the
+verifier?
+
+[Severity: High]
+If the verifier is bypassed, could bpf_sdt_link_attach() suffer from a stack
+buffer overflow?
+
+When looking up a probe by name, bpf_sdt_link_attach() might retrieve an
+unverified entry with an arbitrary nargs value (up to 255):
+
+kernel/bpf/syscall.c:bpf_sdt_link_attach() {
+    ...
+    for (i =3D 0; i < sdt->val.nargs; i++) {
+        tgt_info.fmodel.arg_size[i] =3D 8;
+        tgt_info.fmodel.arg_regs[i] =3D sdt->val.arg_reg[i];
+    }
+    ...
+}
+
+Because tgt_info.fmodel.arg_size and arg_regs are statically sized arrays
+on the kernel stack, could this loop write out-of-bounds if nargs exceeds
+the arrays' bounds?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1782571533.gi=
-t.xukuohai@huawei.com?part=3D9
+t.xukuohai@huawei.com?part=3D11
