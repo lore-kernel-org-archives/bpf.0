@@ -1,27 +1,27 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7583D3B38B8;
-	Sat, 27 Jun 2026 14:53:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADAB3B14BD;
+	Sat, 27 Jun 2026 14:53:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782571988; cv=none; b=Gul1IoWda/zAqtiwq8hv3P0LiM0D+y8Ls2qOAkI+PETVElLrfwjglObNYsnYXR/CCoj0gNH4n1C9dUMEI9qDKW5gOfrXiNi/qRqJgn5OUs1ZLYKQXNBv8bHcAsN3kOx+wF9rKJmccvXnt0yv9WHHWq7l2alrBrjK20uOy96AGg8=
+	t=1782571992; cv=none; b=jKTk8BmmsDrJWgPqa5ecXqD6iyOcaQRe7J45lBA7DlAjxoV+JRXs9KZZEgPsEBxWwhFrNDCENpJf5mxUicCbhJyE1bF4GBavBwwplGuKgzXrFxcAu12CbyyCL0iz20ztz9hCB2aUwaCS0gIjgxdHkY27ig9LLFyY9YMUZ/R/dHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782571988; c=relaxed/simple;
-	bh=AlmAAGt55kjNEH/QcP+MS68+3t7mhjVtM/N8J7M2u/o=;
+	s=arc-20240116; t=1782571992; c=relaxed/simple;
+	bh=eN2AmVD+Hlliw36+ApMI280DB7BK3opSJ7xw5iiAXgU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ff5HP0qwebHgoUZrdswLhTlFA2ch3HiBmVz07OAmdZnP2Yy5pEL5xS5hrfqJzXX0b1BsbCV4NHxvNKQ/rbvpy31685aFHDX7ApKK8o2BTAdDOkQA2hZgMhINf8m3iuNaMLABXi+OasgYgCGHkdixO+gvhjASCvZdQEhHvD1szPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=auEnaFvt8dx2uWcF8I+TERbDND/4PLh+Hz0+W5W4Or3GJUkyCkjCgI3eG6YPqJomz/CDiROP4ujVtphXrxSZMty+vk7SjFu+dbb7vRd0bLyXryDxbLFC1/uvcN2POG5gobAMk5gJpjLEvYc7V4QYXmllKPtxSyvGm83jjjVh6c4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gnbB409mJzKHMLw;
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gnbB413hbzKHMM6;
 	Sat, 27 Jun 2026 22:52:44 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 5A1F14056E;
+	by mail.maildlp.com (Postfix) with ESMTP id 78F7D408FE;
 	Sat, 27 Jun 2026 22:52:47 +0800 (CST)
 Received: from localhost.huawei.com (unknown [10.67.174.243])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgAHPCa94z9qh0oVAA--.10903S12;
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgAHPCa94z9qh0oVAA--.10903S14;
 	Sat, 27 Jun 2026 22:52:47 +0800 (CST)
 From: Xu Kuohai <xukuohai@huaweicloud.com>
 To: bpf@vger.kernel.org,
@@ -38,9 +38,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Amery Hung <ameryhung@gmail.com>,
 	Eyal Birger <eyal.birger@gmail.com>,
 	Rong Tao <rongtao@cestc.cn>
-Subject: [RFC PATCH bpf-next 10/12] bpf: Support attach and detach for SDT observer program
-Date: Sat, 27 Jun 2026 22:51:44 +0000
-Message-ID: <1b13b561aae721fec70107256228a77fbc0e8987.1782571533.git.xukuohai@huawei.com>
+Subject: [RFC PATCH bpf-next 12/12] selftests/bpf: Add tests for bpf SDT probe
+Date: Sat, 27 Jun 2026 22:51:46 +0000
+Message-ID: <04b17848a1b9bf61c27317075829cd9570aa8557.1782571533.git.xukuohai@huawei.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1782571533.git.xukuohai@huawei.com>
 References: <cover.1782571533.git.xukuohai@huawei.com>
@@ -51,10 +51,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgAHPCa94z9qh0oVAA--.10903S12
-X-Coremail-Antispam: 1UD129KBjvJXoW3Wr13uryrCFWkGr1UZF13Arb_yoW7tF4DpF
-	1Yvr13AF4UXFW7WFyDJay8Za1Fv3Z8W34UKrW7Gwsa9ay5JrWvqF1jgryavryYkrWDC3Wf
-	Jrs0vFWUK347WrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:_Ch0CgAHPCa94z9qh0oVAA--.10903S14
+X-Coremail-Antispam: 1UD129KBjvJXoW3JF1xGF43Zry7uF4UAryDGFg_yoW3WryUpa
+	48ZryYkryrXa1UK34rKFWUuw4rta1Dury5JrykWr13Zw4DXrWvgw1xKr47KasxXFZ8uryr
+	Z34ayFs3CrsrXaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUmKb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
 	8IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAv
@@ -73,171 +73,254 @@ X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
 From: Xu Kuohai <xukuohai@huawei.com>
 
-Add support to attach SDT observer program by reusing the bpf trampoline
-attach and detach mechanism. The trampoline is keyed by target program
-fd and offset of the probe in the target program. Unlike normal tracing
-program, the target function address is the jited address of the probe site,
-and function prototype is resolved from prog->aux->sdt_probe.
+Add selftests for bpf SDT probe sites and observers.
+
+The tests include argument check for observer program, multiple target
+programs in the same ELF, and programs with subprog.
 
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- include/linux/bpf.h     |  9 ++++-
- kernel/bpf/syscall.c    | 85 +++++++++++++++++++++++++++++++++++++++++
- kernel/bpf/trampoline.c |  4 ++
- 3 files changed, 97 insertions(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/test_bpf_sdt.c   | 151 ++++++++++++++++++
+ .../selftests/bpf/progs/bpf_sdt_observer.c    |  30 ++++
+ .../selftests/bpf/progs/bpf_sdt_target.c      |  34 ++++
+ 3 files changed, 215 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_bpf_sdt.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_sdt_observer.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_sdt_target.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 93c196f38b87..6548a2dd76da 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1270,6 +1270,12 @@ struct btf_func_model {
-  */
- #define BPF_TRAMP_F_INDIRECT		BIT(8)
- 
-+/* Trampoline is for an SDT probe site: arguments arrive in
-+ * BPF registers recorded by the SDT macro at build time,
-+ * described by btf_func_model.arg_regs[] instead of ABI order.
-+ */
-+#define BPF_TRAMP_F_SDT_PROBE		BIT(9)
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_bpf_sdt.c b/tools/testing/selftests/bpf/prog_tests/test_bpf_sdt.c
+new file mode 100644
+index 000000000000..b2752e7b2b09
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/test_bpf_sdt.c
+@@ -0,0 +1,151 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <bpf/bpf.h>
++#include "bpf_sdt_observer.skel.h"
++#include "bpf_sdt_target.skel.h"
 +
- /* Each call __bpf_prog_enter + call bpf_func + call __bpf_prog_exit is ~50
-  * bytes on x86.
-  */
-@@ -1393,7 +1399,8 @@ struct bpf_trampoline {
- 	struct {
- 		struct btf_func_model model;
- 		void *addr;
--		bool ftrace_managed;
-+		u8 ftrace_managed:1;
-+		u8 sdt_probe_site:1;
- 	} func;
- 	/* if !NULL this is BPF_PROG_TYPE_EXT program that extends another BPF
- 	 * program by replacing one of its functions. func.addr is the address
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 8b2c73bb6c2a..53897ff1100f 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3737,6 +3737,89 @@ static const struct bpf_link_ops bpf_tracing_link_lops = {
- 	.fill_link_info = bpf_tracing_link_fill_link_info,
- };
- 
-+struct bpf_sdt_link {
-+	struct bpf_tramp_link link;
-+	struct bpf_trampoline *trampoline;
-+};
-+
-+static void bpf_sdt_link_release(struct bpf_link *link)
++static int sdt_attach(struct bpf_program *obs)
 +{
-+	struct bpf_sdt_link *sdt_link = container_of(link, struct bpf_sdt_link, link.link);
-+	struct bpf_prog *prog = sdt_link->link.link.prog;
-+	struct bpf_prog *tgt_prog = prog->aux->dst_prog;
++	LIBBPF_OPTS(bpf_link_create_opts, opts);
 +
-+	WARN_ON_ONCE(bpf_trampoline_unlink_prog(&sdt_link->link.node, sdt_link->trampoline,
-+						tgt_prog));
-+	bpf_trampoline_put(sdt_link->trampoline);
++	return bpf_link_create(bpf_program__fd(obs), 0, BPF_TRACE_SDT, &opts);
 +}
 +
-+static void bpf_sdt_link_dealloc(struct bpf_link *link)
++static void read_args(void)
 +{
-+	struct bpf_sdt_link *sdt_link = container_of(link, struct bpf_sdt_link, link.link);
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	struct bpf_sdt_target *tgt_skel;
++	struct bpf_sdt_observer *skel;
++	char pkt[64] = {};
++	int link, err;
 +
-+	kfree(sdt_link);
++	tgt_skel = bpf_sdt_target__open_and_load();
++	if (!ASSERT_OK_PTR(tgt_skel, "target open_and_load"))
++		return;
++
++	skel = bpf_sdt_observer__open();
++	if (!ASSERT_OK_PTR(skel, "observer open"))
++		goto out_tgt;
++
++	bpf_program__set_autoload(skel->progs.tc_trace_prog, false);
++	bpf_program__set_autoload(skel->progs.subprog_trace_prog, false);
++	bpf_program__set_attach_target(skel->progs.xdp_trace_prog,
++				       bpf_program__fd(tgt_skel->progs.xdp_prog),
++				       "xdp_probe_len_ret");
++	err = bpf_sdt_observer__load(skel);
++	if (!ASSERT_OK(err, "observer load"))
++		goto out_obs;
++
++	link = sdt_attach(skel->progs.xdp_trace_prog);
++	if (!ASSERT_GE(link, 0, "attach xdp_probe_len_ret"))
++		goto out_obs;
++
++	topts.data_in = pkt;
++	topts.data_size_in = sizeof(pkt);
++	topts.data_size_out = sizeof(pkt);
++	err = bpf_prog_test_run_opts(bpf_program__fd(tgt_skel->progs.xdp_prog), &topts);
++	if (!ASSERT_OK(err, "prog_test_run"))
++		goto out_link;
++
++	ASSERT_EQ(skel->bss->xdp_len, sizeof(pkt), "xdp_len");
++	ASSERT_EQ(skel->bss->xdp_ret, XDP_PASS, "xdp_ret");
++
++out_link:
++	close(link);
++out_obs:
++	bpf_sdt_observer__destroy(skel);
++out_tgt:
++	bpf_sdt_target__destroy(tgt_skel);
 +}
 +
-+static const struct bpf_link_ops bpf_sdt_link_lops = {
-+	.release = bpf_sdt_link_release,
-+	.dealloc = bpf_sdt_link_dealloc,
-+};
-+
-+static int bpf_sdt_link_attach(struct bpf_prog *prog)
++static void multi_prog(void)
 +{
-+	struct bpf_sdt_probe_info *sdt = prog->aux->sdt_probe;
-+	struct bpf_attach_target_info tgt_info = {};
-+	struct bpf_link_primer primer;
-+	struct bpf_sdt_link *sdt_link;
-+	struct bpf_prog *tgt_prog = prog->aux->dst_prog;
-+	u64 tr_key;
-+	int i, err;
++	struct bpf_sdt_target *tgt_skel;
++	struct bpf_sdt_observer *skel;
++	int link1, link2, err;
 +
-+	if (!sdt || !tgt_prog)
-+		return -EINVAL;
++	tgt_skel = bpf_sdt_target__open_and_load();
++	if (!ASSERT_OK_PTR(tgt_skel, "target open_and_load"))
++		return;
 +
-+	sdt_link = kzalloc_obj(struct bpf_sdt_link, GFP_USER);
-+	if (!sdt_link)
-+		return -ENOMEM;
++	skel = bpf_sdt_observer__open();
++	if (!ASSERT_OK_PTR(skel, "observer open"))
++		goto out_tgt;
 +
-+	bpf_tramp_link_init(&sdt_link->link, BPF_LINK_TYPE_SDT, &bpf_sdt_link_lops, prog,
-+			    BPF_TRACE_SDT, 0);
-+	err = bpf_link_prime(&sdt_link->link.link, &primer);
-+	if (err) {
-+		kfree(sdt_link);
-+		return err;
-+	}
++	bpf_program__set_autoload(skel->progs.subprog_trace_prog, false);
++	bpf_program__set_attach_target(skel->progs.xdp_trace_prog,
++				       bpf_program__fd(tgt_skel->progs.xdp_prog),
++				       "xdp_probe_len_ret");
++	bpf_program__set_attach_target(skel->progs.tc_trace_prog,
++				       bpf_program__fd(tgt_skel->progs.tc_prog),
++				       "tc_probe");
++	err = bpf_sdt_observer__load(skel);
++	if (!ASSERT_OK(err, "observer load"))
++		goto out_obs;
 +
-+	/* use orig_off to compute the key as orig_off is unique for each probe */
-+	tr_key = bpf_trampoline_compute_key(tgt_prog, NULL, sdt->val.orig_off);
-+	tgt_info.tgt_addr = sdt->probe_ip;
-+	tgt_info.tgt_name = sdt->val.name;
-+	tgt_info.fmodel.nr_args = sdt->val.nargs;
-+	for (i = 0; i < sdt->val.nargs; i++) {
-+		tgt_info.fmodel.arg_size[i] = 8;
-+		tgt_info.fmodel.arg_regs[i] = sdt->val.arg_reg[i];
-+	}
++	link1 = sdt_attach(skel->progs.xdp_trace_prog);
++	ASSERT_GE(link1, 0, "attach xdp xdp_probe_len_ret");
 +
-+	sdt_link->trampoline = bpf_trampoline_get(tr_key, &tgt_info);
-+	if (!sdt_link->trampoline) {
-+		err = -ENOMEM;
-+		goto err_cleanup;
-+	}
-+	sdt_link->trampoline->func.sdt_probe_site = 1;
++	link2 = sdt_attach(skel->progs.tc_trace_prog);
++	ASSERT_GE(link2, 0, "attach tc_probe");
 +
-+	err = bpf_trampoline_link_prog(&sdt_link->link.node, sdt_link->trampoline, tgt_prog);
-+	if (err)
-+		goto err_put_tramp;
-+
-+	return bpf_link_settle(&primer);
-+
-+err_put_tramp:
-+	bpf_trampoline_put(sdt_link->trampoline);
-+err_cleanup:
-+	bpf_link_cleanup(&primer);
-+	return err;
++	close(link1);
++	close(link2);
++out_obs:
++	bpf_sdt_observer__destroy(skel);
++out_tgt:
++	bpf_sdt_target__destroy(tgt_skel);
 +}
 +
- static int bpf_tracing_prog_attach(struct bpf_prog *prog,
- 				   int tgt_prog_fd,
- 				   u32 btf_id,
-@@ -5945,6 +6028,8 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
- 			ret = cgroup_bpf_link_attach(attr, prog);
- 		else if (is_tracing_multi(prog->expected_attach_type))
- 			ret = bpf_tracing_multi_attach(prog, attr);
-+		else if (prog->expected_attach_type == BPF_TRACE_SDT)
-+			ret = bpf_sdt_link_attach(prog);
- 		else
- 			ret = bpf_tracing_prog_attach(prog,
- 						      attr->link_create.target_fd,
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 1a721fc4bef5..68f87e7b901f 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -691,6 +691,9 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
- 	/* clear all bits except SHARE_IPMODIFY and TAIL_CALL_CTX */
- 	tr->flags &= (BPF_TRAMP_F_SHARE_IPMODIFY | BPF_TRAMP_F_TAIL_CALL_CTX);
- 
-+	if (tr->func.sdt_probe_site)
-+		tr->flags |= BPF_TRAMP_F_SDT_PROBE;
++static void subprog_probe(void)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	struct bpf_sdt_target *tgt_skel;
++	struct bpf_sdt_observer *skel;
++	char pkt[64] = {0, 1, 2, 3};
++	int link, err;
 +
- 	if (tnodes[BPF_TRAMP_FEXIT].nr_nodes ||
- 	    tnodes[BPF_TRAMP_MODIFY_RETURN].nr_nodes) {
- 		/* NOTE: BPF_TRAMP_F_RESTORE_REGS and BPF_TRAMP_F_SKIP_FRAME
-@@ -784,6 +787,7 @@ static enum bpf_tramp_prog_type bpf_attach_type_to_tramp(struct bpf_prog *prog)
- 	switch (prog->expected_attach_type) {
- 	case BPF_TRACE_FENTRY:
- 	case BPF_TRACE_FENTRY_MULTI:
-+	case BPF_TRACE_SDT:
- 		return BPF_TRAMP_FENTRY;
- 	case BPF_MODIFY_RETURN:
- 		return BPF_TRAMP_MODIFY_RETURN;
++	tgt_skel = bpf_sdt_target__open_and_load();
++	if (!ASSERT_OK_PTR(tgt_skel, "target open_and_load"))
++		return;
++
++	skel = bpf_sdt_observer__open();
++	if (!ASSERT_OK_PTR(skel, "observer open"))
++		goto out_tgt;
++
++	bpf_program__set_autoload(skel->progs.tc_trace_prog, false);
++	bpf_program__set_autoload(skel->progs.xdp_trace_prog, false);
++	bpf_program__set_attach_target(skel->progs.subprog_trace_prog,
++				       bpf_program__fd(tgt_skel->progs.xdp_prog),
++				       "xdp_probe_ctx");
++	err = bpf_sdt_observer__load(skel);
++	if (!ASSERT_OK(err, "observer load"))
++		goto out_obs;
++
++	link = sdt_attach(skel->progs.subprog_trace_prog);
++	if (!ASSERT_GE(link, 0, "attach xdp_probe_ctx"))
++		goto out_obs;
++
++	topts.data_in = pkt;
++	topts.data_size_in = sizeof(pkt);
++	topts.data_size_out = sizeof(pkt);
++	err = bpf_prog_test_run_opts(bpf_program__fd(tgt_skel->progs.xdp_prog), &topts);
++	ASSERT_OK(err, "prog_test_run");
++	ASSERT_EQ(skel->bss->xdp_len, sizeof(pkt), "xdp_len");
++
++	close(link);
++out_obs:
++	bpf_sdt_observer__destroy(skel);
++out_tgt:
++	bpf_sdt_target__destroy(tgt_skel);
++}
++
++void test_bpf_sdt(void)
++{
++	if (test__start_subtest("read_args"))
++		read_args();
++	if (test__start_subtest("multi_prog"))
++		multi_prog();
++	if (test__start_subtest("subprog_probe"))
++		subprog_probe();
++}
+diff --git a/tools/testing/selftests/bpf/progs/bpf_sdt_observer.c b/tools/testing/selftests/bpf/progs/bpf_sdt_observer.c
+new file mode 100644
+index 000000000000..ec059e86b154
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_sdt_observer.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++volatile int xdp_len;
++volatile int xdp_ret;
++
++SEC("bpf_sdt")
++int BPF_PROG(tc_trace_prog)
++{
++	return 0;
++}
++
++SEC("bpf_sdt")
++int BPF_PROG(xdp_trace_prog, int len, int ret)
++{
++	xdp_len = len;
++	xdp_ret = ret;
++	return 0;
++}
++
++SEC("bpf_sdt")
++int BPF_PROG(subprog_trace_prog, struct xdp_md *xdp_ctx)
++{
++	xdp_len = bpf_xdp_get_buff_len((struct xdp_md *)xdp_ctx);
++	return 0;
++}
++
++char LICENSE[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/bpf_sdt_target.c b/tools/testing/selftests/bpf/progs/bpf_sdt_target.c
+new file mode 100644
+index 000000000000..e1c14b9d7e9a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_sdt_target.c
+@@ -0,0 +1,34 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "../../../../tools/lib/bpf/bpf_sdt.h"
++
++BPF_SDT_DECLARE(tc_probe);
++BPF_SDT_DECLARE1(xdp_probe_ctx, struct xdp_md *);
++BPF_SDT_DECLARE2(xdp_probe_len_ret, int, int);
++
++static __noinline int xdp_process(struct xdp_md *ctx)
++{
++	BPF_SDT_PROBE1(xdp_probe_ctx, ctx);
++	return XDP_PASS;
++}
++
++SEC("xdp")
++int xdp_prog(struct xdp_md *ctx)
++{
++	int len = (int)(ctx->data_end - ctx->data);
++
++	BPF_SDT_PROBE2(xdp_probe_len_ret, len, XDP_PASS);
++
++	return xdp_process(ctx);
++}
++
++SEC("tc")
++int tc_prog(struct __sk_buff *skb)
++{
++	BPF_SDT_PROBE(tc_probe);
++	return 0;
++}
++
++char LICENSE[] SEC("license") = "GPL";
 -- 
 2.47.3
 
