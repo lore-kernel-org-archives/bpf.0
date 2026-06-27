@@ -1,178 +1,156 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 226AE3B47D3;
-	Sat, 27 Jun 2026 14:53:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191682D738F
+	for <bpf@vger.kernel.org>; Sat, 27 Jun 2026 15:01:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782571995; cv=none; b=J4VMeJr8KNPexmLqqxj2a5tex7tCY+ZEfcqlTjJlLj8gRcw+jm4M9KI/MkK5vorhMoErgJ5Y9lMLWhRcEKJjnI90n/D1phZAEsWBc9igeZ2YQBxkEOIEbD/hjFse4STfvaH0zfyMwKW2QRgLHmfOn5CIGQOBwriuYZNkqTm0v0Q=
+	t=1782572487; cv=none; b=F/kZmArnNPeZ0kUU/Bg/horiy7Mx5LO/E8IDc/n5ezcfCcr5N/gqciAtDASGeZf4K1rQ3I8O8JxAcrp2ONZIV+5MA9j0q50yKGWL62wXfWCh/4qiiRjKCMVLVluPCvorEa1DRRfb0h/qD34OCle9x21aUt875+Jbrl36bsAY8Qk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782571995; c=relaxed/simple;
-	bh=9e8TnwLHQQvR6TpBelr1G791pC6JdSIAtEdA2RNgkig=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YgENArZRF1o1FRdbSxE9RDLVSH9br5WNkUiEMPN6SWOz76n9HLuGBDZjvVdhR9A+EqPBd4kvRbMVGzQSjIqr8uEtYbBWlD7xpU/qhMMPvgjMXzrlemtq2LsdnSGCk/lPj2i/TZw08OkxWckByYD8uUQe+TDg1TvlXMgtefTeEj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gnbB40SGWzKHMNS;
-	Sat, 27 Jun 2026 22:52:44 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 659534058D;
-	Sat, 27 Jun 2026 22:52:47 +0800 (CST)
-Received: from localhost.huawei.com (unknown [10.67.174.243])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgAHPCa94z9qh0oVAA--.10903S13;
-	Sat, 27 Jun 2026 22:52:47 +0800 (CST)
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	KP Singh <kpsingh@kernel.org>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Eyal Birger <eyal.birger@gmail.com>,
-	Rong Tao <rongtao@cestc.cn>
-Subject: [RFC PATCH bpf-next 11/12] bpf, x86: Add JIT support SDT for probe
-Date: Sat, 27 Jun 2026 22:51:45 +0000
-Message-ID: <48943c5608280cade48d459ca15fd156c7470209.1782571533.git.xukuohai@huawei.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1782571533.git.xukuohai@huawei.com>
+	s=arc-20240116; t=1782572487; c=relaxed/simple;
+	bh=tM5g4VsLCHIYyygMGNjTeOzFPiTMnSoMAVgzubhIoMg=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=BwvBILWOpix/ZSQ1fV2wX49q8X4VfccphAa/tF6Ju5teD7lLdewlpPsj/qiiY/2WyIfCQN85MHxj2IO1VgUNJofmkbybh+WdiTL+Fzbm2PGrA6SiEORAbG89fBlB2sDtlD662XN62dDwQXEfocICD3SUHPZ0T50ktpFK5XsFYII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UQIkf0pa; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UQIkf0pa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D3D41F000E9;
+	Sat, 27 Jun 2026 15:01:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782572484;
+	bh=G4tyQTevj0xnCdcD/dJJAX4ABODO7I3PpU4DATbwvKo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=UQIkf0paW1JivFma6Ih1AWYkgtEYjqwEDP7w3dQjMrhe7nYo6LZt5LPRGT/8B5XyM
+	 IccIv+hrLhtztyb2tNPYvW0BGcMztfiN3H49K24JPoIglZOHQ/mXCuG7DN4MVCKd8h
+	 wRVTW9+im904RWkJEgYOd+6mfXqF3XLaD8tyYI2oY6jNAhtU/RbXQgsGcZLdPOYKns
+	 UOOQt1j9lrBWSo7oHt1jyJtVgfrTlU07WypEeUSlkh1IYSaJPdPlo8kGh9IGk4ZCIp
+	 Mg4yPjJJdVQTzS9Pm5FpnIPmYQWAmpK1e4zEEFGUe3azhfIozxeYwQPw3/+RdeOc7H
+	 s0qQsSlMd/xHQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH bpf-next 02/12] libbpf: Introduce bpf SDT probe
+ macros
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Xu Kuohai" <xukuohai@huaweicloud.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <8d42452bd09872847be4c1953e4e1362db898d9a.1782571533.git.xukuohai@huawei.com>
 References: <cover.1782571533.git.xukuohai@huawei.com>
+ <8d42452bd09872847be4c1953e4e1362db898d9a.1782571533.git.xukuohai@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 27 Jun 2026 15:01:23 +0000
+Message-Id: <20260627150124.4D3D41F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgAHPCa94z9qh0oVAA--.10903S13
-X-Coremail-Antispam: 1UD129KBjvJXoWxGr1DCFWktw1xJF43AFyUtrb_yoW5ur4DpF
-	Z7A3ZxAF4kX3ZakF97Za1UZF4aqFs5tr4xCryxG34fGay5GryUWF1fKayayry5Kr95Aw1r
-	Zr4qvrn8CF1fG3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUmKb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
-	8IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAv
-	FVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJw
-	A2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE
-	3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr2
-	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv
-	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7
-	CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E
-	4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
-	WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
-	Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7
-	xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j
-	6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUIJ5rDUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-From: Xu Kuohai <xukuohai@huawei.com>
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+s) to consider:
+- [High] Hardcoded named labels in inline assembly break compilation during=
+ routine compiler optimizations.
+- [High] Missing `static` keyword on dummy type-checking variables causes l=
+inker errors.
+- [High] Missing `"memory"` clobber in inline assembly allows the compiler =
+to reorder memory operations past the probe site.
+- [Medium] Macro local variable names (`__a0`, `__a1`, etc.) are insufficie=
+ntly obfuscated, leading to variable shadowing and trace data corruption.
+- [Low] BPF subsystem multi-line comment style violation.
+--
 
-Add x86 JIT support for SDT probe. For the target side, each probe site
-is jited to a 5-byte NOP so it can be patched to a CALL instruction when
-an observer program is attached. For the observer side, the normal bpf
-trampoline is reused, except that the argument registers come from the
-arg_regs[] array in the func_model, rather than the fixed BPF R1~R5.
+commit 225a1b2d44558cc189a9e559d3f30514eab101a7
+Author: Xu Kuohai <xukuohai@huawei.com>
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- arch/x86/net/bpf_jit_comp.c | 38 +++++++++++++++++++++++++++++--------
- 1 file changed, 30 insertions(+), 8 deletions(-)
+libbpf: Introduce bpf SDT probe macros
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 054e043ffcd2..262f1bd74d53 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -2797,6 +2797,16 @@ st:			insn_off = insn->off;
- 			}
- 
- 			if (!jmp_offset) {
-+				int index = bpf_prog->aux->subprog_start + i - 1;
-+
-+				/*
-+				 * Emit a 5-byte NOP for SDT probe site, so it can be patched to
-+				 * a CALL instruction when observer program is attached.
-+				 */
-+				if (env->insn_aux_data[index].sdt_entry) {
-+					emit_nops(&prog, X86_PATCH_SIZE);
-+					break;
-+				}
- 				/*
- 				 * If jmp_padding is enabled, the extra nops will
- 				 * be inserted. Otherwise, optimize out nop jumps.
-@@ -3059,9 +3069,13 @@ static void save_args(const struct btf_func_model *m, u8 **prog,
- 
- 			/* copy the arguments from regs into stack */
- 			for (j = 0; j < arg_regs; j++) {
-+				u8 reg = (flags & BPF_TRAMP_F_SDT_PROBE)
-+					? m->arg_regs[nr_regs]
-+					: (nr_regs == 5 ? X86_REG_R9
-+					   : BPF_REG_1 + nr_regs);
-+
- 				emit_stx(prog, BPF_DW, BPF_REG_FP,
--					 nr_regs == 5 ? X86_REG_R9 : BPF_REG_1 + nr_regs,
--					 -stack_size);
-+					 reg, -stack_size);
- 				stack_size -= 8;
- 				nr_regs++;
- 			}
-@@ -3072,7 +3086,7 @@ static void save_args(const struct btf_func_model *m, u8 **prog,
- }
- 
- static void restore_regs(const struct btf_func_model *m, u8 **prog,
--			 int stack_size)
-+			 int stack_size, u32 flags)
- {
- 	int i, j, arg_regs, nr_regs = 0;
- 
-@@ -3087,9 +3101,12 @@ static void restore_regs(const struct btf_func_model *m, u8 **prog,
- 		arg_regs = (m->arg_size[i] + 7) / 8;
- 		if (nr_regs + arg_regs <= 6) {
- 			for (j = 0; j < arg_regs; j++) {
--				emit_ldx(prog, BPF_DW,
--					 nr_regs == 5 ? X86_REG_R9 : BPF_REG_1 + nr_regs,
--					 BPF_REG_FP,
-+				u8 reg = (flags & BPF_TRAMP_F_SDT_PROBE)
-+					? m->arg_regs[nr_regs]
-+					: (nr_regs == 5 ? X86_REG_R9
-+					   : BPF_REG_1 + nr_regs);
-+
-+				emit_ldx(prog, BPF_DW, reg, BPF_REG_FP,
- 					 -stack_size);
- 				stack_size -= 8;
- 				nr_regs++;
-@@ -3547,7 +3564,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 	}
- 
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
--		restore_regs(m, &prog, regs_off);
-+		restore_regs(m, &prog, regs_off, flags);
- 		save_args(m, &prog, arg_stack_off, true, flags);
- 
- 		if (flags & BPF_TRAMP_F_TAIL_CALL_CTX) {
-@@ -3603,7 +3620,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 	}
- 
- 	if (flags & BPF_TRAMP_F_RESTORE_REGS)
--		restore_regs(m, &prog, regs_off);
-+		restore_regs(m, &prog, regs_off, flags);
- 
- 	/* This needs to be done regardless. If there were fmod_ret programs,
- 	 * the return value is only updated on the stack and still needs to be
-@@ -4220,3 +4237,8 @@ bool bpf_jit_supports_fsession(void)
- {
- 	return true;
- }
-+
-+bool bpf_jit_supports_sdt_probe(void)
-+{
-+	return true;
-+}
--- 
-2.47.3
+Introduce macros to declare and define bpf SDT probes. The declaration is
+used to generate BTF ID of FUNC_PROTO for each probe site, so the probe
+sites can be validated by the kernel, and observer programs can be attached
+to the FUNC_PROTO like normal tracing programs.
 
+> diff --git a/tools/lib/bpf/bpf_sdt.h b/tools/lib/bpf/bpf_sdt.h
+> new file mode 100644
+> index 0000000000000..23f84460aa368
+> --- /dev/null
+> +++ b/tools/lib/bpf/bpf_sdt.h
+
+[ ... ]
+
+> +#define BPF_SDT_DECLARE1(name, t0)					\
+> +	___sdt_decl_attr(name, 1)					\
+> +	static void (*const __sdt_type_##name)(t0);			\
+> +	___sdt_chk_attr t0 __sdt_chk_##name##_0
+
+[Severity: High]
+Could this missing static keyword cause linker errors?
+
+If a developer places BPF_SDT_DECLARE<N> in a shared header included in
+multiple translation units, modern compilers defaulting to -fno-common might
+throw multiple strong definition errors for these dummy variables since they
+lack the static keyword.
+
+[ ... ]
+
+> +/* probe macros, 0-5 arguments
+> + *
+> + * Each probe emits a NOP (goto +0) in the program stream plus a
+> + * .bpf_sdt_notes entry.  The entry begins with the ___sdt_jt_<name>
+
+[Severity: Low]
+This isn't a bug, but the BPF subsystem multi-line comment style requires
+the opening /* to be on its own line.
+
+> + * label so that libbpf can locate each entry boundary at load time.
+> + * One BPF_SDT_PROBE<N> invocation per probe name is required; invoking
+> + * the same name twice produces a duplicate symbol.
+> + */
+> +#define BPF_SDT_PROBE(name)						\
+> +({									\
+> +	asm volatile(							\
+> +		"0:\n"							\
+> +		"goto +0\n"						\
+> +		".pushsection .bpf_sdt_notes,\"\",@progbits\n"		\
+> +		"___sdt_jt_" #name ":\n"				\
+
+[Severity: High]
+Does this inline assembly block need a "memory" clobber?
+
+Without it, could the compiler reorder memory operations past the probe
+site, causing attached observer programs to read stale or uncommitted state
+when triggered?
+
+[Severity: High]
+Can the fixed label ___sdt_jt_ #name cause a build failure?
+
+If the compiler unrolls a loop containing this macro or inlines an
+__always_inline caller multiple times, it seems the assembler would
+encounter multiple identical labels and fail with a redefinition error.
+
+[ ... ]
+
+> +#define BPF_SDT_PROBE2(name, a, b)					\
+> +({									\
+> +	_Static_assert(__builtin_types_compatible_p(typeof(a),		\
+> +			typeof(__sdt_chk_##name##_0)),			\
+> +			"BPF_SDT_PROBE2: arg0 type mismatch");		\
+> +	_Static_assert(sizeof(typeof(a)) <=3D 8,				\
+> +			"BPF_SDT_PROBE2: arg0 too large, use pointer");	\
+> +	_Static_assert(__builtin_types_compatible_p(typeof(b),		\
+> +			typeof(__sdt_chk_##name##_1)),			\
+> +			"BPF_SDT_PROBE2: arg1 type mismatch");		\
+> +	_Static_assert(sizeof(typeof(b)) <=3D 8,				\
+> +			"BPF_SDT_PROBE2: arg1 too large, use pointer");	\
+> +	typeof(a) __a0 =3D (a);						\
+> +	typeof(b) __a1 =3D (b);						\
+
+[Severity: Medium]
+Can these local variable names silently shadow caller variables?
+
+If a caller passes a variable named __a0 as the second argument (b), does
+the declaration of __a1 capture the macro's newly declared __a0 instead of
+the caller's variable, resulting in the probe recording the first argument
+twice?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1782571533.gi=
+t.xukuohai@huawei.com?part=3D2
