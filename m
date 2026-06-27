@@ -1,61 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C4F3C2D;
-	Sat, 27 Jun 2026 01:48:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 122BF25B0A5;
+	Sat, 27 Jun 2026 02:00:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782524939; cv=none; b=Z3CZ2wHiDDaHqWVRoaliDceuxVccgNv118xRcfRulYh0hu0n3T9ZUgW2VuOxvz3pFOtEqry31dQGZHvTV4VyTTXerQH88atR83euqwOHUJXtjyggF3wKEU98F4wpr4kvpySFfXLMxSNOnfvK2sp+OdbsTHF2oOu+R+WvWboeTPk=
+	t=1782525642; cv=none; b=sB5A3AKHUB1bDN89EqITf1Bk/Kk5/nBhHyenaoApMWENn2VKcYf/ou4mI3IdW0wDDkkNWR4w5KTlb5z4F6PxiigkVwh5ThsgEPcc2FI6u2YVdOS2x/0kiGS0bTap/jY9VQnG6rT4B3A8yVEEFLRQK5nJBSesPcmv/byYXOdpw9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782524939; c=relaxed/simple;
-	bh=tY+lEB1fVZf6CWjOO86JALvtnSr8NyG046MrlCmuTqQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HQJKYLHPE2TPTnjunSw13T1IghqCl3E6G3WMNX0nG1/QWZoHU5t77H6atLTeUoewfYv/LNQxZ2CspNY6Qf08pe5l9KpWckvf0gwIqRnCXA0N1CwBPa4SYiOSuP/VakTbNGts8FL8h6t0Ho26dPxsy12DbXfYrsxIXxPcQiR2A1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OaS4COb9; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782525642; c=relaxed/simple;
+	bh=EFjoQt5Foug5DO1fQU0jSVTrUzZcJmb2zgIrDvDBDJM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=uqepE5PGjWhGgcP1KS+cG8qT7hlU4VFZwAti6W6VvwB8UdXyXZFRW1adufYrapx44J5rqB0nYlikDV89y7WortVPj6BMEYJBX6dzKffDbgwIj6AmcYbAQH4OlBqF0ZmTHUrUF9H/4AA6Nx/gL0ClF+BVMqaNqXvM/92bqqK2+W8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FxppuCnD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OaS4COb9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F0D11F000E9;
-	Sat, 27 Jun 2026 01:48:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FxppuCnD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7CC71F000E9;
+	Sat, 27 Jun 2026 02:00:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782524937;
-	bh=qGuvAgmfPhtioQ+ccOiVR0g2fE1Chcr4teyYLHHEAjM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=OaS4COb9c2t10ErVf8Tloketd8CgUu2/Y3/SqXTbI3O0dTQVjM6lE6i1+nARWiduR
-	 iadyrQumdNWzqc+o+TibehYZbLftw3+wB17uPWCfAc74OTk7kPbyrnXUzomw782r1z
-	 V7E+ICyFOpInt2rBUfMqgsMOzToS3sUdQBcDQCZgja1Gts8j8/dplhRGJuphWAqeeb
-	 d5yNfstggVSQeRnRyQsOmfZRon057ciZdvMMETHWyzkumpa6onSqWB1UOLqSxLSjVe
-	 LJ8tUrb0peIBnIRRG6ZhV3HJiIXC+PvjmVr4Z4urZ+dYTPUwzaDG7pANGFL3I1yCjp
-	 IXE0v3inrWBtg==
-Date: Fri, 26 Jun 2026 18:48:56 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Hrushiraj Gandhi <hrushirajg23@gmail.com>
-Cc: Simon Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jiri Pirko
- <jiri@resnulli.us>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, syzbot+6c25f4750230faf70be9@syzkaller.appspotmail.com
-Subject: Re: [PATCH v2] netdevsim: fix use-after-free in nsim_create and
- __nsim_dev_port_del
-Message-ID: <20260626184856.4b7f5228@kernel.org>
-In-Reply-To: <20260623144447.255326-1-hrushirajg23@gmail.com>
-References: <20260623144447.255326-1-hrushirajg23@gmail.com>
+	s=k20260515; t=1782525640;
+	bh=88bgxuwezmvW1f5k01honCxuGEX4KlXiyI8bc/EBdw0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=FxppuCnDzKfLdAShoKxwVfgAarciUROYgZhZpMTule5FdxAQPSI7GcwYCJtFPd7Yy
+	 JIHSeUN/EPsOJoulTbOjPLEBDIYgnvAq6FMKIZY/2CpHVLCjGS95Fzr4eeuZCuCoKk
+	 I4ZX7Fi7U4eMlBG8CPDSKJG7FIJMIygv+PUgNhIgT9eIT/8IOKPGzR5xXCUPxsZhxs
+	 mpEkh/fxP0uW3vLAvT1+JEMkoMF2+IkSUXs3JqgnSzlsg0YgV2664tgO5VTypWyWql
+	 HUJ5Bq8L/jV2fguPlB4IB5ToLwTPCn8S9FioQLlogLBV5xXCI8thIaErSzS4F6Noxw
+	 htpVL796wZkJA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56B3C3938C76;
+	Sat, 27 Jun 2026 02:00:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2] seg6: validate SRH length before reading fixed
+ fields
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178252562681.1167656.14195813566936530803.git-patchwork-notify@kernel.org>
+Date: Sat, 27 Jun 2026 02:00:26 +0000
+References: 
+ <20260623-f01-17-seg6-srh-len-v2-1-2edc40e9e3e1@mails.tsinghua.edu.cn>
+In-Reply-To: 
+ <20260623-f01-17-seg6-srh-len-v2-1-2edc40e9e3e1@mails.tsinghua.edu.cn>
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, andrea.mayer@uniroma2.it,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ m.xhonneux@gmail.com, daniel@iogearbox.net, dlebrun@google.com
 
-On Tue, 23 Jun 2026 20:14:47 +0530 Hrushiraj Gandhi wrote:
-> Fix both paths by calling debugfs_remove_recursive() on the port's
-> ddir before every free_netdev() call. The subsequent
-> nsim_dev_port_debugfs_exit() calls become harmless no-ops since ddir is
-> set to NULL.
+Hello:
 
-Looks like the wrong fix. All features clean up after themselves with
-the exception of ethtool. Save the ethtool ddir and remove just that
-one. This will align with how the other features behave.
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue, 23 Jun 2026 18:32:31 +0800 you wrote:
+> seg6_validate_srh() reads fixed SRH fields such as srh->type and
+> srh->hdrlen before checking that the supplied length covers the fixed
+> struct ipv6_sr_hdr fields.
+> 
+> The BPF SEG6 encap path reaches this with a BPF program-supplied pointer
+> and length: bpf_lwt_push_encap() and the SEG6 local BPF END_B6 and
+> END_B6_ENCAP actions call bpf_push_seg6_encap(), which forwards the
+> length to seg6_validate_srh() with no minimum-size guard.  A 2-byte SEG6
+> encap header can therefore make the validator read srh->type at offset 2
+> beyond the caller-supplied buffer.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,v2] seg6: validate SRH length before reading fixed fields
+    https://git.kernel.org/netdev/net/c/a75d99f46bf2
+
+You are awesome, thank you!
 -- 
-pw-bot: cr
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
