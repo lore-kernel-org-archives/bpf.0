@@ -1,121 +1,151 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652358834
-	for <bpf@vger.kernel.org>; Sat, 27 Jun 2026 16:52:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 959D930BBB8
+	for <bpf@vger.kernel.org>; Sat, 27 Jun 2026 17:05:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782579142; cv=none; b=mcgqX6Je+/7FsL5OoF+cl0VAOjfMUE0HifO+s4u8FmD7Q/FBQR6vWze/T35DmADRuHMUC0CamTXevq9pe69MP7S9KJXh5jD8dvLHdblXZrcSYNHv0EX8qqqqn5yYMqsKmQdR7My5dXAdP4pgYXjQ6/zS89FdOZ9fem9AqtF1xOA=
+	t=1782579959; cv=none; b=ccteH9MRcofQBJW/F/BSGbquff9U2P9cY4GpG81pPNVdUyaDCobO8Rl7BFOIxYCyTSAnsutAhqaxrHhf3vzUMl0LxLQ3Ooer3VmLmPeItf+mqeYLP56SZCxJTPNDSZWan8G0KipPPtKMB+IW5IjilTMrvu0GZkgPRIshx0q5mH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782579142; c=relaxed/simple;
-	bh=X0z0P0fwFMHqGMcKxLSWer/OE+l6j7WMhDlgM0fUgRA=;
+	s=arc-20240116; t=1782579959; c=relaxed/simple;
+	bh=KLV/eUTqGwx5pHJSdQ7mjWnmV2ADvmyc5YJrlo4FDek=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=V+daDdD8S/TLc0+vje/dISbiwJ4xU/SSKqKy2pFn3i3KkKA0nAr82qT0kKwSAoLtZ08r5toKezhq0njH8kpq0ecCVEf+s/nA+kconBur3aW8bQQGHJQ9TJGIDvJ39YFDj01xPM+NCTYbqdHCOVUmjI+CJUZ/FWaw6NcCqI3I1p8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VhIRc0bZ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Rup2/G4/iUzSPbZlCRudz28eiTDV6CVyzJuyi0gueqdfys8Z0opBdV6bosg4EQW9PasFF03rSDXWBKJt5symAbB2Ju5Spo7YGne8+xj4U1JXKQyj3kKHJTrtAr1tuQskyHqEZp8Nacs379s9Kpd2cCjwmd6YHrciTy7toUVtbg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JM61JX7l; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VhIRc0bZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA0CD1F000E9;
-	Sat, 27 Jun 2026 16:52:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JM61JX7l"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03E381F000E9;
+	Sat, 27 Jun 2026 17:05:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782579141;
-	bh=raUkQLLAVj5N+BQMiiLWxPCwjbHCL62aH2eSTFpVUeM=;
+	s=k20260515; t=1782579957;
+	bh=sbhTeX51IRUBMFNt8VpeJqw8dWIBt5y/SGrx0f5lJLQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VhIRc0bZjZmJWu0mzc9SwwJv2J4UjQqOrJH7L/AbT+ZWXTX8OwQe6A8903tci6nb2
-	 ERKECEQ2UdOZ3kJeOfqmacE36ioVDXo00vEkl7Pvcuanp+mIi6efbm/REqQ121wkZP
-	 VZbc/Lnk+lxgBV8oCBZQmBzLZCPSwuW6K7cx5XQwPuTQhHQp0mcV9YnjemJQ+DW/P7
-	 QiwTlfN1XI1HcTXW28xnWWNflfhh44r4eGEWJul8EFl29HTfwGCwGR/Fdpk8sF/YlI
-	 bnO7IVKElpG0iwt7gqYAXPnQol/O8sQDvQ7WIIlP0u2HFMavwpsaFgEsFf/6j85oYS
-	 i1H0nVstE0aPA==
+	b=JM61JX7l0z1zFCqb1T+uAguOswC3PcWYapCtpQColeWC+amM/FuqRGwRrX6kE9+F0
+	 PsA9fcSd2eLYD+wa24tEV82HvY82qh6QIxZKlfP+fzmtrRNHTqZt3aw2xQNtO+bUht
+	 3PQhwFeL57leONveh/ZKey+TwTG7+ahWFkBIWESxNThVrUUoV8QAWXQ/gpjB4q+eaB
+	 BbvGn4m6Q3HQBwx15/oEFKc6DxQZt11hQkRv0F81KYtfSpv2u0sjinNwDjnm5Jdgei
+	 +pRIk468j6yzd5mSNxewCi2/OQTiEGVB26Diywh8hbg3ul6yjTxrIKnQMze663UycC
+	 e13m9WtyRcPeg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net 3/3] selftests/tc-testing: Verify bpf redirect on
- RED block with preceding clsact (egress) classifier
+Subject: Re: [RFC PATCH bpf-next 01/12] libbpf: Prepare bpf SDT probe
+ section for the linker
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jamal Hadi Salim" <jhs@mojatatu.com>
+To: "Xu Kuohai" <xukuohai@huaweicloud.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260626165156.169012-4-jhs@mojatatu.com>
-References: <20260626165156.169012-1-jhs@mojatatu.com>
- <20260626165156.169012-4-jhs@mojatatu.com>
+In-Reply-To: <addc1860d60c2eee409f187805b6cfbc5382e82a.1782571533.git.xukuohai@huawei.com>
+References: <cover.1782571533.git.xukuohai@huawei.com>
+ <addc1860d60c2eee409f187805b6cfbc5382e82a.1782571533.git.xukuohai@huawei.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 27 Jun 2026 16:52:20 +0000
-Message-Id: <20260627165220.CA0CD1F000E9@smtp.kernel.org>
+Date: Sat, 27 Jun 2026 17:05:56 +0000
+Message-Id: <20260627170557.03E381F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
 s) to consider:
-- [Medium] Hardcoded BPF object path 'action-ebpf' instead of using '$EBPFD=
-IR/action-ebpf'.
+
+New issues:
+- [High] Cross-endian linking corrupts target-endian addresses in `.bpf_sdt=
+_notes`.
+- [High] Unaligned memory access via direct pointer cast of `.bpf_sdt_notes=
+` relocations causes undefined behavior.
+- [Medium] Blind assumption of 64-bit relocation type for `.bpf_sdt_notes` =
+can cause memory corruption.
+- [Medium] Redundant symbol validation bypass allows malicious global symbo=
+ls in `.bpf_sdt_notes`.
+
+Pre-existing issues:
+- [High] Missing bounds check for ELF relocation offsets allows out-of-boun=
+ds heap memory access.
 --
 
-commit f4ff308069725bd7a3b6c6f843ecb0fda5b73239
-Author: Victor Nogueira <victor@mojatatu.com>
+commit c10bd6264b90c8115e40b5bcf69e608dd418c585
+Author: Xu Kuohai <xukuohai@huawei.com>
 
-selftests/tc-testing: Verify bpf redirect on RED block with preceding clsac=
-t (egress) classifier
+libbpf: Prepare bpf SDT probe section for the linker
 
-This commit adds a test case to reproduce a NULL pointer dereference when a
-bpf filter attached to a RED block (which uses shared blocks) returns
-TC_ACT_REDIRECT while a preceding clsact egress classifier is present. The
-issue stems from a stack-allocated bpf_net_context being torn down before
-tcf_qevent_handle() calls skb_do_redirect().
+This patch prepares the BPF linker to handle the .bpf_sdt_notes section,
+treating it similarly to jumptables. It bypasses section-type checks for
+SDT symbols and relocates 64-bit absolute addresses inside each entry.
 
-> diff --git a/tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.jso=
-n b/tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.json
-> index a1f97a4b606e8..762f86ceab1cd 100644
-> --- a/tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.json
-> +++ b/tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.json
+> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
+nal.h
+> index 04cd303fb5a87..ed7a587a61ca4 100644
+> --- a/tools/lib/bpf/libbpf_internal.h
+> +++ b/tools/lib/bpf/libbpf_internal.h
 [ ... ]
-> @@ -1540,5 +1540,37 @@
-[ ... ]
-> +    {
-> +        "id": "fb8d",
-> +        "name": "Verify bpf redirect on RED block with preceding clsact =
-(egress) classifier",
-> +        "category": [
-> +            "qdisc",
-> +            "red",
-> +            "qevent",
-> +            "clsact"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP addr add 10.10.10.1/24 dev $DUMMY",
-> +            "$IP neigh add 10.10.10.2 lladdr 02:00:00:00:00:01 dev $DUMM=
-Y nud permanent",
-> +            "$TC qdisc add dev $DUMMY handle 1: root tbf rate 1Mbit burs=
-t 10K limit 1M",
-> +            "$TC qdisc add dev $DUMMY parent 1:1 handle 11: red limit 1M=
- avpkt 1400 probability 1 burst 38 harddrop min 30000 max 30001 qevent earl=
-y_drop block 10",
-> +            "$TC qdisc add dev $DUMMY clsact",
-> +            "$TC filter add dev $DUMMY egress protocol ip prio 1 matchal=
-l action gact pass",
-> +            "$TC filter add block 10 protocol ip prio 1 matchall action =
-bpf obj action-ebpf sec action-redirect"
+> diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
+> index 78f92c39290af..3a72276244c72 100644
+> --- a/tools/lib/bpf/linker.c
+> +++ b/tools/lib/bpf/linker.c
+> @@ -2028,6 +2028,8 @@ static int linker_append_elf_sym(struct bpf_linker =
+*linker, struct src_obj *obj,
+> =20
+>  		if (strcmp(src_sec->sec_name, JUMPTABLES_SEC) =3D=3D 0)
+>  			goto add_sym;
+> +		if (strcmp(src_sec->sec_name, SDT_NOTES_SEC) =3D=3D 0)
+> +			goto add_sym;
 
 [Severity: Medium]
-In the setup block for "Verify bpf redirect on RED block with preceding cls=
-act
-(egress) classifier", will this test fail with a file-not-found error when
-the tdc.py runner is executed in an out-of-tree build environment or with a
-customized $EBPFDIR?
+Could this bypass of global symbol resolution cause issues? If a symbol in
+the SDT notes section has STB_GLOBAL binding, it will hit this branch and
+skip the deduplication and resolution logic entirely.=20
 
-Should this path be updated to use $EBPFDIR/action-ebpf instead of the
-hardcoded action-ebpf so it aligns with other tests in the suite and finds
-the BPF object correctly?
+For STB_LOCAL symbols, this check appears to be redundant because of the
+subsequent check for STB_LOCAL binding.
 
-> +        ],
-> +        "cmdUnderTest": "bash -c 'data=3D$(head -c 1400 /dev/zero | tr \=
-"\\0\" \"x\"); exec 3>/dev/udp/10.10.10.2/12345; for i in $(seq 1 8000); do=
- printf \"%s\" \"$data\" >&3; done; exit 0'",
+>  	}
+> =20
+>  	if (sym_bind =3D=3D STB_LOCAL)
 [ ... ]
+> @@ -2274,6 +2276,13 @@ static int linker_append_elf_relos(struct bpf_link=
+er *linker, struct src_obj *ob
+>  						insn->imm +=3D sec->dst_off / sizeof(struct bpf_insn);
+>  					else
+>  						insn->imm +=3D sec->dst_off;
+> +				} else if (strcmp(src_linked_sec->sec_name, SDT_NOTES_SEC) =3D=3D 0)=
+ {
+> +					/* .bpf_sdt_notes contains R_BPF_64_ABS64 relocations
+> +					 * referencing code section symbols. Adjust the 64-bit
+> +					 * address by dst_off.
+> +					 */
+> +					__u64 *addr =3D dst_linked_sec->raw_data + dst_rel->r_offset;
+
+[Severity: High]
+This is a pre-existing issue, but does this lack a bounds check for the
+relocation offset? The code uses the r_offset from the relocation to index
+into raw_data. If a malformed ELF provides an r_offset that exceeds the
+section size, it could result in an out-of-bounds heap memory access.
+
+[Severity: High]
+Can this direct pointer cast result in unaligned memory access? The r_offset
+value might not be naturally aligned, which could lead to undefined
+behavior or crashes on strict-alignment architectures when dereferencing the
+cast pointer.
+
+> +					*addr +=3D sec->dst_off;
+
+[Severity: High]
+Does this perform host-endian arithmetic on target-endian data without
+conversion? The data section is not byte-swapped to native endianness, so
+modifying the address using native host-endian addition could corrupt the
+relocated address during cross-compiling.
+
+[Severity: Medium]
+Is it safe to blindly assume the relocation type is 64-bit? If an ELF object
+contains a 32-bit relocation type targeting this section, unconditionally
+reading and writing 64 bits without verifying the relocation type from
+the relocation info could corrupt adjacent data.
+
+>  				} else {
+>  					pr_warn("relocation against STT_SECTION in non-exec section is not =
+supported!\n");
+>  					return -EINVAL;
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260626165156.1690=
-12-1-jhs@mojatatu.com?part=3D3
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1782571533.gi=
+t.xukuohai@huawei.com?part=3D1
