@@ -1,108 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA41343895;
-	Sat, 27 Jun 2026 15:34:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB69A3101A7;
+	Sat, 27 Jun 2026 16:35:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782574486; cv=none; b=MgfQ9ig6u9usD1aSeJGxGhhTo0MtEVtXJypQya5Tx2eoMz4Mp0a9va43WZlK6Ba2R0n/A3Wxn1cMdBuyQf4kKx5RpsIRP+vTHuGdUMI91oC8g1oRPk9WySixEzR6B9cdxarLKS/3zBfOZAtBsSA30ImYBrWyYy23mzXnBaaKOmg=
+	t=1782578147; cv=none; b=gQSClxPucmxjED1b8UuIRmFNDL0d0457i9Wyqih5dkf47NQFJzdU/6GuwRBYbFqG0xahYZqY7alI9goThzxN1qczrGP6RWx6QGlAYtHF+sTHgxkp/eHewRzvRWjcOC9sQ5sqVipSFBPBf0DEi0snQlm01SX7ob3WITt0IEWcmXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782574486; c=relaxed/simple;
-	bh=0vGdq8NgwzO2H6v5B16P65ceyh4e2tYedUAXiZlGuZ4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=C4RhzKaz6hsDbZ0qe2uGtB1rMi2BXvpz6Bv8rouYd/KCZcgDGtpN1Mo28nN8fVKg3Ux9b8xfmK+kPo6IIXZoXrAy9wjgtv5UomWavAnjWnkeaGYNTQTZSW63EbscwV6s/wlDSfcgnBEeWSsbwYWBrVEkBLkzs9EGajNgrwerAi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ev97/phO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782578147; c=relaxed/simple;
+	bh=LSeX5dTmVKAwuvtjDBS38OMI7aoRkeOidKLUTvkoiwg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=GNv6j3t3MoVjWKAiF2gt6bCJFNvl6Mb4sLR44zVVJiXQfnCz9cO5oaPxgYEqdAwAuOoqnryXCsJXBjqBNAKkEXC+OJl/IL1oybUgegM+yii6KiO1Mi1YBAmtT421/DHkQ3yQnp1CuYJa5Yy6kjaFPn1nR0LUlq5vFCh51t/q/MY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k6zRHu6Y; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ev97/phO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C1301F00A3A;
-	Sat, 27 Jun 2026 15:34:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k6zRHu6Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91E5C1F000E9;
+	Sat, 27 Jun 2026 16:35:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782574485;
-	bh=zlP9prGKQIZ/6H1WwuMlstVjGJSDj8T8CPGuCyMolqs=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ev97/phOyHiAYhQ0MUd+ZHoXQoyMbEPbBHFuAPXUoyQeCpj61OJ/xcul+3ROlHwKR
-	 d3dyISMwpC2UEslYssU4gQ4keibHatxv9yOlvB1xFQF255feTjeHSUQFAcvm5YEuzw
-	 ko7xbvUKF4vsrOwdk6mYVTVHaDH8p1ix0HTazRQP34QziX0R/4DxjUOslZjP5MhuOp
-	 /Kc3JRho0eZv11JZcrPrPDPGRi/s+TnE8ZDRvOOJVgpJuLFvGrot26Y4gilydNqOmB
-	 KgeGIVD5briCHx/XfdAt+Eg9GvyVsmBl423EpRHSI6Zi40RmdgrjK95ISxgUlZYTLh
-	 072OQe593wOwQ==
-Content-Type: multipart/mixed; boundary="===============2409666400934983421=="
+	s=k20260515; t=1782578146;
+	bh=HsktIm+QY4BsGrhFOxHHtIcLN/tKMMKOe2MQHQBTuec=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=k6zRHu6YCb/cISwdfLV8CNeNjWbhCFyl0r/FCG3vHpdmTsojWWh0UmSb+jKxMCdwj
+	 DNVF05VpYC5axGq74m3Mn7r/s81QfhXD1CDihGBeQvGe3HyD1FoLzQ13E+voW7h/9/
+	 t52yA97B6HNqVd117kbRvAaNsY9Dll7ooIsHYm4Wroa/bkJ00ugFP/lYY73/rK5+2p
+	 M/KQ3cmvujU4SzKUQ10yNYR5KLqjbKxN6E9ybXIzzliMv5179hUwnPNLzyfH3qL+GL
+	 z3vZIuWJ6IWvv+ZB32tt6F/LG12fHHJtM3zoxBPrb3iYjYSVJOQxqRtDBP6jY6IeEL
+	 Tl610P3Id5slA==
+From: Sasha Levin <sashal@kernel.org>
+To: viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	jack@suse.cz,
+	miklos@szeredi.hu,
+	amir73il@gmail.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	stephen.smalley.work@gmail.com,
+	omosnace@redhat.com,
+	gregkh@linuxfoundation.org,
+	bboscaccy@linux.microsoft.com,
+	caixinchen1@huawei.com
+Cc: Sasha Levin <sashal@kernel.org>,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-unionfs@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	selinux@vger.kernel.org,
+	bpf@vger.kernel.org,
+	stable@vger.kernel.org,
+	lujialin4@huawei.com
+Subject: Re: [PATCH v2 stable/linux-6.12.y 0/2] Backport Fix incorrect overlayfs mmap() and mprotect() LSM access controls
+Date: Sat, 27 Jun 2026 12:35:32 -0400
+Message-ID: <stable-reply-item017-overlayfs-lsm-612-20260627162226@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260627042835.1492435-1-caixinchen1@huawei.com>
+References: <20260627042835.1492435-1-caixinchen1@huawei.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2988124d82972debcfb2bba8440ffde62f148a10c792a6dc0acd42336684d204@mail.kernel.org>
-In-Reply-To: <ec8e3dcd0857d4ed80151ab68be9acf01fa4d93b.1782571533.git.xukuohai@huawei.com>
-References: <ec8e3dcd0857d4ed80151ab68be9acf01fa4d93b.1782571533.git.xukuohai@huawei.com>
-Subject: Re: [RFC PATCH bpf-next 05/12] bpf: Collect SDT probe BTF IDs from BTF decl tags
-From: bot+bpf-ci@kernel.org
-To: xukuohai@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,yonghong.song@linux.dev,jolsa@kernel.org,kpsingh@kernel.org,a.s.protopopov@gmail.com,ameryhung@gmail.com,eyal.birger@gmail.com,rongtao@cestc.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 27 Jun 2026 15:34:45 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============2409666400934983421==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 3f8b12a1eb8b..badac128e8ad 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-
-[ ... ]
-
-> @@ -6692,6 +6693,57 @@ static int create_jt_map(struct bpf_object *obj, struct bpf_program *prog, struc
->  	return err;
->  }
+> [PATCH v2 stable/linux-6.12.y 0/2] Backport Fix incorrect overlayfs
+> mmap() and mprotect() LSM access controls
 >
-> +static void sdt_collect_btf_ids(struct bpf_object *obj)
-> +{
-> +	int n = btf__type_cnt(obj->btf);
-                                ^^^^^^^^
+> [PATCH 2/2] selinux: fix overlayfs mmap() and mprotect() access checks
 
-Can sdt_collect_btf_ids() handle an object with no BTF?
+Thanks for the backport. I think there's a small issue: the selinux patch calls
+backing_file_user_path() with a 'const struct file *', but in 6.12 that
+accessor still takes a non-const file pointer, so the build produces
+const-discard warnings.
 
-btf__type_cnt(obj->btf) dereferences obj->btf. obj->btf is NULL when
-the object carries no .BTF section - stripped or built without BTF.
+The cleanest fix is to also include the upstream prerequisite:
 
-SDT entries come from the .bpf_sdt_notes section, which is independent of
-BTF presence. An object with probe sites but stripped BTF would have
-sdt_entry_cnt > 0 and obj->btf == NULL, triggering a NULL dereference
-here.
+  4e301d858af17a ("fs: constify file ptr in backing_file accessor helpers")
 
-Existing libbpf functions guard this explicitly:
-
-tools/lib/bpf/libbpf.c:bpf_object_fixup_btf() {
-    if (!obj->btf)
-        return 0;
-    n = btf__type_cnt(obj->btf);
-    ...
-}
-
-Should sdt_collect_btf_ids() return early if obj->btf is NULL, leaving
-btf_id as 0 (the intended value per the bpf_insn_array_value comment)?
-
-> +	const struct btf_type *t;
-> +	int i;
-> +
-> +	for (i = 1; i < n; i++) {
-
-[ ... ]
-
-> @@ -6749,6 +6801,8 @@ static int bpf_object__create_sdt_maps(struct bpf_object *obj)
->  	if (err)
->  		return err;
->
-> +	sdt_collect_btf_ids(obj);
-> +
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28292842584
---===============2409666400934983421==--
+--
+Thanks,
+Sasha
