@@ -1,127 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CAD63A9D9B
-	for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 14:24:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA2A3A48CE
+	for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 15:26:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782656644; cv=none; b=rmUWTRckxQIKtZrB2b/X4c+5RUqwY8JLw3bv5Scg9nwQglibF0t0CCxZ2XPxCuPMQKNd6K6J2QEtMwulMJSxI/0D/a6kkdN0GMgCIN51wFZvIQiCp+gMZPTvwBYLAU3qUosBInI1gfeMckD05SiTbHJRhzzn0PWy0hD0NAXCwF8=
+	t=1782660405; cv=none; b=eOJVtkdRfDhjzDJ29bLUtIeZ4s9ojXh+wf56Ayj+Uw1NkSHV/G10h9S+T4CDtIpOdrhKHWtWiKTpYteA4gbOqwhv0b/mNxHk1KiaYbKO1aycB3h3D6z/8xZU2q6hnJ+6skXKONoXeW6Okr4XfVx2MgY1M1lYamDQ5EE4QRhoq9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782656644; c=relaxed/simple;
-	bh=3hsrKxlHkuRy+tFzRvHBAE9uRl/bYK1TugsyGFd9ydU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=F00W8Q4VAbz5jnpRstvX6bpCfvMAX8ZjHrp6o1yhr2WrOdzfemd7w0KFTAjQKlAZm4FO5YRlx/OID+YdTmBmcxQmGzA1rQZVjJ6bFx5NDYnq7MtDgAzsjbddWEu1g/F4qVNE1nFrkkRhHY2tLNBVUNptr2gOBCjM75HVZb2KxTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ARUaIj8V; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782660405; c=relaxed/simple;
+	bh=WBai87XxH2KfdCNpP6IHXulByZKLLRxdxBssMrSpXNo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qdETNeEKCVr7pukstmg6w/nGzxEq4sjVDuVVjQ1jOGcqFK3F1mdXBHiMxRwpUOVZ6ZPGMlZuPPI8C50U9zHzO3hJBZvBMkpUfooyLWgAU6MmYclsEs9EmRcQynS7Nhs6FSSQBizKCuRyPu6bT//Uy1ZuiDFBS81jB30uTT1kOU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EuRa5dRq; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ARUaIj8V"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80DC21F000E9;
-	Sun, 28 Jun 2026 14:24:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782656641;
-	bh=9z1BAdNEfUui+KzQrcTXy1YL2zG5hyu/VH8llukbrOI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ARUaIj8VjQxowNifuObLfNa+Iwhns2/mvl3ac0a8AQ8k1TDDXlIf03/pT1eUQkGcW
-	 GlXbQXVjt1FA2ftpF0Xui0WiUgM46tmk24KQngTPcC6hMSLEWWesueA60I/29gibu5
-	 AEsDGqIHiO9CStBhSWjJoKfmI+gc2L3cq/YvZoaxTprW6aEgpVgEVbUtc+tccXIetP
-	 yQIFrZ7qHf5Rehvj12M8Fiy5jazczoVxajZJw113kZlACyCWYHpNQvbQcY2Q2acq60
-	 8mmLbxRXV0T8eDYtYHZSyHv5gPaYJiJiLVECdj9wYJBOOnF52L4rHN2NE+CWVIQ7Uv
-	 zbd2oQZdMq3aQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: Enforce gotox targets against
- subprog bounds
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260628-f01-03-gotox-bpf-next-v3-1-b744432e1361@mails.tsinghua.edu.cn>
-References: <20260628-f01-03-gotox-bpf-next-v3-0-b744432e1361@mails.tsinghua.edu.cn>
- <20260628-f01-03-gotox-bpf-next-v3-1-b744432e1361@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 28 Jun 2026 14:24:01 +0000
-Message-Id: <20260628142401.80DC21F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EuRa5dRq"
+Message-ID: <29129c40-4010-4862-9b4b-3bafad874568@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782660391;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TeK+Cvyg2fOloDs+N1O69MAGfndJD1u5V/csmGaI8cE=;
+	b=EuRa5dRqExJZ5UWWWpG3KNz3LC4YymuAcLyPVwXcWvk6v+WIf0+qUlzYOcpbQcRpg1o2b0
+	uoZGboFK/NySptMEb4a+oiOJmd6P6J4NAq6AS/bYavpSS9HwDAi3pMtEX/sGfM3Dq2hf6i
+	NuUNlLXayuDoGU9fV1dhH08a3DkUZjQ=
+Date: Sun, 28 Jun 2026 23:26:15 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [RFC] xdp: add device context to bpf_xdp_link_attach_failed
+ tracepoint
+To: Masashi Honma <masashi.honma@gmail.com>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, kuba@kernel.org, hawk@kernel.org,
+ andrii@kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
+ edumazet@google.com, pabeni@redhat.com, linux-kernel@vger.kernel.org
+References: <CAFk-A4mE9Jweo2hfX7y_85xbPyt0FqpMT1EvqX1OcYZ=LTLgRA@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAFk-A4mE9Jweo2hfX7y_85xbPyt0FqpMT1EvqX1OcYZ=LTLgRA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On 2026/6/28 19:39, Masashi Honma wrote:
+> Hello, I am re-posting this mail because I forget to add [RFC].
+> 
+> The bpf_xdp_link_attach_failed tracepoint (added in commit bf4ea1d0b2cb
+> "xdp: Add tracepoint for xdp attaching failure") exposes the netlink
+> extack message produced when attaching an XDP program via BPF_LINK_CREATE
+> fails. This is useful because, unlike the netlink attach path, the
 
-Pre-existing issues:
-- [Critical] The patch adds a runtime bounds check to prevent `gotox` targe=
-ts from jumping outside the current subprogram, but fails to ensure that dy=
-namically observed targets were actually modeled during Control Flow Graph =
-(CFG) construction. This allows an attacker to follow unmodeled control-flo=
-w edges and bypass static liveness-based state pruning.
---
+I really appreciate that the XDP tracepoint helped someone.
 
-commit 5e0bdd5b4a7e2ce073913482349669d9387d6a32
-Author: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> bpf_link attach path does not return the extack to userspace -- the caller
+> only gets an errno (e.g. EINVAL/ERANGE).
+> 
+> We would like to use this in Cilium [1][2]: when attaching the XDP
+> datapath program fails, surface the kernel's reason (e.g. "single-buffer
+> XDP requires MTU less than ...") in the agent logs instead of an opaque
+> errno, so operators don't have to inspect dmesg on the host.
+> 
+> The limitation we hit is that the tracepoint only carries the message
+> string, so a consumer cannot tell which device a failure belongs to.
+> This matters for two reasons:
+> 
+>   1. Correlation: with only the message, a consumer cannot reliably
+>       attribute a failure to a specific attach, particularly if multiple
+>       XDP attaches happen concurrently.
+>   2. Scoping: a consumer watching this tracepoint sees XDP attach
+>       failures system-wide and cannot limit them to the devices it
+>       manages.
+> 
+> At the call site (bpf_xdp_link_attach() in net/core/dev.c) the net_device
+> is in scope, so exposing it looks straightforward:
+> 
+>   TRACE_EVENT(bpf_xdp_link_attach_failed,
+>       TP_PROTO(const char *msg, const struct net_device *dev),
+>       TP_ARGS(msg, dev),
+>       TP_STRUCT__entry(
+>           __string(msg, msg)
+>           __field(int, ifindex)
+>       ),
+>       TP_fast_assign(
+>           __assign_str(msg);
+>           __entry->ifindex = dev->ifindex;
+>       ),
+>       TP_printk("ifindex=%d errmsg=%s", __entry->ifindex, __get_str(msg))
+>   );
+> 
+>   - trace_bpf_xdp_link_attach_failed(extack._msg);
+>   + trace_bpf_xdp_link_attach_failed(extack._msg, dev);
+> 
+> Before sending a formal patch I'd appreciate guidance on a few points:
+> 
+>   - Should the tracepoint take const struct net_device *dev (consistent
+>     with the other tracepoints in this file, and lets TP_printk show the
+>     device), or just the ifindex as an int (simpler for raw_tp BPF
+>     consumers, which otherwise read dev->ifindex via CO-RE)?
+> 
+>   - For raw_tp consumers the argument order is effectively ABI: prepending
+>     dev would shift the existing msg argument. I've appended dev above to
+>     keep msg at args[0]. Is preserving the existing argument position the
+>     right call, or is reordering acceptable given how new and rarely
+>     consumed this tracepoint is?
+> 
 
-bpf: Enforce gotox targets against subprog bounds
+Good concerns. I'm not sure about these parts.
 
-During CFG construction, the verifier records the modeled gotox target set
-in insn_aux_data->jt. This patch adds a check to reject targets outside the
-calling subprogram bounds when check_indirect_jump() follows targets from
-the runtime PTR_TO_INSN register's actual INSN_ARRAY map.
+>   - Is extending the existing tracepoint preferred, or would you rather
+>     keep it as-is and expose the device context some other way?
+> 
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -17188,6 +17190,23 @@ static int check_indirect_jump(struct bpf_verifi=
-er_env *env, struct bpf_insn *in
->  		return -EINVAL;
->  	}
-> =20
-> +	subprog =3D bpf_find_containing_subprog(env, env->insn_idx);
-> +	if (verifier_bug_if(!subprog, env,
-> +			    "gotox insn %d is outside subprog bounds\n",
-> +			    env->insn_idx))
-> +		return -EFAULT;
-> +	subprog_start =3D subprog->start;
-> +	subprog_end =3D (subprog + 1)->start;
-> +
-> +	for (i =3D 0; i < n; i++) {
-> +		u32 target =3D env->gotox_tmp_buf->items[i];
-> +
-> +		if (target < subprog_start || target >=3D subprog_end) {
+I'm planning to retire this tracepoint. But I think I cannot do it, if
+there's user space application relied on the tracepoint.
 
-[Severity: Critical]
-This is a pre-existing issue, but does this bounds check alone fully protect
-against unmodeled control-flow edges?
+I'm planning to add BPF syscall common attributes support for
+BPF_LINK_CREATE, including XDP link. By that way, the kernel will be
+able to back-propagate the 'extack._msg' to user space, when fail to
+create XDP link. Thereafter, the user space library will be able to get
+the error message alongside the errno.
 
-During CFG construction in kernel/bpf/cfg.c:jt_from_subprog(), if an
-INSN_ARRAY map's minimum offset falls outside the subprogram, the heuristic
-skips the map entirely:
+Thanks,
+Leon
 
-    if (jt_cur->items[0] >=3D subprog_start && jt_cur->items[0] < subprog_e=
-nd) {
+> This would be my first XDP/BPF tracepoint change, so any direction is
+> welcome. I'm happy to send a proper patch once the shape is agreed.
+> 
+> Regards,
+> Masashi Honma
+> 
+> [1] https://github.com/cilium/cilium/issues/40777
+> [2] https://github.com/cilium/cilium/pull/46546
 
-If an attacker creates an INSN_ARRAY map containing both an out-of-bounds
-offset (e.g., 0) and a valid in-bounds target Y, the CFG construction drops
-Y completely because items[0] is less than subprog_start.
-
-Later at runtime, if the attacker restricts the bounds to index exactly Y,
-this check passes because Y is within subprog_start and subprog_end. The
-verifier then explores the gotox to Y edge that was never modeled in the
-CFG jump tables.
-
-Because liveness analysis relies strictly on the statically modeled CFG,
-could traversing this unmodeled edge cause liveness to incorrectly assume
-registers are dead, allowing an unsound state pruning bypass?
-
-Should this logic verify that the dynamic target is actually present in
-env->insn_aux_data[env->insn_idx].jt, rather than only verifying the target
-is within subprogram boundaries?
-
-> +			verbose(env, "gotox target %u outside subprog\n", target);
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260628-f01-03-got=
-ox-bpf-next-v3-0-b744432e1361@mails.tsinghua.edu.cn?part=3D1
