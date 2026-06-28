@@ -1,118 +1,160 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C501632DD
-	for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 08:17:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782634673; cv=none; b=svO0wuKtkfB81pgHItu4qoLVyPZBN/sYK+TkrBxNoWdFCm9Bgq+7URgYMtzY/vAVuEb1LypdzUE/Ekn6NVavo1w8t3Lke07z/lmovnlGio6H9npSuIwuePZyybPBsn3DTkXSblpAJI7f5ifsrZgmbzT4yoqbAV1muagfgpjv3pI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782634673; c=relaxed/simple;
-	bh=A5u4LAzVAFK4HP13JmQ/QCon/EhAKEfkFBJqMIm3bi0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KBECyK4AzUlVgT3EZ4wodOjcF2BuT3evSuouwPalotU+EK5F/7pJpD3rRMg48IQiHfvN3j+VP4Tz67L8DHUC3PPuuqy2u3v+Y/qj8HD1063vUo7HLyMZo4E9jqw3xM/wUxYvLvdv6zIXnsjxqTATx55JQdcuCDhv1aNNlDxeNkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JfgqFSxw; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4E6334681
+	for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 11:33:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782646425; cv=pass; b=lKkGbkTPLGjdqtrjwSA8QE45LMQpHarTeeRZFOiN1bb9vAi180420qitjvaQWvUNqA4K3zD1B6rS8W+fGMY/KbUG9p4jCOHlungbo+nk+1jvTi2aW6NCZuQo1Xximw2MFGZ7cmOhzHI8XJN/DT6TKijkQa72zOc6uB3/z4z/pos=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782646425; c=relaxed/simple;
+	bh=bgfpN079ZTjkfGSzvnJl3HzKuIyjV75/HikjUo6F6JI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Ku2GSMhauJuuwMVxMOQCfWVKTT9SbTWxRen50A8witgL+z/LcU7J5gwCRVGaa//YfB+hWEOnuZ0mkIWBb3EBw1U0Iimsg51UywRSMDzbT/BBtdWEhhy0CVa6+9RzhmCQhkoY+nt9lQP6sAcD281zNj/6CTI0Qw/CPjTa9so/Yyo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JpKJajIp; arc=pass smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JfgqFSxw"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-37de961d1bfso1931530a91.0
-        for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 01:17:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JpKJajIp"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-47248615e4dso644516f8f.2
+        for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 04:33:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782646423; cv=none;
+        d=google.com; s=arc-20260327;
+        b=EbDzo8eQ9UXLBvyXKuM6eR8N2Y1O/YRr31KF6r/BzLxfenOB6uJnaHwefZRlhI9cYb
+         AXsMfqmlmqBtac/qYUPvdjYzUduQEbE4Pvg1Lc0snVS7yyifBN9fC1Jd6TxDaNbBt4mc
+         6xIltOOTS+VjB7lUt3Ykhfm5QVtWlLWO11CFf1SGmzefdVupwYNtSzNetYrWhSfHzhFm
+         TU34CiAcSkE7loQ5xUzmUTOdHF7xxyDLqpX/3PWkc6wZklhaigvUEj+Oa1d/LBLJ+VH4
+         iYyu6pvPYt2+E14vG3Mpx3T7SyQEHa4sG3RcigIrbUvTpUpiq4DkJ04q5tFntLth+Jn0
+         ETMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=CBSQ7Q9WGiOFkEauFRc+1+ZNzSO1tr4SWnVeYuWVixE=;
+        fh=eWriO86QW0bFXZjlcHmZvJgWj2GedKTCmpKu4aDA9/Y=;
+        b=UltQmJi7QXy65Y2wMvWLIWFesVmZ8WKygu+WNbQdA3quCNQqAiLt1Xeaq2efU+KrRH
+         mH2/IGEtGFM2q3I5xuz4O8kwxtNwJTKFZSz6m+bRqFSuVMwrbOS2gqGXwVuVLfZ3gCxg
+         Rfio3RY5MwuLoDFvDMwQF7TKiBBQuJQBK5Tdv1YrnrEWeV19R9RoZbMWL77RRnQZESc5
+         z+KQ02g2vuIdRQE6nKHAGsQANkbn1Doztc3AWBiGR+FtBeW7r/83y7orGXl9v7OqrVa3
+         FLoDwxUd4RlHJ/JPV/VJ+/RErnfWzeG8K6fxMzF//67X5ABoM69q/gck33vPn+3lCNR9
+         8d6w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782634672; x=1783239472; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wIbWUZbf4PMs4YBadVfF+7ZfJ1yqBeFq4gfTDljCk2k=;
-        b=JfgqFSxw0eTSs3vnGzu/+Nv/3SK40lDU0QrM3Vd9Xs/GssvnnjamGwct0oSVW8KFj0
-         x4fR3kAo8lBxlI3VpY+DNebQaxeA5sr6Ld5t57LnQbieFRuc2o+HUbWJ3Wxm8ReArXcT
-         EV08868WYtzMxDWExcG9LCCDiaZ6BjOy0vPrTaohsrXHsB3vjINxF8ajgf/i7c9JDKLa
-         ZCneZiJDN5ZhaqZxOpraH6ZqRaGpBTjPwRB2gLu1bv0HlZBeJTVWbifW2Q/zVdiUKGdD
-         /A/FPiQQZ9kJbKdpkAQc3LGw9MeOPRziDvtMOiiRfmSDsS6JRR4zy5gLEVr/6LazhHjB
-         XOlg==
+        d=gmail.com; s=20251104; t=1782646423; x=1783251223; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CBSQ7Q9WGiOFkEauFRc+1+ZNzSO1tr4SWnVeYuWVixE=;
+        b=JpKJajIpQ0FsXQUjKhtdpT3iBJKQSG165IVyQXjfxsUhliJGJNWIPAZTUBpR89tEn6
+         H2KbKu0pdQJMavGl9T4mRFD/AnmSdewRUk61h87UCuGx7In2VcJLio1PRkbCtBR/gmJ8
+         Jbdbd6rkYcCrmaU0jrWq2dffI6HzdULitCNKmdw71Ro4f+P7KW65jPC6eYhMsg16G9bi
+         lEPGfBk6RLrg7yrhNP/+rQTuBXYVbo1kur2+03a1gHnXiOTxPSjF+Z7PUuuhQjpmkHIY
+         j7BFIP4K70FYuyYgqCiKysNbGPq2eNwB9tY80qeecK8s+Xvd+6ZZtqDg1MfC6SRgXkQw
+         K3Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782634672; x=1783239472;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=wIbWUZbf4PMs4YBadVfF+7ZfJ1yqBeFq4gfTDljCk2k=;
-        b=SWKduV7/N2G03QgYb+koqyFcrwSeAX/cOlQ7lPvF6URnu4LaNLFvHFTY6GCWS+0OKR
-         66wbIffYtT5Wecn9h28C4Rn3xiCfY8W97HQ9XmrG9Y7sbL6+RnEw6kPQF3ndKzPdl/sy
-         1jm0yqzKi3gkRG0zBSuFJ6N9WJTGOKKo67JT4Vw5sW5+K8+s6eJuGr/Ci8tnAOgVurAS
-         3rQUvvlSXvbjkgGwjqAI7WR0+f2CoXfVh2dZg6ai8hCv1nTu6Vsrv4vexQI6azACQH0P
-         6LFd4pael5QWixnOusgUwiJQLuFMGeYbpo+QbSnjHlM84BbakeJd8TqLmLDKqNRGZC3i
-         1W/w==
-X-Forwarded-Encrypted: i=1; AHgh+RqVEkNy2JIAFUGgaaWVPd3VwXvZ5U781xM1du7Cg8ItD2RDYF3NgPPIxEq2Zl8WEAjC+uU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YztYnw0xa03KFY/tb8NT5rPcHz933OuJJDGfKJcZ2xTrrgi1BfA
-	ZZcNbYbM0G6ouuLfd0v2dKB12fS+OjcNbbSUvJ7m1AIDzTv2yh+EVGns
-X-Gm-Gg: AfdE7cnOBF/2iRy0h7zSr5N1jYd0dLgtvMcQ5Eh2EXvVFaq13FBEo3igrEmob2j1rB9
-	GRyc3rPVi0OHVxXPprWCwtWSpDRuE0OUCOtc+RIp39sA6ZYGHmGOa3MMRnaV6aZbLPb+ekH3JIh
-	FprZ8l0IPzR7o80Fbr8dF6Jv6TxMthRrb0nZaJIHpHax4KXQb9cD81Y23rA8o53Z+bQ0JKIJdCF
-	0NQx/fDC1knq8CfSchcoDpOWQGTfstTdGi/Ofmy/nnq5fPKbvsfKeUJ2btOH319ZV99FHHURY0T
-	QJLAie54E/K6JeGKjDLzPU+/E2X97+FLO9UzD1aYhZ1XL4TQqiMAVRtZ2czYJktnvQNwZH88eXC
-	ALxBoNsTkvwWqaUvNmleT7ptAXWGbST8oumC9IuqpKZKu6FC1GiCbHKe6xnCsxpX2O1a96l6TuQ
-	SV3HisokfBt9zBnMMiD6r8O5YPh1cGKvboyYVLR8fS91eiiDcf56BV+PI=
-X-Received: by 2002:a17:90b:1647:b0:37f:d70a:9605 with SMTP id 98e67ed59e1d1-37fd70ab29fmr2995751a91.9.1782634672198;
-        Sun, 28 Jun 2026 01:17:52 -0700 (PDT)
-Received: from computer.goose-salary.ts.net ([2a09:bac5:3b4a:8aa::dd:15])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c92bd55985asm6020434a12.31.2026.06.28.01.17.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Jun 2026 01:17:51 -0700 (PDT)
-From: Varun R Mallya <varunrmallya@gmail.com>
-To: pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	bjorn@kernel.org,
-	pulehui@huawei.com
-Cc: alex@ghiti.fr,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	puranjay@kernel.org,
-	shuah@kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	varunrmallya@gmail.com
-Subject: [PATCH bpf-next v2 3/3] riscv, bpf: Remove BPF exceptions from BPF CI denylist
-Date: Sun, 28 Jun 2026 13:47:10 +0530
-Message-ID: <20260628081710.113333-4-varunrmallya@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260628081710.113333-1-varunrmallya@gmail.com>
-References: <20260628081710.113333-1-varunrmallya@gmail.com>
+        d=1e100.net; s=20251104; t=1782646423; x=1783251223;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CBSQ7Q9WGiOFkEauFRc+1+ZNzSO1tr4SWnVeYuWVixE=;
+        b=dsWaNsoqYYgfA4Bvlx0kPjLADkL4NjpvQzyFwWGG+E8uY27W5rEZ3MVgHhiD3alMEq
+         jpux+63x5a5twXXYB7E5I/vSxYKXEZzDmyikkfW/MaFEqY166XoPO0ZPnQImD8lkpPyO
+         9jPgsovu3E9CKKpiefmhnDC9YJZ8o77ikt/weG+Yi4k1pWMYmUQrcOCWyMtzC9DMjooh
+         2ezGRw+/UBlCvGD/N2WEMbNa5Xe3aGSKLj+K7QDHo41WJRr+qEVZn1eNolPaFpxpOAjK
+         I0M8FkMFNNuoZMIILXP/c/hBrg9eDNtDdrB2bg3X8g5aFoRJEmLgRPASB2U2G5hjqhO2
+         +0Mw==
+X-Forwarded-Encrypted: i=1; AHgh+Rrv0ZTFFR93KZpo1GL07Y3xRxJAN3FeSk9rc1TIhFX4u3fSS1XADSNHIqj+y8itvSwl0Tw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQBgklZ7mcEOzcoTzTX3tqORWdqna63axmH9C7yd0cP+l2BOp0
+	5jJhPZe6myM6+hZvYmx2AfXrtmF/y780HlKbA3GxgovO/K6IDV36rWQZ7RYu+UHLz+pCygN3pD1
+	bl96IT5PFeAdJujdT9mIf3xVhIpTAdfY=
+X-Gm-Gg: AfdE7ckW7+RpTXldrbJ1kwW279k8Q1Rijmio3rQ/91n2PCEaxTi29Vce1A/vg0LvffK
+	KCb62pmpg6usxxaf2gBigV/jyAZWkGnuj0IosQ5zeRplV4VDd4PzxG62f8gJ7Y2IZqZCBxmsTPD
+	NYyoGdWUZ/3ETv7ova3Q/3Hlw4WRxS2Sfj/R0Oes8GgSiFUTfY/PIkNEKU/8Wkyn/6TPgjMVeoG
+	V+44/Z7TySKXpChNhswwgkqJu6WAdm7j6cBUugMmyBBgkXwZE28WpUa0vQxA9pviKSfqA==
+X-Received: by 2002:a05:6000:3111:b0:45e:f684:7347 with SMTP id
+ ffacd0b85a97d-46dbf7d1bc0mr22070830f8f.12.1782646422449; Sun, 28 Jun 2026
+ 04:33:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: Masashi Honma <masashi.honma@gmail.com>
+Date: Sun, 28 Jun 2026 20:33:31 +0900
+X-Gm-Features: AVVi8Ceiv0d_3j-P-e81X83o_swUGxL0tFzZtYhSLjCxBgrq_DUpuk-krqAYxbI
+Message-ID: <CAFk-A4mcCfNBWLw-rMAnC25k8LV6fF2_jGyhpKciFZv35koy8w@mail.gmail.com>
+Subject: xdp: add device context to bpf_xdp_link_attach_failed tracepoint
+To: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org
+Cc: leon.hwang@linux.dev, ast@kernel.org, daniel@iogearbox.net, 
+	kuba@kernel.org, hawk@kernel.org, andrii@kernel.org, rostedt@goodmis.org, 
+	mhiramat@kernel.org, edumazet@google.com, pabeni@redhat.com, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-This patch removes BPF exceptions from riscv64 denylist on
-BPF selftests since support for exceptions has been added now.
+Hello,
 
-Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
-Reviewed-by: Pu Lehui <pulehui@huawei.com>
----
- tools/testing/selftests/bpf/DENYLIST.riscv64 | 1 -
- 1 file changed, 1 deletion(-)
+The bpf_xdp_link_attach_failed tracepoint (added in commit bf4ea1d0b2cb
+"xdp: Add tracepoint for xdp attaching failure") exposes the netlink
+extack message produced when attaching an XDP program via BPF_LINK_CREATE
+fails. This is useful because, unlike the netlink attach path, the
+bpf_link attach path does not return the extack to userspace -- the caller
+only gets an errno (e.g. EINVAL/ERANGE).
 
-diff --git a/tools/testing/selftests/bpf/DENYLIST.riscv64 b/tools/testing/selftests/bpf/DENYLIST.riscv64
-index 4fc4dfdde293..9268351ce4c1 100644
---- a/tools/testing/selftests/bpf/DENYLIST.riscv64
-+++ b/tools/testing/selftests/bpf/DENYLIST.riscv64
-@@ -1,3 +1,2 @@
- # riscv64 deny list for BPF CI and local vmtest
--exceptions					# JIT does not support exceptions
- tailcalls/tailcall_bpf2bpf*			# JIT does not support mixing bpf2bpf and tailcalls
--- 
-2.54.0
+We would like to use this in Cilium [1][2]: when attaching the XDP
+datapath program fails, surface the kernel's reason (e.g. "single-buffer
+XDP requires MTU less than ...") in the agent logs instead of an opaque
+errno, so operators don't have to inspect dmesg on the host.
 
+The limitation we hit is that the tracepoint only carries the message
+string, so a consumer cannot tell which device a failure belongs to.
+This matters for two reasons:
+
+  1. Correlation: with only the message, a consumer cannot reliably
+      attribute a failure to a specific attach, particularly if multiple
+      XDP attaches happen concurrently.
+  2. Scoping: a consumer watching this tracepoint sees XDP attach
+      failures system-wide and cannot limit them to the devices it
+      manages.
+
+At the call site (bpf_xdp_link_attach() in net/core/dev.c) the net_device
+is in scope, so exposing it looks straightforward:
+
+  TRACE_EVENT(bpf_xdp_link_attach_failed,
+      TP_PROTO(const char *msg, const struct net_device *dev),
+      TP_ARGS(msg, dev),
+      TP_STRUCT__entry(
+          __string(msg, msg)
+          __field(int, ifindex)
+      ),
+      TP_fast_assign(
+          __assign_str(msg);
+          __entry->ifindex = dev->ifindex;
+      ),
+      TP_printk("ifindex=%d errmsg=%s", __entry->ifindex, __get_str(msg))
+  );
+
+  - trace_bpf_xdp_link_attach_failed(extack._msg);
+  + trace_bpf_xdp_link_attach_failed(extack._msg, dev);
+
+Before sending a formal patch I'd appreciate guidance on a few points:
+
+  - Should the tracepoint take const struct net_device *dev (consistent
+    with the other tracepoints in this file, and lets TP_printk show the
+    device), or just the ifindex as an int (simpler for raw_tp BPF
+    consumers, which otherwise read dev->ifindex via CO-RE)?
+
+  - For raw_tp consumers the argument order is effectively ABI: prepending
+    dev would shift the existing msg argument. I've appended dev above to
+    keep msg at args[0]. Is preserving the existing argument position the
+    right call, or is reordering acceptable given how new and rarely
+    consumed this tracepoint is?
+
+  - Is extending the existing tracepoint preferred, or would you rather
+    keep it as-is and expose the device context some other way?
+
+This would be my first XDP/BPF tracepoint change, so any direction is
+welcome. I'm happy to send a proper patch once the shape is agreed.
+
+Regards,
+Masashi Honma
+
+[1] https://github.com/cilium/cilium/issues/40777
+[2] https://github.com/cilium/cilium/pull/46546
