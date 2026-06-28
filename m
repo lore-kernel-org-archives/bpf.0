@@ -1,75 +1,75 @@
 Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4E6334681
-	for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 11:33:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8929539FCBF
+	for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 11:39:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782646425; cv=pass; b=lKkGbkTPLGjdqtrjwSA8QE45LMQpHarTeeRZFOiN1bb9vAi180420qitjvaQWvUNqA4K3zD1B6rS8W+fGMY/KbUG9p4jCOHlungbo+nk+1jvTi2aW6NCZuQo1Xximw2MFGZ7cmOhzHI8XJN/DT6TKijkQa72zOc6uB3/z4z/pos=
+	t=1782646788; cv=pass; b=cQbbChPqj7iBzfDjaeFP7z0QBCtKovp3GjDHWEfuMPM8dPnX6u0DSCg/f5RgdBKa8LrsLrXfaozezSf5h0I7cgt+quD0W/dwkdO4akEb9hyS59xQgMeWrwIGp9y428H0DJfVFeFbIJrsuja/FWBFsqXOHVbvnavnX0cyIqQDR3A=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782646425; c=relaxed/simple;
-	bh=bgfpN079ZTjkfGSzvnJl3HzKuIyjV75/HikjUo6F6JI=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Ku2GSMhauJuuwMVxMOQCfWVKTT9SbTWxRen50A8witgL+z/LcU7J5gwCRVGaa//YfB+hWEOnuZ0mkIWBb3EBw1U0Iimsg51UywRSMDzbT/BBtdWEhhy0CVa6+9RzhmCQhkoY+nt9lQP6sAcD281zNj/6CTI0Qw/CPjTa9so/Yyo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JpKJajIp; arc=pass smtp.client-ip=209.85.221.46
+	s=arc-20240116; t=1782646788; c=relaxed/simple;
+	bh=d498hBMWdU3yNFxeg0vqz25RIl2j1GJoEg3MDJBpWnU=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=od38bRevrsqCcbXuvsht5RwNOv69CIR0/2rpNs/HNYpfajdHjDUBoNVPbY022Ifju9m/BKkWwzQND8ndVLlZbAd8GwtQgs2JnpKGVdNK9woixdd29j9t5nRqmHRkWlzGe20niSVWBMk5INxVzSayrKj9Xp9olSSh/sKG+VwXX1s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oSTAZ+7B; arc=pass smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JpKJajIp"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-47248615e4dso644516f8f.2
-        for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 04:33:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782646423; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oSTAZ+7B"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-463f1165e16so2499157f8f.0
+        for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 04:39:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782646785; cv=none;
         d=google.com; s=arc-20260327;
-        b=EbDzo8eQ9UXLBvyXKuM6eR8N2Y1O/YRr31KF6r/BzLxfenOB6uJnaHwefZRlhI9cYb
-         AXsMfqmlmqBtac/qYUPvdjYzUduQEbE4Pvg1Lc0snVS7yyifBN9fC1Jd6TxDaNbBt4mc
-         6xIltOOTS+VjB7lUt3Ykhfm5QVtWlLWO11CFf1SGmzefdVupwYNtSzNetYrWhSfHzhFm
-         TU34CiAcSkE7loQ5xUzmUTOdHF7xxyDLqpX/3PWkc6wZklhaigvUEj+Oa1d/LBLJ+VH4
-         iYyu6pvPYt2+E14vG3Mpx3T7SyQEHa4sG3RcigIrbUvTpUpiq4DkJ04q5tFntLth+Jn0
-         ETMg==
+        b=qI8ik+ZoA4Qw8/gRgmhX4AIxZkEpgaWBCOZVlkCvgrRntGP/bHBD9U5V1D7Fo4pLVx
+         86Sowm+1Ftm/8dcl0ODhz0QZUOQoXag3dQeonpxalU25iMTZOOpSatsJwpmURoCZmF3K
+         jeTkKB5as7iet3WQns/40+BnI4m41L20wZ3IXyZPafawnCRwi2EWfAbQfX8rzMWNZrk/
+         xFiYODeSFLsyECoh/nPM3C/Aq74i7mSgsVHyKmZsWiXQAN1niLpskXUjUMS34e3Gje+V
+         37NbuFEWqzXBNkSHirMEOH3dg4oZf0C/dgVOqIXu2ntSq4UMLYjlemRWhSg8hqe+Z8gy
+         PY3A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=CBSQ7Q9WGiOFkEauFRc+1+ZNzSO1tr4SWnVeYuWVixE=;
-        fh=eWriO86QW0bFXZjlcHmZvJgWj2GedKTCmpKu4aDA9/Y=;
-        b=UltQmJi7QXy65Y2wMvWLIWFesVmZ8WKygu+WNbQdA3quCNQqAiLt1Xeaq2efU+KrRH
-         mH2/IGEtGFM2q3I5xuz4O8kwxtNwJTKFZSz6m+bRqFSuVMwrbOS2gqGXwVuVLfZ3gCxg
-         Rfio3RY5MwuLoDFvDMwQF7TKiBBQuJQBK5Tdv1YrnrEWeV19R9RoZbMWL77RRnQZESc5
-         z+KQ02g2vuIdRQE6nKHAGsQANkbn1Doztc3AWBiGR+FtBeW7r/83y7orGXl9v7OqrVa3
-         FLoDwxUd4RlHJ/JPV/VJ+/RErnfWzeG8K6fxMzF//67X5ABoM69q/gck33vPn+3lCNR9
-         8d6w==;
+        bh=1k0VeFABvfpPKot2iuI8Yf+iW1BODubQlFUp6DJBWSQ=;
+        fh=t3evCTJwXzEEWG/jDHt/eMTtuIDAkmOc4mQH+Z00To0=;
+        b=FA+t859UM/iHbJKUn1nQmjzjio/NUfEeO8C1DzfLeHVQsplU2ekdFfl7GG3p+TxtPg
+         fY9ZuNMiJIWzrAYq7OUutxpMv7qusBm9rkEqBkNDQqJChizVZrxJMKzlsgrN20A0Z7Km
+         9Gwxg5i29OPwyYkVG2OJ5fjGHn67pVQUhKcUBs87wIVkGGJwKPMhMa7B+FrFST5up/OK
+         4hR78ePdf7dWWv7gZH9Gv3j1j4s/B68DnOkkCMi7BqF6+FeeUTq8/6nWgSqq60a976GW
+         NF8oQ7hnkvfIpBikS+hudv99NJL3dKGK8JTuy2wmAb7aNY2+0X5XGleVR8gtnkyxmx9E
+         aI2w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782646423; x=1783251223; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782646785; x=1783251585; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=CBSQ7Q9WGiOFkEauFRc+1+ZNzSO1tr4SWnVeYuWVixE=;
-        b=JpKJajIpQ0FsXQUjKhtdpT3iBJKQSG165IVyQXjfxsUhliJGJNWIPAZTUBpR89tEn6
-         H2KbKu0pdQJMavGl9T4mRFD/AnmSdewRUk61h87UCuGx7In2VcJLio1PRkbCtBR/gmJ8
-         Jbdbd6rkYcCrmaU0jrWq2dffI6HzdULitCNKmdw71Ro4f+P7KW65jPC6eYhMsg16G9bi
-         lEPGfBk6RLrg7yrhNP/+rQTuBXYVbo1kur2+03a1gHnXiOTxPSjF+Z7PUuuhQjpmkHIY
-         j7BFIP4K70FYuyYgqCiKysNbGPq2eNwB9tY80qeecK8s+Xvd+6ZZtqDg1MfC6SRgXkQw
-         K3Rg==
+        bh=1k0VeFABvfpPKot2iuI8Yf+iW1BODubQlFUp6DJBWSQ=;
+        b=oSTAZ+7BUFaCqqvsuzotB8ngAQTb+rEB9zl8svMjzjB7b5h7hasER2XV466r4ynW2h
+         aujKdUJNkJRAstFCxCptghu4IjH2l8NDqPEgvYnW+aAySXIuqXSRGUYLgMHyY6bOiYbF
+         /w/QeRDgzVwUpr7bmoaVPu9yjR0vLM3259X2FTlgdre5aJ2+F4FaKK73xC63oWiafR+G
+         W9OsuJh9SQ24W0GxgiJTSzUE5O+6gTImi0qVfS/2bfhgtN/X4zwfDQyTiW1weaiDKL5L
+         tQBoYpfUXauZ+RNN+zeiYOnXaJlIiGuYIZ9AZTDXf2NAjj/N8pkwVT87FTxoT32nXMG/
+         r+iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782646423; x=1783251223;
+        d=1e100.net; s=20251104; t=1782646785; x=1783251585;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CBSQ7Q9WGiOFkEauFRc+1+ZNzSO1tr4SWnVeYuWVixE=;
-        b=dsWaNsoqYYgfA4Bvlx0kPjLADkL4NjpvQzyFwWGG+E8uY27W5rEZ3MVgHhiD3alMEq
-         jpux+63x5a5twXXYB7E5I/vSxYKXEZzDmyikkfW/MaFEqY166XoPO0ZPnQImD8lkpPyO
-         9jPgsovu3E9CKKpiefmhnDC9YJZ8o77ikt/weG+Yi4k1pWMYmUQrcOCWyMtzC9DMjooh
-         2ezGRw+/UBlCvGD/N2WEMbNa5Xe3aGSKLj+K7QDHo41WJRr+qEVZn1eNolPaFpxpOAjK
-         I0M8FkMFNNuoZMIILXP/c/hBrg9eDNtDdrB2bg3X8g5aFoRJEmLgRPASB2U2G5hjqhO2
-         +0Mw==
-X-Forwarded-Encrypted: i=1; AHgh+Rrv0ZTFFR93KZpo1GL07Y3xRxJAN3FeSk9rc1TIhFX4u3fSS1XADSNHIqj+y8itvSwl0Tw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQBgklZ7mcEOzcoTzTX3tqORWdqna63axmH9C7yd0cP+l2BOp0
-	5jJhPZe6myM6+hZvYmx2AfXrtmF/y780HlKbA3GxgovO/K6IDV36rWQZ7RYu+UHLz+pCygN3pD1
-	bl96IT5PFeAdJujdT9mIf3xVhIpTAdfY=
-X-Gm-Gg: AfdE7ckW7+RpTXldrbJ1kwW279k8Q1Rijmio3rQ/91n2PCEaxTi29Vce1A/vg0LvffK
-	KCb62pmpg6usxxaf2gBigV/jyAZWkGnuj0IosQ5zeRplV4VDd4PzxG62f8gJ7Y2IZqZCBxmsTPD
-	NYyoGdWUZ/3ETv7ova3Q/3Hlw4WRxS2Sfj/R0Oes8GgSiFUTfY/PIkNEKU/8Wkyn/6TPgjMVeoG
-	V+44/Z7TySKXpChNhswwgkqJu6WAdm7j6cBUugMmyBBgkXwZE28WpUa0vQxA9pviKSfqA==
-X-Received: by 2002:a05:6000:3111:b0:45e:f684:7347 with SMTP id
- ffacd0b85a97d-46dbf7d1bc0mr22070830f8f.12.1782646422449; Sun, 28 Jun 2026
- 04:33:42 -0700 (PDT)
+        bh=1k0VeFABvfpPKot2iuI8Yf+iW1BODubQlFUp6DJBWSQ=;
+        b=l/CBus2V7RRVNq+tdJiq60nwJoT0zqydXM+3aXhLs/Rl2k19cwjkAhEvWIzu11tw0q
+         e74Nix9bimbxVP/nKeFOABJkMMEtmHPedK1LdDCUt/RPF+mAKS+v2+v/H3qXlSZ4Izq+
+         0jdzQ/qArCVGA8Mff/JNZiHO04MOmDPGemL8KWRLbcKICsvW3KG3qh6C+MEkpQrQro6x
+         SIgKcihARcK+i3fh0JTkAmpIU2pforqctR8xA/z8eqYAEGFaiIkBvvUzjrHYC7yArapT
+         nKVj00CbnYvkEZFt/tWR/Lb+2YF8zOk2VM94Po40bndVmlYCw8Ydz8fFYXEJqQ1Mb8H/
+         E+6Q==
+X-Forwarded-Encrypted: i=1; AHgh+RqQlb1F2jhU9V88Dt0EQDuFru9xZ+wQv+Egj5X7G3OMlz9cF9+mhBxDeEOY2VwADDFin5Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFECkaXS/SBtHo8rrKgFOYF9ai+Bda09newgy0IN45q0hkb3mg
+	xotXVSK98m4ZVXZkHolKuHc4UBdMcrvCJ1jYMFW1hmwZ2JLD2KV5YMLFV1V8O277OKSbrGhHl9G
+	Ot5PhKclqK+XC/xXQQuRxXSjYAlem7MI=
+X-Gm-Gg: AfdE7cnzb7r+8wACdIIKN10AH7CVEJXKCehxK7PYv/1brrn2Jcevd0YnvioaAlTV5KO
+	UsBFI1bhhwGPVOaczTXidRbJekquQPMCqBiWV1sTbbEI/0Jngeeu8P3pAtIkYre5fOj17SBhNrA
+	54zqONSvef/FC8nl5FaGqm1c7BGYQysXVdIhWMZKy34NynC/8s2DwMigx5qb1df1MDqtEHMX23T
+	t9Yan0FRLXI4XcC1bzZ6/l7FuStDyeCsZENuGFf/98vxAJbTXlvkKsUXF83w+LCdeBwtg==
+X-Received: by 2002:a05:6000:40cf:b0:46d:1433:77ec with SMTP id
+ ffacd0b85a97d-46dbf021840mr22541235f8f.2.1782646785414; Sun, 28 Jun 2026
+ 04:39:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,10 +77,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 From: Masashi Honma <masashi.honma@gmail.com>
-Date: Sun, 28 Jun 2026 20:33:31 +0900
-X-Gm-Features: AVVi8Ceiv0d_3j-P-e81X83o_swUGxL0tFzZtYhSLjCxBgrq_DUpuk-krqAYxbI
-Message-ID: <CAFk-A4mcCfNBWLw-rMAnC25k8LV6fF2_jGyhpKciFZv35koy8w@mail.gmail.com>
-Subject: xdp: add device context to bpf_xdp_link_attach_failed tracepoint
+Date: Sun, 28 Jun 2026 20:39:34 +0900
+X-Gm-Features: AVVi8CfDJaopmWM8eZVww041Hj-U2h62NQOVb61mCb6UmG7XUvpGHldL02uI0LM
+Message-ID: <CAFk-A4mE9Jweo2hfX7y_85xbPyt0FqpMT1EvqX1OcYZ=LTLgRA@mail.gmail.com>
+Subject: [RFC] xdp: add device context to bpf_xdp_link_attach_failed tracepoint
 To: netdev@vger.kernel.org, bpf@vger.kernel.org, 
 	linux-trace-kernel@vger.kernel.org
 Cc: leon.hwang@linux.dev, ast@kernel.org, daniel@iogearbox.net, 
@@ -89,7 +89,7 @@ Cc: leon.hwang@linux.dev, ast@kernel.org, daniel@iogearbox.net,
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hello,
+Hello, I am re-posting this mail because I forget to add [RFC].
 
 The bpf_xdp_link_attach_failed tracepoint (added in commit bf4ea1d0b2cb
 "xdp: Add tracepoint for xdp attaching failure") exposes the netlink
