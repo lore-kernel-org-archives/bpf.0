@@ -1,45 +1,45 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE283B8D40;
-	Sun, 28 Jun 2026 21:59:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 772FC3BAD9F;
+	Sun, 28 Jun 2026 21:59:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782683983; cv=none; b=FxmM7d4XYXImiQ+UNM9OYM/wcSW17ckd1U6BT9qjpqrjzmb4az40rZsN8fWzle4lOIkjFlHJHCLmMVLuCWBn4zMNJ4xcp7qu4KWPYPbiMSIM22AYPtutbYOCxp/hRJ3IcpWaWzmtFDbrxh83SRdaHoF+mTx1wxAiZKm8Rn7Ffkg=
+	t=1782683998; cv=none; b=Cgs3B1EMmHrbGa209u3J4JTu33W6IE7iyjWYznBKFImPMkSQ8l0XmoGdOxKBH5uJt69npoaUCbYUjup9tjHNC128ZohPsMOZLUMXZ899VeXJpr6C4GEbAXssAC+2NwzPLqqFyMCMv+9rnuuOZRYjihj2vUlu+2ZnpdX5yeaOZ5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782683983; c=relaxed/simple;
-	bh=t2sMTNUbxD4BknlcrTMpWc4SMcLbIGXrma4CzOJVaWI=;
+	s=arc-20240116; t=1782683998; c=relaxed/simple;
+	bh=Jo0XcOlZi0WxtmDMP0w4xh35b8lphoShPRqDWBSKrgs=;
 	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=kWQg0vLYuXA4zjKfo2W0oooKusfqJfmh6LGRrLCuqbtdPo0wOvtsvlu7vcYfKJBSloVzx7krmS1advjVwI9d8iozoMRwbblxXVpmZEXSbdjiDGfLeHSDQ8Y13gdD6WUJuxct1tNYhY1Q5JayaIzV2ZMgOmwVnbpRsVNM47uxBGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=RXCF0CAP; arc=none smtp.client-ip=185.226.149.38
+	 In-Reply-To:Content-Type; b=TQihT2K3EPEeP8kLTsTmzByXurvvXXhK0c/Hjd9DHs2fYpGT1PxBJ5pTeMS2DF8x6QLF0A6AnFXVS7UkFmFOPAvty42+ISCc+f8LRp5ZfqkKjD41J7JnjBK6L8NJXihd5x3QSpuOW8FGBGjDi8MVRErc5Vwvbg+uuhXVymaYEJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=jUeyx9BU; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="RXCF0CAP"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="jUeyx9BU"
 Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1wdxXQ-001ZMg-30; Sun, 28 Jun 2026 23:59:40 +0200
+	id 1wdxXc-00Gg5x-R4; Sun, 28 Jun 2026 23:59:52 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
 	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-	bh=Huq7o+X/3/jMiP4VYmjn9/eydGCayTj3Mb+IM0OaK4w=; b=RXCF0CAPXKlGI5A4Yqx6tF0OlK
-	ZCqFYbb77AJkJ2QolHT6+H0XB3DQ0PgwHhHluqMQfPHVviYa38xuACMeXEBcVWK5ijzyGu0iuHQx9
-	uhAU0V/5gRFaXJSgj9lydtnRVHjOdXQCcvn3pvlmMokdsxgCPMX5fyaQqmEzr63S4gyVKxHZVZFJZ
-	ejBtTVRRJhJ1Gw1FvvdnFq8k3xlZuqqq2SfJ9w3P0WZghuI5ss2cZhqhKJ01TjcYDOPcHN8wrS4Rx
-	gVtWgkZV3VhJ8HZg9F3O3aXZCTt9EkUTLNxOqrVd1CECebyaJkfNM+7vIhHQQezkmRLqYE+0IadZb
-	isqZb1gg==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
+	bh=iFfN33bXCoFIYJH0PyNERYalk6o6fo/Q09tESzrMJ8Y=; b=jUeyx9BU9C8cxydkEfZ06ftnW5
+	Oc2aaCx+Jl8DE7/dSZoFKdRzVZEe5/ij0peydwKHsuGYmIRwmH8oF2Tto1HBoqKZrJgerj4QTwRAm
+	Ix2+ppm/d1shknjKRgH9BCTZEJ5ikLcCeU12tOOlbiatmpzKMUtdTmAIhDWz31ZhKyHXtn8D0rzO6
+	O46tWVimS5LlihaRciqC6V6LPVJ15JMzlkEhhTdqrGoElf7p0Ord48+cvPkxWwdzzvJcdGCtI/F1y
+	axvqTLqF30et/lrfHVIbh4+hICZ1X75j734rBbX7/K1N/eUNvePkEwdCJAXX4EimK+nYcAp+JyoT5
+	STtp5nuQ==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
 	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1wdxXP-00060f-RW; Sun, 28 Jun 2026 23:59:39 +0200
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	id 1wdxXc-00060k-H5; Sun, 28 Jun 2026 23:59:52 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.95)
-	id 1wdxXN-00DEJc-Qo;
-	Sun, 28 Jun 2026 23:59:37 +0200
-Message-ID: <e08be4f5-0bd9-4228-843d-86ed20594bac@rbox.co>
-Date: Sun, 28 Jun 2026 23:59:37 +0200
+	id 1wdxXY-00Bg9h-58;
+	Sun, 28 Jun 2026 23:59:48 +0200
+Message-ID: <06bb709d-54e2-4515-8ea6-33163ba8d510@rbox.co>
+Date: Sun, 28 Jun 2026 23:59:46 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,85 +48,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH bpf v2 1/4] bpf, sockmap: Reject unhashed UDP sockets on
- sockmap update
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH bpf v2 3/4] selftests/bpf: Adapt sockmap update error
+ handling
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Willem de Bruijn <willemb@google.com>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Jiayuan Chen
+ <jiayuan.chen@linux.dev>, "David S. Miller" <davem@davemloft.net>,
+ Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Cong Wang <cong.wang@bytedance.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 References: <20260626-sockmap-lookup-udp-leak-v2-0-7e7e201c951a@rbox.co>
- <20260626-sockmap-lookup-udp-leak-v2-1-7e7e201c951a@rbox.co>
- <20260626205814.BAC3C1F000E9@smtp.kernel.org>
+ <20260626-sockmap-lookup-udp-leak-v2-3-7e7e201c951a@rbox.co>
+ <CAAVpQUDULzZh58oKkRaYqgM9bRToGb7wHrzT+cZNpRmAtM12Ow@mail.gmail.com>
 Content-Language: pl-PL, en-GB
-In-Reply-To: <20260626205814.BAC3C1F000E9@smtp.kernel.org>
+In-Reply-To: <CAAVpQUDULzZh58oKkRaYqgM9bRToGb7wHrzT+cZNpRmAtM12Ow@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/26/26 22:58, sashiko-bot@kernel.org wrote:
-> ...
-> [Severity: High]
-> This is a pre-existing issue, but does this leave TCP sockets susceptible to
-> the exact same state-transition leak?
+On 6/26/26 22:58, Kuniyuki Iwashima wrote:
+> On Fri, Jun 26, 2026 at 1:37 PM Michal Luczaj <mhal@rbox.co> wrote:
+>>
+>> Update sockmap_listen to accommodate the recent change in sockmap that
+>> rejects unbound UDP sockets.
+>>
+>> TCP: Reject unbound and bound (unless established or listening).
+>> UDP: Accept only bound sockets.
+>>
+>> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+>> ---
+>>  tools/testing/selftests/bpf/prog_tests/sockmap_listen.c | 17 +++++++++--------
+>>  1 file changed, 9 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+>> index cc0c68bab907..6ee1bc6b3b23 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+>> @@ -63,11 +63,8 @@ static void test_insert_opened(struct test_sockmap_listen *skel __always_unused,
+>>         errno = 0;
+>>         value = s;
+>>         err = bpf_map_update_elem(mapfd, &key, &value, BPF_NOEXIST);
+>> -       if (sotype == SOCK_STREAM) {
+>> -               if (!err || errno != EOPNOTSUPP)
+>> -                       FAIL_ERRNO("map_update: expected EOPNOTSUPP");
+>> -       } else if (err)
+>> -               FAIL_ERRNO("map_update: expected success");
 > 
-> If a TCP socket is held by a BPF program in TCP_ESTABLISHED state and then
-> transitions to TCP_LISTEN, inet_hash() unconditionally sets SOCK_RCU_FREE:
-> 
-> net/ipv4/inet_hashtables.c:inet_hash() {
->     ...
->     sock_set_flag(sk, SOCK_RCU_FREE);
->     ...
-> }
-> 
-> This dynamic state change would cause bpf_sk_release() to evaluate
-> sk_is_refcounted(sk) as false and skip the refcount decrement, leading to
-> a memory leak similar to the UDP case.
-> 
->> +	if (sk_is_udp(sk))
->> +		return sk_hashed(sk);
+> Initially I thought AF_UNIX still exercised this path but it was removed
+> in f3de1cf621f7.  The leftover in family_str() was a bit confusing, so please
+> follow up on bpf-next.
 
-Right, TCP sockets can leak in a similar fashion.
-
-unreferenced object 0xffff88810544b400 (size 3200):
-  comm "softirq", pid 0, jiffies 4299372426
-  hex dump (first 32 bytes):
-    7f 00 00 01 7f 00 00 01 48 40 f2 e3 00 00 00 00  ........H@......
-    02 00 07 40 00 00 00 00 00 00 00 00 00 00 00 00  ...@............
-  backtrace (crc 82faf8d5):
-    kmem_cache_alloc_noprof+0x53e/0x640
-    sk_prot_alloc+0x69/0x240
-    sk_clone+0x79/0x1200
-    inet_csk_clone_lock+0x30/0x760
-    tcp_create_openreq_child+0x34/0x2740
-    tcp_v4_syn_recv_sock+0x12e/0x1080
-    tcp_check_req+0x447/0x2310
-    tcp_v4_rcv+0x1026/0x3c90
-    ip_protocol_deliver_rcu+0x93/0x340
-    ip_local_deliver_finish+0x356/0x5c0
-    ip_local_deliver+0x184/0x4a0
-    ip_rcv+0x4f4/0x5b0
-    __netif_receive_skb_one_core+0x153/0x1b0
-    process_backlog+0x28d/0x1190
-    __napi_poll+0xa7/0x520
-    net_rx_action+0x3f0/0xca0
-
-But I guess that's a material for a followup series?
-
-> [Severity: High]
-> Could a memory ordering regression here allow unbound UDP sockets to still
-> bypass this check?
-> 
-> In udp_v4_get_port(), the flag and hash are set:
-> 
-> net/ipv4/udp.c:udp_v4_get_port() {
->     ...
->     sock_set_flag(sk, SOCK_RCU_FREE);
->     sk_add_node_rcu(sk, &hslot->head);
->     ...
-> }
-> 
-> Because these stores lack a memory barrier between them, could sk_hashed(sk)
-> return true on another CPU while SOCK_RCU_FREE is not yet visible, allowing
-> the leak to still trigger?
-
-I'd like to verify it on a weakly-ordered CPU; please give me a day or two.
+Sure, will do.
 
 thanks,
 Michal
