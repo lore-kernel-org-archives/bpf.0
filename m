@@ -1,160 +1,111 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8929539FCBF
-	for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 11:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C1B3A16A1
+	for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 12:16:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.169
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782646788; cv=pass; b=cQbbChPqj7iBzfDjaeFP7z0QBCtKovp3GjDHWEfuMPM8dPnX6u0DSCg/f5RgdBKa8LrsLrXfaozezSf5h0I7cgt+quD0W/dwkdO4akEb9hyS59xQgMeWrwIGp9y428H0DJfVFeFbIJrsuja/FWBFsqXOHVbvnavnX0cyIqQDR3A=
+	t=1782648994; cv=pass; b=TzoZNe4TqYx8TcBYfwzYJxbp29qg06sbOvY+bog6py6ejUjb4fj+D0pWAPZjL1I5zwNZdG9RffOQi/nA8NDcypat7BEeq33evJVfqtSeZd3CnOeGdZaT8zlAONk9HwN2hAkAHaJqfjT5S/mKGB8osgYcTrsBHlvvrXROwJF3Y98=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782646788; c=relaxed/simple;
-	bh=d498hBMWdU3yNFxeg0vqz25RIl2j1GJoEg3MDJBpWnU=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=od38bRevrsqCcbXuvsht5RwNOv69CIR0/2rpNs/HNYpfajdHjDUBoNVPbY022Ifju9m/BKkWwzQND8ndVLlZbAd8GwtQgs2JnpKGVdNK9woixdd29j9t5nRqmHRkWlzGe20niSVWBMk5INxVzSayrKj9Xp9olSSh/sKG+VwXX1s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oSTAZ+7B; arc=pass smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782648994; c=relaxed/simple;
+	bh=RMUcDI1StIDI+D03aa+iM8MljuIZTtn0DfooOOj6yjk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BYBCJ16zHMePIM2tQoxyAXe7w7HyYZPrQIKjkm06mzKJs2LpW0bhkol0RnhGjiYMV8nZlIlyEHaXMnw8OukaedgwjeL2dtKYoumVO76ob81/vREbrODneCE2nFulSN4fePZOexj4o6atPc3eQlZ3MiAQmDlQCuMO29Ji9Ojrc7o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=jztQfS8R; arc=pass smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oSTAZ+7B"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-463f1165e16so2499157f8f.0
-        for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 04:39:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782646785; cv=none;
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="jztQfS8R"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-845b733e82cso1481350b3a.2
+        for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 05:16:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782648992; cv=none;
         d=google.com; s=arc-20260327;
-        b=qI8ik+ZoA4Qw8/gRgmhX4AIxZkEpgaWBCOZVlkCvgrRntGP/bHBD9U5V1D7Fo4pLVx
-         86Sowm+1Ftm/8dcl0ODhz0QZUOQoXag3dQeonpxalU25iMTZOOpSatsJwpmURoCZmF3K
-         jeTkKB5as7iet3WQns/40+BnI4m41L20wZ3IXyZPafawnCRwi2EWfAbQfX8rzMWNZrk/
-         xFiYODeSFLsyECoh/nPM3C/Aq74i7mSgsVHyKmZsWiXQAN1niLpskXUjUMS34e3Gje+V
-         37NbuFEWqzXBNkSHirMEOH3dg4oZf0C/dgVOqIXu2ntSq4UMLYjlemRWhSg8hqe+Z8gy
-         PY3A==
+        b=fUreM4I22Q/f0ooIQNCEWMsP3/85HO8b92pXhJ7Le1j+NnVy0wIADr4BeeIb8nig/E
+         6Qdcdf9loXSqwRCfJZ2tZT0QGJ/WP1OGeO0V90EE1BcqNc9rG8bXTa7ykOlcEnhNyeOT
+         oEXQFwQX6wFyFy6xEMicdZUG55pHckPHRswqLYCFoNy0X4UIeUX5K699nqXMd1XGj9eB
+         38bLUAQm3syocTiTSf8fJ6n+KDmzVPfy6CbsTO3jzok/wIfjC39gqPErRXWrN1MyvEdm
+         UbUEukPrSvqtFtPpkVdKur70RK3IBlF+JHMpkE0E2eKdZp9Idiv7m8rPcgSE1Z2ZRpkL
+         RAAw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=1k0VeFABvfpPKot2iuI8Yf+iW1BODubQlFUp6DJBWSQ=;
-        fh=t3evCTJwXzEEWG/jDHt/eMTtuIDAkmOc4mQH+Z00To0=;
-        b=FA+t859UM/iHbJKUn1nQmjzjio/NUfEeO8C1DzfLeHVQsplU2ekdFfl7GG3p+TxtPg
-         fY9ZuNMiJIWzrAYq7OUutxpMv7qusBm9rkEqBkNDQqJChizVZrxJMKzlsgrN20A0Z7Km
-         9Gwxg5i29OPwyYkVG2OJ5fjGHn67pVQUhKcUBs87wIVkGGJwKPMhMa7B+FrFST5up/OK
-         4hR78ePdf7dWWv7gZH9Gv3j1j4s/B68DnOkkCMi7BqF6+FeeUTq8/6nWgSqq60a976GW
-         NF8oQ7hnkvfIpBikS+hudv99NJL3dKGK8JTuy2wmAb7aNY2+0X5XGleVR8gtnkyxmx9E
-         aI2w==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=RMUcDI1StIDI+D03aa+iM8MljuIZTtn0DfooOOj6yjk=;
+        fh=1NHhrpVCiqRcEqYtXqot8+/0F+5WE7aKd/ewuCf6pH0=;
+        b=BQruxS+fHdobg55yHcow24HGLBPKdhg/Ro2YkYOBTuBK68IvNRWYmCQf5d2aX76PDh
+         Q/Q5W+7hU5YAEqpIRQKyhv3HS5gUYtEypoK4zrUDYZaRnWK1llgx+S/QWh1P7OW2zEDW
+         Fp5z3LQ3jMw1IWOj20sp+/7BWliELIq9WqQOPJuXkKHSXK91v3Pgy1VUytjIgBs4UxcH
+         bhhQG32DUTZIVZk6NOF36EEbt2Tl5LcpdOqBfUUHq76IG/pY/M9vrb7CYlMJ9caB9ZQh
+         D7avRoLQ804rRd6ED/VMNK95FYK+sr0PHkWOjzCGsRU6rY7ZTmbuiUlwqoHoBM6b7D6P
+         BGcg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782646785; x=1783251585; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=1k0VeFABvfpPKot2iuI8Yf+iW1BODubQlFUp6DJBWSQ=;
-        b=oSTAZ+7BUFaCqqvsuzotB8ngAQTb+rEB9zl8svMjzjB7b5h7hasER2XV466r4ynW2h
-         aujKdUJNkJRAstFCxCptghu4IjH2l8NDqPEgvYnW+aAySXIuqXSRGUYLgMHyY6bOiYbF
-         /w/QeRDgzVwUpr7bmoaVPu9yjR0vLM3259X2FTlgdre5aJ2+F4FaKK73xC63oWiafR+G
-         W9OsuJh9SQ24W0GxgiJTSzUE5O+6gTImi0qVfS/2bfhgtN/X4zwfDQyTiW1weaiDKL5L
-         tQBoYpfUXauZ+RNN+zeiYOnXaJlIiGuYIZ9AZTDXf2NAjj/N8pkwVT87FTxoT32nXMG/
-         r+iw==
+        d=mojatatu.com; s=google; t=1782648992; x=1783253792; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RMUcDI1StIDI+D03aa+iM8MljuIZTtn0DfooOOj6yjk=;
+        b=jztQfS8R4tB59V9HDCHQFZMecGZLae67Ye2WSJX36nkVvG8s3dreE/aTvn6g7QqaT/
+         6CMRC9PrAoXgbBMfXaqzR3iHyX7ch34Wh1qQd8us63mMnjA1JN38+kL/5/YMcuKhmoid
+         blO566MEuVnxNRKNIuLxn8l0VB+nqWOfG1cPw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782646785; x=1783251585;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1k0VeFABvfpPKot2iuI8Yf+iW1BODubQlFUp6DJBWSQ=;
-        b=l/CBus2V7RRVNq+tdJiq60nwJoT0zqydXM+3aXhLs/Rl2k19cwjkAhEvWIzu11tw0q
-         e74Nix9bimbxVP/nKeFOABJkMMEtmHPedK1LdDCUt/RPF+mAKS+v2+v/H3qXlSZ4Izq+
-         0jdzQ/qArCVGA8Mff/JNZiHO04MOmDPGemL8KWRLbcKICsvW3KG3qh6C+MEkpQrQro6x
-         SIgKcihARcK+i3fh0JTkAmpIU2pforqctR8xA/z8eqYAEGFaiIkBvvUzjrHYC7yArapT
-         nKVj00CbnYvkEZFt/tWR/Lb+2YF8zOk2VM94Po40bndVmlYCw8Ydz8fFYXEJqQ1Mb8H/
-         E+6Q==
-X-Forwarded-Encrypted: i=1; AHgh+RqQlb1F2jhU9V88Dt0EQDuFru9xZ+wQv+Egj5X7G3OMlz9cF9+mhBxDeEOY2VwADDFin5Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFECkaXS/SBtHo8rrKgFOYF9ai+Bda09newgy0IN45q0hkb3mg
-	xotXVSK98m4ZVXZkHolKuHc4UBdMcrvCJ1jYMFW1hmwZ2JLD2KV5YMLFV1V8O277OKSbrGhHl9G
-	Ot5PhKclqK+XC/xXQQuRxXSjYAlem7MI=
-X-Gm-Gg: AfdE7cnzb7r+8wACdIIKN10AH7CVEJXKCehxK7PYv/1brrn2Jcevd0YnvioaAlTV5KO
-	UsBFI1bhhwGPVOaczTXidRbJekquQPMCqBiWV1sTbbEI/0Jngeeu8P3pAtIkYre5fOj17SBhNrA
-	54zqONSvef/FC8nl5FaGqm1c7BGYQysXVdIhWMZKy34NynC/8s2DwMigx5qb1df1MDqtEHMX23T
-	t9Yan0FRLXI4XcC1bzZ6/l7FuStDyeCsZENuGFf/98vxAJbTXlvkKsUXF83w+LCdeBwtg==
-X-Received: by 2002:a05:6000:40cf:b0:46d:1433:77ec with SMTP id
- ffacd0b85a97d-46dbf021840mr22541235f8f.2.1782646785414; Sun, 28 Jun 2026
- 04:39:45 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782648992; x=1783253792;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=RMUcDI1StIDI+D03aa+iM8MljuIZTtn0DfooOOj6yjk=;
+        b=ObMYKciPq5dH5odmvdLnv5CbmZRZfzJE8S4blrwcuCDwVChZ2uTG69AgUS4ZDa83h8
+         wfOdfAP0JxQhco1NIABSNIsWDPrOmzX7P5Tz/3Wbc8igAT4rw5V1q5AX5BMDgX0X/B6Q
+         wbREUd+eD9rsw8C6plpByaX/pXn8QAa+Ldo0+qopTxQUf1BSiIhhDd86BVO8vGRC5W9O
+         v9uu8Sw5+tZlPzjdoERTrWdyBAVXxeb9z5ae04PkNcMi5N8KC0u1mdZSVim1YAO8VXNQ
+         +7f7ukPYvyK8DYbzRaQ1x+8JqVe5Ak/RNGRiMoyG8p0uPdqlYJqO/jZhvLhXDBveuHUG
+         d5iQ==
+X-Gm-Message-State: AOJu0Yw+omqDFOOCwR8Q7xs59mFrRtJ4dquEk/UaxfJkyj7gNtiQOA90
+	yGhyqM6haXaRhODrDTgiNSGvpxVfjULfCgKqVmox8gSKj6myOPFTknDZNLODR15oHx8ZCaAXCGM
+	Fnk7ZXdajfrytjhtGLhKQOFFcaoDgkjnOGoT8R3GBkJAM3becnZ4=
+X-Gm-Gg: AfdE7cnhokzNBIpLqt9N6Rqw+xxuJbp7s8hD6yQbVtTbOUgtwm6hTQKsxtHgcD9IhA3
+	zgHF/XcbqC0hg7+pi6HkxyMXH/faQI/kgbbhJtkoDhd3VxTxp7AgsoqG+oy99YfNtdirif/90Dl
+	WLNF+hE7nJzU9W0m5+L7h7QkcuwvQztkERFvU9HEKWBw2rNvFFeAI+l5r6GGnxP2rCBb6F+az0r
+	qCTVodBVs3woz3wnft9RenNxExqLUZ+vNJjzHLnZ8u3GpAV15/TZOyK7W9D6ucnej4FLXW7cyqy
+	mDa3kDWK
+X-Received: by 2002:a05:6a00:94f2:b0:845:bcf0:118 with SMTP id
+ d2e1a72fcca58-845bcf00accmr11132513b3a.41.1782648992308; Sun, 28 Jun 2026
+ 05:16:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Masashi Honma <masashi.honma@gmail.com>
-Date: Sun, 28 Jun 2026 20:39:34 +0900
-X-Gm-Features: AVVi8CfDJaopmWM8eZVww041Hj-U2h62NQOVb61mCb6UmG7XUvpGHldL02uI0LM
-Message-ID: <CAFk-A4mE9Jweo2hfX7y_85xbPyt0FqpMT1EvqX1OcYZ=LTLgRA@mail.gmail.com>
-Subject: [RFC] xdp: add device context to bpf_xdp_link_attach_failed tracepoint
-To: netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org
-Cc: leon.hwang@linux.dev, ast@kernel.org, daniel@iogearbox.net, 
-	kuba@kernel.org, hawk@kernel.org, andrii@kernel.org, rostedt@goodmis.org, 
-	mhiramat@kernel.org, edumazet@google.com, pabeni@redhat.com, 
-	linux-kernel@vger.kernel.org
+References: <20260626165156.169012-1-jhs@mojatatu.com> <20260626165156.169012-2-jhs@mojatatu.com>
+ <20260627165218.959371F000E9@smtp.kernel.org>
+In-Reply-To: <20260627165218.959371F000E9@smtp.kernel.org>
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+Date: Sun, 28 Jun 2026 08:16:20 -0400
+X-Gm-Features: AVVi8CfK6ZQWPR_bECyYbUG-IfHbpb8Amli00uwF06yQtXNsZDWtTMw8GIyhK3k
+Message-ID: <CAM0EoMmgF5HFuGYWAg3Mrx7tP_BWzjuu7w9UVsr=R9soV3fXLQ@mail.gmail.com>
+Subject: Re: [PATCH net 1/3] net: Extend bpf_net_context lifetime to cover
+ qdisc enqueue
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org, netdev@kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello, I am re-posting this mail because I forget to add [RFC].
+On Sat, Jun 27, 2026 at 12:52=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+>
+> Pre-existing issues:
+> - [High] The patch moves `bpf_net_context` initialization to `__dev_queue=
+_xmit()`, but fails to handle asynchronous qdisc enqueue operations (e.g., =
+via `netem`'s `dequeue` function), leaving a NULL pointer dereference unadd=
+ressed when qevents execute during `net_tx_action()`.
 
-The bpf_xdp_link_attach_failed tracepoint (added in commit bf4ea1d0b2cb
-"xdp: Add tracepoint for xdp attaching failure") exposes the netlink
-extack message produced when attaching an XDP program via BPF_LINK_CREATE
-fails. This is useful because, unlike the netlink attach path, the
-bpf_link attach path does not return the extack to userspace -- the caller
-only gets an errno (e.g. EINVAL/ERANGE).
+Indeed my lord, this is a valid point as you described below...
+Even though this is a pre-existing issue I believe it makes sense to
+fix it in the next version.
+I was too fixated on fixing the obvious issue that i missed this one.
 
-We would like to use this in Cilium [1][2]: when attaching the XDP
-datapath program fails, surface the kernel's reason (e.g. "single-buffer
-XDP requires MTU less than ...") in the agent logs instead of an opaque
-errno, so operators don't have to inspect dmesg on the host.
-
-The limitation we hit is that the tracepoint only carries the message
-string, so a consumer cannot tell which device a failure belongs to.
-This matters for two reasons:
-
-  1. Correlation: with only the message, a consumer cannot reliably
-      attribute a failure to a specific attach, particularly if multiple
-      XDP attaches happen concurrently.
-  2. Scoping: a consumer watching this tracepoint sees XDP attach
-      failures system-wide and cannot limit them to the devices it
-      manages.
-
-At the call site (bpf_xdp_link_attach() in net/core/dev.c) the net_device
-is in scope, so exposing it looks straightforward:
-
-  TRACE_EVENT(bpf_xdp_link_attach_failed,
-      TP_PROTO(const char *msg, const struct net_device *dev),
-      TP_ARGS(msg, dev),
-      TP_STRUCT__entry(
-          __string(msg, msg)
-          __field(int, ifindex)
-      ),
-      TP_fast_assign(
-          __assign_str(msg);
-          __entry->ifindex = dev->ifindex;
-      ),
-      TP_printk("ifindex=%d errmsg=%s", __entry->ifindex, __get_str(msg))
-  );
-
-  - trace_bpf_xdp_link_attach_failed(extack._msg);
-  + trace_bpf_xdp_link_attach_failed(extack._msg, dev);
-
-Before sending a formal patch I'd appreciate guidance on a few points:
-
-  - Should the tracepoint take const struct net_device *dev (consistent
-    with the other tracepoints in this file, and lets TP_printk show the
-    device), or just the ifindex as an int (simpler for raw_tp BPF
-    consumers, which otherwise read dev->ifindex via CO-RE)?
-
-  - For raw_tp consumers the argument order is effectively ABI: prepending
-    dev would shift the existing msg argument. I've appended dev above to
-    keep msg at args[0]. Is preserving the existing argument position the
-    right call, or is reordering acceptable given how new and rarely
-    consumed this tracepoint is?
-
-  - Is extending the existing tracepoint preferred, or would you rather
-    keep it as-is and expose the device context some other way?
-
-This would be my first XDP/BPF tracepoint change, so any direction is
-welcome. I'm happy to send a proper patch once the shape is agreed.
-
-Regards,
-Masashi Honma
-
-[1] https://github.com/cilium/cilium/issues/40777
-[2] https://github.com/cilium/cilium/pull/46546
+cheers,
+jamal
