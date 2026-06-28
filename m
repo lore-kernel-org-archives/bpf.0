@@ -1,111 +1,221 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C1B3A16A1
-	for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 12:16:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E32D3A6B65
+	for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 12:28:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.177
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782648994; cv=pass; b=TzoZNe4TqYx8TcBYfwzYJxbp29qg06sbOvY+bog6py6ejUjb4fj+D0pWAPZjL1I5zwNZdG9RffOQi/nA8NDcypat7BEeq33evJVfqtSeZd3CnOeGdZaT8zlAONk9HwN2hAkAHaJqfjT5S/mKGB8osgYcTrsBHlvvrXROwJF3Y98=
+	t=1782649741; cv=pass; b=C8PPm8IH4d84gWXJwLDtfGbgl0Q9yFParu366V+pv3PTUuVVaMQkr3zwgC9LhSlL4WWQxXwouqj4sjtQUaKM7hq8yupkB/K11KDTY+uVYYtUOnXRXd3/fj7rFa5Vf34lmTKqUPJIwn/dCzbiRM+lhhiDZeaLo0tfCizQ0jiWWxk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782648994; c=relaxed/simple;
-	bh=RMUcDI1StIDI+D03aa+iM8MljuIZTtn0DfooOOj6yjk=;
+	s=arc-20240116; t=1782649741; c=relaxed/simple;
+	bh=5ApnCwq5Hsy6OnK5R9dFY0h0QMvGDBvhMeGj0FhJ0Eg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BYBCJ16zHMePIM2tQoxyAXe7w7HyYZPrQIKjkm06mzKJs2LpW0bhkol0RnhGjiYMV8nZlIlyEHaXMnw8OukaedgwjeL2dtKYoumVO76ob81/vREbrODneCE2nFulSN4fePZOexj4o6atPc3eQlZ3MiAQmDlQCuMO29Ji9Ojrc7o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=jztQfS8R; arc=pass smtp.client-ip=209.85.210.169
+	 To:Cc:Content-Type; b=A+P1CDenCWN4Y34UrlgiAjcEMB7+WrUtrFPvzrG9JtUhcmcP25USsO21j48ZBYIPkqWbW6VAAjTUJF/FHFV1aVB7S4wNl1rs48P+pSOMdT386zFe5401b0wZhyDirwMpYc2sPnBL3DTsdf0R4EmzhodPiLcRABrlFROrAcdo2VM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=YSO11PSM; arc=pass smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="jztQfS8R"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-845b733e82cso1481350b3a.2
-        for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 05:16:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782648992; cv=none;
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="YSO11PSM"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-845e363246aso647229b3a.1
+        for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 05:28:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782649738; cv=none;
         d=google.com; s=arc-20260327;
-        b=fUreM4I22Q/f0ooIQNCEWMsP3/85HO8b92pXhJ7Le1j+NnVy0wIADr4BeeIb8nig/E
-         6Qdcdf9loXSqwRCfJZ2tZT0QGJ/WP1OGeO0V90EE1BcqNc9rG8bXTa7ykOlcEnhNyeOT
-         oEXQFwQX6wFyFy6xEMicdZUG55pHckPHRswqLYCFoNy0X4UIeUX5K699nqXMd1XGj9eB
-         38bLUAQm3syocTiTSf8fJ6n+KDmzVPfy6CbsTO3jzok/wIfjC39gqPErRXWrN1MyvEdm
-         UbUEukPrSvqtFtPpkVdKur70RK3IBlF+JHMpkE0E2eKdZp9Idiv7m8rPcgSE1Z2ZRpkL
-         RAAw==
+        b=sCZcVr76Rsng7s87BpBT0EBIVUIYRZCK3Oeek9hkM614WV3c6mkuNc7OWoghxoX/wp
+         i0Eiw3gzmTjeDB75xyJHTBb7hie8kpdCjNhJiWh2jNKAfFO+tSklXUrkOHGSo+DoA/FX
+         8OWuwiFj5LkCi9JVWaU/lLpZj70bLN40MAscD8W1wJpFn+XyUHPh6Y56zg7xw0ntxnjx
+         rzydH+DhppGgTMPfK6SkhmlDpCJOSrljYz5j0+wRIfXhnICUUfhU04PZZ7vOjgWLgXhi
+         hsy+8GHTfwo/Wj7e9a8qTIYWIJca+3PISw7ruROuVkk+TOtD4hfVKJumpdvHZ2gaeICi
+         cEnQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=RMUcDI1StIDI+D03aa+iM8MljuIZTtn0DfooOOj6yjk=;
-        fh=1NHhrpVCiqRcEqYtXqot8+/0F+5WE7aKd/ewuCf6pH0=;
-        b=BQruxS+fHdobg55yHcow24HGLBPKdhg/Ro2YkYOBTuBK68IvNRWYmCQf5d2aX76PDh
-         Q/Q5W+7hU5YAEqpIRQKyhv3HS5gUYtEypoK4zrUDYZaRnWK1llgx+S/QWh1P7OW2zEDW
-         Fp5z3LQ3jMw1IWOj20sp+/7BWliELIq9WqQOPJuXkKHSXK91v3Pgy1VUytjIgBs4UxcH
-         bhhQG32DUTZIVZk6NOF36EEbt2Tl5LcpdOqBfUUHq76IG/pY/M9vrb7CYlMJ9caB9ZQh
-         D7avRoLQ804rRd6ED/VMNK95FYK+sr0PHkWOjzCGsRU6rY7ZTmbuiUlwqoHoBM6b7D6P
-         BGcg==;
+        bh=sEdjbIGDqsoiW4GawsVBo2JW1gWoEIpSwHHzh69Rb4A=;
+        fh=h6FRjY4Vg/+m/z24uvzYaeQBI8nwVTWs0k3ZXJWq2bs=;
+        b=ieJpBiGG7MPXjP3m+zgfVOZbC4wLUhvpqC+RZDsxLSX373XKTtrL5+Q5q1oaYmZdVA
+         ZBzvYVAaWBLIjhEBWWz/RN3EsamN37SePnoKmZ8ny4VPTaR99RhUaIbjiEX4CrEmO4Uq
+         YVpgyv1z1jlM6ATACg01Eb3dN9+wC0V75zYAS+PbXEHQ9ybd7roUfCdWGNJweT3a2LL7
+         uLWH9yyRDfIAtIpTZTjAwfLCC4xP/JV0T/mu7SJ8sOYJI92pSdxLc3FO3lsyHTvYa7TN
+         K9/jzktbAleuCwy1rFLQNJYssi+yjDuZamYMSTMOrYvMANrIIWlpp8MQh3ftRfKFcx1I
+         QTog==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1782648992; x=1783253792; darn=vger.kernel.org;
+        d=mojatatu.com; s=google; t=1782649738; x=1783254538; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RMUcDI1StIDI+D03aa+iM8MljuIZTtn0DfooOOj6yjk=;
-        b=jztQfS8R4tB59V9HDCHQFZMecGZLae67Ye2WSJX36nkVvG8s3dreE/aTvn6g7QqaT/
-         6CMRC9PrAoXgbBMfXaqzR3iHyX7ch34Wh1qQd8us63mMnjA1JN38+kL/5/YMcuKhmoid
-         blO566MEuVnxNRKNIuLxn8l0VB+nqWOfG1cPw=
+        bh=sEdjbIGDqsoiW4GawsVBo2JW1gWoEIpSwHHzh69Rb4A=;
+        b=YSO11PSMSJL8ahHFpAaBEQseDtKAyGwXZIMJ2uymz5G8I2rwq1An9gnidiEaJ2EScj
+         Dw8nAwQixfotAeu7MSOYe7iMpCqRiugzE5BSWTdc1EmHINI+/VrJSTNNUwC5ov+nnplA
+         Q8wFaCUbhhGyRdbPgyQpfxcLXrPK+wlJyl1sg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782648992; x=1783253792;
+        d=1e100.net; s=20251104; t=1782649738; x=1783254538;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=RMUcDI1StIDI+D03aa+iM8MljuIZTtn0DfooOOj6yjk=;
-        b=ObMYKciPq5dH5odmvdLnv5CbmZRZfzJE8S4blrwcuCDwVChZ2uTG69AgUS4ZDa83h8
-         wfOdfAP0JxQhco1NIABSNIsWDPrOmzX7P5Tz/3Wbc8igAT4rw5V1q5AX5BMDgX0X/B6Q
-         wbREUd+eD9rsw8C6plpByaX/pXn8QAa+Ldo0+qopTxQUf1BSiIhhDd86BVO8vGRC5W9O
-         v9uu8Sw5+tZlPzjdoERTrWdyBAVXxeb9z5ae04PkNcMi5N8KC0u1mdZSVim1YAO8VXNQ
-         +7f7ukPYvyK8DYbzRaQ1x+8JqVe5Ak/RNGRiMoyG8p0uPdqlYJqO/jZhvLhXDBveuHUG
-         d5iQ==
-X-Gm-Message-State: AOJu0Yw+omqDFOOCwR8Q7xs59mFrRtJ4dquEk/UaxfJkyj7gNtiQOA90
-	yGhyqM6haXaRhODrDTgiNSGvpxVfjULfCgKqVmox8gSKj6myOPFTknDZNLODR15oHx8ZCaAXCGM
-	Fnk7ZXdajfrytjhtGLhKQOFFcaoDgkjnOGoT8R3GBkJAM3becnZ4=
-X-Gm-Gg: AfdE7cnhokzNBIpLqt9N6Rqw+xxuJbp7s8hD6yQbVtTbOUgtwm6hTQKsxtHgcD9IhA3
-	zgHF/XcbqC0hg7+pi6HkxyMXH/faQI/kgbbhJtkoDhd3VxTxp7AgsoqG+oy99YfNtdirif/90Dl
-	WLNF+hE7nJzU9W0m5+L7h7QkcuwvQztkERFvU9HEKWBw2rNvFFeAI+l5r6GGnxP2rCBb6F+az0r
-	qCTVodBVs3woz3wnft9RenNxExqLUZ+vNJjzHLnZ8u3GpAV15/TZOyK7W9D6ucnej4FLXW7cyqy
-	mDa3kDWK
-X-Received: by 2002:a05:6a00:94f2:b0:845:bcf0:118 with SMTP id
- d2e1a72fcca58-845bcf00accmr11132513b3a.41.1782648992308; Sun, 28 Jun 2026
- 05:16:32 -0700 (PDT)
+        bh=sEdjbIGDqsoiW4GawsVBo2JW1gWoEIpSwHHzh69Rb4A=;
+        b=JqhU4wky0PA19nKrjhNNWOAupFM2G/rjIkHGSP+GG9/AsgXxTe7F99aumT0xLtvbL7
+         FnFXc8fPn3BK8ziJSVxyOJ80iaup0goSOXrVJmIxbE8pNGuroWv7x3R09HfNop8pdF7h
+         yeQHwDQ4iQeE7zYJVpOo0wIaVNx7tZESIHlM4IIbR9hd1q0pyNgOnHUDYHE1rrSFTCmQ
+         HhSNf/2X1Afy4X8tdbnvmKxdbxtCzEhEpbbdDWnrjtMHpyfmHcqNYbr0yUPE8Y6Dq9qH
+         DjDRNRqV6C6GucmBg2EE8snmY/18h001z5uKUnBRw4hJ/LIMmC3Cv1aQfXwwOULehm0K
+         S1tg==
+X-Gm-Message-State: AOJu0YxzJe3CP/IAd67gc6OJCmrBMJY2/FEAeAYiiNGUd21LQw1gpqj3
+	y4y1eDFDtNJXyAEs42UzWJ+lIg0fEuD19i7KdFU7pyPaOkTKxiqj+aTI/RUvIa3nKYy++cuwSMP
+	44jZrirPjdXM4wqfb8WBxMFlzohfv+RUMPFWP2tIV
+X-Gm-Gg: AfdE7cktDFN4E/mDH5FLI1Kcm4xU9s90v9VcKHP/AbwSFB4Yjgzw+c3QtBilXcEo4MQ
+	Ejd4d7j7qjcBzbKkc9saU4pmLKSD4asBAjNXyGeJ0Ls90X0DIUksIEBU6ij6OTHhb+KiwHipiV3
+	M+5wlVaVRaRSMOra3n1uSSWo7u1Y14lIhWYn+g8/uEfkwD+5MTgHhlDi8QVjvsRVBT6ms1sps+9
+	aproXWqzUm2xGZhy95v02Uig9C1WSNp8+DgOY+iMNw69QwEVBxJDeNIWHUyVCerJqC345lBZ1wl
+	R7j3XhUl
+X-Received: by 2002:a05:6a00:32ce:b0:845:4888:74c5 with SMTP id
+ d2e1a72fcca58-845b3ab50a8mr14060519b3a.23.1782649738333; Sun, 28 Jun 2026
+ 05:28:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260626165156.169012-1-jhs@mojatatu.com> <20260626165156.169012-2-jhs@mojatatu.com>
- <20260627165218.959371F000E9@smtp.kernel.org>
-In-Reply-To: <20260627165218.959371F000E9@smtp.kernel.org>
+References: <20260626165156.169012-1-jhs@mojatatu.com> <20260626165156.169012-3-jhs@mojatatu.com>
+ <20260627165220.096B61F00A3A@smtp.kernel.org>
+In-Reply-To: <20260627165220.096B61F00A3A@smtp.kernel.org>
 From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Sun, 28 Jun 2026 08:16:20 -0400
-X-Gm-Features: AVVi8CfK6ZQWPR_bECyYbUG-IfHbpb8Amli00uwF06yQtXNsZDWtTMw8GIyhK3k
-Message-ID: <CAM0EoMmgF5HFuGYWAg3Mrx7tP_BWzjuu7w9UVsr=R9soV3fXLQ@mail.gmail.com>
-Subject: Re: [PATCH net 1/3] net: Extend bpf_net_context lifetime to cover
- qdisc enqueue
+Date: Sun, 28 Jun 2026 08:28:46 -0400
+X-Gm-Features: AVVi8CeUfCgYCrMiVLpafN92ArCYDophcwyfKGs-OnnxoG-o95tadQncfOA3DcM
+Message-ID: <CAM0EoMkUeJYuPbg-qXxFLEtiLuntT+g4MeY-sHy5yBSVd7+j2Q@mail.gmail.com>
+Subject: Re: [PATCH net 2/3] net/sched: Handle TC_ACT_REDIRECT from qdisc
+ filter chains
 To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, netdev@kernel.org
+Cc: bpf@vger.kernel.org, 
+	Linux Kernel Network Developers <netdev@vger.kernel.org>, Petr Machata <petrm@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Sat, Jun 27, 2026 at 12:52=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
 e(s) to consider:
+> - [High] Removal of TC_ACT_REDIRECT support from qevents (tcf_qevent_hand=
+le) breaks existing eBPF redirect functionality.
+> - [Low] pr_warn_once() used inside a static inline function in a header f=
+ile will print multiple times.
+> --
 >
-> Pre-existing issues:
-> - [High] The patch moves `bpf_net_context` initialization to `__dev_queue=
-_xmit()`, but fails to handle asynchronous qdisc enqueue operations (e.g., =
-via `netem`'s `dequeue` function), leaving a NULL pointer dereference unadd=
-ressed when qevents execute during `net_tx_action()`.
+> commit d96e142c03f9c1a1e9ac2e1d8c8fe26605053b10
+> Author: Jamal Hadi Salim <jhs@mojatatu.com>
+>
+> net/sched: Handle TC_ACT_REDIRECT from qdisc filter chains
+>
+> When a TC filter attached to a qdisc filter chain returns TC_ACT_REDIRECT=
+,
+> the redirect is silently lost. This patch adds a tcf_classify_qdisc()
+> wrapper to convert TC_ACT_REDIRECT to TC_ACT_SHOT and drops the packet.
+> It also removes the TC_ACT_REDIRECT case from tcf_qevent_handle() since
+> it is handled by the wrapper.
+>
+> > diff --git a/include/net/pkt_cls.h b/include/net/pkt_cls.h
+> > index 3bd08d7f39c18..3a542a72e9a55 100644
+> > --- a/include/net/pkt_cls.h
+> > +++ b/include/net/pkt_cls.h
+> [ ... ]
+> > @@ -159,6 +159,19 @@ static inline int tcf_classify(struct sk_buff *skb=
+,
+> >
+> >  #endif
+> >
+> > +static inline int tcf_classify_qdisc(struct sk_buff *skb,
+> > +                                  const struct tcf_proto *tp,
+> > +                                  struct tcf_result *res, bool compat_=
+mode)
+> > +{
+> > +     int ret =3D tcf_classify(skb, NULL, tp, res, compat_mode);
+> > +
+> > +     if (unlikely(ret =3D=3D TC_ACT_REDIRECT)) {
+> > +             pr_warn_once("TC_ACT_REDIRECT from qdisc filter chains is=
+ not supported; use eBPF with clsact or mirred redirect instead\n");
+>
+> [Severity: Low]
+> Is this going to print multiple times instead of strictly once globally?
+>
+> Because tcf_classify_qdisc() is a static inline function in a header file=
+,
+> each C file including it (like the various qdisc modules) will create its=
+ own
+> local instance of the static __already_done variable used by pr_warn_once=
+().
 
-Indeed my lord, this is a valid point as you described below...
-Even though this is a pre-existing issue I believe it makes sense to
-fix it in the next version.
-I was too fixated on fixing the obvious issue that i missed this one.
+This was intentional. I used WARN_ONCE() initially, but NIPA testing
+may consider that as something "bad". In any case, this usage is
+common, just ignore it.
+
+> > +             ret =3D TC_ACT_SHOT;
+> > +     }
+> > +     return ret;
+> > +}
+> > +
+> >  static inline unsigned long
+> >  __cls_set_class(unsigned long *clp, unsigned long cl)
+> >  {
+> > diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+> > index 3e67600a4a1a1..3ca56d060e28f 100644
+> > --- a/net/sched/cls_api.c
+> > +++ b/net/sched/cls_api.c
+> > @@ -4033,7 +4033,7 @@ struct sk_buff *tcf_qevent_handle(struct tcf_qeve=
+nt *qe, struct Qdisc *sch, stru
+> >
+> >       fl =3D rcu_dereference_bh(qe->filter_chain);
+> >
+> > -     switch (tcf_classify(skb, NULL, fl, &cl_res, false)) {
+> > +     switch (tcf_classify_qdisc(skb, fl, &cl_res, false)) {
+>
+> [Severity: High]
+> Does this break existing eBPF redirect functionality for qevents?
+>
+
+Again, design intent. I will update the commit message to state this
+clearly with the following text:
+---
+Remove the TC_ACT_REDIRECT case from tcf_qevent_handle().
+skb_do_redirect() belongs in the BPF plumbing layer (net/core/), not
+in net/sched/. The case was never consistent with the rest of the
+qdisc classification infrastructure, where no classify function
+handles
+TC_ACT_REDIRECT.
+---
+
+IMO, it appears to have been TheLinuxWay(tm) i.e a cut-and-paste from
+existing code on day 1 of  the qevent introduction rather than a
+deliberate design decision.
+Ccing Petr to see if he thinks differently.
 
 cheers,
 jamal
+
+> Prior to this patch, tcf_qevent_handle() correctly handled TC_ACT_REDIREC=
+T
+> by calling skb_do_redirect(skb). By using the tcf_classify_qdisc() wrappe=
+r
+> here, TC_ACT_REDIRECT is unconditionally converted to TC_ACT_SHOT. This
+> inadvertently drops packets that were legitimately redirecting from qeven=
+ts.
+>
+> >       case TC_ACT_SHOT:
+> >               qdisc_qstats_drop(sch);
+> >               __qdisc_drop(skb, to_free);
+> > @@ -4045,10 +4045,6 @@ struct sk_buff *tcf_qevent_handle(struct tcf_qev=
+ent *qe, struct Qdisc *sch, stru
+> >               __qdisc_drop(skb, to_free);
+> >               *ret =3D __NET_XMIT_STOLEN;
+> >               return NULL;
+> > -     case TC_ACT_REDIRECT:
+> > -             skb_do_redirect(skb);
+> > -             *ret =3D __NET_XMIT_STOLEN;
+> > -             return NULL;
+> >       case TC_ACT_CONSUMED:
+> >               *ret =3D __NET_XMIT_STOLEN;
+> >               return NULL;
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260626165156.16=
+9012-1-jhs@mojatatu.com?part=3D2
