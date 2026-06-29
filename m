@@ -1,237 +1,187 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB4732BF5D
-	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 10:35:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782729322; cv=none; b=DzCLFoJrnyjAC2V8MPQgKSeomSPGthzj0Dkj4NdsiY+cr/Smly5ZmzXAnNfOkeA1r6fr2x2RdFKkXT2gZvju7IMdHpQjRvu+dx3FtT9ViaICVR2yj/eADAuuzOITF37I8MGfJaMnlmcYW1cz6HMOebhvm65AAY1llWF1y+5kr+w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782729322; c=relaxed/simple;
-	bh=OxfItVu+Dy/erU0SRYLqXuxmaniB33A1bNceKG8hwyE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XyNfMuh8GNyhuYs91v52Yu5ey6VrgcKh24LlzUWyZ2mWlxVK/kDMoPJ0LXBh0TvwjxN/zT0d3a92xYfeDlPLK7HYMa4UT58AxHAwJ0GFNeJQpM+gHRq4ZC2DM2TKYVXGb953giqWhVmEYZaZlie+BO/PTdCwCq89o0WbiITpU6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pFBFbFxe; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B4D346E40
+	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 10:47:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782730047; cv=pass; b=NjrFTQZz3gJY/saTgvmz6ElOFHoF5091+cwe18uKDNSobT5/KTskM0ESLfL6c2riyG3wDlHNW12xOqSUvPit+Q327oKbA5xUO7OF7UNTnO8MsSNptw7CxZ9PFdIGyN7DvDK7MQNjp2EUh7H72eNqb5nPg5H0VUcBlRvNJEPhMi8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782730047; c=relaxed/simple;
+	bh=gWfU6/OyCo2rP1ZHR0B3aygjC+wA0mTDxemW9AISS04=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VPPiHY8c5IMkOj25KT94323SjMIQhMUmf/YSXN9ZwNFO5vfPCegFS2JthYfhpgfdZtwvwzLQ28XYTO3GPQ0frnCk/v010q8N7xuUlXATjlPMetWrk/zcfM2Dvj0SX61ZQovJpWuwwca7YsSsMBcFPaxnTXpj1yZlvW9vqs4Yuuw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=oyI/H26l; arc=pass smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pFBFbFxe"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-493a5d32e8cso15112675e9.1
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 03:35:20 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="oyI/H26l"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8478fe07f65so214676b3a.0
+        for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 03:47:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782730045; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ZaqB3UMDMc4+aJ+1bbLUjsx7+B+//oJlw5/RT3sd/8dmQOEh+xJCbMmPNcf+DBZDYl
+         zZg7uPkTLa3larHyeyyNeKYBn5Ymu7kFdz+miSeJSitQgxY7c869js64xQVu/CD5jwMD
+         TDyhn6bkPHlEFIQjIVmHXhvcok2sH79UoeQ9NFI4i8oEw2F2Wg32XeQ9IX7fNnfQFlKi
+         YCXhjHEMnk1zHH7ZeCszltkzE5XaiByq1vxtey7Jnjh2DOWOG0Q9hItAgVj2G5cakWns
+         GVrXT3fL5HqihXVhMY9g4Sdz8vB8qelte90UOhTF9qXSJmNHQP8QsjDkPgZi7EFMJMz8
+         A3XA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=2D/+tKmqEVHdrXuSNJqyqQwhydaMlOMVeSo45A3y9ak=;
+        fh=kfK/ZDn371IfVhNfFLJiij7JjciI2ByNq/HOOouDDzI=;
+        b=cPf1044Fr26T1ApiuHKQKpRq7juu0K8bWYy7mwHWHJ9+ijAAemI44DlvPBzp/H3SD/
+         QNo41tl7+FuiaaIlWpNS8rg/3G9ktaoVhdk4tjP2wuNftoQmzanvyfjqzeKVZuui1yXk
+         q1tX6v3Ldc3w4j56qSfN3hAjwW6cqaUkSPVCP0PghEG3O5EPa1BC0kBe5e02Rq8ElFoK
+         U2ReZTSZYl6zZmV+p+EqIfOTmI2gxu4TDfZ5n5WTDn/Zha6TbHdbcmLBzcgibFmM+pyT
+         QUXmeVLL3HuazK3eDymjOOFPtJ0lwMv59Uv9dLpE5pFoNZ+eK0FfBkneaUsAfrk5GrB3
+         Acfw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782729319; x=1783334119; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=V21dV6eJxZuScQe+ruVRNU/bsGpSFqGgqu4eb+ZmYgs=;
-        b=pFBFbFxeDlG0szu/ha+5+/NxN209suSAO762lZ3FC13BFulZMbZ5ycVqL8HH7lRQYW
-         QE5L7JtdQtFICK7cB7OqNaIExcH2f9Dw+lDire/KdZCmJxcyuTiRCI5VVy3DUWM17vL9
-         Kec7mG/b/a5Sw3UdwAVfS9t6L7vX+F0PI7tx8fP+7ZIGNyGO2xPQ5uOa+v9cb6ZqjmmN
-         2BChrncN9Iys5yv64NyWYXDcNko3FbHfJNCniggLfXwnNR5uFnSXzoxeUrj56cBiSavx
-         eF7FlrF06FKcDcc9q4vNS6LDV5Vy1/UrkAz1HVxv/3H+hrWbNY4x/d0lmIYWM12FqTYB
-         zl1A==
+        d=mojatatu.com; s=google; t=1782730045; x=1783334845; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2D/+tKmqEVHdrXuSNJqyqQwhydaMlOMVeSo45A3y9ak=;
+        b=oyI/H26lFj6+qhCKhcQPKAz2JKRRE2BIwmqYDhZR58GxiuPo3OYsSLPEInYwX1uAV8
+         QhMD3sd1UjSVoyyB0xCYz2gVMqbym+a6TcaYQMeklDKuQA7z5a711ABRYqA7JJFuEEFE
+         gBv/+uBfY67xhSWAv8AvDxuFlHahv1KV/z4+c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782729319; x=1783334119;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V21dV6eJxZuScQe+ruVRNU/bsGpSFqGgqu4eb+ZmYgs=;
-        b=VtX0Fy+NtzC/Ik0zXereG5Tz0Fu6QQm8RuHu7MDyBDRj1frQng5pDxYAXAAk054qSb
-         3nD0UmoQY/uwfGwJhPmoUdGn0vdgcDB72qtVn3eJSIREyt2RDexmscl774rcgYxk/c0N
-         cbpjj6S8koyOHQYjY1uQr3XuPmYrJrLE8hCV+KCgw2fy6tMewy4CzxDf/TxNDqnwcF04
-         IHRHoAkAFCs1RrgMphiTC7yR3IbTbS/L6O6OPINGlZM5QgJDbkyO2alLnUHeM1JTBUmN
-         HoyxHuvYyeroRkdabaHwQC1kL79ot7u32k8XTVdqs5Hy0xhTC/JXs+KeCIcPUQo9cMaG
-         4hFw==
-X-Gm-Message-State: AOJu0YzOy7xz1/jANENGGFHAVVlFOw8glS9Rgm7k3WBlXX0jbhpPYDsU
-	Y5sNb0NreceAccnz5TXsE/JizYW7JdmLY4FxZzCPwI8Y7uXNoAnqI8kXxNq3NihP
-X-Gm-Gg: AfdE7cl1ym3hsixpWKA/BzBGH2hhcwkjMHMHYFgE1z91p3it02lEwgZW/AGHPX4rvS/
-	lMhWBjdShXytJJuFieRyjlUdjhV4z5j7GO12zSgvzEZaZSI9BX/MLmWjk7CIZ9LSxGJqt/qp2U6
-	D47EbA0qnPsmWchyUWHF70V3ZzguCmbfLZly+BaZteuHaMAqlwnnQKXwPSw/TgoaS+HtYjfaKeu
-	8JLU7WYE64I6dzRnwH0WUwmq7jT1nvAtCF0vMkoM5DqutQPD1wljLF2SU0JsqxDU4j6V9L7Oz5A
-	Zv5+5iNrubYPvxrZ+92VjNBHOWtMICrfdKIO3BjjJ6PdK1fDyc3m51/a/cbVxILrnmfJAJXeyJn
-	B6uCmLxJ+M8Vz5dJHZa25vprJ89WbJP/842qtgxViMv49NAp+4tgrJLnhyL6FUYPImtSwZZe8Qm
-	AfBwOxNpGfuBXsinEtTdYDQZNaRirGqSzH+g==
-X-Received: by 2002:a05:600c:37cf:b0:493:a8eb:5145 with SMTP id 5b1f17b1804b1-493a8eb518amr65726205e9.4.1782729318747;
-        Mon, 29 Jun 2026 03:35:18 -0700 (PDT)
-Received: from gmail.com ([2a01:e0a:488:3510:9c63:70fa:f7ea:28fc])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-473dddcb295sm8150916f8f.35.2026.06.29.03.35.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2026 03:35:18 -0700 (PDT)
-Date: Mon, 29 Jun 2026 12:35:15 +0200
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
-	daniel@iogearbox.net, john.fastabend@gmail.com, jordan@jrife.io,
-	martin.lau@linux.dev, yonghong.song@linux.dev, emil@etsalapatis.com,
-	netdev@vger.kernel.org, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, davem@davemloft.net, horms@kernel.org
-Subject: Re: [PATCH bpf-next v10 1/5] bpf: add bpf_icmp_send kfunc
-Message-ID: <akJKY_x1GdO3MZJS@gmail.com>
-References: <20260625110321.28236-1-mahe.tardy@gmail.com>
- <20260625110321.28236-2-mahe.tardy@gmail.com>
- <aj1V2ZdzY1EGtsma@devvm7509.cco0.facebook.com>
- <aj1b_z6h5xn42Hxe@gmail.com>
- <aj6kdnfAB0LJKDcR@devvm7509.cco0.facebook.com>
+        d=1e100.net; s=20251104; t=1782730045; x=1783334845;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=2D/+tKmqEVHdrXuSNJqyqQwhydaMlOMVeSo45A3y9ak=;
+        b=BTlci1mgtjwCqsvBjEPs1qpoP3ELTEeiTTMCiWjtjw+OEbUUY9FpLOZ8thVNPBQhL0
+         joVD0UZnDyz33ys3V0gsVO2iWn+OpXCuiDAj8nGtC9XGxZEG1twm92LqvBwdlrt2AL80
+         j88JiHbn+lINfYU3I2dhmYFIKzrlWxsR1EfFs3BAGQIuCDgOH42XS9D9U17EUmAvz8Tk
+         TLmgmVs8mo9nsDUPk/9vTPsItJwwAZkvBAr3mzWrbw7MhTlKlIiG9j6NFS8+a9rS6hp6
+         uykbXADh7ZIAn9p0ukm0Maghxs8uvhVBTK8D4hIMtlkQiOUJhwL3kneJAHX4LVOJ7EHx
+         nr+w==
+X-Forwarded-Encrypted: i=1; AHgh+RoG97NNWMs2qFkWtNRSBsz/8mVcszXjzIvqQ4HHxXzRqUtS7PqDPsRF601r7HwCodknRvU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzr9MPXzN4MqOclCmYz7AXasTVpVYgZEFL0rlvdXyHDkTq8B5u4
+	YwF5VsLrvoIvtWAsczlyNTPvCvCk29u8P5NhQ4zVqSWpyncGoxKaD5RVcUzQR/8r9vnH891KOyH
+	V2le7kwUnTeGYSXOtLCU1BoR2uyoXezriRxHz8lXK
+X-Gm-Gg: AfdE7cnBwDrwtZg5eSG2MPuga6YGq0YmtE0MGOGsTdVh62fWx03+fDoSCR6CgvoGu9H
+	Jy+5EMSeQ/NGl1GA+sZUxJj29h3c/C8P4gmo5BdAcKLgKvTPPjH5wPXOgAxMEFk53/O/PGnQ5KA
+	GM26nyLOXcZ2olKFAspKyD/yUTqQFCNSvwHqhGaSnofF6X+HzAAOAcjpFIIchiolG/mPGIg/Nd1
+	r3hjPkfemHYUgmNokU9pLdNcbsC1PEdm6UaleT4+1sFsEnU3MRQkgT3r9c2xTsL0ERWIYjsjA==
+X-Received: by 2002:a05:6a00:4b4f:b0:847:1d73:f753 with SMTP id
+ d2e1a72fcca58-8471d740f0emr3744079b3a.45.1782730045309; Mon, 29 Jun 2026
+ 03:47:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aj6kdnfAB0LJKDcR@devvm7509.cco0.facebook.com>
+References: <20260626165156.169012-1-jhs@mojatatu.com> <20260626165156.169012-2-jhs@mojatatu.com>
+ <20260629102917.Ag2Vd7LR@linutronix.de>
+In-Reply-To: <20260629102917.Ag2Vd7LR@linutronix.de>
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+Date: Mon, 29 Jun 2026 06:47:14 -0400
+X-Gm-Features: AVVi8CdCMJDxSkLILcgjDrSjOxQDi_5ubUK40tv1YNxcJz-LIUxKvJgWZ1t15wA
+Message-ID: <CAM0EoMkh50LPeZ6sy8uA6APen1zTRBRYjcH_b521q=5YhitLKg@mail.gmail.com>
+Subject: Re: [PATCH net 1/3] net: Extend bpf_net_context lifetime to cover
+ qdisc enqueue
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
+	toke@toke.dk, jiri@resnulli.us, clrkwllms@kernel.org, rostedt@goodmis.org, 
+	kuniyu@google.com, sdf.kernel@gmail.com, skhawaja@google.com, 
+	liuhangbin@gmail.com, krikku@gmail.com, mkarsten@uwaterloo.ca, 
+	victor@mojatatu.com, ast@kernel.org, hawk@kernel.org, 
+	john.fastabend@gmail.com, daniel@iogearbox.net, 
+	Sashiko <sashiko-bot@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 26, 2026 at 09:18:39AM -0700, Stanislav Fomichev wrote:
-> On 06/25, Mahe Tardy wrote:
-> > On Thu, Jun 25, 2026 at 09:24:59AM -0700, Stanislav Fomichev wrote:
-> > > On 06/25, Mahe Tardy wrote:
-> > 
-> > [...]
-> > 
-> > > > +__bpf_kfunc int bpf_icmp_send(struct __sk_buff *skb_ctx, int type, int code)
-> > > > +{
-> > > > +	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
-> > > > +	struct sk_buff *nskb;
-> > > > +	struct sock *sk;
-> > > > +
-> > > > +	sk = skb_to_full_sk(skb);
-> > > > +	if (sk && sk->sk_kern_sock &&
-> > > > +	    (sk->sk_protocol == IPPROTO_ICMP || sk->sk_protocol == IPPROTO_ICMPV6))
-> > > > +		return -EBUSY;
-> > > > +
-> > > > +	switch (skb->protocol) {
-> > > > +#if IS_ENABLED(CONFIG_INET)
-> > > > +	case htons(ETH_P_IP): {
-> > > > +		if (type != ICMP_DEST_UNREACH)
-> > > > +			return -EOPNOTSUPP;
-> > > > +		if (code < 0 || code > NR_ICMP_UNREACH ||
-> > > > +		    code == ICMP_FRAG_NEEDED) /* needs a valid next-hop MTU */
-> > > > +			return -EINVAL;
-> > > > +
-> > > > +		/* icmp_send expects skb_dst to be a real rtable. */
-> > > > +		if (!skb_valid_dst(skb))
-> > > > +			return -ENETUNREACH;
-> > > > +
-> > > > +		nskb = skb_clone(skb, GFP_ATOMIC);
-> > > > +		if (!nskb)
-> > > > +			return -ENOMEM;
-> > > > +
-> > > > +		memset(IPCB(nskb), 0, sizeof(*IPCB(nskb)));
-> > > > +		icmp_send(nskb, type, code, 0);
-> > > > +		consume_skb(nskb);
-> > > > +		break;
-> > > > +	}
-> > > > +#endif
-> > > > +#if IS_ENABLED(CONFIG_IPV6)
-> > > > +	case htons(ETH_P_IPV6):
-> > > > +		if (type != ICMPV6_DEST_UNREACH)
-> > > > +			return -EOPNOTSUPP;
-> > > > +		if (code < 0 || code > ICMPV6_REJECT_ROUTE)
-> > > > +			return -EINVAL;
-> > > 
-> > > [..]
-> > > 
-> > > > +		/* icmpv6_send may treat skb_dst as rt6_info. */
-> > > > +		if (skb_metadata_dst(skb))
-> > > > +			return -ENETUNREACH;
-> > > 
-> > > A bit confused about this. Which part of icmpv6_send treats skb_dst as rt6_info?
-> > > (I see the original sashiko report about dst, but icmp6 seems to be not
-> > > requiring it)
-> > 
-> > Yeah I was also a bit confused because this came out of nowhere as soon
-> > as I put the skb_valid_dst only on the IPv4 path (for different
-> > reasons), but there is actually a potential trace in which we have type
-> > confusion indeed:
-> > 
-> > - icmp6_send() checks scoped source addresses and calls icmp6_iif() at net/ipv6/icmp.c:702
-> > - icmp6_iif() calls icmp6_dev() at net/ipv6/icmp.c:441
-> > - icmp6_dev() does skb_rt6_info(skb) for loopback/L3 master devices at net/ipv6/icmp.c:428
-> > - skb_rt6_info() casts any non-NULL dst to struct rt6_info at include/net/ip6_route.h:233
-> > - rt6->rt6i_idev is then dereferenced at net/ipv6/icmp.c:434
-> > 
-> > When checking with pahole, we can find this on my local kernel:
-> > 
-> > struct rt6_info {
-> > 	struct dst_entry           dst;                  /*     0   136 */
-> > 	/* --- cacheline 2 boundary (128 bytes) was 8 bytes ago --- */
-> > 	struct fib6_info *         from;                 /*   136     8 */
-> > 	int                        sernum;               /*   144     4 */
-> > 	struct rt6key              rt6i_dst;             /*   148    20 */
-> > 	struct rt6key              rt6i_src;             /*   168    20 */
-> > 	struct in6_addr            rt6i_gateway;         /*   188    16 */
-> > 
-> > 	/* XXX 4 bytes hole, try to pack */
-> > 
-> > 	/* --- cacheline 3 boundary (192 bytes) was 16 bytes ago --- */
-> > 	struct inet6_dev *         rt6i_idev;            /*   208     8 */  <--- we dereference this
-> > 	u32                        rt6i_flags;           /*   216     4 */
-> > 	short unsigned int         rt6i_nfheader_len;    /*   220     2 */
-> > 
-> > 	/* size: 224, cachelines: 4, members: 9 */
-> > 	/* sum members: 218, holes: 1, sum holes: 4 */
-> > 	/* padding: 2 */
-> > 	/* last cacheline: 32 bytes */
-> > };
-> > 
-> > And the metadata_dst would look like this:
-> > 
-> > struct metadata_dst {
-> > 	struct dst_entry           dst;                  /*     0   136 */
-> > 	/* --- cacheline 2 boundary (128 bytes) was 8 bytes ago --- */
-> > 	enum metadata_type         type;                 /*   136     4 */
-> > 
-> > 	/* XXX 4 bytes hole, try to pack */
-> > 
-> > 	union {
-> > 		struct ip_tunnel_info tun_info;          /*   144    96 */
-> > 		struct hw_port_info port_info;           /*   144    16 */
-> > 		struct macsec_info macsec_info;          /*   144     8 */
-> > 		struct xfrm_md_info xfrm_info;           /*   144    16 */
-> > 	} u;                                             /*   144    96 */  <--- we land on this union
-> > 
-> > 	/* size: 240, cachelines: 4, members: 3 */
-> > 	/* sum members: 236, holes: 1, sum holes: 4 */
-> > 	/* last cacheline: 48 bytes */
-> > };
-> > 
-> > Let's say it's a struct ip_tunnel_info:
-> > 
-> > struct ip_tunnel_info {
-> > 	struct ip_tunnel_key       key;                  /*     0    64 */
-> > 
-> > 	/* XXX last struct has 7 bytes of padding */
-> > 
-> > 	/* --- cacheline 1 boundary (64 bytes) --- */
-> > 	struct ip_tunnel_encap     encap;                /*    64     8 */  <--- 144 + 64 = 208 we land here
-> > 	struct dst_cache           dst_cache;            /*    72    16 */
-> > 	u8                         options_len;          /*    88     1 */
-> > 	u8                         mode;                 /*    89     1 */
-> > 
-> > 	/* size: 96, cachelines: 2, members: 5 */
-> > 	/* padding: 6 */
-> > 	/* paddings: 1, sum paddings: 7 */
-> > 	/* last cacheline: 32 bytes */
-> > };
-> > 
-> > So I imagine this is fairly tricky to trigger but still a case of type
-> > confusion. I have actually no idea how likely this can happen from my
-> > call but the trace makes sense at least.
-> 
-> That logic seems to exist for the icmp6_send to find the input device
-> (since the expected use-case for calling icmp6_send is to the incoming
-> skb). And since you're mainly doing egress, I don't think this path will
-> ever trigger (iow the check is not needed)?
-> 
-> Maybe you can add cgroup_ingress test case? Looks like this rt6_info
-> path might trigger for ipv6 lo? I don't see any ingress test in your
-> series, so might be good to have one regardless?
+ -
 
-The initial reason I added only egress is because the use case of this
-makes more sense if that's your local kernel giving you feedback about a
-connection you are trying to establish, as a process, but is prevented.
+On Mon, Jun 29, 2026 at 6:29=E2=80=AFAM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+>
+> On 2026-06-26 12:51:54 [-0400], Jamal Hadi Salim wrote:
+> > The bpf_net_context used by sch_handle_egress() is stack-allocated and =
+torn
+> > down in that function returned. By the time tcf_qevent_handle() runs
+> > current->bpf_net_context is NULL.
+> >
+> > When a filter attached to a qevent block (e.g. RED's early_drop or mark
+> > qevents, which always use shared blocks) returns TC_ACT_REDIRECT,
+> > tcf_qevent_handle() calls skb_do_redirect(), which in turn calls bpf he=
+lper
+> > bpf_net_ctx_get_ri(). That helper unconditionally dereferences
+> > current->bpf_net_context resulting in a NULL pointer dereference.
+> >
+> > Note: The same holds for actions that invoke BPF redirect helpers
+> > (e.g. act_bpf running a program that calls bpf_redirect()) during qeven=
+t
+> > classification itself. And as a matter of fact the same assumption is
+> > made in the code outside of tc.
+> >
+> > Fix:
+> > Move the bpf_net_context lifecycle out of sch_handle_egress() into
+> > __dev_queue_xmit(), so that it spans both the egress TC fast path and t=
+he
+> > qdisc enqueue. The setup is placed outside the egress_needed_key static
+> > branch because qevents are independent of clsact/NF egress hooks and
+> > that key may stay disabled when only a qevent-bearing qdisc is
+> > configured. Unfortunately this adds a small unconditional penalty to th=
+e
+> > code path _per packet_ only guarded by CONFIG_NET_XGRESS (two writes an=
+d
+> > one read for bpf_net_ctx_set, plus one write for bpf_net_ctx_clear).
+>
+> I fail to understand this but you and sashiko have an understanding...
+> If there is TC_ACT_REDIRECT returned by tc_run(), then the skb is NULL
+> and as such uppon return from sch_handle_egress() the control flow goes
+> to the out label.
+> As a fix you move the bpf_net_ctx assigned to before CONFIG_NET_EGRESS
+> and clear it on exit. What do I miss here?
+>
 
-But indeed, I could extend the test to ingress as well, I'd just like
-ideally getting an ack from networking maintainers since this is already
-v10 of this, before making some new changes.
+There are 2 separate filters.
+IIUC, you are thinking of the first one which is the clsact egress
+classifier (which runs in sch_handle_egress())  - its redirect would
+indeed return NULL and skip qdisc enqueue.
+The second one is the qevent redirect whch happens in
+tcf_qevent_handle() during qdisc enqueue (block 10 in the reproducer).
 
+
+> > This keeps all bpf_net_context management in net/core/dev.c i.e the
+> > existing boundary between tc core and BPF without requiring any net/sch=
+ed/
+> > code to know about BPF plumbing.
+> >
+> > Reproducer (see the accompanying tdc test):
+> >
+> >   tc qdisc add dev eth0 root handle 1: red limit 1MB min 10KB max 20KB =
+\
+> >       avpkt 1000 burst 100 qevent early_drop block 10
+> >   tc qdisc add dev eth0 clsact
+> >   tc filter add block 10 pref 1 bpf obj redirect.o
+>
+> stupid question: how do I get this redirect.o? Just a simply thing to
+> reproduce this=E2=80=A6
+>
+
+It's just pseudo code for a bpf prog that redirects (so you can create
+probably a few liner bpf prog).
+Take a look at patch 3 which uses a prebuilt action-ebpf binary with
+the action-redirect section (added by patch 3 to action.c).
+If it's still not clear, I can craft one and send it to you.
+
+cheers,
+jamal
+
+> >   tc filter add dev eth0 egress protocol ip prio 1 matchall \
+> >       action gact pass
+> >
+> >   traffic through eth0 triggers red_enqueue() -> tcf_qevent_handle() an=
+d,
+> >   on a redirect verdict, a NULL deref in skb_do_redirect().
+>
+> Sebastian
