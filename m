@@ -1,79 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBD134FF41
-	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 17:48:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42AEC2D0C7E;
+	Mon, 29 Jun 2026 18:06:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782755306; cv=none; b=h8YBMyLtI5JjeQ45EEMSfMaR53TnhJC5J6rDfdpUZlmerTlZMljU9jc6LMzI34zvWdpG+hv8Zia4lIow9bD8gaPl5cw8jvmoJJ/jkXMpWDK6sLeq0/uPDSLgHoTX71woNimJ/OgPvE4dWfR4oPaGSBCdIe0RMorOll5GKtb9Bck=
+	t=1782756384; cv=none; b=QotSf8HKxr3S0EwQaseZMr1Q/pL83RdYYP20GzwPG0S1tbv44AZx+cfhSYvQ3zTAnsHEHJP2eHFHiVYno3Ms0ypexzes9jWFPXzYqEntLABhW/QTqy1kgiplg4/zw0nSg4uL8pJULklSQEbxVjtGgvZ1fXrYGb2YwBdrn7SGmFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782755306; c=relaxed/simple;
-	bh=F5fr/wPd9SBUxFrkLybZT/stKUqM4fjgVXlBJV09YAI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=SjGRBi6SGubhQofCDtXoX40PsSNc8uhCqxjkUDv1bO4ERXNu3YhMubv7ZJpZxzSBv3plaZGUCoZtFxmGPtNmdNMGHeejQDDGMgX2WBjTLxwyASmGyunVePvh6RvJXh4uT8l8IUllj6AGL7cAACYjSPTSTSZ4rDhU+XAeXHCmcQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i0PA3E9N; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782756384; c=relaxed/simple;
+	bh=ISc5SyCOpS0axCv9I7/0PAfvIIvOLejgS1CCA3ntoB4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=SYP8aNoVut9iwZzlHnkTz3+1hk/LIY/ygUsiYBqbIG/u+W4ZhjKQtCyFCaJjQaWFlXYtebuW7JlYl4+nRhWT2KwoqVibhPBsYLHJTqQrsGx/HhsIB7yAta3YvcCv55Pov2N7fFO5DXmVVUCHsD/VRob6U6Nv5cYETyV+sUIGa0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hc76mXVB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i0PA3E9N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95C2D1F00A3A;
-	Mon, 29 Jun 2026 17:48:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hc76mXVB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ABAE1F000E9;
+	Mon, 29 Jun 2026 18:06:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782755305;
-	bh=F5fr/wPd9SBUxFrkLybZT/stKUqM4fjgVXlBJV09YAI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=i0PA3E9NKZ0+rN9Rv45yPg37a8KyvSUY1e7jnh2lwMKdMMRgelCJAO7tff5Di6GH8
-	 bwipbXLgFPnIy7UwcCF2AByEJxEcPAmcWc5JXDv86tlgi2U94KUMAhGY5GIK9TyExJ
-	 rGVHNGDckPT+bidI9FiWy3e5rHnhGkoPSUgfoMnOhklNvHcqp1fwGt8G+Dkj52VIKZ
-	 gILHuJGYj9iWGu/4NVOn4RslaPqberk8AwfHh72lpxrR2aU6fh/fpTtDgF7Ranf4nb
-	 +DhbxF5No+5nKBYhaC2Aw6kTB7VCdIfb/VM+w3EDRXIiQu2s/bYvq8AwN45D2EO3jo
-	 XLVilhPZCqVtA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: drop
- tc/xdp/flow_dissector sockmap mutation tests
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sechang Lim" <rhkrqnwk98@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260629172704.1302218-3-rhkrqnwk98@gmail.com>
-References: <20260629172704.1302218-1-rhkrqnwk98@gmail.com>
- <20260629172704.1302218-3-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 29 Jun 2026 17:48:25 +0000
-Message-Id: <20260629174825.95C2D1F00A3A@smtp.kernel.org>
+	s=k20260515; t=1782756382;
+	bh=15dZbETBPdvycW7dlHbmw19eotEmkycpFDuovtTBY5E=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=hc76mXVBx/xAmA7fOoTVWhqc9v3QMpG7oxGdePrhTwK2EQT2W0AnO0bFLcVDKAVT/
+	 gQmj6yjP99RURYeZUj4aei4iRmS+4iK0Y3YAF8UxW5TVsQg1hnRQ7bLFkCW6JshPFI
+	 EpCQW1rdzRL6QsAlQjeKftOujACNAv/nWjkRrmZGPeJTEZgaNF5+2iukkWGWN60wPR
+	 pd1ch5ayR59W5jeO5Cb9gHoSbEP6bp7oovcPzfIJ3sifeguevPbiYrC4MadLmclnOe
+	 9GiL4UFPdLskjlprWC/iSY6u+Bkb1t31D9MSJ3aM28uH83zm8mOe059clxGY6is++g
+	 ulK2pvStV55JA==
+Content-Type: multipart/mixed; boundary="===============1636887923003465919=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <ebc38cb448d37cbb143f80680a4e489e5a06bbb5106faf0c381ba97efd9a10df@mail.kernel.org>
+In-Reply-To: <20260629172704.1302218-2-rhkrqnwk98@gmail.com>
+References: <20260629172704.1302218-2-rhkrqnwk98@gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf, sockmap: disallow update and delete from tc, xdp and flow_dissector
+From: bot+bpf-ci@kernel.org
+To: rhkrqnwk98@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,john.fastabend@gmail.com,eddyz87@gmail.com,memxor@gmail.com,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,sdf@fomichev.me,emil@etsalapatis.com,lmb@isovalent.com,jakub@cloudflare.com,jiayuan.chen@linux.dev,shuah@kernel.org,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 29 Jun 2026 18:06:22 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The commit deletes the selftest file test_sockmap_update.c but leav=
-es broken references to it in the sockmap documentation.
---
+--===============1636887923003465919==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit ccad6ec599cc55c0fbdeda989132b9073df009d1
-Author: Sechang Lim <rhkrqnwk98@gmail.com>
+>     sock_map_update_common() and __sock_map_delete() hold stab->lock and call
+>     sock_map_unref() -> sock_map_del_link(), which takes sk_callback_lock for
+>     write. That gives the order stab->lock -> sk_callback_lock.
+>
+>     The reverse order comes from the SK_SKB stream parser.
+>     sk_psock_strp_data_ready() holds sk_callback_lock for read, and after the
+>     verdict tcp_bpf_strp_read_sock() acks the consumed data inline via
+>     __tcp_cleanup_rbuf(). The ACK goes out egress, where a sched_cls program
+>     deletes from the sockmap and takes stab->lock:
+>
+>     A tc, xdp or flow_dissector program has no reason to update or delete a
+>     sockmap, and redirect does not go through here. Drop them from
+>     may_update_sockmap() so the verifier rejects it. It also closes the
+>     matching sockhash inversion.
+>
+>     Suggested-by: John Fastabend <john.fastabend@gmail.com>
+>     Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 
-selftests/bpf: drop tc/xdp/flow_dissector sockmap mutation tests
+This fixes the behaviour added by commit 0126240f448d ("bpf: sockmap: Allow
+update from BPF"), which introduced may_update_sockmap() and added the four
+BPF_PROG_TYPE_* cases that this change removes.  Should it carry:
 
-tc, xdp and flow_dissector programs can no longer update or delete a
-sockmap. Adjust the tests and remove the now-unused test_sockmap_update.c
-and freplace_cls_redirect.c files.
+  Fixes: 0126240f448d ("bpf: sockmap: Allow update from BPF")
 
-> diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_update.c b/to=
-ols/testing/selftests/bpf/progs/test_sockmap_update.c
-> deleted file mode 100644
-> index 6d64ea536e3d8..0000000000000
-> --- a/tools/testing/selftests/bpf/progs/test_sockmap_update.c
-> +++ /dev/null
 
-[Severity: Low]
-Does this commit also need to update Documentation/bpf/map_sockmap.rst?
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Since test_sockmap_update.c is being removed here, the literal references
-and hyperlinks to it in Documentation/bpf/map_sockmap.rst (around lines
-352 and 498) are left as broken links.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260629172704.1302=
-218-1-rhkrqnwk98@gmail.com?part=3D2
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28391303635
+--===============1636887923003465919==--
