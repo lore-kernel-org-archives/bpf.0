@@ -1,102 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62073413220
-	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 14:21:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14EA356767
+	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 14:38:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782742895; cv=none; b=iES0oHpxHehfUwHg6J43bj672plPOgU6yIxV/dfPcPh3e+eftpl03sADkKuUVdgDMPBb+UCqwJ8yxbQ8r2TA1UfH9w0xDHafJjbvjMigiP01TUrdwc7RIYhEb//wLBL9P0Z9B3x5AcjxxmvmOAEi6lGWJrk0Zwh5iKk7l3n+quU=
+	t=1782743932; cv=none; b=GHcQTO9C8EjlTaZgrnGWLx90LNboP6UFcdZYIommfGKSoX95SQA6Sb0OO856V9H/MHkGLLzWcrY1MwqHqhP1qR47pOP/JBed80LQv9Sye79rNDCY3KCuz4Q7FpUR937nAJmyJeCn0/4IeVF/UqgfZOJoVpm4GMNBcRAdPMTrxV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782742895; c=relaxed/simple;
-	bh=6N8TZdOGZpYdvkdEzYl4kczOMe5OzzYX7K8rWlif55w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g+rMcqhQ6ypciRNnzC/0tZ8RlQVXqN4vwfebd6ifYZ+DBjTsTBZe7Fa1yAwRIXdPCM4GbqAQuQeUzWhB5KLek/ZJfjmZ/+yvTWIHjaaOmjaRj275NAs4+LXTzmSuy8u+bZy3wgBOwYGUwE45MnZuRuvrPYboqYl+HajUQPzqtLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RvQnH6MT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782743932; c=relaxed/simple;
+	bh=HyK6/2Fq0N4GlAzH7LfDGAi5PN1+aH3MycftfCgUUck=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cr/xKIST4rdT6+H/YtCoRiBPblvXPQ2W/19J9Hk/D/PdjL0zwKIKv6coZ0+26qfo6RjOkrpHflmTzvGI8F/aJDsSOSL93gdkYuWPz4MeSuqr1WivrjyKpC43I8JVOSqhe9rien7hqp55NH1AJPcT3dLVhB+S3RhTVCszIuA99cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PysI31+g; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RvQnH6MT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF8B01F00A3D
-	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 14:21:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PysI31+g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E1361F000E9;
+	Mon, 29 Jun 2026 14:38:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782742892;
-	bh=6N8TZdOGZpYdvkdEzYl4kczOMe5OzzYX7K8rWlif55w=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=RvQnH6MTIBL/G8eXLoFHj7YZth3vXHgnVDXJCKfbDeZp6RXJ3BXCLE0grbrZzyii9
-	 /yS+oreF3/8JQ0puL6llRqgTg/xs0Cq6sBDFGYeEx0Jn2TNR8YyXcwWfx7IFN9yhDc
-	 LAeHBiDlmOvu5L0mCxDtz88UL3GCczmBaYd7WLSbKcWud45EtrT6OBPZlaK5rm+Blh
-	 EXN6Mz8LoFkMbpJlxxk1YxWVGragpChsvDFhry132uDN5YZ65ejpW5hQOSCugXRW/E
-	 eru4jKMDGMjr0kdGORU6W4odDhBapVkVRXRIO6N1HFgDXjeiME51cqnc6Ow4xWVIZI
-	 jd0YuLgRbDZCA==
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-92e5cb052edso43448985a.2
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 07:21:32 -0700 (PDT)
-X-Gm-Message-State: AOJu0YyULi/QhouA6+3IytSBvABgSMSgnEQPoIJD3eemn5EJd6ZPDx0D
-	c6gRk3EHWFkXXbQK2+iBq3K/4PVIzkVF3RpPdHrNXY6KcxdWOL3GstuM8w0w9QTzOJNublkKdz5
-	HXVxCd5/CpTUe5F12GJCmGWAi4GL/rGk=
-X-Received: by 2002:a05:620a:29ca:b0:92e:56f7:c5fb with SMTP id
- af79cd13be357-92e56f7d387mr348831685a.12.1782742892220; Mon, 29 Jun 2026
- 07:21:32 -0700 (PDT)
+	s=k20260515; t=1782743931;
+	bh=OEFxQ3TjzgLLP+xAavU/6S5tek39pLJ98IoxA9i3enY=;
+	h=From:To:Cc:Subject:Date;
+	b=PysI31+g22kDLArxflC3FbLHHsMnbRydpnBKk5Jyx074zWlElGHBZcoHIjaxUPgRq
+	 ai6fhtZHAcO8PyRMn1p/AXurXr8zFzzT5NC2ngj9nl0JTkyYJToQ9vfUHeWqQ8E240
+	 P7gXFZoyyg+vaK7o41i7D95oNm3fBfaRLXzSNXJrY57Tp82S/zp+Hst2VMqIVS2qnY
+	 fedTO5LBx1JfgqWGSnIDGeZj3hSa1xcEKO1nRSxKC8ew6M2gaFIbeuV1bnzHA8eJKh
+	 xbL0RKz0FT+z6sm8i0fbRGi+ySKJH9YL2sPLeKs8MHUP2tQJ/UH8RTXy+LqFlaFPxq
+	 LgEqpop3BBhDw==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	Quentin Monnet <qmo@kernel.org>
+Subject: [PATCHv3 bpf-next 0/3] bpf: tracing_multi link info support
+Date: Mon, 29 Jun 2026 16:38:41 +0200
+Message-ID: <20260629143844.862369-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260629140048.733346-1-pulehui@huaweicloud.com>
-In-Reply-To: <20260629140048.733346-1-pulehui@huaweicloud.com>
-From: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Date: Mon, 29 Jun 2026 16:21:20 +0200
-X-Gmail-Original-Message-ID: <CAJ+HfNhn9eK+3xsd3ewEsG-duCgBeYXeLAtNan=qefas2Ya0dQ@mail.gmail.com>
-X-Gm-Features: AVVi8CfLeBnCl8UWbgTGDyVcouBIu1AOkUzgbXfQlr0DRYJvmC-HJ0Ezdj90Wog
-Message-ID: <CAJ+HfNhn9eK+3xsd3ewEsG-duCgBeYXeLAtNan=qefas2Ya0dQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 0/6] Mixing bpf2bpf and tailcalls for RV64
-To: Pu Lehui <pulehui@huaweicloud.com>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>, Pu Lehui <pulehui@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hey!
+hi,
+adding link info support for tracing_multi link.
 
-On Mon, 29 Jun 2026 at 15:56, Pu Lehui <pulehui@huaweicloud.com> wrote:
->
-> From: Pu Lehui <pulehui@huawei.com>
->
-> In the current RV64 JIT, if we just don't initialize the TCC in subprog,
-> the TCC can be propagated from the parent process to the subprocess, but
-> the updated TCC of the parent process cannot be restored when the
-> subprocess exits. Since the RV64 TCC is initialized before saving the
-> callee saved registers into the stack, we cannot use the callee saved
-> register to pass the TCC, otherwise the original value of the callee
-> saved register will be destroyed. So we implemented mixing bpf2bpf and
-> tailcalls similar to x86_64, i.e. using a non-callee saved register to
-> transfer the TCC between functions, and saving that register to the
-> stack to protect the TCC value. As for the tailcall hierarchy issue,
-> inspired by the s390's low-overhead approach, we store TCC from
-> RV_REG_TCC back to stack after calling bpf2bpf call or calling orig bpf
-> func in bpf trampoline.
->
-> In addition, some code cleans are also attached to this patchset.
->
-> Tests test_bpf.ko and test_verifier have passed, as well as the relative
-> testcases of test_progs*.
->
-> v4:
-> - Fix tailcall hierarchy issue.
-> - use is_struct_ops_tramp helper in bpf trampoline
+Adding the kernel support with related selftests and bpftool support
+to display the tracing_multi link info, the output looks like:
 
-Alexei outlined some (major) concerns on the whole mixing side of
-things [0]. I haven't been following that space -- did Leon have a
-workaround/fix? Can you explain more how you fixed it, and why it
-would make sense to add it to RISC-V now?
+  # bpftool link
+  ...
+  61: tracing_multi  prog 167
+          attach_type trace_fentry_multi  btf_obj_id 1  count 3
+          btf_id           addr             cookie           func [module]
+          92598            ffffffff825017c4 10               bpf_fentry_test1
+          92600            ffffffff82503814 30               bpf_fentry_test2
+          92601            ffffffff82503824 20               bpf_fentry_test3
+          pids test_progs(1540)
 
-Thanks,
-Bj=C3=B6rn
+thanks,
+jirka
 
 
-[0] https://lore.kernel.org/bpf/CAADnVQ+rLneO4t=3DYYmLYtc945Fz0=3DucNTWZBxg=
-vs8toFY-onRg@mail.gmail.com/
+v1: https://lore.kernel.org/bpf/20260621204524.61067-1-jolsa@kernel.org/
+v2: https://lore.kernel.org/bpf/20260623142417.275892-1-jolsa@kernel.org/
+
+v3 changes:
+- added acks [Andrii, Leon]
+- display cookies as decimal numbers [Andrii]
+- renamed obj_id to btf_obj_id [Andrii]
+- several fixes in bpftool change [Andrii]
+
+---
+Jiri Olsa (3):
+      bpf: Add tracing_multi link info support
+      selftests/bpf: Add tracing_multi link info tests
+      bpftool: Add tracing_multi link info output
+
+ include/uapi/linux/bpf.h                                |   9 +++
+ kernel/trace/bpf_trace.c                                |  55 +++++++++++++++++
+ tools/bpf/bpftool/link.c                                | 133 ++++++++++++++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h                          |   9 +++
+ tools/testing/selftests/bpf/prog_tests/fill_link_info.c | 242 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_fill_link_info.c |   6 ++
+ 6 files changed, 454 insertions(+)
