@@ -1,218 +1,180 @@
-Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F682D0615
-	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 06:30:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782714653; cv=pass; b=qhIGI+0jgh+cVe3/pORw6BknC2f7A8K/+mK9tLgVFQX0G0DS98K1VMzsEdjd4ral2fCYx0RNP8+wvoiDUUCERs0yC4CYmva8WFJ/Hq50IUioN6VkQ0IkQ2WzbaTsSD9IZK+5i9f2qOO5tzhZRqz03MY/BxCgHJjoVXgA1GZ/mRw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782714653; c=relaxed/simple;
-	bh=Yh2GmLQHQfGIsF6kKCnlkZRXhN4K5Wjvj7p+60WwXHU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=T5UeHnJCmPsfXgYmt6YjptN2JqubhSRmD44k+AOFaWWbuhGT3jxI/8f77vTOJVhRhxwmaLQK9tOiU/L2VxodCCIbZXCmk4bmtvumVhsro7ITvzQqDRp7eALN0+6KamBjGpF4i+6XcrdyUpJBo5nQGMcXsaC84SPFwbl4MzZH/uQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y++EETQ5; arc=pass smtp.client-ip=74.125.224.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06DF399899;
+	Mon, 29 Jun 2026 06:35:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782714960; cv=none; b=cuKM4BvkOzYTaVNhwfdwjjfqScp0XLgeNmNX2TPycLVfZphdarw06q55i45PDEW8P0hzMBjGgct+/iaoyIO3adVYk1vP3jVoPMD+aBoYPerJUl7Rvn//dgN0hvF7CwxJn7FRH3DKFf9B62685xD+Bijl0/fTHhydkdeORdfUg7c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782714960; c=relaxed/simple;
+	bh=84SgCX4/J8Nm/1TgJIEJEiLJQxKvJ4FTjUDPPwB4Sko=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DfLkXjxuISrP39DD+fsA1gHUY++/kDEfJxL2/dMkr2hKm7MOsrg5ECwzwZDe/61LG0gqjVpXFYY6d2DX8A1onAKGFdwCluz0YZ9HyrTssCUM1m5LFpqtOrPguhxjNs6ekcJ87sJCSQx7CcdKCb/oDrtCOpM3bGqbG+n0TRzNl94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=CZvVKtJ+; arc=none smtp.client-ip=113.46.200.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y++EETQ5"
-Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-664ee752958so95228d50.1
-        for <bpf@vger.kernel.org>; Sun, 28 Jun 2026 23:30:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782714651; cv=none;
-        d=google.com; s=arc-20260327;
-        b=nPhkLY44QMVrASPAqxNXVJAUW2uWstI8iyqDJmTSFGhRbwbR7Ai5ckjOrQTGyvcUlT
-         VPrs9Z7drn/cKLdpew2rySAptMbS44SVvxIBWGePLnt5/esChKhqHQxan/JP+BAbNgTn
-         1H8/wC6eWPX3h08GsdlVRJ3JlqedgExvK9oczsoihT8SKMXAbuWm6mn0JSewtUBI6/KR
-         bBo15811l07u4dsCrah3E7zrJRAjvr50ttpivBOuwo/5MlWEEEnbw1Pank+sYKGM0Yvt
-         wXvtlWvoHi8Ytd4SHm4hXNLrpKDf4SnGIr730UvylpUJIAldzYEq0uD5thTij2SR+7Ip
-         Yyww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=wc1gXYp+xGTaSUZnzHKIS46+9gTB+iWgKfnEP0p5T9g=;
-        fh=az0GnwzDTD5fcBq+j7RTzi2zesrPyXEVnqMPe17+lZs=;
-        b=PfJXYp4TvUlJDko4JRZGDeU/O2QtcAnw45XBq8Jtf/XS7xkt3b4fAvlL/Qm2I7iXMM
-         Q4lmBWkp3liiPlH4FMLlNGF8EcGHsc4YGB6KVJllz3QsnXiqGU9w2hur7vDPLGClR9Sy
-         ZhvUjvykvinXU2/v1s5ZmDKjV4eGa8rxb4Hb3hFGNc1XArE8E0o1hcTpfN39fgcuYrEX
-         qPsxTok4GDHbVwvHwOddnWhV81oOA00wgeDXvPUWjMFkcxli9w1ztB69mMMSf8hq6pZD
-         Iar7My2sq5MbcpqsFDF+Xtsyt3btDlyLFNqcqDUK158Ukz4ku3T7UF7jY1WQH4sbUb+N
-         VoGg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782714651; x=1783319451; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wc1gXYp+xGTaSUZnzHKIS46+9gTB+iWgKfnEP0p5T9g=;
-        b=Y++EETQ5szRKVlRbDRiR/W9JR6XxTrjgPrhRH3iWxEcSUyTdSy0jKnHw8fdOLfoPKW
-         UX+QWUSowC82WxeIpz4nJel5q5nYRixwvvVk7HpPi2Kgi/Ks/m6YneaxtLtAAMc5jXeO
-         sb49bUaxD53angfLD0YXa7vIBhSISVdTc9sQKsZ5Rx8dlF3f0PXTJ1OayvL8/+LsJvIp
-         XW46IkMCOpFq1sv+LWz/9NYu6c+Uw2SJgFCNotMkYzevoRj2v9Ivwgkol3vAiTzB7/6f
-         xHZIK8g3AXSFEosz6tBumG5eJeU4/bUUhgGauMqRF2IFkb5lEjYB++Nn6/v/HUXBORa6
-         RqQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782714651; x=1783319451;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=wc1gXYp+xGTaSUZnzHKIS46+9gTB+iWgKfnEP0p5T9g=;
-        b=ZPQxFjO0yFrvNiRjSzGnTsEYW9YbVtEDLEkae8R3atPAv4lwUug3nlqnGIgOVxL5t6
-         sx4Oeq8bYTK3WIeVC2uhr6mta9j2PMLXXncH1AdFcFm1NOZ7r35LUpEg6i1PIjDRVH4+
-         HdolhhkoQv1k2yv3+BFLYcdYvtYui/vUVb8rRj4NtjVEyQ8z8yPuM6Pl94Cy6paGVCcK
-         acZvnWRud75E9msGbzk6aJIWvkPNy50VhavxYff2z+0LI3pbM5th0MA6Co1+zzBTR+3U
-         cbJ+6AentkWNo3irAYsDRXleUb0yPaie8w93SkLtXxoGPCmUezVMi+hXWE0+ucRSe3Ov
-         sEew==
-X-Gm-Message-State: AOJu0YysDsLEdhTBG/0hxidd5vxUprYcr10chhaCUYXHvZLc5nA2ocEL
-	/LR0jZjrhH6Z33ebSMI6af/EvXa09QdDvNfSfBLjUsYmm+SJXyRJvDwwnkL5P7hv+i1Xfct0s/9
-	ReOdY8AP1SFqnCQEhb/wtdGYMNEv+mBc=
-X-Gm-Gg: AfdE7cnQy7FOKHmsfbg7dLAselQ/ok9shjKPtVH+eYhWduXIGLoMiCm4pAZPd/eaQlG
-	j1alHOpAsJgLazHgEta7lRK7Iq0Xtfhtxu7GucuL2JxKqqiYpNmOaPHTLbb5MkGJ9mkFbTsMYfN
-	899F0SssxISbMK6YculMgDSpPu1bykoD5+w8Zx4ZApho+cVGfonv5L5vRM+aXnRuhEoL2IUHyrW
-	b4CfOcYkAs1wbKz+ZHNUGH2AeKOmYBKcm+zC1Uzx20ODfGhOzgypshsIOCE6KIpottUvCjnORKX
-	pdJm8PU=
-X-Received: by 2002:a53:b0c8:0:b0:664:ae68:33b5 with SMTP id
- 956f58d0204a3-664ae683a18mr6204799d50.17.1782714650763; Sun, 28 Jun 2026
- 23:30:50 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="CZvVKtJ+"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=xt8oDi+bI3bYNwgnYXtWn3UN8f+umrwsGOwaJMxCFgk=;
+	b=CZvVKtJ+qfInXDOY1/oQfyXE7Ej1O6niptRYqR2KuJ9VOxK38Qd4y7WV3BnC7gROpF4JhYpa1
+	d0hwW5tXeO+fxv2hUrgN9f4Lz8fkOi6sTDzhuUsXM+K2NTG8k1YC3aKO8vbV4X1SXB6pZ3Jk56a
+	j5dmVmPgyWXAjwQy2kZJp30=
+Received: from mail.maildlp.com (unknown [172.19.162.140])
+	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4gpbsd0rmmz1T564;
+	Mon, 29 Jun 2026 14:27:01 +0800 (CST)
+Received: from dggemv706-chm.china.huawei.com (unknown [10.3.19.33])
+	by mail.maildlp.com (Postfix) with ESMTPS id D93252025F;
+	Mon, 29 Jun 2026 14:35:48 +0800 (CST)
+Received: from kwepemq200017.china.huawei.com (7.202.195.228) by
+ dggemv706-chm.china.huawei.com (10.3.19.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 29 Jun 2026 14:35:48 +0800
+Received: from octopus.huawei.com (10.67.174.191) by
+ kwepemq200017.china.huawei.com (7.202.195.228) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 29 Jun 2026 14:35:47 +0800
+From: Cai Xinchen <caixinchen1@huawei.com>
+To: <viro@zeniv.linux.org.uk>, <brauner@kernel.org>, <jack@suse.cz>,
+	<miklos@szeredi.hu>, <amir73il@gmail.com>, <paul@paul-moore.com>,
+	<jmorris@namei.org>, <serge@hallyn.com>, <stephen.smalley.work@gmail.com>,
+	<omosnace@redhat.com>, <gregkh@linuxfoundation.org>, <sashal@kernel.org>,
+	<bboscaccy@linux.microsoft.com>, <caixinchen1@huawei.com>
+CC: <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-unionfs@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+	<selinux@vger.kernel.org>, <bpf@vger.kernel.org>, <stable@vger.kernel.org>,
+	<lujialin4@huawei.com>
+Subject: [PATCH v3 stable/linux-6.12.y 1/3] fs: constify file ptr in backing_file accessor helpers
+Date: Mon, 29 Jun 2026 15:03:36 +0800
+Message-ID: <20260629070338.578858-2-caixinchen1@huawei.com>
+X-Mailer: git-send-email 2.18.0.huawei.25
+In-Reply-To: <20260629070338.578858-1-caixinchen1@huawei.com>
+References: <20260629070338.578858-1-caixinchen1@huawei.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260628201103.3624525-1-mattbobrowski@google.com>
-In-Reply-To: <20260628201103.3624525-1-mattbobrowski@google.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Sun, 28 Jun 2026 23:30:38 -0700
-X-Gm-Features: AVVi8CdR2QkQ2JIXHjOSnHplL5uGO3pBFVyJy022RkglMcMQwCrE_jthuoaMa2k
-Message-ID: <CAMB2axOQhmm-eyEqSU-FHzw3P36XMW9RyU5--LRewZNUcfd_BA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: reject BPF_MAP_TYPE_INODE_STORAGE creation
- if BPF LSM is uninitialized
-To: Matt Bobrowski <mattbobrowski@google.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Paul Moore <paul@paul-moore.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, oxsignal <awo@kakao.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemq200017.china.huawei.com (7.202.195.228)
 
-On Sun, Jun 28, 2026 at 1:11=E2=80=AFPM Matt Bobrowski <mattbobrowski@googl=
-e.com> wrote:
->
-> When CONFIG_BPF_LSM=3Dy is set, BPF inode storage maps
-> (BPF_MAP_TYPE_INODE_STORAGE) are compiled into the kernel. However,
-> if the BPF LSM is not explicitly enabled at boot time (e.g. omitted
-> from the "lsm=3D" boot parameter), lsm_prepare() is never executed for
-> the BPF LSM.
->
-> Consequently, the BPF inode security blob offset
-> (bpf_lsm_blob_sizes.lbs_inode) is never initialized and remains at its
-> default compiled size of 8 bytes instead of being updated to a valid
-> offset past the reserved struct rcu_head (typically 16 bytes or more).
->
-> When a privileged user creates and updates a
-> BPF_MAP_TYPE_INODE_STORAGE map, bpf_inode() evaluates
-> inode->i_security + 8. This erroneously aliases the struct
-> rcu_head.func callback pointer at the beginning of the
-> inode->i_security blob. During subsequent map element cleanup or inode
-> destruction, writing NULL to owner_storage clears the queued RCU
-> callback pointer. When rcu_do_batch() later executes the queued
-> callback, it attempts an instruction fetch at address 0x0, triggering
-> an immediate kernel panic.
->
-> Fix this by introducing a global bpf_lsm_initialized boolean flag
-> marked with __ro_after_init. Set this flag to true inside
-> bpf_lsm_init() when the LSM framework successfully registers the BPF
-> LSM. Gate map allocation in inode_storage_map_alloc() on this flag,
-> returning -EOPNOTSUPP if the BPF LSM is in turn uninitialized.
->
-> This fail-fast approach prevents userspace from allocating inode
-> storage maps when the supporting BPF LSM infrastructure is absent,
-> avoiding zombie map states.
->
-> Fixes: 8ea636848aca ("bpf: Implement bpf_local_storage for inodes")
-> Reported-by: oxsignal <awo@kakao.com>
-> Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
+From: Amir Goldstein <amir73il@gmail.com>
 
-Reviewed-by: Amery Hung <ameryhung@gmail.com>
+[ Upstream commit 4e301d858af17ae2ce56886296e5458c5a08219a ]
 
-> ---
->  include/linux/bpf_lsm.h        | 4 ++++
->  kernel/bpf/bpf_inode_storage.c | 9 +++++++++
->  security/bpf/hooks.c           | 3 +++
->  3 files changed, 16 insertions(+)
->
-> diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
-> index 143775a27a2a..dda272d78f01 100644
-> --- a/include/linux/bpf_lsm.h
-> +++ b/include/linux/bpf_lsm.h
-> @@ -14,6 +14,8 @@
->
->  #ifdef CONFIG_BPF_LSM
->
-> +extern bool bpf_lsm_initialized __ro_after_init;
-> +
->  #define LSM_HOOK(RET, DEFAULT, NAME, ...) \
->         RET bpf_lsm_##NAME(__VA_ARGS__);
->  #include <linux/lsm_hook_defs.h>
-> @@ -56,6 +58,8 @@ bool bpf_lsm_hook_returns_errno(u32 btf_id);
->
->  #else /* !CONFIG_BPF_LSM */
->
-> +#define bpf_lsm_initialized false
-> +
->  static inline bool bpf_lsm_is_sleepable_hook(u32 btf_id)
->  {
->         return false;
-> diff --git a/kernel/bpf/bpf_inode_storage.c b/kernel/bpf/bpf_inode_storag=
-e.c
-> index 0da8d923e39d..f9e81060c1f4 100644
-> --- a/kernel/bpf/bpf_inode_storage.c
-> +++ b/kernel/bpf/bpf_inode_storage.c
-> @@ -178,6 +178,15 @@ static int notsupp_get_next_key(struct bpf_map *map,=
- void *key,
->
->  static struct bpf_map *inode_storage_map_alloc(union bpf_attr *attr)
->  {
-> +       /*
-> +        * Do not allow allocation of BPF_MAP_TYPE_INODE_STORAGE if the B=
-PF LSM
-> +        * was not initialized by the LSM framework at boot. Without prop=
-er
-> +        * initialization, the BPF inode security blob offset remains unp=
-repared,
-> +        * causing bpf_inode() to calculate an invalid memory offset and =
-corrupt
-> +        * inode->i_security.
-> +        */
-> +       if (!bpf_lsm_initialized)
-> +               return ERR_PTR(-EOPNOTSUPP);
->         return bpf_local_storage_map_alloc(attr, &inode_cache);
->  }
->
-> diff --git a/security/bpf/hooks.c b/security/bpf/hooks.c
-> index 40efde233f3a..7b98f5d1e2be 100644
-> --- a/security/bpf/hooks.c
-> +++ b/security/bpf/hooks.c
-> @@ -7,6 +7,8 @@
->  #include <linux/bpf_lsm.h>
->  #include <uapi/linux/lsm.h>
->
-> +bool bpf_lsm_initialized __ro_after_init;
-> +
->  static struct security_hook_list bpf_lsm_hooks[] __ro_after_init =3D {
->         #define LSM_HOOK(RET, DEFAULT, NAME, ...) \
->         LSM_HOOK_INIT(NAME, bpf_lsm_##NAME),
-> @@ -24,6 +26,7 @@ static int __init bpf_lsm_init(void)
->  {
->         security_add_hooks(bpf_lsm_hooks, ARRAY_SIZE(bpf_lsm_hooks),
->                            &bpf_lsmid);
-> +       bpf_lsm_initialized =3D true;
->         pr_info("LSM support for eBPF active\n");
->         return 0;
->  }
-> --
-> 2.55.0.rc0.799.gd6f94ed593-goog
->
->
+Add internal helper backing_file_set_user_path() for the only
+two cases that need to modify backing_file fields.
+
+Signed-off-by: Amir Goldstein <amir73il@gmail.com>
+Link: https://lore.kernel.org/20250607115304.2521155-2-amir73il@gmail.com
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+Signed-off-by: Cai Xinchen <caixinchen1@huawei.com>
+---
+ fs/backing-file.c  |  4 ++--
+ fs/file_table.c    | 13 ++++++++-----
+ fs/internal.h      |  1 +
+ include/linux/fs.h |  6 +++---
+ 4 files changed, 14 insertions(+), 10 deletions(-)
+
+diff --git a/fs/backing-file.c b/fs/backing-file.c
+index 09a9be945d45..892361c31c3d 100644
+--- a/fs/backing-file.c
++++ b/fs/backing-file.c
+@@ -41,7 +41,7 @@ struct file *backing_file_open(const struct path *user_path, int flags,
+ 		return f;
+ 
+ 	path_get(user_path);
+-	*backing_file_user_path(f) = *user_path;
++	backing_file_set_user_path(f, user_path);
+ 	error = vfs_open(real_path, f);
+ 	if (error) {
+ 		fput(f);
+@@ -65,7 +65,7 @@ struct file *backing_tmpfile_open(const struct path *user_path, int flags,
+ 		return f;
+ 
+ 	path_get(user_path);
+-	*backing_file_user_path(f) = *user_path;
++	backing_file_set_user_path(f, user_path);
+ 	error = vfs_tmpfile(real_idmap, real_parentpath, f, mode);
+ 	if (error) {
+ 		fput(f);
+diff --git a/fs/file_table.c b/fs/file_table.c
+index 2a08bc93b0b9..75a1908d51a9 100644
+--- a/fs/file_table.c
++++ b/fs/file_table.c
+@@ -48,17 +48,20 @@ struct backing_file {
+ 	struct path user_path;
+ };
+ 
+-static inline struct backing_file *backing_file(struct file *f)
+-{
+-	return container_of(f, struct backing_file, file);
+-}
++#define backing_file(f) container_of(f, struct backing_file, file)
+ 
+-struct path *backing_file_user_path(struct file *f)
++struct path *backing_file_user_path(const struct file *f)
+ {
+ 	return &backing_file(f)->user_path;
+ }
+ EXPORT_SYMBOL_GPL(backing_file_user_path);
+ 
++void backing_file_set_user_path(struct file *f, const struct path *path)
++{
++	backing_file(f)->user_path = *path;
++}
++EXPORT_SYMBOL_GPL(backing_file_set_user_path);
++
+ static inline void backing_file_free(struct backing_file *ff)
+ {
+ 	path_put(&ff->user_path);
+diff --git a/fs/internal.h b/fs/internal.h
+index 8c1b7acbbe8f..a4352d333c61 100644
+--- a/fs/internal.h
++++ b/fs/internal.h
+@@ -100,6 +100,7 @@ extern void chroot_fs_refs(const struct path *, const struct path *);
+ struct file *alloc_empty_file(int flags, const struct cred *cred);
+ struct file *alloc_empty_file_noaccount(int flags, const struct cred *cred);
+ struct file *alloc_empty_backing_file(int flags, const struct cred *cred);
++void backing_file_set_user_path(struct file *f, const struct path *path);
+ 
+ static inline void file_put_write_access(struct file *file)
+ {
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 87720e1b5419..70bbc00a2bd2 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2738,7 +2738,7 @@ struct file *dentry_open(const struct path *path, int flags,
+ 			 const struct cred *creds);
+ struct file *dentry_create(const struct path *path, int flags, umode_t mode,
+ 			   const struct cred *cred);
+-struct path *backing_file_user_path(struct file *f);
++struct path *backing_file_user_path(const struct file *f);
+ 
+ /*
+  * When mmapping a file on a stackable filesystem (e.g., overlayfs), the file
+@@ -2750,14 +2750,14 @@ struct path *backing_file_user_path(struct file *f);
+  * by fstat() on that same fd.
+  */
+ /* Get the path to display in /proc/<pid>/maps */
+-static inline const struct path *file_user_path(struct file *f)
++static inline const struct path *file_user_path(const struct file *f)
+ {
+ 	if (unlikely(f->f_mode & FMODE_BACKING))
+ 		return backing_file_user_path(f);
+ 	return &f->f_path;
+ }
+ /* Get the inode whose inode number to display in /proc/<pid>/maps */
+-static inline const struct inode *file_user_inode(struct file *f)
++static inline const struct inode *file_user_inode(const struct file *f)
+ {
+ 	if (unlikely(f->f_mode & FMODE_BACKING))
+ 		return d_inode(backing_file_user_path(f)->dentry);
+-- 
+2.18.0.huawei.25
+
