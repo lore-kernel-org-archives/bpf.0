@@ -1,215 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE7F723741;
-	Mon, 29 Jun 2026 07:09:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5453CF054
+	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 07:23:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782716986; cv=none; b=ok9cDhI6w1VC0XYMZP0pd39sbrowMVOKXr2ou//YvBp8c8rrvZYn3KY56tIhGcF3TCaGj7/FBkKVJqrHOsJMCPSacQFj8UQPw3ifXwhzwtuhsNdOLEbFOG8JHhXnlekDo4CnfDVUg8nOKwgMRKPwQbNr1dqq48VWILt8cu78uts=
+	t=1782717805; cv=none; b=VkiZmM0nurauJIJhTZ7Yp+P+HBq10zBHBBS3bQl5hpd/M0ybCtZmY6KiDmwyMeql/C8xy6w7DnxzlpwFiUzjS7Rai/U82hM3bemMNRCDpnlnHMT7EDkW/Xen5FWx6Ldc06+eT1gEVb6UYo8YCaWxUzTU+aGgw+dcEKKlzIB2BU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782716986; c=relaxed/simple;
-	bh=5AZeoKjQfqAuawD84u77T0wQ5TAPKWLpqAo2IoSfV/8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=G6ia7JfCU9UPB+Fq8Eeg1dpEmLv1WpKdd85sux5QETq1GtbZ9I0oMrtyxttWFcMLIiiAD+DSXqd9Z6xbUYyWZe3AT+pUWBxsAdde3YdWCgJaBGmY5WaTCDVGrfhp7zK4UJififbI6y8SxHtEiAl61ZAMHq/MgJS+0SI12T8lIjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X87y6/Fq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782717805; c=relaxed/simple;
+	bh=F4mUr5fBW1c1Axigt0EZGxBodn37EyWGG5Bvapzj6BA=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=LOHw9L2g6FfQIEUBQv1pTTSTV38uLrq+VeJXzMGCO46hz4N9DPLMS6VGsMVokxIHijvBT/2FxJR524u1QYh6ozGGWhELWret+1T7RX4ia2nCCsrDUNQIEU2Emb5lokFLIkbcyMVWH68icyqz0HR9TeAvSeVtVfQcYxnNs/RMyp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--clecigne.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KFoMNT+Z; arc=none smtp.client-ip=209.85.208.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--clecigne.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X87y6/Fq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1925F1F000E9;
-	Mon, 29 Jun 2026 07:09:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782716984;
-	bh=1yJqsa1RfcrjeTwKckOxOGrMFUnt+B0Bt+BIiSyD2qQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=X87y6/FqzlQtFCJ1kEukObmXzPcAB5/o9JtB4wh8f2iGGUtCxmCjfL3UO6HxUF8wl
-	 i4KcqyJDJ+DA0FpBZRan2VJhzetrpG2OXy0lxQqepIj9ME2ZSvZj+a+80JJEURGjEC
-	 9cWFzbJPcCBQ/8Kyem0q8BoeCaJmwm3waBTRHNgVcY/6GO2wtV96boqeZhrMM8rwD/
-	 tX2e7dEK0+q/CT0ZAIUjCPriiZ05z/lFPBxq6Zx0ORePVviN6JfG1hyb30KlDxkEvr
-	 Pft5JS06KEpwLdVLfnkUYbwOuAIx3deUnfsWtETmvsfwP52e8VptFxGobGr2ELjYv9
-	 wAsJsNznbyCnQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 stable/linux-6.12.y 3/3] selinux: fix overlayfs
- mmap() and mprotect() access checks
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Cai Xinchen" <caixinchen1@huawei.com>
-Cc: selinux@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260629070338.578858-4-caixinchen1@huawei.com>
-References: <20260629070338.578858-1-caixinchen1@huawei.com>
- <20260629070338.578858-4-caixinchen1@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 29 Jun 2026 07:09:37 +0000
-Message-Id: <20260629070944.1925F1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KFoMNT+Z"
+Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-69843ac68d0so1543882a12.3
+        for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 00:23:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1782717801; x=1783322601; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=esIyG5vSRRrObBzd9FBYvLdlPmWTHEKEhlqipjb5aLM=;
+        b=KFoMNT+Z3IUv44V2WDO4nmwk0jVWhc2avf3twLkEiT0zC+bo+OV5BorxbIRkAtr4Se
+         wJMhGJM4b7eDiIvkabthe7LoUzlt/UuiFddM+e0tI5O5eKxMffGjqxQ4Ukf4lVaXIWzQ
+         myNLd55O2h5efC5BE4jh4pp06AtSTl0+4oiemVCIgEi9E1+UzitUohSj1QqWWLLqS8vV
+         QCk1DLwtaDzCB15iIn4PEUgtKinmBz1/03vLlQ1ahFukJYepsjfuja2q1r7grmCfmh6T
+         VnXNiH5qYiUg2ibLbFEUKX6ruy9Dv3vGTU99cavVObLewmbm0fzStxbY93vHFc7kzHoF
+         Y4WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782717801; x=1783322601;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=esIyG5vSRRrObBzd9FBYvLdlPmWTHEKEhlqipjb5aLM=;
+        b=YHUDq4vm6nM0P0YwLNf3xLPvC2cW8iaqkvsASWUdYsXXEV9MPN5u9P1FHfuHmAfN9b
+         IbgY7meP1y/1lMYJczerNLWPT2bEQcq9fWoV0RzmR+ejqRs4RvYoDAfdn2zr1lv8rSxV
+         tqx6AyYDDVqAKJo7eXvo6v2y/Lu8/k5HQC4ur82tPLNScMJrlwru0eoPkGatnp1pjQXK
+         teUIGw2LuVLAJJDpPLgxkf11iWU0UQCn/ERlb6YRFhkG8gRDEENwXMpJaUa2r6jkoG/P
+         SaxpaBsIzMqad1HVc7nDuHPqJW5SIcM3TOPmSxXDCMUPamr+uqIatFdpbd8kOVpj3wYB
+         UUOw==
+X-Forwarded-Encrypted: i=1; AHgh+RpssvpFG0hAMkrtxE4MwGRAg3hn/hshPzXkbXVWn6eyVo/wfVInwQ07kiOB1nWF8/Azstg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5Gp3PcrSeE1Fjqj1v4Kc5wZO+Q1hEgkSi3CmEypVdsTXQkxW5
+	8gHoM4osH4k0fffYuqN4cjTOXjjRFt+12MUo/PSSmxj1HG9Tts8HWpE+xxDwlhLzDJSQcAlL+Ri
+	mpG6vy2QxtqjVGA==
+X-Received: from edyd4.prod.google.com ([2002:a05:6402:784:b0:698:3f24:d08a])
+ (user=clecigne job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6402:190b:b0:697:c0f6:394c with SMTP id 4fb4d7f45d1cf-69810a44a6dmr5463438a12.9.1782717800656;
+ Mon, 29 Jun 2026 00:23:20 -0700 (PDT)
+Date: Mon, 29 Jun 2026 07:22:58 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.55.0.rc0.799.gd6f94ed593-goog
+Message-ID: <20260629072300.1664622-1-clecigne@google.com>
+Subject: [PATCH v3] xsk: fix memory corruptions in net/core/xdp.c
+From: Clement Lecigne <clecigne@google.com>
+To: aleksander.lobakin@intel.com, edumazet@google.com, netdev@vger.kernel.org
+Cc: clecigne@google.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kuba@kernel.org, sdf@fomichev.me, horms@kernel.org, john.fastabend@gmail.com, 
+	ast@kernel.org, daniel@iogearbox.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+From: Cl=C3=A9ment Lecigne <clecigne@google.com>
 
-New issues:
-- [High] The patch erroneously applies the process-centric `PROCESS__EXECME=
-M` and `FILE__EXECMOD` permission checks to the backing file's mounter cred=
-entials instead of the executing process.
+Commit 560d958c6c68 ("xsk: add generic XSk &xdp_buff -> skb conversion")
+introduced a vulnerability in the handling of XDP_PASS for AF_XDP zero-copy
+frames.
 
-Pre-existing issues:
-- [High] The code incorrectly uses `vma->vm_file` as a proxy for file-backe=
-d VMA classification, which violates VMA handling rules and triggers incorr=
-ect SELinux `FILE__EXECMOD` checks on anonymous `/dev/zero` mappings.
---
+Note: Currently, this specific AF_XDP zero-copy conversion path is only
+reachable from the drivers/net/ethernet/intel/ice and
+drivers/net/ethernet/intel/idpf drivers.
 
-commit 555f3d33101bb91626c5a624dddd21197775bb31
-Author: Paul Moore <paul@paul-moore.com>
+When building an skb, xdp_build_skb_from_zc() uses the chunk size
+(xdp->frame_sz) for the allocation. However, napi_build_skb() automatically
+reserves space at the end of the allocation for the skb_shared_info
+structure.=20
 
-selinux: fix overlayfs mmap() and mprotect() access checks
+Most high performance UMEM applications use 4K chunks, where the
+corruption cannot happen. However, if the UMEM is configured with 2KB
+chunks (a very common configuration to maximize packet density in memory),
+a standard 1500 MTU packet will trigger the corruption because the required
+space exceeds the 2048 byte chunk size:
 
-This commit updates the SELinux security model for overlayfs by applying
-access controls for mmap() and mprotect(). It introduces a new backing
-file LSM hook and uses the backing file API to enforce mprotect() access
-controls properly for stacked filesystems.
+Headroom (256) + Packet (1514) + skb_shared_info (320) =3D 2090 bytes
 
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index 8e31d3b60fc62..1b89c8d5fa2fc 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-[ ... ]
-> @@ -3821,36 +3868,80 @@ static int selinux_mmap_addr(unsigned long addr)
-[ ... ]
-> +static int selinux_mmap_backing_file(struct vm_area_struct *vma,
-> +				     struct file *backing_file,
-> +				     struct file *user_file __always_unused)
-> +{
-> +	unsigned long prot =3D 0;
-> +
-> +	/* translate vma->vm_flags perms into PROT perms */
-> +	if (vma->vm_flags & VM_READ)
-> +		prot |=3D PROT_READ;
-> +	if (vma->vm_flags & VM_WRITE)
-> +		prot |=3D PROT_WRITE;
-> +	if (vma->vm_flags & VM_EXEC)
-> +		prot |=3D PROT_EXEC;
-> +
-> +	return selinux_mmap_file_common(backing_file->f_cred, backing_file,
-> +					prot, vma->vm_flags & VM_SHARED);
+Because 2090 bytes > 2048 bytes and __skb_put() does not perform bounds
+checking, the memcpy() writes past the available linear data area and
+corrupts the skb_shared_info structure. This can lead to arbitrary code
+execution if pointers like destructor_arg are overwritten.
 
-[Severity: High]
-Does this apply the process-centric PROCESS__EXECMEM permission check
-to the mounter's credentials instead of the executing process?
+Additionally, in xdp_copy_frags_from_zc(), the allocation size is set
+strictly to the fragment size (len), but the subsequent memcpy() uses
+LARGEST_ALIGN(len). This mismatch results in an out-of-bounds write of
+up to 7 bytes, which triggers KASAN warnings and is unsafe despite typical
+page pool allocator padding.
 
-selinux_mmap_file_common() eventually calls __file_map_prot_check(), which
-evaluates the PROCESS__EXECMEM permission against the credentials provided.
-When passed the mounter's credentials here (backing_file->f_cred), it
-seems to evaluate the mounter domain instead of the current task. This
-could spuriously deny mapping W+X memory on overlayfs files, or allow an
-unauthorized process to do so if the mounter has execmem.
+Fix the skb allocation in xdp_build_skb_from_zc() by dynamically
+calculating the exact truesize required using SKB_HEAD_ALIGN() to
+properly account for the headroom, the LARGEST_ALIGN(len), and the
+skb_shared_info overhead.
 
->  }
-> =20
->  static int selinux_file_mprotect(struct vm_area_struct *vma,
->  				 unsigned long reqprot __always_unused,
->  				 unsigned long prot)
->  {
-> +	int rc;
->  	const struct cred *cred =3D current_cred();
->  	u32 sid =3D cred_sid(cred);
-> +	const struct file *file =3D vma->vm_file;
-> +	bool backing_file;
-> +	bool shared =3D vma->vm_flags & VM_SHARED;
-> +
-> +	/* check if we need to trigger the "backing files are awful" mode */
-> +	backing_file =3D file && (file->f_mode & FMODE_BACKING);
-> =20
->  	if (default_noexec &&
->  	    (prot & PROT_EXEC) && !(vma->vm_flags & VM_EXEC)) {
-> -		int rc =3D 0;
->  		/*
->  		 * We don't use the vma_is_initial_heap() helper as it has
->  		 * a history of problems and is currently broken on systems
-> @@ -3864,11 +3955,15 @@ static int selinux_file_mprotect(struct vm_area_s=
-truct *vma,
->  		    vma->vm_end <=3D vma->vm_mm->brk) {
->  			rc =3D avc_has_perm(sid, sid, SECCLASS_PROCESS,
->  					  PROCESS__EXECHEAP, NULL);
-> -		} else if (!vma->vm_file && (vma_is_initial_stack(vma) ||
-> +			if (rc)
-> +				return rc;
-> +		} else if (!file && (vma_is_initial_stack(vma) ||
->  			    vma_is_stack_for_current(vma))) {
+Fix the out-of-bounds write in xdp_copy_frags_from_zc() by rounding up
+the allocation request using LARGEST_ALIGN(len) to match the copy
+operation.
 
-[Severity: High]
-This is a pre-existing issue, but does using !file correctly identify
-anonymous VMAs?
+Fixes: 560d958c6c68 ("xsk: add generic XSk &xdp_buff -> skb conversion")
+CC: Alexander Lobakin <aleksander.lobakin@intel.com>
+CC: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Cl=C3=A9ment Lecigne <clecigne@google.com>
+---
+Changes since v2:
+ - Used LARGEST_ALIGN to calculate the len to account for the aligned memcp=
+y.
+ - Fixed the commit message to include the idpf driver.
 
-According to the VMA guidelines, a VMA can have a valid vm_file but still
-be anonymous, such as private mappings of /dev/zero. The canonical test for
-an anonymous VMA is vma_is_anonymous(vma).
+Changes since v1:
+ - Used SKB_HEAD_ALIGN to properly calculate the required allocation size
+   including the skb_shared_info overhead.
+ - Re-ordered variable declarations.
 
->  			rc =3D avc_has_perm(sid, sid, SECCLASS_PROCESS,
->  					  PROCESS__EXECSTACK, NULL);
-> -		} else if (vma->vm_file && vma->anon_vma) {
-> +			if (rc)
-> +				return rc;
-> +		} else if (file && vma->anon_vma) {
-
-[Severity: High]
-This is a pre-existing issue, but checking for a non-null file and anon_vma
-as a proxy for file-backed VMA classification seems incorrect.
-
-Private mappings of /dev/zero have a vm_file and set anon_vma after a COW
-fault, which would cause this code to erroneously check FILE__EXECMOD on
-them. Should this use !vma_is_anonymous(vma) instead to safely handle these
-cases?
-
->  			/*
->  			 * We are making executable a file mapping that has
->  			 * had some COW done. Since pages might have been
-> @@ -3876,13 +3971,29 @@ static int selinux_file_mprotect(struct vm_area_s=
-truct *vma,
->  			 * modified content.  This typically should only
->  			 * occur for text relocations.
->  			 */
-> -			rc =3D file_has_perm(cred, vma->vm_file, FILE__EXECMOD);
-> +			rc =3D __file_has_perm(cred, file, FILE__EXECMOD,
-> +					     backing_file);
-> +			if (rc)
-> +				return rc;
-> +			if (backing_file) {
-> +				rc =3D file_has_perm(file->f_cred, file,
-> +						   FILE__EXECMOD);
-
-[Severity: High]
-Does this apply the process-centric FILE__EXECMOD permission check to the
-mounter's credentials? Checking file->f_cred evaluates if the mounter can
-execute modified file memory, rather than checking the executing process.
-
-> +				if (rc)
-> +					return rc;
-> +			}
->  		}
-> +	}
-> +
-> +	rc =3D __file_map_prot_check(cred, file, prot, shared, backing_file);
-> +	if (rc)
-> +		return rc;
-> +	if (backing_file) {
-> +		rc =3D file_map_prot_check(file->f_cred, file, prot, shared);
-
-[Severity: High]
-Does this have the same issue of passing the mounter's credentials down to
-the PROCESS__EXECMEM check?
-
-By passing file->f_cred into file_map_prot_check(), the mounter is
-evaluated for process-centric permissions instead of the current task.
-
-> +		if (rc)
-> +			return rc;
->  	}
-> =20
-> -	return file_map_prot_check(vma->vm_file, prot, vma->vm_flags&VM_SHARED);
-> +	return 0;
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260629070338.5788=
-58-1-caixinchen1@huawei.com?part=3D3
+---
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 9890a30584ba..7e39f17ad407 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -698,8 +698,8 @@ static noinline bool xdp_copy_frags_from_zc(struct sk_b=
+uff *skb,
+=20
+ 	for (u32 i =3D 0; i < nr_frags; i++) {
+ 		const skb_frag_t *frag =3D &xinfo->frags[i];
+-		u32 len =3D skb_frag_size(frag);
+-		u32 offset, truesize =3D len;
++		u32 offset, len =3D skb_frag_size(frag);
++		u32 truesize =3D LARGEST_ALIGN(len);
+ 		struct page *page;
+=20
+ 		page =3D page_pool_dev_alloc(pp, &offset, &truesize);
+@@ -738,9 +738,10 @@ static noinline bool xdp_copy_frags_from_zc(struct sk_=
+buff *skb,
+  */
+ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp)
+ {
++	u32 headroom =3D xdp->data_meta - xdp->data_hard_start;
+ 	const struct xdp_rxq_info *rxq =3D xdp->rxq;
+-	u32 len =3D xdp->data_end - xdp->data_meta;
+-	u32 truesize =3D xdp->frame_sz;
++	u32 len =3D LARGEST_ALIGN(xdp->data_end - xdp->data_meta);
++	u32 truesize =3D SKB_HEAD_ALIGN(headroom + len);
+ 	struct sk_buff *skb =3D NULL;
+ 	struct page_pool *pp;
+ 	int metalen;
+@@ -762,7 +763,7 @@ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *=
+xdp)
+ 	}
+=20
+ 	skb_mark_for_recycle(skb);
+-	skb_reserve(skb, xdp->data_meta - xdp->data_hard_start);
++	skb_reserve(skb, headroom);
+=20
+ 	memcpy(__skb_put(skb, len), xdp->data_meta, LARGEST_ALIGN(len));
+=20
