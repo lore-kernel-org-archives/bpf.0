@@ -1,87 +1,82 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8FE3B71BA
-	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 09:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A613C456D
+	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 10:22:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782726716; cv=none; b=W9Awxa7Rj1whFlZtjlzdELEi9MUtne051R3M36UV4ZlLpvOMrdD3qovD3molYL8AQnY67v7jasfFXBVy3eRE0fMWmmH0JyVD/cBLUYBWr3ZrrOFa3anFg+uO+Y+TGRtLfiGFDCTQtdRXq/h9443+GjcWX9t1Prr5Rq++D9GZrV4=
+	t=1782728535; cv=none; b=eETGgRwRJ+jG9Z8bE6fo0ds+vOido0Sft8hBnxOAR+4ACEMHA3acZ27vgq5VyLXAUw7VmoGh4tZIsdCgsrtXB+ly0aXdb9OqzSrlBLi8LT+nQ72kx/c8gJVggjexq7WmZsdMCCMhvpSd9HUr2PfPKCbOOcxhkQSWFKBh46PRyRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782726716; c=relaxed/simple;
-	bh=jT/07ZjnEljCDkg1Sui4v5JLloAdoehB4ms4+KILrac=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CoKKXVVF8Zz7Lr04shWbm9DpyMuzQoNsbzYWqqu491Kkd65rw3NODs81voLgr0fexdSKjWZEesCAqDOFVFud0gE0dVNWT23chopSqw+gVuDxmJ2HaZ//ZHESPbsQL+zd7p7OB9gu1vG2iESoy+RNe/+WdhJXfl6Bk/HeqR7qblk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bCfx8ehP; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782728535; c=relaxed/simple;
+	bh=jwLgLR3nYwBK3/BuT+gD2ATqKLN7xJeOS1tgrZOALpE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=eI3rlA91BKJ9ar7ZJfLVaxH/9YiXpFoVTvHJv5FP0djeXmv6auP1AGcnAhDr2fbDUdtHtk5SFaOZkvp4WyQJYteWwPChPHeG3CqGsxyG41Do0yuHKiHA3GyYsroghbTSwXGqhgaTIMl4p5dDOcgSY7kuKgYErM0sJTO5e2/gvl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=ggLBy4V1; arc=none smtp.client-ip=209.85.222.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bCfx8ehP"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-37cb36ca63bso1300736a91.0
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 02:51:54 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="ggLBy4V1"
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-92e5c9211d2so30066785a.1
+        for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 03:22:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782726714; x=1783331514; darn=vger.kernel.org;
+        d=mojatatu.com; s=google; t=1782728532; x=1783333332; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZntHgB1VK83jSGRR6wDqH2TYAXRNVfVNGYQkueQtUtc=;
-        b=bCfx8ehPCTE0J0Qca0r+V0+q7TfDPfuak5II0H7mxn+smEAzEY+0pJvzq8I5eNkFF2
-         1IzzHgjqF9JCYXPrNS2ZtkER/jwbBZe4wN68YCckYXt5mCu7tAepva9B5xak5nErdWz9
-         cdFrAowT+PsxCf5WYoMUUMNTjlhVppRtUcqbVsqJ73b7U4Gfk8ZF8tJ/U/T6eX5uTiQn
-         wjUYrB+pDM+Dx1T0XNwvcLmNBHYMN7CEYMR1eljfAs0n+B12E3whZzjxbRr5mdOvmrdp
-         8TWzfW4X4DrsSGNgZsA3/Qta6OyNUZgp4MctoRqwLlMalP2Uyhi/gmjraCl6TLKKyd/7
-         t9RA==
+        bh=o6OASslZi7YxFlKXAz00T8+s1qFuKwk4pzWc3ZIqweI=;
+        b=ggLBy4V1W0LbmCKi/2CazVXEZUlnFpJGI7IpQ8C6hf43LMGWg/y7xDO/AhVIeGzdo1
+         dzRfWThPGyMVVqXzjBzn3MXV6fAAhGbtBNGSrW857aOqnM/vmGhwBQGTVuz78M5HnBVE
+         NmOVH3a8r94j03HImkuz6qObCE09I1qRiuT+I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782726714; x=1783331514;
+        d=1e100.net; s=20251104; t=1782728532; x=1783333332;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZntHgB1VK83jSGRR6wDqH2TYAXRNVfVNGYQkueQtUtc=;
-        b=UsVHSt/ereIMXad+Rf+hn2pPeGtCXNimhEqG3sO5iacUMmtOk6QYDNui8DLrZLa/Ck
-         fX82VqhyV/MF6SQFUpDAJ5LHaq43bUIVyQMdXTV7FA5bc/ER3O2jakelSxin4KipP+ij
-         zCXHlAvaRH4sGUHorqZOL2WTcjcSkOvKf1l6BBpG3xWDv06Do1EeIPEIj8NQCOQw2EVQ
-         sW2XE3xlruOkdzJDGiuvhrbYlowHRxA1xYMpXIL+r88BEbg7SY0HAV4RmcD7g9sp6gvC
-         ak/Yjj5og32LoT/IAn90vFkODjR0iVDYdlVHn3LgZ236wWgz/uJ955ZQpeFO6ntWC7nX
-         N4YA==
-X-Forwarded-Encrypted: i=1; AHgh+RpUhXSiy3uejqZl+t5bbT9R1AYEmFrq4plz0lqmhDxE0eCi+NOUoz38Bf+BwlKYOVsY0oA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwptUPPiRhb5Q8n4wt0G7vQ52fqEmHm6qD5YJolqbtX5//L+5Oq
-	f/m1s7OGxI1St385tQEPwhDzwdRgZJNikiXoeJTNAu/ayOyGYTuVNgtJ
-X-Gm-Gg: AfdE7cmB5nzOX6HcdquKlIPe8bWv/h+QOD3JUDYjiBW5odt5RDtC5pGAlG4ZaRDgBTt
-	8PZM/bBFL1zzRzCHdSx8u1zp+L1v8oHqz6iEGNQgJFltEVqaQw6T0k/zWYz0Wtc45mpoiGYchAJ
-	w65GliELZGDgiR9MCofmH/yl2zzSa+50ju8JV9YvOB1JQqD9wD86ysXEFYJcgLFOhf30yQO6UBH
-	2KKlkVmZjYfy8goUdjf8UvESxZ6pPeJllONdsEi2OjQaJOP111pT2NMPHOhx5TqHKOcFFbRbjB0
-	vnaYQLbOsU7zSbyQmgTxTPxSpXb+gMMJAS9hfyQr+tlzlt1ukgOOnmNa3jQ3mS5S9j6YdAX4aAJ
-	GV89eJ+HJQquwWp8DJdd7jdNuXOHcsHr2hxibbOIp7WLKOZRsUetUyEFyleFaivCblx2+ewZ0JW
-	HfNDZYfe85u8fo4lEEJsSGHlJ2LA7EL44wUOcqkY0K3QQcbD4uLGg=
-X-Received: by 2002:a17:90b:57cc:b0:37d:85cd:1367 with SMTP id 98e67ed59e1d1-37dfa2363cbmr14496003a91.15.1782726713861;
-        Mon, 29 Jun 2026 02:51:53 -0700 (PDT)
-Received: from cps-manycore-1.. ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37e1c93272fsm5550432a91.14.2026.06.29.02.51.48
+        bh=o6OASslZi7YxFlKXAz00T8+s1qFuKwk4pzWc3ZIqweI=;
+        b=kGovZBAxAD4b6VoXC98mIxCpXA1rSqevjm3AcWHgeh2HUUPhLoGX4XxUe0WG975qW0
+         5jruilH0ABmLZjI2PoDdOA0APLOUbLtQzeaR1gJ2Y0enSNLTQjxgP01OsK8blg1zGNiE
+         JEVv7Qi9ilV06BosJgm/jel/2a1vA4v9SJ/j8rAe7Ye/l8AxRizO8x855g369uyir0xC
+         2PPshs3UkpcYLlYoFdz5cPN3p3HLjaWJXo58STALNH5lTjzbcFRkg1psZGPpkck2K7ZG
+         bKyGresDLr3LqNexxoneiiaRdWhOJ53GthjsNeiInWHmB/1DbHQxZ5iUmoIztnuONGU5
+         1YRQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rog8N1CY3HgNQo7k4MMQRmcpRcQRckJXtt1lobza25M2229kX/ghkFT6tMcGN6os4nwwQ8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9DRKg+0eih65Ds3KrmDrt6+7UC8Ecd73M9PZPcmfDp/48aAwI
+	T6u1PXCeS9OUYwccfibuxELgKSJgAHMyXNWTrKE+XcJwsIe7/Kp1Y65pmlkRQEzy+g==
+X-Gm-Gg: AfdE7ckumXcXssTTPD9UheI3Ks//cuT6rlyZvvs3Tr/F8GuC1aM3lGT5JzZGrg/yPHp
+	T2k5oxm2SPZE34vTOjbuPBIXkKJwyeu0WuLRMJc5mFkMHeRZYAQhQ3v0s8jyaHLdzLi6fZsvH8t
+	UzwFQnvBWz7e/qlrsiDQC8hAfrfbpTtGvj5wmToRi28957ejFJvKuQGHDYTfiJ8N246LItYHX6G
+	xLgZVfvsAXAFCI7RZcWzHOsPtP6Eut4ufDNBOO0nObdycdlJKzYniGuJPnK5DxuRUXjJvnmpMPy
+	aVbhUkbZojhtBYX4oWfDMctdjiJloKdwUE1Pk2YXnGRoe1tz6YoNif8UwD6pVKJ5ifCnLbBwDTk
+	fhIaAFWoQRDbjGjW4zcNACwE0FzVxa7xnT/8mxhu/wmAYVuagiNozHc1xEexW/PYZEg5xMYZqRF
+	i7g3ts2g==
+X-Received: by 2002:a05:6214:194c:b0:8ee:df58:e5c5 with SMTP id 6a1803df08f44-8eedf58e938mr95782096d6.20.1782728532334;
+        Mon, 29 Jun 2026 03:22:12 -0700 (PDT)
+Received: from majuu.waya ([184.144.29.222])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ef0f2b9df0sm53589236d6.13.2026.06.29.03.22.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2026 02:51:53 -0700 (PDT)
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: "D . Wythe" <alibuda@linux.alibaba.com>,
-	Dust Li <dust.li@linux.alibaba.com>,
-	Sidraya Jayagond <sidraya@linux.ibm.com>,
-	Wenjia Zhang <wenjia@linux.ibm.com>,
-	"David S . Miller" <davem@davemloft.net>,
+        Mon, 29 Jun 2026 03:22:11 -0700 (PDT)
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+To: netdev@vger.kernel.org
+Cc: jiri@resnulli.us,
+	davem@davemloft.net,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Mahanta Jambigi <mjambigi@linux.ibm.com>,
-	Tony Lu <tonylu@linux.alibaba.com>,
-	Wen Gu <guwen@linux.alibaba.com>,
+	Paolo Abeni <pabeni@redhat.com>,
 	Simon Horman <horms@kernel.org>,
-	Karsten Graul <kgraul@linux.ibm.com>,
-	Guvenc Gulce <guvenc@linux.ibm.com>,
-	Ursula Braun <ubraun@linux.ibm.com>,
-	linux-rdma@vger.kernel.org,
-	linux-s390@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net v3] net/smc: fix out-of-bounds read when sk_user_data holds a sk_psock
-Date: Mon, 29 Jun 2026 09:51:33 +0000
-Message-ID: <20260629095140.679754-1-rhkrqnwk98@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	toke@toke.dk,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Petr Machata <petrm@nvidia.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	linux-rt-devel@lists.linux.dev,
+	bpf@vger.kernel.org,
+	security@kernel.org,
+	stable@vger.kernel.org,
+	Jamal Hadi Salim <jhs@mojatatu.com>
+Subject: [PATCH net 0/3 v2] Fix broken TC_ACT_REDIRECT
+Date: Mon, 29 Jun 2026 06:21:54 -0400
+Message-Id: <20260629102157.737306-1-jhs@mojatatu.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -90,89 +85,77 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A passive-open child inherits the listener's smc_clcsock_data_ready().
-sk_clone_lock() clears its sk_user_data to NULL because the listener tagged
-it SK_USER_DATA_NOCOPY. Until accept restores the callback, a BPF sock_ops
-program can add the established child to a sockmap, and sk_psock_init()
-installs a sk_psock into the NULL sk_user_data. The inherited callback then
-reads it back through smc_clcsock_user_data(), which strips only NOCOPY,
-takes the sk_psock for an smc_sock, and dereferences a clcsk_* field past
-its end:
+When sashiko-gemini[1] reviewed commit a8a02897f2b4
+("net/sched: cls_api: Handle TC_ACT_CONSUMED in tcf_qevent_handle") it
+ correctly pointed out the following:
 
-  BUG: KASAN: slab-out-of-bounds in smc_clcsock_data_ready+0x84/0x200 net/smc/af_smc.c:2637
-  Read of size 8 at addr ffff8880013b8674 by task syz.6.12484/67930
-   <IRQ>
-   smc_clcsock_data_ready+0x84/0x200 net/smc/af_smc.c:2637
-   tcp_urg+0x24d/0x360 net/ipv4/tcp_input.c:6264
-   tcp_rcv_state_process+0x280d/0x4940 net/ipv4/tcp_input.c:7336
-   tcp_child_process+0x371/0xa50 net/ipv4/tcp_minisocks.c:1002
-   tcp_v4_rcv+0x1eaa/0x2a00 net/ipv4/tcp_ipv4.c:2186
-   [...]
-   </IRQ>
+"
+This is a pre-existing issue, but does executing a redirect via a qevent
+filter cause a NULL pointer dereference?
+When tcf_qevent_handle() processes a TC_ACT_REDIRECT, it calls
+skb_do_redirect(). This eventually calls bpf_net_ctx_get_ri() which
+dereferences the task bpf_net_context:
+include/linux/filter.h:bpf_net_ctx_get_ri() {
+    ...
+    struct bpf_net_context *bpf_net_ctx = bpf_net_ctx_get();
+    if (!(bpf_net_ctx->ri.kern_flags & BPF_RI_F_RI_INIT)) {
+    ...
+}
+Since qevents are evaluated during enqueue, which runs within
+__dev_queue_xmit() after sch_handle_egress() has already executed and
+cleared the bpf_net_context pointer, will this dereference a NULL pointer?
+"
 
-  Allocated by task 67930:
-   sk_psock_init+0x142/0x740 net/core/skmsg.c:766
-   sock_hash_update_common+0xd3/0x990 net/core/sock_map.c:1010
-   bpf_sock_hash_update+0x114/0x170 net/core/sock_map.c:1229
-   __cgroup_bpf_run_filter_sock_ops+0x74/0xa0 kernel/bpf/cgroup.c:1727
-   tcp_init_transfer+0x1085/0x1100 net/ipv4/tcp_input.c:6693
-   [...]
+That issue is fixed in patch 1. See the commit log for details.
 
-Resolve the conflict on the write path. Reserve the child's sk_user_data
-with a NULL pointer tagged SK_USER_DATA_NOCOPY so sk_psock_init() returns
--EBUSY, and release it at accept. smc_clcsock_user_data() still strips the
-tag to NULL, so the inherited callback stays a no-op.
+Upon further investigation it turns out that TC_ACT_REDIRECT being returned
+from the egress qdiscs never actually worked. When an action returns that
+code we would silently loose it and the packet will never be redirected.
+After all those years, if nobody complained, my gut feel is it was never
+used by anyone with serious need for it.
+Patch 2 fixes it by 1) putting a warning out when someone does and 2) asking
+the core to drop the packet. At least this would help whoever is
+misconfiguring to diagnose the issue much faster.
+I had initially attempted to "fix" this and make it work, but unfortunately
+it's a bit ugly so i left i didnt think it was worth fixing
 
-Fixes: a60a2b1e0af1 ("net/smc: reduce active tcp_listen workers")
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+Apologies for the shotgun Cc - its what get_maintainer.pl told me to use.
+
+
+[1] https://sashiko.dev/#/patchset/20260620130749.226642-1-jhs%40mojatatu.com
+
 ---
-v3:
- - reserve sk_user_data on the write path instead of the read-side check (D. Wythe)
+Changes since v1 (address 3 sashiko comments):
+1)Patch 1: Address pre-existing issue to cover asynchronous qdisc enqueue
+  operations in particular if bpf_redirect() is invoked from an attached
+   ebpf program (the helper invokes bpf_net_ctx_get_ri())
+https://sashiko.dev/#/patchset/20260620130749.226642-1-jhs%40mojatatu.com
 
-v2:
- - https://lore.kernel.org/netdev/20260619150342.3626224-1-rhkrqnwk98@gmail.com/
+2)Patch 2: Explain in the commit message that it is actually design intent to
+  remove TC_ACT_REDIRECT from tcf_qevent_handle().
+https://sashiko.dev/#/patchset/20260626165156.169012-1-jhs@mojatatu.com?part=2
 
-v1:
- - https://lore.kernel.org/netdev/20260614120931.4041687-1-rhkrqnwk98@gmail.com/
-
- net/smc/af_smc.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index b5db69073e20..78f162344fe3 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -154,7 +154,11 @@ static struct sock *smc_tcp_syn_recv_sock(const struct sock *sk,
- 					       own_req, opt_child_init);
- 	/* child must not inherit smc or its ops */
- 	if (child) {
--		rcu_assign_sk_user_data(child, NULL);
-+		/* reserve sk_user_data so sockmap cannot claim the slot */
-+		write_lock_bh(&child->sk_callback_lock);
-+		__rcu_assign_sk_user_data_with_flags(child, NULL,
-+						     SK_USER_DATA_NOCOPY);
-+		write_unlock_bh(&child->sk_callback_lock);
- 
- 		/* v4-mapped sockets don't inherit parent ops. Don't restore. */
- 		if (inet_csk(child)->icsk_af_ops == inet_csk(sk)->icsk_af_ops)
-@@ -1773,6 +1777,7 @@ static int smc_clcsock_accept(struct smc_sock *lsmc, struct smc_sock **new_smc)
- 	/* new clcsock has inherited the smc listen-specific sk_data_ready
- 	 * function; switch it back to the original sk_data_ready function
- 	 */
-+	write_lock_bh(&new_clcsock->sk->sk_callback_lock);
- 	new_clcsock->sk->sk_data_ready = lsmc->clcsk_data_ready;
- 
- 	/* if new clcsock has also inherited the fallback-specific callback
-@@ -1786,6 +1791,9 @@ static int smc_clcsock_accept(struct smc_sock *lsmc, struct smc_sock **new_smc)
- 		if (lsmc->clcsk_error_report)
- 			new_clcsock->sk->sk_error_report = lsmc->clcsk_error_report;
- 	}
-+	/* release the slot reserved in smc_tcp_syn_recv_sock() */
-+	rcu_assign_sk_user_data(new_clcsock->sk, NULL);
-+	write_unlock_bh(&new_clcsock->sk->sk_callback_lock);
- 
- 	(*new_smc)->clcsock = new_clcsock;
- out:
--- 
-2.43.0
+3) Patch 3: be explicit with $EBPFDIR
+https://sashiko.dev/#/patchset/20260626165156.169012-1-jhs@mojatatu.com?part=3
+---
+ net/core/dev.c                                  | 31 +++++++++++++++----
+ include/net/pkt_cls.h                            | 13 +++++++
+ net/sched/cls_api.c                              |  6 +---
+ net/sched/sch_cake.c                             |  2 +-
+ net/sched/sch_drr.c                              |  2 +-
+ net/sched/sch_dualpi2.c                          |  2 +-
+ net/sched/sch_ets.c                              |  2 +-
+ net/sched/sch_fq_codel.c                         |  2 +-
+ net/sched/sch_fq_pie.c                           |  2 +-
+ net/sched/sch_hfsc.c                             |  2 +-
+ net/sched/sch_htb.c                              |  2 +-
+ net/sched/sch_multiq.c                           |  2 +-
+ net/sched/sch_prio.c                             |  2 +-
+ net/sched/sch_qfq.c                              |  2 +-
+ net/sched/sch_sfb.c                              |  2 +-
+ net/sched/sch_sfq.c                              |  2 +-
+ tools/testing/selftests/tc-testing/action-ebpf   | Bin 856 -> 9072 bytes
+ tools/testing/selftests/tc-testing/action.c      |   5 +++
+ .../tc-testing/tc-tests/infra/qdiscs.json        |  32 ++++++++++++++
+ 19 files changed, 87 insertions(+), 26 deletions(-)
 
