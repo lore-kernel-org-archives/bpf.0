@@ -1,52 +1,87 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191BA3F8ECA
-	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 08:55:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8FE3B71BA
+	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 09:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782723340; cv=none; b=q8ZKquoKBr01Sdyaw30RV7mnLY5JONtqB9hLrgpZM2ET381Epxd7+OGikkc+1aUYAnBHSoYWXODAk4IXIIyyC69jFEGA8y9yFs4Snjtwg/Bln63wgR6yC2khNS5Adm6XsBCA59VZvbE2FvBs7X4zTCIoyDMTpHjOnjh3y450kP4=
+	t=1782726716; cv=none; b=W9Awxa7Rj1whFlZtjlzdELEi9MUtne051R3M36UV4ZlLpvOMrdD3qovD3molYL8AQnY67v7jasfFXBVy3eRE0fMWmmH0JyVD/cBLUYBWr3ZrrOFa3anFg+uO+Y+TGRtLfiGFDCTQtdRXq/h9443+GjcWX9t1Prr5Rq++D9GZrV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782723340; c=relaxed/simple;
-	bh=koXZVkv+H5aUy7dUnGtXaW5EVAc1bVhhL44/jbs3IwY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pZH5NU/W/YLc1vkraCdWvJALYNNUOIyh7xAJ5hzWbhWbZInfmjrg66Ru2JEnJZeDJjnHnw3E7ZgbD+Nlvz3eopyvtgMQNyBebo9QZdvAbWq0uVMayf9yPjaMtAMK3p5mVgcqHmSBkiamv2kP8JaikhhLM365ikwAaoWX35dTxBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TXVkzdY4; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782726716; c=relaxed/simple;
+	bh=jT/07ZjnEljCDkg1Sui4v5JLloAdoehB4ms4+KILrac=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CoKKXVVF8Zz7Lr04shWbm9DpyMuzQoNsbzYWqqu491Kkd65rw3NODs81voLgr0fexdSKjWZEesCAqDOFVFud0gE0dVNWT23chopSqw+gVuDxmJ2HaZ//ZHESPbsQL+zd7p7OB9gu1vG2iESoy+RNe/+WdhJXfl6Bk/HeqR7qblk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bCfx8ehP; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TXVkzdY4"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782723324;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZeKM9BOzEu5hGJchdfeYskOLG9RiF3XxK5/9qzeUnhM=;
-	b=TXVkzdY4CG/j8CYOc1oXlbULUVWgDOzy0uYtUJAktYZFGAH+JKQZfwKbk1E85RSxTbkFvA
-	cLlNJJT4srV/aO9ozLPGaBUs0rk9b7q8m3XkCY0r4n6hhr6osi/7TRSy42MaKlf0R+AXkc
-	RlVIlX5WdTR3jPzghh9PbQsHbhH4DOQ=
-From: George Guo <dongtai.guo@linux.dev>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Hengqi Chen <hengqi.chen@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: WANG Xuerui <kernel@xen0n.name>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	George Guo <guodongtai@kylinos.cn>,
-	bpf@vger.kernel.org,
-	loongarch@lists.linux.dev,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bCfx8ehP"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-37cb36ca63bso1300736a91.0
+        for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 02:51:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782726714; x=1783331514; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZntHgB1VK83jSGRR6wDqH2TYAXRNVfVNGYQkueQtUtc=;
+        b=bCfx8ehPCTE0J0Qca0r+V0+q7TfDPfuak5II0H7mxn+smEAzEY+0pJvzq8I5eNkFF2
+         1IzzHgjqF9JCYXPrNS2ZtkER/jwbBZe4wN68YCckYXt5mCu7tAepva9B5xak5nErdWz9
+         cdFrAowT+PsxCf5WYoMUUMNTjlhVppRtUcqbVsqJ73b7U4Gfk8ZF8tJ/U/T6eX5uTiQn
+         wjUYrB+pDM+Dx1T0XNwvcLmNBHYMN7CEYMR1eljfAs0n+B12E3whZzjxbRr5mdOvmrdp
+         8TWzfW4X4DrsSGNgZsA3/Qta6OyNUZgp4MctoRqwLlMalP2Uyhi/gmjraCl6TLKKyd/7
+         t9RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782726714; x=1783331514;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZntHgB1VK83jSGRR6wDqH2TYAXRNVfVNGYQkueQtUtc=;
+        b=UsVHSt/ereIMXad+Rf+hn2pPeGtCXNimhEqG3sO5iacUMmtOk6QYDNui8DLrZLa/Ck
+         fX82VqhyV/MF6SQFUpDAJ5LHaq43bUIVyQMdXTV7FA5bc/ER3O2jakelSxin4KipP+ij
+         zCXHlAvaRH4sGUHorqZOL2WTcjcSkOvKf1l6BBpG3xWDv06Do1EeIPEIj8NQCOQw2EVQ
+         sW2XE3xlruOkdzJDGiuvhrbYlowHRxA1xYMpXIL+r88BEbg7SY0HAV4RmcD7g9sp6gvC
+         ak/Yjj5og32LoT/IAn90vFkODjR0iVDYdlVHn3LgZ236wWgz/uJ955ZQpeFO6ntWC7nX
+         N4YA==
+X-Forwarded-Encrypted: i=1; AHgh+RpUhXSiy3uejqZl+t5bbT9R1AYEmFrq4plz0lqmhDxE0eCi+NOUoz38Bf+BwlKYOVsY0oA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwptUPPiRhb5Q8n4wt0G7vQ52fqEmHm6qD5YJolqbtX5//L+5Oq
+	f/m1s7OGxI1St385tQEPwhDzwdRgZJNikiXoeJTNAu/ayOyGYTuVNgtJ
+X-Gm-Gg: AfdE7cmB5nzOX6HcdquKlIPe8bWv/h+QOD3JUDYjiBW5odt5RDtC5pGAlG4ZaRDgBTt
+	8PZM/bBFL1zzRzCHdSx8u1zp+L1v8oHqz6iEGNQgJFltEVqaQw6T0k/zWYz0Wtc45mpoiGYchAJ
+	w65GliELZGDgiR9MCofmH/yl2zzSa+50ju8JV9YvOB1JQqD9wD86ysXEFYJcgLFOhf30yQO6UBH
+	2KKlkVmZjYfy8goUdjf8UvESxZ6pPeJllONdsEi2OjQaJOP111pT2NMPHOhx5TqHKOcFFbRbjB0
+	vnaYQLbOsU7zSbyQmgTxTPxSpXb+gMMJAS9hfyQr+tlzlt1ukgOOnmNa3jQ3mS5S9j6YdAX4aAJ
+	GV89eJ+HJQquwWp8DJdd7jdNuXOHcsHr2hxibbOIp7WLKOZRsUetUyEFyleFaivCblx2+ewZ0JW
+	HfNDZYfe85u8fo4lEEJsSGHlJ2LA7EL44wUOcqkY0K3QQcbD4uLGg=
+X-Received: by 2002:a17:90b:57cc:b0:37d:85cd:1367 with SMTP id 98e67ed59e1d1-37dfa2363cbmr14496003a91.15.1782726713861;
+        Mon, 29 Jun 2026 02:51:53 -0700 (PDT)
+Received: from cps-manycore-1.. ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37e1c93272fsm5550432a91.14.2026.06.29.02.51.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2026 02:51:53 -0700 (PDT)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: "D . Wythe" <alibuda@linux.alibaba.com>,
+	Dust Li <dust.li@linux.alibaba.com>,
+	Sidraya Jayagond <sidraya@linux.ibm.com>,
+	Wenjia Zhang <wenjia@linux.ibm.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Mahanta Jambigi <mjambigi@linux.ibm.com>,
+	Tony Lu <tonylu@linux.alibaba.com>,
+	Wen Gu <guwen@linux.alibaba.com>,
+	Simon Horman <horms@kernel.org>,
+	Karsten Graul <kgraul@linux.ibm.com>,
+	Guvenc Gulce <guvenc@linux.ibm.com>,
+	Ursula Braun <ubraun@linux.ibm.com>,
+	linux-rdma@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH bpf v2] LoongArch: BPF: Fix tail call count pointer offset for arena programs
-Date: Mon, 29 Jun 2026 16:55:11 +0800
-Message-Id: <20260629085511.359546-1-dongtai.guo@linux.dev>
-In-Reply-To: <20260625083212.277417-1-dongtai.guo@linux.dev>
-References: <20260625083212.277417-1-dongtai.guo@linux.dev>
+	bpf@vger.kernel.org
+Subject: [PATCH net v3] net/smc: fix out-of-bounds read when sk_user_data holds a sk_psock
+Date: Mon, 29 Jun 2026 09:51:33 +0000
+Message-ID: <20260629095140.679754-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,93 +89,90 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-From: George Guo <guodongtai@kylinos.cn>
+A passive-open child inherits the listener's smc_clcsock_data_ready().
+sk_clone_lock() clears its sk_user_data to NULL because the listener tagged
+it SK_USER_DATA_NOCOPY. Until accept restores the callback, a BPF sock_ops
+program can add the established child to a sockmap, and sk_psock_init()
+installs a sk_psock into the NULL sk_user_data. The inherited callback then
+reads it back through smc_clcsock_user_data(), which strips only NOCOPY,
+takes the sk_psock for an smc_sock, and dereferences a clcsk_* field past
+its end:
 
-The tail call count (TCC) and its pointer occupy the two deepest slots of
-the callee-saved area set up by build_prologue(). An arena program reserves
-one extra word for REG_ARENA (arena_vm_start) right above them:
+  BUG: KASAN: slab-out-of-bounds in smc_clcsock_data_ready+0x84/0x200 net/smc/af_smc.c:2637
+  Read of size 8 at addr ffff8880013b8674 by task syz.6.12484/67930
+   <IRQ>
+   smc_clcsock_data_ready+0x84/0x200 net/smc/af_smc.c:2637
+   tcp_urg+0x24d/0x360 net/ipv4/tcp_input.c:6264
+   tcp_rcv_state_process+0x280d/0x4940 net/ipv4/tcp_input.c:7336
+   tcp_child_process+0x371/0xa50 net/ipv4/tcp_minisocks.c:1002
+   tcp_v4_rcv+0x1eaa/0x2a00 net/ipv4/tcp_ipv4.c:2186
+   [...]
+   </IRQ>
 
-    ra fp s0 s1 s2 s3 s4 s5      <- 8 words
-    [ REG_ARENA ]                <- only if ctx->arena_vm_start
-    tail_call_cnt
-    tail_call_cnt_ptr            <- loaded on tail call / bpf2bpf call
+  Allocated by task 67930:
+   sk_psock_init+0x142/0x740 net/core/skmsg.c:766
+   sock_hash_update_common+0xd3/0x990 net/core/sock_map.c:1010
+   bpf_sock_hash_update+0x114/0x170 net/core/sock_map.c:1229
+   __cgroup_bpf_run_filter_sock_ops+0x74/0xa0 kernel/bpf/cgroup.c:1727
+   tcp_init_transfer+0x1085/0x1100 net/ipv4/tcp_input.c:6693
+   [...]
 
-BPF_TAIL_CALL_CNT_PTR_STACK_OFF() hardcodes the pointer at
-round_up(stack, 16) - 80, which is only correct when REG_ARENA is absent.
-For an arena program the extra word shifts every slot below it down by 8
-bytes, so the macro resolves to the tail_call_cnt slot (the counter value)
-instead of tail_call_cnt_ptr. The JIT then loads the counter value and
-dereferences it as the TCC pointer, corrupting memory or panicking the
-kernel whenever an arena program performs a tail call or a bpf2bpf call.
+Resolve the conflict on the write path. Reserve the child's sk_user_data
+with a NULL pointer tagged SK_USER_DATA_NOCOPY so sk_psock_init() returns
+-EBUSY, and release it at accept. smc_clcsock_user_data() still strips the
+tag to NULL, so the inherited callback stays a no-op.
 
-Replace the macro with a helper that accounts for the REG_ARENA slot,
-mirroring the reservation logic in build_prologue().
-
-Fixes: ef54c517a937 ("LoongArch: BPF: Implement PROBE_MEM32 pseudo instructions")
-Cc: stable@vger.kernel.org
-Signed-off-by: George Guo <guodongtai@kylinos.cn>
+Fixes: a60a2b1e0af1 ("net/smc: reduce active tcp_listen workers")
+Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 ---
+v3:
+ - reserve sk_user_data on the write path instead of the read-side check (D. Wythe)
+
 v2:
- - Dropped the second patch ("Don't charge an empty prog_array slot to
-   the tail call count"); that off-by-one was fixed independently by
-   commit 0379d10f09bc ("LoongArch: BPF: Fix off-by-one error in tail
-   call"), now in 7.2-rc1. The arena tail call count pointer offset bug
-   addressed here is independent and still unfixed.
- - No code change; reworded the commit message and rebased on 7.2-rc1.
- - v1: https://lore.kernel.org/all/20260625083212.277417-1-dongtai.guo@linux.dev
+ - https://lore.kernel.org/netdev/20260619150342.3626224-1-rhkrqnwk98@gmail.com/
 
- arch/loongarch/net/bpf_jit.c | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+v1:
+ - https://lore.kernel.org/netdev/20260614120931.4041687-1-rhkrqnwk98@gmail.com/
 
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index ad7e28375aa9..5e34e9e3f508 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -25,7 +25,23 @@
+ net/smc/af_smc.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index b5db69073e20..78f162344fe3 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -154,7 +154,11 @@ static struct sock *smc_tcp_syn_recv_sock(const struct sock *sk,
+ 					       own_req, opt_child_init);
+ 	/* child must not inherit smc or its ops */
+ 	if (child) {
+-		rcu_assign_sk_user_data(child, NULL);
++		/* reserve sk_user_data so sockmap cannot claim the slot */
++		write_lock_bh(&child->sk_callback_lock);
++		__rcu_assign_sk_user_data_with_flags(child, NULL,
++						     SK_USER_DATA_NOCOPY);
++		write_unlock_bh(&child->sk_callback_lock);
  
- #define REG_TCC		LOONGARCH_GPR_A6
- #define REG_ARENA	LOONGARCH_GPR_S6 /* For storing arena_vm_start */
--#define BPF_TAIL_CALL_CNT_PTR_STACK_OFF(stack) (round_up(stack, 16) - 80)
-+
-+static int tail_call_cnt_ptr_stack_off(struct jit_ctx *ctx)
-+{
-+	/* Ten words are pushed below the BPF stack: ra, fp, s0-s5, and the
-+	 * tail call count plus its pointer, which occupy the two deepest
-+	 * slots of the callee-saved area.
-+	 */
-+	int offset = sizeof(long) * 10;
-+
-+	/* An arena program reserves one extra word above them (REG_ARENA),
-+	 * which pushes the tail call count pointer down by one slot.
-+	 */
-+	if (ctx->arena_vm_start)
-+		offset += sizeof(long);
-+
-+	return round_up(ctx->stack_size, 16) - offset;
-+}
+ 		/* v4-mapped sockets don't inherit parent ops. Don't restore. */
+ 		if (inet_csk(child)->icsk_af_ops == inet_csk(sk)->icsk_af_ops)
+@@ -1773,6 +1777,7 @@ static int smc_clcsock_accept(struct smc_sock *lsmc, struct smc_sock **new_smc)
+ 	/* new clcsock has inherited the smc listen-specific sk_data_ready
+ 	 * function; switch it back to the original sk_data_ready function
+ 	 */
++	write_lock_bh(&new_clcsock->sk->sk_callback_lock);
+ 	new_clcsock->sk->sk_data_ready = lsmc->clcsk_data_ready;
  
- static const int regmap[] = {
- 	/* return value from in-kernel function, and exit value for eBPF program */
-@@ -291,7 +307,7 @@ bool bpf_jit_supports_far_kfunc_call(void)
- static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
- {
- 	int off, tc_ninsn = 0;
--	int tcc_ptr_off = BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size);
-+	int tcc_ptr_off = tail_call_cnt_ptr_stack_off(ctx);
- 	u8 a1 = LOONGARCH_GPR_A1;
- 	u8 a2 = LOONGARCH_GPR_A2;
- 	u8 t1 = LOONGARCH_GPR_T1;
-@@ -1181,7 +1197,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 			return ret;
+ 	/* if new clcsock has also inherited the fallback-specific callback
+@@ -1786,6 +1791,9 @@ static int smc_clcsock_accept(struct smc_sock *lsmc, struct smc_sock **new_smc)
+ 		if (lsmc->clcsk_error_report)
+ 			new_clcsock->sk->sk_error_report = lsmc->clcsk_error_report;
+ 	}
++	/* release the slot reserved in smc_tcp_syn_recv_sock() */
++	rcu_assign_sk_user_data(new_clcsock->sk, NULL);
++	write_unlock_bh(&new_clcsock->sk->sk_callback_lock);
  
- 		if (insn->src_reg == BPF_PSEUDO_CALL) {
--			tcc_ptr_off = BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size);
-+			tcc_ptr_off = tail_call_cnt_ptr_stack_off(ctx);
- 			emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, tcc_ptr_off);
- 		}
- 
+ 	(*new_smc)->clcsock = new_clcsock;
+ out:
 -- 
-2.25.1
+2.43.0
 
