@@ -1,135 +1,100 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71EB83A4513
-	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 20:51:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D9840D57B
+	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 21:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782766283; cv=none; b=OQMaC5NSQcfsXgavhLPWKcEjF5/VTttcHL3XYuxokUAwnlQDMiGq3FjwqQlWEuvr5At/INLbEbzDsyjibu4n5wqE0BDdrGsUQ1y5/AP6OTF1vJIrQ98WLrDs072ItqxEVWFOZ3VseGThZJhDINT+LfuqYsGQCB1n3nKvrVKd7ZI=
+	t=1782768137; cv=none; b=UvSTINeTP+0ss3QXGsWkIX9bCzvz0SjWA4ke6b7dlk8Lu9CbKyk0Lxo9SWZ8IbS+4BqaK+BIjhCeTavo6jM5BFwtLAQbejYNOTD4ssystYUJNFS1tuloCKgKhJV08gR20c3f07pDbgqSzyCaVAjOwUFAPzei7smMZ1YR/bEYePU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782766283; c=relaxed/simple;
-	bh=rmX0NGlLAo9ekZH6Y2jezlm9CoKFQQVwnfBmxm9MLjE=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VA4joBmMdi77YjeSPxXtfcLg7oLcSTXP5BkMoguD94+jaPtmwnPVoRWqhli69V5Q1hSUQd922HNJkx4Gs0Oc7pxNs6MyawDYmh9G+7VpXaBSJPg6vs0Hg/f280hRZjYIZ43gpS48tGKRqYIvdvn9DbqysVDHf5K+d4hBrfR5rIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=idsrUZbv; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782768137; c=relaxed/simple;
+	bh=kctU5XVrqBZwdV9BC3j1ili2fdmCoTJCvKNmLI8JROg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=svPyzVfxOCRzxPxBReHL6OhGQ8pSqKdPC/QYapX7qtnm/7l1vTZBYTclwnFecoLwSsTN+KYbOo0s0exrc0zkqEx4U9oW0ePAiS6NinO/PT28FkhqwKB9zikM97rurx2xfWqsgCuy4QuIPLslUQE1zEOQm19Wtw3341V65ORiiYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KwFilec2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="idsrUZbv"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-473dc4cf238so876646f8f.3
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 13:51:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782766279; x=1783371079; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AYyY6lEtB4HL1DdfAYLDKmmLVQmR71vYlmUmwFPjYVE=;
-        b=idsrUZbvuOqKoR1VOWcBB57kBa2TuJMmyatDczEYUjni3PVWUe5CxrEmJdrQ4YX7BX
-         fFrMD5VmpF3CYN5sE1BoPFAFCupC9sJedHi19juo47kE3hSgyXJY4IFKcJS/tzvpC+bb
-         KouaeyBWSMUYWNoM2Bp3XfBvDimkcCowDrACAAhyIal9eK6S0kplvNciuTJ9YcWf1hiG
-         b4tW1mD5PsYIFxfY95iGVNenZIp/TnhcZHMsjUxUJDlkTItglioUkAj435u06hrn7ePO
-         T3NwUE8jflsnWtRktab7o4x4EN9JosHgn7udkrKoVcWs4hqQ439LvJP+e8IcZaZ+2tix
-         9Gww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782766279; x=1783371079;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AYyY6lEtB4HL1DdfAYLDKmmLVQmR71vYlmUmwFPjYVE=;
-        b=JIPJGmqtPi58Jc+SidFKDl207WuxXEe/a/K63NIY8ZzwldYcn5a1t+dm49TZMUctEM
-         LP5cQsx8WtuYL0VO0ZeZaTwbsVo9sadaXK6VHDmUB3RIWQlAIXvi7NA/f6msaTngCr+I
-         qztPI4VbAAkfjega444VgcasfZJseTkvog2nh6RoaTy1b/pgUBIAgokZpUwGlRBNaQIi
-         puPhOjV4LvMETrF+rdlxcRCIBhwpkTiiKs7FKH/3+mN2+VNA1htPL6Lt2B4VdOvbmjFD
-         c55rwk609KFFeY4aK0cpU+W5JUCoOgtcSiSMeGh/fLr5sYkH3YLUnd3zI+VaPMlf00R/
-         Vovg==
-X-Forwarded-Encrypted: i=1; AHgh+RpKBRfoSnUpralBP8+pifmtA6b6zAIzQb6F0EnCLQdMp6aArygd7JMNjEFsus1neEcuUGM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgGll/ZBesJc5djIrHfXhIgSLjhCUXAi6uIiluv8sTu+XC+y/N
-	HTp2MNQbiDM17e36gsp2w/P1eUPp0nuV8UkkdkhYzfcPa0F/qaef8xEn
-X-Gm-Gg: AfdE7cnmucomzR2pEWnn8OsfO9ohQBRZeHlZBgAGwZZkZdSUtzFGRhCzs754xLJ89L8
-	MdmW4lNzS5RhLGUtP45Iylmzvq28Ge1EFSXsA613ekYKMJqIVkytd3l8u8EiDpuZa+3LkwgOl4f
-	J5TI5hC87uuhHc82NMX30H1aGKu4WYB3lxN9lFbGll5qdnWLH2aafnxcS1+C1gshrCqPhp/WPzN
-	GjMbNrLIQPxhFRiy01qrS8a986ki29LTwZjBKgnwuJ1bBD3h0dpYy2bu4Jjp8Etflr3Ahw24QU2
-	PckEIj8MrobcUMOtqGfRviDTds1DE0voiapKMenAEgdnzf88O3s00iyoYdXw3gwGwd+O0HHCq9f
-	oz/Iw7ZySgkhUTX9sWdREBpvryPNpEHbbW/AyeIyXNCMMJdlH6/1Vof7I0MCNX6D6itviceP2J5
-	bDt1mMcYnv+olcHO26L0Plmg4CnLC5+FpG8Sw=
-X-Received: by 2002:a05:6000:2c0b:b0:473:ba02:8cbc with SMTP id ffacd0b85a97d-4754d7e38a6mr1092712f8f.0.1782766278470;
-        Mon, 29 Jun 2026 13:51:18 -0700 (PDT)
-Received: from krava (37-188-219-218.red.o2.cz. [37.188.219.218])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47566c0deacsm938666f8f.26.2026.06.29.13.51.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2026 13:51:18 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 29 Jun 2026 22:51:12 +0200
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	bpf@vger.kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
-	songliubraving@fb.com, yhs@fb.com, qmo@kernel.org,
-	martin.lau@kernel.org, yonghong.song@linux.dev, clm@meta.com,
-	ihor.solodrai@linux.dev
-Subject: Re: [PATCHv3 bpf-next 3/3] bpftool: Add tracing_multi link info
- output
-Message-ID: <akLawCtmY4PkWDAO@krava>
-References: <20260629143844.862369-4-jolsa@kernel.org>
- <3205a51da759dfd735af18490c48f952b34dd066a1ff0d47f832b0a1a5de6469@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KwFilec2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 168081F000E9;
+	Mon, 29 Jun 2026 21:22:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782768136;
+	bh=M7vPGLF2HBEke0sFiTDcnndoE7fJx2SY5Y4KDK9GvgU=;
+	h=From:To:Cc:Subject:Date;
+	b=KwFilec2gcUMx5AUAmGSvU5EJbgvvmWbXXcQCupl8R76KP3SUb66fbcNy3uBfmYQ7
+	 H7G9h6No+u6V9U7uB2afsPMbc6GLm7mgA2W0Z41wgaO3iLCxlsQVLDC5lZuHZumpQK
+	 1Ba9DelDxwlSYiG2yEN6x8m0Z+rI6bn1kJQCuqoyjOwuzQkFTGrE886EQ8qjWqz4KC
+	 CGFuaKJ1wTmmipVXKXMYCU+zkpizSbug7Qy2074sY02N0MceG9fG+BaRAGpFr+uChg
+	 OCkMMTrh+7wqJZbjlfhKje1t/BebIqKybZouzq9NhWwWS7gb3ktN0xn9N8TdBFhqcH
+	 D70/VCkpcI9+A==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	Quentin Monnet <qmo@kernel.org>
+Subject: [PATCHv4 bpf-next 0/3] bpf: tracing_multi link info support
+Date: Mon, 29 Jun 2026 23:22:05 +0200
+Message-ID: <20260629212208.895962-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3205a51da759dfd735af18490c48f952b34dd066a1ff0d47f832b0a1a5de6469@mail.kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 29, 2026 at 04:05:27PM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-> > index bdcd717b0348..eb0ba9d71692 100644
-> > --- a/tools/bpf/bpftool/link.c
-> > +++ b/tools/bpf/bpftool/link.c
-> > @@ -377,6 +377,25 @@ static __u64 *u64_to_arr(__u64 val)
-> >  	return (__u64 *) u64_to_ptr(val);
-> >  }
-> >
-> > +static __u32 *u64_to_u32_arr(__u64 val)
-> > +{
-> > +	return (__u32 *)u64_to_ptr(val);
-> > +}
-> > +
-> > +static struct kernel_sym *find_kernel_sym_by_addr(__u64 addr, bool is_ibt_enabled)
-> > +{
-> > +	struct kernel_sym *sym;
-> > +
-> > +	if (!addr)
-> > +		return NULL;
-> > +
-> > +	sym = kernel_syms_search(&dd, addr);
-> > +	if (!sym && is_ibt_enabled && addr >= 4)
-> > +		sym = kernel_syms_search(&dd, addr - 4);
-> 
-> When is_ibt_enabled is set, can addr ever be resolved by the first
-> kernel_syms_search(&dd, addr) call, or does a match always require the
-> addr - 4 adjustment?
-> 
-> If a match is only ever possible at addr - 4, would an if/else be clearer
-> here than trying addr first and then falling back to addr - 4?
+hi,
+adding link info support for tracing_multi link.
 
-I see trace-able functions without endbr instruction at the entry
-on kernel with IBT enabled, like:
+Adding the kernel support with related selftests and bpftool support
+to display the tracing_multi link info, the output looks like:
 
-	# cat available_filter_functions_addrs | grep get_next_root
-	ffffffff81211a70 get_next_root
-	# cat /proc/kallsyms | grep get_next_root
-	ffffffff81211a70 t get_next_root
+  # bpftool link
+  ...
+  61: tracing_multi  prog 167
+          attach_type trace_fentry_multi  btf_obj_id 1  count 3
+          btf_id           addr             cookie           func [module]
+          92598            ffffffff825017c4 10               bpf_fentry_test1
+          92600            ffffffff82503814 30               bpf_fentry_test2
+          92601            ffffffff82503824 20               bpf_fentry_test3
+          pids test_progs(1540)
 
-and having adjusted functions with endbr instruction as well:
-
-	# cat available_filter_functions_addrs | grep ksys_read
-	ffffffff816f6404 ksys_readahead
-	ffffffff8182bf14 ksys_read
-	# cat /proc/kallsyms | grep ksys_read
-	ffffffff816f6400 T ksys_readahead
-	ffffffff8182bf10 T ksys_read
-
-so we need the check as is
-
+thanks,
 jirka
+
+
+v1: https://lore.kernel.org/bpf/20260621204524.61067-1-jolsa@kernel.org/
+v2: https://lore.kernel.org/bpf/20260623142417.275892-1-jolsa@kernel.org/
+v3: https://lore.kernel.org/bpf/20260629143844.862369-1-jolsa@kernel.org/
+
+v4 changes:
+- fix wrong allocation check [Alexei]
+
+v3 changes:
+- added acks [Andrii, Leon]
+- display cookies as decimal numbers [Andrii]
+- renamed obj_id to btf_obj_id [Andrii]
+- several fixes in bpftool change [Andrii]
+
+v2 changes:
+- fix kernel symbol search logic [sashiko]
+- typo fixes [bots]
+
+
+---
+Jiri Olsa (3):
+      bpf: Add tracing_multi link info support
+      selftests/bpf: Add tracing_multi link info tests
+      bpftool: Add tracing_multi link info output
+
+ include/uapi/linux/bpf.h                                |   9 +++
+ kernel/trace/bpf_trace.c                                |  55 +++++++++++++++++
+ tools/bpf/bpftool/link.c                                | 133 ++++++++++++++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h                          |   9 +++
+ tools/testing/selftests/bpf/prog_tests/fill_link_info.c | 242 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_fill_link_info.c |   6 ++
+ 6 files changed, 454 insertions(+)
