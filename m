@@ -1,30 +1,33 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C82BA45;
-	Mon, 29 Jun 2026 07:51:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC901E2614;
+	Mon, 29 Jun 2026 08:01:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782719498; cv=none; b=fvkzRmEolPncxA6YebwMqBEBmS08J7+1zNXtci7dp6blP+Md/jCSz6/P9dxhN5in3Z1vo2rWfP9tciLh6bEXzImt70MbSslkszLGl4rFihK3aUBl/HnXQDnNvOQMbWg+XY6oVb9VdZGYf0CG3gUmK8ZQ5RY8E2/axt4fJgJYvbQ=
+	t=1782720085; cv=none; b=dxiREtYG+DY1kZo4Tw/RCSsWGqDsfyBcyKsMH+k64UzMW2m0kniIJ8olIht7+DNR9P4yUgrKZuqK2erhPGju4bn+vdDXC9Rl33rsQ+pSoPd4Q8/crUEG1W1h2Fl/sRkKUyMZhneZh2vTH2EMcF4PgVLvERnDeLhU4pswjRH+B3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782719498; c=relaxed/simple;
-	bh=eBEuRwsonxsBISJwWNuDseekumI8c7aVSN1D4Qb7K3s=;
+	s=arc-20240116; t=1782720085; c=relaxed/simple;
+	bh=6WtfEtDwRgZKtWJGqAWFdEHEncKVrRvsJrNAIoGHYDY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HlnUZ40y6+8nVtbQR4CNcIsr7w6VXzN6A6ZzNg0OuWDQvOYysX9g/ezwOlM9EdAcjlsJVvLK9Dm2JZ/QGv4jHN/Ln/2OVFozQFYwhA67KjeDJFDN/vfwDSenG/kM2Wocrm3knG801lUCcTmvDxq8OAes5NBFOtZg+Po6yuD6E1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gpdkx0vbjzKHMVX;
-	Mon, 29 Jun 2026 15:51:21 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 39FE940574;
-	Mon, 29 Jun 2026 15:51:27 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgAHy_77I0JqFCzkAA--.42713S2;
-	Mon, 29 Jun 2026 15:51:25 +0800 (CST)
-Message-ID: <55499fcf-d552-4366-9016-21ede7f687ac@huaweicloud.com>
-Date: Mon, 29 Jun 2026 15:51:23 +0800
+	 In-Reply-To:Content-Type; b=tZQE5OymF27l9bgREBheeVTzhE4C5EDOEbXPnztV6cZmIvX3UPAkrw9ppYCEszK17VB0IuL2sKwT4mFlKhCb72ONW6m+EsNIfzRjLkQBjfCG6AVScbHT9z22sbqrBeDSrx8Vtq7g9ku/dFK9AhKmYCfIS/8cnsg/ph+B6oS2vkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mlN4ld7B; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mlN4ld7B"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73EDE1F000E9;
+	Mon, 29 Jun 2026 08:01:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782720083;
+	bh=3LVSjuJQKF56hy+riBeL/zblhV4LkNcEAKxGC0pcQPg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=mlN4ld7BkQYjyRTJK3kyWD4NufZhPV2GoGmPHHzeR/q5CzFBmiitR8vc1db+oPA49
+	 wlUU+nB4lViDFMxuGBs7huTGjqMBsiaZenPP417l0HlRaY4/kAxEGwWRpz6QwLAd/Y
+	 oxPJHxgxLsygyni6rSv5WQndKe2n6nqt+YAwzQNADIIIlQW/FBqQZT3HTKlgIp011S
+	 J/IkEE2lomuIKOdNXvzgQ2ljK3+N5YPgG09MDmxyEzQ5XOI7NLg8FIMVQnPYWFH/Qs
+	 PNEEogqpZMLvxtmUmiHDPlVqtBe/5RCa2e5vqY5bfDIYXSJQDioYy/oeNRLa4eEfkR
+	 I1oOwobvw5JWQ==
+Message-ID: <872bd673-3d45-4111-8a41-31185db3ece5@kernel.org>
+Date: Mon, 29 Jun 2026 17:01:15 +0900
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -32,367 +35,215 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH bpf-next 00/12] bpf: Introduce static-defined tracing
- probe for BPF
+Subject: Re: [PATCH for-next v3 3/9] mm/slab: handle the !allow_spin case in
+ kfree_rcu_sheaf()
+To: Pedro Falcato <pfalcato@suse.de>
+Cc: Vlastimil Babka <vbabka@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Suren Baghdasaryan <surenb@google.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+ rcu@vger.kernel.org, bpf@vger.kernel.org
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-3-70a54f3775bb@kernel.org>
+ <ajvn5-2yJxykPlbP@pedro-suse>
 Content-Language: en-US
-To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- KP Singh <kpsingh@kernel.org>, Anton Protopopov <a.s.protopopov@gmail.com>,
- Amery Hung <ameryhung@gmail.com>, Eyal Birger <eyal.birger@gmail.com>,
- Rong Tao <rongtao@cestc.cn>
-References: <cover.1782571533.git.xukuohai@huawei.com>
- <855e44f3-d22c-47e5-8bd1-c5d9f7014a75@linux.dev>
- <ec28f0f9-0693-4c9b-88fa-bffca446a63c@huaweicloud.com>
- <b8d8ab5e-bef1-4c95-8e5b-ea9768041b2e@linux.dev>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <b8d8ab5e-bef1-4c95-8e5b-ea9768041b2e@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgAHy_77I0JqFCzkAA--.42713S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3GF1xAFWUKF1kXFyDKr1fCrg_yoWfXryDpF
-	9xJa4rK397XF1jyF1xJrWYyayYgw4ftr45J3WrCrWI9w1q9r1FgF1UGFWYkF1Y9r1v9r1I
-	v3y2ywsxWr9FkFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
-	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
-	7KsUUUUUU==
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+From: Harry Yoo <harry@kernel.org>
+In-Reply-To: <ajvn5-2yJxykPlbP@pedro-suse>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------s820ITmkaB0kEH48e0odpSeB"
 
-On 6/29/2026 1:26 PM, Leon Hwang wrote:
-> On 29/6/26 11:27, Xu Kuohai wrote:
->> On 6/29/2026 10:14 AM, Leon Hwang wrote:
->>> Hi Kuohai,
->>>
->>> On 28/6/26 06:51, Xu Kuohai wrote:
->>>> From: Xu Kuohai <xukuohai@huawei.com>
->>>>
->>>> This series introduces static-defined tracing probes for BPF programs.
->>>> BPF SDT (static-defined tracing) works similarly to USDT. User defines
->>>
->>>
->>> At first glance, the SDT idea looks cool to me.
->>>
->>> However, what's your purpose of introducing SDT?
->>>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------s820ITmkaB0kEH48e0odpSeB
+Content-Type: multipart/mixed; boundary="------------Wp0Llgz6JnGFUEROBnwNWjFi";
+ protected-headers="v1"
+From: Harry Yoo <harry@kernel.org>
+To: Pedro Falcato <pfalcato@suse.de>
+Cc: Vlastimil Babka <vbabka@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Suren Baghdasaryan <surenb@google.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+ rcu@vger.kernel.org, bpf@vger.kernel.org
+Message-ID: <872bd673-3d45-4111-8a41-31185db3ece5@kernel.org>
+Subject: Re: [PATCH for-next v3 3/9] mm/slab: handle the !allow_spin case in
+ kfree_rcu_sheaf()
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-3-70a54f3775bb@kernel.org>
+ <ajvn5-2yJxykPlbP@pedro-suse>
+In-Reply-To: <ajvn5-2yJxykPlbP@pedro-suse>
+
+--------------Wp0Llgz6JnGFUEROBnwNWjFi
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+
+
+On 6/24/26 11:28 PM, Pedro Falcato wrote:
+> On Mon, Jun 15, 2026 at 08:05:57PM +0900, Harry Yoo (Oracle) wrote:
+>> Teach kfree_rcu_sheaf() how to handle the !allow_spin case. Try to get=
+
+>> an empty sheaf from pcs->spare or the barn even when spinning is not
+>> allowed. Unlike __pcs_replace_full_main(), try harder to allocate
+>> an empty sheaf because the fallback path will be more expensive than
+>> kfree_nolock().
 >>
->> Well, the purpose is to add a dynamic, zero-overhead tracing mechanism for
->> bpf, not just at function entry, but anywhere inside the prog source code.
+>> When trylock fails or the kernel observes non-NULL pcs->rcu_free after=
+
+>> lock acquisition, free the sheaf instead of putting it to the barn.
+>> This is rare and not worth complicating the code.
 >>
-> 
-> Better to carry the purpose in cover letter in the future.
+>> Since call_rcu() cannot be called in an unknown context,
+>> kfree_rcu_sheaf() fails when the rcu sheaf becomes full.
+>>
+>> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+>> ---
+>>  mm/slab.h        |  2 +-
+>>  mm/slab_common.c |  2 +-
+>>  mm/slub.c        | 39 ++++++++++++++++++++++++++++++---------
+>>  3 files changed, 32 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/mm/slab.h b/mm/slab.h
+>> index 509f330654b8..b1bd33a16544 100644
+>> --- a/mm/slab.h
+>> +++ b/mm/slab.h
+>> @@ -429,7 +429,7 @@ static inline bool is_kmalloc_normal(struct kmem_c=
+ache *s)
+>>  	return !(s->flags & (SLAB_CACHE_DMA|SLAB_ACCOUNT|SLAB_RECLAIM_ACCOUN=
+T));
+>>  }
+>> =20
+>> -bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj);
+>> +bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj, bool allow_sp=
+in);
+>>  void flush_all_rcu_sheaves(void);
+>>  void flush_rcu_sheaves_on_cache(struct kmem_cache *s);
+>> =20
+>> diff --git a/mm/slab_common.c b/mm/slab_common.c
+>> index b6426d7ceec9..bc1a8ec938d9 100644
+>> --- a/mm/slab_common.c
+>> +++ b/mm/slab_common.c
+>> @@ -1605,7 +1605,7 @@ static bool kfree_rcu_sheaf(void *obj)
+>> =20
+>>  	s =3D slab->slab_cache;
+>>  	if (likely(!IS_ENABLED(CONFIG_NUMA) || slab_nid(slab) =3D=3D numa_me=
+m_id()))
+>> -		return __kfree_rcu_sheaf(s, obj);
+>> +		return __kfree_rcu_sheaf(s, obj, /* allow_spin =3D */ true);
+>=20
+> Since this is stacked on top of the slab alloc flags work, could it pas=
+s slab
+> alloc flags instead of allow_spin?
+
+Good point.
+
+Hmm, I thought we'll eventually introduce SLAB_FREE_ flags rather than
+reusing SLAB_ALLOC_ flags (and then translate SLAB_FREE_NOLOCK to
+SLAB_ALLOC_NOLOCK when allocating sheaves) rather than reusing
+SLAB_ALLOC_ flags...
+
+>> @@ -6065,7 +6074,7 @@ static void rcu_free_sheaf(struct rcu_head *head=
+)
+>>   */
+>>  static DEFINE_WAIT_OVERRIDE_MAP(kfree_rcu_sheaf_map, LD_WAIT_CONFIG);=
+
+>> =20
+>> -bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj)
+>> +bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj, bool allow_sp=
+in)
+>>  {
+>>  	struct slub_percpu_sheaves *pcs;
+>>  	struct slab_sheaf *rcu_sheaf;
+>> @@ -6081,9 +6090,10 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, vo=
+id *obj)
+>>  	pcs =3D this_cpu_ptr(s->cpu_sheaves);
+>> =20
+>>  	if (unlikely(!pcs->rcu_free)) {
+>> -
+>>  		struct slab_sheaf *empty;
+>>  		struct node_barn *barn;
+>> +		unsigned int alloc_flags =3D SLAB_ALLOC_DEFAULT;
+>=20
+> which would make this logic more natural.
+
+Right.
+
+>> +		gfp_t gfp =3D GFP_NOWAIT;
+>> =20
+>>  		/* Bootstrap or debug cache, fall back */
+>>  		if (unlikely(!cache_has_sheaves(s))) {
+>> @@ -6103,7 +6113,7 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, voi=
+d *obj)
+>>  			goto fail;
+>>  		}
+>> =20
+>> -		empty =3D barn_get_empty_sheaf(barn, true);
+>> +		empty =3D barn_get_empty_sheaf(barn, allow_spin);
+>> =20
+>>  		if (empty) {
+>>  			pcs->rcu_free =3D empty;
+>> @@ -6112,20 +6122,25 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, v=
+oid *obj)
+>> =20
+>>  		local_unlock(&s->cpu_sheaves->lock);
+>> =20
+>> -		empty =3D alloc_empty_sheaf(s, GFP_NOWAIT, SLAB_ALLOC_DEFAULT);
+>> +		if (unlikely(!allow_spin)) {
+>> +			alloc_flags =3D SLAB_ALLOC_TRYLOCK;
+>> +			gfp =3D 0;
 >
+> and this as well (alloc_empty_sheaf() could derive gfp from whatever yo=
+u
+> passed it, by simply knowing alloc_flags =3D TRYLOCK -> gfp =3D 0
+> (or gfp &=3D ~__GFP_RECLAIM)).
 
-Ok, will add it in the next verion.
+Right.
 
->>> If to provide points in bpf progs to be traced, like tracepoints in
->>> kernel functions, I think subprog+fentry is an alternative approach.
->>> Comparing with SDT, subprog+fentry requires a function call at run time,
->>> instead of a NOP like SDT.
->>>
-> [...]
->>>
->>> Furthermore, if users don't want a function call at run time, e.g. they
->>> don't want to call 'my_trace' at run time in production, they can patch
->>> the callsite of 'my_trace' with NOP before loading 'xdp_prog', and drop
->>> the subprog 'my_trace' in their user space application. This elimination
->>> is approachable, since it is used heavily in bpfsnoop [1].
->>
->> Sounds like the subprog+fentry you described gives a good evidance for real
->> demand of dyanmic tracing inside function body.
-> 
-> Correct.
-> 
-> A subprog in an existing bpf prog can be used to inspect the prog's
-> runtime details, including the 'tail_call_cnt' on the stack.
-> 
-> An extra subprog as stub is better for dynamic tracing.
-> 
-> See my blog post:
-> https://blog.leonhw.com/post/ebpf-talk-138-debug-tailcall-bug-with-fentry/.
-> 
->>
->> IIUC, even though the CALL instruction at the callsite is patched to NOP at
->> runtime, the argument preparation instructions - r1 = len, r2 = ctx -
->> remain
-> 
-> Correct.
-> 
->> in the callsite. For SDT, the argument preparation is recorded as metadata
->> out of line, and is never executed.
-> 
-> So, does argument preparation require the verifier to analyze the
-> registers to identify the argument registers, when an SDT is defined in
-> a prog? What if the verifier cannot identify them?
->
+--=20
+Cheers,
+Harry / Hyeonggon
 
-The arguemnt registers are identified by libbpf from the source register
-of the BPF move instructions (e.g. arg_reg1 from r1 = arg_reg1) created
-by the probe mcaro.
 
-For target prog side, the prototype BTF are used by the verifier to check
-if the argument register types match the prototype.
+--------------Wp0Llgz6JnGFUEROBnwNWjFi--
 
-For observer prog side, the prototype BTF are used to validate the access
-to the argument registers, and the registers are used explicitly by the
-bpf trampoline to construct the context for the observer prog.
+--------------s820ITmkaB0kEH48e0odpSeB
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
-See:
-1. sdt_parse_arg() in patch 03
-2. check_sdt_probe() in patch 06,
-3. check_attach_btf_id() in patch 09, wher check_attach_btf_id() sets the
-    prog->aux->attach_func_proto for SDT, then btf_ctx_access() uses it
-    to check the access.
-4. save_args() in patch 11
+-----BEGIN PGP SIGNATURE-----
 
->>
->> And I think SDT is cleaner and easier to use. User just declares the
->> prototype
->> and insert the probe, no need to hack with subprog+fentry.
->>
->>> However, this elimination is not easy to understand. Want me to show >
->>> mored etails about this elimination?
->>>
->>
->> That would be appreciated, thanks.
->>
-> 
-> static __noinline void
-> subprog(int len, int ret)
-> {
->      __sink(len);
->      __sink(ret);
-> }
-> 
-> SEC("xdp")
-> int xdp_fn(struct xdp_md *ctx)
-> {
->      struct ethhdr *eth = (struct ethhdr *)(ctx_ptr(ctx, data));
->      struct iphdr *iph = (struct iphdr *)(eth + 1);
->      int len = ctx->data_end - ctx->data;
->      int ret = XDP_PASS;
-> 
->      if ((void *)(iph + 1) > ctx_ptr(ctx, data_end))
->          return ret;
-> 
->      if (iph->protocol != IPPROTO_ICMP)
->          return ret;
-> 
->      barrier_var(ret);
->      subprog(len, ret);
-> 
->      return ret;
-> }
-> 
-> After attaching 'xdp_fn' to 'lo',
-> 
-> ===
-> without the elimination:
-> 
-> bpftool p d x n xdp_fn
-> int xdp_fn(struct xdp_md * ctx):
-> ; int xdp_fn(struct xdp_md *ctx)
->     0: (b7) r0 = 2
-> ; struct ethhdr *eth = (struct ethhdr *)(ctx_ptr(ctx, data));
->     1: (79) r2 = *(u64 *)(r1 +0)
-> ; int len = ctx->data_end - ctx->data;
->     2: (79) r1 = *(u64 *)(r1 +8)
-> ; if ((void *)(iph + 1) > ctx_ptr(ctx, data_end))
->     3: (bf) r3 = r2
->     4: (07) r3 += 34
-> ; if ((void *)(iph + 1) > ctx_ptr(ctx, data_end))
->     5: (2d) if r3 > r1 goto pc+10
->     6: (b7) r3 = 9
-> ; struct iphdr *iph = (struct iphdr *)(eth + 1);
->     7: (bf) r4 = r2
->     8: (0f) r4 += r3
-> ; if (iph->protocol != IPPROTO_ICMP)
->     9: (71) r3 = *(u8 *)(r4 +14)
-> ; if (iph->protocol != IPPROTO_ICMP)
->    10: (55) if r3 != 0x1 goto pc+5
->    11: (1f) r1 -= r2
->    12: (b7) r6 = 2
-> ; subprog(len, ret);
->    13: (bf) r2 = r6
->    14: (85) call pc+2#bpf_prog_6a2f766e16102c10_subprog
->    15: (bf) r0 = r6
-> ; }
->    16: (95) exit
-> void subprog(int len, int ret):
-> ; subprog(int len, int ret)
->    17: (63) *(u32 *)(r10 -8) = r2
->    18: (63) *(u32 *)(r10 -4) = r1
-> ; __sink(len);
->    19: (63) *(u32 *)(r10 -4) = r1
-> ; __sink(ret);
->    20: (63) *(u32 *)(r10 -8) = r2
-> ; }
->    21: (95) exit
-> 
-> 
-> bpftool p d j n xdp_fn
-> int xdp_fn(struct xdp_md * ctx):
-> bpf_prog_6480db4581c3a618_xdp_fn:
-> ; int xdp_fn(struct xdp_md *ctx)
->     0:	nopl	(%rax,%rax)
->     5:	nop
->     7:	pushq	%rbp
->     8:	movq	%rsp, %rbp
->     b:	pushq	%rbx
->     c:	movl	$2, %eax
-> ; struct ethhdr *eth = (struct ethhdr *)(ctx_ptr(ctx, data));
->    11:	movq	(%rdi), %rsi
-> ; int len = ctx->data_end - ctx->data;
->    15:	movq	8(%rdi), %rdi
-> ; if ((void *)(iph + 1) > ctx_ptr(ctx, data_end))
->    19:	movq	%rsi, %rdx
->    1c:	addq	$34, %rdx
-> ; if ((void *)(iph + 1) > ctx_ptr(ctx, data_end))
->    20:	cmpq	%rdi, %rdx
->    23:	ja	0xffffffffc0000926
->    25:	movl	$9, %edx
-> ; struct iphdr *iph = (struct iphdr *)(eth + 1);
->    2a:	movq	%rsi, %rcx
->    2d:	addq	%rdx, %rcx
-> ; if (iph->protocol != IPPROTO_ICMP)
->    30:	movzbq	14(%rcx), %rdx
-> ; if (iph->protocol != IPPROTO_ICMP)
->    35:	cmpq	$1, %rdx
->    39:	jne	0xffffffffc0000926
->    3b:	subq	%rsi, %rdi
->    3e:	movl	$2, %ebx
-> ; subprog(len, ret);
->    43:	movq	%rbx, %rsi
->    46:	callq	0xffffffffc00009d0
->    4b:	movq	%rbx, %rax
-> ; }
->    4e:	popq	%rbx
->    4f:	leave
->    50:	retq
->    51:	int3
-> 
-> void subprog(int len, int ret):
-> bpf_prog_6a2f766e16102c10_subprog:
-> ; subprog(int len, int ret)
->     0:	nopl	(%rax,%rax)
->     5:	nop
->     7:	pushq	%rbp
->     8:	movq	%rsp, %rbp
->     b:	subq	$8, %rsp
->    12:	movl	%esi, -8(%rbp)
->    15:	movl	%edi, -4(%rbp)
-> ; __sink(len);
->    18:	movl	%edi, -4(%rbp)
-> ; __sink(ret);
->    1b:	movl	%esi, -8(%rbp)
-> ; }
->    1e:	leave
->    1f:	retq
->    20:	int3
-> 
-> 
-> ===
-> with the elimination:
-> 
-> bpftool p d x n xdp_fn
-> int xdp_fn(struct xdp_md * ctx):
-> ; int xdp_fn(struct xdp_md *ctx)
->     0: (b7) r0 = 2
-> ; struct ethhdr *eth = (struct ethhdr *)(ctx_ptr(ctx, data));
->     1: (79) r2 = *(u64 *)(r1 +0)
-> ; int len = ctx->data_end - ctx->data;
->     2: (79) r1 = *(u64 *)(r1 +8)
-> ; if ((void *)(iph + 1) > ctx_ptr(ctx, data_end))
->     3: (bf) r3 = r2
->     4: (07) r3 += 34
-> ; if ((void *)(iph + 1) > ctx_ptr(ctx, data_end))
->     5: (2d) if r3 > r1 goto pc+9
->     6: (b7) r3 = 9
-> ; struct iphdr *iph = (struct iphdr *)(eth + 1);
->     7: (bf) r4 = r2
->     8: (0f) r4 += r3
-> ; if (iph->protocol != IPPROTO_ICMP)
->     9: (71) r3 = *(u8 *)(r4 +14)
-> ; if (iph->protocol != IPPROTO_ICMP)
->    10: (55) if r3 != 0x1 goto pc+4
->    11: (1f) r1 -= r2
->    12: (b7) r6 = 2
-> ; subprog(len, ret);
->    13: (bf) r2 = r6
->    14: (bf) r0 = r6
-> ; }
->    15: (95) exit
-> 
-> 
-> bpftool p d j n xdp_fn
-> int xdp_fn(struct xdp_md * ctx):
-> bpf_prog_861d0ecc72ad8d9e_xdp_fn:
-> ; int xdp_fn(struct xdp_md *ctx)
->     0:	nopl	(%rax,%rax)
->     5:	nop
->     7:	pushq	%rbp
->     8:	movq	%rsp, %rbp
->     b:	pushq	%rbx
->     c:	movl	$2, %eax
-> ; struct ethhdr *eth = (struct ethhdr *)(ctx_ptr(ctx, data));
->    11:	movq	(%rdi), %rsi
-> ; int len = ctx->data_end - ctx->data;
->    15:	movq	8(%rdi), %rdi
-> ; if ((void *)(iph + 1) > ctx_ptr(ctx, data_end))
->    19:	movq	%rsi, %rdx
->    1c:	addq	$34, %rdx
-> ; if ((void *)(iph + 1) > ctx_ptr(ctx, data_end))
->    20:	cmpq	%rdi, %rdx
->    23:	ja	0xffffffffc0000929
->    25:	movl	$9, %edx
-> ; struct iphdr *iph = (struct iphdr *)(eth + 1);
->    2a:	movq	%rsi, %rcx
->    2d:	addq	%rdx, %rcx
-> ; if (iph->protocol != IPPROTO_ICMP)
->    30:	movzbq	14(%rcx), %rdx
-> ; if (iph->protocol != IPPROTO_ICMP)
->    35:	cmpq	$1, %rdx
->    39:	jne	0xffffffffc0000929
->    3b:	subq	%rsi, %rdi
->    3e:	movl	$2, %ebx
-> ; subprog(len, ret);
->    43:	movq	%rbx, %rsi
->    46:	movq	%rbx, %rax
-> ; }
->    49:	popq	%rbx
->    4a:	leave
->    4b:	retq
->    4c:	int3
-> 
-> 
-> Demo source code:
-> https://github.com/Asphaltt/learn-by-example/tree/main/ebpf/eliminate-subprog
-> 
-> 
-> With the elimination, the callsite of 'subprog' has been eliminated.
-> 
-> However, as you mentioned above, the argument preparation insns are kept.
->
+iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCakImSwAKCRCGXBN6rc5S
+1n9DAP9zhlN5ijXwjntBc0wlfFJAuqZardZzqd1PLSXx1SrTyAEA20oNG98gOTzG
+A1Uncfq79JGJcEnkaLo9tcyk4f9Xog4=
+=KrR/
+-----END PGP SIGNATURE-----
 
-I see, the CALL insntruction is removed, not patched to NOP.
-
-So the call site is either a call to subprog, or totally removed. The fentry
-tracing only works when the CALL instruction and the subprog are not eliminated.
-This is exactly what SDT tries to solve.
-
-> Thanks,
-> Leon
-
+--------------s820ITmkaB0kEH48e0odpSeB--
