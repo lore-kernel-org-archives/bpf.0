@@ -1,118 +1,102 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 572C440802C
-	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 14:10:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62073413220
+	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 14:21:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782742238; cv=none; b=sfWfgh3DBJh12SCnwgwTW8HAzxZnk4vknc8mTbDwOtCJAdcn4TCd5vay75/Nq56Gun/PRQ/Y9Oa+dlzJanVW8Hxx4Bw3MRsnvXadeCwj2f1Q4o8WXZWy8Axy5ZCn5B8KV6qUXC4E3PcejyGUSSVm2En0TvdZNeY2kK2RNBa6K+M=
+	t=1782742895; cv=none; b=iES0oHpxHehfUwHg6J43bj672plPOgU6yIxV/dfPcPh3e+eftpl03sADkKuUVdgDMPBb+UCqwJ8yxbQ8r2TA1UfH9w0xDHafJjbvjMigiP01TUrdwc7RIYhEb//wLBL9P0Z9B3x5AcjxxmvmOAEi6lGWJrk0Zwh5iKk7l3n+quU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782742238; c=relaxed/simple;
-	bh=2kxmWxcETEb3vDCu1T85edgzhqCy22DHMmXVywmipRM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=iZRi4XTsc+pfwcowvhzytYXH97dBQjo693EnKk8g0fSKez9+i7RdPHknYhZ9XECD75YJvqKAyA7ZNrrEroMklDSvVc6xwli6Mdy96FJRZhIy2X25IOT6uEWv8r3tpRfKWvD7KcOidTrre1Je+sG1kPz7maGkoI1Z+xBo5eMgN60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fmSFa5xa; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782742895; c=relaxed/simple;
+	bh=6N8TZdOGZpYdvkdEzYl4kczOMe5OzzYX7K8rWlif55w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=g+rMcqhQ6ypciRNnzC/0tZ8RlQVXqN4vwfebd6ifYZ+DBjTsTBZe7Fa1yAwRIXdPCM4GbqAQuQeUzWhB5KLek/ZJfjmZ/+yvTWIHjaaOmjaRj275NAs4+LXTzmSuy8u+bZy3wgBOwYGUwE45MnZuRuvrPYboqYl+HajUQPzqtLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RvQnH6MT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fmSFa5xa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5F6F1F000E9;
-	Mon, 29 Jun 2026 14:10:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RvQnH6MT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF8B01F00A3D
+	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 14:21:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782742235;
-	bh=AcXItKB7qnxqHibqhYUzLhC++idTk4yQRF+vlE3rmfk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fmSFa5xabWzu8FlvyWO+v8iijFqKFA3OKfgrkVPZ7Pxp1UY4uaOtMAD4UR1coi46J
-	 QJxLmT0pOroXs/1C6isEhhtijnvkSZumE+03ZjfffVarOcqkT7TZBSlqbFsX7eU1mJ
-	 ImDn8E1asjC6T4EmfGLMh4QWrE4XSeEp/+cyXHErXZ909e2G78VoAxMJUAaON5w9qQ
-	 40bv4Z3bHXfSCee8M1/QdVzvtEZ3np7Q/tO8v1bDvDbOZmqIjOnCrrWgdKtQIP/Yqo
-	 DnXsopE6oxTDcwtb8s0owHVSw+E/atA84g4dVHLK7JntFJGV7+Y/JaT1oqCyCivybp
-	 vBU5dkSKcjICA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 4/6] riscv, bpf: Add RV_TAILCALL_OFFSET
- macro to format tailcall offset
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pu Lehui" <pulehui@huaweicloud.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260629140048.733346-5-pulehui@huaweicloud.com>
-References: <20260629140048.733346-1-pulehui@huaweicloud.com>
- <20260629140048.733346-5-pulehui@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 29 Jun 2026 14:10:34 +0000
-Message-Id: <20260629141034.D5F6F1F000E9@smtp.kernel.org>
+	s=k20260515; t=1782742892;
+	bh=6N8TZdOGZpYdvkdEzYl4kczOMe5OzzYX7K8rWlif55w=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=RvQnH6MTIBL/G8eXLoFHj7YZth3vXHgnVDXJCKfbDeZp6RXJ3BXCLE0grbrZzyii9
+	 /yS+oreF3/8JQ0puL6llRqgTg/xs0Cq6sBDFGYeEx0Jn2TNR8YyXcwWfx7IFN9yhDc
+	 LAeHBiDlmOvu5L0mCxDtz88UL3GCczmBaYd7WLSbKcWud45EtrT6OBPZlaK5rm+Blh
+	 EXN6Mz8LoFkMbpJlxxk1YxWVGragpChsvDFhry132uDN5YZ65ejpW5hQOSCugXRW/E
+	 eru4jKMDGMjr0kdGORU6W4odDhBapVkVRXRIO6N1HFgDXjeiME51cqnc6Ow4xWVIZI
+	 jd0YuLgRbDZCA==
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-92e5cb052edso43448985a.2
+        for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 07:21:32 -0700 (PDT)
+X-Gm-Message-State: AOJu0YyULi/QhouA6+3IytSBvABgSMSgnEQPoIJD3eemn5EJd6ZPDx0D
+	c6gRk3EHWFkXXbQK2+iBq3K/4PVIzkVF3RpPdHrNXY6KcxdWOL3GstuM8w0w9QTzOJNublkKdz5
+	HXVxCd5/CpTUe5F12GJCmGWAi4GL/rGk=
+X-Received: by 2002:a05:620a:29ca:b0:92e:56f7:c5fb with SMTP id
+ af79cd13be357-92e56f7d387mr348831685a.12.1782742892220; Mon, 29 Jun 2026
+ 07:21:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260629140048.733346-1-pulehui@huaweicloud.com>
+In-Reply-To: <20260629140048.733346-1-pulehui@huaweicloud.com>
+From: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Date: Mon, 29 Jun 2026 16:21:20 +0200
+X-Gmail-Original-Message-ID: <CAJ+HfNhn9eK+3xsd3ewEsG-duCgBeYXeLAtNan=qefas2Ya0dQ@mail.gmail.com>
+X-Gm-Features: AVVi8CfLeBnCl8UWbgTGDyVcouBIu1AOkUzgbXfQlr0DRYJvmC-HJ0Ezdj90Wog
+Message-ID: <CAJ+HfNhn9eK+3xsd3ewEsG-duCgBeYXeLAtNan=qefas2Ya0dQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 0/6] Mixing bpf2bpf and tailcalls for RV64
+To: Pu Lehui <pulehui@huaweicloud.com>
+Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>, Pu Lehui <pulehui@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+Hey!
 
-Pre-existing issues:
-- [Critical] The tail call offset macro `RV_TAILCALL_OFFSET` incorrectly do=
-uble-counts the KCFI preamble when `CONFIG_CFI` is enabled, causing tail-ca=
-lled programs to skip their stack pointer adjustment and corrupt the caller=
-'s stack frame.
---
+On Mon, 29 Jun 2026 at 15:56, Pu Lehui <pulehui@huaweicloud.com> wrote:
+>
+> From: Pu Lehui <pulehui@huawei.com>
+>
+> In the current RV64 JIT, if we just don't initialize the TCC in subprog,
+> the TCC can be propagated from the parent process to the subprocess, but
+> the updated TCC of the parent process cannot be restored when the
+> subprocess exits. Since the RV64 TCC is initialized before saving the
+> callee saved registers into the stack, we cannot use the callee saved
+> register to pass the TCC, otherwise the original value of the callee
+> saved register will be destroyed. So we implemented mixing bpf2bpf and
+> tailcalls similar to x86_64, i.e. using a non-callee saved register to
+> transfer the TCC between functions, and saving that register to the
+> stack to protect the TCC value. As for the tailcall hierarchy issue,
+> inspired by the s390's low-overhead approach, we store TCC from
+> RV_REG_TCC back to stack after calling bpf2bpf call or calling orig bpf
+> func in bpf trampoline.
+>
+> In addition, some code cleans are also attached to this patchset.
+>
+> Tests test_bpf.ko and test_verifier have passed, as well as the relative
+> testcases of test_progs*.
+>
+> v4:
+> - Fix tailcall hierarchy issue.
+> - use is_struct_ops_tramp helper in bpf trampoline
 
-commit 655037e3f7e62935bb76d41ae8cffb13d2a38d50
-Author: Pu Lehui <pulehui@huawei.com>
+Alexei outlined some (major) concerns on the whole mixing side of
+things [0]. I haven't been following that space -- did Leon have a
+workaround/fix? Can you explain more how you fixed it, and why it
+would make sense to add it to RISC-V now?
 
-riscv, bpf: Add RV_TAILCALL_OFFSET macro to format tailcall offset
+Thanks,
+Bj=C3=B6rn
 
-Add RV_TAILCALL_OFFSET macro to format tailcall offset, and correct the
-relevant comments.
 
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
-p64.c
-> index 69512d93ca4a7..c239696cca646 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
-> @@ -21,6 +21,8 @@
->  #define RV_KCFI_NINSNS (IS_ENABLED(CONFIG_CFI) ? 1 : 0)
->  /* imm that allows emit_imm to emit max count insns */
->  #define RV_MAX_COUNT_IMM 0x7FFF7FF7FF7FF7FF
-> +/* kcfi, fentry and TCC init insns will be skipped on tailcall */
-> +#define RV_TAILCALL_OFFSET ((RV_KCFI_NINSNS + RV_FENTRY_NINSNS + 1) * 4)
-
-[Severity: Critical]
-This is a pre-existing issue, but does RV_TAILCALL_OFFSET incorrectly
-double-count the KCFI preamble when CONFIG_CFI is enabled?
-
-Since prog->bpf_func already skips the 4-byte KCFI hash (because it points
-to ctx->ro_insns + cfi_get_offset()), it looks like including RV_KCFI_NINSNS
-here overshoots the correct jump target by 4 bytes.
-
-Does this skip the necessary stack pointer adjustment instruction, causing
-tail-called programs to execute prologue register saves using the unadjusted
-stack pointer of the caller and potentially corrupting the kernel stack?
-
-[ ... ]
-
-> @@ -272,9 +274,7 @@ static void __build_epilogue(bool is_tail_call, struc=
-t rv_jit_context *ctx)
->  	if (!is_tail_call)
->  		emit_addiw(RV_REG_A0, RV_REG_A5, 0, ctx);
->  	emit_jalr(RV_REG_ZERO, is_tail_call ? RV_REG_T3 : RV_REG_RA,
-> -		  /* kcfi, fentry and TCC init insns will be skipped on tailcall */
-> -		  is_tail_call ? (RV_KCFI_NINSNS + RV_FENTRY_NINSNS + 1) * 4 : 0,
-> -		  ctx);
-> +		  is_tail_call ? RV_TAILCALL_OFFSET : 0, ctx);
->  }
-
-[ ... ]
-
-> @@ -394,7 +394,7 @@ static int emit_bpf_tail_call(int insn, struct rv_jit=
-_context *ctx)
->  	off =3D ninsns_rvoff(tc_ninsn - (ctx->ninsns - start_insn));
->  	emit_branch(BPF_JEQ, RV_REG_T2, RV_REG_ZERO, off, ctx);
-> =20
-> -	/* goto *(prog->bpf_func + 4); */
-> +	/* goto *(prog->bpf_func + RV_TAILCALL_OFFSET); */
->  	off =3D offsetof(struct bpf_prog, bpf_func);
->  	if (is_12b_check(off, insn))
->  		return -1;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260629140048.7333=
-46-1-pulehui@huaweicloud.com?part=3D4
+[0] https://lore.kernel.org/bpf/CAADnVQ+rLneO4t=3DYYmLYtc945Fz0=3DucNTWZBxg=
+vs8toFY-onRg@mail.gmail.com/
