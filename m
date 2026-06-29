@@ -1,229 +1,148 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0597C2C1788
-	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 02:14:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE921C2324;
+	Mon, 29 Jun 2026 02:45:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782699300; cv=none; b=b+y6IkKsDhs2ZZoIScA1BMJSMGoi3s0OitdC4+34Jj6nulqSXQbnclTrLxkcfX5+8Ohhns+0QNdAXQ5no3YBbJ/U3kVOYqw23Nyc2tkxg98pmCmXDaWIsCPlLRSEyZ9yCi2xEpRnPiY1lm5jyt4aFeV/RtFnRDztce6W84sDB7U=
+	t=1782701152; cv=none; b=GLn/srjteR89qmOX/wVqVtSqDXFf+4XJrPMQkMmcboZJYkeBA5lwoRBu+WCwE3g8m3MMLxfkLj4zmFSskzwq0Z/bTymj2MV6gblTVgxLQGhLrTxD2rTvOp5WU9mT2cbambBPOO/2xc9rkV/PCh7g9RA7fPU/ONEKEaORpG8ogbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782699300; c=relaxed/simple;
-	bh=B2fdBKpNv5OvbM0GIPeh4SNTUYsiUx7nFegm/cKV6VY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NHw3n15laIjboJMWWmo7PDY2vMa6MGNZd82IvmbV1ttdKziypQa/DejW2T8WR31X/fw/l2G2+GgmPjv3TKUGqk6R2H3Am2KZ9DUuBnjJAzzEiMTV2VPiq19A4BPDxz4LGLrpE0hqEZsY0el8plxQyKuoVEfcyeKbCp//WDZihAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gQ5OZukC; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782701152; c=relaxed/simple;
+	bh=6whlM472XDbDK4oAY86QBQE4lLMTcLBzRjw0kH7xu6U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=GUaKdwJMfnmOi3oCOC9qiL5s24g3Aze/oBVS3Dtc0K6WlcbjHD05VmiOgnL1nSdejntHFy44YJfdyTIFt65y+OUa0f9MZeYu/xxFSUGomu0Wc0HABkQWpSjn+Jj9Vabyv5JrUEcL2JxIkuoyIJqn6H3l6np9eW6wU0p8nOpOX40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=zLFZCyhK; arc=none smtp.client-ip=113.46.200.225
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gQ5OZukC"
-Message-ID: <855e44f3-d22c-47e5-8bd1-c5d9f7014a75@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782699287;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SfciW9oe/6KsBQ9g2E0tczItMH1cFAvZbrBquHscbUE=;
-	b=gQ5OZukCAeKLNPZ+YxRovUP3vQcQGlgOuVlKm6ikMGUjKgvPxKqErZ2CT1TMhx+BhJoD5n
-	oKOniTn/Cm0SUOg1l2ySQYCkrKt8gMaR2Te6O81JgRL4g0N7dlDIY3zul/R531Ieq/U3I2
-	JAaLn0QA5QD3MBgowIa0D86/21yIt7Q=
-Date: Mon, 29 Jun 2026 10:14:28 +0800
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="zLFZCyhK"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=+RJGyhOhZ1tq7Gv/WlbCg3jJO5RCxNjVoq4LnTJ7QMw=;
+	b=zLFZCyhKBZTaW85ElrIqjEtWjtBULUaJRgJ79csFigvWxfctAYuAhpSmb0X8384DNa/kmMLwK
+	+oWvsgT6b/pzLEEso0TzdGz+WkNEBVKx8eHnrWybYlaUklmJyMyAHDO3RccwX7+fIfz06j3WE+v
+	OC2qxfpzMkzbl76y2sbMM2w=
+Received: from mail.maildlp.com (unknown [172.19.163.15])
+	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4gpVlg4bDmz1K98D;
+	Mon, 29 Jun 2026 10:36:31 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id A47AA40578;
+	Mon, 29 Jun 2026 10:45:38 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
+ (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Mon, 29 Jun
+ 2026 10:45:37 +0800
+Message-ID: <912fa271-7358-46b6-ad19-8a2a25b7d34a@huawei.com>
+Date: Mon, 29 Jun 2026 10:45:36 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH bpf-next 00/12] bpf: Introduce static-defined tracing
- probe for BPF
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 1/3] riscv: stacktrace: Implement
+ arch_bpf_stack_walk() for BPF
 Content-Language: en-US
-To: Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- KP Singh <kpsingh@kernel.org>, Anton Protopopov <a.s.protopopov@gmail.com>,
- Amery Hung <ameryhung@gmail.com>, Eyal Birger <eyal.birger@gmail.com>,
- Rong Tao <rongtao@cestc.cn>
-References: <cover.1782571533.git.xukuohai@huawei.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <cover.1782571533.git.xukuohai@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-
-Hi Kuohai,
-
-On 28/6/26 06:51, Xu Kuohai wrote:
-> From: Xu Kuohai <xukuohai@huawei.com>
-> 
-> This series introduces static-defined tracing probes for BPF programs.
-> BPF SDT (static-defined tracing) works similarly to USDT. User defines
+To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Varun R Mallya
+	<varunrmallya@gmail.com>, <pjw@kernel.org>, <palmer@dabbelt.com>,
+	<aou@eecs.berkeley.edu>, <ast@kernel.org>, <daniel@iogearbox.net>,
+	<andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>
+CC: <alex@ghiti.fr>, <martin.lau@linux.dev>, <song@kernel.org>,
+	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+	<puranjay@kernel.org>, <shuah@kernel.org>, <linux-riscv@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20260628081710.113333-1-varunrmallya@gmail.com>
+ <20260628081710.113333-2-varunrmallya@gmail.com>
+ <87ik72y3sr.fsf@all.your.base.are.belong.to.us>
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <87ik72y3sr.fsf@all.your.base.are.belong.to.us>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
 
-At first glance, the SDT idea looks cool to me.
+On 2026/6/29 1:26, Björn Töpel wrote:
+> Varun!
+> 
+> Thanks for spending time on getting RV eBPF more feature complete! Sorry
+> for the slow replies.
+> 
+> Varun R Mallya <varunrmallya@gmail.com> writes:
+> 
+>> This will be used by bpf_throw() to unwind till the program marked as
+>> exception boundary and run the callback with the stack of the main
+>> program.
+>> This is required for supporting BPF exceptions on RISC-V.
+>> This depends on the frame pointer unwinder, so it is only built under
+>> CONFIG_FRAME_POINTER, else falls back to the weak no-op.
+>>
+>> Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
+>> Reviewed-by: Pu Lehui <pulehui@huawei.com>
+>> ---
+>>   arch/riscv/kernel/stacktrace.c | 31 +++++++++++++++++++++++++++++++
+>>   1 file changed, 31 insertions(+)
+>>
+>> diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
+>> index c7555447149b..64929381bb30 100644
+>> --- a/arch/riscv/kernel/stacktrace.c
+>> +++ b/arch/riscv/kernel/stacktrace.c
+>> @@ -5,6 +5,7 @@
+>>    */
+>>   
+>>   #include <linux/export.h>
+>> +#include <linux/filter.h>
+>>   #include <linux/kallsyms.h>
+>>   #include <linux/sched.h>
+>>   #include <linux/sched/debug.h>
+>> @@ -102,6 +103,36 @@ void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
+>>   	}
+>>   }
+>>   
+>> +void notrace arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp),
+>> +				 void *cookie)
+>> +{
+>> +	unsigned long fp, sp, pc;
+>> +	int graph_idx = 0;
+>> +
+>> +	fp = (unsigned long)__builtin_frame_address(0);
+>> +	sp = current_stack_pointer;
+>> +	pc = (unsigned long)arch_bpf_stack_walk;
+>> +
+>> +	for (;;) {
+>> +		struct stackframe *frame;
+>> +
+>> +		if (unlikely(!__kernel_text_address(pc)))
+>> +			break;
+>> +		/* pc belongs to the function whose frame pointer is fp */
+>> +		if (!consume_fn(cookie, pc, sp, fp))
+>> +			break;
+>> +		if (unlikely(!fp_is_valid(fp, sp)))
+>> +			break;
+>> +
+>> +		frame = (struct stackframe *)fp - 1;
+>> +		sp = fp;
+>> +		fp = READ_ONCE_TASK_STACK(current, frame->fp);
+>> +		pc = READ_ONCE_TASK_STACK(current, frame->ra);
+>> +		pc = ftrace_graph_ret_addr(current, &graph_idx, pc,
+>> +					   &frame->ra);
+>> +	}
+>> +}
+> 
+> We don't need more stack unwinders. Can you see if you can extend
+> walk_stackframe() with "cookie" to match BPF's needs? Have a look at
+> what arm64 does.
+> 
+> Sashiko had a good point about ftrace_graph_ret_addr() -- now what about
+> kretprobe? Do we need to take that in consideration as well?
 
-However, what's your purpose of introducing SDT?
+IIUC, arch_bpf_stack_walk only unwind for bpf prog stack, maybe we could 
+not need to handle kretprobe.
 
-If to provide points in bpf progs to be traced, like tracepoints in
-kernel functions, I think subprog+fentry is an alternative approach.
-Comparing with SDT, subprog+fentry requires a function call at run time,
-instead of a NOP like SDT.
-
-For example,
-
-#define __sink(expr) asm volatile("" : "+g"(expr))
-
-static __noinline void my_trace(int len, int ret)
-{
-	__sink(len);
-	__sink(ret);
-}
-
-SEC("xdp")
-int xdp_prog(struct xdp_md *ctx)
-{
-	int len = ctx->data_end - ctx->data;
-	int ret = XDP_DROP;
-	...
-	my_trace(len, ret);
-	...
-}
-
-'my_trace' can be traced using fentry to inspect the details of 'xdp_prog'.
-
-Furthermore, if users don't want a function call at run time, e.g. they
-don't want to call 'my_trace' at run time in production, they can patch
-the callsite of 'my_trace' with NOP before loading 'xdp_prog', and drop
-the subprog 'my_trace' in their user space application. This elimination
-is approachable, since it is used heavily in bpfsnoop [1]. However, this
-elimination is not easy to understand. Want me to show more details
-about this elimination?
-
-Link:
-[1] https://github.com/bpfsnoop/bpfsnoop
-
-Thanks,
-Leon
-
-> probes in the BPF source code. The probes are built into NOP instructions
-> in the ELF. At runtime, when an observer is attached, the NOP instruction
-> is patched to a CALL instruction to the observer prog trampoline.
 > 
-> Unlike USDT, BPF SDT requires explicit macros to generate the function
-> prototype BTF for each probe. This allows the verifier to validate the
-> probe sites against the declared types, and observer programs can be
-> attached similarly to normal tracing programs using the function prototype
-> information.
 > 
-> A probe with two arguments in the target program can be declared and defined
-> like:
-> 
->     BPF_SDT_DECLARE2(my_trace, int, int);
-> 
->     SEC("xdp")
->     int xdp_prog(struct xdp_md *ctx)
->     {
->         int len = ctx->data_end - ctx->data;
->         int ret = XDP_DROP;
->         ...
->         BPF_SDT_PROBE2(my_trace, len, ret);
->         ...
->     }
-> 
-> An observer would be like:
-> 
->     SEC("bpf_sdt")
->     int BPF_PROG(observer_prog, int len, int ret)
->     {
->         bpf_printk("len=%d ret=%d\n", len, ret);
->         return 0;
->     }
-> 
-> The target program and probe site for the observer program should be set
-> at load time via bpf_program__set_attach_target() manually, since program
-> names are not unique and program IDs are allocated at runtime - there is
-> no static way to identify the target program.
-> 
-> For BPF_SDT_DECLARE2(my_trace, int, int) and BPF_SDT_PROBE2(my_trace, len, ret)
-> macros, the compiler produces:
-> 
->   [code section, e.g. xdp]
->       goto +0                  // NOP, patched to CALL at attach time
-> 
->   [.bpf_sdt_notes section]
->       ___sdt_jt_my_trace:      // symbol marking this entry's boundary
->       .quad  0b                // 8 bytes: offset of the NOP in the code
->                                // section (resolved by the linker via
->                                // R_BPF_64_ABS64 relocation)
->       r1 = %[arg1_reg]         // 8 bytes per argument: BPF move insn
->                                // whose src_reg field encodes the BPF
->                                // register holding each probe argument
->       r2 = %[arg2_reg]
-> 
->       ....
-> 
->   [.BTF section]
->       FUNC_PROTO (int, int) -> void   // from BPF_SDT_DECLARE2 stub
->       DECL_TAG "bpf_sdt:my_trace:2"   // keyed by name + nargs
-> 
-> The .BTF and .bpf_sdt_notes sections are parsed by libbpf and ultimately
-> converted to an insn_array map per bpf program. Each map slot records the
-> instruction offset, jited address, FUNC_PROTO BTF ID, and argument register
-> for each probe site.
-> 
-> When an observer prog is loaded, the probe is resolved against the target
-> program's SDT map using the target fd and probe name passed by the user.
-> 
-> For attach, the existing bpf trampoline is reused with per-argument register
-> mappings declared by the SDT macro.
-> 
-> Xu Kuohai (12):
->   libbpf: Prepare bpf SDT probe section for the linker
->   libbpf: Introduce bpf SDT probe macros
->   libbpf: Add bpf_sdt_notes section parser
->   bpf: Create insn_array map for bpf SDT probe
->   bpf: Collect SDT probe BTF IDs from BTF decl tags
->   bpf: Add type check for SDT probe site
->   bpf: Record probe name in SDT map
->   libbpf: Add libbpf support to load SDT observer program
->   bpf: Add kernel support to load SDT observer program
->   bpf: Support attach and detach for SDT observer program
->   bpf, x86: Add JIT support SDT for probe
->   selftests/bpf: Add tests for bpf SDT probe
-> 
->  arch/x86/net/bpf_jit_comp.c                   |  38 +-
->  include/linux/bpf.h                           |  26 +-
->  include/linux/bpf_types.h                     |   1 +
->  include/linux/bpf_verifier.h                  |   3 +
->  include/linux/filter.h                        |   1 +
->  include/uapi/linux/bpf.h                      |  21 +-
->  kernel/bpf/bpf_insn_array.c                   |  64 ++-
->  kernel/bpf/cfg.c                              |   3 +
->  kernel/bpf/core.c                             |   5 +
->  kernel/bpf/fixups.c                           |   4 +
->  kernel/bpf/liveness.c                         |  24 +-
->  kernel/bpf/syscall.c                          | 163 +++++-
->  kernel/bpf/trampoline.c                       |   4 +
->  kernel/bpf/verifier.c                         | 174 +++++-
->  tools/include/uapi/linux/bpf.h                |  21 +-
->  tools/lib/bpf/Makefile                        |   2 +-
->  tools/lib/bpf/bpf.c                           |  10 +-
->  tools/lib/bpf/bpf.h                           |   9 +-
->  tools/lib/bpf/bpf_sdt.h                       | 346 ++++++++++++
->  tools/lib/bpf/libbpf.c                        | 513 +++++++++++++++++-
->  tools/lib/bpf/libbpf_internal.h               |   1 +
->  tools/lib/bpf/linker.c                        |   9 +
->  .../selftests/bpf/prog_tests/test_bpf_sdt.c   | 151 ++++++
->  .../selftests/bpf/progs/bpf_sdt_observer.c    |  30 +
->  .../selftests/bpf/progs/bpf_sdt_target.c      |  34 ++
->  25 files changed, 1622 insertions(+), 35 deletions(-)
->  create mode 100644 tools/lib/bpf/bpf_sdt.h
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/test_bpf_sdt.c
->  create mode 100644 tools/testing/selftests/bpf/progs/bpf_sdt_observer.c
->  create mode 100644 tools/testing/selftests/bpf/progs/bpf_sdt_target.c
-> 
-
+> Thanks,
+> Björn
