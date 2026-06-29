@@ -1,110 +1,128 @@
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E45E643DA27
-	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 17:28:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782754093; cv=none; b=QvooIPvL2iSJiAX8AOIUF9Ka7DzeG89OtdtmvrbNRBeZbTqCqEBp91VBr6b2Z44T3Kc5a11jZkPoC4qbpgX7nCYFABykXU1v8qSwpyCei85ncLPkRU4uRgunVzSTzxjylZyM1A5fA+Wep3ucXecrJAeuaFuzzEKkDFunOgssJeA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782754093; c=relaxed/simple;
-	bh=q89a1LIYC/+za1L0sqYn4ObuSzIDGeRBUiOXTZATgrM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=r11JqY6sYVR9D4s58rpHFjppVWjeGLH6IL+q4bYFXmONruZcfH5KitoMWhKrsuC7rL5ZMIaowz/PecY6Dxgc5/m/MZ8bjqYwqzeBvrwj/3aoM4f2+4Qd8dNE6WMcTHHkq9hRb9kvxT7ues7bshFIjhfHo3JghTAqmpnSpczGasc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kJoZZHZV; arc=none smtp.client-ip=209.85.210.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37241355049
+	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 17:31:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782754284; cv=pass; b=gsKRXa0aK4gCAZMnrI3SrEpXmJY4IgG0v2RY6Nv2U+yMVHiBFqKy/fRJXC0DrHRJVaAr+0p47zDUsMPk0LmGlZAkSAQxldKpDeEMWJ2K/dbbjsIn0m/o/w1fr+PXrcOlabaXe7YDNvN3yXlQKXFJTCVkvc5IObQoMBbeDN58/w4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782754284; c=relaxed/simple;
+	bh=eOClBfv6lfdCI5t+K8NOrbjIYwBgmecurDoITjBEbHY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hrrTr98Yvajdh5d9QmomnehH111SRbBUpGTZ2+Adad2vGnQblg16AlYr50K5knV/P4ZwGVHwAXThqIaxg2O0tAOKK/GqjMRKjeBsYjA3pH3g2Lnc6uwwXxxJoZp8G2Yd9MWOkTE8i49uoc7Yb0jirf6KkQVdzQ249oVCuuuF6UM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VOB0tbQz; arc=pass smtp.client-ip=209.85.208.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kJoZZHZV"
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7e9ecd7216cso45249a34.3
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 10:28:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VOB0tbQz"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-69857dc1d5eso2962014a12.3
+        for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 10:31:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782754281; cv=none;
+        d=google.com; s=arc-20260327;
+        b=BGiLdiM1eNzUmV+VLF5GaNWXQ2Mw8/wrxdqWA2aMpAoj0J+WGOptyeQAvccH7k9sFz
+         CXlNxFuFuCEBoujaA7qgeO2oGQ6eCpdiwbWB5mifxqu+Q/pm5nj+nhHA8lfH+kjnIRe1
+         7YEl50++GZczFcwq0WG+tBQNfP51MDza5uqSIIjnssd6976iihxX3y2t9/RbARTm02P5
+         1rZnv6DYJ9p1qrufWXmxMvyEownIxmy+hu/uUIET/4xUTyPvh5u7I1ob84c3IbRkCLZb
+         bemQNHsGGCUPTH0oThrpq6Ww0ieUN3W7Fp7HN1gXElKRC97TBQJ06QVjSmBh6/REuy/P
+         A4VQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=eOClBfv6lfdCI5t+K8NOrbjIYwBgmecurDoITjBEbHY=;
+        fh=QAQO5TGs2GNYkeupizvwLcgOwopY11+SrZ225YGzIAs=;
+        b=rfq8uqLqL1iO5lKWAonutSP+Wsgow2ykMEqqnrwTihygadRCIexumirF6YbJ5xPdM5
+         01emKzda9NT5rGtqa9eg4ONvYbRaz6OOtJVbZzLNGOfU4/EWTw17Iab+NNSoLfnYNsPg
+         +jxvo2YWaNP9/yMtYCISDxwI0/sUmtmsUmRZ0I37/VYsXZq5bLzagSmaSR46UkAZ85kN
+         cAJfZDS6MfjDuVmBiSb6IUV82eilYRmUIUIUs/IPdVxk3RQrON1LfII0zTM/r2CiU/FR
+         jQcpKnkx+QVqvIShfF34oVSQaTlKjHaSi4/cfVIcxmbgBlGio2e5iDWaJTfUvIheOXZ+
+         IECw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782754091; x=1783358891; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PFEMIzG3ZwYx+F9DQvZAp4h+AG8K3cwEV9kiHVx3YVQ=;
-        b=kJoZZHZVGdY4snS0wXg4PA//kdeiIWfC6+PalJ7s1PLXKfL4FSuLCzI842b9ytW2u1
-         kOs0GVSiD1927cshK2LhAY/S+EjN0K4QGNY2zR/pi+8YrI7u+hqfiv002IgWhmJaw31k
-         8Uit8jU8BCgHoN9s4lfnx8ZR2OwouZkBizSfzCpxAkpkm56I/ugZLd2mbc7Xh0hVCZo8
-         7p4KSFx8I8j3z3aJUeXqt4TOuDjkk/o5ZQ6B0qNK4t59zkun7z1bFOdvdfqX1S9MKypr
-         f84Kz2Zp0rZGbFd9HYYzyRGMlPFyt796q9CrZq5paeDUTt2REHYiOVnSWzsTOcSi9rqJ
-         EcZA==
+        d=gmail.com; s=20251104; t=1782754281; x=1783359081; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=eOClBfv6lfdCI5t+K8NOrbjIYwBgmecurDoITjBEbHY=;
+        b=VOB0tbQzXHx225/eBRLGEzWz6vX02N24U92aDSCNpfdq7DZv9iI6NGkOHF5VJSXBf0
+         iZEHeZ0V5mC0F3hIMX5sla7sCwE6QUNe99CfMZz+3kF02NmreX29GtPeIhhn9/tvERdq
+         6rIHJEfwGNs7g3Qtc2MU325nY7nvEWm2h/9qTqpSpa6S67zweReqCilX7ZHuwu06Afw2
+         Tp0haJ2b/3LKr4BGQqiyRCz5NDX62Jd6SCIPaTHgyHwtVcs9J/8SW3WLPHp/mOLeDDnB
+         HbauBnc7gNry89jY+RZ4nsQ9ECd+RxPZvUBef39i/RgCTiFo8PTy4LyUjrjbVd51dDKN
+         dcww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782754091; x=1783358891;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PFEMIzG3ZwYx+F9DQvZAp4h+AG8K3cwEV9kiHVx3YVQ=;
-        b=nk1aKsGfZELDCNxcRor5BrRa8XoIlm2oFs6wJp/KxKqHw5DDRCBLDlhYvUTK31XJix
-         W6u/2ECt0yuq37jkSrZv1NULARXu8Yq46t2eUi9IEy/Gu5son241jM2Yt8pg5jyIQfhr
-         aVGtcXloJ5ZzD0VxThN8x48v5bPy/10D97XqjZZPhgQ8Md1CuRD0T4FvF9jDFbS2wDB9
-         CFvBRAHEX6Ay29iozCqNP+gCPHtmKlGg1vFIU+eMKiTGOhQ7pU6zV30SkXS3YwNLt/Yd
-         APCHs9ZjpgeW1zADxFWFlmDyabXgSrqqap99xqdcayeepBdwWEoF562WVJ5qs6/oFY5+
-         EzpQ==
-X-Gm-Message-State: AOJu0Yzmqc2focBmYK3iShRcTG8U1yBLXWtEt1nfbayT9+x5U9nh68Zu
-	Udal5DrVGkNjlfHGSu8qTSZl4eQAf3yUc0htizK8JetjEplsKfNWDrmm
-X-Gm-Gg: AfdE7cl/E2+DUNhXyNlwhFV2BUuydCBdMxBTU3xwLOIr8uZXy2/JO4dZawJnoFQBX/i
-	m/oJdT7Olh+Mq6LAo6NQX36dc1yen3jxi+ct7DWJEmq/Wnl82jmR6b+7JAMhzyRfdQ9hOj1Wbgs
-	42zokkWDvOw9bvHGwu3w4g4Iwvz/oV32gd9E72wS+GhS7KquOU3CF2sDlEt/6HmWky464ti7ZkF
-	6sgXalmqxlpEr6CY7TPKRofTvxUIij2CyA9gbrUgk2e6vI6PsgksvYCQzrFFSiDNxuXxTZIoi6y
-	wxR2OyYCviXrVAGdsKSA1fxiEC9fM1CCa0tyV01ETJPx/thmBx4kq0b6c2m1ei2aEKjY06HCR2d
-	isr8gFMDECgGxdqEz15wafvsCqJcqw+cVBeyOVBLHlzAibW269pLaMC64p2rSzJdS7RZbnpT71X
-	Vy88GYxgVC+byHTmv5d+snEsrAZdfTvR2RTvIHB3hDYXTxguCJ1+BGkQcBpzeiggsscXDuYuGah
-	LDaty0=
-X-Received: by 2002:a05:6820:5714:10b0:6a1:588f:d142 with SMTP id 006d021491bc7-6a18914fa3emr288615eaf.16.1782754090701;
-        Mon, 29 Jun 2026 10:28:10 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:1a::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6a1891cf544sm270781eaf.5.2026.06.29.10.28.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jun 2026 10:28:09 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782754281; x=1783359081;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=eOClBfv6lfdCI5t+K8NOrbjIYwBgmecurDoITjBEbHY=;
+        b=sTrgwta+/g3SPBqGgHt/V4H442I8A4h9HseaQLSZeNyoKIGXNY9VLN7SkmQdLAZqOC
+         1KtqrWjrGjAf0T/ulsIF3bzaTtEik2IvpMnrlacykOvPEod35puOg8kFKd8M2py3DzVn
+         hIRguNvo4lzJH3LhuRHL3mwzVQaGRpoGLTD8/4tS5YYy34F2FytLbdMLOrpsl58KOpny
+         i+dEyyESz4hN1WzcG2to18eqjd4xr5DBLaOXzvN02h8KJVu/+j7GzyaRvPNHzLkW1jBO
+         JWwre2GR65KeO45eVNXW5GYcm4bEdZmSsijuQwJzux8mCmB86C59bZNHly0kKFoKLmPO
+         IGFg==
+X-Forwarded-Encrypted: i=1; AHgh+Rru4ckUj3PYsmIczsUtgozyhQHmKinah2fdJGoP09paZbgr6KP6IaZOBZAwQZDzsD41T8g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3wRaayWSGrU5ObkDghiYxb+Lto/vKVZ8unS9E4VKyw7kN9Pid
+	Shx2wyLAajsARivzflXKSrh2nD7mMJ8+GND9kLrquGayXLNRtRrwmWJJRtXZlffVRIfQJLqCmTR
+	aUJ1Vh7fCzaksshEEKv9sKCA2Vsi5C+M=
+X-Gm-Gg: AfdE7cnABIwW6GYFjMUhkkJqihDctC1jR1GdHPLKuRquJV4hBp1tegChSt4CObyYGIn
+	skBSDqzSEnrP0QDWC01SGbhdA5S3DKp4qIgDfPrLoelKuR/RnT3Pt1j+car3sgCSBkBn2Wlivnr
+	NsGDi5qI/R9KIQiLYs1hcyR5F6erFA11cUy7UGSjnczAYF2F5rHixkqwc95K9rqsmIl0T2j9VJ3
+	TJV91gUtiNop2YkFBucXlgOHkI00j5lwrjQTNmQgX73/WhrdAd6sOrp5q7ZB+/E9eXLPVBrKKRk
+	gQPMevsBfFo8N3agOT7C/wG+tRG/IGM=
+X-Received: by 2002:a05:6402:390a:b0:68f:cc95:8c10 with SMTP id
+ 4fb4d7f45d1cf-69879e4b974mr46982a12.27.1782754280332; Mon, 29 Jun 2026
+ 10:31:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260629070653.580879-1-caixinchen1@huawei.com>
+In-Reply-To: <20260629070653.580879-1-caixinchen1@huawei.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Mon, 29 Jun 2026 19:31:09 +0200
+X-Gm-Features: AVVi8CfvDZzdzYVHdraWAewZEFEyCZ6yZ4zu-tcKsdp7diMSLlszm49WqjY_Vvs
+Message-ID: <CAOQ4uxjcD0-PHqqmrpEvkLRgtKJGe8-n+6DQyBngjN2TorwU+g@mail.gmail.com>
+Subject: Re: [PATCH stable/linux-5.10.y 0/7] Backport Fix incorrect overlayfs
+ mmap() and mprotect() LSM access controls
+To: Cai Xinchen <caixinchen1@huawei.com>
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, 
+	miklos@szeredi.hu, paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, 
+	stephen.smalley.work@gmail.com, omosnace@redhat.com, 
+	gregkh@linuxfoundation.org, sashal@kernel.org, bboscaccy@linux.microsoft.com, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-unionfs@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	selinux@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org, 
+	lujialin4@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 29 Jun 2026 10:28:08 -0700
-Message-Id: <DJLPKY6WJTBD.319506WRJ7EUI@gmail.com>
-To: "Jiri Olsa" <jolsa@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>
-Cc: <bpf@vger.kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <songliubraving@fb.com>,
- "Yonghong Song" <yhs@fb.com>, "Quentin Monnet" <qmo@kernel.org>
-Subject: Re: [PATCHv3 bpf-next 3/3] bpftool: Add tracing_multi link info
- output
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc
-References: <20260629143844.862369-1-jolsa@kernel.org>
- <20260629143844.862369-4-jolsa@kernel.org>
-In-Reply-To: <20260629143844.862369-4-jolsa@kernel.org>
 
-On Mon Jun 29, 2026 at 7:38 AM PDT, Jiri Olsa wrote:
-> +	if (info.type =3D=3D BPF_LINK_TYPE_TRACING_MULTI && !info.tracing_multi=
-.ids) {
-> +		count =3D info.tracing_multi.count;
-> +		if (count) {
-> +			ids =3D calloc(count, sizeof(__u32));
-> +			addrs =3D calloc(count, sizeof(__u64));
-> +			cookies =3D calloc(count, sizeof(__u64));
-> +			if (!ids) {
-> +				p_err("mem alloc failed");
-> +				close(fd);
-> +				free(cookies);
-> +				free(addrs);
-> +				free(ids);
-> +				return -ENOMEM;
-> +			}
-> +			info.tracing_multi.ids =3D ptr_to_u64(ids);
-> +			info.tracing_multi.addrs =3D ptr_to_u64(addrs);
-> +			info.tracing_multi.cookies =3D ptr_to_u64(cookies);
-> +			goto again;
-> +		}
+On Mon, Jun 29, 2026 at 8:38=E2=80=AFAM Cai Xinchen <caixinchen1@huawei.com=
+> wrote:
+>
+> ackport the patch series
+> "Fix incorrect overlayfs mmap() and mprotect() LSM access controls" [1]
+> to 5.10 lts
 
-The above doesn't look correct.
-Please de-llm your code before posting.
+Chai,
 
-pw-bot: cr
+First of all, I don't think that stable maintainers are picking backports
+to 5.10 that were not backported to 6.1 and 5.15.
+
+Second, backporting backing_file as a dependency to LTS kernels is a pretty
+intrusive change, so your description above is very much lacking.
+
+Please do not backport backing_file to any of the LTS kernels without provi=
+ding
+detailed explanation to try and convince the vfs maintainers that you
+verified this
+bacport is safe for the LTS kernel, because honestly, this looks a bit
+risky for me.
+
+Thanks,
+Amir.
