@@ -1,151 +1,70 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 733203D6CDD;
-	Mon, 29 Jun 2026 08:20:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E7CC39657D;
+	Mon, 29 Jun 2026 08:55:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782721258; cv=none; b=ZEPNLSV9NLFcgsab0oMUubc09YX9TAZJ3mHSIDRxi/G8yNXZakCjTpGFWLRNCQsnvofaYrXv60cGkMS2z2TbFGXY43DEd+HSMwKV2o3h23W9GFBYYec6BtDLYHfn/40baUyaOwDMald6byige7RPApuaC08+B6L+SVnjwGlBw2A=
+	t=1782723310; cv=none; b=bTKpS2yalWo4+apSF7Alvip648GiCie/XXnA7EHqUPTtNBCZr4wj5n5pvPAmZlid6TKwaZMF7AmLreruSNSsBuuZhNndxr0NlZpuj0kYrAjz0ko3LkPXPYIbBPIEHFB1MecETFcYVhuYGa1m7j6MMSvdVNtT4uBqDt8UfkZkEMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782721258; c=relaxed/simple;
-	bh=kia53t9Vmn3rVHR65dB2hSoGJC+kCBm9nZndKzrlbpY=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=QnG8d1VISMT0Otqw9r0ERDORDgLcnBoM8gwwdpY3pexGf5MVHTtO/VZs7Y1iPYOrcxnd+o/9ZgSwVYPLWN/NCTgG/+qHmc4odyZq2ei0YAfVFvqU/d1vb0eJGTLIe981YQT6banoCFle4epLlNo0z77By6aNg2eWztVjworcogw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ALYdjdHR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782723310; c=relaxed/simple;
+	bh=3XUwill7/pl5/veNAx1KZD3C0a7ZQw+EeLUCuIHJYfw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=b1j2EXfpTdrzY29epWDnbyQarYR6BlSDFDZzXtQouVSuqeKWM0mPtthB0rjvKS4Zp/uzW7zZwvxJA1qADPx4ny+LSaXq/FvP2CXXCnGxfWuOhuqgqcClyuaDgG874hLnEo+J0epeVtGNeC79tdvjh/UyvQES4LKoJw0SUZMiCyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EKMIogsu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ALYdjdHR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F287B1F000E9;
-	Mon, 29 Jun 2026 08:20:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EKMIogsu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94C5C1F000E9;
+	Mon, 29 Jun 2026 08:55:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782721257;
-	bh=kia53t9Vmn3rVHR65dB2hSoGJC+kCBm9nZndKzrlbpY=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To;
-	b=ALYdjdHREWYrGGiSraB7MR+uJIezD9H8RD62KChSKPY5qxgXGXnNPOmA0XJMurrdl
-	 AkcvDW58TEZEpP1VIafI87KjnUhZDr6+wuOVo8M2U+CPKAURCoIRpcaz0eUU0pIy+x
-	 Nr5nn+rpu7fQ2EyjOORAw0sP6LIEf5fSon8WkphyJmSJCzTWa+2f7PMN3A1rKTklKR
-	 7tfSSATNMl2tmIcJh72y3vqvLxCEGX/i3vIpmOHpyUcauAEPrMJVSHvsuJAAoFlyg8
-	 ZHcQH4W7mHA01/DLNoviNonduxaiLIX3gsV2xK9uh8cMi1ilmE4nEQTdUj32wpg4Kg
-	 1Fn3sX7B19hVw==
-Message-ID: <b48c8045-2297-47ee-a0f7-d7a67e74ea09@kernel.org>
-Date: Mon, 29 Jun 2026 17:20:46 +0900
+	s=k20260515; t=1782723308;
+	bh=3XUwill7/pl5/veNAx1KZD3C0a7ZQw+EeLUCuIHJYfw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=EKMIogsu8uWSTVrF+ltRr5epYsuFxWPkg8O7W3DB3Ozq6zxLJ1YHHqe1M03SGjT8H
+	 YoqBxhakMnbDDg5VdxdzUuunFvQGEAcsoQRctKU38lyl6RtvASTjdojn+aMjnqSqzt
+	 4Efp2a4NTqpc/o9BvEtmWiwQe+fCm8JVdxbX2MzJsXkHl0tiZOb+Jy6EW9+fVb/f1C
+	 7uZ56mBYtbcKdU57DRF2djl8505yNvqmPlo8Hh/i6Lsav5BdDvilVlnPZW5Cofqv2/
+	 WCIC27DQRimnBbNgHwC6zLWYKTsbSyQiw0Engrs1e9oxIxnT1SAEZcajSPCtipE+/U
+	 oMsyF+yKglEuw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH stable/linux-5.10.y 1/7] ovl: pass layer mnt to
+ ovl_open_realfile()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Cai Xinchen" <caixinchen1@huawei.com>
+Cc: bpf@vger.kernel.org, selinux@vger.kernel.org
+In-Reply-To: <20260629070653.580879-2-caixinchen1@huawei.com>
+References: <20260629070653.580879-1-caixinchen1@huawei.com>
+ <20260629070653.580879-2-caixinchen1@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 29 Jun 2026 08:55:08 +0000
+Message-Id: <20260629085508.94C5C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH for-next v3 2/9] mm/slab, slub_kunit: register kprobe to
- trigger _nolock APIs
-From: Harry Yoo <harry@kernel.org>
-To: Pedro Falcato <pfalcato@suse.de>
-Cc: Vlastimil Babka <vbabka@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Suren Baghdasaryan <surenb@google.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
- rcu@vger.kernel.org, bpf@vger.kernel.org
-References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
- <20260615-kfree_rcu_nolock-v3-2-70a54f3775bb@kernel.org>
- <ajvczSpMOGWFhe30@pedro-suse>
- <6edebc2b-5f5a-4b9c-9a4c-564310acee1b@kernel.org>
-Content-Language: en-US
-In-Reply-To: <6edebc2b-5f5a-4b9c-9a4c-564310acee1b@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------8xQSbLfkLa3QcHTEy0A3WfM5"
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------8xQSbLfkLa3QcHTEy0A3WfM5
-Content-Type: multipart/mixed; boundary="------------H7l0hVTepAgAY5a6Xn02vj04";
- protected-headers="v1"
-From: Harry Yoo <harry@kernel.org>
-To: Pedro Falcato <pfalcato@suse.de>
-Cc: Vlastimil Babka <vbabka@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Suren Baghdasaryan <surenb@google.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
- rcu@vger.kernel.org, bpf@vger.kernel.org
-Message-ID: <b48c8045-2297-47ee-a0f7-d7a67e74ea09@kernel.org>
-Subject: Re: [PATCH for-next v3 2/9] mm/slab, slub_kunit: register kprobe to
- trigger _nolock APIs
-References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
- <20260615-kfree_rcu_nolock-v3-2-70a54f3775bb@kernel.org>
- <ajvczSpMOGWFhe30@pedro-suse>
- <6edebc2b-5f5a-4b9c-9a4c-564310acee1b@kernel.org>
-In-Reply-To: <6edebc2b-5f5a-4b9c-9a4c-564310acee1b@kernel.org>
-
---------------H7l0hVTepAgAY5a6Xn02vj04
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-
-
-On 6/29/26 4:34 PM, Harry Yoo wrote:
+> From: Amir Goldstein <amir73il@gmail.com>
 >=20
+> [ Upstream commit 1248ea4b91bcdafefdb025087e67d58382cfc9eb ]
 >=20
-> On 6/24/26 10:41 PM, Pedro Falcato wrote:
->> On Mon, Jun 15, 2026 at 08:05:56PM +0900, Harry Yoo (Oracle) wrote:
->>> Since kmalloc_nolock() always fails in NMI and hardirq contexts on
->>> PREEMPT_RT, slub_kunit cannot properly test _nolock() APIs.
->>>
->>> Register a kprobe pre-handler to invoke kmalloc_nolock() and
->>> kfree_nolock() in the middle of the slab allocator. However, do not
->>> register the handler on UP kernels [1].
->>
->> Maybe explain in the commit message why that is?
+> Ensure that ovl_open_realfile() takes the mount's idmapping into
+> account. We add a new helper ovl_path_realdata() that can be used to
+> easily retrieve the relevant path which we can pass down. This is needed
+> to support idmapped base layers with overlay.
 >=20
-> Because it's the case is broken on UP and we decided not bother to fix.=
+> Cc: <linux-unionfs@vger.kernel.org>
+> Tested-by: Giuseppe Scrivano <gscrivan@redhat.com>
+> Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+> Signed-off-by: Amir Goldstein <amir73il@gmail.com>
+> Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+> Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+> Signed-off-by: Cai Xinchen <caixinchen1@huawei.com>
 
-> Thought the cover letter in Link: would give enough context.
-
-But I will clarify this on the commit message, thanks!
+Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
-Cheers,
-Harry / Hyeonggon
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260629070653.5808=
+79-1-caixinchen1@huawei.com?part=3D1
 
-
---------------H7l0hVTepAgAY5a6Xn02vj04--
-
---------------8xQSbLfkLa3QcHTEy0A3WfM5
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCakIq3gAKCRCGXBN6rc5S
-1oI0AQCmD4+FAnCL5s0WuOSoFo5XR/5TKwqVhP08qfsAyrwXvwD/RJBmV5okisfF
-oBc6p+YW15g8jrEgvQwjI3qwgz+UDgw=
-=v2D6
------END PGP SIGNATURE-----
-
---------------8xQSbLfkLa3QcHTEy0A3WfM5--
