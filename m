@@ -1,128 +1,110 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37241355049
-	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 17:31:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782754284; cv=pass; b=gsKRXa0aK4gCAZMnrI3SrEpXmJY4IgG0v2RY6Nv2U+yMVHiBFqKy/fRJXC0DrHRJVaAr+0p47zDUsMPk0LmGlZAkSAQxldKpDeEMWJ2K/dbbjsIn0m/o/w1fr+PXrcOlabaXe7YDNvN3yXlQKXFJTCVkvc5IObQoMBbeDN58/w4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782754284; c=relaxed/simple;
-	bh=eOClBfv6lfdCI5t+K8NOrbjIYwBgmecurDoITjBEbHY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hrrTr98Yvajdh5d9QmomnehH111SRbBUpGTZ2+Adad2vGnQblg16AlYr50K5knV/P4ZwGVHwAXThqIaxg2O0tAOKK/GqjMRKjeBsYjA3pH3g2Lnc6uwwXxxJoZp8G2Yd9MWOkTE8i49uoc7Yb0jirf6KkQVdzQ249oVCuuuF6UM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VOB0tbQz; arc=pass smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86222DA757
+	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 17:42:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782754972; cv=none; b=X3FT36a6ivhcBdCG6Gd3LzFN5wpvV1euc1H6dNsH3O06t3PxjyINr+N+sLuMI5lkGZT6jej9k0O+Keuq0AZZnfQeOekM0nncYCr3jD4ua65Ki27fZzbKUF1pgAXcUrci/2gW8rxWi7s7TiRLfWqlOyG65mBoHqTEUilIpXdaOTc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782754972; c=relaxed/simple;
+	bh=9xbkvuC0Oo+xhLW95N/vnGJZrJCD3+nukXF0S3HTjoI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=duaGX9N4wSXryoSwjR78UR/f56bx+6vnxOjlPyLjC2MS3Ykxl0eXfHIs2ulWBt65j+TuNldlNLALDQ8o71qIgyQaU+z4JzDjM6s5Uskg8pOM81C9M5e9UC9eM40e9Ry/fBMB40FPEFnaFCz9TB6/3/91Ignxqz2hHlqUWzikJec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GoZo0S/+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VOB0tbQz"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-69857dc1d5eso2962014a12.3
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 10:31:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782754281; cv=none;
-        d=google.com; s=arc-20260327;
-        b=BGiLdiM1eNzUmV+VLF5GaNWXQ2Mw8/wrxdqWA2aMpAoj0J+WGOptyeQAvccH7k9sFz
-         CXlNxFuFuCEBoujaA7qgeO2oGQ6eCpdiwbWB5mifxqu+Q/pm5nj+nhHA8lfH+kjnIRe1
-         7YEl50++GZczFcwq0WG+tBQNfP51MDza5uqSIIjnssd6976iihxX3y2t9/RbARTm02P5
-         1rZnv6DYJ9p1qrufWXmxMvyEownIxmy+hu/uUIET/4xUTyPvh5u7I1ob84c3IbRkCLZb
-         bemQNHsGGCUPTH0oThrpq6Ww0ieUN3W7Fp7HN1gXElKRC97TBQJ06QVjSmBh6/REuy/P
-         A4VQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=eOClBfv6lfdCI5t+K8NOrbjIYwBgmecurDoITjBEbHY=;
-        fh=QAQO5TGs2GNYkeupizvwLcgOwopY11+SrZ225YGzIAs=;
-        b=rfq8uqLqL1iO5lKWAonutSP+Wsgow2ykMEqqnrwTihygadRCIexumirF6YbJ5xPdM5
-         01emKzda9NT5rGtqa9eg4ONvYbRaz6OOtJVbZzLNGOfU4/EWTw17Iab+NNSoLfnYNsPg
-         +jxvo2YWaNP9/yMtYCISDxwI0/sUmtmsUmRZ0I37/VYsXZq5bLzagSmaSR46UkAZ85kN
-         cAJfZDS6MfjDuVmBiSb6IUV82eilYRmUIUIUs/IPdVxk3RQrON1LfII0zTM/r2CiU/FR
-         jQcpKnkx+QVqvIShfF34oVSQaTlKjHaSi4/cfVIcxmbgBlGio2e5iDWaJTfUvIheOXZ+
-         IECw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782754281; x=1783359081; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=eOClBfv6lfdCI5t+K8NOrbjIYwBgmecurDoITjBEbHY=;
-        b=VOB0tbQzXHx225/eBRLGEzWz6vX02N24U92aDSCNpfdq7DZv9iI6NGkOHF5VJSXBf0
-         iZEHeZ0V5mC0F3hIMX5sla7sCwE6QUNe99CfMZz+3kF02NmreX29GtPeIhhn9/tvERdq
-         6rIHJEfwGNs7g3Qtc2MU325nY7nvEWm2h/9qTqpSpa6S67zweReqCilX7ZHuwu06Afw2
-         Tp0haJ2b/3LKr4BGQqiyRCz5NDX62Jd6SCIPaTHgyHwtVcs9J/8SW3WLPHp/mOLeDDnB
-         HbauBnc7gNry89jY+RZ4nsQ9ECd+RxPZvUBef39i/RgCTiFo8PTy4LyUjrjbVd51dDKN
-         dcww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782754281; x=1783359081;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=eOClBfv6lfdCI5t+K8NOrbjIYwBgmecurDoITjBEbHY=;
-        b=sTrgwta+/g3SPBqGgHt/V4H442I8A4h9HseaQLSZeNyoKIGXNY9VLN7SkmQdLAZqOC
-         1KtqrWjrGjAf0T/ulsIF3bzaTtEik2IvpMnrlacykOvPEod35puOg8kFKd8M2py3DzVn
-         hIRguNvo4lzJH3LhuRHL3mwzVQaGRpoGLTD8/4tS5YYy34F2FytLbdMLOrpsl58KOpny
-         i+dEyyESz4hN1WzcG2to18eqjd4xr5DBLaOXzvN02h8KJVu/+j7GzyaRvPNHzLkW1jBO
-         JWwre2GR65KeO45eVNXW5GYcm4bEdZmSsijuQwJzux8mCmB86C59bZNHly0kKFoKLmPO
-         IGFg==
-X-Forwarded-Encrypted: i=1; AHgh+Rru4ckUj3PYsmIczsUtgozyhQHmKinah2fdJGoP09paZbgr6KP6IaZOBZAwQZDzsD41T8g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3wRaayWSGrU5ObkDghiYxb+Lto/vKVZ8unS9E4VKyw7kN9Pid
-	Shx2wyLAajsARivzflXKSrh2nD7mMJ8+GND9kLrquGayXLNRtRrwmWJJRtXZlffVRIfQJLqCmTR
-	aUJ1Vh7fCzaksshEEKv9sKCA2Vsi5C+M=
-X-Gm-Gg: AfdE7cnABIwW6GYFjMUhkkJqihDctC1jR1GdHPLKuRquJV4hBp1tegChSt4CObyYGIn
-	skBSDqzSEnrP0QDWC01SGbhdA5S3DKp4qIgDfPrLoelKuR/RnT3Pt1j+car3sgCSBkBn2Wlivnr
-	NsGDi5qI/R9KIQiLYs1hcyR5F6erFA11cUy7UGSjnczAYF2F5rHixkqwc95K9rqsmIl0T2j9VJ3
-	TJV91gUtiNop2YkFBucXlgOHkI00j5lwrjQTNmQgX73/WhrdAd6sOrp5q7ZB+/E9eXLPVBrKKRk
-	gQPMevsBfFo8N3agOT7C/wG+tRG/IGM=
-X-Received: by 2002:a05:6402:390a:b0:68f:cc95:8c10 with SMTP id
- 4fb4d7f45d1cf-69879e4b974mr46982a12.27.1782754280332; Mon, 29 Jun 2026
- 10:31:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GoZo0S/+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F014B1F000E9;
+	Mon, 29 Jun 2026 17:42:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782754971;
+	bh=IFgW2U/ymLKMUAWG9k8uGnpSnkAI2fCiJ2IjmJRdKT4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=GoZo0S/+DvPT4gQ2PRKRotHG37prVpQlDQDcxYAaqXWaEXLVhMtXr2b22yoLg5omK
+	 iLGbaSEXKPp5VTA3Wg8OARtcydPGb6i/EkayZzYmpgy8xQUca/2D8167XgotVf7kfF
+	 BpYsX3zV7Q31g2Rdh1X43YfDghztNg7aXKdi6B1dIF7JornSYnUd5PjtO3WQaYkJJ0
+	 Q4DdhIeYjvXhLikRw1AqF/zUEehuGbJWJyjIXlCA0MGEUtkr6a42eQIVHn+j1xfGyL
+	 8NBGuNfXq4YUCdWte/ml3K8/+1aYoMI++Tucgk0OmczHsxGYThgGKrUOITPD/y56gg
+	 HDUhWwwccoijw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 1/2] bpf, sockmap: disallow update and
+ delete from tc, xdp and flow_dissector
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sechang Lim" <rhkrqnwk98@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260629172704.1302218-2-rhkrqnwk98@gmail.com>
+References: <20260629172704.1302218-1-rhkrqnwk98@gmail.com>
+ <20260629172704.1302218-2-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 29 Jun 2026 17:42:50 +0000
+Message-Id: <20260629174250.F014B1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260629070653.580879-1-caixinchen1@huawei.com>
-In-Reply-To: <20260629070653.580879-1-caixinchen1@huawei.com>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Mon, 29 Jun 2026 19:31:09 +0200
-X-Gm-Features: AVVi8CfvDZzdzYVHdraWAewZEFEyCZ6yZ4zu-tcKsdp7diMSLlszm49WqjY_Vvs
-Message-ID: <CAOQ4uxjcD0-PHqqmrpEvkLRgtKJGe8-n+6DQyBngjN2TorwU+g@mail.gmail.com>
-Subject: Re: [PATCH stable/linux-5.10.y 0/7] Backport Fix incorrect overlayfs
- mmap() and mprotect() LSM access controls
-To: Cai Xinchen <caixinchen1@huawei.com>
-Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, 
-	miklos@szeredi.hu, paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, 
-	stephen.smalley.work@gmail.com, omosnace@redhat.com, 
-	gregkh@linuxfoundation.org, sashal@kernel.org, bboscaccy@linux.microsoft.com, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-unionfs@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	selinux@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org, 
-	lujialin4@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 29, 2026 at 8:38=E2=80=AFAM Cai Xinchen <caixinchen1@huawei.com=
-> wrote:
->
-> ackport the patch series
-> "Fix incorrect overlayfs mmap() and mprotect() LSM access controls" [1]
-> to 5.10 lts
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Chai,
+Pre-existing issues:
+- [High] Incomplete Deadlock Fix / Bypass Vector
+--
 
-First of all, I don't think that stable maintainers are picking backports
-to 5.10 that were not backported to 6.1 and 5.15.
+commit 11c2a6f499580e1830b9a3c86513eb4f154d7710
+Author: Sechang Lim <rhkrqnwk98@gmail.com>
 
-Second, backporting backing_file as a dependency to LTS kernels is a pretty
-intrusive change, so your description above is very much lacking.
+bpf, sockmap: disallow update and delete from tc, xdp and flow_dissector
 
-Please do not backport backing_file to any of the LTS kernels without provi=
-ding
-detailed explanation to try and convince the vfs maintainers that you
-verified this
-bacport is safe for the LTS kernel, because honestly, this looks a bit
-risky for me.
+This commit aims to fix a circular locking dependency between
+sk_callback_lock and stab->lock by disallowing sockmap updates and deletes
+from tc, xdp, and flow_dissector programs.
 
-Thanks,
-Amir.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -8489,11 +8489,7 @@ static bool may_update_sockmap(struct bpf_verifier=
+_env *env, int func_id)
+>  			return true;
+>  		break;
+>  	case BPF_PROG_TYPE_SOCKET_FILTER:
+> -	case BPF_PROG_TYPE_SCHED_CLS:
+> -	case BPF_PROG_TYPE_SCHED_ACT:
+> -	case BPF_PROG_TYPE_XDP:
+>  	case BPF_PROG_TYPE_SK_REUSEPORT:
+> -	case BPF_PROG_TYPE_FLOW_DISSECTOR:
+>  	case BPF_PROG_TYPE_SK_LOOKUP:
+>  		return true;
+
+[Severity: High]
+This is a pre-existing issue, but does leaving BPF_PROG_TYPE_SOCKET_FILTER
+and BPF_PROG_TYPE_SOCK_OPS (located just above this block) allowed to
+update/delete sockmaps leave the deadlock unresolved?
+
+The commit message describes a deadlock where sk_callback_lock is held for
+read, a TCP ACK goes out egress, and a BPF program modifies the sockmap,
+acquiring stab->lock.
+
+Can BPF_PROG_TYPE_SOCK_OPS execute synchronously during this same egress
+path and trigger the same issue?
+
+sk_psock_strp_data_ready()  // holds sk_callback_lock
+   __tcp_cleanup_rbuf()
+      tcp_send_ack()
+         __tcp_transmit_skb()
+            bpf_skops_write_hdr_opt()  // runs BPF_PROG_TYPE_SOCK_OPS
+
+Similarly, can BPF_PROG_TYPE_SOCKET_FILTER be executed synchronously during
+egress when dev_queue_xmit_nit() calls run_filter()?
+
+If either of these programs calls a sockmap map update or delete helper,
+wouldn't they acquire stab->lock and recreate the exact same circular
+locking dependency?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260629172704.1302=
+218-1-rhkrqnwk98@gmail.com?part=3D1
