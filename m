@@ -1,162 +1,138 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE3D15E5BB
-	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 21:33:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 613393839BA
+	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 21:34:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782768811; cv=none; b=cSFaX+EEOVdNppiASvj4HsdtaT1wqCkjjZNxqx6CMhz4fJwwA9M6cq7CS24U52GE/bgF7FMK9HGpSqSeRiCvMlpH+CRXpyNUZTVm8NJmpaPqknd7qwFECobaWfPwDWr1soE5wXJbFGX1JAg6Jgp3/6WQCYDHBKPHd9c5qtOmR60=
+	t=1782768848; cv=none; b=OLWwjGxzJ8Uv8Sp9pUpD5aJh2en+T9nQ+Qk1n3Lzcqt0pBaM1va4uN9LXvuS+I5mfC5uZ1eKo1WdqR/f6/PmH/MpnzDcRvly7Aq4Pk6O+0awXFuDhptbBsKGqJHGc+XbIVh31Quku9dwoIWtp9omod1elElu6ZmD0dvmrEKCr10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782768811; c=relaxed/simple;
-	bh=hgKtRtkReq4+EtPij8Wu/zdHolciU1EPv2pvcH6mN54=;
+	s=arc-20240116; t=1782768848; c=relaxed/simple;
+	bh=M5462KMZ2bCg9mXsoHHDyOLwNNh5xW7BQZpqxIsXR8I=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=W9EcWk8nTIViMUCTeTElbW6E6GghVs9qpUBu+BTjymmAN9pcV/kSlIn1Gmls/67/6ujwFu2CaZB/ANlOIlKSmeAJ+DvQ3EanW6Y02EKpa4KwPiYCHfOFz+CONRM7xOQfqA2tuez/RqYq1nzOzxiSUUan1YsNfbhW+H5SHan561c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TP6MvvCL; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=XpAQtvqGxbNJ3LVCfa/WciALtZcPKF9T6uc7vFUyukbHYCrq74QYtJ2HaE6KHhufevEKkDDorFq3rbS9Jq/nfTG18/NGTtsvATZTR26JbdEJq5HwLBrwElxTtdc8cHRaGW57JpQVJbJO/hKRjRgIQf4yxT7LcZGmdqY4ForiPtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QOFn3/qB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TP6MvvCL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ACD41F000E9;
-	Mon, 29 Jun 2026 21:33:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QOFn3/qB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11FB61F000E9;
+	Mon, 29 Jun 2026 21:34:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782768810;
-	bh=gtF3QTs1SGSgm5PukJMEbGKiexRy6jZkzeIlhtEyLW4=;
+	s=k20260515; t=1782768847;
+	bh=vAisuHaYn08O+ZRc5sUkzHfah0Rlz9Dn7ph9TJ35TUs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=TP6MvvCLcxbHGdfX7SSxKa1xqC6aXmpGVHK7O7/piuV+e0g3zXSlRiqce/j5AcDBY
-	 z0F10vS52vqsG53PsiBKfaWszq6Ts7NOVOUTaCDpjjsjSeiv1SoZhiBghD5VYkRV1C
-	 BxBEIZ60vwW5hyPh9r+7FPput2+gJTBrJ1lLSrRwwpAUdRDaZdjx4HSCUFCBUpXOhJ
-	 pdm4dz6Jp0Kz5AjruA/QR33gehVdaRwQ9fgJm01sd6htDUTOCpfPYVCn9NqDlILYIe
-	 vzzRJ1gAfEJCv2W5/fMiAhPWo1EBBWl7wAOOD6K2VfaGn4u01SPmLp+ipAMKnz+55G
-	 /b0QJHohgaZHw==
+	b=QOFn3/qBu8Sli6vA0CNWiKH/7Xsv8fLlJOXnyPzX8S3a73ummpMCEuaAFFFg1hffO
+	 zeKV3/sitQArn4iAcPyjO4BDhtTguf6qAa33o11ZChb5y2DkUHnuFo0drn7e/Jaw9Q
+	 i2I7L8oMfg/sC4w2O9B7F6LzJlFukPA6OqSySdWE4/LRIqIowdu4EC1X4LpuX8WBAw
+	 lWGTWWMmTojUe7QcZDsd7AnU2Pp8/5+IW1n2vjJNgaE0MWe2LPml9Al308ULs+JdTF
+	 kMxd+hz3dZJmh9+yFGs10SxPFw8M1VyQ9rqsq4jNVZOQsaBfCRTGDQroajRm4zeYqv
+	 OauZfSPHLHeGg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv4 bpf-next 3/3] bpftool: Add tracing_multi link info
- output
+Subject: Re: [PATCHv4 bpf-next 2/3] selftests/bpf: Add tracing_multi link
+ info tests
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jiri Olsa" <jolsa@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260629212208.895962-4-jolsa@kernel.org>
+In-Reply-To: <20260629212208.895962-3-jolsa@kernel.org>
 References: <20260629212208.895962-1-jolsa@kernel.org>
- <20260629212208.895962-4-jolsa@kernel.org>
+ <20260629212208.895962-3-jolsa@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 29 Jun 2026 21:33:29 +0000
-Message-Id: <20260629213330.0ACD41F000E9@smtp.kernel.org>
+Date: Mon, 29 Jun 2026 21:34:06 +0000
+Message-Id: <20260629213407.11FB61F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] bpftool uses a non-existent `tracing_multi` union member in `str=
-uct bpf_link_info`.
-- [Medium] The kernel-side `bpf_tracing_multi_link_lops` is missing the `.f=
-ill_link_info` callback.
-- [Low] Memory allocated for `ids`, `addrs`, and `cookies` is leaked on the=
- error path of the `bpf_link_get_info_by_fd` syscall.
+- [Medium] Missing UAPI and kernel implementation for 'tracing_multi' link =
+info.
+- [Medium] Flawed negative testing logic for 'tracing_multi' invalid user b=
+uffers.
 --
 
-commit 3c4bad76286f49adf87a7b01dc7042ac6368c5ce
+commit 10d5275538071b94b5cfb747b2b37b5cb2e5d158
 Author: Jiri Olsa <jolsa@kernel.org>
 
-bpftool: Add tracing_multi link info output
+selftests/bpf: Add tracing_multi link info tests
 
-Adding bpftool support to show tracing_multi link details. The new output w=
-ill
-display attach types, counts, BTF IDs, addresses, cookies, and functions.
+Adding tracing_multi link info tests that follow the kprobe_multi
+and uprobe_multi tests logic.
 
-> diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-> index bdcd717b0348f..088d1d206065f 100644
-> --- a/tools/bpf/bpftool/link.c
-> +++ b/tools/bpf/bpftool/link.c
-
+> diff --git a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c b/to=
+ols/testing/selftests/bpf/prog_tests/fill_link_info.c
+> index f589eefbf9fbd..0918321c8e63d 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
 [ ... ]
-
-> @@ -403,6 +422,52 @@ show_uprobe_multi_json(struct bpf_link_info *info, j=
-son_writer_t *wtr)
->  	jsonw_end_array(json_wtr);
->  }
-> =20
-> +static void
-> +show_tracing_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
+> @@ -396,6 +413,224 @@ static void test_kprobe_multi_fill_link_info(struct=
+ test_fill_link_info *skel,
+[ ... ]
+> +static int verify_tracing_multi_link_info(int fd, const struct bpf_progr=
+am *prog,
+> +					  const struct tmulti_target *targets,
+> +					  __u32 btf_obj_id, bool has_cookies)
 > +{
-> +	bool is_ibt_enabled =3D is_x86_ibt_enabled(), show_symbol;
-> +	__u64 *addrs, *cookies;
-> +	__u32 i, *ids;
+> +	enum bpf_attach_type attach_type =3D bpf_program__expected_attach_type(=
+prog);
+> +	__u64 addrs[TRACING_MULTI_CNT], cookies[TRACING_MULTI_CNT];
+> +	__u32 ids[TRACING_MULTI_CNT];
+> +	struct bpf_link_info info;
+> +	__u32 len =3D sizeof(info);
+> +	int err, i;
 > +
-> +	if (!dd.sym_count)
-> +		kernel_syms_load(&dd);
-> +	show_symbol =3D !!dd.sym_count;
+> +	memset(&info, 0, sizeof(info));
+> +	err =3D bpf_link_get_info_by_fd(fd, &info, &len);
+> +	if (!ASSERT_OK(err, "bpf_link_get_info_by_fd"))
+> +		return -1;
 > +
-> +	show_link_attach_type_json(info->tracing_multi.attach_type, wtr);
+> +	if (!ASSERT_EQ(info.type, BPF_LINK_TYPE_TRACING_MULTI, "info.type"))
+> +		return -1;
+> +
+> +	ASSERT_EQ(info.tracing_multi.attach_type, attach_type, "info.tracing_mu=
+lti.attach_type");
+> +	ASSERT_EQ(info.tracing_multi.count, TRACING_MULTI_CNT, "info.tracing_mu=
+lti.count");
 
 [Severity: Medium]
-Does `struct bpf_link_info` in `include/uapi/linux/bpf.h` include a
-`tracing_multi` member?
+Does struct bpf_link_info currently have a tracing_multi member? It appears
+this might cause a compilation failure because the UAPI header doesn't incl=
+ude
+it. Also, does the kernel side implement the .fill_link_info callback in
+bpf_tracing_multi_link_lops?
 
-It looks like the `tracing_multi` struct is missing from `struct bpf_link_i=
-nfo`
-in the UAPI, which causes a compile error here when trying to access
-`info->tracing_multi.attach_type`.
-
-Additionally, the kernel-side implementation in `kernel/trace/bpf_trace.c`
-appears to be missing the `.fill_link_info` callback in
-`bpf_tracing_multi_link_lops`.
-
-Without it, will the kernel silently return unpopulated link details when
-queried via `bpf_obj_get_info_by_fd()`?
-
+> +
+> +	memset(ids, 0, sizeof(ids));
+> +	memset(cookies, 0, sizeof(cookies));
+> +	memset(addrs, 0, sizeof(addrs));
 [ ... ]
+> +static void verify_tracing_multi_invalid_user_buffer(int fd, const struc=
+t tmulti_target *targets)
+> +{
+> +	__u32 ids[TRACING_MULTI_CNT] =3D {};
+> +	struct bpf_link_info info;
+> +	__u32 len =3D sizeof(info);
+> +	int err, i;
+[ ... ]
+> +	/* Invalid addrs pointer -> EFAULT */
+> +	memset(&info, 0, sizeof(info));
+> +	info.tracing_multi.addrs =3D 0x1;
+> +	info.tracing_multi.count =3D TRACING_MULTI_CNT;
+> +	err =3D bpf_link_get_info_by_fd(fd, &info, &len);
+> +	ASSERT_EQ(err, -EFAULT, "tracing_multi.bad_addrs");
 
-> @@ -1114,6 +1226,26 @@ static int do_show_link(int fd)
->  			goto again;
->  		}
->  	}
-> +	if (info.type =3D=3D BPF_LINK_TYPE_TRACING_MULTI && !info.tracing_multi=
-.ids) {
-> +		count =3D info.tracing_multi.count;
-> +		if (count) {
-> +			ids =3D calloc(count, sizeof(__u32));
-> +			addrs =3D calloc(count, sizeof(__u64));
-> +			cookies =3D calloc(count, sizeof(__u64));
-> +			if (!ids || !addrs || !cookies) {
-> +				p_err("mem alloc failed");
-> +				close(fd);
-> +				free(cookies);
-> +				free(addrs);
-> +				free(ids);
-> +				return -ENOMEM;
-> +			}
-> +			info.tracing_multi.ids =3D ptr_to_u64(ids);
-> +			info.tracing_multi.addrs =3D ptr_to_u64(addrs);
-> +			info.tracing_multi.cookies =3D ptr_to_u64(cookies);
-> +			goto again;
+[Severity: Medium]
+Will this test actually return -EFAULT?
 
-[Severity: Low]
-Do we leak the memory allocated for `ids`, `addrs`, and `cookies` if the
-subsequent `bpf_link_get_info_by_fd()` syscall fails?
+By zeroing out the info struct before these checks, the mandatory ids
+pointer is left as NULL while count is non-zero. If the kernel validation
+logic eagerly rejects the missing ids array with -EINVAL before reaching
+the -EFAULT paths, won't this assertion fail?
 
-When jumping to `again:`, if `bpf_link_get_info_by_fd()` returns an error, =
-the
-function returns early without freeing these arrays:
-
-tools/bpf/bpftool/link.c:do_show_link() {
-    ...
-    again:
-	err =3D bpf_link_get_info_by_fd(fd, &info, &len);
-	if (err) {
-		p_err("can't get link info: %s",
-		      strerror(errno));
-		close(fd);
-		return err;
-	}
-    ...
-}
-
-Should the error path free these arrays before returning?
-
-> +		}
-> +	}
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260629212208.8959=
-62-4-jolsa@kernel.org?part=3D1
+62-3-jolsa@kernel.org?part=3D1
