@@ -1,130 +1,229 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 742271FCFFC
-	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 01:18:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0597C2C1788
+	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 02:14:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782695931; cv=none; b=H91KnDxjzi50uu8R+GzDcO/AgnU6JVBaSfasiND9WCjHYtedoQB081Igy0RSmQNvflTXLGld20Gi3gqNeHM/0zV+c2bUEh7/ah4gcE3lK+uaQw0Coi269Y6ArJRYoWtkd4WA+77euXSuxzGANL9r8rCfBiWqQoakA11xH+Q8e/A=
+	t=1782699300; cv=none; b=b+y6IkKsDhs2ZZoIScA1BMJSMGoi3s0OitdC4+34Jj6nulqSXQbnclTrLxkcfX5+8Ohhns+0QNdAXQ5no3YBbJ/U3kVOYqw23Nyc2tkxg98pmCmXDaWIsCPlLRSEyZ9yCi2xEpRnPiY1lm5jyt4aFeV/RtFnRDztce6W84sDB7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782695931; c=relaxed/simple;
-	bh=JJPvMl3C5EwiyNDQZfdSCn+pGhz8kCdu5r0Z2+2OqBs=;
+	s=arc-20240116; t=1782699300; c=relaxed/simple;
+	bh=B2fdBKpNv5OvbM0GIPeh4SNTUYsiUx7nFegm/cKV6VY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fVzNCMeWgslCCXcYjVbbMo64uIX7lo2BhxzAlvfOHQfbIG9X00WR6pXd7Chtk2Hnhli4ikqG9OnBb/A7EeCpiJBlQ1U2/MwhImkjXmQn3kTIHpHZTRfB7iUdN8fZF/Yk60HOjavAW9hBKByl9VzhktM0OIl0IGgNYIPjnJmun9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uLNt3yQb; arc=none smtp.client-ip=91.218.175.179
+	 In-Reply-To:Content-Type; b=NHw3n15laIjboJMWWmo7PDY2vMa6MGNZd82IvmbV1ttdKziypQa/DejW2T8WR31X/fw/l2G2+GgmPjv3TKUGqk6R2H3Am2KZ9DUuBnjJAzzEiMTV2VPiq19A4BPDxz4LGLrpE0hqEZsY0el8plxQyKuoVEfcyeKbCp//WDZihAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gQ5OZukC; arc=none smtp.client-ip=95.215.58.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uLNt3yQb"
-Message-ID: <b1ed59ef-9d00-446c-bc92-131ccb3d20e4@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gQ5OZukC"
+Message-ID: <855e44f3-d22c-47e5-8bd1-c5d9f7014a75@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782695918;
+	t=1782699287;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=92MI5kENEF5zQ2yYEaLwm6Sik2fV4GEydFbExF+S0wk=;
-	b=uLNt3yQbcl+GpCAxTenm6oZ8MecAQCxbpGIjarrFZkALrW31IXszZNsfL0VsL2RqgIp5H/
-	dIb9vunYRthU05oTL4xw+tXsJRbGogeMHnsaDs7XK+TLGdzRrW72UD62BBbr+ya5YchMko
-	U9j7DJ00T+T0OEsOmfDMPVmDdArJdYI=
-Date: Mon, 29 Jun 2026 09:18:22 +0800
+	bh=SfciW9oe/6KsBQ9g2E0tczItMH1cFAvZbrBquHscbUE=;
+	b=gQ5OZukCAeKLNPZ+YxRovUP3vQcQGlgOuVlKm6ikMGUjKgvPxKqErZ2CT1TMhx+BhJoD5n
+	oKOniTn/Cm0SUOg1l2ySQYCkrKt8gMaR2Te6O81JgRL4g0N7dlDIY3zul/R531Ieq/U3I2
+	JAaLn0QA5QD3MBgowIa0D86/21yIt7Q=
+Date: Mon, 29 Jun 2026 10:14:28 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2] bpf, unix: Guard sk_msg-dependent code behind
- CONFIG_NET_SOCK_MSG
-To: John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Amery Hung <ameryhung@gmail.com>, Kuniyuki Iwashima <kuniyu@google.com>,
- bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Jakub Kicinski <kuba@kernel.org>,
- Network Development <netdev@vger.kernel.org>,
- kernel-team <kernel-team@cloudflare.com>
-References: <87v7b9ysep.fsf@cloudflare.com>
- <CAAVpQUBARp1qCEomgzWXVe35WatdaswujVLku+RESm_LW0dE7Q@mail.gmail.com>
- <CAADnVQL2pfQ0BoN-vWcuCpbOBBKq_rM7Bp7P4XdLMFER5LGSDg@mail.gmail.com>
- <87mrwlyqg4.fsf@cloudflare.com>
- <CAMB2axMVhJJpP5HZtDFyQLLbKoRxhW08rj1zGRtWtgDkfYaVNA@mail.gmail.com>
- <878q85yoy5.fsf@cloudflare.com>
- <CAADnVQKr1XisnigNsBw7CsXxY3Xn5KOGtX_YDdXmNMZyJy4_Cw@mail.gmail.com>
- <a50cef70-d8fe-4f42-a89b-2c63c33a72ef@linux.dev>
- <DJHKW8E1F6PI.P3WUIG9DZE1K@gmail.com> <87cxxey09d.fsf@cloudflare.com>
- <aj6-Ga_sIrMixgKN@john-p8>
+Subject: Re: [RFC PATCH bpf-next 00/12] bpf: Introduce static-defined tracing
+ probe for BPF
+Content-Language: en-US
+To: Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ KP Singh <kpsingh@kernel.org>, Anton Protopopov <a.s.protopopov@gmail.com>,
+ Amery Hung <ameryhung@gmail.com>, Eyal Birger <eyal.birger@gmail.com>,
+ Rong Tao <rongtao@cestc.cn>
+References: <cover.1782571533.git.xukuohai@huawei.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <aj6-Ga_sIrMixgKN@john-p8>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <cover.1782571533.git.xukuohai@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
+Hi Kuohai,
 
-On 6/27/26 2:04 AM, John Fastabend wrote:
-> On Thu, Jun 25, 2026 at 07:53:50PM +0200, Jakub Sitnicki wrote:
->> On Wed, Jun 24, 2026 at 01:57 PM -07, Alexei Starovoitov wrote:
->>> On Tue Jun 23, 2026 at 6:32 PM PDT, Jiayuan Chen wrote:
->>>>
->>>> Hi Alexei and Jakub,
->>>>
->>>> skmsg is actually still pretty useful for gateways.
->>>> I started with bpf by integrating skmsg into nginx as a module and 
->>>> envoy
->>>> has something similar.
->>>> The usual setup is cgroup/sk for L4 bypass (reject SYN), and skmsg for
->>>> L7, redirecting
->>>> between local apps by looking at the payload. So there are real users.
->
-> Interesting.
->
->>>
->>> ...
->>>
->>>> Agree, just like we remove skmsg from KTLS which is rarely used.
->>>
->>> ...
->>>
->>>> Hope not have skmsg disabled by default.
->>>
->>> I wasn't suggesting to delete the whole skmsg,
->>> but to disable combinations that are causing issues.
->>> Like what was done for skmsg and ktls.
->>> I'd allow plain tcp and udp sockets only.
->>> Allowing unix sockets was fishy. I think we should reject it too.
->>
->> For unix & vsock we know Bytedance built a proxy using it.
->> We've been showcasing it as one of sockmap use cases [1].
->> That said, I don't know if it's still being used or not.
->>
->> If we don't want to go through the config-knob-then-deprecate process,
->> then I guess the only option is to kill it and see if anyone complains.
->>
->> [1] Slide 117, 
->> https://github.com/sockmap-project/sockmap-project/blob/810d259af6e7a5793922af3991c9dc7ff502fe19/talks/2024-09%20-%20NDC%20TechTown%20-%20Splicing%20Sockets%20with%20SOCKMAP.pdf
->
-> Most the bugs I'm seeing are combinations of push/pop/pull/tail/head
-> calls over sk_msg scatter gather list no one ever considered. Or at
-> least I never considered. Add in additional socket combinations that
-> came later and we get bugs.
+On 28/6/26 06:51, Xu Kuohai wrote:
+> From: Xu Kuohai <xukuohai@huawei.com>
+> 
+> This series introduces static-defined tracing probes for BPF programs.
+> BPF SDT (static-defined tracing) works similarly to USDT. User defines
 
 
-IMO, the helper has issues, but it's simple. We can test every edge case,
+At first glance, the SDT idea looks cool to me.
 
-so problems will be resolved over time.
+However, what's your purpose of introducing SDT?
 
+If to provide points in bpf progs to be traced, like tracepoints in
+kernel functions, I think subprog+fentry is an alternative approach.
+Comparing with SDT, subprog+fentry requires a function call at run time,
+instead of a NOP like SDT.
 
->
-> Do the nginx/envoy offloads manipulate the scatter gather list as
-> well?
->
-We use a helper to insert an HTTP header to mark that the packet has 
-been processed by BPF, which helps with debugging and tracing.
+For example,
 
+#define __sink(expr) asm volatile("" : "+g"(expr))
 
-> Do we need all these helpers? At some point I thought I was going to
-> build a real kernel proxy with this, but never did it. Another option
-> would be better test framework.
->
-> .John
+static __noinline void my_trace(int len, int ret)
+{
+	__sink(len);
+	__sink(ret);
+}
+
+SEC("xdp")
+int xdp_prog(struct xdp_md *ctx)
+{
+	int len = ctx->data_end - ctx->data;
+	int ret = XDP_DROP;
+	...
+	my_trace(len, ret);
+	...
+}
+
+'my_trace' can be traced using fentry to inspect the details of 'xdp_prog'.
+
+Furthermore, if users don't want a function call at run time, e.g. they
+don't want to call 'my_trace' at run time in production, they can patch
+the callsite of 'my_trace' with NOP before loading 'xdp_prog', and drop
+the subprog 'my_trace' in their user space application. This elimination
+is approachable, since it is used heavily in bpfsnoop [1]. However, this
+elimination is not easy to understand. Want me to show more details
+about this elimination?
+
+Link:
+[1] https://github.com/bpfsnoop/bpfsnoop
+
+Thanks,
+Leon
+
+> probes in the BPF source code. The probes are built into NOP instructions
+> in the ELF. At runtime, when an observer is attached, the NOP instruction
+> is patched to a CALL instruction to the observer prog trampoline.
+> 
+> Unlike USDT, BPF SDT requires explicit macros to generate the function
+> prototype BTF for each probe. This allows the verifier to validate the
+> probe sites against the declared types, and observer programs can be
+> attached similarly to normal tracing programs using the function prototype
+> information.
+> 
+> A probe with two arguments in the target program can be declared and defined
+> like:
+> 
+>     BPF_SDT_DECLARE2(my_trace, int, int);
+> 
+>     SEC("xdp")
+>     int xdp_prog(struct xdp_md *ctx)
+>     {
+>         int len = ctx->data_end - ctx->data;
+>         int ret = XDP_DROP;
+>         ...
+>         BPF_SDT_PROBE2(my_trace, len, ret);
+>         ...
+>     }
+> 
+> An observer would be like:
+> 
+>     SEC("bpf_sdt")
+>     int BPF_PROG(observer_prog, int len, int ret)
+>     {
+>         bpf_printk("len=%d ret=%d\n", len, ret);
+>         return 0;
+>     }
+> 
+> The target program and probe site for the observer program should be set
+> at load time via bpf_program__set_attach_target() manually, since program
+> names are not unique and program IDs are allocated at runtime - there is
+> no static way to identify the target program.
+> 
+> For BPF_SDT_DECLARE2(my_trace, int, int) and BPF_SDT_PROBE2(my_trace, len, ret)
+> macros, the compiler produces:
+> 
+>   [code section, e.g. xdp]
+>       goto +0                  // NOP, patched to CALL at attach time
+> 
+>   [.bpf_sdt_notes section]
+>       ___sdt_jt_my_trace:      // symbol marking this entry's boundary
+>       .quad  0b                // 8 bytes: offset of the NOP in the code
+>                                // section (resolved by the linker via
+>                                // R_BPF_64_ABS64 relocation)
+>       r1 = %[arg1_reg]         // 8 bytes per argument: BPF move insn
+>                                // whose src_reg field encodes the BPF
+>                                // register holding each probe argument
+>       r2 = %[arg2_reg]
+> 
+>       ....
+> 
+>   [.BTF section]
+>       FUNC_PROTO (int, int) -> void   // from BPF_SDT_DECLARE2 stub
+>       DECL_TAG "bpf_sdt:my_trace:2"   // keyed by name + nargs
+> 
+> The .BTF and .bpf_sdt_notes sections are parsed by libbpf and ultimately
+> converted to an insn_array map per bpf program. Each map slot records the
+> instruction offset, jited address, FUNC_PROTO BTF ID, and argument register
+> for each probe site.
+> 
+> When an observer prog is loaded, the probe is resolved against the target
+> program's SDT map using the target fd and probe name passed by the user.
+> 
+> For attach, the existing bpf trampoline is reused with per-argument register
+> mappings declared by the SDT macro.
+> 
+> Xu Kuohai (12):
+>   libbpf: Prepare bpf SDT probe section for the linker
+>   libbpf: Introduce bpf SDT probe macros
+>   libbpf: Add bpf_sdt_notes section parser
+>   bpf: Create insn_array map for bpf SDT probe
+>   bpf: Collect SDT probe BTF IDs from BTF decl tags
+>   bpf: Add type check for SDT probe site
+>   bpf: Record probe name in SDT map
+>   libbpf: Add libbpf support to load SDT observer program
+>   bpf: Add kernel support to load SDT observer program
+>   bpf: Support attach and detach for SDT observer program
+>   bpf, x86: Add JIT support SDT for probe
+>   selftests/bpf: Add tests for bpf SDT probe
+> 
+>  arch/x86/net/bpf_jit_comp.c                   |  38 +-
+>  include/linux/bpf.h                           |  26 +-
+>  include/linux/bpf_types.h                     |   1 +
+>  include/linux/bpf_verifier.h                  |   3 +
+>  include/linux/filter.h                        |   1 +
+>  include/uapi/linux/bpf.h                      |  21 +-
+>  kernel/bpf/bpf_insn_array.c                   |  64 ++-
+>  kernel/bpf/cfg.c                              |   3 +
+>  kernel/bpf/core.c                             |   5 +
+>  kernel/bpf/fixups.c                           |   4 +
+>  kernel/bpf/liveness.c                         |  24 +-
+>  kernel/bpf/syscall.c                          | 163 +++++-
+>  kernel/bpf/trampoline.c                       |   4 +
+>  kernel/bpf/verifier.c                         | 174 +++++-
+>  tools/include/uapi/linux/bpf.h                |  21 +-
+>  tools/lib/bpf/Makefile                        |   2 +-
+>  tools/lib/bpf/bpf.c                           |  10 +-
+>  tools/lib/bpf/bpf.h                           |   9 +-
+>  tools/lib/bpf/bpf_sdt.h                       | 346 ++++++++++++
+>  tools/lib/bpf/libbpf.c                        | 513 +++++++++++++++++-
+>  tools/lib/bpf/libbpf_internal.h               |   1 +
+>  tools/lib/bpf/linker.c                        |   9 +
+>  .../selftests/bpf/prog_tests/test_bpf_sdt.c   | 151 ++++++
+>  .../selftests/bpf/progs/bpf_sdt_observer.c    |  30 +
+>  .../selftests/bpf/progs/bpf_sdt_target.c      |  34 ++
+>  25 files changed, 1622 insertions(+), 35 deletions(-)
+>  create mode 100644 tools/lib/bpf/bpf_sdt.h
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/test_bpf_sdt.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/bpf_sdt_observer.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/bpf_sdt_target.c
+> 
+
