@@ -1,145 +1,115 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8556C37C0FF;
-	Mon, 29 Jun 2026 03:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F71137C0FA
+	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 04:39:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782703638; cv=none; b=jjJ1/IwjQ2rdHkwccWXnSsZdEhEel/56KBS4/Cy88bAa3CtVkG0lLZZwh/hwNLnAjLfexV/+WyCvx4bSN6VQX9TOdg/qp7FwDJ8CWdRFKzYZvdmc2fkfOK/nEdj1RARhAzXi5sZPpCsq2BzQTRRacSy/+bErfyF2B5iott7fAEI=
+	t=1782707958; cv=none; b=L+3xVRcrwqHmcWJiV50fx79vgn2g644GZwshifopBhEdxu7EXz2gMZEUkbHgnCe+4hWATSHSd4lVDrhf0A1wgFTaUfQvoEPLbnDgkCXyoqB5kIWSiyo2gFuk47YDiaoooyy5WinblYrgDMzdY56gWAW/jnFTPluXrY3IwQh776w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782703638; c=relaxed/simple;
-	bh=Cj/8dglih8D0DnH5bXTCPZtOPaooc2mG6W9vEFkkFT8=;
+	s=arc-20240116; t=1782707958; c=relaxed/simple;
+	bh=FPjr2lEBsf6tuINR6Z2hE7dN1HCg7bXg2Jp+zTC1I20=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gu8xdDCFvLxoN1Pd+BDNJsIRBo3D1K9czuSZ1SjkV3pT6o2JbtnRUAKdcePuRRt+jK7/4qzvp9+xwIFCgHg+TeHa2YCRhO+0vyBUaucWcB3Ub166zopvZuNny+aBEjfstgW9OKqSiQEVxsdGfloTaS6SRY6Sax0ANM8BdBJyY/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gpWsv32SkzKHMcn;
-	Mon, 29 Jun 2026 11:26:59 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 39CA540873;
-	Mon, 29 Jun 2026 11:27:05 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgD3uv4H5kFqPODNAA--.32934S2;
-	Mon, 29 Jun 2026 11:27:05 +0800 (CST)
-Message-ID: <ec28f0f9-0693-4c9b-88fa-bffca446a63c@huaweicloud.com>
-Date: Mon, 29 Jun 2026 11:27:03 +0800
+	 In-Reply-To:Content-Type; b=A3c1BVqfqXRW46zRTW4Myaxuv2n4xlVaph5mqh7yEfkNidJ36BeoGgRDm7FwwzgcxQ/VKSDTXlSPEMtjSAkD5WQJFn2DmikzqM5bTrUZaUrg45aND+jcg6Qrq11RAz8ovC2Z2liAtGVndTZ//Gp3RJdl232P3bE7nJLWj95FJfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CZlIPKgH; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CZlIPKgH"
+Message-ID: <840fa721-297d-4147-ac58-7aa6f4673faf@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782707943;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yoEJ91xEiAqps2gA9CAfL/dauGrpRbXH1HQpcKF9hGY=;
+	b=CZlIPKgHewo6byYDJC0G6KfIOCWH8Q84iS/6U5TRCL9ZjBsInEtWkPv3nBYGz7UAlQJDWY
+	gkDxqFj6edQfjY4NfVeYRD8kUtk3NhvLoqfIqpLmk809W+eKmuoEfSCYmM2Lxe7RTUuQZG
+	3Gc/69MgDHkGdQkPYgX7XIy8dN/oEZc=
+Date: Sun, 28 Jun 2026 21:38:55 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH bpf-next 00/12] bpf: Introduce static-defined tracing
- probe for BPF
-To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- KP Singh <kpsingh@kernel.org>, Anton Protopopov <a.s.protopopov@gmail.com>,
- Amery Hung <ameryhung@gmail.com>, Eyal Birger <eyal.birger@gmail.com>,
- Rong Tao <rongtao@cestc.cn>
-References: <cover.1782571533.git.xukuohai@huawei.com>
- <855e44f3-d22c-47e5-8bd1-c5d9f7014a75@linux.dev>
-Content-Language: en-US
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <855e44f3-d22c-47e5-8bd1-c5d9f7014a75@linux.dev>
+Subject: Re: [PATCH] Documentation/bpf: make it clear that kfuncs should be
+ non-static
+Content-Language: en-GB
+To: JP Kobryn <jp.kobryn@linux.dev>, ast@kernel.org,
+ roman.gushchin@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ jolsa@kernel.org, emil@etsalapatis.com, corbet@lwn.net,
+ skhan@linuxfoundation.org, bpf@vger.kernel.org
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260626172026.7327-1-jp.kobryn@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260626172026.7327-1-jp.kobryn@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgD3uv4H5kFqPODNAA--.32934S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFyfXr1xZF48ZF1UtF1fWFg_yoW8tw4UpF
-	43ZrnYyF1vqF42yF97Jr4fAFWFv395GrW3Jrn5WrWSv3ZrXr1vgF42gFWYvF98ur48u34I
-	qay0vrsxWr15ZF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
-	v3UUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-Migadu-Flow: FLOW_OUT
 
-On 6/29/2026 10:14 AM, Leon Hwang wrote:
-> Hi Kuohai,
-> 
-> On 28/6/26 06:51, Xu Kuohai wrote:
->> From: Xu Kuohai <xukuohai@huawei.com>
->>
->> This series introduces static-defined tracing probes for BPF programs.
->> BPF SDT (static-defined tracing) works similarly to USDT. User defines
-> 
-> 
-> At first glance, the SDT idea looks cool to me.
-> 
-> However, what's your purpose of introducing SDT?
+
+
+On 6/26/26 10:20 AM, JP Kobryn wrote:
+> The kfunc documentation mentions how the macro __bpf_kfunc prevents
+> inlining for static functions. This makes it sound like static kfuncs are
+> acceptable. Although static kfuncs may happen to work, it is by chance that
+> the compiler chose not to rename these functions and BTF resolution still
+> succeeds.
 >
-
-Well, the purpose is to add a dynamic, zero-overhead tracing mechanism for
-bpf, not just at function entry, but anywhere inside the prog source code.
-
-> If to provide points in bpf progs to be traced, like tracepoints in
-> kernel functions, I think subprog+fentry is an alternative approach.
-> Comparing with SDT, subprog+fentry requires a function call at run time,
-> instead of a NOP like SDT.
-> 
-> For example,
-> 
-> #define __sink(expr) asm volatile("" : "+g"(expr))
-> 
-> static __noinline void my_trace(int len, int ret)
-> {
-> 	__sink(len);
-> 	__sink(ret);
-> }
-> 
-> SEC("xdp")
-> int xdp_prog(struct xdp_md *ctx)
-> {
-> 	int len = ctx->data_end - ctx->data;
-> 	int ret = XDP_DROP;
-> 	...
-> 	my_trace(len, ret);
-> 	...
-> }
-> 
-> 'my_trace' can be traced using fentry to inspect the details of 'xdp_prog'.
-> 
-> Furthermore, if users don't want a function call at run time, e.g. they
-> don't want to call 'my_trace' at run time in production, they can patch
-> the callsite of 'my_trace' with NOP before loading 'xdp_prog', and drop
-> the subprog 'my_trace' in their user space application. This elimination
-> is approachable, since it is used heavily in bpfsnoop [1].
-
-Sounds like the subprog+fentry you described gives a good evidance for real
-demand of dyanmic tracing inside function body.
-
-IIUC, even though the CALL instruction at the callsite is patched to NOP at
-runtime, the argument preparation instructions - r1 = len, r2 = ctx - remain
-in the callsite. For SDT, the argument preparation is recorded as metadata
-out of line, and is never executed.
-
-And I think SDT is cleaner and easier to use. User just declares the prototype
-and insert the probe, no need to hack with subprog+fentry.
-
-> However, this elimination is not easy to understand. Want me to show > mored etails about this elimination?
+> Make it clear in the documentation why kfuncs should not be declared
+> static. First, remove wording that makes it sound like static is ok. Then
+> point out the external naming needed for BTF resolution. Finally point out
+> that sparse may warn on unreferenced kfuncs and that this warning can be
+> ignored.
 >
+> Signed-off-by: JP Kobryn <jp.kobryn@linux.dev>
 
-That would be appreciated, thanks.
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
-> Link:
-> [1] https://github.com/bpfsnoop/bpfsnoop
-> 
-> Thanks,
-> Leon
+> ---
+>   Documentation/bpf/kfuncs.rst | 21 ++++++++++++++-------
+>   1 file changed, 14 insertions(+), 7 deletions(-)
+>
+> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+> index 4c814ff6061e..1dbaff8d4805 100644
+> --- a/Documentation/bpf/kfuncs.rst
+> +++ b/Documentation/bpf/kfuncs.rst
+> @@ -276,19 +276,26 @@ This set encodes the BTF ID of each kfunc listed above, and encodes the flags
+>   along with it. Ofcourse, it is also allowed to specify no flags.
+>   
+>   kfunc definitions should also always be annotated with the ``__bpf_kfunc``
+> -macro. This prevents issues such as the compiler inlining the kfunc if it's a
+> -static kernel function, or the function being elided in an LTO build as it's
+> -not used in the rest of the kernel. Developers should not manually add
+> -annotations to their kfunc to prevent these issues. If an annotation is
+> -required to prevent such an issue with your kfunc, it is a bug and should be
+> -added to the definition of the macro so that other kfuncs are similarly
+> -protected. An example is given below::
+> +macro. This prevents issues such as the compiler inlining the kfunc, or the
+> +function being elided in an LTO build as it's not used in the rest of the
+> +kernel. Developers should not manually add annotations to their kfunc to prevent
+> +these issues. If an annotation is required to prevent such an issue with your
+> +kfunc, it is a bug and should be added to the definition of the macro so that
+> +other kfuncs are similarly protected. An example is given below::
+>   
+>           __bpf_kfunc struct task_struct *bpf_get_task_pid(s32 pid)
+>           {
+>           ...
+>           }
+>   
+> +Note that kfuncs must not be declared ``static``. A kfunc can be called from a
+> +BPF program ``*.c`` file outside the compilation unit that defines it, so its
+> +externally visible name must remain available for BTF ID lookup. ``static``
+> +linkage allows the compiler to rename the function, which can break this
+> +BTF-based kfunc resolution. Further note that sparse may warn that an otherwise
+> +unreferenced kfunc should be static. Such warnings should be ignored for kfunc
+> +definitions.
+> +
+>   2.5.1 KF_ACQUIRE flag
+>   ---------------------
+>   
 
