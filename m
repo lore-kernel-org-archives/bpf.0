@@ -1,95 +1,138 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 612874657F8
-	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 16:40:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782751224; cv=none; b=PvV7BPcNGhbGpWE+WfxOh8188Qacy2j2t89R33wCHTHjnRuNiYIyIftFFagqQBvaXAWn4NGc60EkKOfb6S+oXGpNle3wF72ntrFosaIR1IL1Fndi+WBccveP4hjJOgUR0acwoWzQMl47Zsp0OHaSqTOW+DNap9pd6sRVp28XH/M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782751224; c=relaxed/simple;
-	bh=T1fLXCn3FavD3bJ3PxuobqPBjZ+A8RlVrG4IjG7DiNE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rtXZsoUhw9X5yF205Lkgtn7rO1TlnuDZuk+ZmoebPxj8c/AgVxSxH2pGU9cZ62USmXMQY1OMQYrM1hJTid/pyesfmIyvAwkHIK9f3SzgmC5eI0ZhU2FzSlF0Igd+MjdOKCFyRSVf/C6Zhgex83fBFXEkHZSVVrgKvHKk6OttKiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UE2QrexO; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135524657DB
+	for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 16:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782751543; cv=pass; b=Ymlzx2PdHFjePFx8o6woNcLsIc0eb6+pwW5d3vCt3JVELmiuzWiKWkG4Y/alIuMQ+ApNg/s+LYjViUitBA3PEHAxw1ADb8fuhZ0uK7HTpqeK1K965kC0Hq2El8mVVsf6ABaGnOkC7RnNzTtPI5J3nK4bIcigp/kWuwm5sK8L0pQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782751543; c=relaxed/simple;
+	bh=RfAQIv+FKjyChWZcfNsSEW6hCNkKaMQ2UoVdejtyssQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CkuQ3ZtZ2CSHQ4yO90E8yh/YUW9ZgFfufElzhwaX0vVn5PSIfbASfpsHrKlpsBptP7Tos4Z8mQZnvYjMCkd/2IpdDsyvskzAoAnPlDurS/yHKXLaQPeB3onsRFXj3Pu6V6itrwIR3O1a/Xgrsdjj5CRNtZKMs7Xie3tdiwBWg1w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZguUt/6u; arc=pass smtp.client-ip=74.125.224.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UE2QrexO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782751217;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CviOjkV9/YgKW2WypG09pJ964/zY+DekGBGC6jJ7pxM=;
-	b=UE2QrexO/BGSvAHBa3oSwFZalPY8n8OTvSxwxoyHVuieKbLaKI5Eoyr9qJbQQ65Jc8JZOx
-	JgSsucZh5BnnJSuEhZYkV2A/1hJ2YzMPfmSthfn0CdOC8TcvSzAll5bxZaB6uoiTALOP10
-	KuBtshhvhnwAZ6MFeAU3mGibgrCfr3Y=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-637-rpdYnSZOPrigYNwYjzgDog-1; Mon,
- 29 Jun 2026 12:40:13 -0400
-X-MC-Unique: rpdYnSZOPrigYNwYjzgDog-1
-X-Mimecast-MFC-AGG-ID: rpdYnSZOPrigYNwYjzgDog_1782751212
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7874B1955F44;
-	Mon, 29 Jun 2026 16:40:12 +0000 (UTC)
-Received: from fedora (unknown [10.44.32.37])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 6085F3000B76;
-	Mon, 29 Jun 2026 16:40:09 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Mon, 29 Jun 2026 18:40:12 +0200 (CEST)
-Date: Mon, 29 Jun 2026 18:40:07 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 05/13] uprobes/x86: Move optimized uprobe from nop5 to
- nop10
-Message-ID: <akKf511eknMCE0AB@redhat.com>
-References: <20260526205840.173790-1-jolsa@kernel.org>
- <20260526205840.173790-6-jolsa@kernel.org>
- <aj5JuH6AtjDtWIVU@redhat.com>
- <akJNZN9gvZ30zKUf@krava>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZguUt/6u"
+Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-664c6304683so1667783d50.2
+        for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 09:45:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782751541; cv=none;
+        d=google.com; s=arc-20260327;
+        b=JPcsbTJxzjD+beiW1NHjM0/6DiyB/tMobGcWP3Jd4uVX6GJpusSxdTBzDK10UqW9Fo
+         oeU7IeSrsW4beIH86nnxonLEAV1NtyTbQl8mV/qQpRpihOHx/EJO3+dvRb490TZbBYSU
+         e4T/x+oiYmuQAITLTjNtX8mXqnL23dutssCLvEeHSQt0cXA8bRvlzsgmNE3BLCQJ4ouJ
+         hBfy+4hX2sEJ9wGLA9xydJyqEylg9CZyBaxCOTzQ5F8KZFI/NV0qDQECRS/xkYWNOyQ4
+         UOxNKllbLYGer55vCgvbpWUTdMaRW4dOtdTmidY3fhrjyRwKu8jK16NkLnXGuv8NjbEO
+         vujQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=RfAQIv+FKjyChWZcfNsSEW6hCNkKaMQ2UoVdejtyssQ=;
+        fh=XKE8cqTb/JF5vl4P8NIKySLcJ72kxwh9sEAPxfKwaCc=;
+        b=Ofx8UwFrAh6rK8On0/THH4v/nz7f3ewSuV5U2q0FHyMRWypRn0+8kDoNIjYmUvsc88
+         hyN2bo3+EpmBx/rLtLDonFX1huOg+D10LfM4/g4uxQ2yFL7Y55U1RE9A/+64kZ66c18Q
+         Cni2Wu8dFq+gwou1Udcao+073UR+onU6/pU5FGsBbg2UhP6VS2fphKmngYkx92vjukDR
+         sDs6mh/V1BawQBdkxaVUWGFjsfEE244r3aOt22fV5PgqsUE5h6C2wiQII1bXU03TR7Xf
+         ctoQMaKkckYr40InUdztdNeTb0Qvc5nU/4NVLXSZQfbpOOQ2UgIbSWdaJM4QfGdp7wst
+         2diQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1782751541; x=1783356341; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RfAQIv+FKjyChWZcfNsSEW6hCNkKaMQ2UoVdejtyssQ=;
+        b=ZguUt/6uRY+ixRON2HeGfISa9pTO7Pp4viBiXIbUCE6Hqj7rryzlkLkUB0DpsAMKMi
+         baiGQ3QNQRJcKf+XCJtKDkUkakaSO4Vh6Wj4Rfq9KwH1xLISIxzFr9/0H2JVvujrFa3z
+         93tTQryCrAYRP9anmQyeemy1aNpqtKbgz3vCrbHLUl8MEYjb0hS1GgvOoXZC/CzxfObQ
+         +xEN6IoLFAbgvASMs22quUTQTuzBrtQH8XsGpR/xzI3i7FK7LVJxAnxWI5RjuDhjM+Gv
+         IYqPjiS0/8bKwOiDaKL2USRipSjUQ8wx6V7yuKtssd+UNvCCBkkcgZYHKcQLjPJGgESW
+         M2xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782751541; x=1783356341;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=RfAQIv+FKjyChWZcfNsSEW6hCNkKaMQ2UoVdejtyssQ=;
+        b=Q+1/Q4kLPP9tvf8WxmXfHFlSNJBHwSqAVFd4eO5VOyUV7BzZ/Blq+TzD9aIg+UH2XI
+         Zy3dVQiDVQH2yMZN5Kg+KT8DuVHmKngY1CXDZEXxOeW4R7EAjcXAxhwbnkAeYGhLnhQd
+         Q3O2AAq7AiHU41WAep+nxWzIJtwGu4Cf7dK4xQlpmGhP8/c7veeUl7LoT57xtaD8ncSq
+         JNBN1x3KJ0SLu9t8OyqLbdpjwmhd4eplohENgubSSLPxp5SJiHP7Wg0qYglMvrK8zHym
+         RtX4sr2bJeKaAYtdB7yyPiBOIMAWNlZrciZqG/44I5evTDeUJocvWuyohg1JCTdMlcPa
+         lvzQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqoU4ruH2dM9AsJco/4kOZXC5OVGcNrIJp5vWNwEIp7xRsFGO1RlXnQ0YjLkJZJd5X/JHo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzJaPkdq9g9I5h4+QCwORREE+KYh4ad5VZ04lLfCP+VVKVE/90
+	pVYybXNX21DOL+rg5+TiQXoIwjhr89hu+sx6E3foxbNAw3EUVa1o0Xg5PBJzirv32RDhk/dV2CG
+	RriE1c8fwvswzXQGWcor8fYNXNyjHTFk3XRejB9bRNmkf4yPOUj6N6eVxTCM=
+X-Gm-Gg: AfdE7cne9SI1fN25pieyEZq/sUrK75bomN8y381MvU/BjX9n7AVV/H5ZjSJDMpunEsj
+	iFrS70z7eVmeB/gGvQOswI4esLG2CiUiukZgAPSbo7m9C762+xxvNaHcsXCyAoqd4AXG2PgeTEy
+	DrOEheIMG4qynRHUyrHuPPvpY5JiblSV8gix9zgCiUSg+Xh/YvrzZEA6vDURxrWr8ORyAGNnr75
+	aSHiuKc1JlusDauPVI+bCBnHJ7UygIwvJrv7C9JfaQqG4dHSTwaxbJRz6i3GcGGfs2o15zzqU4f
+	hkBSJLgeYuXHO87sywORfqKpuZXuNeQPws7hWA==
+X-Received: by 2002:a53:cf06:0:b0:664:e5c5:5b3c with SMTP id
+ 956f58d0204a3-664f9a36866mr296098d50.59.1782751540298; Mon, 29 Jun 2026
+ 09:45:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <akJNZN9gvZ30zKUf@krava>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+References: <20260624-bpf-lskel-fixes-v2-1-e8ac5974a72c@google.com> <CAADnVQLURewU9wJ+4MTjCG9Uq0nR=c=oBbJ4vGbL-tRdp9YJBg@mail.gmail.com>
+In-Reply-To: <CAADnVQLURewU9wJ+4MTjCG9Uq0nR=c=oBbJ4vGbL-tRdp9YJBg@mail.gmail.com>
+From: Sid Nayyar <sidnayyar@google.com>
+Date: Mon, 29 Jun 2026 17:45:28 +0100
+X-Gm-Features: AVVi8CekWeW1fxinE3JpwJM_gtUOj6Fel1RD2zjrFANLf0oLUg3OXqT-fWzZggY
+Message-ID: <CA+OvW8avnAOq8PAcboZ+YJs9hGsnZHN1bYWstytc+UqoTamnZw@mail.gmail.com>
+Subject: Re: [PATCH v2] bpf: allow BPF_LOG_KERNEL from kernel space
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, LKML <linux-kernel@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Giuliano Procida <gprocida@google.com>, Matthias Maennich <maennich@google.com>, 
+	Tiffany Yang <ynaffit@google.com>, Neill Kapron <nkapron@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 06/29, Jiri Olsa wrote:
+On Thu, Jun 25, 2026 at 9:02=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> --- a/arch/x86/kernel/uprobes.c
-> +++ b/arch/x86/kernel/uprobes.c
-> @@ -265,6 +265,10 @@ static bool is_prefix_bad(struct insn *insn)
+> I don't think it's a good idea.
+> BPF_LOG_KERNEL prints to dmesg and it's there for cases
+> where BTF is corrupted in vmlinux or in the module.
+> The verifier log can be large. It's never suitable for dmesg.
 >
->  		attr = inat_get_opcode_attribute(p);
->  		switch (attr) {
-> +		case INAT_MAKE_PREFIX(INAT_PFX_CS):
-> +			if (insn->x86_64)
-> +				break;
-> +			fallthrough;
->  		case INAT_MAKE_PREFIX(INAT_PFX_ES):
->  		case INAT_MAKE_PREFIX(INAT_PFX_DS):
->  		case INAT_MAKE_PREFIX(INAT_PFX_SS):
+> Let's step back and discuss the end goal.
+> Not just this patch, but overall.
+> You're sending a bunch of patches for various lskel things.
+> Please explain the full picture.
 >
-> or we could just skip it for nop10.. maybe that's better
+> pw-bot: cr
 
-Well, if you ask me I'd agree with the "maybe that's better" plan ;)
-I mean... I don't think that INAT_PFX_CS should be "special" in is_prefix_bad.
+I am trying to enable support for STRUCT_OPS maps in light skeletons.
+The idea is to enable loading sched_ext eBPF programs using in-kernel
+loaders, such as a kernel module. I am preparing to send a patch
+series for the same.
 
-But, whatever you do - I agree, feel free to keep my r-b.
+The changes I have been sending fix bugs I found along the way, for
+example poisoning unresolved weak kfuncs and fixing a typo in
+struct_ops map FD generation.
 
-Oleg.
+This change, however, is not a bug fix but just a quality-of-life
+improvement. Having the ability to enable BPF logs in dmesg for
+in-kernel loaders has been helpful for debugging. Therefore I sent
+this change upstream. I agree that enabling dmesg logs for loaders in
+production is a bad idea, but in-kernel loaders can use this option
+during development to ease debugging.
 
+That said, I am happy to drop this change since it is merely a quality
+of life improvement and doesn't deliver any crucial functionality.
+
+Regards,
+Siddharth Nayyar
