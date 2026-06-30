@@ -1,108 +1,101 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF673ACF0B
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 12:25:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833D2391E77;
+	Tue, 30 Jun 2026 12:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782822354; cv=none; b=DEKHRltboDae9A9hs8N6CqTjf+yAWWEFSmOQIn2nnCywiPQfl80x4a9qH/kFE7g3SLaaAKykU+J1QNS+V3OFrkNcMkwfDF6M7IKBKnJ69Up8JelkRXxw/NQSphzRPxIHg//R4YGLA9o02QXhIIL+5uVf7E7d4OqWC3A6707sE3A=
+	t=1782822816; cv=none; b=OjtTRbX2RhAd7th6M2jQHuDwogFIwSKnp3wWtMelDHaxmvrRpv3qk3A3Hy24ImnlFr3kgdCYlHZ4Qssb8nSqqu5968Jzmow7Psimov9NEs5ip6Ifu9W1AC0we4KpX/65FtXNPWsW+IIiRETNKhPhW49eaiN0HCVgbBnVxbyx0i0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782822354; c=relaxed/simple;
-	bh=cvYllD7eoYPExw+EYeo74W9hwOcQ72DgvlR2qNX7cME=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PsUW66XkMiWKZchcf5yxCl8Jdll6tvJnaYSrwWrrUnz8qrMw43IEDHckehvYELURUA3rWCqeYuGtvkUir4fObBhv9Ix4oNqOadEtPaA2HI+ArO/FJHqUDW50f2zHJDxRnWnj78ZGSD3hHk6Qfz3DRbnFxrLZif6NFsyYSiSmpT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TZXhUi6N; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782822816; c=relaxed/simple;
+	bh=j/4atb9+pcESumLeAY7R129iJqrRFKgjemNXrb52HZY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gx9c8DGqtweTCynWnfYQYWZsj8v6siTFUISL/quZ/dztPKBYO3A13b1AxJFjRpp8h98Ap/Ds++X0GmXzkkOVs9zzoVbCkkaIxwkDzxMgNxwNtI/YNW8cGbhgCJuPwOwvfPv6HfMFl/AOPEHgXBdWwMPSl6bDX3FxJ0TKQpTCLmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=qhzzuu2o; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TZXhUi6N"
-Message-ID: <f72ebb75-66e8-47ae-b1f0-e77d6a24f3e0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782822341;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YxbpRPtc3V96hx23kGkgswvCUJxuCkTGojxcU3JwbNE=;
-	b=TZXhUi6NcYnbEU22y9YRe/5m+hQAEKydU3G0LQACu1fCwyrs98RkNvyWEFa7y/1A5R0iSm
-	MIl4/f5q4WoOHdxX6z5mrDAlA7a8UGIGG0m6nbLkps1NIsyqlhVT2zHFvH0KOBUe8pxeyH
-	XSmHvltW2rhEdpJidr/bOEKrftER3Ks=
-Date: Tue, 30 Jun 2026 20:25:30 +0800
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="qhzzuu2o"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=z4p7hUd9/x0IqFiaZtRCAdL6WlP2+E1Y5oVefYB42/8=; b=qhzzuu2odfImJinNs9D/14O9nO
+	AfQsvdbBfcOzurIzUsGKpsp7SnDuwYfuaUNzF+o90r3PUtUOrtqC+fRqmZWXuW90R4nqqwP8HUsNp
+	QgGteBoTz4mVcQN3DiWN3K26gU+YQ1htP2J5MQNonnNjLCNuS6dT14T126ZVKf9VhKhrPvhwVby0U
+	E6upjR5pbx8STpmWeSgn/MsYBrpL+wbClc0+JAYe1CJg+QQfHDqt+JyRJyxmPgek1g2dmsVc9sCI9
+	t/4a6fFsUYdrVXvVGHvcyNdJgASsdjPZrxRTOIpxLZvaJ2rjTww7M/fNpQ0/kDzu80VhDH4RJpXnB
+	WsxxDXhQ==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1weXee-000NcL-01;
+	Tue, 30 Jun 2026 14:33:32 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: kuba@kernel.org
+Cc: pabeni@redhat.com,
+	jhs@mojatatu.com,
+	bigeasy@linutronix.de,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH net 0/3] Fix broken TC_ACT_REDIRECT from qdiscs
+Date: Tue, 30 Jun 2026 14:33:28 +0200
+Message-ID: <20260630123331.186840-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2] bpf: Fix smp_processor_id() call trace for preemptible
- kernels
-To: Edward Adam Davis <eadavis@qq.com>, sashiko-bot@kernel.org
-Cc: bpf@vger.kernel.org, sashiko-reviews@lists.linux.dev
-References: <20260630094823.897BD1F00A3D@smtp.kernel.org>
- <tencent_94C3BFC44F9761376546C493608362896E05@qq.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <tencent_94C3BFC44F9761376546C493608362896E05@qq.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28046/Mon Jun 29 08:27:20 2026)
 
+This is an alternative fix to [0] in order to not uglify
+__dev_queue_xmit() with sprinkled ifdefs given this can be
+simplified and isolated through a simple test into the BPF
+redirect helper itself.
 
-On 6/30/26 7:14 PM, Edward Adam Davis wrote:
-> On Tue, 30 Jun 2026 09:48:23 +0000, Sashiko wrote:
->> [Severity: High]
->> Does this fix the issue at the right layer? By adding the preemption
->> protection here, it masks the fact that the caller is running with migration
->> enabled, which leaves sibling APIs vulnerable.
->>
->> For example, in __rhtab_map_lookup_and_delete_batch() in
->> kernel/bpf/hashtab.c, the batch loop iterates and calls rhtab_delete_elem()
->> without disabling migration.
->>
->> If the map elements contain special fields (like BPF_KPTR),
->> rhtab_delete_elem() will first call rhtab_check_and_free_fields(), which
->> eventually calls bpf_mem_free().
->>
->> Since bpf_mem_free() also uses this_cpu_ptr() without get_cpu() protection:
->>
->> kernel/bpf/memalloc.c:bpf_mem_free() {
->>      ...
->>      unit_free(this_cpu_ptr(ma->caches)->cache + idx, ptr);
->>      ...
->> }
->>
->> Will this result in the exact same BUG being triggered on that path? Should
->> the missing migration protection be added to
->> __rhtab_map_lookup_and_delete_batch() instead of modifying the allocator
->> here?
-> Like this?
->
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index 9f394e1aa2e8..7b98c2eea685 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -3345,8 +3345,10 @@ static int __rhtab_map_lookup_and_delete_batch(struct bpf_map *map,
->   	}
->   
->   	if (do_delete) {
-> +		get_cpu();
->   		for (i = 0; i < total; i++)
->   			rhtab_delete_elem(rhtab, del_elems[i], NULL, 0);
-> +		put_cpu();
->   	}
->   
->   	rcu_read_unlock();
+I've also added a proper BPF selftest, so there is no need
+to check-in a binary BPF object into selftests given we do
+have BPF infra for all of this.
 
+  [0] https://lore.kernel.org/netdev/20260629102157.737306-1-jhs@mojatatu.com/
+  [1] https://lore.kernel.org/netdev/20260629102157.737306-4-jhs@mojatatu.com/
 
-This splat is specific to rhash...
+Daniel Borkmann (2):
+  bpf: Reject redirect helpers without a bpf_net_context
+  selftests/bpf: Add test for redirect from qdisc qevent block
 
-For HASH/PERCPU_HASH/..., most operations are performed under
-bpf_disable_instrumentation(); see __htab_map_lookup_and_delete_batch().
+Jamal Hadi Salim (1):
+  net/sched: Handle TC_ACT_REDIRECT from qdisc filter chains
 
-But for rhash, bpf_mem_cache_free_rcu() is called outside the
-bpf_disable_instrumentation() region; see 
-__rhtab_map_lookup_and_delete_batch().
+ include/net/pkt_cls.h                         |  14 ++-
+ net/core/filter.c                             |  17 ++-
+ net/sched/cls_api.c                           |   6 +-
+ net/sched/sch_cake.c                          |   2 +-
+ net/sched/sch_drr.c                           |   2 +-
+ net/sched/sch_dualpi2.c                       |   2 +-
+ net/sched/sch_ets.c                           |   2 +-
+ net/sched/sch_fq_codel.c                      |   2 +-
+ net/sched/sch_fq_pie.c                        |   2 +-
+ net/sched/sch_hfsc.c                          |   2 +-
+ net/sched/sch_htb.c                           |   2 +-
+ net/sched/sch_multiq.c                        |   2 +-
+ net/sched/sch_prio.c                          |   2 +-
+ net/sched/sch_qfq.c                           |   2 +-
+ net/sched/sch_sfb.c                           |   2 +-
+ net/sched/sch_sfq.c                           |   2 +-
+ tools/testing/selftests/bpf/config            |   1 +
+ .../selftests/bpf/prog_tests/tc_qevent.c      | 113 ++++++++++++++++++
+ .../selftests/bpf/progs/test_tc_qevent.c      |  23 ++++
+ 19 files changed, 175 insertions(+), 25 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_qevent.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_tc_qevent.c
 
-note: map_lookup_and_delete_batch() disable cpu migration
-
+-- 
+2.43.0
 
