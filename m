@@ -1,138 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1F72405E1;
-	Tue, 30 Jun 2026 22:16:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59225322C77;
+	Tue, 30 Jun 2026 22:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782857814; cv=none; b=DG8uOQZfJATcpGFKRuPuqAeGm9gevou709CGWdPzarpPTp2dqnTgRbkFJW0lx978yZJimrm/jgvles7wPsJymDAQvokjbsI0lat+VxeyIq0YfwXaX/kwA1MlxwKwy5LcvOVgqDYO9M1vTfdumzxk1XHM+Ap+BfrreF6L1OU2/i4=
+	t=1782858200; cv=none; b=FkaZXXAsxHvt3HT6sUXvTbYc1pvh+uXdNci19NGwX3ooCHUGOysEaUCAVF73QKB+cK2mdemWT+Q4W18MRY713Rm9wSCF6ABenpjqrgfF8+ehmSBwqJf7oLG1CLfruleX8IFGdKmvHTCuI9Aaz2ghVq3BeP1EHLwuYgj7v7zo1ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782857814; c=relaxed/simple;
-	bh=htrANcxd20nmrILXwJpsOCDJVICGkLLOXJVouWan+x8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H4/LyJV5RhIxiyWJWc6PAWh921/dSkHW2Oj3qLsNXAWch0FQmPcOzWBWjVCQy8RyeuyVewF/3XZwvS1eFmwZop7gIV50NlvS9MHOVgcPiPB9xhqur09D1TuQxdGnlJ+S+8AzivRZ74TNylNRk+Yh2/+e6ASbjdD9xUBbRFcAnWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kMHgZF4B; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782858200; c=relaxed/simple;
+	bh=dyWlc/2eR8m+sQqMtQbUYiFpV2uOHxIlz/9dViFfAPg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qGgWvl7X1MwbcnorHO575SIkUfRVyZrmQRmw7EuNrTPPLC3tEQJWgL/DZslogyl2wDvbcZ6Klj+sVB63ii+8sd48kJPQNh250995MwuCt2Joo4U2NLsC/ZHvNaUERjVoYWVfWHFVwurVljUX0fS2MTYg2F2XdXwYTVBus38bQQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EcY7mt7O; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kMHgZF4B"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BCA11F000E9;
-	Tue, 30 Jun 2026 22:16:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EcY7mt7O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94DEA1F000E9;
+	Tue, 30 Jun 2026 22:23:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782857812;
-	bh=DGltGEycY+hCI/dvIu1mTklnBJ/JnDR2WIlHuuRxAUM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=kMHgZF4Brk/SBFDdKiygIwML/E2u0M6ucnpL8qOX70RwLlQsAqlL7E7rYBNrKlNz0
-	 9YnCOk0VLQHXe/WHB5xHI4RoyO9YXPWmhE+Wqh9X1ztAyAXCtKkgOHveeNm0FRk0aa
-	 NxLuQnU8iHtYKhgNSmtrQuw3o8EFtUTA4nP+kXhET1ZBZnAedK6Ya0+CaHT8SxT2Zk
-	 DfIbK40rCHUXjUBjNpZnakArNCRLTHoEC6BN8fRUDOM0TTmSApwbzbOH2x6GERet3M
-	 rGmfbFsCwEST7dHNxVHerJQJ07eQifuwPxYC11kDOxIHUF3JpIM7d3kbzBpzNgwfTQ
-	 aVfc5BYfoEQNA==
-Date: Wed, 1 Jul 2026 00:16:49 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: Vladimir Vdovin <deliran@verdict.gg>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, martin.lau@linux.dev, sdf@fomichev.me,
-	hawk@kernel.org, john.fastabend@gmail.com, kuba@kernel.org
-Subject: Re: [RFC PATCH bpf-next v1 0/7] xdp: RX checksum metadata hint and
- checksum assertion over redirect
-Message-ID: <akRAUTAqVKkxmoVa@lore-desk>
-References: <20260630191510.81402-1-deliran@verdict.gg>
- <akQyT2d0wNF5F5LG@devvm7509.cco0.facebook.com>
+	s=k20260515; t=1782858197;
+	bh=n7o6b+pDfbXkoCXWqOQ4sT4HKnVIGfNIQENiExzPoRA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=EcY7mt7O6KCpNEL2GMPDeHKUgyQU5wwnwOEnBqqzrsOMOMFWZLCEAvSePCw9TprYw
+	 j/VVLbikigx1l8ACtyx1WH0ZCl84x7w17ugdybddB9GoUqwKlb7/zpLKuE1O7nXyjp
+	 zu2biYTGaZbRW6DiUbOyyzwxMNBRkAz0jjAMKg7j6OjQlWXOKUkPijO89/BJqzixqn
+	 9DIKzc/sVL+qTR/tBq/RGgemLjw0mI30EQRPwo+449yh3o6QZOcDNKGahq+w4Dzuo2
+	 kArX2KM1bXApwlBRuFC67clHyCFBwbsrCWL0wwjz+AKsfzOOfI8ID96vSgRreTcIrz
+	 6Y9kSDP1KDk6A==
+From: Sasha Levin <sashal@kernel.org>
+To: viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	jack@suse.cz,
+	miklos@szeredi.hu,
+	amir73il@gmail.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	stephen.smalley.work@gmail.com,
+	omosnace@redhat.com,
+	gregkh@linuxfoundation.org,
+	bboscaccy@linux.microsoft.com,
+	caixinchen1@huawei.com
+Cc: Sasha Levin <sashal@kernel.org>,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-unionfs@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	selinux@vger.kernel.org,
+	bpf@vger.kernel.org,
+	stable@vger.kernel.org,
+	lujialin4@huawei.com
+Subject: Re: [PATCH v3 stable/linux-6.12.y 0/3] Backport Fix incorrect overlayfs mmap() and mprotect() LSM access controls
+Date: Tue, 30 Jun 2026 18:23:09 -0400
+Message-ID: <stable-reply-item001-overlayfs-612-20260630181642@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260629070338.578858-1-caixinchen1@huawei.com>
+References: <20260629070338.578858-1-caixinchen1@huawei.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2QzZE0hPxBRkFxHX"
-Content-Disposition: inline
-In-Reply-To: <akQyT2d0wNF5F5LG@devvm7509.cco0.facebook.com>
+Content-Transfer-Encoding: 8bit
 
+> Backport the patch series
+> "Fix incorrect overlayfs mmap() and mprotect() LSM access controls" [1]
+> to 6.12 lts
+>
+> Amir Goldstein (1):
+>   fs: constify file ptr in backing_file accessor helpers
+>
+> Paul Moore (2):
+>   lsm: add backing_file LSM hooks
+>   selinux: fix overlayfs mmap() and mprotect() access checks
 
---2QzZE0hPxBRkFxHX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+All three patches are queued for 6.12, thanks.
 
-On Jun 30, Stanislav Fomichev wrote:
-> On 06/30, Vladimir Vdovin wrote:
-> > This series lets XDP programs work with the hardware RX checksum verdic=
-t:
-> > read what the NIC concluded about a packet, and carry a "the L4 checksum
-> > is correct" assertion across a redirect so the stack does not revalidate
-> > it in software.
-> >=20
-> > When an XDP program redirects a frame to a cpumap (or any other path th=
-at
-> > rebuilds an skb from an xdp_frame via __xdp_build_skb_from_frame()), the
-> > HW RX checksum status is lost and the stack revalidates the L4 checksum=
- in
-> > software.
-> >=20
-> > Two kfuncs are added:
-> >=20
-> >  - bpf_xdp_metadata_rx_csum(): a device-bound RX-metadata hint, like the
-> >    existing rx_hash / rx_vlan_tag ones.  It reports enum xdp_csum_status
-> >    (XDP_CSUM_NONE / XDP_CSUM_VERIFIED) and is implemented for mlx5e, ice
-> >    and veth.
-> >=20
-> >  - bpf_xdp_assert_rx_csum(): a generic, non-device-bound kfunc that lets
-> >    the program assert the L4 checksum is correct.  It sets a buff flag
-> >    that rides into the xdp_frame, and __xdp_build_skb_from_frame() turns
-> >    it into skb->ip_summed =3D CHECKSUM_UNNECESSARY.  The kernel cannot
-> >    verify the assertion; the program takes responsibility, as it already
-> >    does when rewriting packet contents.
-> >=20
-> > Posted as RFC to get feedback on:
-> >=20
-> >  - whether the read hint (bpf_xdp_metadata_rx_csum() and its driver
-> >    support) belongs in this series at all.  bpf_xdp_assert_rx_csum() is
-> >    self-contained and already covers the main use case: a program that
-> >    computes or fixes the L4 checksum itself, or trusts the source, and
-> >    wants the rebuilt skb to skip software revalidation.  The read hint =
-is
-> >    an optimization for programs that did not touch the payload and only
-> >    want to relay the hardware verdict.  These could just as well be two
-> >    independent series (assert-only first);
-> >  - the kfunc naming, bpf_xdp_assert_rx_csum() in particular.
-> >=20
-> > Testing:
-> >=20
-> >  - new selftest xdp_cpumap_rx_csum drives a frame through a native-XDP
-> >    veth into a cpumap redirect and checks, via fexit on
-> >    __xdp_build_skb_from_frame(), that the rebuilt skb is
-> >    CHECKSUM_UNNECESSARY iff the program called bpf_xdp_assert_rx_csum();
-> >  - xdp_metadata calls bpf_xdp_metadata_rx_csum() over veth and checks b=
-oth
-> >    verdicts: XDP_CSUM_NONE for an AF_XDP-injected frame and
-> >    XDP_CSUM_VERIFIED for one sent through the stack.
->=20
-> This was posted somewhat recently from Lorenzo (and had a fair bit of
-> discussion), but there haven't been a follow up:
-> https://lore.kernel.org/bpf/20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba=
-71@kernel.org/
-
-Hi Vladimir and Stanislav,
-
-AFAIK in my series we are just missing the drv self-test requested by Jakub.
-I have not the time to look into it yet.
-@Vladimir: if you have any free-cycles, do you agree to introduce the missi=
-ng
- test requested by Jakub to my series? Thanks in advance.
-
-Regards,
-Lorenzo
-
---2QzZE0hPxBRkFxHX
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCakRAUQAKCRA6cBh0uS2t
-rJlfAP9EMrP2/gOvhi9eqC1JNW/IWpiF6PrNN6R2YRl24hFYlAEAz/5TB17FzPlv
-NM+ZJLjwBy9VKzOmrrIYnBhkMsAr8wM=
-=X6ts
------END PGP SIGNATURE-----
-
---2QzZE0hPxBRkFxHX--
+--
+Thanks,
+Sasha
