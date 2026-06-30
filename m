@@ -1,174 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FDC25742F;
-	Tue, 30 Jun 2026 03:11:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C62264617;
+	Tue, 30 Jun 2026 03:12:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782789065; cv=none; b=cKXB2zNLr6g5l0sTsFp05SmvT/EQbAFyjCiVGKdu/MQ1i+8wJ7VYJjS9qtURLUX0m5csNQvmhmoQSQjIj9hPy50Dswjtzeo6D7I35I/UtpUHpJ6Aldkf2YK6V7gshi8b0IXk8kBjyy+hgO1Zk3svYz5sGCDaU8YGcPTDRVrnAjY=
+	t=1782789183; cv=none; b=cQztp5//kcw/ZClhWStSm+d6103fjORCO/BYwu5hTqQ/ylwAJwN6afee9Q5Slly4xfdZTZ8sXNOuhPKhX6QQgyw8OTYCekQiWw1U7NoEzdtKvNp1MGpgX/GCjINQsxUCdYB1mJcL5qxQOqftygFTgrgG4ifjsEa6WVbAjR8+Vjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782789065; c=relaxed/simple;
-	bh=B1nMRf2on4vze8kmJVFyrqIQgrF4tE2ZTm7Mmlk+LyI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=L4RENwJtj9m+lp5FGFDGkCC2JtEtu7LxND6N2VH3skFfbchI5TStF7IFPmaWAURFdQ3yyIHE7ohywDrT61OmQjYPmI8n4alS3UhtWsd7RwtNl8YOkdaTkwUMrUeOXlKzrgj1eK3dN7Ta1GsOG1xuAyYt8M87Sj3sKLrC5FC1nEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F6vr4lqs; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F6vr4lqs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A091C1F00A3D;
-	Tue, 30 Jun 2026 03:11:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782789063;
-	bh=W0gn1NJRudDjHk8gSxS5NTA5NbX5IBxyR60m2RuTsN0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=F6vr4lqsxYLVKVQDEDWhvIpm9B/ygGAdCu/zStBH3ZOFprkAcprdhBR6NnQsCe/ii
-	 2Chk315WYADr2gMpAQl+puvyUufqBOoO+uKGiHVn02VNhP/aNZp/74YcMRQc7ogxqm
-	 2YCdSwPl2KeU+4izgRwDNDY2RLRLJq/g3Y0R3qoFf68jvvK72Ud3E3G17dsPgEY15h
-	 4HWuZNBKWuA5O5cdN2/Q8GvkSWhoHzdavnAgJDYtwJtd6J6uGo3qFKPrTGh87jd0Nk
-	 Bs1f66T4Jqp3Ur/UiTtpz8tkVeHw6lABJ3ObZ4FceGFIrYMRa/WMGPkfAgqxJbpUZs
-	 3uPPaHwBnWRSQ==
-Content-Type: multipart/mixed; boundary="===============5081759315822687536=="
+	s=arc-20240116; t=1782789183; c=relaxed/simple;
+	bh=/gjzEm9ltNohmq6N/JYDwBx5hXvsLgmkU42gn6o4lhA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cWg8+op6Vq/ygtCXXP31sKGcIa4I6Z0LbXY0Ho50JgKsDV5FidOl8zHDofLUp9CXKeYqR53S5srOtYB6XWtHbShrRvF22rkiQNSfBeQav7QxxnOAr6jmOC9Tf2Ctxstd6RPGySSTKa9vIyqmdXNGEySqAjqLAo4RthILN3ZMCWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 94166692743111f1aa26b74ffac11d73-20260630
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:65eb45f9-2d48-46f7-9c6b-e8dad5cd176a,IP:0,U
+	RL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:25
+X-CID-META: VersionHash:e7bac3a,CLOUDID:24d84fac57e3adc4c16301e1f1b049b9,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|123|850|865|898,TC:nil,Content:0|15|
+	50,EDM:5,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,
+	OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 94166692743111f1aa26b74ffac11d73-20260630
+X-User: luoliang@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <luoliang@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1777881677; Tue, 30 Jun 2026 11:12:51 +0800
+From: luoliang@kylinos.cn
+To: Tejun Heo <tj@kernel.org>
+Cc: David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Liang Luo <luoliang@kylinos.cn>
+Subject: [PATCH] tools/sched_ext: use btf_vlen() helper in compat.h
+Date: Tue, 30 Jun 2026 11:12:46 +0800
+Message-Id: <20260630031246.2618216-1-luoliang@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d31368b258945685c4ae5018157a6327233a45a35b4e19352d9830a216b881e6@mail.kernel.org>
-In-Reply-To: <20260630022306.10017-1-yangtiezhu@loongson.cn>
-References: <20260630022306.10017-1-yangtiezhu@loongson.cn>
-Subject: Re: [PATCH bpf-next v1] selftests/bpf: Add benchmark for tail call performance
-From: bot+bpf-ci@kernel.org
-To: yangtiezhu@loongson.cn,andrii@kernel.org,eddyz87@gmail.com
-Cc: loongarch@lists.linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 30 Jun 2026 03:11:03 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============5081759315822687536==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: luoliang <luoliang@kylinos.cn>
 
-> diff --git a/tools/testing/selftests/bpf/benchs/run_bench_tailcall.sh b/tools/testing/selftests/bpf/benchs/run_bench_tailcall.sh
-> new file mode 100755
-> index 000000000000..c687f34455e8
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/benchs/run_bench_tailcall.sh
-> @@ -0,0 +1,18 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +# 1. Load the official common benchmark utilities
-> +source ./benchs/run_common.sh
-> +
-> +# 2. Strict error handling configurations
-> +set -eufo pipefail
-> +
-> +# 3. Use default bench binary path if not exported by the framework
-> +BENCH_BIN=${BENCH:-./bench}
-> +
-> +# 4. Run with strict core affinity and isolation for reliable profiling
-> +RUN_BENCH="numactl --physcpubind=0,2 --membind=0 nice -n -20 $BENCH_BIN -w5 -d20 -a"
-> +
-> +# 5. Capture the output string and pass it straight into summarize_ops
-> +# This satisfies the framework's internal parameter bounds without triggering set -u.
-> +summarize_ops "tailcall" "$($RUN_BENCH tailcall)"
+__COMPAT_read_enum() and __COMPAT_struct_has_field() open-code the
+vlen lookup via the raw BTF_INFO_VLEN(t->info) UAPI macro, whose
+result type is __u32 (t->info is __u32 and 0xffff is promoted to
+unsigned). Comparing it against the int loop counter triggers
+-Wsign-compare in every example scheduler that includes compat.h.
 
-This isn't a bug, but could the numbered step comments (# 1. .. # 5.) be
-trimmed?  Several of them restate the line right below them, for example:
+libbpf already exposes btf_vlen() for exactly this purpose; it
+returns __u16, the natural width of the vlen field, and the usual
+integer promotions turn the 'int < __u16' comparison into a plain
+'int < int' so the warning goes away without any cast. This matches
+the pattern already used in-kernel (e.g. kernel/bpf/inode.c) and in
+tools/bpf/bpftool. Replace the three open-coded lookups with
+btf_vlen(t). No functional change.
 
-	# 1. Load the official common benchmark utilities
-	source ./benchs/run_common.sh
-
-The neighbouring run_bench_*.sh scripts here tend to be a couple of lines
-with little commentary, so the running narration stands out.  Keeping only
-the comments that explain a non-obvious choice (such as the cpu-affinity
-flags) might fit the directory better.
-
-> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bench.c b/tools/testing/selftests/bpf/progs/tailcall_bench.c
-> new file mode 100644
-> index 000000000000..68a50c7b1d06
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/tailcall_bench.c
-
-[ ... ]
-
-> +/* High-performance Per-CPU Array Map to eliminate global lock variance */
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-> +	__uint(max_entries, 1);
-> +	__type(key, __u32);
-> +	__type(value, __u64);
-> +} pcpu_hits_map SEC(".maps");
-
-[ ... ]
-
-> +static __always_inline void increment_pcpu_counter(void)
-> +{
-> +	__u32 key = 0;
-> +	__u64 *val;
-> +
-> +	val = bpf_map_lookup_elem(&pcpu_hits_map, &key);
-> +	if (val) {
-> +		/* Lockless and stable per-CPU increment without cacheline bounce */
-> +		(*val)++;
-> +	}
-> +}
-
-This isn't a bug, but do the "high-performance / lockless / no cacheline
-bounce" comments add anything beyond what the per-CPU map type already
-conveys?  The increment comment in particular sits directly above a plain
-(*val)++;.  Could these be dropped?
-
-The commit message has a similar question.  Quoting it in full:
-
-> Add a dedicated benchmark to measure the runtime performance and overhead
-> of tail calls. This helps developers detect performance regressions across
-> different kernel versions and optimization phases.
->
-> The benchmark sets up a standard tracepoint to intercept syscalls triggered
-> by a dedicated producer thread running a dead loop. The execution path is
-> strictly bounded by the tail call depth limit, safely preventing any core
-> lockup or infinite recursion risks.
->
-> To eliminate cacheline bouncing and global locking variance, Per-CPU array
-> maps are utilized to track execution hits across multiple cores.
->
-> To evaluate the JIT compiler architecture under complex control flows, it
-> interleaves direct tail calls with bpf2bpf tail calls.
->
-> This forces the tracking context at the target program's entry prologue to
-> toggle dynamically between a scalar count (0 to 33) and a massive kernel
-> pointer address, providing a robust micro-architectural stress test which
-> consists of:
->
-> 1. tailcall_bench_main: The entry program filtering processes by PID, and
->    introducing a high-frequency alternating execution path via the syscall
->    arguments to switch between a direct tail call and a bpf2bpf tail call.
-> 2. tailcall_bench_target: The final target destination hop which safely
->    terminates the mixed execution flow and increments the step counter.
->
-> All functions utilize explicit "struct tracepoint_raw_syscalls_sys_enter"
-> context types to ensure strict type alignment and clear pointer provenance
-> for the BPF verifier.
->
-> Additionally, provide a test script run_bench_tailcall.sh to automate the
-> execution under strict core affinity and isolation for reliable profiling,
-> formatting the captured metrics directly into the performance report.
->
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-
-This isn't a bug, but could the changelog focus more on why a dedicated
-tail-call throughput benchmark is needed over the existing infrastructure?
-
-The text mostly walks through what each program does, and uses phrasing like
-"robust micro-architectural stress test", "massive kernel pointer address",
-and "strict type alignment and clear pointer provenance".  A reviewer comes
-away knowing what the two programs are, but less about the load-bearing
-design rationale.
-
-
+Signed-off-by: Liang Luo <luoliang@kylinos.cn>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ tools/sched_ext/include/scx/compat.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28416687457
---===============5081759315822687536==--
+diff --git a/tools/sched_ext/include/scx/compat.h b/tools/sched_ext/include/scx/compat.h
+index 039854c490d5..df5ca1ce20f6 100644
+--- a/tools/sched_ext/include/scx/compat.h
++++ b/tools/sched_ext/include/scx/compat.h
+@@ -42,7 +42,7 @@ static inline bool __COMPAT_read_enum(const char *type, const char *name, u64 *v
+ 	if (btf_is_enum(t)) {
+ 		struct btf_enum *e = btf_enum(t);
+ 
+-		for (i = 0; i < BTF_INFO_VLEN(t->info); i++) {
++		for (i = 0; i < btf_vlen(t); i++) {
+ 			n = btf__name_by_offset(__COMPAT_vmlinux_btf, e[i].name_off);
+ 			SCX_BUG_ON(!n, "btf__name_by_offset()");
+ 			if (!strcmp(n, name)) {
+@@ -53,7 +53,7 @@ static inline bool __COMPAT_read_enum(const char *type, const char *name, u64 *v
+ 	} else if (btf_is_enum64(t)) {
+ 		struct btf_enum64 *e = btf_enum64(t);
+ 
+-		for (i = 0; i < BTF_INFO_VLEN(t->info); i++) {
++		for (i = 0; i < btf_vlen(t); i++) {
+ 			n = btf__name_by_offset(__COMPAT_vmlinux_btf, e[i].name_off);
+ 			SCX_BUG_ON(!n, "btf__name_by_offset()");
+ 			if (!strcmp(n, name)) {
+@@ -97,7 +97,7 @@ static inline bool __COMPAT_struct_has_field(const char *type, const char *field
+ 
+ 	m = btf_members(t);
+ 
+-	for (i = 0; i < BTF_INFO_VLEN(t->info); i++) {
++	for (i = 0; i < btf_vlen(t); i++) {
+ 		n = btf__name_by_offset(__COMPAT_vmlinux_btf, m[i].name_off);
+ 		SCX_BUG_ON(!n, "btf__name_by_offset()");
+ 			if (!strcmp(n, field))
+-- 
+2.43.0
+
