@@ -1,140 +1,199 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854A333F5A2;
-	Tue, 30 Jun 2026 17:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A8A3DDDDE
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 18:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782839612; cv=none; b=NdHx5yEsMZdsDJKkCWalscBDqisWfJITYI+PNlU21+gJm53ZRlfhnVyiGvobj/yHZmmgMuPogN8Y9r4oRoW88kpG/KWQ/ogqDABOteGZEwdnMumNL0AQD+mAp97VTpESH21QGqMscIRNNxg5PWpIaf3MgZXFkDVQIkCOuxavY0U=
+	t=1782842732; cv=none; b=BEGECxtPYeAu5dfGp+3eg0ksBce7f5CO907qp+zlPcl39RH+LNNPzOGO53WvxOwTQTzdmzp85fKa/J/mbmEneijtIqccTfzN8egHNhGLAkJ3QjdOJOU6P/eKfa0gD4R9IpQzxXAwBBG2TBaR6/lL5JsNOoewIIl3cOBvQQhPyK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782839612; c=relaxed/simple;
-	bh=maSROVvHwhT23x4mQIVE1Dg1TnQPMeYsWHJf9xXF/nQ=;
+	s=arc-20240116; t=1782842732; c=relaxed/simple;
+	bh=zhwfiszxWXiMMT6LjUYSSGtsZNPpr9cM3CJLKGlPlXs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kIqihWJHWH9AXvtKeLWzUc/YMH9qjWEcfi5HNNCpf1XF8FQteTOZLM68baBtA+igL7UHGixfaP0zcNTZMiLAKBslaMpo5LpqeQRGuZU5rpOqSgkHO+s9u3Yhy7GLGJsO4XOX4jVAa4Lb+kDjBipFMgXk0o8Ry4PYVDjI2Zk3hjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bfT3adCg; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=ZtsudnnyrYn9cPFBbpL/yRMjWNysysIuR26Pv2abgeaiEEhPdwCT+p1Fc+kvggKSJJ8b2popKLrwcgGqU07GJI9vgCDLB/Punzk+AbeJkVyUIPlUCubdo+JqM/zpNbniGPqxnSX4ld/9osGt5uPw37Z+yObqm8UKTvSm8XmTzI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vWDvA0/g; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bfT3adCg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB9471F000E9;
-	Tue, 30 Jun 2026 17:13:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782839611;
-	bh=+ZgEUdCFZUTdRl6MEpNeqgPGG+C6npsAloU8d/7L74M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=bfT3adCgYcdsxhBEaYSuU0/Mp/u5+XTWkNMTF6tWRDtxujGQoU48LtyEDE5Kbndec
-	 BJBbd4JnL0YjQ27/v6bcJCmb8fnCVGRusjdjuKs1HbX5YHDeqteRvEtc/0vknB0O2F
-	 dudA0orCmQqKdGpNSwMf5vXS6AN13Ta+6FHfzcnOGifPR9saBu/qrw8uiELOp3Dq2X
-	 xf5RSrEabpbFEeUVfYRLoY/jfZFwyI/qi88EBqj7Zdz1mscQmP/yxINZQwZY6X9ZQl
-	 e5a6nEtqXGHS+okEIW8BogO/EBzihZp/CPxUN8YIgpe+Dh9PSwRy7Fm/mit1Wgkv4w
-	 b5iEIpaZFmaQg==
-Message-ID: <916191fc-2e10-4449-b82b-c086d90283ae@kernel.org>
-Date: Tue, 30 Jun 2026 11:13:29 -0600
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vWDvA0/g"
+Message-ID: <992e0697-f0da-4bfd-8178-abb206410e9d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782842727;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Sw4NySBYgfwi3CnSLMJYGp3+j1Adhe95jmfy5tgLgts=;
+	b=vWDvA0/g2FiyzXpTPr4Tv0igHVwZrPSfBW2jGQc4oW3FUQwwKPSQ0GqvBJV0GFdLXBaXSq
+	pNnnTVosP5ZibI+Yb26pUiPT/hm7Zc+07Je9sIb/al5+9knsvfkdSAftMtpe4fale2JKBi
+	I0Qt/NRMbQueqlHiL4A6CGHbAgdfbug=
+Date: Tue, 30 Jun 2026 11:05:13 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
- bpf_fib_lookup() helper
+Subject: Verifier aspects of (was Re: gcc [RFC] bpf: don't synthesize
+ sign_extend for ISA v4)
+To: bpf@gcc.gnu.org
+Cc: jose.marchesi@oracle.com, ast@kernel.org,
+ Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song
+ <yonghong.song@linux.dev>, David Faust <david.faust@oracle.com>,
+ Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>
+References: <20260413185834.58706-1-vineet.gupta@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vineet Gupta <vineet.gupta@linux.dev>
 Content-Language: en-US
-To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
- yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
- a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
- eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
- <20260624030530.3342884-2-avinash.duduskar@gmail.com>
- <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org> <87se65bd04.fsf@toke.dk>
- <2ffa32dd-5c88-488a-aa23-deef13465eb9@kernel.org> <87echobb5h.fsf@toke.dk>
- <cf25f667-1095-4f84-98ff-bf4662d3faa8@kernel.org> <874iik2ew4.fsf@toke.dk>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <874iik2ew4.fsf@toke.dk>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20260413185834.58706-1-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 6/30/26 10:04 AM, Toke Høiland-Jørgensen wrote:
-> David Ahern <dsahern@kernel.org> writes:
-> 
->> On 6/30/26 4:00 AM, Toke Høiland-Jørgensen wrote:
->>>> It does not make sense to require a flag to get lookup output. vlan
->>>> proto of 0 is not valid, so it is a clear indication that the vlan
->>>> output parameters were not set during the lookup.
->>>
->>> Okay, so we could just unconditionally set the VLAN fields, but if we
->>> start rewriting the ifindex that would be a change of the existing
->>> behaviour that could break existing applications, no?
->>
->> Consistently dealing with upper devices is one of the reasons I never
->> sent patches for vlan support.
->>
->> xdp support is at the driver layer for real (physical) devices. The fib
->> lookup is going to return the vlan device index - a virtual device.
->> Support for xdp should not be propagated to virtual devices; it goes
->> against the intent of xdp. Any trip down this path will have to decide
->> how to handle vlan-in-vlan use cases. Where is the line drawn for fast
->> networking?
-> 
-> Right, which is why we need building blocks that makes it possible for
-> XDP programs to do the right thing in the BPF code :)
-> 
-> A helper that resolves the parent could be used for stacked VLANs as
-> well (just calling the helper multiple times).
-> 
->>> Specifically, if an XDP application has a table of the interfaces it
->>> forwards between, today they'd get a VLAN interface ifindex, which would
->>> not be in that table, and the application would return XDP_PASS. Whereas
->>> if we change the ifindex and populate the VLAN tag, suddenly the
->>> interface would be in the table, but because the application doesn't
->>> read the returned VLAN tag, it will end up sending packets out without
->>> tagging them, leading to broken forwarding.
->>
->> I have not followed developments over the past few years. Does XDP have
->> support for vlan acceleration in the Tx path now? You really want that
->> to deal with vlans and not replicating s/w processing in ebpf.
-> 
-> It does not, no. There's TX metadata for AF_XDP, but VLAN support is not
-> in there (see include/uapi/linux/if_xdp.h).
-> 
-> Doesn't mean software VLAN handling can't be useful, though; there are
-> use cases other than the very high end where XDP can speed things up
-> even if it has to write a VLAN tag or two...
-> 
->>> So if we don't want the flag, we'd need some other mechanism to resolve
->>> the parent ifindex, AFAICT? Maybe a xdp_get_parent_ifindex() kfunc, say?
->>> That could also be made generic for other stacked interface types, I
->>> suppose.
->>>
->>> WDYT?
->>
->> dealing with stacked devices is hard :-)
->>
->> What is the return is a bond device or a vlan on a bond device?
-> 
-> Well, bond devices have XDP support, so you can just redirect to those :)
-> 
-> But yeah, each type of stacked device would need to pass different
-> information through to the XDP program, and the program would need to
-> support those. Building a single XDP program that supports all of them
-> will require quite a bit of code, and would probably not perform super
-> well. But most deployments have distinct subsets of features they need,
-> so this does not have to be a blocker, IMO?
-> 
+On 4/13/26 11:58 AM, Vineet Gupta wrote:
+> Currently the extendsidi2 expander generates a shift left+right to
+> materialize a sign_extend. This is not needed for ISA v4 which
+> natively supports the sign extending move.
+>
+> There are various other reasons for fixing this:
+>
+>   - The shifts are throwaway work since Combine subsequently undoes them
+>     anyways, while diminishing potential opportunities for other optim
+>     transformations it could have done, given to its own limitations of
+>     max 3 -> 2 combinations.
+>
+>   - Interim passes scuh as CSE1 can also "see thru" a native sign_extend:DI
+>     better than the shifts, again opening up more optimization opportunites.
+>
+>   - It also helps slightly with debugging Expand dumps as sign_extend is
+>     obvious vs. 2 shifts.
+>
+> The fix itself is easy: just gate the expander on non-availabilty of smov
+> which in turn is keyed off of -msmov or -mcpu.
+>
+>                   Before                              After
+> ----------------------------------------+---------------------------------------
+> (insn 8 7 9 2 (set (reg:DI 19 [ _1 ])   |  (insn 8 7 9 2 (set (reg:DI 19 [ _1 ])
+>     (ashift:DI (subreg:DI (reg:SI 24) 0) |     (sign_extend:DI (reg:SI 24)))
+>        (const_int 32 [0x20])))           |       (nil))
+>    (nil))                                |
+> (insn 9 8 10 2 (set (reg:DI 19 [ _1 ])  |
+>     (ashiftrt:DI (reg:DI 19 [ _1 ])      |
+>        (const_int 32 [0x20])))           |
+>    (nil))                                |
+>
+> This change is clean running bpf.exp testsuite tests.
+>
+> The complication comes from a subtle yet very important aspect, which is
+> in the old regime, expander unconditionally forced src operand to DImode.
+>
+> |  operands[1] = gen_lowpart (DImode, operands[1])
+>
+> With the patch, src remains SImode which exposes some latent issues in
+> the backend and/or "impedance mismatch [1]" with the kernel verifier and it
+> reports following additional fails vs. gcc trunk against kernel bpf-next [2]
+>
+> | #12      attach_probe:FAIL
+> | #74      cgroup_xattr:FAIL
+> | #122     file_reader:FAIL
+> | #412     sockopt_inherit:FAIL
+> | #413     sockopt_multi:FAIL
 
-Seems to me the fib_lookup for xdp needs to return the bottom device,
-not the vlan device, for forwarding to work. That's why I added the
-fields to the struct. That allows the program to push the vlan header if
-required. My preference (dream?) was that Tx path had support to tell
-the redirect the vlan and h/w added it on send.
+For sockopt_multi, the trunk version we have the following snippet:
 
-But really, once stacked devices come into play, I just wanted to make
-sure thought is given to different use cases. As you know the lookup
-struct if hard bound to 64B and it is trying to cover a lot of use cases.
+    0: (81) r0 = *(s32 *)(r1 +24)         ; R0=scalar(smin=0xffffffff80000000,smax=0x7fffffff) R1=ctx()
+    1: (55) if r0 != 0x0 goto pc+10       ; R0=0
+    ...
+    11: (95) exit
+
+Insn 1 branch is not taken, so upon exit, verifier is happy that r0 == 0.
+
+W/ the patch, codegen changes slightly
+
+    0: (61) r2 = *(u32 *)(r1 +24)         ; R1=ctx() R2=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))
+    1: (bf) r0 = (s32)r2                  ; R0=scalar(smin=0xffffffff80000000,smax=0x7fffffff) R2=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))
+    2: (56) if w2 != 0x0 goto pc+10       ; R2=0
+    ...
+    12: (95) exit
+
+Here's verifier can't conclude that r0 is 0 or 1 and complains.
+
+For sign extending move, verifier: check_alu_op () can't establish that 
+truncated+extended r2 value (r0) and r2 are and equivalent and delinks 
+the scalar ids. So on insn 2 it can deduce that r2 == 0, it can't be 
+backpropagated due to delinking of the regs. We initially thought this 
+would be a simple "bug fix" in the verifier. But it seems this requires 
+additional state tracking - currently all 64-bits are tracked with 
+copy_register_state, this need to be broken down into separate lo/hi 
+bits with additional link kind similar to BPF_ADD_CONST - will that be 
+acceptable ?
+
+What's also interesting is for a reduced version the codegen difference 
+between gcc trunk and clang.
+The first load is a regular signed int access so technically it needs to 
+be either *(s32 *) or a *(u32*) + (s32).
+Clang seems to be eliding sign extension altogether [1] and only 
+generating *(u32 *)
+Any thoughts why clang can do that ?
+
+[1] https://godbolt.org/z/fsdrExPWd
+
+Thx,
+-Vineet
+
+> | #415     sockopt_sk:FAIL
+> | #517     uprobe_multi_test:FAIL
+> | #519     usdt:FAIL
+> | #649     verif_scale_pyperf600_iter:FAIL
+>
+> These fallout issues need to be addressed first but as discussed in the
+> bpf patchworks call this morning, I'm sending this out as an RFC.
+>
+> [1] https://devblogs.microsoft.com/oldnewthing/20180123-00/?p=97865
+> [2] 2026-02-18 f620af11c27b ("xsk: avoid double checking against rx queue being full")
+>
+> gcc/ChangeLog:
+>
+> 	* config/bpf/bpf.md (define_expand extendsidi2): Only emit shifts
+> 	if !bpf_has_smov.
+>
+> gcc/testsuite/ChangeLog:
+>
+> 	* gcc.target/bpf/zero-ext.c: Check Expand dumps to ensure
+> 	sign_extend is present and two shifts are not.
+>
+> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+> ---
+>   gcc/config/bpf/bpf.md                   | 12 ++++++++----
+>   gcc/testsuite/gcc.target/bpf/zero-ext.c |  5 ++++-
+>   2 files changed, 12 insertions(+), 5 deletions(-)
+>
+> diff --git a/gcc/config/bpf/bpf.md b/gcc/config/bpf/bpf.md
+> index a2bceb8998d7..1431bfd225e0 100644
+> --- a/gcc/config/bpf/bpf.md
+> +++ b/gcc/config/bpf/bpf.md
+> @@ -308,16 +308,20 @@
+>   
+>   ;; Sign-extending a 32-bit value into a 64-bit value is achieved using
+>   ;; shifting, with instructions generated by the expand below.
+> +;; Only needed for ISA V3 and prior builds.
+>   
+>   (define_expand "extendsidi2"
+>     [(set (match_operand:DI 0 "register_operand")
+>   	(sign_extend:DI (match_operand:SI 1 "register_operand")))]
+>     ""
+>   {
+> -  operands[1] = gen_lowpart (DImode, operands[1]);
+> -  emit_insn (gen_ashldi3 (operands[0], operands[1], GEN_INT (32)));
+> -  emit_insn (gen_ashrdi3 (operands[0], operands[0], GEN_INT (32)));
+> -  DONE;
+> +  if (!bpf_has_smov)
+> +    {
+> +      operands[1] = gen_lowpart (DImode, operands[1]);
+> +      emit_insn (gen_ashldi3 (operands[0], operands[1], GEN_INT (32)));
+> +      emit_insn (gen_ashrdi3 (operands[0], operands[0], GEN_INT (32)));
+> +      DONE;
+> +    }
+>   })
+
 
