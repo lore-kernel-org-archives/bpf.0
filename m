@@ -1,199 +1,106 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A8A3DDDDE
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 18:05:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14403DFC8F
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 18:06:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782842732; cv=none; b=BEGECxtPYeAu5dfGp+3eg0ksBce7f5CO907qp+zlPcl39RH+LNNPzOGO53WvxOwTQTzdmzp85fKa/J/mbmEneijtIqccTfzN8egHNhGLAkJ3QjdOJOU6P/eKfa0gD4R9IpQzxXAwBBG2TBaR6/lL5JsNOoewIIl3cOBvQQhPyK8=
+	t=1782842793; cv=none; b=MqVqD0CSf31fzFRpp0B9W/7PWYd2tL8J+eTt0USvMbokRt+bsQn843hTRwt+PVTPl0VWjCYgiLCy8b+jibtF9qwjnzqY6PhmduIFpDs1BOKEhv0uQylqrbRlJyqNeekJ/oE+ZWFO3/nHymc3pnxUrCyAc85Ap5xGOX1nYKNdbfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782842732; c=relaxed/simple;
-	bh=zhwfiszxWXiMMT6LjUYSSGtsZNPpr9cM3CJLKGlPlXs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZtsudnnyrYn9cPFBbpL/yRMjWNysysIuR26Pv2abgeaiEEhPdwCT+p1Fc+kvggKSJJ8b2popKLrwcgGqU07GJI9vgCDLB/Punzk+AbeJkVyUIPlUCubdo+JqM/zpNbniGPqxnSX4ld/9osGt5uPw37Z+yObqm8UKTvSm8XmTzI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vWDvA0/g; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782842793; c=relaxed/simple;
+	bh=CCydaf8iCxcowGdrabRK9TAL0PXl8sDl0isd9KqbIFg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=HalQiVCtjdVh+IyH8pQ12CgnxtrKPtXloy+XHXvMxpAB+wGIIJE3tXBJwx4bZAxz9uG5SuHm9vDCZIuYgQPZ2xIzgew9eIcmtAl3J4hQ/8mIewm7ViwzAGuyfOJ4HZ9ZZ774G0yiMDXJj12FKEbhqYYycWlJUlUINsaCauJQlvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MJhYR22m; arc=none smtp.client-ip=209.85.161.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vWDvA0/g"
-Message-ID: <992e0697-f0da-4bfd-8178-abb206410e9d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782842727;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Sw4NySBYgfwi3CnSLMJYGp3+j1Adhe95jmfy5tgLgts=;
-	b=vWDvA0/g2FiyzXpTPr4Tv0igHVwZrPSfBW2jGQc4oW3FUQwwKPSQ0GqvBJV0GFdLXBaXSq
-	pNnnTVosP5ZibI+Yb26pUiPT/hm7Zc+07Je9sIb/al5+9knsvfkdSAftMtpe4fale2JKBi
-	I0Qt/NRMbQueqlHiL4A6CGHbAgdfbug=
-Date: Tue, 30 Jun 2026 11:05:13 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MJhYR22m"
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-69d8f70cb0cso3628147eaf.0
+        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 11:06:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782842791; x=1783447591; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=CCydaf8iCxcowGdrabRK9TAL0PXl8sDl0isd9KqbIFg=;
+        b=MJhYR22mhr0PL4c+1IVSGhLN6njEgnua1G7NYYosJOMO0vALapwrhx91TRv4sYMpp4
+         uynoAEfO43NqdmsNbPqcumUh9JbDYDBFJjrJq7XKHDx19iaqXL3GR00c1SX6IOvo1wat
+         xT+Z8yc7FrjcQFlufTHVhCMflyZwGCjHB5iXREldY4oXRHmnYsumjb3g25wBWCJxsUV8
+         gfsEeGkRz63WFkK1Y6RIEtzte8pf8ztd6AauQECZHYJabXeCKjWg7/cZRuqYxamUtN7U
+         4Ib/vlbzkHp2e9qQZAjNpZHiB/lBjIwjXJ4HIsGADGAbhSQnogeZqCa8v1Dq6dE/Bujl
+         NEWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782842791; x=1783447591;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=CCydaf8iCxcowGdrabRK9TAL0PXl8sDl0isd9KqbIFg=;
+        b=M4bH//A6m7ZftzTyQvydvEXZ4355BDf9wJSHv5zGUM7nxODdTBm9Wu13xyUP05WXAY
+         HJ2PNfqwVMNWk01TavLnq28FavzpKeQPY3MehPYEa4/TBbyF1DpwzLINjjIfEsyIxI2f
+         k9J/mId7pauoXaPwzW94a/Kaps8nX7QED3R4HXmWSblFYi7ZV7TJxKXVI6tBumP2ex+E
+         Xh/MXyB8WyUeZaDqaYTTcyTc0SdCyu/2v4AEhN8+BNf+8br4e05Brx3KF2miJuZU4b5w
+         EyeYEC1GuMIaa2JBaL9vxXgKvLikmTbrB3jyJsJc0B46wjfsP/K7VH6cw/TMCmuO5Ajx
+         /XGw==
+X-Forwarded-Encrypted: i=1; AFNElJ9yiMtG4DcoE5N8QrqOhOpgYJgmmLZR5oJYpM3Czg2VylsIF2RyrKmXDyoqF5uCepXKfTI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxvtdWgRzApUMmjGtzZn7tccywju+JPvzUCSlxbjc7Hlj1yOvl
+	4vgL+qdNDvxYC0NNWTASl9bFLMn3anpR2zNLFdVfuVWsWdxuzBzLg92z
+X-Gm-Gg: AfdE7clBQDMEkbXbyUR/C0N3QvwNPzl2YcFHKZP4TU4BheyxMqxdYKiSabdPApsGuUL
+	cGb/EEs7aeFZK+mzWmtQNQg8lo1+7SHgjlplhheqTPtB1AgOtonAApigvs1SKWE29BDuo2xiVss
+	T7ZO9v7QJnlSizJTi5jdxoJtdMVh+pnEJtMXLccXmnJ6/RE9mZ8OUNZbmAwbn8tVoyoPwvf6cpv
+	wAWmpKSv2DqBVaDq0rAv1exmHpfevC8NO/Qdy+qcb+gQcyb4vTtlLQSqYE+r50CXw3939JxC2W8
+	KqDv/4HDtrAY8aErUNCIpYlrEvJAJYnzv8oqz16NiNcGAo2Wb8UBbhebrom0nHBSChT7W1eB/vH
+	NGYmJkzPPk+zIiUrr1ApLPtRoraL03CvH0seRdIf0s75UT/2PbXpr5gmoM+kdmgwSmvxA/e5r4W
+	f4potj6MwvTWmi9C9G5U8k+xQagPxFE7sOaPk6/L1tyoIlnBPn2RXap9Re8uswCcoBjE8eirGqL
+	5G51LsQhHGp03zq9w==
+X-Received: by 2002:a05:6820:52d2:b0:6a1:50eb:d524 with SMTP id 006d021491bc7-6a1893fcc34mr2741079eaf.69.1782842791572;
+        Tue, 30 Jun 2026 11:06:31 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:5b::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-448dbf813d2sm2773410fac.14.2026.06.30.11.06.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Jun 2026 11:06:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Verifier aspects of (was Re: gcc [RFC] bpf: don't synthesize
- sign_extend for ISA v4)
-To: bpf@gcc.gnu.org
-Cc: jose.marchesi@oracle.com, ast@kernel.org,
- Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song
- <yonghong.song@linux.dev>, David Faust <david.faust@oracle.com>,
- Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>
-References: <20260413185834.58706-1-vineet.gupta@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20260413185834.58706-1-vineet.gupta@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 30 Jun 2026 11:06:30 -0700
+Message-Id: <DJML0UYPUL9U.P5NHVG4E32LW@gmail.com>
+Subject: Re: [PATCH bpf] selftests/bpf: Skip libarena when the BPF backend
+ lacks 32-bit arena cmpxchg
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "George Guo" <dongtai.guo@linux.dev>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>
+Cc: "Eduard Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>, "Mykola Lysenko" <mykolal@fb.com>, "Martin KaFai
+ Lau" <martin.lau@linux.dev>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+ "Huacai Chen" <chenhuacai@kernel.org>, "Tiezhu Yang"
+ <yangtiezhu@loongson.cn>, "George Guo" <guodongtai@kylinos.cn>,
+ <bpf@vger.kernel.org>, <loongarch@lists.linux.dev>,
+ <linux-kernel@vger.kernel.org>
+X-Mailer: aerc
+References: <20260630025809.74043-1-dongtai.guo@linux.dev>
+In-Reply-To: <20260630025809.74043-1-dongtai.guo@linux.dev>
 
-On 4/13/26 11:58 AM, Vineet Gupta wrote:
-> Currently the extendsidi2 expander generates a shift left+right to
-> materialize a sign_extend. This is not needed for ISA v4 which
-> natively supports the sign extending move.
+On Mon Jun 29, 2026 at 7:58 PM PDT, George Guo wrote:
+> From: George Guo <guodongtai@kylinos.cn>
 >
-> There are various other reasons for fixing this:
->
->   - The shifts are throwaway work since Combine subsequently undoes them
->     anyways, while diminishing potential opportunities for other optim
->     transformations it could have done, given to its own limitations of
->     max 3 -> 2 combinations.
->
->   - Interim passes scuh as CSE1 can also "see thru" a native sign_extend:DI
->     better than the shifts, again opening up more optimization opportunites.
->
->   - It also helps slightly with debugging Expand dumps as sign_extend is
->     obvious vs. 2 shifts.
->
-> The fix itself is easy: just gate the expander on non-availabilty of smov
-> which in turn is keyed off of -msmov or -mcpu.
->
->                   Before                              After
-> ----------------------------------------+---------------------------------------
-> (insn 8 7 9 2 (set (reg:DI 19 [ _1 ])   |  (insn 8 7 9 2 (set (reg:DI 19 [ _1 ])
->     (ashift:DI (subreg:DI (reg:SI 24) 0) |     (sign_extend:DI (reg:SI 24)))
->        (const_int 32 [0x20])))           |       (nil))
->    (nil))                                |
-> (insn 9 8 10 2 (set (reg:DI 19 [ _1 ])  |
->     (ashiftrt:DI (reg:DI 19 [ _1 ])      |
->        (const_int 32 [0x20])))           |
->    (nil))                                |
->
-> This change is clean running bpf.exp testsuite tests.
->
-> The complication comes from a subtle yet very important aspect, which is
-> in the old regime, expander unconditionally forced src operand to DImode.
->
-> |  operands[1] = gen_lowpart (DImode, operands[1])
->
-> With the patch, src remains SImode which exposes some latent issues in
-> the backend and/or "impedance mismatch [1]" with the kernel verifier and it
-> reports following additional fails vs. gcc trunk against kernel bpf-next [2]
->
-> | #12      attach_probe:FAIL
-> | #74      cgroup_xattr:FAIL
-> | #122     file_reader:FAIL
-> | #412     sockopt_inherit:FAIL
-> | #413     sockopt_multi:FAIL
+> The arena qspinlock pulled in by libarena (bpf_arena_spin_lock.h) perform=
+s
+> a 32-bit atomic compare-and-exchange on an arena (address space 1) pointe=
+r
+> via atomic_try_cmpxchg_acquire() on the 32-bit atomic_t lock word. Not
+> every LLVM BPF backend can select that operation; releases such as clang =
+19
+> abort instruction selection with:
 
-For sockopt_multi, the trunk version we have the following snippet:
+Sorry, you have to upgrade your test environment.
+We won't be disabling tests because people still have old clang or old gcc
+or other older tools in their setups.
 
-    0: (81) r0 = *(s32 *)(r1 +24)         ; R0=scalar(smin=0xffffffff80000000,smax=0x7fffffff) R1=ctx()
-    1: (55) if r0 != 0x0 goto pc+10       ; R0=0
-    ...
-    11: (95) exit
-
-Insn 1 branch is not taken, so upon exit, verifier is happy that r0 == 0.
-
-W/ the patch, codegen changes slightly
-
-    0: (61) r2 = *(u32 *)(r1 +24)         ; R1=ctx() R2=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))
-    1: (bf) r0 = (s32)r2                  ; R0=scalar(smin=0xffffffff80000000,smax=0x7fffffff) R2=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))
-    2: (56) if w2 != 0x0 goto pc+10       ; R2=0
-    ...
-    12: (95) exit
-
-Here's verifier can't conclude that r0 is 0 or 1 and complains.
-
-For sign extending move, verifier: check_alu_op () can't establish that 
-truncated+extended r2 value (r0) and r2 are and equivalent and delinks 
-the scalar ids. So on insn 2 it can deduce that r2 == 0, it can't be 
-backpropagated due to delinking of the regs. We initially thought this 
-would be a simple "bug fix" in the verifier. But it seems this requires 
-additional state tracking - currently all 64-bits are tracked with 
-copy_register_state, this need to be broken down into separate lo/hi 
-bits with additional link kind similar to BPF_ADD_CONST - will that be 
-acceptable ?
-
-What's also interesting is for a reduced version the codegen difference 
-between gcc trunk and clang.
-The first load is a regular signed int access so technically it needs to 
-be either *(s32 *) or a *(u32*) + (s32).
-Clang seems to be eliding sign extension altogether [1] and only 
-generating *(u32 *)
-Any thoughts why clang can do that ?
-
-[1] https://godbolt.org/z/fsdrExPWd
-
-Thx,
--Vineet
-
-> | #415     sockopt_sk:FAIL
-> | #517     uprobe_multi_test:FAIL
-> | #519     usdt:FAIL
-> | #649     verif_scale_pyperf600_iter:FAIL
->
-> These fallout issues need to be addressed first but as discussed in the
-> bpf patchworks call this morning, I'm sending this out as an RFC.
->
-> [1] https://devblogs.microsoft.com/oldnewthing/20180123-00/?p=97865
-> [2] 2026-02-18 f620af11c27b ("xsk: avoid double checking against rx queue being full")
->
-> gcc/ChangeLog:
->
-> 	* config/bpf/bpf.md (define_expand extendsidi2): Only emit shifts
-> 	if !bpf_has_smov.
->
-> gcc/testsuite/ChangeLog:
->
-> 	* gcc.target/bpf/zero-ext.c: Check Expand dumps to ensure
-> 	sign_extend is present and two shifts are not.
->
-> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
-> ---
->   gcc/config/bpf/bpf.md                   | 12 ++++++++----
->   gcc/testsuite/gcc.target/bpf/zero-ext.c |  5 ++++-
->   2 files changed, 12 insertions(+), 5 deletions(-)
->
-> diff --git a/gcc/config/bpf/bpf.md b/gcc/config/bpf/bpf.md
-> index a2bceb8998d7..1431bfd225e0 100644
-> --- a/gcc/config/bpf/bpf.md
-> +++ b/gcc/config/bpf/bpf.md
-> @@ -308,16 +308,20 @@
->   
->   ;; Sign-extending a 32-bit value into a 64-bit value is achieved using
->   ;; shifting, with instructions generated by the expand below.
-> +;; Only needed for ISA V3 and prior builds.
->   
->   (define_expand "extendsidi2"
->     [(set (match_operand:DI 0 "register_operand")
->   	(sign_extend:DI (match_operand:SI 1 "register_operand")))]
->     ""
->   {
-> -  operands[1] = gen_lowpart (DImode, operands[1]);
-> -  emit_insn (gen_ashldi3 (operands[0], operands[1], GEN_INT (32)));
-> -  emit_insn (gen_ashrdi3 (operands[0], operands[0], GEN_INT (32)));
-> -  DONE;
-> +  if (!bpf_has_smov)
-> +    {
-> +      operands[1] = gen_lowpart (DImode, operands[1]);
-> +      emit_insn (gen_ashldi3 (operands[0], operands[1], GEN_INT (32)));
-> +      emit_insn (gen_ashrdi3 (operands[0], operands[0], GEN_INT (32)));
-> +      DONE;
-> +    }
->   })
-
-
+pw-bot: cr
