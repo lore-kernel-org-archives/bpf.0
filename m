@@ -1,129 +1,121 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2692E2C11C6;
-	Tue, 30 Jun 2026 15:09:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 869BB340281
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 15:14:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782832157; cv=none; b=VhCyxQFrK4v/wx6dTk1Z6xZK5921hhEdQhH8VMzLD/XImKJBqzlvPUKzaFl9A+MbIWHL+74MKfXf1M9/m767IZ1PnGprWi0AIybOA3AFT/rMV9CVGxHpHLyb4vjKUUPtfMQiXHNXytjYTEKrgVnl9eCNjyUoQVzU41s90wFk1O4=
+	t=1782832448; cv=none; b=Ml+KyDnQHX8ICKdrMGYArwtI6qlIam5zmGJ6KcJQ3jB4Z2oBgtvLOu4JoAv32pFOKJuIQNuJgwZwik9u2ClaTzo4wAdSGuX0etGlJxLllxdZFXZZ+LLhvxX2GPNNF3KSnsv9PVY+M46PJ5MY0fhuQU+b0OESP1uQfR1nqI9ibyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782832157; c=relaxed/simple;
-	bh=ce6n035nRFIntk+kxQl0ImgQgqnvRKlENZTCguQA5vA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n3tZCB2fARo/i6e/B0u2LYFOql0jvhA4yxedxoIb3S/ysVdeZWw87H3bDk5S09GgS7S5NDFN3nU/4FMOP5w/O3fbNDWnpeqEMymxMdT9CllRktDh6iemp0tCxX4dmuDIr3wrvSJXshmYVji9NKwF0zZmttxCbZQ4NSPwpj86VV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=USXLHejF; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1782832448; c=relaxed/simple;
+	bh=jXFLso0X7JmkwTE0tnEV9pFB0Zsg2XAk5CcpC3peiw4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=C9IoAkv7S9+TxeAWSZNFe6DV7znkzMAr1qLnVeCQdeTUIKEcbNY5Wg9EcQ6EK18QDJ7+rdmDFO/Zy72TVI+MuamjNL7fZxgaoffsTLmCctsizQemqwBCmTg717X93vPQScMn2QfVmXdh3XCNm4YqawQzuwfHNG9CKGBqG8KAoeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AJ9BZdZC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="USXLHejF"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=PxzYerktg0snGxe0uaNS0P9u0BqNzShxcXQWv0n3pX8=; b=USXLHejFh2akD3o4zT8INmYd1n
-	U2uwJkKQmbabwRZJ82EH2ETeTnIZ4nY1KYF5WIyOSYKqf5dB7gvfaRdkUbbpyTHM7O4U5S7jclD6u
-	W5pVxbxM5pSHitmXzNiVq8+ufYQWsZtmALYNyV98Tlu9NcMyR0KSyq/4YWQ/Td5MxfJ5ls8HnwCxS
-	dBHSI8EoZh0mcu3lPjQVo/91rRwrlyVCzS9E76xXecPsW7DYZm5IwS/vXUxro85fXF+u3AQZjbVpF
-	+LMadoZyrxNIUKI37vGrtNTEn9jxsb5ia3NajflV0P9VfHJuFNhAiPLC4ltll89FCFp4q8pp9ANnf
-	HK/WJ0Cw==;
-Received: from sslproxy08.your-server.de ([78.47.166.52])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wea5B-000IpO-1H;
-	Tue, 30 Jun 2026 17:09:05 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wea5A-000Gjk-2M;
-	Tue, 30 Jun 2026 17:09:04 +0200
-Message-ID: <3a88dd85-6857-462f-98cd-9cd5dac25316@iogearbox.net>
-Date: Tue, 30 Jun 2026 17:09:04 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AJ9BZdZC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A4F71F000E9;
+	Tue, 30 Jun 2026 15:14:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782832445;
+	bh=kwOewv4zLWyrJtrWJAnsgdaAK4Utg8FLc6/x/VOZvDA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=AJ9BZdZCTFb+bLV/wBbkhwZqHg17erc2OQyE9jkDo6sSCe5UAI8ArwERpNgv7g6Ep
+	 wwzcHU/migvx32Iz9zUToT5o3W3O7SEuh1ybRwkWdPVqiafiRhPUkJlvtp5hyk3IGW
+	 zZ/RSbIpM29jUokR9ooZ907bv2lFQs0jTXC7qForeRmNqO4HUftea0JWgjMT+r4VXF
+	 kruYl0JCPRTa51Ub1Gtdq8496Az66cHBmIGmPH9jT61qa6po6ozn62rVPYXFwLbLhu
+	 b+XhpF7CjrcBQ/Rc63p3WIDkRv5pc6GooEDWMQ53otQlORCE3yatkrX8QnRnJ63jJx
+	 0WEoKx9gGfrTg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4 1/2] bpf, sockmap: disallow update and
+ delete from tc, xdp, socket_filter and flow_dissector
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sechang Lim" <rhkrqnwk98@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260630145410.3648099-2-rhkrqnwk98@gmail.com>
+References: <20260630145410.3648099-1-rhkrqnwk98@gmail.com>
+ <20260630145410.3648099-2-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 30 Jun 2026 15:14:04 +0000
+Message-Id: <20260630151405.0A4F71F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 0/3] Fix broken TC_ACT_REDIRECT from qdiscs
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: kuba@kernel.org, pabeni@redhat.com, jhs@mojatatu.com, andrii@kernel.org,
- memxor@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org
-References: <20260630123331.186840-1-daniel@iogearbox.net>
- <20260630143730.ZhXWjEIh@linutronix.de>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260630143730.ZhXWjEIh@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28046/Mon Jun 29 08:27:20 2026)
 
-On 6/30/26 4:37 PM, Sebastian Andrzej Siewior wrote:
-> On 2026-06-30 14:33:28 [+0200], Daniel Borkmann wrote:
->> This is an alternative fix to [0] in order to not uglify
->> __dev_queue_xmit() with sprinkled ifdefs given this can be
->> simplified and isolated through a simple test into the BPF
->> redirect helper itself.
->>
->> I've also added a proper BPF selftest, so there is no need
->> to check-in a binary BPF object into selftests given we do
->> have BPF infra for all of this.
-> 
-> 1/3 makes sense. Assuming we wouldn't have this per-task memory
-> assignment, wouldn't then the state from one redirect leak into another?
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-For the normal/functional case out of tcx / cls_bpf via clsact
-not given skb_do_redirect() is called right after return. (For
-the full qdisc case it was never working in the first place.)
+Pre-existing issues:
+- [High] Incomplete fix for lock inversion deadlock: BPF_PROG_TYPE_SOCK_OPS=
+ can still trigger the exact same AB-BA deadlock on sockmap deletion.
+--
 
-> For what it's worth:
-> Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> 
-> Sebastian
+commit a83dfc6fb81e4e2eb338be86e16b21c433de50ac
+Author: Sechang Lim <rhkrqnwk98@gmail.com>
 
+bpf, sockmap: disallow update and delete from tc, xdp, socket_filter and fl=
+ow_dissector
+
+The patch prevents a potential circular locking dependency by dropping seve=
+ral
+BPF program types from may_update_sockmap(). This addresses a deadlock where
+a sched_cls program taking stab->lock can invert the lock ordering against
+sk_callback_lock held during stream parser receive.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 25aea4271cd08..83ea3b33ff679 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -8488,12 +8488,7 @@ static bool may_update_sockmap(struct bpf_verifier=
+_env *env, int func_id)
+>  		if (func_id =3D=3D BPF_FUNC_map_delete_elem)
+>  			return true;
+>  		break;
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does allowing
+BPF_PROG_TYPE_SOCK_OPS to call BPF_FUNC_map_delete_elem still leave the same
+lock inversion deadlock open?
+
+If CPU0 calls bpf_map_delete_elem() from process context, acquires stab->lo=
+ck
+via __sock_map_delete(), and blocks waiting for a write lock on
+sk_callback_lock inside sock_map_del_link():
+
+CPU0
+__sock_map_delete()
+   takes stab->lock
+   sock_map_del_link()
+      blocks on sk_callback_lock (write)
+
+And concurrently on CPU1, network receive processing invokes
+sk_psock_strp_data_ready() and holds sk_callback_lock for read:
+
+CPU1
+sk_psock_strp_data_ready()
+   holds sk_callback_lock (read)
+   ...
+   tcp_send_ack()
+      __tcp_transmit_skb()
+         tcp_established_options()
+            synchronously executes attached BPF_PROG_TYPE_SOCK_OPS program
+
+Can the BPF program call bpf_map_delete_elem() on a SOCKMAP, attempting to
+acquire stab->lock and deadlocking against CPU0?
+
+> -	case BPF_PROG_TYPE_SOCKET_FILTER:
+> -	case BPF_PROG_TYPE_SCHED_CLS:
+> -	case BPF_PROG_TYPE_SCHED_ACT:
+> -	case BPF_PROG_TYPE_XDP:
+>  	case BPF_PROG_TYPE_SK_REUSEPORT:
+> -	case BPF_PROG_TYPE_FLOW_DISSECTOR:
+>  	case BPF_PROG_TYPE_SK_LOOKUP:
+>  		return true;
+>  	default:
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260630145410.3648=
+099-1-rhkrqnwk98@gmail.com?part=3D1
