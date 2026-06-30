@@ -1,143 +1,189 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52AE6E56A;
-	Tue, 30 Jun 2026 01:19:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF88B42AA6
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 01:48:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782782377; cv=none; b=rzWNv8bPFbfg8Xu4WoFRoH0glZEg2jUnuDeoie9aLgFHGv73kz8y3ti8w7Bn3u7F0I3tyKYsDZ/TExc+dmjgAX7fuyxPHaohj/jv56mzsPud0Lror6d4Beg1DeERCFO1UfnbCCi6MIrko1HR3uZkRIM8qZ/MPYyPJ3VpOkE6oNc=
+	t=1782784132; cv=none; b=imI+kfzbV5PgOEZYTbewW9ND4C2dW/LMtA2PyHCs4gfwxVLKd+UD+vp6HrxpiUi5vn7kDAuWJqiYj2pVuTuvBur8dQy1W1nNytttJ7iHvWWNuUmZV/NJMQfHhptuM+AHn9Rt4OARPtZn8bP7KLmE0ndjHd2neBbG0plJUgUVU8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782782377; c=relaxed/simple;
-	bh=peWAbyqXpsv3LiV9QAIC1oXbRLP6lWXeCnCVHSXq+RE=;
+	s=arc-20240116; t=1782784132; c=relaxed/simple;
+	bh=qLOURlE2EgSYW+y/aqV1mWxO63kKVIvDu5Gx5r2thMU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l9/3U3gXw7QEpfdWPLaKREuwJMf36pTcfPt3uHHA8LoNh0KoF44rcthFWZe9Dj1EdOnykf25jxQwB2DeX0BYGdSDtj+3Q7hW7wMIkVuASYfD4jlmXciQwQLsOO/XxhR8I3jR1X64voMYfYLe+r3ZbuMcfscs1+WnY4+ALhKtXKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gq50036YyzKHLw3;
-	Tue, 30 Jun 2026 09:19:12 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id ADBC840590;
-	Tue, 30 Jun 2026 09:19:19 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgAXh_SWGUNqKGU7AQ--.354S2;
-	Tue, 30 Jun 2026 09:19:19 +0800 (CST)
-Message-ID: <8ea18b6a-932c-4eb0-a536-d52ce3e1f457@huaweicloud.com>
-Date: Tue, 30 Jun 2026 09:19:18 +0800
+	 In-Reply-To:Content-Type; b=Ber+nUakvc28QDFZFo7XhHX4JznOiVHVf48hxo7TCU9PhuFshVkG97iiVqWU+gwC3eCB/YsuvrFE+9ESgVl1L/UwiLkFsRUogzB4NkhZEFwe6fQT0+ri75MFp5hO2n8iNIl7B/hnyszl3369Ljh3KoZXwn08fD1tScynl9Pe9Mw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YyqQlWTR; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YyqQlWTR"
+Message-ID: <d255172d-d9e9-4116-9243-975cf4bdf3d0@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782784127;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EAO4HQmOrZNYmlyWXHLdasaCnAiXempbTm0/OfxDInk=;
+	b=YyqQlWTR8b+m1iZ5phaCOAIz64MOEznCpfVZ0jFi4whKoQgxsgWB6cio5G3UAyHBvsvesx
+	I5OGpN/FgF5E6seoKWGat2nCH+XDPb30pfYMPLm/T/EcmhYnsJXc4jJGUKY49+559QfHu5
+	gcIfMg5DYMExMh794mPTuuf1i4jizAo=
+Date: Tue, 30 Jun 2026 09:48:36 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH bpf-next 00/12] bpf: Introduce static-defined tracing
- probe for BPF
+Subject: Re: PROBLEM: BPF interpreter fallback after JIT compilation of
+ BPF_ADDR_PERCPU leads to kernel panic
 Content-Language: en-US
-To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- KP Singh <kpsingh@kernel.org>, Anton Protopopov <a.s.protopopov@gmail.com>,
- Amery Hung <ameryhung@gmail.com>, Eyal Birger <eyal.birger@gmail.com>,
- Rong Tao <rongtao@cestc.cn>
-References: <cover.1782571533.git.xukuohai@huawei.com>
- <855e44f3-d22c-47e5-8bd1-c5d9f7014a75@linux.dev>
- <ec28f0f9-0693-4c9b-88fa-bffca446a63c@huaweicloud.com>
- <b8d8ab5e-bef1-4c95-8e5b-ea9768041b2e@linux.dev>
- <55499fcf-d552-4366-9016-21ede7f687ac@huaweicloud.com>
- <4f30012f-778b-4c7d-b610-2e18cf01abdd@linux.dev>
- <678ec73d-06f1-4860-94be-be000ca462d4@huaweicloud.com>
- <b4b906cb-e7b2-4ba7-bbb9-e6c813238859@linux.dev>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <b4b906cb-e7b2-4ba7-bbb9-e6c813238859@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgAXh_SWGUNqKGU7AQ--.354S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw4kZw1rAFW8tr1fGw1rWFg_yoW8urWrpF
-	yktFyUKFyDJr92yr18tr1UJry5tr48Gw4DXr13XFWrX3saqrnYgr1UWF4Y9ry5Jw4rAFy0
-	vrWUZrnxur1DAr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
-	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
-	7KsUUUUUU==
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+To: Vincent Thiberville <vincent@harfanglab.fr>,
+ "ast@kernel.org" <ast@kernel.org>,
+ "daniel@iogearbox.net" <daniel@iogearbox.net>
+Cc: "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+References: <MR1P264MB331494502C9D13D8A9EAFB99B7E82@MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <MR1P264MB331494502C9D13D8A9EAFB99B7E82@MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On 6/29/2026 9:53 PM, Leon Hwang wrote:
-> On 2026/6/29 19:32, Xu Kuohai wrote:
->> On 6/29/2026 6:55 PM, Leon Hwang wrote:
->>> On 29/6/26 15:51, Xu Kuohai wrote:
->>>>>
->>>>> With the elimination, the callsite of 'subprog' has been eliminated.
->>>>>
->>>>> However, as you mentioned above, the argument preparation insns are
->>>>> kept.
->>>>>
->>>>
->>>> I see, the CALL insntruction is removed, not patched to NOP.
->>>>
->>>> So the call site is either a call to subprog, or totally removed. The
->>>> fentry
->>>> tracing only works when the CALL instruction and the subprog are not
->>>> eliminated.
->>>> This is exactly what SDT tries to solve.
->>>>
->>> So, why not add a macro for the stub following the subprog+fentry idea?
->>>
->>> #define DEFINE_TRACING_STUB(__stub, ...)     \
->>> static __noinline void __stub(...)        \
->>> {                        \
->>>      ...                    \
->>> }
->>>
->>> DEFINE_TRACING_STUB(my_trace, int, len, int, ret);
->>>
->>> SEC("xdp")
->>> int xdp_prog(struct xdp_md *ctx)
->>> {
->>>      ...
->>>      my_trace(len, ret);
->>>      ...
->>> }
->>>
->>> Then, add a libbpf API bpf_program__remove_stub(prog, my_stub) to drop
->>> the stub by the way like my demo.
->>>
->>
->> Since the stub prog is dropped in libbpf, where is the fentry prog
->> attached?
->>
+Hi Vincent,
+
+Thank you for the report.
+
+On 29/6/26 22:42, Vincent Thiberville wrote:
+> Hello BPF maintainers
 > 
-> No. By default, the stub prog won't be dropped by libbpf. The
-> bpf_program__remove_stub() API is provided so that users can
-> intentionally remove the stub prog.
+> I have stumbled upon what I believe is a kernel bug that occurs when a BPF program is executed
+> in specific conditions. The in-the-wild situation is a fairly large BPF program that runs as a kretprobe,
+> and the crash happened on up-to-date debian13 computers, with the parameter `net.core.bpf_jit_harden=2`.
 > 
-> Maybe bpf_program__remove_subprog() would be a better name for the API,
-> because it is to remove a subprog.
+> I have managed to reduce the conditions to a fairly small reproducer (joined to this mail), that does the
+> following:
 > 
+> 
+>   *
+> Call bpf_map_lookup_elem (1)
+>   *
+> Dereference the result if non null (2)
+>   *
+> Jump with a large enough offset (>=11000) over instructions using constants (3)
+> 
+> ```
+>     0: .......... (62) *(u32 *)(r10 -4) = 0
+>     1: .......... (bf) r2 = r10
+>     2: ..2....... (07) r2 += -4
+>     3: ..2....... (18) r1 = 0xffff8f0708cca200
+>     5: .12....... (85) call bpf_map_lookup_elem#1
+>     6: 0......... (15) if r0 == 0x0 goto pc+1
+>     7: 0......... (79) r0 = *(u64 *)(r0 +0)
+>     8: .......... (b7) r0 = 0
+>     9: 0......... (15) if r0 == 0x12345678 goto pc+11001
+>    10: 0......... (07) r0 += 1
+>    11: 0......... (07) r0 += 1
+> ...
+> 11009: 0......... (07) r0 += 1
+> 11010: .......... (b7) r0 = 0
+> 11011: 0......... (95) exit
+> ```
+> 
+> This program,  in most situations, will either be JIT compiled and run properly, or will be rejected with the
+> error ENOTSUPP. But on machines with:
+> 
+> 
+>   *
+> `CONFIG_BPF_JIT_ALWAYS_ON` not set
+>   *
+> `net.core.bpf_jit_harden=2`
 
-So it is more of a user-space workaround than a formal solution. And even
-for this workaround, there is no need to add a new libbpf API to remove the
-stub. You can simply build two versions of bpf prog, one with subprog and
-one without. When you need to trace fentry, load the first one; otherwise,
-load the second one.
 
-What SDT resolves is dynamic tracing after the prog is loaded, the hacking
-before loading does not apply.
+I tried your reproducer with latest bpf-next code, but failed. It did
+not crash the kernel.
 
-> Thanks,
-> Leon
+gcc -o bpf-interpreter-bug ./repro.c
+
+uname -r
+7.1.0-ga187b7f97305
+
+zgrep BPF /proc/config.gz
+# BPF subsystem
+CONFIG_BPF_SYSCALL=y
+CONFIG_BPF_JIT=y
+# CONFIG_BPF_JIT_ALWAYS_ON is not set
+
+sysctl -a | grep bpf_jit
+net.core.bpf_jit_enable = 1
+net.core.bpf_jit_harden = 2
+net.core.bpf_jit_kallsyms = 1
+net.core.bpf_jit_limit = 528482304
+
+./bpf-interpreter-bug
+BPF_ADDR_PERCPU JIT bug reproducer
+
+WARNING: this WILL crash the kernel. Run in a disposable VM.
+
+Current config: bpf_jit_enable=1 bpf_jit_harden=2 bpf_jit_limit=528482304
+Created per-cpu array map (fd 3)
+Loaded target BPF program (fd 4)
+Verifier:
+processed 11011 insns (limit 1000000) max_states_per_insn 0 total_states
+1 peak_states 1 mark_read 0
+
+BPF program was unexpectedly JIT-compiled, the bug will not occur. Aborting.
+
+
+Did I miss something?
+
+> 
+> the program will fail to be JIT compiled, will fallback to the interpreter, and when executed, will cause
+> a invalid pointer dereference leading to a kernel panic.
+> 
+> To the best of my understanding, what happens is that:
+> 
+> 
+>   *
+> The JIT compiler will optimize the map lookup at (1)
+>   *
+> The JIT compiler will fail when reaching (3). This is because the JIT hardening enables constant blinding, which triples the size of the jump, overflowing 32767.
+>   *
+> Since the JIT compiler failed, and CONFIG_BPF_JIT_ALWAYS_ON is not set, the kernel falls back to the interpreter
+>   *
+> When executed, the interpreter will badly interpret (1), I suppose due to some JIT optimization not being cleaned after the JIT compiler failure.
+>   *
+> This will leave R0 with an invalid value, which is dereferenced when the interpreter reaches (2)
+> 
+> But of course this may not be what is happening, I am far from an expert and you will know better than me.
+> 
+> This is easily reproducible on debian images, which do not set CONFIG_BPF_JIT_ALWAYS_ON. I have reproduced it on 6.12.74+deb13+1-amd64,
+> 6.12.94+deb13-amd64 and 7.0.13+deb14-amd64. Setting `net.core.bpf_jit_harden=2` and running the reproducer is enough to trigger the kernel panic.
+> 
+> I am not entirely sure when this bug was introduced, or if it is fixed on the latest version. From some research, it may be related to this patch:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7bdbf7446305
+> 
+> and there is a commit in review for bpf-next that mentions a fix for the aforementioned commit: `bpf: Disallow interpreter fallback for BPF_ADDR_PERCPU insn` in https://lore.kernel.org/bpf/20260622143557.22955-1-leon.hwang@linux.dev/T/#t
+
+
+I've posted another patch series to fix the assorted interpreter
+fallback issues:
+https://lore.kernel.org/bpf/20260626154330.33619-1-leon.hwang@linux.dev/
+
+Thanks,
+Leon
+
+> 
+> that would indicate an impact since 6.10.
+> 
+> Joined to this mail are the reproducer for the issue, and the dmesg of a kernel panic caused by the reproducer on the standard debian image `debian-sid-nocloud-amd64-daily-20260629-2524.qcow2`.
+> 
+> Thank you for all your work and for your help on this matter.
+> 
+> Best Regards
+> 
+> Vincent Thiberville
+> 
+> 
+> 
 
