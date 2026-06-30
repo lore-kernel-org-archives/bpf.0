@@ -1,60 +1,74 @@
-Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
+Received: from out203-205-221-233.mail.qq.com (out203-205-221-233.mail.qq.com [203.205.221.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE583FBEC1
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 12:46:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E87673F4102
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 13:11:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782823604; cv=none; b=hPjJNB93tLMC/Hn2QBkvA2+eHp7M94Dm1M5tSAKHdpWBEUZdas/BCZnOTqn6N1woRDWKOnm0XUTqYqKxYKDbHDsoqZ5ZXd99wlCbRE1pcWU06doXyMdNhtMMsVnt/8Q3QXlTCJVabjaeP0v5jW6ML7MCOV1ChON8YXeRZQULJoo=
+	t=1782825075; cv=none; b=FJQLOAzGBD0jEL6Sa4CpXVEdVH46SEokGHB7UnOqD0gK7AYuOgwim/QhQsRVsdset9KPPXCxNgmMFuGOHFwZimuD7s6Z6144XddX50jH6464/xqqTy+ynPgQXCqYaNUUtWzXhH6BlXuLkAW3N9XFFnv9E/xehGJtL4dknx5c+Xc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782823604; c=relaxed/simple;
-	bh=PxqKtpx3FyLpZNRYpTr7hcZOV7MsKvNIU9b44l4suLU=;
+	s=arc-20240116; t=1782825075; c=relaxed/simple;
+	bh=dnu21409BfWniyjA2dNfWjGlJbexQMqKOmfzZid0lQo=;
 	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=Mc9OOoYzRwDPgkgPNymwESKpIORXaxlmd3XSwdEwsmGvHFyMlbZVyc0oMjlI3Uuy0dCPzoNRtVkbXPmhLSasjM9ajT2Yn4keEml7I4HD3QNvj7Gfq074otqzSHjVZOZTkA9e9D2Whzo8XpAvcF29brvWWek0ZRr9k7qhZXrEE6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=IubpzA3+; arc=none smtp.client-ip=203.205.221.155
+	 MIME-Version; b=VPpATFePDNTTn9pkIpYmsZzLf+tx7zmB4ZFQuA9Gn/bpM8lD1mwuEygPAVSTSePD+Nd2EcjhDue9eMW1AKQt0Sun0bcdc7vlcndkGkc8PhEH2rOMiPpQB/Byav5OjLMnFjvNw7Cu/jC3+82Y476x5x6Y6Z/NS6XJa7H9kIILESs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=o4HcYTLD; arc=none smtp.client-ip=203.205.221.233
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="IubpzA3+"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="o4HcYTLD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1782823599; bh=NlISi6Rp/uuCxNnD2Etwb/tWLq6Cin3Mm/X4skjvR7s=;
+	t=1782825069; bh=7HskIzzUHXw3md6kiQ2qF8NTdxNXoTsE1DQjR31NoGw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=IubpzA3+wpiV2AIPx+fqM9pd0IzehOjvUG3lHnHF9t6BBNnHs7V0PALdmspVsQBqz
-	 1tiVfMv3futg6HRDj3YOSbIQ72yz1T8kOctugQ8yDRoXga/aHO8BttppyEWAOBV7Eq
-	 1No0HRAcNOZVhHpEMc1K26TTyUmIlbw9H8MYknsc=
+	b=o4HcYTLDrCfjbuZZ1smAjaAe1+BPtkwhsEqcGbaQskyyFOQm7rdVlBCE1pYCCSepo
+	 7Qv2NIAFAjpNKBEHlXS5djWVsKw5lbE+QtHV1e87gmCd/p9j7o3pBgTipge05nkrxI
+	 nJy1BQqIv2pW2qcsc5LyS+VexsT1jTWXiLSChQ2k=
 Received: from lxu-ped-host.. ([111.198.231.89])
-	by newxmesmtplogicsvrszb43-0.qq.com (NewEsmtp) with SMTP
-	id BA4B2CE7; Tue, 30 Jun 2026 20:46:36 +0800
-X-QQ-mid: xmsmtpt1782823596tj0y34xgz
-Message-ID: <tencent_B6259ABAF5BB63335B9E3C1BB74B071BD608@qq.com>
-X-QQ-XMAILINFO: Nj+lDvaLCxoMXhcko6wIWnPCjB0eSfVRTB26+OCAW/vdXE5lbw1ou9JGeaMq19
-	 7MgHJKDPvitT5i1NFKrIhLbYH2x+yyOvQV2UrOoxcGfKX1gyVTm8bwx/ILeRd3kRZRzOdLotGfLU
-	 qrD3ZL1o+7Ob96EXX9KgV3xmKQv1C2FWGRxKUrrINmeXQ3XBN3IvWp2KvLBBoRdpLkCxTKyUyTWB
-	 Q5zq3ZRhdHnHVKjxRvh5az/op2DNTKqbjaS97nSA9o/HsUid7fwF/p0H/Ww8yDaSSdcHQ2jixiIA
-	 7IhlIzqNL6ogmHT0f4QbBDObpdFbbWl7dXophKAdlgWi6QP9+ccy6DalTmseCnraK1XXodTxFP/h
-	 j2/vBH2ORcohThCIafP4j3Afu82g8XUYEG2ezIQsm/p29QA8NXj+qh+veH3h5SnZ617Ag3hFj2Vm
-	 6yBJhva4XCtE31V82v5f7VWaPMiyhfHQqQvUjwi1bVnl8MzXaVkhHv4ybOrISyvT45zgPwODFpyj
-	 83GXtJMIsTFovdUBNG0dFa3HFArdbdM86hHNAP6dqTK7/ECO6YZv2OSUYks2XA1aOtIO3+G4/EWh
-	 qnJkaPcghECr14SSJVpmugleRAmmYoII64w9nRUvcEWOg4a16l1WrBczRGNbqZ7sgBqXeET/QTBN
-	 GZw7rNhUTrpasr1A1dL6vuKenDoXAJaizdkL6BwfzzD0x4cJVjtvcty0JALPoRvVPzNyxuJOgo+K
-	 jjf21PZBv1V0QPFRkAYDVOeP2Ts68f2liZw0ZZ6aDgaVN5aVmVImUv7pmdDDt1fIY2vinDo8K0J5
-	 Ma7xAJzaaBIEZHkTwdevM19HpdGps22ltoiUGxv2YJbuHUUPOj4WfaipGsYfrSb9Bc9TrqqwSiOP
-	 /gxsB5CqeZ5rKeOV2aGtRj19Hi4ulLz6df/X+Ygf9vyKEIdB63962sYXr6FAm6rM1F38mM4Cuaxk
-	 LkVabudPNmRuuS4ixYSfh7osDTl2ohEEvjbT7ZmmVnicZ61gaF94WgoNPzJKngr/nte5NQzUn+Ur
-	 Bk6HLC8KQhOe34nx12ojNZ/Cs/JlQ=
-X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+	by newxmesmtplogicsvrszb51-0.qq.com (NewEsmtp) with SMTP
+	id 2720E82B; Tue, 30 Jun 2026 21:09:50 +0800
+X-QQ-mid: xmsmtpt1782824990tfudmil50
+Message-ID: <tencent_4F9E5F1B854B1D1BB42574BA76BB5133BF08@qq.com>
+X-QQ-XMAILINFO: MZg/qcWmVFFr2+zJK0Ieu9UNm2IFC9pNiLCARFSy6AdxMgyfPOh0P6+id5WEFX
+	 KMfw/4BtJYG2OkuEzNAefUcXoIDtRr+qMrebpxPxiwN8Z1bnMH/A1o/g/LcongHpQS8i47FHv8Ir
+	 mu+ej7SA9cV5hp8Ur5V35wlpBb4fp9QTRfYpZc9zyVM0jeq64ZOInrDLimC4C71/W4l4q+gr8uEa
+	 dFV1GZbDgnNkgjTQHjClZoFzjYvG8hgBOM7V/I2c80+O+PI0o87dBbPd75p8giI82a9nm0ne2Oyq
+	 LxuVt0hv0dhEg9W2Lz6ElZH7gMwcPHK33r5NaulpqweMeZ27WtiMTi0vWIyvxtFndp+vHPUXfW0P
+	 NjLDhW/OfRxzL+9PDln2dfmi4+4XO6RuAZe4aoMAuW4kssKzvtVU7tyqm8uGKtQtO1eL03rEJuDL
+	 JjGcFf6VrlP2+vnaBTgzOQyxl0JNHqkjodowP9wwbnFMSbfwhC5rEUqAoXbtdjvWQFEr2Lvqtt7q
+	 dbqlDt/A1hKPZn1Nhp9F0AeaAtD5CCUGeU24U4peZxZJCGwLXSMrY5jIOTtuy01eQwZLOIbvkIHG
+	 wk4wEZ5XGwwYusGS/xAnl1aT7GxJLxrxP1obSz9O7EmrT5ZPdEw9zB/13xwG2BIdu7c02Ntco+YB
+	 guH1MdyJ55g37438y79w90yaLqt3T3DuaT26M0YI9peyYHtD4UPTBME9LjhH4oO7YMCkqfeiJDUL
+	 3ii72B/YxWC6nrxm3HP+p624xSOC7ebYZXWLmP16E0Od2soH4AYL9H5xpWntrjagl7hwqhF99mnq
+	 +ZmpagotP8wFPRsKx+TVk71o/KdCBWDJ0MpkBstfZjdhH8/uHrlSpRKhkF4AL0qYjFOqnFEyknl7
+	 aWxphlWuvA9vIq8tpkOcaKxN4qnvN/im75OAOwtsQVqaIK7+4x3QT0tyzkj6yVZaMAbYv70ZK8uv
+	 WR6D9zlit4Tzezg7Wjk0Zt/OO7oHO5cwU4cQkRQw5afZtdQ/2jrlqfraGVU87PkC0tFJFlggj8Bj
+	 tV8K3p6biIlFj/qiJfowAVBnEMr730ebrfPD0/bTFSCShPG0GXdaAEPNe/fmZg8+EZeIq8AqxGkO
+	 LZCa5VtGtbGWRza6pXGGgVDstqKMMhzbIkSdyc1XYE0k0hT7Y=
+X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
 From: Edward Adam Davis <eadavis@qq.com>
-To: jiayuan.chen@linux.dev
-Cc: bpf@vger.kernel.org,
-	eadavis@qq.com,
+To: eadavis@qq.com
+Cc: jiayuan.chen@linux.dev,
 	sashiko-bot@kernel.org,
-	sashiko-reviews@lists.linux.dev
-Subject: Re: [PATCH v2] bpf: Fix smp_processor_id() call trace for preemptible kernels
-Date: Tue, 30 Jun 2026 20:46:37 +0800
-X-OQ-MSGID: <20260630124636.953001-2-eadavis@qq.com>
+	sashiko-reviews@lists.linux.dev,
+	andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	emil@etsalapatis.com,
+	jolsa@kernel.org,
+	linux-kernel@vger.kernel.org,
+	martin.lau@linux.dev,
+	memxor@gmail.com,
+	netdev@vger.kernel.org,
+	song@kernel.org,
+	syzkaller-bugs@googlegroups.com,
+	yonghong.song@linux.dev
+Subject: [PATCH v3] bpf: Fix smp_processor_id() call trace for preemptible kernels
+Date: Tue, 30 Jun 2026 21:09:50 +0800
+X-OQ-MSGID: <20260630130949.954947-2-eadavis@qq.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <f72ebb75-66e8-47ae-b1f0-e77d6a24f3e0@linux.dev>
-References: <f72ebb75-66e8-47ae-b1f0-e77d6a24f3e0@linux.dev>
+In-Reply-To: <tencent_B6259ABAF5BB63335B9E3C1BB74B071BD608@qq.com>
+References: <tencent_B6259ABAF5BB63335B9E3C1BB74B071BD608@qq.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -63,63 +77,31 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Tue, 30 Jun 2026 20:25:30 +0800, Jiayuan Chen wrote:
->On 6/30/26 7:14 PM, Edward Adam Davis wrote:
->> On Tue, 30 Jun 2026 09:48:23 +0000, Sashiko wrote:
->>> [Severity: High]
->>> Does this fix the issue at the right layer? By adding the preemption
->>> protection here, it masks the fact that the caller is running with migration
->>> enabled, which leaves sibling APIs vulnerable.
->>>
->>> For example, in __rhtab_map_lookup_and_delete_batch() in
->>> kernel/bpf/hashtab.c, the batch loop iterates and calls rhtab_delete_elem()
->>> without disabling migration.
->>>
->>> If the map elements contain special fields (like BPF_KPTR),
->>> rhtab_delete_elem() will first call rhtab_check_and_free_fields(), which
->>> eventually calls bpf_mem_free().
->>>
->>> Since bpf_mem_free() also uses this_cpu_ptr() without get_cpu() protection:
->>>
->>> kernel/bpf/memalloc.c:bpf_mem_free() {
->>>      ...
->>>      unit_free(this_cpu_ptr(ma->caches)->cache + idx, ptr);
->>>      ...
->>> }
->>>
->>> Will this result in the exact same BUG being triggered on that path? Should
->>> the missing migration protection be added to
->>> __rhtab_map_lookup_and_delete_batch() instead of modifying the allocator
->>> here?
->> Like this?
->>
->> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
->> index 9f394e1aa2e8..7b98c2eea685 100644
->> --- a/kernel/bpf/hashtab.c
->> +++ b/kernel/bpf/hashtab.c
->> @@ -3345,8 +3345,10 @@ static int __rhtab_map_lookup_and_delete_batch(struct bpf_map *map,
->>   	}
->>
->>   	if (do_delete) {
->> +		get_cpu();
->>   		for (i = 0; i < total; i++)
->>   			rhtab_delete_elem(rhtab, del_elems[i], NULL, 0);
->> +		put_cpu();
->>   	}
->>
->>   	rcu_read_unlock();
->
->
->This splat is specific to rhash...
->
->For HASH/PERCPU_HASH/..., most operations are performed under
->bpf_disable_instrumentation(); see __htab_map_lookup_and_delete_batch().
->
->But for rhash, bpf_mem_cache_free_rcu() is called outside the
->bpf_disable_instrumentation() region; see
->__rhtab_map_lookup_and_delete_batch().
-Let's use bpf_disable/enable_instrumentation() consistently to protect
-__rhtab_map_lookup_and_delete_batch().
+bpf_mem_cache_free_rcu() maybe called in preemptible context, this
+will trigger the below warning message:
+
+BUG: using smp_processor_id() in preemptible [00000000] code: syz.0.17/5820
+caller is bpf_mem_cache_free_rcu+0x48/0xc0 kernel/bpf/memalloc.c:954
+Call Trace:
+ check_preemption_disabled+0xd3/0xe0 lib/smp_processor_id.c:47
+ bpf_mem_cache_free_rcu+0x48/0xc0 kernel/bpf/memalloc.c:954
+ rhtab_delete_elem+0x185a/0x1b30 kernel/bpf/hashtab.c:2969
+ __rhtab_map_lookup_and_delete_batch+0x935/0xcb0 kernel/bpf/hashtab.c:3349
+ bpf_map_do_batch+0x445/0x630 kernel/bpf/syscall.c:-1
+ __sys_bpf+0x906/0xd90 kernel/bpf/syscall.c:-1
+
+this_cpu_ptr() access needs to be guarded against preemption.
+
+Fixes: 5af6807bdb10 ("bpf: Introduce bpf_mem_free_rcu() similar to kfree_rcu().")
+Reported-by: syzbot+fd7e415d891073b83e1f@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=fd7e415d891073b83e1f
+Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+---
+v1 -> v2: using guard against preemption
+v2 -> v3: replace get/put_cpu() to bpf_disable/enable_instrumentation()
+
+ kernel/bpf/hashtab.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
 index 9f394e1aa2e8..d3f2f8a379e8 100644
@@ -149,4 +131,6 @@ index 9f394e1aa2e8..d3f2f8a379e8 100644
  
  	if (total == 0) {
  		ret = -ENOENT;
+-- 
+2.43.0
 
