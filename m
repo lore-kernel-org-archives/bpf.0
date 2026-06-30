@@ -1,111 +1,95 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF9A3D330C
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 07:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79F71FCFFC;
+	Tue, 30 Jun 2026 08:15:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782803684; cv=none; b=CmCn+VcYwrdx+WR3ioL/j066Qs5ZYyhLxFGVT/9MvE1tlKsoT1UQCbH1zkHQxp8f5ESJkxnpIawhlnvg861sKATmUHZRzS4EXn21Sk6xJoN5S39DC3QiEOB/zTs+MymHksdSmkqL3yG1/141xqujOiGusJAvBWfJqOyhpVE0j0k=
+	t=1782807329; cv=none; b=lFOZ01aIIS0uwLBuU3C6MgmEu9ConLZqHkj3BTM6zxoYO/LzdrQ/s1DytWeuhkAKOrfcD2UUhmzXhAvgUmJmog89DjQ1hV4E6OXMZym5BcpfRsaXkOeIzBB7+8beFkdI4q/A3c1fK9szi0ixZ1P+1zrt8DK81utvMR8gfW2QEQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782803684; c=relaxed/simple;
-	bh=XL23FZIFV8lgtowgc1D3LIn4aqMyxN0Pts3G4jOCcZI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BnhOdt3S2J4BUkCdfi07977B2uUL0Iw/alwfiXa8YCswgl/hdYiT4xcV4Rt9r2LHsAIj+YyTXGCfR+z7wB4C0JopknA+X7uhVxKQM/Yo2NvOKVPNw1e6zOn7JV4hsrruxHyCzbt5JK4abv46toZiGBxd0YvfaBU4POLdbfyTS60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fgN5FXQE; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fgN5FXQE"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-37e1607f7faso1878467a91.1
-        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 00:14:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782803682; x=1783408482; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2bDQGREITe91mNJKLkfaBft7iY0zy1ezAMTmaONILis=;
-        b=fgN5FXQEFp7ODVTlb5EKin3jjBuoNcnuY813a8+INqGJD5QCMSObTCqWfspj6cY8ma
-         e+CSpiBPZz5LxN6QtnVJBNgCE3gFD2r/CTnSo3N0Ib7M7oLJVpt10Krm+HIwJb5SclPg
-         4rj8Anq4Lg4dSYXs9bVx4bdr1xQ43iPyYmTNjb+32ccty2ZGU+tfIdHDVxc/8zSxh1Y8
-         KyfXqQQYpgaznKXfD6L8u5YDVX44XB7uj4AI+O4+EhBWlqDzFKCRRhgH2m70ZZEVLg3t
-         ATC8nct5RdNwm1Uz13EGl+tyzlsLdSgiIfPJLJ1Ngx76lH7MQrzx6y94lX6unE9i7CR+
-         9APQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782803682; x=1783408482;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2bDQGREITe91mNJKLkfaBft7iY0zy1ezAMTmaONILis=;
-        b=HuQ7XFWcszuqTNHtu4NX69WRefTGlNfoR8HLh/MQSsHdsL08An27patD15F4caRb68
-         BqdTbSdGHBlLgA9DyiSjHWpm5hJHmWqQeurEq5ZyObIvZq2ZoDTiTbISpR1qgLlIB9OZ
-         3vMMxpfxuKBpcXnxT0eRadnMi4JIvLtW1t7GuEOEQlDoienMJKzGs1RqyOVo1/Ds7ad0
-         3a7tcd7rliL9CLQMD40EEfmcQc2nwjENLIb32CtkiFOB+bfifRBLgHgIgrJ1qHhnnRxK
-         z3v9qy2fPc56+nmIVv9kg7FUqmqVhvFdxpOLtOvGxcTLPrRQSMEjrTZ+9kSUwHQHpIe6
-         kF3Q==
-X-Forwarded-Encrypted: i=1; AHgh+Ro4zgmUQHuqfxWtyONYGFumqKtqeRkRa17tgRbsS1zhUovreAXZcdJeReqIHp8kicB/4IM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yya+sbICQHJdJPFvk2JKMIp/L7H418OmMebgZKlF1p6vyYg9E/V
-	bysrxVZWdP4BqheloRj+wNFlrlNBX0UboI3wZ2hcE1cjPbRBhFGgYO+U
-X-Gm-Gg: AfdE7cniaRChybwIzVZG2dT7RvV1LBqjla7VgM81MmZfn8xRKlKlFmUosV08l15gHIc
-	ywRGh0docAlCF9ro2dC288jbP8F5kK+vSUvt4Ppcx4wjyYhveamnV4+RzSnxMwQ4tA8ou9zQy/1
-	fTeTRDV0+0XJ+e1xM6zRsIGb/+8uv65oioSPBGvw/vSwAVAOtI/pmvMLUes+J0NFFsODbSYHfKL
-	cq6OVWZG82j6OQ66/ABkuhOqjE2HkYSqh2HVd85i8XwS9pspVmTFZeYLpLnBVaGrFdFXSdDLZoi
-	BEUgKUDbQT42guaRxPrhLCu9XhIYcVtzh8A6vN6utpvTLoF2EU9pYcFf5KjYFzKKENn/ssOiL9K
-	iHmaDorxnnkxTMzC0XsVdAuEB346/YYPlMwyHsypmCE81LGh6NPi4NqkmcGTItKuRynbYiWeU5z
-	ehq7xpK9oyvs5CVnktPQkWwv/Di1YeNRabR/k+tTV4iB8sH29sbzv5r+io4is=
-X-Received: by 2002:a17:90b:2e48:b0:37f:9cdf:f0ad with SMTP id 98e67ed59e1d1-3805281b8d0mr1773163a91.28.1782803682352;
-        Tue, 30 Jun 2026 00:14:42 -0700 (PDT)
-Received: from cps-manycore-1 ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3805bf2c5absm285378a91.2.2026.06.30.00.14.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 00:14:41 -0700 (PDT)
-Date: Tue, 30 Jun 2026 07:14:32 +0000
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: John Fastabend <john.fastabend@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Lorenz Bauer <lmb@isovalent.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Jiayuan Chen <jiayuan.chen@linux.dev>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 1/2] bpf, sockmap: disallow update and delete
- from tc, xdp and flow_dissector
-Message-ID: <3speqrvxsx25cbyronbm4jatlhkawkjiki7j2b7clrtkbwgpn6@x2gx7rwvpho7>
-References: <20260629172704.1302218-1-rhkrqnwk98@gmail.com>
- <20260629172704.1302218-2-rhkrqnwk98@gmail.com>
- <DJLQSC87KCSV.314DTZAWRNA8C@gmail.com>
- <akNXhg5K7aV7Opdr@john-p8>
+	s=arc-20240116; t=1782807329; c=relaxed/simple;
+	bh=2FO3GFdlx/35mYp7J1ehhVKATK9d3NfbW/2C6l9aeMo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=pS8d81T0ggTBsFKSAdAs8ItN3JvOJIVM2LJiwSTJBkjThB7GBibMy3pk63Zu/jY9KNujSpYCIKmKMKq6p3SyXVgD8W5QtYK3XHTOlF8qfXhgoV7EBOe9+P3WhpZnLByjPANW/qldPzX2/3NdUdc3kBnqkt2QJdJnJF5KjCQBs2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: d4a7c302745b11f1aa26b74ffac11d73-20260630
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:21ed812c-ddb2-4ac6-a199-c2c63d0cb047,IP:0,U
+	RL:0,TC:0,Content:13,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:13
+X-CID-META: VersionHash:e7bac3a,CLOUDID:9e5185e0d9ad5dd29d1b815af61615ac,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|123|850|865|898,TC:nil,C
+	ontent:3|15|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil
+	,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: d4a7c302745b11f1aa26b74ffac11d73-20260630
+X-User: luoliang@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <luoliang@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 611008674; Tue, 30 Jun 2026 16:15:18 +0800
+From: luoliang@kylinos.cn
+To: Andrea Righi <arighi@nvidia.com>
+Cc: Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Liang Luo <luoliang@kylinos.cn>
+Subject: Re: [PATCH] tools/sched_ext: use btf_vlen() helper in compat.h
+Date: Tue, 30 Jun 2026 16:15:07 +0800
+Message-Id: <20260630081507.3078867-1-luoliang@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <akNQjzejJOdtDYnQ@gpd4>
+References: <20260630031246.2618216-1-luoliang@kylinos.cn> <20260630032027.92BB51F000E9@smtp.kernel.org> <akNQjzejJOdtDYnQ@gpd4>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <akNXhg5K7aV7Opdr@john-p8>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 29, 2026 at 10:47:41PM -0700, John Fastabend wrote:
->I think we additionally need to also block 
->BPF_PROG_TYPE_SOCKET_FILTER? Did you check this case I guess the same 
->case is possible there?
+From: Liang Luo <luoliang@kylinos.cn>
+
+On Tue, Jun 30, 2026 at 07:13:51AM +0200, Andrea Righi wrote:
+> btf_vlen() currently returns __u32, not __u16. This changed in commit
+> cacd6729c0923 ("libbpf: Adjust btf_vlen() to return a __u32"), because BTF vlen
+> was expanded to 24 bits. We should update the description to match this. And i
+> should be changed to __u32 for consistency.
 >
-
-Yes, same inversion. I'll block BPF_PROG_TYPE_SOCKET_FILTER in v4.
-
->Then another patch needs to restrict BPF_SOCK_OPS users. For that
->we need to block BPF_SOCK_OPS_HDR_OPT_LEN_CB and BPF_SOCK_OPS_WRITE_*.
->Let me know if you want to do those as well. Let me know if you want
->to do both patches or just the prog blocking above with the possible
->addition of SOCKET_FILTER. I didn't search very hard so probably need
->to check all the BPF_SOCK_OPS_* to find the valid cases.
+> With these changes:
 >
+> Reviewed-by: Andrea Righi <arighi@nvidia.com>
 
-Just the prog blocking with BPF_PROG_TYPE_SOCKET_FILTER added. I'll
-leave SOCK_OPS out of this series.
+Thanks Andrea, and thanks to Sashiko for catching this first. You're
+both right, and I apologize for the noise on the list.
 
-Bests,
-Sechang
+I made a basic mistake: I developed and verified v1 against a v7.1
+baseline, where btf_vlen() still returns __u16 and the warning does
+go away there. But I did not re-check against current mainline,
+which is what the patch actually targets. On mainline, cacd6729c0923
+already widened btf_vlen() to __u32 (the BTF vlen field itself was
+expanded from 16 to 24 bits), so on mainline v1 does not silence the
+warning, and the commit message's core claim is false there. Sashiko
+flagged the return-type discrepancy, and Andrea identified both the
+root cause and the fix (declare the loop counters as __u32). I
+should have caught this myself before sending.
+
+v2 incoming, rebased on v7.2-rc1, with the description corrected and
+the two loop counters declared as __u32 so the comparison is a plain
+'__u32 < __u32'. Verified on v7.2-rc1 that all -Wsign-compare
+instances from compat.h are gone across the 8 userspace schedulers,
+with no new warnings introduced.
+
+Sorry again for the extra review cycles, and thanks for the careful
+reviews.
+
+Thanks,
+Liang
