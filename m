@@ -1,185 +1,130 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1AD270EC1
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 14:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABBC43CEF5
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 14:54:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782830918; cv=none; b=PbmhwN1iHZxY94QDAIgb0FTaP/4zX91zqG20JnX9PZqo1BBZktiSOiBsIRzEOhc5mc415mENN+mtOV8TC0nRf4iziit2EQSpcuskAO72cUVbYVVUhwTT9otyGrpi690wIsupyo6OxKQPJn2FuTOsRA6C97IV77TZuzQ/+HWnlLY=
+	t=1782831266; cv=none; b=cwMH19yM+LkVygCMvbHsA54ffuKCX6cq+VySWhMiLAPODHAJjvzmVxXYbB9aI5aIgjPBBmLDr6iqYLXCJbH+40stfvBiFWti7NCgPH6Ew8tDw6hV3fhfZKIyGSSaNDGDmEEaAD3goDWUkd06zPqfGd8jaGOSvqM/vCgAAGE80NE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782830918; c=relaxed/simple;
-	bh=1Jj/c/TOCM9F8C2420YyNj+4Ly0pxwW5lqXFrBHZorY=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LaJeWfuzNou7hAJERuyCI18rPY2SShSpqv6ldTU4JZ5chaL9P63i5Lc45AaNMAveOIqBuTkwRUwQSVnzJcgaohR+twe1/oAty1Pzn35A+WarFsahpYut53sZMVRk7O8XcRX0ggUdo74cdRhNDhWkDToqlIOPcnfR5YSf/FP/Qmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AMt8z6b4; arc=none smtp.client-ip=209.85.128.45
+	s=arc-20240116; t=1782831266; c=relaxed/simple;
+	bh=mvMluMulz8TsazPI0k8zL2aMZtsqN5Gi7GN9fqtNkKE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DrIomC7hnagJxNa28ffwFT9kMVAuIfuv4gSiQ4YW0Z54miJfXkCfpa4kZ+T5xWCE2FwOx6yNHqISSAi23hEB3K7XNc/XhLZAlTNTziodmkNvgB4iE873DnxNZzrIeJnyfg/2u2xFEetFAEPX2QW/mhQP70Wdbfq30oGlGDN3z30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zo5H2nrT; arc=none smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AMt8z6b4"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-493a54b80a5so38358555e9.2
-        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 07:48:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zo5H2nrT"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-37d46e0d246so2134822a91.2
+        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 07:54:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782830916; x=1783435716; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=m03AIVt/lARsmyZNqaerMYeWdNxHnC4KuUXFWS8CSvU=;
-        b=AMt8z6b4VBsSDvxJzJSry6DANpmVvMjvWG0UFsaWG2W65aGWs7dGAMXOPb2iu/kVzG
-         6Pw7vbngT+54s63gaw23ovptmlxvhX6PhdicVf38O1B3YYwBJ/ZDbNydQzvHm+WMlpxj
-         0wLh7Ct3MEJBMMaRkjDRiNW5+G0n7uQUkk5EjlU3uv36sX7+3nKNWoN7WOkpsPBxmATF
-         iwl2ewUise/Pdtg3Eakv9jCzqP5syCOGTj6XNaObvJvhPSVKW5SUjVHO8HUc/Klp6TCq
-         QEx7Q/BrQEBAWV7WOZ/fg/dRekMA0U8eBJCErdCbJNG0gUMoHQMZC2DkUSTWRLSyAYD2
-         Jxug==
+        d=gmail.com; s=20251104; t=1782831264; x=1783436064; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=px0Wcp6VhD6xZWRvmlTtSAYT6tdeg+tqH+zTVPz9ZEg=;
+        b=Zo5H2nrTXqjMYGMdJPP50uZUExrQFXD75XRkt7ocVE6oac4J4tN2zkkf9h8s5ty3oK
+         xcKO3yH5g6VpqT92aZgPdQ81KxtbW4Mc86s9h75HzFqRZkmIgX7HZLdyqWf9kaDI+QRy
+         kslQlRdZIQY3AKaPbViHeYasYakmEJEpXzy+LAFPMXfLVgDphgMbu53cncAWEbPLiV6p
+         3zBglHAqZA9vq2XSUBos1c+YGOixmSDBe6USxnDxmsq99x4wOSbjTrCXvBdMxnUF4zyg
+         B8W8uXwQN+YJoMIW65UdV8fZQ39SMHU16WOSJW8apPnUwg1YxFLg0ePJLOOZBYNjUsMp
+         CzNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782830916; x=1783435716;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m03AIVt/lARsmyZNqaerMYeWdNxHnC4KuUXFWS8CSvU=;
-        b=fc5kHVYy8UwdSOuYTpudY6MOoeuWK4p5+AZNV9IFRcqBWXEc5TtBZx8Snc5tA3Gu37
-         J2wFRb3nqRm7NeL55A8VRBnm2LpwTlAtil8wMgWR1qTCLQoynTORdyw0hWWGYr7RRjfS
-         SxctFtSc8M17pNNMrSe05iugPUZvhwQ+hwTvVCFBapglYwGAabkd53n9600QBwdlQyVm
-         utbAdLWTFxfW52yTRtwNvJaKfSX3pA8pc3G43jHlsmsFinYzLKHCYIG+WxeYrNECWV0B
-         XEMQc54RDUx0POlg9/U0GVkK0+SyvVsMzpYVkUQBSQghBs/0yVjJWaEJ6U6EZg7Q02RK
-         0Khg==
-X-Forwarded-Encrypted: i=1; AFNElJ8sRhX7H7/5dKVN4kGBVmucGVjsePKHoTUNCokoP2xq3SaMMogt5NO45xtc5YdgnwKufzQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWj+sisynJdokDWbCdxmPAcl+9jiIj759F9hASUAnL31JlsPd5
-	HiZYJdmrGOZPOpPJAZCBe50qcuQmvQkDIHDtyxw/81B0rvEKvXNqfvcD
-X-Gm-Gg: AfdE7ckbGeKKAGVqEqXK8Qs19Y/kWcyWkfkLxgNbjtLUirkP2Sci3RMwccQhy/EnMrk
-	GLCYs+T3tuewYjAYGA8VEG+wDo6GJ19V7gj/GN9C9N9ER2YgMiAMKsKvbT+yHiMO1M8PRi5Yux2
-	VYhO8crTmgdRhWpFXQZwt5q7Xb8pO+bBbvaY3qG9hCB9/TRfwQkn93cnXfidZjgOdFIN+ViTd6u
-	x5qYy0YbjhZaWPbQxVmTb2LN0xHOwAA4LFjtQ3S611oMzmvuxgrM/Dg1TAz8KTL5mdxXXo8PPAx
-	MQScYIuLETELl/yKK0YVyfrY9EnDOtDFglKVCO+Bu5ZqkgQAwf3o806QucS10F3EhZl4lKJjAIH
-	4tcIHUbEfWlCLjwTNIdAjJVU4sHGl+WbxUmC+algKAPqrdH8vyKGJhWScTOw2ltds1fylULKQU3
-	pzNWosX7WqFBBoonNYP5vac5Yo
-X-Received: by 2002:a05:600c:811a:b0:490:33b3:4be0 with SMTP id 5b1f17b1804b1-493b82aedf7mr51812715e9.20.1782830915394;
-        Tue, 30 Jun 2026 07:48:35 -0700 (PDT)
-Received: from krava (37-188-177-177.red.o2.cz. [37.188.177.177])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493be4dd77bsm188855e9.10.2026.06.30.07.48.33
+        d=1e100.net; s=20251104; t=1782831264; x=1783436064;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=px0Wcp6VhD6xZWRvmlTtSAYT6tdeg+tqH+zTVPz9ZEg=;
+        b=b7PqOwJedO1c50lV0akvobQuV/YkPPSpf9XRHiqcubaR+qbQ4fZeLK67JT0yeY0z93
+         kxO+cckHkKw6LwtIBHnJw7hWAmf5uaEryZUC7EF27/59OYtVEe9TsJK27Ek9EV+2iaxu
+         hZEBDL119kJUjnpccqXwfNbM5WDo7LSZBWO1x0lRaNZnNwKioK4H+K1f1uVpY3UqlkQZ
+         atPs0dKRsVrElO4wdf0ptcnXeE1iJVoM8OMUSsgT0Ft/M86WqZgNJcsH+nR2Oa6EMguZ
+         1CVAkcSCaK+LFmJGLCPv/yK44oHvHfL4XdOsUvArYPLjnDu2tETyWDsosEnhdqxcrT6h
+         VR1w==
+X-Forwarded-Encrypted: i=1; AHgh+Ro7no8OYJvxKOHhUbzXGrM1baNXpKX4D/if9YHeWgH7v6QiM0700AJscslWiagrxRP9KP8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8X4TVTi8tsFh6jbzMbytrB7k0ZoLhWQVWSLteg/k8RIk3hD8v
+	iJIwMiJDuprS7YvzwxPpuT0yQNx7OQ5OFef6KuBSBxvygRlZvDquC9jSjlHug5vV
+X-Gm-Gg: AfdE7cmK1ghOMLaTwjpXcH51lLF74POaYWmkpYqPzf02eJeKX2gcRHDJ+yKGQS7Qaj3
+	SQhH3601LRVnemu0dCb3Iu6VjFMYvMTpWa/2RpGLRtGuJw5RbpVQbjDjfWyu0Hb+h4Bxo4OIiAK
+	2pk6ISrJW5CXZIcCK17WhHDLIyoXSnzNI9WdWaxcTb4htULd69cve/Loc2NpS0KMLRk6XIb+xJu
+	sol/WG4qyNMKZK4v60NWAxu5TsyLaqCxvGtnJBDB3lEHwqOB3581zwcR7qkODMItz7cdwf0dvZi
+	4NNvNjfzMIOPfnz24enYy0nEcDmlY/6CGdotILN2/M3byVq0tSDLdARAnCqZmcaUejqMAepIKT7
+	2RVs+KUbf68izIyBb0A6DqjPnjcvTy3wYtYdf8juNQEwYkl3MBfc2HmTum7WRC+sqSPhzhWUU1M
+	ZpOK61JGxaHEPX8d47EUG0mSr8FlYx6wiGq8pPJUwHfNFt3Hjqtt8iK3jcquajyA==
+X-Received: by 2002:a17:90b:3c08:b0:368:78da:803 with SMTP id 98e67ed59e1d1-38052583a4emr2912925a91.12.1782831264127;
+        Tue, 30 Jun 2026 07:54:24 -0700 (PDT)
+Received: from cps-manycore-1.. ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38095b684basm20122a91.1.2026.06.30.07.54.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 07:48:34 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 30 Jun 2026 16:48:30 +0200
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 05/13] uprobes/x86: Move optimized uprobe from nop5 to
- nop10
-Message-ID: <akPXPhXIf6Vz76Xc@krava>
-References: <20260526205840.173790-1-jolsa@kernel.org>
- <20260526205840.173790-6-jolsa@kernel.org>
- <aj5JuH6AtjDtWIVU@redhat.com>
- <akJNZN9gvZ30zKUf@krava>
- <akKf511eknMCE0AB@redhat.com>
+        Tue, 30 Jun 2026 07:54:23 -0700 (PDT)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Varun R Mallya <varunrmallya@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v4 0/2] bpf, sockmap: disallow sockmap mutation from tc, xdp, socket_filter and flow_dissector
+Date: Tue, 30 Jun 2026 14:54:04 +0000
+Message-ID: <20260630145410.3648099-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <akKf511eknMCE0AB@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 29, 2026 at 06:40:07PM +0200, Oleg Nesterov wrote:
-> On 06/29, Jiri Olsa wrote:
-> >
-> > --- a/arch/x86/kernel/uprobes.c
-> > +++ b/arch/x86/kernel/uprobes.c
-> > @@ -265,6 +265,10 @@ static bool is_prefix_bad(struct insn *insn)
-> >
-> >  		attr = inat_get_opcode_attribute(p);
-> >  		switch (attr) {
-> > +		case INAT_MAKE_PREFIX(INAT_PFX_CS):
-> > +			if (insn->x86_64)
-> > +				break;
-> > +			fallthrough;
-> >  		case INAT_MAKE_PREFIX(INAT_PFX_ES):
-> >  		case INAT_MAKE_PREFIX(INAT_PFX_DS):
-> >  		case INAT_MAKE_PREFIX(INAT_PFX_SS):
-> >
-> > or we could just skip it for nop10.. maybe that's better
-> 
-> Well, if you ask me I'd agree with the "maybe that's better" plan ;)
-> I mean... I don't think that INAT_PFX_CS should be "special" in is_prefix_bad.
-> 
-> But, whatever you do - I agree, feel free to keep my r-b.
+A tc, xdp, socket_filter or flow_dissector program updating or deleting
+a sockmap deadlocks on stab->lock vs sk_callback_lock and has no reason
+to. Patch 1 disallows it in may_update_sockmap(); patch 2 drops the
+selftests that exercised it.
 
-I ended up with the bigger change below, wdyt?
+v4:
+ - also drop BPF_PROG_TYPE_SOCKET_FILTER (John Fastabend)
 
-jirka
+v3:
+ - https://lore.kernel.org/all/20260629172704.1302218-1-rhkrqnwk98@gmail.com/
 
+v2:
+ - https://lore.kernel.org/all/20260620034632.2308-1-rhkrqnwk98@gmail.com/
 
----
-diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
-index 92626fce06a9..521a120a0c78 100644
---- a/arch/x86/kernel/uprobes.c
-+++ b/arch/x86/kernel/uprobes.c
-@@ -266,6 +266,7 @@ static bool is_prefix_bad(struct insn *insn)
- 		attr = inat_get_opcode_attribute(p);
- 		switch (attr) {
- 		case INAT_MAKE_PREFIX(INAT_PFX_ES):
-+		case INAT_MAKE_PREFIX(INAT_PFX_CS):
- 		case INAT_MAKE_PREFIX(INAT_PFX_DS):
- 		case INAT_MAKE_PREFIX(INAT_PFX_SS):
- 		case INAT_MAKE_PREFIX(INAT_PFX_LOCK):
-@@ -275,15 +276,9 @@ static bool is_prefix_bad(struct insn *insn)
- 	return false;
- }
- 
--static int uprobe_init_insn(struct arch_uprobe *auprobe, struct insn *insn, bool x86_64)
-+static int uprobe_init_insn(struct arch_uprobe *auprobe, struct insn *insn)
- {
--	enum insn_mode m = x86_64 ? INSN_MODE_64 : INSN_MODE_32;
- 	u32 volatile *good_insns;
--	int ret;
--
--	ret = insn_decode(insn, auprobe->insn, sizeof(auprobe->insn), m);
--	if (ret < 0)
--		return -ENOEXEC;
- 
- 	if (is_prefix_bad(insn))
- 		return -ENOTSUPP;
-@@ -292,7 +287,7 @@ static int uprobe_init_insn(struct arch_uprobe *auprobe, struct insn *insn, bool
- 	if (insn_masking_exception(insn))
- 		return -ENOTSUPP;
- 
--	if (x86_64)
-+	if (insn->x86_64)
- 		good_insns = good_insns_64;
- 	else
- 		good_insns = good_insns_32;
-@@ -1620,16 +1615,26 @@ static int push_setup_xol_ops(struct arch_uprobe *auprobe, struct insn *insn)
-  */
- int arch_uprobe_analyze_insn(struct arch_uprobe *auprobe, struct mm_struct *mm, unsigned long addr)
- {
-+	enum insn_mode m = is_64bit_mm(mm) ? INSN_MODE_64 : INSN_MODE_32;
- 	u8 fix_ip_or_call = UPROBE_FIX_IP;
- 	struct insn insn;
- 	int ret;
- 
--	ret = uprobe_init_insn(auprobe, &insn, is_64bit_mm(mm));
--	if (ret)
--		return ret;
-+	ret = insn_decode(&insn, auprobe->insn, sizeof(auprobe->insn), m);
-+	if (ret < 0)
-+		return -ENOEXEC;
- 
--	if (can_optimize(&insn, addr))
-+	/*
-+	 * No need to check instruction in uprobe_init_insn in case we
-+	 * are on top of optimizable nop10.
-+	 */
-+	if (can_optimize(&insn, addr)) {
- 		set_bit(ARCH_UPROBE_FLAG_CAN_OPTIMIZE, &auprobe->flags);
-+	} else {
-+		ret = uprobe_init_insn(auprobe, &insn);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	ret = branch_setup_xol_ops(auprobe, &insn);
- 	if (ret != -ENOSYS)
+v1:
+ - https://lore.kernel.org/all/20260616091153.2966617-1-rhkrqnwk98@gmail.com/
+
+Sechang Lim (2):
+  bpf, sockmap: disallow update and delete from tc, xdp, socket_filter
+    and flow_dissector
+  selftests/bpf: drop tc/xdp/flow_dissector/socket_filter sockmap
+    mutation tests
+
+ kernel/bpf/verifier.c                         |  5 --
+ .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 13 -----
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 52 -------------------
+ .../bpf/progs/freplace_cls_redirect.c         | 34 ------------
+ .../selftests/bpf/progs/test_sockmap_update.c | 48 -----------------
+ .../bpf/progs/verifier_sockmap_mutate.c       | 12 ++---
+ 6 files changed, 6 insertions(+), 158 deletions(-)
+ delete mode 100644 tools/testing/selftests/bpf/progs/freplace_cls_redirect.c
+ delete mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_update.c
+
+-- 
+2.43.0
+
