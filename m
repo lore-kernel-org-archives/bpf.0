@@ -1,61 +1,63 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58D85478E5E
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 20:50:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C79774534A5
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 20:51:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782852659; cv=none; b=segAoCIvm3INycxbYtVbvu1i5sxssFDg0vhBdLPT0qrWvmsvV3ASXbacsQco+e+0TkTB7xESAh3NY1iPA605mkuKUZo8B7MmQ+rekSSW8+PDyf+SgGbh75cp+PJ3jo3TYmq6wZ4sh5ZLHltZAnPN075Eod/H9K/l3MQlYr6FvsQ=
+	t=1782852665; cv=none; b=n8gZ/cTyXsBehGh1T6THd+do0+dsLRDs6gWIOpZhtVJNO/O1QqN5qa9Kms68ZVhf3dOo1lCC/aUF/CCY4FuE95v6wqJ0ZteVVdv3rV3erkHrYNxfU8Rmr79NqWtyCoXIVuIMYuwv/Hqjyp0vt5YZt3XfAc7E/xA1nWPcir7TAig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782852659; c=relaxed/simple;
-	bh=fK/MWsPyhM/NRS8LN/G6f6zgJ3L/0Mw5pNSYTbRJMDc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FOW1WZkyYIhiJN0pB9kkzEhNJCICgwmLTN8+ZShhOVKV+d4mz2u5xwT1w/dkPgU7mr0l481x+zDEGOiNrWh2UZM8v0+bWjpwF4ymJ60SaSdbfrzt3lokZ/fpHYjgX8xoXBHdDtlNIEJhc5HZ4goQL84w0iWdGqoqGw+nSJ++Iuc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T7HrGP7l; arc=none smtp.client-ip=209.85.214.172
+	s=arc-20240116; t=1782852665; c=relaxed/simple;
+	bh=9eRiyZzxLrtoYjnXIPP2OfGBo8eFMn7rPbbU+dGCphY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=BBE9URI9yFVIi+ZOEFMsMLpGdarLlC+0ukTxtsuJY/toJpa66YEDEgCfb7w2esZ8OfNqO11vY70U56CqjN+JOLaJePlJ5/vNitfsLW1F4ved8PwKSdp1bnFVRTijkUk3Pz0vjcAaJjqA4eJUenBQ/xLD3PVtXAUdlTK98MDHR2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mgcD2L+h; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T7HrGP7l"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ca265d6ca1so7627015ad.1
-        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 13:50:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mgcD2L+h"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-380544d00b1so640662a91.0
+        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 13:51:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782852656; x=1783457456; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bREOiO5mN7hLvS/DleneGMdLVSBD6LdzBp7bNvZIud4=;
-        b=T7HrGP7l88Lf1REDsU3vyF3oRCp/Pkch1PeD4ax2pdQQwkIwEONhWil81pmpKg+8Ag
-         rAoEgPzFMIlBHdH8bQVAlUP6DT9Hv3lkmxGGOxTMwa5nIb3V/Cg+dXfxkrBUFVBH8ZTA
-         bnPxcGXUBS4htBKKIt3SYiz8x+AiWdAk4ICOzuwAHDKzF+dmAT/Ax0n0StzI6vRuUT1v
-         iVhKD2JNRfZLzu2fOtnUw6gBXG5CoqT7JoeQ21IV666CD2uMW+g6RXk6ylt5PvnD5+v/
-         43kOygdBxyCJzf29YkluGH4/hQ0NfcGYAH3DmmeVBln65uovZVShBQur4ipr8S+VGhpM
-         3V8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782852656; x=1783457456;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1782852663; x=1783457463; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bREOiO5mN7hLvS/DleneGMdLVSBD6LdzBp7bNvZIud4=;
-        b=kyl1tiMLdp1urevkfbENc5KnuXiKzrXxhZ7IVn9NCvq+bwAMQXKlrrTlIKb837sMez
-         1ghmBq74D3Bki8Sv+1gdwvjKrHXTLuBs76tPHsM2516D7eBfdPk3e2WXMsR6HEaWCmLd
-         kW2F+O2/l2To5IYucjD8GTXOrOOQ2K2G7nEvH6xk54ZwQmyx88p3ZQ5BD507Xw9sJkE0
-         D+uXZetpodBoqwV6c41P1Ga7xGcBTKXlfxv3ZeTeGintdTnQPiXr51LySm3xtwSGgura
-         +61GBO2GFJ9scsEGE36wfekwuooudOjYO8+mOS41bOcASG0qwUTuvmtWyaUsrNhFlwti
-         zNgQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rqn93IB3gEzwwJEeQzAEcnPUh58jsC+3pmITVurBO/Ov1jQvQ03qV92g7oAJMilnhpr4V4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtZGrbHjMbQbdiGnVwkGEmdwdR6ixvpPU97MRAOmD9pVGej6oE
-	9QVzDhnMnhQEeHmX0UIkNfXEEc67Ba8Mh97BUSFziVbRrZblazWEVb9K
-X-Gm-Gg: AfdE7ckgYgS4d3mTv6OfwzV9/n23HcQw9D70wAJTi41PVS7e9xXdHL0kuMs/ItDMjLi
-	humt7msiyA6tiCUAJMGo3qsky/aob7KhL7jmnoG9u/NP0+ExK0XtZNq9tm6O5vJeLE4RBCoMIo4
-	XriM7TwL/5iiqC0T/nLWdgFQ1n1OLijwO1cxXfmw+U04cSXTakrJ0BOLQLZHgwJQiG943IZ40Vd
-	YXnII1lk7/FcklsrJUhoEUiRKV1V/BONQtak3t4b1eVkMGtUvFERVdkPyvRPdNnIIi+/cQlMs61
-	1JokkCEs2vAupe7Z3DKWnpiFxcMQ/bWZQYJMBML41/mQkiTxlp9WvA2Xt/AqRijsI8louPIRIuF
-	wSDrpYm4em85GXt7tpurxd+GDpPCcvEFk0c3h1GHm9wKwx8oWGwJIMxW7kiRcdUKJWGyKDl15iZ
-	skXSMwJVlIHwNfAqe2YzAIoayoDrWwEZ+YsuOedNrakESlBH0E5yc=
-X-Received: by 2002:a17:902:f54c:b0:2ca:d4f:adab with SMTP id d9443c01a7336-2ca44a060e1mr25125905ad.19.1782852656493;
-        Tue, 30 Jun 2026 13:50:56 -0700 (PDT)
+        bh=/ksGOdAvrWVQOc/6CEjrG1hzk2bKP0wufpP0CwkmqNo=;
+        b=mgcD2L+hav2B/mkWsuviNSjca04X3W6uZ4tegXWTjbNDM0efnVGiMVgbVfKlt0VwYn
+         MfYiFdgqMlYhlB6gVEfCZ3yEANbdJLUfogZDlU77xuWiE22w/Y1FB1RQabJbVCUleS/W
+         JZW5KlmXNKv+wObKKyBrxGHgsePDV4OKxPSoVtHmwioalq0vUNVM+0kBEefJGsw0TmAu
+         iPTl+1tJ/wObMDzu+1o6wSjj2KjDZJAZIE9Xd8lDuiEZa0T7dfeMbOpYMytWMDTzaV0o
+         vYfXg3leMAID8npboUqEj2oLE6e+NdvkO0aOo6FZ3xF/H3WXubm1P6EnkhwJzyzmJ6aJ
+         2ZNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782852663; x=1783457463;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/ksGOdAvrWVQOc/6CEjrG1hzk2bKP0wufpP0CwkmqNo=;
+        b=MSxEQmpyv4rUN+Uiw2bbAci4uxXk81s+zzQIBy2/VccOcgEPAS1Uv2EmI7TOzMAtWv
+         ticGPHis73S3OMSp51kJbqy5xGmQbyYqodW3EAsG/cpTlVGci19stY/WIPm9pZR6muC1
+         TxdEBTpxMGWCUqkS3HQ2e2wd0JAql+vEV6vp4BeLHossQXciHMGRLYi2h2Fv2xdP9itk
+         UVMHhw9AlgiqxWHO2DP/iM2DBN8uE6UBhtd3b0PWVZScxWhDZq58akk03pART4uDE6nd
+         uhAWYGCZad356NpOlU8L46ubBLE7aOJnwtIjlBWt7RBlc3H8Ti2yC1g9uRqf1m9+cc+H
+         3bPw==
+X-Forwarded-Encrypted: i=1; AHgh+RoAREy7+oTrpmKcv0rdHwqQogS7xR1rsNCPLCLPW5fp/vMUjqjZTGmKFqQM2JdP5nZrbaY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvdNmdlJL5+hxwybDJbUp2lCX7BB3T6d/Gxoy7jlm+nyLt2CyB
+	VEXV4Kj4/Z42o6gxNi73VgFm3ZEIlSaseKaAp45UcDpfRivkEAIQdh9R
+X-Gm-Gg: AfdE7clvDtFZDN26GV5GgRtFOeoLFY55uGpeiBKcQ3ybewPvCi54CKnS0YJtyRK2Yg6
+	b0C9aqvtz5zdH37XXyaSjGA3dO+s6llBQOyiFhjPqQIlVNOqiV6hIQ9jTCoZPCpfWxkdry1QC6n
+	YQ0xRlGm5TF7AErT40gdLX/pxOUlsO6YtAc8DRLd149+obWdnI/opLQy6rWeLgPTMrzLS67zMtZ
+	xcWM3kmo0jMhgLbZR25ysIgY24M6iRDASK+NJghreispFEe9/l25io1U5n9lP7hx94fmXDF0x6W
+	GTDpGHgFFGIrUg7aH23Cf3j2ooyhJJR2W2RwVM/wRIK+CrtLHQvLKN0BV++2P9l84iwUgu4JkPG
+	VFqlAkpk6zWBSCSzG8d89dmTf3irkdOvMwohCIUrfb1zHYibPjDWxbK2gBfR/LPcj0x21tyVUKk
+	30Uh02PTE/ULJtTezuOlO7D6T1r4biwWKbDLvsnXWYtKbsTiaHTxQ=
+X-Received: by 2002:a17:90b:224f:b0:368:83e6:ca95 with SMTP id 98e67ed59e1d1-38052388689mr4254366a91.0.1782852662945;
+        Tue, 30 Jun 2026 13:51:02 -0700 (PDT)
 Received: from cps-manycore-1.. ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca382ba1ccsm20322305ad.66.2026.06.30.13.50.50
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca382ba1ccsm20322305ad.66.2026.06.30.13.50.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 13:50:55 -0700 (PDT)
+        Tue, 30 Jun 2026 13:51:02 -0700 (PDT)
 From: Sechang Lim <rhkrqnwk98@gmail.com>
 To: Eric Dumazet <edumazet@google.com>,
 	Neal Cardwell <ncardwell@google.com>,
@@ -83,10 +85,12 @@ Cc: Kuniyuki Iwashima <kuniyu@google.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 0/2] bpf, sockmap: fix copied_seq left behind when a stream parser is removed
-Date: Tue, 30 Jun 2026 20:50:33 +0000
-Message-ID: <20260630205043.184894-1-rhkrqnwk98@gmail.com>
+Subject: [PATCH bpf 1/2] bpf, sockmap: settle copied_seq when a stream parser is removed
+Date: Tue, 30 Jun 2026 20:50:34 +0000
+Message-ID: <20260630205043.184894-2-rhkrqnwk98@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260630205043.184894-1-rhkrqnwk98@gmail.com>
+References: <20260630205043.184894-1-rhkrqnwk98@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -95,20 +99,48 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A stream-parser sockmap socket can be removed with SK_PASS data still
-parked on its ingress_msg queue. The copied_seq rollback for that data is
-never repaid, leaving copied_seq behind sk_receive_queue, so the native
-tcp_recvmsg() warns. Patch 1 settles copied_seq on removal. Patch 2 adds a
-selftest.
+tcp_bpf_strp_read_sock() rolls tp->copied_seq back by the SK_PASS bytes
+parked on the psock ingress_msg queue; tcp_bpf_recvmsg_parser() repays it
+as those bytes are delivered. When the socket leaves the sockmap they are
+purged undelivered and nothing repays the rollback, so copied_seq is left
+behind sk_receive_queue and the native tcp_recvmsg() warns:
 
-Sechang Lim (2):
-  bpf, sockmap: settle copied_seq when a stream parser is removed
-  selftests/bpf: test sockmap strparser recover with undelivered ingress
+  TCP recvmsg seq # bug: copied 66913561, seq 6691356A, rcvnxt 66913572, fl 40
+  WARNING: net/ipv4/tcp.c:2733 at tcp_recvmsg_locked+0x2d0/0x1270
+   tcp_recvmsg+0xba/0x340
+   inet_recvmsg+0x7a/0x370
+   sock_recvmsg+0xef/0x110
+   __sys_recvfrom+0x132/0x1e0
 
- net/ipv4/tcp_bpf.c                            |  9 +++
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 59 +++++++++++++++++++
- 2 files changed, 68 insertions(+)
+Settle copied_seq to the parser's consume point as the socket leaves the
+sockmap so it cannot trail the receive queue.
 
+Fixes: 36b62df5683c ("bpf: Fix wrong copied_seq calculation")
+Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+---
+ net/ipv4/tcp_bpf.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index cc0bd73f36b6..918f8da02c39 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -715,6 +715,15 @@ int tcp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
+ 	}
+ 
+ 	if (restore) {
++#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
++		/*
++		 * Settle the copied_seq rollback for the now-discarded
++		 * ingress_msg data so it cannot trail the receive queue
++		 */
++		if (sk_psock_test_state(psock, SK_PSOCK_RX_STRP_ENABLED) &&
++		    before(tcp_sk(sk)->copied_seq, psock->copied_seq))
++			WRITE_ONCE(tcp_sk(sk)->copied_seq, psock->copied_seq);
++#endif
+ 		if (inet_csk_has_ulp(sk)) {
+ 			/* TLS does not have an unhash proto in SW cases,
+ 			 * but we need to ensure we stop using the sock_map
 -- 
 2.43.0
 
