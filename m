@@ -1,110 +1,154 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C62264617;
-	Tue, 30 Jun 2026 03:12:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03ADD27144B
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 03:16:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782789183; cv=none; b=cQztp5//kcw/ZClhWStSm+d6103fjORCO/BYwu5hTqQ/ylwAJwN6afee9Q5Slly4xfdZTZ8sXNOuhPKhX6QQgyw8OTYCekQiWw1U7NoEzdtKvNp1MGpgX/GCjINQsxUCdYB1mJcL5qxQOqftygFTgrgG4ifjsEa6WVbAjR8+Vjo=
+	t=1782789395; cv=none; b=sPrkfYtlGWkJumiwyWlJMUwz3lH9Mv+/rwlPMTtUgQ/cH+aEhpBC2NJL3CVGpPKHMwPEBQZUmJGokAQTkQo6wVsVUM7CpHo9GxK4nJagTeVRAAGtTnPHicYjukKyU57YFVapnMHuXEZe1qDrAptBd0g4fE86Bvf8GbSMo/nDoQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782789183; c=relaxed/simple;
-	bh=/gjzEm9ltNohmq6N/JYDwBx5hXvsLgmkU42gn6o4lhA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cWg8+op6Vq/ygtCXXP31sKGcIa4I6Z0LbXY0Ho50JgKsDV5FidOl8zHDofLUp9CXKeYqR53S5srOtYB6XWtHbShrRvF22rkiQNSfBeQav7QxxnOAr6jmOC9Tf2Ctxstd6RPGySSTKa9vIyqmdXNGEySqAjqLAo4RthILN3ZMCWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 94166692743111f1aa26b74ffac11d73-20260630
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:65eb45f9-2d48-46f7-9c6b-e8dad5cd176a,IP:0,U
-	RL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:25
-X-CID-META: VersionHash:e7bac3a,CLOUDID:24d84fac57e3adc4c16301e1f1b049b9,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102|123|850|865|898,TC:nil,Content:0|15|
-	50,EDM:5,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,
-	OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 94166692743111f1aa26b74ffac11d73-20260630
-X-User: luoliang@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <luoliang@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1777881677; Tue, 30 Jun 2026 11:12:51 +0800
-From: luoliang@kylinos.cn
-To: Tejun Heo <tj@kernel.org>
-Cc: David Vernet <void@manifault.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Liang Luo <luoliang@kylinos.cn>
-Subject: [PATCH] tools/sched_ext: use btf_vlen() helper in compat.h
-Date: Tue, 30 Jun 2026 11:12:46 +0800
-Message-Id: <20260630031246.2618216-1-luoliang@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1782789395; c=relaxed/simple;
+	bh=wmAT7oOP/vwT9mP/MZRJBXWOiCFdYiaRXlaxXIF3x48=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ZDN3kSy7HYsMIsNg9TiMFHGZhzPcI3ysAiD2mzOhIFo4PyQvyikixtLWhtTYhKfXFu7J+Z1owmaJrhQvaoyMIWrtElJBUiWL7oKDROkMQsI6bBK61n6g7LFja66FjVkiE1EFWj+npJS1dI+2kRDY8f4wSpPBGimRuIXilqrL66U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vewvwlvg; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vewvwlvg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AE7C1F000E9;
+	Tue, 30 Jun 2026 03:16:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782789393;
+	bh=+gSbod73Sq2w7PYR2N+ds4nQeqsp0uMSvca5Of9moic=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Vewvwlvg8+Uz/5ZVt+sZnQFx4qEqf+iZmpwmRtXhlwut+6e43SlY/rimhBRps/B6t
+	 dG22DYHN0/lBvmzwZdbb0WSzw57NR/48umJri+eTx7JACBkCrTNtwFGZ4GVAEo3OXO
+	 EoVH1gIqL84udExEVtL1ud0ONluDh4F7BjWgOgqKC+7FOYHs0VqCwxF4LAt8sFCbAV
+	 AQ1SgJNQX2lvclFROUM1ISBHY4RbjrtK8iq+tcBvkTr5x+uHLd680EbmHGTzz9mFcn
+	 9L4QjfIjU91THNCEIhoJQ0vXdejkNiIcKp45808rdA/VLk02O1p7gitK683KW8KSq7
+	 JvIVOi9kGYPBg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf] selftests/bpf: Skip libarena when the BPF backend
+ lacks 32-bit arena cmpxchg
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "George Guo" <dongtai.guo@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260630025809.74043-1-dongtai.guo@linux.dev>
+References: <20260630025809.74043-1-dongtai.guo@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 30 Jun 2026 03:16:33 +0000
+Message-Id: <20260630031633.7AE7C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: luoliang <luoliang@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-__COMPAT_read_enum() and __COMPAT_struct_has_field() open-code the
-vlen lookup via the raw BTF_INFO_VLEN(t->info) UAPI macro, whose
-result type is __u32 (t->info is __u32 and 0xffff is promoted to
-unsigned). Comparing it against the int loop counter triggers
--Wsign-compare in every example scheduler that includes compat.h.
+New issues:
+- [High] The patch misdiagnoses the root cause of the Clang crash and imple=
+ments a workaround that incorrectly skips `libarena` tests instead of fixin=
+g the underlying build configuration.
 
-libbpf already exposes btf_vlen() for exactly this purpose; it
-returns __u16, the natural width of the vlen field, and the usual
-integer promotions turn the 'int < __u16' comparison into a plain
-'int < int' so the warning goes away without any cast. This matches
-the pattern already used in-kernel (e.g. kernel/bpf/inode.c) and in
-tools/bpf/bpftool. Replace the three open-coded lookups with
-btf_vlen(t). No functional change.
+Pre-existing issues:
+- [High] The patch fails to apply the new 32-bit cmpxchg guard to the ASAN =
+variant of `libarena`, leaving the selftests build vulnerable to the exact =
+same compiler crash it attempts to fix.
+--
 
-Signed-off-by: Liang Luo <luoliang@kylinos.cn>
----
- tools/sched_ext/include/scx/compat.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+commit e34c5b107c762422f1dc3835420230ecdcd78708
+Author: George Guo <guodongtai@kylinos.cn>
 
-diff --git a/tools/sched_ext/include/scx/compat.h b/tools/sched_ext/include/scx/compat.h
-index 039854c490d5..df5ca1ce20f6 100644
---- a/tools/sched_ext/include/scx/compat.h
-+++ b/tools/sched_ext/include/scx/compat.h
-@@ -42,7 +42,7 @@ static inline bool __COMPAT_read_enum(const char *type, const char *name, u64 *v
- 	if (btf_is_enum(t)) {
- 		struct btf_enum *e = btf_enum(t);
- 
--		for (i = 0; i < BTF_INFO_VLEN(t->info); i++) {
-+		for (i = 0; i < btf_vlen(t); i++) {
- 			n = btf__name_by_offset(__COMPAT_vmlinux_btf, e[i].name_off);
- 			SCX_BUG_ON(!n, "btf__name_by_offset()");
- 			if (!strcmp(n, name)) {
-@@ -53,7 +53,7 @@ static inline bool __COMPAT_read_enum(const char *type, const char *name, u64 *v
- 	} else if (btf_is_enum64(t)) {
- 		struct btf_enum64 *e = btf_enum64(t);
- 
--		for (i = 0; i < BTF_INFO_VLEN(t->info); i++) {
-+		for (i = 0; i < btf_vlen(t); i++) {
- 			n = btf__name_by_offset(__COMPAT_vmlinux_btf, e[i].name_off);
- 			SCX_BUG_ON(!n, "btf__name_by_offset()");
- 			if (!strcmp(n, name)) {
-@@ -97,7 +97,7 @@ static inline bool __COMPAT_struct_has_field(const char *type, const char *field
- 
- 	m = btf_members(t);
- 
--	for (i = 0; i < BTF_INFO_VLEN(t->info); i++) {
-+	for (i = 0; i < btf_vlen(t); i++) {
- 		n = btf__name_by_offset(__COMPAT_vmlinux_btf, m[i].name_off);
- 		SCX_BUG_ON(!n, "btf__name_by_offset()");
- 			if (!strcmp(n, field))
--- 
-2.43.0
+selftests/bpf: Skip libarena when the BPF backend lacks 32-bit arena cmpxchg
 
+This patch introduces a feature probe to detect if the BPF backend supports
+32-bit arena cmpxchg operations. It skips building libarena and its
+dependent tests if the operation is unsupported to prevent build aborts.
+
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
+ts/bpf/Makefile
+> index b642ee489ea64..0098d892cb39e 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+
+[ ... ]
+
+> @@ -91,6 +91,17 @@ CLANG_HAS_ARENA_ASAN :=3D $(shell echo 'int x;' | \
+>  	-mllvm -asan-shadow-addr-space=3D1 \
+>  	-x c -c - -o /dev/null 2>/dev/null && echo 1)
+> =20
+> +# The arena qspinlock used by libarena performs a 32-bit atomic cmpxchg =
+on an
+> +# arena (address space 1) pointer. Not every LLVM BPF backend can select=
+ it;
+> +# older releases bail out with "unsupported atomic operation, please use=
+ 64 bit
+> +# version", which aborts the whole selftests build. Probe for the operat=
+ion and
+> +# skip libarena (and its dependent tests) when the backend cannot handle=
+ it.
+> +CLANG_HAS_ARENA_CMPXCHG32 :=3D $(shell printf '%s\n' \
+> +	'struct s { int counter; };' \
+> +	'int f(struct s __attribute__((address_space(1))) *l, int o, int n)' \
+> +	'{ return __sync_val_compare_and_swap(&l->counter, o, n); }' | \
+> +	$(CLANG) --target=3Dbpf -O2 -x c -c - -o /dev/null 2>/dev/null && echo =
+1)
+> +
+
+[Severity: High]
+Does this feature probe artificially fail by omitting the -mcpu=3Dv4 flag?
+
+Because the probe runs against the default BPF CPU target (which lacks 32-b=
+it
+atomic support), it will falsely report that the backend lacks support and
+unnecessarily skip the tests.
+
+Could the actual root cause of the build failure be that libarena's
+BPF_CFLAGS in tools/testing/selftests/bpf/libarena/Makefile is missing
+the -mcpu=3Dv4 flag?=20
+
+For example, test_progs-cpuv4 successfully compiles progs/arena_spin_lock.c
+because it explicitly passes -mcpu=3Dv4. Would adding -mcpu=3Dv4 to the
+libarena Makefile fix the compilation error natively instead of skipping
+the tests entirely?
+
+>  # Order correspond to 'make run_tests' order
+>  TEST_GEN_PROGS =3D test_verifier test_tag test_maps test_lru_map test_pr=
+ogs \
+>  	test_sockmap \
+
+[ ... ]
+
+> @@ -835,10 +846,13 @@ LIBARENA_BPF_DEPS :=3D $(wildcard libarena/Makefile=
+		\
+>  				 libarena/selftests/*		\
+>  				 libarena/*.bpf.o)
+> =20
+> +ifneq ($(CLANG_HAS_ARENA_CMPXCHG32),)
+>  LIBARENA_SKEL :=3D libarena/libarena.skel.h
+> +CFLAGS +=3D -DHAS_BPF_ARENA
+> =20
+>  $(LIBARENA_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(LIBARENA_BPF_DEPS)
+>  	+$(MAKE) -C libarena libarena.skel.h $(LIBARENA_MAKE_ARGS)
+> +endif
+> =20
+>  ifneq ($(CLANG_HAS_ARENA_ASAN),)
+>  LIBARENA_ASAN_SKEL :=3D libarena/libarena_asan.skel.h
+
+[Severity: High]
+This is a pre-existing issue, but doesn't the ASAN variant of libarena
+also need protection from this compiler crash?
+
+The LIBARENA_ASAN_SKEL build is only guarded by CLANG_HAS_ARENA_ASAN, which
+checks for ASAN flag support but not 32-bit cmpxchg support.=20
+
+Since the ASAN build compiles the exact same buddy.bpf.c source code
+containing the 32-bit arena cmpxchg, the compiler will still crash here
+with the exact same "Cannot select: AtomicCmpSwap" error if the target
+lacks 32-bit atomics.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260630025809.7404=
+3-1-dongtai.guo@linux.dev?part=3D1
