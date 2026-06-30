@@ -1,146 +1,182 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DAB3D567A
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 15:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8092B3546D3
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 16:04:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782833485; cv=none; b=RpsMvCCGpkCHDmfg0gnjDU0VVvTkugtT+/yMumsQPss/1OwLyrS7YmBMBs0NRymNXQYSf4Sj6Q7g6DiHvJzkCVA5RAExy1Xv0m//euguqmlsY0J9D+hfpMMRgh0MxsXs/Tco5XUaM+CuPyLL1ZW9J/40AHuXL+IZ+m88fyZh108=
+	t=1782835492; cv=none; b=rDUPKmLfv/54ECqbcCD5fV9Y0nF7tr/lA6jcSBd7wWwCymn7yZ3+X/svmSEF8QQ6IxUO/q9CeEalUH8OjhUFSqEC7B0x/e6Xb/OUhH8/kBGqvxDeLikqa7XpQglqCXHVNpEhOii0ofDAUqxDf5gt7are2QT6wnDjL/2cRivSc/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782833485; c=relaxed/simple;
-	bh=Af2OFosjMlWHn9gojCzudn6jQgDHfgbDX9XZj9usug0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Fbjzgwn5LNxOXNWUFLhD8ciF8CTaYGjvz9CYbfhq7+Eb9/tilHn+wSXcgZOZPBJIz0dPtWboBqZd5sTq9AfJxjlJAan0zkhSQoQaR6X40TFqM81D05YKQE8LfcPz6OhngsuKR8OiAZSoOhy8kyXEdFYnBKo5mBWH6V+6c60ggf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=JIrSzssd; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1782835492; c=relaxed/simple;
+	bh=gnxLHcVgClfVWz5Z9psgzTnjkbBo03gIXTKKfAZdZU8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=gozzPc2VauFDcICcfhi6BPnpB56JZ9ZeINsTasVsJgmATfr509h51dWSyKtp5mHGQdikqf0qgnapdWKX0ZKDciMhCwp3AFbjc1PKNvBuPY7C5u8huA14gWF+R2YIerVwY1E+nP4Fkc7v6DWkaTyOaG5b+bjzY3o1BxgQ78VXIXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y2FKRQZe; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=cN0oTRXh; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="JIrSzssd"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=XGx2RPFA90K8ecslMt0497adzQl5eWEZN2+YFLmY1Pk=; b=JIrSzssdgni8itL/pdBcbdIH1d
-	WO0WVoxRymjqEfwsod5gHzbpYpCqBPF4xWshsv5kpBncLVATX1KvKq2LIYRW6O0VNM6yaP83UpRy0
-	EJXMXE+6CR6yQQzDk3V2CPjx4ydfN577PrROoP4sUe0kjj0HSg2TmRyL+WSlsaQkMi4J3edQUQehp
-	RTK0i+Tzum/0XWVK7OX2/tbiF6AbfUfKIayTSqk2MpjjrVzdfCdXvPBeh8TiuJT0cvSmmBvaqGrbs
-	aJBKXM3sXhT4r19vlef+KA1Ybb1twzVY5U/4ekYY9RSwFrioC8s53ZIpLYg/tabq2BlCDlQ+KvJqm
-	nuriMQ1g==;
-Received: from sslproxy07.your-server.de ([78.47.199.104])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1weaQc-000Mrc-0j;
-	Tue, 30 Jun 2026 17:31:14 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1weaQb-000GvA-2I;
-	Tue, 30 Jun 2026 17:31:13 +0200
-Message-ID: <e3c95beb-8b74-4037-8520-9f3c18a35606@iogearbox.net>
-Date: Tue, 30 Jun 2026 17:31:13 +0200
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y2FKRQZe";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="cN0oTRXh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782835489;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gnxLHcVgClfVWz5Z9psgzTnjkbBo03gIXTKKfAZdZU8=;
+	b=Y2FKRQZe+gVFDrgPe3xXkkVa6jsVTNvaXWrZcVhESxb9Ax6qBS1+/4d7iyQGH5hkk4OGyT
+	bG6o/jlrdFRkToVkpgFJ0Aa1mM+BiDY0zj1Imxh4YqfHw9Ju8R17HYQdXQ+N8R+NNEYNWn
+	mgMwmY++qFcCJCKkOZ0JlncNQ3rMoNk=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-451-XMUOtATJNCajI4Hsy0M8YA-1; Tue, 30 Jun 2026 12:04:46 -0400
+X-MC-Unique: XMUOtATJNCajI4Hsy0M8YA-1
+X-Mimecast-MFC-AGG-ID: XMUOtATJNCajI4Hsy0M8YA_1782835485
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-475de65009dso683225f8f.0
+        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 09:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1782835485; x=1783440285; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gnxLHcVgClfVWz5Z9psgzTnjkbBo03gIXTKKfAZdZU8=;
+        b=cN0oTRXht8efcyJTON9/Rhgq3t5BYAmy9k8uEs3eUe/Oqv8ROTVgJNCw630q3NCEqE
+         LOGfKF/0K1KGj/KhbDVb6OnXAvuvDm4mosadAlXpFGVHChtIfX+kpgeMZw1NuvxXKkJ0
+         H/rnQeh5pX2EjpwK1C92id90VTiwP8VjqQuQz/XRYrUL7wsuKiEcr2ffkjZhqGjJlmcY
+         IqfL9EA2tUmi8nYqZyQA3FEwqmEVq79PcmHDHrH5NfcIWdLz+/dqUWjPgT2/PRRQ2WWq
+         g3bVfBmNTPIOE7XLRGQpzrBiPO6WQOjy7IHJx1zu0dB575x3zdlcTV/ISujAyB4iaU83
+         iuqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782835485; x=1783440285;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=gnxLHcVgClfVWz5Z9psgzTnjkbBo03gIXTKKfAZdZU8=;
+        b=ppyneKZZw8tLJlSNZsxZFL4WBcIQwZ2pKXpTKkn9f7OMgyqVB6OmhzVIoEW1t5ZIs8
+         Q4nj+mlRvR0gCK/indKhnnzyVRtjoxBJRSehwirv1zHO16nWlcyCWDJ8znFXcbu4DOBM
+         qN+i3+iDR/vlI1sMZ6rOTHAa3qufMRqL2L8b73Z/tPFjLLAzeLQo5nAb4YRoCMnWu4Jn
+         hyBzRa45BFzRmA1K4a/NOMHQXeA+JYE3MWIugoCVrtxEQE7n7ofWwypQe0WEJ9rTEU+r
+         aLZzBvNCmyiKh5BQ1x9cLGJEPeXCfWI6omKVd+aW5TplmkifW9aabQhvxSAqXtKspFiR
+         8Qhw==
+X-Forwarded-Encrypted: i=1; AHgh+Rp/DIPn9bcbizhxWE3aKMCuJtBvU2kKf+5zaeXm8ZJ3c/wT+dYZXX2yzSCYr01McrIdGGg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaoJsnbt0Izt8nXmf1TiKZVywwtIMRQJg6VH3vNlLGJp6Nhfnf
+	mfofGcKq70+wwHGTkQxG8q6I2c/UkXh7bihxf1CUHbQERwoqm6SHsWR762aTciSwgVyvnwEGuxm
+	DTnloQP2tgyd+uu0R6G7AqdAPNnzBrO83pYt/jE3tz7HSrWKSxUjTew==
+X-Gm-Gg: AfdE7cnAj+LoXWh4fZWs2ah3o7iAZJcI+87UjfsShtnTkPclVDQGwsaG8JWL04eZ2wR
+	JryZohlQDg9dRWyZqRhuEAJud4EuKH17z/ypyy4cxg7SpCkmI9bIGp09zsqn6L+/WUDB2JoQJvU
+	l9hC4jAzkzhc5ReFY7fIit7Xmw2pltETgE/csdphtkv1zVIMf6rStww8MJoq13csFocGWqCNN+r
+	pip3ZRuftCMjMyK8cn9sJJsuZ/wJcSbGn7dQ3ZK95POb45ViD45eiPzTotNzlHkciG9CjpEP73y
+	35151grgoma20pufJYkuLYbJUEzCCsNHWioBd64e7XOI0Md1Vhp6euXRswC0WPeaXV8xwahLDC8
+	yjea38R0xZSZtsOx+AMhNJVBcWXZoIFYQCKwHxw==
+X-Received: by 2002:a5d:6e47:0:b0:470:2fb1:3db5 with SMTP id ffacd0b85a97d-475524a8385mr3587010f8f.30.1782835485190;
+        Tue, 30 Jun 2026 09:04:45 -0700 (PDT)
+X-Received: by 2002:a5d:6e47:0:b0:470:2fb1:3db5 with SMTP id ffacd0b85a97d-475524a8385mr3586955f8f.30.1782835484588;
+        Tue, 30 Jun 2026 09:04:44 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4756636ce7esm9527715f8f.23.2026.06.30.09.04.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2026 09:04:44 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 23A5E80A689; Tue, 30 Jun 2026 18:04:43 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: David Ahern <dsahern@kernel.org>, Avinash Duduskar
+ <avinash.duduskar@gmail.com>, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org
+Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
+ yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
+ a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
+ eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
+ bpf_fib_lookup() helper
+In-Reply-To: <cf25f667-1095-4f84-98ff-bf4662d3faa8@kernel.org>
+References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
+ <20260624030530.3342884-2-avinash.duduskar@gmail.com>
+ <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org> <87se65bd04.fsf@toke.dk>
+ <2ffa32dd-5c88-488a-aa23-deef13465eb9@kernel.org> <87echobb5h.fsf@toke.dk>
+ <cf25f667-1095-4f84-98ff-bf4662d3faa8@kernel.org>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Tue, 30 Jun 2026 18:04:43 +0200
+Message-ID: <874iik2ew4.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] bpf: reject BPF_MAP_TYPE_INODE_STORAGE creation
- if BPF LSM is uninitialized
-To: Matt Bobrowski <mattbobrowski@google.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Paul Moore <paul@paul-moore.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, oxsignal <awo@kakao.com>
-References: <20260628201103.3624525-1-mattbobrowski@google.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260628201103.3624525-1-mattbobrowski@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28046/Mon Jun 29 08:27:20 2026)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 6/28/26 10:11 PM, Matt Bobrowski wrote:
-> When CONFIG_BPF_LSM=y is set, BPF inode storage maps
-> (BPF_MAP_TYPE_INODE_STORAGE) are compiled into the kernel. However,
-> if the BPF LSM is not explicitly enabled at boot time (e.g. omitted
-> from the "lsm=" boot parameter), lsm_prepare() is never executed for
-> the BPF LSM.
-> 
-> Consequently, the BPF inode security blob offset
-> (bpf_lsm_blob_sizes.lbs_inode) is never initialized and remains at its
-> default compiled size of 8 bytes instead of being updated to a valid
-> offset past the reserved struct rcu_head (typically 16 bytes or more).
-> 
-> When a privileged user creates and updates a
-> BPF_MAP_TYPE_INODE_STORAGE map, bpf_inode() evaluates
-> inode->i_security + 8. This erroneously aliases the struct
-> rcu_head.func callback pointer at the beginning of the
-> inode->i_security blob. During subsequent map element cleanup or inode
-> destruction, writing NULL to owner_storage clears the queued RCU
-> callback pointer. When rcu_do_batch() later executes the queued
-> callback, it attempts an instruction fetch at address 0x0, triggering
-> an immediate kernel panic.
-> 
-> Fix this by introducing a global bpf_lsm_initialized boolean flag
-> marked with __ro_after_init. Set this flag to true inside
-> bpf_lsm_init() when the LSM framework successfully registers the BPF
-> LSM. Gate map allocation in inode_storage_map_alloc() on this flag,
-> returning -EOPNOTSUPP if the BPF LSM is in turn uninitialized.
-> 
-> This fail-fast approach prevents userspace from allocating inode
-> storage maps when the supporting BPF LSM infrastructure is absent,
-> avoiding zombie map states.
-> 
-> Fixes: 8ea636848aca ("bpf: Implement bpf_local_storage for inodes")
-> Reported-by: oxsignal <awo@kakao.com>
-> Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
+David Ahern <dsahern@kernel.org> writes:
 
-(Looks like pwbot is asleep; applied to bpf.)
+> On 6/30/26 4:00 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>>> It does not make sense to require a flag to get lookup output. vlan
+>>> proto of 0 is not valid, so it is a clear indication that the vlan
+>>> output parameters were not set during the lookup.
+>>=20
+>> Okay, so we could just unconditionally set the VLAN fields, but if we
+>> start rewriting the ifindex that would be a change of the existing
+>> behaviour that could break existing applications, no?
+>
+> Consistently dealing with upper devices is one of the reasons I never
+> sent patches for vlan support.
+>
+> xdp support is at the driver layer for real (physical) devices. The fib
+> lookup is going to return the vlan device index - a virtual device.
+> Support for xdp should not be propagated to virtual devices; it goes
+> against the intent of xdp. Any trip down this path will have to decide
+> how to handle vlan-in-vlan use cases. Where is the line drawn for fast
+> networking?
+
+Right, which is why we need building blocks that makes it possible for
+XDP programs to do the right thing in the BPF code :)
+
+A helper that resolves the parent could be used for stacked VLANs as
+well (just calling the helper multiple times).
+
+>> Specifically, if an XDP application has a table of the interfaces it
+>> forwards between, today they'd get a VLAN interface ifindex, which would
+>> not be in that table, and the application would return XDP_PASS. Whereas
+>> if we change the ifindex and populate the VLAN tag, suddenly the
+>> interface would be in the table, but because the application doesn't
+>> read the returned VLAN tag, it will end up sending packets out without
+>> tagging them, leading to broken forwarding.
+>
+> I have not followed developments over the past few years. Does XDP have
+> support for vlan acceleration in the Tx path now? You really want that
+> to deal with vlans and not replicating s/w processing in ebpf.
+
+It does not, no. There's TX metadata for AF_XDP, but VLAN support is not
+in there (see include/uapi/linux/if_xdp.h).
+
+Doesn't mean software VLAN handling can't be useful, though; there are
+use cases other than the very high end where XDP can speed things up
+even if it has to write a VLAN tag or two...
+
+>> So if we don't want the flag, we'd need some other mechanism to resolve
+>> the parent ifindex, AFAICT? Maybe a xdp_get_parent_ifindex() kfunc, say?
+>> That could also be made generic for other stacked interface types, I
+>> suppose.
+>>=20
+>> WDYT?
+>
+> dealing with stacked devices is hard :-)
+>
+> What is the return is a bond device or a vlan on a bond device?
+
+Well, bond devices have XDP support, so you can just redirect to those :)
+
+But yeah, each type of stacked device would need to pass different
+information through to the XDP program, and the program would need to
+support those. Building a single XDP program that supports all of them
+will require quite a bit of code, and would probably not perform super
+well. But most deployments have distinct subsets of features they need,
+so this does not have to be a blocker, IMO?
+
+-Toke
+
