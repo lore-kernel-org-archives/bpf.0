@@ -1,53 +1,60 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA4618871F;
-	Tue, 30 Jun 2026 12:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE583FBEC1
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 12:46:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782822817; cv=none; b=JDpRbS0SSahIKYyqStIkA4GyP5jR8cZqT5E9MeAepobb+xapZ3Nq5TwAZ4eP2WUxdMd4kwRZn4jnUdBUEgUpRsuBEdKyUv68Ee6T5gJA84IB3NMOx/drQ80be2lF37uqIstffetO/pmA0iJXkiEjIaej9cymmVaw3+JHzPVSAms=
+	t=1782823604; cv=none; b=hPjJNB93tLMC/Hn2QBkvA2+eHp7M94Dm1M5tSAKHdpWBEUZdas/BCZnOTqn6N1woRDWKOnm0XUTqYqKxYKDbHDsoqZ5ZXd99wlCbRE1pcWU06doXyMdNhtMMsVnt/8Q3QXlTCJVabjaeP0v5jW6ML7MCOV1ChON8YXeRZQULJoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782822817; c=relaxed/simple;
-	bh=fmcjA+8zx9ng55VbxjMg0pdkvEml9BpWwChGtvRVN9w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PuTdtRfc5AS+LxVpASPZ4+Sqv2y1pFSetrC9/cHdoPSGfRsAQcJpzeGT7zna/wtGRfscqJ8WsIMn98Vbu5v4TPOouufe4MAEM0+QOvot/hhvddL/TM0PpsRuflVZICXmI1SDjRaYiq21hKKZgq+RvOKbPIM/02ffXqPHBJ6TwiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=EUbDFW3h; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1782823604; c=relaxed/simple;
+	bh=PxqKtpx3FyLpZNRYpTr7hcZOV7MsKvNIU9b44l4suLU=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=Mc9OOoYzRwDPgkgPNymwESKpIORXaxlmd3XSwdEwsmGvHFyMlbZVyc0oMjlI3Uuy0dCPzoNRtVkbXPmhLSasjM9ajT2Yn4keEml7I4HD3QNvj7Gfq074otqzSHjVZOZTkA9e9D2Whzo8XpAvcF29brvWWek0ZRr9k7qhZXrEE6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=IubpzA3+; arc=none smtp.client-ip=203.205.221.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="EUbDFW3h"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=c2qHVEHihA5zjk8EnCG+2QyPJvH+BtbDoswXeUR0QU0=; b=EUbDFW3hiQ1JxmRF8pZBPNWKpa
-	qD7PAQQydVU4uAst6KJ2vJbe2dMx7BBjqRaSG1RLn7M1GGkITo/vdietxAvYlXYISKfzhBl/8irPO
-	eWzuw0DRRSrRcAvHu70XCWFtzSLD6jtG9/jAtncvu/d4K2eheF08eKkkGfb5plsDyN7ho0GVEKHIx
-	2RG1LfsxJYHRbp632I0nCGVpBGCFlLn2fNqlqazSIXnLwAJIdMfaMntbeiR9kQCH6BPKcd+ovpgWi
-	fPSCCS1/IEvhbR9ju2/u0xi8gH5mgA2oxDmcmu2l0zuyGWtBFTq5uQfI+7+B6N1nAdjWWzI9y7MUi
-	dR2uAK/w==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1weXeg-000Ncu-1a;
-	Tue, 30 Jun 2026 14:33:34 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: kuba@kernel.org
-Cc: pabeni@redhat.com,
-	jhs@mojatatu.com,
-	bigeasy@linutronix.de,
-	andrii@kernel.org,
-	memxor@gmail.com,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH net 3/3] selftests/bpf: Add test for redirect from qdisc qevent block
-Date: Tue, 30 Jun 2026 14:33:31 +0200
-Message-ID: <20260630123331.186840-4-daniel@iogearbox.net>
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="IubpzA3+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1782823599; bh=NlISi6Rp/uuCxNnD2Etwb/tWLq6Cin3Mm/X4skjvR7s=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=IubpzA3+wpiV2AIPx+fqM9pd0IzehOjvUG3lHnHF9t6BBNnHs7V0PALdmspVsQBqz
+	 1tiVfMv3futg6HRDj3YOSbIQ72yz1T8kOctugQ8yDRoXga/aHO8BttppyEWAOBV7Eq
+	 1No0HRAcNOZVhHpEMc1K26TTyUmIlbw9H8MYknsc=
+Received: from lxu-ped-host.. ([111.198.231.89])
+	by newxmesmtplogicsvrszb43-0.qq.com (NewEsmtp) with SMTP
+	id BA4B2CE7; Tue, 30 Jun 2026 20:46:36 +0800
+X-QQ-mid: xmsmtpt1782823596tj0y34xgz
+Message-ID: <tencent_B6259ABAF5BB63335B9E3C1BB74B071BD608@qq.com>
+X-QQ-XMAILINFO: Nj+lDvaLCxoMXhcko6wIWnPCjB0eSfVRTB26+OCAW/vdXE5lbw1ou9JGeaMq19
+	 7MgHJKDPvitT5i1NFKrIhLbYH2x+yyOvQV2UrOoxcGfKX1gyVTm8bwx/ILeRd3kRZRzOdLotGfLU
+	 qrD3ZL1o+7Ob96EXX9KgV3xmKQv1C2FWGRxKUrrINmeXQ3XBN3IvWp2KvLBBoRdpLkCxTKyUyTWB
+	 Q5zq3ZRhdHnHVKjxRvh5az/op2DNTKqbjaS97nSA9o/HsUid7fwF/p0H/Ww8yDaSSdcHQ2jixiIA
+	 7IhlIzqNL6ogmHT0f4QbBDObpdFbbWl7dXophKAdlgWi6QP9+ccy6DalTmseCnraK1XXodTxFP/h
+	 j2/vBH2ORcohThCIafP4j3Afu82g8XUYEG2ezIQsm/p29QA8NXj+qh+veH3h5SnZ617Ag3hFj2Vm
+	 6yBJhva4XCtE31V82v5f7VWaPMiyhfHQqQvUjwi1bVnl8MzXaVkhHv4ybOrISyvT45zgPwODFpyj
+	 83GXtJMIsTFovdUBNG0dFa3HFArdbdM86hHNAP6dqTK7/ECO6YZv2OSUYks2XA1aOtIO3+G4/EWh
+	 qnJkaPcghECr14SSJVpmugleRAmmYoII64w9nRUvcEWOg4a16l1WrBczRGNbqZ7sgBqXeET/QTBN
+	 GZw7rNhUTrpasr1A1dL6vuKenDoXAJaizdkL6BwfzzD0x4cJVjtvcty0JALPoRvVPzNyxuJOgo+K
+	 jjf21PZBv1V0QPFRkAYDVOeP2Ts68f2liZw0ZZ6aDgaVN5aVmVImUv7pmdDDt1fIY2vinDo8K0J5
+	 Ma7xAJzaaBIEZHkTwdevM19HpdGps22ltoiUGxv2YJbuHUUPOj4WfaipGsYfrSb9Bc9TrqqwSiOP
+	 /gxsB5CqeZ5rKeOV2aGtRj19Hi4ulLz6df/X+Ygf9vyKEIdB63962sYXr6FAm6rM1F38mM4Cuaxk
+	 LkVabudPNmRuuS4ixYSfh7osDTl2ohEEvjbT7ZmmVnicZ61gaF94WgoNPzJKngr/nte5NQzUn+Ur
+	 Bk6HLC8KQhOe34nx12ojNZ/Cs/JlQ=
+X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+From: Edward Adam Davis <eadavis@qq.com>
+To: jiayuan.chen@linux.dev
+Cc: bpf@vger.kernel.org,
+	eadavis@qq.com,
+	sashiko-bot@kernel.org,
+	sashiko-reviews@lists.linux.dev
+Subject: Re: [PATCH v2] bpf: Fix smp_processor_id() call trace for preemptible kernels
+Date: Tue, 30 Jun 2026 20:46:37 +0800
+X-OQ-MSGID: <20260630124636.953001-2-eadavis@qq.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260630123331.186840-1-daniel@iogearbox.net>
-References: <20260630123331.186840-1-daniel@iogearbox.net>
+In-Reply-To: <f72ebb75-66e8-47ae-b1f0-e77d6a24f3e0@linux.dev>
+References: <f72ebb75-66e8-47ae-b1f0-e77d6a24f3e0@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,191 +62,91 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28046/Mon Jun 29 08:27:20 2026)
 
-Add a regression test for the NULL current->bpf_net_context deref hit
-when a BPF classifier attached to a qdisc qevent block asks for a
-redirect. The classifier runs from tcf_qevent_handle() on the qdisc
-enqueue path, outside any bpf_net_context.
+On Tue, 30 Jun 2026 20:25:30 +0800, Jiayuan Chen wrote:
+>On 6/30/26 7:14 PM, Edward Adam Davis wrote:
+>> On Tue, 30 Jun 2026 09:48:23 +0000, Sashiko wrote:
+>>> [Severity: High]
+>>> Does this fix the issue at the right layer? By adding the preemption
+>>> protection here, it masks the fact that the caller is running with migration
+>>> enabled, which leaves sibling APIs vulnerable.
+>>>
+>>> For example, in __rhtab_map_lookup_and_delete_batch() in
+>>> kernel/bpf/hashtab.c, the batch loop iterates and calls rhtab_delete_elem()
+>>> without disabling migration.
+>>>
+>>> If the map elements contain special fields (like BPF_KPTR),
+>>> rhtab_delete_elem() will first call rhtab_check_and_free_fields(), which
+>>> eventually calls bpf_mem_free().
+>>>
+>>> Since bpf_mem_free() also uses this_cpu_ptr() without get_cpu() protection:
+>>>
+>>> kernel/bpf/memalloc.c:bpf_mem_free() {
+>>>      ...
+>>>      unit_free(this_cpu_ptr(ma->caches)->cache + idx, ptr);
+>>>      ...
+>>> }
+>>>
+>>> Will this result in the exact same BUG being triggered on that path? Should
+>>> the missing migration protection be added to
+>>> __rhtab_map_lookup_and_delete_batch() instead of modifying the allocator
+>>> here?
+>> Like this?
+>>
+>> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+>> index 9f394e1aa2e8..7b98c2eea685 100644
+>> --- a/kernel/bpf/hashtab.c
+>> +++ b/kernel/bpf/hashtab.c
+>> @@ -3345,8 +3345,10 @@ static int __rhtab_map_lookup_and_delete_batch(struct bpf_map *map,
+>>   	}
+>>
+>>   	if (do_delete) {
+>> +		get_cpu();
+>>   		for (i = 0; i < total; i++)
+>>   			rhtab_delete_elem(rhtab, del_elems[i], NULL, 0);
+>> +		put_cpu();
+>>   	}
+>>
+>>   	rcu_read_unlock();
+>
+>
+>This splat is specific to rhash...
+>
+>For HASH/PERCPU_HASH/..., most operations are performed under
+>bpf_disable_instrumentation(); see __htab_map_lookup_and_delete_batch().
+>
+>But for rhash, bpf_mem_cache_free_rcu() is called outside the
+>bpf_disable_instrumentation() region; see
+>__rhtab_map_lookup_and_delete_batch().
+Let's use bpf_disable/enable_instrumentation() consistently to protect
+__rhtab_map_lookup_and_delete_batch().
 
-  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t qevent
-  [...]
-  + /etc/rcS.d/S50-startup
-  ./test_progs -t qevent
-  #496/1   tc_qevent/redirect_verdict:OK
-  #496/2   tc_qevent/redirect_helper:OK
-  #496     tc_qevent:OK
-  Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
-
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- tools/testing/selftests/bpf/config            |   1 +
- .../selftests/bpf/prog_tests/tc_qevent.c      | 113 ++++++++++++++++++
- .../selftests/bpf/progs/test_tc_qevent.c      |  23 ++++
- 3 files changed, 137 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_qevent.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_tc_qevent.c
-
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index adb25146e88c..ea7044f30adc 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -82,6 +82,7 @@ CONFIG_NET_SCH_BPF=y
- CONFIG_NET_SCH_FQ=y
- CONFIG_NET_SCH_INGRESS=y
- CONFIG_NET_SCH_HTB=y
-+CONFIG_NET_SCH_RED=y
- CONFIG_NET_SCHED=y
- CONFIG_NETDEVSIM=y
- CONFIG_NETFILTER=y
-diff --git a/tools/testing/selftests/bpf/prog_tests/tc_qevent.c b/tools/testing/selftests/bpf/prog_tests/tc_qevent.c
-new file mode 100644
-index 000000000000..67e1d17567ab
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/tc_qevent.c
-@@ -0,0 +1,113 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+#include <sys/socket.h>
-+#include <netinet/in.h>
-+#include <arpa/inet.h>
-+#include <unistd.h>
-+#include <string.h>
-+
-+#include "test_tc_qevent.skel.h"
-+
-+#define NS_TX		"tc_qevent_tx"
-+#define NS_RX		"tc_qevent_rx"
-+#define IP_TX		"10.255.0.1"
-+#define IP_RX		"10.255.0.2"
-+#define PIN_PATH	"/sys/fs/bpf/tc_qevent_redirect"
-+
-+static void blast_udp(void)
-+{
-+	struct sockaddr_in dst = {};
-+	char buf[1400] = {};
-+	int fd, i;
-+
-+	fd = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (!ASSERT_GE(fd, 0, "udp socket"))
-+		return;
-+
-+	dst.sin_family = AF_INET;
-+	dst.sin_port = htons(12345);
-+	inet_pton(AF_INET, IP_RX, &dst.sin_addr);
-+
-+	/*
-+	 * Push far more than the RED queue can hold. Once qavg crosses qth_min
-+	 * every further packet hits the congestion_drop / early_drop qevent.
-+	 */
-+	for (i = 0; i < 50000; i++)
-+		sendto(fd, buf, sizeof(buf), MSG_DONTWAIT,
-+		       (struct sockaddr *)&dst, sizeof(dst));
-+
-+	close(fd);
-+}
-+
-+static void run_qevent_redirect(struct bpf_program *prog, __u64 *counter)
-+{
-+	struct nstoken *tok = NULL;
-+	int err;
-+
-+	SYS_NOFAIL("ip netns del %s", NS_TX);
-+	SYS_NOFAIL("ip netns del %s", NS_RX);
-+	unlink(PIN_PATH);
-+
-+	err = bpf_program__pin(prog, PIN_PATH);
-+	if (!ASSERT_OK(err, "pin prog"))
-+		return;
-+
-+	SYS(unpin,  "ip netns add %s", NS_TX);
-+	SYS(del_tx, "ip netns add %s", NS_RX);
-+	SYS(del_rx, "ip -n %s link add veth0 type veth peer name veth1 netns %s", NS_TX, NS_RX);
-+	SYS(del_rx, "ip -n %s addr add %s/24 dev veth0", NS_TX, IP_TX);
-+	SYS(del_rx, "ip -n %s link set veth0 up", NS_TX);
-+	SYS(del_rx, "ip -n %s addr add %s/24 dev veth1", NS_RX, IP_RX);
-+	SYS(del_rx, "ip -n %s link set veth1 up", NS_RX);
-+
-+	tok = open_netns(NS_TX);
-+	if (!ASSERT_OK_PTR(tok, "open_netns"))
-+		goto del_rx;
-+
-+	SYS(close_ns, "tc qdisc add dev veth0 root handle 1: htb default 1");
-+	SYS(close_ns, "tc class add dev veth0 parent 1: classid 1:1 htb rate 1mbit ceil 1mbit");
-+
-+	if (system("tc qdisc add dev veth0 parent 1:1 handle 11: red "
-+		   "limit 500000 avpkt 1000 probability 1 min 5000 max 6000 "
-+		   "burst 6 qevent early_drop block 10 2>/dev/null")) {
-+		test__skip();
-+		goto close_ns;
-+	}
-+
-+	if (system("tc filter add block 10 bpf da object-pinned "
-+		   PIN_PATH " 2>/dev/null")) {
-+		test__skip();
-+		goto close_ns;
-+	}
-+
-+	blast_udp();
-+	ASSERT_GT(*counter, 0, "qevent classifier ran");
-+close_ns:
-+	close_netns(tok);
-+del_rx:
-+	SYS_NOFAIL("ip netns del %s", NS_RX);
-+del_tx:
-+	SYS_NOFAIL("ip netns del %s", NS_TX);
-+unpin:
-+	bpf_program__unpin(prog, PIN_PATH);
-+}
-+
-+void test_tc_qevent(void)
-+{
-+	struct test_tc_qevent *skel;
-+
-+	skel = test_tc_qevent__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	if (test__start_subtest("redirect_verdict"))
-+		run_qevent_redirect(skel->progs.qevent_redirect_verdict,
-+				    &skel->bss->verdict_calls);
-+	if (test__start_subtest("redirect_helper"))
-+		run_qevent_redirect(skel->progs.qevent_redirect_helper,
-+				    &skel->bss->helper_calls);
-+
-+	test_tc_qevent__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_tc_qevent.c b/tools/testing/selftests/bpf/progs/test_tc_qevent.c
-new file mode 100644
-index 000000000000..1529c111f4aa
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_tc_qevent.c
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+int redirect_ifindex = 1;
-+__u64 verdict_calls = 0;
-+__u64 helper_calls = 0;
-+
-+SEC("tc")
-+int qevent_redirect_verdict(struct __sk_buff *skb)
-+{
-+	__sync_fetch_and_add(&verdict_calls, 1);
-+	return TCX_REDIRECT;
-+}
-+
-+SEC("tc")
-+int qevent_redirect_helper(struct __sk_buff *skb)
-+{
-+	__sync_fetch_and_add(&helper_calls, 1);
-+	return bpf_redirect(redirect_ifindex, 0);
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 9f394e1aa2e8..d3f2f8a379e8 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -3299,6 +3299,7 @@ static int __rhtab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 	dst_val = values;
+ 	total = 0;
+ 
++	bpf_disable_instrumentation();
+ 	rcu_read_lock();
+ 
+ 	/*
+@@ -3313,6 +3314,7 @@ static int __rhtab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 		elem = rhtab_lookup_elem(map, cursor);
+ 		if (!elem) {
+ 			rcu_read_unlock();
++			bpf_enable_instrumentation();
+ 			ret = -EAGAIN;
+ 			goto free;
+ 		}
+@@ -3350,6 +3352,7 @@ static int __rhtab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 	}
+ 
+ 	rcu_read_unlock();
++	bpf_enable_instrumentation();
+ 
+ 	if (total == 0) {
+ 		ret = -ENOENT;
 
