@@ -1,98 +1,110 @@
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CF9358369
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 09:23:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D293ED3B3
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 09:48:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782811430; cv=none; b=KUTOwsSY0DCM9GHL7bNeej0eIieNuxC9QFwIEJFbpm65EQi17IEcfC61HBaXJUs92LDFRnZpwBhuUwwl1E9nnm93A+BSvacztT1yt4jhL66AG7E3ZreWLSPt9cLyb2fUvZ1pTpwS6jC+eA5CmPSaHXzHBhbxj5WeTmfSwgErIQ8=
+	t=1782812905; cv=none; b=UVlOB5QuxX2LCINH+Xi/I1muRqym72sqPzm2Y6uQ0IqYtxXUcSy0xVT5d2fHc+V89YMTpatlHLCGoHYE2LFhubDGlHg4+x4hoig/voHrBzSs8mYeEo4AdajVGmhxBLhFVfIwMIEJvGTzXzRUh3ireP+32Q2dkHyijQyV17rhHQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782811430; c=relaxed/simple;
-	bh=aqczyMpEG5BbZ598I8o/Wi9L5s+QEPdes93UA6gNdPs=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=excW8e55upPyGkBH5PQ0jQWjQ4JyrHnxikxA223nbD4FUJkjINI4MDEeyqkkrXWx0oGx66ZrouVgPcWrNI9tAop+WvA3h4+qQPhsrB6WQI56r32PKkm3A+H9nNebGjBj4GAVkUy+aTh94M2l4T8NephALCPO2LOmD3UiqxDb/To=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-48f0c5d20c6so7262249b6e.2
-        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 02:23:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782811428; x=1783416228;
-        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t34TSfkiH4ytfaQmHSXYPoxFCM5arp0uf4f1vQVJqI0=;
-        b=WSiBnG8mQTOleLoF3vVuNMymamS8PA0zXPaG4mgvfURCFZu117rvXqR5cyIUD3EqZX
-         yUkOkq4I8cRkCSdNeFsPLnX4C7jqwAcn2APircVqpe2COsg77JRjSXrxsPzIzCoqTnDm
-         kiXrbv+S8T5h73Fdb2CpdrcAkxEvZH2KhTlyLGIEn12oJIgeVNPfnOTex2GDPfIpTw3X
-         ClTnYwU3C5qHn1MlgAtpyaXL21ctW9aE1PgMT7qI0F03hr2zqIZVnW/PuG5bnz4Dw7MK
-         uqwLdL7+ARefg7qxFGLv+szSCp12I3/epdCQPYPvqWM2jMcR4HDmdTwzmgu/tifw/rmD
-         d88w==
-X-Forwarded-Encrypted: i=1; AFNElJ/wJoMY3dJDqpE7TWBx+ZIHsl/XHq+VekRFUkv6AyOmLwsBMA+3U00KT0hjCrvR5uZu7S4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyR44rbidNERx0B1NSJTe5xBOpggd/hG8brXkv1wjkIvbvXwtBI
-	Le6/gbLVU7ktTxRu7w3FqjcQXlJQGfX/mZM949Q0Ftv1k4+2Rf8P/hTAhoFntmxw1sR7fjmU4ZU
-	w4Xozlw+3LdMk/wX9uASvZMoD4yxtyzRaTymqYgsRjbD25B8yyvZfURf6qz4=
+	s=arc-20240116; t=1782812905; c=relaxed/simple;
+	bh=SBrsYnp8nWmUIkU9WJP8Nl8H+TnO/nxtNfDvbbFwjqc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ZSnzdYwWhPOKSvxe+n7+aXEw9YMJy30vOEvkhDAIVk7ZN8C0SIkJMQEiin7UvC/UynBsswLDX/CPPTGy+w1J8MO+ABDxH5wZGzzK47KZHPMgt8oQ18iMtDkanNal0TwBxbcJ6BwOv9ie0FwIpFWii7OWOrtgBl+TZxS0Yilj5E4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NM+1jwHX; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NM+1jwHX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 897BD1F00A3D;
+	Tue, 30 Jun 2026 09:48:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782812904;
+	bh=9lHoOdeiBXFiVyC2J1edLTFPMx92pr/EwYNXje33gcI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=NM+1jwHXt184rV/Fd9k8VhXl2K4DrTjjSzjohiq7UU4ZZzvouTIbBVPDkpizrohCZ
+	 kGKZbvkMHmZ7x3awmJNLOc3z5lOzeXEx4o1VtDwyx0wWjv62IlylNG+4x9gl6RYJsl
+	 YPDZ/bq7SH/BzEHtTams8DGJdtW06eW8m3csSTvK58B2b/cVLKnuMcW3Yf+cg8ObvG
+	 QxHkGHFvtNKWLx5b9nImw+z5G387F4Pvl3tvy1+T+hwijMR8K0vti8pBe15VDKWUp/
+	 KYwDFOcCp6gMWcmC2PXJsrJ6rKtA1vZuHt5aAr5mp48UevVIJPE75p5c8IEivDyseT
+	 +agd1NNlljusQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2] bpf: Fix smp_processor_id() call trace for
+ preemptible kernels
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Edward Adam Davis" <eadavis@qq.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <tencent_45066D89AD6EF9AED34CA567FA46CA52C606@qq.com>
+References: <20260630084910.D5C3A1F000E9@smtp.kernel.org>
+ <tencent_45066D89AD6EF9AED34CA567FA46CA52C606@qq.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 30 Jun 2026 09:48:23 +0000
+Message-Id: <20260630094823.897BD1F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Received: by 2002:a05:6808:4fe0:b0:490:9b13:e9cd with SMTP id
- 5614622812f47-495eaf31d75mr2574075b6e.24.1782811428183; Tue, 30 Jun 2026
- 02:23:48 -0700 (PDT)
-Date: Tue, 30 Jun 2026 02:23:48 -0700
-In-Reply-To: <20260630023443.3026627-2-sanghyun.park.cnu@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6a438b24.6124255a.dd83.0009.GAE@google.com>
-Subject: [syzbot ci] Re: bpf: Fix use-after-free on mm_struct in bpf_find_vma()
-From: syzbot ci <syzbot+cid1a625374f9dbb34@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com, 
-	haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org, 
-	kpsingh@kernel.org, linux-kernel@vger.kernel.org, martin.lau@linux.dev, 
-	memxor@gmail.com, puranjay@kernel.org, sanghyun.park.cnu@gmail.com, 
-	sdf@fomichev.me, song@kernel.org, yonghong.song@linux.dev
-Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
 
-syzbot ci has tested the following series
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] The patch addresses the syzbot warning at the wrong layer by addin=
+g `get_cpu()`/`put_cpu()` inside the BPF memory allocator. This masks the c=
+aller's missing migration protection while leaving sibling allocator APIs v=
+ulnerable to the exact same crash.
+--
 
-[v5] bpf: Fix use-after-free on mm_struct in bpf_find_vma()
-https://lore.kernel.org/all/20260630023443.3026627-2-sanghyun.park.cnu@gmail.com
-* [PATCH bpf-next v5] bpf: Fix use-after-free on mm_struct in bpf_find_vma()
+commit 231004c76441ce47022b6f1dabd04453961dcac4
+Author: Edward Adam Davis <eadavis@qq.com>
 
-and found the following issue:
-kernel build error
+bpf: Fix smp_processor_id() call trace for preemptible kernels
 
-Full report is available here:
-https://ci.syzbot.org/series/f0ce67c9-2c09-418c-bbe2-c698246e9c7f
+This patch wraps unit_free_rcu() with get_cpu() and put_cpu() in
+bpf_mem_cache_free_rcu() to avoid a preemption warning.
 
-***
+Reported-by: syzbot+fd7e415d891073b83e1f@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=3Dfd7e415d891073b83e1f
 
-kernel build error
+> diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
+> index e9662db7198fe..8f91f2b3848ff 100644
+> --- a/kernel/bpf/memalloc.c
+> +++ b/kernel/bpf/memalloc.c
+> @@ -951,7 +951,9 @@ void notrace bpf_mem_cache_free_rcu(struct bpf_mem_al=
+loc *ma, void *ptr)
+>  	if (!ptr)
+>  		return;
+> =20
 
-tree:      bpf-next
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
-base:      53435562a725962e4de0c29653223129ba11643a
-arch:      amd64
-compiler:  Debian clang version 22.1.6 (++20260514074242+fc4aad7b5db3-1~exp1~20260514074407.73), Debian LLD 22.1.6
-config:    https://ci.syzbot.org/builds/a434cf48-2810-46a3-bb75-064be88b96be/config
+[Severity: High]
+Does this fix the issue at the right layer? By adding the preemption
+protection here, it masks the fact that the caller is running with migration
+enabled, which leaves sibling APIs vulnerable.
 
-kernel/bpf/task_iter.c:1017:3: error: call to undeclared function 'bpf_iter_mmput_async'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+For example, in __rhtab_map_lookup_and_delete_batch() in
+kernel/bpf/hashtab.c, the batch loop iterates and calls rhtab_delete_elem()
+without disabling migration.
 
-***
+If the map elements contain special fields (like BPF_KPTR),
+rhtab_delete_elem() will first call rhtab_check_and_free_fields(), which
+eventually calls bpf_mem_free().
 
-If these findings have caused you to resend the series or submit a
-separate fix, please add the following tag to your commit message:
-  Tested-by: syzbot@syzkaller.appspotmail.com
+Since bpf_mem_free() also uses this_cpu_ptr() without get_cpu() protection:
 
----
-This report is generated by a bot. It may contain errors.
-syzbot ci engineers can be reached at syzkaller@googlegroups.com.
+kernel/bpf/memalloc.c:bpf_mem_free() {
+    ...
+    unit_free(this_cpu_ptr(ma->caches)->cache + idx, ptr);
+    ...
+}
 
-To test a patch for this bug, please reply with `#syz test`
-(should be on a separate line).
+Will this result in the exact same BUG being triggered on that path? Should
+the missing migration protection be added to
+__rhtab_map_lookup_and_delete_batch() instead of modifying the allocator
+here?
 
-The patch should be attached to the email.
-Note: arguments like custom git repos and branches are not supported.
+> +	get_cpu();
+>  	unit_free_rcu(this_cpu_ptr(ma->cache), ptr);
+> +	put_cpu();
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/tencent_45066D89AD6=
+EF9AED34CA567FA46CA52C606@qq.com?part=3D1
