@@ -1,255 +1,107 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 456743672A2;
-	Tue, 30 Jun 2026 02:27:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E927E36605A;
+	Tue, 30 Jun 2026 02:29:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782786445; cv=none; b=Fz5Yv6NaFNPFRqAW8rJBQ7g6/Pwae711+yEezPrAFUdTJtVKGryZLRknT/XcFKkWuXZ5UNoFjauDdeMehKLTl96T1mkM+lsLgdGcIXBZUXeenw1SeEFXxtyncOxvmBKGhH0ZOjxmgEGfe+plfFdx+9eYlRY2af26bxu6jFeqJlc=
+	t=1782786563; cv=none; b=OlMHbi43zoxDY/eUB3prvJlmrbo9rztaUW97rglTvYCnZGryngharc9eKOTA4S1rcV4lfLeupPVlT/vx78SKrLnBiR63rkBMw5R5yACgRg3BGJe2nKdRhbhS14Ue1B+TCRKUJkyfeevv2HtqWstq85YFFCASui46NxLbudmWTTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782786445; c=relaxed/simple;
-	bh=df1PM/UFAncMmhwncHAXEcUL/9wbCpS8UU8f/sv3xek=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nNvZdWPhdz/rDUdu8Ge82cMnEa8GU2Yu5eOMfmoKOLXK5158sKOmXuSpVwe2RRMP2b3vWOicz+Eas1LSR1t219VWFw4hucmBdt4mhDiSh8q9FwMH9fTozsTSUP471YTVVt/MruEYVj80NZ++Ez87Z5ZPuIIxg866cnyTR7Bm6Lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8DxFOh_KUNq4HcZAA--.59354S3;
-	Tue, 30 Jun 2026 10:27:11 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJBxbcJ6KUNqIH24AA--.20759S6;
-	Tue, 30 Jun 2026 10:27:10 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Hengqi Chen <hengqi.chen@gmail.com>
-Cc: loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 4/4] LoongArch: BPF: Implement branchless conditional move for TCC
-Date: Tue, 30 Jun 2026 10:27:05 +0800
-Message-ID: <20260630022705.11536-5-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20260630022705.11536-1-yangtiezhu@loongson.cn>
-References: <20260630022705.11536-1-yangtiezhu@loongson.cn>
+	s=arc-20240116; t=1782786563; c=relaxed/simple;
+	bh=juTJQJWa3HS79THiD/lohh02iaQ6EKMAcfxyy/1PGXQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sSUUn9SuBL9cxdIrp3jK7h/FXm0fgr1J5ORi2B0yqIGqdRP7B9bDwQ86MLAEAIt7VzYPdsvV+zLzzmJG+yJ0yGW+Pv9RxtRhZVST2TAVQUFwk+qrqdWUQcjjawKlUBD2YC6c6nMGLJlsm36w3bNllp5v9qQLrMEw9nCSkZeuFKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gq6Wq5yGyzYQtfg;
+	Tue, 30 Jun 2026 10:28:23 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id D570B40590;
+	Tue, 30 Jun 2026 10:29:15 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgDH_Cb6KUNqKow+AQ--.27894S2;
+	Tue, 30 Jun 2026 10:29:15 +0800 (CST)
+Message-ID: <06c23b18-b385-45d0-a602-a82c00f5aab8@huaweicloud.com>
+Date: Tue, 30 Jun 2026 10:29:14 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJBxbcJ6KUNqIH24AA--.20759S6
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW3GFW8KFykur1kJrWDJF4DJrc_yoW3Kw1fpa
-	sFkrsYgr4kXF13tFnrAa18urZ5Aws5CrW3WF1DJrWvy3sxury5W3WUKr1agFW5Crn5Zr10
-	qr1Yvw42va1DJ3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAF
-	wI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7V
-	AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
-	r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6x
-	IIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAI
-	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x
-	0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8l38UUUUUU==
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH bpf-next 00/12] bpf: Introduce static-defined tracing
+ probe for BPF
+Content-Language: en-US
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ KP Singh <kpsingh@kernel.org>, Anton Protopopov <a.s.protopopov@gmail.com>,
+ Amery Hung <ameryhung@gmail.com>, Eyal Birger <eyal.birger@gmail.com>,
+ Rong Tao <rongtao@cestc.cn>
+References: <cover.1782571533.git.xukuohai@huawei.com>
+ <855e44f3-d22c-47e5-8bd1-c5d9f7014a75@linux.dev>
+ <ec28f0f9-0693-4c9b-88fa-bffca446a63c@huaweicloud.com>
+ <b8d8ab5e-bef1-4c95-8e5b-ea9768041b2e@linux.dev>
+ <55499fcf-d552-4366-9016-21ede7f687ac@huaweicloud.com>
+ <4f30012f-778b-4c7d-b610-2e18cf01abdd@linux.dev>
+ <678ec73d-06f1-4860-94be-be000ca462d4@huaweicloud.com>
+ <b4b906cb-e7b2-4ba7-bbb9-e6c813238859@linux.dev>
+ <8ea18b6a-932c-4eb0-a536-d52ce3e1f457@huaweicloud.com>
+ <1f10e056-744e-45bf-af93-6192668be79c@linux.dev>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <1f10e056-744e-45bf-af93-6192668be79c@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:_Ch0CgDH_Cb6KUNqKow+AQ--.27894S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtFWDtrWDZFW5Gw48Cry8Xwb_yoWftrX_u3
+	s5ur1vywsF9r1xXr4rtF18AFWxKr4UArWUXFW5uF45J395Ja92qr4DK3srZwn3trW8WFsI
+	vrZxJa4xZr429jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbx8YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+	67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+	kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AK
+	xVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+	AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
+	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAwI
+	DUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-The current implementation handles combined bpf2bpf and tail calls by
-checking at runtime whether REG_TCC holds a count or an address via a
-conditional jump (BPF_JGT against 33). This adds non-negligible branch
-prediction overhead in the hot path of tail call execution.
+On 6/30/2026 10:14 AM, Leon Hwang wrote:
+> On 30/6/26 09:19, Xu Kuohai wrote:
+>> On 6/29/2026 9:53 PM, Leon Hwang wrote:
+>>
+>> So it is more of a user-space workaround than a formal solution. And even
+>> for this workaround, there is no need to add a new libbpf API to remove the
+>> stub. You can simply build two versions of bpf prog, one with subprog and
+>> one without. When you need to trace fentry, load the first one; otherwise,
+>> load the second one.
+> 
+> Yep.
+> 
+>>
+>> What SDT resolves is dynamic tracing after the prog is loaded, the hacking
+>> before loading does not apply.
+>>
+> I think current implementation is too complicated to justify this kind
+> of workaround. I'd be more comfortable with a simpler approach.
+>
 
-To eliminate this runtime conditional branch in prologue, refactor the
-logic of prepare_bpf_tail_call_cnt() with a branchless conditional move
-mechanism using unsigned comparison and mask instructions.
+Right, the implementation is indeed in a somewhat prototype state and needs
+polish. The RFC was sent out to check if this is a worthwhile direction. I'll
+craft a cleaner, refined version after getting more feedback.
 
-When the program is a main program (is_main_prog), the branchless logic
-classifies and blends the incoming REG_TCC based on its physical content
-according to three possible entrance statuses:
-
-1) Initial Entry (Scalar): Enter via a standard event, where REG_TCC is
-   initialized to a pure scalar 0.
-2) Inherited Entry (Scalar): Enter via a flat main-to-main tail call,
-   where REG_TCC carries an accumulated scalar count (1 to 33) reloaded
-   from the prior stack frame.
-3) Inherited Entry (Pointer): Enter via a tail call from a subprogram,
-   where REG_TCC inherits and carries a massive kernel pointer address
-   reloaded from the prior stack frame.
-
-To handle these cases seamlessly without branching:
-- sltui identifies the type of REG_TCC. For cases 1 and 2 (scalar count),
-  it sets the temporary register T8 to 1. For case 3 (kernel pointer), it
-  sets T8 to 0.
-- maskeqz handles the local stack pointer (T7). If T8 == 1, it keeps T7
-  intact. If T8 == 0, it clears T7 to 0.
-- masknez handles the incoming REG_TCC to prevent register pollution.
-  If T8 == 1, it clears REG_TCC to 0 (erasing 1~33 scalars). If T8 == 0,
-  it keeps the massive kernel pointer intact.
-- or combines the results. The scalar cases yield a clean local stack
-  pointer by evaluating REG_TCC (0) | T7, while the pointer case leaves
-  the inherited global pointer intact by evaluating REG_TCC | T7 (0).
-
-For subprograms, the logic directly backs up the verified TCC pointer
-inherited via REG_TCC into its own local "tcc" slot, ensuring the global
-counter reference remains safely propagated across function frames.
-
-Finally, the finalized REG_TCC pointer is unconditionally backed up into
-the adjacent "tcc_ptr" slot, completing the expected dual-slot stack
-layout identically across all entry paths.
-
-This optimization refactors the inner logic of the helper function,
-unifies the offset decrement at the function entry, and uses safe
-internal temporary registers (T7 and T8) to prevent any JIT register
-conflicts, completely removing all runtime branching from the prologue
-hot path.
-
-When exposed to complex bpf2bpf + tailcall interleaved control flows,
-where inputs shuffle dynamically between a scalar count (0 to 33) and
-a massive kernel pointer address, clear improvements are demonstrated.
-Furthermore, the optimization significantly eliminated uncertainty in
-the execution path, making the performance more stable and predictable.
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/include/asm/inst.h |  6 +++
- arch/loongarch/net/bpf_jit.c      | 74 +++++++++++++++++--------------
- 2 files changed, 46 insertions(+), 34 deletions(-)
-
-diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
-index 76b723590023..19feae166e1c 100644
---- a/arch/loongarch/include/asm/inst.h
-+++ b/arch/loongarch/include/asm/inst.h
-@@ -97,6 +97,7 @@ enum reg2i6_op {
- };
- 
- enum reg2i12_op {
-+	sltui_op	= 0x09,
- 	addiw_op	= 0x0a,
- 	addid_op	= 0x0b,
- 	lu52id_op	= 0x0c,
-@@ -153,6 +154,8 @@ enum reg3_op {
- 	addd_op		= 0x21,
- 	subw_op		= 0x22,
- 	subd_op		= 0x23,
-+	maskeqz_op	= 0x26,
-+	masknez_op	= 0x27,
- 	nor_op		= 0x28,
- 	and_op		= 0x29,
- 	or_op		= 0x2a,
-@@ -644,6 +647,7 @@ static inline void emit_##NAME(union loongarch_instruction *insn,	\
- 	insn->reg2i12_format.rj = rj;					\
- }
- 
-+DEF_EMIT_REG2I12_FORMAT(sltui, sltui_op)
- DEF_EMIT_REG2I12_FORMAT(addiw, addiw_op)
- DEF_EMIT_REG2I12_FORMAT(addid, addid_op)
- DEF_EMIT_REG2I12_FORMAT(lu52id, lu52id_op)
-@@ -749,6 +753,8 @@ DEF_EMIT_REG3_FORMAT(divd, divd_op)
- DEF_EMIT_REG3_FORMAT(modd, modd_op)
- DEF_EMIT_REG3_FORMAT(divdu, divdu_op)
- DEF_EMIT_REG3_FORMAT(moddu, moddu_op)
-+DEF_EMIT_REG3_FORMAT(maskeqz, maskeqz_op)
-+DEF_EMIT_REG3_FORMAT(masknez, masknez_op)
- DEF_EMIT_REG3_FORMAT(and, and_op)
- DEF_EMIT_REG3_FORMAT(or, or_op)
- DEF_EMIT_REG3_FORMAT(xor, xor_op)
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index b30132f44541..ec46d598e8a9 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -52,50 +52,56 @@ static void prepare_bpf_tail_call_cnt(struct jit_ctx *ctx, int *store_offset)
- 	const struct bpf_prog *prog = ctx->prog;
- 	const bool is_main_prog = !bpf_is_subprog(prog);
- 
-+	*store_offset -= sizeof(long);
- 	if (is_main_prog) {
--		/*
--		 * LOONGARCH_GPR_T3 = MAX_TAIL_CALL_CNT
--		 * if (REG_TCC > T3 )
--		 *	std REG_TCC -> LOONGARCH_GPR_SP + store_offset
--		 * else
--		 *	std REG_TCC -> LOONGARCH_GPR_SP + store_offset
--		 *	REG_TCC = LOONGARCH_GPR_SP + store_offset
--		 *
--		 * std REG_TCC -> LOONGARCH_GPR_SP + store_offset
--		 *
--		 * The purpose of this code is to first push the TCC into stack,
--		 * and then push the address of TCC into stack.
--		 * In cases where bpf2bpf and tailcall are used in combination,
--		 * the value in REG_TCC may be a count or an address,
--		 * these two cases need to be judged and handled separately.
--		 */
--		emit_insn(ctx, addid, LOONGARCH_GPR_T3, LOONGARCH_GPR_ZERO, MAX_TAIL_CALL_CNT);
--		*store_offset -= sizeof(long);
--
--		emit_cond_jmp(ctx, BPF_JGT, REG_TCC, LOONGARCH_GPR_T3, 4);
--
--		/*
--		 * If REG_TCC < MAX_TAIL_CALL_CNT, the value in REG_TCC is a count,
--		 * push tcc into stack
--		 */
-+		/* Save entrance TCC state (scalar count or kernel pointer) to local 'tcc' slot */
- 		emit_insn(ctx, std, REG_TCC, LOONGARCH_GPR_SP, *store_offset);
- 
--		/* Push the address of TCC into the REG_TCC */
--		emit_insn(ctx, addid, REG_TCC, LOONGARCH_GPR_SP, *store_offset);
--
--		emit_uncond_jmp(ctx, 2);
-+		/* Compute the absolute pointer to the local 'tcc' slot */
-+		emit_insn(ctx, addid, LOONGARCH_GPR_T7, LOONGARCH_GPR_SP, *store_offset);
- 
- 		/*
--		 * If REG_TCC > MAX_TAIL_CALL_CNT, the value in REG_TCC is an address,
--		 * push tcc_ptr into stack
-+		 * Branchless classification and blending:
-+		 *
-+		 * In combined bpf2bpf and tailcall scenarios, REG_TCC can carry
-+		 * either a scalar count (0 to 33) or an inherited kernel pointer address.
-+		 *
-+		 * Entrance status for a main program based on REG_TCC physical content:
-+		 * 1) Initial Entry (Scalar): Enter via a standard event, where REG_TCC
-+		 *    is initialized to a pure scalar 0.
-+		 * 2) Inherited Entry (Scalar): Enter via a flat main-to-main tail call,
-+		 *    where REG_TCC carries an accumulated scalar count (1 to 33) reloaded
-+		 *    from the prior stack frame.
-+		 * 3) Inherited Entry (Pointer): Enter via a tail call from a subprogram,
-+		 *    where REG_TCC inherits and carries a massive kernel pointer address
-+		 *    reloaded from the prior stack frame.
-+		 *
-+		 * sltui:   Identify the type of REG_TCC.
-+		 *          If REG_TCC < MAX_TAIL_CALL_CNT + 1 (scalar 0~33), sets T8 = 1.
-+		 *          If REG_TCC >= MAX_TAIL_CALL_CNT + 1 (kernel pointer), sets T8 = 0.
-+		 *
-+		 * maskeqz: Handle the local stack pointer (T7).
-+		 *          If T8 == 1, keeps T7 intact.
-+		 *          If T8 == 0, clears T7 to 0.
-+		 *
-+		 * masknez: Handle the incoming REG_TCC to prevent register pollution.
-+		 *          If T8 == 1, clears REG_TCC to 0 (erasing 1~33 scalars).
-+		 *          If T8 == 0, keeps the massive kernel pointer intact.
-+		 *
-+		 * or:      Combine the results.
-+		 *          Scalar Case:  REG_TCC = 0 | T7       -> Clean local stack pointer.
-+		 *          Pointer Case: REG_TCC = REG_TCC | 0  -> Clean inherited global pointer.
- 		 */
--		emit_insn(ctx, std, REG_TCC, LOONGARCH_GPR_SP, *store_offset);
-+		emit_insn(ctx, sltui, LOONGARCH_GPR_T8, REG_TCC, MAX_TAIL_CALL_CNT + 1);
-+		emit_insn(ctx, maskeqz, LOONGARCH_GPR_T7, LOONGARCH_GPR_T7, LOONGARCH_GPR_T8);
-+		emit_insn(ctx, masknez, REG_TCC, REG_TCC, LOONGARCH_GPR_T8);
-+		emit_insn(ctx, or, REG_TCC, REG_TCC, LOONGARCH_GPR_T7);
- 	} else {
--		*store_offset -= sizeof(long);
-+		/* Subprograms: backup the verified TCC pointer inherited via REG_TCC */
- 		emit_insn(ctx, std, REG_TCC, LOONGARCH_GPR_SP, *store_offset);
- 	}
- 
--	/* Push tcc_ptr into stack */
-+	/* Store the finalized TCC pointer value securely into the local 'tcc_ptr' slot */
- 	*store_offset -= sizeof(long);
- 	emit_insn(ctx, std, REG_TCC, LOONGARCH_GPR_SP, *store_offset);
- }
--- 
-2.42.0
+> Thanks,
+> Leon
 
