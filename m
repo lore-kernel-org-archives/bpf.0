@@ -1,184 +1,143 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AF93287268;
-	Tue, 30 Jun 2026 01:13:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52AE6E56A;
+	Tue, 30 Jun 2026 01:19:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782782044; cv=none; b=OaNVyuMVN+cKYwl2UKGGCbmA2YxnLczQfxOfvBrgPaDe0IDglrSM7ZtBw0kwc06adaVZTbe0hyv0Nh/PMtSRJ4Ovj/SPyGgt8OagOljlxAj8Ql7VqR555WRpIGkHayAWSuxj1J0YUrI79irZeiokl/PJCUB1uZwnzPmjhsEZhac=
+	t=1782782377; cv=none; b=rzWNv8bPFbfg8Xu4WoFRoH0glZEg2jUnuDeoie9aLgFHGv73kz8y3ti8w7Bn3u7F0I3tyKYsDZ/TExc+dmjgAX7fuyxPHaohj/jv56mzsPud0Lror6d4Beg1DeERCFO1UfnbCCi6MIrko1HR3uZkRIM8qZ/MPYyPJ3VpOkE6oNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782782044; c=relaxed/simple;
-	bh=gYPpa6Sqm4w7uMS5KVTf1sAiXmd6DsTtkDuR6g8v6gI=;
-	h=Subject:From:To:Cc:References:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=qCr8ppGiw3eQCawQSGnik6dGaGysdvjYx8WolufMvpIrTzzCQ4QS7PqoGRAqE9FntMknkGEilIV/OdghqDZkpECcngn2W/ds6M6vpkU+Qpmcl0PoCPcE0f/ggImy62Lp4HBq7pTtBzgTCYusVotsDD2/tAEZh3rF8upYzVfyloE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8BxNehMGENqsHIZAA--.59115S3;
-	Tue, 30 Jun 2026 09:13:48 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJAx28FCGENq6me4AA--.20790S3;
-	Tue, 30 Jun 2026 09:13:39 +0800 (CST)
-Subject: Re: [PATCH bpf-next v4] bpf: Fix unaligned interpreter panic on JIT
- fallback path
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
-Cc: Puranjay Mohan <puranjay@kernel.org>, loongarch@lists.linux.dev,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260615025316.24429-1-yangtiezhu@loongson.cn>
-Message-ID: <ed0326b4-2953-16a6-0472-5fa96df1d63e@loongson.cn>
-Date: Tue, 30 Jun 2026 09:13:38 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1782782377; c=relaxed/simple;
+	bh=peWAbyqXpsv3LiV9QAIC1oXbRLP6lWXeCnCVHSXq+RE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=l9/3U3gXw7QEpfdWPLaKREuwJMf36pTcfPt3uHHA8LoNh0KoF44rcthFWZe9Dj1EdOnykf25jxQwB2DeX0BYGdSDtj+3Q7hW7wMIkVuASYfD4jlmXciQwQLsOO/XxhR8I3jR1X64voMYfYLe+r3ZbuMcfscs1+WnY4+ALhKtXKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gq50036YyzKHLw3;
+	Tue, 30 Jun 2026 09:19:12 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id ADBC840590;
+	Tue, 30 Jun 2026 09:19:19 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgAXh_SWGUNqKGU7AQ--.354S2;
+	Tue, 30 Jun 2026 09:19:19 +0800 (CST)
+Message-ID: <8ea18b6a-932c-4eb0-a536-d52ce3e1f457@huaweicloud.com>
+Date: Tue, 30 Jun 2026 09:19:18 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260615025316.24429-1-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH bpf-next 00/12] bpf: Introduce static-defined tracing
+ probe for BPF
 Content-Language: en-US
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ KP Singh <kpsingh@kernel.org>, Anton Protopopov <a.s.protopopov@gmail.com>,
+ Amery Hung <ameryhung@gmail.com>, Eyal Birger <eyal.birger@gmail.com>,
+ Rong Tao <rongtao@cestc.cn>
+References: <cover.1782571533.git.xukuohai@huawei.com>
+ <855e44f3-d22c-47e5-8bd1-c5d9f7014a75@linux.dev>
+ <ec28f0f9-0693-4c9b-88fa-bffca446a63c@huaweicloud.com>
+ <b8d8ab5e-bef1-4c95-8e5b-ea9768041b2e@linux.dev>
+ <55499fcf-d552-4366-9016-21ede7f687ac@huaweicloud.com>
+ <4f30012f-778b-4c7d-b610-2e18cf01abdd@linux.dev>
+ <678ec73d-06f1-4860-94be-be000ca462d4@huaweicloud.com>
+ <b4b906cb-e7b2-4ba7-bbb9-e6c813238859@linux.dev>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <b4b906cb-e7b2-4ba7-bbb9-e6c813238859@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAx28FCGENq6me4AA--.20790S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxuryfGw4xAw1UJr4xCw43CFX_yoWrArW8pF
-	WkCw4akr48XF4I9a1xJw42vw15K3yrGFWUGa93Ga4FkF1Yqrn7WF4UKw40gFZxGr409F1S
-	vw42vFy29w18JagCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AK
-	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzV
-	AYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8zwZ7UU
-	UUU==
+X-CM-TRANSID:Syh0CgAXh_SWGUNqKGU7AQ--.354S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tw4kZw1rAFW8tr1fGw1rWFg_yoW8urWrpF
+	yktFyUKFyDJr92yr18tr1UJry5tr48Gw4DXr13XFWrX3saqrnYgr1UWF4Y9ry5Jw4rAFy0
+	vrWUZrnxur1DAr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
+	7KsUUUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On 2026/6/15 上午10:53, Tiezhu Yang wrote:
-> When an architecture implements bpf_jit_inlines_helper_call(), such
-> as LoongArch, ARM64, and RISC-V, the BPF verifier skips rewriting
-> the helper call offset (insn->imm) during the bpf_do_misc_fixups()
-> phase if the helper is expected to be inlined by the JIT compiler.
-> As a result, insn->imm remains as the raw helper enum ID.
+On 6/29/2026 9:53 PM, Leon Hwang wrote:
+> On 2026/6/29 19:32, Xu Kuohai wrote:
+>> On 6/29/2026 6:55 PM, Leon Hwang wrote:
+>>> On 29/6/26 15:51, Xu Kuohai wrote:
+>>>>>
+>>>>> With the elimination, the callsite of 'subprog' has been eliminated.
+>>>>>
+>>>>> However, as you mentioned above, the argument preparation insns are
+>>>>> kept.
+>>>>>
+>>>>
+>>>> I see, the CALL insntruction is removed, not patched to NOP.
+>>>>
+>>>> So the call site is either a call to subprog, or totally removed. The
+>>>> fentry
+>>>> tracing only works when the CALL instruction and the subprog are not
+>>>> eliminated.
+>>>> This is exactly what SDT tries to solve.
+>>>>
+>>> So, why not add a macro for the stub following the subprog+fentry idea?
+>>>
+>>> #define DEFINE_TRACING_STUB(__stub, ...)     \
+>>> static __noinline void __stub(...)        \
+>>> {                        \
+>>>      ...                    \
+>>> }
+>>>
+>>> DEFINE_TRACING_STUB(my_trace, int, len, int, ret);
+>>>
+>>> SEC("xdp")
+>>> int xdp_prog(struct xdp_md *ctx)
+>>> {
+>>>      ...
+>>>      my_trace(len, ret);
+>>>      ...
+>>> }
+>>>
+>>> Then, add a libbpf API bpf_program__remove_stub(prog, my_stub) to drop
+>>> the stub by the way like my demo.
+>>>
+>>
+>> Since the stub prog is dropped in libbpf, where is the fentry prog
+>> attached?
+>>
 > 
-> However, if JIT is disabled at runtime (net.core.bpf_jit_enable=0)
-> or if the JIT compilation later dynamically fails (e.g., due to OOM
-> during bpf_jit_alloc_exec()), the core BPF subsystem falls back to
-> the BPF interpreter.
+> No. By default, the stub prog won't be dropped by libbpf. The
+> bpf_program__remove_stub() API is provided so that users can
+> intentionally remove the stub prog.
 > 
-> When the fallback interpreter executes (__bpf_call_base + insn->imm)
-> with the unpatched raw helper ID, it jumps into an unaligned invalid
-> address space, triggering a fatal instruction alignment fault (ADEF)
-> or illegal memory access kernel panic.
-> 
-> This issue impacts all architectures that support helper inlining,
-> so introduce a late fixup pass via bpf_fixup_fallback_helpers() in
-> __bpf_prog_select_runtime() to fix this panic.
-> 
-> When JIT compilation fails or is disabled, the helper call offsets
-> originally skipped for inlining are rewritten to relative memory
-> offsets right before transferring control to the interpreter.
-> 
-> 1. Test case (test_panic.c):
-> 
->    #include <linux/bpf.h>
->    #include <bpf/bpf_helpers.h>
-> 
->    SEC("kprobe/sys_getpid")
->    int test_panic(void *ctx)
->    {
->    	struct task_struct *task;
-> 
->    	task = (struct task_struct *)bpf_get_current_task();
->    	if (task)
->    		bpf_printk("Task address: %p\n", task);
-> 
->    	return 0;
->    }
-> 
->    char LICENSE[] SEC("license") = "GPL";
-> 
-> 2. Reproduction steps:
-> 
->    $ clang -target bpf -O2 -g -c test_panic.c -o test_panic.o
->    $ sudo sysctl -w net.core.bpf_jit_enable=0
->    $ sudo bpftool prog load test_panic.o /sys/fs/bpf/test_panic autoattach
->    $ sudo cat /sys/kernel/debug/tracing/trace_pipe
-> 
-> 3. Panic information on LoongArch:
-> 
->    Kernel ade access[#1]:
->    ...
->        ra: 9000000000486e50 ___bpf_prog_run+0x1370/0x36b0
->       ERA: 9000000000485383 __bpf_prog_ret0_warn+0x13/0x20
->    ...
->     ESTAT: 00080000 [ADEF] (IS= ECode=8 EsubCode=0)
-> 
-> Fixes: 2ddec2c80b44 ("riscv, bpf: inline bpf_get_smp_processor_id()")
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> Acked-by: Leon Hwang <leon.hwang@linux.dev>
-> Tested-by: Xu Kuohai <xukuohai@huawei.com>
-> ---
-> v4:
->    - Rename the static function to bpf_fixup_fallback_helpers() to
->      be more accurate and concise, following the file's naming style.
->    - Remove redundant helper ID bounds check since invalid helper
->      IDs are already filtered out in bpf_jit_inlines_helper_call().
->    - Simplify code by merging nested if statements for helper checks.
-> 
->   kernel/bpf/core.c | 22 ++++++++++++++++++++++
->   1 file changed, 22 insertions(+)
-> 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 649cce41e13f..0db6e55bad52 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2608,6 +2608,25 @@ static struct bpf_prog *bpf_prog_jit_compile(struct bpf_verifier_env *env, struc
->   	return prog;
->   }
->   
-> +/* Fix up helper call offsets on JIT fallback path. */
-> +static void bpf_fixup_fallback_helpers(struct bpf_verifier_env *env, struct bpf_prog *fp)
-> +{
-> +	struct bpf_insn *insn = fp->insnsi;
-> +	const struct bpf_func_proto *fn;
-> +	int i;
-> +
-> +	if (!env || !env->ops->get_func_proto)
-> +		return;
-> +
-> +	for (i = 0; i < fp->len; i++, insn++) {
-> +		if (bpf_helper_call(insn) && bpf_jit_inlines_helper_call(insn->imm)) {
-> +			fn = env->ops->get_func_proto(insn->imm, env->prog);
-> +			if (fn && fn->func)
-> +				insn->imm = fn->func - __bpf_call_base;
-> +		}
-> +	}
-> +}
-> +
->   struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct bpf_prog *fp,
->   					   int *err)
->   {
-> @@ -2643,6 +2662,9 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
->   			*err = -ENOTSUPP;
->   			return fp;
->   		}
-> +
-> +		if (!fp->jited)
-> +			bpf_fixup_fallback_helpers(env, fp);
->   	} else {
->   		*err = bpf_prog_offload_compile(fp);
->   		if (*err)
+> Maybe bpf_program__remove_subprog() would be a better name for the API,
+> because it is to remove a subprog.
 > 
 
-Ping? Any more comments?
+So it is more of a user-space workaround than a formal solution. And even
+for this workaround, there is no need to add a new libbpf API to remove the
+stub. You can simply build two versions of bpf prog, one with subprog and
+one without. When you need to trace fentry, load the first one; otherwise,
+load the second one.
 
-Thanks,
-Tiezhu
+What SDT resolves is dynamic tracing after the prog is loaded, the hacking
+before loading does not apply.
+
+> Thanks,
+> Leon
 
