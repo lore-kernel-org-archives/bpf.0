@@ -1,191 +1,172 @@
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011070.outbound.protection.outlook.com [52.101.57.70])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDCC32D0D4;
-	Tue, 30 Jun 2026 05:14:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.70
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782796447; cv=fail; b=q2Bu5sh03kWov7WOLIxyOutG+LS5ZrtkPnZbxaX6rWtK7H0M0Q9/z5FfDY/FrtYU3lgCu7tOdPTFB0jwPKYWspMowaCGjkzJ6IMV3lXr3nRWkltl6nexYxXDA8a8yBd0b+DAn6JALGdcXliw6ZNhJi83FCkYkssmTcY7Ru44Ttc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782796447; c=relaxed/simple;
-	bh=+WOfISRnCQdq7zytYLejxIMvomy00ZxExQgHwXooGH0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=kXroKgAFoXFQIaSGd6WdihZ/vejYK9UGtYs2Qk0vh9AJ/xRlKE5MKK2B9M7qWaFuWeB2oV2xnH46tqk5RH8D6mXbKFrHY2awLBYalKkllHnX0C2eZdzZLloZxB+HY7O0vokbZ7poiPem8uWCUu+MvPl8I7l00cjHyl2Dz2J8LLk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=LZS7rP1S; arc=fail smtp.client-ip=52.101.57.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 659873E315F
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 05:43:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782798187; cv=none; b=Iovc1kfJ32huV6oEzwTAzr1X9C1383SLqSbEZu/Q91TKQUmypcnxhdBnApYaNIJopd2wIywaKWHTIp82upG4qLlIi0rW5f4jHAc3iar/Wl0gayXvdRAU7pL1E1rKCxYnPyd8C3f+KyB556fXZc84Np1ly0RZKFS6k4XsKzuKAZ0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782798187; c=relaxed/simple;
+	bh=9rXZUBsGBmtMoEa+jKKzLo71wF5tmz2Z8X2eRMgLKC0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qgVWSA3SfUBzVHToYntuKEj1iJN5ov2GVPkMThCpqG6FTwFLjeH4ewfrnBdBjXks8J6qE7KErw5bp7pm4OGWxyVhjtddd77e0FjP0gm2u9/zTcB3SZJdEkXnQ0xCMpVR9DK5ntBKo3u8D/IXegNtcWqNxnfmDdegREBjYlh6zQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YJao5Dj5; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=lZkDQkxM; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="LZS7rP1S"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=a9cZvQqzICrRzE47COBP4omFyW0YYKddCArNzoXK+qTT0mQKK4nyMeWpuwUaurcibPnUJ/e3pPgcH6jbtq13+IXfjISSeyCpU1bYMVjxwsOKuZt7W39cM27kHqtlWozymrKkga+1pOorRX5nlAwrF9lqhAHT1dxqHptiDrN3NemfD42++MZnl4gZcRJchTZ+DKs1ksSviYfVLUuMhWG1l2KRYnJta/tjCQJNNljMQVSh1fP4k1XP1PmDZf48lnTkwBJrIoogb9TxKBi/3fAPNv/T6iQwnjDHIuwhaHv2KvvH4flNvS1ZmDMm758au/7cX/gsVXww7J6SCrpBX/YS5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0+/8QwxL//uLuCKLw4KthxOeIdXmrtb75bglkZaByFs=;
- b=UsbD2eZFDvNJZfojL19I8M2Uq2xPFuZGJMjL+MFsogaGLZkchHsWLzUjrraCdKbA4fFDPiz9N/D8pTHHrHubWkEqkg18L+vDqu2HBzDm3dU3HJa5W4MQe2xLll6nRb1Uo35Eo2vrmstVKAcM8FXgu2GEqt5dVT/WklEO8C//GmWJmML5/uAMgE7BWb/xqLk69M9sfOCNmns897U5Cy7axhwDaoGHK/G7PB+5gaiIELe1Gx5Uqu6A3HccLN5dKjTdxlbN7WnYiI+swUxtuCpVizDKumX8mrJjvcV7n2sC2wOiEcOS1qo6HFwGQlPbOIDKUyMnYPDiskYWGOK16cOHfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0+/8QwxL//uLuCKLw4KthxOeIdXmrtb75bglkZaByFs=;
- b=LZS7rP1SZ3ehm+Ww4iRpBbeIIF+OmdNvWpstHqTljm/gvRJzhV4CsDfV/IK+bXFfdu/iGkgh4eX6MlpoucpJCWTvnWDcw2qeyyaLErXqRl5JgIwxG5FbkaLLIPlTi51GS7POfZa3T3cEMThoWrj+iohxiJRRVcK/PZri/5uKs+B9LNphuu2tr7M+6BxBdwfxoyOoJaDMxDboqHbHIebPP6ZKwwM9287a/zgpUJeqKel5iTZbCti24HVcN5G8PyTnwfDuflS0niMial4VIQbfa58NW1YaKhr2ty3l1t2QwNXbS25GLRyanwibbURO5dbybpOwuIp0ZedSJMb5UlFiQA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM6PR12MB4827.namprd12.prod.outlook.com (2603:10b6:5:1d6::14)
- by PH8PR12MB6865.namprd12.prod.outlook.com (2603:10b6:510:1c8::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.18; Tue, 30 Jun
- 2026 05:14:00 +0000
-Received: from DM6PR12MB4827.namprd12.prod.outlook.com
- ([fe80::6261:3040:864b:159c]) by DM6PR12MB4827.namprd12.prod.outlook.com
- ([fe80::6261:3040:864b:159c%3]) with mapi id 15.21.0159.018; Tue, 30 Jun 2026
- 05:13:59 +0000
-Date: Tue, 30 Jun 2026 07:13:51 +0200
-From: Andrea Righi <arighi@nvidia.com>
-To: luoliang@kylinos.cn
-Cc: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>, sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] tools/sched_ext: use btf_vlen() helper in compat.h
-Message-ID: <akNQjzejJOdtDYnQ@gpd4>
-References: <20260630031246.2618216-1-luoliang@kylinos.cn>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260630031246.2618216-1-luoliang@kylinos.cn>
-X-ClientProxiedBy: MI2PEPF00000B7E.ITAP293.PROD.OUTLOOK.COM
- (2603:10a6:298:1::412) To DM6PR12MB4827.namprd12.prod.outlook.com
- (2603:10b6:5:1d6::14)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YJao5Dj5";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="lZkDQkxM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782798185;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=q/eDjU5MiOjexozee7SNJIrZyMlG/yERHTdQ3gey+uU=;
+	b=YJao5Dj5+vF3yFc5Dgiib86uqmbUAPNgS1y7oGf6VueY2YDUUJsbHTnghaTo9P8VPyiN5m
+	FA7FTZcgGjMb4W2beyWEExiMBLbLaMjloThid98hWMVs9UEGehKIvMA5UboZYNZMblj+kl
+	2drvfawX8roOLaWk6GMs0Z7O+Eh7OJ4=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-227-kOsEZ8UNMVestZBFLAPbyg-1; Tue, 30 Jun 2026 01:43:03 -0400
+X-MC-Unique: kOsEZ8UNMVestZBFLAPbyg-1
+X-Mimecast-MFC-AGG-ID: kOsEZ8UNMVestZBFLAPbyg_1782798182
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-492714d002cso14659715e9.0
+        for <bpf@vger.kernel.org>; Mon, 29 Jun 2026 22:43:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1782798182; x=1783402982; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q/eDjU5MiOjexozee7SNJIrZyMlG/yERHTdQ3gey+uU=;
+        b=lZkDQkxMyIJQG+HdGrnGBqvHOFcYRDKCI+h7u8ijSTNYla4xfsh9La1RKXx+ip0pyB
+         6yONDkQNFffPxXQ/JbtDgeR5YNOaj1h3V21OVG8uGwA1sN/WA+2Q69NVBKtn+wQ94qpb
+         LmoV8hYf34dhi5s2dYVWm5JLIf4ehqTH1hoMPmsD6el/wcc8JG0OyriC4nySSRhL0Osw
+         Meivv/Km8HutWPZ5G5NnUWz8yTzcYdtrwoPNHBHmWNzmyR07m1dTXTNOzN5i+BA1feeX
+         tao/A5L2jG8+6/MPLP57kJoLvl8ezkwBYeDnWiRnzghcevhyrK0rSeyTNjZtKgNFmaYF
+         UPLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782798182; x=1783402982;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q/eDjU5MiOjexozee7SNJIrZyMlG/yERHTdQ3gey+uU=;
+        b=mahRrAHvb2p0b/3t/0wZ5AAPkhdM3BKFM/m2exLlfEM35CoW7xN8B67hfJkQ6S0QY2
+         UoOQ8TZZnMtDq8kgIvhnW7XvGPUXWoiyhtFfoci9M/RXqqSUlouzVhabOi8rxm/rc56x
+         8M3p7NOx93XuXkZ5dmU7JzuBkdz0JnSoDDYKCLlKkDuQI2vEqQqB2Ev68k+A7FnX7H0z
+         Z7gM191NjjEjm0BQNKlc2LBu/dlEq5eFf/rZgX36iQPcvKJpqEmgLyqwbUcO3tXr37/q
+         /ITgUNLZV9ANlHj5zLVjbFtuDaWHMwCq27X+anZM8wz6w457AaegJvsmWQ5MKqZXm3r8
+         /dug==
+X-Forwarded-Encrypted: i=1; AFNElJ+2dXyrr0qneP0RdTkXZLqaJdw912K9ncz1MX2/EdHYBJ9dMCOA/Zx6ijM3v/tRKKFUSn8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzvy7mCXLTswee6CsbBs2APdwENrdZ7ND/NfORNBQ4w6uz/Yaob
+	bPrOV9yFuY0rBHSU4YfudJ9ovbi6dBtE15237j+wwoznLNGev551DGgvHLRQStABNQP6mMSbnuL
+	uVt09uZc4TyjjASWyIAXYbTShui9ii8qaf/Rf5bwhrp9gAT2/S3Qc
+X-Gm-Gg: AfdE7cme1Kdfz1ZLQ6u+cs1a8+NHB9o/G3jJm+RL9a1SNU1oJSe4frvgx6CedxC6AWm
+	wOyekTIYtFL/Cm5roaoBiApcs8g6eQpTTzsGp8lw2NIQTaDly7d709div3DNTNgm/H77KeTsKH7
+	mHHWVY1YNuTqnR2FJiVmuVsDU0aBMu4UPpJL2JcMRsfPvGQtMM5QcZZ7reGid2d40iJTWnO7ZCA
+	sh1lDEc/KUffvlWr2YQAi2o8oqdNRKgU+cc5oUuxwT5kqml6Yu9EL2NvF8NeGRWKVtL5CzlGxpm
+	p/r/Y77vsZ58ARKhMgdlMuQxp/t7Kc5A5qvNn17rmE/tfzrwRUQdhWBCU97o0rYt/neUVyBFd7f
+	aFkDapwExN6i437IcDjwlMdCYgwnt9Gb6VVFr1WAa3WJJhQ==
+X-Received: by 2002:a05:600c:848e:b0:490:3d62:f5e1 with SMTP id 5b1f17b1804b1-493b82b0f53mr33437945e9.22.1782798182361;
+        Mon, 29 Jun 2026 22:43:02 -0700 (PDT)
+X-Received: by 2002:a05:600c:848e:b0:490:3d62:f5e1 with SMTP id 5b1f17b1804b1-493b82b0f53mr33437635e9.22.1782798182012;
+        Mon, 29 Jun 2026 22:43:02 -0700 (PDT)
+Received: from [192.168.0.135] (185-219-167-205-static.vivo.cz. [185.219.167.205])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493b8cb62f1sm70244105e9.15.2026.06.29.22.42.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Jun 2026 22:43:01 -0700 (PDT)
+Message-ID: <c1666061-c3e7-4eda-82ca-d03daf05f4f8@redhat.com>
+Date: Tue, 30 Jun 2026 07:42:59 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4827:EE_|PH8PR12MB6865:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0d0dfa5d-4eb6-479e-8c86-08ded666646a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|23010399003|6133799003|22082099003|18002099003|5023799004|11063799006|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	f7t6WCXaQD1Dorm4uQSUd4fNOa2hBeay2m8yMZpDo/dygGYbnHQNsBrbshbX2a3eX2y7My5fydpsS6HrcACyZT0apOwd0rO78bag/msKS1nUJBlR5rTz+h8iagzVrlSHnobN1myiS4htjJUCSe2SJFmpXExpSvF1Bu4HZHVm9dhShPF/5rCSmXNrKPu02elkb/5UTfHG7YKE6Q3HGpaFc+iiJGSmnFzHYscHz2uMCzaEhThNXmhxQcn9N7W38iRixCgp1sPoEjcGz0bxMnzFrUTMztifIh9qqZYDcL0wg6ACwkTQ1ecaJnP9y0ht3cAkRlfnuhw+oR9/+nTOu4dYSWoJagdRWAnB4Flu3PsWoJ93/pevy5ZfljgWx+rumKMuM1vGF+Lx2GmSUT4hp/gUSBl4Nyhms9nqgQfPi5+lsuB+dxK+XtnfsggFb4u9KiNHr4UVVl6lzzmX581xXnNIel0aV88PIZm7IAmqSf6Rb3WzZ0O/o3g5Quz9iy7I2wT9DIYGgG3/x75CVchMTupfKQSas4Ja6j6tH28nujJJyotb3KSOrPakPR30XmrgNRX4Kf3tjmdFLs1HPU7OFchlrFuVZ/9C9g7NtH39PPqCSmCqbOI0HXk/tY/U57oUFyohTx4XwW30RxIF1mZWQxqCHmzwkvZiHygpRwwgr/bscIk=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4827.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(23010399003)(6133799003)(22082099003)(18002099003)(5023799004)(11063799006)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?M/tjT1SqWpJJLugGEA4WG94IpGBqbxhgLHR7uAxNDuXZ1bK8/McAm0ezlgBB?=
- =?us-ascii?Q?kyENVul2yBDXRYL96/5lDmkIERoCLW9GEyPT14dCf1xd0AWR+e18WNvAevqF?=
- =?us-ascii?Q?wfYw+ckecu1HZwpGAx3qHMD6wUbtuedQqx/tH8rscvw99MwK7BXYXqm62Wv8?=
- =?us-ascii?Q?o8ZiaUShBJ8kpPtMQ4GNm32bbq50TyNrBDS4dansqK4s6qBk3U4XwyaKgSCw?=
- =?us-ascii?Q?UKy6I+5woMzDAjzlrCJ9W5Fr0VoDEG8/lKQrm2TSjetA+s9TzLnY9GkJoeiM?=
- =?us-ascii?Q?sC0AA0Lh2Gq3UOunXEr3enCkp8S1Vwq/jNmpRfXcRLknF0EOO0B7zYj2anQl?=
- =?us-ascii?Q?rUu/0abTGn1aAxRPBvaos8A9KJxo4cpjjYgR3CGJXX/sKefqOZhJo1W/nD4+?=
- =?us-ascii?Q?ebwZixmzzxys6Ferpgnqa2KKKth1/Jt8ax93oJPPXBUdiyrvHICE5qcTkZJW?=
- =?us-ascii?Q?nCD3GP+zCsbf3e7Hp1vD0HbiEqXFvyCtLaJ5Cot/5kDV2mjDPEEHpFFRPxmI?=
- =?us-ascii?Q?gjJEJb6I81AYTIynBsp6ILnnY3FTwtklxaWldOPBEKg75lLa6YxSpuafUvUq?=
- =?us-ascii?Q?96R7deGA30J5KH8H1ooin+bVvYQhbX6Xred2dXcFQ9ZhhsQJh1Y6P39oIhH5?=
- =?us-ascii?Q?5K9wsz4u7bZsm9yx50MnJAun7+QN8oZfo3quBCxAEocWdmuwHRJHE1hJzUwC?=
- =?us-ascii?Q?naNrFeliiSIC0bA4AcBkEkQkIoFtRrlX1OsMvl11Z2J9e8nAPtz3HSPj4IDK?=
- =?us-ascii?Q?q34A/LHotE2NCXkTKV2fWx+66LzZzbM0pucvTSILQj4f95No2/uY5d87HgIX?=
- =?us-ascii?Q?B6K1PoOpiwkUwZpJva5Sbh91Ag6ZoJ0rvvTkHB69tTs35/FfLi9K7DS+i6p6?=
- =?us-ascii?Q?LW6K4gEwwXUFaUfHqhMynXCWA9GezpqmwiF/QPSxPkMY0rroJU/52g73wKGt?=
- =?us-ascii?Q?9f6QGsCZa4Y3tdLhhA6fDqdawE8c/2OjENnlwHYfjp5Wa5zDFphtO7vv4cWg?=
- =?us-ascii?Q?kqE6nEmc+ewk0nCLLA+BToA2Qt/eGvl01jt8A1IhuaS9tQ/tFO9w3+M4dOeU?=
- =?us-ascii?Q?jFdCeg1QKv+fkWi0lrHhnL/TJpq5y2FmUk86QHzHbIeWcRcK6jPT4YwMPmGc?=
- =?us-ascii?Q?S3yif29qHIzL5pVCtxH6s+E3v2ilMqUZPTWF0SLt9ab88oF2svFUoUr2rIh7?=
- =?us-ascii?Q?bfSkS/Q/82OibOYNf2K6RuoWVpDGo1GwkzhlTKGPt53+JUiTCDw/ZgKgzGdD?=
- =?us-ascii?Q?nSvdQY3+bol4uC2pkXamNQVjoLNCTUxcfNjmdqdxxDx8HscpGHC4K2LF/FeH?=
- =?us-ascii?Q?XAf0SMrsqPsDGxeHXGCMuSstOcGCdUCMmCbRKKpf4Yfr3NDU7y76T8gn5C1c?=
- =?us-ascii?Q?CSmsdBa0dvjdFgF9+zdQ2fucq+LI0mNJ0kYjEJESgk1+RxmeFozc2GZwgLgg?=
- =?us-ascii?Q?wV6FYgm/94J5MmxVQjM8FMnmZu3RJVfaQTD/gVQOoF7ME1VI79KXvFeP4Qk4?=
- =?us-ascii?Q?wpSf1wSVsQuC73Mr//i1/0q+rAcAsYCB3E3u+GZ0fnwsGSXXfDzKwKWVJVvk?=
- =?us-ascii?Q?9lqKlpNX1kpTj5ekwCqEeVcBbq/LIPPNhzXYRnZiroKDR2to3ovT8uHrOl0g?=
- =?us-ascii?Q?IUwzcBPOgYD4evoiWNIU8x4hNYxcNpeQGiS9zQJn3CGXPs1oTutq6nOBlRH+?=
- =?us-ascii?Q?+b/w0OdEdliQCinyD7LmLENS5P1RNN46QAJ/HyjtTK3WAncjMl/aVG/v0hbw?=
- =?us-ascii?Q?2GiNqSRsqw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d0dfa5d-4eb6-479e-8c86-08ded666646a
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4827.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2026 05:13:59.5335
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: x7jc6mCjCusqeEILtqZTo3Fu9F3061+1Op1KdtmNa7fmYqolY800i4XhA4UCwr1TyClqWQZd8hX63Z4XRhvbJA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6865
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] perf trace: Refactor augmented_raw_syscalls using
+ bpf_loop
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ linux-perf-users@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, James Clark
+ <james.clark@linaro.org>, Howard Chu <howardchu95@gmail.com>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ Michael Petlan <mpetlan@redhat.com>, stable@vger.kernel.org
+References: <20260623112533.1151502-1-vmalik@redhat.com>
+ <DJGJ9F6WQZV9.2W4WBIHYLJQ97@gmail.com> <ajq98dm4gAwEzkMb@google.com>
+ <c2f4e45e-d5c9-42e9-a46b-25fb0cacb267@redhat.com>
+ <ajwu7xR6V6MAQOFw@google.com>
+ <3c221e35-d642-4036-88fd-d25df7f8807e@redhat.com>
+ <akLXCFpnum0WgXGf@google.com>
+From: Viktor Malik <vmalik@redhat.com>
+Content-Language: en-US
+In-Reply-To: <akLXCFpnum0WgXGf@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi,
-
-On Tue, Jun 30, 2026 at 11:12:46AM +0800, luoliang@kylinos.cn wrote:
-> From: luoliang <luoliang@kylinos.cn>
+On 6/29/26 22:35, Namhyung Kim wrote:
+> On Thu, Jun 25, 2026 at 02:05:29PM +0200, Viktor Malik wrote:
+>> On 6/24/26 21:24, Namhyung Kim wrote:
+>>> On Wed, Jun 24, 2026 at 08:47:38AM +0200, Viktor Malik wrote:
+>>>> On 6/23/26 19:10, Namhyung Kim wrote:
+>>>>> Hello,
+>>>>>
+>>>>> On Tue, Jun 23, 2026 at 08:27:39AM -0700, Alexei Starovoitov wrote:
+>>>>>> On Tue Jun 23, 2026 at 4:25 AM PDT, Viktor Malik wrote:
+>>> [SNIP]
+>>>>>>> +	struct args_loop_ctx loop_ctx = {
+>>>>>>> +		.args = args,
+>>>>>>> +		.beauty_map = beauty_map,
+>>>>>>> +		.payload_offset = payload_offset,
+>>>>>>> +		.value_size = value_size,
+>>>>>>> +		.output = &output,
+>>>>>>> +		.do_output = &do_output
+>>>>>>> +	};
+>>>>>>> +	iters = bpf_loop(6, process_arg_cb, &loop_ctx, 0);
+>>>>>>
+>>>>>> bpf_loop() is old and generally not recommended.
+>>>>>> Please use bpf_for() then the diff will be one line change and
+>>>>>> can scale to any number of args. Not just 6.
+>>>>
+>>>> Thanks Alexei, I didn't know about this preference.
+>>>>
+>>>>> One thing we should take care is to support old kernels.  The oldest
+>>>>> LTS kernel in the kernel.org is 5.10 and bpf_loop() was introduced in
+>>>>> 5.17 and bpf_for (bpf_iter_num) was 6.4.
+>>>>
+>>>> The problematic loop was introduced in 6.12 by a68fd6a6cdd3 ("perf
+>>>> trace: Collect augmented data using BPF") so we should be good using
+>>>> bpf_for. Or is perf from 7.2 supposed to work on 5.10 LTS kernels?
+>>>
+>>> Yep, we'd like to support old kernels.
+>>
+>> How much strict are you on this requirement? IMHO, the very least we
+>> need to fix the verifier issue is bpf_loop, so that would still not work
+>> on 5.10 and 5.15 LTS kernels.
 > 
-> __COMPAT_read_enum() and __COMPAT_struct_has_field() open-code the
-> vlen lookup via the raw BTF_INFO_VLEN(t->info) UAPI macro, whose
-> result type is __u32 (t->info is __u32 and 0xffff is promoted to
-> unsigned). Comparing it against the int loop counter triggers
-> -Wsign-compare in every example scheduler that includes compat.h.
+> I don't think it's an absolute requirement, but I think we don't want to
+> break any existing working setup (old kernel + old compiler).
 > 
-> libbpf already exposes btf_vlen() for exactly this purpose; it
-> returns __u16, the natural width of the vlen field, and the usual
-> integer promotions turn the 'int < __u16' comparison into a plain
-> 'int < int' so the warning goes away without any cast. This matches
-> the pattern already used in-kernel (e.g. kernel/bpf/inode.c) and in
-> tools/bpf/bpftool. Replace the three open-coded lookups with
-> btf_vlen(t). No functional change.
-
-btf_vlen() currently returns __u32, not __u16. This changed in commit
-cacd6729c092 ("libbpf: Adjust btf_vlen() to return a __u32"), because BTF vlen
-was expanded to 24 bits. We should update the description to match this. And i
-should be changed to __u32 for consistency.
-
-With these changes:
-
-Reviewed-by: Andrea Righi <arighi@nvidia.com>
-
-Thanks,
--Andrea
-
-> 
-> Signed-off-by: Liang Luo <luoliang@kylinos.cn>
-> ---
->  tools/sched_ext/include/scx/compat.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/sched_ext/include/scx/compat.h b/tools/sched_ext/include/scx/compat.h
-> index 039854c490d5..df5ca1ce20f6 100644
-> --- a/tools/sched_ext/include/scx/compat.h
-> +++ b/tools/sched_ext/include/scx/compat.h
-> @@ -42,7 +42,7 @@ static inline bool __COMPAT_read_enum(const char *type, const char *name, u64 *v
->  	if (btf_is_enum(t)) {
->  		struct btf_enum *e = btf_enum(t);
+>>
+>> We could probably keep the open-coded loop in case bpf_loop is not
+>> available but `perf trace` would still fail on kernels without bpf_loop
+>> for new perf built with Clang>=22. Also, the code would be a bit ugly
+>> and I'm not sure how well the feature check for helpers (bpf_loop) works
+>> on old kernels.
 >  
-> -		for (i = 0; i < BTF_INFO_VLEN(t->info); i++) {
-> +		for (i = 0; i < btf_vlen(t); i++) {
->  			n = btf__name_by_offset(__COMPAT_vmlinux_btf, e[i].name_off);
->  			SCX_BUG_ON(!n, "btf__name_by_offset()");
->  			if (!strcmp(n, name)) {
-> @@ -53,7 +53,7 @@ static inline bool __COMPAT_read_enum(const char *type, const char *name, u64 *v
->  	} else if (btf_is_enum64(t)) {
->  		struct btf_enum64 *e = btf_enum64(t);
->  
-> -		for (i = 0; i < BTF_INFO_VLEN(t->info); i++) {
-> +		for (i = 0; i < btf_vlen(t); i++) {
->  			n = btf__name_by_offset(__COMPAT_vmlinux_btf, e[i].name_off);
->  			SCX_BUG_ON(!n, "btf__name_by_offset()");
->  			if (!strcmp(n, name)) {
-> @@ -97,7 +97,7 @@ static inline bool __COMPAT_struct_has_field(const char *type, const char *field
->  
->  	m = btf_members(t);
->  
-> -	for (i = 0; i < BTF_INFO_VLEN(t->info); i++) {
-> +	for (i = 0; i < btf_vlen(t); i++) {
->  		n = btf__name_by_offset(__COMPAT_vmlinux_btf, m[i].name_off);
->  		SCX_BUG_ON(!n, "btf__name_by_offset()");
->  			if (!strcmp(n, field))
-> -- 
-> 2.43.0
-> 
+> Any chance process_arg_cb() can be called directly in the regular for
+> loop on old kernels?
+
+That's my thinking, too. Should be pretty straightforward, I'm going to
+give it a try in v2.
+
+Viktor
+
