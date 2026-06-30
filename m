@@ -1,105 +1,297 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159F81A0BF3;
-	Tue, 30 Jun 2026 14:18:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884654279F6;
+	Tue, 30 Jun 2026 14:23:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782829091; cv=none; b=tpIPWjp/O7M8fG5rbrJPOmfmd1bAB6n98Acjn3l8mYkoZuS/93XHNUoBqrRXFaz0bUoWXVqL1xSJj8CfG2vhZCh/T/FevJcPZqO8cUiK7+EgYiCropqMPVIFYoPISYgrVT298ffj5r+a9hqnQdMw940iAd1vV2J4H/TizpA1tvg=
+	t=1782829406; cv=none; b=eH5E8uYMy/D5uMn4EZiFcTzdsOJ5UeVFfTqvrCDM/UYC/lJ/0T/Dpc5iwT/0QiKtjGyf6GExG+XEfg3/UouU6gKqepMs4O9yp+iVULkn0mJiKIQ8JlOs0AE9/e39j8i02+0UAvR0Kisy/cjO6rbrKN2kd5AOl+KfVM7RyxQ/tzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782829091; c=relaxed/simple;
-	bh=B8Y0dTMlB+oB9s7duvm7DhqDyHlJZoxRIu7q/l43pzc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L8imXBJh/C01TMsDpNM4o4NQ4i7l+DjSf+tigGqyDa5LfrHrM3QExEVfo/vwJPYJbFJQNwBLRsg2Lzb58DHcCG1WW242wShg4+q5Z4XCOm1bl7lvZ3sBLWZrAFbjAYx8WqyJ8tjl3ca6WoRW5dCuF6dOBd01NDMXbhal54B/eco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=czOvN6MP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782829406; c=relaxed/simple;
+	bh=4Mdk6PeJVz2qKvGO8sh40YuDeFqEaJZUp90ErRdeae4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=YknTcq6S+P5/aP7NkRN76R/Bj6Bj8ZEGXp35h45XEypDi+cru5evaWhODPD3BUj64vrc/XlG4ZrY7gHsvDovw5dTIr6mKwN81hmbNQxM9+kvnWd6Ryy7vH+PgakwcTMip8J+cRAKxUkY8ug25ZxFuN1zN3nU1r0f//WUBV5YsgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AVINqA4+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="czOvN6MP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A6491F00A3A;
-	Tue, 30 Jun 2026 14:18:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AVINqA4+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FDC11F000E9;
+	Tue, 30 Jun 2026 14:23:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782829090;
-	bh=nJE7z6y+b0729BtKGMZ7zs0Yot0Hv1XhxgGW0/v1JZc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=czOvN6MPHetgLKJr5rLG6WWWF2AgkQQu5eBvJsJ5Yt9XG/CkpJu012K4kYCMEmjhI
-	 4y+VvaQY1M81JIrE9e0akdnw63N8atIg83+q2d23SSmfhcjoi4giHM+aMJMRvPWyaT
-	 y0dgHzWvwh9pCQIsK2MTRRFAxmlYSIbSJ542/LL5+05w6s5clcKLi82csRNiMgBUPx
-	 fim/GrOlNnCOZaDrf6+O5NPI3DJgw2owkORlK77Y0c4sPGgJ722AuYSOVxedB+973h
-	 4RdfQWcQBo8KurgCe1FP+gvQeAlCDe2eFNB/VAYbdvvmHQVXEu2cXuQpucrg+aTtbT
-	 EMSWmRA6izxyw==
-Message-ID: <cf25f667-1095-4f84-98ff-bf4662d3faa8@kernel.org>
-Date: Tue, 30 Jun 2026 08:18:07 -0600
+	s=k20260515; t=1782829405;
+	bh=fUSz7eEHYpvlOzsm+PvIOL5UMpwSX4asWnIG8SXRQ9w=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=AVINqA4+0mKW2mbjg4vu8fM695FCCJx6R/nwzY2PZ9fiJJhPzAVXWL6lf61XNUJX/
+	 YJgPmk14Czg6d1p3zQ6jRrrqJiVjg6hCw20WvCNSVB2/3Dg9hyUFMK01SFn0i6YZRA
+	 ke5H+Ol0omhT/06YZVLMeNP6fYuOXzNwNNlxEV118f0F4Tr2ws4GZeVIEezcbOhCz8
+	 DTr5q5lTordecxRlTR2Dbk80KcMsX0bQKQlehHmdhtqGOoOAMc3So3Md5K+aaIi383
+	 9ps14BNr62/RAx+azFG7eu+B8stugu9/fNb0XdtiwTXekuzayIMYXk3s6e8QJcq7CS
+	 q5oaNrL6Oi12Q==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 1/1] tools/bpftrace: Add a simple instrumented kernel
+ profiler
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Aaron Lewis" <aaronlewis@google.com>
+Cc: bpf@vger.kernel.org, kvm@vger.kernel.org
+In-Reply-To: <20260630141152.3757722-2-aaronlewis@google.com>
+References: <20260630141152.3757722-1-aaronlewis@google.com>
+ <20260630141152.3757722-2-aaronlewis@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 30 Jun 2026 14:23:24 +0000
+Message-Id: <20260630142325.0FDC11F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
- bpf_fib_lookup() helper
-Content-Language: en-US
-To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
- yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
- a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
- eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
- <20260624030530.3342884-2-avinash.duduskar@gmail.com>
- <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org> <87se65bd04.fsf@toke.dk>
- <2ffa32dd-5c88-488a-aa23-deef13465eb9@kernel.org> <87echobb5h.fsf@toke.dk>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <87echobb5h.fsf@toke.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On 6/30/26 4:00 AM, Toke Høiland-Jørgensen wrote:
->> It does not make sense to require a flag to get lookup output. vlan
->> proto of 0 is not valid, so it is a clear indication that the vlan
->> output parameters were not set during the lookup.
-> 
-> Okay, so we could just unconditionally set the VLAN fields, but if we
-> start rewriting the ifindex that would be a change of the existing
-> behaviour that could break existing applications, no?
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+s) to consider:
+- [Medium] Incomplete timers (DURATION_UNSET) are blindly aggregated, corru=
+pting profile metrics.
+- [Medium] The `kvm_mmu_page_fault` probe incorrectly names its timer `kvm_=
+vcpu_block`.
+- [Medium] Two-pass parsing architecture breaks when reading from standard =
+input, causing an AttributeError.
+- [Medium] Fragile parsing logic crashes the script if any BPF trace map ev=
+ents are dropped.
+- [Low] File validation checks evaluate against closed file descriptors, re=
+ndering them dead code.
+--
 
-Consistently dealing with upper devices is one of the reasons I never
-sent patches for vlan support.
+commit 991cf3dc11faba4afe46fa2281e4850e5407d45b
+Author: Aaron Lewis <aaronlewis@google.com>
 
-xdp support is at the driver layer for real (physical) devices. The fib
-lookup is going to return the vlan device index - a virtual device.
-Support for xdp should not be propagated to virtual devices; it goes
-against the intent of xdp. Any trip down this path will have to decide
-how to handle vlan-in-vlan use cases. Where is the line drawn for fast
-networking?
+tools/bpftrace: Add a simple instrumented kernel profiler
 
-> 
-> Specifically, if an XDP application has a table of the interfaces it
-> forwards between, today they'd get a VLAN interface ifindex, which would
-> not be in that table, and the application would return XDP_PASS. Whereas
-> if we change the ifindex and populate the VLAN tag, suddenly the
-> interface would be in the table, but because the application doesn't
-> read the returned VLAN tag, it will end up sending packets out without
-> tagging them, leading to broken forwarding.
+This commit introduces a simple instrumented profiler for the kernel using
+BpfTrace. It allows arbitrary tracing of kernel functions and tracepoints,
+and includes a Python script to aggregate and display the results in a
+hierarchical view with timing data.
 
-I have not followed developments over the past few years. Does XDP have
-support for vlan acceleration in the Tx path now? You really want that
-to deal with vlans and not replicating s/w processing in ebpf.
+> diff --git a/tools/bpftrace/instrumented_profiler/aggregate_bpf_results.p=
+y b/tools/bpftrace/instrumented_profiler/aggregate_bpf_results.py
+> new file mode 100644
+> index 0000000000000..f4ffe8cff4418
+> --- /dev/null
+> +++ b/tools/bpftrace/instrumented_profiler/aggregate_bpf_results.py
 
-> 
-> So if we don't want the flag, we'd need some other mechanism to resolve
-> the parent ifindex, AFAICT? Maybe a xdp_get_parent_ifindex() kfunc, say?
-> That could also be made generic for other stacked interface types, I
-> suppose.
-> 
-> WDYT?
+[ ... ]
 
-dealing with stacked devices is hard :-)
+> +def update_child(r: BpfResult, timer: BpfTimer, tid: int) -> int:
+> +  i =3D r.child_index.get(timer.name)
+> +  if i is None:
+> +    i =3D len(r.children)
+> +    r.children.append(BpfResult(
+> +        timer.name,
+> +        timer.start_time_us,
+> +        timer.start_time_us + timer.duration_us,
+> +        timer.duration_us,
+> +        timer.duration_us,
+> +        timer.duration_us,
+> +        1,
+> +        1,
+> +        timer.depth,
+> +        tid))
+> +    r.child_index[timer.name] =3D i
+> +  else:
+> +    r.children[i].wall_time_start_us =3D min(r.children[i].wall_time_sta=
+rt_us, timer.start_time_us)
+> +    r.children[i].wall_time_end_us =3D max(r.children[i].wall_time_end_u=
+s, timer.start_time_us + timer.duration_us)
+> +    r.children[i].thread_us +=3D timer.duration_us
+> +    r.children[i].max_us =3D max(r.children[i].max_us, timer.duration_us)
 
-What is the return is a bond device or a vlan on a bond device?
+[Severity: Medium]
+When a traced function does not complete before tracing ends (for example, =
+if
+interrupted via Ctrl-C), the duration remains at its initialization value of
+DURATION_UNSET (-1 cast to uint64).
 
+Are we blindly aggregating incomplete timers here?
+
+Adding this massive sentinel value directly to thread_us and max_us will
+severely corrupt the aggregated timing metrics.
+
+[ ... ]
+
+> +def merge_recursive(r: BpfResult, tid: int, timers: List[BpfTimer], inde=
+x: int, child_index: int) -> int:
+> +  while index < len(timers):
+> +    while index < len(timers) and timers[index] =3D=3D None:
+> +      index +=3D 1
+> +
+> +    if index >=3D len(timers):
+> +      return index
+> +
+> +    # The timer is a child of 'r'. (Child case)
+> +    if timers[index].depth =3D=3D (r.depth + 1):
+> +      # Add child
+> +      child_index =3D update_child(r, timers[index], tid)
+> +
+> +      # Now that the timer has been handled increment to the next one.
+> +      index +=3D 1
+> +
+> +    # The timer is a child of 'r'. (Grandchild case)
+> +    elif timers[index].depth =3D=3D (r.depth + 2):
+> +      if child_index < 0:
+> +        raise ValueError("Invalid 'child_index'")
+> +      # Recurse down the child becuase that is the parent this timer.
+> +      index =3D merge_recursive(r.children[child_index], tid, timers, in=
+dex, child_index)
+> +
+> +    # The timer is a descendant of 'r', but not the child... Invalid cas=
+e!
+> +    elif timers[index].depth > (r.depth + 2):
+> +      raise ValueError("Invalid depth.  descendant can only be children.=
+ name =3D '%s', tid =3D %d, index =3D %d" % (timers[index].name, tid, index=
+))
+
+[Severity: Medium]
+Will this script crash with a ValueError or IndexError if bpftrace drops any
+map events due to ring buffer overflow or map eviction under heavy load?
+
+The parsing logic appears to assume a flawless 1:1 correlation across all
+dumped maps. If events are dropped, it might create a gap in the call depth
+triggering this strict ValueError, or result in an IndexError during array
+assignment in generate_from_log() when index expectations are broken.
+
+[ ... ]
+
+> +def generate_from_log(files: Sequence[str]):
+> +  """Read the trace and return a list of ProfilerResult objects."""
+> +
+> +  timer_counts =3D {}
+> +  all_timers =3D {}
+> +
+> +  count_regex =3D re.compile(
+> +      r"^@timer_count\[(?P<tid>[0-9]+)\]:\W(?P<count>[-0-9]+)"
+> +  )
+> +  name_regex =3D re.compile(
+> +      r"^@timer_name\[(?P<tid>[0-9]+),\W*(?P<index>[0-9]+)\]:\W(?P<name>=
+[\w\.0-9]+)"
+> +  )
+> +  start_time_regex =3D re.compile(
+> +      r"^@timer_start\[(?P<tid>[0-9]+),\W*(?P<index>[0-9]+)\]:\W(?P<star=
+t_time_us>[-0-9]+)"
+> +  )
+> +  duration_regex =3D re.compile(
+> +      r"^@timer_duration\[(?P<tid>[0-9]+),\W*(?P<index>[0-9]+)\]:\W(?P<d=
+uration_us>[-0-9]+)"
+> +  )
+> +  depth_regex =3D re.compile(
+> +      r"^@timer_depth\[(?P<tid>[0-9]+),\W*(?P<index>[0-9]+)\]:\W(?P<dept=
+h>[-0-9]+)"
+> +  )
+> +
+> +  attaching_regex =3D re.compile(
+> +      r"^Attaching.*"
+> +  )
+> +
+> +  # Get all counts.  That way we know how many timers each thread used.
+> +  for line in fileinput.input(files=3Dfiles):
+
+[Severity: Medium]
+Could this two-pass parsing architecture break when reading trace data dire=
+ctly
+from standard input?
+
+If a user pipes bpftrace output into this script, this first loop will cons=
+ume
+the entire stream until EOF.
+
+The second fileinput.input() loop below will then read nothing, leaving the
+timer arrays filled with None values. This leads to an AttributeError in
+merge_timers() when attempting to read timers[0].depth.
+
+> +    line =3D line.rstrip()
+> +
+> +    m =3D re.fullmatch(duration_regex, line)
+> +    if m:
+> +      tid =3D int(m.group("tid"))
+> +      index =3D int(m.group("index"))
+> +      duration_str =3D m.group("duration_us")
+> +      duration =3D int(m.group("duration_us"))
+> +
+> +      if not tid in timer_counts:
+> +        timer_counts[tid] =3D index
+> +      else:
+> +        timer_counts[tid] =3D max(timer_counts[tid], index)
+> +
+> +  # Allocate enough timers to fit the trace.
+> +  for tid, count in timer_counts.items():
+> +    all_timers[tid] =3D [None] * (count + 1)
+> +
+> +  # Populate the trace.
+> +  for line in fileinput.input(files=3Dfiles):
+
+[ ... ]
+
+> +  root =3D BpfResult("", 0, 0, 0, 0, 0, 1, 1, -1, -1)
+> +  results =3D []
+> +  for tid, timers in all_timers.items():
+> +    merge_timers(root, tid, timers)
+> +  print_results(root, results)
+> +
+> +  if fileinput.fileno() =3D=3D 0:
+> +    raise ValueError("Expected a file to read.")
+
+[Severity: Low]
+Does this file validation check evaluate against closed file descriptors?
+
+The fileinput loops have already exhausted and closed the files by this poi=
+nt.
+Calling fileinput.fileno() returns the active UNIX file descriptor, which is
+-1 when closed, not the count of parsed files.
+
+Both this check and the one below will always evaluate to false, rendering
+this block dead code.
+
+> +
+> +  if fileinput.fileno() > 1:
+> +    raise ValueError("Too many files read.  Expected 1")
+> +
+> +def main() -> None:
+
+[ ... ]
+
+> diff --git a/tools/bpftrace/instrumented_profiler/samples/kvm_trace.bt b/=
+tools/bpftrace/instrumented_profiler/samples/kvm_trace.bt
+> new file mode 100644
+> index 0000000000000..bd341e408570e
+> --- /dev/null
+> +++ b/tools/bpftrace/instrumented_profiler/samples/kvm_trace.bt
+
+[ ... ]
+
+> +/*
+> + * Time 'kvm_mmu_page_fault()'.
+> + *
+> + * Check: sudo grep kvm_mmu_page_fault /proc/kallsyms
+> + */
+> +kfunc:kvm_mmu_page_fault
+> +{
+> +	START_TIMER("kvm_vcpu_block",
+> +		    @timer_name, @trace_stack, @timer_start, @timer_duration,
+> +		    @timer_depth, @timer_count, @trace_stack_top);
+> +}
+
+[Severity: Medium]
+Is there a copy-paste error here where the timer for kvm_mmu_page_fault is
+incorrectly named kvm_vcpu_block?
+
+This will falsely attribute page fault durations to kvm_vcpu_block, distort=
+ing
+the captured metrics for the profile.
+
+> +kretfunc:kvm_mmu_page_fault
+> +{
+> +	if (@trace_stack_top[tid] > 0) {
+> +		STOP_TIMER(@trace_stack_top, @trace_stack, @timer_duration, @timer_sta=
+rt);
+> +	}
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260630141152.3757=
+722-2-aaronlewis@google.com?part=3D1
