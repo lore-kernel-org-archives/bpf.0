@@ -1,73 +1,150 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8D243900E;
-	Tue, 30 Jun 2026 14:37:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617A8368D46;
+	Tue, 30 Jun 2026 14:46:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782830254; cv=none; b=HKAakKxJj0CNAwcGngvLZwYl20QrbNDKa8CRxUjLXV4YTr/dxGEG5kUVOX3cjxlDklY0jWHuFytWgzke2oQqwXI75FsgBG3k2FArGvrfZzUXePj1oPv4HPud/DQKeseaCZTF5e5bV9yHqtbr1keTrHuceSscyBwHdElFdUKbHGU=
+	t=1782830777; cv=none; b=TOTH6cg9mo7u3RUvIKMj1uyzNPaZWT6HqrzSSQz9sn9Wv6bD7rKAjNjgclw9jVIOP+KqchLLaDE2PmqF1NIxhLrS4yKu72NcCVgEbHwDIWA6EEqSoQaXEawhAgeTVIAgvciz1vLTRmz6t2KiPHyUfa8Waf5qkbc8z+Hi4y1vGVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782830254; c=relaxed/simple;
-	bh=qYkGTJXbPXZcHnt20w8gJCZ37O5G4G3Mba+cie49R0M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iWteplM4Qs0U7xBke+uylZrER02fHXC5Tb6Mu9Ymg8FDFOHP5pvXhSgTT6Anwe/mjrzPU/wuOt7QekPXqZvS20eUJGBgTBrNF4zJYwQiWR+RaLAJZdE4dKCkKX0yC1TrN4luXMPs2/vySA0jazLJX3XFx075rryq+DmIORJIddE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=CgemoEDA; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=D5H2UWkM; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1782830777; c=relaxed/simple;
+	bh=et6WWXnaS2+pKmOqfW2RoPxasq8OHuop6VwHgCWWPSU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=WB5C+SOmZwWut1JD0TKchAV+jPMoltAoYeqD13ZLG9yahOLl0QOIjiwGtFo38sAJH8Bl4Sr7G/QAwe08qBF7Uq6uBDIgpfY0mR8mMdXcdOkbzFKXpvQcpN0Q7D19kZVggQVJ9EuPblttRdXR/GmOSQih9Kh6IgWovRMTcsHgmSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LSsPTQJ/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="CgemoEDA";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="D5H2UWkM"
-Date: Tue, 30 Jun 2026 16:37:30 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1782830251;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ezLN1M9JlwArYj7BBJygaHQ3CcZPQGglpyFqaQ1V4EU=;
-	b=CgemoEDAhBhli2MXnGblrEhYV4/HcyVG4Xjp+/Gd2phD6kvZ1O2qSs1SIjc0nbTGDvSe1t
-	SUJgsFTMOKgoypA7l9oYtkoLES9+TVoa4dzx1NmzQlSTu0UbjXTPPVl7queu7A0B036oOl
-	+mTf78Onz3uOxHkVFhcZhJXi4AQT3wzFKLh7ZDLlloV7JEPFhRHH+VfT+XErIq3g2UR85A
-	STi/ttIDIN1dryJa3rHioQ6LwN6vECe0c+OC2C5wMP+AVoLXLOPYe2/WkueA8QNKog3IFk
-	hs3ENulEsxDhWGQEaiwGDa4zWbL8cCFIic4c/wm3xEpvKXuMR+tzrug7dBSBYQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1782830251;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ezLN1M9JlwArYj7BBJygaHQ3CcZPQGglpyFqaQ1V4EU=;
-	b=D5H2UWkM9IozabpBUu6oLVONiIjo5RguuKx2l7+CVKip0gjzunesfuYXepr0BBWbXW1QU0
-	33ipBUNDFvJMU6DQ==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: kuba@kernel.org, pabeni@redhat.com, jhs@mojatatu.com, andrii@kernel.org,
-	memxor@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net 0/3] Fix broken TC_ACT_REDIRECT from qdiscs
-Message-ID: <20260630143730.ZhXWjEIh@linutronix.de>
-References: <20260630123331.186840-1-daniel@iogearbox.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LSsPTQJ/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC9051F000E9;
+	Tue, 30 Jun 2026 14:46:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782830776;
+	bh=tUR1TZqZgIjf7g/qHfTnghrYzXKLgJDw1xWeRAXLWJo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=LSsPTQJ/A+v2jDQU690DW1fqHe/pLTvNXjuDFl1rNxlNreEw651MXk4g2iYcEkoLB
+	 KROa+IraIHhnWx/b6ykEYVlhLxSwURZ9K26rgS/qXttBW2D93uWcRAWbN5dIAwlbi8
+	 X02xOAeT7hZ0ojScXO8wXPseolmhnMbMlwzYfR7RhiuZ1xZfY05wJ87frNwYoh+nrQ
+	 RO4Ul8we42r3+7z/nlPPDsK5oKwF/PsNJqIJsydcQPhx+LzlUVH7yErgroIo+P11v9
+	 LP8cPpZBrN1+fcphatL2PpF7s8pSsl8PMQveBJqOfHIP7AJJaiXkR04oMK6v1IZemB
+	 Fla9dRfgznWKw==
+Content-Type: multipart/mixed; boundary="===============4372272007352423530=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260630123331.186840-1-daniel@iogearbox.net>
+Message-Id: <da582eb50a1b974b40f4f4c22b0ff138e490d84e0c3ff06a6f13428f62608ded@mail.kernel.org>
+In-Reply-To: <tencent_5E4F8F8DADA5DE0DAD924ADD835DD7991707@qq.com>
+References: <tencent_5E4F8F8DADA5DE0DAD924ADD835DD7991707@qq.com>
+Subject: Re: [PATCH v4] bpf: Fix smp_processor_id() call trace for preemptible kernels
+From: bot+bpf-ci@kernel.org
+To: eadavis@qq.com,sashiko-bot@kernel.org
+Cc: eadavis@qq.com,jiayuan.chen@linux.dev,sashiko-reviews@lists.linux.dev,andrii@kernel.org,ast@kernel.org,bpf@vger.kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,jolsa@kernel.org,linux-kernel@vger.kernel.org,martin.lau@linux.dev,memxor@gmail.com,netdev@vger.kernel.org,song@kernel.org,syzkaller-bugs@googlegroups.com,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 30 Jun 2026 14:46:15 +0000 (UTC)
 
-On 2026-06-30 14:33:28 [+0200], Daniel Borkmann wrote:
-> This is an alternative fix to [0] in order to not uglify
-> __dev_queue_xmit() with sprinkled ifdefs given this can be
-> simplified and isolated through a simple test into the BPF
-> redirect helper itself.
-> 
-> I've also added a proper BPF selftest, so there is no need
-> to check-in a binary BPF object into selftests given we do
-> have BPF infra for all of this.
+--===============4372272007352423530==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-1/3 makes sense. Assuming we wouldn't have this per-task memory
-assignment, wouldn't then the state from one redirect leak into another?
+> bpf: Fix smp_processor_id() call trace for preemptible kernels
+>
+> bpf_mem_cache_free_rcu() maybe called in preemptible context, this
+> will trigger the below warning message:
+>
+> BUG: using smp_processor_id() in preemptible [00000000] code: syz.0.17/5820
+> caller is bpf_mem_cache_free_rcu+0x48/0xc0 kernel/bpf/memalloc.c:954
+> Call Trace:
+>  check_preemption_disabled+0xd3/0xe0 lib/smp_processor_id.c:47
+>  bpf_mem_cache_free_rcu+0x48/0xc0 kernel/bpf/memalloc.c:954
+>  rhtab_delete_elem+0x185a/0x1b30 kernel/bpf/hashtab.c:2969
+>  __rhtab_map_lookup_and_delete_batch+0x935/0xcb0 kernel/bpf/hashtab.c:3349
+>  bpf_map_do_batch+0x445/0x630 kernel/bpf/syscall.c:-1
+>  __sys_bpf+0x906/0xd90 kernel/bpf/syscall.c:-1
+>
+> this_cpu_ptr() access needs to be guarded against migration.
 
-For what it's worth:
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+The commit message says "guarded against migration" but the fix actually
+disables preemption using get_cpu()/put_cpu(). Is this description accurate?
 
-Sebastian
+get_cpu() does preempt_disable() + __smp_processor_id(), not just
+migrate_disable(). The later sentence "disabling preemption rather than
+prohibiting migration" correctly describes the fix, but this earlier line
+understates the requirement.
+
+> Wrapping this batch operation in bpf_disable_instrumentation() risk
+> blinding BPF tracing globally on the CPU if preemption occurs.
+>
+> bpf_disable_instrumentation() increments the per-CPU bpf_prog_active counter.
+> Because migrate_disable() and rcu_read_lock() do not disable preemption under
+> CONFIG_PREEMPT_RCU, the task can be preempted during this potentially long
+> loop.
+>
+> If preempted, bpf_prog_active would remain elevated on that CPU, which could
+> cause subsequent tasks scheduled on the same CPU to silently drop BPF tracing
+> events (kprobes, tracepoints, perf).
+
+The reasoning about bpf_disable_instrumentation() is sound, but could the
+commit message clarify that rhtab_delete_elem() already calls
+bpf_disable_instrumentation() internally?
+
+Looking at rhtab_delete_elem():
+
+kernel/bpf/hashtab.c:rhtab_delete_elem() {
+    ...
+    bpf_disable_instrumentation();
+    ret = rhashtable_remove_fast(&rhtab->table, &elem->htab_node,
+                                  rhtab->rhtable_params);
+    bpf_enable_instrumentation();
+    ...
+}
+
+This means the same "blinding BPF tracing" window already exists in the
+per-element path. The argument is against a longer-held instrumentation
+disable across the entire loop, not a categorical concern.
+
+> Therefore, we fix this by disabling preemption rather than prohibiting
+> migration.
+>
+> Fixes: 5af6807bdb10 ("bpf: Introduce bpf_mem_free_rcu() similar to kfree_rcu().")
+
+Should the Fixes tag point to a different commit? The bug occurs when
+__rhtab_map_lookup_and_delete_batch() calls rhtab_delete_elem() which calls
+bpf_mem_cache_free_rcu() in preemptible context.
+
+Commit 5af6807bdb10 introduced bpf_mem_free_rcu() in 2023 but did not modify
+kernel/bpf/hashtab.c or introduce the rhtab code. The call chain was
+introduced by:
+
+  Fixes: 6905f8601298 ("bpf: Allow special fields in resizable hashtab")
+
+which added the rhtab implementation including __rhtab_map_lookup_and_delete_batch()
+and the call to bpf_mem_cache_free_rcu() in rhtab_delete_elem().
+
+> Reported-by: syzbot+fd7e415d891073b83e1f@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=fd7e415d891073b83e1f
+> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+
+[ ... ]
+
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -3345,8 +3345,10 @@
+>  	}
+>
+>  	if (do_delete) {
+> +		get_cpu();
+>  		for (i = 0; i < total; i++)
+>  			rhtab_delete_elem(rhtab, del_elems[i], NULL, 0);
+> +		put_cpu();
+>  	}
+>
+>  	rcu_read_unlock();
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28451219226
+--===============4372272007352423530==--
