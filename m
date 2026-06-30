@@ -1,167 +1,101 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E131C23FC41
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 02:58:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 401273D332B;
+	Tue, 30 Jun 2026 03:06:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782788318; cv=none; b=bCXBr+Ck1SU7pCbfFh6E/VVkPYidHPI0fsnG1v0aae7CNpAODB4DEM1YM0qyQ7sKHZYUPNU76RAB3qe4Zhz/fwg0umzm75qenHf51bW9FeE9jHmw01WymPv7NURp8nuwcfx4m0TOfiPwgdio0DCadd4Bw72HyWkqIpoKUxEMPq4=
+	t=1782788777; cv=none; b=bZSpkeTrdk1fUv9Mio6Y+L8PtfxCS/6SfAywLwu1HeCx8shXGJimQuh8mtZ8ImHdBwAa5ed8JJDOmr9aTson8oZR/wSZT45ugTekIDGR+FEjAPFSFTGSXA28yOvEGaeu7Y3LnQMgnvmK2jTaWVA/iRxrM3sbxbLLzbyYwMEHXFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782788318; c=relaxed/simple;
-	bh=tPLinYbJb80Iz/qFBGacknXcBvQq+tUEq9miK6254Iw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sbcZ4h254cHCf3MZigfrKzkem6ZgY5Y9RQNLut2C52vukgD/cGX+rZqrTKDEuh2hptY4dbjn0acKI0cHvfMdbJM7bvebWuXKTM0qVk2g7S8Q6rkgrPbRfRWc4NvYd1xxFYuwx1pzeoyAt+6ktnHBjVnQUCIfcTyQ4Lr2k+g5bHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Z9L8pjtG; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782788777; c=relaxed/simple;
+	bh=kNjrwoORVthnBf/vBxPfWIiMUiGevlSWW9XXBnF9gCw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=baf3DFJZI49dIR6sLRXFaaXElBDnesfwc8Ch+lOk5m9tjGnRt4dR66FPH1QwbfTPrBoZrUJKCYTCftfE4/z8snqx4haPvEXVqsvW1uRHjnvpWmkcLVuhsZCHK9RcwOLbQDYNvVv8VTLbnY8wtXQnnTjh9PgR8GAd+NblWYORzDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=e0TzzfJq; arc=none smtp.client-ip=113.46.200.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Z9L8pjtG"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782788304;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=OsYagQzu6qHNQWTSa0S7+sdlg1USYp8Up3WJKT3wYiY=;
-	b=Z9L8pjtGtgPdqqpvLzsFUS0JgIr7gs5/l0Zlddd83H+CvT7uKHQtMwmYrlV6Tsh63ry97E
-	OFOIsKp/Ozxz8x74bPxw1/pzsiywZpP2FFzGFO6/dgznVQAkNR69uhXfo7g/UuPUQr6Rno
-	BZMfGaLbzGgqyjJGLP0GVUyFWT8fgCc=
-From: George Guo <dongtai.guo@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	George Guo <guodongtai@kylinos.cn>,
-	bpf@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] selftests/bpf: Skip libarena when the BPF backend lacks 32-bit arena cmpxchg
-Date: Tue, 30 Jun 2026 10:58:09 +0800
-Message-Id: <20260630025809.74043-1-dongtai.guo@linux.dev>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="e0TzzfJq"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=42YfSe3DboV3wBjY85azjB4WYifYQz9ou3fKoyJ7f8U=;
+	b=e0TzzfJqQZp0DHl/gMR3UsVwky3RfiPDqJyA7juJpiV1Jt0I8ZxFeQbTz7IoSGWghFA7m7/J/
+	j9UzKlfapSweOKuqPbI9qNahaYjOSoTXvQbxvSl6kBu6DuricRMXG7HAno3KbY76WHN7pcXYlX4
+	gZl8+MUAn4Q6h+pHI5ZSy/k=
+Received: from mail.maildlp.com (unknown [172.19.162.140])
+	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4gq79B74nnz1T4xK;
+	Tue, 30 Jun 2026 10:57:18 +0800 (CST)
+Received: from dggemv706-chm.china.huawei.com (unknown [10.3.19.33])
+	by mail.maildlp.com (Postfix) with ESMTPS id F34842025F;
+	Tue, 30 Jun 2026 11:06:07 +0800 (CST)
+Received: from kwepemq200017.china.huawei.com (7.202.195.228) by
+ dggemv706-chm.china.huawei.com (10.3.19.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 30 Jun 2026 11:06:07 +0800
+Received: from [10.67.109.91] (10.67.109.91) by kwepemq200017.china.huawei.com
+ (7.202.195.228) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 30 Jun
+ 2026 11:06:06 +0800
+Message-ID: <f4c8f5fe-30c3-4e7f-8512-7a2befdd1ed3@huawei.com>
+Date: Tue, 30 Jun 2026 11:06:05 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH stable/linux-5.10.y 0/7] Backport Fix incorrect overlayfs
+ mmap() and mprotect() LSM access controls
+To: Amir Goldstein <amir73il@gmail.com>
+CC: <viro@zeniv.linux.org.uk>, <brauner@kernel.org>, <jack@suse.cz>,
+	<miklos@szeredi.hu>, <paul@paul-moore.com>, <jmorris@namei.org>,
+	<serge@hallyn.com>, <stephen.smalley.work@gmail.com>, <omosnace@redhat.com>,
+	<gregkh@linuxfoundation.org>, <sashal@kernel.org>,
+	<bboscaccy@linux.microsoft.com>, <linux-fsdevel@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-unionfs@vger.kernel.org>,
+	<linux-security-module@vger.kernel.org>, <selinux@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <stable@vger.kernel.org>, <lujialin4@huawei.com>
+References: <20260629070653.580879-1-caixinchen1@huawei.com>
+ <CAOQ4uxjcD0-PHqqmrpEvkLRgtKJGe8-n+6DQyBngjN2TorwU+g@mail.gmail.com>
+Content-Language: en-US
+From: Cai Xinchen <caixinchen1@huawei.com>
+In-Reply-To: <CAOQ4uxjcD0-PHqqmrpEvkLRgtKJGe8-n+6DQyBngjN2TorwU+g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemq200017.china.huawei.com (7.202.195.228)
 
-From: George Guo <guodongtai@kylinos.cn>
+Thank you for your reply. Regarding the two points of feedback:
 
-The arena qspinlock pulled in by libarena (bpf_arena_spin_lock.h) performs
-a 32-bit atomic compare-and-exchange on an arena (address space 1) pointer
-via atomic_try_cmpxchg_acquire() on the 32-bit atomic_t lock word. Not
-every LLVM BPF backend can select that operation; releases such as clang 19
-abort instruction selection with:
+First, 6.1 is still in the process of being adapted.
 
-  error: unsupported atomic operation, please use 64 bit version
-  fatal error: error in backend: Cannot select: AtomicCmpSwap<(s32)> ...
-  In function: arena_spin_lock_slowpath
+Second, this patch set is primarily intended to fix CVE-2026-46054, but 
+it seems that for lower versions to implement SELinux checks for overlay 
+mmap/mprotect checks, some dependencies are unavoidable. In such cases, 
+should we add more tests to reduce the risk and integrate the changes, 
+or should we simply not fix this issue? If more tests are needed, are 
+there any recommended test suites?
 
-Because libarena/libarena.skel.h is an unconditional dependency of
-test_progs, this aborts the entire selftests/bpf build before test_progs is
-ever linked, so none of the other tests can be built or run. This was
-observed building selftests/bpf for LoongArch with clang 19, but it is a
-property of the BPF backend, not of the host architecture.
-
-Mirror the existing CLANG_HAS_ARENA_ASAN feature probe: detect whether the
-backend can compile a 32-bit arena cmpxchg, and only build libarena when it
-can. Define HAS_BPF_ARENA in that case and guard prog_tests/libarena.c
-behind it - exactly the way prog_tests/libarena_asan.c is guarded behind
-HAS_BPF_ARENA_ASAN - so the test still compiles and reports as skipped when
-libarena is not built. When the operation is unsupported, libarena is
-skipped and the rest of test_progs builds and links as before.
-
-Fixes: d5327480a12a ("selftests/bpf: Add basic libarena scaffolding")
-Signed-off-by: George Guo <guodongtai@kylinos.cn>
----
- tools/testing/selftests/bpf/Makefile          | 14 ++++++++++++++
- .../selftests/bpf/prog_tests/libarena.c       | 19 ++++++++++++++++++-
- 2 files changed, 32 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index b642ee489ea6..0098d892cb39 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -91,6 +91,17 @@ CLANG_HAS_ARENA_ASAN := $(shell echo 'int x;' | \
- 	-mllvm -asan-shadow-addr-space=1 \
- 	-x c -c - -o /dev/null 2>/dev/null && echo 1)
- 
-+# The arena qspinlock used by libarena performs a 32-bit atomic cmpxchg on an
-+# arena (address space 1) pointer. Not every LLVM BPF backend can select it;
-+# older releases bail out with "unsupported atomic operation, please use 64 bit
-+# version", which aborts the whole selftests build. Probe for the operation and
-+# skip libarena (and its dependent tests) when the backend cannot handle it.
-+CLANG_HAS_ARENA_CMPXCHG32 := $(shell printf '%s\n' \
-+	'struct s { int counter; };' \
-+	'int f(struct s __attribute__((address_space(1))) *l, int o, int n)' \
-+	'{ return __sync_val_compare_and_swap(&l->counter, o, n); }' | \
-+	$(CLANG) --target=bpf -O2 -x c -c - -o /dev/null 2>/dev/null && echo 1)
-+
- # Order correspond to 'make run_tests' order
- TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_progs \
- 	test_sockmap \
-@@ -835,10 +846,13 @@ LIBARENA_BPF_DEPS := $(wildcard libarena/Makefile		\
- 				 libarena/selftests/*		\
- 				 libarena/*.bpf.o)
- 
-+ifneq ($(CLANG_HAS_ARENA_CMPXCHG32),)
- LIBARENA_SKEL := libarena/libarena.skel.h
-+CFLAGS += -DHAS_BPF_ARENA
- 
- $(LIBARENA_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(LIBARENA_BPF_DEPS)
- 	+$(MAKE) -C libarena libarena.skel.h $(LIBARENA_MAKE_ARGS)
-+endif
- 
- ifneq ($(CLANG_HAS_ARENA_ASAN),)
- LIBARENA_ASAN_SKEL := libarena/libarena_asan.skel.h
-diff --git a/tools/testing/selftests/bpf/prog_tests/libarena.c b/tools/testing/selftests/bpf/prog_tests/libarena.c
-index 61ea68dce410..a7ede72c7256 100644
---- a/tools/testing/selftests/bpf/prog_tests/libarena.c
-+++ b/tools/testing/selftests/bpf/prog_tests/libarena.c
-@@ -1,6 +1,8 @@
- // SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
- /* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
- #include <test_progs.h>
-+
-+#ifdef HAS_BPF_ARENA
- #include <unistd.h>
- 
- #include <libarena/common.h>
-@@ -198,7 +200,7 @@ static void run_libarena_parallel_test(struct libarena *skel, struct bpf_program
- 	run_libarena_parallel_fini(skel, name, prefixlen);
- }
- 
--void test_libarena(void)
-+static void run_test(void)
- {
- 	struct arena_alloc_reserve_args args;
- 	struct libarena *skel;
-@@ -251,3 +253,18 @@ void test_libarena(void)
- out:
- 	libarena__destroy(skel);
- }
-+
-+#endif /* HAS_BPF_ARENA */
-+
-+/*
-+ * Run the test only if the BPF backend can compile the arena programs
-+ * libarena depends on (see CLANG_HAS_ARENA_CMPXCHG32 in the Makefile).
-+ */
-+void test_libarena(void)
-+{
-+#ifdef HAS_BPF_ARENA
-+	run_test();
-+#else
-+	test__skip();
-+#endif
-+}
--- 
-2.25.1
-
+On 6/30/2026 1:31 AM, Amir Goldstein wrote:
+> On Mon, Jun 29, 2026 at 8:38 AM Cai Xinchen <caixinchen1@huawei.com> wrote:
+>> ackport the patch series
+>> "Fix incorrect overlayfs mmap() and mprotect() LSM access controls" [1]
+>> to 5.10 lts
+> Chai,
+>
+> First of all, I don't think that stable maintainers are picking backports
+> to 5.10 that were not backported to 6.1 and 5.15.
+>
+> Second, backporting backing_file as a dependency to LTS kernels is a pretty
+> intrusive change, so your description above is very much lacking.
+>
+> Please do not backport backing_file to any of the LTS kernels without providing
+> detailed explanation to try and convince the vfs maintainers that you
+> verified this
+> bacport is safe for the LTS kernel, because honestly, this looks a bit
+> risky for me.
+>
+> Thanks,
+> Amir.
