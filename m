@@ -1,350 +1,332 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011040.outbound.protection.outlook.com [52.101.70.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B39093FAE09;
-	Tue, 30 Jun 2026 11:35:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782819343; cv=none; b=Biv0+J+ioI23mQrjNjbjdBPbKVVQHIQzYeon50XnkOGSxmGdWwXbGpDz/qamGZn/WdHuGer4Tml6PLwF0sAJQu1wAtrABVDLXSpFKiVEysSSTgJL+KVsn+WA1eS0MB+xG9WrCzNVvQyFgibpOkXdJEVvPpRMXqYUyN6fjQVjFC8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782819343; c=relaxed/simple;
-	bh=QjGz2Y9jMRppp8rvNtdHQgdXd4X0KsQq8hwgoKJnEJg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N+pAeVdMhAJdnrPRU6EO1biUy+/UIG7ovxWSPOoGJBtuEZfCR/G5cB3SFK83Sm/owmbxKUn4d3T+AlM5h5cHaStOXH3kcCVn3opk4lSws097geEpya8goYjgDuFqWk7AP9DLlCxZEdmfSzD58B6c6JSR1wUruGBVzxi+uazr/Bk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=JcBGePte; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D59405C55;
+	Tue, 30 Jun 2026 12:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.40
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782820917; cv=fail; b=bOTySD0xsKPYJx5j32k1cq/psDhJsPWsww37ZmwJYe7nSUlIHSFr6YMZ/leJCd9y08GP4eDsg7q5pdzZgZNn9fA20wUQr7g/A2I/QEAmtYtbAE9NfQXmZM5HNDMLAaq2gP2aVx6fKg8RDBfznKhjZpgkD1V6Dw1pCqy0c+Ruq5k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782820917; c=relaxed/simple;
+	bh=eHd/N0lqgmUv6F9/kVeZH80/vj/Ug2LnFq8X0K7jWVc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ftbkGo5zWgDZrT7Jr5Dzy2bF6g1NXiPnfNDVh0sBuZraFUmSkMocHZ96g6F/xRocko3KAnG1H+jQqo6URG8OGt9n3iXcxK/vjWdJjSgPerSbT1J6hEt3jJullNdUTrgwQLK+negjeXd6isJu8IPfSu0ruokUONWRLVqk9s9LvSo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=BIyvX/1j; arc=fail smtp.client-ip=52.101.70.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="JcBGePte"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65U9nOvH1582285;
-	Tue, 30 Jun 2026 11:35:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=7Wt989
-	FoWb2no5S8STL6eiYsx2I0rfyvNEeHgE89g5M=; b=JcBGePteCGE7kehzgowSCp
-	Ko8J2I5kXWwPCWAYxUAUg47F5lqoYYFFSWkbUp5Vw/tbLUNrQmD2/eeTYOGXGrlS
-	yrdddz4/faZQZWo5aU7GiwBcbPdvmfKFsEcRcUaYLzzmOfRqpQ4UhI+rojV+Po1x
-	hzFt5go+iaknQEzzGaPv25WHzPASTDmp2rNCdyAHDyG30Pi2esQ//aRuLfas8VaB
-	sv+NfWO84WOCAOzaxUVnFKQOnhXNK3lZnyGF3YcnLErkoMu0r/WUWUfDOJsLOPsj
-	GVRgw+RhJgVpmXBGbZt36tXi6KFD8LVCR9MA0BbwCRpujpj4lzCE6JEjbpGrnGgw
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4f26q9x6p2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 30 Jun 2026 11:35:23 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65UBYeM3005703;
-	Tue, 30 Jun 2026 11:35:22 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4f2u2g9tmt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 30 Jun 2026 11:35:22 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65UBZKYn24707762
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 30 Jun 2026 11:35:20 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BA06358054;
-	Tue, 30 Jun 2026 11:35:20 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 13BE058045;
-	Tue, 30 Jun 2026 11:35:17 +0000 (GMT)
-Received: from [9.123.2.143] (unknown [9.123.2.143])
-	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 30 Jun 2026 11:35:16 +0000 (GMT)
-Message-ID: <79961464-e8fb-419b-92a5-b5b57e00de52@linux.ibm.com>
-Date: Tue, 30 Jun 2026 17:05:15 +0530
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="BIyvX/1j"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=OhWKyjLCTAMZ2miBMvPXPPvuLYbpB8grLpNLipQE6VVDX+NDN0DJm98dEdYKIJ26HFGQIbyPtIbP3U02aQvjsPS97tAcnOK1s1UrF0AVhbPA72I5SP69gem1VoApTBULxJ6cnCHGDaI9zwFlaiJMYz7irRcceLkt8d7vklDNSpgsGTOaeEcPDIM1bdMcV0/tec69b1BybRPadAZ+It2deXirtp3UC11ZOPn5guLt8/REJJuI5SryX11k13+2HzAYqsKO2gsvgpT1JCWOp1EPepoiTkzpKSQZfNRTyR7TCun0OiHZDTzMFxRGUu0UY0IUQjMthQTKbkBSztpW83OzRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jp8tcFgXhMqpLIMrY4X12rw+rY5znkjBoeRjhhnLSlY=;
+ b=iL9U9zXmeF6pxH4ZxS7jUED7io+qzIQc17lwlteb97HHIO+C0YcFAUiWxSqZ+sC8cOxFzryHQ6E4F2+qlj1Fsj0GQqSztY+0chyvL91IWandKT7Pn1gzlQ31xMK7/LIZyCSsVFLIjWYgj/ElLoSgGtaV+8AcZDT+XHhZTyYyLrS4C+F4TMtgo0lHY+TOr/BcsHRm9+7zLteDQ36hrro70xM6AlNp25tmVTBW5WyxWc36qmmY7uLzxwMBsPz5MDZU/z/NIg33PlPo47RM+E0i62uKWeYTFps+DCV0Myvf8vO2e2izf5WKD/1MF+vq2d1HCw8P/tOhc0nVval8EDX7lA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.2.241) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jp8tcFgXhMqpLIMrY4X12rw+rY5znkjBoeRjhhnLSlY=;
+ b=BIyvX/1j2+V83Mc2fNWdUlWb5WX3X2gpQmZjyY10OjqUc+CAwlgsXjTWQZm99L0pOyKKUHlPtDW0YEHn+LewcOX5KeUCpSPYVk27RQvwZ5QEY32z4Ujgl308cvl1e64EulEvQs+7WjSg3Vxi4ILzS43+yGh9H/6rTc810RLi+ncR3LdrDGlPwD5NFvRlpXtTFut54bKFbHUQ14u5Jj/AnVhs72FuGeHlKafwP0BBU0tw6gZU/CUMn98sGdfZi6WWOHlVBf0YcxPErwraFzxQ/o6M1HRtjZ/u+aMLYrms/zZ78vHtJUix/8NHVcRn/h8yjjCzW/BXPYgZYIzCK90WUg==
+Received: from DU2PR04CA0066.eurprd04.prod.outlook.com (2603:10a6:10:232::11)
+ by AMDPR07MB11456.eurprd07.prod.outlook.com (2603:10a6:20b:73d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.18; Tue, 30 Jun
+ 2026 12:01:49 +0000
+Received: from DU2PEPF00028CFE.eurprd03.prod.outlook.com
+ (2603:10a6:10:232:cafe::8f) by DU2PR04CA0066.outlook.office365.com
+ (2603:10a6:10:232::11) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.159.19 via Frontend Transport; Tue,
+ 30 Jun 2026 12:01:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.241)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.2.241 as permitted sender)
+ receiver=protection.outlook.com; client-ip=131.228.2.241;
+ helo=fihe3nok0734.emea.nsn-net.net; pr=C
+Received: from fihe3nok0734.emea.nsn-net.net (131.228.2.241) by
+ DU2PEPF00028CFE.mail.protection.outlook.com (10.167.242.182) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.181.6
+ via Frontend Transport; Tue, 30 Jun 2026 12:01:49 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fihe3nok0734.emea.nsn-net.net (Postfix) with ESMTP id 7D9782054D;
+	Tue, 30 Jun 2026 15:01:47 +0300 (EEST)
+From: chia-yu.chang@nokia-bell-labs.com
+To: jolsa@kernel.org,
+	yonghong.song@linux.dev,
+	song@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	memxor@gmail.com,
+	shuah@kernel.org,
+	martin.lau@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	andrew+netdev@lunn.ch,
+	donald.hunter@gmail.com,
+	kuniyu@google.com,
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v3 net-next 1/1] tcp: Replace min_tso_segs() with tso_segs() CC callback
+Date: Tue, 30 Jun 2026 14:01:45 +0200
+Message-Id: <20260630120145.286497-1-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v9 0/8] powerpc/bpf: address missing verifier selftest
- coverage
-To: adubey@linux.ibm.com, bpf@vger.kernel.org
-Cc: hbathini@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
-        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20260623231411.6216-1-adubey@linux.ibm.com>
-Content-Language: en-US
-From: Yeswanth Krishna <yeswanth@linux.ibm.com>
-In-Reply-To: <20260623231411.6216-1-adubey@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjMwMDEwNCBTYWx0ZWRfXw7UMlb5RCgRj
- 0UzbnX2qgNucGyrM8fwCmX/gKkFgPE1ekrIPKVIft6xUEuyOVsEC4fa9TwrItHlOPJel6sfGYPK
- VHBiKUz5HvF+kozSahGvZYq9datHR1bV/yRhDQ1EJJabvk/ixNrt5vSoyzyqHx0tc1CIkyVjNwc
- Dk9a7/wDVAVm+2vkmmMOd4IDlv28Px6Aica1qfKbvgECPvGIyn7ilFXwUPTAG2MDqkVyLVtRZ7V
- Q41a4oXps2CeXAccDjDz0/WCe1trbrioIRLn4nGUdo76aXnIqc11ySjvGgZiqz0qk3It8+zVzHF
- 2+xm0REW7WeQs5BJle2kvIAa5Bg97illzLaO9WaTvfrP6zKWsGhxgfEWNV3HjxLFFR//RWLiiof
- vuga2gtx7NMXz95xUu1cAGdJwmPLCsLNB4ZFPXoP2vHss/qajSKPDnXz17ejfBtlWSgvZvmS9km
- OHHL9shsTJhaRVKtbiw==
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjMwMDEwNCBTYWx0ZWRfX4VpmAabpvHPF
- F/Qac/XhnozVFPicDwFzPOp1lKvR2jmWp5t8ZAXKpGx4tmGsLZbzCz5zJdsWNts7qzkSrGB9drm
- JMGxEhWkOvbVHZjxZfK2uVw1fnWi21I=
-X-Proofpoint-GUID: F9_rIo_NAtGf2g1DDtbRf_9RjWaLe3DI
-X-Proofpoint-ORIG-GUID: F9_rIo_NAtGf2g1DDtbRf_9RjWaLe3DI
-X-Authority-Analysis: v=2.4 cv=WZ88rUhX c=1 sm=1 tr=0 ts=6a43a9fb cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=xDyIDuHK5_EkN-KXH40A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-30_03,2026-06-26_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 adultscore=0 phishscore=0 clxscore=1011 bulkscore=0
- impostorscore=0 priorityscore=1501 lowpriorityscore=0 suspectscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
- definitions=main-2606300104
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PEPF00028CFE:EE_|AMDPR07MB11456:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6037cdd1-2b66-48a6-1ddf-08ded69f5d9c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|1800799024|82310400026|36860700016|7416014|376014|56012099006|18002099003|6133799003|3023799007|11063799006|921020;
+X-Microsoft-Antispam-Message-Info:
+	7cCuRiXrS7b8cZoBy7MLOhe1s9NvOYsEfjUIdc6mbzpThmvX5olZbJJhJ1if5t7xqAseCp3BtD26Oz4Bt8Bk/5KcFtBS4puLRjl+FMquQKkIHXV0rHLNgaEv4W+3/2EFKd6k/w3dA29OajOIRx+MXPQKb98BE5haZP38Fj8eAKpTaqeIHDU0BsHia6J6JuZTBVt6QiaiP6l9rXbnqpFjPflGmd19VGtfAbqncIq9+R2VUdqoXhCV1q92dVQR6/6UmsM5ZEHN6a68fcCZt98qfEOxxNYS1ID9xCv85qJ6m7dA2/2bnPQLBpIEuvDgp625zl4WLhrBkoqhRSleMT1VIcLD5ZgUEI4mEkmX4RqLET2EykPxLRdqkWCm4HV6JgXfJQC2JeWurCC9AG60qF9ub5jx4r51U835BcI/Umn5MIIota7qzVK5aZ3wKx/J6Yk+i9IfjjJlQdXljhxWM3mphmXRa2GL7Vo6R0JyGcgcicCN9mCmi99/3TG2pcHRqIjGUyQrEgL906EFFeEe9EnoEW4kRQPxqECIpTShFvytK6P+tpXbTd6ocz+RJCSFVnD2JD3Ikho9zEMviOuyJt/rvTsjgS6Cp18XmFjM4jYfJkBmRREDUiqci1BqhLqNre17GGpfDeBjUQQ8aGjjiW6RyS1ikdLVo25rSQBEKTnmnJL8PWfmZUxX/vW3Sq+pYBjcwScSObmNIlk2CO0IalyqWJFJbQannwhAXP3kJxFd0O/Y2ps1DP0lMsS53tL33r2P
+X-Forefront-Antispam-Report:
+	CIP:131.228.2.241;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(82310400026)(36860700016)(7416014)(376014)(56012099006)(18002099003)(6133799003)(3023799007)(11063799006)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	ZCKDiIJlMTI0NzS2uTjyBXeZv+L1CUxY093zfP1YSRzGykjNraoNXId5fPsd04zoxghDz1YTS45VxgdkWv7tih8nBBoxmzQphcoPr72BM0DWVcUS9W7GNbH0RodVnJyF09Hk1UQuO0cTwxnsjcblq/sMyZlLhvAtG8MiGpzNDucEbxGyFEpLSCT58TnhS8kjdSPgAM2l0yGhh74JVuHBNmN9yWVJA/DU6xtWDlyjvOSyzRfj0mlvKpY4qN7NFenOqTGplwU1FCtfd5VDnzT/9QsCLhwZu8VqWmRnw1ZmpGpB/xfuTLg3UwLEZ4U4BEpcDzq9Ks1pscbreHVPLz5syw8l6s7sb3f+LGR8d1QSjfzH3eoFxkLbiIy5SyqDNAN6bH/5PUh4owUiFB6wWU+811yAe5ddBbibhQCyXfRYJp67QUSkhv6zn5v3o/vjttRo
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2026 12:01:49.0784
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6037cdd1-2b66-48a6-1ddf-08ded69f5d9c
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.241];Helo=[fihe3nok0734.emea.nsn-net.net]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-DU2PEPF00028CFE.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AMDPR07MB11456
 
-Hi Abhishek,
+From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-I have tested this patch series on PowerPC64 (ppc64le) and can confirm 
-all 8 patches work correctly.
+This patch replaces existing min_tso_segs() with tso_segs() CC callbak
+for CC algorithm to provides explicit tso segment number of each data
+burst and overrides tcp_tso_autosize().
 
-## Test Environment
-- System: PowerPC64 (ppc64le)
-- Kernel: 7.1.0-rc3 with all 8 patches applied
-- BTF Support: Enabled (CONFIG_DEBUG_INFO_BTF=y)
-- Test Suite: tools/testing/selftests/bpf/test_progs
+This change provides below impacts on BPF struct_ops users:
+- The callback is renamed from min_tso_segs to tso_segs
+- The signature gains an extra u32 mss_now argument
+- The return value semantics is changed from "floor value passed into
+  tcp_tso_autosize()" to "final tso_segs value", bypassing autosizing
 
-## Test Results
+As a result, BPF programs shall be updated, beccause retuning a small
+constans will now directly limit tso_segs instead of the minimum.
 
-### WITHOUT Patches (Baseline):
-- Kernel: 7.1.0-rc3-00362-g6916d5703ddf
-- Summary: 111/2135 PASSED, 35 SKIPPED, 5 FAILED
-- verifier_tailcall_jit: **FAIL**
-- Error: "Can't disasm instruction at offset 96: 60 80 1c 00 00 00 00 c0"
+Signed-off-by: Ilpo Järvinen <ij@kernel.org>
+Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+---
+ include/net/tcp.h                                | 13 +++++++++++--
+ net/ipv4/bpf_tcp_ca.c                            |  8 +++++---
+ net/ipv4/tcp_bbr.c                               | 13 ++++++++++---
+ net/ipv4/tcp_output.c                            | 13 +++++++------
+ tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c |  8 ++++----
+ 5 files changed, 37 insertions(+), 18 deletions(-)
 
-### WITH All 8 Patches:
-- Kernel: 7.1.0-rc3-00370-g202ecf282b6e
-- Summary: 112/2136 PASSED, 35 SKIPPED, 4 FAILED
-- verifier_tailcall_jit: **OK**
-
-The critical PowerPC64-specific test `verifier_tailcall_jit` now passes:
-
-#635/1   verifier_tailcall_jit/main:OK
-#635     verifier_tailcall_jit:OK
-
-
-This test was previously failing due to JIT disassembly issues caused by 
-the dummy_tramp_addr placement. The patches successfully:
-
-1. Fix alignment of long branch trampoline address
-2. Relocate dummy_tramp_addr to bottom of stub
-3. Fix JIT disassembly truncation
-4. Enable PowerPC64 arch support in verifier tests
-5. Fix compare instruction (cmpldi vs cmplwi) for tailcalls
-6. Add PowerPC64 tailcall verifier test
-7. Fix JIT buffer overflow for large programs
-8. Fix percpu private stack leak on JIT failure
-
-The 4 remaining failures are all in verifier_arena* tests with -ENOMEM 
-errors, which are unrelated to these patches and appear to be 
-platform-specific memory allocation issues with the arena feature.
-
-Please add below tag.
-Tested-by: Yeswanth Krishna Tellakula <yeswanth@linux.ibm.com>
-
-Regards,
-Yeswanth
-
-On 24/06/26 4:44 am, adubey@linux.ibm.com wrote:
-> From: Abhishek Dubey <adubey@linux.ibm.com>
-> 
-> The verifier selftest validates JITed instructions by matching expected
-> disassembly output. The first two patches fix issues in powerpc instruction
-> disassembly that were causing test flow failures. The fix is common for
-> 64-bit & 32-bit powerpc. Add support for the powerpc-specific "__powerpc64"
-> architecture tag in the third patch, enabling proper test filtering in
-> verifier test files. Introduce verifier testcases for tailcalls on powerpc64.
-> 
-> The first patch in series is fix patch, correcting memory alignment with
-> 8-byte boundary for long branch address field. The subsequent patches
-> enables verifier selftests on powerpc. The fifth patch in the series fixes
-> incorrect comparator usage for comparing tailcall info with tailcall
-> threshold. The last two patches fix JIT buffer overflow for large BPF progs
-> and private stack memory leak (identified by bot during reviews).
-> 
-> Issue Details:
-> --------------
-> 
->      The Long branch stub in the trampoline implementation[1] provides
->      flexibility to handles short as well as long branch distance to
->      actual trampoline. Whereas, the 8 bytes long dummy_tramp_addr field
->      sitting before long branch stub leads to failure when enabling
->      verifier based seltest for ppc64.
->      
->      The verifier selftests require disassembing the final jited image
->      to get native instructions. Later the disassembled instruction
->      sequence is matched against sequence of instructions provided in
->      test-file under __jited() wrapper. The final jited image contains
->      Out-of-line stub and Long branch stub as part of epilogue jitting
->      for a bpf program. The 8 bytes space for dummy_tramp is sandwiched
->      between both above mentioned stubs. These 8 bytes contain memory
->      address of dummy trampoline during trampoline invocation which don't
->      correspond to any powerpc instructions. So, disassembly fails
->      resulting in failure of verifier selftests.
->      
->      The following code snippet shows the problem with current arrangement
->      made for dummy_tramp_addr.
->      
->      /* Out-of-line stub */
->      mflr    r0
->      [b|bl]  tramp
->      mtlr    r0 //only with OOL
->      b       bpf_func + 4
->      /* Long branch stub */
->      .long   <dummy_tramp_addr>  <---Invalid bytes sequence, disassembly fails
->      mflr    r11
->      bcl     20,31,$+4
->      mflr    r12
->      ld      r12, -8-SZL(r12)
->      mtctr   r12
->      mtlr    r11 //retain ftrace ABI
->      bctr
-> 
->      Consider test program binary of size 112 bytes:
->      0:  00000060 10004de8 00002039 f8ff21f9 81ff21f8 7000e1fb 3000e13b
->      28: 3000e13b 2a006038 f8ff7ff8 00000039 7000e1eb 80002138 7843037d
->      56: 2000804e a602087c 00000060 a603087c bcffff4b c0341d00 000000c0
->      84: a602687d 05009f42 a602887d f0ff8ce9 a603897d a603687d 2004804e
-> 
->      Disassembly output of above binary for ppc64le:
->      pc:0     left:112    00 00 00 60  :  nop
->      pc:4     left:108    10 00 4d e8  :  ld 2, 16(13)
->      pc:8     left:104    00 00 20 39  :  li 9, 0
->      pc:12    left:100    f8 ff 21 f9  :  std 9, -8(1)
->      pc:16    left:96     81 ff 21 f8  :  stdu 1, -128(1)
->      pc:20    left:92     70 00 e1 fb  :  std 31, 112(1)
->      pc:24    left:88     30 00 e1 3b  :  addi 31, 1, 48
->      pc:28    left:84     30 00 e1 3b  :  addi 31, 1, 48
->      pc:32    left:80     2a 00 60 38  :  li 3, 42
->      pc:36    left:76     f8 ff 7f f8  :  std 3, -8(31)
->      pc:40    left:72     00 00 00 39  :  li 8, 0
->      pc:44    left:68     70 00 e1 eb  :  ld 31, 112(1)
->      pc:48    left:64     80 00 21 38  :  addi 1, 1, 128
->      pc:52    left:60     78 43 03 7d  :  mr    3, 8
->      pc:56    left:56     20 00 80 4e  :  blr
->      pc:60    left:52     a6 02 08 7c  :  mflr 0
->      pc:64    left:48     00 00 00 60  :  nop
->      pc:68    left:44     a6 03 08 7c  :  mtlr 0
->      pc:72    left:40     bc ff ff 4b  :  b .-68
->      pc:76    left:36     c0 34 1d 00  :
->      ...
-> 
->      Failure log:
->      Can't disasm instruction at offset 76: c0 34 1d 00 00 00 00 c0 a6 02 68 7d 05 00 9f 42
->      --------------------------------------
-> 
->      Observation:
->      Can't disasm instruction at offset 76 as this address has
->      ".long <dummy_tramp_addr>" (0xc0341d00000000c0)
->      But valid instructions follow at offset 84 onwards.
-> 
->      Move the long branch address space to the bottom of the long
->      branch stub. This allows uninterrupted disassembly until the
->      last 8 bytes. Exclude these last bytes from the overall
->      program length to prevent failure in assembly generation.
-> 
->      Following is disassembler output for same test program with moved down
->      dummy_tramp_addr field:
->      .....
->      .....
->      pc:68    left:44     a6 03 08 7c  :  mtlr 0
->      pc:72    left:40     bc ff ff 4b  :  b .-68
->      pc:76    left:36     a6 02 68 7d  :  mflr 11
->      pc:80    left:32     05 00 9f 42  :  bcl 20, 31, .+4
->      pc:84    left:28     a6 02 88 7d  :  mflr 12
->      pc:88    left:24     14 00 8c e9  :  ld 12, 20(12)
->      pc:92    left:20     a6 03 89 7d  :  mtctr 12
->      pc:96    left:16     a6 03 68 7d  :  mtlr 11
->      pc:100   left:12     20 04 80 4e  :  bctr
->      pc:104   left:8      c0 34 1d 00  :
-> 
->      Failure log:
->      Can't disasm instruction at offset 104: c0 34 1d 00 00 00 00 c0
->      ---------------------------------------
->      Disassembly logic can truncate at 104, ignoring last 8 bytes.
-> 
->      Update the dummy_tramp_addr field offset calculation from the end
->      of the program to reflect its new location, for bpf_arch_text_poke()
->      to update the actual trampoline's address in this field.
-> 
->      [1] https://lore.kernel.org/all/20241030070850.1361304-18-hbathini@linux.ibm.com
-> 
-> v8->v9:
->    Dynamic pass handling until code keeps shrinking
->    Fix private stack memory leak
-> 
-> v7->v8:
->    Fixed bot identified issues of alt_exit_addr and BPF_EXIT
->    Fixed 32-bit ppc function signature mismatch
-> 
-> v6->v7:
->    Fixed JIT buffer overflow in case of large BPF progs
->    Addressed remaining bot comments
-> 
-> v5->v6:
->    Changed alignment NOP emittion dependency on fimage layout
->    Adjust tail truncate length for 32-bit ppc
->    Addressed few minor bot comments
-> 
-> v4->v5:
->    Handled alignment NOP emit logic and corresponding stub offsets
->    Handled image buffer overflow problem in last pass
->    Above changes took care of other bot reviews
->    Included LLVMDisposeMessage() for graceful freeing
->    Adjusted parameters in bpf_jit_build_fentry_stubs for ppc32
->    Adjusted expected JIT inst. in tailcall test for
-> CONFIG_PPC_KERNEL_PCREL config
->    Added fix patch at last for inaccurate use of cmplwi inst.
-> 
-> v3->v4:
->    Changed logic for emitting alignment NOP
-> 
-> v2->v3:
->    Removed fixed NOP from bottom of long branch stub
->    Rebased on top of bpf-next
-> 
-> v1->v2:
->    Added fix-patch to correct memory alignment in-place
->    Moved the optional alignmnet NOP before OOL stub
-> 
-> [v1]: https://lore.kernel.org/bpf/20260225013627.22098-1-adubey@linux.ibm.com
-> [v2]: https://lore.kernel.org/bpf/20260403004011.44417-1-adubey@linux.ibm.com
-> [v3]: https://lore.kernel.org/bpf/20260411221413.44304-1-adubey@linux.ibm.com
-> [v4]: https://lore.kernel.org/bpf/20260517214043.12975-1-adubey@linux.ibm.com
-> [v5]: https://lore.kernel.org/bpf/20260519233812.18787-1-adubey@linux.ibm.com
-> [v6]: https://lore.kernel.org/bpf/20260529015855.364704-1-adubey@linux.ibm.com
-> [v7]: https://lore.kernel.org/bpf/20260611153826.31187-1-adubey@linux.ibm.com
-> [v8]: https://lore.kernel.org/bpf/20260616164741.32252-1-adubey@linux.ibm.com
-> 
-> Abhishek Dubey (8):
->    powerpc/bpf: fix alignment of long branch trampoline address
->    powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
->    selftest/bpf: Fixing powerpc JIT disassembly failure
->    selftest/bpf: Enable verifier selftest for powerpc64
->    powerpc64/bpf: fix compare instruction emitted for tailcall
->    selftest/bpf: Add tailcall verifier selftest for powerpc64
->    powerpc/bpf: fix buffer overflow in JIT for large BPF programs
->    powerpc64/bpf: fix percpu private stack leak on JIT failure
-> 
->   arch/powerpc/net/bpf_jit.h                    | 20 +++-
->   arch/powerpc/net/bpf_jit_comp.c               | 99 ++++++++++++++-----
->   arch/powerpc/net/bpf_jit_comp32.c             |  7 +-
->   arch/powerpc/net/bpf_jit_comp64.c             | 15 +--
->   .../selftests/bpf/jit_disasm_helpers.c        | 27 ++++-
->   tools/testing/selftests/bpf/progs/bpf_misc.h  |  1 +
->   .../bpf/progs/verifier_tailcall_jit.c         | 69 +++++++++++++
->   tools/testing/selftests/bpf/test_loader.c     |  5 +
->   8 files changed, 203 insertions(+), 40 deletions(-)
-> 
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 6d376ea4d1c0..7fb42a0ce7da 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -824,6 +824,9 @@ unsigned int tcp_sync_mss(struct sock *sk, u32 pmtu);
+ unsigned int tcp_current_mss(struct sock *sk);
+ u32 tcp_clamp_probe0_to_user_timeout(const struct sock *sk, u32 when);
+ 
++u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
++		     int min_tso_segs);
++
+ /* Bound MSS / TSO packet size with the half of the window */
+ static inline int tcp_bound_to_half_wnd(struct tcp_sock *tp, int pktsize)
+ {
+@@ -1361,8 +1364,14 @@ struct tcp_congestion_ops {
+ 	/* hook for packet ack accounting (optional) */
+ 	void (*pkts_acked)(struct sock *sk, const struct ack_sample *sample);
+ 
+-	/* override sysctl_tcp_min_tso_segs (optional) */
+-	u32 (*min_tso_segs)(struct sock *sk);
++	/*
++	 * Override tcp_tso_autosize (optional)
++	 *
++	 * If provided, this callback returns the final TSO segment number
++	 * and will bypass tcp_tso_autosize() entirely. The implementation
++	 * must derive an appropriate value and ensure the result is valid.
++	 */
++	u32 (*tso_segs)(struct sock *sk, u32 mss_now);
+ 
+ 	/* new value of cwnd after loss (required) */
+ 	u32  (*undo_cwnd)(struct sock *sk);
+diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
+index 791e15063237..27c4cdfd80a8 100644
+--- a/net/ipv4/bpf_tcp_ca.c
++++ b/net/ipv4/bpf_tcp_ca.c
+@@ -284,9 +284,11 @@ static void bpf_tcp_ca_pkts_acked(struct sock *sk, const struct ack_sample *samp
+ {
+ }
+ 
+-static u32 bpf_tcp_ca_min_tso_segs(struct sock *sk)
++static u32 bpf_tcp_ca_tso_segs(struct sock *sk, u32 mss_now)
+ {
+-	return 0;
++	if (unlikely(!mss_now))
++		return U32_MAX;
++	return tcp_tso_autosize(sk, mss_now, 0);
+ }
+ 
+ static void bpf_tcp_ca_cong_control(struct sock *sk, u32 ack, int flag,
+@@ -320,7 +322,7 @@ static struct tcp_congestion_ops __bpf_ops_tcp_congestion_ops = {
+ 	.cwnd_event_tx_start = bpf_tcp_ca_cwnd_event_tx_start,
+ 	.in_ack_event = bpf_tcp_ca_in_ack_event,
+ 	.pkts_acked = bpf_tcp_ca_pkts_acked,
+-	.min_tso_segs = bpf_tcp_ca_min_tso_segs,
++	.tso_segs = bpf_tcp_ca_tso_segs,
+ 	.cong_control = bpf_tcp_ca_cong_control,
+ 	.undo_cwnd = bpf_tcp_ca_undo_cwnd,
+ 	.sndbuf_expand = bpf_tcp_ca_sndbuf_expand,
+diff --git a/net/ipv4/tcp_bbr.c b/net/ipv4/tcp_bbr.c
+index 82378a2bfd1e..b63e77b14c65 100644
+--- a/net/ipv4/tcp_bbr.c
++++ b/net/ipv4/tcp_bbr.c
+@@ -297,11 +297,18 @@ static void bbr_set_pacing_rate(struct sock *sk, u32 bw, int gain)
+ }
+ 
+ /* override sysctl_tcp_min_tso_segs */
+-__bpf_kfunc static u32 bbr_min_tso_segs(struct sock *sk)
++static u32 bbr_min_tso_segs(struct sock *sk)
+ {
+ 	return READ_ONCE(sk->sk_pacing_rate) < (bbr_min_tso_rate >> 3) ? 1 : 2;
+ }
+ 
++__bpf_kfunc static u32 bbr_tso_segs(struct sock *sk, u32 mss_now)
++{
++	if (unlikely(!mss_now))
++		return U32_MAX;
++	return tcp_tso_autosize(sk, mss_now, bbr_min_tso_segs(sk));
++}
++
+ static u32 bbr_tso_segs_goal(struct sock *sk)
+ {
+ 	struct tcp_sock *tp = tcp_sk(sk);
+@@ -1151,7 +1158,7 @@ static struct tcp_congestion_ops tcp_bbr_cong_ops __read_mostly = {
+ 	.undo_cwnd	= bbr_undo_cwnd,
+ 	.cwnd_event_tx_start	= bbr_cwnd_event_tx_start,
+ 	.ssthresh	= bbr_ssthresh,
+-	.min_tso_segs	= bbr_min_tso_segs,
++	.tso_segs	= bbr_tso_segs,
+ 	.get_info	= bbr_get_info,
+ 	.set_state	= bbr_set_state,
+ };
+@@ -1163,7 +1170,7 @@ BTF_ID_FLAGS(func, bbr_sndbuf_expand)
+ BTF_ID_FLAGS(func, bbr_undo_cwnd)
+ BTF_ID_FLAGS(func, bbr_cwnd_event_tx_start)
+ BTF_ID_FLAGS(func, bbr_ssthresh)
+-BTF_ID_FLAGS(func, bbr_min_tso_segs)
++BTF_ID_FLAGS(func, bbr_tso_segs)
+ BTF_ID_FLAGS(func, bbr_set_state)
+ BTF_KFUNCS_END(tcp_bbr_check_kfunc_ids)
+ 
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 00ec4b5900f2..f3fc4b64e61d 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -2253,8 +2253,8 @@ static bool tcp_nagle_check(bool partial, const struct tcp_sock *tp,
+  * for every 2^9 usec (aka 512 us) of RTT, so that the RTT-based allowance
+  * is below 1500 bytes after 6 * ~500 usec = 3ms.
+  */
+-static u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
+-			    int min_tso_segs)
++u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
++		     int min_tso_segs)
+ {
+ 	unsigned long bytes;
+ 	u32 r;
+@@ -2269,6 +2269,7 @@ static u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
+ 
+ 	return max_t(u32, bytes / mss_now, min_tso_segs);
+ }
++EXPORT_SYMBOL(tcp_tso_autosize);
+ 
+ /* Return the number of segments we want in the skb we are transmitting.
+  * See if congestion control module wants to decide; otherwise, autosize.
+@@ -2278,11 +2279,11 @@ static u32 tcp_tso_segs(struct sock *sk, unsigned int mss_now)
+ 	const struct tcp_congestion_ops *ca_ops = inet_csk(sk)->icsk_ca_ops;
+ 	u32 min_tso, tso_segs;
+ 
+-	min_tso = ca_ops->min_tso_segs ?
+-			ca_ops->min_tso_segs(sk) :
+-			READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_tso_segs);
++	min_tso = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_tso_segs);
+ 
+-	tso_segs = tcp_tso_autosize(sk, mss_now, min_tso);
++	tso_segs = ca_ops->tso_segs ?
++			ca_ops->tso_segs(sk, mss_now) :
++			tcp_tso_autosize(sk, mss_now, min_tso);
+ 	return min_t(u32, tso_segs, sk->sk_gso_max_segs);
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c b/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c
+index 0a3e9d35bf6f..58262e490336 100644
+--- a/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c
++++ b/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c
+@@ -10,7 +10,7 @@ extern u32 bbr_sndbuf_expand(struct sock *sk) __ksym;
+ extern u32 bbr_undo_cwnd(struct sock *sk) __ksym;
+ extern void bbr_cwnd_event_tx_start(struct sock *sk) __ksym;
+ extern u32 bbr_ssthresh(struct sock *sk) __ksym;
+-extern u32 bbr_min_tso_segs(struct sock *sk) __ksym;
++extern u32 bbr_tso_segs(struct sock *sk, u32 mss_now) __ksym;
+ extern void bbr_set_state(struct sock *sk, u8 new_state) __ksym;
+ 
+ extern void dctcp_init(struct sock *sk) __ksym;
+@@ -90,9 +90,9 @@ u32 BPF_PROG(ssthresh, struct sock *sk)
+ }
+ 
+ SEC("struct_ops")
+-u32 BPF_PROG(min_tso_segs, struct sock *sk)
++u32 BPF_PROG(tso_segs, struct sock *sk, u32 mss_now)
+ {
+-	return bbr_min_tso_segs(sk);
++	return bbr_tso_segs(sk, mss_now);
+ }
+ 
+ SEC("struct_ops")
+@@ -120,7 +120,7 @@ struct tcp_congestion_ops tcp_ca_kfunc = {
+ 	.cwnd_event	= (void *)cwnd_event,
+ 	.cwnd_event_tx_start = (void *)cwnd_event_tx_start,
+ 	.ssthresh	= (void *)ssthresh,
+-	.min_tso_segs	= (void *)min_tso_segs,
++	.tso_segs	= (void *)tso_segs,
+ 	.set_state	= (void *)set_state,
+ 	.pkts_acked     = (void *)pkts_acked,
+ 	.name		= "tcp_ca_kfunc",
+-- 
+2.34.1
 
