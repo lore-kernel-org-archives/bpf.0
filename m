@@ -1,92 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AEDE3C3443
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 19:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 435A92DC765
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 19:27:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782847641; cv=none; b=BwtvXfC/HWLUl2IwiBMfCHsXUWyW1RQSL9RaYejSsf8WC8vMIhHIdFTgspD1fLNuSMzZXCxCFVUj7mBQ6TroftzbOeW9ViiJ9sKkBlLf6TU4k2umf8pcEfxeNNcbILuilMSCWGkKZyc3dZIV3VMYmHIqk7B7sAoL/ONMtJwk0dM=
+	t=1782847652; cv=none; b=nDJYlL05FOg6FocVNycfLts4vVsrwCYqIZSMNNw1EN4weOmH4xuvAcvZPtrIgQMN4ZxlsTP6/67GCAwgr8SULjwcZVUGW+cN84JpkzLDvidhH1hf/dtqwqM+xSsRo3DqOBO2oe05fpEGPvQd2M3etexmu6CUpxnkDF6qVI1+Ico=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782847641; c=relaxed/simple;
-	bh=B6nAcbzf7qcwbZ275fkjBhRhWbFtTJdRl2zx6Y7ueR8=;
+	s=arc-20240116; t=1782847652; c=relaxed/simple;
+	bh=pAaaZ1iWfporPIsKd2D2ma8ZHnJxXHPu3PmBVuv6wqI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uTCahwN2pks+cvDrrCseOSu2RtWB/AuHDaQQUTzNKY3zmucxLw9Elqk9B8Kb+y/iHZKqjkc52893cHpTA1vjq7fuGeMB1GiD2bBP6Y0jIEoIFHlVhF5Lnmiw8WyrNfEBUsjvH05nFe+SL8/HlCyY82ErFixAubm76nxYqEar58c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DSAXut2x; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=slh7IsaDb+mI235m5GUk1w26uK4vtey6/c30W23HTS21yInvDnGeYhh68wzBfvBqaadWKMkmkOi1eGNDG5qLDiQGErK2z3YnAUw7/K0uMNxnY3pT1e3u+251nDZ+p7KKfhKZVT6XTFpgWH7ekrfVtiS7h81EOqxyDBJKMRzXcrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RzTCNraN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DSAXut2x"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 832DB1F00A3A;
-	Tue, 30 Jun 2026 19:27:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RzTCNraN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B63461F000E9;
+	Tue, 30 Jun 2026 19:27:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782847640;
-	bh=1Sv6JTvV+Qnq51faPVwH8GZDpljXVRSjMX9cWXFiZRA=;
+	s=k20260515; t=1782847650;
+	bh=szT46Yn0WqYeGxjXzLVaey6a+Ul7Ju7viQC/SN9LmXI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=DSAXut2x/z8RK+477ryUIOqT9YI2T5kf+utq/Eow6JbPFpILGdhPxYo+2kWIY/h9N
-	 08ZW1+lIaOnzp1J2P4WCTNLS1lHjdDDMzyIf+t4ucmhVXxUt2d/gZBeEfC0ueUHRTE
-	 /zCSM28cWG7hXZwhqF1xkESrRciGzoDNeLutyhOu17nfp9sPLNJl3IHOcBpfvAQCSz
-	 q4GAhFYORgHYK/ce2yIjpM8XzActGwmnXCBf4ToumoZVkf2tsEKE8r/YDnxHvv8Vle
-	 RaYn4wBY0PomDQ7J1SB/f6xaeUETvkiLDoy49l8CC0l1qKys3Q3veaDjOifCw3VB8j
-	 Dfp9pvYOcpvlA==
+	b=RzTCNraNZRfoz6YAYChqwmrr41n5nn2//idwpOT6ao6IlFDabXxILEv+36PxFKfj8
+	 8UctfABDCgGu4EX75CTs0DKB5CcPCfgCqsyOEqGEp6j76lYE2OfyWdfYl/BqiGHB/c
+	 pIbC6/fI8P8uQUdFW8etNLCWr6Q0UYZE/gvbuz0Ga1xmD6dcIJlo6wpaLvWfp5nQQq
+	 8QuSWO2sGQyGlxWw1J4JAuBzXKp+++EfYsmLfpy933/PxGvuYo9vKnNcCKm6l59X6b
+	 c1pVXrVWutAI4qt9OpYNwtpW7bCrEUDuemiiNU8dbegY5DcIOu00CybIVK7O6OzRCq
+	 oRBknkRtlcdXA==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next v1 7/7] selftests/bpf: cover
- bpf_xdp_metadata_rx_csum in xdp_metadata
+Subject: Re: [RFC PATCH bpf-next v1 5/7] ice: support the rx_csum XDP
+ metadata hint
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Vladimir Vdovin" <deliran@verdict.gg>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260630191510.81402-8-deliran@verdict.gg>
+In-Reply-To: <20260630191510.81402-6-deliran@verdict.gg>
 References: <20260630191510.81402-1-deliran@verdict.gg>
- <20260630191510.81402-8-deliran@verdict.gg>
+ <20260630191510.81402-6-deliran@verdict.gg>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 30 Jun 2026 19:27:19 +0000
-Message-Id: <20260630192719.832DB1F00A3A@smtp.kernel.org>
+Date: Tue, 30 Jun 2026 19:27:30 +0000
+Message-Id: <20260630192730.B63461F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Low] The newly added multi-line comment in `verify_xsk_metadata` violate=
-s the BPF subsystem comment style guidelines.
+- [High] Incomplete checksum validation logic improperly reports `XDP_CSUM_=
+VERIFIED` for packets with IP or outer header checksum errors.
+- [Low] Dereferencing a `void *` pointer causes a compilation error.
 --
 
-commit f8507da4f2875a0c3ae86814a72a21202665e4a5
+commit 3569f119a8bc81475b62415df37c17d04819a768
 Author: Vladimir Vdovin <deliran@verdict.gg>
 
-selftests/bpf: cover bpf_xdp_metadata_rx_csum in xdp_metadata
+ice: support the rx_csum XDP metadata hint
 
-This commit updates the xdp_metadata test to call bpf_xdp_metadata_rx_csum()
-and export its status to userspace. It then asserts the expected checksum
-status depending on whether the frame was injected via AF_XDP or sent
-through the stack.
+This commit implements the xmo_rx_csum XDP metadata hint for the ice driver
+by reading the Rx flex descriptor status bits. It mirrors ice_rx_csum()
+and returns -ENODATA when hardware checksum offload is disabled.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tool=
-s/testing/selftests/bpf/prog_tests/xdp_metadata.c
-> index 5c31054ad4a4c..77f55696eb786 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-> @@ -310,6 +310,16 @@ static int verify_xsk_metadata(struct xsk *xsk, bool=
- sent_from_af_xdp)
->  	if (!ASSERT_NEQ(meta->rx_hash, 0, "rx_hash"))
->  		return -1;
-> =20
-> +	/* veth surfaces the checksum verdict from skb->ip_summed.  A packet
-> +	 * injected via AF_XDP carries no checksum context and is CHECKSUM_NONE,
-> +	 * while one sent through the stack is CHECKSUM_PARTIAL and reads back =
-as
-> +	 * verified.
-> +	 */
-
-[Severity: Low]
-This isn't a bug, but does this comment format match the BPF subsystem
-multi-line comment style guidelines?=20
-
-The BPF subsystem typically requires the opening /* to be on its own line,
-rather than sharing a line with the first row of text.
+> diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/=
+ethernet/intel/ice/ice_txrx_lib.c
+> --- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+> +++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
 
 [ ... ]
 
+> +static int ice_xdp_rx_csum(const struct xdp_md *ctx,
+> +			   enum xdp_csum_status *csum_status)
+> +{
+> +	const struct libeth_xdp_buff *xdp_ext =3D (void *)ctx;
+> +	struct ice_rx_ring *rx_ring;
+> +	u16 status0;
+> +
+> +	rx_ring =3D libeth_xdp_buff_to_rq(xdp_ext, typeof(*rx_ring), xdp_rxq);
+> +	if (!(rx_ring->netdev->features & NETIF_F_RXCSUM))
+> +		return -ENODATA;
+> +
+> +	status0 =3D le16_to_cpu(xdp_ext->desc->wb.status_error0);
+
+[Severity: Low]
+Does this code compile? Looking at include/net/libeth/xdp.h,=20
+libeth_xdp_buff->desc is defined as const void *. Attempting to access=20
+the wb member directly on a void pointer will cause a compilation error.
+
+> +	if ((status0 & BIT(ICE_RX_FLEX_DESC_STATUS0_L3L4P_S)) &&
+> +	    !(status0 & BIT(ICE_RX_FLEX_DESC_STATUS0_XSUM_L4E_S)))
+> +		*csum_status =3D XDP_CSUM_VERIFIED;
+
+[Severity: High]
+Does this code improperly report XDP_CSUM_VERIFIED for packets with outer
+header or IP checksum errors?
+
+Unlike ice_rx_csum() which validates IP and outer header errors, this
+condition only checks that L3/L4 are present and that there is no inner L4
+checksum error (XSUM_L4E_S). If a packet has a corrupted IP checksum or a
+corrupted outer UDP checksum in a tunnel (XSUM_EUDPE_S or XSUM_IPE_S), it
+appears this will bypass the error flags and still return XDP_CSUM_VERIFIED.
+
+> +	else
+> +		*csum_status =3D XDP_CSUM_NONE;
+> +
+> +	return 0;
+> +}
+
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260630191510.8140=
-2-1-deliran@verdict.gg?part=3D7
+2-1-deliran@verdict.gg?part=3D5
