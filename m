@@ -1,88 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out203-205-221-153.mail.qq.com (out203-205-221-153.mail.qq.com [203.205.221.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2457E3FBB72;
-	Tue, 30 Jun 2026 11:09:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846C5388E51
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 11:14:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782817775; cv=none; b=KUdSA4r6zp/tWfk5ed1SCKm0GgfqwPEGykwQBiknJQ96ozTVaWWWQUMeDHDcvQ9EOfEeGpEDwldIhfDk1+jaYsd3bVAKRkUp4zaD/JO+1C8LZ7OTzql+W83WM9iOVMj2BqO9SGHeb/DBsFe0fl/mvxkL2sR2iaBV/q2OnM+ZR30=
+	t=1782818098; cv=none; b=hRv09+XjJtryToq08plLO9Hem/iLMqc61Te7xLdintu/oFckZhZNONt2brf2UO8M8zMDBvV8hQlpHRAX7NvFjtJBm1YnhjxBe9IWv7sPcIoVbyjk0q8uc7n2qsEC35IGHKcPWrmumCPBsdcEi2W0sUL2Wxip6WZuFHH8Ipw2r6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782817775; c=relaxed/simple;
-	bh=LDtINCcCDbAQN/lDJwIzHf34H7YwfSI1iyKLb8sI5Ac=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=mpOJTirwZp/nZgrsOeN42+Jkk1H2+XWD6b0LfYZxfMvCprs2Y9GTraVrLWY4YGXisI3yhEjp8yi7yILHWuqQRLrsbXkbjMDnfFo2Q7auPZWszWG1n9ARaS/JTwkqHH1l78kuBYLxmBQnq6XpDoSgv+iHia7q5bhe/3SEzCH3MIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TJb3XyLl; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782818098; c=relaxed/simple;
+	bh=aZtOcJQEs3HeA6J5ZhXO3LIiRB522Qn7mauZCnQEyGI=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=uJsVPRDWHLYEOsqkchs2AdthRf1dWsRHOvl2jA8rWzGOu/VneKjClScphGI0+nHcw6c5S2YubAReLr8olehtWvhcheUHVd9VpRKUYJfDePsiPEcRA6jtHvwH+P4KX4Z0H13c/WK0y9LyvFoSpwE658Mul6u4HwFyM3MEnSxltNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=BK3RYRIC; arc=none smtp.client-ip=203.205.221.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TJb3XyLl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C0691F000E9;
-	Tue, 30 Jun 2026 11:09:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782817773;
-	bh=3KMj5bAXV72/vr7i0iWBQZicBPu9LajLdf1dnb0ON3o=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=TJb3XyLlV69QofssxSQ6LDnIqB9DgMuYHF2J+gykUHK+WcbxktgXa8N260MmTValQ
-	 dLgHkDs/vbXl6qrTn6559/gkWvt7gmK/zqvAeJfz93dndhWCX+yXpYwNHlZdGkluN+
-	 oH8LmrzMh4u84voT8ohJ2rCaOKzCvgJaoLNosUePGuchunDF0XbH8C7MO+ZxaLogWr
-	 4aAf5Eadof5NzP1A7Xq/yQxNVJIEiLJE6PCcYsgX2TxQJEiOIkNg6xI35xWjjOjkmL
-	 yKnSM15co6nI0S8bo9r7sPnWNtY2wL1wvCOIFZunJ+X7gVe8fAJuhvxnLclM9Ogsbt
-	 FRFIuSXnYEnzQ==
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="BK3RYRIC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1782818087; bh=gyqfkTLrC6kduqPSVXaxDqy1JRHoGg4HTQ/Xtx9D1OE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=BK3RYRICuycCwRT8Hd1XXNY/FPH5kUgsIpgD350DpiWEj9eYg+rduPbkysnPIXYeN
+	 p0RFjkBKHebzIMlhYfdFbLZ4lJcwQOg1OBkdYgwirDL2Va/1q7pYSTV2VW+qY4uCUP
+	 oBw9vgsM8qmT2rSmmMSzan091XNz/1rAE8qZG2KA=
+Received: from lxu-ped-host.. ([111.198.231.89])
+	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
+	id 3ABBB8EE; Tue, 30 Jun 2026 19:14:43 +0800
+X-QQ-mid: xmsmtpt1782818083t01f49fsd
+Message-ID: <tencent_94C3BFC44F9761376546C493608362896E05@qq.com>
+X-QQ-XMAILINFO: Nx5J06Esz7r7xbYMHuFPJJR67lhKId4a74qy8RLwQpfc9eLqmmxkaIlif2mxU0
+	 y5jvZVjn20x0Yk8tg2OrRLVvw7LFykBaSBEWFm8pRq71WQhWf39m53PXvD6gms/yr54UhKrI8ZUk
+	 ind/KSi5Kt/cv5vvqh6Imn76DhM1PqFxHRbW3WvfiIUhnh5yp5ysyfvEZjIGnVlrYjs6YgPICBBD
+	 3wAHH6HigA87siexD9lwqlPrzbvb9WpKVNkn0Huq0y4CteKH3dQ8mPn+u3JMx8xOETFXV5GTK1eZ
+	 OgBEWI9TRAJ1m840KlmvoS87CyEWNh9QQprfZEXhFIsPCtwGXMrxgkp7UPAjo2d+YgTvO1KEnFhx
+	 jKhY9ix8i4GdXEmiCkHKu1veTWpANsMf4XXKiZds+iCkIYAtOAcvt2Qe2+nufQnvBIk6AnEUIavS
+	 R5io8ocfGfpvdKcmDIWMPImqBG9dQcC49+Igw5eA98py+0tOF9iyN4vgeiTCGSP4umCDyt5ISoyY
+	 8SMlRLyGAg/5Z/KOT7QSXbldl4toH9vogoDNSOHksIvy9xq9XIVDhxK+jLnKgOgTmwpeGMDU7nHV
+	 Gg08/1+eghIb66uS264YjCRNwSJ1qH/0ppqG8hN+o6XewXhK92oqZ2ngR0ny5e3RLrXCyKOeiZ1a
+	 Ew65vPZWsbfR2M1Q7Er3/Nl0c7C8ztsr8yZlobX9ZR0nCFCAEkpcEwhmQuidQJBG/5JU7sMkROvz
+	 SvfXdVVDR989vrDysGwqh+jkAn5ZxwVq3Hqh6M0dv7I4gFtQsZwvL+e6HKf2/b1QOjcliVqUhJ/6
+	 dcpJHZDzjl9ZeDF1cK29MKSdGfrBKEmUQ3bhIf1QeN8ztdaENUK8TyZxYVTJ8dw9osZp5aHDjZJM
+	 /T0DPUqlTRFVbXQwNZTzzwkZ2Hy/gVeMrak8EqD0wktZjZoNFGQZ2dPcZj7bK+yFvkHPWV3tA9jr
+	 gddq55CE5JsBMijjaJbeQcZHHzWeEtqKhPl+KMKg+YR5BllqgMYcRYciQoLVVsMiJ7Rbuv5ovJTi
+	 lk1GCMB7VnE1wL5g5t
+X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
+From: Edward Adam Davis <eadavis@qq.com>
+To: sashiko-bot@kernel.org
+Cc: bpf@vger.kernel.org,
+	eadavis@qq.com,
+	sashiko-reviews@lists.linux.dev
+Subject: Re: [PATCH v2] bpf: Fix smp_processor_id() call trace for preemptible kernels
+Date: Tue, 30 Jun 2026 19:14:43 +0800
+X-OQ-MSGID: <20260630111442.947614-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260630094823.897BD1F00A3D@smtp.kernel.org>
+References: <20260630094823.897BD1F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Mask socket type flags in
- mptcpify prog
-From: Matthieu Baerts <matttbe@kernel.org>
-To: Guillaume Maudoux <layus.on@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Matthieu Baerts <matttbe@kernel.org>, 
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, mptcp@lists.linux.dev, 
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20260630095723.564392-1-layus.on@gmail.com>
-References: <20260630095723.564392-1-layus.on@gmail.com>
-Date: Tue, 30 Jun 2026 13:09:22 +0200
-Message-Id: <178281776277.2535326.16467031353021194373.b4-review@b4>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1067; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=LDtINCcCDbAQN/lDJwIzHf34H7YwfSI1iyKLb8sI5Ac=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLKcF7+aGNfXv+Rfxg/NHud1t2xzJBzkuYxqjhmnZr8rn
- 394z7KmjlIWBjEuBlkxRRbptsj8mc+reEu8/Cxg5rAygQxh4OIUgIm4ZzH8L75basBx51rk3cTZ
- R5u+77M6pXH4I88Xv7lJ8+KeVFiYGDL8D7B5Kfbv5LnC5/WLVCWfVD7v520oW9bBVvbsqP6Z4KQ
- fbAA=
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Content-Transfer-Encoding: 8bit
 
-Hi Guillaume,
+On Tue, 30 Jun 2026 09:48:23 +0000, Sashiko wrote:
+> [Severity: High]
+> Does this fix the issue at the right layer? By adding the preemption
+> protection here, it masks the fact that the caller is running with migration
+> enabled, which leaves sibling APIs vulnerable.
+> 
+> For example, in __rhtab_map_lookup_and_delete_batch() in
+> kernel/bpf/hashtab.c, the batch loop iterates and calls rhtab_delete_elem()
+> without disabling migration.
+> 
+> If the map elements contain special fields (like BPF_KPTR),
+> rhtab_delete_elem() will first call rhtab_check_and_free_fields(), which
+> eventually calls bpf_mem_free().
+> 
+> Since bpf_mem_free() also uses this_cpu_ptr() without get_cpu() protection:
+> 
+> kernel/bpf/memalloc.c:bpf_mem_free() {
+>     ...
+>     unit_free(this_cpu_ptr(ma->caches)->cache + idx, ptr);
+>     ...
+> }
+> 
+> Will this result in the exact same BUG being triggered on that path? Should
+> the missing migration protection be added to
+> __rhtab_map_lookup_and_delete_batch() instead of modifying the allocator
+> here?
 
-Thank you for sharing this fix!
+Like this?
 
-> The mptcpify BPF prog upgrades eligible TCP sockets to MPTCP, but only
-> when the socket type is exactly SOCK_STREAM. Its update_socket_protocol()
-> hook runs on the raw type from userspace, before the socket core masks
-> it with SOCK_TYPE_MASK, so the type may still carry SOCK_CLOEXEC or
-> SOCK_NONBLOCK in its upper bits and the equality check fails.
->
-> As a result, a socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0) -- what
-> common libraries do by default -- is silently left as plain TCP. This
-> was hit in practice with curl. Since mptcpify.c is referenced as example
-> code for enabling MPTCP transparently, the same mistake is likely to be
-> copied into real deployments where it fails the same way and is hard to
-> diagnose.
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 9f394e1aa2e8..7b98c2eea685 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -3345,8 +3345,10 @@ static int __rhtab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 	}
+ 
+ 	if (do_delete) {
++		get_cpu();
+ 		for (i = 0; i < total; i++)
+ 			rhtab_delete_elem(rhtab, del_elems[i], NULL, 0);
++		put_cpu();
+ 	}
+ 
+ 	rcu_read_unlock();
 
-Good idea to fix this code in mptcpify.c, which is indeed used as a
-reference, and ends up in real deployments.
-
-The modifications look good to me:
-
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-
--- 
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
