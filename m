@@ -1,118 +1,98 @@
-Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297DB3EAC74;
-	Tue, 30 Jun 2026 09:11:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CF9358369
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 09:23:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782810709; cv=none; b=rv/QpUOXfzEYiQKpCBba06co1nszdA5vrlwxJCiriQf3uMCyvL+/UtaiwwgM+wAFkTL1A+Q/eEkpDMwsP2ZiOMjs9HrhVwzmBzpW/Yvdlm9/5MGniFXYZQN7O5DP1qTX7DjIF8ge+rYAMPQcGKVnRpwblQAC+T5/jIgSLBdeNZM=
+	t=1782811430; cv=none; b=KUTOwsSY0DCM9GHL7bNeej0eIieNuxC9QFwIEJFbpm65EQi17IEcfC61HBaXJUs92LDFRnZpwBhuUwwl1E9nnm93A+BSvacztT1yt4jhL66AG7E3ZreWLSPt9cLyb2fUvZ1pTpwS6jC+eA5CmPSaHXzHBhbxj5WeTmfSwgErIQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782810709; c=relaxed/simple;
-	bh=kySt2e1rfj7LptBox57g7w5ICPrmxbvLWzxRFUNeSIk=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=KznotneQy8kiYmQMBtaPjZLpwaEj45hfBrCVGetWX1ynPL9rEuxWq2ajTPr1tpgnaKMw02NNLwKH07iYhpYpuH92zoDvTLR+ZJQaL1lnQmd+zzPfng+ws4ntML5uB3c4Buhvt6vY0+dDiHqtIosNCdNRatC8m5CDIsYyrrqBM2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=PsG5sMtN; arc=none smtp.client-ip=203.205.221.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="PsG5sMtN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1782810699; bh=1dfi7biA1sGA59UN+588jwNbvleUJ44ok6h9LBwNWnQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=PsG5sMtN7gOH+c/kvH0vPU7sVZTyFmkMxunKcaaHBtkHDHRuY+NL6f77ev9r6Ewfu
-	 ynOBqFKbQvzzDhnW7c9QkdPS9C0nM3Isnd1IeYvrWCpEnq7tNM075cd8VkDMQYRL5V
-	 K6Bex3Q3jjpAA4bF/oaN5HFOQKslMnGmeJf59bPA=
-Received: from lxu-ped-host.. ([111.198.231.89])
-	by newxmesmtplogicsvrszc56-0.qq.com (NewEsmtp) with SMTP
-	id 2E201616; Tue, 30 Jun 2026 17:11:34 +0800
-X-QQ-mid: xmsmtpt1782810694t6vhyvnda
-Message-ID: <tencent_45066D89AD6EF9AED34CA567FA46CA52C606@qq.com>
-X-QQ-XMAILINFO: OZZSS56D9fAjxnsilrLdrNDiNIRRjgkkepro8vxPt12NBctPvNYFwCeu81DM9Z
-	 OfV9p6l/T41Jd7iuk/0sCvJQp27jU2a8CqX+dbCRmFWqGdxu+EEQZ7Gk/Cy44shP0EY5lPVZoZsg
-	 RFQ811puuNOmncYOKpncYqU/JwF8Ue9RIV26QJZCXvJywPog5kzprRTKcagiwtitp9GFnMFF8z9t
-	 h7w4NWkt/POpJZylA3b9sfRSlDUHR/vuJxrYENwD1yJ5AiYi+XJ4L75UJLZYBgyqGusmN7ajLlCW
-	 9NFj9zHo/XHVAM9ifgBGbcV+ccU/E0N7ihtM4+Lp5GbqqWtjViujRPi5Y63R11szcpGvCTJRiwkD
-	 6AUBajf7g16xLSnWyOpIYM2EAr0S7RQhIKK6ATOA9s5UgU3jv5PDZmdE7gsTDZNiOlnxYQjtkCj2
-	 97Xa/k+UfZvtFLLZLZMjtOaNFW5QzqYlS5mPpvg02rbpvtuCtb+tEF1zD2qi3dP+lVL5Cbe9zEhE
-	 wveQsB403beKq0POyjCojG3k/BOsFbX1UdWKePkSYqRtp4CmpU1zJWgVh7qfVOwMYGWAbLxs8FD5
-	 Q/+pN7MdZtvkqN8Uo9DZrBZorS2st0JEArCr93+un1raqkMAm3h7CTxVGWfAjfKSWN8Z5ZdMe1tc
-	 MbWkNbDrDk8+1/8Ym78hvkm3h3Jia8BRDj5docEiLxwl61qZdvPUfm4zQuvfWwN0Q46HsRwxyNpn
-	 HZQMCKTHaE7zXWO/1ph8+/79fu0Gc0CtlND9QzPNE9lzuBWiqjN3bkCujGPE0sOSr/8fIobtQuaA
-	 rL/c8paAMIVVptF02XVSEr1oY81Ab/PC3Jun55jNC9DZkuifWxRv58UbfLJ+cejVWYOqD+5UCtvy
-	 f1ImAa15F0cNqwm8GMuYv7lNkDWxto5R3zvXi3cCPLXp4zkx7DOPsIdOxtqDKSmPAjB2ej69Edvc
-	 5N17TF5nSxzg9M4FDGwmgneHMHLOX+5BQhU6u4xfybG/+9FsHip+ukJJWZz+Y8/hkmu08AFTVUXv
-	 95VN6HYt64DzETfL1I7GdlAbO0DQDMcShe97JLS31So/nlglm89spHRfvsH62SFGqnMlDUZ+ulWY
-	 9yVaYr
-X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
-From: Edward Adam Davis <eadavis@qq.com>
-To: sashiko-bot@kernel.org
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	emil@etsalapatis.com,
-	jolsa@kernel.org,
-	linux-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	netdev@vger.kernel.org,
-	song@kernel.org,
-	syzkaller-bugs@googlegroups.com,
-	yonghong.song@linux.dev
-Subject: [PATCH v2] bpf: Fix smp_processor_id() call trace for preemptible kernels
-Date: Tue, 30 Jun 2026 17:11:33 +0800
-X-OQ-MSGID: <20260630091132.941145-2-eadavis@qq.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260630084910.D5C3A1F000E9@smtp.kernel.org>
-References: <20260630084910.D5C3A1F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1782811430; c=relaxed/simple;
+	bh=aqczyMpEG5BbZ598I8o/Wi9L5s+QEPdes93UA6gNdPs=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=excW8e55upPyGkBH5PQ0jQWjQ4JyrHnxikxA223nbD4FUJkjINI4MDEeyqkkrXWx0oGx66ZrouVgPcWrNI9tAop+WvA3h4+qQPhsrB6WQI56r32PKkm3A+H9nNebGjBj4GAVkUy+aTh94M2l4T8NephALCPO2LOmD3UiqxDb/To=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-48f0c5d20c6so7262249b6e.2
+        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 02:23:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782811428; x=1783416228;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t34TSfkiH4ytfaQmHSXYPoxFCM5arp0uf4f1vQVJqI0=;
+        b=WSiBnG8mQTOleLoF3vVuNMymamS8PA0zXPaG4mgvfURCFZu117rvXqR5cyIUD3EqZX
+         yUkOkq4I8cRkCSdNeFsPLnX4C7jqwAcn2APircVqpe2COsg77JRjSXrxsPzIzCoqTnDm
+         kiXrbv+S8T5h73Fdb2CpdrcAkxEvZH2KhTlyLGIEn12oJIgeVNPfnOTex2GDPfIpTw3X
+         ClTnYwU3C5qHn1MlgAtpyaXL21ctW9aE1PgMT7qI0F03hr2zqIZVnW/PuG5bnz4Dw7MK
+         uqwLdL7+ARefg7qxFGLv+szSCp12I3/epdCQPYPvqWM2jMcR4HDmdTwzmgu/tifw/rmD
+         d88w==
+X-Forwarded-Encrypted: i=1; AFNElJ/wJoMY3dJDqpE7TWBx+ZIHsl/XHq+VekRFUkv6AyOmLwsBMA+3U00KT0hjCrvR5uZu7S4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyR44rbidNERx0B1NSJTe5xBOpggd/hG8brXkv1wjkIvbvXwtBI
+	Le6/gbLVU7ktTxRu7w3FqjcQXlJQGfX/mZM949Q0Ftv1k4+2Rf8P/hTAhoFntmxw1sR7fjmU4ZU
+	w4Xozlw+3LdMk/wX9uASvZMoD4yxtyzRaTymqYgsRjbD25B8yyvZfURf6qz4=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6808:4fe0:b0:490:9b13:e9cd with SMTP id
+ 5614622812f47-495eaf31d75mr2574075b6e.24.1782811428183; Tue, 30 Jun 2026
+ 02:23:48 -0700 (PDT)
+Date: Tue, 30 Jun 2026 02:23:48 -0700
+In-Reply-To: <20260630023443.3026627-2-sanghyun.park.cnu@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6a438b24.6124255a.dd83.0009.GAE@google.com>
+Subject: [syzbot ci] Re: bpf: Fix use-after-free on mm_struct in bpf_find_vma()
+From: syzbot ci <syzbot+cid1a625374f9dbb34@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com, 
+	haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org, 
+	kpsingh@kernel.org, linux-kernel@vger.kernel.org, martin.lau@linux.dev, 
+	memxor@gmail.com, puranjay@kernel.org, sanghyun.park.cnu@gmail.com, 
+	sdf@fomichev.me, song@kernel.org, yonghong.song@linux.dev
+Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-bpf_mem_cache_free_rcu() maybe called in preemptible context, this
-will trigger the below warning message:
+syzbot ci has tested the following series
 
-BUG: using smp_processor_id() in preemptible [00000000] code: syz.0.17/5820
-caller is bpf_mem_cache_free_rcu+0x48/0xc0 kernel/bpf/memalloc.c:954
-Call Trace:
- check_preemption_disabled+0xd3/0xe0 lib/smp_processor_id.c:47
- bpf_mem_cache_free_rcu+0x48/0xc0 kernel/bpf/memalloc.c:954
- rhtab_delete_elem+0x185a/0x1b30 kernel/bpf/hashtab.c:2969
- __rhtab_map_lookup_and_delete_batch+0x935/0xcb0 kernel/bpf/hashtab.c:3349
- bpf_map_do_batch+0x445/0x630 kernel/bpf/syscall.c:-1
- __sys_bpf+0x906/0xd90 kernel/bpf/syscall.c:-1
+[v5] bpf: Fix use-after-free on mm_struct in bpf_find_vma()
+https://lore.kernel.org/all/20260630023443.3026627-2-sanghyun.park.cnu@gmail.com
+* [PATCH bpf-next v5] bpf: Fix use-after-free on mm_struct in bpf_find_vma()
 
-this_cpu_ptr() access needs to be guarded against preemption.
+and found the following issue:
+kernel build error
 
-Fixes: 5af6807bdb10 ("bpf: Introduce bpf_mem_free_rcu() similar to kfree_rcu().")
-Reported-by: syzbot+fd7e415d891073b83e1f@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=fd7e415d891073b83e1f
-Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+Full report is available here:
+https://ci.syzbot.org/series/f0ce67c9-2c09-418c-bbe2-c698246e9c7f
+
+***
+
+kernel build error
+
+tree:      bpf-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
+base:      53435562a725962e4de0c29653223129ba11643a
+arch:      amd64
+compiler:  Debian clang version 22.1.6 (++20260514074242+fc4aad7b5db3-1~exp1~20260514074407.73), Debian LLD 22.1.6
+config:    https://ci.syzbot.org/builds/a434cf48-2810-46a3-bb75-064be88b96be/config
+
+kernel/bpf/task_iter.c:1017:3: error: call to undeclared function 'bpf_iter_mmput_async'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+
+***
+
+If these findings have caused you to resend the series or submit a
+separate fix, please add the following tag to your commit message:
+  Tested-by: syzbot@syzkaller.appspotmail.com
+
 ---
-v1 -> v2: using guard against preemption
+This report is generated by a bot. It may contain errors.
+syzbot ci engineers can be reached at syzkaller@googlegroups.com.
 
- kernel/bpf/memalloc.c | 2 ++
- 1 file changed, 2 insertions(+)
+To test a patch for this bug, please reply with `#syz test`
+(should be on a separate line).
 
-diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
-index bd45dda9dc35..1d7ddfc1c9d1 100644
---- a/kernel/bpf/memalloc.c
-+++ b/kernel/bpf/memalloc.c
-@@ -957,7 +957,9 @@ void notrace bpf_mem_cache_free_rcu(struct bpf_mem_alloc *ma, void *ptr)
- 	if (!ptr)
- 		return;
- 
-+	get_cpu();
- 	unit_free_rcu(this_cpu_ptr(ma->cache), ptr);
-+	put_cpu();
- }
- 
- /* Directly does a kfree() without putting 'ptr' back to the free_llist
--- 
-2.43.0
-
+The patch should be attached to the email.
+Note: arguments like custom git repos and branches are not supported.
