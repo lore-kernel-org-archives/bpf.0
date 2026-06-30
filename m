@@ -1,22 +1,22 @@
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C7A7368D63;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 456743672A2;
 	Tue, 30 Jun 2026 02:27:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782786445; cv=none; b=jvQUjZ+rM9P9L9OJmXqBY0aw+2I48084G5kh3xT7XHC/t8KHP0DFlNcPcInw1a3TxWCdiXnGXV4yraNCeZ7yJtqw0bSL2jE0Pj41D1mwzFBRUZ9ljOmjNcnFVXKer+hfJsTNq931+mMktU//73BgWCjRTDbNNVgYdLP8mRWzUhU=
+	t=1782786445; cv=none; b=Fz5Yv6NaFNPFRqAW8rJBQ7g6/Pwae711+yEezPrAFUdTJtVKGryZLRknT/XcFKkWuXZ5UNoFjauDdeMehKLTl96T1mkM+lsLgdGcIXBZUXeenw1SeEFXxtyncOxvmBKGhH0ZOjxmgEGfe+plfFdx+9eYlRY2af26bxu6jFeqJlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1782786445; c=relaxed/simple;
-	bh=saA1Zntfpxnf9P2xnIIQYrA/79oabXZnCG5oNZoyIDY=;
+	bh=df1PM/UFAncMmhwncHAXEcUL/9wbCpS8UU8f/sv3xek=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H5AmSCQ7HRO3qe1xljvlwTg6hDmuSuZbQT5sW2a2Z7jj7xhcfWPvcJ0aQajnYDbPwMpCgso8bwIt5l5eAUBwSonnSkspfk0ZsX4766tMIwdzXhuYQ8g/1Ry5B6qnRu+jQdkJVmJX2Y+3GgUYEO1ojfaESBKm10ppvxyFY11uFpk=
+	 MIME-Version; b=nNvZdWPhdz/rDUdu8Ge82cMnEa8GU2Yu5eOMfmoKOLXK5158sKOmXuSpVwe2RRMP2b3vWOicz+Eas1LSR1t219VWFw4hucmBdt4mhDiSh8q9FwMH9fTozsTSUP471YTVVt/MruEYVj80NZ++Ez87Z5ZPuIIxg866cnyTR7Bm6Lc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8BxNeh+KUNq3HcZAA--.59159S3;
-	Tue, 30 Jun 2026 10:27:10 +0800 (CST)
+	by gateway (Coremail) with SMTP id _____8DxFOh_KUNq4HcZAA--.59354S3;
+	Tue, 30 Jun 2026 10:27:11 +0800 (CST)
 Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJBxbcJ6KUNqIH24AA--.20759S5;
+	by front1 (Coremail) with SMTP id qMiowJBxbcJ6KUNqIH24AA--.20759S6;
 	Tue, 30 Jun 2026 10:27:10 +0800 (CST)
 From: Tiezhu Yang <yangtiezhu@loongson.cn>
 To: Huacai Chen <chenhuacai@kernel.org>,
@@ -24,9 +24,9 @@ To: Huacai Chen <chenhuacai@kernel.org>,
 Cc: loongarch@lists.linux.dev,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/4] LoongArch: BPF: Refactor jump offset calculation in tail call
-Date: Tue, 30 Jun 2026 10:27:04 +0800
-Message-ID: <20260630022705.11536-4-yangtiezhu@loongson.cn>
+Subject: [PATCH v1 4/4] LoongArch: BPF: Implement branchless conditional move for TCC
+Date: Tue, 30 Jun 2026 10:27:05 +0800
+Message-ID: <20260630022705.11536-5-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20260630022705.11536-1-yangtiezhu@loongson.cn>
 References: <20260630022705.11536-1-yangtiezhu@loongson.cn>
@@ -37,11 +37,11 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJBxbcJ6KUNqIH24AA--.20759S5
+X-CM-TRANSID:qMiowJBxbcJ6KUNqIH24AA--.20759S6
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxWF1fXw4DAw4rJw47Ww1DXFc_yoWrGr13pr
-	Z09r4kKFWFqr1UGF4DJas7Zw1fKan5Gr17Kr1DG39ayasIvryfWa4Yk3W5ua45CrW8Zryx
-	Zrs0yry5ua1UArbCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+X-Coremail-Antispam: 1Uk129KBj93XoW3GFW8KFykur1kJrWDJF4DJrc_yoW3Kw1fpa
+	sFkrsYgr4kXF13tFnrAa18urZ5Aws5CrW3WF1DJrWvy3sxury5W3WUKr1agFW5Crn5Zr10
+	qr1Yvw42va1DJ3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
 	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
 	0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
 	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
@@ -52,102 +52,204 @@ X-Coremail-Antispam: 1Uk129KBj93XoWxWF1fXw4DAw4rJw47Ww1DXFc_yoWrGr13pr
 	wI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7V
 	AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
 	r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6x
-	IIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAI
+	IIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAI
 	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x
 	0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8l38UUUUUU==
 
-In emit_bpf_tail_call(), the macro-based jmp_offset calculation relies
-on a fragile prediction equation: "tc_ninsn - (ctx->idx - idx0)". This
-calculation model utilizes tc_ninsn from the previous pass to estimate
-the remaining stride of the active tail call code block.
+The current implementation handles combined bpf2bpf and tail calls by
+checking at runtime whether REG_TCC holds a count or an address via a
+conditional jump (BPF_JGT against 33). This adds non-negligible branch
+prediction overhead in the hot path of tail call execution.
 
-Given that the macro relies on stale layout data from a prior pass to
-compute the active relative stride, the conditional branches end up
-encoding wrong immediate offsets under extra JIT passes. Consequently,
-the execution flow leaps into misaligned instruction boundaries,
-triggering soft lockups or early loop collapse.
+To eliminate this runtime conditional branch in prologue, refactor the
+logic of prepare_bpf_tail_call_cnt() with a branchless conditional move
+mechanism using unsigned comparison and mask instructions.
 
-To fix this issue, drop the pass-dependent macro and the intermediate
-variable entirely. Instead, explicitly calculate "jmp_offset" using an
-absolute target reference anchor: "ctx->offset[insn + 1] - ctx->idx".
+When the program is a main program (is_main_prog), the branchless logic
+classifies and blends the incoming REG_TCC based on its physical content
+according to three possible entrance statuses:
 
-Within this new deterministic arithmetic model:
-1) "ctx->offset[insn + 1]" maps directly to the absolute instruction
-   index of the immediate next eBPF business instruction, serving as
-   a rock-solid target label.
-2) "ctx->idx" tracks the real-time instruction index of the conditional
-   branch currently being emitted.
+1) Initial Entry (Scalar): Enter via a standard event, where REG_TCC is
+   initialized to a pure scalar 0.
+2) Inherited Entry (Scalar): Enter via a flat main-to-main tail call,
+   where REG_TCC carries an accumulated scalar count (1 to 33) reloaded
+   from the prior stack frame.
+3) Inherited Entry (Pointer): Enter via a tail call from a subprogram,
+   where REG_TCC inherits and carries a massive kernel pointer address
+   reloaded from the prior stack frame.
 
-This guarantees the generated immediate offsets always land precisely
-on the next instruction boundary under all multi-pass compilation paths.
+To handle these cases seamlessly without branching:
+- sltui identifies the type of REG_TCC. For cases 1 and 2 (scalar count),
+  it sets the temporary register T8 to 1. For case 3 (kernel pointer), it
+  sets T8 to 0.
+- maskeqz handles the local stack pointer (T7). If T8 == 1, it keeps T7
+  intact. If T8 == 0, it clears T7 to 0.
+- masknez handles the incoming REG_TCC to prevent register pollution.
+  If T8 == 1, it clears REG_TCC to 0 (erasing 1~33 scalars). If T8 == 0,
+  it keeps the massive kernel pointer intact.
+- or combines the results. The scalar cases yield a clean local stack
+  pointer by evaluating REG_TCC (0) | T7, while the pointer case leaves
+  the inherited global pointer intact by evaluating REG_TCC | T7 (0).
+
+For subprograms, the logic directly backs up the verified TCC pointer
+inherited via REG_TCC into its own local "tcc" slot, ensuring the global
+counter reference remains safely propagated across function frames.
+
+Finally, the finalized REG_TCC pointer is unconditionally backed up into
+the adjacent "tcc_ptr" slot, completing the expected dual-slot stack
+layout identically across all entry paths.
+
+This optimization refactors the inner logic of the helper function,
+unifies the offset decrement at the function entry, and uses safe
+internal temporary registers (T7 and T8) to prevent any JIT register
+conflicts, completely removing all runtime branching from the prologue
+hot path.
+
+When exposed to complex bpf2bpf + tailcall interleaved control flows,
+where inputs shuffle dynamically between a scalar count (0 to 33) and
+a massive kernel pointer address, clear improvements are demonstrated.
+Furthermore, the optimization significantly eliminated uncertainty in
+the execution path, making the performance more stable and predictable.
 
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- arch/loongarch/net/bpf_jit.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ arch/loongarch/include/asm/inst.h |  6 +++
+ arch/loongarch/net/bpf_jit.c      | 74 +++++++++++++++++--------------
+ 2 files changed, 46 insertions(+), 34 deletions(-)
 
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index 95e3b372a44f..b30132f44541 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -290,17 +290,13 @@ bool bpf_jit_supports_far_kfunc_call(void)
+diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
+index 76b723590023..19feae166e1c 100644
+--- a/arch/loongarch/include/asm/inst.h
++++ b/arch/loongarch/include/asm/inst.h
+@@ -97,6 +97,7 @@ enum reg2i6_op {
+ };
  
- static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
- {
--	int off, tc_ninsn = 0;
-+	int off, jmp_offset;
- 	int tcc_ptr_off = BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size);
- 	u8 a1 = LOONGARCH_GPR_A1;
- 	u8 a2 = LOONGARCH_GPR_A2;
- 	u8 t1 = LOONGARCH_GPR_T1;
- 	u8 t2 = LOONGARCH_GPR_T2;
- 	u8 t3 = LOONGARCH_GPR_T3;
--	const int idx0 = ctx->idx;
--
--#define cur_offset (ctx->idx - idx0)
--#define jmp_offset (tc_ninsn - (cur_offset))
- 
- 	/*
- 	 * a0: &ctx
-@@ -310,12 +306,12 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
- 	 * if (index >= array->map.max_entries)
- 	 *	 goto out;
- 	 */
--	tc_ninsn = insn ? ctx->offset[insn+1] - ctx->offset[insn] : ctx->offset[0];
- 	emit_zext_32(ctx, a2, true);
- 
- 	off = offsetof(struct bpf_array, map.max_entries);
- 	emit_insn(ctx, ldwu, t1, a1, off);
- 	/* bgeu $a2, $t1, jmp_offset */
-+	jmp_offset = ctx->offset[insn + 1] - ctx->idx;
- 	if (emit_tailcall_jmp(ctx, BPF_JGE, a2, t1, jmp_offset) < 0)
- 		goto toofar;
- 
-@@ -326,6 +322,7 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
- 	emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, tcc_ptr_off);
- 	emit_insn(ctx, ldd, t3, REG_TCC, 0);
- 	emit_insn(ctx, addid, t2, LOONGARCH_GPR_ZERO, MAX_TAIL_CALL_CNT);
-+	jmp_offset = ctx->offset[insn + 1] - ctx->idx;
- 	if (emit_tailcall_jmp(ctx, BPF_JSGE, t3, t2, jmp_offset) < 0)
- 		goto toofar;
- 
-@@ -340,6 +337,7 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
- 	off = offsetof(struct bpf_array, ptrs);
- 	emit_insn(ctx, ldd, t2, t2, off);
- 	/* beq $t2, $zero, jmp_offset */
-+	jmp_offset = ctx->offset[insn + 1] - ctx->idx;
- 	if (emit_tailcall_jmp(ctx, BPF_JEQ, t2, LOONGARCH_GPR_ZERO, jmp_offset) < 0)
- 		goto toofar;
- 
-@@ -355,8 +353,6 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
- toofar:
- 	pr_info_once("tail_call: jump too far\n");
- 	return -1;
--#undef cur_offset
--#undef jmp_offset
+ enum reg2i12_op {
++	sltui_op	= 0x09,
+ 	addiw_op	= 0x0a,
+ 	addid_op	= 0x0b,
+ 	lu52id_op	= 0x0c,
+@@ -153,6 +154,8 @@ enum reg3_op {
+ 	addd_op		= 0x21,
+ 	subw_op		= 0x22,
+ 	subd_op		= 0x23,
++	maskeqz_op	= 0x26,
++	masknez_op	= 0x27,
+ 	nor_op		= 0x28,
+ 	and_op		= 0x29,
+ 	or_op		= 0x2a,
+@@ -644,6 +647,7 @@ static inline void emit_##NAME(union loongarch_instruction *insn,	\
+ 	insn->reg2i12_format.rj = rj;					\
  }
  
- static void emit_store_stack_imm64(struct jit_ctx *ctx, int reg, int stack_off, u64 imm64)
++DEF_EMIT_REG2I12_FORMAT(sltui, sltui_op)
+ DEF_EMIT_REG2I12_FORMAT(addiw, addiw_op)
+ DEF_EMIT_REG2I12_FORMAT(addid, addid_op)
+ DEF_EMIT_REG2I12_FORMAT(lu52id, lu52id_op)
+@@ -749,6 +753,8 @@ DEF_EMIT_REG3_FORMAT(divd, divd_op)
+ DEF_EMIT_REG3_FORMAT(modd, modd_op)
+ DEF_EMIT_REG3_FORMAT(divdu, divdu_op)
+ DEF_EMIT_REG3_FORMAT(moddu, moddu_op)
++DEF_EMIT_REG3_FORMAT(maskeqz, maskeqz_op)
++DEF_EMIT_REG3_FORMAT(masknez, masknez_op)
+ DEF_EMIT_REG3_FORMAT(and, and_op)
+ DEF_EMIT_REG3_FORMAT(or, or_op)
+ DEF_EMIT_REG3_FORMAT(xor, xor_op)
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index b30132f44541..ec46d598e8a9 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -52,50 +52,56 @@ static void prepare_bpf_tail_call_cnt(struct jit_ctx *ctx, int *store_offset)
+ 	const struct bpf_prog *prog = ctx->prog;
+ 	const bool is_main_prog = !bpf_is_subprog(prog);
+ 
++	*store_offset -= sizeof(long);
+ 	if (is_main_prog) {
+-		/*
+-		 * LOONGARCH_GPR_T3 = MAX_TAIL_CALL_CNT
+-		 * if (REG_TCC > T3 )
+-		 *	std REG_TCC -> LOONGARCH_GPR_SP + store_offset
+-		 * else
+-		 *	std REG_TCC -> LOONGARCH_GPR_SP + store_offset
+-		 *	REG_TCC = LOONGARCH_GPR_SP + store_offset
+-		 *
+-		 * std REG_TCC -> LOONGARCH_GPR_SP + store_offset
+-		 *
+-		 * The purpose of this code is to first push the TCC into stack,
+-		 * and then push the address of TCC into stack.
+-		 * In cases where bpf2bpf and tailcall are used in combination,
+-		 * the value in REG_TCC may be a count or an address,
+-		 * these two cases need to be judged and handled separately.
+-		 */
+-		emit_insn(ctx, addid, LOONGARCH_GPR_T3, LOONGARCH_GPR_ZERO, MAX_TAIL_CALL_CNT);
+-		*store_offset -= sizeof(long);
+-
+-		emit_cond_jmp(ctx, BPF_JGT, REG_TCC, LOONGARCH_GPR_T3, 4);
+-
+-		/*
+-		 * If REG_TCC < MAX_TAIL_CALL_CNT, the value in REG_TCC is a count,
+-		 * push tcc into stack
+-		 */
++		/* Save entrance TCC state (scalar count or kernel pointer) to local 'tcc' slot */
+ 		emit_insn(ctx, std, REG_TCC, LOONGARCH_GPR_SP, *store_offset);
+ 
+-		/* Push the address of TCC into the REG_TCC */
+-		emit_insn(ctx, addid, REG_TCC, LOONGARCH_GPR_SP, *store_offset);
+-
+-		emit_uncond_jmp(ctx, 2);
++		/* Compute the absolute pointer to the local 'tcc' slot */
++		emit_insn(ctx, addid, LOONGARCH_GPR_T7, LOONGARCH_GPR_SP, *store_offset);
+ 
+ 		/*
+-		 * If REG_TCC > MAX_TAIL_CALL_CNT, the value in REG_TCC is an address,
+-		 * push tcc_ptr into stack
++		 * Branchless classification and blending:
++		 *
++		 * In combined bpf2bpf and tailcall scenarios, REG_TCC can carry
++		 * either a scalar count (0 to 33) or an inherited kernel pointer address.
++		 *
++		 * Entrance status for a main program based on REG_TCC physical content:
++		 * 1) Initial Entry (Scalar): Enter via a standard event, where REG_TCC
++		 *    is initialized to a pure scalar 0.
++		 * 2) Inherited Entry (Scalar): Enter via a flat main-to-main tail call,
++		 *    where REG_TCC carries an accumulated scalar count (1 to 33) reloaded
++		 *    from the prior stack frame.
++		 * 3) Inherited Entry (Pointer): Enter via a tail call from a subprogram,
++		 *    where REG_TCC inherits and carries a massive kernel pointer address
++		 *    reloaded from the prior stack frame.
++		 *
++		 * sltui:   Identify the type of REG_TCC.
++		 *          If REG_TCC < MAX_TAIL_CALL_CNT + 1 (scalar 0~33), sets T8 = 1.
++		 *          If REG_TCC >= MAX_TAIL_CALL_CNT + 1 (kernel pointer), sets T8 = 0.
++		 *
++		 * maskeqz: Handle the local stack pointer (T7).
++		 *          If T8 == 1, keeps T7 intact.
++		 *          If T8 == 0, clears T7 to 0.
++		 *
++		 * masknez: Handle the incoming REG_TCC to prevent register pollution.
++		 *          If T8 == 1, clears REG_TCC to 0 (erasing 1~33 scalars).
++		 *          If T8 == 0, keeps the massive kernel pointer intact.
++		 *
++		 * or:      Combine the results.
++		 *          Scalar Case:  REG_TCC = 0 | T7       -> Clean local stack pointer.
++		 *          Pointer Case: REG_TCC = REG_TCC | 0  -> Clean inherited global pointer.
+ 		 */
+-		emit_insn(ctx, std, REG_TCC, LOONGARCH_GPR_SP, *store_offset);
++		emit_insn(ctx, sltui, LOONGARCH_GPR_T8, REG_TCC, MAX_TAIL_CALL_CNT + 1);
++		emit_insn(ctx, maskeqz, LOONGARCH_GPR_T7, LOONGARCH_GPR_T7, LOONGARCH_GPR_T8);
++		emit_insn(ctx, masknez, REG_TCC, REG_TCC, LOONGARCH_GPR_T8);
++		emit_insn(ctx, or, REG_TCC, REG_TCC, LOONGARCH_GPR_T7);
+ 	} else {
+-		*store_offset -= sizeof(long);
++		/* Subprograms: backup the verified TCC pointer inherited via REG_TCC */
+ 		emit_insn(ctx, std, REG_TCC, LOONGARCH_GPR_SP, *store_offset);
+ 	}
+ 
+-	/* Push tcc_ptr into stack */
++	/* Store the finalized TCC pointer value securely into the local 'tcc_ptr' slot */
+ 	*store_offset -= sizeof(long);
+ 	emit_insn(ctx, std, REG_TCC, LOONGARCH_GPR_SP, *store_offset);
+ }
 -- 
 2.42.0
 
