@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9353A331EC4;
-	Tue, 30 Jun 2026 15:23:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DAB3D567A
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 15:31:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782833023; cv=none; b=DL4bqqtUT/jKi4zsOkQ5EwXeiQOvSxUgmI9dUBzfDwON2kr7+ayqBVVRWfl2DYI9ADwwK46DrZhD3cMggRT6BHNuPHxaFipzNpEXVQP7ICEGRUe7STJ+AvEfAO2xJ+P30TOFV7TfGznoELRvYgLfhGl0QLCMb2dRZFc1xBjF4zw=
+	t=1782833485; cv=none; b=RpsMvCCGpkCHDmfg0gnjDU0VVvTkugtT+/yMumsQPss/1OwLyrS7YmBMBs0NRymNXQYSf4Sj6Q7g6DiHvJzkCVA5RAExy1Xv0m//euguqmlsY0J9D+hfpMMRgh0MxsXs/Tco5XUaM+CuPyLL1ZW9J/40AHuXL+IZ+m88fyZh108=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782833023; c=relaxed/simple;
-	bh=jTUcFUdqVXaryJJT5G6c3pRyMG8K6/CvBsvXR5TR3ds=;
+	s=arc-20240116; t=1782833485; c=relaxed/simple;
+	bh=Af2OFosjMlWHn9gojCzudn6jQgDHfgbDX9XZj9usug0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AMYfTah9uEk9TzdbLdwNqjDsxhcyn5fdqJ+sAT2/JWhfZae5ZzkzG01uKdRsqSYqJO5mY8KJg2c3p967kEWs6OvlSOCHYYaiSlfYGhUzipV07cmQca0G6d8bcGaNxxpPV4073lee/qnDJ2sd0glnJrWgyQLFsu45oL8Q0NIJ2LY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=lfQu91Pp; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=Fbjzgwn5LNxOXNWUFLhD8ciF8CTaYGjvz9CYbfhq7+Eb9/tilHn+wSXcgZOZPBJIz0dPtWboBqZd5sTq9AfJxjlJAan0zkhSQoQaR6X40TFqM81D05YKQE8LfcPz6OhngsuKR8OiAZSoOhy8kyXEdFYnBKo5mBWH6V+6c60ggf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=JIrSzssd; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="lfQu91Pp"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="JIrSzssd"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=nMee/uZbUMe58sUAmrz7UN0eTZdK+lUDrEcGLJFtnsQ=; b=lfQu91PpItXOIDI1dj5Llh0TqB
-	d2EIJ+XDYTx3xFyAhEH3H5QgdopxkiSpLhUUDVy6XoHg2UFCdaWAdLZ5ubGqajWbjsvTXDBVCNpQe
-	yJjSABniMb80AC+ehwh0XqfS3KhilcqL2NC34+2wSlI88Aa8V4dF4CJY6rvi/s0OuZ7jk1DIckcrB
-	CuZ3CjSoFw6eBO23kduaFUG7cj0+kubgDdTVkVV85agE7hCq2L/35jMTnPQtr+XyFL7zKDwRz3PfS
-	jvUYx1yowu9phjXDW3ZKTNVDsrc+U4A3a2TVC7rCBa86TzLIbJEQQnmja/XUj5IyGhUyW3n2dBNir
-	PY8fgS2w==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
+	bh=XGx2RPFA90K8ecslMt0497adzQl5eWEZN2+YFLmY1Pk=; b=JIrSzssdgni8itL/pdBcbdIH1d
+	WO0WVoxRymjqEfwsod5gHzbpYpCqBPF4xWshsv5kpBncLVATX1KvKq2LIYRW6O0VNM6yaP83UpRy0
+	EJXMXE+6CR6yQQzDk3V2CPjx4ydfN577PrROoP4sUe0kjj0HSg2TmRyL+WSlsaQkMi4J3edQUQehp
+	RTK0i+Tzum/0XWVK7OX2/tbiF6AbfUfKIayTSqk2MpjjrVzdfCdXvPBeh8TiuJT0cvSmmBvaqGrbs
+	aJBKXM3sXhT4r19vlef+KA1Ybb1twzVY5U/4ekYY9RSwFrioC8s53ZIpLYg/tabq2BlCDlQ+KvJqm
+	nuriMQ1g==;
+Received: from sslproxy07.your-server.de ([78.47.199.104])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1weaJH-000LzG-2I;
-	Tue, 30 Jun 2026 17:23:39 +0200
+	id 1weaQc-000Mrc-0j;
+	Tue, 30 Jun 2026 17:31:14 +0200
 Received: from localhost ([127.0.0.1])
-	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1weaJH-000Mpw-18;
-	Tue, 30 Jun 2026 17:23:39 +0200
-Message-ID: <d9fce17f-851e-4cb0-9d78-2ac2cadfda81@iogearbox.net>
-Date: Tue, 30 Jun 2026 17:23:38 +0200
+	id 1weaQb-000GvA-2I;
+	Tue, 30 Jun 2026 17:31:13 +0200
+Message-ID: <e3c95beb-8b74-4037-8520-9f3c18a35606@iogearbox.net>
+Date: Tue, 30 Jun 2026 17:31:13 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,15 +48,15 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 2/3] net/sched: Handle TC_ACT_REDIRECT from qdisc
- filter chains
-To: Jamal Hadi Salim <jhs@mojatatu.com>
-Cc: kuba@kernel.org, pabeni@redhat.com, bigeasy@linutronix.de,
- andrii@kernel.org, memxor@gmail.com, bpf@vger.kernel.org,
- netdev@vger.kernel.org, Victor Nogueira <victor@mojatatu.com>
-References: <20260630123331.186840-1-daniel@iogearbox.net>
- <20260630123331.186840-3-daniel@iogearbox.net>
- <CAM0EoMn6H6cKCweHmt=8ve2i0JuK=E8W1Q89oqDD7vra_Uuk-w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: reject BPF_MAP_TYPE_INODE_STORAGE creation
+ if BPF LSM is uninitialized
+To: Matt Bobrowski <mattbobrowski@google.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Paul Moore <paul@paul-moore.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, oxsignal <awo@kakao.com>
+References: <20260628201103.3624525-1-mattbobrowski@google.com>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -102,103 +102,45 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <CAM0EoMn6H6cKCweHmt=8ve2i0JuK=E8W1Q89oqDD7vra_Uuk-w@mail.gmail.com>
+In-Reply-To: <20260628201103.3624525-1-mattbobrowski@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28046/Mon Jun 29 08:27:20 2026)
 
-On 6/30/26 5:16 PM, Jamal Hadi Salim wrote:
-> On Tue, Jun 30, 2026 at 8:33 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
->> From: Jamal Hadi Salim <jhs@mojatatu.com>
->>
->> When a TC filter attached to a qdisc filter chain returns
->> TC_ACT_REDIRECT (ex: via an eBPF program calling bpf_redirect() or an
->> act_bpf action), the redirect was silently lost i.e no qdisc classify
->> function handled TC_ACT_REDIRECT, so the packet fell through the
->> switch and was enqueued normally instead of being redirected.
->>
->> This has been broken since bpf_redirect() was introduced for TC in
->> commit 27b29f63058d ("bpf: add bpf_redirect() helper"). We got lucky
->> for a long time because bpf_net_context was a per-CPU variable that
->> was always available.
->>
->> commit 401cb7dae813 ("net: Reference bpf_redirect_info via task_struct
->> on PREEMPT_RT.") turned bpf_net_context into a task_struct member that
->> is only set up by explicit callers. Without a caller setting it up,
->> bpf_redirect() itself crashes with a NULL pointer dereference in
->> bpf_net_ctx_get_ri(). However, even with bpf_net_context available,
->> TC_ACT_REDIRECT from qdisc filter chains cannot be honored without
->> adding skb_do_redirect() calls to every qdisc classify function, which
->> would require changes across net/sched/. Isolate it to ebpf core where
->> it belongs.
->>
->> Instead, add a tcf_classify_qdisc() inline helper in pkt_cls.h, as a
->> wrapper around tcf_classify() for use by qdisc classify functions and
->> tcf_qevent_handle(). When the classify verdict is TC_ACT_REDIRECT,
->> the wrapper converts it to TC_ACT_SHOT, dropping the packet rather
->> than letting it continue silently. Dropping is preferred over
->> letting the packet through because the user immediately sees packet
->> loss. Silently passing the packet through would hide the problem and
->> leave the user wondering why their redirect is not working.
->>
->> The clsact fast path, tc_run() continues to call tcf_classify() directly
->> and is unaffected: TC_ACT_REDIRECT is returned as-is and handled by
->> sch_handle_egress/ingress() calling skb_do_redirect() as before.
->>
->> Fixes: 27b29f63058d ("bpf: add bpf_redirect() helper")
->> Fixes: 401cb7dae813 ("net: Reference bpf_redirect_info via task_struct on PREEMPT_RT.")
->> Tested-by: Victor Nogueira <victor@mojatatu.com>
->> Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
->> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
->> ---
->>   include/net/pkt_cls.h    | 14 +++++++++++++-
->>   net/sched/cls_api.c      |  4 +---
->>   net/sched/sch_cake.c     |  2 +-
->>   net/sched/sch_drr.c      |  2 +-
->>   net/sched/sch_dualpi2.c  |  2 +-
->>   net/sched/sch_ets.c      |  2 +-
->>   net/sched/sch_fq_codel.c |  2 +-
->>   net/sched/sch_fq_pie.c   |  2 +-
->>   net/sched/sch_hfsc.c     |  2 +-
->>   net/sched/sch_htb.c      |  2 +-
->>   net/sched/sch_multiq.c   |  2 +-
->>   net/sched/sch_prio.c     |  2 +-
->>   net/sched/sch_qfq.c      |  2 +-
->>   net/sched/sch_sfb.c      |  2 +-
->>   net/sched/sch_sfq.c      |  2 +-
->>   15 files changed, 27 insertions(+), 17 deletions(-)
->>
->> diff --git a/include/net/pkt_cls.h b/include/net/pkt_cls.h
->> index 3bd08d7f39c1..5f5cb36439fe 100644
->> --- a/include/net/pkt_cls.h
->> +++ b/include/net/pkt_cls.h
->> @@ -156,8 +156,20 @@ static inline int tcf_classify(struct sk_buff *skb,
->>   {
->>          return TC_ACT_UNSPEC;
->>   }
->> -
->>   #endif
->> +static inline int tcf_classify_qdisc(struct sk_buff *skb,
->> +                                    const struct tcf_proto *tp,
->> +                                    struct tcf_result *res, bool compat_mode)
->> +{
->> +       int ret = tcf_classify(skb, NULL, tp, res, compat_mode);
->> +
->> +       /* TC_ACT_REDIRECT from qdisc filter chains is not supported.
->> +        * Use BPF via tcx or mirred redirect instead.
->> +        */
->> +       if (unlikely(ret == TC_ACT_REDIRECT))
->> +               ret = TC_ACT_SHOT;
->> +       return ret;
->> +}
+On 6/28/26 10:11 PM, Matt Bobrowski wrote:
+> When CONFIG_BPF_LSM=y is set, BPF inode storage maps
+> (BPF_MAP_TYPE_INODE_STORAGE) are compiled into the kernel. However,
+> if the BPF LSM is not explicitly enabled at boot time (e.g. omitted
+> from the "lsm=" boot parameter), lsm_prepare() is never executed for
+> the BPF LSM.
 > 
-> Why did you remove the warning?
-> A lesser issue is that you introduced a space above #endif
+> Consequently, the BPF inode security blob offset
+> (bpf_lsm_blob_sizes.lbs_inode) is never initialized and remains at its
+> default compiled size of 8 bytes instead of being updated to a valid
+> offset past the reserved struct rcu_head (typically 16 bytes or more).
+> 
+> When a privileged user creates and updates a
+> BPF_MAP_TYPE_INODE_STORAGE map, bpf_inode() evaluates
+> inode->i_security + 8. This erroneously aliases the struct
+> rcu_head.func callback pointer at the beginning of the
+> inode->i_security blob. During subsequent map element cleanup or inode
+> destruction, writing NULL to owner_storage clears the queued RCU
+> callback pointer. When rcu_do_batch() later executes the queued
+> callback, it attempts an instruction fetch at address 0x0, triggering
+> an immediate kernel panic.
+> 
+> Fix this by introducing a global bpf_lsm_initialized boolean flag
+> marked with __ro_after_init. Set this flag to true inside
+> bpf_lsm_init() when the LSM framework successfully registers the BPF
+> LSM. Gate map allocation in inode_storage_map_alloc() on this flag,
+> returning -EOPNOTSUPP if the BPF LSM is in turn uninitialized.
+> 
+> This fail-fast approach prevents userspace from allocating inode
+> storage maps when the supporting BPF LSM infrastructure is absent,
+> avoiding zombie map states.
+> 
+> Fixes: 8ea636848aca ("bpf: Implement bpf_local_storage for inodes")
+> Reported-by: oxsignal <awo@kakao.com>
+> Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
 
-I don't think we need to put out an extra warn to spam the log, this
-can be easily traced either via bpftrace or qdisc stats etc; plus the
-guidance to eBPF with clsact is also obsolete. Given noone has run
-into this the last 10y, I don't think it really matters tbh.
-
-Thanks,
-Daniel
+(Looks like pwbot is asleep; applied to bpf.)
