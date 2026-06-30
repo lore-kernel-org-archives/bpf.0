@@ -1,70 +1,49 @@
-Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632C12D1916;
-	Tue, 30 Jun 2026 08:41:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.210
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC3312E9729;
+	Tue, 30 Jun 2026 08:42:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.175.55.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782808926; cv=none; b=pvUUpdQGhYbJIgCAd/bvuJ3joLpys4dIK6IF8JmXtRjWYZK9WZeuHR8pFGQHA16uxhV68kKgI9H9OslbJtywNd97ma0N8ydRNkjz60YHlWxcXivRsVcI5NRZttXNsprBstvA1PMo/cOVu6/qFnB2KdNSqSbuE32TVsRXrPmjoag=
+	t=1782808931; cv=none; b=sHk3mRTJV1nsWS3acKDfdXfhosn5jVaTjX+no/U596x4Ywd0joxAB5R6q+tv2LxqrvmYN/abZO+THYhcPe9cQYN4oRi/pueAc8i/RTt11t2J9W3y4pq3IXyg9B+/YSA5LjPiiaIAFzfPwb8IHPtjgwpSHTuXKRa/98pk16DWGqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782808926; c=relaxed/simple;
-	bh=ZfX+WUlidGt3MD9RKL56uLQHVqdQY9yPw3YfZBPiEmw=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=CSf7KMSXyd+jFwIuFaBj0J2jaga+p4lZgRxg2hNBSfFeMOF9MrRi3uuCCylm4WnchlXHlQVzgcU1x7J70u6wLigcvu5uMLJH9lw4f12LV1syr0oMSpgyQR6mgtpYCeSvQ7Q1Jc1vFERiRkVX4vu+hauAHvsUJMoJknb+hbrWWpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=f/UhJW1O; arc=none smtp.client-ip=162.62.57.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	s=arc-20240116; t=1782808931; c=relaxed/simple;
+	bh=4JVNHk7k7nEnkCg+WDVTBhjkTl7SyLorKiw8SkSKu1w=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qw6xzGCoYcy4EIrk1S1TPCo7Lgvr2jk56y7V9uBZ1rAhl+gnfVrcGS2HhJSWsaIzMJBTRVL7VAwaXHEg7l/ic3XQFqpqA+x4fC3XrtgC5PQzwc+zvKcHqN2/wKcrqkEToRvoinxikLwrjI4nJQr4F0aehgRHBN3M3Qag8VmsCsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=Ui/ksH67; arc=none smtp.client-ip=52.175.55.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="f/UhJW1O"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1782808912; bh=PgRWuavyvpcMX6a1mtBTkd77HNcfXSkaUDGACw6U90c=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=f/UhJW1OAGKo3j7rkLAdm5+QtQ9alnIt/PUBTKkjG8FizMidQMgERc9N+S4+DR48J
-	 mlI4zp+28fEvZoFMnkLbpAANSRug0dPXfiH5sirvpgQKlH3NgPct6/dCzYvQcFqacJ
-	 fF/6WWoODJ/8PuNnHsXO1goatrbQPvxFlE1lDMig=
-Received: from lxu-ped-host.. ([111.198.231.89])
-	by newxmesmtplogicsvrszb51-0.qq.com (NewEsmtp) with SMTP
-	id A70A549F; Tue, 30 Jun 2026 16:41:48 +0800
-X-QQ-mid: xmsmtpt1782808908tg9sujbui
-Message-ID: <tencent_C4C3064909A16EDCAEDB0C8767D886D01206@qq.com>
-X-QQ-XMAILINFO: OVFdYp27KdlJKjm/DmkFv2Zcms1KQYsBE/KFXP5xNItufkG88nBulvvPq39P0y
-	 ZZ5FzOPXrTsJZiV28EKON9rArzcCq3ZRv7qoiVDQ2ARMRH9RLvOuF7spsBzyAlBVWh3OZ7h1i1Dt
-	 ekefuTX+GiCYntHA4SZENZ76AlsCmILx2k3PPV/ySXCnMqSS7fhzpbnK/KgoW9IKhxaqVIaOHBst
-	 Hf50O8ZQEjkhBqXeUz8H1lsYVwFGPKRp1OkWAfQ6zI2w2O+OqsauVHNOJwOmbmtNOtwp++v3MFiT
-	 EegC5f8zENP3viKP1/oRNxY8y4xOHfgSdkxGS4MOpEGwV8GjjUQuAvgO0pY4WvOjenzvTtqZo4kr
-	 BRpoG99aExz7JK6jOgDTMEO+ynhn4lwZQQ1+ooq30GePYXZMw8ML6uPnCEs0tZpP1bouVEGdVgQ9
-	 d+AHHrw/uPUmFe9NedxzWfmDUOWUYUc1igCit1ZylOcTDrX3Ce4aAr39qbuHBUiS+dcOyTFqOGJU
-	 q7v/jgZzpRrGfXAh2lGTTaTezeCLywlUDK/aS1YojpY820EAV3Hmd20Omun3+kv+glJzvlU/J/iB
-	 8KS87AX9EapvR8Q1m8/sJaImnDutYRqN7qSM12162jju0QyYQXOxwQGDrbCwQmQ73TWzu9FWc7Ld
-	 140zx9Fx745alcEUbNUY4BNWdIhWu8NpHDeWvdG7b/oYVA8tPq7rGTJQOqSshE1fwacEnHGUI/lF
-	 kgRZVuKylrEhkC04l7uS59De7aZf1uqE3NvNlkBw2k84Bj4oEdIfo0MbK9nUJyuY6nJWrPqlqegb
-	 Xr4Bej+xa22qAHDlIqThIxzEyFfLuFi6lEDQ1kz3AjF9bhXINzemUGR8OnlcxCstXQXCcuOKRc9P
-	 WUnhK5SkB+156JnO/9bCOWcff1OZwFBn36nVZYfxnsFc+ER5saG6ScZNMAdhYEyaAUZ99L0tS9cB
-	 y5HgiZ8mTb81IZ8zZimQ86JEyk4Fz2xB5XdYYE3uIIwZF8ApR/OG5D4tsKmqIrYHWZiIwrRmwfG3
-	 TfF4cJ3gvJevyddGCE
-X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
-From: Edward Adam Davis <eadavis@qq.com>
-To: syzbot+fd7e415d891073b83e1f@syzkaller.appspotmail.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="Ui/ksH67"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=cSc7i
+	7aALHrIS9SMWrRZZJU3ALNoFPly4B0adlHNLOw=; b=Ui/ksH67MQXyGOo4qXA25
+	xXtgje3oH7+J5NgGsUqgCamAcH7/TRAWxCbaNe45uTmjQIQqM1M8sUbNd2Y5Zv7P
+	NvqjFay9lVTV9N5n4TRAhND2wux0PR3BgRSe0y1ETg+2TknK9WnAGs5/iI6BWqab
+	/DbuCLrlRMg6z85AM71FBs=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web4 (Coremail) with SMTP id ywQGZQCnbKE5gUNqiZafAg--.37989S2;
+	Tue, 30 Jun 2026 16:41:47 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
 	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	emil@etsalapatis.com,
-	jolsa@kernel.org,
-	linux-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	netdev@vger.kernel.org,
-	song@kernel.org,
-	syzkaller-bugs@googlegroups.com,
-	yonghong.song@linux.dev
-Subject: [PATCH] bpf: Fix smp_processor_id() call trace for preemptible kernels
-Date: Tue, 30 Jun 2026 16:41:49 +0800
-X-OQ-MSGID: <20260630084148.938854-2-eadavis@qq.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <6a436023.b42ede87.8e801.0003.GAE@google.com>
-References: <6a436023.b42ede87.8e801.0003.GAE@google.com>
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3 0/2] bpf: Reject MEM_ALLOC BTF accesses past bounds
+Date: Tue, 30 Jun 2026 08:41:25 +0000
+Message-Id: <cover.1782807039.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,44 +51,60 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:ywQGZQCnbKE5gUNqiZafAg--.37989S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww1UXryxJF4xJr15CF15Jwb_yoW8XryUpF
+	WrJw1fAFW0vrWxZFnIya129rn8tay8Xr15G3WfK348ur1YyF1UXrWkKr1Yyr90y3sF9F15
+	uFy09F9xG3W7uwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUP014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+	F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+	4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
+	648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xSY4AK67
+	AK6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc4
+	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
+	xVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+	1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjXTm3UU
+	UUU==
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-bpf_mem_cache_free_rcu() maybe called in preemptible context, this
-will trigger the below warning message:
+BTF struct walks can relax the top-level struct-size check for trailing
+flexible arrays. That relaxation must not let a PTR_TO_BTF_ID | MEM_ALLOC
+access escape the bytes allocated by bpf_obj_new() or bpf_percpu_obj_new().
 
-BUG: using smp_processor_id() in preemptible [00000000] code: syz.0.17/5820
-caller is bpf_mem_cache_free_rcu+0x48/0xc0 kernel/bpf/memalloc.c:954
-Call Trace:
- check_preemption_disabled+0xd3/0xe0 lib/smp_processor_id.c:47
- bpf_mem_cache_free_rcu+0x48/0xc0 kernel/bpf/memalloc.c:954
- rhtab_delete_elem+0x185a/0x1b30 kernel/bpf/hashtab.c:2969
- __rhtab_map_lookup_and_delete_batch+0x935/0xcb0 kernel/bpf/hashtab.c:3349
- bpf_map_do_batch+0x445/0x630 kernel/bpf/syscall.c:-1
- __sys_bpf+0x906/0xd90 kernel/bpf/syscall.c:-1
+Patch 1 rejects MEM_ALLOC BTF walks whose access range reaches past the
+current struct size before applying the flexible-array relaxation. This now
+also applies to struct ID matching used by kfunc and kptr type checks.
+Patch 2 adds a linked_list negative loader case for this path.
 
-this_cpu_ptr() calls smp_processor_id() in a preemptible context.
-Fix by using per_cpu_ptr() with raw_smp_processor_id() instead.
+Changes in v3:
+- Pass the flexible-array walk policy through btf_struct_ids_match() callers,
+  so MEM_ALLOC kfunc/kptr type checks use the same bounds rule.
+- Rename the btf_struct_walk() parameter to walk_flex_arrays.
+- Rebase onto current bpf-next.
 
-Fixes: 5af6807bdb10 ("bpf: Introduce bpf_mem_free_rcu() similar to kfree_rcu().")
-Reported-by: syzbot+fd7e415d891073b83e1f@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=fd7e415d891073b83e1f
-Signed-off-by: Edward Adam Davis <eadavis@qq.com>
----
- kernel/bpf/memalloc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2:
+https://lore.kernel.org/bpf/cover.1782197377.git.chenyy23@mails.tsinghua.edu.cn/
 
-diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
-index bd45dda9dc35..151d9c8183bc 100644
---- a/kernel/bpf/memalloc.c
-+++ b/kernel/bpf/memalloc.c
-@@ -957,7 +957,7 @@ void notrace bpf_mem_cache_free_rcu(struct bpf_mem_alloc *ma, void *ptr)
- 	if (!ptr)
- 		return;
- 
--	unit_free_rcu(this_cpu_ptr(ma->cache), ptr);
-+	unit_free_rcu(per_cpu_ptr(ma->cache, raw_smp_processor_id()), ptr);
- }
- 
- /* Directly does a kfree() without putting 'ptr' back to the free_llist
+v1:
+https://lore.kernel.org/bpf/cover.1782100805.git.chenyy23@mails.tsinghua.edu.cn/
+
+Yiyang Chen (2):
+  bpf: Reject MEM_ALLOC BTF accesses past object bounds
+  selftests/bpf: Cover MEM_ALLOC access past object bounds
+
+ include/linux/bpf.h                           |  2 +-
+ kernel/bpf/btf.c                              | 17 +++++++++-----
+ kernel/bpf/verifier.c                         | 11 +++++----
+ .../selftests/bpf/prog_tests/linked_list.c    |  1 +
+ .../selftests/bpf/progs/linked_list_fail.c    | 23 +++++++++++++++++++
+ 5 files changed, 43 insertions(+), 11 deletions(-)
+
+
+base-commit: 53435562a725962e4de0c29653223129ba11643a
 -- 
-2.43.0
+2.34.1
 
