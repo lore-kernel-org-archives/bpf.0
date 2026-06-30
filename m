@@ -1,31 +1,31 @@
-Received: from outbound.ci.icloud.com (ci-2003e-snip4-8.eps.apple.com [57.103.91.179])
+Received: from outbound.ci.icloud.com (ci-2003h-snip4-4.eps.apple.com [57.103.91.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D9B336EE9
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 19:18:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.91.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3F73D1A99
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 19:18:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.91.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782847092; cv=none; b=NZoYGrT2g9ZyLK6s9yTBtdpEnA+aJI6UmR1D3QOTkUaSc25m0dyXwQCnOJ20SAb9Vs6lL/dW9CobsXwXvPzl4AVRH+AtRKCeYzB7y6HalBcwuLdTVopcHEaIY/uPvwfsH9CzCHBYGSgexnXcWpMatZmFW+L247keHS5PKLQZX0M=
+	t=1782847096; cv=none; b=gOMQYuhZ02EgvI2YOqu/Lj67S5f56J2GLnL3FVn08VNtQjlQYxJQ9oj00saCqNSxdMkopaezhp0VKQsqiHtxROcePLX7Vdf/46ylaElhyKoKBRdlPawFK6h/3ZjDog5UZVa45/NiFd9d9H1Y/WHw5qov+DrK0mnlrMoRRVGexNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782847092; c=relaxed/simple;
-	bh=tDTKbjGelxHYdq0P/yQNXaUtsP+AKmJ6h8QfqI3vOvk=;
+	s=arc-20240116; t=1782847096; c=relaxed/simple;
+	bh=bzxFy41sPH7fJd071OWXb6j48wdQSl7USCsOB++sLSk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h3Iq5fU8itjLkv+pHA2QwQbMpsggarUTkP+3PRhHMpGfAnYSW4I7RT0K4B87iX+PgmnZa4YNAilZmTppkEFP8ZFk4D5T2VJD6MLFA7L3Tkb3RhFVP+FnB9hbHYQF4rMuB1EaiZipcveZO3FTeEiCUNr2E8MvrWCkiU3WsBgTNKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg; spf=pass smtp.mailfrom=verdict.gg; dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b=AfUTRaK1; arc=none smtp.client-ip=57.103.91.179
+	 MIME-Version; b=oRsaYLmzcjLoRMYxpAMdNpUfFpXiJxqpds1Qxj/dRm2HlHGYdS2P2P7EklhWUeq4sYCCjR1BLGXvBns9eoi6hqN5sBSDWmEmFuI4Vyv5LQxSU1xRwTZwN2iO/WIfnMojts1dA6el9puShknad75onF8m+b6UjcAD1CuBuicoTPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg; spf=pass smtp.mailfrom=verdict.gg; dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b=gjImPDZM; arc=none smtp.client-ip=57.103.91.205
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verdict.gg
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b="AfUTRaK1"
+	dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b="gjImPDZM"
 Received: from outbound.ci.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-central-1k-10-percent-2 (Postfix) with ESMTPS id 1CBFA18015D5;
-	Tue, 30 Jun 2026 19:18:01 +0000 (UTC)
-X-ICL-RepId: 019f19f7-8e1e-7cff-a214-104e7a8a714c
-X-ICL-Out-Info: HUtFAUMHWwJACUgBTUQeDx5WFlZNRAJCTQhICkMGWQJeCEABQwVdEhVdRVcIWwJAEVc4RQhFD1sTTVZUChcNVk1PHUEJXghGXl4fEx9UVgNBGRBWAVhWXQVNGlwYWQ8cE1BWWg5bBEcUFxtcABcbRgIEIwJfAEUCXglWATAXD1ZNTx1BCV4IRl5eHxMAXg8PTAtIAVsHXQFACEECWAZbHEgITANfGl4fFFwUWh9WBXIGXApXBFQfHBdeRhMZThtXTVoNQBlYBm0UVhVSBFk=
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1; t=1782847084; x=1785439084; bh=J81YmnAPrP6zHKrLn+lQ24l9/ckBcDQUWCB+REgLVWI=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=AfUTRaK1VWjZGkuIaY/BToghmh2hUpHDGW5owJwcrziGZxY7tkdDa6GsoEz4LG5ZYWYc/IpVWm55a/qzZOSULgseO8RcyPEzaJZWK6MmxVbn2zgdYVoXeTL8F7eJO6+yeK3gMZ/k8ZMWGU7T0gItm/8AwSGKTaz0ijddoBQFioDGTXAnuQsXOqYxk07Z1pxc0F0ENIoJOo8N1Xzj9gxTJC61gJ3TyYPiOOtchyUp239zsk/r6gALCbQK7180wV8PEumFyHkJ0+JBqxLZV0rTKMV0vsGMVzJ6jRw35OKuHaS6eI2zydKTuT4vPMQ/C0arbI5LNuTnVT9Vx9MRPN9yNQ==
+	by p00-icloudmta-asmtp-us-central-1k-10-percent-2 (Postfix) with ESMTPS id 4BF2E18015FF;
+	Tue, 30 Jun 2026 19:18:09 +0000 (UTC)
+X-ICL-RepId: 019f19f7-aa3d-708d-92a6-6423bd0acea5
+X-ICL-Out-Info: HUtFAUMHWwJACUgBTUQeDx5WFlZNRAJCTQhICkMGWQJeCEABQwVdEhVdRVcIWwJAEVc4RQhFD1sTTVZUChcNVk1PHUEJXghGXl4fEx9UVgNBGRBWAVhWXQVNGlwYWQ8cE1BWWg5bBEcUFxtcABcbRgIEIwJfAEUCXglWATAXD1ZNTx1BCV4IRl5eHxMAXg8PTAtIAVsHXQFACEECWAZbHEgITANfGlMfFFwUWh9WBXIGXApXBFQfHBdeRhMZThtXTVoNQBlYBm0UVhVSBFk=
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1; t=1782847092; x=1785439092; bh=MlH8EI0NXkS41fcAP+/C6cjXncTfe7i2j/oK54dy168=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=gjImPDZMnR0eiFhM8rvRXjw4xYG7Jyf/9JRDWjhBDuxTtHkQq1DAiyyadBFi2kS9RZ+K4TIZzbM+R+RygTnQyx6nF+tPRdrTG5TxsyeDMzybQpibVh1X0e1lJaN+GBgX+3cZtSvqEIwxMbrUNSFr2dTNN1xWxqtma5k/LTMGQ2XGpTtvkdW4AE8YvKf2uEwM5s6jmhhSyUq7KmpjD/OmaR/ih8xwz4VL+p+WlMr4hgVTAMalAczoF0UzHz3rQh0zf5XNHQItEp9mQhwpZbyAisbU8djeieFL8ow6Eqqt1r0SM513TxgrUTkoNnLdTq4Ub/PjtULAmB8QArL/CpY7gw==
 mail-alias-created-date: 1621344842221
 Received: from DelNac.mail.msk (unknown [17.57.156.36])
-	by p00-icloudmta-asmtp-us-central-1k-10-percent-2 (Postfix) with ESMTPSA id 3E07E1800375;
-	Tue, 30 Jun 2026 19:17:59 +0000 (UTC)
+	by p00-icloudmta-asmtp-us-central-1k-10-percent-2 (Postfix) with ESMTPSA id 7E48218015DC;
+	Tue, 30 Jun 2026 19:18:06 +0000 (UTC)
 From: Vladimir Vdovin <deliran@verdict.gg>
 To: bpf@vger.kernel.org,
 	netdev@vger.kernel.org
@@ -38,9 +38,9 @@ Cc: ast@kernel.org,
 	john.fastabend@gmail.com,
 	kuba@kernel.org,
 	Vladimir Vdovin <deliran@verdict.gg>
-Subject: [RFC PATCH bpf-next v1 4/7] net/mlx5e: support the rx_csum XDP metadata hint
-Date: Tue, 30 Jun 2026 22:15:07 +0300
-Message-ID: <20260630191510.81402-5-deliran@verdict.gg>
+Subject: [RFC PATCH bpf-next v1 7/7] selftests/bpf: cover bpf_xdp_metadata_rx_csum in xdp_metadata
+Date: Tue, 30 Jun 2026 22:15:10 +0300
+Message-ID: <20260630191510.81402-8-deliran@verdict.gg>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20260630191510.81402-1-deliran@verdict.gg>
 References: <20260630191510.81402-1-deliran@verdict.gg>
@@ -51,63 +51,107 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 6ZMu9A_ILdra1GCI_IansEXtJqcBIWzq
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjMwMDE4NiBTYWx0ZWRfX1YHBZ68OfrUk
- kBn4GvUUc8Caze7+5gSXYu+TQnoqnqk0Vbvwst6Iy8TQlZHtn81ElqSvKZVTgqAQL/iM9fMMv8U
- Nuom7/G91G7uNskChRB3Lifrpatm+UYg1uHr8DN4yJh77Wx7xd9+Pa58jSE3DUk2BzrKLsHSfuf
- 9swgSzYs6Dzt873GWZARjTE97prETX3S1fDnbWMdzW3T97Js8aUu2jACoBjKGan583wm9sZ3YpX
- ayRBUQ5oK/GkNsJ6dq4ctUq7UlOdGKmze/YenKcpeOQaZCywzDYy9Zs+hLIAQZ3Jvfv0vO+1Hpx
- 4nXsqwkhJ1VrgeIg7BA
-X-Proofpoint-ORIG-GUID: 6ZMu9A_ILdra1GCI_IansEXtJqcBIWzq
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjMwMDE4NiBTYWx0ZWRfX/EamM9QkAXmh
+ c6vwdpZQ8tNevkl2WwFDaqN5FtZc32efUxVMpq8eaKmCFiUJL4Ic9dPnH0v++OeUSVJYzOkAvll
+ l8jyEa1qKp09dXchU8Rw40zUwSrUGdc/szmBdl802AvtBY8chCGZ8i+fGcAbwnODUALAOQzOt3T
+ XObQkzYq76XwnMZv2Q88/Ax7+1joCfsmQ5IPyQG0tZ2TPqevhiZJTyduiHo1hgLCtvMkDIllelb
+ pdajCj5YfNMNXMc7fxbjN2ia0hx26lt/vSrTkjxoSM4Dp3yP1aetWi0uQUuziGas9JAyfxoQQLw
+ HGMqBYEFTS4V4Y0Avzm
+X-Proofpoint-GUID: Vro55lTvrxDexyUZhVxXDOSWRg7RsG4A
+X-Proofpoint-ORIG-GUID: Vro55lTvrxDexyUZhVxXDOSWRg7RsG4A
 
-Implement xmo_rx_csum by reading CQE_L3_OK/CQE_L4_OK, mirroring the
-verdict mlx5e_handle_csum() uses for CHECKSUM_UNNECESSARY.
-CHECKSUM_COMPLETE is intentionally not surfaced: it is already
-disabled while an XDP program is loaded.
+Call bpf_xdp_metadata_rx_csum() in the xdp_metadata program and export the
+status to userspace.  veth surfaces skb->ip_summed: a frame injected via
+AF_XDP carries no checksum context (XDP_CSUM_NONE), while one sent through
+the stack is CHECKSUM_PARTIAL (XDP_CSUM_VERIFIED).  Assert each.
 
 Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
 ---
- .../net/ethernet/mellanox/mlx5/core/en/xdp.c  | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/xdp_metadata.c | 10 ++++++++++
+ tools/testing/selftests/bpf/progs/xdp_metadata.c      |  9 +++++++++
+ tools/testing/selftests/bpf/xdp_metadata.h            |  8 ++++++++
+ 3 files changed, 27 insertions(+)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-index d8c7cb8837d7..6ac06bd24c79 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-@@ -277,10 +277,33 @@ static int mlx5e_xdp_rx_vlan_tag(const struct xdp_md *ctx, __be16 *vlan_proto,
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+index 5c31054ad4a4..77f55696eb78 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+@@ -310,6 +310,16 @@ static int verify_xsk_metadata(struct xsk *xsk, bool sent_from_af_xdp)
+ 	if (!ASSERT_NEQ(meta->rx_hash, 0, "rx_hash"))
+ 		return -1;
+ 
++	/* veth surfaces the checksum verdict from skb->ip_summed.  A packet
++	 * injected via AF_XDP carries no checksum context and is CHECKSUM_NONE,
++	 * while one sent through the stack is CHECKSUM_PARTIAL and reads back as
++	 * verified.
++	 */
++	if (!ASSERT_EQ(meta->rx_csum_status,
++		       sent_from_af_xdp ? XDP_META_CSUM_NONE : XDP_META_CSUM_VERIFIED,
++		       "rx_csum_status"))
++		return -1;
++
+ 	if (!sent_from_af_xdp) {
+ 		if (!ASSERT_NEQ(meta->rx_hash_type & XDP_RSS_TYPE_L4, 0, "rx_hash_type"))
+ 			return -1;
+diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata.c b/tools/testing/selftests/bpf/progs/xdp_metadata.c
+index 09bb8a038d52..0089c6c5a2e4 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_metadata.c
++++ b/tools/testing/selftests/bpf/progs/xdp_metadata.c
+@@ -33,6 +33,8 @@ extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 *hash,
+ extern int bpf_xdp_metadata_rx_vlan_tag(const struct xdp_md *ctx,
+ 					__be16 *vlan_proto,
+ 					__u16 *vlan_tci) __ksym;
++extern int bpf_xdp_metadata_rx_csum(const struct xdp_md *ctx,
++				    enum xdp_csum_status *csum_status) __ksym;
+ 
+ SEC("xdp")
+ int rx(struct xdp_md *ctx)
+@@ -43,6 +45,7 @@ int rx(struct xdp_md *ctx)
+ 	struct udphdr *udp = NULL;
+ 	struct iphdr *iph = NULL;
+ 	struct xdp_meta *meta;
++	enum xdp_csum_status csum_status;
+ 	u64 timestamp = -1;
+ 	int ret;
+ 
+@@ -99,6 +102,12 @@ int rx(struct xdp_md *ctx)
+ 	bpf_xdp_metadata_rx_vlan_tag(ctx, &meta->rx_vlan_proto,
+ 				     &meta->rx_vlan_tci);
+ 
++	ret = bpf_xdp_metadata_rx_csum(ctx, &csum_status);
++	if (ret < 0)
++		meta->rx_csum_err = ret;
++	else
++		meta->rx_csum_status = csum_status;
++
+ 	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
  }
  
-+static int mlx5e_xdp_rx_csum(const struct xdp_md *ctx,
-+			     enum xdp_csum_status *csum_status)
-+{
-+	const struct mlx5e_xdp_buff *_ctx = (void *)ctx;
-+	const struct mlx5_cqe64 *cqe = _ctx->cqe;
-+
-+	if (unlikely(!(_ctx->xdp.rxq->dev->features & NETIF_F_RXCSUM)))
-+		return -ENODATA;
-+
-+	/* Same verdict the normal RX path uses for CHECKSUM_UNNECESSARY.
-+	 * CHECKSUM_COMPLETE is deliberately not surfaced here: it is disabled
-+	 * while an XDP program is loaded (see mlx5e_handle_csum()).
-+	 */
-+	if (likely((cqe->hds_ip_ext & CQE_L3_OK) &&
-+		   (cqe->hds_ip_ext & CQE_L4_OK)))
-+		*csum_status = XDP_CSUM_VERIFIED;
-+	else
-+		*csum_status = XDP_CSUM_NONE;
-+
-+	return 0;
-+}
-+
- const struct xdp_metadata_ops mlx5e_xdp_metadata_ops = {
- 	.xmo_rx_timestamp		= mlx5e_xdp_rx_timestamp,
- 	.xmo_rx_hash			= mlx5e_xdp_rx_hash,
- 	.xmo_rx_vlan_tag		= mlx5e_xdp_rx_vlan_tag,
-+	.xmo_rx_csum			= mlx5e_xdp_rx_csum,
+diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
+index 87318ad1117a..ba1b2902b371 100644
+--- a/tools/testing/selftests/bpf/xdp_metadata.h
++++ b/tools/testing/selftests/bpf/xdp_metadata.h
+@@ -30,6 +30,10 @@ enum xdp_meta_field {
+ 	XDP_META_FIELD_VLAN_TAG	= BIT(2),
  };
  
- struct mlx5e_xsk_tx_complete {
++/* Mirror of enum xdp_csum_status (include/net/xdp.h) for userspace asserts. */
++#define XDP_META_CSUM_NONE	0
++#define XDP_META_CSUM_VERIFIED	1
++
+ struct xdp_meta {
+ 	union {
+ 		__u64 rx_timestamp;
+@@ -48,5 +52,9 @@ struct xdp_meta {
+ 		};
+ 		__s32 rx_vlan_tag_err;
+ 	};
++	union {
++		__u32 rx_csum_status;
++		__s32 rx_csum_err;
++	};
+ 	enum xdp_meta_field hint_valid;
+ };
 -- 
 2.47.0
 
