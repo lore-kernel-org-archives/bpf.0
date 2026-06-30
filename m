@@ -1,126 +1,88 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B05A43EF65D
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 11:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782817318; cv=pass; b=J2iumwuhlUC4R3kqZaIXLs02I53che+w+r86ptH6PbsuHJnbFIruc6dIWzzwvhIOSwMGuY8IcIstx7N/hOgayQdoq9R6lfFZ03YI2/BpkNjdcT5zJ2gXcwDBr0oqkMObEeBLiyTV2t4pVi9TGVlbhll1opd6W0anYpDv7t6NUrM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782817318; c=relaxed/simple;
-	bh=XVMnZazNe6ueinmZJ6D34+lB49c1hHJgeNSRfW04Low=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f79FBm3oVFEpabHBh4IGj/0vgaTvySr23xGvykc+5bxP2XpqThlPmuEiRn4EvyZaNx2RIEXgtja2VpfYIQEyjzVS7McOFTEZYsLkrPEkhQO41KmHc+nXkchCwf5AWUzpi8v3HhvtxHU3GC5sKiT4foWOd/yS88rLu2YYCV5whv0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vh/cOEk4; arc=pass smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2457E3FBB72;
+	Tue, 30 Jun 2026 11:09:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782817775; cv=none; b=KUdSA4r6zp/tWfk5ed1SCKm0GgfqwPEGykwQBiknJQ96ozTVaWWWQUMeDHDcvQ9EOfEeGpEDwldIhfDk1+jaYsd3bVAKRkUp4zaD/JO+1C8LZ7OTzql+W83WM9iOVMj2BqO9SGHeb/DBsFe0fl/mvxkL2sR2iaBV/q2OnM+ZR30=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782817775; c=relaxed/simple;
+	bh=LDtINCcCDbAQN/lDJwIzHf34H7YwfSI1iyKLb8sI5Ac=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=mpOJTirwZp/nZgrsOeN42+Jkk1H2+XWD6b0LfYZxfMvCprs2Y9GTraVrLWY4YGXisI3yhEjp8yi7yILHWuqQRLrsbXkbjMDnfFo2Q7auPZWszWG1n9ARaS/JTwkqHH1l78kuBYLxmBQnq6XpDoSgv+iHia7q5bhe/3SEzCH3MIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TJb3XyLl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vh/cOEk4"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-69857dc1c75so2624323a12.1
-        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 04:01:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782817315; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Z/OhzlTIBXUi6e0BHTEWy0bt7j7YVqzYMyCMCxG5e19A2GCd856Xt4vABh0eaUmYrG
-         TEkbvvXuTW6tPWEAEXYhpP+ntPZ9CERwvsq38apvzNe9yblJJ/HO2iCAxshxybrVccn9
-         80clfxEa6vopj2DL2xu/AeuO5+hHnKdpNv/wxZkF5xwzv9cLa756QWeFJ40Y1x1nXNDG
-         8i+Eo00KNIxQiQP7vq9xvSKFWjEyflIbZSHPGL+U+ZLRl1/Z+R5P85w+tigyApB5mRAH
-         0vksFWoA6JpHsFNGvEEPxuNeVFgABtVP6sr8LWL3RXY0qgrHoGcQJbGpwqvl2blgwCHQ
-         m4uQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=XVMnZazNe6ueinmZJ6D34+lB49c1hHJgeNSRfW04Low=;
-        fh=EFTCZfq9qfBIrTH98EbhrGxP0Q+/lAf7mhjLGZL2+/0=;
-        b=dhMFS9ifGorf1nnk8/0ga7oRGY1gUOUNdO5qCmVJeNoVxWTPzcIMCitU+EKzCE/JY9
-         mRN0UwJVLKCNrC+czkx9L88v4UaqJPCIipF51GBC2PtG8+pkxx1m8GYNrEpbjXgwcrui
-         arDGIm6/bhkUMBKDHbp81eZywxWRQM5t2Kbf+Ug3WXSJKd25jzHtXQKG0nu5Svczvle+
-         E9xal2NtKgVyrmAJuAgApqSy9E5YJVx/8ftFKDQelgaN94Q+XXmuBfcaBEnP5kt3uLBR
-         OrdlYDlc2QD7Zx/h4FYEEVhfDgTc0dUKRztK2KIFTWkVIEXCHXLyRxs4b7546J5O7YBh
-         jELA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782817315; x=1783422115; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XVMnZazNe6ueinmZJ6D34+lB49c1hHJgeNSRfW04Low=;
-        b=Vh/cOEk41rYPNWUDRzL9fV6pGiGys+jgYv56yyVM5YLQG+CQ6HAz8bjg+2yhOi6Z0R
-         HX5dq5MjKkDCK0F0V42AmSr9XYvoGMwSY8++X6KpGHvfsB59EyMe/afP90eBPd6RVRuU
-         L7n25ctS5VPtXZFXOSehyvn8hizxq6TuElNJX8Iqm3lyuU2vWeZaWZSlzFn+po0im++h
-         6dXOnUDzBwgqXpKdQxQeR6rYoXT3d9Jo00Fe2t0MpjfrJ99DhicDwTRG2/Uz1zEh9e4R
-         eR7AWSSH51CU2MO3xvGY9EF+7aN4NbA4bV/dCilNCPOg4BUfkwmVFQbMOtZGFMCByYKP
-         R3zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782817315; x=1783422115;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=XVMnZazNe6ueinmZJ6D34+lB49c1hHJgeNSRfW04Low=;
-        b=exy23KldbrYpQlzrd/OaE9tmXqUuFH3Gv1b57INgGSYY0CPSzjULi1sf9c49ZZmrrW
-         mKofYCmJuXtlFqWPnCO1V6IUNOHA60nZJiu1IHhmbwwsKWDIBoUNFot3CqVzm01JZV3a
-         2I81QNd+tZWvna6DSOPcUneilYaZy5HsyLsB1rDO0PKbK0iHXnWrQ7yw8qlCIv7f81Hw
-         pWc+3U0Dj5KMtb7/8X+67T57KFPoy9GlbEGaK2HhMezdRyTkNmgD5bsHzK2/n3XRBxsW
-         8YgNrC3+04ojnAiEu9E24PmOf4BxWlqCiAvo0zRO+/K7YkUt/Ow6+B+iAbaz82RpGfeA
-         u/JA==
-X-Forwarded-Encrypted: i=1; AHgh+Rrjny57fh8KberPpLZ/5Ow0cn/Pb8jr+pVHDF15hEK6v8Oa1UidbXPGJTfh9MkOcx0nPRE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yya/H5Kub8fYNGr1OaP3lvINXo8eroNum7Gzf1177cJTdCkhC+M
-	OgOFl1ueXd8GrAb0I/OfIJcqim/5g6GT7f378lUBnZ/PjwLUr3A3i0J/6g3LNWUdx8XUMbr59SQ
-	/hGbKw8ZMmSUMQraWyJGlABpbtlVmBPc=
-X-Gm-Gg: AfdE7cm++XwhvqcnoRgYJjK/ZsRMPg9xYgrHRUCcZlaS5DGJemyXNU76Yyf1MDS8Trm
-	ZIWhUX2tYddWUw51ac4gUXaP8q8HizGeDY/M3lZ0v+dovon7Bfs5qYKLXDSF9nNXLSKNLksCrOq
-	5714h0K0xZF2GKj2Pa47PbIvPu2UITt8zdHWaTBdRAAWaQSmSPApvo2EIBVNMOnD+LF6bXc8gBz
-	6Jp9CTxMHayKdm9Aflj9l+KanAUAHBfrip69i8aLJ6AlezjvYyOlNzcIoj7fSIoOlaaYk9x8koG
-	UUEVpAfx4eI71kZ7pUnbdIzq10medqk=
-X-Received: by 2002:a05:6402:5248:b0:697:4307:991d with SMTP id
- 4fb4d7f45d1cf-6988789244bmr120235a12.19.1782817314715; Tue, 30 Jun 2026
- 04:01:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TJb3XyLl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C0691F000E9;
+	Tue, 30 Jun 2026 11:09:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782817773;
+	bh=3KMj5bAXV72/vr7i0iWBQZicBPu9LajLdf1dnb0ON3o=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=TJb3XyLlV69QofssxSQ6LDnIqB9DgMuYHF2J+gykUHK+WcbxktgXa8N260MmTValQ
+	 dLgHkDs/vbXl6qrTn6559/gkWvt7gmK/zqvAeJfz93dndhWCX+yXpYwNHlZdGkluN+
+	 oH8LmrzMh4u84voT8ohJ2rCaOKzCvgJaoLNosUePGuchunDF0XbH8C7MO+ZxaLogWr
+	 4aAf5Eadof5NzP1A7Xq/yQxNVJIEiLJE6PCcYsgX2TxQJEiOIkNg6xI35xWjjOjkmL
+	 yKnSM15co6nI0S8bo9r7sPnWNtY2wL1wvCOIFZunJ+X7gVe8fAJuhvxnLclM9Ogsbt
+	 FRFIuSXnYEnzQ==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260629070653.580879-1-caixinchen1@huawei.com>
- <CAOQ4uxjcD0-PHqqmrpEvkLRgtKJGe8-n+6DQyBngjN2TorwU+g@mail.gmail.com> <f4c8f5fe-30c3-4e7f-8512-7a2befdd1ed3@huawei.com>
-In-Reply-To: <f4c8f5fe-30c3-4e7f-8512-7a2befdd1ed3@huawei.com>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Tue, 30 Jun 2026 13:01:43 +0200
-X-Gm-Features: AVVi8CeRSS7JXqOJC8_jFJY-F8O-_1zMcUusRfzqJnniatTSJdpzkrHWbWs8ruQ
-Message-ID: <CAOQ4uxh4-LYt8VUW5o+0mMrHpnZm3t8k4WD6x2kRqEj=_ZpLOA@mail.gmail.com>
-Subject: Re: [PATCH stable/linux-5.10.y 0/7] Backport Fix incorrect overlayfs
- mmap() and mprotect() LSM access controls
-To: Cai Xinchen <caixinchen1@huawei.com>
-Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, 
-	miklos@szeredi.hu, paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, 
-	stephen.smalley.work@gmail.com, omosnace@redhat.com, 
-	gregkh@linuxfoundation.org, sashal@kernel.org, bboscaccy@linux.microsoft.com, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-unionfs@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	selinux@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org, 
-	lujialin4@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Mask socket type flags in
+ mptcpify prog
+From: Matthieu Baerts <matttbe@kernel.org>
+To: Guillaume Maudoux <layus.on@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Matthieu Baerts <matttbe@kernel.org>, 
+ Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, mptcp@lists.linux.dev, 
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20260630095723.564392-1-layus.on@gmail.com>
+References: <20260630095723.564392-1-layus.on@gmail.com>
+Date: Tue, 30 Jun 2026 13:09:22 +0200
+Message-Id: <178281776277.2535326.16467031353021194373.b4-review@b4>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1067; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=LDtINCcCDbAQN/lDJwIzHf34H7YwfSI1iyKLb8sI5Ac=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLKcF7+aGNfXv+Rfxg/NHud1t2xzJBzkuYxqjhmnZr8rn
+ 394z7KmjlIWBjEuBlkxRRbptsj8mc+reEu8/Cxg5rAygQxh4OIUgIm4ZzH8L75basBx51rk3cTZ
+ R5u+77M6pXH4I88Xv7lJ8+KeVFiYGDL8D7B5Kfbv5LnC5/WLVCWfVD7v520oW9bBVvbsqP6Z4KQ
+ fbAA=
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On Tue, Jun 30, 2026 at 5:06=E2=80=AFAM Cai Xinchen <caixinchen1@huawei.com=
-> wrote:
+Hi Guillaume,
+
+Thank you for sharing this fix!
+
+> The mptcpify BPF prog upgrades eligible TCP sockets to MPTCP, but only
+> when the socket type is exactly SOCK_STREAM. Its update_socket_protocol()
+> hook runs on the raw type from userspace, before the socket core masks
+> it with SOCK_TYPE_MASK, so the type may still carry SOCK_CLOEXEC or
+> SOCK_NONBLOCK in its upper bits and the equality check fails.
 >
-> Thank you for your reply. Regarding the two points of feedback:
->
-> First, 6.1 is still in the process of being adapted.
+> As a result, a socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0) -- what
+> common libraries do by default -- is silently left as plain TCP. This
+> was hit in practice with curl. Since mptcpify.c is referenced as example
+> code for enabling MPTCP transparently, the same mistake is likely to be
+> copied into real deployments where it fails the same way and is hard to
+> diagnose.
 
-So do not propose for 5.10 please.
+Good idea to fix this code in mptcpify.c, which is indeed used as a
+reference, and ends up in real deployments.
 
->
-> Second, this patch set is primarily intended to fix CVE-2026-46054, but
-> it seems that for lower versions to implement SELinux checks for overlay
-> mmap/mprotect checks, some dependencies are unavoidable. In such cases,
-> should we add more tests to reduce the risk and integrate the changes,
-> or should we simply not fix this issue? If more tests are needed, are
-> there any recommended test suites?
+The modifications look good to me:
 
-I have concerns.
-The burdn of proof is on you.
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
-Thanks,
-Amir.
+-- 
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
