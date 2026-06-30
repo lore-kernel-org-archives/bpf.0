@@ -1,166 +1,139 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7CE3E0C55
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 18:20:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782843616; cv=none; b=I7Gb1WTtxyzXC9EWQXTi5fjj/HTIo2EoP8MQJpRlyhcXjGlL9U6bYywHBEYXy/fX0GloWDBpihT2K8Kw+XvREVb3tyagrActdcZ3gdU8R2oyPVe0wJAWLXPizP6UNzpb3yTgAIuTiwG5eVNfPPAZuGIgcc09bgFwxSBCt6WmCUU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782843616; c=relaxed/simple;
-	bh=3MWWgnBNxcNxcJyS1JYLu2pwY6mLlM3CWAfqQAGyALo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S6ZPno8phQq3O0hXhEqRaUR6NsDltlMCKJPqHTgUrYLSM2SUVTKpzA42QR0Bikk/wwEax4nlKGcafjlOKrfMTgGjd2b0wr+ZKkq7OycghsUIjGf9Ow+187HKgnwTwCvRQsXdxyY+WhF/Y6ZmLeWuEATxkzPbUZTJnN4A7z3qlm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NC0TjlMx; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C0E63DB635
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 18:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782844356; cv=pass; b=Q5Lp9taXTSPoITKeTEMlMbibKJVAMoc2TyuJQ4IDg79Q9d4lLm7L6wCL2k5B/ah+xk81asQ40T7bNRsY31phjIxX5dS2nMg5YH/1NeWQtb6pbTLbJicP5C9oKsDaVljktKKxNMToahEDFXv6WV/7B3tuFOu4zs/PmCJ+54LiASk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782844356; c=relaxed/simple;
+	bh=i5cPT+uFJ6k3nHG66pbSMnLBQVgZ8SNtUuZYNE3FZTM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YPcIhy5NxD2KoOvymKxfotrdpZwYR7Ht1T7i0Kkq4S10tsM2PbDx2z/zof7XqL8nGUbS69bZRLqV0VxcEfgGqzDZLwpwDeViICMKrYBnzc1yChJmlEXRJ75CLJFA0gUFs7dmepq5M3Y/UDP6MAGqdJYrj0GkkCS3UXZfwlLIWzw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bTur/gDM; arc=pass smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NC0TjlMx"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-4728c12ba97so2244463f8f.0
-        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 11:20:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bTur/gDM"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c88973b6965so501227a12.1
+        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 11:32:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782844355; cv=none;
+        d=google.com; s=arc-20260327;
+        b=fw9NOU64M63OlRiuLYQPwyvp9HGdVFkeWczzIsn2aJG7S+HiLCfEyB5nBAem4J1sSU
+         BWwvjIw0wTNPgg0MdY6taam13M8a6P5P7clkYaQY7P9MW9Wxbj5YyuItztCFnx7Ps2S/
+         emTj4r4YH9jbzVd+mebkEGIUY11X2S0/SgFjJ4FpMeELp3MlEUqZUG59qme2RxEfqOIU
+         +5o0z7RDSZOf2sa5cnivgl8u3NleScO0bTNZ67FSUDwXiq5nG4vk7Ke4t2MFtnrAlNel
+         gtn9dqJZ7A+9OvXKeNep676DUnEeB0fCbPR9DToXf7qac7iwg+55ZldwJsr58kU7dk6J
+         qeGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=r3FAamP2gRA2cCM2zM3ZYVzoEGplljt19iJI6CljgOk=;
+        fh=EiqklGnZCUZeRq7AR+Ugfz4FIdqRPmHfG8nA9Y2Ye84=;
+        b=KFXMKpVsiVQQE5sJarLYya60iiZjFwCPfrCvn3sBBrH5fN4+WBujwS5KpUhQ9sVEwA
+         /Sh1nsnz6/AygZwtoIw8ZitVN/2sbZPDE2XLJoq72PmZw4daHozw2MbRq1npq8v6Qp9D
+         co4wjhvBSFYb2/F9AdwjAChBd95R02xLPPzNJMCWjbzXCrcf8csIuFnuLIyeid/LFHzg
+         b0Lsq+D44qXddRkT4OEedi8PbFAlm8fRGcFnEC8cAJTzPOEApPh/SIu7D//yAGLHaQbm
+         0sM1kDFcwT5SxMDrg2NnGurBlpTr0ff2myNayt8bBM2gTspcOoVRQAcce1n7keeu25i5
+         Y7Sg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782843614; x=1783448414; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wX3a5DZftWQLzIO2gAwJsDiCFshv0dUhsjO14dVAZWo=;
-        b=NC0TjlMx5QVcSNBYh1WpSYEKY/ltfDKLQj+X6H2EPA+g0+QsF1xtnvMX0ChlndY/xE
-         58drb7SeoH2zPcQT3lDN8sdDdnUXicuQyNqhd/DQDHXKmzjhRBpQDwWWSU6QxQd6O4uz
-         jaeLwWJVM5kERczFK+YMePOeclAhe0qsaQKSMlmlMqbl8eJUnEe9HMn/yahZnNsfSew9
-         rwqaohlkXqnFE8Qr/8tiK+f7i4KFAApSdkoCtpTK4PV5B8PMWfqwTgvO7O9DxaNwzq/k
-         6pnxluf+ekhBzRHL4ydZP74mGetoM9qd4g786uF+o+TbKI2T32FSyxNaZe67R5uC/Vyd
-         SErw==
+        d=gmail.com; s=20251104; t=1782844355; x=1783449155; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r3FAamP2gRA2cCM2zM3ZYVzoEGplljt19iJI6CljgOk=;
+        b=bTur/gDM3AjWfen2aDsFn7/hVq25cYwmJglaGBARoHIT27OwYMRERKcMril0W79H+G
+         0KmwxR49WAU+DaTh45zzjGSO6BKSXE+Kme30stim39kWjQpk0ETuVSS0N3S/NnF5xIZm
+         sPbc39WcqKu+z+nIv/XyScf3OUnGOFRn2iSdtFP7hsgS910iHhlqcBb9LREaIUHIXJ6I
+         FQVHPVCJcmIp7M5iP4EoVBjdEkNJajBkb7K7DrRDShVlfFj3MXF9rXyh893ZpLtKzch9
+         dgYCMVBrGTVePf1L32qqXgrPZdHvdJNkGjpmH+AoxBnsGHKnnclu1DmIYRh1NO33hUGv
+         pebQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782843614; x=1783448414;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wX3a5DZftWQLzIO2gAwJsDiCFshv0dUhsjO14dVAZWo=;
-        b=rlQWw9KimGjmZLz5ADYfBHrhRueDdgyUwn6EXJ6gpZA566osfV319MIElSvaiw7Ujy
-         DTEB7dEvNxnpSOtATdAd1/dj+PBbQRtNUsCOIRVRe+e1WcxBsN9E2LU9Gzmj/jGkusuo
-         vol+zenKhZtQxKbq/F10/bq0VtQTA9hy5V8gZ3Re9MnewI78wgfttx7ZZfrR8Si4HNBc
-         dGw4PFpsx7D4lJOtUU6BZVgGsAPtazg9H0S80Vb+TWREXyPsVDTqOAsCLwhKd4nSAgC+
-         p0qyz2szsscOc16Nn7Dqo8I9k3xAMirLZ+7dzKyzYF3AMFu3zTEE8h1Y2lOs9FGLw0hB
-         9+KQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+J5F0SoCkvlqSY9YZXcP46LL6NXaQ9XALIOrn3JFW24dYRRHLPXqWbvQ5ZhteXG/nLV14=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywoz9UgX8ysU90Ey0WzrGRIAI6GqoPRKhjJH+ENOM05LKxifCg3
-	4RHjdwAAFsZsm+2ruVMFKMzaajgSWI4uAgOw47Ocd0mVKKoNkM7uk9B5
-X-Gm-Gg: AfdE7cmNS3bu+73zgiU/tmJ0llQhoxgWo1fzh99ic8guPN30tq8aFHxhBrEej3+5XI7
-	UGLCXxk/Z6H23Um2hZP12vIDI7NnBEUurrY1vs8lJkbNkl1UyW0KdYSIsZxNgM4+UEgVde2g6gv
-	5Gf8WkFtczSvO5gM+qie7rFNgDrJdkrE8cvFsqcV8qrS3rGk8nE2QCWhDrNpudkpWbITmVAbUoz
-	oZZWxpv+HpGnqv4PIa8Mz5hDwJfYtSI4LW3svFHf/kbufGJiBAmsW69clW+Ov6J+equYoPDi9t8
-	pQSlPtLWsl1uLRRIun8QnVuXq9QP+yzG+EF9/EGi8Y875KE6hks2LoOgI4n1G5S4yFttgKIlnvl
-	TkSbyaVFPQdFZKcK+Wo4qv1OpwSLhG/3MmUq1fTPRxNNR6WyjQVGlqj0xVhfV6s8guwgbPULraD
-	cvAG5eG572fl2154Wfgg1uipvs4lmfMr4u
-X-Received: by 2002:a05:600c:4695:b0:493:aa24:792b with SMTP id 5b1f17b1804b1-493bda6fdc1mr26258915e9.22.1782843613521;
-        Tue, 30 Jun 2026 11:20:13 -0700 (PDT)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493be810be8sm12316055e9.9.2026.06.30.11.20.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 11:20:13 -0700 (PDT)
-Date: Tue, 30 Jun 2026 18:30:15 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: Enforce gotox targets against
- subprog bounds
-Message-ID: <akQLN49YynM4hf+H@mail.gmail.com>
-References: <20260628-f01-03-gotox-bpf-next-v3-0-b744432e1361@mails.tsinghua.edu.cn>
- <20260628-f01-03-gotox-bpf-next-v3-1-b744432e1361@mails.tsinghua.edu.cn>
- <20260628142401.80DC21F000E9@smtp.kernel.org>
+        d=1e100.net; s=20251104; t=1782844355; x=1783449155;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=r3FAamP2gRA2cCM2zM3ZYVzoEGplljt19iJI6CljgOk=;
+        b=MA+Y2VWins0YJlgs7ZYWhIViefyJ5vjqa0/YewraRTmctzG0PN+vemp77Vpr15eJpZ
+         fY1C+WAnbVjCKOTuIot6f/YTtzoFC/phXhVMi+SvPx50R4N0ctYxh+dFuhn5/Osub6DD
+         crYE/UdnT3sIH2+28EmoUG/7VJf3tL8crg2fOkWL83vRCpwMGjEF1zAB6dL9uDotH7Nw
+         92E2c71dcGB9WrjibpFEXhMK6GBJON60+BQB2hf/5MF+NbSF26EFYe6IJeQYKSA32GT9
+         i2P8IP7kcxsN15HM7Akh5kJIXT3ouecGM4Rk71/e6vN5buQk08eMMgqXYaXsJRQnFljR
+         aBwQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9OpaBfGg+q5AsqB/GrNEq6RsDkwL3mp12ShUvJiNV9dmCJtc1+6T2L+/puoAyPqJSx+ms=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQ1H/iTMsl1soA19oVWFITYWqmB46Evwmu+wvbqMb7WjUwZhv1
+	YK3wrEgVXLhyu2x8OQy31LalDIwIAc97gvOLTL9g66NDVt7XiUVAh5+rn4G4Z0aAtzfEiZGC8Xm
+	m8/KQ5cyBLSN10DOwdRGNQyQa/xS99Qg=
+X-Gm-Gg: AfdE7clUpeLLjWEyW0uIgh+q3ooY0Ida2VdgP/1j6IS/CNQsWn5WJ0f80iIpBWm6HBV
+	wsDNmMFzxEonU1QNgCS4CWayayCkpNY6Ik/mw6oPcxFmiFMQ0C50fsRPVxwr3LDZ5sJ9iruyT7g
+	cMUJtVNf+OvEu4iSLaMT/sUA86pcl6oBzyXm9L/AcO5bm1QdQkujottR4UjdzOIRLQ9MhU2dRA0
+	dOtsuJaB7XTr5OJT226M4NZBiqhZKpZfVNNwtqTd8Qrxc0xFOCD9MJ6gpoL175KaR1dEAnri75R
+	Sl2aH1Sk+roDVZzduT7wWsvNZHfBwNZgHgh3VggWbhqbep7Y69DaFddAGA4pcPPN08M/tg==
+X-Received: by 2002:a05:6a21:2e14:b0:3bf:6763:f0d0 with SMTP id
+ adf61e73a8af0-3bfd2637e25mr2423789637.4.1782844354664; Tue, 30 Jun 2026
+ 11:32:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260628142401.80DC21F000E9@smtp.kernel.org>
+References: <20260624204946.2901178-1-andrii@kernel.org> <178248062788.457674.6865742035078097472.git-patchwork-notify@kernel.org>
+In-Reply-To: <178248062788.457674.6865742035078097472.git-patchwork-notify@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 30 Jun 2026 11:32:19 -0700
+X-Gm-Features: AVVi8CcH4ADHKMGLKtxIIqCUc9RGZeIiph6llLtnTXNhaFFLnt2B9qIbhZYSB-k
+Message-ID: <CAEf4BzbUEi4zZxEBggHzbYRaSMtQ6wWJSjHhqfvE-omvGadApw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: fix -Wformat warnings from
+ format/argument type mismatches
+To: Quentin Monnet <qmo@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 26/06/28 02:24PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> 
-> Pre-existing issues:
-> - [Critical] The patch adds a runtime bounds check to prevent `gotox` targets from jumping outside the current subprogram, but fails to ensure that dynamically observed targets were actually modeled during Control Flow Graph (CFG) construction. This allows an attacker to follow unmodeled control-flow edges and bypass static liveness-based state pruning.
+On Fri, Jun 26, 2026 at 6:30=E2=80=AFAM <patchwork-bot+netdevbpf@kernel.org=
+> wrote:
+>
+> Hello:
+>
+> This patch was applied to bpf/bpf-next.git (master)
+> by Alexei Starovoitov <ast@kernel.org>:
+>
+> On Wed, 24 Jun 2026 13:49:46 -0700 you wrote:
+> > Building libbpf with -Wall (as happens via bpftool's bootstrap build)
+> > surfaces ~120 -Wformat warnings where pr_warn/pr_debug format specifier=
+s
+> > don't match their argument types: %d for __u32/Elf64_Word, %u for signe=
+d
+> > ints, %zd for size_t, %ld for unsigned long, and %x/%lx/%llx applied to
+> > signed values.
+> >
+> > Match each specifier to its argument's type where a correctly-signed
+> > specifier exists (%d<->%u, %ld->%lu, %zd->%zu). For hex conversions,
+> > which have no signed form, cast the argument instead (%x->(unsigned),
+> > %lx->(unsigned long), %llx->(unsigned long long)). No functional change=
+.
+> >
+> > [...]
+>
+> Here is the summary with links:
+>   - [bpf-next] libbpf: fix -Wformat warnings from format/argument type mi=
+smatches
+>     https://git.kernel.org/bpf/bpf-next/c/df3153758ddb
+>
+
+Quentin,
+
+I synced these changes to libbpf's Github mirror. Can you please
+update bpftool mirror's libbpf reference to include this change, so
+that I can fix these noisy warnings for wprof? Thanks!
+
+> You are awesome, thank you!
 > --
-> 
-> commit 5e0bdd5b4a7e2ce073913482349669d9387d6a32
-> Author: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-> 
-> bpf: Enforce gotox targets against subprog bounds
-> 
-> During CFG construction, the verifier records the modeled gotox target set
-> in insn_aux_data->jt. This patch adds a check to reject targets outside the
-> calling subprogram bounds when check_indirect_jump() follows targets from
-> the runtime PTR_TO_INSN register's actual INSN_ARRAY map.
-> 
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> [ ... ]
-> > @@ -17188,6 +17190,23 @@ static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *in
-> >  		return -EINVAL;
-> >  	}
-> >  
-> > +	subprog = bpf_find_containing_subprog(env, env->insn_idx);
-> > +	if (verifier_bug_if(!subprog, env,
-> > +			    "gotox insn %d is outside subprog bounds\n",
-> > +			    env->insn_idx))
-> > +		return -EFAULT;
-> > +	subprog_start = subprog->start;
-> > +	subprog_end = (subprog + 1)->start;
-> > +
-> > +	for (i = 0; i < n; i++) {
-> > +		u32 target = env->gotox_tmp_buf->items[i];
-> > +
-> > +		if (target < subprog_start || target >= subprog_end) {
-> 
-> [Severity: Critical]
-> This is a pre-existing issue, but does this bounds check alone fully protect
-> against unmodeled control-flow edges?
-> 
-> During CFG construction in kernel/bpf/cfg.c:jt_from_subprog(), if an
-> INSN_ARRAY map's minimum offset falls outside the subprogram, the heuristic
-> skips the map entirely:
-> 
->     if (jt_cur->items[0] >= subprog_start && jt_cur->items[0] < subprog_end) {
-> 
-> If an attacker creates an INSN_ARRAY map containing both an out-of-bounds
-> offset (e.g., 0) and a valid in-bounds target Y, the CFG construction drops
-> Y completely because items[0] is less than subprog_start.
-> 
-> Later at runtime, if the attacker restricts the bounds to index exactly Y,
-> this check passes because Y is within subprog_start and subprog_end. The
-> verifier then explores the gotox to Y edge that was never modeled in the
-> CFG jump tables.
-
-The robot is right here, the check should verify that the map was
-actually checked during the config stage. I think the easiest way
-to check this is do the same check: verify that the whole map fits
-within the subprogram. (An optimization would be to cache this info
-somehow.  Every jump table map can only lie within one subprog, so
-subprog index cached is enough.)
-
-Could you please address this and add a corresponding selftest?
-
-You also have lost some acks for this patch from v2, please
-don't forget to add them the next time.
-
-> Because liveness analysis relies strictly on the statically modeled CFG,
-> could traversing this unmodeled edge cause liveness to incorrectly assume
-> registers are dead, allowing an unsound state pruning bypass?
-> 
-> Should this logic verify that the dynamic target is actually present in
-> env->insn_aux_data[env->insn_idx].jt, rather than only verifying the target
-> is within subprogram boundaries?
-> 
-> > +			verbose(env, "gotox target %u outside subprog\n", target);
-> > +			return -EINVAL;
-> > +		}
-> > +	}
-> > +
-> 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260628-f01-03-gotox-bpf-next-v3-0-b744432e1361@mails.tsinghua.edu.cn?part=1
+> Deet-doot-dot, I am a bot.
+> https://korg.docs.kernel.org/patchwork/pwbot.html
+>
+>
