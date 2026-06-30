@@ -1,154 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03ADD27144B
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 03:16:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93FB32367DF
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 03:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782789395; cv=none; b=sPrkfYtlGWkJumiwyWlJMUwz3lH9Mv+/rwlPMTtUgQ/cH+aEhpBC2NJL3CVGpPKHMwPEBQZUmJGokAQTkQo6wVsVUM7CpHo9GxK4nJagTeVRAAGtTnPHicYjukKyU57YFVapnMHuXEZe1qDrAptBd0g4fE86Bvf8GbSMo/nDoQY=
+	t=1782789610; cv=none; b=gcb5dUFGiVBSQL7n3WH2afDjixHFEavIWhT0VXAIVF8+tPVy6djSG9YUfhb2sqH49w9NVvsP3g6yShWg/TM7exlRwCbS6opljGpxSC/uMQGCPxdCLkqYOK2xpqnpxezyCrrqbQaayIpc87Y/gsK+xP7PzhDyTlac+pgC1IcIBJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782789395; c=relaxed/simple;
-	bh=wmAT7oOP/vwT9mP/MZRJBXWOiCFdYiaRXlaxXIF3x48=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ZDN3kSy7HYsMIsNg9TiMFHGZhzPcI3ysAiD2mzOhIFo4PyQvyikixtLWhtTYhKfXFu7J+Z1owmaJrhQvaoyMIWrtElJBUiWL7oKDROkMQsI6bBK61n6g7LFja66FjVkiE1EFWj+npJS1dI+2kRDY8f4wSpPBGimRuIXilqrL66U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vewvwlvg; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vewvwlvg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AE7C1F000E9;
-	Tue, 30 Jun 2026 03:16:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782789393;
-	bh=+gSbod73Sq2w7PYR2N+ds4nQeqsp0uMSvca5Of9moic=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Vewvwlvg8+Uz/5ZVt+sZnQFx4qEqf+iZmpwmRtXhlwut+6e43SlY/rimhBRps/B6t
-	 dG22DYHN0/lBvmzwZdbb0WSzw57NR/48umJri+eTx7JACBkCrTNtwFGZ4GVAEo3OXO
-	 EoVH1gIqL84udExEVtL1ud0ONluDh4F7BjWgOgqKC+7FOYHs0VqCwxF4LAt8sFCbAV
-	 AQ1SgJNQX2lvclFROUM1ISBHY4RbjrtK8iq+tcBvkTr5x+uHLd680EbmHGTzz9mFcn
-	 9L4QjfIjU91THNCEIhoJQ0vXdejkNiIcKp45808rdA/VLk02O1p7gitK683KW8KSq7
-	 JvIVOi9kGYPBg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf] selftests/bpf: Skip libarena when the BPF backend
- lacks 32-bit arena cmpxchg
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "George Guo" <dongtai.guo@linux.dev>
+	s=arc-20240116; t=1782789610; c=relaxed/simple;
+	bh=mUq3InlUgj+BAWa9s2S5mLTFpk5qAryF8o1OYoMXI5s=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=ozZfVMScQjwu9olljLPckraVbQ+3Kca7sKNHMF4qWYTKw1R9AYEZN774gZYNRYTCbaq27NMPFioKnPHJM8vKCOwoelSdi+2GnXKcfIL79PqYvv56Kgv7R3VGb3kHighCjbgrj/wivqacOgeaYlxx8vyyFGx17Ea0biqIhFBgeqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8BxT+rlNUNqdHwZAA--.64316S3;
+	Tue, 30 Jun 2026 11:20:05 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJBxSeDhNUNqDIy4AA--.22102S3;
+	Tue, 30 Jun 2026 11:20:02 +0800 (CST)
+Subject: Re: [PATCH v1 3/4] LoongArch: BPF: Refactor jump offset calculation
+ in tail call
+To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260630025809.74043-1-dongtai.guo@linux.dev>
-References: <20260630025809.74043-1-dongtai.guo@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 30 Jun 2026 03:16:33 +0000
-Message-Id: <20260630031633.7AE7C1F000E9@smtp.kernel.org>
+References: <20260630022705.11536-1-yangtiezhu@loongson.cn>
+ <20260630022705.11536-4-yangtiezhu@loongson.cn>
+ <20260630024002.26F4D1F000E9@smtp.kernel.org>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <38d77460-2824-13e6-ef64-6732c60c30fb@loongson.cn>
+Date: Tue, 30 Jun 2026 11:20:01 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+In-Reply-To: <20260630024002.26F4D1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJBxSeDhNUNqDIy4AA--.22102S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxurykZryfuryUGF4kKrWfJFc_yoW5GFykpF
+	Z0gwn3Aay7Wr1Dtanrt395X3WUtw1kGry7Gr1rGr10y3yYqr9FgFW5Ka15ua48Cw4kZw4S
+	qFs0v34SvF4DAacCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
+	67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+	AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
+	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jrv_JF
+	1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+	4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07Ui
+	iSdUUUUU=
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On 2026/6/30 上午10:40, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] Spurious JIT compilation failure for large BPF programs with tail calls due to invalid jump offset calculation in the first JIT pass.
+> --
+> 
+> commit c7d3e2cbf4a615b76ec73b1fff169ff7f13381b9
+> Author: Tiezhu Yang <yangtiezhu@loongson.cn>
+> 
+> LoongArch: BPF: Refactor jump offset calculation in tail call
+> 
+> This patch modifies the jump offset calculation in emit_bpf_tail_call()
+> to use an absolute target reference anchor based on the next instruction
+> offset, ensuring immediate offsets land precisely on instruction boundaries.
+> 
+>> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+>> --- a/arch/loongarch/net/bpf_jit.c
+>> +++ b/arch/loongarch/net/bpf_jit.c
+> [ ... ]
+>> @@ -310,12 +306,12 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
+> [ ... ]
+>>   	off = offsetof(struct bpf_array, map.max_entries);
+>>   	emit_insn(ctx, ldwu, t1, a1, off);
+>>   	/* bgeu $a2, $t1, jmp_offset */
+>> +	jmp_offset = ctx->offset[insn + 1] - ctx->idx;
+>>   	if (emit_tailcall_jmp(ctx, BPF_JGE, a2, t1, jmp_offset) < 0)
+>>   		goto toofar;
+> 
+> [Severity: High]
+> Does this calculation cause large BPF programs to fail JIT compilation during
+> the first pass?
+> 
+> During the first JIT pass, ctx->offset[insn + 1] is not yet populated and will
+> be 0. As a result, jmp_offset evaluates to -ctx->idx.
+> 
+> If ctx->idx exceeds 32767 for a large program, jmp_offset will fail the 16-bit
+> bounds check inside emit_tailcall_jmp(), causing JIT compilation to abort
+> prematurely.
+> 
+> Previously, jmp_offset used a small relative offset which safely fit within
+> the 16-bit limit during the initial pass.
 
-New issues:
-- [High] The patch misdiagnoses the root cause of the Clang crash and imple=
-ments a workaround that incorrectly skips `libarena` tests instead of fixin=
-g the underlying build configuration.
+Thank you for catching this critical corner case, you are correct.
 
-Pre-existing issues:
-- [High] The patch fails to apply the new 32-bit cmpxchg guard to the ASAN =
-variant of `libarena`, leaving the selftests build vulnerable to the exact =
-same compiler crash it attempts to fix.
---
+During Pass 1, ctx->offset[insn + 1] is uninitialized (0), making
+jmp_offset = -ctx->idx. For large BPF programs, this negative offset
+overflows the 16-bit range check inside emit_tailcall_jmp(), causing
+the JIT compilation to abort prematurely.
 
-commit e34c5b107c762422f1dc3835420230ecdcd78708
-Author: George Guo <guodongtai@kylinos.cn>
+To fix this cleanly without breaking any function signatures, we can
+use ctx->image to detect Pass 1. Since conditional branch instructions
+on LoongArch always have a fixed 4-byte size, using a safe dummy offset
+(like 0) during Pass 1 will not affect the size estimation but will
+successfully bypass the 16-bit bounds check.
 
-selftests/bpf: Skip libarena when the BPF backend lacks 32-bit arena cmpxchg
+I will send a v2 patch shortly with the following guard logic:
 
-This patch introduces a feature probe to detect if the BPF backend supports
-32-bit arena cmpxchg operations. It skips building libarena and its
-dependent tests if the operation is unsupported to prevent build aborts.
+   jmp_offset = ctx->image ? (ctx->offset[insn + 1] - ctx->idx) : 0;
 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-> index b642ee489ea64..0098d892cb39e 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
+Thanks,
+Tiezhu
 
-[ ... ]
-
-> @@ -91,6 +91,17 @@ CLANG_HAS_ARENA_ASAN :=3D $(shell echo 'int x;' | \
->  	-mllvm -asan-shadow-addr-space=3D1 \
->  	-x c -c - -o /dev/null 2>/dev/null && echo 1)
-> =20
-> +# The arena qspinlock used by libarena performs a 32-bit atomic cmpxchg =
-on an
-> +# arena (address space 1) pointer. Not every LLVM BPF backend can select=
- it;
-> +# older releases bail out with "unsupported atomic operation, please use=
- 64 bit
-> +# version", which aborts the whole selftests build. Probe for the operat=
-ion and
-> +# skip libarena (and its dependent tests) when the backend cannot handle=
- it.
-> +CLANG_HAS_ARENA_CMPXCHG32 :=3D $(shell printf '%s\n' \
-> +	'struct s { int counter; };' \
-> +	'int f(struct s __attribute__((address_space(1))) *l, int o, int n)' \
-> +	'{ return __sync_val_compare_and_swap(&l->counter, o, n); }' | \
-> +	$(CLANG) --target=3Dbpf -O2 -x c -c - -o /dev/null 2>/dev/null && echo =
-1)
-> +
-
-[Severity: High]
-Does this feature probe artificially fail by omitting the -mcpu=3Dv4 flag?
-
-Because the probe runs against the default BPF CPU target (which lacks 32-b=
-it
-atomic support), it will falsely report that the backend lacks support and
-unnecessarily skip the tests.
-
-Could the actual root cause of the build failure be that libarena's
-BPF_CFLAGS in tools/testing/selftests/bpf/libarena/Makefile is missing
-the -mcpu=3Dv4 flag?=20
-
-For example, test_progs-cpuv4 successfully compiles progs/arena_spin_lock.c
-because it explicitly passes -mcpu=3Dv4. Would adding -mcpu=3Dv4 to the
-libarena Makefile fix the compilation error natively instead of skipping
-the tests entirely?
-
->  # Order correspond to 'make run_tests' order
->  TEST_GEN_PROGS =3D test_verifier test_tag test_maps test_lru_map test_pr=
-ogs \
->  	test_sockmap \
-
-[ ... ]
-
-> @@ -835,10 +846,13 @@ LIBARENA_BPF_DEPS :=3D $(wildcard libarena/Makefile=
-		\
->  				 libarena/selftests/*		\
->  				 libarena/*.bpf.o)
-> =20
-> +ifneq ($(CLANG_HAS_ARENA_CMPXCHG32),)
->  LIBARENA_SKEL :=3D libarena/libarena.skel.h
-> +CFLAGS +=3D -DHAS_BPF_ARENA
-> =20
->  $(LIBARENA_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(LIBARENA_BPF_DEPS)
->  	+$(MAKE) -C libarena libarena.skel.h $(LIBARENA_MAKE_ARGS)
-> +endif
-> =20
->  ifneq ($(CLANG_HAS_ARENA_ASAN),)
->  LIBARENA_ASAN_SKEL :=3D libarena/libarena_asan.skel.h
-
-[Severity: High]
-This is a pre-existing issue, but doesn't the ASAN variant of libarena
-also need protection from this compiler crash?
-
-The LIBARENA_ASAN_SKEL build is only guarded by CLANG_HAS_ARENA_ASAN, which
-checks for ASAN flag support but not 32-bit cmpxchg support.=20
-
-Since the ASAN build compiles the exact same buddy.bpf.c source code
-containing the 32-bit arena cmpxchg, the compiler will still crash here
-with the exact same "Cannot select: AtomicCmpSwap" error if the target
-lacks 32-bit atomics.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260630025809.7404=
-3-1-dongtai.guo@linux.dev?part=3D1
