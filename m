@@ -1,332 +1,323 @@
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011040.outbound.protection.outlook.com [52.101.70.40])
+Received: from MRZP264CU002.outbound.protection.outlook.com (mail-francesouthazon11020087.outbound.protection.outlook.com [52.101.165.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D59405C55;
-	Tue, 30 Jun 2026 12:01:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E30CA404BCF
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 12:08:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.165.87
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782820917; cv=fail; b=bOTySD0xsKPYJx5j32k1cq/psDhJsPWsww37ZmwJYe7nSUlIHSFr6YMZ/leJCd9y08GP4eDsg7q5pdzZgZNn9fA20wUQr7g/A2I/QEAmtYtbAE9NfQXmZM5HNDMLAaq2gP2aVx6fKg8RDBfznKhjZpgkD1V6Dw1pCqy0c+Ruq5k=
+	t=1782821335; cv=fail; b=Shsnu8EwqqDaewM4TyD2Ad2zcvXPRpedgjopnIetoB1JPn1WJcz/nMfiEwCbq2ubZYg/6/QwjwvD7d27jEjjdzztkT9V3KJLqAEDdi51H1FqZMkf4U5m7IDnohzuSfMnAyh8LvM2tiqb/YyXZ3SCEAttAeljVHAilHRr1uwOMe4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782820917; c=relaxed/simple;
-	bh=eHd/N0lqgmUv6F9/kVeZH80/vj/Ug2LnFq8X0K7jWVc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ftbkGo5zWgDZrT7Jr5Dzy2bF6g1NXiPnfNDVh0sBuZraFUmSkMocHZ96g6F/xRocko3KAnG1H+jQqo6URG8OGt9n3iXcxK/vjWdJjSgPerSbT1J6hEt3jJullNdUTrgwQLK+negjeXd6isJu8IPfSu0ruokUONWRLVqk9s9LvSo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=BIyvX/1j; arc=fail smtp.client-ip=52.101.70.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+	s=arc-20240116; t=1782821335; c=relaxed/simple;
+	bh=cwm2pC/LPVSTwwqyPxuzE2FIQV8XgnYc0tOqjTcMZoM=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=OGQCy3hj3XyWZdwtzkxc//xPGHdtP0AkhQSVgA09P0kJ2JUyiB2xNpNkddilOY+sQ5ShkfrI7aP9lVtpoZObD6ij6pT+SqxN/sX1Z8qkmzaNAaJkm0lfzJu+Vtnwt/fXzPK8iR/TLSDli9soSkSwex+JSrHpV8IJ0OJEzNm7EwE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=harfanglab.fr; spf=pass smtp.mailfrom=harfanglab.fr; dkim=pass (1024-bit key) header.d=harfanglab.fr header.i=@harfanglab.fr header.b=XJicdlyb; arc=fail smtp.client-ip=52.101.165.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=harfanglab.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=harfanglab.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="BIyvX/1j"
+	dkim=pass (1024-bit key) header.d=harfanglab.fr header.i=@harfanglab.fr header.b="XJicdlyb"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=OhWKyjLCTAMZ2miBMvPXPPvuLYbpB8grLpNLipQE6VVDX+NDN0DJm98dEdYKIJ26HFGQIbyPtIbP3U02aQvjsPS97tAcnOK1s1UrF0AVhbPA72I5SP69gem1VoApTBULxJ6cnCHGDaI9zwFlaiJMYz7irRcceLkt8d7vklDNSpgsGTOaeEcPDIM1bdMcV0/tec69b1BybRPadAZ+It2deXirtp3UC11ZOPn5guLt8/REJJuI5SryX11k13+2HzAYqsKO2gsvgpT1JCWOp1EPepoiTkzpKSQZfNRTyR7TCun0OiHZDTzMFxRGUu0UY0IUQjMthQTKbkBSztpW83OzRQ==
+ b=nNGd0/ELOzADsX7Tm8QeN7fUx0aOrYSpCn8mUrFlzOIimR31jLWd+0RQm/dmucUUOfpo4m7y8xHHBPYaslfzEQ7G+U44DGiMiHqwL58ysN3DUSXnMGfpxxHWbIy22AGndDvDx+j02LucknAcluVrchLWW7r2qkHvNxe3xscEcTC1ozaaB/pmYDo0CL/ws/GRLtdWPw8h1ACRGHV2hKTghSTBmwDqvn/UgoPL2jr1P8wXtOAJHnWgWeYJUzGMb+Iuq1w24+4IwIQMHGPxfBM2WGR9MlFF1I71W1373wsY1SXlzpb0BobYLWCI2zWzbBKMZBHBJITsku0lVoC/DG91fA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jp8tcFgXhMqpLIMrY4X12rw+rY5znkjBoeRjhhnLSlY=;
- b=iL9U9zXmeF6pxH4ZxS7jUED7io+qzIQc17lwlteb97HHIO+C0YcFAUiWxSqZ+sC8cOxFzryHQ6E4F2+qlj1Fsj0GQqSztY+0chyvL91IWandKT7Pn1gzlQ31xMK7/LIZyCSsVFLIjWYgj/ElLoSgGtaV+8AcZDT+XHhZTyYyLrS4C+F4TMtgo0lHY+TOr/BcsHRm9+7zLteDQ36hrro70xM6AlNp25tmVTBW5WyxWc36qmmY7uLzxwMBsPz5MDZU/z/NIg33PlPo47RM+E0i62uKWeYTFps+DCV0Myvf8vO2e2izf5WKD/1MF+vq2d1HCw8P/tOhc0nVval8EDX7lA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 131.228.2.241) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ bh=cwm2pC/LPVSTwwqyPxuzE2FIQV8XgnYc0tOqjTcMZoM=;
+ b=rQZyG0bOUdl0G1QGl2HFheTfSXB6mxKLmScpcNsi1IOJTVta1Pk/ZGLy6bi2mc8Ur5Vqz/tEHqPzVusgcORW4N7LVEGxroHUwnQO3xFaADvBZ2OymHiPKrP9/knIqbJ8BfvSTtlDSD4uHvKlATZyl3bp8zB6h8mtmMsMcjNkEGVuJhdgSRL45yL5zBOieX1eIApU8BVVD/G1WyWQoKlIfkOr7uo9iYoA7tRP0EgZ5ktUVQTHY2rcQg3mB8vkzpoyCMGRHIhUGFSYk9hCn6xjEwiu60YMOugWyyKgwYL77Z7DTPuXRCPATvVtCyrW89xIvZh57hKbn/FL11VLYgwScw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=harfanglab.fr; dmarc=pass action=none
+ header.from=harfanglab.fr; dkim=pass header.d=harfanglab.fr; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=harfanglab.fr;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jp8tcFgXhMqpLIMrY4X12rw+rY5znkjBoeRjhhnLSlY=;
- b=BIyvX/1j2+V83Mc2fNWdUlWb5WX3X2gpQmZjyY10OjqUc+CAwlgsXjTWQZm99L0pOyKKUHlPtDW0YEHn+LewcOX5KeUCpSPYVk27RQvwZ5QEY32z4Ujgl308cvl1e64EulEvQs+7WjSg3Vxi4ILzS43+yGh9H/6rTc810RLi+ncR3LdrDGlPwD5NFvRlpXtTFut54bKFbHUQ14u5Jj/AnVhs72FuGeHlKafwP0BBU0tw6gZU/CUMn98sGdfZi6WWOHlVBf0YcxPErwraFzxQ/o6M1HRtjZ/u+aMLYrms/zZ78vHtJUix/8NHVcRn/h8yjjCzW/BXPYgZYIzCK90WUg==
-Received: from DU2PR04CA0066.eurprd04.prod.outlook.com (2603:10a6:10:232::11)
- by AMDPR07MB11456.eurprd07.prod.outlook.com (2603:10a6:20b:73d::17) with
+ bh=cwm2pC/LPVSTwwqyPxuzE2FIQV8XgnYc0tOqjTcMZoM=;
+ b=XJicdlybABgEzhCsTP5aR9s6Xn09LShlS4BubKViRYcxrGG9gZoo2wjcTFAS8w1pusDGACQ2gs6NIVlqwvBJZGYpAqKQSrwj2ub7/4ayB5MU0+RQoxuLFrEVPktBSomFX9+kOKUAytWGiGljQqQiqGSUwczhFOWGr2vJpYPAsS8=
+Received: from MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:28::14)
+ by PR0P264MB2027.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:169::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.18; Tue, 30 Jun
- 2026 12:01:49 +0000
-Received: from DU2PEPF00028CFE.eurprd03.prod.outlook.com
- (2603:10a6:10:232:cafe::8f) by DU2PR04CA0066.outlook.office365.com
- (2603:10a6:10:232::11) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.159.19 via Frontend Transport; Tue,
- 30 Jun 2026 12:01:49 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.241)
- smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
-Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
- designates 131.228.2.241 as permitted sender)
- receiver=protection.outlook.com; client-ip=131.228.2.241;
- helo=fihe3nok0734.emea.nsn-net.net; pr=C
-Received: from fihe3nok0734.emea.nsn-net.net (131.228.2.241) by
- DU2PEPF00028CFE.mail.protection.outlook.com (10.167.242.182) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.181.6
- via Frontend Transport; Tue, 30 Jun 2026 12:01:49 +0000
-Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
-	by fihe3nok0734.emea.nsn-net.net (Postfix) with ESMTP id 7D9782054D;
-	Tue, 30 Jun 2026 15:01:47 +0300 (EEST)
-From: chia-yu.chang@nokia-bell-labs.com
-To: jolsa@kernel.org,
-	yonghong.song@linux.dev,
-	song@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	memxor@gmail.com,
-	shuah@kernel.org,
-	martin.lau@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	horms@kernel.org,
-	dsahern@kernel.org,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	jhs@mojatatu.com,
-	kuba@kernel.org,
-	stephen@networkplumber.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	donald.hunter@gmail.com,
-	kuniyu@google.com,
-	ij@kernel.org,
-	ncardwell@google.com,
-	koen.de_schepper@nokia-bell-labs.com,
-	g.white@cablelabs.com,
-	ingemar.s.johansson@ericsson.com,
-	mirja.kuehlewind@ericsson.com,
-	cheshire@apple.com,
-	rs.ietf@gmx.at,
-	Jason_Livingood@comcast.com,
-	vidhi_goel@apple.com
-Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Subject: [PATCH v3 net-next 1/1] tcp: Replace min_tso_segs() with tso_segs() CC callback
-Date: Tue, 30 Jun 2026 14:01:45 +0200
-Message-Id: <20260630120145.286497-1-chia-yu.chang@nokia-bell-labs.com>
-X-Mailer: git-send-email 2.34.1
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.8; Tue, 30 Jun
+ 2026 12:08:50 +0000
+Received: from MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::7d89:c984:624d:9689]) by MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::7d89:c984:624d:9689%6]) with mapi id 15.21.0181.008; Tue, 30 Jun 2026
+ 12:08:50 +0000
+From: Vincent Thiberville <vincent@harfanglab.fr>
+To: Leon Hwang <leon.hwang@linux.dev>, "ast@kernel.org" <ast@kernel.org>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>
+CC: "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: Re: PROBLEM: BPF interpreter fallback after JIT compilation of
+ BPF_ADDR_PERCPU leads to kernel panic
+Thread-Topic: PROBLEM: BPF interpreter fallback after JIT compilation of
+ BPF_ADDR_PERCPU leads to kernel panic
+Thread-Index: AQHdB8yzqGrNWEhQ9U+ot25Rw6XY5rZWVYcAgACsKdY=
+Date: Tue, 30 Jun 2026 12:08:50 +0000
+Message-ID:
+ <MR1P264MB33143D31DA8982ADB2E0D808B7F72@MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM>
+References:
+ <MR1P264MB331494502C9D13D8A9EAFB99B7E82@MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM>
+ <d255172d-d9e9-4116-9243-975cf4bdf3d0@linux.dev>
+In-Reply-To: <d255172d-d9e9-4116-9243-975cf4bdf3d0@linux.dev>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=harfanglab.fr;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MR1P264MB3314:EE_|PR0P264MB2027:EE_
+x-ms-office365-filtering-correlation-id: 0d5596c3-1978-40bc-c0b6-08ded6a058c1
+x-ms-exchange-atpmessageproperties: SA
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|1800799024|10070799003|376014|23010399003|18002099003|22082099003|55112099003|3023799007|38070700021|11063799006|4143699003|56012099006|6133799003;
+x-microsoft-antispam-message-info:
+ 3XdyiPeqUnQr4mRMQj0XctzNfGrP6l7tMCmvSTasFT0N+oEZQX3NgHqIMdUBaXmUzWYPfA9MiFt9Pj/fag4YM57Auc6MhNFbLJVfLOIATNR2TN9iOw7akiYp2DxyTur522a9L9R8NA/re27z9RiYmrBZdV0graBRDWg3ta4y/jhgWsy8FVKDxI4HJ6hZH+CdCKZrwga1AbiMe3p/PHQxse7LZnVB7ohRq8KOf8U/w43zNPrsj1Vzuw6cV6bUXsPSdYC1ShVVmxwqnls5RKrKWs1X/hPgsZh2MqfPhpZWwE4qTl2TSwnYUi6sAT3EpaIBDzt+3N7lc7P2ykyUJhD1UwZY+RxekNVl2DMFMTLvLtiwOPCJMIfgPm80HlIwM8F6AtsPQjj5skK9OU3NBFNxwPjQLAvmvwqqoVgoP8ZV2TXpIKA1SCSxOJBFayIfvEJeEYFW88eFrnsqRUqpHlqOeFVNhqmtFzgQbttoPcm5YnN4Y5+u4LwVf7TNLBxAVCFQqGiDQkLJNGHzvXdAfKT+q3oVLCpc0tQ+6S1fpOf/Z6mtMqQrrSk0u21TlGMh5dbbhxgQblscaJNiGbp5YxG6lQZJZ5JsIwTXYdBBTXwHP276SK1SkpVa0p7c5o4MDwb+zZaSaJVK3vK20ELj+gxGTab/YbibPZ29vULU/dhrrzs=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(10070799003)(376014)(23010399003)(18002099003)(22082099003)(55112099003)(3023799007)(38070700021)(11063799006)(4143699003)(56012099006)(6133799003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?9Q/d3PQODDtNQ2unPr6HgL20Qaa7QXq9280RBcZ2c+atvZlXDzwYLsdy6s?=
+ =?iso-8859-1?Q?VSjAbqbZdOuOiEOgKcX5CHr2oPSWyfgoxFaFr4PCtH5T/6khtpqy3j2BF+?=
+ =?iso-8859-1?Q?E1F/WlGb/ex0gvyrHDx22TQQZVP4s2I3R3XsXseFeTkEO5IvtMJbvevK+q?=
+ =?iso-8859-1?Q?7eB0scstLrJ1fR9F2geaNW7Qj9FsfKdCO33CWX2YzeTYHCjYs6Ux2T77/K?=
+ =?iso-8859-1?Q?9bvX1jMoUs+1O5/x5blI7BztSBijTdNjtxfG5v0tceXWshIYFc7RC8sfhl?=
+ =?iso-8859-1?Q?nyEIMBcsPH7BnCEhC51DrzsyLX7FdsoFV6ZhPgLazu8OdbSD1IrNrLYzk4?=
+ =?iso-8859-1?Q?HUO2rjHG0ujByUhA8S7q8oAmJWEr7JnmVAlF8gg5miiexBrJ5MouEKZMjN?=
+ =?iso-8859-1?Q?JLgs81h43ru4l+6N1NlKu7LeTYb37nhtPnuseH39pEEvIfinkh4o8+M4o+?=
+ =?iso-8859-1?Q?9RBiwNB8RNsLxTOtZ8Y6lkP5UVwQipRYGcTCQt7SxNx4uSdglvg58otHIn?=
+ =?iso-8859-1?Q?h9Juf6hpKWrFDX0Dmc7SEmaZ8ru0hwYf4Hbz8pFsBzdBtbBrKokYIm6pJr?=
+ =?iso-8859-1?Q?U2z/JykoQnbyZVHgOgq9uF8nb6MPvIEzyKtNSITpUWF/z/V6I99bMrKR4t?=
+ =?iso-8859-1?Q?4RDMHlgL7ccaT7JvPZxSL+NfO51KuR1cETSDzyxJdeNUldwc02404imphn?=
+ =?iso-8859-1?Q?gf4e49q1vAer4uxhNLSUD5pftT14ZI5A/bRfOkba1jEpIMsPVelGN8hter?=
+ =?iso-8859-1?Q?OrgJo6qCzXFa2bRI57dhiDkYgrtOc6/NJRw9p+OEcpJIrh4RUUfNzktadc?=
+ =?iso-8859-1?Q?smRc28i4OOiyGDfnWe5wwOOjQqJafYBw7ga40I33zcWGbONv0Adt/XhaSD?=
+ =?iso-8859-1?Q?GQOpYPBBoIPl4gE5xAanpFZ5TensPRjAK7cYmayVUM4RKgVZHVnnKZBVtm?=
+ =?iso-8859-1?Q?8opAV0OzNEB1LsqNSQdU5hyTPJzp7riQKijKtPGgEougzBffUYOmMyvwTz?=
+ =?iso-8859-1?Q?haNftyx7vpQe7lkSF4z7kAa8qNYFr99AqUxHeLHBnJx4qdvj/k3dcq8kwp?=
+ =?iso-8859-1?Q?d7Kzq22tr2xArPkIdinTZFnuEVTloWeIwsOw8oCDctoB/kV73Lr0Lep613?=
+ =?iso-8859-1?Q?r5L5jzLg7Lvq7wQkx4zRM3L44Q92n/IiU/TwS+Y+ijnxZb57Fle2eM0mlQ?=
+ =?iso-8859-1?Q?88BG9rtv0fHN+YXF9bSlBLSJshzptC6BF3A60oLZr+wzr/EzUyk05028VX?=
+ =?iso-8859-1?Q?4vR1KEh2P2TAJVEHQZ/gfi3tuCWDYlo8l5Yl9InORv1cLlbjaczYgbZ9vg?=
+ =?iso-8859-1?Q?0WC4qi6R1MyfimGhDIr4ZAP/5xFfZub7ayPTWQzFVJ/9e1MBO0C1h94RcC?=
+ =?iso-8859-1?Q?Z1A0tnJymuURBUTMp5v3NOlOvgoWayfsRAOeg2KmDgVIVfBhITCzUS/wrX?=
+ =?iso-8859-1?Q?wF988TA3Dv9XjzaNdzKvf5ItmVl6LU3YP0aL8bLpMIkKFmHbIZM3lj3QFU?=
+ =?iso-8859-1?Q?XBqrBDr1hMX0g0zHGm833KP1oKKiI/Nbp77mkW4Nz7qMmXM7Qi13nb+nmj?=
+ =?iso-8859-1?Q?u+1IolhYSNnAlYxGJYVneAbD3Szap/TbJnWsAT/EurG7S+qKgCxzCdSbGN?=
+ =?iso-8859-1?Q?f6emARknYvVOwwo0Xvb9VkIodRzBRk1EuGzSM9VoKfthtFONAGRrRQf//k?=
+ =?iso-8859-1?Q?QcDBLhvPTD/MBtjnyh7GWlDLsxEHXnElUXmdLgIrG71VLj48qc0AZl82xf?=
+ =?iso-8859-1?Q?+kI3eykTqOvxVJIQUErHatbOBy1lZzPdu2cALlmq1ED36oBMls4ppgVuqz?=
+ =?iso-8859-1?Q?AVzrhwWsl8Amq4LFVn7uCXhvT+miS3PzEbizOz3z6gTTzZkh5cFX?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PEPF00028CFE:EE_|AMDPR07MB11456:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6037cdd1-2b66-48a6-1ddf-08ded69f5d9c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|1800799024|82310400026|36860700016|7416014|376014|56012099006|18002099003|6133799003|3023799007|11063799006|921020;
-X-Microsoft-Antispam-Message-Info:
-	7cCuRiXrS7b8cZoBy7MLOhe1s9NvOYsEfjUIdc6mbzpThmvX5olZbJJhJ1if5t7xqAseCp3BtD26Oz4Bt8Bk/5KcFtBS4puLRjl+FMquQKkIHXV0rHLNgaEv4W+3/2EFKd6k/w3dA29OajOIRx+MXPQKb98BE5haZP38Fj8eAKpTaqeIHDU0BsHia6J6JuZTBVt6QiaiP6l9rXbnqpFjPflGmd19VGtfAbqncIq9+R2VUdqoXhCV1q92dVQR6/6UmsM5ZEHN6a68fcCZt98qfEOxxNYS1ID9xCv85qJ6m7dA2/2bnPQLBpIEuvDgp625zl4WLhrBkoqhRSleMT1VIcLD5ZgUEI4mEkmX4RqLET2EykPxLRdqkWCm4HV6JgXfJQC2JeWurCC9AG60qF9ub5jx4r51U835BcI/Umn5MIIota7qzVK5aZ3wKx/J6Yk+i9IfjjJlQdXljhxWM3mphmXRa2GL7Vo6R0JyGcgcicCN9mCmi99/3TG2pcHRqIjGUyQrEgL906EFFeEe9EnoEW4kRQPxqECIpTShFvytK6P+tpXbTd6ocz+RJCSFVnD2JD3Ikho9zEMviOuyJt/rvTsjgS6Cp18XmFjM4jYfJkBmRREDUiqci1BqhLqNre17GGpfDeBjUQQ8aGjjiW6RyS1ikdLVo25rSQBEKTnmnJL8PWfmZUxX/vW3Sq+pYBjcwScSObmNIlk2CO0IalyqWJFJbQannwhAXP3kJxFd0O/Y2ps1DP0lMsS53tL33r2P
-X-Forefront-Antispam-Report:
-	CIP:131.228.2.241;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(82310400026)(36860700016)(7416014)(376014)(56012099006)(18002099003)(6133799003)(3023799007)(11063799006)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	ZCKDiIJlMTI0NzS2uTjyBXeZv+L1CUxY093zfP1YSRzGykjNraoNXId5fPsd04zoxghDz1YTS45VxgdkWv7tih8nBBoxmzQphcoPr72BM0DWVcUS9W7GNbH0RodVnJyF09Hk1UQuO0cTwxnsjcblq/sMyZlLhvAtG8MiGpzNDucEbxGyFEpLSCT58TnhS8kjdSPgAM2l0yGhh74JVuHBNmN9yWVJA/DU6xtWDlyjvOSyzRfj0mlvKpY4qN7NFenOqTGplwU1FCtfd5VDnzT/9QsCLhwZu8VqWmRnw1ZmpGpB/xfuTLg3UwLEZ4U4BEpcDzq9Ks1pscbreHVPLz5syw8l6s7sb3f+LGR8d1QSjfzH3eoFxkLbiIy5SyqDNAN6bH/5PUh4owUiFB6wWU+811yAe5ddBbibhQCyXfRYJp67QUSkhv6zn5v3o/vjttRo
-X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2026 12:01:49.0784
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6037cdd1-2b66-48a6-1ddf-08ded69f5d9c
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.241];Helo=[fihe3nok0734.emea.nsn-net.net]
+X-OriginatorOrg: harfanglab.fr
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-DU2PEPF00028CFE.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AMDPR07MB11456
+X-MS-Exchange-CrossTenant-AuthSource: MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d5596c3-1978-40bc-c0b6-08ded6a058c1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jun 2026 12:08:50.5348
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e072cd9e-210a-496b-aa68-c0965404b8f9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4cuNGEFHtGHAIYiTyrYFr/tvaPn2Le8aeyeQPxE2GoAyFiupjcTXbt+Cbl2GtvVfuMyF+5ddZU0yW6Eee2CYzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2027
 
-From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-
-This patch replaces existing min_tso_segs() with tso_segs() CC callbak
-for CC algorithm to provides explicit tso segment number of each data
-burst and overrides tcp_tso_autosize().
-
-This change provides below impacts on BPF struct_ops users:
-- The callback is renamed from min_tso_segs to tso_segs
-- The signature gains an extra u32 mss_now argument
-- The return value semantics is changed from "floor value passed into
-  tcp_tso_autosize()" to "final tso_segs value", bypassing autosizing
-
-As a result, BPF programs shall be updated, beccause retuning a small
-constans will now directly limit tso_segs instead of the minimum.
-
-Signed-off-by: Ilpo Järvinen <ij@kernel.org>
-Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
----
- include/net/tcp.h                                | 13 +++++++++++--
- net/ipv4/bpf_tcp_ca.c                            |  8 +++++---
- net/ipv4/tcp_bbr.c                               | 13 ++++++++++---
- net/ipv4/tcp_output.c                            | 13 +++++++------
- tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c |  8 ++++----
- 5 files changed, 37 insertions(+), 18 deletions(-)
-
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 6d376ea4d1c0..7fb42a0ce7da 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -824,6 +824,9 @@ unsigned int tcp_sync_mss(struct sock *sk, u32 pmtu);
- unsigned int tcp_current_mss(struct sock *sk);
- u32 tcp_clamp_probe0_to_user_timeout(const struct sock *sk, u32 when);
- 
-+u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
-+		     int min_tso_segs);
-+
- /* Bound MSS / TSO packet size with the half of the window */
- static inline int tcp_bound_to_half_wnd(struct tcp_sock *tp, int pktsize)
- {
-@@ -1361,8 +1364,14 @@ struct tcp_congestion_ops {
- 	/* hook for packet ack accounting (optional) */
- 	void (*pkts_acked)(struct sock *sk, const struct ack_sample *sample);
- 
--	/* override sysctl_tcp_min_tso_segs (optional) */
--	u32 (*min_tso_segs)(struct sock *sk);
-+	/*
-+	 * Override tcp_tso_autosize (optional)
-+	 *
-+	 * If provided, this callback returns the final TSO segment number
-+	 * and will bypass tcp_tso_autosize() entirely. The implementation
-+	 * must derive an appropriate value and ensure the result is valid.
-+	 */
-+	u32 (*tso_segs)(struct sock *sk, u32 mss_now);
- 
- 	/* new value of cwnd after loss (required) */
- 	u32  (*undo_cwnd)(struct sock *sk);
-diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
-index 791e15063237..27c4cdfd80a8 100644
---- a/net/ipv4/bpf_tcp_ca.c
-+++ b/net/ipv4/bpf_tcp_ca.c
-@@ -284,9 +284,11 @@ static void bpf_tcp_ca_pkts_acked(struct sock *sk, const struct ack_sample *samp
- {
- }
- 
--static u32 bpf_tcp_ca_min_tso_segs(struct sock *sk)
-+static u32 bpf_tcp_ca_tso_segs(struct sock *sk, u32 mss_now)
- {
--	return 0;
-+	if (unlikely(!mss_now))
-+		return U32_MAX;
-+	return tcp_tso_autosize(sk, mss_now, 0);
- }
- 
- static void bpf_tcp_ca_cong_control(struct sock *sk, u32 ack, int flag,
-@@ -320,7 +322,7 @@ static struct tcp_congestion_ops __bpf_ops_tcp_congestion_ops = {
- 	.cwnd_event_tx_start = bpf_tcp_ca_cwnd_event_tx_start,
- 	.in_ack_event = bpf_tcp_ca_in_ack_event,
- 	.pkts_acked = bpf_tcp_ca_pkts_acked,
--	.min_tso_segs = bpf_tcp_ca_min_tso_segs,
-+	.tso_segs = bpf_tcp_ca_tso_segs,
- 	.cong_control = bpf_tcp_ca_cong_control,
- 	.undo_cwnd = bpf_tcp_ca_undo_cwnd,
- 	.sndbuf_expand = bpf_tcp_ca_sndbuf_expand,
-diff --git a/net/ipv4/tcp_bbr.c b/net/ipv4/tcp_bbr.c
-index 82378a2bfd1e..b63e77b14c65 100644
---- a/net/ipv4/tcp_bbr.c
-+++ b/net/ipv4/tcp_bbr.c
-@@ -297,11 +297,18 @@ static void bbr_set_pacing_rate(struct sock *sk, u32 bw, int gain)
- }
- 
- /* override sysctl_tcp_min_tso_segs */
--__bpf_kfunc static u32 bbr_min_tso_segs(struct sock *sk)
-+static u32 bbr_min_tso_segs(struct sock *sk)
- {
- 	return READ_ONCE(sk->sk_pacing_rate) < (bbr_min_tso_rate >> 3) ? 1 : 2;
- }
- 
-+__bpf_kfunc static u32 bbr_tso_segs(struct sock *sk, u32 mss_now)
-+{
-+	if (unlikely(!mss_now))
-+		return U32_MAX;
-+	return tcp_tso_autosize(sk, mss_now, bbr_min_tso_segs(sk));
-+}
-+
- static u32 bbr_tso_segs_goal(struct sock *sk)
- {
- 	struct tcp_sock *tp = tcp_sk(sk);
-@@ -1151,7 +1158,7 @@ static struct tcp_congestion_ops tcp_bbr_cong_ops __read_mostly = {
- 	.undo_cwnd	= bbr_undo_cwnd,
- 	.cwnd_event_tx_start	= bbr_cwnd_event_tx_start,
- 	.ssthresh	= bbr_ssthresh,
--	.min_tso_segs	= bbr_min_tso_segs,
-+	.tso_segs	= bbr_tso_segs,
- 	.get_info	= bbr_get_info,
- 	.set_state	= bbr_set_state,
- };
-@@ -1163,7 +1170,7 @@ BTF_ID_FLAGS(func, bbr_sndbuf_expand)
- BTF_ID_FLAGS(func, bbr_undo_cwnd)
- BTF_ID_FLAGS(func, bbr_cwnd_event_tx_start)
- BTF_ID_FLAGS(func, bbr_ssthresh)
--BTF_ID_FLAGS(func, bbr_min_tso_segs)
-+BTF_ID_FLAGS(func, bbr_tso_segs)
- BTF_ID_FLAGS(func, bbr_set_state)
- BTF_KFUNCS_END(tcp_bbr_check_kfunc_ids)
- 
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index 00ec4b5900f2..f3fc4b64e61d 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -2253,8 +2253,8 @@ static bool tcp_nagle_check(bool partial, const struct tcp_sock *tp,
-  * for every 2^9 usec (aka 512 us) of RTT, so that the RTT-based allowance
-  * is below 1500 bytes after 6 * ~500 usec = 3ms.
-  */
--static u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
--			    int min_tso_segs)
-+u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
-+		     int min_tso_segs)
- {
- 	unsigned long bytes;
- 	u32 r;
-@@ -2269,6 +2269,7 @@ static u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
- 
- 	return max_t(u32, bytes / mss_now, min_tso_segs);
- }
-+EXPORT_SYMBOL(tcp_tso_autosize);
- 
- /* Return the number of segments we want in the skb we are transmitting.
-  * See if congestion control module wants to decide; otherwise, autosize.
-@@ -2278,11 +2279,11 @@ static u32 tcp_tso_segs(struct sock *sk, unsigned int mss_now)
- 	const struct tcp_congestion_ops *ca_ops = inet_csk(sk)->icsk_ca_ops;
- 	u32 min_tso, tso_segs;
- 
--	min_tso = ca_ops->min_tso_segs ?
--			ca_ops->min_tso_segs(sk) :
--			READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_tso_segs);
-+	min_tso = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_tso_segs);
- 
--	tso_segs = tcp_tso_autosize(sk, mss_now, min_tso);
-+	tso_segs = ca_ops->tso_segs ?
-+			ca_ops->tso_segs(sk, mss_now) :
-+			tcp_tso_autosize(sk, mss_now, min_tso);
- 	return min_t(u32, tso_segs, sk->sk_gso_max_segs);
- }
- 
-diff --git a/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c b/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c
-index 0a3e9d35bf6f..58262e490336 100644
---- a/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c
-+++ b/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c
-@@ -10,7 +10,7 @@ extern u32 bbr_sndbuf_expand(struct sock *sk) __ksym;
- extern u32 bbr_undo_cwnd(struct sock *sk) __ksym;
- extern void bbr_cwnd_event_tx_start(struct sock *sk) __ksym;
- extern u32 bbr_ssthresh(struct sock *sk) __ksym;
--extern u32 bbr_min_tso_segs(struct sock *sk) __ksym;
-+extern u32 bbr_tso_segs(struct sock *sk, u32 mss_now) __ksym;
- extern void bbr_set_state(struct sock *sk, u8 new_state) __ksym;
- 
- extern void dctcp_init(struct sock *sk) __ksym;
-@@ -90,9 +90,9 @@ u32 BPF_PROG(ssthresh, struct sock *sk)
- }
- 
- SEC("struct_ops")
--u32 BPF_PROG(min_tso_segs, struct sock *sk)
-+u32 BPF_PROG(tso_segs, struct sock *sk, u32 mss_now)
- {
--	return bbr_min_tso_segs(sk);
-+	return bbr_tso_segs(sk, mss_now);
- }
- 
- SEC("struct_ops")
-@@ -120,7 +120,7 @@ struct tcp_congestion_ops tcp_ca_kfunc = {
- 	.cwnd_event	= (void *)cwnd_event,
- 	.cwnd_event_tx_start = (void *)cwnd_event_tx_start,
- 	.ssthresh	= (void *)ssthresh,
--	.min_tso_segs	= (void *)min_tso_segs,
-+	.tso_segs	= (void *)tso_segs,
- 	.set_state	= (void *)set_state,
- 	.pkts_acked     = (void *)pkts_acked,
- 	.name		= "tcp_ca_kfunc",
--- 
-2.34.1
-
+Hello=0A=
+=0A=
+Thank you for the quick feedback. I cannot reproduce the issue using my rep=
+roducer on bpf-next, nor on 7.1.0-rc1. However, as I said, it works on 6.12=
+.74 and on 7.0.13.=0A=
+=0A=
+My best guess would be that a patch like this one: https://git.kernel.org/p=
+ub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3Dd3e945223e0158c85db=
+de23de4f89493a2a817f6=A0makes the reproducer no longer work, but I do not k=
+now.=0A=
+I don't know if this means the bug is no longer reachable on kernels >=3D7.=
+1, =A0or if my reproducer no longer works but the bug is reachable with oth=
+er setups.=0A=
+=0A=
+To the best of my understanding however, the reproducer should work between=
+ (and including) 6.10 and 7.0. I have not tested to find the exact version =
+bounds however.=0A=
+=0A=
+Best Regards=0A=
+Vincent=0A=
+=0A=
+________________________________________=0A=
+From:=A0Leon Hwang <leon.hwang@linux.dev>=0A=
+Sent:=A0Tuesday, June 30, 2026 03:48=0A=
+To:=A0Vincent Thiberville <vincent@harfanglab.fr>; ast@kernel.org <ast@kern=
+el.org>; daniel@iogearbox.net <daniel@iogearbox.net>=0A=
+Cc:=A0bpf@vger.kernel.org <bpf@vger.kernel.org>=0A=
+Subject:=A0Re: PROBLEM: BPF interpreter fallback after JIT compilation of B=
+PF_ADDR_PERCPU leads to kernel panic=0A=
+=A0=0A=
+Hi Vincent,=0A=
+=0A=
+Thank you for the report.=0A=
+=0A=
+On 29/6/26 22:42, Vincent Thiberville wrote:=0A=
+> Hello BPF maintainers=0A=
+>=0A=
+> I have stumbled upon what I believe is a kernel bug that occurs when a BP=
+F program is executed=0A=
+> in specific conditions. The in-the-wild situation is a fairly large BPF p=
+rogram that runs as a kretprobe,=0A=
+> and the crash happened on up-to-date debian13 computers, with the paramet=
+er `net.core.bpf_jit_harden=3D2`.=0A=
+>=0A=
+> I have managed to reduce the conditions to a fairly small reproducer (joi=
+ned to this mail), that does the=0A=
+> following:=0A=
+>=0A=
+>=0A=
+>=A0=A0 *=0A=
+> Call bpf_map_lookup_elem (1)=0A=
+>=A0=A0 *=0A=
+> Dereference the result if non null (2)=0A=
+>=A0=A0 *=0A=
+> Jump with a large enough offset (>=3D11000) over instructions using const=
+ants (3)=0A=
+>=0A=
+> ```=0A=
+>=A0=A0=A0=A0 0: .......... (62) *(u32 *)(r10 -4) =3D 0=0A=
+>=A0=A0=A0=A0 1: .......... (bf) r2 =3D r10=0A=
+>=A0=A0=A0=A0 2: ..2....... (07) r2 +=3D -4=0A=
+>=A0=A0=A0=A0 3: ..2....... (18) r1 =3D 0xffff8f0708cca200=0A=
+>=A0=A0=A0=A0 5: .12....... (85) call bpf_map_lookup_elem#1=0A=
+>=A0=A0=A0=A0 6: 0......... (15) if r0 =3D=3D 0x0 goto pc+1=0A=
+>=A0=A0=A0=A0 7: 0......... (79) r0 =3D *(u64 *)(r0 +0)=0A=
+>=A0=A0=A0=A0 8: .......... (b7) r0 =3D 0=0A=
+>=A0=A0=A0=A0 9: 0......... (15) if r0 =3D=3D 0x12345678 goto pc+11001=0A=
+>=A0=A0=A0 10: 0......... (07) r0 +=3D 1=0A=
+>=A0=A0=A0 11: 0......... (07) r0 +=3D 1=0A=
+> ...=0A=
+> 11009: 0......... (07) r0 +=3D 1=0A=
+> 11010: .......... (b7) r0 =3D 0=0A=
+> 11011: 0......... (95) exit=0A=
+> ```=0A=
+>=0A=
+> This program,=A0 in most situations, will either be JIT compiled and run =
+properly, or will be rejected with the=0A=
+> error ENOTSUPP. But on machines with:=0A=
+>=0A=
+>=0A=
+>=A0=A0 *=0A=
+> `CONFIG_BPF_JIT_ALWAYS_ON` not set=0A=
+>=A0=A0 *=0A=
+> `net.core.bpf_jit_harden=3D2`=0A=
+=0A=
+=0A=
+I tried your reproducer with latest bpf-next code, but failed. It did=0A=
+not crash the kernel.=0A=
+=0A=
+gcc -o bpf-interpreter-bug ./repro.c=0A=
+=0A=
+uname -r=0A=
+7.1.0-ga187b7f97305=0A=
+=0A=
+zgrep BPF /proc/config.gz=0A=
+# BPF subsystem=0A=
+CONFIG_BPF_SYSCALL=3Dy=0A=
+CONFIG_BPF_JIT=3Dy=0A=
+# CONFIG_BPF_JIT_ALWAYS_ON is not set=0A=
+=0A=
+sysctl -a | grep bpf_jit=0A=
+net.core.bpf_jit_enable =3D 1=0A=
+net.core.bpf_jit_harden =3D 2=0A=
+net.core.bpf_jit_kallsyms =3D 1=0A=
+net.core.bpf_jit_limit =3D 528482304=0A=
+=0A=
+./bpf-interpreter-bug=0A=
+BPF_ADDR_PERCPU JIT bug reproducer=0A=
+=0A=
+WARNING: this WILL crash the kernel. Run in a disposable VM.=0A=
+=0A=
+Current config: bpf_jit_enable=3D1 bpf_jit_harden=3D2 bpf_jit_limit=3D52848=
+2304=0A=
+Created per-cpu array map (fd 3)=0A=
+Loaded target BPF program (fd 4)=0A=
+Verifier:=0A=
+processed 11011 insns (limit 1000000) max_states_per_insn 0 total_states=0A=
+1 peak_states 1 mark_read 0=0A=
+=0A=
+BPF program was unexpectedly JIT-compiled, the bug will not occur. Aborting=
+.=0A=
+=0A=
+=0A=
+Did I miss something?=0A=
+=0A=
+>=0A=
+> the program will fail to be JIT compiled, will fallback to the interprete=
+r, and when executed, will cause=0A=
+> a invalid pointer dereference leading to a kernel panic.=0A=
+>=0A=
+> To the best of my understanding, what happens is that:=0A=
+>=0A=
+>=0A=
+>=A0=A0 *=0A=
+> The JIT compiler will optimize the map lookup at (1)=0A=
+>=A0=A0 *=0A=
+> The JIT compiler will fail when reaching (3). This is because the JIT har=
+dening enables constant blinding, which triples the size of the jump, overf=
+lowing 32767.=0A=
+>=A0=A0 *=0A=
+> Since the JIT compiler failed, and CONFIG_BPF_JIT_ALWAYS_ON is not set, t=
+he kernel falls back to the interpreter=0A=
+>=A0=A0 *=0A=
+> When executed, the interpreter will badly interpret (1), I suppose due to=
+ some JIT optimization not being cleaned after the JIT compiler failure.=0A=
+>=A0=A0 *=0A=
+> This will leave R0 with an invalid value, which is dereferenced when the =
+interpreter reaches (2)=0A=
+>=0A=
+> But of course this may not be what is happening, I am far from an expert =
+and you will know better than me.=0A=
+>=0A=
+> This is easily reproducible on debian images, which do not set CONFIG_BPF=
+_JIT_ALWAYS_ON. I have reproduced it on 6.12.74+deb13+1-amd64,=0A=
+> 6.12.94+deb13-amd64 and 7.0.13+deb14-amd64. Setting `net.core.bpf_jit_har=
+den=3D2` and running the reproducer is enough to trigger the kernel panic.=
+=0A=
+>=0A=
+> I am not entirely sure when this bug was introduced, or if it is fixed on=
+ the latest version. From some research, it may be related to this patch:=
+=0A=
+>=0A=
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
+/?id=3D7bdbf7446305=0A=
+>=0A=
+> and there is a commit in review for bpf-next that mentions a fix for the =
+aforementioned commit: `bpf: Disallow interpreter fallback for BPF_ADDR_PER=
+CPU insn` in https://lore.kernel.org/bpf/20260622143557.22955-1-leon.hwang@=
+linux.dev/T/#t=0A=
+=0A=
+=0A=
+I've posted another patch series to fix the assorted interpreter=0A=
+fallback issues:=0A=
+https://lore.kernel.org/bpf/20260626154330.33619-1-leon.hwang@linux.dev/=0A=
+=0A=
+Thanks,=0A=
+Leon=0A=
+=0A=
+>=0A=
+> that would indicate an impact since 6.10.=0A=
+>=0A=
+> Joined to this mail are the reproducer for the issue, and the dmesg of a =
+kernel panic caused by the reproducer on the standard debian image `debian-=
+sid-nocloud-amd64-daily-20260629-2524.qcow2`.=0A=
+>=0A=
+> Thank you for all your work and for your help on this matter.=0A=
+>=0A=
+> Best Regards=0A=
+>=0A=
+> Vincent Thiberville=0A=
+>=0A=
+>=0A=
+>=0A=
