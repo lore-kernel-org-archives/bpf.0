@@ -1,125 +1,148 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9307544B693
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 20:59:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83EEB318EDA
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 21:08:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782853157; cv=none; b=E1T3QQxcpTr/HW4fqk4e1dWQiII6czdm6pICMxndkKelfNMV2KjZzzRLBovazNoqolZ23IkOhGgVtyeBIr5ui0TjHXTfL2BHsj7ZqCEzAGRgnB1VG8syHyPE2DhVhzTEXCpNbbSg4G9wE9uFoFFT4QUrHVQbR0VCPaqBVd5p2kE=
+	t=1782853700; cv=none; b=fI8vBsDBQBJb/5ANBjacmADHbU5jYwLK5omkBjvINAtjCZlU5w4nQUmhhUSDMBxxeG5tZmAifdJnRSUlBMkyEFAhVrZG6hcXk9Ekpw7Pt9AipuBS2+gtYBBU+finr8hkWTOoVBChbzm6R+lkT3ptoC5ZXThPNnxDshWhYkGJz9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782853157; c=relaxed/simple;
-	bh=9g1bcE8R3QSMqMWnuD188pnOLxuyG4kJ4SyviaekoZo=;
+	s=arc-20240116; t=1782853700; c=relaxed/simple;
+	bh=n1jrvRHdDjtNcqvMRxqiQxrZCn026n71jfklfB00IRo=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=n0ucJbhq0bDIGbXheCwORMaKe4xHQekRlWCAE8+d7h1AF5KIIV5aDOrWyUQ670R8V+kPL/72WIZPT/G/kI/uHKsmtAw+9YkvYdQ7y9h5maJV3qL+kZiXQQPJHPaDnDdcLAlu8UyqCXG4DUKc3Gg0eLKMhh02lhYkMi1fXl8c+Nk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JboZb6L7; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=seYwKQ7NADMTWQCfRAcYEE6NQjyTkqx+rf0nqvm22Zqh8xGBZMpwpSw0NHEBbav0wT+VSfSc6Zqo5VGcl8ax6boPcy3AOphNMnX82w2DGcF2z6tFeCAYOKhIA860aanw679vHybbGKyvwYo0dQc8unf1jgAO7PA+isi7a/NYb1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c0zur7D0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JboZb6L7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F1EA1F000E9;
-	Tue, 30 Jun 2026 20:59:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c0zur7D0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BD6A1F000E9;
+	Tue, 30 Jun 2026 21:08:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782853156;
-	bh=ZC98IbuME/tcMtbCq3l4oAWyZczxXEms4SsjOxD0zNc=;
+	s=k20260515; t=1782853697;
+	bh=TsLc3UORcc7krVpZGtn/ZlPAL+jHqnIle3rSf/xm3yo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=JboZb6L7vzdmRF9A0ROUujXvjskrnMqq09YrVZmUhpSBkBt1L+ngWAZR3Yg+SC/aD
-	 z9sx2VMewV9d4Irm5LUVbxcvgnhxWtJm+6k7hcedANIcl6azzDoOTbbdVoSr3EJr5E
-	 MxdQwDNbcBeb13bqOvq6RBYEGHR0A4YoFK5BDbbBTzeeHv98LtrTGr0qhfi0qEEaFm
-	 Kn8anWZKWCEmroS3vpD8ucUcQ4s08PP0sD8QgC8FmB44E10AgfjRr4Tel75RRgjxge
-	 v5wIZbRQvAwdwsrL/wWtywsNrPbRdrCf6GWN9r+G9hWU0lCsEvjqIw57IvtvxL62bw
-	 KO40RwDB0YQ7Q==
+	b=c0zur7D04s+XxasbMKhb8hPMr07u1+mhMgPYGtoMCN24aKBjY9L/VIFthHXky9+LZ
+	 EMJh55s/ci9FJiz3IQ1rHT75GFqmTkuMDh3yR2wGQb+rm+5ub5rRpwwTxaXLZkIyH7
+	 mZGGayIWZuth+Fj5ist9ICV45WuzSFdbaEjcZyTj7TguplPzhXw8+5hk0x5K6w+8qu
+	 CprDIHNjQORQElIsc+td1jxgA8p+DRKrraMXsI8xj3LcwMj7hG9qizZs4Ed+79PSeZ
+	 zPVTCxvLgFjLPYOm3sghmdqyDNjP/9kro36VO2A2aI1D3wm5xikp5wcXBJTiSuri7V
+	 9Zw/wNAJ3Zdhw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: test sockmap strparser recover
- with undelivered ingress
+Subject: Re: [PATCH bpf 1/2] bpf, sockmap: settle copied_seq when a stream
+ parser is removed
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Sechang Lim" <rhkrqnwk98@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260630205043.184894-3-rhkrqnwk98@gmail.com>
+In-Reply-To: <20260630205043.184894-2-rhkrqnwk98@gmail.com>
 References: <20260630205043.184894-1-rhkrqnwk98@gmail.com>
- <20260630205043.184894-3-rhkrqnwk98@gmail.com>
+ <20260630205043.184894-2-rhkrqnwk98@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 30 Jun 2026 20:59:15 +0000
-Message-Id: <20260630205916.0F1EA1F000E9@smtp.kernel.org>
+Date: Tue, 30 Jun 2026 21:08:17 +0000
+Message-Id: <20260630210817.7BD6A1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Low] Missing file descriptor validation on error paths leading to double=
- closes and invalid closes.
-- [Low] Missing payload verification in data delivery test.
+
+New issues:
+- [High] Modifying `tcp_sk(sk)->copied_seq` in `tcp_bpf_update_proto` witho=
+ut holding `lock_sock(sk)` introduces a data race with concurrent TCP opera=
+tions.
+
+Pre-existing issues:
+- [High] The patch only settles `copied_seq` for sockets using a stream par=
+ser, but sockets using `skb_verdict` suffer from the identical trailing `co=
+pied_seq` bug.
+- [High] `tp->copied_seq` is incorrectly updated in `tcp_bpf_strp_read_sock=
+()`, double-counting bytes if userspace partially reads data.
 --
 
-commit 17a0c6f1d3f82f28804bd94c56f370520016d2dd
+commit 75c8f708aa799c9c48eb6ff6ab39fc06c1f80d27
 Author: Sechang Lim <rhkrqnwk98@gmail.com>
 
-selftests/bpf: test sockmap strparser recover with undelivered ingress
+bpf, sockmap: settle copied_seq when a stream parser is removed
 
-Park SK_PASS data on a stream-parser socket's ingress_msg queue, drop the
-socket from the sockmap without reading it, then check the native stack
-still delivers data queued afterwards. Without the fix copied_seq is left
-behind sk_receive_queue and tcp_recvmsg_locked() warns instead of
-delivering.
+tcp_bpf_strp_read_sock() rolls tp->copied_seq back by the SK_PASS bytes
+parked on the psock ingress_msg queue; tcp_bpf_recvmsg_parser() repays it
+as those bytes are delivered. When the socket leaves the sockmap they are
+purged undelivered and nothing repays the rollback, so copied_seq is left
+behind sk_receive_queue and the native tcp_recvmsg() warns.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/too=
-ls/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+> index cc0bd73f36b6d..918f8da02c394 100644
+> --- a/net/ipv4/tcp_bpf.c
+> +++ b/net/ipv4/tcp_bpf.c
+> @@ -715,6 +715,15 @@ int tcp_bpf_update_proto(struct sock *sk, struct sk_=
+psock *psock, bool restore)
+>  	}
+> =20
+>  	if (restore) {
+> +#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
+> +		/*
+> +		 * Settle the copied_seq rollback for the now-discarded
+> +		 * ingress_msg data so it cannot trail the receive queue
+> +		 */
+> +		if (sk_psock_test_state(psock, SK_PSOCK_RX_STRP_ENABLED) &&
 
-[ ... ]
+[Severity: High]
+This is a pre-existing issue, but does checking SK_PSOCK_RX_STRP_ENABLED
+leave skb_verdict programs vulnerable to the exact same TCP recvmsg sequence
+bug?
 
-> +static void test_sockmap_strp_recover_undelivered(void)
-> +{
-> +	struct test_sockmap_pass_prog *skel =3D NULL;
-> +	int c0 =3D -1, p0 =3D -1, c1 =3D -1, p1 =3D -1;
-> +	char buf[10] =3D "0123456789", rcv[11];
-> +	int err, map, verdict, parser, sent, recvd, avail, zero =3D 0;
-> +
+If a sockmap is configured with BPF_SK_SKB_VERDICT, passes packets to SK_PA=
+SS,
+and then the socket is deleted from the sockmap before all data is read,
+copied_seq will still trail sk_receive_queue since the stream parser is not
+enabled.
 
-[ ... ]
+> +		    before(tcp_sk(sk)->copied_seq, psock->copied_seq))
+> +			WRITE_ONCE(tcp_sk(sk)->copied_seq, psock->copied_seq);
 
-> +	sent =3D xsend(c1, buf, sizeof(buf), 0);
-> +	if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c1) native"))
-> +		goto out;
-> +	recvd =3D recv_timeout(p1, rcv, sizeof(buf), MSG_DONTWAIT, 1);
-> +	ASSERT_EQ(recvd, sent, "recv(p1) native after drop");
+[Severity: High]
+Does modifying tcp_sk(sk)->copied_seq here without holding lock_sock(sk)
+introduce a data race?
 
-[Severity: Low]
-Does this test omit verifying the payload?
+If a user-space program deletes an element from a sockmap (e.g., via
+bpf_map_delete_elem) concurrently while another thread receives data from t=
+he
+same socket using recvmsg(), the map deletion calls sock_map_unref inside an
+RCU/spinlock section without acquiring lock_sock(sk).
 
-The test checks the length of the received data but does not seem to check =
-the
-actual contents. Should there be a memcmp check here to verify data integri=
-ty,
-as done in other tests?
+This lockless write to copied_seq could race with non-atomic read-modify-wr=
+ite
+operations in tcp_recvmsg_locked() (such as WRITE_ONCE(*seq, *seq + used)),
+leading to lost updates or sequence jumps that corrupt the TCP stream state.
 
-Also, since 10 bytes are sent twice but the test only attempts to read 10
-bytes, does this leave the latter half of the data queued and unverified?
+> +#endif
+>  		if (inet_csk_has_ulp(sk)) {
+>  			/* TLS does not have an unhash proto in SW cases,
+>  			 * but we need to ensure we stop using the sock_map
 
-> +
-> +out:
-> +	close(c0);
-> +	close(p0);
-> +	close(c1);
-> +	close(p1);
+[Severity: High]
+This is a pre-existing issue, but is tp->copied_seq incorrectly updated in
+tcp_bpf_strp_read_sock()?
 
-[Severity: Low]
-Could this cleanup path cause double closes or invalid descriptor closes?
+net/ipv4/tcp_bpf.c:tcp_bpf_strp_read_sock() {
+    ...
+    tp->copied_seq =3D psock->copied_seq - psock->ingress_bytes;
+    ...
+}
 
-If create_socket_pairs fails early, variables like c1 and p1 (which are
-initialized to -1) will be passed to close.
+If userspace partially consumes data from ingress_msg via recvmsg(), leaving
+some bytes in the queue, and then the stream parser wakes up and reads anot=
+her
+batch of packets into ingress_msg, this calculation ignores the older, unre=
+ad
+bytes.
 
-Further, if create_socket_pairs fails on the second pair, it internally
-closes the first pair without resetting their descriptors to -1. Would the
-unconditional close calls here then trigger a double-close of those
-descriptors?
-
-> +
-> +	test_sockmap_pass_prog__destroy(skel);
-> +}
+Could this double-count older bytes when they are later read, causing
+copied_seq to exceed rcv_nxt and permanently corrupting the TCP sequence st=
+ate?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260630205043.1848=
-94-1-rhkrqnwk98@gmail.com?part=3D2
+94-1-rhkrqnwk98@gmail.com?part=3D1
