@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB2C3C0601;
-	Tue, 30 Jun 2026 12:33:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA4618871F;
+	Tue, 30 Jun 2026 12:33:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782822817; cv=none; b=fDeWSH1dQVLUlhF/Ztisu8axyL895crLlBegQEQ9hSvaRnfJ0RahrxlhOWVqaS7MnQfjmxzBbb2drGwa+dzfEZ9S8P2RSIRggKRiH+L+kfFiq+mp64sDB1CT6lqhm2Ln9StkgBQi4f/YHTP3yB5MI7MxrXlUfoAj/v52nVCFdGc=
+	t=1782822817; cv=none; b=JDpRbS0SSahIKYyqStIkA4GyP5jR8cZqT5E9MeAepobb+xapZ3Nq5TwAZ4eP2WUxdMd4kwRZn4jnUdBUEgUpRsuBEdKyUv68Ee6T5gJA84IB3NMOx/drQ80be2lF37uqIstffetO/pmA0iJXkiEjIaej9cymmVaw3+JHzPVSAms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1782822817; c=relaxed/simple;
-	bh=4xirhVk5rd8/OzP9pdd2shYjtS5a4xImDIcuYYJF2Ng=;
+	bh=fmcjA+8zx9ng55VbxjMg0pdkvEml9BpWwChGtvRVN9w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hnduUfV9ASEA1PfGRsTzPC6X/JU2kYEldzULvGGKqqQrVRmS4vmgdWqLyRE8bT6ehDiNZcBdOLua6GdaSt9jUA5gBGa1Pcx9sxmz7gYisUlp5wOkY8eyYETOq+RMjlvg796j+5ZgdQxS3xiLJHXB05L72l2vK6c58FPTUtSCYRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Zap0J3Sk; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=PuTdtRfc5AS+LxVpASPZ4+Sqv2y1pFSetrC9/cHdoPSGfRsAQcJpzeGT7zna/wtGRfscqJ8WsIMn98Vbu5v4TPOouufe4MAEM0+QOvot/hhvddL/TM0PpsRuflVZICXmI1SDjRaYiq21hKKZgq+RvOKbPIM/02ffXqPHBJ6TwiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=EUbDFW3h; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Zap0J3Sk"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="EUbDFW3h"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=2J9NdtPZSW7EAYePRVcww4LdPHj6ztJIcm0YUUfpipA=; b=Zap0J3Sk6BNCenXOIOmJ94o1Ts
-	pESa6lvFsPdjC+Ji9+Jz2qBLzMbWORgfnwxzJY7qH88QvLiR+LfGKtW92YzttfjFmIvWiY3od+Rar
-	NqRbNQsk88QobSOux+5V3Wwn+ihSDLTY9g0gXsZ3MMqd2cVYF7sRaY5KyDLRYair199lEPH4ZxR9j
-	kLGrcurG//6GYdrLYqsYaxA57XMMA6U0O3gCJL8DP14pMVzmkKUKRIbYhVXzqMBcVFm/D4UA/ind/
-	tbRb+fnVyiI622+2oOLiVFOJGcSfD72Ey0mlQXIg8JEVSQd+mpLkbVXh/7tKKX3QAJl5vbOTe5mIX
-	MbBEXOFA==;
+	bh=c2qHVEHihA5zjk8EnCG+2QyPJvH+BtbDoswXeUR0QU0=; b=EUbDFW3hiQ1JxmRF8pZBPNWKpa
+	qD7PAQQydVU4uAst6KJ2vJbe2dMx7BBjqRaSG1RLn7M1GGkITo/vdietxAvYlXYISKfzhBl/8irPO
+	eWzuw0DRRSrRcAvHu70XCWFtzSLD6jtG9/jAtncvu/d4K2eheF08eKkkGfb5plsDyN7ho0GVEKHIx
+	2RG1LfsxJYHRbp632I0nCGVpBGCFlLn2fNqlqazSIXnLwAJIdMfaMntbeiR9kQCH6BPKcd+ovpgWi
+	fPSCCS1/IEvhbR9ju2/u0xi8gH5mgA2oxDmcmu2l0zuyGWtBFTq5uQfI+7+B6N1nAdjWWzI9y7MUi
+	dR2uAK/w==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1weXee-000NcR-2z;
-	Tue, 30 Jun 2026 14:33:33 +0200
+	id 1weXeg-000Ncu-1a;
+	Tue, 30 Jun 2026 14:33:34 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: kuba@kernel.org
 Cc: pabeni@redhat.com,
@@ -42,9 +42,9 @@ Cc: pabeni@redhat.com,
 	memxor@gmail.com,
 	bpf@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH net 1/3] bpf: Reject redirect helpers without a bpf_net_context
-Date: Tue, 30 Jun 2026 14:33:29 +0200
-Message-ID: <20260630123331.186840-2-daniel@iogearbox.net>
+Subject: [PATCH net 3/3] selftests/bpf: Add test for redirect from qdisc qevent block
+Date: Tue, 30 Jun 2026 14:33:31 +0200
+Message-ID: <20260630123331.186840-4-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260630123331.186840-1-daniel@iogearbox.net>
 References: <20260630123331.186840-1-daniel@iogearbox.net>
@@ -57,113 +57,189 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28046/Mon Jun 29 08:27:20 2026)
 
-The bpf_redirect*() helpers and skb_do_redirect() obtain the per-task
-bpf_redirect_info via bpf_net_ctx_get_ri(), which dereferences the
-current->bpf_net_context unconditionally. That context is established
-on the paths that run tc BPF such as sch_handle_{ingress,egress}(),
-*except* for the case where {cls,act}_bpf was attached to a proper
-qdisc. A program running from there reaches the NULL deref in two ways:
+Add a regression test for the NULL current->bpf_net_context deref hit
+when a BPF classifier attached to a qdisc qevent block asks for a
+redirect. The classifier runs from tcf_qevent_handle() on the qdisc
+enqueue path, outside any bpf_net_context.
 
-* It calls bpf_redirect() directly, which dereferences the context at
-  the top of the helper:
+  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t qevent
+  [...]
+  + /etc/rcS.d/S50-startup
+  ./test_progs -t qevent
+  #496/1   tc_qevent/redirect_verdict:OK
+  #496/2   tc_qevent/redirect_helper:OK
+  #496     tc_qevent:OK
+  Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
 
-     tc qdisc add dev eth0 root handle 1: red limit 1MB min 10KB max 20KB \
-        avpkt 1000 burst 100 qevent early_drop block 10
-     tc filter add block 10 pref 1 bpf obj redirect.o
-
-* It simply returns TC_ACT_REDIRECT without helper call: tcf_qevent_handle()
-  then dispatches to skb_do_redirect(), which dereferences the context
-
-Rather than extending bpf_net_context management into the qdisc path,
-make the redirect helpers refuse to operate when no context exists, and
-have tcf_qevent_handle() drop a TC_ACT_REDIRECT verdict instead of
-calling skb_do_redirect(). Previous behaviour was a crash, so nothing
-regresses by not supporting it.
-
-Fixes: 401cb7dae813 ("net: Reference bpf_redirect_info via task_struct on PREEMPT_RT.")
-Fixes: 3625750f05ec ("net: sched: Introduce helpers for qevent blocks")
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- net/core/filter.c   | 17 +++++++++++------
- net/sched/cls_api.c |  6 ++----
- 2 files changed, 13 insertions(+), 10 deletions(-)
+ tools/testing/selftests/bpf/config            |   1 +
+ .../selftests/bpf/prog_tests/tc_qevent.c      | 113 ++++++++++++++++++
+ .../selftests/bpf/progs/test_tc_qevent.c      |  23 ++++
+ 3 files changed, 137 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_qevent.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_tc_qevent.c
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index b446aa8be5c3..11bb0d236822 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2552,11 +2552,13 @@ int skb_do_redirect(struct sk_buff *skb)
- 
- BPF_CALL_2(bpf_redirect, u32, ifindex, u64, flags)
- {
--	struct bpf_redirect_info *ri = bpf_net_ctx_get_ri();
-+	struct bpf_redirect_info *ri;
- 
--	if (unlikely(flags & (~(BPF_F_INGRESS) | BPF_F_REDIRECT_INTERNAL)))
-+	if (unlikely(!bpf_net_ctx_get() ||
-+		     (flags & (~(BPF_F_INGRESS) | BPF_F_REDIRECT_INTERNAL))))
- 		return TC_ACT_SHOT;
- 
-+	ri = bpf_net_ctx_get_ri();
- 	ri->flags = flags;
- 	ri->tgt_index = ifindex;
- 
-@@ -2573,11 +2575,12 @@ static const struct bpf_func_proto bpf_redirect_proto = {
- 
- BPF_CALL_2(bpf_redirect_peer, u32, ifindex, u64, flags)
- {
--	struct bpf_redirect_info *ri = bpf_net_ctx_get_ri();
-+	struct bpf_redirect_info *ri;
- 
--	if (unlikely(flags))
-+	if (unlikely(!bpf_net_ctx_get() || flags))
- 		return TC_ACT_SHOT;
- 
-+	ri = bpf_net_ctx_get_ri();
- 	ri->flags = BPF_F_PEER;
- 	ri->tgt_index = ifindex;
- 
-@@ -2595,11 +2598,13 @@ static const struct bpf_func_proto bpf_redirect_peer_proto = {
- BPF_CALL_4(bpf_redirect_neigh, u32, ifindex, struct bpf_redir_neigh *, params,
- 	   int, plen, u64, flags)
- {
--	struct bpf_redirect_info *ri = bpf_net_ctx_get_ri();
-+	struct bpf_redirect_info *ri;
- 
--	if (unlikely((plen && plen < sizeof(*params)) || flags))
-+	if (unlikely((plen && plen < sizeof(*params)) ||
-+		     !bpf_net_ctx_get() || flags))
- 		return TC_ACT_SHOT;
- 
-+	ri = bpf_net_ctx_get_ri();
- 	ri->flags = BPF_F_NEIGH | (plen ? BPF_F_NEXTHOP : 0);
- 	ri->tgt_index = ifindex;
- 
-diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
-index 3e67600a4a1a..ac49ca6d9a0c 100644
---- a/net/sched/cls_api.c
-+++ b/net/sched/cls_api.c
-@@ -4034,6 +4034,8 @@ struct sk_buff *tcf_qevent_handle(struct tcf_qevent *qe, struct Qdisc *sch, stru
- 	fl = rcu_dereference_bh(qe->filter_chain);
- 
- 	switch (tcf_classify(skb, NULL, fl, &cl_res, false)) {
-+	case TC_ACT_REDIRECT:
-+		fallthrough;
- 	case TC_ACT_SHOT:
- 		qdisc_qstats_drop(sch);
- 		__qdisc_drop(skb, to_free);
-@@ -4045,10 +4047,6 @@ struct sk_buff *tcf_qevent_handle(struct tcf_qevent *qe, struct Qdisc *sch, stru
- 		__qdisc_drop(skb, to_free);
- 		*ret = __NET_XMIT_STOLEN;
- 		return NULL;
--	case TC_ACT_REDIRECT:
--		skb_do_redirect(skb);
--		*ret = __NET_XMIT_STOLEN;
--		return NULL;
- 	case TC_ACT_CONSUMED:
- 		*ret = __NET_XMIT_STOLEN;
- 		return NULL;
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index adb25146e88c..ea7044f30adc 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -82,6 +82,7 @@ CONFIG_NET_SCH_BPF=y
+ CONFIG_NET_SCH_FQ=y
+ CONFIG_NET_SCH_INGRESS=y
+ CONFIG_NET_SCH_HTB=y
++CONFIG_NET_SCH_RED=y
+ CONFIG_NET_SCHED=y
+ CONFIG_NETDEVSIM=y
+ CONFIG_NETFILTER=y
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_qevent.c b/tools/testing/selftests/bpf/prog_tests/tc_qevent.c
+new file mode 100644
+index 000000000000..67e1d17567ab
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/tc_qevent.c
+@@ -0,0 +1,113 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include <network_helpers.h>
++#include <sys/socket.h>
++#include <netinet/in.h>
++#include <arpa/inet.h>
++#include <unistd.h>
++#include <string.h>
++
++#include "test_tc_qevent.skel.h"
++
++#define NS_TX		"tc_qevent_tx"
++#define NS_RX		"tc_qevent_rx"
++#define IP_TX		"10.255.0.1"
++#define IP_RX		"10.255.0.2"
++#define PIN_PATH	"/sys/fs/bpf/tc_qevent_redirect"
++
++static void blast_udp(void)
++{
++	struct sockaddr_in dst = {};
++	char buf[1400] = {};
++	int fd, i;
++
++	fd = socket(AF_INET, SOCK_DGRAM, 0);
++	if (!ASSERT_GE(fd, 0, "udp socket"))
++		return;
++
++	dst.sin_family = AF_INET;
++	dst.sin_port = htons(12345);
++	inet_pton(AF_INET, IP_RX, &dst.sin_addr);
++
++	/*
++	 * Push far more than the RED queue can hold. Once qavg crosses qth_min
++	 * every further packet hits the congestion_drop / early_drop qevent.
++	 */
++	for (i = 0; i < 50000; i++)
++		sendto(fd, buf, sizeof(buf), MSG_DONTWAIT,
++		       (struct sockaddr *)&dst, sizeof(dst));
++
++	close(fd);
++}
++
++static void run_qevent_redirect(struct bpf_program *prog, __u64 *counter)
++{
++	struct nstoken *tok = NULL;
++	int err;
++
++	SYS_NOFAIL("ip netns del %s", NS_TX);
++	SYS_NOFAIL("ip netns del %s", NS_RX);
++	unlink(PIN_PATH);
++
++	err = bpf_program__pin(prog, PIN_PATH);
++	if (!ASSERT_OK(err, "pin prog"))
++		return;
++
++	SYS(unpin,  "ip netns add %s", NS_TX);
++	SYS(del_tx, "ip netns add %s", NS_RX);
++	SYS(del_rx, "ip -n %s link add veth0 type veth peer name veth1 netns %s", NS_TX, NS_RX);
++	SYS(del_rx, "ip -n %s addr add %s/24 dev veth0", NS_TX, IP_TX);
++	SYS(del_rx, "ip -n %s link set veth0 up", NS_TX);
++	SYS(del_rx, "ip -n %s addr add %s/24 dev veth1", NS_RX, IP_RX);
++	SYS(del_rx, "ip -n %s link set veth1 up", NS_RX);
++
++	tok = open_netns(NS_TX);
++	if (!ASSERT_OK_PTR(tok, "open_netns"))
++		goto del_rx;
++
++	SYS(close_ns, "tc qdisc add dev veth0 root handle 1: htb default 1");
++	SYS(close_ns, "tc class add dev veth0 parent 1: classid 1:1 htb rate 1mbit ceil 1mbit");
++
++	if (system("tc qdisc add dev veth0 parent 1:1 handle 11: red "
++		   "limit 500000 avpkt 1000 probability 1 min 5000 max 6000 "
++		   "burst 6 qevent early_drop block 10 2>/dev/null")) {
++		test__skip();
++		goto close_ns;
++	}
++
++	if (system("tc filter add block 10 bpf da object-pinned "
++		   PIN_PATH " 2>/dev/null")) {
++		test__skip();
++		goto close_ns;
++	}
++
++	blast_udp();
++	ASSERT_GT(*counter, 0, "qevent classifier ran");
++close_ns:
++	close_netns(tok);
++del_rx:
++	SYS_NOFAIL("ip netns del %s", NS_RX);
++del_tx:
++	SYS_NOFAIL("ip netns del %s", NS_TX);
++unpin:
++	bpf_program__unpin(prog, PIN_PATH);
++}
++
++void test_tc_qevent(void)
++{
++	struct test_tc_qevent *skel;
++
++	skel = test_tc_qevent__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	if (test__start_subtest("redirect_verdict"))
++		run_qevent_redirect(skel->progs.qevent_redirect_verdict,
++				    &skel->bss->verdict_calls);
++	if (test__start_subtest("redirect_helper"))
++		run_qevent_redirect(skel->progs.qevent_redirect_helper,
++				    &skel->bss->helper_calls);
++
++	test_tc_qevent__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_qevent.c b/tools/testing/selftests/bpf/progs/test_tc_qevent.c
+new file mode 100644
+index 000000000000..1529c111f4aa
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_tc_qevent.c
+@@ -0,0 +1,23 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++int redirect_ifindex = 1;
++__u64 verdict_calls = 0;
++__u64 helper_calls = 0;
++
++SEC("tc")
++int qevent_redirect_verdict(struct __sk_buff *skb)
++{
++	__sync_fetch_and_add(&verdict_calls, 1);
++	return TCX_REDIRECT;
++}
++
++SEC("tc")
++int qevent_redirect_helper(struct __sk_buff *skb)
++{
++	__sync_fetch_and_add(&helper_calls, 1);
++	return bpf_redirect(redirect_ifindex, 0);
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
