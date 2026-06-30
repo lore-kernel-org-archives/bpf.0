@@ -1,133 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C32940D58C
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 02:47:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E131C23FC41
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 02:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782787624; cv=none; b=ZA0e0DbDT3fVCBvmIjAKDGHDJM2PAiPYwfXun+r//mUphvmDbiQhZjprdm3kMGq7Epw0Cd4Tq+dOjRO/ff1XkIDrGXILpQ23OFVv7H5lcJHYb+kZYFYXGvJMB/uFZxpmisbXVYD2uyXqglo+ZFD+Dn6Pfg/oBrpyor8QWo6ag+M=
+	t=1782788318; cv=none; b=bCXBr+Ck1SU7pCbfFh6E/VVkPYidHPI0fsnG1v0aae7CNpAODB4DEM1YM0qyQ7sKHZYUPNU76RAB3qe4Zhz/fwg0umzm75qenHf51bW9FeE9jHmw01WymPv7NURp8nuwcfx4m0TOfiPwgdio0DCadd4Bw72HyWkqIpoKUxEMPq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782787624; c=relaxed/simple;
-	bh=CEyjj6VGfJR5agfxFhVGmgZFcVEelJh9bcoIBx3trPA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=d0pllFwur0ZjCQZ+gngrmSCIL3MgVAHc+BOXBh4oVUUFw0jN8GHHsMxjkcEy7lxQoZK6J3ven4W+NIuwx3q5cD3+ZxrbLDOdt8X7yBbEwH2IOB/yCR03Kvy9R/D7ouVfYMVEN7JsTg/ZsUju+Tf9ANVwnfS3xUP08cqSNruweQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IwN2CTcP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782788318; c=relaxed/simple;
+	bh=tPLinYbJb80Iz/qFBGacknXcBvQq+tUEq9miK6254Iw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sbcZ4h254cHCf3MZigfrKzkem6ZgY5Y9RQNLut2C52vukgD/cGX+rZqrTKDEuh2hptY4dbjn0acKI0cHvfMdbJM7bvebWuXKTM0qVk2g7S8Q6rkgrPbRfRWc4NvYd1xxFYuwx1pzeoyAt+6ktnHBjVnQUCIfcTyQ4Lr2k+g5bHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Z9L8pjtG; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IwN2CTcP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C111F1F000E9;
-	Tue, 30 Jun 2026 02:47:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782787623;
-	bh=bg11iEPGV4asJlLP/B5kCdeNjV/daDqBGeR4oqYoQZA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=IwN2CTcPV3wD8LBruNYAvwbobmBV8lanQ9X6bttGxsMWWabEqD7cTeAeZnC9VPJzv
-	 IhPkiU3vfKVNqXpIaNH0b/JUwuyNSpi8GrZUVctObymXtCpRSB3JbtjY1rw/fXIPG6
-	 6M3x4YC5EUcGwXFfwsmDii77kwDqLFHCcI43AkFRwyT3ZHJQD9xIjYPLmPtqTTfUYJ
-	 iN/vugcVxI5nXXCtBET5iQ3+w/fGh+qjQO9QKX69RZwhaleZOz+rOSFFOdMz13HQbw
-	 o+PvgOFkFEnUnMcHpBVESHDsVL5ZzJcXPj1+BoYR7IFkklfOCvLrhAhezje7V0u4PL
-	 8oFH9DepI5xTw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5] bpf: Fix use-after-free on mm_struct in
- bpf_find_vma()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sanghyun Park" <sanghyun.park.cnu@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260630023443.3026627-2-sanghyun.park.cnu@gmail.com>
-References: <20260630023443.3026627-2-sanghyun.park.cnu@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 30 Jun 2026 02:47:02 +0000
-Message-Id: <20260630024702.C111F1F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Z9L8pjtG"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782788304;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=OsYagQzu6qHNQWTSa0S7+sdlg1USYp8Up3WJKT3wYiY=;
+	b=Z9L8pjtGtgPdqqpvLzsFUS0JgIr7gs5/l0Zlddd83H+CvT7uKHQtMwmYrlV6Tsh63ry97E
+	OFOIsKp/Ozxz8x74bPxw1/pzsiywZpP2FFzGFO6/dgznVQAkNR69uhXfo7g/UuPUQr6Rno
+	BZMfGaLbzGgqyjJGLP0GVUyFWT8fgCc=
+From: George Guo <dongtai.guo@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	George Guo <guodongtai@kylinos.cn>,
+	bpf@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf] selftests/bpf: Skip libarena when the BPF backend lacks 32-bit arena cmpxchg
+Date: Tue, 30 Jun 2026 10:58:09 +0800
+Message-Id: <20260630025809.74043-1-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Low] The patch removes the `bpf_iter_mmput_async()` helper function but =
-leaves an active call to it in `bpf_iter_task_vma_destroy()`, causing an un=
-conditional compilation failure.
-- [Low] Calling `mmput_async()` directly causes a build failure on configur=
-ations without `CONFIG_MMU` and `CONFIG_FUTEX_PRIVATE_HASH`.
---
+From: George Guo <guodongtai@kylinos.cn>
 
-commit 2e44c7b3855fc202fcf8df33fd8efe7bae06e921
-Author: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-Subject: bpf: Fix use-after-free on mm_struct in bpf_find_vma()
+The arena qspinlock pulled in by libarena (bpf_arena_spin_lock.h) performs
+a 32-bit atomic compare-and-exchange on an arena (address space 1) pointer
+via atomic_try_cmpxchg_acquire() on the 32-bit atomic_t lock word. Not
+every LLVM BPF backend can select that operation; releases such as clang 19
+abort instruction selection with:
 
-This commit addresses a use-after-free in bpf_find_vma() by safely
-pinning task->mm for foreign tasks under alloc_lock. It adds a required
-mmput_async() call on the exit path and removes the static inline wrapper
-bpf_iter_mmput_async().
+  error: unsupported atomic operation, please use 64 bit version
+  fatal error: error in backend: Cannot select: AtomicCmpSwap<(s32)> ...
+  In function: arena_spin_lock_slowpath
 
-> diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-> index e791ae065c39b..27ceead874651 100644
-> --- a/kernel/bpf/task_iter.c
-> +++ b/kernel/bpf/task_iter.c
+Because libarena/libarena.skel.h is an unconditional dependency of
+test_progs, this aborts the entire selftests/bpf build before test_progs is
+ever linked, so none of the other tests can be built or run. This was
+observed building selftests/bpf for LoongArch with clang 19, but it is a
+property of the BPF backend, not of the host architecture.
 
-[ ... ]
+Mirror the existing CLANG_HAS_ARENA_ASAN feature probe: detect whether the
+backend can compile a 32-bit arena cmpxchg, and only build libarena when it
+can. Define HAS_BPF_ARENA in that case and guard prog_tests/libarena.c
+behind it - exactly the way prog_tests/libarena_asan.c is guarded behind
+HAS_BPF_ARENA_ASAN - so the test still compiles and reports as skipped when
+libarena is not built. When the operation is unsupported, libarena is
+skipped and the rest of test_progs builds and links as before.
 
-> @@ -782,6 +807,9 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *, task, =
-u64, start,
->  		ret =3D 0;
->  	}
->  	bpf_mmap_unlock_mm(work, mm);
-> +out:
-> +	if (mmput_needed)
-> +		mmput_async(mm);
+Fixes: d5327480a12a ("selftests/bpf: Add basic libarena scaffolding")
+Signed-off-by: George Guo <guodongtai@kylinos.cn>
+---
+ tools/testing/selftests/bpf/Makefile          | 14 ++++++++++++++
+ .../selftests/bpf/prog_tests/libarena.c       | 19 ++++++++++++++++++-
+ 2 files changed, 32 insertions(+), 1 deletion(-)
 
-[Severity: Low]
-Does directly invoking mmput_async() break the build on configurations
-without CONFIG_MMU?
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index b642ee489ea6..0098d892cb39 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -91,6 +91,17 @@ CLANG_HAS_ARENA_ASAN := $(shell echo 'int x;' | \
+ 	-mllvm -asan-shadow-addr-space=1 \
+ 	-x c -c - -o /dev/null 2>/dev/null && echo 1)
+ 
++# The arena qspinlock used by libarena performs a 32-bit atomic cmpxchg on an
++# arena (address space 1) pointer. Not every LLVM BPF backend can select it;
++# older releases bail out with "unsupported atomic operation, please use 64 bit
++# version", which aborts the whole selftests build. Probe for the operation and
++# skip libarena (and its dependent tests) when the backend cannot handle it.
++CLANG_HAS_ARENA_CMPXCHG32 := $(shell printf '%s\n' \
++	'struct s { int counter; };' \
++	'int f(struct s __attribute__((address_space(1))) *l, int o, int n)' \
++	'{ return __sync_val_compare_and_swap(&l->counter, o, n); }' | \
++	$(CLANG) --target=bpf -O2 -x c -c - -o /dev/null 2>/dev/null && echo 1)
++
+ # Order correspond to 'make run_tests' order
+ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_progs \
+ 	test_sockmap \
+@@ -835,10 +846,13 @@ LIBARENA_BPF_DEPS := $(wildcard libarena/Makefile		\
+ 				 libarena/selftests/*		\
+ 				 libarena/*.bpf.o)
+ 
++ifneq ($(CLANG_HAS_ARENA_CMPXCHG32),)
+ LIBARENA_SKEL := libarena/libarena.skel.h
++CFLAGS += -DHAS_BPF_ARENA
+ 
+ $(LIBARENA_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(LIBARENA_BPF_DEPS)
+ 	+$(MAKE) -C libarena libarena.skel.h $(LIBARENA_MAKE_ARGS)
++endif
+ 
+ ifneq ($(CLANG_HAS_ARENA_ASAN),)
+ LIBARENA_ASAN_SKEL := libarena/libarena_asan.skel.h
+diff --git a/tools/testing/selftests/bpf/prog_tests/libarena.c b/tools/testing/selftests/bpf/prog_tests/libarena.c
+index 61ea68dce410..a7ede72c7256 100644
+--- a/tools/testing/selftests/bpf/prog_tests/libarena.c
++++ b/tools/testing/selftests/bpf/prog_tests/libarena.c
+@@ -1,6 +1,8 @@
+ // SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
+ /* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+ #include <test_progs.h>
++
++#ifdef HAS_BPF_ARENA
+ #include <unistd.h>
+ 
+ #include <libarena/common.h>
+@@ -198,7 +200,7 @@ static void run_libarena_parallel_test(struct libarena *skel, struct bpf_program
+ 	run_libarena_parallel_fini(skel, name, prefixlen);
+ }
+ 
+-void test_libarena(void)
++static void run_test(void)
+ {
+ 	struct arena_alloc_reserve_args args;
+ 	struct libarena *skel;
+@@ -251,3 +253,18 @@ void test_libarena(void)
+ out:
+ 	libarena__destroy(skel);
+ }
++
++#endif /* HAS_BPF_ARENA */
++
++/*
++ * Run the test only if the BPF backend can compile the arena programs
++ * libarena depends on (see CLANG_HAS_ARENA_CMPXCHG32 in the Makefile).
++ */
++void test_libarena(void)
++{
++#ifdef HAS_BPF_ARENA
++	run_test();
++#else
++	test__skip();
++#endif
++}
+-- 
+2.25.1
 
-The removed bpf_iter_mmput_async() wrapper previously fell back to mmput()
-when CONFIG_MMU was disabled. Even though this new path is guarded by a
-runtime IS_ENABLED(CONFIG_MMU) check earlier in the function, the C compiler
-still evaluates the function call, which might be undeclared in the headers
-on !CONFIG_MMU builds.
-
->  	return ret;
->  }
-> =20
-> @@ -796,15 +824,6 @@ const struct bpf_func_proto bpf_find_vma_proto =3D {
->  	.arg5_type	=3D ARG_ANYTHING,
->  };
-> =20
-> -static inline void bpf_iter_mmput_async(struct mm_struct *mm)
-> -{
-> -#ifdef CONFIG_MMU
-> -	mmput_async(mm);
-> -#else
-> -	mmput(mm);
-> -#endif
-> -}
-> -
-
-[Severity: Low]
-Does the removal of bpf_iter_mmput_async() cause a build failure?
-
-While the wrapper was removed here, it looks like it is still being called
-further down in the file:
-
-kernel/bpf/task_iter.c:bpf_iter_task_vma_destroy() {
-        ...
-        if (kit->data) {
-                bpf_iter_task_vma_snapshot_reset(&kit->data->snapshot);
-                put_task_struct(kit->data->task);
-                bpf_iter_mmput_async(kit->data->mm);
-                ...
-        }
-}
-
-Will this cause an undeclared identifier error when compiling
-bpf_iter_task_vma_destroy()?
-
->  struct bpf_iter_task_vma_kern_data {
->  	struct task_struct *task;
->  	struct mm_struct *mm;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260630023443.3026=
-627-2-sanghyun.park.cnu@gmail.com?part=3D1
