@@ -1,63 +1,63 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C79774534A5
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 20:51:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4563B3C19
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 20:51:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782852665; cv=none; b=n8gZ/cTyXsBehGh1T6THd+do0+dsLRDs6gWIOpZhtVJNO/O1QqN5qa9Kms68ZVhf3dOo1lCC/aUF/CCY4FuE95v6wqJ0ZteVVdv3rV3erkHrYNxfU8Rmr79NqWtyCoXIVuIMYuwv/Hqjyp0vt5YZt3XfAc7E/xA1nWPcir7TAig=
+	t=1782852671; cv=none; b=IqT+j6lQHjiKSURhvLxRjDzso8iv29J0fV15E17xJUJHXWsy5NqNJyxBO1lXYhkLfWI/aMHUAkaKO/Cus7M/217YkPanYZf3Y7wslk3pp+gM1RQ/fyN77MwojB7NkUoS03DD462uIZNm4IuyEyOcmpZdopd1sJohefZJJU27Rv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782852665; c=relaxed/simple;
-	bh=9eRiyZzxLrtoYjnXIPP2OfGBo8eFMn7rPbbU+dGCphY=;
+	s=arc-20240116; t=1782852671; c=relaxed/simple;
+	bh=vIZVPtoekYXA97ar0f3RVpNBTUnPvEkA2N5XD+HOG7c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BBE9URI9yFVIi+ZOEFMsMLpGdarLlC+0ukTxtsuJY/toJpa66YEDEgCfb7w2esZ8OfNqO11vY70U56CqjN+JOLaJePlJ5/vNitfsLW1F4ved8PwKSdp1bnFVRTijkUk3Pz0vjcAaJjqA4eJUenBQ/xLD3PVtXAUdlTK98MDHR2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mgcD2L+h; arc=none smtp.client-ip=209.85.216.50
+	 MIME-Version; b=JnCDN4g/WvhYIWOBINUACzq5GIi8x5X3ZMEa3CgcqPe5jX+cN4cbnEq5Y3ltAszue+M3TG28DZqFfPne7sKOhqEeVMIqtTTTGnDeII6gJsgXwg2/V4RXlGrf8wM6AzPofwzqc9nfg7SHfqfzaUPrjkNiZHg7hXHulTjgUhKjFbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k0hIWX4p; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mgcD2L+h"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-380544d00b1so640662a91.0
-        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 13:51:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k0hIWX4p"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2c9cb97e178so29710115ad.3
+        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 13:51:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782852663; x=1783457463; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782852669; x=1783457469; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/ksGOdAvrWVQOc/6CEjrG1hzk2bKP0wufpP0CwkmqNo=;
-        b=mgcD2L+hav2B/mkWsuviNSjca04X3W6uZ4tegXWTjbNDM0efnVGiMVgbVfKlt0VwYn
-         MfYiFdgqMlYhlB6gVEfCZ3yEANbdJLUfogZDlU77xuWiE22w/Y1FB1RQabJbVCUleS/W
-         JZW5KlmXNKv+wObKKyBrxGHgsePDV4OKxPSoVtHmwioalq0vUNVM+0kBEefJGsw0TmAu
-         iPTl+1tJ/wObMDzu+1o6wSjj2KjDZJAZIE9Xd8lDuiEZa0T7dfeMbOpYMytWMDTzaV0o
-         vYfXg3leMAID8npboUqEj2oLE6e+NdvkO0aOo6FZ3xF/H3WXubm1P6EnkhwJzyzmJ6aJ
-         2ZNg==
+        bh=F+9mrYL3HnxDWYVBXM/qgCi1xc+LI25f9+ZzQtFcgdQ=;
+        b=k0hIWX4pvkl2yOfEqWeywoYdPHqAdSHQYqwJT7PGfZ7lxZwb2N/nD/tkBHHZgbjNv2
+         TK2B/Zj1UHEvtRpuBtnREbHJnA92RKNFpYAXgM7T6HoSoyLmj7uosYMbi7PBNg56KfSr
+         mvbkrKHo0PgBpVNMUH7+zd4nuH97Y1J3biLUCeKtPJ/tsr0BemKev+gP4YDOxZLRc25l
+         +PeWHc0Xdi6O1QzaTBeCuWAmW64EX3OuEzyty8m5bW8tsUbcWN8Q526fRe1uF0CjWKTK
+         PSEEGGGqpVKe05nkEJ0wjqJ0nM7Q2AyVbq749RYRDLu/Q0nuhK8kIcItYSlvH30Chrs8
+         9x7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782852663; x=1783457463;
+        d=1e100.net; s=20251104; t=1782852669; x=1783457469;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=/ksGOdAvrWVQOc/6CEjrG1hzk2bKP0wufpP0CwkmqNo=;
-        b=MSxEQmpyv4rUN+Uiw2bbAci4uxXk81s+zzQIBy2/VccOcgEPAS1Uv2EmI7TOzMAtWv
-         ticGPHis73S3OMSp51kJbqy5xGmQbyYqodW3EAsG/cpTlVGci19stY/WIPm9pZR6muC1
-         TxdEBTpxMGWCUqkS3HQ2e2wd0JAql+vEV6vp4BeLHossQXciHMGRLYi2h2Fv2xdP9itk
-         UVMHhw9AlgiqxWHO2DP/iM2DBN8uE6UBhtd3b0PWVZScxWhDZq58akk03pART4uDE6nd
-         uhAWYGCZad356NpOlU8L46ubBLE7aOJnwtIjlBWt7RBlc3H8Ti2yC1g9uRqf1m9+cc+H
-         3bPw==
-X-Forwarded-Encrypted: i=1; AHgh+RoAREy7+oTrpmKcv0rdHwqQogS7xR1rsNCPLCLPW5fp/vMUjqjZTGmKFqQM2JdP5nZrbaY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvdNmdlJL5+hxwybDJbUp2lCX7BB3T6d/Gxoy7jlm+nyLt2CyB
-	VEXV4Kj4/Z42o6gxNi73VgFm3ZEIlSaseKaAp45UcDpfRivkEAIQdh9R
-X-Gm-Gg: AfdE7clvDtFZDN26GV5GgRtFOeoLFY55uGpeiBKcQ3ybewPvCi54CKnS0YJtyRK2Yg6
-	b0C9aqvtz5zdH37XXyaSjGA3dO+s6llBQOyiFhjPqQIlVNOqiV6hIQ9jTCoZPCpfWxkdry1QC6n
-	YQ0xRlGm5TF7AErT40gdLX/pxOUlsO6YtAc8DRLd149+obWdnI/opLQy6rWeLgPTMrzLS67zMtZ
-	xcWM3kmo0jMhgLbZR25ysIgY24M6iRDASK+NJghreispFEe9/l25io1U5n9lP7hx94fmXDF0x6W
-	GTDpGHgFFGIrUg7aH23Cf3j2ooyhJJR2W2RwVM/wRIK+CrtLHQvLKN0BV++2P9l84iwUgu4JkPG
-	VFqlAkpk6zWBSCSzG8d89dmTf3irkdOvMwohCIUrfb1zHYibPjDWxbK2gBfR/LPcj0x21tyVUKk
-	30Uh02PTE/ULJtTezuOlO7D6T1r4biwWKbDLvsnXWYtKbsTiaHTxQ=
-X-Received: by 2002:a17:90b:224f:b0:368:83e6:ca95 with SMTP id 98e67ed59e1d1-38052388689mr4254366a91.0.1782852662945;
-        Tue, 30 Jun 2026 13:51:02 -0700 (PDT)
+        bh=F+9mrYL3HnxDWYVBXM/qgCi1xc+LI25f9+ZzQtFcgdQ=;
+        b=X6k3e8fHDQGlMW6rlst14vqN27iThrQ+Rtht78RfG/yCEtM/7IrdQOZ7oXP1W3SyQF
+         +wasPzChFMDyjfqevkGtgSb64hA1dxU/H8EHwPMFuBDSs+n3Wg+LMTf0tkLnqvFbtH+h
+         WeZ40nkV3AxhTJ4jUzlYl23HNHCz8jZDuqU/ovcfK452DAXcPnqraHiMdVCbN+8ntI7g
+         tdVfurvcagyy2gZFHx9lXMGucixFefNPYSxODsei/HiH9xAMDdTM9SkG9WiQW/iM0MMJ
+         AxbY1HxdFCzHbeYWY+/m6evX7KY484FX3Psv/Q53i3vM60EayUOu8g5Wj8uftWQ/6UcJ
+         1Khg==
+X-Forwarded-Encrypted: i=1; AHgh+RpX4qbTySW5jPq2lXpn4elD+1mUrtMH9gHVj+C83tKvzd1MCQrPx53Vga/ca4+SVmf658A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzN5S9vy2Mjsie1ld5NgQ3SzMjkABRhDt9cO4LQYFF/sq27hKO5
+	rqO64upUX1vTfVBAgc/cyBn6N/kqa8SwjksBBuLfRbVdcgN8dhkAag9x
+X-Gm-Gg: AfdE7cn06dUuUcza6s2dSSN38XwU1KPGmuNH1Q3orQcELhIL86iWl+oyG43vCXOhFTl
+	IZh7dWYuK6Ir9KH/Mbjah9rJcfUeF4chZR8qgmEAjaOSypOK5+YBpXJ9vAkpvw7v32p0wBkJJfy
+	SdUHAprzLYKvBhjIfwcaJBkUB78AHZYQirf4mPoL9rMZZ8NC+5/nhBs8KSzWb+exnh8BV+Gcjyz
+	tnEoaQZuyHIVfYsbV6wQ5UlMLJYXj3s5OohGpOqrCop1Sqyf7PXthMkuvIjDYsSG+SvXNxdhkMx
+	yMcrYOHA0BG3GoauDHbpjnPRADF30ZOgfxxnpigOZO2pk4eP2F1lcfXoxJNZ5n/KcRK9DXS+NSz
+	5EOzb4ltxdrrEDTBckjstA5qrIhPtrEXNbJIsXtskJ1iu+6cCkigDgVO2fo1SwH9Ad7u2Lp6tSz
+	Qkk5Io2Vat2Am5QN97H23W89PIV7IypIkFaqc2QXLyHgZmiM/LiWY=
+X-Received: by 2002:a17:903:1b03:b0:2c8:1c05:16bb with SMTP id d9443c01a7336-2ca2e71bf72mr41313975ad.24.1782852669354;
+        Tue, 30 Jun 2026 13:51:09 -0700 (PDT)
 Received: from cps-manycore-1.. ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca382ba1ccsm20322305ad.66.2026.06.30.13.50.56
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca382ba1ccsm20322305ad.66.2026.06.30.13.51.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 13:51:02 -0700 (PDT)
+        Tue, 30 Jun 2026 13:51:08 -0700 (PDT)
 From: Sechang Lim <rhkrqnwk98@gmail.com>
 To: Eric Dumazet <edumazet@google.com>,
 	Neal Cardwell <ncardwell@google.com>,
@@ -85,9 +85,9 @@ Cc: Kuniyuki Iwashima <kuniyu@google.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 1/2] bpf, sockmap: settle copied_seq when a stream parser is removed
-Date: Tue, 30 Jun 2026 20:50:34 +0000
-Message-ID: <20260630205043.184894-2-rhkrqnwk98@gmail.com>
+Subject: [PATCH bpf 2/2] selftests/bpf: test sockmap strparser recover with undelivered ingress
+Date: Tue, 30 Jun 2026 20:50:35 +0000
+Message-ID: <20260630205043.184894-3-rhkrqnwk98@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260630205043.184894-1-rhkrqnwk98@gmail.com>
 References: <20260630205043.184894-1-rhkrqnwk98@gmail.com>
@@ -99,48 +99,94 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-tcp_bpf_strp_read_sock() rolls tp->copied_seq back by the SK_PASS bytes
-parked on the psock ingress_msg queue; tcp_bpf_recvmsg_parser() repays it
-as those bytes are delivered. When the socket leaves the sockmap they are
-purged undelivered and nothing repays the rollback, so copied_seq is left
-behind sk_receive_queue and the native tcp_recvmsg() warns:
+Park SK_PASS data on a stream-parser socket's ingress_msg queue, drop the
+socket from the sockmap without reading it, then check the native stack
+still delivers data queued afterwards. Without the fix copied_seq is left
+behind sk_receive_queue and tcp_recvmsg_locked() warns instead of
+delivering.
 
-  TCP recvmsg seq # bug: copied 66913561, seq 6691356A, rcvnxt 66913572, fl 40
-  WARNING: net/ipv4/tcp.c:2733 at tcp_recvmsg_locked+0x2d0/0x1270
-   tcp_recvmsg+0xba/0x340
-   inet_recvmsg+0x7a/0x370
-   sock_recvmsg+0xef/0x110
-   __sys_recvfrom+0x132/0x1e0
-
-Settle copied_seq to the parser's consume point as the socket leaves the
-sockmap so it cannot trail the receive queue.
-
-Fixes: 36b62df5683c ("bpf: Fix wrong copied_seq calculation")
 Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 ---
- net/ipv4/tcp_bpf.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 59 +++++++++++++++++++
+ 1 file changed, 59 insertions(+)
 
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index cc0bd73f36b6..918f8da02c39 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -715,6 +715,15 @@ int tcp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
- 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index cb3229711f93..86b584f5491e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -1292,6 +1292,63 @@ static int wait_for_fionread(int fd, int expected, unsigned int timeout_ms)
+ 	return avail;
+ }
  
- 	if (restore) {
-+#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
-+		/*
-+		 * Settle the copied_seq rollback for the now-discarded
-+		 * ingress_msg data so it cannot trail the receive queue
-+		 */
-+		if (sk_psock_test_state(psock, SK_PSOCK_RX_STRP_ENABLED) &&
-+		    before(tcp_sk(sk)->copied_seq, psock->copied_seq))
-+			WRITE_ONCE(tcp_sk(sk)->copied_seq, psock->copied_seq);
-+#endif
- 		if (inet_csk_has_ulp(sk)) {
- 			/* TLS does not have an unhash proto in SW cases,
- 			 * but we need to ensure we stop using the sock_map
++static void test_sockmap_strp_recover_undelivered(void)
++{
++	struct test_sockmap_pass_prog *skel = NULL;
++	int c0 = -1, p0 = -1, c1 = -1, p1 = -1;
++	char buf[10] = "0123456789", rcv[11];
++	int err, map, verdict, parser, sent, recvd, avail, zero = 0;
++
++	skel = test_sockmap_pass_prog__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	if (create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1))
++		goto out;
++
++	map = bpf_map__fd(skel->maps.sock_map_rx);
++
++	verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
++	err = bpf_prog_attach(verdict, map, BPF_SK_SKB_STREAM_VERDICT, 0);
++	if (!ASSERT_OK(err, "bpf_prog_attach"))
++		goto out;
++
++	parser = bpf_program__fd(skel->progs.prog_skb_verdict_ingress_strp);
++	err = bpf_prog_attach(parser, map, BPF_SK_SKB_STREAM_PARSER, 0);
++	if (!ASSERT_OK(err, "bpf_prog_attach"))
++		goto out;
++
++	err = bpf_map_update_elem(map, &zero, &p1, BPF_ANY);
++	if (!ASSERT_OK(err, "bpf_map_update(p1)"))
++		goto out;
++
++	sent = xsend(c1, buf, sizeof(buf), 0);
++	if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c1) bpf"))
++		goto out;
++
++	avail = wait_for_fionread(p1, sizeof(buf), 1000);
++	if (!ASSERT_EQ(avail, sizeof(buf), "fionread"))
++		goto out;
++
++	err = bpf_map_delete_elem(map, &zero);
++	if (!ASSERT_OK(err, "map_delete(p1)"))
++		goto out;
++
++	sent = xsend(c1, buf, sizeof(buf), 0);
++	if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c1) native"))
++		goto out;
++	recvd = recv_timeout(p1, rcv, sizeof(buf), MSG_DONTWAIT, 1);
++	ASSERT_EQ(recvd, sent, "recv(p1) native after drop");
++
++out:
++	close(c0);
++	close(p0);
++	close(c1);
++	close(p1);
++
++	test_sockmap_pass_prog__destroy(skel);
++}
++
+ /* it is used to send data to via native stack and BPF redirecting */
+ static void test_sockmap_multi_channels(int sotype)
+ {
+@@ -1447,6 +1504,8 @@ void test_sockmap_basic(void)
+ 		test_sockmap_copied_seq(false);
+ 	if (test__start_subtest("sockmap recover with strp"))
+ 		test_sockmap_copied_seq(true);
++	if (test__start_subtest("sockmap strp recover undelivered"))
++		test_sockmap_strp_recover_undelivered();
+ 	if (test__start_subtest("sockmap tcp multi channels"))
+ 		test_sockmap_multi_channels(SOCK_STREAM);
+ 	if (test__start_subtest("sockmap udp multi channels"))
 -- 
 2.43.0
 
