@@ -1,88 +1,166 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6352C382F0C
-	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 20:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCF3E348C6D
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 20:02:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782849702; cv=none; b=PnzfrPtvRfXJlUY4R88WS/v0xaCxfP1WxH8w7yV9OI4stSUzYMOAH8ri2F0jqGnKChH5Q2arE7unRsClo1p/Re1KW3YDfruL1IygKwYA0iC4J97FkMjXr7RbjShrD0HO1Po1KZXkNMCq6esKtItKv+YbCfySacE6XJcIPm7nJIQ=
+	t=1782849768; cv=none; b=aNREoRMdQY97gIgvjC5xXu/woKnrJ02CdtHacdMcZLOOdsa2vI+2C1tuD3Cmo2fCXgNydGPMMBP+m4zc0iwtX9I7uZ63cTp+6/jUISmylZICx2eoacYy+naSf2iIiOTk7iH8RN5e8F/v5/Z7Q9bIFeH1+3ZLAb8CVi2q/aptsiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782849702; c=relaxed/simple;
-	bh=z+jGbOpfpf8QLKc519XpubXZV77N1XJM/4t8nMnZHgg=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=kEsM0gqsep/Upyk3tp24/G9gmvjRCr1VB27m97MSbv2sYDnE6B3+YjfuCv26XIpXXCiiowJ4aKdA2RjaBCpS7uTQP9yK8hyDHXY6PT0kI5Gn3mrldfYOGejyOPFlmtsZgbRFVIq+JyrF+LZlXKFFayIifOHb9tGTV4z/ttPCz1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BKKBT7g4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782849768; c=relaxed/simple;
+	bh=xst1DzWdaxXFt4+BZXS6RCE0rafa1NrbAxCW+tfUIBo=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=db4injflMh/DYe+YCWXrv3VzCSJnogdezyRRTlIFkN/kp71MCST5dHGZUKhsn1LFsQfq28nh4Xe7PeFyesksK8lpXvTyGa6XJ2LlZX7yzwxyL6eqT0MEYZhKP0Uv3zJ4BsEmLENa5ZGP0mMw3Ay2wP/ytqhVNCz/cu934n6r3gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Jl6FnrHy; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BKKBT7g4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 207C51F000E9;
-	Tue, 30 Jun 2026 20:01:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782849701;
-	bh=fSdhBPsF8cZabrhMEEsqt5HsYKpTF84FzUhrGFLAHNU=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To;
-	b=BKKBT7g46lRbtt9i9fwoo+bG/5VmnJjO/yhUgRv+yF4m5JQm0GYEG4g2vJYPiJHrP
-	 nwH1S9+XOTY1eaBLMYvTrTGclHyk6ZGHYKM4QTxXugkczim8hnI/AHp5/kGYc0IkfU
-	 R45s8zX2sAYqS+sKACsSyhjOICnovnXfgk5273SNsX4aSO5WhEjaPSk9aTgyUVP9LX
-	 Hk23Y8hI6QmWu627nN3mQ8SE5/9ThVoFM1qnRxU9yJjzbsyvUxOtVoAIC56h3bBLMC
-	 8Mxjn1RVvF/q6MWCTQDcieOvLxfYfGx376KbUiLCSUjMp3lujs95oHECf//YSFvIli
-	 h4dIRpM3sRI/A==
-Message-ID: <da07a0af-fbcf-4936-8194-1dc2d58bdf59@kernel.org>
-Date: Tue, 30 Jun 2026 21:01:38 +0100
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Jl6FnrHy"
+Message-ID: <252c53f3-3f06-40f4-9cd3-795eb298687c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782849763;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=H8t0Qt4F0E73z5RniCMl52vonFMgOcmL/y7SG1J9PCI=;
+	b=Jl6FnrHyLFWcueY9vSMQnTQ+5nWLI+TkaF9oExI+qY9Q98jExQIE5wCeD/nGNEsZikk5BT
+	31LwNzJSi7+6JuC3VBPHLY/3uCXySfph1P8isdRJMHcXDlQhgl2FiQSTIKlbSnXkFQDqbo
+	1Q0RbS7kZxR0fo2ORtXGE/TOdEIsNS8=
+Date: Tue, 30 Jun 2026 13:02:23 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Quentin Monnet <qmo@kernel.org>
-Subject: Re: [PATCH bpf-next] libbpf: fix -Wformat warnings from
- format/argument type mismatches
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
- kernel-team@meta.com
-References: <20260624204946.2901178-1-andrii@kernel.org>
- <178248062788.457674.6865742035078097472.git-patchwork-notify@kernel.org>
- <CAEf4BzbUEi4zZxEBggHzbYRaSMtQ6wWJSjHhqfvE-omvGadApw@mail.gmail.com>
-Content-Language: en-GB
-In-Reply-To: <CAEf4BzbUEi4zZxEBggHzbYRaSMtQ6wWJSjHhqfvE-omvGadApw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PAHOLE v4 2/3] dwarf_loader: Add support for
+ DW_TAG_GNU_annotation
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: Yonghong Song <yonghong.song@linux.dev>, dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ acme@kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>, jose.marchesi@oracle.com,
+ David Faust <david.faust@oracle.com>
+References: <20260602195512.1511013-1-vineet.gupta@linux.dev>
+ <20260602195512.1511013-2-vineet.gupta@linux.dev>
+ <9152fde6-d35c-4688-9ff1-c7fe152c9b2a@linux.dev>
+ <4e425892-2aec-4fee-a199-7fe9c615d982@linux.dev>
+Content-Language: en-US
+In-Reply-To: <4e425892-2aec-4fee-a199-7fe9c615d982@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-2026-06-30 11:32 UTC-0700 ~ Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> On Fri, Jun 26, 2026 at 6:30 AM <patchwork-bot+netdevbpf@kernel.org> wrote:
+On 6/17/26 11:18 AM, Vineet Gupta wrote:
+> On 6/3/26 1:08 PM, Yonghong Song wrote:
+>> For decl tag
+>> ============
 >>
->> Hello:
+>> $ cat decl_tag.c
+>> /* btf_decl_tag test cases.
+>>     *
+>>     * btf_decl_tag can be attached to:
+>>     *   - global (incl. static) variables
+>>     *   - functions
+>>     *   - function parameters
+>>     *   - struct/union types and their members
+>>     *   - typedefs
+>>     *
+>>     * Build:  clang -O2 -target bpf -g -c decl_tag.c -o decl_tag.o
+>>     *         /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2 -gbtf -g -c decl_tag.c -o decl_tag.o
+>>     * Dump:   bpftool btf dump file decl_tag.o
+>>     */
 >>
->> This patch was applied to bpf/bpf-next.git (master)
->> by Alexei Starovoitov <ast@kernel.org>:
+>> #define __tag(x) __attribute__((btf_decl_tag(x)))
 >>
->> On Wed, 24 Jun 2026 13:49:46 -0700 you wrote:
->>> Building libbpf with -Wall (as happens via bpftool's bootstrap build)
->>> surfaces ~120 -Wformat warnings where pr_warn/pr_debug format specifiers
->>> don't match their argument types: %d for __u32/Elf64_Word, %u for signed
->>> ints, %zd for size_t, %ld for unsigned long, and %x/%lx/%llx applied to
->>> signed values.
->>>
->>> Match each specifier to its argument's type where a correctly-signed
->>> specifier exists (%d<->%u, %ld->%lu, %zd->%zu). For hex conversions,
->>> which have no signed form, cast the argument instead (%x->(unsigned),
->>> %lx->(unsigned long), %llx->(unsigned long long)). No functional change.
->>>
->>> [...]
+>> /* tag on a global variable */
+>> int global_var __tag("global_var_tag");
 >>
->> Here is the summary with links:
->>   - [bpf-next] libbpf: fix -Wformat warnings from format/argument type mismatches
->>     https://git.kernel.org/bpf/bpf-next/c/df3153758ddb
+>> /* tag on a static variable */
+>> static int static_var __tag("static_var_tag");
 >>
-> 
-> Quentin,
-> 
-> I synced these changes to libbpf's Github mirror. Can you please
-> update bpftool mirror's libbpf reference to include this change, so
-> that I can fix these noisy warnings for wprof? Thanks!
+>> /* multiple tags on one declaration */
+>> int multi_tag_var __tag("tag_a") __tag("tag_b");
+>>
+>> /* tag on struct type and its members */
+>> struct foo {
+>>            int a __tag("member_a_tag");
+>>            int b __tag("member_b_tag");
+>> } __tag("struct_foo_tag");
+>>
+>> /* tag on a typedef */
+>> typedef struct foo foo_t1 __tag("typedef_foo_tag");
+>> typedef struct {int foo2;} foo_t2 __tag("typedef_foo2_tag");
+>>
+>> /* tag on a function and its parameters */
+>> __tag("func_add_tag")
+>> int add(int x __tag("param_x_tag"), int y __tag("param_y_tag"))
+>> {
+>>            return x + y;
+>> }
+>>
+>> /* keep the globals/types alive so they land in BTF */
+>> int use(foo_t1 *f, foo_t2 *g)
+>> {
+>>            return add(global_var + static_var + multi_tag_var, f->a + g->foo2);
+>> }
+>>
+>> $ /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2 -gbtf -g -c decl_tag.c -o decl_tag.o
+>> decl_tag.c:30:1: warning: ‘btf_decl_tag’ attribute does not apply to types [-Wattributes]
+>>       30 | } __tag("struct_foo_tag");
+>>          | ^
+>>
+> [snip]
+>
+>> Three decl tags (struct_foo_tag, typedef_foo_tag and typedef_foo2_tag)
+>> are missing here:
+>>
+>> struct foo {
+>>            int a __tag("member_a_tag");
+>>            int b __tag("member_b_tag");
+>> } __tag("struct_foo_tag");
+>>
+>> /* tag on a typedef */
+>> typedef struct foo foo_t1 __tag("typedef_foo_tag");
+>> typedef struct {int foo2;} foo_t2 __tag("typedef_foo2_tag");
+> Semantically what does this mean ? Will the decl tag will be "applied"
+> where ever the type is instantiated ?
+
+So these are dec tags (not type tags) on typedefs.
+Are these still relevant after the change below for supporting type tags 
+on typedefs (and gcc has in flight patches to do the same).
+
+    commit 5754a48780f516cbc06eeb2a31b1e445ddd9c935
+    Author: yonghong-song <yhs@fb.com>
+    Date:   Mon Jun 15 10:51:02 2026 -0700
+         [Clang][BPF] Support btf_type_tag on typedef underlying types (#203089)
+         Emil Tsalapatis suggested to add type tag for typedef like below:
+         ```
+           $ cat tag.c
+           #define __type_tag(x) __attribute__((btf_type_tag(x)))
+           struct bar { int c; int d; };
+           typedef struct bar __type_tag("a") bar_t;
+           int use(bar_t *v)
+           {
+             return v->c + v->d;
+           }
+         ```
+         This makes the code simpler -- using `bar_t *v` instead of the longer
+         form `struct bar __type_tag("a") *v`.
+         So the goal is to allow type tag for typedef underlying types. The
+         following describes the main changes:
 
 
-Hi Andrii, I just synced it, thank you.
+And if so, how are they semantically different and what's the use case 
+fot decl tags on typedefs.
 
-Quentin
+> OK, opened PR/125862 [1]  for future improvement.
+>
+> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=125862
+
+If not, we can close this gcc PR as won't fix / not needed.
+
+Thx,
+-Vineet
