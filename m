@@ -1,150 +1,185 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617A8368D46;
-	Tue, 30 Jun 2026 14:46:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1AD270EC1
+	for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 14:48:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782830777; cv=none; b=TOTH6cg9mo7u3RUvIKMj1uyzNPaZWT6HqrzSSQz9sn9Wv6bD7rKAjNjgclw9jVIOP+KqchLLaDE2PmqF1NIxhLrS4yKu72NcCVgEbHwDIWA6EEqSoQaXEawhAgeTVIAgvciz1vLTRmz6t2KiPHyUfa8Waf5qkbc8z+Hi4y1vGVU=
+	t=1782830918; cv=none; b=PbmhwN1iHZxY94QDAIgb0FTaP/4zX91zqG20JnX9PZqo1BBZktiSOiBsIRzEOhc5mc415mENN+mtOV8TC0nRf4iziit2EQSpcuskAO72cUVbYVVUhwTT9otyGrpi690wIsupyo6OxKQPJn2FuTOsRA6C97IV77TZuzQ/+HWnlLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782830777; c=relaxed/simple;
-	bh=et6WWXnaS2+pKmOqfW2RoPxasq8OHuop6VwHgCWWPSU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WB5C+SOmZwWut1JD0TKchAV+jPMoltAoYeqD13ZLG9yahOLl0QOIjiwGtFo38sAJH8Bl4Sr7G/QAwe08qBF7Uq6uBDIgpfY0mR8mMdXcdOkbzFKXpvQcpN0Q7D19kZVggQVJ9EuPblttRdXR/GmOSQih9Kh6IgWovRMTcsHgmSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LSsPTQJ/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782830918; c=relaxed/simple;
+	bh=1Jj/c/TOCM9F8C2420YyNj+4Ly0pxwW5lqXFrBHZorY=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LaJeWfuzNou7hAJERuyCI18rPY2SShSpqv6ldTU4JZ5chaL9P63i5Lc45AaNMAveOIqBuTkwRUwQSVnzJcgaohR+twe1/oAty1Pzn35A+WarFsahpYut53sZMVRk7O8XcRX0ggUdo74cdRhNDhWkDToqlIOPcnfR5YSf/FP/Qmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AMt8z6b4; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LSsPTQJ/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC9051F000E9;
-	Tue, 30 Jun 2026 14:46:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782830776;
-	bh=tUR1TZqZgIjf7g/qHfTnghrYzXKLgJDw1xWeRAXLWJo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=LSsPTQJ/A+v2jDQU690DW1fqHe/pLTvNXjuDFl1rNxlNreEw651MXk4g2iYcEkoLB
-	 KROa+IraIHhnWx/b6ykEYVlhLxSwURZ9K26rgS/qXttBW2D93uWcRAWbN5dIAwlbi8
-	 X02xOAeT7hZ0ojScXO8wXPseolmhnMbMlwzYfR7RhiuZ1xZfY05wJ87frNwYoh+nrQ
-	 RO4Ul8we42r3+7z/nlPPDsK5oKwF/PsNJqIJsydcQPhx+LzlUVH7yErgroIo+P11v9
-	 LP8cPpZBrN1+fcphatL2PpF7s8pSsl8PMQveBJqOfHIP7AJJaiXkR04oMK6v1IZemB
-	 Fla9dRfgznWKw==
-Content-Type: multipart/mixed; boundary="===============4372272007352423530=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AMt8z6b4"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-493a54b80a5so38358555e9.2
+        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 07:48:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782830916; x=1783435716; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=m03AIVt/lARsmyZNqaerMYeWdNxHnC4KuUXFWS8CSvU=;
+        b=AMt8z6b4VBsSDvxJzJSry6DANpmVvMjvWG0UFsaWG2W65aGWs7dGAMXOPb2iu/kVzG
+         6Pw7vbngT+54s63gaw23ovptmlxvhX6PhdicVf38O1B3YYwBJ/ZDbNydQzvHm+WMlpxj
+         0wLh7Ct3MEJBMMaRkjDRiNW5+G0n7uQUkk5EjlU3uv36sX7+3nKNWoN7WOkpsPBxmATF
+         iwl2ewUise/Pdtg3Eakv9jCzqP5syCOGTj6XNaObvJvhPSVKW5SUjVHO8HUc/Klp6TCq
+         QEx7Q/BrQEBAWV7WOZ/fg/dRekMA0U8eBJCErdCbJNG0gUMoHQMZC2DkUSTWRLSyAYD2
+         Jxug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782830916; x=1783435716;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m03AIVt/lARsmyZNqaerMYeWdNxHnC4KuUXFWS8CSvU=;
+        b=fc5kHVYy8UwdSOuYTpudY6MOoeuWK4p5+AZNV9IFRcqBWXEc5TtBZx8Snc5tA3Gu37
+         J2wFRb3nqRm7NeL55A8VRBnm2LpwTlAtil8wMgWR1qTCLQoynTORdyw0hWWGYr7RRjfS
+         SxctFtSc8M17pNNMrSe05iugPUZvhwQ+hwTvVCFBapglYwGAabkd53n9600QBwdlQyVm
+         utbAdLWTFxfW52yTRtwNvJaKfSX3pA8pc3G43jHlsmsFinYzLKHCYIG+WxeYrNECWV0B
+         XEMQc54RDUx0POlg9/U0GVkK0+SyvVsMzpYVkUQBSQghBs/0yVjJWaEJ6U6EZg7Q02RK
+         0Khg==
+X-Forwarded-Encrypted: i=1; AFNElJ8sRhX7H7/5dKVN4kGBVmucGVjsePKHoTUNCokoP2xq3SaMMogt5NO45xtc5YdgnwKufzQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWj+sisynJdokDWbCdxmPAcl+9jiIj759F9hASUAnL31JlsPd5
+	HiZYJdmrGOZPOpPJAZCBe50qcuQmvQkDIHDtyxw/81B0rvEKvXNqfvcD
+X-Gm-Gg: AfdE7ckbGeKKAGVqEqXK8Qs19Y/kWcyWkfkLxgNbjtLUirkP2Sci3RMwccQhy/EnMrk
+	GLCYs+T3tuewYjAYGA8VEG+wDo6GJ19V7gj/GN9C9N9ER2YgMiAMKsKvbT+yHiMO1M8PRi5Yux2
+	VYhO8crTmgdRhWpFXQZwt5q7Xb8pO+bBbvaY3qG9hCB9/TRfwQkn93cnXfidZjgOdFIN+ViTd6u
+	x5qYy0YbjhZaWPbQxVmTb2LN0xHOwAA4LFjtQ3S611oMzmvuxgrM/Dg1TAz8KTL5mdxXXo8PPAx
+	MQScYIuLETELl/yKK0YVyfrY9EnDOtDFglKVCO+Bu5ZqkgQAwf3o806QucS10F3EhZl4lKJjAIH
+	4tcIHUbEfWlCLjwTNIdAjJVU4sHGl+WbxUmC+algKAPqrdH8vyKGJhWScTOw2ltds1fylULKQU3
+	pzNWosX7WqFBBoonNYP5vac5Yo
+X-Received: by 2002:a05:600c:811a:b0:490:33b3:4be0 with SMTP id 5b1f17b1804b1-493b82aedf7mr51812715e9.20.1782830915394;
+        Tue, 30 Jun 2026 07:48:35 -0700 (PDT)
+Received: from krava (37-188-177-177.red.o2.cz. [37.188.177.177])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493be4dd77bsm188855e9.10.2026.06.30.07.48.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2026 07:48:34 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 30 Jun 2026 16:48:30 +0200
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 05/13] uprobes/x86: Move optimized uprobe from nop5 to
+ nop10
+Message-ID: <akPXPhXIf6Vz76Xc@krava>
+References: <20260526205840.173790-1-jolsa@kernel.org>
+ <20260526205840.173790-6-jolsa@kernel.org>
+ <aj5JuH6AtjDtWIVU@redhat.com>
+ <akJNZN9gvZ30zKUf@krava>
+ <akKf511eknMCE0AB@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <da582eb50a1b974b40f4f4c22b0ff138e490d84e0c3ff06a6f13428f62608ded@mail.kernel.org>
-In-Reply-To: <tencent_5E4F8F8DADA5DE0DAD924ADD835DD7991707@qq.com>
-References: <tencent_5E4F8F8DADA5DE0DAD924ADD835DD7991707@qq.com>
-Subject: Re: [PATCH v4] bpf: Fix smp_processor_id() call trace for preemptible kernels
-From: bot+bpf-ci@kernel.org
-To: eadavis@qq.com,sashiko-bot@kernel.org
-Cc: eadavis@qq.com,jiayuan.chen@linux.dev,sashiko-reviews@lists.linux.dev,andrii@kernel.org,ast@kernel.org,bpf@vger.kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,jolsa@kernel.org,linux-kernel@vger.kernel.org,martin.lau@linux.dev,memxor@gmail.com,netdev@vger.kernel.org,song@kernel.org,syzkaller-bugs@googlegroups.com,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 30 Jun 2026 14:46:15 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <akKf511eknMCE0AB@redhat.com>
 
---===============4372272007352423530==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Mon, Jun 29, 2026 at 06:40:07PM +0200, Oleg Nesterov wrote:
+> On 06/29, Jiri Olsa wrote:
+> >
+> > --- a/arch/x86/kernel/uprobes.c
+> > +++ b/arch/x86/kernel/uprobes.c
+> > @@ -265,6 +265,10 @@ static bool is_prefix_bad(struct insn *insn)
+> >
+> >  		attr = inat_get_opcode_attribute(p);
+> >  		switch (attr) {
+> > +		case INAT_MAKE_PREFIX(INAT_PFX_CS):
+> > +			if (insn->x86_64)
+> > +				break;
+> > +			fallthrough;
+> >  		case INAT_MAKE_PREFIX(INAT_PFX_ES):
+> >  		case INAT_MAKE_PREFIX(INAT_PFX_DS):
+> >  		case INAT_MAKE_PREFIX(INAT_PFX_SS):
+> >
+> > or we could just skip it for nop10.. maybe that's better
+> 
+> Well, if you ask me I'd agree with the "maybe that's better" plan ;)
+> I mean... I don't think that INAT_PFX_CS should be "special" in is_prefix_bad.
+> 
+> But, whatever you do - I agree, feel free to keep my r-b.
 
-> bpf: Fix smp_processor_id() call trace for preemptible kernels
->
-> bpf_mem_cache_free_rcu() maybe called in preemptible context, this
-> will trigger the below warning message:
->
-> BUG: using smp_processor_id() in preemptible [00000000] code: syz.0.17/5820
-> caller is bpf_mem_cache_free_rcu+0x48/0xc0 kernel/bpf/memalloc.c:954
-> Call Trace:
->  check_preemption_disabled+0xd3/0xe0 lib/smp_processor_id.c:47
->  bpf_mem_cache_free_rcu+0x48/0xc0 kernel/bpf/memalloc.c:954
->  rhtab_delete_elem+0x185a/0x1b30 kernel/bpf/hashtab.c:2969
->  __rhtab_map_lookup_and_delete_batch+0x935/0xcb0 kernel/bpf/hashtab.c:3349
->  bpf_map_do_batch+0x445/0x630 kernel/bpf/syscall.c:-1
->  __sys_bpf+0x906/0xd90 kernel/bpf/syscall.c:-1
->
-> this_cpu_ptr() access needs to be guarded against migration.
+I ended up with the bigger change below, wdyt?
 
-The commit message says "guarded against migration" but the fix actually
-disables preemption using get_cpu()/put_cpu(). Is this description accurate?
+jirka
 
-get_cpu() does preempt_disable() + __smp_processor_id(), not just
-migrate_disable(). The later sentence "disabling preemption rather than
-prohibiting migration" correctly describes the fix, but this earlier line
-understates the requirement.
-
-> Wrapping this batch operation in bpf_disable_instrumentation() risk
-> blinding BPF tracing globally on the CPU if preemption occurs.
->
-> bpf_disable_instrumentation() increments the per-CPU bpf_prog_active counter.
-> Because migrate_disable() and rcu_read_lock() do not disable preemption under
-> CONFIG_PREEMPT_RCU, the task can be preempted during this potentially long
-> loop.
->
-> If preempted, bpf_prog_active would remain elevated on that CPU, which could
-> cause subsequent tasks scheduled on the same CPU to silently drop BPF tracing
-> events (kprobes, tracepoints, perf).
-
-The reasoning about bpf_disable_instrumentation() is sound, but could the
-commit message clarify that rhtab_delete_elem() already calls
-bpf_disable_instrumentation() internally?
-
-Looking at rhtab_delete_elem():
-
-kernel/bpf/hashtab.c:rhtab_delete_elem() {
-    ...
-    bpf_disable_instrumentation();
-    ret = rhashtable_remove_fast(&rhtab->table, &elem->htab_node,
-                                  rhtab->rhtable_params);
-    bpf_enable_instrumentation();
-    ...
-}
-
-This means the same "blinding BPF tracing" window already exists in the
-per-element path. The argument is against a longer-held instrumentation
-disable across the entire loop, not a categorical concern.
-
-> Therefore, we fix this by disabling preemption rather than prohibiting
-> migration.
->
-> Fixes: 5af6807bdb10 ("bpf: Introduce bpf_mem_free_rcu() similar to kfree_rcu().")
-
-Should the Fixes tag point to a different commit? The bug occurs when
-__rhtab_map_lookup_and_delete_batch() calls rhtab_delete_elem() which calls
-bpf_mem_cache_free_rcu() in preemptible context.
-
-Commit 5af6807bdb10 introduced bpf_mem_free_rcu() in 2023 but did not modify
-kernel/bpf/hashtab.c or introduce the rhtab code. The call chain was
-introduced by:
-
-  Fixes: 6905f8601298 ("bpf: Allow special fields in resizable hashtab")
-
-which added the rhtab implementation including __rhtab_map_lookup_and_delete_batch()
-and the call to bpf_mem_cache_free_rcu() in rhtab_delete_elem().
-
-> Reported-by: syzbot+fd7e415d891073b83e1f@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=fd7e415d891073b83e1f
-> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
-
-[ ... ]
-
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -3345,8 +3345,10 @@
->  	}
->
->  	if (do_delete) {
-> +		get_cpu();
->  		for (i = 0; i < total; i++)
->  			rhtab_delete_elem(rhtab, del_elems[i], NULL, 0);
-> +		put_cpu();
->  	}
->
->  	rcu_read_unlock();
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28451219226
---===============4372272007352423530==--
+diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+index 92626fce06a9..521a120a0c78 100644
+--- a/arch/x86/kernel/uprobes.c
++++ b/arch/x86/kernel/uprobes.c
+@@ -266,6 +266,7 @@ static bool is_prefix_bad(struct insn *insn)
+ 		attr = inat_get_opcode_attribute(p);
+ 		switch (attr) {
+ 		case INAT_MAKE_PREFIX(INAT_PFX_ES):
++		case INAT_MAKE_PREFIX(INAT_PFX_CS):
+ 		case INAT_MAKE_PREFIX(INAT_PFX_DS):
+ 		case INAT_MAKE_PREFIX(INAT_PFX_SS):
+ 		case INAT_MAKE_PREFIX(INAT_PFX_LOCK):
+@@ -275,15 +276,9 @@ static bool is_prefix_bad(struct insn *insn)
+ 	return false;
+ }
+ 
+-static int uprobe_init_insn(struct arch_uprobe *auprobe, struct insn *insn, bool x86_64)
++static int uprobe_init_insn(struct arch_uprobe *auprobe, struct insn *insn)
+ {
+-	enum insn_mode m = x86_64 ? INSN_MODE_64 : INSN_MODE_32;
+ 	u32 volatile *good_insns;
+-	int ret;
+-
+-	ret = insn_decode(insn, auprobe->insn, sizeof(auprobe->insn), m);
+-	if (ret < 0)
+-		return -ENOEXEC;
+ 
+ 	if (is_prefix_bad(insn))
+ 		return -ENOTSUPP;
+@@ -292,7 +287,7 @@ static int uprobe_init_insn(struct arch_uprobe *auprobe, struct insn *insn, bool
+ 	if (insn_masking_exception(insn))
+ 		return -ENOTSUPP;
+ 
+-	if (x86_64)
++	if (insn->x86_64)
+ 		good_insns = good_insns_64;
+ 	else
+ 		good_insns = good_insns_32;
+@@ -1620,16 +1615,26 @@ static int push_setup_xol_ops(struct arch_uprobe *auprobe, struct insn *insn)
+  */
+ int arch_uprobe_analyze_insn(struct arch_uprobe *auprobe, struct mm_struct *mm, unsigned long addr)
+ {
++	enum insn_mode m = is_64bit_mm(mm) ? INSN_MODE_64 : INSN_MODE_32;
+ 	u8 fix_ip_or_call = UPROBE_FIX_IP;
+ 	struct insn insn;
+ 	int ret;
+ 
+-	ret = uprobe_init_insn(auprobe, &insn, is_64bit_mm(mm));
+-	if (ret)
+-		return ret;
++	ret = insn_decode(&insn, auprobe->insn, sizeof(auprobe->insn), m);
++	if (ret < 0)
++		return -ENOEXEC;
+ 
+-	if (can_optimize(&insn, addr))
++	/*
++	 * No need to check instruction in uprobe_init_insn in case we
++	 * are on top of optimizable nop10.
++	 */
++	if (can_optimize(&insn, addr)) {
+ 		set_bit(ARCH_UPROBE_FLAG_CAN_OPTIMIZE, &auprobe->flags);
++	} else {
++		ret = uprobe_init_insn(auprobe, &insn);
++		if (ret)
++			return ret;
++	}
+ 
+ 	ret = branch_setup_xol_ops(auprobe, &insn);
+ 	if (ret != -ENOSYS)
