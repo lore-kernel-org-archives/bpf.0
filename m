@@ -1,102 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4503B47F2C3;
-	Wed,  1 Jul 2026 11:57:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782907049; cv=none; b=nGegrL1HOVWpfoloeDaqzVaFnZou5dRfnFFuodBQCv8cW/tKZzDYU/TkYUBUOrqA5jLFf2/mfhNnUSXdj697PMUL00lGqNci48uBQ88yySIJtISzUrONYIrgdUqt7Ig/K633JW21FQ/Ude0pPTCmU0nUyqqSh7+9R5VFDgGE4gk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782907049; c=relaxed/simple;
-	bh=ZUU03A8w/B6xrDBbWiu8jFWT8odRw2O+gPvzJy/toPc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=FdKcLbGEIUXJ3pAtiufl5U/EZOsgFxrdsNl/BnuJ42Z1bToO5ApTBbQC0euGU8fwgPgH73opZj2ce3IkpIqgv31vkvHIJsuPDAguhFhUGilMj+M8ophOyMgfVVCtNYESHeRLfGm1bHPAUS0G/mxD4asmgDLTDXQWnOZexI91rFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nji7s0qv; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDCF1480DED
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 11:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782907070; cv=pass; b=k814QNY9dPgsdd0LQC2mTA84wzNEg0+7e3sf0S1wlrUxbQspl7jCiR76WSwdIG3CelewL/BWTo6DWBxwxP1IzHC8x126iBzhs+7HWg8Ocryq3PROfQYEVQ0ag0Od3vHwNbuAgR9Je9js4h3reFsPZ643bO2e6xO1X6MUK39nfC4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782907070; c=relaxed/simple;
+	bh=k/m7mOwOe2VK+7j1exKhxSnw3ozmGI8iEWqvbTFE6eI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uMJWnxl61Sz+aTo9RBHWNA4cVkTJQNoukhMyQbeSzWnfqAOhPhkIJGqp/Kwe7rrd/Ab3+GahxFzKqQFB/7ENkVPIo8JPdambul0jNvvn/M4DYcpDxd7CPbxAPuAshlv86nHzPIEYOQlqkNifuRCpkQDuIPirFs+nNkp3HoiMGx0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=beayJkSQ; arc=pass smtp.client-ip=209.85.167.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nji7s0qv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC9371F000E9;
-	Wed,  1 Jul 2026 11:57:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782907047;
-	bh=rhYXZRLA1X9ujZhf753ZxH8w0AlHmBTOEKHArhSHUxs=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Nji7s0qv1vbRhTj+m7RDJN39fVQFcuRNmUHb56NhNqBkTwOpz4/SMnKa17/5b5gDm
-	 63CybCXVtyWyNuUs13SWTFVLJqFG/E2wtJNZP2WgQm8BUM2Gu05hkgQQB7PRug60b/
-	 QsYMToJxDqJo2qWSpSyg1jWOAk2OX6IxUP9EVlmg8MDTGVgpS9KwOakNNokhjlbQYY
-	 I43N7QP7cD0QG4DPSBv7RDj+mP+F++Hgpao6B9TZgxoqCBgQ0ZoGMnDSLtMntnqecx
-	 FYapASxnvsArpEfVbUy4cPlTtuEBQvem6j7s2OQQuUOgMNSOMWHR/wtjXt8TZfQ/cE
-	 zI5oNJhPprRqw==
-Content-Type: multipart/mixed; boundary="===============2339572275471711898=="
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="beayJkSQ"
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-4955cd5da3dso220896b6e.2
+        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 04:57:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782907065; cv=none;
+        d=google.com; s=arc-20260327;
+        b=MUMUs5WfYmx8iGuamhu0UarsbmIDjOi9YI7w97eVKjW10Ob2f/R9W1B21HAGyoK+yn
+         RXQmpONDFPzx6CUJrNqoNOd7cmfnpDo0zDDHpcmCYk/0M+D7fzjklNpf0wwln4ogVZni
+         4HiA4d4UdBcb707DZtlIJKX+HySD8O+ZHpTdIjBxrLVxsBLrudmQbmfyaDYaQKlWkfZW
+         /cQsqL2AqXu1q1X2AO8z1BAOp39ghCwAvT+sRZWArNwwGt71nhhkywyiLOgU5NfCVd0u
+         cqAaK5Fn9dYNLeUjxbKK5Vc8Cwf7j10Y+9hATxMPmPT+8igvfhvjNE/H7UoT8DbSblMX
+         N+uQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=lqKxpCifHTwVLxyMY/FMijSWYZ0kJMALXZou2Lu6auM=;
+        fh=TdfAiknAoHYJDv9dwgL26uTECxAWnaVfFFEM+0TUTpA=;
+        b=GFt6Zk9fIhsHb+8qpOrKa8uBGpj7ogNXQSIeNkyTDPVTFNuaGDq4wgLhI66xpbhBma
+         lP8W/q7erKlftc4rwxZ9CZT2tzO8wvosgxBgiDmegVShf0rX3jXtjo0COpjToRJXAEGI
+         DWAWPBQUsRJuYTf1j6X58jfuha3z6uCBc24NORjFEvqllqCu43+3DXoJ+IslrV0A97Zi
+         3ZAsrnA+f/Qe/JuXXeSBQJZVj9xbmclIIJ7WWnsWKoYd0M15YGr2oL0dt4TXevt9ri//
+         ch+6pI+tyzA55gstuC0k/MAM7xgsjzvP2+PsMMjxL1aZG5Bqs5dV3cJU/dUK2EqyfK3u
+         BrHg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1782907065; x=1783511865; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lqKxpCifHTwVLxyMY/FMijSWYZ0kJMALXZou2Lu6auM=;
+        b=beayJkSQr05vWYthJphsua2qi+wI2deN3ee4s+RMMCcgG36dU/SEXscL3RrMizBEa3
+         eOAxxSCX2hqgrkeKXxMxF7dAXzzyw67pfUz/T15fHCiNkUaPTnlR/pZynfzeNlGeDDKq
+         buWXeDmcWf/HUMynqzaP/5i1vsu9w/Yj0BGAeuvAZ4gZ1WMo11SqajiqzMHOIlAJsTtw
+         FOzLTQj7VUgrAQdAIS5uuRU2zq7AGqH3shd3tSFeo31+Uvd59dItC1E/EROQsNmp0rAT
+         GrjUFCOZfpGFgvYMRBTNx+zSAIk5+nIHn0pTElTWQqb8uHmUnEi87FV+p3IjP54ID4OV
+         HxhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782907065; x=1783511865;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lqKxpCifHTwVLxyMY/FMijSWYZ0kJMALXZou2Lu6auM=;
+        b=AFT7IypUDcwDvimi+cxEi5AC1wCbMeUwgszAb21e93ypGTgOkmOmcmpDRDoH418ezL
+         4A74634BDThmPWhSJYotgknHtbCuNZQH/qKjjUBMJIBGZUwhyPtmxRGFdIHb5byZIjEx
+         zObqTmniO2T2a7ha1iiit/jxEhrzqKEdzZy7W5RSncpv01kcfwWJwML0Gt7wy5dyRx6S
+         R0vMQuh990Azw87FwCY4XUiz5xCL+LnczznFnw779c8PWXmqmOX2Fcdhm6K2DbNG8k1n
+         WD1BTkiH+AJ6fS/IC966USnCIBQTu59I804RoTwrYLksDsBxj03yYOMYuC6qoAlcN6Xl
+         sD4g==
+X-Forwarded-Encrypted: i=1; AFNElJ+CPGYLeT4r0mxcr6FbZ1awlynnylQEmteKP5cBuwJjV8QBL58bl5276ZAKcWocAY9loh0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxI7k/a+F9SPIkTdybixsKjkaSYy6yfKc13TuIOPxU2qCMm+LX
+	196wxRyBC7brgHhHs3qeFmVJUc4oRBIEsEviBay7lsegg+bQiKTNIWChsXal5E2sjkyWDs/O/gi
+	PKuIearqZ48kupXe7NggkH2pV+5oiGKu8doQ+IwHSoA==
+X-Gm-Gg: AfdE7cnQTYYsIc3tIHRGNrcqja0IrNosInaeomO9dNrdd78ieegYFyq7uQ7zsnhV20n
+	nSxXjpC4oMUQFHRM0oGtAWd4J8mvea5JK9MNNmDDJd5OGCubJjXb+rCgLmtosXYX58kB1Z56+HL
+	5Sh9eK2M77WhSW0DMprI4XIyMTvN78pJgBvZnBnRtSjIZzWgEloW3DkQ4Dq1u4vDKvd40KLDp9E
+	2LVMyde75UzVkI6Js9G4pxs0Srouzl66c2Hn4hrgTAu7PtwQaUSb5kHbo39425sHZzK9lYAzEQ=
+X-Received: by 2002:a05:6808:1389:b0:492:5bf0:d29f with SMTP id
+ 5614622812f47-4960f0d2101mr838181b6e.37.1782907065542; Wed, 01 Jul 2026
+ 04:57:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f8a1b24c80382f961103107220cab7b4de971c263d62c643b24d69c399a47abb@mail.kernel.org>
-In-Reply-To: <20260701111337.53943-6-jolsa@kernel.org>
-References: <20260701111337.53943-6-jolsa@kernel.org>
-Subject: Re: [PATCHv5 05/13] uprobes/x86: Move optimized uprobe from nop5 to nop10
-From: bot+bpf-ci@kernel.org
-To: jolsa@kernel.org,oleg@redhat.com,peterz@infradead.org,mingo@kernel.org,mhiramat@kernel.org,andrii@kernel.org
-Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  1 Jul 2026 11:57:27 +0000 (UTC)
+References: <cover.1782877663.git.cuiyunhui@bytedance.com> <7988df83f6341ea045ebd7294af2e8907dbd5ee7.1782877663.git.cuiyunhui@bytedance.com>
+ <ea525a80-1e6f-4304-a371-3ec17d91ee96@app.fastmail.com>
+In-Reply-To: <ea525a80-1e6f-4304-a371-3ec17d91ee96@app.fastmail.com>
+From: yunhui cui <cuiyunhui@bytedance.com>
+Date: Wed, 1 Jul 2026 19:57:33 +0800
+X-Gm-Features: AVVi8Ce8Hvhgv036NZvyTtBZ5NMmFq-2bEMlGWh7WwSjecXpQvRJF8LZ_SFRCM4
+Message-ID: <CAEEQ3wnDACZ08kk6ycpgXezgyS5zxi+P_vF_yBScK2sxU+UKaw@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH v5 1/3] riscv: io: avoid null-pointer
+ arithmetic in PIO helpers
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Dennis Zhou <dennis@kernel.org>, 
+	Tejun Heo <tj@kernel.org>, "Christoph Lameter (Ampere)" <cl@gentwo.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, pulehui@huawei.com, 
+	puranjay@kernel.org, Thomas Huth <thuth@redhat.com>, 
+	Andrew Jones <ajones@ventanamicro.com>, Ben Dooks <ben.dooks@codethink.co.uk>, 
+	=?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@ventanamicro.com>, 
+	Samuel Holland <samuel.holland@sifive.com>, Zong Li <zong.li@sifive.com>, 
+	"Conor.Dooley" <conor.dooley@microchip.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Deepak Gupta <debug@rivosinc.com>, seanwascoding@gmail.com, 
+	Andy Chiu <andybnac@gmail.com>, menglong8.dong@gmail.com, cyrilbur@tenstorrent.com, 
+	Vivian Wang <wangruikang@iscas.ac.cn>, Atish Patra <atishp@rivosinc.com>, 
+	Anup Patel <apatel@ventanamicro.com>, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, qingfang.deng@siflower.com.cn, 
+	Linux-Arch <linux-arch@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============2339572275471711898==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi Arnd,
 
-> Note as explained in [2] we need to use following nop10:
->        PF1   PF2   ESC   NOPL  MOD   SIB   DISP32
-> NOP10: 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 -- cs nopw 0x00000000(%rax,%rax,1)
+On Wed, Jul 1, 2026 at 2:25=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> which means we need to allow 0x2e prefix which maps to INAT_PFX_CS
-> attribute in is_prefix_bad function.
+> On Wed, Jul 1, 2026, at 06:20, Yunhui Cui wrote:
+> > @@ -56,6 +56,8 @@
+> >  #define __io_pbw()   RISCV_FENCE(iow, o)
+> >  #define __io_paw()   RISCV_FENCE(o, io)
+> >
+> > +#define PCI_IO_ADDR(addr)    ((void __iomem *)((unsigned long)PCI_IOBA=
+SE
+> > + (addr)))
+>
+> This does not seem to have any purpose, is this just left over
+> from the previous version?
+>
+> >
+> > +#ifdef CONFIG_HAS_IOPORT
+> >  __io_reads_ins(ins,  u8, b, __io_pbr(), __io_par(addr))
+> >  __io_reads_ins(ins, u16, w, __io_pbr(), __io_par(addr))
+> >  __io_reads_ins(ins, u32, l, __io_pbr(), __io_par(addr))
+> > -#define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, =
+count)
+> > -#define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, =
+count)
+> > -#define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, =
+count)
+> > +#define insb(addr, buffer, count) __insb(PCI_IO_ADDR(addr), buffer, co=
+unt)
+> > +#define insw(addr, buffer, count) __insw(PCI_IO_ADDR(addr), buffer, co=
+unt)
+> > +#define insl(addr, buffer, count) __insl(PCI_IO_ADDR(addr), buffer, co=
+unt)
+> > +#endif
+>
+> As far as I can tell, just adding the #ifdef here should be sufficient.
 
-This isn't a bug, but could the changelog be updated to describe the
-approach actually taken? The patch bypasses uprobe_init_insn() (and
-therefore is_prefix_bad()) entirely when can_optimize() is true for the
-nop10. The is_prefix_bad() function itself remains unchanged and still
-returns true for the CS prefix.
+Okay.
 
-> Unoptimize path (int3_update_unoptimize):
 >
->   1) Initial optimized state:
->       48 8d 64 24 80 e8 d0 d1 d2 d3
->      Same as 3) above.
->
->   2) Trap new entries before restoring the NOP bytes:
->       [cc] 8d 64 24 80 e8 d0 d1 d2 d3
->
->      From offset 0 this traps. A thread that had already executed the
->      LEA can still reach the intact CALL at offset 5.
->
->   3) Restore bytes 1..4 of the original NOP while keeping byte 0 trapped
->      and byte 5 as CALL.
->       cc [2e 0f 1f 84] e8 d0 d1 d2 d3
->
->      From offset 0 this still traps. Offset 5 is still the CALL for any
->      thread that was already past the first LEA byte.
->
->   4) Publish the first byte of the original NOP:
->       [66] 2e 0f 1f 84 e8 d0 d1 d2 d3
->
->      From offset 0 this is the restored 10-byte NOP; the CALL opcode and
->      displacement are now only NOP operands.  Offset 5 still decodes as
->      CALL for a thread that was already there.
->
->      Tthere is only a single target uprobe-trampoline for the given nop10
->      instruction address, so the CALL instruction will not be changed across
->      unoptimization/optimization cycles.
+>       Arnd
 
-This isn't a bug, but there's a typo: "Tthere is only a single target"
-should be "There is only a single target".
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28514315910
---===============2339572275471711898==--
+Thanks,
+Yunhui
