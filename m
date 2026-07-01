@@ -1,83 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E582E762C;
-	Wed,  1 Jul 2026 00:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 514BFE573
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 00:07:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782864029; cv=none; b=EFkYvgDyaXxGwtiHQk/cl6Ebm7XW++xjfvVYFL3XlGgtpa5EQofYCpmZf6xbcIbwKcU0PMBP/k3hPomGazPSOEH4EHQ6yZK2l6alR2RHDxVuDoaXk0vBMwRJiWO97dJPuRgYJ4LLDhGVrH5JkS9RO0PlFWkH2TUk0wBh+9XXba0=
+	t=1782864464; cv=none; b=bcdKOEE/zELSAUO3MwojfGjn5t6B/OKPSjjUyzl1Eo6UNTywN/iuUTgctQ0CBbcoQ81GrOr8TGahW8WMECeXJMNFHT1iWJjwTEW7Ft7MRSHPEtxtHv/wnmEsqo0+l24db4dywOmiLx+tN/5H3mBq1D/M7BFjlAeKLw3ZTa7Xfxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782864029; c=relaxed/simple;
-	bh=k32ehnz4IuXU6wPQSqwRpQPB9rqHt1M/h5JJM/2w0CE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=SGqNFdISK0alMBIubeaVBeLaPjzHaeJeJZoqSfYBtJ2ktpVJKeq4Ooa2H1rDP3aBccM48uOt4wXF+Me8OSqRYYWBjloQuyRE9Pa0V8G/Zg+qMSbpIh4f9b+Cv1UYGvDIJUt3YIgN03RWDlhNxSw34f+EB0gwDukghLBt/UrnguI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ddur2im8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782864464; c=relaxed/simple;
+	bh=lC+k+6mNle6sj5AuGdZt4d9WTpneeUI+q286W11Koso=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IHi7Yu2+tOUFsMeA0gX8CneJHY3a7CKUm12Ed0b0xbHzt4nuq7EUmWNNJTUqaxkZmBVNTseMJae/mQvPopEaYtxUJCGH9NBJogrJJlI+jIgTDUft0HBAJsImCqxsRrryt7qfBwcf+7GMOJ7pdaS0TDbbYWdxjPjVICss+zAkxug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OGxc+NpG; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ddur2im8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14FF01F000E9;
-	Wed,  1 Jul 2026 00:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782864028;
-	bh=gRzYk816UJfDAJRIIcceXJ6zh52SBooRr0jxl3yODms=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=ddur2im8Fok2dWxq3wl1S7oT7NPHPtg/NYxVA1DmzbFBVpRad3N1yUSnh5YqHjNOL
-	 lhEUUP5kozRstYx5TyfaGQHeM2w7YWnG/lUelj9E2V9fG1W8agdcZsi+j6XSeGEysd
-	 LYJ69p6uLyduLjtjCb1KmDswym7/mOnrLfcjqSHCe+hZlcJ0nVfSZg4AvYeG350mUq
-	 LFy7TyyH8/1rG9mbEk8Q6kUSJrqyFY5jOru31CMBTR5hu4CksJy/tIRAMQJrd5WbJP
-	 BTdEs1VSrKyIREgKJ1YxHVPqQrMiFZuTU4nX9GRAPrv3YEMTMQchPGGTjc1rbBbs//
-	 mij2gOfnBqvRg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 198D4393A963;
-	Wed,  1 Jul 2026 00:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OGxc+NpG"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-37febcda057so24921a91.1
+        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 17:07:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782864461; x=1783469261; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=NRsFNTp0mbWr+vlnr7zhHF/IOCJEISt4xOaBSTIIlKc=;
+        b=OGxc+NpGOmU5VBQR4YX7pojFZaMLGpqNMFoHHLKnEJR+aBWkcOJodtXepu6Px17Fai
+         9zmaKf/MO3UruBNl+wrcOMTl+ng5o4RrsJBwhHZRiQ6yy+v3QrO+/JPFykYLnSyj0w0y
+         PZOqSs5yuCoD24xfI1bd93ASt0ZzsvyL7e8Nmu4r3BE0y0uruswAk0Af3QeECDcMuDjg
+         vCmrrCevNijsTNHS6+dTfGRNj2n6F1p+kDrg6Ejct6MtdSJGhUSbIqgO6XJLcll0z9tv
+         LJRNowaZEdavi+2NE7KpNG8ASh9Wt4wk21Ftn5SCfm1gb33UTW35VTATHngmZihmHyfL
+         8+2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782864461; x=1783469261;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NRsFNTp0mbWr+vlnr7zhHF/IOCJEISt4xOaBSTIIlKc=;
+        b=MJFdOeXgf8S/uF7G3Sj3SVwYRyIM/Tk9Z5T/Pdkk+SmgEaGbmfe8bbMJBDFyw6aWQ7
+         UNB0ajHg2Unjdp7rweifF/jx+NfEhO2ws9VckbxLF5kMy0zrugZvV8ivjZDWOpNUG/HQ
+         vabuGnvf7I7jlylL/yWvcPDoWUqMqHNTlir+e5GrLTumI8ALWoTx0v2CBKUaXddXiDBd
+         3ot5ztrlwgtYDtTW0Edm772UjjAbkQai2QBu9lbw2gMsDxY345neVroH4JPF9Qp4cukx
+         mhOw8n8LJSbUjLULsf4LHNciUQzP+Y+vnNDGzSTmNruKCpo+yzCUQWkdBnsoNBPF9ywU
+         rwQA==
+X-Forwarded-Encrypted: i=1; AHgh+RpqfZp/Zihfauz406ykHHa2G5XK8PdrJh5jmNsQGysWFOH9uOWi/gyGs6vIMbbefGXnxiM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAducGMLchRoWw1xA9n1DJKTzucAvnNJ/IzFy2Gat5llFM3+Nx
+	51rbozO/1YMrAve06ISR1TdlG+cdu9GkX55nHNSE9pebjFHeKuaP2XJl
+X-Gm-Gg: AfdE7cnE2AJOXH10YgXZDhzSmTb51oj5EEtjyLSZ4KHElz7gJXAJ0x5ymnxngjErZqT
+	3BMcXnqKZALQ3iqOUhP0EviQPneiu0YXovkPC9GLwd2LUjlNkbxVWzHqXplbT4vEoaV0oWFqpd0
+	Si6t7A3eyH0AtpohhTuwpDQg1ITrkvoYOzc605fhriQqYZ/NobiyHQ4JOSVZwhNsvFC8fkDWUFc
+	F8s0vujd/ql/CmBmp1jqsIbZkyr+q4jUAR1YeK+VzazbYyww5Lapc5rX0YYKPDB4NiGM/tS7AhM
+	dNNnKmHQtPLwvoieOHMsV4XNJpvxmaCsr0DvEAd4RDcdZWTXijSlDVNSQQlnfcjjyfdtmujoxrb
+	vyte9n9sz58F7a3LzNLAbmlmwP79Kv+r/q/SNYNg8nsjN0LbAwmtVC7v00J1S7u4JEbmEl8sD+2
+	OOFgRU2VFzWw==
+X-Received: by 2002:a17:90b:3944:b0:37f:7210:ccd7 with SMTP id 98e67ed59e1d1-3805272a521mr4755526a91.20.1782864461559;
+        Tue, 30 Jun 2026 17:07:41 -0700 (PDT)
+Received: from john-p8 ([98.97.43.89])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38095ea2e2dsm737009a91.16.2026.06.30.17.07.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2026 17:07:40 -0700 (PDT)
+Date: Tue, 30 Jun 2026 17:07:38 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Sechang Lim <rhkrqnwk98@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Jiayuan Chen <jiayuan.chen@linux.dev>, Varun R Mallya <varunrmallya@gmail.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v4 1/2] bpf, sockmap: disallow update and delete
+ from tc, xdp, socket_filter and flow_dissector
+Message-ID: <akRZ_e7DJh2aP-2i@john-p8>
+References: <20260630145410.3648099-1-rhkrqnwk98@gmail.com>
+ <20260630145410.3648099-2-rhkrqnwk98@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 net-next] selftests/xsk: Preserve UMEM view in
- BIDIRECTIONAL test
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178286401163.341356.4009907939641685478.git-patchwork-notify@kernel.org>
-Date: Wed, 01 Jul 2026 00:00:11 +0000
-References: <20260629191221.2700-1-maciej.fijalkowski@intel.com>
-In-Reply-To: <20260629191221.2700-1-maciej.fijalkowski@intel.com>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
- stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- tushar.vyavahare@intel.com, kerneljasonxing@gmail.com
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20260630145410.3648099-2-rhkrqnwk98@gmail.com>
 
-Hello:
+On Tue, Jun 30, 2026 at 02:54:05PM +0000, Sechang Lim wrote:
+>sock_map_update_common() and __sock_map_delete() hold stab->lock and call
+>sock_map_unref() -> sock_map_del_link(), which takes sk_callback_lock for
+>write. That gives the order stab->lock -> sk_callback_lock.
+>
+>The reverse order comes from the SK_SKB stream parser.
+>sk_psock_strp_data_ready() holds sk_callback_lock for read, and after the
+>verdict tcp_bpf_strp_read_sock() acks the consumed data inline via
+>__tcp_cleanup_rbuf(). The ACK goes out egress, where a sched_cls program
+>deletes from the sockmap and takes stab->lock:
+>
+>  WARNING: possible circular locking dependency detected
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+[...]
 
-On Mon, 29 Jun 2026 21:12:21 +0200 you wrote:
-> The UMEM state refactor made __send_pkts() use xsk->umem for Tx
-> address generation. At the same time, the shared-UMEM Tx setup copies the
-> Rx UMEM state into a Tx-local state object and resets base_addr and
-> next_buffer before configuring the Tx socket.
-> 
-> Passing that Tx-local object to xsk_configure() makes xsk->umem point to
-> the zero-based Tx allocator state. This breaks the BIDIRECTIONAL test once
-> the roles are switched: the same socket is then used for Rx validation, but
-> received descriptors from the other logical UMEM half are checked against
-> base_addr == 0. With the new UMEM bounds check, a valid address such as
-> base_addr + XDP_PACKET_HEADROOM is rejected as being outside the UMEM
-> window.
-> 
-> [...]
+>A tc, xdp, socket_filter or flow_dissector program has no reason to
+>update or delete a sockmap, and redirect does not go through here. Drop
+>them from may_update_sockmap() so the verifier rejects it. It also
+>closes the matching sockhash inversion.
+>
+>Suggested-by: John Fastabend <john.fastabend@gmail.com>
+>Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+>---
 
-Here is the summary with links:
-  - [v3,net-next] selftests/xsk: Preserve UMEM view in BIDIRECTIONAL test
-    https://git.kernel.org/netdev/net-next/c/333289d1690d
+Great lets get this merged and we will separately fix the sockops
+issue reported by the bots.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
