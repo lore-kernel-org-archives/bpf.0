@@ -1,109 +1,125 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AED048032F
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 11:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484E347AF68
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 11:32:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782905485; cv=none; b=p3lCOZ6NDJNe96NoX5qqECdX2xSbTFIbLreItKyLZn1LkwjMRxl/ynnmvZRi4AokyqlgFyXFMCLF+JJjh/HacQN7R9MOB9MaKccnsHQzpTV4jIURHXlxaltoz7Qt9ICpM2EySiRsH0Jr1SlX1lFdU3HxSoIPcPkhTGzE6fyETqs=
+	t=1782905552; cv=none; b=SVOhMyMUDVIvz9SuouYNnEV9CU5CPFsICt4MVhJHAQDzM9KvybWdUbCKxkK4hFhx2HDm7uSnC29wuNdnN0R0ahyWBRZ5G8U88450zT36H5TWTsaaORbMMEW0pLBuMK658/75ztx1GVY9Q4UASl6GcJTxFbszSFO0VPTI+MSlAnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782905485; c=relaxed/simple;
-	bh=Dve0VmCjU9mPpD1Ya9SMCVr9374pIBOKQAR5OsMMYds=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mr29n+5HC1O51ps0Hl6ucncyvjq89HffyYYl3UJvBt9YVcQzRF9gwnt4KnJkFZqGYzvrDCWwkb6LBEsVC1BKtP1yD70mwdS4LB7FFrSN6EgwhISg/b0LEaYlE3QZQjlGVP6KbxCIXcX86ijGaC1vsRyzh+3O/P1/xRbMuEFYWMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FHZ/VeEJ; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782905552; c=relaxed/simple;
+	bh=PD1txDY2R4+3SIG/X6X2ViL7065a3RkSWezwzKt5uus=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=r0ppozpEELzfX4rPeAuJDLRZefPbleY+8u7caBPTyGK08+adQyhuPjYrBK+zKkfRPRCTCwimToJdUck6pBKqBAQqhRQ8ZN+6GJMQ5blO8l1VhyMuO0fVYZWtdiuRGKvO51DUfreGmEaev13mlrfbQNQo30ic+iout82UetBZmm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YHB4dgNF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FHZ/VeEJ"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4921eed3fa2so3537905e9.0
-        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 04:31:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782905483; x=1783510283; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fj8eAuKcVgK2A4fvhFbSFS2GpOpIsHgk7CadgUGfyUI=;
-        b=FHZ/VeEJZg26HcWMicdHKh2m0oH6a3YI1dguXjeVUeR0iFZIP9P/ATLXIQbT3jXh+4
-         ncoKOMdYmJ4BBbyrwvVQbEuJ7PlfHLdm8BDzcSQyCk03QU6RKTPIvDqDwEQoFPOjFkjx
-         6p4kPbZ87P71AHWYt3m56temE8IoRh08wNEsBxTyYzudGh57qRkArwzIhic2wdNjZk0v
-         6m6OmSwhFBFYP+IfCWWCXb+awr1DRkXTbfwXSRfkZvsY1P7/Y3gZn6h6qyawUBbdgEfv
-         HfI9mwfA9wzQgLN8fNPH0YFUGwfxG4B5SiZdh7OcpCJ7ZOWWvyzlrMz3wBJSTnqb9lv+
-         n7Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782905483; x=1783510283;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fj8eAuKcVgK2A4fvhFbSFS2GpOpIsHgk7CadgUGfyUI=;
-        b=dTovRC2Ep7H6g2iuD3R/rnGOsgE/rkxu/+PZHJveV8AF/kXfQHhSMZsBA1h9HK2zCl
-         09BYgzdlNcHWm1cZV2ogLYG/R2qt2iJhhDD3Y7ekR2sQNo6gd+JTwKU0bMWUYgnw1V6F
-         VjYnXWvPxw/X6nn0kvUbvF9VK4OHuROJwdpPbPdg2e5m3y8fpPl/DgAPU0EeW6MrMyjw
-         aBc4dNwhvTYbXTnr00n/DINW7JjTaeLQv5ED2zGw+29EHQuGgkemy+UgX3NtnuAAqWIE
-         Y0yqLwesJiOZL/ZNxMH7qfIkWrAfw6WTojQae+VsPqMQj3ut9UCpIqakpgwyloPLNtxu
-         +FRA==
-X-Gm-Message-State: AOJu0YyjDR+ZBC2lTocGgfQ2KNrXuE6jpQ3C6hIWnRVg0IUa4LzaVpBp
-	Yxz+Rvz6cVUGvR7xKqQ0WYx7kB5stF1v1ChcMy66X8IpgqfaGyS+li+O
-X-Gm-Gg: AfdE7clTF30SKUvu4zfRpphJySm5WRJRPy4DVMuUGZgX9pLtwGmrzfgTWZYBC4SUuES
-	B3zk7ENAzMu3rJWzuIPTEC5XnqBI7cTKwadKDwYyf8kdafyO/tOC4RahrSrmwp7nBoBDwIXlnLz
-	XG62N5hJdReWQ4W4R5MC954bOvL47wUv7GYgQsNEwCYLA4A3GORCNoNM4pcKjCVAIzdv7K0lgbZ
-	jkv2eTzVFOAVpQuWdY68VAD/0mvV8T69Rv9UT/JaXMKk44LySoqCEcIdeXqOwgZcP4wX+p2d8CR
-	MzNUDReCcxPpX9VDQCT1zR89yn/KpEoIg/JB9vvce/ZK6dTwOL6ENRnvzr5igxszhKZ4xKu0zgQ
-	IevRtIxAH2bWJUwWKTGE7DclS98fKYvdMpEMh46tKmgQXBwX6Wp3mHkQba1G8isR6mZhPGxoHe9
-	5OXbYucEshwOsCwisGAiTAQNsq
-X-Received: by 2002:a05:600d:6447:20b0:493:c194:4e7a with SMTP id 5b1f17b1804b1-493c2b382e8mr16151225e9.3.1782905482666;
-        Wed, 01 Jul 2026 04:31:22 -0700 (PDT)
-Received: from krava (37-188-177-177.red.o2.cz. [37.188.177.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-475671d0403sm17059649f8f.29.2026.07.01.04.31.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jul 2026 04:31:22 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 1 Jul 2026 13:31:18 +0200
-To: sashiko-reviews@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YHB4dgNF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F258E1F000E9;
+	Wed,  1 Jul 2026 11:32:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782905551;
+	bh=Co+EklIqaQueAD+HJu8eP5eQ1uRjkRkuUgqZn4FEz8A=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=YHB4dgNFGbmQuH2cXVnuEJIN4f3K8XzWK8gQ9+l6qOeyJ1R4Ixjsk4gEFwsL6A2nI
+	 CRDw+A6tZKbFye2EB1MeFiszYS94njvs16yFU3q1gSrf9M2yhW4e649MKVW8TcAOVL
+	 sfGQerjEdptJ4yjlDRqZARbvWNcD4oEBURSEmZlT5cdm0Ep56Ug1iAbVkyxOg3TPXh
+	 Nq6FLanPosSmHicFCgZWkO/M1pSADKX4eR4CRXlUbsEMe8Z4HCCozlWwCpq5xMJDVE
+	 t/fYTwA09A/c38gXTQBjbUwv+MFbSQWuoVkCJiv6n2/lx+ImnfPYjN/qtvWO6wZZQ9
+	 ZuyhsSFyEWprg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCHv5 01/13] uprobes/x86: Use proper mm_struct in
+ __in_uprobe_trampoline
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiri Olsa" <jolsa@kernel.org>
 Cc: bpf@vger.kernel.org
-Subject: Re: [PATCHv4 bpf-next 2/3] selftests/bpf: Add tracing_multi link
- info tests
-Message-ID: <akT6hnLyJpFd-QLV@krava>
-References: <20260629212208.895962-1-jolsa@kernel.org>
- <20260629212208.895962-3-jolsa@kernel.org>
- <20260629213407.11FB61F000E9@smtp.kernel.org>
+In-Reply-To: <20260701111337.53943-2-jolsa@kernel.org>
+References: <20260701111337.53943-1-jolsa@kernel.org>
+ <20260701111337.53943-2-jolsa@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 01 Jul 2026 11:32:30 +0000
+Message-Id: <20260701113230.F258E1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260629213407.11FB61F000E9@smtp.kernel.org>
 
-On Mon, Jun 29, 2026 at 09:34:06PM +0000, sashiko-bot@kernel.org wrote:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-SNIP
+Pre-existing issues:
+- [High] Missing vma_start_write() before modifying page tables under mmap_=
+write_lock() in uprobe modification paths.
+--
 
-> > +static void verify_tracing_multi_invalid_user_buffer(int fd, const struct tmulti_target *targets)
-> > +{
-> > +	__u32 ids[TRACING_MULTI_CNT] = {};
-> > +	struct bpf_link_info info;
-> > +	__u32 len = sizeof(info);
-> > +	int err, i;
-> [ ... ]
-> > +	/* Invalid addrs pointer -> EFAULT */
-> > +	memset(&info, 0, sizeof(info));
-> > +	info.tracing_multi.addrs = 0x1;
-> > +	info.tracing_multi.count = TRACING_MULTI_CNT;
-> > +	err = bpf_link_get_info_by_fd(fd, &info, &len);
-> > +	ASSERT_EQ(err, -EFAULT, "tracing_multi.bad_addrs");
-> 
-> [Severity: Medium]
-> Will this test actually return -EFAULT?
-> 
-> By zeroing out the info struct before these checks, the mandatory ids
-> pointer is left as NULL while count is non-zero. If the kernel validation
-> logic eagerly rejects the missing ids array with -EINVAL before reaching
-> the -EFAULT paths, won't this assertion fail?
+commit e98c98f0853de23f35b1d0253c941b8b823e5967
+Author: Jiri Olsa <jolsa@kernel.org>
 
-there's no such eager reject in bpf_tracing_multi_link_fill_link_info,
-the test passes
+uprobes/x86: Use proper mm_struct in __in_uprobe_trampoline
 
-jirka
+This commit updates the unregister path to pass the correct mm_struct to
+__in_uprobe_trampoline instead of relying on current->mm. It adds the
+mm_struct argument and updates related callers to provide the proper
+pointer in the tracer context.
+
+> diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+> index 7be8e361ca55b..c5bb040488b35 100644
+> --- a/arch/x86/kernel/uprobes.c
+> +++ b/arch/x86/kernel/uprobes.c
+
+[ ... ]
+
+[Severity: High]
+This isn't a bug introduced by this patch, but there is a pre-existing
+issue in the uprobes subsystem regarding the per-VMA locks.
+
+Does the uprobe registration and optimization path race with concurrent
+per-VMA lock readers?
+
+In arch_uprobe_optimize(), the code takes the mmap_write_lock but doesn't
+call vma_start_write() on the target VMA:
+
+arch/x86/kernel/uprobes.c:arch_uprobe_optimize() {
+        ...
+        mmap_write_lock(mm);
+        ...
+        if (__arch_uprobe_optimize(auprobe, mm, vaddr))
+        ...
+}
+
+A similar sequence happens in register_for_each_vma():
+
+kernel/events/uprobes.c:register_for_each_vma() {
+        ...
+        mmap_write_lock(mm);
+        if (check_stable_address_space(mm))
+                goto unlock;
+
+        vma =3D find_vma(mm, info->vaddr);
+        ...
+        err =3D install_breakpoint(uprobe, vma, info->vaddr);
+        ...
+}
+
+Both of these paths eventually call down to __uprobe_write(), which
+modifies the page tables directly:
+
+kernel/events/uprobes.c:__uprobe_write() {
+        ...
+        fw->pte =3D ptep_clear_flush(vma, vaddr, fw->ptep);
+        ...
+}
+
+Since mmap_write_lock() alone does not drain existing per-VMA read lock
+holders (its sequence counter only prevents new acquisitions), could this
+cause a race where concurrent paths executing under the per-VMA lock
+(like page faults or MADV_DONTNEED) read stale page table state while
+__uprobe_write() clears and flushes the PTEs?=20
+
+Should these paths call vma_start_write() to safely drain the per-VMA
+readers before making page table modifications?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260701111337.5394=
+3-2-jolsa@kernel.org?part=3D1
