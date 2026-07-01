@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14BC1C3BF7;
-	Wed,  1 Jul 2026 13:45:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A01325B09E;
+	Wed,  1 Jul 2026 13:46:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782913556; cv=none; b=lZLLA6+qdnmcGCEHx76N3Sotm3cexkThc+QMW0nbtlPVITcj3xf0jAwNTkqvwF/CNUwwys3qd9Oa7fMXadw2Knoc2YQWO4Spnh0iuciA5RKzLlrOV8Qarn+gJUPc6gpT1/H8mSiIt3MpYBKyYA2bhKwuaLdE6XRROSIAm+1/BVU=
+	t=1782913566; cv=none; b=WKf1GEe4FAC8Zwe34VOHw3XO3KWc1wTtM0rFcuv6gQQzBKS67dbMqT/QwZ5DByny+rKcXYDBiGCQ75g+WEHFa7RapMy4Q+O+Mz3w/RuLegZuOxhtG2fF0ts6EozT0DHxJ3ytrw6H5zGr1bsNyolK+vUG7F7Q4fxg9Nt3Q2IAxSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782913556; c=relaxed/simple;
-	bh=ubJQfmstF66KYxLq0hJxS4KCx4raPJgpI6uR2Cpx1/U=;
+	s=arc-20240116; t=1782913566; c=relaxed/simple;
+	bh=HLU8OIArXV3mbsdJlZe5UUck7Pp5tiyeL9y3YxVzorg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qCP9bqnOYMFZdL6c6OHU9TYt1YHwd5l40UDIAXs1mQF2Dr0Ed2cwI6sI3YFvjw6TagrPu4mFPyLGoU6xYPJvmo9elR3P4qxJrzT1tRUNKFFEKOj2aEPbw+8M7UIFaKZTGHRYhByo6s6aLxjHh+/Xc/cMl1CI5Y+n3cyRLUlcxCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mwc14w6r; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=CworTH6BQd3rCGzpA4kxfRb2BZoaA8ae7W6PmjC+mbWzbSnfvhw/3N/q9VAUQmwtS/DC57pwZNGpS5mHBdCQkuSeYGLXH9pdtiRe+Oz9HQD/9ZglFuiAEydSSYNzeyygyR98NyPUpi+0h4P36y2cNI/9G91RYaJpTiPA0Ub1K4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c3wKxvRp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mwc14w6r"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD711F000E9;
-	Wed,  1 Jul 2026 13:45:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c3wKxvRp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F1F21F000E9;
+	Wed,  1 Jul 2026 13:46:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782913555;
-	bh=Q3X5n8EACXLoYwth4VEh1SlqF1hV5LwxxfHvBlRQlv0=;
+	s=k20260515; t=1782913564;
+	bh=Qr809JcwYSpHxRXSCO3Q4RMwS8OcGyNKa91B91Dbwe8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Mwc14w6r5pqEImPcypaR7nwz4mtdph7e9gOfhC107R+/bbIs+hRmsMM52TRq5TRSN
-	 j5wRSGKSFpMvZR+vH8moMHSTeEE94bk6JaNVNmNauzJbyoBZiXma8xDZojSZlKvf/C
-	 V2U7yLPXMXkrbzXviAKBp3KDU+Z76txYt3KqdkpGr78KvwCZayM6t4o6wFzZ+TF11f
-	 XmPe3tlNVdoGaf+DJJa7hu3mVOwk5nkM1v4C1MOlsXF30nAItPFXW8p0yvVnGDjSbF
-	 dLNteDjSa87UHiLApXbY1nkOiY5OMyyGWqL8ehmjJ5Puabyux5ci7OfGNOTaRIQHEY
-	 R0J/pyDSQfeqQ==
+	b=c3wKxvRpfXFvTI4OTLwLiLskSFkkqQDuMhBaIRwU1GTWRyVi3M4MN4+5Jo3wOpXRe
+	 +6b+PzUWfqRREEWuHW7Tz1vEzphqUn05snPFiPbnnYZtT+lyxl+eaxYw7YbUT41ZYF
+	 go4XU3jw/FU8SfvRpXNA7fL7jxdPbfucSeVR9hK0Z1UELznZxX3g32AnXYZLijXLKw
+	 /EJAiFef3DPO6h1CAZhGN+tmmVh5JPZLCiHvD5lyKKsASed45FtHsF+ZiVRzTxiWH6
+	 UST+QCG3KknLhwzY/8RWWWoVPoPHlOUzw/yJTewcVbb+5xEr95UUw6IIqcLTjAWGlf
+	 ydP6XlruHlrgA==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
@@ -35,9 +35,9 @@ Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [RFC PATCH 3/4] tracing: Add disable_bpf trace option to ignore eBPF for fetchargs
-Date: Wed,  1 Jul 2026 22:45:51 +0900
-Message-ID: <178291355107.1566898.16400808380207816368.stgit@devnote2>
+Subject: [RFC PATCH 4/4] selftests/ftrace: Add a test for eBPF compiled fetchargs
+Date: Wed,  1 Jul 2026 22:46:00 +0900
+Message-ID: <178291356080.1566898.2303910167100203913.stgit@devnote2>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <178291352217.1566898.14481561093843379745.stgit@devnote2>
 References: <178291352217.1566898.14481561093843379745.stgit@devnote2>
@@ -53,71 +53,72 @@ Content-Transfer-Encoding: 8bit
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Add a trace option "disable_bpf" to disable BPF execution for fetchargs,
-forcing the execution to fallback to the interpreter loop. This is useful
-for evaluating BPF compilation performance impact.
+Add a selftest for trace probe BPF compilation to verify that BPF is
+correctly compiled and executes properly for valid configurations,
+and falls back to interpreter on unsupported cases.
 
 Assisted-by: Antigravity:gemini-3.5-flash
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- kernel/trace/trace.c            |    7 +++++++
- kernel/trace/trace.h            |    8 ++++++++
- kernel/trace/trace_probe_tmpl.h |    2 +-
- 3 files changed, 16 insertions(+), 1 deletion(-)
+ .../ftrace/test.d/dynevent/test_bpf_fetchargs.tc   |   51 ++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/test_bpf_fetchargs.tc
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index c9e182d40059..7c0f7b629fcb 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -9940,6 +9940,13 @@ struct trace_array *trace_get_global_array(void)
- }
- #endif
- 
-+#ifdef CONFIG_BPF_SYSCALL
-+bool trace_probe_bpf_disabled(void)
-+{
-+	return !!(global_trace.trace_flags & TRACE_ITER(DISABLE_BPF));
-+}
-+#endif
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/test_bpf_fetchargs.tc b/tools/testing/selftests/ftrace/test.d/dynevent/test_bpf_fetchargs.tc
+new file mode 100644
+index 000000000000..6c6f4dd4517a
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/test_bpf_fetchargs.tc
+@@ -0,0 +1,51 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# description: Dynamic event - test eBPF compiled fetchargs for tprobe and fprobe
++# requires: dynamic_events "t[:[<group>/][<event>]] <tracepoint> [<args>]":README
 +
- void __init early_trace_init(void)
- {
- 	if (tracepoint_printk) {
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index 80fe152af1dd..bf83680e0ba7 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -1503,6 +1503,7 @@ extern int trace_get_user(struct trace_parser *parser, const char __user *ubuf,
- 		C(PAUSE_ON_TRACE,	"pause-on-trace"),	\
- 		C(HASH_PTR,		"hash-ptr"),	/* Print hashed pointer */ \
- 		C(BITMASK_LIST,		"bitmask-list"),	\
-+		C(DISABLE_BPF,		"disable_bpf"),		\
- 		FUNCTION_FLAGS					\
- 		FGRAPH_FLAGS					\
- 		STACK_FLAGS					\
-@@ -2505,4 +2506,11 @@ static inline int rv_init_interface(void)
- 		_args;							\
- 	})
- 
-+#ifdef CONFIG_BPF_SYSCALL
-+bool trace_probe_bpf_disabled(void);
-+#else
-+static inline bool trace_probe_bpf_disabled(void) { return false; }
-+#endif
++# Check if the sample module is loaded
++if ! lsmod | grep -q trace_events_sample; then
++  modprobe trace-events-sample || exit_unsupported
++fi
 +
- #endif /* _LINUX_KERNEL_TRACE_H */
++echo 0 > events/enable
++echo > dynamic_events
++clear_trace
 +
-diff --git a/kernel/trace/trace_probe_tmpl.h b/kernel/trace/trace_probe_tmpl.h
-index 6ca2dfe59a0f..015208aefbaf 100644
---- a/kernel/trace/trace_probe_tmpl.h
-+++ b/kernel/trace/trace_probe_tmpl.h
-@@ -274,7 +274,7 @@ store_trace_args(void *data, struct trace_probe *tp, void *rec, void *edata,
- 	int ret, i;
- 
- #ifdef CONFIG_BPF_SYSCALL
--	if (tp->prog) {
-+	if (tp->prog && !trace_probe_bpf_disabled()) {
- 		struct fetch_bpf_ctx ctx = {
- 			.rec = rec,
- 			.edata = edata,
++# Add a tprobe to sample-trace:foo_bar
++# foo_bar args: const char *foo, int bar, ...
++# So $arg1 is char ptr (points to "hello"), $arg2 is int.
++# Let's test REG (arg2) and DEREF (+0($arg1))
++# "hello" in little-endian 32-bit: 'h'(0x68), 'e'(0x65), 'l'(0x6c), 'l'(0x6c) -> 0x6c6c6568 -> 1819043176
++echo "t:test_tprobe foo_bar mybar=\$arg2 myfoo=+0(\$arg1):u32" >> dynamic_events
++
++# Add an fprobe to __traceiter_foo_bar
++if grep -q "__traceiter_foo_bar" /proc/kallsyms; then
++  # __traceiter_foo_bar args: void *__data, const char *foo, int bar, ...
++  # $arg1 is __data, $arg2 is foo (points to "hello")
++  # "hello" in little-endian 32-bit: 'h'(0x68), 'e'(0x65), 'l'(0x6c), 'l'(0x6c) -> 0x6c6c6568 -> 1819043176
++  echo "f:test_fprobe __traceiter_foo_bar myfoo=\$arg2 myfmt=+0(\$arg2):u32" >> dynamic_events
++fi
++
++echo 1 > events/sample-trace/foo_bar/enable
++echo 1 > events/tracepoints/test_tprobe/enable
++if [ -d events/fprobes/test_fprobe ]; then
++  echo 1 > events/fprobes/test_fprobe/enable
++fi
++
++# Wait for 2 seconds to let the sample thread trigger the events
++sleep 2
++
++echo 0 > events/enable
++
++# Now verify the trace
++grep -q "test_tprobe.*myfoo=1819043176" trace || exit_fail
++
++if [ -d events/fprobes/test_fprobe ]; then
++  grep -q "test_fprobe.*myfmt=1819043176" trace || exit_fail
++fi
++
++echo > dynamic_events
++rmmod trace-events-sample
++
++exit 0
 
