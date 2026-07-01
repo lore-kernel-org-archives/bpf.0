@@ -1,63 +1,63 @@
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC9C2EC090
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39FC38A718
 	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 18:52:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782931963; cv=none; b=bzIYZVDXe3ILMqrOU4suuTOfitJaf0SsDo9It41rdaipjnqDPWjlYjWm+aP6KwF9htMFKgFN7GOh7XZH2x22rgyr+JJUrAggubfTfYNdrCC1COuc3xQTO2f2DHAnfcVI8EzRCzrO+X7IX9oE7fzKwtkfLhTZXoX9HLC4Job7ZVg=
+	t=1782931964; cv=none; b=IrFYkys1m+Tqgyec1pS2qkpc7wxCxH2SCdIdfnnpBEnVbA412WrJJ4Flcp0eaCqGs9B52DzIYCqjH8Ps7fVlfysbCPO9DY4+wjKwCih4+oKTAXq/wkSYg/sxqJluAf1A3yZqnMn83T8uj3P9VYxN3zUwnnRdewiqTneZZkwLK/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782931963; c=relaxed/simple;
-	bh=vVJw4lUHhdBUz19LYicpEYUsAltyO54KTQLuOSwQBx4=;
+	s=arc-20240116; t=1782931964; c=relaxed/simple;
+	bh=ijJnLjDYknX4t6mV1XLiSWjvnUEG9Wr7olg8QS+J6mY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=f37iz6hz41TibZULCq/B4sk3fKRLkhztjvq+ressOftq4S+7FdAtqjFKxekL3p4JtqS/+qEZ9fqUp1H6tdnZzukNjpXKkziO8ySTr7DQsO3yMi6stn04M/5FxBL3OHhB81Emxl5QieZSPH34kRGfBeiHmlHdPpkiSlA47WkRkQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=OV9g0vbR; arc=none smtp.client-ip=209.85.222.182
+	 MIME-Version; b=vGe2NFoV8unQuHp9pCd3Qp7HqDaJe26bjgB5+bHE7FPMl48eXmaeKK/4k8EQDOPOqRKh8N1+d6Jw1wDJdXSYGysjWVzMmoUME5J2NhR28UweHcmj9lyM/qjTWwplwbJ9Ju4mA3tu02m7dSuw+adks2IeW4CjrTxJRWwrXkSB8jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=CNJrY1Do; arc=none smtp.client-ip=209.85.222.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="OV9g0vbR"
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-92e6c4a867cso54609085a.0
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="CNJrY1Do"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-92e6a434cabso57728085a.1
         for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 11:52:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782931961; x=1783536761; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782931962; x=1783536762; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wiT6IchzYo0pZI6BwQ69eT32M2XHj1el/xogHD0SjIo=;
-        b=OV9g0vbR0uhMYEUaqVSpY7YAba7LNiLFtZczX/7TEcB6kv5mOP/vuTOMKnKudJAdSc
-         BvG1xoeEMm9cc/xt+Ih4HAEKyepvjk7TEomuja5uEGZ3lVZF/9UV0q2TdBvjW8iHtgg7
-         fBFEBvfT12RbabpZrUX7KC77S93NXUgH32RxzQTu7u/xgEIDh+Plfg0xA7ipizO0lRzt
-         GlJLT+B5+IiorUApEsrKshQaNuzl40eI6PmuS0otEtuQL/rih3EpPz6+sS1+/z55giPP
-         lt19wDpl2+Bb9JzzZTa4nR/vdyvIVcPGqcyJeeNYQfQgMAjlfCEua5Nabd9FPA999f5o
-         6rvA==
+        bh=RG5DAAe4oYSj5vQ/8aDJzHLtCh3g6krTQVWW1uwIBd4=;
+        b=CNJrY1Dotr3nsYRyOLdkg+j0HG3XJgcx/ex1K9TpQlQAOtQk/cLwBUqGpaajpzUkG0
+         6HC9ci+rHh3gqNPuEhPqqHWwQAvWUKeVVa5YW9LO020QOOGmEgW4sy+UF65N2kxiQ3Zx
+         53q6sJpZmv2QC6eThQ5SqrHzbNrFnqI+2D53rhRmS7MPWCoEfNir9yBz7UaiQXTNGCqz
+         OImlx9a+M+aWrAwqZ08FpU+pTv19pp9YtAZ4AN8vqYL1+d6acVZqkhge7j8G46zVvrbj
+         EmqBbrh8jC3EQZjzyyckfYZQ2HT87+HUn1Y8XV2cJ6wt0S2PlBgqngkV0gZmyKtnhDbZ
+         3I/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782931961; x=1783536761;
+        d=1e100.net; s=20251104; t=1782931962; x=1783536762;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=wiT6IchzYo0pZI6BwQ69eT32M2XHj1el/xogHD0SjIo=;
-        b=VPQnUmQac6dVG5FsQuytE9q9XPTtkMiX3U65zjW0+Ea0dAPN1E7JwGmm0fe1r7zlGn
-         jBvib8Ii+vTKOlj9GcjI5pXszFzDuvrVArQTVlHEx4XgOR/70whoK7WYERT3bEa+iiso
-         55mlFoIcR+GI0mi9ckowV8aiUU+Q+nGiedM1gRbduwTVgrp5ml/BnUjWA5ohJLuIjMxo
-         geE/LtiyAKS8Quu5A8fm3+KEt/Zhe2ehhDPUMPhXC+0xOUma+w00JS9arDAEOnNTNH2D
-         0c1u3xubJPDPKi2Np4dTW3CNatklSX2GWcdGVfgc0vl687G+8PIUPaZin5m8Urzb1zQ2
-         QtsA==
-X-Gm-Message-State: AOJu0YxBw26gSn5XW+ABYRlCe8aY+PpNBcg3qonjTIarnMIk8o7kK0oc
-	5+fWCOaEttV8Mfq/IAJxtYZUSy6ljuEcX1witQf1V1TSqmUPnMZGa5eci4xOXbv1IRLy95Pe9C1
-	KeuZ6yl4=
-X-Gm-Gg: AfdE7ckVYFfn+02G4+Z3kZi2PWsFcksa81T30eId7ef0tgXtDMCMgBb05V77SBv5mhA
-	nXLejGtNLiShfIjCJ0VJRJNBCwzfqaRV6AxTVE1xYAFoU6XDkTRngmvQ2tU7tEjVtYxpZazDdDm
-	GFbrB8mUagFnodv9bfPxv8O5H+dbVJy0P5HTFvnnUXydrKC0tQAFebk7VdK7JtJFzUheTEDWZUg
-	pmxqO51dQxVV+QOgIRdP30vZxP7F134mZY9lz4hEZgX2cu7iqtHwFVsyfiUBRWorkhjxnfFjgbs
-	gsD15+w1M3PtkQSmWFu8ey3cQ9DqsDZaWpqs7i+P2DwkWuQCLJXCwpicV3DJ7y0M0FOW8ICvewT
-	3piz47pfEFs57KXiVFeGMxvop5iXBBvlUO8cx2WK0rsHaYFBFXkl9ya+VQEW5JIHC4sRMk9u6zr
-	lBlT4WvLdip6lCvxtsYxnQqpcokok3TlQVwRmy1JISZL+DLLiB
-X-Received: by 2002:a05:620a:40d4:b0:915:7732:ea7c with SMTP id af79cd13be357-92e7b3e89acmr319468185a.43.1782931960948;
-        Wed, 01 Jul 2026 11:52:40 -0700 (PDT)
+        bh=RG5DAAe4oYSj5vQ/8aDJzHLtCh3g6krTQVWW1uwIBd4=;
+        b=B/JhYaQuHJ6QAUafTpZwbtKd0aETla1HU9xX21xopKt1duCCeu9brRMBM8SzRBbwg6
+         5GKEb1XV4yY752wMClvj6CqNSFdaLjgmp8r5Bhn84BtWPwRiCbA1Tq+sn/4pz8nrP+1s
+         jgmb4+v2m3Ch70oq6HACid2OOawYwdVD8JlLhnYke33knWL/eH0lUMry95F160/IQuih
+         DYhhlzUB+Zys2ti+adJTzphNBkgttlrTvxrR+JJKZMp/renE3TeXkb+p9EpoEhtG2HXf
+         AAWVckThe6ZaVnmuKqG8A+GJLaU3SO/x5UUMA/4g5kegLHLAHd+3ov+0p6zwOpc7D/3h
+         wJ4w==
+X-Gm-Message-State: AOJu0Yxc/ExhhVeC10WC8Sg+iLC9gLNkLg0wvcXdXhpfMQ9TbQqNi8yI
+	ycYri6DIhsRRh4fbg0319GraJL7hzS0mhFkgEqDCOdyfYY0jH5lovVDGc5txodjckYc36z4BN03
+	zUI0EdWE=
+X-Gm-Gg: AfdE7cm8YfAxtWTS3YFXxkutQsnewoSscygNhZnkVoBGVDJYZmgOjx9/PmVo+/E7Nmw
+	GLNfSMStjdZRq8VkCG4yHWuLPPi8TYh3jbbD3+VJTJXd2kZPoG2ZhsizltCge9gi4Z00eZB3uz1
+	5frQM36McQC8T94VKoUhxYPSBAPJ5cp+KYfbWXf91L4uqthnyExPcZMOlrp8AIRqwhWdxXpBu1R
+	aViy29kCmgcYxvwDcPm+tk6BCQ/edeyz2AlT802BkRFkr0rrTWybRtNN7157KfuuBIlejjhEeIR
+	9aP7Led3KS5G7mh+qwbmxA006D0hx4CRQudF9vFV/AtsbuSsIcKeb8X4n54DVEWoxtGXIUTL6vj
+	7kF9+uz2bLsReD7jwWtTkohL8mrOEyOXvayHcEijYBnI6VQbWy85oYkXML+bQRbpT+rUIcEGqTu
+	TaMzZD9t47etM8GvXM11MyRzMfjM/7L2rubybSpw==
+X-Received: by 2002:a05:620a:28cf:b0:929:b3a4:9bf4 with SMTP id af79cd13be357-92e7b0542f1mr315596685a.21.1782931961913;
+        Wed, 01 Jul 2026 11:52:41 -0700 (PDT)
 Received: from krios.home.ca.int.haoyugu.com ([198.58.242.173])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-92e801949d9sm12876685a.36.2026.07.01.11.52.40
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-92e801949d9sm12876685a.36.2026.07.01.11.52.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jul 2026 11:52:40 -0700 (PDT)
+        Wed, 01 Jul 2026 11:52:41 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -67,10 +67,11 @@ Cc: ast@kernel.org,
 	eddyz87@gmail.com,
 	mattbobrowski@google.com,
 	song@kernel.org,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v2 3/5] selftests/bpf: Add arena-based bitmap data structure
-Date: Wed,  1 Jul 2026 14:52:33 -0400
-Message-ID: <20260701185235.4516-4-emil@etsalapatis.com>
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 4/5] selftests/bpf: libarena: Add bitmap selftets
+Date: Wed,  1 Jul 2026 14:52:34 -0400
+Message-ID: <20260701185235.4516-5-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260701185235.4516-1-emil@etsalapatis.com>
 References: <20260701185235.4516-1-emil@etsalapatis.com>
@@ -82,308 +83,414 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add an arena-based word-aligned bitmap data struture. The
-structure is useful as a building block, e.g., sched-ext
-uses it to represent cpumask structures.
+Add testing for the new arena bitmap data structure.
 
+Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- .../bpf/libarena/include/libarena/bitmap.h    |  34 +++
- .../selftests/bpf/libarena/src/bitmap.bpf.c   | 245 ++++++++++++++++++
- 2 files changed, 279 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/bitmap.h
- create mode 100644 tools/testing/selftests/bpf/libarena/src/bitmap.bpf.c
+ .../bpf/libarena/selftests/test_bitmap.bpf.c  | 394 ++++++++++++++++++
+ 1 file changed, 394 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/test_bitmap.bpf.c
 
-diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/bitmap.h b/tools/testing/selftests/bpf/libarena/include/libarena/bitmap.h
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_bitmap.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_bitmap.bpf.c
 new file mode 100644
-index 000000000000..cf6b63f5d9a4
+index 000000000000..e7d32f44d687
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/include/libarena/bitmap.h
-@@ -0,0 +1,34 @@
-+#pragma once
-+
-+#define BITS_PER_BYTE		8
-+#define BYTES_TO_BITS(nb)	((nb) * BITS_PER_BYTE)
-+
-+#define BITS_PER_LONG_LONG	(sizeof(long long) * BITS_PER_BYTE)
-+#define BITS_TO_LONG_LONGS(nr)	(((nr) + BITS_PER_LONG_LONG - 1) / BITS_PER_LONG_LONG)
-+#define BIT_MASK(nr)		(1ULL << ((nr) % BITS_PER_LONG_LONG))
-+#define BIT_WORD(nr)		((nr) / BITS_PER_LONG_LONG)
-+
-+struct bitmap {
-+	u64 bits[0];
-+};
-+
-+struct bitmap __arena *bmp_alloc(size_t bits);
-+void bmp_free(struct bitmap __arena *bmp);
-+
-+void __bmp_set_bit(u32 bit, struct bitmap __arena *bmp);
-+void __bmp_clear_bit(u32 bit, struct bitmap __arena *bmp);
-+void bmp_set_bit(u32 bit, struct bitmap __arena *bmp);
-+void bmp_clear_bit(u32 bit, struct bitmap __arena *bmp);
-+bool bmp_test_bit(u32 bit, struct bitmap __arena *bmp);
-+bool bmp_test_and_clear_bit(u32 bit, struct bitmap __arena *bmp);
-+bool bmp_test_and_set_bit(u32 bit, struct bitmap __arena *bmp);
-+
-+void bmp_clear(size_t bits, struct bitmap __arena *bmp);
-+void bmp_and(size_t bits, struct bitmap __arena *dst, struct bitmap __arena *src1, struct bitmap __arena *src2);
-+void bmp_or(size_t bits, struct bitmap __arena *dst, struct bitmap __arena *src1, struct bitmap __arena *src2);
-+bool bmp_empty(size_t bits, struct bitmap __arena *bmp);
-+void bmp_copy(size_t bits, struct bitmap __arena *dst, struct bitmap __arena *src);
-+
-+bool bmp_intersects(size_t bits, struct bitmap __arena *arg1, struct bitmap __arena *arg2);
-+bool bmp_subset(size_t bits, struct bitmap __arena *big, struct bitmap __arena *small);
-+void bmp_print(size_t bits, struct bitmap __arena *bmp);
-diff --git a/tools/testing/selftests/bpf/libarena/src/bitmap.bpf.c b/tools/testing/selftests/bpf/libarena/src/bitmap.bpf.c
-new file mode 100644
-index 000000000000..80e814401fb9
---- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/src/bitmap.bpf.c
-@@ -0,0 +1,245 @@
-+// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
-+/*
-+ * Copyright (c) 2025-2026 Meta Platforms, Inc. and affiliates.
-+ * Copyright (c) 2025-2026 Emil Tsalapatis <emil@etsalapatis.com>
-+ */
-+
++++ b/tools/testing/selftests/bpf/libarena/selftests/test_bitmap.bpf.c
+@@ -0,0 +1,394 @@
 +#include <libarena/common.h>
 +
 +#include <libarena/asan.h>
 +#include <libarena/bitmap.h>
 +
-+__weak
-+struct bitmap __arena *bmp_alloc(size_t bits)
++#define TEST_BITS	(2 * BITS_PER_LONG_LONG)
++#define TEST_WORDS	BITS_TO_LONG_LONGS(TEST_BITS)
++#define MID_BIT		(BITS_PER_LONG_LONG + 1)
++#define LAST_BIT	(TEST_BITS - 1)
++
++static void test_bmp_setall(struct bitmap __arena *bmp)
++{
++	volatile u32 i;
++
++	for (i = zero; i < TEST_WORDS && can_loop; i++)
++		bmp->bits[i] = ~0ULL;
++}
++
++SEC("syscall")
++__weak int test_bitmap_alloc_free(void)
 +{
 +	struct bitmap __arena *bmp;
-+	size_t size = BITS_TO_LONG_LONGS(bits) * sizeof(bmp->bits[0]);
 +
-+	/* Assume long-aligned masks. */
-+	if (bits % BITS_PER_LONG_LONG)
-+		return NULL;
-+
-+	bmp = (struct bitmap __arena *)arena_malloc(size);
++	bmp = bmp_alloc(TEST_BITS);
 +	if (!bmp)
-+		return NULL;
++		return -ENOMEM;
 +
-+	bmp_clear(bits, bmp);
++	if (!bmp_empty(TEST_BITS, bmp))
++		goto err;
 +
-+	return bmp;
++	__bmp_set_bit(LAST_BIT, bmp);
++	if (!bmp_test_bit(LAST_BIT, bmp))
++		goto err;
++
++	__bmp_clear_bit(LAST_BIT, bmp);
++	if (bmp_test_bit(LAST_BIT, bmp))
++		goto err;
++
++	bmp_free(bmp);
++	return 0;
++
++err:
++	bmp_free(bmp);
++	return -EINVAL;
 +}
 +
-+__weak
-+void bmp_free(struct bitmap __arena *bmp)
++SEC("syscall")
++__weak int test_bitmap_bit_ops(void)
 +{
-+	arena_free(bmp);
++	struct bitmap __arena *bmp;
++
++	bmp = bmp_alloc(TEST_BITS);
++	if (!bmp)
++		return -ENOMEM;
++
++	__bmp_set_bit(0, bmp);
++	if (!bmp_test_bit(0, bmp))
++		goto err;
++
++	__bmp_set_bit(MID_BIT, bmp);
++	if (!bmp_test_bit(MID_BIT, bmp))
++		goto err;
++
++	__bmp_set_bit(LAST_BIT, bmp);
++	if (!bmp_test_bit(LAST_BIT, bmp))
++		goto err;
++
++	if (bmp_test_bit(MID_BIT - 1, bmp))
++		goto err;
++
++	__bmp_clear_bit(MID_BIT, bmp);
++	if (bmp_test_bit(MID_BIT, bmp))
++		goto err;
++
++	if (!bmp_test_bit(0, bmp))
++		goto err;
++
++	if (!bmp_test_bit(LAST_BIT, bmp))
++		goto err;
++
++	__bmp_clear_bit(0, bmp);
++	__bmp_clear_bit(LAST_BIT, bmp);
++	if (!bmp_empty(TEST_BITS, bmp))
++		goto err;
++
++	if (bmp->bits[0])
++		goto err;
++
++	if (bmp->bits[1])
++		goto err;
++
++	bmp_free(bmp);
++	return 0;
++
++err:
++	bmp_free(bmp);
++	return -EINVAL;
 +}
 +
-+__weak
-+void __bmp_set_bit(u32 bit, struct bitmap __arena *bmp)
++static bool test_bitmap_test_and_clear_single(struct bitmap __arena *bmp, size_t ind)
 +{
-+	bmp->bits[BIT_WORD(bit)] |= BIT_MASK(bit);
-+}
++	if (bmp_test_and_clear_bit(ind, bmp))
++		return false;
 +
-+__weak
-+void __bmp_clear_bit(u32 bit, struct bitmap __arena *bmp)
-+{
-+	bmp->bits[BIT_WORD(bit)] &= ~BIT_MASK(bit);
-+}
++	__bmp_set_bit(ind, bmp);
 +
-+__weak
-+bool bmp_test_bit(u32 bit, struct bitmap __arena *bmp)
-+{
-+	return bmp->bits[BIT_WORD(bit)] & BIT_MASK(bit);
-+}
++	if (!bmp_test_and_clear_bit(ind, bmp))
++		return false;
 +
-+__weak
-+bool bmp_test_and_clear_bit(u32 bit, struct bitmap __arena *bmp)
-+{
-+	u64 val = BIT_MASK(bit);
-+	u32 idx = BIT_WORD(bit);
-+	u64 old, new, actual;
++	if (bmp_test_bit(ind, bmp))
++		return false;
 +
-+	do {
-+		old = bmp->bits[idx];
-+
-+		if (!(old & val))
-+			return false;
-+
-+		new = old & ~val;
-+		actual = cmpxchg(&bmp->bits[idx], old, new);
-+
-+		if (actual == old)
-+			return true;
-+
-+	} while (can_loop);
-+
-+	return false;
-+}
-+
-+__weak
-+bool bmp_test_and_set_bit(u32 bit, struct bitmap __arena *bmp)
-+{
-+	u64 val = BIT_MASK(bit);
-+	u32 idx = BIT_WORD(bit);
-+	u64 old, new, actual;
-+
-+	do {
-+		old = bmp->bits[idx];
-+
-+		if ((old & val))
-+			return true;
-+
-+		new = old | val;
-+		actual = cmpxchg(&bmp->bits[idx], old, new);
-+
-+		if (actual == old)
-+			return false;
-+
-+	} while (can_loop);
-+
-+	return false;
-+}
-+
-+__weak
-+void bmp_clear_bit(u32 bit, struct bitmap __arena *bmp)
-+{
-+	u64 val = BIT_MASK(bit);
-+	u32 idx = BIT_WORD(bit);
-+	u64 old, new, actual;
-+
-+	do {
-+		old = bmp->bits[idx];
-+		new = old & ~val;
-+		actual = cmpxchg(&bmp->bits[idx], old, new);
-+
-+	} while (actual != old && can_loop);
-+}
-+
-+__weak
-+void bmp_set_bit(u32 bit, struct bitmap __arena *bmp)
-+{
-+	u64 val = BIT_MASK(bit);
-+	u32 idx = BIT_WORD(bit);
-+	u64 old, new, actual;
-+
-+	do {
-+		old = bmp->bits[idx];
-+		new = old | val;
-+		actual = cmpxchg(&bmp->bits[idx], old, new);
-+
-+	} while (actual != old && can_loop);
-+}
-+
-+__weak
-+void bmp_clear(size_t bits, struct bitmap __arena *bmp)
-+{
-+	size_t nwords = BITS_TO_LONG_LONGS(bits);
-+	volatile u32 i;
-+
-+	for (i = zero; i < nwords && can_loop; i++)
-+		bmp->bits[i] = 0;
-+}
-+
-+static __always_inline u64 bmp_last_word_mask(size_t bits)
-+{
-+	u32 rem = bits % BITS_PER_LONG_LONG;
-+
-+	return rem ? (1ULL << rem) - 1 : ~0ULL;
-+}
-+
-+__weak
-+void bmp_and(size_t bits, struct bitmap __arena *dst, struct bitmap __arena *src1, struct bitmap __arena *src2)
-+{
-+	size_t nwords = BITS_TO_LONG_LONGS(bits);
-+	volatile u32 i;
-+
-+	for (i = zero; i < nwords && can_loop; i++)
-+		dst->bits[i] = src1->bits[i] & src2->bits[i];
-+
-+	if (nwords && bits % BITS_PER_LONG_LONG)
-+		dst->bits[nwords - 1] &= bmp_last_word_mask(bits);
-+}
-+
-+__weak
-+void bmp_or(size_t bits, struct bitmap __arena *dst, struct bitmap __arena *src1, struct bitmap __arena *src2)
-+{
-+	size_t nwords = BITS_TO_LONG_LONGS(bits);
-+	volatile u32 i;
-+
-+	for (i = zero; i < nwords && can_loop; i++)
-+		dst->bits[i] = src1->bits[i] | src2->bits[i];
-+
-+	if (nwords && bits % BITS_PER_LONG_LONG)
-+		dst->bits[nwords - 1] &= bmp_last_word_mask(bits);
-+}
-+
-+__weak
-+bool bmp_empty(size_t bits, struct bitmap __arena *bmp)
-+{
-+	size_t nwords = BITS_TO_LONG_LONGS(bits);
-+	volatile u32 i;
-+
-+	for (i = zero; i < nwords && can_loop; i++) {
-+		u64 mask = (i == nwords - 1) ? bmp_last_word_mask(bits) : ~0ULL;
-+
-+		if (bmp->bits[i] & mask)
-+			return false;
-+	}
++	if (bmp_test_and_clear_bit(ind, bmp))
++		return false;
 +
 +	return true;
 +}
 +
-+__weak
-+void bmp_copy(size_t bits, struct bitmap __arena *dst, struct bitmap __arena *src)
++static bool test_bitmap_test_and_set_single(struct bitmap __arena *bmp, size_t ind)
 +{
-+	size_t nwords = BITS_TO_LONG_LONGS(bits);
-+	volatile u32 i;
++	if (bmp_test_and_set_bit(ind, bmp))
++		return false;
 +
-+	for (i = zero; i < nwords && can_loop; i++)
-+		dst->bits[i] = src->bits[i];
++	if (!bmp_test_and_set_bit(ind, bmp))
++		return false;
 +
-+	if (nwords && bits % BITS_PER_LONG_LONG)
-+		dst->bits[nwords - 1] &= bmp_last_word_mask(bits);
-+}
++	if (!bmp_test_bit(ind, bmp))
++		return false;
 +
-+__weak
-+bool bmp_subset(size_t bits, struct bitmap __arena *big, struct bitmap __arena *small)
-+{
-+	size_t nwords = BITS_TO_LONG_LONGS(bits);
-+	volatile u32 i;
++	__bmp_clear_bit(ind, bmp);
 +
-+	for (i = zero; i < nwords && can_loop; i++) {
-+		u64 mask = (i == nwords - 1) ? bmp_last_word_mask(bits) : ~0ULL;
-+
-+		if (~big->bits[i] & small->bits[i] & mask)
-+			return false;
-+	}
++	if (bmp_test_and_set_bit(ind, bmp))
++		return false;
 +
 +	return true;
 +}
 +
-+__weak
-+bool bmp_intersects(size_t bits, struct bitmap __arena *arg1, struct bitmap __arena *arg2)
++SEC("syscall")
++__weak int test_bitmap_test_and_clear_bit(void)
 +{
-+	size_t nwords = BITS_TO_LONG_LONGS(bits);
-+	volatile u32 i;
++	struct bitmap __arena *bmp;
 +
-+	for (i = zero; i < nwords && can_loop; i++) {
-+		u64 mask = (i == nwords - 1) ? bmp_last_word_mask(bits) : ~0ULL;
++	bmp = bmp_alloc(TEST_BITS);
++	if (!bmp)
++		return -ENOMEM;
 +
-+		if (arg1->bits[i] & arg2->bits[i] & mask)
-+			return true;
-+	}
++	if (!test_bitmap_test_and_clear_single(bmp, 0))
++		goto err;
 +
-+	return false;
++	if (!test_bitmap_test_and_clear_single(bmp, MID_BIT))
++		goto err;
++
++	if (!test_bitmap_test_and_clear_single(bmp, LAST_BIT))
++		goto err;
++
++	if (!bmp_empty(TEST_BITS, bmp))
++		goto err;
++
++	bmp_free(bmp);
++	return 0;
++
++err:
++	bmp_free(bmp);
++	return -EINVAL;
 +}
 +
-+__weak
-+void bmp_print(size_t bits, struct bitmap __arena *bmp)
++SEC("syscall")
++__weak int test_bitmap_test_and_set_bit(void)
 +{
-+	size_t nwords = BITS_TO_LONG_LONGS(bits);
-+	volatile u32 i;
++	struct bitmap __arena *bmp;
 +
-+	for (i = zero; i < nwords && can_loop; i++)
-+		arena_stderr("%016llx ", bmp->bits[i]);
++	bmp = bmp_alloc(TEST_BITS);
++	if (!bmp)
++		return -ENOMEM;
++
++	if (!test_bitmap_test_and_set_single(bmp, 0))
++		goto err;
++
++	if (!test_bitmap_test_and_set_single(bmp, MID_BIT))
++		goto err;
++
++	if (!test_bitmap_test_and_set_single(bmp, LAST_BIT))
++		goto err;
++
++	bmp_free(bmp);
++	return 0;
++
++err:
++	bmp_free(bmp);
++	return -EINVAL;
++}
++
++
++SEC("syscall")
++__weak int test_bitmap_and(void)
++{
++	struct bitmap __arena *src1 = NULL, *src2 = NULL, *dst = NULL;
++
++	src1 = bmp_alloc(TEST_BITS);
++	src2 = bmp_alloc(TEST_BITS);
++	dst = bmp_alloc(TEST_BITS);
++	if (!src1 || !src2 || !dst)
++		goto err;
++
++	test_bmp_setall(dst);
++
++	__bmp_set_bit(0, src1);
++	__bmp_set_bit(MID_BIT, src1);
++	__bmp_set_bit(LAST_BIT, src1);
++
++	__bmp_set_bit(MID_BIT, src2);
++	__bmp_set_bit(LAST_BIT, src2);
++
++	bmp_and(TEST_BITS, dst, src1, src2);
++
++	if (bmp_test_bit(0, dst))
++		goto err;
++	if (!bmp_test_bit(MID_BIT, dst))
++		goto err;
++	if (!bmp_test_bit(LAST_BIT, dst))
++		goto err;
++
++	if (dst->bits[0])
++		goto err;
++	if (dst->bits[1] != (BIT_MASK(MID_BIT) | BIT_MASK(LAST_BIT)))
++		goto err;
++
++	bmp_free(src1);
++	bmp_free(src2);
++	bmp_free(dst);
++	return 0;
++
++err:
++	bmp_free(src1);
++	bmp_free(src2);
++	bmp_free(dst);
++	return -EINVAL;
++}
++
++SEC("syscall")
++__weak int test_bitmap_or(void)
++{
++	struct bitmap __arena *src1 = NULL, *src2 = NULL, *dst = NULL;
++
++	src1 = bmp_alloc(TEST_BITS);
++	src2 = bmp_alloc(TEST_BITS);
++	dst = bmp_alloc(TEST_BITS);
++	if (!src1 || !src2 || !dst)
++		goto err;
++
++	test_bmp_setall(dst);
++
++	__bmp_set_bit(0, src1);
++	__bmp_set_bit(LAST_BIT, src1);
++
++	__bmp_set_bit(MID_BIT, src2);
++	__bmp_set_bit(LAST_BIT, src2);
++
++	bmp_or(TEST_BITS, dst, src1, src2);
++
++	if (!bmp_test_bit(0, dst))
++		goto err;
++	if (!bmp_test_bit(MID_BIT, dst))
++		goto err;
++	if (!bmp_test_bit(LAST_BIT, dst))
++		goto err;
++
++	if (dst->bits[0] != BIT_MASK(0))
++		goto err;
++	if (dst->bits[1] != (BIT_MASK(MID_BIT) | BIT_MASK(LAST_BIT)))
++		goto err;
++
++	bmp_free(src1);
++	bmp_free(src2);
++	bmp_free(dst);
++	return 0;
++
++err:
++	bmp_free(src1);
++	bmp_free(src2);
++	bmp_free(dst);
++	return -EINVAL;
++}
++
++SEC("syscall")
++__weak int test_bitmap_subset(void)
++{
++	struct bitmap __arena *big = NULL, *small = NULL;
++
++	big = bmp_alloc(TEST_BITS);
++	small = bmp_alloc(TEST_BITS);
++	if (!big || !small)
++		goto err;
++
++	if (!bmp_subset(TEST_BITS, big, small))
++		goto err;
++
++	__bmp_set_bit(0, small);
++	if (bmp_subset(TEST_BITS, big, small))
++		goto err;
++
++	__bmp_set_bit(0, big);
++	if (!bmp_subset(TEST_BITS, big, small))
++		goto err;
++
++	__bmp_set_bit(LAST_BIT, small);
++	if (bmp_subset(TEST_BITS, big, small))
++		goto err;
++
++	__bmp_set_bit(LAST_BIT, big);
++	__bmp_set_bit(MID_BIT, big);
++	if (!bmp_subset(TEST_BITS, big, small))
++		goto err;
++
++	if (bmp_subset(TEST_BITS, small, big))
++		goto err;
++
++	bmp_free(big);
++	bmp_free(small);
++	return 0;
++
++err:
++	bmp_free(big);
++	bmp_free(small);
++	return -EINVAL;
++
++}
++
++SEC("syscall")
++__weak int test_bitmap_intersects(void)
++{
++	struct bitmap __arena *arg1 = NULL, *arg2 = NULL;
++
++	arg1 = bmp_alloc(TEST_BITS);
++	arg2 = bmp_alloc(TEST_BITS);
++	if (!arg1 || !arg2)
++		goto err;
++
++	if (bmp_intersects(TEST_BITS, arg1, arg2))
++		goto err;
++
++	__bmp_set_bit(0, arg1);
++	__bmp_set_bit(MID_BIT, arg2);
++	if (bmp_intersects(TEST_BITS, arg1, arg2))
++		goto err;
++
++	__bmp_set_bit(LAST_BIT, arg1);
++	__bmp_set_bit(LAST_BIT, arg2);
++	if (!bmp_intersects(TEST_BITS, arg1, arg2))
++		goto err;
++
++	bmp_free(arg1);
++	bmp_free(arg2);
++	return 0;
++
++err:
++	bmp_free(arg1);
++	bmp_free(arg2);
++	return -EINVAL;
++}
++
++SEC("syscall")
++__weak int test_bitmap_copy(void)
++{
++	struct bitmap __arena *arg1 = NULL, *arg2 = NULL;
++
++	arg1 = bmp_alloc(TEST_BITS);
++	arg2 = bmp_alloc(TEST_BITS);
++	if (!arg1 || !arg2)
++		goto err;
++
++	__bmp_set_bit(0, arg1);
++	__bmp_set_bit(MID_BIT, arg1);
++
++	/* Make sure those get overwritten. */
++	__bmp_set_bit(1, arg2);
++	__bmp_set_bit(MID_BIT + 2, arg2);
++
++	bmp_copy(TEST_BITS, arg2, arg1);
++
++	/* Bitmaps are equal if a subset of each other. */
++	if (!bmp_subset(TEST_BITS, arg1, arg2) ||
++	    !bmp_subset(TEST_BITS, arg2, arg1))
++		goto err;
++
++	bmp_free(arg1);
++	bmp_free(arg2);
++	return 0;
++
++err:
++	bmp_free(arg1);
++	bmp_free(arg2);
++	return -EINVAL;
 +}
 -- 
 2.54.0
