@@ -1,149 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65438224B04
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 13:53:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856BA15B971
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 13:53:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782913991; cv=none; b=pRftgJVYvpdoNvGLWX/INz5gErJIgzzolcKbpOq7RjOjkmJEqxRjjvpA2pyY27xQmNfAoj9MSZsGOGXyMDn+PkB5/M5lH/oI+78m5lIsWEy97/2UAWZajkJvHFTvyU75ArR+O8f71NGvSqrObNX+I8qSA4wMvd5zV7C3It3eHMI=
+	t=1782914023; cv=none; b=N/snbpk4vBWbzYwLNvlq8lDG2ZvvlOXeMRaqkCf9Vv1cZorLVv57Vq4G6dH82ZfzMmiSMnaungBExy0tT00tTNM9jMdkAu4dT/42iPG6vaueM49IXPoxsU2KCPRBqk4nL6iWaissPf/CQnjUB1phOY+iUQ57c1pFW7aVBjXs6GQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782913991; c=relaxed/simple;
-	bh=JwdK/5R1jTpWPL7HYChUWPb2NrumQPkjlLCu0mdd92k=;
+	s=arc-20240116; t=1782914023; c=relaxed/simple;
+	bh=3nvZfN0nI/0oN0R7O+KkW0jqKvDKyQsE9Q/yhhuXL9E=;
 	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=BVT+EjWq0a6qkFYPkVIfknv2GWF6MHU3qz7mG0T+8aMIbp4ytmxN8Z+XJEahwcUK4dDwuxlziqcxzyJIInzo34iEeg0rf4LpHdqDDk0U50RyQBS61iAN8bcY5VAWD/JUd0Q9cc/gD6iNq3VXmR/ZEKQYI00TMDIMNL6wsDleNdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L/EpnuLo; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=EbwoGeKogO8jPles2bFJRLJi/48VqBS1ck53zIN27vtEXxI6Kgha5w9MpA9yD2xNGmabERD4WoYSd4rnH6BGKbvvWfuTAHwR9alzYZPhcQaYQmLX3q7MLqLlClT6VkxqrjTe1Kv5xAd4A9S9NsrFPsgUJ9zSjFz3pbUmSZLtO68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PgRq0b9q; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L/EpnuLo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0488D1F00A3D
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 13:53:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PgRq0b9q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CFED1F00A3A
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 13:53:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782913990;
-	bh=y4LXRZ53BHaUiLlnVu4ZH3hhs4By6X8kv/X+fdQ5NVc=;
+	s=k20260515; t=1782914022;
+	bh=HDPeTH+Q9DAmApa/7jHeWKmsileZou7xHE8Qfn2BqLE=;
 	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date;
-	b=L/EpnuLo8HLimGDbOolvx5lyuFmIe3zYXMZ1uX3CjO8a62GoBjHcd6FK1pV43sHHO
-	 lffL2wf10tePjERjhbv4S+KKwoJ+PoV6hOJqriHkJLAQiSZTVegiE3TwxM/e+5eP8l
-	 84P4Pe0XqxHNZwIZbLn+mnqTAl7vVE35x6g5dhV8AVXPnvzLbFAHyHy7pfjM1FmDtI
-	 iYcFuVxQ+RG1bVV77W8tlSnPDW5clVgs3x3TpCrQczHFXOKEEYqOl6spOU6Dk/k9xd
-	 YRkVLtoWs4PuuyUYhNjzO0LQB035QmWT9comZ6HAeCDceZ2LFikVsDbP9kiVhNli0E
-	 ITAXVrWu4jgYA==
+	b=PgRq0b9qQ7vIpgN6OoNgxbwh3FAo9dvTg1kBfm3KqsA3qi1jmc0OT47Rm0eu6a8Nc
+	 CirXIDtdmN9JAsJNqHP3UjHn3ck/EyvaAksZQnpPju/YCr2Et9KYRxmzVaaRbee9Rz
+	 o/gdXgPD0DiG5D5MMJLXXzL4ympky2bjQT17yhh+sxvA3REc/vzpfOp51JMW5zkq13
+	 y5aJ81ozPOG5MXzR2C1lPgiuRLYpTCvWXAto1xM2P0neDrur2oaY9Zkuv0XKfJEVRn
+	 nrCP8NQ82ftnljjdXma9xlPq742ec4E3+kfMVHYgKhS+Wnuv6PoGlmX/AuF4HDb+rW
+	 jHUuVi6xB+oPA==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH 4/4] selftests/ftrace: Add a test for eBPF compiled
- fetchargs
+Subject: Re: [RFC PATCH 1/4] tools/tracing: Add fetcharg performance
+ micro-benchmark
 Reply-To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
-In-Reply-To: <178291356080.1566898.2303910167100203913.stgit@devnote2>
+In-Reply-To: <178291353202.1566898.1316084678106262789.stgit@devnote2>
 References: <178291352217.1566898.14481561093843379745.stgit@devnote2>
- <178291356080.1566898.2303910167100203913.stgit@devnote2>
+ <178291353202.1566898.1316084678106262789.stgit@devnote2>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 01 Jul 2026 13:53:09 +0000
-Message-Id: <20260701135310.0488D1F00A3D@smtp.kernel.org>
+Date: Wed, 01 Jul 2026 13:53:41 +0000
+Message-Id: <20260701135342.3CFED1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Hardcoded little-endian expectation for string memory read as u3=
-2 causes selftest failure on big-endian architectures.
-- [Medium] Improper cleanup of `trace-events-sample` module causes resource=
- leaks on early test failure and violates test isolation on success.
-- [Medium] The test fails to verify the fallback to the interpreter on unsu=
-pported cases, despite claims in the commit message.
-- [Low] The test configures multiple fetch arguments but only verifies the =
-dereferenced string, ignoring the register argument.
+- [High] Divide by zero in benchmark calculation causing a kernel panic
+- [Medium] Buffer Overflow / User-Space Out-of-Bounds Write due to ignored =
+`count` in `fetcharg_bench_read`
 --
 
-commit 4bb415f7039780520dc7b73a0fda0fb23e2616db
+commit e30ac26f087c17e4a2160772405d441b6e416abd
 Author: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-selftests/ftrace: Add a test for eBPF compiled fetchargs
-   =20
-Add a selftest for trace probe BPF compilation to verify that BPF is
-correctly compiled and executes properly for valid configurations,
-and falls back to interpreter on unsupported cases.
+tools/tracing: Add fetcharg performance micro-benchmark
 
-> Add a selftest for trace probe BPF compilation to verify that BPF is
-> correctly compiled and executes properly for valid configurations,
-> and falls back to interpreter on unsupported cases.
+This commit adds a benchmark test module and a shell script to measure the
+execution overhead of fetchargs across kprobe, fprobe, and eprobe
+configurations.
 
-[Severity: Medium]
-Does the test actually verify the fallback to the interpreter on unsupported
-cases? The script configures REG and DEREF fetchargs, but there doesn't
-appear to be a test case that intentionally uses an unsupported configurati=
-on
-(such as dynamic strings) to verify the interpreter fallback mechanism.
-
-> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/test_bpf_fetc=
-hargs.tc b/tools/testing/selftests/ftrace/test.d/dynevent/test_bpf_fetcharg=
-s.tc
+> diff --git a/tools/tracing/benchmark/fetcharg_bench.c b/tools/tracing/ben=
+chmark/fetcharg_bench.c
 > new file mode 100644
-> index 0000000000000..6c6f4dd4517ac
+> index 0000000000000..af18183c1f5d5
 > --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/test_bpf_fetchargs.tc
-> @@ -0,0 +1,51 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +# description: Dynamic event - test eBPF compiled fetchargs for tprobe a=
-nd fprobe
-> +# requires: dynamic_events "t[:[<group>/][<event>]] <tracepoint> [<args>=
-]":README
-> +
-> +# Check if the sample module is loaded
-> +if ! lsmod | grep -q trace_events_sample; then
-> +  modprobe trace-events-sample || exit_unsupported
-> +fi
-
-[Severity: Medium]
-If the script exits early on failure, will this module be left loaded
-since there is no trap EXIT registered to clean it up?
-
+> +++ b/tools/tracing/benchmark/fetcharg_bench.c
 [ ... ]
+> +static ssize_t fetcharg_bench_read(struct file *file, char __user *user_=
+buf,
+> +				   size_t count, loff_t *ppos)
+> +{
+> +	char buf[64];
+> +	int len;
+> +	u64 start, current_time;
+> +	u64 elapsed;
+> +	u64 loops_per_sec;
+[ ... ]
+> +	start =3D ktime_get_ns();
+> +	for (i =3D 0; i < BENCH_ITERATIONS; i++)
+> +		dummy +=3D bench_func_ptr(a, b, c);
+> +	current_time =3D ktime_get_ns();
+> +
+> +	elapsed =3D current_time - start;
+> +	loops_per_sec =3D ((u64)BENCH_ITERATIONS * NSEC_PER_SEC) / elapsed;
+
+[Severity: High]
+Could this result in a divide by zero? If the system lacks high-resolution
+timers or if the loop completes within the same timer tick, elapsed could
+evaluate to 0 and cause a kernel panic.
 
 > +
-> +# Now verify the trace
-> +grep -q "test_tprobe.*myfoo=3D1819043176" trace || exit_fail
+> +	len =3D snprintf(buf, sizeof(buf), "%llu\n", loops_per_sec);
+> +	if (len < 0)
+> +		return len;
+> +
+> +	if (copy_to_user(user_buf, buf, len))
 
 [Severity: Medium]
-Will this hardcoded value cause false-positive test failures on big-endian
-architectures? The test dereferences the string "hello" as a 32-bit unsigned
-integer and unconditionally expects the little-endian integer representation
-1819043176 (0x6c6c6568). On big-endian systems, this value would be
-1751477356 (0x68656c6c).
+Does this code ignore the user-provided count parameter?
 
-[Severity: Low]
-Does this grep ignore the register argument configured earlier? The tprobe
-was configured to capture two arguments (mybar=3D$arg2 myfoo=3D+0($arg1):u3=
-2),
-but this verification only checks for the presence of the dereferenced
-myfoo value.
-
-> +
-> +if [ -d events/fprobes/test_fprobe ]; then
-> +  grep -q "test_fprobe.*myfmt=3D1819043176" trace || exit_fail
-
-[Severity: Low]
-Similarly, does this grep check ignore the myfoo register argument configur=
-ed
-earlier for the fprobe?
-
-> +fi
-> +
-> +echo > dynamic_events
-> +rmmod trace-events-sample
-
-[Severity: Medium]
-If the trace-events-sample module was already loaded before the test starte=
-d,
-will this unconditional rmmod incorrectly unload it and alter the preexisti=
-ng
-system state?
-
-> +
-> +exit 0
+If a user program calls read() on the debugfs file with a count parameter
+smaller than the formatted string length len, it appears we could write bey=
+ond
+the bounds of the user-provided buffer by copying len bytes instead of
+honoring the count.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/178291352217.156689=
-8.14481561093843379745.stgit@devnote2?part=3D4
+8.14481561093843379745.stgit@devnote2?part=3D1
