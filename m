@@ -1,231 +1,457 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB1431985C
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 17:58:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782928696; cv=none; b=BmxdQFt2OOk10TRWhTc1rPOcK1mJxIlsjuFNHrK19DUZAnQdAXlO2E3EUtWEZUKS2gLgs9ZjKqux8kwl24LL/yPoOE0knsT+Ml94W5ZAWHneaL5i/qailQGRo4/0HIm6vxUmlHd4+E1ehSEFBzFe+KXKGmcKEt7JUGpF9MP2yHw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782928696; c=relaxed/simple;
-	bh=20BNAu0toLJu3EDSbAd1PFkdToLOSXojvcM2xNhDLFM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gDB4I6tvfJRdy7cg+vBHhAT8UOhMnPo80chppnLB3mPQ98DDPAn+Y0UbfGg7LXqJ3ACucE6MuNCPEyVAwml6WlVGF0TmGmcliXNg99We+QD+5/Yip6qyJ7+mBTmtETPeS6qzjbo09R4NKpte6M/kh9IxtRfyzZ/4j84vIwA6bms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=P/R7+NSk; arc=none smtp.client-ip=95.215.58.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E359380FC8
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 18:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782929179; cv=pass; b=VaOXC77zB7jfs1JOvVqmOXyR/pa3Wq66NpydyQV8BdDeBdgBEA1f8KRJSxz/NnegnrYlQBjeyTMW9L4jjIlScEqZbcM1LHECBjOk9qYZIZ5Uq2ALS73OPEvBZ15o7EMHKMdrRwy/Q1K8/0/+PdZL3uphJN4o2WSd9HfRXe6YDhc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782929179; c=relaxed/simple;
+	bh=kPiqNE7xlfNV+ivs9rELOKqBb5P6MZfIfrGYF6zIOhA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LizufE9ClXhMrHrQviO2JmSJQGQ0aLu7cC25f0XR3LadLNBMIPRxGM1vTBDjyXWV+wseqK14fjWg+axBMfrAjlXcmU9vSj5PwA5ZIIx+zEolpubDbOPFWAKt9ZhcFMedLe0IhxCS8oiUuo73WUPo8JRR1yMS6BLQH3I5ZJFqIfA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aHGDoW01; arc=pass smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="P/R7+NSk"
-Message-ID: <1585500e-ad00-427e-91f7-7beb60303a0b@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782928690;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GJwnGWtiO6o/kI+CCb46HCwB5s1Rnx47zF25eEQimqo=;
-	b=P/R7+NSkYG6BLdnct5/DBB0tNY+imhfXivPm5Ui1gqhYLA9c8r7nKiEWOJN02AXSGyze1w
-	7GQrE1fNBy9uFu9OkbIAncsRNxqVWrTzEDoDpUx8EcO+BpPhg6XSkFYX+J12KP2pY/Thno
-	GlAJNyzL2t220svW2FygDnPwOwY7tos=
-Date: Wed, 1 Jul 2026 10:58:01 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aHGDoW01"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ca64989e64so7710745ad.2
+        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 11:06:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782929175; cv=none;
+        d=google.com; s=arc-20260327;
+        b=TuC67HrE59YJ0lVYZ5VKILdReEX5//B3U5fzlqFgYzVXHK7iiVQrkWwwkSIbcVebsq
+         otZ/8KqXj3qDpcJp7hF/6mD25tHKyW6oNMsGLaJqVYKjgVDFkr0St0IyBoraqkwBH27R
+         JD2WenxfNVAHfx7I2O+UOJMQoqJ/nr/K/j32G0QT0NEXM8JSqqNVCQK2CDJzGXe6Cv8B
+         e1alV+Fz/Xfy4FNY3FG/oe/8JFYVjcEp+Gm5/hZG/ff0xWgv08djmvZIeHGFuxONT59J
+         SbkZ9z5CzwlJuIvA2MC+2bk/k9yIHKkRbHKrT7Cbhnde2u+xQXsuS0LHAenKctgIPcBF
+         0lrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Scba/x/dCfB9JJzbY7WApPv7XEyMR8UN1JS/S3YUF78=;
+        fh=VYi2F5PggyYbvtBEBOb+huCe5AEAkc9kX4msMQsfkFs=;
+        b=TYcvdMKcscC+m9TceZKYydvo4MHo94drjBAr6i23WbhzxhGZkVPXxFaoxogbSx052N
+         bLbPh6U2cvMu7k1CazsUfxWy/D5T9aShQd+CvGQ8sKsYE8nZgcZ/u5uL7Hcu+An2oGN3
+         xyDzZtQTaqZAAR6yN9MEM/nwx3icd6Km0JcfspjZNhdCZSnW0RlxiaXRwUZjN3cR9Vhc
+         A87oOqCTdumEfkLE5ixRnj1QOsMolOPJ1UOnC31YTmITpnM+G/DnvehaGQzbqmgAvN4J
+         91pgyGaEq3AJJRipNX3AhdlFUEkThNE+aGc0vkT2BRlxnuXDp8AaUodzD0daKuaZ7zCH
+         O+zg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782929175; x=1783533975; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Scba/x/dCfB9JJzbY7WApPv7XEyMR8UN1JS/S3YUF78=;
+        b=aHGDoW01Ug2bpSWuC3y1ZKZ4bt4VEeZvnikaXpwnM0fD3GCMJPPQ4b2yZOh+24VMdH
+         CPXdCHcc8gkb+p8Lj03Dlg8qSSR++BeY/h0ihHZaiko5W+MTulL4AD8PJy/8QKuvzOoA
+         CAAabCNXBzogxbc7MhwqT2/ZegN8uhgge+HpvOBTA5OUegzRySqC4tbuusapQvcH4LJl
+         od7SEPGjRdNhAruuzwsee26EhK+0mJYbcphMS4EpxugiZiEav+Hk1uNliperLAGfHs2H
+         dQiSa8Y+Mie/VBo8JSFYdIaa1axee5vxV6ZrCe4+5gH0f10SXkEn0sD/cAaTM2QxQ/Nk
+         Bw3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782929175; x=1783533975;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Scba/x/dCfB9JJzbY7WApPv7XEyMR8UN1JS/S3YUF78=;
+        b=OqMwHGKYbV/tIByelpp3v+Suxb6WjvO6uWFsSl4eT/Eboc3Y2E0mWCagSdzsK4w6/8
+         OvW5X4SWo9AKhYCQzhq12dKmh/CfDDprlDtW4EmAq6OsumfSSgKPrASMxexNv4caVTTr
+         lF3KGlSiiyhqWiyGmGCjKPvSazbfNEkDE/AZbuEJmEDzWd1OQ8sipCwSZeYTtFVLQZDf
+         xQJN/VfTbHDPpTxrBkYrKQWZkdFvLGzYHimie7xoUN/h1hrIe4mQz5SbsdeM2AFZ/U7I
+         V+SwXKI03cmqGjSLzVYME688C3OUZX2zW7LrFH3vI1O8KB8GA9NPCJaHC0dXZcQTvkr6
+         kf5A==
+X-Forwarded-Encrypted: i=1; AHgh+RoUMW+jZTGSJn94BWtTp2yjYqKA0aoJTL3AtH0rMkqJRb1GLTYB+tzis8/9Ux/h7iQO03s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVRh5FwiVd4v/qn+izKsoLzrUwvawtLwFhR5DkrlRRUvDizrti
+	oTruP6OkQ30ZAdtCPQ1lIMvutbVJKt9WfFitC0iIZFIt7qoinJxR/4EkvIEvHU+xk8y2m+D/ZWt
+	Fge8Ri41rMFuW7/pTlGEsfGGEJRGLOxU=
+X-Gm-Gg: AfdE7ckh7BBBlAHUzrHvyFbMxlkZDYkwQ3GyTuDBKU6TmtOdjXawjr5IotUOgRDXkBA
+	iAVM1lmB5EDKSqTZ4muqz91XbBfLECsYalEmcC/Ll0afvZm0wLc9dswxa/xM1dvWO74LfK2ndXJ
+	rXtlagyu5vzrnGSVPbipaoPvUmmAqX1zKYNjBiSnGgq/0OWO0B0cZVjaBvTq3/z6B8E/loEmnpQ
+	BrnUlbyeadzclRhw8AZtAWEtvdxbTbo4eY9DWXgVTWX6+sYqOjc4aj1M0T6S1voRUupWNGmo9fi
+	lsnO1riaw7DfU1zeTDg4OyNIuoMDf+evz6eAAih/BIlc8igd7rsMq047PuDOIJNO
+X-Received: by 2002:a17:902:d50a:b0:2c9:dc38:3ed7 with SMTP id
+ d9443c01a7336-2ca7e882266mr28117815ad.36.1782929175268; Wed, 01 Jul 2026
+ 11:06:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: Verifier aspects of (was Re: gcc [RFC] bpf: don't synthesize
- sign_extend for ISA v4)
-Content-Language: en-GB
-To: Vineet Gupta <vineet.gupta@linux.dev>, bpf@gcc.gnu.org
-Cc: jose.marchesi@oracle.com, ast@kernel.org,
- Eduard Zingerman <eddyz87@gmail.com>, David Faust <david.faust@oracle.com>,
- bpf <bpf@vger.kernel.org>
-References: <20260413185834.58706-1-vineet.gupta@linux.dev>
- <992e0697-f0da-4bfd-8178-abb206410e9d@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <992e0697-f0da-4bfd-8178-abb206410e9d@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260623112533.1151502-1-vmalik@redhat.com> <DJGJ9F6WQZV9.2W4WBIHYLJQ97@gmail.com>
+ <ajq98dm4gAwEzkMb@google.com> <c2f4e45e-d5c9-42e9-a46b-25fb0cacb267@redhat.com>
+ <93e70dc7-e52f-444e-b57e-09d149dc4808@redhat.com> <CAEf4BzYWdsBDQ3D41=+n_oCO68bVOtKuqQCqZOEVo=j7nK9Ozg@mail.gmail.com>
+ <82252ae0-133a-45dc-9622-315236a437ad@redhat.com> <CAEf4Bza8vFSkuiD_Vd47-eGuDS40kKvTcHQR=V3OY=c505a9=g@mail.gmail.com>
+ <4f43e9aa-2444-407b-ae52-0f4bf889ec17@redhat.com>
+In-Reply-To: <4f43e9aa-2444-407b-ae52-0f4bf889ec17@redhat.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 1 Jul 2026 11:06:03 -0700
+X-Gm-Features: AVVi8CdJLWsVd93IAAyHqimLkNG-LKWJDclAXvnosyzScFpuqT5IgLm4V0nYlJo
+Message-ID: <CAEf4Bzb4niXoqLDWvD211M9eJ+Wo5KT2ezVYtTVABVOGOLe=Ug@mail.gmail.com>
+Subject: Re: [PATCH] perf trace: Refactor augmented_raw_syscalls using bpf_loop
+To: Viktor Malik <vmalik@redhat.com>
+Cc: Namhyung Kim <namhyung@kernel.org>, Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	linux-perf-users@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	James Clark <james.clark@linaro.org>, Howard Chu <howardchu95@gmail.com>, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	Michael Petlan <mpetlan@redhat.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Jun 25, 2026 at 11:04=E2=80=AFPM Viktor Malik <vmalik@redhat.com> w=
+rote:
+>
+> On 6/25/26 19:55, Andrii Nakryiko wrote:
+> > On Thu, Jun 25, 2026 at 4:58=E2=80=AFAM Viktor Malik <vmalik@redhat.com=
+> wrote:
+> >>
+> >> On 6/24/26 19:19, Andrii Nakryiko wrote:
+> >>> On Wed, Jun 24, 2026 at 3:27=E2=80=AFAM Viktor Malik <vmalik@redhat.c=
+om> wrote:
+> >>>>
+> >>>> On 6/24/26 08:47, Viktor Malik wrote:
+> >>>>> On 6/23/26 19:10, Namhyung Kim wrote:
+> >>>>>> Hello,
+> >>>>>>
+> >>>>>> On Tue, Jun 23, 2026 at 08:27:39AM -0700, Alexei Starovoitov wrote=
+:
+> >>>>>>> On Tue Jun 23, 2026 at 4:25 AM PDT, Viktor Malik wrote:
+> >>>>>>>> The loop for processing syscall args in augment_raw_syscalls has=
+ a
+> >>>>>>>> history of breaking with Clang updates, see e.g. commit 013eb043=
+f37b
+> >>>>>>>> ("perf trace: Fix BPF loading failure (-E2BIG)") from Clang 15 t=
+o 16.
+> >>>>>>>>
+> >>>>>>>> Now, a similar thing happened between Clang 21 and 22. While the=
+ issue
+> >>>>>>>> is mitigated on the main line by a recent verifier update, it re=
+mains
+> >>>>>>>> broken on the 6.12 and 6.18 stable branches:
+> >>>>>>>>
+> >>>>>>>>     [linux-6.18.y]# sudo perf trace true
+> >>>>>>>>     libbpf: prog 'sys_enter': BPF program load failed: -E2BIG
+> >>>>>>>>     libbpf: prog 'sys_enter': -- BEGIN PROG LOAD LOG --
+> >>>>>>>>     [...]
+> >>>>>>>>     BPF program is too large. Processed 1000001 insn
+> >>>>>>>>     processed 1000001 insns (limit 1000000) max_states_per_insn =
+40 total_states 37941 peak_states 232 mark_read 0
+> >>>>>>>>     -- END PROG LOAD LOG --
+> >>>>>>>>     libbpf: prog 'sys_enter': failed to load: -E2BIG
+> >>>>>>>>     libbpf: failed to load object 'augmented_raw_syscalls_bpf'
+> >>>>>>>>     libbpf: failed to load BPF skeleton 'augmented_raw_syscalls_=
+bpf': -E2BIG
+> >>>>>>>>     Error: failed to get syscall or beauty map fd
+> >>>>>>>>     [...]
+> >>>>>>>>
+> >>>>>>>> The reason is that the loop is quite complex and the BPF verifie=
+r often
+> >>>>>>>> struggles to prove that it terminates.
+> >>>>>>>>
+> >>>>>>>> Fix the issue by refactoring the loop body into a callback funct=
+ion and
+> >>>>>>>> calling the bpf_loop helper. This should prevent future breakage=
+s of
+> >>>>>>>> this kind since the callback function has no loops. It also allo=
+ws to
+> >>>>>>>> drop a few artificial checks to help the verifier, including the=
+ changes
+> >>>>>>>> introduced by 013eb043f37b.
+> >>>>>>
+> >>>>>> Thanks for working on this.  I encountered this issue before and n=
+ever
+> >>>>>> found time to take a deeper look yet.
+> >>>>>>
+> >>>>>>>>
+> >>>>>>>> Signed-off-by: Viktor Malik <vmalik@redhat.com>
+> >>>>>>>> Fixes: a68fd6a6cdd3 ("perf trace: Collect augmented data using B=
+PF")
+> >>>>>>>> Fixes: 013eb043f37b ("perf trace: Fix BPF loading failure (-E2BI=
+G)")
+> >>>>>>>> Cc: stable@vger.kernel.org
+> >>>>>>>> ---
+> >>>>>>>>  .../bpf_skel/augmented_raw_syscalls.bpf.c     | 157 +++++++++++=
+-------
+> >>>>>>>>  1 file changed, 96 insertions(+), 61 deletions(-)
+
+[...]
+
+> >>>>>>>> +  struct args_loop_ctx loop_ctx =3D {
+> >>>>>>>> +          .args =3D args,
+> >>>>>>>> +          .beauty_map =3D beauty_map,
+> >>>>>>>> +          .payload_offset =3D payload_offset,
+> >>>>>>>> +          .value_size =3D value_size,
+> >>>>>>>> +          .output =3D &output,
+> >>>>>>>> +          .do_output =3D &do_output
+> >>>>>>>> +  };
+> >>>>>>>> +  iters =3D bpf_loop(6, process_arg_cb, &loop_ctx, 0);
+> >>>>>>>
+> >>>>>>> bpf_loop() is old and generally not recommended.
+> >>>>>>> Please use bpf_for() then the diff will be one line change and
+> >>>>>>> can scale to any number of args. Not just 6.
+> >>>>>
+> >>>>> Thanks Alexei, I didn't know about this preference.
+> >>>>>
+> >>>>>> One thing we should take care is to support old kernels.  The olde=
+st
+> >>>>>> LTS kernel in the kernel.org is 5.10 and bpf_loop() was introduced=
+ in
+> >>>>>> 5.17 and bpf_for (bpf_iter_num) was 6.4.
+> >>>>>
+> >>>>> The problematic loop was introduced in 6.12 by a68fd6a6cdd3 ("perf
+> >>>>> trace: Collect augmented data using BPF") so we should be good usin=
+g
+> >>>>> bpf_for. Or is perf from 7.2 supposed to work on 5.10 LTS kernels?
+> >>>>>
+> >>>>> I'll refactor with bpf_for and will send v2.
+> >>>>
+> >>>> Or I won't. It turns out that just swapping the for loop for bpf_for
+> >>>> leads to -E2BIG from the verifier again. Looking at the verifier log=
+, it
+> >>>> fails to find equivalence between states at the loop head:
+> >>>>
+> >>>>     [...]
+> >>>>     78: (85) call bpf_iter_num_next#84922 [...]
+> >>>> fp-56=3Dmap_value(map=3Dbeauty_payload_,ks=3D4,vs=3D24688,imm=3D112)
+> >>>>     [...]
+> >>>>     78: (85) call bpf_iter_num_next#84922 [...]
+> >>>> fp-56=3Dmap_value(map=3Dbeauty_payload_,ks=3D4,vs=3D24688,imm=3D120)
+> >>>>     [...]
+> >>>>
+> >>>> IMHO, the reason is that payload_offset, which points to the
+> >>>> beauty_payload_enter_map entry, gets updated in every iteration.
+> >>>>
+> >>>> This could be probably fixed on the perf side by reworking how augme=
+nted
+> >>>> args are stored but at this point, bpf_loop sounds like an easier an=
+d
+> >>>> more reliable approach.
+> >>>>
+> >>>> Let me know if anyone has objections, otherwise I'll send v2 of the
+> >>>> bpf_loop approach, with suggestions from Sashiko incorporated.
+> >>>>
+> >>>
+> >>> I'd still try to adapt bpf_for(), it's a much better code structure.
+> >>> You probably need to add a bounding checking/confirming `if ()`
+> >>> condition validating that offset at which you access map_value is
+> >>> always correct. And/or you might need barrier_var() before using i,
+> >>> because bpf_for() macro does bounds checking (check the macro itself)=
+,
+> >>> but compiler often will reorder instructions leading to verifier
+> >>> complaints.
+> >>
+> >> I gave it a try but wasn't successful so far. I think that the problem
+> >> is that while it would be possible to add an upper bound condition for
+> >> `payload_offset`, the verifier tracks the value of `payload_offset` to=
+o
+> >> precisely (as map_value(..., imm=3DX) with a concrete offset) and neve=
+r
+> >> merges states with different offsets. And since there are multiple
+> >> branches inside the loop, each incrementing `payload_offset` by a
+> >> different value, the verifier seems to fork its state on each branch,
+> >> effectively leading to the amount of states growing exponentially and
+> >> hitting the jump limit.
+> >>
+> >> To me, bpf_loop sounds like a more reliable choice in this situation.
+> >
+> > correctly verified bpf_loop would basically have to follow the same
+> > logic, so if it works with bpf_loop, it should work with bpf_for.
+>
+> Are you sure about that? My perception is that the bpf_loop callback is
+> only verified once in a single pass. On the contrary, bpf_for is a
+> normal loop, for which the verifier needs to prove that after some
+> iteration, we get to the state seen in a previous iteration (to prune
+> the state). Which never happens here because the offset to
+> beauty_payload_enter_map (the payload_offset var) is tracked precisely
+> and causes state forks on every condition inside the loop.
+
+Hey Viktor,
+
+Sorry for taking so long to get back.
+
+Answering your question about bpf_loop() vs bpf_for() they are
+conceptually the same from verifier POV, so they are verified
+similarly. Earlier (buggier) versions of verifier did have a loophole
+where we verifier bpf_loop() in more laxed single-shot way, but that's
+not correct. We have since fixed that and it (bpf_loop) now has to
+"prove" convergence just like bpf_for().
+
+Anyways, the biggest issue with "normal" unrolled BPF loop is that
+people tend to write it such that there is some carry-over state
+between each iteration (like output variable which tracks advancing
+but bounded offset) which, with fixed number of iterations allows
+verifier to prove everything is bounded.
+
+This model is really-really bad for bpf_for() because it doesn't allow
+convergence. The trick is to structure each iteration as independent
+piece of calculation where the state outside of bpf_for() loop stays
+as unspecific/imprecise as possible, which at the beginning of the
+loop you revalidate invariants, if necessary (e.g., reestablish
+map_value offset boundaries).
+
+Anyways, it needed a bit of persuasion, but here's the verification
+result and gmail-butchered diff below. The trick is in making output
+imprecise (force verifier to forget its tracked range), so it doesn't
+differ between iterations from verifier POV. That's what the global
+ZERO allows to do. (We've discussed w/ Alexei and Eduard adding
+special instruction to force scalar register into imprecise, it would
+be a cleaner solution here, alas we never got anywhere with this,
+unfortunately).
+
+Processing 'augmented_raw_syscalls.bpf.o'...
+PROCESSING ./util/bpf_skel/.tmp/augmented_raw_syscalls.bpf.o/sys_enter,
+DURATION US: 1129, VERDICT: success, VERIFIER LOG:
+verification time 1129 usec
+stack depth 64
+processed 547 insns (limit 1000000) max_states_per_insn 4 total_states
+38 peak_states 67 mark_read 0
+
+File                          Program    Verdict  Duration (us)  Insns
+ States  Program size  Jited size
+----------------------------  ---------  -------  -------------  -----
+ ------  ------------  ----------
+augmented_raw_syscalls.bpf.o  sys_enter  success           1129    547
+     38           172         917
+----------------------------  ---------  -------  -------------  -----
+ ------  ------------  ----------
+
+The diff:
+
+diff --git a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+index 2a6e61864ee0..8436368ba203 100644
+--- a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
++++ b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+@@ -429,15 +429,17 @@ static bool pid_filter__has(struct pids_filtered
+*pids, pid_t pid)
+        return bpf_map_lookup_elem(pids, &pid) !=3D NULL;
+ }
+
++u64 ZERO =3D 0;
++
+ static int augment_sys_enter(void *ctx, struct syscall_enter_args *args)
+ {
+        bool augmented, do_output =3D false;
+-       int zero =3D 0, index, value_size =3D sizeof(struct augmented_arg)
+- offsetof(struct augmented_arg, value);
++       int i, zero =3D 0, index, value_size =3D sizeof(struct
+augmented_arg) - offsetof(struct augmented_arg, value);
+        u64 output =3D 0; /* has to be u64, otherwise it won't pass the
+verifier */
+        s64 aug_size, size;
+        unsigned int nr, *beauty_map;
+        struct beauty_payload_enter *payload;
+-       void *arg, *payload_offset;
++       void *arg;
+
+        /* fall back to do predefined tail call */
+        if (args =3D=3D NULL)
+@@ -449,7 +451,6 @@ static int augment_sys_enter(void *ctx, struct
+syscall_enter_args *args)
+
+        /* set up payload for output */
+        payload        =3D bpf_map_lookup_elem(&beauty_payload_enter_map, &=
+zero);
+-       payload_offset =3D (void *)&payload->aug_args;
+
+        if (beauty_map =3D=3D NULL || payload =3D=3D NULL)
+                return 1;
+@@ -466,7 +467,7 @@ static int augment_sys_enter(void *ctx, struct
+syscall_enter_args *args)
+         * struct: size of struct             -> size of struct
+         * buffer: -1 * (index of paired len) -> value of paired len
+(maximum: TRACE_AUG_MAX_BUF)
+         */
+-       for (int i =3D 0; i < 6; i++) {
++       bpf_for(i, 0, 6) {
+                arg =3D (void *)args->args[i];
+                augmented =3D false;
+                size =3D beauty_map[i];
+@@ -475,6 +476,11 @@ static int augment_sys_enter(void *ctx, struct
+syscall_enter_args *args)
+                if (size =3D=3D 0 || arg =3D=3D NULL)
+                        continue;
+
++               if (output > sizeof(payload->aug_args) -
+sizeof(payload->aug_args[0]))
++                       break; /* can't/shouldn't happen */
++               barrier_var(output);
++               void *payload_offset =3D (void *)&payload->aug_args + outpu=
+t;
++
+                if (size =3D=3D 1) { /* string */
+                        aug_size =3D bpf_probe_read_user_str(((struct
+augmented_arg *)payload_offset)->value, value_size, arg);
+                        /* minimum of 0 to pass the verifier */
+@@ -510,7 +516,7 @@ static int augment_sys_enter(void *ctx, struct
+syscall_enter_args *args)
+
+                        ((struct augmented_arg *)payload_offset)->size
+=3D aug_size;
+                        output +=3D written;
+-                       payload_offset +=3D written;
++                       output +=3D ZERO; /* forget range */
+                        do_output =3D true;
+                }
+        }
 
 
-
-On 6/30/26 11:05 AM, Vineet Gupta wrote:
-> On 4/13/26 11:58 AM, Vineet Gupta wrote:
->> Currently the extendsidi2 expander generates a shift left+right to
->> materialize a sign_extend. This is not needed for ISA v4 which
->> natively supports the sign extending move.
->>
->> There are various other reasons for fixing this:
->>
->>   - The shifts are throwaway work since Combine subsequently undoes them
->>     anyways, while diminishing potential opportunities for other optim
->>     transformations it could have done, given to its own limitations of
->>     max 3 -> 2 combinations.
->>
->>   - Interim passes scuh as CSE1 can also "see thru" a native 
->> sign_extend:DI
->>     better than the shifts, again opening up more optimization 
->> opportunites.
->>
->>   - It also helps slightly with debugging Expand dumps as sign_extend is
->>     obvious vs. 2 shifts.
->>
->> The fix itself is easy: just gate the expander on non-availabilty of 
->> smov
->> which in turn is keyed off of -msmov or -mcpu.
->>
->>                   Before                              After
->> ----------------------------------------+--------------------------------------- 
->>
->> (insn 8 7 9 2 (set (reg:DI 19 [ _1 ])   |  (insn 8 7 9 2 (set (reg:DI 
->> 19 [ _1 ])
->>     (ashift:DI (subreg:DI (reg:SI 24) 0) |     (sign_extend:DI 
->> (reg:SI 24)))
->>        (const_int 32 [0x20])))           |       (nil))
->>    (nil))                                |
->> (insn 9 8 10 2 (set (reg:DI 19 [ _1 ])  |
->>     (ashiftrt:DI (reg:DI 19 [ _1 ])      |
->>        (const_int 32 [0x20])))           |
->>    (nil))                                |
->>
->> This change is clean running bpf.exp testsuite tests.
->>
->> The complication comes from a subtle yet very important aspect, which is
->> in the old regime, expander unconditionally forced src operand to 
->> DImode.
->>
->> |  operands[1] = gen_lowpart (DImode, operands[1])
->>
->> With the patch, src remains SImode which exposes some latent issues in
->> the backend and/or "impedance mismatch [1]" with the kernel verifier 
->> and it
->> reports following additional fails vs. gcc trunk against kernel 
->> bpf-next [2]
->>
->> | #12      attach_probe:FAIL
->> | #74      cgroup_xattr:FAIL
->> | #122     file_reader:FAIL
->> | #412     sockopt_inherit:FAIL
->> | #413     sockopt_multi:FAIL
 >
-> For sockopt_multi, the trunk version we have the following snippet:
+> > Is
+> > it possible to share your bpf_for-based code in some branch to try
+> > locally? I'm sure it can be done one way or another.
 >
->    0: (81) r0 = *(s32 *)(r1 +24)         ; 
-> R0=scalar(smin=0xffffffff80000000,smax=0x7fffffff) R1=ctx()
->    1: (55) if r0 != 0x0 goto pc+10       ; R0=0
->    ...
->    11: (95) exit
+> The change is super-simple, I can as well share it here. It's just the
+> matter of using bpf_for with two additional suggested mechanisms,
+> barrier_var and a bounds check for payload_offset:
 >
-> Insn 1 branch is not taken, so upon exit, verifier is happy that r0 == 0.
+> diff --git a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c b/tool=
+s/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+> index 2a6e61864ee0..341d77a78949 100644
+> --- a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+> +++ b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+> @@ -432,7 +432,7 @@ static bool pid_filter__has(struct pids_filtered *pid=
+s, pid_t pid)
+>  static int augment_sys_enter(void *ctx, struct syscall_enter_args *args)
+>  {
+>         bool augmented, do_output =3D false;
+> -       int zero =3D 0, index, value_size =3D sizeof(struct augmented_arg=
+) - offsetof(struct augmented_arg, value);
+> +       int zero =3D 0, i, index, value_size =3D sizeof(struct augmented_=
+arg) - offsetof(struct augmented_arg, value);
+>         u64 output =3D 0; /* has to be u64, otherwise it won't pass the v=
+erifier */
+>         s64 aug_size, size;
+>         unsigned int nr, *beauty_map;
+> @@ -466,12 +466,16 @@ static int augment_sys_enter(void *ctx, struct sysc=
+all_enter_args *args)
+>          * struct: size of struct             -> size of struct
+>          * buffer: -1 * (index of paired len) -> value of paired len (max=
+imum: TRACE_AUG_MAX_BUF)
+>          */
+> -       for (int i =3D 0; i < 6; i++) {
+> +       bpf_for(i, 0, 6) {
+> +               barrier_var(i);
+>                 arg =3D (void *)args->args[i];
+>                 augmented =3D false;
+>                 size =3D beauty_map[i];
+>                 aug_size =3D size; /* size of the augmented data read fro=
+m user space */
 >
-> W/ the patch, codegen changes slightly
->
->    0: (61) r2 = *(u32 *)(r1 +24)         ; R1=ctx() 
-> R2=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))
->    1: (bf) r0 = (s32)r2                  ; 
-> R0=scalar(smin=0xffffffff80000000,smax=0x7fffffff) 
-> R2=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))
->    2: (56) if w2 != 0x0 goto pc+10       ; R2=0
->    ...
->    12: (95) exit
->
-> Here's verifier can't conclude that r0 is 0 or 1 and complains.
->
-> For sign extending move, verifier: check_alu_op () can't establish 
-> that truncated+extended r2 value (r0) and r2 are and equivalent and 
-> delinks the scalar ids. So on insn 2 it can deduce that r2 == 0, it 
-> can't be backpropagated due to delinking of the regs. We initially 
-> thought this would be a simple "bug fix" in the verifier. But it seems 
-> this requires additional state tracking - currently all 64-bits are 
-> tracked with copy_register_state, this need to be broken down into 
-> separate lo/hi bits with additional link kind similar to BPF_ADD_CONST 
-> - will that be acceptable ?
->
-> What's also interesting is for a reduced version the codegen 
-> difference between gcc trunk and clang.
-> The first load is a regular signed int access so technically it needs 
-> to be either *(s32 *) or a *(u32*) + (s32).
-> Clang seems to be eliding sign extension altogether [1] and only 
-> generating *(u32 *)
-> Any thoughts why clang can do that ?
-
-The clang didn't use s32 becomes there is no need.
-Related code:
-
-    struct bpf_sockopt {
-       int level, optname, optlen, retval;
-       void *optval_end, *optval;
-    };
-    ...
-    if (ctx->level != 0 || ctx->optname != 1)
-       goto out;
-
-In such case, there is NO sign-extenstion need from 32bit to 64bit.
-So llvm decides to just use unsigned load (LDW32).
-
->
-> [1] https://godbolt.org/z/fsdrExPWd
->
-> Thx,
-> -Vineet
->
->> | #415     sockopt_sk:FAIL
->> | #517     uprobe_multi_test:FAIL
->> | #519     usdt:FAIL
->> | #649     verif_scale_pyperf600_iter:FAIL
->>
->> These fallout issues need to be addressed first but as discussed in the
->> bpf patchworks call this morning, I'm sending this out as an RFC.
->>
->> [1] https://devblogs.microsoft.com/oldnewthing/20180123-00/?p=97865
->> [2] 2026-02-18 f620af11c27b ("xsk: avoid double checking against rx 
->> queue being full")
->>
->> gcc/ChangeLog:
->>
->>     * config/bpf/bpf.md (define_expand extendsidi2): Only emit shifts
->>     if !bpf_has_smov.
->>
->> gcc/testsuite/ChangeLog:
->>
->>     * gcc.target/bpf/zero-ext.c: Check Expand dumps to ensure
->>     sign_extend is present and two shifts are not.
->>
->> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
->> ---
->>   gcc/config/bpf/bpf.md                   | 12 ++++++++----
->>   gcc/testsuite/gcc.target/bpf/zero-ext.c |  5 ++++-
->>   2 files changed, 12 insertions(+), 5 deletions(-)
->>
->> diff --git a/gcc/config/bpf/bpf.md b/gcc/config/bpf/bpf.md
->> index a2bceb8998d7..1431bfd225e0 100644
->> --- a/gcc/config/bpf/bpf.md
->> +++ b/gcc/config/bpf/bpf.md
->> @@ -308,16 +308,20 @@
->>     ;; Sign-extending a 32-bit value into a 64-bit value is achieved 
->> using
->>   ;; shifting, with instructions generated by the expand below.
->> +;; Only needed for ISA V3 and prior builds.
->>     (define_expand "extendsidi2"
->>     [(set (match_operand:DI 0 "register_operand")
->>       (sign_extend:DI (match_operand:SI 1 "register_operand")))]
->>     ""
->>   {
->> -  operands[1] = gen_lowpart (DImode, operands[1]);
->> -  emit_insn (gen_ashldi3 (operands[0], operands[1], GEN_INT (32)));
->> -  emit_insn (gen_ashrdi3 (operands[0], operands[0], GEN_INT (32)));
->> -  DONE;
->> +  if (!bpf_has_smov)
->> +    {
->> +      operands[1] = gen_lowpart (DImode, operands[1]);
->> +      emit_insn (gen_ashldi3 (operands[0], operands[1], GEN_INT (32)));
->> +      emit_insn (gen_ashrdi3 (operands[0], operands[0], GEN_INT (32)));
->> +      DONE;
->> +    }
->>   })
+> +               if (payload_offset + sizeof(struct augmented_arg) > (void=
+ *)payload + sizeof(struct beauty_payload_enter))
+> +                       break;
+> +
+>                 if (size =3D=3D 0 || arg =3D=3D NULL)
+>                         continue;
 >
 >
-
+> Thanks a lot for the help!
+> Viktor
+>
