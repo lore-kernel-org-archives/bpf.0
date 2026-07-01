@@ -1,92 +1,89 @@
-Received: from smtp-8fad.mail.infomaniak.ch (smtp-8fad.mail.infomaniak.ch [83.166.143.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617AFEED8
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 19:49:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDBD229D27A
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 19:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782935363; cv=none; b=epUIKoU+LHM+fBsUDk3aXtycxS2gx3Ov/fDvdw676R+bIIb4udvkKRnM66PXRlzFe7wxhz9qeLrs/Al/hX2A6bWwYH0cGQO7zhBHXDLQiKipZP5ErS0Uer0vv7jOdA52piZWpEIKGlKtE6CnSZwQDu7sgogCYYbmrm0BwveWkKQ=
+	t=1782935430; cv=none; b=Y2l+PyL0UHOfVCkNuk34QERlVM3XISRmgt/icES+ADvhTsToV3+2OtOjbSTG5mYqmHeTw/XtBVgd1I97MCYpMwCqDF2JlfLeNpJdIMyZsBJETYZHaQY7t05JlHKC0kI9YYZqTjfT+osvUoKiL5asmTVH+EtKXvWXhYBD5vjOibc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782935363; c=relaxed/simple;
-	bh=+PO6Jv5aQEC1AdRkFIMezYhDZ32fwd7yteKTu06ncwM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=daL5Vl/2wbZo1hGVT3YO0gp28rKn3yJ0o/kZPpqfN6dk5wbsAiP6d8BaKuIUm1ko+11ZyFrg9Gi/JN7WX7P2Qk+OB+GlvFECbv+UafEjDoMuHJYTlRQgmIqMj56xdmS0vP5Bf3J53UnGJk63qXGP+I4rV4vUCwctaUVQtNUoBQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=gg9IYyP7; arc=none smtp.client-ip=83.166.143.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1782935430; c=relaxed/simple;
+	bh=HWmMZFmb2pbH6JZVZxSJi9RmyE8g50/2/jBfXaHBEaw=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=LUsTonizHazyHpxQWHxkLg3mngUhiFsYb9XfWMtYLeO1ErfkFrKYoSRY5DsiXAcX8N0ZiOEy5igSWU36K599cvCpeRASZOgh1rkndrZBIxuanh9pzCja1DScSlgzFptPIRVgGUuBH/QJ/nz0mQ/phA+nGxZ9ZFTtEwDqN0yigEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jtf9jbS4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="gg9IYyP7"
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4gr9ZM38pmzMjv;
-	Wed,  1 Jul 2026 21:49:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1782935355;
-	bh=2EXsSe8ptI/Vsy+FKQ/hQBs65YWDNcUEBktyRoWNYiY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gg9IYyP7K8PBkSnAyrNffRejOkTywh3/eKAKWOjAzEVDEGFKMtzG3t13YPgLLBzG7
-	 bvx/hElNmP+ipI5azlzPBYsnMr9VY7a211TUpFWfaaLfq6O/qsZhoT1iouOFV/J7FX
-	 ANOBSeFbqKqziYC4jsHNuRv97P3EQOTPSyhPu2gM=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4gr9ZJ44XfzNxF;
-	Wed,  1 Jul 2026 21:49:12 +0200 (CEST)
-Date: Wed, 1 Jul 2026 21:49:07 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Paul Moore <paul@paul-moore.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, kpsingh@kernel.org, 
-	john.fastabend@gmail.com, Justin Suess <utilityemal77@gmail.com>, andrii@kernel.org, 
-	viro@zeniv.linux.org.uk, brauner@kernel.org, kees@kernel.org, gnoack@google.com, 
-	jack@suse.cz, jmorris@namei.org, serge@hallyn.com, song@kernel.org, 
-	yonghong.song@linux.dev, martin.lau@linux.dev, m@maowtm.org, eddyz87@gmail.com, 
-	sdf@fomichev.me, skhan@linuxfoundation.org, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	Frederick Lawler <fred@cloudflare.com>
-Subject: Re: [RFC PATCH 06/20] bpf: lsm: Add Landlock kfuncs
-Message-ID: <20260701.oTeikequi3ee@digikod.net>
-References: <20260407200157.3874806-1-utilityemal77@gmail.com>
- <20260407200157.3874806-7-utilityemal77@gmail.com>
- <20260701.ze4eph1eKo7a@digikod.net>
- <CAHC9VhRfqSoM89WC6TdQHapUVQe8a18rW2c-F7+tu6EjM9EdCA@mail.gmail.com>
- <akUH13qbsEnJLgQu@zenbox>
- <CAHC9VhSjRcMr9+5dMkep_TPKduYdob-bZ73FLfXd_o2xiWwOSg@mail.gmail.com>
- <20260701.jei4Paej3zen@digikod.net>
- <CAHC9VhRzZVUz8icZ2RD9OVvscJdZW3ivPERJLEkNi5poBeguxw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jtf9jbS4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 840DC1F000E9;
+	Wed,  1 Jul 2026 19:50:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782935429;
+	bh=Aj3H6yE49GEFnv8UGauDjnTY5pgF6dhT4NTwXe7gPmY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=Jtf9jbS4ruim3DD5NEoajCY3s8HdmJoiTneC5KQfs7QugcxzB21K3eUAPZY87g50c
+	 sLTguvJTQH3Mea6cA2mlaFDt53gh3RhwcyA0R/lom+rZCbYO3yhozaUVFl7rp1t9mN
+	 xFIGKv6cqrrV90gKJ4zd6tMQ1Ql99CUKK9ccYCVJIJm3cy8IhiryWf/zGZOB8u6KhP
+	 P6QpzelaFRJQfD3ygS7C4cvKoQLNyPLkswFC4Fc1iYYhig6UcYZuQMTuyAgNLr/6pj
+	 BzMHL1MdgJONdvqm0kLwdoX8NBBCJythOerPZXgPIf+bWYcP4oxOIIBQrrNyFvwLVp
+	 yZGlRBwXISQ2A==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 19892383BA04;
+	Wed,  1 Jul 2026 19:50:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhRzZVUz8icZ2RD9OVvscJdZW3ivPERJLEkNi5poBeguxw@mail.gmail.com>
-X-Infomaniak-Routing: alpha
+Subject: Re: [PATCHv4 bpf-next 0/3] bpf: tracing_multi link info support
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178293541264.1269008.13935548760043177318.git-patchwork-notify@kernel.org>
+Date: Wed, 01 Jul 2026 19:50:12 +0000
+References: <20260629212208.895962-1-jolsa@kernel.org>
+In-Reply-To: <20260629212208.895962-1-jolsa@kernel.org>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ bpf@vger.kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+ songliubraving@fb.com, yhs@fb.com, qmo@kernel.org
 
-On Wed, Jul 01, 2026 at 02:38:08PM -0400, Paul Moore wrote:
-> On Wed, Jul 1, 2026 at 2:34 PM Mickaël Salaün <mic@digikod.net> wrote:
-> > On Wed, Jul 01, 2026 at 09:28:22AM -0400, Paul Moore wrote:
-> > > On Wed, Jul 1, 2026 at 8:52 AM Justin Suess <utilityemal77@gmail.com> wrote:
-> > > > On Wed, Jul 01, 2026 at 08:12:34AM -0400, Paul Moore wrote:
-> > > > > On Wed, Jul 1, 2026 at 6:59 AM Mickaël Salaün <mic@digikod.net> wrote:
-> > > > > > On Tue, Apr 07, 2026 at 04:01:28PM -0400, Justin Suess wrote:
-> > > > > > > Create 2 kfuncs exposing control over Landlock functionality to BPF
-> > > > > > > callers. Export an opaque struct bpf_landlock_ruleset preventing callers
-> > > > > > > from accessing unstable internal Landlock fields.
-> > > > >
-> > > > > Generally speaking we don't want to provide APIs, either in-kernel or
-> > > > > at the userspace/kernel boundary, that are specific to a single LSM,
-> > > > > see the LSM syscalls or the security_current_getlsmprop_subj()
-> > > > > function as examples.
-> >
-> > This patch series is not about the LSM framework, only about Landlock
-> > and its specific model and use case.  Landlock using some of the LSM API
-> > is not relevant here.
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Mon, 29 Jun 2026 23:22:05 +0200 you wrote:
+> hi,
+> adding link info support for tracing_multi link.
 > 
-> Based on a quick look the patchset enables BPF programs to call
-> directly into Landlock.  For the same reason we discourage other parts
-> of the kernel to call directly into individual LSMs, we want to
-> discourage BPF programs from calling directly into individual LSMs.
+> Adding the kernel support with related selftests and bpftool support
+> to display the tracing_multi link info, the output looks like:
+> 
+>   # bpftool link
+>   ...
+>   61: tracing_multi  prog 167
+>           attach_type trace_fentry_multi  btf_obj_id 1  count 3
+>           btf_id           addr             cookie           func [module]
+>           92598            ffffffff825017c4 10               bpf_fentry_test1
+>           92600            ffffffff82503814 30               bpf_fentry_test2
+>           92601            ffffffff82503824 20               bpf_fentry_test3
+>           pids test_progs(1540)
+> 
+> [...]
 
-We're OK for a dedicated kfunc to call directly into Landlock (with a
-tailored interface).  Landlock is designed around its syscall interfaces
-(well documented, tailored, tested), and this would be a new user of
-almost the same UAPI.
+Here is the summary with links:
+  - [PATCHv4,bpf-next,1/3] bpf: Add tracing_multi link info support
+    https://git.kernel.org/bpf/bpf-next/c/859055e07697
+  - [PATCHv4,bpf-next,2/3] selftests/bpf: Add tracing_multi link info tests
+    https://git.kernel.org/bpf/bpf-next/c/d36e4dd547bb
+  - [PATCHv4,bpf-next,3/3] bpftool: Add tracing_multi link info output
+    https://git.kernel.org/bpf/bpf-next/c/37c1e353c9fd
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
