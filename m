@@ -1,160 +1,131 @@
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDCF1480DED
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 11:57:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B143FC5A7
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 12:12:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.173
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782907070; cv=pass; b=k814QNY9dPgsdd0LQC2mTA84wzNEg0+7e3sf0S1wlrUxbQspl7jCiR76WSwdIG3CelewL/BWTo6DWBxwxP1IzHC8x126iBzhs+7HWg8Ocryq3PROfQYEVQ0ag0Od3vHwNbuAgR9Je9js4h3reFsPZ643bO2e6xO1X6MUK39nfC4=
+	t=1782907968; cv=pass; b=jQdREWPgrpVLsTlvIwiiAAz+fCL7VuFl84iOxG1O4QXNRlosdRC90s/g46vcoo9mKGmLwVijCwn4/Ks7t6wrEB2g3Y0dhBpFHS9WB8yZimEYFpa+yagfHjnEqP035XpwDqOFgOP4NtVcGO9L5PuXaOU0Xgbi1JzYzg+IXU0iJ/Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782907070; c=relaxed/simple;
-	bh=k/m7mOwOe2VK+7j1exKhxSnw3ozmGI8iEWqvbTFE6eI=;
+	s=arc-20240116; t=1782907968; c=relaxed/simple;
+	bh=Fk8PD7DHIxYkylROYr9KgJtjNuKi7EFq1m7jUmi/2yA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uMJWnxl61Sz+aTo9RBHWNA4cVkTJQNoukhMyQbeSzWnfqAOhPhkIJGqp/Kwe7rrd/Ab3+GahxFzKqQFB/7ENkVPIo8JPdambul0jNvvn/M4DYcpDxd7CPbxAPuAshlv86nHzPIEYOQlqkNifuRCpkQDuIPirFs+nNkp3HoiMGx0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=beayJkSQ; arc=pass smtp.client-ip=209.85.167.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	 To:Cc:Content-Type; b=eOXqdgoB7NbxbwhJUHHTzOjUepcERI5n4biYKLiRlUCzHXrQDqoBTSttImL+Uw5hafLzkSaAcx8EYJ2h42dp/uqL54QbgjCW170BFHuiLkQVgMkPZPGM+8EBTbbEhFQM8mfbCIaGbal9uFzBsM3HiteAkL70O/h7tHOfPfD8eMk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=HWNFwAuy; arc=pass smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="beayJkSQ"
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-4955cd5da3dso220896b6e.2
-        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 04:57:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782907065; cv=none;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="HWNFwAuy"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c9d1fc053e0so311625a12.1
+        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 05:12:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782907966; cv=none;
         d=google.com; s=arc-20260327;
-        b=MUMUs5WfYmx8iGuamhu0UarsbmIDjOi9YI7w97eVKjW10Ob2f/R9W1B21HAGyoK+yn
-         RXQmpONDFPzx6CUJrNqoNOd7cmfnpDo0zDDHpcmCYk/0M+D7fzjklNpf0wwln4ogVZni
-         4HiA4d4UdBcb707DZtlIJKX+HySD8O+ZHpTdIjBxrLVxsBLrudmQbmfyaDYaQKlWkfZW
-         /cQsqL2AqXu1q1X2AO8z1BAOp39ghCwAvT+sRZWArNwwGt71nhhkywyiLOgU5NfCVd0u
-         cqAaK5Fn9dYNLeUjxbKK5Vc8Cwf7j10Y+9hATxMPmPT+8igvfhvjNE/H7UoT8DbSblMX
-         N+uQ==
+        b=RfgmMxoIdyx7lSJwxFkI7pGsQ5MZTKlw5D/ttJ4iHI68y9pVUb68NiZo+dOPEen6nB
+         58zjf1vl0j1tQq4y9u81yt06yBMzo1Def2u1ngxAzJE4/WUJiIwYfyfF1gn8od4eIM1o
+         uNi+g7qu++IzHEkQGbJUENIlIDgS2kv5X7U79asrXtcfMkOzLIw4YLR7vEOvzx/RuJ55
+         ANbSynKAzl4TGM/MlmVTjgNVC8RbGV7iVrbBtCAkNANeWzdFa4h/T1UQ9+0znZY2vHhU
+         QObwRes/jc6dajtGWGdYx5X0oIt8Ak9rH6Eeq0uMQUjv2w9gkFwRCkubLz0Coax+ZJSt
+         lflA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=lqKxpCifHTwVLxyMY/FMijSWYZ0kJMALXZou2Lu6auM=;
-        fh=TdfAiknAoHYJDv9dwgL26uTECxAWnaVfFFEM+0TUTpA=;
-        b=GFt6Zk9fIhsHb+8qpOrKa8uBGpj7ogNXQSIeNkyTDPVTFNuaGDq4wgLhI66xpbhBma
-         lP8W/q7erKlftc4rwxZ9CZT2tzO8wvosgxBgiDmegVShf0rX3jXtjo0COpjToRJXAEGI
-         DWAWPBQUsRJuYTf1j6X58jfuha3z6uCBc24NORjFEvqllqCu43+3DXoJ+IslrV0A97Zi
-         3ZAsrnA+f/Qe/JuXXeSBQJZVj9xbmclIIJ7WWnsWKoYd0M15YGr2oL0dt4TXevt9ri//
-         ch+6pI+tyzA55gstuC0k/MAM7xgsjzvP2+PsMMjxL1aZG5Bqs5dV3cJU/dUK2EqyfK3u
-         BrHg==;
+        bh=v+RmTpdSNJcnbFj51/rDNICNavYVs5s5tmOS41AN5HI=;
+        fh=jm8kMeQLk15sXFS+RhHC5kxQ5/hxGAiayJgh3pTqJ/o=;
+        b=TMNE6O5tUDrDGwmpVkHy+f4Z01SwV6GoeFYgfQ0RPyrO+vojf4kHXRVLl/BAIPCMAR
+         +IFdtopOv94/hdqAfMyadLpYSZIKm8OtUF6q2MZUDbBjzWKlwA8EQx7pLgpmfNLXerEA
+         HY1L53kkmHKnctM7AXMfNIw3d+FlUzY7wfnrtWWw2xReo+0dt7llkaP9SXx57IFEU8Wf
+         CFAf2ibs9Nrk29HmPDQ16OrhZ1rWEXbPUJh6r26GBDftSFv/sfimb8mkGhBwC4lqUqwh
+         T0uIAvcLssVFaqj5QvWxf4PPnUd6S3aUJVfZXZ40AYWQ61/9v8lnDXUgINSq/NRMS+k1
+         RREA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1782907065; x=1783511865; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1782907966; x=1783512766; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lqKxpCifHTwVLxyMY/FMijSWYZ0kJMALXZou2Lu6auM=;
-        b=beayJkSQr05vWYthJphsua2qi+wI2deN3ee4s+RMMCcgG36dU/SEXscL3RrMizBEa3
-         eOAxxSCX2hqgrkeKXxMxF7dAXzzyw67pfUz/T15fHCiNkUaPTnlR/pZynfzeNlGeDDKq
-         buWXeDmcWf/HUMynqzaP/5i1vsu9w/Yj0BGAeuvAZ4gZ1WMo11SqajiqzMHOIlAJsTtw
-         FOzLTQj7VUgrAQdAIS5uuRU2zq7AGqH3shd3tSFeo31+Uvd59dItC1E/EROQsNmp0rAT
-         GrjUFCOZfpGFgvYMRBTNx+zSAIk5+nIHn0pTElTWQqb8uHmUnEi87FV+p3IjP54ID4OV
-         HxhA==
+        bh=v+RmTpdSNJcnbFj51/rDNICNavYVs5s5tmOS41AN5HI=;
+        b=HWNFwAuyF9faYBiKPwy/0ShIU4GCX4wa8/hc/SOe9F1q6tq9fkzadaCiz8K7nKYUps
+         NpttmbGGEfEuTuLNSy8f4TGD7jG0Zpxg0iAE9BzzCM3xE8Voz4C/sKSlXqrbtPC0NFb/
+         ascm4R4G6ggQ/8xtWBrJMlGiKNK+4pHnswraCYIM2tZuaj5rZ6GgCXYl8u9qerzeER+Q
+         ZRZexYuBnlnePZ8w/f+27PT+QqZf9f331aWKtJrU6Oi7oHSiJU4FNN9o9jB55DuoblSO
+         Si6/GSNg/N8/pWcI6bl2bpqpfdWah69vJTFIJ9WOcKR7J8D8npYORHpmI1VFRfzjZ1D+
+         5LXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782907065; x=1783511865;
+        d=1e100.net; s=20251104; t=1782907966; x=1783512766;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lqKxpCifHTwVLxyMY/FMijSWYZ0kJMALXZou2Lu6auM=;
-        b=AFT7IypUDcwDvimi+cxEi5AC1wCbMeUwgszAb21e93ypGTgOkmOmcmpDRDoH418ezL
-         4A74634BDThmPWhSJYotgknHtbCuNZQH/qKjjUBMJIBGZUwhyPtmxRGFdIHb5byZIjEx
-         zObqTmniO2T2a7ha1iiit/jxEhrzqKEdzZy7W5RSncpv01kcfwWJwML0Gt7wy5dyRx6S
-         R0vMQuh990Azw87FwCY4XUiz5xCL+LnczznFnw779c8PWXmqmOX2Fcdhm6K2DbNG8k1n
-         WD1BTkiH+AJ6fS/IC966USnCIBQTu59I804RoTwrYLksDsBxj03yYOMYuC6qoAlcN6Xl
-         sD4g==
-X-Forwarded-Encrypted: i=1; AFNElJ+CPGYLeT4r0mxcr6FbZ1awlynnylQEmteKP5cBuwJjV8QBL58bl5276ZAKcWocAY9loh0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxI7k/a+F9SPIkTdybixsKjkaSYy6yfKc13TuIOPxU2qCMm+LX
-	196wxRyBC7brgHhHs3qeFmVJUc4oRBIEsEviBay7lsegg+bQiKTNIWChsXal5E2sjkyWDs/O/gi
-	PKuIearqZ48kupXe7NggkH2pV+5oiGKu8doQ+IwHSoA==
-X-Gm-Gg: AfdE7cnQTYYsIc3tIHRGNrcqja0IrNosInaeomO9dNrdd78ieegYFyq7uQ7zsnhV20n
-	nSxXjpC4oMUQFHRM0oGtAWd4J8mvea5JK9MNNmDDJd5OGCubJjXb+rCgLmtosXYX58kB1Z56+HL
-	5Sh9eK2M77WhSW0DMprI4XIyMTvN78pJgBvZnBnRtSjIZzWgEloW3DkQ4Dq1u4vDKvd40KLDp9E
-	2LVMyde75UzVkI6Js9G4pxs0Srouzl66c2Hn4hrgTAu7PtwQaUSb5kHbo39425sHZzK9lYAzEQ=
-X-Received: by 2002:a05:6808:1389:b0:492:5bf0:d29f with SMTP id
- 5614622812f47-4960f0d2101mr838181b6e.37.1782907065542; Wed, 01 Jul 2026
- 04:57:45 -0700 (PDT)
+        bh=v+RmTpdSNJcnbFj51/rDNICNavYVs5s5tmOS41AN5HI=;
+        b=WKr8v9LkDzdouALf2G175t9LllReLbV++p58VGp0fveCkT2HXHXUdTRewfcyZ8Xz6K
+         2fvlzMMj8DRNUE/XoRgELwnr34Mw3yyJwCHRqjAeQI5oFhqHk2fuw+InOr/rfj8Bfmme
+         WI7rUP3NUCdo+NKMmhuaGdIUdCNEOMKJCHimUpXY2UtKTWhVRJW8Qds7Q0pnoaxIKuSs
+         i9RXWyHHWFxIoGRtH2uuKxVUAj6+YM6w3Tc3ubEbFGS2iFmCUORnQrUTvPNRffkaEfPH
+         fPYHwhKHCYT2frNX77oJUt1VgEWa+haqhAD+vdrVL0x0nx2qq6s6XJtuLG9UPuCr2bHD
+         uekw==
+X-Forwarded-Encrypted: i=1; AHgh+RqfmIPzNpXCAhQgxbwYKlWr0FAGUgM7ITuiMZr5RSk8cdj8k0Ydnke1k65whZdjCASja1I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxH6LCKozPGCcYE08PnpgaJ4caW9lojR010JAD5FetKVeyrpZmE
+	e9PBw9PNOmmoKdfOGfaQqE0u+VB2X8Bnm169Asu5XWk8gaVl+5u9PkrBd558sLndueYifzPZCVu
+	VbOHwnkcIVsA+KkPo4FtEMXDpuQlqrkExQhwgXJQT
+X-Gm-Gg: AfdE7clQCJDOaNOl3V0WACD98nOkh12t1CAa9ObiN01tR6vimlZZ6dHclfzE9PJxSbN
+	0Owgh6gKaDaHjdNavwW18tIg0gs1wbZwZ+CLi51ABH5Aejv1Al5lIwbPUvPFHYEf2b8RiSZyHab
+	W3qmuBN0E6hVZE/zDOtUCXCN8I8LzbV8oA65UqEQF+qd2S9DVTzKA5hkC1DJLU99OG0GG2reh5/
+	9XpICetUx9AhmBtozA5MnWRNdSRpBtVN72DxJ5CiNNOndXZB+Gr8SS43a2BFH1sQthbWf36
+X-Received: by 2002:a05:6a20:5484:b0:3bf:6c08:2842 with SMTP id
+ adf61e73a8af0-3bff42c92cdmr553443637.49.1782907966065; Wed, 01 Jul 2026
+ 05:12:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1782877663.git.cuiyunhui@bytedance.com> <7988df83f6341ea045ebd7294af2e8907dbd5ee7.1782877663.git.cuiyunhui@bytedance.com>
- <ea525a80-1e6f-4304-a371-3ec17d91ee96@app.fastmail.com>
-In-Reply-To: <ea525a80-1e6f-4304-a371-3ec17d91ee96@app.fastmail.com>
-From: yunhui cui <cuiyunhui@bytedance.com>
-Date: Wed, 1 Jul 2026 19:57:33 +0800
-X-Gm-Features: AVVi8Ce8Hvhgv036NZvyTtBZ5NMmFq-2bEMlGWh7WwSjecXpQvRJF8LZ_SFRCM4
-Message-ID: <CAEEQ3wnDACZ08kk6ycpgXezgyS5zxi+P_vF_yBScK2sxU+UKaw@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v5 1/3] riscv: io: avoid null-pointer
- arithmetic in PIO helpers
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Dennis Zhou <dennis@kernel.org>, 
-	Tejun Heo <tj@kernel.org>, "Christoph Lameter (Ampere)" <cl@gentwo.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, pulehui@huawei.com, 
-	puranjay@kernel.org, Thomas Huth <thuth@redhat.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Ben Dooks <ben.dooks@codethink.co.uk>, 
-	=?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@ventanamicro.com>, 
-	Samuel Holland <samuel.holland@sifive.com>, Zong Li <zong.li@sifive.com>, 
-	"Conor.Dooley" <conor.dooley@microchip.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Deepak Gupta <debug@rivosinc.com>, seanwascoding@gmail.com, 
-	Andy Chiu <andybnac@gmail.com>, menglong8.dong@gmail.com, cyrilbur@tenstorrent.com, 
-	Vivian Wang <wangruikang@iscas.ac.cn>, Atish Patra <atishp@rivosinc.com>, 
-	Anup Patel <apatel@ventanamicro.com>, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, qingfang.deng@siflower.com.cn, 
-	Linux-Arch <linux-arch@vger.kernel.org>, llvm@lists.linux.dev
+References: <20260407200157.3874806-1-utilityemal77@gmail.com>
+ <20260407200157.3874806-7-utilityemal77@gmail.com> <20260701.ze4eph1eKo7a@digikod.net>
+In-Reply-To: <20260701.ze4eph1eKo7a@digikod.net>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 1 Jul 2026 08:12:34 -0400
+X-Gm-Features: AVVi8CeqewfdSkYjjmrhNYrv7bEJMOVzvMagAf7bsF5eyhzqBn0BNZSrdfQn4sM
+Message-ID: <CAHC9VhRfqSoM89WC6TdQHapUVQe8a18rW2c-F7+tu6EjM9EdCA@mail.gmail.com>
+Subject: Re: [RFC PATCH 06/20] bpf: lsm: Add Landlock kfuncs
+To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Justin Suess <utilityemal77@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	kpsingh@kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org, 
+	kees@kernel.org, gnoack@google.com, jack@suse.cz, jmorris@namei.org, 
+	serge@hallyn.com, song@kernel.org, yonghong.song@linux.dev, 
+	martin.lau@linux.dev, m@maowtm.org, eddyz87@gmail.com, 
+	john.fastabend@gmail.com, sdf@fomichev.me, skhan@linuxfoundation.org, 
+	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	Frederick Lawler <fred@cloudflare.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Arnd,
+On Wed, Jul 1, 2026 at 6:59=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@digiko=
+d.net> wrote:
+> On Tue, Apr 07, 2026 at 04:01:28PM -0400, Justin Suess wrote:
+> > Create 2 kfuncs exposing control over Landlock functionality to BPF
+> > callers. Export an opaque struct bpf_landlock_ruleset preventing caller=
+s
+> > from accessing unstable internal Landlock fields.
 
-On Wed, Jul 1, 2026 at 2:25=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Jul 1, 2026, at 06:20, Yunhui Cui wrote:
-> > @@ -56,6 +56,8 @@
-> >  #define __io_pbw()   RISCV_FENCE(iow, o)
-> >  #define __io_paw()   RISCV_FENCE(o, io)
-> >
-> > +#define PCI_IO_ADDR(addr)    ((void __iomem *)((unsigned long)PCI_IOBA=
-SE
-> > + (addr)))
->
-> This does not seem to have any purpose, is this just left over
-> from the previous version?
->
-> >
-> > +#ifdef CONFIG_HAS_IOPORT
-> >  __io_reads_ins(ins,  u8, b, __io_pbr(), __io_par(addr))
-> >  __io_reads_ins(ins, u16, w, __io_pbr(), __io_par(addr))
-> >  __io_reads_ins(ins, u32, l, __io_pbr(), __io_par(addr))
-> > -#define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, =
-count)
-> > -#define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, =
-count)
-> > -#define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, =
-count)
-> > +#define insb(addr, buffer, count) __insb(PCI_IO_ADDR(addr), buffer, co=
-unt)
-> > +#define insw(addr, buffer, count) __insw(PCI_IO_ADDR(addr), buffer, co=
-unt)
-> > +#define insl(addr, buffer, count) __insl(PCI_IO_ADDR(addr), buffer, co=
-unt)
-> > +#endif
->
-> As far as I can tell, just adding the #ifdef here should be sufficient.
+Generally speaking we don't want to provide APIs, either in-kernel or
+at the userspace/kernel boundary, that are specific to a single LSM,
+see the LSM syscalls or the security_current_getlsmprop_subj()
+function as examples.
 
-Okay.
+Yes, Landlock does have its own syscalls, but those are
+"grandfathered" and not something I want to see emulated across other
+LSMs.  If a BPF program wants to interact with a LSM, it should go
+through a LSM framework API.
 
->
->       Arnd
+There have been some initial efforts to develop a LSM wide policy API
+for userspace, and while it was put on hold to sort out some namespace
+issues, we could move forward with an in-kernel API now.  We don't
+have strict API stability guarantees for LSM hooks/APIs so we have
+some more freedom to do something now, even if it isn't perfect, and
+refine it at a later date.
 
-Thanks,
-Yunhui
+--=20
+paul-moore.com
