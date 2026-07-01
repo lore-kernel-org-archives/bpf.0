@@ -1,176 +1,130 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34B143A71AD
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 20:32:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782937952; cv=pass; b=fjLWh3aaj/N+vr9WbgaTW059GQgbupWtrJPIjVvV7Uf/zbylqWxlQLKgQFGY9MoyQFk8XK4/titW+ShPOa9WNGGcW+oQ7F/gHcUd4ldmIZCm8Lmjsoc3ktuTN3spwRkfYQVQSLuDJ/Rjpm0sqO2WzPn3bC8xJCmUPQuOufWE268=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782937952; c=relaxed/simple;
-	bh=7/sHJHaXSYF+upxkU4mAxLjNkxjly/ZvWaONQwnzSIk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MI3EN9k3KVKN6qF6P7fi9D5cut/d3f/rrQkIOfhCDIqUdFTRRiCZcbRrA0iHz0Mt8SWk5gMAmt7veV1gV1Nj5UTSQXXNvjscvlIQ8nOh1WMvySRwpigJ9Cn/kesXdK0cA+QOu9WIR1+gEYBsRyKoDO88+bbmM3uoQ2CJSyC8lD0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ssHKnqUD; arc=pass smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6BD63BBFD1
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 20:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782938423; cv=none; b=Bi6EVnEk/3X3rUYCPlJ4HyZoWAzcKtO7+3HbrvKKJU0wiMBFljcelFjtdyauU9HHSkvF2cRDb5U2gGq/EhAbKy8iJLN6nKSd9dpXUSlpoCY706vLGg7pOz6Lgfr5NmYJBzEN5WFMP3knnSDqqyMBGacjQtJ2lBCx8OWeYXBx3Ko=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782938423; c=relaxed/simple;
+	bh=U2hF8G7MxMlTrCk03c/hCMOtixrsLEfPEzGm4AL91X8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=kHu4CHID5PiObhpOEWE7Ok5fmS2phmGsVndOOj9nDkDZZSswEcmwR/1ke0jRRhyIbYwp/IzkcxHL+Yp5pD9miycwI+j/Pv3W9Unb+6F87LHooaHjurWzm4WrPwejAsUJPO2TFTm3Q58gaDI+g+nIpdDKdZsIsi3wETaFZInh9q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=x7LYEDNc; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ssHKnqUD"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-37fc01881f2so1077773a91.1
-        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 13:32:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782937949; cv=none;
-        d=google.com; s=arc-20260327;
-        b=QsFlg5m+OtTyEyJJaZHoMLxHu9ZXY7eqoH55BNoVJpA1ecsWCkllELOM2Rcp5JKi/k
-         KQ9BEO26gMaN+60JEXfHFqaFz3koqxERzyu+7DMWdqpAPE/EtDSbG7UtedLICHdofcbl
-         UJ9WM9N7T9KAGX4830jX4mwMPoK+3lCrzSChlFwR3IIUgJl348DPZKMcTkQLUseCLoV/
-         323blfFB1/tnuer9eObJ1XbtvBooshxWshX/qA5L1Jco6JwCbkNZo+JVgLrl4JYehwEQ
-         wdDNmJzsLPjl205ytI+bFDGNQ+fUhcwDudKpX8RRoMqg2xzJH4R5HwkZ97SNbnJgmx+t
-         uPKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=MNRUwb98CGj20jMOUNCoIeWSRqWstmMnRVlQAu295kk=;
-        fh=s8QdQtxftUlaYHOX2Bpmks3+9l4ZxMUJEmvv2haRIg4=;
-        b=exFo/R49YDGTAtoHyD8MVbMBIknCrkl2DtbYsDt0fjXpHIS9Fj+1HAU17oalhKOrOR
-         Li/FauFlup61MY3Ln0CQ6mfohetae1+txq4I1OFwCso/80jGSXF0z1MuZBn+mfjnGAQ6
-         VElrHFNqz8eq9SEI9gLNuK1eUi+53wlHJN4cQimpFdy0nOgBp44xmm3bbzC9y0bQ3fah
-         M/G1IuGY+KZ3Uafev2TB94nKwkr9JAoYxArvavjb3TnoiQN7O3vPeQtVvKN5+6AFpNYB
-         6qJ+UAw79Zc2lMq7TOFkLgxiWYXKP0p8lYbivDEVzAJP3+uLn2rtHkItlF+LIpqmp0GE
-         Prrw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="x7LYEDNc"
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-9217d13c276so62542985a.1
+        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 13:40:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782937949; x=1783542749; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782938421; x=1783543221; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MNRUwb98CGj20jMOUNCoIeWSRqWstmMnRVlQAu295kk=;
-        b=ssHKnqUDPxfs9qh230Lt760/9PO/pwSsAXaDlNJXgqodiYErQVkdf+pVsEvdESvT2X
-         hKKLmuZQlMwRa79EuBEe8NsutlCcySVDgzGaGGdahzRuE+d5BjjsQrspOzLkAXJX0L5j
-         E0wUyfewUOy1xpwFU1SBi7cDFW96Cd5YfmnnbEjvl9Zf6RlJ9ZY79RubBsHn4DNHeN7S
-         8EDM15reCVe5anvxdUzURYH0/lr/PUlBz4jJ4f2q/vCY1Xi3rXNjhLXX0DPcyaAtEjmV
-         NGrZKNVA5bdrOGQeg+jagcPQlrvzIM55sjiMGdqZa43G/CBOwjdm8SBLdzTbG68bT3wp
-         nBAA==
+        bh=EXb+Hm8EqB+tIxEhH7zHV/2Rqng5Rp8lq/N7EdSukgA=;
+        b=x7LYEDNcFudrXI3W83Dq4B3qLqg8nJwlwsXaEbCOysCZp3984EQVCGEqfcpHhuQexr
+         WOc4b+6Mki0quXp7ue3ak0cnAwJjU0q2La9bHkMZxDehh0NphOi0X1DUeFSECtC8OKdM
+         snbPzf/VXyOujxA8p3zyBI4Uh1nAXb1l7M6ehUodhAyWgUsOzOUu48ZGS4zEjaWxLhrK
+         pXbPNx/LQ6LOcgf1KGxLZ4SzUC/9cEXmM0U/n9jd5xpQTmLDhTG8ypuhpH/dP0YGj73G
+         7Nrec++K29OPgyKHNFEUR1KneUZ/QV0cfqR/lbXzVRhnMQqAucqNV3tTDMmBS9p9M+z2
+         tE5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782937949; x=1783542749;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=MNRUwb98CGj20jMOUNCoIeWSRqWstmMnRVlQAu295kk=;
-        b=eRGLl4QsuXRDpcxDPIqTlEAtPuVKP5muSlbbSKwKBYaKZtPBHL7OgvI+xldcSTaWkI
-         C0VC+4GIkDH2mQ+VIdzLgzBHPYRVZn4XpnHjQ07Mp7yi16IyKsxSPNH2fVzeUjcZz1c5
-         g15ALFoAUE0RHGXMhNMfm/S7jbm9/7efE9EB75jEH+51MOje9EICpnXFJmAgMsVfMdWw
-         fMVSqB9ZGoORJGZLmgg67fcuBvw1TZZaY8Qpwrd1NYvo9NvMKkXXXGHYwvFFd+Iyzc/L
-         avNluqDn5Y2gQXRzDmW0dks0PYj/Uet1bWeUXwfCPkFPwHNBVzlru0qYz6VnfBR7qlQ/
-         5O9g==
-X-Gm-Message-State: AOJu0Yy3SIQ+LRI2qszfoNqsZ1rsNuqPf8SdiQpF/ARhiP1QZp+deKUF
-	sLKFmZlYqyyuS9B15gzkow4CBz2PcONcmE0BIJWOSXLzRmUlbiEpGnk5leUrmcjAn/JKUJHEw93
-	jQYKdb9w5fCM+obnM/RSWnxRQjfKfaog=
-X-Gm-Gg: AfdE7cmcfOG66408A2Fx7mynzo/l2//ggtsBY5RycEFe/iqBV7sn/95DHSJ5meb/U2k
-	8MfZlop3t9c3wYTEHJSoH1Mys/SLnA8p4evIzembwGZ7LjobINV+SV/HJ3QDH7fdYm4u6xmwSuf
-	N14RkZbiHYV4BkAvF8PPB/Xe7QpvtLwt+AkSwkw7sMUH9AwfQZz1flpq3dIa4/GL1RCmlIsFPDG
-	1qAowmztL9hWqz+UuDT4gQkwWDKDHSv/d2TFr2iTX8wqful2zWnEPzZ3ZyQuuH4LJvicw2x6fU4
-	Zmoavv6n8V6PdUa/sV7h7RQTNPAz9timyY5r/+r4m5cBRsLJmQNiKnXwl/d0Qb9G
-X-Received: by 2002:a17:90a:e7cd:b0:37f:133a:3e02 with SMTP id
- 98e67ed59e1d1-380ba74883fmr2259236a91.0.1782937949401; Wed, 01 Jul 2026
- 13:32:29 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782938421; x=1783543221;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EXb+Hm8EqB+tIxEhH7zHV/2Rqng5Rp8lq/N7EdSukgA=;
+        b=sq1xTorX4StbwUewEvkttabwfCG/C6BsKuoI5M+bjgnVKFqsD3QP2uD5bW9iiO27ur
+         xtli+eY8/00mJv+CjWwmLVMfDB9RclM0hdhfC+UWwT0fCH8GT8Ub2de5WLY7kaYX3AIN
+         cdt+9wv5jSyvCXOkHMcEhRQrVQckbrFai0SgFaIIZqZgojaztsxi16OhA5ZAFQPSyw/Y
+         QYMjkT0OIJaJGZlU4kE7QFJEvoTthKqegO3sMBXrQbEW76SpUgnAq5vu2nLQPcN2mOOK
+         Iwu5ek8/7OPUnW1G2TA2rZkxQ2YqT0hMo7wTydbjwVmDPeDMTfsyiOifzDXenpTYzGcE
+         4U+A==
+X-Forwarded-Encrypted: i=1; AFNElJ8dAGpZlEqNl8Jhg/vsXXI3g04ll9K5HUu9AibhiDV7O5uZuNBcc52dcYP12cJNcQYmHJI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlMfTdBsXypcTlxvwg9Dz0cSb6NynOGM/R+lE3AnhLcs4u+xpd
+	sLFTPrEJ45t8Ui2UYWK8EgLQVEXMS3h71OPVPfa6Rd3N7O+4vxU48sS9AR/GgDKMuHE=
+X-Gm-Gg: AfdE7cnHuzcOlQvj0/7iEuwuEZTm80M919sMoaDPSvY9qMbNI5LZ6bZQ3QXg+SlxjnJ
+	IuZbDSpZntiA2A72/0DGCmN3i5pMFhVkZa29GInaW6smQd6YlaPlyn/Jini03MzTjwWwe0sEZiS
+	EUSePmwlhgT1C/yLwB4vL+4DXWBKXRZjR9yzesdlyA1RNjY5i8p5Yx5XDIUa0JTyFj6G5p9v8CJ
+	kPPooqRFtstzKyHYntzCDmN3cyM8rhJlVlt9dEN1w1zi5j7aomvicsQq8rAqhaI3HBjg0UZ1K6r
+	jR6KRpLyZG0mkQchpTFC6NVT0z0zzXIs1PidoukIq9YKvnF9DFbI4hWq3vUn0st2uB6wz1I44OT
+	R0H+U8zGzICzgf2BxmC9tuB8EW6KZJp4iUqw+xuCnGPfzD6NDmPAZEDd1vQ4lgzNQNuIvgol43/
+	biohq+xT96YB0=
+X-Received: by 2002:a05:622a:116:b0:516:e152:7a59 with SMTP id d75a77b69052e-51c26b14343mr43716081cf.42.1782938420485;
+        Wed, 01 Jul 2026 13:40:20 -0700 (PDT)
+Received: from localhost ([198.58.242.173])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8f471813f56sm7192136d6.30.2026.07.01.13.40.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jul 2026 13:40:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260623175006.3136053-1-ameryhung@gmail.com> <20260623175006.3136053-14-ameryhung@gmail.com>
-In-Reply-To: <20260623175006.3136053-14-ameryhung@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 1 Jul 2026 13:32:16 -0700
-X-Gm-Features: AVVi8CfcQa6IBvQSgCXyIce6uAtzmIMLNbYaYjbp5x30Mu2NEKAwhZgDNROhdQw
-Message-ID: <CAEf4BzZ9Mf7-o6JNnqbTDTDC4mYjRCNh8o6cfN=TKqe8D=Sz+w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 13/15] libbpf: Support attaching struct_ops to
- a cgroup
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
-	andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
-	martin.lau@kernel.org, shakeel.butt@linux.dev, roman.gushchin@linux.dev, 
-	kuniyu@google.com, kerneljasonxing@gmail.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 01 Jul 2026 16:40:19 -0400
+Message-Id: <DJNIX6BLBZU3.3TAKCXAF7L0XY@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v2 5/5] selftests/bpf: libarena: Add parallel
+ bitmap selftest
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: <bot+bpf-ci@kernel.org>, <emil@etsalapatis.com>, <bpf@vger.kernel.org>
+Cc: <ast@kernel.org>, <andrii@kernel.org>, <memxor@gmail.com>,
+ <daniel@iogearbox.net>, <eddyz87@gmail.com>, <mattbobrowski@google.com>,
+ <song@kernel.org>, <martin.lau@kernel.org>, <yonghong.song@linux.dev>,
+ <clm@meta.com>, <ihor.solodrai@linux.dev>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260701185235.4516-6-emil@etsalapatis.com>
+ <c4b56704d686ce2c0a944b0726914b06a593620812d129573855a7d89c9ce646@mail.kernel.org>
+In-Reply-To: <c4b56704d686ce2c0a944b0726914b06a593620812d129573855a7d89c9ce646@mail.kernel.org>
 
-On Tue, Jun 23, 2026 at 10:50=E2=80=AFAM Amery Hung <ameryhung@gmail.com> w=
-rote:
+On Wed Jul 1, 2026 at 3:38 PM EDT, bot+bpf-ci wrote:
+>> diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_paralle=
+l_bitmap.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_parall=
+el_bitmap.bpf.c
+>> new file mode 100644
+>> index 000000000000..5381deeb8d37
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/libarena/selftests/test_parallel_bitma=
+p.bpf.c
+>> @@ -0,0 +1,191 @@
+>> +// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
+>> +
+>> +#include <bpf_atomic.h>
+>> +
+>> +#include <libarena/common.h>
+>> +
+>> +#include <libarena/asan.h>
+>> +#include <libarena/bitmap.h>
+>> +
+>> +#define TEST_BITMAP_THREADS	2
+>> +#define TEST_BITMAP_BITS	(2 * BITS_PER_LONG_LONG)
+>> +#define TEST_BITMAP_WORDS	BITS_TO_LONG_LONGS(TEST_BITMAP_BITS)
 >
-> From: Martin KaFai Lau <martin.lau@kernel.org>
+> This isn't a bug, but TEST_BITMAP_WORDS does not appear to be used
+> anywhere in this file - could it be dropped, or is a use intended?
 >
-> Add bpf_map__attach_cgroup_opts() to attach a struct_ops map to a cgroup
-> through a BPF link.
+> The sibling serial test (test_bitmap.bpf.c) defines the analogous
+> TEST_WORDS macro and does use it as a loop bound.
 >
-> Also extend struct bpf_prog_query_opts with a type_id field so a
-> BPF_STRUCT_OPS query on a cgroup can select the struct_ops type to
-> enumerate.
+
+Ack to this and the bot nits. Sashiko failed to apply the patch,
+but the CI did so just fine.
+
+>> +#define TEST_BITMAP_SYNC_SPINS	BPF_MAX_LOOPS
 >
-> Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
-> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> [ ... ]
+>
+>
 > ---
->  tools/lib/bpf/bpf.c            |  2 ++
->  tools/lib/bpf/bpf.h            |  3 +-
->  tools/lib/bpf/libbpf.c         | 59 ++++++++++++++++++++++++++++++++++
->  tools/lib/bpf/libbpf.h         |  3 ++
->  tools/lib/bpf/libbpf.map       |  5 +++
->  tools/lib/bpf/libbpf_version.h |  2 +-
->  6 files changed, 72 insertions(+), 2 deletions(-)
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
 >
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/285413=
+48016
 
-[...]
-
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index b965ad571540..0e5f4e9bba41 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -960,6 +960,9 @@ bpf_program__attach_cgroup_opts(const struct bpf_prog=
-ram *prog, int cgroup_fd,
->  struct bpf_map;
->
->  LIBBPF_API struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_=
-map *map);
-> +LIBBPF_API struct bpf_link *bpf_map__attach_cgroup_opts(const struct bpf=
-_map *map,
-> +                                                       int cgroup_fd,
-> +                                                       const struct bpf_=
-cgroup_opts *opts);
->  LIBBPF_API int bpf_link__update_map(struct bpf_link *link, const struct =
-bpf_map *map);
->
->  struct bpf_iter_attach_opts {
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index b731df19ae69..1b01d49e58eb 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -462,3 +462,8 @@ LIBBPF_1.8.0 {
->                 bpf_program__clone;
->                 btf__new_empty_opts;
->  } LIBBPF_1.7.0;
-> +
-> +LIBBPF_1.9.0 {
-> +       global:
-> +               bpf_map__attach_cgroup_opts;
-> +} LIBBPF_1.8.0;
-
-v1.8 hasn't been released yet, this new API should go into LIBBPF_1.8.0 sec=
-tion
-
-> diff --git a/tools/lib/bpf/libbpf_version.h b/tools/lib/bpf/libbpf_versio=
-n.h
-> index c446c0cd8cf9..57b74ef3618c 100644
-> --- a/tools/lib/bpf/libbpf_version.h
-> +++ b/tools/lib/bpf/libbpf_version.h
-> @@ -4,6 +4,6 @@
->  #define __LIBBPF_VERSION_H
->
->  #define LIBBPF_MAJOR_VERSION 1
-> -#define LIBBPF_MINOR_VERSION 8
-> +#define LIBBPF_MINOR_VERSION 9
->
->  #endif /* __LIBBPF_VERSION_H */
-> --
-> 2.53.0-Meta
->
