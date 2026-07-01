@@ -1,84 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92364C77C5;
-	Wed,  1 Jul 2026 18:20:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E474A139F;
+	Wed,  1 Jul 2026 18:26:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782930040; cv=none; b=N85/1lKfx/LhtM9/2yymgxRT7yvo4QXOcG/jv5XCFrCYVd20zGXLAem9h70oBJlxZ/2KEgLJ/KFAcxmgXzRDGf3J7JyIfKtXugSZin+rFAtMYPBgUWn8pcLXYaBzzL+qIwRyFYpof2FixUapcOuYPgrnMG1qO3TMrLd4L7Zk/14=
+	t=1782930391; cv=none; b=usRUEQ59Nt66xcdIZZ0wPXvNprfNZvooT/rTzdMtL2jmjUghF6ZfP6cE6xB5bsKbamq51FUKrfVIYIQFMsoi3o/3dYRfVNf/BjZXMBbxsITxjQrZY+TkeuEr2zIA75572/73ScozGBhbtJ+jgncR6kThwqhRoWibSZcS9xqYLq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782930040; c=relaxed/simple;
-	bh=TOLHBFND6ppr68lJWaNCk+SEB2rlXO73mQeKsXmMgNI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=njNpm3deWfMLb4uzjpQZyYVpfePU0reg+kGSyo6gMvhSoGDRrqmK9Yp9rbGGYKyhgxeXC78TjwTmrnMwdq66fRRAgmuKQruoL8FDtjvdfawcAGqq8V+iz9KSy83UXs0tbBF0VHWgeoIF2VQbmeZFvsgRdaatmWlJrOPFUDxURr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PaVZDv/C; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782930391; c=relaxed/simple;
+	bh=OQUrReie53Vn2Gih0HTfDGjKSSQjohLSc3GaTBVZ1kc=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=si/wyoQllx+2wds6zC3RuP4vYYCfIvB4NX4VIH4SQQ2ZmdVzVVlSKVFQWHVZBzl6xR5YCu3b11gMdmaORg/IGqa44lMYmP8XG+mRN6Dyve6ejLjU/lWkm55yFVJ3XNlvq15HVb2EezcnpuNsNEK3ZIO3Mh2GtYnNp76GB58LGY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PpaeXtq/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PaVZDv/C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 799E81F000E9;
-	Wed,  1 Jul 2026 18:20:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PpaeXtq/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D41E81F000E9;
+	Wed,  1 Jul 2026 18:26:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782930039;
-	bh=Tqe1iKgcR9VnyzKFrUF243iApoSgQbbr//NwEAsy2YA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=PaVZDv/C+MDveRIXjCiMjswfJ7upbLZf6+WMd9u7iTVAuYIhHkXi99Pm9AtTqedLe
-	 kPo9qdf40mJDaPzBsx7xfvqbK9r32U+smcukIQ3EfL7qkBrnButDZ+LlP4uQlgmjFu
-	 l13IGEXbZXEgMEmbsPplBcvh2iY8Ry+E77KF5T7OsQ6raVzd1aB6QxibWCjZuX4Grf
-	 CU/9+K34nzvzpipgqgKRB790vMdZKHDzkbEpaQDg9JvMhNOw1Hjq6XvW3O2Ya8P445
-	 DQ7ckH8JhCOo6NqiQkSMOULjYRpbrUWC6+pk094koEuTWHyCuG/qPT6jdm5CmIeTYE
-	 /8Ko2njcF3WJg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 19872383B26F;
-	Wed,  1 Jul 2026 18:20:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1782930390;
+	bh=OQUrReie53Vn2Gih0HTfDGjKSSQjohLSc3GaTBVZ1kc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=PpaeXtq/0w6RjxlntWTAI3+TGu1Aa8s9f9QxVfvoKGET/DcCF381xz2iXsxk7nsMh
+	 6W7psTAd/p8F8tnfOvi3+MI15CuJ2l4wl2IomrJBTljNUfQzuQSCp2+QVPzIoi+I2O
+	 4vB0UKXp6LZwO6Sm4T7vtqYuJpYsBSvPzNubvcBEreJeeC9/dS7D7JHTiPORBrbQDa
+	 5UXh2DSGR8hmnm1ioT3tNK7UJN7PghML0fzz+Dtc1+5VhynVSACD2+ggxPzAn/goYi
+	 440M22Z5X8o/m+BEu8Zma7al/J1mpkb5+OgZk1pmR0TirIF0iqdI0aNbgUlm2WAppP
+	 Rv76ZHBOYR9yg==
+Date: Wed, 01 Jul 2026 08:26:29 -1000
+Message-ID: <b5bb205febbb5d2220bd668d2fef5abe@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: "zhidao su (Xiaomi)" <soolaugust@gmail.com>
+Cc: David Vernet <void@manifault.com>,
+ Andrea Righi <arighi@nvidia.com>,
+ Changwoo Min <changwoo@igalia.com>,
+ Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>,
+ Valentin Schneider <vschneid@redhat.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>,
+ Shuah Khan <shuah@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>,
+ Christian Loehle <christian.loehle@arm.com>,
+ zhidao su <suzhidao@xiaomi.com>,
+ Cheng-Yang Chou <yphbchou0911@gmail.com>,
+ Zhao Mengmeng <zhaomengmeng@kylinos.cn>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ linux-kernel@vger.kernel.org,
+ sched-ext@lists.linux.dev,
+ linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org
+Subject: Re: [PATCH] sched_ext: Reject task setter kfuncs outside SCX contexts
+In-Reply-To: <20260701091954.384565-1-soolaugust@gmail.com>
+References: <20260701091954.384565-1-soolaugust@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 0/2] tools/bpf/bpftool: Fix vmlinux BTF state cleanup
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178293002265.1238008.17846374226094054785.git-patchwork-notify@kernel.org>
-Date: Wed, 01 Jul 2026 18:20:22 +0000
-References: 
- <12A35C14DA710D2E+20260624025055.1574875-1-chenyichong@uniontech.com>
-In-Reply-To: 
- <12A35C14DA710D2E+20260624025055.1574875-1-chenyichong@uniontech.com>
-To: Yichong Chen <chenyichong@uniontech.com>
-Cc: emil@etsalapatis.com, qmo@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, jiayuan.chen@linux.dev, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
 
-Hello:
+Hello, zhidao.
 
-This series was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+On Wed, Jul 01, 2026 at 05:19:54PM +0800, zhidao su (Xiaomi) wrote:
+> As a result, a non-SCX tracing program can load after calling the task
+> setter wrappers, reaching the mutator kfuncs outside an SCX scheduler
+> context.
 
-On Wed, 24 Jun 2026 10:50:53 +0800 you wrote:
-> This series fixes stale vmlinux BTF state in bpftool batch mode.
-> 
-> Patch 1 resets the map command cached vmlinux BTF pointer when the
-> command releases it, and avoids freeing the cached object from the
-> map lookup path.
-> 
-> Patch 2 resets the struct_ops command cached vmlinux BTF pointer and
-> dependent cached map info state after each struct_ops command.
-> 
-> [...]
+This is intended. A scheduler is conceptually the struct_ops plus the
+accompanying BPF programs identified by the associated struct_ops, and these
+operations are explicitly allowed for all of them. scx_prog_sched() and
+scx_task_on_sched() confine each to tasks owned by its own scheduler, so this
+isn't an escape from SCX context and there's nothing to reject.
 
-Here is the summary with links:
-  - [v4,1/2] tools/bpf/bpftool: Reset vmlinux BTF after map commands
-    https://git.kernel.org/bpf/bpf-next/c/66d7e39e49b0
-  - [v4,2/2] tools/bpf/bpftool: Reset vmlinux BTF after struct_ops commands
-    https://git.kernel.org/bpf/bpf-next/c/f7f540e19751
+Thanks.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+--
+tejun
