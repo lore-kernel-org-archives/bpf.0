@@ -1,169 +1,149 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBCC938F947
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 04:07:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B50837DAAC
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 04:21:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782878843; cv=none; b=YwFt5HfIQFGEMbtvRhJibOVZKWWQyxJ2YqW4JSToZMCIYCSJlJFik8ByjITJP//fycS/sG2y8cPh/+vh6NJxYbGgLrrjnGxC2BHOovz5cE2cBWLTSmGCHRRRg3yZKgzwEjeFdtJFKrv2GDOFTtbxqMhNNcPocPr89EarR3mP8F8=
+	t=1782879674; cv=none; b=euLrPAdAl+hBTqNjZvjbb5evkZf7/A24l/iNqFlG7F8/ZhiuDDn+G1pCoZEeGT8yfITSWP489eRh0Fq26RVEprO2exem0Uiniykopef+2R4HKeMR5wj036mutx0OgPF/tWNPCkwHBsP8k8wSxTjegdsAjj9g58KTZ8KwcapavZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782878843; c=relaxed/simple;
-	bh=dXT2ahJqasc9p4cQsCG156kB2AzaxEJOjoIHqogI8S4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XP8MzPeihlT/svSsfisBu6/LxH0/DcurKwwK0EwUHgqHSXkKHQSYdaZv+pPo4H0r1v3BtPTFumSMkIgxddG5pLvIzFnVXvwg7XxoY62V1SDeBmt8FqUupQSZ+gxRSaWygMsfG14gtU5EWtAjEyBgTOYrexe+ralzZEHC+rqaNSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b2EozNqD; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782879674; c=relaxed/simple;
+	bh=ndidOr7I8IHgvxf1AeP1Ck+0PatfZjEXy4LWSt++W30=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=aWV/a+INeC/cnWrypQEULdFHrH/RlRuU4J1DmHKCKJz9qS+CE0qP4qda2sR1mkPMZHHnyV76zO14aRE6Kkx0MAnjvmdM9QY792HRP4tviVwr8L9uyiwCUfgq4HjHyhzr/33XNYOm+jZbn5XVki7X5kPpHQ7hLSDuFC2SuieiImY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=dKtmCoE+; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b2EozNqD"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-47248615e4dso115354f8f.2
-        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 21:07:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="dKtmCoE+"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2c82538b6b0so1281095ad.1
+        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 21:21:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782878833; x=1783483633; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hYt1JaFwWQ+K5BLa9YiKbNban4KncdVGbMcNeutj1cE=;
-        b=b2EozNqD3Rto9LC6ZaiIHBEepu9kBGmS6TciNhkYnQEf5DZvEdPXmKrAnhC7+3te9O
-         1QtRU6ZmP5OZNGpGTcL/IV79KCu9F72Lr0mn3rzxJPvxMoX8hL1jTbgjqpdBL4ew/VDp
-         oGAbElFYrKKV8XTxQLpkqtLCBAPPhW97/uhp3oPu6KatKzSIgoNVJRy24446GEfQWKll
-         x3IwKOT54iC8sNV6DtzY8YmOW4Mn4mTpcjATk4WTd/Mycz/PwY7ztQCzZK81uzqZ36Cu
-         EOsXyu3TdEghxA7vnAce6IzQqNK2ieo6Z96pYuQ80OaXMkgHzIXubXb0xujzy3lJ2U/M
-         TnSA==
+        d=bytedance.com; s=google; t=1782879669; x=1783484469; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wIXJacBAyEaKz61QqT13AHUcLwATDSXxJV4uZgWwmww=;
+        b=dKtmCoE+cMY+ae/6a2cuOy+r+DPt6J+S4DxJSxhCK/iVk2m5G8zm0VFeoSMS++ijC8
+         ZikwGoEKOiyIGXH/IwGqj2V3NbknCEcKa93vP8AMlFJfJIzRpw4PF+yRwt5swNe64yCy
+         m8RhGaagOMQX53X3qrgHwEdkmNXf1zbFkYp4UvFI6OerLariet9nHvlCJipDMGvI8O+a
+         Qx/5LCScOL9uAio4n0vbpSdNIsot8E59GhGqTIAzcvR2/gQXPZ1FHiPinOZj+rU1Hapx
+         YsbNN9SrRkWmJfaKblaBkGbluEZP2ZAqaZSrYdIrNkNt+6xAQbcROLCv/dnKIX1J6FbZ
+         dNLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782878833; x=1783483633;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hYt1JaFwWQ+K5BLa9YiKbNban4KncdVGbMcNeutj1cE=;
-        b=pa6GgQpjQwblaF7iULZlzgrB7gOJPFL8t1+uhg2gfTGmB8TOy2ETzNdotuw34CAhlM
-         lBcq2GCc/EDa3LjobHDDmUYO0aT+HEmZFDCXx+xyua0yAfRBkwZki4dsH4eLWjxRT6k5
-         8rd3YqMeukY3HYqwGarzxHlb/Esqf3OAOOrF5Gjd4AYrcJW0H+iKeDlvnhZYWU8HXnkE
-         F7T7cax13D+lGvzmbfrv9kK7VUSRTzH+gp7tQ2CPOMOWRsXBiISglqN0TFdrg6O4Ch16
-         iqpcMTWNd+0PBRxyrizUBFGz1vD4KA7yTM4pa9+735QtzhODFp5xPzesK7TqylyW/p+F
-         gAvg==
-X-Forwarded-Encrypted: i=1; AHgh+Rr440pEI/wJiyke8C3QW6h/ieDHkSwA8nsT1uBwuz9HZjm76Jdkl0Iolzdt82sAUugb5cQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw38GKvNwCyhXnt6LevWbaeqMGKj3ty0B2RtTW2PngEnEJT2gqw
-	P+WjwK3vijZucOQGTUB/YDXWS6paWAnlltr1EYWJOt2uZS/5t/kUr8kA
-X-Gm-Gg: AfdE7ckUW+f2VUEwMdSYoIx8dutJl/ZoejLjrrwif6D8myfrL9w/PaGLNAKvAfokJSW
-	p+0qnc2kBKMOemMkC4iBjm6KFiZiE6RwqfPTatGTsw4OLU7Ysi/W8SEt/7aXAkSj7XQsbqvBL8c
-	TocDtH1KwezS7pJ1Cf8OypTv3S4baRyclS4JKPE7ZfVYaExeg7dxb+rFSGbl2H/ea//wvIbnc+D
-	4fLiIpWQxMERIbDVrCcv3lEeuGJ/YIqXzkYXSfPjSovrDxyexkBTMnWyyFCBZyeF8W9gnX06Qkb
-	qZOv5zR9WZmCKICZbns1eVHs2sqshCS/AS7jGNcUloAaiZhh8Qx6vAU24A21/7c8O6mQwolPCyI
-	Ac1VbaSH9YCtApDivQKvRbt9RWf9byMGWFUh4Jnygo6qZKBHmhlA6ZDh+XQwNEvTI9J9TORdUFz
-	oiU9TB5s5c+K63tSyg2qjm0Gl8XEz1KKiK
-X-Received: by 2002:a05:6000:993:b0:472:90af:e406 with SMTP id ffacd0b85a97d-47659ee659bmr4120684f8f.37.1782878832738;
-        Tue, 30 Jun 2026 21:07:12 -0700 (PDT)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47563d195b3sm13850596f8f.8.2026.06.30.21.07.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 21:07:12 -0700 (PDT)
-Date: Wed, 1 Jul 2026 04:17:13 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: Xu Kuohai <xukuohai@huaweicloud.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Amery Hung <ameryhung@gmail.com>,
-	Eyal Birger <eyal.birger@gmail.com>, Rong Tao <rongtao@cestc.cn>
-Subject: Re: [RFC PATCH bpf-next 00/12] bpf: Introduce static-defined tracing
- probe for BPF
-Message-ID: <akSUyRNYp6hx7BK+@mail.gmail.com>
-References: <cover.1782571533.git.xukuohai@huawei.com>
- <DJMQ5HY26JFM.3QOFH7X8RTPIL@gmail.com>
- <5335390d-6627-49fb-9645-ebcce410277b@huaweicloud.com>
+        d=1e100.net; s=20251104; t=1782879669; x=1783484469;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wIXJacBAyEaKz61QqT13AHUcLwATDSXxJV4uZgWwmww=;
+        b=j07A+S6H7Yil8XzBP/mNY6cHcqQT4n1JBHEzpBfobcw2B0N2X6ElImPFJ29H2jNXrl
+         +6u+7xGON6kTkYI2D7cgMqD0N3+j68gtvSRpJw3K4uxVLkUqNqgWJP3FUg1q50u78Yn/
+         S345tff0GWjGoHQrddbYKjs9BhSZEdYsdA09S1wzCas07en2L9mxvt04dcTShJhmWhx+
+         Nqic5KF/GFwnhofv29IIeIYqECTthW8oKMjIW3KehFKDuRb6IoNGAa/7VfGFIjVJtlpZ
+         I6R5+ipwoCBFv2OPn+86sVZoFQsNR5STK4EHeQyQDA39oACLHzlifEMfr/u6x4bCTMhV
+         6HUg==
+X-Forwarded-Encrypted: i=1; AHgh+RrycMHX5ov5I+gJmYexfPxix+IMbgyknLV47W2gmsDYNETE4CXe40rP4oEEHOvBcyhhK0c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyT3pBWHwQUQwXS3gaZozqfSyUqbq973OHlrZkNpejWUHfT54oj
+	mTSwXIlcP+iKLwLG2Me7UEoFc8jVyMcPcYEQMlogHtkXaVbDpSBvVcH+V5C8I1W0wgI=
+X-Gm-Gg: AfdE7cncUUl7V3bdj6e2g60Y1XYD5zoHY4g1ZGn4luhWwVZusUnTW449CRBumPtn0kx
+	0qft+imtuei+JsDTaPlbiWsVeipYgd7sPmTp9qwIixtwBCjwzWKAgcuF3XSZtS7F5UsfgbtcMPN
+	Nx5J18zt5/sM6G8yaqOq++r4UtCpGukq3GdROlejseRIE1VrUCf8bps3497i/WD68BrV+hD4gup
+	srVfj4sWzXTsG6l6onkdS/s6Y4N+Ksb6sZP7EvglrT7z2NR42svA1M4bvfRB112ctctzvLFAd+7
+	yNz4+cV3LX0ZcxwE7/VTaFpD9M1NCCUT2uZMKgWGunL9M4c6PXFBIxTeo+z2iVh28esLBtgm7rM
+	+w5ctsQno8i4ON2KwTvLZ9jv1h/oXP6qIWelWjPXReACDPuJlr09loy7pECoVzUZ7vr8bLGEq7p
+	0u6tq7EcP6gMGq1qQ0JXzkMYofbLP8OaYCYHQzg3HC971mxA==
+X-Received: by 2002:a17:902:d54f:b0:2ca:e3f:6a4a with SMTP id d9443c01a7336-2ca7e73b1bfmr1201915ad.21.1782879669155;
+        Tue, 30 Jun 2026 21:21:09 -0700 (PDT)
+Received: from L6YN4KR4K9.bytedance.net ([139.177.225.232])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca37c73a9csm24450865ad.21.2026.06.30.21.20.53
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 30 Jun 2026 21:21:08 -0700 (PDT)
+From: Yunhui Cui <cuiyunhui@bytedance.com>
+To: pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	dennis@kernel.org,
+	tj@kernel.org,
+	cl@gentwo.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	bjorn@kernel.org,
+	pulehui@huawei.com,
+	puranjay@kernel.org,
+	thuth@redhat.com,
+	ajones@ventanamicro.com,
+	ben.dooks@codethink.co.uk,
+	rkrcmar@ventanamicro.com,
+	cuiyunhui@bytedance.com,
+	samuel.holland@sifive.com,
+	zong.li@sifive.com,
+	conor.dooley@microchip.com,
+	tglx@kernel.org,
+	debug@rivosinc.com,
+	seanwascoding@gmail.com,
+	andybnac@gmail.com,
+	menglong8.dong@gmail.com,
+	cyrilbur@tenstorrent.com,
+	wangruikang@iscas.ac.cn,
+	atishp@rivosinc.com,
+	apatel@ventanamicro.com,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	bpf@vger.kernel.org,
+	arnd@arndb.de,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	qingfang.deng@siflower.com.cn,
+	linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v5 0/3] riscv: improve percpu helpers and PIO mapping
+Date: Wed,  1 Jul 2026 12:20:38 +0800
+Message-Id: <cover.1782877663.git.cuiyunhui@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5335390d-6627-49fb-9645-ebcce410277b@huaweicloud.com>
+Content-Transfer-Encoding: 8bit
 
-On 26/07/01 10:18AM, Xu Kuohai wrote:
-> On 7/1/2026 6:07 AM, Alexei Starovoitov wrote:
-> > On Sat Jun 27, 2026 at 3:51 PM PDT, Xu Kuohai wrote:
-> > > From: Xu Kuohai <xukuohai@huawei.com>
-> > > 
-> > > This series introduces static-defined tracing probes for BPF programs.
-> > > BPF SDT (static-defined tracing) works similarly to USDT. User defines
-> > > probes in the BPF source code. The probes are built into NOP instructions
-> > > in the ELF. At runtime, when an observer is attached, the NOP instruction
-> > > is patched to a CALL instruction to the observer prog trampoline.
-> > > 
-> > > Unlike USDT, BPF SDT requires explicit macros to generate the function
-> > > prototype BTF for each probe. This allows the verifier to validate the
-> > > probe sites against the declared types, and observer programs can be
-> > > attached similarly to normal tracing programs using the function prototype
-> > > information.
-> > > 
-> > > A probe with two arguments in the target program can be declared and defined
-> > > like:
-> > > 
-> > >      BPF_SDT_DECLARE2(my_trace, int, int);
-> > > 
-> > >      SEC("xdp")
-> > >      int xdp_prog(struct xdp_md *ctx)
-> > >      {
-> > >          int len = ctx->data_end - ctx->data;
-> > >          int ret = XDP_DROP;
-> > >          ...
-> > >          BPF_SDT_PROBE2(my_trace, len, ret);
-> > >          ...
-> > >      }
-> > > 
-> > > An observer would be like:
-> > > 
-> > >      SEC("bpf_sdt")
-> > >      int BPF_PROG(observer_prog, int len, int ret)
-> > >      {
-> > >          bpf_printk("len=%d ret=%d\n", len, ret);
-> > >          return 0;
-> > >      }
-> > > 
-> > > The target program and probe site for the observer program should be set
-> > > at load time via bpf_program__set_attach_target() manually, since program
-> > > names are not unique and program IDs are allocated at runtime - there is
-> > > no static way to identify the target program.
-> > > 
-> > > For BPF_SDT_DECLARE2(my_trace, int, int) and BPF_SDT_PROBE2(my_trace, len, ret)
-> > > macros, the compiler produces:
-> > > 
-> > >    [code section, e.g. xdp]
-> > >        goto +0                  // NOP, patched to CALL at attach time
-> > > 
-> > >    [.bpf_sdt_notes section]
-> > >        ___sdt_jt_my_trace:      // symbol marking this entry's boundary
-> > >        .quad  0b                // 8 bytes: offset of the NOP in the code
-> > >                                 // section (resolved by the linker via
-> > >                                 // R_BPF_64_ABS64 relocation)
-> > >        r1 = %[arg1_reg]         // 8 bytes per argument: BPF move insn
-> > >                                 // whose src_reg field encodes the BPF
-> > >                                 // register holding each probe argument
-> > >        r2 = %[arg2_reg]
-> > > 
-> > >        ....
-> > > 
-> > >    [.BTF section]
-> > >        FUNC_PROTO (int, int) -> void   // from BPF_SDT_DECLARE2 stub
-> > >        DECL_TAG "bpf_sdt:my_trace:2"   // keyed by name + nargs
-> > 
-> > Interesting idea and encoding scheme, but I don't think we need it.
-> > I'd rather see static_branch/jmp work that Anton started to be completed.
-> > That would be more generic and folks that need SDT-like observability
-> > inside bpf progs can instead guard their debug code with static_branches.
-> > SDT equivalent would be static branch plus a call to nop function
-> > which can be freplaced.
-> 
-> Sounds like this is similar to the kernel tracepoint approach. I'll
-> hold this work and recheck if a dedicated SDT-like function is still
-> needed once Anton's static key work is posted.
+Changes in v5:
+- Keep the PIO helper fix local to RISC-V: drop the generic
+  HAS_IOPORT_MAP dependency change and the generic ioport_map() change
+  from v4.
+- Add the missing linux/bits.h include for GENMASK and BITS_PER_BYTE.
+- Fix the 8/16-bit LR/SC fallback to mask subword results before writing
+  them back.
+- Use early-clobber constraints in the 8/16-bit add_return LR/SC fallback.
+- Fix this_cpu_and_4/8 to pass the intended operand to RISC-V amoand.
+- Initialize the secondary idle task pcpu_offset before starting the CPU.
 
-Yes, one of the reasons for adding static branches was tracing.
-I will post an updated patch set soon and cc you.
+Yunhui Cui (3):
+  riscv: io: avoid null-pointer arithmetic in PIO helpers
+  riscv: introduce percpu.h into include/asm
+  riscv: store percpu offset into thread_info
+
+ arch/riscv/include/asm/asm.h         |   6 +-
+ arch/riscv/include/asm/io.h          |  26 ++-
+ arch/riscv/include/asm/percpu.h      | 287 +++++++++++++++++++++++++++
+ arch/riscv/include/asm/switch_to.h   |   8 +
+ arch/riscv/include/asm/thread_info.h |   3 +-
+ arch/riscv/kernel/asm-offsets.c      |   1 +
+ arch/riscv/kernel/smpboot.c          |   8 +
+ arch/riscv/net/bpf_jit_comp64.c      |   9 +-
+ 8 files changed, 326 insertions(+), 22 deletions(-)
+ create mode 100644 arch/riscv/include/asm/percpu.h
+
+-- 
+2.39.5
+
