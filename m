@@ -1,178 +1,163 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-8fae.mail.infomaniak.ch (smtp-8fae.mail.infomaniak.ch [83.166.143.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE45E38D40E
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 21:13:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D8F34750D
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 21:35:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782940415; cv=none; b=hj5aakRjBQFyxB8n0gVYpETsttboTm6cbDiZ/iNSWrHhpTK9e1Gd7u1ciyRdkLPfVhxNv4gwbNW/BmP8/yYp24xyILLi83aZJW5XclBLTsUdOVcxWm4fyAwfI/S3IWcFJKO1fnHWJwzKHSc0w4Vfxn+rhxYqPRuI4VSY4Hu5TYQ=
+	t=1782941718; cv=none; b=p74HH8DhrhlDFQo4pnAiI6RPVnhYZXjh2LfkflQOsX1bwbeAlS5TF3hIUYBuQeWnsNeb4nsa9jgQSOECbpZlu4T/4wAZ86dTTqlvKilq8YlKVAsf+vhG2ACZwRmGOnZQamXSEREnCkRY6AmMCJbh82Ofkzp98s7faVI2X8Ms7GA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782940415; c=relaxed/simple;
-	bh=ixq5iPSr6lESeemFDQZAkXkMKmcyRqci45TX352zPc0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=bPQcxFRNbzYZJsciRG1o1n5DeUjv8YhhsipOJclKkj1NwJlo+66gW4BsyH30PT+ICljtzzO/betS5YaULz2AK5N4qshw38/99gheW8gnJpOs1ZCsXlns3nY/el+0MPNQK04rdKdcUYSgR7B86DOlQdfSuvcOHCv/3YL5EDbuWAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=ziCf3MT1; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1782941718; c=relaxed/simple;
+	bh=dEUQ/Da4pnHSP+0kKQfjko+As5IBIzmfVYTAQX1pVGE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zt9Kyw42DZkJ1mPJCuHWUS+AG463+2is1XRGiKW1oMA8vzqXyCVOgtbUeOkxi6OjdKmDJ/Alr+XBqi4VQ4gYhnqgViBl/GDY+gsxGelUXohTvNAwi9bwfecGXsVZ8Gys+NRJFEmalW8uSf0NNNLJ2vPBYXWyvpnCbNTfEG5sDDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=YaVpezl/; arc=none smtp.client-ip=83.166.143.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="ziCf3MT1"
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-51bfbe05683so6936691cf.2
-        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 14:13:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782940413; x=1783545213; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gjeDKyLKBZcUrNcouKdVLuX/5CVGzH0NAqcX61nIrwU=;
-        b=ziCf3MT1mC6t3eZjzKPwBOQhxxXNVyCAXHfuW7yuekhEovINnoB67ExFfaPgT0An2F
-         n18q59b2weTI6L3JWBH0zmm/Ux9/t2uVpEfB5t8+uaIfpazYhZFEmU5GB+TxrGbjklsF
-         6WksxwEAJKGe+yO5WCY2OpO+UxJ2srJnCB1iAN3Ih02yyZ3hi2hHw0F6O6/AvqIvCiYE
-         J7N/g2dLwGM1uUsaTpWBIng3GqNOoi+/y1xptCo8SJ1WUL/+Dtl/SLTt0erAPChx8zm0
-         oWc4k6Ri0pcjdRDbs0E7TrPm2XyoFYXkTZwu2+grBCrLDp02i4g+DzVb2SJYQW7fvC2W
-         0Bww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782940413; x=1783545213;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gjeDKyLKBZcUrNcouKdVLuX/5CVGzH0NAqcX61nIrwU=;
-        b=JSZZDzolTmwvtfLNWM1yXBFgncKy+m36IiLyvQozVmlAc0QjTCUO1uAMdiAzFQMsxk
-         VToTbDlVr+VD0h6akZ5ng+VTXsX8/vjpzEcFNekT0KsDWUmmVMSdOLOZaW3NmGvDyMd4
-         OCzhaeAkCInJ+F23G63rZJuOl+btGKCPnszNOHvBl/XhCG7r9Z85fTFaBuShgCw7HlpX
-         HcYzUK0KW9zWt3s2VIeaVH6fBsIREFyZFidxdOCPupoRH+CKqclhYchZ7cC35cy+V7m3
-         6AMgCQYBpQD9dksJTKHhoqVm61nBjLrwaBPADRdNoUaDWRqy6Srsf/gDLlm85dp4HYKH
-         xTHA==
-X-Forwarded-Encrypted: i=1; AFNElJ9z80/8xd86Lf096NJRGeucHJMTwHYN3Iw+AcBL3YsleUTJyHYG8Y9eshyKJkO2mn8IG2w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfPx4bRDHkQYJQ8gtuHTcMoDBiVQtQ6V75pUQxUE+bmdS4uEKr
-	+6pFzZvaD0I6pl5r1gxMlCkiTI41lHw7nd+LazM5IhOLkWtoareZrMc1bjL75/7pXU4=
-X-Gm-Gg: AfdE7clmdzr8nVZJgAIV44wnxtkzs5TVjzR/8KNaECl0hHy7AgtIng5m1NHnKnuhKvW
-	wOvKeidW9yMqCLp2qIcYQkK23oEnFwEPOSHwbcCbgQUliYiXIx+fECCdSiA0zwAFajwrE7jujWZ
-	XCw/Ubvi3Wv378rWZ/5mQpUGEJtMyl+m5vNJc0XvA2PxBd5hFRd5MmiinB0TMztRty6/iZw2JhB
-	QIn/Q9HnJkZWq8M0W659qR5VPKisq+bsZH2JWxqoYCxvpmMjNN99GFkLkOTKXyBHqY22pQCYc/2
-	dGXU9rR0hRvWvwMtUET1PqPqpO5izdHABtc77HwP8TY7BK0NDq0aEesV0MH5s4cuOetGYqPkCsY
-	KhJYt26zdU3W3tJ/1w/Bvn4wS0KDv9ZeDYtfbkymezmeZQUapnUyuz8L5Xj9Bai4S6wQHBbr01/
-	+HcrVPJDq7ty8=
-X-Received: by 2002:a05:622a:116:b0:516:e152:7a59 with SMTP id d75a77b69052e-51c26b14343mr45276931cf.42.1782940412547;
-        Wed, 01 Jul 2026 14:13:32 -0700 (PDT)
-Received: from localhost ([198.58.242.173])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8f46e27d53fsm8562786d6.5.2026.07.01.14.13.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jul 2026 14:13:32 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="YaVpezl/"
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4grCmv1n6JzF92;
+	Wed,  1 Jul 2026 23:28:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1782941310;
+	bh=uEr+QVQeNz6rhGt+Xh1nDbaglruQNgz7HzPlQsT/wx0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YaVpezl/MXVw4rgS5ZDf2j/f+HKwXxX0FIc71LGZtebEnxYZi1n/aa0wgtoSryoXL
+	 2BagYaGSuf/1vNOjbVImqwR/Ww4DrGm28mN0H7ZvtfefUS+2j7tXbsqA8NrN6SLErq
+	 GtyXKpC0TWSDiICtNMRwZzwtXRH+OVi6tqHPg3LU=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4grCms1yvNzmY7;
+	Wed,  1 Jul 2026 23:28:29 +0200 (CEST)
+Date: Wed, 1 Jul 2026 23:28:25 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Justin Suess <utilityemal77@gmail.com>, ast@kernel.org, 
+	daniel@iogearbox.net, kpsingh@kernel.org, john.fastabend@gmail.com, andrii@kernel.org, 
+	viro@zeniv.linux.org.uk, brauner@kernel.org, kees@kernel.org, gnoack@google.com, 
+	jack@suse.cz, jmorris@namei.org, serge@hallyn.com, song@kernel.org, 
+	yonghong.song@linux.dev, martin.lau@linux.dev, m@maowtm.org, eddyz87@gmail.com, 
+	sdf@fomichev.me, skhan@linuxfoundation.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	Frederick Lawler <fred@cloudflare.com>
+Subject: Re: [RFC PATCH 06/20] bpf: lsm: Add Landlock kfuncs
+Message-ID: <20260701.aeghohNoe3ek@digikod.net>
+References: <20260407200157.3874806-7-utilityemal77@gmail.com>
+ <20260701.ze4eph1eKo7a@digikod.net>
+ <CAHC9VhRfqSoM89WC6TdQHapUVQe8a18rW2c-F7+tu6EjM9EdCA@mail.gmail.com>
+ <akUH13qbsEnJLgQu@zenbox>
+ <CAHC9VhSjRcMr9+5dMkep_TPKduYdob-bZ73FLfXd_o2xiWwOSg@mail.gmail.com>
+ <20260701.jei4Paej3zen@digikod.net>
+ <CAHC9VhRzZVUz8icZ2RD9OVvscJdZW3ivPERJLEkNi5poBeguxw@mail.gmail.com>
+ <20260701.oTeikequi3ee@digikod.net>
+ <akVvkA3kmlv_POsF@zenbox>
+ <CAHC9VhTQtHPFGqu58EaFqMobV3LCcTsdzYfxy568P8mU769TMg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 01 Jul 2026 17:13:31 -0400
-Message-Id: <DJNJMLHHX9UQ.PEYCIU5HPCR2@etsalapatis.com>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Shuah Khan" <shuah@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>,
- "Puranjay Mohan" <puranjay@kernel.org>, <bpf@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover scalar arena frees
- below the base
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <cover.1782813442.git.chenyy23@mails.tsinghua.edu.cn>
- <e4226ac143315bb584dfedc79693ccf813ac56b0.1782813442.git.chenyy23@mails.tsinghua.edu.cn>
-In-Reply-To: <e4226ac143315bb584dfedc79693ccf813ac56b0.1782813442.git.chenyy23@mails.tsinghua.edu.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhTQtHPFGqu58EaFqMobV3LCcTsdzYfxy568P8mU769TMg@mail.gmail.com>
+X-Infomaniak-Routing: alpha
 
-On Tue Jun 30, 2026 at 6:12 AM EDT, Yiyang Chen wrote:
-> Add a verifier_arena case that fills a two-page arena, calls
-> bpf_arena_free_pages() with a scalar address one page below the arena
-> base, and then verifies that another allocation is still rejected.
->
-> Before the runtime guard, the invalid free can repopulate the free
-> tree with an out-of-domain offset and the final allocation succeeds.
->
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+On Wed, Jul 01, 2026 at 04:02:36PM -0400, Paul Moore wrote:
+> On Wed, Jul 1, 2026 at 3:55 PM Justin Suess <utilityemal77@gmail.com> wrote:
+> > On Wed, Jul 01, 2026 at 09:49:07PM +0200, Mickaël Salaün wrote:
+> > > On Wed, Jul 01, 2026 at 02:38:08PM -0400, Paul Moore wrote:
+> > > > On Wed, Jul 1, 2026 at 2:34 PM Mickaël Salaün <mic@digikod.net> wrote:
+> > > > > On Wed, Jul 01, 2026 at 09:28:22AM -0400, Paul Moore wrote:
+> > > > > > On Wed, Jul 1, 2026 at 8:52 AM Justin Suess <utilityemal77@gmail.com> wrote:
+> > > > > > > On Wed, Jul 01, 2026 at 08:12:34AM -0400, Paul Moore wrote:
+> > > > > > > > On Wed, Jul 1, 2026 at 6:59 AM Mickaël Salaün <mic@digikod.net> wrote:
+> > > > > > > > > On Tue, Apr 07, 2026 at 04:01:28PM -0400, Justin Suess wrote:
+> > > > > > > > > > Create 2 kfuncs exposing control over Landlock functionality to BPF
+> > > > > > > > > > callers. Export an opaque struct bpf_landlock_ruleset preventing callers
+> > > > > > > > > > from accessing unstable internal Landlock fields.
+> > > > > > > >
+> > > > > > > > Generally speaking we don't want to provide APIs, either in-kernel or
+> > > > > > > > at the userspace/kernel boundary, that are specific to a single LSM,
+> > > > > > > > see the LSM syscalls or the security_current_getlsmprop_subj()
+> > > > > > > > function as examples.
+> > > > >
+> > > > > This patch series is not about the LSM framework, only about Landlock
+> > > > > and its specific model and use case.  Landlock using some of the LSM API
+> > > > > is not relevant here.
+> > > >
+> > > > Based on a quick look the patchset enables BPF programs to call
+> > > > directly into Landlock.  For the same reason we discourage other parts
+> > > > of the kernel to call directly into individual LSMs, we want to
+> > > > discourage BPF programs from calling directly into individual LSMs.
+> > >
+> > > We're OK for a dedicated kfunc to call directly into Landlock (with a
+> > > tailored interface).  Landlock is designed around its syscall interfaces
+> > > (well documented, tailored, tested), and this would be a new user of
+> > > almost the same UAPI.
+> >
+> > Paul, Mickaël,
+> >
+> > I think there's a cleaner way to resolve this.
+> >
+> > First, walking back my earlier email: I was wrong saying that we need to call
+> > into security/security.c to check whether Landlock is enabled. Landlock's
+> > init only runs when it's in the active lsm= list, so I can just test
+> > landlock_initialized directly. There's no per-invocation reason to route
+> > through the LSM framework for that.
+> 
+> The landlock_initialized flag is not really a LSM framework API, that
+> is still Landlock specific which is something we try hard to avoid.
+> 
+> > Rather than routing each kfunc *invocation* through a security/security.c
+> > wrapper, I think the right place for the framework to be involved is
+> > *registration*: have the LSM framework own registration of an LSM's
+> > kfunc sets, e.g.
+> >
+> >     int security_register_lsm_kfunc_set(u64 lsm_id, enum bpf_prog_type type,
+> >                                         const struct btf_kfunc_id_set *kset);
+> 
+> That implies a set of LSM kfunc APIs which Alexei has been deadset
+> against (see other ongoing threads).
+> 
+> > Each LSM calls this once to register its sets. Because registration goes
+> > through the framework, the framework gets to decide whether to actually
+> > register them so you could, for example, run an LSM while explicitly
+> > opting its BPF kfuncs out. (something that should be done at the LSM
+> > framework level).
+> 
+> I'm not opposed to the LSM supporting a set of kfuncs, see my comments
+> in other threads, but we should treat these kfuncs just as we treat
+> other LSM hooks today because that is what they are: LSM hooks that
+> happened to be called from within a BPF program.
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+What an LSM hook is or should be is the crux of the misunderstanding.  I
+explained my point of view here:
+https://lore.kernel.org/all/20260701.jei4Paej3zen@digikod.net/
 
-Nit/question below.
+  LSM hooks make sense because they are designed for a specific subsystem
+  (the caller) and their goal is to return an access decision or to keep
+  up-to-date related states, which means that their API is designed for
+  the caller, with its own types and specificities, not the other way
+  around.  This case is different, the kfunc is strongly typed and tied to
+  the Landlock (subsystem) semantic with an API defined by and for
+  Landlock.  I don't think a multiplexer would be a good idea.
 
-> ---
->  .../selftests/bpf/progs/verifier_arena.c      | 41 ++++++++++++++++---
->  1 file changed, 36 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/t=
-esting/selftests/bpf/progs/verifier_arena.c
-> index 62e282f4448aa..b4bd134646607 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-> @@ -12,15 +12,17 @@
-> =20
->  #define private(name) SEC(".bss." #name) __hidden __attribute__((aligned=
-(8)))
-> =20
-> +#ifdef __TARGET_ARCH_arm64
-> +#define ARENA_VM_START ((1ull << 32) | (~0u - __PAGE_SIZE * 2 + 1))
-> +#else
-> +#define ARENA_VM_START ((1ull << 44) | (~0u - __PAGE_SIZE * 2 + 1))
-> +#endif
-> +
->  struct {
->  	__uint(type, BPF_MAP_TYPE_ARENA);
->  	__uint(map_flags, BPF_F_MMAPABLE);
->  	__uint(max_entries, 2); /* arena of two pages close to 32-bit boundary*=
-/
-> -#ifdef __TARGET_ARCH_arm64
-> -        __ulong(map_extra, (1ull << 32) | (~0u - __PAGE_SIZE * 2 + 1)); =
-/* start of mmap() region */
-> -#else
-> -        __ulong(map_extra, (1ull << 44) | (~0u - __PAGE_SIZE * 2 + 1)); =
-/* start of mmap() region */
-> -#endif
-> +	__ulong(map_extra, ARENA_VM_START); /* start of mmap() region */
->  } arena SEC(".maps");
-> =20
->  SEC("socket")
-> @@ -93,6 +95,35 @@ int basic_alloc1(void *ctx)
->  	return 0;
->  }
-> =20
-> +SEC("syscall")
-> +__success __retval(0)
-> +int free_scalar_below_arena(void *ctx)
-> +{
-> +	void __arena *page1, *page2, *page3;
-> +	__u64 bad_addr =3D ARENA_VM_START - __PAGE_SIZE;
-> +
-> +	page1 =3D bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-> +	if (!page1)
-> +		return 1;
-> +
-> +	page2 =3D bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-> +	if (!page2)
-> +		return 2;
-> +
-> +	page3 =3D bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-> +	if (page3)
-> +		return 3;
-> +
-> +	asm volatile("" : "+r"(bad_addr));
+I'd try to explain better: in a nutshell, an LSM hook exposes a subset
+of the context of the caller, for any access control system to be able
+to make a decision.  It makes sense to have such dispatcher because the
+callees must adapt to the caller's context, and then the API is tailored
+to the caller, so even with several consumers, the API would ultimately
+be the same.  In the case of this kfunc, the callee is one specific
+subsystem that happens to be Landlock.  The caller asks a specific
+subsystem to do something specific to this subsystem, not to ask all
+potential access control systems to give a generic verdict to grant an
+access or not.  For this kfunc, the caller passes arguments which are
+specific to the callee subsystem (e.g. a Landlock ruleset), not the
+other way around.  Every LSM has its own configuration, and it doesn't
+make sense to somehow wrap these configurations with a common layer/API.
+That's the same thing here.
 
-Why the asm volatile? We use it right underneath, what does this give
-us.
-
-> +	bpf_arena_free_pages(&arena, (void __arena *)bad_addr, 1);
-> +
-> +	page3 =3D bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-> +	if (page3)
-> +		return 4;
-> +
-> +	return 0;
-> +}
-> +
->  SEC("socket")
->  __success __retval(0)
->  int basic_alloc2_nosleep(void *ctx)
-
+Why not start with something simple that fits a use case now?  If and
+when another LSM will need a kfunc, then we'll have something concrete
+to talk about.
