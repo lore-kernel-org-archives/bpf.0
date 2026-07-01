@@ -1,42 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CB9442EEAC;
-	Wed,  1 Jul 2026 11:14:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6091B43C063;
+	Wed,  1 Jul 2026 11:15:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782904500; cv=none; b=FEFKQOU0UEsheT//fcZYubyP5N8ZD4+zqXqP8ASRISyQVGmF2AWwygk3/CEyjGKbvl6tPDG4NjZfXedQ9jrjCPonN52X60rUYScapoeM6Z+m+ableoTwDKUHS01MoJO3+tT0UThSfdk37nnkhdvLdby4CAdIxd5PYqnCMwlKFR4=
+	t=1782904511; cv=none; b=OJq4v87JoHGqgZl1H73gWQqENlCXHu1uHaW9uPnNCmTjtEscPQh9XlYs2zdi9mHYg0j70azWNMh5HV4un76JLtX3ybIRK8opCNWRT0A66lAISqIUQ9+ox36pEZz5zeBHlUcb6PTwl4s5NhAyg7ymkZejOdLE9fVA/VJhiCTfvZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782904500; c=relaxed/simple;
-	bh=o1B2PiD7Dcjro3AZUtHdlmXGHnIGf5m1awLr6Wj1acE=;
+	s=arc-20240116; t=1782904511; c=relaxed/simple;
+	bh=nmnXOS7eAb/+qx/rVlnbGfjDPGW6H6UyJnkkB6UAGn8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EYEtzoXswvpBNUtmJqSVVt9X0COFQ4d4Rc99rYKfrSrk+SL5VdnY8ADcbjwyEvd5nvt1gfZUwYlSkCMjwteENnS83K99h/JmmqsysXonPsfs4GvDCOxY+1fLsYWXRLXQnEeJLA4TZef1Sn4e04YPVqHLw02BWI8jDXqWTeF/FeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R9xg6hMU; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=ey5ghuOxX9e2lKQtrMCgf5vwUB5x81+sUM0o+IRljFlA+7Tm9fdmSGmO79/RwASkqljRQVB+j4StOzFnbkWSDyMYqrF1lByF8V9vvSmWLXx+J5OVCSgKE9PknDeDnfrFLiMW8oXLbyhnZXxYPr7HE1elPSCkDfdG6q/GS9ewgho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eLbADVTa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R9xg6hMU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13DFF1F000E9;
-	Wed,  1 Jul 2026 11:14:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eLbADVTa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF0211F000E9;
+	Wed,  1 Jul 2026 11:15:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782904499;
-	bh=uOkmul1W1VL2+7L25PolcRw2cNoza+fUstOlngHhH3A=;
+	s=k20260515; t=1782904510;
+	bh=WBLw/3Dgjn1AFQz5j+xOU3Lx44NupKqGdqngWQoVYVY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=R9xg6hMUg4Ax1DwNF3wuCb8/Roj54rO3yBesff6/o5dolm3qBUEnRK3ev2fXLEiDO
-	 hDlKF3ZDg1LaoleEY4c9pRj0REjKjycbh6anqIJxugSnseb7P3oGP8LQsnxxKDAepE
-	 xeVHshO5CncFfwmtjRa+WaptpZhBZ/dXnabaWjkMiF/atDgUeUMtGtNMEKT5ELu22t
-	 blCyZZKsoAlHuQVgm5Qj07XCOgagUIllN3IDhLX5IoKtCgUaDmjI5rnSphT5zLqh/y
-	 h4pRt73sG/d8eOGnqaT1NB75Gcs0x4uvU21LL9I24rW0bZxRubfhqXl/Pl50fJ7Q7L
-	 b3+5vLmiw+yig==
+	b=eLbADVTau70MV/vR39ai+ITgCcnuCmWOTdTkeOw2ZAea5u8XwAvc4V0aQ/rZk5tEE
+	 Z43MPCtNDK9boxbwkcUOB0uEZ/2csy4vLLTszbNsg39wjZ6jiHOqu+JOxoUZa5TyOg
+	 OjdX2MmgTF64RkHbaTeOdLgDZ6JLq+gdtcv62vuC3kXk1Om61C9RQH35NDptQ3qWSX
+	 G5yj+yxHYNBnRjUWiY1IZhVeoi+1BgSqg3SiqatfBcqMoPl3o/kQmyc+yDtOHXi27a
+	 XcmMJxH4PgGRmXNIsIwaHPmCCOBkAAWAHQduSHen5XajknCKbiJh9zwga4kMtUPAAp
+	 rQEKd/fIDUY8A==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Oleg Nesterov <oleg@redhat.com>,
 	Peter Zijlstra <peterz@infradead.org>,
 	Ingo Molnar <mingo@kernel.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org,
+Cc: Jakub Sitnicki <jakub@cloudflare.com>,
+	bpf@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
-Subject: [PATCHv5 07/13] libbpf: Detect uprobe syscall with new error
-Date: Wed,  1 Jul 2026 13:13:31 +0200
-Message-ID: <20260701111337.53943-8-jolsa@kernel.org>
+Subject: [PATCHv5 08/13] selftests/bpf: Emit nop,nop10 instructions combo for x86_64 arch
+Date: Wed,  1 Jul 2026 13:13:32 +0200
+Message-ID: <20260701111337.53943-9-jolsa@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260701111337.53943-1-jolsa@kernel.org>
 References: <20260701111337.53943-1-jolsa@kernel.org>
@@ -48,49 +49,32 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In the previous optimized uprobe fix we changed the syscall
-error used for its detection from ENXIO to EPROTO.
+Syncing latest usdt.h change [1].
 
-Changing related probe_uprobe_syscall detection check.
+Now that we have nop10 optimization support in kernel, let's emit
+nop,nop10 for usdt probe. We leave it up to the library to use
+desirable nop instruction.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Fixes: 05738da0efa1 ("libbpf: Add uprobe syscall feature detection")
+[1] TBD
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/lib/bpf/features.c                                | 4 ++--
- tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/usdt.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
-index b7e388f99d0b..e5641fa60163 100644
---- a/tools/lib/bpf/features.c
-+++ b/tools/lib/bpf/features.c
-@@ -577,10 +577,10 @@ static int probe_ldimm64_full_range_off(int token_fd)
- static int probe_uprobe_syscall(int token_fd)
- {
- 	/*
--	 * If kernel supports uprobe() syscall, it will return -ENXIO when called
-+	 * If kernel supports uprobe() syscall, it will return -EPROTO when called
- 	 * from the outside of a kernel-generated uprobe trampoline.
- 	 */
--	return syscall(__NR_uprobe) < 0 && errno == ENXIO;
-+	return syscall(__NR_uprobe) < 0 && errno == EPROTO;
- }
+diff --git a/tools/testing/selftests/bpf/usdt.h b/tools/testing/selftests/bpf/usdt.h
+index c71e21df38b3..75687f50f4e2 100644
+--- a/tools/testing/selftests/bpf/usdt.h
++++ b/tools/testing/selftests/bpf/usdt.h
+@@ -313,7 +313,7 @@ struct usdt_sema { volatile unsigned short active; };
+ #if defined(__ia64__) || defined(__s390__) || defined(__s390x__)
+ #define USDT_NOP			nop 0
+ #elif defined(__x86_64__)
+-#define USDT_NOP                       .byte 0x90, 0x0f, 0x1f, 0x44, 0x00, 0x0 /* nop, nop5 */
++#define USDT_NOP                       .byte 0x90, 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 /* nop, nop10 */
  #else
- static int probe_uprobe_syscall(int token_fd)
-diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-index 955a37751b52..c944136252c6 100644
---- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-+++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-@@ -762,7 +762,7 @@ static void test_uprobe_error(void)
- 	long err = syscall(__NR_uprobe);
- 
- 	ASSERT_EQ(err, -1, "error");
--	ASSERT_EQ(errno, ENXIO, "errno");
-+	ASSERT_EQ(errno, EPROTO, "errno");
- }
- 
- static void __test_uprobe_syscall(void)
+ #define USDT_NOP			nop
+ #endif
 -- 
 2.54.0
 
