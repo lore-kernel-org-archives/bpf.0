@@ -1,140 +1,140 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE704481259
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 12:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B233481FD6
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 12:33:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782909220; cv=none; b=aasJsqeijNDXCrx+2KAWD0sMWFiJJD5dGOLuXfia+lRhSUEjTDpttIAwHOYLHGhVMlhE9CGui7R4dx1dYKR0ssbuEG7EM2o6s0UN5m6BsRKjydLb/B2G2wUnBTIYPC9kXYKYG+RBCqGiI4Xeznxy89ag3Cmh9fvak7UQgzo9A50=
+	t=1782909222; cv=none; b=AaT4+AYSU8O3kUb4qcKbJL83p8OMAOJpC5FgDNULrvm1VrCwZLrTyWB55bQYBYZoMsI+3uFQYiBya9Ub7riZjVB/CWXOHUWpB+Ss57C3vxVYBwLdIXo/h9FPaKIH0Y469rZ4I+iRK+SsQqpY+c5rNbgJIi9hMbsPkuVU7l5bdBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782909220; c=relaxed/simple;
-	bh=nxSvtZjpHBTYBqqqTi+QkAQPbhkvMv7HuGVgVBlics8=;
+	s=arc-20240116; t=1782909222; c=relaxed/simple;
+	bh=dckliJA1HA+MBkavOMFC4q5qt055wBVp3m+q9tkwrLI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=dJP/cwilmZVcgbqqQe+XbFYFbCta/MmStaun5Tf0+zTklloBnSnndUQUk0BCAFT3uiEZ8cCTaxzy9VaerWZe6qQyjmpM1C8YXAlz17wzfy+Dnq8PwhIoAdw8Jz6hJSbBwOyvSTDWTJ5lPb4Kz0dq0Mi/9J0IWn4lcWo7L3TQfB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MfXW6llr; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=G8UG/V05CCVK3xMdyDQz0MqaWGlDUFa7nFP/ioxsOaAMoMSeLEYoMIZ6gV/LUdITFDOrAww2/wjHlwnzIadIKlQGZF6ZbsS5lnca+s+iPT9QkYDqlmR3+yLS6c+QLCML3BxTvDObMYGSVWXOxypXiqKi27WbNn13abL79sZPS/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WGZ/YTCP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MfXW6llr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 522481F000E9;
-	Wed,  1 Jul 2026 12:33:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WGZ/YTCP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D29A71F000E9;
+	Wed,  1 Jul 2026 12:33:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782909219;
-	bh=RflKE3Fxq7bxEDvAC+1KFZ5T7prYhHLsxED+mM8dKXs=;
+	s=k20260515; t=1782909221;
+	bh=iVojyTv/ag1c5CVdnY4Xv26HqgQDz9SNawO5LrHnIVc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=MfXW6llrqo5aGGqPbpOxc1Z0NXbkLpnCsYB7pvqk93yvBGPCk6zqU2vZE0peOZqoS
-	 NCZiSXtoL2KXbYVyB1jdocCfyDzb6pUS00FhAHz0XQcfr8F4kHWwWBHE0RTuHbDpq7
-	 bB1Euzu79kKEI2vGRMtlLvgkbghcjyTnJEISTcBboDBdLw+OQ69oh4884m8Oh5RnQv
-	 oiBL9tTlJ7E5fKCj7rRxRuErEt5gzf70Vs0ipbE/2FHeWTc1kp0Bh9DzSUc+akVMPX
-	 3IZioJ3UUFnk5CSBuWeVb4z+YiTFWxNqvle6EJMhwXMgFgLtja4Z8xmJKVGPNgOO+l
-	 RgnjI0w7JzMpw==
+	b=WGZ/YTCPk5XFeTCsatwwuhB+zsQIwk3hhKtFYeoto4PM0ly67Ooj4OjasQVI4tkim
+	 ny3a9Fs6n3zujBP78oHtcyE48s+YsQawu7Z8uQgmiMRAvxThW4GokAz4zibY5xj7V+
+	 wP7yAMOedlH5vOc9Ie/VA6KuV7dOPePMcHm2tk+M5cTOPM0LDMFQAbIqAhKx0Z10v4
+	 6Ej3WUlV1Gj3SPTOxV273TzQrt5/mn7uO85tL5zzlrXhdh2h2B2nm95DWiEa0gtVTj
+	 tpIoBou54DJX0MOpkBtFNvmOzHbnXuJ5VoGdICvGJsnAEXA2vOxAvs5BHALBoBoxLy
+	 ZSELsBCgD0gjA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net 3/3] selftests/bpf: Add test for redirect from qdisc
- qevent block
+Subject: Re: [PATCH net 2/3] net/sched: Handle TC_ACT_REDIRECT from qdisc
+ filter chains
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Daniel Borkmann" <daniel@iogearbox.net>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260630123331.186840-4-daniel@iogearbox.net>
+In-Reply-To: <20260630123331.186840-3-daniel@iogearbox.net>
 References: <20260630123331.186840-1-daniel@iogearbox.net>
- <20260630123331.186840-4-daniel@iogearbox.net>
+ <20260630123331.186840-3-daniel@iogearbox.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 01 Jul 2026 12:33:38 +0000
-Message-Id: <20260701123339.522481F000E9@smtp.kernel.org>
+Date: Wed, 01 Jul 2026 12:33:40 +0000
+Message-Id: <20260701123340.D29A71F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The test is flaky due to a race condition with asynchronous ARP =
-resolution.
-- [Low] Semantically incorrect use of the tcx-specific constant `TCX_REDIRE=
-CT` in a legacy `cls_bpf` program.
+
+Pre-existing issues:
+- [Critical] Missing handling of TC_ACT_CONSUMED in qdisc filter chains lea=
+ds to Use-After-Free.
 --
 
-commit fc8f69a4140a0efbcb7d3933eb46154533713ffc
-Author: Daniel Borkmann <daniel@iogearbox.net>
+commit 84137b5068cebac45a2a901c08e1d2f5e6d71111
+Author: Jamal Hadi Salim <jhs@mojatatu.com>
 
-selftests/bpf: Add test for redirect from qdisc qevent block
+net/sched: Handle TC_ACT_REDIRECT from qdisc filter chains
 
-This commit adds a regression test for a NULL current->bpf_net_context
-dereference. It verifies the behavior when a BPF classifier attached to
-a qdisc qevent block asks for a redirect.
+When a TC filter attached to a qdisc filter chain returns TC_ACT_REDIRECT,
+the redirect was silently lost and the packet fell through to the switch.
+This patch adds a tcf_classify_qdisc wrapper to convert TC_ACT_REDIRECT to
+TC_ACT_SHOT, preventing the packet from silently continuing.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tc_qevent.c b/tools/t=
-esting/selftests/bpf/prog_tests/tc_qevent.c
-> new file mode 100644
-> index 0000000000000..67e1d17567abd
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/tc_qevent.c
-> @@ -0,0 +1,113 @@
+> diff --git a/include/net/pkt_cls.h b/include/net/pkt_cls.h
+> --- a/include/net/pkt_cls.h
+> +++ b/include/net/pkt_cls.h
 [ ... ]
-> +static void blast_udp(void)
+> @@ -156,8 +156,20 @@ static inline int tcf_classify(struct sk_buff *skb,
+>  {
+>  	return TC_ACT_UNSPEC;
+>  }
+> -
+>  #endif
+> +static inline int tcf_classify_qdisc(struct sk_buff *skb,
+> +				     const struct tcf_proto *tp,
+> +				     struct tcf_result *res, bool compat_mode)
 > +{
-[ ... ]
-> +	/*
-> +	 * Push far more than the RED queue can hold. Once qavg crosses qth_min
-> +	 * every further packet hits the congestion_drop / early_drop qevent.
+> +	int ret =3D tcf_classify(skb, NULL, tp, res, compat_mode);
+> +
+> +	/* TC_ACT_REDIRECT from qdisc filter chains is not supported.
+> +	 * Use BPF via tcx or mirred redirect instead.
 > +	 */
-> +	for (i =3D 0; i < 50000; i++)
-> +		sendto(fd, buf, sizeof(buf), MSG_DONTWAIT,
-> +		       (struct sockaddr *)&dst, sizeof(dst));
-> +
-> +	close(fd);
-> +}
-[ ... ]
-> +static void run_qevent_redirect(struct bpf_program *prog, __u64 *counter)
-> +{
-[ ... ]
-> +	if (system("tc filter add block 10 bpf da object-pinned "
-> +		   PIN_PATH " 2>/dev/null")) {
-> +		test__skip();
-> +		goto close_ns;
-> +	}
-> +
-> +	blast_udp();
-> +	ASSERT_GT(*counter, 0, "qevent classifier ran");
-
-[Severity: Medium]
-Since static ARP entries are not configured, could this lead to a flaky test
-due to a race condition with asynchronous ARP resolution?
-
-When blast_udp() loops through sendto(), the first packets might trigger an
-ARP request while the rest get dropped or queued by the neighbor layer befo=
-re
-reaching the RED qdisc.
-
-Because ASSERT_GT() is checked immediately after blast_udp(), is it possible
-the check evaluates before the network stack finishes processing the ARP
-reply, leaving the qdisc with no packets and causing the test to fail?
-
-> diff --git a/tools/testing/selftests/bpf/progs/test_tc_qevent.c b/tools/t=
-esting/selftests/bpf/progs/test_tc_qevent.c
-> new file mode 100644
-> index 0000000000000..1529c111f4aa4
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_tc_qevent.c
-> @@ -0,0 +1,23 @@
-[ ... ]
-> +SEC("tc")
-> +int qevent_redirect_verdict(struct __sk_buff *skb)
-> +{
-> +	__sync_fetch_and_add(&verdict_calls, 1);
-> +	return TCX_REDIRECT;
+> +	if (unlikely(ret =3D=3D TC_ACT_REDIRECT))
+> +		ret =3D TC_ACT_SHOT;
+> +	return ret;
 > +}
 
-[Severity: Low]
-Is it correct to return the TCX_REDIRECT constant here?
+[Severity: Critical]
+This is a pre-existing issue, but missing handling of TC_ACT_CONSUMED in
+this helper can lead to a use-after-free.
 
-Since this program is attached using the legacy cls_bpf via tc filter add b=
-pf
-da in run_qevent_redirect(), shouldn't it return standard TC_ACT_* return
-codes like TC_ACT_REDIRECT?
+The tcf_classify_qdisc() wrapper intentionally intercepts TC_ACT_REDIRECT
+to prevent it from falling through to the qdiscs. However, it fails to
+intercept TC_ACT_CONSUMED, which suffers from the exact same fall-through
+vulnerability.
 
-They both evaluate to 7 so it functions correctly, but mixing the newer TCX
-framework constants in a legacy program might cause API confusion.
+If a user configures a qdisc filter with an action that returns
+TC_ACT_CONSUMED (such as act_ct queueing an IPv4 fragment for defrag), the
+action takes ownership of the skb.
+
+Because TC_ACT_CONSUMED bypasses the switch statements in qdisc classify
+functions like cake_classify(), the qdisc treats it as a successful match
+and enqueues the already consumed skb into its internal queues.
+
+Should TC_ACT_CONSUMED also be intercepted and handled here in
+tcf_classify_qdisc() to prevent this use-after-free scenario?
+
+> diff --git a/net/sched/sch_cake.c b/net/sched/sch_cake.c
+> --- a/net/sched/sch_cake.c
+> +++ b/net/sched/sch_cake.c
+[ ... ]
+> @@ -1730,7 +1730,7 @@ static u32 cake_classify(struct Qdisc *sch, struct =
+cake_tin_data **t,
+>  		goto hash;
+> =20
+>  	*qerr =3D NET_XMIT_SUCCESS | __NET_XMIT_BYPASS;
+> -	result =3D tcf_classify(skb, NULL, filter, &res, false);
+> +	result =3D tcf_classify_qdisc(skb, filter, &res, false);
+> =20
+>  	if (result >=3D 0) {
+>  #ifdef CONFIG_NET_CLS_ACT
+
+[Severity: Critical]
+This is a pre-existing issue, but TC_ACT_CONSUMED bypasses the switch
+statement that immediately follows this result check.
+
+When tcf_classify_qdisc() returns TC_ACT_CONSUMED, it satisfies the
+result >=3D 0 check but falls through the switch handling TC_ACT_STOLEN,
+TC_ACT_QUEUED, and TC_ACT_TRAP. The qdisc then treats the consumed packet
+as a successful match and enqueues it.
+
+Could this be resolved by either adding TC_ACT_CONSUMED to the switch
+cases here and in other qdiscs, or by having tcf_classify_qdisc() intercept
+it alongside TC_ACT_REDIRECT?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260630123331.1868=
-40-1-daniel@iogearbox.net?part=3D3
+40-1-daniel@iogearbox.net?part=3D2
