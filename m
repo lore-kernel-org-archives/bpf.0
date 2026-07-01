@@ -1,392 +1,182 @@
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93683A873A
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 22:04:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782943498; cv=none; b=WhIG5iulWBgIx3jXODIKFGHio6/VrFEuImpgA0uSx37w7YLW+i4IWhLqBnMEV46Z1ocncEuMaYebeXpNtRXYxgwoOBh3rCRWa0V9fvp0HzKKKH/+LrCUuAFHpnt7BWsgM6ijjws4onPOUyAgQIcKn4bqXgyL25nRqRn5P9y7k0o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782943498; c=relaxed/simple;
-	bh=kqApQUefcoxMOyFgYsfScJmRhcYAnJyGHDiCFGYPj5s=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=orVd0Y/cOA3vyQ0ppzEfkGGTz+BDrXHEuKwzcuQx+sIS9SlpM5OFPYTmOfq78mmqNhu91rNolwoI64P6bOoGaCljp7ojZvHIhzszhVJJ46OdJ3NPEIDJcggWHUT3Vtv5pOdH3N1FiIZRWbGplD1wUVWn1Q6R3E6jFdiUZgECelU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=r/r7+50P; arc=none smtp.client-ip=209.85.222.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 995C33749E7
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 22:24:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782944686; cv=pass; b=IP8NhBjPdqL7zEXuaqaacDnaDSPU1JLyH72l9909HDy/r/GKZ6GLm1u3MP4OSdh0MUCgp9DgrsEAbjfG9Ixj4cLaUlOzsVk4fOYEhSr2fQ31FPkRAZhPKI2qPT2fMei2igcpjvXZNUDDATDQNUVYXn4Xub6enbwJ1LjfMcGBYjA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782944686; c=relaxed/simple;
+	bh=IXf8gz5n5cCHK5E3rSG8n2wYfl5DmpNceUHuKVfskoo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=r0BtXT/EZWsqCwsOc3CLEbSF4bRj8WlAX1IUb8woQ5iSL1S/QrHw2/26xLk2oxRQx6fj3dPHXVqRamen66BEMJyGeo0+hvq+qYg51TCSJKbRRjsLME+ol6rSbejAwNypvZ/wKUNuUuG85jevE6QBAzFv8231EKUJlLMewrta0rY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QNgBN500; arc=pass smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="r/r7+50P"
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-92e50979c71so107903485a.3
-        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 15:04:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QNgBN500"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-37ff798fe89so791404a91.1
+        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 15:24:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782944684; cv=none;
+        d=google.com; s=arc-20260327;
+        b=OF/iGt6sS77LOy9CDU1mydb5KOeWcj9QAHhAgvdaaev/FGz84MfUjyw/UN9f0BEj7b
+         YhoJhbHObWA4ccPdgBY8leIm5yuihAoK20o1JNIZ1ZL3MO2n73yFzBP2p44E0TffHMXC
+         phh2iKbustoLoi0z5KJUhPdNC3WEuJ4Cn+G4rFuqoX8AZwOZVqdBNQPHk/Xp6qJDgbkJ
+         NnvHMq2SkjP5Dq2+iYDHpri1Ar6/JPO+Nc+Q3pKYVCoxfeACRPbGuAel52Wsa1lHgVBI
+         gf8JC5dbVp3NT5SSHumhV9T1Xk7b2rNT7Ysqxj8v9hksc0uHw4QaR7c6UoaNQUJWmBwR
+         1DGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=v1yFeJucqFnCUSeSRxPYIH9H5v+xydKmvVf67iGU/as=;
+        fh=6hmPMIKZIOQU+lZnLCzA/xlUTqjAYydvNmOrLC4vDGs=;
+        b=jMRyZ8QChjZBQPHXktyxj91jUYslc+UgnADdu7BdSJLlpSx64RJvBZbI7ySHiPMOOn
+         E298cY9l9OPZgGBEbdqxatswODq2wZpraAvOW9XMlhq+Z9P9cPiAYXrZyAbn2lJlOEP6
+         VXBbYyK4j4YmFk7J3qHUZxG7m4gt0SihgUBZfUKCuRRD7HIGhlJjVUoJHJ5NwhuGfMfZ
+         bxQytEzxvVmXXTa4uPof42OyKsKv99OTebUP8sxgZ3doweZ27PoRdt8hOX8zIsDsupvk
+         AxPJ4ezEdulDqlsnArrLYYDieyy0pBrvCtnJpt7e7ft0ZEA00qr7S8WxWPhItbgCwDPz
+         E4RQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782943495; x=1783548295; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1782944684; x=1783549484; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Cz+w72WqMjFFoJkIcS+YO7klDKbo3zQaz3oeNDKSsls=;
-        b=r/r7+50PQgX5+Dlmq+3Zj7SmqzTZzQxSCW5uGtqXgDG/DGShs8qwLrpK7h5LS1SJDv
-         xzt1/mNbpP15354f3Y8OZkajBVps6sbiY8cLp68DghFpGZLMOhbeLGP7OpK+EvYS0iwO
-         /v6mzqasi4EEIXNvfDDw4ofcErAoS0WKqGtOCx5kCKvd3p8wuEJFmMwG/aZsJqs2ZDDS
-         HJjm3yzuhZDwxUx5TsuWvj3D3mThv5kzOR0XyhcFThlFCKMWLmpqmcES5DPREHWcZeKY
-         yDE+/HI7hVdHfxI6sqnRoKcB/8AoLUDZ8AkkWmQMMdR82+56lofanvj/62x3znbiC0/S
-         dJ/A==
+        bh=v1yFeJucqFnCUSeSRxPYIH9H5v+xydKmvVf67iGU/as=;
+        b=QNgBN500YbfhQ7K+nw7+F5DoNAmQ/rh66shGavDhRfQRnReuD8uVVRC5JdhfVWjE41
+         0qMEMxv73cQA0dpJUNBeHXdEw5litE+wfYluv+LfXXsGFtJp6Cn4iG6k7d8PNjvnSbP4
+         CWdJtEcPz/lXRRdsyQC9Aown4dgJpDCCkaRqdCzBgT2XR3KCK+Lo4btvTYuNAlaRpC6p
+         akKLqfsx9jDNgFAFqwhVbzskwdpUR3fWeGry7Os+FESsZDYYF9N23ToUeWoEKeXEkUMQ
+         QuUaVYKaTbAnJymXR2NKPwZILSO6b9cn2wZKB6YonXbfqcUlMkxKk4jIM2UyUwoVAmN6
+         sGSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782943495; x=1783548295;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Cz+w72WqMjFFoJkIcS+YO7klDKbo3zQaz3oeNDKSsls=;
-        b=klcXhes7y5+qVriWtoJgCM8y9t1giMSLwqK1NpRz6YiX3hYvgyD9MkmEast+8VI9y7
-         CmC1sxbioVDbh3Zol6FFgQuf1qZOGtyouKpfRtR8syuXiYvx9JRKsAtW70vX573/nqqG
-         8qf6h0LzT504r+BtvGVjTQkq+B73hgERFRwPVqUnuhbE4a6ZoN/nOdmSZvfiCtFICSBM
-         LSMVThRVFFZspAQ96SKV+/vzk5hSF3pkVCj4UJ6sU4ZhFvJyCI7+afIzMfsrUgiuFvPZ
-         m5wPpzs9hJSO173J9Ibcj5F/qN4b5NAvM6yqWD0kw9pXPuuaNMIG7v9x955TtSnfmkUJ
-         kz8w==
-X-Forwarded-Encrypted: i=1; AFNElJ+THYhQVuLQIztv4aajiT+nSRa5+OPCLVJvXaEpmEP5U2Gj5RLwSsGEgVMqpjIWevAaAdk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuND348PBDn1QzByuAIaVFgzIooEQxDE7BXjAgAMTcUe3nMooS
-	IDB03uYy2HgOt+SKm2gRX4J1yT8zg3F5vzW/hnjv4nTsvwA9txNftdNhvnsvMf7TjaY=
-X-Gm-Gg: AfdE7cn51GqrKYOscfv9icUfp10UKJODI2XNGc2U9hpW2grSPEyTJtO/LnB+dNGC3u9
-	Qbng6kn6BlKyZymqe+DUARwO1g8TPOchRFyS3jKmiJxsjVQDU7bklIvpohYxFtiwewThNhVtNjW
-	z6x/4CcJwaC39c9nuwbpBXC5JDu4BwbtsJA+Cdt/tJP8nhKDQbMbKvHIb0TL7qxHLxoMwISowto
-	9JIuOvG7mt/p6BCJnMms+jhQk9PdPfE4fU/eQ/Vw/WYh9cQ4cSpwTUXSIGPlfKNlpWRK2viyS39
-	pQhZvypHtshSCHLoll6gHVo70P3tF3K7/Gb3rr3H1qAnSNVf0F2JGrLV3FRb2efbWrwjK6mACx3
-	+QAnkiyWzp7Oz+j4qeWcz7UoJ6eK4DtWiJJmVk5uB/h05fh1sChksHrN6yMrZZ3Dg4jH9BIpZmx
-	Z0yev6aGuut2U=
-X-Received: by 2002:a05:622a:4d8d:b0:51a:8bc9:2915 with SMTP id d75a77b69052e-51c26a3b27fmr48081291cf.8.1782943494690;
-        Wed, 01 Jul 2026 15:04:54 -0700 (PDT)
-Received: from localhost ([198.58.242.173])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51c30b12a1bsm1973011cf.7.2026.07.01.15.04.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jul 2026 15:04:54 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782944684; x=1783549484;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=v1yFeJucqFnCUSeSRxPYIH9H5v+xydKmvVf67iGU/as=;
+        b=NL5//6MxOJnngpkJ3t6HRiorXut5WUoyTmzzFZtsXjlKkufCe4QMxX+H+rs2HS4VhF
+         S5KL9fwnzGruWsT6dbgbIdxTRoVxs9JevOR5zsrVED6rtN4+zNT4z4u8+U77sB5LGz09
+         lxqhkfA2uBbQ5aKHWqnBr31pFcCPQipxpjN7XuderDWlvQVFYw9dHc3qCsmHyHuwjSg3
+         p/IKfteEb6nwmkzD9NPQ76V6giDkS1fMa8axQzR19cQfkk/6FWr7lo98tOmMvRkEzlYR
+         jQiR6vS+h9sBbZPbGi/EysbndR87CpzEHc+zpmwEsCHD+ATJnF5cKjDk2Kh1SWHw4wNA
+         HJPw==
+X-Forwarded-Encrypted: i=1; AHgh+RqZPDRmhiE6e9OID5xQhXG2nXFYwau2xXZd36mFqQIzn0yiwaXYEvN1l7M+T4pldP30z1E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7uH7aQ6GsoiYL7YwfsjYddK+/KM2alOpkNRbXvV/TdIKreyq5
+	EetxFdq6zVgrJTBVzqZDDxBMqZDcanFFYrruOXXYH/JZrW15c+5vVRAsP6HT+yzOhS1X18PY3wO
+	v2mQl919d74i0cc/+FdmGHunJaLuGiWikRwOo
+X-Gm-Gg: AfdE7cmFFUY5K5L2Bxxx9jaTnirU1Fd1ZSrPYeNRO9I5bULneOE0naVsu8WkjlwMJUF
+	nS/AAXYC5YnVieePuefc4g8MbXArbo8spyd4HObOfoUsv+aWXkpMeXIsUuH5s1x7aWpWAbHQlc+
+	OZ4Y+nlgRWlhtJAO5MYYW9zas0j7YABx1CgH/Eb0K7y/6SVIdl0oVxUcmmjU87hLgwjWhwuSgRz
+	afCZbU+8twki3E4E5FzK+hGIDy++OQsvbFRoSl+rek/bPC4bsxoKdJbt8kwxT3+tCss9EHbLWJt
+	yLkc/uX2Wr86QqFIrbavH6C1XR0G1rP1zr+ACTzn1jSJfQ2VYnCsnA==
+X-Received: by 2002:a17:90b:4f4b:b0:35f:b6a1:8d27 with SMTP id
+ 98e67ed59e1d1-380aa184432mr3263591a91.18.1782944683513; Wed, 01 Jul 2026
+ 15:24:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260626172026.7327-1-jp.kobryn@linux.dev>
+In-Reply-To: <20260626172026.7327-1-jp.kobryn@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 1 Jul 2026 15:24:31 -0700
+X-Gm-Features: AVVi8CdBHnAQ-dVGbD-wbbUQLjWhZ2YL-KT_zOSpJ4xXWUxIe8qhM2sm7BSyxYk
+Message-ID: <CAEf4Bzb-3GA2OGTOBg-dgUNPJfH8-PDi=3gFZbyZLMmP9DFvLQ@mail.gmail.com>
+Subject: Re: [PATCH] Documentation/bpf: make it clear that kfuncs should be non-static
+To: JP Kobryn <jp.kobryn@linux.dev>
+Cc: ast@kernel.org, roman.gushchin@linux.dev, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, 
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
+	emil@etsalapatis.com, corbet@lwn.net, skhan@linuxfoundation.org, 
+	bpf@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 01 Jul 2026 18:04:52 -0400
-Message-Id: <DJNKPX7M6V2M.3VHAH7G1VML8B@etsalapatis.com>
-Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: drop
- tc/xdp/flow_dissector/socket_filter sockmap mutation tests
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Sechang Lim" <rhkrqnwk98@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "John Fastabend"
- <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, "Jakub
- Kicinski" <kuba@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>,
- "Shuah Khan" <shuah@kernel.org>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, "Stanislav Fomichev"
- <sdf@fomichev.me>, "Jiayuan Chen" <jiayuan.chen@linux.dev>, "Varun R
- Mallya" <varunrmallya@gmail.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260630145410.3648099-1-rhkrqnwk98@gmail.com>
- <20260630145410.3648099-3-rhkrqnwk98@gmail.com>
-In-Reply-To: <20260630145410.3648099-3-rhkrqnwk98@gmail.com>
 
-On Tue Jun 30, 2026 at 10:54 AM EDT, Sechang Lim wrote:
-> tc, xdp, socket_filter and flow_dissector programs can no longer update
-> or delete a sockmap. Adjust the tests:
+On Fri, Jun 26, 2026 at 10:21=E2=80=AFAM JP Kobryn <jp.kobryn@linux.dev> wr=
+ote:
 >
->  - verifier_sockmap_mutate: the tc, xdp, socket_filter and
->    flow_dissector cases now expect __failure with "cannot update sockmap
->    in this context".
->  - sockmap_basic: drop "sockmap update" / "sockhash update", which load
->    a SEC("tc") program that copies a sock between maps.
->  - fexit_bpf2bpf: drop "func_sockmap_update", whose freplace program
->    updates a sockmap in the tc cls_redirect context.
+> The kfunc documentation mentions how the macro __bpf_kfunc prevents
+> inlining for static functions. This makes it sound like static kfuncs are
+> acceptable. Although static kfuncs may happen to work, it is by chance th=
+at
+> the compiler chose not to rename these functions and BTF resolution still
+> succeeds.
 >
-> Remove the now-unused test_sockmap_update.c and freplace_cls_redirect.c.
+> Make it clear in the documentation why kfuncs should not be declared
+> static. First, remove wording that makes it sound like static is ok. Then
+> point out the external naming needed for BTF resolution. Finally point ou=
+t
+> that sparse may warn on unreferenced kfuncs and that this warning can be
+> ignored.
 >
-> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
+> Signed-off-by: JP Kobryn <jp.kobryn@linux.dev>
 > ---
->  .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 13 -----
->  .../selftests/bpf/prog_tests/sockmap_basic.c  | 52 -------------------
->  .../bpf/progs/freplace_cls_redirect.c         | 34 ------------
->  .../selftests/bpf/progs/test_sockmap_update.c | 48 -----------------
->  .../bpf/progs/verifier_sockmap_mutate.c       | 12 ++---
->  5 files changed, 6 insertions(+), 153 deletions(-)
->  delete mode 100644 tools/testing/selftests/bpf/progs/freplace_cls_redire=
-ct.c
->  delete mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_update=
-.c
+>  Documentation/bpf/kfuncs.rst | 21 ++++++++++++++-------
+>  1 file changed, 14 insertions(+), 7 deletions(-)
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/too=
-ls/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-> index 92c20803ea76..d3a954158c33 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-> @@ -336,17 +336,6 @@ static void test_fmod_ret_freplace(void)
->  }
-> =20
-> =20
-> -static void test_func_sockmap_update(void)
-> -{
-> -	const char *prog_name[] =3D {
-> -		"freplace/cls_redirect",
-> -	};
-> -	test_fexit_bpf2bpf_common("./freplace_cls_redirect.bpf.o",
-> -				  "./test_cls_redirect.bpf.o",
-> -				  ARRAY_SIZE(prog_name),
-> -				  prog_name, false, NULL);
-> -}
-> -
->  static void test_func_replace_void(void)
->  {
->  	const char *prog_name[] =3D {
-> @@ -599,8 +588,6 @@ void serial_test_fexit_bpf2bpf(void)
->  		test_func_replace();
->  	if (test__start_subtest("func_replace_verify"))
->  		test_func_replace_verify();
-> -	if (test__start_subtest("func_sockmap_update"))
-> -		test_func_sockmap_update();
->  	if (test__start_subtest("func_replace_return_code"))
->  		test_func_replace_return_code();
->  	if (test__start_subtest("func_map_prog_compatibility"))
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/too=
-ls/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> index cb3229711f93..33f788e2786d 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> @@ -7,7 +7,6 @@
-> =20
->  #include "test_progs.h"
->  #include "test_skmsg_load_helpers.skel.h"
-> -#include "test_sockmap_update.skel.h"
->  #include "test_sockmap_invalid_update.skel.h"
->  #include "test_sockmap_skb_verdict_attach.skel.h"
->  #include "test_sockmap_progs_query.skel.h"
-> @@ -235,53 +234,6 @@ static void test_skmsg_helpers_with_link(enum bpf_ma=
-p_type map_type)
->  	test_skmsg_load_helpers__destroy(skel);
->  }
-> =20
-> -static void test_sockmap_update(enum bpf_map_type map_type)
-> -{
-> -	int err, prog, src;
-> -	struct test_sockmap_update *skel;
-> -	struct bpf_map *dst_map;
-> -	const __u32 zero =3D 0;
-> -	char dummy[14] =3D {0};
-> -	LIBBPF_OPTS(bpf_test_run_opts, topts,
-> -		.data_in =3D dummy,
-> -		.data_size_in =3D sizeof(dummy),
-> -		.repeat =3D 1,
-> -	);
-> -	__s64 sk;
-> -
-> -	sk =3D connected_socket_v4();
-> -	if (!ASSERT_NEQ(sk, -1, "connected_socket_v4"))
-> -		return;
-> -
-> -	skel =3D test_sockmap_update__open_and_load();
-> -	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-> -		goto close_sk;
-> -
-> -	prog =3D bpf_program__fd(skel->progs.copy_sock_map);
-> -	src =3D bpf_map__fd(skel->maps.src);
-> -	if (map_type =3D=3D BPF_MAP_TYPE_SOCKMAP)
-> -		dst_map =3D skel->maps.dst_sock_map;
-> -	else
-> -		dst_map =3D skel->maps.dst_sock_hash;
-> -
-> -	err =3D bpf_map_update_elem(src, &zero, &sk, BPF_NOEXIST);
-> -	if (!ASSERT_OK(err, "update_elem(src)"))
-> -		goto out;
-> -
-> -	err =3D bpf_prog_test_run_opts(prog, &topts);
-> -	if (!ASSERT_OK(err, "test_run"))
-> -		goto out;
-> -	if (!ASSERT_NEQ(topts.retval, 0, "test_run retval"))
-> -		goto out;
-> -
-> -	compare_cookies(skel->maps.src, dst_map);
-> -
-> -out:
-> -	test_sockmap_update__destroy(skel);
-> -close_sk:
-> -	close(sk);
-> -}
-> -
->  static void test_sockmap_invalid_update(void)
->  {
->  	struct test_sockmap_invalid_update *skel;
-> @@ -1385,10 +1337,6 @@ void test_sockmap_basic(void)
->  		test_skmsg_helpers(BPF_MAP_TYPE_SOCKMAP);
->  	if (test__start_subtest("sockhash sk_msg load helpers"))
->  		test_skmsg_helpers(BPF_MAP_TYPE_SOCKHASH);
-> -	if (test__start_subtest("sockmap update"))
-> -		test_sockmap_update(BPF_MAP_TYPE_SOCKMAP);
-> -	if (test__start_subtest("sockhash update"))
-> -		test_sockmap_update(BPF_MAP_TYPE_SOCKHASH);
->  	if (test__start_subtest("sockmap update in unsafe context"))
->  		test_sockmap_invalid_update();
->  	if (test__start_subtest("sockmap copy"))
-> diff --git a/tools/testing/selftests/bpf/progs/freplace_cls_redirect.c b/=
-tools/testing/selftests/bpf/progs/freplace_cls_redirect.c
-> deleted file mode 100644
-> index 7e94412d47a5..000000000000
-> --- a/tools/testing/selftests/bpf/progs/freplace_cls_redirect.c
-> +++ /dev/null
-> @@ -1,34 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -// Copyright (c) 2020 Facebook
-> -
-> -#include <linux/stddef.h>
-> -#include <linux/bpf.h>
-> -#include <linux/pkt_cls.h>
-> -#include <bpf/bpf_endian.h>
-> -#include <bpf/bpf_helpers.h>
-> -
-> -struct {
-> -	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-> -	__type(key, int);
-> -	__type(value, int);
-> -	__uint(max_entries, 2);
-> -} sock_map SEC(".maps");
-> -
-> -SEC("freplace/cls_redirect")
-> -int freplace_cls_redirect_test(struct __sk_buff *skb)
-> -{
-> -	int ret =3D 0;
-> -	const int zero =3D 0;
-> -	struct bpf_sock *sk;
-> -
-> -	sk =3D bpf_map_lookup_elem(&sock_map, &zero);
-> -	if (!sk)
-> -		return TC_ACT_SHOT;
-> -
-> -	ret =3D bpf_map_update_elem(&sock_map, &zero, sk, 0);
-> -	bpf_sk_release(sk);
-> -
-> -	return ret =3D=3D 0 ? TC_ACT_OK : TC_ACT_SHOT;
-> -}
-> -
-> -char _license[] SEC("license") =3D "GPL";
-> diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_update.c b/to=
-ols/testing/selftests/bpf/progs/test_sockmap_update.c
-> deleted file mode 100644
-> index 6d64ea536e3d..000000000000
-> --- a/tools/testing/selftests/bpf/progs/test_sockmap_update.c
-> +++ /dev/null
-> @@ -1,48 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -// Copyright (c) 2020 Cloudflare
-> -#include "vmlinux.h"
-> -#include <bpf/bpf_helpers.h>
-> -
-> -struct {
-> -	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-> -	__uint(max_entries, 1);
-> -	__type(key, __u32);
-> -	__type(value, __u64);
-> -} src SEC(".maps");
-> -
-> -struct {
-> -	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-> -	__uint(max_entries, 1);
-> -	__type(key, __u32);
-> -	__type(value, __u64);
-> -} dst_sock_map SEC(".maps");
-> -
-> -struct {
-> -	__uint(type, BPF_MAP_TYPE_SOCKHASH);
-> -	__uint(max_entries, 1);
-> -	__type(key, __u32);
-> -	__type(value, __u64);
-> -} dst_sock_hash SEC(".maps");
-> -
-> -SEC("tc")
-> -int copy_sock_map(void *ctx)
-> -{
-> -	struct bpf_sock *sk;
-> -	bool failed =3D false;
-> -	__u32 key =3D 0;
-> -
-> -	sk =3D bpf_map_lookup_elem(&src, &key);
-> -	if (!sk)
-> -		return SK_DROP;
-> -
-> -	if (bpf_map_update_elem(&dst_sock_map, &key, sk, 0))
-> -		failed =3D true;
-> -
-> -	if (bpf_map_update_elem(&dst_sock_hash, &key, sk, 0))
-> -		failed =3D true;
-> -
-> -	bpf_sk_release(sk);
-> -	return failed ? SK_DROP : SK_PASS;
-> -}
-> -
-> -char _license[] SEC("license") =3D "GPL";
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c =
-b/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c
-> index fe4b123187b8..20332a731d4e 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c
-> @@ -74,7 +74,7 @@ static __always_inline void test_sockmap_lookup_and_mut=
-ate(void)
->  }
-> =20
->  SEC("action")
-> -__success
-> +__failure __msg("cannot update sockmap in this context")
->  int test_sched_act(struct __sk_buff *skb)
->  {
->  	test_sockmap_mutate(skb->sk);
-> @@ -82,7 +82,7 @@ int test_sched_act(struct __sk_buff *skb)
->  }
-> =20
->  SEC("classifier")
-> -__success
-> +__failure __msg("cannot update sockmap in this context")
->  int test_sched_cls(struct __sk_buff *skb)
->  {
->  	test_sockmap_mutate(skb->sk);
-> @@ -90,7 +90,7 @@ int test_sched_cls(struct __sk_buff *skb)
->  }
-> =20
->  SEC("flow_dissector")
-> -__success
-> +__failure __msg("cannot update sockmap in this context")
->  int test_flow_dissector_delete(struct __sk_buff *skb __always_unused)
->  {
->  	test_sockmap_delete();
-> @@ -98,7 +98,7 @@ int test_flow_dissector_delete(struct __sk_buff *skb __=
-always_unused)
->  }
-> =20
->  SEC("flow_dissector")
-> -__failure __msg("program of this type cannot use helper bpf_sk_release")
-> +__failure __msg("cannot update sockmap in this context")
->  int test_flow_dissector_update(struct __sk_buff *skb __always_unused)
->  {
->  	test_sockmap_lookup_and_update(); /* no access to skb->sk */
-> @@ -146,7 +146,7 @@ int test_sk_reuseport(struct sk_reuseport_md *ctx)
->  }
-> =20
->  SEC("socket")
-> -__success
-> +__failure __msg("cannot update sockmap in this context")
->  int test_socket_filter(struct __sk_buff *skb)
->  {
->  	test_sockmap_mutate(skb->sk);
-> @@ -179,7 +179,7 @@ int test_sockops_update_dedicated(struct bpf_sock_ops=
- *ctx)
->  }
-> =20
->  SEC("xdp")
-> -__success
-> +__failure __msg("cannot update sockmap in this context")
->  int test_xdp(struct xdp_md *ctx __always_unused)
->  {
->  	test_sockmap_lookup_and_mutate();
+> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+> index 4c814ff6061e..1dbaff8d4805 100644
+> --- a/Documentation/bpf/kfuncs.rst
+> +++ b/Documentation/bpf/kfuncs.rst
+> @@ -276,19 +276,26 @@ This set encodes the BTF ID of each kfunc listed ab=
+ove, and encodes the flags
+>  along with it. Ofcourse, it is also allowed to specify no flags.
+>
+>  kfunc definitions should also always be annotated with the ``__bpf_kfunc=
+``
+> -macro. This prevents issues such as the compiler inlining the kfunc if i=
+t's a
+> -static kernel function, or the function being elided in an LTO build as =
+it's
+> -not used in the rest of the kernel. Developers should not manually add
+> -annotations to their kfunc to prevent these issues. If an annotation is
+> -required to prevent such an issue with your kfunc, it is a bug and shoul=
+d be
+> -added to the definition of the macro so that other kfuncs are similarly
+> -protected. An example is given below::
+> +macro. This prevents issues such as the compiler inlining the kfunc, or =
+the
+> +function being elided in an LTO build as it's not used in the rest of th=
+e
+> +kernel. Developers should not manually add annotations to their kfunc to=
+ prevent
+> +these issues. If an annotation is required to prevent such an issue with=
+ your
+> +kfunc, it is a bug and should be added to the definition of the macro so=
+ that
+> +other kfuncs are similarly protected. An example is given below::
+>
+>          __bpf_kfunc struct task_struct *bpf_get_task_pid(s32 pid)
+>          {
+>          ...
+>          }
+>
+> +Note that kfuncs must not be declared ``static``. A kfunc can be called =
+from a
 
+it seems like we do have static kfuncs and they work fine... And
+__noclone in __bpf_kfunc is meant to prevent compiler doing
+.constprop/.isra and other transformations.
+
+> +BPF program ``*.c`` file outside the compilation unit that defines it, s=
+o its
+> +externally visible name must remain available for BTF ID lookup. ``stati=
+c``
+> +linkage allows the compiler to rename the function, which can break this
+> +BTF-based kfunc resolution. Further note that sparse may warn that an ot=
+herwise
+> +unreferenced kfunc should be static. Such warnings should be ignored for=
+ kfunc
+> +definitions.
+> +
+>  2.5.1 KF_ACQUIRE flag
+>  ---------------------
+>
+> --
+> 2.54.0
+>
