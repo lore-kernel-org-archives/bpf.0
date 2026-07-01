@@ -1,457 +1,138 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E359380FC8
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 18:06:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC1A248873
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 18:15:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782929179; cv=pass; b=VaOXC77zB7jfs1JOvVqmOXyR/pa3Wq66NpydyQV8BdDeBdgBEA1f8KRJSxz/NnegnrYlQBjeyTMW9L4jjIlScEqZbcM1LHECBjOk9qYZIZ5Uq2ALS73OPEvBZ15o7EMHKMdrRwy/Q1K8/0/+PdZL3uphJN4o2WSd9HfRXe6YDhc=
+	t=1782929728; cv=pass; b=haC7kzThhspSL5zQEbFU8giV+krAr9jWHl4s8E2MAXY8Zb0DfzHvPOGiqBQMUYF+HxllS0EF07NVISOp81xqtD9Qy708626wEreJ4jRGiBlyZlltxf95cjB+OG4Bmwd2gMpktwo8sbmUnG6Rk6U6K73foj80F/wOiM27tN9N3TA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782929179; c=relaxed/simple;
-	bh=kPiqNE7xlfNV+ivs9rELOKqBb5P6MZfIfrGYF6zIOhA=;
+	s=arc-20240116; t=1782929728; c=relaxed/simple;
+	bh=7nSzcLTzrsVem0dCJXM85ZkctaHDk9+vQYaJP8p15O0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LizufE9ClXhMrHrQviO2JmSJQGQ0aLu7cC25f0XR3LadLNBMIPRxGM1vTBDjyXWV+wseqK14fjWg+axBMfrAjlXcmU9vSj5PwA5ZIIx+zEolpubDbOPFWAKt9ZhcFMedLe0IhxCS8oiUuo73WUPo8JRR1yMS6BLQH3I5ZJFqIfA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aHGDoW01; arc=pass smtp.client-ip=209.85.214.169
+	 To:Cc:Content-Type; b=bqc6vjZVUP75MnzYA19B2a7ugX6a6cpAf8SGvrDog5KYMYhZzLi+ajPjtspQvImbwM3mOhbHLvf3Yq8t+NZg79fiGRbxXazb0KXfTsObK4EU3GHtTLPEhs0+mm6XToKsFOOb6AXapwGXAWHelivzftDvTT84X0H6Mh8bA+UYYIM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=po/CBtg1; arc=pass smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aHGDoW01"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ca64989e64so7710745ad.2
-        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 11:06:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782929175; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="po/CBtg1"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-37defb2f231so491326a91.2
+        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 11:15:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782929726; cv=none;
         d=google.com; s=arc-20260327;
-        b=TuC67HrE59YJ0lVYZ5VKILdReEX5//B3U5fzlqFgYzVXHK7iiVQrkWwwkSIbcVebsq
-         otZ/8KqXj3qDpcJp7hF/6mD25tHKyW6oNMsGLaJqVYKjgVDFkr0St0IyBoraqkwBH27R
-         JD2WenxfNVAHfx7I2O+UOJMQoqJ/nr/K/j32G0QT0NEXM8JSqqNVCQK2CDJzGXe6Cv8B
-         e1alV+Fz/Xfy4FNY3FG/oe/8JFYVjcEp+Gm5/hZG/ff0xWgv08djmvZIeHGFuxONT59J
-         SbkZ9z5CzwlJuIvA2MC+2bk/k9yIHKkRbHKrT7Cbhnde2u+xQXsuS0LHAenKctgIPcBF
-         0lrQ==
+        b=E1RubHp2tDmP9wEMGjuVlzddJ6OCc10QRqEQt/wk0/hJvUtJqnYnzEaFmA9xW6EFRO
+         bMmOHzscrzjh4wSM1G/AdPtXz8vxWQeY8ad9SAQ7LCJZMx/kd59mE7PIQ6yYyQjR1x/v
+         g5Dzt4tTLl6SEAefXXk/UeUPGGAC3lmmttp9Wr9OdgeWCLVTiwwDsU3I613LVUA1pVfg
+         jVsoeTDmN/KvPtl4mnfvmrahiZyed8XX2ZFaL2c1g3gMRZ2vSkDfIAdLhbPx+MgFyJic
+         I9gfDeG1iD3IzTTUwItUGw47nRAnC+JbzARw9sWoR7pnUgVmsvKppGLgJGzKP5ByvVil
+         UYZQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Scba/x/dCfB9JJzbY7WApPv7XEyMR8UN1JS/S3YUF78=;
-        fh=VYi2F5PggyYbvtBEBOb+huCe5AEAkc9kX4msMQsfkFs=;
-        b=TYcvdMKcscC+m9TceZKYydvo4MHo94drjBAr6i23WbhzxhGZkVPXxFaoxogbSx052N
-         bLbPh6U2cvMu7k1CazsUfxWy/D5T9aShQd+CvGQ8sKsYE8nZgcZ/u5uL7Hcu+An2oGN3
-         xyDzZtQTaqZAAR6yN9MEM/nwx3icd6Km0JcfspjZNhdCZSnW0RlxiaXRwUZjN3cR9Vhc
-         A87oOqCTdumEfkLE5ixRnj1QOsMolOPJ1UOnC31YTmITpnM+G/DnvehaGQzbqmgAvN4J
-         91pgyGaEq3AJJRipNX3AhdlFUEkThNE+aGc0vkT2BRlxnuXDp8AaUodzD0daKuaZ7zCH
-         O+zg==;
+        bh=Q1nKV/KkJQB92AXXYWGqyaPHuI72ASXANxWmG9I4gh4=;
+        fh=SHcJ46kg5u7NVf8n5txIU5o7h8agRqssbFx66mDs6pc=;
+        b=oG24OTKfmZDODT+yIsqN38y6smvIrahZY5wTt0VbSujIxJLR+8PAxJ9kSLFGds5x8e
+         t8ZKwCc6YMGxWXh3R+yEwOjlW3nG5GAyPyfP8yFj8vS6gHFM14ZIVSxTkdwPUgEMcnen
+         HbCjtP+ObZe+TPb0+1lcpUXHyHzskLFYL4qmU6wV4CD8Tp7w6bqst8G/8e4Yd2Pnrdou
+         lt9GlpQm7I8GYKTiPWjT0BRLYb7oM4uLPrONE0tC3SMcSkfrdVhuBYR//R8rdD/umkIr
+         rbUzukkU1rgljmX9CkxAj2qhzA3pAiypHS8U0/p6fVcu72wM0OwUFHdZ/lJEGOJd/BJN
+         01eg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782929175; x=1783533975; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782929726; x=1783534526; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Scba/x/dCfB9JJzbY7WApPv7XEyMR8UN1JS/S3YUF78=;
-        b=aHGDoW01Ug2bpSWuC3y1ZKZ4bt4VEeZvnikaXpwnM0fD3GCMJPPQ4b2yZOh+24VMdH
-         CPXdCHcc8gkb+p8Lj03Dlg8qSSR++BeY/h0ihHZaiko5W+MTulL4AD8PJy/8QKuvzOoA
-         CAAabCNXBzogxbc7MhwqT2/ZegN8uhgge+HpvOBTA5OUegzRySqC4tbuusapQvcH4LJl
-         od7SEPGjRdNhAruuzwsee26EhK+0mJYbcphMS4EpxugiZiEav+Hk1uNliperLAGfHs2H
-         dQiSa8Y+Mie/VBo8JSFYdIaa1axee5vxV6ZrCe4+5gH0f10SXkEn0sD/cAaTM2QxQ/Nk
-         Bw3g==
+        bh=Q1nKV/KkJQB92AXXYWGqyaPHuI72ASXANxWmG9I4gh4=;
+        b=po/CBtg1ulBZbRoJsnJWrRayLQiSwmBmfRnh5tvsOcEnnrYxcEJp4PmN/zzaFz9r9i
+         hRKmWj5RFIi4u8VTP2Ivj2UP4RCghxclRVPJObfztE7y2O92S9xseU5PBfw0ksfT1w53
+         w6qlxE2WX0OQuWVUNzi1UliZaTaiasp+dXYVAmz1WjhloxQ0Eh/EH9u92U6I9sigqSOT
+         SDnlAz/39iQN/c80seIDr3V+8s378nT0c/2OI5CwZw1BqKQ9a/jAKHYEVjMQ60jGDtIp
+         SdgZdkGD1S9MqyD8wa70n7eEMe/1K8+Q4EoCDZdURZlojKKKEPd4Uk4yH5XU+1zY3BPf
+         dzAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782929175; x=1783533975;
+        d=1e100.net; s=20251104; t=1782929726; x=1783534526;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Scba/x/dCfB9JJzbY7WApPv7XEyMR8UN1JS/S3YUF78=;
-        b=OqMwHGKYbV/tIByelpp3v+Suxb6WjvO6uWFsSl4eT/Eboc3Y2E0mWCagSdzsK4w6/8
-         OvW5X4SWo9AKhYCQzhq12dKmh/CfDDprlDtW4EmAq6OsumfSSgKPrASMxexNv4caVTTr
-         lF3KGlSiiyhqWiyGmGCjKPvSazbfNEkDE/AZbuEJmEDzWd1OQ8sipCwSZeYTtFVLQZDf
-         xQJN/VfTbHDPpTxrBkYrKQWZkdFvLGzYHimie7xoUN/h1hrIe4mQz5SbsdeM2AFZ/U7I
-         V+SwXKI03cmqGjSLzVYME688C3OUZX2zW7LrFH3vI1O8KB8GA9NPCJaHC0dXZcQTvkr6
-         kf5A==
-X-Forwarded-Encrypted: i=1; AHgh+RoUMW+jZTGSJn94BWtTp2yjYqKA0aoJTL3AtH0rMkqJRb1GLTYB+tzis8/9Ux/h7iQO03s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVRh5FwiVd4v/qn+izKsoLzrUwvawtLwFhR5DkrlRRUvDizrti
-	oTruP6OkQ30ZAdtCPQ1lIMvutbVJKt9WfFitC0iIZFIt7qoinJxR/4EkvIEvHU+xk8y2m+D/ZWt
-	Fge8Ri41rMFuW7/pTlGEsfGGEJRGLOxU=
-X-Gm-Gg: AfdE7ckh7BBBlAHUzrHvyFbMxlkZDYkwQ3GyTuDBKU6TmtOdjXawjr5IotUOgRDXkBA
-	iAVM1lmB5EDKSqTZ4muqz91XbBfLECsYalEmcC/Ll0afvZm0wLc9dswxa/xM1dvWO74LfK2ndXJ
-	rXtlagyu5vzrnGSVPbipaoPvUmmAqX1zKYNjBiSnGgq/0OWO0B0cZVjaBvTq3/z6B8E/loEmnpQ
-	BrnUlbyeadzclRhw8AZtAWEtvdxbTbo4eY9DWXgVTWX6+sYqOjc4aj1M0T6S1voRUupWNGmo9fi
-	lsnO1riaw7DfU1zeTDg4OyNIuoMDf+evz6eAAih/BIlc8igd7rsMq047PuDOIJNO
-X-Received: by 2002:a17:902:d50a:b0:2c9:dc38:3ed7 with SMTP id
- d9443c01a7336-2ca7e882266mr28117815ad.36.1782929175268; Wed, 01 Jul 2026
- 11:06:15 -0700 (PDT)
+        bh=Q1nKV/KkJQB92AXXYWGqyaPHuI72ASXANxWmG9I4gh4=;
+        b=PFCw/QfEeD/R6i1m565gWtJ0hVGBCw7ZEIzjaeLJzH9PoBmVb8L4+wZsRfGn4JCRoV
+         Vg/h7xdfy7dgqH9LaoowrSUOL5VrmFFcBjONVPmcxEK9W+K7rm45kJl3YgbQVaa8/S6k
+         UtcTiaH6O3T4UzUxJKXzq2oI69A+iIxidCqvR039g/6eyHOQy5tPKx1avUVZ0w1JHafQ
+         YYkrMAkAaNIStKsam47viaia5auTQDogvjq6gBbMudbqQXhPSeCeHvjlkOXSz5w+pcBu
+         f8kg3b5haTmrv8v5l9w5HdjfCTSG4/XbFeNRyU8HmmuEsxonZWqcUERP86V1mJNR6Qlx
+         6CjQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpfGdjDsqLLtsEkwlCWge+s0wXAXDVhqgTlMEcZPJ4QxeJAl/FbJOrU1PxR8HNyX31p9+Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVzOa4ORIJ6pcxCp+MVv1Ls19ou20pmIzl3uxkumj1H0ylUZAt
+	S2soz0VoBNq8GBxK55eh97G9qkWPhlLwedAHb5+7XZ1Ri8RafbSsyCes519HdMj7lyM7ypn4TZp
+	snam8vE/2e6yo4lercydkmrgz+j3M8LE=
+X-Gm-Gg: AfdE7cmAsMHEYrNxOK2HINMtzJAIkdpwrJmeRNhHyVGNS7RqoYnuEiYlkMeVYFx0J5E
+	6SpN/gVWJrAvlqjMPPm+eUTjtduIVpUQjNL+Yqqe6mudZYdxrMLDZp8ZIj7gG011kGa+UkNW2Lr
+	SuUx6T93aH7axdX8jWoqJ+JQsYnWlrT7wf26c510fHxmQOnYnwttkDFzqKGknyx/4Oyh+P3UK2b
+	J1sm6H2zuG5rd7EQ9oimI6dDW7SZa+2mQ9VT/K4myjIS2THCwD23ra0jnAycvJXfVQkK5SqD5qr
+	8RKd1KdwrWw3D7ClErQe6s8U81ldfaHiYyIDUzwrw+XkDd1in0rdRg==
+X-Received: by 2002:a17:90b:390b:b0:37f:be6c:f3f2 with SMTP id
+ 98e67ed59e1d1-380aa0ac578mr2648449a91.2.1782929726253; Wed, 01 Jul 2026
+ 11:15:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260623112533.1151502-1-vmalik@redhat.com> <DJGJ9F6WQZV9.2W4WBIHYLJQ97@gmail.com>
- <ajq98dm4gAwEzkMb@google.com> <c2f4e45e-d5c9-42e9-a46b-25fb0cacb267@redhat.com>
- <93e70dc7-e52f-444e-b57e-09d149dc4808@redhat.com> <CAEf4BzYWdsBDQ3D41=+n_oCO68bVOtKuqQCqZOEVo=j7nK9Ozg@mail.gmail.com>
- <82252ae0-133a-45dc-9622-315236a437ad@redhat.com> <CAEf4Bza8vFSkuiD_Vd47-eGuDS40kKvTcHQR=V3OY=c505a9=g@mail.gmail.com>
- <4f43e9aa-2444-407b-ae52-0f4bf889ec17@redhat.com>
-In-Reply-To: <4f43e9aa-2444-407b-ae52-0f4bf889ec17@redhat.com>
+References: <20260630205418.3483969-1-andrii@kernel.org> <77ea35c8-2a06-41f0-b808-9743dbd3ea51@kernel.org>
+In-Reply-To: <77ea35c8-2a06-41f0-b808-9743dbd3ea51@kernel.org>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 1 Jul 2026 11:06:03 -0700
-X-Gm-Features: AVVi8CdJLWsVd93IAAyHqimLkNG-LKWJDclAXvnosyzScFpuqT5IgLm4V0nYlJo
-Message-ID: <CAEf4Bzb4niXoqLDWvD211M9eJ+Wo5KT2ezVYtTVABVOGOLe=Ug@mail.gmail.com>
-Subject: Re: [PATCH] perf trace: Refactor augmented_raw_syscalls using bpf_loop
-To: Viktor Malik <vmalik@redhat.com>
-Cc: Namhyung Kim <namhyung@kernel.org>, Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	linux-perf-users@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, Howard Chu <howardchu95@gmail.com>, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	Michael Petlan <mpetlan@redhat.com>, stable@vger.kernel.org
+Date: Wed, 1 Jul 2026 11:15:14 -0700
+X-Gm-Features: AVVi8CfMz6aP6_OfKBuah_J2LzOonBm72rUquS9BZifApLTrxTdaY_N231KDMpg
+Message-ID: <CAEf4BzaDjuLTsoTFXpPMp33KbKHvXkDv0Gwf2T=JVQBqGgZ+5A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpftool: Strip all -Wformat* flags from
+ bootstrap libbpf build
+To: Quentin Monnet <qmo@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 25, 2026 at 11:04=E2=80=AFPM Viktor Malik <vmalik@redhat.com> w=
-rote:
+On Wed, Jul 1, 2026 at 5:54=E2=80=AFAM Quentin Monnet <qmo@kernel.org> wrot=
+e:
 >
-> On 6/25/26 19:55, Andrii Nakryiko wrote:
-> > On Thu, Jun 25, 2026 at 4:58=E2=80=AFAM Viktor Malik <vmalik@redhat.com=
-> wrote:
-> >>
-> >> On 6/24/26 19:19, Andrii Nakryiko wrote:
-> >>> On Wed, Jun 24, 2026 at 3:27=E2=80=AFAM Viktor Malik <vmalik@redhat.c=
-om> wrote:
-> >>>>
-> >>>> On 6/24/26 08:47, Viktor Malik wrote:
-> >>>>> On 6/23/26 19:10, Namhyung Kim wrote:
-> >>>>>> Hello,
-> >>>>>>
-> >>>>>> On Tue, Jun 23, 2026 at 08:27:39AM -0700, Alexei Starovoitov wrote=
-:
-> >>>>>>> On Tue Jun 23, 2026 at 4:25 AM PDT, Viktor Malik wrote:
-> >>>>>>>> The loop for processing syscall args in augment_raw_syscalls has=
- a
-> >>>>>>>> history of breaking with Clang updates, see e.g. commit 013eb043=
-f37b
-> >>>>>>>> ("perf trace: Fix BPF loading failure (-E2BIG)") from Clang 15 t=
-o 16.
-> >>>>>>>>
-> >>>>>>>> Now, a similar thing happened between Clang 21 and 22. While the=
- issue
-> >>>>>>>> is mitigated on the main line by a recent verifier update, it re=
-mains
-> >>>>>>>> broken on the 6.12 and 6.18 stable branches:
-> >>>>>>>>
-> >>>>>>>>     [linux-6.18.y]# sudo perf trace true
-> >>>>>>>>     libbpf: prog 'sys_enter': BPF program load failed: -E2BIG
-> >>>>>>>>     libbpf: prog 'sys_enter': -- BEGIN PROG LOAD LOG --
-> >>>>>>>>     [...]
-> >>>>>>>>     BPF program is too large. Processed 1000001 insn
-> >>>>>>>>     processed 1000001 insns (limit 1000000) max_states_per_insn =
-40 total_states 37941 peak_states 232 mark_read 0
-> >>>>>>>>     -- END PROG LOAD LOG --
-> >>>>>>>>     libbpf: prog 'sys_enter': failed to load: -E2BIG
-> >>>>>>>>     libbpf: failed to load object 'augmented_raw_syscalls_bpf'
-> >>>>>>>>     libbpf: failed to load BPF skeleton 'augmented_raw_syscalls_=
-bpf': -E2BIG
-> >>>>>>>>     Error: failed to get syscall or beauty map fd
-> >>>>>>>>     [...]
-> >>>>>>>>
-> >>>>>>>> The reason is that the loop is quite complex and the BPF verifie=
-r often
-> >>>>>>>> struggles to prove that it terminates.
-> >>>>>>>>
-> >>>>>>>> Fix the issue by refactoring the loop body into a callback funct=
-ion and
-> >>>>>>>> calling the bpf_loop helper. This should prevent future breakage=
-s of
-> >>>>>>>> this kind since the callback function has no loops. It also allo=
-ws to
-> >>>>>>>> drop a few artificial checks to help the verifier, including the=
- changes
-> >>>>>>>> introduced by 013eb043f37b.
-> >>>>>>
-> >>>>>> Thanks for working on this.  I encountered this issue before and n=
-ever
-> >>>>>> found time to take a deeper look yet.
-> >>>>>>
-> >>>>>>>>
-> >>>>>>>> Signed-off-by: Viktor Malik <vmalik@redhat.com>
-> >>>>>>>> Fixes: a68fd6a6cdd3 ("perf trace: Collect augmented data using B=
-PF")
-> >>>>>>>> Fixes: 013eb043f37b ("perf trace: Fix BPF loading failure (-E2BI=
-G)")
-> >>>>>>>> Cc: stable@vger.kernel.org
-> >>>>>>>> ---
-> >>>>>>>>  .../bpf_skel/augmented_raw_syscalls.bpf.c     | 157 +++++++++++=
--------
-> >>>>>>>>  1 file changed, 96 insertions(+), 61 deletions(-)
-
-[...]
-
-> >>>>>>>> +  struct args_loop_ctx loop_ctx =3D {
-> >>>>>>>> +          .args =3D args,
-> >>>>>>>> +          .beauty_map =3D beauty_map,
-> >>>>>>>> +          .payload_offset =3D payload_offset,
-> >>>>>>>> +          .value_size =3D value_size,
-> >>>>>>>> +          .output =3D &output,
-> >>>>>>>> +          .do_output =3D &do_output
-> >>>>>>>> +  };
-> >>>>>>>> +  iters =3D bpf_loop(6, process_arg_cb, &loop_ctx, 0);
-> >>>>>>>
-> >>>>>>> bpf_loop() is old and generally not recommended.
-> >>>>>>> Please use bpf_for() then the diff will be one line change and
-> >>>>>>> can scale to any number of args. Not just 6.
-> >>>>>
-> >>>>> Thanks Alexei, I didn't know about this preference.
-> >>>>>
-> >>>>>> One thing we should take care is to support old kernels.  The olde=
-st
-> >>>>>> LTS kernel in the kernel.org is 5.10 and bpf_loop() was introduced=
- in
-> >>>>>> 5.17 and bpf_for (bpf_iter_num) was 6.4.
-> >>>>>
-> >>>>> The problematic loop was introduced in 6.12 by a68fd6a6cdd3 ("perf
-> >>>>> trace: Collect augmented data using BPF") so we should be good usin=
-g
-> >>>>> bpf_for. Or is perf from 7.2 supposed to work on 5.10 LTS kernels?
-> >>>>>
-> >>>>> I'll refactor with bpf_for and will send v2.
-> >>>>
-> >>>> Or I won't. It turns out that just swapping the for loop for bpf_for
-> >>>> leads to -E2BIG from the verifier again. Looking at the verifier log=
-, it
-> >>>> fails to find equivalence between states at the loop head:
-> >>>>
-> >>>>     [...]
-> >>>>     78: (85) call bpf_iter_num_next#84922 [...]
-> >>>> fp-56=3Dmap_value(map=3Dbeauty_payload_,ks=3D4,vs=3D24688,imm=3D112)
-> >>>>     [...]
-> >>>>     78: (85) call bpf_iter_num_next#84922 [...]
-> >>>> fp-56=3Dmap_value(map=3Dbeauty_payload_,ks=3D4,vs=3D24688,imm=3D120)
-> >>>>     [...]
-> >>>>
-> >>>> IMHO, the reason is that payload_offset, which points to the
-> >>>> beauty_payload_enter_map entry, gets updated in every iteration.
-> >>>>
-> >>>> This could be probably fixed on the perf side by reworking how augme=
-nted
-> >>>> args are stored but at this point, bpf_loop sounds like an easier an=
-d
-> >>>> more reliable approach.
-> >>>>
-> >>>> Let me know if anyone has objections, otherwise I'll send v2 of the
-> >>>> bpf_loop approach, with suggestions from Sashiko incorporated.
-> >>>>
-> >>>
-> >>> I'd still try to adapt bpf_for(), it's a much better code structure.
-> >>> You probably need to add a bounding checking/confirming `if ()`
-> >>> condition validating that offset at which you access map_value is
-> >>> always correct. And/or you might need barrier_var() before using i,
-> >>> because bpf_for() macro does bounds checking (check the macro itself)=
-,
-> >>> but compiler often will reorder instructions leading to verifier
-> >>> complaints.
-> >>
-> >> I gave it a try but wasn't successful so far. I think that the problem
-> >> is that while it would be possible to add an upper bound condition for
-> >> `payload_offset`, the verifier tracks the value of `payload_offset` to=
-o
-> >> precisely (as map_value(..., imm=3DX) with a concrete offset) and neve=
-r
-> >> merges states with different offsets. And since there are multiple
-> >> branches inside the loop, each incrementing `payload_offset` by a
-> >> different value, the verifier seems to fork its state on each branch,
-> >> effectively leading to the amount of states growing exponentially and
-> >> hitting the jump limit.
-> >>
-> >> To me, bpf_loop sounds like a more reliable choice in this situation.
+> 2026-06-30 13:54 UTC-0700 ~ Andrii Nakryiko <andrii@kernel.org>
+> > Commit 9080b97689db ("bpftool: Pass host flags to bootstrap libbpf")
+> > started building the bootstrap libbpf with HOST_CFLAGS, stripping the
+> > warning options that are unsuitable for that build by filtering out
+> > -W -Wall -Wextra -Wformat -Wformat-signedness.
 > >
-> > correctly verified bpf_loop would basically have to follow the same
-> > logic, so if it works with bpf_loop, it should work with bpf_for.
->
-> Are you sure about that? My perception is that the bpf_loop callback is
-> only verified once in a single pass. On the contrary, bpf_for is a
-> normal loop, for which the verifier needs to prove that after some
-> iteration, we get to the state seen in a previous iteration (to prune
-> the state). Which never happens here because the offset to
-> beauty_payload_enter_map (the payload_offset var) is tracked precisely
-> and causes state forks on every condition inside the loop.
-
-Hey Viktor,
-
-Sorry for taking so long to get back.
-
-Answering your question about bpf_loop() vs bpf_for() they are
-conceptually the same from verifier POV, so they are verified
-similarly. Earlier (buggier) versions of verifier did have a loophole
-where we verifier bpf_loop() in more laxed single-shot way, but that's
-not correct. We have since fixed that and it (bpf_loop) now has to
-"prove" convergence just like bpf_for().
-
-Anyways, the biggest issue with "normal" unrolled BPF loop is that
-people tend to write it such that there is some carry-over state
-between each iteration (like output variable which tracks advancing
-but bounded offset) which, with fixed number of iterations allows
-verifier to prove everything is bounded.
-
-This model is really-really bad for bpf_for() because it doesn't allow
-convergence. The trick is to structure each iteration as independent
-piece of calculation where the state outside of bpf_for() loop stays
-as unspecific/imprecise as possible, which at the beginning of the
-loop you revalidate invariants, if necessary (e.g., reestablish
-map_value offset boundaries).
-
-Anyways, it needed a bit of persuasion, but here's the verification
-result and gmail-butchered diff below. The trick is in making output
-imprecise (force verifier to forget its tracked range), so it doesn't
-differ between iterations from verifier POV. That's what the global
-ZERO allows to do. (We've discussed w/ Alexei and Eduard adding
-special instruction to force scalar register into imprecise, it would
-be a cleaner solution here, alas we never got anywhere with this,
-unfortunately).
-
-Processing 'augmented_raw_syscalls.bpf.o'...
-PROCESSING ./util/bpf_skel/.tmp/augmented_raw_syscalls.bpf.o/sys_enter,
-DURATION US: 1129, VERDICT: success, VERIFIER LOG:
-verification time 1129 usec
-stack depth 64
-processed 547 insns (limit 1000000) max_states_per_insn 4 total_states
-38 peak_states 67 mark_read 0
-
-File                          Program    Verdict  Duration (us)  Insns
- States  Program size  Jited size
-----------------------------  ---------  -------  -------------  -----
- ------  ------------  ----------
-augmented_raw_syscalls.bpf.o  sys_enter  success           1129    547
-     38           172         917
-----------------------------  ---------  -------  -------------  -----
- ------  ------------  ----------
-
-The diff:
-
-diff --git a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-index 2a6e61864ee0..8436368ba203 100644
---- a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-+++ b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-@@ -429,15 +429,17 @@ static bool pid_filter__has(struct pids_filtered
-*pids, pid_t pid)
-        return bpf_map_lookup_elem(pids, &pid) !=3D NULL;
- }
-
-+u64 ZERO =3D 0;
-+
- static int augment_sys_enter(void *ctx, struct syscall_enter_args *args)
- {
-        bool augmented, do_output =3D false;
--       int zero =3D 0, index, value_size =3D sizeof(struct augmented_arg)
-- offsetof(struct augmented_arg, value);
-+       int i, zero =3D 0, index, value_size =3D sizeof(struct
-augmented_arg) - offsetof(struct augmented_arg, value);
-        u64 output =3D 0; /* has to be u64, otherwise it won't pass the
-verifier */
-        s64 aug_size, size;
-        unsigned int nr, *beauty_map;
-        struct beauty_payload_enter *payload;
--       void *arg, *payload_offset;
-+       void *arg;
-
-        /* fall back to do predefined tail call */
-        if (args =3D=3D NULL)
-@@ -449,7 +451,6 @@ static int augment_sys_enter(void *ctx, struct
-syscall_enter_args *args)
-
-        /* set up payload for output */
-        payload        =3D bpf_map_lookup_elem(&beauty_payload_enter_map, &=
-zero);
--       payload_offset =3D (void *)&payload->aug_args;
-
-        if (beauty_map =3D=3D NULL || payload =3D=3D NULL)
-                return 1;
-@@ -466,7 +467,7 @@ static int augment_sys_enter(void *ctx, struct
-syscall_enter_args *args)
-         * struct: size of struct             -> size of struct
-         * buffer: -1 * (index of paired len) -> value of paired len
-(maximum: TRACE_AUG_MAX_BUF)
-         */
--       for (int i =3D 0; i < 6; i++) {
-+       bpf_for(i, 0, 6) {
-                arg =3D (void *)args->args[i];
-                augmented =3D false;
-                size =3D beauty_map[i];
-@@ -475,6 +476,11 @@ static int augment_sys_enter(void *ctx, struct
-syscall_enter_args *args)
-                if (size =3D=3D 0 || arg =3D=3D NULL)
-                        continue;
-
-+               if (output > sizeof(payload->aug_args) -
-sizeof(payload->aug_args[0]))
-+                       break; /* can't/shouldn't happen */
-+               barrier_var(output);
-+               void *payload_offset =3D (void *)&payload->aug_args + outpu=
-t;
-+
-                if (size =3D=3D 1) { /* string */
-                        aug_size =3D bpf_probe_read_user_str(((struct
-augmented_arg *)payload_offset)->value, value_size, arg);
-                        /* minimum of 0 to pass the verifier */
-@@ -510,7 +516,7 @@ static int augment_sys_enter(void *ctx, struct
-syscall_enter_args *args)
-
-                        ((struct augmented_arg *)payload_offset)->size
-=3D aug_size;
-                        output +=3D written;
--                       payload_offset +=3D written;
-+                       output +=3D ZERO; /* forget range */
-                        do_output =3D true;
-                }
-        }
-
-
->
-> > Is
-> > it possible to share your bpf_for-based code in some branch to try
-> > locally? I'm sure it can be done one way or another.
->
-> The change is super-simple, I can as well share it here. It's just the
-> matter of using bpf_for with two additional suggested mechanisms,
-> barrier_var and a bounds check for payload_offset:
->
-> diff --git a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c b/tool=
-s/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-> index 2a6e61864ee0..341d77a78949 100644
-> --- a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-> +++ b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-> @@ -432,7 +432,7 @@ static bool pid_filter__has(struct pids_filtered *pid=
-s, pid_t pid)
->  static int augment_sys_enter(void *ctx, struct syscall_enter_args *args)
->  {
->         bool augmented, do_output =3D false;
-> -       int zero =3D 0, index, value_size =3D sizeof(struct augmented_arg=
-) - offsetof(struct augmented_arg, value);
-> +       int zero =3D 0, i, index, value_size =3D sizeof(struct augmented_=
-arg) - offsetof(struct augmented_arg, value);
->         u64 output =3D 0; /* has to be u64, otherwise it won't pass the v=
-erifier */
->         s64 aug_size, size;
->         unsigned int nr, *beauty_map;
-> @@ -466,12 +466,16 @@ static int augment_sys_enter(void *ctx, struct sysc=
-all_enter_args *args)
->          * struct: size of struct             -> size of struct
->          * buffer: -1 * (index of paired len) -> value of paired len (max=
-imum: TRACE_AUG_MAX_BUF)
->          */
-> -       for (int i =3D 0; i < 6; i++) {
-> +       bpf_for(i, 0, 6) {
-> +               barrier_var(i);
->                 arg =3D (void *)args->args[i];
->                 augmented =3D false;
->                 size =3D beauty_map[i];
->                 aug_size =3D size; /* size of the augmented data read fro=
-m user space */
->
-> +               if (payload_offset + sizeof(struct augmented_arg) > (void=
- *)payload + sizeof(struct beauty_payload_enter))
-> +                       break;
-> +
->                 if (size =3D=3D 0 || arg =3D=3D NULL)
->                         continue;
+> > HOST_CFLAGS inherits EXTRA_WARNINGS, which includes -Wformat-security
+> > and -Wformat-y2k. The filter drops -Wall and -Wformat (the latter being
+> > what actually enables -Wformat), but leaves those two -Wformat-* childr=
+en
+> > in LIBBPF_BOOTSTRAP_CFLAGS. Building the bootstrap libbpf with it then
+> > warns:
+> >
+> >   cc1: warning: '-Wformat-y2k' ignored without '-Wformat'
+> >   cc1: warning: '-Wformat-security' ignored without '-Wformat'
+> >
+> > The warning is easy to miss in an in-tree build: tools/lib/bpf/Makefile
+> > re-adds -Wall via "override CFLAGS +=3D -Wall", which re-enables -Wform=
+at
+> > for the libbpf objects, so only libbpf's feature-detection probe (which
+> > uses the passed CFLAGS verbatim) leaks the two warnings. The standalone
+> > libbpf Makefile (github.com/libbpf/libbpf, used by the bpftool mirror)
+> > instead uses "CFLAGS ?=3D ... -Wall", which the passed-in CFLAGS overri=
+des,
+> > so -Wall is never re-added and every bootstrap object warns.
+> >
+> > Use a -Wformat% wildcard in the filter-out so the orphaned children are
+> > removed together with the parent.
+> >
+> > Fixes: 9080b97689db ("bpftool: Pass host flags to bootstrap libbpf")
+> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 >
 >
-> Thanks a lot for the help!
-> Viktor
+> Looks good, thank you.
 >
+> Acked-by: Quentin Monnet <qmo@kernel.org>
+
+thanks, applied to bpf-next, please do another bpftool sync when you
+get a chance
