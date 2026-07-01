@@ -1,136 +1,117 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from localhost.localdomain (unknown [147.136.157.0])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6980628DB54
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 08:08:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8A239448F;
+	Wed,  1 Jul 2026 08:11:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.0
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782893294; cv=none; b=Eyc1tb43GSNoaAX8oMuVnYEY3b0DMyKlP/Lv3BNoC3e+kNS+NR+YRuHlpcWc5ZED4/8HBu6l3IlEKEDwJ+hxNZ3xpnXTSlIb5tu2Q0tsh1qn1Svi7c1dVYitNHG4WOhlDqsW4wBh4YIrmj7LDB6dupVGFK0N1lULT0wWvsZquBQ=
+	t=1782893461; cv=none; b=TCklem+Ym26K1+WlNNf1GQfidovN5Jh53q4/TvjDYICa7zIKsFMcW5dzt4mzFaUKSTCdD+hJhC9b2YhYGDKrhxuKmvNJL8ZOscd/b+itm17O/Ysbo2ya2oSJM49+u8L/RgyIEpz4P9bMB6FKHkudyBNAXCjT/kmLFfGCDk0guwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782893294; c=relaxed/simple;
-	bh=nvNjJxN8d7S7fwFmCmCVHAK94UdVcm9NUdeYMSQFoRE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CzQk2bIlJCkwx0gxopctc8kRgeECoLKdo15samtNj9iWpkz+jwPBG7z/isJzFD80NZN0bnRLeJz00M5tKtbApFlKVl7titb2AYOYzvXpOO32rwgBDufBn6V1L9Y4G9Cj6GFbgIb2ujmX2sbPL0HbgkpY9TpBExyEqTtuujYGJYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P2pwR7zN; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P2pwR7zN"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-845c92bc464so232382b3a.2
-        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 01:08:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782893290; x=1783498090; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Dr3ca9Gbche1v8ZCkSbyudGXgkkz76Bf2v/z4hZeM2M=;
-        b=P2pwR7zN5bKIi4llG30rY2wHwnCoVcyb5DsnD32qDG7SHl5NvgrhxS4oEkpIGUG/gq
-         Ba9zKX3rciKz4IoOKMuOU/l3WVg3OAdiVmkqo0emvr/VedT1csK09U492Wa9yZqArBeg
-         GsomI9ToGZhdF4BbS1CnsOMErHxp5tPxJ2DtNH8oZb8BJ+t8rfI4SHCyHajIfzTS3TiD
-         qFnpf7tLrLBiWB3cw+3whYYQoeK58SZ3F2+WCE8l5gJ7hZ4XXuSvKglQnCKVxzjpX5By
-         YRZStcin7olFCYEk6dFbqTahcDqGdMvzF+OPv+2oOc2rMn2ydUjymC9bZ48RqBSJgOVv
-         +Qzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782893290; x=1783498090;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Dr3ca9Gbche1v8ZCkSbyudGXgkkz76Bf2v/z4hZeM2M=;
-        b=UvUWnNN4VaMafLxfZhdd2kS94tKOIl/z7y8PvYIc86dm1sVj3WJQVeNMcyAc1biRyH
-         HdKxcxZvcMeMaYSjtCx7kfJZqQ8F3up/KCcals0I8UlpE/1WURj/Duz22KJwl8/Shsm8
-         fby0TzfpXe+oLQulEosf5ZnYrbO2WrSgdErp+YTHBwP8Jzu/aB/mve+WrMF8ioKJ9B5Y
-         DP6jlIl8fcSA/mA4BIQSj0eaVeZmXONQSA65ByzW0Ube0KCbubeAftiJpXnij7nqa3R6
-         0/bu0arRbHgcQflkI/4EsbOKaG2QVuY2t62fEySXxXnYPLwOaZmRhsIJtgAiGQMNalfi
-         9Obg==
-X-Forwarded-Encrypted: i=1; AHgh+RraL08Yc6zCCFpdQq4apNmz28SRIRiRnzsR6SnAMc1ntQj+vCo30bJrhrKUKJ2udT+e8Kk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywon/93FjyZa13xl9QYVcs+PSHUp2SqteLOnI+pIFRGw6ll22f1
-	Qzs2qR4DTbgKxpoIoaQ3PQ2APqElb0HDpz1VM3xhz6+MleGekiJ4ClBW
-X-Gm-Gg: AfdE7cnK+EclgbLCSABMPd4Hz5FbE4jVn+dLRY75xOV6aGho5WUc/pH4kBUD2cWWri+
-	62By0QInki01ynE1BvQw/tcZhW2SlkkSkt+eSQlGFCJY3hau5zr5FiiC/dcUynMTseNwn3g13O3
-	maGwlLSGK1eUAyy67Bjek7RULx1BC58Xn+nGEgoZ+FQbwgFys8qUNylVJ9XIS8rGyU8yBxK0sYD
-	4srFOXSYuKentV8e6JqskuKxwTSYhzvO/08cN4DeyyC8umyBOiK8RDMhHM9ZitnqxjMNueJcZkl
-	Ankolx+wrPJ1A79b59xDFPzZCpQkRa62vSJIFe/QBQC0uWRRf461JLI6Njf11PGRlMCAcWds1Lb
-	d6rf1PRnrBah3wbEoQ6w72H++sqM7RdOIO8r30d+94/20sIi4WaCrIajkoqqmhRuPArGy781ZcS
-	b3Z3QedF3E+ljccaKO2CnSK3VkyrL0lazpv4ZKUCzpGK+CFWUEhEQ=
-X-Received: by 2002:a05:6a00:2d05:b0:842:5a8d:302c with SMTP id d2e1a72fcca58-847c093f017mr478860b3a.38.1782893290425;
-        Wed, 01 Jul 2026 01:08:10 -0700 (PDT)
-Received: from cps-manycore-1.. ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8479fffa4f0sm3567781b3a.19.2026.07.01.01.08.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jul 2026 01:08:09 -0700 (PDT)
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
+	s=arc-20240116; t=1782893461; c=relaxed/simple;
+	bh=A71KniBxj6AqbKjBGpQsPVKmK3p0wYzdL3smoRNFjQo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qiMpu0RR5QTjAvIEYvnsi64J6QJ0UeOWyvdrVGvsb8+hF2IjEBG/IM75WqtfT6YgycMOhAXstw4m1wpme89w0GD6MXjPxXAjywxdrFKkq1Ya6gzcCTrFzEvXOaEnRcghvBUkLDUD8QvBgRMXryOA/WOc0fU3reYKjk4k8kxZy+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=shopee.com; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.0
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=shopee.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=localhost.localdomain
+Received: by localhost.localdomain (Postfix, from userid 1007)
+	id 640AB27E725; Wed,  1 Jul 2026 16:05:51 +0800 (+08)
+From: Leon Huang Fu <leon.huangfu@shopee.com>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Leon Huang Fu <leon.huangfu@shopee.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	KaFai Wan <kafai.wan@linux.dev>,
+	bpf@vger.kernel.org,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
-	Paul Moore <paul@paul-moore.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v2] bpf,lsm: drop bpf_prog_free from sleepable_lsm_hooks
-Date: Wed,  1 Jul 2026 08:07:51 +0000
-Message-ID: <20260701080757.1394144-1-rhkrqnwk98@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH bpf 1/6] bpf: Disallow interpreter fallback for user BPF_ADDR_SPACE_CAST insn
+Date: Wed,  1 Jul 2026 16:04:38 +0800
+Message-ID: <20260701080524.194326-1-leon.huangfu@shopee.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <7438f087-7fb4-4991-a095-1d24d6d09895@loongson.cn>
+References: <20260626154330.33619-1-leon.hwang@linux.dev>  <20260626154330.33619-2-leon.hwang@linux.dev>  <e279c9a7ca6b16e52dc261560513b0eafdd70f87.camel@linux.dev>  <a2aaa21d-4cf9-48a4-839f-dd152bda8185@linux.dev>  <af9c0a7e-13de-c227-849f-4b35d1fb74ff@loongson.cn>  <d55e10b1-d883-4fcf-8fb3-8210db935e4a@linux.dev>  <1c07a34f-b050-a281-6a7b-542a9bfa30b3@loongson.cn>  <bfb432db-bd29-419a-8147-78ff6fac07ad@linux.dev>  <7438f087-7fb4-4991-a095-1d24d6d09895@loongson.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 
-__bpf_prog_put_rcu() is the call_rcu() callback for non-sleepable programs.
-security_bpf_prog_free() called from there fires bpf_prog_free in softirq;
-if a sleepable LSM prog is attached to that hook, might_fault() BUGs:
-
-  BUG: sleeping function called from invalid context
-  in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 5038
-  preempt_count: 101, expected: 0
-  Call Trace:
-   <IRQ>
-   __bpf_prog_enter_sleepable+0x1cd/0x320 kernel/bpf/trampoline.c:1255
-   bpf_trampoline_6442549705+0x53/0xd7
-   security_bpf_prog_free+0xde/0x130 security/security.c:5465
-   __bpf_prog_put_rcu+0xab/0xd0 kernel/bpf/syscall.c:2365
-   rcu_do_batch kernel/rcu/tree.c:2617 [inline]
-   handle_softirqs+0x236/0x800 kernel/softirq.c:622
-   </IRQ>
-
-The call_rcu/call_rcu_tasks_trace split reflects the freed program's
-sleepability, not that of any attached observer.
-
-security_bpf_prog_free() also frees prog->aux->security, which has to stay
-after the grace period, so drop bpf_prog_free from sleepable_lsm_hooks
-rather than move the call. Non-sleepable observers still run there.
-
-Fixes: 1b67772e4e3f ("bpf,lsm: Refactor bpf_prog_alloc/bpf_prog_free LSM hooks")
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
----
-v2:
- - remove security_bpf_prog_free from sleepable (Alexei Starovoitov)
-
-v1:
- - https://lore.kernel.org/all/20260626093711.2969648-1-rhkrqnwk98@gmail.com/
-
- kernel/bpf/bpf_lsm.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index c5c925f00202..d2dd5a1b557d 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -292,7 +292,6 @@ BTF_ID(func, bpf_lsm_bpf_map_create)
- BTF_ID(func, bpf_lsm_bpf_map_free)
- BTF_ID(func, bpf_lsm_bpf_prog)
- BTF_ID(func, bpf_lsm_bpf_prog_load)
--BTF_ID(func, bpf_lsm_bpf_prog_free)
- BTF_ID(func, bpf_lsm_bpf_token_create)
- BTF_ID(func, bpf_lsm_bpf_token_free)
- BTF_ID(func, bpf_lsm_bpf_token_cmd)
--- 
-2.43.0
-
+On Wed, 1 Jul 2026 15:29:28 +0800, Tiezhu Yang <yangtiezhu@loongson.cn> wro=
+te:=0D
+> On 2026/7/1 =E4=B8=8B=E5=8D=883:02, Leon Hwang wrote:=0D
+>> On 1/7/26 14:49, Tiezhu Yang wrote:=0D
+>> [...]=0D
+>>>>=0D
+>>>> It is a real issue.=0D
+>>>>=0D
+>>>> Instead of fixing up helper calls, it seems better to prevent=0D
+>>>> interpreter fallback if the prog has any JIT-inlineable helper call.=0D
+>>>=0D
+>>> Hi Alexei and Leon,=0D
+>>>=0D
+>>> What about the following: (not tested yet, if it is good, I can test it=
+)=0D
+>>>=0D
+>>> [...]=0D
+>>>=0D
+>>> If you are OK with the above changes, I will test it again and send=0D
+>>> a new version later.=0D
+>>>=0D
+>>=0D
+>> If you don't mind, I think I can disallow the interpreter fallback by=0D
+>> the below diff in the next revision of this series.=0D
+>>=0D
+>> The 'aux->jit_required' is introduced by following Alexei's suggestion.=
+=0D
+>=0D
+> I am not sure if introducing a new aux->jit_required member is necessary,=
+=0D
+> as we already have a local jit_needed flag in the current logic.=0D
+=0D
+A 'must_jit'-like member was suggested by Alexei [1].=0D
+=0D
+Probably, the commits in [2] could help to understand 'aux->jit_required'.=
+=0D
+=0D
+[1] https://lore.kernel.org/bpf/DJMRIZ5PDWP4.12OOZ8H881H6O@gmail.com/=0D
+[2] https://github.com/Asphaltt/bpf/commits/bpf/fix-interpreter-fallback/v2=
+/=0D
+=0D
+>=0D
+> Additionally, the issue reported in my patch [1] is fundamentally tied=0D
+> to bpf_jit_inlines_helper_call(). Maybe we can simply reuse jit_needed=0D
+> by checking bpf_prog_has_inline_helpers() right before JITing, and then=0D
+> reject fallback with -ENOTSUPP if JIT compilation fails.=0D
+=0D
+Correct. Reusing jit_needed is preferred.=0D
+=0D
+Thanks,=0D
+Leon=0D
+=0D
+>=0D
+> Let us wait for Alexei's comments on the overall direction before=0D
+> respinning.=0D
+>=0D
+> [1] bpf: Fix unaligned interpreter panic on JIT fallback path=0D
+> https://lore.kernel.org/bpf/20260615025316.24429-1-yangtiezhu@loongson.cn=
+/=0D
+>=0D
+> Thanks,=0D
+> Tiezhu=0D
