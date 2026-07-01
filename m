@@ -1,140 +1,155 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E3D3A257E
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 22:59:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92701F2380
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 23:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782946781; cv=none; b=aesfexkg0nHLIMSd50rcJ+8eYtf3b0rRbRLzcU3JeJuagO8Bvkw6pZSI6gQ2xy3RLrmsFuUncZFJp4epU8G0oVqpUa4TRtjzGXJXfCiHKuw/fHwN79+oAzIo/Rznsl/wl/SRrrWFTjAmx5nzQ5r5QLikpdEMiEEsqLjgdhqJu7c=
+	t=1782947197; cv=none; b=OuWi0DrgIHYkkwTaV/y9mwIN4JiesHhbJpjWSkRgoR11OMI/2IjzYxxJzUk0i1h1hILIJVW3dRjWp0JtyQPmdj8mkXzmJhks1yZudadCMVJezi8YJHflOaMOWgVpsgB8H735byzsRrZj0l/bFOxsSdlnBwZCBO5L4fohFuCuND0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782946781; c=relaxed/simple;
-	bh=b7hCX9/rBhLq6D0U13TWkBKOZW1C8WElJk7v2c6wHGg=;
+	s=arc-20240116; t=1782947197; c=relaxed/simple;
+	bh=/opBjLlEq/vgOmiKIUQcrBbSGODGSv1adznKRq2Thqs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J0698n05/96/3F8QGmQ+bf02RNevIFxgnMZ71G8Mz65uMsR722PJ2h6lE/WxvfYRXCXUEMKacntZCLe1xgnWgwVtGpYJGJgoATLo8WqN7vYjeRrq9hxlGt0yECPqTTNQVbMS4QhA9kZsKIYBjnE9Uxwdu0RFZrY2DYfUDRafrPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SYgHKdg0; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=hXQD0CSLQWltN7Q18e+KRgPdhJJBY+WV63VLdb3zX5ZVilkarOGhZVak/6Xl8u1xFw3IsR19nm1Pzda2aTlq3KC0zejyiOFIx3ECRN1KDOVPqeWMxOLKKqZdCa6vtZ6hIJdJtyOymY3GeMXCYbfErPValGDbSVpMZ5P9PhlHKXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nvRZizpB; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SYgHKdg0"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2ca7aaa4b85so7736335ad.3
-        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 15:59:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nvRZizpB"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2c81db32393so126275ad.0
+        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 16:06:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782946778; x=1783551578; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1782947195; x=1783551995; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=giEqW7q9VcfExLik9phOW3EsB4XFWvu/oaZfoJVW5+M=;
-        b=SYgHKdg0agRvsDKUClXirSvqPSa/5BPj4Jj6Eks6GD/km9VzI+nGMDdddeYngntAdL
-         EMIeQUSlXJjct7AwQlCMlWBGeOHuD09kFn09YOAYlcMysFbjhLTMBO+wXluTBU7rbF8Q
-         /LIolGkD5Ygl3CmBCj12elvVQ6rMnJd8JJ/NHzwaNWRL72+kGzaTDypC56EhQ3N4CeiP
-         Tf52tt3FgfoalUPrE5sYNQGg7l8vYoRkyWgjs2W32v09W47nhWRCsQ9u7rJ56wtU9rSt
-         JgWnDvgTAxhsgucvdLaPvzxYZmkgZebIIedqQDN5Af8w+pkpVlU4BhsFghcq6a2gjLp9
-         /4ZQ==
+        bh=1f3MKShOfk4iUfvf9qLIvTdXvweDhrev1tUtGTADb3w=;
+        b=nvRZizpBilvph0tnHDR/AsIfUT9PXr50FEprrwXsdiYnjfuwY9eDTTBX72hPZ/RVoT
+         2fFMzv99HlmOmB8uuyZD3ZiaxMMltOsfVVYcVbfaWfvMB7RRneM4fESRCptuGfZAzep5
+         axL8i9Ogflz9TvKAHnIVPE2+YPHoaUUhdCoF67lHJeKhiP3XcCtSYEW/gGzaJNzIPBFR
+         TZ65gt3XNVSRJck64Vp7+ZGT3eqew8Z1UJNrcyZAUAAahe9Lem4Mpewxx5N+DWKeeOzw
+         dlFcgQprbkCZeoIbFgk7qrO5s4bvzRlnJDLe1I8T7zJ/kfEM5dSblALabwDz6yphKXuz
+         KiNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782946778; x=1783551578;
+        d=1e100.net; s=20251104; t=1782947195; x=1783551995;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=giEqW7q9VcfExLik9phOW3EsB4XFWvu/oaZfoJVW5+M=;
-        b=YSCsk2imZ6RVm7m4e1Kov5ynAnsq1P0pupuFpjgVIyDcdfAPWnCRUztRi774KT8OpM
-         nKpyHMg2oh0j8oFwKjU0f8pSSGE7OHQ/L0L9/KlAkUvNn/KbV8YLrzd8qdOSB76/RIEa
-         Vi8q4jpxF7P9wA9Y3gvnOFxrS+J4F3WYJnaStkg1nTFgXgeG9hhPvu4chubXfYqwcEZQ
-         9ab0/3ndhbFZHrI3JLQsNlklDHK/PwDDHeh6XkzqpbkkMsIJ1DplGgRyGSyfL30sprc4
-         a7xBGNAFUNv7n15AvCoGTv0zV5OZyebytkCHcXkEnFj83BVhcapMFqMb7iPxSsMNjoZL
-         hgUQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/Ub+c0yhcNzj96Sth6O3WskfIIlRWpmm/tJtVqrzjY8OAhqchxP50fzktjiUvO+PTCoVc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yww5W5HltsVOT6P9anb2xwdZUg6F9yplqiV08MbFTQS0gbMFFpv
-	qmDL62r851krtdjlsX/0m5/TljhOv+MFiN2VDR87Xd2Lqpx3LQHILmrT
-X-Gm-Gg: AfdE7cnhlDFBwXtDkECFPELT81asayGUjlZ1Ly1wuG7UCPk/7l0cIDo6ixBX/2Pa07+
-	FSfPF0d1fMFbl/Vp5K2jSKU2U8ViLHaUk1/XIDC2ku5ep3dtvY+ct6cEJ91Sm9nL7/U1LW/3JRA
-	9Rcaz9Jp8cDgMOCJnl08Nx6tFtLz+18NDebJNGRRi3mX9RbXPynde8yydT+OMVKYlF8/nki5WSc
-	Qpxb8k6846c/VFTdhLcfAed3Iz6/oz4NhmYl/IbkawsFiXmhCN9Yfx4vr5uwSujUtt49hKEWhoD
-	wECJmliidkqQ9t0vEHQxnC/OAElOYwwHmTbBA75ufZbYdEskbbeZN4zNTtlASxEA7oZ1yevUbVr
-	CIawrXxL6WEu7NEndtYjVIn9eITdQMW//06v1FCHX/vaVtR+B86iaxxtMNFkVFTfSGnynn1B12+
-	CGjGrSiWxddA==
-X-Received: by 2002:a05:6a20:4310:b0:3bf:c12c:2ecf with SMTP id adf61e73a8af0-3bff430fae9mr2922510637.59.1782946777855;
-        Wed, 01 Jul 2026 15:59:37 -0700 (PDT)
-Received: from john-p8 ([98.97.43.89])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c9e8eb0ef50sm442748a12.6.2026.07.01.15.59.36
+        bh=1f3MKShOfk4iUfvf9qLIvTdXvweDhrev1tUtGTADb3w=;
+        b=Dgbv0usLOENudubr++ztLAHlMC5KEA1wui0DfckVeDYGpObNIBYyPAqbYtsMr30ziC
+         i0XKdwb8pXOeL+PVelp9BbVguBtkIy0fv/HpM7uBdnRPmm0pxBRSgJhYcVL6vMs4eJEV
+         tnvL1pfwMP+P3fmMoDYSYh6GJEXrKw3UZ5bwRgoKCe0GWMxFbagXJePVWK4jVl/pIsBD
+         NQW5HXDlkPFskNtV6gosq4wyKVmPMriC7y3VxI5fMBZWFyYNJRXMb0NUeuU9dA4HyQVJ
+         dvNDP8XV7UnPBiUwhJlR0+Ne4i+sg0ffLDhHjWscWS3A+0CgtEeqRl2NjlwaA+0vnHYx
+         9ORQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpgYj0678/u58mMnMr7S0JLRftSJiGs9mH59+W/nEn0IxZKO8RbJpVN4wyQV5eXnX0DWMM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwT94j4ckxfif4hxGM7ivbtVSPaawzqHDqTdJxHXAVGGeErqA81
+	yFxeWmjX/kJbkKwHzGoQgxsqG0WFt4dF6bIbwihz+m8VlUi0tE7PW4wuU+qeRlQUKQ==
+X-Gm-Gg: AfdE7clmtwuQaqcqy12cZNViW79/PUhko7wgqXh7/rkWfotMJcyxB9fr468eWQuOIRi
+	2XilGB8aMNdmuuuTygDVQKtlcwKW0Azziw58gf2HWjJ+E3+yg4OEjQHWxkZ66icyYgPqGPhcPoz
+	EMAjE4XhYonU6t+CetueYXtmmFx6uvMujO7IjKUxJmdOqN25zaq1CuVzMnSM1CZhPfOQl4t4tZP
+	Kj9HAfje2VZmGQC7qTB/dqIMfXhLv92CZO8QLW+RiWgYAw5rkK/ryAbE9Y0Nff213/p2PeoJRH2
+	SgkS5lQHW5Dur05hUg/pPTU/XiTc6qME3pdMyEjNd1X+zSE8tsf5l0o+9FaWbjcBbY18jqrTOtq
+	mIba7yH+1bnNTkgaWD34eWKiO4Fy5UtAEJMf4Ok94kTvZ5zjAczhcn5BK0Czs9y/qvlH5bLR/Aq
+	B8xMqiswwdxmRJVAS4o/kfy2ekU7zZo+KpVmBCQF07kh75bNiUw8pVD473HTTF9zd3I6lkx57pE
+	Y+6vHt5cedEsHP0cPv2OP9ii7Dbql7ee7E=
+X-Received: by 2002:a17:902:e884:b0:2c7:f6ca:2deb with SMTP id d9443c01a7336-2caa3d72afbmr254205ad.22.1782947190924;
+        Wed, 01 Jul 2026 16:06:30 -0700 (PDT)
+Received: from google.com (112.174.16.34.bc.googleusercontent.com. [34.16.174.112])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca9a8fc961sm4768155ad.22.2026.07.01.16.06.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jul 2026 15:59:37 -0700 (PDT)
-Date: Wed, 1 Jul 2026 15:59:35 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Michal Luczaj <mhal@rbox.co>, Eric Dumazet <edumazet@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Cong Wang <cong.wang@bytedance.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v2 1/4] bpf, sockmap: Reject unhashed UDP sockets on
- sockmap update
-Message-ID: <akWbxAwIhjJdPtjA@john-p8>
-References: <20260626-sockmap-lookup-udp-leak-v2-0-7e7e201c951a@rbox.co>
- <20260626-sockmap-lookup-udp-leak-v2-1-7e7e201c951a@rbox.co>
- <87pl1937c7.fsf@cloudflare.com>
+        Wed, 01 Jul 2026 16:06:30 -0700 (PDT)
+Date: Wed, 1 Jul 2026 23:06:26 +0000
+From: Carlos Llamas <cmllamas@google.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
+Subject: Re: [PATCH vfs/vfs-7.2.xattr v3] bpf: Add simple xattr support to
+ bpffs
+Message-ID: <akWdcp6P0FkNDzBk@google.com>
+References: <20260602074012.416289-1-daniel@iogearbox.net>
+ <20260603-abwenden-plagiat-abtropfen-31bd59c3140b@brauner>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87pl1937c7.fsf@cloudflare.com>
+In-Reply-To: <20260603-abwenden-plagiat-abtropfen-31bd59c3140b@brauner>
 
-On Mon, Jun 29, 2026 at 01:38:00PM +0200, Jakub Sitnicki wrote:
->On Fri, Jun 26, 2026 at 10:36 PM +02, Michal Luczaj wrote:
->> UDP sockets get SOCK_RCU_FREE set when (auto-)bound. This means
->> sk_is_refcounted(unbound) = true, while sk_is_refcounted(bound) = false.
->>
->> Because sockmap accepts unbound UDP sockets, a BPF program can increment a
->> socket's refcount via lookup. If the socket is subsequently bound, the
->> transition from unbound to bound causes bpf_sk_release() to skip the
->> decrement of the refcount, causing a memory leak.
->>
->> unreferenced object 0xffff88810bc2eb40 (size 1984):
->>   comm "test_progs", pid 2451, jiffies 4295320596
->>   hex dump (first 32 bytes):
->>     7f 00 00 01 7f 00 00 01 d2 04 1b b7 04 d2 00 00  ................
->>     02 00 01 40 00 00 00 00 00 00 00 00 00 00 00 00  ...@............
->>   backtrace (crc bdee079d):
->>     kmem_cache_alloc_noprof+0x557/0x660
->>     sk_prot_alloc+0x69/0x240
->>     sk_alloc+0x30/0x460
->>     inet_create+0x2ce/0xf80
->>     __sock_create+0x25b/0x5c0
->>     __sys_socket+0x119/0x1d0
->>     __x64_sys_socket+0x72/0xd0
->>     do_syscall_64+0xa1/0x5f0
->>     entry_SYSCALL_64_after_hwframe+0x76/0x7e
->>
->> Instead of special-casing for refcounted sockets, reject unhashed UDP
->> sockets during sockmap updates, as there is no benefit to supporting those.
->> This effectively reverts the commit under Fixes, with two exceptions:
->>
->> 1. sock_map_sk_state_allowed() maintains a fall-through `return true`.
->> 2. In the spirit of commit b8b8315e39ff ("bpf, sockmap: Remove unhash
->>    handler for BPF sockmap usage"), the proto::unhash BPF handler is not
->>    reintroduced.
->>
->> Historical note: this issue is related to commit 67312adc96b5 ("bpf: reject
->> unhashed sockets in bpf_sk_assign").
->>
->> Fixes: 0c48eefae712 ("sock_map: Lift socket state restriction for datagram sockets")
->> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
->> Signed-off-by: Michal Luczaj <mhal@rbox.co>
->> ---
->
->Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+On Wed, Jun 03, 2026 at 09:07:55AM +0200, Christian Brauner wrote:
+> On Tue, 02 Jun 2026 09:40:12 +0200, Daniel Borkmann wrote:
+> > Add support for extended attributes on bpffs inodes so that user space
+> > and BPF LSM programs can attach metadata, for example, a content hash
+> > or a security label - to a pinned object or directory. BPF LSM or user
+> > space tooling can then uniformly look at this (e.g. security.bpf.*) in
+> > similar way to other fs'es. The store is in-memory and non-persistent:
+> > it lives only for the lifetime of the mount, like everything else in
+> > bpffs. The modelling is similar to tmpfs.
+> > 
+> > [...]
+> 
+> Applied to the vfs-7.2.xattr branch of the vfs/vfs.git tree.
+> Patches in the vfs-7.2.xattr branch should appear in linux-next soon.
+> 
+> Please report any outstanding bugs that were missed during review in a
+> new review to the original patch series allowing us to drop it.
+> 
+> It's encouraged to provide Acked-bys and Reviewed-bys even though the
+> patch has now been applied. If possible patch trailers will be updated.
+> 
+> Note that commit hashes shown below are subject to change due to rebase,
+> trailer updates or similar. If in doubt, please check the listed branch.
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+> branch: vfs-7.2.xattr
+> 
+> [1/1] bpf: Add simple xattr support to bpffs
+>       https://git.kernel.org/vfs/vfs/c/a146500e1144
 
-For me as well.
+Hey Christian / Daniel,
 
-Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+I'm getting a regression with this patch when using genfs for bpffs. It
+seems like calling selinux_inode_init_security() with !SBLABEL_MNT will
+leave the isec->initialized before doing the EOPNOTSUPP exit.
+
+The genfs path is later skipped because inode_doinit_with_dentry() sees
+the inode initialized and I get denials in userspace.
+
+I don't know if this would be correct but doing the check for
+SBLABEL_MNT before marking the isec as initialized worked for me.
+
+Any thoughts? Should I send a formal patch?
+
+Carlos Llamas
+
+---
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 0f704380a8c8..9cb1724d2bbc 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -2980,6 +2980,10 @@ static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
+ 	if (rc)
+ 		return rc;
+ 
++	if (!selinux_initialized() ||
++	    !(sbsec->flags & SBLABEL_MNT))
++		return -EOPNOTSUPP;
++
+ 	/* Possibly defer initialization to selinux_complete_init. */
+ 	if (sbsec->flags & SE_SBINITIALIZED) {
+ 		struct inode_security_struct *isec = selinux_inode(inode);
+@@ -2988,10 +2992,6 @@ static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
+ 		isec->initialized = LABEL_INITIALIZED;
+ 	}
+ 
+-	if (!selinux_initialized() ||
+-	    !(sbsec->flags & SBLABEL_MNT))
+-		return -EOPNOTSUPP;
+-
+ 	xattr = lsm_get_xattr_slot(xattrs, xattr_count);
+ 	if (xattr) {
+ 		rc = security_sid_to_context_force(newsid,
