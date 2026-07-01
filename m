@@ -1,204 +1,320 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FA2C3C1F36;
-	Wed,  1 Jul 2026 09:07:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50AC33EE1D4
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 09:20:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782896856; cv=none; b=SOyukBPTd/ePZfEjkmTWSjh7cKcLl/x/HgVLtbe/VLbg/E72EYSHIpF+yyrD1I7GlRIHxjJ4aaHzMVlkiK8eFeaMTiKdjZK1liS9Hcd2C2HZ5JzfgtKbzb8z/hJHTICdAg3rxuP/NxkZoC/BDJ0vKFBzEH3SfuSfSsxIN1cwMP8=
+	t=1782897608; cv=none; b=Os61FLNOyay9P0c/YGvwsoEGZ7tLIZkgVhio3myP6VDfmSTkMSdI1HLMEAVFh/qs7Cl68H+GkOG/2ieGCYM6CORSgjjQpGgSsXK2btmTeuj+WBZb7PHemuj/eGiSvi8HzAgTva6qz9KgWfsXRC9E4upJjotlpVC5IuWo8/USSKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782896856; c=relaxed/simple;
-	bh=Tnv+D9HsSsnYr11/Z0+Uok1+c1b0VRtvufR+McFYnNY=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=WaFZidZfhF/oDGtbsQQicRrit/F6L3jpu6a0JTbgJJD4TIjmXym6IRYuu93PFXPSwa2WZRKUPDmZ+t3t85C1LMXShA+c8ksuWiOPlV2jDUipAg389SyEuk9oeYMstxXYej1e0tQnibRWNAOVUpmBRlXE60yWh+lS+sRLdCMKivI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8Cx7+vR2ERq52gAAA--.1617S3;
-	Wed, 01 Jul 2026 17:07:29 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJBx68HL2ERq7Di6AA--.23033S3;
-	Wed, 01 Jul 2026 17:07:25 +0800 (CST)
-Subject: Re: [RFC PATCH bpf 1/6] bpf: Disallow interpreter fallback for user
- BPF_ADDR_SPACE_CAST insn
-To: Leon Huang Fu <leon.huangfu@shopee.com>
-Cc: Leon Hwang <leon.hwang@linux.dev>, KaFai Wan <kafai.wan@linux.dev>,
- bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>,
- Anton Protopopov <a.s.protopopov@gmail.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260626154330.33619-1-leon.hwang@linux.dev>
- <20260626154330.33619-2-leon.hwang@linux.dev>
- <e279c9a7ca6b16e52dc261560513b0eafdd70f87.camel@linux.dev>
- <a2aaa21d-4cf9-48a4-839f-dd152bda8185@linux.dev>
- <af9c0a7e-13de-c227-849f-4b35d1fb74ff@loongson.cn>
- <d55e10b1-d883-4fcf-8fb3-8210db935e4a@linux.dev>
- <1c07a34f-b050-a281-6a7b-542a9bfa30b3@loongson.cn>
- <bfb432db-bd29-419a-8147-78ff6fac07ad@linux.dev>
- <7438f087-7fb4-4991-a095-1d24d6d09895@loongson.cn>
- <20260701080524.194326-1-leon.huangfu@shopee.com>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <d369317a-e695-7b56-2efd-f53ec76c6688@loongson.cn>
-Date: Wed, 1 Jul 2026 17:07:23 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1782897608; c=relaxed/simple;
+	bh=7P+u0ve+4pTAQ3JWDmumCDHsnrmWBaIf1JwfEVKSINo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ni5m95AyQFNdyYi5FS2LUDq7xvvhtde5TKdDxAhGlbLrlR4yt47/KWzRWsanyik+QPMhytpGHRVIvEhHjpfUmG535IUAqTPjzTiVLRVJxsWr9S5bvv8iU7waxev34BEPODlEe7KvqaoXS8ZTtNqAm0jRJ8aUy7zSvelp7SsXCAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IldlL2Jt; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IldlL2Jt"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-37fb434c547so275491a91.0
+        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 02:20:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782897603; x=1783502403; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=737f7Ebbsrst7YTIEUi1Ot0TEsMTGrl0n4PwgIjxMgU=;
+        b=IldlL2JtxiJDECTFywbQceX6lPZ2TbX0xJ+uoecMDR7vU83BrvPoAE4DQkEcqDU7Ue
+         xIGQvMbSt4OYz2KxfEee+pvmt0GjSAZO0bzAyCQtP6d+o3aRYhWyLbAs3ciVeMgE6ixH
+         OR3tPJhgvL9+ZtI1365i22dk1LLA9ylr/+BauQn9J+qfCbduxVjx3buEA9G5blt6opfS
+         y8m81jLsQeEWiet6y9oclZjBIp1DZBb2nevDq/2NtqK9cGgruNKKD+LDKCiYDFkg7g1p
+         AgteJDfaUuog90eFMkP0R3LGmmsH13sIZ+unRuB0+Kj6iC9EOogZgFJ7zGgVGnh+qOYt
+         aPvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782897603; x=1783502403;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=737f7Ebbsrst7YTIEUi1Ot0TEsMTGrl0n4PwgIjxMgU=;
+        b=ds8nDC65L/tHK19OVpyg4dGoeJ7PVJ4/mjWN4TCRoeVpm52hZRGZSinJDpW+/Dngu7
+         aIgNVHiobA7r0Pe52k7Et9/fJVEhMZ8dB2PHCG6K6yR4l76StoL6TwuknFNvMeS4hzfH
+         8DbTCIjHg/7HiGHVHnGLuBjsVimwT/DF343LSf5Uf62hAkFErKJIXy7K3v4Zsz+A4u4P
+         NTteQBHSitJ80uwZk0Pn4lHM2tX2kkEnFwJQ9CbLZXhB+kngV7XhL20ULeHcL6y0zQBI
+         jX2sf+73F3HaaJ9O96kIpwruX/OMnyWyoc1B+N97UDqF/GVunj3EYImDISHbIeFfXxA3
+         X+cw==
+X-Forwarded-Encrypted: i=1; AHgh+Rp5JQH8BhMLygo5Py3KNVquGw9xXRpx0V6+pvP+vPKIFSEQsbH8dWF02Yx8kqfyeSn4pgE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6MAOc/PyNHCvKFV5HLNMu1jVTwRmoNcxFCCWHHcYBNH1l90Ox
+	M516bAI6MPBXW4cN2NrEpGcSjy3GZe9uaJx3DItYfV+4kuaMo3Mpt0hI
+X-Gm-Gg: AfdE7clHjw/BREEowwtyM/tEoL97pfC2dOh92iGyyF9dCzf6+hE3h9zEaLz/a51DBDy
+	pnxoMs+Bc7ESEfnzo0XoyaH7udwB0kf1KIj+x39reYd05gi4+4B7W1A/dy6Cu7bXE+F+xbmjZ/o
+	Y4v+GG9zxKaFY5Xp3BfMGVwaSGqOQpkc4UjZ7+9NDKpV/yG/SXI5GDIljq37LM+IGJVsLznmzpm
+	s0e9uN6hoVFWAleeKbutOgFIr2tWHB0HsBbvNgqNy4J+96ADqr3uqJQSU25+QmKuEUM4FnAs9RE
+	x8mztHa1TFzDEBSjnPXlaRdPppsWkmp6es88/VTJcN0SB0AunhTwvftOEarV3xIwcfF3X3D8WK5
+	gCxwfuA50xZvRMq8O+TDWGSoLU02FBEMzxuA+yJqJkCbKnZmxvMZpA79PLvTCKLnt4fZTPzg8HU
+	LzUiTi3dxMWkGlgc2b6pGybz4hX87uXvwXPC5/cb/8++Twhj4f17nYzfzPZb8Rgklvug==
+X-Received: by 2002:a17:90b:28c4:b0:37f:9ce2:348c with SMTP id 98e67ed59e1d1-380aa2078admr873524a91.29.1782897603321;
+        Wed, 01 Jul 2026 02:20:03 -0700 (PDT)
+Received: from mi-HP-ProDesk-680-G6-PCI-Microtower-PC.mioffice.cn ([43.224.245.226])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3809645185dsm1457000a91.15.2026.07.01.02.19.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jul 2026 02:20:02 -0700 (PDT)
+From: "zhidao su (Xiaomi)" <soolaugust@gmail.com>
+To: Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>
+Cc: zhidao su <soolaugust@gmail.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	zhidao su <suzhidao@xiaomi.com>,
+	Cheng-Yang Chou <yphbchou0911@gmail.com>,
+	Zhao Mengmeng <zhaomengmeng@kylinos.cn>,
+	linux-kernel@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH] sched_ext: Reject task setter kfuncs outside SCX contexts
+Date: Wed,  1 Jul 2026 17:19:54 +0800
+Message-ID: <20260701091954.384565-1-soolaugust@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260701080524.194326-1-leon.huangfu@shopee.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJBx68HL2ERq7Di6AA--.23033S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxCr1kZF45Cr1Duw1fZrWDtrc_yoWrGFy3pF
-	WUJa4jyr4DWF4kZ3srtr4jyr13t3yFgr4xWa18GrWS9rs0qrn3WF409a1a9FWagrWjyF1I
-	vr4jvrs2vFy7urXCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-	8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vI
-	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
-	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIY
-	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14
-	v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-	JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcQzVUU
-	UUU
 
-On 2026/7/1 下午4:04, Leon Huang Fu wrote:
-> On Wed, 1 Jul 2026 15:29:28 +0800, Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->> On 2026/7/1 ä¸‹åˆ3:02, Leon Hwang wrote:
->>> On 1/7/26 14:49, Tiezhu Yang wrote:
->>> [...]
->>>>>
->>>>> It is a real issue.
->>>>>
->>>>> Instead of fixing up helper calls, it seems better to prevent
->>>>> interpreter fallback if the prog has any JIT-inlineable helper call.
->>>>
->>>> Hi Alexei and Leon,
->>>>
->>>> What about the following: (not tested yet, if it is good, I can test it)
->>>>
->>>> [...]
->>>>
->>>> If you are OK with the above changes, I will test it again and send
->>>> a new version later.
->>>>
->>>
->>> If you don't mind, I think I can disallow the interpreter fallback by
->>> the below diff in the next revision of this series.
->>>
->>> The 'aux->jit_required' is introduced by following Alexei's suggestion.
->>
->> I am not sure if introducing a new aux->jit_required member is necessary,
->> as we already have a local jit_needed flag in the current logic.
-> 
-> A 'must_jit'-like member was suggested by Alexei [1].
-> 
-> Probably, the commits in [2] could help to understand 'aux->jit_required'.
-> 
-> [1] https://lore.kernel.org/bpf/DJMRIZ5PDWP4.12OOZ8H881H6O@gmail.com/
-> [2] https://github.com/Asphaltt/bpf/commits/bpf/fix-interpreter-fallback/v2/
-> 
->>
->> Additionally, the issue reported in my patch [1] is fundamentally tied
->> to bpf_jit_inlines_helper_call(). Maybe we can simply reuse jit_needed
->> by checking bpf_prog_has_inline_helpers() right before JITing, and then
->> reject fallback with -ENOTSUPP if JIT compilation fails.
-> 
-> Correct. Reusing jit_needed is preferred.
+scx_bpf_task_set_slice() and scx_bpf_task_set_dsq_vtime() mutate
+sched_ext task state and rely on scx_prog_sched() and
+scx_task_on_sched() to validate the calling scheduler's authority over
+the target task.
 
-I agree.
+However, the kfuncs were part of scx_kfunc_ids_any. That set is also
+registered for tracing and syscall programs and the verifier-time
+context filter allows any-set kfuncs from non-STRUCT_OPS program types.
+As a result, a non-SCX tracing program can load after calling the task
+setter wrappers, reaching the mutator kfuncs outside an SCX scheduler
+context.
 
-To avoid bloating struct bpf_prog_aux and to keep the refactoring
-minimal, I suggest that you submit a patch to introduce a centralized
-bpf_prog_requires_jit() helper in kernel/bpf/core.c.
+Split the task setter kfuncs into their own filtered kfunc set. Register
+that set for STRUCT_OPS, TRACING, and SYSCALL so the verifier can find
+the kfuncs, but let scx_kfunc_context_filter() reject them outside SCX
+struct_ops contexts. SCX schedulers can still call the setters, and the
+existing runtime task authority checks remain in place.
 
-This will cleanly bundle bpf_prog_has_kfunc_call() and other JIT-only
-instructions (like user cast, arena, etc.) together, like this:
+Add a negative sched_ext selftest which tries to call both task setter
+kfuncs from a tracing program. The test fails before this change because
+the program loads successfully, and passes after this change because the
+verifier rejects the task setter call.
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 649cce41e13f..4e96272f7377 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2608,6 +2608,24 @@ static struct bpf_prog 
-*bpf_prog_jit_compile(struct bpf_verifier_env *env, struc
-         return prog;
-  }
+Signed-off-by: zhidao su (Xiaomi) <soolaugust@gmail.com>
 
-+static bool bpf_prog_requires_jit(const struct bpf_prog *fp)
+---
+Validation:
+- Before fix: task_setter_kfunc_deny failed because non-SCX BPF loaded after calling task setter kfuncs
+- After fix: runner -t task_setter_kfunc_deny passed (PASSED=1 FAILED=0)
+- checkpatch --strict: 0 errors, 1 warning (MAINTAINERS new-file prompt), 0 checks
+
+ kernel/sched/ext.c                                      | 24 ++++++++++++++++++------
+ tools/testing/selftests/sched_ext/Makefile              |  1 +
+ tools/testing/selftests/sched_ext/task_setter_kfunc_deny.bpf.c | 17 +++++++++++++++++
+ tools/testing/selftests/sched_ext/task_setter_kfunc_deny.c     | 77 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 113 insertions(+), 6 deletions(-)
+
+diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
+index b8dd3358959d..257ffaca45f6 100644
+--- a/kernel/sched/ext.c
++++ b/kernel/sched/ext.c
+@@ -10254,9 +10254,12 @@ __bpf_kfunc struct cgroup *scx_bpf_task_cgroup(struct task_struct *p,
+ 
+ __bpf_kfunc_end_defs();
+ 
+-BTF_KFUNCS_START(scx_kfunc_ids_any)
++BTF_KFUNCS_START(scx_kfunc_ids_task_setter)
+ BTF_ID_FLAGS(func, scx_bpf_task_set_slice, KF_IMPLICIT_ARGS | KF_RCU);
+ BTF_ID_FLAGS(func, scx_bpf_task_set_dsq_vtime, KF_IMPLICIT_ARGS | KF_RCU);
++BTF_KFUNCS_END(scx_kfunc_ids_task_setter)
++
++BTF_KFUNCS_START(scx_kfunc_ids_any)
+ BTF_ID_FLAGS(func, scx_bpf_kick_cpu, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, scx_bpf_kick_cid, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, scx_bpf_dsq_nr_queued, KF_IMPLICIT_ARGS)
+@@ -10299,6 +10302,12 @@ BTF_ID_FLAGS(func, scx_bpf_task_cgroup, KF_IMPLICIT_ARGS | KF_RCU | KF_ACQUIRE)
+ #endif
+ BTF_KFUNCS_END(scx_kfunc_ids_any)
+ 
++static const struct btf_kfunc_id_set scx_kfunc_set_task_setter = {
++	.owner			= THIS_MODULE,
++	.set			= &scx_kfunc_ids_task_setter,
++	.filter			= scx_kfunc_context_filter,
++};
++
+ static const struct btf_kfunc_id_set scx_kfunc_set_any = {
+ 	.owner			= THIS_MODULE,
+ 	.set			= &scx_kfunc_ids_any,
+@@ -10408,13 +10417,14 @@ int scx_kfunc_context_filter(const struct bpf_prog *prog, u32 kfunc_id)
+ 	bool in_dispatch = btf_id_set8_contains(&scx_kfunc_ids_dispatch, kfunc_id);
+ 	bool in_cpu_release = btf_id_set8_contains(&scx_kfunc_ids_cpu_release, kfunc_id);
+ 	bool in_idle = btf_id_set8_contains(&scx_kfunc_ids_idle, kfunc_id);
++	bool in_task_setter = btf_id_set8_contains(&scx_kfunc_ids_task_setter, kfunc_id);
+ 	bool in_any = btf_id_set8_contains(&scx_kfunc_ids_any, kfunc_id);
+ 	bool in_cpu_only = btf_id_set8_contains(&scx_kfunc_ids_cpu_only, kfunc_id);
+ 	u32 moff, flags;
+ 
+ 	/* Not an SCX kfunc - allow. */
+ 	if (!(in_unlocked || in_init || in_select_cpu || in_enqueue || in_dispatch ||
+-	      in_cpu_release || in_idle || in_any))
++	      in_cpu_release || in_idle || in_task_setter || in_any))
+ 		return 0;
+ 
+ 	/* SYSCALL progs (e.g. BPF test_run()) may call unlocked and select_cpu kfuncs. */
+@@ -10457,7 +10467,7 @@ int scx_kfunc_context_filter(const struct bpf_prog *prog, u32 kfunc_id)
+ 		return -EACCES;
+ 
+ 	/* SCX struct_ops: check the per-op allow list. */
+-	if (in_any || in_idle)
++	if (in_any || in_idle || in_task_setter)
+ 		return 0;
+ 
+ 	moff = prog->aux->attach_st_ops_member_off;
+@@ -10572,6 +10582,12 @@ static int __init scx_init(void)
+ 					     &scx_kfunc_set_unlocked)) ||
+ 	    (ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
+ 					     &scx_kfunc_set_unlocked)) ||
++	    (ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
++					     &scx_kfunc_set_task_setter)) ||
++	    (ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
++					     &scx_kfunc_set_task_setter)) ||
++	    (ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
++					     &scx_kfunc_set_task_setter)) ||
+ 	    (ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
+ 					     &scx_kfunc_set_any)) ||
+ 	    (ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
+diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
+index 5d2dffca0e91..000000000000 100644
+--- a/tools/testing/selftests/sched_ext/Makefile
++++ b/tools/testing/selftests/sched_ext/Makefile
+@@ -176,6 +176,7 @@ auto-test-targets :=			\
+ 	maybe_null			\
+ 	minimal				\
+ 	non_scx_kfunc_deny		\
++	task_setter_kfunc_deny		\
+ 	numa				\
+ 	allowed_cpus			\
+ 	peek_dsq			\
+diff --git a/tools/testing/selftests/sched_ext/task_setter_kfunc_deny.bpf.c b/tools/testing/selftests/sched_ext/task_setter_kfunc_deny.bpf.c
+new file mode 100644
+index 000000000000..79b619a3445f
+--- /dev/null
++++ b/tools/testing/selftests/sched_ext/task_setter_kfunc_deny.bpf.c
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Verify that non-SCX programs cannot call task-mutating SCX kfuncs.
++ */
++
++#include <scx/common.bpf.h>
++
++SEC("tp_btf/sched_switch")
++int BPF_PROG(non_scx_task_setter, bool preempt, struct task_struct *prev,
++	     struct task_struct *next, unsigned int prev_state)
 +{
-+       struct bpf_insn *insn = fp->insnsi;
-+       int i;
-+
-+       if (bpf_prog_has_kfunc_call(fp))
-+               return true;
-+
-+       for (i = 0; i < fp->len; i++, insn++) {
-+               if (insn_is_cast_user(insn) ||
-+                   insn_is_arena_load_store(insn) ||
-+                   insn_is_indirect_jump(insn))
-+                       return true;
-+       }
-+
-+       return false;
++	scx_bpf_task_set_slice(next, 1000000);
++	scx_bpf_task_set_dsq_vtime(next, 1);
++	return 0;
 +}
 +
-  struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env 
-*env, struct bpf_prog *fp,
-                                            int *err)
-  {
-@@ -2620,7 +2638,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct 
-bpf_verifier_env *env, struct
-                 goto finalize;
-
-         if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
--           bpf_prog_has_kfunc_call(fp))
-+           bpf_prog_requires_jit(fp))
-                 jit_needed = true;
-
-         if (!bpf_prog_select_interpreter(fp))
-
-
-Once that infrastructure is in place, I can simply spin my next revision
-by adding the bpf_jit_inlines_helper_call() check into this centralized
-function, like so:
-
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 4e96272f7377..2ef82029de49 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2617,6 +2617,9 @@ static bool bpf_prog_requires_jit(const struct 
-bpf_prog *fp)
-                 return true;
-
-         for (i = 0; i < fp->len; i++, insn++) {
-+               if (bpf_helper_call(insn) && 
-bpf_jit_inlines_helper_call(insn->imm))
-+                       return true;
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/sched_ext/task_setter_kfunc_deny.c b/tools/testing/selftests/sched_ext/task_setter_kfunc_deny.c
+new file mode 100644
+index 000000000000..1450a7133a5c
+--- /dev/null
++++ b/tools/testing/selftests/sched_ext/task_setter_kfunc_deny.c
+@@ -0,0 +1,77 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Verify that task-mutating SCX kfuncs are rejected outside SCX contexts.
++ */
 +
-                 if (insn_is_cast_user(insn) ||
-                     insn_is_arena_load_store(insn) ||
-                     insn_is_indirect_jump(insn))
-
-This keeps the core runtime selection logic completely clean.
-
-Thanks,
-Tiezhu
-
++#include <bpf/libbpf.h>
++#include <stdarg.h>
++#include <scx/common.h>
++#include <stdio.h>
++#include <string.h>
++#include "scx_test.h"
++#include "task_setter_kfunc_deny.bpf.skel.h"
++
++static char verifier_log[8192];
++static size_t verifier_log_pos;
++
++static int libbpf_print_fn(enum libbpf_print_level level, const char *format, va_list args)
++{
++	if (level == LIBBPF_DEBUG && verifier_log_pos < sizeof(verifier_log)) {
++		int ret = vsnprintf(verifier_log + verifier_log_pos,
++				  sizeof(verifier_log) - verifier_log_pos, format, args);
++
++		if (ret > 0)
++			verifier_log_pos += ret;
++	}
++
++	return 0;
++}
++
++static bool expected_rejection_seen(void)
++{
++	return strstr(verifier_log, "scx_bpf_task_set_slice") ||
++	       strstr(verifier_log, "scx_bpf_task_set_dsq_vtime");
++}
++
++static enum scx_test_status run(void *ctx)
++{
++	struct task_setter_kfunc_deny *skel;
++	libbpf_print_fn_t old_libbpf_print_fn;
++	int err;
++
++	old_libbpf_print_fn = libbpf_set_print(libbpf_print_fn);
++	verifier_log[0] = '\0';
++	verifier_log_pos = 0;
++
++	skel = task_setter_kfunc_deny__open();
++	if (!skel) {
++		SCX_ERR("Failed to open skel");
++		libbpf_set_print(old_libbpf_print_fn);
++		return SCX_TEST_FAIL;
++	}
++
++	err = task_setter_kfunc_deny__load(skel);
++	task_setter_kfunc_deny__destroy(skel);
++	libbpf_set_print(old_libbpf_print_fn);
++
++	if (!err) {
++		SCX_ERR("non-SCX BPF program loaded after calling task setter kfuncs");
++		return SCX_TEST_FAIL;
++	}
++
++	if (!expected_rejection_seen()) {
++		SCX_ERR("load failed without expected sched_ext task setter rejection: %s",
++			verifier_log);
++		return SCX_TEST_FAIL;
++	}
++
++	return SCX_TEST_PASS;
++}
++
++struct scx_test task_setter_kfunc_deny = {
++	.name = "task_setter_kfunc_deny",
++	.description = "Verify non-SCX programs cannot call SCX task setter kfuncs",
++	.run = run,
++};
++
++REGISTER_SCX_TEST(&task_setter_kfunc_deny)
