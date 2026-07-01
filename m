@@ -1,206 +1,282 @@
-Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011037.outbound.protection.outlook.com [40.107.130.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF18435E1C0
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 15:35:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7904236657B;
+	Wed,  1 Jul 2026 16:16:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.37
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782920127; cv=pass; b=V/yuhVPPGcNF7rfQ5O+iwY8h5wYkRu/wu+LN91XwZbrRZ3V8zV3H14Ni8mN0TUSbgHKMj9PYZMH84LPsHBjikQhEFEa88lwdw3oT4c402fQu79N89BA/Md9QyALYpceQEs2TQuAGYYU/xK3reseDT9RsQJzukIaWxehgtZr44TQ=
+	t=1782922605; cv=fail; b=bEcUANQFwYxbA1D/PIojkg5YYQ56FCVKepU0mz2hSBjQ8Nj471aqqsdw3c+l2tbGdbhjiA5DDDkmy2e6u7aiTCpbMzHHOtYtsKTt3CvGe5zXV4MQ+AVk8f8AQgx3th4e8hkPNoTkZYsz+plRbnWC5sKZ8feiXWbZr6FBhhZdJWs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782920127; c=relaxed/simple;
-	bh=Y2c6QTfFJtVu0RfirbPQ6iVT1Kw5wPu8BkJiRRYRdIs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DCJg7X+9sXTD0dDNzbe2V4rL/sMtLq74K2FfGdRRKXtjZDbDO1HBuXcxvDteVyPHbuVLVvjx9E1t3MFn+qkAuGLQ8UHEmkiyWu3rJVYDWTOVKYJy5p+q7g4qbkW5xqwDHhmIWk8ka45RSl9T/Kf4CWk+ty3xhlp8nVs8tlHo4f4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=FltoVmhk; arc=pass smtp.client-ip=74.125.224.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	s=arc-20240116; t=1782922605; c=relaxed/simple;
+	bh=AGyHlRPM3reAemhe219fJBgmmjNosg+YDWr1fhHJazI=;
+	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=nHdNQP32RGv2w/2zb+TyBB6btlAVAURmP7ej2s2xhFA3WrWOInrbsvrVhyGUzI7GdPm6WtEaz8K2FOSsur7JIEhBRLw0hktcOc2eILVEszW03m4j6k61TA51n5tc++yG8Z+vaBSOIvUq2ePRcIidY6kSGLZhNtw8JaLigATwoC4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=d+T4nBui; arc=fail smtp.client-ip=40.107.130.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="FltoVmhk"
-Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-664ae993e4bso787462d50.0
-        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 08:35:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782920123; cv=none;
-        d=google.com; s=arc-20260327;
-        b=BXhmVWEThaxilxe8q+r1WfqxbMmcmx+PnKF2rl4hLFeqpyffQIe4rinNuZ82/CkIQh
-         WfCPyPeUIUsY34PtUk4odCAei+L7FTjaFbV69zgvNB16nk3tng3lm39WcO3WKoItY1f+
-         zo8mAZOBDX1SY1SKh4KZPkedCE7ybz8s3Fb/7TMt6ta1psHrQyRK6rgwbv1o8SO+5UWl
-         1F7dQwtHZXbvHO6uRmIUTbn6lJy6RjQB169qlElfTisvT1U+iLya9JoOUkBE0m4oTrK8
-         sknWPkx6ukBoKekHiWCKbA53oNyHM5LJB1QjP/UUwu/EX5PjUT3gSwtq5mZvVX/lwgAq
-         BT/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ndR8vhWFt9KSYRpwVTspSwgHXJD0hfWVRuMdjE0PPzc=;
-        fh=vZoj5azBbEYCdIujBPoCfHXlaPXHl/xKs+OCWOTW1H0=;
-        b=OKm4gGT7XN2soilttdH9pbw79Aw0MAvcj1tdalknHwnmEUixTscpii7KYtlSBgah0m
-         r0yiVvdrsnUEHUUtNtjMpX35eeWe2t3bSZAcfCz2yy6FaxoYYIg5VF65Eeo/wRiUQLzn
-         SfeUBaEEk/lbhlDa6rKYMHLIE4QSK2YxrUQfma5J1iw7XQzA4UNTKFa4WXNj318wlUGf
-         guERO1jrhbBwTBGvLpG9NxDbCrS0yJij/c/vbPVNWzL25a2ddXpGZm1ncEglsW/+e9yA
-         XgWmBA9jRDuQvNzO12jkmMcUo0jq8NDJyUsXsACUigvJOBVXK6YRdHZ+cY/VSQWzGCcu
-         Uj5Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1782920123; x=1783524923; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ndR8vhWFt9KSYRpwVTspSwgHXJD0hfWVRuMdjE0PPzc=;
-        b=FltoVmhkn3E9PCmMtx+l+2vCJp/LzSVHT2m5n/11+Y4/V/i4x0BCJkUuyye5rfzS+z
-         /CWpTUrNhfhX1vv92m/WpZ6BxVMLbSVmZSZZeFF0KGY7krtJapuFfs3yW68wI0XHlM4H
-         C+HIfr7hcfVS9fqN6tX/J6KBKC8KdYl21UsKI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782920123; x=1783524923;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ndR8vhWFt9KSYRpwVTspSwgHXJD0hfWVRuMdjE0PPzc=;
-        b=CUlFtFps7/YZ4ZBLF7dDE/+Ni2+p49E82xi0cM4g0CZbGoNrAZ857JUNaXckEIHORO
-         WZcFDe0HZxWynEhZDxUno0W5eG2ij7uyzZoV7dt3LW732NChM/MmZCNrUh/tX2Rhnsv0
-         yhCTz/ZzGlmzt2QocTixGUVV9DDrIm9CeaY4BUptkQdNpCyeWPAivr7vaICn4K8DS6xe
-         Q2cCFV/71YDlbwnvUyc67jbuFDsq1AhXNleeehf0bksghoQnB6Uvj1QiHoTtYc4SMU7s
-         VEzSC5XtMELIArf2em0Re7LUPtK5rzhDgLE0cNg+Sp+5591DABhVQQzkdH0QLa4plZgi
-         pC5w==
-X-Forwarded-Encrypted: i=1; AHgh+Rr6BQoqW2B6UOnDUHBtSz/7K4cTTl/sREjDSZmUrn73B4YQKTL3Qn5DDg+H6YZef3jHHVo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZNBq29HRKri+2ZuH9llq1vuKl8UsRGN1vyCZVG2G65u57gjdF
-	vAV+JU8kfIEQnQhHst3DHxaTMTpL8qXrk6xL2YgX77wv00nr/553eJ57Av5zwMvX9Asuaay9bbo
-	/n/ERFQ4kEN0wVsL1Zn4Yz3Rbw3ff/ZcdLz7ylpwfRus0WX/BdahWPQ==
-X-Gm-Gg: AfdE7cldx1fu1uQ1XsSjU0NGe9XFYh64Cvmw8B2daOCMl9k56joygTf8+qnpEhdIqT9
-	vOdq9vJ9oAjejIVerbVsgAyo/S7RH4Zh1r0wPp0Hyv9KZuYVFGdGkmK2lYx6PH94La9cD4+UJL2
-	qyHslNYd+fgn9W3rN4yQ8x0ZrIUncCwKGJHiMXHM+cdSkqQAyHsLofssWNmqBXlPseMB2H1Fc/5
-	1QVThQgGMOPfABZYkSOKrjjjbdn9PAmMAcj7Ck4KOJ17hf9pH0p9wYnNmgUKr40TINIBhKZ1Q==
-X-Received: by 2002:a05:690e:1489:b0:664:e5c5:5b2b with SMTP id
- 956f58d0204a3-66520e00800mr1930879d50.4.1782920123243; Wed, 01 Jul 2026
- 08:35:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="d+T4nBui"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ri59JHtL8/mHfK4UcGtTqNBDnpZmtf2+iW4vIGcKPUsut5BRi4uRFvGSMdednfqgFLRFUjkw5tc5cUYec/+5MBtEahkPOn/LOTYEhd2tFCpUJS0Gprk68JsOfPJwqsftc6SXu+z790HUlcnkGv9JK5qid3ONY/92k2P967NzzQFCsxhtVw+7bW8eJaxObCIPJYcwkn/zRTNuIOmM0QMbz5dUb0TZ7aXcsIA6vBCZYY/uwq6880Jsiq2RLeOzBFOA5Gr95smk8NhNKG7fZ9OTA8wFOfBv1W0qnGzszxx5d54c2FH6DvHFGPSyJ4Hgt/eDvWJoOwba21EHULh9WykFsg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=v5UhyJQ6Cla7OExs/24b9jnbfZFKNSu0G0LyDQXNqGQ=;
+ b=iHCjTsf9T0YZ/93PjtmGIraIECu6D/1gvkFUsQKPGBvB2On+wXMOaQAmWl7PtmxMjYp7k7BNmeQKUi1FTMx+zKGjccbqn4TeREnw2oeWUUVkopVy8UmYVJ/neo7JGG+RzDY6nbaF0fPvwv+lMzORcHq7H+FnoM8z2qRoR6/pDXZ4fcdGv9PTzefhEIWLjyX/yHTBhghUYyHQk9nYdVEyvkC6K+1bbGBWJnPSifG+0FOqILa2jdOB0LqNFeqKDw5+YIwGQ5JHt2OfWuTHQCD5MGXKbvXdp9BT/6owt+cDMDrqfHEFWc29Kt0U1RiYI0HgcTHrKn2I4WVvAginFicKuw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
+ header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v5UhyJQ6Cla7OExs/24b9jnbfZFKNSu0G0LyDQXNqGQ=;
+ b=d+T4nBui8bK1bDKewVntxxLjGp8zSfwV5eJpyq2BPopnDJkos9iTkweCDjOe0FTP37VNP/5FlC3GTXtOBftAXzqXVZzeDh790HWkVE54eJFcxRKfhy3qZKWbpgMwlSXvgAYCY1sty/g33KWG1WqzmfKnIaSzwaFy5Jrn8rNeoRmVBnyuTP5LfQnSnMc+4vXREl4V1Gswli7tnLUg3+XYcL/vequXRB/ollZx0Tno323LAVbzQQoWIfBlul2wtoAnN8+NPgK+WIwxnXJPKIl+5TwC+szwCh/EOFR39nf0/h3SRpj/d2pZObmkXQLLl2QbJxkaRZrkVGLmuo7fsno3sA==
+Received: from DU0PR07MB8441.eurprd07.prod.outlook.com (2603:10a6:10:354::20)
+ by AS8PR07MB7144.eurprd07.prod.outlook.com (2603:10a6:20b:25e::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.9; Wed, 1 Jul 2026
+ 16:16:40 +0000
+Received: from DU0PR07MB8441.eurprd07.prod.outlook.com
+ ([fe80::7aaf:2a26:5a13:ef74]) by DU0PR07MB8441.eurprd07.prod.outlook.com
+ ([fe80::7aaf:2a26:5a13:ef74%6]) with mapi id 15.21.0181.008; Wed, 1 Jul 2026
+ 16:16:39 +0000
+From: "Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, "Chia-Yu Chang (Nokia)"
+	<chia-yu.chang@nokia-bell-labs.com>, "jolsa@kernel.org" <jolsa@kernel.org>,
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>, "song@kernel.org"
+	<song@kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "memxor@gmail.com" <memxor@gmail.com>,
+	"shuah@kernel.org" <shuah@kernel.org>, "martin.lau@linux.dev"
+	<martin.lau@linux.dev>, "ast@kernel.org" <ast@kernel.org>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org"
+	<andrii@kernel.org>, "eddyz87@gmail.com" <eddyz87@gmail.com>,
+	"horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org"
+	<dsahern@kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, "pabeni@redhat.com"
+	<pabeni@redhat.com>, "jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org"
+	<kuba@kernel.org>, "stephen@networkplumber.org" <stephen@networkplumber.org>,
+	"davem@davemloft.net" <davem@davemloft.net>, "edumazet@google.com"
+	<edumazet@google.com>, "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	"donald.hunter@gmail.com" <donald.hunter@gmail.com>, "kuniyu@google.com"
+	<kuniyu@google.com>, "ij@kernel.org" <ij@kernel.org>, "ncardwell@google.com"
+	<ncardwell@google.com>, "g.white@cablelabs.com" <g.white@cablelabs.com>,
+	"ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>,
+	"mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>,
+	"cheshire@apple.com" <cheshire@apple.com>, "rs.ietf@gmx.at" <rs.ietf@gmx.at>,
+	"Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>,
+	"vidhi_goel@apple.com" <vidhi_goel@apple.com>
+Subject: RE: [PATCH v3 net-next 1/1] tcp: Replace min_tso_segs() with
+ tso_segs() CC callback
+Thread-Topic: [PATCH v3 net-next 1/1] tcp: Replace min_tso_segs() with
+ tso_segs() CC callback
+Thread-Index: AQHdCIg8HgSKPBAq9k+bjLaznYoXgbZXvRwAgABrn4CAAALXgIAAnb8A
+Date: Wed, 1 Jul 2026 16:16:39 +0000
+Message-ID:
+ <DU0PR07MB844141FCBD1AD6F40FE08D2EB9F62@DU0PR07MB8441.eurprd07.prod.outlook.com>
+References: <20260630120145.286497-1-chia-yu.chang@nokia-bell-labs.com>
+ <DJMRPJEUTY5G.30HYOMPLBGZOJ@gmail.com>
+ <PAXPR07MB7984443B70E713F016EAA550A3F62@PAXPR07MB7984.eurprd07.prod.outlook.com>
+ <DJN048GYRBCZ.M83AO0MXTKSV@gmail.com>
+In-Reply-To: <DJN048GYRBCZ.M83AO0MXTKSV@gmail.com>
+Accept-Language: en-US, nl-BE
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DU0PR07MB8441:EE_|AS8PR07MB7144:EE_
+x-ms-office365-filtering-correlation-id: 3f0299c1-a07e-4cb5-aad0-08ded78c21bc
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|376014|7416014|23010399003|366016|921020|22082099003|18002099003|38070700021|3023799007|4133799003|4143699003|56012099006|11063799006;
+x-microsoft-antispam-message-info:
+ 8Z8/1Grb1wTdUerGYvgrYYbt+HD5ViK5xL5BrkJAs+VB/ctT8p/PNC8AuR+Bg57hIjwze5APdPoH/DLjt1O1uz5vXrX7eMeYaHNRQhYykvIvQX2wIiDaKOz7k6Y21v39IjqqB8Y9rEqOid759OwPDpwptRU42Llxt3bazZy63G+xItatBHUsJQgRdAtZAu5dLLa7Juxxlm4KXRzwUwWxs77FPIILoQxm3aprY5Pe2y3GHtwbXghA0i6FzF/u3Y9g6mmcvML2Fzgz3f4YI2kEJKie1fD1AIz0BXxcDq9N92Jna00VJg2VLLxP0kp39TwFW69jPP1PHVOa+qtDI+RwmWa4stnx5dHJkqsZ+zRVdbKLhZg4TShzQuOBc3MPXSXqbKxYaEb3oOWO5q1gHs/QE5YEDLK+/V4pYrkuOY98RUL02tcUBlTEPbn0MKZwkP81i2KhEpADshd5eFCVa/tq31CtzJ+VdUWoS1RNslxxsJ61uAsJNC+HpwxorB6nKjCDyUE7Ii7Arc8mEVxmOIWJlH7z4hwTglwTVCzXEBW5oIISjSJKoJWyZWSYUmscr8wPysIg1EKXWNPfJfDzjwqKCrEe/bs+OM5ojApC7DxxUAHlyAL5XvSP1KhlqwjhIrr8xSFMNWjWOeMaN4FvlcMeehc+GVO0L8tOPkvnx2UUxy9EGJ8FeAvwh4Eubq6QUINCDNgJ6hsoG9wVs34wreBNcLYUdIZmHGAdzbwBGYvZ5V1FG9OZOOrIaAuj/u/37er0
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR07MB8441.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(23010399003)(366016)(921020)(22082099003)(18002099003)(38070700021)(3023799007)(4133799003)(4143699003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?Gl7fYhrrXWtTZSimNudWz8ZSKjPdusL79YFPVoQeC53eK76P00bwsqMHobT6?=
+ =?us-ascii?Q?MAvxUKgNFf0yVp+Lrh55ymR3Pin1uKgB/D1b66MnaQlngNgkjuD+GgdYRawS?=
+ =?us-ascii?Q?pG8N6L4ziHaQsaWBfCnxTGqPCKxUHFqV7bEX9gyOCE5bd6V3d0iEglEdzhXg?=
+ =?us-ascii?Q?v9zQ9wRyVCCAmvJHfEbfZoCrvmb3byVkzxuYkZ+hCHc/FOAgp8mKzreAxn8f?=
+ =?us-ascii?Q?oMGnEqsz4EXG9n9qZc7vUUMAiGl5Y2wqvsWM951VZcYUP3Ghd7sqbIE60+5H?=
+ =?us-ascii?Q?P3jMWw0KlnM2iLNWtRPt41jWi1wsd3NjG3BjoqpA5KnnFpOETY3xBvOk5bMI?=
+ =?us-ascii?Q?KrNRFMjUDEXcjeRrMiw06THMtJMFwJnAudXnfOD2z4GXKm1vjLqXz7IJ7lM6?=
+ =?us-ascii?Q?mCVh0+pqf6IABoPjtn/OxObiJda8JK+YesNVZSTS1Mvck+S9mMxl+zZEhuwy?=
+ =?us-ascii?Q?jLxqnj62MdPQFCWisWBkmb/Mz9u9TN5qyWmOmsnBoLhfUnt6B/1qGXsH9rwO?=
+ =?us-ascii?Q?wfDHq/o+Px5P09o37y/Fy5tDWVcNSCZ1zhV3Xwg2A3farKOt2D/n1pIdCyNQ?=
+ =?us-ascii?Q?T0t0yzg8lqATuIZV6KU5dtlfoNQMVM/7e9ItFg29OW/guDgzrB/f9uUY4FQJ?=
+ =?us-ascii?Q?f/BARlQArySoAkYoTM9CHAnHp0rM3vs3qeAF/g9NIxLGr/GMHfR8eAeiFdN+?=
+ =?us-ascii?Q?8KpDSwV9+6BgsmG4j8LWRJAqnLKmw7qF/IniMSwrRbIfdtrl9SJSuKySOGPa?=
+ =?us-ascii?Q?Xkfh+JYlSq/Yfe4HqbPeSwXcWeV8r9u6buxNiEO8ANz3myB7Oi4jh514XOMJ?=
+ =?us-ascii?Q?Dg/MTlmq2hT6/0N9kxaBJYGUnkoTrUVHAyLPrsxFllJQTPb2phdFMTVmmo3n?=
+ =?us-ascii?Q?VbC7Izf+t6cdxBMqbp2QY5/mnuw91w6/GGVfSwe6JDhWGCNhye0Kmm8KclWy?=
+ =?us-ascii?Q?wCujmwUcCu0qaYKPUWEokQvabrdB3NWQvfCMpaM5gMxac4ETqyAELEjemk9z?=
+ =?us-ascii?Q?6VMmG9i1Shkk+YY23zWZS7IzdlecxEiSe+4/iMA4FUNUp+l94JUffi/LIffn?=
+ =?us-ascii?Q?jn5KGK7Soj5QwxeppFUJcQL+yeS+f+7q98Hugl1kaUPeWGLftR7uOZEWn30f?=
+ =?us-ascii?Q?khFd28K+GTdLRVo0cX5y6qBp2PXZj5B2lLqOm4KyyYIJKuEC/E+0VCrcKWAj?=
+ =?us-ascii?Q?cGt+boaE+1L19CojZThyGlyQrogx1fMT9gZq+r8HkevuBcdBp6FIuARRYp0y?=
+ =?us-ascii?Q?DapaERiG4haQG1RsA0yWDwGyHA6yN3wiJg09c14s1jGF8RDkxSSw86Aw4x6e?=
+ =?us-ascii?Q?owYnCqE1HI3KVpxpaP8oMUxepf2jIeiSITdl49Zny2jyevhGU+pFg07ecP76?=
+ =?us-ascii?Q?CEE2TgIgH+MIHgg5EHtpKk5Kc8mVXoBT56T1lS7UP3QK/y+3YBtWm2FiM/0u?=
+ =?us-ascii?Q?lgST+xodYIBWRpoSVVMVJjFH5h4kSQXpVvpVLEvitbNypcOaoyIm3kkbQc+2?=
+ =?us-ascii?Q?cdNNHn8Yc3No9fwIjyzct/P01WzFHv0Clg9whnZ47iKPnnKMGVIU5Xw3W7oS?=
+ =?us-ascii?Q?yZHcFAgySOsDjAAApD2zNDOhkHJRe0Rw8cw8lVSaJcnDoF+8QRZ7Sg5KT9PD?=
+ =?us-ascii?Q?8IOggdKIdXYgn4koLOiOHcX8sklKX+p2vd7TYwGQjzBRwtOwvi4klEpvvbvN?=
+ =?us-ascii?Q?pMrJr6ltJaEnW9WZ5Qszlan+n0sdMCp6FT65qwDgevNQOl7os3aaU/e7/zJ8?=
+ =?us-ascii?Q?OPhq+VgT4xojZm5Ta2roKr4YC8OakOlB4cKdNGT6EC6sVSG+py8o?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260630123331.186840-1-daniel@iogearbox.net> <20260630123331.186840-3-daniel@iogearbox.net>
- <CAM0EoMn6H6cKCweHmt=8ve2i0JuK=E8W1Q89oqDD7vra_Uuk-w@mail.gmail.com> <d9fce17f-851e-4cb0-9d78-2ac2cadfda81@iogearbox.net>
-In-Reply-To: <d9fce17f-851e-4cb0-9d78-2ac2cadfda81@iogearbox.net>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Wed, 1 Jul 2026 11:35:11 -0400
-X-Gm-Features: AVVi8CfqeTgnacRGIOCuhvdFtORTR-T_CEfhc-_OdUiwNBANp03Tk1iSAhcfLDM
-Message-ID: <CAM0EoMnZPbKG3GCndk2Xp44KxUfPJzSMGXYPDZeoa_-6JZ+Uuw@mail.gmail.com>
-Subject: Re: [PATCH net 2/3] net/sched: Handle TC_ACT_REDIRECT from qdisc
- filter chains
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Andrii Nakryiko <andrii@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Linux Kernel Network Developers <netdev@vger.kernel.org>, Victor Nogueira <victor@mojatatu.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR07MB8441.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f0299c1-a07e-4cb5-aad0-08ded78c21bc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2026 16:16:39.4262
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 75g5ysuNaLXytjEnXiBy5zSjjv5VrdJL4gHzhW5zweUwnB4YmkrYI0nBF/JWFUaj8YggSlyKbsAp75YSB+r8oDGhQ6rW0LbJuhftNpchZmYudyDEp4CR3JgyRexLTIkm
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR07MB7144
 
-On Tue, Jun 30, 2026 at 11:23=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.=
-net> wrote:
+Hi Alexei,
+
+>>You have to explain why Prague CC cannot rely on autosizing.
+>>To me it sounds like a red flag. autosizing logic was there for a decade,=
+ if not more.
+>>And now you're arguing that your CC logic is special and it deserves new =
+API and breakage of existing convention.
+>>Maybe you should step back and reconsider.
+
+The objective behind Prague auto-sizing is that the TSO burst should not cr=
+eate a queuing latency bigger than 250us, on a bottleneck link rate that is=
+ the pacing rate. The rationale is that the L4S AQMs are allowed to have a =
+very small threshold (often somewhere between 0.5ms to 1ms). When the pacin=
+g rate is 96Mbps we start allowing TSO size of 2, etc... Below 96Mbps the T=
+SO size is 1, and below 48Mbps the potential serialization time of a single=
+ packet is bigger than 250us. You will also see in other patches that we li=
+mit the serialization time of one MTU to 10ms when the rate goes lower than=
+ 1Mbps by limiting the max MTU (going down to a minimum pacing rate of 100k=
+bps as the minimum sending rate).=20
+L4S AQMs are designed with these parameters in mind. As AQMs usually work p=
+acket per packet and evaluate waiting time in the queue, definitely the min=
+imum inter-packet departure time needs to be bigger than the serialization =
+time - 0.5ms or packets will get marked without necessarily using the full =
+link capacity.
+
+The current autosizing algo has as objective to scale the TSO size dependin=
+g on both pacing rate and RTT. It targets a 1ms queue delay burst when the =
+RTT is bigger than 3ms, but when the RTT is smaller it further increases th=
+e TSO-size. The rationale behind this is that a bigger TSO-size results in =
+a bigger chance of loss, and that loss is easier to retransmit if the RTT i=
+s smaller.=20
+
+So, the current algorithm does not line up with the Prague expectations. Is=
+ allows bursts of 1ms instead of 250us and it allows even bigger bursts if =
+the minimum RTT is below 3ms (for instance 27ms burst at 10Mbps and 1ms RTT=
+).
+
+I see following options how to include the Prague requirement of 250us burs=
+t instead of 1ms and not increasing TSO if the RTT is lower than 3ms:
+- Let Prague do the calculation and set the desired TSO size
+       - previously done with an extra hook to overwrite the autosize, but =
+it was already commented to avoid the extra hook
+       - change the existing hook and add a fixed or max TSO size (current =
+patch did the fixed TSO overruling, maybe a max could be more general as it=
+ would always be lower than the current calculated autosize)
+- Add a cc settable parameter max-TSO-burst-time to let the current autosiz=
+e do the extra calculation and take this extra check into account
+- we are open to any other suggestions...
+
+Koen.
+
+
+
+
+-----Original Message-----
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>=20
+Sent: Wednesday, July 1, 2026 7:56 AM
+To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>; jolsa@kernel=
+.org; yonghong.song@linux.dev; song@kernel.org; linux-kselftest@vger.kernel=
+.org; memxor@gmail.com; shuah@kernel.org; martin.lau@linux.dev; ast@kernel.=
+org; daniel@iogearbox.net; andrii@kernel.org; eddyz87@gmail.com; horms@kern=
+el.org; dsahern@kernel.org; bpf@vger.kernel.org; netdev@vger.kernel.org; pa=
+beni@redhat.com; jhs@mojatatu.com; kuba@kernel.org; stephen@networkplumber.=
+org; davem@davemloft.net; edumazet@google.com; andrew+netdev@lunn.ch; donal=
+d.hunter@gmail.com; kuniyu@google.com; ij@kernel.org; ncardwell@google.com;=
+ Koen De Schepper (Nokia) <koen.de_schepper@nokia-bell-labs.com>; g.white@c=
+ablelabs.com; ingemar.s.johansson@ericsson.com; mirja.kuehlewind@ericsson.c=
+om; cheshire@apple.com; rs.ietf@gmx.at; Jason_Livingood@comcast.com; vidhi_=
+goel@apple.com
+Subject: Re: [PATCH v3 net-next 1/1] tcp: Replace min_tso_segs() with tso_s=
+egs() CC callback
+
+
+CAUTION: This is an external email. Please be very careful when clicking li=
+nks or opening attachments. See the URL nok.it/ext for additional informati=
+on.
+
+
+
+On Tue Jun 30, 2026 at 10:46 PM PDT, Chia-Yu Chang (Nokia) wrote:
+>> > -     /* override sysctl_tcp_min_tso_segs (optional) */
+>> > -     u32 (*min_tso_segs)(struct sock *sk);
+>> > +     /*
+>> > +      * Override tcp_tso_autosize (optional)
+>> > +      *
+>> > +      * If provided, this callback returns the final TSO segment numb=
+er
+>> > +      * and will bypass tcp_tso_autosize() entirely. The implementati=
+on
+>> > +      * must derive an appropriate value and ensure the result is val=
+id.
+>> > +      */
+>> > +     u32 (*tso_segs)(struct sock *sk, u32 mss_now);
+>>
+>> I don't like this interface change.
+>> It introduces churn for no good reason.
+>> At least I don't see why you cannot live with the existing api.
 >
-> On 6/30/26 5:16 PM, Jamal Hadi Salim wrote:
-> > On Tue, Jun 30, 2026 at 8:33=E2=80=AFAM Daniel Borkmann <daniel@iogearb=
-ox.net> wrote:
-> >> From: Jamal Hadi Salim <jhs@mojatatu.com>
-> >>
-> >> When a TC filter attached to a qdisc filter chain returns
-> >> TC_ACT_REDIRECT (ex: via an eBPF program calling bpf_redirect() or an
-> >> act_bpf action), the redirect was silently lost i.e no qdisc classify
-> >> function handled TC_ACT_REDIRECT, so the packet fell through the
-> >> switch and was enqueued normally instead of being redirected.
-> >>
-> >> This has been broken since bpf_redirect() was introduced for TC in
-> >> commit 27b29f63058d ("bpf: add bpf_redirect() helper"). We got lucky
-> >> for a long time because bpf_net_context was a per-CPU variable that
-> >> was always available.
-> >>
-> >> commit 401cb7dae813 ("net: Reference bpf_redirect_info via task_struct
-> >> on PREEMPT_RT.") turned bpf_net_context into a task_struct member that
-> >> is only set up by explicit callers. Without a caller setting it up,
-> >> bpf_redirect() itself crashes with a NULL pointer dereference in
-> >> bpf_net_ctx_get_ri(). However, even with bpf_net_context available,
-> >> TC_ACT_REDIRECT from qdisc filter chains cannot be honored without
-> >> adding skb_do_redirect() calls to every qdisc classify function, which
-> >> would require changes across net/sched/. Isolate it to ebpf core where
-> >> it belongs.
-> >>
-> >> Instead, add a tcf_classify_qdisc() inline helper in pkt_cls.h, as a
-> >> wrapper around tcf_classify() for use by qdisc classify functions and
-> >> tcf_qevent_handle(). When the classify verdict is TC_ACT_REDIRECT,
-> >> the wrapper converts it to TC_ACT_SHOT, dropping the packet rather
-> >> than letting it continue silently. Dropping is preferred over
-> >> letting the packet through because the user immediately sees packet
-> >> loss. Silently passing the packet through would hide the problem and
-> >> leave the user wondering why their redirect is not working.
-> >>
-> >> The clsact fast path, tc_run() continues to call tcf_classify() direct=
-ly
-> >> and is unaffected: TC_ACT_REDIRECT is returned as-is and handled by
-> >> sch_handle_egress/ingress() calling skb_do_redirect() as before.
-> >>
-> >> Fixes: 27b29f63058d ("bpf: add bpf_redirect() helper")
-> >> Fixes: 401cb7dae813 ("net: Reference bpf_redirect_info via task_struct=
- on PREEMPT_RT.")
-> >> Tested-by: Victor Nogueira <victor@mojatatu.com>
-> >> Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
-> >> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> >> ---
-> >>   include/net/pkt_cls.h    | 14 +++++++++++++-
-> >>   net/sched/cls_api.c      |  4 +---
-> >>   net/sched/sch_cake.c     |  2 +-
-> >>   net/sched/sch_drr.c      |  2 +-
-> >>   net/sched/sch_dualpi2.c  |  2 +-
-> >>   net/sched/sch_ets.c      |  2 +-
-> >>   net/sched/sch_fq_codel.c |  2 +-
-> >>   net/sched/sch_fq_pie.c   |  2 +-
-> >>   net/sched/sch_hfsc.c     |  2 +-
-> >>   net/sched/sch_htb.c      |  2 +-
-> >>   net/sched/sch_multiq.c   |  2 +-
-> >>   net/sched/sch_prio.c     |  2 +-
-> >>   net/sched/sch_qfq.c      |  2 +-
-> >>   net/sched/sch_sfb.c      |  2 +-
-> >>   net/sched/sch_sfq.c      |  2 +-
-> >>   15 files changed, 27 insertions(+), 17 deletions(-)
-> >>
-> >> diff --git a/include/net/pkt_cls.h b/include/net/pkt_cls.h
-> >> index 3bd08d7f39c1..5f5cb36439fe 100644
-> >> --- a/include/net/pkt_cls.h
-> >> +++ b/include/net/pkt_cls.h
-> >> @@ -156,8 +156,20 @@ static inline int tcf_classify(struct sk_buff *sk=
-b,
-> >>   {
-> >>          return TC_ACT_UNSPEC;
-> >>   }
-> >> -
-> >>   #endif
-> >> +static inline int tcf_classify_qdisc(struct sk_buff *skb,
-> >> +                                    const struct tcf_proto *tp,
-> >> +                                    struct tcf_result *res, bool comp=
-at_mode)
-> >> +{
-> >> +       int ret =3D tcf_classify(skb, NULL, tp, res, compat_mode);
-> >> +
-> >> +       /* TC_ACT_REDIRECT from qdisc filter chains is not supported.
-> >> +        * Use BPF via tcx or mirred redirect instead.
-> >> +        */
-> >> +       if (unlikely(ret =3D=3D TC_ACT_REDIRECT))
-> >> +               ret =3D TC_ACT_SHOT;
-> >> +       return ret;
-> >> +}
-> >
-> > Why did you remove the warning?
-> > A lesser issue is that you introduced a space above #endif
+> Hi Alexei,
 >
-> I don't think we need to put out an extra warn to spam the log, this
-> can be easily traced either via bpftrace or qdisc stats etc; plus the
-> guidance to eBPF with clsact is also obsolete. Given noone has run
-> into this the last 10y, I don't think it really matters tbh.
+> This patch was part of TCP Prague preparation series:=20
+> https://eur03.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flore
+> .kernel.org%2Fall%2F20260611161504.228319-4-chia-yu.chang%40nokia-bell
+> -labs.com%2F&data=3D05%7C02%7Ckoen.de_schepper%40nokia-bell-labs.com%7C5
+> a4af4e411b5485a2abb08ded735768f%7C5d4717519675428d917b70f44f9630b0%7C0
+> %7C0%7C639184821777198173%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRy
+> dWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%
+> 3D%7C0%7C%7C%7C&sdata=3DyBTs89k8g2CSHfi0preWag0X%2BR%2F5vJAmRw6ijEK4E1k%
+> 3D&reserved=3D0 Our original patch is to add an extra tso_segs, and=20
+> after discussion it's recommended to replace exisiting min_tso_segs.
+>
+> This is needed because TCP Prague would set the exact TSO size rather tha=
+n using autosizing from TCP.
+> The TCP Prague itself is planned to be submitted after all preparation co=
+mmits are accepted.
+> You can find its current stauts:=20
+> https://eur03.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgith
+> ub.com%2FL4STeam%2Flinux-net-next%2Fblob%2Fupstream_l4steam%2Fnet%2Fip
+> v4%2Ftcp_prague.c&data=3D05%7C02%7Ckoen.de_schepper%40nokia-bell-labs.co
+> m%7C5a4af4e411b5485a2abb08ded735768f%7C5d4717519675428d917b70f44f9630b
+> 0%7C0%7C0%7C639184821777240736%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGk
+> iOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyf
+> Q%3D%3D%7C0%7C%7C%7C&sdata=3D1tkkWXoSYqOyvr3FkmKpybDt2M6P7BOY240SEvkjfqY
+> %3D&reserved=3D0
 
-It's a bit entitled for you to change someone else's patch to fit your
-philosophy without a mention.
-It's only one message per qdisc. But fine, let's keep it that way.
-Sashiko is hallucinating on TC_ACT_CONSUMED for patch 1. Let's ignore it.
+You have to explain why Prague CC cannot rely on autosizing.
+To me it sounds like a red flag. autosizing logic was there for a decade, i=
+f not more.
+And now you're arguing that your CC logic is special and it deserves new AP=
+I and breakage of existing convention.
+Maybe you should step back and reconsider.
 
-cheers,
-jamal
-> Thanks,
-> Daniel
