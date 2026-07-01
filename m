@@ -1,134 +1,151 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B1225DB1A
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 10:18:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FFA43F4DF1
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 10:19:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782901085; cv=none; b=jTjXFJWTeBqex28nYYxCyisEBa/6MecxlAg18RP8wC8ds3lQ7DALL22hVzeTNWwft/ymALT+vbfW8BjgN0wYFplI4L1mXroBClqkSL9rjowFO6yS4HH+LhGGgtZ+qYrdmg+clQOvrh5PZvgQx9lJXRSqj6OUwsDcTKnXPdILUU4=
+	t=1782901179; cv=none; b=qACFnAAJ0796SyPxOtkiEX8mzaTugGWeaQ68nPe1Qe+RSMW1YwvBJHpzOXF14OpAfvXX4+M9arnWZ9OS9rBiFhwbA3lk/eWkvVMH9PxtsSkGRxvu5eFiyU6ZSxzUXdsOEJpq6V42gLxVg6hPgeLR8e296Rfg/PgeSywBeIYkS8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782901085; c=relaxed/simple;
-	bh=Mx6VIlFmZUMU9tDwA7sWlgZ9jYsQ70rh5VqS+XWiwdo=;
+	s=arc-20240116; t=1782901179; c=relaxed/simple;
+	bh=iie/leU6lL0yQkTS7f6rdHxyIdpGbutb9lv8aUuj9NU=;
 	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=SZB4x7v7KnI5UQ7CB8c61x/3PtuWvRHSjoZOhA6LnL9/Ht1EfDSC2LdWuM5djY34qzugu3OdRqKkjghabh+rTKP2MGxQfmmac3mMd8wmDe3/K1b+dSiLETJ0oWzTkRcHvGzpFlzeL/YPsDnNsOmI9SXeId0KmNSkDbmwU30t4wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H4f8OpPC; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=mb4Xge2tzYxvEWInAi1SOyqqu4Mf09lev5OKE+/DrV+OYVKSSsnd5m93ba6waFn8cExPzYvn8ybfcyqpFKxZJIYQqM1qLqf3SFj9NoqFxASI3uwHm+lbjoHzXVtoRBF7kLG85157NPUXbVQBmYcNVXlUPm+/R64ry82WoUj1KCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QXRVuNx2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H4f8OpPC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E4111F000E9
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 10:18:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QXRVuNx2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86D731F000E9
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 10:19:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782901084;
-	bh=/mopfRHZiawgnlBMc93PHQyIwsQVhu9bqA4H2lFPgzg=;
+	s=k20260515; t=1782901177;
+	bh=v1yVwv+VLlNNhd6qQ5OcdF5thM4bWcbCvcb/4f3T9vI=;
 	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date;
-	b=H4f8OpPC2K5Q7kS0aXCvAiNqwPxmj8H9hQuLPgBwgjt9PTcTfG0waZk8y1y1Gwm9g
-	 fBzf6PwPOrPZKiLNu/vdq/x0rsqK6Q/+WbzBtoxsNB3cSo5LX6na5V7s5JWCF1tTu+
-	 v6nbs/x18tIY2RqPOTuld0Fw+eIkFYCeISIHUWcu+r/ZW0DIuob7YrMQeXI566F569
-	 iA9NfCaZDYDjDiqm4cuIB9lYucoRGA1WLQ9dYZyiA9ZHDRcjBuvZ2Edr0aTtmQ8ojG
-	 ZZUxjOqXc1DV4X+gMVFV0Hhevj+Vsef6kNuHBTkp/r6wmnBp5+b37hviJJD64DtXbf
-	 yinW2HZ/ey3Bw==
+	b=QXRVuNx2tIOdL5QgQh2y9c1I7iPgEll75RAvFZl/WN0vxEY7JS3DdRREg/QTIDL2H
+	 5/ErIflcZJd0ERRPP8MzxW2s0eguhNi/v4oow0B447n5xbIbiLrS3me3lrwxsyvct7
+	 Szt2DPd1AsEMfN3JewANt5b/1pv6b07zES7RBEwKU7PlOU5jQvtUPkzSL3FNzMBvkw
+	 J7VazhVCyDa1M7bVAjEqkhEVh1f2MYiYklgn/ZUNvPR+tSehY0ysD0WeQM6vUwS+cz
+	 +mq2qgp6sJuq3z4fclx29lFZRpio0ip4jeERCLqahFhSZ1swqVwDG6FrAEKks+JDmh
+	 1RtTxPDt+FXWg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 06/10] bpf, x86: emit KASAN checks into x86
- JITed programs
+Subject: Re: [PATCH bpf-next v3 02/10] bpf: mark instructions accessing
+ program stack
 Reply-To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260701-kasan-v3-6-bd09bb942d86@bootlin.com>
+In-Reply-To: <20260701-kasan-v3-2-bd09bb942d86@bootlin.com>
 References: <20260701-kasan-v3-0-bd09bb942d86@bootlin.com>
- <20260701-kasan-v3-6-bd09bb942d86@bootlin.com>
+ <20260701-kasan-v3-2-bd09bb942d86@bootlin.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 01 Jul 2026 10:18:03 +0000
-Message-Id: <20260701101804.0E4111F000E9@smtp.kernel.org>
+Date: Wed, 01 Jul 2026 10:19:37 +0000
+Message-Id: <20260701101937.86D731F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Critical] emit_kasan_check fails to save and restore x86 caller-saved re=
-gisters R10 (BPF_REG_AX) and R11 (AUX_REG), causing BPF register corruption.
+- [High] The `is_mem_insn` helper incorrectly excludes `BPF_ATOMIC`, causin=
+g inline atomic operations to bypass KASAN checks.
+- [Medium] Early return in `adjust_insn_aux_data` bypasses KASAN marking fo=
+r 1-to-1 patched memory instructions.
 --
 
-commit f9acd1352526b0ce263a176070ea1146c5f57a4a
+commit 90d3117a6d0883383f557efe547dcd0c0e5bc53a
 Author: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.com>
 
-bpf, x86: emit KASAN checks into x86 JITed programs
+bpf: mark instructions accessing program stack
 
-Insert KASAN shadow memory checks before memory load and store
-operations in JIT-compiled BPF programs. This helps detect memory safety
-bugs such as use-after-free and out-of-bounds accesses at runtime.
+In order to prepare to emit KASAN checks in JITed programs, JIT compilers
+need to be aware about whether some load/store instructions are targeting
+the bpf program stack, as those should not be monitored. The verifier marks
+instructions depending on whether they access memory other than the stack,
+taking care to shift instruction marking when the verifier patches
+instructions.
 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index b70cecfec1793..a383ffc8f2899 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index 1f340211b65c2..0b58a02a71795 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+> @@ -152,6 +152,17 @@ static int get_callee_stack_depth(struct bpf_verifie=
+r_env *env,
+>  }
+>  #endif
+> =20
+> +static bool is_mem_insn(struct bpf_insn *insn)
+> +{
+> +	if (BPF_MODE(insn->code) !=3D BPF_MEM &&
+> +	    BPF_MODE(insn->code) !=3D BPF_MEMSX)
+> +		return false;
+
+[Severity: High]
+Does this logic inadvertently exclude BPF_ATOMIC operations from KASAN boun=
+ds
+checking?
+
+When bpf_kptr_xchg is inlined into an atomic exchange (via fixup_bpf_calls(=
+)),
+the verifier replaces the CALL with a BPF_ATOMIC instruction. Because this
+function specifically requires BPF_MEM or BPF_MEMSX, it returns false for
+BPF_ATOMIC.
+
+Consequently, the newly generated atomic operation inherits
+non_stack_access =3D false from the original CALL instruction. The JIT will=
+ then
+assume the map value access is a stack access and skip KASAN instrumentatio=
+n.
+Could this be updated to include BPF_ATOMIC?
+
+> +
+> +	return BPF_CLASS(insn->code) =3D=3D BPF_ST ||
+> +		BPF_CLASS(insn->code) =3D=3D BPF_STX ||
+> +		BPF_CLASS(insn->code) =3D=3D BPF_LDX;
+> +}
 
 [ ... ]
 
-> @@ -2605,14 +2640,14 @@ static int do_jit(struct bpf_verifier_env *env, s=
-truct bpf_prog *bpf_prog, int *
->  			}
->  			fallthrough;
->  		case BPF_STX | BPF_ATOMIC | BPF_W:
-> -		case BPF_STX | BPF_ATOMIC | BPF_DW:
-> +		case BPF_STX | BPF_ATOMIC | BPF_DW: {
-> +			bool is64 =3D BPF_SIZE(insn->code) =3D=3D BPF_DW;
-> +			u32 real_src_reg =3D src_reg;
-> +			u32 real_dst_reg =3D dst_reg;
-> +			u8 *branch_target;
->  			if (insn->imm =3D=3D (BPF_AND | BPF_FETCH) ||
->  			    insn->imm =3D=3D (BPF_OR | BPF_FETCH) ||
->  			    insn->imm =3D=3D (BPF_XOR | BPF_FETCH)) {
-> =20
->  				/*
->  				 * Can't be implemented with a single x86 insn.
-> @@ -2626,7 +2661,19 @@ static int do_jit(struct bpf_verifier_env *env, st=
-ruct bpf_prog *bpf_prog, int *
->  				if (dst_reg =3D=3D BPF_REG_0)
->  					real_dst_reg =3D BPF_REG_AX;
-> =20
-> +				ip +=3D 3;
-> +			}
-> +			if (!bpf_atomic_is_load_store(insn)) {
-> +				err =3D emit_kasan_check(env, &prog, real_dst_reg,
-> +						       insn, ip, false,
-> +						       accesses_stack_only);
+> @@ -183,7 +194,19 @@ static void adjust_insn_aux_data(struct bpf_verifier=
+_env *env,
+>  		/* Expand insni[off]'s seen count to the patched range. */
+>  		data[i].seen =3D old_seen;
+>  		data[i].zext_dst =3D insn_has_def32(insn + i);
+> +		if (i =3D=3D off + insn_off_in_patch) {
+> +			data[i].non_stack_access =3D data[off + cnt - 1].non_stack_access;
+> +			data[off + cnt - 1].non_stack_access =3D false;
+> +		} else if (is_mem_insn(insn + i)) {
+> +			data[i].non_stack_access =3D true;
+> +		}
+>  	}
+> +	/*
+> +	 * Last slot instruction could be a newly generated
+> +	 * BPF_ST/BPF_LDX/BPF_STX
+> +	 */
+> +	if (is_mem_insn(insn + off + cnt - 1) && insn_off_in_patch !=3D cnt - 1)
+> +		data[off + cnt - 1].non_stack_access =3D true;
 
-[Severity: Critical]
-Does emit_kasan_check() correctly preserve x86 caller-saved registers like =
-R10
-(BPF_REG_AX) and R11 (AUX_REG)?
+[Severity: Medium]
+What happens when a non-memory instruction is replaced with a single memory
+instruction (i.e., cnt =3D=3D 1)?
 
-Looking at emit_kasan_check(), it saves r8 and r9 before the C function cal=
-l=20
-but seems to miss saving r10 and r11:
+Looking at adjust_insn_aux_data(), there is an early return if cnt =3D=3D 1:
 
-    /* Save rdi */
-    EMIT1(0x57);
-    /* Save r8 */
-    EMIT2(0x41, 0x50);
-    /* Save r9 */
-    EMIT2(0x41, 0x51);
+	data[off].zext_dst =3D insn_has_def32(insn + off + cnt - 1);
 
-    /* mov rdi, addr_reg */
+	if (cnt =3D=3D 1)
+		return;
 
-Because the x86-64 System V ABI allows C functions like __asan_load* to=20
-clobber R10 and R11, failing to save and restore them before the call can=20
-corrupt BPF registers.
+Since this new logic is placed after the early return, if a non-memory
+instruction (like a helper call) is replaced 1-to-1 with a memory instructi=
+on
+(e.g., BPF_LDX_MEM for bpf_get_func_ip), it skips evaluating is_mem_insn().
 
-For example, in the atomic block above, BPF_REG_AX (R10) is used to tempora=
-rily
-save BPF_REG_0 across the emit_kasan_check() call. If __asan_load* clobbers
-BPF_REG_AX, the restored BPF_REG_0 will contain garbage, which could be use=
-d to
-bypass verifier checks and lead to out-of-bounds kernel memory accesses.
+The newly generated instruction would then blindly inherit
+non_stack_access =3D false, causing the JIT to skip KASAN bounds checks.
 
-> +				if (err)
-> +					return err;
->  				branch_target =3D prog;
-> +			}
+Is it possible to move the 1-to-1 handling before the early return, or
+explicitly check it there?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260701-kasan-v3-0=
--bd09bb942d86@bootlin.com?part=3D6
+-bd09bb942d86@bootlin.com?part=3D2
