@@ -1,256 +1,316 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E1F843637D
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 11:02:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EA31449EA9;
+	Wed,  1 Jul 2026 11:08:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782903778; cv=none; b=b/9C3Nfpgl+SmEGR4caJo269OKx64dtDvJ3sNr1Fl2KrntbpdNweQJtkFkrpEyseBfQaAzEvk0TvGWxG5SafP6CFiV2qEtWNNzRUwKJoerKFqiGFEFrwK+RlTTJUnhOsFtjloAjc5YJ+7lm0Hj2lNgxwJ3PQgFUkD5gQNwYvyhc=
+	t=1782904114; cv=none; b=nYbbBRODBCB85sa5YeQ1BdVvk6B0gkncoz/hvtukW1k0V15qbtcxAKzyIVOkXM0V8dSSLqyDb1KY5bAia1bAE6Sl3cC8JuDt+YbPkI9+on72WDvjKFOPiLXtrE5mkRzeZvYlmZ+eR0Dgtf4EpzmZkFfT57GtbNvBTMYvCeaNGi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782903778; c=relaxed/simple;
-	bh=fRGiZtTZwPpQ+e62B55nkzc896Y8lcB1tI5y3I/MMEM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=jIL7MVqPLn/qie/S7W7mjxcgv/va+XGqcff1SwZcS1O6RC/5n69uP+WwZsqLc9AwGpQwjJYufwT5Ur6BnfvH0cJyfWL7+3MaguVYayd3VobF+CJL5qYhrnwiw0hW24n7qefL+bB8lIJAPl7EFIuHVrIG9onF9JYZIbUqsXKnrPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LBBSvDjt; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=iVlhmPBb; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782904114; c=relaxed/simple;
+	bh=S9U/QQkOj2QcN7GOUDf8Nq4vJ3cWwPyQIEl2/pEFaPo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kKqfYrPMMtRjByZsakL5vlqIu8RDlC/porwbV+EY/X+Jj9W3fGQ2JVzTMgHChj6U5oxh/+xWUv2W+DAbDDkJiS7KS9eDPDCmvhIxkkvNsibMetJp77YrOHf0L+2x8Z20NrFQp002+l5oP/AhbnD+3usivHw10XAkUxqddKyCofU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QRnvYhKi; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LBBSvDjt";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="iVlhmPBb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782903775;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QRnvYhKi"
+Message-ID: <0efcc0a9-a51d-4de8-8406-b8fa536a91b7@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782904099;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=NnOYvPIZlJQwQJ6FFCiD44nqFh2+p0us6zgjeQu6Qjg=;
-	b=LBBSvDjt6fqmoL5JEZmxIpa+A3xuVgYvXj+mhbHe7y6r6D3W4kbVZuxbTJlo1PLI8aku81
-	eAz1an6iVf3vefwLHWfMPYdD38dk6E07byXFT5MQpfZxOGpwklVOmmnshrYcrw8E9F2oPP
-	CxuUl3uiW4hWU0GAjzd5qJ0PgqhxNCE=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-376-zYG6qyZ9P-qMBnpoVhGqXQ-1; Wed, 01 Jul 2026 07:02:54 -0400
-X-MC-Unique: zYG6qyZ9P-qMBnpoVhGqXQ-1
-X-Mimecast-MFC-AGG-ID: zYG6qyZ9P-qMBnpoVhGqXQ_1782903773
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-49244130073so4281255e9.1
-        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 04:02:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1782903773; x=1783508573; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NnOYvPIZlJQwQJ6FFCiD44nqFh2+p0us6zgjeQu6Qjg=;
-        b=iVlhmPBb+7k3Oe8KP9Kuo4PtvFA/amoJy/Roa6Li2TUU85OxztmbFdgUYhvobwqSMf
-         dfI3UoYJ4Ni/uLB6V8RfQ3kyECcKr+TC717efOlkGT7bSIEKtYvlVKneF9I4oGBv2Haf
-         jOJsz9lIRQ2M2lVV8X3LIV9t76TqCHQTOFNTIt801FEYriIAKIZ3FnHE4PMupeVCb+Eq
-         NdwuzoaCYfyecxr+KaNRPYdx1XL8DMZNeCZhWB5+tlvlW8rnm8t6meEKG1RZiK/q6ZL0
-         CqWuVLrPPWMyDQRY4HnmUKwk9+zou93XO/SV/7uaY1xVWmFIkyiDYVNmTLJed2CTYzT0
-         9F1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782903773; x=1783508573;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NnOYvPIZlJQwQJ6FFCiD44nqFh2+p0us6zgjeQu6Qjg=;
-        b=iihZlAhtH880z5R+lAgzbBft50BWr6tWOYKAf8SGu6Y2JF3gBiuixHWJvjSM7BcYqI
-         cq712l8k4v3+aUqYwZtUq/tQE7RCmuYUQJ+BGkpS9mYIxiKcHawIMCAGgD36IdCk0xmU
-         +8Ys4dFKU3OaeXDBPlHw9kzdgnMw7omnzNTwFNsiqeqS6Y7S287mpiTKOflKOCdcIwLH
-         vPVEhhuhrwFqjeLFGqEDEkgfGvDHRf5GFBK7DH5bgIhh8Qi1V/5Dp/zWGDKldWUQwamy
-         WTW7JZ3yj11vtj4M7NxlRiiEn1943/QfbSnq9gFIYtUnQ1nT+FLpFXpyqd7zpaYIueNe
-         XhDw==
-X-Forwarded-Encrypted: i=1; AFNElJ/y3yzLUvmQB7lUD5nE6YC3/MXqdecoLRmPYyQ/zRtGiHCa5eFE/PGnw6Q7mLlB2ph/iHA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4Rm4GGEiAdyqzpFreazGEn4eh7n3KAluDyT8tZf3hZORdAE+l
-	d/hgUk2mT2n2vGNy1LqWMaot88TjZLhiR/AnzNKtGGopSmK0To4diUZp9azrdC7qpX1QqP+96b+
-	Mh5RnuWjzqJ42rBOzht30DpArRBp4YxTKGPREAfmnU6Uz5KucqiR+mA==
-X-Gm-Gg: AfdE7cmOJ9wpCFyLHLJbBipFEpoatvkTIc+m8+PBePerGi+Hu/bUoidE48jbBzJ/Saj
-	o8lpXOraWqmj/0Wqr5prpfc3dygJflJwrkZyYdc7qSdo9PXB7hXoI23aPd9l7Gc2GlxVgjgU7fd
-	8iTUaxz+ODhmrXHHn3bmWnFtF8te/GLh+R71ciI13tTiYaj/Pkg+p/ymc3Yh+AXBm9XZs2q9aLy
-	WFhOjPGlQT15h2GX6+aquXzAV0j+KgIQ2H1m3+r7g7TijL5Tn71i0/IbCMRshhaHuYu7/xr2/oA
-	PFMFsVKftO3zB/gj4PaWRhx6pUklJVYtVUrkkLM8mbESvJ4+kZ6Vv6F6OAcFSbznfaizjGgq9m6
-	2A6gxYDZyJH4ZAjRitDlD/9rvK0ylkGA79Ghh+w==
-X-Received: by 2002:a05:600c:5297:b0:493:a5da:e5d2 with SMTP id 5b1f17b1804b1-493c2b93614mr16386045e9.26.1782903772801;
-        Wed, 01 Jul 2026 04:02:52 -0700 (PDT)
-X-Received: by 2002:a05:600c:5297:b0:493:a5da:e5d2 with SMTP id 5b1f17b1804b1-493c2b93614mr16385385e9.26.1782903772259;
-        Wed, 01 Jul 2026 04:02:52 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493be4d8f5asm99969285e9.8.2026.07.01.04.02.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jul 2026 04:02:51 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 9C78480A7F7; Wed, 01 Jul 2026 13:02:50 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: David Ahern <dsahern@kernel.org>, Avinash Duduskar
- <avinash.duduskar@gmail.com>, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org
-Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
- yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
- a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
- eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
- bpf_fib_lookup() helper
-In-Reply-To: <916191fc-2e10-4449-b82b-c086d90283ae@kernel.org>
-References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
- <20260624030530.3342884-2-avinash.duduskar@gmail.com>
- <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org> <87se65bd04.fsf@toke.dk>
- <2ffa32dd-5c88-488a-aa23-deef13465eb9@kernel.org> <87echobb5h.fsf@toke.dk>
- <cf25f667-1095-4f84-98ff-bf4662d3faa8@kernel.org> <874iik2ew4.fsf@toke.dk>
- <916191fc-2e10-4449-b82b-c086d90283ae@kernel.org>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Wed, 01 Jul 2026 13:02:50 +0200
-Message-ID: <87y0fv0y79.fsf@toke.dk>
+	bh=ieMgPSS1eIBfAPTWcoeMePMwN2vKLGAwkXUol+yS3JM=;
+	b=QRnvYhKi7ifn2CAOqwrrTALRRhFuKdBNRY4USBSzQESgxOH79yyPbWsw+wvjxJGm9pDQu3
+	75wHltVABewcdEultw97xVO9Srux+vxmHLrM1y3qkyY8Qi8RlcbW/19L2d+jmEkSOqKAw5
+	8d3ZpLHm3o4fEt3mWUbZ+Ie+mvfoBxk=
+Date: Wed, 1 Jul 2026 19:07:22 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v3 1/7] list: Add mutable iterator variants
+To: Jani Nikula <jani.nikula@linux.intel.com>,
+ David Laight <david.laight.linux@gmail.com>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ "David Hildenbrand (Arm)" <david@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Jens Axboe <axboe@kernel.dk>,
+ Tejun Heo <tj@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Paul Moore <paul@paul-moore.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Shakeel Butt <shakeel.butt@linux.dev>, David Howells <dhowells@redhat.com>,
+ Simona Vetter <simona.vetter@ffwll.ch>, Randy Dunlap
+ <rdunlap@infradead.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Philipp Stanner <phasta@kernel.org>, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+ linux-ntfs-dev@lists.sourceforge.net, linux-fsdevel@vger.kernel.org,
+ io-uring@vger.kernel.org, audit@vger.kernel.org, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-perf-users@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ kexec@lists.infradead.org, live-patching@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-crypto@vger.kernel.org,
+ linux-pm@vger.kernel.org, rcu@vger.kernel.org, sched-ext@lists.linux.dev,
+ linux-mm@kvack.org, virtualization@lists.linux.dev, damon@lists.linux.dev,
+ llvm@lists.linux.dev, Kaitao Cheng <chengkaitao@kylinos.cn>,
+ Muchun Song <muchun.song@linux.dev>
+References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
+ <20260622040533.29824-2-kaitao.cheng@linux.dev>
+ <20260622094242.64531b9a@pumpkin>
+ <351a6b67-b394-4c58-aee2-88b6c8089ad5@linux.dev>
+ <cf8467c7-b98f-44a5-9cf9-60b43b5da711@amd.com>
+ <20260624152324.3def88ce@pumpkin>
+ <0ed6b5c3-e955-46e2-9fc6-075a0dfd1c4f@linux.dev>
+ <734f66ca51485ee3ec9788c0eaaead681e00664b@intel.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+In-Reply-To: <734f66ca51485ee3ec9788c0eaaead681e00664b@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-David Ahern <dsahern@kernel.org> writes:
-
-> On 6/30/26 10:04 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
->> David Ahern <dsahern@kernel.org> writes:
->>=20
->>> On 6/30/26 4:00 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
->>>>> It does not make sense to require a flag to get lookup output. vlan
->>>>> proto of 0 is not valid, so it is a clear indication that the vlan
->>>>> output parameters were not set during the lookup.
+在 2026/6/25 19:00, Jani Nikula 写道:
+> On Thu, 25 Jun 2026, Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
+>> 在 2026/6/24 22:23, David Laight 写道:
+>>> On Wed, 24 Jun 2026 15:23:47 +0200
+>>> Christian König <christian.koenig@amd.com> wrote:
+>>>> On 6/24/26 15:14, Kaitao Cheng wrote:
+>>>>> 在 2026/6/22 16:42, David Laight 写道:  
+>>>>>> On Mon, 22 Jun 2026 12:05:31 +0800
+>>>>>> Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
+>>>>>>  
+>>>>>>> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+>>>>>>>
+>>>>>>> The list_for_each*_safe() helpers are used when the loop body may
+>>>>>>> remove the current entry.  Their API exposes the temporary cursor at
+>>>>>>> every call site, even though most users only need it for the iterator
+>>>>>>> implementation and never reference it in the loop body.
+>>>>>>>
+>>>>>>> Add *_mutable() variants for list and hlist iteration.  The new helpers
+>>>>>>> support both forms: callers may keep passing an explicit temporary cursor
+>>>>>>> when they need to inspect or reset it, or omit it and let the helper use
+>>>>>>> a unique internal cursor.  
+>>>>>>
+>>>>>> I'm not really sure 'mutable' means anything either.
+>>>>>> It is possible to make it valid for the loop body (or even other threads)
+>>>>>> to delete arbitrary list items - but that needs significant extra overheads.
+>>>>>>
+>>>>>> It might be worth doing something that doesn't need the extra variable,
+>>>>>> but there is little point doing all the churn just to rename things.
+>>>>>>  
+>>>>>>>
+>>>>>>> This makes call sites that only mutate the list through the current entry
+>>>>>>> less noisy, while keeping the existing *_safe() helpers available for
+>>>>>>> compatibility.
+>>>>>>>
+>>>>>>> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+>>>>>>> ---
+>>>>>>>  include/linux/list.h | 269 +++++++++++++++++++++++++++++++++++++------
+>>>>>>>  1 file changed, 231 insertions(+), 38 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/include/linux/list.h b/include/linux/list.h
+>>>>>>> index 09d979976b3b..1081def7cea9 100644
+>>>>>>> --- a/include/linux/list.h
+>>>>>>> +++ b/include/linux/list.h
+>>>>>>> @@ -7,6 +7,7 @@
+>>>>>>>  #include <linux/stddef.h>
+>>>>>>>  #include <linux/poison.h>
+>>>>>>>  #include <linux/const.h>
+>>>>>>> +#include <linux/args.h>
+>>>>>>>  
+>>>>>>>  #include <asm/barrier.h>
+>>>>>>>  
+>>>>>>> @@ -763,28 +764,72 @@ static inline void list_splice_tail_init(struct list_head *list,
+>>>>>>>  #define list_for_each_prev(pos, head) \
+>>>>>>>  	for (pos = (head)->prev; !list_is_head(pos, (head)); pos = pos->prev)
+>>>>>>>  
+>>>>>>> -/**
+>>>>>>> - * list_for_each_safe - iterate over a list safe against removal of list entry
+>>>>>>> - * @pos:	the &struct list_head to use as a loop cursor.
+>>>>>>> - * @n:		another &struct list_head to use as temporary storage
+>>>>>>> - * @head:	the head for your list.
+>>>>>>> +/*
+>>>>>>> + * list_for_each_safe is an old interface, use list_for_each_mutable instead.
+>>>>>>>   */
+>>>>>>>  #define list_for_each_safe(pos, n, head) \
+>>>>>>>  	for (pos = (head)->next, n = pos->next; \
+>>>>>>>  	     !list_is_head(pos, (head)); \
+>>>>>>>  	     pos = n, n = pos->next)
+>>>>>>>  
+>>>>>>> +#define __list_for_each_mutable_internal(pos, tmp, head)		\
+>>>>>>> +	for (typeof(pos) tmp = (pos = (head)->next)->next;		\  
+>>>>>>
+>>>>>> Use auto
+>>>>>>  
+>>>>>>> +	     !list_is_head(pos, (head));				\
+>>>>>>> +	     pos = tmp, tmp = pos->next)
+>>>>>>> +
+>>>>>>> +#define __list_for_each_mutable1(pos, head)				\
+>>>>>>> +	__list_for_each_mutable_internal(pos, __UNIQUE_ID(next), head)
+>>>>>>> +
+>>>>>>> +#define __list_for_each_mutable2(pos, next, head)			\
+>>>>>>> +	list_for_each_safe(pos, next, head)
+>>>>>>> +
+>>>>>>>  /**
+>>>>>>> - * list_for_each_prev_safe - iterate over a list backwards safe against removal of list entry
+>>>>>>> + * list_for_each_mutable - iterate over a list safe against entry removal
+>>>>>>>   * @pos:	the &struct list_head to use as a loop cursor.
+>>>>>>> - * @n:		another &struct list_head to use as temporary storage
+>>>>>>> - * @head:	the head for your list.
+>>>>>>> + * @...:	either (head) or (next, head)
+>>>>>>> + *
+>>>>>>> + * next:	another &struct list_head to use as optional temporary storage.
+>>>>>>> + *		The temporary cursor is internal unless explicitly supplied by
+>>>>>>> + *		the caller.
+>>>>>>> + * head:	the head for your list.
+>>>>>>> + */
+>>>>>>> +#define list_for_each_mutable(pos, ...)					\
+>>>>>>> +	CONCATENATE(__list_for_each_mutable, COUNT_ARGS(__VA_ARGS__))	\
+>>>>>>> +		(pos, __VA_ARGS__)  
+>>>>>>
+>>>>>> The variable argument count logic really just slows down compilation.
+>>>>>> Maybe there aren't enough copies of this code to make that significant.
+>>>>>> But just because you can do it doesn't mean it is a gooD idea.
+>>>>>> I'm also not sure it really adds anything to the readability.
+>>>>>>
+>>>>>> And, it you are going to make the middle argument optional there is
+>>>>>> no need to change the macro name.  
+>>>>>
+>>>>> Christian König and Jani Nikula also disagree with the variadic-argument
+>>>>> implementation approach. If we abandon that method, it means we will
+>>>>> inevitably need to add some new macros. If mutable is not a good name,
+>>>>> suggestions for better alternatives would be welcome; coming up with a
+>>>>> suitable name is indeed rather tricky.  
 >>>>
->>>> Okay, so we could just unconditionally set the VLAN fields, but if we
->>>> start rewriting the ifindex that would be a change of the existing
->>>> behaviour that could break existing applications, no?
->>>
->>> Consistently dealing with upper devices is one of the reasons I never
->>> sent patches for vlan support.
->>>
->>> xdp support is at the driver layer for real (physical) devices. The fib
->>> lookup is going to return the vlan device index - a virtual device.
->>> Support for xdp should not be propagated to virtual devices; it goes
->>> against the intent of xdp. Any trip down this path will have to decide
->>> how to handle vlan-in-vlan use cases. Where is the line drawn for fast
->>> networking?
->>=20
->> Right, which is why we need building blocks that makes it possible for
->> XDP programs to do the right thing in the BPF code :)
->>=20
->> A helper that resolves the parent could be used for stacked VLANs as
->> well (just calling the helper multiple times).
->>=20
->>>> Specifically, if an XDP application has a table of the interfaces it
->>>> forwards between, today they'd get a VLAN interface ifindex, which wou=
-ld
->>>> not be in that table, and the application would return XDP_PASS. Where=
-as
->>>> if we change the ifindex and populate the VLAN tag, suddenly the
->>>> interface would be in the table, but because the application doesn't
->>>> read the returned VLAN tag, it will end up sending packets out without
->>>> tagging them, leading to broken forwarding.
->>>
->>> I have not followed developments over the past few years. Does XDP have
->>> support for vlan acceleration in the Tx path now? You really want that
->>> to deal with vlans and not replicating s/w processing in ebpf.
->>=20
->> It does not, no. There's TX metadata for AF_XDP, but VLAN support is not
->> in there (see include/uapi/linux/if_xdp.h).
->>=20
->> Doesn't mean software VLAN handling can't be useful, though; there are
->> use cases other than the very high end where XDP can speed things up
->> even if it has to write a VLAN tag or two...
->>=20
->>>> So if we don't want the flag, we'd need some other mechanism to resolve
->>>> the parent ifindex, AFAICT? Maybe a xdp_get_parent_ifindex() kfunc, sa=
-y?
->>>> That could also be made generic for other stacked interface types, I
->>>> suppose.
+>>>> I don't think you need to add a new macro for the specific use case that people want to modify the next element of the iteration.
 >>>>
->>>> WDYT?
+>>>> If I remember your numbers correctly that is a really corner case and keeping using the existing *_safe() macros for that sounds perfectly fine to me.
 >>>
->>> dealing with stacked devices is hard :-)
+>>> IIRC currently you have a choice of either:
+>>> 	define               Item that can't be deleted
+>>> 	list_for_each()	     The current item.
+>>> 	list_for_each_safe() The next item.
+>>> There is also likely to be code that updates the variables to allow
+>>> for other scenarios.
 >>>
->>> What is the return is a bond device or a vlan on a bond device?
->>=20
->> Well, bond devices have XDP support, so you can just redirect to those :)
->>=20
->> But yeah, each type of stacked device would need to pass different
->> information through to the XDP program, and the program would need to
->> support those. Building a single XDP program that supports all of them
->> will require quite a bit of code, and would probably not perform super
->> well. But most deployments have distinct subsets of features they need,
->> so this does not have to be a blocker, IMO?
->>=20
->
-> Seems to me the fib_lookup for xdp needs to return the bottom device,
-> not the vlan device, for forwarding to work. That's why I added the
-> fields to the struct. That allows the program to push the vlan header if
-> required. My preference (dream?) was that Tx path had support to tell
-> the redirect the vlan and h/w added it on send.
+>>> Note that if increase a reference count and release a lock then list_for_each()
+>>> is likely safer than list_for_each_safe() :-)
+>>>
+>>> list.h has 9 variants of the 'safe' loop.
+>>> The bloat of another 9 is getting excessive.
+>>>
+>>> It has to be said that this is one of my least favourite type of list...
+>>
+>> Hi Christian König, David Laight, Jani Nikula, David Hildenbrand,
+>> Andy Shevchenko, Alexei Starovoitov
+>>
+>> For ease of discussion, I need to summarize the currently possible
+>> approaches and briefly describe their respective pros and cons,
+>> using the list_for_each_entry* interfaces as examples.
+>>
+>> 1. Add list_for_each_entry_mutable, while keeping list_for_each_entry
+>> and list_for_each_entry_safe unchanged. list_for_each_entry_mutable
+>> would be used specifically for safe deletion scenarios that do not
+>> need to expose the temporary cursor externally. The code can refer to
+>> the v1 version.
+>>
+>> Pros: Does not depend on immediate per-subsystem adaptation and can be
+>>       merged directly.
+>> Cons: Requires adding a whole set of mutable interfaces, which makes the
+>>       code somewhat redundant.
+> 
+> Seems fine, and the original _safe naming is ambiguous anyway.
+> 
+>> 2. Directly optimize away the temporary cursor in list_for_each_entry_safe
+>> and define it inside the loop instead, changing the interface from four
+>> arguments to three.
+>>
+>> Pros: Does not add redundant interfaces.
+>> Cons: (1) Users need to manually update special cases that use the
+>>       traversal variable of list_for_each_entry_safe, the new
+>>       list_for_each_entry_safe would no longer apply there and would
+>>       need to be open-coded.
+>>       (2) Because the macro arguments changes, all list_for_each_entry_safe
+>>       callers would need to be modified and merged together, making it
+>>       difficult to merge such a large amount of code at once.
+> 
+> This won't fly because there are literally thousands of
+> list_for_each_entry_safe() users.
+> 
+>> 3. Use a variadic macro approach to optimize list_for_each_entry_safe,
+>> so that it supports both three and four arguments.
+>>
+>> Pros: (1) Does not add redundant interfaces.
+>>       (2) Does not depend on immediate per-subsystem adaptation and can
+>>       be merged directly.
+>> Cons: (1) Increases compile time.
+>>       (2) Makes the interface harder for users to use.
+> 
+> Basically I'm against any variadic macro tricks where the optional
+> argument is not the last argument. That's just way too surprising, and
+> goes against common practice in just about all other languages.
+> 
+>> 4. Optimize list_for_each_entry by defining the temporary cursor internally,
+>> making it compatible with the functionality of list_for_each_entry_safe.
+>> The code can refer to the v2 version.
+>>
+>> Pros: (1) Does not add redundant interfaces.
+>>       (2) The number of externally visible arguments of list_for_each_entry
+>>       remains unchanged, still three.
+>> Cons: (1) list_for_each_entry and list_for_each_entry_safe would be merged
+>>       into one, and list_for_each_entry_safe would gradually be deprecated.
+>>       (2) Users need to manually update special cases that use the traversal
+>>       variable of list_for_each_entry, the new list_for_each_entry would no
+>>       longer apply there and would need to be open-coded. There are 15 such
+>>       cases in total.
+> 
+> This sounds good to me, though I take it there's some code size increase
+> and/or performance penalty?
+> 
+> Maybe the 15 cases are questionable anyway?
+> 
+>> 5. Use a variadic macro approach to optimize list_for_each_entry, so that
+>> it supports both three and four arguments.
+>>
+>> Pros: (1) Does not add redundant interfaces.
+>>       (2) Does not depend on immediate per-subsystem adaptation and can be
+>>       merged directly.
+>> Cons: (1) Increases compile time.
+>>       (2) list_for_each_entry and list_for_each_entry_safe would be merged
+>>       into one, and list_for_each_entry_safe would gradually be deprecated.
+> 
+> Please don't do the macro tricks.
+> 
+>> 6. Make no changes, keep the current logic unchanged, and close the current
+>> email discussion.
+> 
+> I like hiding the temporary stuff when possible.
+> 
+> BR,
+> Jani.
 
-Sure, returning the bottom device index with the VLAN tag makes sense,
-and that's basically what this series does (but bails out on stacked
-VLANs). However, that's not what the helper does today, which is why the
-flag is there, to opt-in to the new behaviour. I don't think we can just
-change the ifindex without breaking existing applications (as noted
-up-thread).
-
-> But really, once stacked devices come into play, I just wanted to make
-> sure thought is given to different use cases. As you know the lookup
-> struct if hard bound to 64B and it is trying to cover a lot of use cases.
-
-Agreed, I don't think we can handle stacked devices in this helper. But
-we could split it out into a new one. Something like:
-
-struct lower_device_info {
-	enum device_type type;
-	struct {
-		__be16	h_vlan_proto;
-		__be16	h_vlan_TCI;
-	} vlan;
-        /* add other types here */
-};
-
-int xdp_get_lower_device(int ifindex, struct lower_device_info *info);
-
-called like:
-
-int xdp_program(struct xdp_md *ctx)
-{
-        struct lower_device_info dev_info =3D {};
-	int ifindex, ret;
-
-        ifindex =3D find_destination(ctx); /* does fib lookup, or something=
- else */
-
-        while ((ret =3D xdp_get_lower_device_info(ifindex, &dev_info)) > 0)=
- {
-        	if (dev_info.type =3D=3D VLAN) {
-                      	push_vlan_tag(ctx, &dev_info.vlan);
-                        ifindex =3D ret;
-                } else {
-                	return XDP_PASS; /* we only handle VLAN devices */
-                }
-        }
-
-        return bpf_redirect(ifindex, 0);
-}
+Hi all,
+If there are no objections, I will make the changes using the first approach.
 
 
-With a helper like this, we obviously don't strictly speaking need to
-change the fib lookup helper at all. However, for the single-tagged VLAN
-case, I think supporting it directly in the fib lookup could still have
-value, as an optimisation: it saves an extra call for resolving the
-ifindex, and the fields are already there. So I think my preference
-would be to merge this series as-is, and then follow up with a new kfunc
-to handle the stacked case. But we could also just drop this series and
-go straight to the new kfunc.
+Hi David Laight,
+You previously expressed a different opinion. Do you have any further comments
+on the current proposed approach?
 
-WDYT?
-
--Toke
+-- 
+Thanks
+Kaitao Cheng
 
