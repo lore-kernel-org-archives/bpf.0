@@ -1,112 +1,204 @@
-Received: from outbound.ms.icloud.com (ms-2005l-snip4-11.eps.apple.com [57.103.72.123])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA5D038759C
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 17:11:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.72.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988781891A9
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 17:14:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782925872; cv=none; b=kJh+DCGkadIE45GB9EIWEFUeQCQR/5ZXn9Po/fusWDMpp2kv4ufcJ1kWDTpNYf+6Zz/HYpyspR2a0bkwC+TuUXkoDF4rvOVX0lQ18KYAwkETLJmF2iog4eAsi7ELjRzq1O99k2AGMlS7aFId85D62oINLybR0gPt4SI4Sg+xMXo=
+	t=1782926088; cv=none; b=YnJzcp+lS6p/+oOPU2qw6NRB4cFIO9k4cITt3JkGyrpVzBiWPg0th4ja3bZL1YP8nIIZT8XKDNq/G6gqIqCe1QVhkxkwqFBsw4JDxS6+aieTgLLI76oUYI5MRI7eU89rerWJb3q5037uUuKqqaD5a2iPh25NHQJzqusFqkYQW14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782925872; c=relaxed/simple;
-	bh=oJRnrYvJPwJWBEXTRVH7A79TUXWT1PIOip4ufaCLJ1g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=N5in0Iw+8nVX0kf2LF/cZOf15910932QC4wf0O89OjgTThzzUUXntvv2TNn3Hlqi51NJSfewlCMmi1rUGhZRdTXNfdeM6XLpyUG7CZsCIdseEg9nrNimMdiPj9uOMgeplpfm7WyRoYF5+fbzfdm19n04UkkVqiVAOibC1qf0KfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg; spf=pass smtp.mailfrom=verdict.gg; dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b=LshjrYu5; arc=none smtp.client-ip=57.103.72.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verdict.gg
+	s=arc-20240116; t=1782926088; c=relaxed/simple;
+	bh=kN1Yv9rAxjb4buhMHrPsL9JBBRuADNmrJq7PrSbWLds=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FW+KI/OfcudOYJUjij2W7/cMeS9iVyaLpVoNNn+x1qnujU9HkkFATP7tiVKxrySguajbipJwmRwXHL0JlkRFziJfZ0gAFQT6j1bYViQEgFC7Jt+Thdm6YU7eKotSiPvJqAnW7JGzT/6rgThGQR7MHHQtzoWkv18FG3bGheatGK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X5LR01lu; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b="LshjrYu5"
-Received: from outbound.ms.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-west-3a-20-percent-0 (Postfix) with ESMTPS id 809D6180047B;
-	Wed, 01 Jul 2026 17:11:04 +0000 (UTC)
-X-ICL-RepId: 019f1ea9-adcf-71a1-be69-dcd8c6563bff
-X-ICL-Out-Info: HUtFAUMHWwJACUgBTUQeDx5WFlZNRAJCTQhICkMGWQJeCEABQwVdEhVdRVcIWwJAEVc4RQhFD1sTTVZUChcNVk1PHUEJXghGXl4fEx9UVgNDGRBWAVhWXQVNGlwYWQ8cHUpWWg5bBEcUFxtcABcbRgIEIwJfAEUCXglWATAXD1ZNTx1BCV4IRl5eHxMAXg8PTAtIAVsHXAJBCE8CXQJcHEQKSwNABkZWFVURQQxZK0QVSxxaDkNFVRcHWEcURw4PE0wLRwJaNFYfVBlaAw==
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1; t=1782925867; x=1785517867; bh=Ux7+DOdhq925QFrHXROFexh8o7u6tNSyc/XGZzwyn+k=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=LshjrYu5hea0XNelNbATHPHVpRcXMvrvwMtxobwp8CUYBDEG3OiR3S59ps8Goqh0uSXhbX7e8ZtnjMLumMW7dm9geAnouOrZgPhCC3LCOQG83bBUw6oAlzvj9nEkb/Dwcrzef1Ev1MA2nqRwFV2QxcWthVwXMfv0gydr846PLC30MnqkRN98XOhhl0aYr2LYH2iDjDtV6cxsinqRoqWGJioK5aPB0WxlprY1pYwa29evDPWGIrGNEHMTB+85uKdr93Qh/vtQcg41THEkZGERap7mTzI37hB6qQRAkVp39X1gF/CgjoVpns9du91D8rN2ItFEWiZ1nLSuN33BSiAugQ==
-mail-alias-created-date: 1621344842221
-Received: from DelNac.mail.msk (unknown [17.57.154.37])
-	by p00-icloudmta-asmtp-us-west-3a-20-percent-0 (Postfix) with ESMTPSA id A219018004A4;
-	Wed, 01 Jul 2026 17:11:00 +0000 (UTC)
-From: Vladimir Vdovin <deliran@verdict.gg>
-To: lorenzo@kernel.org,
-	sdf@fomichev.me,
-	kuba@kernel.org
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	martin.lau@linux.dev,
-	sdf.kernel@gmail.com,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Vladimir Vdovin <deliran@verdict.gg>
-Subject: Re: [RFC PATCH bpf-next v1 0/7] xdp: RX checksum metadata hint and checksum assertion over redirect
-Date: Wed,  1 Jul 2026 20:10:57 +0300
-Message-ID: <20260701171057.4330-1-deliran@verdict.gg>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <akRAUTAqVKkxmoVa@lore-desk>
-References: <20260630191510.81402-1-deliran@verdict.gg> <akQyT2d0wNF5F5LG@devvm7509.cco0.facebook.com> <akRAUTAqVKkxmoVa@lore-desk>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X5LR01lu"
+Message-ID: <c9beceb9-946d-47ce-9311-4b9559f21613@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782926074;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=faJQBBqDU4jX+pQpjtADp7wBo455JhSN+YQaVil2Yhg=;
+	b=X5LR01luTofR7ZRMZSBaiB80u36POkFc3N+PdFJIL+T0Pyi76+HXZRtLkbVsESHbRWGP7Q
+	uLUlp/JXtQbB/xpCESxh/wkKNKrerXtDqcmKVLDs9eBUOTiHmzEAZ8yxHNSKeJa5ItWCPQ
+	hsxLmAg/qJsgEDgDQh3PdyrgadPD2sY=
+Date: Wed, 1 Jul 2026 10:14:25 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PAHOLE v4 2/3] dwarf_loader: Add support for
+ DW_TAG_GNU_annotation
+Content-Language: en-GB
+To: Vineet Gupta <vineet.gupta@linux.dev>, dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ acme@kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>, jose.marchesi@oracle.com,
+ David Faust <david.faust@oracle.com>
+References: <20260602195512.1511013-1-vineet.gupta@linux.dev>
+ <20260602195512.1511013-2-vineet.gupta@linux.dev>
+ <9152fde6-d35c-4688-9ff1-c7fe152c9b2a@linux.dev>
+ <4e425892-2aec-4fee-a199-7fe9c615d982@linux.dev>
+ <252c53f3-3f06-40f4-9cd3-795eb298687c@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <252c53f3-3f06-40f4-9cd3-795eb298687c@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: XoCZSw2ihQeYXaZeorvaKpw_P-MtUnbj
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzAxMDE4MyBTYWx0ZWRfX7/8CHOYakImc
- JoJQofyUX4ikAALH7wMSE/qCNYvnuRTis7kli79H0PfrprAUtJ8q5YxDnnL0I8OOtT64/Vunrgz
- XfBtX9SlEoKcj7fYO/DE5J28y72VSfNBrMurdJk7FK6wvLh/Tura7iSieMc4lUc3pXzWNdUFDmb
- 6ea+JrUCQarqkHP6NA09Q24idOXcP/b8zu92DhaCZpV81ZzHZc6EDvbadeC11tR1yRQdSKMTlfR
- DaXa4VR9XtYHJJqSeAfmG35sX4D1JHrSSd1QF5855JIxPJKHE1xz/fds590H5wJoiNqb7IZBPJ7
- I7XQH0OOhNAvUFO/4ry
-X-Proofpoint-ORIG-GUID: XoCZSw2ihQeYXaZeorvaKpw_P-MtUnbj
+X-Migadu-Flow: FLOW_OUT
 
-Hi Lorenzo,
 
-Sorry -- I blindly missed your earlier RX-checksum series before I posted
-mine, thanks Stanislav for the pointer.
 
-To answer your question: yes, I'm happy to take on the driver selftest
-Jakub asked for.
+On 6/30/26 1:02 PM, Vineet Gupta wrote:
+> On 6/17/26 11:18 AM, Vineet Gupta wrote:
+>> On 6/3/26 1:08 PM, Yonghong Song wrote:
+>>> For decl tag
+>>> ============
+>>>
+>>> $ cat decl_tag.c
+>>> /* btf_decl_tag test cases.
+>>>     *
+>>>     * btf_decl_tag can be attached to:
+>>>     *   - global (incl. static) variables
+>>>     *   - functions
+>>>     *   - function parameters
+>>>     *   - struct/union types and their members
+>>>     *   - typedefs
+>>>     *
+>>>     * Build:  clang -O2 -target bpf -g -c decl_tag.c -o decl_tag.o
+>>>     *         /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2 
+>>> -gbtf -g -c decl_tag.c -o decl_tag.o
+>>>     * Dump:   bpftool btf dump file decl_tag.o
+>>>     */
+>>>
+>>> #define __tag(x) __attribute__((btf_decl_tag(x)))
+>>>
+>>> /* tag on a global variable */
+>>> int global_var __tag("global_var_tag");
+>>>
+>>> /* tag on a static variable */
+>>> static int static_var __tag("static_var_tag");
+>>>
+>>> /* multiple tags on one declaration */
+>>> int multi_tag_var __tag("tag_a") __tag("tag_b");
+>>>
+>>> /* tag on struct type and its members */
+>>> struct foo {
+>>>            int a __tag("member_a_tag");
+>>>            int b __tag("member_b_tag");
+>>> } __tag("struct_foo_tag");
+>>>
+>>> /* tag on a typedef */
+>>> typedef struct foo foo_t1 __tag("typedef_foo_tag");
+>>> typedef struct {int foo2;} foo_t2 __tag("typedef_foo2_tag");
+>>>
+>>> /* tag on a function and its parameters */
+>>> __tag("func_add_tag")
+>>> int add(int x __tag("param_x_tag"), int y __tag("param_y_tag"))
+>>> {
+>>>            return x + y;
+>>> }
+>>>
+>>> /* keep the globals/types alive so they land in BTF */
+>>> int use(foo_t1 *f, foo_t2 *g)
+>>> {
+>>>            return add(global_var + static_var + multi_tag_var, f->a 
+>>> + g->foo2);
+>>> }
+>>>
+>>> $ /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2 -gbtf -g -c 
+>>> decl_tag.c -o decl_tag.o
+>>> decl_tag.c:30:1: warning: ‘btf_decl_tag’ attribute does not apply to 
+>>> types [-Wattributes]
+>>>       30 | } __tag("struct_foo_tag");
+>>>          | ^
+>>>
+>> [snip]
+>>
+>>> Three decl tags (struct_foo_tag, typedef_foo_tag and typedef_foo2_tag)
+>>> are missing here:
+>>>
+>>> struct foo {
+>>>            int a __tag("member_a_tag");
+>>>            int b __tag("member_b_tag");
+>>> } __tag("struct_foo_tag");
+>>>
+>>> /* tag on a typedef */
+>>> typedef struct foo foo_t1 __tag("typedef_foo_tag");
+>>> typedef struct {int foo2;} foo_t2 __tag("typedef_foo2_tag");
+>> Semantically what does this mean ? Will the decl tag will be "applied"
+>> where ever the type is instantiated ?
+>
+> So these are dec tags (not type tags) on typedefs.
+> Are these still relevant after the change below for supporting type 
+> tags on typedefs (and gcc has in flight patches to do the same).
+>
+>    commit 5754a48780f516cbc06eeb2a31b1e445ddd9c935
+>    Author: yonghong-song <yhs@fb.com>
+>    Date:   Mon Jun 15 10:51:02 2026 -0700
+>         [Clang][BPF] Support btf_type_tag on typedef underlying types 
+> (#203089)
+>         Emil Tsalapatis suggested to add type tag for typedef like below:
+>         ```
+>           $ cat tag.c
+>           #define __type_tag(x) __attribute__((btf_type_tag(x)))
+>           struct bar { int c; int d; };
+>           typedef struct bar __type_tag("a") bar_t;
+>           int use(bar_t *v)
+>           {
+>             return v->c + v->d;
+>           }
+>         ```
+>         This makes the code simpler -- using `bar_t *v` instead of the 
+> longer
+>         form `struct bar __type_tag("a") *v`.
+>         So the goal is to allow type tag for typedef underlying types. 
+> The
+>         following describes the main changes:
+>
+>
+> And if so, how are they semantically different and what's the use case 
+> fot decl tags on typedefs.
 
-As for my own series, the read side clearly overlaps yours and you own it,
-so I'll drop my bpf_xdp_metadata_rx_csum() hint and its driver bits.
+Decl tags and type tags are different in the above. Decl tags will be something like
 
-What's left that is genuinely separate is the "assertion" half -- a non-dev-bound
-bpf_xdp_assert_rx_csum() that preserves the HW verdict across a
-cpumap/redirect: it sets a flag on the xdp_buff that rides into the
-xdp_frame and becomes skb->ip_summed = CHECKSUM_UNNECESSARY in
-__xdp_build_skb_from_frame().
+     decl_tag -> typedef -> ...
 
-Should I resend that as a small standalone series (v2, assert-only)?
-It also looks like a PoC that you and Jakub discussed on v3 [1].
+Type tags will be something like\
 
-A few things I'd like to confirm before writing the test:
+     typedef -> type_tag -> ...
 
-1. API for v4. In the v3 discussion you agreed to rework the API to report
-   both COMPLETE and UNNECESSARY (+ csum_level), per Jakub. Do you plan to
-   send that in v4, or should the driver selftest target the current v3
-   signature (enum xdp_checksum + cksum_meta)? I'd rather write the test
-   against the API you intend to keep.
+You can do both decl tag and type dag for the same typedef
 
-2. Documented behavior. The selftest is meant to "check the documented
-   expectation", so which rule should it assert -- "a driver must never
-   report CHECKSUM_COMPLETE while an XDP program is attached", or that the
-   driver downgrades/repairs COMPLETE on the XDP_PASS path? I'll write the
-   doc paragraph and the test to match whatever we settle on.
+     decl_tag -> typedef -> type_tag -> ...
 
-3. Drivers. Your series adds veth and ice; I don't see mlx5e -- was that
-   intentional (left to the driver maintainers)? I had an mlx5e
-   implementation in my v1 and I'm happy to contribute it to your series if
-   it's useful.
+There is a selftest (progs/test_btf_decl_tag.c) which has an example with decl_tag
+for typedef.
 
-For the test itself I was thinking of extending
-tools/testing/selftests/drivers/net/hw/xdp_metadata.py, gated on the new
-"checksum" xdp-rx-metadata feature, with good-csum / bad-csum / modify +
-XDP_PASS cases. Does that match what you and Jakub had in mind?
+About the question what is the use case for decl tags for typedef.
+The initial llvm implementation is to have more coverage so we do not need
+to add them later on. I didn't monitor this and not sure whether anybody
+uses it or not.
 
-[1] https://lore.kernel.org/bpf/20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba71@kernel.org/
+But I think gcc should implement
+     typedef -> type_tag -> ...
+if this is the case, I assume it should be easier for gcc to implement
+     decl_tag -> typedef -> ...
 
-Thanks,
-Vladimir
+>
+>> OK, opened PR/125862 [1]  for future improvement.
+>>
+>> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=125862
+>
+> If not, we can close this gcc PR as won't fix / not needed.
+>
+> Thx,
+> -Vineet
+
