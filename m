@@ -1,93 +1,96 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE0E9330D43;
-	Wed,  1 Jul 2026 14:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D728298991;
+	Wed,  1 Jul 2026 14:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782916179; cv=none; b=HOZdHEqBKxaCDGYZ/yf05OWPgJoG7ZUkkHKsFyhftSI18gNk5p9BALaIDijiCE5tTo74iIQLnBO6EArqiyogC/1gnZtbE8abEAnoLi2kzvrGpPpihsZPPeAbWvogOzCR1ZHVvexhl2sGoWTA9cKnE+vqPPvfSQHOt/zvCjjTFgA=
+	t=1782916309; cv=none; b=EOnkpXMdQMNw35o06G9AXJbkDKYSa5eYPnEjkNHRpdYg/nD1mCVHJBc52mdTOk7+LncWGGyGxOiiHbybQro1qFTsTSSndJAicS5EUsvmJQUZeXtD+g+mZ4AwE9ZSZQBNiVuDH5yA2n65UXRcNXb9OXziFY5oA+HVz/F788ypkC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782916179; c=relaxed/simple;
-	bh=e9zG2J/6CtdG9sjGYRXm1SrI6+g1Ut9XvKMQhA1bYmI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JbnJj4dfTDyZ2ZIZRbJo05bq7wwuGXNNXC9Iq4c48OfurYe47xTcCw3ExRlJEkOVEhrCO4wdGxsrlkDm2OZUg5jE4DrzEpDvNj2V1Otb8UsAc++1Hi/g9ncbiev8slCchaU/pcyBrsAS3fiuJ9tQXAGN/+n5MwkFQEaGUdfuIx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Yg7NZpNh; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1782916309; c=relaxed/simple;
+	bh=hmw/JmklP6CDbven6Y9I9PsyLGXLEKUCPS58Zc+R+1o=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Tdnh/iSwNmIs+by5ntqo7+jN/f6JBEnU8Z5s+pqgGzvnJCKLc/WHLOZ4aCn5HIS5jVAX5ydCwXEbZENJ0ZKbpF6f/s3u9+QNFGPsdh4ikD0YCsw9/6zrrOaTaWXvZHFrDGZyW4v+ssWtdaNQypeydfoKIQiwcGOO0OpWLPohYFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ax/RCP8/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Yg7NZpNh"
-Received: by linux.microsoft.com (Postfix, from userid 1204)
-	id 6968F20B7166; Wed,  1 Jul 2026 07:29:37 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6968F20B7166
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1782916177;
-	bh=TuyXNNDkjGNekj9kasMP1vdYOegRSZ1Lu0MTl3ivfaI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Yg7NZpNhaMOocVoelqZdHjJCxfd5hjS25T7nWNlCwzs1y5cgpyXjbPY6Xm1zySWOo
-	 AGmfgQmaaVX/xd4Y8fQ//w/DkYHAnqM8T5WRPjB5kWmq26PcxtuW4pZMRrB4aQ3yKP
-	 P711eBRlyu/iRbBcM5k7AYT6kqrUFVymte/yljL0=
-Date: Wed, 1 Jul 2026 07:29:37 -0700
-From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@google.com, pabeni@redhat.com, leon@kernel.org,
-	longli@microsoft.com, kotaranov@microsoft.com, horms@kernel.org,
-	shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
-	ernis@linux.microsoft.com, shirazsaleem@microsoft.com,
-	linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-	stephen@networkplumber.org, jacob.e.keller@intel.com,
-	dipayanroy@microsoft.com, leitao@debian.org, kees@kernel.org,
-	john.fastabend@gmail.com, hawk@kernel.org, bpf@vger.kernel.org,
-	daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me,
-	yury.norov@gmail.com, pavan.chebbi@broadcom.com
-Subject: Re: [PATCH net-next v10 0/2] net: mana: add ethtool private flag for
- full-page RX buffers
-Message-ID: <akUkUQodHuxZFUZV@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20260602202801.1873742-1-dipayanroy@linux.microsoft.com>
- <ajBRwYftEol8IE49@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <20260615134247.0bd7e16e@kernel.org>
- <ajCXIpDVaVcUcQwd@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <20260615173314.677c33a8@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ax/RCP8/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B4811F000E9;
+	Wed,  1 Jul 2026 14:31:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782916308;
+	bh=BSv9yPYteER3Khd6NhAoVMHEZQola5XM3jfHLGD4hPA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Ax/RCP8/ydjSA3v73k4p2lrdbCbGbkjusxe+CEMUeAPPIOtT4qGcCAtcHTvBYUDep
+	 9PPs5RzBYMwJH6kDxnZ4Z3X2uBVaNddQhWN30D5giAVW1RVqh7nktwDOJaXcipar6i
+	 yhET/a/M0LdLD2XOQQ12yGDMxzj6TvxdfNc5ZQnj3ppwY11kl14vyA2wOkgF5UKY9g
+	 gsDcJ3l+TcxS+qyyLw7axIwSkCPjLY2TB+ANzznwvDmNJHZfWf/UVyYnZlqeiBIsnL
+	 KPPazjwQYyTYR0AH3xnhYjoJMe5GBb+y+8VuNAQnmQmVIo2tvbW/OGubzou5rGhNk1
+	 Coy6DZuZvaGkQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] perf: record: Clear BPF headers if not needed
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Mayuresh Chitale" <mayuresh.chitale@oss.qualcomm.com>
+Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+In-Reply-To: <20260701141347.4098670-1-mayuresh.chitale@oss.qualcomm.com>
+References: <20260701141347.4098670-1-mayuresh.chitale@oss.qualcomm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 01 Jul 2026 14:31:47 +0000
+Message-Id: <20260701143148.0B4811F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260615173314.677c33a8@kernel.org>
 
-On Mon, Jun 15, 2026 at 05:33:14PM -0700, Jakub Kicinski wrote:
-> On Mon, 15 Jun 2026 17:21:54 -0700 Dipayaan Roy wrote:
-> > On Mon, Jun 15, 2026 at 01:42:47PM -0700, Jakub Kicinski wrote:
-> > > On Mon, 15 Jun 2026 12:25:53 -0700 Dipayaan Roy wrote:  
-> > > > Just a gentle ping on this series. The approach was agreed upon, and it
-> > > > has picked up a few Reviewed-by tags as well.
-> > > > 
-> > > > Please let me know if you need anything else from me, or if I should
-> > > > resend it to collect the tags.  
-> > > 
-> > > Don't recall now what the exact sequence was but pretty sure this 
-> > > no longer applied after some other mana series was merged.  
-> > 
-> > I see, the net-next is closed now, I will rebase and resend this
-> > once it opens on June 29th.
-> 
-> Sorry for not flagging this sooner, IDK how it escaped the reply.
-> Maybe some mix of Jake's comments plus it not being applicable 
-> later.
-> 
-> Not to deflect blame but y'all should coordinate better, the "no longer
-> applies" situation happens in mana a lot more often than with other
-> drivers :(
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The patch conditionally clears BPF header features based on `rec=
+->opts.no_bpf_event` too early in `record__init_features()`, failing to fix=
+ the spurious error messages for default and dynamically evaluated cases wh=
+en `perf` is compiled without `libbpf`.
+--
 
-Hi Jakub,
+commit 9515d1b27d6dcc9884718d4505a8cf399d665c9e
+Author: Mayuresh Chitale <mayuresh.chitale@oss.qualcomm.com>
 
-I have rebased and sent a v11:
-https://lore.kernel.org/all/20260701141808.461554-1-dipayanroy@linux.microsoft.com/
+perf: record: Clear BPF headers if not needed
 
-Thank you for all the support.
+This patch clears the HEADER_BPF_PROG_INFO and HEADER_BPF_BTF bits from the
+file header feature bitmask when the '--no-bpf-event' flag is passed. This
+aims to prevent spurious error messages about missing libbpf support when
+writing perf data.
 
-Regards
-Dipayaan Roy
+> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> index e915390556752..692ab7138d2c3 100644
+> --- a/tools/perf/builtin-record.c
+> +++ b/tools/perf/builtin-record.c
+> @@ -1829,6 +1829,11 @@ static void record__init_features(struct record *r=
+ec)
+>  	if (!record__comp_enabled(rec))
+>  		perf_header__clear_feat(&session->header, HEADER_COMPRESSED);
+> =20
+> +	if (rec->opts.no_bpf_event) {
+> +		perf_header__clear_feat(&session->header, HEADER_BPF_PROG_INFO);
+> +		perf_header__clear_feat(&session->header, HEADER_BPF_BTF);
+> +	}
+> +
+
+[Severity: Medium]
+Does this conditionally clear the features too early in the initialization
+process?
+
+If the user does not explicitly pass the flag (the default case), or if the
+flag is dynamically updated to true later (e.g. if updated after checking
+!evlist__needs_bpf_sb_event(rec->evlist)), this condition will evaluate to
+false.
+
+Will this leave the spurious errors unresolved for default and dynamically
+evaluated cases when perf is compiled without libbpf?
+
+>  	perf_header__clear_feat(&session->header, HEADER_STAT);
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260701141347.4098=
+670-1-mayuresh.chitale@oss.qualcomm.com?part=3D1
