@@ -1,204 +1,206 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC93423168
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 15:27:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782919640; cv=none; b=EeAXVnlRXvKyhJaCd6we7t8jmr5q9QlXrqQxX7ABLTVIM9WgfqwHYbFvKxQno+NY3n8cLh9g5NgYb2UIka4oecDFOF8C0W3gtklanlnVDzuvIOPImUR9+OG67IFuYfK4XoFpcTNKnaIKCqccsRI21DRAplDHn29m0/i4Q+N7hPM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782919640; c=relaxed/simple;
-	bh=HYrbqswVMwTk4kuKtL5hvsLl3UN33eSIAa6Clnw68Po=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KweYHvhI+uuebBhCQqxURvCQ/H6VDf5XHukCWZUmwUIWXQsEQc5kmd0Ve9yjWQsKLB7A7oGUzz/OmM0z5gW1BEokL6r4Y59mx67UFX9xpaNQQczvQsYaQpHaHYKMurTc051DJsjGZPCH+eiu358qNS2XCJlobkLfqTVUrovzFtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WNX4/XOX; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=EiIoxfZ4; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF18435E1C0
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 15:35:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782920127; cv=pass; b=V/yuhVPPGcNF7rfQ5O+iwY8h5wYkRu/wu+LN91XwZbrRZ3V8zV3H14Ni8mN0TUSbgHKMj9PYZMH84LPsHBjikQhEFEa88lwdw3oT4c402fQu79N89BA/Md9QyALYpceQEs2TQuAGYYU/xK3reseDT9RsQJzukIaWxehgtZr44TQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782920127; c=relaxed/simple;
+	bh=Y2c6QTfFJtVu0RfirbPQ6iVT1Kw5wPu8BkJiRRYRdIs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DCJg7X+9sXTD0dDNzbe2V4rL/sMtLq74K2FfGdRRKXtjZDbDO1HBuXcxvDteVyPHbuVLVvjx9E1t3MFn+qkAuGLQ8UHEmkiyWu3rJVYDWTOVKYJy5p+q7g4qbkW5xqwDHhmIWk8ka45RSl9T/Kf4CWk+ty3xhlp8nVs8tlHo4f4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=FltoVmhk; arc=pass smtp.client-ip=74.125.224.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WNX4/XOX";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="EiIoxfZ4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782919637;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=auHUwjD5Zohk1V2S34LD+3/BNdV8kbrNPDmWnQVZGEc=;
-	b=WNX4/XOXs+g2OEJiTh3jtK0qqAEVhgHUW5d+A4NwWWOB9nFUk/6RDmswY3IzFoj1YC7Ya8
-	7o98bQlrOCrmhCjVBVvp4pFsSaxPgq3F58CDce+6d0sAhR2v7byZsE2Q34HQi/HN6/5eqQ
-	3+GR8Xk7lJenA7/QpmeaDmrIGW93p3Y=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-606-oEP2fvbNMc-2waW2_HyuRA-1; Wed, 01 Jul 2026 11:27:16 -0400
-X-MC-Unique: oEP2fvbNMc-2waW2_HyuRA-1
-X-Mimecast-MFC-AGG-ID: oEP2fvbNMc-2waW2_HyuRA_1782919635
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-47485fde05aso559948f8f.0
-        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 08:27:16 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="FltoVmhk"
+Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-664ae993e4bso787462d50.0
+        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 08:35:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782920123; cv=none;
+        d=google.com; s=arc-20260327;
+        b=BXhmVWEThaxilxe8q+r1WfqxbMmcmx+PnKF2rl4hLFeqpyffQIe4rinNuZ82/CkIQh
+         WfCPyPeUIUsY34PtUk4odCAei+L7FTjaFbV69zgvNB16nk3tng3lm39WcO3WKoItY1f+
+         zo8mAZOBDX1SY1SKh4KZPkedCE7ybz8s3Fb/7TMt6ta1psHrQyRK6rgwbv1o8SO+5UWl
+         1F7dQwtHZXbvHO6uRmIUTbn6lJy6RjQB169qlElfTisvT1U+iLya9JoOUkBE0m4oTrK8
+         sknWPkx6ukBoKekHiWCKbA53oNyHM5LJB1QjP/UUwu/EX5PjUT3gSwtq5mZvVX/lwgAq
+         BT/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ndR8vhWFt9KSYRpwVTspSwgHXJD0hfWVRuMdjE0PPzc=;
+        fh=vZoj5azBbEYCdIujBPoCfHXlaPXHl/xKs+OCWOTW1H0=;
+        b=OKm4gGT7XN2soilttdH9pbw79Aw0MAvcj1tdalknHwnmEUixTscpii7KYtlSBgah0m
+         r0yiVvdrsnUEHUUtNtjMpX35eeWe2t3bSZAcfCz2yy6FaxoYYIg5VF65Eeo/wRiUQLzn
+         SfeUBaEEk/lbhlDa6rKYMHLIE4QSK2YxrUQfma5J1iw7XQzA4UNTKFa4WXNj318wlUGf
+         guERO1jrhbBwTBGvLpG9NxDbCrS0yJij/c/vbPVNWzL25a2ddXpGZm1ncEglsW/+e9yA
+         XgWmBA9jRDuQvNzO12jkmMcUo0jq8NDJyUsXsACUigvJOBVXK6YRdHZ+cY/VSQWzGCcu
+         Uj5Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1782919635; x=1783524435; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=auHUwjD5Zohk1V2S34LD+3/BNdV8kbrNPDmWnQVZGEc=;
-        b=EiIoxfZ4lh/9INR/6hgveLmGNx7YWbe5NVlWp8IvDO8iR81V/ayYyfsTSPdD85tNO4
-         BzdaXuxPtgD7RoYJilDg/naaK3VpDOKqomf51rYfgB0OcAwopCpD9Pd9nOutvP3N5RH1
-         aObLch26Bd4SDlSEVmcXN6D++2DH8/yJ+CNSPGKogq4rgAmYaafKd6NDdUjksS+cwtyl
-         sa8vnmBlphvg1HIt+q5kW0U27S8pcra0L4qOIBZO8MIWcgaqHbTx6Rifm/VkBPTg0qLm
-         Xw7z/tDpohszQzhGpKPf3XzBMESAsA2GG2ZTK3MuKTPOac3ehd6MxCdiKd9iQOyOEcQW
-         3t0w==
+        d=mojatatu.com; s=google; t=1782920123; x=1783524923; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ndR8vhWFt9KSYRpwVTspSwgHXJD0hfWVRuMdjE0PPzc=;
+        b=FltoVmhkn3E9PCmMtx+l+2vCJp/LzSVHT2m5n/11+Y4/V/i4x0BCJkUuyye5rfzS+z
+         /CWpTUrNhfhX1vv92m/WpZ6BxVMLbSVmZSZZeFF0KGY7krtJapuFfs3yW68wI0XHlM4H
+         C+HIfr7hcfVS9fqN6tX/J6KBKC8KdYl21UsKI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782919635; x=1783524435;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=auHUwjD5Zohk1V2S34LD+3/BNdV8kbrNPDmWnQVZGEc=;
-        b=mqZOYZTIm1tCL4AYcBGh9iOVCgdm/sSuBxwFp4OZECAQmeLbhwmOMKZ0KJPdHqS8jW
-         bvGfRDE3Lzin6mMXzt38J0d2dmpm6D6J75fu6Cd4pvq4ksyrOAni4cqz7TxZaX7RYT5Q
-         8UxnP1B3AjI7Wt228abkGbPY40ROQxD+8KyE+RCwOWXd3t8BzIRrQvFQttOfKW43SQQN
-         xLcsRHH6Wbh7GucosGNOlRm9pbIRWm8tEB4HPIDcx7TDxAHllMf2EIKETkGgEzjndqK7
-         7stPG/wscKzP+Tt3t2rvk12Rn+0PxkU/U5iab12iyeZ6I+Ob9tWiYbGTMzzVSM3qnzYG
-         bqmw==
-X-Forwarded-Encrypted: i=1; AHgh+RpFwzmmhhRB8SxqMqTWw/K7WCrN4YVbBnFKvt9N6Zx9beouzEmgGdVlGomIoyNxtJ/VaKY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwU1HZlNfqq7WHBGJSpVtAsjVEHb5N4yK2mzHjkt2tVcbHG8PkA
-	2ulN0JtdH9o9uqnZnYFejiJxu/04phSEJ2vsMT0hivqmxIp8YE+IAI2oRchSmi7BzqoPd9lUcl9
-	FvO+OoRTp+r7+pbKxw7jpkSDW5d77wQEH7hq0y8en+jmjT21PpWsYYw==
-X-Gm-Gg: AfdE7ckhuSnE4d20nae3tkjIoT1PMhtdBGuPEWdQiAc8I5NJzwkgcrbfymLQWZsx3a+
-	cTZ+73hZNhBXCyhQpMyM0vCaY14v6B/p6wmcdSBKGX0+uA23gXdzB75b8gFOjEkfgbuSeHU3za4
-	1iamCdrVDnYfZow9Zo7xR0uBL99mBz8VpZiEGEGYTCd0hab2me0HcHKFfX7mQpZIm3vfunYsMgz
-	FqHCOp9qEN/GFqtELhmD1/N2gkuZ16uWUyxnHAzDr+IVcc9klgyGRgjv2PAEAXeu+WlSpF395Ff
-	iY7jIKbWL5FdayuWJo5hhR8cHoBsE0cumzBtim53ZK/e14eY9oGg4Jg43OIGTCGUtCXuMTzSkPQ
-	UHEHFWE/MRXsJHfLluThVuAF2UyrLhrMPlcEKaNXVdgRk//zz9gxHBJuNcmGQ3IdnzPNa+qdVVS
-	2vZE1vwqPIlQ==
-X-Received: by 2002:a05:6000:186f:b0:475:cd6f:720a with SMTP id ffacd0b85a97d-477571cb959mr3680954f8f.1.1782919635219;
-        Wed, 01 Jul 2026 08:27:15 -0700 (PDT)
-X-Received: by 2002:a05:6000:186f:b0:475:cd6f:720a with SMTP id ffacd0b85a97d-477571cb959mr3680896f8f.1.1782919634784;
-        Wed, 01 Jul 2026 08:27:14 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:5521:6b10:2eb7:f61a:75:4534? ([2a0d:3344:5521:6b10:2eb7:f61a:75:4534])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-477dd94ce4csm706993f8f.17.2026.07.01.08.27.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jul 2026 08:27:13 -0700 (PDT)
-Message-ID: <c222390f-96c7-4dc3-8f33-f4dd277c3639@redhat.com>
-Date: Wed, 1 Jul 2026 17:27:11 +0200
+        d=1e100.net; s=20251104; t=1782920123; x=1783524923;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ndR8vhWFt9KSYRpwVTspSwgHXJD0hfWVRuMdjE0PPzc=;
+        b=CUlFtFps7/YZ4ZBLF7dDE/+Ni2+p49E82xi0cM4g0CZbGoNrAZ857JUNaXckEIHORO
+         WZcFDe0HZxWynEhZDxUno0W5eG2ij7uyzZoV7dt3LW732NChM/MmZCNrUh/tX2Rhnsv0
+         yhCTz/ZzGlmzt2QocTixGUVV9DDrIm9CeaY4BUptkQdNpCyeWPAivr7vaICn4K8DS6xe
+         Q2cCFV/71YDlbwnvUyc67jbuFDsq1AhXNleeehf0bksghoQnB6Uvj1QiHoTtYc4SMU7s
+         VEzSC5XtMELIArf2em0Re7LUPtK5rzhDgLE0cNg+Sp+5591DABhVQQzkdH0QLa4plZgi
+         pC5w==
+X-Forwarded-Encrypted: i=1; AHgh+Rr6BQoqW2B6UOnDUHBtSz/7K4cTTl/sREjDSZmUrn73B4YQKTL3Qn5DDg+H6YZef3jHHVo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZNBq29HRKri+2ZuH9llq1vuKl8UsRGN1vyCZVG2G65u57gjdF
+	vAV+JU8kfIEQnQhHst3DHxaTMTpL8qXrk6xL2YgX77wv00nr/553eJ57Av5zwMvX9Asuaay9bbo
+	/n/ERFQ4kEN0wVsL1Zn4Yz3Rbw3ff/ZcdLz7ylpwfRus0WX/BdahWPQ==
+X-Gm-Gg: AfdE7cldx1fu1uQ1XsSjU0NGe9XFYh64Cvmw8B2daOCMl9k56joygTf8+qnpEhdIqT9
+	vOdq9vJ9oAjejIVerbVsgAyo/S7RH4Zh1r0wPp0Hyv9KZuYVFGdGkmK2lYx6PH94La9cD4+UJL2
+	qyHslNYd+fgn9W3rN4yQ8x0ZrIUncCwKGJHiMXHM+cdSkqQAyHsLofssWNmqBXlPseMB2H1Fc/5
+	1QVThQgGMOPfABZYkSOKrjjjbdn9PAmMAcj7Ck4KOJ17hf9pH0p9wYnNmgUKr40TINIBhKZ1Q==
+X-Received: by 2002:a05:690e:1489:b0:664:e5c5:5b2b with SMTP id
+ 956f58d0204a3-66520e00800mr1930879d50.4.1782920123243; Wed, 01 Jul 2026
+ 08:35:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v3] net/smc: fix out-of-bounds read when sk_user_data
- holds a sk_psock
-To: Sechang Lim <rhkrqnwk98@gmail.com>, "D . Wythe"
- <alibuda@linux.alibaba.com>, Dust Li <dust.li@linux.alibaba.com>,
- Sidraya Jayagond <sidraya@linux.ibm.com>, Wenjia Zhang
- <wenjia@linux.ibm.com>, "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
- Mahanta Jambigi <mjambigi@linux.ibm.com>, Tony Lu
- <tonylu@linux.alibaba.com>, Wen Gu <guwen@linux.alibaba.com>,
- Simon Horman <horms@kernel.org>, Karsten Graul <kgraul@linux.ibm.com>,
- Guvenc Gulce <guvenc@linux.ibm.com>, Ursula Braun <ubraun@linux.ibm.com>,
- linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20260629095140.679754-1-rhkrqnwk98@gmail.com>
-From: Paolo Abeni <pabeni@redhat.com>
-Content-Language: en-US
-In-Reply-To: <20260629095140.679754-1-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260630123331.186840-1-daniel@iogearbox.net> <20260630123331.186840-3-daniel@iogearbox.net>
+ <CAM0EoMn6H6cKCweHmt=8ve2i0JuK=E8W1Q89oqDD7vra_Uuk-w@mail.gmail.com> <d9fce17f-851e-4cb0-9d78-2ac2cadfda81@iogearbox.net>
+In-Reply-To: <d9fce17f-851e-4cb0-9d78-2ac2cadfda81@iogearbox.net>
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+Date: Wed, 1 Jul 2026 11:35:11 -0400
+X-Gm-Features: AVVi8CfqeTgnacRGIOCuhvdFtORTR-T_CEfhc-_OdUiwNBANp03Tk1iSAhcfLDM
+Message-ID: <CAM0EoMnZPbKG3GCndk2Xp44KxUfPJzSMGXYPDZeoa_-6JZ+Uuw@mail.gmail.com>
+Subject: Re: [PATCH net 2/3] net/sched: Handle TC_ACT_REDIRECT from qdisc
+ filter chains
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Andrii Nakryiko <andrii@kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Linux Kernel Network Developers <netdev@vger.kernel.org>, Victor Nogueira <victor@mojatatu.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6/29/26 11:51 AM, Sechang Lim wrote:
-> A passive-open child inherits the listener's smc_clcsock_data_ready().
-> sk_clone_lock() clears its sk_user_data to NULL because the listener tagged
-> it SK_USER_DATA_NOCOPY. Until accept restores the callback, a BPF sock_ops
-> program can add the established child to a sockmap, and sk_psock_init()
-> installs a sk_psock into the NULL sk_user_data. The inherited callback then
-> reads it back through smc_clcsock_user_data(), which strips only NOCOPY,
-> takes the sk_psock for an smc_sock, and dereferences a clcsk_* field past
-> its end:
-> 
->   BUG: KASAN: slab-out-of-bounds in smc_clcsock_data_ready+0x84/0x200 net/smc/af_smc.c:2637
->   Read of size 8 at addr ffff8880013b8674 by task syz.6.12484/67930
->    <IRQ>
->    smc_clcsock_data_ready+0x84/0x200 net/smc/af_smc.c:2637
->    tcp_urg+0x24d/0x360 net/ipv4/tcp_input.c:6264
->    tcp_rcv_state_process+0x280d/0x4940 net/ipv4/tcp_input.c:7336
->    tcp_child_process+0x371/0xa50 net/ipv4/tcp_minisocks.c:1002
->    tcp_v4_rcv+0x1eaa/0x2a00 net/ipv4/tcp_ipv4.c:2186
->    [...]
->    </IRQ>
-> 
->   Allocated by task 67930:
->    sk_psock_init+0x142/0x740 net/core/skmsg.c:766
->    sock_hash_update_common+0xd3/0x990 net/core/sock_map.c:1010
->    bpf_sock_hash_update+0x114/0x170 net/core/sock_map.c:1229
->    __cgroup_bpf_run_filter_sock_ops+0x74/0xa0 kernel/bpf/cgroup.c:1727
->    tcp_init_transfer+0x1085/0x1100 net/ipv4/tcp_input.c:6693
->    [...]
-> 
-> Resolve the conflict on the write path. Reserve the child's sk_user_data
-> with a NULL pointer tagged SK_USER_DATA_NOCOPY so sk_psock_init() returns
-> -EBUSY, and release it at accept. smc_clcsock_user_data() still strips the
-> tag to NULL, so the inherited callback stays a no-op.
-> 
-> Fixes: a60a2b1e0af1 ("net/smc: reduce active tcp_listen workers")
-> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
-> ---
-> v3:
->  - reserve sk_user_data on the write path instead of the read-side check (D. Wythe)
-> 
-> v2:
->  - https://lore.kernel.org/netdev/20260619150342.3626224-1-rhkrqnwk98@gmail.com/
-> 
-> v1:
->  - https://lore.kernel.org/netdev/20260614120931.4041687-1-rhkrqnwk98@gmail.com/
-> 
->  net/smc/af_smc.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-> index b5db69073e20..78f162344fe3 100644
-> --- a/net/smc/af_smc.c
-> +++ b/net/smc/af_smc.c
-> @@ -154,7 +154,11 @@ static struct sock *smc_tcp_syn_recv_sock(const struct sock *sk,
->  					       own_req, opt_child_init);
->  	/* child must not inherit smc or its ops */
->  	if (child) {
-> -		rcu_assign_sk_user_data(child, NULL);
-> +		/* reserve sk_user_data so sockmap cannot claim the slot */
-> +		write_lock_bh(&child->sk_callback_lock);
-> +		__rcu_assign_sk_user_data_with_flags(child, NULL,
-> +						     SK_USER_DATA_NOCOPY);
-> +		write_unlock_bh(&child->sk_callback_lock);
->  
->  		/* v4-mapped sockets don't inherit parent ops. Don't restore. */
->  		if (inet_csk(child)->icsk_af_ops == inet_csk(sk)->icsk_af_ops)
-> @@ -1773,6 +1777,7 @@ static int smc_clcsock_accept(struct smc_sock *lsmc, struct smc_sock **new_smc)
->  	/* new clcsock has inherited the smc listen-specific sk_data_ready
->  	 * function; switch it back to the original sk_data_ready function
->  	 */
-> +	write_lock_bh(&new_clcsock->sk->sk_callback_lock);
->  	new_clcsock->sk->sk_data_ready = lsmc->clcsk_data_ready;
->  
->  	/* if new clcsock has also inherited the fallback-specific callback
-> @@ -1786,6 +1791,9 @@ static int smc_clcsock_accept(struct smc_sock *lsmc, struct smc_sock **new_smc)
->  		if (lsmc->clcsk_error_report)
->  			new_clcsock->sk->sk_error_report = lsmc->clcsk_error_report;
->  	}
-> +	/* release the slot reserved in smc_tcp_syn_recv_sock() */
-> +	rcu_assign_sk_user_data(new_clcsock->sk, NULL);
-> +	write_unlock_bh(&new_clcsock->sk->sk_callback_lock);
+On Tue, Jun 30, 2026 at 11:23=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.=
+net> wrote:
+>
+> On 6/30/26 5:16 PM, Jamal Hadi Salim wrote:
+> > On Tue, Jun 30, 2026 at 8:33=E2=80=AFAM Daniel Borkmann <daniel@iogearb=
+ox.net> wrote:
+> >> From: Jamal Hadi Salim <jhs@mojatatu.com>
+> >>
+> >> When a TC filter attached to a qdisc filter chain returns
+> >> TC_ACT_REDIRECT (ex: via an eBPF program calling bpf_redirect() or an
+> >> act_bpf action), the redirect was silently lost i.e no qdisc classify
+> >> function handled TC_ACT_REDIRECT, so the packet fell through the
+> >> switch and was enqueued normally instead of being redirected.
+> >>
+> >> This has been broken since bpf_redirect() was introduced for TC in
+> >> commit 27b29f63058d ("bpf: add bpf_redirect() helper"). We got lucky
+> >> for a long time because bpf_net_context was a per-CPU variable that
+> >> was always available.
+> >>
+> >> commit 401cb7dae813 ("net: Reference bpf_redirect_info via task_struct
+> >> on PREEMPT_RT.") turned bpf_net_context into a task_struct member that
+> >> is only set up by explicit callers. Without a caller setting it up,
+> >> bpf_redirect() itself crashes with a NULL pointer dereference in
+> >> bpf_net_ctx_get_ri(). However, even with bpf_net_context available,
+> >> TC_ACT_REDIRECT from qdisc filter chains cannot be honored without
+> >> adding skb_do_redirect() calls to every qdisc classify function, which
+> >> would require changes across net/sched/. Isolate it to ebpf core where
+> >> it belongs.
+> >>
+> >> Instead, add a tcf_classify_qdisc() inline helper in pkt_cls.h, as a
+> >> wrapper around tcf_classify() for use by qdisc classify functions and
+> >> tcf_qevent_handle(). When the classify verdict is TC_ACT_REDIRECT,
+> >> the wrapper converts it to TC_ACT_SHOT, dropping the packet rather
+> >> than letting it continue silently. Dropping is preferred over
+> >> letting the packet through because the user immediately sees packet
+> >> loss. Silently passing the packet through would hide the problem and
+> >> leave the user wondering why their redirect is not working.
+> >>
+> >> The clsact fast path, tc_run() continues to call tcf_classify() direct=
+ly
+> >> and is unaffected: TC_ACT_REDIRECT is returned as-is and handled by
+> >> sch_handle_egress/ingress() calling skb_do_redirect() as before.
+> >>
+> >> Fixes: 27b29f63058d ("bpf: add bpf_redirect() helper")
+> >> Fixes: 401cb7dae813 ("net: Reference bpf_redirect_info via task_struct=
+ on PREEMPT_RT.")
+> >> Tested-by: Victor Nogueira <victor@mojatatu.com>
+> >> Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+> >> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> >> ---
+> >>   include/net/pkt_cls.h    | 14 +++++++++++++-
+> >>   net/sched/cls_api.c      |  4 +---
+> >>   net/sched/sch_cake.c     |  2 +-
+> >>   net/sched/sch_drr.c      |  2 +-
+> >>   net/sched/sch_dualpi2.c  |  2 +-
+> >>   net/sched/sch_ets.c      |  2 +-
+> >>   net/sched/sch_fq_codel.c |  2 +-
+> >>   net/sched/sch_fq_pie.c   |  2 +-
+> >>   net/sched/sch_hfsc.c     |  2 +-
+> >>   net/sched/sch_htb.c      |  2 +-
+> >>   net/sched/sch_multiq.c   |  2 +-
+> >>   net/sched/sch_prio.c     |  2 +-
+> >>   net/sched/sch_qfq.c      |  2 +-
+> >>   net/sched/sch_sfb.c      |  2 +-
+> >>   net/sched/sch_sfq.c      |  2 +-
+> >>   15 files changed, 27 insertions(+), 17 deletions(-)
+> >>
+> >> diff --git a/include/net/pkt_cls.h b/include/net/pkt_cls.h
+> >> index 3bd08d7f39c1..5f5cb36439fe 100644
+> >> --- a/include/net/pkt_cls.h
+> >> +++ b/include/net/pkt_cls.h
+> >> @@ -156,8 +156,20 @@ static inline int tcf_classify(struct sk_buff *sk=
+b,
+> >>   {
+> >>          return TC_ACT_UNSPEC;
+> >>   }
+> >> -
+> >>   #endif
+> >> +static inline int tcf_classify_qdisc(struct sk_buff *skb,
+> >> +                                    const struct tcf_proto *tp,
+> >> +                                    struct tcf_result *res, bool comp=
+at_mode)
+> >> +{
+> >> +       int ret =3D tcf_classify(skb, NULL, tp, res, compat_mode);
+> >> +
+> >> +       /* TC_ACT_REDIRECT from qdisc filter chains is not supported.
+> >> +        * Use BPF via tcx or mirred redirect instead.
+> >> +        */
+> >> +       if (unlikely(ret =3D=3D TC_ACT_REDIRECT))
+> >> +               ret =3D TC_ACT_SHOT;
+> >> +       return ret;
+> >> +}
+> >
+> > Why did you remove the warning?
+> > A lesser issue is that you introduced a space above #endif
+>
+> I don't think we need to put out an extra warn to spam the log, this
+> can be easily traced either via bpftrace or qdisc stats etc; plus the
+> guidance to eBPF with clsact is also obsolete. Given noone has run
+> into this the last 10y, I don't think it really matters tbh.
 
-Sashiko reports that this still cause problem on fallback.
+It's a bit entitled for you to change someone else's patch to fit your
+philosophy without a mention.
+It's only one message per qdisc. But fine, let's keep it that way.
+Sashiko is hallucinating on TC_ACT_CONSUMED for patch 1. Let's ignore it.
 
-@Wythe, I understand from previous discussion that you would prefer to
-address such issues separately (and thus you are fine with the patch in
-the current form). Could you please confirm?
-
-/P
->  
->  	(*new_smc)->clcsock = new_clcsock;
->  out:
-
+cheers,
+jamal
+> Thanks,
+> Daniel
