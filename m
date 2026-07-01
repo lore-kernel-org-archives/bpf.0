@@ -1,205 +1,316 @@
 Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97B433655C3
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 03:11:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0296C155A5D
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 03:20:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782875477; cv=pass; b=o49JECfpjl41dRMFtm9fBN8Z9TmXrRP+Clk6qi64yKofhaOBDxej+nhFe4/JfR2keSDK/ORUDUDgLx7B8QDll+tQxsNzqOgRX3Vy6i4cCRUJ5LUC4w21+rjxLPS5niuXw8mqGMy1fjV2zHlcXzqw1FVS5D07fELG+0SWdx9poiQ=
+	t=1782876044; cv=pass; b=B+5U286dFQoa76bVSBT1g7reVyCZyf6wh2tjQcpoQK32yE+Pwo+3+knAzgV/P+koSGToKiHIsbLkb/aySs/jjaM5O+h2tSh+IIbRq0uNXbfmBgJpUf+NHkW+iVxr3AO+xzEi8Pg1r/cy4WdFsl4s8QNatokOSwbJ96YLJbA2NY0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782875477; c=relaxed/simple;
-	bh=0uOca1qt2gUEPBJfSHH0c1IQv17V7spgn+tiXL+gnJ4=;
+	s=arc-20240116; t=1782876044; c=relaxed/simple;
+	bh=RxtcwpztGp0mYEgrZ9qMRhx4+bmsCvWD3JFqEp/tmHg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uBjo7qiOOjuZ/AYxrw3wrKrrFqCiLHfBhwIOmudeNw/IUrC1uiay7tXAuo4FfIK5VCJPmZBdemMppMOmUa7r3GsezCw8kD+18aDhWijVGClhDNfs2kU+ywPCZTsC/fkGm1ap3JqAd/CI4lEwR/4T3OknEVoek4kKp6GOzqHmJVQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=RhtWkNr9; arc=pass smtp.client-ip=209.85.210.46
+	 To:Cc:Content-Type; b=ZiEZHw/TwQH0BBa0qQisCFlbN4gG+ETbg2tN2ise0DVrOXEl7ZVBo37bo12mcPIgSRzYpFxqxaO1V0fWVGjQVdWM/EX0rBZVtliuszWxN1a1dLmVYjZtMLkpZrU99XON9Bdeb2BHKD2EnblaRmiFoayA4AfXnsQA0hEwBB9Eb4M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=BzFHX+Ka; arc=pass smtp.client-ip=209.85.210.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="RhtWkNr9"
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7eb29ed2bbdso28430a34.2
-        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 20:11:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782875473; cv=none;
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="BzFHX+Ka"
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7eb3865ea6fso10598a34.2
+        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 20:20:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782876042; cv=none;
         d=google.com; s=arc-20260327;
-        b=UUOCZULt6LCciCnP484APYJxBEqPybKIfEKeHjq10SlrJFMTlnfWkODWBjV2f6cTbf
-         ZGsxXIAiPZsTC+dirsbhYZAwThoG1t0u2Dw7BrY/yMj5Gok29v+pjbsg2Pb3JKbQ6U9T
-         baFGXN8ty0CJvThZfAlDqqAP19rKxqW2g799Wv+aA2c4ED7QQRaGGzGfKigruV0qzLbP
-         skYNvJHciGtN723zQO0zoU6V3Tfj4Sfj5ZDdtqdZM6i836GNj5qAGxl8eSaE3ueK15KG
-         lfxQqAjJcibReooyEHptHrEf9VTuPV2l01koyrpVDI1j4kttcehfIvxjqddg4qPlhGqJ
-         lGyg==
+        b=f/Kcx4q5UMP09jiypiEqsI6JJnHvDzFtgn49EG0eVASkDjVrUxmjH3VGgzRUvtwBkb
+         hGJgyX17bkK4mXwaEyutvX5NnQRHTDiQoemgglZZwWgVCF+VCZMT4nvS5zkRxabvgc0b
+         +Ijzt0ir+AkWog/Uir7V1H5FZU26C6vU44xaQYeF2p5lp7zDlumavezkrkJpVtAdgSB9
+         VfPmei8bUdeXSHYejDmwcv4lCuQpA0Yl1gSQ2lSODmD0nUKcV6FeLFyP25ZEig/GqLp/
+         CZMs/vKU6jTS3bGbgsuGOvo17dnfl/rP1DodSaS+IrhbZqLJJ/v1hQLlJyJLUihH5txN
+         GfMg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=AW+XVWe2JL0df9uuAdxaZgi837urm1REze6zO62j7wg=;
-        fh=MtKEu9jM6dPY8LSjtuhFxyjq86sWhnK/m4xDbHI1DHw=;
-        b=aTX4fUMO2f/39O4OOmwywgQwY81fy7FWBGgKj+O0a6Ol3oBiyB+IeO3EbCSjYZSQIJ
-         wKBopNvOwoEyLUjXPVtZ0VWPPa74nHSBbcXHwOF/joZnyWmtJutrocgK+5iNuA58oYrk
-         qYq3ixz+FpLeOsfv/GhilAmhVJVQjRtjmo7RuGsxrTlzfMR7CW+QRU2KUU8rVfuXjz9Z
-         ojd3Di+xLZ4GymywqIjoBwoVLtUWedSutTpaNKgvu9rsQateVzmjCLVP/sUop1MsUUMB
-         zTrhCTbUHp7ZL31sx1dE5OQPLE+d1fxloERnT81EZvgPZX37zTXJoH7OHM6YQHyfA/Fu
-         6n6A==;
+        bh=2N+msG67XKvItUVY55FS4/emZkqDvzrnsWiB4SJXA5o=;
+        fh=7pQPbM1mTaKjUbZ75iTISJbipA72wUVZwkXXTYMxzFw=;
+        b=rE6rz48udtucMSAnsjjWFWdy+Z0i/wUYGPFNWjMR2K71tjvazgFxoY1HBNDPd/gn2d
+         9jgnWvLOVCzCPUyFE3DNAgiEH1uEj1aCPUiL+DMaF3MMkBF9ds7RFZcphQ4VazCKc6BO
+         y3MTgwMK60x9EF4JnKKusfDnq7w68a8Wbs0WAl9Pw8ylktQYnmV6khhziDZHwohGUSyT
+         RGFraI6NRumTMGzEy6I8uzzxS5ER2r/Rb0WYU2ghq3sKQBo7lACfDvFdkhHdZLjjGgUJ
+         f7u0KbJF4Ko7RZHKtvxpZzAXojP4KlBhH1+DUrwdT/0T9q2XsxESTvRYCdkaQeX+/bnC
+         l11Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1782875473; x=1783480273; darn=vger.kernel.org;
+        d=bytedance.com; s=google; t=1782876042; x=1783480842; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AW+XVWe2JL0df9uuAdxaZgi837urm1REze6zO62j7wg=;
-        b=RhtWkNr9HQpCqgGvJVbgjiv2wzGAcrVQ+TANpvNCyIUXljKu9PhtnvdatILuTv1M1K
-         PrDLUPg+L7Up4A24TBlk8gNNNUFTfWfELGRA83Bu5YBwNAeVvzgeBTO+E+21KLaAY7Hu
-         Q1xWOUMDe4mjI5IBlU/nYxcT/OBYKg6lN93XIQTcYJUK73YvCUufLIqMdE5sea5peJEN
-         ReZrZMf8DKYjiafiuZ7tlictI6Diw29QfSbSlM+LnvsK/8+lMadzvNT44xJTAPxa4X69
-         3DROgSsOLwDWlz7PcRyj4SWl38cPKL3A/fNJJyaX9833yI8RXvn+OTqR5VokoT24MyAH
-         VFvg==
+        bh=2N+msG67XKvItUVY55FS4/emZkqDvzrnsWiB4SJXA5o=;
+        b=BzFHX+KaYSD23revJzb0Y10f4Q4KqA6DVC+6lK3Rukr04t3aUSaeETiN4JTvt7lTX2
+         /JJSf9H1Q0M7DCMQKuqi9qw5iY7Yrr4x2rW+LIEQGu6zo2Y3+LczI+V97VIxe9al1h3r
+         N/kIAk+6Ubq/cTBTP0mVgoLjbvdXeAOZhfk9YFjpVmYIVw5sl20oXCLNeoPnY3zVg7R2
+         LaoLUxtS2hqTzDhNOPdsyDAq+tz7oPppyjwjPwzFyz7MmTsmFumoy1dbBqu5AWW8rZuS
+         44Nh5TqyW/WD8EhAYK6jigqeSSRM9JzFZUXnMniU2RFn5Ecw9GWzGTt3ERW/mp6ELUyj
+         SIOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782875473; x=1783480273;
+        d=1e100.net; s=20251104; t=1782876042; x=1783480842;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=AW+XVWe2JL0df9uuAdxaZgi837urm1REze6zO62j7wg=;
-        b=U8dQAMe4afc9JKzvKlKvJboaIjCtpjviUax65xZoS/OKlOAgz8A4INiE6l8f7br4Xp
-         AnnEMYcDafFIVx9XKGAFdFsDvdJkRthKneGXIeI79Ho0DJacU6KWthWQJ5FItdbjqjSh
-         ZwLLY3mRiep7Zskj7F7nf2JACkmaVviiJdpsIrU/X5dPBKw7ieO+S5O7ztX5HsGlmg2K
-         qGVDglMPjwWlk5MxaqtMaItpc/Tfgudv3k2ahFGJ+k4gPVO6HaKGHzUIxOkf7rlV9oLI
-         69WEGGLOejbYogxUOG8metqmpsVd4fc/Bf/OElC6e+2BAtw1q2eykJI1UbOzZC9Hz9KR
-         7Jbg==
-X-Forwarded-Encrypted: i=1; AFNElJ/Q30SXRU2h+5qHKuYaGW2zSnihBD1Yx+BZawADal7tkFx5/QF3sjtVdz+yxHH6RnnfuDE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxc2mTzES1y00Jbn/lBJK7MoK7PXHgaOiCcvbgG/hHrYNYq0UB1
-	tTAhOfa2ss7K+5uFss4+XdR4mHC8V4Z2PBCTGV2gZx4PjoZRbPmAWR9QwLIv/23WzkY3g9+q7/O
-	T04zSHMiKDn1v6Z0tORW2G5oBgXnwabGePk12DAS2bA==
-X-Gm-Gg: AfdE7clS7hzQIjBLFa+En0UkUIUVf4g5WosN5bS/whgDNhb0vXHxFBY7g63+vbfvmqK
-	2wN1IT51Tveko3FB5z1JHHEZYfu68Wesa0lWYy4ZaEtTFKub+qL6WrUhPIS1+KPglPI7UnB++c/
-	/GXUy69eiVsQoFt/jA6uazRlcoRAC7E5c3oejEGBxXLL88AjJRwH/YynK5kOyZLUtE3NCyKpM5a
-	dXzOE4rWpZBUwWyWKbUqwJytBdS5T73lMYWLJLmbIlEioh9gd6bQqxMUon80oM0IDEki9Y1WM8=
-X-Received: by 2002:a05:6830:4901:b0:7dc:c4ae:a689 with SMTP id
- 46e09a7af769-7e9ec586d01mr4829708a34.2.1782875473497; Tue, 30 Jun 2026
- 20:11:13 -0700 (PDT)
+        bh=2N+msG67XKvItUVY55FS4/emZkqDvzrnsWiB4SJXA5o=;
+        b=cvP6rJxP/UbGdXykZdQjnAKxlOMIt/SMYpwOZGHNactGvDaB6RiETh34sAyFV+3Nww
+         ZwOdfjIM1xRkC43jvvgekBFXvZ3MXcrEKv3giYvGXEypKPxOKtYINh1DlzlH/N2D2hB1
+         HW1qFdmP7hoT5/Yany0yaXpk7o0hxKK8jdQvizEOvuwymPVxqgFiHIchyootD4J0ZEtK
+         elaSoNkJj0Jbg7Hy6kyMRlGOxG/7KJ/gQoNIdvPssB9ZqQBOSjKhI0oow/jazwTp80mh
+         y3Vtp2iWLS8/Zk3E74YRwEznbdAyuw5AtF6Y0526V0FanjnVXh4nSz0J7SQstpJuyYGO
+         lFQw==
+X-Gm-Message-State: AOJu0YxKtYY3TsWRHBcZScicgnUP5/IMzj9MycJiSEhI+5fxbDeDGruY
+	ly0oJsSDZ13ou9nY80AxySeS8Ebs7iDozhwyWwXBvYwzBhPwPN1fmb5xlPrL6Lm7HY6USHI4Ekk
+	Ni0U7Hk5pbIHZEaqRfQ1kKcEF0KY8+JpqDdrChpnkhA==
+X-Gm-Gg: AfdE7cntCqXSWKPiXbKdgs2YC1J2e69RY9NqVgVw3PzeJblQKT6XnFdZcOr/a5hhspx
+	vNlR0Z63FkLezj8gvve0tl4TVDtpt9ddIjP0IFC6SUGEL9nJVB3eokVwT+cXAzwNDopzYhxX7yr
+	1SU2UtcT149zABrQgEtQ99zaf/lHEC1dTsdxPx6y7meERLTuNmzHuuEp4T/zpJOAr9mxAN1JPBB
+	KXJnFN7k8LvUgsh94FRQfU3IEt6Bs4wYASeyjyLBNA+d9+ULHRoqdtrp3uJLg5PTH8McDyvmG0=
+X-Received: by 2002:a05:6808:191f:b0:496:7ba:89b7 with SMTP id
+ 5614622812f47-49607ba95b6mr657735b6e.6.1782876041837; Tue, 30 Jun 2026
+ 20:20:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260505062026.91724-1-cuiyunhui@bytedance.com>
- <20260505062026.91724-2-cuiyunhui@bytedance.com> <3720c3a4-cc0d-4ba8-97ae-35def0189e2e@app.fastmail.com>
-In-Reply-To: <3720c3a4-cc0d-4ba8-97ae-35def0189e2e@app.fastmail.com>
+References: <20260505062026.91724-3-cuiyunhui@bytedance.com> <20260505072635.27923C2BCB4@smtp.kernel.org>
+In-Reply-To: <20260505072635.27923C2BCB4@smtp.kernel.org>
 From: yunhui cui <cuiyunhui@bytedance.com>
-Date: Wed, 1 Jul 2026 11:11:02 +0800
-X-Gm-Features: AVVi8CfCZ39PlUVHuhvVesQ30Ayu5byi3NLY-dGR5ZLniizemgTSehNq4vDg6QE
-Message-ID: <CAEEQ3wn8AFVqWZAiXfQd4a1ZzH=2L8qRX4W3S=KcmQ5FORjn+Q@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v4 1/3] riscv: io: avoid null-pointer
- arithmetic in PIO helpers
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Dennis Zhou <dennis@kernel.org>, 
-	Tejun Heo <tj@kernel.org>, "Christoph Lameter (Ampere)" <cl@gentwo.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, pulehui@huawei.com, 
-	puranjay@kernel.org, Thomas Huth <thuth@redhat.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Ben Dooks <ben.dooks@codethink.co.uk>, 
-	=?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@ventanamicro.com>, 
-	Samuel Holland <samuel.holland@sifive.com>, Zong Li <zong.li@sifive.com>, 
-	"Conor.Dooley" <conor.dooley@microchip.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Deepak Gupta <debug@rivosinc.com>, seanwascoding@gmail.com, 
-	Andy Chiu <andybnac@gmail.com>, menglong8.dong@gmail.com, cyrilbur@tenstorrent.com, 
-	wangruikang@iscas.ac.cn, Atish Patra <atishp@rivosinc.com>, 
-	Anup Patel <apatel@ventanamicro.com>, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, qingfang.deng@siflower.com.cn, 
-	Linux-Arch <linux-arch@vger.kernel.org>, llvm@lists.linux.dev
+Date: Wed, 1 Jul 2026 11:20:30 +0800
+X-Gm-Features: AVVi8CcoFpqxF5PhV14dTdaZbZMkY9ne_n8LdC7VwoKZ_u2i4GWjbagj4k94u-I
+Message-ID: <CAEEQ3w=KmjNTn5NwyoU8DX8hkB74PiTyp=vNKnG_1P1WVCekrA@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH v4 2/3] riscv: introduce percpu.h into include/asm
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Arnd,
+Hi sashiko,
 
-On Tue, May 5, 2026 at 2:34=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote:
+On Tue, May 5, 2026 at 3:26=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
-> On Tue, May 5, 2026, at 08:20, Yunhui Cui wrote:
-> > The RISC-V PIO helpers derive I/O addresses from PCI_IOBASE in ins*(),
-> > outs*(), and ioport_map().
-> >
-> > Under configurations where I/O port support is not available, these
-> > expressions can still be formed during compilation and trigger
-> > -Wnull-pointer-arithmetic warnings from clang.
+> Thank you for your contribution! Sashiko AI review found 3 potential issu=
+e(s) to consider:
+> - [Critical] The 8-bit and 16-bit `this_cpu_add` fallback logic fails to =
+mask arithmetic overflow, corrupting adjacent percpu variables.
+> - [High] The 32-bit and 64-bit `this_cpu_and` macros incorrectly perform =
+an AND-NOT operation instead of a bitwise AND.
+> - [High] Missing early-clobber modifiers (`=3D&r`) on output operands in =
+`PERCPU_8_16_RET_OP` allow destructive register overlapping.
+> --
 >
-> If a driver attempts to use ISA port operations in a configuration
-> without CONFIG_HAS_IOPORT, there is a NULL pointer warning because
-> this is actually a NULL pointer access that will crash the
-> kernel if the driver is ever loaded. You should not attempt
-> to shut up the useful warning here but instead make sure every
-> such code has a proper 'depends on HAS_IOPORT' dependency.
+> commit f4a490dc0b24e17cbd874e03d02e506d017e61b6
+> Author: Yunhui Cui <cuiyunhui@bytedance.com>
+>
+> riscv: introduce percpu.h into include/asm
+>
+> This commit introduces a RISC-V percpu header to implement direct this_cp=
+u
+> operations. It provides macros for 8, 16, 32, and 64-bit read, write, and
+> atomic memory operations.
+>
+> > diff --git a/arch/riscv/include/asm/percpu.h b/arch/riscv/include/asm/p=
+ercpu.h
+> > new file mode 100644
+> > index 0000000000000..3b26fe45e70f4
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/percpu.h
+>
+> [ ... ]
+>
+> > +#define PERCPU_8_16_OP(name, amo_insn, sz, sfx, val_type, new_val_expr=
+, asm_op)                      \
+> > +static inline void __percpu_##name##_amo_case_##sz(void *ptr, unsigned=
+ long val)             \
+> > +{                                                                     =
+                       \
+> > +     if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&                        =
+                       \
+> > +             riscv_has_extension_unlikely(RISCV_ISA_EXT_ZABHA)) {     =
+                       \
+> > +             asm volatile ("amo" #amo_insn #sfx " zero, %[val], %[ptr]=
+"                      \
+> > +                     : [ptr] "+A"(*(val_type *)ptr)                   =
+                       \
+> > +                     : [val] "r"((val_type)((new_val_expr) & PERCPU_8_=
+16_GET_MASK(sz)))      \
+> > +                     : "memory");                                     =
+                       \
+> > +     } else {                                                         =
+                       \
+> > +             u32 *ptr32 =3D PERCPU_8_16_GET_PTR32(ptr);               =
+                         \
+> > +             const unsigned long shift =3D PERCPU_8_16_GET_SHIFT(ptr);=
+                         \
+> > +             const u32 mask =3D PERCPU_8_16_GET_MASK(sz) << shift;    =
+                         \
+> > +             const val_type val_trunc =3D (val_type)((new_val_expr)   =
+                         \
+> > +                                        & PERCPU_8_16_GET_MASK(sz));  =
+                       \
+> > +             u32 retx, rc;                                            =
+                       \
+> > +             val_type new_val_type;                                   =
+                       \
+> > +                                                                      =
+                       \
+> > +             asm volatile (                                           =
+                       \
+> > +                     "0: lr.w %0, %2\n"                               =
+                       \
+> > +                     "and %3, %0, %4\n"                               =
+                       \
+> > +                     "srl %3, %3, %5\n"                               =
+                       \
+> > +                     #asm_op " %3, %3, %6\n"                          =
+                       \
+>
+> Is it possible for an 8-bit or 16-bit addition to overflow here? If there=
+ are
+> carry bits outside the subword boundary, they aren't masked out before th=
+e
+> result is shifted left.
+>
+> Could this silent overflow spill into and corrupt adjacent per-CPU variab=
+les?
 
-Thanks for the review.
-
-I agree that NULL-pointer arithmetic warnings can point to real missing
-HAS_IOPORT dependencies in drivers, and we should not hide those globally.
-
-You are right about the generic ioport_map() change: the helper is already
-guarded by CONFIG_HAS_IOPORT_MAP, so the extra CONFIG_HAS_IOPORT check is
-redundant. I will drop that change.
-
-For the RISC-V ins*/outs* helpers, they use PIO-specific fences
-(__io_pbr()/__io_par() and __io_pbw()/__io_paw()), while the asm-generic
-helpers would go through readsb()/writesb() and use normal MMIO string
-ordering. So removing them would change ordering semantics.
-
-I will keep the RISC-V helpers for now and only guard the port-I/O
-variants with CONFIG_HAS_IOPORT.
+Thanks, will fix this in the next version.
 
 >
-> >
-> > +#ifdef CONFIG_HAS_IOPORT
-> >  __io_reads_ins(ins,  u8, b, __io_pbr(), __io_par(addr))
-> >  __io_reads_ins(ins, u16, w, __io_pbr(), __io_par(addr))
-> >  __io_reads_ins(ins, u32, l, __io_pbr(), __io_par(addr))
-> > -#define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, =
-count)
-> > -#define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, =
-count)
-> > -#define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, =
-count)
-> > +#define insb(addr, buffer, count) __insb(PCI_IO_ADDR(addr), buffer, co=
-unt)
-> > +#define insw(addr, buffer, count) __insw(PCI_IO_ADDR(addr), buffer, co=
-unt)
-> > +#define insl(addr, buffer, count) __insl(PCI_IO_ADDR(addr), buffer, co=
-unt)
+> > +                     "sll %3, %3, %5\n"                               =
+                       \
+> > +                     "and %1, %0, %7\n"                               =
+                       \
+> > +                     "or %1, %1, %3\n"                                =
+                       \
+> > +                     "sc.w %1, %1, %2\n"                              =
+                       \
+> > +                     "bnez %1, 0b\n"                                  =
+                       \
+> > +                     : "=3D&r"(retx), "=3D&r"(rc), "+A"(*ptr32), "=3D&=
+r"(new_val_type)             \
+> > +                     : "r"(mask), "r"(shift), "r"(val_trunc), "r"(~mas=
+k)                     \
+> > +                     : "memory");                                     =
+                       \
+> > +             }                                                        =
+                       \
+> > +}
+>
+> [ ... ]
+>
+> > +#define PERCPU_8_16_RET_OP(name, amo_insn, sz, sfx, val_type, new_val_=
+expr)                  \
+> > +static inline val_type __percpu_##name##_return_amo_case_##sz(void *pt=
+r, unsigned long val)  \
+> > +{                                                                     =
+                       \
+> > +     if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&                        =
+                       \
+> > +             riscv_has_extension_unlikely(RISCV_ISA_EXT_ZABHA)) {     =
+                       \
+>
+> [ ... ]
+>
+> > +     } else {                                                         =
+                       \
+> > +             u32 *ptr32 =3D PERCPU_8_16_GET_PTR32(ptr);               =
+                         \
+> > +             const unsigned long shift =3D PERCPU_8_16_GET_SHIFT(ptr);=
+                         \
+> > +             const u32 mask =3D (PERCPU_8_16_GET_MASK(sz) << shift);  =
+                         \
+> > +             const u32 inv_mask =3D ~mask;                            =
+                         \
+> > +             const val_type val_trunc =3D (val_type)((new_val_expr)   =
+                         \
+> > +                                        & PERCPU_8_16_GET_MASK(sz));  =
+                       \
+> > +             u32 old, new, tmp;                                       =
+                       \
+> > +                                                                      =
+                       \
+> > +             asm volatile (                                           =
+                       \
+> > +                     "0: lr.w %0, %3\n"                               =
+                       \
+> > +                     "and %1, %0, %4\n"                               =
+                       \
+> > +                     "srl %1, %1, %5\n"                               =
+                       \
+> > +                     "add %1, %1, %6\n"                               =
+                       \
+> > +                     "and %1, %1, %7\n"                               =
+                       \
+> > +                     "sll %1, %1, %5\n"                               =
+                       \
+> > +                     "and %2, %0, %8\n"                               =
+                       \
+> > +                     "or %2, %2, %1\n"                                =
+                       \
+> > +                     "sc.w %2, %2, %3\n"                              =
+                       \
+> > +                     "bnez %2, 0b\n"                                  =
+                       \
+> > +                     : "=3Dr"(old), "=3Dr"(tmp), "=3D&r"(new), "+A"(*p=
+tr32)                        \
+>
+> Should the old and tmp output operands use the early-clobber modifier (=
+=3D&r)?
+>
+> Since they are written to early in the instruction sequence before inputs
+> like mask (%4), shift (%5), or val_trunc (%6) are consumed, could the com=
+piler
+> allocate them to the same physical registers, leading to clobbered inputs=
+?
+>
+> > +                     : "r"(mask), "r"(shift), "r"(val_trunc), "r"(PERC=
+PU_8_16_GET_MASK(sz)), \
+> > +                     "r"(inv_mask)                                    =
+                       \
+> > +                     : "memory");                                     =
+                       \
+> > +             return (val_type)(tmp >> shift);                         =
+                       \
+> > +     }                                                                =
+                       \
+> > +}
+>
+> [ ... ]
+>
+> > +#define this_cpu_and_1(pcp, val)     _pcp_protect(__percpu_andnot_amo_=
+case_8, pcp, ~(val))
+> > +#define this_cpu_and_2(pcp, val)     _pcp_protect(__percpu_andnot_amo_=
+case_16, pcp, ~(val))
+> > +#define this_cpu_and_4(pcp, val)     _pcp_protect(__percpu_andnot_amo_=
+case_32, pcp, ~(val))
+> > +
+> > +#ifdef CONFIG_64BIT
+> > +#define this_cpu_and_8(pcp, val)     _pcp_protect(__percpu_andnot_amo_=
+case_64, pcp, ~(val))
 > > +#endif
 >
-> Can you try to remove the custom accessors altogether and
-> use the ones from asm-generic instead? These should already
-> have the correct behavior all the time, in particular they
-> already come with the correct #ifdef check that is apparently
-> missing in the riscv version.
+> Since the underlying __percpu_andnot_amo_case_32 and 64 macros directly u=
+se the
+> amoand instruction on the value passed, does negating val here with ~(val=
+)
+> cause the hardware to perform an AND-NOT operation (pcp &=3D ~val) instea=
+d of a
+> bitwise AND (pcp &=3D val)?
 >
-> > diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> > index ca5a1ce6f0f89..d799e5ccc9437 100644
-> > --- a/include/asm-generic/io.h
-> > +++ b/include/asm-generic/io.h
-> > @@ -1205,8 +1205,12 @@ static inline void __iomem
-> > *ioremap_np(phys_addr_t offset, size_t size)
-> >  #define ioport_map ioport_map
-> >  static inline void __iomem *ioport_map(unsigned long port, unsigned
-> > int nr)
-> >  {
-> > +#ifdef CONFIG_HAS_IOPORT
-> >       port &=3D IO_SPACE_LIMIT;
-> >       return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-> > +#else
-> > +     return NULL;
-> > +#endif
-> >  }
+> > +
+> > +#define this_cpu_or_1(pcp, val)      _pcp_protect(__percpu_or_amo_case=
+_8, pcp, val)
 >
-> The function definition here is guarded by the #ifdef CONFIG_HAS_IOPORT_M=
-AP
-> check, which should already prevent it from being visible when
-> CONFIG_HAS_IOPORT is disabled.
->
->      Arnd
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260505062026.91=
+724-1-cuiyunhui@bytedance.com?part=3D2
 
 Thanks,
 Yunhui
