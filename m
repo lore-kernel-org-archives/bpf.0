@@ -1,163 +1,126 @@
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5E0394EB7
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 22:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782946483; cv=pass; b=aK39B26TOzow3mXiT0U1fkslQLJ3qHC+5aO93TYm+wQRGPZ5uAOo/ojYIF2yAI9YtH46AzmyEzC3tGXkCYztho7LNHnRp5/21v74KX5zF/+PsSQPCNyB5ghFxC8a7jT5iUvd0Z+Te6aV/iwt9k+Ue0WTDO3uUgHcz/jiWbbwE9M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782946483; c=relaxed/simple;
-	bh=YrHz8YZ43CxSfARfvrAgifJB6HE6igo+tpoQ1A+WQNI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rh+sxZKWNwqKYj8l27ukG6f9jlXY7AGUfnCTO8AWmT1GWdHsPfTJ0rYeD9jfEpDD45/Ixc3FcdDP97QMm2+ze/yicgGS6WSOTvBE+Ia1CS1wEKMDzMrCaZuTBBf+RgVG5MLgdb+xGX/PVR8GLxq5s2XilyexRjOPLQ/ZT64bFZQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oe0D4n6h; arc=pass smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 133AD1CAA65
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 22:58:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782946706; cv=none; b=jdZ/Qbd8szUDmjqXpkEfm5Ljah98elhudkT/dsCki2Dhp2B9lsISylGk7xNiYgtI8mXnD+6T88pQZ5qWRIvRb0JM+Le0/IdtTkdP6jncxc6WjM5qZZhcNSOkHG6IEHTgZsYct1NyrmmAhBeP5/n+F/JY4CdMM24P1nJdrsEkjAE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782946706; c=relaxed/simple;
+	bh=bUDYuKYHtQmgldv9vVNnWK4B+5v8BcuM1LLff3DuZEE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F3s8166iMFc2JEbhSSMUAboSbuPNt79sKOPG2YcxLDtxslYSj5L/pU9v0QBDHpZpnBrVZCHSHXpWXywfr8zeCykAT9pIYVI5ZAqFVa+hhglFQNNxs2D36aXx6jxgY05AkwpfndgdlKbc2iVQx6JEsdwU0fJHNGe7PUFHKiFZ0hU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SQqIlGJt; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oe0D4n6h"
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8ee43b3e5abso7956236d6.3
-        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 15:54:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782946481; cv=none;
-        d=google.com; s=arc-20260327;
-        b=A5ZUEat22kyxSpWIX4lLExsNPRy1LdMNkiDfEZGJzRx1Xk1DN13RKu6R5GIQBCPyhH
-         FvVU+fL3SGTHN5Ts2keoJbGc1LC4BsIhrqzvoUisJDWDT6rLH55LW4b3H6STxXDfiHUE
-         glwCD9yZEEcOTZ7kWM6T0j4WtAsd8wZq+yCVr+jS6YOZywiGQM0XoPE4zYbVAP71FAWM
-         MJH4sINxUxnOSr9IlG4n6bdAc9LxqvD2dnBzIjZ1L0Ak4ZhFIYSASE3SBmyHn3AH1rDO
-         NEviNqFIjIRjL6+Esgnx208vdGmfHdI71tMmCgf6PbJEWQNMJuRFnFRlhMfONx26kgms
-         srdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=FdFRIxxhmjTBAY4g/1wOYGYHr9cH8lfvdG8YM/zsTzo=;
-        fh=S6DDseF5h3+g4zAU2M40h9tycaIPHDMVdwvfM/5iAnk=;
-        b=RK+x6OtmE1LhdwIwmIsoBax0sbt9/FJnXVta8xu1zHKTUDCHfQPt6hNJZLrvDm9klo
-         J9uYa4TjHwqu4g+l2MuodMorFYMix6w1Z9/oVrbCVeZhjSNCDz4yaDFTASuseDEp71U0
-         lhUGDTMG6yggIvULQhHdILKinobksz+GTtne0496RzKYkP4gSINsziQ//5JpXUvpmC0l
-         6lLrwfEN2ZB1et1raPboY5ALyuw3jtROIKi10RBMy50Sp7+zCKBVTMHkCjRXm+oS/+ee
-         ycpEoGck3hlw8TvpwmxBdKAlQzLh/AXOfFUI3NWiEKoeYuqro2jECooVSn9Fs46c+P8y
-         jp8Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SQqIlGJt"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-36b9d265355so751706a91.2
+        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 15:58:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782946481; x=1783551281; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FdFRIxxhmjTBAY4g/1wOYGYHr9cH8lfvdG8YM/zsTzo=;
-        b=oe0D4n6hhppkiuohBMlsVwdoy+x6uP2UpPjgSx00nukU2I5NpdT6+DerAhcWZhs7aG
-         FS4+SdR697SwCb6zjN5Tu6ksC4Dto92B5VlZX3VITT+Fko0bpl4/LOBOU3VPW60hOXPA
-         RRrre8RBxmnO+upfTpkSqgb9MvP4qPAXT2WXWP8oOUx/CjG4RDQRhwD9/AGP8u5QwSa2
-         ylYd24ruCGEoAgOuXhYjbOynmq3WMlMzH2IU1ZQX1wXrqtOeW7LO3xeDagvHHicyLI3A
-         /zGc6CPl0F0ixLzuJK27Gqk3gH7vT1mX2fmYAaEq6cGhQtfK7yKTk5UHqZJcx9IdmWeP
-         XQ8g==
+        d=gmail.com; s=20251104; t=1782946704; x=1783551504; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=De8XTkFmbzVQpV87okqkWkxOfLzf9SREnezKw2Sjhrg=;
+        b=SQqIlGJthVps4kpcXuJohYjaxqycopvRMH7wj9DiKy3M6ecJlTFGL4UVHli+m5dRnc
+         rHgxN6t2haIZ0s8KCoCekno5luVipsv+3btqnvLB27D10Y/cSJq8oRHPJ8Ibtz2has9S
+         nobFW6SNmtdpvlsj8/W2yMc1jDZA6e5ON8YRZ+eJZ0k/mo/grZPvAOfwsolRbCLk+fM6
+         19qLcebM0x+VPKDHXNDTfCxQphCCwix94c8LaymJ7ZharYYjJh/NcccAxugq67yxHP7v
+         GZcC4yBoz1fFgyFS2VrGwS3yO5mSUvL7wPqAn6s/MzHmteKxuKZfhtqSH+WyWIxmuI5b
+         zP+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782946481; x=1783551281;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FdFRIxxhmjTBAY4g/1wOYGYHr9cH8lfvdG8YM/zsTzo=;
-        b=U6WOKU+CIVOicVnMnyP9aE/EDRcbXRiztcaEF93ThK8YJ5bvX3awyBFFVFGhQ4QnZ+
-         kY01qTQ0OXuZLHK+tRmIXHdP0SAbeiRDsMobv8pvNso++Ihkkf84yE30BeT0tCB2tVSJ
-         D47MUDntkSLmEpCMSuDuel3kbsu7pke1IdU/EAqJHPZEnbRXnsJx6cjY3FkRxiB1DavP
-         78aGtAjnmuGIZ0M/Qfq9grEPk6+sGt/SA6wppCz3bd8kjJ29GRBcHf4G60VdLhzu4tir
-         33WNw+XgTncjzXP15+ZrYIuPwjWzHKLlxLsViCzAYo0wSfsnJFjW6Vf6oFRErIguLeZO
-         VSVg==
-X-Gm-Message-State: AOJu0YwWUwsJITqvRT7mDI+qleKaH80QjjzWW8Ce051piOiEC0fncjMu
-	pgBW6SYUr1Fpl9pIvAL5hA2WZ14jyxvdb79Fk72JhvCRu/LPc32ZSFqJM7/Cp8lkOwy91WbUKoz
-	YXghtFoHyoOMTAacw1vKA10vGK3o4+Y/9jEi9
-X-Gm-Gg: AfdE7cl0xxCrc7VwNwhLeQVVFHr/0Mj8Ie1lIv8Sgzb7FEYqTDi48YmDRxwt76x1B5Z
-	f6u/QjJMBgSUB0Z70pLv6BDaX5xGaAVjcs5HYkaied9FcE3a20VBTiS97ilxg2Rej7VYAFdTEsy
-	Sc4RLDKi/AqbcVicQ2sI6QPBWOLjY4VxLli4mbX1vV2kMzwDL7K/WPeZmxZfsTkwxQIclp1qTqI
-	JAcoQPTVB5wPyOtcUSzVAH9ulTiYbK7frnsB4Q/vCVQnuxWQGz5wiNRVRGv2q+Tdl2aMaIBkdd+
-	oYW9eFNLLEz9tfF1jQ9eJpPUhkU=
-X-Received: by 2002:a05:6214:5703:b0:8c4:edb4:a44a with SMTP id
- 6a1803df08f44-8f3c73b6003mr55971746d6.23.1782946481604; Wed, 01 Jul 2026
- 15:54:41 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782946704; x=1783551504;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=De8XTkFmbzVQpV87okqkWkxOfLzf9SREnezKw2Sjhrg=;
+        b=Z+s/lSTqlB5Cvt+wKV7Z2E3Ok0CJjdL3lvbJSxmXw/NAi0jP6OIjc6I/yomInWBgzd
+         HkKhncihdO6s2c5Ol45Qh4vl0VTEVLaLGdAkcEdpudM9Wc7YZsP+IhbwHakwV61/y83Z
+         lFWlsBK/IGI9JRaoiiFKV4OmMWUQDFYLhf1DWsfixlDvE+PoN+auYdPv6PO8+kXvC0S3
+         w7fFAqiNJfaM6lP0KKVRH8rqPDcclW7yEiWLg6H2SIJIeSCCCahkMp3HgA8yWbh0Pt+k
+         jChmmAOgcxn1CHREIyrfL7lPisHTR+RAejjvdxsAaZVxO5Iv1r/nbFXuIsGbTDE22/vu
+         WpBw==
+X-Forwarded-Encrypted: i=1; AHgh+RowGWHJ9XyL3aXStq8Ponw2ElOVOe91JjEywnn1oEyL3KmUbPXMofMquWWV3I5YEHiqHrY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz692B1FgNygSZwQ8xQj31Z+bpJbRi8nxW1F39MXcW61qOVrrl+
+	4vNW+wzu8orx1fqEs9p65iJarOT4QFsd+CKLZNt4xteGqCIgEImCIFV2
+X-Gm-Gg: AfdE7cnLZCE3emLl+uDiJPXvyOgMvounPX/sldDByR+y1zYujqoIDlxjlRdtx3Ixw6H
+	UzPLXgCBcwRRQftd/F9jaJ5uiurslLlJtIib8llV8dzvns6b5iY95sm4oTNyLKJSKSXiXKdB1eQ
+	uQecMz7OBHZ2v7XJkkR3wofHicLz/wJ9jPTaXr6u1XehXy8oibGTVmMKI7LB7kbH0W1m3LWHgmo
+	g4vk1gdfwx1EESPOxDKCWxk5VPbAlJHGK3jcXtZUKvkgprXZpOcy1TEMz88M6U6A0I7ij7WahSo
+	nR8PDlhRACGR2YOVjoYWvzD2Jx/D+seJGjFRz4pvXDCJAFuO1C01JizjecUCLTvSKLe23m9xIQG
+	yftWVPzqWFh6lmYnXjiGXTleiEDVsUKAiB2DISywTkUVM2yCGDk1g3GHPbf++KLdwmZAC+BE/xe
+	Fuyy7RyqCtvg==
+X-Received: by 2002:a17:90b:180e:b0:37f:ff9d:ad69 with SMTP id 98e67ed59e1d1-380ba80c706mr2735930a91.7.1782946703866;
+        Wed, 01 Jul 2026 15:58:23 -0700 (PDT)
+Received: from john-p8 ([98.97.43.89])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-380def494c5sm99877a91.15.2026.07.01.15.58.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jul 2026 15:58:23 -0700 (PDT)
+Date: Wed, 1 Jul 2026 15:58:21 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Michal Luczaj <mhal@rbox.co>, sashiko-reviews@lists.linux.dev, 
+	bpf@vger.kernel.org
+Subject: Re: [PATCH bpf v2 1/4] bpf, sockmap: Reject unhashed UDP sockets on
+ sockmap update
+Message-ID: <akWbSP5aMxLYSmM8@john-p8>
+References: <20260626-sockmap-lookup-udp-leak-v2-0-7e7e201c951a@rbox.co>
+ <20260626-sockmap-lookup-udp-leak-v2-1-7e7e201c951a@rbox.co>
+ <20260626205814.BAC3C1F000E9@smtp.kernel.org>
+ <e08be4f5-0bd9-4228-843d-86ed20594bac@rbox.co>
+ <87v7b137cx.fsf@cloudflare.com>
+ <26ecbce0-48ad-4b53-a0b7-34b59870e010@rbox.co>
+ <87echn2fhd.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260630183956.281293-1-dwindsor@gmail.com> <20260630183956.281293-3-dwindsor@gmail.com>
- <20260630185420.96A6B1F000E9@smtp.kernel.org>
-In-Reply-To: <20260630185420.96A6B1F000E9@smtp.kernel.org>
-From: David Windsor <dwindsor@gmail.com>
-Date: Wed, 1 Jul 2026 18:54:29 -0400
-X-Gm-Features: AVVi8CfjKMOaPkHqrop8tSk9s7QdUaQXIvtbHpp2DcyirtgW-I3jIDr4KPnWk_s
-Message-ID: <CAEXv5_iqNay39fp_2jJjxWUpfzBtfiUgpfo5-TYysrLMGEfNGw@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 2/3] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, selinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <87echn2fhd.fsf@cloudflare.com>
 
-On Tue, Jun 30, 2026 at 2:54=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
-> [ ... ]
-> > @@ -385,6 +463,7 @@ BTF_ID_FLAGS(func, bpf_get_file_xattr, KF_SLEEPABLE=
-)
-> >  BTF_ID_FLAGS(func, bpf_set_dentry_xattr, KF_SLEEPABLE)
-> >  BTF_ID_FLAGS(func, bpf_remove_dentry_xattr, KF_SLEEPABLE)
-> >  BTF_ID_FLAGS(func, bpf_real_inode, KF_SLEEPABLE | KF_RET_NULL)
-> > +BTF_ID_FLAGS(func, bpf_init_inode_xattr, KF_SLEEPABLE)
+On Wed, Jul 01, 2026 at 12:04:14PM +0200, Jakub Sitnicki wrote:
+>On Mon, Jun 29, 2026 at 11:40 PM +02, Michal Luczaj wrote:
+>> On 6/29/26 13:37, Jakub Sitnicki wrote:
+>>> On Sun, Jun 28, 2026 at 11:59 PM +02, Michal Luczaj wrote:
+>>>> On 6/26/26 22:58, sashiko-bot@kernel.org wrote:
+>>>>> [Severity: High]
+>>>>> Could a memory ordering regression here allow unbound UDP sockets to still
+>>>>> bypass this check?
+>>>>>
+>>>>> In udp_v4_get_port(), the flag and hash are set:
+>>>>>
+>>>>> net/ipv4/udp.c:udp_v4_get_port() {
+>>>>>     ...
+>>>>>     sock_set_flag(sk, SOCK_RCU_FREE);
+>>>>>     sk_add_node_rcu(sk, &hslot->head);
+>>>>>     ...
+>>>>> }
+>>>>>
+>>>>> Because these stores lack a memory barrier between them, could sk_hashed(sk)
+>>>>> return true on another CPU while SOCK_RCU_FREE is not yet visible, allowing
+>>>>> the leak to still trigger?
+>>>>
+>>>> I'd like to verify it on a weakly-ordered CPU; please give me a day or two.
+>>>
+>>> False positive, IMO.
+>>> Both ->get_port and sock_map_sk_state_allowed run with sk_lock held.
+>>
+>> What about an update coming from iter/task_file? You get an unlocked socket
+>> via bpf_sock_from_file(ctx->file). And sock_map_update_elem()'s
+>> bh_lock_sock(sk) doesn't care if socket is owned.
 >
-> [Severity: High]
-> Does marking this kfunc as sleepable create a risk of deadlocks?
+>You're right. No exclusive access to socket there.
 >
-> Since the kfunc is only callable from the inode_init_security hook, marki=
-ng
-> the hook as sleepable allows BPF programs to trigger page faults
-> (e.g., via bpf_copy_from_user). When a file is created (e.g., ext4_create=
-),
-> the filesystem acquires a transaction handle before invoking the hook. If=
- the
-> BPF program triggers a page fault, it will attempt to take mmap_read_lock=
-.
+>I think we should block map updates from all iterators but iter/sockmap,
+>where we know the socket is already in the correct state.
 >
-> Concurrently, another thread doing a write page fault (or mmap/mprotect)
-> might acquire mmap_lock and attempt to start a transaction (e.g., in
-> ext4_page_mkwrite), which blocks on the transaction handle held by the fi=
-rst
-> process. This creates an AB-BA deadlock between the filesystem transactio=
-n and
-> mmap_lock.
->
+>This is in the spirit of the API lockdown that is in progress [1]
 
-This is real. We can eliminate the deadlock by removing KF_SLEEPABLE,
-which is fine here once we change the single allocation made by this
-function to GFP_NOWAIT.
-
-
-> >  BTF_KFUNCS_END(bpf_fs_kfunc_set_ids)
-> >
-> >  static int bpf_fs_kfuncs_filter(const struct bpf_prog *prog, u32 kfunc=
-_id)
-> [ ... ]
-> > diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-> > index 564071a92d7d2..1c3f84a924203 100644
-> > --- a/kernel/bpf/bpf_lsm.c
-> > +++ b/kernel/bpf/bpf_lsm.c
-> > @@ -315,6 +315,7 @@ BTF_ID(func, bpf_lsm_inode_create)
-> >  BTF_ID(func, bpf_lsm_inode_free_security)
-> >  BTF_ID(func, bpf_lsm_inode_getattr)
-> >  BTF_ID(func, bpf_lsm_inode_getxattr)
-> > +BTF_ID(func, bpf_lsm_inode_init_security)
->
-> [Severity: High]
-> Is it safe to add bpf_lsm_inode_init_security to the sleepable hooks list=
-?
->
-> As mentioned above, marking this hook as sleepable permits BPF programs t=
-o
-> take page faults from within a filesystem transaction, which violates
-> filesystem locking rules and can freeze filesystem operations.
->
-> >  BTF_ID(func, bpf_lsm_inode_mknod)
-> >  BTF_ID(func, bpf_lsm_inode_need_killpriv)
-> >  BTF_ID(func, bpf_lsm_inode_post_setxattr)
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260630183956.28=
-1293-1-dwindsor@gmail.com?part=3D2
++1 lock this down to just iter/sockmap allowing these updates from
+arbitrary context is too hard to reason about.
