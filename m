@@ -1,204 +1,231 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988781891A9
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 17:14:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB1431985C
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 17:58:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782926088; cv=none; b=YnJzcp+lS6p/+oOPU2qw6NRB4cFIO9k4cITt3JkGyrpVzBiWPg0th4ja3bZL1YP8nIIZT8XKDNq/G6gqIqCe1QVhkxkwqFBsw4JDxS6+aieTgLLI76oUYI5MRI7eU89rerWJb3q5037uUuKqqaD5a2iPh25NHQJzqusFqkYQW14=
+	t=1782928696; cv=none; b=BmxdQFt2OOk10TRWhTc1rPOcK1mJxIlsjuFNHrK19DUZAnQdAXlO2E3EUtWEZUKS2gLgs9ZjKqux8kwl24LL/yPoOE0knsT+Ml94W5ZAWHneaL5i/qailQGRo4/0HIm6vxUmlHd4+E1ehSEFBzFe+KXKGmcKEt7JUGpF9MP2yHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782926088; c=relaxed/simple;
-	bh=kN1Yv9rAxjb4buhMHrPsL9JBBRuADNmrJq7PrSbWLds=;
+	s=arc-20240116; t=1782928696; c=relaxed/simple;
+	bh=20BNAu0toLJu3EDSbAd1PFkdToLOSXojvcM2xNhDLFM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FW+KI/OfcudOYJUjij2W7/cMeS9iVyaLpVoNNn+x1qnujU9HkkFATP7tiVKxrySguajbipJwmRwXHL0JlkRFziJfZ0gAFQT6j1bYViQEgFC7Jt+Thdm6YU7eKotSiPvJqAnW7JGzT/6rgThGQR7MHHQtzoWkv18FG3bGheatGK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X5LR01lu; arc=none smtp.client-ip=91.218.175.170
+	 In-Reply-To:Content-Type; b=gDB4I6tvfJRdy7cg+vBHhAT8UOhMnPo80chppnLB3mPQ98DDPAn+Y0UbfGg7LXqJ3ACucE6MuNCPEyVAwml6WlVGF0TmGmcliXNg99We+QD+5/Yip6qyJ7+mBTmtETPeS6qzjbo09R4NKpte6M/kh9IxtRfyzZ/4j84vIwA6bms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=P/R7+NSk; arc=none smtp.client-ip=95.215.58.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X5LR01lu"
-Message-ID: <c9beceb9-946d-47ce-9311-4b9559f21613@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="P/R7+NSk"
+Message-ID: <1585500e-ad00-427e-91f7-7beb60303a0b@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782926074;
+	t=1782928690;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=faJQBBqDU4jX+pQpjtADp7wBo455JhSN+YQaVil2Yhg=;
-	b=X5LR01luTofR7ZRMZSBaiB80u36POkFc3N+PdFJIL+T0Pyi76+HXZRtLkbVsESHbRWGP7Q
-	uLUlp/JXtQbB/xpCESxh/wkKNKrerXtDqcmKVLDs9eBUOTiHmzEAZ8yxHNSKeJa5ItWCPQ
-	hsxLmAg/qJsgEDgDQh3PdyrgadPD2sY=
-Date: Wed, 1 Jul 2026 10:14:25 -0700
+	bh=GJwnGWtiO6o/kI+CCb46HCwB5s1Rnx47zF25eEQimqo=;
+	b=P/R7+NSkYG6BLdnct5/DBB0tNY+imhfXivPm5Ui1gqhYLA9c8r7nKiEWOJN02AXSGyze1w
+	7GQrE1fNBy9uFu9OkbIAncsRNxqVWrTzEDoDpUx8EcO+BpPhg6XSkFYX+J12KP2pY/Thno
+	GlAJNyzL2t220svW2FygDnPwOwY7tos=
+Date: Wed, 1 Jul 2026 10:58:01 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PAHOLE v4 2/3] dwarf_loader: Add support for
- DW_TAG_GNU_annotation
+Subject: Re: Verifier aspects of (was Re: gcc [RFC] bpf: don't synthesize
+ sign_extend for ISA v4)
 Content-Language: en-GB
-To: Vineet Gupta <vineet.gupta@linux.dev>, dwarves@vger.kernel.org
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
- acme@kernel.org, Alan Maguire <alan.maguire@oracle.com>,
- Emil Tsalapatis <emil@etsalapatis.com>, jose.marchesi@oracle.com,
- David Faust <david.faust@oracle.com>
-References: <20260602195512.1511013-1-vineet.gupta@linux.dev>
- <20260602195512.1511013-2-vineet.gupta@linux.dev>
- <9152fde6-d35c-4688-9ff1-c7fe152c9b2a@linux.dev>
- <4e425892-2aec-4fee-a199-7fe9c615d982@linux.dev>
- <252c53f3-3f06-40f4-9cd3-795eb298687c@linux.dev>
+To: Vineet Gupta <vineet.gupta@linux.dev>, bpf@gcc.gnu.org
+Cc: jose.marchesi@oracle.com, ast@kernel.org,
+ Eduard Zingerman <eddyz87@gmail.com>, David Faust <david.faust@oracle.com>,
+ bpf <bpf@vger.kernel.org>
+References: <20260413185834.58706-1-vineet.gupta@linux.dev>
+ <992e0697-f0da-4bfd-8178-abb206410e9d@linux.dev>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <252c53f3-3f06-40f4-9cd3-795eb298687c@linux.dev>
+In-Reply-To: <992e0697-f0da-4bfd-8178-abb206410e9d@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 6/30/26 1:02 PM, Vineet Gupta wrote:
-> On 6/17/26 11:18 AM, Vineet Gupta wrote:
->> On 6/3/26 1:08 PM, Yonghong Song wrote:
->>> For decl tag
->>> ============
->>>
->>> $ cat decl_tag.c
->>> /* btf_decl_tag test cases.
->>>     *
->>>     * btf_decl_tag can be attached to:
->>>     *   - global (incl. static) variables
->>>     *   - functions
->>>     *   - function parameters
->>>     *   - struct/union types and their members
->>>     *   - typedefs
->>>     *
->>>     * Build:  clang -O2 -target bpf -g -c decl_tag.c -o decl_tag.o
->>>     *         /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2 
->>> -gbtf -g -c decl_tag.c -o decl_tag.o
->>>     * Dump:   bpftool btf dump file decl_tag.o
->>>     */
->>>
->>> #define __tag(x) __attribute__((btf_decl_tag(x)))
->>>
->>> /* tag on a global variable */
->>> int global_var __tag("global_var_tag");
->>>
->>> /* tag on a static variable */
->>> static int static_var __tag("static_var_tag");
->>>
->>> /* multiple tags on one declaration */
->>> int multi_tag_var __tag("tag_a") __tag("tag_b");
->>>
->>> /* tag on struct type and its members */
->>> struct foo {
->>>            int a __tag("member_a_tag");
->>>            int b __tag("member_b_tag");
->>> } __tag("struct_foo_tag");
->>>
->>> /* tag on a typedef */
->>> typedef struct foo foo_t1 __tag("typedef_foo_tag");
->>> typedef struct {int foo2;} foo_t2 __tag("typedef_foo2_tag");
->>>
->>> /* tag on a function and its parameters */
->>> __tag("func_add_tag")
->>> int add(int x __tag("param_x_tag"), int y __tag("param_y_tag"))
->>> {
->>>            return x + y;
->>> }
->>>
->>> /* keep the globals/types alive so they land in BTF */
->>> int use(foo_t1 *f, foo_t2 *g)
->>> {
->>>            return add(global_var + static_var + multi_tag_var, f->a 
->>> + g->foo2);
->>> }
->>>
->>> $ /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2 -gbtf -g -c 
->>> decl_tag.c -o decl_tag.o
->>> decl_tag.c:30:1: warning: ‘btf_decl_tag’ attribute does not apply to 
->>> types [-Wattributes]
->>>       30 | } __tag("struct_foo_tag");
->>>          | ^
->>>
->> [snip]
+On 6/30/26 11:05 AM, Vineet Gupta wrote:
+> On 4/13/26 11:58 AM, Vineet Gupta wrote:
+>> Currently the extendsidi2 expander generates a shift left+right to
+>> materialize a sign_extend. This is not needed for ISA v4 which
+>> natively supports the sign extending move.
 >>
->>> Three decl tags (struct_foo_tag, typedef_foo_tag and typedef_foo2_tag)
->>> are missing here:
->>>
->>> struct foo {
->>>            int a __tag("member_a_tag");
->>>            int b __tag("member_b_tag");
->>> } __tag("struct_foo_tag");
->>>
->>> /* tag on a typedef */
->>> typedef struct foo foo_t1 __tag("typedef_foo_tag");
->>> typedef struct {int foo2;} foo_t2 __tag("typedef_foo2_tag");
->> Semantically what does this mean ? Will the decl tag will be "applied"
->> where ever the type is instantiated ?
->
-> So these are dec tags (not type tags) on typedefs.
-> Are these still relevant after the change below for supporting type 
-> tags on typedefs (and gcc has in flight patches to do the same).
->
->    commit 5754a48780f516cbc06eeb2a31b1e445ddd9c935
->    Author: yonghong-song <yhs@fb.com>
->    Date:   Mon Jun 15 10:51:02 2026 -0700
->         [Clang][BPF] Support btf_type_tag on typedef underlying types 
-> (#203089)
->         Emil Tsalapatis suggested to add type tag for typedef like below:
->         ```
->           $ cat tag.c
->           #define __type_tag(x) __attribute__((btf_type_tag(x)))
->           struct bar { int c; int d; };
->           typedef struct bar __type_tag("a") bar_t;
->           int use(bar_t *v)
->           {
->             return v->c + v->d;
->           }
->         ```
->         This makes the code simpler -- using `bar_t *v` instead of the 
-> longer
->         form `struct bar __type_tag("a") *v`.
->         So the goal is to allow type tag for typedef underlying types. 
-> The
->         following describes the main changes:
->
->
-> And if so, how are they semantically different and what's the use case 
-> fot decl tags on typedefs.
-
-Decl tags and type tags are different in the above. Decl tags will be something like
-
-     decl_tag -> typedef -> ...
-
-Type tags will be something like\
-
-     typedef -> type_tag -> ...
-
-You can do both decl tag and type dag for the same typedef
-
-     decl_tag -> typedef -> type_tag -> ...
-
-There is a selftest (progs/test_btf_decl_tag.c) which has an example with decl_tag
-for typedef.
-
-About the question what is the use case for decl tags for typedef.
-The initial llvm implementation is to have more coverage so we do not need
-to add them later on. I didn't monitor this and not sure whether anybody
-uses it or not.
-
-But I think gcc should implement
-     typedef -> type_tag -> ...
-if this is the case, I assume it should be easier for gcc to implement
-     decl_tag -> typedef -> ...
-
->
->> OK, opened PR/125862 [1]  for future improvement.
+>> There are various other reasons for fixing this:
 >>
->> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=125862
+>>   - The shifts are throwaway work since Combine subsequently undoes them
+>>     anyways, while diminishing potential opportunities for other optim
+>>     transformations it could have done, given to its own limitations of
+>>     max 3 -> 2 combinations.
+>>
+>>   - Interim passes scuh as CSE1 can also "see thru" a native 
+>> sign_extend:DI
+>>     better than the shifts, again opening up more optimization 
+>> opportunites.
+>>
+>>   - It also helps slightly with debugging Expand dumps as sign_extend is
+>>     obvious vs. 2 shifts.
+>>
+>> The fix itself is easy: just gate the expander on non-availabilty of 
+>> smov
+>> which in turn is keyed off of -msmov or -mcpu.
+>>
+>>                   Before                              After
+>> ----------------------------------------+--------------------------------------- 
+>>
+>> (insn 8 7 9 2 (set (reg:DI 19 [ _1 ])   |  (insn 8 7 9 2 (set (reg:DI 
+>> 19 [ _1 ])
+>>     (ashift:DI (subreg:DI (reg:SI 24) 0) |     (sign_extend:DI 
+>> (reg:SI 24)))
+>>        (const_int 32 [0x20])))           |       (nil))
+>>    (nil))                                |
+>> (insn 9 8 10 2 (set (reg:DI 19 [ _1 ])  |
+>>     (ashiftrt:DI (reg:DI 19 [ _1 ])      |
+>>        (const_int 32 [0x20])))           |
+>>    (nil))                                |
+>>
+>> This change is clean running bpf.exp testsuite tests.
+>>
+>> The complication comes from a subtle yet very important aspect, which is
+>> in the old regime, expander unconditionally forced src operand to 
+>> DImode.
+>>
+>> |  operands[1] = gen_lowpart (DImode, operands[1])
+>>
+>> With the patch, src remains SImode which exposes some latent issues in
+>> the backend and/or "impedance mismatch [1]" with the kernel verifier 
+>> and it
+>> reports following additional fails vs. gcc trunk against kernel 
+>> bpf-next [2]
+>>
+>> | #12      attach_probe:FAIL
+>> | #74      cgroup_xattr:FAIL
+>> | #122     file_reader:FAIL
+>> | #412     sockopt_inherit:FAIL
+>> | #413     sockopt_multi:FAIL
 >
-> If not, we can close this gcc PR as won't fix / not needed.
+> For sockopt_multi, the trunk version we have the following snippet:
+>
+>    0: (81) r0 = *(s32 *)(r1 +24)         ; 
+> R0=scalar(smin=0xffffffff80000000,smax=0x7fffffff) R1=ctx()
+>    1: (55) if r0 != 0x0 goto pc+10       ; R0=0
+>    ...
+>    11: (95) exit
+>
+> Insn 1 branch is not taken, so upon exit, verifier is happy that r0 == 0.
+>
+> W/ the patch, codegen changes slightly
+>
+>    0: (61) r2 = *(u32 *)(r1 +24)         ; R1=ctx() 
+> R2=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))
+>    1: (bf) r0 = (s32)r2                  ; 
+> R0=scalar(smin=0xffffffff80000000,smax=0x7fffffff) 
+> R2=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))
+>    2: (56) if w2 != 0x0 goto pc+10       ; R2=0
+>    ...
+>    12: (95) exit
+>
+> Here's verifier can't conclude that r0 is 0 or 1 and complains.
+>
+> For sign extending move, verifier: check_alu_op () can't establish 
+> that truncated+extended r2 value (r0) and r2 are and equivalent and 
+> delinks the scalar ids. So on insn 2 it can deduce that r2 == 0, it 
+> can't be backpropagated due to delinking of the regs. We initially 
+> thought this would be a simple "bug fix" in the verifier. But it seems 
+> this requires additional state tracking - currently all 64-bits are 
+> tracked with copy_register_state, this need to be broken down into 
+> separate lo/hi bits with additional link kind similar to BPF_ADD_CONST 
+> - will that be acceptable ?
+>
+> What's also interesting is for a reduced version the codegen 
+> difference between gcc trunk and clang.
+> The first load is a regular signed int access so technically it needs 
+> to be either *(s32 *) or a *(u32*) + (s32).
+> Clang seems to be eliding sign extension altogether [1] and only 
+> generating *(u32 *)
+> Any thoughts why clang can do that ?
+
+The clang didn't use s32 becomes there is no need.
+Related code:
+
+    struct bpf_sockopt {
+       int level, optname, optlen, retval;
+       void *optval_end, *optval;
+    };
+    ...
+    if (ctx->level != 0 || ctx->optname != 1)
+       goto out;
+
+In such case, there is NO sign-extenstion need from 32bit to 64bit.
+So llvm decides to just use unsigned load (LDW32).
+
+>
+> [1] https://godbolt.org/z/fsdrExPWd
 >
 > Thx,
 > -Vineet
+>
+>> | #415     sockopt_sk:FAIL
+>> | #517     uprobe_multi_test:FAIL
+>> | #519     usdt:FAIL
+>> | #649     verif_scale_pyperf600_iter:FAIL
+>>
+>> These fallout issues need to be addressed first but as discussed in the
+>> bpf patchworks call this morning, I'm sending this out as an RFC.
+>>
+>> [1] https://devblogs.microsoft.com/oldnewthing/20180123-00/?p=97865
+>> [2] 2026-02-18 f620af11c27b ("xsk: avoid double checking against rx 
+>> queue being full")
+>>
+>> gcc/ChangeLog:
+>>
+>>     * config/bpf/bpf.md (define_expand extendsidi2): Only emit shifts
+>>     if !bpf_has_smov.
+>>
+>> gcc/testsuite/ChangeLog:
+>>
+>>     * gcc.target/bpf/zero-ext.c: Check Expand dumps to ensure
+>>     sign_extend is present and two shifts are not.
+>>
+>> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+>> ---
+>>   gcc/config/bpf/bpf.md                   | 12 ++++++++----
+>>   gcc/testsuite/gcc.target/bpf/zero-ext.c |  5 ++++-
+>>   2 files changed, 12 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/gcc/config/bpf/bpf.md b/gcc/config/bpf/bpf.md
+>> index a2bceb8998d7..1431bfd225e0 100644
+>> --- a/gcc/config/bpf/bpf.md
+>> +++ b/gcc/config/bpf/bpf.md
+>> @@ -308,16 +308,20 @@
+>>     ;; Sign-extending a 32-bit value into a 64-bit value is achieved 
+>> using
+>>   ;; shifting, with instructions generated by the expand below.
+>> +;; Only needed for ISA V3 and prior builds.
+>>     (define_expand "extendsidi2"
+>>     [(set (match_operand:DI 0 "register_operand")
+>>       (sign_extend:DI (match_operand:SI 1 "register_operand")))]
+>>     ""
+>>   {
+>> -  operands[1] = gen_lowpart (DImode, operands[1]);
+>> -  emit_insn (gen_ashldi3 (operands[0], operands[1], GEN_INT (32)));
+>> -  emit_insn (gen_ashrdi3 (operands[0], operands[0], GEN_INT (32)));
+>> -  DONE;
+>> +  if (!bpf_has_smov)
+>> +    {
+>> +      operands[1] = gen_lowpart (DImode, operands[1]);
+>> +      emit_insn (gen_ashldi3 (operands[0], operands[1], GEN_INT (32)));
+>> +      emit_insn (gen_ashrdi3 (operands[0], operands[0], GEN_INT (32)));
+>> +      DONE;
+>> +    }
+>>   })
+>
+>
 
