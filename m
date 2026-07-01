@@ -1,120 +1,178 @@
-Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F537282F1B
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 21:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.188.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A40C397B05
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 22:02:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782942123; cv=none; b=XJGvxtrs1FCCDM0xAJr/61Ysgt0OZlmMiCTr6JZVMdS+28/YAlg8zP5D/RMKui4M6LN3SL5K9BDrK0VSolIu7WdfjT+EjGoQmU1DXDsf0Tp5s6pn8VfNA9I873LxDh8qq2kqtY4q1N3mz6PTfRmQBBLNM7GLLZWboyVqsyXhewc=
+	t=1782943354; cv=none; b=mMiknT9oDIz1lcDImvJHX+D67bTEx9yxxLZsZjjZRXA2iqc1uPIZN0tuoJgXj4lNbUsZLcrieki5NuXVInViyVwnKEkWmE3YedqJo0lWmL/XyDgSgPJZTLdsQm5ZTofqzpipC2Vqe/CUIDtj9aGMqsE9kwHgBhI5sSvRyOT8akE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782942123; c=relaxed/simple;
-	bh=ONdhMY8s8sl/1GzSWOimUx70kBPD6YcnE7nc/TKGze0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O1MRauhmuQuOoku7hG/uWknn9lxLPMKQboRXyZ5YoYg/ldy30ZAYWzu9C4D22cTQgz1YMYfwVDJBEYkxiaskZTqCCowR5hOc0Tw79lsIt2itGj2rRaZ1+P4Y7lFHFO0nbeG/mJP2VQ9xgC6HDG0Dwdqx6kcjByNN0ovXpnT5DWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=VxHrgyP3; arc=none smtp.client-ip=66.163.188.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+	s=arc-20240116; t=1782943354; c=relaxed/simple;
+	bh=eVypLHVgpYs6tf8E01MUjLp5Ab/fWW4yiCILeVsBp1U=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=uM3ya8VzlahV6nJ9hw5CZzMuJjiCWx2ytCZAm2Brmt3actQph2PDVchPi+sh3itRk09Iiv2YUBo+Z2eakq0UkYCOqhHAeq6LsQ1cUDgeXTtiJK480D3Uz60tyC2Q2xveB2iFkamTpS4W5Hnhh0TgA1WH23W1CCdxALEHeNtKE3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=qTzrZfzH; arc=none smtp.client-ip=209.85.222.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="VxHrgyP3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1782942114; bh=ONdhMY8s8sl/1GzSWOimUx70kBPD6YcnE7nc/TKGze0=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=VxHrgyP3YWDawyyA6V+bCoCE8uMhDQKIFima+kbqcfVmXU1yE5qO320ehmVid6/qnXgQ8xSNzu0uAAfrGdNFKXfh2rnBrqfoW5Nury/c2tOMmEmEqBQJPDxZOKAU2vnBVqIBr/R4HaOLL3+1R48ilJOA33dU+2eyocXZcsnqJ4Xk7ZMHicFmtLziUC19DWfDVIG23DuDPYZJo2t2POMGkQCmHW/YBfpM6BKxzuruyHKtEuR4xuI8srZDzXWSORUB7ky/7B9+j/7kH8eYdu0F7qYIqetkEFb0jWWjhQSXJAXMx2OxkVy4S5aikbquijpYj0lwULyYuIH+LhxY+/UZoA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1782942114; bh=wvXyFs89ajCpKK4NRBmG/mfQ3TEVjMkOZsszXjEihKd=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=tj5LEeI+7U5Dgeo5cLoTuPl7oxiVvkMhx3GzRJvNHv2NAD2DaHyOD/TlXHB1Kj3xbDTzpD9qhWSf6sytBvCwHuY0X8talt8uEBjBuxVLVKvr8MMk4/IIsa0k+694z0dqNw/VyZrap2K9avMrN6AWk/cw5ZIjDtZgfcdfkqimRHs16uKtv6wAwzcL3gqCuwGuO3szK8Kj+ufjrDrMKHMbjkv7x/B4/xda0YSFa/oQOd1lC8reuql0DVYteRi+nQ9Qeu3+4oNsReVTdBjzXpK9V2OdOjEj1qU8W2MqE5zIEZAAWDD3MCFTU9C+c071tws7PxXMLPms+Dp0QqoWZTG9mA==
-X-YMail-OSG: jj26vDoVM1m.jXlw468P0YqK.522FF8z2ThfBznRWJn4FUi5jOeIhbFntZWbKBt
- hM8EY6SA56G108CvP9MVs2.LcPuHsEwnqfz5rJ3IhHwYaNrIe003FoQNJtu.Oyxd_AZjbZiqMxOM
- qHpRBYgq_KDsYxxWoBsWR.qkHePU91rSqVPxvbMu50dI57vkmR71Do78G8FYpPPY1JZxmSjAbZM9
- 0Gi7A0aq8Pjnn9Y1Ldf0SDAT7DlnKfQiVGgyaTEafFvTo2F6W5cxXj8WkeTUqA2w7Q5uotvKewqO
- NNGAQMGBnKdZGo9f4CQS2LB13aJCja9oY4sjASSoLYpzi_zXYwRRDqEcCsDVMC0Pwu4R.6Nj1YOo
- NbrAfryoGEMfnwodiJF6rzb.6atrokgd7aybFl4wRdc.3GdUkey4Gbls4DD42cgWKxYQ2Zu.uPZ3
- 1v1Y6najkE8zxpSJlV799Jz.pJjucJc39PbOp4Kf2YckniYHSj8Rmi2cW33cFRDfYFrf050yhQPW
- tm_fYBC0tLkdCgsblMtQOJrUrjl7QhFkTPMkKlhrV9Ax41zpKyEGLAu720dq7qMMmQ3NKfhzNRWo
- NMqlD7GsYChk7WmddqSNgodTAaIVGbKtHCRLixSG88RvN6e_LGLqqpv6JaKKaMKiacCBJ89x1Xgh
- Gv7geGRVRYlc5aOZtM79GNrzk0hMEdTUee4814_o2jgKR9DYDUMWV6KAfjEi4lGv_qg5HfNGVPMD
- _0OITGreiX7uQtajrU8Knos6NcU_pSlSGApe3JReLctC6HSG31xp4vbv.s7oJ9sSCyFCbW9GJwfG
- B82zsFLkB_qunkLZMCeumiljBhbKCqn2GpzT7TuwocvzQ10JZzQ1JRGvhEZO6ILIyODkMdIHNov3
- F3gii0qLL92bbJKuW91Gvs6Xmwe_IYhWf58RRkShfrDwAH7c0GF1.H6uP_BtxKpnICOxuEeocYIq
- GMhn6PyVrvT6.AV.xx_aKlvPzOwMfj10kIQswnwiON75YDA_0_RyX_ciYnf2Vc2X.btt7Q4gBWDO
- 6ePh.LQxFoUPVW.vL9tIt2hk2lHdGcdK1IJeou1l8Hrwby9gqNvG3jjcUajV6aunwGJ_tpFf1MOQ
- drGfOEWRUWl.d6syb9tKdwDey90nW87LndpPbnBw7BcSYcoNsTgmskM6McplQV2AMTlciEzhqVLQ
- jQKSoMoNznlWw6vFzuVMsRfoEm2AtqZ0os3UV5frtpFYTNUsnyLk1OFFcBPRdcjERdiwqqh7nU45
- QiNedQrGUrEChbCZ2phGVRJeZDwzLPAuRRwqzOJfnRwyuO5D0nGDGSNRKukYUn3sbtl3Hgkor17.
- VtW_Kre2DO31aJnpzMxog1YQ85G0RTpEwN3_aedgh3cZKWaIIK2PxQ.Go0VMnO3IHcQ8AbQ9nZ_o
- J5U2gkflIvbFk.5okLOLcxHK4vXn6JPpJI9Sjo7DhmV1e5GLquEkjcgPgtC2w_n.RRCo2uFbRZB5
- MbmzLMrBfBIQ023ceT38eEjUm8LbC79jxWvxWisTgd2gkLvWtBnMw8LOYTUVWKjucM0_Wt2QoH5E
- fstF2VxtQoOYuWIMpeTAHh41fTyqVb7LHCZYJ5MT8HtmOC.p6.3VEOiNumHOHtGp4pgBr_cylUiB
- NkDNDyVPYOJ9En613mhUrxWF2r8p2rcwNt3VLNYc.5NYSWEEVeWmYdqmUkA4Tjym5S_YTmlnL.L3
- jCnRP9Z0NfR8wubeWr2X_teMnukJV4z_yJRG7z93rKjJ9bnSKMg8nV0u6roQX60BV0dZA0Sdt3BC
- Tc7Z2Fl4NnCD9pVTgioZg1CyfshNZll9b6VVojJkZw32wI1GuKTxnlrj9uy9TGt1UVwW5GDM4LCe
- 0d4xXv7M64a82G8xfJCfmTyzPjBEMtjk6anIEN1bAiAEPpwnKM1dDXppjqoqBWiIaijOBrLoOASV
- PhVZ4teRzQlQImYvdYtlo_2kUkTzmyHwnWQ0mWlMEk776nrq9iR233sUiblEY3hcNyhZNRMqej4t
- bvwXaLojbdI9X_RjGn3QEdckHmT.aydQRnlOao8ICcLJN9l_6eYTZXp8BBGl.gUTZX3JBUzJ2TJa
- yONjU5TaTaJG8rfSQVRlYN8zAFxLTdDoI.XlSn_W0ofXjhUpmAZ76vJ0zW.3EIjHOpSSqiZGwr_F
- PxPryPEnGnaO9m0jUj9iedP62z9KXadwgklWwgV.1yrm327pKMOtImYDvVBRVIi3kY4TAHKEFUfO
- tXcW4vuRRsxyxBlVz4r.amz_Af9fZZGH4lLNJ77CcH3sJf2LB8nYCsxV7BXmBcZ85JR_HQk9f9WI
- eWw--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 65b2555f-ba57-404b-b211-4f7df9a05a57
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 1 Jul 2026 21:41:54 +0000
-Received: by hermes--production-gq1-6dc558886b-tfbv4 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 984b9385c4c6f433da7a05bd9bec98cc;
-          Wed, 01 Jul 2026 21:41:52 +0000 (UTC)
-Message-ID: <c9abd9ab-3379-47ab-ad41-79cec8f465c2@schaufler-ca.com>
-Date: Wed, 1 Jul 2026 14:41:49 -0700
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="qTzrZfzH"
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-92e6a434cabso64073385a.1
+        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 15:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782943352; x=1783548152; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yLVtzWFR2dQSLkUs2HwYG25dqTS2FGwULXJdwvU+iBE=;
+        b=qTzrZfzHbaUJEWLCbu/VcXgWvZONswmngMnxBrt2qS/5ZcPbLb3JmW0K/35U2V0P8l
+         N8MI2n/fxVrSvevTD743mxXzeoNOj15iOHQYKrm+XnzVMN5tKQC2VPWiOTxHFzhVKdiN
+         rSg2UcD996fuKUzSuKkl/fqw5wSeu/InHrvPUei3F4YAcwOZRM4wCaNSb7eAAjukpzAr
+         KLLGBudhzj+MnJEEzS9TiVu4dPZE6yYYIFgDmxs2tznBHOHpDpjm5cYjRmDdk6j/nys4
+         3/XA0qvld6PK7DkEhyIwYBahij8c4/byMOUf/PS/GMl1yjH/175U4mIAHfzoxsceCOga
+         0XPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782943352; x=1783548152;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yLVtzWFR2dQSLkUs2HwYG25dqTS2FGwULXJdwvU+iBE=;
+        b=lKzyITE5o35AjWTHA5Z6PL2v468f/A3pzyRuXYUxHITsSXmMDg3eni+HPfa916r2Si
+         PZnY/LGMRgw4zRpmC5CUNLSXDRrN+fDoAURZ/i/yvoMBklJZECQD930rAB0nCIF8sTnI
+         ejgLspM16D4W7iXtq0Zi0VCILtZSg2Em+VTervV5BQBH/7JQRVGKRe3F8tvPUTYSkRY/
+         KE0KpUn7MrMkCFPd2hAc0mxFBiYswVjyHl7+dZVvfyI5bZbtk61v+gafm5xIOj+juPOY
+         cqPBX7jDmHXzVCIztzZuM0aNOZtendwQM1UwVC+XyKutkD+9oMOFFXnuEcaAjmSCoOlX
+         xHGw==
+X-Forwarded-Encrypted: i=1; AFNElJ9KngsgkJHJaMyyTyOJh62J9YfYJrti0ePqP+HhktmjbB4tfJ6heeNMyc73UCpyr+WTDGk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNE9rKFd3avbgp86HJM0fKxurvLLeOYynzmdEyZvl7wlbvSx3w
+	ns/MEV94IOBH3vcYKKgQ5ImSW2TWzz+jSVvRpueVCF2bvdOJMk9jWnYZ2uJVVwaXbQk=
+X-Gm-Gg: AfdE7ck9VNxK6cGT9gVk3by9C0xS4Ly6sx47npz4C79kFNcW797XK1sLaIg06bgiRRz
+	Mjp8wJsVvgVm22cxiEzjA7Rrt3xx+n0rI/w+bWgdMvVrlTePQuVg1ncPBpWK1adY7Yrz50jYxEj
+	c4Mn/J/r42p2WY3pM59YktMyioieTaq/eU9sSpF1s1X33AYjaiEIXmIRKdUZ8sOpRSuXGSbloOV
+	sT+cm5OcAyd/3c+umGKzgPEtRUX8pa7Ou2mlg7PVuD+voy49fhA8i3N8e4unPSEwlnXrAUQgN8T
+	gvsnVWd4bZ9XCIS2ZsC2Qj0vaU2ux4MojZLWR0MhqDGjR/gcuiBBA/rPIQoNFEsDaXKNaomUflP
+	b1KscFK2pCdmu/DOd5vRtZYWrN8kYP8wL29JR023tuRC+HU6DfQpxutGXIS/TVgqi+TrRpsx1GB
+	r4AUNFXEaIBsc=
+X-Received: by 2002:a05:620a:4489:b0:92e:5fe2:fd35 with SMTP id af79cd13be357-92e7b368d85mr406755685a.32.1782943351824;
+        Wed, 01 Jul 2026 15:02:31 -0700 (PDT)
+Received: from localhost ([198.58.242.173])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-92e80162220sm58215185a.25.2026.07.01.15.02.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jul 2026 15:02:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 06/20] bpf: lsm: Add Landlock kfuncs
-To: Paul Moore <paul@paul-moore.com>, Justin Suess <utilityemal77@gmail.com>
-Cc: =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, ast@kernel.org,
- daniel@iogearbox.net, kpsingh@kernel.org, john.fastabend@gmail.com,
- andrii@kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org,
- kees@kernel.org, gnoack@google.com, jack@suse.cz, jmorris@namei.org,
- serge@hallyn.com, song@kernel.org, yonghong.song@linux.dev,
- martin.lau@linux.dev, m@maowtm.org, eddyz87@gmail.com, sdf@fomichev.me,
- skhan@linuxfoundation.org, bpf@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, Frederick Lawler <fred@cloudflare.com>,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20260407200157.3874806-1-utilityemal77@gmail.com>
- <20260407200157.3874806-7-utilityemal77@gmail.com>
- <20260701.ze4eph1eKo7a@digikod.net>
- <CAHC9VhRfqSoM89WC6TdQHapUVQe8a18rW2c-F7+tu6EjM9EdCA@mail.gmail.com>
- <akUH13qbsEnJLgQu@zenbox>
- <CAHC9VhSjRcMr9+5dMkep_TPKduYdob-bZ73FLfXd_o2xiWwOSg@mail.gmail.com>
- <20260701.jei4Paej3zen@digikod.net>
- <CAHC9VhRzZVUz8icZ2RD9OVvscJdZW3ivPERJLEkNi5poBeguxw@mail.gmail.com>
- <20260701.oTeikequi3ee@digikod.net> <akVvkA3kmlv_POsF@zenbox>
- <CAHC9VhTQtHPFGqu58EaFqMobV3LCcTsdzYfxy568P8mU769TMg@mail.gmail.com>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <CAHC9VhTQtHPFGqu58EaFqMobV3LCcTsdzYfxy568P8mU769TMg@mail.gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.26086 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Date: Wed, 01 Jul 2026 18:02:29 -0400
+Message-Id: <DJNKO3H4C8CK.YM204DS9PVSN@etsalapatis.com>
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Sechang Lim" <rhkrqnwk98@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "John Fastabend"
+ <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>,
+ "Shuah Khan" <shuah@kernel.org>
+Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Emil Tsalapatis" <emil@etsalapatis.com>, "Stanislav Fomichev"
+ <sdf@fomichev.me>, "Jiayuan Chen" <jiayuan.chen@linux.dev>, "Varun R
+ Mallya" <varunrmallya@gmail.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v4 1/2] bpf, sockmap: disallow update and
+ delete from tc, xdp, socket_filter and flow_dissector
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260630145410.3648099-1-rhkrqnwk98@gmail.com>
+ <20260630145410.3648099-2-rhkrqnwk98@gmail.com>
+In-Reply-To: <20260630145410.3648099-2-rhkrqnwk98@gmail.com>
 
-On 7/1/2026 1:02 PM, Paul Moore wrote:
-> ...
+On Tue Jun 30, 2026 at 10:54 AM EDT, Sechang Lim wrote:
+> sock_map_update_common() and __sock_map_delete() hold stab->lock and call
+> sock_map_unref() -> sock_map_del_link(), which takes sk_callback_lock for
+> write. That gives the order stab->lock -> sk_callback_lock.
 >
->> Each LSM calls this once to register its sets. Because registration goes
->> through the framework, the framework gets to decide whether to actually
->> register them so you could, for example, run an LSM while explicitly
->> opting its BPF kfuncs out. (something that should be done at the LSM
->> framework level).
-> I'm not opposed to the LSM supporting a set of kfuncs, see my comments
-> in other threads, but we should treat these kfuncs just as we treat
-> other LSM hooks today because that is what they are: LSM hooks that
-> happened to be called from within a BPF program.
+> The reverse order comes from the SK_SKB stream parser.
+> sk_psock_strp_data_ready() holds sk_callback_lock for read, and after the
+> verdict tcp_bpf_strp_read_sock() acks the consumed data inline via
+> __tcp_cleanup_rbuf(). The ACK goes out egress, where a sched_cls program
+> deletes from the sockmap and takes stab->lock:
+>
+>   WARNING: possible circular locking dependency detected
+>   ------------------------------------------------------
+>   syz.9.8824 is trying to acquire lock:
+>   (&stab->lock){+.-.}-{3:3}, at: __sock_map_delete net/core/sock_map.c:42=
+1
+>   but task is already holding lock:
+>   (clock-AF_INET){++.-}-{3:3}, at: sk_psock_strp_data_ready net/core/skms=
+g.c:1173
+>
+>   -> #1 (clock-AF_INET){++.-}-{3:3}:
+>          _raw_write_lock_bh
+>          sock_map_del_link net/core/sock_map.c:167
+>          sock_map_unref net/core/sock_map.c:184
+>          sock_map_update_common net/core/sock_map.c:509
+>          sock_map_update_elem_sys net/core/sock_map.c:588
+>          map_update_elem kernel/bpf/syscall.c:1805
+>
+>   -> #0 (&stab->lock){+.-.}-{3:3}:
+>          _raw_spin_lock_bh
+>          __sock_map_delete net/core/sock_map.c:421
+>          sock_map_delete_elem net/core/sock_map.c:452
+>          bpf_prog_06044d24140080b6
+>          tcx_run net/core/dev.c:4451
+>          sch_handle_egress net/core/dev.c:4541
+>          __dev_queue_xmit net/core/dev.c:4808
+>          ...
+>          tcp_bpf_strp_read_sock net/ipv4/tcp_bpf.c:701
+>          strp_data_ready net/strparser/strparser.c:402
+>          sk_psock_strp_data_ready net/core/skmsg.c:1174
+>          tcp_data_queue net/ipv4/tcp_input.c:5661
+>
+>   Possible unsafe locking scenario:
+>
+>          CPU0                    CPU1
+>          ----                    ----
+>     rlock(clock-AF_INET);
+>                                  lock(&stab->lock);
+>                                  lock(clock-AF_INET);
+>     lock(&stab->lock);
+>
+>    *** DEADLOCK ***
+>
+> A tc, xdp, socket_filter or flow_dissector program has no reason to
+> update or delete a sockmap, and redirect does not go through here. Drop
+> them from may_update_sockmap() so the verifier rejects it. It also
+> closes the matching sockhash inversion.
+>
+> Suggested-by: John Fastabend <john.fastabend@gmail.com>
+> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 
-As someone who has been working to get the SELinux specific assumptions
-out of the LSM framework for the past 15 years the notion of adding
-Landlock specific interfaces makes me want to cry. Is it really that
-difficult to understand that 5 or 10 years from now something is going
-to come along that makes any LSM specific interface a nightmare? What
-if there's an LSM that does what Landlock does, but does it better?
-What if the Landlock sponsors decide to quit funding it? Or the maintainers
-get bored?
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-I agree with Paul completely. Make the hooks available to any and all
-LSMs, or don't make them at all.
+> ---
+>  kernel/bpf/verifier.c | 5 -----
+>  1 file changed, 5 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 25aea4271cd0..83ea3b33ff67 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -8488,12 +8488,7 @@ static bool may_update_sockmap(struct bpf_verifier=
+_env *env, int func_id)
+>  		if (func_id =3D=3D BPF_FUNC_map_delete_elem)
+>  			return true;
+>  		break;
+> -	case BPF_PROG_TYPE_SOCKET_FILTER:
+> -	case BPF_PROG_TYPE_SCHED_CLS:
+> -	case BPF_PROG_TYPE_SCHED_ACT:
+> -	case BPF_PROG_TYPE_XDP:
+>  	case BPF_PROG_TYPE_SK_REUSEPORT:
+> -	case BPF_PROG_TYPE_FLOW_DISSECTOR:
+>  	case BPF_PROG_TYPE_SK_LOOKUP:
+>  		return true;
+>  	default:
 
