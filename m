@@ -1,105 +1,140 @@
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87BE937189A
-	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 04:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AFA31CAA7D
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 04:38:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782880418; cv=none; b=YGNQT8xH2KAyx01cJuQjVCo0CoIKsR/vJeapfdt48R0LOQL147J6ZQY7QtOHogfuvHYL3t/Mph5Ks6obwFAsPcdM9eyoVbOMkeBHRU+AmemLX1PCtrNDFGZDK+BOUlWzZ8ujJhqEMi5XN2Vqy5HwslL71RT8dS/eaof6begTuAw=
+	t=1782880695; cv=none; b=cG7e6POzhSqdH4wTyfpFhaZ3WyKuFI5vQLAbpXJROZ01oT7GAWdRLMmgUMrJw3QBaNSP5FTSmJKWgxyfhl9HR4+H4FL783cFzRgJdgZ4yz/gXKnVO/KXYTryqNHUVdNDsdKYJmX7sC6TNywLfJsYFF/lwlubw7CqQle+0lIOw4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782880418; c=relaxed/simple;
-	bh=/nmnobtjJf7DeuOmsJfhnD4kVBPuo5Blpi7AtswsGbA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=kcE1e2iIqcV/ODh+ZjGrvSQ55bol89RzhQT1JrZO1+HYgSctseDKC5Io5yLcUcS4E17PRjPhySzLKqvOO12bwokm3DABIqW7hhHtlVi35AqkP5qJLTU5xPO64zwVALadGecBTE5D6XDnN/dy+8pXcwkOg4VU31/UUXARhCFKKIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=VJ3+igLM; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1782880695; c=relaxed/simple;
+	bh=19PMHQl/tl9HDU9cyINoh7Jp0RcLsty2mQ8UYsc0RP4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=FRI6yvJ2KY+179dkWjrSvqlmmMhNJb1dL7QuQEMLn376eI3Z+1+OrT2na0Fg4zSYN8IruerPLQheLCZN9MgiWTg6alJ8zVkYXIqCrsBzB/fkju4nXg2786TUfyUcQMXAlc2nKXQBgm68tdjbVol/dAgVjwQhK/ir+P+XesWtZKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dQvzs5x6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="VJ3+igLM"
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-92e6a434cabso12144785a.1
-        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 21:33:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1782880416; x=1783485216; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0R1QJeI06Wrfnk6C1+/9UGmY70b8ywwdMJisPWWJWow=;
-        b=VJ3+igLMPvA/nzbN61G+GrSWMIl5SpdJkHCrSxsi/uxHA/5T22mjVpys1ZrfYpUdpU
-         7WTPUjOW45Up2MHTYUQGUGRfE83uoiHedlE7I72RbSAc/zULDnL5xeY0awR987n+pb0Z
-         V2mbyuRnEUOT6Fckd4YuBfb/trGZMC48L1DDosoD9v5Rj/bAh6sYtrv8Pz3yx1Gs8A02
-         cg8iC/sozWwEjHPjpvQqWYZrDEfkC1N/bjh3IrAUdRE4uuCLUMAWyH0V8lKpca0ueQEu
-         l0+trs+e4Clm2g3HDHcmkHwP8t9xCVuYXezDjEQgtGEykmBleKNlCG2fMVNMDENvU282
-         0NNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782880416; x=1783485216;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0R1QJeI06Wrfnk6C1+/9UGmY70b8ywwdMJisPWWJWow=;
-        b=EqXvaMj7t3eIqcxDKlfmsli2ST/kup6Mk3Uno1FtWuK9Rk6Ylk4k0IA5T86IvVhOwt
-         H7qmz7MAQlCiFouH/m9DWII7zWEwXLYwo6F/4i6r3Ex9rw1hFOq7MOOnXqBNVWmAVfg/
-         GiRFCSEGOTH6XheplJU2Z01cIld9zba8Xaij4tr75KdyyXe6EiG3/IQKx8vu+Weldh59
-         zmwTDJWLJLgh0C8d+qVGFtuK+DnuwmAWHRA6OSihURuxv9g0UgfsY96WlvRjyC09LdGB
-         wLwa7ruT1JTJ8ycBKlAXEIV1nHv0SfForCqDktSODDLjkvbE8YSeZJ+QUS/sf94UtV6v
-         sOKQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9Dsqe0poXlrsvlLh4ITsRJzYLfBS08JQ+ibITMr8R5px7YgmuqA9Jfnf35s1UQCg3fCnc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZsStOCGApI0Z55ROfxeqtcs9qbKW/Oz7eJr6X7/wXzYIOWJ47
-	9DswtG8u41im90f6qwQSO3YEy2gMNsthHFxHKi8va2P6HLrpFNsd1+dY57+/EapuDd0=
-X-Gm-Gg: AfdE7cm1ASUGM+/jSCvyaju8ufXnFX4QFLV2OKaD4W161Jpk2vFDZoRAXRd4D9lG7px
-	rpubPGypYFCORBuddcIhpayNMbkc5ZbGSqaZsgiEjFsA3rIXWgHiGNRZr9xXuOYLi7Uc7AlY25D
-	VAOm3q9PyxJ+EG9EjzGoUHi5Mqqn0kM2/fyuPAqEB21FpZu/129qvyyNneXJrgYWVQfwqPn+lc6
-	W8OHoFFOJUVpbvi+3gXeWX6ltmuGINADcbtSdBGUtxvw80S6WGZeLet4TUaOZIfnwb3vyJzfOI2
-	jus0ApwXVbAs9UgMTsfWs4WnqnYEt3olD9br604Kvy/wRHgmuEvSMxMxgCu+yASuYFnlOCa+Vjf
-	hbL3OTWD8fuKvx2f52CHguiKQl8/8QZnzynRkv/z2TK0hQ9INaiHk8BjXrSZVJGs6Itt4FxMrvM
-	qHGSdpAsAJFOE=
-X-Received: by 2002:a05:622a:16:b0:51a:8a47:b578 with SMTP id d75a77b69052e-51c26b0077amr1635301cf.38.1782880416540;
-        Tue, 30 Jun 2026 21:33:36 -0700 (PDT)
-Received: from localhost ([198.58.242.173])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51c10a3307csm33851011cf.29.2026.06.30.21.33.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jun 2026 21:33:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dQvzs5x6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FEB81F000E9;
+	Wed,  1 Jul 2026 04:38:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782880694;
+	bh=J57tadxDZh5GxuDfZnQqzvgj/+XKZKVUHQnqiAFtmVY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=dQvzs5x6d/2eedIqNSlTSjSPJXOG9IV22RE79+RRaYvo38mKiIWyOx73Zuq/nO6cU
+	 gtmokXrF1oTMHdvzwNAz5qsQ8SA4Gkwu7HuJs3D3SJI1ktCKhvRts1klnmohRxbwUd
+	 CpJ77S5j+J9v09/yZ6vdfDGN1qnVfwMsnSh9gnrOVRTSjGIHQkEtGiuTStlHmo11Ub
+	 IYIP/eM6xXPAtFKWcPq0cotaKrUYJ2LLxLOVQ7Ek8fRMhTZLXakTaxnsKSVn2Rqq0P
+	 mhS9aVM6CyxAz65EP82SfJ4f+XGZ4yOcO1m4KC2uTZ9bGVLRWi8R3peVX9h1ge8nLT
+	 /MpouGzE5vKwg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v5 2/3] riscv: introduce percpu.h into include/asm
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yunhui Cui" <cuiyunhui@bytedance.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <d6afed2c271de42efe2a3580ea30c7601cae9c0c.1782877663.git.cuiyunhui@bytedance.com>
+References: <cover.1782877663.git.cuiyunhui@bytedance.com>
+ <d6afed2c271de42efe2a3580ea30c7601cae9c0c.1782877663.git.cuiyunhui@bytedance.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 01 Jul 2026 04:38:13 +0000
+Message-Id: <20260701043814.0FEB81F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 01 Jul 2026 00:33:35 -0400
-Message-Id: <DJMYCZW34PNV.GIH8C7AWGIOV@etsalapatis.com>
-Cc: <ast@kernel.org>, <andrii@kernel.org>, <memxor@gmail.com>,
- <daniel@iogearbox.net>, <eddyz87@gmail.com>, <mattbobrowski@google.com>,
- <song@kernel.org>
-Subject: Re: [PATCH bpf-next 5/5] selftests/bpf: libarena: Add bitmap
- selftets
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260618085626.19633-1-emil@etsalapatis.com>
- <20260618085626.19633-6-emil@etsalapatis.com>
- <a9926def-30f4-47c2-8ce9-569412d1459c@linux.dev>
-In-Reply-To: <a9926def-30f4-47c2-8ce9-569412d1459c@linux.dev>
 
-On Tue Jun 30, 2026 at 5:46 PM EDT, Ihor Solodrai wrote:
-> On 6/18/26 1:56 AM, Emil Tsalapatis wrote:
->> Add testing for the new arena bitmap data structure.
->>=20
->> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
->
-> Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
->
-> nit: Looks like bmp_copy() is not covered.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Missing `<asm/cmpxchg.h>` silently drops NMI-safe ZACAS optimizati=
+on and causes arbitrary compile errors.
+--
 
-Ack I will add a test.
+commit 81a0db6d3f915424f8959abac9007e01a81b105c
+Author: Yunhui Cui <cuiyunhui@bytedance.com>
 
->
->> ---
->>  .../bpf/libarena/selftests/test_bitmap.bpf.c  | 314 ++++++++++++++++++
->>  1 file changed, 314 insertions(+)
->>  create mode 100644 tools/testing/selftests/bpf/libarena/selftests/test_=
-bitmap.bpf.c
->>=20
->> [...]
+riscv: introduce percpu.h into include/asm
 
+This commit adds RISC-V specific this_cpu helpers for percpu operations.
+It uses AMOs for native-width operations, and Zabha or local 32-bit LR/SC
+fallbacks for 8/16-bit operations.
+
+> diff --git a/arch/riscv/include/asm/percpu.h b/arch/riscv/include/asm/per=
+cpu.h
+> new file mode 100644
+> index 0000000000000..46f1901d3bb88
+> --- /dev/null
+> +++ b/arch/riscv/include/asm/percpu.h
+
+[ ... ]
+
+> +#define this_cpu_xchg_1(pcp, val)	_pcp_protect_return(xchg_relaxed, pcp,=
+ val)
+> +#define this_cpu_xchg_2(pcp, val)	_pcp_protect_return(xchg_relaxed, pcp,=
+ val)
+> +#define this_cpu_xchg_4(pcp, val)	_pcp_protect_return(xchg_relaxed, pcp,=
+ val)
+> +
+> +#ifdef CONFIG_64BIT
+> +#define this_cpu_xchg_8(pcp, val)	_pcp_protect_return(xchg_relaxed, pcp,=
+ val)
+> +#endif
+> +
+> +#define this_cpu_cmpxchg_1(pcp, o, n)	_pcp_protect_return(cmpxchg_relaxe=
+d, pcp, o, n)
+> +#define this_cpu_cmpxchg_2(pcp, o, n)	_pcp_protect_return(cmpxchg_relaxe=
+d, pcp, o, n)
+> +#define this_cpu_cmpxchg_4(pcp, o, n)	_pcp_protect_return(cmpxchg_relaxe=
+d, pcp, o, n)
+
+[Severity: High]
+Does this missing <asm/cmpxchg.h> include lead to build failures?
+
+Since these macros rely on cmpxchg_relaxed, if callers expand them without
+manually including the atomic headers, it looks like cmpxchg_relaxed will
+be undefined.
+
+> +
+> +#ifdef CONFIG_64BIT
+> +#define this_cpu_cmpxchg_8(pcp, o, n)	_pcp_protect_return(cmpxchg_relaxe=
+d, pcp, o, n)
+> +
+> +#define this_cpu_cmpxchg64(pcp, o, n)	this_cpu_cmpxchg_8(pcp, o, n)
+> +#endif
+> +
+> +#ifdef system_has_cmpxchg128
+
+[Severity: High]
+Will this macro evaluate to false and silently drop the NMI-safe ZACAS
+optimization?
+
+Because <asm/cmpxchg.h> is not included, if a file includes <asm/percpu.h>
+first (for example via <linux/spinlock.h> and <linux/irqflags.h>),
+system_has_cmpxchg128 is not defined here.
+
+Does this cause the kernel to silently fall back to
+this_cpu_generic_cmpxchg?
+
+Since the generic fallback only disables interrupts and does not block NMIs,
+could this introduce a data corruption race condition if a percpu variable
+is updated concurrently from both NMI and normal contexts?
+
+> +#define this_cpu_cmpxchg128(pcp, o, n)					\
+> +({									\
+> +	u128 ret__;							\
+> +	typeof(pcp) *ptr__;						\
+> +									\
+> +	preempt_disable_notrace();					\
+> +	ptr__ =3D raw_cpu_ptr(&(pcp));					\
+> +	if (system_has_cmpxchg128())					\
+> +		ret__ =3D cmpxchg128_local(ptr__, (o), (n));		\
+> +	else								\
+> +		ret__ =3D this_cpu_generic_cmpxchg(pcp, (o), (n));	\
+> +	preempt_enable_notrace();					\
+> +	ret__;								\
+> +})
+> +#endif
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1782877663.gi=
+t.cuiyunhui@bytedance.com?part=3D2
