@@ -1,89 +1,93 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D081B436367;
-	Wed,  1 Jul 2026 11:57:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B349480945;
+	Wed,  1 Jul 2026 11:57:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782907045; cv=none; b=iHGl14CQF4F4FQzIrmkWG0SUc/IVB0EdzTUBcIbmGDRgclpPiZjtQznsakjvtWUHAp2tPiJwRMKRPi9v+bRaKJlEIOvYydCzLIGsTKjZX3Z23wS9Za7Dd22Cd3/G46jJOM9GjSJIKs+c7yK1xTKLoRMqJtjYzsJE6ybgdUqdaNw=
+	t=1782907047; cv=none; b=OPcM+BMnRDrAbNkN26/uPnRct/EihRwFRLPwyNEo7ianDuXJGhw7zRSXH+ofOYL43Q9qt4vZT8LgRaOaBPJN/Vv+3BTNL/K7SbojLHi2y6yMIwJ5Q48hkMoasiduTRtBde1XU9fb6dGRlXANvXNvt+4/K/1e+GBnZyiFb0RCpG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782907045; c=relaxed/simple;
-	bh=aRQAU9eT0foZSiswMsLlNuhtqqtImnalvsfnhIWO4ow=;
+	s=arc-20240116; t=1782907047; c=relaxed/simple;
+	bh=adDfxxqNMhHTS7u8Q2Ts8gjafrimuwoyJgLXQt1HVnk=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Sf9THpquBkchOoa/q0L3qHeqdgrBu89WrEZ19b/q0qe7lWCq+L/uzqg7elZBzWwm9iFj98ZsVdONrMZbjNjregjcodTwC7MG1FVdeW3k05tJXnEtwdY+uUoxieNkSkXRd/MJmSplD7dBkh1hvP3asoMVW1/AImNzi8t00fkAVOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mHvJIZcm; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=YR5Yfj8dW5QpdqGoJI/ejjmfHprsPKuucKJEJ3+kmkeRYk8yulu36Mo7IphHtNYuymdTg6PECRCl2vMAWM5u3kZ/+/vT4JlAh6WpCOT4Gtot0zk5dHL43gYqVjo79Cp++6emazXEu2CBfYrfYJAVKVM5+PaDyy5EpwlNenwyeCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dPdhjtVv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mHvJIZcm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46BC01F000E9;
-	Wed,  1 Jul 2026 11:57:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dPdhjtVv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DBB81F000E9;
+	Wed,  1 Jul 2026 11:57:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782907044;
-	bh=TxF4LBJSSES2Z56A4SYU4ACXyu8JScPWCypLcddMZdw=;
+	s=k20260515; t=1782907046;
+	bh=aHTb/NZa/DTZLovWUqS7Q8/oam3WHgoOZjM/h+vRByI=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=mHvJIZcmXaKwkze0V+bmeOYolEkabAnGQ6PBX0wCd53R8TBO6E0vAIj770TZhzcmD
-	 zLjniCiliUMPqCsJaROX51xWxPCzFNZgmJq/AblHwKoQUsRcjv8IG0DKk/MYcIDOJg
-	 rllQLhsjh3jEfNFegSQMNcpugmu2bbPuLk0y4Fm0iacySu6KByjxXvukwwlNAbrfoL
-	 y7mEbRXF3jpCmoAnjZz/L2dAr9CDlGkc6Qw9Xe8ZiA9QsHSWtYRJKFK7O22mV3O/ev
-	 IpJ3i5BovJeOzPqM6laDHuUfgvVVGL3kbNZPyV4q7LiLncdHHs1gfZ6MwspOFPNOZJ
-	 EK/ymUwEzUnZw==
-Content-Type: multipart/mixed; boundary="===============2796236423524058254=="
+	b=dPdhjtVvadWvhsSxJX3hXPnBMA50JvjCMGvacO7PcL0Q8hqYM5wxKfZYJ3egYMJkE
+	 VsLZhvL56ltDYbHC98w3Ec9TThUlfTNm95HBqPZWYl9UJZMY97MiRU3EgRBlAq78Qu
+	 Km1BLKh8xN9jWevFVVAR+seAfb4O59M20dm8JnNk2sxaBw2fXopSIinXVN7o1X24tH
+	 1/DigetoeVBh42k+lHFzWd4QAkanKMtM9QvGbinMWl/jnkEvKKz+Mry4rIQfYBAejV
+	 qTLCaCh0Rn2QMmRTw0a8e/nhnDwcHP2tpJnUmry6mwxoU06ec5uYSfAcsIxnrFsCtl
+	 jYlsvk3Rsl8dQ==
+Content-Type: multipart/mixed; boundary="===============1133100935469573393=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <abc994f32124893b2dfca6678096a7eba977dace1550a393dfdc516d4350ff9a@mail.kernel.org>
-In-Reply-To: <20260701111337.53943-13-jolsa@kernel.org>
-References: <20260701111337.53943-13-jolsa@kernel.org>
-Subject: Re: [PATCHv5 12/13] selftests/bpf: Add tests for uprobe nop10 red zone clobbering
+Message-Id: <826d1095dbfbd8e5fe4fed1fe143dfab054c42c9ef608e120ebb73e2eb506f09@mail.kernel.org>
+In-Reply-To: <20260701111337.53943-3-jolsa@kernel.org>
+References: <20260701111337.53943-3-jolsa@kernel.org>
+Subject: Re: [PATCHv5 02/13] uprobes/x86: Remove struct uprobe_trampoline object
 From: bot+bpf-ci@kernel.org
 To: jolsa@kernel.org,oleg@redhat.com,peterz@infradead.org,mingo@kernel.org,mhiramat@kernel.org,andrii@kernel.org
-Cc: jakub@cloudflare.com,bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  1 Jul 2026 11:57:24 +0000 (UTC)
+Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed,  1 Jul 2026 11:57:26 +0000 (UTC)
 
---===============2796236423524058254==
+--===============1133100935469573393==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/usdt.c b/tools/testing/selftests/bpf/prog_tests/usdt.c
-> index fda3a298ccfc..8004c9568ffa 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/usdt.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
+> diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+> index 2be6707e3320..d2933cf77cd3 100644
+> --- a/arch/x86/kernel/uprobes.c
+> +++ b/arch/x86/kernel/uprobes.c
 
 [ ... ]
 
-> @@ -340,6 +341,52 @@ static void subtest_optimized_attach(void)
->  cleanup:
->  	test_usdt__destroy(skel);
+> @@ -1111,21 +1051,19 @@ int set_orig_insn(struct arch_uprobe *auprobe, struct vm_area_struct *vma,
+>  static int __arch_uprobe_optimize(struct arch_uprobe *auprobe, struct mm_struct *mm,
+>  				  unsigned long vaddr)
+>  {
+> -	struct uprobe_trampoline *tramp;
+> -	struct vm_area_struct *vma;
+> -	bool new = false;
+> -	int err = 0;
+> +	struct pt_regs *regs = task_pt_regs(current);
+> +	struct vm_area_struct *vma, *tramp;
+> +	int ret;
+>
+> +	if (!user_64bit_mode(regs))
+> +		return -EINVAL;
+>  	vma = find_vma(mm, vaddr);
+>  	if (!vma)
+>  		return -EINVAL;
+> -	tramp = get_uprobe_trampoline(vaddr, &new);
+> -	if (!tramp)
+> -		return -EINVAL;
+> -	err = swbp_optimize(auprobe, vma, vaddr, tramp->vaddr);
+> -	if (WARN_ON_ONCE(err) && new)
+> -		destroy_uprobe_trampoline(tramp);
+> -	return err;
+> +	tramp = get_uprobe_trampoline(mm, vaddr);
+> +	if (IS_ERR(tramp))
+> +		return PTR_ERR(tramp);
+> +	return WARN_ON_ONCE(swbp_optimize(auprobe, vma, vaddr, tramp->vm_start));
 >  }
-> +
-> +/*
-> + * Test that USDT arguments survive nop10 optimization in a function where
-> + * the compiler places operands in the red zone.
-> + *
-> + * Signal handlers are prone to having the compiler place USDT argument
-> + * operands in the red zone (below rsp).
-> + *
-> + * The nop5 optimization used CALL (which pushes a return address to
-> + * [rsp-8]), the value at -8(%rsp) was overwritten. The nop10 optimization
-> + * should escape that by moving stackpointer below the redzone before
-> + * doing the CALL.
-> + */
-> +static void subtest_optimized_red_zone(void)
 
-This isn't a bug, but the four-line "nop5 optimization used CALL ..."
-explanation here reads nearly verbatim to the comment added above
-uprobe_red_zone_test() in prog_tests/uprobe_syscall.c.
-
-Since both tests probe the same mechanism, would a single copy (or a
-shorter note pointing at the other) be preferable, so the two don't drift
-apart?
-
-One small wording note: "moving stackpointer below the redzone" uses
-"stackpointer" and "redzone", while the rest of the change and the commit
-message use "stack pointer" and "red zone".
+The variable ret is declared but never used in the refactored
+__arch_uprobe_optimize(). The old code used err which was assigned and
+returned, but the new code returns directly. Should ret be removed to
+avoid a compiler warning?
 
 
 ---
@@ -91,4 +95,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28514315910
---===============2796236423524058254==--
+--===============1133100935469573393==--
