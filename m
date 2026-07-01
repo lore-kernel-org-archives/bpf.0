@@ -1,155 +1,148 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ADDA3AF676;
-	Wed,  1 Jul 2026 06:49:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6049628DB54
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 06:57:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782888562; cv=none; b=Q/H07l1XFIsYGc5ieP/pMggOobn9vxe8M8YrBjMnpgxcz3NN0aX5OhloKyygGNFmmiYCpkktG8DmNEPrLPVDe6UQUhcWNrXe91f/JGM/03oJOGAogTy9Aiu3QDOd6pARzihUt/f6d9Uno4bV+JdcNiokC4AT0pHtA9mQ64hnn1I=
+	t=1782889041; cv=none; b=VO6QRWRhluE5g1bHI3xkInBPgrDGRNj1AyN/UXTgOrNlSVJWbNIJ1YN1vSiMwLqb8V/slS0pqLKPzMVhKUnJxkehVpTXPZY4TvO6uZ8p1TZE+ejyFdBwz8n1Mo7RkpGOQQHKtqsvLOySyJRtaS51KHjIct2MUb+T6NgBt0ASEmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782888562; c=relaxed/simple;
-	bh=1h5+A7fGGRbsOGbZcEKDqm4L+EdU05qwaM8k80pNZjU=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=uqdwG3V5snL/A3+iRvH0euAJmTj5gMpmjYh2o9UYXxtVtBz55pxKlq3Dxo5yjJ8w/dY1RMQe6NoVK7Oh9gSBKo6O1/gHJEEDgGNQnwcHigMCDBeHWXt+NDokyOoxXmQ7SajjN5y+q4mCKgrl657racm1IlvpbEP7xW09mLKcKr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8AxOvFsuERqe18AAA--.2306S3;
-	Wed, 01 Jul 2026 14:49:16 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJCxfcJnuERqjhm6AA--.23063S3;
-	Wed, 01 Jul 2026 14:49:12 +0800 (CST)
-Subject: Re: [RFC PATCH bpf 1/6] bpf: Disallow interpreter fallback for user
- BPF_ADDR_SPACE_CAST insn
-To: Leon Hwang <leon.hwang@linux.dev>, KaFai Wan <kafai.wan@linux.dev>,
- bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>,
- Anton Protopopov <a.s.protopopov@gmail.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260626154330.33619-1-leon.hwang@linux.dev>
- <20260626154330.33619-2-leon.hwang@linux.dev>
- <e279c9a7ca6b16e52dc261560513b0eafdd70f87.camel@linux.dev>
- <a2aaa21d-4cf9-48a4-839f-dd152bda8185@linux.dev>
- <af9c0a7e-13de-c227-849f-4b35d1fb74ff@loongson.cn>
- <d55e10b1-d883-4fcf-8fb3-8210db935e4a@linux.dev>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <1c07a34f-b050-a281-6a7b-542a9bfa30b3@loongson.cn>
-Date: Wed, 1 Jul 2026 14:49:11 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1782889041; c=relaxed/simple;
+	bh=v5hqlUAqqqIWuqB8AKVxFDVbPWO9Yr1oiUSORsVrU8k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fMlSHWAosEboQ6Oi75jX/4UzDVlIdZqAbX99Nj1RE+uFAlLl/v8hDkzR6WzzRp7eu7FI5mMXMzcXc/O3ko4Ivz83/haUk0/p0hgwINSQQ2MTHoJwjxmQ4wJeOoJfAdQIrwnxRGTUIPsioZi9z/rsOB2Nr4qhKIMKWt/w1TItH0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M5ZSs0Wc; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=bv20BlP2; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M5ZSs0Wc";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="bv20BlP2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782889038;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OsPLZhthgeNTmosmvhtfLrcyUwQKZWXNpePOYSm6rBc=;
+	b=M5ZSs0WcSfRjFKjJHX4QdmAOLMBjz94XtSV+Tet+hoenuWC5VDl29O/OuGpn+gphcGPGna
+	YhcXX7gxjgU0wibSROr6HYTRPUrEqG3Dpv5S/zV441djXMeKfdwMLx5jMavTErttFvJ0ZM
+	ZIG8dnFrC0aVgVJ6BZF7P88KelBoboA=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-216-LpXqJLdoPS23CNriZYJ3YA-1; Wed, 01 Jul 2026 02:57:17 -0400
+X-MC-Unique: LpXqJLdoPS23CNriZYJ3YA-1
+X-Mimecast-MFC-AGG-ID: LpXqJLdoPS23CNriZYJ3YA_1782889036
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4926d371224so2678255e9.1
+        for <bpf@vger.kernel.org>; Tue, 30 Jun 2026 23:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1782889036; x=1783493836; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OsPLZhthgeNTmosmvhtfLrcyUwQKZWXNpePOYSm6rBc=;
+        b=bv20BlP27tI4T2IA+W8Aecn6i69YCpcuFBwqxWx06D8APxDhuN5mSIuKmfWwigLxuM
+         dJEGj2wqrP8x/GIHzCBYMud+oPapYS3GJZeymKt9E0EtnZdvW21G83j+Rek0BxnEEWWP
+         Gnr/iLcC87fICXqUC1jZlwZoEulH5i1NhpdAnA0XBkT1b8RDkrqbixz3FSzYkjCxi49p
+         8zDTycOcK4U3wl/M0i+nfOGaoMe7uAuAvutepfEhb6Kra7VIFwjFGrjJJ8XuUXXC+oF/
+         65VNLCLg/r6m+pFrYZjzSJ8Ro99vA83nT80kcLBg1DwwTp7rz3YueHoFptV/MXQlLfuc
+         d8JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782889036; x=1783493836;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OsPLZhthgeNTmosmvhtfLrcyUwQKZWXNpePOYSm6rBc=;
+        b=LymqflmqFD0XSLEJRs9yAzTVQdvoheMczlAuL635Sw8KPgQ51U8PpyI9byeiHZk1Aq
+         MEk27vj6e+s6E1kKW9EymCl1EgNndW+l1w84tO80VYKTG11BykoufFQiV9/tsvw55SQo
+         GfkragAz545ggbeDNEOqcohO9Moc/BxbVbP3ejfESUNUduRNUys1JxQIr5Brvv+1gmx9
+         ruX9gZRBsWhXfD/sqbil/cCAhIoELkJjdll1ry8uf3DekK4AEf6sEg6cXes+TB0dgUUl
+         vDnvMtgkdtqQVe7cv6gMr3OMpJGyzApthGbr08vFQ+3h3MuwkEs7Kz8V1bq4rajfYyYt
+         grPQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9B2I4v1XQfr9ItVCgU6S8FUZz1+BuJDZnep1q8HKMDxuWHmaB2vwVhhhvwtQxTQnBssRI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDwxxZ2esR5YTo9lE6Brzi23HdGPKSrlbMV3XFB41+2RJUTDon
+	TQnkl0b/zlVh5B4KSi1Yi7FsujMyWFKQX+87/UNmV1k9QAun1lmmvS6FeA2SgdeD67AxXdFkcIl
+	VJZWV2sR0ZPQE3xHRnBAHh3mvalCkXd3bVav6HtHmImNXIyVd3zOp
+X-Gm-Gg: AfdE7cmxiv0Yl4IOpZDYqjLYGEpQHWMbzpWHsH/ZJlLbWNsevXwHqfLnVTFePiDS+PV
+	Btwiqr24QeljPr6dkYqLpuJz12z0Y+CkKQE/883QOhWnemLID+mThoA2rW8tF5fRm9HFwWeif3i
+	5SiocGd/fb7ik6y7gM5Gth4flxI/twEbsKYpy8FZyHGdbJyMH68VVFXrY9cLHn0nsclxxNaU6Xg
+	mqSEQ+DCopSvM5M1MiUjI3MXFmuNa4YS8ZzUrZn5eHXyfMNpvG8i/RFxDHArElFg1ncnn3rGbOR
+	fzEquYkm1RbX2mlA2SCpt9mJB3p2klOaDMv2GQRxVeA8L5htzs7quzwwSRsqYyXVCp17sDLL4Q=
+	=
+X-Received: by 2002:a05:600c:5749:b0:493:bc4b:b8d with SMTP id 5b1f17b1804b1-493c2bb968dmr2658775e9.39.1782889035983;
+        Tue, 30 Jun 2026 23:57:15 -0700 (PDT)
+X-Received: by 2002:a05:600c:5749:b0:493:bc4b:b8d with SMTP id 5b1f17b1804b1-493c2bb968dmr2658495e9.39.1782889035417;
+        Tue, 30 Jun 2026 23:57:15 -0700 (PDT)
+Received: from [10.43.17.14] ([213.175.37.14])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493bef1807asm32048695e9.1.2026.06.30.23.57.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Jun 2026 23:57:14 -0700 (PDT)
+Message-ID: <45022e92-7840-45c5-ba30-a276d736505f@redhat.com>
+Date: Wed, 1 Jul 2026 08:57:11 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <d55e10b1-d883-4fcf-8fb3-8210db935e4a@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/1] Introduce an instrumented profiler using BpfTrace
+To: Aaron Lewis <aaronlewis@google.com>, peterz@infradead.org,
+ mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
+ mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+ irogers@google.com, adrian.hunter@intel.com, james.clark@linaro.org,
+ seanjc@google.com, dmatlack@google.com
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, bpf@vger.kernel.org
+References: <20260630141152.3757722-1-aaronlewis@google.com>
+From: Viktor Malik <vmalik@redhat.com>
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCxfcJnuERqjhm6AA--.23063S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7tFWfGrWrWFy5ArWkJw15Jrc_yoW8ZF1kpF
-	ZIy3sFyr4DKw40q3srJw42y3W5Kw1jgas7GFZ5G34F9FZ0qrn3WF109FsayFZ8WryUKr1I
-	vw4Sqryq9Fy7ArXCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
-	6r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
-	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
-	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
-	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
-	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4U
-	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07joc_-UUU
-	UU=
+In-Reply-To: <20260630141152.3757722-1-aaronlewis@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 2026/7/1 下午2:21, Leon Hwang wrote:
-> On 1/7/26 09:26, Tiezhu Yang wrote:
-> [...]
->>
->> Hi all,
->>
->> Alexei said in another thread like this:
->>
->> ```
->>> [3] https://lore.kernel.org/bpf/20260615025316.24429-1-
->> yangtiezhu@loongson.cn/
->>
->> I don't think we need such fallback in patch [3].
->> ```
->> https://lore.kernel.org/bpf/DJMRIZ5PDWP4.12OOZ8H881H6O@gmail.com/
->>
->> Should I just drop my previous patch? To be honest, I'm not sure how to
->> solve the issue mentioned in it. Is that a real problem, and does it
->> need to be fixed? What is the next step?
->>
+On 6/30/26 16:11, Aaron Lewis wrote:
+> I am proposing this patch as a simple way of turning BpfTrace into an
+> instrumented profiler. This approach has come in handy for me more than
+> once, so I felt like it could be useful for others as well.
 > 
-> It is a real issue.
+> I am not entirely sure where something like this should live in the
+> kernel tree, so I took a chance and put it in
+> "tools/bpftrace/instrumented_profiler". I am not attached to this
+> location, so please feel free to recommend a better place for it to live
+> if this doesn't seem appropriate.
 > 
-> Instead of fixing up helper calls, it seems better to prevent
-> interpreter fallback if the prog has any JIT-inlineable helper call.
+> I have included two samples as examples of how a trace can be set up
+> (`kvm_trace.bt` and `vfio_trace.bt`). The included Python script then
+> runs over the output of these traces to generate the final profiler
+> results.  Example output can be seen in the patch itself.
+> 
+> Aaron Lewis (1):
+>   tools/bpftrace: Add a simple instrumented kernel profiler
+> 
+>  .../aggregate_bpf_results.py                  | 318 ++++++++++++++++++
+>  .../samples/kvm_trace.bt                      | 197 +++++++++++
+>  .../samples/vfio_trace.bt                     | 315 +++++++++++++++++
+>  3 files changed, 830 insertions(+)
+>  create mode 100644 tools/bpftrace/instrumented_profiler/aggregate_bpf_results.py
+>  create mode 100644 tools/bpftrace/instrumented_profiler/samples/kvm_trace.bt
+>  create mode 100644 tools/bpftrace/instrumented_profiler/samples/vfio_trace.bt
+> 
 
-Hi Alexei and Leon,
+Agreed with Alexei, this doesn't belong to the kernel tree. For the very
+least, the provided bpftrace scripts depend on a specific version of
+bpftrace (e.g. they use macros, which are only available from 0.24). But
+we could certainly consider it for the bpftrace main repo [1] or the
+user-tools repo [2].
 
-What about the following: (not tested yet, if it is good, I can test it)
+Looking at the code, I'm just wondering what value does the Python
+script provide. Wouldn't it be possible to do the same in bpftrace
+directly? If so, then including such a tool into bpftrace could be
+relatively simple.
 
------>8-----
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 649cce41e13f..806e1ec85ff4 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2608,6 +2608,19 @@ static struct bpf_prog 
-*bpf_prog_jit_compile(struct bpf_verifier_env *env, struc
-         return prog;
-  }
+Thanks!
+Viktor
 
-+static bool bpf_prog_has_inline_helpers(const struct bpf_prog *fp)
-+{
-+       struct bpf_insn *insn = fp->insnsi;
-+       int i;
-+
-+       for (i = 0; i < fp->len; i++, insn++) {
-+               if (bpf_helper_call(insn) && 
-bpf_jit_inlines_helper_call(insn->imm))
-+                       return true;
-+       }
-+
-+       return false;
-+}
-+
-  struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env 
-*env, struct bpf_prog *fp,
-                                            int *err)
-  {
-@@ -2620,7 +2633,8 @@ struct bpf_prog *__bpf_prog_select_runtime(struct 
-bpf_verifier_env *env, struct
-                 goto finalize;
-
-         if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
--           bpf_prog_has_kfunc_call(fp))
-+           bpf_prog_has_kfunc_call(fp) ||
-+           bpf_prog_has_inline_helpers(fp))
-                 jit_needed = true;
-
-         if (!bpf_prog_select_interpreter(fp))
------>8-----
-
-If you are OK with the above changes, I will test it again and send
-a new version later.
-
-Thanks,
-Tiezhu
+[1] https://github.com/bpftrace/bpftrace
+[2] https://github.com/bpftrace/user-tools
 
