@@ -1,185 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C3B25A359;
-	Wed,  1 Jul 2026 11:16:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C9CE477E48
+	for <bpf@vger.kernel.org>; Wed,  1 Jul 2026 11:26:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782904568; cv=none; b=XURtJvHmTU6pIGVQa5SXdRlEb11zMEclFIpSM5fq6x2+bX2979l1JE5YupjvzB/+arcAbdxyMzF8qpOjn1S9Wm5LuV9qLk1vhTCR7bLi+R9IjXNqGc57MmdpSZHBV1FrznNCNEU3jLiBBYxUeBZR3tU+dVZmjB7srup8RmrOr5Q=
+	t=1782905193; cv=none; b=PIOWd7MBfJQ9Y3kzOZ3/yYgux//y1mRsXo7Q1KTQxZhRrX6PnWDXHKOjnYwg8GZxWUx74NpyVanlCViOooOji/jvFa9KAeMc9LOvLrwlPuR1L1aeKbYttgVjBZxPjBQUlfhAhC4yC78dWMos2o5lLKCqTyOYwwUjLCL2HXnEaIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782904568; c=relaxed/simple;
-	bh=E5AKmv9dooAtukjkd75xKEflznyZ54BgmtgjyR0mdAc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=V7dH8zObSTJMkTMJlm+wjYF449btxPR45dYhYiReAJYbFuzCz1Hf/po5FNHyNmGuF2Cwd/2Fp/SVTPIKmRsv6COa8ulOqAQO52w4LaYOiTinrJZ7fo3kkNwzBFAbfYKKGCM+9WHZTJgpd/mrNVbY4aXiUApULgSuStgHpUFnlQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lbLgC67Z; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782905193; c=relaxed/simple;
+	bh=QQ0h8tHZCN95thSrFIvN0UO3SbViqfAUA3A6R/BSXcE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=FuzKMBtfk0bhSefNuT/TWEz8qaI1PiH1E0A+MMCigT0wF/4gSmW0yLGy9sTY5EVbZVLlh9KxZDExNrfKClfb3aWk48H8Tf4uL0hJfmKqaQ4JFbcqHGRQMCSpWIj0xc+POfg+yy6JIU9Hd8M7loVoWE+70g/p6+h2O7Q7FeCwg1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kbwffGUM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lbLgC67Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2247D1F000E9;
-	Wed,  1 Jul 2026 11:16:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kbwffGUM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AB3C1F000E9;
+	Wed,  1 Jul 2026 11:26:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782904566;
-	bh=cDr8G0F6yCiCnw6K0Lnay7yPMxCdZ+9NycdV7FZSCIo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=lbLgC67Z/w2imQD0Di7xJDcHxkuv5oSdEPvCSmHKuUSbT6W85BDlnwjegDaf0MfMp
-	 i73KiKxTQ372PUc/JYrBi2fmaRemIXnMDhmlYT8aWl1mZwJ6OAn5i57hyNy5UIqQYn
-	 vGNeVI2MzwX8P2K+X/uRG3Pe85tXiS8rsbyeetgmYKJrofeYyot0fpCP2eDfo9nuFi
-	 hqn31pwD7m3lmoBblbLAnGKvt+JlTMGfYEN4oze5B9JJmt53pciieFwpzKWr6mznAB
-	 EDQi4rdZ7aKd7qBgnchfy1zkDY6bbD+7aFI5eiJXVgTFtQajbGFNr8AD55fRLKuf1G
-	 qUx0kTbV8xIpQ==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Oleg Nesterov <oleg@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Jakub Sitnicki <jakub@cloudflare.com>,
-	bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: [PATCHv5 13/13] selftests/bpf: Add tests for forked/cloned optimized uprobes
-Date: Wed,  1 Jul 2026 13:13:37 +0200
-Message-ID: <20260701111337.53943-14-jolsa@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260701111337.53943-1-jolsa@kernel.org>
+	s=k20260515; t=1782905190;
+	bh=tFC6AcKg6+NqF4EeLbDq1Lr9QTZ/Mn1gEiJJIW0h1fA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=kbwffGUMy7QNVspYindmtoJlnFrxYbwn01JDnbbEY3qgEsrXQ5ALfhaw2ldztWxBD
+	 PmnqFOgn9DZyL9+ikU/FbedYAK4LvaF2rjBk0husr9llNmx8qR6QLPH9Mspe0hXSqP
+	 Om4WdyJTyLAP6IW/Q4F1iQvmgOv3j5JNwnmzgIZvzDK6cEA7oEAu8rJkKaIf00IeTf
+	 1/4lzDuCtTV7w343za0HT72Z5YfHQX5GB+eloxx1V05FC3qvmJyGCgO6hpMPru+7EK
+	 NJRwL6lWi4Epo27ZuuUiB3I841+R11nAeLsDlWbWFmP2fNnrdYrmib+ID+2MDDZYut
+	 4JJd+UkeCj0EQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCHv5 08/13] selftests/bpf: Emit nop,nop10 instructions
+ combo for x86_64 arch
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiri Olsa" <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260701111337.53943-9-jolsa@kernel.org>
 References: <20260701111337.53943-1-jolsa@kernel.org>
+ <20260701111337.53943-9-jolsa@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 01 Jul 2026 11:26:29 +0000
+Message-Id: <20260701112630.6AB3C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Adding tests for forked/cloned optimized uprobes and make
-sure the child can properly execute optimized probe for
-both fork (dups mm) and clone with CLONE_VM.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] The change to default `USDT_NOP` breaks `prog_tests/usdt.c` and fa=
+ils to achieve the intended optimization because `libbpf` is not updated.
+--
 
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- .../selftests/bpf/prog_tests/uprobe_syscall.c | 89 +++++++++++++++++++
- 1 file changed, 89 insertions(+)
+commit 94041e33868287f19cab80050a0ae7ab5dca238b
+Author: Jiri Olsa <jolsa@kernel.org>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-index ff07e5df9a65..eb067f029a9f 100644
---- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-+++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-@@ -4,6 +4,8 @@
- 
- #ifdef __x86_64__
- 
-+#define _GNU_SOURCE
-+#include <sched.h>
- #include <unistd.h>
- #include <asm/ptrace.h>
- #include <linux/compiler.h>
-@@ -13,6 +15,7 @@
- #include <sys/syscall.h>
- #include <sys/prctl.h>
- #include <asm/prctl.h>
-+#include <stdnoreturn.h>
- #include "uprobe_syscall.skel.h"
- #include "uprobe_syscall_executed.skel.h"
- #include "bpf/libbpf_internal.h"
-@@ -954,6 +957,88 @@ static void test_uprobe_error(void)
- 	ASSERT_EQ(errno, EPROTO, "errno");
- }
- 
-+__attribute__((aligned(16)))
-+__nocf_check __weak __naked void uprobe_fork_test(void)
-+{
-+	asm volatile (
-+		".byte 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00\n" /* nop10 */
-+		"ret\n"
-+	);
-+}
-+
-+static noreturn int child_func(void *arg)
-+{
-+	struct uprobe_syscall_executed *skel = arg;
-+
-+	/* Make sure the child's probe is still there and optimized.. */
-+	if (memcmp(uprobe_fork_test, lea_rsp, sizeof(lea_rsp)))
-+		_exit(1);
-+
-+	skel->bss->pid = getpid();
-+
-+	/* .. and it executes properly. */
-+	uprobe_fork_test();
-+
-+	if (skel->bss->executed != 3)
-+		_exit(2);
-+
-+	_exit(0);
-+}
-+
-+static void test_uprobe_fork_optimized(bool clone_vm)
-+{
-+	struct uprobe_syscall_executed *skel = NULL;
-+	struct bpf_link *link = NULL;
-+	unsigned long offset;
-+	int pid, status, err;
-+	char stack[65535];
-+
-+	offset = get_uprobe_offset(&uprobe_fork_test);
-+	if (!ASSERT_GE(offset, 0, "get_uprobe_offset"))
-+		return;
-+
-+	skel = uprobe_syscall_executed__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		goto cleanup;
-+
-+	link = bpf_program__attach_uprobe_opts(skel->progs.test_uprobe,
-+				-1, "/proc/self/exe", offset, NULL);
-+	if (!ASSERT_OK_PTR(link, "attach_uprobe"))
-+		goto cleanup;
-+
-+	skel->bss->pid = getpid();
-+
-+	/* Trigger optimization of uprobe in uprobe_fork_test.  */
-+	uprobe_fork_test();
-+	uprobe_fork_test();
-+
-+	/* Make sure it got optimied. */
-+	if (!ASSERT_OK(memcmp(uprobe_fork_test, lea_rsp, sizeof(lea_rsp)), "optimized"))
-+		goto cleanup;
-+
-+	if (clone_vm) {
-+		pid = clone(child_func, stack + sizeof(stack), CLONE_VM|SIGCHLD, skel);
-+		if (!ASSERT_GT(pid, 0, "clone"))
-+			goto cleanup;
-+	} else {
-+		pid = fork();
-+		if (!ASSERT_GE(pid, 0, "fork"))
-+			goto cleanup;
-+		if (pid == 0)
-+			child_func(skel);
-+	}
-+
-+	/* Wait for the child and verify it exited properly with 0. */
-+	err = waitpid(pid, &status, 0);
-+	if (ASSERT_EQ(err, pid, "waitpid")) {
-+		ASSERT_EQ(WIFEXITED(status), 1, "child_exited");
-+		ASSERT_EQ(WEXITSTATUS(status), 0, "child_exit_code");
-+	}
-+
-+cleanup:
-+	uprobe_syscall_executed__destroy(skel);
-+}
-+
- static void __test_uprobe_syscall(void)
- {
- 	if (test__start_subtest("uretprobe_regs_equal"))
-@@ -974,6 +1059,10 @@ static void __test_uprobe_syscall(void)
- 		test_uprobe_race();
- 	if (test__start_subtest("uprobe_red_zone"))
- 		test_uprobe_red_zone();
-+	if (test__start_subtest("uprobe_optimized_fork"))
-+		test_uprobe_fork_optimized(false);
-+	if (test__start_subtest("uprobe_optimized_clone_vm"))
-+		test_uprobe_fork_optimized(true);
- 	if (test__start_subtest("uprobe_error"))
- 		test_uprobe_error();
- 	if (test__start_subtest("uprobe_regs_equal"))
--- 
-2.54.0
+selftests/bpf: Emit nop,nop10 instructions combo for x86_64 arch
 
+This commit synchronizes the latest usdt.h changes. It updates the x86_64
+USDT_NOP macro to emit a nop,nop10 instruction combination to utilize the
+new nop10 optimization support in the kernel.
+
+> diff --git a/tools/testing/selftests/bpf/usdt.h b/tools/testing/selftests=
+/bpf/usdt.h
+> index c71e21df38b32..75687f50f4e21 100644
+> --- a/tools/testing/selftests/bpf/usdt.h
+> +++ b/tools/testing/selftests/bpf/usdt.h
+> @@ -313,7 +313,7 @@ struct usdt_sema { volatile unsigned short active; };
+>  #if defined(__ia64__) || defined(__s390__) || defined(__s390x__)
+>  #define USDT_NOP			nop 0
+>  #elif defined(__x86_64__)
+> -#define USDT_NOP                       .byte 0x90, 0x0f, 0x1f, 0x44, 0x0=
+0, 0x0 /* nop, nop5 */
+> +#define USDT_NOP                       .byte 0x90, 0x66, 0x2e, 0x0f, 0x1=
+f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 /* nop, nop10 */
+
+[Severity: High]
+Will this change cause the usdt selftest to fail?
+
+Looking at tools/testing/selftests/bpf/prog_tests/usdt.c,
+subtest_optimized_attach() hardcodes a check for the 6-byte combo:
+
+tools/testing/selftests/bpf/prog_tests/usdt.c:subtest_optimized_attach() {
+    ...
+    /* usdt_2 USDT probe has nop,nop5 instructions combo */
+    addr_2 =3D find_instr(usdt_2, nop1_nop5_combo, 6);
+    if (!ASSERT_OK_PTR(addr_2, "usdt_2_find_nop1_nop5_combo"))
+        return;
+    ...
+}
+
+Since USDT_NOP now emits an 11-byte combo, find_instr() will return NULL
+and fail the assertion.
+
+Additionally, will this break the intended uprobe optimization in libbpf?
+
+In tools/lib/bpf/usdt.c, has_nop_combo() only checks for the 6-byte
+combination:
+
+tools/lib/bpf/usdt.c:has_nop_combo() {
+    unsigned char nop_combo[6] =3D {
+        0x90, 0x0f, 0x1f, 0x44, 0x00, 0x00 /* nop,nop5 */
+    };
+    ...
+    if (pread(fd, buf, 6, off) !=3D 6)
+        return false;
+    return memcmp(buf, nop_combo, 6) =3D=3D 0;
+}
+
+When libbpf encounters the new nop10 bytes, it will return false, skip the
+optimization, and attach the uprobe at the first nop byte. Should libbpf and
+the selftest be updated to recognize the new 11-byte nop10 sequence?
+
+>  #else
+>  #define USDT_NOP			nop
+>  #endif
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260701111337.5394=
+3-9-jolsa@kernel.org?part=3D1
