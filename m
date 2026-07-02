@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B4C308F32;
-	Thu,  2 Jul 2026 15:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F01A30E82D;
+	Thu,  2 Jul 2026 15:29:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783006123; cv=none; b=lXzMOyg/5w9xn2fMnmtqI0i0pEncURr7ELd0m0nvre/RVaw4Hw0NxV0Dhm5+y5QffjEfsMkYiWuJoYF0ygKfMjGHe02WaKg1LDgINxPkufjIgwGrLtnnplolHttpPhHkxsGK9So/V6emgoAsVa5iio/Q43nfD5FFEacT4ARaY64=
+	t=1783006193; cv=none; b=nYNTzeJbW7zgZy8NbRVsHAM6MjwGEII4zHW6icJrgFGlhrtXwA+SZ2ipUeQRWtMrkI4h2/0zNK6TrNHMNcg8l+o1Jnzyu/eSfhtH8jlRbMGYesblgBaaKXFZNaim6k3b7hKnpDVsnk5tX6fjXIxo+4zaC4wOzn9mC2c+iIJ7Jgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783006123; c=relaxed/simple;
-	bh=d5yiPnQApNgl1W5Ol3iJJF603p2IRj459EIpM7lxtoc=;
+	s=arc-20240116; t=1783006193; c=relaxed/simple;
+	bh=zxoIZShm6ZNxMtbZpz9iw7kbYXyCc5TGB22XrGOMYpI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oGLUPgplNfHkEF16YLj3uTjFyAtnVap4s5rqcq3kfMcmL3ENovdvhyGYohXDOm1diq4Hta8LE7JCYtQBV4ZBwfhBX9jPL21GE+VrZM8Du+RJdxwxDSqbn1vRFZcb8bJcRwgBVW/+SRnYVP6LlngEyU1SsHcia5/Mj3f/kAaYmK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Qtvd7szv; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=lMigDXg5idG2sUkkO6HRNQbJiEBUYxWd8niHU4n3ULMS3qvNY/vhLiyFEtXkifSM3VuVL7FE0YGrHuKnOotRxnx34dsGleI+8KeY4LVIH1UUK/dEXzI8SS6C7Q5ft7nqpQjlnrLp72R1xl9LaXjk/ZlWRs7Q/DxRXsZft92n9SM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=GMvSqTkb; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Qtvd7szv"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="GMvSqTkb"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=jvYZWxd7I/e5vHQylRZUA15LFxJtj6rr/9Icf2FpEfQ=; b=Qtvd7szvi5XffRQrUjd09MAtJ9
-	jjoYBWLGCGz6+nGv4yPnN7BCgIvJH9+/dBSz4B9fZm2IGYuy68lessKM1MWeyWUW4AqVScmyoRyBF
-	WQPELihdXz+EE1HChJZXLzcWm5jCA1dfGebkbFZ+Ejd1xL8ASlu77fvZBm5JY09hFX5RhWmFGecLl
-	jmdToyN0f/5AhcSgriUI/czYyU2PMaj+/Nb83Zj9v0veMT+X4qSaP2UE9q+LEt9+Laj8MEoTDAybx
-	ybKad/bAmxm5iyOciB3YDML4bvhmtW49gGKmXRWuGojht9fg62omFfomOxmFyVakl8sTVsBiySbAa
-	kqCgeTgw==;
+	bh=zxoIZShm6ZNxMtbZpz9iw7kbYXyCc5TGB22XrGOMYpI=; b=GMvSqTkbV2KhdRVdfUtyKi2X/r
+	6+gF/55FiLxheIC91PWpXI2Ei2JSD/OYCy6lWRbUx3DxrZuzysDh1HheWtM5nc5Kr8wbxUXAE6ZVU
+	kOL1z//7IAAZ71CyrpS6bfVARH2schwZRAfz0pBXYwc2c8EmG+knRrPz4FOYvrbBpB3BRmAZrKn5K
+	v05GlDDuvSn6bLS2G30NOF2Eztby/bKX03qiuWcPxlo39jbStzaE/kP57jolQZzpyoeRCml+XtoNl
+	FYtGLupsgdXZmBNjDqgW14rQ7+I0SLR5Ctg3qOSAOAqtovXHqTOdRIXAbcwJRAIUWwiQd6HEgh78u
+	cDkPlSnw==;
 Received: from sslproxy02.your-server.de ([78.47.166.47])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wfJLA-000CUU-1l;
-	Thu, 02 Jul 2026 17:28:36 +0200
+	id 1wfJMM-000CgX-1b;
+	Thu, 02 Jul 2026 17:29:50 +0200
 Received: from localhost ([127.0.0.1])
 	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wfJL9-000Ksg-1o;
-	Thu, 02 Jul 2026 17:28:35 +0200
-Message-ID: <fa352070-631c-4c0a-bc76-f60b7904f0cd@iogearbox.net>
-Date: Thu, 2 Jul 2026 17:28:34 +0200
+	id 1wfJMM-00044s-0y;
+	Thu, 02 Jul 2026 17:29:50 +0200
+Message-ID: <7a8d4f44-430b-444e-a82f-403381997a8a@iogearbox.net>
+Date: Thu, 2 Jul 2026 17:29:50 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,15 +50,11 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH bpf-next v3 5/6] selftests/bpf: Verify load-time signed
  loader metadata
-To: bot+bpf-ci@kernel.org, ast@kernel.org
-Cc: kpsingh@kernel.org, James.Bottomley@hansenpartnership.com,
- paul@paul-moore.com, bboscaccy@linux.microsoft.com, memxor@gmail.com,
- torvalds@linux-foundation.org, a.s.protopopov@gmail.com,
- bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
- andrii@kernel.org, martin.lau@kernel.org, eddyz87@gmail.com,
- yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260702143605.252797-6-daniel@iogearbox.net>
- <038b4c7b60a311cb9905bc88e7f27e6846e9578413afa4b902b0684f44dfd980@mail.kernel.org>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260702143605.252797-1-daniel@iogearbox.net>
+ <20260702143605.252797-6-daniel@iogearbox.net>
+ <20260702144840.EDDBB1F000E9@smtp.kernel.org>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -104,23 +100,13 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <038b4c7b60a311cb9905bc88e7f27e6846e9578413afa4b902b0684f44dfd980@mail.kernel.org>
+In-Reply-To: <20260702144840.EDDBB1F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28048/Thu Jul  2 08:25:04 2026)
 
-On 7/2/26 5:17 PM, bot+bpf-ci@kernel.org wrote:
-[...]
->> +cleanup:
->> +	if (btf)
->> +		btf__free(btf);
->> +	if (map_fd >= 0)
->> +		close(map_fd);
-> 
-> This isn't a bug, but was map_fd meant to be dropped from this test?
-> It's initialized to -1 and never changed, so the cleanup branch is
-> unreachable. The sibling tests signed_map_by_fd_rejected and
-> signed_sparse_fd_array_rejected create and close a map_fd, but
-> signed_module_kfunc_rejected only uses BTF fds and never assigns
-> map_fd.
-Ack, will clean up in a v4.
+On 7/2/26 4:48 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Low] In `signed_btf_fd_array_rejected()`, if `gen_loader_fixture_init(&f)` fails partway (e.g., `bpf_object__gen_loader()` fails), it returns non-zero and the code jumps to the `out` label. Because `have_fixture` is set to `true` only *after* the function call, the cleanup block `if (have_fixture) gen_loader_fixture_fini(&f);` is bypassed. This causes a memory leak of resources like `f.skel` which were partially allocated by `gen_loader_fixture_init()`. Setting `have_fixture = true` before the call (as correctly done in `lsm_signature_verdict()`) would prevent this leak, since `gen_loader_fixture_init()` zeroes the struct before allocation.
+Ack, should have been set to true before gen_loader_fixture_init.
+Fixed locally for a v4.
