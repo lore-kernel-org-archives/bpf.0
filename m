@@ -1,30 +1,32 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283762F8E8D
-	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 02:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220152F745C
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 02:24:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782959037; cv=none; b=CWEHoAUmxcBa/Li0Mw6yxklT05RDFJoMacZj5Ij6TXQE2vUFsoTPs0wz9BeZh+VrrBPhQBf+h/2shMB4J8DfYVIWcnDrMnG0oL5MKBFqWqZ78gwVp1NMvXHYghVPNULePqDA6koMhyPj0y5UNQqZ6YaGoawNcDJGnKuIpqysAZE=
+	t=1782959041; cv=none; b=If1JB4c427VqJY75ivseXWauKhSM0IO1aTNtO7FnIUMpgjZFMXJCLe1+PEf49PzrkDJPhbhnmUJg+HcHyVmxqlXDWtXdwgAIDMKkGaXpLSTw4j58seNizD+ejm48X5DoAmBhNoCmffpmqYT1q29QUJaOayksdB0siLyodBMdGk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782959037; c=relaxed/simple;
-	bh=yplBL66WLmZGYDHw0TI7wnH5gX+F/2Udmn6htXB7G18=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lCVIBf8VXAsxZTPIdBzeO4FhrKC+dSP8IS0pRFM4DJRW7jeMGZXGmrcdxgFnT2/K+AyFrNr7SBXCJi7ELEYrJscloYP/0Hpw9Nv8yIuc/DdTicwwZkGMbTHCpdtZPlGJs0vgnBh+JtWrpUbVWfOciLtNGfENShQ/8/L0LDEar/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vJDpm7Gb; arc=none smtp.client-ip=91.218.175.182
+	s=arc-20240116; t=1782959041; c=relaxed/simple;
+	bh=2YumHmT4R4gKfwEUrU+wl2y3oDnZcbSwBUhQbNWpBFQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=JY/CRzAD8r83Nh5HDKMuWiFuCX8r/R0H1bQ+Guib7QfwvFDeUt3WHO5AoVFEr+JxA/v9XDmB4FZKdJHJ1Y5TeFx/DPRE/N1dfXkItTay3kFoxUIarx0cr22BZ+65gJc0T+GibHJbS/uaG+fZ/n1GqA1gylJ4bxqlC+Jnp3iIwEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vfaR7vDl; arc=none smtp.client-ip=91.218.175.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vJDpm7Gb"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vfaR7vDl"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782959023;
+	t=1782959037;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=cX5Z8YeR97ZszPR6LJ2fsh+c2SruApAoDhLXDRoFhzg=;
-	b=vJDpm7Gbx5bIZSlrN1GTZ7oArsFFkvQIONWe+nDfAQqEFZb0XBgyEEcjEsUi56Y2ZXZXk6
-	qyXj0xOkeHVpS28LrPAwoEN9fsq1a01pfnHybIlKIPmYYecZ5qGhD/UvRFu5GzO4hBef3B
-	icGDQrh+QlS9S8IteqSvdFaRkUig5Lo=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eg2XUtsWbE8d0hRsNi6uEMkuMS8sIDRfMXn4zdVKrcA=;
+	b=vfaR7vDlEzr7H511Y1gM++5ovrA2aW+i+R8Ajuq0pU+xoE1rT9C4vVAxO/1Fm/SqWeCY3k
+	rU+VFE7jK+x3xdRIfd5bJDosqli5Mk4hTiVKYBiIssCjJW/LQo1LBvQv2iKpUD1pPDovTT
+	lXXbEW8NxLsQkK8dcNTOYVrTWGusjU8=
 From: George Guo <dongtai.guo@linux.dev>
 To: Huacai Chen <chenhuacai@kernel.org>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>,
@@ -43,9 +45,11 @@ Cc: WANG Xuerui <kernel@xen0n.name>,
 	bpf@vger.kernel.org,
 	loongarch@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 00/11] LoongArch: BPF: arena features, exceptions, private stack and may_goto
-Date: Thu,  2 Jul 2026 10:23:11 +0800
-Message-Id: <20260702022322.51033-1-dongtai.guo@linux.dev>
+Subject: [PATCH bpf-next v2 02/11] LoongArch: BPF: Support internal-only MOV to resolve per-CPU addrs
+Date: Thu,  2 Jul 2026 10:23:13 +0800
+Message-Id: <20260702022322.51033-3-dongtai.guo@linux.dev>
+In-Reply-To: <20260702022322.51033-1-dongtai.guo@linux.dev>
+References: <20260702022322.51033-1-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,74 +59,68 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-This series adds the remaining LoongArch BPF JIT features and enables the
-matching selftests:
+From: George Guo <guodongtai@kylinos.cn>
 
-  - internal-only MOV for per-CPU address resolution
-  - timed may_goto
-  - per-program private stacks
-  - exceptions (bpf_throw)
-  - sign-extending loads from arena (PROBE_MEM32SX)
-  - atomics on arena pointers (PROBE_ATOMIC)
-  - selftests: struct_ops private stack, arena LDSX, arena atomics, and a
-    LoongArch deny list
+Support the internal-only BPF_MOV instruction that resolves the absolute
+address of per-CPU data from its per-CPU offset. This instruction is used
+only for internal inlining optimizations between the BPF verifier and the
+JITs (e.g. inlining bpf_get_smp_processor_id() and per-CPU map lookups).
 
-Patch 1 ("LoongArch: BPF: Fix tail call count pointer offset for arena
-programs") is the same fix already posted separately for the bpf tree;
-several patches in this series (notably exceptions, patch 5) build on
-top of the helper it introduces, so it is included here, unchanged, to
-keep the series self-contained and applicable on bpf-next. It can be
-dropped once it lands via the bpf tree.
+LoongArch keeps the per-CPU offset of the current CPU in $r21
+(__my_cpu_offset), so resolving a per-CPU address only requires adding
+$r21 to the source register holding the per-CPU offset. Advertise the
+capability via bpf_jit_supports_percpu_insn().
 
-  LoongArch: BPF: Fix tail call count pointer offset for arena programs
-  https://lore.kernel.org/all/20260629085511.359546-1-dongtai.guo@linux.dev
+Signed-off-by: George Guo <guodongtai@kylinos.cn>
+---
+ arch/loongarch/include/asm/inst.h |  1 +
+ arch/loongarch/net/bpf_jit.c      | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+)
 
-Based on 7.2-rc1.
-
-v2:
- - Included the tail call count pointer offset fix as patch 1/11 (see
-   above) instead of only referencing it, so the series applies cleanly
-   on bpf-next without waiting on the bpf tree; the empty prog_array
-   off-by-one was fixed independently upstream by commit 0379d10f09bc
-   ("LoongArch: BPF: Fix off-by-one error in tail call"), now in 7.2-rc1.
- - timed may_goto: store $ra at the ORC-mandated .ra_offset = -8 slot in
-   the trampoline (it was stored at the wrong slot in v1), per Tiezhu
-   Yang's review.
- - Consolidated the earlier per-CPU MOV / timed may_goto and arena gating
-   postings into one series; rebased on 7.2-rc1.
- - selftests: use the upstream __arch_loongarch / "LOONGARCH" test_loader
-   support now in 7.2-rc1 instead of introducing it.
- - Prior postings:
-   https://lore.kernel.org/all/20260609041407.122384-1-dongtai.guo@linux.dev
-   https://lore.kernel.org/all/20260618033809.98253-1-dongtai.guo@linux.dev
-
-George Guo (11):
-  LoongArch: BPF: Fix tail call count pointer offset for arena programs
-  LoongArch: BPF: Support internal-only MOV to resolve per-CPU addrs
-  LoongArch: BPF: Add timed may_goto support
-  LoongArch: BPF: Add private stack support
-  LoongArch: BPF: Add exceptions (bpf_throw) support
-  LoongArch: BPF: Support sign-extending loads from arena
-  LoongArch: BPF: Support atomics on arena pointers
-  selftests/bpf: Enable struct_ops private stack test for LoongArch
-  selftests/bpf: Enable arena LDSX tests on LoongArch
-  selftests/bpf: Enable arena atomics tests on LoongArch
-  selftests/bpf: Add LoongArch deny list
-
- arch/loongarch/include/asm/inst.h             |   1 +
- arch/loongarch/kernel/stacktrace.c            |  52 +++
- arch/loongarch/net/Makefile                   |   2 +-
- arch/loongarch/net/bpf_jit.c                  | 397 ++++++++++++++++--
- arch/loongarch/net/bpf_jit.h                  |   1 +
- arch/loongarch/net/bpf_timed_may_goto.S       |  47 +++
- .../testing/selftests/bpf/DENYLIST.loongarch  |   1 +
- .../bpf/prog_tests/struct_ops_private_stack.c |   2 +-
- .../selftests/bpf/progs/arena_atomics.c       |   3 +
- .../selftests/bpf/progs/verifier_ldsx.c       |  17 +
- 10 files changed, 485 insertions(+), 38 deletions(-)
- create mode 100644 arch/loongarch/net/bpf_timed_may_goto.S
- create mode 100644 tools/testing/selftests/bpf/DENYLIST.loongarch
-
+diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
+index 76b723590023..44fb5ad26d1a 100644
+--- a/arch/loongarch/include/asm/inst.h
++++ b/arch/loongarch/include/asm/inst.h
+@@ -404,6 +404,7 @@ enum loongarch_gpr {
+ 	LOONGARCH_GPR_T6,
+ 	LOONGARCH_GPR_T7,
+ 	LOONGARCH_GPR_T8,
++	LOONGARCH_GPR_U0 = 21,	/* Kernel per-CPU base register ($r21) */
+ 	LOONGARCH_GPR_FP = 22,
+ 	LOONGARCH_GPR_S0 = 23,
+ 	LOONGARCH_GPR_S1,
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 5e34e9e3f508..b4208fa3a242 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -759,6 +759,15 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 			move_reg(ctx, dst, t1);
+ 			break;
+ 		}
++		if (insn_is_mov_percpu_addr(insn)) {
++			if (dst != src)
++				move_reg(ctx, dst, src);
++#ifdef CONFIG_SMP
++			/* dst += __my_cpu_offset, held in $r21 */
++			emit_insn(ctx, addd, dst, dst, LOONGARCH_GPR_U0);
++#endif
++			break;
++		}
+ 		switch (off) {
+ 		case 0:
+ 			move_reg(ctx, dst, src);
+@@ -2406,6 +2415,11 @@ bool bpf_jit_supports_fsession(void)
+ 	return true;
+ }
+ 
++bool bpf_jit_supports_percpu_insn(void)
++{
++	return true;
++}
++
+ /* Indicate the JIT backend supports mixing bpf2bpf and tailcalls. */
+ bool bpf_jit_supports_subprog_tailcalls(void)
+ {
 -- 
 2.25.1
 
