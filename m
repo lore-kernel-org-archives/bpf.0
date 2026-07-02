@@ -1,202 +1,138 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5742E8DEA
-	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 12:17:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2767448AE20;
+	Thu,  2 Jul 2026 12:58:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782994636; cv=none; b=RezXWirw6bDDkj3NORMKsRabnf847VhmRcrs+Gmo8Q9c/iQJezlAq2c62CdrIcPokOI34cAmhvAqte1+4yRCf4DQcqD4aCl4Dog4rt4TyZmHlGgspoZuHc+qZEyWpVz8XxqYE0UsexXU9j1yHew2EeI/6KZWM4uor1wmOeF1Y3c=
+	t=1782997130; cv=none; b=ZvyVMl6t1cOuDIF+Ao3HL7WoIaHzb264me3mcE4YI+yxUDup0Q6+cEfp6EbEoVKCMp4ykjCX7vgcfuuNZiECnbK8JzTE6A4fk0fgagewdD4ytmKspM1lou9HfbKjapOLvXrz/1KYSuxms4PLwUYO18N+Iw9KpwsPAEMvexY3KI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782994636; c=relaxed/simple;
-	bh=yJRAPWNo21RnCUG4ESG0w7KE2hT1JrFP2dLUEQ9co58=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VAjTYai3hp9TOPrSiaGukk5mA74806zMs1E7zDq3lQURD3y1G3U8YKFqyVWTZfrocVz2DmIK6VVWxVrSmr65QiV64O1ZUAKIZh2bgyrnUJhJmF8oaw7Z7/Skmy/qVxJ1rlGAIdzFddFPWFARmPoKft+DxIDXE7azv+JQFp+9UjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=erGT8SnZ; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782997130; c=relaxed/simple;
+	bh=T4ADteLYKYg5AaQGhaBpoBHsOh/4UVoNZQ3SpG0Dp6Y=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=KfpjxCzjyQFoau0cBjcgEkpDovub/s7c614X745W81ikWWDEO8joS76+2XuHxeAZ9J9oS5vVM5mZrT4oH2L1Ao+VNTnC5HZkcjY0l/7+/6oKoB68iQuVzyiZlKV42FARwZRA94fbxzxDQrOB8GQtSlgqS1qtbzw5au2aCnZA/KA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=WbJz4NUu; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="erGT8SnZ"
-Message-ID: <f61c41783f56fc259b56141e8d438a56c9dfa31b.camel@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782994622;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=X/OZ//ON7orm4N2x26XRJAtujrag+hI9dhYZcyvpa9g=;
-	b=erGT8SnZepaErUEWINQJbvD6sNy5wb++XQ/UXVzWWUf/yU+mrjClpSe3AcpmFvcPI5spfT
-	TKs+JjskWm6VF6uPrlWhrOKalC6pHXE3OegnyOXUKW4/iUZgWIdsQcrmVsUxJXlqjNlMcp
-	St0U9fSg5Wfw8v3pdXahLN+WmHglgCI=
-Subject: Re: [PATCH bpf-next v6] bpf: Reject programs with inlined helpers
- if JIT is unavailable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: KaFai Wan <kafai.wan@linux.dev>
-To: Tiezhu Yang <yangtiezhu@loongson.cn>, Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,  Kumar Kartikeya
- Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
- Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, loongarch@lists.linux.dev, Leon Hwang
-	 <leon.hwang@linux.dev>, Puranjay Mohan <puranjay@kernel.org>, 
- =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?=
-	 <bjorn@kernel.org>
-Date: Thu, 02 Jul 2026 20:16:51 +0800
-In-Reply-To: <20260702053127.23599-1-yangtiezhu@loongson.cn>
-References: <20260702053127.23599-1-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="WbJz4NUu"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
+	Reply-To:Content-ID:Content-Description:In-Reply-To:References;
+	bh=6CE5iuMYrd1Q/RUldXDbld+/EnjNdJ6JRr2ZhCktWjc=; b=WbJz4NUutZ1FXoZFCH7bPJ4KG8
+	1VCxYbBYKk5dw0fyAvHA/+Kso4wSFgd9vLRqYxZY0Lx4OS5ac6GJ/F1r8U7Tc7MUBLYuAtwALHCNi
+	3/r1cbb+L19gkj/kXsd+cb+ATwK65m0NlsNfAtia3AtuTgLsq4kbFVWPT/dB5qHA18Ua4byDQP7W7
+	WTAyzuOzGjbiOGJZ/rCrXY4xlkJPigCpiZ33FiNFHUyjrLK+T0Bqx0KJyzAAQH7EvOhUrH+sRDCX7
+	zOTvrzYsrmixi8MTKG41PoMfA5af7xh54MeHEWXoDsC3/ea+JQa89HmmEo0KSZXK6smxJk9EBOimE
+	Ll4ng2Dw==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wfH08-008dbm-1h;
+	Thu, 02 Jul 2026 12:58:44 +0000
+From: Breno Leitao <leitao@debian.org>
+Date: Thu, 02 Jul 2026 05:58:34 -0700
+Subject: [PATCH] radix-tree: fix kmemleak false positives on tree head
+ reassignment
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260702-radix-tree-v1-1-a87c125b0f96@debian.org>
+X-B4-Tracking: v=1; b=H4sIAHlgRmoC/x3MQQqAIBAF0KsMf52gFhVeJVpITjUbizFCiO4e9
+ A7wHhRW4YJAD5RvKXJkBHINYdlj3thIQiB463s7WG80JqnmUmYzRu5can3nrENDOJVXqX82ze/
+ 7AdtNi1hcAAAA
+X-Change-ID: 20260702-radix-tree-8ae41d324101
+To: Andrew Morton <akpm@linux-foundation.org>, catalin.marinas@arm.com
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ kent.overstreet@linux.dev, arnd@arndb.de, bigeasy@linutronix.de, 
+ kangas@redhat.com, kernel-team@meta.com, Breno Leitao <leitao@debian.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2277; i=leitao@debian.org;
+ h=from:subject:message-id; bh=T4ADteLYKYg5AaQGhaBpoBHsOh/4UVoNZQ3SpG0Dp6Y=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqRmCAZ9vpx0AiFrsv1uCk7YjAL9uUYkZl7+mMs
+ 59Zx1UQzjaJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCakZggAAKCRA1o5Of/Hh3
+ bb/6D/0VCu9t/+VpWXJb3oNFYG03fXJojkUvvBBpFwzku6flTrbr4TbaPAHXdBpvPXD7bpUfZ8t
+ DS+KBUHjA935zr5NyHCD5q/Dz3LPZxOfcKuo70IAwyznqrByWnARsp4a9Y3upbFcpC66W55WXAe
+ kaw32xadAo92eZHXTuF46rcA8WKyq/OyOIZFDhPgPM/lv53X3C4VKAxaEkcy/+xjioB2WvW7Pz5
+ tN3y6e1LUSutL0NLY25MOewH/r7V4VbVZwiABqQeDSVtuB5RcbSTooTVCCJCvJqW2MRaUOhV15W
+ gHrofqKCkaxKMaxh4PbCF9BWrnbnesVjT6P3bMmCMI9PFKzSdRpGUFOnCqeElocOhU+ZVkFfE80
+ mfhHcpYl3HuBsA2LLBB+LZguMka/4VL+5ww1JQsFdosQcRqIJdDve78X+AnNB/ufvKDbXk4kNUe
+ 2XsRc1UsGc7laZElSYZoMqxDlBJmxrGBD2ybCXoSC+cfOEVmfwP2g3eU353ibu7Y3QgcCVhYOVN
+ V5u+plWbtpBOeVoOX/aaauOLtc5QwVI2sTTFa4LxJOPvB0PoahVBuaDIE7hOsZ6k+3ebY/WHLCA
+ 22kqeotkjo6u7MqRWPnPaMl5opyVDCGy4lZlKVSjpFg9P2hNpCtdCv0ZblD3abwh0C70kKDMrEQ
+ YfbdiXgOe9oqwJQ==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-On Thu, 2026-07-02 at 13:31 +0800, Tiezhu Yang wrote:
-> When an architecture implements bpf_jit_inlines_helper_call(), such as
-> LoongArch, ARM64, PowerPC, and RISC-V, the verifier skips rewriting the
-> helper call offset (insn->imm) during the bpf_do_misc_fixups() phase,
-> because the helper is expected to be inlined by the JIT compiler. As a
-> result, insn->imm remains as the raw helper enum ID.
->=20
-> However, if JIT is disabled at runtime (net.core.bpf_jit_enable=3D0) or
-> if the JIT compilation later dynamically fails (e.g., due to OOM), the
-> core BPF subsystem falls back to the BPF interpreter.
->=20
-> When the interpreter executes (__bpf_call_base + insn->imm) with the
-> unpatched raw helper ID, it jumps into an unaligned invalid address
-> space, triggering an instruction alignment fault or a memory access
-> panic.
->=20
-> To avoid modifying the BPF interpreter's complexity for JIT-specific
-> paths, just introduce a 'jit_required' flag in struct bpf_prog. When
-> a program contains helper calls that skip rewriting for JIT inlining,
-> set this flag to 1. During runtime selection, if JIT compilation is
-> not available, explicitly reject loading with -ENOTSUPP instead of
-> falling back to the interpreter, safely preventing the kernel panic.
->=20
-> Fixes: 2ddec2c80b44 ("riscv, bpf: inline bpf_get_smp_processor_id()")
-> Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
-> v6:
-> =C2=A0 - Place 'jit_required' as a standalone u8 field right before 'stat=
-s'
-> =C2=A0=C2=A0=C2=A0 to reuse the existing 4-byte struct hole (offset 52) b=
-ased on pahole
-> =C2=A0=C2=A0=C2=A0 analysis, avoiding the u16->u32 bitfield conversion in=
- v5 which=20
-> =C2=A0=C2=A0=C2=A0 unintentionally changed the layout/alignment of subseq=
-uent fields.
->=20
-> v5:
-> =C2=A0 - Drop the fallback interpreter fixups as per maintainer's feedbac=
-k.
-> =C2=A0 - Introduce 'jit_required' member in struct bpf_prog to flag progr=
-ams
-> =C2=A0=C2=A0=C2=A0 that strictly rely on JIT.
-> =C2=A0 - Reject loading with -ENOTSUPP in __bpf_prog_select_runtime() if =
-JIT
-> =C2=A0=C2=A0=C2=A0 fails or is disabled for these programs.
-> =C2=A0 - Upgrade 'jited' bitfield group type from u16 to u32 in struct bp=
-f_prog
-> =C2=A0=C2=A0=C2=A0 to prevent 17-bit overflow warning.
->=20
-> =C2=A0include/linux/bpf.h | 1 +
-> =C2=A0kernel/bpf/core.c=C2=A0=C2=A0 | 2 +-
-> =C2=A0kernel/bpf/fixups.c | 4 +++-
-> =C2=A03 files changed, 5 insertions(+), 2 deletions(-)
->=20
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index ba09795e0bfd..f5c283af3cf7 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1889,6 +1889,7 @@ struct bpf_prog {
-> =C2=A0		u8 digest[SHA256_DIGEST_SIZE];
-> =C2=A0		u8 tag[BPF_TAG_SIZE];
-> =C2=A0	};
-> +	u8			jit_required;	/* program strictly requires JIT compiler */
+Kmemleak periodically reports transient false positives for radix tree
+nodes allocated through the IDR, for example:
 
-maybe 1 bit is enough. I'm not sure the layout matters, if not we can put b=
-ehind sleepable:1.
+  unreferenced object 0xffff0004d6ac4200 (size 576):
+    comm "tcpeventd", pid 6412
+    backtrace (crc 335d668a):
+      kmem_cache_alloc_noprof
+      radix_tree_node_alloc
+      radix_tree_extend
+      idr_get_free
+      idr_alloc_cyclic
+      map_create
+      __sys_bpf
 
-> =C2=A0	struct bpf_prog_stats __percpu *stats;
-> =C2=A0	u8 __percpu		*active;	/* u8[BPF_NR_CONTEXTS] for recursion protect=
-ion
-> */
-> =C2=A0	unsigned int		(*bpf_func)(const void *ctx,
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 649cce41e13f..a55754bcc593 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2639,7 +2639,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct b=
-pf_verifier_env *env,
-> struct
-> =C2=A0
-> =C2=A0		fp =3D bpf_prog_jit_compile(env, fp);
-> =C2=A0		bpf_prog_jit_attempt_done(fp);
-> -		if (!fp->jited && jit_needed) {
-> +		if (!fp->jited && (jit_needed || fp->jit_required)) {
+radix_tree_extend() (grow) and radix_tree_shrink() (shrink) repoint
+root->xa_head to a new node.  If a kmemleak scan has already walked past
+root->xa_head, the new head is not reachable from any scanned pointer
+until the following scan, so kmemleak reports it as leaked even though it
+is live.
 
-You ignore Alexei's feedback. Should be =20
+This is the same race fixed for the XArray API in commit a1a029bcea59
+("XArray: fix kmemleak false positive in xas_shrink()").  The IDR uses
+the radix tree API directly and hits it on both the grow and the shrink
+path, so mark the new head as a transient leak in both.
 
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2619,8 +2619,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf=
-_verifier_env *env,
-struct
- 	if (fp->bpf_func)
- 		goto finalize;
-=20
--	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
--	    bpf_prog_has_kfunc_call(fp))
-+	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) || fp->jit_required)
- 		jit_needed =3D true;
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ lib/radix-tree.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-so we can set fp->jit_required when need, without change the rest.
+diff --git a/lib/radix-tree.c b/lib/radix-tree.c
+index 976b9bd02a1b5..cb5ca920fddb6 100644
+--- a/lib/radix-tree.c
++++ b/lib/radix-tree.c
+@@ -455,6 +455,8 @@ static int radix_tree_extend(struct radix_tree_root *root, gfp_t gfp,
+ 		node->slots[0] = (void __rcu *)entry;
+ 		entry = node_to_entry(node);
+ 		rcu_assign_pointer(root->xa_head, entry);
++		/* new head may be missed by an in-progress kmemleak scan */
++		kmemleak_transient_leak(node);
+ 		shift += RADIX_TREE_MAP_SHIFT;
+ 	} while (shift <= maxshift);
+ out:
+@@ -495,8 +497,11 @@ static inline bool radix_tree_shrink(struct radix_tree_root *root)
+ 		if (!node->shift && is_idr(root))
+ 			break;
+ 
+-		if (radix_tree_is_internal_node(child))
++		if (radix_tree_is_internal_node(child)) {
+ 			entry_to_node(child)->parent = NULL;
++			/* new head may be missed by an in-progress kmemleak scan */
++			kmemleak_transient_leak(entry_to_node(child));
++		}
+ 
+ 		/*
+ 		 * We don't need rcu_assign_pointer(), since we are simply
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 25aea4271cd0..3b2fb0163db7 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2712,6 +2712,7 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *env, =
-u32 func_id, u16 offset)
- 		if (!tab)
- 			return -ENOMEM;
- 		prog_aux->kfunc_tab =3D tab;
-+		env->prog->jit_required =3D true;
- 	}
+---
+base-commit: 840ef6c78e6a2f694b578ecb9063241c992aaa9e
+change-id: 20260702-radix-tree-8ae41d324101
 
-So the patch#1 is a refactor, some sort of this, I'm not sure it's right.
+Best regards,
+-- 
+Breno Leitao <leitao@debian.org>
 
-> =C2=A0			*err =3D -ENOTSUPP;
-> =C2=A0			return fp;
-> =C2=A0		}
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index 12a8a4eb757f..94e0457a0aa3 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -1841,8 +1841,10 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *en=
-v)
-> =C2=A0		}
-> =C2=A0
-> =C2=A0		/* Skip inlining the helper call if the JIT does it. */
-> -		if (bpf_jit_inlines_helper_call(insn->imm))
-> +		if (bpf_jit_inlines_helper_call(insn->imm)) {
-> +			prog->jit_required =3D 1;
-
-This's the patch#2.
-
-> =C2=A0			goto next_insn;
-> +		}
-> =C2=A0
-> =C2=A0		if (insn->imm =3D=3D BPF_FUNC_get_route_realm)
-> =C2=A0			prog->dst_needed =3D 1;
-
-and the rest.
-
---=20
-Thanks,
-KaFai
