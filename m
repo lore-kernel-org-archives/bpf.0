@@ -1,218 +1,162 @@
-Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D4C47DF88
-	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 09:53:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9DDD431E47;
+	Thu,  2 Jul 2026 10:14:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782986014; cv=none; b=W0E1+dH/YjeqYbMPfog6qUJXDgdgaxZOeEAI7fZq3eOUJbC7heq5OVtTBtXVV+MzCybOsUsRbq6oVl1URMDr+Hr5HqRuktb7xTL8w7/v8WNWnWzYDGP5Wb+Bhwmq0j/JHPENPxdI6vVu3GkOR6vnEdCM9XtkQwhXm6qwZehunjY=
+	t=1782987251; cv=none; b=hanOyj2s49WG4VMyWh3p7Tx418gp5MtNOhtlzMtasKnVkcgbS3Wis+6Yr8ZzKuhch6amLhzvMKPGhjOB9uyoDyt6D0yxTKCJxzflJaCqZYddhJrLU+v2jzQZYQgMiQPr/fP6L36qjsz1Da+JrktP8KmiLCKnBP9yzoAusgQPem4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782986014; c=relaxed/simple;
-	bh=awht1+4TGXpltiUaIUINPh0ni0Ekfg4l4tLYB6CdFL0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rQzQiji+RuqnCnMLytQqoLvTpYehzqu+QT/BCVq74oA+bVxhEOCXLoPgRxuveeq+8NNsdA4nURVn4sOxComLxzMurx6PtDPbVaYhghzg/VMgKH5IPF8q5XEUpzLcmS63FNhGoAv3pSN5iJaEYtOAQtGlQ6VWnOQZZxalNLhPT0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=ZcL5foN3; arc=none smtp.client-ip=84.16.66.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1782987251; c=relaxed/simple;
+	bh=tOMmQUenCG1jMgN7FzjDP94hTwGMiM5uWixk6zfaXN4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aFu2pScNO4DNSdTcmWuRr6rt5Fe9ADjTl3VT68EkRh0sQTJXsWvdHGla72D/2hi+E/pGWSt5LXvTHAnyvjiOVxGiYt//q3sTYnW9LYhijUwIoMdptqx9eJYnlcFQI5Mk3rbjA4mV48rJiNa/siqTZfEwjgyt6++AtUD5+n5bvUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nC+FBSYp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="ZcL5foN3"
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4grXJL4gTkzJvw;
-	Thu,  2 Jul 2026 11:53:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1782986002;
-	bh=w5yKyriWdfqxI/VD/SvKt+YW5stML2iFnEsLvQtXp24=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZcL5foN38QMLyL3T1hITDriaKoSzFVN10GhDAFjokhbfol1Sf74Ukj7bpemF0qDf/
-	 ZJFbrskSmZLVZf2g4DJ5QvpDWrErfZL3HX0Co/c8nfbExTwxarQCgyLgAa+9mo7Piy
-	 ZsFZvlNSUsL6zhq+QIp7voYfeOXU/kXtqQ+vqnE4=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4grXJJ7214z2QG;
-	Thu,  2 Jul 2026 11:53:20 +0200 (CEST)
-Date: Thu, 2 Jul 2026 11:53:19 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Paul Moore <paul@paul-moore.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>
-Cc: Justin Suess <utilityemal77@gmail.com>, ast@kernel.org, 
-	daniel@iogearbox.net, kpsingh@kernel.org, john.fastabend@gmail.com, andrii@kernel.org, 
-	viro@zeniv.linux.org.uk, brauner@kernel.org, kees@kernel.org, gnoack@google.com, 
-	jack@suse.cz, jmorris@namei.org, serge@hallyn.com, song@kernel.org, 
-	yonghong.song@linux.dev, martin.lau@linux.dev, m@maowtm.org, eddyz87@gmail.com, 
-	sdf@fomichev.me, skhan@linuxfoundation.org, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	Frederick Lawler <fred@cloudflare.com>
-Subject: Re: [RFC PATCH 06/20] bpf: lsm: Add Landlock kfuncs
-Message-ID: <20260702.ierahzaiLub3@digikod.net>
-References: <CAHC9VhRfqSoM89WC6TdQHapUVQe8a18rW2c-F7+tu6EjM9EdCA@mail.gmail.com>
- <akUH13qbsEnJLgQu@zenbox>
- <CAHC9VhSjRcMr9+5dMkep_TPKduYdob-bZ73FLfXd_o2xiWwOSg@mail.gmail.com>
- <20260701.jei4Paej3zen@digikod.net>
- <CAHC9VhRzZVUz8icZ2RD9OVvscJdZW3ivPERJLEkNi5poBeguxw@mail.gmail.com>
- <20260701.oTeikequi3ee@digikod.net>
- <akVvkA3kmlv_POsF@zenbox>
- <CAHC9VhTQtHPFGqu58EaFqMobV3LCcTsdzYfxy568P8mU769TMg@mail.gmail.com>
- <20260701.aeghohNoe3ek@digikod.net>
- <CAHC9VhSYJPdn3Y+C1s8VExQ0DhV9Kg-NZiWhhOA657JeHDnzjQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nC+FBSYp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE99A1F000E9;
+	Thu,  2 Jul 2026 10:14:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782987250;
+	bh=0KD4IxePiaRKiDUnsWDd7ZzKC/uuEISEEwFi3ALOjG8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=nC+FBSYplUxRkTcDA28Uihm2bb0QiWxV6MKbGDNC2p8EaFdzDDKXcx/WjB54/PouI
+	 GmfOQFEXDexXOHToPjplEC/5XhrM4B51o5tunEHF6yY5kw0cJnm8noVKI/GaUf7izo
+	 O9p4ZSBSYk/iOV6xJl48gcPJ9ZR4hYpqRwpkY7viZS346SnAIrmBHvqWi1g9iBMtcO
+	 skGWM7S8Slo0omYWjyLEV3xJmzJbvFHXHKusV8rPuG0APvSTaSPRxkdhlA4PP/b/0e
+	 j48nMGXjDMdufA2vA4J09h9/c3JATnx0ztPQaNI81DGzMDka5MF9vnOQDuTtVPoZM+
+	 wQB0L+wI1SWeA==
+Message-ID: <80fd18b5-dc4d-4078-a236-80b8be531e22@kernel.org>
+Date: Thu, 2 Jul 2026 11:14:06 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v8 5/9] bpftool: Generate skeleton for global
+ percpu data
+To: Leon Hwang <leon.hwang@linux.dev>,
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+References: <20260629152406.52582-1-leon.hwang@linux.dev>
+ <20260629152406.52582-6-leon.hwang@linux.dev>
+ <a4e4adfe-4b2e-49c4-a708-89276514f930@kernel.org>
+ <CAEf4BzbfA2nySpf3Oh6KVBRjDKMOOYN-NC279Sj73KwH32cGGg@mail.gmail.com>
+ <ad19d283-aaab-41f1-b1a5-73de551b03a9@linux.dev>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <ad19d283-aaab-41f1-b1a5-73de551b03a9@linux.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhSYJPdn3Y+C1s8VExQ0DhV9Kg-NZiWhhOA657JeHDnzjQ@mail.gmail.com>
-X-Infomaniak-Routing: alpha
 
-On Wed, Jul 01, 2026 at 07:32:57PM -0400, Paul Moore wrote:
-> On Wed, Jul 1, 2026 at 5:28 PM Mickaël Salaün <mic@digikod.net> wrote:
-> > On Wed, Jul 01, 2026 at 04:02:36PM -0400, Paul Moore wrote:
-> > > On Wed, Jul 1, 2026 at 3:55 PM Justin Suess <utilityemal77@gmail.com> wrote:
-> > > > On Wed, Jul 01, 2026 at 09:49:07PM +0200, Mickaël Salaün wrote:
-> > > > > On Wed, Jul 01, 2026 at 02:38:08PM -0400, Paul Moore wrote:
-> > > > > > On Wed, Jul 1, 2026 at 2:34 PM Mickaël Salaün <mic@digikod.net> wrote:
-> > > > > > > On Wed, Jul 01, 2026 at 09:28:22AM -0400, Paul Moore wrote:
-> > > > > > > > On Wed, Jul 1, 2026 at 8:52 AM Justin Suess <utilityemal77@gmail.com> wrote:
-> > > > > > > > > On Wed, Jul 01, 2026 at 08:12:34AM -0400, Paul Moore wrote:
-> > > > > > > > > > On Wed, Jul 1, 2026 at 6:59 AM Mickaël Salaün <mic@digikod.net> wrote:
-> > > > > > > > > > > On Tue, Apr 07, 2026 at 04:01:28PM -0400, Justin Suess wrote:
-> > > > > > > > > > > > Create 2 kfuncs exposing control over Landlock functionality to BPF
-> > > > > > > > > > > > callers. Export an opaque struct bpf_landlock_ruleset preventing callers
-> > > > > > > > > > > > from accessing unstable internal Landlock fields.
-> > > > > > > > > >
-> > > > > > > > > > Generally speaking we don't want to provide APIs, either in-kernel or
-> > > > > > > > > > at the userspace/kernel boundary, that are specific to a single LSM,
-> > > > > > > > > > see the LSM syscalls or the security_current_getlsmprop_subj()
-> > > > > > > > > > function as examples.
-> > > > > > >
-> > > > > > > This patch series is not about the LSM framework, only about Landlock
-> > > > > > > and its specific model and use case.  Landlock using some of the LSM API
-> > > > > > > is not relevant here.
-> > > > > >
-> > > > > > Based on a quick look the patchset enables BPF programs to call
-> > > > > > directly into Landlock.  For the same reason we discourage other parts
-> > > > > > of the kernel to call directly into individual LSMs, we want to
-> > > > > > discourage BPF programs from calling directly into individual LSMs.
-> > > > >
-> > > > > We're OK for a dedicated kfunc to call directly into Landlock (with a
-> > > > > tailored interface).  Landlock is designed around its syscall interfaces
-> > > > > (well documented, tailored, tested), and this would be a new user of
-> > > > > almost the same UAPI.
-> > > >
-> > > > Paul, Mickaël,
-> > > >
-> > > > I think there's a cleaner way to resolve this.
-> > > >
-> > > > First, walking back my earlier email: I was wrong saying that we need to call
-> > > > into security/security.c to check whether Landlock is enabled. Landlock's
-> > > > init only runs when it's in the active lsm= list, so I can just test
-> > > > landlock_initialized directly. There's no per-invocation reason to route
-> > > > through the LSM framework for that.
-> > >
-> > > The landlock_initialized flag is not really a LSM framework API, that
-> > > is still Landlock specific which is something we try hard to avoid.
-> > >
-> > > > Rather than routing each kfunc *invocation* through a security/security.c
-> > > > wrapper, I think the right place for the framework to be involved is
-> > > > *registration*: have the LSM framework own registration of an LSM's
-> > > > kfunc sets, e.g.
-> > > >
-> > > >     int security_register_lsm_kfunc_set(u64 lsm_id, enum bpf_prog_type type,
-> > > >                                         const struct btf_kfunc_id_set *kset);
-> > >
-> > > That implies a set of LSM kfunc APIs which Alexei has been deadset
-> > > against (see other ongoing threads).
-> > >
-> > > > Each LSM calls this once to register its sets. Because registration goes
-> > > > through the framework, the framework gets to decide whether to actually
-> > > > register them so you could, for example, run an LSM while explicitly
-> > > > opting its BPF kfuncs out. (something that should be done at the LSM
-> > > > framework level).
-> > >
-> > > I'm not opposed to the LSM supporting a set of kfuncs, see my comments
-> > > in other threads, but we should treat these kfuncs just as we treat
-> > > other LSM hooks today because that is what they are: LSM hooks that
-> > > happened to be called from within a BPF program.
-> >
-> > What an LSM hook is or should be is the crux of the misunderstanding.  I
-> > explained my point of view here:
-> > https://lore.kernel.org/all/20260701.jei4Paej3zen@digikod.net/
-> >
-> >   LSM hooks make sense because they are designed for a specific subsystem
-> >   (the caller) and their goal is to return an access decision or to keep
-> >   up-to-date related states, which means that their API is designed for
-> >   the caller, with its own types and specificities, not the other way
-> >   around.  This case is different, the kfunc is strongly typed and tied to
-> >   the Landlock (subsystem) semantic with an API defined by and for
-> >   Landlock.  I don't think a multiplexer would be a good idea.
-> >
-> > I'd try to explain better: in a nutshell, an LSM hook exposes a subset
-> > of the context of the caller, for any access control system to be able
-> > to make a decision.
+2026-07-02 14:24 UTC+0800 ~ Leon Hwang <leon.hwang@linux.dev>
+> On 2/7/26 03:32, Andrii Nakryiko wrote:
+>> On Wed, Jul 1, 2026 at 9:49 AM Quentin Monnet <qmo@kernel.org> wrote:
+>>>
+>>> 2026-06-29 23:24 UTC+0800 ~ Leon Hwang <leon.hwang@linux.dev>
+> [...]
+>>>> @@ -254,6 +254,20 @@ static const struct btf_type *find_type_for_map(struct btf *btf, const char *map
+>>>>       return NULL;
+>>>>  }
+>>>>
+>>>> +static bool bpf_map_is_skel_data(const struct bpf_map *map)
+>>>> +{
+>>>> +     if (!bpf_map__is_internal(map))
+>>>> +             return false;
+>>>> +
+>>>> +     if (bpf_map__map_flags(map) & BPF_F_MMAPABLE)
+>>>> +             return true;
+>>>> +
+>>>> +     if (bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY)
+>>>> +             return true;
+>>>> +
+>>>> +     return false;
+>>>> +}
+>>>> +
+>>>>  static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
+>>>>  {
+>>>>       size_t tmp_sz;
+>>>> @@ -263,7 +277,7 @@ static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
+>>>>               return true;
+>>>>       }
+>>>>
+>>>> -     if (!bpf_map__is_internal(map) || !(bpf_map__map_flags(map) & BPF_F_MMAPABLE))
+>>>> +     if (!bpf_map_is_skel_data(map))
+>>>>               return false;
+>>>>
+>>>>       if (!get_map_ident(map, buf, sz))
+>>>
+>>>
+>>> Thanks! The bpftool patch looks good, with one reservation: after this
+>>> patch, I believe "is_mmapable_map(map, ...)" will return true if map is
+>>> a percpu map, although percpu maps aren't mmap-able, so we should
+>>> probably update the name of that function to avoid any confusion?
+>>>
+>>
+>> Great observation, Quentin!
+>>
+>> bpf_map_is_skel_data() I think was supposed to be exactly that generic
+>> name. But it seems like Leon went half-way through with unification.
+>> Unless there are some subtle situations where per-cpu array shouldn't
+>> be handled where is_mmapable_map() is handled, we should rename
+>> is_mmapable_map() and add BPF_MAP_TYPE_PERCPU_ARRAY check (assuming
+>> it's internal map, of course) there.
+>>
+>> Leon, can you please check?
+>>
+> Aha, my bad.
 > 
-> That is true for some LSM hooks, but not all of them.  LSM hooks are
-> really just another name for the functions that compose parts of the
-> LSM framework API; it isn't always strictly about access control in
-> the kernel.
-
-That's why I wrote "in a nutshell".  Concrete examples and the rationale
-for such hooks would help.
-
-> We leverage the "hooks" for the LSM syscalls, we've
-> discussed "hooks" for implementing a common LSM namespace API, and
-> there have also been early efforts at LSM policy loading via "hooks".
-
-All that is doable, my question is: why a kfunc multiplexer?  What are
-the pros and cons?  I only see disadvantages for now.  Please, convince
-us.
-
+> Try to rename is_mmapable_map() to bpf_map_is_skel_data(). See below patch.
 > 
-> > It makes sense to have such dispatcher because the
-> > callees must adapt to the caller's context, and then the API is tailored
-> > to the caller, so even with several consumers, the API would ultimately
-> > be the same.  In the case of this kfunc, the callee is one specific
-> > subsystem that happens to be Landlock.  The caller asks a specific
-> > subsystem to do something specific to this subsystem, not to ask all
-> > potential access control systems to give a generic verdict to grant an
-> > access or not.
+> Thanks,
+> Leon
 > 
-> > For this kfunc, the caller passes arguments which are
-> > specific to the callee subsystem (e.g. a Landlock ruleset), not the
-> > other way around.  Every LSM has its own configuration, and it doesn't
-> > make sense to somehow wrap these configurations with a common layer/API.
+> ---
 > 
-> Once again, there have already been discussions about trying to build
-> a common API for that.  I'd rather have us pick that up for an
-> in-kernel/kfunc users than treat Landlock as an exception.  We're
-> trying to get rid of the exceptions in the LSM space.
-
-I understand and I agree about the argument for dispatchers (e.g. access
-control and state hooks) but not for multiplexers (i.e. which would be a
-kfunc in this case).
-
-How would look such multiplexer kfunc?  Something like this?
-
-  union lsm_restrict_arg {
-    struct {
-	    const struct landlock_rulest *ruleset,
-	    int flags,
-    } landlock;
-    ...?
-  };
-
- int bpf_lsm_restrict_binprm(struct lsm_id target_lsm,
-                             union lsm_restrict_arg multiplexed_generic_argument);
-
-I don't see the point of such multiplexer.  It adds complexity for no
-gain, except maybe to sneak in new features by only extending the
-argument types?  What would be the value for eBPF users?
-
+> From 654306cd9091a175883dd61c7b251996c42e7cae Mon Sep 17 00:00:00 2001
+> From: Leon Hwang <leon.hwang@linux.dev>
+> Date: Mon, 29 Jun 2026 23:24:02 +0800
+> Subject: [PATCH bpf-next v9 5/9] bpftool: Generate skeleton for global
+> percpu
+>  data
 > 
-> > Why not start with something simple that fits a use case now?  If and
-> > when another LSM will need a kfunc, then we'll have something concrete
-> > to talk about.
-> 
-> I think Casey's reply answers that question rather well.
 
-This was mainly about (access control/security) hooks, not multiplexer
-interfaces.
+[...]
+
+> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+> index 6ae7262ebe0c..798a34366e08 100644
+> --- a/tools/bpf/bpftool/gen.c
+> +++ b/tools/bpf/bpftool/gen.c
+
+[...]
+
+> @@ -254,7 +254,7 @@ static const struct btf_type
+> *find_type_for_map(struct btf *btf, const char *map
+>  	return NULL;
+>  }
+> 
+> -static bool is_mmapable_map(const struct bpf_map *map, char *buf,
+> size_t sz)
+> +static bool bpf_map_is_skel_data(const struct bpf_map *map, char *buf,
+> size_t sz)
+>  {
+
+
+Yes, I think it addresses the issue, thanks! I'd maybe drop the
+"bpf_map_" prefix in the function name ("is_skel_data_map()" instead?)
+to remain closer to is_mmapable_map(), and to avoid creating confusion
+with libbpf functions names, although I don't feel strongly about it.
+You can add my ACK to this v9 for the bpftool patch when you repost the
+series.
+
+Thanks,
+Quentin
