@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF98309F1D
-	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 14:48:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC71D35202D
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 14:48:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783003682; cv=none; b=gBBuB6B5BQJGeRSJJRmyzluFq6fOj4LMxN0gj60ujE+jHplb7uoxrPIRg7iovL1vtP1vGpSd4Z/uNOqPHu/PbJOzTHKt6Y6o39nZg2pK/PNqibrJQjGCrAE5zfru5oewcQTufOcNOUR1nAG6rXdSqisrp6C7L45mzFn7LB6Yuic=
+	t=1783003722; cv=none; b=DAvgzYyHb7JRDfRXI7QSd4zzz3ndd8EJnnp2717ivrAfSrbtnAdTGb3mnl+/tKuftiovvNLelN4WWrO5JRRpdmn2+KiE3xdPR5cYK0keWPAt9WKNfoF1J4yvMPJNvFrdBzPunu1x/bIYUBzjDT2rX+LsSJzhh5JlWTWjUUrtnjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783003682; c=relaxed/simple;
-	bh=NM3GUIzn0/isOrlbN9INnIfcqJe5E9XQG4/wAVLtomU=;
+	s=arc-20240116; t=1783003722; c=relaxed/simple;
+	bh=r1KbzCKwOoA9Umv8Nid7WMcHoDENG0mQY4ItHEU3wXs=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=j0AX06qRfBzVep68iXIXqBqccJtLQQVxPOe878GifDuXc3TOxIad/dw3APsUDcYqQc+YqMgpRCtcVHXkBicWDxfIBzki37B52n76RGXX6xnU7Z8UnTKDiv/iqma4DrSA3BzkOiDpMUZjUP0iGbv7YIp7smMz0i2bvgo1cSe5fSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=brji+86A; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=k0l5ZeAg4h/HqxN+5B+EZYVkUKt1phN4iHXnqg5osFMfNJttLJbuw/tvfF77SgjASR56gHk8wD0PJZt+GKzn0s62CfgA5B7NtmRIs4PW4TCUSEr2iD16atAZeyDhlqRPa8p/7BAM1/bmZgYgsvpnkGqeJKWcmaC7fA2OrQh+wuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HVQxc2kp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="brji+86A"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E96AC1F00A3D;
-	Thu,  2 Jul 2026 14:48:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HVQxc2kp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDDBB1F000E9;
+	Thu,  2 Jul 2026 14:48:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783003681;
-	bh=eXyuqz7zJSaGQvLgyOWPsDY646xuLAFEmJ7wrY8ANcM=;
+	s=k20260515; t=1783003721;
+	bh=Na6KlzwsmH1mOlmO6enzKo5WiuCN7axllwvjPgHObNg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=brji+86A/jEyQYHCTV5CRjsmeZN5r4i+UmVAduoX7gTt+NK7pQPCOkLgQ0W28UrZ+
-	 UZpNcV8mKA9fzgtM6E9WPlgngaB4J1ZXUCP0wlKdsp8OHKajMD67KGThCgoAtdxfrP
-	 a7r6uVIb1ENcsH6GYwWc0FpkG1RFRM5v42ZGBih53aE6rr7nvCR3mylsY0lw0dDSzU
-	 Nn1+5fVrBOCBdqck5oxjCcpt0BcVRSdYAfJaPlm5qKN80hFTIBBp2fvZwZM+ScjD66
-	 Y6UHlHCSq6G4LSIok79JoU+TAOYmE+ItVcdemnkb26aFXETg07FcYqWmsH1OlUr+21
-	 9T6rBTKbxvWSA==
+	b=HVQxc2kpAhiej4/Clk9iCPEspVzp/gxjSAvUCi4TU4jzQuhZ5Fv7ik2L+J4fAFxuu
+	 0NC7JhzDjbwMRcPFSFuJ0ykwiWTN+uDlX3//jibPR1j+7/EXI2q+JGmlOjLqrUwi1U
+	 1ZiN8Jo1ZXbjkZBfeVenBEzMsx0qyDhxlfZVWx9yqOHe23HMNL22noLkYY6orK8dje
+	 SR9f1IHfEK7+4VLzKOX1/mcraT1BmIApZ68c+EAj8rQIGv3kdmuqBUSUgIbr6sVtci
+	 nZwLT4ZdSPzQtIERg3OrGZn229So9J1aGLGelZ9hCJnLPV4POiaZvqG3zE6Hw7/oq6
+	 e0zbYv/aQAu4g==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 4/6] bpftool: Cover loader metadata with the
- program signature
+Subject: Re: [PATCH bpf-next v3 5/6] selftests/bpf: Verify load-time signed
+ loader metadata
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Daniel Borkmann" <daniel@iogearbox.net>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260702143605.252797-5-daniel@iogearbox.net>
+In-Reply-To: <20260702143605.252797-6-daniel@iogearbox.net>
 References: <20260702143605.252797-1-daniel@iogearbox.net>
- <20260702143605.252797-5-daniel@iogearbox.net>
+ <20260702143605.252797-6-daniel@iogearbox.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 02 Jul 2026 14:48:00 +0000
-Message-Id: <20260702144800.E96AC1F00A3D@smtp.kernel.org>
+Date: Thu, 02 Jul 2026 14:48:40 +0000
+Message-Id: <20260702144840.EDDBB1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,56 +47,90 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [Medium] The return value of EVP_Digest() is ignored, meaning that if the=
- digest computation fails, uninitialized stack memory is embedded as the ex=
-cl_prog_hash in the generated C skeleton.
+- [Low] In `signed_btf_fd_array_rejected()`, if `gen_loader_fixture_init(&f=
+)` fails partway (e.g., `bpf_object__gen_loader()` fails), it returns non-z=
+ero and the code jumps to the `out` label. Because `have_fixture` is set to=
+ `true` only *after* the function call, the cleanup block `if (have_fixture=
+) gen_loader_fixture_fini(&f);` is bypassed. This causes a memory leak of r=
+esources like `f.skel` which were partially allocated by `gen_loader_fixtur=
+e_init()`. Setting `have_fixture =3D true` before the call (as correctly do=
+ne in `lsm_signature_verdict()`) would prevent this leak, since `gen_loader=
+_fixture_init()` zeroes the struct before allocation.
 --
 
-commit e281b7d5ac70a49b622a3d4044b8e6f8e9dd90d4
+commit 029153a8d1d1ffbf9c42e3430f45b09e6533827c
 Author: Daniel Borkmann <daniel@iogearbox.net>
+Subject: selftests/bpf: Verify load-time signed loader metadata
 
-bpftool: Cover loader metadata with the program signature
+This commit updates the signed gen_loader selftests to verify load-time
+metadata enforcement. The kernel now folds the loader's frozen exclusive
+fd_array maps into the signature at load time instead of checking it from
+within BPF. The patch adds multiple test cases to ensure the signature
+logic and bounds are strictly enforced.
 
-This commit updates bpftool's program signing logic to include loader
-metadata alongside instructions. The signed artifact now embeds both in
-the generated skeleton, allowing offline signature validation.
-
-Link: https://lore.kernel.org/lkml/ecf0521ed302db672672ebfbc670ecfba36a6e00=
-.camel@HansenPartnership.com [0]
-
-> diff --git a/tools/bpf/bpftool/sign.c b/tools/bpf/bpftool/sign.c
-> index f9b742f4bb104..7cc991c69dc2c 100644
-> --- a/tools/bpf/bpftool/sign.c
-> +++ b/tools/bpf/bpftool/sign.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/signed_loader.c b/too=
+ls/testing/selftests/bpf/prog_tests/signed_loader.c
+> index 5fc417e31fc61..b3ac3d9b0e316 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/signed_loader.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
 [ ... ]
-> @@ -178,7 +190,7 @@ int bpftool_prog_sign(struct bpf_load_and_run_opts *o=
-pts)
->  	EVP_Digest(opts->insns, opts->insns_sz, opts->excl_prog_hash,
->  		   &opts->excl_prog_hash_sz, EVP_sha256(), NULL);
+> +static void signed_btf_fd_array_rejected(void)
+> +{
+> +	char dir_tmpl[] =3D "/tmp/signed_loader_btfXXXXXX", *dir =3D NULL;
+> +	__u32 sig_sz =3D 8192;
+> +	int map_fd =3D -1, prog_fd =3D -1;
+> +	unsigned char *buf =3D NULL;
+> +	struct gen_loader_fixture f;
+> +	bool have_fixture =3D false;
+> +	struct btf *btf =3D NULL;
+> +	union bpf_attr attr;
+> +	int fds[2];
+> +	__u8 sig[8192];
+> +
+> +	syscall(__NR_request_key, "keyring", "_uid.0", NULL,
+> +		KEY_SPEC_SESSION_KEYRING);
+> +	dir =3D mkdtemp(dir_tmpl);
+> +	if (!ASSERT_OK_PTR(dir, "mkdtemp"))
+> +		return;
+> +	if (!ASSERT_OK(run_setup("setup", dir), "verify_sig_setup")) {
+> +		rmdir(dir);
+> +		return;
+> +	}
+> +	if (gen_loader_fixture_init(&f) !=3D 0)
+> +		goto out;
+> +	have_fixture =3D true;
 
-[Severity: Medium]
-This is a pre-existing issue, but should we check the return value of
-EVP_Digest() here?
+[Severity: Low]
+Does this leak partially allocated fixture resources on failure?
 
-If EVP_Digest() fails (for example, due to an OpenSSL internal error or
-memory allocation failure), it returns 0 and leaves the hash uncomputed.
+If gen_loader_fixture_init(&f) fails partway through its setup, it returns
+non-zero and the code jumps to the out label.=20
 
-When called from gen_trace() in tools/bpf/bpftool/gen.c, this would result
-in an uninitialized stack buffer (prog_sha) being written to the generated
-C skeleton file as excl_prog_hash. This could leak build-time tool stack
-memory into the generated code and cause the program signature validation
-to fail when loaded.
+Because have_fixture is set to true only after the function call succeeds,
+the cleanup block at the out label:
 
-> =20
-> -		bd_out =3D BIO_new(BIO_s_mem());
-> +	bd_out =3D BIO_new(BIO_s_mem());
->  	if (!bd_out) {
->  		err =3D -ENOMEM;
->  		goto cleanup;
+    if (have_fixture)
+        gen_loader_fixture_fini(&f);
+
+is bypassed. This skips the cleanup of resources like f.skel which may have
+been allocated prior to the failure.
+
+Should have_fixture be set to true before calling gen_loader_fixture_init()
+so that any partially allocated resources are safely torn down?
+
 [ ... ]
+> +out:
+> +	if (btf)
+> +		btf__free(btf);
+> +	if (map_fd >=3D 0)
+> +		close(map_fd);
+> +	if (have_fixture)
+> +		gen_loader_fixture_fini(&f);
+> +	if (dir)
+> +		run_setup("cleanup", dir);
+> +	free(buf);
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260702143605.2527=
-97-1-daniel@iogearbox.net?part=3D4
+97-1-daniel@iogearbox.net?part=3D5
