@@ -1,28 +1,28 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A8043A1E92;
-	Thu,  2 Jul 2026 16:47:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C6C3A59A3;
+	Thu,  2 Jul 2026 16:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783010857; cv=none; b=gV+qmfLEaPmcJp+BiUsF69i9cstUfb8+DJUN5z+PodREB6dw/0jDN1dn9jz0QI3a8Dl/qEcOYHsB9yQCr9bQy4NLWxI5YIs3L7pcGVnvd+Brb+ouIqEvshD+y5URpUPc54YH5DxyHakLSOAs38dEa4D8rsG90FFo5bSylOfY6+g=
+	t=1783010862; cv=none; b=Qs11gOsiB+gSkESyP/gg3YVRo6W5PTe85qnNYDoSQiKtZR/Ez/5vQzDqHEAzIKjvSyk0BvETIZL4MLIRq5Hm7Rt5Qc1YQtB3IPYLN6Wk6e6aJ20eQpj6hw252mWEIZFs1PPx+pAxk6p+GrLOiSm6PJsE0+lp9kRMrIMUNVJ+cVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783010857; c=relaxed/simple;
-	bh=ybo5kdtIQbzoMR+nPjRZuspSA4FLEX0OUpqlmyXR5i4=;
+	s=arc-20240116; t=1783010862; c=relaxed/simple;
+	bh=GvywutXAupahoYgPnGZ1pMmPoh3tjXyA9vgdRbcanPo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rpXu3gLGRVTPtmgv4VA5F2il6266xltqCPZzvAPxg0yH3p7Z0PHe8REmWvyTOAymSm0tEJ4vCX+8t86uifrngyNWEyKJG4zsC4JYfgIx2jCHQNnfuvr3ABtttVZYavYaqdTc+ydreSUMF1U/lOu+c9WKLFfu920iCJoz2dUSusE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Z5+oWD2u; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=Jp15W/R5MKJ9+Huxe9NWe0vDRQvX7HcIFPDl03sW2UHdzBjnxIClIbcCXnQtt9/bsvahWHcTjUfqL/u553PzatMLw/OrvkshWQu7ppG9J70UYk2uOAQVW0yLn71h3tJlOxuTlIYjfemdoOwJmFokYsBb0y5nJFZSaA/sgUy68PU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2FAV6Mqf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Z5+oWD2u"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58C5D1F000E9;
-	Thu,  2 Jul 2026 16:47:35 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2FAV6Mqf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95B701F000E9;
+	Thu,  2 Jul 2026 16:47:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1783010856;
-	bh=V6n5C7vOKkzekwiNi/nVdZaccRf0/knKkOshOolO/F0=;
+	s=korg; t=1783010861;
+	bh=z+xmveiCxvPMr5kA1UNUK6DWf9DK+vvjoATufpk28kc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Z5+oWD2u+RnS2SBjZVu6oJxZc/JfSLPt/VlX3G2+gHUvNEyYSGyr541M72Wr6TDGh
-	 4FmuzNuZ8YvWm5p68xqyABbTWgaCcgrSlQQyoJrMxyVG5LPly4V+Ar1oMeEvG6XQGz
-	 GdkbUNPSYKmguBqep2abrEKomIo4mX0Qr2qM2Kl8=
+	b=2FAV6Mqfc40Nd+/MM50kWOeTN4XIV7MwQ3mbqCbDTTEjiQ4WDFEsfiKMyqk8UyjYY
+	 5ePl91IVI+evzEQATV7fNSgU/0nCKOjpP/35RKbFiuMWUIklZog85xmCW6mHOBIK1m
+	 DwD2lNqa1nS+io0QU8JUwzN4YO6hteYt4vcTQgYc=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -41,16 +41,11 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Martin Kelly <martin.kelly@crowdstrike.com>,
 	Christophe Leroy <christophe.leroy@csgroup.eu>,
 	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
 	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
 	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Subject: [PATCH 6.6 064/175] ftrace: Have ftrace pages output reflect freed pages
-Date: Thu,  2 Jul 2026 18:19:25 +0200
-Message-ID: <20260702155117.143529381@linuxfoundation.org>
+Subject: [PATCH 6.6 048/175] scripts/sorttable: Make compare_extable() into two functions
+Date: Thu,  2 Jul 2026 18:19:09 +0200
+Message-ID: <20260702155116.809305994@linuxfoundation.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260702155115.766838875@linuxfoundation.org>
 References: <20260702155115.766838875@linuxfoundation.org>
@@ -71,28 +66,27 @@ Content-Transfer-Encoding: 8bit
 
 From: Steven Rostedt <rostedt@goodmis.org>
 
-[ Upstream commit 264143c4e54412095f4b615e65bf736fc3c60af0 ]
+[ Upstream commit 7ffc0d0819f438779ed592e2e2e3576f43ce14f0 ]
 
-The amount of memory that ftrace uses to save the descriptors to manage
-the functions it can trace is shown at output. But if there are a lot of
-functions that are skipped because they were weak or the architecture
-added holes into the tables, then the extra pages that were allocated are
-freed. But these freed pages are not reflected in the numbers shown, and
-they can even be inconsistent with what is reported:
+Instead of having the compare_extable() part of the sorttable.h header
+where it get's defined twice, since it is a very simple function, just
+define it twice in sorttable.c, and then it can use the proper read
+functions for the word size and endianess and the Elf_Addr macro can be
+removed from sorttable.h.
 
- ftrace: allocating 57482 entries in 225 pages
- ftrace: allocated 224 pages with 3 groups
+Also add a micro optimization. Instead of:
 
-The above shows the number of original entries that are in the mcount_loc
-section and the pages needed to save them (225), but the second output
-reflects the number of pages that were actually used. The two should be
-consistent as:
+    if (a < b)
+        return -1;
+    if (a > b)
+        return 1;
+    return 0;
 
- ftrace: allocating 56739 entries in 224 pages
- ftrace: allocated 224 pages with 3 groups
+That can be shorten to:
 
-The above also shows the accurate number of entires that were actually
-stored and does not include the entries that were removed.
+   if (a < b)
+      return -1;
+   return a > b;
 
 Cc: bpf <bpf@vger.kernel.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
@@ -108,70 +102,87 @@ Cc: Zheng Yejian <zhengyejian1@huawei.com>
 Cc: Martin  Kelly <martin.kelly@crowdstrike.com>
 Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-Link: https://lore.kernel.org/20250218200023.221100846@goodmis.org
+Link: https://lore.kernel.org/20250105162344.945299671@goodmis.org
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/ftrace.c |   15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ scripts/sorttable.c |   20 ++++++++++++++++++++
+ scripts/sorttable.h |   14 --------------
+ 2 files changed, 20 insertions(+), 14 deletions(-)
 
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -6527,6 +6527,7 @@ static int ftrace_process_locs(struct mo
- 	unsigned long addr;
- 	unsigned long kaslr;
- 	unsigned long flags = 0; /* Shut up gcc */
-+	unsigned long pages;
- 	int ret = -ENOMEM;
- 
- 	count = end - start;
-@@ -6534,6 +6535,8 @@ static int ftrace_process_locs(struct mo
- 	if (!count)
- 		return 0;
- 
-+	pages = DIV_ROUND_UP(count, ENTRIES_PER_PAGE);
-+
- 	/*
- 	 * Sorting mcount in vmlinux at build time depend on
- 	 * CONFIG_BUILDTIME_MCOUNT_SORT, while mcount loc in
-@@ -6645,6 +6648,8 @@ static int ftrace_process_locs(struct mo
- 			for (pg = pg_unuse; pg; pg = pg->next)
- 				remaining += 1 << pg->order;
- 
-+			pages -= remaining;
-+
- 			skip = DIV_ROUND_UP(skip, ENTRIES_PER_PAGE);
- 
- 			/*
-@@ -6658,6 +6663,13 @@ static int ftrace_process_locs(struct mo
- 		synchronize_rcu();
- 		ftrace_free_pages(pg_unuse);
- 	}
-+
-+	if (!mod) {
-+		count -= skipped;
-+		pr_info("ftrace: allocating %ld entries in %ld pages\n",
-+			count, pages);
-+	}
-+
- 	return ret;
+--- a/scripts/sorttable.c
++++ b/scripts/sorttable.c
+@@ -173,6 +173,26 @@ static inline unsigned int get_secindex(
+ 	return r(&symtab_shndx_start[sym_offs]);
  }
  
-@@ -7315,9 +7327,6 @@ void __init ftrace_init(void)
- 		goto failed;
- 	}
++static int compare_extable_32(const void *a, const void *b)
++{
++	Elf32_Addr av = r(a);
++	Elf32_Addr bv = r(b);
++
++	if (av < bv)
++		return -1;
++	return av > bv;
++}
++
++static int compare_extable_64(const void *a, const void *b)
++{
++	Elf64_Addr av = r8(a);
++	Elf64_Addr bv = r8(b);
++
++	if (av < bv)
++		return -1;
++	return av > bv;
++}
++
+ /* 32 bit and 64 bit are very similar */
+ #include "sorttable.h"
+ #define SORTTABLE_64
+--- a/scripts/sorttable.h
++++ b/scripts/sorttable.h
+@@ -23,7 +23,6 @@
+ #undef sort_mcount_loc
+ #undef elf_mcount_loc
+ #undef do_sort
+-#undef Elf_Addr
+ #undef Elf_Ehdr
+ #undef Elf_Shdr
+ #undef Elf_Sym
+@@ -38,7 +37,6 @@
+ # define sort_mcount_loc	sort_mcount_loc_64
+ # define elf_mcount_loc		elf_mcount_loc_64
+ # define do_sort		do_sort_64
+-# define Elf_Addr		Elf64_Addr
+ # define Elf_Ehdr		Elf64_Ehdr
+ # define Elf_Shdr		Elf64_Shdr
+ # define Elf_Sym		Elf64_Sym
+@@ -52,7 +50,6 @@
+ # define sort_mcount_loc	sort_mcount_loc_32
+ # define elf_mcount_loc		elf_mcount_loc_32
+ # define do_sort		do_sort_32
+-# define Elf_Addr		Elf32_Addr
+ # define Elf_Ehdr		Elf32_Ehdr
+ # define Elf_Shdr		Elf32_Shdr
+ # define Elf_Sym		Elf32_Sym
+@@ -160,17 +157,6 @@ static void *sort_orctable(void *arg)
+ }
+ #endif
  
--	pr_info("ftrace: allocating %ld entries in %ld pages\n",
--		count, DIV_ROUND_UP(count, ENTRIES_PER_PAGE));
+-static int compare_extable(const void *a, const void *b)
+-{
+-	Elf_Addr av = _r(a);
+-	Elf_Addr bv = _r(b);
 -
- 	ret = ftrace_process_locs(NULL,
- 				  __start_mcount_loc,
- 				  __stop_mcount_loc);
+-	if (av < bv)
+-		return -1;
+-	if (av > bv)
+-		return 1;
+-	return 0;
+-}
+ #ifdef MCOUNT_SORT_ENABLED
+ pthread_t mcount_sort_thread;
+ 
 
 
