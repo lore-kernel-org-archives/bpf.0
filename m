@@ -1,162 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9DDD431E47;
-	Thu,  2 Jul 2026 10:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC8D39FCD2
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 10:36:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782987251; cv=none; b=hanOyj2s49WG4VMyWh3p7Tx418gp5MtNOhtlzMtasKnVkcgbS3Wis+6Yr8ZzKuhch6amLhzvMKPGhjOB9uyoDyt6D0yxTKCJxzflJaCqZYddhJrLU+v2jzQZYQgMiQPr/fP6L36qjsz1Da+JrktP8KmiLCKnBP9yzoAusgQPem4=
+	t=1782988563; cv=none; b=X9+S1M5Ye3eYfhSf9Gc63uS6scVYNqBbARailAZjgfLSYYbbxl6Br7F2gxo+NBXY/C+qM3a/E4xx4VVc/ojYCWF/qqwi8Ihc68by3PwsmJeBz2CgAkbzsUc436bVhrGxNAfAMmJYtjQqaOGEIoJwhms4NUKo2H9G29xIYL/bl/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782987251; c=relaxed/simple;
-	bh=tOMmQUenCG1jMgN7FzjDP94hTwGMiM5uWixk6zfaXN4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aFu2pScNO4DNSdTcmWuRr6rt5Fe9ADjTl3VT68EkRh0sQTJXsWvdHGla72D/2hi+E/pGWSt5LXvTHAnyvjiOVxGiYt//q3sTYnW9LYhijUwIoMdptqx9eJYnlcFQI5Mk3rbjA4mV48rJiNa/siqTZfEwjgyt6++AtUD5+n5bvUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nC+FBSYp; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782988563; c=relaxed/simple;
+	bh=u78F4QdlrR7C1BYI5zDtdJCtyxUfspZXfPNBzuyN/eM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=PcNfwjN35EBIoHBudpCpYJEzyISBIikmJ3DScIASZ/JxDw9Vsj1hyeyj01gofySylMHwW6LvoMm46hI9VAUj6L76uQPW0aNd0OWlRF8H1gjn2pobZSFV/ZwhT3jmSJ1/9229cRGiaODPlwxTWdVj0jfKmFH1eBAtVtNcGZe0NZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=NOKtO6Ls; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nC+FBSYp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE99A1F000E9;
-	Thu,  2 Jul 2026 10:14:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782987250;
-	bh=0KD4IxePiaRKiDUnsWDd7ZzKC/uuEISEEwFi3ALOjG8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=nC+FBSYplUxRkTcDA28Uihm2bb0QiWxV6MKbGDNC2p8EaFdzDDKXcx/WjB54/PouI
-	 GmfOQFEXDexXOHToPjplEC/5XhrM4B51o5tunEHF6yY5kw0cJnm8noVKI/GaUf7izo
-	 O9p4ZSBSYk/iOV6xJl48gcPJ9ZR4hYpqRwpkY7viZS346SnAIrmBHvqWi1g9iBMtcO
-	 skGWM7S8Slo0omYWjyLEV3xJmzJbvFHXHKusV8rPuG0APvSTaSPRxkdhlA4PP/b/0e
-	 j48nMGXjDMdufA2vA4J09h9/c3JATnx0ztPQaNI81DGzMDka5MF9vnOQDuTtVPoZM+
-	 wQB0L+wI1SWeA==
-Message-ID: <80fd18b5-dc4d-4078-a236-80b8be531e22@kernel.org>
-Date: Thu, 2 Jul 2026 11:14:06 +0100
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="NOKtO6Ls"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c12788a75abso301111466b.2
+        for <bpf@vger.kernel.org>; Thu, 02 Jul 2026 03:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1782988559; x=1783593359; darn=vger.kernel.org;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=u78F4QdlrR7C1BYI5zDtdJCtyxUfspZXfPNBzuyN/eM=;
+        b=NOKtO6LsvoIK3dwQteCncaPJ+g6OcppeqhO2+Xa7XrRrDnbeZvy5DdHH2UutfGIVCr
+         S/qkYU3bKmUr2e32gAzY1EhNJD8B1nrnHdcCz6BEJ1cC3R4fjw7FpukTx86ePzDS0BaC
+         buJ0EfBWH4I4bGQKG07nN8TzsvEgrmylGq9sqUt0AfEgTX8OAMM0b/F7QMtZeCvjPWb8
+         RDXgFFbgwrYUPQnNlgkipCiSMg/+5h3Y1DBUcKl3wG5ILjHi7di+v5NwxvmiCUWE8OCE
+         Kr5Nt6+UAcMs3o0pbMx7lWiXQAiJgcyuiWJl64+r/UifjbmQCzoUtnuK+4n4jV6bSlRg
+         71Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782988559; x=1783593359;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=u78F4QdlrR7C1BYI5zDtdJCtyxUfspZXfPNBzuyN/eM=;
+        b=ezFLzrhnbVxstRBOqXHh+cKPprki4W65tCeFZLtMXPy8mTfOntcmHkdkUzTz8g9qM1
+         O/GmdKVvn6Ov26wPe0qH6/SNOHNMWY6TnwBad3GA86sScMLKmcXSxwfHZ8iyxKctyFr2
+         +nW3QIFm48vBVf0kFO2b+2h/Y1t9FC27l0NRpcu0nxr0HcAD4A71H0LOqZgCNYPCNF91
+         BPuBpMCds4HsJZiOa1s08d9+Zed62YYRPGygoLuziTic3U4Pxa01la5dL570T27Q8ivW
+         wlNlXBdlIcsLphQksSFRb7W0LVFPR0oV4OAEobvsQGzmWXXD5xlN+1rdexa80rX9wQgN
+         mClA==
+X-Forwarded-Encrypted: i=1; AHgh+RoEJGB4WvfzZnvNZBEL0Dm6DZUc4t/afnmY6HD+/T9AFs8UPXYYQyBwlhlWLLU/LmqXf9w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyyeM47FUFes2gNh2GV9GLc4+cJhUdAYxonYeQOsHh34GdYDIaF
+	Lhx3DN1n8XUzNnEeJ4xvj9x9G0D1zcJnUUQNKL+ggkcreLp7cmSAbXevG7BcN9p0aHY=
+X-Gm-Gg: AfdE7cngZz2GEWCy2eQqYXPyYdGecYN/fxca9t1wbMOLI7EzTDHzIBI7+9xwjqnvYuh
+	4Kk1ciYtpA5zg1mUWDdtj3iRYXlQbEYLeS3rprVqdP32w6BxaREHfhi0xoEi5JZqeuHUKaPHoOe
+	Rba3kGM39TcLwUQc/luBe0/GIrQm9ZNYVHXGUGZRjtw9pfxtQa5o39r2mlMTWv5a6FQqF78Eu9Y
+	aa+1ELzoqWdBGe2hGrObPaRa7EvklR9xpzOZOgm04U6Yk6oIeVfsgV1hMk9o2cCL1SbD4AebHTJ
+	YxNhOUksT5r0CiFpRMsWQvftrhUAljc2a35zGHRxos9S703WhrQM04VUw0QoU8vp9sSBt+A6Ge/
+	IEZQy8BLAIq79yL0qosfccD3L7cdq2DxOM0yQw6kz2JSZ7+ygZ5NICW/rbyH/sAC8JRq3xLY6iS
+	3fhiBkEzNQJAvgtsc=
+X-Received: by 2002:a17:906:44f:b0:c12:4f19:fad5 with SMTP id a640c23a62f3a-c12ae77c901mr167169566b.59.1782988559046;
+        Thu, 02 Jul 2026 03:35:59 -0700 (PDT)
+Received: from cloudflare.com ([104.28.21.182])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c12b62907ffsm107708366b.40.2026.07.02.03.35.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2026 03:35:58 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Michal Luczaj <mhal@rbox.co>
+Cc: Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  Eduard
+ Zingerman <eddyz87@gmail.com>,  Kumar Kartikeya Dwivedi
+ <memxor@gmail.com>,  Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
+ <song@kernel.org>,  Yonghong Song <yonghong.song@linux.dev>,  Jiri Olsa
+ <jolsa@kernel.org>,  Emil Tsalapatis <emil@etsalapatis.com>,  Shuah Khan
+ <shuah@kernel.org>,  John Fastabend <john.fastabend@gmail.com>,  Jiayuan
+ Chen <jiayuan.chen@linux.dev>,  Eric Dumazet <edumazet@google.com>,
+  Kuniyuki Iwashima <kuniyu@google.com>,  Paolo Abeni <pabeni@redhat.com>,
+  Willem de Bruijn <willemb@google.com>,  "David S. Miller"
+ <davem@davemloft.net>,  Jakub Kicinski <kuba@kernel.org>,  Simon Horman
+ <horms@kernel.org>,  Cong Wang <cong.wang@bytedance.com>,
+  bpf@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  netdev@vger.kernel.org
+Subject: Re: [PATCH bpf v3 1/4] selftests/bpf: Ensure UDP sockets are bound
+In-Reply-To: <20260702-sockmap-lookup-udp-leak-v3-1-ff8de8782468@rbox.co>
+	(Michal Luczaj's message of "Thu, 02 Jul 2026 01:28:19 +0200")
+References: <20260702-sockmap-lookup-udp-leak-v3-0-ff8de8782468@rbox.co>
+	<20260702-sockmap-lookup-udp-leak-v3-1-ff8de8782468@rbox.co>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Thu, 02 Jul 2026 12:35:57 +0200
+Message-ID: <878q7t3che.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v8 5/9] bpftool: Generate skeleton for global
- percpu data
-To: Leon Hwang <leon.hwang@linux.dev>,
- Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
-References: <20260629152406.52582-1-leon.hwang@linux.dev>
- <20260629152406.52582-6-leon.hwang@linux.dev>
- <a4e4adfe-4b2e-49c4-a708-89276514f930@kernel.org>
- <CAEf4BzbfA2nySpf3Oh6KVBRjDKMOOYN-NC279Sj73KwH32cGGg@mail.gmail.com>
- <ad19d283-aaab-41f1-b1a5-73de551b03a9@linux.dev>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <ad19d283-aaab-41f1-b1a5-73de551b03a9@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-2026-07-02 14:24 UTC+0800 ~ Leon Hwang <leon.hwang@linux.dev>
-> On 2/7/26 03:32, Andrii Nakryiko wrote:
->> On Wed, Jul 1, 2026 at 9:49 AM Quentin Monnet <qmo@kernel.org> wrote:
->>>
->>> 2026-06-29 23:24 UTC+0800 ~ Leon Hwang <leon.hwang@linux.dev>
-> [...]
->>>> @@ -254,6 +254,20 @@ static const struct btf_type *find_type_for_map(struct btf *btf, const char *map
->>>>       return NULL;
->>>>  }
->>>>
->>>> +static bool bpf_map_is_skel_data(const struct bpf_map *map)
->>>> +{
->>>> +     if (!bpf_map__is_internal(map))
->>>> +             return false;
->>>> +
->>>> +     if (bpf_map__map_flags(map) & BPF_F_MMAPABLE)
->>>> +             return true;
->>>> +
->>>> +     if (bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY)
->>>> +             return true;
->>>> +
->>>> +     return false;
->>>> +}
->>>> +
->>>>  static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
->>>>  {
->>>>       size_t tmp_sz;
->>>> @@ -263,7 +277,7 @@ static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
->>>>               return true;
->>>>       }
->>>>
->>>> -     if (!bpf_map__is_internal(map) || !(bpf_map__map_flags(map) & BPF_F_MMAPABLE))
->>>> +     if (!bpf_map_is_skel_data(map))
->>>>               return false;
->>>>
->>>>       if (!get_map_ident(map, buf, sz))
->>>
->>>
->>> Thanks! The bpftool patch looks good, with one reservation: after this
->>> patch, I believe "is_mmapable_map(map, ...)" will return true if map is
->>> a percpu map, although percpu maps aren't mmap-able, so we should
->>> probably update the name of that function to avoid any confusion?
->>>
->>
->> Great observation, Quentin!
->>
->> bpf_map_is_skel_data() I think was supposed to be exactly that generic
->> name. But it seems like Leon went half-way through with unification.
->> Unless there are some subtle situations where per-cpu array shouldn't
->> be handled where is_mmapable_map() is handled, we should rename
->> is_mmapable_map() and add BPF_MAP_TYPE_PERCPU_ARRAY check (assuming
->> it's internal map, of course) there.
->>
->> Leon, can you please check?
->>
-> Aha, my bad.
-> 
-> Try to rename is_mmapable_map() to bpf_map_is_skel_data(). See below patch.
-> 
-> Thanks,
-> Leon
-> 
+On Thu, Jul 02, 2026 at 01:28 AM +02, Michal Luczaj wrote:
+> Update sockmap_basic tests to bind sockets before they are used. This
+> accommodates the recent change in sockmap that rejects unbound UDP sockets.
+>
+> Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+> Signed-off-by: Michal Luczaj <mhal@rbox.co>
 > ---
-> 
-> From 654306cd9091a175883dd61c7b251996c42e7cae Mon Sep 17 00:00:00 2001
-> From: Leon Hwang <leon.hwang@linux.dev>
-> Date: Mon, 29 Jun 2026 23:24:02 +0800
-> Subject: [PATCH bpf-next v9 5/9] bpftool: Generate skeleton for global
-> percpu
->  data
-> 
 
-[...]
-
-> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-> index 6ae7262ebe0c..798a34366e08 100644
-> --- a/tools/bpf/bpftool/gen.c
-> +++ b/tools/bpf/bpftool/gen.c
-
-[...]
-
-> @@ -254,7 +254,7 @@ static const struct btf_type
-> *find_type_for_map(struct btf *btf, const char *map
->  	return NULL;
->  }
-> 
-> -static bool is_mmapable_map(const struct bpf_map *map, char *buf,
-> size_t sz)
-> +static bool bpf_map_is_skel_data(const struct bpf_map *map, char *buf,
-> size_t sz)
->  {
-
-
-Yes, I think it addresses the issue, thanks! I'd maybe drop the
-"bpf_map_" prefix in the function name ("is_skel_data_map()" instead?)
-to remain closer to is_mmapable_map(), and to avoid creating confusion
-with libbpf functions names, although I don't feel strongly about it.
-You can add my ACK to this v9 for the bpftool patch when you repost the
-series.
-
-Thanks,
-Quentin
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
