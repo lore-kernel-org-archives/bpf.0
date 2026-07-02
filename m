@@ -1,162 +1,177 @@
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3BD4181334;
-	Thu,  2 Jul 2026 03:18:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.112
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AA63318B96
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 03:31:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782962287; cv=none; b=YZG/xCK87lwHLzrRK9Qos7uPaRZ6E1m414oyo045a8VYJb3ETq2WzIVhnqUCiBh9rX2SWFoNBdKXf7ecsRpbEeUWDq0ar+6gPNpdTkPVK0rGv1pAY92NDf/LhLENR/7WmccxPEhqO2Q8D7YnVBOZNWZN1x55sweWg1hAUNPK5Bs=
+	t=1782963101; cv=none; b=Q7PEUQX6PcDJWchX6QrVVUVd1bLclFtm5yBRUl8/dJV0dP32GnBVai/51GWytfA1qNMM7zBQlZDA/JaDO4WiqUfADikSfdLRFiffk2nA6vWV6EIlLO1HiX6/a7xFnekDlkLmOYYXkNWYq/jUsXam9U10oV5zN7wMDrpWd35ya58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782962287; c=relaxed/simple;
-	bh=3BcLJWhoWFgV9slK/ItxBb1txl9oDXdEKTXeS5guuzY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aJ2+CwAPEtbqjPQwGBpfCOy56Ohcia0d5ai1B6ljg3tzaLAxROOCO88HnZgMKOAF0g31orMZFHTbmb9psoKrugnfAKdF4jAaG6MWgs+Wd47zkniFOeCsNRcksiJzE7dLnOLJWCLAv9O+1GaRYvDpEeKzpdM8ITfHkVYF25ZqKv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Vmua5xOI; arc=none smtp.client-ip=115.124.30.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Vmua5xOI"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1782962277; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-	bh=qRFiwz274BAI0tGfuVu7HAAEPreWRlpaAR/BIu4h8tk=;
-	b=Vmua5xOIn0pQxAoY4HSGskLC67IkQmApMngqhYqLpCjnBtZma6lpHk1g+CyYLProUQyX1RTj1xJjQuXTN/rBkev6b24BIWJqHZvT9tRFOzDEsn0E5HKKyjpARtBpvCek+dMaZsvASyIhab+73Ub/HX6L78H/oZYERI69ft+z5DA=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R701e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=alibuda@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0X6CQ0f9_1782962275;
-Received: from localhost(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0X6CQ0f9_1782962275 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 02 Jul 2026 11:17:56 +0800
-Date: Thu, 2 Jul 2026 11:17:55 +0800
-From: "D. Wythe" <alibuda@linux.alibaba.com    >
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: Sechang Lim <rhkrqnwk98@gmail.com>,
-	"D . Wythe" <alibuda@linux.alibaba.com>,
-	Dust Li <dust.li@linux.alibaba.com>,
-	Sidraya Jayagond <sidraya@linux.ibm.com>,
-	Wenjia Zhang <wenjia@linux.ibm.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Mahanta Jambigi <mjambigi@linux.ibm.com>,
-	Tony Lu <tonylu@linux.alibaba.com>,
-	Wen Gu <guwen@linux.alibaba.com>, Simon Horman <horms@kernel.org>,
-	Karsten Graul <kgraul@linux.ibm.com>,
-	Guvenc Gulce <guvenc@linux.ibm.com>,
-	Ursula Braun <ubraun@linux.ibm.com>, linux-rdma@vger.kernel.org,
-	linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net v3] net/smc: fix out-of-bounds read when sk_user_data
- holds a sk_psock
-Message-ID: <20260702031755.GA70283@j66a10360.sqa.eu95>
-References: <20260629095140.679754-1-rhkrqnwk98@gmail.com>
- <c222390f-96c7-4dc3-8f33-f4dd277c3639@redhat.com>
+	s=arc-20240116; t=1782963101; c=relaxed/simple;
+	bh=Cq8aVbupcdVVj0iwOLMAbsuiwqFEAE8N9FpHv/x/w0o=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=cIu+rzEkp2kFkJK+KXRf4A/3nydmYb60CTuElWpdcBOUlm3hFzC+LIyJddhdXCE0EQKV9wTefYMJMb64Sw2j4DVPsLl3/1dQ1E5yZIwBA5PjFeC4NPY5xcuxKJYU0wrx7P9D+GKliSI7DuyWmZRwmntJZ+LnjvW6tIXWvBN5eak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8BxCfGS20Vq_cIAAA--.4498S3;
+	Thu, 02 Jul 2026 11:31:30 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJDxSMGP20VqaYS7AA--.13542S3;
+	Thu, 02 Jul 2026 11:31:28 +0800 (CST)
+Subject: Re: [PATCH bpf-next v5] bpf: Reject programs with inlined helpers if
+ JIT is unavailable
+To: Leon Hwang <leon.hwang@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, KaFai Wan <kafai.wan@linux.dev>
+Cc: bpf@vger.kernel.org, loongarch@lists.linux.dev
+References: <20260702022108.17693-1-yangtiezhu@loongson.cn>
+ <3fe115fd-8df8-4bf0-805b-2d0c2c40fdf5@linux.dev>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <527b7e2e-e9cc-33b2-6a17-a888331a4d3e@loongson.cn>
+Date: Thu, 2 Jul 2026 11:31:27 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c222390f-96c7-4dc3-8f33-f4dd277c3639@redhat.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <3fe115fd-8df8-4bf0-805b-2d0c2c40fdf5@linux.dev>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJDxSMGP20VqaYS7AA--.13542S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxGFyrWr15GrWfXryxGr4fXrc_yoW5tryfpF
+	1DCw1kuFWI9rWxWrWkAa18ury3trW5Gr17KF40grWjgr1DWFZ7Gw1fKF45A3s3ur4vvF10
+	vrnFvr9xJr13X3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+	6r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
+	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
+	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4U
+	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07joc_-UUU
+	UU=
 
-On Wed, Jul 01, 2026 at 05:27:11PM +0200, Paolo Abeni wrote:
-> On 6/29/26 11:51 AM, Sechang Lim wrote:
-> > A passive-open child inherits the listener's smc_clcsock_data_ready().
-> > sk_clone_lock() clears its sk_user_data to NULL because the listener tagged
-> > it SK_USER_DATA_NOCOPY. Until accept restores the callback, a BPF sock_ops
-> > program can add the established child to a sockmap, and sk_psock_init()
-> > installs a sk_psock into the NULL sk_user_data. The inherited callback then
-> > reads it back through smc_clcsock_user_data(), which strips only NOCOPY,
-> > takes the sk_psock for an smc_sock, and dereferences a clcsk_* field past
-> > its end:
-> > 
-> >   BUG: KASAN: slab-out-of-bounds in smc_clcsock_data_ready+0x84/0x200 net/smc/af_smc.c:2637
-> >   Read of size 8 at addr ffff8880013b8674 by task syz.6.12484/67930
-> >    <IRQ>
-> >    smc_clcsock_data_ready+0x84/0x200 net/smc/af_smc.c:2637
-> >    tcp_urg+0x24d/0x360 net/ipv4/tcp_input.c:6264
-> >    tcp_rcv_state_process+0x280d/0x4940 net/ipv4/tcp_input.c:7336
-> >    tcp_child_process+0x371/0xa50 net/ipv4/tcp_minisocks.c:1002
-> >    tcp_v4_rcv+0x1eaa/0x2a00 net/ipv4/tcp_ipv4.c:2186
-> >    [...]
-> >    </IRQ>
-> > 
-> >   Allocated by task 67930:
-> >    sk_psock_init+0x142/0x740 net/core/skmsg.c:766
-> >    sock_hash_update_common+0xd3/0x990 net/core/sock_map.c:1010
-> >    bpf_sock_hash_update+0x114/0x170 net/core/sock_map.c:1229
-> >    __cgroup_bpf_run_filter_sock_ops+0x74/0xa0 kernel/bpf/cgroup.c:1727
-> >    tcp_init_transfer+0x1085/0x1100 net/ipv4/tcp_input.c:6693
-> >    [...]
-> > 
-> > Resolve the conflict on the write path. Reserve the child's sk_user_data
-> > with a NULL pointer tagged SK_USER_DATA_NOCOPY so sk_psock_init() returns
-> > -EBUSY, and release it at accept. smc_clcsock_user_data() still strips the
-> > tag to NULL, so the inherited callback stays a no-op.
-> > 
-> > Fixes: a60a2b1e0af1 ("net/smc: reduce active tcp_listen workers")
-> > Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
-> > ---
-> > v3:
-> >  - reserve sk_user_data on the write path instead of the read-side check (D. Wythe)
-> > 
-> > v2:
-> >  - https://lore.kernel.org/netdev/20260619150342.3626224-1-rhkrqnwk98@gmail.com/
-> > 
-> > v1:
-> >  - https://lore.kernel.org/netdev/20260614120931.4041687-1-rhkrqnwk98@gmail.com/
-> > 
-> >  net/smc/af_smc.c | 10 +++++++++-
-> >  1 file changed, 9 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-> > index b5db69073e20..78f162344fe3 100644
-> > --- a/net/smc/af_smc.c
-> > +++ b/net/smc/af_smc.c
-> > @@ -154,7 +154,11 @@ static struct sock *smc_tcp_syn_recv_sock(const struct sock *sk,
-> >  					       own_req, opt_child_init);
-> >  	/* child must not inherit smc or its ops */
-> >  	if (child) {
-> > -		rcu_assign_sk_user_data(child, NULL);
-> > +		/* reserve sk_user_data so sockmap cannot claim the slot */
-> > +		write_lock_bh(&child->sk_callback_lock);
-> > +		__rcu_assign_sk_user_data_with_flags(child, NULL,
-> > +						     SK_USER_DATA_NOCOPY);
-> > +		write_unlock_bh(&child->sk_callback_lock);
-> >  
-> >  		/* v4-mapped sockets don't inherit parent ops. Don't restore. */
-> >  		if (inet_csk(child)->icsk_af_ops == inet_csk(sk)->icsk_af_ops)
-> > @@ -1773,6 +1777,7 @@ static int smc_clcsock_accept(struct smc_sock *lsmc, struct smc_sock **new_smc)
-> >  	/* new clcsock has inherited the smc listen-specific sk_data_ready
-> >  	 * function; switch it back to the original sk_data_ready function
-> >  	 */
-> > +	write_lock_bh(&new_clcsock->sk->sk_callback_lock);
-> >  	new_clcsock->sk->sk_data_ready = lsmc->clcsk_data_ready;
-> >  
-> >  	/* if new clcsock has also inherited the fallback-specific callback
-> > @@ -1786,6 +1791,9 @@ static int smc_clcsock_accept(struct smc_sock *lsmc, struct smc_sock **new_smc)
-> >  		if (lsmc->clcsk_error_report)
-> >  			new_clcsock->sk->sk_error_report = lsmc->clcsk_error_report;
-> >  	}
-> > +	/* release the slot reserved in smc_tcp_syn_recv_sock() */
-> > +	rcu_assign_sk_user_data(new_clcsock->sk, NULL);
-> > +	write_unlock_bh(&new_clcsock->sk->sk_callback_lock);
+On 2026/7/2 上午11:17, Leon Hwang wrote:
+> On 2/7/26 10:21, Tiezhu Yang wrote:
+> [...]
+>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>> index ba09795e0bfd..463fae6a5c33 100644
+>> --- a/include/linux/bpf.h
+>> +++ b/include/linux/bpf.h
+>> @@ -1865,8 +1865,9 @@ struct bpf_prog_aux {
+>>   
+>>   struct bpf_prog {
+>>   	u16			pages;		/* Number of allocated pages */
+>> -	u16			jited:1,	/* Is our filter JIT'ed? */
+>> +	u32			jited:1,	/* Is our filter JIT'ed? */
+>>   				jit_requested:1,/* archs need to JIT the prog */
+>> +				jit_required:1, /* program strictly requires JIT compiler */
 > 
-> Sashiko reports that this still cause problem on fallback.
+> Looks good to put jit_required together with jit_requested.
 > 
-> @Wythe, I understand from previous discussion that you would prefer to
-> address such issues separately (and thus you are fine with the patch in
-> the current form). Could you please confirm?
-
-No, I do not agree with this patch in any form. As I replied to it, I do
-not think this is the right direction.
-
-D. Wythe
-
+> However, 'u16 -> u32' changes the layout of struct bpf_prog.
 > 
-> /P
-> >  
-> >  	(*new_smc)->clcsock = new_clcsock;
-> >  out:
+> Before the change, pahole -C bpf_prog ./vmlinux
+> 
+> struct bpf_prog {
+> 	u16                        pages;                /*     0     2 */
+> 	u16                        jited:1;              /*     2: 0  2 */
+> 	u16                        jit_requested:1;      /*     2: 1  2 */
+> 	u16                        gpl_compatible:1;     /*     2: 2  2 */
+> 	u16                        cb_access:1;          /*     2: 3  2 */
+> 	u16                        dst_needed:1;         /*     2: 4  2 */
+> 	u16                        blinding_requested:1; /*     2: 5  2 */
+> 	u16                        blinded:1;            /*     2: 6  2 */
+> 	u16                        is_func:1;            /*     2: 7  2 */
+> 	u16                        kprobe_override:1;    /*     2: 8  2 */
+> 	u16                        has_callchain_buf:1;  /*     2: 9  2 */
+> 	u16                        enforce_expected_attach_type:1; /*     2:10
+> 2 */
+> 	u16                        call_get_stack:1;     /*     2:11  2 */
+> 	u16                        call_get_func_ip:1;   /*     2:12  2 */
+> 	u16                        call_session_cookie:1; /*     2:13  2 */
+> 	u16                        tstamp_type_access:1; /*     2:14  2 */
+> 	u16                        sleepable:1;          /*     2:15  2 */
+> 	enum bpf_prog_type         type;                 /*     4     4 */
+> 	enum bpf_attach_type       expected_attach_type; /*     8     4 */
+> 	u32                        len;                  /*    12     4 */
+> 	u32                        jited_len;            /*    16     4 */
+> 	union {
+> 		u8                 digest[32];           /*    20    32 */
+> 		u8                 tag[8];               /*    20     8 */
+> 	};                                               /*    20    32 */
+> 
+> 	/* XXX 4 bytes hole, try to pack */
+> 
+> 	struct bpf_prog_stats *    stats;                /*    56     8 */
+
+Hi,
+
+Thank you for the detailed pahole analysis! You are absolutely right.
+Changing 'u16 -> u32' for the bitfield group row implicitly changed
+the layout of subsequent fields like 'type', disrupting their natural
+alignment and padding.
+
+To address this and preserve the original bitfield packed layout perfectly,
+I have rolled back the 'u16 -> u32' change. Instead, I moved 'jit_required'
+out of the bitfield group and declared it as a standalone 'u8' field right
+before 'stats'. This elegantly packs it into the existing 4-byte structural
+hole (at offset 52).
+
+The total size of struct bpf_prog stays exactly at 96 bytes, with zero
+alignment regression.
+
+Here is the incremental diff based on the previous v5 patch:
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 463fae6a5c33..f5c283af3cf7 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1865,9 +1865,8 @@ struct bpf_prog_aux {
+
+  struct bpf_prog {
+         u16                     pages;          /* Number of allocated 
+pages */
+-       u32                     jited:1,        /* Is our filter JIT'ed? */
++       u16                     jited:1,        /* Is our filter JIT'ed? */
+                                 jit_requested:1,/* archs need to JIT 
+the prog */
+-                               jit_required:1, /* program strictly 
+requires JIT compiler */
+                                 gpl_compatible:1, /* Is filter GPL 
+compatible? */
+                                 cb_access:1,    /* Is control block 
+accessed? */
+                                 dst_needed:1,   /* Do we need dst entry? */
+@@ -1890,6 +1889,7 @@ struct bpf_prog {
+                 u8 digest[SHA256_DIGEST_SIZE];
+                 u8 tag[BPF_TAG_SIZE];
+         };
++       u8                      jit_required;   /* program strictly 
+requires JIT compiler */
+         struct bpf_prog_stats __percpu *stats;
+         u8 __percpu             *active;        /* u8[BPF_NR_CONTEXTS] 
+for recursion protection */
+         unsigned int            (*bpf_func)(const void *ctx,
+
+I will collect this optimization and send out the formal V6 patchset 
+shortly.
+
+Thanks,
+Tiezhu
+
