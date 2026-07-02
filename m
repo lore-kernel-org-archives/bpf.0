@@ -1,128 +1,181 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2AAE367B9A
-	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 05:39:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A05934E777
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 05:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782970777; cv=pass; b=I+ZkzwGw8kohjhThCkqhagHL1J+Lr2q38COC95b8hcAJT6CpD7zL5rBqWz9nCOQqLJBNc+CqSuef+XcQkmJ4oT3vuILQQibs+Edkk+4vRQobOn6NNO+GefQAzjB221/kT0wwrnzkpevs+f+rXLeJ1tGSU+G4tjITm4RCxhx+77w=
+	t=1782970864; cv=pass; b=cBhCgoMz/IJZMQc+rCT9M8ltq1IOBg7kY7kiaWcosS1EzZqv1S0Y8+CThyYogWjFoiU024LJEm5sp9V2HD6KrZq4dx9vG34W6o91/PJhm1TLNhn1ly7kVzAbrcethizmwFxC6Hzvzdwt8RfvSGogZNmEgnnYbY1VpoPq54Ge85g=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782970777; c=relaxed/simple;
-	bh=r0oea4DsE+/Fov0KykxRB5CSjwQYNH/nKviFCsjXURo=;
+	s=arc-20240116; t=1782970864; c=relaxed/simple;
+	bh=IQ/c8WVDoxQrhZvKSrnPQbv4b/9COlcR710Od8nu4tM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sXEvUA1PNKN1OItw1GZ3EOu/t2c3MHF5n58DspwFlW0vk+C/5XV9jhqFHNIt4ZMyeWmAv+G6jVtxeIlXf9FZZI8vpXsThP9k7CKVMPLfTZmW8CLQ+7HSh4JmmXUz9cSYtVMPHWCaLt+kq1hPQ43mtj9zMr3uPfkKP+QbAbVneh4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=adgzpMRH; arc=pass smtp.client-ip=209.85.214.169
+	 To:Cc:Content-Type; b=BRCYqc3A9ZaCAryXvKG2n2cbMz6l1i04ZfGaci8MEGAULadMd3X4w0/JoPyOip6++g7vkynH5edCGEnzgBJNr6K6K2uWSu8Y26rIeqKoFPF/YauU9SxMj0I9Kk0OTDkvR+w5saPtfolZCoOvcP6UEi8a9inW8ZicWKvcjmJwsgA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hZnbC/SR; arc=pass smtp.client-ip=209.85.215.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="adgzpMRH"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ca15944645so12296815ad.0
-        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 22:39:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782970775; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hZnbC/SR"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c9d1fc053e0so1021317a12.1
+        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 22:41:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782970860; cv=none;
         d=google.com; s=arc-20260327;
-        b=U4WNA6YNUl65BbpiS3ktRVIJ8n8v/sbWwTKb8L1YHTgo9BGFDfxUdu35+28yqA6GG3
-         GxoUJpT/W4+uXtIeDZi9tked0hEjBOoiSPG6Zm/LonVbowmbi7uAJl5N4kfqSj2nkKJG
-         603Ukm6koEt8aUFAHhn65RXJ/PKdEzWG9Mwfzf0PN5FCLULHiB8sLr2ghnivJ7ZyMhYD
-         RK+WgtHYVz/chswLXICHV/RuBmh3JSmnJIhUkAluXobnqPvCPX0H1+9P44Ur32utJrbr
-         Jf4+b9IqZd19oWR4JcsqJhaX8CN5KtBGo1ptAPQyy/9XgEIRDOzAekmCXzomDskyz9Qc
-         8fLA==
+        b=YEVNudJU5GRmqTQHd8/mvro/6NjEQCYMcd5aQk0rF4LpeESCVXEcFAq+3STe8ZxW//
+         znR0p9bYV0hpp8NAfR2tPlbc1bN+vyB9FV6xrPTmDymhY2LgcB1A0uJUo86E0hxTplys
+         Brnr385E1rkCak/G545r48FukCHXHwVv9wIKSaveNCjnzVF58vA0C0ROCGbzzSovWylB
+         2CbnxjNuH7uX0iOrelQPl+Hp6o+H+QZh6sGcDkgngMgzoKRHttLtX0aIFddmAVuJWFAP
+         7dCF57KkpVGx9NEILGt2zujpu5f55DtcNCUThrJoe3SYBlDZV1hcZktOFfmD7DD/dZKc
+         3zZw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=r0oea4DsE+/Fov0KykxRB5CSjwQYNH/nKviFCsjXURo=;
-        fh=eOw4QbFYVf4yn8vexkR5qyYKsu2oasJV4SMwf6Tzeyk=;
-        b=G8PhRRnuojYRPL9GYB+sPLzn6L4CMoVKK7jULYc+Q1B66XM2B2Yh3dZNNqvhDQCtNt
-         D2MWUn65ShUa4UmdsbQwxo4geA+zqWkX0Ryg5LBE/DyoaJmBElmw0TlCdf4WQ9c6WGaU
-         LOaJ0O6xRojmQUajaIwVuQ/SOhFNgxb9hn9DHcxALLjvl/10Jkfz7Nyddbyo3Rh284Pq
-         ltOl6OppR3Kr4YAftjCpQcxdXnq9zdhTCegkF33z/InwSbOmZxxW0AFRPeGLSehz1dtV
-         z8zNLyStkFS2BRcrTHzurfkt5j/BTOReglSpKE3P6ZdgaNIgIYuVlb6MGCujgt8MWo/Y
-         yj2w==;
+        bh=z5UfvAgJ8YjTczByfeidWqKA0EosDZTFgQFu0/uNWSo=;
+        fh=SvUFgCbfcniZAbc/EmJ1tILJ96lPK51DgcGWlM2Np4Q=;
+        b=r5h/jqJNadrjRgBmZu2+6pitBkFqRhEY6KZ59hwniLJndMhp8AHgycszlglr4MkBVJ
+         PEcPN/U5mUA5+aCDjgcRiZ05P9trtGsn2+AuTH+CJRoB1YkkDZc45TpYrBSxMhKziyxb
+         Tl2oLHyYfvJAyk2+Ufc9/xhW4A3/izO0cG/2i9lCvUb0tG21jfiTBDd5TTICfAwFkMSZ
+         6/AW6cWBNm95wXNH8QffOj+wbJQHSSm4Dz5gMl7+c9NXLdB/uFfLo/Lymiw+uFHJFxuc
+         pOFiYsBrJH33T+yfDq7b2SNv0rQvAyvB8Uv7dtaYEDs5Lx+hSNnYnFVmyl5VnlOE1304
+         Jk1Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782970775; x=1783575575; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782970860; x=1783575660; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=r0oea4DsE+/Fov0KykxRB5CSjwQYNH/nKviFCsjXURo=;
-        b=adgzpMRHAxSnp3T6UND8CzrIzo8TKCyZbBePLKpZQyBhrO+lPDD8EBlXZlBXe49+8L
-         yCkUBlVkSakE7A/Pn+kPvWJXr5ak3E2Vv6V1933ro7H+lXHnXq57vhxy+KrspSZrt+7w
-         Ih+M6gfsYqlSiMGuMSBl3KjtnwWmaVHXR5kKh1bxluwhej/lv8L56VuXcXPeSaGZknD/
-         QzFe4zbO4ToZpiZ1r3/5Gtk8CSxxZQBy+5awtCTUzmEVm1h/rNn2mOEdzXOPRkPsiMPi
-         lKDsX5OSI9oCh57sl+Kn9FcS3TzYZCH9qHhBMq0/vdx/RC6+SRRLPe1qT2roqVVQUpP2
-         PkkQ==
+        bh=z5UfvAgJ8YjTczByfeidWqKA0EosDZTFgQFu0/uNWSo=;
+        b=hZnbC/SRBH2AZkGEnTPMfGm08niGDg9CuWxkmErjq29CGkUCWbo6Mvd8CtiGR9ASdZ
+         svLyYIWDbfmKULY1Nr15+A5PlL9JqJTI5aULm2/+w/ATMJIb3LEY0+NYI5LP7h1d8VYQ
+         Mi4mCId1feAE70jV9MfB1MYLkBg9IYRoItVB1jcyNdwPPiLG3K4wHgOqhq4oDIf5smXv
+         zv2ilgMQB24O6zy88bkZX0nwk5Dn7ioa/uKrGmxwCwwk0bTLLdNJdcOvQWaIwYACVAnn
+         MCNs5R6pPyoQecQjdDDMJvH7J5yfTeJqZ8p4BPORnjeVTVPD1Lo6hzdrr6wjsUvmv8qW
+         CPkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782970775; x=1783575575;
+        d=1e100.net; s=20251104; t=1782970860; x=1783575660;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=r0oea4DsE+/Fov0KykxRB5CSjwQYNH/nKviFCsjXURo=;
-        b=OxlTqhyx7tMyGt1NLTcB5k+zmaV/Fmd8lTh34j3RgWc26GVQWcNhU9OlapAQTCnS5/
-         l1qDomFCfzDwsR8HB2tu8LxbJwb02zNBT/451U0X8I9LZbMVeJBvFxMob+CpobCNlZ3L
-         8iIasmP2otqG1TdPKu3MbodKGxf3ahGdtZPiPDaQwolialURwdoMc213cLItD8Sp7zk/
-         j07WPEUWiqvyi5X+ZqvYvRYBeQRdelci/K+rc098O+B4tbim6QKScpA3Bv5YVw+SFfEA
-         Po9tre6F2ih4XDA2qXojyObWydmrmchQldtMxKp2uhT2tHNcmjN+M2HwW+UuFP4+2ew+
-         Uqyw==
-X-Forwarded-Encrypted: i=1; AHgh+RoQFUqVUW33VsDZDCV7VlJmZM4OxV2VLQAqAX9JOp0kIeIcYZAHoNfFUY7oPKGoA2NI0BE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlZU540PXD0YvxWZM4btl7IYTKPuH0lmn64M/7X7t6rNLeWQgE
-	BaEKSxfhIJR3OCjYAU5BYL9cUp9BaEHD+osrLjtZubaaVVIrOeI437Tn/ZVs78O/GYcwJuxWTNb
-	I1B1eO3YNWLwAt8T1TG84ykQ3xPn7jRw=
-X-Gm-Gg: AfdE7cnG82Sqm6l3mIakRiSWvjwHxzdqUmNuOeQk/mlb//OaE9YDf189/lrP+pw4Ow9
-	2PkcCkl92LJ/qgZjYj/q7YNRzbdvnuQHJTTaP9q7OJL1ud+M3uT0peiCTxw61lMq/flmWPwymyv
-	qAcEgYYCwmXfBcNHCw/Ko9KMY6/nEc7rXkdnZGUFKI1abLzwlAf9wezbusvO30n5Oiw2/bxxBzQ
-	14svC2gUCfhLeInbgWSBOikNK3CTiCq/jbZPMvi1kWXLDDM7TDGCHXVZGEZngJxBEcCAt93y4KU
-	nwXrOR7VWoE646A5tXWdwKeHLdurnMrqfnJL4yCFDtKGMxSehgLMJcuGrBzQkxjzejOyaGQC6rp
-	hwpas7fvQT6ulzw==
-X-Received: by 2002:a17:902:e841:b0:2c8:be9:1d9e with SMTP id
- d9443c01a7336-2ca7e86485dmr47475665ad.34.1782970774733; Wed, 01 Jul 2026
- 22:39:34 -0700 (PDT)
+        bh=z5UfvAgJ8YjTczByfeidWqKA0EosDZTFgQFu0/uNWSo=;
+        b=Vtp+onrd2gOD0CXPp9Eto+lxAhVqwSb4pFHZUtvQEWdUFh2JNO1Ng0wvPBdOo4MYJn
+         i88iJCtnsegKcy/5+UThRr9+4ktY1NspRZGKXpkV+5Tx3Boe/7/EQzjUPGKpGw+qnphI
+         wl+m1fRAhY5X7CfLEYq+TbdnyF9i0hACVUg6nWSOHN81GD/T1NlSnqZ6OGpdW7iKlNeJ
+         FsKo3+OvbwmLO8s9qX0ryQt1WXWpF6gza1i8Rg6H1s46Bjm7TgA9EFm4OflC5y/eLTwr
+         mDB1jYNiB4skQZTEVHhRDR0BZnqDNrXVuLXwghhiGbq9HhuA9x4efWqcgOAJL8ViNNn9
+         wYKA==
+X-Forwarded-Encrypted: i=1; AFNElJ+rNUzBb5zZGFbSX+/kVa9JhnqTd0GVsmlo4Gzq37Rw7NFPG2SnCPppQ2jfDawW3vR+8qs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWy3e0jVkLdddT+ulB7MitujXEcmvdkUlL9o7EV28bJw2qWfyr
+	pEBGrsmvrxcZYKuPoeyzCTRLMx62vVKkKX7BrteIfNFtCtvI6hJmWjCU1t1yhjiDIeKtvEzXOik
+	inG/fQRZ2by8kj1JcEE1qfEforLMpTHE=
+X-Gm-Gg: AfdE7cmQ10ISf2QLeA7vtgEsaVgZizTUIPpsZaaYtwdjspgK6v9UHxkVibtqvm70/Dd
+	bfHO0XzyVuo3KhUNbvObEYB6tz1VXS5fHWLHKyQ5FGP3olYobrEdmGZYXWf9mgQ2fNVZZjDjzLf
+	yaoYmPCe0wiWvSF20o1VKiGtF3zK1zz9CjTgrZcXtT6gPOvyu+ZpLtAgegPEu6bTNVVGVfyVIf0
+	imOFY55u3gWV7PF/mWDc5iIPwlcsJ4wigsrN6Sf7MfSvTaJXvhiKX0vfel3viRgHOFCSl3SXIEp
+	5wV2Sg0Tni9HjWtm101iHONlEDd3agZPJfVGEPK43NeXlm2aqZzxqBxfRJ6yCQx91DDuxwmEfcf
+	a9hHw7ZQ9ZfyXYw==
+X-Received: by 2002:a05:6a20:9f93:b0:3b3:fdb0:2295 with SMTP id
+ adf61e73a8af0-3bff3ffaea9mr4293388637.6.1782970860276; Wed, 01 Jul 2026
+ 22:41:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260702022108.17693-1-yangtiezhu@loongson.cn>
- <3fe115fd-8df8-4bf0-805b-2d0c2c40fdf5@linux.dev> <527b7e2e-e9cc-33b2-6a17-a888331a4d3e@loongson.cn>
-In-Reply-To: <527b7e2e-e9cc-33b2-6a17-a888331a4d3e@loongson.cn>
+References: <CAEf4Bzb+OOrdGyxbzjh=7MUEbA5FC05E6_iwCjDXcnSO-HZ=ig@mail.gmail.com>
+ <tencent_30FB52DFC6440984EEF0EEC70C90A7DAC606@qq.com>
+In-Reply-To: <tencent_30FB52DFC6440984EEF0EEC70C90A7DAC606@qq.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 1 Jul 2026 22:39:23 -0700
-X-Gm-Features: AVVi8Cef_t17V2Lu4bXkTa_xCxYiJRzZZA1gYJYB61h0hKWpLeqLSaO3rYNd5eM
-Message-ID: <CAADnVQLaRRXQg=LuQMJpjkzqc63SK9bEP=DCGShHPrxH06mj3A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5] bpf: Reject programs with inlined helpers if
- JIT is unavailable
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Leon Hwang <leon.hwang@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, KaFai Wan <kafai.wan@linux.dev>, bpf <bpf@vger.kernel.org>, 
-	loongarch@lists.linux.dev
+Date: Wed, 1 Jul 2026 22:40:48 -0700
+X-Gm-Features: AVVi8Cd_Aydgpi6ybanaT5W1RYtoYBPVPSh1YD5O91Uma0-voa1CtKjxUtg_WYg
+Message-ID: <CAADnVQKvNewGNAoiF8thaqaWuZCFxzeXU3QHg8jP8Dmqag6_JQ@mail.gmail.com>
+Subject: Re: [PATCH v5] bpf: Fix smp_processor_id() call trace for preemptible kernels
+To: Edward Adam Davis <eadavis@qq.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Network Development <netdev@vger.kernel.org>, sashiko <sashiko-bot@kernel.org>, 
+	sashiko-reviews@lists.linux.dev, Song Liu <song@kernel.org>, 
+	syzkaller-bugs <syzkaller-bugs@googlegroups.com>, Yonghong Song <yonghong.song@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 1, 2026 at 8:31=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn>=
- wrote:
+On Wed, Jul 1, 2026 at 9:35=E2=80=AFPM Edward Adam Davis <eadavis@qq.com> w=
+rote:
 >
+> On Wed, 1 Jul 2026 12:57:52 -0700, Andrii Nakryiko wrote:
+> > > bpf_mem_cache_free_rcu() maybe called in preemptible context, this
+> > > will trigger the below warning message:
+> > >
+> > > BUG: using smp_processor_id() in preemptible [00000000] code: syz.0.1=
+7/5820
+> > > caller is bpf_mem_cache_free_rcu+0x48/0xc0 kernel/bpf/memalloc.c:954
+> > > Call Trace:
+> > >  check_preemption_disabled+0xd3/0xe0 lib/smp_processor_id.c:47
+> > >  bpf_mem_cache_free_rcu+0x48/0xc0 kernel/bpf/memalloc.c:954
+> > >  rhtab_delete_elem+0x185a/0x1b30 kernel/bpf/hashtab.c:2969
+> > >  __rhtab_map_lookup_and_delete_batch+0x935/0xcb0 kernel/bpf/hashtab.c=
+:3349
+> > >  bpf_map_do_batch+0x445/0x630 kernel/bpf/syscall.c:-1
+> > >  __sys_bpf+0x906/0xd90 kernel/bpf/syscall.c:-1
+> > >
+> > > this_cpu_ptr() requires the caller to prevent task migration.
+> > > These helpers currently do not enforce that requirement and may
+> > > be invoked from preemptible contexts, leading to accesses to another
+> > > CPU's per-CPU cache after migration. Use get_cpu_ptr()/put_cpu_ptr()
+> > > to pin the task while accessing the per-CPU allocator state.
+> > >
+> > > Fixes: 5af6807bdb10 ("bpf: Introduce bpf_mem_free_rcu() similar to kf=
+ree_rcu().")
+> > > Fixes: 7c8199e24fa0 ("bpf: Introduce any context BPF specific memory =
+allocator.")
+> > > Reported-by: syzbot+fd7e415d891073b83e1f@syzkaller.appspotmail.com
+> > > Closes: https://syzkaller.appspot.com/bug?extid=3Dfd7e415d891073b83e1=
+f
+> > > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+> > > ---
+> >
+> > from what I can see, bpf_mem_free() is called through bpf kfuncs only,
+> > and all BPF programs run with migration disabled. So this seems like a
+> > false positive. For per-cpu checking, it should probably check that
+> > either preemption is disabled or migration is disabled. tl;dr, there
+> > doesn't seem to be any
+> Today, I researched the call sites of bpf_mem_free() in detail; it is
+> called directly by bpf kfuns only.
 >
-> Hi,
+> Different BPF program types execute in distinct kernel contexts: for
+> instance, XDP and TC typically run in non-sleepable networking contexts,
+> whereas `raw_tp`, `tracing`, `LSM`, `syscall` and especially sleepable
+> BPF programs may run in contexts where preemption and migration are
+> enabled. Consequently, any shared BPF code (such as a helper or kfunc)
+> that accesses per-CPU data must not rely on the caller having disabled
+> migration; instead, it must internally ensure that CPU migration does
+> not occur during the access.
 >
-> Thank you for the detailed pahole analysis! You are absolutely right.
-> Changing 'u16 -> u32' for the bitfield group row implicitly changed
-> the layout of subsequent fields like 'type', disrupting their natural
-> alignment and padding.
+> Taking into account the CI reviewer's feedback [1] and my further
+> investigation into BPF programs as described above, the adjustments
+> related to bpf_mem_free() should be retained.
 >
-> To address this and preserve the original bitfield packed layout perfectl=
-y,
-> I have rolled back the 'u16 -> u32' change. Instead, I moved 'jit_require=
-d'
-> out of the bitfield group and declared it as a standalone 'u8' field righ=
-t
-> before 'stats'. This elegantly packs it into the existing 4-byte structur=
-al
-> hole (at offset 52).
+> [1]
+> https://lore.kernel.org/all/20260630094823.897BD1F00A3D@smtp.kernel.org
+> >
+> > pw-bot: cr
+> >
+> > > v1 -> v2: using guard against preemption
+> > > v2 -> v3: replace get/put_cpu() to bpf_disable/enable_instrumentation=
+()
+> > > v3 -> v4: disable preempt to make this_cpu_ptr() work
+> > > v4 -> v5: in mem free disable preemption
+> > >
+> >
+> > maybe throttle your patch resubmission spree a bit?..
+> My earlier actions were driven by a desire to keep pace with the CI
+> reviewer's response speed.
+> Moving forward, I will slow down the cadence of new patch submissions,
+> as you suggested.
 
-Your replies smell AI way too much.
-If I sense it again you will be banned and all your patches will be rejecte=
-d.
+Don't bother. You don't sound like a human.
+Bots are not welcomed here.
