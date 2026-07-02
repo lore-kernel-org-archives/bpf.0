@@ -1,239 +1,160 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88AB832AAD6
-	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 16:20:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6664A31A07F
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 16:21:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783009240; cv=pass; b=mfGCuG+CvtaiEsqF7JYzuBWFHJiQODTuGKMv7t7JhEytCSzB9cxnlgRpTK/TvjiaSKmPePwfPijH4NIYfR9GVk+HkIfsDy7+T9yQKWS+FpWQZfeFybHBQGGw4M2Q5fYKZcDnWFNYLMKRY0aBPkkfscnprh8WVNYiSJrWB6F8/AU=
+	t=1783009308; cv=pass; b=ry2B4aFfhy6j5lpx5wnPoKSfFPQqjVHICL9L4I5MOvoTmwfr+9yasp/sC9steqG6zmnPm6G6ALOYP5xPZfXYKHdKnThyQJR6SC1bom6z+HmHy3lxbTxwSgKw9tcx/k54IhKkvb5U48jROrEu7nwFrzt5PjQgUAGA0W2WIsm45QE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783009240; c=relaxed/simple;
-	bh=AbxhAA4SLquf6Zum5gkBUik/6+9F6bRTK9QJ65RTA8c=;
+	s=arc-20240116; t=1783009308; c=relaxed/simple;
+	bh=q+o/yNzSXuyt0613ZPmcuoVubhew05a0sSUdyDx4tSM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KHnAkczvgklrD/Xh1k4jjrkPcD7tt8/S7QBV9UHu0wUF8lsi40xt5rOuKgHIFJ37Q6vr/VtfNQ0KizmNb1rLbrBoIxXt+teXsbXEEsbhdyxg7eIKJUC833ugBk3uU7LAPtqJobQpvKejSF4HRr17XWH42PKdPPE+uC/4oc56AqU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hHB+xLYt; arc=pass smtp.client-ip=209.85.216.46
+	 To:Cc:Content-Type; b=oBdokNuYHzEnmwPyZHDxajbeygIi8A/GtoRZztgS3O9Hl9Pg+k7jcNx+cr6ihk13Nz8RmiR1vUOganTv0nVJPpkLGT8p6ff+0ljW5PpFvLXNkjQdwLAz7xVe0Vxullcu+i7r+8xPa+OCa4aSS7oZQMWn0wGkrORIjCl1k7EGUgs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j2TEdBBO; arc=pass smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hHB+xLYt"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-37de8008910so1646758a91.0
-        for <bpf@vger.kernel.org>; Thu, 02 Jul 2026 09:20:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783009239; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j2TEdBBO"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2c7c61b5292so23832635ad.0
+        for <bpf@vger.kernel.org>; Thu, 02 Jul 2026 09:21:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783009306; cv=none;
         d=google.com; s=arc-20260327;
-        b=CQAEYFR3tubjM3aqO/u2cKHqucIRWv+YLqUnny2fZjOsuCuJOlGLHVMpNWY87/DxXx
-         6TPOeynDZu01Z42wzDjUXsbJ0G7uEk7qZNTbOElweCURzHBXxCND9n0wGgWet1ASYwcJ
-         dSYbvSKbTLmcbKwylUST/RkHJweVGBdk8txK/TRXVvDJsvDgnYDWR5LTZvb4iaDOyCRa
-         KiiPHIL7T6CJsRDaWNZkLI02mwZMoUvdzI9LBeLCkDjWSAswQCB05DmZHEArwhHHzG0L
-         ZmfYtE03i1qgHnnyPjJNNPROv5xR/xcWDWRfmRyHybLGjzpfzaudh6cWoeWXuD/1oeUK
-         xOdA==
+        b=VwuK9FtomSWzHckE0Z2s+XXl+KWc5tc79yXE6BQHsxc1Ljej/1jkquoQbEv/otpGOw
+         rdEDtTNqYC5qHbwsdCi6GuSXugrQCJj0BsEsEA+tifkB6iGZ6eR7J2gWN/24P4iDgq22
+         Hno7hb/q2W92MNYbFZlgnUG/8CuBtHeb68K3mpNV/0eWD9OLzBnkgYBHP9MDvRXHMjM9
+         9i1kS5vAvaIXDpVl0A+kmCczaFinn3969lV6w+KAxUuuKCa6TBQraB4GkV5MEXF6X83z
+         uPp1QEWaqUMcOuiWxPMEwmsokiM4ioD3QKd96Y22NCO70ZDaSw2BCe+kVN/9PmH8pArz
+         KZhg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=WAJnHDBbX/83CEIHOc+h8RqgK2NST+BsSxsSaf65zLI=;
-        fh=HWw3tFYdT3ug8e+1WHpKcsLun66ZflR3d/Yg3/+Mkjs=;
-        b=eJw23XsRWYD6KyrHgmL/S4akmCFYuZ/ManLEQ/WvGjuQSDPy8ycAY0naGUx0zh1J29
-         bIDixiGqicDErcZJUUGrNHQUKg/eSFrgjUMIc+7MZFQUyRDqrvfMx9fSxTXE8t5kr1aR
-         pl2+i3LRegpnRzAKYO0A4wgPymNCZqd/tb6NIjFZiCjNXpK1goMjK5AtGHI8sWhE0IQf
-         k6Pu5h5x6bpBWM8/H69C/IBWtYXG2PvXb10iZBr52HcekEeqV4bznuQ71U2tPiL8lifP
-         qzFPl4WuOiNiEdzDn7bYvqxKz2F9SWfiNSDAwAVJLxI/lIkEjPQ01Us7djmIA8mT1/W3
-         muSA==;
+        bh=dNqy+sY/bvwDtNrT9SQaApzsG/1uW4k7ziD0ks8Gk1Q=;
+        fh=FZJ76Ql0B1ZSj0oCGiK9/LDA+CBhkFaOec4z3jwifqQ=;
+        b=X3AI08vb1lNVza2I0R7jI2JY0E7tMfwxD+FTg6t2wN+SsiFjrJtssu3Xld5p7+VARU
+         gdNa5P1NR0jlcLpMjulp6aitLJTuXbg0J+OY8qbaXFggJiTa+bsyzx2vnkG7yYaL3Kpn
+         BtgRcd0FXJa+V9/gTEFdxLfyN7ay0mo5YDZvL5G9Lj/c0KN5jb6J20dVv9pt1B5KEc8S
+         Qw8JEbLpFWmhC/BM5orD1fXGSHpsQee+NOegqXtpYPrsvYw0Al2qswUmG2EL/7qctklO
+         DcuPDxDoPtc/y1IvVfuFvh6NqPB3KoQuLdMmGY7h4FC+Gg1JnKDIlBk7dH2Z5WQAJT61
+         nfAg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783009239; x=1783614039; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WAJnHDBbX/83CEIHOc+h8RqgK2NST+BsSxsSaf65zLI=;
-        b=hHB+xLYttMvWpXFs1CBCNwbfwhZnPeIJSqaV4pN3TtXbBmEk6oFvhIzElF2Ny8qPnP
-         HPAfxH/n06AssnCExjYgRhbwH7HruFfLERTGQglOUbJEtstbY3t8NiLokSuTLtUQkDVD
-         uNhvpbLjMJhqqWFnQi90Jr9O2k2woU0LHuAJ40B2GoIwzwlaulug7AAFMo6/l/xqMP2P
-         pvts47upA2iGHkJyKwZA6+Rvv5+RdLFinKjxkoiNPvbMbAtuI/r+ZaIaC4A3jRQqTZ7b
-         smjnog9bhOGtibPHwyTRNH26A6ykIyCHaJd+oGlnVAO5hT3hXo928Xz1xK5RnSAn083l
-         otNQ==
+        d=gmail.com; s=20251104; t=1783009306; x=1783614106; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=dNqy+sY/bvwDtNrT9SQaApzsG/1uW4k7ziD0ks8Gk1Q=;
+        b=j2TEdBBOHSksoGqMukuI9m6CWd7fB8Azb8ujgpZOJrQKad0RCpkm6bORK4zsByaXKB
+         drzWY8yTH3G2RakwTkuMNT0t5/bEzpQOG0ONUZdaRT5dQ+KBjmFmXsZpDb9xp2AW+CRZ
+         U9JMlS/V11IQXvRxftv6C7E/sxxBN+DoqCw+xAfGafS7amPjF2esA3N+FylFzySWF4Yn
+         Jh4SstReTD8V59WHSNvu/9mXqG/p+AsJIpgdj27t40dl1msMjoFM0IQdRmy/2Wi1vL69
+         eZAwhNTUsipcuzJijiFq9pEPNphOU1T+YU+Nb0zEx5J8zWSIDUU81vUMtYTzY95ORwPm
+         7rHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783009239; x=1783614039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=WAJnHDBbX/83CEIHOc+h8RqgK2NST+BsSxsSaf65zLI=;
-        b=qb/SpE4GFU8RaoDbQK4leqbA0BzdTmV0j8b5zop6Q0hwgNlt+PQ6YOhGXm7wn6cE8i
-         2+CsDD2S6z+LKiy7VJouBruP+i0uD9KfQ9EZSjZe7oNR4RJxEVkqX0rjsmvY7orv1bH4
-         uWO200BbsMRBNA1F3TEGGhPkvSpUhh04QJjm1UKBtVXS93zElcXGwNrl67Y70V1NNGaf
-         N4cweCpz3Hp8k0TnOtVLNQ++R9hkDLCk7IIJlbtt3V53EMBd47ug8N3EQuCypLIfPr53
-         HBXWTdEfe0dXCPlSZdlF8Jix9pfSF6h30B+Kw1jxFgLguQVtvo4ukRLm7Zd4HFcIsUPB
-         ONuQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpHA4uxOYVrpQAqJTmoovOqKvQtvzE61yyEdeEATDT+1ee0K8nIrAw4KMq2Cvsr51Em81E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpCgA899fw7CHh1d7E06vfW9SbM4+Wg8wQxcEGKiwXBw1ygowp
-	1HILlc2RSRQhUS7OkwsNCvjhMD/5vEoFDagpVX5K4dzfhgBh+h6sFZObwTyCvmEEsrdGDBk6/Ts
-	obgiQA6xkwCYg9mqBbAHJlubW7F71z0c=
-X-Gm-Gg: AfdE7cn/x30IwXm66Umt2LA+yYXzG1CPPuRk3/tkVlM2vVcGwcaldncI0/ERZrXVVN2
-	cuQYOAqLhRInck0HhOLwIl/gDkEqv7x1UBP8KlcedzRvG5AxQg5kkSN5/uV/kOmFUAV2SUo4QWo
-	IPR/1fO8bb/otgotDOCzDuteZUOz7hR5FFVSOgbyReY7creTmjL7HstgHPNuHYDN9kVMQLzdA0v
-	XsMN9CexCURen9vw8xRNAT+o8li4RDrwz7mvGWWfcAezKJ/QFdmeMRExC2Lt+hjs0gmtj3uxHwq
-	1aS5sa0q5t12sRbk1fNi4BkdD3sWralwL578RqKKwzvdwqLve3NAj0cIodtFZ73DykqXGQ==
-X-Received: by 2002:a17:90b:534e:b0:380:9d0d:7ade with SMTP id
- 98e67ed59e1d1-380a9e39c77mr6962041a91.0.1783009238577; Thu, 02 Jul 2026
- 09:20:38 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783009306; x=1783614106;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=dNqy+sY/bvwDtNrT9SQaApzsG/1uW4k7ziD0ks8Gk1Q=;
+        b=HNXLqOUX95gQ2bWt2w/4Yc2DWSsBFwy8BmO8ll+7UCLU/cHiPpMEXowIj5l6Q6Zcuv
+         OlsP4XrN3maFDxotBOUD57m5dflCCJcuOQkpiMf1kLR9uPCnMjTXM2Ty9R54dYfhDKvA
+         kbjciTiZrVyD1+s7v6atQUCmX4oH6ndEwdg62SZwcaRsaCAHAj3phGu9K5ZBPjWNET3O
+         LHyTuTzgFkbQINogwFwZs2W63VV79CCOKriktomRoxyjRwKzlvDwbblKxa0Wg5mAsGzc
+         1F5gBq8947PSExLPAsw+GvKfIqbCR6CzIZOiclb/hYUzT8TjT6bdTJQ1fpvJ49+bF7vT
+         PteA==
+X-Forwarded-Encrypted: i=1; AHgh+RrqSpPhZSlUTcGh8lIkb73CPCXQ+Sqe4uU5Yfj62QQdtJ5u4e/nUwPz4dEcmi1uEQlbEVY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjjRdQgtMhVWBuZnfRfUcHPxfCH36SjJ52p72cSuVjDEv6cazs
+	zqpnUP9sJNW7X598uRDinmNzT78eN23goULpTEfeFrM8igVcMkctKKWLsY73ItoMKpQUOisKtAZ
+	tULjBPPuAj2XozzhsXAmMDMmKPASkXpI=
+X-Gm-Gg: AfdE7ckV3rQfV/1LfZSNUsP/tqB6FoVuYbFyv/5YzTYOnDXVAtSkyeEZ6muL8xcssMS
+	VhxXQOH3WRRBmtl7c0owYzTZwnID2XmLkfjPp9m5nCZiHFOqukHvlsscGX7b6tJ2oRodyyxnLGl
+	gFc2NFthKOq3MwCeZFcgAvgqZg4MgDqXeqO+7y5nyCVnkZPe+E3LNdC1S5WjTtts8iOYbPINOdM
+	WNWNd/HaGICTDWmNgUQEu+uOjotw/6nclAe4S5jLSAyVphLhKCITzG0jPwdwCY4fmOCsjZsp4CU
+	hUp8JO4mXWeZnb1l16ORiwkilCzfHkJju9p9fZa1DSEc/TI6dZ4U80q0wiqzAVjdrLvWxjzaZb7
+	j974U
+X-Received: by 2002:a17:903:ac4:b0:2c9:d55d:2d1 with SMTP id
+ d9443c01a7336-2ca9120069emr63395015ad.33.1783009306459; Thu, 02 Jul 2026
+ 09:21:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260701111337.53943-1-jolsa@kernel.org> <CAEf4BzYiPeLTbgeVEDKqU45oHBFJgU6ULgK=3i1J7dbzKS2+yg@mail.gmail.com>
- <akZJZth3-fVUhADl@krava>
-In-Reply-To: <akZJZth3-fVUhADl@krava>
+References: <20260630205418.3483969-1-andrii@kernel.org> <77ea35c8-2a06-41f0-b808-9743dbd3ea51@kernel.org>
+ <CAEf4BzaDjuLTsoTFXpPMp33KbKHvXkDv0Gwf2T=JVQBqGgZ+5A@mail.gmail.com> <6a8fbf80-5672-4691-aa60-8f8b3b75aa96@kernel.org>
+In-Reply-To: <6a8fbf80-5672-4691-aa60-8f8b3b75aa96@kernel.org>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 2 Jul 2026 09:20:25 -0700
-X-Gm-Features: AVVi8Cdd0hjaOMgJY4gkX8pZsaH8cMTgoYASFLQFE8XssD5U-NZbt0K3FsfHuRc
-Message-ID: <CAEf4BzaDwwW1ebPO+4r5rhmdyXk+XddWTDBzN4iOaCU8qEPZRw@mail.gmail.com>
-Subject: Re: [PATCHv5 00/13] uprobes/x86: Fix red zone issue for optimized uprobes
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Date: Thu, 2 Jul 2026 09:21:33 -0700
+X-Gm-Features: AVVi8CepZ9Ra4LM7mE2naC730lnxt3OxGM_aDcCcyzar3_zxZvhUBfsMO_l6Vhs
+Message-ID: <CAEf4BzabKBK+NjNkVEUay9WhbMW7s00f9-=SQ1e2740ugXCHOw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpftool: Strip all -Wformat* flags from
+ bootstrap libbpf build
+To: Quentin Monnet <qmo@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 2, 2026 at 4:20=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrote=
-:
+On Thu, Jul 2, 2026 at 7:57=E2=80=AFAM Quentin Monnet <qmo@kernel.org> wrot=
+e:
 >
-> On Wed, Jul 01, 2026 at 04:13:26PM -0700, Andrii Nakryiko wrote:
-> > On Wed, Jul 1, 2026 at 4:13=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wro=
-te:
-> > >
-> > > hi,
-> > > Andrii reported an issue with optimized uprobes [1] that can clobber
-> > > redzone area with call instruction storing return address on stack
-> > > where user code may keep temporary data without adjusting rsp.
-> > >
-> > > Fixing this by moving the optimized uprobes on top of 10-bytes nop
-> > > instruction, so we can squeeze another instruction to escape the
-> > > redzone area before doing the call.
-> > >
-> > > Note we need upstream update first for patch 3 (github.com/libbpf/usd=
-t),
-> > > if we decide to take this change.
-> > >
-> > > thanks,
-> > > jirka
-> > >
-> > >
-> > > v1: https://lore.kernel.org/bpf/20260514135342.22130-1-jolsa@kernel.o=
-rg/
-> > > v2: https://lore.kernel.org/bpf/20260518105957.123445-1-jolsa@kernel.=
-org/
-> > > v3: https://lore.kernel.org/bpf/20260521124411.31133-1-jolsa@kernel.o=
-rg/
-> > > v4: https://lore.kernel.org/bpf/20260526205840.173790-1-jolsa@kernel.=
-org/
-> > >
-> > > v5 changes:
-> > > - several selftests changes and reviewed-by tags [Jakub]
-> > > - add more comments in int3_update_unoptimize [Andrii]
-> > > - several other minor changes and acks [Oleg]
-> > > - move insn_decode out of uprobe_init_insn to simplify the code
-> > > - align uprobe_red_zone_test to 64 to make sure nop10 is not on page =
-boundary
-> > >
-> > > v4 changes:
-> > > - do not use 2nd int3 (ont +5 offset) because the call instruction
-> > >   is allways the same for the given nop10 address [Andrii/Peter]
-> > > - unmap unused trampoline vma after unsuccesfull optimization [sashik=
-o]
-> > > - small change to patch#2 moved user_64bit_mode earlier in the path
-> > >   and pass/use mm_struct pointer directly from arch_uprobe_optimize
-> > >   instead of gettting current->mm
-> > >   Andrii, keeping your ack, please shout otherwise
-> > >
-> > > v3 changes:
-> > > - use nop10 update suggested by Peter in [2]
-> > > - remove struct uprobe_trampoline object, use vma objects directly in=
-stead
-> > > - selftests fixes [sashiko]
-> > > - ack from Andrii
-> > >
-> > > v2 changes:
-> > > - several selftest fixes [sashiko]
-> > > - consolidate is_lea_insn and is_call_insn insto single check [Jakub =
-Sitnicki]
-> > > - use proper mm_struct object in __in_uprobe_trampoline check [sashik=
-o]
-> > > - allow to copy uprobe trampolines vma objects on fork [sashiko]
-> > > - change uprobe syscall detection error from -ENXIO to -EPROTO [Andri=
-i]
-> > > - added fork/clone tests
-> > > - I kept the selftest changes and nop5->nop10 changes in separate
-> > >   commits for easier review, we can squash them later if we want to k=
-eep
-> > >   bisect working properly
-> > >
-> > >
-> > > [1] https://lore.kernel.org/bpf/20260509003146.976844-1-andrii@kernel=
-.org/
-> > > [2] https://lore.kernel.org/bpf/20260518104306.GU3102624@noisy.progra=
-mming.kicks-ass.net/#t
-> > > ---
+> 2026-07-01 11:15 UTC-0700 ~ Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> > On Wed, Jul 1, 2026 at 5:54=E2=80=AFAM Quentin Monnet <qmo@kernel.org> =
+wrote:
+> >>
+> >> 2026-06-30 13:54 UTC-0700 ~ Andrii Nakryiko <andrii@kernel.org>
+> >>> Commit 9080b97689db ("bpftool: Pass host flags to bootstrap libbpf")
+> >>> started building the bootstrap libbpf with HOST_CFLAGS, stripping the
+> >>> warning options that are unsuitable for that build by filtering out
+> >>> -W -Wall -Wextra -Wformat -Wformat-signedness.
+> >>>
+> >>> HOST_CFLAGS inherits EXTRA_WARNINGS, which includes -Wformat-security
+> >>> and -Wformat-y2k. The filter drops -Wall and -Wformat (the latter bei=
+ng
+> >>> what actually enables -Wformat), but leaves those two -Wformat-* chil=
+dren
+> >>> in LIBBPF_BOOTSTRAP_CFLAGS. Building the bootstrap libbpf with it the=
+n
+> >>> warns:
+> >>>
+> >>>   cc1: warning: '-Wformat-y2k' ignored without '-Wformat'
+> >>>   cc1: warning: '-Wformat-security' ignored without '-Wformat'
+> >>>
+> >>> The warning is easy to miss in an in-tree build: tools/lib/bpf/Makefi=
+le
+> >>> re-adds -Wall via "override CFLAGS +=3D -Wall", which re-enables -Wfo=
+rmat
+> >>> for the libbpf objects, so only libbpf's feature-detection probe (whi=
+ch
+> >>> uses the passed CFLAGS verbatim) leaks the two warnings. The standalo=
+ne
+> >>> libbpf Makefile (github.com/libbpf/libbpf, used by the bpftool mirror=
+)
+> >>> instead uses "CFLAGS ?=3D ... -Wall", which the passed-in CFLAGS over=
+rides,
+> >>> so -Wall is never re-added and every bootstrap object warns.
+> >>>
+> >>> Use a -Wformat% wildcard in the filter-out so the orphaned children a=
+re
+> >>> removed together with the parent.
+> >>>
+> >>> Fixes: 9080b97689db ("bpftool: Pass host flags to bootstrap libbpf")
+> >>> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> >>
+> >>
+> >> Looks good, thank you.
+> >>
+> >> Acked-by: Quentin Monnet <qmo@kernel.org>
 > >
-> > ASAN-enabled test_progs runs are not happy in CI, can you please check?
->
-> I failed to release link in test_uprobe_fork_optimized, fix is below
-> I can send new version or separate fix
-
-yeah, please fix the test, adjust comments as pointed out by AI and
-send v6. Seems like Peter wants to pick it up through tip, I don't
-mind.
-
+> > thanks, applied to bpf-next, please do another bpftool sync when you
+> > get a chance
 >
 >
-> also there's 2 things to solve/discuss once kernel changes are acked:
-> - selftest changes depend on:
->   selftests/bpf: Emit nop,nop10 instructions combo for x86_64 arch
->   that is taken from libbpf/usdt, I pushed the PR in here [1]
+> Done now, it should be all sorted in the GitHub mirror. Thanks!
 >
 
-merged that one, we are good
+Nice, finally warning-free wprof build :) Thanks!
 
-> - as bots complained the patchset breaks bisection, because kernel
->   changes break selftests.. not sure what's prefered solution, as for
->   me I'd keep it that way rather than mixing kernel/user space changes
-
-I think it's fine to keep them separate
-
->
-> thanks,
-> jirka
->
->
-> [1] https://github.com/libbpf/usdt/pull/16
-> ---
-> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/to=
-ols/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> index eb067f029a9f..e193206fc5d2 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> @@ -988,7 +988,6 @@ static noreturn int child_func(void *arg)
->  static void test_uprobe_fork_optimized(bool clone_vm)
->  {
->         struct uprobe_syscall_executed *skel =3D NULL;
-> -       struct bpf_link *link =3D NULL;
->         unsigned long offset;
->         int pid, status, err;
->         char stack[65535];
-> @@ -1001,9 +1000,9 @@ static void test_uprobe_fork_optimized(bool clone_v=
-m)
->         if (!ASSERT_OK_PTR(skel, "open_and_load"))
->                 goto cleanup;
->
-> -       link =3D bpf_program__attach_uprobe_opts(skel->progs.test_uprobe,
-> -                               -1, "/proc/self/exe", offset, NULL);
-> -       if (!ASSERT_OK_PTR(link, "attach_uprobe"))
-> +       skel->links.test_uprobe =3D bpf_program__attach_uprobe_opts(skel-=
->progs.test_uprobe,
-> +                                       -1, "/proc/self/exe", offset, NUL=
-L);
-> +       if (!ASSERT_OK_PTR(skel->links.test_uprobe, "attach_uprobe"))
->                 goto cleanup;
->
->         skel->bss->pid =3D getpid();
+> Quentin
