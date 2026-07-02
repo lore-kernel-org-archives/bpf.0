@@ -1,99 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775E134D389;
-	Thu,  2 Jul 2026 04:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4618E39FD4;
+	Thu,  2 Jul 2026 04:35:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782965274; cv=none; b=B8qPf44BF8fXziQk00gL4dEPx2zPtZ5SRd81TdV9cJVPkd2aHjFc1oX1oP5kRE37kCq+/EwEpabaRjp8EIsLL4cKEJZkz//ffE2auc0lbJ2zu9oEkayBxU1ELveRMVw1PYmwKrvmfOgeeON1G2rr0oB4M3s7+cMccRwZKwzL1Vo=
+	t=1782966907; cv=none; b=fPYqEK7Q1dFhD+zdz3CW5SAsGxjzWQT3SL67cmdKQe/Oz0Bu4VvtIrlqt6+znBOZKgchhhiKnRIHzEU35Zn14x2r7nR8kNUGCbtCQ9l05oHZJ/0e+S/6vU/kYKyc5Bl/efKZXql696TAhvxPMGuC3DRYFlseEBEupD2Kg7Uz16U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782965274; c=relaxed/simple;
-	bh=0zDpt9rBgLyC9VA4+6J8GTHQlnGiGK0pxjqPM+lFMfU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=FRivEd5G+ASS004r8TLKmEtRhTF0OctcizXVS06eAISoVV83HDFKE0txDdHQmAXPQJWNnEfOZgi++kV/WXxwDFsr1DNy6y1X4tDpHt7nxdFgZiIGYgN1JVapNeD0+wKHjvBPNAb+5gbFkMZncPyz569qSLOmEkqiFZYozYgAZNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l+A32ihn reason="signature verification failed"; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782966907; c=relaxed/simple;
+	bh=3u6EvztuLUlA+ejRxZatA6N+wbu2IiMs7KXilJNbVk4=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=X366F2FjQsd2wIT3AjSh543wZUsTxRBWvqr9mfP+5Fyp2ZdmSHYCZwQtifI8fDqSaWxTQUnacj2MWZO7cdClBvyrx92P3FqGr97SQsdG2km9A5Snx6wKDE3mtWoFlRm62LRIa4wTq20RCo5Rmq1wiw7cwMefOtgQDmBWuzXaW5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=r/PzeJEb; arc=none smtp.client-ip=43.163.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l+A32ihn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57F051F000E9;
-	Thu,  2 Jul 2026 04:07:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782965273;
-	bh=DnEVEcJDxsyM432WD69nOlBblOFD/CeS/4w4EcraZIU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=l+A32ihnWo8GqzDaLubXnRmf7NUq6k3fcrvbRJ81KHvT4qyyck8EwSViWmtlQ4y+E
-	 PYKyGDVV4MK7yNcQNhnqQG/hdihqKL39ueM7zwmAl6eako+ml/Mo8bAqQ3TWAsm73f
-	 9kyoIFuNuEDoiQUWo2SvrVxn5rxXpyvA6kjX7BXfwB8kZohk/KGSH8StjUDoimJfU9
-	 DbNUA+JXOfKATIWb6fH1SrLZL62Cv+u9VSiD6dKif1HDogW5+N+GhFebA4HHhfjDby
-	 xvVh9vhQ+kElVu0/GmhRl6/N9J8AatENAVvJ6yg7msgVgpaMexhx3yVc0l4Wb4BpPa
-	 SXWYhEaXb/TYw==
-Content-Type: multipart/mixed; boundary="===============1457489896787659387=="
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="r/PzeJEb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1782966894; bh=t1GNANpFuzLE/PYGoogesdPNStNh8vPbm2FDGBZNhLk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=r/PzeJEbRkxUDEkqnJ660hHMqI7SYRjhgFpRl6gS+6hrhyp4vVF3e2NSA9lLfyO2u
+	 euT1nQF4bKCVJq2uV0LUp1bcK4IVIQaKAFTY1LrLx5+n4p+xfpxfwSYlCKslT+LcRh
+	 Y9N0RqvQttB2Hpo3R3c3gmTHIOD/arc/VL32caOM=
+Received: from lxu-ped-host.. ([111.198.231.89])
+	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
+	id 8B10EACB; Thu, 02 Jul 2026 12:34:49 +0800
+X-QQ-mid: xmsmtpt1782966889tpm5fdqw5
+Message-ID: <tencent_30FB52DFC6440984EEF0EEC70C90A7DAC606@qq.com>
+X-QQ-XMAILINFO: NAuAIaytDrXppw3uhnqACGI+GTfyRfCrUZI81C+oro9C457KCvnVIieR7bgYrO
+	 l46J0Yh1z6Y+FMKPn1PaHc9JNECPabpNNua0y7gzYBBTKgaw/5IEQ+UuW/SkTHmdcI+o8XkghSVA
+	 7qlRxQPchEH/z2zhmDwJSjzgqp6neHrDSy0Bq/Wz4hLaNnPk2Tex7ReBlRMeSVOpZugc4FjV0j1n
+	 9MzE/qZQROb4wCLZ2zOKF2vBAAfTjt1k6x05Yi4sIjESNqvzNYq1tgqaf6YyVysxP6AxdmJiXBDI
+	 2te7+BEgIDcNQMGdRq7xKVr/cTwQYppJZsUfNxm9irzAKvrNex7R+eWqvvjspczhJsX089HwW7xM
+	 iDeeOF1BIa4xVCJ7QaM3435QGCIDGB539ttTKOpCOxMbaGxSwKQq5M/TP6YylfyR1+9+gXv0Ke3W
+	 X6CwuS2p1ljngDK8MyVMqnYhW2Dok357WIBGfDySpgNfDutYKINhOESF40cv364CFl5TvExNqzcO
+	 DFY2xrnCuENUVu5gONmsSpTBVke63FFiS+buyl8Ba4dG56x9qx53wVsYtcQgkGlNLL8rD0m4IuJE
+	 C+JpCfAzgY6CuyNRx8BURm46FfSNNNA4v1+rQ68IlEGavh+BVYFRnTz2Jg3qM6N7pLyFE2Y82qYk
+	 MkI3lHgQxsHNWUuCvoIqrKrVLUpYkYQRKnWjdp9caegTvn5XANVdG2z4XsVNJ/Eu1sgEhlYzcTvE
+	 dVon1LaJ5SP49xQYzDGX05jotyTLUEtoRzlINz/JK2JaBuvjegBjRg6hTYY2mELly6SQR+lneIab
+	 t+d8Zw368u1mnqw2rjjCRCFj1Uij8zCOCRsOUjbqhupxVfDmYx4kWWtCWPJSBV2VI930DDG3slZa
+	 lHggq1fam3x9v5P9bR1czk2G026GoUmBYydKWv3A9JY2mokZqMMV7zMZ/PufAfY9A3AI0exqJubD
+	 s/dtOAkg3LlQXYLVuyjSixbvNJj+um6jzXbwKZ2rZvr3fsZpgsAdP/7XtUCKr00wbWmjfZyL+2PH
+	 35iRCWsXfXT60trK5wBXoUVLi5mu31Juq+RZ60cA==
+X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
+From: Edward Adam Davis <eadavis@qq.com>
+To: andrii.nakryiko@gmail.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	eadavis@qq.com,
+	eddyz87@gmail.com,
+	emil@etsalapatis.com,
+	jiayuan.chen@linux.dev,
+	jolsa@kernel.org,
+	linux-kernel@vger.kernel.org,
+	martin.lau@linux.dev,
+	memxor@gmail.com,
+	netdev@vger.kernel.org,
+	sashiko-bot@kernel.org,
+	sashiko-reviews@lists.linux.dev,
+	song@kernel.org,
+	syzkaller-bugs@googlegroups.com,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH v5] bpf: Fix smp_processor_id() call trace for preemptible kernels
+Date: Thu,  2 Jul 2026 12:34:50 +0800
+X-OQ-MSGID: <20260702043449.1021846-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <CAEf4Bzb+OOrdGyxbzjh=7MUEbA5FC05E6_iwCjDXcnSO-HZ=ig@mail.gmail.com>
+References: <CAEf4Bzb+OOrdGyxbzjh=7MUEbA5FC05E6_iwCjDXcnSO-HZ=ig@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <cee66b78b5bad62e6107ce7579d7e613ad05a258aef8d0ab279b706543651a13@mail.kernel.org>
-In-Reply-To: <20260702025443.83389-4-cuiyunhui@bytedance.com>
-References: <20260702025443.83389-4-cuiyunhui@bytedance.com>
-Subject: Re: [PATCH v7 3/3] riscv: store percpu offset into thread_info
-From: bot+bpf-ci@kernel.org
-To: cuiyunhui@bytedance.com,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,dennis@kernel.org,tj@kernel.org,cl@gentwo.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,bjorn@kernel.org,pulehui@huawei.com,puranjay@kernel.org,thuth@redhat.com,ajones@ventanamicro.com,ben.dooks@codethink.co.uk,rkrcmar@ventanamicro.com,cuiyunhui@bytedance.com,samuel.holland@sifive.com,zong.li@sifive.com,conor.dooley@microchip.com,tglx@kernel.org,debug@rivosinc.com,seanwascoding@gmail.com,andybnac@gmail.com,menglong8.dong@gmail.com,cyrilbur@tenstorrent.com,wangruikang@iscas.ac.cn,atishp@rivosinc.com,apatel@ventanamicro.com,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,linux-mm@kvack.org,bpf@vger.kernel.org,arnd@arndb.de,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com,qingfang.deng@siflower.com.cn,linux-arch@vg
- er.kernel.org,llvm@lists.linux.dev
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  2 Jul 2026 04:07:52 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============1457489896787659387==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, 1 Jul 2026 12:57:52 -0700, Andrii Nakryiko wrote:
+> > bpf_mem_cache_free_rcu() maybe called in preemptible context, this
+> > will trigger the below warning message:
+> >
+> > BUG: using smp_processor_id() in preemptible [00000000] code: syz.0.17/5820
+> > caller is bpf_mem_cache_free_rcu+0x48/0xc0 kernel/bpf/memalloc.c:954
+> > Call Trace:
+> >  check_preemption_disabled+0xd3/0xe0 lib/smp_processor_id.c:47
+> >  bpf_mem_cache_free_rcu+0x48/0xc0 kernel/bpf/memalloc.c:954
+> >  rhtab_delete_elem+0x185a/0x1b30 kernel/bpf/hashtab.c:2969
+> >  __rhtab_map_lookup_and_delete_batch+0x935/0xcb0 kernel/bpf/hashtab.c:3349
+> >  bpf_map_do_batch+0x445/0x630 kernel/bpf/syscall.c:-1
+> >  __sys_bpf+0x906/0xd90 kernel/bpf/syscall.c:-1
+> >
+> > this_cpu_ptr() requires the caller to prevent task migration.
+> > These helpers currently do not enforce that requirement and may
+> > be invoked from preemptible contexts, leading to accesses to another
+> > CPU's per-CPU cache after migration. Use get_cpu_ptr()/put_cpu_ptr()
+> > to pin the task while accessing the per-CPU allocator state.
+> >
+> > Fixes: 5af6807bdb10 ("bpf: Introduce bpf_mem_free_rcu() similar to kfree_rcu().")
+> > Fixes: 7c8199e24fa0 ("bpf: Introduce any context BPF specific memory allocator.")
+> > Reported-by: syzbot+fd7e415d891073b83e1f@syzkaller.appspotmail.com
+> > Closes: https://syzkaller.appspot.com/bug?extid=fd7e415d891073b83e1f
+> > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+> > ---
+> 
+> from what I can see, bpf_mem_free() is called through bpf kfuncs only,
+> and all BPF programs run with migration disabled. So this seems like a
+> false positive. For per-cpu checking, it should probably check that
+> either preemption is disabled or migration is disabled. tl;dr, there
+> doesn't seem to be any
+Today, I researched the call sites of bpf_mem_free() in detail; it is
+called directly by bpf kfuns only. 
 
-> diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
-> index e9e8ba83e632..137a49488325 100644
-> --- a/arch/riscv/include/asm/asm.h
-> +++ b/arch/riscv/include/asm/asm.h
-> @@ -91,11 +91,7 @@
->
->  #ifdef CONFIG_SMP
->  .macro asm_per_cpu dst sym tmp
-> -	lw    \tmp, TASK_TI_CPU_NUM(tp)
-> -	slli  \tmp, \tmp, RISCV_LGPTR
-> -	la    \dst, __per_cpu_offset
-> -	add   \dst, \dst, \tmp
-> -	REG_L \tmp, 0(\dst)
-> +	REG_L \tmp, TASK_TI_PCPU_OFFSET(tp)
->  	la    \dst, \sym
->  	add   \dst, \dst, \tmp
->  .endm
+Different BPF program types execute in distinct kernel contexts: for
+instance, XDP and TC typically run in non-sleepable networking contexts,
+whereas `raw_tp`, `tracing`, `LSM`, `syscall` and especially sleepable
+BPF programs may run in contexts where preemption and migration are
+enabled. Consequently, any shared BPF code (such as a helper or kfunc)
+that accesses per-CPU data must not rely on the caller having disabled
+migration; instead, it must internally ensure that CPU migration does
+not occur during the access.
 
-This isn't a bug, but asm_per_cpu was the only reader of TASK_TI_CPU_NUM,
-and it now loads TASK_TI_PCPU_OFFSET(tp) instead.
+Taking into account the CI reviewer's feedback [1] and my further
+investigation into BPF programs as described above, the adjustments
+related to bpf_mem_free() should be retained.
 
-> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-> index af827448a609..fbf53b66b0e0 100644
-> --- a/arch/riscv/kernel/asm-offsets.c
-> +++ b/arch/riscv/kernel/asm-offsets.c
-> @@ -38,6 +38,7 @@ void asm_offsets(void)
->  	OFFSET(TASK_THREAD_SUM, task_struct, thread.sum);
->
->  	OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
-> +	OFFSET(TASK_TI_PCPU_OFFSET, task_struct, thread_info.pcpu_offset);
->  	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
->  	OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
->  	OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
+[1]
+https://lore.kernel.org/all/20260630094823.897BD1F00A3D@smtp.kernel.org
+> 
+> pw-bot: cr
+> 
+> > v1 -> v2: using guard against preemption
+> > v2 -> v3: replace get/put_cpu() to bpf_disable/enable_instrumentation()
+> > v3 -> v4: disable preempt to make this_cpu_ptr() work
+> > v4 -> v5: in mem free disable preemption
+> >
+> 
+> maybe throttle your patch resubmission spree a bit?..
+My earlier actions were driven by a desire to keep pace with the CI
+reviewer's response speed.
+Moving forward, I will slow down the cadence of new patch submissions,
+as you suggested.
 
-A tree-wide search now finds TASK_TI_CPU_NUM only at its definition in
-asm_offsets():
-
-	OFFSET(TASK_TI_CPU_NUM, task_struct, thread_info.cpu);
-
-with no remaining users (TASK_TI_CPU is a separate symbol still referenced
-by entry.S).  Could this OFFSET() line be dropped as well?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28562450933
---===============1457489896787659387==--
