@@ -1,177 +1,99 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AA63318B96
-	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 03:31:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775E134D389;
+	Thu,  2 Jul 2026 04:07:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782963101; cv=none; b=Q7PEUQX6PcDJWchX6QrVVUVd1bLclFtm5yBRUl8/dJV0dP32GnBVai/51GWytfA1qNMM7zBQlZDA/JaDO4WiqUfADikSfdLRFiffk2nA6vWV6EIlLO1HiX6/a7xFnekDlkLmOYYXkNWYq/jUsXam9U10oV5zN7wMDrpWd35ya58=
+	t=1782965274; cv=none; b=B8qPf44BF8fXziQk00gL4dEPx2zPtZ5SRd81TdV9cJVPkd2aHjFc1oX1oP5kRE37kCq+/EwEpabaRjp8EIsLL4cKEJZkz//ffE2auc0lbJ2zu9oEkayBxU1ELveRMVw1PYmwKrvmfOgeeON1G2rr0oB4M3s7+cMccRwZKwzL1Vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782963101; c=relaxed/simple;
-	bh=Cq8aVbupcdVVj0iwOLMAbsuiwqFEAE8N9FpHv/x/w0o=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=cIu+rzEkp2kFkJK+KXRf4A/3nydmYb60CTuElWpdcBOUlm3hFzC+LIyJddhdXCE0EQKV9wTefYMJMb64Sw2j4DVPsLl3/1dQ1E5yZIwBA5PjFeC4NPY5xcuxKJYU0wrx7P9D+GKliSI7DuyWmZRwmntJZ+LnjvW6tIXWvBN5eak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8BxCfGS20Vq_cIAAA--.4498S3;
-	Thu, 02 Jul 2026 11:31:30 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJDxSMGP20VqaYS7AA--.13542S3;
-	Thu, 02 Jul 2026 11:31:28 +0800 (CST)
-Subject: Re: [PATCH bpf-next v5] bpf: Reject programs with inlined helpers if
- JIT is unavailable
-To: Leon Hwang <leon.hwang@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, KaFai Wan <kafai.wan@linux.dev>
-Cc: bpf@vger.kernel.org, loongarch@lists.linux.dev
-References: <20260702022108.17693-1-yangtiezhu@loongson.cn>
- <3fe115fd-8df8-4bf0-805b-2d0c2c40fdf5@linux.dev>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <527b7e2e-e9cc-33b2-6a17-a888331a4d3e@loongson.cn>
-Date: Thu, 2 Jul 2026 11:31:27 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1782965274; c=relaxed/simple;
+	bh=0zDpt9rBgLyC9VA4+6J8GTHQlnGiGK0pxjqPM+lFMfU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=FRivEd5G+ASS004r8TLKmEtRhTF0OctcizXVS06eAISoVV83HDFKE0txDdHQmAXPQJWNnEfOZgi++kV/WXxwDFsr1DNy6y1X4tDpHt7nxdFgZiIGYgN1JVapNeD0+wKHjvBPNAb+5gbFkMZncPyz569qSLOmEkqiFZYozYgAZNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l+A32ihn reason="signature verification failed"; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l+A32ihn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57F051F000E9;
+	Thu,  2 Jul 2026 04:07:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782965273;
+	bh=DnEVEcJDxsyM432WD69nOlBblOFD/CeS/4w4EcraZIU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=l+A32ihnWo8GqzDaLubXnRmf7NUq6k3fcrvbRJ81KHvT4qyyck8EwSViWmtlQ4y+E
+	 PYKyGDVV4MK7yNcQNhnqQG/hdihqKL39ueM7zwmAl6eako+ml/Mo8bAqQ3TWAsm73f
+	 9kyoIFuNuEDoiQUWo2SvrVxn5rxXpyvA6kjX7BXfwB8kZohk/KGSH8StjUDoimJfU9
+	 DbNUA+JXOfKATIWb6fH1SrLZL62Cv+u9VSiD6dKif1HDogW5+N+GhFebA4HHhfjDby
+	 xvVh9vhQ+kElVu0/GmhRl6/N9J8AatENAVvJ6yg7msgVgpaMexhx3yVc0l4Wb4BpPa
+	 SXWYhEaXb/TYw==
+Content-Type: multipart/mixed; boundary="===============1457489896787659387=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <3fe115fd-8df8-4bf0-805b-2d0c2c40fdf5@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxSMGP20VqaYS7AA--.13542S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxGFyrWr15GrWfXryxGr4fXrc_yoW5tryfpF
-	1DCw1kuFWI9rWxWrWkAa18ury3trW5Gr17KF40grWjgr1DWFZ7Gw1fKF45A3s3ur4vvF10
-	vrnFvr9xJr13X3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
-	6r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
-	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
-	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
-	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4U
-	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07joc_-UUU
-	UU=
+Message-Id: <cee66b78b5bad62e6107ce7579d7e613ad05a258aef8d0ab279b706543651a13@mail.kernel.org>
+In-Reply-To: <20260702025443.83389-4-cuiyunhui@bytedance.com>
+References: <20260702025443.83389-4-cuiyunhui@bytedance.com>
+Subject: Re: [PATCH v7 3/3] riscv: store percpu offset into thread_info
+From: bot+bpf-ci@kernel.org
+To: cuiyunhui@bytedance.com,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,dennis@kernel.org,tj@kernel.org,cl@gentwo.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,bjorn@kernel.org,pulehui@huawei.com,puranjay@kernel.org,thuth@redhat.com,ajones@ventanamicro.com,ben.dooks@codethink.co.uk,rkrcmar@ventanamicro.com,cuiyunhui@bytedance.com,samuel.holland@sifive.com,zong.li@sifive.com,conor.dooley@microchip.com,tglx@kernel.org,debug@rivosinc.com,seanwascoding@gmail.com,andybnac@gmail.com,menglong8.dong@gmail.com,cyrilbur@tenstorrent.com,wangruikang@iscas.ac.cn,atishp@rivosinc.com,apatel@ventanamicro.com,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,linux-mm@kvack.org,bpf@vger.kernel.org,arnd@arndb.de,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com,qingfang.deng@siflower.com.cn,linux-arch@vg
+ er.kernel.org,llvm@lists.linux.dev
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu,  2 Jul 2026 04:07:52 +0000 (UTC)
 
-On 2026/7/2 上午11:17, Leon Hwang wrote:
-> On 2/7/26 10:21, Tiezhu Yang wrote:
-> [...]
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index ba09795e0bfd..463fae6a5c33 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -1865,8 +1865,9 @@ struct bpf_prog_aux {
->>   
->>   struct bpf_prog {
->>   	u16			pages;		/* Number of allocated pages */
->> -	u16			jited:1,	/* Is our filter JIT'ed? */
->> +	u32			jited:1,	/* Is our filter JIT'ed? */
->>   				jit_requested:1,/* archs need to JIT the prog */
->> +				jit_required:1, /* program strictly requires JIT compiler */
-> 
-> Looks good to put jit_required together with jit_requested.
-> 
-> However, 'u16 -> u32' changes the layout of struct bpf_prog.
-> 
-> Before the change, pahole -C bpf_prog ./vmlinux
-> 
-> struct bpf_prog {
-> 	u16                        pages;                /*     0     2 */
-> 	u16                        jited:1;              /*     2: 0  2 */
-> 	u16                        jit_requested:1;      /*     2: 1  2 */
-> 	u16                        gpl_compatible:1;     /*     2: 2  2 */
-> 	u16                        cb_access:1;          /*     2: 3  2 */
-> 	u16                        dst_needed:1;         /*     2: 4  2 */
-> 	u16                        blinding_requested:1; /*     2: 5  2 */
-> 	u16                        blinded:1;            /*     2: 6  2 */
-> 	u16                        is_func:1;            /*     2: 7  2 */
-> 	u16                        kprobe_override:1;    /*     2: 8  2 */
-> 	u16                        has_callchain_buf:1;  /*     2: 9  2 */
-> 	u16                        enforce_expected_attach_type:1; /*     2:10
-> 2 */
-> 	u16                        call_get_stack:1;     /*     2:11  2 */
-> 	u16                        call_get_func_ip:1;   /*     2:12  2 */
-> 	u16                        call_session_cookie:1; /*     2:13  2 */
-> 	u16                        tstamp_type_access:1; /*     2:14  2 */
-> 	u16                        sleepable:1;          /*     2:15  2 */
-> 	enum bpf_prog_type         type;                 /*     4     4 */
-> 	enum bpf_attach_type       expected_attach_type; /*     8     4 */
-> 	u32                        len;                  /*    12     4 */
-> 	u32                        jited_len;            /*    16     4 */
-> 	union {
-> 		u8                 digest[32];           /*    20    32 */
-> 		u8                 tag[8];               /*    20     8 */
-> 	};                                               /*    20    32 */
-> 
-> 	/* XXX 4 bytes hole, try to pack */
-> 
-> 	struct bpf_prog_stats *    stats;                /*    56     8 */
+--===============1457489896787659387==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Hi,
+> diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
+> index e9e8ba83e632..137a49488325 100644
+> --- a/arch/riscv/include/asm/asm.h
+> +++ b/arch/riscv/include/asm/asm.h
+> @@ -91,11 +91,7 @@
+>
+>  #ifdef CONFIG_SMP
+>  .macro asm_per_cpu dst sym tmp
+> -	lw    \tmp, TASK_TI_CPU_NUM(tp)
+> -	slli  \tmp, \tmp, RISCV_LGPTR
+> -	la    \dst, __per_cpu_offset
+> -	add   \dst, \dst, \tmp
+> -	REG_L \tmp, 0(\dst)
+> +	REG_L \tmp, TASK_TI_PCPU_OFFSET(tp)
+>  	la    \dst, \sym
+>  	add   \dst, \dst, \tmp
+>  .endm
 
-Thank you for the detailed pahole analysis! You are absolutely right.
-Changing 'u16 -> u32' for the bitfield group row implicitly changed
-the layout of subsequent fields like 'type', disrupting their natural
-alignment and padding.
+This isn't a bug, but asm_per_cpu was the only reader of TASK_TI_CPU_NUM,
+and it now loads TASK_TI_PCPU_OFFSET(tp) instead.
 
-To address this and preserve the original bitfield packed layout perfectly,
-I have rolled back the 'u16 -> u32' change. Instead, I moved 'jit_required'
-out of the bitfield group and declared it as a standalone 'u8' field right
-before 'stats'. This elegantly packs it into the existing 4-byte structural
-hole (at offset 52).
+> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+> index af827448a609..fbf53b66b0e0 100644
+> --- a/arch/riscv/kernel/asm-offsets.c
+> +++ b/arch/riscv/kernel/asm-offsets.c
+> @@ -38,6 +38,7 @@ void asm_offsets(void)
+>  	OFFSET(TASK_THREAD_SUM, task_struct, thread.sum);
+>
+>  	OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
+> +	OFFSET(TASK_TI_PCPU_OFFSET, task_struct, thread_info.pcpu_offset);
+>  	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
+>  	OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
+>  	OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
 
-The total size of struct bpf_prog stays exactly at 96 bytes, with zero
-alignment regression.
+A tree-wide search now finds TASK_TI_CPU_NUM only at its definition in
+asm_offsets():
 
-Here is the incremental diff based on the previous v5 patch:
+	OFFSET(TASK_TI_CPU_NUM, task_struct, thread_info.cpu);
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 463fae6a5c33..f5c283af3cf7 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1865,9 +1865,8 @@ struct bpf_prog_aux {
+with no remaining users (TASK_TI_CPU is a separate symbol still referenced
+by entry.S).  Could this OFFSET() line be dropped as well?
 
-  struct bpf_prog {
-         u16                     pages;          /* Number of allocated 
-pages */
--       u32                     jited:1,        /* Is our filter JIT'ed? */
-+       u16                     jited:1,        /* Is our filter JIT'ed? */
-                                 jit_requested:1,/* archs need to JIT 
-the prog */
--                               jit_required:1, /* program strictly 
-requires JIT compiler */
-                                 gpl_compatible:1, /* Is filter GPL 
-compatible? */
-                                 cb_access:1,    /* Is control block 
-accessed? */
-                                 dst_needed:1,   /* Do we need dst entry? */
-@@ -1890,6 +1889,7 @@ struct bpf_prog {
-                 u8 digest[SHA256_DIGEST_SIZE];
-                 u8 tag[BPF_TAG_SIZE];
-         };
-+       u8                      jit_required;   /* program strictly 
-requires JIT compiler */
-         struct bpf_prog_stats __percpu *stats;
-         u8 __percpu             *active;        /* u8[BPF_NR_CONTEXTS] 
-for recursion protection */
-         unsigned int            (*bpf_func)(const void *ctx,
 
-I will collect this optimization and send out the formal V6 patchset 
-shortly.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Thanks,
-Tiezhu
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28562450933
+--===============1457489896787659387==--
