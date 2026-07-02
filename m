@@ -1,73 +1,134 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D1C390C89;
-	Thu,  2 Jul 2026 00:00:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074B954774;
+	Thu,  2 Jul 2026 00:00:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782950419; cv=none; b=C86JTFLIz4JDnQj/ziEOnA7wLkCM+r9ZBCpSR51f34zVnczIC8E/EWj0m6L/vupv9Dao+SVCQvqn5b07+fYp9pc1I133FR6T6cipA7j2x+RqWI3RUaqmOQ8PT6wXQU4MFBzOexXV9mnOf1fsTT6AmMwN4HWkKJ5gCQls4GyFlCQ=
+	t=1782950436; cv=none; b=I9vy3ixNnN9pagDUK58ll2EmA6ooHLZUe8PzQ6DYuwfoaC+w3QtuNd9fLgiSbmT3gjmuaDVpf5bVNRQCOqwC2M0fFO+415CJpCL1f1gvh2C8Y1+/4xCwTamvsIitVnD+gK2zouoh6VQitGnsnZbWb86tl3PoG2c6mS9PVH9OvLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782950419; c=relaxed/simple;
-	bh=jqjbeFdIpVRXhFcW3JHkxpTxn2W1/ZUCXSwYSed7u3E=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=XdgI/g9gQ39CucrxkJSlReLciunrrSvE3A0nf559YF+OEyje7lTSAx5nKtWOOaBtx7aV74pW2gRikT+qjQsBD767rzLKc1lkW9wCGvRhn+Zdqz4sOp3y6PlTAImcebkAaSAdeQcVxRELeaCnLcRDLqC5xI/kr+vOf1Tt/UtXISM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QMT4kgVW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782950436; c=relaxed/simple;
+	bh=49oNaBsWC1ibQFOVK2VcpZiHrR3tpRL6dBrdVrGD1bs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TrCaClcx4CQQ0HIlsdxo81TeoaqZSshWFhzrZxKsuXPDMjjMFXq0zpZ73hP6VJDPkwPz4LfhMzto2z704j6JlLcz3NgPKIu4R6LN5wudMlMrTEcvxr4k2mMo3Q8M/TcQkYGf999o+d5qO3ayEcY2fqonakmEWqg1pGHi77KMDew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RAGaEWdv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QMT4kgVW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A5DC1F00ACF;
-	Thu,  2 Jul 2026 00:00:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RAGaEWdv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74A291F000E9;
+	Thu,  2 Jul 2026 00:00:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782950418;
-	bh=jqjbeFdIpVRXhFcW3JHkxpTxn2W1/ZUCXSwYSed7u3E=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=QMT4kgVWFI7QkeYtoq9/QtdxTQy6Tq1TAnZHIL2FV1UXIHs9mMQmLu/6QoslqWFyZ
-	 tR0QsRtp1v1Pz/uvQwEm35yQzZGF/d/FrXXH11OtuCoSFlVTyky0OtiaFA5UxfESHV
-	 3W/UB0QBxqKJsVfQNwrTFkwKx72MsqmbAKDFNZ1mUSRsENGiQ2hRVZkP+7nTQ5S7VC
-	 tprrtUY7X2qJnatmnTOhplRhUKrziu8PVGlej2FB8hVL7wWKBsX4PKTtCuO0BB/UcF
-	 iB2PrRWhHlVFyz+d4iVA8fXdyiHjMhI1kCFGg+nzURDA1gHan8N+eQqIGkOGdlN85P
-	 abQV2U+cDZxdw==
-Content-Type: multipart/mixed; boundary="===============4278333573925749137=="
+	s=k20260515; t=1782950434;
+	bh=4DxY+NveVlYpMYk9+8EzvprbIuiW7b27j/Q3O7UOpGA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=RAGaEWdvlnS9Lk1iGe3zDhYAk6CUI8rBdM1J/vFEMw1SLmdPLWnnT+uC42wd/nSmY
+	 0YhlR50K/drAQqj7QRUqMrkVzEkLYFAbSXGbdgnphLlmWnUk/KmPi0/7wRs48jlxUF
+	 gmmY3i5/gvTlNCpgHz9Buvpr6TZYOuU1wJyx3CXTVGLDeQKka/4OFN08+D+XCclhQo
+	 HafrnBWIukbhH+vk85drrar6sNt+oCdG96JicMekQQFhj9zhteAMvXe3rBLy3MwIwC
+	 dormm8qIrhHbCXV90PWTc0lPEdd07za8UzAP8qmMvD0offBS4IY1VXPH23bvU9ZOqM
+	 qGhR+rDHKZSYw==
+Date: Wed, 1 Jul 2026 17:00:33 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Viktor Malik <vmalik@redhat.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	linux-perf-users@vger.kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, Michael Petlan <mpetlan@redhat.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] perf trace: Refactor augmented_raw_syscalls using
+ bpf_loop
+Message-ID: <akWqIfWPMCdaGgGg@google.com>
+References: <20260623112533.1151502-1-vmalik@redhat.com>
+ <DJGJ9F6WQZV9.2W4WBIHYLJQ97@gmail.com>
+ <ajq98dm4gAwEzkMb@google.com>
+ <c2f4e45e-d5c9-42e9-a46b-25fb0cacb267@redhat.com>
+ <ajwu7xR6V6MAQOFw@google.com>
+ <3c221e35-d642-4036-88fd-d25df7f8807e@redhat.com>
+ <akLXCFpnum0WgXGf@google.com>
+ <c1666061-c3e7-4eda-82ca-d03daf05f4f8@redhat.com>
+ <360bfd5c-b023-4952-9e24-53fcc26690d3@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <03d8ce102b71c68c30e98be36feaebe539055195c2323ec3b3fd84f157487afd@mail.kernel.org>
-In-Reply-To: <20260702-sockmap-lookup-udp-leak-v3-3-ff8de8782468@rbox.co>
-References: <20260702-sockmap-lookup-udp-leak-v3-3-ff8de8782468@rbox.co>
-Subject: Re: [PATCH bpf v3 3/4] selftests/bpf: Adapt sockmap update error handling
-From: bot+bpf-ci@kernel.org
-To: mhal@rbox.co,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,john.fastabend@gmail.com,jakub@cloudflare.com,jiayuan.chen@linux.dev,edumazet@google.com,kuniyu@google.com,pabeni@redhat.com,willemb@google.com,davem@davemloft.net,kuba@kernel.org,horms@kernel.org,cong.wang@bytedance.com
-Cc: mhal@rbox.co,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  2 Jul 2026 00:00:18 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <360bfd5c-b023-4952-9e24-53fcc26690d3@redhat.com>
 
---===============4278333573925749137==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
+On Wed, Jul 01, 2026 at 08:12:06AM +0200, Viktor Malik wrote:
+> On 6/30/26 07:42, Viktor Malik wrote:
+> > On 6/29/26 22:35, Namhyung Kim wrote:
+> >> On Thu, Jun 25, 2026 at 02:05:29PM +0200, Viktor Malik wrote:
+> >>> On 6/24/26 21:24, Namhyung Kim wrote:
+> >>>> On Wed, Jun 24, 2026 at 08:47:38AM +0200, Viktor Malik wrote:
+> >>>>> On 6/23/26 19:10, Namhyung Kim wrote:
+> >>>>>> Hello,
+> >>>>>>
+> >>>>>> On Tue, Jun 23, 2026 at 08:27:39AM -0700, Alexei Starovoitov wrote:
+> >>>>>>> On Tue Jun 23, 2026 at 4:25 AM PDT, Viktor Malik wrote:
+> >>>> [SNIP]
+> >>>>>>>> +	struct args_loop_ctx loop_ctx = {
+> >>>>>>>> +		.args = args,
+> >>>>>>>> +		.beauty_map = beauty_map,
+> >>>>>>>> +		.payload_offset = payload_offset,
+> >>>>>>>> +		.value_size = value_size,
+> >>>>>>>> +		.output = &output,
+> >>>>>>>> +		.do_output = &do_output
+> >>>>>>>> +	};
+> >>>>>>>> +	iters = bpf_loop(6, process_arg_cb, &loop_ctx, 0);
+> >>>>>>>
+> >>>>>>> bpf_loop() is old and generally not recommended.
+> >>>>>>> Please use bpf_for() then the diff will be one line change and
+> >>>>>>> can scale to any number of args. Not just 6.
+> >>>>>
+> >>>>> Thanks Alexei, I didn't know about this preference.
+> >>>>>
+> >>>>>> One thing we should take care is to support old kernels.  The oldest
+> >>>>>> LTS kernel in the kernel.org is 5.10 and bpf_loop() was introduced in
+> >>>>>> 5.17 and bpf_for (bpf_iter_num) was 6.4.
+> >>>>>
+> >>>>> The problematic loop was introduced in 6.12 by a68fd6a6cdd3 ("perf
+> >>>>> trace: Collect augmented data using BPF") so we should be good using
+> >>>>> bpf_for. Or is perf from 7.2 supposed to work on 5.10 LTS kernels?
+> >>>>
+> >>>> Yep, we'd like to support old kernels.
+> >>>
+> >>> How much strict are you on this requirement? IMHO, the very least we
+> >>> need to fix the verifier issue is bpf_loop, so that would still not work
+> >>> on 5.10 and 5.15 LTS kernels.
+> >>
+> >> I don't think it's an absolute requirement, but I think we don't want to
+> >> break any existing working setup (old kernel + old compiler).
+> >>
+> >>>
+> >>> We could probably keep the open-coded loop in case bpf_loop is not
+> >>> available but `perf trace` would still fail on kernels without bpf_loop
+> >>> for new perf built with Clang>=22. Also, the code would be a bit ugly
+> >>> and I'm not sure how well the feature check for helpers (bpf_loop) works
+> >>> on old kernels.
+> >>  
+> >> Any chance process_arg_cb() can be called directly in the regular for
+> >> loop on old kernels?
+> > 
+> > That's my thinking, too. Should be pretty straightforward, I'm going to
+> > give it a try in v2.
+> 
+> Btw, I just noticed that util/bpf_skel/lock_contention.bpf.c already
+> uses bpf_loop without any fallback so newer perf (at least `perf lock`)
+> won't be usable on kernels without bpf_loop anyways.
+ 
+IIUC the lock contention tracepoints were added to v5.19 so it won't
+work on old kernels anyway. :)
 
-PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvc29j
-a21hcF9saXN0ZW4uYyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3Nv
-Y2ttYXBfbGlzdGVuLmMKPiBpbmRleCBjYzBjNjhiYWI5MDcuLmI4NzExOGFhYjdjNCAxMDA2NDQK
-PiAtLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9zb2NrbWFwX2xp
-c3Rlbi5jCj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvc29j
-a21hcF9saXN0ZW4uYwoKWyAuLi4gXQoKPiBAQCAtOTMsOCArOTAsMTIgQEAgc3RhdGljIHZvaWQg
-dGVzdF9pbnNlcnRfYm91bmQoc3RydWN0IHRlc3Rfc29ja21hcF9saXN0ZW4gKnNrZWwgX19hbHdh
-eXNfdW51c2VkLAo+ICAJZXJybm8gPSAwOwo+ICAJdmFsdWUgPSBzOwo+ICAJZXJyID0gYnBmX21h
-cF91cGRhdGVfZWxlbShtYXBmZCwgJmtleSwgJnZhbHVlLCBCUEZfTk9FWElTVCk7Cj4gLQlpZiAo
-IWVyciB8fCBlcnJubyAhPSBFT1BOT1RTVVBQKQo+IC0JCUZBSUxfRVJSTk8oIm1hcF91cGRhdGU6
-IGV4cGVjdGVkIEVPUE5PVFNVUFAiKTsKPiArCWlmIChzb3R5cGUgPT0gU09DS19TVFJFQU0pIHsK
-PiArCQlBU1NFUlRfRVJSKGVyciwgIm1hcF91cGRhdGUiKTsKPiArCQlBU1NFUlRfRVEoZXJybm8s
-IEVPUE5PVFNVUFAsICJlcnJubyIpOwo+ICsJfSBlbHNlIGlmIChlcnIpIHsKPiArCQlBU1NFUlRf
-T0soZXJyLCAibWFwX3VwZGF0ZSIpOwo+ICsJfQoKVGhpcyBpc24ndCBhIGJ1ZywgYnV0IGNvdWxk
-IHRoZSBVRFAgYnJhbmNoIGp1c3QgYmUgYGVsc2UgQVNTRVJUX09LKGVyciwKIm1hcF91cGRhdGUi
-KTtgIOKAlCB0aGUgYGlmIChlcnIpYCBndWFyZCBsb29rcyByZWR1bmRhbnQgc2luY2UgQVNTRVJU
-X09LIGlzCmEgbm8tb3Agb24gc3VjY2Vzcz8KCj4gIGNsb3NlOgo+ICAJeGNsb3NlKHMpOwo+ICB9
-CgpbIC4uLiBdCgoKLS0tCkFJIHJldmlld2VkIHlvdXIgcGF0Y2guIFBsZWFzZSBmaXggdGhlIGJ1
-ZyBvciBlbWFpbCByZXBseSB3aHkgaXQncyBub3QgYSBidWcuClNlZTogaHR0cHM6Ly9naXRodWIu
-Y29tL2tlcm5lbC1wYXRjaGVzL3ZtdGVzdC9ibG9iL21hc3Rlci9jaS9jbGF1ZGUvUkVBRE1FLm1k
-CgpDSSBydW4gc3VtbWFyeTogaHR0cHM6Ly9naXRodWIuY29tL2tlcm5lbC1wYXRjaGVzL2JwZi9h
-Y3Rpb25zL3J1bnMvMjg1NTQ5MTExOTI=
+Thanks,
+Namhyung
 
---===============4278333573925749137==--
