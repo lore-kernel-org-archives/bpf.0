@@ -1,28 +1,28 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37C134753C;
-	Thu,  2 Jul 2026 16:46:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A7D346A18;
+	Thu,  2 Jul 2026 16:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783010815; cv=none; b=CEj21cZwZ8OBlw5TQHR/IRQzn3SwS9yHXAYKdXVvhYwX3XRtcAoIOK6iLwQztiEaeOxDnRzs8jXFGSQjoApZxDt0ii+rTxh7IAg37Xtxpmx+K9KlO0cJkqjg3hE6Z2GYq7Q8RhJZfSbY++yi6DCWWbWXaVY2DMIJEiZXtotTxqw=
+	t=1783010833; cv=none; b=uAI+gX/WUliDt7JexQ3lMTz5H7Wi6FPfojOBgvj64I2Ee/mGIUeajuUPQSr1m4Sen9rlBIzaEd4EadyzBbGR0ViiHbTI8X1CHu40th+jokIRMK1++VVf1ycNWmKvjkV7khfneP79kVEfx+w413YicAu9Ark4oHOqFu2Xli2kOZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783010815; c=relaxed/simple;
-	bh=7OBK6CDoaedL8PlPyU6gqwveF+bNO5pqMqTRFCnqq+U=;
+	s=arc-20240116; t=1783010833; c=relaxed/simple;
+	bh=Xkf6Hd+8/vjrBCt362ymLUa6m7d8Srl9zxE93HyLc5s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Bhqwg3d/upf7ympYL7o9pFeUsJmDnFQ+qNyYiz1VGC91IshGQ2qdeuIbKdXgvugYLjnV6tI06lunLvoQjS0QS4vchTVZWdvO+U8gQ+ki7MAfvCy0tSTZLMkPGwQYxtkhZwur6dpmBY0+nwb2c2zACjxR+68iGFinnxvT1R8K7Lo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZluXWdGR; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=az4hm6XYhfbvezv5K0J4xWY5sTw4dRxMbKJZdjzD8lS82sexDsNWb+uJjvlNzISsd3fEM+igi/g5Z+K5+K2DY8CkInACbDlfTXLUT5Zh/HXBBBASPDgqT7CxzIbnDnIWni2qPoRLWGA4d5q7sVgxOAXabXFC6ccW7OSunZ6Pjz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NBCeGssE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZluXWdGR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6F051F000E9;
-	Thu,  2 Jul 2026 16:46:52 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NBCeGssE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 838451F00A3E;
+	Thu,  2 Jul 2026 16:47:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1783010813;
-	bh=LLJG4jOUHf0kHWRhnCdFtxWzox0n70R1Na/qla+0z4M=;
+	s=korg; t=1783010832;
+	bh=CGvDThpXhSQn5z+GiSfX/scnUjOYAk8cJ/SrpnkAaeI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ZluXWdGRn8ajadIuLLo14eHQxy9sqO7042Z3agF9lkvv/YFt3VrncI5Q5jv4GfpTz
-	 upLLccnsBY4kWwWBZTsnTrZVfuHDoimVhm8cGVmseKEIDQOu0DMzZ9IDam2GjYBYcY
-	 TDZdnNcwyzdjFIdJzA5GAnBoEo1cFQKMyMNstnew=
+	b=NBCeGssEcq4NaZxTWLWSBV4RZgTGBfrekgby7eGIXHaeKQhI4H/nZdlNmpr/0Xnin
+	 7KvLvomfPf903nPeZ7UxhiQAERD+0N4vuxZTlEnyAOC84nLfO+ZSYLo+l5xlRXfPmU
+	 SUtz082oQs1Z37R6D3TpthmrIBx5iep2LzPRd3DY=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -43,9 +43,9 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Josh Poimboeuf <jpoimboe@redhat.com>,
 	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
 	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Subject: [PATCH 6.6 045/175] scripts/sorttable: Remove unused write functions
-Date: Thu,  2 Jul 2026 18:19:06 +0200
-Message-ID: <20260702155116.746965279@linuxfoundation.org>
+Subject: [PATCH 6.6 047/175] scripts/sorttable: Have the ORC code use the _r() functions to read
+Date: Thu,  2 Jul 2026 18:19:08 +0200
+Message-ID: <20260702155116.789918873@linuxfoundation.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260702155115.766838875@linuxfoundation.org>
 References: <20260702155115.766838875@linuxfoundation.org>
@@ -66,12 +66,13 @@ Content-Transfer-Encoding: 8bit
 
 From: Steven Rostedt <rostedt@goodmis.org>
 
-[ Upstream commit 4f48a28b37d594dab38092514a42ae9f4b781553 ]
+[ Upstream commit 66990c003306c240d570b3ba274ec4f68cf18c91 ]
 
-The code of sorttable.h was copied from the recordmcount.h  which defined
-various write functions for different sizes (2, 4, 8 byte lengths). But
-sorttable only uses the 4 byte writes. Remove the extra versions as they
-are not used.
+The ORC code reads the section information directly from the file. This
+currently works because the default read function is for 64bit little
+endian machines. But if for some reason that ever changes, this will
+break. Instead of having a surprise breakage, use the _r() functions that
+will read the values from the file properly.
 
 Cc: bpf <bpf@vger.kernel.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
@@ -87,73 +88,34 @@ Cc: Zheng Yejian <zhengyejian1@huawei.com>
 Cc: Martin  Kelly <martin.kelly@crowdstrike.com>
 Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/20250105162344.314385504@goodmis.org
+Link: https://lore.kernel.org/20250105162344.721480386@goodmis.org
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- scripts/sorttable.c |   26 --------------------------
- 1 file changed, 26 deletions(-)
+ scripts/sorttable.h |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/scripts/sorttable.c
-+++ b/scripts/sorttable.c
-@@ -68,8 +68,6 @@ static uint32_t (*r)(const uint32_t *);
- static uint16_t (*r2)(const uint16_t *);
- static uint64_t (*r8)(const uint64_t *);
- static void (*w)(uint32_t, uint32_t *);
--static void (*w2)(uint16_t, uint16_t *);
--static void (*w8)(uint64_t, uint64_t *);
- typedef void (*table_sort_t)(char *, int);
- 
- /*
-@@ -146,31 +144,11 @@ static void wbe(uint32_t val, uint32_t *
- 	put_unaligned_be32(val, x);
- }
- 
--static void w2be(uint16_t val, uint16_t *x)
--{
--	put_unaligned_be16(val, x);
--}
--
--static void w8be(uint64_t val, uint64_t *x)
--{
--	put_unaligned_be64(val, x);
--}
--
- static void wle(uint32_t val, uint32_t *x)
- {
- 	put_unaligned_le32(val, x);
- }
- 
--static void w2le(uint16_t val, uint16_t *x)
--{
--	put_unaligned_le16(val, x);
--}
--
--static void w8le(uint64_t val, uint64_t *x)
--{
--	put_unaligned_le64(val, x);
--}
--
- /*
-  * Move reserved section indices SHN_LORESERVE..SHN_HIRESERVE out of
-  * the way to -256..-1, to avoid conflicting with real section
-@@ -277,16 +255,12 @@ static int do_file(char const *const fna
- 		r2	= r2le;
- 		r8	= r8le;
- 		w	= wle;
--		w2	= w2le;
--		w8	= w8le;
- 		break;
- 	case ELFDATA2MSB:
- 		r	= rbe;
- 		r2	= r2be;
- 		r8	= r8be;
- 		w	= wbe;
--		w2	= w2be;
--		w8	= w8be;
- 		break;
- 	default:
- 		fprintf(stderr, "unrecognized ELF data encoding %d: %s\n",
+--- a/scripts/sorttable.h
++++ b/scripts/sorttable.h
+@@ -299,14 +299,14 @@ static int do_sort(Elf_Ehdr *ehdr,
+ #if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
+ 		/* locate the ORC unwind tables */
+ 		if (!strcmp(secstrings + idx, ".orc_unwind_ip")) {
+-			orc_ip_size = s->sh_size;
++			orc_ip_size = _r(&s->sh_size);
+ 			g_orc_ip_table = (int *)((void *)ehdr +
+-						   s->sh_offset);
++						   _r(&s->sh_offset));
+ 		}
+ 		if (!strcmp(secstrings + idx, ".orc_unwind")) {
+-			orc_size = s->sh_size;
++			orc_size = _r(&s->sh_size);
+ 			g_orc_table = (struct orc_entry *)((void *)ehdr +
+-							     s->sh_offset);
++							     _r(&s->sh_offset));
+ 		}
+ #endif
+ 	} /* for loop */
 
 
