@@ -1,130 +1,122 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp-42a9.mail.infomaniak.ch (smtp-42a9.mail.infomaniak.ch [84.16.66.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF23527A47F;
-	Thu,  2 Jul 2026 08:26:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2BCE48124E
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 09:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782980796; cv=none; b=oNP0fCrT47qWtKYl3S59xBj0c7q4/sv2n+zI+dGkfDysPxMmQsecqQNpZl89HW3ACQ57hCg0GlD11Y7XZ8d+zRkgN7mJjqgMEqP0e0kd2mipGR8XiWqrfFCy+FLougRmpqXY0mZcQmjZRW0I3aq8f+eJL/kWwcS739HOaK36SDY=
+	t=1782985936; cv=none; b=aop6qnJKbZJvOLy2rBJRWA7od2ljgzUOTJAWoKZT+gmYaFrBoo1KjbRqUyT0hDBrhdR8GRMXC6TCYFbt7rioZaEnEhabF6bhef6xJhmQuCoLBVXIwBwqqMX0ffLgY3OLY8NSN4r4Iax5OQioajVxH+lQAweeb+9LfPAdvrwKVU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782980796; c=relaxed/simple;
-	bh=Q2GpEH2X2aDsVJd2QBgwWSCP//9EvHao/aIsiWG4RBk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=PTJ0bwLHxjZw3pjivJZFwt65ohtorlwHG0Ccp9L05UD2TxjmZpO3ccEBBRP+Z6n+Kb58nVf2/mvmpiWimpwMdyggVYwRTiz8l0D+YL+8BOAbKT2NttVPVxtovvMYy6pcsWTG93SJ5I7jrGVrq7lJSWmzwpWOKgLV++QUZkTeEjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ID4Bc5Z/; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LksgL9A7; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1782985936; c=relaxed/simple;
+	bh=//wk7179FguVyasl50g5Wote0Tk9APu7AWvtVlY8tNU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I+NwJJSyzyldk/MfJTm+BUZyvEs/4XB4Df/UFym1qoPn96Nz3bGxo+x7DQmsyKZCay9A35woiAXqO9PWV7vUU+0vT/KER5ZzTh//ym+hPrfrKmQ603dL6ZICo8JsYW3Djkh0tTSQoFQ/xca7OBLV9tTp2JYvIW6U8XbL2ki/OOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=P/L3o1ie; arc=none smtp.client-ip=84.16.66.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ID4Bc5Z/";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LksgL9A7"
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1782980792;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=L4hkRJykr+eab8Dvtf4lhJ8zi/LQtBLjciGJU8kYhK4=;
-	b=ID4Bc5Z/2kZkZq+LKAkjibOQWT+EMu+Swc71Gui0/mrliEJAzLSTfkd+RL4OB3AWdHPT9H
-	3LUmeQiROCbMEg5b+35IOxftA8rAKAQvwmu/0SbVHpW7NgZ9PEDSbOfkZLeCv3ZFlQBCXM
-	i+rrA6bMWHBz3qanIHdJ0XPJepBvqHi0gfuaVp0vc6E228VjPlHTX+5sxb5580xsCQlV9g
-	EYUCh98ruWK9eiPXzDSDY3kekS9/ACBMS/ZBB19TjOcbCR6Dl+rUKBHGuF/QtLme4wdx7J
-	lyuH5b2BEz5UZqCw9MJ3kKraK/t7qWgjrmvFcy80qPPhdwj75gzaU/Fq4+pR4Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1782980792;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=L4hkRJykr+eab8Dvtf4lhJ8zi/LQtBLjciGJU8kYhK4=;
-	b=LksgL9A7fgudwKwlbpT1/JoosBH/W0dYP3meqI2dYbC1/dFgrhNUgs3fbuwQ2KrIi52hCV
-	9A6MlgArx6kcfVCQ==
-Date: Thu, 02 Jul 2026 10:26:30 +0200
-Subject: [PATCH] tools/resolve_btfids: Include libsubcmd headers directly
- from source tree
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="P/L3o1ie"
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4grXGn24NszF1l;
+	Thu,  2 Jul 2026 11:52:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1782985920;
+	bh=oEWBJpKZfD92xrQv2OExUZvBrbU2/bp/oFr1oEXgzA8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=P/L3o1ieylcYjqtUNm50SFSz+jYWm6i2JNuzgI5TeEZPavrOaasuRNwmLTrYJbR8e
+	 je/WTUIB8Qn32AMybuitq2EGO1G9WXlNhf72tnJWb5TAndvthwjnwbYJbHXba3sf/v
+	 x79J33AgbtdZNSf1c6ayNuWLHH+tRIkQwzaAlesk=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4grXGk6Xp1znQb;
+	Thu,  2 Jul 2026 11:51:58 +0200 (CEST)
+Date: Thu, 2 Jul 2026 11:51:54 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Casey Schaufler <casey@schaufler-ca.com>
+Cc: Paul Moore <paul@paul-moore.com>, 
+	Justin Suess <utilityemal77@gmail.com>, ast@kernel.org, daniel@iogearbox.net, kpsingh@kernel.org, 
+	john.fastabend@gmail.com, andrii@kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org, 
+	kees@kernel.org, gnoack@google.com, jack@suse.cz, jmorris@namei.org, 
+	serge@hallyn.com, song@kernel.org, yonghong.song@linux.dev, martin.lau@linux.dev, 
+	m@maowtm.org, eddyz87@gmail.com, sdf@fomichev.me, skhan@linuxfoundation.org, 
+	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	Frederick Lawler <fred@cloudflare.com>
+Subject: Re: [RFC PATCH 06/20] bpf: lsm: Add Landlock kfuncs
+Message-ID: <20260702.wiegh2vahb3O@digikod.net>
+References: <20260701.ze4eph1eKo7a@digikod.net>
+ <CAHC9VhRfqSoM89WC6TdQHapUVQe8a18rW2c-F7+tu6EjM9EdCA@mail.gmail.com>
+ <akUH13qbsEnJLgQu@zenbox>
+ <CAHC9VhSjRcMr9+5dMkep_TPKduYdob-bZ73FLfXd_o2xiWwOSg@mail.gmail.com>
+ <20260701.jei4Paej3zen@digikod.net>
+ <CAHC9VhRzZVUz8icZ2RD9OVvscJdZW3ivPERJLEkNi5poBeguxw@mail.gmail.com>
+ <20260701.oTeikequi3ee@digikod.net>
+ <akVvkA3kmlv_POsF@zenbox>
+ <CAHC9VhTQtHPFGqu58EaFqMobV3LCcTsdzYfxy568P8mU769TMg@mail.gmail.com>
+ <c9abd9ab-3379-47ab-ad41-79cec8f465c2@schaufler-ca.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260702-libsubcmd-spam-v1-1-300ec142a62f@linutronix.de>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDI0Nj3ZzMpOLSpOTcFN3igsRcXcM0U6M0gxSDZFNzSyWgpoKi1LTMCrC
- B0bG1tQDPaN5cYAAAAA==
-X-Change-ID: 20260213-libsubcmd-spam-1f52f0d0c579
-To: Arnaldo Carvalho de Melo <acme@redhat.com>, 
- Namhyung Kim <namhyung@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>
-Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1782980791; l=2152;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=Q2GpEH2X2aDsVJd2QBgwWSCP//9EvHao/aIsiWG4RBk=;
- b=0IKmozQzZwy0KsEWciAu+b6HsLs1d8wdr/vGnp2kLdoyzJd24mI5SK1hc/3qmR359H1y2zK2k
- L/lUEdKFiBAAvPHXjuHJPCTbY/6TZ3qRrS5uj/K3vAlIYHRPmiE19/s
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <c9abd9ab-3379-47ab-ad41-79cec8f465c2@schaufler-ca.com>
+X-Infomaniak-Routing: alpha
 
-Currently each build with resolve_btfids enabled unnecessarily prints
-the line 'INSTALL libsubcmd_headers' from libsubcmd.
+On Wed, Jul 01, 2026 at 02:41:49PM -0700, Casey Schaufler wrote:
+> On 7/1/2026 1:02 PM, Paul Moore wrote:
+> > ...
+> >
+> >> Each LSM calls this once to register its sets. Because registration goes
+> >> through the framework, the framework gets to decide whether to actually
+> >> register them so you could, for example, run an LSM while explicitly
+> >> opting its BPF kfuncs out. (something that should be done at the LSM
+> >> framework level).
+> > I'm not opposed to the LSM supporting a set of kfuncs, see my comments
+> > in other threads, but we should treat these kfuncs just as we treat
+> > other LSM hooks today because that is what they are: LSM hooks that
+> > happened to be called from within a BPF program.
+> 
+> As someone who has been working to get the SELinux specific assumptions
+> out of the LSM framework for the past 15 years the notion of adding
+> Landlock specific interfaces makes me want to cry. Is it really that
+> difficult to understand that 5 or 10 years from now something is going
+> to come along that makes any LSM specific interface a nightmare?
 
-Use the libcmd headers from source tree instead, without installation.
+From my point of view, your work has been, and continue to be, very
+valuable and helped improve Linux security tremendously.  Everyone agree
+that no LSM should implement their own security hook.  But that's not
+the topic here.  See
+https://lore.kernel.org/all/20260701.aeghohNoe3ek@digikod.net/
 
-The same was done for objtool in commit ac999926774a ("objtool: Include
-libsubcmd headers directly from source tree"), albeit for a different
-reason.
+> What
+> if there's an LSM that does what Landlock does, but does it better?
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
-Changes in v2:
-- Rebase on v7.2-rc1.
-- Change the resolve_btfids rules instead of the libsubcmd ones
-- Link to v1: https://lore.kernel.org/lkml/20260303-libsubcmd-spam-v1-1-d0749e3c7998@linutronix.de/
----
- tools/bpf/resolve_btfids/Makefile | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Then the eBPF programs will use another kfunc, specific to the *new*
+semantic of the other LSM.
 
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index 7672208f65e4..bb0463b380af 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -40,7 +40,6 @@ LIBBPF_DESTDIR := $(LIBBPF_OUT)
- LIBBPF_INCLUDE := $(LIBBPF_DESTDIR)include
- 
- SUBCMD_DESTDIR := $(SUBCMD_OUT)
--SUBCMD_INCLUDE := $(SUBCMD_DESTDIR)include
- 
- BINARY     := $(OUTPUT)/resolve_btfids
- BINARY_IN  := $(BINARY)-in.o
-@@ -56,7 +55,7 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
- $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
- 	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
- 		    DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
--		    $(abspath $@) install_headers
-+		    $(abspath $@)
- 
- $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
- 	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
-@@ -77,7 +76,7 @@ HOSTCFLAGS_resolve_btfids += -g \
-           -I$(srctree)/tools/include \
-           -I$(srctree)/tools/include/uapi \
-           -I$(LIBBPF_INCLUDE) \
--          -I$(SUBCMD_INCLUDE) \
-+          -I$(srctree)/tools/lib \
-           $(LIBELF_FLAGS) \
-           -Wall -Werror
- 
+> What if the Landlock sponsors decide to quit funding it? Or the maintainers
+> get bored?
 
----
-base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
-change-id: 20260213-libsubcmd-spam-1f52f0d0c579
+It is the same for any (kernel) interface: going through a multiplexer
+would not help at all.  Your argument is sound for security hooks, but
+not here.  Security (or access control) hooks make sense because they
+identify a set of specific enforcement points in the kernel, and any LSM
+can implement such hook to allow or deny the related operation.  Other
+hooks are useful to keep track of the kernel state.  Again, see
+https://lore.kernel.org/all/20260701.aeghohNoe3ek@digikod.net/
 
-Best regards,
---  
-Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> 
+> I agree with Paul completely. Make the hooks available to any and all
+> LSMs, or don't make them at all.
 
+We don't need a security hook but a function call to one specific part
+of the kernel with a very clear semantic that only make sense for one
+subsystem (i.e. Landlock in this case).  It's the same for other kfunc,
+nothing special.  The same way it would be a waste of time to implement
+an in-kernel multiplexer for a set of unrelated operations, I really
+don't see the value of adding a generic kfunc that might perform an
+action according to an operation argument (i.e. multiplexer).  Why
+implementing an ioctl-like interface in the kernel?  I'm open to
+suggestions (and concrete proposal/examples) but so far I only heard
+authoritative arguments that ignored most of my comments.
