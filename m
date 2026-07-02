@@ -1,101 +1,215 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F8C4C0426
-	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 14:08:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFFA44DBD90;
+	Thu,  2 Jul 2026 14:18:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783001336; cv=none; b=pq9xEIpfMk7wPREBARNlRAUeyyoCE5nwaGMtsj6N2H6VVBCztrFM55XVy41Pp+6iJx4HucSPpzB7pOfKUjHQt/JidLFB1jCCJihboZL/B4byADQYoLNP32BFHv0PlAqm2bo4g9DgoC8Itt4xrlF2kVm1lVhkSLfpU5IXBd1btKI=
+	t=1783001928; cv=none; b=M3STGgIINOnGjdXeeHwMFInCkD2MA3MRKwHvdKL0TBBx/OUJhR+9JwgAeci/zWIS2gzD1GWzTfZjXnSbldbRDYU9TIWXQXdT0Z75QfN49IRRUwMPU21NFWLdooKD+6/Jb36fSLOL5yv9Ypx5/TY34hqirdMIaELm0GXspSxwBb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783001336; c=relaxed/simple;
-	bh=ylogCBpRh7nIEOiHjeHfdVdsyeDm5W+s+wmDOc6MaoU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bq0eWKDp7jX78QaCHwyBC3kdJHEq7sgBv6p+lZDIiu6m7qxqgaC692z+PXj661Vq6KkM4iN/3LWXrR75CoWoFlmSiWJCIjljPkrqprtZBBcKeIyIumbv20UEPpvDYjmeutjuwfxt4YMu4ep5f9D3X7YLv4ahhpUVdVgmkqYgqBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gaD5Lx1J; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783001928; c=relaxed/simple;
+	bh=Afmir2I7kiJ9IFP6pcIr1ZrHhMgkQJ3DwgTbIXf7Axc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=pab2CgtK7TXNryE/Rl95JE/XR+D1pYye6f6leAuK9JIkIeh1VHVKeNKH+jc/nz0O3x2H9x+/R3dgYKyk5qQFsIqL3gaJjQh/0qy6J3xh0LRhNuiYGlXLIo1Gb1ee+JrNvsHi16rZDXqLo6RtYeyDC6+eLJLXxycr0m7+DEvZibw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e3BXhN8A; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gaD5Lx1J"
-Message-ID: <7ebdd15e-7ea0-4806-b0f4-e4a0bfa4d910@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783001333;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iTdm2JBztiYqU3Zms5Vccy0DPPST/McJHOc5YW0+b1A=;
-	b=gaD5Lx1Js6RPeuKo9QBF4Gqh2tHjf8SWrCf5figLt8mAIX0jNS5X/U4k16k4oJwlg/BFDk
-	+o4+auXGZjsr/JqkREZE0ux0AJ13qSCiuCLqtfA47+BaI+HugVdsPvtM+hsTM9iDuW6V6t
-	vPTTyo2OP48eoOPQPrl05QCSDq5udUY=
-Date: Thu, 2 Jul 2026 22:08:40 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e3BXhN8A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 876721F000E9;
+	Thu,  2 Jul 2026 14:18:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783001923;
+	bh=mJIabPCgXmZJ7kQs37o83qEJmDNmO5PB3BW150cVzlE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=e3BXhN8A3lnb7r4qHZxFAf2gSQIzYLg60zSDC+Jo3nHkD3TF/1otUunmTPLsuPd/6
+	 M8zFxDY4b4DyPhXJvkp6EnQjBERPoXL2hRCH4rA7RIhuEyLZTnnbhbUfFcujb7QiI+
+	 dIlQHJSneji36hZ8bH9k0Mw/XuKFgxqhc7Y/FkE6lHt8RBufmOUt2fNXNxViFMsFcQ
+	 5yyy0/An6th5HIvqGabcsyUXl+fPgt+pEr7AUdMzWaJYNXQ35FgVQw/YqtA1G/TmWH
+	 GE+pk2yInbLChWwNeRa95huwIAUz71hPKlVTIYFLoxeHLdZW0EvQt6AX8ZkwjmyHe4
+	 V3195BFTmbaMg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v11 2/2] net: mana: force full-page RX buffers
+ via ethtool private flag
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Dipayaan Roy" <dipayanroy@linux.microsoft.com>
+Cc: bpf@vger.kernel.org, linux-hyperv@vger.kernel.org
+In-Reply-To: <20260701141808.461554-3-dipayanroy@linux.microsoft.com>
+References: <20260701141808.461554-1-dipayanroy@linux.microsoft.com>
+ <20260701141808.461554-3-dipayanroy@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 02 Jul 2026 14:18:41 +0000
+Message-Id: <20260702141842.876721F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v8 5/9] bpftool: Generate skeleton for global
- percpu data
-To: Quentin Monnet <qmo@kernel.org>,
- Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
-References: <20260629152406.52582-1-leon.hwang@linux.dev>
- <20260629152406.52582-6-leon.hwang@linux.dev>
- <a4e4adfe-4b2e-49c4-a708-89276514f930@kernel.org>
- <CAEf4BzbfA2nySpf3Oh6KVBRjDKMOOYN-NC279Sj73KwH32cGGg@mail.gmail.com>
- <ad19d283-aaab-41f1-b1a5-73de551b03a9@linux.dev>
- <80fd18b5-dc4d-4078-a236-80b8be531e22@kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <80fd18b5-dc4d-4078-a236-80b8be531e22@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 2026/7/2 18:14, Quentin Monnet wrote:
-> 2026-07-02 14:24 UTC+0800 ~ Leon Hwang <leon.hwang@linux.dev>
->> On 2/7/26 03:32, Andrii Nakryiko wrote:
-[...]
->> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
->> index 6ae7262ebe0c..798a34366e08 100644
->> --- a/tools/bpf/bpftool/gen.c
->> +++ b/tools/bpf/bpftool/gen.c
-> 
-> [...]
-> 
->> @@ -254,7 +254,7 @@ static const struct btf_type
->> *find_type_for_map(struct btf *btf, const char *map
->>  	return NULL;
->>  }
->>
->> -static bool is_mmapable_map(const struct bpf_map *map, char *buf,
->> size_t sz)
->> +static bool bpf_map_is_skel_data(const struct bpf_map *map, char *buf,
->> size_t sz)
->>  {
-> 
-> 
-> Yes, I think it addresses the issue, thanks! I'd maybe drop the
-> "bpf_map_" prefix in the function name ("is_skel_data_map()" instead?)
-> to remain closer to is_mmapable_map(), and to avoid creating confusion
-> with libbpf functions names, although I don't feel strongly about it.
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
 
+New issues:
+- [High] Forcing `port_is_up =3D true` in the `mana_attach()` error path le=
+aves the port state inconsistent, leading to a double-teardown of hardware =
+queues and a NULL pointer dereference in stats gathering.
+- [High] The device restart sequence in `mana_set_priv_flags()` lacks `vpor=
+t_mutex` synchronization and does not set `apc->channel_changing`, creating=
+ a race condition with concurrent RDMA operations.
 
-Makes sense. Will drop the prefix.
+Pre-existing issues:
+- [High] Bulk pre-allocation of RX buffers uses GFP_ATOMIC and emergency me=
+mory reserves in a process context (ethtool), which can lead to memory depl=
+etion and spurious failures.
+- [High] Pre-allocated RX buffers with `from_pool =3D false` are leaked whe=
+n dropped in a queue configured with `frag_count > 1`.
+--
 
-> You can add my ACK to this v9 for the bpftool patch when you repost the
-> series.
+commit 40ed2f3da9bc06c10116aa35575da8c740d52002
+Author: Dipayaan Roy <dipayanroy@linux.microsoft.com>
 
+net: mana: force full-page RX buffers via ethtool private flag
+   =20
+This patch adds an ethtool private flag "full-page-rx" to force one RX
+buffer per page on ARM64 platforms. The single-buffer-per-page logic is
+consolidated into a new helper function. The driver is detached and
+reattached when the flag is modified to apply the new buffer configurations.
 
-Thanks for your review.
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers=
+/net/ethernet/microsoft/mana/mana_ethtool.c
+> index 3531abfdaf433..24f6ce63b031b 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+[ ... ]
+> @@ -611,6 +630,88 @@ static int mana_get_link_ksettings(struct net_device=
+ *ndev,
+>  	return 0;
+>  }
+> =20
+> +static u32 mana_get_priv_flags(struct net_device *ndev)
+> +{
+> +	struct mana_port_context *apc =3D netdev_priv(ndev);
+> +
+> +	return apc->priv_flags;
+> +}
+> +
+> +static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
+> +{
+> +	struct mana_port_context *apc =3D netdev_priv(ndev);
+> +	u32 changed =3D apc->priv_flags ^ priv_flags;
+> +	u32 old_priv_flags =3D apc->priv_flags;
+> +	bool schedule_port_reset =3D false;
+> +	int err =3D 0;
+> +
+> +	if (!changed)
+> +		return 0;
+> +
+> +	/* Reject unknown bits */
+> +	if (priv_flags & ~GENMASK(MANA_PRIV_FLAG_MAX - 1, 0))
+> +		return -EINVAL;
+> +
+> +	if (changed & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF)) {
+> +		apc->priv_flags =3D priv_flags;
+> +
+> +		if (!apc->port_is_up) {
+> +			/* Port is down, flag updated to apply on next up
+> +			 * so just return.
+> +			 */
+> +			return 0;
+> +		}
+> +
+> +		/* Pre-allocate buffers to prevent failure in mana_attach
+> +		 * later
+> +		 */
+> +		err =3D mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queues);
 
-Leon
+[Severity: High]
+This is a pre-existing issue, but does calling mana_pre_alloc_rxbufs() from
+ethtool context cause memory allocation problems?
 
+mana_pre_alloc_rxbufs() calls dev_alloc_pages() in a bulk loop, which uses
+GFP_ATOMIC and emergency memory reserves. Since this is now triggered from
+process context via ethtool, could this deplete system emergency reserves
+intended for atomic receive paths, leading to spurious failures or network
+drops under memory pressure?
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does toggling this flag
+dynamically create conditions that permanently leak pre-allocated buffers?
+
+When a packet is dropped, mana_rx_skb() checks if from_pool is false (which
+it is for pre-allocated buffers) and unconditionally saves the buffer to
+rxq->xdp_save_va. However, mana_get_rxfrag() only reuses xdp_save_va if
+rxq->frag_count =3D=3D 1.=20
+
+If this flag causes the queue to operate with frag_count > 1 after buffers
+are pre-allocated (e.g. by disabling the flag), xdp_save_va is ignored.
+Subsequent drops will trigger WARN_ON_ONCE(rxq->xdp_save_va) and permanently
+leak the old buffer.
+
+> +		if (err) {
+> +			netdev_err(ndev,
+> +				   "Insufficient memory for new allocations\n");
+> +			apc->priv_flags =3D old_priv_flags;
+> +			return err;
+> +		}
+> +
+> +		err =3D mana_detach(ndev, false);
+
+[Severity: High]
+Does this device restart sequence lack vport_mutex synchronization with
+concurrent RDMA operations?
+
+In mana_set_channels(), detach and re-attach is protected by asserting
+apc->channel_changing under vport_mutex. Here, mana_detach() tears down
+the vport (dropping vport_use_count to 0) without setting
+apc->channel_changing.=20
+
+Can an RDMA process concurrently call mana_cfg_vport(), observe a zero use
+count, and successfully claim the vport before mana_attach() blindly
+attempts to configure the exact same vport, resulting in conflicting
+hardware programming?
+
+> +		if (err) {
+> +			netdev_err(ndev, "mana_detach failed: %d\n", err);
+> +			apc->priv_flags =3D old_priv_flags;
+> +
+> +			/* Port is in an inconsistent state. Restore
+> +			 * 'port_is_up' so that queue reset work handler
+> +			 * can properly detach and re-attach.
+> +			 */
+> +			apc->port_is_up =3D true;
+> +			schedule_port_reset =3D true;
+> +			goto out;
+> +		}
+> +
+> +		err =3D mana_attach(ndev);
+> +		if (err) {
+> +			netdev_err(ndev, "mana_attach failed: %d\n", err);
+> +			apc->priv_flags =3D old_priv_flags;
+> +
+> +			/* Restore 'port_is_up' so the reset work handler
+> +			 * can properly detach/attach. Without this,
+> +			 * the handler sees port_is_up=3Dfalse and skips
+> +			 * queue allocation, leaving the port dead.
+> +			 */
+> +			apc->port_is_up =3D true;
+
+[Severity: High]
+Does forcing port_is_up to true in this error path lead to a NULL pointer
+dereference in stats gathering?
+
+The internal failure path of mana_attach() calls
+mana_cleanup_port_context(), which frees apc->rxqs and sets it to NULL.=20
+
+By forcing apc->port_is_up =3D true here, if userspace queries stats via
+ethtool -S or ip -s link, mana_get_stats64() and mana_get_ethtool_stats()
+will bypass their safety checks and blindly dereference the NULL
+apc->rxqs[q] array.
+
+> +			schedule_port_reset =3D true;
+> +		}
+> +	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260701141808.4615=
+54-1-dipayanroy@linux.microsoft.com?part=3D2
