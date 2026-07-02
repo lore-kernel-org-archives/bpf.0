@@ -1,35 +1,57 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AE8D344D9F;
-	Thu,  2 Jul 2026 16:30:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E9282DC78C;
+	Thu,  2 Jul 2026 16:38:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783009825; cv=none; b=oUxEHeKWnvFpXwEz8uvhQuxncZgFclYhOMpizZxss1LFn6rpC5HH1u1bYOhjxy6EKyYLMdeF8Fd+dfzYSDeSJAM/3/vga1YjAHoWsgx71y+qXnV+gXvNXKczMeIz4N3Jjpc5o7xgO40htzqp9OWg4iSojNXvC+rTihblpYeDUd4=
+	t=1783010308; cv=none; b=LMufyMQ5sTfb9qsoLY98BUaKV/9WEVv6Yxd/ekp68ox5vMgZE+MtFJDv4YRne8w9UxW3VJ5ga0qSu8EhT/B0Wlm2YvJhzqF+vLxnkKoxO2wTjMwGAaCx3PDNRFUCJSdDq15TTjRAAJv9qXLDQQsbSfYln6Uz9Yx9pGHccNnPumE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783009825; c=relaxed/simple;
-	bh=VGIrMFfUO68ru9Gm3ijUIOF4czSsIOuPHv1JMHISwBc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=SRFI7KapPGgGAUAU/2BcKOc2OEvkBgURDp9e9K6PrDCrK16BdRKO1YJ/5p3YJvDeGT5H5F9iJ+B65rFvy/qYQZEnAGgJiV2HFe1qDMDWzxC0vpo9NhixvYicVLBdcA7/3HXxcSKDagBg+hhw8NK5hDaOVgz1SMVgeoZ78gJMwB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vg5mJA+c; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783010308; c=relaxed/simple;
+	bh=lB/n7jKMq23f9ffKIcreoffbIOUNgc5zwxAGIeCgBT0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EhznJHTiGy2uJb5cua8uoXu+OJ0tE3ac3wlmRsrB/vB/gVEb7M3RRd2ScDtO+Jrz0QOphoMKaXGNo7aexY7xr+d9I6jmkKywcZGUjc2HruA9KHP8EOd2oCITla5UJbtcj2G3yPrYvgiLBL1DOOfmbFj3IoaGOyefsZMBxL87sIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hO37/FvM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vg5mJA+c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD3811F00A3A;
-	Thu,  2 Jul 2026 16:30:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783009822;
-	bh=VISgW3J+ri7MacFLLUVnHH3VEp7193wwlfi9aC8e9FM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Vg5mJA+cuR0kiaMUXxs5zp5E4arrECuL9PB6HUEL7N1YzaVe3OgQSYVTWI4oiPCc1
-	 m4qiD6b+hk3AnYyjA6A9jRTJHXrgE4wQEODhaX8g+JI1VEP+b/IxApxO+rJ0nLlZwL
-	 Ppx3vsiL9Pzleh7fcL9mpSagXUtEE/tKAFfBF9d3H4tBAR4ui+xP37lQnJg8gKShk/
-	 ZqoxZwAtnCym94Hzvmq0dD2xgdI4CmPYfs3VI0lPEnwGTvtIFyRPNGDENnkQTg5EOp
-	 9mBrmi5jNwMKF+/S8sVFSgBCnYn8Axn+t9KeTCG07k50sP0TW0FVzsxSXPHybX0F8R
-	 Q1Mhyj6aq3X9Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D09A439309B8;
-	Thu,  2 Jul 2026 16:30:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hO37/FvM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B44821F000E9;
+	Thu,  2 Jul 2026 16:38:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1783010306;
+	bh=45u4tT78RqVDHhQ1IKjsgWVr6Hlhyj/l8p8+iGJ9wlo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=hO37/FvM8KQF/xMAhA5loJqjrSfYLmrryy9qWw4g4fNz8oBNX4NLOPaM02HR6aGrs
+	 Sx2xTLhr4WLPn64K2s9PzYz3OJUIib12AlUSpwg6ITZyVGAHNfSFN/zpmxHChWqqZz
+	 qNNT0tPQd9c1rnoTSGKS0+obgHLiErcSfO52MD/0=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	bpf <bpf@vger.kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Zheng Yejian <zhengyejian1@huawei.com>,
+	Martin Kelly <martin.kelly@crowdstrike.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
+	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Subject: [PATCH 6.12 057/204] scripts/sorttable: Remove unused macro defines
+Date: Thu,  2 Jul 2026 18:18:34 +0200
+Message-ID: <20260702155119.857589801@linuxfoundation.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260702155118.667618796@linuxfoundation.org>
+References: <20260702155118.667618796@linuxfoundation.org>
+User-Agent: quilt/0.69
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,40 +59,103 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] bpftool: use btf_vlen()/btf_kind()/btf_kflag() helpers
- consistently
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178300980565.1768277.11391992832497919628.git-patchwork-notify@kernel.org>
-Date: Thu, 02 Jul 2026 16:30:05 +0000
-References: <20260702012311.2265001-1-luoliang@kylinos.cn>
-In-Reply-To: <20260702012311.2265001-1-luoliang@kylinos.cn>
-To: None <luoliang@kylinos.cn>
-Cc: qmo@kernel.org, ast@kernel.org, andrii@kernel.org, kafai.wan@linux.dev,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 
-Hello:
+6.12-stable review patch.  If anyone has any objections, please let me know.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+------------------
 
-On Thu,  2 Jul 2026 09:23:11 +0800 you wrote:
-> From: luoliang <luoliang@kylinos.cn>
-> 
-> The btf_vlen(), btf_kind() and btf_kflag() inline helpers defined in
-> tools/lib/bpf/btf.h are thin wrappers around the BTF_INFO_VLEN(),
-> BTF_INFO_KIND() and BTF_INFO_KFLAG() UAPI macros - each one simply
-> returns the corresponding macro applied to t->info.
-> 
-> [...]
+From: Steven Rostedt <rostedt@goodmis.org>
 
-Here is the summary with links:
-  - [v2] bpftool: use btf_vlen()/btf_kind()/btf_kflag() helpers consistently
-    https://git.kernel.org/bpf/bpf-next/c/bb4e90e91ba1
+[ Upstream commit 28b24394c6e9a3166fcb4480cba054562526657c ]
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+The code of sorttable.h was copied from the recordmcount.h  which defined
+a bunch of Elf MACROs so that they could be used between 32bit and 64bit
+functions. But there's several MACROs that sorttable.h does not use but
+was copied over. Remove them to clean up the code.
+
+Cc: bpf <bpf@vger.kernel.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nicolas@fjasle.eu>
+Cc: Zheng Yejian <zhengyejian1@huawei.com>
+Cc: Martin  Kelly <martin.kelly@crowdstrike.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+Link: https://lore.kernel.org/20250105162344.128870118@goodmis.org
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ scripts/sorttable.h |   27 ---------------------------
+ 1 file changed, 27 deletions(-)
+
+--- a/scripts/sorttable.h
++++ b/scripts/sorttable.h
+@@ -27,19 +27,10 @@
+ #undef Elf_Ehdr
+ #undef Elf_Shdr
+ #undef Elf_Rel
+-#undef Elf_Rela
+ #undef Elf_Sym
+-#undef ELF_R_SYM
+-#undef Elf_r_sym
+-#undef ELF_R_INFO
+-#undef Elf_r_info
+-#undef ELF_ST_BIND
+ #undef ELF_ST_TYPE
+-#undef fn_ELF_R_SYM
+-#undef fn_ELF_R_INFO
+ #undef uint_t
+ #undef _r
+-#undef _w
+ 
+ #ifdef SORTTABLE_64
+ # define extable_ent_size	16
+@@ -52,19 +43,10 @@
+ # define Elf_Ehdr		Elf64_Ehdr
+ # define Elf_Shdr		Elf64_Shdr
+ # define Elf_Rel		Elf64_Rel
+-# define Elf_Rela		Elf64_Rela
+ # define Elf_Sym		Elf64_Sym
+-# define ELF_R_SYM		ELF64_R_SYM
+-# define Elf_r_sym		Elf64_r_sym
+-# define ELF_R_INFO		ELF64_R_INFO
+-# define Elf_r_info		Elf64_r_info
+-# define ELF_ST_BIND		ELF64_ST_BIND
+ # define ELF_ST_TYPE		ELF64_ST_TYPE
+-# define fn_ELF_R_SYM		fn_ELF64_R_SYM
+-# define fn_ELF_R_INFO		fn_ELF64_R_INFO
+ # define uint_t			uint64_t
+ # define _r			r8
+-# define _w			w8
+ #else
+ # define extable_ent_size	8
+ # define compare_extable	compare_extable_32
+@@ -76,19 +58,10 @@
+ # define Elf_Ehdr		Elf32_Ehdr
+ # define Elf_Shdr		Elf32_Shdr
+ # define Elf_Rel		Elf32_Rel
+-# define Elf_Rela		Elf32_Rela
+ # define Elf_Sym		Elf32_Sym
+-# define ELF_R_SYM		ELF32_R_SYM
+-# define Elf_r_sym		Elf32_r_sym
+-# define ELF_R_INFO		ELF32_R_INFO
+-# define Elf_r_info		Elf32_r_info
+-# define ELF_ST_BIND		ELF32_ST_BIND
+ # define ELF_ST_TYPE		ELF32_ST_TYPE
+-# define fn_ELF_R_SYM		fn_ELF32_R_SYM
+-# define fn_ELF_R_INFO		fn_ELF32_R_INFO
+ # define uint_t			uint32_t
+ # define _r			r
+-# define _w			w
+ #endif
+ 
+ #if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
 
 
