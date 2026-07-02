@@ -1,440 +1,395 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010035.outbound.protection.outlook.com [52.101.85.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD66234D3B0
-	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 06:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782973482; cv=none; b=eBYox6/gtV00UWJo85HXzfjS2yd7EX8HUNWacsPNJk/tLQSEbOYsn3Fk6N89PPuJ3jiUkD2SU3ir7a0+RUPLoiVI4lnqTZL8ereG0iOucRoDBuG/HIcAeabJ7C0UTKhGFbfEh2eRmteLW/3xaKHLxBnExCZ0Z0SDAjlRENyHZcY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91F138AC7C;
+	Thu,  2 Jul 2026 06:24:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.35
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782973482; cv=fail; b=ZkvdUd3MlbXxDi+P2L6SLHMmQgmuOdkp2UcuKyGa2+oeBi0kZy43/+ee2E2poHJEcxAa1fAOGKD3JFwXvHXzGh8Jp2QIIaeeLhva2ZtbHOPKAk2qRWINfFJmRUyO08BRb5TCFHHIPnBZuLZ/DAdGS6+S+Gy6yqDPBzLnur29ls8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1782973482; c=relaxed/simple;
-	bh=lhUWfoXsQWcB2tkn5J8OiyjlLjXiU22pcbQPJkE6ymg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o0QTnUZUzRd6KT3DZR+G6l9hDZ1r2jQ9NJrqCSkzkawLFuzunBl/H/IA1/23rwbMUlQfEJQBUIE+f7BPCFiz2IcZ4d5m92uYqQaJ96bVHkWVMw7RiXsizzjXj/ww2wYWxm+7IgUEn9sBZnaSspPV6L9eQphfTisoN9sse20dlCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Fk/bFwJC; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	bh=NavQOWDGtSduDgCBykMN4fYbMGODT6VJwXyqLRj5WLg=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NnHPBVD8SxPovMYPweRynSFXaknDsEIqD7uDPruEo6VjxyjjuI+loR6XmJ1v6gcw0c+oPHnruzScfnV6gRAQCcUWuj39/kYdPEawzCOnVYWgB50JVCLxLvCB/72plhb4rwkvT0AFufKmrD6uMGaqOzLQeSFAYHNUnr5KGY2gEL8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=TPGvykes; arc=fail smtp.client-ip=52.101.85.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Fk/bFwJC"
-Message-ID: <ad19d283-aaab-41f1-b1a5-73de551b03a9@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782973477;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Bz5tUB5pFkbuDkjCVYTQ7Qj10RhR66LemowS5HsxdaE=;
-	b=Fk/bFwJC/fywUV/C1hZ9XwKBHqfiU9K2+7L1jnV+OBl5ZfEQJ7F4jnL5wLckfuntqxLWQi
-	HFk/vubILUPxK75z0oKhqxhzdAJjrKUiuCS3orO6K+qFPv04macOq0IJ7nhyH3pX/EsAXu
-	Upa2CUqK9YBLGglrCKtGMB9XNkDpNGQ=
-Date: Thu, 2 Jul 2026 14:24:28 +0800
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="TPGvykes"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BDGnhyEKfREeG5NJ9wZnxWglZ7fSpZjNc+oISpXFwLNmNCnRZHmNA9HfYA1UdG9PFhMX8sRaUVjVthJT2wLfmfy+fNwzLV3+M+VMR1sfylehizNkvT4cGC9SjuUaaVOSQoqcKkLcxNufUUqTyzInDey+zu/lQrtjgHXPr3XLoQYWdaqZk2e0uyIQzsYpFm32KPXiz1/mKNHpHTWUfK3RwTitOEtHXMgTNHYD7N/Fc0286VfVxXm+xWcNXhgNF4PxG+H3gQsO1hRS2+zqnh9EIDikhvRlmENjIFJ8fgcgxCw35EBIGj3sMIMiyRn6sJPpsS56nPxZnxgYe2+A3FPj3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xwpY1hL5/2oRrVH3xusOME+WKeAW1y7BAHEUKM13eFM=;
+ b=C7o/nBT7TEnyuXIR54ey4Cal6Logzuqpbj9JJ1NI/YNCeR5VVRP2DGpNynMmNHi/IszDbJn4zp4HHU3mr5vDhME2sBO9LI8SDlfQyoCyACldZxNGSGpXw0UW0Z3TBD3RyQ4OntxLB32mzZIGklnp8YSXJ0mJf+9uSa7kF3076wbkqAmoLDfaJG3jglHnb7swYv7Nh07l40iT8oPyUWQnYREgzghFk6lZ2h2B7Y7MRh8Cez7m40TkwPgXoZ/S7bHic1Bz9hJCa3yHm6ZfjA5MeJgnSbSr70xSAJQ6fWjfePD1LfVyUCJpjYRX2mKmZBJQ7Js5Xa52RFRKXCGlQriPxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=lunn.ch smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xwpY1hL5/2oRrVH3xusOME+WKeAW1y7BAHEUKM13eFM=;
+ b=TPGvykesXVFxfUrx7CVmBb6lpEX1jg50HDRObqvWNYR9kLxASknBsQ+PpqgyvkrZjXVGY44J7TNDTLbLIWNh0Pm6OK0aPj59FvvP1wjQUQ9B9dhQq5o+K+WXRUTQ3f8CeMlJzlyTp6P/oBzuL7Kb2GLr/TQt6IXWLJy8jhQ785TaY3pUioICEQOlPj6G2qImGdWd/9VsoilrqrULTKFT0XqaHoXtURjBbRFo7FwbuNRwxquakNRWDUXPKbL5nHTW1GVdIQx989dMGTAsyyFNpQN2PKsrvYL7jE9/bCFxVtRp+uab3m4to/IGAuz8PtEp3W17TX7LmHzMnyGqoDkUlQ==
+Received: from DS7PR03CA0305.namprd03.prod.outlook.com (2603:10b6:8:2b::25) by
+ SA1PR12MB8164.namprd12.prod.outlook.com (2603:10b6:806:338::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.181.8; Thu, 2 Jul 2026 06:24:25 +0000
+Received: from DS1PEPF00017090.namprd03.prod.outlook.com
+ (2603:10b6:8:2b:cafe::7d) by DS7PR03CA0305.outlook.office365.com
+ (2603:10b6:8:2b::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.181.10 via Frontend Transport; Thu, 2
+ Jul 2026 06:24:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ DS1PEPF00017090.mail.protection.outlook.com (10.167.17.132) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.181.6 via Frontend Transport; Thu, 2 Jul 2026 06:24:24 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 1 Jul
+ 2026 23:24:11 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.20; Wed, 1 Jul 2026 23:24:10 -0700
+Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Wed, 1 Jul 2026 23:24:05 -0700
+From: Nimrod Oren <noren@nvidia.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+	<shuah@kernel.org>
+CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
+ Fastabend" <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+	Bobby Eshleman <bobbyeshleman@meta.com>, Willem de Bruijn
+	<willemb@google.com>, Wei Wang <weibunny@fb.com>, David Wei <dw@davidwei.uk>,
+	Cosmin Ratiu <cratiu@nvidia.com>, <netdev@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>, Nimrod Oren <noren@nvidia.com>, Carolina Jubran
+	<cjubran@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>
+Subject: [PATCH net-next 2/2] selftests: drv-net: xdp: run with both IP versions
+Date: Thu, 2 Jul 2026 09:23:48 +0300
+Message-ID: <20260702062348.2123960-3-noren@nvidia.com>
+X-Mailer: git-send-email 2.45.0
+In-Reply-To: <20260702062348.2123960-1-noren@nvidia.com>
+References: <20260702062348.2123960-1-noren@nvidia.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v8 5/9] bpftool: Generate skeleton for global
- percpu data
-Content-Language: en-US
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
- Quentin Monnet <qmo@kernel.org>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
-References: <20260629152406.52582-1-leon.hwang@linux.dev>
- <20260629152406.52582-6-leon.hwang@linux.dev>
- <a4e4adfe-4b2e-49c4-a708-89276514f930@kernel.org>
- <CAEf4BzbfA2nySpf3Oh6KVBRjDKMOOYN-NC279Sj73KwH32cGGg@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAEf4BzbfA2nySpf3Oh6KVBRjDKMOOYN-NC279Sj73KwH32cGGg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF00017090:EE_|SA1PR12MB8164:EE_
+X-MS-Office365-Filtering-Correlation-Id: c2e42912-1420-4b1e-c27c-08ded8028fbe
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|7416014|376014|82310400026|36860700016|1800799024|22082099003|18002099003|56012099006|6133799003|11063799006;
+X-Microsoft-Antispam-Message-Info:
+	WDslS0Ly1seWWI/CcL4ixxa2ajf3ecZ/E9/oY24PBl/3VllH91i3aCplI1useZuz6naeuxXp8TTydEinfQ1k7NLRa6jNQCZWflPtbxBGfOpBp0GIR4jBZ7MYR9s+WG3UNqzn/2ogVps9YWZIUJvEIL+V73NGYrkMTcIsGvNFti+L2uAnalw6WdrkP9oyG0BG/APhOsLpdri49gqKo/tQLKa6oWUnWEOZcf8oeBxjAH0+K1tPyseoBrmT/1VPhMyKtfUqkW4N+pFhlkdt4eg2qtZW+nWVdMyNooA7x6ptHZAHPAZ8b8DgRZP2DzsPLgf0mgobzS52ugW9YrklxBqpmXXKc6mTwENsTCvLNz90IbrAXvepqyJMzKj7fagUAtfsaXkBIYcqgczmEvBrwDhpLM3xglX//vfAM4hDXdEDobDAOt/sh4Uwi8Cf0cxqU+VsAAWQAy0Zic+/U8VBPnmCHyiIXH75OVl4J706W219rBlZ4jFGA6w/HoNEdGDiE2xKbHKQLseX766pUBoJCi7OjexSnH/qwswEBkw0jFFM17cW0/1HOiGGcrbjUatxJK4/J2F8TyeUiD8M57cwSTxR7Yr5R3hCws3zHoHhGqxYvBEXIKzDgZ8EtZd6vuMq9W+6GKx7qzCUhCZx9fJmAll1KrV99KwymrK1FBOTCDY76z8iowwicwo1Y8CMNtR2wt7+7vxXt8pOtmejtDNxUG6jZQ==
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(376014)(82310400026)(36860700016)(1800799024)(22082099003)(18002099003)(56012099006)(6133799003)(11063799006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	xguh54AF0j/IO9Y184ewrgcW24c0+8HlWm3JWfLchk+A0EWwRmNWXubfigTVsW29CtxJpjdIni58PvQ7iYpwsY1T7hYSoAJLhGaZK+J+gtt6sAQKlx0cVnvH51EAsBxrG062vBp16EYOfvkspoD6UZCmgfs6DKUH+m+60ZkT3tKoriJneVGQDteSJiSqf38zyMZ0QwR6dtkh27HeXtGWwI0F6IHBcAqbvFAmk8uHq78+8nxk/cTiqxXrbUwBMpltCJabj6T6AzNhelprcyzf0mShbbiD7uR6T00zbn7nhpNJko/zPbGyPSR3lr38QcGlT83PRlQpI+w0P4HVGIqGMChTgTiATNgoAZpvbGBKOnYBIyL9LWC4arL4KwpSIMFLi83wiB0LqIV/MCVvR1ft7h/ZP1Hrh6BDHfWqsUS0Ll4f44zaVCZmgnp+Jm1iPvPS
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2026 06:24:24.4594
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2e42912-1420-4b1e-c27c-08ded8028fbe
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS1PEPF00017090.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8164
 
-On 2/7/26 03:32, Andrii Nakryiko wrote:
-> On Wed, Jul 1, 2026 at 9:49 AM Quentin Monnet <qmo@kernel.org> wrote:
->>
->> 2026-06-29 23:24 UTC+0800 ~ Leon Hwang <leon.hwang@linux.dev>
-[...]
->>> @@ -254,6 +254,20 @@ static const struct btf_type *find_type_for_map(struct btf *btf, const char *map
->>>       return NULL;
->>>  }
->>>
->>> +static bool bpf_map_is_skel_data(const struct bpf_map *map)
->>> +{
->>> +     if (!bpf_map__is_internal(map))
->>> +             return false;
->>> +
->>> +     if (bpf_map__map_flags(map) & BPF_F_MMAPABLE)
->>> +             return true;
->>> +
->>> +     if (bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY)
->>> +             return true;
->>> +
->>> +     return false;
->>> +}
->>> +
->>>  static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
->>>  {
->>>       size_t tmp_sz;
->>> @@ -263,7 +277,7 @@ static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
->>>               return true;
->>>       }
->>>
->>> -     if (!bpf_map__is_internal(map) || !(bpf_map__map_flags(map) & BPF_F_MMAPABLE))
->>> +     if (!bpf_map_is_skel_data(map))
->>>               return false;
->>>
->>>       if (!get_map_ident(map, buf, sz))
->>
->>
->> Thanks! The bpftool patch looks good, with one reservation: after this
->> patch, I believe "is_mmapable_map(map, ...)" will return true if map is
->> a percpu map, although percpu maps aren't mmap-able, so we should
->> probably update the name of that function to avoid any confusion?
->>
-> 
-> Great observation, Quentin!
-> 
-> bpf_map_is_skel_data() I think was supposed to be exactly that generic
-> name. But it seems like Leon went half-way through with unification.
-> Unless there are some subtle situations where per-cpu array shouldn't
-> be handled where is_mmapable_map() is handled, we should rename
-> is_mmapable_map() and add BPF_MAP_TYPE_PERCPU_ARRAY check (assuming
-> it's internal map, of course) there.
-> 
-> Leon, can you please check?
-> 
-Aha, my bad.
+Parameterize test cases by IP version using @ksft_variants. Set the
+environment's IP version at the start of each case using a new local
+helper, which also handles restoring the original value via defer().
 
-Try to rename is_mmapable_map() to bpf_map_is_skel_data(). See below patch.
+The last case is left unparameterized because it does not send traffic
+or exercise IP-version-specific code.
 
-Thanks,
-Leon
+While here, fix an int vs str comparison bug `if cfg.addr_ipver == 4`.
 
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Carolina Jubran <cjubran@nvidia.com>
+Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
+Signed-off-by: Nimrod Oren <noren@nvidia.com>
 ---
+ tools/testing/selftests/drivers/net/xdp.py | 94 ++++++++++++++++++----
+ 1 file changed, 77 insertions(+), 17 deletions(-)
 
-From 654306cd9091a175883dd61c7b251996c42e7cae Mon Sep 17 00:00:00 2001
-From: Leon Hwang <leon.hwang@linux.dev>
-Date: Mon, 29 Jun 2026 23:24:02 +0800
-Subject: [PATCH bpf-next v9 5/9] bpftool: Generate skeleton for global
-percpu
- data
-
-Enhance bpftool to generate skeletons that properly handle global percpu
-variables. The generated skeleton now includes a dedicated structure for
-percpu data, allowing users to initialize and access percpu variables more
-efficiently.
-
-For global percpu variables, the skeleton now includes a nested
-structure, e.g.:
-
-struct test_global_percpu_data {
-	struct bpf_object_skeleton *skeleton;
-	struct bpf_object *obj;
-	struct {
-		struct bpf_map *percpu;
-	} maps;
-	// ...
-	struct test_global_percpu_data__percpu {
-		int data;
-		char run;
-		struct {
-			char set;
-			int i;
-			int nums[7];
-		} struct_data;
-		int nums[7];
-	} *percpu;
-
-	// ...
-};
-
-  * The "struct test_global_percpu_data__percpu *percpu" points to
-    initialized data, which is actually "maps.percpu->mmaped".
-  * Before loading the skeleton, updating the
-    "struct test_global_percpu_data__percpu *percpu" modifies the initial
-    value of the corresponding global percpu variables.
-  * After loading the skeleton, "maps.percpu->mmaped" has been marked as
-    read-only in libbpf. If users want to update the global percpu
-    variables, they have to update the "maps.percpu" map instead.
-  * For lightweight skeleton, "lskel->percpu" will be protected by
-    "mprotect(p, sz, PROT_READ)".
-  * For subskeleton, those variables of global percpu data will be
-    skipped.
-
-Assisted-by: Codex:gpt-5.5-xhigh
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- tools/bpf/bpftool/gen.c       | 72 ++++++++++++++++++++++++++---------
- tools/lib/bpf/skel_internal.h | 24 +++++++++++-
- 2 files changed, 76 insertions(+), 20 deletions(-)
-
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index 6ae7262ebe0c..798a34366e08 100644
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -92,7 +92,7 @@ static void get_header_guard(char *guard, const char
-*obj_name, const char *suff
-
- static bool get_map_ident(const struct bpf_map *map, char *buf, size_t
-buf_sz)
- {
--	static const char *sfxs[] = { ".data", ".rodata", ".bss", ".kconfig" };
-+	static const char *sfxs[] = { ".data", ".rodata", ".bss", ".percpu",
-".kconfig" };
- 	const char *name = bpf_map__name(map);
- 	int i, n;
-
-@@ -117,7 +117,7 @@ static bool get_map_ident(const struct bpf_map *map,
-char *buf, size_t buf_sz)
-
- static bool get_datasec_ident(const char *sec_name, char *buf, size_t
-buf_sz)
- {
--	static const char *pfxs[] = { ".data", ".rodata", ".bss", ".kconfig" };
-+	static const char *pfxs[] = { ".data", ".rodata", ".bss", ".percpu",
-".kconfig" };
- 	int i, n;
-
- 	/* recognize hard coded LLVM section name */
-@@ -254,7 +254,7 @@ static const struct btf_type
-*find_type_for_map(struct btf *btf, const char *map
- 	return NULL;
- }
-
--static bool is_mmapable_map(const struct bpf_map *map, char *buf,
-size_t sz)
-+static bool bpf_map_is_skel_data(const struct bpf_map *map, char *buf,
-size_t sz)
- {
- 	size_t tmp_sz;
-
-@@ -263,13 +263,19 @@ static bool is_mmapable_map(const struct bpf_map
-*map, char *buf, size_t sz)
- 		return true;
- 	}
-
--	if (!bpf_map__is_internal(map) || !(bpf_map__map_flags(map) &
-BPF_F_MMAPABLE))
-+	if (!bpf_map__is_internal(map))
- 		return false;
-
- 	if (!get_map_ident(map, buf, sz))
- 		return false;
-
--	return true;
-+	if (bpf_map__map_flags(map) & BPF_F_MMAPABLE)
-+		return true;
+diff --git a/tools/testing/selftests/drivers/net/xdp.py b/tools/testing/selftests/drivers/net/xdp.py
+index 2ad5932299e8..0369929f3c51 100755
+--- a/tools/testing/selftests/drivers/net/xdp.py
++++ b/tools/testing/selftests/drivers/net/xdp.py
+@@ -172,25 +172,45 @@ def _test_pass(cfg, bpf_info, msg_sz):
+     ksft_eq(stats[XDPStats.RX.value], stats[XDPStats.PASS.value], "RX and PASS stats mismatch")
+ 
+ 
+-def test_xdp_native_pass_sb(cfg):
++_ipvers = [
++    KsftNamedVariant("ipv4", "4"),
++    KsftNamedVariant("ipv6", "6"),
++]
 +
-+	if (bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY)
-+		return true;
 +
-+	return false;
- }
-
- static int codegen_datasecs(struct bpf_object *obj, const char *obj_name)
-@@ -286,8 +292,11 @@ static int codegen_datasecs(struct bpf_object *obj,
-const char *obj_name)
- 		return -errno;
-
- 	bpf_object__for_each_map(map, obj) {
--		/* only generate definitions for memory-mapped internal maps */
--		if (!is_mmapable_map(map, map_ident, sizeof(map_ident)))
-+		/*
-+		 * Only generate definitions for internal maps that have
-+		 * mmapped data.
-+		 */
-+		if (!bpf_map_is_skel_data(map, map_ident, sizeof(map_ident)))
- 			continue;
-
- 		sec = find_type_for_map(btf, map_ident);
-@@ -339,8 +348,14 @@ static int codegen_subskel_datasecs(struct
-bpf_object *obj, const char *obj_name
- 		return -errno;
-
- 	bpf_object__for_each_map(map, obj) {
--		/* only generate definitions for memory-mapped internal maps */
--		if (!is_mmapable_map(map, map_ident, sizeof(map_ident)))
-+		/*
-+		 * Only generate definitions for internal maps that have
-+		 * mmapped data.
-+		 */
-+		if (!bpf_map_is_skel_data(map, map_ident, sizeof(map_ident)))
-+			continue;
++def _set_ipver_defer_restore(cfg, ipver):
++    old_ipver = cfg.addr_ipver
++    cfg.set_ipver(ipver)
++    defer(cfg.set_ipver, old_ipver)
 +
-+		if (bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY)
- 			continue;
-
- 		sec = find_type_for_map(btf, map_ident);
-@@ -493,7 +508,10 @@ static size_t bpf_map_mmap_sz(const struct bpf_map
-*map)
- 	return map_sz;
- }
-
--/* Emit type size asserts for all top-level fields in memory-mapped
-internal maps. */
-+/*
-+ * Emit type size asserts for all top-level fields in internal maps that
-+ * have mmaped data.
-+ */
- static void codegen_asserts(struct bpf_object *obj, const char *obj_name)
- {
- 	struct btf *btf = bpf_object__btf(obj);
-@@ -517,7 +535,7 @@ static void codegen_asserts(struct bpf_object *obj,
-const char *obj_name)
- 		", obj_name);
-
- 	bpf_object__for_each_map(map, obj) {
--		if (!is_mmapable_map(map, map_ident, sizeof(map_ident)))
-+		if (!bpf_map_is_skel_data(map, map_ident, sizeof(map_ident)))
- 			continue;
-
- 		sec = find_type_for_map(btf, map_ident);
-@@ -669,7 +687,8 @@ static void codegen_destroy(struct bpf_object *obj,
-const char *obj_name)
- 		if (!get_map_ident(map, ident, sizeof(ident)))
- 			continue;
- 		if (bpf_map__is_internal(map) &&
--		    (bpf_map__map_flags(map) & BPF_F_MMAPABLE))
-+		    ((bpf_map__map_flags(map) & BPF_F_MMAPABLE) ||
-+		     bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY))
- 			printf("\tskel_free_map_data(skel->%1$s,
-skel->maps.%1$s.initial_value, %2$zu);\n",
- 			       ident, bpf_map_mmap_sz(map));
- 		codegen("\
-@@ -741,7 +760,7 @@ static int gen_trace(struct bpf_object *obj, const
-char *obj_name, const char *h
- 		const void *mmap_data = NULL;
- 		size_t mmap_size = 0;
-
--		if (!is_mmapable_map(map, ident, sizeof(ident)))
-+		if (!bpf_map_is_skel_data(map, ident, sizeof(ident)))
- 			continue;
-
- 		codegen("\
-@@ -847,9 +866,23 @@ static int gen_trace(struct bpf_object *obj, const
-char *obj_name, const char *h
- 	bpf_object__for_each_map(map, obj) {
- 		const char *mmap_flags;
-
--		if (!is_mmapable_map(map, ident, sizeof(ident)))
-+		if (!bpf_map_is_skel_data(map, ident, sizeof(ident)))
- 			continue;
-
-+		if (bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY) {
-+			codegen("\
-+		\n\
-+			err = skel_protect_map_data(skel->%1$s,
-&skel->maps.%1$s.initial_value, %2$zd);\n\
-+			if (err)					    \n\
-+				return err;				    \n\
-+		#ifdef __KERNEL__					    \n\
-+			skel->%1$s = NULL;				    \n\
-+		#endif							    \n\
-+			",
-+			ident, bpf_map_mmap_sz(map));
-+			continue;
-+		}
 +
- 		if (bpf_map__map_flags(map) & BPF_F_RDONLY_PROG)
- 			mmap_flags = "PROT_READ";
- 		else
-@@ -953,8 +986,7 @@ codegen_maps_skeleton(struct bpf_object *obj, size_t
-map_cnt, bool mmaped, bool
- 				map->map = &obj->maps.%s;	    \n\
- 			",
- 			i, bpf_map__name(map), ident);
--		/* memory-mapped internal maps */
--		if (mmaped && is_mmapable_map(map, ident, sizeof(ident))) {
-+		if (mmaped && bpf_map_is_skel_data(map, ident, sizeof(ident))) {
- 			printf("\tmap->mmaped = (void **)&obj->%s;\n", ident);
- 		}
-
-@@ -1738,7 +1770,9 @@ static int do_subskeleton(int argc, char **argv)
- 		/* Also count all maps that have a name */
- 		map_cnt++;
-
--		if (!is_mmapable_map(map, ident, sizeof(ident)))
-+		if (!bpf_map_is_skel_data(map, ident, sizeof(ident)))
-+			continue;
-+		if (bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY)
- 			continue;
-
- 		map_type_id = bpf_map__btf_value_type_id(map);
-@@ -1861,7 +1895,9 @@ static int do_subskeleton(int argc, char **argv)
-
- 	/* walk through each symbol and emit the runtime representation */
- 	bpf_object__for_each_map(map, obj) {
--		if (!is_mmapable_map(map, ident, sizeof(ident)))
-+		if (!bpf_map_is_skel_data(map, ident, sizeof(ident)))
-+			continue;
-+		if (bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY)
- 			continue;
-
- 		map_type_id = bpf_map__btf_value_type_id(map);
-diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
-index 74503d358bc8..485b0cd17017 100644
---- a/tools/lib/bpf/skel_internal.h
-+++ b/tools/lib/bpf/skel_internal.h
-@@ -135,8 +135,10 @@ static inline void skel_free_map_data(void *p,
-__u64 addr, size_t sz)
- {
- 	if (addr != ~0ULL)
- 		kvfree(p);
--	/* When addr == ~0ULL the 'p' points to
--	 * ((struct bpf_array *)map)->value. See skel_finalize_map_data.
-+	/*
-+	 * When addr == ~0ULL the init buffer has already been released.
-+	 * For skel_finalize_map_data(), 'p' points to
-+	 * ((struct bpf_array *)map)->value.
- 	 */
- }
-
-@@ -174,6 +176,15 @@ static inline void *skel_finalize_map_data(__u64
-*init_val, size_t mmap_sz, int
- 	return addr;
- }
-
-+static inline int skel_protect_map_data(void *p, __u64 *init_val,
-size_t sz)
-+{
-+	(void)sz;
++@ksft_variants(_ipvers)
++def test_xdp_native_pass_sb(cfg, ipver):
+     """
+     Tests the XDP_PASS action for single buffer case.
+ 
+     Args:
+         cfg: Configuration object containing network settings.
++        ipver: IP version to use ("4" or "6").
+     """
++    _set_ipver_defer_restore(cfg, ipver)
 +
-+	kvfree(p);
-+	*init_val = ~0ULL;
-+	return 0;
-+}
+     bpf_info = BPFProgInfo("xdp_prog", "xdp_native.bpf.o", "xdp", 1500)
+ 
+     _test_pass(cfg, bpf_info, 256)
+ 
+ 
+-def test_xdp_native_pass_mb(cfg):
++@ksft_variants(_ipvers)
++def test_xdp_native_pass_mb(cfg, ipver):
+     """
+     Tests the XDP_PASS action for a multi-buff size.
+ 
+     Args:
+         cfg: Configuration object containing network settings.
++        ipver: IP version to use ("4" or "6").
+     """
++    _set_ipver_defer_restore(cfg, ipver)
 +
- #else
-
- static inline void *skel_alloc(size_t size)
-@@ -212,6 +223,15 @@ static inline void *skel_finalize_map_data(__u64
-*init_val, size_t mmap_sz, int
- 		return NULL;
- 	return addr;
- }
+     bpf_info = BPFProgInfo("xdp_prog_frags", "xdp_native.bpf.o", "xdp.frags", 9000)
+ 
+     _test_pass(cfg, bpf_info, 8000)
+@@ -219,25 +239,33 @@ def _test_drop(cfg, bpf_info, msg_sz):
+     ksft_eq(stats[XDPStats.RX.value], stats[XDPStats.DROP.value], "RX and DROP stats mismatch")
+ 
+ 
+-def test_xdp_native_drop_sb(cfg):
++@ksft_variants(_ipvers)
++def test_xdp_native_drop_sb(cfg, ipver):
+     """
+     Tests the XDP_DROP action for a signle-buff case.
+ 
+     Args:
+         cfg: Configuration object containing network settings.
++        ipver: IP version to use ("4" or "6").
+     """
++    _set_ipver_defer_restore(cfg, ipver)
 +
-+static inline int skel_protect_map_data(void *p, __u64 *init_val,
-size_t sz)
-+{
-+	(void)init_val;
+     bpf_info = BPFProgInfo("xdp_prog", "xdp_native.bpf.o", "xdp", 1500)
+ 
+     _test_drop(cfg, bpf_info, 256)
+ 
+ 
+-def test_xdp_native_drop_mb(cfg):
++@ksft_variants(_ipvers)
++def test_xdp_native_drop_mb(cfg, ipver):
+     """
+     Tests the XDP_DROP action for a multi-buff case.
+ 
+     Args:
+         cfg: Configuration object containing network settings.
++        ipver: IP version to use ("4" or "6").
+     """
++    _set_ipver_defer_restore(cfg, ipver)
 +
-+	if (mprotect(p, sz, PROT_READ))
-+		return -errno;
-+	return 0;
-+}
- #endif
-
- static inline int skel_closenz(int fd)
+     bpf_info = BPFProgInfo("xdp_prog_frags", "xdp_native.bpf.o", "xdp.frags", 9000)
+ 
+     _test_drop(cfg, bpf_info, 8000)
+@@ -287,13 +315,17 @@ def _test_xdp_native_tx(cfg, bpf_info, payload_lens):
+         ksft_eq(stats[XDPStats.TX.value], expected_pkts, "TX stats mismatch")
+ 
+ 
+-def test_xdp_native_tx_sb(cfg):
++@ksft_variants(_ipvers)
++def test_xdp_native_tx_sb(cfg, ipver):
+     """
+     Tests the XDP_TX action for a single-buff case.
+ 
+     Args:
+         cfg: Configuration object containing network settings.
++        ipver: IP version to use ("4" or "6").
+     """
++    _set_ipver_defer_restore(cfg, ipver)
++
+     bpf_info = BPFProgInfo("xdp_prog", "xdp_native.bpf.o", "xdp", 1500)
+ 
+     # Ensure there's enough room for an ETH / IP / UDP header
+@@ -302,13 +334,17 @@ def test_xdp_native_tx_sb(cfg):
+     _test_xdp_native_tx(cfg, bpf_info, [0, 1500 // 2, 1500 - pkt_hdr_len])
+ 
+ 
+-def test_xdp_native_tx_mb(cfg):
++@ksft_variants(_ipvers)
++def test_xdp_native_tx_mb(cfg, ipver):
+     """
+     Tests the XDP_TX action for a multi-buff case.
+ 
+     Args:
+         cfg: Configuration object containing network settings.
++        ipver: IP version to use ("4" or "6").
+     """
++    _set_ipver_defer_restore(cfg, ipver)
++
+     bpf_info = BPFProgInfo("xdp_prog_frags", "xdp_native.bpf.o",
+                            "xdp.frags", 9000)
+     # The first packet ensures we exercise the fragmented code path.
+@@ -447,13 +483,17 @@ def _test_xdp_native_tail_adjst(cfg, pkt_sz_lst, offset_lst):
+     return {"status": "pass"}
+ 
+ 
+-def test_xdp_native_adjst_tail_grow_data(cfg):
++@ksft_variants(_ipvers)
++def test_xdp_native_adjst_tail_grow_data(cfg, ipver):
+     """
+     Tests the XDP tail adjustment by growing packet data.
+ 
+     Args:
+         cfg: Configuration object containing network settings.
++        ipver: IP version to use ("4" or "6").
+     """
++    _set_ipver_defer_restore(cfg, ipver)
++
+     pkt_sz_lst = [512, 1024, 2048]
+     offset_lst = [1, 16, 32, 64, 128, 256]
+     res = _test_xdp_native_tail_adjst(
+@@ -465,13 +505,17 @@ def test_xdp_native_adjst_tail_grow_data(cfg):
+     _validate_res(res, offset_lst, pkt_sz_lst)
+ 
+ 
+-def test_xdp_native_adjst_tail_shrnk_data(cfg):
++@ksft_variants(_ipvers)
++def test_xdp_native_adjst_tail_shrnk_data(cfg, ipver):
+     """
+     Tests the XDP tail adjustment by shrinking packet data.
+ 
+     Args:
+         cfg: Configuration object containing network settings.
++        ipver: IP version to use ("4" or "6").
+     """
++    _set_ipver_defer_restore(cfg, ipver)
++
+     pkt_sz_lst = [512, 1024, 2048]
+     offset_lst = [-16, -32, -64, -128, -256]
+     res = _test_xdp_native_tail_adjst(
+@@ -535,7 +579,7 @@ def _test_xdp_native_head_adjst(cfg, prog, pkt_sz_lst, offset_lst):
+             # after we eat into it. We send large-enough packets, but if HDS
+             # is enabled head will only contain headers. Don't try to eat
+             # more than 28 bytes (UDPv4 + eth hdr left: (14 + 20 + 8) - 14)
+-            l2_cut_off = 28 if cfg.addr_ipver == 4 else 48
++            l2_cut_off = 28 if cfg.addr_ipver == "4" else 48
+             if pkt_sz > hds_thresh and offset > l2_cut_off:
+                 ksft_pr(
+                 f"Failed run: pkt_sz ({pkt_sz}) > HDS threshold ({hds_thresh}) and "
+@@ -579,18 +623,22 @@ def _test_xdp_native_head_adjst(cfg, prog, pkt_sz_lst, offset_lst):
+     return {"status": "pass"}
+ 
+ 
+-def test_xdp_native_adjst_head_grow_data(cfg):
++@ksft_variants(_ipvers)
++def test_xdp_native_adjst_head_grow_data(cfg, ipver):
+     """
+     Tests the XDP headroom growth support.
+ 
+     Args:
+         cfg: Configuration object containing network settings.
++        ipver: IP version to use ("4" or "6").
+ 
+     This function sets up the packet size and offset lists, then calls the
+     _test_xdp_native_head_adjst_mb function to perform the actual test. The
+     test is passed if the headroom is successfully extended for given packet
+     sizes and offsets.
+     """
++    _set_ipver_defer_restore(cfg, ipver)
++
+     pkt_sz_lst = [512, 1024, 2048]
+ 
+     # Negative values result in headroom shrinking, resulting in growing of payload
+@@ -600,18 +648,22 @@ def test_xdp_native_adjst_head_grow_data(cfg):
+     _validate_res(res, offset_lst, pkt_sz_lst)
+ 
+ 
+-def test_xdp_native_adjst_head_shrnk_data(cfg):
++@ksft_variants(_ipvers)
++def test_xdp_native_adjst_head_shrnk_data(cfg, ipver):
+     """
+     Tests the XDP headroom shrinking support.
+ 
+     Args:
+         cfg: Configuration object containing network settings.
++        ipver: IP version to use ("4" or "6").
+ 
+     This function sets up the packet size and offset lists, then calls the
+     _test_xdp_native_head_adjst_mb function to perform the actual test. The
+     test is passed if the headroom is successfully shrunk for given packet
+     sizes and offsets.
+     """
++    _set_ipver_defer_restore(cfg, ipver)
++
+     pkt_sz_lst = [512, 1024, 2048]
+ 
+     # Positive values result in headroom growing, resulting in shrinking of payload
+@@ -621,12 +673,19 @@ def test_xdp_native_adjst_head_shrnk_data(cfg):
+     _validate_res(res, offset_lst, pkt_sz_lst)
+ 
+ 
+-@ksft_variants([
+-    KsftNamedVariant("pass", XDPAction.PASS),
+-    KsftNamedVariant("drop", XDPAction.DROP),
+-    KsftNamedVariant("tx", XDPAction.TX),
+-])
+-def test_xdp_native_qstats(cfg, act):
++def _qstats_variants():
++    actions = [
++        ("pass", XDPAction.PASS),
++        ("drop", XDPAction.DROP),
++        ("tx", XDPAction.TX),
++    ]
++    for ipver in ["4", "6"]:
++        for name, act in actions:
++            yield KsftNamedVariant(f"{name}_ipv{ipver}", act, ipver)
++
++
++@ksft_variants(_qstats_variants())
++def test_xdp_native_qstats(cfg, act, ipver):
+     """
+     Send 1000 messages. Expect XDP action specified in @act.
+     Make sure the packets were counted to interface level qstats
+@@ -634,6 +693,7 @@ def test_xdp_native_qstats(cfg, act):
+     """
+ 
+     cfg.require_cmd("socat")
++    _set_ipver_defer_restore(cfg, ipver)
+ 
+     bpf_info = BPFProgInfo("xdp_prog", "xdp_native.bpf.o", "xdp", 1500)
+     prog_info = _load_xdp_prog(cfg, bpf_info)
 -- 
-2.54.0
-
+2.45.0
 
