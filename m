@@ -1,90 +1,130 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D8D63939BD;
-	Thu,  2 Jul 2026 07:30:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF23527A47F;
+	Thu,  2 Jul 2026 08:26:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782977453; cv=none; b=fc+PHAHsZiU2iB8tquNcRmwOTA5dhqChiLGOhxW3nMS/xAbL4IYrQ5gx8/KLRZbVGVpCxKfyTNG6eFte6f7xlPAatMPQ8vJiUJJWvz9Wr+CqRvMbdOE9O4YFSztZL8WTnOyRHJ9Re5a8hmgmVrBuL2Ma1/KZLbzRI1Ej/oEbZUA=
+	t=1782980796; cv=none; b=oNP0fCrT47qWtKYl3S59xBj0c7q4/sv2n+zI+dGkfDysPxMmQsecqQNpZl89HW3ACQ57hCg0GlD11Y7XZ8d+zRkgN7mJjqgMEqP0e0kd2mipGR8XiWqrfFCy+FLougRmpqXY0mZcQmjZRW0I3aq8f+eJL/kWwcS739HOaK36SDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782977453; c=relaxed/simple;
-	bh=b5Yh/1B5RAfqkXa6kZW8y8XuCwb9JRcdG9Cc6vPOrcM=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=GNwG/9tia0C3G8WpX3G8Vi9+i6hd318ROAuDSnjQf2zuw7E/ai91Bn1J13VUgwfTI2jVeLmWH4Ubbwg/u+R9SrukyKrhE2NF7y+flnTHRse4it7PlheuG/8Rw2aar37FjMNpsF8tSP8Upu4u6fYpXV9ypwOBT6pWoRMStIIZXRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=ZMG3bZi/; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1782980796; c=relaxed/simple;
+	bh=Q2GpEH2X2aDsVJd2QBgwWSCP//9EvHao/aIsiWG4RBk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=PTJ0bwLHxjZw3pjivJZFwt65ohtorlwHG0Ccp9L05UD2TxjmZpO3ccEBBRP+Z6n+Kb58nVf2/mvmpiWimpwMdyggVYwRTiz8l0D+YL+8BOAbKT2NttVPVxtovvMYy6pcsWTG93SJ5I7jrGVrq7lJSWmzwpWOKgLV++QUZkTeEjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ID4Bc5Z/; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LksgL9A7; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="ZMG3bZi/"
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1wfBsc-00BOKQ-T0; Thu, 02 Jul 2026 09:30:38 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-	bh=T0KU9Qlc02n2j5IdAO8aCi86nlSvwxBOmtJy+AvJI5s=; b=ZMG3bZi/7Dml2jz332+5aTfLBY
-	U93C5alk3kpGZpnQ7/RMi63KycR4qg86NIQHlX2u+Gev2XzSSjw2IMS8XksWh7ytUpzPFKfeBgMKF
-	J+Q9lPmBfakqsDbh527/hbJnUKa2epzoUCkiccyf7keUMXGuOCBc+5UWLaWaqIHE08XCTWHeSWYB7
-	EdrhJgL4cGMkOOjDFjRjhP7wdgDQvCMnAE+EPTF3TCvhSlQJzh38cEd+6Cn1NLX65VdX6D/aqWrB3
-	TCeo6PWIMwjUaHgmDYW8Kp8xGISIkthV21sGzw3HUASAikRIeGcjMI96E7UITaXvVHNbjFjUMbWuG
-	pTFTaXZw==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1wfBsb-0006gp-S3; Thu, 02 Jul 2026 09:30:38 +0200
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.95)
-	id 1wfBsK-003HJw-OZ;
-	Thu, 02 Jul 2026 09:30:20 +0200
-Message-ID: <352c268e-508a-4155-b597-b0f172c0a1cf@rbox.co>
-Date: Thu, 2 Jul 2026 09:30:19 +0200
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ID4Bc5Z/";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LksgL9A7"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1782980792;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=L4hkRJykr+eab8Dvtf4lhJ8zi/LQtBLjciGJU8kYhK4=;
+	b=ID4Bc5Z/2kZkZq+LKAkjibOQWT+EMu+Swc71Gui0/mrliEJAzLSTfkd+RL4OB3AWdHPT9H
+	3LUmeQiROCbMEg5b+35IOxftA8rAKAQvwmu/0SbVHpW7NgZ9PEDSbOfkZLeCv3ZFlQBCXM
+	i+rrA6bMWHBz3qanIHdJ0XPJepBvqHi0gfuaVp0vc6E228VjPlHTX+5sxb5580xsCQlV9g
+	EYUCh98ruWK9eiPXzDSDY3kekS9/ACBMS/ZBB19TjOcbCR6Dl+rUKBHGuF/QtLme4wdx7J
+	lyuH5b2BEz5UZqCw9MJ3kKraK/t7qWgjrmvFcy80qPPhdwj75gzaU/Fq4+pR4Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1782980792;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=L4hkRJykr+eab8Dvtf4lhJ8zi/LQtBLjciGJU8kYhK4=;
+	b=LksgL9A7fgudwKwlbpT1/JoosBH/W0dYP3meqI2dYbC1/dFgrhNUgs3fbuwQ2KrIi52hCV
+	9A6MlgArx6kcfVCQ==
+Date: Thu, 02 Jul 2026 10:26:30 +0200
+Subject: [PATCH] tools/resolve_btfids: Include libsubcmd headers directly
+ from source tree
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH bpf v3 3/4] selftests/bpf: Adapt sockmap update error
- handling
-To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, shuah@kernel.org,
- john.fastabend@gmail.com, jakub@cloudflare.com, jiayuan.chen@linux.dev,
- edumazet@google.com, kuniyu@google.com, pabeni@redhat.com,
- willemb@google.com, davem@davemloft.net, kuba@kernel.org, horms@kernel.org,
- cong.wang@bytedance.com
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org, martin.lau@kernel.org,
- clm@meta.com, ihor.solodrai@linux.dev
-References: <20260702-sockmap-lookup-udp-leak-v3-3-ff8de8782468@rbox.co>
- <03d8ce102b71c68c30e98be36feaebe539055195c2323ec3b3fd84f157487afd@mail.kernel.org>
-Content-Language: pl-PL, en-GB
-In-Reply-To: <03d8ce102b71c68c30e98be36feaebe539055195c2323ec3b3fd84f157487afd@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-Id: <20260702-libsubcmd-spam-v1-1-300ec142a62f@linutronix.de>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDI0Nj3ZzMpOLSpOTcFN3igsRcXcM0U6M0gxSDZFNzSyWgpoKi1LTMCrC
+ B0bG1tQDPaN5cYAAAAA==
+X-Change-ID: 20260213-libsubcmd-spam-1f52f0d0c579
+To: Arnaldo Carvalho de Melo <acme@redhat.com>, 
+ Namhyung Kim <namhyung@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1782980791; l=2152;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=Q2GpEH2X2aDsVJd2QBgwWSCP//9EvHao/aIsiWG4RBk=;
+ b=0IKmozQzZwy0KsEWciAu+b6HsLs1d8wdr/vGnp2kLdoyzJd24mI5SK1hc/3qmR359H1y2zK2k
+ L/lUEdKFiBAAvPHXjuHJPCTbY/6TZ3qRrS5uj/K3vAlIYHRPmiE19/s
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On 7/2/26 02:00, bot+bpf-ci@kernel.org wrote:
->> @@ -93,8 +90,12 @@ static void test_insert_bound(struct test_sockmap_listen *skel __always_unused,
->>  	errno = 0;
->>  	value = s;
->>  	err = bpf_map_update_elem(mapfd, &key, &value, BPF_NOEXIST);
->> -	if (!err || errno != EOPNOTSUPP)
->> -		FAIL_ERRNO("map_update: expected EOPNOTSUPP");
->> +	if (sotype == SOCK_STREAM) {
->> +		ASSERT_ERR(err, "map_update");
->> +		ASSERT_EQ(errno, EOPNOTSUPP, "errno");
->> +	} else if (err) {
->> +		ASSERT_OK(err, "map_update");
->> +	}
-> 
-> This isn't a bug, but could the UDP branch just be `else ASSERT_OK(err,
-> "map_update");` — the `if (err)` guard looks redundant since ASSERT_OK is
-> a no-op on success?
+Currently each build with resolve_btfids enabled unnecessarily prints
+the line 'INSTALL libsubcmd_headers' from libsubcmd.
 
-Ugh, sorry. If there are no other comments for this series, I'd happy to
-fix it later in bpf-next.
+Use the libcmd headers from source tree instead, without installation.
+
+The same was done for objtool in commit ac999926774a ("objtool: Include
+libsubcmd headers directly from source tree"), albeit for a different
+reason.
+
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Changes in v2:
+- Rebase on v7.2-rc1.
+- Change the resolve_btfids rules instead of the libsubcmd ones
+- Link to v1: https://lore.kernel.org/lkml/20260303-libsubcmd-spam-v1-1-d0749e3c7998@linutronix.de/
+---
+ tools/bpf/resolve_btfids/Makefile | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+index 7672208f65e4..bb0463b380af 100644
+--- a/tools/bpf/resolve_btfids/Makefile
++++ b/tools/bpf/resolve_btfids/Makefile
+@@ -40,7 +40,6 @@ LIBBPF_DESTDIR := $(LIBBPF_OUT)
+ LIBBPF_INCLUDE := $(LIBBPF_DESTDIR)include
+ 
+ SUBCMD_DESTDIR := $(SUBCMD_OUT)
+-SUBCMD_INCLUDE := $(SUBCMD_DESTDIR)include
+ 
+ BINARY     := $(OUTPUT)/resolve_btfids
+ BINARY_IN  := $(BINARY)-in.o
+@@ -56,7 +55,7 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
+ $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
+ 	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
+ 		    DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
+-		    $(abspath $@) install_headers
++		    $(abspath $@)
+ 
+ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
+ 	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
+@@ -77,7 +76,7 @@ HOSTCFLAGS_resolve_btfids += -g \
+           -I$(srctree)/tools/include \
+           -I$(srctree)/tools/include/uapi \
+           -I$(LIBBPF_INCLUDE) \
+-          -I$(SUBCMD_INCLUDE) \
++          -I$(srctree)/tools/lib \
+           $(LIBELF_FLAGS) \
+           -Wall -Werror
+ 
+
+---
+base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
+change-id: 20260213-libsubcmd-spam-1f52f0d0c579
+
+Best regards,
+--  
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
