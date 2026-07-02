@@ -1,155 +1,108 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1EBC45039
-	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 06:10:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C84383982
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 06:15:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782972650; cv=none; b=VuxEuAumdnBYoepmEE3XbyUPvh+q8aZwnttdW7skB5WLlOcYQnzPGlMNHywVEZMwjtzahP4seyCAYhvI6DX6QOfVtrkhrJnnRKuKIAgbch+efuwR7kCW2R8hi047HdrQaulSRwmaDcWB3WrSPw4rFBuPRcp51h/Hx2nGqvAyYo0=
+	t=1782972953; cv=none; b=bPJvdN44pe9qLv4aNCW9iiIKMK6QURy7H1hWgnMsizt9eO9QEJmjXLTDt9XMAt7tW5PefSRVuLxEFspHq+U6i056y73WOM8qEU4ryjQ/2w+kV7kflTNu03XFGTcDruuWIJDlPcQJKsQ2L1667xDkejiTmQN4uQTk53L/c4tHLI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782972650; c=relaxed/simple;
-	bh=l2Y5w3mPIbBEeQ8kSbXus7o5RUfZJ0TgUAfPh09G4Wk=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=nELqUgUDNgA/Kk1Edd1d2vMWliVvoHW1udmt4yxUk1+1EJWiUlCQ+cbwwowLxCE4M05897++gAcFv/K/XTUVso1SJ6HnaDMeEEZWSszRxw7Wtgoe7F77PAwqFJLgee9VKM9skKZeg1LhcobnXMy1eIJXNb+2a0Tonv88WurxxhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8AxuPDiAEZqq8oAAA--.4657S3;
-	Thu, 02 Jul 2026 14:10:42 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJDxysHXAEZqI6q7AA--.25892S3;
-	Thu, 02 Jul 2026 14:10:33 +0800 (CST)
-Subject: Re: [PATCH bpf-next v6] bpf: Reject programs with inlined helpers if
- JIT is unavailable
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, KaFai Wan <kafai.wan@linux.dev>,
- bpf <bpf@vger.kernel.org>, loongarch@lists.linux.dev,
- Leon Hwang <leon.hwang@linux.dev>, Puranjay Mohan <puranjay@kernel.org>,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-References: <20260702053127.23599-1-yangtiezhu@loongson.cn>
- <CAADnVQJodzDppDUjSYXra-jCo3J32t7=h32bHm4tQei-+5P72w@mail.gmail.com>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <8e441177-455d-4a0a-00dd-8f6c2adb954d@loongson.cn>
-Date: Thu, 2 Jul 2026 14:10:31 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1782972953; c=relaxed/simple;
+	bh=gZataAktdZqFVOQNF9xTx4XhlvCz1HfP5FRQulEDopw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KTFkcFh6x4r1e9twbFLX8nduLHKJR1Ji6o+EAnVa99ZsuphR6YLvimFt0iYfmja5ZLaWa69FNFQduje3+0w0LRMEJCJ3LJLdxLrI8wq/8Qol2kD7cL+UKoYL/+9AW8VV886Ti1nut2zWd5iOm5No7ZE8rTMcqlPtCfTRPAieJaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xXTx/Fja; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xXTx/Fja"
+Message-ID: <b9413abf-0735-4acc-8770-e0582436b2f5@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782972939;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uI8ueJO3T3j9lODHWCIaJNjGSGrgbiCEdlasJRUkOPI=;
+	b=xXTx/FjabfNJXkzPXAZj4AElGy9w+AF0b4T/v6NN8HfY5JhlqOsb8k82jeqMoAvzaD5QHL
+	A/89zeKn/7+jJJNh0ug3btdpQxgbsLeiKqTmQifGRBbPtm39KJxcj9ILFvWldDNBAJxTz2
+	qVppmoC9eDOo7KSwU1LJ91wkUM7vQ+0=
+Date: Thu, 2 Jul 2026 14:15:20 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAADnVQJodzDppDUjSYXra-jCo3J32t7=h32bHm4tQei-+5P72w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Subject: Re: [PATCH bpf-next v8 2/9] bpf: Introduce global percpu data
 Content-Language: en-US
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-patches-bot@fb.com
+References: <20260629152406.52582-1-leon.hwang@linux.dev>
+ <20260629152406.52582-3-leon.hwang@linux.dev>
+ <CAEf4BzbLDna2j_yNniZ8gW6Um4AzWd6xYS4N8hp7hk879phgug@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAEf4BzbLDna2j_yNniZ8gW6Um4AzWd6xYS4N8hp7hk879phgug@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxysHXAEZqI6q7AA--.25892S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxZw47Jw4rCry5Kw1fGw1xZwc_yoW5uw1UpF
-	Wvkw4qkrykXw1093y2ya1xur1ag3yDJryUKa4fGF1Fya12qrn3XrZxKa10qFZ5Gw4kW3WI
-	v342yF95u3WUZFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
-	6r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
-	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
-	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14
-	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
-	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4U
-	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jwnYwUUU
-	UU=
+X-Migadu-Flow: FLOW_OUT
 
-On 2026/7/2 下午1:45, Alexei Starovoitov wrote:
-> On Wed, Jul 1, 2026 at 10:31 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+On 2/7/26 03:31, Andrii Nakryiko wrote:
+> On Mon, Jun 29, 2026 at 8:24 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+[...]
+>> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+>> index 3cf2cc6e3ab6..4f84d087ca69 100644
+>> --- a/kernel/bpf/fixups.c
+>> +++ b/kernel/bpf/fixups.c
+>> @@ -1819,6 +1819,38 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+>>                         goto next_insn;
+>>                 }
 >>
->> When an architecture implements bpf_jit_inlines_helper_call(), such as
->> LoongArch, ARM64, PowerPC, and RISC-V, the verifier skips rewriting the
->> helper call offset (insn->imm) during the bpf_do_misc_fixups() phase,
->> because the helper is expected to be inlined by the JIT compiler. As a
->> result, insn->imm remains as the raw helper enum ID.
->>
->> However, if JIT is disabled at runtime (net.core.bpf_jit_enable=0) or
->> if the JIT compilation later dynamically fails (e.g., due to OOM), the
->> core BPF subsystem falls back to the BPF interpreter.
->>
->> When the interpreter executes (__bpf_call_base + insn->imm) with the
->> unpatched raw helper ID, it jumps into an unaligned invalid address
->> space, triggering an instruction alignment fault or a memory access
->> panic.
->>
->> To avoid modifying the BPF interpreter's complexity for JIT-specific
->> paths, just introduce a 'jit_required' flag in struct bpf_prog. When
->> a program contains helper calls that skip rewriting for JIT inlining,
->> set this flag to 1. During runtime selection, if JIT compilation is
->> not available, explicitly reject loading with -ENOTSUPP instead of
->> falling back to the interpreter, safely preventing the kernel panic.
->>
->> Fixes: 2ddec2c80b44 ("riscv, bpf: inline bpf_get_smp_processor_id()")
->> Suggested-by: Alexei Starovoitov <ast@kernel.org>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->> v6:
->>    - Place 'jit_required' as a standalone u8 field right before 'stats'
->>      to reuse the existing 4-byte struct hole (offset 52) based on pahole
->>      analysis, avoiding the u16->u32 bitfield conversion in v5 which
->>      unintentionally changed the layout/alignment of subsequent fields.
+>> +               if (env->prog->jit_requested &&
+>> +                   bpf_jit_supports_percpu_insn() &&
+>> +                   insn->code == (BPF_LD | BPF_IMM | BPF_DW) &&
+>> +                   (insn->src_reg == BPF_PSEUDO_MAP_VALUE ||
+>> +                    insn->src_reg == BPF_PSEUDO_MAP_IDX_VALUE)) {
+>> +                       struct bpf_map *map;
+>> +
+>> +                       aux = &env->insn_aux_data[i + delta];
+>> +                       map = env->used_maps[aux->map_index];
+>> +                       if (map->map_type != BPF_MAP_TYPE_PERCPU_ARRAY)
+>> +                               goto next_insn;
+>> +
+>> +                       /*
+>> +                        * Reuse the original ld_imm64 insn, and add one
+>> +                        * mov64_percpu_reg insn.
+>> +                        */
+>> +
+>> +                       insn_buf[0] = insn[1];
+>> +                       insn_buf[1] = BPF_MOV64_PERCPU_REG(insn->dst_reg, insn->dst_reg);
+>> +                       cnt = 2;
+>> +
+>> +                       i++;
 > 
-> v5 had AI written all over it. v6 is not any better.
-> Please ask AI whether your v6 is any better than v5 ?
-> Then analyze replies as a human.
+> oof, this was a subtle head scratcher for me.. that i++ is easy to
+> miss. let's update the comment to be more explicit: we are *skipping*
+> first half of ld_imm64, patching over second half of it with that same
+> half + percpu mov. All because bpf_patch_insn_data() can only replace
+> one 8-byte instruction, which doesn't work well for ldimm64.
+> 
+> Anyways, this looks correct, it just took me a bit to figure this out
+> and while the above comment warned me about this, it didn't really
+> make it any easier for figure out what's going on.
+> 
 
-Hi Alexei,
-
-Sorry for the AI text. I used it to translate my replies.
-
-- v5 code: Placed jit_required under u16 group, but u32 broke layout.
-- v6 code: Moved it to offset 52 hole to fix the alignment.
-
-Here is the local test log for v6 when JIT is disabled:
-
-fedora@linux:~$ cat test_panic.c
-   #include <linux/bpf.h>
-   #include <bpf/bpf_helpers.h>
-
-   SEC("kprobe/sys_getpid")
-   int test_panic(void *ctx)
-   {
-   	struct task_struct *task;
-
-   	task = (struct task_struct *)bpf_get_current_task();
-   	if (task)
-   		bpf_printk("Task address: %p\n", task);
-
-   	return 0;
-   }
-
-   char LICENSE[] SEC("license") = "GPL";
-fedora@linux:~$ clang -target bpf -O2 -g -c test_panic.c -o test_panic.o
-fedora@linux:~$ sudo sysctl -w net.core.bpf_jit_enable=0
-net.core.bpf_jit_enable = 0
-fedora@linux:~$ sudo bpftool prog load test_panic.o 
-/sys/fs/bpf/test_panic autoattach
-libbpf: prog 'test_panic': BPF program load failed: unknown error (-524)
-libbpf: prog 'test_panic': -- BEGIN PROG LOAD LOG --
-processed 10 insns (limit 1000000) max_states_per_insn 0 total_states 1 
-peak_states 1 mark_read 0
--- END PROG LOAD LOG --
-libbpf: prog 'test_panic': failed to load: -524
-libbpf: failed to load object 'test_panic.o'
-Error: failed to load object file
-
-It correctly rejects loading with -ENOTSUPP (-524) and prevents the panic.
+Ack. Will update the comment.
 
 Thanks,
-Tiezhu
+Leon
 
