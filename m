@@ -1,153 +1,133 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8489E37A831;
-	Thu,  2 Jul 2026 19:28:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFCB352C3F
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 20:53:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783020522; cv=none; b=XZ8hE9GE+fxHQRHvy6hcs7nVBCkFPWq3gkPSjLZ/kifNyAXAfegeNiU20KVuYeU49E8fj6/QYN0eA7WPVebnl7hciIEwfGjvNz7pc+I7xNoO/sRkLIAGakpo2KCpnSEXLjACcK8exMNLmXae9pl/2qh1gFAegaKORM7/H4JWJhI=
+	t=1783025587; cv=none; b=u8fDVSe2Wdaab6W+eZZXF/fjhh5gAw5jTKnqcBYPuc9EDMEpidHUZeK6lh30nAmzfjjYgJIS/7SCA9LFNx9Z4J6lUUco2frY/aGQccnIdOGfy0OibD3LJ6IabPTHeFtEnScsO9kyaQU7ZT1tDtubZnKrZXuQeGwk9MxONqSoVvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783020522; c=relaxed/simple;
-	bh=ZBYMbbcikO3o8DkjVV5xZrgHhG76OW4qLeSlyGNGGJA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=spFMuvLZJjnMfchQAx6lbdVSDlYBrnkXVJMq3/AiazyLYhBtFchX7yRmsDC0xHz4b2oQ8OR+wj7qGTiAYXPkochyVLTYep2msj461x2k1KNrSGA+XoOi3pH3QYKBJUHm65WDnqGZv5kIuWh4Hekhd8iVO4NZTbx0dUMGuTHTHJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=BSI71FEr; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1783025587; c=relaxed/simple;
+	bh=90X6nwoMcrMyfEKMt542bHgq7hQLvNHeiApFXnkbcls=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VFT6s/vYGGm2ywPHyB+Dz1V8yJ8MEPn2Bai92DWeZSEoEnYMh63WBZ5MQlNtMMHdvlqxKqhpaVtGn8FUYNy2e3AuIkBf/1vA+oGF3LnRqrwC2vqkYiOs5cA8gBtcxYqrFEOGIJOZL7EPF5WQCkwM+rxekTr/pJleWkdEJ9SZsIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ej8i8WDa; arc=none smtp.client-ip=209.85.161.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="BSI71FEr"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=VV5ifilyYe3Y2EuLX/U3iWS4Zj3m0/qaJG7pGs4/iEQ=; b=BSI71FEra66CBqMTmkux93Opd1
-	lI9LY00sFJvd1M3jyBhm+bXKEpdTPA3+IeeE8VB6vevyyI0sHTgkwVHEbt5CP2qJhFV/3Q1qZNvr9
-	M5Qb8jzBAPbrRM/KwE16yxizLe6FqYweclgB/iizQn4uhvmoCi3b8RMQoPTrMTQsm2IeNZazb9LTz
-	npdkohrxji9tGgtznJAwu0JqqBYIit7emosSdgmzducbzHJLPmuPXF8LX62ehRrLQq6rpUAgRlE3H
-	fUrqpwR4hdfhoROFhnU85nMMBogmEx0rPDOHv53yIaTnn/vAqXDhJA6dLWC4oJUvCG7VIkdqmTP0H
-	CH/jwzkw==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wfN5R-000HJT-0A;
-	Thu, 02 Jul 2026 21:28:37 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: torvalds@linux-foundation.org
-Cc: bpf@vger.kernel.org,
-	alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	memxor@gmail.com,
-	eddyz87@gmail.com,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] BPF fixes for 7.2-rc2
-Date: Thu,  2 Jul 2026 21:28:36 +0200
-Message-ID: <20260702192836.260994-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ej8i8WDa"
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-69dead44101so1537479eaf.3
+        for <bpf@vger.kernel.org>; Thu, 02 Jul 2026 13:53:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783025584; x=1783630384; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OUUT9U/zE34DOVJLI19IRKYtBuKLwinorFscWJ3YAUg=;
+        b=Ej8i8WDaiCF8QhuUucg46HRkTgyDFK4XLMMhz07Cm/BDxjqAARpU6kiy4uYGFbePiy
+         13fccyYoGUCd8x8B9Wqt/mGFU2Uct7Ziqb3LYsMULCp43t7x9DBk6l8ywKglfw+X5iAh
+         ExNFilcHLxiL08I/TXkUyOywfdcsFTKNtzznRLZL7CszwsLf+4mAvZ8yo+hIEEWgQ+n4
+         Mj6FbJLqmvsGSR9GDc6klI92qQ45FlTuqUCt3qASMNr6q/W0R78sjlwPa33JYX+LGeT1
+         4SEQRqO8RC9oxDFqol6XErRaaNvPaiys0p1oxmpG3C/LlAN1jFrevh38PtuXnK9+S+ay
+         a0VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783025584; x=1783630384;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OUUT9U/zE34DOVJLI19IRKYtBuKLwinorFscWJ3YAUg=;
+        b=tIW+jXj+rpdoAAIekrYdeeAuFN3RYjECfTnmL61J1/4lGJkfITOKtJy5YLiHiEtm1J
+         3tsnidS7S34PAFswt12m5t46EIDrUC70ldongWTfgWuWI3eNdZifM4GAkoG40IYxYnWx
+         OaHuo+rw14ksfUJg53bfzzegs8ebDQeAqO29NvuCgTorj4f2VRcAY80GqoJEnoPHq10m
+         rUCM+zVPSaoNlikzlwV42ABxykjyGGDQzGdV2g/sBZOXc4gTk63KKNoyT6sGDZWV+wn6
+         k8x7jsCsCQ2qgzMki3dA3BhLGhALyOss6ulsyYhs3QD510QpYKeixilvMoT/yJWLIagZ
+         htnQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+fOQ0zoKNegMqwEYjVp/CXZdAEnun7FRbYLYrBqVRfZ0nT7GdKh3I3a6AEqfTEuHexKOM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywj1PwUcdXB5DEtsprwcp94J9kw4dW2t9tgEbTwQ30M5N85xGM7
+	DhA42mdwkZxs7DKtmbB/AsTpiFCbLjIOGXDtMcz5NUUJMy72DER1ktAA
+X-Gm-Gg: AfdE7cm7nCiO/ll9TqC6uFue01+zf47WmH7m5ASOHOrd4EFsC3sGJSHS/+GdQEKr+Nq
+	+Rw6E323DiNhaU8oGj17rzWxefu9pWure+7RfnRxxNuFFhhOCVzRR08V+kle77VXuDtLUFT/y6d
+	HOOcKJJj49YhyrtncSDKD0uflkyOO4Js2qrFu8mNIo02Y9do9B15v3pmp2y5uWuJIaEWYfNsSAB
+	ULZSngVhQz62wVh1LvNxNJ2lOy0DQY4BPxZA4LEZxRH7D2XseqYETOXXE/6lGjdhZgtFPJnkGuO
+	mOJJ/Ch8gE8cZQXkOkY7RrnZx+w+UUeOLrKonhWNL6NafB8SieBsgapV54wb//NOrPjTEAvnlEA
+	fQv5v2VCL2iCetOY6tp2N4lX/0k4ed98U6UHX+euKrti5kA+bS/B/Dzk3ClVI9Qn/JVDFh4dio7
+	fDlOcJS1C27FXW6NGBKDi8B4YZCL/US30n
+X-Received: by 2002:a05:6820:1512:b0:6a1:50eb:2110 with SMTP id 006d021491bc7-6a309b831e1mr4672517eaf.69.1783025584368;
+        Thu, 02 Jul 2026 13:53:04 -0700 (PDT)
+Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:8::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7eb54534789sm3393061a34.26.2026.07.02.13.53.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2026 13:53:03 -0700 (PDT)
+Date: Thu, 2 Jul 2026 13:53:00 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: kraxel@redhat.com, vivek.kasireddy@intel.com, kuba@kernel.org,
+	Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v2] selftests: Open /dev/udmabuf O_RDONLY
+Message-ID: <akbPrI67h5btdI44@devvm29614.prn0.facebook.com>
+References: <20260701192210.2997769-1-tjmercier@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28048/Thu Jul  2 08:25:04 2026)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260701192210.2997769-1-tjmercier@google.com>
 
-Hi Linus,
+On Wed, Jul 01, 2026 at 12:22:08PM -0700, T.J. Mercier wrote:
+> Write permissions on the /dev/udmabuf device file are not required to
+> issue ioctls and allocate udmabufs. Applications should be opening this
+> file as O_RDONLY. The BPF dmabuf_iter selftest already does this. [1]
+> 
+> Users are pointing to these selftests as examples of how use udmabuf,
+> and encountering permission errors on systems where write permissions
+> are not available on /dev/udmabuf. Apply the principle of least
+> privilege to selftests which use udmabuf by removing the write access
+> mode from drivers/dma-buf/udmabuf.c and drivers/net/hw/ncdevmem.c.
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c?h=v7.1#n49
+> 
+> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> ---
+>  tools/testing/selftests/drivers/dma-buf/udmabuf.c | 2 +-
+>  tools/testing/selftests/drivers/net/hw/ncdevmem.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+> index d78aec662586..ced0b95c876c 100644
+> --- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+> +++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+> @@ -140,7 +140,7 @@ int main(int argc, char *argv[])
+>  	ksft_print_header();
+>  	ksft_set_plan(7);
+>  
+> -	devfd = open("/dev/udmabuf", O_RDWR);
+> +	devfd = open("/dev/udmabuf", O_RDONLY);
+>  	if (devfd < 0) {
+>  		ksft_print_msg(
+>  			"%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
+> diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+> index e098d6534c3c..8114a29692fd 100644
+> --- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+> +++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+> @@ -149,7 +149,7 @@ static struct memory_buffer *udmabuf_alloc(size_t size)
+>  
+>  	ctx->size = size;
+>  
+> -	ctx->devfd = open("/dev/udmabuf", O_RDWR);
+> +	ctx->devfd = open("/dev/udmabuf", O_RDONLY);
+>  	if (ctx->devfd < 0) {
+>  		pr_err("[skip,no-udmabuf: Unable to access DMA buffer device file]");
+>  		goto err_free_ctx;
+> 
+> base-commit: fbb7ad31ab376c5101b2ac7205fad0344fd2de60
+> -- 
+> 2.55.0.rc0.799.gd6f94ed593-goog
+> 
 
-The following changes since commit 4edcdefd4083ae04b1a5656f4be6cd83ae919ef4:
-
-  Merge tag 'bpf-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf (2026-06-25 14:09:26 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
-
-for you to fetch changes up to b72e29e0f7ee329d89f86db8700c8ea99b4a370a:
-
-  bpf: Prefer dirty packs for eBPF allocations (2026-07-01 10:34:41 +0200)
-
-----------------------------------------------------------------
-BPF fixes:
-
-- Initialize task local storage before fork bails out to
-  free the task (Jann Horn)
-
-- Fix insn_aux_data leak on verifier error path (KaFai Wan)
-
-- Reject BPF inode storage map creation when BPF LSM is
-  uninitialized (Matt Bobrowski)
-
-- Mask pseudo pointer values in verifier logs when pointer
-  leaks are not allowed (Nuoqi Gui)
-
-- Harden BPF JIT against spraying via IBPB flush (Pawan Gupta)
-
-- Reject a skb-modifying SK_SKB stream parser since the latter
-  is only meant to measure the next message (Sechang Lim)
-
-- Fix bpf_refcount_acquire to reject refcounted allocation
-  arguments with a non-zero fixed offset (Yiyang Chen)
-
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-
-----------------------------------------------------------------
-Alexei Starovoitov (3):
-      Merge branch 'bpf-sockmap-reject-a-packet-modifying-sk_skb-stream-parser'
-      Merge branch 'bpf-reject-offset-refcount-acquire-arguments'
-      Merge branch 'bpf-mask-pseudo-pointer-values-in-verifier-logs'
-
-Jann Horn (1):
-      bpf,fork: wipe ->bpf_storage before bailouts that access it
-
-KaFai Wan (1):
-      bpf: Fix insn_aux_data leak on verifier err_free_env path
-
-Matt Bobrowski (1):
-      bpf: Reject BPF_MAP_TYPE_INODE_STORAGE creation if BPF LSM is uninitialized
-
-Nuoqi Gui (2):
-      bpf: Mask pseudo pointer values in verifier logs
-      selftests/bpf: Cover pseudo-BTF ksym log masking
-
-Pawan Gupta (6):
-      bpf: Support for hardening against JIT spraying
-      x86/bugs: Enable IBPB flush on BPF JIT allocation
-      bpf: Restrict JIT predictor flush to cBPF
-      bpf: Skip redundant IBPB in pack allocator
-      bpf: Prefer packs that won't trigger an IBPB flush on allocation
-      bpf: Prefer dirty packs for eBPF allocations
-
-Sechang Lim (3):
-      selftests/bpf: don't modify the skb in the strparser parser prog
-      bpf, sockmap: reject a packet-modifying SK_SKB stream parser
-      selftests/bpf: test rejection of a packet-modifying SK_SKB stream parser
-
-Yiyang Chen (2):
-      bpf: Reject offset refcount acquire arguments
-      selftests/bpf: Cover refcount acquire node offsets
-
- arch/arm64/net/bpf_jit_comp.c                      |  4 +-
- arch/loongarch/net/bpf_jit.c                       |  5 +-
- arch/powerpc/net/bpf_jit_comp.c                    |  4 +-
- arch/riscv/net/bpf_jit_comp64.c                    |  2 +-
- arch/riscv/net/bpf_jit_core.c                      |  3 +-
- arch/x86/include/asm/nospec-branch.h               |  4 ++
- arch/x86/kernel/cpu/bugs.c                         | 50 ++++++++++++++--
- arch/x86/net/bpf_jit_comp.c                        |  5 +-
- include/linux/bpf_lsm.h                            |  4 ++
- include/linux/filter.h                             | 15 ++++-
- kernel/bpf/bpf_inode_storage.c                     |  9 +++
- kernel/bpf/core.c                                  | 68 ++++++++++++++++++++--
- kernel/bpf/disasm.c                                |  5 +-
- kernel/bpf/dispatcher.c                            |  2 +-
- kernel/bpf/verifier.c                              | 34 +++++++----
- kernel/fork.c                                      |  9 +--
- net/core/sock_map.c                                | 20 +++++++
- security/bpf/hooks.c                               |  3 +
- .../selftests/bpf/prog_tests/sockmap_strp.c        | 31 ++++++++++
- .../selftests/bpf/progs/refcounted_kptr_fail.c     | 34 +++++++++++
- .../selftests/bpf/progs/sockmap_parse_prog.c       | 22 -------
- .../selftests/bpf/progs/test_sockmap_strp.c        |  7 +++
- .../testing/selftests/bpf/progs/verifier_unpriv.c  | 19 ++++++
- 23 files changed, 297 insertions(+), 62 deletions(-)
+Reviewed-by: Bobby Eshleman <bobbyeshleman@meta.com>
