@@ -1,134 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074B954774;
-	Thu,  2 Jul 2026 00:00:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782950436; cv=none; b=I9vy3ixNnN9pagDUK58ll2EmA6ooHLZUe8PzQ6DYuwfoaC+w3QtuNd9fLgiSbmT3gjmuaDVpf5bVNRQCOqwC2M0fFO+415CJpCL1f1gvh2C8Y1+/4xCwTamvsIitVnD+gK2zouoh6VQitGnsnZbWb86tl3PoG2c6mS9PVH9OvLw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782950436; c=relaxed/simple;
-	bh=49oNaBsWC1ibQFOVK2VcpZiHrR3tpRL6dBrdVrGD1bs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TrCaClcx4CQQ0HIlsdxo81TeoaqZSshWFhzrZxKsuXPDMjjMFXq0zpZ73hP6VJDPkwPz4LfhMzto2z704j6JlLcz3NgPKIu4R6LN5wudMlMrTEcvxr4k2mMo3Q8M/TcQkYGf999o+d5qO3ayEcY2fqonakmEWqg1pGHi77KMDew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RAGaEWdv; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B23E175A79
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 00:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782950475; cv=pass; b=koDnjle+na9an7qXe10wju8n3YtuG16JTLiGetTG86Ly2fkqar+fu5XuMqlMJu4lxBfJwU633yYEbXxj5fc+ZnO3nf/CnJbJlJb0NJ2Lxl3+8iWTf2mshlWw7xHKdb9rfBenywRgAi4RcImKyZKieGcrK7NYBkVgW7v9DPcLwLo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782950475; c=relaxed/simple;
+	bh=h7F8Hea6IuFuXhEfwJYVnVQjGYALLY6z0SeCgrb7pFE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=T12vbgIlRXvTMcK9BSco9jn4JMVkhd5MSZ4EE5yTXIoY1MxkT9bLYU017UxMOwpLFuwS4z1YyGp+7b5zlM1Hg8NK4B3lWRjMWxKdvHMuLUfulFeRaSja+3lFSiceu5Bj9+8eMlLF0ZFdHUMiIGPa3YBV1P69zH+bp7eRSX2ifQ8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lyoXQ1EE; arc=pass smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RAGaEWdv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74A291F000E9;
-	Thu,  2 Jul 2026 00:00:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782950434;
-	bh=4DxY+NveVlYpMYk9+8EzvprbIuiW7b27j/Q3O7UOpGA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=RAGaEWdvlnS9Lk1iGe3zDhYAk6CUI8rBdM1J/vFEMw1SLmdPLWnnT+uC42wd/nSmY
-	 0YhlR50K/drAQqj7QRUqMrkVzEkLYFAbSXGbdgnphLlmWnUk/KmPi0/7wRs48jlxUF
-	 gmmY3i5/gvTlNCpgHz9Buvpr6TZYOuU1wJyx3CXTVGLDeQKka/4OFN08+D+XCclhQo
-	 HafrnBWIukbhH+vk85drrar6sNt+oCdG96JicMekQQFhj9zhteAMvXe3rBLy3MwIwC
-	 dormm8qIrhHbCXV90PWTc0lPEdd07za8UzAP8qmMvD0offBS4IY1VXPH23bvU9ZOqM
-	 qGhR+rDHKZSYw==
-Date: Wed, 1 Jul 2026 17:00:33 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: Viktor Malik <vmalik@redhat.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	linux-perf-users@vger.kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, Michael Petlan <mpetlan@redhat.com>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] perf trace: Refactor augmented_raw_syscalls using
- bpf_loop
-Message-ID: <akWqIfWPMCdaGgGg@google.com>
-References: <20260623112533.1151502-1-vmalik@redhat.com>
- <DJGJ9F6WQZV9.2W4WBIHYLJQ97@gmail.com>
- <ajq98dm4gAwEzkMb@google.com>
- <c2f4e45e-d5c9-42e9-a46b-25fb0cacb267@redhat.com>
- <ajwu7xR6V6MAQOFw@google.com>
- <3c221e35-d642-4036-88fd-d25df7f8807e@redhat.com>
- <akLXCFpnum0WgXGf@google.com>
- <c1666061-c3e7-4eda-82ca-d03daf05f4f8@redhat.com>
- <360bfd5c-b023-4952-9e24-53fcc26690d3@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lyoXQ1EE"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-845ea8924a2so767333b3a.1
+        for <bpf@vger.kernel.org>; Wed, 01 Jul 2026 17:01:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782950473; cv=none;
+        d=google.com; s=arc-20260327;
+        b=UoWLoLIKx4ADRLHqqz8z2gvrzUvA/dcqwVy5O4v4JgxBM78wr05kl67/3QtfO+VPeM
+         chDXnOz8Wy0D6ibgvu/Y4s4WGwSpSm1DJyyC/TghGCT3q/oL1MEoK+H4GF0QcpREauZ9
+         4Rb63KPDtLLv/rcABsm5TX1aQVIyMXZIxddOJiKA/B+WVUEIJvWeUM1/7/NGPt/1qcIj
+         I0e+imqh40RWQPwOgqNLUfkTbifOr+hqMvabes3l4JP7duQRxXYxlXllxAGAP10XFoAu
+         Q9xb8t6w7hCfY1W2usMw5qPS12BO2s69k9q4xXyU7pReEYIWspDFcebHLR5tEl8UdVie
+         jSzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=h7F8Hea6IuFuXhEfwJYVnVQjGYALLY6z0SeCgrb7pFE=;
+        fh=XTI62B6XuCqRI/JcZCzbxwe4bxIg7tGPnymTKZCpoB4=;
+        b=nhe3C6kwBGwcFF4jBe9p67QY/GiKw7Tpv4Tqmqz/IMvvgcJk/roQGuLYk02mUtqeP4
+         PRli8VV3aOabr1RcY3DbgcyE/ajs5hQP1IxCQc2NuajUzXYGJZvO78Pv++SlZYFqpPcf
+         MkXoYp+/5i1PSPQFdbiwNYPjJReieGFcqngMeuXylVMQR43F1yub/Gb6TRV/RnQx/Orv
+         dT1YHdjE+ptqKa2d1vYaCLDdTy0lB26gVUmURu6CQGZ38w3zJExn4vxloSywrvqoKiv3
+         UsUgZE1KWcVqMaA1Y71YByQ/P9GOz/fmtS4olWhgBbUOZY1okCftOU0mkpXsiRlTqcD7
+         b+wQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782950473; x=1783555273; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h7F8Hea6IuFuXhEfwJYVnVQjGYALLY6z0SeCgrb7pFE=;
+        b=lyoXQ1EErjH7PjP3Ijggvk+B4EADZpMT4ykcRN6Eo7bLcgve7oHwh53RNh+YVSEUvd
+         huK1Snljy7Drp51UsgxlrMyKd8lpnxAppnUnqVwDjsHfyyhE7/FDuKe6eFj1w9eTH2E+
+         DRbeSNlwp6kat59q2oWWWXPQPUMlwkI7MB61So3K+GalUrsj8s2wlvkcVJ/XSFI8rsEs
+         FtF029G1RE13rtcXrVqSW2BdRsYT6DPSj/zB95rhS1HohKdT05C+uxkvoTfh+FD05QcN
+         Sop1OLHXBJykSsQkybEz13ixvi/b4+CqlgeSF7bfVpCRLR9cCfCzwv1IJXUUNK0CAdnm
+         amww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782950473; x=1783555273;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=h7F8Hea6IuFuXhEfwJYVnVQjGYALLY6z0SeCgrb7pFE=;
+        b=WqRi/r+R1gvMAtUcV5D2nh8xUalzRvJfUw26y1ND4Iaqb8XhRidSY/4Qvm+GIyUx4Q
+         atEkmbwnNMqJvNl+6EtySnpiwCnKPYa238xt8wZ9bjxihQrzQ0PrmEOHlbcx+qcPxtTc
+         ve0clgIgDVAQdisyPajyOoN+VE/eSNc3D6ysqhuOcwymJ11TXZUS6elrWsnWyJpTBA5U
+         1o6MljU3N79S9ov94vIXLc0xRUl8H+s7O5TVEauG5mGg9ROd3Bdttajb3IjwtZYpEaa+
+         oT8fd8Hasmk8eFnZNQBt+SxbwUlrKsKIxq+VgG/EWc3trJnMaAXnBhAmWgiQozrzQHQu
+         Zu+w==
+X-Forwarded-Encrypted: i=1; AFNElJ+oCsVceUHFAWKjXL0Hi4vEkvDuXvbVHELz9abJcJmu9/B3QleE8jiKVQP6Xvj4EuLT6B4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLe7XvOgdjjOt01GyFS7V+KlP88uD4J3t/6sAGj/tKufFhRzW8
+	5V/1rdB0fxMnNzM77j5vqtTLm8Tw/3QuBDT5elRrIQ00PEaWcO6nYEcXl0TAxkMiOxH7/Ys5sAL
+	4xgHcY3o5V4MZrJcrpeCDZmewpO0ArUA=
+X-Gm-Gg: AfdE7cl+8IF1CiHM5DQ6Oq8WKUDSu3dFf0khQhgvWgffhpIk/+eFSh2ehLSmRb8J8hs
+	uAS9fdNPKdMdh8ibOkEijOWz5iikUzDcaamxSSCzwKSNjAGMiSDP2dxam/7QoLh7hGGN2UjjIr2
+	aby6wahJoizP2g2N1eUXFpbUsXKkuluQcCcGvjEfIaX8YrLwv1Vh52z3m7CcjAWRnGMUoDcZcJE
+	a8Bmkl52ze4mCAqfEqUtHwc8KQp2IE6LofiTImZJ39XZ6HY595dZ6XvAtiJEuhucZN/zFu2CKS/
+	G39F+SFMqhR8oUXAJJcpGK5FFkouzCCmOym7lpyvOwNffUydZ3SjNnFLOQr6CDUMnAh59KieTGV
+	s+/HEzJwd04c/4g==
+X-Received: by 2002:a05:6a21:6f8b:b0:3b3:26aa:5455 with SMTP id
+ adf61e73a8af0-3bfed15c303mr4004694637.13.1782950473171; Wed, 01 Jul 2026
+ 17:01:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <360bfd5c-b023-4952-9e24-53fcc26690d3@redhat.com>
+References: <178291352217.1566898.14481561093843379745.stgit@devnote2>
+ <178291354144.1566898.14374948740441958770.stgit@devnote2>
+ <DJNGE5JG5ZY4.FEO5DZ21TL7Z@gmail.com> <20260702074007.e1047c9d66cbcecc7d4ab3a9@kernel.org>
+In-Reply-To: <20260702074007.e1047c9d66cbcecc7d4ab3a9@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 1 Jul 2026 17:01:01 -0700
+X-Gm-Features: AVVi8CeNxG3GffX-OwXo6mb147DD5vMthLu_C49lWR5Of1AKIMhyjJfW9B4eScU
+Message-ID: <CAADnVQLUniyTM64gHrLzgjWiNZTB82tT0LCxh8D29YfXG7cZ6w@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/4] tracing/probes: Compile all fetchargs into a
+ single BPF program per event
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, LKML <linux-kernel@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 01, 2026 at 08:12:06AM +0200, Viktor Malik wrote:
-> On 6/30/26 07:42, Viktor Malik wrote:
-> > On 6/29/26 22:35, Namhyung Kim wrote:
-> >> On Thu, Jun 25, 2026 at 02:05:29PM +0200, Viktor Malik wrote:
-> >>> On 6/24/26 21:24, Namhyung Kim wrote:
-> >>>> On Wed, Jun 24, 2026 at 08:47:38AM +0200, Viktor Malik wrote:
-> >>>>> On 6/23/26 19:10, Namhyung Kim wrote:
-> >>>>>> Hello,
-> >>>>>>
-> >>>>>> On Tue, Jun 23, 2026 at 08:27:39AM -0700, Alexei Starovoitov wrote:
-> >>>>>>> On Tue Jun 23, 2026 at 4:25 AM PDT, Viktor Malik wrote:
-> >>>> [SNIP]
-> >>>>>>>> +	struct args_loop_ctx loop_ctx = {
-> >>>>>>>> +		.args = args,
-> >>>>>>>> +		.beauty_map = beauty_map,
-> >>>>>>>> +		.payload_offset = payload_offset,
-> >>>>>>>> +		.value_size = value_size,
-> >>>>>>>> +		.output = &output,
-> >>>>>>>> +		.do_output = &do_output
-> >>>>>>>> +	};
-> >>>>>>>> +	iters = bpf_loop(6, process_arg_cb, &loop_ctx, 0);
-> >>>>>>>
-> >>>>>>> bpf_loop() is old and generally not recommended.
-> >>>>>>> Please use bpf_for() then the diff will be one line change and
-> >>>>>>> can scale to any number of args. Not just 6.
-> >>>>>
-> >>>>> Thanks Alexei, I didn't know about this preference.
-> >>>>>
-> >>>>>> One thing we should take care is to support old kernels.  The oldest
-> >>>>>> LTS kernel in the kernel.org is 5.10 and bpf_loop() was introduced in
-> >>>>>> 5.17 and bpf_for (bpf_iter_num) was 6.4.
-> >>>>>
-> >>>>> The problematic loop was introduced in 6.12 by a68fd6a6cdd3 ("perf
-> >>>>> trace: Collect augmented data using BPF") so we should be good using
-> >>>>> bpf_for. Or is perf from 7.2 supposed to work on 5.10 LTS kernels?
-> >>>>
-> >>>> Yep, we'd like to support old kernels.
-> >>>
-> >>> How much strict are you on this requirement? IMHO, the very least we
-> >>> need to fix the verifier issue is bpf_loop, so that would still not work
-> >>> on 5.10 and 5.15 LTS kernels.
-> >>
-> >> I don't think it's an absolute requirement, but I think we don't want to
-> >> break any existing working setup (old kernel + old compiler).
-> >>
-> >>>
-> >>> We could probably keep the open-coded loop in case bpf_loop is not
-> >>> available but `perf trace` would still fail on kernels without bpf_loop
-> >>> for new perf built with Clang>=22. Also, the code would be a bit ugly
-> >>> and I'm not sure how well the feature check for helpers (bpf_loop) works
-> >>> on old kernels.
-> >>  
-> >> Any chance process_arg_cb() can be called directly in the regular for
-> >> loop on old kernels?
-> > 
-> > That's my thinking, too. Should be pretty straightforward, I'm going to
-> > give it a try in v2.
-> 
-> Btw, I just noticed that util/bpf_skel/lock_contention.bpf.c already
-> uses bpf_loop without any fallback so newer perf (at least `perf lock`)
-> won't be usable on kernels without bpf_loop anyways.
- 
-IIUC the lock contention tracepoints were added to v5.19 so it won't
-work on old kernels anyway. :)
+On Wed, Jul 1, 2026 at 3:40=E2=80=AFPM Masami Hiramatsu <mhiramat@kernel.or=
+g> wrote:
+>
+> On Wed, 01 Jul 2026 11:41:26 -0700
+> "Alexei Starovoitov" <alexei.starovoitov@gmail.com> wrote:
+>
+> >
+> > Nack.
+> > I really don't like it.
+> > There were days in the past when the kernel generating bpf directly was=
+ appealing.
+> > These days are gone. Performance improvements for fetchargs is not a go=
+od reason
+> > to add all this complexity and bypass verifier checks.
+> > bpf insns should come from user space.
+>
+> Thanks for your comment!
+> OK, I don't mind because this is a kind of investigation project. And som=
+e
+> people had asked me about the same idea, now I can tell them the result.
+>
+> I'm satisfied with the current outcome, as this development process gave =
+me
+> insight into the implementation of BPF and demonstrated the potential for
+> optimization via JIT. :)
+>
+> And also, as noted in the cover letter, the current performance of fetcha=
+rg
+> is better than I thought, and is good enough for debugging. :)
+>
+> BTW, I'm also interested in calling the verifier on this generated code.
+> Even it it is not merged, I think showing the correct way to implement it
+> will be useful in the future.
 
-Thanks,
-Namhyung
-
+The whole feature you're trying to do is imo reinvention of the wheel.
+bpf could do that kind of filtering years ago.
+I don't buy the excuse that embedded environments without any
+kind of user space needs this facility.
