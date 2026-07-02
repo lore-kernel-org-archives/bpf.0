@@ -1,206 +1,199 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C1854A341F
-	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 14:38:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD96353A96
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 14:47:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783003134; cv=none; b=UG1zreJUYVbB6xV3t30zlXCpItvKQpXonfQsIVEFc/7cJw6rkgpqd7d5ZPqXoLZfFjEE3c0V0OfV+DRtajbJVfbQVhevmT6K2hamHq1HcLC7v1s2j/HYjdNIpqtKvQKWGjrz6lvTmrzgx2+dz1x76/iRqDeglqfVZes7IG25ti0=
+	t=1783003659; cv=none; b=uo4P0Om2RsJO9d8u2Q1JCRiM4yulctADke1swwnq9O88sjAQXQItxMOmYPZ1ah0/n3U+UzrDoHXTsAVGMy71IYdsyeU7YxXisW37KDUP0rEy+tqwI82jZEMNtlJKrT5pggZnJHBi1F60NZsR3oj7DqBq6uPf9JRqn3KDkoWpKxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783003134; c=relaxed/simple;
-	bh=H88g9hW4UZ+8YvbJreYAaYNBhxdmpJiqEb2cx/0GvAg=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=UWiE1+HQqEmEw9KNUfxE4Q4cV718kMNEvTcnDFbdc9HsSNxifGMOXjpwkfw4UCJJL9dpwq98Qlu4RbnvslUHjjgGjGPE3g+Hsouq34bf9GrFs3bA7DCPNpxQcljV2+JH2hEPnsCGhIYe0eQ0TnRcGxX5p7sCJIoqGnyznc8CwL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8DxOPL6d0ZqrfEAAA--.5510S3;
-	Thu, 02 Jul 2026 22:38:50 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJBxacH4d0ZqXUa8AA--.15763S3;
-	Thu, 02 Jul 2026 22:38:49 +0800 (CST)
-Subject: Re: [PATCH bpf-next v6] bpf: Reject programs with inlined helpers if
- JIT is unavailable
-To: KaFai Wan <kafai.wan@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, loongarch@lists.linux.dev,
- Leon Hwang <leon.hwang@linux.dev>, Puranjay Mohan <puranjay@kernel.org>,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-References: <20260702053127.23599-1-yangtiezhu@loongson.cn>
- <f61c41783f56fc259b56141e8d438a56c9dfa31b.camel@linux.dev>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <f8e82ae2-78cd-bf91-ee7b-99a49289552a@loongson.cn>
-Date: Thu, 2 Jul 2026 22:38:48 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1783003659; c=relaxed/simple;
+	bh=qSoRJ+ny6mwEKR7wyqw9/Ie8ciB2/XLnhVkOOj3TvhE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=f53G+oZJBRv/IN1FBsohfDdM0SuqQqZztVMoFBRav0KTEAuHFVmw0+zYOINLpbYJkXG7LAYmSoYMhVBZzT4fJw5mq/EdoM2m0XHvEoeqdVbkaMPxKGJY2MH6GAxc6qTQ3VdC3eQkr52TB1JusAblWpZf7b1kL7RKlc9dp8lkE5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OI6ZfXdf; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=dc9qcubB; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OI6ZfXdf";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="dc9qcubB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783003657;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TJKNYo7arqO2T3O8Laac+0jwpzsq2e8teEx8RAzi/7U=;
+	b=OI6ZfXdfIH803YH8WnUn+hGo6xZC+oQw8A0KwUHMVd52+9boI33jf/s3bYQgnRSU+X7OFH
+	xWU8/Bz56TDC/g/vwdfn3z0ngNsGdCoRxNTA6JgT5I+ZLzQWooBJ95NoGHtQtzuUV2OUH9
+	ekqJ3comR01rT7BqZRqOelP6EBG1z5c=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-195-mr7jDL_EOXKRbZpwekcgMw-1; Thu, 02 Jul 2026 10:47:36 -0400
+X-MC-Unique: mr7jDL_EOXKRbZpwekcgMw-1
+X-Mimecast-MFC-AGG-ID: mr7jDL_EOXKRbZpwekcgMw_1783003655
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-c125ef89f4eso166311866b.2
+        for <bpf@vger.kernel.org>; Thu, 02 Jul 2026 07:47:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1783003655; x=1783608455; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TJKNYo7arqO2T3O8Laac+0jwpzsq2e8teEx8RAzi/7U=;
+        b=dc9qcubBzeEvOYmZS9pj4eiws7WPPAmfRCgjF/FokfGuQVOE3YvkYFQIQr+dadonfM
+         VjiUW1k91zi+XuHNh9FIf1zHZeilfBSYsEbp+kiyTSjqPu5++VlUsniyPgQOlLZAOAM1
+         YPBElXSmJcEb495Sr7mbw82Gm4ar28GKGxlbNb7uSA7MInaUnX2HlUK6OXaNIQd+aKm/
+         66ADkXlFVgy0Fp5a5LjqezABS5C3lb3eWPntaD5oH91TfJP/BI+oesHV879BOJbFgyrB
+         7seE8C33UgtmZEg1SGImxpgHO0Eu492MU+stOoEoXSXRRUtjAiWNQApdpweKPD7beixz
+         xckQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783003655; x=1783608455;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=TJKNYo7arqO2T3O8Laac+0jwpzsq2e8teEx8RAzi/7U=;
+        b=Zy/snWhLlVKx/RpO3IMKQLJ8wsP1TZMASSFDQ+otou3zDKEQ6O58kUpGwTo3Fc3/1Z
+         M5qdfsBtcbTUUo/EYBW/SgSXL/TggU5rVgZl32I4qiziovCnh2o9087GYZifEcBzs5FJ
+         XfsN3DZfg8Uer+vnD6uQVxh/euuH6hN+LvJTaiIVXUUgUxJy1ujAxuFM3mRVBR9bMtYb
+         yhVEVM7UoEW2jEeMumZswoJQ+HBUSz+Ojx9znw3sQq5UdSwRHtLJ/exXb9HEetVG3MW0
+         0owrO9IC1PJqr/YJGAo45K0z1sozYEEWFZOMNFnXzzqa7y7owMbVrJu/jwT71KAt6MAh
+         tZpA==
+X-Forwarded-Encrypted: i=1; AHgh+RoMIdiAd2Fl+5Myj+cz3dWEh2IENZKtFoYnH+cp881edjE/b6INo5XRC1azSPi10Qs7L9w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxqzbi3BvwBL/f1Ke0f6yNYl0yqJYbHclJB11STVSp06j+IEv8X
+	xDZsbtlCFr5dC/P+Xk/PZsoXBvzG7A81RlQ4rmk5nJ1OVdZ4V2gsg+2zkoTLWtCG4LgVGuWJ6Tm
+	4umyrCJJrZZw/bgmtOijqp63kNaJVhODs+kiRRjo3LOUQGVedE/TafQ==
+X-Gm-Gg: AfdE7ck6XkLudwolYlyScVTD7JQsPu2sUasLq2AYuJycx2fq/zncK+9J3ShFXXHx4ub
+	8apel994fykY4ezoz1ZrHUEJ6HCg0zFaBdNIszTVRgcWd933nhU7RtFvUg2I5AzqyY9Ypl26IQy
+	tUuzl6FMt+x7cnzMF0RCQlwAVc1+luz8fbrY31KH4O1ueUWFTXepsCUxAOPrx9MNkkEzFjb0FPM
+	bTPM/cxtjEfE4Hdwg1tlQGUE8Xshy5z0dWYaLDbmwlv7rp9gOGUTy75+FPz+Im67sO+C8QZ4Msq
+	79UQ/hgSI54djUxQKgr0JPe9ZnBbMzpdNk0dEA2nei7oYJlS1MIdz43YoyU+K7hADkUKWCyH+0N
+	Hw5T9B0bQxCOFGlbhbeK7ty1hF07ejayZWq4=
+X-Received: by 2002:a17:906:890e:b0:bee:6806:d69a with SMTP id a640c23a62f3a-c12aa1c038fmr242107766b.38.1783003654806;
+        Thu, 02 Jul 2026 07:47:34 -0700 (PDT)
+X-Received: by 2002:a17:906:890e:b0:bee:6806:d69a with SMTP id a640c23a62f3a-c12aa1c038fmr242105266b.38.1783003654407;
+        Thu, 02 Jul 2026 07:47:34 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c12b628efefsm140821766b.32.2026.07.02.07.47.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2026 07:47:33 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 2D65E80AC62; Thu, 02 Jul 2026 16:47:33 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: David Ahern <dsahern@kernel.org>, Avinash Duduskar
+ <avinash.duduskar@gmail.com>, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org
+Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
+ yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
+ a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
+ eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
+ bpf_fib_lookup() helper
+In-Reply-To: <9d14ff4b-eadd-4ae2-ab68-5927d4f19eeb@kernel.org>
+References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
+ <20260624030530.3342884-2-avinash.duduskar@gmail.com>
+ <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org> <87se65bd04.fsf@toke.dk>
+ <2ffa32dd-5c88-488a-aa23-deef13465eb9@kernel.org> <87echobb5h.fsf@toke.dk>
+ <cf25f667-1095-4f84-98ff-bf4662d3faa8@kernel.org> <874iik2ew4.fsf@toke.dk>
+ <916191fc-2e10-4449-b82b-c086d90283ae@kernel.org> <87y0fv0y79.fsf@toke.dk>
+ <9d14ff4b-eadd-4ae2-ab68-5927d4f19eeb@kernel.org>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Thu, 02 Jul 2026 16:47:32 +0200
+Message-ID: <87ik6x1m9n.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <f61c41783f56fc259b56141e8d438a56c9dfa31b.camel@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJBxacH4d0ZqXUa8AA--.15763S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxZw48ArWkGF1fXw4UXF1rZrc_yoWrXFWfpF
-	ykC3WvkrWrWrZ2g397Ca18ur4avrZrCr9rKayrGr1YkFyqgrnaq3W7Kr1YyrsxWr48W3WI
-	vwnFqFykGr1rXFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-	wI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
-	xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-	Jw0_WrylYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64
-	vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0E
-	wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F4
-	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
-	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxV
-	AFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWx
-	JVW8Jr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07
-	jjLvtUUUUU=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 2026/7/2 下午8:16, KaFai Wan wrote:
-> On Thu, 2026-07-02 at 13:31 +0800, Tiezhu Yang wrote:
->> When an architecture implements bpf_jit_inlines_helper_call(), such as
->> LoongArch, ARM64, PowerPC, and RISC-V, the verifier skips rewriting the
->> helper call offset (insn->imm) during the bpf_do_misc_fixups() phase,
->> because the helper is expected to be inlined by the JIT compiler. As a
->> result, insn->imm remains as the raw helper enum ID.
+David Ahern <dsahern@kernel.org> writes:
 
-...
+> On 7/1/26 5:02 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> David Ahern <dsahern@kernel.org> writes:
+>>> Seems to me the fib_lookup for xdp needs to return the bottom device,
+>>> not the vlan device, for forwarding to work. That's why I added the
+>>> fields to the struct. That allows the program to push the vlan header if
+>>> required. My preference (dream?) was that Tx path had support to tell
+>>> the redirect the vlan and h/w added it on send.
+>>=20
+>> Sure, returning the bottom device index with the VLAN tag makes sense,
+>> and that's basically what this series does (but bails out on stacked
+>> VLANs). However, that's not what the helper does today, which is why the
+>> flag is there, to opt-in to the new behaviour. I don't think we can just
+>> change the ifindex without breaking existing applications (as noted
+>> up-thread).
+>
+> I do not see it as breaking existing programs which is why I chimed in
+> on the thread.
+>
+>>=20
+>>> But really, once stacked devices come into play, I just wanted to make
+>>> sure thought is given to different use cases. As you know the lookup
+>>> struct if hard bound to 64B and it is trying to cover a lot of use case=
+s.
+>>=20
+>> Agreed, I don't think we can handle stacked devices in this helper. But
+>> we could split it out into a new one. Something like:
+>>=20
+>> struct lower_device_info {
+>> 	enum device_type type;
+>> 	struct {
+>> 		__be16	h_vlan_proto;
+>> 		__be16	h_vlan_TCI;
+>> 	} vlan;
+>>         /* add other types here */
+>> };
+>>=20
+>> int xdp_get_lower_device(int ifindex, struct lower_device_info *info);
+>>=20
+>> called like:
+>>=20
+>> int xdp_program(struct xdp_md *ctx)
+>> {
+>>         struct lower_device_info dev_info =3D {};
+>> 	int ifindex, ret;
+>>=20
+>>         ifindex =3D find_destination(ctx); /* does fib lookup, or someth=
+ing else */
+>>=20
+>>         while ((ret =3D xdp_get_lower_device_info(ifindex, &dev_info)) >=
+ 0) {
+>>         	if (dev_info.type =3D=3D VLAN) {
+>>                       	push_vlan_tag(ctx, &dev_info.vlan);
+>>                         ifindex =3D ret;
+>>                 } else {
+>>                 	return XDP_PASS; /* we only handle VLAN devices */
+>>                 }
+>>         }
+>>=20
+>>         return bpf_redirect(ifindex, 0);
+>> }
+>>=20
+>>=20
+>> With a helper like this, we obviously don't strictly speaking need to
+>> change the fib lookup helper at all. However, for the single-tagged VLAN
+>> case, I think supporting it directly in the fib lookup could still have
+>> value, as an optimisation: it saves an extra call for resolving the
+>> ifindex, and the fields are already there. So I think my preference
+>> would be to merge this series as-is, and then follow up with a new kfunc
+>> to handle the stacked case. But we could also just drop this series and
+>> go straight to the new kfunc.
+>>=20
+>> WDYT?
+>
+> no preference. I only chimed in because of the added flag to the uapi
+> which I do not see as needed. If the consensus is that it is in fact
+> needed, all good then.
 
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index ba09795e0bfd..f5c283af3cf7 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -1889,6 +1889,7 @@ struct bpf_prog {
->>   		u8 digest[SHA256_DIGEST_SIZE];
->>   		u8 tag[BPF_TAG_SIZE];
->>   	};
->> +	u8			jit_required;	/* program strictly requires JIT compiler */
-> 
-> maybe 1 bit is enough. I'm not sure the layout matters, if not we can put behind sleepable:1.
+Alright, cool - care to provide an ACK, then? :)
 
-Hi KaFai,
-
-Thanks for the guidance.
-
-I have placed jit_required:1 right behind sleepable:1
-to keep the layout clean, and refactored the kfunc path.
-
-I have just sent out the formal v7 patch series with
-Suggested-by tags.
-
-Here is the full pahole output for v7:
-
-```
-fedora@linux:~/703jit.git$ pahole -C bpf_prog ./vmlinux
-struct bpf_prog {
-	u16                        pages;                /*     0     2 */
-	u16                        jited:1;              /*     2: 0  2 */
-	u16                        jit_requested:1;      /*     2: 1  2 */
-	u16                        gpl_compatible:1;     /*     2: 2  2 */
-	u16                        cb_access:1;          /*     2: 3  2 */
-	u16                        dst_needed:1;         /*     2: 4  2 */
-	u16                        blinding_requested:1; /*     2: 5  2 */
-	u16                        blinded:1;            /*     2: 6  2 */
-	u16                        is_func:1;            /*     2: 7  2 */
-	u16                        kprobe_override:1;    /*     2: 8  2 */
-	u16                        has_callchain_buf:1;  /*     2: 9  2 */
-	u16                        enforce_expected_attach_type:1; /*     2:10 
-2 */
-	u16                        call_get_stack:1;     /*     2:11  2 */
-	u16                        call_get_func_ip:1;   /*     2:12  2 */
-	u16                        call_session_cookie:1; /*     2:13  2 */
-	u16                        tstamp_type_access:1; /*     2:14  2 */
-	u16                        sleepable:1;          /*     2:15  2 */
-	u16                        jit_required:1;       /*     4: 0  2 */
-
-	/* XXX 15 bits hole, try to pack */
-	/* XXX 2 bytes hole, try to pack */
-
-	enum bpf_prog_type         type;                 /*     8     4 */
-	enum bpf_attach_type       expected_attach_type; /*    12     4 */
-	u32                        len;                  /*    16     4 */
-	u32                        jited_len;            /*    20     4 */
-	union {
-		u8                 digest[32];           /*    24    32 */
-		u8                 tag[8];               /*    24     8 */
-	};                                               /*    24    32 */
-	struct bpf_prog_stats *    stats;                /*    56     8 */
-	/* --- cacheline 1 boundary (64 bytes) --- */
-	u8 *                       active;               /*    64     8 */
-	unsigned int               (*bpf_func)(const void  *, const struct 
-bpf_insn  *); /*    72     8 */
-	struct bpf_prog_aux *      aux;                  /*    80     8 */
-	struct sock_fprog_kern *   orig_prog;            /*    88     8 */
-	union {
-		struct {
-			struct {
-			} __empty_insns;                 /*    96     0 */
-			struct sock_filter insns[0];     /*    96     0 */
-		};                                       /*    96     0 */
-		struct {
-			struct {
-			} __empty_insnsi;                /*    96     0 */
-			struct bpf_insn insnsi[0];       /*    96     0 */
-		};                                       /*    96     0 */
-	};                                               /*    96     0 */
-
-	/* size: 96, cachelines: 2, members: 29 */
-	/* sum members: 90, holes: 1, sum holes: 2 */
-	/* sum bitfield members: 17 bits, bit holes: 1, sum bit holes: 15 bits */
-	/* last cacheline: 32 bytes */
-};
-```
-
-Here is the local test log for v7 when JIT is disabled,
-it correctly rejects loading with -ENOTSUPP (-524) and
-prevents the panic.
-
-```
-fedora@linux:~$ cat test_panic.c
-   #include <linux/bpf.h>
-   #include <bpf/bpf_helpers.h>
-
-   SEC("kprobe/sys_getpid")
-   int test_panic(void *ctx)
-   {
-   	struct task_struct *task;
-
-   	task = (struct task_struct *)bpf_get_current_task();
-   	if (task)
-   		bpf_printk("Task address: %p\n", task);
-
-   	return 0;
-   }
-
-   char LICENSE[] SEC("license") = "GPL";
-fedora@linux:~$ clang -target bpf -O2 -g -c test_panic.c -o test_panic.o
-fedora@linux:~$ sudo sysctl -w net.core.bpf_jit_enable=0
-[sudo] password for fedora:
-net.core.bpf_jit_enable = 0
-fedora@linux:~$ sudo bpftool prog load test_panic.o 
-/sys/fs/bpf/test_panic autoattach
-libbpf: prog 'test_panic': BPF program load failed: unknown error (-524)
-libbpf: prog 'test_panic': -- BEGIN PROG LOAD LOG --
-processed 10 insns (limit 1000000) max_states_per_insn 0 total_states 1 
-peak_states 1 mark_read 0
--- END PROG LOAD LOG --
-libbpf: prog 'test_panic': failed to load: -524
-libbpf: failed to load object 'test_panic.o'
-Error: failed to load object file
-```
-
-Thanks,
-Tiezhu
+-Toke
 
