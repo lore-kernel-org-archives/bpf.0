@@ -1,171 +1,206 @@
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8727C30C608;
-	Thu,  2 Jul 2026 03:14:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AEC0431E53
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 03:17:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782962097; cv=none; b=M7FxNBT+Xb4vg1yieHvhrt+VTNs9V9+rg+ysXzRFM6XR484wiDmhwY1iUacZxI74DzV+28EQDBCcfxvZuCn8Jx+yze8+zhqkHp0G+6aWbIePVRoJ52wENXgM5YS+eL02Z6BHgPHhbHyPXQBG0598jvAmjAn0WGEKz8wnorHvj20=
+	t=1782962249; cv=none; b=DcAp0oqwEdatSrHRclyR1hOIFUQzPsv/DHLSOzOPJ568sAZrwt5IgyI9ORFufchSe6+P2KIyCpKDAhpxiZmZWsORDesiEdVx+ap2tuAZx6NW3iJnm8SzKUBPacVaW+RHX6Qx4O9DG67JQfEoaNOFbP98BpeeeaDjqOby4DTu6Gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782962097; c=relaxed/simple;
-	bh=Zv6zOOkhVDvrqkwg/FjknHbiL5iANFIai2Qud9WW5fo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PzglwP0Le9Fy7EaoMVqEzwJ//0nwXhfltCEyj1rL95XZ/xl1guqi5mX9VoTDz6VDGxtl7QrodYVnE1v7gntKezlHO9TjnBfYOFC/388wGQeRFne8XLAc6B2ijZC8sFcwh0DR2iDd/yA3gicv4tIdc0MFAca2eUDC4nKgXlgesDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=D8oDRiTE; arc=none smtp.client-ip=115.124.30.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1782962249; c=relaxed/simple;
+	bh=7tHwDppsCdqtyqxvAVoJuKHL4Tf5QnyH6AdPQqUOMcY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tW7mhGdIRoI0NgjevWiY00S+ep/N+VodoGfzpc5SZQjvEAzaq8HM6v9gfZGM7gBWSsIl1zTcIc/UigNuswZRMVP6CMZxsUa+wO7+pOhWvx9PT8hIl6H39DU18gvcO8Ob51jf3ZSTPt98w+4tC5MkZFRQ8ODotzj1n791ui4qn2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ThbLoYK7; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="D8oDRiTE"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1782962091; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-	bh=awjN/Bx8yx2Wa4cq+cg8hFgBXfy/kjaifVF3JoRAeCM=;
-	b=D8oDRiTEst2XV/FHXnAUZM/16sHSdYKqYK3Pdvkxj3SpW2jo11y3qGQ8QiiPg+sJq4vLl1uF07NRndm14o3eLiG20HwKLgsUrz/BFQkev4FMMR8A7LPXQ7/HQLnfMiHVp7ZlqkFahSI0hryeNpKrrORxFHkDImKhRkMRElTvAkY=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R321e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=alibuda@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0X6CTmoG_1782962090;
-Received: from localhost(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0X6CTmoG_1782962090 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 02 Jul 2026 11:14:50 +0800
-Date: Thu, 2 Jul 2026 11:14:50 +0800
-From: "D. Wythe" <alibuda@linux.alibaba.com    >
-To: Sechang Lim <rhkrqnwk98@gmail.com>
-Cc: "D . Wythe" <alibuda@linux.alibaba.com>,
-	Dust Li <dust.li@linux.alibaba.com>,
-	Sidraya Jayagond <sidraya@linux.ibm.com>,
-	Wenjia Zhang <wenjia@linux.ibm.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Mahanta Jambigi <mjambigi@linux.ibm.com>,
-	Tony Lu <tonylu@linux.alibaba.com>,
-	Wen Gu <guwen@linux.alibaba.com>, Simon Horman <horms@kernel.org>,
-	Karsten Graul <kgraul@linux.ibm.com>,
-	Guvenc Gulce <guvenc@linux.ibm.com>,
-	Ursula Braun <ubraun@linux.ibm.com>, linux-rdma@vger.kernel.org,
-	linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net v3] net/smc: fix out-of-bounds read when sk_user_data
- holds a sk_psock
-Message-ID: <20260702031450.GA61525@j66a10360.sqa.eu95>
-References: <20260629095140.679754-1-rhkrqnwk98@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ThbLoYK7"
+Message-ID: <3fe115fd-8df8-4bf0-805b-2d0c2c40fdf5@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782962236;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EpRNLle6+4yZkierBTC2/qWgn38I+N4gkbA1peSKMc0=;
+	b=ThbLoYK76ulkLhRZKA5Ab5Io+WsmGdRgEzYOJm9CNkFKGZq/W5rpG+pADH8AKYJbROUIhr
+	M/cnjxSJiyp7KxupX1t5/QKB2kmim2jhU3Q6u/nDEfy4h8NBy/VDVIJTyk5tGDfQX7Q8vs
+	+i11uSidFCPbFb+XGdpUk/NVVKXQ2Pg=
+Date: Thu, 2 Jul 2026 11:17:06 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260629095140.679754-1-rhkrqnwk98@gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Subject: Re: [PATCH bpf-next v5] bpf: Reject programs with inlined helpers if
+ JIT is unavailable
+Content-Language: en-US
+To: Tiezhu Yang <yangtiezhu@loongson.cn>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, KaFai Wan <kafai.wan@linux.dev>
+Cc: bpf@vger.kernel.org, loongarch@lists.linux.dev
+References: <20260702022108.17693-1-yangtiezhu@loongson.cn>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260702022108.17693-1-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Jun 29, 2026 at 09:51:33AM +0000, Sechang Lim wrote:
-> A passive-open child inherits the listener's smc_clcsock_data_ready().
-> sk_clone_lock() clears its sk_user_data to NULL because the listener tagged
-> it SK_USER_DATA_NOCOPY. Until accept restores the callback, a BPF sock_ops
-> program can add the established child to a sockmap, and sk_psock_init()
-> installs a sk_psock into the NULL sk_user_data. The inherited callback then
-> reads it back through smc_clcsock_user_data(), which strips only NOCOPY,
-> takes the sk_psock for an smc_sock, and dereferences a clcsk_* field past
-> its end:
-> 
->   BUG: KASAN: slab-out-of-bounds in smc_clcsock_data_ready+0x84/0x200 net/smc/af_smc.c:2637
->   Read of size 8 at addr ffff8880013b8674 by task syz.6.12484/67930
->    <IRQ>
->    smc_clcsock_data_ready+0x84/0x200 net/smc/af_smc.c:2637
->    tcp_urg+0x24d/0x360 net/ipv4/tcp_input.c:6264
->    tcp_rcv_state_process+0x280d/0x4940 net/ipv4/tcp_input.c:7336
->    tcp_child_process+0x371/0xa50 net/ipv4/tcp_minisocks.c:1002
->    tcp_v4_rcv+0x1eaa/0x2a00 net/ipv4/tcp_ipv4.c:2186
->    [...]
->    </IRQ>
-> 
->   Allocated by task 67930:
->    sk_psock_init+0x142/0x740 net/core/skmsg.c:766
->    sock_hash_update_common+0xd3/0x990 net/core/sock_map.c:1010
->    bpf_sock_hash_update+0x114/0x170 net/core/sock_map.c:1229
->    __cgroup_bpf_run_filter_sock_ops+0x74/0xa0 kernel/bpf/cgroup.c:1727
->    tcp_init_transfer+0x1085/0x1100 net/ipv4/tcp_input.c:6693
->    [...]
-> 
-> Resolve the conflict on the write path. Reserve the child's sk_user_data
-> with a NULL pointer tagged SK_USER_DATA_NOCOPY so sk_psock_init() returns
-> -EBUSY, and release it at accept. smc_clcsock_user_data() still strips the
-> tag to NULL, so the inherited callback stays a no-op.
-> 
-> Fixes: a60a2b1e0af1 ("net/smc: reduce active tcp_listen workers")
-> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
-> ---
-> v3:
->  - reserve sk_user_data on the write path instead of the read-side check (D. Wythe)
-> 
-> v2:
->  - https://lore.kernel.org/netdev/20260619150342.3626224-1-rhkrqnwk98@gmail.com/
-> 
-> v1:
->  - https://lore.kernel.org/netdev/20260614120931.4041687-1-rhkrqnwk98@gmail.com/
-> 
->  net/smc/af_smc.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-> index b5db69073e20..78f162344fe3 100644
-> --- a/net/smc/af_smc.c
-> +++ b/net/smc/af_smc.c
-> @@ -154,7 +154,11 @@ static struct sock *smc_tcp_syn_recv_sock(const struct sock *sk,
->  					       own_req, opt_child_init);
->  	/* child must not inherit smc or its ops */
->  	if (child) {
-> -		rcu_assign_sk_user_data(child, NULL);
-> +		/* reserve sk_user_data so sockmap cannot claim the slot */
-> +		write_lock_bh(&child->sk_callback_lock);
-> +		__rcu_assign_sk_user_data_with_flags(child, NULL,
-> +						     SK_USER_DATA_NOCOPY);
-> +		write_unlock_bh(&child->sk_callback_lock);
+On 2/7/26 10:21, Tiezhu Yang wrote:
+[...]
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index ba09795e0bfd..463fae6a5c33 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1865,8 +1865,9 @@ struct bpf_prog_aux {
 >  
->  		/* v4-mapped sockets don't inherit parent ops. Don't restore. */
->  		if (inet_csk(child)->icsk_af_ops == inet_csk(sk)->icsk_af_ops)
-> @@ -1773,6 +1777,7 @@ static int smc_clcsock_accept(struct smc_sock *lsmc, struct smc_sock **new_smc)
->  	/* new clcsock has inherited the smc listen-specific sk_data_ready
->  	 * function; switch it back to the original sk_data_ready function
->  	 */
-> +	write_lock_bh(&new_clcsock->sk->sk_callback_lock);
->  	new_clcsock->sk->sk_data_ready = lsmc->clcsk_data_ready;
->  
->  	/* if new clcsock has also inherited the fallback-specific callback
-> @@ -1786,6 +1791,9 @@ static int smc_clcsock_accept(struct smc_sock *lsmc, struct smc_sock **new_smc)
->  		if (lsmc->clcsk_error_report)
->  			new_clcsock->sk->sk_error_report = lsmc->clcsk_error_report;
->  	}
-> +	/* release the slot reserved in smc_tcp_syn_recv_sock() */
-> +	rcu_assign_sk_user_data(new_clcsock->sk, NULL);
-> +	write_unlock_bh(&new_clcsock->sk->sk_callback_lock);
->  
->  	(*new_smc)->clcsock = new_clcsock;
->  out:
-> -- 
+>  struct bpf_prog {
+>  	u16			pages;		/* Number of allocated pages */
+> -	u16			jited:1,	/* Is our filter JIT'ed? */
+> +	u32			jited:1,	/* Is our filter JIT'ed? */
+>  				jit_requested:1,/* archs need to JIT the prog */
+> +				jit_required:1, /* program strictly requires JIT compiler */
+
+Looks good to put jit_required together with jit_requested.
+
+However, 'u16 -> u32' changes the layout of struct bpf_prog.
+
+Before the change, pahole -C bpf_prog ./vmlinux
+
+struct bpf_prog {
+	u16                        pages;                /*     0     2 */
+	u16                        jited:1;              /*     2: 0  2 */
+	u16                        jit_requested:1;      /*     2: 1  2 */
+	u16                        gpl_compatible:1;     /*     2: 2  2 */
+	u16                        cb_access:1;          /*     2: 3  2 */
+	u16                        dst_needed:1;         /*     2: 4  2 */
+	u16                        blinding_requested:1; /*     2: 5  2 */
+	u16                        blinded:1;            /*     2: 6  2 */
+	u16                        is_func:1;            /*     2: 7  2 */
+	u16                        kprobe_override:1;    /*     2: 8  2 */
+	u16                        has_callchain_buf:1;  /*     2: 9  2 */
+	u16                        enforce_expected_attach_type:1; /*     2:10
+2 */
+	u16                        call_get_stack:1;     /*     2:11  2 */
+	u16                        call_get_func_ip:1;   /*     2:12  2 */
+	u16                        call_session_cookie:1; /*     2:13  2 */
+	u16                        tstamp_type_access:1; /*     2:14  2 */
+	u16                        sleepable:1;          /*     2:15  2 */
+	enum bpf_prog_type         type;                 /*     4     4 */
+	enum bpf_attach_type       expected_attach_type; /*     8     4 */
+	u32                        len;                  /*    12     4 */
+	u32                        jited_len;            /*    16     4 */
+	union {
+		u8                 digest[32];           /*    20    32 */
+		u8                 tag[8];               /*    20     8 */
+	};                                               /*    20    32 */
+
+	/* XXX 4 bytes hole, try to pack */
+
+	struct bpf_prog_stats *    stats;                /*    56     8 */
+	/* --- cacheline 1 boundary (64 bytes) --- */
+	u8 *                       active;               /*    64     8 */
+	unsigned int               (*bpf_func)(const void  *, const struct
+bpf_insn  *); /*    72     8 */
+	struct bpf_prog_aux *      aux;                  /*    80     8 */
+	struct sock_fprog_kern *   orig_prog;            /*    88     8 */
+	union {
+		struct {
+			struct {
+			} __empty_insns;                 /*    96     0 */
+			struct sock_filter insns[0];     /*    96     0 */
+		};                                       /*    96     0 */
+		struct {
+			struct {
+			} __empty_insnsi;                /*    96     0 */
+			struct bpf_insn insnsi[0];       /*    96     0 */
+		};                                       /*    96     0 */
+	};                                               /*    96     0 */
+
+	/* size: 96, cachelines: 2, members: 28 */
+	/* sum members: 90, holes: 1, sum holes: 4 */
+	/* sum bitfield members: 16 bits (2 bytes) */
+	/* last cacheline: 32 bytes */
+};
 
 
-I do not think this is the right direction.
+After the change, pahole -C bpf_prog ./vmlinux
 
-You have now sent three versions of essentially the same patch, but I
-still do not see a clear explanation of why this approach is supposed to
-solve the problem you described. At this point, it looks like you are
-repeatedly posting changes without demonstrating that you fully
-understand the ownership and lifetime rules involved here.
+struct bpf_prog {
+	u16                        pages;                /*     0     2 */
 
-This is not the approach I suggested. My preference is to keep the
-sk_user_data reserved from the time the clcsock is created, by not
-setting NOCOPY, so that it remains inherited by the passive socket.
-That avoids the release-then-reacquire pattern entirely. The problem
-is more complicated than it may appear, and if you choose this direction,
-you also need to account for how SMC fallback continues to work with
-sockmap.
+	/* Bitfield combined with previous fields */
 
-If you do not think you can fully address that approach, then feel free
-to pursue other options that you are able to handle, but I will not ack
-any workaround version. You may seek ack from other maintainers.
+	u32                        jited:1;              /*     0:16  4 */
+	u32                        jit_requested:1;      /*     0:17  4 */
+	u32                        jit_required:1;       /*     0:18  4 */
+	u32                        gpl_compatible:1;     /*     0:19  4 */
+	u32                        cb_access:1;          /*     0:20  4 */
+	u32                        dst_needed:1;         /*     0:21  4 */
+	u32                        blinding_requested:1; /*     0:22  4 */
+	u32                        blinded:1;            /*     0:23  4 */
+	u32                        is_func:1;            /*     0:24  4 */
+	u32                        kprobe_override:1;    /*     0:25  4 */
+	u32                        has_callchain_buf:1;  /*     0:26  4 */
+	u32                        enforce_expected_attach_type:1; /*     0:27
+4 */
+	u32                        call_get_stack:1;     /*     0:28  4 */
+	u32                        call_get_func_ip:1;   /*     0:29  4 */
+	u32                        call_session_cookie:1; /*     0:30  4 */
+	u32                        tstamp_type_access:1; /*     0:31  4 */
+	u32                        sleepable:1;          /*     4: 0  4 */
 
-D. Wythe
+	/* XXX 31 bits hole, try to pack */
 
-> 2.43.0
+	enum bpf_prog_type         type;                 /*     8     4 */
+	enum bpf_attach_type       expected_attach_type; /*    12     4 */
+	u32                        len;                  /*    16     4 */
+	u32                        jited_len;            /*    20     4 */
+	union {
+		u8                 digest[32];           /*    24    32 */
+		u8                 tag[8];               /*    24     8 */
+	};                                               /*    24    32 */
+	struct bpf_prog_stats *    stats;                /*    56     8 */
+	/* --- cacheline 1 boundary (64 bytes) --- */
+	u8 *                       active;               /*    64     8 */
+	unsigned int               (*bpf_func)(const void  *, const struct
+bpf_insn  *); /*    72     8 */
+	struct bpf_prog_aux *      aux;                  /*    80     8 */
+	struct sock_fprog_kern *   orig_prog;            /*    88     8 */
+	union {
+		struct {
+			struct {
+			} __empty_insns;                 /*    96     0 */
+			struct sock_filter insns[0];     /*    96     0 */
+		};                                       /*    96     0 */
+		struct {
+			struct {
+			} __empty_insnsi;                /*    96     0 */
+			struct bpf_insn insnsi[0];       /*    96     0 */
+		};                                       /*    96     0 */
+	};                                               /*    96     0 */
+
+	/* size: 96, cachelines: 2, members: 29 */
+	/* sum members: 90 */
+	/* sum bitfield members: 17 bits, bit holes: 1, sum bit holes: 31 bits */
+	/* last cacheline: 32 bytes */
+};
+
+
+Luckily, the total size keeps 96 bytes. The layout change is the hole:
+from 4 bytes to 31 bits.
+
+Thanks,
+Leon
+
+>  				gpl_compatible:1, /* Is filter GPL compatible? */
+>  				cb_access:1,	/* Is control block accessed? */
+>  				dst_needed:1,	/* Do we need dst entry? */
+> [...]
