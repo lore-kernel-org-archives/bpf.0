@@ -1,108 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C7522332E;
-	Thu,  2 Jul 2026 06:01:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1EBC45039
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 06:10:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782972116; cv=none; b=gE7UzWY3Iv4p0PRGLBXCycIVhoj01tzTbdqGw7CROUoBDLisG66Gmj64nn3nxH/omEUdafU4e/E2FjvSJNZA9OpQ/pzRTvUPPK1xDeVqO9j4X3p5F5m2B3Hbt5WuKz2kzQYagAcalp71EWdspa+aCWYibpyJOD1gywLvhnQOqjM=
+	t=1782972650; cv=none; b=VuxEuAumdnBYoepmEE3XbyUPvh+q8aZwnttdW7skB5WLlOcYQnzPGlMNHywVEZMwjtzahP4seyCAYhvI6DX6QOfVtrkhrJnnRKuKIAgbch+efuwR7kCW2R8hi047HdrQaulSRwmaDcWB3WrSPw4rFBuPRcp51h/Hx2nGqvAyYo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782972116; c=relaxed/simple;
-	bh=Ydtfqij3wo6LOGDeCGeZe/nU5WEx5kYmvGqqT05EK7U=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=J6CBFyXDkObeBCwOcaRX4o+pbwOC38NvxPGHc38i/WPBX8QCIcjoYB7Dafa5tKu0Ge4DWlbHkG2kc6Smx5SmfXHZw9gRv1Oojb7blAj44lko+oTkrAdWrkr4aJLo6JsoinvUMS5UXoZdu8SaAGCa59LyfuVXgb/aPtpN6JZRMAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BMuMb2zH; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BMuMb2zH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D8921F000E9;
-	Thu,  2 Jul 2026 06:01:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782972114;
-	bh=cKPd4z1Xf8JW19YEmMTpu1uewWUK1Wlu0tLwU1Qpuv4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=BMuMb2zHLahQbG+yGP+3FSf3EBA8dxXlYkM8zNcgs5HJ2qMEnJ0bqlPDlyp2jDrff
-	 Yoc5gFv8kZVySRb9WpsrC1uHEc6Jp9VGE9upNsT/+aQ0KhTY37GAZV9U9LphwbfK6N
-	 17yXEv+HYpkq8hdWWd+6fIRw6mU1HIHmoruy/6E/ZPNAr6mnb2HktAfsWTiClRxtOk
-	 UfDJIRtA4LyI18jES2neitseKgzr/D+u3ShhyqDxFEEAjBEPpnrNOGApr0hhonxGQp
-	 O7uxyB6sG48wtk0+boTr8tBpfmPhRfx93Idu0ZLU3rZVukyNW6cVndhgsTdb1Y9LZL
-	 /50cXmBtZzA0w==
-Content-Type: multipart/mixed; boundary="===============1323697411249830709=="
+	s=arc-20240116; t=1782972650; c=relaxed/simple;
+	bh=l2Y5w3mPIbBEeQ8kSbXus7o5RUfZJ0TgUAfPh09G4Wk=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=nELqUgUDNgA/Kk1Edd1d2vMWliVvoHW1udmt4yxUk1+1EJWiUlCQ+cbwwowLxCE4M05897++gAcFv/K/XTUVso1SJ6HnaDMeEEZWSszRxw7Wtgoe7F77PAwqFJLgee9VKM9skKZeg1LhcobnXMy1eIJXNb+2a0Tonv88WurxxhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8AxuPDiAEZqq8oAAA--.4657S3;
+	Thu, 02 Jul 2026 14:10:42 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJDxysHXAEZqI6q7AA--.25892S3;
+	Thu, 02 Jul 2026 14:10:33 +0800 (CST)
+Subject: Re: [PATCH bpf-next v6] bpf: Reject programs with inlined helpers if
+ JIT is unavailable
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, KaFai Wan <kafai.wan@linux.dev>,
+ bpf <bpf@vger.kernel.org>, loongarch@lists.linux.dev,
+ Leon Hwang <leon.hwang@linux.dev>, Puranjay Mohan <puranjay@kernel.org>,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+References: <20260702053127.23599-1-yangtiezhu@loongson.cn>
+ <CAADnVQJodzDppDUjSYXra-jCo3J32t7=h32bHm4tQei-+5P72w@mail.gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <8e441177-455d-4a0a-00dd-8f6c2adb954d@loongson.cn>
+Date: Thu, 2 Jul 2026 14:10:31 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <4f48c0a2f4a53b1faacf2b94c36a978cbf6075218f839de6922409e1566befbd@mail.kernel.org>
-In-Reply-To: <20260702053127.23599-1-yangtiezhu@loongson.cn>
-References: <20260702053127.23599-1-yangtiezhu@loongson.cn>
-Subject: Re: [PATCH bpf-next v6] bpf: Reject programs with inlined helpers if JIT is unavailable
-From: bot+bpf-ci@kernel.org
-To: yangtiezhu@loongson.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,kafai.wan@linux.dev
-Cc: bpf@vger.kernel.org,loongarch@lists.linux.dev,leon.hwang@linux.dev,puranjay@kernel.org,bjorn@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  2 Jul 2026 06:01:54 +0000 (UTC)
+In-Reply-To: <CAADnVQJodzDppDUjSYXra-jCo3J32t7=h32bHm4tQei-+5P72w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJDxysHXAEZqI6q7AA--.25892S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxZw47Jw4rCry5Kw1fGw1xZwc_yoW5uw1UpF
+	Wvkw4qkrykXw1093y2ya1xur1ag3yDJryUKa4fGF1Fya12qrn3XrZxKa10qFZ5Gw4kW3WI
+	v342yF95u3WUZFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+	6r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
+	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14
+	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4U
+	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jwnYwUUU
+	UU=
 
---===============1323697411249830709==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 2026/7/2 下午1:45, Alexei Starovoitov wrote:
+> On Wed, Jul 1, 2026 at 10:31 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>>
+>> When an architecture implements bpf_jit_inlines_helper_call(), such as
+>> LoongArch, ARM64, PowerPC, and RISC-V, the verifier skips rewriting the
+>> helper call offset (insn->imm) during the bpf_do_misc_fixups() phase,
+>> because the helper is expected to be inlined by the JIT compiler. As a
+>> result, insn->imm remains as the raw helper enum ID.
+>>
+>> However, if JIT is disabled at runtime (net.core.bpf_jit_enable=0) or
+>> if the JIT compilation later dynamically fails (e.g., due to OOM), the
+>> core BPF subsystem falls back to the BPF interpreter.
+>>
+>> When the interpreter executes (__bpf_call_base + insn->imm) with the
+>> unpatched raw helper ID, it jumps into an unaligned invalid address
+>> space, triggering an instruction alignment fault or a memory access
+>> panic.
+>>
+>> To avoid modifying the BPF interpreter's complexity for JIT-specific
+>> paths, just introduce a 'jit_required' flag in struct bpf_prog. When
+>> a program contains helper calls that skip rewriting for JIT inlining,
+>> set this flag to 1. During runtime selection, if JIT compilation is
+>> not available, explicitly reject loading with -ENOTSUPP instead of
+>> falling back to the interpreter, safely preventing the kernel panic.
+>>
+>> Fixes: 2ddec2c80b44 ("riscv, bpf: inline bpf_get_smp_processor_id()")
+>> Suggested-by: Alexei Starovoitov <ast@kernel.org>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>> v6:
+>>    - Place 'jit_required' as a standalone u8 field right before 'stats'
+>>      to reuse the existing 4-byte struct hole (offset 52) based on pahole
+>>      analysis, avoiding the u16->u32 bitfield conversion in v5 which
+>>      unintentionally changed the layout/alignment of subsequent fields.
+> 
+> v5 had AI written all over it. v6 is not any better.
+> Please ask AI whether your v6 is any better than v5 ?
+> Then analyze replies as a human.
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index ba09795e0bfd..f5c283af3cf7 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1889,6 +1889,7 @@ struct bpf_prog {
->  		u8 digest[SHA256_DIGEST_SIZE];
->  		u8 tag[BPF_TAG_SIZE];
->  	};
-> +	u8			jit_required;	/* program strictly requires JIT compiler */
->  	struct bpf_prog_stats __percpu *stats;
->  	u8 __percpu		*active;	/* u8[BPF_NR_CONTEXTS] for recursion protection */
->  	unsigned int		(*bpf_func)(const void *ctx,
+Hi Alexei,
 
-The placement and overall design of this jit_required field does not look
-settled yet in the upstream discussion.
+Sorry for the AI text. I used it to translate my replies.
 
-Changes were requested on this version, with the note that it is not an
-improvement over the previous version, so is the standalone u8 field here
-the approach that has been agreed on?
+- v5 code: Placed jit_required under u16 group, but u32 broke layout.
+- v6 code: Moved it to offset 52 hole to fix the alignment.
 
-  https://lore.kernel.org/bpf/CAADnVQJodzDppDUjSYXra-jCo3J32t7=h32bHm4tQei-+5P72w@mail.gmail.com/
+Here is the local test log for v6 when JIT is disabled:
 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 649cce41e13f..a55754bcc593 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2639,7 +2639,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
->
->  		fp = bpf_prog_jit_compile(env, fp);
->  		bpf_prog_jit_attempt_done(fp);
-> -		if (!fp->jited && jit_needed) {
-> +		if (!fp->jited && (jit_needed || fp->jit_required)) {
->  			*err = -ENOTSUPP;
->  			return fp;
->  		}
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index 12a8a4eb757f..94e0457a0aa3 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -1841,8 +1841,10 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
->  		}
->
->  		/* Skip inlining the helper call if the JIT does it. */
-> -		if (bpf_jit_inlines_helper_call(insn->imm))
-> +		if (bpf_jit_inlines_helper_call(insn->imm)) {
-> +			prog->jit_required = 1;
->  			goto next_insn;
-> +		}
->
->  		if (insn->imm == BPF_FUNC_get_route_realm)
->  			prog->dst_needed = 1;
+fedora@linux:~$ cat test_panic.c
+   #include <linux/bpf.h>
+   #include <bpf/bpf_helpers.h>
 
+   SEC("kprobe/sys_getpid")
+   int test_panic(void *ctx)
+   {
+   	struct task_struct *task;
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+   	task = (struct task_struct *)bpf_get_current_task();
+   	if (task)
+   		bpf_printk("Task address: %p\n", task);
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28568041313
---===============1323697411249830709==--
+   	return 0;
+   }
+
+   char LICENSE[] SEC("license") = "GPL";
+fedora@linux:~$ clang -target bpf -O2 -g -c test_panic.c -o test_panic.o
+fedora@linux:~$ sudo sysctl -w net.core.bpf_jit_enable=0
+net.core.bpf_jit_enable = 0
+fedora@linux:~$ sudo bpftool prog load test_panic.o 
+/sys/fs/bpf/test_panic autoattach
+libbpf: prog 'test_panic': BPF program load failed: unknown error (-524)
+libbpf: prog 'test_panic': -- BEGIN PROG LOAD LOG --
+processed 10 insns (limit 1000000) max_states_per_insn 0 total_states 1 
+peak_states 1 mark_read 0
+-- END PROG LOAD LOG --
+libbpf: prog 'test_panic': failed to load: -524
+libbpf: failed to load object 'test_panic.o'
+Error: failed to load object file
+
+It correctly rejects loading with -ENOTSUPP (-524) and prevents the panic.
+
+Thanks,
+Tiezhu
+
