@@ -1,123 +1,179 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26311335564
-	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 20:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B831B3F9FB;
+	Thu,  2 Jul 2026 21:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783025740; cv=none; b=L1lK6FlACHnWmpV7lckd06DBZE4ZXytOGkOoyzrqsoRSwv1TvQQ1KSu8KH6A+CrOgFgZBq3ateZJqzZiqaexNrMOu68Gb9TmQHbHGpF29JK2c3JYfaNo85JJR9ohRc/7vxL57icIEUcCMAXrJqORS0UsBZxvsJR704KTN6IDmmI=
+	t=1783027026; cv=none; b=U0Sv9bfMiL96cNOu9tw1OF+XgeL/H7UK4zFm3tkEKhuyqgWnny57uYH4PJ/l9+dMdRyneCT5bd//SlipUoDved0cSpgQnkKrxrjVvS+7BeMYPTL4gcXWDGqmUjTJUgEAv1C1EN/kv2p2Yjh3PQKcwTMABqEeK1ZiWYg1rom5DTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783025740; c=relaxed/simple;
-	bh=BGQezGtAEhObtCT7zzcr8aPET3DzThoRgRXdFBLHp2s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rVWpvbK2noALJkf12sR2MAS9IEmrPJ+TrqRq9rk2R5HXgqFoqsWXcLoRvJ98j7hzFF0f8nMI+tTWuAgNTqbIzdihLx2qYAc+8Ih79wLyUyOnk1N7zKBUX4k5w2YCjRRTgnistOOk7741KncNNshnGFTCwzg3PCXggCT05/rEWT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wWVR15nT; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1783027026; c=relaxed/simple;
+	bh=XawzBJW+QEVhyimcAwWarKIl3iK4n81nuEVvzQSJwOU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RY8NNPN3GIKkbD3PtSSGhXw9PGj0dQGFRoh9C0n6bIgd/Ba2McV+qHJ2y7TareZw0X8oDozR+d/gZp6Sc8OPiJvcl0W5zozbeuymSLV5THDcaAuhFnrP3xpWucQZYaWU2EmT9HKZImq5UyeR36bGFHBpc3CCA6i9HS6QY0OaGj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=BjPorjnm; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wWVR15nT"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-69531108f25so4412722a12.2
-        for <bpf@vger.kernel.org>; Thu, 02 Jul 2026 13:55:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783025737; x=1783630537; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l+3jLVZWypF3i0IWmKvq6/0JVUOvsfukC3JPM7pFG8I=;
-        b=wWVR15nTlyRcCK+0BqKliXFvSPoxzaocr8fyuE3s1qqp3z7g6ykj0Prn2DuxDce+eC
-         aVeNUGi4b2Mwir660+iVxiSKyR0HY/jvSGWnrgs538Z9bmQEzp0aC75Hhpqrav3b20bQ
-         ++iyKzVg9xkudwBE84QIS3MqMZes/75xsF3r9NP1KilpuEYdXh+Q4HQUihAhO7eDZ2tj
-         cQ5dMZpBSRNpNdZBE64aPGUBMN4gNaZjt6cTcPq11jH7YScMf234u0x8oKArNF9LpgKE
-         5Cf9+8/zBa7hLAzoH0DAy6CYIbXtv/SO1P7Zhbg/STbub7k0OHqB+8vRl0wm6NfBqJ9L
-         DLDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783025737; x=1783630537;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l+3jLVZWypF3i0IWmKvq6/0JVUOvsfukC3JPM7pFG8I=;
-        b=GqsxABn+xQyuZud33ScwC+YhKsaYcFWqmA2qIwpJUFaK3yjd77w483iRl2m/xRxv1v
-         6/iJgqd++PCP5/asAiakjDLUGfuB0Rng5kro5Wmc/LFL0c6/e+rSEWrn0BeupHxkx3Oi
-         0p6U/nQlZjNPu7TF60cgmB4WcN5u1iyGCMa0tYBrc9TJNOObvnwhkjz/AGLArGE3yNL/
-         eUGA0sW2oKwZfaXmlQdkGsx02oP3FpJl8yis9hELS0UWIJ0ZIwRXo+JFZuQbpdFUfKJE
-         Ykeaf2jGV2UbSSkgZORzYuXV1Q0545NUnEVqy0RgqcZxEaw5yXx04VUAJ1rNct8hm6BJ
-         iPEg==
-X-Gm-Message-State: AOJu0YyUBPAgXL0fqj7DVFeMx8mdJTidkJ6YBAF/ej4Mhw0OoEtMAXC8
-	ufHGkmGe+dmn2CceM/YDj6FFvkYwtU3jNPI76MDWWvRBcclgkfpGajg8mumppS1PxA==
-X-Gm-Gg: AfdE7ckzuKEvpsG1h2Z/WJ7ueKq1zqxyit8Cg7MgsBl86/WOHZ4dhU7zboPkv3EwuVx
-	uw6YbzQSTCWaHBIMleHbrfchOUCUmQdOQ5E8yeRC7POsXvJoTm6YLwe9LUKeg/0CuHhkk0kAdod
-	A7jhP4Kl8nh05EJxKaySKmL3VHENw4wv/5tAre4aEbGdpCK15xPJPpDBRccdBc6a2OiSxHlNGPh
-	VI+Eca4HJhF4V4WeOw86/w3ZS5v4P6EU8NoH06gYQZyOs28niwxYy31h6AACaVFX7CuU6IyNrWV
-	n2R+P3P/C9cRo+KSTrLu2u6sPgdoS28M9ImPhdGGY/iO9tEHZn+0VYJKDUcjpypN8tZrp28mNp0
-	UwqDYdOtTtbSYKX6OELuyAw3VX5doRZG7+Kt9IAxpfGRPpglfgOZC0lpAfnC7DDtBqmF7QWutEq
-	F+qlnkDeyKH13y0R6Hyfd+9iulqRyw1Yo/HUYsJhxv5JVGJPHuUDdcwRzQuQ==
-X-Received: by 2002:a17:906:c086:b0:c12:a5fb:ff22 with SMTP id a640c23a62f3a-c12aa33d14fmr302689966b.50.1783025736895;
-        Thu, 02 Jul 2026 13:55:36 -0700 (PDT)
-Received: from google.com (136.183.91.34.bc.googleusercontent.com. [34.91.183.136])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c12b62c53c1sm181439566b.45.2026.07.02.13.55.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jul 2026 13:55:35 -0700 (PDT)
-Date: Thu, 2 Jul 2026 20:55:32 +0000
-From: Matt Bobrowski <mattbobrowski@google.com>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Paul Moore <paul@paul-moore.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>, oxsignal <awo@kakao.com>
-Subject: Re: [PATCH bpf-next] bpf: reject BPF_MAP_TYPE_INODE_STORAGE creation
- if BPF LSM is uninitialized
-Message-ID: <akbQRG_Kp6ms7pTr@google.com>
-References: <20260628201103.3624525-1-mattbobrowski@google.com>
- <e3c95beb-8b74-4037-8520-9f3c18a35606@iogearbox.net>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="BjPorjnm"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=7MrVyOUQ+A2JIaTA8EefePQMTeG/s1iSrjXUbdvwrEA=; b=BjPorjnmXBN07GBx1zL3xPvgJ0
+	8CPMK+iAJPXLnE2qUxMKQx0YFwLLeRNjpgvISMcuOS3jlOJ7DEnotykpxL3xk4/b5/B6eTXNeWL/x
+	ILo8wuNuDKB/cqEpYIZyNR1N4XgXBCH+Gl8TcRv26YRqAndfxu4fqVj6F8zmq1bwgdIIWL4FSAFX2
+	jg9SAYQSzN63qIEtSY9aZzzKTcqLDlf3mfCXyPPrB+baGNe2KbGvgVTdFQD4qtvP+rFqaPeOv9LLo
+	MUrgwS3Rcwfv6egY4Qmkal7j8GM8NePHyQ+KdeA1O1QJqNin1Ppd6+wRccmKmoqbkmK8fXtew8a7F
+	wmvQeTfQ==;
+Received: from sslproxy08.your-server.de ([78.47.166.52])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wfOmL-0003cR-0F;
+	Thu, 02 Jul 2026 23:17:01 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wfOmK-000PAZ-14;
+	Thu, 02 Jul 2026 23:17:00 +0200
+Message-ID: <a430a735-4657-475f-a7e7-64036a540644@iogearbox.net>
+Date: Thu, 2 Jul 2026 23:16:59 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e3c95beb-8b74-4037-8520-9f3c18a35606@iogearbox.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 1/6] bpf: Resolve and cache fd_array objects
+ at load time
+To: Anton Protopopov <a.s.protopopov@gmail.com>
+Cc: ast@kernel.org, kpsingh@kernel.org,
+ James.Bottomley@hansenpartnership.com, paul@paul-moore.com,
+ bboscaccy@linux.microsoft.com, memxor@gmail.com,
+ torvalds@linux-foundation.org, bpf@vger.kernel.org,
+ linux-security-module@vger.kernel.org
+References: <20260702143605.252797-1-daniel@iogearbox.net>
+ <20260702143605.252797-2-daniel@iogearbox.net>
+ <aka2yR6IUZMAOUwJ@mail.gmail.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <aka2yR6IUZMAOUwJ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28048/Thu Jul  2 08:25:04 2026)
 
-On Tue, Jun 30, 2026 at 05:31:13PM +0200, Daniel Borkmann wrote:
-> On 6/28/26 10:11 PM, Matt Bobrowski wrote:
-> > When CONFIG_BPF_LSM=y is set, BPF inode storage maps
-> > (BPF_MAP_TYPE_INODE_STORAGE) are compiled into the kernel. However,
-> > if the BPF LSM is not explicitly enabled at boot time (e.g. omitted
-> > from the "lsm=" boot parameter), lsm_prepare() is never executed for
-> > the BPF LSM.
-> > 
-> > Consequently, the BPF inode security blob offset
-> > (bpf_lsm_blob_sizes.lbs_inode) is never initialized and remains at its
-> > default compiled size of 8 bytes instead of being updated to a valid
-> > offset past the reserved struct rcu_head (typically 16 bytes or more).
-> > 
-> > When a privileged user creates and updates a
-> > BPF_MAP_TYPE_INODE_STORAGE map, bpf_inode() evaluates
-> > inode->i_security + 8. This erroneously aliases the struct
-> > rcu_head.func callback pointer at the beginning of the
-> > inode->i_security blob. During subsequent map element cleanup or inode
-> > destruction, writing NULL to owner_storage clears the queued RCU
-> > callback pointer. When rcu_do_batch() later executes the queued
-> > callback, it attempts an instruction fetch at address 0x0, triggering
-> > an immediate kernel panic.
-> > 
-> > Fix this by introducing a global bpf_lsm_initialized boolean flag
-> > marked with __ro_after_init. Set this flag to true inside
-> > bpf_lsm_init() when the LSM framework successfully registers the BPF
-> > LSM. Gate map allocation in inode_storage_map_alloc() on this flag,
-> > returning -EOPNOTSUPP if the BPF LSM is in turn uninitialized.
-> > 
-> > This fail-fast approach prevents userspace from allocating inode
-> > storage maps when the supporting BPF LSM infrastructure is absent,
-> > avoiding zombie map states.
-> > 
-> > Fixes: 8ea636848aca ("bpf: Implement bpf_local_storage for inodes")
-> > Reported-by: oxsignal <awo@kakao.com>
-> > Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
+On 7/2/26 9:06 PM, Anton Protopopov wrote:
+> On 26/07/02 04:36PM, Daniel Borkmann wrote:
+>> The fd_array passed to BPF_PROG_LOAD carries the map and module BTF file
+>> descriptors a program binds. The verifier reads it more than once during
+>> a load: process_fd_array() walks it to bind the maps and BTFs, and
+>> check_and_resolve_insns() and the kfunc BTF resolver later read it again
+>> to resolve the program's BPF_PSEUDO_MAP_IDX and module kfunc refs.
+>>
+>> For signed BPF, we need these upfront in memory, thus resolve each fd to
+>> its object once and cache it by fd_array index, then bind that cached
+>> object for the rest of the load. env->fd_array becomes a small per-slot
+>> {map, btf} cache rather than a bpfptr_t; every later reference is then
+>> an in-bounds lookup of an already-resolved object, and an index outside
+>> the cache is rejected instead of read from user memory:
+>>
+>>    - continuous (fd_array_cnt given): the caller declares the length and
+>>      every entry is resolved and bound up front (used also by signed loader)
+>>
+>>    - sparse (no fd_array_cnt): left as the legacy path with no fd_array
+>>      cache; each reference reads its fd from the caller's fd_array and
+>>      resolves it on the spot. Deduplication in used_maps and the kfunc BTF
+>>      table keeps this correct, and only unsigned programs use this shape.
+>>
+>> UAPI-wise nothing changes, its just the internals on how BPF processes
+>> and caches the fd_array favors. Split these into separate helpers for
+>> continuous versus sparse to make it easier to follow.
 > 
-> (Looks like pwbot is asleep; applied to bpf.)
-
-Thank you Daniel!
+> Overall looks ok. A few comments below.
+> 
+[...]
+>> -	/* Check for integer overflow */
+>> -	if (attr->fd_array_cnt >= (U32_MAX / size)) {
+>> -		verbose(env, "fd_array_cnt is too big (%u)\n", attr->fd_array_cnt);
+>> -		return -EINVAL;
+>> +	if (cnt > MAX_FD_ARRAY_CNT) {
+> 
+> So, I _think_ I've done the "unlimited" thing because there can be duplicates
+> in fd_array. The limit is actually tracked by __add_{map_btf} So here we hard
+> limit on the size of the fd_array itself. (Even without duplicates, this
+> fd_array can contain, say, MAX_KFUNC_BTFS different maps, which will be in any
+> case rejected by __add_used_map.)
+> 
+>> +		verbose(env, "fd_array has too many entries (%u, max %u)\n",
+>> +			cnt, MAX_FD_ARRAY_CNT);
+>> +		return -E2BIG;
+>>   	}
+>>   
+[...]
+>>   
+>> +static int process_fd_array(struct bpf_verifier_env *env,
+>> +			    union bpf_attr *attr, bpfptr_t uattr)
+>> +{
+>> +	bpfptr_t fd_array = make_bpfptr(attr->fd_array, uattr.is_kernel);
+>> +
+>> +	if (bpfptr_is_null(fd_array))
+>> +		return 0;
+>> +	/*
+>> +	 * New API: the caller passes fd_array_cnt and a continuous array that
+>> +	 * is resolved and bound up front. Legacy API (no fd_array_cnt): keep
+>> +	 * the caller's array and resolve entries lazily, on first reference.
+>> +	 */
+>> +	if (attr->fd_array_cnt)
+>> +		return process_fd_array_continuous(env, fd_array,
+>> +						   attr->fd_array_cnt);
+> 
+> Looks like this returns success in case (!fd_array && attr->fd_array_cnt),
+> which is a misconfiguration and should be rejected.
+Thanks for the review, addressing both in v4!
