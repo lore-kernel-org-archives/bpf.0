@@ -1,32 +1,32 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D0A93009F2
-	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 02:25:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A093009F2
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 02:25:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782959102; cv=none; b=IzntcSnrvXwNm3XHiDhN/0b7sEOtwNFchAc9JkuzUAJsUbl0Mtg78hOlx57BCDEd7CFLuCcImMNdJViUGM286EEjlrp3f806fIfF1bCcw2n6Mx35/YSrwm6AMrL3RvwtBybFApnILLrNKzAf7bPgSXn6wUfgpAkPrmptxaCcPQo=
+	t=1782959113; cv=none; b=iGs1k/A4f3HCYXEnHSI9yb3EjIJdniVY2/z8unOvB69I0jQdu+1HFRacSh7adIgqwaOjvUrd9jmCZe6Q379i+qztGViV37WNAAfaJVsr9gT/F/Ov3BQznotr8PFZpbgrjaIieQhitYJ5X2bBjf8Bfw+Ns+6Efi5b6icExWwG2YY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782959102; c=relaxed/simple;
-	bh=u0BHccFFok4W4K1qDbFRTw5PIdV34AfWS/g7edMPN4g=;
+	s=arc-20240116; t=1782959113; c=relaxed/simple;
+	bh=/1uI0PINc3JAPZ3jgxtMPxNgd3W4a0i+Eg0weuYEt9Q=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=U39z0vlMJeMpAAJZtjmGY0BiUMOQ+2Snd/sVdpFb4ZyFpwMPYaH/IQ3PkXwHu0nhSYeKkFYc095i96E9xGYrn4XWAKqKOgp5ibqXaxFfDGhVMX1NzH+F7cgHxwevJwmOg0wAgKVz9PQhaOQB7g+5wkzm7aCerbRsLlzKTrPDzhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RMQMagj6; arc=none smtp.client-ip=91.218.175.171
+	 MIME-Version; b=S3OUHpRGlu2NJ1NL9r3RoOoY2krC9Of5JhdP5fS+bCcEvgxhDcwtrQuqwBrJJyHi2oGGxKXO4rJfgxD5s8fO7vNRolRPPRBusn7IU59IEGCa6Ll3tQ8sDJ582e7Hx25iX/spUCWPH/pq+8Q2wlEVG4pAZSNZoFJqyqRQ/GoNvFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uu0es29L; arc=none smtp.client-ip=95.215.58.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RMQMagj6"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uu0es29L"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782959099;
+	t=1782959110;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=2ZJcV8qkE/533ZNLQ7MwZZ6HE6w38xEeqB7Q6PXDQMU=;
-	b=RMQMagj6uQVCeYKSVqtlZOZbln/2IKrgmxy6/eIoBQgZTIOAYvLobMdSMe7pfQn1RD5mEv
-	7YFrRzXR0CHb9tEgy6LjIOEJljQzV6lyxwXvGOSV5pU3G9WCqW2nSKGTRGf66orWEpns1Y
-	YlSaTmkfNOxk6Ek4fI9NhKBl7Ke+4xM=
+	bh=2z5u1ZhZaI359hc2wfdkg8LPj2X4q4oVjTNlw+7cREc=;
+	b=uu0es29LMd/p6+MjeB2c8IiDd88nldql6FDPeomqsr6uLHAsGsjMXcUmWf4W0ErFBhPAEN
+	kqocuNGh4zw/U0L7IwU5SGd4ctcb+AW6IfATXcNKFEuNqu9Zs0WbZl8z+OVR70azHGnV64
+	eFZ0NN5LG5JZdCPmYE9dmiU7IJENJ4k=
 From: George Guo <dongtai.guo@linux.dev>
 To: Huacai Chen <chenhuacai@kernel.org>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>,
@@ -45,9 +45,9 @@ Cc: WANG Xuerui <kernel@xen0n.name>,
 	bpf@vger.kernel.org,
 	loongarch@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 08/11] selftests/bpf: Enable struct_ops private stack test for LoongArch
-Date: Thu,  2 Jul 2026 10:23:19 +0800
-Message-Id: <20260702022322.51033-9-dongtai.guo@linux.dev>
+Subject: [PATCH bpf-next v2 09/11] selftests/bpf: Enable arena LDSX tests on LoongArch
+Date: Thu,  2 Jul 2026 10:23:20 +0800
+Message-Id: <20260702022322.51033-10-dongtai.guo@linux.dev>
 In-Reply-To: <20260702022322.51033-1-dongtai.guo@linux.dev>
 References: <20260702022322.51033-1-dongtai.guo@linux.dev>
 Precedence: bulk
@@ -61,29 +61,77 @@ X-Migadu-Flow: FLOW_OUT
 
 From: George Guo <guodongtai@kylinos.cn>
 
-LoongArch now supports BPF private stacks via
-bpf_jit_supports_private_stack(), so let the struct_ops private stack
-runtime test (private_stack / private_stack_fail / private_stack_recur)
-run there instead of being skipped.
+The verifier test_loader only runs an __arch_*-tagged test when the tag
+matches the running architecture.  The arena sign-extending load (LDSX)
+subtests in verifier_ldsx are tagged for x86_64 and arm64 only, so they
+are skipped on LoongArch even though the JIT now supports the
+instruction.
+
+Tag the arena LDSX subtests (disasm, exception, S8, S16, S32) with
+__arch_loongarch, and add the expected LoongArch JIT disassembly to the
+disasm subtest, so they run and are checked there.
 
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- .../testing/selftests/bpf/prog_tests/struct_ops_private_stack.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../testing/selftests/bpf/progs/verifier_ldsx.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-index 98db9bafa44b..fcc86f1dfd15 100644
---- a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-+++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-@@ -5,7 +5,7 @@
- #include "struct_ops_private_stack_fail.skel.h"
- #include "struct_ops_private_stack_recur.skel.h"
- 
--#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__)
-+#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__) || defined(__loongarch__)
- static void test_private_stack(void)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+index 41340877dc9d..55039dde3dc5 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+@@ -286,6 +286,19 @@ __jited("add	x11, x0, x28")
+ __jited("ldrsh	x22, [x11, #0x18]")
+ __jited("add	x11, x0, x28")
+ __jited("ldrsb	x22, [x11, #0x20]")
++__arch_loongarch
++__jited("add.d	$t2, $a5, $s6")
++__jited("ld.w	$s2, $t2, 16")
++__jited("add.d	$t2, $a5, $s6")
++__jited("ld.h	$s2, $t2, 24")
++__jited("add.d	$t2, $a5, $s6")
++__jited("ld.b	$s2, $t2, 32")
++__jited("add.d	$t2, $a0, $s6")
++__jited("ld.w	$s3, $t2, 16")
++__jited("add.d	$t2, $a0, $s6")
++__jited("ld.h	$s3, $t2, 24")
++__jited("add.d	$t2, $a0, $s6")
++__jited("ld.b	$s3, $t2, 32")
+ __naked void arena_ldsx_disasm(void *ctx)
  {
- 	struct struct_ops_private_stack *skel;
+ 	asm volatile (
+@@ -317,6 +330,7 @@ __description("Arena LDSX Exception")
+ __success __retval(0)
+ __arch_x86_64
+ __arch_arm64
++__arch_loongarch
+ __naked void arena_ldsx_exception(void *ctx)
+ {
+ 	asm volatile (
+@@ -338,6 +352,7 @@ __description("Arena LDSX, S8")
+ __success __retval(-1)
+ __arch_x86_64
+ __arch_arm64
++__arch_loongarch
+ __naked void arena_ldsx_s8(void *ctx)
+ {
+ 	asm volatile (
+@@ -369,6 +384,7 @@ __description("Arena LDSX, S16")
+ __success __retval(-1)
+ __arch_x86_64
+ __arch_arm64
++__arch_loongarch
+ __naked void arena_ldsx_s16(void *ctx)
+ {
+ 	asm volatile (
+@@ -400,6 +416,7 @@ __description("Arena LDSX, S32")
+ __success __retval(-1)
+ __arch_x86_64
+ __arch_arm64
++__arch_loongarch
+ __naked void arena_ldsx_s32(void *ctx)
+ {
+ 	asm volatile (
 -- 
 2.25.1
 
