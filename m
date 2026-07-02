@@ -1,32 +1,32 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A093009F2
-	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 02:25:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA8A2F8E8D
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 02:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782959113; cv=none; b=iGs1k/A4f3HCYXEnHSI9yb3EjIJdniVY2/z8unOvB69I0jQdu+1HFRacSh7adIgqwaOjvUrd9jmCZe6Q379i+qztGViV37WNAAfaJVsr9gT/F/Ov3BQznotr8PFZpbgrjaIieQhitYJ5X2bBjf8Bfw+Ns+6Efi5b6icExWwG2YY=
+	t=1782959125; cv=none; b=BkG4MvZHVFctDjyf5UxgI2dZaPxZF1V11tttzwhP7IHEin7WkoqCZSkiL1vE2dvTLKNbnpmWjEyIMMMkt/h9UHCe90HfgXtyhiHapz4+DFuTGcLn8X+57Gwkmi/GfCGr+Juk5LYvcVGXfXdruWN95d7rMgMgqNfEAMTWDMEmZZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782959113; c=relaxed/simple;
-	bh=/1uI0PINc3JAPZ3jgxtMPxNgd3W4a0i+Eg0weuYEt9Q=;
+	s=arc-20240116; t=1782959125; c=relaxed/simple;
+	bh=oWGCDeInbCsa1ASxuX2ySdcFuX2MA6q4duP/oVn06Yk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=S3OUHpRGlu2NJ1NL9r3RoOoY2krC9Of5JhdP5fS+bCcEvgxhDcwtrQuqwBrJJyHi2oGGxKXO4rJfgxD5s8fO7vNRolRPPRBusn7IU59IEGCa6Ll3tQ8sDJ582e7Hx25iX/spUCWPH/pq+8Q2wlEVG4pAZSNZoFJqyqRQ/GoNvFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uu0es29L; arc=none smtp.client-ip=95.215.58.189
+	 MIME-Version; b=FuvvZ8RMfKWqCfwxZ1f7QRV8mIrk0dU6vPl3lzUbQc3aErxqdmb8m7x2U0DBGDrBY0pkbxUOo6IaFUpmyoWS1il3kuspHWxTROi036nE8Az4faGe1QOoUYP1bjWrfPuafmW7aGkGd4JWzNhdPHlKyf0sBhAG6KZswdtycjQK1cM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VV8KYdbQ; arc=none smtp.client-ip=95.215.58.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uu0es29L"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VV8KYdbQ"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782959110;
+	t=1782959122;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=2z5u1ZhZaI359hc2wfdkg8LPj2X4q4oVjTNlw+7cREc=;
-	b=uu0es29LMd/p6+MjeB2c8IiDd88nldql6FDPeomqsr6uLHAsGsjMXcUmWf4W0ErFBhPAEN
-	kqocuNGh4zw/U0L7IwU5SGd4ctcb+AW6IfATXcNKFEuNqu9Zs0WbZl8z+OVR70azHGnV64
-	eFZ0NN5LG5JZdCPmYE9dmiU7IJENJ4k=
+	bh=oQfRiZog4SBEdxvYhnX/dtSk1v9+C3JVdCsGBBIYCiM=;
+	b=VV8KYdbQwvMEza1DhIhY5bx6GHSR3d0tiaeY5GsNgXnxFGkWUDRdd/jXdmVfmOgvvmGz5p
+	/5qdwlK339UgoiMp2W6Mx2/EVr2JXn92IfwXAbO006PcaRRdb0r20vyZLcvW8hBiUMaOM2
+	7O155fyaM+NeYAZEK2pVLoGX6J4GrgE=
 From: George Guo <dongtai.guo@linux.dev>
 To: Huacai Chen <chenhuacai@kernel.org>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>,
@@ -45,9 +45,9 @@ Cc: WANG Xuerui <kernel@xen0n.name>,
 	bpf@vger.kernel.org,
 	loongarch@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 09/11] selftests/bpf: Enable arena LDSX tests on LoongArch
-Date: Thu,  2 Jul 2026 10:23:20 +0800
-Message-Id: <20260702022322.51033-10-dongtai.guo@linux.dev>
+Subject: [PATCH bpf-next v2 10/11] selftests/bpf: Enable arena atomics tests on LoongArch
+Date: Thu,  2 Jul 2026 10:23:21 +0800
+Message-Id: <20260702022322.51033-11-dongtai.guo@linux.dev>
 In-Reply-To: <20260702022322.51033-1-dongtai.guo@linux.dev>
 References: <20260702022322.51033-1-dongtai.guo@linux.dev>
 Precedence: bulk
@@ -61,77 +61,43 @@ X-Migadu-Flow: FLOW_OUT
 
 From: George Guo <guodongtai@kylinos.cn>
 
-The verifier test_loader only runs an __arch_*-tagged test when the tag
-matches the running architecture.  The arena sign-extending load (LDSX)
-subtests in verifier_ldsx are tagged for x86_64 and arm64 only, so they
-are skipped on LoongArch even though the JIT now supports the
-instruction.
-
-Tag the arena LDSX subtests (disasm, exception, S8, S16, S32) with
-__arch_loongarch, and add the expected LoongArch JIT disassembly to the
-disasm subtest, so they run and are checked there.
+Now that the LoongArch JIT implements atomic operations on arena
+pointers, add LoongArch to the arena_atomics load-acquire/store-release
+architecture guard so those subtests run on LoongArch.
 
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- .../testing/selftests/bpf/progs/verifier_ldsx.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ tools/testing/selftests/bpf/progs/arena_atomics.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-index 41340877dc9d..55039dde3dc5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-@@ -286,6 +286,19 @@ __jited("add	x11, x0, x28")
- __jited("ldrsh	x22, [x11, #0x18]")
- __jited("add	x11, x0, x28")
- __jited("ldrsb	x22, [x11, #0x20]")
-+__arch_loongarch
-+__jited("add.d	$t2, $a5, $s6")
-+__jited("ld.w	$s2, $t2, 16")
-+__jited("add.d	$t2, $a5, $s6")
-+__jited("ld.h	$s2, $t2, 24")
-+__jited("add.d	$t2, $a5, $s6")
-+__jited("ld.b	$s2, $t2, 32")
-+__jited("add.d	$t2, $a0, $s6")
-+__jited("ld.w	$s3, $t2, 16")
-+__jited("add.d	$t2, $a0, $s6")
-+__jited("ld.h	$s3, $t2, 24")
-+__jited("add.d	$t2, $a0, $s6")
-+__jited("ld.b	$s3, $t2, 32")
- __naked void arena_ldsx_disasm(void *ctx)
- {
- 	asm volatile (
-@@ -317,6 +330,7 @@ __description("Arena LDSX Exception")
- __success __retval(0)
- __arch_x86_64
- __arch_arm64
-+__arch_loongarch
- __naked void arena_ldsx_exception(void *ctx)
- {
- 	asm volatile (
-@@ -338,6 +352,7 @@ __description("Arena LDSX, S8")
- __success __retval(-1)
- __arch_x86_64
- __arch_arm64
-+__arch_loongarch
- __naked void arena_ldsx_s8(void *ctx)
- {
- 	asm volatile (
-@@ -369,6 +384,7 @@ __description("Arena LDSX, S16")
- __success __retval(-1)
- __arch_x86_64
- __arch_arm64
-+__arch_loongarch
- __naked void arena_ldsx_s16(void *ctx)
- {
- 	asm volatile (
-@@ -400,6 +416,7 @@ __description("Arena LDSX, S32")
- __success __retval(-1)
- __arch_x86_64
- __arch_arm64
-+__arch_loongarch
- __naked void arena_ldsx_s32(void *ctx)
- {
- 	asm volatile (
+diff --git a/tools/testing/selftests/bpf/progs/arena_atomics.c b/tools/testing/selftests/bpf/progs/arena_atomics.c
+index 2e7751a85399..38a628b4ee24 100644
+--- a/tools/testing/selftests/bpf/progs/arena_atomics.c
++++ b/tools/testing/selftests/bpf/progs/arena_atomics.c
+@@ -29,6 +29,7 @@ bool skip_all_tests = true;
+ #if defined(ENABLE_ATOMICS_TESTS) &&		  \
+ 	defined(__BPF_FEATURE_ADDR_SPACE_CAST) && \
+ 	(defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
++	 defined(__TARGET_ARCH_loongarch) || \
+ 	 (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64))
+ bool skip_lacq_srel_tests __attribute((__section__(".data"))) = false;
+ #else
+@@ -316,6 +317,7 @@ int load_acquire(const void *ctx)
+ #if defined(ENABLE_ATOMICS_TESTS) &&		  \
+ 	defined(__BPF_FEATURE_ADDR_SPACE_CAST) && \
+ 	(defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
++	 defined(__TARGET_ARCH_loongarch) || \
+ 	 (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64))
+ 
+ #define LOAD_ACQUIRE_ARENA(SIZEOP, SIZE, SRC, DST)	\
+@@ -368,6 +370,7 @@ int store_release(const void *ctx)
+ #if defined(ENABLE_ATOMICS_TESTS) &&		  \
+ 	defined(__BPF_FEATURE_ADDR_SPACE_CAST) && \
+ 	(defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
++	 defined(__TARGET_ARCH_loongarch) || \
+ 	 (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64))
+ 
+ #define STORE_RELEASE_ARENA(SIZEOP, DST, VAL)	\
 -- 
 2.25.1
 
