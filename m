@@ -1,83 +1,111 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A10B2F8E8D
-	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 02:25:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF00B8C1F
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 02:35:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782959134; cv=none; b=fEIrg3WvNFTmAWjBxElzsm/Z8WPtYW/j5DMsWuJJ+7xYju2ZUfsr9tWrCpqeVLhC9fcysYNwdKjr9I1vpNjw4Kh1ETpd79j+46hkU5fMzsVD5CrJSlaIWTyLCv0FqX0A2/K3ha9UOzeijy62ipv3WWrV1D8mK/D9mihuEw7TiBc=
+	t=1782959734; cv=none; b=e/fnAcZnq1X6rPpA4qWkbaFQHmipbNLSOLjvD+MCW1aTr7Z9cAP4Ycmd57NafECX8zaOC/KwXCyzB7Uez8VlnczHb32DdBRgNEDDTdFpHJY0A9muPHXvtSioQMe80tRRcQ2qt8u4a2bflwF1GGfRFga4L1KQetUTpTu5icepiBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782959134; c=relaxed/simple;
-	bh=DbUXG4TTEBNVRHK8jUWgnmK48IhZirjakIZAQtKW1A0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=P7jDus2M3Rzcwp84vOsy/Eq/DY60hby7NTSveIccRowplsPRTNHsK+BiyjHNWHaM7QGEQDXasu7lpcoUT/SiTG6oeRQmlC5lW8q1WXFTj8Z4IsLRRPxk4BGoEsnxjzavmIyT52RM/L//DSTu82Uk5tUEzKms0Xf4p1TJWlo/T/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=klC7Dfcx; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1782959734; c=relaxed/simple;
+	bh=tZsDRv2TQoDa2rupq101WIbYWUvJ4uQXtYwlr3+s184=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=NJEp+/PdCMqmuX0I8I6U0RJfXASFvspz+2ZaVX5sutn9z52/2goKsfHcawbSwtvkquUqWfERfOi4a3A17OGHQKDFB3rLzvIVXXIxwGm3Iqgoe4EXI3Ar08bdIRNwxxZ80p181OqrIGZhoalF5e33rifZAMqjkiwcDsusmDTcARo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QbX2uWi5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="klC7Dfcx"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782959131;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DBFT7UVCiA+ebieOlHk0IAtV4TSScjRXp6MUi9P9uLY=;
-	b=klC7DfcxjvjmkATsTInsKSMBRCOTW2OKKZ99HlXtdpssDcgIRQISDk6j/qabdQOaRneYjB
-	IOSEi/f0QqyEBYPliUF302FYNdghl98bx0KWYFliEyPsUx+6ypcSdpNmlbkOfFtElLtFdj
-	TlYQi+5DhU+/kllsosuiL1GCxAbdYXg=
-From: George Guo <dongtai.guo@linux.dev>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Hengqi Chen <hengqi.chen@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: WANG Xuerui <kernel@xen0n.name>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	George Guo <guodongtai@kylinos.cn>,
-	bpf@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 11/11] selftests/bpf: Add LoongArch deny list
-Date: Thu,  2 Jul 2026 10:23:22 +0800
-Message-Id: <20260702022322.51033-12-dongtai.guo@linux.dev>
-In-Reply-To: <20260702022322.51033-1-dongtai.guo@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QbX2uWi5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E1201F000E9;
+	Thu,  2 Jul 2026 02:35:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782959733;
+	bh=PdAX4hy5FkIPNcuW74lPHFXvlNihDvxrwwPzRqTDppA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=QbX2uWi56KJI9JPNAngzsN48G2UwmGAh/UCTvF4UgiPEOxj7sUJGE/I9ujMZsN/44
+	 vBBKENGlWaKa6jAjnSppjT3fTZH7dXJ5PQYy/4TBuEKbWsnwfOzKk3LOS5Y1092FAb
+	 bPPV47mUh+x1o992KZuQNcc8ue+nCUezceecXmURQ1UebvomhepPAqf7er6+JrV7Ku
+	 GZ66dyZDMh0snq2JGmLKbEqPLpV2+K2Rs/Um+AV6b12O45x5dVm6250e8wFEbehtHk
+	 AhaDT9QUGXz6xcef2VWxIyJ6sd14o6TFLx6itKCfJPl4tXw4twOoe1/rZYn9mPtDOC
+	 SoQcCN1OWvP6g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 01/11] LoongArch: BPF: Fix tail call count
+ pointer offset for arena programs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "George Guo" <dongtai.guo@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260702022322.51033-2-dongtai.guo@linux.dev>
 References: <20260702022322.51033-1-dongtai.guo@linux.dev>
+ <20260702022322.51033-2-dongtai.guo@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 02 Jul 2026 02:35:32 +0000
+Message-Id: <20260702023533.2E1201F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-From: George Guo <guodongtai@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] The newly added multi-line comments violate the BPF subsystem's pre=
+ferred comment style.
+--
 
-Add an empty test_progs deny list for LoongArch, mirroring the other
-architectures, so BPF CI and local vmtest have a place to record cases
-that cannot pass on LoongArch.
+commit a7174bab96fc4c6edb488f83bc8733f74eac78c7
+Author: George Guo <guodongtai@kylinos.cn>
 
-Signed-off-by: George Guo <guodongtai@kylinos.cn>
----
- tools/testing/selftests/bpf/DENYLIST.loongarch | 1 +
- 1 file changed, 1 insertion(+)
- create mode 100644 tools/testing/selftests/bpf/DENYLIST.loongarch
+LoongArch: BPF: Fix tail call count pointer offset for arena programs
 
-diff --git a/tools/testing/selftests/bpf/DENYLIST.loongarch b/tools/testing/selftests/bpf/DENYLIST.loongarch
-new file mode 100644
-index 000000000000..70cc007e396e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/DENYLIST.loongarch
-@@ -0,0 +1 @@
-+# loongarch64 deny list for BPF CI and local vmtest
--- 
-2.25.1
+This commit replaces the BPF_TAIL_CALL_CNT_PTR_STACK_OFF macro with a helper
+function, tail_call_cnt_ptr_stack_off(). This function properly accounts fo=
+r=20
+the REG_ARENA slot in arena programs, resolving an issue where the JIT load=
+ed
+the counter value instead of the tail call count pointer.
 
+Link: https://lore.kernel.org/all/20260629085511.359546-1-dongtai.guo@linux=
+.dev
+
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index ad7e28375aa95..5e34e9e3f5086 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
+> @@ -25,7 +25,23 @@
+> =20
+>  #define REG_TCC		LOONGARCH_GPR_A6
+>  #define REG_ARENA	LOONGARCH_GPR_S6 /* For storing arena_vm_start */
+> -#define BPF_TAIL_CALL_CNT_PTR_STACK_OFF(stack) (round_up(stack, 16) - 80)
+> +
+> +static int tail_call_cnt_ptr_stack_off(struct jit_ctx *ctx)
+> +{
+> +	/* Ten words are pushed below the BPF stack: ra, fp, s0-s5, and the
+> +	 * tail call count plus its pointer, which occupy the two deepest
+> +	 * slots of the callee-saved area.
+> +	 */
+
+[Severity: Low]
+This isn't a bug, but does this multi-line comment format adhere to the BPF
+subsystem's preferred style? Multi-line comments in BPF-related paths usual=
+ly
+require the opening /* to be on its own line.
+
+> +	int offset =3D sizeof(long) * 10;
+> +
+> +	/* An arena program reserves one extra word above them (REG_ARENA),
+> +	 * which pushes the tail call count pointer down by one slot.
+> +	 */
+
+[Severity: Low]
+This isn't a bug, but this comment also doesn't follow the preferred BPF
+subsystem multi-line comment style of placing the opening /* on its own lin=
+e.
+
+> +	if (ctx->arena_vm_start)
+> +		offset +=3D sizeof(long);
+> +
+> +	return round_up(ctx->stack_size, 16) - offset;
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260702022322.5103=
+3-1-dongtai.guo@linux.dev?part=3D1
