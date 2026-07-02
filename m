@@ -1,126 +1,147 @@
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E8A3C3450
-	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 22:33:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F313CCFC4
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 22:45:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783031591; cv=none; b=YNHgGrHZ1bMPMSMcCHB3HMlP+/vmb9fyDQSjD0VlcMywHh3gKhtNlP+zS20u8gHWdVkZLBoNQJ4vjNuzU3uHRgj8SV5CV3HTT3kLRT+JTR9lXhBe+EeNCGLHoIRyIDPTq33BTx9JaEwp5tqP8KZ9/Fc+8Dfb3Kc74q5XhT9Uk8c=
+	t=1783032329; cv=none; b=hzsdtxcYs8lHFxP5cbPsSV6CMAwARjduovzpf4AwehwddSCDLMm6YMiVDeb2XoheMZcHp2ORphdCHEQobxPiperqCL1pRCxP/UdSPeN7lp1l6Vh8H6/SZDm3dOmSDf0nHMk+a9dz/JT9Gz/ubl7MV/R14nEWDc3p8944yv1rZtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783031591; c=relaxed/simple;
-	bh=g2TLxqmYsDcWlbonN1FiCOaGRb1Al5ceMdi+LTYuhG4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=LSA6/UkS9evQTiRSdOBNCSudoF6hGvhItkq9EeIC5dOO7SwBVTej3j4Lmc2h0qVs9m8KS8D7TMwJd4/R5bC+fLTPNnTUqmsPXYuVdzYAqe4ssP5WZBTXUFPpH6j3+qfQ+MSO/SN9GLkwzhGHZrECEjH6C69LEjL8SJ6z9Eyvhbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CfX0AKNk; arc=none smtp.client-ip=209.85.161.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783032329; c=relaxed/simple;
+	bh=+M1GzHyW7gJgudBBznLhu6y63r1NCucH+dqtSspIMXU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JuJ3zAhyG0Q68N4rJMRvr4BqS1IGY9F2VibWM9/mmw9SdqVbbFmNcvhVLMsuiGjAmlhuZuV9xvqBBKV2WfN/4PFFHokvAyLMf1A8dg9Hy8YPWy+do/Qa3o+ahq5wd+RM8hSB6y8U/Re3s59QjxiJbRBEiPgGb84/HN3KYR8o3hY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asu.edu; spf=pass smtp.mailfrom=asu.edu; dkim=pass (2048-bit key) header.d=asu.edu header.i=@asu.edu header.b=IyiuWIvl; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asu.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=asu.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CfX0AKNk"
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-6a30bcadd95so901199eaf.1
-        for <bpf@vger.kernel.org>; Thu, 02 Jul 2026 15:33:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=asu.edu header.i=@asu.edu header.b="IyiuWIvl"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-37d70036426so1802658a91.3
+        for <bpf@vger.kernel.org>; Thu, 02 Jul 2026 15:45:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783031587; x=1783636387; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wzsqf9gTGwcZ883+EjWafMl/QLmheDnAUcy/59Dlq2M=;
-        b=CfX0AKNkR98+VtyMs+zHftNOHI6rI+iRuZ33w7BnZMBr1SBYDfAiHi5ilq0HkLdtEt
-         yjb0+ROxMTH7sY4+hZRxKeSOAT+Q3lztQeflQU3+3cIxH59t9x/2im/CeSUIspb5byBq
-         BxpfPJWh8yqYN5lB3ta9ho17myFvpyS36lKsoUXE4iIIkjMHJf54fj1p4TaDj1QJ18cQ
-         cTR0a5teGeD2j8w3sh1iNx79EWRRQ/qKGx8lgRJL7VbKiYC3Ab5Hk4yrmIYP+ACBVEM+
-         8/Ee4YsJPpHKjNhjCQ8jQWOgTc5ooLmfchsVF8+1c1MokUjHNHvN0jl/bqZ2PQCGW8vU
-         Pc9g==
+        d=asu.edu; s=google; t=1783032325; x=1783637125; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=KDtU2YibaniqMnLc/xn/Zbnq7zTtWrI58XmXirUM2qw=;
+        b=IyiuWIvlgi2oTGMxssP4AG0+Rh1ESl1+U9ePSqhCf2zLSPR8tSqz3sK5KudbbBHXBl
+         /FG0pJuVGTRD0s8PB389UIL086Y+8B4i/7oYuVALq5xS8uOqqeVPH4ERMKfkKY/OszzU
+         dJZfPj71fW/RR85eMTvk/awF0TjiQnOIdyDLbs0MrjAvquX3g5lHUHWnJL3aQIMsJ2A8
+         5iDj1g20c5zrMw3eHmj7lk1EMH3nIQxZtkbU/HgFoyD8bcA/ZYLqK/MIekHNPDys+HZZ
+         AfNX8xBrrjuMXsaWJ8o5SDVHThAY7to5/qNvvuZp7HsOGdYVKxrrQtkZc2u7H0F1c+MT
+         GDdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783031587; x=1783636387;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wzsqf9gTGwcZ883+EjWafMl/QLmheDnAUcy/59Dlq2M=;
-        b=F8H1zuamf1ggdStLznO2czklKNHTYfI9wzaIAo5g6gJhrYJ79eL77Hmn71gasuYcf2
-         w7og6VsPo/Cj7PAuiNMEt5CO4kKKcorr7WXmWZgSzX3fa9oIg/XmedH9NYojC+xpcV9A
-         kXaccmgQ2msV4pfcJJlN3FZ2Ps+aAhWM13bQKsSMU9PRU/zxKKzg5xnMB9PRtFqOrifU
-         ytYPN2+8GyyRMZ3GlWTQuz0alMtREoyd+MugwFLJMtdWDvFV9bWat48w+QMxdlSB6wOX
-         GBBiqMYDKhpdn5R8QXzoEMjaGaZxJ+weBmEpIHPNZnix2ZDs/vuApaRJ2ZbKp7TicZRr
-         yhQw==
-X-Forwarded-Encrypted: i=1; AFNElJ+HOYn5dJbDJezCHxvU2rUry9ibA0lpl4peHVlGQR684RM7qT1vE/vrdF8Qb0Yc/mZXNog=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXIH2DyNKU0BlomIAf283ey6bIsvWT5w7hKTSWBdYbF/OFJ2gy
-	dMOurLbZZCvso7rkVDv+1xgpM2kUP8RJlTBP8Qn30WxW4+9HaJLWZ6co
-X-Gm-Gg: AfdE7cmVILeL5Bd813b4SMUsS6tjML7nVZdSuW+ssEcAu2qftwrtxju5IqASFNZvZ4u
-	nC3T444Ging0xDJJ+v2fZAyQFUM7Tqf4ARQNrhIOXpKZyqdnAqeawBK1h/q3jiaxSvRn3feJaUr
-	lhJBDrJmN1n/+igcDaFBzQMM4BONAWtLWMc+BaXeQRX7RWXgBhoNvCAJmxZ+kGH5zXwWriv1boW
-	69mKUjVcuRpU8EiKtrhJorud0EJ0Hh918WREnI4yRBEZwheQL1+CHtXHQUgRRKZQ0MjQ9zlI/bj
-	EOMGIKmrg2UTlX3GcXlIOC+P/QYBeoZp03R9T0YHdRn/0wS7l9REP6vB73wi74UAu4cTiWRqbdo
-	fo6SZtlulWhDkyr7UHV5olCUuir3ZpCHhwVoZloljq+fMz0ECiV7/sNhVKvGc967r00wiEgio6S
-	nsHBe7hT1l/FizdZgvuaN4OEcdIRStxGsm6LX+yiAoscJZL8NGHPREJN2z8KJDSret1ovy09ims
-	uuMtw==
-X-Received: by 2002:a05:6820:1b06:b0:6a1:93a5:cd6e with SMTP id 006d021491bc7-6a31d501303mr856042eaf.35.1783031586590;
-        Thu, 02 Jul 2026 15:33:06 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:7::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6a310020e13sm3009434eaf.7.2026.07.02.15.33.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jul 2026 15:33:05 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783032325; x=1783637125;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=KDtU2YibaniqMnLc/xn/Zbnq7zTtWrI58XmXirUM2qw=;
+        b=dMcJ2wnGZoR8V/7PgqKYU44bF3FVQSvQ1Mg/8uaolTRfynpBDWVKbANPaow0IXgSNr
+         pqj8cgjCUuhf+eHCZGh6oBqHy2Ian9/rP5ChP9VlJhLyP2+wfAqYUfLORIq+7zczkjP9
+         baEwSiRCpVwVZVT9mac/xrWmXh87TBdb6ocauqyqKRDeMREEWXw3WnRHvMIYRaUMH+lD
+         IDnbCO4KkIzqqkppvYW1EIaH5ATX/a9L9kffIzhfkPtaWnLhIiweRrn8O+RShfX/Zt38
+         5heAWYPd+mdsHk7PQomCqW7O0OPNFC3eDEY5E1VeGduZYLRJqGngmOh3pD/AAjCQIEW3
+         OZ1g==
+X-Forwarded-Encrypted: i=1; AHgh+Rp6D2iBbbGfWWAvXi5WM/0x2CQgYoOj2NVS4o1yYDPFNgx/r5wz0OLg0t9e10hS016HDt4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXF2oadWaLrvi5mBCiIjA8gLV5MtfAgMH/tqdQYN8OpQsVYesg
+	wyn0uoOib3rc1YcCIYhk5g5yqPZtsfhVQRUqtodZVxw4Ij97g6baX3+EA28Ft0CZbQ==
+X-Gm-Gg: AfdE7cmH0ubc6MHW1kcQu/FhPtEdFjghE3IgJKpoweFfUddltQZsKTWrVQufkUpQmuH
+	brNuVnEuVTyFGeB2tj6RnqTwK1FrMhYPlPaMjkCI+gO2jRh4Dy7W7vWOOC7l+A0jyd3wENxFWS2
+	9TYkokD2yuso3EYAO7vyBx2Yq9CPOr/LYy4klFH9+jcgWlkuB4RZK8nhLKsBo0PMD0f7PE8CgHM
+	HiMtWgKVahT41D7GpXh+IIEy3WBanVns6t6owxeoIUEz95etscXDSUc7l66JzV8WV+U4dfq7Rj2
+	BVnyzTh5hSgP9TOjorbQcbZJ/RLla9gOnVGFz3CJURMrxlVawq6Z2MkdcSY3LNbnU5QLNGUyabs
+	ixk+kXqhW0fdMsxfBPvKgpw3GvuFMDgjZ0VMAtzznArwVNVcsmboLce6tDKkGOHBT1IZbbodQf6
+	KUk79uvi9LCZDQaRrRqQ==
+X-Received: by 2002:a17:90b:3502:b0:36b:944b:fd81 with SMTP id 98e67ed59e1d1-380ba80ebf3mr7702968a91.4.1783032324591;
+        Thu, 02 Jul 2026 15:45:24 -0700 (PDT)
+Received: from xiang.tailc0aff1.ts.net ([20.171.14.70])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30f1595e912sm10649247eec.31.2026.07.02.15.45.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2026 15:45:23 -0700 (PDT)
+From: "Xiang Mei (Microsoft)" <xmei5@asu.edu>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	aditi.ghag@isovalent.com,
+	AutonomousCodeSecurity@microsoft.com,
+	tgopinath@linux.microsoft.com,
+	kys@microsoft.com,
+	linux-kernel@vger.kernel.org,
+	"Xiang Mei (Microsoft)" <xmei5@asu.edu>
+Subject: [PATCH bpf] bpf: reject mini-sockets in bpf_sock_destroy()
+Date: Thu,  2 Jul 2026 22:45:19 +0000
+Message-ID: <20260702224519.800135-1-xmei5@asu.edu>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 02 Jul 2026 15:33:04 -0700
-Message-Id: <DJOFY21DYUI4.19WKQ3NPZ4H5R@gmail.com>
-Cc: <ast@kernel.org>, <kpsingh@kernel.org>,
- <James.Bottomley@hansenpartnership.com>, <bboscaccy@linux.microsoft.com>,
- <memxor@gmail.com>, <torvalds@linux-foundation.org>,
- <a.s.protopopov@gmail.com>, <bpf@vger.kernel.org>,
- <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v3 2/6] bpf: Verify signed loader metadata at
- load time
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Paul Moore" <paul@paul-moore.com>, "Daniel Borkmann"
- <daniel@iogearbox.net>
-X-Mailer: aerc
-References: <20260702143605.252797-1-daniel@iogearbox.net>
- <20260702143605.252797-3-daniel@iogearbox.net>
- <CAHC9VhQD4RHsGiTMVCCTN+eB71-Ueopke8XghExpNJ2PSNa_jQ@mail.gmail.com>
-In-Reply-To: <CAHC9VhQD4RHsGiTMVCCTN+eB71-Ueopke8XghExpNJ2PSNa_jQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu Jul 2, 2026 at 3:05 PM PDT, Paul Moore wrote:
->
-> As I mentioned previously, the security_bpf_prog_load() hook should
-> not be moved.  Its placement was deliberate, and moving it as you've
-> done in this patch creates a security regression.=20
+bpf_sock_destroy() casts its struct sock_common * argument to a full
+struct sock and reads sk->sk_protocol. The BPF tcp iterator can pass a
+TIME_WAIT or NEW_SYN_RECV mini-socket, which only embeds a sock_common
+prefix. Unlike sk_prot (which aliases skc_prot inside sock_common),
+sk_protocol lives beyond that prefix, so the read goes out of bounds of
+the small tw_sock_TCP object (type confusion).
 
-not true.
+Reject non-full sockets with sk_fullsock() before touching any
+full-sock field. sk_fullsock() only reads sk_state (in sock_common),
+and these mini-sockets have no ->diag_destroy(), This matches the other
+sock_common consumers in this file, e.g. bpf_skc_to_tcp_sock(), which 
+already sk_fullsock() before reading sk_protocol.
 
-> Without this patch,
-> for processes where SELinux is preventing BPF programs from being
-> loaded, it is able to do so before the process allocates a potentially
-> very large chunk of kernel memory, up to one million BPF instructions.
+  BUG: KASAN: slab-out-of-bounds in bpf_sock_destroy (net/core/filter.c:12673)
+  Read of size 2 at addr ffff888013ffc71c by task exploit/143
+  Call Trace:
+   kasan_report (mm/kasan/report.c:595)
+   bpf_sock_destroy (net/core/filter.c:12673)
+   bpf_prog_8b5bd55c189cabc9_sock_destroy_tw+0x31/0x3e
+   bpf_iter_run_prog (kernel/bpf/bpf_iter.c:697)
+   bpf_iter_tcp_seq_show (net/ipv4/tcp_ipv4.c:3247)
+   bpf_seq_read (kernel/bpf/bpf_iter.c:184)
+   vfs_read (fs/read_write.c:572)
+   ksys_read (fs/read_write.c:716)
+   do_syscall_64 (arch/x86/entry/syscall_64.c:94)
+   entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121)
+  ...
+  The buggy address belongs to the object at ffff888013ffc640
+   which belongs to the cache tw_sock_TCP of size 256
+  The buggy address is located 220 bytes inside of
+   allocated 256-byte region [ffff888013ffc640, ffff888013ffc740)
 
-only when signature verification is requested and the hash over insns
-is what your hornet thingy did too.
-So no regression whatsoever. Exact same behavior.
+Fixes: 4ddbcb886268 ("bpf: Add bpf_sock_destroy kfunc")
+Reported-by: AutonomousCodeSecurity@microsoft.com
+Signed-off-by: Xiang Mei (Microsoft) <xmei5@asu.edu>
+---
+ net/core/filter.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> With this patch, even in cases where SELinux will prevent the BPF
-> program load operation, it is not able to do so before the process
-> triggers a potential sizable memory allocation, opening the door for a
-> local DoS attack.
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 69ec1a4c0f9d..a0fcafb08b96 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -12665,6 +12665,9 @@ __bpf_kfunc int bpf_sock_destroy(struct sock_common *sock)
+ {
+ 	struct sock *sk = (struct sock *)sock;
+ 
++	if (!sk_fullsock(sk))
++		return -EOPNOTSUPP;
++
+ 	/* The locking semantics that allow for synchronous execution of the
+ 	 * destroy handlers are only supported for TCP and UDP.
+ 	 * Supporting protocols will need to acquire sock lock in the BPF context
+-- 
+2.43.0
 
-Not true either. Worst case is 1M which is 8Mbyte.
-Not even close to anything DoS worthy.
-
-> In an effort to work with you on this, I did bring up two alternative
-> solutions: a new LSM hook for the signature verification, or the use
-> of the existing security_bpf_prog() hook.=20
-
-Sorry we're not going to add new hook because Paul has
-non-technical grudge against bpf.
-
-> While I don't like to do this, you haven't given me much of a choice;
-> the security regression can not be ignored:
->
->  Nacked-by: Paul Moore (don't move bpf_prog_load LSM hook) <paul@paul-moo=
-re.com>
-
-of course. will keep it and let Linus decide during the merge window.
