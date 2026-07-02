@@ -1,132 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E69642E8B6B;
-	Thu,  2 Jul 2026 02:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F3821FF7C7
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 02:21:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782958317; cv=none; b=H+ZH2QU1U5qpObscs07rT13yn9uXe2OSkFQMlgtcqvGeOMzYW3ShJuihg+xDaZg1HgY6kEjFYHCKLBjIZwPQJScmgp/vA/ZrYRzgs8qsptZ+ILNjDc3K1Ol08e7htqBMniYhlbfZYZOHhtb5YT3EYZ66HxqkQSGlq3/HlBUgfeE=
+	t=1782958878; cv=none; b=pfxDVAlKMJ74bShk7xae4+87EhZnUJeHGqpm3qPMmQGEnw9SNQTXfdEOmzaQvwzdGrCk/K04IjkFBZXDnm6HNND6U8xRavwafly/U7/NMJbxIaiWetBIubfqg55+MRyJi5k75ANVCPX6io+Ovr6Wh0V3Ehp2+kYnWD3hIQL2HcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782958317; c=relaxed/simple;
-	bh=+/6kqHOBHSJnm3HKR5zkZvO0Pei8wRETfdwkMhmkxDI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ZRdAtqQAglD1S9d2X9bqoG3TSm+fbAlnrZ1azG1zqUn9lD2B2CkCoR7DnxP9CtFj3Xfo0SFL/LdO0cxyxWntZnoRxl2SefNX7Xn+dNrIBusGA+MDzLYSdYxXwZj0NQb0nrR0MeCINI7P51hQedZdc0L3P2uFPEScHifOquhNEPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AnhhggMG; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AnhhggMG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29F581F00A3A;
-	Thu,  2 Jul 2026 02:11:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782958315;
-	bh=22emMlIsPtDrhqmZ4A8+AHkM26C/CxzEvHf32koa6ZE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=AnhhggMGcmGV9OElKHa7vlVrgQFcxDdyStdOySnJQe8g8PtnwExNxBsde62x5riKZ
-	 CivR8hFUzCpLGfZ7WLs6NF9WmyLyZVbD0awEEmQlEELORxx/SVjAAA5JfVcO62Fvll
-	 qUjmNu9SLSLuhXKGl57T1A5PBcBtq4/r+Ra20RI7z284AgQe+Px1wIq7N/mvPb3dhA
-	 Dy2B7Bzu5aSAu6ohriAzsvGoei7VPPZBJ5XOHdyilsU1LITPaoDIzyJK8YABsB4HRF
-	 XzNzrFlDOwYhPWaxbWiKr4qwuM0eZtnAj7n3ngaXICd2ZSSEPruMpMaqtVEgYsRCC+
-	 R6Hnln1KH11Bw==
-Content-Type: multipart/mixed; boundary="===============0253007402283867756=="
+	s=arc-20240116; t=1782958878; c=relaxed/simple;
+	bh=wY913XJBoNw3wtoxup1g0+gEBADQrvWUQ9ZrluiGm8M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pKg/z2u+1JuyirTseY2S3rZIN0DszBz1xCAtILpv1SsExcnHeTZNzVAxqmOpWiLijzEXN2cBDyeRP61If5/jeXLnT9SgGk10hawjLkefClIW3mAn8ZdX5daiKiYSNliwc/6lEjkqQMx9d462Tbl2UMc7/ybG+NHu1zLEc8V8tTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8Bxh_AZy0VqZ74AAA--.4324S3;
+	Thu, 02 Jul 2026 10:21:13 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJBxbcIUy0VqqGy7AA--.26372S2;
+	Thu, 02 Jul 2026 10:21:10 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	KaFai Wan <kafai.wan@linux.dev>
+Cc: bpf@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	Leon Hwang <leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v5] bpf: Reject programs with inlined helpers if JIT is unavailable
+Date: Thu,  2 Jul 2026 10:21:08 +0800
+Message-ID: <20260702022108.17693-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <457d2616d79d9e1a2a3fe06ab548cde2028a979433bd95bdc5859da4d7760e79@mail.kernel.org>
-In-Reply-To: <20260702013334.140905-2-ankur.a.arora@oracle.com>
-References: <20260702013334.140905-2-ankur.a.arora@oracle.com>
-Subject: Re: [PATCH v13 01/15] asm-generic: barrier: Add smp_cond_load_relaxed_timeout()
-From: bot+bpf-ci@kernel.org
-To: ankur.a.arora@oracle.com,linux-kernel@vger.kernel.org,linux-arch@vger.kernel.org,linux-arm-kernel@lists.infradead.org,linux-pm@vger.kernel.org,bpf@vger.kernel.org
-Cc: arnd@arndb.de,catalin.marinas@arm.com,will@kernel.org,peterz@infradead.org,akpm@linux-foundation.org,mark.rutland@arm.com,harisokn@amazon.com,cl@gentwo.org,ast@kernel.org,rafael@kernel.org,daniel.lezcano@linaro.org,memxor@gmail.com,zhenglifeng1@huawei.com,xueshuai@linux.alibaba.com,rdunlap@infradead.org,david.laight.linux@gmail.com,broonie@kernel.org,joao.m.martins@oracle.com,boris.ostrovsky@oracle.com,konrad.wilk@oracle.com,ashok.bhat@arm.com,ankur.a.arora@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  2 Jul 2026 02:11:55 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJBxbcIUy0VqqGy7AA--.26372S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxZr18Xr17XF13AF4fCw1UCFX_yoW5KryrpF
+	n8C3y7Cr4IqF4I9asrJw4xuw1Yqa1rG3W7Ga18GrW0ya1aqFn2qanYgFyFvFWfCr4vkr1S
+	vwnF9r10ka4UXFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
+	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+	8JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
+	6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+	0xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4
+	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
+	xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8svtJUUUUU==
 
---===============0253007402283867756==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+When an architecture implements bpf_jit_inlines_helper_call(), such as
+LoongArch, ARM64, PowerPC, and RISC-V, the verifier skips rewriting the
+helper call offset (insn->imm) during the bpf_do_misc_fixups() phase,
+because the helper is expected to be inlined by the JIT compiler. As a
+result, insn->imm remains as the raw helper enum ID.
 
-> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> index b99cb57dfccc..d1e9ed15bbfc 100644
-> --- a/include/asm-generic/barrier.h
-> +++ b/include/asm-generic/barrier.h
-> @@ -273,6 +273,85 @@ do {									\
->  })
->  #endif
->
-> +/*
-> + * Number of times we iterate in the loop before doing the time check.
-> + * Note that the iteration count assumes that the loop condition is
-> + * relatively cheap.
-> + */
-> +#ifndef SMP_TIMEOUT_POLL_COUNT
-> +#define SMP_TIMEOUT_POLL_COUNT		200
-> +#endif
+However, if JIT is disabled at runtime (net.core.bpf_jit_enable=0) or
+if the JIT compilation later dynamically fails (e.g., due to OOM), the
+core BPF subsystem falls back to the BPF interpreter.
 
-[ ... ]
+When the interpreter executes (__bpf_call_base + insn->imm) with the
+unpatched raw helper ID, it jumps into an unaligned invalid address
+space, triggering an instruction alignment fault or a memory access
+panic.
 
-> +#ifndef cpu_poll_relax
-> +#define cpu_poll_relax(ptr, val, timeout_ns)	cpu_relax()
-> +#endif
+To avoid modifying the BPF interpreter's complexity for JIT-specific
+paths, just introduce a 'jit_required' flag in struct bpf_prog. When
+a program contains helper calls that skip rewriting for JIT inlining,
+set this flag to 1. During runtime selection, if JIT compilation is
+not available, explicitly reject loading with -ENOTSUPP instead of
+falling back to the interpreter, safely preventing the kernel panic.
 
-[ ... ]
-
-> +#ifndef smp_cond_load_relaxed_timeout
-> +#define smp_cond_load_relaxed_timeout(ptr, cond_expr,			\
-> +				      time_expr_ns, timeout_ns)		\
-> +({									\
-> +	typeof(ptr) __PTR = (ptr);					\
-> +	__unqual_scalar_typeof(*(ptr)) VAL;				\
-> +	u32 __count = 0, __spin = SMP_TIMEOUT_POLL_COUNT;		\
-> +	s64 __timeout = (s64)timeout_ns;				\
-> +	s64 __time_now, __time_end = 0;					\
-> +									\
-> +	for (;;) {							\
-> +		VAL = READ_ONCE(*__PTR);				\
-> +		if (cond_expr)						\
-> +			break;						\
-> +		cpu_poll_relax(__PTR, VAL, (u64)__timeout);		\
-
-This same point came up during review of v11. David Laight noted that
-__timeout here is a relative value, and that passing it straight to
-cpu_poll_relax() is only safe when cpu_poll_relax() ignores its timeout
-argument, as the generic cpu_relax() fallback does.
-
-For an arm64 WFE/WFET style cpu_poll_relax() that actually waits on the
-supplied timeout, would this spin roughly SMP_TIMEOUT_POLL_COUNT *
-timeout_ns before the first time-check?
-
-> +		if (++__count < __spin)					\
-> +			continue;					\
-> +		__time_now = (s64)(time_expr_ns);			\
-> +		if (unlikely(__time_end == 0))				\
-> +			__time_end = __time_now + __timeout;		\
-
-__time_end is only initialized here, after the first cpu_poll_relax()
-call has already run with the full relative __timeout, so the initial
-wait is not counted against the timeout window.
-
-Would it be worth converting the relative timeout to an absolute end-time
-once up front, or at least documenting that the effective timeout can be
-roughly doubled for such an implementation?
-
-> +		__timeout = __time_end - __time_now;			\
-> +		if (__time_now <= 0 || __timeout <= 0) {		\
-> +			VAL = READ_ONCE(*__PTR);			\
-> +			break;						\
-> +		}							\
-> +		__count = 0;						\
-> +	}								\
-> +	(typeof(*(ptr)))VAL;						\
-> +})
-> +#endif
-> +
-
-
+Fixes: 2ddec2c80b44 ("riscv, bpf: inline bpf_get_smp_processor_id()")
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+v5:
+  - Drop the fallback interpreter fixups as per maintainer's feedback.
+  - Introduce 'jit_required' member in struct bpf_prog to flag programs
+    that strictly rely on JIT.
+  - Reject loading with -ENOTSUPP in __bpf_prog_select_runtime() if JIT
+    fails or is disabled for these programs.
+  - Upgrade 'jited' bitfield group type from u16 to u32 in struct bpf_prog
+    to prevent 17-bit overflow warning.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28559763019
---===============0253007402283867756==--
+ include/linux/bpf.h | 3 ++-
+ kernel/bpf/core.c   | 2 +-
+ kernel/bpf/fixups.c | 4 +++-
+ 3 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index ba09795e0bfd..463fae6a5c33 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1865,8 +1865,9 @@ struct bpf_prog_aux {
+ 
+ struct bpf_prog {
+ 	u16			pages;		/* Number of allocated pages */
+-	u16			jited:1,	/* Is our filter JIT'ed? */
++	u32			jited:1,	/* Is our filter JIT'ed? */
+ 				jit_requested:1,/* archs need to JIT the prog */
++				jit_required:1, /* program strictly requires JIT compiler */
+ 				gpl_compatible:1, /* Is filter GPL compatible? */
+ 				cb_access:1,	/* Is control block accessed? */
+ 				dst_needed:1,	/* Do we need dst entry? */
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 649cce41e13f..a55754bcc593 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2639,7 +2639,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
+ 
+ 		fp = bpf_prog_jit_compile(env, fp);
+ 		bpf_prog_jit_attempt_done(fp);
+-		if (!fp->jited && jit_needed) {
++		if (!fp->jited && (jit_needed || fp->jit_required)) {
+ 			*err = -ENOTSUPP;
+ 			return fp;
+ 		}
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 12a8a4eb757f..94e0457a0aa3 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -1841,8 +1841,10 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 		}
+ 
+ 		/* Skip inlining the helper call if the JIT does it. */
+-		if (bpf_jit_inlines_helper_call(insn->imm))
++		if (bpf_jit_inlines_helper_call(insn->imm)) {
++			prog->jit_required = 1;
+ 			goto next_insn;
++		}
+ 
+ 		if (insn->imm == BPF_FUNC_get_route_realm)
+ 			prog->dst_needed = 1;
+-- 
+2.42.0
+
