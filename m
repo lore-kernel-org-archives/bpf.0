@@ -1,177 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90ACD347FCD;
-	Thu,  2 Jul 2026 16:39:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783010352; cv=none; b=UTES2N4mm6HI0IWQcduUP1hYDPnW1+4dRj9ZPHR/cdVmHrUJ52t8uvY7i3+JHkvmVrQf62WMeakTOIoFldRM5DXH8VMi64tvvDc4rbjhNWY/AfgW2xP+k+abWWFdUmkbSVRYb1oGR+tXX7Mx+Mz5JM8zwrhb5qtEh38y8V5zoS0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783010352; c=relaxed/simple;
-	bh=bARL1UfQ2+/TVIKdaHQ6opMS9ybB3oAQx961l0o5yN4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i1k+ylpb19ECdCHB2dDjItlPsOm06SpzzruMKGAaaqeR1nI5DY9ZpOVgrJtGRoDi3YUD0x9FO+mxMJz52YOcUtqVD09m0clgywRL9Gn51aAF7ZSxSkmPAWomaGFqDwiwCSBfmObv7O7p0yQMv9mpW1rv43N4XpLvvMlrTLiluAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2tImRB9f; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64479349CCC
+	for <bpf@vger.kernel.org>; Thu,  2 Jul 2026 16:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783010353; cv=pass; b=ptSbFgzqVdP1g22+E9JCHa7DrxQNEEXqvQS/Rv4i0vPI2Pyx04qj4vXl4zhiilTRVi5y98g5ZqE/crMuZO6Ek8NsK8zvVTYULI7FHZ1AuMsyuQk/hkuTqLq2bvE+iMEhHDe0ft408Q2gY6/Dxb/qf/DAmeJtDlU2Aiz/Us8YxGY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783010353; c=relaxed/simple;
+	bh=kOZ8synxEF/3k4EYSZuoWFK5xyfsCIntb32ef8ucf3k=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=hMQC6ZyEoUjeTUEt4aww/FkVevXzqA88/fOdGtSQRrEvEYO/g4fnD/MI7RaeNQDcm6mYEGnRtxdsIK5CTfjPpvVuXUJpXRsiLcdwNlR5Be3H0GdUlRtg9OA8ut1Mfo/V2Mr+Kltym1TI/Yb8kIPPM0B8jOwW4AZ5X5jHdrY1f64=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZdqqvMX1; arc=pass smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2tImRB9f"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 948361F000E9;
-	Thu,  2 Jul 2026 16:39:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1783010351;
-	bh=hTkMjPba82vZaMvl5WNIP5krQISY8NwgVjgfri0lkOk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=2tImRB9fJrbyIme1z1SFh0lyjxyAOX0FcZ+3zi/8bL7d4bx4pa4TUCNOhOurvGdEW
-	 UkB/ijisQRUPEutFfOJB4Fuo8g9b9ZEFW65XE8z38ZbG/FdP1o8PPbloO+LM1kO9ex
-	 WQy4iE3KghP7nLU8KzDBmyr2o3TQDovTgiqEGMWM=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	bpf <bpf@vger.kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Zheng Yejian <zhengyejian1@huawei.com>,
-	Martin Kelly <martin.kelly@crowdstrike.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
-	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Subject: [PATCH 6.12 077/204] ftrace: Have ftrace pages output reflect freed pages
-Date: Thu,  2 Jul 2026 18:18:54 +0200
-Message-ID: <20260702155120.282872367@linuxfoundation.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260702155118.667618796@linuxfoundation.org>
-References: <20260702155118.667618796@linuxfoundation.org>
-User-Agent: quilt/0.69
-X-stable: review
-X-Patchwork-Hint: ignore
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZdqqvMX1"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c96c92c0980so1036062a12.3
+        for <bpf@vger.kernel.org>; Thu, 02 Jul 2026 09:39:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783010352; cv=none;
+        d=google.com; s=arc-20260327;
+        b=iuAC+WBEG3AHDnjZe2EcHakRZ9n/+/drC1Bha0ZYCBcbIeGfhkDuzLt0i/iFv19V7C
+         s6vt5OMY+EDT+XMCRnGSegHtrp580WLvB8B+bNBogLFhxIssz2fsoDS1TvGVov6I/AhP
+         w59z8KgwktVwEDE/jNjm3sQM5l81S9AEOQV1PakKSBhFo+FtFs94VAOGE9hhZyQDo8Z4
+         npoqbAp4Y2tkLcU7lRgmswcVVnxGw70tGz63GVMDftzFys6ErNfIEZqvL8rAkZDM73Rk
+         xzibc2EFuo4vvO+FfHlX9bUVQoT/UhAbvf6UjHl3rs9V+DauRg8//9eRfcKHebNTZftM
+         BOrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=HFGik6+4OsATJQFBbFq4zeNGr+l450c3fMwz9itVayQ=;
+        fh=GWqGYRyc4Zk/I12y/N11k3xChOs2EJqY5zB40Njed9g=;
+        b=C+9fJ/Fg6k6TEMN1W3JFQyEpXf0u+eKA2TvbnVhi1vwV8zh8UYwvu73x7+6fKQ5+Yy
+         8yz6uErPRO0PZG7qebW7qLLHwxidYBjfOt3JFJns8teVxbAYknYnZ4XLXXdswDlkbgcB
+         2+r7HluJI1iJo1NE5RYKuXI+0jxULtvAkPb+r91gVaWNJfGdkc5N01+dUK0JD9eqrGMK
+         FvQD2C5sgfQcPU8+VXeGBD1Kc/06BvtsRB9T89CKNwYexunAD2HzEnB0FUoMi7KoLRjG
+         B8uDmGzCDr8TANvdk7LMVpOwe2b4lfv7wL2ncK7rrIuWEy6GZshmjsTgu/G5Li+tYjeC
+         ogYQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783010352; x=1783615152; darn=vger.kernel.org;
+        h=content-type:to:subject:message-id:date:from:mime-version:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=HFGik6+4OsATJQFBbFq4zeNGr+l450c3fMwz9itVayQ=;
+        b=ZdqqvMX1k7CcPYyRt2hWpU+h7WSDpkBEB4mhJ1OEJFG891v8wcrJe01IQOCwdrzRia
+         FVGYOGeDArSn1ySn4uV6aN6HpyCdwnkf8JirlSTk3RlLwNxrMrKuv82T+/KWkaDm5kHm
+         gKd9wP/l9cDtmHQBlutjoOdnwYLEDiqvQznFOu5Isrst3bquEl/EtoYdNzi7JAcrLsO2
+         cRne0wXr4Su2TtxzMY/QFeNf1onfspTFhTNypdEQVB4W6nbCa242rXhBvq1uDAedmtAG
+         JsbmZX1dPsQ3hKMrIwcKC7zqKpKuMTDUaUsEFmqHREiF7rSxiPanHLvLbqoQBjo7dHlZ
+         I1+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783010352; x=1783615152;
+        h=content-type:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HFGik6+4OsATJQFBbFq4zeNGr+l450c3fMwz9itVayQ=;
+        b=MRQ60iwERZyBW9DVJuBoR/i1Tb1WDpeTiStXJYiW+yV5xOU9NVmQUuwSG7OGnrPYAz
+         X2S+zfO6HkI1cU4gFCOuoiPAJEwPIHX1XZ+BQD5Ui596sF67LJnKb9kNdSEUkQROrlF4
+         rW6FflMkKumBimJ3v3qikkUhYzXgQXAHyWuxBobCwpb1OndEMWCPlwApAZr4yjmMxCeu
+         0SLQS6LkhZnkOrHKEoQbCA9tONuwo4bPo8th0Ycp04n2/8Z4LKMNg8dtMFdp1Kxid6/S
+         uvlPtQO6YLscX121bCvIQ4YECEgQiIXo8kiBcEn85mdLjMER8ne3xSn9kX6Exf/U3vZ5
+         G//g==
+X-Gm-Message-State: AOJu0Ywzq+RfjxPUT4LmhCVxmM+ACNRx4/gDrcQpO1d4ZOfgntxoZbgm
+	8p7+kbfGeGSviB/4y/KScjYAvVujG/tCgqeoHDfwyjcmOZ3KiQdVpRRISMpwuUckSuxFTrvH1D+
+	DOXIbqLmkJMrKLFikDqu7/7Fmw5/f8rfQYBOz
+X-Gm-Gg: AfdE7cl6LL8YLFzGnmfoD+ZalhOTI5j6pgpJvJSqFHzAcLJh0lYr5+gfaE+eGAu5rRq
+	NiVp44KfpAc31l+xPCH6+rd0wb1V/qqWgvc1MfR0y5XmqJkRoZKB7HeyPim+6QxFDZKVLHvHKz0
+	QJj8Ulf1loor/XXDFBkWdoHUIrW4+qHZkLB9If0EAQscuv5B5OXo49+acyo890WERpxa0mtNbRp
+	3wYT6GS6f/IBJ3UISAyLnNa9mJgKNMna8ZMMXfJ12AmIRpD1ZMaIXBCAwOnMGpSToCFmQmjIhQ6
+	7dZAJ36p+QFkYAZN544A8qGX7xtJPjr+PKhMVAaXyg7TTbvW2adILCJKf6Hd6bk4BCk40Qb651e
+	jVAh2Gy/zo+FC4kPQw48I1UOn
+X-Received: by 2002:a05:6a20:549d:b0:39f:2dd0:65d5 with SMTP id
+ adf61e73a8af0-3bff4222b55mr7906831637.39.1783010351482; Thu, 02 Jul 2026
+ 09:39:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 2 Jul 2026 09:39:00 -0700
+X-Gm-Features: AVVi8CeLgejTui-Kppz8NKnSDw3ifQGD3gc9ZGh2g-tg_Ec2Wak7dGPaK2nnMCY
+Message-ID: <CAADnVQKsM8iOGO3ZL3LgbWigOBBMrGbTYZ_k_Ktz=+cVkvRLXg@mail.gmail.com>
+Subject: [ANN] Summer vacations and "Won't Fix" bugs
+To: bpf <bpf@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-6.12-stable review patch.  If anyone has any objections, please let me know.
+Hi Everyone,
 
-------------------
+The summer is upon us and many BPF maintainers are going to take very
+long vacations "surprisingly" at the same time during July and August.
 
-From: Steven Rostedt <rostedt@goodmis.org>
+As signs on freeways say: "Expect delays" in patch processing and
+please don't spam few overloaded maintainers and reviewers.
 
-[ Upstream commit 264143c4e54412095f4b615e65bf736fc3c60af0 ]
+We see a lot of AI generated patches where human took AI generated bug
+finding, AI produced a patch and human sent it to the list without
+much thinking since AI "bug" sounded real and AI "patch" looked legit.
+This is not cool. It doesn't move the BPF project forward. It's a
+wheel spin and a noise in the long run. 3 out of 4 such patches are
+wrong. They consume maintainer's time and distract from real bugs and
+features. Don't be the one who spreads AI slop. Submitters must
+review such patches first. Use another LLM to review it and ask "Does
+this need to be fixed?" If it's a race condition and the reproducer
+requires adding mdelay() to the kernel the chances of hitting such a
+bug are the same as HW crashing due to cosmic rays. Typical solar
+flares cause more kernel crashes in the datacenter than these bugs.
+These are "Won't Fix" bugs.
 
-The amount of memory that ftrace uses to save the descriptors to manage
-the functions it can trace is shown at output. But if there are a lot of
-functions that are skipped because they were weak or the architecture
-added holes into the tables, then the extra pages that were allocated are
-freed. But these freed pages are not reflected in the numbers shown, and
-they can even be inconsistent with what is reported:
+Similarly a patch to fix a "bug" without a reproducer is going to be
+ignored, because it's a sign that AI couldn't craft a reproducer and
+description of the "bug" is a hallucination. No matter how plausible
+it sounds.
 
- ftrace: allocating 57482 entries in 225 pages
- ftrace: allocated 224 pages with 3 groups
+We see newcomers sending such AI slop to multiple subsystems at the
+same time (netdev, bpf, etc). It's a red flag and a sign that the
+submitter has no depth in either area. They are merely forwarding AI
+to the list. Such patches are the lowest priority and might be
+ignored.
 
-The above shows the number of original entries that are in the mcount_loc
-section and the pages needed to save them (225), but the second output
-reflects the number of pages that were actually used. The two should be
-consistent as:
+Landing 100 patches to fix 100 never-in-real-life bugs is not a
+success story. Lines-of-code and number-of-patches-landed is not a
+metric that businesses evaluate employees over. Expect more "Won't Fix".
+Maintainers are not going to help you increase these pointless metrics.
 
- ftrace: allocating 56739 entries in 224 pages
- ftrace: allocated 224 pages with 3 groups
+Also developers who sent 10+ patches are no longer occasional
+contributors they _must_ review other patches.  See
+https://lore.kernel.org/bpf/CAADnVQ+TKKptnNB25V3=bcdybh5G6c2DyW2sYtXvyRaVnPN8MA@mail.gmail.com/
+"As a prerequisite for merging a patch, the submitting developer is
+expected to complete a comprehensive review of another developer's
+patch of comparable scope and complexity."
 
-The above also shows the accurate number of entires that were actually
-stored and does not include the entries that were removed.
+If you don't review other patches and merely forward AI to the list
+expect that your patches will be ignored.
 
-Cc: bpf <bpf@vger.kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nicolas@fjasle.eu>
-Cc: Zheng Yejian <zhengyejian1@huawei.com>
-Cc: Martin  Kelly <martin.kelly@crowdstrike.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-Link: https://lore.kernel.org/20250218200023.221100846@goodmis.org
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- kernel/trace/ftrace.c |   15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
-
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -7050,6 +7050,7 @@ static int ftrace_process_locs(struct mo
- 	unsigned long addr;
- 	unsigned long kaslr;
- 	unsigned long flags = 0; /* Shut up gcc */
-+	unsigned long pages;
- 	int ret = -ENOMEM;
- 
- 	count = end - start;
-@@ -7057,6 +7058,8 @@ static int ftrace_process_locs(struct mo
- 	if (!count)
- 		return 0;
- 
-+	pages = DIV_ROUND_UP(count, ENTRIES_PER_PAGE);
-+
- 	/*
- 	 * Sorting mcount in vmlinux at build time depend on
- 	 * CONFIG_BUILDTIME_MCOUNT_SORT, while mcount loc in
-@@ -7168,6 +7171,8 @@ static int ftrace_process_locs(struct mo
- 			for (pg = pg_unuse; pg; pg = pg->next)
- 				remaining += 1 << pg->order;
- 
-+			pages -= remaining;
-+
- 			skip = DIV_ROUND_UP(skip, ENTRIES_PER_PAGE);
- 
- 			/*
-@@ -7181,6 +7186,13 @@ static int ftrace_process_locs(struct mo
- 		synchronize_rcu();
- 		ftrace_free_pages(pg_unuse);
- 	}
-+
-+	if (!mod) {
-+		count -= skipped;
-+		pr_info("ftrace: allocating %ld entries in %ld pages\n",
-+			count, pages);
-+	}
-+
- 	return ret;
- }
- 
-@@ -7835,9 +7847,6 @@ void __init ftrace_init(void)
- 		goto failed;
- 	}
- 
--	pr_info("ftrace: allocating %ld entries in %ld pages\n",
--		count, DIV_ROUND_UP(count, ENTRIES_PER_PAGE));
--
- 	ret = ftrace_process_locs(NULL,
- 				  __start_mcount_loc,
- 				  __stop_mcount_loc);
-
-
+Have a great summer.
