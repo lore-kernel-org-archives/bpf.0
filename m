@@ -1,297 +1,229 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25806262FD0
-	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 02:57:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E2D25228D
+	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 03:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783047477; cv=none; b=LNm9sO6UAYU1TgkyJP4P5FdJoisZzrSBxROHovrwXZFpGTdaK+RiDcrb/kNG0VVXcKhU8b1vnTc4jnjfUSs03nH/TcdqgTlbndhWJ5j0Iw8gs9/Lwwo7ByteS3KOmSiA9uTxGc4lljtv8txATMGiObwMnEPOWz//dlIbhgC7Utk=
+	t=1783050724; cv=none; b=t08AxMngbR+GprPX70hYk+HaEMQMr7YJyTPbjkILPrK6vcWIpCsGumQR9GvGTrpm4eZvn1DS8ZmwcpmKLTYVgasXxGcYP79tnTRMRbETL4G4Xrw5o5U8x+HUsBKOv+sb5gHM81pcs9McaZdBXndCuxjByskh/Cfq8A1BWm95MKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783047477; c=relaxed/simple;
-	bh=P0TTY1mzLS4ah7V8bJ2lKkeQgztQnUdzRQ9jaXIFhdI=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=G5QV6l9mhsJQjpXiaLUd/u9bwBWGvcLgNneiY1/HAL/p72EljMe3XtIsTaSQT7t+ZhCGFo1gGKDNW2iFZLAqUGBCQoBXd7pUCNlA6ALyUi5WRFHaz1M7wl3JiErPcaJa9l/L2xnDmYEtbJ0wXxzVFADcSoAbRvKAIEt1PruUpJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8Cx7+svJUdqLy4BAA--.5785S3;
-	Fri, 03 Jul 2026 10:57:51 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJBx68EsJUdq31y9AA--.28879S3;
-	Fri, 03 Jul 2026 10:57:49 +0800 (CST)
-Subject: Re: [PATCH bpf-next v7 1/2] bpf: Introduce jit_required flag and
- refactor kfunc path
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- KaFai Wan <kafai.wan@linux.dev>
-References: <20260702143656.28845-1-yangtiezhu@loongson.cn>
- <20260702143656.28845-2-yangtiezhu@loongson.cn>
- <20260702145855.07C6B1F000E9@smtp.kernel.org>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <7cce1695-eaa2-816b-2877-9cb2f117aa27@loongson.cn>
-Date: Fri, 3 Jul 2026 10:57:48 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1783050724; c=relaxed/simple;
+	bh=n9otxYLLiVUCiF0NwBWC80h7o2RKMS08s81YRFvEbGM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jnXG2aVIN94QUf3KWN/M26h8QqMC9pD7DBu/qaby669ktKT6XDw3iZoDGvU8j9UDuSystAtwaRXr9Tl1CZ0UseQ87WrQ0AXhrTDo+cK8VQJDWCv4jxqguE01Cod45lLrSDltiObvfOQ2w8/q2oa+A1SC4VE9XveNQOQ2wq2xPMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EBULXGrH; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EBULXGrH"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2ca70925c25so1207615ad.1
+        for <bpf@vger.kernel.org>; Thu, 02 Jul 2026 20:51:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783050713; x=1783655513; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=irOx4um9SxVnPfyQhReoF+nfX6PSfywyMAlSD0zArHg=;
+        b=EBULXGrHQOdatlJZ2pVyQERbi8gAUzgYotR+3WB1dxaFC1KToZ7iOHiykVXOw7fUhe
+         SNCYWjJlMpS5FkvHeIWxRio51Z7wNhXENlSoRDmnxxL3tzOr2pGt+Rts7r8yB/LxQNjK
+         0O8QofLWBTzwuLO1njRW2JylNnZW1bOAWUw54ieXrOM9CRiIWIbaLCz+wE9t2Gj858sV
+         hwg4Yi0C13YC5Jq1q1ZLVgVoPPx9MzybPvdBMTXdd5GE+kGGGb4DDeRPPTTk9svanW52
+         wtTKzvonds3q4vZKbLVZcg+ugH35Cbu2X2Lpo8jbu768RAoRFXdZ2h8Pugxaj5xk2jtB
+         dtaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783050713; x=1783655513;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=irOx4um9SxVnPfyQhReoF+nfX6PSfywyMAlSD0zArHg=;
+        b=PzTRdDiMvdCbv49ubh37imjNkZ69myjdDwIT74lWKRREqnZxYK0hpSbkk/5kmns+Xm
+         vD8o2EpokaxRgXcf+M9f8T0YeHuw23BoaufD1MzRou2LoyDqzP+e+wtlbHi+Pb3fOu+4
+         NmrRkcl9JAd92C5hC22hTV2aC/N5iS38daNJSqY96nYgTi/AinA6MLtVkR2G7KCSglUf
+         taQRyn+KrHpyCUQcG/MFBZ1uqyuHBjRXPE6a49jXzWI+k+dTec8bSGaOuOe0brSiMNip
+         6KmQBSq33U/y2Ptz53M6FMvO9m6L/cvMgavaE32m+l9PuhhKz229wADjIeCPSMuhmiwY
+         YyEA==
+X-Gm-Message-State: AOJu0YyDXyOHer5yvsdgYyK8czJ6w3pOGgtnRPX8bSBDn6wsFQ1jAAJ0
+	WL86CR4FEX1Vyk8oUYk2A7DwZLn3FBTBB5n2JxdqAUuhGkgRByVAl3X6KsA4RoFdAuWoEG9N
+X-Gm-Gg: AfdE7cnQP7gvl5yKqILgulb3Y0JtWKPr4DXy4nbF1f0U0tuySkNhGoh0p1QPoN2d+3/
+	aheIESAawdVdXzNfsG6sA2JiHGJcXurq2R3qwNYMDwg4xmNh4lDjQ9yJ+a8rCGlSzcJ7Im4gZx9
+	9+NQrEouwm/dFh54RiFw21uVdCmZBHkMMuYTAztxyyeuOnlzS7mhqlkj14nKi+4SYCLORkgoBt8
+	/xaUnLDGswMrXDfBGK4wde/hYDYe9ExhNNb0BuGJEnKvnWY8C/UUxuetPJgNOM9cwegx0G1tMVZ
+	eGsWIIynkde5nuZriuCykFmuBU04LbvLnECO2vqCp7esHw4yVfe/s05URPFxo6sGfitIAKn5jjN
+	GxbvZGCpus5miugtJJslx6KssEQvjCrHMm2rAUfLqnM4h49zm3z0CxUuQBROswznvvsIf7VQ0HF
+	ZpaWIgrw3sVDnXawFuz7d2Wja+ruDCrRbC5qjcYFQ/qd47JrAw3dgBtbNrby7QZyUDZBqlQKdyg
+	0Yw8tsso6jj3eOXSscUuK3+iQ==
+X-Received: by 2002:a17:903:2411:b0:2c1:98b7:ecf3 with SMTP id d9443c01a7336-2ca911de5d0mr82443825ad.23.1783050712813;
+        Thu, 02 Jul 2026 20:51:52 -0700 (PDT)
+Received: from u2404-VMware-Virtual-Platform.localdomain ([24.4.24.156])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b3c85b345sm22506479c88.10.2026.07.02.20.51.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2026 20:51:52 -0700 (PDT)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	shuah@kernel.org,
+	mmullins@fb.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Sun Jian <sun.jian.kdev@gmail.com>
+Subject: [PATCH bpf] bpf: Reject negative const offsets for buffer pointers
+Date: Thu,  2 Jul 2026 20:51:37 -0700
+Message-ID: <20260703035137.109608-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260702145855.07C6B1F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJBx68EsJUdq31y9AA--.28879S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW3Gr1UAF4kCFWfGr1fGF47KFX_yoW3AFyDpF
-	n8J34qkr40qw4F93srAF4xA343Kw4DW3y7KFWkGrySkF4jqFykXw1UK3y3Za9xKrWjga1x
-	Zw4IvFWjgw18uagCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AK
-	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzV
-	AYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8zwZ7UU
-	UUU==
 
-On 2026/7/2 下午10:58, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] The `bpf_fixup_call_args()` function and `bpf_prog_has_kfunc_call()` macro were not updated to use the new `jit_required` flag, leading to inconsistent interpreter fallback behavior for pruned kfuncs.
-> --
-> 
-> commit 5a3f8861c2b6916fe194f97a407cb7265f545fd0
-> Author: Tiezhu Yang <yangtiezhu@loongson.cn>
-> 
-> bpf: Introduce jit_required flag and refactor kfunc path
-> 
-> Introduce a 'jit_required' bitfield flag at the end of the
-> flags group in struct bpf_prog. This bit tracks whether a
-> program strictly requires the JIT compiler.
-> 
->> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
->> index 649cce41e13f3..5fcd19ccb41a9 100644
->> --- a/kernel/bpf/core.c
->> +++ b/kernel/bpf/core.c
->> @@ -2619,8 +2619,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
->>   	if (fp->bpf_func)
->>   		goto finalize;
->>   
->> -	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
->> -	    bpf_prog_has_kfunc_call(fp))
->> +	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) || fp->jit_required)
->>   		jit_needed = true;
->>   
->>   	if (!bpf_prog_select_interpreter(fp))
-> 
-> [Severity: Medium]
-> Since bpf_prog_has_kfunc_call() was replaced here with fp->jit_required,
-> should bpf_fixup_call_args() in kernel/bpf/fixups.c also be updated to use
-> the new flag?
-> 
-> Currently, bpf_fixup_call_args() still calls bpf_prog_has_kfunc_call(). If
-> a program has a pruned kfunc (allocating kfunc_tab but leaving
-> jit_required=0) and JIT falls back to the interpreter, wouldn't
-> bpf_fixup_call_args() incorrectly reject the program with -EINVAL?
-> 
-> kernel/bpf/fixups.c:bpf_fixup_call_args() {
->      ...
-> 	bool has_kfunc_call = bpf_prog_has_kfunc_call(prog);
->      ...
-> 	if (has_kfunc_call) {
-> 		verbose(env, "calling kernel functions are not allowed in non-JITed programs\n");
-> 		return -EINVAL;
-> 	}
->      ...
-> }
-> 
-> Should bpf_prog_has_kfunc_call() in kernel/bpf/verifier.c be updated to
-> check prog->jit_required, or removed entirely in favor of checking the flag
-> directly?
+The verifier rejects variable offsets for PTR_TO_TP_BUFFER and PTR_TO_BUF
+accesses, but it currently accepts a constant negative offset produced by
+pointer arithmetic.
 
-I think it is wrong to remove bpf_prog_has_kfunc_call() entirely,
-because using prog->jit_required directly in bpf_fixup_call_args()
-would cause false positives.
+For example, a raw tracepoint writable program can load ctx[0] as a
+PTR_TO_TP_BUFFER, move it by -8, and then read from the adjusted pointer.
+The register is still tracked as tp_buffer(imm=-8), but the access is
+before the tracepoint writable buffer base and should be rejected.
 
-I tested the following changes:
+Check the signed effective buffer offset before updating max_tp_access or
+other buffer max access accounting. Reject negative effective offsets and
+use the checked end offset for max access accounting.
 
-```
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 4e2b059d71f3..3a2fc194e2bb 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3171,7 +3171,6 @@ const struct bpf_func_proto 
-*bpf_base_func_proto(enum bpf_func_id func_id,
-                                                  const struct bpf_prog 
-*prog);
-  void bpf_task_storage_free(struct task_struct *task);
-  void bpf_cgrp_storage_free(struct cgroup *cgroup);
--bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog);
-  const struct btf_func_model *
-  bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
-                          const struct bpf_insn *insn);
-@@ -3510,11 +3509,6 @@ static inline void bpf_task_storage_free(struct 
-task_struct *task)
-  {
-  }
+Add a verifier test that rejects a raw tracepoint writable program using a
+negative constant offset.
 
--static inline bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog)
--{
--       return false;
--}
--
-  static inline const struct btf_func_model *
-  bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
-                          const struct bpf_insn *insn)
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 94e0457a0aa3..7fb92b5fa415 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -1378,7 +1378,6 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
-  #ifndef CONFIG_BPF_JIT_ALWAYS_ON
-         struct bpf_prog *prog = env->prog;
-         struct bpf_insn *insn = prog->insnsi;
--       bool has_kfunc_call = bpf_prog_has_kfunc_call(prog);
-         int depth;
-  #endif
-         int i, err = 0;
-@@ -1404,7 +1403,7 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
-                         return err;
-         }
-  #ifndef CONFIG_BPF_JIT_ALWAYS_ON
--       if (has_kfunc_call) {
-+       if (prog->jit_required) {
-                 verbose(env, "calling kernel functions are not allowed 
-in non-JITed programs\n");
-                 return -EINVAL;
-         }
+Fixes: 9df1c28bb752 ("bpf: add writable context for raw tracepoints")
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+---
+ kernel/bpf/verifier.c                         | 41 ++++++++++++++++---
+ .../bpf/progs/verifier_raw_tp_writable.c      | 16 ++++++++
+ 2 files changed, 52 insertions(+), 5 deletions(-)
+
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f496b45b9da4..3dbed3047254 100644
+index 21a365d436a5..421ca118fcbf 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -2770,11 +2770,6 @@ int bpf_add_kfunc_call(struct bpf_verifier_env 
-*env, u32 func_id, u16 offset)
-         return 0;
-  }
-
--bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog)
--{
--       return !!prog->aux->kfunc_tab;
--}
--
-  static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
-  {
-         struct bpf_subprog_info *subprog = env->subprog_info;
-```
-
-Here is the local test log:
-
-```
-fedora@linux:~$ cat test_panic.c
-   #include <linux/bpf.h>
-   #include <bpf/bpf_helpers.h>
-
-   SEC("kprobe/sys_getpid")
-   int test_panic(void *ctx)
-   {
-   	struct task_struct *task;
-
-   	task = (struct task_struct *)bpf_get_current_task();
-   	if (task)
-   		bpf_printk("Task address: %p\n", task);
-
-   	return 0;
-   }
-
-   char LICENSE[] SEC("license") = "GPL";
-fedora@linux:~$ clang -target bpf -O2 -g -c test_panic.c -o test_panic.o
-fedora@linux:~$ sudo sysctl -w net.core.bpf_jit_enable=0
-[sudo] password for fedora:
-net.core.bpf_jit_enable = 0
-fedora@linux:~$ sudo bpftool prog load test_panic.o 
-/sys/fs/bpf/test_panic autoattach
-libbpf: prog 'test_panic': BPF program load failed: Invalid argument
-libbpf: prog 'test_panic': -- BEGIN PROG LOAD LOG --
-calling kernel functions are not allowed in non-JITed programs
-processed 10 insns (limit 1000000) max_states_per_insn 0 total_states 1 
-peak_states 1 mark_read 0
--- END PROG LOAD LOG --
-libbpf: prog 'test_panic': failed to load: -22
-libbpf: failed to load object 'test_panic.o'
-Error: failed to load object file
-```
-
-This change incorrectly rejects programs that only contain normal
-inlined helper calls with -EINVAL.
-
-Instead, I think bpf_prog_has_kfunc_call() should be updated to check
-prog->jit_required, like so:
-
-```
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f496b45b9da4..1f5824c1c691 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2772,7 +2772,7 @@ int bpf_add_kfunc_call(struct bpf_verifier_env 
-*env, u32 func_id, u16 offset)
-
-  bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog)
-  {
--       return !!prog->aux->kfunc_tab;
-+       return prog->jit_required && !!prog->aux->kfunc_tab;
-  }
-
-  static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
-```
-
-Here is the local test log:
-
-```
-fedora@linux:~$ cat test_panic.c
-   #include <linux/bpf.h>
-   #include <bpf/bpf_helpers.h>
-
-   SEC("kprobe/sys_getpid")
-   int test_panic(void *ctx)
-   {
-   	struct task_struct *task;
-
-   	task = (struct task_struct *)bpf_get_current_task();
-   	if (task)
-   		bpf_printk("Task address: %p\n", task);
-
-   	return 0;
-   }
-
-   char LICENSE[] SEC("license") = "GPL";
-fedora@linux:~$ clang -target bpf -O2 -g -c test_panic.c -o test_panic.o
-fedora@linux:~$ sudo sysctl -w net.core.bpf_jit_enable=0
-[sudo] password for fedora:
-net.core.bpf_jit_enable = 0
-fedora@linux:~$ sudo bpftool prog load test_panic.o 
-/sys/fs/bpf/test_panic autoattach
-libbpf: prog 'test_panic': BPF program load failed: unknown error (-524)
-libbpf: prog 'test_panic': -- BEGIN PROG LOAD LOG --
-processed 10 insns (limit 1000000) max_states_per_insn 0 total_states 1 
-peak_states 1 mark_read 0
--- END PROG LOAD LOG --
-libbpf: prog 'test_panic': failed to load: -524
-libbpf: failed to load object 'test_panic.o'
-Error: failed to load object file
-```
-
-This ensures that pruned kfuncs (allocating kfunc_tab but leaving
-jit_required=0) safely return false, at the same time, this check
-perfectly isolates normal inlined helper paths.
-
-Let me wait for more review comments and will send v8 next week.
-
-Thanks,
-Tiezhu
+@@ -5326,14 +5326,18 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ static int __check_buffer_access(struct bpf_verifier_env *env,
+ 				 const char *buf_info,
+ 				 const struct bpf_reg_state *reg,
+-				 argno_t argno, int off, int size)
++				 argno_t argno, int off, int size,
++				 u32 *access_end)
+ {
++	s64 start, var_off;
++
+ 	if (off < 0) {
+ 		verbose(env,
+ 			"%s invalid %s buffer access: off=%d, size=%d\n",
+ 			reg_arg_name(env, argno), buf_info, off, size);
+ 		return -EACCES;
+ 	}
++
+ 	if (!tnum_is_const(reg->var_off)) {
+ 		char tn_buf[48];
+ 
+@@ -5344,6 +5348,29 @@ static int __check_buffer_access(struct bpf_verifier_env *env,
+ 		return -EACCES;
+ 	}
+ 
++	var_off = (s64)reg->var_off.value;
++	if (check_add_overflow(var_off, (s64)off, &start)) {
++		verbose(env,
++			"%s invalid %s buffer access: off=%d, var_off=%lld\n",
++			reg_arg_name(env, argno), buf_info, off, var_off);
++		return -EACCES;
++	}
++
++	if (start < 0) {
++		verbose(env,
++			"%s invalid negative %s buffer offset: off=%d, var_off=%lld\n",
++			reg_arg_name(env, argno), buf_info, off, var_off);
++		return -EACCES;
++	}
++
++	if (start > U32_MAX || size < 0 ||
++	    check_add_overflow((u32)start, (u32)size, access_end)) {
++		verbose(env,
++			"%s invalid %s buffer access: off=%lld, size=%d\n",
++			reg_arg_name(env, argno), buf_info, start, size);
++		return -EACCES;
++	}
++
+ 	return 0;
+ }
+ 
+@@ -5351,13 +5378,15 @@ static int check_tp_buffer_access(struct bpf_verifier_env *env,
+ 				  const struct bpf_reg_state *reg,
+ 				  argno_t argno, int off, int size)
+ {
++	u32 access_end;
+ 	int err;
+ 
+-	err = __check_buffer_access(env, "tracepoint", reg, argno, off, size);
++	err = __check_buffer_access(env, "tracepoint", reg, argno, off, size,
++				    &access_end);
+ 	if (err)
+ 		return err;
+ 
+-	env->prog->aux->max_tp_access = max(reg->var_off.value + off + size,
++	env->prog->aux->max_tp_access = max(access_end,
+ 					    env->prog->aux->max_tp_access);
+ 
+ 	return 0;
+@@ -5370,13 +5399,15 @@ static int check_buffer_access(struct bpf_verifier_env *env,
+ 			       u32 *max_access)
+ {
+ 	const char *buf_info = type_is_rdonly_mem(reg->type) ? "rdonly" : "rdwr";
++	u32 access_end;
+ 	int err;
+ 
+-	err = __check_buffer_access(env, buf_info, reg, argno, off, size);
++	err = __check_buffer_access(env, buf_info, reg, argno, off, size,
++				    &access_end);
+ 	if (err)
+ 		return err;
+ 
+-	*max_access = max(reg->var_off.value + off + size, *max_access);
++	*max_access = max(access_end, *max_access);
+ 
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c b/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
+index 14a0172e2141..4055a6443bc2 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
++++ b/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
+@@ -47,4 +47,20 @@ l0_%=:	/* shift the buffer pointer to a variable location */\
+ 	: __clobber_all);
+ }
+ 
++SEC("raw_tracepoint.w")
++__description("raw_tracepoint_writable: reject negative const offset")
++__failure
++__msg("invalid negative tracepoint buffer offset")
++__naked void tracepoint_writable_reject_negative_const_offset(void)
++{
++	asm volatile ("					\
++	r6 = *(u64 *)(r1 + 0);				\
++	r6 += -8;					\
++	r0 = *(u64 *)(r6 + 0);				\
++	exit;						\
++"	:
++	:
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
+-- 
+2.43.0
 
