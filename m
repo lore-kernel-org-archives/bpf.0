@@ -1,195 +1,114 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED81F1D9A5F
-	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 16:14:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739193242BD
+	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 18:16:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783095272; cv=none; b=bYdlpCuCCmxqjAJ2llpnE2GXeck9x26M4pVC7etPOglSP5PKhmD5rqcggzVFMVgx7qiZCjkm3RJcsmPrwJPpWV8yPS8iDfvwDZ8PU/sO02Jrp+hFnP9hm/psDFYWJVscRnRWLEhv0OOz3817khflXY4cAha3Lceh62j/oIo4CQs=
+	t=1783102579; cv=none; b=jwhxq/jiyM6Q2N4dJYbRRm5FQZtOU8nrz0Xg0kU4niaHemvsJHxeNwJTHbPPskIkK1O2WFTXy5oThroZ8JZ0pDy5tA27aX0j6p6i/DNzu7mNAGkbAqkH69Ms60E9CcPvTHrb5Ayk+cHuaG204SpqcNtxjndpQWUxfFRXThNlsoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783095272; c=relaxed/simple;
-	bh=7w/X1cc13jwOkMFd7WkIJ0IZogAONd76gWlycTImxpM=;
+	s=arc-20240116; t=1783102579; c=relaxed/simple;
+	bh=tHaRnBkHGDwxe27vTn4OgEjwyrOSNdq/sa3ntNRDUrY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PRWH82ijIe1Qs8PF+3aTDLfYssl9Ok2D45rpR06vs6uTAOcUY8xPUrKSeFHzgzv5csPhBEtvyOCQIjVmHv3Hn3IdavtWo2abZ+NsZvmFGAw0biFByrXfUEsbKt1Y6OX5beL8QoVqhidd+z9MXmBZ79PB3ZMM7kK+0lWNhtGk8Ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [36.44.120.111])
-	by gateway (Coremail) with SMTP id _____8DxOPLi30dqiGUBAA--.7395S3;
-	Sat, 04 Jul 2026 00:14:26 +0800 (CST)
-Received: from [192.168.0.111] (unknown [36.44.120.111])
-	by front1 (Coremail) with SMTP id qMiowJBxacHe30dqDju+AA--.19487S3;
-	Sat, 04 Jul 2026 00:14:25 +0800 (CST)
-Message-ID: <2d1babdf-a4d9-9902-77b0-3f5640871323@loongson.cn>
-Date: Sat, 4 Jul 2026 00:14:28 +0800
+	 In-Reply-To:Content-Type; b=QraDh+Jj2oiOnggE/L4neEPPyIvK/zTqfqVG9n+ygAaJwYtICYI/LCzMPmHE72tkK+Ow7dxwxOND520nGW9XQLFwytNOidXWDYwo+O3y9CAuq5wi8HM5+91o95JIBS07KI3qWAVIUvWB6M8A5tAwmbUZaOvErrvSdicnIHxdLBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WHwECOXa; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WHwECOXa"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-475417f010dso542026f8f.2
+        for <bpf@vger.kernel.org>; Fri, 03 Jul 2026 11:16:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783102574; x=1783707374; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=vsSwgqydI0TUTd1LdM/qdllikjjCJsaJszfdOZPreSE=;
+        b=WHwECOXacfOlaFdVXkN4YzhO4D6o4cjLpP9QdnIb10K0/XQqjQRQrcAOmrou58QHlj
+         rFYMA+KOGIiJunbI3hoJTotQ2gu4haGYpfWRqvSXprOYB97UBOSZj/S5eJLNgooT8ze1
+         8h4r9G7Op/XhAjuoeaxOog8U2MPjcnzkzyaUaVjsF1w4/eCyaOAhNh7C2k6XtY+i7vB0
+         txYIe1r4KDL6POc+hVQKh54v/F6L7c6RMaPCLV2ZeKjRW6JbgIaQbUlBAzB+PxQVF3lP
+         YrVMQbCm8rYFnh+CYYc2UFWSVpqpNOGeLHSaIlBdw8YM4ovnxp93oBkfXtcgXvFM/Q21
+         YvOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783102574; x=1783707374;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vsSwgqydI0TUTd1LdM/qdllikjjCJsaJszfdOZPreSE=;
+        b=h1E+wSxIjTEo+DqNoo0LIe94LJnX/KjtnqU8z2Qo4V49gYhEjKskxXL5XSd+nr7IqR
+         Lo/7JcLflKVUGzO8mUr+BzuDsI6ae1zXlSidGsuc2kxc5KHgqXeE2a7YAmN9eqTLuUD4
+         nevsCawVlyO4fZmdnYHUCOQI0SnwBLLH/ckKqj6IAbYzwF2R1xQiWld41hHpmhnbfBBo
+         7z6FdTeRvfbzi9pOA4UrJ0wvRiLVBD/P/lYySRBTSQY50c5AVwI/dJFe+WdOK125mSKg
+         XHJ9o3dniD+62eQ4IdvPzukzCLrpXnIBRp09xST5bHw4R76CGUc7TUzm+BIrp70+XBTf
+         /FDg==
+X-Forwarded-Encrypted: i=1; AHgh+RpjkJEd56/yy0DH5Vn6+o0xAY3/1ji8MhwwgqjBbuWDe5Xff4wl1j7XzwZdNXmeDYZK7i8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9q5gv0sPNAf0U3yk0uWoFOVjAwpkwNxn8lNUhVyAee+CoTpmg
+	tuTQabFKENsXQ+WJADvViqsnu2/JoNLdGrDwohBPgNSQNk5NBh55i7Ll
+X-Gm-Gg: AfdE7clB2e7AgTDeVTpBrC2djqqU4tf930/YBm2hNjzXXURrJb5Wpwe7/kpzsbBefYh
+	JGXyBhF102g3YpveIfq89GJ/DbeU9ONLlhtZ0MFM5BEg+D/97gv2c1fbYeSL6xsrs+Ka+G//3Yf
+	fe6k3KXMak3EpOuEvngc8JScUs80dl0j2qqfGrBy8IJkCBerCu5FpV31Wx6lsgR45NVvNDgLhmn
+	pF1cy28ymoGU+iIdbTRrjMgr8tUtZTxrYixarGCI2rgRrbbUM7Lj34OATFu73pAo24xyNL4Ie52
+	m9KZ/EoRpYdPFpUJBYibHUeggUu9MaG1znIfHuxQcl7Q8X5pAuzkqi5NT6sG9rmGfdO9NUN0Go3
+	jrH5yyNS+XkUAe1Q7HlEIfYV7pVZ4pO66uH5nfkwpqL3vawnVbJPqX+z6jlduh6NUpWN3XIRZKN
+	DtJI52HRl0BBpxgTSTLOzO7hdLj3brTU2FB90b7HxaT9xME0050fupLybiWvk5NcwRrgAnb2Rft
+	EZd6Zli
+X-Received: by 2002:adf:f3c8:0:b0:470:a7d8:75f5 with SMTP id ffacd0b85a97d-47aab77041emr390229f8f.42.1783102574577;
+        Fri, 03 Jul 2026 11:16:14 -0700 (PDT)
+Received: from [10.128.11.240] (195-23-151-163.net.novis.pt. [195.23.151.163])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47a9de1d8f1sm1195806f8f.3.2026.07.03.11.16.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jul 2026 11:16:13 -0700 (PDT)
+Sender: Julian Braha <julian.braha@gmail.com>
+Message-ID: <92264294-afe8-4752-9f22-2b633373b288@gmail.com>
+Date: Fri, 3 Jul 2026 19:16:12 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH bpf-next v7 1/2] bpf: Introduce jit_required flag and
- refactor kfunc path
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 14/15] barrier: add tests for
+ smp_cond_load_*_timeout()
+To: Ankur Arora <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-pm@vger.kernel.org, bpf@vger.kernel.org
+Cc: arnd@arndb.de, catalin.marinas@arm.com, will@kernel.org,
+ peterz@infradead.org, akpm@linux-foundation.org, mark.rutland@arm.com,
+ harisokn@amazon.com, cl@gentwo.org, ast@kernel.org, rafael@kernel.org,
+ daniel.lezcano@linaro.org, memxor@gmail.com, zhenglifeng1@huawei.com,
+ xueshuai@linux.alibaba.com, rdunlap@infradead.org,
+ david.laight.linux@gmail.com, broonie@kernel.org, joao.m.martins@oracle.com,
+ boris.ostrovsky@oracle.com, konrad.wilk@oracle.com, ashok.bhat@arm.com
+References: <20260702013334.140905-1-ankur.a.arora@oracle.com>
+ <20260702013334.140905-15-ankur.a.arora@oracle.com>
 Content-Language: en-US
-To: KaFai Wan <kafai.wan@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, loongarch@lists.linux.dev,
- Leon Hwang <leon.hwang@linux.dev>, Puranjay Mohan <puranjay@kernel.org>,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-References: <20260702143656.28845-1-yangtiezhu@loongson.cn>
- <20260702143656.28845-2-yangtiezhu@loongson.cn>
- <ba5679e744e0209ca10788c2c385c6727eddb8a5.camel@linux.dev>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-In-Reply-To: <ba5679e744e0209ca10788c2c385c6727eddb8a5.camel@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJBxacHe30dqDju+AA--.19487S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxZr4xtw43Ww17KrWUuF1UXFc_yoWrurykpF
-	ykGasrCF109r409F9rJF48ZrW5t3W0kr17Kry8Kry09r1qgw1vga48G3sxZa9Yqr4vkr10
-	vF9FvrWUt34UZFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUP0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Jr0_Gr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
-	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1D
-	McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7
-	I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCF
-	x2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r
-	1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij
-	64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-	0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-	0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8HKZJUUUUU==
+From: Julian Braha <julianbraha@gmail.com>
+In-Reply-To: <20260702013334.140905-15-ankur.a.arora@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 7/3/26 21:55, KaFai Wan wrote:
-> On Thu, 2026-07-02 at 22:36 +0800, Tiezhu Yang wrote:
->> Introduce a 'jit_required' bitfield flag at the end of the
->> flags group in struct bpf_prog. This bit tracks whether a
->> program strictly requires the JIT compiler.
->>
->> Set this flag to 1 when a kfunc call is added at the end of
->> bpf_add_kfunc_call().
->>
->> In __bpf_prog_select_runtime(), check with fp->jit_required
->> rather than bpf_prog_has_kfunc_call() to unify the logic.
->>
->> Suggested-by: Alexei Starovoitov <ast@kernel.org>
->> Suggested-by: KaFai Wan <kafai.wan@linux.dev>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->>   include/linux/bpf.h   | 3 ++-
->>   kernel/bpf/core.c     | 3 +--
->>   kernel/bpf/verifier.c | 2 ++
->>   3 files changed, 5 insertions(+), 3 deletions(-)
->>
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index ba09795e0bfd..4e2b059d71f3 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -1880,7 +1880,8 @@ struct bpf_prog {
->>   				call_get_func_ip:1, /* Do we call get_func_ip() */
->>   				call_session_cookie:1, /* Do we call bpf_session_cookie() */
->>   				tstamp_type_access:1, /* Accessed __sk_buff->tstamp_type */
->> -				sleepable:1;	/* BPF program is sleepable */
->> +				sleepable:1,	/* BPF program is sleepable */
->> +				jit_required:1;	/* program strictly requires JIT compiler
->> */
-> 
-> In v6 you're using 'u8 jit_required', I thought it would be 'u8 jit_required:1', so we use one byte
-> and left 3 byte hole for future use.
-> 
-> This version left 2 bytes hole, same as v5, but it can easily be misleading because of the u16 type,
-> since we used 17 bits. I prefer v5, it has better readability.
+Hi Ankur,
 
-OK, I will use the previous layout in v8, like this:
+On 7/2/26 02:33, Ankur Arora wrote:
+> +config BARRIER_TIMEOUT_TEST
+> +	tristate "KUnit tests for smp_cond_load_relaxed_timeout()"
+> +	depends on KUNIT
+> +	default KUNIT_ALL_TESTS
+> +	help
+> +	  Builds KUnit tests that validate wake-up and timeout handling paths
+> +	  in smp_cond_load_relaxed_timeout().
+> +
+> +	  Say N if you are unsure.
 
-```
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index ba09795e0bfd..463fae6a5c33 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1865,8 +1865,9 @@ struct bpf_prog_aux {
+Could you follow the kunit documentation for the kconfig entry:
+Documentation/dev-tools/kunit/style.rst
 
-  struct bpf_prog {
-  	u16			pages;		/* Number of allocated pages */
--	u16			jited:1,	/* Is our filter JIT'ed? */
-+	u32			jited:1,	/* Is our filter JIT'ed? */
-  				jit_requested:1,/* archs need to JIT the prog */
-+				jit_required:1, /* program strictly requires JIT compiler */
-  				gpl_compatible:1, /* Is filter GPL compatible? */
-  				cb_access:1,	/* Is control block accessed? */
-  				dst_needed:1,	/* Do we need dst entry? */
-```
+Specifically, these two guidelines:
+1. "be named CONFIG_<name>_KUNIT_TEST: where <name> is the name of the
+test suite."
+2. be visible only if CONFIG_KUNIT_ALL_TESTS is not enabled.
 
-> 
->>   	enum bpf_prog_type	type;		/* Type of BPF program */
->>   	enum bpf_attach_type	expected_attach_type; /* For some prog types */
->>   	u32			len;		/* Number of filter blocks */
->> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
->> index 649cce41e13f..5fcd19ccb41a 100644
->> --- a/kernel/bpf/core.c
->> +++ b/kernel/bpf/core.c
->> @@ -2619,8 +2619,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env,
->> struct
->>   	if (fp->bpf_func)
->>   		goto finalize;
->>   
->> -	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
->> -	    bpf_prog_has_kfunc_call(fp))
->> +	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) || fp->jit_required)
->>   		jit_needed = true;
->>   
->>   	if (!bpf_prog_select_interpreter(fp))
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 25aea4271cd0..f496b45b9da4 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -2765,6 +2765,8 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, u16
->> offset)
->>   	desc->func_model = func_model;
->>   	sort(tab->descs, tab->nr_descs, sizeof(tab->descs[0]),
->>   	     kfunc_desc_cmp_by_id_off, NULL);
->> +
->> +	env->prog->jit_required = 1;
-> 
-> That's ok, and I think Sashiko is right about this patch.
-> 
->>   	return 0;
->>   }
-
-As discussed in another thread, I will update bpf_prog_has_kfunc_call()
-in v8, like this:
-
-```
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 25aea4271cd0..c34cc524651a 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2770,7 +2770,7 @@ int bpf_add_kfunc_call(struct bpf_verifier_env
-*env, u32 func_id, u16 offset)
-
-   bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog)
-   {
--       return !!prog->aux->kfunc_tab;
-+       return prog->aux->kfunc_tab && prog->aux->kfunc_tab->nr_descs;
-   }
-
-   static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
-```
-
-IIUC, there are two places to modify so far:
-(1) struct bpf_prog
-(2) bpf_prog_has_kfunc_call()
-
-If you have any more comments, please let me know.
-
-Thanks,
-Tiezhu
-
+- Julian Braha
