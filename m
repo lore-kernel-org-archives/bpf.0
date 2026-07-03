@@ -1,123 +1,69 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8536E3B47CD;
-	Fri,  3 Jul 2026 10:48:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA51A3BA253;
+	Fri,  3 Jul 2026 10:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783075725; cv=none; b=k77WDc5ChjahZx//lQHUceZggp/UF1Vgxc67p0Irm+V05Mxb9onCorViHPTd46yZQtam87GZaKQ80vdVs/zEKiJikP6juoP4UPFPSNhBPz8Lx8B8junibqfOUdSiPoQfsAtdqJpKmE1e26ZY5rtLz20eJX30icGvrvNuc4mTbI8=
+	t=1783076345; cv=none; b=CATzGz5ZHXcJpTA3gKTq2WR7e4FKHuJvoSP3hQLOk484bjMJ20DB0qI/OjXdleOq23yCw+IJowmnmNVWLmEpKae+tRM+OxV4G8eew6NE7x0bU7a4nIyEBVo5+SGG3ZKpB3k6iAZwaidCi3NxJZUcE4XNr2XT8hWr/dRRyic6IH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783075725; c=relaxed/simple;
-	bh=4wpVi5B6cuEm0Yx8MPwGNQT7mk6f4DTeDdrRm/VBsI8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=i71WTD+WEtpPU9m/jYwNkzJ3vtWFS62NpJmM01zY4KpWHKHeUlN6sv3zGiUN4kgvYuT48be4LiPgCshRmfYxywbHb/TQntWERQYBs53zQo4l/27kJCLQDLyO7yv6d0K9PEZy6tvJxXJ40UahQO3rcfjc/0OIpJOk0HrBouMiQXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gvatzzEe; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783076345; c=relaxed/simple;
+	bh=HPf57kZWKP5aG+CCEzNG66wp/LBnKqH/SbYsEr+Hiw4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uFuwZz0svjM3jH6vXzcFVS5oARIUTIbJlUynfxBABi4ph8lXgRCkEFPVz4w3lj5Yy5fcV/BHdRsdG5/9Z4WcqW2raq9oMQOuqDMxqo5HxxM8+0qy0k9zT3CxJCB3vgnvFwl/COfkGFeRTCHpLequW5SMfC3faF0fJIBwmA5UdPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=CrVcpKGf; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gvatzzEe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E21C51F000E9;
-	Fri,  3 Jul 2026 10:48:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783075724;
-	bh=PCHPieaTdVPktVO1pf+IqahTfnxq7M8WpDNPUJJV0Bw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gvatzzEeGf7tAAFwCSusFnI+uJc1bxYr7d+Nz5jb+bdqIpb8GJazFvU5iLm0s7Oh8
-	 pytYqB303papvdLM9Z5E0+Ya7/Juc+ZHUw69ihYeFZUbGYGZ91UgYJufTQQx+BYXSh
-	 g81ArlMvFmnKKuGApviinScuG+Hx2fgQcAjyAbhZBspaGfK3Hi1AcHHW26JZUydMly
-	 ja9evYvifX38Ch0X5zbjAXb2moA5t5uyHm1Fai0N4G5+WU1r08fHdaOJrr4iYjxQko
-	 UA9sRKP051wfUolH8bCZfhtAM5XwqXD894opaDuobvAMCdc+yKkQGigxwDVbuEjgla
-	 BX17IItOL3hJA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/2] perf trace: Factor out BPF loop body
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Viktor Malik" <vmalik@redhat.com>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20fc67aa2550ca5aff52b3a9a207f2e07f8e0b1d.1783070132.git.vmalik@redhat.com>
-References: <cover.1783070132.git.vmalik@redhat.com>
- <20fc67aa2550ca5aff52b3a9a207f2e07f8e0b1d.1783070132.git.vmalik@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 03 Jul 2026 10:48:42 +0000
-Message-Id: <20260703104843.E21C51F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="CrVcpKGf"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=nr5l6b4Yqe+7voRCZfV6ADc4VDQFMFng9cyt4wXHdkM=; b=CrVcpKGfnB1UEqRWyp7DDwepNZ
+	lgQrgqo32rjTDVBJqGoqav3GR/r1R0f8MfmR9QzoPFM25/0IZADrhXBe12kdMYqM+nqkcxtgBGX6N
+	xRxyalaNqJ3LnFNpDmWj01GpACmeYxFg6FknOTSEzl/ZsLHRbA/cS0Y/uAPtoIkPfJBMQcarDDz7p
+	2fNbKHCIlEuNIzlI6ffS8f8hI7C4AoGcFfG2FdlhyHWZXZs+lSW9QKnHbUSp1IONa5VjJ/nZAYCVQ
+	Lb2UW0EPtmJymlFPendvBfhn6f2UtEh/GMX8SaxviCbcFG1u6ER4XepMQKdxMTWuwvukQ5uC8CI3G
+	sY1DgUMw==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wfbbo-0000000AByh-1RBg;
+	Fri, 03 Jul 2026 10:59:00 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 94AD930035C; Fri, 03 Jul 2026 12:58:59 +0200 (CEST)
+Date: Fri, 3 Jul 2026 12:58:59 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Oleg Nesterov <oleg@redhat.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCHv5 00/13] uprobes/x86: Fix red zone issue for optimized
+ uprobes
+Message-ID: <20260703105859.GD651302@noisy.programming.kicks-ass.net>
+References: <20260701111337.53943-1-jolsa@kernel.org>
+ <CAEf4BzYiPeLTbgeVEDKqU45oHBFJgU6ULgK=3i1J7dbzKS2+yg@mail.gmail.com>
+ <akZJZth3-fVUhADl@krava>
+ <CAEf4BzaDwwW1ebPO+4r5rhmdyXk+XddWTDBzN4iOaCU8qEPZRw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzaDwwW1ebPO+4r5rhmdyXk+XddWTDBzN4iOaCU8qEPZRw@mail.gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Zero-extension of map values makes the condition `size < 0` alwa=
-ys false, resulting in dead code that completely breaks tracepoint buffer a=
-ugmentation.
---
+On Thu, Jul 02, 2026 at 09:20:25AM -0700, Andrii Nakryiko wrote:
 
-commit d586728f909e7c096ce4ad924848b781a274c29f
-Author: Viktor Malik <vmalik@redhat.com>
+> > I failed to release link in test_uprobe_fork_optimized, fix is below
+> > I can send new version or separate fix
+> 
+> yeah, please fix the test, adjust comments as pointed out by AI and
+> send v6. Seems like Peter wants to pick it up through tip, I don't
+> mind.
 
-perf trace: Factor out BPF loop body
-
-This commit factors out the loop body in augmented_raw_syscalls into a
-separate function. This is intended to simplify the code and help address
-problems with the BPF verifier.
-
-> diff --git a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c b/tool=
-s/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-> --- a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-> +++ b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-
-[ ... ]
-
-> +static inline int augment_arg(struct syscall_enter_args *args, int i,
-> +			      unsigned int *beauty_map, void *payload_offset)
-> +{
-> +	int index, value_size =3D sizeof(struct augmented_arg) - offsetof(struc=
-t augmented_arg, value);
-> +	s64 aug_size, size;
-> +	bool augmented;
-> +	void *arg;
-> +
-> +	arg =3D (void *)args->args[i];
-> +	augmented =3D false;
-> +	size =3D beauty_map[i];
-
-[ ... ]
-
-> +	} else if (size > 0 && size <=3D value_size) { /* struct */
-> +		if (!bpf_probe_read_user(((struct augmented_arg *)payload_offset)->val=
-ue, size, arg))
-> +			augmented =3D true;
-> +	} else if ((int)size < 0 && size >=3D -6) { /* buffer */
-
-[Severity: Medium]
-Will this condition evaluate correctly given that beauty_map contains
-unsigned integers?
-
-When the userspace perf trace tool populates beauty_map_enter with negative
-values (e.g., -1) to indicate buffer arguments, they are stored as 32-bit
-unsigned integers (e.g., 4294967295).
-
-Since size is an s64, reading from the map via size =3D beauty_map[i]
-zero-extends this unsigned value, making it strictly non-negative.
-
-It appears a subsequent patch in this series removes the (int) cast to
-address an out-of-bounds array access caused by the size >=3D -6 check
-(which was a pre-existing issue).=20
-
-However, removing that cast leaves the condition checking if size < 0,
-which will always be false because of the zero-extension.
-
-Could this inadvertently turn the entire buffer augmentation branch into
-dead code, systematically failing to augment every buffer tracepoint
-argument?
-
-> +		index =3D -(size + 1);
-> +		barrier_var(index); // Prevent clang (noticed with v18) from removing =
-the &=3D 7 trick.
-> +		index &=3D 7;	    // Satisfy the bounds checking with the verifier in =
-some kernels.
-> +		aug_size =3D args->args[index] > TRACE_AUG_MAX_BUF ? TRACE_AUG_MAX_BUF=
- : args->args[index];
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1783070132.gi=
-t.vmalik@redhat.com?part=3D1
+So I should wait for v6, and not munge the below delta in?
