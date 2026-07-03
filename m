@@ -1,77 +1,69 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B91D340407;
-	Fri,  3 Jul 2026 12:32:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A7F53D1A97;
+	Fri,  3 Jul 2026 12:45:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783081936; cv=none; b=pggNFKYUzJ75B9zzvAc8YU7Wp1dR2agvnHmYi1+xpjN9/JGvatTjzDrjv/VwGAchh7Gzvk85kABQjzigVi1GPjCu2dJCPZNhszCcqeRGBx9U3gnJpllOFa3TyAT+PQew2Q8dh6E3L4NIV7QsX9N9pIaGF0OexbelSSQkcnkn6KY=
+	t=1783082710; cv=none; b=gZGEqBC9MAD54nhdvuMoz62WsNg18Xap7i1twNy1YjyFfcAiVBOS15/8qGSs1lJg/gkEZSb0U5abQkwTqrMp8C/N8zMR/glqzW4t6SUp/CJpt1UpmljvHQ4IjFY82pIzqgRvCYvcFQ4wRBsygG8ybSg8u+UhW6HkFv/vC26MzCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783081936; c=relaxed/simple;
-	bh=PoNOme6RAV8DA+0buWUum3XfBPwAD5v03iZX/WA7qro=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=uGK+jyqAjuXSixcUVTFEerLY1Su9eXQrgGVVgKQ0MX5PPwLnL7vJHgCdhEHz095Jdm+DHR1tdt1oCmanfSDCPZCXfStS/C4ZLiKLTaB5pSA1zeHIpijydIPFS8kzGkbmWcB0oP5E859MmGofJQXLMmLpiRUwcC+REC63mzvz704=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cUSIYvPN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783082710; c=relaxed/simple;
+	bh=SwU4aFqG6SLwp3Rx7eIm5MyWOYcFI0GvCVSGHjrnTXU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u6uUEOJKcEajn5mIjjVJWvKZg4Twb1uClKpAM6b3dLzXeCG2iTTaa/9t5qOCbmABgOcd6el8c4cig0x0gZtvgWnJWaY2TsGvSjXnG+D3gohxmoy9tNXLhIqrYgrvtqdqdf4//qDG6MvIkfzhx1jFd8TuU/bBGQ5WbhEIvYnCJTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=JkPS8diF; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cUSIYvPN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F4E41F000E9;
-	Fri,  3 Jul 2026 12:32:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783081932;
-	bh=PoNOme6RAV8DA+0buWUum3XfBPwAD5v03iZX/WA7qro=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=cUSIYvPNn5kqAwluBnmEamj5wC8IEaC0L9mo8YKHezCtHxbqH8XligmPRg+j0RcP7
-	 7o/LSOEcDINbvGC/6ryMHvANy2Q5WeXOxnyEag+TLGsQ3mmi4rsn9nuwxqM2KqUx9h
-	 m3YsY8u95DQLL/BP0/DCsccwSPvXn4vqBbGuabuUhcV+B0wTNvwj7Yac4asECimbKN
-	 BCrll8zCR8nHgCYkJGvbdx0B7bAubzdlYjoKWD1NTWkrofaEpo0Edk/hqniKWTdMmh
-	 /mII7aPb2pgwaxn2+2cgt2vqperCjUti+u5EJxDAhusx72pM7wu/3Jvn3/IJGD3yAc
-	 OCPi6FaH2HezA==
-Content-Type: multipart/mixed; boundary="===============7859000914753863281=="
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="JkPS8diF"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=HA4YQ+OERYRDsxgWBX7o87h2z1rSrQXVR5NxmKLrZNI=; b=JkPS8diFHhiVc5FHItcbWPHQvJ
+	wQt3AYqZUe0dwzen6jp+LxPON7pbTb3z3FVnAqhEfv9ZQ/Y/inz6L4Fu9mIBxMCS+XhPsUq79+Y5R
+	44WKYPTQdtq3dHsU7LdZDa6caJxXQMJnbc7gGgZnqAvdd/EeA0QxIspWMO+Qq+wrf7/demciH+7S+
+	k+PQfTDPKtDOsSYofRRlmuftteACsXXAqA8WijAi/r/SfJ4bRcj9CIs0DDCI4eOj6613qJ+oRDapr
+	dGhTJPwTSvM7njOVf5esIexOPvwXhqRhZrHAw/i1F065uyOyp9htkL/VnzQ2WXB7kZhADBa8Gdnex
+	iUnBmTyw==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wfdGS-0000000AJpK-3V3i;
+	Fri, 03 Jul 2026 12:45:05 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id D0B1B300220; Fri, 03 Jul 2026 14:45:03 +0200 (CEST)
+Date: Fri, 3 Jul 2026 14:45:03 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Oleg Nesterov <oleg@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCHv6 03/13] uprobes/x86: Do not leak trampoline vma mapping
+ on optimization failure
+Message-ID: <20260703124503.GP751831@noisy.programming.kicks-ass.net>
+References: <20260703114917.238144-1-jolsa@kernel.org>
+ <20260703114917.238144-4-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1a9bbc8d6eb6987a94069feefd70b50f2a614bc915743b1369f5bd4861dd2363@mail.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20260703114917.238144-4-jolsa@kernel.org>
-References: <20260703114917.238144-4-jolsa@kernel.org>
-Subject: Re: [PATCHv6 03/13] uprobes/x86: Do not leak trampoline vma mapping on optimization failure
-From: bot+bpf-ci@kernel.org
-To: jolsa@kernel.org,oleg@redhat.com,peterz@infradead.org,mingo@kernel.org,mhiramat@kernel.org,andrii@kernel.org
-Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri,  3 Jul 2026 12:32:12 +0000 (UTC)
 
---===============7859000914753863281==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> uprobes/x86: Do not leak trampoline vma mapping on optimization failure
->
+On Fri, Jul 03, 2026 at 01:49:07PM +0200, Jiri Olsa wrote:
 > In case the optimization fails, we leak new-ly created trampoline
 > vma mapping (in case we just created it), let's unmap it.
->
+> 
 > Fixes: ba2bfc97b462 ("uprobes/x86: Add support to optimize uprobes")
-
-Should the Fixes: tag point to f4216a203c5d ("uprobes/x86: Remove struct
-uprobe_trampoline object") instead?
-
-The commit message of f4216a203c5d explicitly states: "Note the original
-code called destroy_uprobe_trampoline if the optimiation failed, but it
-only freed the struct uprobe_trampoline object, not the vma. The new vma
-leak is fixed in following change."
-
-This commit (ba6320f8c716) appears to be that following change fixing the
-new vma leak introduced by f4216a203c5d.
-
 > Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
+What is the intention here? That is, Patch 1 has a Fixes and is already
+in tip/perf/urgent (from v5), patch 2 does not have Fixes, this patch
+(3) has Fixes and appears to rely on patch 2.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28659696456
---===============7859000914753863281==--
+So should I stick both 2,3 into perf/urgent or what?
