@@ -1,192 +1,347 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82AA43D88F5;
-	Fri,  3 Jul 2026 13:39:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF0A33DA7D1
+	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 13:51:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783085955; cv=none; b=rz9iraxqKGrvU/pRETFAFPjlsZEg7ciFr7pZspat91dx+TbtFJ59B74/tbwCsbk1c7UInyxV7P1eGPnZ7aEdrNREhRuhdMuNz5NAM9fa03f5/z5icMbdFaRFJL3va5Yopw2AueZ2KyA0TZqy3zbYF4i92005EVZ4RJH6bJDatSI=
+	t=1783086713; cv=none; b=bTqMVHvo+Y6Ryh50KE1OKMaKmN+1mSHqStLyKgYcvoSj6JD7ldADgDTv6Byk6MNVi7xaIeRBylgfX8kSWNb56oHLblApoiP6dN+IH5GiW3jzkvMXTtSdPAZCxLg7snWdkBHBqyuVOCtspNolh77WqTOirF/LFZy9g+9mDKz/8i8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783085955; c=relaxed/simple;
-	bh=7WWSbSoIwq/hUhTjnTNiVjOrA3d9Lyf8l1GJiBo9eH0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IfkXcjaS3cBk+lOqXGpmymPNgwJiZPn/8MoMJgNDAUJfc63r19Pv0RyO/f47DDJ7Lot0G5Cwh4hN8qtTJd8m2/5mC2BOp3hqMLIdL15h1Z4tEsliJ3h2idKLdFAdOwb7isUOBJUhXvZvCRbbZccovzyLHwqIJbxXgPu7UZ5rAjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iy2MjFOD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783086713; c=relaxed/simple;
+	bh=Fya/r2i9Q1HCXdJ+hbuDimOhJPBx0X6DKHGMg0lMhFc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=dDI3p7KCIH7MV/oaECzZ4oXFQkj1oOBQgiOw5sSV6FjWAVkEb3AVsnCe3Ki4vpVgQgUReQd+0B38m0bP2msvtyPrm4P9N7pmo694E5NDeVCFXc42b9WFew7mK1U53QblXL0GeBZJRDeGkd0MrHElPE8zY/IbLHSyrwNKku83HjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ssBSZmQD; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iy2MjFOD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 187FE1F000E9;
-	Fri,  3 Jul 2026 13:38:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783085954;
-	bh=gZAdfsOK4tFSPJR7Aj2D7TzZA7j60EZxfwd8tWq9E3E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Iy2MjFODHI3xorm5lCCn7X6KmOVRg3yW91mvKPD3two97lMxlZP19piRDprB1eNYc
-	 DYlZMhegN1/lp/SjFedKlM3U/uDlvrL/9FgXMqyE6u/yL0Ujaob2xTzV37rWwMRkoq
-	 RD+Cfv1Ss+ANInYh8hjtzd8vOZ2qyNFX0YLUuiDSmBvMQl4DJfBeWFbgehjn15IkuW
-	 pLv3nUbJk9Vw7He2DwneABC+WC7/sy307tOrWzutaUbX1KeUAFwPxeahHXI0Vw6oyu
-	 0/7olW/AWWlIiQs2eKZwXYIiO1DZHs2HA0/80RJmZuQ+CO8dQ46MDNubibxQD7ahra
-	 YV7D3efGERuwA==
-Date: Fri, 3 Jul 2026 16:38:48 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Brendan Jackman <brendan.jackman@linux.dev>
-Cc: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"kernel@xen0n.name" <kernel@xen0n.name>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"pbonzini@redhat.com" <pbonzini@redhat.com>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-	"yuzenghui@huawei.com" <yuzenghui@huawei.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"seanjc@google.com" <seanjc@google.com>,
-	"tglx@kernel.org" <tglx@kernel.org>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-	"luto@kernel.org" <luto@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"willy@infradead.org" <willy@infradead.org>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"david@kernel.org" <david@kernel.org>,
-	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
-	"vbabka@kernel.org" <vbabka@kernel.org>,
-	"surenb@google.com" <surenb@google.com>,
-	"mhocko@suse.com" <mhocko@suse.com>,
-	"ast@kernel.org" <ast@kernel.org>,
-	"martin.lau@linux.dev" <martin.lau@linux.dev>,
-	"eddyz87@gmail.com" <eddyz87@gmail.com>,
-	"song@kernel.org" <song@kernel.org>,
-	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-	"kpsingh@kernel.org" <kpsingh@kernel.org>,
-	"sdf@fomichev.me" <sdf@fomichev.me>,
-	"haoluo@google.com" <haoluo@google.com>,
-	"jolsa@kernel.org" <jolsa@kernel.org>,
-	"jgg@ziepe.ca" <jgg@ziepe.ca>,
-	"jhubbard@nvidia.com" <jhubbard@nvidia.com>,
-	"peterx@redhat.com" <peterx@redhat.com>,
-	"jannh@google.com" <jannh@google.com>,
-	"pfalcato@suse.de" <pfalcato@suse.de>,
-	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
-	"riel@surriel.com" <riel@surriel.com>,
-	"ryan.roberts@arm.com" <ryan.roberts@arm.com>,
-	"jgross@suse.com" <jgross@suse.com>,
-	"yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
-	"kas@kernel.org" <kas@kernel.org>,
-	"coxu@redhat.com" <coxu@redhat.com>,
-	"ackerleytng@google.com" <ackerleytng@google.com>,
-	"yosry@kernel.org" <yosry@kernel.org>,
-	"maobibo@loongson.cn" <maobibo@loongson.cn>,
-	"tabba@google.com" <tabba@google.com>,
-	"prsampat@amd.com" <prsampat@amd.com>,
-	"jthoughton@google.com" <jthoughton@google.com>,
-	"agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-	"chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-	"dev.jain@arm.com" <dev.jain@arm.com>,
-	"gor@linux.ibm.com" <gor@linux.ibm.com>,
-	"hca@linux.ibm.com" <hca@linux.ibm.com>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>,
-	"pjw@kernel.org" <pjw@kernel.org>,
-	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
-	"svens@linux.ibm.com" <svens@linux.ibm.com>,
-	"thuth@redhat.com" <thuth@redhat.com>,
-	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-	"urezki@gmail.com" <urezki@gmail.com>,
-	"zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
-	"gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
-	"jiayuan.chen@shopee.com" <jiayuan.chen@shopee.com>,
-	"rafael@kernel.org" <rafael@kernel.org>,
-	"yangyicong@hisilicon.com" <yangyicong@hisilicon.com>,
-	"vannapurve@google.com" <vannapurve@google.com>,
-	"jackmanb@google.com" <jackmanb@google.com>,
-	"patrick.roy@linux.dev" <patrick.roy@linux.dev>,
-	"Itazuri, Takahiro" <itazur@amazon.co.uk>,
-	"Manwaring, Derek" <derekmn@amazon.com>
-Subject: Re: [PATCH v12 02/16] set_memory: add folio_{zap,restore}_direct_map
- helpers
-Message-ID: <ake7aPB2O_-dAXhI@kernel.org>
-References: <20260410151746.61150-1-kalyazin@amazon.com>
- <20260410151746.61150-3-kalyazin@amazon.com>
- <DJOUYOKL6N3R.BFIO8HEL03OA@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ssBSZmQD"
+Message-ID: <4a0ac2692d2a76ab0479c2bf20dbf26a17636d67.camel@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783086698;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=auCIWg3o17nnR2QLCs22R/XUDmzBkX9qbvWaBSNT648=;
+	b=ssBSZmQDdBdrfuieBmqYoH387xvy4NeoiJpVuwii2c6lYLFgMNbvUDK+ws1NaAJBLlYkIN
+	3iS4OXublRXUYqV1+IX2PRJZVwih5F5TAO/jRULJT2YMLR6vnWkaMHGB1oBfo2eBM+v2r6
+	qKrvpZ/oD6rDRFupCDarV4AJC5SYTA0=
+Subject: Re: [PATCH bpf-next v7 1/2] bpf: Introduce jit_required flag and
+ refactor kfunc path
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: KaFai Wan <kafai.wan@linux.dev>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>, sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
+Date: Fri, 03 Jul 2026 21:51:29 +0800
+In-Reply-To: <7cce1695-eaa2-816b-2877-9cb2f117aa27@loongson.cn>
+References: <20260702143656.28845-1-yangtiezhu@loongson.cn>
+	 <20260702143656.28845-2-yangtiezhu@loongson.cn>
+	 <20260702145855.07C6B1F000E9@smtp.kernel.org>
+	 <7cce1695-eaa2-816b-2877-9cb2f117aa27@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DJOUYOKL6N3R.BFIO8HEL03OA@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Jul 03, 2026 at 10:19:10AM +0000, Brendan Jackman wrote:
-> On Fri Apr 10, 2026 at 3:18 PM UTC, Nikita Kalyazin wrote:
-> 
-> My local Sashiko run pointed out that this is broken for highmem.
-> 
-> There's no highmem for guest_memfd but there is for secretmem.
-> 
-> ... but this isn't actually an issue with the patch, it's currently
-> broken in Linus' master:
-> 
-> Su[   30.071284] ------------[ cut here ]------------
-> ccessfully allocated and mapped 2097152000 bytes at 0x3a449000
-> Populating memor[   30.074614] CPA: called for zero pte. vaddr = 0 cpa->vaddr = 0
-> y...
-> [   30.078636] WARNING: arch/x86/mm/pat/set_memory.c:1840 at __cpa_process_fault+0x34d/0x360, CPU#5: allocate_secret/570
-> [   30.084789] CPU: 5 UID: 0 PID: 570 Comm: allocate_secret Not tainted 7.1.0-14063-g4edcdefd4083-dirty #10 PREEMPTLAZY
-> [   30.090937] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.17.0-0-gb52ca86e094d-prebuilt.qemu.org 04/01/2014
-> [   30.097543] EIP: __cpa_process_fault+0x34d/0x360
-> [   30.100514] Code: ff ff 85 c0 0f 89 7d fe ff ff e9 3d fe ff ff 8b 03 8b 00 c7 04 24 c8 ff 64 c1 89 44 24 08 8b 45 e8 89 44 24 04 e8 53 7a 00 00 <0f> 0b c7 45 f0 f2 ff ff ff e9 fc fc ff ff 90 8d 74 26 00 55 25 00
-> [   30.110829] EAX: 00000000 EBX: f64afe98 ECX: 00000000 EDX: 00000000
-> [   30.114799] ESI: 00000000 EDI: f64afe98 EBP: f64afe04 ESP: f64afdcc
-> [   30.118785] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00010246
-> [   30.123020] CR0: 80050033 CR2: 46c48ffc CR3: 038c8000 CR4: 00000690
-> [   30.127010] Call Trace:
-> [   30.129078]  __change_page_attr_set_clr+0x5e7/0x870
-> [   30.132275]  ? console_unlock+0x99/0x130
-> [   30.135069]  ? irq_work_queue+0x36/0x70
-> [   30.137853]  ? page_address+0xd3/0xf0
-> [   30.140421]  set_direct_map_invalid_noflush+0x52/0x60
-> [   30.143782]  secretmem_fault+0x128/0x210
-> [   30.146560]  __do_fault+0x25/0x90
-> [   30.149053]  handle_mm_fault+0x6d1/0xcb0
-> [   30.151759]  exc_page_fault+0x135/0x3b0
-> [   30.154487]  ? doublefault_shim+0x150/0x150
-> [   30.157416]  handle_exception+0x130/0x130
-> [   30.160137] EIP: 0x804d29f
-> [   30.162307] Code: 89 54 08 e1 89 54 08 e5 89 54 08 e9 89 54 08 ed c3 0f b6 44 24 08 89 7c 24 0c 69 c0 01 01 01 01 8b 7c 24 04 f7 c7 0f 00 00 00 <89> 44 0f fc 75 0e c1 e9 02 f3 ab 8b 44 24 04 8b 7c 24 0c c3 31 d2
-> [   30.172936] EAX: 5a5a5a5a EBX: 00000000 ECX: 0c800000 EDX: 3a449000
-> [   30.176927] ESI: 00000000 EDI: 3a449000 EBP: bfbbae18 ESP: bfbbadac
-> [   30.180897] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00010246
-> [   30.185161]  ? doublefault_shim+0x150/0x150
-> [   30.187979] ---[ end trace 0000000000000000 ]---
-> Bus error                  (core dumped) ./allocate_secret_i686 2000M
-> 
-> Fixing this directly in secretmem.c is kinda yucky but if we can just
-> make folio_zap_direct_map() a NOP for highmem folios it's nice and easy
-> so I propose to just fix it as a followup to this series.
-> 
-> Alternatively, we maybe should disable secretmem for highmem systems
-> since it evidently doesn't have any users.
+On Fri, 2026-07-03 at 10:57 +0800, Tiezhu Yang wrote:
+> On 2026/7/2 =E4=B8=8B=E5=8D=8810:58, sashiko-bot@kernel.org=C2=A0wrote:
+> > Thank you for your contribution! Sashiko AI review found 1 potential is=
+sue(s) to consider:
+> > - [Medium] The `bpf_fixup_call_args()` function and `bpf_prog_has_kfunc=
+_call()` macro were not
+> > updated to use the new `jit_required` flag, leading to inconsistent int=
+erpreter fallback
+> > behavior for pruned kfuncs.
+> > --
+> >=20
+> > commit 5a3f8861c2b6916fe194f97a407cb7265f545fd0
+> > Author: Tiezhu Yang <yangtiezhu@loongson.cn>
+> >=20
+> > bpf: Introduce jit_required flag and refactor kfunc path
+> >=20
+> > Introduce a 'jit_required' bitfield flag at the end of the
+> > flags group in struct bpf_prog. This bit tracks whether a
+> > program strictly requires the JIT compiler.
+> >=20
+> > > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> > > index 649cce41e13f3..5fcd19ccb41a9 100644
+> > > --- a/kernel/bpf/core.c
+> > > +++ b/kernel/bpf/core.c
+> > > @@ -2619,8 +2619,7 @@ struct bpf_prog *__bpf_prog_select_runtime(stru=
+ct bpf_verifier_env *env,
+> > > struct
+> > > =C2=A0=C2=A0	if (fp->bpf_func)
+> > > =C2=A0=C2=A0		goto finalize;
+> > > =C2=A0=20
+> > > -	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
+> > > -	=C2=A0=C2=A0=C2=A0 bpf_prog_has_kfunc_call(fp))
+> > > +	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) || fp->jit_required)
+> > > =C2=A0=C2=A0		jit_needed =3D true;
+> > > =C2=A0=20
+> > > =C2=A0=C2=A0	if (!bpf_prog_select_interpreter(fp))
+> >=20
+> > [Severity: Medium]
+> > Since bpf_prog_has_kfunc_call() was replaced here with fp->jit_required=
+,
+> > should bpf_fixup_call_args() in kernel/bpf/fixups.c also be updated to =
+use
+> > the new flag?
+> >=20
+> > Currently, bpf_fixup_call_args() still calls bpf_prog_has_kfunc_call().=
+ If
+> > a program has a pruned kfunc (allocating kfunc_tab but leaving
+> > jit_required=3D0) and JIT falls back to the interpreter, wouldn't
+> > bpf_fixup_call_args() incorrectly reject the program with -EINVAL?
+> >=20
+> > kernel/bpf/fixups.c:bpf_fixup_call_args() {
+> > =C2=A0=C2=A0=C2=A0=C2=A0 ...
+> > 	bool has_kfunc_call =3D bpf_prog_has_kfunc_call(prog);
+> > =C2=A0=C2=A0=C2=A0=C2=A0 ...
+> > 	if (has_kfunc_call) {
+> > 		verbose(env, "calling kernel functions are not allowed in non-JITed
+> > programs\n");
+> > 		return -EINVAL;
+> > 	}
+> > =C2=A0=C2=A0=C2=A0=C2=A0 ...
+> > }
+> >=20
+> > Should bpf_prog_has_kfunc_call() in kernel/bpf/verifier.c be updated to
+> > check prog->jit_required, or removed entirely in favor of checking the =
+flag
+> > directly?
+>=20
+> I think it is wrong to remove bpf_prog_has_kfunc_call() entirely,
 
-Yes, please :) 
+I think it is ok to remove bpf_prog_has_kfunc_call() but with some changes.=
+ see below.
 
--- 
-Sincerely yours,
-Mike.
+> because using prog->jit_required directly in bpf_fixup_call_args()
+> would cause false positives.
+>=20
+> I tested the following changes:
+>=20
+> ```
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 4e2b059d71f3..3a2fc194e2bb 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -3171,7 +3171,6 @@ const struct bpf_func_proto=20
+> *bpf_base_func_proto(enum bpf_func_id func_id,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 co=
+nst struct bpf_prog=20
+> *prog);
+> =C2=A0 void bpf_task_storage_free(struct task_struct *task);
+> =C2=A0 void bpf_cgrp_storage_free(struct cgroup *cgroup);
+> -bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog);
+> =C2=A0 const struct btf_func_model *
+> =C2=A0 bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 const struct bpf_insn *insn);
+> @@ -3510,11 +3509,6 @@ static inline void bpf_task_storage_free(struct=
+=20
+> task_struct *task)
+> =C2=A0 {
+> =C2=A0 }
+>=20
+> -static inline bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog)
+> -{
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return false;
+> -}
+> -
+> =C2=A0 static inline const struct btf_func_model *
+> =C2=A0 bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 const struct bpf_insn *insn)
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index 94e0457a0aa3..7fb92b5fa415 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+> @@ -1378,7 +1378,6 @@ int bpf_fixup_call_args(struct bpf_verifier_env *en=
+v)
+> =C2=A0 #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct bpf_prog *prog =
+=3D env->prog;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct bpf_insn *insn =
+=3D prog->insnsi;
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bool has_kfunc_call =3D bpf_prog_ha=
+s_kfunc_call(prog);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int depth;
+> =C2=A0 #endif
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int i, err =3D 0;
+> @@ -1404,7 +1403,7 @@ int bpf_fixup_call_args(struct bpf_verifier_env *en=
+v)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 re=
+turn err;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> =C2=A0 #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (has_kfunc_call) {
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (prog->jit_required) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 verbose(env, "calling kernel functions are not all=
+owed=20
+> in non-JITed programs\n");
+
+we can change the log for general purpose. patch #2 and future case will hi=
+t this too.
+
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index f496b45b9da4..3dbed3047254 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -2770,11 +2770,6 @@ int bpf_add_kfunc_call(struct bpf_verifier_env=20
+> *env, u32 func_id, u16 offset)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
+> =C2=A0 }
+>=20
+> -bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog)
+> -{
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return !!prog->aux->kfunc_tab;
+> -}
+> -
+> =C2=A0 static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
+> =C2=A0 {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct bpf_subprog_info =
+*subprog =3D env->subprog_info;
+> ```
+>=20
+> Here is the local test log:
+>=20
+> ```
+> fedora@linux:~$ cat test_panic.c
+> =C2=A0=C2=A0 #include <linux/bpf.h>
+> =C2=A0=C2=A0 #include <bpf/bpf_helpers.h>
+>=20
+> =C2=A0=C2=A0 SEC("kprobe/sys_getpid")
+> =C2=A0=C2=A0 int test_panic(void *ctx)
+> =C2=A0=C2=A0 {
+> =C2=A0=C2=A0=C2=A0	struct task_struct *task;
+>=20
+> =C2=A0=C2=A0=C2=A0	task =3D (struct task_struct *)bpf_get_current_task();
+> =C2=A0=C2=A0=C2=A0	if (task)
+> =C2=A0=C2=A0=C2=A0		bpf_printk("Task address: %p\n", task);
+>=20
+> =C2=A0=C2=A0=C2=A0	return 0;
+> =C2=A0=C2=A0 }
+>=20
+> =C2=A0=C2=A0 char LICENSE[] SEC("license") =3D "GPL";
+> fedora@linux:~$ clang -target bpf -O2 -g -c test_panic.c -o test_panic.o
+> fedora@linux:~$ sudo sysctl -w net.core.bpf_jit_enable=3D0
+> [sudo] password for fedora:
+> net.core.bpf_jit_enable =3D 0
+> fedora@linux:~$ sudo bpftool prog load test_panic.o=20
+> /sys/fs/bpf/test_panic autoattach
+> libbpf: prog 'test_panic': BPF program load failed: Invalid argument
+> libbpf: prog 'test_panic': -- BEGIN PROG LOAD LOG --
+> calling kernel functions are not allowed in non-JITed programs
+> processed 10 insns (limit 1000000) max_states_per_insn 0 total_states 1=
+=20
+> peak_states 1 mark_read 0
+> -- END PROG LOAD LOG --
+> libbpf: prog 'test_panic': failed to load: -22
+> libbpf: failed to load object 'test_panic.o'
+> Error: failed to load object file
+> ```
+>=20
+> This change incorrectly rejects programs that only contain normal
+> inlined helper calls with -EINVAL.
+
+Was it tested after compiling together with patch #2? seems patch #2 works.
+
+>=20
+> Instead, I think bpf_prog_has_kfunc_call() should be updated to check
+> prog->jit_required, like so:
+>=20
+> ```
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index f496b45b9da4..1f5824c1c691 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -2772,7 +2772,7 @@ int bpf_add_kfunc_call(struct bpf_verifier_env=20
+> *env, u32 func_id, u16 offset)
+>=20
+> =C2=A0 bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog)
+> =C2=A0 {
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return !!prog->aux->kfunc_tab;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return prog->jit_required && !!prog=
+->aux->kfunc_tab;
+
+bpf_get_current_task() is a helper, not kfunc. test_panic has no kfunc, pro=
+g->aux->kfunc_tab
+is=C2=A0null.=C2=A0so we get -ENOTSUPP(-524)
+
+> =C2=A0 }
+>=20
+> =C2=A0 static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
+> ```
+>=20
+> Here is the local test log:
+>=20
+> ```
+> fedora@linux:~$ cat test_panic.c
+> =C2=A0=C2=A0 #include <linux/bpf.h>
+> =C2=A0=C2=A0 #include <bpf/bpf_helpers.h>
+>=20
+> =C2=A0=C2=A0 SEC("kprobe/sys_getpid")
+> =C2=A0=C2=A0 int test_panic(void *ctx)
+> =C2=A0=C2=A0 {
+> =C2=A0=C2=A0=C2=A0	struct task_struct *task;
+>=20
+> =C2=A0=C2=A0=C2=A0	task =3D (struct task_struct *)bpf_get_current_task();
+> =C2=A0=C2=A0=C2=A0	if (task)
+> =C2=A0=C2=A0=C2=A0		bpf_printk("Task address: %p\n", task);
+>=20
+> =C2=A0=C2=A0=C2=A0	return 0;
+> =C2=A0=C2=A0 }
+>=20
+> =C2=A0=C2=A0 char LICENSE[] SEC("license") =3D "GPL";
+> fedora@linux:~$ clang -target bpf -O2 -g -c test_panic.c -o test_panic.o
+> fedora@linux:~$ sudo sysctl -w net.core.bpf_jit_enable=3D0
+> [sudo] password for fedora:
+> net.core.bpf_jit_enable =3D 0
+> fedora@linux:~$ sudo bpftool prog load test_panic.o=20
+> /sys/fs/bpf/test_panic autoattach
+> libbpf: prog 'test_panic': BPF program load failed: unknown error (-524)
+> libbpf: prog 'test_panic': -- BEGIN PROG LOAD LOG --
+> processed 10 insns (limit 1000000) max_states_per_insn 0 total_states 1=
+=20
+> peak_states 1 mark_read 0
+> -- END PROG LOAD LOG --
+> libbpf: prog 'test_panic': failed to load: -524
+> libbpf: failed to load object 'test_panic.o'
+> Error: failed to load object file
+> ```
+>=20
+> This ensures that pruned kfuncs (allocating kfunc_tab but leaving
+> jit_required=3D0)=C2=A0safely return false,=C2=A0at the same time, this c=
+heck
+> perfectly isolates normal inlined helper paths.
+
+pruned kfuncs well handled in patch [1], see details in check_kfunc_call() =
+and fixup_kfunc_call().
+
+[1] https://lore.kernel.org/bpf/20211002011757.311265-3-memxor@gmail.com/
+>=20
+> Let me wait for more review comments and will send v8 next week.
+>=20
+> Thanks,
+> Tiezhu
+>=20
+
+--=20
+Thanks,
+KaFai
