@@ -1,40 +1,40 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958083B0AC3;
-	Fri,  3 Jul 2026 15:22:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A1D6242D97;
+	Fri,  3 Jul 2026 15:53:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783092148; cv=none; b=U/G0tDmZDStpc/6XYzDgiTi94LETZ/wRvdbdvD4y8Iq+USFkb56Ny/TlD9weUBRuCdTmtvz237hb7bXmowToFxdApJcC1Jt32N+KgGcVl0J+TS+3aqdEWCoO9ZsPKQAEfT8s3zUgCux5PhZHz5y/VQFG88Yf69ijrqSbYos65Rc=
+	t=1783093985; cv=none; b=NcV8abh3w8zRuKkMZlGK7FKCAcGiFtNUDte0nx1f+WyfU7Yn1Ekj5EG8PzAF1x69UOIBn/AXXCSl1JBMa54uM1wK5e08K36D8UhCPoAYHtHQSNQemRrRVTlvtpxymkbGz6cscMFuO1gT8g91MhicKK5Dp/6Zvw7BzD/23+NrTcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783092148; c=relaxed/simple;
-	bh=eUroo0fU5yL/blMjii7v4YjpGgV1jgMooBoRLcpSp6M=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=LDfiA1SyD4sfXDG8+NXj2RLcxdKBMHE2XwTbdNl+gq5Jw/laXHrMtVwUw35N4pYvvysjU0q6vsJSHmOoibASfU+9UVNJCkjfj121U7xRNVy8016lqtncu84suLSoh/77b5fY8RnSscX8iWVktMVxuKvAZaHKHfm8H4Zb6928hA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=wEHn77ij; arc=none smtp.client-ip=82.195.75.108
+	s=arc-20240116; t=1783093985; c=relaxed/simple;
+	bh=o8mTIMRJH34m5FZmVqFv7hKqLsaCcbxqNUxsi944LOg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=awS9hjDvjBT6gMQ0WjDRhGfTnsV7lK99XTGfMtc2Ru7aDHr8vMVuZeZY0aAsOY7NdRxQ3DwLCyw/NkcQak5gJGvKrdFImp0RgsYDDtZm8tlZ1rAvssV6VgEwrNO+BUZ8RzY8L6Qoq1L5VpSRe4wZRglUdrDD0k0yDmwYN5jzQy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=OJNQTmrs; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="wEHn77ij"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="OJNQTmrs"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
 	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
 	Reply-To:Content-ID:Content-Description:In-Reply-To:References;
-	bh=V+78rN3APZSyQrCASdVp80tzAl8KAm2NRcUFK9s0VeY=; b=wEHn77ijjVW5ZeyTmxaZvCfNgs
-	HZbM6ITzSHEagP1zvZKfVwyNmotRnSu+SAyxyfaoIBVCmVBEcz0aUHj2693rwhWH7L3SqxnUMzvRb
-	uFrRu8stjoGmgJnRBviTwnkMMhiY2N+gusf8CuOBiDn0/bcNKGW3E1jGWb9AguG78Mo5kzFavAa3e
-	/DGGla9Ikk/bXLJnf2I1Bzpk76JxGcptgPjrcvteU857GPK27xNA95FDoqw03rfCa/gQzql8caDVS
-	ryN6fiZuJoDvkrFdi4JhoPK9TcJn64YkyiVpwQwG7sgZqGbCPokzodh0k4QF9FD2SO8QoNUOS2EM0
-	2l9+w8vg==;
+	bh=Wp0hwcEgrbPLsHM90zar8FLEnNY0sGqCErXsxAvYDnM=; b=OJNQTmrsfqINsLldlxP2E8vaAd
+	W2UiCx+e6yMZqA3YQDHFpRhe+S+trc26MN0ywxgva+png/vE4RmUl5V1jKaisBHoYRhjsy5Q0ybh8
+	qAi2Djowrh7Oq1Bc9tkbcDqn+aqp9+g1G5zMULaTcmgJg4kUm+chkyHm8Fi8AGdo9IzzwwG3zWLD+
+	xdHJqPmYKDpzHyuMLStZWZDsa83mBej5wEurrRzd3rlJOLFGojS7TA2Wec0dfJMNLF81ifeDv625B
+	w5E7lXpn7rRUneaRxLFArHDdqJXfyJYNOpyKMB86VnnbkN23n69nnZgLvMeyKaIv1OfrVaKuT7Ito
+	VZwkhokA==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1wffiW-009UVs-2A;
-	Fri, 03 Jul 2026 15:22:13 +0000
+	id 1wfgCJ-009VUy-1E;
+	Fri, 03 Jul 2026 15:52:59 +0000
 From: Breno Leitao <leitao@debian.org>
-Date: Fri, 03 Jul 2026 08:22:03 -0700
-Subject: [PATCH v2] radix-tree: fix kmemleak false positives on tree head
- reassignment
+Date: Fri, 03 Jul 2026 08:52:50 -0700
+Subject: [PATCH] workqueue: annotate racy sum_exec_runtime reads for
+ CPU-intensive detection
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -43,115 +43,101 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260703-radix-tree-v2-1-38bb6efb5f6e@debian.org>
-X-B4-Tracking: v=1; b=H4sIAJvTR2oC/23MsQ6DIBAA0F8hN0vDUauWyf9oHFBOvQWawxAb4
- 783de76hndAJmHK4NQBQoUzpwhO2UrBtPq4kOYAToE1tjGtsVp84F1vQqQ7TzWGu63RIFQK3kI
- z71f2GioFK+ctyee6C/70b1NQo/ZdO6F9jGZ+Nn2gkX28JVlgOM/zC95VpISlAAAA
-X-Change-ID: 20260702-radix-tree-8ae41d324101
-To: Andrew Morton <akpm@linux-foundation.org>, catalin.marinas@arm.com
-Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- kent.overstreet@linux.dev, arnd@arndb.de, bigeasy@linutronix.de, 
- kangas@redhat.com, kernel-team@meta.com, Breno Leitao <leitao@debian.org>
+Message-Id: <20260703-wq-sum-exec-runtime-v1-1-a26062e6de8b@debian.org>
+X-B4-Tracking: v=1; b=H4sIANLaR2oC/x3MQQ6CMBAF0KtM/ppJKg0YexXjgoxfnQVVW0ESw
+ t1JeAd4KyqLsyLJisLZq78zkpwagb2G/KT6HUnQhrYP5xD1/9U6jcqFpmXKPx+pg7GzvovxQkM
+ j+BQ+fDnW623bdlqZ1ztlAAAA
+X-Change-ID: 20260703-wq-sum-exec-runtime-ace5c65339ec
+To: Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com, 
+ Breno Leitao <leitao@debian.org>
 X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3279; i=leitao@debian.org;
- h=from:subject:message-id; bh=eUroo0fU5yL/blMjii7v4YjpGgV1jgMooBoRLcpSp6M=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqR9OgoUuVzD+7SNZPhjWxESlnNtL3rlBK2ZGnU
- 7+Rw7d/LuuJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCakfToAAKCRA1o5Of/Hh3
- bS8pD/9gj2/yPoA0yaIC+0CRR2WtyYgKCVxjCxnw8ujw20CM0PL2uSdVM8mVA0UJu6TgL2GlIZy
- 3iMeuy97lblNaR/vS2hFzLI4GRLJ+fnl7vFo5pUyqzoAtQE4R2vEqWTX/+Ddci1VO2A4C9j9MIO
- EHmDKAfkcq8UMlV6AYNQN6zhLtJKv70rgfAdeBotob0A+KChnSoa9COCZuugwJTsuWYSF04PoK0
- hZ8PY+qtXtV4lPdTufgj7ZJ72fN2SUmRJvtiU3htv+qtvFxrYUNv0rYEGBdhxmyVsicKIRoS3hG
- /Osz1RtwDbqUBkwqUbdsLSwURmX5TReiZ3aLjaALXHqXoKpeLN2QXUvZ73G4sH+a4EsrMNzZoEx
- OIxm2boejR7gIfk/JXYdPPsJ2BZWKq+NpksxTvKtBrROouyC+jAmJ3+SDtkoKwcAhyIgHRfcjdu
- qs1AZ1BIlJTQa2jsxE7VSBQ0uv21oLSSXIW879+o6qmmB2pM77t6Kkmt3UDY9wf0/C4F2I8rWn3
- 7/aHb3HsEL4QoJbpasTSAdYI/FTzb6AQ3IT5jkET1dLO5eG1Nox90XdZUTvOZVAEmRsEjZqyp/r
- vGu6fQ0J/GCdosRa1tR7h0FmOjEGwzM6QqoEN7fYDPnNDjMo25FTXuelLPfkOen5qU3UFycuhJ7
- TGjpmrZDfopDjPQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2739; i=leitao@debian.org;
+ h=from:subject:message-id; bh=o8mTIMRJH34m5FZmVqFv7hKqLsaCcbxqNUxsi944LOg=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqR9rY8LLOvq8ms9b6zS9r3a5t4j9U6RnpqU1RE
+ jeeQOYo8DmJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCakfa2AAKCRA1o5Of/Hh3
+ ba/PEAClj/9XwQh0/Q70QRADXRQJrVh96QkRcNk1kgFWGNESIsgcby/KCzbbIDM+3bLDLSx0+pJ
+ jf/qANO9h/5ppkD7tZBxmPv3syDMH/4yC5zl/+BtQGUpu4yRgb6dJwfdt5E3WkT155tOFa3O+4x
+ oEddqnr1Q9uuencpeC07VWEGbUZvquyWig6QY4NFHBjXRyuRdawgq7jyVJcbDxW3gjHtrchUoWF
+ 1TQGyMEHC9yH3vkgVF8GTGl53GgzPub9pNSfCtOth7sjiP/E8Oaw+oG8F7tkX3jJ24tiBSYCHXj
+ I+Dv6rvOaWsF60t5/fJB2TABGIjabynrsjyOjMiNLeua4xjFWyu6wms+CvtffzkYl3WJBpJRizt
+ KLd/aw2rxUx53iPDzU1dB3HIkV4E1cdRrqguyjgRnEZTC8v5W9fa4InktJT/dKgLKLgva/c/OJ0
+ 5v2pMtcSajqWn3LXkpAw7/qe0/gNrJLnI9g/0A5/TIKnEGIrYpWDGDx2CBpG3SAwdl2vfpgeEIf
+ tKfzoRsBOB6wIZYLcfZZKrGD7Bmcp2KEGhzcCkWUBdujzrFxGKFmNJZb6IrrTQoDfP7IB4mXmEb
+ wlNmKqGaZsKQEuFzGdelUU4PxeDy+gaJD4x57FKC7i0YUR9IZIYkMtf8hYfWd99E77BPuKuLjkw
+ pRe0S9ToGb245hA==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-Kmemleak periodically reports transient false positives for radix tree
-nodes allocated through the IDR, for example:
+The automatic CPU-intensive work item detection reads the worker task's
+se.sum_exec_runtime without a lock in wq_worker_running(),
+wq_worker_tick() and process_one_work(). The scheduler updates that
+field under the rq lock (from the tick via update_curr(), or cross-CPU
+via task_sched_runtime()), raising:
 
-  unreferenced object 0xffff0004d6ac4200 (size 576):
-    comm "tcpeventd", pid 6412
-    backtrace (crc 335d668a):
-      kmem_cache_alloc_noprof
-      radix_tree_node_alloc
-      radix_tree_extend
-      idr_get_free
-      idr_alloc_cyclic
-      map_create
-      __sys_bpf
+  BUG: KCSAN: data-race in wq_worker_running+0xa8/0xe8
 
-radix_tree_extend() (grow) and radix_tree_shrink() (shrink) repoint
-root->xa_head to a new node.  If a kmemleak scan has already walked past
-root->xa_head, the new head is not reachable from any scanned pointer
-until the following scan, so kmemleak reports it as leaked even though it
-is live.
+  race at unknown origin, with read to 0xffff0009a11d1df8 of 8 bytes by task 238535 on cpu 68:
+   wq_worker_running
+   schedule
+   schedule_preempt_disabled
+   __mutex_lock
+   mutex_lock_nested
+   cgroup_bpf_release
+   process_one_work
+   worker_thread
+   kthread
+   ret_from_fork
 
-This is the same race fixed for the XArray API in commit a1a029bcea59
-("XArray: fix kmemleak false positive in xas_shrink()").  The IDR uses
-the radix tree API directly and hits it on both the grow and the shrink
-path, so mark the new head as a transient leak in both.
+  value changed: 0x0000000088482ba0 -> 0x00000000884893c0
 
-Add a matching kmemleak_transient_leak() stub to the radix tree test
-harness so the userspace lib/radix-tree.c build keeps building.
+The value only feeds a heuristic, so the race is benign-ish. Unlike
+commit ecf5aad9a441 ("workqueue: annotate racy PWQ_STAT_CPU_TIME update
+in wq_worker_tick()") that only needs data_race(), these are plain reads
+whose result drives a subtraction and comparison, so use READ_ONCE() for
+a single, non-torn load, which also silences KCSAN.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-Changes in v2:
-- Add a kmemleak_transient_leak() stub to the radix tree test harness
-  (tools/testing/shared/linux/kmemleak.h) so the userspace
-  lib/radix-tree.c build keeps working; reported by the kernel test robot.
-- Link to v1: https://lore.kernel.org/r/20260702-radix-tree-v1-1-a87c125b0f96@debian.org
+ kernel/workqueue.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: bpf@vger.kernel.org
----
- lib/radix-tree.c                      | 7 ++++++-
- tools/testing/shared/linux/kmemleak.h | 1 +
- 2 files changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/lib/radix-tree.c b/lib/radix-tree.c
-index 976b9bd02a1b5..cb5ca920fddb6 100644
---- a/lib/radix-tree.c
-+++ b/lib/radix-tree.c
-@@ -455,6 +455,8 @@ static int radix_tree_extend(struct radix_tree_root *root, gfp_t gfp,
- 		node->slots[0] = (void __rcu *)entry;
- 		entry = node_to_entry(node);
- 		rcu_assign_pointer(root->xa_head, entry);
-+		/* new head may be missed by an in-progress kmemleak scan */
-+		kmemleak_transient_leak(node);
- 		shift += RADIX_TREE_MAP_SHIFT;
- 	} while (shift <= maxshift);
- out:
-@@ -495,8 +497,11 @@ static inline bool radix_tree_shrink(struct radix_tree_root *root)
- 		if (!node->shift && is_idr(root))
- 			break;
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 0ffe104fe213d..c85a158696acf 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -1468,7 +1468,7 @@ void wq_worker_running(struct task_struct *task)
+ 	 * CPU intensive auto-detection cares about how long a work item hogged
+ 	 * CPU without sleeping. Reset the starting timestamp on wakeup.
+ 	 */
+-	worker->current_at = worker->task->se.sum_exec_runtime;
++	worker->current_at = READ_ONCE(worker->task->se.sum_exec_runtime);
  
--		if (radix_tree_is_internal_node(child))
-+		if (radix_tree_is_internal_node(child)) {
- 			entry_to_node(child)->parent = NULL;
-+			/* new head may be missed by an in-progress kmemleak scan */
-+			kmemleak_transient_leak(entry_to_node(child));
-+		}
+ 	WRITE_ONCE(worker->sleeping, 0);
+ }
+@@ -1553,7 +1553,7 @@ void wq_worker_tick(struct task_struct *task)
+ 	 * We probably want to make this prettier in the future.
+ 	 */
+ 	if ((worker->flags & WORKER_NOT_RUNNING) || READ_ONCE(worker->sleeping) ||
+-	    worker->task->se.sum_exec_runtime - worker->current_at <
++	    READ_ONCE(worker->task->se.sum_exec_runtime) - worker->current_at <
+ 	    wq_cpu_intensive_thresh_us * NSEC_PER_USEC)
+ 		return;
  
- 		/*
- 		 * We don't need rcu_assign_pointer(), since we are simply
-diff --git a/tools/testing/shared/linux/kmemleak.h b/tools/testing/shared/linux/kmemleak.h
-index 155f112786c4f..65a383090fb51 100644
---- a/tools/testing/shared/linux/kmemleak.h
-+++ b/tools/testing/shared/linux/kmemleak.h
-@@ -1 +1,2 @@
- static inline void kmemleak_update_trace(const void *ptr) { }
-+static inline void kmemleak_transient_leak(const void *ptr) { }
+@@ -3294,7 +3294,7 @@ __acquires(&pool->lock)
+ 	worker->current_func = work->func;
+ 	worker->current_pwq = pwq;
+ 	if (worker->task)
+-		worker->current_at = worker->task->se.sum_exec_runtime;
++		worker->current_at = READ_ONCE(worker->task->se.sum_exec_runtime);
+ 	worker->current_start = jiffies;
+ 	work_data = *work_data_bits(work);
+ 	worker->current_color = get_work_color(work_data);
 
 ---
-base-commit: 840ef6c78e6a2f694b578ecb9063241c992aaa9e
-change-id: 20260702-radix-tree-8ae41d324101
+base-commit: 6eb8711ece2ce27e52e327a5b7a628ed39b97f45
+change-id: 20260703-wq-sum-exec-runtime-ace5c65339ec
 
 Best regards,
 --  
