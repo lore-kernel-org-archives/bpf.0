@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 910013CB8FF;
-	Fri,  3 Jul 2026 11:51:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70CBD3CB8E6;
+	Fri,  3 Jul 2026 11:51:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783079508; cv=none; b=gZFb379afeyRgo9xo0hq7vYga2pCqej3gA9kL5zB/1rjDH+JV412Do6l9KAL0kP3fRr+k7wUsB3jLftL6mxuh3Q15rLzeVEYxrTONbwaAv2JIisG71byaH2W01a66SCzV8ij+w6UsI48NN0ekTAdZ5aJRAz1EwhynDvq3O7oyx0=
+	t=1783079519; cv=none; b=KWtNpO0apHe36L9McsR/5vFI4+ND2N+aYYQXREUPrww3MY+M/9QEV68zbuxrJ/k4yFm49RA6sJ/zUCTE/7dUu5yIGYh2FvkiDK1TmgImudLK09jkDEfVUfiLnusH7OpE9bXWQT5i8pLNi0PLHMs0wdhEXSMVAKMNt1jI4Vq7Otk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783079508; c=relaxed/simple;
-	bh=bPf0xLGBXLtOGdfdsUv41mBBHTpajtR84zDTAzz1yVw=;
+	s=arc-20240116; t=1783079519; c=relaxed/simple;
+	bh=uS+uBU0I1YUlE+u2cEASKbRadtgcrgEbwbFoMh4+Xh0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u9h3nc+QZ6SDlvv85iGP0sKFjc7tQaFrIHY2LAOzsLYP2+o78wVMgOd/u3YGGbbE7F+Ke/dBgz/Xe5YJ8J4mdf6y0OmlZdHO1gOdU1saF8slNtxAlCpNw5CNqeQr+zn9cD4IJhG+Lh9yRjkcl9KjE1CzjNHXDCDE2twpfadLDn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJli9SlW; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=OqZtiCOsV77pBqYJS2c2gyJtVE2s3TRk5skjZUCorGBC4/sAF5scaMoWDo0CWVN5txqSeHhWXNq1fYhLy4dGzcGQouLBuXdGSAcuKggjQha5BJLcat5YGUTxONaatI1RFB9WiGokV2e106TaMTTg/5bA28z+xcrWqEmqeB2+0NM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bD1zbKxt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJli9SlW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6584A1F000E9;
-	Fri,  3 Jul 2026 11:51:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bD1zbKxt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A18F1F000E9;
+	Fri,  3 Jul 2026 11:51:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783079506;
-	bh=4Xq15MSe3kkKZUg213RRqdb9my+1Ogh3MczntY+84Hc=;
+	s=k20260515; t=1783079518;
+	bh=RQchSe69DAW2imVyaCUfe1AzsIA6bhxFsqyxnFs71Ws=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=WJli9SlWCONwBhK5Lsf9cQ9sJb5Z3IvVZLJDgw4Jn3w1s//7/LZ8IqFC4el7QwznG
-	 JUjz7vsuw25C0sOV0JF30Gd4w+min9m4N1HyempoI2kpuDAgeA1ZoqBFREGBlf82Am
-	 qpFOeJO5UEWS4UE/hBOccPxg+mxsu6RHrx2O7d1rnfJz8l9rfGwIQw93mayK0hgSA7
-	 EOZ64MRBHeSusHRGJvz//SnH28+PpMgcFksuox+WdOcjdk3FvoINH+2ZoTP2bOISuH
-	 LmDLUxfujcFwyYEBhRI2UPbKx1nhsQDQKGfZPkSqbWNc1VWGR9IOjqC4nbWuXdEc0Y
-	 iRkgJcpJIIl9g==
+	b=bD1zbKxt2NWCSbGz3TEihCl8RMn7YbwnIaxITuNIjS429bfBNF/JzdTrD0RZN04Q5
+	 3RUZFlLiPq7mmJ5d4OGG/vu/FQH1PzjJK8B4sZvtWQiPFH8cCmA1pHsrCTrbBEsadT
+	 DM5kgoxtyE1hRjIZjiIPG0J8saVXHscoKPHGEo1XuQW60cBhiQ3deBVhOMDW+1DJzF
+	 BEhw7XK7ppkWoHPf9Y3qcuL1Z8x7FQL6Kn13FY2aj5a4GBia54aLZfSgJp/nY3mgJf
+	 6bwWPiLAkQZFUxcA4Hovlau5PveNLCbmAWPXSb/euqEnzZM1o1jBxPsy6hA9XV3Mq6
+	 gSTMiBf3dnNAg==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Oleg Nesterov <oleg@redhat.com>,
 	Peter Zijlstra <peterz@infradead.org>,
@@ -35,9 +35,9 @@ To: Oleg Nesterov <oleg@redhat.com>,
 Cc: Jakub Sitnicki <jakub@cloudflare.com>,
 	bpf@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
-Subject: [PATCHv6 12/13] selftests/bpf: Add tests for uprobe nop10 red zone clobbering
-Date: Fri,  3 Jul 2026 13:49:16 +0200
-Message-ID: <20260703114917.238144-13-jolsa@kernel.org>
+Subject: [PATCHv6 13/13] selftests/bpf: Add tests for forked/cloned optimized uprobes
+Date: Fri,  3 Jul 2026 13:49:17 +0200
+Message-ID: <20260703114917.238144-14-jolsa@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260703114917.238144-1-jolsa@kernel.org>
 References: <20260703114917.238144-1-jolsa@kernel.org>
@@ -49,273 +49,136 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Andrii Nakryiko <andrii@kernel.org>
-
-The uprobe nop5 optimization used to replace a 5-byte NOP with a 5-byte
-CALL to a trampoline. The CALL pushes a return address onto the stack at
-[rsp-8], clobbering whatever was stored there.
-
-On x86-64, the red zone is the 128 bytes below rsp that user code may use
-for temporary storage without adjusting rsp. Compilers can place USDT
-argument operands there, generating specs like "8@-8(%rbp)" when rbp ==
-rsp. With the CALL-based optimization, the return address overwrites that
-argument before the BPF-side USDT argument fetch runs.
-
-Add two tests for this case. The uprobe_syscall subtest stores known values
-at -8(%rsp), -16(%rsp), and -24(%rsp), executes an optimized nop10 uprobe,
-and verifies the red-zone data is still intact. The USDT subtest triggers a
-probe in a function where the compiler places three USDT operands in the
-red zone and verifies that all 10 optimized invocations deliver the expected
-argument values to BPF.
-
-On an unfixed kernel, the first hit goes through the INT3 path and later
-hits use the optimized CALL path, so the red-zone checks fail after
-optimization.
+Adding tests for forked/cloned optimized uprobes and make
+sure the child can properly execute optimized probe for
+both fork (dups mm) and clone with CLONE_VM.
 
 Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-[ updates to use nop10 ]
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- .../selftests/bpf/prog_tests/uprobe_syscall.c | 77 +++++++++++++++++++
- tools/testing/selftests/bpf/prog_tests/usdt.c | 49 ++++++++++++
- tools/testing/selftests/bpf/progs/test_usdt.c | 25 ++++++
- tools/testing/selftests/bpf/usdt_2.c          | 13 ++++
- 4 files changed, 164 insertions(+)
+ .../selftests/bpf/prog_tests/uprobe_syscall.c | 88 +++++++++++++++++++
+ 1 file changed, 88 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-index 7711018f8acd..ff07e5df9a65 100644
+index ff07e5df9a65..e193206fc5d2 100644
 --- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
 +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-@@ -357,6 +357,50 @@ __nocf_check __weak void usdt_test(void)
- 	USDT(optimized_uprobe, usdt);
+@@ -4,6 +4,8 @@
+ 
+ #ifdef __x86_64__
+ 
++#define _GNU_SOURCE
++#include <sched.h>
+ #include <unistd.h>
+ #include <asm/ptrace.h>
+ #include <linux/compiler.h>
+@@ -13,6 +15,7 @@
+ #include <sys/syscall.h>
+ #include <sys/prctl.h>
+ #include <asm/prctl.h>
++#include <stdnoreturn.h>
+ #include "uprobe_syscall.skel.h"
+ #include "uprobe_syscall_executed.skel.h"
+ #include "bpf/libbpf_internal.h"
+@@ -954,6 +957,87 @@ static void test_uprobe_error(void)
+ 	ASSERT_EQ(errno, EPROTO, "errno");
  }
  
-+/*
-+ * Assembly-level red zone clobbering test. Stores known values in the
-+ * red zone (below RSP), executes a nop10 (uprobe site), and checks that
-+ * the values survived. Returns 0 if intact, 1 if clobbered.
-+ *
-+ * The nop5 optimization used CALL (which pushes a return address to
-+ * [rsp-8]), the value at -8(%rsp) was overwritten. The nop10 optimization
-+ * should escape that by moving stackpointer below the redzone before
-+ * doing the CALL.
-+ *
-+ * Align the code at 64 bytes, to make sure nop10 is not on page boundary.
-+ */
-+__attribute__((aligned(64)))
-+__nocf_check __weak __naked unsigned long uprobe_red_zone_test(void)
++__attribute__((aligned(16)))
++__nocf_check __weak __naked void uprobe_fork_test(void)
 +{
 +	asm volatile (
-+		"movabs $0x1111111111111111, %%rax\n"
-+		"movq   %%rax, -8(%%rsp)\n"
-+		"movabs $0x2222222222222222, %%rax\n"
-+		"movq   %%rax, -16(%%rsp)\n"
-+		"movabs $0x3333333333333333, %%rax\n"
-+		"movq   %%rax, -24(%%rsp)\n"
-+
-+		".byte 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00\n" /* nop10: uprobe site */
-+
-+		"movabs $0x1111111111111111, %%rax\n"
-+		"cmpq   %%rax, -8(%%rsp)\n"
-+		"jne    1f\n"
-+		"movabs $0x2222222222222222, %%rax\n"
-+		"cmpq   %%rax, -16(%%rsp)\n"
-+		"jne    1f\n"
-+		"movabs $0x3333333333333333, %%rax\n"
-+		"cmpq   %%rax, -24(%%rsp)\n"
-+		"jne    1f\n"
-+
-+		"xorl   %%eax, %%eax\n"
-+		"retq\n"
-+		"1:\n"
-+		"movl   $1, %%eax\n"
-+		"retq\n"
-+		::: "rax", "memory"
++		".byte 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00\n" /* nop10 */
++		"ret\n"
 +	);
 +}
 +
- static int find_uprobes_trampoline(void *tramp_addr)
- {
- 	void *start, *end;
-@@ -871,6 +915,37 @@ static void test_uprobe_race(void)
- #define __NR_uprobe 336
- #endif
- 
-+static void test_uprobe_red_zone(void)
++static noreturn int child_func(void *arg)
 +{
-+	struct uprobe_syscall_executed *skel;
-+	struct bpf_link *link;
-+	void *nop10_addr;
-+	size_t offset;
-+	int i;
++	struct uprobe_syscall_executed *skel = arg;
 +
-+	nop10_addr = find_nop10(uprobe_red_zone_test);
-+	if (!ASSERT_NEQ(nop10_addr, NULL, "find_nop10"))
++	/* Make sure the child's probe is still there and optimized.. */
++	if (memcmp(uprobe_fork_test, lea_rsp, sizeof(lea_rsp)))
++		_exit(1);
++
++	skel->bss->pid = getpid();
++
++	/* .. and it executes properly. */
++	uprobe_fork_test();
++
++	if (skel->bss->executed != 3)
++		_exit(2);
++
++	_exit(0);
++}
++
++static void test_uprobe_fork_optimized(bool clone_vm)
++{
++	struct uprobe_syscall_executed *skel = NULL;
++	unsigned long offset;
++	int pid, status, err;
++	char stack[65535];
++
++	offset = get_uprobe_offset(&uprobe_fork_test);
++	if (!ASSERT_GE(offset, 0, "get_uprobe_offset"))
 +		return;
 +
 +	skel = uprobe_syscall_executed__open_and_load();
 +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	offset = get_uprobe_offset(nop10_addr);
-+	link = bpf_program__attach_uprobe_opts(skel->progs.test_uprobe,
-+			0, "/proc/self/exe", offset, NULL);
-+	if (!ASSERT_OK_PTR(link, "attach_uprobe"))
 +		goto cleanup;
 +
-+	for (i = 0; i < 10; i++)
-+		ASSERT_EQ(uprobe_red_zone_test(), 0, "red_zone_intact");
++	skel->links.test_uprobe = bpf_program__attach_uprobe_opts(skel->progs.test_uprobe,
++					-1, "/proc/self/exe", offset, NULL);
++	if (!ASSERT_OK_PTR(skel->links.test_uprobe, "attach_uprobe"))
++		goto cleanup;
 +
-+	bpf_link__destroy(link);
++	skel->bss->pid = getpid();
++
++	/* Trigger optimization of uprobe in uprobe_fork_test.  */
++	uprobe_fork_test();
++	uprobe_fork_test();
++
++	/* Make sure it got optimied. */
++	if (!ASSERT_OK(memcmp(uprobe_fork_test, lea_rsp, sizeof(lea_rsp)), "optimized"))
++		goto cleanup;
++
++	if (clone_vm) {
++		pid = clone(child_func, stack + sizeof(stack), CLONE_VM|SIGCHLD, skel);
++		if (!ASSERT_GT(pid, 0, "clone"))
++			goto cleanup;
++	} else {
++		pid = fork();
++		if (!ASSERT_GE(pid, 0, "fork"))
++			goto cleanup;
++		if (pid == 0)
++			child_func(skel);
++	}
++
++	/* Wait for the child and verify it exited properly with 0. */
++	err = waitpid(pid, &status, 0);
++	if (ASSERT_EQ(err, pid, "waitpid")) {
++		ASSERT_EQ(WIFEXITED(status), 1, "child_exited");
++		ASSERT_EQ(WEXITSTATUS(status), 0, "child_exit_code");
++	}
 +
 +cleanup:
 +	uprobe_syscall_executed__destroy(skel);
 +}
 +
- static void test_uprobe_error(void)
+ static void __test_uprobe_syscall(void)
  {
- 	long err = syscall(__NR_uprobe);
-@@ -897,6 +972,8 @@ static void __test_uprobe_syscall(void)
- 		test_uprobe_usdt();
- 	if (test__start_subtest("uprobe_race"))
+ 	if (test__start_subtest("uretprobe_regs_equal"))
+@@ -974,6 +1058,10 @@ static void __test_uprobe_syscall(void)
  		test_uprobe_race();
-+	if (test__start_subtest("uprobe_red_zone"))
-+		test_uprobe_red_zone();
+ 	if (test__start_subtest("uprobe_red_zone"))
+ 		test_uprobe_red_zone();
++	if (test__start_subtest("uprobe_optimized_fork"))
++		test_uprobe_fork_optimized(false);
++	if (test__start_subtest("uprobe_optimized_clone_vm"))
++		test_uprobe_fork_optimized(true);
  	if (test__start_subtest("uprobe_error"))
  		test_uprobe_error();
  	if (test__start_subtest("uprobe_regs_equal"))
-diff --git a/tools/testing/selftests/bpf/prog_tests/usdt.c b/tools/testing/selftests/bpf/prog_tests/usdt.c
-index fda3a298ccfc..8004c9568ffa 100644
---- a/tools/testing/selftests/bpf/prog_tests/usdt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
-@@ -250,6 +250,7 @@ static void subtest_basic_usdt(bool optimized)
- #ifdef __x86_64__
- extern void usdt_1(void);
- extern void usdt_2(void);
-+extern void usdt_red_zone_trigger(void);
- 
- static unsigned char nop1[1] = { 0x90 };
- static unsigned char nop1_nop10_combo[11] = { 0x90, 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 };
-@@ -340,6 +341,52 @@ static void subtest_optimized_attach(void)
- cleanup:
- 	test_usdt__destroy(skel);
- }
-+
-+/*
-+ * Test that USDT arguments survive nop10 optimization in a function where
-+ * the compiler places operands in the red zone.
-+ *
-+ * Signal handlers are prone to having the compiler place USDT argument
-+ * operands in the red zone (below rsp).
-+ *
-+ * The nop5 optimization used CALL (which pushes a return address to
-+ * [rsp-8]), the value at -8(%rsp) was overwritten. The nop10 optimization
-+ * should escape that by moving stackpointer below the redzone before
-+ * doing the CALL.
-+ */
-+static void subtest_optimized_red_zone(void)
-+{
-+	struct test_usdt *skel;
-+	int i;
-+
-+	skel = test_usdt__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	skel->bss->expected_arg[0] = 0xDEADBEEF;
-+	skel->bss->expected_arg[1] = 0xCAFEBABE;
-+	skel->bss->expected_arg[2] = 0xFEEDFACE;
-+	skel->bss->expected_pid = getpid();
-+
-+	skel->links.usdt_check_arg = bpf_program__attach_usdt(
-+		skel->progs.usdt_check_arg, 0, "/proc/self/exe",
-+		"optimized_attach", "usdt_red_zone", NULL);
-+	if (!ASSERT_OK_PTR(skel->links.usdt_check_arg, "attach_usdt_red_zone"))
-+		goto cleanup;
-+
-+	for (i = 0; i < 10; i++)
-+		usdt_red_zone_trigger();
-+
-+	ASSERT_EQ(skel->bss->arg_total, 10, "arg_total");
-+	ASSERT_EQ(skel->bss->arg_bad, 0, "arg_bad");
-+	ASSERT_EQ(skel->bss->arg_last[0], 0xDEADBEEF, "arg_last_1");
-+	ASSERT_EQ(skel->bss->arg_last[1], 0xCAFEBABE, "arg_last_2");
-+	ASSERT_EQ(skel->bss->arg_last[2], 0xFEEDFACE, "arg_last_3");
-+
-+cleanup:
-+	test_usdt__destroy(skel);
-+}
-+
- #endif
- 
- unsigned short test_usdt_100_semaphore SEC(".probes");
-@@ -613,6 +660,8 @@ void test_usdt(void)
- 		subtest_basic_usdt(true);
- 	if (test__start_subtest("optimized_attach"))
- 		subtest_optimized_attach();
-+	if (test__start_subtest("optimized_red_zone"))
-+		subtest_optimized_red_zone();
- #endif
- 	if (test__start_subtest("multispec"))
- 		subtest_multispec_usdt();
-diff --git a/tools/testing/selftests/bpf/progs/test_usdt.c b/tools/testing/selftests/bpf/progs/test_usdt.c
-index f00cb52874e0..0ee78fb050a1 100644
---- a/tools/testing/selftests/bpf/progs/test_usdt.c
-+++ b/tools/testing/selftests/bpf/progs/test_usdt.c
-@@ -149,5 +149,30 @@ int usdt_executed(struct pt_regs *ctx)
- 		executed++;
- 	return 0;
- }
-+
-+int arg_total;
-+int arg_bad;
-+long arg_last[3];
-+long expected_arg[3];
-+int expected_pid;
-+
-+SEC("usdt")
-+int BPF_USDT(usdt_check_arg, long arg1, long arg2, long arg3)
-+{
-+	if (expected_pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
-+
-+	__sync_fetch_and_add(&arg_total, 1);
-+	arg_last[0] = arg1;
-+	arg_last[1] = arg2;
-+	arg_last[2] = arg3;
-+
-+	if (arg1 != expected_arg[0] ||
-+	    arg2 != expected_arg[1] ||
-+	    arg3 != expected_arg[2])
-+		__sync_fetch_and_add(&arg_bad, 1);
-+
-+	return 0;
-+}
- #endif
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/usdt_2.c b/tools/testing/selftests/bpf/usdt_2.c
-index b359b389f6c0..5e38f8605b02 100644
---- a/tools/testing/selftests/bpf/usdt_2.c
-+++ b/tools/testing/selftests/bpf/usdt_2.c
-@@ -13,4 +13,17 @@ void usdt_2(void)
- 	USDT(optimized_attach, usdt_2);
- }
- 
-+static volatile unsigned long usdt_red_zone_arg1 = 0xDEADBEEF;
-+static volatile unsigned long usdt_red_zone_arg2 = 0xCAFEBABE;
-+static volatile unsigned long usdt_red_zone_arg3 = 0xFEEDFACE;
-+
-+void __attribute__((noinline)) usdt_red_zone_trigger(void)
-+{
-+	unsigned long a1 = usdt_red_zone_arg1;
-+	unsigned long a2 = usdt_red_zone_arg2;
-+	unsigned long a3 = usdt_red_zone_arg3;
-+
-+	USDT(optimized_attach, usdt_red_zone, a1, a2, a3);
-+}
-+
- #endif
 -- 
 2.54.0
 
