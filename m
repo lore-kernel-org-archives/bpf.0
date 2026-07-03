@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16FB03C3C00;
-	Fri,  3 Jul 2026 11:49:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A088368D6F;
+	Fri,  3 Jul 2026 11:49:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783079377; cv=none; b=pRdSrF8Of2ssepJa/W5HAOKqUCeGGDFoddo8EznASwd7Qa5vnTT6o97y/RoAFWecJCJluNESYD3/0RhUVOQDkxgwJfyyauIECxXJl5Holx5MEtA0QcGkIAHSjrl7s5ngALwAh07f4UVrB+f1/DknSDbQIhJAspBibSzjrG8yyq4=
+	t=1783079388; cv=none; b=F3gM7U/irxcV15y4t3FrOMBY5rLQGQsxvSqxDQM93T1IpFy20gCYwIBP3cDJOW/cUtaMLr2uXpDqRKBjFhEyI8UtTEHWqjcaK7zX2h9UpqjAFPmMxB7XJGVDJS6MKvGIix6HqHaHg4ikFz/w/RFuEzeh6AQnFOJGt0I/HgifVaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783079377; c=relaxed/simple;
-	bh=0a6b5N9kVxHyDqF31zxAyCxDdpObNpX9TFImKoXEgAY=;
+	s=arc-20240116; t=1783079388; c=relaxed/simple;
+	bh=DzYv9kQU7J1fEfwbYNXhxfvK8KwLO2v/VV5Qbkut43w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QrARin+ZUNlelZdU9g0YhayD0q6sEeWodWfUzB6dWIo5HohJPnOY+nmnUqlHs5ozl0DFCaRUSAq8u8D13FYrJ5kxJ3kg7p4LyXY8HYQMZvLkHrPLRXNqbmN/bTbVD8ZG/QNpt1QRdW6rMg8o3wXHiyCFzBqOtPtH48Vlte9M1VE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F6coPZYO; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=jCAZiOTf7HwAK46SED0ViruJ5+09aEgxk6LzqMD6ThZZOonCUskpbHuyxJSy/2s86FTmddPGLNfAjd1xvjxpyA43WX1iiGvM9EhEqHHmE4l2dZy21hbXauw7SmSrXfs7NSeFARjBT1SL/jmsAt7/Tyk5xlhgXsEbypmyZ/IyB34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dG9k8dCO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F6coPZYO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 498651F00A3A;
-	Fri,  3 Jul 2026 11:49:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dG9k8dCO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E7CF1F000E9;
+	Fri,  3 Jul 2026 11:49:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783079375;
-	bh=RcEIFSOD+V7JTMGudvrJflbiQwkbYio+/YGVj8j3aZU=;
+	s=k20260515; t=1783079387;
+	bh=FAowrYr5F8VZJrsEbPgQLCe9D0YxUoyTmT4KLks/BtE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=F6coPZYOu7nPS5X8FA1RFuYHwknOoAeImMJK8ieUHMDqnXEtQ8jx9fRku7FhTWCuL
-	 vLuxO9/yQGkaWuDUwlWFLk8eerMC5NWCOC1rdKDkkwiFsnxIxFHfds9l1dWETKOik9
-	 mg9Df/TlqYqUI7v0iDLR8RUZfh24NbQ/nmbdvxZoTusudWjYOwbvx8YelWViQqNyG9
-	 mqSJqbAMbDUrEcEj0t1Q5ue73xEeaM9hvAhYF/gyqNj78lY8AypARUqiAIF7V3pWsZ
-	 jeTSoU0E94UcRivHPqYALbEmoq31TDaO1/qv1i0kiiWwz4g3IBu+sC3gMAYSEu9QkX
-	 oJbRE+IZLqEsA==
+	b=dG9k8dCOHrOEU6WY1q4NnMtVAna5nzFuTk+wj4JwUO3w/fjvz5cMPCutPTJRnwCSA
+	 k0QIRq67jn0+rgIrJGUGlBMWerfPf01U+9CEbFkWowjEEhrIa2PkdVR1P91tfbYA8/
+	 1QEfP81T3u90bZSvzkBxOtAwUBHqxqKhr/23vazCQBs0PkiCzMRIPAXfzAle5C2V6x
+	 Ta4eFQElUjKskT1MkQjaMDu4SnwomBDwf+GUX3BhZAsJ8t0UOJBV34ifzUCnqr7xbt
+	 kt11t+QMS+9aXvX3DpmSvP86/4tCotS7kxC9YiUJ8H1ak7s8Mbu20Islle1NGBuNfw
+	 yhJg4QvHRmwNA==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Oleg Nesterov <oleg@redhat.com>,
 	Peter Zijlstra <peterz@infradead.org>,
@@ -34,9 +34,9 @@ To: Oleg Nesterov <oleg@redhat.com>,
 	Andrii Nakryiko <andrii@kernel.org>
 Cc: bpf@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
-Subject: [PATCHv6 01/13] uprobes/x86: Use proper mm_struct in __in_uprobe_trampoline
-Date: Fri,  3 Jul 2026 13:49:05 +0200
-Message-ID: <20260703114917.238144-2-jolsa@kernel.org>
+Subject: [PATCHv6 02/13] uprobes/x86: Remove struct uprobe_trampoline object
+Date: Fri,  3 Jul 2026 13:49:06 +0200
+Message-ID: <20260703114917.238144-3-jolsa@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260703114917.238144-1-jolsa@kernel.org>
 References: <20260703114917.238144-1-jolsa@kernel.org>
@@ -48,81 +48,234 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In the unregister path we use __in_uprobe_trampoline check with
-current->mm for the VMA lookup, which is wrong, because we are
-in the tracer context, not the traced process.
+Removing struct uprobe_trampoline object and it's tracking code,
+because it's not needed. We can do same thing directly on top of
+struct vm_area_struct objects.
 
-Add mm_struct pointer argument to __in_uprobe_trampoline and
-changing related callers to pass proper mm_struct pointer.
+This makes the code simpler and allows easy propagation of the
+trampoline vma object into child process in following change.
 
-Fixes: ba2bfc97b462 ("uprobes/x86: Add support to optimize uprobes")
+Note the original code called destroy_uprobe_trampoline if the
+optimiation failed, but it only freed the struct uprobe_trampoline
+object, not the vma. The new vma leak is fixed in following change.
+
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- arch/x86/kernel/uprobes.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ arch/x86/kernel/uprobes.c | 106 ++++++++------------------------------
+ include/linux/uprobes.h   |   5 --
+ kernel/events/uprobes.c   |  10 ----
+ kernel/fork.c             |   1 -
+ 4 files changed, 22 insertions(+), 100 deletions(-)
 
 diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
-index ebb1baf1eb1d..2be6707e3320 100644
+index 2be6707e3320..d2933cf77cd3 100644
 --- a/arch/x86/kernel/uprobes.c
 +++ b/arch/x86/kernel/uprobes.c
-@@ -761,9 +761,9 @@ void arch_uprobe_clear_state(struct mm_struct *mm)
- 		destroy_uprobe_trampoline(tramp);
- }
+@@ -631,11 +631,6 @@ static struct vm_special_mapping tramp_mapping = {
+ 	.pages  = tramp_mapping_pages,
+ };
  
--static bool __in_uprobe_trampoline(unsigned long ip)
-+static bool __in_uprobe_trampoline(struct mm_struct *mm, unsigned long ip)
+-struct uprobe_trampoline {
+-	struct hlist_node	node;
+-	unsigned long		vaddr;
+-};
+-
+ static bool is_reachable_by_call(unsigned long vtramp, unsigned long vaddr)
  {
--	struct vm_area_struct *vma = vma_lookup(current->mm, ip);
-+	struct vm_area_struct *vma = vma_lookup(mm, ip);
- 
- 	return vma && vma_is_special_mapping(vma, &tramp_mapping);
- }
-@@ -776,14 +776,14 @@ static bool in_uprobe_trampoline(unsigned long ip)
- 
- 	rcu_read_lock();
- 	if (mmap_lock_speculate_try_begin(mm, &seq)) {
--		found = __in_uprobe_trampoline(ip);
-+		found = __in_uprobe_trampoline(mm, ip);
- 		retry = mmap_lock_speculate_retry(mm, seq);
- 	}
- 	rcu_read_unlock();
- 
- 	if (retry) {
- 		mmap_read_lock(mm);
--		found = __in_uprobe_trampoline(ip);
-+		found = __in_uprobe_trampoline(mm, ip);
- 		mmap_read_unlock(mm);
- 	}
- 	return found;
-@@ -1044,7 +1044,7 @@ static int copy_from_vaddr(struct mm_struct *mm, unsigned long vaddr, void *dst,
- 	return 0;
+ 	long delta = (long)(vaddr + 5 - vtramp);
+@@ -682,83 +677,28 @@ static unsigned long find_nearest_trampoline(unsigned long vaddr)
+ 	return high_tramp;
  }
  
--static bool __is_optimized(uprobe_opcode_t *insn, unsigned long vaddr)
-+static bool __is_optimized(struct mm_struct *mm, uprobe_opcode_t *insn, unsigned long vaddr)
+-static struct uprobe_trampoline *create_uprobe_trampoline(unsigned long vaddr)
++static struct vm_area_struct *get_uprobe_trampoline(struct mm_struct *mm, unsigned long vaddr)
  {
- 	struct __packed __arch_relative_insn {
- 		u8 op;
-@@ -1053,7 +1053,7 @@ static bool __is_optimized(uprobe_opcode_t *insn, unsigned long vaddr)
+-	struct pt_regs *regs = task_pt_regs(current);
+-	struct mm_struct *mm = current->mm;
+-	struct uprobe_trampoline *tramp;
++	VMA_ITERATOR(vmi, mm, 0);
+ 	struct vm_area_struct *vma;
  
- 	if (!is_call_insn(insn))
- 		return false;
--	return __in_uprobe_trampoline(vaddr + 5 + call->raddr);
-+	return __in_uprobe_trampoline(mm, vaddr + 5 + call->raddr);
+-	if (!user_64bit_mode(regs))
+-		return NULL;
++	if (vaddr > TASK_SIZE || vaddr < PAGE_SIZE)
++		return ERR_PTR(-EINVAL);
++
++	for_each_vma(vmi, vma) {
++		if (!vma_is_special_mapping(vma, &tramp_mapping))
++			continue;
++		if (is_reachable_by_call(vma->vm_start, vaddr))
++			return vma;
++	}
+ 
+ 	vaddr = find_nearest_trampoline(vaddr);
+ 	if (IS_ERR_VALUE(vaddr))
+-		return NULL;
++		return ERR_PTR(vaddr);
+ 
+-	tramp = kzalloc_obj(*tramp);
+-	if (unlikely(!tramp))
+-		return NULL;
+-
+-	tramp->vaddr = vaddr;
+-	vma = _install_special_mapping(mm, tramp->vaddr, PAGE_SIZE,
++	return _install_special_mapping(mm, vaddr, PAGE_SIZE,
+ 				VM_READ|VM_EXEC|VM_MAYEXEC|VM_MAYREAD|VM_DONTCOPY|VM_IO,
+ 				&tramp_mapping);
+-	if (IS_ERR(vma)) {
+-		kfree(tramp);
+-		return NULL;
+-	}
+-	return tramp;
+-}
+-
+-static struct uprobe_trampoline *get_uprobe_trampoline(unsigned long vaddr, bool *new)
+-{
+-	struct uprobes_state *state = &current->mm->uprobes_state;
+-	struct uprobe_trampoline *tramp = NULL;
+-
+-	if (vaddr > TASK_SIZE || vaddr < PAGE_SIZE)
+-		return NULL;
+-
+-	hlist_for_each_entry(tramp, &state->head_tramps, node) {
+-		if (is_reachable_by_call(tramp->vaddr, vaddr)) {
+-			*new = false;
+-			return tramp;
+-		}
+-	}
+-
+-	tramp = create_uprobe_trampoline(vaddr);
+-	if (!tramp)
+-		return NULL;
+-
+-	*new = true;
+-	hlist_add_head(&tramp->node, &state->head_tramps);
+-	return tramp;
+-}
+-
+-static void destroy_uprobe_trampoline(struct uprobe_trampoline *tramp)
+-{
+-	/*
+-	 * We do not unmap and release uprobe trampoline page itself,
+-	 * because there's no easy way to make sure none of the threads
+-	 * is still inside the trampoline.
+-	 */
+-	hlist_del(&tramp->node);
+-	kfree(tramp);
+-}
+-
+-void arch_uprobe_init_state(struct mm_struct *mm)
+-{
+-	INIT_HLIST_HEAD(&mm->uprobes_state.head_tramps);
+-}
+-
+-void arch_uprobe_clear_state(struct mm_struct *mm)
+-{
+-	struct uprobes_state *state = &mm->uprobes_state;
+-	struct uprobe_trampoline *tramp;
+-	struct hlist_node *n;
+-
+-	hlist_for_each_entry_safe(tramp, n, &state->head_tramps, node)
+-		destroy_uprobe_trampoline(tramp);
  }
  
- static int is_optimized(struct mm_struct *mm, unsigned long vaddr)
-@@ -1064,7 +1064,7 @@ static int is_optimized(struct mm_struct *mm, unsigned long vaddr)
- 	err = copy_from_vaddr(mm, vaddr, &insn, 5);
- 	if (err)
- 		return err;
--	return __is_optimized((uprobe_opcode_t *)&insn, vaddr);
-+	return __is_optimized(mm, (uprobe_opcode_t *)&insn, vaddr);
+ static bool __in_uprobe_trampoline(struct mm_struct *mm, unsigned long ip)
+@@ -1111,21 +1051,19 @@ int set_orig_insn(struct arch_uprobe *auprobe, struct vm_area_struct *vma,
+ static int __arch_uprobe_optimize(struct arch_uprobe *auprobe, struct mm_struct *mm,
+ 				  unsigned long vaddr)
+ {
+-	struct uprobe_trampoline *tramp;
+-	struct vm_area_struct *vma;
+-	bool new = false;
+-	int err = 0;
++	struct pt_regs *regs = task_pt_regs(current);
++	struct vm_area_struct *vma, *tramp;
++	int ret;
+ 
++	if (!user_64bit_mode(regs))
++		return -EINVAL;
+ 	vma = find_vma(mm, vaddr);
+ 	if (!vma)
+ 		return -EINVAL;
+-	tramp = get_uprobe_trampoline(vaddr, &new);
+-	if (!tramp)
+-		return -EINVAL;
+-	err = swbp_optimize(auprobe, vma, vaddr, tramp->vaddr);
+-	if (WARN_ON_ONCE(err) && new)
+-		destroy_uprobe_trampoline(tramp);
+-	return err;
++	tramp = get_uprobe_trampoline(mm, vaddr);
++	if (IS_ERR(tramp))
++		return PTR_ERR(tramp);
++	return WARN_ON_ONCE(swbp_optimize(auprobe, vma, vaddr, tramp->vm_start));
  }
  
- static bool should_optimize(struct arch_uprobe *auprobe)
+ void arch_uprobe_optimize(struct arch_uprobe *auprobe, unsigned long vaddr)
+diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
+index f548fea2adec..18be159bbc34 100644
+--- a/include/linux/uprobes.h
++++ b/include/linux/uprobes.h
+@@ -186,9 +186,6 @@ struct xol_area;
+ 
+ struct uprobes_state {
+ 	struct xol_area		*xol_area;
+-#ifdef CONFIG_X86_64
+-	struct hlist_head	head_tramps;
+-#endif
+ };
+ 
+ typedef int (*uprobe_write_verify_t)(struct page *page, unsigned long vaddr,
+@@ -238,8 +235,6 @@ extern void uprobe_handle_trampoline(struct pt_regs *regs);
+ extern void *arch_uretprobe_trampoline(unsigned long *psize);
+ extern unsigned long uprobe_get_trampoline_vaddr(void);
+ extern void uprobe_copy_from_page(struct page *page, unsigned long vaddr, void *dst, int len);
+-extern void arch_uprobe_clear_state(struct mm_struct *mm);
+-extern void arch_uprobe_init_state(struct mm_struct *mm);
+ extern void handle_syscall_uprobe(struct pt_regs *regs, unsigned long bp_vaddr);
+ extern void arch_uprobe_optimize(struct arch_uprobe *auprobe, unsigned long vaddr);
+ extern unsigned long arch_uprobe_get_xol_area(void);
+diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+index 4084e926e284..b5c516168f84 100644
+--- a/kernel/events/uprobes.c
++++ b/kernel/events/uprobes.c
+@@ -1806,14 +1806,6 @@ static struct xol_area *get_xol_area(void)
+ 	return area;
+ }
+ 
+-void __weak arch_uprobe_clear_state(struct mm_struct *mm)
+-{
+-}
+-
+-void __weak arch_uprobe_init_state(struct mm_struct *mm)
+-{
+-}
+-
+ /*
+  * uprobe_clear_state - Free the area allocated for slots.
+  */
+@@ -1825,8 +1817,6 @@ void uprobe_clear_state(struct mm_struct *mm)
+ 	delayed_uprobe_remove(NULL, mm);
+ 	mutex_unlock(&delayed_uprobe_lock);
+ 
+-	arch_uprobe_clear_state(mm);
+-
+ 	if (!area)
+ 		return;
+ 
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 13e38e89a1f3..00b52c7314d1 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1064,7 +1064,6 @@ static void mm_init_uprobes_state(struct mm_struct *mm)
+ {
+ #ifdef CONFIG_UPROBES
+ 	mm->uprobes_state.xol_area = NULL;
+-	arch_uprobe_init_state(mm);
+ #endif
+ }
+ 
 -- 
 2.54.0
 
