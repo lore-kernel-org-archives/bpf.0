@@ -1,61 +1,64 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D41B53C9888
-	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 10:02:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C1F3C7DE8
+	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 10:11:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783072971; cv=none; b=tNseNiA3Q8plzWUs7IfnGM0JEChGMM+uwDYqfsoq/Xn+h5vpM2+nVkq9RFkmq0qXopbSIc5kGwO+AxaIUqxxPENGEammkVUq8PF9bxc32GTP8k1HecymYSm32TMg69+AjfDaqbptJFswmq7DGeEy9v2q4Ez3OesCbU8dhZu3yC8=
+	t=1783073476; cv=none; b=S/pWs+wJnyYw57w3MxL0hEWaisX07/8bLmcYZPtqixxdPeBIKd/W9R3WTVQqceWrPGRkVVdpu7PViQKLFx7c3PhXgIWr5WVtLlpmW2jQiZnzi2x48aI99+J9XClr+l4UHS0BnOzfS02Lzg7eZ+YGKycSXoR67eYXtTjfnrgHr1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783072971; c=relaxed/simple;
-	bh=P9QJK2xz/jdfVnMlUFOmfxp+TBzPlMUUfk9wzKX/jwE=;
+	s=arc-20240116; t=1783073476; c=relaxed/simple;
+	bh=ly7+XiycSvEDJf4hQpOCXWK7V0Zf0oEy4b0r6mSD0XA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lJLDDS4Uy6ZrjpYAERgz7Z9eiH9jLkS9n16nj7Cqiq0ARzW/V1ejq3JeyuAbH9AUJqGhDEWoaClcNmHqazwQ4CVuDGINE5ryide6o7P8tqzNPnNOPcpuFPEYjK5W8hsPnRMdsnqh6t1jawdb0JYzbcitDkX+zoin8ZTgQTO7C4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gQ7Q04KK; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=NXfpys580TBShx/+4ZHZFGAnLNKFH/UrmBnQMceNZkabtVhKRz9jhQ93l9UP1fl4vMc1OA7QBU+qwXYp4MA+FhklqnaZ24hP0FilLR8woLVcVYe4ZCQvuAit1o/+vhdw0+/GEKxpVWZ5KEHKeE19NfDx92xV0PQ2lOZbO4bT+bQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mjgYCTSt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gQ7Q04KK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A763D1F0155A
-	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 10:02:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mjgYCTSt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F02DE1F00ADF
+	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 10:11:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783072969;
-	bh=GxICZniZLiTs1zHK8UE4JL2NE8iCjWZD2BK5CrwX6M8=;
+	s=k20260515; t=1783073474;
+	bh=7yTQtn+lkOhvJ9GgcIZXo/KBRiQUpBFjTm+7X5ocVrE=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=gQ7Q04KKbVll2/T84XVbDiCdXpC0k671DQfMVJp+FzCxGj72PckPhFYoQan8Bj2yx
-	 TiGWTRS9294/uNQZLrOSRjg2tLj9/vpgQddHMcd5C3YsEITdmZbyNi+jlLF1+yWJ/E
-	 CYDkUdRLQCl12TzMRa4lJKLA5Bp084C7nwUAVCgRZeUudcEonglNjFYYEo9UX873xQ
-	 BPElgHL99gOhXkuIKTLNv62MytWbZhBEUtjDcyDUS691K7UA4PyLUT32ckctbR3+Lj
-	 uIGewKGLdb3tFqZstiWIq8v1RrWhFqeVmsi54wBC4hTdMm2Qcpc2eSpfccRfrru3ux
-	 GhUbLtSXMaifA==
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-691c5776f95so730271a12.3
-        for <bpf@vger.kernel.org>; Fri, 03 Jul 2026 03:02:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+Rpp4KwG8XzHZU0hibwBlHxIcpE+fNCpmBSpcmuDCgHVhPsHQ0YzR3cZ29ckIAVblxN7YBQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywyjYt4iKr94jlBaE3jaJIu9mhg14Ybk5qhC0mizW7mmtsvfuz
-	eFkCQlYEg76m5NFD3BriiEHcMO19kG+6Hy8ccol0TC2LF81pbHnynZlh/gS8c7erML5DMasrSo3
-	InKoXGdeFm4SAO9KfOfNqET68mIrjsCY=
-X-Received: by 2002:a05:6402:51cc:b0:698:9ea5:d195 with SMTP id
- 4fb4d7f45d1cf-6989f38e7d2mr4357031a12.23.1783072968125; Fri, 03 Jul 2026
- 03:02:48 -0700 (PDT)
+	b=mjgYCTStJ34g43ufMn/HAfEjtiM/AU6WEDJ1qGtwBAmGJvPBbnkUtJdhuqZ4j8W8F
+	 qNl8jIxKjPSGFTU3sJatWv8W1Vd2WvazqGn/wDM5b/bFgzmsVOGhV+0rcHowNjTVIC
+	 m4E3C1G/tmYGBLhSJy0yQCRY1ZlJoD5do6R5tXKN2gnoenc7PrDMFTiOLBlv/bjPnD
+	 kwhs76Zfr4eqbxyXktaz28HSpD6qFnVo5u4OfqNh9xBLqXp+XiQwXeVB6oHxkjI59D
+	 mQCHX9+uKVRfqDgS/fwP52c7P6i43ZyhDRbYVzYvBW2nK+sZxFjpXxRCFYur4GOptX
+	 6DnTK1Jx26HQA==
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6989c0ec3c5so801533a12.2
+        for <bpf@vger.kernel.org>; Fri, 03 Jul 2026 03:11:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RowIftwjw9GzI0pHC7RsrS4cDX3r1hobmbt3F0zJumgdaG+ELXTgdDwNy2AE3kQYgfUE/4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCyfEKl4u4VmqLNTBrEa+HNbSZtEk39g9sr2YrVeJSioyl4sJC
+	cdH2QoJ1xVnhcm1Nokq7UyUlzEBk8LMU1Q74e2wYNIzlHBTdTAJs4z1o0RK9ALY1iKf2OhTSMvs
+	CwNksH7KZeQSYoZR/CBjDPBjfNTtBdic=
+X-Received: by 2002:a05:6402:3983:b0:698:3602:d0d with SMTP id
+ 4fb4d7f45d1cf-6989f302bf2mr4238675a12.17.1783073472599; Fri, 03 Jul 2026
+ 03:11:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1782119051687451.15056.seg@mailgw.kylinos.cn>
-In-Reply-To: <1782119051687451.15056.seg@mailgw.kylinos.cn>
+References: <20260702022322.51033-1-dongtai.guo@linux.dev>
+In-Reply-To: <20260702022322.51033-1-dongtai.guo@linux.dev>
 From: Huacai Chen <chenhuacai@kernel.org>
-Date: Fri, 3 Jul 2026 18:03:13 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4zaPuBjfsujbW2QiYMMDhy3G+0eLOn_DbdHMmGitGEZQ@mail.gmail.com>
-X-Gm-Features: AVVi8CciMHHIh2DiT8jHK9TEKRaAsAY0P6iPzY60Z8u1moayozVW4gt-jf4mfsI
-Message-ID: <CAAhV-H4zaPuBjfsujbW2QiYMMDhy3G+0eLOn_DbdHMmGitGEZQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] LoongArch bpf kptr xchg inline support
-To: Chenguang Zhao <zhaochenguang@kylinos.cn>
-Cc: kernel@xen0n.name, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
-	yangtiezhu@loongson.cn, hengqi.chen@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org, 
-	loongarch@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+Date: Fri, 3 Jul 2026 18:11:37 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7vZ_idb1mDW_PWHN8VfEWy2aBgxbaeP5b7J0RAqjzNKQ@mail.gmail.com>
+X-Gm-Features: AVVi8CecaGJVd1kSOWUGhr-VjVk5Cw-vBiB9HROXdnoWiT71nwcZk0VAttsSm0E
+Message-ID: <CAAhV-H7vZ_idb1mDW_PWHN8VfEWy2aBgxbaeP5b7J0RAqjzNKQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 00/11] LoongArch: BPF: arena features,
+ exceptions, private stack and may_goto
+To: George Guo <dongtai.guo@linux.dev>
+Cc: Tiezhu Yang <yangtiezhu@loongson.cn>, Hengqi Chen <hengqi.chen@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	George Guo <guodongtai@kylinos.cn>, bpf@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -65,76 +68,80 @@ Could you please pay some time to review this series?
 
 Huacai
 
-On Mon, Jun 22, 2026 at 5:04=E2=80=AFPM Chenguang Zhao <zhaochenguang@kylin=
-os.cn> wrote:
+On Thu, Jul 2, 2026 at 10:23=E2=80=AFAM George Guo <dongtai.guo@linux.dev> =
+wrote:
 >
-> This series enables the BPF verifier to inline bpf_kptr_xchg() into BPF_X=
-CHG
-> on LoongArch64, and fixes the underlying JIT atomic ordering that makes s=
-uch
-> inlining safe.
-> The BPF verifier can lower bpf_kptr_xchg() to a single BPF_XCHG atomic wh=
-en
-> the JIT advertises ptr xchg support via bpf_jit_supports_ptr_xchg(). This
-> removes helper-call overhead from the kptr exchange fast path. Inlining i=
-s
-> only correct when the JITed exchange provides the same sequentially consi=
-stent
-> ordering as the bpf_kptr_xchg() helper.
-> Patch 1 fixes memory ordering for all value-returning BPF atomic RMW oper=
-ations
-> emitted by the LoongArch bpf JIT. Per LKMM, value-returning atomic RMW mu=
-st
-> provide sequentially consistent ordering. Plain AMO instructions and bare
-> ll/sc loops on LoongArch do not satisfy this by themselves:
->  - BPF_FETCH (ADD/AND/OR/XOR): switch to am*_db.{b,h,w,d}
->  - BPF_XCHG: switch to amswap_db.{b,h,w,d}
->  - BPF_CMPXCHG: emit dbar 0x700 after the ll/sc loop, matching
->    __WEAK_LLSC_MB in cmpxchg.h
-> Non-value-returning RMW ops (plain BPF_ADD, BPF_AND, etc.) remain weakly
-> ordered, consistent with LKMM. This fix is independent of kptr inlining a=
-nd
-> benefits all BPF programs using value-returning atomics on LoongArch.
-> Patch 2 implements bpf_jit_supports_ptr_xchg() so the verifier may inline
-> bpf_kptr_xchg() on LoongArch64.
-> Patches 3 and 4 extend bpf selftests: functional coverage via kptr_xchg_i=
-nline,
-> and an optional kptr-xchg benchmark to compare helper vs inlined paths.
+> This series adds the remaining LoongArch BPF JIT features and enables the
+> matching selftests:
 >
-> Chenguang Zhao (4):
->   LoongArch: bpf: Fix memory ordering for value-returning atomics
->   LoongArch: bpf: Advertise JIT support for kptr xchg inline
->   selftests/bpf: Enable kptr_xchg_inline test on LoongArch
->   selftests/bpf: Add kptr-xchg benchmark
+>   - internal-only MOV for per-CPU address resolution
+>   - timed may_goto
+>   - per-program private stacks
+>   - exceptions (bpf_throw)
+>   - sign-extending loads from arena (PROBE_MEM32SX)
+>   - atomics on arena pointers (PROBE_ATOMIC)
+>   - selftests: struct_ops private stack, arena LDSX, arena atomics, and a
+>     LoongArch deny list
 >
->  arch/loongarch/include/asm/inst.h             | 18 ++++
->  arch/loongarch/net/bpf_jit.c                  | 37 ++++---
->  tools/testing/selftests/bpf/Makefile          |  2 +
->  tools/testing/selftests/bpf/bench.c           |  2 +
->  .../selftests/bpf/benchs/bench_kptr_xchg.c    | 96 +++++++++++++++++++
->  .../bpf/prog_tests/kptr_xchg_inline.c         |  3 +-
->  .../selftests/bpf/progs/kptr_xchg_bench.c     | 49 ++++++++++
->  7 files changed, 192 insertions(+), 15 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c
->  create mode 100644 tools/testing/selftests/bpf/progs/kptr_xchg_bench.c
+> Patch 1 ("LoongArch: BPF: Fix tail call count pointer offset for arena
+> programs") is the same fix already posted separately for the bpf tree;
+> several patches in this series (notably exceptions, patch 5) build on
+> top of the helper it introduces, so it is included here, unchanged, to
+> keep the series self-contained and applicable on bpf-next. It can be
+> dropped once it lands via the bpf tree.
 >
-> ---
-> v3:
->  - Expand the JIT ordering fix beyond BPF_XCHG w/d to all value-returning
->    atomic RMW ops (BPF_FETCH, BPF_XCHG, BPF_CMPXCHG), using barrier-carry=
-ing
->    AMO variants and dbar after ll/sc as required by LKMM.
->  - Add __btf_root() in the benchmark BPF program so bpf_obj_drop() remain=
-s
->    visible to libbpf's kfunc linker when bpf_kptr_xchg() is inlined.
+>   LoongArch: BPF: Fix tail call count pointer offset for arena programs
+>   https://lore.kernel.org/all/20260629085511.359546-1-dongtai.guo@linux.d=
+ev
+>
+> Based on 7.2-rc1.
 >
 > v2:
->  - https://lore.kernel.org/all/20260603100438.2177817-1-zhaochenguang@kyl=
-inos.cn/
+>  - Included the tail call count pointer offset fix as patch 1/11 (see
+>    above) instead of only referencing it, so the series applies cleanly
+>    on bpf-next without waiting on the bpf tree; the empty prog_array
+>    off-by-one was fixed independently upstream by commit 0379d10f09bc
+>    ("LoongArch: BPF: Fix off-by-one error in tail call"), now in 7.2-rc1.
+>  - timed may_goto: store $ra at the ORC-mandated .ra_offset =3D -8 slot i=
+n
+>    the trampoline (it was stored at the wrong slot in v1), per Tiezhu
+>    Yang's review.
+>  - Consolidated the earlier per-CPU MOV / timed may_goto and arena gating
+>    postings into one series; rebased on 7.2-rc1.
+>  - selftests: use the upstream __arch_loongarch / "LOONGARCH" test_loader
+>    support now in 7.2-rc1 instead of introducing it.
+>  - Prior postings:
+>    https://lore.kernel.org/all/20260609041407.122384-1-dongtai.guo@linux.=
+dev
+>    https://lore.kernel.org/all/20260618033809.98253-1-dongtai.guo@linux.d=
+ev
 >
-> v1:
->  - https://lore.kernel.org/all/20260602021515.214560-1-zhaochenguang@kyli=
-nos.cn/
+> George Guo (11):
+>   LoongArch: BPF: Fix tail call count pointer offset for arena programs
+>   LoongArch: BPF: Support internal-only MOV to resolve per-CPU addrs
+>   LoongArch: BPF: Add timed may_goto support
+>   LoongArch: BPF: Add private stack support
+>   LoongArch: BPF: Add exceptions (bpf_throw) support
+>   LoongArch: BPF: Support sign-extending loads from arena
+>   LoongArch: BPF: Support atomics on arena pointers
+>   selftests/bpf: Enable struct_ops private stack test for LoongArch
+>   selftests/bpf: Enable arena LDSX tests on LoongArch
+>   selftests/bpf: Enable arena atomics tests on LoongArch
+>   selftests/bpf: Add LoongArch deny list
+>
+>  arch/loongarch/include/asm/inst.h             |   1 +
+>  arch/loongarch/kernel/stacktrace.c            |  52 +++
+>  arch/loongarch/net/Makefile                   |   2 +-
+>  arch/loongarch/net/bpf_jit.c                  | 397 ++++++++++++++++--
+>  arch/loongarch/net/bpf_jit.h                  |   1 +
+>  arch/loongarch/net/bpf_timed_may_goto.S       |  47 +++
+>  .../testing/selftests/bpf/DENYLIST.loongarch  |   1 +
+>  .../bpf/prog_tests/struct_ops_private_stack.c |   2 +-
+>  .../selftests/bpf/progs/arena_atomics.c       |   3 +
+>  .../selftests/bpf/progs/verifier_ldsx.c       |  17 +
+>  10 files changed, 485 insertions(+), 38 deletions(-)
+>  create mode 100644 arch/loongarch/net/bpf_timed_may_goto.S
+>  create mode 100644 tools/testing/selftests/bpf/DENYLIST.loongarch
 >
 > --
 > 2.25.1
