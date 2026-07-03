@@ -1,148 +1,231 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57BEE27B35F;
-	Fri,  3 Jul 2026 21:34:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4F72D2394;
+	Fri,  3 Jul 2026 23:49:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783114478; cv=none; b=Oq2W3VxXj9Dd3MUhDGi3GxfuoO6ZrWLCmGhV5MBakw/DH5Au5RjBpFuZzrr6EdoAByxDTt2+ezb3GG+Wd+hLDTkw+YJSAsUin+7P3Iz2/xRbE8jlit08NcWmgku9Eyc9qFtc+fuNodBwxNfTZ3uXLYHvQmajbCrpwdF760dtVnQ=
+	t=1783122544; cv=none; b=OvGOhhTFO+V5QphWzA9ojKA/ljrqN+JlH/LUl7LjAA1kQW8aZouks6yf653L/gdeGDSEzueDw64+3ySwM0qjFiDmsNxpF/w3EXLLztMJ5DUnhb5CZL7UO+QI+wMt91DsvcvFhiIxFOAET3tA9MKHfPG97/QmUNliiCA7aJqOvC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783114478; c=relaxed/simple;
-	bh=x0bvJLKJaAc6rYVnc8di40rWewd25QyVRfeGTu6MwZE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FWmU0mOF5enKm45oT5KQbcsDaa7CIgKshYS5wm76e21+VtvZTtRSEm5ojB20m0HpT+D+YFRRgmIkpo8oDHnqPe68pj8tW2jNPqmYUO8ewTvfBIP2WIlLQVt7w/eWU0WuyguO4Qt4S101RntwUy5SS0q8prJ6FEDmjbNs88m80XA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JZynY/Rx; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783122544; c=relaxed/simple;
+	bh=FNhmNMonWtD+W8/Jzn9Y18D9hUVR6pzPJ8SmKjHoVHU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rDUU+hdfpXO61UkbuGMX5+s3vayh5veMfAMiDNHMoxRG2i93x7fEjCWczWp3yVbEv6yyuTxgIBot0nsxHSzbz9gHy7GsfuzCdwkpHNEak6uWiSm7B5mcYMUwroVPpzBXsJxGcb2gTtxmoktTXbCDq7q1Hnj5TFoqAboz+hIXcKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E0YQy/m2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JZynY/Rx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 631141F000E9;
-	Fri,  3 Jul 2026 21:34:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E0YQy/m2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 988191F000E9;
+	Fri,  3 Jul 2026 23:49:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783114477;
-	bh=0HjjJtel6gpE7V/w3HMWnHHVGlGEUs52zAzp1l+F7aU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=JZynY/RxCUwX90FxlGkLCzwOgWllCnzx9VCS7KJjVIbDn7IXe2uT2ea+DrzvdkC10
-	 KLuvk1POTRdkiLEuxqMI37FnMU5S1Ljduy2u/YP4sVFDB+QMj75/XisTY4W4+grzYe
-	 xj8QwBuXj7lT/BX/Po8jhoUctHSBnZkYMpmDktPGjLwOeOcfiUuIzGfToadJAKzy/t
-	 zCiJsuwUPnPGVu+Z03uYwMEUF8GRcuMsjm31XopoAP/lWS4Ckibqo8mXz6Iyl4/EoX
-	 nSyb5IOrdLjXF4tPk7WADGlaHLjmXkpR6g9J+GliKpvIsT1grF1u03Y6GY5shz/C9w
-	 cQubIvu8kAmhw==
-Message-ID: <2d9312a5-0847-41db-bbea-54e66869d91e@kernel.org>
-Date: Fri, 3 Jul 2026 15:34:34 -0600
+	s=k20260515; t=1783122543;
+	bh=bQPClUfw0fqGZZ6pcSXIeD1or1L5L5SDB1AG907rF4I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=E0YQy/m2twJlYvjAO4IZVvJKzHZIqeDeFIk6Pvj7fKVWexeHn/jEDOfzHN5ieCFc/
+	 ZHxb+UTld2p5dGRJFNUlR2w/AOrRL91xPCcXXWeWrSK8n4qUBAZwzd9Bz5N7ii+Uu0
+	 BX44g5wFdLD0+8sMJoAJ6eXpBeOh/NagO6KdrCKhYxTYu4q0wK8pfk/ujSd2GcCBxQ
+	 tJlZVWfZEf7nGLf8Zj3RbHQYA2126s8Esc4IiP4LzkaqBXbqGIrLG2zii633DKpEMP
+	 7bxxnJPKHqhsCVrXE9j1Zy4OErDYxrlnWcqMycqxC4wjF5H90thQgKLYp84oaFRJU2
+	 pK+1pVy+AyBlA==
+Date: Fri, 3 Jul 2026 16:49:00 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Viktor Malik <vmalik@redhat.com>
+Cc: linux-perf-users@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, Michael Petlan <mpetlan@redhat.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] perf trace: Factor out BPF loop body
+Message-ID: <akhKbOtiracJKkBU@google.com>
+References: <cover.1783070132.git.vmalik@redhat.com>
+ <20fc67aa2550ca5aff52b3a9a207f2e07f8e0b1d.1783070132.git.vmalik@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
- bpf_fib_lookup() helper
-Content-Language: en-US
-To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
- yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
- a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
- eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
- <20260624030530.3342884-2-avinash.duduskar@gmail.com>
- <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org> <87se65bd04.fsf@toke.dk>
- <2ffa32dd-5c88-488a-aa23-deef13465eb9@kernel.org> <87echobb5h.fsf@toke.dk>
- <cf25f667-1095-4f84-98ff-bf4662d3faa8@kernel.org> <874iik2ew4.fsf@toke.dk>
- <916191fc-2e10-4449-b82b-c086d90283ae@kernel.org> <87y0fv0y79.fsf@toke.dk>
- <9d14ff4b-eadd-4ae2-ab68-5927d4f19eeb@kernel.org> <87ik6x1m9n.fsf@toke.dk>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <87ik6x1m9n.fsf@toke.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20fc67aa2550ca5aff52b3a9a207f2e07f8e0b1d.1783070132.git.vmalik@redhat.com>
 
-On 7/2/26 8:47 AM, Toke Høiland-Jørgensen wrote:
-> David Ahern <dsahern@kernel.org> writes:
+Hello,
+
+On Fri, Jul 03, 2026 at 12:32:14PM +0200, Viktor Malik wrote:
+> The BPF program in augmented_raw_syscalls uses a for loop to iterate all
+> syscall arguments. The loop body is quite complex and often poses
+> problems for the BPF verifier. As a preparation step for addressing this
+> issue, factor out the loop body into a separate function.
 > 
->> On 7/1/26 5:02 AM, Toke Høiland-Jørgensen wrote:
->>> David Ahern <dsahern@kernel.org> writes:
->>>> Seems to me the fib_lookup for xdp needs to return the bottom device,
->>>> not the vlan device, for forwarding to work. That's why I added the
->>>> fields to the struct. That allows the program to push the vlan header if
->>>> required. My preference (dream?) was that Tx path had support to tell
->>>> the redirect the vlan and h/w added it on send.
->>>
->>> Sure, returning the bottom device index with the VLAN tag makes sense,
->>> and that's basically what this series does (but bails out on stacked
->>> VLANs). However, that's not what the helper does today, which is why the
->>> flag is there, to opt-in to the new behaviour. I don't think we can just
->>> change the ifindex without breaking existing applications (as noted
->>> up-thread).
->>
->> I do not see it as breaking existing programs which is why I chimed in
->> on the thread.
->>
->>>
->>>> But really, once stacked devices come into play, I just wanted to make
->>>> sure thought is given to different use cases. As you know the lookup
->>>> struct if hard bound to 64B and it is trying to cover a lot of use cases.
->>>
->>> Agreed, I don't think we can handle stacked devices in this helper. But
->>> we could split it out into a new one. Something like:
->>>
->>> struct lower_device_info {
->>> 	enum device_type type;
->>> 	struct {
->>> 		__be16	h_vlan_proto;
->>> 		__be16	h_vlan_TCI;
->>> 	} vlan;
->>>         /* add other types here */
->>> };
->>>
->>> int xdp_get_lower_device(int ifindex, struct lower_device_info *info);
->>>
->>> called like:
->>>
->>> int xdp_program(struct xdp_md *ctx)
->>> {
->>>         struct lower_device_info dev_info = {};
->>> 	int ifindex, ret;
->>>
->>>         ifindex = find_destination(ctx); /* does fib lookup, or something else */
->>>
->>>         while ((ret = xdp_get_lower_device_info(ifindex, &dev_info)) > 0) {
->>>         	if (dev_info.type == VLAN) {
->>>                       	push_vlan_tag(ctx, &dev_info.vlan);
->>>                         ifindex = ret;
->>>                 } else {
->>>                 	return XDP_PASS; /* we only handle VLAN devices */
->>>                 }
->>>         }
->>>
->>>         return bpf_redirect(ifindex, 0);
->>> }
->>>
->>>
->>> With a helper like this, we obviously don't strictly speaking need to
->>> change the fib lookup helper at all. However, for the single-tagged VLAN
->>> case, I think supporting it directly in the fib lookup could still have
->>> value, as an optimisation: it saves an extra call for resolving the
->>> ifindex, and the fields are already there. So I think my preference
->>> would be to merge this series as-is, and then follow up with a new kfunc
->>> to handle the stacked case. But we could also just drop this series and
->>> go straight to the new kfunc.
->>>
->>> WDYT?
->>
->> no preference. I only chimed in because of the added flag to the uapi
->> which I do not see as needed. If the consensus is that it is in fact
->> needed, all good then.
+> Signed-off-by: Viktor Malik <vmalik@redhat.com>
+> Cc: stable@vger.kernel.org
+> ---
+>  .../bpf_skel/augmented_raw_syscalls.bpf.c     | 127 ++++++++++--------
+>  1 file changed, 72 insertions(+), 55 deletions(-)
 > 
-> Alright, cool - care to provide an ACK, then? :)
+> diff --git a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+> index 2a6e61864ee0..cbdd5ce19a2f 100644
+> --- a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+> +++ b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+> @@ -429,15 +429,79 @@ static bool pid_filter__has(struct pids_filtered *pids, pid_t pid)
+>  	return bpf_map_lookup_elem(pids, &pid) != NULL;
+>  }
+>  
+> +/*
+> + * Determine what type of argument and how many bytes to read from user space, using the
+> + * value in the beauty_map. This is the relation of parameter type and its corresponding
+> + * value in the beauty map, and how many bytes we read eventually:
+> + *
+> + * string: 1			      -> size of string
+> + * struct: size of struct	      -> size of struct
+> + * buffer: -1 * (index of paired len) -> value of paired len (maximum: TRACE_AUG_MAX_BUF)
+> + */
+> +static inline int augment_arg(struct syscall_enter_args *args, int i,
+> +			      unsigned int *beauty_map, void *payload_offset)
+
+Can we make it 'struct augmented_arg *payload_offset' instead?
+
+Thanks,
+Namhyung
+
+
+> +{
+> +	int index, value_size = sizeof(struct augmented_arg) - offsetof(struct augmented_arg, value);
+> +	s64 aug_size, size;
+> +	bool augmented;
+> +	void *arg;
+> +
+> +	arg = (void *)args->args[i];
+> +	augmented = false;
+> +	size = beauty_map[i];
+> +	aug_size = size; /* size of the augmented data read from user space */
+> +
+> +	if (size == 0 || arg == NULL)
+> +		return 0;
+> +
+> +	if (size == 1) { /* string */
+> +		aug_size = bpf_probe_read_user_str(((struct augmented_arg *)payload_offset)->value, value_size, arg);
+> +		/* minimum of 0 to pass the verifier */
+> +		if (aug_size < 0)
+> +			aug_size = 0;
+> +
+> +		augmented = true;
+> +	} else if (size > 0 && size <= value_size) { /* struct */
+> +		if (!bpf_probe_read_user(((struct augmented_arg *)payload_offset)->value, size, arg))
+> +			augmented = true;
+> +	} else if ((int)size < 0 && size >= -6) { /* buffer */
+> +		index = -(size + 1);
+> +		barrier_var(index); // Prevent clang (noticed with v18) from removing the &= 7 trick.
+> +		index &= 7;	    // Satisfy the bounds checking with the verifier in some kernels.
+> +		aug_size = args->args[index] > TRACE_AUG_MAX_BUF ? TRACE_AUG_MAX_BUF : args->args[index];
+> +
+> +		if (aug_size > 0) {
+> +			if (!bpf_probe_read_user(((struct augmented_arg *)payload_offset)->value, aug_size, arg))
+> +				augmented = true;
+> +		}
+> +	}
+> +
+> +	/* Augmented data size is limited to sizeof(augmented_arg->unnamed union with value field) */
+> +	if (aug_size > value_size)
+> +		aug_size = value_size;
+> +
+> +	/* write data to payload */
+> +	if (augmented) {
+> +		int written = offsetof(struct augmented_arg, value) + aug_size;
+> +
+> +		if (written < 0 || written > sizeof(struct augmented_arg))
+> +			return -1;
+> +
+> +		((struct augmented_arg *)payload_offset)->size = aug_size;
+> +		return written;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int augment_sys_enter(void *ctx, struct syscall_enter_args *args)
+>  {
+> -	bool augmented, do_output = false;
+> -	int zero = 0, index, value_size = sizeof(struct augmented_arg) - offsetof(struct augmented_arg, value);
+> +	bool do_output = false;
+> +	int zero = 0, written;
+>  	u64 output = 0; /* has to be u64, otherwise it won't pass the verifier */
+> -	s64 aug_size, size;
+>  	unsigned int nr, *beauty_map;
+>  	struct beauty_payload_enter *payload;
+> -	void *arg, *payload_offset;
+> +	void *payload_offset;
+>  
+>  	/* fall back to do predefined tail call */
+>  	if (args == NULL)
+> @@ -457,58 +521,11 @@ static int augment_sys_enter(void *ctx, struct syscall_enter_args *args)
+>  	/* copy the sys_enter header, which has the syscall_nr */
+>  	__builtin_memcpy(&payload->args, args, sizeof(struct syscall_enter_args));
+>  
+> -	/*
+> -	 * Determine what type of argument and how many bytes to read from user space, using the
+> -	 * value in the beauty_map. This is the relation of parameter type and its corresponding
+> -	 * value in the beauty map, and how many bytes we read eventually:
+> -	 *
+> -	 * string: 1			      -> size of string
+> -	 * struct: size of struct	      -> size of struct
+> -	 * buffer: -1 * (index of paired len) -> value of paired len (maximum: TRACE_AUG_MAX_BUF)
+> -	 */
+>  	for (int i = 0; i < 6; i++) {
+> -		arg = (void *)args->args[i];
+> -		augmented = false;
+> -		size = beauty_map[i];
+> -		aug_size = size; /* size of the augmented data read from user space */
+> -
+> -		if (size == 0 || arg == NULL)
+> -			continue;
+> -
+> -		if (size == 1) { /* string */
+> -			aug_size = bpf_probe_read_user_str(((struct augmented_arg *)payload_offset)->value, value_size, arg);
+> -			/* minimum of 0 to pass the verifier */
+> -			if (aug_size < 0)
+> -				aug_size = 0;
+> -
+> -			augmented = true;
+> -		} else if (size > 0 && size <= value_size) { /* struct */
+> -			if (!bpf_probe_read_user(((struct augmented_arg *)payload_offset)->value, size, arg))
+> -				augmented = true;
+> -		} else if ((int)size < 0 && size >= -6) { /* buffer */
+> -			index = -(size + 1);
+> -			barrier_var(index); // Prevent clang (noticed with v18) from removing the &= 7 trick.
+> -			index &= 7;	    // Satisfy the bounds checking with the verifier in some kernels.
+> -			aug_size = args->args[index] > TRACE_AUG_MAX_BUF ? TRACE_AUG_MAX_BUF : args->args[index];
+> -
+> -			if (aug_size > 0) {
+> -				if (!bpf_probe_read_user(((struct augmented_arg *)payload_offset)->value, aug_size, arg))
+> -					augmented = true;
+> -			}
+> -		}
+> -
+> -		/* Augmented data size is limited to sizeof(augmented_arg->unnamed union with value field) */
+> -		if (aug_size > value_size)
+> -			aug_size = value_size;
+> -
+> -		/* write data to payload */
+> -		if (augmented) {
+> -			int written = offsetof(struct augmented_arg, value) + aug_size;
+> -
+> -			if (written < 0 || written > sizeof(struct augmented_arg))
+> -				return 1;
+> -
+> -			((struct augmented_arg *)payload_offset)->size = aug_size;
+> +		written = augment_arg(args, i, beauty_map, payload_offset);
+> +		if (written < 0)
+> +			return 1;
+> +		if (written > 0) {
+>  			output += written;
+>  			payload_offset += written;
+>  			do_output = true;
+> -- 
+> 2.54.0
 > 
-
-
-Acked-by: David Ahern <dsahern@kernel.org>
-
-
