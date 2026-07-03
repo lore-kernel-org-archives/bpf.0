@@ -1,105 +1,123 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC8113DCD98
-	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 14:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08833DCD95
+	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 14:15:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783087894; cv=none; b=uZ6jBSwNa2TzShpFLXiuJQZzzz8NLz8K9/qPqfamezhka70NdRVHoI23t9Mot/mANsvMMvoh53xhbQXNUS1vO92DRfMf2Wd+w4jLQv1y+fvPaO1yGVE3CPvSxAjih10rD82H58yWbhyj2O6cPtTCM/ZHcu427HPh7qSvUvvoOxM=
+	t=1783088121; cv=none; b=WobhwPs1j+K0QetHaZBw+tB08juoM9f4P2Y922VUMhtYwkf3E7DW57IAgbYtYHHRbZVuKZCj+P2z883Yh7T245WXSK9+m5JcYQdNALSfQR8RcbbIGalhDr6RvkchUjp9ORaSvjz0PF5+6O8VNgZUqaHh3OwRMgH0nWRlH0bV+Nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783087894; c=relaxed/simple;
-	bh=rIV9RsnsSZDUK1q1Nd3LKY8epaIDzY11eLnwBM/DcUw=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aTFtstOjylQzEraMg0j7RSkPfUibu2Qjsh9Q35wU+J75mlb7Fux4dOT2wEl4AaCtDKcIDX9MI8Htpl/Gqs/W7/dy9VUzI/C3eST5wyFjn3VcZ9KfDOHRJJCFb8tiVt0SnQ/6YNoEz3nVyCD7w+pYWDbYn7djzHH0X81kgpq7emY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VafHTFi4; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783088121; c=relaxed/simple;
+	bh=TS9PfMuVvpQaG0ClF+suZAUnUuSUBbAn8MmbL2i8tFo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IAMZm+YZwUUx3EyqWOFc5YLHejvumSPrSbhmxzejSNZd/4frJvkfXX8zUJw89gmGd2Gr2sB6Geymf6wr1AbB3RVULMEYfgF68mB841wgXbhp/m6UnxlSojhELL7SL9TZmEAw0zTggpv+DJ9iMaUds2qzCbdX22E9Hdi0fUQNi80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hpSWupzq; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VafHTFi4"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-493c7902f47so3944615e9.1
-        for <bpf@vger.kernel.org>; Fri, 03 Jul 2026 07:11:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783087891; x=1783692691; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QPgd2/au/1j1zvelBc/TbSy2FLXI5cvkqsoiJq1KpPY=;
-        b=VafHTFi4KbMh7Afv9tT4M7SYkyQreMoN09GQqNbtex1LJNt7EUpEwYNe4qm4WKIohF
-         sHQt1SlDf8dC+fpdDA5mHkPscZUMdtRWiNAmGa5xOlv9fIvy1teITtKBnFto+2a5jFA9
-         idWBiaTmBS0wGqBKHEtPy2ndBRmGHASgxl5c1vxqPIH8OnHfBOvL0dZEVFHrfJ/DZv5C
-         1831XNSnxEU81yri+hSd6NdEV5qsW3UPSn7QipViwl6VOu+T7gG8WLOuY2bU2Zlz4woq
-         UIY1bEgajbUhYJ3i+gCWtgWwZ6NqF5UJg0dQY1wZgzRpLCalcSHSJQTxzNYN+1mZFCg1
-         cCQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783087891; x=1783692691;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QPgd2/au/1j1zvelBc/TbSy2FLXI5cvkqsoiJq1KpPY=;
-        b=OiCX7OGC3I3M7HPicKlz4CljPt1tNaUO6y/6RLVntbli9KR+kM9EXulG/VBTBYLqxm
-         WYqHEXexI5HePEOoHMYHJfd7I6rudnW4bQa67bDDLft4qKFfif2mScm6vzLB0xIKo8CB
-         Au2OuiwNZKI/I7m2Pfoh0vIUjPufZFvU4UcEIcXcpArhddbLUtVVk8myyuDbfzTr7wlp
-         E/FAS6aWUkSSlCyC5FxwCjUrypVrJx3ax7ZfGds7Q4f/+ez107u1iT401dIwe69Kdgu1
-         tBATTRmpYb16y9acGZr4STsoysXCmiZTkY+a1oqNuf9C6rUazI08HQNgtdrqHkncgHdK
-         eAhw==
-X-Forwarded-Encrypted: i=1; AFNElJ8hlPuiJ3MAsgyj+KdC8PhkGtgpM3n+qamx/Q84+FaatCzWuLBf0OXVpuMogOeYJqoTZ3M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/G7kXY9wYPzBToBO8rpp/DnRyl6ttLS1dNQtUkyAS1HxF4mEn
-	d/Sq+Is8BS7bd7Q6ol8qHsAaSY5sllnzoT/BR0s6qwb0ZIegG3X//KOn
-X-Gm-Gg: AfdE7ckARuMvVDR5r0z87gSltYbWXXwGxdgXIiqbieCZiru0bhHa/K23p5DmW40aBdr
-	su7u2Ph9d97tObkjchQPRkOgImuVbFykJP8Sbt/GiAphorMW/wlnmCsnPd8naswABwc+mS40uP9
-	QOZzG4SyYS4jScaVTK7f/EbXCGyrICEVjeRtHr7NrU0LavMd+9pAV4TM3jVyN16d+nDw+sVO4xs
-	0868IFQYYyMw0O0rX3s3lRbW9YN82bjB6A9XjIH4+QPQM8jNslTyM/ze1pnRA7jbZns4qjv+w7x
-	5Bg6adgY/XZv32GcEXe0vMxlLrMKi/81WmzplW8md8H7/n+9Y3JPEUsmHfegto3kJ17LP36i7Wf
-	4LDdVvgHKNuTAkjchIJqGMicUk9TboR5T8A4k6InL5+AmmKHh3oPYExrHXqL8fte4tJfvi7utcn
-	Vs0EqTw5cNFMtzXVnLR4p01uSTyVLLmwm+8mE=
-X-Received: by 2002:a05:600c:8716:b0:490:c024:2ec8 with SMTP id 5b1f17b1804b1-493d0de258amr1138135e9.0.1783087890966;
-        Fri, 03 Jul 2026 07:11:30 -0700 (PDT)
-Received: from krava (37-188-223-191.red.o2.cz. [37.188.223.191])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493c6381e4fsm157919945e9.8.2026.07.03.07.11.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jul 2026 07:11:30 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 3 Jul 2026 16:11:26 +0200
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Oleg Nesterov <oleg@redhat.com>, Ingo Molnar <mingo@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCHv6 03/13] uprobes/x86: Do not leak trampoline vma mapping
- on optimization failure
-Message-ID: <akfDDundFgxkIt9j@krava>
-References: <20260703114917.238144-1-jolsa@kernel.org>
- <20260703114917.238144-4-jolsa@kernel.org>
- <20260703124503.GP751831@noisy.programming.kicks-ass.net>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hpSWupzq"
+Message-ID: <ed816369-e1f6-47aa-9532-5f3ccf6d6794@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783088106;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=X7Kybu0lGe03pYWCZKIx76wa/pKwq+CCmvTJJYIikvI=;
+	b=hpSWupzqK9dmwGJ2MmTfaCrzzpG18CooPtfEtRarBF4VrGv3BprLoqeRFzjzod6uz+RdVd
+	PoCgq3P9owt7LP+ObC9MNGSpye69k/ZfXb2qW8zcxk+se7vqyA3/ol6215l5Vxs7D2/X8V
+	o7Mhw/88Qlagt7NMGnUUxySJMA22U7k=
+Date: Fri, 3 Jul 2026 22:14:57 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260703124503.GP751831@noisy.programming.kicks-ass.net>
+Subject: Re: [PATCH bpf-next v7 1/2] bpf: Introduce jit_required flag and
+ refactor kfunc path
+To: Tiezhu Yang <yangtiezhu@loongson.cn>, sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ KaFai Wan <kafai.wan@linux.dev>
+References: <20260702143656.28845-1-yangtiezhu@loongson.cn>
+ <20260702143656.28845-2-yangtiezhu@loongson.cn>
+ <20260702145855.07C6B1F000E9@smtp.kernel.org>
+ <7cce1695-eaa2-816b-2877-9cb2f117aa27@loongson.cn>
+ <42e59c6f-5040-4b50-91ce-10066551a32c@linux.dev>
+ <c6aca1e2-1f7a-7e01-62c8-81d0658a20fe@loongson.cn>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <c6aca1e2-1f7a-7e01-62c8-81d0658a20fe@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Jul 03, 2026 at 02:45:03PM +0200, Peter Zijlstra wrote:
-> On Fri, Jul 03, 2026 at 01:49:07PM +0200, Jiri Olsa wrote:
-> > In case the optimization fails, we leak new-ly created trampoline
-> > vma mapping (in case we just created it), let's unmap it.
-> > 
-> > Fixes: ba2bfc97b462 ("uprobes/x86: Add support to optimize uprobes")
-> > Reviewed-by: Oleg Nesterov <oleg@redhat.com>
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+On 2026/7/3 14:59, Tiezhu Yang wrote:
+[...]
+>>> ```
+>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>>> index f496b45b9da4..1f5824c1c691 100644
+>>> --- a/kernel/bpf/verifier.c
+>>> +++ b/kernel/bpf/verifier.c
+>>> @@ -2772,7 +2772,7 @@ int bpf_add_kfunc_call(struct bpf_verifier_env
+>>> *env, u32 func_id, u16 offset)
+>>>
+>>>   bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog)
+>>>   {
+>>> -       return !!prog->aux->kfunc_tab;
+>>> +       return prog->jit_required && !!prog->aux->kfunc_tab;
+>>
+>>
+>> When 'prog->jit_required' is used for JIT-inlineable helper call, this
+>> change could also cause false positive for the above pruned kfunc case.
+>>
+>> If you don't want bpf_fixup_call_args() rejects the program with -EINVAL
+>> for the pruned kfunc case, suggest moving 'if (!func_id && !offset)'
+>> before the tab allocation in bpf_add_kfunc_call().
 > 
-> What is the intention here? That is, Patch 1 has a Fixes and is already
-> in tip/perf/urgent (from v5), patch 2 does not have Fixes, this patch
-> (3) has Fixes and appears to rely on patch 2.
+> How about this:
 > 
-> So should I stick both 2,3 into perf/urgent or what?
+> ```
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 25aea4271cd0..c34cc524651a 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -2770,7 +2770,7 @@ int bpf_add_kfunc_call(struct bpf_verifier_env
+> *env, u32 func_id, u16 offset)
+> 
+>  bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog)
+>  {
+> -       return !!prog->aux->kfunc_tab;
+> +       return prog->aux->kfunc_tab && prog->aux->kfunc_tab->nr_descs > 0;
 
-patch 3 fixes the vma mapping leak, and it is done on top
-of bigger change in patch 2
 
-I think we are ok without patch 3 in perf/urgent, but if we
-want to have it there, it needs patch 2
+NIT: drop '> 0'
 
-jirka
+Looks better.
+
+>  }
+> 
+>  static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
+> ```
+> IMO, there are no side effects for the following four cases:
+> 
+> 1. Pure JIT-inlined Helper
+> 2. Pure Pruned kfunc
+> 3. Pruned kfunc + Inlined Helper
+> 4. Active (Unpruned) kfunc
+> 
+
+This change allows pruned kfunc + interpreter fallback and pruned kfunc
++ bpf_fixup_call_args(), when CONFIG_BPF_JIT_ALWAYS_ON is off.
+
+Does it look like a pre-existing issue?
+
+Pls read "Support kernel module function calls from eBPF" [1] to
+understand the background of introducing func_id=0 kfunc.
+
+[1] https://lore.kernel.org/bpf/20211002011757.311265-1-memxor@gmail.com/
+
+Thanks,
+Leon
+
