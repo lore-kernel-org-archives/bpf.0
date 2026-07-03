@@ -1,122 +1,195 @@
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2F92EEE83
-	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 16:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783095030; cv=pass; b=RYvFU/hOxjbTZ7IgSJH1F/PjP0USpKiF6gftgjGGkhxBlBdKKKJ/9ClwmzSRpBlzeh8Nhavw5Um66jKUkIcYLycpDSvFhBaQin4BwRZYVOO4wqxoKQkmcOxxTmxy1shb7869gdsZlN+5vOy/eenDYnbozpSVHkvrL3ans6OvhOY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783095030; c=relaxed/simple;
-	bh=xT/W1+CiZkDKLa+FnudJAe36lqY2hX16tIX2AHkVVoA=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=H+FlnYMqdG5xvrB6Mx/UaklEJIO2ft5oPsxIweqq/URyhrNpznuhULdNcr18+mZNuLOQ55jkYoQ0bYDBHyHGIAdIzGaUG53/KS33ifgRfB3o+Vy66h6R2qBnnbLmgOx3Qct4VSX4ZQFtNslLZqoM3QYdRp3Q0TJAfR+8+6T7qkI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=coralogix.com; spf=pass smtp.mailfrom=coralogix.com; dkim=pass (2048-bit key) header.d=coralogix.com header.i=@coralogix.com header.b=OGPXOgjn; arc=pass smtp.client-ip=209.85.221.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=coralogix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=coralogix.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=coralogix.com header.i=@coralogix.com header.b="OGPXOgjn"
-Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-5bd745cf7c7so198387e0c.3
-        for <bpf@vger.kernel.org>; Fri, 03 Jul 2026 09:10:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783095028; cv=none;
-        d=google.com; s=arc-20260327;
-        b=TBSb2BdorjPAGY35P5CGw24Hu8ucG0Kiug36WHmql60H3IpGDSU1V7oN8wZuD+XbK8
-         TTnoLSI+DZr6rvMy5NnB+kDJtQPBF4GuJtdywmiNWtDPURDzK0TliD8VtXgh/Q6POD/D
-         ZiQrx0Mv+NgFSBu974IIJjrFamVOQa3FJ5M2EzLDNmjiGJxnVQD0ZuPLAlB9AQUuNWkg
-         kJRlcn0PHjXWZF+tjo2WQ706TEEDM0aeI+O5MkBUVr72Ley84qAsHuJF4k/T8HseuA9Y
-         XynnpxhXuHH4Vx+jUw/KfwILNet489za/JXifnxaP56PAT8Hf+O0l3OEccj1JyarB7bE
-         EdGA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=gm26QgpnvRtdkKGeFLWfs6QgocR5OAy7gnfY6eH1ivM=;
-        fh=qp7E4f5n0u6cegU9kZtEgcrF+sB11K4/mgAjvmRT6S8=;
-        b=YRFeqjLcjYjHy5j42ApC2BZPl5JZgTwo8WqV8xs0pr7FQg+pzEPhMKqzf+uN1qJpn9
-         P3ZG6vJsxFamux4z7UPEypX+TeZnUXVD4mmKPGueLPjRNVCCPxGgitytwkGdI/dkBonZ
-         HpZNPOCeoc7+H6yI9Xif2w2dcqT5Y9L2QR44NPzg8ZjOX6tqDD3JWx3x2Xpi1FFc6An7
-         FkwtIDGfToVsKiprzFGOJ6MNBbUUt7d5riXcSGu5ZoI3XZuxO8eJJgkiFQyy0MVVFAC4
-         EH3hJb35HaRWq7x1aNKaeH3Zdc7MMkzhGlR05DtOcwf3brdGwgrQmPrKS1RzdzkyTL2p
-         FH7Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=coralogix.com; s=google; t=1783095028; x=1783699828; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gm26QgpnvRtdkKGeFLWfs6QgocR5OAy7gnfY6eH1ivM=;
-        b=OGPXOgjn1pf5lz6XfYUA6oJtbp+WaHDf/ry2adx3Wd/NQL21ZXABVNY3kcqFqWE+l3
-         V3oeAONwSqw0yvynZLdbHjU25A89/4NS7vTgwjL39/J0FGHvO8NgbY7NL8XtpnX4jgVG
-         MEC6v+uEo2Vw42nxgE6bkYCCUiMv5s+vi2KMHZPpR5m/adnkbFmyLvmW4QClk6YgAJys
-         SWivxiSYsQcKWrEWP2jvuj413WImJ93cRq6H5coB4gHJHg8HZ1/nefqkaCLHpaHy3xTN
-         FoTGpCmOBNQ1OL0c9CUMM9BgHd8N5eGE6nGGyMeX8kCwv9v7uce1/BIf4DklDfz8FATU
-         ayTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783095028; x=1783699828;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gm26QgpnvRtdkKGeFLWfs6QgocR5OAy7gnfY6eH1ivM=;
-        b=lyYWuQCJSQmHHyy/jxFS6CCjM7SLCb28hkX9ymbG7m5LihicNSZ6FSxavMOfJkvTni
-         TKzwzHwAy+AYAcaiQcB/EK8xJIXzMMjMNxCVGHxz8653Cy0iL2XBVEqOOm1BBbPwBitK
-         Ve0DFYqiv2+zx4LjhpTw9xGc3NK/1vMiKsL7SHMpM+l0XBaio+keknf8DZkgxLMElaGU
-         SMvlESnvkhH4bvR5TYO/qVQmGv8ulUFrW0YTIy6P+gAuU2BD7tV8sgjJo6BB8keLTmuI
-         zUk9QDq/lJJ6QkfJolhHfLmE3vthknGv+pYy+OwPJZFZadaISeBkr2o0HnhiT2L6Jbdx
-         p2Nw==
-X-Gm-Message-State: AOJu0Ywhs+OEKErTm+VYoyRxtnB2CliAG9Tt4QppR8ZHeh0CjIOUNl0O
-	pCEo2F5A70lS8fVd9rziJoC27TN/UoGel5ixDxXEUluDzAaCH3GvszTVUyd26pDxMDxwrw5Fl65
-	xQ0UBSM2D1q2inQsiiFHiF3uVw+7U9M1Tm3HNQR7AjU3UBxkVIcukCKDVa2Hb
-X-Gm-Gg: AfdE7cnaWuanubAlan+V1Iw3LFToS64wXrmxRj8/Azyrxd14zcg8CM+/mW2LrcrI1Ee
-	BpcyCCVfsD0ynJtBj/bLMVCSBsEmsWZaSrNnZN1fAthqhPSxy6C8ylKjc9ZPSfNmkEFepDofDow
-	L/W+R908PwRZPox8QBMQi/azgAs8UqIpO44k3bCtsnSFZOPZE10ZjXRVF9wPO9ihhTZHqWsM4YH
-	CkljYmtJVx5udyZ8k4qEqlv80nXrTtrz8EFB5GrtU2+//Fsn28mpgOrfgfpMvjB5LACUEzbVw==
-X-Received: by 2002:a05:6122:4892:b0:5a4:ac74:f5ba with SMTP id
- 71dfb90a1353d-5be1025e3ccmr107911e0c.11.1783095028060; Fri, 03 Jul 2026
- 09:10:28 -0700 (PDT)
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED81F1D9A5F
+	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 16:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783095272; cv=none; b=bYdlpCuCCmxqjAJ2llpnE2GXeck9x26M4pVC7etPOglSP5PKhmD5rqcggzVFMVgx7qiZCjkm3RJcsmPrwJPpWV8yPS8iDfvwDZ8PU/sO02Jrp+hFnP9hm/psDFYWJVscRnRWLEhv0OOz3817khflXY4cAha3Lceh62j/oIo4CQs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783095272; c=relaxed/simple;
+	bh=7w/X1cc13jwOkMFd7WkIJ0IZogAONd76gWlycTImxpM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PRWH82ijIe1Qs8PF+3aTDLfYssl9Ok2D45rpR06vs6uTAOcUY8xPUrKSeFHzgzv5csPhBEtvyOCQIjVmHv3Hn3IdavtWo2abZ+NsZvmFGAw0biFByrXfUEsbKt1Y6OX5beL8QoVqhidd+z9MXmBZ79PB3ZMM7kK+0lWNhtGk8Ms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [36.44.120.111])
+	by gateway (Coremail) with SMTP id _____8DxOPLi30dqiGUBAA--.7395S3;
+	Sat, 04 Jul 2026 00:14:26 +0800 (CST)
+Received: from [192.168.0.111] (unknown [36.44.120.111])
+	by front1 (Coremail) with SMTP id qMiowJBxacHe30dqDju+AA--.19487S3;
+	Sat, 04 Jul 2026 00:14:25 +0800 (CST)
+Message-ID: <2d1babdf-a4d9-9902-77b0-3f5640871323@loongson.cn>
+Date: Sat, 4 Jul 2026 00:14:28 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Mattia Meleleo <mattia.meleleo@coralogix.com>
-Date: Fri, 3 Jul 2026 18:10:16 +0200
-X-Gm-Features: AVVi8CeAWA_f68Kki9hfUbY5C4CtuCmcJbPuxzmZ-mdiwT2SUSQ6DXPA9ual2KM
-Message-ID: <CAOvpEWN6xgFx4GWFnnWLGCB+_1auDcAZPYPSv1PDu3UfXkcriw@mail.gmail.com>
-Subject: bpf, sockmap: FIONREAD returns 0 for TCP sockets in a sockmap without
- a verdict program
-To: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org, 
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "jakub@cloudflare.com" <jakub@cloudflare.com>, jiayuan.chen@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH bpf-next v7 1/2] bpf: Introduce jit_required flag and
+ refactor kfunc path
+Content-Language: en-US
+To: KaFai Wan <kafai.wan@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, loongarch@lists.linux.dev,
+ Leon Hwang <leon.hwang@linux.dev>, Puranjay Mohan <puranjay@kernel.org>,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+References: <20260702143656.28845-1-yangtiezhu@loongson.cn>
+ <20260702143656.28845-2-yangtiezhu@loongson.cn>
+ <ba5679e744e0209ca10788c2c385c6727eddb8a5.camel@linux.dev>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+In-Reply-To: <ba5679e744e0209ca10788c2c385c6727eddb8a5.camel@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJBxacHe30dqDju+AA--.19487S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxZr4xtw43Ww17KrWUuF1UXFc_yoWrurykpF
+	ykGasrCF109r409F9rJF48ZrW5t3W0kr17Kry8Kry09r1qgw1vga48G3sxZa9Yqr4vkr10
+	vF9FvrWUt34UZFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUP0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Jr0_Gr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
+	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1D
+	McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7
+	I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCF
+	x2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r
+	1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij
+	64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+	0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+	0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8HKZJUUUUU==
 
-Hi,
+On 7/3/26 21:55, KaFai Wan wrote:
+> On Thu, 2026-07-02 at 22:36 +0800, Tiezhu Yang wrote:
+>> Introduce a 'jit_required' bitfield flag at the end of the
+>> flags group in struct bpf_prog. This bit tracks whether a
+>> program strictly requires the JIT compiler.
+>>
+>> Set this flag to 1 when a kfunc call is added at the end of
+>> bpf_add_kfunc_call().
+>>
+>> In __bpf_prog_select_runtime(), check with fp->jit_required
+>> rather than bpf_prog_has_kfunc_call() to unify the logic.
+>>
+>> Suggested-by: Alexei Starovoitov <ast@kernel.org>
+>> Suggested-by: KaFai Wan <kafai.wan@linux.dev>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>   include/linux/bpf.h   | 3 ++-
+>>   kernel/bpf/core.c     | 3 +--
+>>   kernel/bpf/verifier.c | 2 ++
+>>   3 files changed, 5 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>> index ba09795e0bfd..4e2b059d71f3 100644
+>> --- a/include/linux/bpf.h
+>> +++ b/include/linux/bpf.h
+>> @@ -1880,7 +1880,8 @@ struct bpf_prog {
+>>   				call_get_func_ip:1, /* Do we call get_func_ip() */
+>>   				call_session_cookie:1, /* Do we call bpf_session_cookie() */
+>>   				tstamp_type_access:1, /* Accessed __sk_buff->tstamp_type */
+>> -				sleepable:1;	/* BPF program is sleepable */
+>> +				sleepable:1,	/* BPF program is sleepable */
+>> +				jit_required:1;	/* program strictly requires JIT compiler
+>> */
+> 
+> In v6 you're using 'u8 jit_required', I thought it would be 'u8 jit_required:1', so we use one byte
+> and left 3 byte hole for future use.
+> 
+> This version left 2 bytes hole, same as v5, but it can easily be misleading because of the u16 type,
+> since we used 17 bits. I prefer v5, it has better readability.
 
-in OpenTelemetry eBPF instrumentation we use a sockhash to track
-outgoing TCP sockets for trace context propagation. Sockets are added
-from a sock_ops program, and the map only has an sk_msg program
-attached on the egress side - there is no ingress verdict program.
+OK, I will use the previous layout in v8, like this:
 
-Since commit 929e30f93125 ("bpf, sockmap: Fix FIONREAD for sockmap"),
-ioctl(FIONREAD) returns 0 for these sockets even though read() returns
-data. tcp_bpf_ioctl() answers from psock->msg_tot_len, which only
-accounts for bytes in ingress_msg. Without a verdict program, data
-never lands there: it stays in sk_receive_queue and is read through
-the tcp_bpf_recvmsg() fallback, so FIONREAD always reports 0.
+```
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index ba09795e0bfd..463fae6a5c33 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1865,8 +1865,9 @@ struct bpf_prog_aux {
 
-The commit message explains that sk_receive_queue is intentionally not
-counted because a verdict program may redirect or drop its contents.
-Without a verdict program, however, all of that data is readable, and
-applications that use FIONREAD to size their reads (nginx, Java, .NET)
-hang or truncate transfers once their sockets are in the map.
+  struct bpf_prog {
+  	u16			pages;		/* Number of allocated pages */
+-	u16			jited:1,	/* Is our filter JIT'ed? */
++	u32			jited:1,	/* Is our filter JIT'ed? */
+  				jit_requested:1,/* archs need to JIT the prog */
++				jit_required:1, /* program strictly requires JIT compiler */
+  				gpl_compatible:1, /* Is filter GPL compatible? */
+  				cb_access:1,	/* Is control block accessed? */
+  				dst_needed:1,	/* Do we need dst entry? */
+```
 
-Observed on mainline and on 6.12.75+, 6.6.128+, 6.18.14+.
+> 
+>>   	enum bpf_prog_type	type;		/* Type of BPF program */
+>>   	enum bpf_attach_type	expected_attach_type; /* For some prog types */
+>>   	u32			len;		/* Number of filter blocks */
+>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>> index 649cce41e13f..5fcd19ccb41a 100644
+>> --- a/kernel/bpf/core.c
+>> +++ b/kernel/bpf/core.c
+>> @@ -2619,8 +2619,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env,
+>> struct
+>>   	if (fp->bpf_func)
+>>   		goto finalize;
+>>   
+>> -	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
+>> -	    bpf_prog_has_kfunc_call(fp))
+>> +	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) || fp->jit_required)
+>>   		jit_needed = true;
+>>   
+>>   	if (!bpf_prog_select_interpreter(fp))
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 25aea4271cd0..f496b45b9da4 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -2765,6 +2765,8 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, u16
+>> offset)
+>>   	desc->func_model = func_model;
+>>   	sort(tab->descs, tab->nr_descs, sizeof(tab->descs[0]),
+>>   	     kfunc_desc_cmp_by_id_off, NULL);
+>> +
+>> +	env->prog->jit_required = 1;
+> 
+> That's ok, and I think Sashiko is right about this patch.
+> 
+>>   	return 0;
+>>   }
 
-Reproducer: https://github.com/mmat11/fionread-repro
+As discussed in another thread, I will update bpf_prog_has_kfunc_call()
+in v8, like this:
 
-  pre-insert     FIONREAD=4096 (expect 4096) OK
-  in-sockhash    FIONREAD=0 (expect 4096) BROKEN
-  post-delete    FIONREAD=4096 (expect 4096) OK
+```
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 25aea4271cd0..c34cc524651a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2770,7 +2770,7 @@ int bpf_add_kfunc_call(struct bpf_verifier_env
+*env, u32 func_id, u16 offset)
 
-Is this intended for psocks without a verdict program? If not, would
-falling back to tcp_inq() (plus msg_tot_len) in that case be an
-acceptable fix? Happy to send a patch and test it.
+   bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog)
+   {
+-       return !!prog->aux->kfunc_tab;
++       return prog->aux->kfunc_tab && prog->aux->kfunc_tab->nr_descs;
+   }
+
+   static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
+```
+
+IIUC, there are two places to modify so far:
+(1) struct bpf_prog
+(2) bpf_prog_has_kfunc_call()
+
+If you have any more comments, please let me know.
 
 Thanks,
-Mattia
+Tiezhu
+
