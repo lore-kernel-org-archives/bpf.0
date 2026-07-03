@@ -1,69 +1,103 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A7F53D1A97;
-	Fri,  3 Jul 2026 12:45:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE8173B2FD8
+	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 12:54:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783082710; cv=none; b=gZGEqBC9MAD54nhdvuMoz62WsNg18Xap7i1twNy1YjyFfcAiVBOS15/8qGSs1lJg/gkEZSb0U5abQkwTqrMp8C/N8zMR/glqzW4t6SUp/CJpt1UpmljvHQ4IjFY82pIzqgRvCYvcFQ4wRBsygG8ybSg8u+UhW6HkFv/vC26MzCw=
+	t=1783083260; cv=none; b=Mjz5FNYFl9t5YJ4OtVa+p+nHiTGW0qMTUX35ToxA/d/hvNH0WHv7QKgkb2oR3xzIznAgKWE6R7Ex6EDMkv+xLNX1fsNYsCrVOvYL6MHaDOF3eeWAyyH5nClrWi29WSdk0thvckH5dX2v3tuo18tpZAH+VOIhJXV3o4aRZawblNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783082710; c=relaxed/simple;
-	bh=SwU4aFqG6SLwp3Rx7eIm5MyWOYcFI0GvCVSGHjrnTXU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u6uUEOJKcEajn5mIjjVJWvKZg4Twb1uClKpAM6b3dLzXeCG2iTTaa/9t5qOCbmABgOcd6el8c4cig0x0gZtvgWnJWaY2TsGvSjXnG+D3gohxmoy9tNXLhIqrYgrvtqdqdf4//qDG6MvIkfzhx1jFd8TuU/bBGQ5WbhEIvYnCJTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=JkPS8diF; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1783083260; c=relaxed/simple;
+	bh=uqGZwy2bKlDXwy2jVhl36f0qmPXX0hv7kk/8RotZ/yA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=BY6R4rrRAuRdCkN2Ci46IDz+LgCGW0mV/SXovr5Nvi6RExm0rt0oA1INTdEEVJT4BJxuQ2HdkJoh8uXBANkarvxWc1WYSoMGPj+Btu/utwH0InVL4l2j56KRysIIiV2WfrUMG26LHdBlO/+JKPZNNbbiYWLdfpqj4azfttIrRfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=duz7a4Bc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="JkPS8diF"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=HA4YQ+OERYRDsxgWBX7o87h2z1rSrQXVR5NxmKLrZNI=; b=JkPS8diFHhiVc5FHItcbWPHQvJ
-	wQt3AYqZUe0dwzen6jp+LxPON7pbTb3z3FVnAqhEfv9ZQ/Y/inz6L4Fu9mIBxMCS+XhPsUq79+Y5R
-	44WKYPTQdtq3dHsU7LdZDa6caJxXQMJnbc7gGgZnqAvdd/EeA0QxIspWMO+Qq+wrf7/demciH+7S+
-	k+PQfTDPKtDOsSYofRRlmuftteACsXXAqA8WijAi/r/SfJ4bRcj9CIs0DDCI4eOj6613qJ+oRDapr
-	dGhTJPwTSvM7njOVf5esIexOPvwXhqRhZrHAw/i1F065uyOyp9htkL/VnzQ2WXB7kZhADBa8Gdnex
-	iUnBmTyw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wfdGS-0000000AJpK-3V3i;
-	Fri, 03 Jul 2026 12:45:05 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id D0B1B300220; Fri, 03 Jul 2026 14:45:03 +0200 (CEST)
-Date: Fri, 3 Jul 2026 14:45:03 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Oleg Nesterov <oleg@redhat.com>, Ingo Molnar <mingo@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCHv6 03/13] uprobes/x86: Do not leak trampoline vma mapping
- on optimization failure
-Message-ID: <20260703124503.GP751831@noisy.programming.kicks-ass.net>
-References: <20260703114917.238144-1-jolsa@kernel.org>
- <20260703114917.238144-4-jolsa@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="duz7a4Bc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 573231F000E9;
+	Fri,  3 Jul 2026 12:54:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783083258;
+	bh=TWE+Y0CPhYP/4rukQPBGRLIHyNQYPzfSXBEDvxQEbZ0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=duz7a4Bc0ZpyyZBVyXGt4jZ/TH2G0VFP/RdrrO4I6i/kPpYiGwmo3Kr032I1kTQVS
+	 dD5AT4g6PrjiLOGGAnATJlUriAUODE3ctE4fQCu0SX+cDaE8frEmZATK0B/IOr1+PP
+	 spCIuI3AfPfF2RepyWtp+Z6fjXY2MbzDeMN05leJtAyuixmJBmVwObmqsnaw4b2NQk
+	 S0pNDKaBZljDRcxFonlE+L5HiLO0u4wy9M7JNXegsg6yRHPiAd3ED7CzNjSNXFoh4w
+	 /xTd2zBudccZanU5kd7h6cA4Lzgzx4dMqKX2hs92eiFzvKbV1QKWdYT1SV6crpxiCf
+	 TeUjPUa4EGDOw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v8 3/3] riscv: store percpu offset into thread_info
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yunhui Cui" <cuiyunhui@bytedance.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260703122832.15984-4-cuiyunhui@bytedance.com>
+References: <20260703122832.15984-1-cuiyunhui@bytedance.com>
+ <20260703122832.15984-4-cuiyunhui@bytedance.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 03 Jul 2026 12:54:17 +0000
+Message-Id: <20260703125418.573231F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260703114917.238144-4-jolsa@kernel.org>
 
-On Fri, Jul 03, 2026 at 01:49:07PM +0200, Jiri Olsa wrote:
-> In case the optimization fails, we leak new-ly created trampoline
-> vma mapping (in case we just created it), let's unmap it.
-> 
-> Fixes: ba2bfc97b462 ("uprobes/x86: Add support to optimize uprobes")
-> Reviewed-by: Oleg Nesterov <oleg@redhat.com>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Missing initialization of `pcpu_offset` in `arch_cpuhp_kick_ap_ali=
+ve` causes secondary CPUs to use the boot CPU's per-cpu data during early b=
+oot, leading to memory corruption.
+--
 
-What is the intention here? That is, Patch 1 has a Fixes and is already
-in tip/perf/urgent (from v5), patch 2 does not have Fixes, this patch
-(3) has Fixes and appears to rely on patch 2.
+commit cfb659978a0a1c24330d1d94b1f3e36871d66657
+Author: Yunhui Cui <cuiyunhui@bytedance.com>
 
-So should I stick both 2,3 into perf/urgent or what?
+riscv: store percpu offset into thread_info
+   =20
+RISC-V percpu addressing currently derives the base offset from the CPU
+number and __per_cpu_offset[]. Cache the current CPU percpu offset in
+thread_info so percpu accesses can load it directly. Keep the cached value
+up to date for the boot CPU, context switches and secondary CPU bringup.
+
+Link: https://lists.riscv.org/g/tech-privileged/topic/risc_v_tech_arch_revi=
+ew/113437553?page=3D2
+
+> diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+> index f6ef57930b50a..7876854d16279 100644
+> --- a/arch/riscv/kernel/smpboot.c
+> +++ b/arch/riscv/kernel/smpboot.c
+
+[ ... ]
+
+> @@ -191,6 +191,7 @@ int __cpu_up(unsigned int cpu, struct task_struct *ti=
+dle)
+>  {
+>  	int ret;
+>  	tidle->thread_info.cpu =3D cpu;
+> +	tidle->thread_info.pcpu_offset =3D per_cpu_offset(cpu);
+> =20
+
+[Severity: High]
+Does this code also need to update arch_cpuhp_kick_ap_alive() for the
+CONFIG_HOTPLUG_PARALLEL case?
+
+If CONFIG_HOTPLUG_PARALLEL is enabled, secondary CPUs are booted via
+arch_cpuhp_kick_ap_alive() instead of __cpu_up(). Because the idle thread
+is forked from init_task, it inherits CPU 0's pcpu_offset.
+
+Without initializing tidle->thread_info.pcpu_offset in
+arch_cpuhp_kick_ap_alive(), the secondary CPU will start executing with
+CPU 0's per-cpu offset.
+
+Any per-cpu access before __my_cpu_offset is explicitly re-initialized
+in smp_callin() will concurrently modify CPU 0's per-cpu state without
+locking, which could lead to memory corruption.
+
+>  	ret =3D start_secondary_cpu(cpu, tidle);
+>  	if (!ret) {
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260703122832.1598=
+4-1-cuiyunhui@bytedance.com?part=3D3
