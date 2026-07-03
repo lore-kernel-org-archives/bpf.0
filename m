@@ -1,229 +1,113 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E2D25228D
-	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 03:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 940973264CB
+	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 04:14:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783050724; cv=none; b=t08AxMngbR+GprPX70hYk+HaEMQMr7YJyTPbjkILPrK6vcWIpCsGumQR9GvGTrpm4eZvn1DS8ZmwcpmKLTYVgasXxGcYP79tnTRMRbETL4G4Xrw5o5U8x+HUsBKOv+sb5gHM81pcs9McaZdBXndCuxjByskh/Cfq8A1BWm95MKQ=
+	t=1783052068; cv=none; b=kQjj7ygzMrLwJOTY5F4metnTrBV6YvMzGndmnWaks3IilWUkosZhSAx6mkXeSxtFswqA0yYtNBWs6khm4rSedBlMcl2+QqEGsfl99JL6MPXLj+576UDL0M9e3k6/HAIFUQouJE5/10rAhQTCmDvAwiDojzLezb8TjA1Z1g/Gtu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783050724; c=relaxed/simple;
-	bh=n9otxYLLiVUCiF0NwBWC80h7o2RKMS08s81YRFvEbGM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jnXG2aVIN94QUf3KWN/M26h8QqMC9pD7DBu/qaby669ktKT6XDw3iZoDGvU8j9UDuSystAtwaRXr9Tl1CZ0UseQ87WrQ0AXhrTDo+cK8VQJDWCv4jxqguE01Cod45lLrSDltiObvfOQ2w8/q2oa+A1SC4VE9XveNQOQ2wq2xPMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EBULXGrH; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EBULXGrH"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2ca70925c25so1207615ad.1
-        for <bpf@vger.kernel.org>; Thu, 02 Jul 2026 20:51:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783050713; x=1783655513; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=irOx4um9SxVnPfyQhReoF+nfX6PSfywyMAlSD0zArHg=;
-        b=EBULXGrHQOdatlJZ2pVyQERbi8gAUzgYotR+3WB1dxaFC1KToZ7iOHiykVXOw7fUhe
-         SNCYWjJlMpS5FkvHeIWxRio51Z7wNhXENlSoRDmnxxL3tzOr2pGt+Rts7r8yB/LxQNjK
-         0O8QofLWBTzwuLO1njRW2JylNnZW1bOAWUw54ieXrOM9CRiIWIbaLCz+wE9t2Gj858sV
-         hwg4Yi0C13YC5Jq1q1ZLVgVoPPx9MzybPvdBMTXdd5GE+kGGGb4DDeRPPTTk9svanW52
-         wtTKzvonds3q4vZKbLVZcg+ugH35Cbu2X2Lpo8jbu768RAoRFXdZ2h8Pugxaj5xk2jtB
-         dtaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783050713; x=1783655513;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=irOx4um9SxVnPfyQhReoF+nfX6PSfywyMAlSD0zArHg=;
-        b=PzTRdDiMvdCbv49ubh37imjNkZ69myjdDwIT74lWKRREqnZxYK0hpSbkk/5kmns+Xm
-         vD8o2EpokaxRgXcf+M9f8T0YeHuw23BoaufD1MzRou2LoyDqzP+e+wtlbHi+Pb3fOu+4
-         NmrRkcl9JAd92C5hC22hTV2aC/N5iS38daNJSqY96nYgTi/AinA6MLtVkR2G7KCSglUf
-         taQRyn+KrHpyCUQcG/MFBZ1uqyuHBjRXPE6a49jXzWI+k+dTec8bSGaOuOe0brSiMNip
-         6KmQBSq33U/y2Ptz53M6FMvO9m6L/cvMgavaE32m+l9PuhhKz229wADjIeCPSMuhmiwY
-         YyEA==
-X-Gm-Message-State: AOJu0YyDXyOHer5yvsdgYyK8czJ6w3pOGgtnRPX8bSBDn6wsFQ1jAAJ0
-	WL86CR4FEX1Vyk8oUYk2A7DwZLn3FBTBB5n2JxdqAUuhGkgRByVAl3X6KsA4RoFdAuWoEG9N
-X-Gm-Gg: AfdE7cnQP7gvl5yKqILgulb3Y0JtWKPr4DXy4nbF1f0U0tuySkNhGoh0p1QPoN2d+3/
-	aheIESAawdVdXzNfsG6sA2JiHGJcXurq2R3qwNYMDwg4xmNh4lDjQ9yJ+a8rCGlSzcJ7Im4gZx9
-	9+NQrEouwm/dFh54RiFw21uVdCmZBHkMMuYTAztxyyeuOnlzS7mhqlkj14nKi+4SYCLORkgoBt8
-	/xaUnLDGswMrXDfBGK4wde/hYDYe9ExhNNb0BuGJEnKvnWY8C/UUxuetPJgNOM9cwegx0G1tMVZ
-	eGsWIIynkde5nuZriuCykFmuBU04LbvLnECO2vqCp7esHw4yVfe/s05URPFxo6sGfitIAKn5jjN
-	GxbvZGCpus5miugtJJslx6KssEQvjCrHMm2rAUfLqnM4h49zm3z0CxUuQBROswznvvsIf7VQ0HF
-	ZpaWIgrw3sVDnXawFuz7d2Wja+ruDCrRbC5qjcYFQ/qd47JrAw3dgBtbNrby7QZyUDZBqlQKdyg
-	0Yw8tsso6jj3eOXSscUuK3+iQ==
-X-Received: by 2002:a17:903:2411:b0:2c1:98b7:ecf3 with SMTP id d9443c01a7336-2ca911de5d0mr82443825ad.23.1783050712813;
-        Thu, 02 Jul 2026 20:51:52 -0700 (PDT)
-Received: from u2404-VMware-Virtual-Platform.localdomain ([24.4.24.156])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b3c85b345sm22506479c88.10.2026.07.02.20.51.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jul 2026 20:51:52 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	shuah@kernel.org,
-	mmullins@fb.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH bpf] bpf: Reject negative const offsets for buffer pointers
-Date: Thu,  2 Jul 2026 20:51:37 -0700
-Message-ID: <20260703035137.109608-1-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1783052068; c=relaxed/simple;
+	bh=hNF+BYFw5WurQLv1dEpQiKqkpQlRM3UA8yxeoelt8e0=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=mwuu5YKMiaPgHX5CIaaJ03QvUi7Rygm6Ds0kbJ1nlMwxDhYUhJp7atzUhs9wH6D0OQO+2gwv5PQVeVP9rS625iZsjuHySjtF8m271SVWrzAxcwfCHfnXs2zklv7RWLbSrAW0c5YVMgo9mQclGw6Pi7cRS4okNJOsAQ+6/tPjE8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8DxOPIVN0dqFDMBAA--.6675S3;
+	Fri, 03 Jul 2026 12:14:13 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJCxWeAQN0dqVHO9AA--.31828S3;
+	Fri, 03 Jul 2026 12:14:09 +0800 (CST)
+Subject: Re: [PATCH bpf-next v7 2/2] bpf: Reject programs with inlined helpers
+ if JIT is unavailable
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ KaFai Wan <kafai.wan@linux.dev>
+References: <20260702143656.28845-1-yangtiezhu@loongson.cn>
+ <20260702143656.28845-3-yangtiezhu@loongson.cn>
+ <20260702145726.0B96B1F000E9@smtp.kernel.org>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <1f9a6291-d221-36da-1989-5f8db7d6fb20@loongson.cn>
+Date: Fri, 3 Jul 2026 12:14:08 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <20260702145726.0B96B1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxWeAQN0dqVHO9AA--.31828S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7KFW5GF18Jr15Ww1xJF1DJwc_yoW8ZFyUpF
+	4fKayYk3yDXwn7Ka47t3y7Z3Wjqw48Gr47GFnYgr1Ik3Wakr97XFyfKr47uFn5Gr4v9F1I
+	vr4Igryvk3WDGFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE
+	14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1c
+	AE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
+	rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtw
+	CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
+	67AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_Ma
+	UUUUU
 
-The verifier rejects variable offsets for PTR_TO_TP_BUFFER and PTR_TO_BUF
-accesses, but it currently accepts a constant negative offset produced by
-pointer arithmetic.
+On 2026/7/2 下午10:57, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] The patch prevents loading BPF programs that use JIT-inlined helpers (e.g., `bpf_get_smp_processor_id`) when the BPF JIT is explicitly disabled at load time (`net.core.bpf_jit_enable=0`).
+> --
+> 
+> commit 01713d8606e656f4dadefe493f371f4c861d842b
+> Author: Tiezhu Yang <yangtiezhu@loongson.cn>
+> 
+> bpf: Reject programs with inlined helpers if JIT is unavailable
+> 
+> This patch sets the jit_required flag to 1 when a BPF program uses helpers
+> that are expected to be inlined by the JIT compiler. This prevents a kernel
+> panic in the BPF interpreter by rejecting the program with -ENOTSUPP if
+> JIT compilation is unavailable at runtime.
+> 
+>> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+>> index 12a8a4eb757f1..94e0457a0aa33 100644
+>> --- a/kernel/bpf/fixups.c
+>> +++ b/kernel/bpf/fixups.c
+>> @@ -1841,8 +1841,10 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+>>   		}
+>>   
+>>   		/* Skip inlining the helper call if the JIT does it. */
+>> -		if (bpf_jit_inlines_helper_call(insn->imm))
+>> +		if (bpf_jit_inlines_helper_call(insn->imm)) {
+>> +			prog->jit_required = 1;
+>>   			goto next_insn;
+>> +		}
+> 
+> [Severity: High]
+> While this correctly prevents the interpreter panic, does this unconditionally
+> reject valid BPF programs when the JIT is explicitly disabled at load time
+> (e.g., net.core.bpf_jit_enable=0)?
 
-For example, a raw tracepoint writable program can load ctx[0] as a
-PTR_TO_TP_BUFFER, move it by -8, and then read from the adjusted pointer.
-The register is still tracked as tp_buffer(imm=-8), but the access is
-before the tracepoint writable buffer base and should be rejected.
+Yes.
 
-Check the signed effective buffer offset before updating max_tp_access or
-other buffer max access accounting. Reject negative effective offsets and
-use the checked end offset for max access accounting.
+> If this block checked prog->jit_requested before skipping the fixup and
+> setting jit_required, wouldn't the verifier properly patch the instruction
+> when JIT is disabled, allowing the program to execute successfully in the
+> interpreter?
 
-Add a verifier test that rejects a raw tracepoint writable program using a
-negative constant offset.
+No, this was already explored in earlier version (v4), but it was
+explicitly rejected by the BPF maintainer.
 
-Fixes: 9df1c28bb752 ("bpf: add writable context for raw tracepoints")
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
- kernel/bpf/verifier.c                         | 41 ++++++++++++++++---
- .../bpf/progs/verifier_raw_tp_writable.c      | 16 ++++++++
- 2 files changed, 52 insertions(+), 5 deletions(-)
+If JIT is unavailable, rejecting the program load with -ENOTSUPP is
+the intended design.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 21a365d436a5..421ca118fcbf 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5326,14 +5326,18 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
- static int __check_buffer_access(struct bpf_verifier_env *env,
- 				 const char *buf_info,
- 				 const struct bpf_reg_state *reg,
--				 argno_t argno, int off, int size)
-+				 argno_t argno, int off, int size,
-+				 u32 *access_end)
- {
-+	s64 start, var_off;
-+
- 	if (off < 0) {
- 		verbose(env,
- 			"%s invalid %s buffer access: off=%d, size=%d\n",
- 			reg_arg_name(env, argno), buf_info, off, size);
- 		return -EACCES;
- 	}
-+
- 	if (!tnum_is_const(reg->var_off)) {
- 		char tn_buf[48];
- 
-@@ -5344,6 +5348,29 @@ static int __check_buffer_access(struct bpf_verifier_env *env,
- 		return -EACCES;
- 	}
- 
-+	var_off = (s64)reg->var_off.value;
-+	if (check_add_overflow(var_off, (s64)off, &start)) {
-+		verbose(env,
-+			"%s invalid %s buffer access: off=%d, var_off=%lld\n",
-+			reg_arg_name(env, argno), buf_info, off, var_off);
-+		return -EACCES;
-+	}
-+
-+	if (start < 0) {
-+		verbose(env,
-+			"%s invalid negative %s buffer offset: off=%d, var_off=%lld\n",
-+			reg_arg_name(env, argno), buf_info, off, var_off);
-+		return -EACCES;
-+	}
-+
-+	if (start > U32_MAX || size < 0 ||
-+	    check_add_overflow((u32)start, (u32)size, access_end)) {
-+		verbose(env,
-+			"%s invalid %s buffer access: off=%lld, size=%d\n",
-+			reg_arg_name(env, argno), buf_info, start, size);
-+		return -EACCES;
-+	}
-+
- 	return 0;
- }
- 
-@@ -5351,13 +5378,15 @@ static int check_tp_buffer_access(struct bpf_verifier_env *env,
- 				  const struct bpf_reg_state *reg,
- 				  argno_t argno, int off, int size)
- {
-+	u32 access_end;
- 	int err;
- 
--	err = __check_buffer_access(env, "tracepoint", reg, argno, off, size);
-+	err = __check_buffer_access(env, "tracepoint", reg, argno, off, size,
-+				    &access_end);
- 	if (err)
- 		return err;
- 
--	env->prog->aux->max_tp_access = max(reg->var_off.value + off + size,
-+	env->prog->aux->max_tp_access = max(access_end,
- 					    env->prog->aux->max_tp_access);
- 
- 	return 0;
-@@ -5370,13 +5399,15 @@ static int check_buffer_access(struct bpf_verifier_env *env,
- 			       u32 *max_access)
- {
- 	const char *buf_info = type_is_rdonly_mem(reg->type) ? "rdonly" : "rdwr";
-+	u32 access_end;
- 	int err;
- 
--	err = __check_buffer_access(env, buf_info, reg, argno, off, size);
-+	err = __check_buffer_access(env, buf_info, reg, argno, off, size,
-+				    &access_end);
- 	if (err)
- 		return err;
- 
--	*max_access = max(reg->var_off.value + off + size, *max_access);
-+	*max_access = max(access_end, *max_access);
- 
- 	return 0;
- }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c b/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
-index 14a0172e2141..4055a6443bc2 100644
---- a/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
-@@ -47,4 +47,20 @@ l0_%=:	/* shift the buffer pointer to a variable location */\
- 	: __clobber_all);
- }
- 
-+SEC("raw_tracepoint.w")
-+__description("raw_tracepoint_writable: reject negative const offset")
-+__failure
-+__msg("invalid negative tracepoint buffer offset")
-+__naked void tracepoint_writable_reject_negative_const_offset(void)
-+{
-+	asm volatile ("					\
-+	r6 = *(u64 *)(r1 + 0);				\
-+	r6 += -8;					\
-+	r0 = *(u64 *)(r6 + 0);				\
-+	exit;						\
-+"	:
-+	:
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+Thanks,
+Tiezhu
 
