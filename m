@@ -1,205 +1,143 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E75D3CC7EA
-	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 11:39:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8EFB3C3C00;
+	Fri,  3 Jul 2026 11:49:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783078755; cv=none; b=VbhuVGDzwC3xGIqR6bkqdq6eYO+QqIf4eI+e7ekcnegspm/kucaa7BSL8v0zYPMIjGuDeouquB3hMqSyJIzyXX3urB+OWteN1KRKKOIhpIiwIsQU/NqtGmwtK02bQmHF62zkrvIFFCxR9QYNtFM82+lnY7cujx3HkWyTp5iOMi8=
+	t=1783079365; cv=none; b=E37uXUo7gQggvKIIedMuDEApQsrfUMtANue5g+ixQeRvH8lt/E4DgnIn4Lgzic1dzwch/zcyqnbmj92ZMrAs4fwVu7oYY5dZYbdGorKV1z8pwzke/w/0j4Mok0g31SJ4a5RilsL2BhOb6411UGqWprzMsZzySrHh4XQV5IiRFcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783078755; c=relaxed/simple;
-	bh=HTuWxujs7lhBqsGN8sDhd5w5xbwAqpF+EezVu1G84XU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JEG3PrmCMI2miGjecNI4r8ymh3VpKLtrQapn108qi7whSC79Xljr45NnhnFHhc0ohH7FlFlUnU2utxd+mtdqXeWC5rwOOolpv5iBV3OJQs/uwQk6QTVwSZgBFg6FiNIdmo1BTFDvkB744nu0e87SHX3qg+Y/rbd1TPRHvdk6CLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WhMFQx+D; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Gi97/jix; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783079365; c=relaxed/simple;
+	bh=P263rPI62CWCfbJviCwI1dfpRrn8rqB3/1FpcSgIBe4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q/9Rm/tP8bMZyRZh6TCS9hPF/nsVkzICCaCxaNWI/h7EIEXYzC6V7il4A6ZIj10MqT5t+vEtxBC2dceFbQ5bhMpXQEyndFKJQJlHMCszT4z9yeJG39GRYFNsE0lXHMURaCnVPGquI0lP9dsO7IK5M9BEAmSGiHD4IcsQHF1Y/+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NptH2wr9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WhMFQx+D";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gi97/jix"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783078753;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3OLchXC5VTZDu4RU5sMVkomKCaHx+xb1Y8HfxV81VH8=;
-	b=WhMFQx+DwB+ZY1ezXUAVYW/tvIkR9dYdEVRALk2Mii7U24A2L7RoZ8zsksLu0RL4wM40qv
-	m3Xmfrd89d1xQTwmvUz+7VzRLGdASbT56HuJ5zudRL+ahcEmM+PLCcBTncKCxyziNTpWa1
-	+x6+hNfVj49048QEJsNBdCffxxNP+SQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-639-soAtHJPENfqIK1xjEC9ZQw-1; Fri, 03 Jul 2026 07:39:12 -0400
-X-MC-Unique: soAtHJPENfqIK1xjEC9ZQw-1
-X-Mimecast-MFC-AGG-ID: soAtHJPENfqIK1xjEC9ZQw_1783078751
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-493bd52dae6so3277155e9.0
-        for <bpf@vger.kernel.org>; Fri, 03 Jul 2026 04:39:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1783078751; x=1783683551; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3OLchXC5VTZDu4RU5sMVkomKCaHx+xb1Y8HfxV81VH8=;
-        b=Gi97/jixKKpDElTaSqTpLVOFs3di98zoem+wEyb01J3WXehUztIIZYMPrFIuMTzkZe
-         zqHbITnTidLE9pMJ/gX7LADY7bhpDoLgUSJPxLG6iyeJLNZhqtR4RWv2g/Z458W1VF4T
-         j4dgJgj95BIjIrtdidHl85bXvsmkSduoaJ4yZLmM54KA/o7Vx0L6ZlIVQZOMbyjFZTvR
-         PF582WcC/XoNCDW1MOJc4veDiSwTtUjliRTQKfOAblDDLef2NphIgbWZVurlvgFXpOjT
-         2YIK3nk/Tp9zbewoEJIKq5gLKqizzTotuvnXqPLDbKh6O/Cty+aAw6cMLC1AwSHOlhmn
-         dGuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783078751; x=1783683551;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3OLchXC5VTZDu4RU5sMVkomKCaHx+xb1Y8HfxV81VH8=;
-        b=c8pyTyVhnpIwj5GSnBqPfhXJq2SgAUgm1oaZEjipmUjMGbdFQgs9lgO175kOP81tOr
-         gsS6CabfOGPwP1momqEgbLL56wqbbcOpNns2gPiVGyIyff3CFiO0bNNjb3envgVxDMJy
-         IYka4J6gKORv2v9irtlrUhcSaVmQ6/PsSRouKO1KDRuR4L2MAOFKMtA26t2wP1+4WcgG
-         Q/j/SR93DmXVybEdElRQuvReo63nhRlf715mYc9aPDlIHitWOniuyT4QeQTtkYX/nsvh
-         FVUcrL2NbVSQ0+ZvMeVDc7JdrvctrQaQ3xgddhWq7Qs9c7I/NKjM+IlGTIH3bPDR07vr
-         msVQ==
-X-Forwarded-Encrypted: i=1; AFNElJ94w5rqIeHRfjWuo0RKRF0cROmiKiYaUprdSuPVpZO072amu5aKljezrfoHjKmLNXjQDtM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCnY9ImFev/fsmGZnTadhsxlw+mcY4mxtk/PH5lyOsGfOWB1Zb
-	vUFfmAebTTP55AFP3aDHxhjUyrA19ov1h1G5pTiEIv+kARYwz27UGivP5Qn99FWMUI3U7U0jyme
-	98pnrLOSP6nKFgP3inBaF3zSMUFKonLWsh2iFyaW/zx1sFoCNVp1lGVoBOs6fn2M=
-X-Gm-Gg: AfdE7cmv2eUB0xJqigv99kuZ0ULB47OKpBaNwKuew/cBS+dF82OrZVSxiId0DcnRozy
-	P6j3nuxrkvMyF8Kz9gNDXKg17XFQSuElleV0hIS6Nt6jDaJoGVj2TcSZ98O/sPoZpXxHUAaMw+h
-	0S+sKgLvxIWKptLanWECyX9hi2s61sLQZJz1Ky7Ue2JZvcdL4n3CjPsHaJqaGBwXRtpfNHN2Qgv
-	vC7L77C6VMXnDhNHoyxqp5/PW8gP16Xnx8U3TCziK2E2s11p/nXg0a3/iyn2URYwWYMngZ6pSdB
-	cJmP9KMHP1WBEBn7YAuakLT0M9I4IB4f2OqvtvdzqOHIwK19KanW/R7DRd7qG1KpUZVGuqcGMIe
-	ixHO76+OqAej92FJrLLZXRHpamsz3pScPpSBcbOZZ
-X-Received: by 2002:a05:600c:63d5:b0:493:b87c:c87d with SMTP id 5b1f17b1804b1-493c2b4c910mr94562735e9.11.1783078750900;
-        Fri, 03 Jul 2026 04:39:10 -0700 (PDT)
-X-Received: by 2002:a05:600c:63d5:b0:493:b87c:c87d with SMTP id 5b1f17b1804b1-493c2b4c910mr94562505e9.11.1783078750512;
-        Fri, 03 Jul 2026 04:39:10 -0700 (PDT)
-Received: from [192.168.0.199] (adsl-dyn37.91-127-59.t-com.sk. [91.127.59.37])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493c636ec8asm106968465e9.1.2026.07.03.04.39.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jul 2026 04:39:10 -0700 (PDT)
-Message-ID: <f6ac51ab-318d-4a00-9e97-e76d0f86122a@redhat.com>
-Date: Fri, 3 Jul 2026 13:39:08 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NptH2wr9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72ED01F000E9;
+	Fri,  3 Jul 2026 11:49:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783079364;
+	bh=oEGfggV7R38IHP2RNYQI/TgnlkgxczOJa3nqV0igjw0=;
+	h=From:To:Cc:Subject:Date;
+	b=NptH2wr9/2KsMQAqz9ZYpSvBu6qDzremmD0Is5kT94gSbQ7n4pWZkNwmjtpb4fmPx
+	 a0Zt2n58CkjK7APb6c5hLHwG9F3Z8tvrx7xvK1tRUduc1sHPTv3xRG1VmBPYiMvpXI
+	 Wv/VzC/MOmxNhzruC1+67zb0LX4R2C6DqDA6A2reNxubKm017KikaeC1/DNT1NJMsh
+	 pSZoO26bexuX9LGJ3DKQmlRNm+ZtrC0LEkDxjF+i8CTdL/RfExljJwTd2TmrwzoEDr
+	 FtNU+LAloNfPUwYwebZFRL7ofQLaMj230eK3Bboa2JPv5kN+E6FpKcsaXGCvHpPTly
+	 BuWarC3UwTk+w==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Oleg Nesterov <oleg@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: [PATCHv6 00/13] uprobes/x86: Fix red zone issue for optimized uprobes
+Date: Fri,  3 Jul 2026 13:49:04 +0200
+Message-ID: <20260703114917.238144-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] perf trace: Refactor augmented_raw_syscalls using
- bpf_for
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-References: <cover.1783070132.git.vmalik@redhat.com>
- <8ceb8f3323d0742163c42c343eb9d26843fe9e9b.1783070132.git.vmalik@redhat.com>
- <20260703104554.CAE821F000E9@smtp.kernel.org>
-From: Viktor Malik <vmalik@redhat.com>
-Content-Language: en-US
-In-Reply-To: <20260703104554.CAE821F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 7/3/26 12:45, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
-> - [High] Removing the `(int)` cast in the buffer augmentation condition makes it unconditionally false, completely breaking buffer payload collection.
-> - [Medium] Huge buffer sizes (where the MSB is set) fail to be augmented, whereas previously they were safely clamped to `TRACE_AUG_MAX_BUF`.
-> - [Low] Multi-line comment does not follow the required BPF subsystem style.
-> --
-> 
-> commit 0a122bc3ab16635b5165b20566e6e1890cba855b
-> Author: Viktor Malik <vmalik@redhat.com>
-> 
-> perf trace: Refactor augmented_raw_syscalls using bpf_for
-> 
-> This commit replaces the standard loop in augment_sys_enter with a bpf_for
-> loop to prevent BPF verifier -E2BIG errors. It also drops some workarounds
-> previously added to help the verifier.
-> 
->> diff --git a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
->> index cbdd5ce19a2f6..60babc06f3812 100644
->> --- a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
->> +++ b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-> 
-> [ ... ]
-> 
->> @@ -464,11 +473,13 @@ static inline int augment_arg(struct syscall_enter_args *args, int i,
->>  	} else if (size > 0 && size <= value_size) { /* struct */
->>  		if (!bpf_probe_read_user(((struct augmented_arg *)payload_offset)->value, size, arg))
->>  			augmented = true;
->> -	} else if ((int)size < 0 && size >= -6) { /* buffer */
->> +	} else if (size < 0 && size >= -6) { /* buffer */
-> 
-> [Severity: High]
-> Does removing the (int) cast make this condition unconditionally false?
-> 
-> Since size is an s64 assigned from an unsigned int beauty_map[i], a negative
-> marker (e.g. 0xFFFFFFFF) is zero-extended to a positive s64 value.
-> Without the (int) cast to truncate and sign-extend it back, size < 0 is
-> always false, breaking buffer payload collection.
+hi,
+Andrii reported an issue with optimized uprobes [1] that can clobber
+redzone area with call instruction storing return address on stack
+where user code may keep temporary data without adjusting rsp.
 
-Correct, size should have been made int. Will fix that.
+Fixing this by moving the optimized uprobes on top of 10-bytes nop
+instruction, so we can squeeze another instruction to escape the
+redzone area before doing the call.
 
->>  		index = -(size + 1);
->>  		barrier_var(index); // Prevent clang (noticed with v18) from removing the &= 7 trick.
->>  		index &= 7;	    // Satisfy the bounds checking with the verifier in some kernels.
->> -		aug_size = args->args[index] > TRACE_AUG_MAX_BUF ? TRACE_AUG_MAX_BUF : args->args[index];
->> +		aug_size = args->args[index];
->> +		if (aug_size > TRACE_AUG_MAX_BUF)
->> +			aug_size = TRACE_AUG_MAX_BUF;
-> 
-> [Severity: Medium]
-> Will huge buffer sizes (where the most significant bit is set) fail to be
-> augmented here?
-> 
-> args->args[index] is an unsigned long. If the most significant bit is set,
-> assigning it to the s64 aug_size makes it negative. The subsequent
-> if (aug_size > TRACE_AUG_MAX_BUF) is a signed comparison and will evaluate
-> to false. The length remains negative, causing the later if (aug_size > 0)
-> check to fail, skipping buffer processing entirely instead of clamping it.
+Note we need upstream update first for patch 3 (github.com/libbpf/usdt),
+if we decide to take this change.
 
-Yeah, the original version was better, will revert to that.
+thanks,
+jirka
 
->>  
->>  		if (aug_size > 0) {
->>  			if (!bpf_probe_read_user(((struct augmented_arg *)payload_offset)->value, aug_size, arg))
-> 
-> [ ... ]
-> 
->> @@ -521,14 +530,29 @@ static int augment_sys_enter(void *ctx, struct syscall_enter_args *args)
->>  	/* copy the sys_enter header, which has the syscall_nr */
->>  	__builtin_memcpy(&payload->args, args, sizeof(struct syscall_enter_args));
->>  
->> -	for (int i = 0; i < 6; i++) {
->> -		written = augment_arg(args, i, beauty_map, payload_offset);
->> -		if (written < 0)
->> -			return 1;
->> -		if (written > 0) {
->> -			output += written;
->> -			payload_offset += written;
->> -			do_output = true;
->> +	if (bpf_ksym_exists(bpf_iter_num_new)) {
->> +		bpf_for(i, 0, 6) {
->> +			written = augment_arg(args, i, beauty_map, payload, output);
->> +			if (written < 0)
->> +				return 1;
->> +			if (written > 0) {
->> +				output += written;
->> +				/* guide the verifier to forget range of `output`, which
->> +				 * helps to prove convergence of the loop
->> +				 */
-> 
-> [Severity: Low]
-> This isn't a bug, but this multi-line comment does not follow the preferred
-> BPF subsystem style where the opening /* is on its own line.
 
-Will fix that, too.
+v1: https://lore.kernel.org/bpf/20260514135342.22130-1-jolsa@kernel.org/
+v2: https://lore.kernel.org/bpf/20260518105957.123445-1-jolsa@kernel.org/
+v3: https://lore.kernel.org/bpf/20260521124411.31133-1-jolsa@kernel.org/
+v4: https://lore.kernel.org/bpf/20260526205840.173790-1-jolsa@kernel.org/
+v5: https://lore.kernel.org/bpf/20260701111337.53943-1-jolsa@kernel.org/
 
-I'll wait for some human reviews and will send v3 with the fixes.
 
->> +				output += ZERO;
->> +				do_output = true;
->> +			}
->> +		}
-> 
+v6 changes:
+- added upstream commit ref for patch#8
+- release link in test_uprobe_fork_optimized [ci/asan]
 
+v5 changes:
+- several selftests changes and reviewed-by tags [Jakub]
+- add more comments in int3_update_unoptimize [Andrii]
+- several other minor changes and acks [Oleg]
+- move insn_decode out of uprobe_init_insn to simplify the code
+- align uprobe_red_zone_test to 64 to make sure nop10 is not on page boundary
+
+v4 changes:
+- do not use 2nd int3 (ont +5 offset) because the call instruction
+  is allways the same for the given nop10 address [Andrii/Peter]
+- unmap unused trampoline vma after unsuccesfull optimization [sashiko]
+- small change to patch#2 moved user_64bit_mode earlier in the path
+  and pass/use mm_struct pointer directly from arch_uprobe_optimize
+  instead of gettting current->mm
+  Andrii, keeping your ack, please shout otherwise
+
+v3 changes:
+- use nop10 update suggested by Peter in [2]
+- remove struct uprobe_trampoline object, use vma objects directly instead
+- selftests fixes [sashiko]
+- ack from Andrii
+
+v2 changes:
+- several selftest fixes [sashiko]
+- consolidate is_lea_insn and is_call_insn insto single check [Jakub Sitnicki]
+- use proper mm_struct object in __in_uprobe_trampoline check [sashiko]
+- allow to copy uprobe trampolines vma objects on fork [sashiko]
+- change uprobe syscall detection error from -ENXIO to -EPROTO [Andrii]
+- added fork/clone tests
+- I kept the selftest changes and nop5->nop10 changes in separate
+  commits for easier review, we can squash them later if we want to keep
+  bisect working properly
+
+
+[1] https://lore.kernel.org/bpf/20260509003146.976844-1-andrii@kernel.org/
+[2] https://lore.kernel.org/bpf/20260518104306.GU3102624@noisy.programming.kicks-ass.net/#t
+---
+Andrii Nakryiko (1):
+      selftests/bpf: Add tests for uprobe nop10 red zone clobbering
+
+Jiri Olsa (12):
+      uprobes/x86: Use proper mm_struct in __in_uprobe_trampoline
+      uprobes/x86: Remove struct uprobe_trampoline object
+      uprobes/x86: Do not leak trampoline vma mapping on optimization failure
+      uprobes/x86: Allow to copy uprobe trampolines on fork
+      uprobes/x86: Move optimized uprobe from nop5 to nop10
+      libbpf: Change has_nop_combo to work on top of nop10
+      libbpf: Detect uprobe syscall with new error
+      selftests/bpf: Emit nop,nop10 instructions combo for x86_64 arch
+      selftests/bpf: Change uprobe syscall tests to use nop10
+      selftests/bpf: Change uprobe/usdt trigger bench code to use nop10
+      selftests/bpf: Add reattach tests for uprobe syscall
+      selftests/bpf: Add tests for forked/cloned optimized uprobes
+
+ arch/x86/kernel/uprobes.c                               | 416 +++++++++++++++++++++++++++++++++++++++++++-----------------------------
+ include/linux/uprobes.h                                 |   5 -
+ kernel/events/uprobes.c                                 |  10 --
+ kernel/fork.c                                           |   1 -
+ tools/lib/bpf/features.c                                |   4 +-
+ tools/lib/bpf/usdt.c                                    |  16 +--
+ tools/testing/selftests/bpf/bench.c                     |  20 ++--
+ tools/testing/selftests/bpf/benchs/bench_trigger.c      |  38 +++----
+ tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh |   2 +-
+ tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c | 325 ++++++++++++++++++++++++++++++++++++++++++++++++++++----
+ tools/testing/selftests/bpf/prog_tests/usdt.c           |  74 +++++++++++--
+ tools/testing/selftests/bpf/progs/test_usdt.c           |  25 +++++
+ tools/testing/selftests/bpf/usdt.h                      |   2 +-
+ tools/testing/selftests/bpf/usdt_2.c                    |  15 ++-
+ 14 files changed, 697 insertions(+), 256 deletions(-)
