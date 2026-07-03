@@ -1,144 +1,142 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A085360EC7
-	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 09:00:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D41B53C9888
+	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 10:02:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783069236; cv=none; b=agVJckSkuzXDItBT0f3vXtqNQhnTPNkoEMhX+T5VI0Jr+sHiJJcl2+HZG3zgXQe6yjf5Wz9ZtUrn4vCfrWTSEAgC9hydSxp4Sid09iYnncm2dMb3KGl6mYwW0lb+QJhzPnjMyLlkO6BAtgWgJQSjAg93UpQAo87ukk4hxaJpCjc=
+	t=1783072971; cv=none; b=tNseNiA3Q8plzWUs7IfnGM0JEChGMM+uwDYqfsoq/Xn+h5vpM2+nVkq9RFkmq0qXopbSIc5kGwO+AxaIUqxxPENGEammkVUq8PF9bxc32GTP8k1HecymYSm32TMg69+AjfDaqbptJFswmq7DGeEy9v2q4Ez3OesCbU8dhZu3yC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783069236; c=relaxed/simple;
-	bh=X2mIPTuVUVzG3Sy48nX/GeVEJ+zkaU2gIP0hEAX9jYs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=WhHxE9hDXPIle7W0/CHspfBm6raGFOQU6rrWxZdkN4XUXt/iQG7bIRfpwIYIPoCs58T0NHMbG56AGyJbtKbOddRQCFd76w61uCqfsUyhFLgMHy4uqduFBjcwP+i55yaOhtOsf8nHefPmiYqiZUTYesm//ncp3LHGeWfOOjSYYo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DLn1JD2l; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783072971; c=relaxed/simple;
+	bh=P9QJK2xz/jdfVnMlUFOmfxp+TBzPlMUUfk9wzKX/jwE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lJLDDS4Uy6ZrjpYAERgz7Z9eiH9jLkS9n16nj7Cqiq0ARzW/V1ejq3JeyuAbH9AUJqGhDEWoaClcNmHqazwQ4CVuDGINE5ryide6o7P8tqzNPnNOPcpuFPEYjK5W8hsPnRMdsnqh6t1jawdb0JYzbcitDkX+zoin8ZTgQTO7C4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gQ7Q04KK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DLn1JD2l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EC611F000E9;
-	Fri,  3 Jul 2026 09:00:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gQ7Q04KK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A763D1F0155A
+	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 10:02:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783069234;
-	bh=bRlr6RTE1wU4o/W900DOQrm2i1YySRfOk5Ad5VrUcsU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=DLn1JD2luaUBMckiJbl266HElL5cralo5eIx8Nzra+V8moVbitrxHvrVqovU/Z0JY
-	 UOy+e+voCo7xBaSxzzsnKAaK1rohPGvffYe/f/UUfDXzW7eXJk6NlXj1QuncnI0+A+
-	 1cAATdPOfZn0Vs6GVGJMeJH7GGMSIIkQRaD0WhTPZ1ET83uiHs1n96SqrRlw/SC6Xw
-	 noqUmi8QAfTIi9FQ+VufPgvlNdbpPzVbyQbJ/ky7gLR4+hukOVzmuED3OX8AV1GZg+
-	 A7ifnnGwEKJiwJzaaI9KwRA9ty+H0XmshxqEAoYDeXbARQvJMl1UopJNTHnC2L2ef5
-	 eqIYR3hb//lWQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5] x86/sgx: Report RCU-Tasks quiescent state in EPC
- sanitization loop
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jun Miao" <jun.miao@intel.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260703084810.145567-1-jun.miao@intel.com>
-References: <20260703084810.145567-1-jun.miao@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 03 Jul 2026 09:00:34 +0000
-Message-Id: <20260703090034.8EC611F000E9@smtp.kernel.org>
+	s=k20260515; t=1783072969;
+	bh=GxICZniZLiTs1zHK8UE4JL2NE8iCjWZD2BK5CrwX6M8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=gQ7Q04KKbVll2/T84XVbDiCdXpC0k671DQfMVJp+FzCxGj72PckPhFYoQan8Bj2yx
+	 TiGWTRS9294/uNQZLrOSRjg2tLj9/vpgQddHMcd5C3YsEITdmZbyNi+jlLF1+yWJ/E
+	 CYDkUdRLQCl12TzMRa4lJKLA5Bp084C7nwUAVCgRZeUudcEonglNjFYYEo9UX873xQ
+	 BPElgHL99gOhXkuIKTLNv62MytWbZhBEUtjDcyDUS691K7UA4PyLUT32ckctbR3+Lj
+	 uIGewKGLdb3tFqZstiWIq8v1RrWhFqeVmsi54wBC4hTdMm2Qcpc2eSpfccRfrru3ux
+	 GhUbLtSXMaifA==
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-691c5776f95so730271a12.3
+        for <bpf@vger.kernel.org>; Fri, 03 Jul 2026 03:02:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+Rpp4KwG8XzHZU0hibwBlHxIcpE+fNCpmBSpcmuDCgHVhPsHQ0YzR3cZ29ckIAVblxN7YBQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YywyjYt4iKr94jlBaE3jaJIu9mhg14Ybk5qhC0mizW7mmtsvfuz
+	eFkCQlYEg76m5NFD3BriiEHcMO19kG+6Hy8ccol0TC2LF81pbHnynZlh/gS8c7erML5DMasrSo3
+	InKoXGdeFm4SAO9KfOfNqET68mIrjsCY=
+X-Received: by 2002:a05:6402:51cc:b0:698:9ea5:d195 with SMTP id
+ 4fb4d7f45d1cf-6989f38e7d2mr4357031a12.23.1783072968125; Fri, 03 Jul 2026
+ 03:02:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <1782119051687451.15056.seg@mailgw.kylinos.cn>
+In-Reply-To: <1782119051687451.15056.seg@mailgw.kylinos.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Fri, 3 Jul 2026 18:03:13 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4zaPuBjfsujbW2QiYMMDhy3G+0eLOn_DbdHMmGitGEZQ@mail.gmail.com>
+X-Gm-Features: AVVi8CciMHHIh2DiT8jHK9TEKRaAsAY0P6iPzY60Z8u1moayozVW4gt-jf4mfsI
+Message-ID: <CAAhV-H4zaPuBjfsujbW2QiYMMDhy3G+0eLOn_DbdHMmGitGEZQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] LoongArch bpf kptr xchg inline support
+To: Chenguang Zhao <zhaochenguang@kylinos.cn>
+Cc: kernel@xen0n.name, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
+	yangtiezhu@loongson.cn, hengqi.chen@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org, 
+	loongarch@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+Hi, Tiezhu and Hengqi,
 
-Pre-existing issues:
-- [High] The cond_resched() call in the main loop of ksgxd() was not update=
-d to explicitly report RCU-tasks quiescent states, leaving it vulnerable to=
- stalls.
-- [High] SGX initialization error path frees EPC page arrays without removi=
-ng their physical addresses from the global sgx_epc_address_space XArray, l=
-eading to Use-After-Free on hardware memory errors.
---
+Could you please pay some time to review this series?
 
-commit 71875f4f4ed3656160e4c510add3ac4a68c4cd86
-Author: Jun Miao <jun.miao@intel.com>
+Huacai
 
-x86/sgx: Report RCU-Tasks quiescent state in EPC sanitization loop
-
-When the kernel boots from kexec, the EPC pages may have a stale state.
-The kernel sanitizes all EPC pages to reset them to a clean state before
-their first use in any enclave.  The EPC size could be several GBs and
-resetting them could take a significant amount of time.
-
-Link: https://github.com/systemd/systemd/issues/40423
-
-> diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/mai=
-n.c
-> index dc73194416ac8..545415ee98177 100644
-> --- a/arch/x86/kernel/cpu/sgx/main.c
-> +++ b/arch/x86/kernel/cpu/sgx/main.c
-> @@ -103,7 +103,7 @@ static unsigned long __sgx_sanitize_pages(struct list=
-_head *dirty_page_list)
->  			left_dirty++;
->  		}
-> =20
-> -		cond_resched();
-> +		cond_resched_tasks_rcu_qs();
->  	}
-> =20
->  	list_splice(&dirty, dirty_page_list);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but looking at the main loop
-in ksgxd() in the same file:
-
-arch/x86/kernel/cpu/sgx/main.c:ksgxd() {
-...
-		if (sgx_should_reclaim(SGX_NR_HIGH_PAGES))
-			sgx_reclaim_pages();
-
-		cond_resched();
-...
-}
-
-Could this cond_resched() also starve RCU-tasks grace periods if
-sgx_should_reclaim() remains continuously true under heavy SGX memory press=
-ure?
-
-Since wait_event_freezable() won't sleep in this case, would it make sense
-to update this to cond_resched_tasks_rcu_qs() as well?
-
-
-[Severity: High]
-This is a pre-existing issue, but does the error path in sgx_init() leave
-dangling pointers in the global sgx_epc_address_space XArray?
-
-arch/x86/kernel/cpu/sgx/main.c:sgx_init() {
-...
-err_page_cache:
-	for (i =3D 0; i < sgx_nr_epc_sections; i++) {
-		vfree(sgx_epc_sections[i].pages);
-		memunmap(sgx_epc_sections[i].virt_addr);
-	}
-
-	return ret;
-}
-
-If sgx_page_cache_init() succeeds (which populates the XArray) but a later
-initialization step fails, the section->pages arrays are freed here without
-being removed from the XArray.
-
-If a hardware memory error occurs later, arch_memory_failure() looks up the
-PFN via sgx_paddr_to_page():
-
-arch/x86/kernel/cpu/sgx/main.c:sgx_paddr_to_page() {
-...
-	section =3D xa_load(&sgx_epc_address_space, paddr);
-	if (!section)
-		return NULL;
-
-	return &section->pages[PFN_DOWN(paddr - section->phys_addr)];
-}
-
-Could this lead to a use-after-free in arch_memory_failure() when it
-dereferences the returned page pointer?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260703084810.1455=
-67-1-jun.miao@intel.com?part=3D1
+On Mon, Jun 22, 2026 at 5:04=E2=80=AFPM Chenguang Zhao <zhaochenguang@kylin=
+os.cn> wrote:
+>
+> This series enables the BPF verifier to inline bpf_kptr_xchg() into BPF_X=
+CHG
+> on LoongArch64, and fixes the underlying JIT atomic ordering that makes s=
+uch
+> inlining safe.
+> The BPF verifier can lower bpf_kptr_xchg() to a single BPF_XCHG atomic wh=
+en
+> the JIT advertises ptr xchg support via bpf_jit_supports_ptr_xchg(). This
+> removes helper-call overhead from the kptr exchange fast path. Inlining i=
+s
+> only correct when the JITed exchange provides the same sequentially consi=
+stent
+> ordering as the bpf_kptr_xchg() helper.
+> Patch 1 fixes memory ordering for all value-returning BPF atomic RMW oper=
+ations
+> emitted by the LoongArch bpf JIT. Per LKMM, value-returning atomic RMW mu=
+st
+> provide sequentially consistent ordering. Plain AMO instructions and bare
+> ll/sc loops on LoongArch do not satisfy this by themselves:
+>  - BPF_FETCH (ADD/AND/OR/XOR): switch to am*_db.{b,h,w,d}
+>  - BPF_XCHG: switch to amswap_db.{b,h,w,d}
+>  - BPF_CMPXCHG: emit dbar 0x700 after the ll/sc loop, matching
+>    __WEAK_LLSC_MB in cmpxchg.h
+> Non-value-returning RMW ops (plain BPF_ADD, BPF_AND, etc.) remain weakly
+> ordered, consistent with LKMM. This fix is independent of kptr inlining a=
+nd
+> benefits all BPF programs using value-returning atomics on LoongArch.
+> Patch 2 implements bpf_jit_supports_ptr_xchg() so the verifier may inline
+> bpf_kptr_xchg() on LoongArch64.
+> Patches 3 and 4 extend bpf selftests: functional coverage via kptr_xchg_i=
+nline,
+> and an optional kptr-xchg benchmark to compare helper vs inlined paths.
+>
+> Chenguang Zhao (4):
+>   LoongArch: bpf: Fix memory ordering for value-returning atomics
+>   LoongArch: bpf: Advertise JIT support for kptr xchg inline
+>   selftests/bpf: Enable kptr_xchg_inline test on LoongArch
+>   selftests/bpf: Add kptr-xchg benchmark
+>
+>  arch/loongarch/include/asm/inst.h             | 18 ++++
+>  arch/loongarch/net/bpf_jit.c                  | 37 ++++---
+>  tools/testing/selftests/bpf/Makefile          |  2 +
+>  tools/testing/selftests/bpf/bench.c           |  2 +
+>  .../selftests/bpf/benchs/bench_kptr_xchg.c    | 96 +++++++++++++++++++
+>  .../bpf/prog_tests/kptr_xchg_inline.c         |  3 +-
+>  .../selftests/bpf/progs/kptr_xchg_bench.c     | 49 ++++++++++
+>  7 files changed, 192 insertions(+), 15 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/kptr_xchg_bench.c
+>
+> ---
+> v3:
+>  - Expand the JIT ordering fix beyond BPF_XCHG w/d to all value-returning
+>    atomic RMW ops (BPF_FETCH, BPF_XCHG, BPF_CMPXCHG), using barrier-carry=
+ing
+>    AMO variants and dbar after ll/sc as required by LKMM.
+>  - Add __btf_root() in the benchmark BPF program so bpf_obj_drop() remain=
+s
+>    visible to libbpf's kfunc linker when bpf_kptr_xchg() is inlined.
+>
+> v2:
+>  - https://lore.kernel.org/all/20260603100438.2177817-1-zhaochenguang@kyl=
+inos.cn/
+>
+> v1:
+>  - https://lore.kernel.org/all/20260602021515.214560-1-zhaochenguang@kyli=
+nos.cn/
+>
+> --
+> 2.25.1
+>
+>
