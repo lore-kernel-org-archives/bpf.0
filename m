@@ -1,113 +1,127 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 940973264CB
-	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 04:14:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21EF35675C
+	for <bpf@vger.kernel.org>; Fri,  3 Jul 2026 05:24:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783052068; cv=none; b=kQjj7ygzMrLwJOTY5F4metnTrBV6YvMzGndmnWaks3IilWUkosZhSAx6mkXeSxtFswqA0yYtNBWs6khm4rSedBlMcl2+QqEGsfl99JL6MPXLj+576UDL0M9e3k6/HAIFUQouJE5/10rAhQTCmDvAwiDojzLezb8TjA1Z1g/Gtu8=
+	t=1783056299; cv=none; b=ROMzjZOufBVEMILHqUIV2EdZN3h69t+bZ5IEH4ZXbLHk/pru/MIKaAw6dEiqVhz0bcHot6gKRDbBd9o4mhPQgczCFdVpck8747IM/gL7vC2DfyxQHjoy6tsRGyBhQjm+3scsirEHAuMW8lg2t2lhbMP47ioe6u2sEtggDGC25M0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783052068; c=relaxed/simple;
-	bh=hNF+BYFw5WurQLv1dEpQiKqkpQlRM3UA8yxeoelt8e0=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=mwuu5YKMiaPgHX5CIaaJ03QvUi7Rygm6Ds0kbJ1nlMwxDhYUhJp7atzUhs9wH6D0OQO+2gwv5PQVeVP9rS625iZsjuHySjtF8m271SVWrzAxcwfCHfnXs2zklv7RWLbSrAW0c5YVMgo9mQclGw6Pi7cRS4okNJOsAQ+6/tPjE8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8DxOPIVN0dqFDMBAA--.6675S3;
-	Fri, 03 Jul 2026 12:14:13 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJCxWeAQN0dqVHO9AA--.31828S3;
-	Fri, 03 Jul 2026 12:14:09 +0800 (CST)
-Subject: Re: [PATCH bpf-next v7 2/2] bpf: Reject programs with inlined helpers
- if JIT is unavailable
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- KaFai Wan <kafai.wan@linux.dev>
-References: <20260702143656.28845-1-yangtiezhu@loongson.cn>
- <20260702143656.28845-3-yangtiezhu@loongson.cn>
- <20260702145726.0B96B1F000E9@smtp.kernel.org>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <1f9a6291-d221-36da-1989-5f8db7d6fb20@loongson.cn>
-Date: Fri, 3 Jul 2026 12:14:08 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1783056299; c=relaxed/simple;
+	bh=eos+/Db6RlUVInMkPYHCOKmIYvFu8I8PUh9Ltd3hvjo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=t1qf0NElIrqyTmwZUEnXF7GX9YtXeZ85rF7wI6iv3CxlcahlM5YGWD9MWbZSo8n6210Gfg+0y+SCJxMIq5GMbjPymmDWIc96Yiv2t/vsH7cnK2wuvT0qqX32JlrvbVLdY12o2wVSKgQEYHsWwFjIHrO121boTrEV95XdgiAzGEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aa4l6WYc; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aa4l6WYc"
+Message-ID: <42e59c6f-5040-4b50-91ce-10066551a32c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783056288;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=J/pStqMXFFQsfS/gIUKUC14aOv8lYhkbZ0a1Tt5TFIw=;
+	b=aa4l6WYcYaD0Ey5Al/au5yU1YoFjDyBswhiwHBOadTZSK5uo4ob5mlKhEEJT9D+bIKdmxE
+	yDuijV9QUD8FZYQQZ3Lu00DYmaZ/zZEmq270UmZUKpgYFnJ3MkBvXT3Gv8sobLDhoqwxX3
+	kZEHgaYZr3dD0XN2ElCmwdzcsph76ao=
+Date: Fri, 3 Jul 2026 13:24:40 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260702145726.0B96B1F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Subject: Re: [PATCH bpf-next v7 1/2] bpf: Introduce jit_required flag and
+ refactor kfunc path
 Content-Language: en-US
+To: Tiezhu Yang <yangtiezhu@loongson.cn>, sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ KaFai Wan <kafai.wan@linux.dev>
+References: <20260702143656.28845-1-yangtiezhu@loongson.cn>
+ <20260702143656.28845-2-yangtiezhu@loongson.cn>
+ <20260702145855.07C6B1F000E9@smtp.kernel.org>
+ <7cce1695-eaa2-816b-2877-9cb2f117aa27@loongson.cn>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <7cce1695-eaa2-816b-2877-9cb2f117aa27@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCxWeAQN0dqVHO9AA--.31828S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7KFW5GF18Jr15Ww1xJF1DJwc_yoW8ZFyUpF
-	4fKayYk3yDXwn7Ka47t3y7Z3Wjqw48Gr47GFnYgr1Ik3Wakr97XFyfKr47uFn5Gr4v9F1I
-	vr4Igryvk3WDGFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE
-	14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1c
-	AE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
-	rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtw
-	CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
-	67AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
-	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_Ma
-	UUUUU
+X-Migadu-Flow: FLOW_OUT
 
-On 2026/7/2 下午10:57, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] The patch prevents loading BPF programs that use JIT-inlined helpers (e.g., `bpf_get_smp_processor_id`) when the BPF JIT is explicitly disabled at load time (`net.core.bpf_jit_enable=0`).
-> --
-> 
-> commit 01713d8606e656f4dadefe493f371f4c861d842b
-> Author: Tiezhu Yang <yangtiezhu@loongson.cn>
-> 
-> bpf: Reject programs with inlined helpers if JIT is unavailable
-> 
-> This patch sets the jit_required flag to 1 when a BPF program uses helpers
-> that are expected to be inlined by the JIT compiler. This prevents a kernel
-> panic in the BPF interpreter by rejecting the program with -ENOTSUPP if
-> JIT compilation is unavailable at runtime.
-> 
->> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
->> index 12a8a4eb757f1..94e0457a0aa33 100644
->> --- a/kernel/bpf/fixups.c
->> +++ b/kernel/bpf/fixups.c
->> @@ -1841,8 +1841,10 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
->>   		}
->>   
->>   		/* Skip inlining the helper call if the JIT does it. */
->> -		if (bpf_jit_inlines_helper_call(insn->imm))
->> +		if (bpf_jit_inlines_helper_call(insn->imm)) {
->> +			prog->jit_required = 1;
->>   			goto next_insn;
->> +		}
-> 
-> [Severity: High]
-> While this correctly prevents the interpreter panic, does this unconditionally
-> reject valid BPF programs when the JIT is explicitly disabled at load time
-> (e.g., net.core.bpf_jit_enable=0)?
+On 3/7/26 10:57, Tiezhu Yang wrote:
+> On 2026/7/2 下午10:58, sashiko-bot@kernel.org wrote:
+[...]
+>>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>>> index 649cce41e13f3..5fcd19ccb41a9 100644
+>>> --- a/kernel/bpf/core.c
+>>> +++ b/kernel/bpf/core.c
+>>> @@ -2619,8 +2619,7 @@ struct bpf_prog
+>>> *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
+>>>       if (fp->bpf_func)
+>>>           goto finalize;
+>>>   -    if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
+>>> -        bpf_prog_has_kfunc_call(fp))
+>>> +    if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) || fp->jit_required)
+>>>           jit_needed = true;
+>>>         if (!bpf_prog_select_interpreter(fp))
+>>
+>> [Severity: Medium]
+>> Since bpf_prog_has_kfunc_call() was replaced here with fp->jit_required,
+>> should bpf_fixup_call_args() in kernel/bpf/fixups.c also be updated to
+>> use
+>> the new flag?
+>>
+>> Currently, bpf_fixup_call_args() still calls
+>> bpf_prog_has_kfunc_call(). If
+>> a program has a pruned kfunc (allocating kfunc_tab but leaving
+>> jit_required=0) and JIT falls back to the interpreter, wouldn't
+>> bpf_fixup_call_args() incorrectly reject the program with -EINVAL?
 
-Yes.
 
-> If this block checked prog->jit_requested before skipping the fixup and
-> setting jit_required, wouldn't the verifier properly patch the instruction
-> when JIT is disabled, allowing the program to execute successfully in the
-> interpreter?
+I think this rejection is intentional. '!!prog->aux->kfunc_tab' means
+there is kfunc call in the prog, even though the kfunc call could be pruned.
 
-No, this was already explored in earlier version (v4), but it was
-explicitly rejected by the BPF maintainer.
+>>
+>> kernel/bpf/fixups.c:bpf_fixup_call_args() {
+>>      ...
+>>     bool has_kfunc_call = bpf_prog_has_kfunc_call(prog);
+>>      ...
+>>     if (has_kfunc_call) {
+>>         verbose(env, "calling kernel functions are not allowed in non-
+>> JITed programs\n");
+>>         return -EINVAL;
+>>     }
+>>      ...
+>> }
 
-If JIT is unavailable, rejecting the program load with -ENOTSUPP is
-the intended design.
+[...]
+
+> ```
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index f496b45b9da4..1f5824c1c691 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -2772,7 +2772,7 @@ int bpf_add_kfunc_call(struct bpf_verifier_env
+> *env, u32 func_id, u16 offset)
+> 
+>  bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog)
+>  {
+> -       return !!prog->aux->kfunc_tab;
+> +       return prog->jit_required && !!prog->aux->kfunc_tab;
+
+
+When 'prog->jit_required' is used for JIT-inlineable helper call, this
+change could also cause false positive for the above pruned kfunc case.
+
+If you don't want bpf_fixup_call_args() rejects the program with -EINVAL
+for the pruned kfunc case, suggest moving 'if (!func_id && !offset)'
+before the tab allocation in bpf_add_kfunc_call().
 
 Thanks,
-Tiezhu
+Leon
 
+>  }
+> [...]
