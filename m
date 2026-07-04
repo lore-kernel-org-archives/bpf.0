@@ -1,32 +1,32 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 449DB33A005
-	for <bpf@vger.kernel.org>; Sat,  4 Jul 2026 01:57:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21DFA372664
+	for <bpf@vger.kernel.org>; Sat,  4 Jul 2026 02:05:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783130253; cv=none; b=DJ5qYq/0/Vja1fhv8qfrILP6tj7kF7iD2J2+hSlSRaPed/7fd0WwEtQBo61hb92Gr5cIUHWr8rG0CCuiFYN70FfzjH3PZq/c/0gyeWNn7fOEPEhDwjit/ZdcRHBXubk/jyykq5yjKg4SEEQqIsLkXYnkT8POyT1ByZmY+WQDFQ4=
+	t=1783130755; cv=none; b=LiYFN1NUPs/UJWhgJ2OGi2YFAtWUyQo6xcGDGLPnCuiYC76R4qxfy+jrcoEgeCTceNELVcYNsXDnwH1TUbCphxFUyE/vMIOz7dEHgp9vlkgj0zyo1dsGRxxSrzAGvOQ6HEa5+LkN34RiSh4Y7JSLB3hMkIZOSwL6iRRMqVTppfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783130253; c=relaxed/simple;
-	bh=b/Fl3aC5TDl3rVrInYX4p9Je0CVczDVjgx74t4I6DRA=;
+	s=arc-20240116; t=1783130755; c=relaxed/simple;
+	bh=+S28gcG8VtOaqDH1Jl5RO5eD6iA9xp4gmq8ikXytpYQ=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iWn4+WKlIFB/f5eGprjseyPjHjFHwyIftp9OdEGHJ3EWxe/zAFza+j/nPby1nYMR2inRSu3loJJVir4qtGDC9mCfIsbPKOebsRAVT8zZz5Lf6YDzJVnjt0rusjm3tnPsBmekHzHxpZX2iHIx/jXzjWvL37bSp0hPMn2TmgNxnWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jI98NDRA; arc=none smtp.client-ip=91.218.175.183
+	 Content-Type:MIME-Version; b=Br25DxVE1st+LlPHWEOTyhyLhfQs/qjyMZaOsz+wLNSfIl7HE1zjynXmblNprsqYCK58XKDM6mJOK6NxsKjOVNHMf0aA1CXn0DnDKBgaZAelD2JuZ8T6NxbGd7Gl/ctAi1dlBOeV7VQhg1Xx5bjgYEZfwm/LzrcdhY8U57AsY48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JbHKTk1Q; arc=none smtp.client-ip=91.218.175.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jI98NDRA"
-Message-ID: <2240908fb833182e502d1804b392874cccf17b6c.camel@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JbHKTk1Q"
+Message-ID: <48f6a4e263a011d9017e96a8a6ca3dc0711865d3.camel@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783130239;
+	t=1783130742;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=w/L7gc2Nc7BXcgddL6MtvIXFo01p0bWMICTC+CUAtJw=;
-	b=jI98NDRAeG/I7+PlDAK6Rw6ibD9mlglYZ/8eUJQfv0U5P95Y1BrOnljlUrNWukyfFchaq4
-	ikiVwBsC+kdwf5ksFEfvtkNIUi7kVsg4NA4khxgdLkfi1E2TS5d2ev8ZIcvGbambAsM9VF
-	B2A2ePxqxsFI/5LwxPQA5/KpIjyE9uk=
+	bh=F/oTN/taBMivOGdBXMDX5oW8IKmJMQEKZJVVfOMZ49s=;
+	b=JbHKTk1Qhj8BUUmNnqOsc+cxtraXP1T5mkSNWeYIdw/upLIKvxd4+N8fN/PgXEgFug4Xhx
+	T/Jq+rd+GqZ4KgiZHWK7E/5kZFjGgrHp88SSjJ3KpzVjq5MtWwZKMxhZDW7hXJWxt+8QeE
+	WfLpPo9a56NchYJnp9Hgi6iXPcUhCSI=
 Subject: Re: [PATCH bpf-next v7 1/2] bpf: Introduce jit_required flag and
  refactor kfunc path
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
@@ -41,7 +41,7 @@ Cc: bpf@vger.kernel.org, loongarch@lists.linux.dev, Leon Hwang
 	 <leon.hwang@linux.dev>, Puranjay Mohan <puranjay@kernel.org>, 
  =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?=
 	 <bjorn@kernel.org>
-Date: Sat, 04 Jul 2026 09:57:10 +0800
+Date: Sat, 04 Jul 2026 10:05:33 +0800
 In-Reply-To: <2d1babdf-a4d9-9902-77b0-3f5640871323@loongson.cn>
 References: <20260702143656.28845-1-yangtiezhu@loongson.cn>
 	 <20260702143656.28845-2-yangtiezhu@loongson.cn>
@@ -181,6 +181,11 @@ ct bpf_verifier_env *env,
 > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return !!prog->aux->kfunc_tab;
 > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return prog->aux->kfunc_tab && prog=
 ->aux->kfunc_tab->nr_descs;
+
+!!prog->aux->kfunc_tab works fine when bpf_prog_has_kfunc_call() called cur=
+rently, no need to check=C2=A0
+prog->aux->kfunc_tab->nr_descs, see other thread.
+
 > =C2=A0=C2=A0 }
 >=20
 > =C2=A0=C2=A0 static int add_subprog_and_kfunc(struct bpf_verifier_env *en=
@@ -189,44 +194,7 @@ v)
 >=20
 > IIUC, there are two places to modify so far:
 > (1) struct bpf_prog
-
-yes
-
 > (2) bpf_prog_has_kfunc_call()
-
-I think we can remove this func.
-
-actually, I feed your patch to dsv4-pro and gpt-5.4 yesterday, both point o=
-ut the we should do this
-and change the log message.
-
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 12a8a4eb757f..7fb92b5fa415 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -1378,7 +1378,6 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
- #ifndef CONFIG_BPF_JIT_ALWAYS_ON
- 	struct bpf_prog *prog =3D env->prog;
- 	struct bpf_insn *insn =3D prog->insnsi;
--	bool has_kfunc_call =3D bpf_prog_has_kfunc_call(prog);
- 	int depth;
- #endif
- 	int i, err =3D 0;
-@@ -1404,7 +1403,7 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
- 			return err;
- 	}
- #ifndef CONFIG_BPF_JIT_ALWAYS_ON
--	if (has_kfunc_call) {
-+	if (prog->jit_required) {
- 		verbose(env, "calling kernel functions are not allowed in non-JITed prog=
-rams\n");
- 		return -EINVAL;
- 	}
-
-I think we can change the log message for general purpose no just for kunc,=
- so we can know why prog
-failed in patch#2 as you test yesterday.
-
 >=20
 > If you have any more comments, please let me know.
 >=20
