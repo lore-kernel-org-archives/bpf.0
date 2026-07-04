@@ -1,170 +1,241 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 126005695
-	for <bpf@vger.kernel.org>; Sat,  4 Jul 2026 05:06:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5D6433E84;
+	Sat,  4 Jul 2026 05:39:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783141588; cv=none; b=ocxNH6GTipn4rJ6us0FRcVf8hKqC6tFIq6/pveDHQzDj9Z88S6N43JjCqJ0ySnyd9/kA34Rr5MgngZMv06szj/IYLgQP88ffMw+mlBIc2C2sqRhE8pHqT0A+uI02EDImrHg3BXnUembQhLapcZ3qHtdVd4MH8oJ+Rrr+2lQZ7oc=
+	t=1783143542; cv=none; b=od0O4bMFQaN2Y1clinHsYq/OB2oJ6056i4Py4TQiSp5BUhzrx1SwY8TNiY6OiIABPzzsPw89nCSk3BY4cSVWcyu4fX/aoYKvaeDYjmoVi/BaYYMdaOrXwoZmPCNqmCMAPosZvR3BvFZUCCGcl0iE7iaCN8RD8eeEZkKyJ7X9dHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783141588; c=relaxed/simple;
-	bh=TpikXZgnFFU6QwxVv/bkljNC3YzQlCKHASQTTzJKP4w=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=WiPU+pUXZTd3cVBTvxlGeQQ31lmSqksLWRjaWj4qal14i2hRc+vJRxbfjE8k4gsfPPM7LmKZB4XqRMFuNYqTsNQUffLd/OwEq11GXbJ5yjBqzI/sP5nRf74nNVWoKMdKw9IH6+u3sksH66zEU9HaMzmOPdLhKSP0rCY+Qj8GCVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fZgJV8Qm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783143542; c=relaxed/simple;
+	bh=A+KjvuIipBnT7135EzuQXTsoASaUxKfMzokXbeK1pG0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=VtQua7a/A0Sp11KZ+y4cPnw0pJCK6/QXcCuJKZJrqwOtivxPYkxGbqUaD3/kMl6jGph+/n5zrAqPD0IXrVyD0d6OXXEWVukrtOwjbnmCHgTOuQLE3WHOa81kSaaKE+5Esly5tcarpQFkcYaDILmRcxUwwnw1sBYaYd+ED3BzgX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z5zChWYG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fZgJV8Qm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 520011F000E9;
-	Sat,  4 Jul 2026 05:06:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z5zChWYG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 673E01F000E9;
+	Sat,  4 Jul 2026 05:39:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783141586;
-	bh=+9q1HHnU8CBKHnzEoKlGNO5+AvBEMSLZrwfgYBwj0ZQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fZgJV8Qm7D9c1v5N+abqKBhv06DYfF8iq1nMLZ3P6SSPqBZ8aDGpMN4bi374AlAwB
-	 7e+6RAj6/NFu2u9l6Bdgia4mvW0edyxCfkDTu4XESO0dDK5fBWLuJLsRpzIdBi9ee4
-	 6bYju2m/W8p0m5C0QdxO6YJrC8IXGL1rrdxkXjtctZv3rMFL6CbaBvromgnqIv6XmC
-	 Q+IVuSiaPkBQuXtqjJZ7Vg50pYyhkmTRenDMjhdfgzpmfcpkWVRgQl+LrOZwn6LQZa
-	 xV6sYv/jJC9jNkwjpFy35D/AcX+VJ1xMkvXVKCwCriG7gEXgzKWOoz7DCWklJDt5BZ
-	 wxD9ceulCw4Bg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/3] selftests/bpf: add memcg_stat_reader
- BPF-vs-memory.stat benchmark
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ziyang Men" <ziyang.meme@gmail.com>
-Cc: bpf@vger.kernel.org, hannes@cmpxchg.org, tj@kernel.org, mkoutny@suse.com
-In-Reply-To: <20260704045617.487664-2-ziyang.meme@gmail.com>
-References: <20260704045617.487664-1-ziyang.meme@gmail.com>
- <20260704045617.487664-2-ziyang.meme@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 04 Jul 2026 05:06:25 +0000
-Message-Id: <20260704050626.520011F000E9@smtp.kernel.org>
+	s=k20260515; t=1783143540;
+	bh=Omav1PnVWAaMZoG6fUApE0dlp68yQBo+33N50QCsh9c=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Z5zChWYGLr0SHmTjjiqBGh0M7SlqKkNtKKOqVR/nPEaLT9OlNTAKFffZ1Ozyos581
+	 ckbpJTAddK521RhDoYRpoHgCkrGEcpRK1P+h84zhGcDz/5sV2gRgFiI/hDzt5K1E7Z
+	 2WyjJTpZKXoETEh/Y2NGhFK+vCDR7SECYQg0B7oLuLTVI8Pvt2AeO1Btf/l5A9hDBC
+	 d6myTRAu7x1tu02MUEgvkfz8Gg91pFau2lx6smMw/8FtVw43BRDYHfzBt7Z4UER0SU
+	 ldl0mwaGWX+SDxH924GS3hlG6e0Aqzqv8h3gHwfhVb6H2S03qDg0HgTIP4kipKjEel
+	 qtlAcbvCR494w==
+Content-Type: multipart/mixed; boundary="===============0892255960102653600=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <020c0e385f57d0b2dcdad92ae1ba2f411ec854dd9fb0f0eb4b4a618538b1c983@mail.kernel.org>
+In-Reply-To: <20260704045617.487664-3-ziyang.meme@gmail.com>
+References: <20260704045617.487664-3-ziyang.meme@gmail.com>
+Subject: Re: [PATCH 2/3] selftests/bpf: add memcg_stat_churn BPF-vs-memory.stat benchmark under churn
+From: bot+bpf-ci@kernel.org
+To: ziyang.meme@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,bpf@vger.kernel.org
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,roman.gushchin@linux.dev,kernel-team@meta.com,linux-mm@kvack.org,cgroups@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ziyang.meme@gmail.com,shakeel.butt@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sat,  4 Jul 2026 05:39:00 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+--===============0892255960102653600==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-New issues:
-- [Low] Multi-line comments in the BPF selftest header `memcg_stat_reader.h=
-` violate the BPF subsystem comment style guidelines by not having the open=
-ing `/*` on its own line.
-
-Pre-existing issues:
-- [High] The kfunc `bpf_mem_cgroup_vm_events` allows an out-of-bounds array=
- read due to a missing negative bounds check on its signed enum argument.
---
-
-commit 4ae0facb76303e67faffbd1e910d6587123d09d6
-Author: Ziyang Men <ziyang.meme@gmail.com>
-
-selftests/bpf: add memcg_stat_reader BPF-vs-memory.stat benchmark
-
-This commit adds a BPF selftest to benchmark reading memory cgroup statisti=
-cs
-by walking the cgroup subtree using a BPF program and comparing the cost
-against traditional userspace file reads.
-
-> diff --git a/tools/testing/selftests/bpf/memcg_stat_reader.h b/tools/test=
-ing/selftests/bpf/memcg_stat_reader.h
+> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_stat_churn.c b/tools/testing/selftests/bpf/prog_tests/memcg_stat_churn.c
 > new file mode 100644
-> index 0000000000000..72afebe95ccb8
+> index 000000000000..3e386d0b4c03
 > --- /dev/null
-> +++ b/tools/testing/selftests/bpf/memcg_stat_reader.h
-> @@ -0,0 +1,35 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-> +#ifndef __MEMCG_STAT_READER_H
-> +#define __MEMCG_STAT_READER_H
-> +
-> +/*
-> + * One per-cgroup snapshot, produced by the BPF cgroup iterator and read=
- back
-> + * from a BPF hash map keyed by cgroup id.  The "matched" subset is alwa=
-ys
-> + * populated so it can be compared field-by-field against what userspace=
- parses
-> + * out of memory.stat / memory.current / memory.max.  The "full" fold is=
- only
-> + * populated when collect_full is set and exists to (a) force the extra =
-kfunc
-> + * reads to happen (so the full-vs-matched timing is honest) and (b) giv=
-e a
-> + * coarse, informational signal of how many fields the full path touched.
-> + */
-> +struct memcg_stat_snapshot {
-> +	__u64 cgroup_id;
-> +
-> +	/* Matched subset. Page-state values are in bytes (already unit-scaled
-> +	 * by the kernel), so they compare directly against memory.stat.
-> +	 */
+> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_stat_churn.c
 
-[Severity: Low]
-Does this multi-line comment follow the modern kernel formatting rules?
-The BPF subsystem requires the opening /* to be on its own line, rather than
-sharing a line with the comment text.
-
-> +	__u64 anon;		/* NR_ANON_MAPPED, bytes */
-> +	__u64 file;		/* NR_FILE_PAGES, bytes */
 [ ... ]
-> diff --git a/tools/testing/selftests/bpf/progs/memcg_stat_reader.c b/tool=
-s/testing/selftests/bpf/progs/memcg_stat_reader.c
-> new file mode 100644
-> index 0000000000000..a2c1b1b483646
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/memcg_stat_reader.c
-[ ... ]
-> +	/* Matched subset: always collected so correctness holds in both modes.=
- */
-> +	snap.anon =3D bpf_mem_cgroup_page_state(memcg,
-> +			bpf_core_enum_value(enum node_stat_item, NR_ANON_MAPPED));
-> +	snap.file =3D bpf_mem_cgroup_page_state(memcg,
-> +			bpf_core_enum_value(enum node_stat_item, NR_FILE_PAGES));
-> +	snap.shmem =3D bpf_mem_cgroup_page_state(memcg,
-> +			bpf_core_enum_value(enum node_stat_item, NR_SHMEM));
-> +	snap.file_mapped =3D bpf_mem_cgroup_page_state(memcg,
-> +			bpf_core_enum_value(enum node_stat_item, NR_FILE_MAPPED));
-> +	snap.pgfault =3D bpf_mem_cgroup_vm_events(memcg,
-> +			bpf_core_enum_value(enum vm_event_item, PGFAULT));
 
-[Severity: High]
-This is a pre-existing issue, but does bpf_mem_cgroup_vm_events() prevent an
-out-of-bounds read when a BPF program passes a negative event index?
-
-Since the verifier does not check enum ranges, a negative value can reach
-memcg_vm_event_item_valid() via this kfunc:
-
-mm/bpf_memcontrol.c:bpf_mem_cgroup_vm_events() {
-    ...
-    if (unlikely(!memcg_vm_event_item_valid(event)))
-        return (unsigned long)-1;
-    ...
-}
-
-In memcg_vm_event_item_valid(), the index is compared against
-NR_VM_EVENT_ITEMS using a signed comparison:
-
-mm/memcontrol.c:memcg_vm_event_item_valid() {
-    if (idx >=3D NR_VM_EVENT_ITEMS)
-        return false;
-    ...
-}
-
-Because both idx and NR_VM_EVENT_ITEMS are signed, a negative index bypasses
-the check. This could allow the negative index to be used when accessing
-the events array, resulting in an out-of-bounds read of kernel memory. Shou=
-ld
-memcg_vm_event_item_valid() include a check for negative values, or cast the
-value to an unsigned integer?
-
+> +static long long now_ns(void)
+> +{
+> +	struct timespec t;
 > +
-> +	/* page_counter fields need no kfunc; read them off the trusted ptr. */
-> +	snap.usage_pages =3D BPF_CORE_READ(memcg, memory.usage.counter);
-> +	snap.max_pages =3D BPF_CORE_READ(memcg, memory.max);
+> +	clock_gettime(CLOCK_MONOTONIC, &t);
+> +	return (long long)t.tv_sec * 1000000000LL + t.tv_nsec;
+> +}
+> +
+> +/* ---- tree construction (same shape as memcg_stat_reader) --------------- */
+> +
+> +static struct cg_node *nodes;
+> +static int n_nodes;
+> +static int n_leaves;
+> +
+> +static int add_node(const char *rel, bool is_leaf, int *keep_fd)
+> +{
+> +	int fd;
+> +
+> +	fd = create_and_get_cgroup(rel);
+> +	if (fd < 0)
+> +		return -1;
+> +	if (keep_fd)
+> +		*keep_fd = fd;
+> +	else
+> +		close(fd);
+> +
+> +	strncpy(nodes[n_nodes].rel, rel, sizeof(nodes[n_nodes].rel) - 1);
+> +	nodes[n_nodes].rel[sizeof(nodes[n_nodes].rel) - 1] = '\0';
+> +	nodes[n_nodes].id = get_cgroup_id(rel);
+> +	nodes[n_nodes].is_leaf = is_leaf;
+> +	if (is_leaf)
+> +		n_leaves++;
+> +	n_nodes++;
+> +	return 0;
+> +}
+> +
+> +/* Recursively create children of @rel. @rel must already exist and be recorded. */
+> +static int build_children(const char *rel, int fanout, int depth)
+> +{
+> +	char child[128];
+> +	int i;
+> +
+> +	if (depth == 0)
+> +		return 0;
+> +
+> +	/* Enable memory on this interior node so its children get a memcg. */
+> +	if (enable_controllers(rel, "memory"))
+> +		return -1;
+> +
+> +	for (i = 0; i < fanout; i++) {
+> +		snprintf(child, sizeof(child), "%s/c%d", rel, i);
+> +		if (add_node(child, depth == 1, NULL))
+> +			return -1;
+> +		if (build_children(child, fanout, depth - 1))
+> +			return -1;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static size_t tree_capacity(int fanout, int depth)
+> +{
+> +	size_t total = 1, level = 1;
+> +	int d;
+> +
+> +	for (d = 0; d < depth; d++) {
+> +		level *= fanout;
+> +		total += level;
+> +	}
+> +	return total;
+> +}
+> +
+> +static int build_tree(int fanout, int depth, int *root_fd)
+> +{
+> +	n_nodes = 0;
+> +	n_leaves = 0;
+> +	nodes = calloc(tree_capacity(fanout, depth), sizeof(*nodes));
+> +	if (!nodes)
+> +		return -1;
+> +
+> +	if (add_node(SUBTREE_ROOT, depth == 0, root_fd))
+> +		return -1;
+> +	return build_children(SUBTREE_ROOT, fanout, depth);
+> +}
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260704045617.4876=
-64-1-ziyang.meme@gmail.com?part=3D1
+[ ... ]
+
+> +static void parse_stat(char *buf, struct file_snap *o)
+> +{
+> +	char *save, *line;
+> +
+> +	for (line = strtok_r(buf, "\n", &save); line;
+> +	     line = strtok_r(NULL, "\n", &save)) {
+> +		unsigned long long val;
+> +		char name[64];
+> +
+> +		if (sscanf(line, "%63s %llu", name, &val) != 2)
+> +			continue;
+> +		o->full_sum += val;
+> +		o->full_fields++;
+> +		if (!strcmp(name, "anon"))
+> +			o->anon = val;
+> +		else if (!strcmp(name, "file"))
+> +			o->file = val;
+> +		else if (!strcmp(name, "shmem"))
+> +			o->shmem = val;
+> +		else if (!strcmp(name, "file_mapped"))
+> +			o->file_mapped = val;
+> +		else if (!strcmp(name, "pgfault"))
+> +			o->pgfault = val;
+> +	}
+> +}
+> +
+> +static int file_read_node(const char *rel, struct file_snap *o)
+> +{
+> +	char buf[8192];
+> +
+> +	memset(o, 0, sizeof(*o));
+> +
+> +	if (read_cgroup_file(rel, "memory.stat", buf, sizeof(buf)))
+> +		return -1;
+> +	parse_stat(buf, o);
+> +
+> +	if (!read_cgroup_file(rel, "memory.current", buf, sizeof(buf)))
+> +		o->current = strtoull(buf, NULL, 10);
+> +	if (!read_cgroup_file(rel, "memory.max", buf, sizeof(buf))) {
+> +		if (!strncmp(buf, "max", 3))
+> +			o->max_is_max = true;
+> +		else
+> +			o->max = strtoull(buf, NULL, 10);
+> +	}
+> +	return 0;
+> +}
+
+[ ... ]
+
+> +static int drain_map(int mfd, struct memcg_stat_snapshot *out, int max)
+> +{
+> +	__u64 key = 0, next;
+> +	int n = 0, err;
+> +
+> +	err = bpf_map_get_next_key(mfd, NULL, &next);
+> +	while (err == 0) {
+> +		if (n < max && !bpf_map_lookup_elem(mfd, &next, &out[n])) {
+> +			sink += out[n].anon + out[n].full_sum;
+> +			n++;
+> +		}
+> +		key = next;
+> +		err = bpf_map_get_next_key(mfd, &key, &next);
+> +	}
+> +	return n;
+> +}
+
+[ ... ]
+
+> +static bool memcg_kfuncs_available(void)
+> +{
+> +	struct btf *btf;
+> +	bool ok;
+> +
+> +	btf = btf__load_vmlinux_btf();
+> +	if (!btf)
+> +		return false;
+> +	ok = btf__find_by_name_kind(btf, "bpf_get_mem_cgroup", BTF_KIND_FUNC) > 0;
+> +	btf__free(btf);
+> +	return ok;
+> +}
+
+This isn't a bug, but several of these helpers appear nearly identical
+to the ones in prog_tests/memcg_stat_reader.c -- tree_capacity(),
+build_tree(), add_node(), build_children(), drain_map(), bpf_walk_once(),
+file_read_node(), parse_stat(), now_ns(), and memcg_kfuncs_available().
+
+The commit message notes the BPF program, map, and snapshot struct are
+reused, but the userspace tree-construction and file-reader helpers are
+duplicated rather than shared. Could the common pieces move into a small
+shared header so the two tests don't drift apart over time?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28695985027
+--===============0892255960102653600==--
