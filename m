@@ -1,115 +1,179 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 099921EDA32
-	for <bpf@vger.kernel.org>; Sat,  4 Jul 2026 00:35:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDEBE1D6DA9
+	for <bpf@vger.kernel.org>; Sat,  4 Jul 2026 01:18:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783125303; cv=none; b=VV+0llOwJu7Tq6Uk3Ywj4Wsl7B3DEokbufs+chAbQ5BsIRPOhv8h2gG5fLUAgTZzPuRij3QcV6ujjw6bC/o5V8OELGuM5nKx7kqMzNrRdfS4nrXK1HAwB2Ko98Szkvo2WydKddREzqY2SbwixhXbjbtOgnPXN542H2ukhZra5sc=
+	t=1783127883; cv=none; b=hj7Hk2Tf3KileizojerV1X7KoUsK1R41u++0eJk2IXbkyNvL1HU8sDmknU8DTcxA+t9JuQlQHXrW9Vzv40HFfUizXj2bJAcPGsObh52S8RABvIlWkIyvc77V3j0Hag/V07VyocM+I+heuaQ6j2WvytjlYUzfL8I/X3AHaLpN3ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783125303; c=relaxed/simple;
-	bh=GqDamSSNlxKO7QjljpHve5LA9dwBxNcfbMiZD//8q/E=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=JCAc7HK4Pe6/n8xMa0sFllVKoPRBrAPsQjxgroSj+dLBKFPXZ1U4rYqvtDI1Gqy+LbJSUyF2S3wA4dYhxQcKsmv/UkhOAOQJeonPWiAsQe/BGHlB8tSzYzc7T3GODPaS9pLRJw0s5nahYJoLTNU36TK3WLz7lmDSRLMt9AbaHgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YlzmSUK4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783127883; c=relaxed/simple;
+	bh=yZx1hGLPqbJpAdk5dS5jA86PkXVweV1zJTsdEMcZt5Q=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uVQFsH1exRgPhYlfiN47OZkJ6QTQxecz+6L7472dyHCZ7SP4rN/gMSozuf2Tb/s1oHveIn2rraRRNooFrxsNXMueHOOW6em6PAqb5wgAh/t2RtcmN/7Og77NJ0JNmRw19az0O2gj33tMMPA1sloAlzL4riktINm2VTIRNLtnIQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hg42CmfJ; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YlzmSUK4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7692A1F000E9;
-	Sat,  4 Jul 2026 00:35:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783125301;
-	bh=lWlrDhoa4AP+qbeq8mYa68KgcIT638OSV7GRZck9v54=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YlzmSUK4cfXHtiO8adS7iJErwNM2PrZkRV54pFO5W8mji1npnaFot1IpQYxQwt1/f
-	 2Ll5o8xi/hIxEp57lRSQAgYgGa2QjxKURFoNOO2250sOclNvRDcUT+E1G/brYRDERA
-	 Ppna646rK8J8EmETAe3HovSGEr/ty9Q6LKJ2woZTjZE0bcTSrhbDh05peDKSFmrSlo
-	 oVu1lwbtJdMhsV2ibyzZwGxxdNJKIt+nw6eYSCWbSKtsmPaXZirQWjaWDiXioPvI9N
-	 8713xgF1k93jMBGEB3Dn+yTqjM7RAxsqprnpW4O24aIWkufZvTPL/d+NnzOi120X/B
-	 gY5dVyN/jzt5g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v1 5/5] x86/cpu: Don't reset boot CPU cpuinfo in
- identify_cpu()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260704002046.3859585-6-ihor.solodrai@linux.dev>
-References: <20260704002046.3859585-1-ihor.solodrai@linux.dev>
- <20260704002046.3859585-6-ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hg42CmfJ"
+Message-ID: <f9c2301fbc1f0976a0438d81a8ed694a9b348e5a.camel@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783127870;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2jc7kJR7OM++klJRkEgQh4iavMNSksDIvCWklV+lvF8=;
+	b=hg42CmfJC9/apxlH53DKlWCMqNAKslnGy9o0q+V19VH5LdM28oZCOPhIT7ZrRkPieeDZDu
+	uXP0G8VW9hUzj2iyYSQ8bcwnSdwcxu+jA5Oze3TLNKgazzH2+qMv+z2qAdIhGKjlvisPD/
+	VRLbXDaC4a1VyuVmsb0VcNUAo5z1Xtk=
+Subject: Re: [PATCH bpf-next v7 1/2] bpf: Introduce jit_required flag and
+ refactor kfunc path
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: KaFai Wan <kafai.wan@linux.dev>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>, Leon Hwang <leon.hwang@linux.dev>,
+  sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
+Date: Sat, 04 Jul 2026 09:17:45 +0800
+In-Reply-To: <c56c20eb-00f9-046e-70a4-261499d0f2ae@loongson.cn>
+References: <20260702143656.28845-1-yangtiezhu@loongson.cn>
+	 <20260702143656.28845-2-yangtiezhu@loongson.cn>
+	 <20260702145855.07C6B1F000E9@smtp.kernel.org>
+	 <7cce1695-eaa2-816b-2877-9cb2f117aa27@loongson.cn>
+	 <42e59c6f-5040-4b50-91ce-10066551a32c@linux.dev>
+	 <c6aca1e2-1f7a-7e01-62c8-81d0658a20fe@loongson.cn>
+	 <ed816369-e1f6-47aa-9532-5f3ccf6d6794@linux.dev>
+	 <c56c20eb-00f9-046e-70a4-261499d0f2ae@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 04 Jul 2026 00:35:00 +0000
-Message-Id: <20260704003501.7692A1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On Fri, 2026-07-03 at 23:53 +0800, Tiezhu Yang wrote:
+> On 7/3/26 22:14, Leon Hwang wrote:
+> > On 2026/7/3 14:59, Tiezhu Yang wrote:
+> > [...]
+> > > > > ```
+> > > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > > > index f496b45b9da4..1f5824c1c691 100644
+> > > > > --- a/kernel/bpf/verifier.c
+> > > > > +++ b/kernel/bpf/verifier.c
+> > > > > @@ -2772,7 +2772,7 @@ int bpf_add_kfunc_call(struct bpf_verifier_=
+env
+> > > > > *env, u32 func_id, u16 offset)
+> > > > >=20
+> > > > > =C2=A0=C2=A0=C2=A0bool bpf_prog_has_kfunc_call(const struct bpf_p=
+rog *prog)
+> > > > > =C2=A0=C2=A0=C2=A0{
+> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return !!prog->aux->kfunc_t=
+ab;
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return prog->jit_required &=
+& !!prog->aux->kfunc_tab;
+> > > >=20
+> > > >=20
+> > > > When 'prog->jit_required' is used for JIT-inlineable helper call, t=
+his
+> > > > change could also cause false positive for the above pruned kfunc c=
+ase.
+> > > >=20
+> > > > If you don't want bpf_fixup_call_args() rejects the program with -E=
+INVAL
+> > > > for the pruned kfunc case, suggest moving 'if (!func_id && !offset)=
+'
+> > > > before the tab allocation in bpf_add_kfunc_call().
+> > >=20
+> > > How about this:
+> > >=20
+> > > ```
+> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > index 25aea4271cd0..c34cc524651a 100644
+> > > --- a/kernel/bpf/verifier.c
+> > > +++ b/kernel/bpf/verifier.c
+> > > @@ -2770,7 +2770,7 @@ int bpf_add_kfunc_call(struct bpf_verifier_env
+> > > *env, u32 func_id, u16 offset)
+> > >=20
+> > > =C2=A0=C2=A0bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog)
+> > > =C2=A0=C2=A0{
+> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return !!prog->aux->kfunc_tab;
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return prog->aux->kfunc_tab && =
+prog->aux->kfunc_tab->nr_descs > 0;
+> >=20
+> >=20
+> > NIT: drop '> 0'
+> >=20
+> > Looks better.
+>=20
+> OK, will do it in v8.
+>=20
+> >=20
+> > > =C2=A0=C2=A0}
+> > >=20
+> > > =C2=A0=C2=A0static int add_subprog_and_kfunc(struct bpf_verifier_env =
+*env)
+> > > ```
+> > > IMO, there are no side effects for the following four cases:
+> > >=20
+> > > 1. Pure JIT-inlined Helper
+> > > 2. Pure Pruned kfunc
+> > > 3. Pruned kfunc + Inlined Helper
+> > > 4. Active (Unpruned) kfunc
+> > >=20
+> >=20
+> > This change allows pruned kfunc + interpreter fallback and pruned kfunc
+> > + bpf_fixup_call_args(), when CONFIG_BPF_JIT_ALWAYS_ON is off.
+> >=20
+> > Does it look like a pre-existing issue?
+>=20
+> I think so.
 
-Pre-existing issues:
-- [High] The patch deliberately leaves 32-bit systems vulnerable to the exa=
-ct same interrupt window race condition that it fixes for 64-bit systems.
---
+no, it's not. for kfunc insn, ->imm means btf_id and ->off leads to fd of b=
+tf file.
+we replace ->imm to actual address and reject invalid kfunc in bpf_fixup_kf=
+unc_call().=20
 
-commit 7225f9ebac0ba182d1da83ea9f37319d7bdecfdb
-Author: Ihor Solodrai <ihor.solodrai@linux.dev>
+all pruned kfuncs allowed in bpf_add_kfunc_call() are rejected in bpf_fixup=
+_kfunc_call(),=C2=A0before
+call bpf_fixup_call_args(), no pruned kfuncs fall back to the interpreter.
 
-x86/cpu: Don't reset boot CPU cpuinfo in identify_cpu()
+I think we can set ->jit_required at the entry of bpf_add_kfunc_call() inst=
+ead of end, make less
+confusion of AI.
 
-This patch moves the init_cpu_info() call out of identify_cpu() into its
-callers and skips it for the boot CPU on 64-bit systems. This prevents a wi=
-ndow
-where interrupts can observe cleared CPU capabilities. 32-bit systems still
-reset capabilities in identify_boot_cpu() to maintain the no-CPUID default.
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d46f7db20d8f..4f7b43ab3729 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2713,6 +2713,7 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *env, =
+u32 func_id, u16 offset)
+ 			return -ENOMEM;
+ 		prog_aux->kfunc_tab =3D tab;
+ 	}
++	env->prog->jit_required =3D 1;
+=20
+ 	/* func_id =3D=3D 0 is always invalid, but instead of returning an error,=
+ be
+ 	 * conservative and wait until the code elimination pass before returning
 
-Link: https://lore.kernel.org/bpf/20260610175651.647515-1-ihor.solodrai@lin=
-ux.dev/
-
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index 93ad02ceacc24..01d07b1f30788 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-
-[ ... ]
-
-> @@ -2156,6 +2154,13 @@ static void identify_cpu_32(struct cpuinfo_x86 *c)
-> =20
->  static __init void identify_boot_cpu(void)
->  {
-> +	/*
-> +	 * The boot CPU's capabilities were already scanned in early_identify_c=
-pu().
-> +	 * However 32-bit still needs to init_cpu_info() here for the no-CPUID
-> +	 * cpuid_level default.
-> +	 */
-> +	if (IS_ENABLED(CONFIG_X86_32))
-> +		init_cpu_info(&boot_cpu_data);
-
-[Severity: High]
-This is a pre-existing issue, but does leaving the call to init_cpu_info() =
-here
-leave 32-bit systems vulnerable to the exact same interrupt window race con=
-dition
-that this patch fixes for 64-bit?
-
-Because start_kernel() calls local_irq_enable() before arch_cpu_finalize_in=
-it()
-calls identify_boot_cpu(), an interrupt can fire immediately after
-init_cpu_info() clears the capabilities:
-
-arch/x86/kernel/cpu/common.c:init_cpu_info() {
-    ...
-    memset(&c->x86_capability, 0, sizeof(c->x86_capability));
-    ...
-}
-
-If a timer tick or other hardware interrupt fires right after this memset,
-and the interrupt handler dynamically evaluates boot_cpu_has(), won't it
-falsely observe missing capabilities and potentially cause a crash or
-incorrect behavior during boot?
+>=20
+> >=20
+> > Pls read "Support kernel module function calls from eBPF" [1] to
+> > understand the background of introducing func_id=3D0 kfunc.
+> >=20
+> > [1] https://lore.kernel.org/bpf/20211002011757.311265-1-memxor@gmail.co=
+m/
+> >=20
+> > Thanks,
+> > Leon
+>=20
+> Thanks,
+> Tiezhu
+>=20
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260704002046.3859=
-585-1-ihor.solodrai@linux.dev?part=3D5
+Thanks,
+KaFai
