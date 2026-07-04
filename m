@@ -1,117 +1,113 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99533176238
-	for <bpf@vger.kernel.org>; Sat,  4 Jul 2026 16:12:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F0F346E43;
+	Sat,  4 Jul 2026 16:41:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783181579; cv=none; b=uTwaUv6PRzFil2CDQtkalqyCGnDCvsGhBT5oWPYXYIdEMbrKgZHdMLNA4ThmZCIJOc3FPlvEBCu9w7d8Xw+2PetBtNK4hDVlfAzS0tJalcwKzw6Vi95u32fQU8tD24JR/MD2pagqIQJHd+fsC/8WtBvLp03FZVVOXRDUvWHMkPo=
+	t=1783183270; cv=none; b=prlmgg9N4pY89JyOdJyWMZOtlU/xxWH0nRrmnyo9GxVUumq2Z0/GUbG3tyNVtJUAOT3o3LaoMbIZRFCwqTFx0knjgY2OK9+K1h/Gxu7KiOeHy/tzC1YWRYj7xWdaOIZhKBI3JIZ6WzfVZRW/9X0on/wl7LvwnUZgKw39Je7KeXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783181579; c=relaxed/simple;
-	bh=15YSkLAkQCti5IzcfCpgR1ie8/bhUE9zxOgts1ol0qQ=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=h/2cJcIEGwrI7dbx6CzearHuasaXC6PtIyp4+lHkYhafMInUjw5b9ZbKdpmUhK4Cvsty/+P2+lcCrwquucCSrC6Wgd3JAe7W23XoZmBmaL33Hs7UukoFTkuQVHITG4hOZ4o+ccsfF/QqH0PtReRppSL+YvG3O0mQGud7lmTtkjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jDO1FfoQ; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783183270; c=relaxed/simple;
+	bh=KLyfcr4pZbvjRBb83ICFhddfx+XwcLOeWRqrdS/GO4c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MQuF7wKMFK2HzQuoBdGRGy0mCfaq4ylnOR24UzeBjveyZuQUc0fquUjftXIdZ34QuuWcePWUYAWiHmb33jw+SXIC92xDBf3n/9jko+lLZcvt77QrpF6qRo6iG1v1JLV42JbN3OHRDQgdieMYZzO987kNnlMdqNwW2Mv4MGVmijM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XCHBmwbo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jDO1FfoQ"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8423f236418so894347b3a.1
-        for <bpf@vger.kernel.org>; Sat, 04 Jul 2026 09:12:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783181578; x=1783786378; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=kVfJZz8SjrFuy7zkpM4CK8nsRN5F1mP1tDE3AslmNig=;
-        b=jDO1FfoQoWl63oe7sQHDR9oAmG9ONvd0B/WM+i8SLvmyEc8wdBoIceTZbVwCXrRegL
-         7at93vxFF7c36HD/Hze9aWa5qX5cjrdsJdPtxEsy0JJb8gj5MW/K3xtiY0XQnfSUASmi
-         mx/y1PAbGWAWX5+b5elURf7b7fVzD6JgDJbWsEBebe10/62PdUY3fxXFQcfy+fo7q/Ql
-         nkAHarHdeq1+FfG613E7rmXg4SmF8VueVbVasmbqCSfcaG7zrTMGCYkaJCibSuvLZ8eq
-         SD2d/KILw6ukW/IfNZmgHqA/Ds6Ek0kbUGfCSjF+jS3qm0eONDr08VJ1saIEmvHoe4xO
-         G4/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783181578; x=1783786378;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=kVfJZz8SjrFuy7zkpM4CK8nsRN5F1mP1tDE3AslmNig=;
-        b=bii/o2Sn55mlOPhEljexTcWjTTcM/MDnOJjW9OKMJGBryPOukdTTtzu1PArdQZwH9Q
-         zdLepxfPxPbLtNCbgEO4ib83m9p5lKi6AyAHuHZnNIaAiwvTpsjqypJnGJgqI7Z4UtOL
-         cEZWdlFWk24OK45rEQrztQ2M/AxRadrEOcxcunG/y8QiWrnI6WHXLqQnFBYrg3y7ASHY
-         kWltt9SzJ+S0NYxcH1J4SyFK9UKChXIkWa1uxNse1VyCxTUTzwmaef7RrGdEVPhmN8tl
-         Yus5qPiJBoCAPiR/Yjsdxq2e16wP0fqOsc7KAYEEPrEKtzsJmhulpqHWWs+SDnQDqMWc
-         s6Zw==
-X-Forwarded-Encrypted: i=1; AHgh+Rp38211fdId5uf9xYCSmQdas+asB4W1D6Do86VamenBaSMfXho+bqOpV09u2srDw3HQ8RY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPjXtTBdE8v/v+FYKtnaXBV0qP+8y+S3qqzQPWW49kF/bzOsj2
-	9K8b4i4cRyu3NElpM0BRUoWa/EHyuD5LtemNjKJbE1BMD1299/mUvI/V
-X-Gm-Gg: AfdE7cnMHZ/RcnUmyrIN5lPA9m9N0R5ECpFIagfEcDEbsOv0bcedbj/AbYKNX41B6bq
-	7tOsILFvprrbrkVGKN5DDuDqRlQPYvz7Mt8UvdzEJxRtqsdm2qmpZCb10jKQJrvYcqIicGGd23m
-	glm5Pao1Z2IPxZn1bXn8ZT3VQ10+qTlRdf839Pg9Se4kESxW340Pq3AXGvs8ER0PBfOTIOtzjon
-	IAdvsnHaEDJ2m1dUWr3gatiHEHTxVkltRb/lIV9y5uS29hOLhGHZDrYoq7rFpi4oN2aLIgC/hzn
-	jR8j6xqqNVNPOuQ0sMJVQnyIm/8ExCR5+xLamMa8YK8UUIbDxyt4wOA/emE2aPmnCwcjKnN2blS
-	kJ38A0tGhsZb3nxdr+lUSX+43Fgqq66ArlYjbPtzz/lSMdDIQlQPTOmfMiBZe/Enw+DBgRlOnPS
-	rz1YFI5w==
-X-Received: by 2002:a05:6a00:2789:b0:845:e703:e with SMTP id d2e1a72fcca58-847f6dd4a7fmr3713537b3a.19.1783181577928;
-        Sat, 04 Jul 2026 09:12:57 -0700 (PDT)
-Received: from lgs.. ([2001:250:5800:1000::f280])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-847f6b6162esm1391522b3a.11.2026.07.04.09.12.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jul 2026 09:12:56 -0700 (PDT)
-From: Guangshuo Li <lgs201920130244@gmail.com>
-To: Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Johan Hovold <johan@kernel.org>,
-	Guangshuo Li <lgs201920130244@gmail.com>,
-	linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH] HID: bpf: Fix signedness bug in hid_bpf_hw_request
-Date: Sun,  5 Jul 2026 00:07:02 +0800
-Message-ID: <20260704160703.156298-1-lgs201920130244@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XCHBmwbo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D8751F000E9;
+	Sat,  4 Jul 2026 16:41:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783183268;
+	bh=bqfFA+6qIQTAqqCwTLZHCkY69fT4H02s1o+F8hLcFp0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=XCHBmwbo4lLiJ4fvibhPtALw+W4JqeRuJozvUylHIn7+XnBnhBSS9n0EJA4cj2sXF
+	 vyuSvIJ6e7JSP+Kxt3Oat65gCOcsETfRbi23R3Eyr7UIxgA9TD0MWP/iu19+j+zf4M
+	 RVw0uECaarHZjohDuNSN2sNtcEhew4ixnWmo/jYaJkaywOlMtEmfdcMR6Wlyp9lcpg
+	 3vrZVRbTb/LLhIGLT0ayRtRZJjTT/h0R3tAUxJQCX1aEr1sOTB5ewcL+LCd2o0J/t6
+	 KNvOqdTeLsNeZb+2cOWeX59qsw6buhSUP0JomRgZCa7SAsZCOlYwBvKy4Bg7iV5glq
+	 JDExh1gRJrB8A==
+Message-ID: <1d5521eb-84fc-4417-a3f5-6366694d160a@kernel.org>
+Date: Sat, 4 Jul 2026 18:41:03 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH bpf-next v1 0/7] xdp: RX checksum metadata hint and
+ checksum assertion over redirect
+To: Lorenzo Bianconi <lorenzo@kernel.org>,
+ Vladimir Vdovin <deliran@verdict.gg>
+Cc: sdf@fomichev.me, kuba@kernel.org, andrii@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, john.fastabend@gmail.com, martin.lau@linux.dev,
+ sdf.kernel@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ "David S. Miller" <davem@davemloft.net>,
+ Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Eric Dumazet <edumazet@google.com>, kernel-team <kernel-team@cloudflare.com>
+References: <20260630191510.81402-1-deliran@verdict.gg>
+ <akQyT2d0wNF5F5LG@devvm7509.cco0.facebook.com> <akRAUTAqVKkxmoVa@lore-desk>
+ <20260701171057.4330-1-deliran@verdict.gg> <akZ7QPfn83OUx5Vm@lore-desk>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <akZ7QPfn83OUx5Vm@lore-desk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-hid_bpf_hw_request() clamps the return value of hid_hw_raw_request() to
-the size of the caller supplied buffer before copying data back to the
-BPF buffer.
 
-However, ret is signed while size is unsigned. If hid_hw_raw_request()
-returns a negative error code, the comparison promotes ret to size_t.
-This makes the negative value look like a very large positive value, so
-the error is clamped to size. The following memcpy() then treats the
-failed request as a successful transfer and copies stale data back to
-the caller.
 
-Only clamp positive return values. This preserves negative error codes
-while still preventing oversized successful returns from overflowing the
-caller supplied buffer.
+On 02/07/2026 16.52, Lorenzo Bianconi wrote:
+[...]
+>>
+>> What's left that is genuinely separate is the "assertion" half -- a non-dev-bound
+>> bpf_xdp_assert_rx_csum() that preserves the HW verdict across a
+>> cpumap/redirect: it sets a flag on the xdp_buff that rides into the
+>> xdp_frame and becomes skb->ip_summed = CHECKSUM_UNNECESSARY in
+>> __xdp_build_skb_from_frame().
+>>
+>> Should I resend that as a small standalone series (v2, assert-only)?
+>> It also looks like a PoC that you and Jakub discussed on v3 [1].
+> 
+> I think we should address the 'CHECKSUM_COMPLETE' use case for it, let's work
+> on the problem later, even Jesper is interested in it ;)
+>
 
-Fixes: 2b658c1c442e ("HID: bpf: prevent buffer overflow in hid_hw_request")
-Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
----
- drivers/hid/bpf/hid_bpf_dispatch.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yes, I'm very interested in this use-case of transferring HW offload
+info when XDP_REDIRECT'ing into CPUMAP or veth.  In my patchset[1] I've
+added rx_hash, rx_vlan_tag, and rx_timestamp, but not csum as it was not
+available.  My short term use-case is: RX-hash as setting it earlier
+allows the GRO engine to hash flows (see dev_gro_receive[2]), plus it
+carries info on packet protocol type TCP/UDP IPv4/IPv6.
 
-diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-index d0130658091b..b13f911e5944 100644
---- a/drivers/hid/bpf/hid_bpf_dispatch.c
-+++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-@@ -446,7 +446,7 @@ hid_bpf_hw_request(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz,
- 					      (u64)(long)ctx,
- 					      true); /* prevent infinite recursions */
- 
--	if (ret > size)
-+	if (ret > 0 && ret > size)
- 		ret = size;
- 	if (ret > 0)
- 		memcpy(buf, dma_data, ret);
--- 
-2.43.0
+- [1] 
+https://lore.kernel.org/all/175146824674.1421237.18351246421763677468.stgit@firesoul/#r
+- [2] https://elixir.bootlin.com/linux/v7.1.2/source/net/core/gro.c#L477
 
+The long term[3] vision behind the patchset is that xdp_frame becomes
+the "mini-SKB" that carries enough offload info to avoid allocating SKBs
+in the driver.  The ICE driver is very close to this vision. See [4]
+where it calls xdp_build_skb_from_buff() and later fills out SKB fields
+with HW offloads (ice_process_skb_fields).
+
+What I'm asking is that we generalize this idea of transferring or
+storing HW offloads, that are relevant to the SKB.  My patchset makes
+info avail to both xdp_buff and xdp_frame by storing data[5] in the
+packet top headroom (extending xdp_frame). And like your patch[6] use
+xdp_buff_flags to tell with is active. You patch only needed a single
+flag as you only handle CHECKSUM_UNNECESSARY, but Lorenzo's patch also
+have CHECKSUM_COMPLETE, for which we need to store a csum.
+
+I cannot remember if it was Kuba or Eric that suggested (at netdevconf)
+that instead of using a fixed struct, that I should use the same scheme
+as SKB extensions.  We could call it SKB core-extensions, to signal the
+possibility to move existing SKB member into this area.
+
+--Jesper
+
+- [3] 
+https://lore.kernel.org/all/fbb026f9-54cf-49ba-b0dc-0df0f54c6961@kernel.org/
+- [4] 
+https://elixir.bootlin.com/linux/v7.1.2/source/drivers/net/ethernet/intel/ice/ice_txrx.c#L1044-L1060
+- [5] 
+https://lore.kernel.org/all/175146829944.1421237.13943404585579626611.stgit@firesoul/
+- [6] https://lore.kernel.org/all/20260630191510.81402-1-deliran@verdict.gg/
