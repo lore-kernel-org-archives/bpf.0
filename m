@@ -1,113 +1,124 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F0F346E43;
-	Sat,  4 Jul 2026 16:41:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89253246788;
+	Sat,  4 Jul 2026 16:41:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783183270; cv=none; b=prlmgg9N4pY89JyOdJyWMZOtlU/xxWH0nRrmnyo9GxVUumq2Z0/GUbG3tyNVtJUAOT3o3LaoMbIZRFCwqTFx0knjgY2OK9+K1h/Gxu7KiOeHy/tzC1YWRYj7xWdaOIZhKBI3JIZ6WzfVZRW/9X0on/wl7LvwnUZgKw39Je7KeXU=
+	t=1783183293; cv=none; b=A/GJN1MkDLsT0TSgDt9GL2iGzShbQFhOm9J1ofNdMvLhiHfnSjwJxSaPVX99EEyUpC/8dSsf4homHmVF7dOCKgHz4mNNZmOK+aifIVviI3wNTvwcja98Y77jePnQChlKjpjJkkrG0L22T0wspnwopvpUYatlMqQ4ZGXUJ5mSf/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783183270; c=relaxed/simple;
-	bh=KLyfcr4pZbvjRBb83ICFhddfx+XwcLOeWRqrdS/GO4c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MQuF7wKMFK2HzQuoBdGRGy0mCfaq4ylnOR24UzeBjveyZuQUc0fquUjftXIdZ34QuuWcePWUYAWiHmb33jw+SXIC92xDBf3n/9jko+lLZcvt77QrpF6qRo6iG1v1JLV42JbN3OHRDQgdieMYZzO987kNnlMdqNwW2Mv4MGVmijM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XCHBmwbo; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783183293; c=relaxed/simple;
+	bh=JAnqXpiymMagepe418gUewTa+aRsMqZ+n3v1Mu9hvWo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Bzphh89gyliMKJ0v/xma01E0wj7rgD81oilyHj43M/zJ/f+NEBRquhlHgd0jf6dLCt7exclvT4/unEe1lLINBUBpuV81OXwRvMnHrCaOBFNi9UmTmUvepMmXm+T4Ov15s+E+zKIRH+Ky+0lO5sf/SsIKMD+yG/4LMrirtn4UvHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IGX9v9pZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XCHBmwbo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D8751F000E9;
-	Sat,  4 Jul 2026 16:41:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IGX9v9pZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E664B1F00A3E;
+	Sat,  4 Jul 2026 16:41:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783183268;
-	bh=bqfFA+6qIQTAqqCwTLZHCkY69fT4H02s1o+F8hLcFp0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=XCHBmwbo4lLiJ4fvibhPtALw+W4JqeRuJozvUylHIn7+XnBnhBSS9n0EJA4cj2sXF
-	 vyuSvIJ6e7JSP+Kxt3Oat65gCOcsETfRbi23R3Eyr7UIxgA9TD0MWP/iu19+j+zf4M
-	 RVw0uECaarHZjohDuNSN2sNtcEhew4ixnWmo/jYaJkaywOlMtEmfdcMR6Wlyp9lcpg
-	 3vrZVRbTb/LLhIGLT0ayRtRZJjTT/h0R3tAUxJQCX1aEr1sOTB5ewcL+LCd2o0J/t6
-	 KNvOqdTeLsNeZb+2cOWeX59qsw6buhSUP0JomRgZCa7SAsZCOlYwBvKy4Bg7iV5glq
-	 JDExh1gRJrB8A==
-Message-ID: <1d5521eb-84fc-4417-a3f5-6366694d160a@kernel.org>
-Date: Sat, 4 Jul 2026 18:41:03 +0200
+	s=k20260515; t=1783183290;
+	bh=d8Y9RZWt39sd9f3P87GWbZJYkP+XpRH6IPq9RUBbeUY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=IGX9v9pZbx3fJEwOJMoeFkxrg+bLQnz0rrolUFaaW6e6u/9UQ955S3XkgZ1nIpBd+
+	 FRbdUBwuM+3q+umhkIJxGnu/F0sO71Q3BmQWYeDfIAY2hb8Rt3zSFUzhXWZkWz9uyt
+	 3QisvZL3KWBsi+F/dbGYzgALKESl15DpzPTrOyHskIiz/L35V1VbohwdV82AO5/zQ0
+	 buZgmLG3EkNrHFHPFiUV4H0uTdw1VXA8CVFwUDv+F9OzJotfj1E+ig+/OBnNPzNAVA
+	 WhAoiIjuJTklIPKK0ADZNm2D6ge/pzqLjEE488Zi4DeuwvoGRNld/ItchpsfhDrkWr
+	 07XjKzNMKqCNQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] HID: bpf: Fix signedness bug in hid_bpf_hw_request
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Guangshuo Li" <lgs201920130244@gmail.com>
+Cc: dmitry.torokhov@gmail.com, bpf@vger.kernel.org, linux-input@vger.kernel.org
+In-Reply-To: <20260704160703.156298-1-lgs201920130244@gmail.com>
+References: <20260704160703.156298-1-lgs201920130244@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 04 Jul 2026 16:41:29 +0000
+Message-Id: <20260704164129.E664B1F00A3E@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH bpf-next v1 0/7] xdp: RX checksum metadata hint and
- checksum assertion over redirect
-To: Lorenzo Bianconi <lorenzo@kernel.org>,
- Vladimir Vdovin <deliran@verdict.gg>
-Cc: sdf@fomichev.me, kuba@kernel.org, andrii@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, john.fastabend@gmail.com, martin.lau@linux.dev,
- sdf.kernel@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- "David S. Miller" <davem@davemloft.net>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Eric Dumazet <edumazet@google.com>, kernel-team <kernel-team@cloudflare.com>
-References: <20260630191510.81402-1-deliran@verdict.gg>
- <akQyT2d0wNF5F5LG@devvm7509.cco0.facebook.com> <akRAUTAqVKkxmoVa@lore-desk>
- <20260701171057.4330-1-deliran@verdict.gg> <akZ7QPfn83OUx5Vm@lore-desk>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <akZ7QPfn83OUx5Vm@lore-desk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
+Pre-existing issues:
+- [Critical] Integer overflow in hid_bpf_get_data on 32-bit platforms leads=
+ to out-of-bounds pointer return.
+- [Critical] Missing bounds check on `size` in `dispatch_hid_bpf_device_eve=
+nt` leads to a kernel heap buffer overflow.
+- [High] Dereference of ZERO_SIZE_PTR when processing a 0-length HID report=
+ in hid_bpf_hw_request.
+--
 
-On 02/07/2026 16.52, Lorenzo Bianconi wrote:
-[...]
->>
->> What's left that is genuinely separate is the "assertion" half -- a non-dev-bound
->> bpf_xdp_assert_rx_csum() that preserves the HW verdict across a
->> cpumap/redirect: it sets a flag on the xdp_buff that rides into the
->> xdp_frame and becomes skb->ip_summed = CHECKSUM_UNNECESSARY in
->> __xdp_build_skb_from_frame().
->>
->> Should I resend that as a small standalone series (v2, assert-only)?
->> It also looks like a PoC that you and Jakub discussed on v3 [1].
-> 
-> I think we should address the 'CHECKSUM_COMPLETE' use case for it, let's work
-> on the problem later, even Jesper is interested in it ;)
->
+commit 8a657f92f1d0d08c3cf3bdf8cdaf0b05c7deec72
+Author: Guangshuo Li <lgs201920130244@gmail.com>
+Subject: HID: bpf: Fix signedness bug in hid_bpf_hw_request
 
-Yes, I'm very interested in this use-case of transferring HW offload
-info when XDP_REDIRECT'ing into CPUMAP or veth.  In my patchset[1] I've
-added rx_hash, rx_vlan_tag, and rx_timestamp, but not csum as it was not
-available.  My short term use-case is: RX-hash as setting it earlier
-allows the GRO engine to hash flows (see dev_gro_receive[2]), plus it
-carries info on packet protocol type TCP/UDP IPv4/IPv6.
+This patch clamps positive return values from hid_hw_raw_request() to the
+size of the caller-supplied buffer. It preserves negative error codes while
+preventing oversized successful returns from overflowing the buffer.
 
-- [1] 
-https://lore.kernel.org/all/175146824674.1421237.18351246421763677468.stgit@firesoul/#r
-- [2] https://elixir.bootlin.com/linux/v7.1.2/source/net/core/gro.c#L477
+> diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf=
+_dispatch.c
+> index d0130658091b0..b13f911e5944a 100644
+> --- a/drivers/hid/bpf/hid_bpf_dispatch.c
+> +++ b/drivers/hid/bpf/hid_bpf_dispatch.c
+> @@ -446,7 +446,7 @@ hid_bpf_hw_request(struct hid_bpf_ctx *ctx, __u8 *buf=
+, size_t buf__sz,
+>  					      (u64)(long)ctx,
+>  					      true); /* prevent infinite recursions */
+> =20
 
-The long term[3] vision behind the patchset is that xdp_frame becomes
-the "mini-SKB" that carries enough offload info to avoid allocating SKBs
-in the driver.  The ICE driver is very close to this vision. See [4]
-where it calls xdp_build_skb_from_buff() and later fills out SKB fields
-with HW offloads (ice_process_skb_fields).
+[Severity: High]
+This is a pre-existing issue, but does this code safely handle 0-length HID
+reports?
 
-What I'm asking is that we generalize this idea of transferring or
-storing HW offloads, that are relevant to the SKB.  My patchset makes
-info avail to both xdp_buff and xdp_frame by storing data[5] in the
-packet top headroom (extending xdp_frame). And like your patch[6] use
-xdp_buff_flags to tell with is active. You patch only needed a single
-flag as you only handle CHECKSUM_UNNECESSARY, but Lorenzo's patch also
-have CHECKSUM_COMPLETE, for which we need to store a csum.
+In __hid_bpf_hw_check_params(), the size can be capped to 0. This causes the
+subsequent kmemdup() to return ZERO_SIZE_PTR. The dma_data pointer is then
+unconditionally dereferenced in hid_hw_raw_request() when accessing
+dma_data[0], which could cause a crash.
 
-I cannot remember if it was Kuba or Eric that suggested (at netdevconf)
-that instead of using a fixed struct, that I should use the same scheme
-as SKB extensions.  We could call it SKB core-extensions, to signal the
-possibility to move existing SKB member into this area.
+> -	if (ret > size)
+> +	if (ret > 0 && ret > size)
+>  		ret =3D size;
+>  	if (ret > 0)
+>  		memcpy(buf, dma_data, ret);
 
---Jesper
+[Severity: Critical]
+This is a pre-existing issue, but can the bounds check in hid_bpf_get_data()
+overflow on 32-bit platforms?
 
-- [3] 
-https://lore.kernel.org/all/fbb026f9-54cf-49ba-b0dc-0df0f54c6961@kernel.org/
-- [4] 
-https://elixir.bootlin.com/linux/v7.1.2/source/drivers/net/ethernet/intel/ice/ice_txrx.c#L1044-L1060
-- [5] 
-https://lore.kernel.org/all/175146829944.1421237.13943404585579626611.stgit@firesoul/
-- [6] https://lore.kernel.org/all/20260630191510.81402-1-deliran@verdict.gg/
+drivers/hid/bpf/hid_bpf_dispatch.c:hid_bpf_get_data() {
+    [ ... ]
+    if (rdwr_buf_size + offset > ctx->allocated_size)
+        return NULL;
+
+    return ctx_kern->data + offset;
+}
+
+The addition of rdwr_buf_size and offset could wrap around, bypassing the
+bounds check and potentially returning an out-of-bounds pointer.
+
+[Severity: Critical]
+This is a pre-existing issue, but is there a missing bounds check on size in
+dispatch_hid_bpf_device_event()?
+
+drivers/hid/bpf/hid_bpf_dispatch.c:dispatch_hid_bpf_device_event() {
+    [ ... ]
+    memset(ctx_kern.data, 0, hdev->bpf.allocated_data);
+    memcpy(ctx_kern.data, data, *size);
+    [ ... ]
+}
+
+The memcpy() uses the provided size without validating it against
+hdev->bpf.allocated_data. This could lead to a heap buffer overflow if a
+larger size is provided, such as through a UHID_INPUT event.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260704160703.1562=
+98-1-lgs201920130244@gmail.com?part=3D1
