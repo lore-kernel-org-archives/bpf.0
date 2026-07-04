@@ -1,63 +1,62 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB4138B130
-	for <bpf@vger.kernel.org>; Sat,  4 Jul 2026 04:56:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2AAE38C2BF
+	for <bpf@vger.kernel.org>; Sat,  4 Jul 2026 04:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783141006; cv=none; b=BfenHqrgIjNbbXQgDfm02/SJ0Qu/RefRuYzN3n5JtFtx8b9sE6fpGSDb43rnf8kt4eS/EXNMLz6DIQ6b+25Annz9qixgfrVkf6qIL4t6lyCd1160EETGWzvxE5ZBl6LbqH2gtpiSxAgh2Bad++tTG6wgj66dcxCEq001V6JNLME=
+	t=1783141009; cv=none; b=Sc9Y0HcLwB/v/rUzpSZBWTucF2Ny2nssrypyGSnsG6Q8jWE3QanacmG8+R1lAc+NrOeg89ttcDb1qSSXM264ad/Hpx1quPWAKY6/VSjsuJ6uJ8f/fBQAlhzxZAq+4pHueualBpuTUfi0BfAEdrN7fKNU8rNPZilDeSyMYVKWOPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783141006; c=relaxed/simple;
-	bh=0H+HLZJlKRoqJ5wUdBKEjiPgpHXwEnOYZC06Coe7Tv0=;
+	s=arc-20240116; t=1783141009; c=relaxed/simple;
+	bh=nW43hXojxIwyOk9DC0/ESuB9z5dUUBMsB9HANHXSms4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ORx8oMSb9v02codO2qB2fsqYB/Qg5GewuTyTueN8p/lKHQus9EwR+FRteCt7T2Z3GWdogjDmJYBWgEBfEoYdF3wrsmHt6bRZKiMRQgcETrTHaetUtdpgXkZ1HmHWkvMvEBMUMVLy55Xd2WVHvm8Myohok1smnexjC1uctOCVk68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sKrYubud; arc=none smtp.client-ip=209.85.216.48
+	 MIME-Version; b=NjK6ETIRJZgvLJ0vSXwIMXanrh70RnATU91FvW6I7KjtDzlu45bB2HQnSevO97JIEvqYGyM+Z55lkWMLZqDLG7WRMH1VoFGiKBB4AmXoMc0psDtI5KNLLTRkwn4YO0Q9ACV95fdqOv0lKx85yJoAEXfnKekfXf5tDsMHSCxYPsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BzNXmsnN; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sKrYubud"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-37df416c44bso948317a91.2
-        for <bpf@vger.kernel.org>; Fri, 03 Jul 2026 21:56:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BzNXmsnN"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2c6b67d5fa1so11609265ad.2
+        for <bpf@vger.kernel.org>; Fri, 03 Jul 2026 21:56:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783141002; x=1783745802; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783141004; x=1783745804; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=KK1CaQlBq2a5GdfhbDpXaXFc1/PiH0mg1lprPqNeG44=;
-        b=sKrYubudayYoiScJID9+fvWQBMEb6nVFSPpNHJVEdGhHdxw7J7ZvPJeq5RLJBXER+T
-         Tv3Y2M/uWxOoMyEUyK8tQvV4fAPn4iUyEmsENpyX7RE1DFfFgjpz+7x3NsVYgSsBHeyk
-         QCKXJoax95k8Dm/6yT2v9tor7Dx54acCoFN3ibiS6/xrL0xIGe9fGUOrf96oHQB1aavd
-         MXduysV6uxikRHGbA8u5oolpQDLvXaUI3y9B5dK2DgSQsMlPNLVKcRYTJdJMI/tHJwZT
-         1stkAuSX1JPg5XXUYicv+0S3uhXZQLNp1qrfyAerrTczFO97iK9kQSS4TIbVSJmxl0lG
-         okiA==
+         :message-id:reply-to;
+        bh=cTB03E7STB8Hmyqz2IMNoXVnvkhGQw7Z+RUltHatjNw=;
+        b=BzNXmsnNUnRgwecz5BoZl3GRjhfp9EEh3wNz4DViRwaryZO3QYyjnp9wZ0mypYtY1t
+         FgxelQm9Ynt1hd9t2Bh0dxfNo9slw44PzfSwZRNWPRlxaKioDE6bHvpKYbs2RiesFHXa
+         8W8/8Wn8VBVEfdj9rT63NkRpiBh7l/1+AR0PNTq9vaGlSfeW9LNxfK5+XiBYqznEMeop
+         amwPf9o85yxbcY8d+vZf+TkBptINlp+eYbbYnNcLD4ASf4dC/697HV1hdbv6fHNtNELc
+         1aw2tfEZppal7VTwnquPnvykCfHRzyZQx9n6BtnXJedWUCLOeA86eZuEhNoMpS6MpwL0
+         3lpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783141002; x=1783745802;
+        d=1e100.net; s=20251104; t=1783141004; x=1783745804;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KK1CaQlBq2a5GdfhbDpXaXFc1/PiH0mg1lprPqNeG44=;
-        b=AnMYoOCN8MtCup7WRteHCBnl8LakcYMafBkQGW4IeU3EE9/25iRqdi2rDm4CyMJLCw
-         1y4MrTjEhePb97ydgRkjmf6g456tHDutjXY0ALT7wAzGmF4Ovd8pje1m4RcaNKD6BUsN
-         lJJlg7/4E7z12T1D51H3xz4fS18+4JqJhrROWE8Yplet3jtlnO27kFj/0raabx5Mayqn
-         wwbGu3dNbcjBtNHicJarUWILy4qgLH5HQl5R1ubehRVCTQSaqtyVEbzoCvY2mGUlLY3s
-         9ntsV2sNLI4fnbQwc2eA+Avvh8/47YNHQ6impY32eSf0B5eL1qho1BZsE7MEzxmx7dUT
-         M9qQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpLpvrdfmjHc1m2jO2zcbAbeeQ8WojbwCLbmRtzJYeiVgZwbeOazEExCB5C4c7fYVA4c0M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVgkw96pEYPypW8evciM+aXFfAR4jPslq1claXmecJmRZgotNi
-	AlXKb2NIk+B8sTDtgpp/HMD7c+zYnn4I7Q/z6IUFPcW2lU8eW3I8dIy8
-X-Gm-Gg: AfdE7ck+BD9otAhyUpDxCFxSSDVxV/GJj+zDe/Yn5Nd3GRAlUuaxKJO1lDXAb/wpNra
-	WiUtEUdeBTxCND+etb2mdkbyqZwXtAZSvoFm/uYJafuiq3sROyO8ueIk5w2avDFENdFZJiTSKM+
-	3zXi/drHU3s259b24tq29gfHzPDj1K4J6zI6jlvZBsBstk9u8NT9xczjN03kmbzJU27jXIArFC7
-	wWSHByuXHFlizJ6OKpUtlc2wdzSlwQcNuKO+a8tYzrybZqttu5lyRqu8ryq+a9p2etfCa+1ILmk
-	LPpQDefXuhv6W06/cyd2ViGl0hybEXGZ+u3hcDt1BcdHUmRAKmB/GVDd0gc+t0jDIrDT4okHPBX
-	Tq7BCHmzhEZuEgxnx2faMXGvImEyjkuj1s/lEA6WEgTmyYF2Vot+KPjSgQHqw+PfY9/XbIgDUxD
-	iWnKU=
-X-Received: by 2002:a17:90b:3909:b0:37f:9cdf:f03e with SMTP id 98e67ed59e1d1-3829f7ed77bmr2261411a91.33.1783141002211;
-        Fri, 03 Jul 2026 21:56:42 -0700 (PDT)
-Received: from localhost ([2a03:2880:9ff:62::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30f0bbd2362sm29442167eec.20.2026.07.03.21.56.41
+         :to:cc:subject:date:message-id:reply-to;
+        bh=cTB03E7STB8Hmyqz2IMNoXVnvkhGQw7Z+RUltHatjNw=;
+        b=Gs3AxlxIYXr84xcrg+7hjWJqsWGkYcgeVCg1dn1bhlguBEkXtKhrK3iSTG+Tj56eg2
+         5nwz+6Fekw3xlHo5sVriO8qvjbEcvIv3Ev3/RqeAWsU5L4QKwdNmFv5ry+9QZEENWyij
+         iZKDz2jMKK7TMwicgOIyb9d5Pe+iVd6poyWEG/zgiy/LTsFp1541kAX1QCsY3ONT41Ic
+         bCYC8/e5kRSTCZSZNtsOClHmN8V+WRAwAhn+VnefNQ+q+mC2401DJWDNAzGeL1VwKPbI
+         WuZzB90K9ynTjCEVASAFckgvNWqzmG5B2heXanwmFzrKjE1R2zKzHt8NOKbLvJOuGuIm
+         HSpw==
+X-Forwarded-Encrypted: i=1; AHgh+RrqlKeif4Jl0+pLWSUgnMHUORapuZks+r1JQeNt5+2SCZeg+jjai5NTZsj0H+40+/mfxYU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5yc81fUgpoNyGY05X+/gPyPS/I4oyrbWoWg6c7oc9nOgCxaPZ
+	YfIEPoDmpwHjnoLZugdnsFnczBl7enmFYi0iVscbFpsScSgoToxYSC77
+X-Gm-Gg: AfdE7ckR51ECZqMSz55ogzWxc4FMaJ69q2v6kYJILYQU96Ez3QEI7sgsOEvqfGmPysP
+	/t7TY/52JAFFTcDDG8poTpUB9Q/9pjls/EjuWRqqkb4Ou72dBsRZJlDDkRX+P9x3gp65ljQIcM9
+	fErXdoLUYz0sXqdsofYlyX5QuXZRN4w9Qbhuv2o1EO701kt7Xukd+/eBC4LfFj2SxGMH4dNCzyA
+	StrftzeSiNUM8tUdk5V9vrnk3YVc3FwHSgSkrUJeNRvP+AN2tdzXj+/9YIeor0cQZSAvAJ0K9c4
+	fTj51Ui9HMk8wChVki7e9CI3ElrCuwFDpBPjOtA7H0gIq0nHZKtKLQ7q8B+aSFNRbWqzerGi7Gy
+	t5+dYhhnM6BjtHhxKcLqBZ4VaBnVb8kVZWvdyfO1iDj7zlgeIEOOfyW78oj7NV9+6ZRMK
+X-Received: by 2002:a17:902:ccd2:b0:2c9:fbde:ab66 with SMTP id d9443c01a7336-2cbb9f1642emr17723665ad.37.1783141003555;
+        Fri, 03 Jul 2026 21:56:43 -0700 (PDT)
+Received: from localhost ([2a03:2880:9ff:72::])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b3c7fa566sm24022618c88.4.2026.07.03.21.56.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jul 2026 21:56:41 -0700 (PDT)
+        Fri, 03 Jul 2026 21:56:43 -0700 (PDT)
 From: Ziyang Men <ziyang.meme@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -79,9 +78,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	linux-kernel@vger.kernel.org,
 	Ziyang Men <ziyang.meme@gmail.com>,
 	Shakeel Butt <shakeel.butt@linux.dev>
-Subject: [PATCH 2/3] selftests/bpf: add memcg_stat_churn BPF-vs-memory.stat benchmark under churn
-Date: Fri,  3 Jul 2026 21:56:16 -0700
-Message-ID: <20260704045617.487664-3-ziyang.meme@gmail.com>
+Subject: [PATCH 3/3] selftests/bpf: add memcg_stat_churn_percpu BPF-vs-memory.stat benchmark under cross-CPU churn
+Date: Fri,  3 Jul 2026 21:56:17 -0700
+Message-ID: <20260704045617.487664-4-ziyang.meme@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260704045617.487664-1-ziyang.meme@gmail.com>
 References: <20260704045617.487664-1-ziyang.meme@gmail.com>
@@ -93,150 +92,159 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a test_progs selftest that complements memcg_stat_reader by
-comparing the same two ways of reading memory-cgroup statistics -- the
-traditional per-cgroup memory.stat parse and a single
-SEC("iter.s/cgroup") BPF walk -- but while the tree is under continuous
-allocation churn instead of frozen.
+Add a test_progs selftest that extends memcg_stat_churn by making the
+per-cgroup cross-CPU rstat flush fan-out an explicit, swept variable, and
+compares the same two ways of reading memory-cgroup statistics under it --
+the traditional per-cgroup memory.stat parse and a single
+SEC("iter.s/cgroup") BPF walk.
 
-Where memcg_stat_reader charges a tree once and reads it quiescent,
-memcg_stat_churn forks one "churner" process per selected leaf. Each
-churner joins its leaf, pins a small resident anon set (so the tree
-always carries some charge) and then loops mmap()+memset()+munmap() for
-the whole measurement window, keeping every touched memcg's per-cpu
-rstat perpetually dirty. While that runs, the parent repeatedly samples
-both readers, averages the wall-clock cost of each and reports the
-file/BPF speedup ratio.
+Both readers flush rstat through the same mem_cgroup_flush_stats() path, and
+the cost of that flush grows with the number of (cgroup, cpu) pairs that have
+pending updates.  Where memcg_stat_churn dirties each cgroup on essentially
+one CPU (a read flushes one per-cpu tree per cgroup), this test makes K -- the
+number of CPUs a cgroup is dirtied on -- a first-class knob: a read of a
+cgroup dirtied on K CPUs must visit K per-cpu trees for it.
 
-Each churner is a CPU-busy process (a tight mmap()+memset()+munmap()
-loop) and there is one per selected leaf, so the test is registered
-serial (serial_test_) rather than parallel: under test_progs -j it must
-not steal CPU from co-scheduled workers, and -- since the whole point is
-to time the two readers -- its own measurements must not be perturbed by
-them.
+Load model.  It forks one "churner" process per hot leaf and, rather than
+pinning each to a single CPU, has each churner migrate its own affinity
+round-robin across K CPUs, doing one mmap()+memset()+munmap() on each.  The
+charge/uncharge happens on whatever CPU the task currently runs on, so cycling
+the affinity queues that leaf's rstat dirty on all K CPUs; those per-cpu
+entries persist until flushed, so between two reads the leaf ends up dirty on
+all K CPUs.  The BPF program, its hash map and the snapshot struct are REUSED
+verbatim from memcg_stat_reader (progs/memcg_stat_reader.c +
+memcg_stat_reader.h); only the userspace load model and sampling loop are new,
+so there is no new BPF object and no Makefile change.
 
-The BPF program, its per-cgroup hash map and the snapshot struct are
-reused verbatim from memcg_stat_reader (progs/memcg_stat_reader.c and
-memcg_stat_reader.h); only the userspace load model and sampling loop
-are new, so there is no new BPF object and no Makefile change.
-
-Both readers flush rstat through the same mem_cgroup_flush_stats() path
--- bpf_mem_cgroup_flush_stats() is a thin wrapper around it -- and
-flushing the subtree root flushes the whole subtree, so each whole-tree
-pass pays one real flush F plus N cheap threshold checks, common to both
-paths. If the two readers are simply interleaved back to back, the much
-shorter BPF pass freeloads on the flush just performed by the ~20x
-longer file pass, so the measurement ends up depending on ordering
-rather than work. To avoid that, the parent idles a fixed gap
-(CHURN_GAP_US, 50 ms) before every timed read so the tree re-accumulates
-a roughly fixed amount of churn first; the resulting flush is then paid
-inside the timed region, giving every read approximately the same start
-state. The file/BPF order is also alternated across samples. The gap is
-effectively a staleness / poll-interval knob: a larger gap means a
-larger flush that both paths pay, so the reported ratio, which is
-(F + read_file) / (F + read_bpf), is correspondingly more conservative.
+Two things keep the measurement honest under this load.  One CPU is reserved
+for the reader and the parent (which does the timed reads) is pinned to it, so
+the timed reads run on a churn-free CPU and are not preempted by the churn --
+measuring the reader on a contended CPU swamps a whole-tree walk with
+scheduler latency rather than read work.  And before every timed read the
+parent does an untimed whole-subtree flush (settle_flush()) and then idles a
+fixed gap, so each read re-accumulates exactly gap-worth of churn and pays its
+own flush inside the timed region regardless of read ordering; the file/BPF
+order is also alternated across the (even) sample count.
 
 Because stats are a moving target under churn, the test does not do a
-field-by-field BPF-vs-file equality check (that is memcg_stat_reader's
-job). Pass/fail gates only on structural sanity: a walk on the freshly
-loaded map must visit every cgroup (missing == 0), every timed walk must
-complete, and the tree must carry some anon charge. The timing table and
-the final "RATIO" line are informational diagnostics, captured like any
-other test output, i.e. shown under -v or on failure, never on a normal
-PASS.
+field-by-field BPF-vs-file equality check (that is memcg_stat_reader's job).
+Pass/fail gates only on structural sanity: a walk on the freshly loaded map
+must visit every cgroup (missing == 0), every timed walk must complete, and
+the tree must carry some anon charge.  The timing table and RATIO line are
+informational diagnostics, captured like any other test output (shown under
+-v or on failure, never on a normal PASS).
 
-Both subtests run on a large (1111-cgroup) tree, where the whole-tree read
-cost is large enough to dominate the rstat flush and scheduler jitter, so the
-reported ratios are reproducible run to run; on a small (tens of cgroups) tree
-the sub-millisecond BPF read is swamped by that noise and the ratio bounces.
-They differ only in churn density -- large_dense churns one leaf in four,
-large_sparse one in eight -- which changes how much of the tree the shared
-flush has to touch. Because the flush cost F is common to both readers, the
-speedup tracks how much of the whole-tree read is flush versus per-cgroup read
-work; the BPF path avoids the per-cgroup VFS open/read and memory.stat string
-parsing, so it wins on the read side regardless.
+The narrow/wide/widest subtests run on a large (1111-cgroup) tree and churn a
+fixed set of 64 hot leaves, sweeping only K.  The large tree keeps the
+whole-tree read cost large enough to dominate the rstat flush and scheduler
+jitter, so the reported ratios are reproducible; on a small (tens of cgroups)
+tree the sub-millisecond BPF read is swamped by that noise and the ratio
+bounces run to run.
+
+The file path cost is dominated by per-cgroup VFS open/read and string parsing,
+so the flush is a small fraction of it and it stays roughly flat in K.  The BPF
+path avoids the per-cgroup syscalls and parsing, so the flush is a larger
+fraction of it and it grows with K; the file/BPF ratio therefore compresses as
+K grows, most visibly at the largest fan-out, but BPF stays many times faster
+throughout.
 
 Sample output (v7.1 VM, 60 CPUs); times are us, average per full-tree read
 under churn reading the full memory.stat field set; ratio = file/bpf; ro = bpf
 read()-only (no map drain):
 
-  ==== memcg_stat_churn: large_dense ====
-  tree: nodes=1111 leaves=1000 churners=250 fanout=10 depth=3 region=256KB resident=128KB samples=8 gap=50ms
-  file_avg=323034.3  bpf_avg=14933.4  bpf_ro=6926.8  ratio(file/bpf)=21.63x
+  ==== memcg_stat_churn_percpu: narrow ====
+  tree: nodes=1111 leaves=1000 hot_leaves=64 cpus_per_leaf=1 dirty_pairs=64 cpus=60 reserved=1 churners=64 ...
+  file_avg=358204.7  bpf_avg=15889.0  bpf_ro=7864.0  ratio(file/bpf)=22.54x
 
-  ==== memcg_stat_churn: large_sparse ====
-  tree: nodes=1111 leaves=1000 churners=125 fanout=10 depth=3 region=256KB resident=128KB samples=8 gap=50ms
-  file_avg=347304.8  bpf_avg=13592.8  bpf_ro=6628.6  ratio(file/bpf)=25.55x
+  ==== memcg_stat_churn_percpu: wide ====
+  tree: nodes=1111 leaves=1000 hot_leaves=64 cpus_per_leaf=8 dirty_pairs=512 cpus=60 reserved=1 churners=64 ...
+  file_avg=246735.7  bpf_avg=10719.8  bpf_ro=5719.0  ratio(file/bpf)=23.02x
 
-large_dense churns twice as many leaves as large_sparse (one in four rather
-than one in eight), so its shared flush touches more of the tree and its
-file/BPF ratio is a little lower (21.6x vs 25.5x); the BPF path stays well over
-20x faster either way.
+  ==== memcg_stat_churn_percpu: widest ====
+  tree: nodes=1111 leaves=1000 hot_leaves=64 cpus_per_leaf=59 dirty_pairs=3776 cpus=60 reserved=1 churners=64 ...
+  file_avg=260315.6  bpf_avg=18734.4  bpf_ro=14129.8  ratio(file/bpf)=13.90x
 
-This builds on the memcg BPF kfuncs and complements the memcg_stat_reader
-selftest added in the previous patch.
+The file/BPF ratio holds around 22-23x through K=8 and compresses to ~14x at
+K=59, where each of the 64 hot cgroups is dirty on all 59 churner CPUs (3776
+per-cpu trees flushed in a single read).  The K=1 vs K=8 step is within
+run-to-run noise: on a 1111-cgroup read the flush of 64 vs 512 per-cpu trees is
+a small fraction of the walk, so the fan-out only bites clearly at the largest K.
+
+This builds on the memcg BPF kfuncs and completes the memcg_stat_reader /
+memcg_stat_churn selftest family.
 
 Suggested-by: Shakeel Butt <shakeel.butt@linux.dev>
 Assisted-by: Claude:claude-opus-4-8
 Signed-off-by: Ziyang Men <ziyang.meme@gmail.com>
 ---
- .../bpf/prog_tests/memcg_stat_churn.c         | 716 ++++++++++++++++++
- 1 file changed, 716 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_stat_churn.c
+ .../bpf/prog_tests/memcg_stat_churn_percpu.c  | 902 ++++++++++++++++++
+ 1 file changed, 902 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_stat_churn_percpu.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_stat_churn.c b/tools/testing/selftests/bpf/prog_tests/memcg_stat_churn.c
+diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_stat_churn_percpu.c b/tools/testing/selftests/bpf/prog_tests/memcg_stat_churn_percpu.c
 new file mode 100644
-index 000000000000..3e386d0b4c03
+index 000000000000..16c3f261c878
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/memcg_stat_churn.c
-@@ -0,0 +1,716 @@
++++ b/tools/testing/selftests/bpf/prog_tests/memcg_stat_churn_percpu.c
+@@ -0,0 +1,902 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 +
 +/*
-+ * memcg_stat_churn
-+ * ================
-+ * A load variant of the memcg_stat_reader benchmark.  Where memcg_stat_reader
-+ * charges a quiescent tree once and then measures both readers against static
-+ * stats, this test keeps the memory-cgroup rstat perpetually DIRTY while it
-+ * measures:
++ * memcg_stat_churn_percpu
++ * =======================
++ * A CPU-spread variant of memcg_stat_churn.  It measures the same two whole-tree
++ * memcg-stat readers -- the traditional per-cgroup memory.stat parse and a single
++ * SEC("iter.s/cgroup") BPF walk -- under continuous allocation churn, but this
++ * time each churned cgroup is deliberately dirtied on MANY CPUs at once:
 + *
 + *   - Build a synthetic cgroup subtree (fanout x depth), same as the reader.
-+ *   - Fork one "churner" process per selected leaf.  Each churner joins its
-+ *     leaf, pins a small resident anon set (so tree anon stays > 0), then loops
-+ *     mmap()+memset()+munmap() for the whole measurement window.  The constant
-+ *     charge/uncharge traffic keeps every touched memcg's per-cpu stats dirty,
-+ *     so each reader pays a realistic flush/read cost instead of a warm no-op.
-+ *   - While the churn runs, the parent repeatedly SAMPLES both readers:
-+ *       (A) traditional: open/read/parse memory.stat (+current/+max) for every
-+ *           cgroup from userspace;
-+ *       (B) BPF: one SEC("iter.s/cgroup") walk over the subtree calling the
-+ *           memcg kfuncs into a hash map, drained once per sample.
-+ *     Before each timed read the parent idles for a fixed gap (untimed) so the
-+ *     tree re-accumulates a roughly fixed amount of dirty rstat; every read
-+ *     (file/BPF x matched/full) therefore starts from approximately the same
-+ *     state and pays its own rstat flush inside the timed region.  The
-+ *     file-vs-BPF order is also alternated across samples so residual jitter
-+ *     doesn't systematically favour whichever reader runs first.
-+ *   - Times are averaged over all samples and the file/BPF speedup ratio is
-+ *     reported.  The gap is the "staleness / poll-interval" knob: a larger gap
-+ *     means a larger flush that both paths pay, so the ratio is more
-+ *     conservative (see CHURN_GAP_US).
++ *   - Reserve one CPU for the reader and pin the reader (this parent) to it, so
++ *     the timed reads run on a churn-free CPU and are not preempted by the load
++ *     (measuring on a contended CPU swamps a short walk with scheduler latency).
++ *   - Fork one "churner" process per hot leaf (tc->churn_leaves; 0 = all leaves,
++ *     spread evenly across the tree).  Each churner joins its leaf and then, in a
++ *     loop, migrates its own affinity round-robin across K CPUs
++ *     (tc->cpus_per_leaf; 0 = all churner CPUs) doing one mmap()+memset()+
++ *     munmap() on each.  The charge/uncharge happens on whatever CPU the task is
++ *     currently running on, so cycling the affinity queues this leaf's rstat
++ *     dirty on all K CPUs; those per-cpu entries persist until flushed, so
++ *     between two reads the leaf ends up dirty on all K CPUs.
++ *   - While the churn runs, the parent repeatedly SAMPLES both readers exactly as
++ *     in memcg_stat_churn: settle_flush() then an untimed gap before each read so
++ *     each read starts from exactly gap-worth of churn and pays its own flush
++ *     inside the timed region; the file/BPF order is alternated.
 + *
-+ * The BPF program, its hash map and the snapshot struct are REUSED verbatim
-+ * from memcg_stat_reader (progs/memcg_stat_reader.c + memcg_stat_reader.h); only
-+ * the userspace load model and sampling loop are new here.
++ * Why this matters: both readers flush rstat through the same
++ * mem_cgroup_flush_stats() path, and the cost of that flush grows with the
++ * number of (cgroup, cpu) pairs that have pending updates.  Where memcg_stat_churn
++ * dirties each cgroup on essentially one CPU (a read flushes one per-cpu tree per
++ * cgroup), this test makes K a first-class knob: a read of a cgroup dirtied on K
++ * CPUs must visit K per-cpu trees.  Sweeping K (see the narrow/wide/widest cases)
++ * drives the shared flush cost F up and compresses the file/BPF ratio, isolating
++ * the effect of per-cgroup cross-CPU fan-out.  Because the reader runs on a
++ * reserved, churn-free CPU, the flush cost -- not scheduler jitter -- is what the
++ * timed reads capture; the ratio is robust because the flush hits both readers
++ * equally.
++ *
++ * The BPF program, its hash map and the snapshot struct are REUSED verbatim from
++ * memcg_stat_reader (progs/memcg_stat_reader.c + memcg_stat_reader.h); only the
++ * userspace load model (CPU-pinned churners) and sampling loop are new here.
 + *
 + * Under churn the stats are a moving target, so this test does NOT do a
 + * field-by-field BPF-vs-file equality check (that is memcg_stat_reader's job).
-+ * Pass/fail gates only on structural sanity -- the iterator visited every
-+ * cgroup and the tree carries some anon charge.  The timing table and final
-+ * RATIO line are informational diagnostics, printed like any other test output
-+ * (i.e. under -v or on failure, never on a normal PASS).
++ * Pass/fail gates only on structural sanity -- the iterator visited every cgroup
++ * and the tree carries some anon charge.  The timing table and final RATIO line
++ * are informational diagnostics, printed like any other test output (i.e. under
++ * -v or on failure, never on a normal PASS).
 + */
++#ifndef _GNU_SOURCE
++#define _GNU_SOURCE		/* sched_setaffinity(), CPU_SET() (lib.mk also -D's it) */
++#endif
 +#include <test_progs.h>
 +#include <bpf/libbpf.h>
 +#include <bpf/btf.h>
++#include <sched.h>
 +#include <stdlib.h>
 +#include <string.h>
 +#include <time.h>
@@ -247,7 +255,7 @@ index 000000000000..3e386d0b4c03
 +#include "memcg_stat_reader.h"
 +#include "memcg_stat_reader.skel.h"
 +
-+#define SUBTREE_ROOT	"/mcg_churn"
++#define SUBTREE_ROOT	"/mcg_pcpu"
 +
 +#define WARMUP_ITERS	2
 +
@@ -275,6 +283,42 @@ index 000000000000..3e386d0b4c03
 +
 +	clock_gettime(CLOCK_MONOTONIC, &t);
 +	return (long long)t.tv_sec * 1000000000LL + t.tv_nsec;
++}
++
++/* ---- allowed CPU set --------------------------------------------------- */
++
++static int *cpu_list;		/* ids of the CPUs this process may run on */
++static int n_cpu;		/* number of such CPUs */
++static int n_reserved;		/* CPUs held out for the reader (0 or 1) */
++static int reader_cpu = -1;	/* CPU the reader is pinned to, or -1 */
++static cpu_set_t orig_affinity;	/* parent's affinity, restored on exit */
++
++/*
++ * Collect the CPUs the test is allowed to run on (respecting any cpuset the
++ * harness put us in).  We spawn one pinned churner per usable CPU minus the one
++ * reserved for the reader.  Bounded by CPU_SETSIZE (1024); machines wider than
++ * that would use only the first CPU_SETSIZE CPUs, which is fine for a diagnostic.
++ */
++static int collect_cpus(void)
++{
++	cpu_set_t set;
++	int i, want, n = 0;
++
++	CPU_ZERO(&set);
++	if (sched_getaffinity(0, sizeof(set), &set))
++		return -1;
++	orig_affinity = set;		/* restored in test teardown */
++	want = CPU_COUNT(&set);
++	if (want <= 0)
++		return -1;
++	cpu_list = calloc(want, sizeof(*cpu_list));
++	if (!cpu_list)
++		return -1;
++	for (i = 0; i < CPU_SETSIZE && n < want; i++)
++		if (CPU_ISSET(i, &set))
++			cpu_list[n++] = i;
++	n_cpu = n;
++	return 0;
 +}
 +
 +/* ---- tree construction (same shape as memcg_stat_reader) --------------- */
@@ -353,7 +397,7 @@ index 000000000000..3e386d0b4c03
 +	return build_children(SUBTREE_ROOT, fanout, depth);
 +}
 +
-+/* ---- churn load -------------------------------------------------------- */
++/* ---- churn load (migrating churners, K CPUs per hot cgroup) ------------- */
 +
 +/*
 + * Shared control block, mmap'd MAP_SHARED before the forks so the parent can
@@ -366,19 +410,49 @@ index 000000000000..3e386d0b4c03
 +static struct churn_ctl *ctl;
 +static pid_t *churn_pids;
 +static int n_churners;
++static int n_hot_leaves;		/* distinct cgroups (leaves) churned */
++static int n_cpus_per_leaf;		/* K: CPUs each hot cgroup is dirtied on */
 +static int churn_ready[2] = { -1, -1 };	/* churner -> parent "ready" barrier */
 +
-+/*
-+ * One churner process.  Joins its leaf, pins a resident anon set so the tree
-+ * always carries some charge, signals readiness, then continuously faults in
-+ * and frees a private anon region until told to stop.  Never returns.
-+ */
-+static void churner_child(const struct cg_node *leaf, size_t region_bytes,
-+			  size_t resident_bytes)
++/* Pin the calling task to a single CPU. */
++static int pin_cpu(int cpu)
 +{
++	cpu_set_t set;
++
++	CPU_ZERO(&set);
++	CPU_SET(cpu, &set);
++	return sched_setaffinity(0, sizeof(set), &set);
++}
++
++/*
++ * One churner process, dedicated to a single hot leaf but spread over K CPUs.
++ * It joins its leaf, pins a resident anon set so the tree always carries some
++ * charge, signals readiness, then loops: migrate to the next of its K CPUs and
++ * do one mmap()+memset()+munmap() there.  The charge/uncharge happens on
++ * whatever CPU the task currently runs on, so cycling the affinity queues this
++ * leaf's rstat dirty on all K CPUs; those per-cpu entries persist until flushed,
++ * so between two reads the leaf ends up dirty on all K CPUs and a reader's flush
++ * of the subtree must visit K per-cpu trees for this one cgroup.  Never returns.
++ *
++ * @base is this churner's starting index into the churner CPU pool
++ * (cpu_list[n_reserved ..]); its K CPUs are (base + 0..K-1) mod pool size.
++ */
++static void churner_child(const struct cg_node *leaf, int base, int k,
++			  size_t region_bytes, size_t resident_bytes)
++{
++	int c_pool = n_cpu - n_reserved;
 +	void *resident;
++	int j = 0;
 +
 +	close(churn_ready[0]);
++
++	/*
++	 * Move onto our first CPU before charging.  Children inherit the reader's
++	 * reserved-CPU affinity from the parent, so without this the resident set
++	 * would be charged on the reader's CPU.
++	 */
++	if (pin_cpu(cpu_list[n_reserved + base % c_pool]))
++		_exit(4);
 +
 +	/*
 +	 * cgroup_helpers builds paths from getpid(); in this forked child that
@@ -399,9 +473,15 @@ index 000000000000..3e386d0b4c03
 +	close(churn_ready[1]);	/* so a sibling's early death yields EOF, not a parent hang */
 +
 +	while (!ctl->stop) {
-+		void *p = mmap(NULL, region_bytes, PROT_READ | PROT_WRITE,
-+			       MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++		void *p;
 +
++		/* migrate to the next of our K CPUs, then dirty the leaf there */
++		pin_cpu(cpu_list[n_reserved + (base + j) % c_pool]);
++		if (++j == k)
++			j = 0;
++
++		p = mmap(NULL, region_bytes, PROT_READ | PROT_WRITE,
++			 MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 +		if (p == MAP_FAILED)
 +			continue;
 +		memset(p, 1, region_bytes);	/* fault in -> anon charge */
@@ -412,48 +492,82 @@ index 000000000000..3e386d0b4c03
 +}
 +
 +/*
-+ * Fork one churner per @charge_fraction-th leaf.  Returns 0 once every churner
++ * Fork one migrating churner per hot leaf (H = @churn_leaves, 0 = all leaves),
++ * each spread over K CPUs (@cpus_per_leaf, 0 or > pool => all churner CPUs).
++ * Hot leaves are chosen evenly across the tree.  Returns 0 once every churner
 + * has joined its leaf and pinned its resident set (so measurement starts under
 + * steady-state load).  On failure the caller's cleanup path calls
 + * stop_churners() to reap whatever was started.
 + */
 +static int start_churners(size_t region_bytes, size_t resident_bytes,
-+			  int charge_fraction)
++			  int churn_leaves, int cpus_per_leaf)
 +{
-+	int mod = charge_fraction > 0 ? charge_fraction : 1;
-+	int leaf_idx = 0;
-+	int i;
++	int *leaf_idx = NULL, *pool = NULL;
++	int n_leaf_idx = 0, pool_n = 0;
++	int c_pool = n_cpu - n_reserved;	/* CPUs available to churners */
++	int k_eff, i, h, ret = -1;
++
++	/* K: CPUs each hot cgroup is dirtied on (0 or too big => all churner CPUs) */
++	k_eff = (cpus_per_leaf > 0 && cpus_per_leaf < c_pool) ? cpus_per_leaf
++							     : c_pool;
++	n_cpus_per_leaf = k_eff;
++
++	/* gather all leaf node indices in creation order */
++	leaf_idx = calloc(n_leaves, sizeof(*leaf_idx));
++	if (!ASSERT_OK_PTR(leaf_idx, "calloc leaf_idx"))
++		return -1;
++	for (i = 0; i < n_nodes; i++)
++		if (nodes[i].is_leaf)
++			leaf_idx[n_leaf_idx++] = i;
++
++	/*
++	 * H hot cgroups (one migrating churner each), spread evenly across all
++	 * leaves; churn_leaves <= 0 or >= n_leaves => every leaf is hot.
++	 */
++	pool_n = (churn_leaves > 0 && churn_leaves < n_leaf_idx) ? churn_leaves
++								: n_leaf_idx;
++	pool = calloc(pool_n, sizeof(*pool));
++	if (!ASSERT_OK_PTR(pool, "calloc pool")) {
++		free(leaf_idx);
++		return -1;
++	}
++	for (i = 0; i < pool_n; i++)
++		pool[i] = leaf_idx[(int)((long long)i * n_leaf_idx / pool_n)];
++	free(leaf_idx);
++	n_hot_leaves = pool_n;
 +
 +	ctl = mmap(NULL, sizeof(*ctl), PROT_READ | PROT_WRITE,
 +		   MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 +	if (!ASSERT_NEQ(ctl, MAP_FAILED, "mmap churn_ctl")) {
 +		ctl = NULL;
-+		return -1;
++		goto out;
 +	}
 +	ctl->stop = 0;
 +
 +	if (!ASSERT_OK(pipe(churn_ready), "pipe churn_ready"))
-+		return -1;
++		goto out;
 +
-+	churn_pids = calloc(n_leaves, sizeof(*churn_pids));
++	churn_pids = calloc(pool_n, sizeof(*churn_pids));
 +	if (!ASSERT_OK_PTR(churn_pids, "calloc churn_pids"))
-+		return -1;
++		goto out;
 +
-+	for (i = 0; i < n_nodes; i++) {
-+		pid_t pid;
++	/*
++	 * One migrating churner per hot leaf.  Churner h spans the K CPUs
++	 * (h*K + 0..K-1) mod c_pool of the churner pool (cpu_list[n_reserved ..]),
++	 * so different churners start on different CPUs and cpu_list[0] (the
++	 * reader's reserved CPU) is never used by a churner.
++	 */
++	for (h = 0; h < pool_n; h++) {
++		const struct cg_node *leaf = &nodes[pool[h]];
++		pid_t pid = fork();
 +
-+		if (!nodes[i].is_leaf)
-+			continue;
-+		if ((leaf_idx++ % mod) != 0)
-+			continue;
-+
-+		pid = fork();
 +		if (pid < 0) {
 +			ASSERT_GE(pid, 0, "fork churner");
-+			return -1;
++			goto out;
 +		}
 +		if (pid == 0)
-+			churner_child(&nodes[i], region_bytes, resident_bytes);
++			churner_child(leaf, h * k_eff, k_eff,
++				      region_bytes, resident_bytes);
 +
 +		churn_pids[n_churners++] = pid;
 +	}
@@ -463,17 +577,20 @@ index 000000000000..3e386d0b4c03
 +	churn_ready[1] = -1;
 +
 +	/* wait until every churner has joined + pinned its resident set */
-+	for (i = 0; i < n_churners; i++) {
++	for (h = 0; h < n_churners; h++) {
 +		char c;
 +		ssize_t r = read(churn_ready[0], &c, 1);
 +
 +		if (r == 0)
 +			fprintf(stderr,
-+				"a churner exited before signaling ready (join_parent_cgroup/mmap failure?)\n");
++				"a churner exited before signaling ready (affinity/join/mmap failure?)\n");
 +		if (!ASSERT_EQ(r, 1, "churner ready"))
-+			return -1;
++			goto out;
 +	}
-+	return 0;
++	ret = 0;
++out:
++	free(pool);
++	return ret;
 +}
 +
 +static void stop_churners(void)
@@ -562,10 +679,30 @@ index 000000000000..3e386d0b4c03
 +}
 +
 +/*
-+ * One timed traditional pass over the whole tree; returns nanoseconds.
-+ * @gap_us idles (untimed) before the pass so the tree re-accumulates a roughly
-+ * fixed amount of churn first; the resulting rstat flush is then paid inside the
-+ * timed region, giving every read approximately the same start state.
++ * Untimed whole-subtree flush used to normalise the pre-read state.  Reading the
++ * subtree root's memory.stat flushes the entire subtree's rstat, so the
++ * usleep(gap) that follows re-accumulates *exactly* gap-worth of churn no matter
++ * what the previous timed read was.  Without this reset the accumulation window
++ * would be (previous_read_duration + gap), and since a file pass is ~20x longer
++ * than a BPF walk that made the flush a BPF read pays depend on ordering -- a
++ * ~15% window asymmetry, enough to invert bpf_matched vs bpf_full on
++ * flush-dominated cases (e.g. "hot": few cgroups churned from many CPUs).
++ * nodes[0] is SUBTREE_ROOT (added first in build_tree), whose memcg covers the
++ * whole tree, so one read here flushes every node the timed reads care about.
++ */
++static void settle_flush(void)
++{
++	char buf[8192];
++
++	if (nodes && n_nodes > 0)
++		read_cgroup_file(nodes[0].rel, "memory.stat", buf, sizeof(buf));
++}
++
++/*
++ * One timed traditional pass over the whole tree; returns nanoseconds.  A
++ * settle_flush() then an untimed @gap_us idle precede the pass so the tree
++ * re-accumulates exactly gap-worth of churn first; the resulting rstat flush is
++ * then paid inside the timed region, giving every read the same start state.
 + */
 +static long long file_pass(int gap_us)
 +{
@@ -573,6 +710,7 @@ index 000000000000..3e386d0b4c03
 +	long long t0;
 +	int i;
 +
++	settle_flush();
 +	if (gap_us)
 +		usleep(gap_us);
 +	t0 = now_ns();
@@ -620,8 +758,9 @@ index 000000000000..3e386d0b4c03
 +/*
 + * One timed BPF pass: kernel walk (ro) + map drain into userspace.  Returns the
 + * total nanoseconds; *ro_ns gets the walk-only time, *got the entries drained.
-+ * @gap_us idles (untimed) before the walk, exactly as in file_pass(), so the
-+ * per-node rstat flush the walk pays reflects the same accumulated churn.
++ * A settle_flush() then an untimed @gap_us idle precede the walk, exactly as in
++ * file_pass(), so the rstat flush the walk pays reflects the same gap-worth of
++ * accumulated churn regardless of read ordering.
 + */
 +static long long bpf_pass(struct bpf_link *link, struct memcg_stat_reader *skel,
 +			  struct memcg_stat_snapshot *tmp,
@@ -633,6 +772,7 @@ index 000000000000..3e386d0b4c03
 +
 +	skel->bss->collect_full = 1;
 +
++	settle_flush();
 +	if (gap_us)
 +		usleep(gap_us);
 +	t0 = now_ns();
@@ -691,7 +831,8 @@ index 000000000000..3e386d0b4c03
 +	const char *name;
 +	int fanout;
 +	int depth;
-+	int churn_fraction;	/* one churner per Nth leaf; 1 = all */
++	int churn_leaves;	/* H: # hot cgroups (one migrating churner each); 0 = all leaves */
++	int cpus_per_leaf;	/* K: CPUs each hot cgroup is dirtied on; 0 = all churner CPUs */
 +	size_t region_bytes;	/* per-iteration churn region */
 +	size_t resident_bytes;	/* pinned resident set per churner */
 +	int samples;
@@ -714,7 +855,7 @@ index 000000000000..3e386d0b4c03
 +		goto out;
 +
 +	if (start_churners(tc->region_bytes, tc->resident_bytes,
-+			   tc->churn_fraction))
++			   tc->churn_leaves, tc->cpus_per_leaf))
 +		goto out;
 +	churners = n_churners;
 +
@@ -762,12 +903,11 @@ index 000000000000..3e386d0b4c03
 +	}
 +
 +	/*
-+	 * Timed samples.  Every read idles tc->gap_us (untimed) first, so the
-+	 * tree re-accumulates a roughly fixed amount of churn and each read
-+	 * starts from approximately the same state, paying its own rstat flush
-+	 * inside the timed region.  The file/bpf order is flipped on odd samples
-+	 * so any residual jitter doesn't systematically favour whichever reader
-+	 * runs first.
++	 * Timed samples.  Every read settle_flush()es then idles tc->gap_us
++	 * (untimed) first, so the tree re-accumulates exactly gap-worth of churn
++	 * and each read pays its own rstat flush inside the timed region.  The
++	 * file/bpf order is flipped on odd samples so any residual jitter doesn't
++	 * systematically favour whichever reader runs first.
 +	 */
 +	for (s = 0; s < tc->samples; s++) {
 +		long long ro;
@@ -797,20 +937,24 @@ index 000000000000..3e386d0b4c03
 +	 * under -v or on failure, not on a normal PASS).  The pass/fail verdict
 +	 * comes solely from the structural checks above.
 +	 */
-+	printf("\n==== memcg_stat_churn: %s ====\n", tc->name);
-+	printf("tree: nodes=%d leaves=%d churners=%d fanout=%d depth=%d region=%zuKB resident=%zuKB samples=%d gap=%dms\n",
-+	       n_nodes, n_leaves, churners, tc->fanout, tc->depth,
-+	       tc->region_bytes >> 10, tc->resident_bytes >> 10, tc->samples,
-+	       tc->gap_us / 1000);
++	printf("\n==== memcg_stat_churn_percpu: %s ====\n", tc->name);
++	printf("tree: nodes=%d leaves=%d hot_leaves=%d cpus_per_leaf=%d dirty_pairs=%d cpus=%d reserved=%d churners=%d fanout=%d depth=%d region=%zuKB resident=%zuKB samples=%d gap=%dms\n",
++	       n_nodes, n_leaves, n_hot_leaves, n_cpus_per_leaf,
++	       n_hot_leaves * n_cpus_per_leaf, n_cpu, n_reserved, churners,
++	       tc->fanout, tc->depth, tc->region_bytes >> 10,
++	       tc->resident_bytes >> 10, tc->samples, tc->gap_us / 1000);
++	printf("each hot cgroup churned across %d CPUs (migrating churner) so a reader flush visits ~%d per-cpu trees per hot cgroup; reader pinned to reserved CPU %d\n",
++	       n_cpus_per_leaf, n_cpus_per_leaf, reader_cpu);
 +	printf("all times in us (average per full-tree read under churn, full memory.stat field set); ratio = file/bpf; ro = bpf read()-only (no map drain)\n");
-+	printf("each read idles gap=%dms first so every read starts from ~the same accumulated churn; the rstat flush is counted in the read\n",
++	printf("each read flushes then idles gap=%dms so every read starts from exactly gap-worth of churn; the rstat flush is counted in the read\n",
 +	       tc->gap_us / 1000);
 +	printf("file_avg=%.1f  bpf_avg=%.1f  bpf_ro=%.1f  ratio(file/bpf)=%.2fx\n",
 +	       f, b, bro, b > 0 ? f / b : 0.0);
 +	printf("per-cgroup: file avg=%.0f ns  bpf avg=%.0f ns\n",
 +	       f * 1000.0 / n_nodes, b * 1000.0 / n_nodes);
 +	printf("bpf entries produced: %d (expected %d)\n", acc.last_got, n_nodes);
-+	printf("RATIO (under churn): file/bpf = %.2fx\n", b > 0 ? f / b : 0.0);
++	printf("RATIO (%d CPUs/cgroup): file/bpf = %.2fx\n",
++	       n_cpus_per_leaf, b > 0 ? f / b : 0.0);
 +
 +	ASSERT_EQ(bad_walks, 0, "all timed bpf walks completed");
 +	ASSERT_EQ(acc.last_got, n_nodes, "bpf visited whole subtree under churn");
@@ -845,26 +989,35 @@ index 000000000000..3e386d0b4c03
 + * (file/bpf x matched/full) approximately the same start state and folds the
 + * flush cost into the measured time.  It is the "staleness / poll-interval"
 + * knob: larger gap -> larger common flush -> the file/bpf ratio compresses.
-+ * Pick it past the point where the flush cost saturates; validate by checking
-+ * that bpf matched <= bpf full is restored and that doubling it barely moves
-+ * the numbers.  50 ms is a reasonable default here.
++ * See memcg_stat_churn for the full rationale; 50 ms is a reasonable default.
 + */
 +#define CHURN_GAP_US	(50 * 1000)
 +
 +static const struct testcase cases[] = {
 +	/*
-+	 * Both cases use a large (1111-cgroup) tree, where the whole-tree read is
-+	 * big enough that its cost dominates the rstat flush and scheduler jitter,
-+	 * so the reported ratios are reproducible run to run; on a small (tens of
-+	 * cgroups) tree the sub-millisecond BPF read is swamped by that noise and
-+	 * the ratio bounces.  They differ only in churn density -- large_dense
-+	 * churns one leaf in 4, large_sparse one in 8 -- which changes how much of
-+	 * the tree the shared flush has to touch.  samples are kept even so the
-+	 * file/bpf order-alternation (s & 1) cancels residual first-mover bias.
++	 * The narrow/wide/widest trio runs on a large (1111-cgroup) tree and
++	 * churns a fixed set of 64 hot leaves, sweeping only K, the number of CPUs
++	 * each hot cgroup is dirtied on, to isolate per-cgroup cross-CPU flush
++	 * fan-out:
++	 *
++	 *   narrow  - K=1  : each hot cgroup dirty on 1 CPU   (64 x 1 dirty pairs).
++	 *   wide    - K=8  : each hot cgroup dirty on 8 CPUs  (64 x 8 dirty pairs).
++	 *   widest  - K=all: each hot cgroup dirty on every churner CPU (64 x cpus).
++	 *
++	 * The hot-cgroup count (64) is identical across all three, so only the
++	 * per-cgroup CPU fan-out changes.  As K grows the shared rstat flush F grows
++	 * (more per-cpu trees to visit), so both readers' cost rises and the
++	 * file/bpf ratio compresses toward 1; widest is the most conservative
++	 * regime.  The large tree keeps the whole-tree read cost dominant over the
++	 * flush/scheduler jitter, so the ratios are reproducible (a small tree makes
++	 * the sub-millisecond BPF read too noisy to compare).  samples are kept even
++	 * so the file/bpf order-alternation (s & 1) cancels first-mover bias; widest
++	 * gets more samples as its bigger flush has more variance.
 +	 */
-+	/* name           fan dep frac  region       resident     samp gap */
-+	{ "large_dense",  10,  3,  4,   256 << 10,   128 << 10,     8,  CHURN_GAP_US },
-+	{ "large_sparse", 10,  3,  8,   256 << 10,   128 << 10,     8,  CHURN_GAP_US },
++	/* name          fan dep  H   K   region      resident    samp gap */
++	{ "narrow",       10,  3, 64,  1,  256 << 10,  128 << 10,    8,  CHURN_GAP_US },
++	{ "wide",         10,  3, 64,  8,  256 << 10,  128 << 10,    8,  CHURN_GAP_US },
++	{ "widest",       10,  3, 64,  0,  256 << 10,  128 << 10,   10,  CHURN_GAP_US },
 +};
 +
 +/*
@@ -886,7 +1039,24 @@ index 000000000000..3e386d0b4c03
 +	return ok;
 +}
 +
-+void serial_test_memcg_stat_churn(void)
++/*
++ * Reserve one CPU for the reader (this parent) and pin the parent to it, so its
++ * timed reads run on a CPU that carries no churner.  Needs at least 2 CPUs; on a
++ * single-CPU host we skip reserving and the one churner shares the CPU with the
++ * reader (noisier, but 1-CPU hosts are not the target).  Best-effort: if the
++ * parent cannot be pinned we carry on without a reservation.
++ */
++static void reserve_reader_cpu(void)
++{
++	if (n_cpu < 2)
++		return;
++	if (pin_cpu(cpu_list[0]))
++		return;
++	n_reserved = 1;
++	reader_cpu = cpu_list[0];
++}
++
++void serial_test_memcg_stat_churn_percpu(void)
 +{
 +	int i;
 +
@@ -895,8 +1065,13 @@ index 000000000000..3e386d0b4c03
 +		return;
 +	}
 +
-+	if (!ASSERT_OK(setup_cgroup_environment(), "setup cgroup env"))
++	if (!ASSERT_OK(collect_cpus(), "collect cpus"))
 +		return;
++
++	reserve_reader_cpu();
++
++	if (!ASSERT_OK(setup_cgroup_environment(), "setup cgroup env"))
++		goto restore;
 +
 +	for (i = 0; i < ARRAY_SIZE(cases); i++) {
 +		if (!test__start_subtest(cases[i].name))
@@ -905,6 +1080,14 @@ index 000000000000..3e386d0b4c03
 +	}
 +
 +	cleanup_cgroup_environment();
++restore:
++	/* undo reserve_reader_cpu() so later test_progs tests keep full affinity */
++	sched_setaffinity(0, sizeof(orig_affinity), &orig_affinity);
++	free(cpu_list);
++	cpu_list = NULL;
++	n_cpu = 0;
++	n_reserved = 0;
++	reader_cpu = -1;
 +}
 -- 
 2.53.0-Meta
