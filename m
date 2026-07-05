@@ -1,119 +1,114 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4330E279DC3
-	for <bpf@vger.kernel.org>; Sun,  5 Jul 2026 03:28:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2043D20E702
+	for <bpf@vger.kernel.org>; Sun,  5 Jul 2026 03:38:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783222105; cv=none; b=EWS6QKhfYr87FD2zAvdwYTcLgPPSOwcoaeZX7ylKOXf/xURcgpwfucCjuUsrWKF/XV2QlKc0TyWdXQqK4jY5VhsZ8nI9zregVwoPjYVkEjzUI1z97a1T49hCSsH9OdqaZzekxAuOYyko/2+TUYXSmqwDjM4PTNMbk8NR1wOPRSg=
+	t=1783222714; cv=none; b=iwiwZzuYjFxeqNZGTjwazGl8KNJdfV8fBQ0oM1pyAOHwUzSM6KgToYou2z4ZpNjN4h0rzBIL17uUG+gPjl/JQgQp++U3aVPAplplwkUaDX7uAWJvmLPHjWdZkKW6X0h8bxhgwW4GW/BLUPX0W+C85Tv/nzOPCR9k1q2V9yBzgFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783222105; c=relaxed/simple;
-	bh=Kh85sAaHY/3z568PAyFYsCupQEvAYXv7YtoMdQVufhk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J8ERitvAIig+BWvRcpzt2Ic3ntTApV/e+s4NDivddJ7QDxtyku/TkjVp9RmxvTYhsIMi844SWYm850D1BBIqIryfDQ7kRj3VIU5Z0YHpoJjN+Z7ABY84hb+j4EtBUm+bffz7BXTabBs+ncBqeOAocQDJj7wGuOJ4cEhM0KsM06k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DC0uEmRz; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783222714; c=relaxed/simple;
+	bh=e8EEZlGDcmwZkM2GdoxIpG+OGGkbF8m1pVHt29bVLmc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=bYmsZOGaqY/vkwpuxkD1XIxf1KwPuF7qWNLO59NTrQ/Z+0EeoMJ44Rb1Yzd7uN5aE9ZS/IG7Vyk+5lBJwk8zRXX/x/3bSePnbhTygeK0/DYhk7u2Vc3Jfb/pL9tgrZ16QlPAZe59l4IldjxtwMhtfdtI5rlEELqmLedqWn0OhIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hdB4E2tb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DC0uEmRz"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-37defb2f231so1155321a91.2
-        for <bpf@vger.kernel.org>; Sat, 04 Jul 2026 20:28:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783222103; x=1783826903; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aGAVpUfQaFulsMJsmJqhLyXxHcYUPLV3O7aQk0UJwdw=;
-        b=DC0uEmRzV0dmRYfobuuLqEYmm9YNsLFeBCXaYipxNp25ndlvcmyOMoIj58HzjqLJmY
-         EHs2WpU8yzOHhT8xd5yAC1lqkETQWRhDCl0160jST1ypaTfPEaISXAKAh9NslsYRAyRQ
-         FtOpGX6+0cWatOt1tqQoRNbQUHHWS2fIHKtWdEWmReWLniiLaFcs70+/bfWhZ37QpUY1
-         0HaX5tF/oQYYJviRsxvkCpQbOSgz1ZRcON0bRWc6+vCUDwTgT78wQKXmhjcEo82i5/SP
-         YIRN+8O8p+y14aQy8Z5DS1kcWEnsTzDimUmrusClOH6dRdZ47lp9ZRRsl/qS5tESWGeY
-         smjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783222103; x=1783826903;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aGAVpUfQaFulsMJsmJqhLyXxHcYUPLV3O7aQk0UJwdw=;
-        b=ZCYcjLemSGRAqOPZvqQkmeTjtLYzofYWuerGBmcm0UWlFXu0laL9IOq8FeGI/NtUfV
-         D1VSU8/hpk1mG6kjZqBSRvfUMaDf7d1k8z4fqFZh+bzQJ34pCitK6bOp0iPNKofM6OTa
-         1+eDmEFS3nio3AX1twbpch1iovmqdBT8jWmp59wd2kwr3QnsKE6Uhdy+SewdZAlXt7wH
-         w595J3Ve0LpAdWXNqwByACcyvhmqcfaAYPDI0NzJK/vi9R7RxWD/B1kQ/kpz+gtj1xDI
-         Jcdx8PuKCPinjM0C6PrI6F8HzNO1jT1+e4UHzgINjw8A61nM6SmClZ6lRPU5TFkly2WR
-         AP+A==
-X-Forwarded-Encrypted: i=1; AHgh+RqA5UdOe8hW5bhH9l4Uyr7Xpu3mYBIeJhUsvcjH0zMF5HUyc6gCglSywElCNRSQwJmSinw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4qflfOZWfCkYUzzAwWGPJVr00b45JBGgWy9DpWsKac6whqBgK
-	25B4wurh0+zaYQf9+I6V1med8LMgsrGOswApLw/AaPNQHdFwUHL0A9f3
-X-Gm-Gg: AfdE7ckyMPH6oPiuRAUi0mnSrtshzA12KtLMoVG/heij84q+blzrGWDu96yQW7RWILb
-	9Gde29qFlH1Hkvg3YAUmMsqJOgOMeL4t4DuSS/6+X1WtTNVg6wOBABLlVP+6Rvp3IY/mNws/qkb
-	dsQqGDv201yr4Y6k8bpqvvB73BnhkvGOkx/Jqg/kXtNL3oMPgWtLtg/GLs3ZafhovHR+rD+HPCQ
-	u4i0e4bWqVLOA88qLugQrjFesdvSrtWUDS5X5q24VgL4f0CbjyUry5FOP3Ek+t/bPaq5D5Cyu+F
-	afVkx9XYN0wjOcLXqY1/aJ8B4jOvBNv2A6YFWCOYUNkSDWkJqOyoQpzE1Eg809QVsN9hm0/Rjn2
-	BFvyjnecUZS6YL+LsrRAxE8kPrkK/lpwDWPDFNzP9tf8MH+WHIOo/pgvIy7mtTl1C/sTq+2w=
-X-Received: by 2002:a17:90b:4d88:b0:37f:d9dc:557 with SMTP id 98e67ed59e1d1-3829d70cc3bmr4850298a91.16.1783222103587;
-        Sat, 04 Jul 2026 20:28:23 -0700 (PDT)
-Received: from lgs.. ([2001:250:5800:1000::f280])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38127ae6e2bsm3031767a91.2.2026.07.04.20.28.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jul 2026 20:28:23 -0700 (PDT)
-From: Guangshuo Li <lgs201920130244@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Varun R Mallya <varunrmallya@gmail.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Guangshuo Li <lgs201920130244@gmail.com>
-Subject: [PATCH] libbpf: Check full backing type size for bitfield dump
-Date: Sun,  5 Jul 2026 11:26:03 +0800
-Message-ID: <20260705032603.275766-1-lgs201920130244@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hdB4E2tb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C84101F000E9;
+	Sun,  5 Jul 2026 03:38:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783222713;
+	bh=ikUa5AK5iQagcQWdtZEKJ598dG0s9Iz2609jKUOtmHw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=hdB4E2tbQapxUAeZQOO1jvVTwyG7YVX7/eMCYaQvVj1xxyxDxQVO3+Ok/RvXZu273
+	 zmyrUqVTZ/kSAl1ust8lL9pn/UBuke7XhTUMCLmwZ+Vlh0lWHSNeUo7qUueE/doAGR
+	 4+BtDxqimveXD7FrjpfxtTXZ6haiI7cvXsdRWlWQYF1KjqU7t0G2i0ewglbqk0r8aF
+	 4Z3jEE1WZc/F8KAW06oeUu1nUryOPW4EMelWD1dAg9OE45cNjfVVu3YhKzkAa/6kc3
+	 o9K1Sit3GFGMZR6OmAX6J5oz/aAAFbR8S056iTL5nvFMXfpsHtshFpEQe2MNUw5Fbl
+	 9BcgqWCHaxazg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] libbpf: Check full backing type size for bitfield dump
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Guangshuo Li" <lgs201920130244@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260705032603.275766-1-lgs201920130244@gmail.com>
+References: <20260705032603.275766-1-lgs201920130244@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 05 Jul 2026 03:38:32 +0000
+Message-Id: <20260705033832.C84101F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-btf_dump_get_bitfield_value() builds a bitfield value by reading bytes
-from the backing integer type. The bounds check added for short data
-buffers uses the number of bytes covered by the bitfield itself, but the
-read loop consumes the full backing type width.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] The stricter bounds check using `t->size` incorrectly rejects vali=
+d narrow bitfields in packed structs, causing a false positive `-E2BIG` fai=
+lure.
+- [Medium] The bounds check for bitfields was updated in `btf_dump_get_bitf=
+ield_value` to use `t->size`, but the early bounds check in `btf_dump_type_=
+data_check_overflow` was left unpatched, causing inconsistent behavior.
+- [Low] Unused local variables `start_bit` and `nr_bytes` are left behind a=
+fter the patch.
+--
 
-For narrow bitfields this can leave part of the backing type unchecked.
-For example, a one-bit field backed by a four-byte integer only requires
-one byte according to the bitfield span calculation, while the value
-construction still reads four bytes.
+commit dcf1121c5988139c35dcd52cf31ce52003f38d43
+Author: Guangshuo Li <lgs201920130244@gmail.com>
 
-Check the backing type size instead, so the bounds check matches the
-actual read range.
+libbpf: Check full backing type size for bitfield dump
 
-Fixes: 5714ca8cba5e ("libbpf: Fix OOB read in btf_dump_get_bitfield_value")
-Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
----
- tools/lib/bpf/btf_dump.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch updates the bounds check in btf_dump_get_bitfield_value() to use
+the full backing type size instead of just the bitfield span. This prevents
+out-of-bounds reads when constructing bitfield values from narrow data
+buffers.
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index cc1ba65bb6c5..a49790e356a8 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -1771,7 +1771,7 @@ static int btf_dump_get_bitfield_value(struct btf_dump *d,
- 	nr_bytes = (start_bit + bit_sz + 7) / 8;
- 
- 	/* Bound check */
--	if (data + nr_bytes > d->typed_dump->data_end)
-+	if (data + t->size > d->typed_dump->data_end)
- 		return -E2BIG;
- 
- 	/* Maximum supported bitfield size is 64 bits */
--- 
-2.43.0
+> diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+> index cc1ba65bb6c5a..a49790e356a83 100644
+> --- a/tools/lib/bpf/btf_dump.c
+> +++ b/tools/lib/bpf/btf_dump.c
+> @@ -1771,7 +1771,7 @@ static int btf_dump_get_bitfield_value(struct btf_d=
+ump *d,
+>  	nr_bytes =3D (start_bit + bit_sz + 7) / 8;
 
+[Severity: Low]
+Are start_bit and nr_bytes now unused variables? Since the bounds check
+below was updated to use t->size instead of nr_bytes, it looks like these
+calculations are dead code and might trigger compiler warnings.
+
+> =20
+>  	/* Bound check */
+> -	if (data + nr_bytes > d->typed_dump->data_end)
+> +	if (data + t->size > d->typed_dump->data_end)
+
+[Severity: High]
+Will this stricter bounds check reject valid narrow bitfields in packed
+structs? If a user dumps a 1-byte packed struct containing an int
+bitfield (e.g., int a:8), the backing type size (t->size) will be 4, but
+the valid data size is only 1 byte. Could this cause the libbpf BTF dump
+API to fail with -E2BIG for valid structs?
+
+[Severity: Medium]
+Does this change create an inconsistency with the early bounds check in
+btf_dump_type_data_check_overflow()?
+
+Looking at btf_dump_type_data_check_overflow() in the same file:
+
+	if (btf_is_bitfield(t)) {
+		...
+		return data + nr_bytes > d->typed_dump->data_end ? -E2BIG : nr_bytes;
+	}
+
+Since that function still uses nr_bytes, could it succeed while this
+function fails, resulting in partial and malformed output where the dump
+prints the struct member prefix but fails during value retrieval?
+
+>  		return -E2BIG;
+> =20
+>  	/* Maximum supported bitfield size is 64 bits */
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260705032603.2757=
+66-1-lgs201920130244@gmail.com?part=3D1
