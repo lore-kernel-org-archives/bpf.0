@@ -1,118 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D2D13DDAA
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 02:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C179D3A9D9B;
+	Mon,  6 Jul 2026 03:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783306002; cv=none; b=LjyYP4o0kISU450bplTVHMOfnjvU9yalASylX0nTaaWd4JvacGmmo5aI7wLaJ6gHHE2rUeMAOk3NmO7mGrqtp5XN/hFxnyf4u42rsN7pStRnXoeNK3CKJu1cKGDRW8tHfDFfrXlCIz6w2ZZsLFlTxlul7a8oln5HzwLvrSk6dGo=
+	t=1783309155; cv=none; b=WrjWfgX5HRN79OnEWsbT7n5GBDN96CXfpTlNaZ5cnqhflVqwk9s5cfArpPGyx+U2VL4ZOkHQIUy7pabaVNErITa7BxPyJJXCb5H8QzN30v/JV6OtwBtWHl89TuFYWtclbLCKZvPougrwbSzGsWIiPbU1zdlE9fkX9NR0e+WcsDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783306002; c=relaxed/simple;
-	bh=0Hd0bTYdtvFbwmm2xtnYb/RoGGFVam/EvSVetwT7/To=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=rkaO4EfUB/UqqZX/EQe1KZpnGcRtVgf79taXgK9W3j0xy1cIbP2r6vrmHW8A4q6UYgDFta1/NMfC84GvWIZtBT+erwattbrQhsLGvoCHyYcS8nPYN4TgEry548zSDvYC41cQLDG4NlEDb/N2tFh/psgqtk0tMUGVBB6Dv9kTrTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SL/qS72X; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SL/qS72X"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43C741F000E9;
-	Mon,  6 Jul 2026 02:46:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783306000;
-	bh=r3mXDsw/Jo5WwOIyYwXercje4rMIaHYUY5kc9zPlIM0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SL/qS72X8y8GwXDP1CHy4XGS46NwYKSt+CvBNpkbUtGXPbNu4DV03WNRZyERhiNuC
-	 tL7HNjQps6aKe1mjKFdrIjK7Vzz2a6OcW5kRMdTR3AKaj8ozUxnRaYARmZ0tRAImWR
-	 UPSTR0JwlhdWOTwbx0R20FcEVCkRCX25kI09GGP0NILHaDM6f2QWgxshMMIVYtECyV
-	 9sk3kY7VU/11ZSB1nzRlEk9g4UZ7Oo88FCKGrNUqpn1YY+l9n3U6L7C8Sj3zYo1M6t
-	 DR6UiOGmhvalMBtNe/+n9pQJqy42+d+Zi1Jzl/VgcZBrTC9kN4VYJd5Kr8IwMP4h3v
-	 f3d0rIzwkDx8Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] libbpf: Limit bitfield dump reads to checked bytes
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Guangshuo Li" <lgs201920130244@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260706023632.625353-1-lgs201920130244@gmail.com>
-References: <20260706023632.625353-1-lgs201920130244@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 06 Jul 2026 02:46:39 +0000
-Message-Id: <20260706024640.43C741F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1783309155; c=relaxed/simple;
+	bh=PH77AhTUJx3zvGAbs2xGTdjsLN+bCJb7FSnkmuPeyuM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j/r+JMlDnwLwV832BRZweTLzkmPTsNIK8PX3tKtuxYlHwQ7+PQarLYc1hTuNeE/cqCRpyr5UvolmU7zevOoiKU6Dku85t3L085+vKzAQxZeGn+BcEAwNDMNgNw1Npz4CYyCmr7MDg/iopcd0wJLiSxpYDxmcEwj1rkLiMucAlcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8Cx5+pdI0tqU0QAAA--.1299S3;
+	Mon, 06 Jul 2026 11:39:10 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJAx3cZbI0tq3LoBAA--.10774S2;
+	Mon, 06 Jul 2026 11:39:08 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>,
+	Hengqi Chen <hengqi.chen@gmail.com>
+Cc: loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/4] Optimize BPF tailcall for LoongArch
+Date: Mon,  6 Jul 2026 11:39:02 +0800
+Message-ID: <20260706033906.1988-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAx3cZbI0tq3LoBAA--.10774S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrKw43CF1xuw4xCFyfXFW7Jrc_yoWkXwb_ua
+	4xtaykGw4UXFW7CF129F1fZr97Cayj9FyUGrWvqrWku3y3AF1DZr4kWrW09wsFgrZxKr90
+	y39F93yxZr1a9osvyTuYvTs0mTUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUb3kYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
+	Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_
+	WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+	xGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWU
+	XVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
+	kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY
+	6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0x
+	vEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVj
+	vjDU0xZFpf9x07j5GYJUUUUU=
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The patch introduces a logic error and Undefined Behavior when e=
-xtracting unaligned enum values on little-endian architectures. When `bit_s=
-z =3D=3D 0`, `left_shift_bits` is correctly updated to `64 - nr_bytes * 8` =
-(e.g., 32 for a 4-byte enum), but `right_shift_bits` is unconditionally set=
- to `64 - bit_sz =3D 64`. This results in `(num << 32) >> 64`. Shifting a 6=
-4-bit integer by 64 is Undefined Behavior in C. On architectures like x86_6=
-4 and ARM64, the shift amount is masked by 63, executing effectively as `>>=
- 0`. Consequently, the extracted enum value remains incorrectly shifted lef=
-t (e.g., 1 becomes 4294967296), breaking BTF dumping for unaligned enums.
---
+Based on 7.2-rc1, tested on a Loongson-3A6000 physical machine.
 
-commit 0a4db97a6f3bd1db635b97e6e0efd0932b9505b1
-Author: Guangshuo Li <lgs201920130244@gmail.com>
+This version addresses the review comments of AI, changes are isolated
+to patch 3/4, the rest of the series remains unchanged.
 
-libbpf: Limit bitfield dump reads to checked bytes
+v1 -> v2:
+- [Patch 3/4] Use ctx->image to inject a safe dummy offset during
+  Pass 1, safely bypassing the 16-bit signed immediate range check.
+- [Patch 3/4] Update the commit message to reflect the new code.
 
-This patch restricts the number of bytes read during bitfield value
-extraction to the actual size of the bitfield, preventing out-of-bounds
-reads. It preserves the full-size read for the non-bitfield path.
+Here are the test results:
 
-> diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-> --- a/tools/lib/bpf/btf_dump.c
-> +++ b/tools/lib/bpf/btf_dump.c
+  $ sudo modprobe test_bpf test_suite=test_tail_calls
+  $ dmesg -t | tail -1
+  test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
 
-[ ... ]
+  $ sudo ./test_progs -t tailcalls | tail -1
+  Summary: 1/37 PASSED, 0 SKIPPED, 0 FAILED
 
-> @@ -1784,13 +1788,13 @@ static int btf_dump_get_bitfield_value(struct btf=
-_dump *d,
->  	 * stored in num, then we left/right shift num to eliminate irrelevant =
-bits.
->  	 */
->  #if __BYTE_ORDER__ =3D=3D __ORDER_LITTLE_ENDIAN__
-> -	for (i =3D t->size - 1; i >=3D 0; i--)
-> +	for (i =3D nr_bytes - 1; i >=3D 0; i--)
->  		num =3D num * 256 + bytes[i];
-> -	nr_copy_bits =3D bit_sz + bits_offset;
-> +	nr_copy_bits =3D bit_sz ? bit_sz + bits_offset : nr_bytes * 8;
->  #elif __BYTE_ORDER__ =3D=3D __ORDER_BIG_ENDIAN__
-> -	for (i =3D 0; i < t->size; i++)
-> +	for (i =3D 0; i < nr_bytes; i++)
->  		num =3D num * 256 + bytes[i];
-> -	nr_copy_bits =3D t->size * 8 - bits_offset;
-> +	nr_copy_bits =3D nr_bytes * 8 - bits_offset;
->  #else
->  # error "Unrecognized __BYTE_ORDER__"
->  #endif
->  	left_shift_bits =3D 64 - nr_copy_bits;
->  	right_shift_bits =3D 64 - bit_sz;
-> =20
->  	*value =3D (num << left_shift_bits) >> right_shift_bits;
+Tiezhu Yang (4):
+  LoongArch: BPF: Optimize redundant TCC loads in epilogue
+  LoongArch: BPF: Move arena register slot below TCC context
+  LoongArch: BPF: Refactor jump offset calculation in tail call
+  LoongArch: BPF: Implement branchless conditional move for TCC
 
-[Severity: Medium]
-Does this introduce undefined behavior when extracting unaligned enum values
-where bit_sz is 0?
+ arch/loongarch/include/asm/inst.h |   6 ++
+ arch/loongarch/net/bpf_jit.c      | 112 +++++++++++++++---------------
+ 2 files changed, 63 insertions(+), 55 deletions(-)
 
-When bit_sz is 0 in btf_dump_get_bitfield_value(), right_shift_bits is set
-to 64. Shifting a 64-bit integer by 64 is undefined behavior in C.
+-- 
+2.42.0
 
-On architectures like x86_64 and arm64, the shift amount is masked by 63,
-effectively executing as a shift by 0.
-
-Because left_shift_bits is correctly updated to 64 - nr_bytes * 8
-(for example, 32 for a 4-byte enum), the value is shifted left but not
-shifted back right.
-
-Can this corrupt the extracted unaligned enum values by leaving them
-incorrectly shifted left?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260706023632.6253=
-53-1-lgs201920130244@gmail.com?part=3D1
