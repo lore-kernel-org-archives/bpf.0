@@ -1,133 +1,140 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129163A872B
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 15:29:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED993A6B89
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 15:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783351758; cv=none; b=ooDaYVJR1pyS+F2S8+fpR05aeqF0FQn037qac4tDe6Cm6+W5mJtA07LpCxEeVErLyQqOsAJh/V+Hetn4Q3EJBBGZzYZz8WboMmpXnyfzCzHLMcYROlGiyPUpD0Vs7PhWbcjTieaKrfa4B+LJaVQ0vQ4rV16YM6wS1D6DqnG14n0=
+	t=1783351891; cv=none; b=GFkrczxcPkVvI1RQGnnAiKhLn+Kd0w+44OBqsN1avpwgsYaEJInyISruHD6a3xoH8J7T/dcOoluAY1Fdn8KvUFvF02T9yPx1NqQl0J9pNiG1eHSSWoxfayyTJFYATa5ZyF0iiVAlHr1YOWPkMYh3aS+Nsn06FU7mzSmcV2vsbPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783351758; c=relaxed/simple;
-	bh=x5HuJc8ryRcujdAvfssRfuCUtU/zCfH7JZqYpQDH/Ak=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=OBPDer0GrdpQCVimTZsBrk0Z+1z51jiIxO8qNAJt7f+ld1FQn/PAQl3fGO6UI2oL64zqTfoFfMxTl2sK7ICn4cC48s+vGTKWL5lanXCWF2NYureOZ8FoMLfHXc6BoVZ0TpZrUEtXfaEmpRb8OLiCScXO9HZjMtVyYrg9RLTDBFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AfHkA/fv; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1783351891; c=relaxed/simple;
+	bh=9AzG3JPVWKnuycwkDK0/pbBHGjRDWyxVYQDdjKYKu8Q=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=rwTLtGnJ1qEczB+nGBtB2jCbmfGsi4kNrcGaFISpHdFQWvFbuLp7b/vVhStVkOGug3NWe5qrp20oPx0NuMOqxGEpMXwHzin2S+BMKup1Py0rgkIFZiiCkBkNZeweUkOqlWTSC+vBKugNoIg469crAtfgkJiIa5GA7/I9m1OJBp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=NQAYmF9/; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AfHkA/fv"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-493bf73ec2aso20302615e9.2
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 08:29:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="NQAYmF9/"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2ca70925c25so40331845ad.1
+        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 08:31:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783351755; x=1783956555; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qh+EaBgmuYdNNpZcqgX7l88URVM0gQj+bKH7LdozPRw=;
-        b=AfHkA/fvL3A/rk7KwsBj1Hx/r9dskaifpZxY+7jjR4KV0wrOlC6zKT8JW8wLXoK+i9
-         eEpd3YSPrI/K1ZoyaIc8cISOUl94+fIoo2yNvxoWCyrjkO+ywnHXRsEOzS8MH3LrJ+VW
-         fYglRgDKJfQZy3zyuy74RthRouhVRfGgxSqjw1E//FpBH+hcRnxUd2gxb8WxOIxAsgD4
-         s3fwmmXNKXeWRbLh8c0d4KO7RDfaxnx9XXea3qoBslnLZHDOZkDhOTIJNCUj+F2Hxieb
-         ksGrUHJceoUzLe7OPBG3VUPdDJ1LhFTF7R1U6T4KOCQqGeplvG/4CUasBxCA8JagJqHO
-         snPg==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783351887; x=1783956687; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=hWHAsjGRo/XCVUPncLv7xaoRpS+dOd5JPy82dF58ENg=;
+        b=NQAYmF9/vfKn3CBT8DX9n1Kaix51ZnLddUco9kKnKarSDv0/+TaEm9/vAKsnXFgIfy
+         u7R0Sjg2Szkr5gphPtejqPgSS6Uh79X2S5wAd6bDbnO4/8xBIXOHe4m5ORKFFWz59QlG
+         ui2p65NyHbusG0SDUmRYhNqR6rM5qI5/CfIu9RiQM1S0b8UYnvhw56CwHh0aB3PeCQ2V
+         G18VnvPwGmWiY6U8f9iJGiaQfh755VGaCODjImA+gVKGS5OJZR0Au/f2V9z0pCkfg9PL
+         Sh9LDY7QDsvuUUc+XFP1bp7RoDbi8NTpLTu9u5Lksasc9DJ2dTXtNP4UAW5x5tcp1dGg
+         Jxdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783351755; x=1783956555;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qh+EaBgmuYdNNpZcqgX7l88URVM0gQj+bKH7LdozPRw=;
-        b=fY1u5uNI7V3haPvMtld4NQMAzBOvovXg5C8VN386ZWiFwvgnkl6wrWBSe+mTk+nuP2
-         fnkGEEVwZC893efDG5xmyfMdjUiPyyKEdcSbyNLxF3jmckEf7NbcLslXBNFPlQNAwBHZ
-         QtLfL4KvXU/DQGLKdIcSJxTe7AFn6se7jSNf0yghtv22nLuvbTdlfi5mUQ1ShHnT+F8M
-         VdR0O3gKrLnf+PhhLjk0N+mkSIf4dC7FI5L73GAsCqnOVmzz6QGhAMPKNfMQcs83mEyO
-         A7zewve3ZDUPh3GP8uBBU1VPHKCXex9UYHEYV+CUaSF3x4Ap4rlkeUTd4JAXSUcwvd+e
-         6Ncw==
-X-Gm-Message-State: AOJu0YwjmuWwpILhNhbYwd5hzzlyfaO4gn8HkDrFrx586FbblkBkRvGp
-	06eidgHIozhDUrIwyNL6cJW+JEETb0FKq/sf/QFX/cckMYOHJNFqvQXsj6FhHcfLvxg=
-X-Gm-Gg: AfdE7cmNBWDgJPP3E52ACtc2DdFqrzKJKoVVN3/V1BmGhxd6ZSf6saL7e4YfMPTu7QF
-	A7PAMUFqEbV5O98lAUF2qjLMNcczwGPsbVgX2H0Uu/Sh8OFcOgaEQMLqy+6chK+y53PZ5YXczF1
-	E2cAIR5qpcU2UsLFcZ02hk9BEGkfeskQgFIknN55IUHkU0lIiDpbasMMlsiaJoQ96Mwon+zC/eT
-	380Y90sWs114nsQ3AocFd3Rz2/yvbjo8yvI04Yal4E7GebsYiUO/zcMWss8EO+rLwuUgpbt8ZA2
-	x8mu66zC6W5VpGOa6xdW6ftEAF/QFF7ZN/hOLqQdi7TVnr2kFErbWYsWX6UQKIFGslhVDYHrONt
-	nUEyo1AciskgA7tp6USZIxOlDCbJ6jNTLSw/KBqrecHw8Y9SzezhnfNafdD42ufYeh9bV5Ny6zm
-	4nOg==
-X-Received: by 2002:a05:600c:3b2a:b0:493:df47:8d9f with SMTP id 5b1f17b1804b1-493df478db8mr3788435e9.10.1783351755505;
-        Mon, 06 Jul 2026 08:29:15 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:157e:cc5f:6c4b:db0a:5d2a])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-73e19f3af52sm5839852137.3.2026.07.06.08.29.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 08:29:14 -0700 (PDT)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Mon, 06 Jul 2026 12:28:43 -0300
-Subject: [PATCH] docs/bpf: Document BPF_STRICT_BUILD=0 to tolerate test
- build failures
+        d=1e100.net; s=20251104; t=1783351887; x=1783956687;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hWHAsjGRo/XCVUPncLv7xaoRpS+dOd5JPy82dF58ENg=;
+        b=kcM4K0fke6nuYeukPZZQGKu+5/tdEWK7yBQAsO5RAV6aHVD6CFt0wpi/g/fSfYTl7d
+         Ph/dv7naQYMlEhkjL+TacU7i/WbXZo/eYYEmNMBKiZTrqbeB6+jHubw7t81vjvcUhKPO
+         uiOQj3GtGmUZkP9yatEQbS4Sbu+MTCphOnkq1eEOTpYq8mXp0hLHWNZpusvertz2Q024
+         CoUwQwfuc/Vmx6jjBzMGy6ODaXe5714WHY3MLNYm86myI4/l4MsULdieuMkWsgpCxsFO
+         6k9Bwk1UxA5jvhFpzVyszf/H24lfutYRV/qJLVafkmt2gYRDUGkgUFW7DRRpGiA6od2t
+         XjaQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpbWZT1f+QhbC4/Hy9OpuNRImsNQiaqTcm5UZo+8lrT6QPHsLOBwfGtwMWsVRdpfN6u5po=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxkgd3OZ9+dBAdO9DZXfTTYMO2UfmG4hWnP+O66vuzPNiK70mvP
+	elskc+YEVL+VA6A+87EnN7RbOgR/UbOFCGCz+lRBdN7XKiYm/66sGPM0pXsajc8zkjs=
+X-Gm-Gg: AfdE7cnfMMfkLMjFwNtHvIEnTI+XSAfmPH/eQS/E6EWy3j3DJGdbZOTuIwTOHQWBZyz
+	PcPZdN2Gk5Mss5EPHCmZGhimGDHso1XrTFdezEaPPvyNRHYRd+Tbu2Yo0AchJJxNZvqARM/YjoC
+	hgeF9RFD2DRuPsN6ZGhVii0IrKNYwpnH96abyIZkKEnXnjMiHzgmLdbA/rVAtj4HiLy/S+Pk8hq
+	a3FWQXz10l4gPP4njtMMW28PfRyphV/L+yT1RAlEBgL5lYX9bHDLAEe4ErD/w0DcUEfvg5P8o4j
+	t9Rowmn2spzAFmFVIb1aSbpKu9696dcbIGUvWHixZbUgPUU/XjcI0Ik689UtMZcfLfVfrtXzFKJ
+	N+fp1ZqSeUb8uUKdeXO+u2aEECqYT3nHV0NriVr6gzLUZyQEqEwY6IKLjuwkh3tJx8tpe3cJG76
+	hfQKx3bDzJPgRAag==
+X-Received: by 2002:a17:902:d4c4:b0:2ca:5d9a:ecc6 with SMTP id d9443c01a7336-2ccbf051367mr10747395ad.28.1783351885149;
+        Mon, 06 Jul 2026 08:31:25 -0700 (PDT)
+Received: from localhost ([2605:8d80:5c40:4f71:1131:e194:34df:ee9e])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cad71328d8sm53099575ad.29.2026.07.06.08.31.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jul 2026 08:31:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260706-b4-bpf_strict_build_docs-v1-1-5324d605c7b0@suse.com>
-X-B4-Tracking: v=1; b=H4sIAKrJS2oC/yWMUQqDMBAFryL73VArEkuvUkrYxI1uaaPsRimId
- 29sP+fxZjZQEiaFW7WB0MrKUypwOVUQRkwDGe4LQ1M3tu5qa3xr/BydZuGQnV/41bt+Cmrwith
- FbC01EYo+C0X+/NL3x5918U8K+egdD49KxgumMB7TJDxwOr9RMwns+xfDqGyonAAAAA==
-X-Change-ID: 20260706-b4-bpf_strict_build_docs-a8aa7fa46e2f
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: bpf@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1783351752; l=1578;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=x5HuJc8ryRcujdAvfssRfuCUtU/zCfH7JZqYpQDH/Ak=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QHr+osZxhUqq7pE2zp7ADICTSyXNXxqw773pIlwgLCWR9KitoP8KxoHnsuxC5prSUiXwEd4ESYq
- f3uzdQk9NIQU=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 06 Jul 2026 11:31:23 -0400
+Message-Id: <DJRLHD8JW5G3.1X9A7URRTMGIO@etsalapatis.com>
+Cc: <ast@kernel.org>, <andrii@kernel.org>, <daniel@iogearbox.net>,
+ <eddyz87@gmail.com>, <mattbobrowski@google.com>, <song@kernel.org>
+Subject: Re: [PATCH bpf-next v3 1/5] selftests/bpf: libarena: Fix can-loop
+ zero variable definition
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260701225034.12628-1-emil@etsalapatis.com>
+ <20260701225034.12628-2-emil@etsalapatis.com>
+ <DJQFFKHUGET8.2D2JRDZA26OIS@gmail.com>
+In-Reply-To: <DJQFFKHUGET8.2D2JRDZA26OIS@gmail.com>
 
-When the kernel config does not fully match the BPF selftest config
-fragment, some tests may fail to compile. BPF_STRICT_BUILD (defaulting to
-1) makes any such failure fatal. Mention the option so that developers are
-aware they can set it to 0 to skip broken tests and keep the build going,
-which is particularly useful during bringup or when testing on constrained
-(e.g. distribution) configurations.
+On Sun Jul 5, 2026 at 2:34 AM EDT, Kumar Kartikeya Dwivedi wrote:
+> On Thu Jul 2, 2026 at 12:50 AM CEST, Emil Tsalapatis wrote:
+>> BPF can_loop based loops require the index variable to stay imprecise.
+>> This means we must initialize them from a currently imprecise variable
+>> instead of directly assigning 0 to them, like so:
+>>
+>> static volatile u32 zero =3D 0;
+>>
+>> for (i =3D zero; i < NUM_LOOPS; i++) {
+>> 	/* loop body */
+>> }
+>>
+>> The libarena implementation of this technique is currently faulty. For
+>> the technique to work, the variable must not be in a map. This includes
+>> the .rodata DATASEC map used for const variables. However, libarena
+>> still defines the zero variable as constant.
+>>
+>> Modify the zero variable definition into a volatile variable. This
+>> change adds a complication caused by the compiler optimizing array
+>> derefences from
+>>
+>> for (i =3D zero; i < NUM_LOOPS; i++) {
+>> 	val =3D *(ptr + i);
+>> }
+>>
+>> into
+>>
+>> for (i =3D zero; i < NUM_LOOPS; i++) {
+>> 	val =3D *ptr++;
+>> }
+>>
+>> and causing verification failures. Use the barrier_var() clobber macro
+>> to prevent this optimization from taking place. Using barrier_var() is
+>> the only way to break the optimization, as annotating the index as
+>> volatile does not suffice.
+>>
+>> After that, remove the bpf_for() invocations introduced in libarena for
+>> parallel spmc testing.
+>>
+>> Reported-by: Eduard Zingerman <eddyz87@gmail.com>
+>> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+>> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+>> ---
+>>  .../selftests/bpf/libarena/include/libarena/common.h     | 2 +-
+>>  .../bpf/libarena/selftests/test_asan_buddy.bpf.c         | 8 ++++++-
+>
+> No such file exists, did you forget to send the renaming patch from
+> st_asan_buddy to test_asan_buddy ordered before this one?
+>
+> Please respin. Looks good otherwise.
 
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
----
- Documentation/bpf/bpf_devel_QA.rst | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Yes patch 1 is missing from v3. Will do a resend.
 
-diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
-index 45bc5c5cd793..edf8107a7beb 100644
---- a/Documentation/bpf/bpf_devel_QA.rst
-+++ b/Documentation/bpf/bpf_devel_QA.rst
-@@ -479,7 +479,10 @@ for details.
- 
- To maximize the number of tests passing, the .config of the kernel
- under test should match the config file fragment in
--tools/testing/selftests/bpf as closely as possible.
-+tools/testing/selftests/bpf as closely as possible. If not possible,
-+however, you can set ``BPF_STRICT_BUILD=0`` when invoking ``make``
-+to tolerate individual compilation failures and continue building
-+the remaining tests rather than treating each failure as fatal.
- 
- Finally to ensure support for latest BPF Type Format features -
- discussed in Documentation/bpf/btf.rst - pahole version 1.16
-
----
-base-commit: 8cdeaa50eae8dad34885515f62559ee83e7e8dda
-change-id: 20260706-b4-bpf_strict_build_docs-a8aa7fa46e2f
-
-Best regards,
---  
-Ricardo B. Marlière <rbm@suse.com>
+>
+> pw-bot: cr
 
