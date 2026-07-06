@@ -1,172 +1,188 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F69142F6E7
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 12:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C78DD1E32CF
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 12:44:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783341132; cv=none; b=CRR+/Wf7zSv8YohoZ5tlgT93MoroyyKlHupTGZqn++Xur9eeqm/wfGumaP8mbWrTZCq9xUxpJ6/rZVsZxU9fj+7fzRpgDvYlMi7nkd5L6z6YI+gKEeIObfyc1PSAyokd6OQz5KIRcWFo9OKPTcK4SdTpBvFimGS2D3hWKYzVhHk=
+	t=1783341876; cv=none; b=UQfo9yRkpcGND7Q/NNcm3BTrgZ0vD4xXyAq0Y/uYUPO68EKomiRBI5TdLQPDDSbw9wpVa8gLl03of5Ny1bGy0T6c/yDJf9Tp/ChANeUB8h8ilfIKkpCJTiDTZVaqWf+1tnGqkRIdaL1X4KjPPv8hsHqMd7zw6Viq8hFznk7vkzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783341132; c=relaxed/simple;
-	bh=jK4ZlhYedd4DEg6MSR/LED1W882a6z/xcp0Bv8UCfCU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AwPbsH/QuMfud78Lbyv5uhqxj2rhZTPCjTThJxsZwJM9bAp67wOx/BIRvPTrHpscow4Z1FTHboltyjcAWot/WSnwzL+2xg/T5lL4BLbAFq9NpIMsnbtp7qm/s9j6y5BmRmUSR5RTAIW0h7gxlMKuI8CXszbLKofLkq+BYJuONGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E18WooU1; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783341876; c=relaxed/simple;
+	bh=A6J3qZ1+JzJgiX28rP9twI3tGY+ys//pbkUnyVWTm5s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WIfCI+BbiJMWmxs5FDFi8l8h+qwW0P2y+0IluQEit1DgPkDZWVRtStBWNQiTR1yXJoVma4jp3pbkPjrugDiLofSquLCBlM3/Uai0lcH66PmxX+MGAK5pJv6/WWrbqOMXBsro7e93PfusadMNNkJR7E+oRArpvBrGDBcKtYidruw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aRBLG77y; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=BR4YPo6+; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E18WooU1"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-8143daf89c7so25795937b3.1
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 05:32:08 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aRBLG77y";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="BR4YPo6+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783341872;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rSNzVEuRNXjbACmsP0kXVdabmw9oRqyKD7jVej0sPKA=;
+	b=aRBLG77yphMs69lu94k4pleNv1TGkuRFU8crHdCus+4BXGHqNRRiNRracye0pwRHjRWmwP
+	dMkWpWp4tKV4Lu2yyHQ8A+qzkFyyXQ5gjl/GVkK0TPAV9jpQYO5x3dBd/KUWI9Dr+Gj6gl
+	foyItOKS+dtcqPNmuFDjVVaNubOyvVQ=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-656-Sg-mTOhpP5GfC_HNSAsNdA-1; Mon, 06 Jul 2026 08:44:31 -0400
+X-MC-Unique: Sg-mTOhpP5GfC_HNSAsNdA-1
+X-Mimecast-MFC-AGG-ID: Sg-mTOhpP5GfC_HNSAsNdA_1783341870
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-4744b72f90bso1841512f8f.0
+        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 05:44:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783341125; x=1783945925; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=vY6rzYAt+ZQcO2ZDLPVLwSbWNgumvFKyf8BqCln01Do=;
-        b=E18WooU1SZSlTPxCokaGlaqlqgKjf3ediTexgb90kr/pPsjkxPxOPJ57v8hOI7UVFq
-         r1ky4BUbth+UoIL+1HlhHxASShqLG7l/8BywXApvNuhyZIpyHVv+E39YOedO+YMy16jC
-         OoIiRZs6hhRg7THDRccpDtFE7E7ewkVof4Mhc0dI1TMXpZiNEVTLtFXSqXLlj9NRmyQE
-         Mbz0a5vKBA5LPQRAUMldqjMafugIyGgujwIBPUHqwGrtFC1/gXMcUW+z9OsG8gLJwfJT
-         smHRALzwniYnkv6xTZ0jrNo6+y4PkHmmYET3b834xVGKj4gQnmsMzUnS31FAwzl2YiV4
-         ioiw==
+        d=redhat.com; s=google; t=1783341870; x=1783946670; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rSNzVEuRNXjbACmsP0kXVdabmw9oRqyKD7jVej0sPKA=;
+        b=BR4YPo6+9EbYOU8X2ywICAI6hx+uwldn9bSioEJ/+61v1WeDNzBERfeN8gCUXIVj5i
+         lzs58AgRZHBiUnJr6GkfWkLuRnf3xlflK1R2TSs2j3GRrrcTo16kYm+wDl6UvmG8lL/i
+         HVmBZ3oVH013Uvhot1u8kQEhdgkGG1J037fzjMrlK7ATWOy22Cm+j7cpDFybo4YV4jv+
+         E5FC9WUDH5zfFfmJD15Dt0m3jnKyhAaZfI5mxR+qTiB5Ns+tDR8TJyOBHeyE1MeToT2q
+         z97jw41WUzJlIe8TTdly2Po1lvD5BdD1BG0X58wh/sUNht1gEnZXV6m3laD8nzKv+I2W
+         EJhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783341125; x=1783945925;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=vY6rzYAt+ZQcO2ZDLPVLwSbWNgumvFKyf8BqCln01Do=;
-        b=NMpxXp3PmcBe8P1W50hmhodYtgW9KcOCuhJjut6Oa7/ryUkTEbZBLmIkO7AMjkl/ye
-         VSrerM0eG9sWLtMW7dipSYK//Oi/Wqv9ma0TLi4hl0z3+fqubbqUGCl7r2mlZaeuWdSP
-         N/tUlVRBrzLXAu2A7O2XdZ7xElgHk226Cv30agZGwt7Pu7Z894TD15Xm7gwR9JOsM9Nz
-         5yza7XhWkaYQmrPaH/Mmy9wYI8TP/n1zRuVQ552OpCrCSiCFTZXF1PvjNlbPOUcV/54j
-         OJevNQS6dO2fFxZd9eBHaSCde7qSzKpqJxXn/1ZgZRnqzjjpIF8Bos9rIOWsev37kRsv
-         hluA==
-X-Forwarded-Encrypted: i=1; AHgh+Rpf6Vtgbt+a+z1oDWL4PEqQojHWAsKWbqVt0G6vVlz2TG8EquO8eKwu9ru3KinMPG4Czqg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8pv37iYh/uwEk+WqT5mcLBtixBIX2Wekan+BSYvpwwDnt9Lqw
-	mtpANWc8ylIchY8TIlWCA2SRjfFd3SHuK6AAKHtjN1dW95B61VpwKJiw
-X-Gm-Gg: AfdE7cmcGrmtzLd+anJd7Mw1cRysU+0rONxheH2luGz/lf5qbJ9odP7Gg8kF3jwNpIw
-	cPoQ9NSP4pPHTDuZZJnU2nB7wJl5okMXXcGQEAqKwaHPNRyVfX47xjJ/oWg5Za8FNmtycXR5wAm
-	Wwke0PH/ysfPIdWlYXhnNjG5RbKfEnpW03nWOCAtqzZUYE4se+hiHYPSAHDUJIbBt4W+UUThI3n
-	AJ7ZoINHQFn8Jwyf1KhiwzW9xI34gM3SIgPs6hePHnUYitjUJU13Wx/L01A7vAXCM6B39MC2UsF
-	vwIf8PhIXqacBfNebHH1BvYmYItAXXsN4EzAFjVZ7TA7Kb40Xkiz75s3K2svT8nRO4TB2hKPkH/
-	zFYfP1w6pzH738TpJo92GGFDDnEu0Qm6yPVwVgyFpM2BupYT8VBS74vEo5CagmVbYfSALAd53i8
-	Npmia0mwM3X3tcY+2WOBPx853tHLKm/XnDLywC9hl23egaUN0=
-X-Received: by 2002:a05:690c:6013:b0:80c:de1d:3154 with SMTP id 00721157ae682-81be26662eamr156487b3.35.1783341125333;
-        Mon, 06 Jul 2026 05:32:05 -0700 (PDT)
-Received: from computer ([2405:201:d015:d26b:41c5:151e:6e02:36c7])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-81be1d3c4f8sm148277b3.14.2026.07.06.05.32.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 05:32:05 -0700 (PDT)
-Date: Mon, 6 Jul 2026 18:01:56 +0530
-From: Varun R Mallya <varunrmallya@gmail.com>
-To: Guangshuo Li <lgs201920130244@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] libbpf: Limit bitfield dump reads to checked bytes
-Message-ID: <akugPNylTrOa_bNn@computer>
-References: <20260706023632.625353-1-lgs201920130244@gmail.com>
+        d=1e100.net; s=20251104; t=1783341870; x=1783946670;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rSNzVEuRNXjbACmsP0kXVdabmw9oRqyKD7jVej0sPKA=;
+        b=SDDNas8y0VIS7Xoje4gD/ZtIlXbCeC1BXWNAhNZ8CMsQUO2kdfgB4qPbDs6L4ErvIm
+         2G883qdczAi1v7MCmdjuRBoA8FDrsywJapQvMrxBcEJdsTNpJx0epD/x8TEFdW2DIe1V
+         pvk8HDjOAD9jz9fWZ/5Etp7vEBZuE85S0w7dJj49AvcqTqG0cGSWFEN7I/Bv5rPW63eb
+         QvXsag3pWK7TCDHBTzd+j9XNeRX8GOKZJ4HUhZNEx0IekhglDAKtcuiHYYmpUPImVP6A
+         HquEfds6adaBfuJfyKByZ4kdConH90vM1VhDIb3aof9/OjlSS3+kE1xN4n/a5gdrZONp
+         U5kg==
+X-Gm-Message-State: AOJu0YyFUovT3EIuY+YkH7+dQ8CZbN6Mpwvr6XJbVrQ/iK4a5kc0CYFW
+	oNpiQ29TRSgZ3R/L0ML438zYVZkV53DcksfBvtde+aSIL1RPnozggx9tseHJ2mxx8aYDnOdB+d8
+	Xad1FS7sgxKFPS7M1rpvA6cFFGKJVvrcXV15nSrdgBGRAAg1UZxLG
+X-Gm-Gg: AfdE7cnt1nPm1Scd1vfu3aVI/Vj6p5SzkUSS2vG3CNYs7pPWB//lu/GcSqt3gEurL5i
+	wDs3fhhEneXH+0wE9oDV7frr6bpRWPPAwHskSFy1u1KkTwFFTOmSVfZuYe0/Gy+C+7J35BdRya7
+	qqX0/WEXQ76848sCUs6uZPmPoa7AlZCDbXApSK2G+TXAq1T4RrP/WvEJFoeVxbr+UxPuvf322mp
+	6MdWL6z9qdQg5Ei5VcRm6uQYBwj8VCyPIGNMqMKnvZVBE+btIxP6xjfDFPTbO1igyUdf14Wjtxa
+	R1hcGiCC6WJFB/HftFKnHv0XitxXz7DLpivx/sJWew+POAixKd7G0ozKA52sr43H+Q7WpGfc6Rf
+	NyebABC4O1LHTx0NR6KxtmgMYiCi0JiL+tG/DvxamGbc2rA==
+X-Received: by 2002:a05:600c:5297:b0:493:d1e0:a4f1 with SMTP id 5b1f17b1804b1-493deffbf21mr4834405e9.0.1783341869852;
+        Mon, 06 Jul 2026 05:44:29 -0700 (PDT)
+X-Received: by 2002:a05:600c:5297:b0:493:d1e0:a4f1 with SMTP id 5b1f17b1804b1-493deffbf21mr4834055e9.0.1783341869459;
+        Mon, 06 Jul 2026 05:44:29 -0700 (PDT)
+Received: from [192.168.0.135] (185-219-167-205-static.vivo.cz. [185.219.167.205])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493ccdb62d3sm303300755e9.8.2026.07.06.05.44.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jul 2026 05:44:28 -0700 (PDT)
+Message-ID: <c0a3c830-0b28-47a9-96ee-c0a0f34490eb@redhat.com>
+Date: Mon, 6 Jul 2026 14:44:27 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260706023632.625353-1-lgs201920130244@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] perf trace: Refactor augmented_raw_syscalls using
+ bpf_for
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+References: <cover.1783339165.git.vmalik@redhat.com>
+ <fdf56026e442e44b2374119c21babde4910f3b6e.1783339165.git.vmalik@redhat.com>
+ <20260706121432.8F39A1F00A3A@smtp.kernel.org>
+From: Viktor Malik <vmalik@redhat.com>
+Content-Language: en-US
+In-Reply-To: <20260706121432.8F39A1F00A3A@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jul 06, 2026 at 10:36:32AM +0800, Guangshuo Li wrote:
-> btf_dump_get_bitfield_value() bounds-checks the number of bytes covered
-> by the bitfield, but the value-building loops read the full backing type
-> size. For narrow bitfields this can read past the checked range.
+On 7/6/26 14:14, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] The fallback standard `for` loop will fail to load with `-E2BIG` on older kernels when compiled with Clang 15-18, breaking backward compatibility.
+> --
 > 
-> Checking the full backing type size is too strict for packed bitfields.
-> For example, a packed structure can contain an 8-bit field backed by an
-> int type whose BTF size is 4, while the actual object bytes covering the
-> field are only 1 byte.
+> commit be9035b8b528902be67522e81fa232a2f597b164
+> Author: Viktor Malik <vmalik@redhat.com>
 > 
-> Keep the bounds check based on the bytes covered by the field, and make
-> the value-building loops consume the same checked byte range. Preserve
-> the full-size read for the non-bitfield path used by unaligned enum
-> values.
+> perf trace: Refactor augmented_raw_syscalls using bpf_for
+> 
+> The commit replaces the standard `for` loop in `augment_sys_enter()` with
+> `bpf_for` to fix BPF verifier `-E2BIG` errors on newer Clang versions. It
+> drops artificial verifier workarounds in `augment_arg()` that were previously
+> added to fix these errors. A fallback standard `for` loop is kept for backward
+> compatibility with older kernels lacking `bpf_for`.
+> 
+>> diff --git a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+>> index bc036a348079d..215516df5d2a3 100644
+>> --- a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+>> +++ b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
+>> @@ -440,10 +442,11 @@ static inline int augment_arg(struct syscall_enter_args *args, int i,
+>>   */
+>>  static inline int augment_arg(struct syscall_enter_args *args, int i,
+>>  			      unsigned int *beauty_map,
+>> -			      struct augmented_arg *payload_offset)
+>> +			      struct beauty_payload_enter *payload, u64 offset)
+>>  {
+>> -	int index, value_size = sizeof(struct augmented_arg) - offsetof(struct augmented_arg, value);
+>> -	s64 aug_size, size;
+>> +	int index, size, value_size = sizeof(struct augmented_arg) - offsetof(struct augmented_arg, value);
+>> +	struct augmented_arg *payload_offset;
+>> +	s64 aug_size;
+> 
+> [ ... ]
+> 
+>> -	} else if ((int)size < 0 && size >= -6) { /* buffer */
+>> +	} else if (size < 0 && size >= -6) { /* buffer */
+> 
+> [ ... ]
+> 
+>> @@ -522,14 +529,30 @@ static int augment_sys_enter(void *ctx, struct syscall_enter_args *args)
+>> 	/* copy the sys_enter header, which has the syscall_nr */
+>> 	__builtin_memcpy(&payload->args, args, sizeof(struct syscall_enter_args));
+>>  
+>> -	for (int i = 0; i < 6; i++) {
+>> -		written = augment_arg(args, i, beauty_map, (struct augmented_arg *)payload_offset);
+>> -		if (written < 0)
+>> -			return 1;
+>> -		if (written > 0) {
+>> -			output += written;
+>> -			payload_offset += written;
+>> -			do_output = true;
+>> +	if (bpf_ksym_exists(bpf_iter_num_new)) {
+>> +		bpf_for(i, 0, 6) {
+> 
+> [ ... ]
+> 
+>> +	} else {
+>> +		for (i = 0; i < 6; i++) {
+>> +			written = augment_arg(args, i, beauty_map, payload, output);
+> 
+> [Severity: Medium]
+> Will this fallback standard `for` loop fail to load with `-E2BIG` on older
+> kernels when compiled with Clang 15-18?
+> 
+> Since the `(int)size < 0` cast and `s64 size` verifier workarounds were removed
+> from `augment_arg()`, it appears the unrolled loop in this fallback path will
+> once again fail the BPF verifier checks when evaluated on kernels older than
+> 6.4 (where `bpf_ksym_exists(bpf_iter_num_new)` is false). Could this break
+> backward compatibility for `perf trace` on those older kernels?
 
-This seems like it's heading in the correct direction, but to justify a change
-here, could you provide examples that can break the older
-implementation, if possible, with an ASAN report ? If it's not really
-possible to craft something like that, then this would be an unnecessary
-change.
+Oh, right, I guess we need that combination to remain backwards
+compatible, too. I'll keep the hack in place, then.
 
-> Fixes: 5714ca8cba5e ("libbpf: Fix OOB read in btf_dump_get_bitfield_value")
-> Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
-> ---
-> v2:
->   - Do not check the full backing type size, as it rejects valid packed
->     bitfields.
->   - Limit the value-building loops to the checked byte range instead.
->   - Preserve the non-bitfield path used for unaligned enum values.
+Viktor
+
 > 
->  tools/lib/bpf/btf_dump.c | 22 +++++++++++++---------
->  1 file changed, 13 insertions(+), 9 deletions(-)
+>> +			if (written < 0)
+>> +				return 1;
+>> +			if (written > 0) {
+>> +				output += written;
+>> +				do_output = true;
+>> +			}
+>>  		}
+>>  	}
 > 
-> diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-> index cc1ba65bb6c5..5d185f7961ff 100644
-> --- a/tools/lib/bpf/btf_dump.c
-> +++ b/tools/lib/bpf/btf_dump.c
-> @@ -1766,17 +1766,21 @@ static int btf_dump_get_bitfield_value(struct btf_dump *d,
->  	__u64 num = 0;
->  	int i;
->  
-> -	/* Calculate how many bytes cover the bitfield */
-> -	start_bit = bits_offset % 8;
-> -	nr_bytes = (start_bit + bit_sz + 7) / 8;
-> +	if (bit_sz) {
-> +		/* Calculate how many bytes cover the bitfield */
-> +		start_bit = bits_offset % 8;
-> +		nr_bytes = (start_bit + bit_sz + 7) / 8;
-> +	} else {
-> +		nr_bytes = t->size;
-> +	}
->  
->  	/* Bound check */
->  	if (data + nr_bytes > d->typed_dump->data_end)
->  		return -E2BIG;
->  
->  	/* Maximum supported bitfield size is 64 bits */
-> -	if (t->size > 8) {
-> -		pr_warn("unexpected bitfield size %d\n", t->size);
-> +	if (nr_bytes < 1 || nr_bytes > 8) {
-> +		pr_warn("unexpected bitfield size %d\n", nr_bytes);
->  		return -EINVAL;
->  	}
->  
-> @@ -1784,13 +1788,13 @@ static int btf_dump_get_bitfield_value(struct btf_dump *d,
->  	 * stored in num, then we left/right shift num to eliminate irrelevant bits.
->  	 */
->  #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-> -	for (i = t->size - 1; i >= 0; i--)
-> +	for (i = nr_bytes - 1; i >= 0; i--)
->  		num = num * 256 + bytes[i];
-> -	nr_copy_bits = bit_sz + bits_offset;
-> +	nr_copy_bits = bit_sz ? bit_sz + bits_offset : nr_bytes * 8;
->  #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-> -	for (i = 0; i < t->size; i++)
-> +	for (i = 0; i < nr_bytes; i++)
->  		num = num * 256 + bytes[i];
-> -	nr_copy_bits = t->size * 8 - bits_offset;
-> +	nr_copy_bits = nr_bytes * 8 - bits_offset;
->  #else
->  # error "Unrecognized __BYTE_ORDER__"
->  #endif
-> -- 
-> 2.43.0
-> 
+
