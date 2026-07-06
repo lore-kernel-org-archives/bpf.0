@@ -1,154 +1,139 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 108AF3AC0F8
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 15:43:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11C993F4852;
+	Mon,  6 Jul 2026 15:52:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783352583; cv=none; b=JOFhFM9M+nCLcDAEe6ahXTLaqg813EZ5EpjN+qEh54M2DDT6gFFxcocePGbPdqahRnhwtSBdI7kLHmcXIfrLO7xpPgu4GhJEBk/GzT6vp8KKKXJayWQKHIag5zJ5p1xU7uFT9PM0blVYycMYDVRhBuZSi7Db4hN523pqrlAyhZ4=
+	t=1783353155; cv=none; b=HC4pHcEfoURBw1LcM+aDgNMfNCB3wPCHxHMKxFjtkH220iWz/NfbeXOKNlDJk2uQ1pYZhbDHtHT6EUjTSP2JjxTShZuBs7osPSpkImAyMKdUwJm1Tsm0/kLUs+8Ljmz+ZbuA5YBauMfmkVuxbe9rrP5Gpq6o1NoDndYcLeL1Xgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783352583; c=relaxed/simple;
-	bh=q0XhXu+Jj2Eg7U1xn2xyi7qY1cKp8f2BE3mlRnhVMfE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lhHUFdh9DtRztzWEEZ7dzyUScDU79sAAPRAePuRovbdANSQZ8b5tSg0XqQR1pgwxCvtPMMgByiGCzQIk6QQ3H9PgwUmCnvNag5IQkDr3c3F+2ICvHL6Y5P8L+LCKRmYOqVEyDMccLEY0zCFjT2T5e9TaWJ4MtKEx9xeS3fKCepI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KEwteUEg; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783353155; c=relaxed/simple;
+	bh=NahC9lTNHyBH9udO/CJg8gfBgvCFk9f4bc3Gjzg+0v8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=jGr/p2LeCasiaX0hhnulBXrBsdGl76UxScbLjBtr/1KzLGibcSujUwLmk/dqqbCLj0/yzK8XWVVrpr9xB+5cB7q/WgOuRhD/30Xx9B77/MNF16tGOmyllyWQa++obSj59Xapms0iFsA1fxMeVVXMoPWxI05Z/IqdlJbQ1x8m8J8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=lkARGJ6n; arc=none smtp.client-ip=4.193.249.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KEwteUEg"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-472326ca506so2115098f8f.2
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 08:43:01 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="lkARGJ6n"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783352580; x=1783957380; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+74TScEtXC8EWHN2LGNuN8gZZcygL9VaFHqI167VTSU=;
-        b=KEwteUEgUYOlyMvko9NJEP0IWEiAJ0+6VjMhPGs3+GbLAkViw82sjo/aYlK457ogYr
-         oDI5q9OjVESzTlKlMGWkPYnaON0lox+vEgXLQCjkS54ubyv0iDH3FnufONUkvWcMqWcp
-         sec/YCcf7v+5dRxwTKkyNUYMfyVGu8yu32gVZmmAG2Vm+yor92uJfbl7S8IpmW1kOFNN
-         DB2qortK+8wsKt+0uo505fR0FP/xvcZG6ZNnaMVrASXKd6pkcGyZimY/83W6c+frCqVf
-         hpWcS9SwFQnO2zura837GdQH4PAMKcbGbD2us5dXGQ22fb4pVu1CPEGVmktmD06Z2gv3
-         EhgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783352580; x=1783957380;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+74TScEtXC8EWHN2LGNuN8gZZcygL9VaFHqI167VTSU=;
-        b=YgT8eH2OZ+eyByKcaPQztQdqkG/p6GcgzvjbjNokysjaWjiFEge4w1lM6evCtGuqQT
-         owOs+UhHrASBBZq51jtmna0k/XkCJEmKQF3HvQiezQjoRQbMoka/A63mqgYQjzJLokAH
-         WoyyoU/Os7EDm/UDCqIneBLkjIJM3Iw5NxdOpDZKwHBY9D2WNjcHcqQfFpH55nDtz6c1
-         owiEgj8CXinEYG4kpuzUHlpCNLy0p1IvL+dyBHduPkWV9awrAO07rw8cScRY8J8wIoOQ
-         1PY468OQAX6rvdKuxTK2EFeYGKW2/NXRNk6xPfONWx1BL+eOx9XG7SxqrHPzro5ml37p
-         P7OA==
-X-Gm-Message-State: AOJu0YwWBaWSduLFeWf1wlMXjlvoou4rkpLN7jeRZyAlfjYP715nFw1S
-	WO3NvmT0Kso49h5ru9wJZTRxe4wAPXdgwjxLIJCuF53D6NXoH5mQgJXvc7J+krJoGNH+xw==
-X-Gm-Gg: AfdE7ckDjenM4Ic7LY2/pjd+WuE8UCDmZLxnI3O1ofSz5IUk/6nu1laUeuwqKGlfZeI
-	4FWXWm8GaxB8tNgkM8JOT6ywg2N8SyGOHUkd5GIiSx9ESnFDanskIX0UdrUOgxyeKKhvA06K731
-	/lhnDYwv3nb1DCVRJ8EJOcgdN9IFOGHxL0OiR2fMDxPzqUisajq4pJ79135/lU239ERrmlFg22E
-	T1hEM21gAwo9gnfGJZa+4OFUGQxbmOEJB51/kQ6adXBWdauZHNoRRn27kCSLanQyF5zkXPHUxZ/
-	p1C/fCfWFW4OwmM8E4xjUQqLCKMvGsNOZHU7lK/kgJHbAk8BEHvmxLU6yVNqKRft4/SslroDxPw
-	YHR1QnUa/nNilyQBSYCNquMppGFrUGv2mzUD/Bqqw8JAYHEcuotrMuhtcX0qHbagYaluKCK0dfQ
-	6lIFU00JoghR4VflA5NS/ss3dvHQMphiAjhkuF800mX0W7
-X-Received: by 2002:a05:6000:461e:b0:47d:df96:c9f4 with SMTP id ffacd0b85a97d-47de6667871mr1068251f8f.10.1783352580139;
-        Mon, 06 Jul 2026 08:43:00 -0700 (PDT)
-Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47a9b4d850dsm26893633f8f.0.2026.07.06.08.42.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 08:42:59 -0700 (PDT)
-Date: Mon, 6 Jul 2026 17:42:57 +0200
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 2/6] bpf: Add ksock kfuncs
-Message-ID: <akvNAV2PmZNJPR0x@gmail.com>
-References: <20260706093525.13030-1-mahe.tardy@gmail.com>
- <20260706093525.13030-3-mahe.tardy@gmail.com>
- <20260706100142.6233C1F000E9@smtp.kernel.org>
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	References:In-Reply-To:To:Cc; bh=Xst/KaapphKvDe7MM8HqlJhNeVz8eTp
+	rqdK7gceHzAA=; b=lkARGJ6n5RT27hsdA4K/tt8bKVJM1XaytYOWJj1t6WEfwVE
+	E1/rD37v3LILLH0mG1ir5DbfDHYrHdQBNFXifHMsOrpbtyCjmUjBNuBi+gpCVqGL
+	JzHLRuCyhY61kqHLldBffl41mZEpLj46t8K7qdZcS3zR+pz6OKUJ36PRpVxE=
+Received: from [127.0.0.1] (unknown [101.6.30.195])
+	by web5 (Coremail) with SMTP id zAQGZQC3bb0sz0tqPl8AAw--.17381S4;
+	Mon, 06 Jul 2026 23:52:12 +0800 (CST)
+From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Date: Mon, 06 Jul 2026 23:52:11 +0800
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Cover out-of-range arena free
+ addresses
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260706100142.6233C1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260706-f01-31-arena-free-bpf-next-v1-2-3ad6e7384285@mails.tsinghua.edu.cn>
+References: <20260706-f01-31-arena-free-bpf-next-v1-0-3ad6e7384285@mails.tsinghua.edu.cn>
+In-Reply-To: <20260706-f01-31-arena-free-bpf-next-v1-0-3ad6e7384285@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1783353134; l=1951;
+ i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
+ bh=NahC9lTNHyBH9udO/CJg8gfBgvCFk9f4bc3Gjzg+0v8=;
+ b=NmwEGPWF/sspU3LQThZ5+Upw9YuGafkx4Q/LhubY0HoKjW3QmuuW2cfIUuOMheBsWXIYHFkX9
+ CyypD9iGZp5AgQc0w7BKPbtUlTs25ybNM+Lgb5YR1xyC257GZOyNsvD
+X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
+ pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
+X-CM-TRANSID:zAQGZQC3bb0sz0tqPl8AAw--.17381S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF1kCr45KrWxGw45CFyDWrg_yoW8ZF1xpa
+	y8KasIy3yrJr17Cr4fAFyDua4rursavr4UGF48tr97ZF1fJrZ3tr4Ik3WUWr1Ykrs5u39I
+	vF4jqa10kFs8Z3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9v1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28E
+	F7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzx
+	vE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VCjz48v1sIEY20_GrWk
+	Jr1UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5c
+	I20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxkIecxE
+	wVAFwVW5WwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4rKr1UJr1l4I8I3I
+	0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
+	GVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
+	0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xva
+	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
+	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbPxhJUUUUU==
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQEAA2pLXR+fowAAsc
 
-On Mon, Jul 06, 2026 at 10:01:41AM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] Missing rollback of pernet subsystem on initialization error paths in `bpf_ksock_kfunc_init`.
-> --
-> 
-> commit c26355c87f06c9eb5cc9cceccb20cfce50aa1e1e
-> Author: Mahe Tardy <mahe.tardy@gmail.com>
-> 
-> bpf: Add ksock kfuncs
-> 
-> This commit introduces BPF kfuncs to allow BPF LSM and SYSCALL programs to
-> create and use sockets for sending data. It adds several lifecycle and usage
-> kfuncs for kernel sockets, limits socket creation via a per-namespace sysctl,
-> and registers the necessary BTF kfuncs.
-> 
-> > diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
-> > new file mode 100644
-> > index 0000000000000..8bde734bc917d
-> > --- /dev/null
-> > +++ b/net/core/bpf_ksock.c
-> 
-> [ ... ]
-> 
-> > +static int __init bpf_ksock_kfunc_init(void)
-> > +{
-> > +	int ret;
-> > +	const struct btf_id_dtor_kfunc bpf_ksock_dtors[] = {
-> > +		{
-> > +			.btf_id = bpf_ksock_dtor_ids[0],
-> > +			.kfunc_btf_id = bpf_ksock_dtor_ids[1],
-> > +		},
-> > +	};
-> > +
-> > +	ret = register_pernet_subsys(&bpf_ksock_net_ops);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
-> > +					&ksock_init_kfunc_set);
-> > +	if (ret) {
-> > +		unregister_pernet_subsys(&bpf_ksock_net_ops);
-> > +		return ret;
-> > +	}
-> > +
-> > +	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
-> > +					&ksock_kfunc_set);
-> > +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM,
-> > +					       &ksock_kfunc_set);
-> > +	return ret = ret ?: register_btf_id_dtor_kfuncs(bpf_ksock_dtors,
-> > +						 ARRAY_SIZE(bpf_ksock_dtors),
-> > +						 THIS_MODULE);
-> 
-> [Severity: Medium]
-> If the later register_btf_kfunc_id_set() or register_btf_id_dtor_kfuncs()
-> calls fail in bpf_ksock_kfunc_init(), does this leak the pernet operations
-> registration?
-> 
-> The earlier error path for BPF_PROG_TYPE_SYSCALL registration properly
-> calls unregister_pernet_subsys(&bpf_ksock_net_ops). If these subsequent
-> registrations fail, the function returns the error directly without cleaning
-> up the pernet subsystem.
+Add a verifier selftest that fills a two-page arena, frees the page below
+the arena start through a scalar value, and checks that a third allocation
+is still unavailable.
 
-Since there's no way of unregistering kfuncs for a certain prog type if
-one step fails, I took the decision to unregister the per net ns count
-if the first fails. Not sure how important this is and if there's a
-cleaner way of doing this?
+Without the arena free range check, the out-of-range free can be inserted
+into the free range tree and then allocated again, so the test returns 3.
+With the fix, the out-of-range free is ignored and the focused test passes.
 
-The last return line could be adjusted as mentioned in a separate thread
-on the same message.
+Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+---
+ tools/testing/selftests/bpf/progs/verifier_arena.c | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-> 
-> > +}
-> 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260706093525.13030-1-mahe.tardy@gmail.com?part=2
+diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
+index df0e22d1a29b..b21a8895804f 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_arena.c
++++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+@@ -11,6 +11,7 @@
+ #include <bpf_arena_common.h>
+ 
+ #define private(name) SEC(".bss." #name) __hidden __attribute__((aligned(8)))
++#define ARENA_VM_START_L32 (~0u - __PAGE_SIZE * 2 + 1)
+ 
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_ARENA);
+@@ -93,6 +94,31 @@ int basic_alloc1(void *ctx)
+ 	return 0;
+ }
+ 
++SEC("syscall")
++__success __retval(0)
++int free_pages_out_of_bounds(void *ctx)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
++	__u64 page1, page2, no_page;
++	__u64 below_start = (__u32)(ARENA_VM_START_L32 - __PAGE_SIZE);
++
++	page1 = (__u64)bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
++	if (!page1)
++		return 1;
++	page2 = (__u64)bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
++	if (!page2)
++		return 2;
++
++	asm volatile("" : "+r"(below_start));
++	bpf_arena_free_pages(&arena, (void __arena *)below_start, 1);
++
++	no_page = (__u64)bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
++	if (no_page)
++		return 3;
++#endif
++	return 0;
++}
++
+ SEC("socket")
+ __success __retval(0)
+ int basic_alloc2_nosleep(void *ctx)
+
+-- 
+2.34.1
+
