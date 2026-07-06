@@ -1,218 +1,209 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7E01CAA78
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 17:16:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783358184; cv=pass; b=g/CX42xn+I9vy+q4xWFa/ZgYzOkSFmnk3Xl3dhO5X6w3yHLPRqcJ5bfrXE4hYjBCe8WQyAIv4KEb0pLJ7BdxncurdiKGjuiznnFeO/NIG0b1kA+Dbd+9gnOVyEFE4du6B+8wp2QBUoXFBshNa1O0SswBAk4nKZQZ7+UAIRS4bqc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783358184; c=relaxed/simple;
-	bh=84cTg8yyLrvuEtMq92EVwXi/eEOivoXxHubWUwjxp70=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UEjrFIGdODiPgu9rRNJvOZy+eRQ/uMjGXG3kZhOXbBviMWo90foWK3chmIMihB+DtMB7+1CaFUQsnO0381mGPXQ+v4wNFKHlCTvt4NycPt8Si0yxe2QNjEHzmfNvVRoQV4WHETb7xUYr8qrYagsU6L2ETOxEqU0iqgxgeZ6bHPk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=gchhu0bV; arc=pass smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B99738F252
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 17:19:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783358364; cv=none; b=F6s7NVQT9m06YH8LJWD46jbM/P3OKil4qvFRh4enRbBmK2RG4sN2rmq+dhmADrwAqiwB31F7e85C2G8Yo6pcmLz4ZmMIBR0WNNGVU9JLkcEa6j9fFUFoae4JvF9ic6oIxofBcQ4doS82LkGpmR9X0XwLsDJ6lY2wRW8imInYQVE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783358364; c=relaxed/simple;
+	bh=ehUPaU/1dF2KpG5kToZV7U5XhlQnUkBKHuGMy/qSzhs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FGquObv3MqAuBOSUQSn4VcSuoBnwVYS/rjN2OXPSylbBxBok+02XOXkYTGl0l5I+nvZhIU4zNt5eNFCoRSlFfkpMPCKbXfOneBq9LruZTDyMVIQf7UXK/w0/ITQi7F8sTPq9DOALdWeCSGqBaYwG5LvtSeOkITHQtnP5Nb1Otws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C3yJ6Xan; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="gchhu0bV"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2caced6038eso830615ad.0
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 10:16:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783358182; cv=none;
-        d=google.com; s=arc-20260327;
-        b=A0ATrvxLieMb25b9XebFJB9rWHpLjaLDSccGfruJvxHYvhysgPrA79kK/2guC7z5tQ
-         baF95Ru4valWkFi6utTpv/8NuJWmoJpBt3XN4yUGnmaQVzJCsSrvePK8Vz+HH8cA3clr
-         e913jWGUBX0UDKUtlLkLvvzXQvBYswiOkF3Pmt8taWnedyqnqKe0qDcwTxSniRD0Kcfr
-         S1QwVHCiv0PkgWe5SIpikzPiojvaHQuWRTqcghh7MrgSCr8V1CzbnJdIM/4g3kOvmKZ9
-         /qO0Kwh0w+5VUigVVye/b22+610S9QhoRAjKJDoLX36TVC3QiG/7X/ex3qCai5z4drgW
-         64Tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=p8csJ3JV9Nmi1fu2Dico85NwPbV53oZJfbEJZO4SZhM=;
-        fh=RYhbMwyIXIW5e9WZ73LvUPnIp8ZmnUM/7VeUNqBGUC4=;
-        b=EVMAI5JtKEF/VOI9mvo9iKpdPFLbwof4exut4x42WPcyw+jZrZ+oMeIAMQwzz9SlBU
-         pOEO1FdkXV/cmXP4egJW8+9uG8UsJaGsqnP8BL4m/PPMV+mh10DvIbhzPKtwNkSZvICR
-         5bQKFImbdav7Komk7AtqXBDa3Dpl2t2NP4EO3CXtPQBDDH26/Suec810laEHzCh8Rc9z
-         gL8QtSW3zzm1xLzqeEiLbw2y+c6cMbxQG9xOGUjZjDVCYux5xlN6N/1qlqaaSzoMdTDD
-         urEegKMRsem1UIJTcY4cweDoDI++/6+s7/2J6jhLNZZai5BvJ+4Es9sI+l3/eyN0qKj9
-         5/xQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C3yJ6Xan"
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7eb4d8a21a8so2164367a34.2
+        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 10:19:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1783358182; x=1783962982; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p8csJ3JV9Nmi1fu2Dico85NwPbV53oZJfbEJZO4SZhM=;
-        b=gchhu0bVfj0gaZdJi0hAEjNNYH4+n3RxasyhL2oC2gLazycBFBtW6lzxjv/UlTlOuz
-         rZe/0zQ/Btw4EJ2tbWlCtP2jqQkBHZdFjgdeCygD7VHN1dwbXRQdGoBLtKSEzbEGtC43
-         TUN+lEzaPHll4LPav0I9DsNpr/xNMbw0sHVjCErHZF5OUNoVUgdwIr2PF2AkklKlXE/k
-         9Q4KCsGZmDgbDJe4blUgKGkyRlmo90bfYlu2z/lSYuZ+zBr5bKUB6v1RUNTwdbXOlivN
-         xggYJD2/XbnX/u3KAc5ErFt5+SUdgSq9rwy690sDQwRlfWl7dLMMjwrDtBVuyA9srIZG
-         i90A==
+        d=gmail.com; s=20251104; t=1783358362; x=1783963162; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=CcnEKxuZvnrlq/X8pfnKmD+Iim0hx24bDmSujajdu2Y=;
+        b=C3yJ6Xanaw0+kWmedBpRUt76aNgktRzzTp8Df+YloZ3DIltOIyRAV1ucL9hjoK/V5T
+         zVJ8n5mqkPPp0O5tRbnxpP6lxm6E9STbO2CIADU7Iqnx/eO+PaK+0Q3+wmDyKy0hr2nV
+         fCAorBCKqpK5ZOxVKHxreVoDHRqPyaVqK5F8NLCCCghNhFpMkIsFWTYd2cnFOwtcHRur
+         v0k681+ldBt41nucDVaON0IBhkSVxUZag2SQQNF9H3mzCeeJpjz6AYyIO8nYkG0wNbsA
+         cgM27kAZDV5FoWkGsL1yoJmX5z4EFd9tOLnX/dJ92CStg6UT0iOCdGE520uWRQ252wrf
+         BzFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783358182; x=1783962982;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=p8csJ3JV9Nmi1fu2Dico85NwPbV53oZJfbEJZO4SZhM=;
-        b=tDxnc9MNPOnSs8E15BTIC6kB8vL6xIzHU1ZpuZcV1TZAylGYFuKhkKVBYHMDutIm5q
-         oWlkdFe6tcBA5YOByFz7G7L15Xfh6W8/xunVXyR6MQB2ungZNnUP50wXrjBQVd7DhA5W
-         TG+07v5a+68Ty8wdV0MlVY3ogmajhqSK1TTehgCvRfHxvHJUjfIGW/Umnwu12t2hkeGB
-         UgsS8zIOkWH+GLL8vdmwx8b+VtCmz5M9zyACZ3/z50kLlz/0qtQK0/8qG/8k5TuJwJ3r
-         3acwv/+vuQdOCMnojDbTwSn0KAcQfP7pJ0ibNGqp5ChiASmXSuES2jsJMv9H0FPETC1G
-         wb4Q==
-X-Forwarded-Encrypted: i=1; AHgh+RppxzbTsSdTaG9rTLef2lFOj7EFLfrv9WPM6+V3H8yMxT+3cpzGuCJcg/EZJ40/za1IERc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBphFznWa10HfDgdye78D/ODF/rTijq9xtv886FV7TDGX8Ekbw
-	bRqhWaO+/zKWnDM4ADsPuCyD+t1ZKHPYOHp6v1Z9PaXZo/QB6Y308tfLxy5NK8SlVj4LOL8OS1S
-	RbZPNT0PYVMirMDAlxOrrlqv73RFSEpM81x6kGnMc
-X-Gm-Gg: AfdE7cmiKztAIn0BIJaYQGKqgtFsWC32KxNOUCSLJ+yUPrThyOwphhiS/WUYv9xaJqX
-	vwVdk9WShsoCxas02MbcvEgZTta5BOL5/PRaUBklQGvu5mARhSRgSwCS8jTlC/Zkyjj+PLmgJmq
-	JOZ3THMEaZk3QPkxCMgBROMIOqb7r0SwRsKeNazHEbml858r28V2TyBXUPhRvUWueNLnfzYLq9U
-	vxqziNuziqHeacB3+LcMHJ1oOMpytBedIC60JKnbhRwSnfUVo8rXxlXhZBXuZiLIkxwKBT2
-X-Received: by 2002:a17:903:98c:b0:2ca:12aa:a390 with SMTP id
- d9443c01a7336-2ccbce6c3efmr16539365ad.0.1783358182280; Mon, 06 Jul 2026
- 10:16:22 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783358362; x=1783963162;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=CcnEKxuZvnrlq/X8pfnKmD+Iim0hx24bDmSujajdu2Y=;
+        b=jzrvsQ8nZ0vRbpWkBvV3aaVeRpbFsaMKzlhdqDPlYJ4J4z75+wD7+Wjn/PkaceF9zY
+         6qfLc5QBicDxA1cf2+6cBmSHF2ZigA268F6PLwO4g1BPOkBPfVlM43/vsUmt49pb3e8q
+         MAXP1BAjuMxOyrs0j7eUdmCxYWzR0LjSDGDHEFkKHlTID74hPe31b5UXDTn/Cj6b3CS/
+         aguZBN7Pah3uqEGWthsYfPbKzH0H/7MITCeSn9KDm7AeCqj8vV0MKMUhmA5rv4EuEHQ4
+         WP9QacSVm4/4/8IfW3t6ZgzNDDu4WuSvONQcAJ3ysynqFr62ltiUu32wmjADBftO6aQO
+         YA4w==
+X-Gm-Message-State: AOJu0YwePzvdRkIghCBY0ZQC4JJkvhSIXiYJ6VFnpeKsOLfWyKY9RpAe
+	KhXcdxnHGymVWS7F3HE82csaUjrQzAXRRf/JR4GX40uIzLg08cdnHRGBXSm0Gw==
+X-Gm-Gg: AfdE7ckrFg2VNhy3oszOnVo7I82Wnsw0N0WI9idvJy2H8WhoaOdJaSYu2MVzQf0x+K3
+	YMWpNj38HWR+g2hBC8QTSoB5zO54gzhvr38i1RVM9v76Groaeuo9sY2Kv5y+ioz8X5j0Cfe9EBr
+	fQ3dKXmD+J51tz+BgtcfwaCr0qon78RJ5Rh/gaTkulsil+C9TXicQYPhoRvuMCsLBkSTNbX9RKy
+	Qrsr3HcEJbj5152WlQISwe8Zd2Px0PtOm04TA48jvAutfDCrnJfQOzukkzMbFB9LRZJbXaajguP
+	Uu2fvcBT/yPK7L/HqiU1C3K3y4a5QNbY2NuDFTZYBKoPQmPRQRE8JYRxTCd2KDcUHflNdPvjLKg
+	jHhsysXiVcvvS/2f0tBWLNJargIWfE8l+02h+QDnfwnsVLntUfncWjTOCIaek0v3NkPr+7tajUu
+	7vH6kA1RdGknNy5w==
+X-Received: by 2002:a05:6830:608d:b0:7e6:cee5:1bbf with SMTP id 46e09a7af769-7ebb2262664mr900845a34.12.1783358361740;
+        Mon, 06 Jul 2026 10:19:21 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:45::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7eb54521db4sm11966334a34.25.2026.07.06.10.19.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2026 10:19:20 -0700 (PDT)
+From: Amery Hung <ameryhung@gmail.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@kernel.org,
+	shakeel.butt@linux.dev,
+	roman.gushchin@linux.dev,
+	kuniyu@google.com,
+	kerneljasonxing@gmail.com,
+	ameryhung@gmail.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v3 00/15] bpf: A common way to attach struct_ops to a cgroup
+Date: Mon,  6 Jul 2026 10:19:02 -0700
+Message-ID: <20260706171918.317102-1-ameryhung@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260706135644.326006-1-daniel@iogearbox.net> <20260706135644.326006-4-daniel@iogearbox.net>
-In-Reply-To: <20260706135644.326006-4-daniel@iogearbox.net>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 6 Jul 2026 13:16:10 -0400
-X-Gm-Features: AVVi8CeRwYC1EaFERKCui17anEbPyUnlPMJdGVYrkAfeveKfXt06y9OSTwJveN8
-Message-ID: <CAHC9VhRWG=Of4pKmo8KRjCYnVmfX5ZD7JPVa0D0N0Z=1ts4iQw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 3/9] bpf: Verify signed loader metadata at
- load time
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: ast@kernel.org, kpsingh@kernel.org, James.Bottomley@hansenpartnership.com, 
-	bboscaccy@linux.microsoft.com, memxor@gmail.com, 
-	torvalds@linux-foundation.org, a.s.protopopov@gmail.com, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jul 6, 2026 at 9:56=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.ne=
-t> wrote:
->
-> A signed gen_loader program carries the programs, maps and relocations
-> it installs in a metadata array map. The loader instructions are covered
-> by the PKCS#7 signature, but the metadata map is not: Today the loader
-> compares the map contents from within BPF against a hash baked into its
-> (signed) instructions, using the kernel-cached map hash. The kernel
-> itself never actually attests that the metadata the loader installs is
-> the metadata that was signed.
->
-> This split is the core of the long-standing objection to the BPF signing
-> scheme from the LSM / integrity side: the integrity check of a light
-> skeleton only completes once the loader program runs, that is, after the
-> security_bpf_prog_load() hook, so at admission time an LSM observes a
-> program whose payload has not yet been verified. Auditing the chain
-> link is also not a purely cryptographic operation: whoever signs or
-> reviews an lskel has to disassemble the loader's preamble to convince
-> themselves that the embedded hash check is present and correct [0][1].
-> Two acceptable fixes were identified in those threads: Complete the
-> integrity check before the admission hook fires, or add a second hook
-> that collects the verification result after the loader ran [2]. Covering
-> both the loader and its maps directly with the PKCS#7 signature is what
-> Blaise Boscaccy's patchsets proposed in several forms. Let's implement
-> the former, without growing the UAPI, and in particular as a single
-> unified scheme where the signature spans the raw bytes rather than
-> derived hashes.
->
-> A signed loader binds its metadata map(s) through the existing fd_array,
-> and an exclusive map is already bound to a program digest (excl_prog_hash=
-).
-> So when a signature is present, collect the exclusive maps from fd_array
-> and append their frozen contents to the instructions before verification:
-> The signature now covers insns || metadata_0 || metadata_1 || [...] in
-> the fd_array order, and verification completes in bpf_check(), once the
-> fd_array maps are resolved into used_maps, before the LSM admission hook
-> and the rest of verification. A program is either BPF_SIG_UNSIGNED or
-> BPF_SIG_VERIFIED, with nothing in between. While folding the fd_array
-> maps, a non-exclusive map bound to a signed program is rejected, so every
-> map folded into the signature is exclusive. A signed loader that fails
-> to cover its metadata thus does not load, and BPF_SIG_VERIFIED always
-> means the instructions and every exclusive map are authentic. The maps
-> must be frozen so the hashed bytes cannot change before the loader runs;
-> the map <-> program digest binding is enforced by the verifier for every
-> used map. Binding maps through fd_array_cnt makes the verifier resolve
-> and excl-check them (excl_prog_sha vs prog->digest) before it would
-> otherwise compute the digest, so compute prog->digest up front in
-> bpf_check(), over the unmodified instructions the signature covers, for
-> a load that folds metadata.
->
-> Unsigned programs are not affected by the signature path; for them the
-> LSM admission hook merely moves below fd_array resolution, with minimal
-> bounded work in between (see the previous commit). Note, signed loaders
-> generated by older libbpf/bpftool versions need to be regenerated; some
-> of the recent fixes we've had on the signed loader side require the
-> latter already to close gaps.
->
-> Finally, some remarks around the security_bpf_prog_load() placement
-> given there was pushback, demanding either a new hook or a reuse of
-> the existing security_bpf_prog() hook [3]: Just for loading a single
-> BPF program it would then need to pass through four layers of LSM hooks:
->
->   1) security_bpf (cmd=3DPROG_LOAD): for gating various bpf subcmds
->   2) security_bpf_prog_load: historical admission hook (CAP/token,
->      prog_type, attach point), pre-verification
->   3) security_bpf_prog_verify_signature: newly asked admission hook,
->      same role as 2), plus the BPF signature verdict
->   4) security_bpf_prog: gate handing the prog fd back to userspace,
->      verification done & signature verified
->
-> The use-cases of 2) and 3) conflate, thus BPF community prefers to just
-> keep a total of 3 LSM hooks (as-is today): 3) makes 2) incoherent given
-> they are the /same class/ of hook, that is, access-control admission on
-> the load and split only by _what_ they can see. Worse, with the split,
-> for a signed BPF program security_bpf_prog_load 2) admits a program whose
-> signature has not been checked, so a policy gating at 2) is structurally
-> unable to express "admit only verified" and every such policy is forced
-> onto 3) *anyway*. In other words, one doesn't get two complementary hooks=
-,
-> but rather, one real admission hook aka 3) plus a now-degraded /legacy/
-> hook 2) that can't answer the question operators actually want to ask.
->
-> Reusing security_bpf_prog() 4) for admission is no alternative either:
-> it fires only after the entire verifier (and JIT) pipeline ran, so
-> denying a not-yet-verified program at that point burns exactly the
-> work a denial is supposed to avoid, and by then the program has an id
-> assigned and the kallsyms/perf/audit load events fired. Policies are
-> free to also consume the signature verdict at 4), but admission control
-> belongs into security_bpf_prog_load(). Hence the latter remains the only
-> admission hook, merely moved past signature verification; with moving
-> large allocations further down into the BPF verifier, there is now only
-> minimal work between the old and new location.
+Hi,
 
-See my comment on patch 0/9, but if we can combine this patch with the
-vzalloc(progam) patch, I'll be happy to drop my NACK, and you can trim
-the last half of this patch description ;)
+I am continuing Martin's work to support attaching struct_ops to cgroup.
 
-I suspect that squashing the two patches should also quiet sashiko's
-comments as it will be able to see the vzalloc() below the
-security_bpf_prog_load() hook in this same patch.
+At LSF/MM/BPF 2025, Martin presented [1] the need for a new interface
+to extend tcp_sock operations instead of adding more BPF_SOCK_OPS_*CB
+enum values. The need for predictable ordering when attaching struct_ops
+to a cgroup was also briefly discussed.
 
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> Nacked-by: Paul Moore <paul@paul-moore.com> # (don't move bpf_prog_load L=
-SM hook)
-> Link: https://lore.kernel.org/bpf/2f71d6c03698eb17d51f7247efde777627ee578=
-a.camel@HansenPartnership.com [0]
-> Link: https://lore.kernel.org/lkml/ecf0521ed302db672672ebfbc670ecfba36a6e=
-00.camel@HansenPartnership.com [1]
-> Link: https://lore.kernel.org/bpf/88703f00d5b7a779728451008626efa45e42db3=
-d.camel@HansenPartnership.com [2]
-> Link: https://lore.kernel.org/bpf/DJOFY21DYUI4.19WKQ3NPZ4H5R@gmail.com [3=
-]
-> ---
->  include/linux/bpf_verifier.h |   1 +
->  kernel/bpf/syscall.c         |  76 +--------------
->  kernel/bpf/verifier.c        | 175 +++++++++++++++++++++++++++++++++++
->  3 files changed, 178 insertions(+), 74 deletions(-)
+At LSF/MM/BPF 2026, additional use cases were raised, in particular
+OOM and memcg use cases that also need to attach struct_ops to a
+cgroup.
 
---=20
-paul-moore.com
+BPF already has a common bpf_link-based API for attaching different
+BPF program types to a cgroup. It provides common attach, detach,
+update, ordering, and query semantics across those program types.
+
+This series extends the same model to struct_ops. Conceptually,
+struct_ops is a group of BPF programs, so using similar
+attachment/detachment/update/query APIs and ordering semantics for
+cgroup attachment keeps the interface consistent with existing cgroup
+BPF links.
+
+This series uses a new struct bpf_tcp_ops as the first user. The
+struct_ops mirrors the TCP-related sockops hooks except
+BPF_SOCK_OPS_NEEDS_ECN and BPF_SOCK_OPS_BASE_RTT, which are
+intentionally left out.
+
+The selftests cover attach, query, update, ordering, before/after
+placement, retval chaining, the header option hooks, and inheritance
+across a multi-level cgroup hierarchy.
+
+The map_free_pre_rcu addition in patch 2 is not very ideal; it will
+need some thought too.
+
+[1] page 13: https://drive.google.com/file/d/1wjKZth6T0llLJ_ONPAL_6Q_jbxbAjByp/view?usp=sharing
+
+
+Changelog
+
+v2 -> v3
+  - Patch 3: Remove redundant bpf_struct_ops_kdata_map_id (Sashiko)
+  - Patch 11: Reject sleepable programs (Sashiko)
+  - Patch 12: Silence warning when casting ctx to arg pointer
+  - Patch 13: Fix incorrect libbpf API addition (Andrii)
+  - Patch 14: Fix selftest cgroup cleanup (Sashiko)
+  - Patch 15: Use network_helpers.c
+
+RFC v1 -> v2
+  - Fix UAF of cfi_stubs
+  - Fix retval: use bpf_tramp_run_ctx instead of bpf_cg_run_ctx and
+    expose bpf_get_retval() to bpf_tcp_ops
+  - Add selftests
+    - struct_ops cgroup attachment
+      - Test bpf_get_retval()
+      - Test before/after order
+      - Test cgroup hierarchy and inheritance
+    - Test TCP header option hooks and helpers
+  - Move bpf_tcp_ops out of legacy BPF_SOCK_OPS_TEST_FLAG guard
+  - Complete bpf_tcp_ops (make it comparable to legacy sockops tcp)
+
+---
+
+Amery Hung (4):
+  bpf: Allow all struct_ops to use bpf_dynptr_from_skb()
+  bpf: tcp: Support selected sock_ops callbacks as struct_ops
+  bpf: tcp: Support parse/len/write header option hooks in bpf_tcp_ops
+  selftests/bpf: Add test for bpf_tcp_ops header option hooks
+
+Martin KaFai Lau (11):
+  bpf: Remove __rcu tagging in st_link->map
+  bpf: Make struct_ops tasks_rcu grace period optional
+  bpf: Add bpf_struct_ops accessor helpers
+  bpf: Remove unnecessary prog_list_prog() check
+  bpf: Replace prog_list_prog() check with direct pl->prog and pl->link
+    check
+  bpf: Add prog_list_init_item(), prog_list_replace_item(), and
+    prog_list_id()
+  bpf: Move LSM trampoline unlink into bpf_cgroup_link_auto_detach()
+  bpf: Add a few bpf_cgroup_array_* helper functions
+  bpf: Add infrastructure to support attaching struct_ops to cgroups
+  libbpf: Support attaching struct_ops to a cgroup
+  selftests/bpf: Test attaching struct_ops to a cgroup
+
+ include/linux/bpf-cgroup-defs.h               |   1 +
+ include/linux/bpf-cgroup.h                    |  28 +
+ include/linux/bpf.h                           |  56 +-
+ include/linux/filter.h                        |   5 +
+ include/net/tcp.h                             | 153 ++++-
+ include/uapi/linux/bpf.h                      |  39 +-
+ kernel/bpf/bpf_struct_ops.c                   | 142 +++--
+ kernel/bpf/btf.c                              |  23 +-
+ kernel/bpf/cgroup.c                           | 472 ++++++++++++++-
+ kernel/bpf/core.c                             |   5 +
+ kernel/bpf/syscall.c                          |   4 +
+ net/core/filter.c                             |  33 +-
+ net/ipv4/Makefile                             |   1 +
+ net/ipv4/af_inet.c                            |   1 +
+ net/ipv4/bpf_tcp_ca.c                         |  16 +
+ net/ipv4/bpf_tcp_ops.c                        | 324 ++++++++++
+ net/ipv4/tcp.c                                |   1 +
+ net/ipv4/tcp_input.c                          |  17 +
+ net/ipv4/tcp_output.c                         |  48 ++
+ net/ipv4/tcp_timer.c                          |   1 +
+ net/sched/bpf_qdisc.c                         |   2 -
+ tools/include/uapi/linux/bpf.h                |  39 +-
+ tools/lib/bpf/bpf.c                           |   2 +
+ tools/lib/bpf/bpf.h                           |   3 +-
+ tools/lib/bpf/libbpf.c                        |  64 ++
+ tools/lib/bpf/libbpf.h                        |   3 +
+ tools/lib/bpf/libbpf.map                      |   1 +
+ .../selftests/bpf/prog_tests/bpf_tcp_ops.c    | 560 ++++++++++++++++++
+ .../bpf/prog_tests/bpf_tcp_ops_hdr.c          |  77 +++
+ .../testing/selftests/bpf/progs/bpf_tcp_ops.c | 141 +++++
+ .../selftests/bpf/progs/bpf_tcp_ops_hdr.c     |  83 +++
+ 31 files changed, 2224 insertions(+), 121 deletions(-)
+ create mode 100644 net/ipv4/bpf_tcp_ops.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops_hdr.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_tcp_ops.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_tcp_ops_hdr.c
+
+-- 
+2.52.0
+
