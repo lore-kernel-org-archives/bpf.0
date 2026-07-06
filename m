@@ -1,100 +1,81 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8828D3D811C
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 19:29:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F4ED2D5922;
+	Mon,  6 Jul 2026 19:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783366156; cv=none; b=oUMYqNF8rR2Cm8g+GHG54lH4R05n/qJkAben15jdc1o6fedngl3991quezEzRGlcztgpurxpwrvr6754h8dkguq6L2z7FoaL/en9/IVGWelG+TgKCRm+w6ujzoZ597yxiZjtoDDqc1Tw96UkMqfhqDVw3WabCdAEuLtQT+U0XL8=
+	t=1783366231; cv=none; b=qfBeYOkskqs3eTn/ZR6tZD5f9cgwYHqwz8EZ4trHNZJAPNlzYN0MJYj80SwxW00D3v9SdeHC1bFvrh9jH6AWxfcscywaURYMHmI13XQktVIWUoB+8eukuoPwO9V2JDWy6eMhli0zb8r4TAhCTKiIo/AfhrDQz5f3j4WJC2n0OBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783366156; c=relaxed/simple;
-	bh=SdqvWMCnckb6C/qwPHK1OCp1P59kDYcpUso5dVOBat8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oSBO+l3O452AoNbtrXebZuComuOrF74ADFUjowYSFchkcuK3mUOHCmiZrZVToUdGGa5gbVQ07Rkwc0Mlgv+ehltLYbbNTRylEaiMuW+Luz6M2LR53TCZlh7GX6vYnnQw97z7ISd3z8k7oU+NiukJGssX7nI3StWamlqsmsBUlRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DdRQHA7f; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783366231; c=relaxed/simple;
+	bh=VBtbYcfPjKQbmr8RAcQ1nGffy9tW20FGR3WmW4xHOIY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=DphqbSHlDqQFaRjEHGULQrZbQ4s1lMZHIGy9+hk4dTMOIcnImqPaEwTezS8i2eDvIaD9HfBnUX9XdAGhdJFyjCADRcC+pBwZEscQp+5lLFCFgMUbWTAHb1qQfSYY/JIEu0hREJ0q9rIoRQvxc/fulR88CM8wbWZMv0rUZkn3t3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O4fyPXXd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DdRQHA7f"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-847a52edeb2so2542740b3a.0
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 12:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783366155; x=1783970955; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=SdqvWMCnckb6C/qwPHK1OCp1P59kDYcpUso5dVOBat8=;
-        b=DdRQHA7f9fs+xJ6aMHwX5AHrxHjHv9YBhrQi/6IUQ8IpDdmpu/ji+5PUbsWBxYlsYI
-         f70o1zywlNx5Ix59/vV+Nzxmwr7IF1yuxhmtTTfl2z8S7TxCupKJ4WezWcHTmnmmRTGO
-         lQNJaEfppd3NXPg20XSDB6kf0DjiTup4iKndScYl/BYZCNq1npmrQjtNI+BY7/q6/CqW
-         abzQLkGIiRXTRSUDyMTtV3wBi/+pNQ38ZlJuq9hujXZJw8o0pLZenvRHwSQFbu+PgvTv
-         jkfepNKesd6XtVQAYhoFCcGlJgx6L4ou0lDdKw09fhnfXJ0Km+/DAKad7cgJUxX1UoGM
-         YMHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783366155; x=1783970955;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SdqvWMCnckb6C/qwPHK1OCp1P59kDYcpUso5dVOBat8=;
-        b=pjfIRd+ZqknxBZP6wav9URc40q2QAITwCwYY+4ykjYlDG5d8c1MCn/5qT/Wdx+AkXL
-         lN6femWe4ms5p51FYEJTLelGWJQZqQELw+Qa/FZEt447xgo0CKYiMDwH+ZWcnUWC8X/f
-         v0oWH70Bf3zziS/Mf6DSx7McCx5vOzN4Ig6WKFttDIfqEwb3QDRi9p9+VVGA6Bp0MrP3
-         OAcJ0h+X4DQR34u2YOxgEfiVrtKgoFPTOpXrhAYCP3/uN/eehsbNo9t9+UJUqhCpyB5G
-         Yu9h0yz+nsVHvRAUx47q3IBqMR8ODgy1K7XGl3H9wg1BXUpNTsyw+IPa4592/9UDoHSH
-         vTZA==
-X-Gm-Message-State: AOJu0YxNfElOTuf+OjcVO6sQjTYQsgXV01OjsaRt/nCAPf0Yo/wo5dfg
-	mr20CWQGzA/1b+Cd7hWY3HaxotHVw6UWcUTwlZWtGv21v4d3h6O2l7hr
-X-Gm-Gg: AfdE7cm0eomQqnPouksRAE4X67n17p5oSR9PPcjSRVJ0v0KS5cxr8xvowhlJNhfrYIG
-	KXy+DT92Xp6f5/5G8CVfq674jvh9WCS9kXUfpEhu5fvvcg1wiC3SPiY4iiYmu7MlLQUTiNxrnHA
-	S5CzcbEp3oF2bP10W9k69puTI8LJoe6OxsZ5xJ8ouSHYOpMbv79A/FgOTsETqQ9iFsP/7RpA9f6
-	BF7B0UsDWW/xUTEy/kAGsbzOp0TSMCjgE14lNzW47sfp/+DxY3ufSKC1axwVtIz+WcvasTzaiVN
-	g3Uk2Q3neMwm6aGKAv0a9NuOOINaS/nv44xwA7pPTnQ/squqMEzSlYXsUKPa7xRpOVskecP5DCr
-	nPsZ0o3F5401Uk9i96nyFJJDhuSEsJkCVIox4QTnXDRQeFzub/Ba2n5KqCRFmJuJ/+sVO07QBZi
-	MA5W3msy50xwjSq+M1sliN9x6RecSIVISWwUHl9RUHSrp0L/Lkkl/msW/qOMB4zn+88kkbbw==
-X-Received: by 2002:a05:6a21:2c11:b0:3bf:49c8:f69 with SMTP id adf61e73a8af0-3c08ee6c976mr2081583637.39.1783366154882;
-        Mon, 06 Jul 2026 12:29:14 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:612f:7084:be32:532a? ([2620:10d:c090:500::1:55b9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30f0bb7fe46sm63762700eec.14.2026.07.06.12.29.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 12:29:14 -0700 (PDT)
-Message-ID: <d6647f5eb213d2ece82753285a79f28f600420d7.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 0/6] Mixing bpf2bpf and tailcalls for RV64
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>, Pu Lehui
-	 <pulehui@huaweicloud.com>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau	 <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song	 <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh	 <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo	 <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Puranjay Mohan	 <puranjay@kernel.org>, Paul Walmsley
- <pjw@kernel.org>, Palmer Dabbelt	 <palmer@dabbelt.com>, Alexandre Ghiti
- <alex@ghiti.fr>, Pu Lehui	 <pulehui@huawei.com>
-Date: Mon, 06 Jul 2026 12:29:11 -0700
-In-Reply-To: <CAJ+HfNhn9eK+3xsd3ewEsG-duCgBeYXeLAtNan=qefas2Ya0dQ@mail.gmail.com>
-References: <20260629140048.733346-1-pulehui@huaweicloud.com>
-	 <CAJ+HfNhn9eK+3xsd3ewEsG-duCgBeYXeLAtNan=qefas2Ya0dQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O4fyPXXd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B195D1F000E9;
+	Mon,  6 Jul 2026 19:30:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783366229;
+	bh=KYfAZuR1GlHB8srk2dRV+9pb0lHb7ypvdtEi+ATkMd8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=O4fyPXXdKlrrfQUBdtjtfZXBq3TAuTraSrOIdom2xagF9pkCHGG30QDs4+jLkmegK
+	 9SnmsWZi7d3w6QM2lNKKPYsYGSoWTpesoxAAVBqOoKpZa/6McEbGe5mc+h96l3fY7g
+	 TbOKuB4uJ34OEXfY0SkWWbDrh9S8JH4zjeYW9mWPrAKvT88ZKAm9YT8w5gC3dhgMzO
+	 mGQStQcVv786dj57j7OjTTcph1uJGML0w9tIgv67Q5yGFmT4tyT0vIegsZhbBFyl2Y
+	 MEU744e22pj6zLpFE/PYbPtOOZ9JTlg/KtoJKfI5sNqKId5Gxn5y2ro0KpcuVRZE6V
+	 WXIG03KYP7G/Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 5697C3925F51;
+	Mon,  6 Jul 2026 19:30:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] selftests/bpf: Fix memory leak in msg_alloc_iov error
+ path
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178336620988.1174442.12823379964255859491.git-patchwork-notify@kernel.org>
+Date: Mon, 06 Jul 2026 19:30:09 +0000
+References: <20260704122936.102394-1-malayarout91@gmail.com>
+In-Reply-To: <20260704122936.102394-1-malayarout91@gmail.com>
+To: Malaya Kumar Rout <malayarout91@gmail.com>
+Cc: andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+ ast@kernel.org, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ shuah@kernel.org, john.fastabend@gmail.com, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 
-On Mon, 2026-06-29 at 16:21 +0200, Bj=C3=B6rn T=C3=B6pel wrote:
+Hello:
 
-Hi Bj=C3=B6rn,
+This patch was applied to bpf/bpf-next.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
 
-I'm working through bpf patches queue and have a question regarding
-this series. What's your stance, does it need changes or can I apply
-it to bpf-next?
+On Sat,  4 Jul 2026 17:59:35 +0530 you wrote:
+> In msg_alloc_iov(), when calloc() fails for an individual iov_base
+> allocation, the error path frees all previously allocated iov_base
+> entries but fails to free the iov array itself that was allocated
+> with calloc() at the beginning of the function. This results in a
+> memory leak of the iov array.
+> 
+> Add free(iov) in the unwind_iov error path to ensure proper cleanup
+> of all allocated memory.
+> 
+> [...]
 
-Thanks,
-Eduard
+Here is the summary with links:
+  - [v2] selftests/bpf: Fix memory leak in msg_alloc_iov error path
+    https://git.kernel.org/bpf/bpf-next/c/07c1b07d3871
 
-[...]
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
