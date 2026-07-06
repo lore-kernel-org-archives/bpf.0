@@ -1,162 +1,182 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E17723F5BD6;
-	Mon,  6 Jul 2026 07:31:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 428EF428485
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 08:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783323078; cv=none; b=j9CJNE5rwvVIXy2Ev2ZbdOeMQovCENtDV4SmR95i8QR1iYPKmIq63WInELr40Qgz7sXb+Oc7uKAxg/jiOGgbJTbG9/OmBGzVoaX/RNsPxCNy9CO8pXyZGkIdz8wbA8i4tCBxru3gcfuiXWOp8MUKpANQOeWWr5KsowZB8ktH9Tc=
+	t=1783327911; cv=none; b=XJzxfnPYypVR76D84/pytI61osXIHYuGYrOy79svNJ3AoB2Go7+BfMovx/DKkKhigavt+vLUtwMcJfSM36q5wZl4CcTbr7z1vgF1yYyfBJT8js5e6cAgcBPdXMdpDcx1Cl7HmIiA6cKxLi5VxYmFQZOWejlWxOw3nYwRR/0jvWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783323078; c=relaxed/simple;
-	bh=VTUXD5kKEwznD7W5jqv90+90DnujuyknXSC1WzcX7Q8=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=VIBmwkqV4fMoR8cQ+Kjuji109YisYx5nHZ15e9pMU7PuETI+3XSTzBH/TMx5EpjBk2oG2Jka0AWgJWwypitpEf6QxD4VxeLliFMbHqsrnn64CthzXA4lPTfXdTpTbLZvEKuIhbr5XC3mGSFOUDGv4iQ91u4qOABqhW3OGqD4wVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8Dx9+q4WUtqBlUAAA--.1571S3;
-	Mon, 06 Jul 2026 15:31:04 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJCxIuSyWUtq8fIBAA--.11922S3;
-	Mon, 06 Jul 2026 15:30:59 +0800 (CST)
-Subject: Re: [PATCH bpf v2] LoongArch: BPF: Fix tail call count pointer offset
- for arena programs
-To: George Guo <dongtai.guo@linux.dev>, Huacai Chen <chenhuacai@kernel.org>,
- Hengqi Chen <hengqi.chen@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
-Cc: WANG Xuerui <kernel@xen0n.name>, Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>, George Guo <guodongtai@kylinos.cn>,
- bpf@vger.kernel.org, loongarch@lists.linux.dev,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20260625083212.277417-1-dongtai.guo@linux.dev>
- <20260629085511.359546-1-dongtai.guo@linux.dev>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <d1fb11ae-b1a7-f2c0-6eef-58cf6c8c7d7e@loongson.cn>
-Date: Mon, 6 Jul 2026 15:30:58 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1783327911; c=relaxed/simple;
+	bh=yVESiWj5i22ODaL63YhHXsLyvxNOobWdb6lP19hItgo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=noKE2c6DMDE40XlSHAqSkwnkZ77wOAtywHCC4Eh6shKrnUs0cAZ0sTCzZsohgOzI8gokwkeeVhJVb+3eTBeiqN28tbD2Yulpj0B7r8Oe32fDHjX/hDzDPe+/dFtiBXr4ORyotSpa2zeqkBRoVoLKi0jq7zcr3cRDlUg/5hVoyLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kt0mKmKc; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kt0mKmKc"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-384930ca5e2so1448812a91.3
+        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 01:51:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783327903; x=1783932703; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=T0gzeXbVPPuDm6MFw6rW3cSp3Szz2VQxXfM+6OAkUTo=;
+        b=kt0mKmKctLIjmGVS2vT/oJk7PRa9XW3iWWbIL88wiWUXomvQ1bcaGHP7xImmQSDNqK
+         XlN8s4AWbNkl0mBHg8ic4qidz8YiRkhFWh+j5VSDPI5vwoEKxIBziAGLGZ8a2EHNZyaN
+         1y+SzuOi4+N22zkVxbH/cmHAgyk35QdjDPtIpVL/XD6J757o41CtkAJ3ovjStnzFW7Pt
+         +IVw8g4FH5XAhsAIYK7kfe545Do35TzCedIZ6sNr3VsYK97RIHuVxqo6ZrNnWsbTtRL4
+         ab21ezZ09BIS4DN9r9VEVPODu5h9fkkEszBHQly31/9ZKxDn4o3vNNGhvNVipr5hQMy4
+         0n9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783327903; x=1783932703;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T0gzeXbVPPuDm6MFw6rW3cSp3Szz2VQxXfM+6OAkUTo=;
+        b=iOpC3DM5vOPV6lVxzD/9TfGw6491RZRDgxG8yNMeo8IdyjJrLOBmsVoWt+WPAToj6l
+         q/DPONlQ0v3gY0OGyShFSUiV/7hNm/rrdnfFPqQRooE18fKwtTGhKaFE4G4Sth1OSxn9
+         Er4oh982v0KIIhNN5xN6eny5L1EcYX+uEVaKvIUY0b8BRv+BsY4BysCu73ksiZTy0XMB
+         DqhjWAFu+lwpBG6oc4nAwW+pyIslgrA/x1061Tf6c5Qofjf2m/n0cuKsZzLBKqfoNMIz
+         acFM+miK/8CbwR03BhJxoS2hi+60lN1kpBX8BsfWZAmoP7+BLHAxsoZ16Xs3sMdpGcuL
+         FKMg==
+X-Forwarded-Encrypted: i=1; AHgh+Rra44cWNxdhBlWzyb+UMnHcEsf6tWL2InhXQAVMKo6KG/p5qLoyRBjCk1ncYbO3xWdAzKc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvharN6FrQEGerSRTZZuBqH51fI9GuLNaG3q7fXe887Ou7/x5U
+	1XhkO4hIRWWsXXb3RFG7CNn2XEJLA4tem60QUXw1pvrDK9saU4r+ExIz
+X-Gm-Gg: AfdE7clbazBk2hUEXsuqwhcKQrTqqT7o2XckZCELNYx9wJJl3YXmZ7YQfKIGnNMlOKX
+	4Ybo43abWfdp4xLipRFWYcNk91doW8N+dE6b84vkZMBZB4wjVlGxo4sZ3jG5Y26asHbcPQrrmDU
+	Eb5cuyN1nxWOcuy28wO4agVaNvTgoJWlZdfAW7mQndUE25RZmWPZTquhOCKG+8hLbfyHMqgREnw
+	Xc2B5Tlr2fVPtWTMzWPBXktV6+VL+yxVI54/NHAuLZN5pTrVy6HpbW2khXG8EvkqmETsJ+cHaoE
+	AwtZFhnKejPQCkXV13ZgGy/jJ5kdF47fWT5CEJixoSsbYjRD4f0x4a9pWbQKfbnZXJim+zocSrV
+	77DxGltV7R8Ses12vw9sLKvc9TH2LH7DDkvndL1qORHeh/I07bHtYlLG/fjkvcrZVbPA+1Cjvle
+	po5a67BxQUMabveEABKNh76RMjOG8eO4KBvcZNM6gICzLT9162dDXCCajWrw==
+X-Received: by 2002:a17:90b:3a50:b0:381:cef1:11b0 with SMTP id 98e67ed59e1d1-382a01beeb4mr9152255a91.33.1783327902707;
+        Mon, 06 Jul 2026 01:51:42 -0700 (PDT)
+Received: from computer ([2405:201:d015:d26b:41c5:151e:6e02:36c7])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31164c1c422sm4055231eec.13.2026.07.06.01.51.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2026 01:51:42 -0700 (PDT)
+Date: Mon, 6 Jul 2026 14:21:33 +0530
+From: Varun R Mallya <varunrmallya@gmail.com>
+To: Pu Lehui <pulehui@huawei.com>
+Cc: pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com, bjorn@kernel.org,
+	alex@ghiti.fr, martin.lau@linux.dev, song@kernel.org,
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+	puranjay@kernel.org, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next 2/3] riscv, bpf: Add support for BPF exceptions
+Message-ID: <aktslXMz29C9twvo@computer>
+References: <20260621144259.288135-1-varunrmallya@gmail.com>
+ <20260621144259.288135-3-varunrmallya@gmail.com>
+ <b6e8c677-5fff-4de1-8483-fc23361898dc@huawei.com>
+ <akDOkptnqJt9LDtj@computer>
+ <d5810b66-a2f9-4449-a808-c588e4a2ff1c@huawei.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260629085511.359546-1-dongtai.guo@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCxIuSyWUtq8fIBAA--.11922S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxXr1fWw15Gr43CFW3Xr4DZFc_yoWrXF45pr
-	4UAF4xKrWDXr4xAF47K3y0vr15K395ZrW3GF17Cr95CFnIvr1rWFyFg3yUWFy5uw4rJr18
-	Xrs09r4a9a98A3cCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVWxJr0_GcWln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
-	6r1DMcIj6I8E87Iv67AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
-	xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
-	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
-	AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
-	c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267
-	AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr1j
-	6F4UJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU8
-	T7K3UUUUU==
+In-Reply-To: <d5810b66-a2f9-4449-a808-c588e4a2ff1c@huawei.com>
 
-On 2026/6/29 下午4:55, George Guo wrote:
-> From: George Guo <guodongtai@kylinos.cn>
+On Mon, Jun 29, 2026 at 10:53:26AM +0800, Pu Lehui wrote:
 > 
-> The tail call count (TCC) and its pointer occupy the two deepest slots of
-> the callee-saved area set up by build_prologue(). An arena program reserves
-> one extra word for REG_ARENA (arena_vm_start) right above them:
+> On 2026/6/28 15:34, Varun R Mallya wrote:
+> > On Tue, Jun 23, 2026 at 10:11:57AM +0800, Pu Lehui wrote:
+> > > 
+> > > We don't need to duplicate code. Please merge it.
+> > 
+> > Making this change in the next version!
+> > 
+> > > > +
+> > > > +		if (!aux->exception_cb && aux->exception_boundary) {
+> > > > +			/*
+> > > > +			 * Boundary program: allocate the frame and save the
+> > > > +			 * full callee-saved set, capturing the caller's values.
+> > > > +			 */
+> > > > +			emit_addi(RV_REG_SP, RV_REG_SP, -stack_adjust, ctx);
+> > > > +			for (i = 0; i < ARRAY_SIZE(rv_exception_csave_regs); i++) {
+> > > > +				emit_sd(RV_REG_SP, store_offset,
+> > > > +					rv_exception_csave_regs[i], ctx);
+> > > > +				store_offset -= 8;
+> > > > +			}
+> > > > +			emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
+> > > > +		} else {
+> > > > +			/*
+> > > > +			 * Exception callback, reuse the boundary program's
+> > > > +			 * frame, whose frame pointer is passed in a2. Setting
+> > > 
+> > > something confused—why is it A2? I feel like I missed something.
+> > 
+> > bpf_throw() invokes the exception callback as
+> > bpf_exception_cb(cookie, sp, bp, 0, 0) , whose 3rd argument (which,
+> > according to RISC-V's calling convention resides in A2) is the boundary
+> > prog's frame pointer. Since this else branch handles
+> > the callback, it expects A2 to have the frame pointer. The arm
+> > implementation does something very similar with emit(A64_MOV(1, A64_FP, A64_R(2)), ctx)
+> > where A64_R(2) is the third arg.
 > 
->      ra fp s0 s1 s2 s3 s4 s5      <- 8 words
->      [ REG_ARENA ]                <- only if ctx->arena_vm_start
->      tail_call_cnt
->      tail_call_cnt_ptr            <- loaded on tail call / bpf2bpf call
-> 
-> BPF_TAIL_CALL_CNT_PTR_STACK_OFF() hardcodes the pointer at
-> round_up(stack, 16) - 80, which is only correct when REG_ARENA is absent.
-> For an arena program the extra word shifts every slot below it down by 8
-> bytes, so the macro resolves to the tail_call_cnt slot (the counter value)
-> instead of tail_call_cnt_ptr. The JIT then loads the counter value and
-> dereferences it as the TCC pointer, corrupting memory or panicking the
-> kernel whenever an arena program performs a tail call or a bpf2bpf call.
-> 
-> Replace the macro with a helper that accounts for the REG_ARENA slot,
-> mirroring the reservation logic in build_prologue().
-> 
-> Fixes: ef54c517a937 ("LoongArch: BPF: Implement PROBE_MEM32 pseudo instructions")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: George Guo <guodongtai@kylinos.cn>
-> ---
-> v2:
->   - Dropped the second patch ("Don't charge an empty prog_array slot to
->     the tail call count"); that off-by-one was fixed independently by
->     commit 0379d10f09bc ("LoongArch: BPF: Fix off-by-one error in tail
->     call"), now in 7.2-rc1. The arena tail call count pointer offset bug
->     addressed here is independent and still unfixed.
->   - No code change; reworded the commit message and rebased on 7.2-rc1.
->   - v1: https://lore.kernel.org/all/20260625083212.277417-1-dongtai.guo@linux.dev
-> 
->   arch/loongarch/net/bpf_jit.c | 22 +++++++++++++++++++---
->   1 file changed, 19 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index ad7e28375aa9..5e34e9e3f508 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -25,7 +25,23 @@
->   
->   #define REG_TCC		LOONGARCH_GPR_A6
->   #define REG_ARENA	LOONGARCH_GPR_S6 /* For storing arena_vm_start */
-> -#define BPF_TAIL_CALL_CNT_PTR_STACK_OFF(stack) (round_up(stack, 16) - 80)
-> +
-> +static int tail_call_cnt_ptr_stack_off(struct jit_ctx *ctx)
-> +{
-> +	/* Ten words are pushed below the BPF stack: ra, fp, s0-s5, and the
-> +	 * tail call count plus its pointer, which occupy the two deepest
-> +	 * slots of the callee-saved area.
-> +	 */
-> +	int offset = sizeof(long) * 10;
-> +
-> +	/* An arena program reserves one extra word above them (REG_ARENA),
-> +	 * which pushes the tail call count pointer down by one slot.
-> +	 */
-> +	if (ctx->arena_vm_start)
-> +		offset += sizeof(long);
-> +
-> +	return round_up(ctx->stack_size, 16) - offset;
-> +}
->   
->   static const int regmap[] = {
->   	/* return value from in-kernel function, and exit value for eBPF program */
-> @@ -291,7 +307,7 @@ bool bpf_jit_supports_far_kfunc_call(void)
->   static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
->   {
->   	int off, tc_ninsn = 0;
-> -	int tcc_ptr_off = BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size);
-> +	int tcc_ptr_off = tail_call_cnt_ptr_stack_off(ctx);
->   	u8 a1 = LOONGARCH_GPR_A1;
->   	u8 a2 = LOONGARCH_GPR_A2;
->   	u8 t1 = LOONGARCH_GPR_T1;
-> @@ -1181,7 +1197,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
->   			return ret;
->   
->   		if (insn->src_reg == BPF_PSEUDO_CALL) {
-> -			tcc_ptr_off = BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size);
-> +			tcc_ptr_off = tail_call_cnt_ptr_stack_off(ctx);
->   			emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, tcc_ptr_off);
->   		}
->   
-> 
+> ok, so it would be better to clear in the comments that it is the third
+> parameter.
+>
 
-Please see the discussion in the other thread:
+Will do that in v3. Sorry for being very late to reply to this. There
+are BTF issues I am encountering while running RISC-V kernels which I
+have found the cause for and will send a report and propose a fix soon.
 
-https://lore.kernel.org/loongarch/d7f2c8d3-4a46-e978-5cce-f59b84e632f0@loongson.cn/
-
-Thanks,
-Tiezhu
-
+> > 
+> > > > +			 * SP = FP - stack_adjust lines the epilogue's loads up
+> > > > +			 * with the registers the boundary saved.
+> > > > +			 */
+> > > > +			emit_mv(RV_REG_FP, RV_REG_A2, ctx);
+> > > > +			emit_addi(RV_REG_SP, RV_REG_FP, -stack_adjust, ctx);
+> > > > +		}
+> > > > +
+> > > > +		goto tail_setup;
+> > > > +	}
+> > > > +
+> > > >    	if (seen_reg(RV_REG_RA, ctx))
+> > > >    		stack_adjust += 8;
+> > > >    	stack_adjust += 8; /* RV_REG_FP */
+> > > > @@ -2082,6 +2173,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+> > > >    	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
+> > > > +tail_setup:
+> > > >    	if (bpf_stack_adjust)
+> > > >    		emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
+> > > > @@ -2157,3 +2249,13 @@ bool bpf_jit_supports_fsession(void)
+> > > >    {
+> > > >    	return true;
+> > > >    }
+> > > > +
+> > > > +bool bpf_jit_supports_exceptions(void)
+> > > > +{
+> > > > +	/*
+> > > > +	 * bpf_throw() unwinds by walking the frame-pointer chain from inside
+> > > > +	 * the kernel back into the BPF frames (see arch_bpf_stack_walk()), so
+> > > > +	 * exceptions require the frame-pointer unwinder to be enabled.
+> > > > +	 */
+> > > > +	return IS_ENABLED(CONFIG_FRAME_POINTER);
+> > > 
+> > > riscv select ARCH_WANT_FRAME_POINTERS, so this will always true
+> > 
+> > I checked that the kernel compiled even when I turned
+> > CONFIG_FRAME_POINTER explicitly off, so not gating this
+> > would be a mistake, right ? ARCH_WANT_FRAME_POINTERS makes
+> > CONFIG_FRAME_POINTER user selectable and makes it default to
+> > true, but it's not always true. What does force it is PERF_EVENTS=y but if
+> > that too is turned off, then CONFIG_FRAME_POINTER can also be turned
+> > off.
+> 
+> alright, lgtm
+> > 
+> > Thanks for the review!!
+> > - Varun
+> > > > +}
