@@ -1,159 +1,176 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3136D1C84AB
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 22:50:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAAEB1C84AB
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 22:50:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783378250; cv=none; b=b0vy2ETpKy/3MCaA5ZUe6P7qhG04BPNZuv0KA+P8ouxkalQmwzBoZtujXzslEheeUKNZL0Ktpg5EMRB2edeRpN4Mjii4XX0I2n3tTtX0l/nwrOsntMFuKogsgiWPXOQXsE+sbdGWkAzmvoo4GqUi8dp79GC64ylW1wy+KVuOIZM=
+	t=1783378259; cv=none; b=W9z1faaAfHO3IU3Tj2bQDqxIGLXHVs3t5R2lH819HKHxua2IT1IJmQPAA1NO1iVp18Pfy6uS5dB9iQriwBTPayVMuslqeHNjw+QNlcKAO6sISyCK39gWsuZxu/Mh7CxJWDM10z0fpyfAeIWtYWwLKxpcyD+Rjj9HSWFQsBa/3lU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783378250; c=relaxed/simple;
-	bh=4SQ6iNVvvOZW2cmYvz3muDtCp1kUXi6EHpnqLm01IuM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=E82XAnGSQemo7lnfqrQer2zVYOjgcjjFj37B+y8SaBAwdQyy2tCHk/Qn/z+JpcKVLLL2mBRdJQbhQ1NjUiXI2s0CWQyFFMw1uCJjw6aUSFx0/zih1FmN+HsoMC+V5IGlz/xshqKSihxLejEpGzuCjCtvhiqRCQvGQqnztKG941A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=R1PCSElC; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	s=arc-20240116; t=1783378259; c=relaxed/simple;
+	bh=tMyt3Es51+LZD3opnHgBp9wZal/BxU0JHNo4cRNwQeU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Zt/4a5wsrUuA48IdrEn0yj78aYik6JW6QmgHi4T4sPdEmcinGy1qBPdtFhtV+9l+IjC9nZlY2/RzhqJ6642/WN+1hhryztPEgBhVG/JJG/V027pIVDL6fL8EdMFNS+dM5LQy28w8+PZF7qmXHddZlAYTUPIIzApxhAdBAYbtQU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=q0hegzkk; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R1PCSElC"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-847e32ef4caso5512015b3a.2
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 15:50:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="q0hegzkk"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8454160043aso3494303b3a.3
+        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 15:50:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783378248; x=1783983048; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sV5zgIzwAjP+f/AjnTpHO4CByiDzAfCtpUnBWys2RGg=;
-        b=R1PCSElCVgEM99KLEa/r1pmUqBzfiWUM8+ZzRIRSkNYAehQMt1aU+tfSLBwzc8g0IG
-         62ClLcXh3fQzdeTXqb7Qfd7t5GN1XYKPFzFuVlTOHg96fD+K+pdpF0PSMoUGADd5T98D
-         eiJ8oxKkgQmoE7iy5Ot/D9jOV29haA+77AshIEFoc36Ttn6h3V6OEN9Y3pyrr1ZrGXb2
-         DOeF1TmbLadwDzp1FnrtNOokMZGFUfLlb/+oomJVzEtcbLsTqK4p5bSTUQiIbYdHhvfP
-         N2g616JE6dKOAfOxzw6f76+B/sH48R3uYG6hZSNWBwb1QI5slroVCpCtW32GJT+rhBTh
-         Za7g==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783378257; x=1783983057; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=aq+9wion5AudJfiVlMgdurOInEZzgx8YX7d1sZVsmfE=;
+        b=q0hegzkkJIoKI7Dovvk/gcdL/XXkYGtAXHKpbmZGEXRPnlnxvAjNjPTXVK6LT/kEKK
+         y0SKV+xRmRYIl5Sj4MAm97dkLJQQzBYGdUbLtS/JB0z2OZugJfQ1L2BIOtx7CeD9s3SZ
+         xt4jhsLmWhsc+RANZyusCZ+utjHXfci4xp5S/AZ0uBTwF2CJfHDTDbiXBnQD9oqCIRf7
+         BU1lt8GqabXm3oCqVGoi1XgSC+wlGm4IgO3w/t7SabTg8DsB+Vx/DIlQmWADNLocgPq0
+         ytIw6IOZfJD+yfmMLhtjXE+LDB5Uud+nON16So3SRDEEyin+kSxRfCxRqpqY3n4gG04A
+         uIGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783378248; x=1783983048;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sV5zgIzwAjP+f/AjnTpHO4CByiDzAfCtpUnBWys2RGg=;
-        b=XO9+0/4ypibj0LVzKaX4D/iCi7ClV4VNqCT01s+HVm4DCuVRngm4rd/sE0EbmwXtVd
-         jpfxaN7z+BiVx36G/LyJdKt/gfjvKiQOAjx+2Tm/IXxW4j1iw60VAg0l+X1+0pVKZ+cu
-         9WAVsK9QJbLalYaedoZcbn9+sF9qiYttAyrvjlOIkLEaqW8IIEQLYF2Co4C9zHLUZ6FU
-         T5+B9MqMTeD49UoWLKpb8OQ5zlO1KOliz9o7CFi8TllkcxArJSdvMZOJCPG+ehMQUXiR
-         AgO2VFQVMKSWKqZidGe1aN5pOTe/h4ImwtkfaiLWRZVYRlCMqwPYNT48XKCbfYS2wNia
-         V6QQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rou90SuRoJrrQOXnmJ502hKYryvMydfeiu0NG+B4iy7D0jsqoGkNwS/sSeWVXko8Heq8bQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkFBiyXYcIROBqYVQrmT/VXc8s5y7F1pKc+LVdo5IY1Wk9gpKm
-	Ij1q9CEtXig+4bvuPqk+jJS0jvYqGkfTBV2tVZrwKPk/etbL8Afrinv2yqqxr1vAFFdhaoN8WRH
-	JQ2t2xQ==
-X-Received: from pfble11.prod.google.com ([2002:a05:6a00:4fcb:b0:846:f544:63bc])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:3d4f:b0:845:e66d:919f
- with SMTP id d2e1a72fcca58-84826bb4c1bmr2477083b3a.12.1783378248168; Mon, 06
- Jul 2026 15:50:48 -0700 (PDT)
-Date: Mon,  6 Jul 2026 22:50:33 +0000
-In-Reply-To: <akwTnnSGJpki9hAn@devvm7509.cco0.facebook.com>
+        d=1e100.net; s=20251104; t=1783378257; x=1783983057;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=aq+9wion5AudJfiVlMgdurOInEZzgx8YX7d1sZVsmfE=;
+        b=Gv+P6cqJi09mw6p6U2jYqoMBB4SUSDTD4uVCTQM9P5oM10/qSXsw9B98LWaL+x9HTy
+         zvyjLCYc/4PvhIjZJnH+ICkAa0xGgMl0stMB1/TN1XSHefZsDoDzjanvTR5EjGDuxsYy
+         kfGlUEN1spetm0B2GAUAunepZGABUvTK2iX/hHkN08QDkktMghYbpgv3HVRjEeP7Ge7G
+         gh6rsa3mKtQcUGXnxqZCRuZgwEXDNmXXPErkcWKV3oBMZtlYwZi/5EbeREhIhxZWo4/j
+         Lqp6LGKy6+iAeWTTRWUkoZKm6oy+sW327glac224xXBpKj/Fm7lyXaqyMLwuDmtODjXz
+         jJ8g==
+X-Gm-Message-State: AOJu0Yyk2EIQBWEnOXJVQ0uf5XfymcSI0TuCoU2HYqcieh7p/7yss99h
+	b+Ai2aULnbDptbUnuinEIQNWgAkK4BOrBP9VGzh2PqutzDRjK2I/ZczWur18+7bd/otvEiiN6Sd
+	xZrjXTbg=
+X-Gm-Gg: AfdE7cnUwLzWMu9CG+NboH5b//KwkHgi6H0mO/ftTeF3P2yDPL+uz+n5RJnDY6iAHAP
+	X8NaZsIurFKhGKgkKWL1roa2WSiPRcuvzM1OOEscNgZTtZL84LRA9tFyvxo/tEMCgVJVbK7MZ5A
+	VlUwmGAxCFdJ89wCXQokdZplPv0k0G59RJ/c/GfNZ0Sc+H2Kn3fMV5FM/PwEZVQM199LDpwxPNG
+	vWjX9V7RVv7farKmHhE/OUK+ByDogzzl4IL5PWUCTXT2SO1OyLOKhDqABmu1iGVZLnYU1utD9xe
+	rPXVe7SRakt77NieWciBNdipWj4AP3xEZwdxOq3N5k6PkD1plePsESUEtyOPxIm9Tp/4Q1qhwWy
+	JFjsHZQF7ncFSMTVj2AgzLcLWFWlYjt3UNt4Vz/8d8dPo1DHeggiMabh+AhzRlVyhsODCvWeeFU
+	WiFHaRJZxG4hCQ6NOKoUQGIc27NNhLKnHGsazvDyvJ2CpyAva73ehw5giEKQ==
+X-Received: by 2002:a05:6a00:14c3:b0:847:9a16:4a61 with SMTP id d2e1a72fcca58-84826f45ad1mr2453333b3a.61.1783378257042;
+        Mon, 06 Jul 2026 15:50:57 -0700 (PDT)
+Received: from krios.ht.home (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-847f6d4e741sm4520909b3a.28.2026.07.06.15.50.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2026 15:50:56 -0700 (PDT)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next] selftests/bpf: veristat: Minimize map size during verification
+Date: Mon,  6 Jul 2026 18:50:52 -0400
+Message-ID: <20260706225052.35543-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <akwTnnSGJpki9hAn@devvm7509.cco0.facebook.com>
-X-Mailer: git-send-email 2.55.0.rc2.803.g1fd1e6609c-goog
-Message-ID: <20260706225047.1684039-1-kuniyu@google.com>
-Subject: Re: [PATCH bpf-next 2/6] bpf: Add ksock kfuncs
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: sdf.kernel@gmail.com
-Cc: andrew+netdev@lunn.ch, andrii@kernel.org, ast@kernel.org, 
-	bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net, 
-	eddyz87@gmail.com, edumazet@google.com, john.fastabend@gmail.com, 
-	kuba@kernel.org, liamwisehart@meta.com, mahe.tardy@gmail.com, 
-	martin.lau@linux.dev, netdev@vger.kernel.org, pabeni@redhat.com, 
-	song@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-Date: Mon, 6 Jul 2026 14:02:39 -0700
-> On 07/06, Mahe Tardy wrote:
-> > On Mon, Jul 06, 2026 at 09:58:09AM -0700, Stanislav Fomichev wrote:
-> > > On 07/06, Mahe Tardy wrote:
-> > > > Add BPF kfuncs that allow BPF LSM programs to create and use sockets for
-> > > > sending data. This provides a mechanism for BPF programs to emit
-> > > > telemetry. For this first patch set, it's restricted to SOCK_DGRAM
-> > > > socket types with IPPROTO_UDP protocol but could be easily extended to
-> > > > SOCK_STREAM and IPPROTO_TCP in the future.
-> > > > 
-> > > > The API consists of six kfuncs:
-> > > > 
-> > > >   bpf_ksock_create()   - Create a socket (sleepable)
-> > > 
-> > > [..]
-> > > 
-> > > >   bpf_ksock_bind()     - Bind socket to local address (sleepable)
-> > > >   bpf_ksock_connect()  - Connect socket to remote address (sleepable)
-> > > 
-> > > Since you're doing only UDP for now, maybe you don't need bind/connect? The
-> > > kernel should autobind (by default) when you sendmsg over UDP socket (IIRC).
-> > 
-> > Yep indeed, I kinda overlooked that as I started with UDP & TCP supports
-> > and mostly added the args checks. Another thing is that send is simpler
-> > since only used on connected sockets, so you just pass the struct
-> > bpf_ksock and data. So on one side it would simplify the current
-> > UDP-only API for now by removing the kfuncs but we might need a more
-> > complex send kfunc (something like sendto).
-> 
-> Since you were targeting bpf_netpoll_send_udp originally, maybe sendto
-> is a better fit? You get the payload and the destination and you
-> bpf_sendto() it? We can later move to stateful bind/connect if needed.
-> 
-> (mostly coming from the pow of minimizing api exposure initially, but
-> not a strong preference)
+The veristat tool verifies that BPF objects along with their
+maps pass verification for a given kernel version. To do so,
+veristat loads the objects and maps into the kernel in order
+to pass them through the verifier.
 
-+1, small start would be better.
+Currently, veristat sizes the maps according to the max_entries
+field provided by the program author. Depending on the map type
+this field may be irrelevant to the verification process. However,
+loading a large map can fail because of -ENOMEM errors.
 
+This is a problem when the map is supposed to run on large machines,
+but veristat tests it machines with significantly less RAM (e.g.,
+CI). In that case veristat fails even if the program verifies.
 
-> 
-> > > 
-> > > >   bpf_ksock_send()     - Send data through the socket (sleepable)
-> > > >   bpf_ksock_acquire()  - Acquire a reference to a socket context
-> > > >   bpf_ksock_release()  - Release a reference (cleanup via
-> > > >                          queue_rcu_work since sock_release sleeps)
-> > > > 
-> > > > The setup kfuncs bpf_ksock_create, bpf_ksock_bind, bpf_ksock_connect,
-> > > > can be called from SYSCALL programs only. While bpf_ksock_acquire,
-> > > > bpf_ksock_release and bpf_ksock_send can be called from SYSCALL and LSM
-> > > > programs.
-> > > > 
-> > > > The implementation follows the established kfunc lifecycle pattern
-> > > > (create/acquire/release with refcounting, kptr map storage, dtor
-> > > > registration). The kernel socket is wrapped in a refcounted bpf_ksock
-> > > > struct. Cleanup is deferred via queue_rcu_work() because sock_release()
-> > > > may sleep.
-> > > > 
-> > > > The kfuncs are only compiled when CONFIG_INET is enabled, as they
-> > > > specifically support AF_INET and AF_INET6 sockets.
-> > > > 
-> > > > The socket operations go through the expected LSM hooks instead of
-> > > > by-passing them like many kernel sockets since those are created by BPF
-> > > > programs and thus system users. Thus bpf_ksock_send() kfunc, which is
-> > > > exposed to LSM progs, has a re-entering protection to avoid recursion.
-> > > > Also, because of the LSM checks, we prevent the use of the kfuncs from
-> > > > asynchronous workqueue as the current value would then be invalid.
-> > > 
-> > > [..]
-> > > 
-> > > > A bpf_ksock_max sysctl is added to limit the maximum number of BPF
-> > > > kernel sockets that may exist in each network namespace. Out of
-> > > > simplicity for now, the settings is host wide but the counters are per
-> > > > network namespace.
-> > > 
-> > > What is this guarding against? Rogue bpf programs creating too many sockets?
-> > 
-> > Yes. AI review raised this because users are prevented from creating too
-> > many sockets by bumping against the max number of fd and this would
-> > allow them to create way more sockets. I kind of agreed that having "a
-> > limit" on resource creation would make sense but maybe it doesn't and we
-> > can simplify this!
-> 
-> I believe even the kernel sockets go via lsm layer, so this enforcement
-> can be done in an lsm bpf program. Seems like that should be enough?
+Expand veristat to resize maps whose max_entries are not relevant
+to verification. Set the max_entries value as low as possible to
+avoid -ENOMEM errors.
 
-Right, I don't think the per-netns limit is useful for CAP_BPF users.
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+---
+ tools/testing/selftests/bpf/veristat.c | 46 ++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index a7db6f04f7e1..8d374e140653 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -37,6 +37,10 @@
+ #define min(a, b) ((a) < (b) ? (a) : (b))
+ #endif
+ 
++#ifndef div_round_up
++#define div_round_up(a, b) (((a) + (b) - 1) / (b))
++#endif
++
+ enum stat_id {
+ 	VERDICT,
+ 	DURATION,
+@@ -1238,6 +1242,17 @@ static void mask_unrelated_struct_ops_progs(struct bpf_object *obj,
+ 	}
+ }
+ 
++/* size of global arena data in pages (minimum 1) */
++static size_t arena_global_pages(struct bpf_map *map)
++{
++	size_t min_bytes;
++
++	if (!bpf_map__initial_value(map, &min_bytes))
++		return 1;
++
++	return div_round_up(min_bytes, sysconf(_SC_PAGESIZE)) ?: 1;
++}
++
+ static void fixup_obj_maps(struct bpf_object *obj)
+ {
+ 	struct bpf_map *map;
+@@ -1248,6 +1263,37 @@ static void fixup_obj_maps(struct bpf_object *obj)
+ 
+ 		/* fix up map size, if necessary */
+ 		switch (bpf_map__type(map)) {
++		/*
++		 * if the verifier doesn't use max_entries
++		 * then set to 1 to avoid -ENOMEM
++		 */
++		case BPF_MAP_TYPE_HASH:
++		case BPF_MAP_TYPE_PERCPU_HASH:
++		case BPF_MAP_TYPE_LRU_HASH:
++		case BPF_MAP_TYPE_LRU_PERCPU_HASH:
++		case BPF_MAP_TYPE_HASH_OF_MAPS:
++		case BPF_MAP_TYPE_RHASH:
++		case BPF_MAP_TYPE_SOCKHASH:
++		case BPF_MAP_TYPE_DEVMAP_HASH:
++		case BPF_MAP_TYPE_LPM_TRIE:
++		case BPF_MAP_TYPE_QUEUE:
++		case BPF_MAP_TYPE_STACK:
++		case BPF_MAP_TYPE_BLOOM_FILTER:
++		case BPF_MAP_TYPE_STACK_TRACE:
++			bpf_map__set_max_entries(map, 1);
++			break;
++
++		/* arenas must be big enough to fit all globals */
++		case BPF_MAP_TYPE_ARENA:
++			bpf_map__set_max_entries(map, arena_global_pages(map));
++			break;
++
++		/* ringbufs must be page-aligned */
++		case BPF_MAP_TYPE_RINGBUF:
++		case BPF_MAP_TYPE_USER_RINGBUF:
++			bpf_map__set_max_entries(map, sysconf(_SC_PAGESIZE));
++			break;
++
+ 		case BPF_MAP_TYPE_SK_STORAGE:
+ 		case BPF_MAP_TYPE_TASK_STORAGE:
+ 		case BPF_MAP_TYPE_INODE_STORAGE:
+-- 
+2.54.0
+
