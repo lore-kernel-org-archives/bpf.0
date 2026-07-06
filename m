@@ -1,176 +1,125 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F9C329E7E
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 14:26:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7591A379C2F
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 14:27:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783348013; cv=none; b=mgKss7w0SePRO8DF4xhnGInA3p0Z5d+tzJGeIw24av6FWarM4UAXE8yj2SGNKl/ZIsSEGqa+7Yc+ur8p2PKun4qd2gMPHjxzCYFPnhLuaNd8dZXDoiztuxCweuGIsYZ9f+Hpl6mT3VTm//jfEGbIjvCantOWZ3Sf5uKnvLNohvI=
+	t=1783348065; cv=none; b=mUnRm21tpdGjrg7Juk+qkNPQpWRv3iyHR7aCVqoFz6kNDds5rj6wC6jYEAwFYc+BWsnG/nCDTid7ZyfhcoYRNn7s8F5UG2qZXKowTWZrQDGv2x5FIPQ9jy8Y2Lkor0KsRYafesm6YdFm8ITSyzE83U76wXIlp1j8/HeqPuGOR+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783348013; c=relaxed/simple;
-	bh=4pYl8blXZs17A2ku9nv5sW7MRud2XgxllX6C/bP2dtc=;
+	s=arc-20240116; t=1783348065; c=relaxed/simple;
+	bh=Zte1zo1dQKoTFI+EMMFTWaWSKTb6f3RC5+UcwEgFuPk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=LFlMeGEAev0LmuoyeNCA84ExFCNpbArM8qlN6iOnYsc2v3g5P7yta1KgCkfFYA92TmlUo//gcqx8CkOOIKDVb6yNXGYAiYLsz10CqfnQcTo7szGo7EKedz6Aqw+bnAB9SA/NA2EI9Kp6RnaUfBLL1Cu76GyQn7/sSPF8f6Rwgt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DzoWhcS2; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=nwDnaHNOmfMBkDQLRU+EoHYX6D6H5ka55zwFh+Y88rWUVSniqTAd6h9T2kZnFgCu6oDyL1ItxMmU+RML+5r9Lb61mwUJyhQGgN44OpS6m6XUOoVnTVHE4AcXVOIBBNhqkEgPc2mV6nhOGo+QOK53bUt8ISrKGU9siFcliE8G+1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HZUfCrjc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DzoWhcS2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E3431F00A3A;
-	Mon,  6 Jul 2026 14:26:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HZUfCrjc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1777F1F00A3A;
+	Mon,  6 Jul 2026 14:27:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783348011;
-	bh=5FphX0DguIoaU/DEw2tbSnQzcVUlntNNzuS4qwnk5Fw=;
+	s=k20260515; t=1783348060;
+	bh=mJexkvB2usKKX+6w1X6p4rTZhq9fZxLx3dX+bSS2c4M=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=DzoWhcS2mwtRzPXDo+cBToI8+VZi+CKiyLXdkZpcbVqKpiyxQUqfzOENTSuRugHIL
-	 s9JlkwbclWq7kJjDhhV6U4wzY9QlfhAcxqPSaB4CWspQSkTu6wu+8/6yAIAiW1GzJc
-	 hiiEoXO2tUvBc3g2YOUIvdMObyE0cQqJfBL/a+8AKZFLRiANEje0P9J6eVC+yBiZUO
-	 3eYWwciPMUMympaR/pAmOohUd4QEct+vF8mrr+6dyx7Bx2IDQeVDMToPz7P6wSjcI4
-	 plSyzKU8QhEjH3Nzu2SjlOS7l84av5KRURJxxZ0aynskpPbcTqrzhhGTJCLoeHO8oy
-	 7ffAivtY2daOQ==
+	b=HZUfCrjcwABmDA73QkkqI3ZdZ1rBL0DXnznhgWRXhKz25y82t7RJHx/I3PH8Fi++k
+	 3C6T/KLOJ/gaA/3pO3iIIAGKCLHV/oMgf9v4MfQv0IZ9mFFtObH6ap/BlTZ+Vl3A6K
+	 pAL9lyZzzoIKVt8YoCMwesT3/XJpMiEV0rY26jJpqzqnPliR9aP5U1PzusJj4rYzWo
+	 1KeNiw4Z1yewyIzAj+U+saI7yyFRXRZYpnXfobA9+VQRoWT9HdtKuYSjGOVGqo6K5H
+	 S+1pAGduVF+Os2TxTknXgrwEls0cBzkgg9z8bu69E+Xw/SfZodtff+nqnyUbO9OUFl
+	 2L70enoLxo1bw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 3/9] bpf: Verify signed loader metadata at
- load time
+Subject: Re: [PATCH bpf-next v4 7/9] selftests/bpf: Adjust bpf_map layout in
+ verifier_map_ptr
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Daniel Borkmann" <daniel@iogearbox.net>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260706135644.326006-4-daniel@iogearbox.net>
+In-Reply-To: <20260706135644.326006-8-daniel@iogearbox.net>
 References: <20260706135644.326006-1-daniel@iogearbox.net>
- <20260706135644.326006-4-daniel@iogearbox.net>
+ <20260706135644.326006-8-daniel@iogearbox.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 06 Jul 2026 14:26:50 +0000
-Message-Id: <20260706142651.4E3431F00A3A@smtp.kernel.org>
+Date: Mon, 06 Jul 2026 14:27:39 +0000
+Message-Id: <20260706142740.1777F1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-New issues:
-- [High] Moving `security_bpf_prog_load` into `bpf_check` causes the `bpf_p=
-rog_free` LSM hook to be executed twice if the load hook fails, or executed=
- without a prior allocation/load hook if `bpf_check` fails early.
-
-Pre-existing issues:
-- [High] bpf_prog_calc_tag() fails to mask out kernel addresses for BPF_PSE=
-UDO_MAP_IDX and BPF_PSEUDO_MAP_IDX_VALUE instructions, leaking kernel heap =
-addresses into the subprogram tag.
+- [Critical] The removal of the `excl` field from `struct bpf_map` breaks b=
+ackwards compatibility for existing, previously compiled userspace signed B=
+PF loaders (light skeletons).
 --
 
-commit cfb17a8179c5038b966ac26cfe3e81c8fa9ab54e
+commit c88125fac4570eca959a997d221adcd929990142
 Author: Daniel Borkmann <daniel@iogearbox.net>
 
-bpf: Verify signed loader metadata at load time
+selftests/bpf: Adjust bpf_map layout in verifier_map_ptr
 
-This commit modifies the BPF loader to verify PKCS#7 signatures over
-the loader instructions and its metadata maps. It also moves the
-security_bpf_prog_load() admission hook into bpf_check(), running it
-after the signature is verified but before full verification.
+This commit updates the verifier_map_ptr selftest to reflect the new layout
+of struct bpf_map. It adjusts the offsets and expected error messages to
+account for the ops pointer moving to offset 32 after the removal of the
+excl field.
 
-Link: https://lore.kernel.org/bpf/2f71d6c03698eb17d51f7247efde777627ee578a.=
-camel@HansenPartnership.com [0]
-Link: https://lore.kernel.org/lkml/ecf0521ed302db672672ebfbc670ecfba36a6e00=
-.camel@HansenPartnership.com [1]
-Link: https://lore.kernel.org/bpf/88703f00d5b7a779728451008626efa45e42db3d.=
-camel@HansenPartnership.com [2]
-Link: https://lore.kernel.org/bpf/DJOFY21DYUI4.19WKQ3NPZ4H5R@gmail.com [3]
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c b/tools=
+/testing/selftests/bpf/progs/verifier_map_ptr.c
+> index 1661936598703..e0a65835c861b 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
+> @@ -72,14 +72,15 @@ __naked void bpf_map_ptr_write_rejected(void)
+> =20
+>  /*
+> - * struct bpf_map starts with the SHA256 hash sha[32] at offset 0 (a rea=
+dable
+> - * byte array), the u32 excl field at offset 32, and the ops pointer at =
+offset
+> - * 40. Reading a u32 at offset 41 reaches into the middle of the ops poi=
+nter,
+> - * i.e. a partial pointer access, which is rejected.
+> + * struct bpf_map starts with the SHA256 hash sha[32] at offset 0 (a rea=
+dable
+> + * byte array), followed by the ops pointer at offset 32 and the inner_m=
+ap_meta
+> + * pointer at offset 40. Reading a u32 at offset 41 reaches into the mid=
+dle of
+> + * the inner_map_meta pointer, i.e. a partial pointer access, which is
+> + * rejected.
+>   */
+[Severity: Critical]
+Does this structure layout change introduce a regression by breaking backwa=
+rds
+compatibility for existing userspace signed BPF loaders (light skeletons)?
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index e227c76a8dd96..65f53128fc33d 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+Older versions of bpftool generated a loader program that included explicit
+BPF bytecode to verify the metadata map via a 4-byte read of the excl field
+at offset 32. To support this, the kernel previously pinned this offset usi=
+ng
+BUILD_BUG_ON(offsetof(struct bpf_map, excl) !=3D SHA256_DIGEST_SIZE).
 
-[ ... ]
+By removing excl without retaining 4 bytes of padding, the 8-byte ops point=
+er
+shifts to offset 32 in struct bpf_map. When an old loader attempts to read 4
+bytes at offset 32, the verifier sees a partial pointer read (since 8 !=3D =
+4)
+and unconditionally rejects it:
 
-> @@ -19909,11 +20068,27 @@ int bpf_check(struct bpf_prog **prog, union bpf=
-_attr *attr, bpfptr_t uattr,
->  	ret =3D bpf_vlog_init(&env->log, attr_log->level, attr_log->ubuf, attr_=
-log->size);
->  	if (ret)
->  		goto err_free_env;
-> +	if (env->signature) {
-> +		ret =3D bpf_prog_calc_tag(env->prog);
-
-[Severity: High]
-This is a pre-existing issue, but does bpf_prog_calc_tag() fail to mask out
-kernel addresses for BPF_PSEUDO_MAP_IDX and BPF_PSEUDO_MAP_IDX_VALUE
-instructions?
-
-Looking at bpf_prog_calc_tag() in kernel/bpf/core.c, it only masks the
-immediate fields for BPF_PSEUDO_MAP_FD and BPF_PSEUDO_MAP_VALUE:
-
-kernel/bpf/core.c:bpf_prog_calc_tag() {
+kernel/bpf/btf.c:btf_struct_access() {
     ...
-    if (!was_ld_map &&
-        dst[i].code =3D=3D (BPF_LD | BPF_IMM | BPF_DW) &&
-        (dst[i].src_reg =3D=3D BPF_PSEUDO_MAP_FD ||
-         dst[i].src_reg =3D=3D BPF_PSEUDO_MAP_VALUE)) {
-        was_ld_map =3D true;
-        dst[i].imm =3D 0;
+    if (msize !=3D size || off !=3D moff) {
+        bpf_log(log,
+            "cannot access ptr member %s with moff %u in struct %s with off=
+ %u size %u\n",
+            mname, moff, tname, off, size);
+        return -EACCES;
+    }
     ...
 }
 
-During check_and_resolve_insns() in kernel/bpf/verifier.c, the actual kernel
-address is written into the imm fields for these instructions. Could this
-cause the unmasked kernel heap addresses of BPF maps to be incorporated
-into the SHA256 tag of BPF subprograms, allowing a local attacker to
-recover the pointer and bypass KASLR?
-
-> +		if (ret < 0)
-> +			goto err_prep;
-> +	}
-> =20
->  	ret =3D process_fd_array(env, attr, uattr);
->  	if (ret)
->  		goto err_prep;
-> =20
-> +	if (env->signature) {
-> +		ret =3D bpf_prog_verify_signature(env, attr, uattr.is_kernel);
-> +		if (ret)
-> +			goto err_prep;
-> +	}
-> +
-> +	ret =3D security_bpf_prog_load(env->prog, attr, env->prog->aux->token,
-> +				     uattr.is_kernel);
-> +	if (ret)
-> +		goto err_prep;
-
-[Severity: High]
-If this hook fails, does it result in security_bpf_prog_free() being called
-twice, or executed on an uninitialized state?
-
-When bpf_check() is called from bpf_prog_load() in kernel/bpf/syscall.c, a
-failure routes to the free_used_maps label, which unconditionally calls
-__bpf_prog_put_noref() and subsequently security_bpf_prog_free() via
-__bpf_prog_put_rcu():
-
-kernel/bpf/syscall.c:bpf_prog_load() {
-    ...
-    err =3D bpf_check(&prog, attr, uattr, attr_log);
-    if (err < 0)
-        goto free_used_maps;
-    ...
-free_used_maps:
-    __bpf_prog_put_noref(prog, prog->aux->real_func_cnt);
-    return err;
-}
-
-Since the security_bpf_prog_load hook frees the LSM state internally on
-failure, the resulting error return causes the caller to free it a second
-time. Alternatively, if bpf_check() fails early (like in process_fd_array),
-this is bypassed entirely, causing a free without the load hook ever
-running.
-
-Can this corrupt external reference counts or state maps for BPF LSM
-programs attached to this hook?
-
-> +
->  	bpf_get_btf_vmlinux();
-> =20
->  	/* grab the mutex to protect few globals used by verifier */
+Could a 4-byte padding be added to maintain backward compatibility, allowing
+old loaders to safely read the padding while the new kernel securely handles
+the load-time verification?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260706135644.3260=
-06-1-daniel@iogearbox.net?part=3D3
+06-1-daniel@iogearbox.net?part=3D7
