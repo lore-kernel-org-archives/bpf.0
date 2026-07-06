@@ -1,91 +1,116 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB12346E59
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 11:39:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BCED424650
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 12:02:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783337979; cv=none; b=fQKxt8rkgAkGq+rxabTBFeVGOcZZ1VvvbmjJ7MwiREvyNubifAgVlrXcwIaVEdMy1Yidi3W8HMNHIHqEzz3XMDBuJkoOS2W1ZP/1PK9if0wUDqsFjcITupFEb+hSkDqUFvgpKEb4Q/0FhiXpB1K0ZytAQGqWpsa7T0+KD/RV47s=
+	t=1783339368; cv=none; b=Mytvj9/Bb1g6cqy2oJwtgnat3aABSrbhjxOK9yL3ALTFERXBzk1HweVYEqSjgA0UpfyvrKG2QSKaRf1SF2kMHLnhO+meKJGQS41VWoshYnS8CNeAD03knMbEJwvKDchOHT7N5iE4kPhvgKD538rf7LQ5XIsr4aFUwgXDelm8vm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783337979; c=relaxed/simple;
-	bh=Wjumf1wJOL2LQ1l4O1G0CwcPYWAYntscI+138+QgHEI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NDDVte46rmDRzUx7DjSRVR2lKtP6oRY8ZgtTtdwoYaxUSKHuNlqLmNgS+42ouXRZ99W3dXU71KKe6PxVZOvwzMFxsCy4KzO+iU+yhJsIireaN6w3juc95G06GyR26ryt5f5tNeL00noKp2MEhcmUjwanFBgXY1+c39nbErut6cQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NWdJ234+; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783339368; c=relaxed/simple;
+	bh=5OzzRBkqv5shnpjJGB1yKfPY6YBZX2VAOjcBBySgaxg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=si5vN5zELbiUK66d38fcQCkYGYSvdK2tWVdz8jKIElnmrKn7XlJkXFNxZ1Qxrali+R29Yc2s55tIhv1pc2EDMvC4NoE7m6Zu38D+W+kgyJMAwP92xoVpbg+NuE99GpAG3LVmqK/LX1XqndM3XdfXYFoEIem4S5rQ/UGHzYCGuP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Dyj3Te2d; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NWdJ234+"
-Message-ID: <dd75b7afbe2b5507ac818df14dd44aff32db1e18.camel@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783337966;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Dyj3Te2d"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783339366;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Wjumf1wJOL2LQ1l4O1G0CwcPYWAYntscI+138+QgHEI=;
-	b=NWdJ234+B87Yx1NHHmJto1s5psaBbb8vITOAD5zKV8kSJcjMZ5JjwbpSxOGKcW2zNJfpBI
-	aA/nbSTexc6HGfYigPHvZvchszxupeSUl+1uLBaqnatmE7E43VDEf6Wf7OhdgX2scgMEun
-	DpDoj/WpZld0i7Mn6qlDwSc9SvaZhQs=
-Subject: Re: [PATCH bpf-next v8 1/2] bpf: Introduce jit_required flag and
- remove bpf_prog_has_kfunc_call()
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: KaFai Wan <kafai.wan@linux.dev>
-To: Tiezhu Yang <yangtiezhu@loongson.cn>, Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,  Kumar Kartikeya
- Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
- Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, loongarch@lists.linux.dev, Leon Hwang
-	 <leon.hwang@linux.dev>, Puranjay Mohan <puranjay@kernel.org>, 
- =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?=
-	 <bjorn@kernel.org>
-Date: Mon, 06 Jul 2026 19:39:12 +0800
-In-Reply-To: <20260706040006.10331-2-yangtiezhu@loongson.cn>
-References: <20260706040006.10331-1-yangtiezhu@loongson.cn>
-	 <20260706040006.10331-2-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=TNbmDJ8yv71XW6Zt7jckZQoQwWxn1/Tz59wt93140ho=;
+	b=Dyj3Te2dY5AvWNn5E9SbnSQTAs+UyBNjK8kxpUs64OViNFy9gDp1d4rx3V2Dl5/BcHw3Wi
+	x6jHhvXlQG4SUk+tlLOOUQcUOsgT++DUEyFcaBJooT/S7ESeSSo8om83PkLCuhKrLIFeXt
+	Nq7Mc2N0avMT1cyvWQZR+VGYVqmBS8k=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-691-YMjoI1w3P_-0kvO10rTivw-1; Mon,
+ 06 Jul 2026 08:02:41 -0400
+X-MC-Unique: YMjoI1w3P_-0kvO10rTivw-1
+X-Mimecast-MFC-AGG-ID: YMjoI1w3P_-0kvO10rTivw_1783339359
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8D54C1955F23;
+	Mon,  6 Jul 2026 12:02:38 +0000 (UTC)
+Received: from vmalik-fedora.redhat.com (unknown [10.44.49.128])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 839AF1956088;
+	Mon,  6 Jul 2026 12:02:33 +0000 (UTC)
+From: Viktor Malik <vmalik@redhat.com>
+To: linux-perf-users@vger.kernel.org
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Viktor Malik <vmalik@redhat.com>,
+	Howard Chu <howardchu95@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Michael Petlan <mpetlan@redhat.com>
+Subject: [PATCH v3 0/2] perf trace: Refactor augmented_raw_syscalls using bpf_for
+Date: Mon,  6 Jul 2026 14:02:26 +0200
+Message-ID: <cover.1783339165.git.vmalik@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Mon, 2026-07-06 at 12:00 +0800, Tiezhu Yang wrote:
-> Introduce a 'jit_required' bitfield flag in struct bpf_prog. This bit
-> tracks whether a BPF program strictly requires the JIT compiler to run,
-> preventing dangerous runtime fallback to the interpreter for features
-> not implemented there.
->=20
-> Set the flag 'jit_required' to 1 at the entry of bpf_add_kfunc_call()
-> right after the kfunc_tab allocation succeeds. This cleanly marks the
-> lifecycle of any program attempting to utilize kernel functions.
->=20
-> Furthermore, completely remove the bpf_prog_has_kfunc_call() helper,
-> as its logic is now unified under the 'jit_required' flag.
->=20
-> In bpf_fixup_call_args(), check with 'prog->jit_required' rather than
-> bpf_prog_has_kfunc_call(), and generalize the error message to generic
-> BPF JIT availability.
->=20
-> In __bpf_prog_select_runtime(), check with 'fp->jit_required' rather
-> than bpf_prog_has_kfunc_call() to unify the logic.
->=20
+The loop for processing syscall args in augment_raw_syscalls has a
+history of breaking with Clang updates. In the past, we've seen it break
+(i.e. stop passing the BPF verifier) between Clang 15 and 16 and now a
+similar thing happened between Clang 21 and 22. While the issue is
+mitigated on the main line by a recent verifier update, it remains
+broken on the 6.12 and 6.18 stable branches, effectively breaking
+`perf trace`.
 
-If you have a new version, I think we=C2=A0could simplify the description o=
-f the code details a bit.
+The reason is that the loop is quite complex and the BPF verifier often
+struggles to prove that it terminates.
 
-The code is fine by me, others might have comments.
+This series fixes the issue by replacing the standard for loop by the
+bpf_for macro, which uses numeric BPF iterator. This should prevent
+future breakages of this kind since the verifier has much easier job
+proving that the loop terminates. Small adjustments were necessary for
+the loop to make it work, see the second commit message for details.
 
-> Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> Suggested-by: KaFai Wan <kafai.wan@linux.dev>
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
+To keep perf compatible with older kernels, the first commit factors out
+the loop body into a function, which is then called either from bpf_for
+or from a standard for loop, depending on whether BPF numeric iterators
+are available.
 
---=20
-Thanks,
-KaFai
+Changes from v2:
+- v2: https://lore.kernel.org/bpf/cover.1783070132.git.vmalik@redhat.com/T/
+- Small refactoring suggested by Namhhyung
+- Make `size` in augment_arg() an int (found by Sashiko)
+- Keep the original way of clamping aug_size to TRACE_AUG_MAX_BUF (found
+  by Sashiko)
+
+Changes from v1:
+- v1: https://lore.kernel.org/bpf/akWqIfWPMCdaGgGg@google.com/T/
+- Use bpf_for instead of bpf_loop (suggested by Alexei and Andrii)
+- Keep the change backwards compatible with older kernels (required by
+  Namhyung)
+
+Viktor Malik (2):
+  perf trace: Factor out BPF loop body
+  perf trace: Refactor augmented_raw_syscalls using bpf_for
+
+ .../bpf_skel/augmented_raw_syscalls.bpf.c     | 155 +++++++++++-------
+ 1 file changed, 98 insertions(+), 57 deletions(-)
+
+-- 
+2.54.0
+
