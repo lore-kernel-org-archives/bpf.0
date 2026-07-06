@@ -1,30 +1,30 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D263C553F
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 07:22:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E952F3F1ABF;
+	Mon,  6 Jul 2026 07:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783322581; cv=none; b=WosjvQ53hQe1UgLX/35AnbbFssMdLFyZ1vJzrlXa7Xre4ZZBOEnb59Y7cwOzLKaOLW2F5abvZYy+n5FFN0SfE+ym4+v94sQa1JlKeecYyhYRg9GmyibErAIim9Gd5Sr0AYQgfsKjvMx6LfKeT7YvbhEXm2fiWFJe8BJFQ080m9A=
+	t=1783322655; cv=none; b=d1zpiVNw+heDyAHx5PlR9zqf0GmHrNq0PiVADIY7SEOVfSG2Hu+Ccg1Zrk6t1PdhtEpg7qno/KQ+yRxLzq4CImRk9eDNYu7cfCnSBW012mbt9VnFqF9+oX6tCBM4LiYBlSxT1qrGIEJ9ln3v+lQW6YYKh590pg874i7L0YVOgUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783322581; c=relaxed/simple;
-	bh=793G8Fg70Xi/DClVrYVEIisgQu2USDkKfhP0N/gMUP0=;
+	s=arc-20240116; t=1783322655; c=relaxed/simple;
+	bh=Y4qhRwaVxcdJTWM4dNACYz/CJOGPg7Mj1MrFRrjMOyE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TKQ+hiFxeR9ujcbP3VVLg6l/KKF+eZwHcTMvgTMmUDgM0UI9NUN5iJTWxRPCryBMQUs9xuXgkY3sFUDZsCW68SyqZT37VSpjBIBEH/76rk/K9pKe7s/IzuAvJqVmcRq8kulKrEKGGxg2lXXjYdW277CObcJdDdA9eXhFC+U75hU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 In-Reply-To:Content-Type; b=cjL2seJwjba5/3j7w34/3SYX/hdO776Mfftkx8FQqOj0g7GPqy5MCkzudpVRiANixgBSaTC/bOXpyo0jjz8zVVvsiOJrvNFTEHO3YpcjqYGHqa4HX4V++sL6bUdsSq+iwPhyFfsPasSOopN1xj1BWl6KXA32/lwPga0RvN+HR0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gtwmj15l9zYQtJ0
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 15:22:45 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gtwnd5K9HzKHMND;
+	Mon,  6 Jul 2026 15:23:33 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 5F1ED4058C
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 15:22:46 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 20C944056D;
+	Mon,  6 Jul 2026 15:23:51 +0800 (CST)
 Received: from [10.67.110.68] (unknown [10.67.110.68])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgDH+FnGV0tq4bnzAA--.46886S2;
-	Mon, 06 Jul 2026 15:22:46 +0800 (CST)
-Message-ID: <b4b2a9ed-d9bd-4dfa-817d-37a7865107ce@huaweicloud.com>
-Date: Mon, 6 Jul 2026 15:22:46 +0800
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgB3qVoGWEtqqtDzAA--.50057S2;
+	Mon, 06 Jul 2026 15:23:50 +0800 (CST)
+Message-ID: <bf647816-d292-419c-b79f-fc048122aebc@huaweicloud.com>
+Date: Mon, 6 Jul 2026 15:23:50 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -32,103 +32,68 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 4/6] riscv, bpf: Add RV_TAILCALL_OFFSET macro
- to format tailcall offset
+Subject: Re: [PATCH bpf-next v4 6/6] selftests/bpf: Remove tailcalls tests
+ from DENYLIST.riscv64
 Content-Language: en-US
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260629140048.733346-1-pulehui@huaweicloud.com>
- <20260629140048.733346-5-pulehui@huaweicloud.com>
- <20260629141034.D5F6F1F000E9@smtp.kernel.org>
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc: bjorn@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, puranjay@kernel.org,
+ pjw@kernel.org, palmer@dabbelt.com, alex@ghiti.fr, pulehui@huawei.com,
+ martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+References: <20260629140048.733346-7-pulehui@huaweicloud.com>
+ <0c8408eb97828eb59c171d971793a92654f8018ada812d6ac1703330ec4059fb@mail.kernel.org>
 From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <20260629141034.D5F6F1F000E9@smtp.kernel.org>
+In-Reply-To: <0c8408eb97828eb59c171d971793a92654f8018ada812d6ac1703330ec4059fb@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgDH+FnGV0tq4bnzAA--.46886S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuryDZw1fXw4rKFy3Cr4UJwb_yoW5ArWrpF
-	s3Jwn3CFyqqr1rKryDCF4qqa1avrZ5WF9rWr15CryaywnF9FykG3Z0k3yqqa45ur4UKa10
-	qFyq93s3uas8AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-	6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
-	CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
-	0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
-	AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
-	KfnxnUUI43ZEXa7IU1QVy3UUUUU==
+X-CM-TRANSID:gCh0CgB3qVoGWEtqqtDzAA--.50057S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GF43KF4ruw18Aw17AF4kCrg_yoWDJwb_WF
+	4Iyr93W3y8Jay7WF48Ca1UXrnxuan7ua4UAw15Jry3WrnFkrs5uF9rXrs0vryUWa9xWr9r
+	ZayrJ3y5Kw4UGjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbxkYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+	67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	7PEDUUUUU==
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
 
-On 2026/6/29 22:10, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> 
-> Pre-existing issues:
-> - [Critical] The tail call offset macro `RV_TAILCALL_OFFSET` incorrectly double-counts the KCFI preamble when `CONFIG_CFI` is enabled, causing tail-called programs to skip their stack pointer adjustment and corrupt the caller's stack frame.
-> --
-> 
-> commit 655037e3f7e62935bb76d41ae8cffb13d2a38d50
-> Author: Pu Lehui <pulehui@huawei.com>
-> 
-> riscv, bpf: Add RV_TAILCALL_OFFSET macro to format tailcall offset
-> 
-> Add RV_TAILCALL_OFFSET macro to format tailcall offset, and correct the
-> relevant comments.
-> 
->> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
->> index 69512d93ca4a7..c239696cca646 100644
->> --- a/arch/riscv/net/bpf_jit_comp64.c
->> +++ b/arch/riscv/net/bpf_jit_comp64.c
->> @@ -21,6 +21,8 @@
->>   #define RV_KCFI_NINSNS (IS_ENABLED(CONFIG_CFI) ? 1 : 0)
->>   /* imm that allows emit_imm to emit max count insns */
->>   #define RV_MAX_COUNT_IMM 0x7FFF7FF7FF7FF7FF
->> +/* kcfi, fentry and TCC init insns will be skipped on tailcall */
->> +#define RV_TAILCALL_OFFSET ((RV_KCFI_NINSNS + RV_FENTRY_NINSNS + 1) * 4)
-> 
-> [Severity: Critical]
-> This is a pre-existing issue, but does RV_TAILCALL_OFFSET incorrectly
-> double-count the KCFI preamble when CONFIG_CFI is enabled?
-> 
-> Since prog->bpf_func already skips the 4-byte KCFI hash (because it points
-> to ctx->ro_insns + cfi_get_offset()), it looks like including RV_KCFI_NINSNS
-> here overshoots the correct jump target by 4 bytes.
-> 
-> Does this skip the necessary stack pointer adjustment instruction, causing
-> tail-called programs to execute prologue register saves using the unadjusted
-> stack pointer of the caller and potentially corrupting the kernel stack?
 
-oops, my bad, kcfi insn will be skipped during prog->bpf_func setup, so 
-DO NOT need to skip this again when tailcall.
+On 2026/6/30 0:19, bot+bpf-ci@kernel.org wrote:
+>> selftests/bpf: Remove tailcalls tests from DENYLIST.riscv64
+>>
+>> Remove tailcalls tests from DENYLIST.riscv64.
+>>
+>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> 
+> This isn't a bug, but the changelog restates the subject and the diff
+> without saying why the entry can be dropped now.
+> 
+> The deny-list line being removed documented that the JIT could not mix
+> bpf2bpf and tailcalls, and the preceding commit "riscv, bpf: Mixing
+> bpf2bpf and tailcalls" adds that support.
+> 
+> Could the changelog note that the RV64 JIT now supports mixing bpf2bpf
+> and tailcalls, rather than restating the diff?
 
-Will revert that bad patch, thanks sashiko.
+alright, will add more detail to commit msg.
 
 > 
-> [ ... ]
 > 
->> @@ -272,9 +274,7 @@ static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
->>   	if (!is_tail_call)
->>   		emit_addiw(RV_REG_A0, RV_REG_A5, 0, ctx);
->>   	emit_jalr(RV_REG_ZERO, is_tail_call ? RV_REG_T3 : RV_REG_RA,
->> -		  /* kcfi, fentry and TCC init insns will be skipped on tailcall */
->> -		  is_tail_call ? (RV_KCFI_NINSNS + RV_FENTRY_NINSNS + 1) * 4 : 0,
->> -		  ctx);
->> +		  is_tail_call ? RV_TAILCALL_OFFSET : 0, ctx);
->>   }
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 > 
-> [ ... ]
-> 
->> @@ -394,7 +394,7 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
->>   	off = ninsns_rvoff(tc_ninsn - (ctx->ninsns - start_insn));
->>   	emit_branch(BPF_JEQ, RV_REG_T2, RV_REG_ZERO, off, ctx);
->>   
->> -	/* goto *(prog->bpf_func + 4); */
->> +	/* goto *(prog->bpf_func + RV_TAILCALL_OFFSET); */
->>   	off = offsetof(struct bpf_prog, bpf_func);
->>   	if (is_12b_check(off, insn))
->>   		return -1;
-> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28384109028
 
