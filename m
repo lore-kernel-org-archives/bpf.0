@@ -1,148 +1,133 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365CA3955CD
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 15:28:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129163A872B
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 15:29:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783351723; cv=none; b=F1pSwyZAgMIQuYUPs7jvLNizvGATMMPiLwzGSa+VpBXwobw9lPer5Py2Bo22kRs2wnkJqsxVOG81F/LAsS76R1yAbIKgO2+lSdStVMn2WU7aKWU5yKuB8MQTQPYezjPOft9NZAnLYJh7SFz13NlV8qprVmf+uDzkmDytefRNXHE=
+	t=1783351758; cv=none; b=ooDaYVJR1pyS+F2S8+fpR05aeqF0FQn037qac4tDe6Cm6+W5mJtA07LpCxEeVErLyQqOsAJh/V+Hetn4Q3EJBBGZzYZz8WboMmpXnyfzCzHLMcYROlGiyPUpD0Vs7PhWbcjTieaKrfa4B+LJaVQ0vQ4rV16YM6wS1D6DqnG14n0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783351723; c=relaxed/simple;
-	bh=15t0/qvIPb1m6EhxMeWqoRsVHolGR6WdnX9O2YeniAw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MPbUxs1F2uJkcOetaGeUgfaIKO/SyTUYs6rxXkLQT1s/aRaAWfJKmvyQ3XJbJ22c3qXLZZeZ6PoMxGkyjNHUnoM50PW3oN7tl9UCAND4MMU4yqxas+YnMUtno5lT9AotmrDYqeFVul1eyo4rYUqsEzghydnPtNx00HsrWqq55rc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DQ7DIJh1; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783351758; c=relaxed/simple;
+	bh=x5HuJc8ryRcujdAvfssRfuCUtU/zCfH7JZqYpQDH/Ak=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=OBPDer0GrdpQCVimTZsBrk0Z+1z51jiIxO8qNAJt7f+ld1FQn/PAQl3fGO6UI2oL64zqTfoFfMxTl2sK7ICn4cC48s+vGTKWL5lanXCWF2NYureOZ8FoMLfHXc6BoVZ0TpZrUEtXfaEmpRb8OLiCScXO9HZjMtVyYrg9RLTDBFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AfHkA/fv; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DQ7DIJh1"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-493b966dd74so10726105e9.3
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 08:28:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AfHkA/fv"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-493bf73ec2aso20302615e9.2
+        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 08:29:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783351721; x=1783956521; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DfJaHoVGgMxmKw1/mr0PURm5kBPKEP+5FPobOp8bfyg=;
-        b=DQ7DIJh1SQQhXa4vc9BDjG9OQ0jt1ib71DyWW6DVs8eSHI1xCHY5/iS4SducTMaEnl
-         Ro2CM5AgP7+voT2A2HlNaEkT07YVL7Ry9NnM1oy++cy/7b8kZBjcOuHzfcgGgMq0QdfH
-         y+GL2zXjq7Xkbr8amo8kWYcC26jN7SmH0reXkHqjlgP42PtRuBxd5WqWb5PZ+OdYO9wN
-         k3URRZN+FG2tXutYg5jsgVmh+Wg1uTQIooYDb1/N6TIt2jeaAXmuV5UuirOkB153LYT/
-         8DTYKeD56huaHYUUP4if/trQncweLf02E0AWe3Kp5DPPAgWJtae0Gw+XWQJwSfns+3qZ
-         Yobg==
+        d=suse.com; s=google; t=1783351755; x=1783956555; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qh+EaBgmuYdNNpZcqgX7l88URVM0gQj+bKH7LdozPRw=;
+        b=AfHkA/fvL3A/rk7KwsBj1Hx/r9dskaifpZxY+7jjR4KV0wrOlC6zKT8JW8wLXoK+i9
+         eEpd3YSPrI/K1ZoyaIc8cISOUl94+fIoo2yNvxoWCyrjkO+ywnHXRsEOzS8MH3LrJ+VW
+         fYglRgDKJfQZy3zyuy74RthRouhVRfGgxSqjw1E//FpBH+hcRnxUd2gxb8WxOIxAsgD4
+         s3fwmmXNKXeWRbLh8c0d4KO7RDfaxnx9XXea3qoBslnLZHDOZkDhOTIJNCUj+F2Hxieb
+         ksGrUHJceoUzLe7OPBG3VUPdDJ1LhFTF7R1U6T4KOCQqGeplvG/4CUasBxCA8JagJqHO
+         snPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783351721; x=1783956521;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DfJaHoVGgMxmKw1/mr0PURm5kBPKEP+5FPobOp8bfyg=;
-        b=QA487fe6fYEyr0P7YbejwMKyuzucinKNI3GDtnvtnND8ib/fFNAFcDntrKIS13t0R0
-         wlbhBR6/YRJgl/sLqU6a2is0I2Yx4AD7ynSLmiI8W2Gg7NIH5tOzJMU5+kvc3lzTYj6b
-         mBANSBeUxeQX6cHYlZX+01z0uA0WLL2Y9Q7T/A4vUjeEHUHpHXiqQaJzVCWDMv4qd5cS
-         c0BNb0BGyPgGZqzHRiv2dKqy9P8bLCkrjjETegAZMxCN/EORsdKZqQnYiP3FoLEwFkLh
-         nkYi9itHyq9GEn088oB5neZWmwxJuNaRDJV45OHTZ4/3RYL3hdUwzjE7QSYqkTXMHl+T
-         0hOQ==
-X-Gm-Message-State: AOJu0Yx0sVyvEkC16O+NiUKW6cJGfCBoDieE/20Zs5Kp2gRAj544IuzJ
-	aW5znjiDvi2RV1NVCZO9Cr7e+VjOrGwM3PrzypQ5pre50ht93QZGj/QR
-X-Gm-Gg: AfdE7cnTrUL1dVmCOdJso5TWXB2xRIORv4ciBqpp3eYc1LWn4wDMSbhzbeQDIxdV4xw
-	I4aQROniz+gFUHNd2OhcRLvjyfMf0LnBXyLR0Fx/aWBYKIufJOGS+VCTfBeWvzUNDsL55sBEFbn
-	2VTr5QcrY5VL2dRslKzdYM+YOJzgYYecUiuzt7VMpytw3UECGNEOLeCkkjzqN+A+yKYHRVzI7K+
-	NgJHZq3sJLmWub0tSS+tib5hX9ffmfa8xL1DajWyZK7Q+E2j3CvRhSsbjarjZT9EEIuCqkc/Zw2
-	Roe5EPY8RjkwbFaULGG9dY+E7un9nwlPid1yjMYGZel7QuxHu1MYaX4gvUptUK+TyVnODdIwaqf
-	DDE2khIpAEpubedHPFIMn9iMKinZQOAjvY0asHXuWRzMGmSbemnA4DUXHHwtEM+FxU+Zspln/t1
-	C5EdnBSrjeuSAqT4JiUJAnrXWoQ+/WbkO9hERXXXsiU1Ei
-X-Received: by 2002:a05:600c:4187:b0:493:aa24:792b with SMTP id 5b1f17b1804b1-493df26ed69mr5504085e9.22.1783351720354;
-        Mon, 06 Jul 2026 08:28:40 -0700 (PDT)
-Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47aa039bcdasm26402301f8f.21.2026.07.06.08.28.38
+        d=1e100.net; s=20251104; t=1783351755; x=1783956555;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qh+EaBgmuYdNNpZcqgX7l88URVM0gQj+bKH7LdozPRw=;
+        b=fY1u5uNI7V3haPvMtld4NQMAzBOvovXg5C8VN386ZWiFwvgnkl6wrWBSe+mTk+nuP2
+         fnkGEEVwZC893efDG5xmyfMdjUiPyyKEdcSbyNLxF3jmckEf7NbcLslXBNFPlQNAwBHZ
+         QtLfL4KvXU/DQGLKdIcSJxTe7AFn6se7jSNf0yghtv22nLuvbTdlfi5mUQ1ShHnT+F8M
+         VdR0O3gKrLnf+PhhLjk0N+mkSIf4dC7FI5L73GAsCqnOVmzz6QGhAMPKNfMQcs83mEyO
+         A7zewve3ZDUPh3GP8uBBU1VPHKCXex9UYHEYV+CUaSF3x4Ap4rlkeUTd4JAXSUcwvd+e
+         6Ncw==
+X-Gm-Message-State: AOJu0YwjmuWwpILhNhbYwd5hzzlyfaO4gn8HkDrFrx586FbblkBkRvGp
+	06eidgHIozhDUrIwyNL6cJW+JEETb0FKq/sf/QFX/cckMYOHJNFqvQXsj6FhHcfLvxg=
+X-Gm-Gg: AfdE7cmNBWDgJPP3E52ACtc2DdFqrzKJKoVVN3/V1BmGhxd6ZSf6saL7e4YfMPTu7QF
+	A7PAMUFqEbV5O98lAUF2qjLMNcczwGPsbVgX2H0Uu/Sh8OFcOgaEQMLqy+6chK+y53PZ5YXczF1
+	E2cAIR5qpcU2UsLFcZ02hk9BEGkfeskQgFIknN55IUHkU0lIiDpbasMMlsiaJoQ96Mwon+zC/eT
+	380Y90sWs114nsQ3AocFd3Rz2/yvbjo8yvI04Yal4E7GebsYiUO/zcMWss8EO+rLwuUgpbt8ZA2
+	x8mu66zC6W5VpGOa6xdW6ftEAF/QFF7ZN/hOLqQdi7TVnr2kFErbWYsWX6UQKIFGslhVDYHrONt
+	nUEyo1AciskgA7tp6USZIxOlDCbJ6jNTLSw/KBqrecHw8Y9SzezhnfNafdD42ufYeh9bV5Ny6zm
+	4nOg==
+X-Received: by 2002:a05:600c:3b2a:b0:493:df47:8d9f with SMTP id 5b1f17b1804b1-493df478db8mr3788435e9.10.1783351755505;
+        Mon, 06 Jul 2026 08:29:15 -0700 (PDT)
+Received: from localhost ([2804:7f0:b765:157e:cc5f:6c4b:db0a:5d2a])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-73e19f3af52sm5839852137.3.2026.07.06.08.29.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 08:28:39 -0700 (PDT)
-Date: Mon, 6 Jul 2026 17:28:37 +0200
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org,
-	ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-	eddyz87@gmail.com, edumazet@google.com, john.fastabend@gmail.com,
-	kuba@kernel.org, liamwisehart@meta.com, martin.lau@linux.dev,
-	pabeni@redhat.com, song@kernel.org, netdev@vger.kernel.org,
-	martin.lau@kernel.org, yonghong.song@linux.dev, clm@meta.com,
-	ihor.solodrai@linux.dev
-Subject: Re: [PATCH bpf-next 2/6] bpf: Add ksock kfuncs
-Message-ID: <akvJpSXmBOn88GtV@gmail.com>
-References: <20260706093525.13030-3-mahe.tardy@gmail.com>
- <268078861c26e02c25e9e882bccc607bedf580ae3c1d7e06562c48b85450f1a7@mail.kernel.org>
+        Mon, 06 Jul 2026 08:29:14 -0700 (PDT)
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+Date: Mon, 06 Jul 2026 12:28:43 -0300
+Subject: [PATCH] docs/bpf: Document BPF_STRICT_BUILD=0 to tolerate test
+ build failures
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <268078861c26e02c25e9e882bccc607bedf580ae3c1d7e06562c48b85450f1a7@mail.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260706-b4-bpf_strict_build_docs-v1-1-5324d605c7b0@suse.com>
+X-B4-Tracking: v=1; b=H4sIAKrJS2oC/yWMUQqDMBAFryL73VArEkuvUkrYxI1uaaPsRimId
+ 29sP+fxZjZQEiaFW7WB0MrKUypwOVUQRkwDGe4LQ1M3tu5qa3xr/BydZuGQnV/41bt+Cmrwith
+ FbC01EYo+C0X+/NL3x5918U8K+egdD49KxgumMB7TJDxwOr9RMwns+xfDqGyonAAAAA==
+X-Change-ID: 20260706-b4-bpf_strict_build_docs-a8aa7fa46e2f
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>
+Cc: bpf@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openssh-sha256; t=1783351752; l=1578;
+ i=rbm@suse.com; h=from:subject:message-id;
+ bh=x5HuJc8ryRcujdAvfssRfuCUtU/zCfH7JZqYpQDH/Ak=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QHr+osZxhUqq7pE2zp7ADICTSyXNXxqw773pIlwgLCWR9KitoP8KxoHnsuxC5prSUiXwEd4ESYq
+ f3uzdQk9NIQU=
+X-Developer-Key: i=rbm@suse.com; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-On Mon, Jul 06, 2026 at 10:30:04AM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
-> > new file mode 100644
-> > index 000000000000..8bde734bc917
-> > --- /dev/null
-> > +++ b/net/core/bpf_ksock.c
-> 
-> [ ... ]
-> 
-> > @@ -0,0 +1,516 @@
-> 
-> [ ... ]
-> 
-> > +static int __init bpf_ksock_kfunc_init(void)
-> > +{
-> > +	int ret;
-> > +	const struct btf_id_dtor_kfunc bpf_ksock_dtors[] = {
-> > +		{
-> > +			.btf_id = bpf_ksock_dtor_ids[0],
-> > +			.kfunc_btf_id = bpf_ksock_dtor_ids[1],
-> > +		},
-> > +	};
-> > +
-> > +	ret = register_pernet_subsys(&bpf_ksock_net_ops);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
-> > +					&ksock_init_kfunc_set);
-> > +	if (ret) {
-> > +		unregister_pernet_subsys(&bpf_ksock_net_ops);
-> > +		return ret;
-> > +	}
-> > +
-> > +	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
-> > +					&ksock_kfunc_set);
-> > +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM,
-> > +					       &ksock_kfunc_set);
-> > +	return ret = ret ?: register_btf_id_dtor_kfuncs(bpf_ksock_dtors,
-> > +						 ARRAY_SIZE(bpf_ksock_dtors),
-> > +						 THIS_MODULE);
->                                 ^^^^
-> 
-> This isn't a bug, but in the final return statement the assignment
-> to ret looks like a dead store since the value is returned right
-> away. Could this just be:
-> 
->     return ret ?: register_btf_id_dtor_kfuncs(bpf_ksock_dtors,
->                                               ARRAY_SIZE(bpf_ksock_dtors),
->                                               THIS_MODULE);
+When the kernel config does not fully match the BPF selftest config
+fragment, some tests may fail to compile. BPF_STRICT_BUILD (defaulting to
+1) makes any such failure fatal. Mention the option so that developers are
+aware they can set it to 0 to skip broken tests and keep the build going,
+which is particularly useful during bringup or when testing on constrained
+(e.g. distribution) configurations.
 
-Indeed, this is relic of changes trying to get the cleanup part right,
-see the other message from sashiko on the same patch.
+Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
+---
+ Documentation/bpf/bpf_devel_QA.rst | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> 
-> > +}
-> > +
-> > +late_initcall(bpf_ksock_kfunc_init);
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28783010022
+diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
+index 45bc5c5cd793..edf8107a7beb 100644
+--- a/Documentation/bpf/bpf_devel_QA.rst
++++ b/Documentation/bpf/bpf_devel_QA.rst
+@@ -479,7 +479,10 @@ for details.
+ 
+ To maximize the number of tests passing, the .config of the kernel
+ under test should match the config file fragment in
+-tools/testing/selftests/bpf as closely as possible.
++tools/testing/selftests/bpf as closely as possible. If not possible,
++however, you can set ``BPF_STRICT_BUILD=0`` when invoking ``make``
++to tolerate individual compilation failures and continue building
++the remaining tests rather than treating each failure as fatal.
+ 
+ Finally to ensure support for latest BPF Type Format features -
+ discussed in Documentation/bpf/btf.rst - pahole version 1.16
+
+---
+base-commit: 8cdeaa50eae8dad34885515f62559ee83e7e8dda
+change-id: 20260706-b4-bpf_strict_build_docs-a8aa7fa46e2f
+
+Best regards,
+--  
+Ricardo B. Marlière <rbm@suse.com>
 
