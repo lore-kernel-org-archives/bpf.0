@@ -1,140 +1,120 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED993A6B89
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 15:31:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0E23812F5
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 15:32:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783351891; cv=none; b=GFkrczxcPkVvI1RQGnnAiKhLn+Kd0w+44OBqsN1avpwgsYaEJInyISruHD6a3xoH8J7T/dcOoluAY1Fdn8KvUFvF02T9yPx1NqQl0J9pNiG1eHSSWoxfayyTJFYATa5ZyF0iiVAlHr1YOWPkMYh3aS+Nsn06FU7mzSmcV2vsbPw=
+	t=1783351972; cv=none; b=KoNCEysU6+MqR2xQq7/E3L4GkBYOyLn1VlaQEUgUkNdstOZvWJkqXDsjXvKipVrDERFnVfa6CIoJjm5nGFfDdSL69gsZhyH5l55Qta5Kji9boQshSFaXIyFdR5dmI3KHulKthjE1Z90urHon6tGGezCCwCImjn9ZaPDrI/2Hj60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783351891; c=relaxed/simple;
-	bh=9AzG3JPVWKnuycwkDK0/pbBHGjRDWyxVYQDdjKYKu8Q=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=rwTLtGnJ1qEczB+nGBtB2jCbmfGsi4kNrcGaFISpHdFQWvFbuLp7b/vVhStVkOGug3NWe5qrp20oPx0NuMOqxGEpMXwHzin2S+BMKup1Py0rgkIFZiiCkBkNZeweUkOqlWTSC+vBKugNoIg469crAtfgkJiIa5GA7/I9m1OJBp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=NQAYmF9/; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1783351972; c=relaxed/simple;
+	bh=xFuRcaMQpGQSL2Dao1s4PWYVtF1l9NoTH7rBdz7PPds=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OJ3I91BAzHoBttO/Xlg/TqsZBnXaxRWM3xeRK16vTvl3OSaBeuDv0zl8mA8zQEajca0M9STjN0KsaUBEG+iqsdKFTtZmk1Gmj6JIIjwX2OEqNri6hbNcEnfT+4Rt66a+CGJCWWC/DYJ4EQlt3RiQgfzhTeT8K/bC2YCjenKBL1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VbBslv81; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="NQAYmF9/"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2ca70925c25so40331845ad.1
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 08:31:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VbBslv81"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-493c52cde9eso32716635e9.3
+        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 08:32:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783351887; x=1783956687; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=hWHAsjGRo/XCVUPncLv7xaoRpS+dOd5JPy82dF58ENg=;
-        b=NQAYmF9/vfKn3CBT8DX9n1Kaix51ZnLddUco9kKnKarSDv0/+TaEm9/vAKsnXFgIfy
-         u7R0Sjg2Szkr5gphPtejqPgSS6Uh79X2S5wAd6bDbnO4/8xBIXOHe4m5ORKFFWz59QlG
-         ui2p65NyHbusG0SDUmRYhNqR6rM5qI5/CfIu9RiQM1S0b8UYnvhw56CwHh0aB3PeCQ2V
-         G18VnvPwGmWiY6U8f9iJGiaQfh755VGaCODjImA+gVKGS5OJZR0Au/f2V9z0pCkfg9PL
-         Sh9LDY7QDsvuUUc+XFP1bp7RoDbi8NTpLTu9u5Lksasc9DJ2dTXtNP4UAW5x5tcp1dGg
-         Jxdw==
+        d=gmail.com; s=20251104; t=1783351969; x=1783956769; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=37Umb2yrBsD31B4W0F/cd/5pA0RZH20wLz9q4UgsqCg=;
+        b=VbBslv81ksetFK6OAgihB0kkJbC3uipyOM9UvjAY6LzCdRcHPzrC6nn0N81D7qTzOS
+         nyeamd2qn2RBWe37h5JSdbRWLVaMfXzrK9iAYE97eHNAZkpcN1hK3ckDWiX6HxT1vbp2
+         eGFRxd8lMhW4QRcbqGzvR6ZKHM29sxoqNxpeJIYnHh8Wlw8L26Bs7faiFBrMRjfMq7gE
+         GfWJsi0fpF76/9DR+l5aRv+hTfdwYZS/Wte8tchjdAxQI3WMPdfMKDssbfrzrtvN8SyH
+         DRn1eg8nF3WKa5++dcBiF15jKxxI/LaoTv5aBeiQYReJawHjPs60U18u13e3naWCLOaz
+         KfXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783351887; x=1783956687;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=hWHAsjGRo/XCVUPncLv7xaoRpS+dOd5JPy82dF58ENg=;
-        b=kcM4K0fke6nuYeukPZZQGKu+5/tdEWK7yBQAsO5RAV6aHVD6CFt0wpi/g/fSfYTl7d
-         Ph/dv7naQYMlEhkjL+TacU7i/WbXZo/eYYEmNMBKiZTrqbeB6+jHubw7t81vjvcUhKPO
-         uiOQj3GtGmUZkP9yatEQbS4Sbu+MTCphOnkq1eEOTpYq8mXp0hLHWNZpusvertz2Q024
-         CoUwQwfuc/Vmx6jjBzMGy6ODaXe5714WHY3MLNYm86myI4/l4MsULdieuMkWsgpCxsFO
-         6k9Bwk1UxA5jvhFpzVyszf/H24lfutYRV/qJLVafkmt2gYRDUGkgUFW7DRRpGiA6od2t
-         XjaQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpbWZT1f+QhbC4/Hy9OpuNRImsNQiaqTcm5UZo+8lrT6QPHsLOBwfGtwMWsVRdpfN6u5po=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxkgd3OZ9+dBAdO9DZXfTTYMO2UfmG4hWnP+O66vuzPNiK70mvP
-	elskc+YEVL+VA6A+87EnN7RbOgR/UbOFCGCz+lRBdN7XKiYm/66sGPM0pXsajc8zkjs=
-X-Gm-Gg: AfdE7cnfMMfkLMjFwNtHvIEnTI+XSAfmPH/eQS/E6EWy3j3DJGdbZOTuIwTOHQWBZyz
-	PcPZdN2Gk5Mss5EPHCmZGhimGDHso1XrTFdezEaPPvyNRHYRd+Tbu2Yo0AchJJxNZvqARM/YjoC
-	hgeF9RFD2DRuPsN6ZGhVii0IrKNYwpnH96abyIZkKEnXnjMiHzgmLdbA/rVAtj4HiLy/S+Pk8hq
-	a3FWQXz10l4gPP4njtMMW28PfRyphV/L+yT1RAlEBgL5lYX9bHDLAEe4ErD/w0DcUEfvg5P8o4j
-	t9Rowmn2spzAFmFVIb1aSbpKu9696dcbIGUvWHixZbUgPUU/XjcI0Ik689UtMZcfLfVfrtXzFKJ
-	N+fp1ZqSeUb8uUKdeXO+u2aEECqYT3nHV0NriVr6gzLUZyQEqEwY6IKLjuwkh3tJx8tpe3cJG76
-	hfQKx3bDzJPgRAag==
-X-Received: by 2002:a17:902:d4c4:b0:2ca:5d9a:ecc6 with SMTP id d9443c01a7336-2ccbf051367mr10747395ad.28.1783351885149;
-        Mon, 06 Jul 2026 08:31:25 -0700 (PDT)
-Received: from localhost ([2605:8d80:5c40:4f71:1131:e194:34df:ee9e])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cad71328d8sm53099575ad.29.2026.07.06.08.31.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jul 2026 08:31:24 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783351969; x=1783956769;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=37Umb2yrBsD31B4W0F/cd/5pA0RZH20wLz9q4UgsqCg=;
+        b=s8gbn74J8OiUJnGzYZhErEkyvIWxsbcq3HyGMotrVkkjytf6P+PZyUrZhuRaWQoVjS
+         nXXbCQoYOpT8SdpyZepm4LGdk9Ov1Ocm8+V5L1BPytz91aoA7udfDZVY8VBtFRUkQ1ri
+         50jpu2t3iBc4wAiIooihTNHSpEzCwNUcxZfEBiJHsRPQz06SffdyG9jknyK3ZMAYU8O0
+         vSGD3Mw5qcPV8VR0ZOlajvttjovuZ+AwT07CQDRuYUZ0EOuf2SotdRi6gNHcxlQb9mZj
+         4xLtVWH3M0QWFoDYosEBDuaWEUsg3qz1TKsG0IqYr0sUnTkIa5bjGQTgbpxSUUkWig9J
+         /FiQ==
+X-Forwarded-Encrypted: i=1; AHgh+Ro5PNm7/ejIHa2YNVkeoSG8FSjtYxkgxcabVtedZS37OWOqUU1ifZ8H8xGPRJaLdoj65X8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyO3DsVq0FCqacaBH5hQA8Ha5ud4EQp0817NL+pAMS7NrUn2Ra1
+	9JKP7RFiPSuxGEgRvLIEEJnoJpyWClo4aH59k16OqvHRl1Z7J3WKb9LQ
+X-Gm-Gg: AfdE7cnd0kBscUhMFDHdY/eLQIMLNOJGQaMOMwdAPgf1/mm9uX9gqWlo5dtjjGeNti2
+	IaWhU2f2tyFOcmbHyaukYF7BCo3gY7lTTBhVAWupuCN0fIhrMYsPzRxnDyad/L0VaL3MBeR7cl5
+	YQrmkYD883bUgUCjk5Ampo7WRWxsnBN3R6QwfRDjPt7uxGXLWddM7OpmDxPHZ9gE/iDKichVYBu
+	MG3AzOVCQV+lWL0AF8nwFqWylNumvlHvTo04n4507JiU3iIMQqu4km/0YT9B6mGgNodlO3hlG1K
+	hj6ZbHxUUF6VzDXwCbAl7nBJ77EWhlkc6EbCy5xaajb6dqcZBRk9c6Vu58NNI0B0HIXv+5FtFdF
+	tVcZ8mAq9o+EmzWEXxHB6ZnOh+Y++yybT2PHG1IWYF+FvEJ/M6GKki46Pkx3mrHJ5YM1NOoPJqj
+	aoeycChUKjbH2SaeG1Q7osKw==
+X-Received: by 2002:a05:600c:1548:b0:493:b55f:bca2 with SMTP id 5b1f17b1804b1-493df09fe01mr12130495e9.34.1783351969247;
+        Mon, 06 Jul 2026 08:32:49 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47aa039af67sm29864567f8f.17.2026.07.06.08.32.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2026 08:32:48 -0700 (PDT)
+Date: Mon, 6 Jul 2026 15:42:53 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: ast@kernel.org, kpsingh@kernel.org,
+	James.Bottomley@hansenpartnership.com, paul@paul-moore.com,
+	bboscaccy@linux.microsoft.com, memxor@gmail.com,
+	torvalds@linux-foundation.org, bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH bpf-next v4 1/9] bpf: Resolve and cache fd_array objects
+ at load time
+Message-ID: <akvM/QABjUMINNtW@mail.gmail.com>
+References: <20260706135644.326006-1-daniel@iogearbox.net>
+ <20260706135644.326006-2-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 06 Jul 2026 11:31:23 -0400
-Message-Id: <DJRLHD8JW5G3.1X9A7URRTMGIO@etsalapatis.com>
-Cc: <ast@kernel.org>, <andrii@kernel.org>, <daniel@iogearbox.net>,
- <eddyz87@gmail.com>, <mattbobrowski@google.com>, <song@kernel.org>
-Subject: Re: [PATCH bpf-next v3 1/5] selftests/bpf: libarena: Fix can-loop
- zero variable definition
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260701225034.12628-1-emil@etsalapatis.com>
- <20260701225034.12628-2-emil@etsalapatis.com>
- <DJQFFKHUGET8.2D2JRDZA26OIS@gmail.com>
-In-Reply-To: <DJQFFKHUGET8.2D2JRDZA26OIS@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260706135644.326006-2-daniel@iogearbox.net>
 
-On Sun Jul 5, 2026 at 2:34 AM EDT, Kumar Kartikeya Dwivedi wrote:
-> On Thu Jul 2, 2026 at 12:50 AM CEST, Emil Tsalapatis wrote:
->> BPF can_loop based loops require the index variable to stay imprecise.
->> This means we must initialize them from a currently imprecise variable
->> instead of directly assigning 0 to them, like so:
->>
->> static volatile u32 zero =3D 0;
->>
->> for (i =3D zero; i < NUM_LOOPS; i++) {
->> 	/* loop body */
->> }
->>
->> The libarena implementation of this technique is currently faulty. For
->> the technique to work, the variable must not be in a map. This includes
->> the .rodata DATASEC map used for const variables. However, libarena
->> still defines the zero variable as constant.
->>
->> Modify the zero variable definition into a volatile variable. This
->> change adds a complication caused by the compiler optimizing array
->> derefences from
->>
->> for (i =3D zero; i < NUM_LOOPS; i++) {
->> 	val =3D *(ptr + i);
->> }
->>
->> into
->>
->> for (i =3D zero; i < NUM_LOOPS; i++) {
->> 	val =3D *ptr++;
->> }
->>
->> and causing verification failures. Use the barrier_var() clobber macro
->> to prevent this optimization from taking place. Using barrier_var() is
->> the only way to break the optimization, as annotating the index as
->> volatile does not suffice.
->>
->> After that, remove the bpf_for() invocations introduced in libarena for
->> parallel spmc testing.
->>
->> Reported-by: Eduard Zingerman <eddyz87@gmail.com>
->> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
->> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
->> ---
->>  .../selftests/bpf/libarena/include/libarena/common.h     | 2 +-
->>  .../bpf/libarena/selftests/test_asan_buddy.bpf.c         | 8 ++++++-
->
-> No such file exists, did you forget to send the renaming patch from
-> st_asan_buddy to test_asan_buddy ordered before this one?
->
-> Please respin. Looks good otherwise.
+On 26/07/06 03:56PM, Daniel Borkmann wrote:
+> The fd_array passed to BPF_PROG_LOAD carries the map and module BTF file
+> descriptors a program binds. The verifier reads it more than once during
+> a load: process_fd_array() walks it to bind the maps and BTFs, and
+> check_and_resolve_insns() and the kfunc BTF resolver later read it again
+> to resolve the program's BPF_PSEUDO_MAP_IDX* and module kfunc refs.
+> 
+> For signed BPF, we need these upfront in memory, thus resolve each fd to
+> its object once and cache it by fd_array index, then bind that cached
+> object for the rest of the load. env->fd_array becomes a small per-slot
+> {map, btf} cache rather than a bpfptr_t; every later reference is then
+> an in-bounds lookup of an already-resolved object, and an index outside
+> the cache is rejected instead of read from user memory:
+> 
+>   - continuous (fd_array_cnt given): the caller declares the length and
+>     every entry is resolved and bound up front (used also by the BPF
+>     signed loader)
+> 
+>   - sparse (no fd_array_cnt): left as the legacy path with no fd_array
+>     cache; each reference reads its fd from the caller's fd_array and
+>     resolves it on the spot. Deduplication in used_maps and the kfunc BTF
+>     table keeps this correct, and only unsigned programs use this shape.
+> 
+> Split these into separate helpers to make it easier to follow.
+> 
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Anton Protopopov <a.s.protopopov@gmail.com>
+> ---
+>  include/linux/bpf_verifier.h |  22 +++-
+>  kernel/bpf/verifier.c        | 223 +++++++++++++++++++++++++++--------
+>  2 files changed, 193 insertions(+), 52 deletions(-)
 
-Yes patch 1 is missing from v3. Will do a resend.
+Acked-by: Anton Protopopov <a.s.protopopov@gmail.com>
 
->
-> pw-bot: cr
-
+> [...]
+> -- 
+> 2.43.0
+> 
