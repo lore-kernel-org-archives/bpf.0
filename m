@@ -1,169 +1,154 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A11D03AE6F7;
-	Mon,  6 Jul 2026 03:39:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32EE037C0E6
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 04:00:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783309166; cv=none; b=Vz5jkG4sSIwf2B9Y0E2kyEvGyeGGOQMhTcwmV0b95gDQjc6+MOhP6OMii4Jj2Qorr3XVR60haleIoTmVVOzxSYOdEwDMs1w55Wy41oNKxtlf167XoadDMuYKuGgnCe+OrYwM8oPLk47q7P4KbTccVot3zlpvCxgoKq3tAX3d7Ik=
+	t=1783310418; cv=none; b=jCDxSgJbZ+LkRpvpcJQPWZtKBGdL+nosIey1SwgVfQ5Cz4UOIdbVW7B0TNJyDfjb5AiK7FqtYLPJwMCx0TR781F55EQDTgyTSC0VpVmrIdJ4lKZA/ES5U6Wxs0wK/GAMheL0FM9oCI33Jc6xx4diX80JEyqtXxAHaK4Gv4JTcSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783309166; c=relaxed/simple;
-	bh=sK7OWxjHSEVseZ/UmyKv4Kiu1kp61naUowa+BqgN+AU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nH+rBwdF7Ick8qM0ZjwkGQR5HS1tay0awa9Q8NmhZJfFvxS4gxNLyt99YOjVdGNCHwx5BN3kHS3T1ekI+054LhnyBE0Dex7cOAuwzvGRGcTCjrIwDCsQCmieG54/Fdc07JgOJ/4WEz1En4xBejpfYDSTjVCd48qRFV+wBPBv3Rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8DxOOtgI0tqXkQAAA--.1369S3;
-	Mon, 06 Jul 2026 11:39:12 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJAx3cZbI0tq3LoBAA--.10774S5;
-	Mon, 06 Jul 2026 11:39:10 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Hengqi Chen <hengqi.chen@gmail.com>
-Cc: loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/4] LoongArch: BPF: Refactor jump offset calculation in tail call
-Date: Mon,  6 Jul 2026 11:39:05 +0800
-Message-ID: <20260706033906.1988-4-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20260706033906.1988-1-yangtiezhu@loongson.cn>
-References: <20260706033906.1988-1-yangtiezhu@loongson.cn>
+	s=arc-20240116; t=1783310418; c=relaxed/simple;
+	bh=TlC6QRdgNB8lQwo0I7R7Lyo1gnJ91Si7lvn5pi8rPNI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RqPJ8PeEzrplDMX/EovRZRvPE9lswuUtTESMrPJEx3QHQL+PYuWb1qXcW6aElEoruWc74dkTH2xHqknpMYOKOPicGhQAjcDsi+ewMspb7Pj3QfbJr5dbphh245TKWK/Tr0pVJYLhx9NBZfZXMcNaoK/D4c0aF9QGOAXivHs9+xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=toKHo5SJ; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="toKHo5SJ"
+Message-ID: <746b428a-a81f-4b8e-a767-109965959170@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783310405;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ghqALS/NM0ybJ1g9tsK48doH0iIj7FBvHhLKHdQ1DtQ=;
+	b=toKHo5SJahL0xnnfSSGUAahaRrtJBFT24i75X2ESfA1aIvQAsh8iw3ImWKbYXXmYlqN02R
+	hi91txt035VSmzJn0aIsgQSmjdJt0YrWLiBumDwOVnr+voCgQAr4HEsCVFq+VPqqDDmi59
+	dJ/QdtAP3n1RWaRieYdDqiBCB2gV7cg=
+Date: Mon, 6 Jul 2026 11:59:55 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v7 1/2] bpf: Introduce jit_required flag and
+ refactor kfunc path
+Content-Language: en-US
+To: Tiezhu Yang <yangtiezhu@loongson.cn>, KaFai Wan <kafai.wan@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, loongarch@lists.linux.dev,
+ Puranjay Mohan <puranjay@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>
+References: <20260702143656.28845-1-yangtiezhu@loongson.cn>
+ <20260702143656.28845-2-yangtiezhu@loongson.cn>
+ <ba5679e744e0209ca10788c2c385c6727eddb8a5.camel@linux.dev>
+ <2d1babdf-a4d9-9902-77b0-3f5640871323@loongson.cn>
+ <2240908fb833182e502d1804b392874cccf17b6c.camel@linux.dev>
+ <aa26b3fc-9717-4273-dd76-a0dd6b15ff61@loongson.cn>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <aa26b3fc-9717-4273-dd76-a0dd6b15ff61@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAx3cZbI0tq3LoBAA--.10774S5
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxWF1fXw4DAw4rGF1fKF1rAFc_yoWrKr13pr
-	Z0gr4kt3yrXr1UGF4DJas7Z3WfKan5Cr47GF1DG39Yy34avrn2gFyYk3W5uay5C3y8Zryx
-	Xrs0yry5Za1UAwcCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE
-	14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
-	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
-	C0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
-	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7
-	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07josjUUUUUU=
+X-Migadu-Flow: FLOW_OUT
 
-In emit_bpf_tail_call(), the macro-based jmp_offset calculation relies
-on a fragile prediction equation: "tc_ninsn - (ctx->idx - idx0)". This
-calculation model utilizes tc_ninsn from the previous pass to estimate
-the remaining stride of the active tail call code block.
+On 6/7/26 08:56, Tiezhu Yang wrote:
+> On 2026/7/4 上午9:57, KaFai Wan wrote:
+>> On Sat, 2026-07-04 at 00:14 +0800, Tiezhu Yang wrote:
+>>> On 7/3/26 21:55, KaFai Wan wrote:
+>>>> On Thu, 2026-07-02 at 22:36 +0800, Tiezhu Yang wrote:
+> 
+> ...
+> 
+>>>
+>>> IIUC, there are two places to modify so far:
+>>> (1) struct bpf_prog
+>>
+>> yes
+>>
+>>> (2) bpf_prog_has_kfunc_call()
+>>
+>> I think we can remove this func.
+>>
+>> actually, I feed your patch to dsv4-pro and gpt-5.4 yesterday, both
+>> point out the we should do this
+>> and change the log message.
+>>
+>> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+>> index 12a8a4eb757f..7fb92b5fa415 100644
+>> --- a/kernel/bpf/fixups.c
+>> +++ b/kernel/bpf/fixups.c
+>> @@ -1378,7 +1378,6 @@ int bpf_fixup_call_args(struct bpf_verifier_env
+>> *env)
+>>   #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+>>       struct bpf_prog *prog = env->prog;
+>>       struct bpf_insn *insn = prog->insnsi;
+>> -    bool has_kfunc_call = bpf_prog_has_kfunc_call(prog);
+>>       int depth;
+>>   #endif
+>>       int i, err = 0;
+>> @@ -1404,7 +1403,7 @@ int bpf_fixup_call_args(struct bpf_verifier_env
+>> *env)
+>>               return err;
+>>       }
+>>   #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+>> -    if (has_kfunc_call) {
+>> +    if (prog->jit_required) {
 
-Given that the macro relies on stale layout data from a prior pass to
-compute the active relative stride, the conditional branches end up
-encoding wrong immediate offsets under extra JIT passes. Consequently,
-the execution flow leaps into misaligned instruction boundaries,
-triggering soft lockups or early loop collapse.
 
-To fix this issue, drop the pass-dependent macro and the intermediate
-variable entirely. Instead, explicitly calculate "jmp_offset" using an
-absolute target reference anchor: "ctx->offset[insn + 1] - ctx->idx".
+Agreed with this change.
 
-However, during the initial size-estimation pass, the target address
-"ctx->offset[insn + 1]" is not yet populated and will evaluate to 0,
-resulting in "jmp_offset = -ctx->idx". For large eBPF programs, this
-inflated negative offset would overflow the 16-bit signed immediate
-limit of LoongArch conditional branch instructions, causing the range
-validation inside emit_tailcall_jmp() to abort the JIT compilation
-prematurely.
+Then, think it harder, pls.
 
-To bypass this initialization bottleneck cleanly without changing any
-function signatures, leverage the "ctx->image" pointer to safely detect
-the initial pass. Since conditional branch instructions on LoongArch
-maintain a fixed 4-byte width regardless of the target displacement,
-injecting a safe dummy offset (0) when "ctx->image == NULL" preserves
-accurate size estimation while preventing 16-bit range check failures.
+Can we clean some code of __bpf_prog_select_runtime() btw?
 
-Within this new deterministic arithmetic model:
-1) "ctx->offset[insn + 1]" maps directly to the absolute instruction
-   index of the immediate next eBPF business instruction, serving as
-   a rock-solid target label.
-2) "ctx->idx" tracks the real-time instruction index of the conditional
-   branch currently being emitted.
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 649cce41e13f..bad55e119cb5 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -120,6 +120,9 @@ struct bpf_prog *bpf_prog_alloc_no_stats(unsigned
+int size, gfp_t gfp_extra_flag
+ 		return NULL;
+ 	}
 
-This guarantees the generated immediate offsets always land precisely
-on the next instruction boundary under all multi-pass compilation paths
-and all code size dimensions.
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/net/bpf_jit.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
-
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index 95e3b372a44f..45364a15ae5e 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -290,17 +290,13 @@ bool bpf_jit_supports_far_kfunc_call(void)
- 
- static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
- {
--	int off, tc_ninsn = 0;
-+	int off, jmp_offset;
- 	int tcc_ptr_off = BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size);
- 	u8 a1 = LOONGARCH_GPR_A1;
- 	u8 a2 = LOONGARCH_GPR_A2;
- 	u8 t1 = LOONGARCH_GPR_T1;
- 	u8 t2 = LOONGARCH_GPR_T2;
- 	u8 t3 = LOONGARCH_GPR_T3;
--	const int idx0 = ctx->idx;
--
--#define cur_offset (ctx->idx - idx0)
--#define jmp_offset (tc_ninsn - (cur_offset))
- 
- 	/*
- 	 * a0: &ctx
-@@ -310,12 +306,12 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
- 	 * if (index >= array->map.max_entries)
- 	 *	 goto out;
++#ifdef CONFIG_BPF_JIT_ALWAYS_ON
++	fp->jit_required = true;
++#endif
+ 	fp->pages = size / PAGE_SIZE;
+ 	fp->aux = aux;
+ 	fp->aux->main_prog_aux = aux;
+@@ -2614,15 +2617,11 @@ struct bpf_prog
+*__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
+ 	/* In case of BPF to BPF calls, verifier did all the prep
+ 	 * work with regards to JITing, etc.
  	 */
--	tc_ninsn = insn ? ctx->offset[insn+1] - ctx->offset[insn] : ctx->offset[0];
- 	emit_zext_32(ctx, a2, true);
- 
- 	off = offsetof(struct bpf_array, map.max_entries);
- 	emit_insn(ctx, ldwu, t1, a1, off);
- 	/* bgeu $a2, $t1, jmp_offset */
-+	jmp_offset = ctx->image ? (ctx->offset[insn + 1] - ctx->idx) : 0;
- 	if (emit_tailcall_jmp(ctx, BPF_JGE, a2, t1, jmp_offset) < 0)
- 		goto toofar;
- 
-@@ -326,6 +322,7 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
- 	emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, tcc_ptr_off);
- 	emit_insn(ctx, ldd, t3, REG_TCC, 0);
- 	emit_insn(ctx, addid, t2, LOONGARCH_GPR_ZERO, MAX_TAIL_CALL_CNT);
-+	jmp_offset = ctx->image ? (ctx->offset[insn + 1] - ctx->idx) : 0;
- 	if (emit_tailcall_jmp(ctx, BPF_JSGE, t3, t2, jmp_offset) < 0)
- 		goto toofar;
- 
-@@ -340,6 +337,7 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
- 	off = offsetof(struct bpf_array, ptrs);
- 	emit_insn(ctx, ldd, t2, t2, off);
- 	/* beq $t2, $zero, jmp_offset */
-+	jmp_offset = ctx->image ? (ctx->offset[insn + 1] - ctx->idx) : 0;
- 	if (emit_tailcall_jmp(ctx, BPF_JEQ, t2, LOONGARCH_GPR_ZERO, jmp_offset) < 0)
- 		goto toofar;
- 
-@@ -355,8 +353,6 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
- toofar:
- 	pr_info_once("tail_call: jump too far\n");
- 	return -1;
--#undef cur_offset
--#undef jmp_offset
- }
- 
- static void emit_store_stack_imm64(struct jit_ctx *ctx, int reg, int stack_off, u64 imm64)
--- 
-2.42.0
+-	bool jit_needed = false;
++	bool jit_needed = fp->jit_required;
 
+ 	if (fp->bpf_func)
+ 		goto finalize;
+
+-	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
+-	    bpf_prog_has_kfunc_call(fp))
+-		jit_needed = true;
+-
+ 	if (!bpf_prog_select_interpreter(fp))
+ 		jit_needed = true;
+
+WDYT?
+
+Thanks,
+Leon
+
+>>           verbose(env, "calling kernel functions are not allowed in
+>> non-JITed programs\n");
+>>           return -EINVAL;
+>> [...]
