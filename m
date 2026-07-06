@@ -1,63 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A281F3EDADC;
-	Mon,  6 Jul 2026 17:28:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53C83AEF44
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 17:29:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783358892; cv=none; b=AZ6YFQ+hQMu/6jidR8U6vo2h6h6rqADl9riW7lPtU/X/9M34RFW+LQXmATstblL4xKg7IRU6Ws6W8iBr289+HSDPizkL+qHz3uoYjLzHl49Kk84Jlv1acmq7ds5akjiJnGpGNwMEZNac+ysuW+UVR/mEFjepRih52LZBj8V+/kU=
+	t=1783358944; cv=none; b=s9KlezGd1vljoJWld5P4LTzBEFk7UF2aseVXpVLDK8d9ETgLj0mGAyCW4n7ILRbwpbiK6s1pqBHzWxGDvhjgzZMrnkb/mWLi3PBCA6wSMglT+uRBlVBishoVDaQZ+NuA0dONsIgVuP/DZ1H9U34HrSfLtMtacYr3jACdI59GTyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783358892; c=relaxed/simple;
-	bh=727OLjZVHc7EyTnBJrxsFUiX26uGYaQ82jmgDmlbc14=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nsWz8HH0ZZMak5BKz7bp/zGjpES5eSz4Vtze5qUvlpA4Q4vk3jGUbDVh3dGLZvZadT3ajpORD0CkEDwde70Uge7l8Jn22KAHptzZg7okZq408A7UuFnx1zdDkHTaHYSSWFvQHwcwFWdo/jG/LWtHOiq1J0Mh3P8+foDcBdKdo8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ew9vbn5I; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783358944; c=relaxed/simple;
+	bh=a6fvkYTDuu+14XJxPnVus2CzWTlAZzpebRF6dfNrIPY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fDzTqQAGOrEJXhcQDlDuEQaku+niW29cuJH3fU1z9jCQsCFz0HNEYnem0tr+lhOEIuji96mbp2qfM/RjuCCiVwLCi1/MJRn2cgMl3tI3RhqNzmkTn+n/ytpzMj1hxkvsp8CPI0+TblDyyKPORht5fOy2jDHXeEZgn8C7Hw9U6h0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DxJ9VYxL; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ew9vbn5I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F198E1F000E9;
-	Mon,  6 Jul 2026 17:28:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783358891;
-	bh=hrdUm0bKeClTNQkaldI7+ExZLa4nxjY9gPviXhqQi24=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Ew9vbn5I9+D72lvYQUujKWa7gNxiHWgVnU0FrLg6pTtuhJMUuSFcTYfJ3AMJvlbxd
-	 kSozIUi5AwSWe5MO/OmUB3aXVk7ix5S+fWrq/ubRcgQfFO0bpUfvEbnkWR7qnhWjRr
-	 sXmUszZTyY3FzLDULe42i9r5Yd4RY/Mh1nS6ZsG/5bnlqS8YRrntI0uY3Of84C8Rrs
-	 4EyFQDQm/Og2xn/z16CReh0yjMybJcyrnkOMMrXoE+I/ywn7XamvR9gG9z3a46jXmJ
-	 e209HUB4znF2MtLnZPK5HJa1eD/CpyOu9ivvd0TL2WzErOtVOwLygh6+RLtHRb3xse
-	 wAK/6JKe1RmCw==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: Lai Jiangshan <jiangshanlai@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	rcu@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DxJ9VYxL"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2cc7e86e7aeso18197425ad.2
+        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 10:29:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783358941; x=1783963741; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Sc8UWUFIFca5T75Paxs4hgOTZtiZGU1HZksFlaVnRMg=;
+        b=DxJ9VYxLeHYGAdrSxcSwAYV6p+mezUC9PjEa6L9YvzCr3/tk7mMyL0rC76shdGgAoa
+         f/VE0bxRVkyhHId8l4n9Im+n8yVFdQ2Ax8Us6F8WKvPEPs6/4rU0vPFBJeLdyK41t0Lz
+         /cfr5JXmC0goJhqsG2QYjXOYhjGW5u/iU0LO3ms4Fx3gLPOL+K8BE7B4FBhOHMYRxqcX
+         ZQyo8HrixkflLXOoKzslSR3cEK8jI+sUJWa+VsPvFJrheZOBm3yQfDu4ObS5V6j1354N
+         GuEAJDql81ht4LyWtdTgUJzOPUrRnsFuTgiTi275xzLII/LAQaBd+cYTL+i+XY9rKQHH
+         UsWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783358941; x=1783963741;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Sc8UWUFIFca5T75Paxs4hgOTZtiZGU1HZksFlaVnRMg=;
+        b=s19MUlIMi8d5H+xPvxhgrfW1Lu8RwTUo7iXTzX4PxRMvr1di4QRIMJ11D4orODTO1s
+         aWqR8WMIjbXiHAL9yVNEaV9e7vdHrZjz3RnACDOfy9YrKEtPMr8SurCDeo4ZuK+JTMnB
+         A1n467sul+ArpvoIExD65jyqmkjH4asdTZrUMBdCmhdxyI6PnjHpmQq1zsGVRKhogpHf
+         gS9kXmSoN0FVPk/VaBXCCmjCMZ8n0XXTiymBwMh3JDW42iSOT+He0rZksWHHiJVSPJO4
+         a3egTuuBzuWCYMoCsMMi+CzODKSYiMN5WrsdnM35yyq3q+NRARwYS84pDDBMgDP6bC05
+         i3qg==
+X-Forwarded-Encrypted: i=1; AHgh+RrTWJr877axrtuKQBqRkf1/Q5OjZnsOkT/aRDvENM8QqD4Np1uB8wb6QsaGU0bwTirToXY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyskLs4uJed/fTxWsx5L3KM+n8LJK3UmB2jE7siVd+pkHvdTUnH
+	Yqs8IOUv4VebYqMx/FkvqPiRBv/q9W2eHyJl1QdTQGsbyTlgtT8GXioh
+X-Gm-Gg: AfdE7cmNif+VKtg8gfRehTux6m6ZaLRd0OE94Um/4HcHX6HXc958jmfYflue3bAmJR/
+	vaaNO7t6nhGzlqQEIO8dKvjSjcWx7dhCC0KC4GGWAbVl2VNJ48weGefN5h/KQtBEH9z6kC50J8A
+	jeZQY+HZ9Amx3ky/sSkOi2iqpRWjajrvUF43XT5yqEGxVq63Z+o1nkfqGSKAY8yRYzp3P5F1+JK
+	9aEP5hu9jpmZwzR9PdUC1e+QuMkM9uv8s8l8V0pn9Xliqoqmk+ghYCBSK/ojq8WeENkS3LNX1uy
+	G/cmC9ZszJsv7hCTPdU2JGDQhasKOu4bbzYRwbNw4rI3To0ZHHxTAWsF8id4cF20qoc7VUimNfv
+	7983lD4R5Q7DZ5q7m6l5D7h96CYzQIsL1/fG5AxwmRgJjqzohjlvpulsKMsZp08P7xTHe9BXHgd
+	BIoyHzZZqhRu5jSqo+kcMaz6nqfzffKvvZPzEe9uzlXylZxQV8HoV/uxv7uo94UHrjrUwmmFBRb
+	Sm4sPWNyqkg
+X-Received: by 2002:a17:902:ec85:b0:2c6:a012:6241 with SMTP id d9443c01a7336-2ccbe3f7d69mr17749295ad.6.1783358941128;
+        Mon, 06 Jul 2026 10:29:01 -0700 (PDT)
+Received: from visitorckw-work01.c.googlers.com.com (32.237.80.34.bc.googleusercontent.com. [34.80.237.32])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cad6f25e54sm54667005ad.2.2026.07.06.10.28.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2026 10:29:00 -0700 (PDT)
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	luke.r.nels@gmail.com,
+	xi.wang@gmail.com,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	pulehui@huawei.com
+Cc: martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	alex@ghiti.fr,
+	jserv@ccns.ncku.edu.tw,
+	eleanor15x@gmail.com,
+	marscheng@google.com,
+	bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] uprobes: Switch uretprobes_srcu to SRCU-fast-updown
-Date: Mon,  6 Jul 2026 10:27:42 -0700
-Message-ID: <20260706172744.3920417-3-puranjay@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260706172744.3920417-1-puranjay@kernel.org>
-References: <20260706172744.3920417-1-puranjay@kernel.org>
+	Kuan-Wei Chiu <visitorckw@gmail.com>
+Subject: [PATCH bpf-next v3 0/3] riscv, bpf: Add support for signed operations and 32-bit atomics
+Date: Mon,  6 Jul 2026 17:28:43 +0000
+Message-ID: <20260706172846.3876436-1-visitorckw@gmail.com>
+X-Mailer: git-send-email 2.55.0.rc2.803.g1fd1e6609c-goog
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,180 +94,39 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-uretprobes_srcu currently uses normal SRCU, which issues
-two smp_mb() per read lock/unlock pair. This overhead is
-paid on every uretprobe hit.
+Add support for missing signed operations and 32-bit atomics in the
+RV32 BPF JIT compiler.
 
-Switch to SRCU-fast-updown, which eliminates the per-reader
-memory barriers by moving the ordering cost to the
-grace-period side (synchronize_rcu() instead of smp_mb()).
-This is acceptable because grace periods (uprobe
-unregistration) are infrequent compared to reader-side
-uretprobe hits.
+The current implementation lacks support for BPF_SDIV, BPF_SMOD, and
+BPF_MOVSX, ignoring the instruction offset field and treating them as
+unsigned or zero-extended. Introduce support for these operations by
+checking the offset field and emitting the corresponding instructions.
 
-The updown flavor is required because the SRCU read lock is
-taken in prepare_uretprobe() when a return instance is
-created and is held until that return instance is finalized.
-The traced thread returns to user space in between, so the
-lock is inherently released in a different context from
-where it was acquired: on the normal return path via
-uprobe_handle_trampoline() -> hprobe_finalize(), or from
-ri_timer() (expiry) or dup_utask() (fork) via
-hprobe_expire(). srcu_down_read_fast() / srcu_up_read_fast()
-are designed for this acquire-here / release-elsewhere
-pattern and, unlike the same-context srcu_read_lock_fast()
-variant, do not carry the lockdep read-side tracking that
-would warn on it.
+Additionally, we leverage the mandatory A extension to natively support
+32-bit BPF atomics (and, or, xor, xchg) by mapping them directly to
+amo*.w instructions. BPF_CMPXCHG continues to fall back to the
+interpreter.
 
-The short, same-context SRCU sections in ri_timer() and
-dup_utask() (which guard the uprobe against reuse across the
-hprobe_expire() cmpxchg) instead use guard(srcu_fast_updown)
-for proper lockdep coverage.
-
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+As a result, test_bpf.ko now runs with 0 failures, and the total number
+of successfully JIT'ed test cases increases from 843 to 902.
 ---
- include/linux/uprobes.h |  5 +++--
- kernel/events/uprobes.c | 29 +++++++++++++++++------------
- 2 files changed, 20 insertions(+), 14 deletions(-)
+Changes in v3:
+- Pass insn directly to emit_alu_r32().
+- Remove the Fixes: tag and update title.
+- Consolidate size, mode, and off into insn for emit_store_r64().
 
-diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
-index f548fea2adec8..f3b07753c2f3d 100644
---- a/include/linux/uprobes.h
-+++ b/include/linux/uprobes.h
-@@ -25,6 +25,7 @@ struct mm_struct;
- struct inode;
- struct notifier_block;
- struct page;
-+struct srcu_ctr;
- 
- /*
-  * Allowed return values from uprobe consumer's handler callback
-@@ -106,7 +107,7 @@ enum hprobe_state {
-  *     underlying uprobe is not guaranteed anymore. __UPROBE_DEAD is just an
-  *     internal marker and is handled transparently by hprobe_fetch() helper.
-  *
-- * When uprobe is SRCU-protected, we also record srcu_idx value, necessary for
-+ * When uprobe is SRCU-protected, we also record srcu_scp value, necessary for
-  * SRCU unlocking.
-  *
-  * See hprobe_expire() and hprobe_fetch() for details of race-free uprobe
-@@ -115,7 +116,7 @@ enum hprobe_state {
-  */
- struct hprobe {
- 	enum hprobe_state state;
--	int srcu_idx;
-+	struct srcu_ctr __percpu *srcu_scp;
- 	struct uprobe *uprobe;
- };
- 
-diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-index 4084e926e2844..afa491b0bd3f9 100644
---- a/kernel/events/uprobes.c
-+++ b/kernel/events/uprobes.c
-@@ -54,7 +54,7 @@ static struct mutex uprobes_mmap_mutex[UPROBES_HASH_SZ];
- DEFINE_STATIC_PERCPU_RWSEM(dup_mmap_sem);
- 
- /* Covers return_instance's uprobe lifetime. */
--DEFINE_STATIC_SRCU(uretprobes_srcu);
-+DEFINE_STATIC_SRCU_FAST_UPDOWN(uretprobes_srcu);
- 
- /* Have a copy of original instruction */
- #define UPROBE_COPY_INSN	0
-@@ -707,12 +707,13 @@ static void put_uprobe(struct uprobe *uprobe)
- }
- 
- /* Initialize hprobe as SRCU-protected "leased" uprobe */
--static void hprobe_init_leased(struct hprobe *hprobe, struct uprobe *uprobe, int srcu_idx)
-+static void hprobe_init_leased(struct hprobe *hprobe, struct uprobe *uprobe,
-+			       struct srcu_ctr __percpu *srcu_scp)
- {
- 	WARN_ON(!uprobe);
- 	hprobe->state = HPROBE_LEASED;
- 	hprobe->uprobe = uprobe;
--	hprobe->srcu_idx = srcu_idx;
-+	hprobe->srcu_scp = srcu_scp;
- }
- 
- /* Initialize hprobe as refcounted ("stable") uprobe (uprobe can be NULL). */
-@@ -720,7 +721,7 @@ static void hprobe_init_stable(struct hprobe *hprobe, struct uprobe *uprobe)
- {
- 	hprobe->state = uprobe ? HPROBE_STABLE : HPROBE_GONE;
- 	hprobe->uprobe = uprobe;
--	hprobe->srcu_idx = -1;
-+	hprobe->srcu_scp = NULL;
- }
- 
- /*
-@@ -757,7 +758,7 @@ static void hprobe_finalize(struct hprobe *hprobe, enum hprobe_state hstate)
- {
- 	switch (hstate) {
- 	case HPROBE_LEASED:
--		__srcu_read_unlock(&uretprobes_srcu, hprobe->srcu_idx);
-+		srcu_up_read_fast(&uretprobes_srcu, hprobe->srcu_scp);
- 		break;
- 	case HPROBE_STABLE:
- 		put_uprobe(hprobe->uprobe);
-@@ -829,7 +830,7 @@ static struct uprobe *hprobe_expire(struct hprobe *hprobe, bool get)
- 		 */
- 		if (try_cmpxchg(&hprobe->state, &hstate, uprobe ? HPROBE_STABLE : HPROBE_GONE)) {
- 			/* We won the race, we are the ones to unlock SRCU */
--			__srcu_read_unlock(&uretprobes_srcu, hprobe->srcu_idx);
-+			srcu_up_read_fast(&uretprobes_srcu, hprobe->srcu_scp);
- 			return get ? get_uprobe(uprobe) : uprobe;
- 		}
- 
-@@ -2045,7 +2046,7 @@ static void ri_timer(struct timer_list *timer)
- 	struct return_instance *ri;
- 
- 	/* SRCU protects uprobe from reuse for the cmpxchg() inside hprobe_expire(). */
--	guard(srcu)(&uretprobes_srcu);
-+	guard(srcu_fast_updown)(&uretprobes_srcu);
- 	/* RCU protects return_instance from freeing. */
- 	guard(rcu)();
- 
-@@ -2142,7 +2143,7 @@ static int dup_utask(struct task_struct *t, struct uprobe_task *o_utask)
- 	t->utask = n_utask;
- 
- 	/* protect uprobes from freeing, we'll need try_get_uprobe() them */
--	guard(srcu)(&uretprobes_srcu);
-+	guard(srcu_fast_updown)(&uretprobes_srcu);
- 
- 	p = &n_utask->return_instances;
- 	for (o = o_utask->return_instances; o; o = o->next) {
-@@ -2254,8 +2255,8 @@ static void prepare_uretprobe(struct uprobe *uprobe, struct pt_regs *regs,
- {
- 	struct uprobe_task *utask = current->utask;
- 	unsigned long orig_ret_vaddr, trampoline_vaddr;
-+	struct srcu_ctr __percpu *srcu_scp;
- 	bool chained;
--	int srcu_idx;
- 
- 	if (!get_xol_area())
- 		goto free;
-@@ -2293,8 +2294,12 @@ static void prepare_uretprobe(struct uprobe *uprobe, struct pt_regs *regs,
- 		orig_ret_vaddr = utask->return_instances->orig_ret_vaddr;
- 	}
- 
--	/* __srcu_read_lock() because SRCU lock survives switch to user space */
--	srcu_idx = __srcu_read_lock(&uretprobes_srcu);
-+	/*
-+	 * Use srcu_down_read_fast() because the SRCU lock survives a switch to
-+	 * user space and can be unlocked from a different context by ri_timer()
-+	 * or dup_utask().
-+	 */
-+	srcu_scp = srcu_down_read_fast(&uretprobes_srcu);
- 
- 	ri->func = instruction_pointer(regs);
- 	ri->stack = user_stack_pointer(regs);
-@@ -2303,7 +2308,7 @@ static void prepare_uretprobe(struct uprobe *uprobe, struct pt_regs *regs,
- 
- 	utask->depth++;
- 
--	hprobe_init_leased(&ri->hprobe, uprobe, srcu_idx);
-+	hprobe_init_leased(&ri->hprobe, uprobe, srcu_scp);
- 	ri->next = utask->return_instances;
- 	rcu_assign_pointer(utask->return_instances, ri);
- 
+Changes in v2:
+- Add missing Fixes tags.
+- Fix memory ordering by emitting aq=1, rl=1
+
+Kuan-Wei Chiu (3):
+  riscv, bpf: Add support for BPF_SDIV and BPF_SMOD in RV32 JIT
+  riscv, bpf: Add support for BPF_MOVSX in RV32 JIT
+  riscv, bpf: Add 32 bit atomic operations to RV32 JIT
+
+ arch/riscv/net/bpf_jit_comp32.c | 111 +++++++++++++++++++++++++++-----
+ 1 file changed, 95 insertions(+), 16 deletions(-)
+
 -- 
-2.53.0-Meta
+2.55.0.rc2.803.g1fd1e6609c-goog
 
