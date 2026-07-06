@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C89385D64;
-	Mon,  6 Jul 2026 14:30:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE592DECA1;
+	Mon,  6 Jul 2026 14:48:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783348247; cv=none; b=CiqovvDX5ugfGBr53KePUHLmFIqjfsomIjTg3bzfAZHDkQaG8AmzGVE93IRRHvuxQjijlTrlheoOw4H7LogXXVxxHM8CSlAaOqpGtMfY4n8lE9Xm1QCAspBDiKunjOWu7Etel4RHj0yK7u5F7jl9Q6kIxtVPUmANEttS00wuSx0=
+	t=1783349290; cv=none; b=JUJDaYbOLHmC+LO8pQm4b2MN2aZH4JmeTVRc0/ifb0AtSjMzPCM3QfvuJfksrm1uA6icxXNnVVocBu3GGVDUvYmH3xk2bAXAtrkkt+t6H06mYJ8/OaAS+EUeDqiABLlqgxrLq9UC6hyCN5OcJtJzyyFfSh7AIIGnbkn9wDcsd5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783348247; c=relaxed/simple;
-	bh=CrrshD/db0jkXDvoHPDl6vrw5Kyv7VKGSdnXPbhMsXU=;
+	s=arc-20240116; t=1783349290; c=relaxed/simple;
+	bh=fpGLes6pYuYJBgukAYBktCehUSYa4hdR/xQB7F+Ukvk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CaARnq2fCHSpCsheUE43BeDbGtyQIsv+bIZYU717x07/zmDtCrNHq0Us5ThsUgGFQpRKIjjYwLLHYZM/B+XL5wHjpSjSFj/puMOCsZuFJFSqb5igi+BlUO49VTa8H1qMRFSeeEXZ+Pk7LQzalBY0IvrCEUjIXzhKaQBzLqTuxiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=FYQIvEd4; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=oFEo/UMkmoSY0V8OuUc9P2Jfy/K4ra3C6SsS5x/iC993rlMSS2pnZZhOfxq0Z8TJmZUJMX8H6NVcvYDZRHqrbRDIdvVQKcy3Vfc1U2Sq8Vt5QIS4lIUA+QalaUmx8jaiNu2VXdPEPZdGFkIPiec44zHftbAzlKxcvRRtbAZbw14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=KbV0npQQ; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="FYQIvEd4"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="KbV0npQQ"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=CrrshD/db0jkXDvoHPDl6vrw5Kyv7VKGSdnXPbhMsXU=; b=FYQIvEd4hnIkWv4Zp5P1O5zuFl
-	RdIwgbs/FgFKNyAe9f7J80J9oMcfZDBPCnbRXxv/k4udl8LRa82b9p8plsxkcSfQZBR3hvaPA+Vhy
-	WVXpjatIMRwadj3y4WqdKGkPpo1z5GrSA7KLjHz4SwQYKAqqdXvCwJGKv6usR4PzwpHldfMg83x1P
-	CZFSkktuqjoUx+i1d3zeLP3/euJlc54tUn1LlTYO4fAMdy3SkRujk0Yhe0qhFqnWALv7OyqOL6aXK
-	6C4I95un6tbiAF3SMQn9yj/njT8IEPHjUF8JHTzsg9+39RxhBu8ykF9Qn/PzVBW6EisBcK+Np2RWx
-	NKDbggGw==;
+	bh=hmmUvQgroXCDeCER4r+VRUeTZk4v4eJhow5t7HOPVY0=; b=KbV0npQQU1+yN/X8YgzRjMPVeN
+	JqhWKrEZllyHTeLd2676RiZMGzVbgXC8iEAifwONfghOWC4HqpXy0/eBQ7dLB6++HHqV8RjvPLMzk
+	r2fE/czNCG08SNXog88hwVZbRDhQ7NaFv87vDRXjKb4zj+3RB1cPPDtiJ1zZiSNu0mPYoFpZNNwPd
+	tyXQ6cucuIdk/uOdn0HsX9Dy4B2SN9AMLSc3q2UUcHwoL50+jzfooMqrsvMZz46IQGJJB4P0Tvovc
+	httzq/ucsJrymDynBg8W5MAed6E9eGi4Sx5zofjjo/4PKUiNhSXnFyb8FYigX+cIwZ9EOHQHL7wsW
+	YPg831Qw==;
 Received: from sslproxy08.your-server.de ([78.47.166.52])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wgkLN-000Ika-0b;
-	Mon, 06 Jul 2026 16:30:45 +0200
+	id 1wgkcB-000KcA-12;
+	Mon, 06 Jul 2026 16:48:07 +0200
 Received: from localhost ([127.0.0.1])
 	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wgkLM-0002fw-2q;
-	Mon, 06 Jul 2026 16:30:44 +0200
-Message-ID: <8d262195-5317-4f9a-8974-db4039fc86d5@iogearbox.net>
-Date: Mon, 6 Jul 2026 16:30:44 +0200
+	id 1wgkcB-000Pi9-0J;
+	Mon, 06 Jul 2026 16:48:07 +0200
+Message-ID: <da7df3e5-9161-4349-960a-826a6c2d31dc@iogearbox.net>
+Date: Mon, 6 Jul 2026 16:48:06 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,13 +48,13 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 7/9] selftests/bpf: Adjust bpf_map layout in
- verifier_map_ptr
+Subject: Re: [PATCH bpf-next v4 3/9] bpf: Verify signed loader metadata at
+ load time
 To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
 References: <20260706135644.326006-1-daniel@iogearbox.net>
- <20260706135644.326006-8-daniel@iogearbox.net>
- <20260706142740.1777F1F00A3A@smtp.kernel.org>
+ <20260706135644.326006-4-daniel@iogearbox.net>
+ <20260706142651.4E3431F00A3A@smtp.kernel.org>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -100,13 +100,20 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <20260706142740.1777F1F00A3A@smtp.kernel.org>
+In-Reply-To: <20260706142651.4E3431F00A3A@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28052/Mon Jul  6 08:24:35 2026)
 
-On 7/6/26 4:27 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Critical] The removal of the `excl` field from `struct bpf_map` breaks backwards compatibility for existing, previously compiled userspace signed BPF loaders (light skeletons).
-This is expected since the loader needs to be regenerated in any case as
-mentioned in patch 3.
+On 7/6/26 4:26 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> 
+> New issues:
+> - [High] Moving `security_bpf_prog_load` into `bpf_check` causes the `bpf_prog_free` LSM hook to be executed twice if the load hook fails, or executed without a prior allocation/load hook if `bpf_check` fails early.
+
+There are no in-tree LSM users, and also no double-free/corruption, but I'll later send
+a follow-up for security_bpf_prog_load() to remove the internal security_bpf_prog_free().
+
+> Pre-existing issues:
+> - [High] bpf_prog_calc_tag() fails to mask out kernel addresses for BPF_PSEUDO_MAP_IDX and BPF_PSEUDO_MAP_IDX_VALUE instructions, leaking kernel heap addresses into the subprogram tag.
+I'll look into sending a separate standalone fix.
