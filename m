@@ -1,124 +1,189 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C2630FF30
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 20:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783368060; cv=none; b=eBl0FfBCKb9qRS6oO5T5uFmnzGEoCX4BIuJl6VnXDPO4VuvL3T/rPWmbkK8Cy4qNgzXf4MmeOyIhDwxua3+e7TAlSayej2s1uAx9/maKUQjfQLTcxLxEFbsfWdh3mi+OWJz3Vayhd5nlKhoHm8jRYitIOSo6jdJIVJwxLiMBWok=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783368060; c=relaxed/simple;
-	bh=Bn4Wn0GSYZIZgIEZ5ntKigY1VQrjvtTEoGxji+iVLx8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ofI0rKpgXdC/7ZNJkoLHqDOWgU8afTDv9SV3eT81nt+XHyaht9AzdoOQwH1axLX+bwxUJzv9gbm7nNJMKNeCIBHwjdfcSFMvFMeK/hnbSZseztsNnDsF7Q7ZJhCA1STt8XNsvmNOZ/AGGHfULMcf86lUYfAUIA52Pf5fOi/1BfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HiSwyHYX; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7487F3DE439
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 20:26:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783369619; cv=pass; b=MBJjXrPq0qwcYLAsONrG15d1SgvnArQPhQuuKHuSaertNdVlTv4yJzdBt6ODu4/7DP7Y/5P3hHX1jbOQbWc3ljLwvDb95VGH5qIPqRmS8yMUPF1wccEZRIT3rpjv3Af+EsoacEiZ8zqkSuXV2GJzEOsSvxCuRDxczlKVCdhMWyo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783369619; c=relaxed/simple;
+	bh=prmM21//B9sPKYo5WgVpAv0RCpCNoPqxT9f76VlMleI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jePYPjEZWZHdVufBwTlaKyOm3w0cgrjtIyCYARsoJ33KjKkUpnGIZ04dzRo9FW0ijt9fdRSoOsLZT/DDLU4w//+j1JhyAB46LC5BJiyaft1cv5Y0x0e6oqOdfyAF+DkYFiz5KucBJdOon2Z/xB/RVdYzU3ajL5LH4dLkPkBVWzY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SAcJtj0H; arc=pass smtp.client-ip=209.85.215.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HiSwyHYX"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3811e59df58so2096443a91.1
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 13:00:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SAcJtj0H"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c9d1fff21edso2387815a12.1
+        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 13:26:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783369618; cv=none;
+        d=google.com; s=arc-20260327;
+        b=apC1YHibN1Q1lE3nSZNPWoAUhcHIl2r1WO0T12viibdQc2+PHrlxjX6sGfzrAvDnZT
+         HzLww5e/R7JCFrpHJwQRYbh3jUsvjp6SnuMiWnqftCbpOlOI7w/NYOkZeM1g4DmBx27D
+         dESz/yyXQFs7bYrBJNppgnxS/evIOB7A5QaY80gZqU/MYpR7V/NG2adArTSTsD1ijGCq
+         D1XaKDLASBSIxj61Y2iaDPzhXB4gqMPBnobG5/4PbJq0ZpDrA6l8E/5mRqAw+2Tx16B1
+         5kJlghiFAaJrxSkyHDQmdRNGnk0JuG1Zzvqr2MDlr1voi1XEuXkbpSExxHE5ApH1jJXm
+         Oo+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=4bzkzQjedlM/WHqa+XHjmbIeat2b4Ekopu5HBj7jW+I=;
+        fh=gPJ++hIj+ngE9IqQL6tvUl/HJqxSXfaMxWFzifsNi6s=;
+        b=jEkLtZxrzyhHykox74LcdTxKUnTBumsRNXYYs9RphogLkSfpSi4b5laalLVTGpy7wU
+         QL6LvmqWKL81H3/rLA3oLHdVuP4pym8L9g32frmOFf6pdqBiVi+FTk0HWMNnfHTotoS/
+         A7eyQoNcWrRYCMgff5hFl2HaNhxDuft1IHk7Bp/IqJyF/6TOdlPShkfLSdLJSP/DTh+4
+         kQ93ZeOUgHnqxjX5VrzSO5XNwevFZ587bkWV72oZut2BL7SeV3VbcomBuEs4jRS/uOGH
+         btr4UCBi+QX+X+jwwfY0fHKPnSpEMeeVVCbg9yTDiQhanvhImcZP6EhmcPp+notZXez3
+         Zs+A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783368058; x=1783972858; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=VIf+zohqeDaZywcmZWeYMtyc4MEDifAz/egCRkrh6AM=;
-        b=HiSwyHYXuXpCTq21Ed9uLQF2gfbf80+jtXt78BOXXvwjEWDjx6ulzU1zCNWvT3Pkut
-         Y2na8agDKhmivMiVJa8MdV2BDLdW1wfBHmwuGNh/K49HVPvBdiVX5xuFhbIJCON7jM/P
-         PH5J+TN7sD2UJSGqjcVlB0/hLN6VyfFHZ5NeBu6J3IGW6D2o7us0DAnHTZn+qRqztdQh
-         nAZKcwglPbcQZSO95lZW4zlFIj4eG4Z1RcYvNjcQNhfoyHhVlUkA4aln1omwu00MH3Cm
-         iIs5H2YKZvt3T2fEe2mCywK1m/eD2aIGEPnKt3pw3KuPebIrX2A4jqlSl8ouzaK30nLR
-         pCQQ==
+        d=gmail.com; s=20251104; t=1783369618; x=1783974418; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4bzkzQjedlM/WHqa+XHjmbIeat2b4Ekopu5HBj7jW+I=;
+        b=SAcJtj0HoAc9bgbTOSO1OA4cOAyy0NZAvktwpKKtq6D2iExA8wxkhWe7iEVfdC4Z6m
+         Ci711e2geyy0tvM0g1WrSRc8cZZFuqmTrWcwYM4NgRxwIcvDNGU4POnYWrQcyn25b7eA
+         c6d0lPEtce26jHCk+mL/U9aLBXtbssGTIitfyQYOSBBAH6rze53zekzF5W9QVbS1X78z
+         RtcUAHjAUb2IvVKJ0uqUX+RzDWhP0meEvhnTOIt2cqJQ/GOWFZnbWazU1fwYlKLl8Top
+         ESCUOIkU4tu1X11pRCtQBXsXkRwqAHUFCd8T3u3HroWtH3ligwSBJ7DRp5C3atr+fDE+
+         tcpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783368058; x=1783972858;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VIf+zohqeDaZywcmZWeYMtyc4MEDifAz/egCRkrh6AM=;
-        b=R9j411P63ySrauBRMgMoRP0D16idNwNfyMvs8kNgpy+kHAv87lQV4t+jYObp73uXmI
-         CZnhkLCrpVv00Y1ziwZ8pnosnnhYuFburXG2RyqI6Z8scrtecmfO/CxOEE5r/AyR0Obb
-         s4sLcxEcmT4PdzD8EcnAuPfmljysLHEWNHSwoDT2SG41LS0Q/k2dAQUQ84IbbusnkUzG
-         TLQz1GwGYeZl97uOY+GKxpgSB+7WZCH5oAU4TpsFcL5GcCauv6Qluf+cC/xYqs7CUF3I
-         w5IsfmYAtF2qCosbzWIZPc9G9R9QbsrOl/KbZ4WA5X1a31h7t2jtcnnzt6mDhVurITCZ
-         Ch2w==
-X-Forwarded-Encrypted: i=1; AHgh+RrZ9KRscQrJaoEMOjlk76UKSkiR0MxkcaBL17ux5dUqlAB2NQ2cWSng2nc21fPXUvahRro=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5jIVQSNXNTrBJ2tLzjnYviY/03Qi+RFbYaPPvvFWZ63hU1mfz
-	N2V7jwwV6D43NOcBRCwKzeTnYe2a3ZZbgNR3BAsiwyHPN2U7C151J/ga
-X-Gm-Gg: AfdE7clUGmkftNKMW+8MRBzyh8yLzB5Vkqj1BTAnCYZBAKiBniT4cKrKUPjyAsUmbb4
-	tOSWznRyqS2t3hpV3ogCky9v/z1O3zmrTc2/N1jhNzviswU4jTM/SUGl7qu1mN+/XjolsDCLe/9
-	6ST9OuiuKJxp2eiAbdI8MJry4V2j/MTThotukdcMias1wNzuQEvY6wp/WI2KI2lE8cDtURH37T+
-	an1PgVGX8Wu4eGFeLMfDWeueqElXlx9UUHriekTFwFR0hqajzbb634sIe0yXLXVwq4baNx37hD4
-	448Ghs82QC5jetl0oLWoSEZIsIrlxXEz7RopxZNX+m8icL8OjEzMMyFmO5o0nzCDcxAi81Ex0aI
-	hfYmCoDgceEk1dKSS528jFd1z1fPJIiKz7DBuoCSZUSkd7IpZYHCbIQ7MrkgUk9JuU1pV6jZ9h7
-	zP90sOG9u7igmQbIgiy/CIvlqUpstL1LWZLn2iUbkRL2Enx7zz/SNIQjlrie7Drxe1Xl7qLA==
-X-Received: by 2002:a17:90b:1d43:b0:380:540:d499 with SMTP id 98e67ed59e1d1-38754ea7328mr2054607a91.6.1783368058145;
-        Mon, 06 Jul 2026 13:00:58 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:612f:7084:be32:532a? ([2620:10d:c090:500::1:55b9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-311561dd3a1sm19197214eec.22.2026.07.06.13.00.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 13:00:57 -0700 (PDT)
-Message-ID: <559673fc207097ecd08f1d7e9f684fe1e9f2a581.camel@gmail.com>
-Subject: Re: [PATCH bpf] bpf: Reject negative const offsets for buffer
- pointers
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Sun Jian <sun.jian.kdev@gmail.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	andrii@kernel.org, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- 	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- shuah@kernel.org, 	mmullins@fb.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Date: Mon, 06 Jul 2026 13:00:54 -0700
-In-Reply-To: <20260703035137.109608-1-sun.jian.kdev@gmail.com>
-References: <20260703035137.109608-1-sun.jian.kdev@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+        d=1e100.net; s=20251104; t=1783369618; x=1783974418;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=4bzkzQjedlM/WHqa+XHjmbIeat2b4Ekopu5HBj7jW+I=;
+        b=AkR0QLYmpG0CRQ8d5W9A8MRaA/P+mlFPYGD6PNywAKr7UwA/iIkddF/VzJtvLvzbRp
+         F4N5qiDLcN8z0hsF8oKh2y/R5nD25+30Df29Nx3gXdsBeM2CJPQF2a4z5/QCkMTD5w8I
+         HLR7N+0Fd9/g12UOl+j3lZBfTttDdDbwpZ0+C5hYLjKNQw2cuUoj+fM/Q9zRESuDr5li
+         EuwsfAtKxxfKdFy661QvNglSJSsVNT9OJTHOzjzFT5vyXI3JMjTI8+qb9sWK7LYVd42K
+         tt9L5ltWuyuAQM44/YKQd7/QpSmUB/QkqAFsF75TFA69sNWY7kwIMidtzqMYKQtpCB2a
+         JiAw==
+X-Forwarded-Encrypted: i=1; AHgh+RoVPqgXx9eDSd4IfMS7pthmNb1sD+WUEIsDdhxodX33Qtu3mpIXAgKgbWy4vEOr4Get0Cw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzczUjEnUiQmWfzGWnjwPvg3lvqT6FaIo6SOta083ZI1hn+BnKU
+	YdPCHQzOdc2VFBTz/G+GTnYbZwELqkcrwroqIEy7WwxSF/0m4Qp/zOjSfzMUvbFVfejxJwdV8a6
+	NkXr2iUJQDNTAQnlNnv02aeV9DttDzPLx7A==
+X-Gm-Gg: AfdE7cmhwP4oFsQ37SMWA3EyPesVnVsKdYlLo5+JEeBD6GMe9Z9KmWV5ciuMU3Xrme5
+	+HcdjOpnmKuSxQpsCAFQFv5T0S2eU/kJzjTL+9QA5B3ep96Tx4aqAgJhy/2SJG27FJoYBhuMXUU
+	fi5wGiNQTAjN2UyRjiuf1Dm0CIYwT9M+nGEJYMOzG+TSteDpD0+v230yboyRMEviybZ9Evqf1Rb
+	AFLDdeUxPGifVqNq01b2vo3Bae4lm+FbftuJfzWcruIYA7VhltYtBqCrrbp2TGvmk80KAYf
+X-Received: by 2002:a05:690e:4842:b0:665:6f1e:cad2 with SMTP id
+ 956f58d0204a3-6677fc26633mr1331309d50.56.1783369295329; Mon, 06 Jul 2026
+ 13:21:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260706093525.13030-1-mahe.tardy@gmail.com> <20260706093525.13030-3-mahe.tardy@gmail.com>
+ <akvdsqFhq0x19cu2@devvm7509.cco0.facebook.com> <akvlWB6AkP6kQ7xO@gmail.com>
+In-Reply-To: <akvlWB6AkP6kQ7xO@gmail.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Mon, 6 Jul 2026 13:21:21 -0700
+X-Gm-Features: AVVi8CfZRlGTvWxUUfHSVDzobBUdmJmQJRm0dIoZ7u2Wc5w-j_dRvm0qI4-zD7w
+Message-ID: <CAMB2axPrEo0uwRkLr1fw+ycCJMGckbo4j27+_it7qqARs-9BzA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/6] bpf: Add ksock kfuncs
+To: Mahe Tardy <mahe.tardy@gmail.com>
+Cc: Stanislav Fomichev <sdf.kernel@gmail.com>, bpf@vger.kernel.org, andrew+netdev@lunn.ch, 
+	andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net, 
+	eddyz87@gmail.com, edumazet@google.com, john.fastabend@gmail.com, 
+	kuba@kernel.org, liamwisehart@meta.com, martin.lau@linux.dev, 
+	pabeni@redhat.com, song@kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2026-07-02 at 20:51 -0700, Sun Jian wrote:
-> The verifier rejects variable offsets for PTR_TO_TP_BUFFER and PTR_TO_BUF
-> accesses, but it currently accepts a constant negative offset produced by
-> pointer arithmetic.
+On Mon, Jul 6, 2026 at 12:04=E2=80=AFPM Mahe Tardy <mahe.tardy@gmail.com> w=
+rote:
 >
-> For example, a raw tracepoint writable program can load ctx[0] as a
-> PTR_TO_TP_BUFFER, move it by -8, and then read from the adjusted pointer.
-> The register is still tracked as tp_buffer(imm=3D-8), but the access is
-> before the tracepoint writable buffer base and should be rejected.
+> On Mon, Jul 06, 2026 at 09:58:09AM -0700, Stanislav Fomichev wrote:
+> > On 07/06, Mahe Tardy wrote:
+> > > Add BPF kfuncs that allow BPF LSM programs to create and use sockets =
+for
+> > > sending data. This provides a mechanism for BPF programs to emit
+> > > telemetry. For this first patch set, it's restricted to SOCK_DGRAM
+> > > socket types with IPPROTO_UDP protocol but could be easily extended t=
+o
+> > > SOCK_STREAM and IPPROTO_TCP in the future.
+> > >
+> > > The API consists of six kfuncs:
+> > >
+> > >   bpf_ksock_create()   - Create a socket (sleepable)
+> >
+> > [..]
+> >
+> > >   bpf_ksock_bind()     - Bind socket to local address (sleepable)
+> > >   bpf_ksock_connect()  - Connect socket to remote address (sleepable)
+> >
+> > Since you're doing only UDP for now, maybe you don't need bind/connect?=
+ The
+> > kernel should autobind (by default) when you sendmsg over UDP socket (I=
+IRC).
 >
-> Check the signed effective buffer offset before updating max_tp_access or
-> other buffer max access accounting. Reject negative effective offsets and
-> use the checked end offset for max access accounting.
+> Yep indeed, I kinda overlooked that as I started with UDP & TCP supports
+> and mostly added the args checks. Another thing is that send is simpler
+> since only used on connected sockets, so you just pass the struct
+> bpf_ksock and data. So on one side it would simplify the current
+> UDP-only API for now by removing the kfuncs but we might need a more
+> complex send kfunc (something like sendto).
+
+I also have the same question about the necessity of bind(), but
+connect() + send() make sense to me. In the stated use case, the dst
+addr probably doesn't change often and I think avoiding route lookup
+everytime should be a good thing.
+
 >
-> Add a verifier test that rejects a raw tracepoint writable program using =
-a
-> negative constant offset.
+> >
+> > >   bpf_ksock_send()     - Send data through the socket (sleepable)
+> > >   bpf_ksock_acquire()  - Acquire a reference to a socket context
+> > >   bpf_ksock_release()  - Release a reference (cleanup via
+> > >                          queue_rcu_work since sock_release sleeps)
+> > >
+> > > The setup kfuncs bpf_ksock_create, bpf_ksock_bind, bpf_ksock_connect,
+> > > can be called from SYSCALL programs only. While bpf_ksock_acquire,
+> > > bpf_ksock_release and bpf_ksock_send can be called from SYSCALL and L=
+SM
+> > > programs.
+> > >
+> > > The implementation follows the established kfunc lifecycle pattern
+> > > (create/acquire/release with refcounting, kptr map storage, dtor
+> > > registration). The kernel socket is wrapped in a refcounted bpf_ksock
+> > > struct. Cleanup is deferred via queue_rcu_work() because sock_release=
+()
+> > > may sleep.
+> > >
+> > > The kfuncs are only compiled when CONFIG_INET is enabled, as they
+> > > specifically support AF_INET and AF_INET6 sockets.
+> > >
+> > > The socket operations go through the expected LSM hooks instead of
+> > > by-passing them like many kernel sockets since those are created by B=
+PF
+> > > programs and thus system users. Thus bpf_ksock_send() kfunc, which is
+> > > exposed to LSM progs, has a re-entering protection to avoid recursion=
+.
+> > > Also, because of the LSM checks, we prevent the use of the kfuncs fro=
+m
+> > > asynchronous workqueue as the current value would then be invalid.
+> >
+> > [..]
+> >
+> > > A bpf_ksock_max sysctl is added to limit the maximum number of BPF
+> > > kernel sockets that may exist in each network namespace. Out of
+> > > simplicity for now, the settings is host wide but the counters are pe=
+r
+> > > network namespace.
+> >
+> > What is this guarding against? Rogue bpf programs creating too many soc=
+kets?
 >
-> Fixes: 9df1c28bb752 ("bpf: add writable context for raw tracepoints")
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-> ---
-
-The commit 9df1c28bb752 ("bpf: add writable context for raw tracepoints")
-delays the tracepoint buffer access to the attach time:
-
-    int bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_raw_tp=
-_link *link)
-    {
-            ...
-            if (prog->aux->max_tp_access > btp->writable_size)
-                    return -EINVAL;   =20
-            ...
-    }
-
-Called from syscall.c:bpf_raw_tp_link_attach().
-Please modify the test case such that it exercises the attachment logic.
-
-Also, please keep selftests in a separate patch and make use of the
-full 100 characters line width limit.
-
-pw-bot: cr.
+> Yes. AI review raised this because users are prevented from creating too
+> many sockets by bumping against the max number of fd and this would
+> allow them to create way more sockets. I kind of agreed that having "a
+> limit" on resource creation would make sense but maybe it doesn't and we
+> can simplify this!
+>
+>
