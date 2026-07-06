@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B00338939;
-	Mon,  6 Jul 2026 17:42:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E63D3B7B98
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 17:44:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783359764; cv=none; b=su1jPm4g3iHXSqQ2VNRnpTAuls5lKK6Y2McZGTwZVqcxf1L34mDLSz+/zoL/dB+PqvXBGifQViEQZj6q2fm2xtdKi5l0TwkOFfTWCyG2g+AWEL0VSB9XdGpcsc2S/+JGGyFdcYZQybAM+fVbapM2tw1OeBgZ0yD1+engnq+/3wI=
+	t=1783359847; cv=none; b=flcj9ZWWuVTZ7rpuQPN3dy/Kuis7eiwjHuxhGamS5EQjRQriY0s0vspQ5wO9Ke4AzsoweIs2ASsWqS93uefYlPp/xTjFCOuue2k7LyMKWoY3L3rMrReA5hT7sFhYGzr4U+iFaaKDzyRpkbTHnIVEGc4sX1q/6593oq2jJ3btKU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783359764; c=relaxed/simple;
-	bh=fSRodVM2+qzfFq0roDFYnDJJRDH7phHpqBbBl+97z2o=;
+	s=arc-20240116; t=1783359847; c=relaxed/simple;
+	bh=e+UpiJT/lH5rdzoigNg4SjYMWGrzmwQAPmxOJFaD5Lc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pCj2vz8lYzOm4D/8lO8kgJf2CzXEAeX99LGtDVYJMuNRlFH/UCGT8BIN2dJarI9lQpLiovpSH5furZvmCaSYJK0irDhfS0xyOPSBIkKpEX2ygDdkKKfR0Tsb7hzRyL0zJNsxx8KwGWZJ0rayMMbNtrqVVE8zrwsg3LzilxtA3FM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lD2+PGnl; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=UTtGFzVcXX8eEcGzlsE4ccdegUy3rd50R1sz0p6JZ2LTsbLBdF/8wp91fjCJdz/I81slqrnr56gY3qnTLRiURhtCl3lqZOmNEuODM0+NsHWNe5QkmP7sbWGNCGV+IYCCjbNkgFnuS/pzLho4aQ0NnqC01FxQV5WVQ7GLRh6Jcqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cdOz2iIb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lD2+PGnl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25B791F000E9;
-	Mon,  6 Jul 2026 17:42:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cdOz2iIb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D21B1F000E9;
+	Mon,  6 Jul 2026 17:44:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783359762;
-	bh=oE4QMZ5+i1acv2iRvN/5qBcTrSG0q5J+yogBP70Htek=;
+	s=k20260515; t=1783359846;
+	bh=9YHo+JZ7/ecsf2lCLqleFZqcFWAt0b4VGfiwYeM/PBo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lD2+PGnlwrcVMUYFSkuTUa5E51c8PfPlr9VHsZd6b1CMFtRMjA9OvgGoAfv5s4wYh
-	 BT0iSv2uBA8hGqiFAAP1jMLPEiFVtPmN1SzqtlyviGyM9XpRKFY5TibGIIxy1+P96C
-	 7LavkoKCvPAxMRazYZQxGLZNEnU/r3T1Um0BpOgS3w9pAuDHcKRj6h1K5ZzL8tuNtl
-	 L6UMU4haDTmnKWKMxxl68NDVkd2f0+0tPeYsxGGzGHjgvon1xMtTICAkujcmjVRLfg
-	 mAjfXzYbryKpNtNGp4m9+Qi4Vz2wtJMi2zA5HC+NJqRV4/qlLWC2rJpM/uZZh9oWAi
-	 tDnitGKA6iduA==
+	b=cdOz2iIb2JkLwfMo8Ve1OWoiJhZlDAWOXBW96dXQ5pWSm0GkYQJmw6IIfW8zmJooa
+	 Vi2XQelDDdQXy0yUfktxbMaPw1mYvO5qLy6euzPf2mfLG8PEaCph8agHuu16P87hf6
+	 dKnmxUt3KjDziGM1PfMBA1GcDDGV9wQW/O5nQR01X3Tiz66/bBHkK+069EvFGeXhVz
+	 fjwMEKqNs/4A6v47oRoKEnrWtVCRS94e92OFgIu1UZ15HE0eRDnySk+XdO3ZocmUoh
+	 z2uckoHODiGB9kajCtroPuo60oEhWAIR1qmItS6I3Hp26xmZPKUStic7JfPrs8aKlG
+	 e94QQjUbCLAAg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/2] uprobes: Switch uretprobes_srcu to
- SRCU-fast-updown
+Subject: Re: [PATCH bpf-next v3 02/15] bpf: Make struct_ops tasks_rcu grace
+ period optional
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Puranjay Mohan" <puranjay@kernel.org>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260706172744.3920417-3-puranjay@kernel.org>
-References: <20260706172744.3920417-1-puranjay@kernel.org>
- <20260706172744.3920417-3-puranjay@kernel.org>
+To: "Amery Hung" <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260706171918.317102-3-ameryhung@gmail.com>
+References: <20260706171918.317102-1-ameryhung@gmail.com>
+ <20260706171918.317102-3-ameryhung@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 06 Jul 2026 17:42:41 +0000
-Message-Id: <20260706174242.25B791F000E9@smtp.kernel.org>
+Date: Mon, 06 Jul 2026 17:44:05 +0000
+Message-Id: <20260706174406.0D21B1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,81 +47,95 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] Concurrent hprobe_expire() and hprobe_consume() can cause a use-af=
-ter-free on uprobe due to misunderstood SRCU semantics.
+- [High] Use-After-Free due to RCU-001 violation in bpf_struct_ops_map_free=
+()
 --
 
-commit 86c857f0a70ec453b9e38c36e230b36b91bef460
-Author: Puranjay Mohan <puranjay@kernel.org>
+commit 1218e0fc116da5657ca3ee1c0ca920d127c6c75d
+Author: Martin KaFai Lau <martin.lau@kernel.org>
 
-    uprobes: Switch uretprobes_srcu to SRCU-fast-updown
-   =20
-    uretprobes_srcu currently uses normal SRCU, which issues
-    two smp_mb() per read lock/unlock pair. This overhead is
-    paid on every uretprobe hit.
-   =20
-    Switch to SRCU-fast-updown, which eliminates the per-reader
-    memory barriers by moving the ordering cost to the
-    grace-period side.
+bpf: Make struct_ops tasks_rcu grace period optional
 
-> diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-> index 4084e926e2844..afa491b0bd3f9 100644
-> --- a/kernel/events/uprobes.c
-> +++ b/kernel/events/uprobes.c
+This commit makes the tasks RCU grace period optional for struct_ops maps.
+It adds a map_free_pre_rcu callback so ksyms can be removed before
+bpf_map_put waits for a regular RCU grace period, and defers tasks RCU
+synchronization to map free time only when required by the ops.
+
+> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+> index d06b3d9bcc13c..c422ce41873ee 100644
+> --- a/kernel/bpf/bpf_struct_ops.c
+> +++ b/kernel/bpf/bpf_struct_ops.c
 [ ... ]
-> @@ -2045,7 +2046,7 @@ static void ri_timer(struct timer_list *timer)
->  	struct return_instance *ri;
+> @@ -997,24 +1006,8 @@ static void bpf_struct_ops_map_free(struct bpf_map =
+*map)
 > =20
->  	/* SRCU protects uprobe from reuse for the cmpxchg() inside hprobe_expi=
-re(). */
-> -	guard(srcu)(&uretprobes_srcu);
-> +	guard(srcu_fast_updown)(&uretprobes_srcu);
+>  	bpf_struct_ops_map_dissoc_progs(st_map);
+> =20
+> -	bpf_struct_ops_map_del_ksyms(st_map);
+> -
+> -	/* The struct_ops's function may switch to another struct_ops.
+> -	 *
+> -	 * For example, bpf_tcp_cc_x->init() may switch to
+> -	 * another tcp_cc_y by calling
+> -	 * setsockopt(TCP_CONGESTION, "tcp_cc_y").
+> -	 * During the switch,  bpf_struct_ops_put(tcp_cc_x) is called
+> -	 * and its refcount may reach 0 which then free its
+> -	 * trampoline image while tcp_cc_x is still running.
+> -	 *
+> -	 * A vanilla rcu gp is to wait for all bpf-tcp-cc prog
+> -	 * to finish. bpf-tcp-cc prog is non sleepable.
+> -	 * A rcu_tasks gp is to wait for the last few insn
+> -	 * in the tramopline image to finish before releasing
+> -	 * the trampoline image.
+> -	 */
+> -	synchronize_rcu_mult(call_rcu, call_rcu_tasks);
+> +	if (tasks_rcu && IS_ENABLED(CONFIG_TASKS_RCU))
+> +		synchronize_rcu_tasks();
+> =20
+>  	__bpf_struct_ops_map_free(map);
+>  }
+[ ... ]
+> @@ -1123,6 +1116,7 @@ static struct bpf_map *bpf_struct_ops_map_alloc(uni=
+on bpf_attr *attr)
+> =20
+>  	mutex_init(&st_map->lock);
+>  	bpf_map_init_from_attr(map, attr);
+> +	map->free_after_rcu_gp =3D true;
 
 [Severity: High]
-This isn't a bug introduced by this patch, but does the new SRCU read lock
-acquired here actually protect the uprobe from being freed?
+Does this sequence introduce a use-after-free by violating the RCU "remove
+before reclaim" ordering?
 
-If a uprobe is being unregistered, uprobe_free_deferred() calls
-call_srcu(&uretprobes_srcu, ...) to free the uprobe. This starts an SRCU
-grace period that waits only for pre-existing SRCU readers to finish.
+By setting map->free_after_rcu_gp =3D true, bpf_map_put() will now wait for=
+ a
+regular RCU grace period before invoking bpf_struct_ops_map_free():
 
-Concurrently, if ri_timer() or dup_utask() takes this new SRCU read lock,
-the grace period will not wait for it because the new lock started after the
-grace period began.
+bpf_map_put()
+  call_rcu(&map->rcu, bpf_map_free_rcu_gp)
+  ...
+  // later in workqueue
+  bpf_struct_ops_map_free()
 
-If the traced task concurrently executes uprobe_handle_trampoline(), calls
-hprobe_consume() and hprobe_finalize(), and releases the original SRCU read
-lock, the grace period can complete and free the uprobe (via
-call_rcu_tasks_trace()).
+However, the programs are unpublished from the map during
+bpf_struct_ops_map_free():
 
-When ri_timer() then proceeds to call hprobe_expire(), which does:
-
-kernel/events/uprobes.c:hprobe_expire() {
-    ...
-    case HPROBE_LEASED: {
-        struct uprobe *uprobe =3D try_get_uprobe(hprobe->uprobe);
-    ...
+static void bpf_struct_ops_map_free(struct bpf_map *map)
+{
+        ...
+        bpf_struct_ops_map_dissoc_progs(st_map);
+        ...
+        __bpf_struct_ops_map_free(map);
 }
 
-Could this lead to a use-after-free on the uprobe? The comment in
-hprobe_expire() seems to assume the new lock prevents the free:
-
-        /*
-         * Even if hprobe_consume() or another hprobe_expire() wins
-         * the state update race and unlocks SRCU from under us, we
-         * still have a guarantee that underyling uprobe won't be
-         * freed due to ongoing caller's SRCU lock region, so we can
-         * return it regardless.
-         */
-
-Is this analysis accurate?
-
->  	/* RCU protects return_instance from freeing. */
->  	guard(rcu)();
->
+Because the unpublish operation (bpf_struct_ops_map_dissoc_progs) happens
+after the RCU grace period has already elapsed, could a concurrent BPF prog=
+ram
+execution (e.g., via bpf_prog_test_run()) start after the grace period begi=
+ns,
+find the still-associated struct_ops pointer, and access it while it is bei=
+ng
+synchronously freed by __bpf_struct_ops_map_free()?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260706172744.3920=
-417-1-puranjay@kernel.org?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260706171918.3171=
+02-1-ameryhung@gmail.com?part=3D2
