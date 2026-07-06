@@ -1,264 +1,110 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385DA35AC32
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 23:01:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32EC935AC32
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 23:03:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783378906; cv=none; b=mnSRisKTxy2FEwk9ZsUsrkTJRCbkUg5Tf/KkVNT4/hR6U7yQoJ9mfe3GGFTduVLOl4Zxo/nAhvK9cDJfLQySvj3h8WROAJn7rO1gDVDPqSqNMjP1XdaF7+oO0qTM7OF9SOSomDqsAN70SzKh+EPpwhSKAsWiedcb7G8nd4qVI60=
+	t=1783379021; cv=none; b=p+DUMlTmwH/4gQmjHwbV1tF8z+fC+U6XVLGOeMBi+nMV73EvGa/vbtHCtjqCiM5AgvtbBxFxZeUkrng2x5VG8MLmx350SNjWpH4zIXz/OIp9jExm2ySMGQ5bT8s4NYamnEgK/W87vBUP0MPkONV0jYlc+5h5M7aS3pkErx3u3HA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783378906; c=relaxed/simple;
-	bh=2fcJP08/HSUH1wuSTGx+vBhClLrtN4O9zNgxlhnCbX0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Vu7ZoIGRzUkygrGuhyfuwS9BMxh2leHa5Eivz8h2SxnZXR1Lw0/GK6Fl6nrW4Jx5Nqe/wy57xpcIzEfVzbbpwaVwUg6m/PWNy9wZ0zjhd57LE7+9uMTA6cuFM+fGfyIiCWp80TQyFtmlA2SftdUgEb+/2ToUHCYE+4ZsrbPlLNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MaqfLxci; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	s=arc-20240116; t=1783379021; c=relaxed/simple;
+	bh=3jhGKH95UK7ABv0WV0absmvK1hU4ENWAjuxFgs8JgwA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=pLP6aW1mwuxXwBi4gkgZsPR0w1Am3iP22Ud0/4ma7Id+eAyFtAw9rX4I5phR+M7DKXbSXiCuUnDRtJM5HD+Dr1ieY9d1Dax2QzyyKTatcSrLjOzxOEIC8IwvaG9UBFbEOV5EojfHmq/v6UIOhCrxycEOUCh5VFdqvcPXPeqh7So=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gQzJaT2c; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MaqfLxci"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-84777e9b51bso8843312b3a.2
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 16:01:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783378903; x=1783983703; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=v4OKH8nLpRPfbp1hgj6REqr4yMvAGngFItE2YoOJh7A=;
-        b=MaqfLxci+7yU4xbgzhJ7Yft+fgtHLcaVKgIDMH/w/QqxbYBpNW6RvvMyUZb6zTGddG
-         gsi7pa1dKRhDE0GSR34GWGmvigUjd/OPo/f8v+tAS0NRr07+zOk0OifwzXmm+CmzClek
-         f14ZZA4OL96xP+l/o22mvz2cCi44rno0VJvFQYcV5xgrD9m9WdPiT2CwQ4qfJ3eKEIFw
-         /FtLCGYICBcJoTeW8LuxNCYel56kyCUFXOW5EAjs+lgymmlZcp0x1heY1VW112487g1p
-         1u28O0/G3etokeXBlSNVsBvsUH0DKx1+YzZc87ZvFghLGHFbcpte1tnHgvmGAHZrQByE
-         IWxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783378903; x=1783983703;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=v4OKH8nLpRPfbp1hgj6REqr4yMvAGngFItE2YoOJh7A=;
-        b=Uui2r+5hCTfpYIH6cS07gJRXT6rRSpfFYoUZSvMxoiCZrLdl8NYhVSboGSnQD+yd0n
-         0uwZHQO5ni+ukUpIxDlha4URNbYWuG+sZA6I4ZfvbjZYaOTk3cH4MPZiPNM8KLmVatd/
-         fq83RAaRzr8Vi+jHmP0VjURE1tjuS1z5RmEzMPWnCxhSyfrR2O8+Miuw+3Eymupyae2H
-         DmPZQcCLxm5JGm7x1VJM/G03p/tY8MUBDNY299S/4PxSBFGFI0Dgs+2fhycBp21/HDQz
-         ophjqp22Je3APMDqwu03LZ+SQ9aoJZWJf5qQabactTTz4ZwwZP9eWKsKj/iROHpjhvyp
-         anhA==
-X-Forwarded-Encrypted: i=1; AHgh+Rp6gH9Pv0gRpMk1qQVpF2T9wlPjgWs6JmBQtZD89cvkgVbQUVql5f1dEfykxL37aE8giWc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlUmF4bdu5WKwNIjzKJ3onnQv4OYuOmOygtW4MSvHbE8iaMlSx
-	yNIXILopQiHtS9hJIhGNes4EG+vI6e11fKrqj4L2G/GyxKT3l5QdFr/n+PiT7oKnaCOiKXnzm0Q
-	rCqbzGQ==
-X-Received: from pfll10.prod.google.com ([2002:a05:6a00:158a:b0:847:ada8:bf86])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:bd81:b0:847:8650:69cd
- with SMTP id d2e1a72fcca58-84826dad939mr2513930b3a.33.1783378903005; Mon, 06
- Jul 2026 16:01:43 -0700 (PDT)
-Date: Mon,  6 Jul 2026 23:01:27 +0000
-In-Reply-To: <20260706093525.13030-3-mahe.tardy@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gQzJaT2c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8A981F000E9;
+	Mon,  6 Jul 2026 23:03:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783379019;
+	bh=11KNDyIeoeZbPAB/n+gd/m/CNoTctSMU48HFm9g99WU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=gQzJaT2c3OrWTWrmuqlD9TZO9gBQe+X4prMBfvQexVAHPWf5rKMf82fM0u8Nw5Lni
+	 IPIe1HVHvP97n6aWx7y9Zx8smZSJOA66B//QIFLXBlYaE/5zvQoL3aEsYesMeVlQD4
+	 EBhdm7P1rHb7Myt9uH3Z6BmCToJ+lOBOjdMBQMJluMRdMCz+DuYFC7nghplvwnvNFN
+	 kZINh4CifaFXXpHeU0dClvhA5d9wmT8xo6aDt00vzP4+vVlkHzm2DETSjKAA0pu9Ju
+	 wVXbsdIF8o0jm/SNGik+e2VVwMGjsRQiCAkrMmH1OZbwwbneicPtfu/lX+VHrJfJLc
+	 KW5LYI2rW36fw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next] selftests/bpf: veristat: Minimize map size
+ during verification
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Emil Tsalapatis" <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260706225052.35543-1-emil@etsalapatis.com>
+References: <20260706225052.35543-1-emil@etsalapatis.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 06 Jul 2026 23:03:39 +0000
+Message-Id: <20260706230339.A8A981F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260706093525.13030-3-mahe.tardy@gmail.com>
-X-Mailer: git-send-email 2.55.0.rc2.803.g1fd1e6609c-goog
-Message-ID: <20260706230142.1691146-1-kuniyu@google.com>
-Subject: Re: [PATCH bpf-next 2/6] bpf: Add ksock kfuncs
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: mahe.tardy@gmail.com
-Cc: andrew+netdev@lunn.ch, andrii@kernel.org, ast@kernel.org, 
-	bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net, 
-	eddyz87@gmail.com, edumazet@google.com, john.fastabend@gmail.com, 
-	kuba@kernel.org, liamwisehart@meta.com, martin.lau@linux.dev, 
-	netdev@vger.kernel.org, pabeni@redhat.com, song@kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-From: Mahe Tardy <mahe.tardy@gmail.com>
-Date: Mon,  6 Jul 2026 09:35:21 +0000
-> diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
-[...]
-> +static bool bpf_ksock_send_enter(struct bpf_ksock_send_guard *guard)
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Setting `max_entries` to 1 for `BPF_MAP_TYPE_RHASH` maps causes =
+map creation to fail if `map_extra` > 1.
+--
 
-Can we do this better with assigning a single bit to task_struct ?
+--- Patch [1]: [PATCH bpf-next] selftests/bpf: veristat: Minimize map size =
+during verification ---
+commit a11623d3f77bb05764867d10c3ff357f2a8a1403
+Author: Emil Tsalapatis <emil@etsalapatis.com>
 
+selftests/bpf: veristat: Minimize map size during verification
 
-> +{
-> +	struct bpf_ksock_send_guard *entry;
-> +	struct hlist_bl_node *pos;
-> +	struct bpf_ksock_send_bucket *bucket;
-> +
-> +	bucket = bpf_ksock_send_bucket(current);
-> +	hlist_bl_lock(&bucket->head);
-> +	hlist_bl_for_each_entry(entry, pos, &bucket->head, node) {
-> +		if (entry->task == current) {
-> +			hlist_bl_unlock(&bucket->head);
-> +			return false;
-> +		}
-> +	}
-> +
-> +	guard->task = current;
-> +	INIT_HLIST_BL_NODE(&guard->node);
-> +	hlist_bl_add_head(&guard->node, &bucket->head);
-> +	hlist_bl_unlock(&bucket->head);
-> +	return true;
-> +}
-> +
-> +static void bpf_ksock_send_exit(struct bpf_ksock_send_guard *guard)
-> +{
-> +	struct bpf_ksock_send_bucket *bucket;
-> +
-> +	bucket = bpf_ksock_send_bucket(guard->task);
-> +	hlist_bl_lock(&bucket->head);
-> +	hlist_bl_del(&guard->node);
-> +	hlist_bl_unlock(&bucket->head);
-> +}
-[...]
-> +__bpf_kfunc struct bpf_ksock *
-> +bpf_ksock_create(const struct bpf_ksock_create_opts *opts, u32 opts__sz,
-> +		 int *err__uninit)
-> +{
-> +	struct bpf_ksock_create_opts opts_copy;
-> +	struct bpf_ksock *ks;
-> +	struct net *net;
-> +	int err;
-> +
-> +	/*
-> +	 * sock_create() derives the network namespace, credentials, and cgroup
-> +	 * from current. Kernel threads, including BPF workqueue callbacks, do
-> +	 * not carry the context of the task that invoked the BPF program.
-> +	 */
-> +	if (!bpf_ksock_has_user_task_context()) {
-> +		err = -EOPNOTSUPP;
-> +		goto err_out;
-> +	}
-> +
-> +	if (!opts || opts__sz != sizeof(struct bpf_ksock_create_opts)) {
-> +		err = -EINVAL;
-> +		goto err_out;
-> +	}
-> +
-> +	opts_copy = (struct bpf_ksock_create_opts){
-> +		.family = READ_ONCE(opts->family),
-> +		.type = READ_ONCE(opts->type),
-> +		.protocol = READ_ONCE(opts->protocol),
-> +		.reserved = READ_ONCE(opts->reserved),
-> +	};
-> +
-> +	if (opts_copy.reserved) {
-> +		err = -EINVAL;
-> +		goto err_out;
-> +	}
-> +
-> +	if (opts_copy.family != AF_INET && opts_copy.family != AF_INET6) {
-> +		err = -EAFNOSUPPORT;
-> +		goto err_out;
-> +	}
-> +
-> +	if (opts_copy.type != SOCK_DGRAM) {
-> +		err = -EPROTONOSUPPORT;
-> +		goto err_out;
-> +	}
-> +
-> +	if (opts_copy.protocol != IPPROTO_UDP && opts_copy.protocol != 0) {
-> +		err = -EPROTONOSUPPORT;
-> +		goto err_out;
-> +	}
-> +
-> +	ks = kzalloc_obj(*ks);
-> +	if (!ks) {
-> +		err = -ENOMEM;
-> +		goto err_out;
-> +	}
-> +
-> +	net = current->nsproxy->net_ns;
-> +	if (!bpf_ksock_net_try_charge(net)) {
-> +		err = -ENOSPC;
-> +		goto err_free;
-> +	}
-> +
-> +	/*
-> +	 * Use the normal current-task socket path so LSM/cgroup policy,
-> +	 * socket labels, and the active netns reference match a socket(2)
-> +	 * created by the BPF program's caller.
-> +	 */
-> +	err = sock_create(opts_copy.family, opts_copy.type, opts_copy.protocol,
-> +			  &ks->sock);
+The veristat tool loads objects and maps into the kernel to verify them.
+This patch expands veristat to resize maps whose max_entries are not
+relevant to verification to as low as possible to avoid -ENOMEM errors
+on smaller test machines.
 
-This also triggers LSM in __sock_create() so needs the loop
-detection, no ?
+> diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selft=
+ests/bpf/veristat.c
+> index a7db6f04f7e14..8d374e1406532 100644
+> --- a/tools/testing/selftests/bpf/veristat.c
+> +++ b/tools/testing/selftests/bpf/veristat.c
+[ ... ]
+> @@ -1248,6 +1263,37 @@ static void fixup_obj_maps(struct bpf_object *obj)
+> =20
+>  		/* fix up map size, if necessary */
+>  		switch (bpf_map__type(map)) {
+> +		/*
+> +		 * if the verifier doesn't use max_entries
+> +		 * then set to 1 to avoid -ENOMEM
+> +		 */
+> +		case BPF_MAP_TYPE_HASH:
+> +		case BPF_MAP_TYPE_PERCPU_HASH:
+> +		case BPF_MAP_TYPE_LRU_HASH:
+> +		case BPF_MAP_TYPE_LRU_PERCPU_HASH:
+> +		case BPF_MAP_TYPE_HASH_OF_MAPS:
+> +		case BPF_MAP_TYPE_RHASH:
+> +		case BPF_MAP_TYPE_SOCKHASH:
+> +		case BPF_MAP_TYPE_DEVMAP_HASH:
+> +		case BPF_MAP_TYPE_LPM_TRIE:
+> +		case BPF_MAP_TYPE_QUEUE:
+> +		case BPF_MAP_TYPE_STACK:
+> +		case BPF_MAP_TYPE_BLOOM_FILTER:
+> +		case BPF_MAP_TYPE_STACK_TRACE:
+> +			bpf_map__set_max_entries(map, 1);
+> +			break;
 
-Same for __sys_bind_socket() and __sys_connect_socket().
+[Severity: Medium]
+Will setting max_entries to 1 cause map creation to fail for
+BPF_MAP_TYPE_RHASH maps that have map_extra set to greater than 1?
 
+The kernel's rhtab_map_alloc_check() enforces that map_extra must be less
+than or equal to max_entries. If a BPF program legitimately uses an RHASH
+map with a map_extra preallocation hint greater than 1, this unconditional
+minimization will cause an -EINVAL load failure, making veristat erroneously
+report a verification failure.
 
-> +	if (err)
-> +		goto err_uncharge;
-> +
-> +	ks->sock->sk->sk_rcvbuf = SOCK_MIN_RCVBUF;
-> +	ks->sock->sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
-> +
-> +	refcount_set(&ks->usage, 1);
-> +	put_unaligned(0, err__uninit);
-> +	return ks;
-> +
-> +err_uncharge:
-> +	bpf_ksock_net_uncharge(net);
-> +err_free:
-> +	kfree(ks);
-> +err_out:
-> +	put_unaligned(err, err__uninit);
-> +	return NULL;
-> +}
-> +
-> +/**
-> + * bpf_ksock_bind() - Bind a BPF kernel socket to a local address.
-> + * @ks:		The BPF kernel socket context.
-> + * @opts:	Pointer to struct bpf_ksock_addr_opts with local address.
-> + * @opts__sz:	Size of the opts struct.
-> + *
-> + * Binds the socket to the specified local address and port.
-> + * This is optional; if not called, the kernel will auto-assign.
-> + *
-> + * This function may sleep while binding the socket, so it can only be used in
-> + * sleepable BPF programs (SYSCALL).
-> + *
-> + * Return: 0 on success, negative errno on error.
-> + */
-> +__bpf_kfunc int bpf_ksock_bind(struct bpf_ksock *ks,
-> +			       const struct bpf_ksock_addr_opts *opts,
-> +			       u32 opts__sz)
-> +{
-> +	struct sockaddr_storage addr = {};
+Does veristat also need to adjust map_extra when reducing max_entries for
+RHASH maps?
 
-nit: we don't need to initialise here since bpf_ksock_get_addr() does.
-
-
-> +	int addrlen;
-> +
-> +	if (!bpf_ksock_has_user_task_context())
-> +		return -EOPNOTSUPP;
-> +
-> +	addrlen = bpf_ksock_get_addr(opts, opts__sz, &addr);
-> +	if (addrlen < 0)
-> +		return addrlen;
-> +
-> +	return __sys_bind_socket(ks->sock, &addr, addrlen);
-> +}
-> +
-> +/**
-> + * bpf_ksock_connect() - Connect a BPF kernel socket to a remote address.
-> + * @ks:		The BPF kernel socket context.
-> + * @opts:	Pointer to struct bpf_ksock_addr_opts with remote address.
-> + * @opts__sz:	Size of the opts struct.
-> + *
-> + * Connects the socket to the specified remote address and port.
-> + *
-> + * This function may sleep while connecting the socket, so it can only be used
-> + * in sleepable BPF programs (SYSCALL).
-> + *
-> + * Return: 0 on success, negative errno on error.
-> + */
-> +__bpf_kfunc int bpf_ksock_connect(struct bpf_ksock *ks,
-> +				  const struct bpf_ksock_addr_opts *opts,
-> +				  u32 opts__sz)
-> +{
-> +	struct sockaddr_storage addr = {};
-
-Same.
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260706225052.3554=
+3-1-emil@etsalapatis.com?part=3D1
