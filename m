@@ -1,22 +1,23 @@
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 457E91A682F
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 04:00:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18DC93AF64D
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 04:00:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783310423; cv=none; b=hj40Y2HQihAJqpvt3NBbqfZLBom+ZvIhSMqqJ4H86rhD7eCX2TCh5C++NgD3p/KJj7t+zxbhWBtpmYlen85eh+LB010g0Qczj+lFbrvRL7PRO3+mUTTnMNnMyZ/DV9ZIOF+K3VTZoTj9T6zN9lxfhE/j6JaEsxynDeTA/pYZ8Tc=
+	t=1783310429; cv=none; b=LGpPeORTj+YvLrh8NVg7ZbmXKuczJ+s4xOpZ+snLwjLdAKfv9/NXg2gv9QRiEjr9kABnO+MGcUDyl5eVe014HYJylBNJWrktKAaAVHH5RBUEm2pScsLrQMG9ROZJRpmI9khfjys7sHqCNngI9rX9KMTwB2Kwj+jWtJ6WJ894j/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783310423; c=relaxed/simple;
-	bh=xaZLghahuAKDgBH0MeBFRv6MdroClVLRholyo4h6rMg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZAqMLcSVQiV/w5OvMpuea9pqpBVyDw+60pGWtqGJJL7DICbTK1CnpVKDDv5gZa3cBbwz/xQy+g316fnVL4yH6gouZsgN1RuqQ4+30UUVyQmfl5eeV3cpntxVmy4+a0T1ALEkW9Jmhf2uuAtfSu4P2ERHR9kdhgPi0IzRN5IwJQ0=
+	s=arc-20240116; t=1783310429; c=relaxed/simple;
+	bh=JwWDOQBjpF1sG6SbgDbs/FHQ5D8NWvGiR1WV8th6ucM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZePw/2ApfOq1HWneUmHoMNt/1BSUMIcYkiXWxE+NU+wYp9oK4mXk9ak7xArYruhJsY8E++H5EhDnTxeDKySNlFo61yfzu3R0kRij2JW0ddRq/k+2ISSn8uK6oXiB70cF9y5K5ZwnKHqjUML/3YwBEXovWAAlU7u3yuprOqyfbcA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8Dx6vBSKEtqnkUAAA--.1394S3;
-	Mon, 06 Jul 2026 12:00:18 +0800 (CST)
+	by gateway (Coremail) with SMTP id _____8DxOOtZKEtqq0UAAA--.1399S3;
+	Mon, 06 Jul 2026 12:00:25 +0800 (CST)
 Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJDxfsVHKEtqQ8MBAA--.9722S2;
-	Mon, 06 Jul 2026 12:00:08 +0800 (CST)
+	by front1 (Coremail) with SMTP id qMiowJDxfsVHKEtqQ8MBAA--.9722S3;
+	Mon, 06 Jul 2026 12:00:15 +0800 (CST)
 From: Tiezhu Yang <yangtiezhu@loongson.cn>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -34,10 +35,12 @@ Cc: bpf@vger.kernel.org,
 	Leon Hwang <leon.hwang@linux.dev>,
 	Puranjay Mohan <puranjay@kernel.org>,
 	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
-Subject: [PATCH bpf-next v8 0/2] Introduce jit_required to prevent a kernel panic
-Date: Mon,  6 Jul 2026 12:00:04 +0800
-Message-ID: <20260706040006.10331-1-yangtiezhu@loongson.cn>
+Subject: [PATCH bpf-next v8 1/2] bpf: Introduce jit_required flag and remove bpf_prog_has_kfunc_call()
+Date: Mon,  6 Jul 2026 12:00:05 +0800
+Message-ID: <20260706040006.10331-2-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20260706040006.10331-1-yangtiezhu@loongson.cn>
+References: <20260706040006.10331-1-yangtiezhu@loongson.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,48 +48,152 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxfsVHKEtqQ8MBAA--.9722S2
+X-CM-TRANSID:qMiowJDxfsVHKEtqQ8MBAA--.9722S3
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7XFWfWF4rKrWxCryDAFWkuFX_yoW3ZrX_ur
-	W0q3s7Xrs3ZFyav3W7Gr1ftrn5KrWxKr40y392qrWfJr13Wa1UJFW8XFy7uF9Iva1vyrZ8
-	tws3Ar4vvryruosvyTuYvTs0mTUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
-	Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_
-	Jw1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-	xGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
-	JVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-	vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IY
-	x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26c
-	xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAF
-	wI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07joc_-UUUUU=
+X-Coremail-Antispam: 1Uk129KBj93XoWxGr1fCFyUZrW7JrW3KFWUJrc_yoW7Gr15pF
+	98G3srCr40gr4I93ZrJF4xA343ta48W3y2krWkG34S9r4qq397X3W8KryfZaySqry0kF1I
+	vws29FWYgw18u3cCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+	AKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
+	6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xII
+	jxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw2
+	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x02
+	67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8XTm3UUUUU==
 
-This series introduces a 'jit_required' flag in struct bpf_prog
-to track programs that strictly require JIT.
+Introduce a 'jit_required' bitfield flag in struct bpf_prog. This bit
+tracks whether a BPF program strictly requires the JIT compiler to run,
+preventing dangerous runtime fallback to the interpreter for features
+not implemented there.
 
-The aim is to prevent a kernel panic by rejecting programs with
-inlined helpers when JIT is not available.
+Set the flag 'jit_required' to 1 at the entry of bpf_add_kfunc_call()
+right after the kfunc_tab allocation succeeds. This cleanly marks the
+lifecycle of any program attempting to utilize kernel functions.
 
-v8:
-  -- Completely remove bpf_prog_has_kfunc_call().
-  -- Set jit_required at the entry of bpf_add_kfunc_call().
-  -- Generalize the error message to:
-     "program requires BPF JIT compiler but it is not available"
+Furthermore, completely remove the bpf_prog_has_kfunc_call() helper,
+as its logic is now unified under the 'jit_required' flag.
 
-Tiezhu Yang (2):
-  bpf: Introduce jit_required flag and remove bpf_prog_has_kfunc_call()
-  bpf: Reject programs with inlined helpers if JIT is not available
+In bpf_fixup_call_args(), check with 'prog->jit_required' rather than
+bpf_prog_has_kfunc_call(), and generalize the error message to generic
+BPF JIT availability.
 
+In __bpf_prog_select_runtime(), check with 'fp->jit_required' rather
+than bpf_prog_has_kfunc_call() to unify the logic.
+
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Suggested-by: KaFai Wan <kafai.wan@linux.dev>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
  include/linux/bpf.h   | 9 ++-------
  kernel/bpf/core.c     | 3 +--
- kernel/bpf/fixups.c   | 9 +++++----
+ kernel/bpf/fixups.c   | 5 ++---
  kernel/bpf/verifier.c | 7 ++-----
- 4 files changed, 10 insertions(+), 18 deletions(-)
+ 4 files changed, 7 insertions(+), 17 deletions(-)
 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index ba09795e0bfd..0b620bfbbd9b 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1865,8 +1865,9 @@ struct bpf_prog_aux {
+ 
+ struct bpf_prog {
+ 	u16			pages;		/* Number of allocated pages */
+-	u16			jited:1,	/* Is our filter JIT'ed? */
++	u32			jited:1,	/* Is our filter JIT'ed? */
+ 				jit_requested:1,/* archs need to JIT the prog */
++				jit_required:1,	/* program strictly requires JIT compiler */
+ 				gpl_compatible:1, /* Is filter GPL compatible? */
+ 				cb_access:1,	/* Is control block accessed? */
+ 				dst_needed:1,	/* Do we need dst entry? */
+@@ -3170,7 +3171,6 @@ const struct bpf_func_proto *bpf_base_func_proto(enum bpf_func_id func_id,
+ 						 const struct bpf_prog *prog);
+ void bpf_task_storage_free(struct task_struct *task);
+ void bpf_cgrp_storage_free(struct cgroup *cgroup);
+-bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog);
+ const struct btf_func_model *
+ bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
+ 			 const struct bpf_insn *insn);
+@@ -3509,11 +3509,6 @@ static inline void bpf_task_storage_free(struct task_struct *task)
+ {
+ }
+ 
+-static inline bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog)
+-{
+-	return false;
+-}
+-
+ static inline const struct btf_func_model *
+ bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
+ 			 const struct bpf_insn *insn)
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 6e19a030da6f..faef1de84fa7 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2675,8 +2675,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
+ 	if (fp->bpf_func)
+ 		goto finalize;
+ 
+-	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
+-	    bpf_prog_has_kfunc_call(fp))
++	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) || fp->jit_required)
+ 		jit_needed = true;
+ 
+ 	if (!bpf_prog_select_interpreter(fp))
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 12a8a4eb757f..02246df2f6c3 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -1378,7 +1378,6 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
+ #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+ 	struct bpf_prog *prog = env->prog;
+ 	struct bpf_insn *insn = prog->insnsi;
+-	bool has_kfunc_call = bpf_prog_has_kfunc_call(prog);
+ 	int depth;
+ #endif
+ 	int i, err = 0;
+@@ -1404,8 +1403,8 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
+ 			return err;
+ 	}
+ #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+-	if (has_kfunc_call) {
+-		verbose(env, "calling kernel functions are not allowed in non-JITed programs\n");
++	if (prog->jit_required) {
++		verbose(env, "program requires BPF JIT compiler but it is not available\n");
+ 		return -EINVAL;
+ 	}
+ 	for (i = 0; i < env->subprog_cnt; i++) {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d46f7db20d8f..e188d55e8116 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2714,6 +2714,8 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, u16 offset)
+ 		prog_aux->kfunc_tab = tab;
+ 	}
+ 
++	env->prog->jit_required = 1;
++
+ 	/* func_id == 0 is always invalid, but instead of returning an error, be
+ 	 * conservative and wait until the code elimination pass before returning
+ 	 * error, so that invalid calls that get pruned out can be in BPF programs
+@@ -2768,11 +2770,6 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, u16 offset)
+ 	return 0;
+ }
+ 
+-bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog)
+-{
+-	return !!prog->aux->kfunc_tab;
+-}
+-
+ static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_subprog_info *subprog = env->subprog_info;
 -- 
 2.42.0
 
