@@ -1,122 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94656433BAE;
-	Mon,  6 Jul 2026 18:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3287C3B14A5
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 18:32:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783362522; cv=none; b=R+ZBmEMKygtpFAlOEDI9m5E0TB9G4z309HruSDaTp6nGGixwfqbkLj+R9dXQBf5hvcKMnV7+JniNnYzCc/GhgWxDpHJv9gYOWVSTHfG04o+8RYjAKOkK09n3hhHKjxOmcHxTbvb79CLSTOU79uTpQkSFtp+IF1RJCzPRSh1X9Lw=
+	t=1783362743; cv=none; b=haMaZg+Ri258mlJ0LLDjZm+MmabQCpnBcXILtUbKsVuAUtT4kcUnvRbrkM7e91VDnx6ZtJ+kY10GjxaXxV7vQwscAXmaHhSHx2d33NyysXgWxtgwZNUcyCBKOHFQsmccrWBUEY7DcpWyvm4mY+t0NR2ng2HTdLopBcMcnoSfaAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783362522; c=relaxed/simple;
-	bh=2GJVHk8J9oP4pqbk2rf4m610mitVjbW42vAzFhNMLlk=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Lj1fFQHuPkIcpuaXyAlVsFrofHVxD2XIt8FWWjy6TV8uIkSBbFb4+OllixY+0+QKQAUSBRB8SS3n0d8HzLqSwZPPSA1VW1phnkA2LxRAifhzb5bsPAdk3IYtyGhk91UbONuZJpd3Rffcu1vHIUVcGeF8FNdSfDHBWdCvwRtCsOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fduKAlBq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783362743; c=relaxed/simple;
+	bh=MAxD6Z933c52eM9gAA+LFQlAFbeieFsLP70PzEkb0DE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=LUpi5kKCIcw1H4+7pdy/ocimb0IMVjeWaL5bkvUWte6G216/SXjbt/p2ha7BEa4HZYlsZkAGofnCPw8UhYVu63YXZSxHhQTK5CnFz9HO0BVRhs24xDh40TI6FVFcB01QV1cuYZMOXV4l69egELXr/u/t2tOiOogZO64i2VBE0pQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MdjNf0av; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fduKAlBq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06AD61F000E9;
-	Mon,  6 Jul 2026 18:28:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MdjNf0av"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8548F1F000E9;
+	Mon,  6 Jul 2026 18:32:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783362521;
-	bh=bzTB0Uolf5gJZKoynBYTKORKIX0O4dCjDmQcxbolsSA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=fduKAlBqxaeUAXgWJmIWmMUdEf7lR5xN4hfLqQFjDn7s+FFo70qeYmHHI1NL5shMZ
-	 SjeqZOnGi10rNZ5nS6oDjMzDTDkheAc2wBbodsvLvukTb9z83gAIj+O4DAJxVpp54/
-	 zC2rcwZjxcaT3zw+aoaknplj9cN/8aD3uMXxkYiUVwjCD6w2J1yK6jh6Apt6M/0gk8
-	 m5+ed9ZUFfeTWxwLzNgqKx9YUeLyYx6plNhLaTk2Jke1fuopiglZIjYxkal21fuUfB
-	 6OrtziqQESFy8pWqZFGXoIk2Ep6bv58tv24rfbfFlxIpo/fuusRAeEt6W3bFFnh0kC
-	 kpgwngbFIlfxA==
-Content-Type: multipart/mixed; boundary="===============2782450239906331367=="
+	s=k20260515; t=1783362741;
+	bh=Mg71YAeLUMe9ywm//QOpX7gL4ZqVh7qX4GrG1w0h7yI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=MdjNf0avktNiWuzEElb7ucBGo9sY1MWGqLhrUo9/kJF0GEUWRtk5BK62uf7cljIY7
+	 S2bgc6GJ+hOGQMetWlFteulJDbXdFTfDmF+1OjxCZVcLX5KVdFgyYwK0ogFo9VxUKM
+	 Qf/hTpKXIfdFfWkLK0TsTt/w2urk6fTe2XuQtT8YnUW5ISPEWvjfEbyqb0Nz6ijPQP
+	 Ms3Ji4FsXb3N9iVH7h1xYYorbYjd2gY8ASSFoxE3hj0ikHi9LM612AI7VfPqV3SHq3
+	 ygFP+ok/LfSYUFKSFhesXV1syU5N0McqH/VX5xG1iDD72adl8ddyw8Sutg1smJuKa3
+	 euxsMW1poaH7Q==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH RESEND bpf-next v3 6/6] selftests/bpf: libarena: Add
+ parallel bitmap selftest
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Emil Tsalapatis" <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260706181730.21731-7-emil@etsalapatis.com>
+References: <20260706181730.21731-1-emil@etsalapatis.com>
+ <20260706181730.21731-7-emil@etsalapatis.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 06 Jul 2026 18:32:21 +0000
+Message-Id: <20260706183221.8548F1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <53de193473737a3692df075a179e186e996dc26a592b697f2f335d9d4039c943@mail.kernel.org>
-In-Reply-To: <20260706171918.317102-12-ameryhung@gmail.com>
-References: <20260706171918.317102-12-ameryhung@gmail.com>
-Subject: Re: [PATCH bpf-next v3 11/15] bpf: tcp: Support selected sock_ops callbacks as struct_ops
-From: bot+bpf-ci@kernel.org
-To: ameryhung@gmail.com,bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,martin.lau@kernel.org,shakeel.butt@linux.dev,roman.gushchin@linux.dev,kuniyu@google.com,kerneljasonxing@gmail.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  6 Jul 2026 18:28:41 +0000 (UTC)
 
---===============2782450239906331367==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Spurious test failure due to BPF instruction budget exhaustion d=
+uring atomic operation retries
+--
 
-> diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
+commit 03c6a4c41937c3d9d257316bef5f1cacfa40aa71
+Author: Emil Tsalapatis <emil@etsalapatis.com>
+
+selftests/bpf: libarena: Add parallel bitmap selftest
+   =20
+This commit introduces a new selftest for the libarena atomic bitmap
+operations. It spawns two threads that concurrently modify even and odd
+bits to verify that operations do not improperly affect adjacent bits.
+
+> diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_parallel=
+_bitmap.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_paralle=
+l_bitmap.bpf.c
 > new file mode 100644
-> index 000000000000..3febbc8dd1a0
+> index 0000000000000..eec2871e2b0d1
 > --- /dev/null
-> +++ b/net/ipv4/bpf_tcp_ops.c
-> @@ -0,0 +1,188 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-> +
-> +#include <linux/bpf.h>
-> +#include <linux/btf_ids.h>
-> +#include <linux/bpf_verifier.h>
-> +#include <net/bpf_sk_storage.h>
-> +#include <net/tcp.h>
-> +
-> +static int timeout_init_stub(struct sock *sk, struct request_sock *req__nullable)
-> +{
-> +	struct bpf_tramp_run_ctx *ctx =
-> +		container_of(current->bpf_ctx, struct bpf_tramp_run_ctx, run_ctx);
-> +
-> +	return ctx->retval;
-> +}
-> +
-> +static int rwnd_init_stub(struct sock *sk, struct request_sock *req__nullable)
-> +{
-> +	struct bpf_tramp_run_ctx *ctx =
-> +		container_of(current->bpf_ctx, struct bpf_tramp_run_ctx, run_ctx);
-> +
-> +	return ctx->retval;
-> +}
-
-This isn't a bug, but could timeout_init_stub() and rwnd_init_stub()
-simply return 0 like the analogous int-returning stubs in
-net/ipv4/bpf_tcp_ca.c?
-
-These stubs are only used for CFI/trampoline generation and never
-executed. The sibling file's int stubs (bpf_tcp_ca_undo_cwnd,
-bpf_tcp_ca_sndbuf_expand, bpf_tcp_ca_ssthresh) all return 0. The
-container_of() plus ctx->retval logic here duplicates the actual
-bpf_tcp_ops_get_retval() helper below.
-
-> +static void active_established_stub(struct sock *sk, struct sk_buff *skb__nullable)
-> +{
-> +}
+> +++ b/tools/testing/selftests/bpf/libarena/selftests/test_parallel_bitmap=
+.bpf.c
 
 [ ... ]
 
-> +BPF_CALL_0(bpf_tcp_ops_get_retval)
+> +__weak
+> +int bitmap_test_bit_sequence(u32 bit)
 > +{
-> +	struct bpf_tramp_run_ctx *ctx =
-> +		container_of(current->bpf_ctx, struct bpf_tramp_run_ctx, run_ctx);
-> +
-> +	/* bpf_get_retval() is only exposed to timeout_init/rwnd_init, which
-> +	 * always run via bpf_tcp_ops_call_int(). Its run_ctx carries the int
-> +	 * return value chained across the bpf_tcp_ops attached to the cgroup
-> +	 * and is this program's saved_run_ctx.
-> +	 */
-> +	if (WARN_ON_ONCE(!ctx->saved_run_ctx))
-> +		return 0;
-> +
-> +	return container_of(ctx->saved_run_ctx, struct bpf_tramp_run_ctx,
-> +			    run_ctx)->retval;
-> +}
 
 [ ... ]
 
+> +	if (bmp_test_and_clear_bit(bit, bitmap))
+> +		return -EINVAL;
+> +
+> +	bmp_set_bit(bit, bitmap);
+> +	if (!bmp_test_bit(bit, bitmap))
+> +		return -EINVAL;
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+[Severity: Medium]
+Will this test fail spuriously if the BPF loop budget is exhausted during
+the atomic operation retries?
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28810680939
---===============2782450239906331367==--
+The test executes a high number of iterations to intentionally run until
+the BPF loop budget (can_loop) is exhausted.
+
+Because the two threads heavily contend on the same bitmap words, cmpxchg
+operations in helpers like bmp_set_bit can frequently fail and retry.
+
+If the budget runs out precisely during a retry inside bmp_set_bit, the
+helper will exit early without performing the atomic operation. This
+function then unconditionally asserts the outcome by checking bmp_test_bit.
+
+Since the bit was never set, this will fail and abort the test with
+-EINVAL, rather than cleanly terminating due to budget exhaustion.
+
+> +
+> +	bmp_clear_bit(bit, bitmap);
+> +	if (bmp_test_bit(bit, bitmap))
+> +		return -EINVAL;
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260706181730.2173=
+1-1-emil@etsalapatis.com?part=3D6
