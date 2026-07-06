@@ -1,92 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22C637F738
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 17:34:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96753ACA65;
+	Mon,  6 Jul 2026 17:36:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783359260; cv=none; b=LdLbW5LsA9/ehNLib4eVEJ9MhTn7gL5Qo+UF+aWVkfD0s3Fn/qS+04wpHYdHG3gwfoQadpYpFZzaitOeA0GM9cDIb2tdCeyBeGtioqVTGrHnYJaV8JyLt7/s1LShzeqgLGgh7dB7CSi+cCRX2TtfFjgD3aRBpmK5cS9/jFzAbhQ=
+	t=1783359401; cv=none; b=cCMqvRFAfaP2IYf9pZrFkhNJgHnvms22Ha+Lev4dpF8QHdkTqfPUJLdA2eLdtltCxXh5XISuQlAh2TWn6SxnU9BPBdIfVC/U0lzZflV/ntJVPOpflaj2eoeuQXF713GkExfbd/g7XvQDsfLWycSj4UoFzQwhA34x9ou983Yboqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783359260; c=relaxed/simple;
-	bh=y4rMSqY82UpbAhx5vvgl241U/7PL/WCfgxLs3hcZGF8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=YUdt9z1tZoJR+IIWfnHczG63yeeSp6qkippv+HxYb/byblhmjWQu6PTuPSzwq3sZvgRw60VlLPLiEiy7hm1XbRAdKgOdKfIvoUAILtd21CNavWigSiOtAgEg0vfQ5AJKw6BWCsYrRkBqRJmVIWJdPqefl26xyQvD8DCz8zpp/DI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iG0o12xG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783359401; c=relaxed/simple;
+	bh=ti/TCm1z6PBJR8yRQ3m3yQyVD1D6NvxRQXjN6C7kvHw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h7QHlqPLHrT80yF5jN8jmiClzbBmP0v+kRXdHPD/Wya7kx7DBDeMQIMAiOAHJ3pbXTIsw3uPpSWB9sOX2o2wrNqlgLyPwLr326dabns23HuVWRJn8tFEfsUTCdpsYqAIRYKZcNzQC7rRHMbU3P0lCt5bvU0iCTQrNuy606KMo2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NOvIvJ33; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iG0o12xG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F11D1F000E9;
-	Mon,  6 Jul 2026 17:34:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NOvIvJ33"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8663E1F000E9;
+	Mon,  6 Jul 2026 17:36:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783359259;
-	bh=5XoSZYkuOB7GdmQEbwFBAhY8WaKLa+j0usHJF9vdwVk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=iG0o12xGgxxaCXcMUs1JumO+obhu6qDIgGb3okapQGiVeBZrwXhuz6QCNw0k4A4Nt
-	 SVc/UptJ4AF1fQdNTrCUXUiQ8Sb7ROJLj9eqNIaWuPYriSX3YIaDy55t114odwkl33
-	 1541sIBrjuLghurm+IVOuhcXMVt4/alXyaSgE+gBBWvN+1ebW2kBIdgLuAPjZAA5yI
-	 p0EO4sHD+2I3/qk7Vi48n4WkkWihIVq3gPa7SFXpd04EXpt7KgDPQxGyCYjsJGUipn
-	 cDgCCYnxkZTSGmf7R1mQvnvPphVojovq+j5QXNg2JPxODawIUHoosn+15oR2I6JPuO
-	 Viffxee161hwQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 03/15] bpf: Add bpf_struct_ops accessor
- helpers
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Amery Hung" <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260706171918.317102-4-ameryhung@gmail.com>
-References: <20260706171918.317102-1-ameryhung@gmail.com>
- <20260706171918.317102-4-ameryhung@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 06 Jul 2026 17:34:18 +0000
-Message-Id: <20260706173419.6F11D1F000E9@smtp.kernel.org>
+	s=k20260515; t=1783359400;
+	bh=SJAL2kQaBCSoToztC9FBWr2yuBhtAQr6v0dewB6ngTs=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=NOvIvJ33f7MRiSQZOiy7PjGGic8Czp9J4gbptjsxqbfxtNYz3fsgilf1LHSkA5ks2
+	 NrPzGGqOO6wvLGmFhhjR9ZW5UhjsAveGMy9K1SU+GHMbpU0VuOSyfXIsr/7BvAGbuq
+	 ecPP9rOAKEh+zIF1YFk4+v7FTXzan4x9QcDJho9RMpwZgodqH9EsOOX/yfwF8xWPK+
+	 6GSx/g/uYtFhvmQyZQYxQfDpmuxqI867dUCIdAhVFTjuFE8c2jPGegd9nrf2a5fOWw
+	 6oy+F+VzdNSTnRpPkp2Z/joCxx0Gi5Ye0cpnqfnVGRxXGUlpYgCQAzQF9lsvWWPzGH
+	 2AhFBHvuHX54g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 48E49CE0774; Mon,  6 Jul 2026 10:36:40 -0700 (PDT)
+Date: Mon, 6 Jul 2026 10:36:40 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>, rcu@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next 1/2] srcu: Add lock guard for srcu_fast_updown
+ flavor
+Message-ID: <b36e0790-15e8-4ca9-80f5-94119a3b7a3b@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20260706172744.3920417-1-puranjay@kernel.org>
+ <20260706172744.3920417-2-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260706172744.3920417-2-puranjay@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The function `bpf_struct_ops_kdata_map_id` is declared in `include/=
-linux/bpf.h` but its implementation is missing.
---
+On Mon, Jul 06, 2026 at 10:27:41AM -0700, Puranjay Mohan wrote:
+> Add a guard(srcu_fast_updown) definition for scoped
+> SRCU-fast-updown read-side critical sections, following the
+> existing pattern of guard(srcu) and guard(srcu_fast).
+> 
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 
-commit 95521f3bc40fc850e1847bcb5fd4b12e698ebe45
-Author: Martin KaFai Lau <martin.lau@kernel.org>
+Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
 
-bpf: Add bpf_struct_ops accessor helpers
+(Or I can take it if you would prefer, but it might be easier and faster
+for you to send it along with the next patch.)
 
-This commit adds helper functions in bpf_struct_ops.c for the upcoming
-patch to create a struct_ops to cgroup attachment link. It also exposes
-existing validation logic as new helper functions.
-
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 91b8479121fa3..1a1e8d0885c8e 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -2252,6 +2252,12 @@ u32 bpf_struct_ops_id(const void *kdata);
->  int bpf_struct_ops_for_each_prog(const void *kdata,
->  				 int (*cb)(struct bpf_prog *prog, void *data),
->  				 void *data);
-> +void *bpf_struct_ops_map_kdata(struct bpf_map *map);
-> +u32 bpf_struct_ops_kdata_map_id(void *kdata);
-
-[Severity: Low]
-Is the implementation for bpf_struct_ops_kdata_map_id() missing?=20
-
-The prototype is added here and a dummy version is provided for the=20
-non-CONFIG_NET case further down in this file, but there doesn't appear to =
-be=20
-an actual definition in kernel/bpf/bpf_struct_ops.c. This would cause a lin=
-ker=20
-error if the function were called.
-
-> +void *bpf_struct_ops_map_cfi_stubs(struct bpf_map *map);
-> +bool bpf_struct_ops_valid_to_reg(struct bpf_map *map);
-> +int bpf_struct_ops_link_update_check(struct bpf_map *new_map, struct bpf=
-_map *old_map,
-> +				     struct bpf_map *expected_old_map);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260706171918.3171=
-02-1-ameryhung@gmail.com?part=3D3
+> ---
+>  include/linux/srcu.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/include/linux/srcu.h b/include/linux/srcu.h
+> index a54ce9e808b92..72c86d3b23f2e 100644
+> --- a/include/linux/srcu.h
+> +++ b/include/linux/srcu.h
+> @@ -638,4 +638,11 @@ DEFINE_LOCK_GUARD_1(srcu_fast_notrace, struct srcu_struct,
+>  DECLARE_LOCK_GUARD_1_ATTRS(srcu_fast_notrace, __acquires_shared(_T), __releases_shared(*(struct srcu_struct **)_T))
+>  #define class_srcu_fast_notrace_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(srcu_fast_notrace, _T)
+>  
+> +DEFINE_LOCK_GUARD_1(srcu_fast_updown, struct srcu_struct,
+> +		    _T->scp = srcu_read_lock_fast_updown(_T->lock),
+> +		    srcu_read_unlock_fast_updown(_T->lock, _T->scp),
+> +		    struct srcu_ctr __percpu *scp)
+> +DECLARE_LOCK_GUARD_1_ATTRS(srcu_fast_updown, __acquires_shared(_T), __releases_shared(*(struct srcu_struct **)_T))
+> +#define class_srcu_fast_updown_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(srcu_fast_updown, _T)
+> +
+>  #endif
+> -- 
+> 2.53.0-Meta
+> 
