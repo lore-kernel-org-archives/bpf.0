@@ -1,134 +1,122 @@
-Received: from mail-pj2-f4.google.com (mail-pj2-f4.google.com [74.125.227.132])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61C36382374
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 16:58:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.132
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783357100; cv=none; b=SfNyvP1BMOfTz9fEgUVRcAJBGkAGUvcijAtkE3FcywFZXGiyEjd4vliIBULxwBbVBP17dpkHEZx7OxmrsGQlI6Nu61AlDLV+SODxNEjHgWyCZndtIe2iGVUmSqaX9N6ivDSas8HtJD1tESYktT6ujIEChdjMaOvDJfqUAlkr8V4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783357100; c=relaxed/simple;
-	bh=ww7lCt6NpJeU6KKhYEyofAyOhJWk5zB8DqbthydSzU8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tUplq2LMPt29VHwDjeZTAl2pN4yhB+0NsirkthHVQUleiB8tBaLb8Cr+MTTLkvYzBX+5QwY/ojYX1zthIyB9FueXKxH8cUVzXpa2ToGz7xyEKiMpAdgJ8lVpLwmB3FLCW0JyQ5Bu4HZOzqeai3wJJZins+Z49y6T55K1FRIuEVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KYUkjdZS; arc=none smtp.client-ip=74.125.227.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B152DEA68
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 17:01:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783357297; cv=pass; b=C1N5g/lI0x6D2kzEC0c2Nbtl9ZT+A7KKmpPKBp14FRCG0fFpZWDN0pnJxqJdRvRwFmB4A0zIquQwrIFUkFF/yyWDbiCiLY7TW0PidfqQMqzvkqYmZzl9ozhUDE2lMRJVny3u7BhkqgxuAMWcGds8lXj1P/ZIhpswZ1f4+RQbeKw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783357297; c=relaxed/simple;
+	bh=/fbiPozIgE/BcMKR8ypJKRnzXzWLVslZg5WE58Fd4gs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iWL58hmWK9KzipHG3EyZFnlM70bhPM9x9sMI2Yldm49mSHzjD9jU4sHMkLqsuviHMFcf5tdDe0GTMCiY/unVJZ3v7LkL/lY/lZOofdX8vKgTmOWg2Mb0EYv2Vknfb7uJra0/nP71GPADCWQ86rLOcYezISF1E8dvbuGubZYHlzM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=BJrZT5L4; arc=pass smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KYUkjdZS"
-Received: by mail-pj2-f4.google.com with SMTP id d9443c01a7336-2cc7ef596c6so2764405ad.1
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 09:58:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="BJrZT5L4"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2c7c61b5292so47805155ad.0
+        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 10:01:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783357295; cv=none;
+        d=google.com; s=arc-20260327;
+        b=s6uUZM9h80H4uYe7WD4Vs2+b5/TlcE73JVI1H6qasQFSpQIVhCg6J20t33jTIyz3+X
+         pj47SuPkeQFUqQUVH54l3ezI3Ci3jms5HzVq74WnjRDGpwuJnxp3er/ROXRmAqR4DTSS
+         l35G9K/6EVTuD847dQxVhUaBi0chus8+wyV5uuowjVtX6HiP2E+jwSCbtZhdpiXSSWk2
+         04Ll1I6+vFKC7g4ga/f6enMmi1O7zdbDPVuEE1qxwO1960VKX+dr9AhERnaS6trHvYmD
+         y5HCfUQfQWV8bLvi+sdPQmMy0fYuzdwQvOv/oTmnaV0UGu/y+FTY8h7FJNvfl2fVw/1x
+         PImw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=zq2b1QVorb+bhiFECEfSOsi7qpZoF1nziG3KnKBTCwo=;
+        fh=eRKX80Nt1daTozFqmWmTibGxBVez4gt0Tc87wZvX5Es=;
+        b=JbHf3RnUsiekgbzjlwxvMrb4xPcujvfb2KacAgr78yQ8Wb8wt9v9mQP3QXPF7+NY3m
+         A/A0hULyYtgAJPOnO55qDAF2C4VndtglLCXfhlBoWfuM179dwrHxMhohS9rn/rQsP+/6
+         DH8j0vTYvD0m0c/U+Bz6mOGSqlX2W/vwmASPE4eFWibn9Y6NVd/NDzLZUQjWLwTyYG4t
+         sYToz1yEU9T8Vrl+YTdXmBF/JcX1FJxj0FbVJ0GXqK9EC46JeGaCL/l+REmxaCjRZhTo
+         lwFWHPGVX5P+M6nHswtkKpd6Sy8srqF4UZ44CFaIFkoxPAhw/4GldT//HeucHw1jOl3d
+         PBOA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783357099; x=1783961899; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=paul-moore.com; s=google; t=1783357295; x=1783962095; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=yCktVGKDr9d58r4vlA1PSQeqKAytnjdIS32qXzkgbaU=;
-        b=KYUkjdZSCIF4b0cm2KLL1+10MAj23ccTmUc7MQPUafwirB0sEGz14heT4laggVu9uZ
-         +tvO182u5QGm3t4ErE4v/NDt/k8jyal5qb8mt3sgv/AzSBtNzzS2A9KSgouMf6nf/Dxo
-         xoYCDjg00EwOK3ZUHJq8AhPVtotUS1K8K9Cr1mM+JydpE9v8A9dHcGosjGoTMWI+5+Su
-         9ootqqn1lGrbqHz8JJbgJg0kR/PSWTQleTA3kN29Gpku7Km35oVrhXAaqpdVQ3aRVIYl
-         hoG7QVfwArwykWmz0DgtCsuMZ3AFkMOqkPhhzuZIg2biEES3YCN0P9NoOltv9D8sHb5p
-         OG0A==
+        bh=zq2b1QVorb+bhiFECEfSOsi7qpZoF1nziG3KnKBTCwo=;
+        b=BJrZT5L4kB8+03O1XUB065bWaMO6CeNpCHtMAPoW8aMEgEncyMUoesoamFJAzo6/vr
+         xzFX2EKrRK/h1VpYHmxo95Z6xAt4LI6vU5Gq3nLhekeolmZUWnmdD2+sCYDylDZfqh5M
+         ef40H339QSNtrNlL9Zu78iR/jAevuekNXrQeZjBmko3u4f/ycffJa++AqYP/ZApFPja/
+         S1xxHq0bYnjdr1w1JLjP2ywC77Ja9+/rt2xuZk5JmcQn4L+pS+AHbpfxthWxT5fSPbH1
+         LVdeJvf1PgP0w2/2UJI+L2pkYV7IT6zuoAxUwy1nPhkVmVl0sZOePgCyfZXUa96gISR2
+         KRGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783357099; x=1783961899;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1783357295; x=1783962095;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=yCktVGKDr9d58r4vlA1PSQeqKAytnjdIS32qXzkgbaU=;
-        b=fNlndESljdzXQPD3fnccZUmXVb6XbfL3AKq/As3W/K6wRCEYxU1Xg56Vi2sUH/ZrQM
-         KUx1Wz/Gk2UNShJDyD20q4Bm7S0eyDIUUWGwNPmkn3QB1xo6yiWMtThmf3FNmN5uoqHY
-         S42DFfqnDRFAlGvcFrfC3lCl703Y2e0e6NVu5hrLQ9Qc5HcST1/GyEG4UznDerwAWVqG
-         CyabmdPEC4y4FN4m06Eaue0Klyo41uKZp0ARhinUY9tWhT8OQM+HhXDq6wr5fhVFX9fE
-         GbsL6AiSgc+qN7136DmP9GpHvSduhVA8XrYaA0ew+wm6m3ugYLfNMPELC4WZvmahIbm0
-         tMpw==
-X-Gm-Message-State: AOJu0YyWAFzZH2O/mbShWseBJ/HzG+0ZJdEoRUtFmc0+yZslCu8lxqhc
-	02u/pVRvuuY/WCOPFkxQs+Bdc1tsNCDN0QiSfCbut3PFnnIV9iy2nVHt
-X-Gm-Gg: AfdE7cn/QqMvUU86Vgdhiw6R5Hipl9MixGjML1xludDeaZ0jUVoiion5Yft7Jia7pEq
-	AjFUIkIZj6C1VPE9/lEgggscnIFXMWrVo6Hqp2BpeZFLPiotMTMkS5t6oGM4MOoFdYhMzz0ENUT
-	8UbxtctEXv4cUDgBjPj5KYDLB5qVHBB0dFW4hgdpbmlSzu0tnAWorBe1mY5b27B4+1sRTuP4ISu
-	o8ChwcY5krHGwS7HOQ7osqITuZRWql8jHmFAWNuvmy31VRlpzRk+tuCGqB/OlI2JiHIBYlRsJ+z
-	wxZ1Ly04Ch+g5cAc0VydHlTPs/B5CIF13LC5iLdPMEt3RzsjxNgHh4ZbOlEtfSg83JOfjs91KEn
-	+AOOhVuOZQ95pr8u93M8AuOWK9Xz8rYorK7+D3Em7+GdDoPUP9b67n8wJNqY+2iJw24gXbhF0sy
-	vtbHImBKoHQARHB/7d
-X-Received: by 2002:a17:902:d4c7:b0:2ca:ce91:f027 with SMTP id d9443c01a7336-2ccbf08784fmr14779995ad.36.1783357098686;
-        Mon, 06 Jul 2026 09:58:18 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:58::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cad6f260acsm54342455ad.6.2026.07.06.09.58.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 09:58:18 -0700 (PDT)
-Date: Mon, 6 Jul 2026 09:58:09 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Mahe Tardy <mahe.tardy@gmail.com>
-Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com, 
-	edumazet@google.com, john.fastabend@gmail.com, kuba@kernel.org, liamwisehart@meta.com, 
-	martin.lau@linux.dev, pabeni@redhat.com, song@kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH bpf-next 2/6] bpf: Add ksock kfuncs
-Message-ID: <akvdsqFhq0x19cu2@devvm7509.cco0.facebook.com>
-References: <20260706093525.13030-1-mahe.tardy@gmail.com>
- <20260706093525.13030-3-mahe.tardy@gmail.com>
+        bh=zq2b1QVorb+bhiFECEfSOsi7qpZoF1nziG3KnKBTCwo=;
+        b=kFfN+BbV1x4+j++pyatdSEmpDeFY3P+yMSISi+XQQwNBW2NFi9LRwMIHnln0r7ipHn
+         kviAWNzH5Mec3Pma5oe93n2z9I6yfkNc3zhMZnaUOCFz2dLyAPwhwv8bKoeEB6YeYrm+
+         NCoOLEqFAybP9ETXyyPRDdKKFL6yYNnx4TitzJrZ1Khwi1eCcR+rRMBYLlMC60sHepDz
+         i8W3cMB/7w3zTnORbyw6G5sH370dt+CJtzMw9vZgGYlhtxCYHr5IsVWU2MuV9ojhWYp/
+         /C7xtIRosl9QnFSjs894kFu3ziHNw7UtUaJem3dcIX5pZgrX0EbZWIMmF1e9+LsVu8Or
+         t7BQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpZ7adWhHFmI4Pr/ul3XZykV2jaukvBYNZ3tQ0q+tlJR2mVAtIM7OqkYzeKkei6PyKJ/kI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx83ynTz8ch+nR/aiVqWWjtEU6cMvM8EqkVIjVQQwNGuXJmzScM
+	wfezyCev5svr7ayy7j5en7vBOS/uKzDSdCnrViGq/hVwbVNdECgyQiZx/YGMIuc44VEsPEOF1n/
+	qO+2EF+BWLwaVEfZBS4eaV4xbTnS33EJXXT2n55c8WZG3oSbO51x9Cw==
+X-Gm-Gg: AfdE7cmfCD6AYC7VvLVHf/QJc7cT4N+hfLqRgPC6aChwWdA5pz5e6NjeunKOjrOts5f
+	aj2MQfN7gu0xPB/+ePOeyLNtxKJJlBqoV19a2cfnRc0tbAR1hL5/9ZOrhgupLMsmhOixMXDXhbs
+	tTSxZW6YfdU7DLss67rE/ibz+nOAT4lxZGnpbzThnOUBMoKjcQKeqHo3yU+5zh4aazRutQZkBAc
+	qnY7wJsrilcWDLudlZRM8oG3Acki6jOisrI1zGYsWTg057KMzpbYNngYCtLPBf6sCY/xJLGXmxb
+	g3nMbk8=
+X-Received: by 2002:a17:902:d58f:b0:2c0:b6c7:2271 with SMTP id
+ d9443c01a7336-2ccbe607239mr17075695ad.4.1783357295265; Mon, 06 Jul 2026
+ 10:01:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260706093525.13030-3-mahe.tardy@gmail.com>
+References: <20260702143605.252797-1-daniel@iogearbox.net> <20260702143605.252797-3-daniel@iogearbox.net>
+ <CAHC9VhQD4RHsGiTMVCCTN+eB71-Ueopke8XghExpNJ2PSNa_jQ@mail.gmail.com> <DJOFY21DYUI4.19WKQ3NPZ4H5R@gmail.com>
+In-Reply-To: <DJOFY21DYUI4.19WKQ3NPZ4H5R@gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 6 Jul 2026 13:01:23 -0400
+X-Gm-Features: AVVi8CfE0QwDBed6yHQcGtrwFOqh1sJ73kXaa2-AIzBqCn9zlWXgtMH2cudzbRI
+Message-ID: <CAHC9VhRk=j4_cNH5v+iCvSpJXz2g=dTK_+1O-kgT=E+OESENiA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/6] bpf: Verify signed loader metadata at
+ load time
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org, kpsingh@kernel.org, 
+	James.Bottomley@hansenpartnership.com, bboscaccy@linux.microsoft.com, 
+	memxor@gmail.com, torvalds@linux-foundation.org, a.s.protopopov@gmail.com, 
+	bpf@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 07/06, Mahe Tardy wrote:
-> Add BPF kfuncs that allow BPF LSM programs to create and use sockets for
-> sending data. This provides a mechanism for BPF programs to emit
-> telemetry. For this first patch set, it's restricted to SOCK_DGRAM
-> socket types with IPPROTO_UDP protocol but could be easily extended to
-> SOCK_STREAM and IPPROTO_TCP in the future.
-> 
-> The API consists of six kfuncs:
-> 
->   bpf_ksock_create()   - Create a socket (sleepable)
+On Thu, Jul 2, 2026 at 6:33=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+> On Thu Jul 2, 2026 at 3:05 PM PDT, Paul Moore wrote:
 
-[..]
+...
 
->   bpf_ksock_bind()     - Bind socket to local address (sleepable)
->   bpf_ksock_connect()  - Connect socket to remote address (sleepable)
+> > With this patch, even in cases where SELinux will prevent the BPF
+> > program load operation, it is not able to do so before the process
+> > triggers a potential sizable memory allocation, opening the door for a
+> > local DoS attack.
+>
+> Not true either. Worst case is 1M which is 8Mbyte.
+> Not even close to anything DoS worthy.
 
-Since you're doing only UDP for now, maybe you don't need bind/connect? The
-kernel should autobind (by default) when you sendmsg over UDP socket (IIRC).
+That's 8MB in a single allocation that can be triggered directly by
+userspace.  I suspect most systems allow a fair number of processes
+per user; that 8MB allocation can quickly multiply into a big number,
+especially for more modest, non-server systems/VMs.
 
->   bpf_ksock_send()     - Send data through the socket (sleepable)
->   bpf_ksock_acquire()  - Acquire a reference to a socket context
->   bpf_ksock_release()  - Release a reference (cleanup via
->                          queue_rcu_work since sock_release sleeps)
-> 
-> The setup kfuncs bpf_ksock_create, bpf_ksock_bind, bpf_ksock_connect,
-> can be called from SYSCALL programs only. While bpf_ksock_acquire,
-> bpf_ksock_release and bpf_ksock_send can be called from SYSCALL and LSM
-> programs.
-> 
-> The implementation follows the established kfunc lifecycle pattern
-> (create/acquire/release with refcounting, kptr map storage, dtor
-> registration). The kernel socket is wrapped in a refcounted bpf_ksock
-> struct. Cleanup is deferred via queue_rcu_work() because sock_release()
-> may sleep.
-> 
-> The kfuncs are only compiled when CONFIG_INET is enabled, as they
-> specifically support AF_INET and AF_INET6 sockets.
-> 
-> The socket operations go through the expected LSM hooks instead of
-> by-passing them like many kernel sockets since those are created by BPF
-> programs and thus system users. Thus bpf_ksock_send() kfunc, which is
-> exposed to LSM progs, has a re-entering protection to avoid recursion.
-> Also, because of the LSM checks, we prevent the use of the kfuncs from
-> asynchronous workqueue as the current value would then be invalid.
-
-[..]
-
-> A bpf_ksock_max sysctl is added to limit the maximum number of BPF
-> kernel sockets that may exist in each network namespace. Out of
-> simplicity for now, the settings is host wide but the counters are per
-> network namespace.
-
-What is this guarding against? Rogue bpf programs creating too many sockets?
+--=20
+paul-moore.com
