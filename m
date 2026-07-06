@@ -1,122 +1,199 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B152DEA68
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 17:01:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF233264DF
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 17:13:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783357297; cv=pass; b=C1N5g/lI0x6D2kzEC0c2Nbtl9ZT+A7KKmpPKBp14FRCG0fFpZWDN0pnJxqJdRvRwFmB4A0zIquQwrIFUkFF/yyWDbiCiLY7TW0PidfqQMqzvkqYmZzl9ozhUDE2lMRJVny3u7BhkqgxuAMWcGds8lXj1P/ZIhpswZ1f4+RQbeKw=
+	t=1783357995; cv=pass; b=GE24wA5OgST/9cHy0M5X3U/LpccWcReYdzbnNCrJyLdNEUyojq90I1tU/lssZythjhWw2cdqN4HzetY3KRU7GVfVQEp0rAE0qvlC4tzbMlkZgJJJNVbyINL8EaoL4VgCx+ybPJZSFDH+7RBkBRzLqLs6cXtMafzpAUjRD6t59jU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783357297; c=relaxed/simple;
-	bh=/fbiPozIgE/BcMKR8ypJKRnzXzWLVslZg5WE58Fd4gs=;
+	s=arc-20240116; t=1783357995; c=relaxed/simple;
+	bh=1ZNEn0E8kMjTljW5xMZlKQLRFTDyE82gh+WwjDpJB3w=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iWL58hmWK9KzipHG3EyZFnlM70bhPM9x9sMI2Yldm49mSHzjD9jU4sHMkLqsuviHMFcf5tdDe0GTMCiY/unVJZ3v7LkL/lY/lZOofdX8vKgTmOWg2Mb0EYv2Vknfb7uJra0/nP71GPADCWQ86rLOcYezISF1E8dvbuGubZYHlzM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=BJrZT5L4; arc=pass smtp.client-ip=209.85.214.175
+	 To:Cc:Content-Type; b=lPqTquER29GnqwQ2ExlPZduthT4OFgUp8nRD1OpHvCz/l9sFrvc8GggDQcRTa2qrZujFG0syk/y+PwMrFUmIIsilhIPSfDWMnuRINRYDaonBpSupMc9xiDzkDAfZivK8qjcmJIORg2/hy54YB49g6ZD0dXn/XzU8q1kV0MQ8a6U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=gABKBJEZ; arc=pass smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="BJrZT5L4"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2c7c61b5292so47805155ad.0
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 10:01:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783357295; cv=none;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="gABKBJEZ"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-381065a7a03so2439104a91.0
+        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 10:13:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783357993; cv=none;
         d=google.com; s=arc-20260327;
-        b=s6uUZM9h80H4uYe7WD4Vs2+b5/TlcE73JVI1H6qasQFSpQIVhCg6J20t33jTIyz3+X
-         pj47SuPkeQFUqQUVH54l3ezI3Ci3jms5HzVq74WnjRDGpwuJnxp3er/ROXRmAqR4DTSS
-         l35G9K/6EVTuD847dQxVhUaBi0chus8+wyV5uuowjVtX6HiP2E+jwSCbtZhdpiXSSWk2
-         04Ll1I6+vFKC7g4ga/f6enMmi1O7zdbDPVuEE1qxwO1960VKX+dr9AhERnaS6trHvYmD
-         y5HCfUQfQWV8bLvi+sdPQmMy0fYuzdwQvOv/oTmnaV0UGu/y+FTY8h7FJNvfl2fVw/1x
-         PImw==
+        b=RXh4epyPW0u7CfWHiddmQ9bMI6Xd5K319cKb9/YPj9ehd2HAQddAD/sw2WOAkmI2zk
+         Zw2is3CGdQmezQrzuo17ozPaRU87UuSBuGqufZ3u7fu6vCyWUZ8E0zg7/bTEAOM9rpYX
+         03rj7Hzierl5M9a1FyahsBFP+a/Uz2HxNE8ksU76Av8LDWdJE02cYkVBkM/FZRTFYNOR
+         6ZFsXKzcSnbp6yMqkcx7Jajk5sqHYo1jGWRnzC5Saz5WQHwb1xopdjIwAs6p9YMhnFYQ
+         /VyXc0JOjsqQeIk0WWdXT829hn6NH3eZsTflh0b8MLn0nL0ZxR/6RA6/t3sIIIEsjDbm
+         HFzQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=zq2b1QVorb+bhiFECEfSOsi7qpZoF1nziG3KnKBTCwo=;
-        fh=eRKX80Nt1daTozFqmWmTibGxBVez4gt0Tc87wZvX5Es=;
-        b=JbHf3RnUsiekgbzjlwxvMrb4xPcujvfb2KacAgr78yQ8Wb8wt9v9mQP3QXPF7+NY3m
-         A/A0hULyYtgAJPOnO55qDAF2C4VndtglLCXfhlBoWfuM179dwrHxMhohS9rn/rQsP+/6
-         DH8j0vTYvD0m0c/U+Bz6mOGSqlX2W/vwmASPE4eFWibn9Y6NVd/NDzLZUQjWLwTyYG4t
-         sYToz1yEU9T8Vrl+YTdXmBF/JcX1FJxj0FbVJ0GXqK9EC46JeGaCL/l+REmxaCjRZhTo
-         lwFWHPGVX5P+M6nHswtkKpd6Sy8srqF4UZ44CFaIFkoxPAhw/4GldT//HeucHw1jOl3d
-         PBOA==;
+        bh=0xmu+kWC2HiBNzOMZUwexKsbY0N1RGOC8BXOe7wfUo8=;
+        fh=GbIDqfATo2fbDwropNDCkLA0fO6Q2aLROXRKa3+qGLc=;
+        b=FxrTitGHeoHCnslLzu2ynvsgR9RGnkvkapb0ftj5FOXgap+iLNBU4ZRYbgWrzXin5y
+         APjyPv9TRuhxM/UZKvXwEwUPgDGAV4+4e8OtaimWqEmehh0mVkP4YteJvw8Ojci7oB6G
+         A6fER00YshqTfHehY234M8uf3V6aUdyXQ9oFR/6N9ypx5LaH6iER+r7N+qQv62oqwcqu
+         LGcWJkGq3nKhVOs4/DleLuRil1Wk4J9VFoul7VfpPs/lAVW1iiteURqhrfzbgzjm20Ek
+         R+ApIWHwr4YoLQIjcAr0epGw/dA+WQ4w9ykyCfjjGus1V6g9ffk1b7sJhKLrpcFQ3Qgg
+         i30g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1783357295; x=1783962095; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=zq2b1QVorb+bhiFECEfSOsi7qpZoF1nziG3KnKBTCwo=;
-        b=BJrZT5L4kB8+03O1XUB065bWaMO6CeNpCHtMAPoW8aMEgEncyMUoesoamFJAzo6/vr
-         xzFX2EKrRK/h1VpYHmxo95Z6xAt4LI6vU5Gq3nLhekeolmZUWnmdD2+sCYDylDZfqh5M
-         ef40H339QSNtrNlL9Zu78iR/jAevuekNXrQeZjBmko3u4f/ycffJa++AqYP/ZApFPja/
-         S1xxHq0bYnjdr1w1JLjP2ywC77Ja9+/rt2xuZk5JmcQn4L+pS+AHbpfxthWxT5fSPbH1
-         LVdeJvf1PgP0w2/2UJI+L2pkYV7IT6zuoAxUwy1nPhkVmVl0sZOePgCyfZXUa96gISR2
-         KRGg==
+        d=paul-moore.com; s=google; t=1783357993; x=1783962793; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0xmu+kWC2HiBNzOMZUwexKsbY0N1RGOC8BXOe7wfUo8=;
+        b=gABKBJEZplBQOeAiY58cDNt5l0T9YcmfC8zY4vMK88ojpnv5vLtz7eivmuXDl2tMJU
+         JK9l07DOsc3RjvWRy6M96kAaJjUxsmgOLj5009a8lVsW+Fs7jBbKEtXlfnWllROILO4W
+         CkiD9t3Rg9zR3ogGXsoBJPKiDlN2r90zET1lOG32RWRqjS/OAF7Jkq4NmRcmLLS7BS9m
+         lBMwB++Prq8P0TPuR43XDT4fOdoJq1jxrywAw/7nbnquEySFtxGFTDQWLDLeeW7//3tO
+         ve5jm4rzh7lyZbr1fpLQnVhUjsAenkcw/gyZ27VM4HZcN+i4bYE2D7PyMKPvwsOPLzO6
+         S7Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783357295; x=1783962095;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=zq2b1QVorb+bhiFECEfSOsi7qpZoF1nziG3KnKBTCwo=;
-        b=kFfN+BbV1x4+j++pyatdSEmpDeFY3P+yMSISi+XQQwNBW2NFi9LRwMIHnln0r7ipHn
-         kviAWNzH5Mec3Pma5oe93n2z9I6yfkNc3zhMZnaUOCFz2dLyAPwhwv8bKoeEB6YeYrm+
-         NCoOLEqFAybP9ETXyyPRDdKKFL6yYNnx4TitzJrZ1Khwi1eCcR+rRMBYLlMC60sHepDz
-         i8W3cMB/7w3zTnORbyw6G5sH370dt+CJtzMw9vZgGYlhtxCYHr5IsVWU2MuV9ojhWYp/
-         /C7xtIRosl9QnFSjs894kFu3ziHNw7UtUaJem3dcIX5pZgrX0EbZWIMmF1e9+LsVu8Or
-         t7BQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpZ7adWhHFmI4Pr/ul3XZykV2jaukvBYNZ3tQ0q+tlJR2mVAtIM7OqkYzeKkei6PyKJ/kI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx83ynTz8ch+nR/aiVqWWjtEU6cMvM8EqkVIjVQQwNGuXJmzScM
-	wfezyCev5svr7ayy7j5en7vBOS/uKzDSdCnrViGq/hVwbVNdECgyQiZx/YGMIuc44VEsPEOF1n/
-	qO+2EF+BWLwaVEfZBS4eaV4xbTnS33EJXXT2n55c8WZG3oSbO51x9Cw==
-X-Gm-Gg: AfdE7cmfCD6AYC7VvLVHf/QJc7cT4N+hfLqRgPC6aChwWdA5pz5e6NjeunKOjrOts5f
-	aj2MQfN7gu0xPB/+ePOeyLNtxKJJlBqoV19a2cfnRc0tbAR1hL5/9ZOrhgupLMsmhOixMXDXhbs
-	tTSxZW6YfdU7DLss67rE/ibz+nOAT4lxZGnpbzThnOUBMoKjcQKeqHo3yU+5zh4aazRutQZkBAc
-	qnY7wJsrilcWDLudlZRM8oG3Acki6jOisrI1zGYsWTg057KMzpbYNngYCtLPBf6sCY/xJLGXmxb
-	g3nMbk8=
-X-Received: by 2002:a17:902:d58f:b0:2c0:b6c7:2271 with SMTP id
- d9443c01a7336-2ccbe607239mr17075695ad.4.1783357295265; Mon, 06 Jul 2026
- 10:01:35 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783357993; x=1783962793;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0xmu+kWC2HiBNzOMZUwexKsbY0N1RGOC8BXOe7wfUo8=;
+        b=ZzbT2T5CuDNTiGusUEXxane2Uc6XmvX5XMx9qLl8JI4a741Fd2PY2NAahjRJgd6zG6
+         5Wmig8qLjVaom3ErY3HlZgcRC6VIHbAov6xHdTjQ+mQPXKxls5uEiEM1zHLJ7GaTx9tV
+         6rpc6ahJhvLbX/FMuMc6mi4ih8XN4Z5h3ce8ocQtuJThCc35Eul38i0LwnzMrHnk+AI+
+         /MG5iM5zbrA7DkbMHbI2YDDGy6k2fvSDd5GsYqWwpVg2UEdvI8ivNS0/PHCTr9fyJgE9
+         tLQT8aKQQGvdmSV1k3RhxxgqV2tGHReDsESY/nn+UUfT3jKdsxm6dF0URiSH02ksnXNO
+         JmoQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rp+DU/Lr0HPTm54wY+8qIaegi33amdo22w9N9dy4WmaUmqZAV+vI02gZE0P+RAVEcF1gsE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFS7qnqrYJ/Rv46hOAPd6O4DQLTbOR8KdZUUzPJk6/VGokSR5v
+	fsDoPYOmDlPhAmo4vaknFTHbRKD+ywl+sezkRYFY2hYw4MCV5mIrEPg7FW5bYVVVAU58NGPsjen
+	hrwdwqqziH700+BgOjW3ZGdzdu7jeAdjvXBSIUygZ
+X-Gm-Gg: AfdE7cnWIIxvxbVctlAO9lnlKGYoHAv/dmZ6M/cF2mTY/k4iED79r6jSKWqtQ5t/jcJ
+	e0OkM+b4pQzonpX6Veie6Z63sK5/JCLwK56+A++Q4Udsa1q12RUVWnsgBamsxcAMduJzG+uC1or
+	NEgJv1HAMiVCXlxaNgvS72nHMsHyBSE66AIUM2+xC7xlD6eHEFQMLKrs+X9IlnDSFwCabSPMDum
+	eDiiwYSjaYq0SN3N5LgV/8muxlNI43u/pnBZbJr6JJrLLOYUm0jT30PgawrZcyGa3u477Lm
+X-Received: by 2002:a17:90b:3dc5:b0:381:6466:7160 with SMTP id
+ 98e67ed59e1d1-387575a0b4cmr1310473a91.26.1783357992887; Mon, 06 Jul 2026
+ 10:13:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260702143605.252797-1-daniel@iogearbox.net> <20260702143605.252797-3-daniel@iogearbox.net>
- <CAHC9VhQD4RHsGiTMVCCTN+eB71-Ueopke8XghExpNJ2PSNa_jQ@mail.gmail.com> <DJOFY21DYUI4.19WKQ3NPZ4H5R@gmail.com>
-In-Reply-To: <DJOFY21DYUI4.19WKQ3NPZ4H5R@gmail.com>
+References: <20260706135644.326006-1-daniel@iogearbox.net>
+In-Reply-To: <20260706135644.326006-1-daniel@iogearbox.net>
 From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 6 Jul 2026 13:01:23 -0400
-X-Gm-Features: AVVi8CfE0QwDBed6yHQcGtrwFOqh1sJ73kXaa2-AIzBqCn9zlWXgtMH2cudzbRI
-Message-ID: <CAHC9VhRk=j4_cNH5v+iCvSpJXz2g=dTK_+1O-kgT=E+OESENiA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/6] bpf: Verify signed loader metadata at
- load time
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org, kpsingh@kernel.org, 
-	James.Bottomley@hansenpartnership.com, bboscaccy@linux.microsoft.com, 
-	memxor@gmail.com, torvalds@linux-foundation.org, a.s.protopopov@gmail.com, 
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org
+Date: Mon, 6 Jul 2026 13:13:00 -0400
+X-Gm-Features: AVVi8CeCuWrUiOENGEA-IpthH0EltUGg_gz23gBLobgWKHgUrDsTpSX5qNBeOt0
+Message-ID: <CAHC9VhQbqxJFBX+3-JiHR7+QqgWsiAAak7J4-q3QykdGqB7g+g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 0/9] Verify BPF signed loader at load time
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: ast@kernel.org, kpsingh@kernel.org, James.Bottomley@hansenpartnership.com, 
+	bboscaccy@linux.microsoft.com, memxor@gmail.com, 
+	torvalds@linux-foundation.org, a.s.protopopov@gmail.com, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 2, 2026 at 6:33=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
-> On Thu Jul 2, 2026 at 3:05 PM PDT, Paul Moore wrote:
-
-...
-
-> > With this patch, even in cases where SELinux will prevent the BPF
-> > program load operation, it is not able to do so before the process
-> > triggers a potential sizable memory allocation, opening the door for a
-> > local DoS attack.
+On Mon, Jul 6, 2026 at 9:56=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.ne=
+t> wrote:
 >
-> Not true either. Worst case is 1M which is 8Mbyte.
-> Not even close to anything DoS worthy.
+> The BPF signing scheme signs a light skeleton's loader program and lets
+> the loader vouch for everything else: bpftool bakes the SHA256 of the
+> metadata map into the loader's instructions, signs the instructions, and
+> the loader compares the (frozen, exclusive) map against that hash from
+> within BPF once it runs. The construction is sound as a trusted hash
+> chain, but the kernel itself never attests the metadata, and that split
+> has been the recurring objection from the LSM / integrity side since the
+> scheme was proposed.
+>
+> This proposal closes both gaps by having the kernel verify the metadata
+> at BPF_PROG_LOAD time, before the LSM admission hook and before the
+> verifier, /without/ growing the UAPI. A signed loader binds its metadata
+> map(s) through the existing fd_array/fd_array_cnt, and exclusive maps
+> are already bound to the loader's digest via excl_prog_hash. When a
+> signature is present, the kernel collects the exclusive maps from the
+> fd_array and appends their frozen contents to the instructions before
+> PKCS#7 verification, so the signature covers ...
+>
+>     insns || metadata_0 || metadata_1 || [...]
+>
+> ... in fd_array order. The in-loader hash check is dropped from the
+> gen_loader entirely: generated loaders carry no verification logic
+> anymore, and signing or verifying a skeleton becomes an ordinary CMS
+> operation over bytes that sit verbatim in the skeleton, reproducible
+> offline. A signed program is either BPF_SIG_UNSIGNED or BPF_SIG_VERIFIED
+> with nothing in between.
+>
+> There is no new UAPI, we now have a single signature scheme, no LSM
+> code reaching into BPF internals, no new LSM hook, and unsigned loads
+> are completely unaffected. It is also less complex since the loader
+> does not need to deal with BTF, an extra kfunc, etc, as proposed in
+> an earlier series [0]. Tested against full BPF CI which came back
+> green. For more details and examples, see the documentation patch in
+> this series.
+>
+>   [0] https://lore.kernel.org/bpf/20260522023234.3778588-1-kpsingh@kernel=
+.org/
+>
+> v3 -> v4:
+>   - Fix upper limit in MAX_FD_ARRAY_CNT (Anton)
+>   - Reject !fd_array && attr->fd_array_cnt (Anton)
+>   - Add bpftool patch wrt ignored return value of EVP_Digest() (sashiko)
+>   - Fix setting of gen_loader_fixture_init (sashiko)
+>   - Fix unused map_fd cleanup branch in selftest (bot+bpf-ci)
+>   - Remove now unused map->excl member and adjust selftests
+>   - Added more BPF signed_loader corner case selftest coverage
+>   - Added Paul's Nack wrt bpf_prog_load LSM hook dispute
+>   - Added patch 2 to move bigger allocations below fd_array
+>     resolution (Paul)
 
-That's 8MB in a single allocation that can be triggered directly by
-userspace.  I suspect most systems allow a fair number of processes
-per user; that 8MB allocation can quickly multiply into a big number,
-especially for more modest, non-server systems/VMs.
+If you want to squash patch 2/9 and 3/9 together so that one can't
+easily merge 3/9 without the vzalloc(program) relocation I'll gladly
+drop my NACK on patch 3/9.
+
+> v2 -> v3:
+>   - Added first commit to cache and work on objects in fd_array
+>     which was the most recent issue sashiko rightfully complained
+>   - Added more BPF signed_loader selftest coverage to cover that
+>     usage of sparse fd_array or map fds gets rejected
+>   - I left the security_bpf_prog_load as in v2 given preference
+>     from BPF side over adding new hook
+> v1 -> v2:
+>   - Addressed both sashiko complaints, the TOCTOU bug regarding
+>     fd_array processing, as well as exclusive map checking to
+>     only allow array maps. The validation is now moved into the
+>     verifier before the main verification work happens. This also
+>     gives the opportunity to utilize the verifier log.
+>
+> Daniel Borkmann (9):
+>   bpf: Resolve and cache fd_array objects at load time
+>   bpf: Move bigger allocations below fd_array resolution
+>   bpf: Verify signed loader metadata at load time
+>   libbpf: Drop in-loader metadata check for load-time verification
+>   bpftool: Check EVP_Digest when computing excl_prog_hash
+>   bpftool: Cover loader metadata with the program signature
+>   selftests/bpf: Adjust bpf_map layout in verifier_map_ptr
+>   selftests/bpf: Verify load-time signed loader metadata
+>   Documentation/bpf: Add BPF signing and enforcement doc
+>
+>  Documentation/bpf/index.rst                   |    1 +
+>  Documentation/bpf/signing.rst                 |  496 ++++++++
+>  include/linux/bpf.h                           |    1 -
+>  include/linux/bpf_verifier.h                  |   23 +-
+>  kernel/bpf/syscall.c                          |   83 +-
+>  kernel/bpf/verifier.c                         |  450 ++++++--
+>  tools/bpf/bpftool/gen.c                       |    2 +
+>  tools/bpf/bpftool/sign.c                      |   24 +-
+>  tools/lib/bpf/bpf_gen_internal.h              |    1 -
+>  tools/lib/bpf/gen_loader.c                    |   76 +-
+>  tools/lib/bpf/libbpf_internal.h               |    1 -
+>  tools/lib/bpf/skel_internal.h                 |   31 +-
+>  .../selftests/bpf/prog_tests/signed_loader.c  | 1004 ++++++++++++++---
+>  .../selftests/bpf/progs/test_signed_loader.c  |    9 +-
+>  .../selftests/bpf/progs/verifier_map_ptr.c    |   23 +-
+>  15 files changed, 1786 insertions(+), 439 deletions(-)
+>  create mode 100644 Documentation/bpf/signing.rst
 
 --=20
 paul-moore.com
