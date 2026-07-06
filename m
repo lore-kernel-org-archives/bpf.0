@@ -1,259 +1,222 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.yourmailgateway.de (relay.yourmailgateway.de [188.68.61.103])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1243DD85B
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 11:28:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783337328; cv=pass; b=TnlvfdjLhryTxmd3gebjkbK9Q/BoARWoM+MjGHaEN+EWK1wgI3xxNxNnOdurWpSHPpU7vifon4N0AOVYMet9fFJ4NdMDLo6CI+w6JrCUJ0wR4gN6eDM6ILgYK/x/B8uLTmt/gI7483ca1fjp3gZnA5mkKhLmqqt3s6Ai1UK/plo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783337328; c=relaxed/simple;
-	bh=UnVNq/wWWKvKlOrOF6g0ETJyq4yEhQX5Rgky1/KTcPg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UyDj31C6yqdO55kTS9oe0YI9XFVKZcchU38OiD9aoLA/NEPFQXHd3iqa7u/vXheMHM0vifAIMx3eNJOH+jVArSeX6ryfDuBb2mJqsi/pEysvDnGQRvrB66TSKPAyqqPa6wH48IzT6bC0HWpmNUgrMJOuAJkswEwXkuSQDDbX8w0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RTDuOYid; arc=pass smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4970741D4CC;
+	Mon,  6 Jul 2026 11:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.68.61.103
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783337591; cv=none; b=YlVG8gcRzWW5PSpsXuZA4iEKNRAHNoQ65BaLYbdzX1Vb8YUzh/e0iYevzcAKGrGEHhdpL89CCksg+AMDVBGH7wZWLJ9hzGF6TkAJ8Lh4rWj+CA2uMfrhPGs+p+SdR7wgNPkFHEZZu+qrcovkZo/yQrQN1tW5wW5okrfSNB2pO/E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783337591; c=relaxed/simple;
+	bh=CrAyFlNelNHVdYVgyLcMn88u7gZnj2u5kod5elb1DH0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UN7hqDxz8waZg0CDWNjxbHi4SbwH8t2aRuSGHWahL3i7QGvuCCrAgnihsjn1im2gJL813mkXEtpyC/wP+MLZVilNVUHAduSBInv1fnICHldxig8BsDWowFrCCdlmluqDDUbzOw9+piKtrp+nmy56K6btTfwdXjsfQajR+hRuczw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=cQmGraDO; arc=none smtp.client-ip=188.68.61.103
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RTDuOYid"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c126b8118afso348407666b.2
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 04:28:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783337325; cv=none;
-        d=google.com; s=arc-20260327;
-        b=DZP5r6MhrqUiVaJ3GRlFbbBVPjAqpGYS5RX2T6VcAhZm/SCixW0aNi8cCOqlto3xs/
-         azEBA0iwvLQn44ULulvEYcMyuAcu3EsDe8GwBZdVHqRzvwcSQMKqHS6BJqL364wUBVd/
-         ZWRL0U+TNIsrZh4hBe76G49zuo5xhz+momltDmUU4F5y45z/GX/r+SVFU1fKfG2cnu8l
-         SP2mwRNmZkR2JTBEaNw4xJTZpcdMfKMr7It3oqfQqcnXM2oohq15EwT1RGz5Nmp7QlKV
-         pUAtPlg1UCxOORwE4YUQ/o/Ldqh+yXgoD2t+AtcZqr1O+t94EEx6GeD9XPLJKDcts1ap
-         Y45A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=wFOj79bWOnd0LS0wjSgsgRhf1+z7hwm6H+c6gNDl8fY=;
-        fh=++llaMHPpNdcclvDlNvdn1k/420oxF/RHbHN1VCG4T0=;
-        b=U/S9atX+3f8SXPRzkbkzGlvbkqiZ63xvdyi2eBOYFwrK76F9toTNLshN+v2snA26Gv
-         KC0pRlCVW/KnkbKFAZZsupFg9QOzWAjAmfFgfYM/G+VxQFqtGXhLCr3I/tzt49BXasZH
-         2CqVyFBegHTzWXB5HZz4z3kBg57sfSB5Lrj4nIYDKahVGkYnUY9GPaD9pHDsCP+Df5ZZ
-         T4DqfT503LwKdoI9Dtff0npiIn2HEUN9AZ+XhnBfP6wHBpxNY1u9DuJ+n/edAdHrjDXx
-         lhX8hYOaIfmy6YMQQb3+ir/6+xn8Gmdk5qv7+9EMHjyEIa/vhyldLqHPsWtGJGLtt/g/
-         ObtQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783337325; x=1783942125; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=wFOj79bWOnd0LS0wjSgsgRhf1+z7hwm6H+c6gNDl8fY=;
-        b=RTDuOYidaS8IpkUIERhWc25/XU3u9bmNfiychQIFM64HjpmFnEV3oGDUMhNl2Ica0R
-         rkZxPl2ceB8fk0heMmvQI2FP+S5LyP7gwm2Ddtg7SWc0eb4nkkerTF2HMQxbixaJWSgO
-         ab8px22mlg3E4G1tohp94r8hTiWIo1q5+RVXZIM2fM8OKoaFgycwS6gWxvCETFUHiM9g
-         EVMqhgjezo+XWGFCc9HdBBGP6vjPg1o0mtpbefTMUuXvwMzg7Tebihbv+1Lzo5Us5slS
-         jnJpTZ66x+o6b3+Ih+Ywloe5ubjEbwXiA56SQynXi+XBVJF14diUJBMfhjY5t7yToCss
-         tprg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783337325; x=1783942125;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wFOj79bWOnd0LS0wjSgsgRhf1+z7hwm6H+c6gNDl8fY=;
-        b=OwCugEL4P7FRFt44lvgzmnDTnQTrs9V0uDTkk4WOxbeLMfUpie/3yaKL0UF6xn4pT+
-         8Pge8xT1nhXFN28xWk5zDQTqdWL3iR1lls057T3lO69yXlBetDYOUFSXjYa0P9atxbOf
-         U9Vk5itWpd5J8SS5a390y4MlradaY7Rb6FJ+ITYe1L5f5YvaJBMrRBTlqNi9493hKDjL
-         xR+EXi2Ja9GYwlmCmrxttD5ixwgYnVANK/MYgF0wBqPTcXXFquMN9ccAnqN6kRYNqdP4
-         U88JthOHNv5DRnjjIyZ0XzMlvCnYLjUBWutk/LLhxEbi1/drJvliiHQjpR8Oeb1l+v3y
-         lMUA==
-X-Forwarded-Encrypted: i=1; AHgh+Rqsdbj490qdhE8miKY6vlP9CtX6/6WMrajBN5kFDegyg7wVOJcw6bfzVcy6N67yZDGMcfA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKGZ7riHwWx5UNUutcHGE5rHe8BNAninOY9fXkQ2MHs90VkKaM
-	NpEHkAaPvst3bO7zcSWJfYF5mgw0ZOidFJF/ojT7fxVryzyZq1+N46uZe8oOnhp7ZWEnUMkedN9
-	cyyCsAWMA23DpAS/eqZPCXYVRtLPKcGbGVqvCQ2s=
-X-Gm-Gg: AfdE7cmrAcvY7h1G+3G9DdVN+aRv7Rx+DgkDHYe1y+CJUpsyb60FD1qhGazhTMNsYXh
-	XiZthCWGwa4OlYGu39X4pgCehnTLqm4Cq5P49qfYriHb4w+PyjVJUjxqZLgnbwmuBGUl5iKHzLr
-	VKfvbqL3IlUbA+W3m/I3JMwXrQLL6jAO17OnzTfq7b/uWmJj5IdiXJ4rMCw6B3B4YbxJK1hKaHF
-	Cw+6SqM/eDhRt2j/oLUPBav5V7yeFyTRnO2DKCECgiRJB0DIp5XSqBcbGM0ex/ta8mKe/AUjEp1
-	ONjY4XPYK9fN
-X-Received: by 2002:a17:907:787:b0:c12:525b:4e84 with SMTP id
- a640c23a62f3a-c15a67d60edmr7635666b.9.1783337324905; Mon, 06 Jul 2026
- 04:28:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="cQmGraDO"
+Received: from mors-relay-8403.netcup.net (localhost [127.0.0.1])
+	by mors-relay-8403.netcup.net (Postfix) with ESMTPS id 4gv2K93Nwkz8838;
+	Mon,  6 Jul 2026 13:32:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=leemhuis.info;
+	s=key2; t=1783337565;
+	bh=CrAyFlNelNHVdYVgyLcMn88u7gZnj2u5kod5elb1DH0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=cQmGraDOQdBWVgJ2Og2JqDPgqLdI2xwoEHZYWowjbE4fv7P1BkeFPXFRzNEzmZnUa
+	 hn+tUzGcgvXY9YilBYDcA2cIVBH5hqi+KHlL1Rlhm/PW51Jk1XGob/pZ33ZEU/ozXy
+	 cyE3s25knDwyIKGzC3gZDfScQzUNWbQ6CEQKXO23KD8gKKeLvdjJBkfaR5dlX+bJAt
+	 Xw3yBCngwvAVGdQuEWPs9LmUpiHyAkYzzrlj/MSwSMuzS27EaJCoCQkFSrfL7SKkdp
+	 lX1Nel3JBgGc9ao/F5Q+DnkDbIeWpfIahNjg+/zQyDFt/gAC98z7N3RsROJ0KkW68z
+	 g7PHoATYfJCqQ==
+Received: from policy01-mors.netcup.net (unknown [46.38.225.35])
+	by mors-relay-8403.netcup.net (Postfix) with ESMTPS id 4gv2K92cvNz87md;
+	Mon,  6 Jul 2026 13:32:45 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at policy01-mors.netcup.net
+X-Spam-Flag: NO
+X-Spam-Score: -2.898
+X-Spam-Level: 
+Received: from mxe9fb.netcup.net (unknown [10.243.12.53])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by policy01-mors.netcup.net (Postfix) with ESMTPS id 4gv2K50Ys6z8tbb;
+	Mon,  6 Jul 2026 13:32:41 +0200 (CEST)
+Received: from [IPV6:2a02:8108:8984:1d00:a0cf:1912:4be:477f] (unknown [IPv6:2a02:8108:8984:1d00:a0cf:1912:4be:477f])
+	by mxe9fb.netcup.net (Postfix) with ESMTPSA id D6871603ED;
+	Mon,  6 Jul 2026 13:32:39 +0200 (CEST)
+Authentication-Results: mxe9fb;
+        spf=pass (sender IP is 2a02:8108:8984:1d00:a0cf:1912:4be:477f) smtp.mailfrom=regressions@leemhuis.info smtp.helo=[IPV6:2a02:8108:8984:1d00:a0cf:1912:4be:477f]
+Received-SPF: pass (mxe9fb: connection is authenticated)
+Message-ID: <1a9a672d-914d-43c2-b1da-6a0deede4dac@leemhuis.info>
+Date: Mon, 6 Jul 2026 13:32:39 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260630032543.3165720-1-sanghyun.park.cnu@gmail.com> <CAEf4Bzby1M8OPRomzEq-xvciK-Zq2zoL0AoSn=iSR02t=wdNOg@mail.gmail.com>
-In-Reply-To: <CAEf4Bzby1M8OPRomzEq-xvciK-Zq2zoL0AoSn=iSR02t=wdNOg@mail.gmail.com>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Mon, 6 Jul 2026 12:28:31 +0100
-X-Gm-Features: AVVi8CetW9gw2hBN3-LImrQOVIhuWsQfo_rzbdkuFO_gKpVT2HD5VfQD2dz4NE8
-Message-ID: <CANk7y0g+tk_C9jF6c0420NDEyeM7LYgYyoCkKxy1utB46GnDUw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6] bpf: Fix use-after-free on mm_struct in bpf_find_vma()
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Sanghyun Park <sanghyun.park.cnu@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] rcu: Use an intermediate irq_work to start
+ process_srcu()
+To: Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+ Boqun Feng <boqun@kernel.org>, Samuel Holland <samuel.holland@sifive.com>
+Cc: Joel Fernandes <joelagnelf@nvidia.com>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>, frederic@kernel.org,
+ neeraj.iitr10@gmail.com, urezki@gmail.com, boqun.feng@gmail.com,
+ rcu@vger.kernel.org, Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>, Andrea Righi <arighi@nvidia.com>,
+ Zqiang <qiang.zhang@linux.dev>, linux-riscv@lists.infradead.org,
+ Sarah Emery <sarah.emery@canonical.com>,
+ Indrek Kruusa <indrek.kruusa@gmail.com>,
+ Linux kernel regressions list <regressions@lists.linux.dev>
+References: <ab2yd35rm6OgZUmb@gpd4> <20260320222916.19987-1-boqun@kernel.org>
+ <CAJM55Z-hiNDuu5UwoBe7m0wq+_WJrRY0cwopALUgpG+r3ixj8g@mail.gmail.com>
+ <ajQPAk_ALP-84obp@MacBook-0RXW5>
+ <CAJM55Z_15U7GssTOims1=J34CYSj=8CDE_di1kJYs5hE3=J53w@mail.gmail.com>
+ <ajlW4oSzEqav6gxc@MacBook-0RXW5>
+ <CAJM55Z_7N40ARWGoZg04p-NnAy-w10v4=Em-e4Bx4+oNYMGBLg@mail.gmail.com>
+ <80773b89-f333-4c82-99b5-3fca44ea93b3@sifive.com>
+ <CAJM55Z_aUzPieiGKPgr_iETovgyGB0EUFau+=tLxZksT9CkpYQ@mail.gmail.com>
+From: Thorsten Leemhuis <regressions@leemhuis.info>
+Content-Language: de-DE, en-US
+In-Reply-To: 
+ <CAJM55Z_aUzPieiGKPgr_iETovgyGB0EUFau+=tLxZksT9CkpYQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-PPP-Message-ID: <178333756076.763651.5475009093779181864@mxe9fb.netcup.net>
+X-NC-CID: 5We4qmzXW0aQeF+1js2/uoL0nHzawYS6SjwmVksOB9uX0tTkc/8=
 
-On Wed, Jul 1, 2026 at 8:48=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Jun 29, 2026 at 8:25=E2=80=AFPM Sanghyun Park
-> <sanghyun.park.cnu@gmail.com> wrote:
-> >
-> > bpf_find_vma() reads task->mm and calls mmap_read_trylock(mm) without
-> > holding a reference on the mm. On a foreign task, a concurrent exit_mm(=
-)
-> > can free the mm_struct between the lockless read and the trylock,
-> > resulting in a use-after-free. mm_struct is not SLAB_TYPESAFE_BY_RCU.
-> >
-> > For the current task, task->mm is stable. For a foreign task, pin the m=
-m
-> > under task->alloc_lock and release it with mmput_async(), mirroring com=
-mit
-> > d8e27d2d22b6 ("bpf: fix mm lifecycle in open-coded task_vma iterator").
-> > Use spin_trylock() instead of get_task_mm() so BPF context does not blo=
-ck
-> > on alloc_lock. Reject irqs-disabled contexts and !CONFIG_MMU on the
-> > foreign-task path because dropping the mm reference is not safe there.
-> >
-> > Race:
-> >
-> >   CPU0 (BPF program)                  CPU1 (exiting task)
-> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D        =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >   bpf_find_vma(foreign_task):
-> >     mm =3D task->mm
-> >                                       exit_mm():
-> >                                         task->mm =3D NULL
-> >                                         mmput(mm) -> frees mm_struct
-> >     mmap_read_trylock(mm)
-> >         // UAF on mm
-> >
-> > Fixes: 7c7e3d31e785 ("bpf: Introduce helper bpf_find_vma")
-> > Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> > Signed-off-by: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-> > ---
->
-> Puranjay, PTAL, I think you've been fixing similar issue in
-> bpf_iter_task_vma_new(), would be nice for you to check this fix as
-> well. Thanks!
->
-> > v6:
-> >  - Restore bpf_iter_mmput_async() because bpf_iter_task_vma_destroy()
-> >    still uses it.
-> >  - Keep the direct mmput_async() call in bpf_find_vma(), but guard it w=
-ith
-> >    CONFIG_MMU because mmput_async() is declared only for CONFIG_MMU bui=
-lds.
-> > v5: https://lore.kernel.org/bpf/20260630023443.3026627-2-sanghyun.park.=
-cnu@gmail.com/
-> >  - Replace bpf_iter_mmput_async() with mmput_async() directly as sugges=
-ted
-> >    by Yonghong.
-> >  - Add Yonghong's Acked-by.
-> > v4: https://lore.kernel.org/bpf/20260610024637.343364-1-sanghyun.park.c=
-nu@gmail.com/
-> >  - Use [PATCH bpf-next] subject as requested by Alexei.
-> >  - Add the missing BPF maintainers/reviewers to Cc.
-> > v3: https://lore.kernel.org/bpf/20260609105216.3536839-1-sanghyun.park.=
-cnu@gmail.com/
-> >  - Drop get_task_mm()+mmput(); mirror d8e27d2d22b6 with alloc_lock
-> >    trylock + mmput_async(). (Yonghong Song)
-> >  - Reject irqs-disabled contexts on the foreign-task path.
-> >  - Reject foreign-task path when !CONFIG_MMU: bpf_iter_mmput_async()
-> >    falls back to mmput() which may sleep, and bpf_find_vma() can run
-> >    in non-sleepable context.
-> >  - Shorten the foreign-task rationale comment and trim the changelog bo=
-dy.
-> >  - Fix the v2's whitespace damage.
-> > v2: https://lore.kernel.org/bpf/CAOrxSK5_7e4114VyfEU9htGi+UneuNt88fGVKO=
-Aa3_ZenPOFkA@mail.gmail.com/
-> >
-> >  kernel/bpf/task_iter.c | 36 +++++++++++++++++++++++++++++++++---
-> >  1 file changed, 33 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-> > index fc5f463ca529a..1d56193caf5e4 100644
-> > --- a/kernel/bpf/task_iter.c
-> > +++ b/kernel/bpf/task_iter.c
-> > @@ -760,6 +760,7 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *, task=
-, u64, start,
-> >         struct mmap_unlock_irq_work *work =3D NULL;
-> >         struct vm_area_struct *vma;
-> >         bool irq_work_busy =3D false;
-> > +       bool mmput_needed =3D false;
-> >         struct mm_struct *mm;
-> >         int ret =3D -ENOENT;
-> >
-> > @@ -769,14 +770,38 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *, ta=
-sk, u64, start,
-> >         if (!task)
-> >                 return -ENOENT;
-> >
-> > -       mm =3D task->mm;
-> > +       if (task =3D=3D current) {
-> > +               mm =3D task->mm;
-> > +       } else {
-> > +               /*
-> > +                * Foreign task: pin task->mm against a concurrent exit=
-_mm().
-> > +                * Use trylock on alloc_lock instead of get_task_mm()'s
-> > +                * blocking task_lock() to avoid deadlocking the target=
- task.
-> > +                */
-> > +               if (!IS_ENABLED(CONFIG_MMU))
-> > +                       return -EOPNOTSUPP;
-> > +               if (irqs_disabled())
-> > +                       return -EBUSY;
-> > +               if (!spin_trylock(&task->alloc_lock))
-> > +                       return -EBUSY;
-> > +               mm =3D task->mm;
-> > +               if (mm && !(task->flags & PF_KTHREAD)) {
-> > +                       mmget(mm);
-> > +                       mmput_needed =3D true;
-> > +               } else {
-> > +                       mm =3D NULL;
-> > +               }
-> > +               spin_unlock(&task->alloc_lock);
-> > +       }
-> >         if (!mm)
-> >                 return -ENOENT;
-> >
-> >         irq_work_busy =3D bpf_mmap_unlock_get_irq_work(&work);
-> >
-> > -       if (irq_work_busy || !mmap_read_trylock(mm))
-> > -               return -EBUSY;
-> > +       if (irq_work_busy || !mmap_read_trylock(mm)) {
-> > +               ret =3D -EBUSY;
-> > +               goto out;
-> > +       }
-> >
-> >         vma =3D find_vma(mm, start);
-> >
-> > @@ -786,6 +811,11 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *, tas=
-k, u64, start,
-> >                 ret =3D 0;
-> >         }
-> >         bpf_mmap_unlock_mm(work, mm);
-> > +out:
-> > +#ifdef CONFIG_MMU
-> > +       if (mmput_needed)
-> > +               mmput_async(mm);
-> > +#endif
-> >         return ret;
-> >  }
-> >
-> > --
-> > 2.48.1
+On 6/24/26 10:55, Emil Renner Berthing wrote:
+> Quoting Samuel Holland (2026-06-23 17:53:19)
+>> On 2026-06-23 4:34 AM, Emil Renner Berthing wrote:
+>>> Quoting Boqun Feng (2026-06-22 17:38:10)
+>>>> On Sat, Jun 20, 2026 at 05:25:25AM -0400, Emil Renner Berthing wrote:
+>>>>> Quoting Boqun Feng (2026-06-18 17:30:10)
+>>>>>> On Thu, Jun 18, 2026 at 08:11:36AM -0500, Emil Renner Berthing wrote:
+>>>>>>> Quoting Boqun Feng (2026-03-20 23:29:16)
+>>>>>>>> Since commit c27cea4416a3 ("rcu: Re-implement RCU Tasks Trace in terms
+>>>>>>>> of SRCU-fast") we switched to SRCU in BPF. However as BPF instrument can
+>>>>>>>> happen basically everywhere (including where a scheduler lock is held),
+>>>>>>>> call_srcu() now needs to avoid acquiring scheduler lock because
+>>>>>>>> otherwise it could cause deadlock [1]. Fix this by following what the
+>>>>>>>> previous RCU Tasks Trace did: using an irq_work to delay the queuing of
+>>>>>>>> the work to start process_srcu().
+>>>>>>>>
+>>>>>>>> [boqun: Apply Joel's feedback]
+>>>>>>>> [boqun: Apply Andrea's test feedback]
+>>>>>>>>
+>>>>>>>> Reported-by: Andrea Righi <arighi@nvidia.com>
+>>>>>>>> Closes: https://lore.kernel.org/all/abjzvz_tL_siV17s@gpd4/
+>>>>>>>> Fixes: commit c27cea4416a3 ("rcu: Re-implement RCU Tasks Trace in terms of SRCU-fast")
+>>>>>>>> Link: https://lore.kernel.org/rcu/3c4c5a29-24ea-492d-aeee-e0d9605b4183@nvidia.com/ [1]
+>>>>>>>> Suggested-by: Zqiang <qiang.zhang@linux.dev>
+>>>>>>>> Tested-by: Andrea Righi <arighi@nvidia.com>
+>>>>>>>> Signed-off-by: Boqun Feng <boqun@kernel.org>
+>>>>>>>
+>>>>>>> Thanks for the patch, which is now upstream as
+>>>>>>> 7c405fb3279b ("rcu: Use an intermediate irq_work to start process_srcu()")
+>>>>>>>
+>>>>>>> Unfortunately it seems to halt booting on the Allwinner D1 single-core RISC-V
+>>>>>>> SoC both on the 7.0 and 7.1 kernels:
+>>>>>>>
+>>>>>>
+>>>>>> By "single-core", is it only one CPU in that system?
+>>>>>>
+>>>>>>> https://esmil.dk/d1-7.0.txt
+>>>>>>> https://esmil.dk/d1-7.1.txt
+>>>>>>>
+>>>>>
+>>>>> Yes, the SoC only has one CPU core capable of running Linux at least.
+>>>>>
+>>>>>> From the callstack,
+>>>>>>
+>>>>>> [  243.002818] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>>>>>> [  243.010681] task:kworker/0:0     state:D stack:0     pid:9     tgid:9     ppid:2      task_flags:0x4208060 flags:0x00000000
+>>>>>> [  243.021858] Workqueue: device_link_wq device_link_release_fn
+>>>>>> [  243.027587] Call Trace:
+>>>>>> [  243.030079] [<ffffffff80745b66>] __schedule+0x232/0x530
+>>>>>> [  243.035365] [<ffffffff80745e82>] schedule+0x1e/0x94
+>>>>>> [  243.040298] [<ffffffff8074aa7a>] schedule_timeout+0x6e/0xa8
+>>>>>> [  243.045929] [<ffffffff8004d6a0>] wakeup_preempt+0x8c/0x98
+>>>>>> [  243.051380] [<ffffffff80746aee>] wait_for_completion+0x3a/0xb0
+>>>>>> [  243.057267] [<ffffffff80087226>] __synchronize_srcu.part.0+0x4e/0x60
+>>>>>> [  243.063712] [<ffffffff80084414>] rcu_tasks_get_gp_data+0xc/0x10
+>>>>>> [  243.069699] [<ffffffff80490898>] device_link_release_fn+0x14/0x80
+>>>>>> [  243.075850] [<ffffffff8003dbd0>] process_one_work+0xf8/0x1c8
+>>>>>> [  243.081583] [<ffffffff8003e282>] worker_thread+0x11a/0x254
+>>>>>> [  243.087127] [<ffffffff8003e164>] rescuer_thread+0x3a0/0x3a4
+>>>>>> [  243.092755] [<ffffffff8003e164>] rescuer_thread+0x3a0/0x3a4
+>>>>>> [  243.098381] [<ffffffff8004499e>] kthread+0xbe/0xe4
+>>>>>> [  243.103231] [<ffffffff8001349e>] ret_from_fork_kernel+0x6/0xd0
+>>>>>> [  243.109127] [<ffffffff800517a8>] schedule_tail+0x8/0xac
+>>>>>> [  243.114410] [<ffffffff800448dc>] kthreads_online_cpu+0x0/0x4
+>>>>>> [  243.120121] [<ffffffff8074be0a>] ret_from_fork_kernel_asm+0x12/0x18
+>>>>>>
+>>>>>> I will guess for some reasons the irq_work was missed or the IPI never
+>>>>>> happened. Is it possible for you to enable trace points ipi_send_cpu and
+>>>>>> ipi_entry to get more information?
+>>>>>
+>>>>> I have to admit I've not used tracepoints before, but it seems like only
+>>>>> ipi_send_cpu and ipi_send_cpumask is available on RISC-V.
+>>>>> I've now added trace_event=ipi:* and tp_printk to the command line, and this
+>>>>
+>>>> Thank you! Yeah, this is what I meant ;-)
+>>>>
+>>>>> is what I get:
+>>>>> https://esmil.dk/d1-7.0-2.txt
+>>>>>
+>>>>
+>>>>
+>>>> [    0.071132] rcu:     Max phase no-delay instances is 1000.
+>>>> [    0.077837] ipi_send_cpu: cpu=0 callsite=irq_work_queue+0x22/0x4c callback=srcu_irq_work+0x0/0x58
+>>>>
+>>>> Is this the last line you can see from your (serial?) console, or we are
+>>>> missing a few more lines? Maybe it'll should the same hung task
+>>>> messages?
+>>>
+>>> Yes, sorry for not being clear about that. This is the exact same binary booted
+>>> without the two extra command line parametrs:
+>>> https://esmil.dk/d1-7.0-3.txt
+>>>
+>>> But with the two parameters added the board reboots before getting to the hung
+>>> task messages. The bootloader enables the watchdog, so I think what happens is
+>>> that the kernel halts earlier with the tracepoints enabled, and doesn't get to
+>>> load the watchdog driver to keep the machine from rebooting.
+>>>
+>>> The same happens with just trace_event=ipi:* added, just without the last
+>>> message above.
+>>>
+>>>>
+>>>> The ipi_send_cpu message means RCU was able to send an IPI, now if there
+>>>> is no ipi_handler between the send and the hung task, that would mean
+>>>> the IPI was missed.
+>>
+>> Assuming that your OpenSBI version is exactly v1.3 per the boot log, and not
+>> "v1.3 + patches", then you would indeed not be receiving IPIs. You need at least
+>> this commit: https://github.com/riscv-software-src/opensbi/commit/446fa65eb579
+>> (included in v1.4) or alternatively to add the CLINT to the M-mode devicetree.
+> 
+> So then we're in a situation similar to [1], where upgrading the kernel from
+> 6.19 to 7.0 requires you to update the firmware first.
 
-Thanks for this, it looks good to me.
+Which normally should never happen to ensure users feel save to update
+the kernel. But I wonder if that is relevant, as Indrek Kruusa reported
+problems with that board, too -- and there is a fix that fixes it:
+https://lore.kernel.org/linux-riscv/20260624220434.4183732-1-felixonmars@archlinux.org/
 
-Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
+Does that maybe fix your problem, too (even if it was bisected to a
+different commit, it might be related somehow, that's why I'm asking)?
+
+Ciao, Thorsten
+
+> To me and from the thread
+> that seems like a really obvious regression. So the question is, how can we make
+> the current kernel work like < 7.0 kernels worked?
+> 
+> [1]: https://lore.kernel.org/all/87jzgjnh9z.ffs@tglx/#t
+
+
