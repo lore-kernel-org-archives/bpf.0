@@ -1,61 +1,63 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3418538229A
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 18:17:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7A73B27F3
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 18:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783361856; cv=none; b=qcuesG3BSu1X09Yg2+GvJHUJDZzZv8KtRpc/Dm9bz7mWdboeuBJb3tnIAF7dAAdML23cCYxYZd1PfLnzbqMMyKo6a2GNs79yeGyI/wYjy/gDoiBAspSQMJE793iv9mHX5FT7BAJzgxxY75WozzFM+VeLDLwwxYSzCvLVyH5C9zA=
+	t=1783361857; cv=none; b=qTzzxgMFhK2fzZeGGsS+3lCqto4mg6ZQB1w3OrgUovLBdyOe8NdcAcpNVLzIztrU6BYT4txhXJRoLv4Y5mX4/VOOxYjX9lqeAMvnUyXlWgw3aAaKS4uVDxxYwqmf19h84g1qu61O3n8oT2Pu/Howd2ZiTHEdlbjzYGGPCVLTww4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783361856; c=relaxed/simple;
-	bh=uGRBKCzS2u2DXRohLNfmYBc2EbiXKDSLmpBYPX5fO1Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IrZhR+Lhu2mAX1E3ICv07O44bpIe2AlSRxpubETkm+mEJ2zA5wAGsM//+vxm6VbpqL6qeF15xyspEUTiXOob5qUM/B2nQ5/DLNFR5cMzADPe1++DNmGSFAwFZ6u0AwOqN23UBARWa1Z2OVmWMHzZEDQlqQ4S2ALRuskBPaDywCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=eoE+Ou0I; arc=none smtp.client-ip=209.85.210.176
+	s=arc-20240116; t=1783361857; c=relaxed/simple;
+	bh=ViGs/NFGnGGD+xR6nTYav9ZwHqqtrsDL0CUJBuuIFnI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=T/4WvdrDzAfhsIyw8EpohHHNcQVmQhVhTpjBm25vsNVgw8byA0RbB9twqS369WIz+uRtYsJAvQgMdePvEEUbUSdPPmicu05OLU0Xvk0KzibXoQyVa6R8Usw3X6jeWN5Fjt73gP4NjLJVOElApkhr/ncoCv8rDH83A3arK5hmHN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=cg6esNK0; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="eoE+Ou0I"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-84780c95e2eso2598201b3a.3
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 11:17:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="cg6esNK0"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-84783bce476so2282324b3a.0
+        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 11:17:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783361854; x=1783966654; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NbkX5/oO7RDXS8/3JwepjXOBbP5OzlZzz6ME/c1tPSQ=;
-        b=eoE+Ou0Iy/0HyiEB0mRd3rQoteeDrczgTfPlWs2yiQrRyEPRqC9jtvC6/ES+5xnpBL
-         gIB0IEcUreF9I8URIkZDrxcPMPraYOmMnmnGAMAbDrOc6APoKwCJGuHCbQxqgrODh/Y5
-         RRc8yxNe0QAf4+HvjYwSDkG3txDelEkKeXzVIsmDMeGNiwF1noCGhvlXOhlDBDGAVC9+
-         5ktT/mX/IDKeKqh3jbF4ctBrQNWwDZRa75D/vvLpgtHKJPYQu2GfTFVm9tBwDQ/xEHUn
-         j9tOIxf9+WPDRVB0jQss4ALF9tY3J+8q+1knEq381tRkafwha79igHLIPsNpuLNKbNtW
-         C9Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783361854; x=1783966654;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783361855; x=1783966655; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=NbkX5/oO7RDXS8/3JwepjXOBbP5OzlZzz6ME/c1tPSQ=;
-        b=UqGWRIGdOmArNOFm01xvcgsLacc7c8PuNRu+Y6QBh8b4wkG/Xa1BfJSH2ReU4R4fnF
-         hWD2NBH+VUFswBztP90aqnCjyUVbXJMPkIl2Ecttzma6j9BKYmHqQzwBR1lPENhWZRxk
-         FYNDcDOdssVET/V0RCg5e3uFSW6OTYRDbH4v41K1yOdFYMkG8efSCQunl6wfANnzsTlL
-         1+G//nAvmzCEPlFegin4P+NSp+ASzLRIQmhMp5YiR0R71jR1LBmiPQswspWi80Z0FGOX
-         AtpTdyngWB1C90uULpl7YuCsHdX3s/TDoXhC+YzPAnyRBs0vLhPxGmERvKLwn/KVTUaw
-         X6zw==
-X-Gm-Message-State: AOJu0YzJHJ6FKcln79SYBBAeh5L2y9id917KYt2qHZY1C0EJfqy9Nf/r
-	y4SgHsMv7X3tvvIkkYyPEdp7yK3Wle1g6yjoCxSGHknV292agxNU50qh+6xwKbT/5Djf9KqXUAL
-	NdqJIOWA=
-X-Gm-Gg: AfdE7ck6SVpHlquvjMuowIKTOT03dyrDxKxgP8NXRBJu5JCWqSgNZfYYk01AFWjyeRD
-	b8RfcfMw/5UG+5Itidush1lloYQVH3cY6jr2TkMUziq64H3T0WeZYvAXSyBb1WTjMx7QT6Sl5Eu
-	WRniMb/9xGlBhKkTjKL6v3VfCcwWvdHN5UBrFT0uTZ+wkzUg2dKyI/7SDKu0MPnnplc1qCYzS2D
-	TPGF7Zup/G9X3j5omFMgakaL/IJVemHVpGHrf0VlCwjl6K48Il/aY0ik8/0bLTOXPr/9UgztLWN
-	ZRuX3iz6u/WtoTrnBtLdceGEieoNhvFYWAh0Qm0BldMAjVQ0ED2+3o6xaWienKThApVkvd4y0HA
-	m0hMS6tViN893Flfj4glQyH4fEYnEEGU/aZZ0+xAmy8KWcsy50BQL/sBgS6gGDGJDPgtIbePbZ4
-	ptwm0ElaIJlVE9wdQWytlCIB6JS6+WlGEHtVi1EGcQBTrK/zM=
-X-Received: by 2002:a05:6a00:21cf:b0:845:e9e8:6458 with SMTP id d2e1a72fcca58-84826c0ddcfmr1616405b3a.20.1783361854391;
-        Mon, 06 Jul 2026 11:17:34 -0700 (PDT)
+        bh=/amI9OCsL+BtzMBTmCfAN5gheYkbvxHg0Qf6eT0XQF4=;
+        b=cg6esNK0WU9z/8wxBn8fFPo54/o36ShTIc0Da2FzOKPt8CcTHB1ge7YFZEiMHLFPvv
+         XrWxeWSd5recnWPrT4MxFp4GuSTvI0rhVpDOlh9GDdJk8cr63g0FqANzPVyZVuEy1xt8
+         9x9dssyeFw5tf1R6D4F/EE/352dWAj80+vDJQp0/eC6XG0VrkL7YP1L3+eIv1S3SDKZZ
+         wgY6lrlN4W2NUa+NVjSitHmSHI4AG9mjocqzQupRT9s7Tcmnp4qipskaBJdHYek1VEAH
+         Nx36f6U4FXChmuQDnS8SHG2hu33LDBuyo4oVsP476WptKPyTvSe4V4Iv+/wMYyLINB10
+         KGBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783361855; x=1783966655;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=/amI9OCsL+BtzMBTmCfAN5gheYkbvxHg0Qf6eT0XQF4=;
+        b=FtchdxRgufOVom+3trekGuldXv1Cvel0UEYlKp3fO1DnEgF3Jf7jMqEKQwyXopKa0Q
+         qms+0GQhI6q0LlMjGXdd+qDAwpXLDE0mvLc5+gmf/iA8NA9iNPcuARnr/KncTsIS+d/f
+         OCwyumoA74E01rT4ytNzQQL7/FuAVoBkWQ38Gz4btzaQiHuJ6mn+O07hryrw/rkvPaVb
+         +UAMJrVw09ySjHL1TJllb2nhxgdrI779u68GXsIUNeoRanfOOlLUjWwMpUIJkDVsLtfi
+         nB7FllspZUAtUfNvX1xoD8egkZHmJrBimEbo4l+ziP4IOgFpmTnX43C87tq6AjaWmXxr
+         dGtA==
+X-Gm-Message-State: AOJu0Yz799BIaj7WfXDBABOWSZUCnlSQlPO3tSkWXNolxT1APMxpw+cA
+	kn7AKUKWQiG3SHFKWktXW/g/BTpexTj9W7RB8LgNekJYmjg2HbljCa6gzUDsai5wxAEts6ZspK2
+	dyPjl7OA=
+X-Gm-Gg: AfdE7cmJ/9pFPtIZq55vQFKrLyFy5fS7nkZHdPRH8jyXp/kbgfFEZzgh7V9PwhUbksI
+	RHhe2oiIwJocn2JwhG5wBZbSMlI0EUmxX3T7voAY19KAzCFfoSVt96mzktebfQYZiGR1yfoXCFI
+	UJpoZOw8PxgHN2W+zAXtD1WR57tKL4EzVcJ/fsHAwHDEpOokuY7FLnYf7L9vkJHyR6BWCnJP1oT
+	KeTKtbFNdSIn8eaMf9G1wFNlhnv2gn7mW63JJNtZbMaFiww3Iv3peN5TETKaOZjqRqWowwFGeLv
+	JDSPVGsJlvDJoZXyTk/zNeQiYTPH0mUCRC0TQK0i7iA75+kW3n9qscnEYe8jcl5aiiCXClAYo21
+	D3v5FO9lQeIyVDanByr1950Z2wqqegRpnD/SUiBdpBbBGZSfW9iqzifzBFhYjYEtCzlbyy3nJyy
+	IuDJJ6I83Y0i4QRPidyLKOOAgxu7ibDKtpYtLeqxcWnfIk1vg=
+X-Received: by 2002:a05:6a00:2e2a:b0:847:9518:a6fc with SMTP id d2e1a72fcca58-84826e83fc6mr1681617b3a.33.1783361855590;
+        Mon, 06 Jul 2026 11:17:35 -0700 (PDT)
 Received: from krios.ht.home (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-847f6d498dcsm4192997b3a.30.2026.07.06.11.17.33
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-847f6d498dcsm4192997b3a.30.2026.07.06.11.17.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 11:17:33 -0700 (PDT)
+        Mon, 06 Jul 2026 11:17:35 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -65,11 +67,14 @@ Cc: ast@kernel.org,
 	eddyz87@gmail.com,
 	mattbobrowski@google.com,
 	song@kernel.org,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH RESEND bpf-next v3 0/6] selftests/bpf: libarena cleanup and bitmap struct
-Date: Mon,  6 Jul 2026 14:17:24 -0400
-Message-ID: <20260706181730.21731-1-emil@etsalapatis.com>
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>
+Subject: [PATCH RESEND bpf-next v3 1/6] selftests/bpf: libarena: Replace leftover st_ prefix with test_
+Date: Mon,  6 Jul 2026 14:17:25 -0400
+Message-ID: <20260706181730.21731-2-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260706181730.21731-1-emil@etsalapatis.com>
+References: <20260706181730.21731-1-emil@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,63 +83,45 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Cleanup patches for libarena, along with a new bitmap data type that is
-in use by sched-ext. Patch 1 is an NFC that properly renames the buddy
-selftests for consistency. Patch 2 fixes the zero variable used in
-libarena for can_loop based looping, and afterwrds removes all bpf_for()
-instances from the code. Patch 3 fixes an (untriggered) edge case that 
-could cause spurious selftest failures. Finally, patches 4 to 6
-introduce the bitmap data structure along with selftests.
+The st_ (selftests_) prefix is confusing and has been replaced
+with the more descriptive test_. However, last patch did not
+properly move all files to the new prefix. Rename the existing
+files to complete the move.
 
-Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
-
-CHANGELOG
-=========
-
-v3 was resent as the first submission was missing the first patch.
-
-v2 -> v3: (https://lore.kernel.org/bpf/20260701185235.4516-1-emil@etsalapatis.com)
-- Remove unused macros and fix typo in commit message (AI)
-
-v1 -> v2: (https://lore.kernel.org/bpf/20260618085626.19633-1-emil@etsalapatis.com)
-
-- Added acks by Ihor and Eduard
-- Fix missing commit message (Ihor)
-- Enforce 64 bits per cell with BITS_TO_LONG_LONG (Sashiko)
-- Add test for bmp_copy (Ihor)
-- Add atomic versions of _set() and _clear() (Ihor) and add a parallel
-  selftest for them.
-
-
-Emil Tsalapatis (6):
-  selftests/bpf: libarena: Replace leftover st_ prefix with test_
-  selftests/bpf: libarena: Fix can-loop zero variable definition
-  selftests/bpf: libarena: Clean up allocation state before buddy tests
-  selftests/bpf: Add arena-based bitmap data structure
-  selftests/bpf: libarena: Add bitmap selftests
-  selftests/bpf: libarena: Add parallel bitmap selftest
-
- .../bpf/libarena/include/libarena/bitmap.h    |  34 ++
- .../bpf/libarena/include/libarena/common.h    |   2 +-
- ...asan_buddy.bpf.c => test_asan_buddy.bpf.c} |  10 +-
- .../{st_asan_common.h => test_asan_common.h}  |   0
- .../bpf/libarena/selftests/test_bitmap.bpf.c  | 394 ++++++++++++++++++
- .../{st_buddy.bpf.c => test_buddy.bpf.c}      |   8 +-
- .../selftests/test_parallel_bitmap.bpf.c      | 190 +++++++++
- .../selftests/test_parallel_spmc.bpf.c        |   9 +-
- .../selftests/bpf/libarena/src/bitmap.bpf.c   | 245 +++++++++++
- .../selftests/bpf/libarena/src/common.bpf.c   |   9 +-
- .../selftests/bpf/prog_tests/libarena.c       |   8 +-
- .../selftests/bpf/prog_tests/libarena_asan.c  |   8 +-
- 12 files changed, 900 insertions(+), 17 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/bitmap.h
- rename tools/testing/selftests/bpf/libarena/selftests/{st_asan_buddy.bpf.c => test_asan_buddy.bpf.c} (98%)
+Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+---
+ .../selftests/{st_asan_buddy.bpf.c => test_asan_buddy.bpf.c}    | 2 +-
+ .../libarena/selftests/{st_asan_common.h => test_asan_common.h} | 0
+ .../bpf/libarena/selftests/{st_buddy.bpf.c => test_buddy.bpf.c} | 0
+ 3 files changed, 1 insertion(+), 1 deletion(-)
+ rename tools/testing/selftests/bpf/libarena/selftests/{st_asan_buddy.bpf.c => test_asan_buddy.bpf.c} (99%)
  rename tools/testing/selftests/bpf/libarena/selftests/{st_asan_common.h => test_asan_common.h} (100%)
- create mode 100644 tools/testing/selftests/bpf/libarena/selftests/test_bitmap.bpf.c
- rename tools/testing/selftests/bpf/libarena/selftests/{st_buddy.bpf.c => test_buddy.bpf.c} (97%)
- create mode 100644 tools/testing/selftests/bpf/libarena/selftests/test_parallel_bitmap.bpf.c
- create mode 100644 tools/testing/selftests/bpf/libarena/src/bitmap.bpf.c
+ rename tools/testing/selftests/bpf/libarena/selftests/{st_buddy.bpf.c => test_buddy.bpf.c} (100%)
 
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_asan_buddy.bpf.c
+similarity index 99%
+rename from tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
+rename to tools/testing/selftests/bpf/libarena/selftests/test_asan_buddy.bpf.c
+index 686caba2c643..256d62a03ce7 100644
+--- a/tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
++++ b/tools/testing/selftests/bpf/libarena/selftests/test_asan_buddy.bpf.c
+@@ -12,7 +12,7 @@ extern struct buddy __arena buddy;
+ 
+ #ifdef BPF_ARENA_ASAN
+ 
+-#include "st_asan_common.h"
++#include "test_asan_common.h"
+ 
+ static __always_inline int asan_test_buddy_oob_single(size_t alloc_size)
+ {
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_asan_common.h b/tools/testing/selftests/bpf/libarena/selftests/test_asan_common.h
+similarity index 100%
+rename from tools/testing/selftests/bpf/libarena/selftests/st_asan_common.h
+rename to tools/testing/selftests/bpf/libarena/selftests/test_asan_common.h
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_buddy.bpf.c
+similarity index 100%
+rename from tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c
+rename to tools/testing/selftests/bpf/libarena/selftests/test_buddy.bpf.c
 -- 
 2.54.0
 
