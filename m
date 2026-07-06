@@ -1,146 +1,84 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D76C3B42D6;
-	Mon,  6 Jul 2026 07:09:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF3BA30CD92;
+	Mon,  6 Jul 2026 07:16:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783321764; cv=none; b=tBqj+bw1iz2AlGjLJJPCKu8gzAlK4BoPKzuoPoOcrBgaxImL3PNQxGcXWgyl+k0DIDA3kCvuNTMIVMw4BlKdylJqKhR+QlCJDcYqqWEGV969d3f+2PMRGBltZrZXf3FSyr/relgkzKZ5ydqA8Nb7EdsYVPg1iPSKRQVa/vav984=
+	t=1783322174; cv=none; b=cKDWnCWlyMStctqZQNFKvHlmtd2DWurY1WfzIr0VI0jTpH5rV8kA0VRTHEYz7FdDjzH0yR4kAPmTqo0wYFA7S335ryUIr4I9YZzijWVwh0tnr/7/fw6HCcLqx5fspOEfuEi1AqH2+iTMyYrm68Kd5rhI4t8IB6JCV8ygimsODxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783321764; c=relaxed/simple;
-	bh=tcsFM7ARHJ8Laep0mLsnO/EHNTadvDiuU04w0JZqPHE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mtuWeVBRmbQ69sCeM8wpY0cP9gcKhrvtULffhp+XTowzHAEEAh19lgD7b8c+5xiV82V3H1UeUklYFKmXDyxhhwtam8Cb7Y5HTjBM7ikIbkmsfy0mewD6F7OYEqLBq8bL4C3fxXQNlkNgEat9LlUNBk5ZE7TN/7niBr181w/idfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gtwSt5ZxRzYQtlh;
-	Mon,  6 Jul 2026 15:09:02 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 0206B4056E;
-	Mon,  6 Jul 2026 15:09:04 +0800 (CST)
-Received: from [10.67.110.68] (unknown [10.67.110.68])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgDnzCiJVEtq7aPxAA--.22259S2;
-	Mon, 06 Jul 2026 15:09:03 +0800 (CST)
-Message-ID: <468262e0-43c6-46dd-a9dc-0b216f2beab1@huaweicloud.com>
-Date: Mon, 6 Jul 2026 15:08:57 +0800
+	s=arc-20240116; t=1783322174; c=relaxed/simple;
+	bh=y5rmTt8HCC4BPMF4KZGDmFo1ZV4eh1UMgqKgGYg4koY=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=SGiUmTWLAJd57lZzJTM3a/GpdaDDF1Kd/azG39oLT5CY78ePp63/UL2kI6K+Wb6it0qCvOGfD+q3MCyWtWDb1cVE0fBaTHcS7GZ5z/+3KyGILZqaSUlj9+oGLDbtpoTUIW5easKRm/Z47JwvbJStpg+3bYzQbb9P3xfyR1vc4fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8BxyvAvVktqRFMAAA--.1553S3;
+	Mon, 06 Jul 2026 15:15:59 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJCxvMYsVktqSvABAA--.11716S3;
+	Mon, 06 Jul 2026 15:15:57 +0800 (CST)
+Subject: Re: [PATCH bpf-next v2 00/11] LoongArch: BPF: arena features,
+ exceptions, private stack and may_goto
+To: George Guo <dongtai.guo@linux.dev>, Huacai Chen <chenhuacai@kernel.org>,
+ Hengqi Chen <hengqi.chen@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
+Cc: WANG Xuerui <kernel@xen0n.name>, Martin KaFai Lau <martin.lau@linux.dev>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ George Guo <guodongtai@kylinos.cn>, bpf@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20260702022322.51033-1-dongtai.guo@linux.dev>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <dd02bf32-e447-2191-6cd5-7b7441f9a9b5@loongson.cn>
+Date: Mon, 6 Jul 2026 15:15:56 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 0/6] Mixing bpf2bpf and tailcalls for RV64
+In-Reply-To: <20260702022322.51033-1-dongtai.guo@linux.dev>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Alexandre Ghiti <alex@ghiti.fr>, Pu Lehui <pulehui@huawei.com>,
- Pu Lehui <pulehui@huaweicloud.com>
-References: <20260629140048.733346-1-pulehui@huaweicloud.com>
- <CAJ+HfNhn9eK+3xsd3ewEsG-duCgBeYXeLAtNan=qefas2Ya0dQ@mail.gmail.com>
-From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <CAJ+HfNhn9eK+3xsd3ewEsG-duCgBeYXeLAtNan=qefas2Ya0dQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgDnzCiJVEtq7aPxAA--.22259S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXFy8XF18CFy7WrWkAr1kKrg_yoW5CF1kpa
-	97uw4ay34vqr4xuw47Ka1xJFWrGFZ3CayUAr15tr1rAF45Cryvkr17KFW0va45GrWvkw1j
-	vr4jqan8Za1DAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-	0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
-	v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-	1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-	AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
-	42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-	evJa73UjIFyTuYvjTRNJ5oDUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-CM-TRANSID:qMiowJCxvMYsVktqSvABAA--.11716S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+	BjDU0xBIdaVrnRJUUUmab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxV
+	AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x02
+	67AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+	I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
+	jsIE14v26r4UJVWxJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2
+	IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4c8EcI0En4kS14v26r126r1DMxAqzxv2
+	6xkF7I0En4kS14v26r1q6r43MxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r
+	126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+	b7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0x
+	vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+	cVC2z280aVAFwI0_Gr1j6F4UJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvf
+	C2KfnxnUUI43ZEXa7IU82sjUUUUUU==
 
-Hi Björn,
-
-Sorry for late reply.
-
-On 2026/6/29 22:21, Björn Töpel wrote:
-> Hey!
+On 2026/7/2 上午10:23, George Guo wrote:
+> This series adds the remaining LoongArch BPF JIT features and enables the
+> matching selftests:
 > 
-> On Mon, 29 Jun 2026 at 15:56, Pu Lehui <pulehui@huaweicloud.com> wrote:
->>
->> From: Pu Lehui <pulehui@huawei.com>
->>
->> In the current RV64 JIT, if we just don't initialize the TCC in subprog,
->> the TCC can be propagated from the parent process to the subprocess, but
->> the updated TCC of the parent process cannot be restored when the
->> subprocess exits. Since the RV64 TCC is initialized before saving the
->> callee saved registers into the stack, we cannot use the callee saved
->> register to pass the TCC, otherwise the original value of the callee
->> saved register will be destroyed. So we implemented mixing bpf2bpf and
->> tailcalls similar to x86_64, i.e. using a non-callee saved register to
->> transfer the TCC between functions, and saving that register to the
->> stack to protect the TCC value. As for the tailcall hierarchy issue,
->> inspired by the s390's low-overhead approach, we store TCC from
->> RV_REG_TCC back to stack after calling bpf2bpf call or calling orig bpf
->> func in bpf trampoline.
->>
->> In addition, some code cleans are also attached to this patchset.
->>
->> Tests test_bpf.ko and test_verifier have passed, as well as the relative
->> testcases of test_progs*.
->>
->> v4:
->> - Fix tailcall hierarchy issue.
->> - use is_struct_ops_tramp helper in bpf trampoline
-> 
-> Alexei outlined some (major) concerns on the whole mixing side of
-> things [0]. I haven't been following that space -- did Leon have a
+>    - internal-only MOV for per-CPU address resolution
+>    - timed may_goto
+>    - per-program private stacks
+>    - exceptions (bpf_throw)
+>    - sign-extending loads from arena (PROBE_MEM32SX)
+>    - atomics on arena pointers (PROBE_ATOMIC)
+>    - selftests: struct_ops private stack, arena LDSX, arena atomics, and a
+>      LoongArch deny list
 
-Yes, Leon addressed this issue years ago [0]. He solved it by passing 
-the TCC PTR to the subprog, ensuring that the updated TCC is correctly 
-propagated back upon the subprog's return. It's time for riscv64 to 
-implement this feature.
+Please provide the test execution logs to ensure they don't fail.
 
-[0] 
-https://lore.kernel.org/all/CAADnVQ+TOFOA0Ya4qzrLDFV331uxZy8ay0svBMt-2Sh5E0tr2A@mail.gmail.com/
-
-> workaround/fix? Can you explain more how you fixed it, and why it
-> would make sense to add it to RISC-V now?
-
-When dealing with the tailcall hierarchy issue, x64 and arm64 check if a 
-register is a TCC PTR right in the function prologue, which may adds 
-some overhead. To get around this, riscv64 plan to pass the updated TCC 
-value to the stack using the TCC register after calling a subprog or a 
-trampoline's orig_call, which something similar to s390.
-
-Because of this, we have to use a caller-saved (non-callee-saved) 
-register for the TCC. If we used a callee-saved one, the old TCC value 
-would just get restored by mistake when the function returns.
-
-As for the overall plan for mixing tailcalls and bpf2bpf, the main idea 
-is to keep the TCC value on the stack and pass it between function calls 
-using that caller-saved TCC register. Since we need to grab the latest 
-updated TCC value after calling a subprog or a tailcall leaf node, we 
-have to make sure the prologue always pushes the TCC to the stack, and 
-the epilogue always restores it from the stack back into the TCC register.
-
-> 
-> Thanks,
-> Björn
-> 
-> 
-> [0] https://lore.kernel.org/bpf/CAADnVQ+rLneO4t=YYmLYtc945Fz0=ucNTWZBxgvs8toFY-onRg@mail.gmail.com/
+Thanks,
+Tiezhu
 
