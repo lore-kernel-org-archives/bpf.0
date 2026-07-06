@@ -1,127 +1,134 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pj2-f4.google.com (mail-pj2-f4.google.com [74.125.227.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61592436BDE
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 16:57:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61C36382374
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 16:58:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783357039; cv=none; b=V7aJlUiG+3Au3sEtkOvCUxbg3wDPEobfFZJkikPydryImIwcGTzDqQjWnvKAi92UOo9NfB5wbaO5J3BRrwk/K7/xdBo0C86pCPMpzxS8/0UBiTAlRIgF2vhn3ujTXqevNjGohqdjqS/e66pHM5/qFDQm5oXxdTxk2Uq6E1W7glQ=
+	t=1783357100; cv=none; b=SfNyvP1BMOfTz9fEgUVRcAJBGkAGUvcijAtkE3FcywFZXGiyEjd4vliIBULxwBbVBP17dpkHEZx7OxmrsGQlI6Nu61AlDLV+SODxNEjHgWyCZndtIe2iGVUmSqaX9N6ivDSas8HtJD1tESYktT6ujIEChdjMaOvDJfqUAlkr8V4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783357039; c=relaxed/simple;
-	bh=kEBJEY/PJInPUYHCrM/CWDu6omOsOAQaEbY6MfxYMmY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=DMFtP93oafrQxU2BKRU/8Kk3Hvbvqrbdt7qoVNEDkTBAn/YGWzgfyR35UngRTiUl941yaP/KAvAoZ2jdJs0nekkgb1paj95zhIu/gJ44ywxF0+43I4Q5327OdhxOEwDDwT3Fhtx1guLZkCc1QYyjX44F1boydutriU0dhi15L4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=v3YxPL9W; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1783357100; c=relaxed/simple;
+	bh=ww7lCt6NpJeU6KKhYEyofAyOhJWk5zB8DqbthydSzU8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tUplq2LMPt29VHwDjeZTAl2pN4yhB+0NsirkthHVQUleiB8tBaLb8Cr+MTTLkvYzBX+5QwY/ojYX1zthIyB9FueXKxH8cUVzXpa2ToGz7xyEKiMpAdgJ8lVpLwmB3FLCW0JyQ5Bu4HZOzqeai3wJJZins+Z49y6T55K1FRIuEVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KYUkjdZS; arc=none smtp.client-ip=74.125.227.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="v3YxPL9W"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8453427d3f4so2996103b3a.3
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 09:57:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KYUkjdZS"
+Received: by mail-pj2-f4.google.com with SMTP id d9443c01a7336-2cc7ef596c6so2764405ad.1
+        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 09:58:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783357034; x=1783961834; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/8ge3ixhQ7bc+RtCQGTIiLP+joKUlT/9A4CFAqvurEA=;
-        b=v3YxPL9WHWjJW95U6yFeSiFzz7kiBYOP1tVAhFJhF/+uHEcNvLvrJvbEZIOTXmCUFr
-         PCgBTE8fiGxhTPyzA9BAakl7H7XFR1/+cS52ncH8z5fiPI7tYrvG1LgVCihVfxg44Olo
-         9mLXwdcFsBvUjZkgKHMCQAPoSPAx/1Qv8jPfQOzG3gLEcZQ9LCaaten6lEoD6oeuUSMU
-         Z2fpgCtgba82kGWa+GFCA9Oo/KupuPHqYwiBUp8m82YCe3AxWKnyxBF9twZPP2IwnEWE
-         q6uf5mi6cfPLUHSvYEJJ7aEg4BGX4JUAxr5DQbtxmW4kAypBjVSb483JGYGrnA+DPSmq
-         a+ww==
+        d=gmail.com; s=20251104; t=1783357099; x=1783961899; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=yCktVGKDr9d58r4vlA1PSQeqKAytnjdIS32qXzkgbaU=;
+        b=KYUkjdZSCIF4b0cm2KLL1+10MAj23ccTmUc7MQPUafwirB0sEGz14heT4laggVu9uZ
+         +tvO182u5QGm3t4ErE4v/NDt/k8jyal5qb8mt3sgv/AzSBtNzzS2A9KSgouMf6nf/Dxo
+         xoYCDjg00EwOK3ZUHJq8AhPVtotUS1K8K9Cr1mM+JydpE9v8A9dHcGosjGoTMWI+5+Su
+         9ootqqn1lGrbqHz8JJbgJg0kR/PSWTQleTA3kN29Gpku7Km35oVrhXAaqpdVQ3aRVIYl
+         hoG7QVfwArwykWmz0DgtCsuMZ3AFkMOqkPhhzuZIg2biEES3YCN0P9NoOltv9D8sHb5p
+         OG0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783357034; x=1783961834;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/8ge3ixhQ7bc+RtCQGTIiLP+joKUlT/9A4CFAqvurEA=;
-        b=N1L7zl1cB5okAmgzyCUGRCr82Do70q9VF3Rj2zVmkvW2RFOpQYz06JDmRzsirBBiAm
-         +fzQRJVmDV+p0pDE0HHzO1SrinOLpcq5iFIaqidv/OMabKzrDZEycG1GW3C3GFrLWdg5
-         bzU3JarHUg3h8f6fgNkIIrtYDYFwz/KU5Dpd4tFu4D+xpi+YaIw3foj71MEW3Owaprkb
-         KO55iUNADQjmT363+ZIH0L1CKZ5rXzQVarC2BcKDeOTswOtgI8vRDe6i3PMbFrXDibem
-         GcT6bRrskPEJYsKbRVFiTGOx/wJO8QmcN1gMV56WHdeSInI3OLygK0vl0KdtUm/7Cq0v
-         s/fg==
-X-Forwarded-Encrypted: i=1; AHgh+RqjG438ldJmH+IvZexwI6dZSPr1rWsHK+S0X0kB2c4J8g8ZguXWevwB7Co0Cc1EmtG8h3g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvA+8ZnzTBbRDhnyHrRgPLHubbF8YAiNkJ5g0rHyUPkfGRRcWZ
-	a8N5AMEMjgGRV9YOsKApBzvnC3iYbETgIL1yz4lG36gloE9RyJtjRdVzzGnohKMgT7k=
-X-Gm-Gg: AfdE7ckREr55qCszJ/uRj3GbDH0APH6UGaQyQeh/NjiLErlzbCPEgY6hOtCi1ym/XH9
-	wqxQ4+xwtEk7rQl31coTA3DkRnlLDdgOmCSzQvoHc1ZGBooCJfNRdQ36TJFNMgDbUj2EFEJbFZf
-	dvtjZMSTWe8HiOc0P5euFF5hpG21z0BTyM3tiYk3eOfk8jIB3wE4LiJuLjDy3dv9db1kVqM9NYq
-	1UV3UykX5hI61u1ttVj9KrrYfJOBRXnekYYvIMfESNCGUM/T2NomHW+SROIueZZrQfq3BRVRnKB
-	aO9J1WJmopJdYEUR4eYS795RcP7+/XYcvuzCAgDxeMZXio/uZbczmwAVDkHS6dTPkBANqN27qin
-	npXDmyEmxiO+sUp6HLHmhVaCkhpZXExXtJYygZdd1OXFi8pnV29a6dwt31H5nf/W0mv66R58vIk
-	AH5KnyhpHL9AdloFuR1gsaq2ypUoTRxkIw6Shlmy+BTQ==
-X-Received: by 2002:a05:6a00:80b:b0:845:259f:8925 with SMTP id d2e1a72fcca58-84826be28aamr1426446b3a.6.1783357033742;
-        Mon, 06 Jul 2026 09:57:13 -0700 (PDT)
-Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c9e91b0a2c4sm6115711a12.19.2026.07.06.09.57.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jul 2026 09:57:13 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783357099; x=1783961899;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=yCktVGKDr9d58r4vlA1PSQeqKAytnjdIS32qXzkgbaU=;
+        b=fNlndESljdzXQPD3fnccZUmXVb6XbfL3AKq/As3W/K6wRCEYxU1Xg56Vi2sUH/ZrQM
+         KUx1Wz/Gk2UNShJDyD20q4Bm7S0eyDIUUWGwNPmkn3QB1xo6yiWMtThmf3FNmN5uoqHY
+         S42DFfqnDRFAlGvcFrfC3lCl703Y2e0e6NVu5hrLQ9Qc5HcST1/GyEG4UznDerwAWVqG
+         CyabmdPEC4y4FN4m06Eaue0Klyo41uKZp0ARhinUY9tWhT8OQM+HhXDq6wr5fhVFX9fE
+         GbsL6AiSgc+qN7136DmP9GpHvSduhVA8XrYaA0ew+wm6m3ugYLfNMPELC4WZvmahIbm0
+         tMpw==
+X-Gm-Message-State: AOJu0YyWAFzZH2O/mbShWseBJ/HzG+0ZJdEoRUtFmc0+yZslCu8lxqhc
+	02u/pVRvuuY/WCOPFkxQs+Bdc1tsNCDN0QiSfCbut3PFnnIV9iy2nVHt
+X-Gm-Gg: AfdE7cn/QqMvUU86Vgdhiw6R5Hipl9MixGjML1xludDeaZ0jUVoiion5Yft7Jia7pEq
+	AjFUIkIZj6C1VPE9/lEgggscnIFXMWrVo6Hqp2BpeZFLPiotMTMkS5t6oGM4MOoFdYhMzz0ENUT
+	8UbxtctEXv4cUDgBjPj5KYDLB5qVHBB0dFW4hgdpbmlSzu0tnAWorBe1mY5b27B4+1sRTuP4ISu
+	o8ChwcY5krHGwS7HOQ7osqITuZRWql8jHmFAWNuvmy31VRlpzRk+tuCGqB/OlI2JiHIBYlRsJ+z
+	wxZ1Ly04Ch+g5cAc0VydHlTPs/B5CIF13LC5iLdPMEt3RzsjxNgHh4ZbOlEtfSg83JOfjs91KEn
+	+AOOhVuOZQ95pr8u93M8AuOWK9Xz8rYorK7+D3Em7+GdDoPUP9b67n8wJNqY+2iJw24gXbhF0sy
+	vtbHImBKoHQARHB/7d
+X-Received: by 2002:a17:902:d4c7:b0:2ca:ce91:f027 with SMTP id d9443c01a7336-2ccbf08784fmr14779995ad.36.1783357098686;
+        Mon, 06 Jul 2026 09:58:18 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:58::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cad6f260acsm54342455ad.6.2026.07.06.09.58.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2026 09:58:18 -0700 (PDT)
+Date: Mon, 6 Jul 2026 09:58:09 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Mahe Tardy <mahe.tardy@gmail.com>
+Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org, 
+	ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com, 
+	edumazet@google.com, john.fastabend@gmail.com, kuba@kernel.org, liamwisehart@meta.com, 
+	martin.lau@linux.dev, pabeni@redhat.com, song@kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next 2/6] bpf: Add ksock kfuncs
+Message-ID: <akvdsqFhq0x19cu2@devvm7509.cco0.facebook.com>
+References: <20260706093525.13030-1-mahe.tardy@gmail.com>
+ <20260706093525.13030-3-mahe.tardy@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 06 Jul 2026 12:57:12 -0400
-Message-Id: <DJRNB2GQ7RAX.T3F4PHNFMI49@etsalapatis.com>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, "Puranjay Mohan"
- <puranjay@kernel.org>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Reject out-of-range arena free
- addresses
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Shuah Khan"
- <shuah@kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260706-f01-31-arena-free-bpf-next-v1-0-3ad6e7384285@mails.tsinghua.edu.cn> <20260706-f01-31-arena-free-bpf-next-v1-1-3ad6e7384285@mails.tsinghua.edu.cn>
-In-Reply-To: <20260706-f01-31-arena-free-bpf-next-v1-1-3ad6e7384285@mails.tsinghua.edu.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260706093525.13030-3-mahe.tardy@gmail.com>
 
-On Mon Jul 6, 2026 at 11:52 AM EDT, Nuoqi Gui wrote:
-> bpf_arena_free_pages() accepts scalar arena addresses. The free path
-> masks the low 32 bits, computes the full user address, and clips only
-> against arena->user_vm_end before inserting the range into the arena
-> free range tree.
->
-> A scalar address below arena->user_vm_start can therefore produce an
-> out-of-domain page offset. A later allocation can consume that offset
-> from the free range tree and return an address outside the arena range.
->
-> Reject frees whose computed full address is below the arena start before
-> clipping the end of the range.
->
-> Fixes: 317460317a02 ("bpf: Introduce bpf_arena.")
-> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+On 07/06, Mahe Tardy wrote:
+> Add BPF kfuncs that allow BPF LSM programs to create and use sockets for
+> sending data. This provides a mechanism for BPF programs to emit
+> telemetry. For this first patch set, it's restricted to SOCK_DGRAM
+> socket types with IPPROTO_UDP protocol but could be easily extended to
+> SOCK_STREAM and IPPROTO_TCP in the future.
+> 
+> The API consists of six kfuncs:
+> 
+>   bpf_ksock_create()   - Create a socket (sleepable)
 
-This is the exact same patch that Yiyang Chen sent about a week ago.
+[..]
 
-pw-bot: cr
+>   bpf_ksock_bind()     - Bind socket to local address (sleepable)
+>   bpf_ksock_connect()  - Connect socket to remote address (sleepable)
 
-> ---
->  kernel/bpf/arena.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index 80b7b8a69446..97a5d8d21295 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
-> @@ -853,6 +853,8 @@ static void arena_free_pages(struct bpf_arena *arena,=
- long uaddr, long page_cnt,
->  	uaddr &=3D PAGE_MASK;
->  	kaddr =3D bpf_arena_get_kern_vm_start(arena) + uaddr;
->  	full_uaddr =3D clear_lo32(arena->user_vm_start) + uaddr;
-> +	if (full_uaddr < arena->user_vm_start)
-> +		return;
->  	uaddr_end =3D min(arena->user_vm_end, full_uaddr + (page_cnt << PAGE_SH=
-IFT));
->  	if (full_uaddr >=3D uaddr_end)
->  		return;
+Since you're doing only UDP for now, maybe you don't need bind/connect? The
+kernel should autobind (by default) when you sendmsg over UDP socket (IIRC).
 
+>   bpf_ksock_send()     - Send data through the socket (sleepable)
+>   bpf_ksock_acquire()  - Acquire a reference to a socket context
+>   bpf_ksock_release()  - Release a reference (cleanup via
+>                          queue_rcu_work since sock_release sleeps)
+> 
+> The setup kfuncs bpf_ksock_create, bpf_ksock_bind, bpf_ksock_connect,
+> can be called from SYSCALL programs only. While bpf_ksock_acquire,
+> bpf_ksock_release and bpf_ksock_send can be called from SYSCALL and LSM
+> programs.
+> 
+> The implementation follows the established kfunc lifecycle pattern
+> (create/acquire/release with refcounting, kptr map storage, dtor
+> registration). The kernel socket is wrapped in a refcounted bpf_ksock
+> struct. Cleanup is deferred via queue_rcu_work() because sock_release()
+> may sleep.
+> 
+> The kfuncs are only compiled when CONFIG_INET is enabled, as they
+> specifically support AF_INET and AF_INET6 sockets.
+> 
+> The socket operations go through the expected LSM hooks instead of
+> by-passing them like many kernel sockets since those are created by BPF
+> programs and thus system users. Thus bpf_ksock_send() kfunc, which is
+> exposed to LSM progs, has a re-entering protection to avoid recursion.
+> Also, because of the LSM checks, we prevent the use of the kfuncs from
+> asynchronous workqueue as the current value would then be invalid.
+
+[..]
+
+> A bpf_ksock_max sysctl is added to limit the maximum number of BPF
+> kernel sockets that may exist in each network namespace. Out of
+> simplicity for now, the settings is host wide but the counters are per
+> network namespace.
+
+What is this guarding against? Rogue bpf programs creating too many sockets?
