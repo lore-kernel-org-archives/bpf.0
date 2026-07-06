@@ -1,119 +1,162 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775F542E8F0;
-	Mon,  6 Jul 2026 14:16:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21EEC388E74
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 14:21:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783347394; cv=none; b=GFAFwDeJFN0PYmxZMrwJ7GswrqCkSJ44Qey7n1yECu8yNUAzPkVCxj8EzIBtvBnKjgGIr6gPxqnWGCysRejuRx99jZnD3BpFlAau10sji1rl5UQfpfjQaW/Qz0uC/Sr6FUUlOi2XyLzdlv3tAC3p0T7aS5JgbK1/J5EHVieY63s=
+	t=1783347721; cv=none; b=eUp0TFx1Z/MLzdT0WplPsk6Esv6VVpyHJnYi6TDLJufQAitytN9LYYHxkzHpP6HAa5/kbmd1i4eN/FHUCxybv5GE7i0RVgkE3584BkUsK9toEnEyxn2kUQg2bcA2zORFecAptsc9YBhCs8PaNw2/UwMpGtO6oihV0i9vORKuBOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783347394; c=relaxed/simple;
-	bh=Z462dJVLhUuc7O3el4wqGSe9NqpHGqLyckYou6DakcM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:From:To:Subject:
-	 References:In-Reply-To; b=GbA31pL6V0gr5ytrNIT2s8qrKTGYp+eCFpZ8/pWkjqX8ntHHpkgdbS6sRn9bOpD/Y06YO3o0iI2KuLqSaZq+N9IWzBErs69V/iT6Sa49K8pgGfFBLc50ywtmp/htn71Ke77tLDQptmwjcDq3yhGjk+dFAM3kh3xBZqQP5Ts3Jro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=tAqfGVWm; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1783347721; c=relaxed/simple;
+	bh=RCupD5v/HPY3feGmb2+sFTgcKMnNdQ1n9OpKThK2ViQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=cYRem3C9Dy196O9hUQiFnvcG52uEkf5YDH+NTfhqVnZR1LLUya+JZIs0hikh/Dn8gKaM75ixRCJYt2WIYR5KCfQPCuskSkQ2m1e05zgx6v8rLi/iDKSUOkb+LvwAgDcJI5MfZHisM43wgFeh+gugtmdEHTgw4xMFAycZqSc+jgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hKCQIAM9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="tAqfGVWm"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 09F7A1A0E96;
-	Mon,  6 Jul 2026 14:16:32 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id CCBD1601A2;
-	Mon,  6 Jul 2026 14:16:31 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 75E6D11BBA535;
-	Mon,  6 Jul 2026 16:16:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1783347390; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=FscgQS9V09PYtyLYPG4VcMCZ6avrrSFZcTEyFdiSxYU=;
-	b=tAqfGVWmAZg/iwU6s4lGdM16t/Xf//Nx5f/zM7B71tyxxHcNX06EUZ6Qcaq/Ngp2w9foIX
-	2WHeo+6KO1vjhgS9xbgywpk6UNKQfBSlREP3haVmhwmt7/X11kAn0PIABByEPnMeSs79Aa
-	5/GrXgnYw7qgHnhuYMDP4Uasdqa8lT2BR0fqiX9obfEk7XCvZwbJe8G9sudTuvWbBjT6fG
-	qtjzxk8u56JjuPN2OVv7NK0Yi1nqY2jEiqo6hFUXlH9p4r1m3mTMl2c06APK0ftt3/Nphe
-	f5g9oDkj32en8mko7MFZ97PXHxh4EbYDk3jphBdOSeB4aeyjE0rnRvm2nBrUgA==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hKCQIAM9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A34551F000E9;
+	Mon,  6 Jul 2026 14:21:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783347719;
+	bh=Hg1QF8U37UcJSu8D4TbWI0vTz/9KFYcXyIVkV+xDRCA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=hKCQIAM9cVvNcjkVQ3YzuenS7NxTvpOCX1IA0zSjg/kmBSeK2V8ScgzhM0DsBYLQ4
+	 afskqwLDOsS/EQR7TAYyRI4K8FcuoGLYPosR4n1/3EcbHtV1elJQKPI+PRr12td4Kp
+	 vgqBkQZbd0/T0KdbgL/nUPF8L7q/4udjh7MKQOGGWGlEyZ8hVtvB/QrVOyVOgtWclT
+	 w9CY3koA/3R96SH+Qj5URLcMWGhiElovwfKBM8qpuBW34CGmebFpH39uF3GFfqTVyg
+	 srnPrUOZxMlqaeAQafSQU721gSZ8FsBGSFF4fTVry6vWZI+D81e8Xk1ZRfTls2qzqj
+	 VaGCl2JHjuHqg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4 2/9] bpf: Move bigger allocations below
+ fd_array resolution
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Daniel Borkmann" <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260706135644.326006-3-daniel@iogearbox.net>
+References: <20260706135644.326006-1-daniel@iogearbox.net>
+ <20260706135644.326006-3-daniel@iogearbox.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 06 Jul 2026 14:21:59 +0000
+Message-Id: <20260706142159.A34551F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 06 Jul 2026 16:16:23 +0200
-Message-Id: <DJRJVY5TTS73.2NQ1NZ8XI5WWL@bootlin.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Thomas Gleixner" <tglx@kernel.org>, "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter
- Anvin" <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Ingo Molnar"
- <mingo@redhat.com>, <ebpf@linuxfoundation.org>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Andrey Konovalov" <andreyknvl@gmail.com>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>
-Subject: Re: [PATCH bpf-next v3 03/10] bpf: add BPF_JIT_KASAN for KASAN
- instrumentation of JITed programs
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260701-kasan-v3-0-bd09bb942d86@bootlin.com>
- <20260701-kasan-v3-3-bd09bb942d86@bootlin.com>
- <CA+fCnZcJzRvq9942LXgTpq5067u4DvXQRjdNDpq-5vOZpQuCVQ@mail.gmail.com>
-In-Reply-To: <CA+fCnZcJzRvq9942LXgTpq5067u4DvXQRjdNDpq-5vOZpQuCVQ@mail.gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Andrey,
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-On Wed Jul 1, 2026 at 3:43 PM CEST, Andrey Konovalov wrote:
-> On Wed, Jul 1, 2026 at 12:03=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Foundat=
-ion)
-> <alexis.lothore@bootlin.com> wrote:
+Pre-existing issues:
+- [High] Missing memory barrier in double-checked locking of `btf_vmlinux`
+- [High] Unprivileged users can hold `bpf_verifier_lock` indefinitely via u=
+serfaultfd, causing a Denial of Service
+--
 
-[...]
+commit a8c04cef46e77fd3e978148e583b8fbfc045147f
+Author: Daniel Borkmann <daniel@iogearbox.net>
+Date:   Mon Jul 6 13:56:37 2026 +0000
 
->> +config BPF_JIT_KASAN
->> +       bool
->> +       depends on HAVE_EBPF_JIT_KASAN
->> +       default y if BPF_JIT && KASAN_GENERIC && KASAN_VMALLOC && VMAP_S=
-TACK
->
-> I think it make sense to put KASAN_GENERIC into the "depends on"
-> section, as __asan_load/storeX() are only defined for the Generic
-> mode. SW_TAGS mode is expected to be soon implemented for x86-64, and
-> that mode uses different checking function names.
+    bpf: Move bigger allocations below fd_array resolution
+   =20
+    Reorder the preparation work in bpf_check() such that only the minimally
+    necessary setup happens up front: allocating the env, initializing the
+    verifier log and resolving the fd_array that a signed BPF metadata map
+    needs.
 
-I guess I can move most of the kconfig options that currently are in the
-`default y if ...` into dedicated `depends on ...` lines, and just keep
-a `default y if KASAN`, something like:
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 33f9c47ee197d..e227c76a8dd96 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-  config BPF_JIT_KASAN
-          bool
-          depends on HAVE_EBPF_JIT_KASAN
-          depends on KASAN_GENERIC
-          depends on KASAN_VMALLOC
-          depends on VMAP_STACK
-          depends on BPF_JIT
-          default y if KASAN
+[ ... ]
 
-> Would also be great to add description for this config option.
+> @@ -19915,21 +19903,33 @@ int bpf_check(struct bpf_prog **prog, union bpf=
+_attr *attr, bpfptr_t uattr,
+>  	env->bypass_spec_v4 =3D bpf_bypass_spec_v4(env->prog->aux->token);
+>  	env->bpf_capable =3D is_priv =3D bpf_token_capable(env->prog->aux->toke=
+n, CAP_BPF);
+> =20
+> -	bpf_get_btf_vmlinux();
+> -
+> -	/* grab the mutex to protect few globals used by verifier */
+> -	if (!is_priv)
+> -		mutex_lock(&bpf_verifier_lock);
+> -
+>  	/* user could have requested verbose verifier output
+>  	 * and supplied buffer to store the verification trace
+>  	 */
+>  	ret =3D bpf_vlog_init(&env->log, attr_log->level, attr_log->ubuf, attr_=
+log->size);
+>  	if (ret)
+> -		goto err_unlock;
+> +		goto err_free_env;
+> =20
+>  	ret =3D process_fd_array(env, attr, uattr);
+>  	if (ret)
+> +		goto err_prep;
+> +
+> +	bpf_get_btf_vmlinux();
+> +
 
-I can fill a help field with a basic description, but it will be visible
-only by reading the Kconfig file, it will not appear in menuconfig
-unless we make the knob user-selectable, which I would like to avoid.
+[Severity: High]
+This isn't a bug introduced by this patch, but does the double-checked
+locking pattern in bpf_get_btf_vmlinux() lack necessary memory barriers?
 
-Thanks,
+kernel/bpf/verifier.c:bpf_get_btf_vmlinux() {
+	if (!btf_vmlinux && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
+		mutex_lock(&bpf_verifier_lock);
+		if (!btf_vmlinux)
+			btf_vmlinux =3D btf_parse_vmlinux();
+		mutex_unlock(&bpf_verifier_lock);
+	}
+	return btf_vmlinux;
+}
 
-Alexis
+If btf_vmlinux is read locklessly without smp_load_acquire() or READ_ONCE(),
+and the assignment inside the lock lacks smp_store_release(), the CPU could
+reorder the initialization of the struct btf object with the store to the
+btf_vmlinux pointer.
+
+A concurrent thread calling bpf_get_btf_vmlinux() could observe
+btf_vmlinux !=3D NULL and return the pointer before the object's contents a=
+re
+fully visible, leading to uninitialized memory dereferences.
+
+> +	/* grab the mutex to protect few globals used by verifier */
+> +	if (!is_priv)
+> +		mutex_lock(&bpf_verifier_lock);
+
+[Severity: High]
+This is a pre-existing issue, but can unprivileged users hold
+bpf_verifier_lock indefinitely via userfaultfd, causing a local DoS?
+
+When an unprivileged user executes a BPF program load, the verifier acquires
+bpf_verifier_lock. While holding this lock, the verifier accesses user-space
+memory in a few places.
+
+For example, when reading the user-supplied array in
+fd_array_get_map_idx_sparse():
+
+kernel/bpf/verifier.c:fd_array_get_map_idx_sparse() {
+	if (copy_from_bpfptr_offset(&fd, env->fd_array_raw, ...))
+		return -EFAULT;
+	...
+}
+
+Similar reads occur in fd_array_get_btf_sparse(). Additionally,
+bpf_log_attr_finalize() writes the verification log back to the user-suppli=
+ed
+attr_log->ubuf before the mutex is released on some error paths.
+
+If an unprivileged user maps these user-space buffers with userfaultfd,
+they could cause the kernel thread to pause indefinitely in the fault
+handler while still holding bpf_verifier_lock.
+
+Since this blocks all other unprivileged BPF program loads system-wide,
+could this be exploited to deny service?
 
 --=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260706135644.3260=
+06-1-daniel@iogearbox.net?part=3D2
