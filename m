@@ -1,64 +1,64 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3964E3B7B68
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 17:29:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECC03BA244
+	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 17:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783358955; cv=none; b=GmUkZxldAD6EExVbRg6nshF9i5p6WglmHZJTbY0q4FEUuLcHH/RzxczBG4d9X8FcRb5u/sIkpOeEsNSDpqQfyoGqU3NRvyS/bGYEJ+YE5uhlqKSwIkmljm0D2/02lH08glM7hNjnJ+aqKcbeP93iFvLUfw6quO8f0JmdQ7s0cf8=
+	t=1783358964; cv=none; b=oKnxEWFAyZCd/liGDvVoJkhcuZObny9UpjLU69n6NSY0PCaJWTmSms8FBPtIIKp6zNIdqco80PfIpEYGUT3kuk5JW1CHHcu0pv9LfTLYd6yehKUK5TjILSoEhji8gaehYHsVr3o3wduoaM6OKAYjfQ4b8lejfzS9YutxuBaoPSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783358955; c=relaxed/simple;
-	bh=croLdcn3FwdzG8AWJzxdaWpM9dTxbRX/erkgu9LHroE=;
+	s=arc-20240116; t=1783358964; c=relaxed/simple;
+	bh=XUGBNDhkxSdoWA8s3b6xvXl2QEAYsziYUpQlKSLMWlA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eL8HdqzkBXUk/8qrdqbPk18zRKwGgtHTdd7ykKGAcBbnfUA/59fOu3DTHQbDEp3ROh8P+3OI5XBZ9lgJH1IKyWgxAiNB3RgN+VjuGFfXAIHvctQp+3m34g9ACciFcnxvFOr+a2wCGoc8bEcIVEwA9kSXkmhE5p7NjjcHmj4mzbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UeQI+UTJ; arc=none smtp.client-ip=209.85.214.171
+	 MIME-Version; b=BudqrVMe8htd++W50T2JGy4hgZN1ranaw/Kr63GIghkkPViBCDmB0dSMMZyEs9DYsyF7mBJj6OLQ7qvNVUfwtRUpaHWoNVSByHPC8Mw1hwtesUNspkdZYNGrVUUQVBOWd9ZLY3xlmqKRjlqWnejMsKoRkzapnehTtHsaWmDe2QQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L/g978Gx; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UeQI+UTJ"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2cab973140bso40650115ad.3
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 10:29:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L/g978Gx"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2cace7da66eso30892025ad.0
+        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 10:29:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783358953; x=1783963753; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783358962; x=1783963762; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=/CMhFxVY82r5Eid4wLFl+1SdH8jeYdZBt6ircQEov1c=;
-        b=UeQI+UTJwMShvPcuV/PG5+ELVZ+0NYVVW74DMx4n7Rj09uspKnNSFbxFXZdOzhTefo
-         aGI9vFsIX1PMW9yqid9moqFTMjRg+nvvDLmjorhiJURK2EBBmDcNYS8z3J+XSD+2+rn8
-         xNOanZIbDm+6XgBJ4eywxKh1+QzsFAoXVDU9KqTZ77kMiGIFg9MFLRDdbKyffPxp2YMj
-         II0nyEKTFqm5XwW0nEnqfyHnXpJdkooWV46K4PVlPSFtca6F/B29AScq7NwEpePVj8in
-         6k5+mHzoFaC3ezoYhSa0qLxZjjH9bDZhwGqGhXvesYKD7xb0TJMAwb2wkY+QT4B3BMnU
-         wEMA==
+        bh=6EpkLMFszm/nPT49Xmg8gx0H7X2O/Rvk7vOoUDq2KHI=;
+        b=L/g978GxwSoOPrPG9RJA2OjumU37Vj9Zt2tvT5GG6arcEtDNjst2gEmz8AO56UbeL8
+         XlBL+M+tz+6KAdxD24EAExRdrPCX6FLQQvJNGL/aF7Y1WBsmpfMlCPnpHkwucVHC+FJH
+         G3mvde9q3+4Z3QSjWhNmGRM5PFDLkXGYzsH1zbhgI9hfA/w7HAOYCyM/S65wS93NwlOn
+         3MQSEg9yNCbCuVrUsU4sRyU3Fn/fSc9u8eEYWPI3U6gqIvvhvbAS/faO9sqHIA0PXQ/6
+         sw/UlIPrvW3efjSkNyV6r+m1ilVfWMrgxUNocJmEdLezkxiE3hVoRO8RAaSz4eTWUywd
+         XwIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783358953; x=1783963753;
+        d=1e100.net; s=20251104; t=1783358962; x=1783963762;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=/CMhFxVY82r5Eid4wLFl+1SdH8jeYdZBt6ircQEov1c=;
-        b=jFA6VF1+fq8CFDxgoGSqjNDIw5HIsanyxS1GGNNCFOeuURfCDHbtg59sMtAvewaHh/
-         3yFT3ysRKKF0Jjc9K8gmh91zPYbRVrwC5HtaTAkb48qCLlpU+8zqgPrxkF1TOAgZ5gew
-         vu+5cYtSTyhcXLh6liCGoJGKuhCGN0XXaEG7oZLQbmkkxOiHKy+9JoK5t/GFUseYX4jq
-         pg01TGvpze009buyvsml14BcHet4lPG3LuYpq6D0ShtaCM6F6kwZcS4RG1dzmIqAQOuV
-         rHuz6uqcAk3ye8aawW83p7IERe/PEVGoC9umU5Q4Amfx2Ks1h/WsIcClvbFwqsU42ksT
-         ebDA==
-X-Forwarded-Encrypted: i=1; AHgh+Rq8Fu4WXkSYq0J1MecISpenIIpkPRvYskukwvwS6BoEaSY3fFjojgp0bv88zAIHD4vRhZ0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyynKyjfuPbBDDZ73SfCy+AVFKJQ5+NL555r6lrfeUAT+UPUrrC
-	tQtHGSn3wmuRorjqRTh6s+t+3jIl7ny56dDxBW07ymr3AHnsBF1us89n
-X-Gm-Gg: AfdE7ckOCvnMliI/AWR3OtIp6DNNgj6BCEs062ZtvzPtkzrJwzXLPyiV8vWhvATlJ9Y
-	+4BkfWFdfEwTpRGQOh1XXrh2FZ5E0L/TN81vf4i404VjnZ23lS22ZhrpOTd4ZgUVOtUhxQp3zNP
-	dDM7bnTzmcIOoqG2GvPxb9Y6+taU2saOAzTYSNE2qi5WlxHIekU3GjNPPAoktIapzwzgPMjfRas
-	NJZdDl9iWctQmPwAVHb3ztiGG/y5rqn7TttYxzb/hOrs3EflH8NeFwZ9qVUYU/0zbAc3olxPXFJ
-	RnnS/St0+vC74LejClqF7upqE+fr2SiVilLemzOcPT/AZI4tenwFx5ltdVsA4TfAsy7BgsSPQeE
-	G6GReDR7BADXdppnW//1RyJaD3HQSqO1ZDjxGJHPbiBmhCM0pLfFSO3FU91RnEcH9ECZm+BbsuZ
-	MYr24bzFd0koEz6EN8SN2hFtPNupoaUzWD7y0Dr2uo4Vqev0/z2fcF3r9CeF6h1sac0Vtert8Az
-	aDEkl9gJ8OoPBd9lznjGnM=
-X-Received: by 2002:a17:903:17c5:b0:2bd:5ab:af95 with SMTP id d9443c01a7336-2ccbdf40961mr16975285ad.0.1783358953412;
-        Mon, 06 Jul 2026 10:29:13 -0700 (PDT)
+        bh=6EpkLMFszm/nPT49Xmg8gx0H7X2O/Rvk7vOoUDq2KHI=;
+        b=tBaZ7cC5fO8YSqqry+O08KsHnrpsE+SR2NDkj3QKWjUi1xbud837/TXgNLK4s3AGsv
+         ZxIabzddhXAUbQUVzL+Jjfth6t62JTp/tdWOJz3qAc4uPq8dQY+IGdixVh7arc+FXISG
+         hVt9HkrsUILE+kuIxsV/SpSOQlS9nuoX4cWjM+afyL/WxNRSwQnjDTlOkLtqfckHQAWe
+         f/761U9w3JnVd5rl868R/xDKvxCWvfuRCh/wxZ653jLeHo7YQPBDj2PaqFauLuQEzazC
+         TUaEPXhcE8KmN2Tz5e0tyM0fppq2CpPk1B/POD+DApGMqqSyqx7s7Q9lCRh2yzHjUvON
+         TdHA==
+X-Forwarded-Encrypted: i=1; AHgh+Rqf9b+V0jKOqOZPYxShm/ctfcj9qUiQ5E6s3tfBnNAvQOHrGIDtVWjmfvVjckho9QHqPuU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxL+hWT8riv5wto5COmqVO7dX7PkmGaT00JRC6iZPkar0KzngzB
+	vF1T7NnfuGkPQ44vOdmIyvcCsVEiHARDqth2GX4ufvP5NgAQRPpwCfGy
+X-Gm-Gg: AfdE7ckdzBfdis9ApTjrhz88aXkTk+ztK+q0vk0HdSu1tztw0tdD0SdK8UF0eCkzw3B
+	n/eSAaUa6jebLoZerU4Plaqq0IiLTb9ebV1jNUVnE/hVCJDYtSoFaEUAsPjnmcwnMIGz2wm4sYo
+	QUGEzZJLcWvM5puBtIxFeAYsFrCeDccb3DtwptDJuj0BnloO0a/yxrWApfiipDhbg96kSkUvOV2
+	ccppoWTPhiv8JiRDcBTD8516bKa5d8cczpgIHwHX3yi8LL3fX1eqOkR+Mzl7E4OT0XcScMvaqyR
+	CglHf0lsLa9JBqwDyvYT3D4NX6S+l4p6cXl9tMtUN7qWtQhvQIyYs5MsYcvH0vwD7YPzqdzyBRa
+	pHvSSdNtgdSp6OC2hPL07mbrw5CC9KVRqY3HXmMlBKv8TXQHiU54z+NWqbaFFBqEhv+S5+k6aaS
+	06RnZPjxXVDZY/B/YfaJ1sJIvvpF7JxpVkF4odG/bZ2+pQ5dITDQ6pKtkYwa2daR2XfnuXYPXnn
+	6o0zIQq12Zh8EnDMOZR+Cw=
+X-Received: by 2002:a17:902:cf0b:b0:2c1:f262:4962 with SMTP id d9443c01a7336-2ccbe7297fbmr15392495ad.20.1783358962288;
+        Mon, 06 Jul 2026 10:29:22 -0700 (PDT)
 Received: from visitorckw-work01.c.googlers.com.com (32.237.80.34.bc.googleusercontent.com. [34.80.237.32])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cad6f25e54sm54667005ad.2.2026.07.06.10.29.07
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cad6f25e54sm54667005ad.2.2026.07.06.10.29.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 10:29:13 -0700 (PDT)
+        Mon, 06 Jul 2026 10:29:21 -0700 (PDT)
 From: Kuan-Wei Chiu <visitorckw@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -84,9 +84,9 @@ Cc: martin.lau@linux.dev,
 	linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Kuan-Wei Chiu <visitorckw@gmail.com>
-Subject: [PATCH bpf-next v3 1/3] riscv, bpf: Add support for BPF_SDIV and BPF_SMOD in RV32 JIT
-Date: Mon,  6 Jul 2026 17:28:44 +0000
-Message-ID: <20260706172846.3876436-2-visitorckw@gmail.com>
+Subject: [PATCH bpf-next v3 2/3] riscv, bpf: Add support for BPF_MOVSX in RV32 JIT
+Date: Mon,  6 Jul 2026 17:28:45 +0000
+Message-ID: <20260706172846.3876436-3-visitorckw@gmail.com>
 X-Mailer: git-send-email 2.55.0.rc2.803.g1fd1e6609c-goog
 In-Reply-To: <20260706172846.3876436-1-visitorckw@gmail.com>
 References: <20260706172846.3876436-1-visitorckw@gmail.com>
@@ -98,85 +98,85 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The current rv32 bpf jit compiler incorrectly treats BPF_SDIV and
-BPF_SMOD as unsigned operations. The BPF instruction set allows
-signed division and modulo by reusing the BPF_DIV and BPF_MOD opcodes
-with the instruction offset set to 1.
+The current rv32 bpf jit compiler incorrectly treats BPF_MOVSX as a
+standard zero-extended move operation. The bpf instruction set allows
+sign-extension moves by reusing the BPF_MOV opcode with the instruction
+offset set to 8, 16, or 32.
 
-Update the emit_alu_r32() function to accept an 'is_sdiv' variable and
-emit the correct div and rem instructions when the offset is 1.
+Update the bpf_jit_emit_insn() function to check the offset field for
+both ALU and ALU64 MOV operations. If the offset is non-zero, emit the
+correct slli and srai instructions to perform the sign extension.
 
 Before this patch:
-[   44.161771] test_bpf: #165 ALU_SDIV_X: -6 / 2 = -3 jited:1 ret 2147483645 != -3 (0x7ffffffd != 0xfffffffd)FAIL (1 times)
-[   44.167385] test_bpf: #166 ALU_SDIV_K: -6 / 2 = -3 jited:1 ret 2147483645 != -3 (0x7ffffffd != 0xfffffffd)FAIL (1 times)
-[   44.171053] test_bpf: #169 ALU_SMOD_X: -7 % 2 = -1 jited:1 ret 1 != -1 (0x1 != 0xffffffff)FAIL (1 times)
-[   44.172081] test_bpf: #170 ALU_SMOD_K: -7 % 2 = -1 jited:1 ret 1 != -1 (0x1 != 0xffffffff)FAIL (1 times)
+[   19.549705] test_bpf: #82 ALU_MOVSX | BPF_B jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
+[   19.551354] test_bpf: #83 ALU_MOVSX | BPF_H jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
+[   19.552576] test_bpf: #84 ALU64_MOVSX | BPF_B jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
+[   19.553542] test_bpf: #85 ALU64_MOVSX | BPF_H jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
+[   19.554807] test_bpf: #86 ALU64_MOVSX | BPF_W jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
 
 After this patch:
-[   16.002192] test_bpf: #165 ALU_SDIV_X: -6 / 2 = -3 jited:1 95 PASS
-[   16.002983] test_bpf: #166 ALU_SDIV_K: -6 / 2 = -3 jited:1 1059 PASS
-[   16.017167] test_bpf: #169 ALU_SMOD_X: -7 % 2 = -1 jited:1 136 PASS
-[   16.023002] test_bpf: #170 ALU_SMOD_K: -7 % 2 = -1 jited:1 109 PASS
+[   17.931172] test_bpf: #82 ALU_MOVSX | BPF_B jited:1 125 PASS
+[   17.932198] test_bpf: #83 ALU_MOVSX | BPF_H jited:1 124 PASS
+[   17.933039] test_bpf: #84 ALU64_MOVSX | BPF_B jited:1 124 PASS
+[   17.933918] test_bpf: #85 ALU64_MOVSX | BPF_H jited:1 124 PASS
+[   17.934751] test_bpf: #86 ALU64_MOVSX | BPF_W jited:1 122 PASS
 
 Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+Reviewed-by: Pu Lehui <pulehui@huawei.com>
 ---
- arch/riscv/net/bpf_jit_comp32.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ arch/riscv/net/bpf_jit_comp32.c | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
 diff --git a/arch/riscv/net/bpf_jit_comp32.c b/arch/riscv/net/bpf_jit_comp32.c
-index 592dd86fbf81..89153946a4e4 100644
+index 89153946a4e4..39e2b0b907dc 100644
 --- a/arch/riscv/net/bpf_jit_comp32.c
 +++ b/arch/riscv/net/bpf_jit_comp32.c
-@@ -509,12 +509,15 @@ static void emit_alu_r64(const s8 *dst, const s8 *src,
- }
+@@ -972,6 +972,24 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
  
- static void emit_alu_r32(const s8 *dst, const s8 *src,
--			 struct rv_jit_context *ctx, const u8 op)
-+			 struct rv_jit_context *ctx,
-+			 const struct bpf_insn *insn)
- {
- 	const s8 *tmp1 = bpf2rv32[TMP_REG_1];
- 	const s8 *tmp2 = bpf2rv32[TMP_REG_2];
- 	const s8 *rd = bpf_get_reg32(dst, tmp1, ctx);
- 	const s8 *rs = bpf_get_reg32(src, tmp2, ctx);
-+	u8 op = BPF_OP(insn->code);
-+	bool is_signed = insn->off == 1;
+ 	switch (code) {
+ 	case BPF_ALU64 | BPF_MOV | BPF_X:
++		if (insn->off != 0) {
++			const s8 *rd = bpf_get_reg64(dst, tmp1, ctx);
++			const s8 *rs = bpf_get_reg64(src, tmp2, ctx);
++
++			if (insn->off == 8) {
++				emit(rv_slli(lo(rd), lo(rs), 24), ctx);
++				emit(rv_srai(lo(rd), lo(rd), 24), ctx);
++			} else if (insn->off == 16) {
++				emit(rv_slli(lo(rd), lo(rs), 16), ctx);
++				emit(rv_srai(lo(rd), lo(rd), 16), ctx);
++			} else {
++				emit(rv_addi(lo(rd), lo(rs), 0), ctx);
++			}
++			emit(rv_srai(hi(rd), lo(rd), 31), ctx);
++			bpf_put_reg64(dst, rd, ctx);
++			break;
++		}
++		fallthrough;
  
- 	switch (op) {
- 	case BPF_MOV:
-@@ -539,10 +542,12 @@ static void emit_alu_r32(const s8 *dst, const s8 *src,
- 		emit(rv_mul(lo(rd), lo(rd), lo(rs)), ctx);
- 		break;
- 	case BPF_DIV:
--		emit(rv_divu(lo(rd), lo(rd), lo(rs)), ctx);
-+		emit(is_signed ? rv_div(lo(rd), lo(rd), lo(rs)) :
-+				 rv_divu(lo(rd), lo(rd), lo(rs)), ctx);
- 		break;
- 	case BPF_MOD:
--		emit(rv_remu(lo(rd), lo(rd), lo(rs)), ctx);
-+		emit(is_signed ? rv_rem(lo(rd), lo(rd), lo(rs)) :
-+				 rv_remu(lo(rd), lo(rd), lo(rs)), ctx);
- 		break;
- 	case BPF_LSH:
- 		emit(rv_sll(lo(rd), lo(rd), lo(rs)), ctx);
-@@ -1041,7 +1046,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			emit_imm32(tmp2, imm, ctx);
- 			src = tmp2;
+ 	case BPF_ALU64 | BPF_ADD | BPF_X:
+ 	case BPF_ALU64 | BPF_ADD | BPF_K:
+@@ -1022,6 +1040,20 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 			emit_zext64(dst, ctx);
+ 			break;
  		}
--		emit_alu_r32(dst, src, ctx, BPF_OP(code));
-+		emit_alu_r32(dst, src, ctx, insn);
- 		break;
++		if (insn->off != 0) {
++			const s8 *rd = bpf_get_reg32(dst, tmp1, ctx);
++			const s8 *rs = bpf_get_reg32(src, tmp2, ctx);
++
++			if (insn->off == 8) {
++				emit(rv_slli(lo(rd), lo(rs), 24), ctx);
++				emit(rv_srai(lo(rd), lo(rd), 24), ctx);
++			} else if (insn->off == 16) {
++				emit(rv_slli(lo(rd), lo(rs), 16), ctx);
++				emit(rv_srai(lo(rd), lo(rd), 16), ctx);
++			}
++			bpf_put_reg32(dst, rd, ctx);
++			break;
++		}
+ 		fallthrough;
  
- 	case BPF_ALU | BPF_MOV | BPF_K:
-@@ -1065,7 +1070,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		 * src is ignored---choose tmp2 as a dummy register since it
- 		 * is not on the stack.
- 		 */
--		emit_alu_r32(dst, tmp2, ctx, BPF_OP(code));
-+		emit_alu_r32(dst, tmp2, ctx, insn);
- 		break;
- 
- 	case BPF_ALU | BPF_END | BPF_FROM_LE:
+ 	case BPF_ALU | BPF_ADD | BPF_X:
 -- 
 2.55.0.rc2.803.g1fd1e6609c-goog
 
