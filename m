@@ -1,125 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7591A379C2F
-	for <bpf@vger.kernel.org>; Mon,  6 Jul 2026 14:27:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C89385D64;
+	Mon,  6 Jul 2026 14:30:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783348065; cv=none; b=mUnRm21tpdGjrg7Juk+qkNPQpWRv3iyHR7aCVqoFz6kNDds5rj6wC6jYEAwFYc+BWsnG/nCDTid7ZyfhcoYRNn7s8F5UG2qZXKowTWZrQDGv2x5FIPQ9jy8Y2Lkor0KsRYafesm6YdFm8ITSyzE83U76wXIlp1j8/HeqPuGOR+Y=
+	t=1783348247; cv=none; b=CiqovvDX5ugfGBr53KePUHLmFIqjfsomIjTg3bzfAZHDkQaG8AmzGVE93IRRHvuxQjijlTrlheoOw4H7LogXXVxxHM8CSlAaOqpGtMfY4n8lE9Xm1QCAspBDiKunjOWu7Etel4RHj0yK7u5F7jl9Q6kIxtVPUmANEttS00wuSx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783348065; c=relaxed/simple;
-	bh=Zte1zo1dQKoTFI+EMMFTWaWSKTb6f3RC5+UcwEgFuPk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=nwDnaHNOmfMBkDQLRU+EoHYX6D6H5ka55zwFh+Y88rWUVSniqTAd6h9T2kZnFgCu6oDyL1ItxMmU+RML+5r9Lb61mwUJyhQGgN44OpS6m6XUOoVnTVHE4AcXVOIBBNhqkEgPc2mV6nhOGo+QOK53bUt8ISrKGU9siFcliE8G+1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HZUfCrjc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783348247; c=relaxed/simple;
+	bh=CrrshD/db0jkXDvoHPDl6vrw5Kyv7VKGSdnXPbhMsXU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CaARnq2fCHSpCsheUE43BeDbGtyQIsv+bIZYU717x07/zmDtCrNHq0Us5ThsUgGFQpRKIjjYwLLHYZM/B+XL5wHjpSjSFj/puMOCsZuFJFSqb5igi+BlUO49VTa8H1qMRFSeeEXZ+Pk7LQzalBY0IvrCEUjIXzhKaQBzLqTuxiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=FYQIvEd4; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HZUfCrjc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1777F1F00A3A;
-	Mon,  6 Jul 2026 14:27:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783348060;
-	bh=mJexkvB2usKKX+6w1X6p4rTZhq9fZxLx3dX+bSS2c4M=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HZUfCrjcwABmDA73QkkqI3ZdZ1rBL0DXnznhgWRXhKz25y82t7RJHx/I3PH8Fi++k
-	 3C6T/KLOJ/gaA/3pO3iIIAGKCLHV/oMgf9v4MfQv0IZ9mFFtObH6ap/BlTZ+Vl3A6K
-	 pAL9lyZzzoIKVt8YoCMwesT3/XJpMiEV0rY26jJpqzqnPliR9aP5U1PzusJj4rYzWo
-	 1KeNiw4Z1yewyIzAj+U+saI7yyFRXRZYpnXfobA9+VQRoWT9HdtKuYSjGOVGqo6K5H
-	 S+1pAGduVF+Os2TxTknXgrwEls0cBzkgg9z8bu69E+Xw/SfZodtff+nqnyUbO9OUFl
-	 2L70enoLxo1bw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 7/9] selftests/bpf: Adjust bpf_map layout in
- verifier_map_ptr
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Daniel Borkmann" <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260706135644.326006-8-daniel@iogearbox.net>
-References: <20260706135644.326006-1-daniel@iogearbox.net>
- <20260706135644.326006-8-daniel@iogearbox.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 06 Jul 2026 14:27:39 +0000
-Message-Id: <20260706142740.1777F1F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="FYQIvEd4"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=CrrshD/db0jkXDvoHPDl6vrw5Kyv7VKGSdnXPbhMsXU=; b=FYQIvEd4hnIkWv4Zp5P1O5zuFl
+	RdIwgbs/FgFKNyAe9f7J80J9oMcfZDBPCnbRXxv/k4udl8LRa82b9p8plsxkcSfQZBR3hvaPA+Vhy
+	WVXpjatIMRwadj3y4WqdKGkPpo1z5GrSA7KLjHz4SwQYKAqqdXvCwJGKv6usR4PzwpHldfMg83x1P
+	CZFSkktuqjoUx+i1d3zeLP3/euJlc54tUn1LlTYO4fAMdy3SkRujk0Yhe0qhFqnWALv7OyqOL6aXK
+	6C4I95un6tbiAF3SMQn9yj/njT8IEPHjUF8JHTzsg9+39RxhBu8ykF9Qn/PzVBW6EisBcK+Np2RWx
+	NKDbggGw==;
+Received: from sslproxy08.your-server.de ([78.47.166.52])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wgkLN-000Ika-0b;
+	Mon, 06 Jul 2026 16:30:45 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wgkLM-0002fw-2q;
+	Mon, 06 Jul 2026 16:30:44 +0200
+Message-ID: <8d262195-5317-4f9a-8974-db4039fc86d5@iogearbox.net>
+Date: Mon, 6 Jul 2026 16:30:44 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v4 7/9] selftests/bpf: Adjust bpf_map layout in
+ verifier_map_ptr
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260706135644.326006-1-daniel@iogearbox.net>
+ <20260706135644.326006-8-daniel@iogearbox.net>
+ <20260706142740.1777F1F00A3A@smtp.kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260706142740.1777F1F00A3A@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28052/Mon Jul  6 08:24:35 2026)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] The removal of the `excl` field from `struct bpf_map` breaks b=
-ackwards compatibility for existing, previously compiled userspace signed B=
-PF loaders (light skeletons).
---
-
-commit c88125fac4570eca959a997d221adcd929990142
-Author: Daniel Borkmann <daniel@iogearbox.net>
-
-selftests/bpf: Adjust bpf_map layout in verifier_map_ptr
-
-This commit updates the verifier_map_ptr selftest to reflect the new layout
-of struct bpf_map. It adjusts the offsets and expected error messages to
-account for the ops pointer moving to offset 32 after the removal of the
-excl field.
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c b/tools=
-/testing/selftests/bpf/progs/verifier_map_ptr.c
-> index 1661936598703..e0a65835c861b 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
-> @@ -72,14 +72,15 @@ __naked void bpf_map_ptr_write_rejected(void)
-> =20
->  /*
-> - * struct bpf_map starts with the SHA256 hash sha[32] at offset 0 (a rea=
-dable
-> - * byte array), the u32 excl field at offset 32, and the ops pointer at =
-offset
-> - * 40. Reading a u32 at offset 41 reaches into the middle of the ops poi=
-nter,
-> - * i.e. a partial pointer access, which is rejected.
-> + * struct bpf_map starts with the SHA256 hash sha[32] at offset 0 (a rea=
-dable
-> + * byte array), followed by the ops pointer at offset 32 and the inner_m=
-ap_meta
-> + * pointer at offset 40. Reading a u32 at offset 41 reaches into the mid=
-dle of
-> + * the inner_map_meta pointer, i.e. a partial pointer access, which is
-> + * rejected.
->   */
-[Severity: Critical]
-Does this structure layout change introduce a regression by breaking backwa=
-rds
-compatibility for existing userspace signed BPF loaders (light skeletons)?
-
-Older versions of bpftool generated a loader program that included explicit
-BPF bytecode to verify the metadata map via a 4-byte read of the excl field
-at offset 32. To support this, the kernel previously pinned this offset usi=
-ng
-BUILD_BUG_ON(offsetof(struct bpf_map, excl) !=3D SHA256_DIGEST_SIZE).
-
-By removing excl without retaining 4 bytes of padding, the 8-byte ops point=
-er
-shifts to offset 32 in struct bpf_map. When an old loader attempts to read 4
-bytes at offset 32, the verifier sees a partial pointer read (since 8 !=3D =
-4)
-and unconditionally rejects it:
-
-kernel/bpf/btf.c:btf_struct_access() {
-    ...
-    if (msize !=3D size || off !=3D moff) {
-        bpf_log(log,
-            "cannot access ptr member %s with moff %u in struct %s with off=
- %u size %u\n",
-            mname, moff, tname, off, size);
-        return -EACCES;
-    }
-    ...
-}
-
-Could a 4-byte padding be added to maintain backward compatibility, allowing
-old loaders to safely read the padding while the new kernel securely handles
-the load-time verification?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260706135644.3260=
-06-1-daniel@iogearbox.net?part=3D7
+On 7/6/26 4:27 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Critical] The removal of the `excl` field from `struct bpf_map` breaks backwards compatibility for existing, previously compiled userspace signed BPF loaders (light skeletons).
+This is expected since the loader needs to be regenerated in any case as
+mentioned in patch 3.
