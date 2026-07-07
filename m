@@ -1,35 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F34E3AB26E;
-	Tue,  7 Jul 2026 19:37:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB353AB5C7;
+	Tue,  7 Jul 2026 19:37:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783453035; cv=none; b=jPR/IaUu3hFSxpiz8FInT7H2S+V2HfScPIb0xAhiRqyOfRY7tqIFXUzWkGHHicEEkpFiWcQEmjTPxnNdbMvCSv6BfPk8hPTgcs+VSolvBzF40Ga9YyMfEoa/RYmcfrS1FYXR5Qyfb289pjWoj3pNaG7plL6xAFEKSIP+Ju95HWQ=
+	t=1783453038; cv=none; b=eccioea8BQ1gVBcY8jZgGYqPfyznz7LDH/lBJCpPu8ATS1bGLcJpWhg8aXeteme1RQLM9QhwXqKuUNymVOLkd03Ou9DBHg3LmU6vV5hau88VPLiNKGz0XtxSwM1leuLi53Ax5nQmX5Pro2iKFR5BDuui0QxA8GRnS38LuZ3BipE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783453035; c=relaxed/simple;
-	bh=a5r2YAYg3gONzXW7niZTSsCx4zOJtyZ/oaHrNqdiwtE=;
+	s=arc-20240116; t=1783453038; c=relaxed/simple;
+	bh=c2bxGFoxQxDhi2AAos8sEU+11LFeMkVJChF5CpobtPQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NjH+TeEHWj+hglyYAhcUd52n8Zb00WWn5C0oH1ksZD+nBQHV4ZGVNsCpSUWee/0JW5ogFBJNO9CwAEB2uktH0C2iduDnT/WyAoZnw38/CbHrcXmLxV8JMEs2gHpNiG9TBLqUD9xYHPwOcFbibPJawjk/3ni+iPLTM+ZHsSLDcZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IypPmUbs; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=aS1ur/TAAAubeHzZxMk/XYh2aBS3cTAC9Fk1DI3jbv570ph9R9bHUSZUFKRnbu+ponCL6NhTlDhrMd/1mObj7/ZbW5Cxp2R8B49d7PQWcvULCPUo49rhNH56ytnqwiiTmUA/fEg9cFvYM1hMvA69W23GYyph72Q7WVfPb3mzGZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NgX2XPMd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IypPmUbs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F02AE1F000E9;
-	Tue,  7 Jul 2026 19:37:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NgX2XPMd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2604B1F00A3A;
+	Tue,  7 Jul 2026 19:37:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783453033;
-	bh=WfZlSfQ3Fv3HmDxCHURVjrGU4Ov6As4pO2JoW8DP2To=;
+	s=k20260515; t=1783453036;
+	bh=7H+nuLsu/xLrsPGwGk2H34dZOFArN4uMoNlNdacm5v8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=IypPmUbstyxEwzJFQCJ4McjGkHKODRpbgD1J+bedDh58ah+UVuwraZEpiGaXgh4j1
-	 nnBCn3Zsy20XbS1nX3AsEiiuncCRvM9WE8xKcTzYjiPNezH5KhSecl4+BZAOxxsO7p
-	 2XB+ViX5GEoyEsmbiqLID3+ARFd08FAx5ODxNwyr+s2ky4FyHwCR4Fe9J74MR3tBCP
-	 ACYFiL/2CiZcMggKhrJBWBzSnwAdPUnQi/6x/I5/WsNCrPUe2w0ZcqxYrwVwSm5THW
-	 fYhf1TJ64GQgOjaI+bAne+b2LutU8YrbKIg1yzYT0GG5wR5DX/gKZHWF8WebD3PPL8
-	 +Fu3FYKrAYIhw==
+	b=NgX2XPMdQkoWHrASfo053PJ9DQD2Lx4hfIYNacOsyE+8QheFrJrZrS0xitm7c6bYx
+	 fq/HF1WVMEVWIfZLanNQWuBqeOvyY9yPP2qcdmxPKjfkGLROE1YRzezAvLJiknxuBz
+	 ChGxm7SFRVZv9qyg0/EIrgsuzmwzPN0o9qRh2sL29n3loFffUYqpTwY3pmmqc2mU75
+	 3ae8iaMLjjh2q9Uv28pELa0lpNokXSefnJ1pnQDGeRqNHLprnXIG+yTOp9ZdgGMlX8
+	 dtLEEnQYIHMI+9ef8eUVQBn2kFb9ATx53MLCD1UXIQy8zH4YRK/lTZ7dCVVUu5WpOY
+	 rG+O/WmVWTvEA==
 From: Christian Brauner <brauner@kernel.org>
-Date: Tue, 07 Jul 2026 21:36:46 +0200
-Subject: [PATCH RFC POC 2/4] binfmt_misc: add binfmt_misc_ops bpf
- struct_ops
+Date: Tue, 07 Jul 2026 21:36:47 +0200
+Subject: [PATCH RFC POC 3/4] binfmt_misc: wire up bpf-backed 'B' entries
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,7 +37,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260707-work-bpf-binfmt_misc-v1-2-74b995c84ec1@kernel.org>
+Message-Id: <20260707-work-bpf-binfmt_misc-v1-3-74b995c84ec1@kernel.org>
 References: <20260707-work-bpf-binfmt_misc-v1-0-74b995c84ec1@kernel.org>
 In-Reply-To: <20260707-work-bpf-binfmt_misc-v1-0-74b995c84ec1@kernel.org>
 To: Farid Zakaria <farid.m.zakaria@gmail.com>
@@ -50,448 +49,441 @@ Cc: Daniel Borkmann <daniel@iogearbox.net>,
  jannh@google.com, linux-mm@kvack.org, mail@johnericson.me, 
  "Christian Brauner (Amutable)" <brauner@kernel.org>
 X-Mailer: b4 0.16-dev-4217c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13800; i=brauner@kernel.org;
- h=from:subject:message-id; bh=a5r2YAYg3gONzXW7niZTSsCx4zOJtyZ/oaHrNqdiwtE=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWT5hiZcsX14xPzBueNrul6vsEq33lB6OZJd47W0cvidq
- ukuDBn2HaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABPxUGBk2K072Xq9w+J7ZZxb
- mz4zCDeZVTgmRnZciQ6757zIvSR4KsMv5kv1iXXVTWd0L3k2VF86zKd70a707Q1N+5PnO5fpBc1
- jAAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=15992; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=c2bxGFoxQxDhi2AAos8sEU+11LFeMkVJChF5CpobtPQ=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWT5hib4XYszVViuuXGC39NdOg5SYoWL79n/CpiRV7fJS
+ 3Lj+vQbHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABPJmsPIsPOO++WM6qUveNRl
+ XyRLJzruyWI8djko65F/Atf5QkH/ZYwMy25v1H23O3HpvB8h11tniqckiJglubCW/GvV41qbG8j
+ KAQA=
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-Add the bpf plumbing for binary type handlers whose matching and
-interpreter selection are implemented by a bpf program instead of a
-fixed magic/extension and a fixed interpreter string recorded at
-registration time. This serves relocatable binary formats where the
-interpreter must be computed per binary, e.g. relative to the location
-of the binary itself, as discussed for hermetic Nix-style executables.
+Activate a registered binfmt_misc_ops handler through the existing text
+interface with the new 'B' entry type:
 
-A handler is an instance of the new binfmt_misc_ops struct_ops with a
-single op:
+	echo ':name:B:<handler-name>::::' > <binfmt_misc>/register
 
-	int (*load)(struct linux_binprm *bprm);
+The offset field carries the handler name; magic, mask, and interpreter
+must be empty since the program supplies both the matching and the
+interpreter. Reusing the register file keeps the existing permission
+model intact: activating a handler requires the same write access to a
+binfmt_misc instance as any other registration, and the per user
+namespace instance semantics apply unchanged. A 'B' entry in a
+container's own instance shadows the host's handlers just like any
+other entry, and the privilege needed to shadow e.g. all ELF binaries
+is the same as for a static 'M' entry matching \x7fELF today; the only
+novelty is that matching becomes programmable.
 
-and a name that binfmt_misc entries reference it by. struct_ops is the
-sanctioned mechanism for this kind of user-supplied policy callback:
-program types, attach types, and the uapi helper list are frozen, and
-every recently added subsystem hook (bpf qdisc, SMC handshake control,
-io_uring loop ops, sched_ext) is a struct_ops user. The op receives the
-bprm as a trusted BTF pointer, so a program can match on the header in
-bprm->buf, read arbitrary file content via bpf_dynptr_from_file() to
-parse e.g. ELF program headers, and inspect the binary's location. No
-dedicated program type, ctx blob, or uapi helper is needed.
+The entry takes its own reference on the ops for its whole lifetime.
+It is dropped in put_binfmt_handler() next to the MISC_FMT_OPEN_FILE
+interp_file cleanup, which the existing users refcount already defers
+past any concurrent load_misc_binary(), and explicitly on the
+registration failure path where the users refcount is not live yet.
 
-The load program is required to be sleepable. Reliable file reads at
-exec time fault in the file's pages; a non-sleepable program would be
-limited to whatever happens to be resident in the page cache and would
-fail sporadically on cold caches. This also constrains the caller:
-binfmt_misc must invoke the op from sleepable context, which a later
-patch takes care of.
+The program runs from load_misc_binary(), never from the matching walk
+under entries_lock: the read_lock disables preemption while the load
+program must be able to sleep to read file content. search_binfmt_handler()
+therefore only nominates the next enabled 'B' entry and the program
+decides outside the lock. A declining program (returning 0) falls
+through to handlers registered after it via a skip cursor and a rescan;
+entries registered or removed between rescans can shift the cursor, so
+a program may be consulted twice in that window, which is harmless
+since matching must be free of side effects. Returning a positive value
+without having selected an interpreter terminates the binfmt_misc scan
+with -ENOEXEC so the remaining binary formats still get a shot.
 
-The interpreter is selected through the new kfunc:
-
-	int bpf_binprm_set_interp(struct linux_binprm *bprm,
-				  const char *path, size_t path__sz);
-
-which enforces an absolute path shorter than PATH_MAX and stages a copy
-in the bprm. The bprm is exclusively owned by the task doing the exec,
-so no shared or per-CPU state is involved and nothing here can race.
-The kfunc is registered for struct_ops programs with a filter limiting
-it to binfmt_misc_ops programs.
-
-Registering an ops instance (updating the struct_ops map or attaching
-its link) publishes the handler under its name in a registry keyed by
-the registering task's user namespace. Lookups walk the user namespace
-hierarchy upwards, mirroring how binfmt_misc instances themselves are
-resolved in load_binfmt_misc(). Consumers take a reference on the ops
-via bpf_struct_ops_get() which pins the underlying map and programs, so
-an activated handler keeps working even if the map is deleted or the
-registering container goes away; deregistration only prevents new
-activations, exactly like unregistering a tcp congestion ops with live
-users.
+The 'C' and 'F' flags are rejected for 'B' entries. 'F' exists to
+pre-open a fixed interpreter at registration time in the registrar's
+context which is meaningless for a per-exec computed path. 'C' honors
+the suid bits of the matched binary while executing the interpreter;
+combined with a program-chosen interpreter that would let a user
+namespace root pick what runs with a setuid binary's credentials. The
+computed path itself cannot widen access: it is opened with open_exec()
+under the caller's credentials with the usual LSM and noexec checks,
+identical to a statically registered interpreter.
 
 Link: https://lore.kernel.org/20260704211409.1978485-1-farid.m.zakaria@gmail.com
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- fs/Kconfig.binfmt           |  14 +++
- fs/Makefile                 |   1 +
- fs/binfmt_misc_bpf.c        | 275 ++++++++++++++++++++++++++++++++++++++++++++
- include/linux/binfmt_misc.h |  49 ++++++++
- 4 files changed, 339 insertions(+)
+ Documentation/admin-guide/binfmt-misc.rst |  40 ++++++++-
+ fs/binfmt_misc.c                          | 143 +++++++++++++++++++++++++++---
+ 2 files changed, 168 insertions(+), 15 deletions(-)
 
-diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
-index 1949e25c7741..daeac4889d03 100644
---- a/fs/Kconfig.binfmt
-+++ b/fs/Kconfig.binfmt
-@@ -168,6 +168,20 @@ config BINFMT_MISC
- 	  you have use for it; the module is called binfmt_misc. If you
- 	  don't know what to answer at this point, say Y.
+diff --git a/Documentation/admin-guide/binfmt-misc.rst b/Documentation/admin-guide/binfmt-misc.rst
+index c0a34fbf8022..c0efb0773628 100644
+--- a/Documentation/admin-guide/binfmt-misc.rst
++++ b/Documentation/admin-guide/binfmt-misc.rst
+@@ -26,11 +26,13 @@ Here is what the fields mean:
+    name below ``/proc/sys/fs/binfmt_misc``; cannot contain slashes ``/`` for
+    obvious reasons.
+ - ``type``
+-   is the type of recognition. Give ``M`` for magic and ``E`` for extension.
++   is the type of recognition. Give ``M`` for magic, ``E`` for extension and
++   ``B`` for a bpf-backed handler (see below).
+ - ``offset``
+    is the offset of the magic/mask in the file, counted in bytes. This
+    defaults to 0 if you omit it (i.e. you write ``:name:type::magic...``).
+-   Ignored when using filename extension matching.
++   Ignored when using filename extension matching. For ``B`` entries this
++   field carries the name of the bpf handler instead.
+ - ``magic``
+    is the byte sequence binfmt_misc is matching for. The magic string
+    may contain hex-encoded characters like ``\x0a`` or ``\xA4``. Note that you
+@@ -97,6 +99,40 @@ There are some restrictions:
+    offset+size(magic) has to be less than 128
+  - the interpreter string may not exceed 127 characters
  
-+config BINFMT_MISC_BPF
-+	bool "BPF-selected interpreters for misc binaries"
-+	depends on BINFMT_MISC=y
-+	depends on BPF_SYSCALL && BPF_JIT && DEBUG_INFO_BTF
-+	help
-+	  Allow binfmt_misc binary type handlers to be implemented as bpf
-+	  struct_ops programs. Instead of matching a fixed magic and
-+	  redirecting to a fixed interpreter recorded at registration time
-+	  such handlers match binaries programmatically and compute the
-+	  interpreter to use per binary, e.g. relative to the location of
-+	  the binary itself.
 +
-+	  If you don't know what to answer at this point, say N.
++bpf-backed handlers
++-------------------
 +
- config COREDUMP
- 	bool "Enable core dump support" if EXPERT
- 	default y
-diff --git a/fs/Makefile b/fs/Makefile
-index 89a8a9d207d1..499c6670f0c1 100644
---- a/fs/Makefile
-+++ b/fs/Makefile
-@@ -33,6 +33,7 @@ obj-$(CONFIG_FS_ENCRYPTION)	+= crypto/
- obj-$(CONFIG_FS_VERITY)		+= verity/
- obj-$(CONFIG_FILE_LOCKING)      += locks.o
- obj-$(CONFIG_BINFMT_MISC)	+= binfmt_misc.o
-+obj-$(CONFIG_BINFMT_MISC_BPF)	+= binfmt_misc_bpf.o
- obj-$(CONFIG_BINFMT_SCRIPT)	+= binfmt_script.o
- obj-$(CONFIG_BINFMT_ELF)	+= binfmt_elf.o
- obj-$(CONFIG_COMPAT_BINFMT_ELF)	+= compat_binfmt_elf.o
-diff --git a/fs/binfmt_misc_bpf.c b/fs/binfmt_misc_bpf.c
-new file mode 100644
-index 000000000000..72da0964d949
---- /dev/null
-+++ b/fs/binfmt_misc_bpf.c
-@@ -0,0 +1,275 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * BPF-backed binary type handlers for binfmt_misc.
-+ *
-+ * A handler is a struct binfmt_misc_ops struct_ops map. Loading and
-+ * registering it makes the handler available under its name in the user
-+ * namespace it was registered in. A binfmt_misc 'B' entry activates it:
-+ *
-+ *   echo ':entry:B:<handler-name>::::' > <binfmt_misc>/register
-+ */
++With ``CONFIG_BINFMT_MISC_BPF`` both the matching and the interpreter
++selection can be delegated to a bpf program. A handler is an instance of the
++``binfmt_misc_ops`` struct_ops with a sleepable ``load`` program and a
++``name``. Once the struct_ops map is registered the handler can be activated
++with a ``B`` entry that references it by name and carries neither magic,
++mask, nor interpreter::
 +
++    echo ':qemu:B:my_handler::::' > register
++
++At exec time the ``load`` program receives the ``linux_binprm`` of the
++binary. It can match on the header in ``bprm->buf``, read the file itself,
++e.g. to parse ELF program headers, and derive the interpreter from the
++binary's location. It selects the interpreter by calling the
++``bpf_binprm_set_interp()`` kfunc with an absolute path and returning a
++positive value. Returning ``0`` falls through to the handlers registered
++after this one, a negative errno fails the exec with that error;
++``-ENOEXEC`` ends the binfmt_misc search but lets the remaining binary
++formats have a go. The interpreter is opened with the credentials of the
++task doing the exec, exactly as a statically registered interpreter would
++be.
++
++Handlers are looked up in the user namespace the struct_ops map was
++registered in, falling back to ancestor namespaces, mirroring how
++binfmt_misc instances themselves are looked up. The entry keeps the handler
++alive; deleting the struct_ops map only prevents new registrations.
++
++The ``C`` and ``F`` flags cannot be combined with ``B`` entries: there is no
++fixed interpreter to pre-open and a program-selected interpreter must never
++inherit the credentials of a setuid binary.
++
+ To use binfmt_misc you have to mount it first. You can mount it with
+ ``mount -t binfmt_misc none /proc/sys/fs/binfmt_misc`` command, or you can add
+ a line ``none  /proc/sys/fs/binfmt_misc binfmt_misc defaults 0 0`` to your
+diff --git a/fs/binfmt_misc.c b/fs/binfmt_misc.c
+index 84349fcb93f1..b80e219ba587 100644
+--- a/fs/binfmt_misc.c
++++ b/fs/binfmt_misc.c
+@@ -17,6 +17,7 @@
+ #include <linux/sched/mm.h>
+ #include <linux/magic.h>
+ #include <linux/binfmts.h>
 +#include <linux/binfmt_misc.h>
-+#include <linux/binfmts.h>
-+#include <linux/bpf.h>
-+#include <linux/bpf_verifier.h>
-+#include <linux/btf.h>
-+#include <linux/btf_ids.h>
-+#include <linux/cred.h>
-+#include <linux/init.h>
-+#include <linux/limits.h>
-+#include <linux/mutex.h>
-+#include <linux/slab.h>
-+#include <linux/string.h>
-+#include <linux/user_namespace.h>
+ #include <linux/slab.h>
+ #include <linux/ctype.h>
+ #include <linux/string_helpers.h>
+@@ -41,7 +42,7 @@ enum {
+ 	VERBOSE_STATUS = 1 /* make it zero to save 400 bytes kernel memory */
+ };
+ 
+-enum {Enabled, Magic};
++enum {Enabled, Magic, Bpf};
+ #define MISC_FMT_PRESERVE_ARGV0 (1UL << 31)
+ #define MISC_FMT_OPEN_BINARY (1UL << 30)
+ #define MISC_FMT_CREDENTIALS (1UL << 29)
+@@ -58,6 +59,8 @@ typedef struct {
+ 	char *name;
+ 	struct dentry *dentry;
+ 	struct file *interp_file;
++	const struct binfmt_misc_ops *bpf_ops;	/* bpf-backed handler ('B') */
++	const char *bpf_ops_name;
+ 	refcount_t users;		/* sync removal with load_misc_binary() */
+ } Node;
+ 
+@@ -82,14 +85,19 @@ static struct file_system_type bm_fs_type;
+  * search_binfmt_handler - search for a binary handler for @bprm
+  * @misc: handle to binfmt_misc instance
+  * @bprm: binary for which we are looking for a handler
++ * @bpf_skip: number of bpf-backed handlers to skip over
+  *
+  * Search for a binary type handler for @bprm in the list of registered binary
+- * type handlers.
++ * type handlers. A bpf-backed handler cannot be matched here as its program
++ * must run in sleepable context; it is returned as a candidate and the
++ * program decides in load_misc_binary(). @bpf_skip allows the caller to
++ * resume the search after the first @bpf_skip candidates declined.
+  *
+  * Return: binary type list entry on success, NULL on failure
+  */
+ static Node *search_binfmt_handler(struct binfmt_misc *misc,
+-				   struct linux_binprm *bprm)
++				   struct linux_binprm *bprm,
++				   unsigned int bpf_skip)
+ {
+ 	char *p = strrchr(bprm->interp, '.');
+ 	Node *e;
+@@ -103,6 +111,15 @@ static Node *search_binfmt_handler(struct binfmt_misc *misc,
+ 		if (!test_bit(Enabled, &e->flags))
+ 			continue;
+ 
++		/* The program decides in load_misc_binary(). */
++		if (test_bit(Bpf, &e->flags)) {
++			if (bpf_skip) {
++				bpf_skip--;
++				continue;
++			}
++			return e;
++		}
 +
-+struct bm_bpf_ops_reg {
-+	struct list_head list;
-+	const struct binfmt_misc_ops *ops;
-+	struct bpf_link *link;
-+	struct user_namespace *user_ns;
-+};
-+
-+static DEFINE_MUTEX(bm_bpf_ops_lock);
-+static LIST_HEAD(bm_bpf_ops_list);
-+
-+static struct bpf_struct_ops bpf_binfmt_misc_ops;
-+
-+static struct bm_bpf_ops_reg *bm_bpf_ops_find(const struct user_namespace *user_ns,
-+					      const char *name)
-+{
-+	struct bm_bpf_ops_reg *reg;
-+
-+	lockdep_assert_held(&bm_bpf_ops_lock);
-+
-+	list_for_each_entry(reg, &bm_bpf_ops_list, list) {
-+		if (reg->user_ns == user_ns && !strcmp(reg->ops->name, name))
-+			return reg;
+ 		/* Do matching based on extension if applicable. */
+ 		if (!test_bit(Magic, &e->flags)) {
+ 			if (p && !strcmp(e->magic, p + 1))
+@@ -132,6 +149,7 @@ static Node *search_binfmt_handler(struct binfmt_misc *misc,
+  * get_binfmt_handler - try to find a binary type handler
+  * @misc: handle to binfmt_misc instance
+  * @bprm: binary for which we are looking for a handler
++ * @bpf_skip: number of bpf-backed handlers to skip over
+  *
+  * Try to find a binfmt handler for the binary type. If one is found take a
+  * reference to protect against removal via bm_{entry,status}_write().
+@@ -139,12 +157,13 @@ static Node *search_binfmt_handler(struct binfmt_misc *misc,
+  * Return: binary type list entry on success, NULL on failure
+  */
+ static Node *get_binfmt_handler(struct binfmt_misc *misc,
+-				struct linux_binprm *bprm)
++				struct linux_binprm *bprm,
++				unsigned int bpf_skip)
+ {
+ 	Node *e;
+ 
+ 	read_lock(&misc->entries_lock);
+-	e = search_binfmt_handler(misc, bprm);
++	e = search_binfmt_handler(misc, bprm, bpf_skip);
+ 	if (e)
+ 		refcount_inc(&e->users);
+ 	read_unlock(&misc->entries_lock);
+@@ -164,6 +183,8 @@ static void put_binfmt_handler(Node *e)
+ 	if (refcount_dec_and_test(&e->users)) {
+ 		if (e->flags & MISC_FMT_OPEN_FILE)
+ 			filp_close(e->interp_file, NULL);
++		if (e->bpf_ops)
++			binfmt_misc_put_ops(e->bpf_ops);
+ 		kfree(e);
+ 	}
+ }
+@@ -206,12 +227,15 @@ static int load_misc_binary(struct linux_binprm *bprm)
+ 	struct file *interp_file = NULL;
+ 	int retval = -ENOEXEC;
+ 	struct binfmt_misc *misc;
++	const char *interpreter;
++	unsigned int bpf_skip = 0;
+ 
+ 	misc = load_binfmt_misc();
+ 	if (!misc->enabled)
+ 		return retval;
+ 
+-	fmt = get_binfmt_handler(misc, bprm);
++retry:
++	fmt = get_binfmt_handler(misc, bprm, bpf_skip);
+ 	if (!fmt)
+ 		return retval;
+ 
+@@ -220,6 +244,32 @@ static int load_misc_binary(struct linux_binprm *bprm)
+ 	if (bprm->interp_flags & BINPRM_FLAGS_PATH_INACCESSIBLE)
+ 		goto ret;
+ 
++	if (test_bit(Bpf, &fmt->flags)) {
++		retval = fmt->bpf_ops->load(bprm);
++		if (retval < 0) {
++			/* Keep a program-supplied error within errno range. */
++			if (retval < -MAX_ERRNO)
++				retval = -ENOEXEC;
++			goto ret;
++		}
++		if (!retval) {
++			/* Declined, move on to later handlers. */
++			kfree(bprm->bpf_interp);
++			bprm->bpf_interp = NULL;
++			put_binfmt_handler(fmt);
++			bpf_skip++;
++			retval = -ENOEXEC;
++			goto retry;
++		}
++		/* Selecting an interpreter is part of the contract. */
++		retval = -ENOEXEC;
++		if (!bprm->bpf_interp)
++			goto ret;
++		interpreter = bprm->bpf_interp;
++	} else {
++		interpreter = fmt->interpreter;
 +	}
-+	return NULL;
-+}
 +
-+/**
-+ * binfmt_misc_get_ops - look up a bpf binary type handler by name
-+ * @user_ns: user namespace of the binfmt_misc instance
-+ * @name: name the handler was registered under
-+ *
-+ * Search @user_ns and its ancestors for a handler named @name, mirroring
-+ * the instance lookup in load_binfmt_misc(). The returned handler stays
-+ * callable until binfmt_misc_put_ops() even if the backing struct_ops map
-+ * is detached or deleted in the meantime.
-+ *
-+ * Return: the handler on success, NULL on failure
-+ */
-+const struct binfmt_misc_ops *binfmt_misc_get_ops(struct user_namespace *user_ns,
-+						  const char *name)
-+{
-+	const struct user_namespace *ns;
-+	struct bm_bpf_ops_reg *reg;
-+
-+	guard(mutex)(&bm_bpf_ops_lock);
-+
-+	for (ns = user_ns; ns; ns = ns->parent) {
-+		reg = bm_bpf_ops_find(ns, name);
-+		if (!reg)
-+			continue;
-+		if (!bpf_struct_ops_get(reg->ops))
-+			return NULL;
-+		return reg->ops;
-+	}
-+	return NULL;
-+}
-+
-+void binfmt_misc_put_ops(const struct binfmt_misc_ops *ops)
-+{
-+	bpf_struct_ops_put(ops);
-+}
-+
-+bool bpf_prog_is_binfmt_misc_ops(const struct bpf_prog *prog)
-+{
-+	return prog->type == BPF_PROG_TYPE_STRUCT_OPS &&
-+	       prog->aux->st_ops == &bpf_binfmt_misc_ops;
-+}
-+
-+__bpf_kfunc_start_defs();
-+
-+/**
-+ * bpf_binprm_set_interp - select the interpreter for the current exec
-+ * @bprm: binary that is being executed
-+ * @path: absolute path to the interpreter
-+ * @path__sz: size of the @path buffer, including the terminating NUL
-+ *
-+ * To be called from the load program of a struct binfmt_misc_ops handler
-+ * before returning a positive value. The path is opened with the
-+ * credentials of the task doing the exec after the program returns.
-+ *
-+ * Return: 0 on success, a negative errno on failure
-+ */
-+__bpf_kfunc int bpf_binprm_set_interp(struct linux_binprm *bprm,
-+				      const char *path, size_t path__sz)
-+{
-+	size_t len;
-+	char *interp;
-+
-+	if (!path__sz)
-+		return -EINVAL;
-+	len = strnlen(path, path__sz);
-+	if (len == path__sz)
-+		return -EINVAL;
-+	if (path[0] != '/')
-+		return -EINVAL;
-+	if (len >= PATH_MAX)
-+		return -ENAMETOOLONG;
-+
-+	interp = kmemdup_nul(path, len, GFP_KERNEL);
-+	if (!interp)
-+		return -ENOMEM;
-+
+ 	if (fmt->flags & MISC_FMT_PRESERVE_ARGV0) {
+ 		bprm->interp_flags |= BINPRM_FLAGS_PRESERVE_ARGV0;
+ 	} else {
+@@ -238,13 +288,13 @@ static int load_misc_binary(struct linux_binprm *bprm)
+ 	bprm->argc++;
+ 
+ 	/* add the interp as argv[0] */
+-	retval = copy_string_kernel(fmt->interpreter, bprm);
++	retval = copy_string_kernel(interpreter, bprm);
+ 	if (retval < 0)
+ 		goto ret;
+ 	bprm->argc++;
+ 
+ 	/* Update interp in case binfmt_script needs it. */
+-	retval = bprm_change_interp(fmt->interpreter, bprm);
++	retval = bprm_change_interp(interpreter, bprm);
+ 	if (retval < 0)
+ 		goto ret;
+ 
+@@ -253,7 +303,7 @@ static int load_misc_binary(struct linux_binprm *bprm)
+ 		if (!IS_ERR(interp_file))
+ 			deny_write_access(interp_file);
+ 	} else {
+-		interp_file = open_exec(fmt->interpreter);
++		interp_file = open_exec(interpreter);
+ 	}
+ 	retval = PTR_ERR(interp_file);
+ 	if (IS_ERR(interp_file))
+@@ -265,6 +315,9 @@ static int load_misc_binary(struct linux_binprm *bprm)
+ 
+ 	retval = 0;
+ ret:
++	/* A program-selected interpreter is consumed by this exec attempt. */
 +	kfree(bprm->bpf_interp);
-+	bprm->bpf_interp = interp;
-+	return 0;
-+}
-+
-+__bpf_kfunc_end_defs();
-+
-+BTF_KFUNCS_START(bm_bpf_kfunc_ids)
-+BTF_ID_FLAGS(func, bpf_binprm_set_interp, KF_SLEEPABLE)
-+BTF_KFUNCS_END(bm_bpf_kfunc_ids)
-+
-+static int bm_bpf_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
-+{
-+	if (!btf_id_set8_contains(&bm_bpf_kfunc_ids, kfunc_id))
-+		return 0;
-+	if (bpf_prog_is_binfmt_misc_ops(prog))
-+		return 0;
-+	return -EACCES;
-+}
-+
-+static const struct btf_kfunc_id_set bm_bpf_kfunc_set = {
-+	.owner	= THIS_MODULE,
-+	.set	= &bm_bpf_kfunc_ids,
-+	.filter	= bm_bpf_kfunc_filter,
-+};
-+
-+static int bm_bpf_ops__load(struct linux_binprm *bprm)
-+{
-+	return 0;
-+}
-+
-+static struct binfmt_misc_ops bm_bpf_ops_stubs = {
-+	.load = bm_bpf_ops__load,
-+};
-+
-+static int bm_bpf_init(struct btf *btf)
-+{
-+	return register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
-+					 &bm_bpf_kfunc_set);
-+}
-+
-+static int bm_bpf_check_member(const struct btf_type *t,
-+			       const struct btf_member *member,
-+			       const struct bpf_prog *prog)
-+{
-+	u32 moff = __btf_member_bit_offset(t, member) / 8;
-+
-+	switch (moff) {
-+	case offsetof(struct binfmt_misc_ops, load):
-+		/* Reliable file reads at exec time require sleeping. */
-+		if (!prog->sleepable)
-+			return -EINVAL;
++	bprm->bpf_interp = NULL;
+ 
+ 	/*
+ 	 * If we actually put the node here all concurrent calls to
+@@ -404,13 +457,47 @@ static Node *create_entry(const char __user *buffer, size_t count)
+ 		pr_debug("register: type: M (magic)\n");
+ 		e->flags = (1 << Enabled) | (1 << Magic);
+ 		break;
++	case 'B':
++		if (!IS_ENABLED(CONFIG_BINFMT_MISC_BPF))
++			goto einval;
++		pr_debug("register: type: B (bpf)\n");
++		e->flags = (1 << Enabled) | (1 << Bpf);
 +		break;
+ 	default:
+ 		goto einval;
+ 	}
+ 	if (*p++ != del)
+ 		goto einval;
+ 
+-	if (test_bit(Magic, &e->flags)) {
++	if (test_bit(Bpf, &e->flags)) {
++		char *s;
++
++		/* The 'offset' field carries the handler name. */
++		s = strchr(p, del);
++		if (!s)
++			goto einval;
++		*s++ = '\0';
++		e->bpf_ops_name = p;
++		if (!e->bpf_ops_name[0] ||
++		    strlen(e->bpf_ops_name) >= BINFMT_MISC_OPS_NAME_MAX)
++			goto einval;
++		p = s;
++		pr_debug("register: bpf handler: {%s}\n", e->bpf_ops_name);
++
++		/* The 'magic' field must be empty. */
++		s = strchr(p, del);
++		if (!s || s != p)
++			goto einval;
++		*s++ = '\0';
++		p = s;
++
++		/* The 'mask' field must be empty. */
++		s = strchr(p, del);
++		if (!s || s != p)
++			goto einval;
++		*s++ = '\0';
++		p = s;
++	} else if (test_bit(Magic, &e->flags)) {
+ 		/* Handle the 'M' (magic) format. */
+ 		char *s;
+ 
+@@ -524,8 +611,13 @@ static Node *create_entry(const char __user *buffer, size_t count)
+ 	if (!p)
+ 		goto einval;
+ 	*p++ = '\0';
+-	if (!e->interpreter[0])
++	if (test_bit(Bpf, &e->flags)) {
++		/* The program selects the interpreter at exec time. */
++		if (e->interpreter[0])
++			goto einval;
++	} else if (!e->interpreter[0]) {
+ 		goto einval;
 +	}
-+	return 0;
-+}
+ 	pr_debug("register: interpreter: {%s}\n", e->interpreter);
+ 
+ 	/* Parse the 'flags' field. */
+@@ -535,6 +627,14 @@ static Node *create_entry(const char __user *buffer, size_t count)
+ 	if (p != buf + count)
+ 		goto einval;
+ 
++	/*
++	 * A program-selected interpreter cannot be pre-opened and must not
++	 * inherit the credentials of a setuid binary it was chosen for.
++	 */
++	if (test_bit(Bpf, &e->flags) &&
++	    (e->flags & (MISC_FMT_CREDENTIALS | MISC_FMT_OPEN_FILE)))
++		goto einval;
 +
-+static int bm_bpf_init_member(const struct btf_type *t,
-+			      const struct btf_member *member,
-+			      void *kdata, const void *udata)
-+{
-+	const struct binfmt_misc_ops *uops = udata;
-+	struct binfmt_misc_ops *ops = kdata;
-+	u32 moff = __btf_member_bit_offset(t, member) / 8;
-+
-+	switch (moff) {
-+	case offsetof(struct binfmt_misc_ops, name):
-+		if (bpf_obj_name_cpy(ops->name, uops->name,
-+				     sizeof(ops->name)) <= 0)
-+			return -EINVAL;
-+		return 1;
-+	}
-+	return 0;
-+}
-+
-+static int bm_bpf_validate(void *kdata)
-+{
-+	struct binfmt_misc_ops *ops = kdata;
-+
-+	if (!ops->load)
-+		return -EINVAL;
-+	return 0;
-+}
-+
-+static int bm_bpf_reg(void *kdata, struct bpf_link *link)
-+{
-+	struct binfmt_misc_ops *ops = kdata;
-+	struct bm_bpf_ops_reg *reg;
-+
-+	reg = kzalloc_obj(*reg, GFP_KERNEL_ACCOUNT);
-+	if (!reg)
-+		return -ENOMEM;
-+
-+	reg->ops = ops;
-+	reg->link = link;
-+	reg->user_ns = get_user_ns(current_user_ns());
-+
-+	guard(mutex)(&bm_bpf_ops_lock);
-+
-+	if (bm_bpf_ops_find(reg->user_ns, ops->name)) {
-+		put_user_ns(reg->user_ns);
-+		kfree(reg);
-+		return -EEXIST;
-+	}
-+
-+	list_add(&reg->list, &bm_bpf_ops_list);
-+	return 0;
-+}
-+
-+static void bm_bpf_unreg(void *kdata, struct bpf_link *link)
-+{
-+	struct bm_bpf_ops_reg *reg;
-+
-+	guard(mutex)(&bm_bpf_ops_lock);
-+
-+	list_for_each_entry(reg, &bm_bpf_ops_list, list) {
-+		if (reg->ops == kdata && reg->link == link) {
-+			list_del(&reg->list);
-+			put_user_ns(reg->user_ns);
-+			kfree(reg);
-+			return;
+ 	return e;
+ 
+ out:
+@@ -588,7 +688,10 @@ static void entry_status(Node *e, char *page)
+ 		return;
+ 	}
+ 
+-	dp += sprintf(dp, "%s\ninterpreter %s\n", status, e->interpreter);
++	if (test_bit(Bpf, &e->flags))
++		dp += sprintf(dp, "%s\nbpf %s\n", status, e->bpf_ops_name);
++	else
++		dp += sprintf(dp, "%s\ninterpreter %s\n", status, e->interpreter);
+ 
+ 	/* print the special flags */
+ 	dp += sprintf(dp, "flags: ");
+@@ -602,7 +705,9 @@ static void entry_status(Node *e, char *page)
+ 		*dp++ = 'F';
+ 	*dp++ = '\n';
+ 
+-	if (!test_bit(Magic, &e->flags)) {
++	if (test_bit(Bpf, &e->flags)) {
++		*dp = '\0';
++	} else if (!test_bit(Magic, &e->flags)) {
+ 		sprintf(dp, "extension .%s\n", e->magic);
+ 	} else {
+ 		dp += sprintf(dp, "offset %i\nmagic ", e->offset);
+@@ -809,6 +914,16 @@ static ssize_t bm_register_write(struct file *file, const char __user *buffer,
+ 	if (IS_ERR(e))
+ 		return PTR_ERR(e);
+ 
++	if (test_bit(Bpf, &e->flags)) {
++		e->bpf_ops = binfmt_misc_get_ops(sb->s_user_ns, e->bpf_ops_name);
++		if (!e->bpf_ops) {
++			pr_notice("register: no bpf handler named %s\n",
++				  e->bpf_ops_name);
++			kfree(e);
++			return -ENOENT;
 +		}
 +	}
-+}
 +
-+static const struct bpf_verifier_ops bm_bpf_verifier_ops = {
-+	.get_func_proto		= bpf_base_func_proto,
-+	.is_valid_access	= bpf_tracing_btf_ctx_access,
-+};
-+
-+static struct bpf_struct_ops bpf_binfmt_misc_ops = {
-+	.verifier_ops	= &bm_bpf_verifier_ops,
-+	.init		= bm_bpf_init,
-+	.check_member	= bm_bpf_check_member,
-+	.init_member	= bm_bpf_init_member,
-+	.validate	= bm_bpf_validate,
-+	.reg		= bm_bpf_reg,
-+	.unreg		= bm_bpf_unreg,
-+	.cfi_stubs	= &bm_bpf_ops_stubs,
-+	.name		= "binfmt_misc_ops",
-+	.owner		= THIS_MODULE,
-+};
-+
-+static int __init bm_bpf_struct_ops_init(void)
-+{
-+	return register_bpf_struct_ops(&bpf_binfmt_misc_ops, binfmt_misc_ops);
-+}
-+late_initcall(bm_bpf_struct_ops_init);
-diff --git a/include/linux/binfmt_misc.h b/include/linux/binfmt_misc.h
-new file mode 100644
-index 000000000000..e1d26c4301da
---- /dev/null
-+++ b/include/linux/binfmt_misc.h
-@@ -0,0 +1,49 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_BINFMT_MISC_H
-+#define _LINUX_BINFMT_MISC_H
-+
-+#include <linux/types.h>
-+
-+struct bpf_prog;
-+struct linux_binprm;
-+struct user_namespace;
-+
-+#define BINFMT_MISC_OPS_NAME_MAX 16
-+
-+/**
-+ * struct binfmt_misc_ops - bpf-backed binary type handler
-+ * @load: match @bprm and select an interpreter via bpf_binprm_set_interp();
-+ *        returns > 0 if the binary was handled, 0 to fall through to the
-+ *        handlers registered after this one, a negative errno to fail the
-+ *        exec; -ENOEXEC does not fail the exec but moves on to the
-+ *        remaining binary formats
-+ * @name: name that 'B' entries reference the handler by
-+ */
-+struct binfmt_misc_ops {
-+	int (*load)(struct linux_binprm *bprm);
-+	char name[BINFMT_MISC_OPS_NAME_MAX];
-+};
-+
-+#ifdef CONFIG_BINFMT_MISC_BPF
-+const struct binfmt_misc_ops *binfmt_misc_get_ops(struct user_namespace *user_ns,
-+						  const char *name);
-+void binfmt_misc_put_ops(const struct binfmt_misc_ops *ops);
-+bool bpf_prog_is_binfmt_misc_ops(const struct bpf_prog *prog);
-+#else
-+static inline const struct binfmt_misc_ops *
-+binfmt_misc_get_ops(struct user_namespace *user_ns, const char *name)
-+{
-+	return NULL;
-+}
-+
-+static inline void binfmt_misc_put_ops(const struct binfmt_misc_ops *ops)
-+{
-+}
-+
-+static inline bool bpf_prog_is_binfmt_misc_ops(const struct bpf_prog *prog)
-+{
-+	return false;
-+}
-+#endif /* CONFIG_BINFMT_MISC_BPF */
-+
-+#endif /* _LINUX_BINFMT_MISC_H */
+ 	if (e->flags & MISC_FMT_OPEN_FILE) {
+ 		/*
+ 		 * Now that we support unprivileged binfmt_misc mounts make
+@@ -834,6 +949,8 @@ static ssize_t bm_register_write(struct file *file, const char __user *buffer,
+ 			exe_file_allow_write_access(f);
+ 			filp_close(f, NULL);
+ 		}
++		if (e->bpf_ops)
++			binfmt_misc_put_ops(e->bpf_ops);
+ 		kfree(e);
+ 		return err;
+ 	}
 
 -- 
 2.53.0
