@@ -1,227 +1,142 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCB913B19A8
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 06:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4C0357D10
+	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 07:17:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783407206; cv=none; b=Fak3RCkV+WpllclgQuFpqFjpEIf/GFVuEM7RKDefMpCiOkFZJiEAdYO7t/ICKUExyK0z9TyP62EobLuguS4VV5AP60pCjOXU8rRx0Q8MKeG2o6gMGNguKSUL9VYMPRPub0BE9dldJbRIbo2f6nfINBv6WB4HP6FR3g/bv8l18Ko=
+	t=1783408656; cv=none; b=Nek+VXwxy06ODddvwJOpnZ2HTBCxoC84wSUvECPv4DqKLxUb1784Zzm2G5f6Or10uu2IaOr9HZb/XVsDZuOzTjOR5VNKxeY1QoRKbedvN03x65OwmCNzHbfMCRG7bOFrlahpt001dFFIlt4gSWbwDSKhybv7st2QJZIBcLNf47c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783407206; c=relaxed/simple;
-	bh=UUi7ZPY68FzydqFXLRJx1F35K1cv91nvZLrM7pj5Gus=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qN2XIQzLQoNlncsxOk/X5EnpV5sh+1gR4lH9UTiqpRhQ4iwsW8SSYs5TveDMdj1LtQyhGDA7bfnK5pyRbJFeRhR2C3DMXRPjutQayiqfd4dNCqkz7OXZ8zFTA/jmgR0mSxgFaSZwyQunhznNt3Zu9tzPQJd3p+aVnp8y1mTPfjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fMScHa+k; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783408656; c=relaxed/simple;
+	bh=Ej8NqPpY8Y2tM5iaL7Pfew4r5IbWYX63UJqTgnJNTMQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DuiiHYP8BmkcMEK84dPwWTSXOq41kCyToa63/2f1yJ55ehVdEbGJ/n4zuag4BnTaXJthn3Fwa6LlLAG3snJ1uPXjypOKbecjkHnZgOksTZOkCrLgCYgO0pH0lBm4aemEWVLSTMujCuY6qD3yIiA0cmzUHObcYjjMtDMdchY2R3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SdaKDsbe; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fMScHa+k"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783407200;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KKyrkRQAO2eoY3ppvINPzoApwyh1I0vLGhy15gwEZ/I=;
-	b=fMScHa+k0kNLc7Hbx4rdmPFJ8Pq3FXwMzKP0eTBentMCs5/8afulHAL0kx4CUC7yMAyvop
-	4NhB8cjhsYsmfQONhCNSbKEOYjOlYFUYzJsgVNqZcHIFY7127Jp9DyMwltv4JgofCKcrzx
-	6xeEcMEN8WmTweoxlo0CaIBzctfuxEg=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-12-PvVAgK-PPmW7IURXm9HiZg-1; Tue,
- 07 Jul 2026 02:53:16 -0400
-X-MC-Unique: PvVAgK-PPmW7IURXm9HiZg-1
-X-Mimecast-MFC-AGG-ID: PvVAgK-PPmW7IURXm9HiZg_1783407194
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 532EB1920C2E;
-	Tue,  7 Jul 2026 06:53:04 +0000 (UTC)
-Received: from vmalik-fedora.brq.redhat.com (unknown [10.43.17.109])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 70CCA19560A6;
-	Tue,  7 Jul 2026 06:53:00 +0000 (UTC)
-From: Viktor Malik <vmalik@redhat.com>
-To: linux-perf-users@vger.kernel.org
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	Viktor Malik <vmalik@redhat.com>,
-	Howard Chu <howardchu95@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Michael Petlan <mpetlan@redhat.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	stable@vger.kernel.org
-Subject: [PATCH v4 2/2] perf trace: Refactor augmented_raw_syscalls using bpf_for
-Date: Tue,  7 Jul 2026 08:52:47 +0200
-Message-ID: <a4a363ae325a670ba122fee2cabcebc7ecd236bd.1783406979.git.vmalik@redhat.com>
-In-Reply-To: <cover.1783406979.git.vmalik@redhat.com>
-References: <cover.1783406979.git.vmalik@redhat.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SdaKDsbe"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-493b786d6c0so20267135e9.2
+        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 00:17:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1783408649; x=1784013449; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=l02n0V7uxUW1ka2kHMZJ3uiSZxCig+R49GpTVh1FrvI=;
+        b=SdaKDsbePCNLu3pALbshc74sY9wTXoIKsDAGmAUyTmdZ31BfNU4oie/LpIJ3HQUf62
+         5JEsQOhuKy2wIzgmEIit37eHuesoJGCWnOdl7wh/FJ3grEB2UQgMbEydiMqumGfr6I2G
+         7E/WhEq2CP4/bM6E2bhQtishLMjg68ltxlNniYy6a4qZ7SFG/EEz9yP77GoIkIpiDeK8
+         Jp0rZNQ6w+j2C7lPj4ZQWktfcnODktzJ4g0rCTrlaHCS5j7SV9qzre1DjlNhALfdBmJZ
+         NpooLELMwen2/eN9leOHd/yRqj79IxQpEepY/Ab2q9uEegB6NI4WeLbCpRwwKW602WJ0
+         tyGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783408649; x=1784013449;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=l02n0V7uxUW1ka2kHMZJ3uiSZxCig+R49GpTVh1FrvI=;
+        b=EIAz4hROlz6AYLc6aUGeJDeYE8IsyeUnZLSCB3PyMKVzb54sNxwQSC1C0fTeDTquac
+         12Hcns7AZLPXIZHAnpVmuwnKGSwP5ou/rMHYsc05kPtwMfCD8KnYUhP6WE8zmvYE7JPr
+         2DDwKXzc1+KiCv2ZT+ak0VNrM4407JmI5i6Hg/IXjVQC3SyDhQ4Dwl+4efHCCje++ZEr
+         yMCZW9ixbrbEqZbLIlNSryDCAM3pjs9uuZ/OPmWrpSltUC8r0rJRLS2QLDeP50o5AgNu
+         9no/niHToxxtpMky6OBf4i1lBfs5TA7ygjV3sURLNcJfjeWzm6M8znswboejFcNyvigR
+         phnw==
+X-Gm-Message-State: AOJu0Yz2rW/sralxHakbBO2WOB1SLoyyQoKamjYiqN7RRCOgB4noO/PN
+	6J3gXYYnyMgOlyR3JPnqwJJ/flV3/JqhIaXl8JRqaFHbITnm90/KG0kO+nu1RVhjGg8=
+X-Gm-Gg: AfdE7clYlIpKaynmujjF6Vy8zAomO4vt11PYm8fgtFxY+ybrVEwUVtjQtusOrU1puUC
+	XDmVxHEgmDoVLxPbwI12Zic2mWeIyGd2hvOmKcI+3DapGbAirokprLvzbIS9DZAkGLJTNDo5b80
+	Mf547apSJerCPuXurojWHl5s0UKkEJcn1E3tNf22dFY6TJuSG0faN/wZd+TK07IsVB2Vl+fiO5b
+	naWOpRpj8ehjCKzvff+4GkfnvMBsBhlOsuCxy2ka208Lt3ygjFp/zPzb/cWtz49rgCeaix50d1U
+	18gbYhr3Vx14ozoPVfJvft7ao83pPNclsDyahi0mRRwwTfalevTb7O2P2E/uOqe8u6BKg/gf5Cq
+	/JJJvvnmnm7wlFAht/4WjJHV/eirrRzWIheeJ731z0MfGdSxrlMnXx+Dy8lJ2iriCzAh8iQ3uNT
+	dONUf7Pdm/Ko/L3fL8NfsN3r4yuRtLz22gu8dkhbRcrpImNQ==
+X-Received: by 2002:a05:600c:5288:b0:490:b2c9:e284 with SMTP id 5b1f17b1804b1-493df09608emr41741795e9.30.1783408648684;
+        Tue, 07 Jul 2026 00:17:28 -0700 (PDT)
+Received: from u94a (27-53-112-249.adsl.fetnet.net. [27.53.112.249])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bdb7e9sm6828225ad.10.2026.07.07.00.17.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2026 00:17:26 -0700 (PDT)
+Date: Tue, 7 Jul 2026 15:17:16 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Sun Jian <sun.jian.kdev@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
+	emil@etsalapatis.com, shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf v2 1/2] bpf: Reject negative const offsets for buffer
+ pointers
+Message-ID: <akynPc5YJKD12963@u94a>
+References: <20260707060804.93561-1-sun.jian.kdev@gmail.com>
+ <20260707060804.93561-2-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260707060804.93561-2-sun.jian.kdev@gmail.com>
 
-The loop for processing syscall args in augment_raw_syscalls has a
-history of breaking with Clang updates, see e.g. commit 013eb043f37b
-("perf trace: Fix BPF loading failure (-E2BIG)") from Clang 15 to 16.
+Sorry I missed that there was a v2 already. Reposting the comments I
+sent to v1 below.
 
-Now, a similar thing happened between Clang 21 and 22. While the issue
-is mitigated on the main line by a recent verifier update, it remains
-broken on the 6.12 and 6.18 stable branches:
+On Mon, Jul 06, 2026 at 11:08:03PM -0700, Sun Jian wrote:
+[...]
+> @@ -5344,6 +5348,29 @@ static int __check_buffer_access(struct bpf_verifier_env *env,
+>  		return -EACCES;
+>  	}
+>  
+> +	var_off = (s64)reg->var_off.value;
+> +	if (check_add_overflow(var_off, (s64)off, &start)) {
+> +		verbose(env,
+> +			"%s invalid %s buffer access: off=%d, var_off=%lld\n",
+> +			reg_arg_name(env, argno), buf_info, off, var_off);
+> +		return -EACCES;
+> +	}
 
-    [linux-6.18.y]# sudo perf trace true
-    libbpf: prog 'sys_enter': BPF program load failed: -E2BIG
-    libbpf: prog 'sys_enter': -- BEGIN PROG LOAD LOG --
-    [...]
-    BPF program is too large. Processed 1000001 insn
-    processed 1000001 insns (limit 1000000) max_states_per_insn 40 total_states 37941 peak_states 232 mark_read 0
-    -- END PROG LOAD LOG --
-    libbpf: prog 'sys_enter': failed to load: -E2BIG
-    libbpf: failed to load object 'augmented_raw_syscalls_bpf'
-    libbpf: failed to load BPF skeleton 'augmented_raw_syscalls_bpf': -E2BIG
-    Error: failed to get syscall or beauty map fd
-    [...]
+Other pointer offset checks (check_mem_region_access and
+adjust_ptr_min_max_vals) seem to check var_off against BPF_MAX_VAR_OFF,
+and that `off` being >= 0. It would be great if the convention can be
+kept for consistency, albeit being more conservative.
 
-The reason is that the loop is quite complex and the BPF verifier often
-struggles to prove that it terminates.
+From a blind guess I would guess that compiler does not product a
+pattern where `off` encoded in the instruction is negative but the net
+overall offset is positive for PTR_TO_TP_BUFFER/PTR_TO_BUF, and
+rejecting such pattern is fine.
 
-Fix the issue by replacing the standard for loop with the bpf_for macro,
-which uses a numeric BPF iterator. This should prevent future breakages
-of this kind since the verifier has a much easier job proving that the
-loop terminates.
+  r6 = *(u64 *)(r1 + 0);
+  r6 += 16;
+  r0 = *(u64 *)(r6 - 8);
 
-Small adjustments were necessary for the loop to make it work.  The main
-problem is that the verifier sometimes has problems with bpf_for loops
-that use a carry-over state, such as the `payload_offset` and `output`
-vars here, since the verifier tries to track their values too precisely
-and cannot prove loop convergence. To resolve the issue, we (1)
-explicitly recompute `payload_offset` in every iteration and (2) use a
-trick with adding a global zero to `output` to help the verifier forget
-its precise state and use a range instead.
+One more comment below.
 
-Finally, to keep backwards compatibility with older kernel versions that
-don't have bpf_for (i.e. numeric iterators), fall back to standard loop.
+> +
+> +	if (start < 0) {
+> +		verbose(env,
+> +			"%s invalid negative %s buffer offset: off=%d, var_off=%lld\n",
+> +			reg_arg_name(env, argno), buf_info, off, var_off);
+> +		return -EACCES;
+> +	}
+> +
+> +	if (start > U32_MAX || size < 0 ||
+> +	    check_add_overflow((u32)start, (u32)size, access_end)) {
+> +		verbose(env,
+> +			"%s invalid %s buffer access: off=%lld, size=%d\n",
+> +			reg_arg_name(env, argno), buf_info, start, size);
+> +		return -EACCES;
+> +	}
 
-Signed-off-by: Viktor Malik <vmalik@redhat.com>
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Fixes: a68fd6a6cdd3 ("perf trace: Collect augmented data using BPF")
-Cc: stable@vger.kernel.org
----
- .../bpf_skel/augmented_raw_syscalls.bpf.c     | 47 ++++++++++++++-----
- 1 file changed, 35 insertions(+), 12 deletions(-)
+If we check that var_off is within BPF_MAX_VAR_OFF and that `off` is not
+negative, then `var_off + off + size` should be guaranteed to not
+overflow max_tp_access, since the maximum of `off` is S16_MAX and the
+maximum of `size` is 8.
 
-diff --git a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-index bc036a348079..3bc9e28a9b8a 100644
---- a/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-+++ b/tools/perf/util/bpf_skel/augmented_raw_syscalls.bpf.c
-@@ -429,6 +429,8 @@ static bool pid_filter__has(struct pids_filtered *pids, pid_t pid)
- 	return bpf_map_lookup_elem(pids, &pid) != NULL;
- }
- 
-+u64 ZERO = 0;
-+
- /*
-  * Determine what type of argument and how many bytes to read from user space, using the
-  * value in the beauty_map. This is the relation of parameter type and its corresponding
-@@ -440,9 +442,10 @@ static bool pid_filter__has(struct pids_filtered *pids, pid_t pid)
-  */
- static inline int augment_arg(struct syscall_enter_args *args, int i,
- 			      unsigned int *beauty_map,
--			      struct augmented_arg *payload_offset)
-+			      struct beauty_payload_enter *payload, u64 offset)
- {
- 	int index, value_size = sizeof(struct augmented_arg) - offsetof(struct augmented_arg, value);
-+	struct augmented_arg *payload_offset;
- 	s64 aug_size, size;
- 	bool augmented;
- 	void *arg;
-@@ -455,6 +458,12 @@ static inline int augment_arg(struct syscall_enter_args *args, int i,
- 	if (size == 0 || arg == NULL)
- 		return 0;
- 
-+	/* bounds check for the verifier */
-+	if (offset > sizeof(payload->aug_args) - sizeof(payload->aug_args[0]))
-+		return -1;
-+	barrier_var(offset);
-+	payload_offset = (struct augmented_arg *)((void *)&payload->aug_args + offset);
-+
- 	if (size == 1) { /* string */
- 		aug_size = bpf_probe_read_user_str(payload_offset->value, value_size, arg);
- 		/* minimum of 0 to pass the verifier */
-@@ -498,11 +507,10 @@ static inline int augment_arg(struct syscall_enter_args *args, int i,
- static int augment_sys_enter(void *ctx, struct syscall_enter_args *args)
- {
- 	bool do_output = false;
--	int zero = 0, written;
-+	int i, zero = 0, written;
- 	u64 output = 0; /* has to be u64, otherwise it won't pass the verifier */
- 	unsigned int nr, *beauty_map;
- 	struct beauty_payload_enter *payload;
--	void *payload_offset;
- 
- 	/* fall back to do predefined tail call */
- 	if (args == NULL)
-@@ -514,7 +522,6 @@ static int augment_sys_enter(void *ctx, struct syscall_enter_args *args)
- 
- 	/* set up payload for output */
- 	payload        = bpf_map_lookup_elem(&beauty_payload_enter_map, &zero);
--	payload_offset = (void *)&payload->aug_args;
- 
- 	if (beauty_map == NULL || payload == NULL)
- 		return 1;
-@@ -522,14 +529,30 @@ static int augment_sys_enter(void *ctx, struct syscall_enter_args *args)
- 	/* copy the sys_enter header, which has the syscall_nr */
- 	__builtin_memcpy(&payload->args, args, sizeof(struct syscall_enter_args));
- 
--	for (int i = 0; i < 6; i++) {
--		written = augment_arg(args, i, beauty_map, (struct augmented_arg *)payload_offset);
--		if (written < 0)
--			return 1;
--		if (written > 0) {
--			output += written;
--			payload_offset += written;
--			do_output = true;
-+	if (bpf_ksym_exists(bpf_iter_num_new)) {
-+		bpf_for(i, 0, 6) {
-+			written = augment_arg(args, i, beauty_map, payload, output);
-+			if (written < 0)
-+				return 1;
-+			if (written > 0) {
-+				output += written;
-+				/*
-+				 * guide the verifier to forget range of `output`, which
-+				 * helps to prove convergence of the loop
-+				 */
-+				output += ZERO;
-+				do_output = true;
-+			}
-+		}
-+	} else {
-+		for (i = 0; i < 6; i++) {
-+			written = augment_arg(args, i, beauty_map, payload, output);
-+			if (written < 0)
-+				return 1;
-+			if (written > 0) {
-+				output += written;
-+				do_output = true;
-+			}
- 		}
- 	}
- 
--- 
-2.54.0
-
+> +
+>  	return 0;
+>  }
+>  
+[...]
