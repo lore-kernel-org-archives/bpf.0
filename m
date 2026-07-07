@@ -1,84 +1,76 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2223D648F
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 09:48:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70FE13C1969
+	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 10:06:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783417738; cv=none; b=c5H2Q6dOJepCMgOyx1PfZrHr1HgS7UcM/250rF8hxYHGf3PBcmFOpaENyfZ58FaPZh7p2GJyKX8xlOWZJz5C6EM14AVCYblFbohcbgkkZcEYRtWbucETKYIqFqwY0ySpHrbt9IMIp6c4KaMwYNwWMfmXE1H3Y5DxlC2jRkxJyJ4=
+	t=1783418782; cv=none; b=N9ous8A+V9tbnZZqEiBO8nEkjRyjfxI9WW+L32NEOvvdM2Ce8mmwjgwxGFS+0GPlVwQE3EFcU3IgxK1xYIPtvMaDU9Be7yb86l+Kwk6iqu0H28Z06D5zRDx2OxHCa3aUZymwi5mgbXcPS8QB8siJngvdORoLlIYuJOA7NjgI6C8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783417738; c=relaxed/simple;
-	bh=dxErGz/gtuJMMd0ZCUwsU0QRw3tKi/SSEtrZ2mEv2ZM=;
+	s=arc-20240116; t=1783418782; c=relaxed/simple;
+	bh=OAKB6REpwMAL3mD8f/kvOYmQD6X0GhKuKto/VKRSscc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s26jq+mlx7sPutK9yDUIYrIBu5LDR4FrU8wed8uX049BOWKgP650Bo9F1j/lRGlevuxpHQJ42X+CA9UWp7kmXFRGnDKpB8tGYkhNvjvAm/8NFLpIO7vwYqB4u9U94GEgK1GHObAUg6LDNOFojotq8yF9doITMlbs2sy+Y2iuqF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=WmmDCAQc; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=YNSmW/TxwkXB4kmfKKqo4/0CxhVC9iHl//nRBIdO1bDfuDw7WhF3eAwzrgQOBCHj//vTlR3G21QR8oa4/N62GhtdyPT9Kkw0ol5BpM7lHckH+puCLPf8GqxCfbDm271CqbFIDgIZpcQylvEiVPrNn8Tcqq2/WNdMYbH2vpBkAMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V4Y7Q7RH; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="WmmDCAQc"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-493ce08a75bso16948395e9.1
-        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 02:48:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V4Y7Q7RH"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-490cf322ed0so25852855e9.1
+        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 03:06:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1783417733; x=1784022533; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qs3A+LONAtni+h8Qp1wmlltG03uWEkxp59/Fd3Ox+rE=;
-        b=WmmDCAQcONqxk8QJsEcXqFwhg5sYGEf8xrpamiqLkwYdRbxOBRrJN/i29BzoAXcTgS
-         k5hXvOuvttmuf2y7ZHOViUajJuhaMkyUBDWR8eg537kXOx/1jz3tuhX0ifR88nk2tJ+b
-         l9WQNxWWuUIv3OFmvIrIpcqAo5LyInMH1s0WBaSzBD9/UMuiTDXrF40U7uP3FpFT4bLI
-         AHSp0whB9b9JMnJW4L7eYN4Xgmh6NdnDe73jLVji6bS6JBMlSMQh04uNMmuverWCfw99
-         JXr8HgmQOS6ah49YklfN+e0+QNbBDQuVpHn2e4hprBvTK+1iHWg1gEJy5vjEdHG9Q3i7
-         aQ0g==
+        d=gmail.com; s=20251104; t=1783418779; x=1784023579; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=7nKMzBrNPng+OFv7tZKgSIEKfGOpCS7rDlLCvXC7fDo=;
+        b=V4Y7Q7RHfgFf+JB6BGzY4VjhE15lIDP66ULj9x8I3S2HI4TtCPN6Eu1i6y1EiplEWP
+         ztCXpnHktjsci8m22o2YhPgew1YkXfShxQ5g/AkhARIjckpIEQr31cQdQnk6LKS7B8+u
+         h+DmlPSkE1dSVPHhnBZMzIhzidx4Bj+HTzTrAo50r+12kNBvYVZ/wTxxWtlwDGDYRr+5
+         AXIeHShm970EQMyISxF1YDcXZ4hEgs/hnBbd9qr7y939XJ3CM97M/6cL/ZyHmtbbzVu5
+         GU5yBasEG0wg1ZRZioCpAlpQmGXRZ9zsltZyMlb1eDpTdYgPDH+iCrHYAcH6tJhI0ZUl
+         mgzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783417733; x=1784022533;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qs3A+LONAtni+h8Qp1wmlltG03uWEkxp59/Fd3Ox+rE=;
-        b=YN85rSBgXye0xNSWZmamSmEDric8t0dS86/NZ3u/Qd4wnZyugrX3XPvZHuZ5IrXJmk
-         caNec1yBdVSCh0VEsC4jI9CPCZxudu67AXVClN+f2ZwC21/feQymu/QvJpMhqK7ZnNZY
-         ipxqixivrzuYj3FfF3ImFdTZwfW2hAmVoXJ66+JmcMh6D3g0/xtVT7cW3aU6nTLMiUC/
-         tgONqRWDODVHIv8rER0pQAl3dLz9jBR8Bn23/LZguDZflHQiXXNAE7c1PZxr78zPkbSQ
-         Lj5euc0UU2gZOc1oRwauRjGJSuPM/pYMlG3es6CksMmpnoSLxjJdKPTf2r3CfVYKhRMW
-         hiXw==
-X-Forwarded-Encrypted: i=1; AHgh+RqFMJAq6yk16k824D79Iv7shl00Hu2lRc0NUOmnmv/wX9NCXdHjwn/vitcaSIjVGUUya/8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6gx/OSuzsv6bVtM8kFwDaCHVQIS6qxy8cHKDxh7K5UivzVoOR
-	lEvG+cUZmumCpoAtFdVkyZG/zn9h5S8xwoe9TKEkuINrpvA5fOC+XohciVyrvS1Pi5A=
-X-Gm-Gg: AfdE7cle5eRHdznbIWv5tpIy0ATVF/uCJJFPHYvYbcySLaJ5nxqsseYGmdkYObkysKX
-	4YcBQeJLirBJjhU8yV1jeKT6NPq57HgavpE7829/9O8jTDm+23rJnzD35U6zooyDQoYvtdkUfWq
-	aRxwIs6RfNb6RgjnB8hwWxTL1zavfjMum1jzPhgDNIkuSElfruVkSEFTvBPWcrpA1HPyNJJK0YH
-	32ChFiFJ6bj7InqlgC31TKSSHHaIM1ExUC1tJH+FA64Zxqtfav8OghukjItwj8mNpCTc5WS2zYX
-	/e9vURQ7jh4kr+4CL77eflkSHJgSKUGwvYfpDXizWHmmKUvsGo6VcN38VJh72igJNB/kJ3akODs
-	gLMZdD36olyXhY5Oekk0UI57mvA9aN/OlGokOX87tTKWUSxuNFjltSJnGCf8L2m6b5jhUQpNMbt
-	ME9LcGw69sUC2xF6UHd8NOdKY/3TSdykQXjCcMD6zNNoayHIbbJpz6tEp3ZLEluyyoQ8Ss6uIqm
-	BJbw3495FoY2AOBiXodlcZPizYr5NcVYo56tL06ZyDtuxwJFpHWcPWzh63A3pBUdrZIUL2iXg==
-X-Received: by 2002:a05:600c:8b67:b0:493:bd2f:c5dd with SMTP id 5b1f17b1804b1-493df08c35dmr46181645e9.21.1783417733495;
-        Tue, 07 Jul 2026 02:48:53 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493e0078d49sm47904175e9.0.2026.07.07.02.48.52
+        d=1e100.net; s=20251104; t=1783418779; x=1784023579;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7nKMzBrNPng+OFv7tZKgSIEKfGOpCS7rDlLCvXC7fDo=;
+        b=FTAfp/4TnJm8OAXRhFc22OAOcu4a8NP8ynamlOTRwHFUu4DcQCYHViPsFBa/mxVEt3
+         UVB7aChKgH9l474b8OGK7AgDpMppX4bU68UekDch97GIqcYzsCq1a/fTZ3J20Seqz+iB
+         94Yl48vB1cl1vzhJqIsO/woaGKn2itAnKb5Xibs5nXCwJczXIOLVrF/ykdDZTONVtw25
+         lUOdWuUVAfJpqX6R/e3vjLpDFvbtud8MWC/XCjp4DoJdJImJ/i+Y+72yQnw4mRlrz+/f
+         0WW9+PjLm59pnhC+Ywm7djEAMUAQzQECmMtCbvg4NNll2otQwYDb7b8TEXUp9vZFMCFs
+         NkDw==
+X-Forwarded-Encrypted: i=1; AHgh+RrxqBYfpDx69NIt9xxGESoVB3AvpRHLxkHRjusWrZf58AGTVucTSYVBSSHEESBdjBsZRkw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/IxU1aw6yLZ1kQ3b+FDsGONpb1B6zfsktIcoyvgcXIRzHJSe4
+	eaQKNFk9aSLRvj7UgBsRBHTizN2gvg1y97VJ1hbHpLeSAoE8olDxe5xT
+X-Gm-Gg: AfdE7ckBzumf0LPClp+nKUNDzTvMMbWFdA+rt3uB5NAHGqsF6ucQUAHMXHTlRwccqzw
+	zS24/VDIed/orZqUHqQp3W/68q6y8P9qlBMc5KMBRr61tnvAAGvzLMIsUX1A4cSVvsnD3AxtD7m
+	haUE++y9Q8VHYAbGq6hqmYe27p+I9m64e0biJrtb9h4awsZ2RM4hdh2qRGoX4V7L2qHwkMaC54g
+	f91hLvM87fRRGYJ9oLIp59tjS5WnJen/SNvO2Xf5HTplUTR9Csq3NdYPNAWYcLOtjdj3f1L3ZZu
+	snNJN9YN/0+9RPlxaQ/fi6pdoQwP+ZnXT9MupT524Xa8AaJt0yqh6sPbmfdir6zP9KrVsSX+yTZ
+	G6vSal+ee6aIv5772YsngNs+pvpwAm32LoEB9IUt/qJ4hCJpBsxT3d5wEO+VR03LCMnsdrzPxRP
+	HW5PxVRM05gzlSi1HwYlRU9XJRwUC0tOIez1czRNxmMljV
+X-Received: by 2002:a05:600c:3b05:b0:493:bb45:d54d with SMTP id 5b1f17b1804b1-493df09e3a9mr49840045e9.37.1783418778334;
+        Tue, 07 Jul 2026 03:06:18 -0700 (PDT)
+Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493e0f3676dsm47709045e9.5.2026.07.07.03.06.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 02:48:52 -0700 (PDT)
-Date: Tue, 7 Jul 2026 10:48:50 +0100
-From: Daniel Thompson <daniel@riscstar.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Cc: Alex Elder <elder@riscstar.com>, netdev@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH] net: stmmac: Avoid freeing and re-requesting IRQ during
- XDP set prog
-Message-ID: <akzLgrzsw4xYmnLH@aspen.lan>
-References: <20260706-tc956x-stmmac-no_irq_teardown-v1-1-df009d0272bf@riscstar.com>
+        Tue, 07 Jul 2026 03:06:17 -0700 (PDT)
+Date: Tue, 7 Jul 2026 12:06:15 +0200
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: andrew+netdev@lunn.ch, andrii@kernel.org, ast@kernel.org,
+	bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+	eddyz87@gmail.com, edumazet@google.com, john.fastabend@gmail.com,
+	kuba@kernel.org, liamwisehart@meta.com, martin.lau@linux.dev,
+	netdev@vger.kernel.org, pabeni@redhat.com, song@kernel.org
+Subject: Re: [PATCH bpf-next 2/6] bpf: Add ksock kfuncs
+Message-ID: <akzPl9lLtjcRFXxD@gmail.com>
+References: <20260706093525.13030-3-mahe.tardy@gmail.com>
+ <20260706230142.1691146-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -87,44 +79,212 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260706-tc956x-stmmac-no_irq_teardown-v1-1-df009d0272bf@riscstar.com>
+In-Reply-To: <20260706230142.1691146-1-kuniyu@google.com>
 
-On Mon, Jul 06, 2026 at 05:17:58PM +0100, Daniel Thompson wrote:
-> Currently stmmac will run a full cycle of IRQ tear down and setup when
-> setting up a new XDP program. This makes tuning TSN systems difficult
-> because whenever a new XDP program is installed then the irq threads will
-> be stopped and restarted which will undo any thread tuning.
->
-> The problem is avoided by removing stmmac_free_irq()/stmmac_request_irq()
-> from stmmac_xdp_release()/stmmac_xdp_open().
->
-> stmmac_free_irq() implicitly synchronizes interrupts and, with that
-> removed, I was unable to prove that later actions in
-> stmmac_xdp_release() are safe when there are concurrent interrupts. To
-> avoid problems let's also move the code to disable DMA interrupts earlier
-> in the sequence and explicitly sync the interrupts handler(s).
->
-> Signed-off-by: Daniel Thompson <daniel@riscstar.com>
-> <snip>
-> @@ -7156,10 +7201,8 @@ int stmmac_xdp_open(struct net_device *dev)
->  	stmmac_reset_queues_param(priv);
->
->  	/* DMA CSR Channel configuration */
-> -	for (chan = 0; chan < dma_csr_ch; chan++) {
-> +	for (chan = 0; chan < dma_csr_ch; chan++)
->  		stmmac_init_chan(priv, priv->ioaddr, priv->plat->dma_cfg, chan);
-> -		stmmac_disable_dma_irq(priv, priv->ioaddr, chan, 1, 1);
-> -	}
+On Mon, Jul 06, 2026 at 11:01:27PM +0000, Kuniyuki Iwashima wrote:
+> From: Mahe Tardy <mahe.tardy@gmail.com>
+> Date: Mon,  6 Jul 2026 09:35:21 +0000
+> > diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
+> [...]
+> > +static bool bpf_ksock_send_enter(struct bpf_ksock_send_guard *guard)
+> 
+> Can we do this better with assigning a single bit to task_struct ?
 
-Sashiko picked up that stmmac_init_chan() has the effect of enabling DMA
-irqs, making this code unsafe.
+Yes, that would be way simpler but I avoided touching task_struct. If we
+are okay with that then it could be simplified.
 
-Given stmmac_xdp_open() can only be called on a running interface (and that
-stmmac_xdp_open() explicitly sets sph) then re-initializing with stmmac_init_chan()
-should have no effect and we can drop that as well.
+> 
+> > +{
+> > +	struct bpf_ksock_send_guard *entry;
+> > +	struct hlist_bl_node *pos;
+> > +	struct bpf_ksock_send_bucket *bucket;
+> > +
+> > +	bucket = bpf_ksock_send_bucket(current);
+> > +	hlist_bl_lock(&bucket->head);
+> > +	hlist_bl_for_each_entry(entry, pos, &bucket->head, node) {
+> > +		if (entry->task == current) {
+> > +			hlist_bl_unlock(&bucket->head);
+> > +			return false;
+> > +		}
+> > +	}
+> > +
+> > +	guard->task = current;
+> > +	INIT_HLIST_BL_NODE(&guard->node);
+> > +	hlist_bl_add_head(&guard->node, &bucket->head);
+> > +	hlist_bl_unlock(&bucket->head);
+> > +	return true;
+> > +}
+> > +
+> > +static void bpf_ksock_send_exit(struct bpf_ksock_send_guard *guard)
+> > +{
+> > +	struct bpf_ksock_send_bucket *bucket;
+> > +
+> > +	bucket = bpf_ksock_send_bucket(guard->task);
+> > +	hlist_bl_lock(&bucket->head);
+> > +	hlist_bl_del(&guard->node);
+> > +	hlist_bl_unlock(&bucket->head);
+> > +}
+> [...]
+> > +__bpf_kfunc struct bpf_ksock *
+> > +bpf_ksock_create(const struct bpf_ksock_create_opts *opts, u32 opts__sz,
+> > +		 int *err__uninit)
+> > +{
+> > +	struct bpf_ksock_create_opts opts_copy;
+> > +	struct bpf_ksock *ks;
+> > +	struct net *net;
+> > +	int err;
+> > +
+> > +	/*
+> > +	 * sock_create() derives the network namespace, credentials, and cgroup
+> > +	 * from current. Kernel threads, including BPF workqueue callbacks, do
+> > +	 * not carry the context of the task that invoked the BPF program.
+> > +	 */
+> > +	if (!bpf_ksock_has_user_task_context()) {
+> > +		err = -EOPNOTSUPP;
+> > +		goto err_out;
+> > +	}
+> > +
+> > +	if (!opts || opts__sz != sizeof(struct bpf_ksock_create_opts)) {
+> > +		err = -EINVAL;
+> > +		goto err_out;
+> > +	}
+> > +
+> > +	opts_copy = (struct bpf_ksock_create_opts){
+> > +		.family = READ_ONCE(opts->family),
+> > +		.type = READ_ONCE(opts->type),
+> > +		.protocol = READ_ONCE(opts->protocol),
+> > +		.reserved = READ_ONCE(opts->reserved),
+> > +	};
+> > +
+> > +	if (opts_copy.reserved) {
+> > +		err = -EINVAL;
+> > +		goto err_out;
+> > +	}
+> > +
+> > +	if (opts_copy.family != AF_INET && opts_copy.family != AF_INET6) {
+> > +		err = -EAFNOSUPPORT;
+> > +		goto err_out;
+> > +	}
+> > +
+> > +	if (opts_copy.type != SOCK_DGRAM) {
+> > +		err = -EPROTONOSUPPORT;
+> > +		goto err_out;
+> > +	}
+> > +
+> > +	if (opts_copy.protocol != IPPROTO_UDP && opts_copy.protocol != 0) {
+> > +		err = -EPROTONOSUPPORT;
+> > +		goto err_out;
+> > +	}
+> > +
+> > +	ks = kzalloc_obj(*ks);
+> > +	if (!ks) {
+> > +		err = -ENOMEM;
+> > +		goto err_out;
+> > +	}
+> > +
+> > +	net = current->nsproxy->net_ns;
+> > +	if (!bpf_ksock_net_try_charge(net)) {
+> > +		err = -ENOSPC;
+> > +		goto err_free;
+> > +	}
+> > +
+> > +	/*
+> > +	 * Use the normal current-task socket path so LSM/cgroup policy,
+> > +	 * socket labels, and the active netns reference match a socket(2)
+> > +	 * created by the BPF program's caller.
+> > +	 */
+> > +	err = sock_create(opts_copy.family, opts_copy.type, opts_copy.protocol,
+> > +			  &ks->sock);
+> 
+> This also triggers LSM in __sock_create() so needs the loop
+> detection, no ?
+> 
+> Same for __sys_bind_socket() and __sys_connect_socket().
 
-I'll double check with a code review across all the dwmac versions
-before pushing out a v2!
+This should be okay as create/bind/connect can only be called from
+SYSCALL progs and not LSM progs. We only care about recursion from the
+kfuncs in the ksock_kfunc_btf_ids group which are also allowed from LSM
+progs (release/acquire/send).
 
+> 
+> 
+> > +	if (err)
+> > +		goto err_uncharge;
+> > +
+> > +	ks->sock->sk->sk_rcvbuf = SOCK_MIN_RCVBUF;
+> > +	ks->sock->sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
+> > +
+> > +	refcount_set(&ks->usage, 1);
+> > +	put_unaligned(0, err__uninit);
+> > +	return ks;
+> > +
+> > +err_uncharge:
+> > +	bpf_ksock_net_uncharge(net);
+> > +err_free:
+> > +	kfree(ks);
+> > +err_out:
+> > +	put_unaligned(err, err__uninit);
+> > +	return NULL;
+> > +}
+> > +
+> > +/**
+> > + * bpf_ksock_bind() - Bind a BPF kernel socket to a local address.
+> > + * @ks:		The BPF kernel socket context.
+> > + * @opts:	Pointer to struct bpf_ksock_addr_opts with local address.
+> > + * @opts__sz:	Size of the opts struct.
+> > + *
+> > + * Binds the socket to the specified local address and port.
+> > + * This is optional; if not called, the kernel will auto-assign.
+> > + *
+> > + * This function may sleep while binding the socket, so it can only be used in
+> > + * sleepable BPF programs (SYSCALL).
+> > + *
+> > + * Return: 0 on success, negative errno on error.
+> > + */
+> > +__bpf_kfunc int bpf_ksock_bind(struct bpf_ksock *ks,
+> > +			       const struct bpf_ksock_addr_opts *opts,
+> > +			       u32 opts__sz)
+> > +{
+> > +	struct sockaddr_storage addr = {};
+> 
+> nit: we don't need to initialise here since bpf_ksock_get_addr() does.
 
-Daniel.
+Ah actually I didn't know that compound literal in C would zero the rest
+of the struct. Thanks, let's remove those two then.
+
+> 
+> > +	int addrlen;
+> > +
+> > +	if (!bpf_ksock_has_user_task_context())
+> > +		return -EOPNOTSUPP;
+> > +
+> > +	addrlen = bpf_ksock_get_addr(opts, opts__sz, &addr);
+> > +	if (addrlen < 0)
+> > +		return addrlen;
+> > +
+> > +	return __sys_bind_socket(ks->sock, &addr, addrlen);
+> > +}
+> > +
+> > +/**
+> > + * bpf_ksock_connect() - Connect a BPF kernel socket to a remote address.
+> > + * @ks:		The BPF kernel socket context.
+> > + * @opts:	Pointer to struct bpf_ksock_addr_opts with remote address.
+> > + * @opts__sz:	Size of the opts struct.
+> > + *
+> > + * Connects the socket to the specified remote address and port.
+> > + *
+> > + * This function may sleep while connecting the socket, so it can only be used
+> > + * in sleepable BPF programs (SYSCALL).
+> > + *
+> > + * Return: 0 on success, negative errno on error.
+> > + */
+> > +__bpf_kfunc int bpf_ksock_connect(struct bpf_ksock *ks,
+> > +				  const struct bpf_ksock_addr_opts *opts,
+> > +				  u32 opts__sz)
+> > +{
+> > +	struct sockaddr_storage addr = {};
+> 
+> Same.
+
+Noted
+
