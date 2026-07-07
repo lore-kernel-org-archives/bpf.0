@@ -1,137 +1,178 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886CF3ACA41;
-	Tue,  7 Jul 2026 19:37:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B3F3ADB9B
+	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 19:45:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783453041; cv=none; b=kPCbZ0GTHpzXSlQ6851k+gqyRkHkzD42rKo8drrc4HLvURSz/zgrpA95koj1/ItNomPnccxELxZjOasUaltGOaIl9BYxDSdTm/Fe2GcUqkoB7B6hxgMETVxMwrrF3WkZWLYp2hTA7eEjm+FREO50M7zTl756ZEYOMMsh2MbWpuM=
+	t=1783453505; cv=none; b=pHrVMdPp3ZIhxJnoOb7fOd/sMMfGohmmrQB6KC6TmgmzFUzZ4H84eHQYZDlhx5nmFrmitB+cJIYpmfaR7f4VmxsoZeQpxIno8d/9wbYkX5LvUWWzKWYj/C1etUHPaVC1snrPf6BFJGhruWbw8jSwqNxibqwdnzAvaZCClbSvWbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783453041; c=relaxed/simple;
-	bh=WrSENH+5tMwx8U3a+mcJ71xVE4chcPlq2GvrRcLbaCc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=R4LySNeVufeCB6EzktANiHj54Q3zyph8M4kzqhXGDV23hCmM/4JT7c51IYANnlPook0shy06n9+J6dKc15SYGkhCgkcWhuX29lFdRxFZelaVQlX8Jd6EEwsGCT9IWEm7W0UevabfaTcGofXek3xjekfh+HTR5hqs6bX9jPL9pxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n1YSoy+L; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783453505; c=relaxed/simple;
+	bh=vpfGcDaKn93kO0c0pBHut+lxXP6vFT8v6Ae7YDmYrQU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ji/fPoxMNdNBnJZHm86ZPCOWL2UnQy05U3vLOteMrElwNu4MeBMmcXLwgx8iFXJponpkJqNc/Ngt1SCYoO/Rvb35p2jNBf2A6pFijSbx4Sc9Fno4lTb/ZrvYV7w/sTWNi4PBTBArG09k5AFwR471Ip5KFoJGwVWs8gOtL1Kt//M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XA6YjNGE; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n1YSoy+L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A5E1F000E9;
-	Tue,  7 Jul 2026 19:37:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783453040;
-	bh=NdXDOxsyu1F5h/+GeY4wpi+0FA2AfuOSIvwjDrH3T+E=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=n1YSoy+L4RPfRGgqyLgaXdMaChn1+sLhk+EF1OhoEwNObgYeL1tLyQdph1MituyWF
-	 3r0fhnPd+kgIDIoqVlJt6XHQO1xRJWhK05klTcaRJ5oEwFZ3Q/e+w4MFxw9E5aEqjx
-	 SV4bbiQR+AKNKQjqnC6Ao0aPZowcBVeFkowrGfiZVCez0XyvL3Er3WmXUJMTZ2N8j9
-	 rfNdNZj3q7/9cyZHjpM/HUAFGcsOba2M7whbD1Vlwi/6C29FmJHIcCeNNjr5m4kowK
-	 qHPoa8lfH2YoriIMQLQ1jhiy0c2LYdx6gh03u6blKwV/ocU68+tMhCTi5+9+D6Okbu
-	 j/GIRykCsgwlw==
-From: Christian Brauner <brauner@kernel.org>
-Date: Tue, 07 Jul 2026 21:36:48 +0200
-Subject: [PATCH RFC POC 4/4] bpf: allow fs kfuncs for binfmt_misc_ops
- programs
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XA6YjNGE"
+Message-ID: <bec46089-abc2-418e-9b27-34dd9f6d1dde@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783453500;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Fa9GDRjYxkf/DCTXoRTIYtmmpV/5FZvirgY/VRgV3Dg=;
+	b=XA6YjNGECwbiVp7XCLdWtDjDiszb+KoKrNuUEq50kBFjzH2naO39dtx+ZXnoY5ekQOi+wi
+	ysny/gl4qtDZCJXQg1arirNYR0APMwJfNeNmhiubvju/il8C96lBttCZNrRqO6B6fgASKn
+	KHZ9HyHvDuGlXHGhf+ehkd0JX+6dyyU=
+Date: Tue, 7 Jul 2026 12:44:47 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Subject: Re: [PATCH v2] resolve_btfids: preserve tag and parameter names when
+ processing implicit args
+To: Henrik Grimler <henrik@grimler.se>
+Cc: Aelin Reidel <aelin@mainlining.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20260620-resolve-btfids-implicit-args-use-after-free-v2-1-4132e1f639f0@mainlining.org>
+ <0606be50-1f21-438f-bf00-024f31b9eda8@linux.dev>
+ <20260707075500.GA10854@localhost>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260707075500.GA10854@localhost>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260707-work-bpf-binfmt_misc-v1-4-74b995c84ec1@kernel.org>
-References: <20260707-work-bpf-binfmt_misc-v1-0-74b995c84ec1@kernel.org>
-In-Reply-To: <20260707-work-bpf-binfmt_misc-v1-0-74b995c84ec1@kernel.org>
-To: Farid Zakaria <farid.m.zakaria@gmail.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, 
- Alexei Starovoitov <ast@kernel.org>, Kees Cook <kees@kernel.org>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- Jonathan Corbet <corbet@lwn.net>, linux-fsdevel@vger.kernel.org, 
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- jannh@google.com, linux-mm@kvack.org, mail@johnericson.me, 
- "Christian Brauner (Amutable)" <brauner@kernel.org>
-X-Mailer: b4 0.16-dev-4217c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2829; i=brauner@kernel.org;
- h=from:subject:message-id; bh=WrSENH+5tMwx8U3a+mcJ71xVE4chcPlq2GvrRcLbaCc=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWT5hiZ0V0S6GO/pEbObbcBiabC0pke2++Z9xmeeV3t6H
- pvliHB2lLIwiHExyIopsji0m4TLLeep2GyUqQEzh5UJZAgDF6cATKRwNiPD7vlldy336y+90aCy
- p21d6d2Opo1MF8T/uIbqCN/qXzzxG8P/xC3blbKfKf9asil6n/nyUwcZleZeenVxvtCJ1R1zXfZ
- rcgAA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+X-Migadu-Flow: FLOW_OUT
 
-The fs kfuncs are currently exclusive to LSM programs. A binfmt_misc
-load program needs a subset of them to do anything interesting: to
-compute an interpreter relative to the binary's location it wants
-bpf_path_d_path() on bprm->file->f_path, and matching on per-binary
-metadata wants bpf_get_file_xattr() and friends.
+On 7/7/26 12:55 AM, Henrik Grimler wrote:
+> Hi Ihor,
+> 
+> On Thu, Jun 25, 2026 at 10:26:27PM -0700, Ihor Solodrai wrote:
+>> [...]
+>>
+>> However you have a stable reproducer, so your strdup() change probably
+>> covers a real UAF bug somewhere else (in libbpf?).
+>>
+>> Let's track this down before coming up with a fix.
+>>
+>> What version/commit of libbpf are you using in your kernel tree?
+> 
+> I use the same build environment as Aelin and get the same issue with
+> resolve_btfids from linux v7.1.1. System libbpf is at v1.7.0 [1] (but
+> I guess this is not relevant? resolve_btfids is not linked against
+> it).
+> 
+>> You could build resolve_btfids with ASAN, or run it with valgrind.
+> 
+> Valgrind reports some invalid reads, see log here:
+> https://grimler.se/files/valgrind-resolve-btfids.txt
+> 
+> and if run under gdb I get:
+> 
+> ```
+> $ gdb -ex r --args tools/bpf/resolve_btfids/resolve_btfids --fatal_warnings --verbose --btf .tmp_vmlinux1.BTF.1 .tmp_vmlinux1
+> [ ... ]
+> found kfunc tcp_reno_ssthresh in BTF_ID_FLAGS bpf_tcp_ca_check_kfunc_ids
+> found kfunc tcp_reno_undo_cwnd in BTF_ID_FLAGS bpf_tcp_ca_check_kfunc_ids
+> found kfunc tcp_slow_start in BTF_ID_FLAGS bpf_tcp_ca_check_kfunc_ids
+> resolve_btfids: function bpf_list_push_back_impl already exists in BTF
+> 
+> Program received signal SIGSEGV, Segmentation fault.
+> 0x00007ffff7f7aaa0 in memcpy (dest=0x7fffebb05a93, src=<optimized out>, n=5) at src/string/memcpy.c:23
+> warning: 23     src/string/memcpy.c: No such file or directory
+> (gdb) bt
+> #0  0x00007ffff7f7aaa0 in memcpy (dest=0x7fffebb05a93, src=<optimized out>, n=5) at src/string/memcpy.c:23
+> #1  0x000055555559865b in _ZL6memcpyPvU17pass_object_size0PKvU17pass_object_size0m (__od=0x7fffeb115c71, __os=0x7fffeb115c71, __n=5) at /usr/include/fortify/string.h:57
+> #2  strset__add_str (set=0x7fffebb85fd0, s=s@entry=0x7fffeb115c71 <error: Cannot access memory at address 0x7fffeb115c71>) at strset.c:162
+> #3  0x0000555555587b2c in btf__add_str (btf=btf@entry=0x7fffebb860a0, s=0x7fffeb115c71 <error: Cannot access memory at address 0x7fffeb115c71>) at btf.c:2109
+> #4  0x00005555555898b1 in btf__add_func_param (btf=0x7fffebb860a0, name=0x7fffeb115c71 <error: Cannot access memory at address 0x7fffeb115c71>, type_id=11011) at btf.c:3108
+> #5  0x000055555555de50 in process_kfunc_with_implicit_args (ctx=0x7fffffffd7d0, kfunc=0x7fffebb739a0) at main.c:1196
+> #6  0x000055555555cc02 in btf2btf (obj=0x7fffffffd868) at main.c:1229
+> #7  0x000055555555b869 in main (argc=1, argv=0x7fffffffec08) at main.c:1535
+> ```
+> 
+>> If you can share a reproducer that's easy to run, that would be
+>> great too.
+> 
+> I have uploaded .tmp_vmlinux1 and .tmp_vmlinux1.BTF.1 files (for an
+> ARM kernel) that reproduce the issue here:
+> 
+> https://grimler.se/files/tmp_vmlinux1
+> https://grimler.se/files/tmp_vmlinux1.BTF.1
 
-Register the fs kfunc set for struct_ops programs as well and extend
-the filter to admit binfmt_misc_ops programs. The xattr setters stay
-exclusive to LSM programs: a binary type handler decides how to run a
-binary, it has no business modifying filesystem state.
+Hi Henrik,
 
-This only takes effect in builds that have the fs kfunc set at all,
-i.e. CONFIG_BPF_LSM. Without it a binfmt_misc handler is limited to
-bprm fields and the file-backed dynptr, which are provided by the
-common kfunc set.
+Thanks for the reproducer and the logs, very helpful.
+The crash you hit is a real UAF that was recently fixed in libbpf:
 
-Link: https://lore.kernel.org/20260704211409.1978485-1-farid.m.zakaria@gmail.com
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
----
- fs/bpf_fs_kfuncs.c | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+    b23705e6afb6 ("libbpf: Fix UAF in strset__add_str()") [1]
 
-diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
-index 768aca2dc0f0..aa1fe988b6d2 100644
---- a/fs/bpf_fs_kfuncs.c
-+++ b/fs/bpf_fs_kfuncs.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2024 Google LLC. */
- 
-+#include <linux/binfmt_misc.h>
- #include <linux/bpf.h>
- #include <linux/bpf_lsm.h>
- #include <linux/btf.h>
-@@ -387,10 +388,20 @@ BTF_ID_FLAGS(func, bpf_remove_dentry_xattr, KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_real_inode, KF_SLEEPABLE | KF_RET_NULL)
- BTF_KFUNCS_END(bpf_fs_kfunc_set_ids)
- 
-+/* Side-effecting kfuncs that stay exclusive to LSM programs. */
-+BTF_SET_START(bpf_fs_kfunc_lsm_only_ids)
-+BTF_ID(func, bpf_set_dentry_xattr)
-+BTF_ID(func, bpf_remove_dentry_xattr)
-+BTF_SET_END(bpf_fs_kfunc_lsm_only_ids)
-+
- static int bpf_fs_kfuncs_filter(const struct bpf_prog *prog, u32 kfunc_id)
- {
--	if (!btf_id_set8_contains(&bpf_fs_kfunc_set_ids, kfunc_id) ||
--	    prog->type == BPF_PROG_TYPE_LSM)
-+	if (!btf_id_set8_contains(&bpf_fs_kfunc_set_ids, kfunc_id))
-+		return 0;
-+	if (prog->type == BPF_PROG_TYPE_LSM)
-+		return 0;
-+	if (bpf_prog_is_binfmt_misc_ops(prog) &&
-+	    !btf_id_set_contains(&bpf_fs_kfunc_lsm_only_ids, kfunc_id))
- 		return 0;
- 	return -EACCES;
- }
-@@ -433,7 +444,13 @@ static const struct btf_kfunc_id_set bpf_fs_kfunc_set = {
- 
- static int __init bpf_fs_kfuncs_init(void)
- {
--	return register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM, &bpf_fs_kfunc_set);
-+	int ret;
-+
-+	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM, &bpf_fs_kfunc_set);
-+	if (ret || !IS_ENABLED(CONFIG_BINFMT_MISC_BPF))
-+		return ret;
-+	return register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
-+					 &bpf_fs_kfunc_set);
- }
- 
- late_initcall(bpf_fs_kfuncs_init);
+strset__add_str() reallocs its buffer, then copies from a string that
+may point into that same buffer (what btf__name_by_offset() returns)
+dangling after the realloc.
 
--- 
-2.53.0
+I ran unpatched resolve_btfids under valgrind on your binaries,
+toggling only b23705e6afb6.
+
+Reverting b23705e6afb6:
+
+    Invalid read of size 1
+       at memmove
+       by strset__add_str (strset.c:162)
+       by btf__add_str (btf.c:2109)
+       by btf__add_func_param (btf.c:3118)
+       by process_kfunc_with_implicit_args (main.c:1196)
+       by btf2btf (main.c:1229)
+       by main (main.c:1535)
+     Address 0x11dfb901 is 22,721 bytes inside a block of size 1,787,619 free'd
+       at realloc
+       by libbpf_add_mem (btf.c:224)
+       by strset_add_str_mem (strset.c:106)
+       by strset__add_str (strset.c:157)
+
+      [...]
+
+    ERROR SUMMARY: 5 errors from 2 contexts
+
+With b23705e6afb6 there are no errors.
+
+resolve_btfids statically links the in-tree tools/lib/bpf, so system
+libbpf 1.7.0 is irrelevant, as you correctly noted. v7.1.1 predates
+b23705e6afb6, which is why you are seeing the crash. It's been merged
+into 7.2-rc1, so it will be in the 7.2 release.
+
+I suggest you apply b23705e6afb6 for your build.
+
+Let's drop this resolve_btfids patch, since the root cause has already been fixed.
+
+Thank you!
+
+[1] https://lore.kernel.org/bpf/20260523162722.2718940-1-cmllamas@google.com/
+
+> 
+> When resolve_btfids is compiled with musl and alpine's toolchain, then
+> the following command segfaults roughly 50 % of the time:
+> 
+> tools/bpf/resolve_btfids/resolve_btfids --fatal_warnings --verbose --btf tmp_vmlinux1.BTF.1 tmp_vmlinux1
+> 
+> With a resolve_btfids compiled for glibc it does not segfault, but valgrind still reports invalid reads.
+> 
+>> Thanks!
+> 
+> [1] https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/main/libbpf/APKBUILD#L3
+> 
+> Best regards,
+> Henrik Grimler
 
