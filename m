@@ -1,140 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5F92EEE75
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 16:30:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE506430CDE
+	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 16:32:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783441860; cv=none; b=IlyfTWuC5XTxkOZicwnMTUmpN0MuM66JGkG+H4fX/7XiMgSw+VyB4olzVmhgkwHxduBIiPejyDm603dqYev5uPN1hdnODi/eU4x1zYOTskMwhMrZuxNFpiltWNG3hJ1egv14nNK2flXA7HC7sjvUjfuImZ3DikRnwBKUXQHlv+U=
+	t=1783441922; cv=none; b=aApMpCtZWeiy0iahisjVwIhKX8GjBL7J904tMALBeas6gpV8+Hlqli3VKBF8xq9kiTcy0QFp6klJwKV8gGWRz6Z2vJ07CLw37kuycZlIGPmHimeJeP8ZgPrwB8AYAa20XIZzN16ub3CPFgYQBieAxLt7Pc/193t7Bk0ExVjBTns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783441860; c=relaxed/simple;
-	bh=76LJBpUK1dbQz5LHMk7UKS9lHwVMatxmLviWUIUdMV4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=s5rrwtQtsSlsqdQuLBOOV5Av4qELo8aG3tV5m3MopLxvD06a0tN+oy1pay0s8iqP2L2CQXYb8/VODkbCAzpK+CmkG0AtKPWooJWTdt83g8c0kyEgNfQKw9Mc1xx9dMv0tx8DVsCRaYGOuKHJXZK+4lF1WSpgD6XCqtTWre7q62E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WTHfAds/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783441922; c=relaxed/simple;
+	bh=gGzx3dFnivTgZ/tqWbN8NHW7o1lF8IcUldK8xxPVITk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=s3Jcw39WDfkdi1gjHMD9+WcxRKHx9/K1tHYzs9YLI8uyXsEnXEa/jCphf7VEDSRSckiA5CbvyaxrRgTJtAHo4gEqBxnnZw9Q05y/tztbO3dUXSTMG7u6bJsn34BErspwehRojJ5i89CQZxOGZdeAWzI8Ju8fy1vxYG6AAbw9wXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nf2XwBig; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WTHfAds/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 635851F000E9;
-	Tue,  7 Jul 2026 16:30:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783441859;
-	bh=XjJa25IiBYfXxRcb2dTMfIkpDDLZxVSRY39oy9+gZ/I=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=WTHfAds/0fbzFi+f101Dkyc0LyUJYsHeOlpc40xvwW0jflOqGZ1pGQ4wdASprJZIe
-	 p7aX+e7sXV1k+64u0/1pXzQHNdCMXwcD6057ooEWx+m2yOMFI6tXtfot2/z8/+vHh0
-	 lEGq0akKoopkMo/49UPMcm1dxpERSWy06y6pxxhTFB+cSsbgjZOUoHgJQ/b+HLUG1x
-	 r85UxoXaqx/gpBJvRC7zpvuG6arlxUAO92oCx0CjPmhnFsnV06512SH881skN7p8B1
-	 DAVK7bQOcm/6P7Tc2C5oWR44zub4oBdazz/u0J+QVWWqMxkmAW6oVjwzV1QY2Xu3gD
-	 BtmjR0Gt8Kk6A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf] bpf, sockmap: Account for receive queue in FIONREAD
- without a verdict program
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mattia Meleleo" <mattia.meleleo@coralogix.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260707-fionread-no-verdict-v1-1-ce94a72357ec@coralogix.com>
-References: <20260707-fionread-no-verdict-v1-1-ce94a72357ec@coralogix.com>
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nf2XwBig"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c998fd549a8so3033272a12.2
+        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 09:32:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783441920; x=1784046720; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=gGzx3dFnivTgZ/tqWbN8NHW7o1lF8IcUldK8xxPVITk=;
+        b=Nf2XwBighvz+M+jVqvufA156SYtvgtyTrExtGpKU+TnVjWFtQIo0b5SEK1Z1+1Z0FJ
+         E4+Gqc7lZLrytewfHW9ldEcUdIwQQ1ONtcfbjI/LVNEh23VO51lquzwchaED51RblsTS
+         Z551My8+l0t2sVKOBoidJ4P8SP0gzAuXzeLTzPizcz5oEJROYxHqPh6HU89tlaBBLkLk
+         yyvv71W+/5oTe3vdZGUV+YmOL1EAto9R1E3rNOtDbr1Ts4iCppMusscVz67Hrafp+yMa
+         em95TR173iL9RIZ3wvgnjoeESI7Vlc9Rimy7uS7Izly50a1FU5EkVHXqlJ+F9fOyxP2J
+         aV7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783441920; x=1784046720;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gGzx3dFnivTgZ/tqWbN8NHW7o1lF8IcUldK8xxPVITk=;
+        b=QAFW12uT0pDPFrlD0tzeFuAn7BRtWdpLft7l14xEaiI/g+0/Mjvg62pWl1jxMFp1Ud
+         CCnFaVR0atXGKb+oPraiZaDpHOQvpqp9OJTyn9AgsPm5DuR0GwpyNo8J4CGWlzO4XJ6P
+         yXxLBqxET0AJH5uaNq1yWuIm6y/ZaNAhEpANwvmq6eGM+nHRCa7SI+pevY9IYlYfMnCB
+         9AtP470Ye0clXkFNtu1DgZV87HCEQpEUM722uvcNILAUECn3fNUhmkbIydyXuFftbE33
+         OYHonP87nKd9yPbk983W0A+dvJwR3WpZpRxheAEhZjq1/k58MihBMqW0APfW2fOW+1Hb
+         Q6CQ==
+X-Gm-Message-State: AOJu0YwXrCbyjMbr5qRRF8pLbTc3rs7ds3mxQXkqdNeWCTgNjnas3cCW
+	g6IqzXkaYLYwNYOO1hBcsmNDzZfYaNQKoDw0SQdje/s+2FrR2V8HeZ6F
+X-Gm-Gg: AfdE7cm5VTTXETR/ueCz65P5xT7axjr5vRzDygQJSt1UfpyKQSBrGbV0BZIUmXhWrzo
+	BKjofT4xXEG/WQ7HcBn08aOyck5xpqyB7SZMfNBkbDpku30sLZGcKt6pmBHRBl/fUPs2GZ+qfES
+	0nzFuumWQusq/mw3Lbph60RcFMPhKUyc1cPbrudxZTKq8obi+exfhW4DCTbv5hKqibhIpL3td/Q
+	gZV6SSUt9jxJjkGczMvms4jQYH8+tA1UIT89nnatxMeLVpD2VdIKWfNPiqqNkp0GDuYMMk+Y8gE
+	OM2MJrnUXGJjJDdEd+tDqGWxeYonoJ6be2VHWWtS9en7Bs5q0+fL0F7DCoJAH3h71qkY8ZbYlgH
+	nYyRH86qOPHItn6gS9nw64dHjpqgBS6/kh5JNW6OzQjb6AC0EHUcsCV04YxC5rtJRs9bii3vPKJ
+	clPbhnz5P9/8rV5AzkjQVo26lIf4MAeAUdRiTTvQEfltaY2W0WvWJzc7Qlfu7HK19i41zaGw==
+X-Received: by 2002:a05:6a20:5491:b0:398:7df5:2dae with SMTP id adf61e73a8af0-3c08ed14361mr7575416637.9.1783441920227;
+        Tue, 07 Jul 2026 09:32:00 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:84b0:ae0a:5cbe:26bf? ([2620:10d:c090:500::1:76b9])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3118389d9bcsm2489902eec.20.2026.07.07.09.31.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2026 09:31:59 -0700 (PDT)
+Message-ID: <7bc3b23e96b502f9f5aa7012ce1b671b6d29e996.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v8 2/2] bpf: Reject programs with inlined
+ helpers if JIT is not available
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Leon Hwang <leon.hwang@linux.dev>, Tiezhu Yang <yangtiezhu@loongson.cn>,
+  Alexei Starovoitov	 <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko	 <andrii@kernel.org>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>,  Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+ <emil@etsalapatis.com>, KaFai Wan <kafai.wan@linux.dev>
+Cc: bpf@vger.kernel.org, loongarch@lists.linux.dev, Puranjay Mohan
+	 <puranjay@kernel.org>, =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+Date: Tue, 07 Jul 2026 09:31:57 -0700
+In-Reply-To: <7b8e9361-2fc9-4302-b055-3657b19d2272@linux.dev>
+References: <20260706040006.10331-1-yangtiezhu@loongson.cn>
+	 <20260706040006.10331-3-yangtiezhu@loongson.cn>
+	 <abd697d839043d80e0230d2b9ab30b214dfa34d7.camel@gmail.com>
+	 <e86ba5c0-41c2-4492-a316-7693c7d8d3fd@linux.dev>
+	 <1c1738784ae321ed5c9dfa0aca6d0f483592713f.camel@gmail.com>
+	 <7b8e9361-2fc9-4302-b055-3657b19d2272@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 07 Jul 2026 16:30:58 +0000
-Message-Id: <20260707163059.635851F000E9@smtp.kernel.org>
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On Tue, 2026-07-07 at 21:42 +0800, Leon Hwang wrote:
+> On 2026/7/7 17:27, Eduard Zingerman wrote:
 
-New issues:
-- [Medium] Missing READ_ONCE() when accessing `psock->progs.stream_verdict`=
- and `psock->progs.skb_verdict` concurrently.
+[...]
 
-Pre-existing issues:
-- [High] Missing equivalent FIONREAD fix for UDP sockets in udp_bpf_ioctl().
---
+> > Meaning that you'd prefer the bpf_get_smp_processor_id() and co to
+> > work correctly w/o JIT, do I understand you correctly?
+> >=20
+> Hmm, no. According to Alexei's comment [1], we should reject the helper
+> by the way of this patch.
+>=20
+> [1] https://lore.kernel.org/bpf/DJN001X0S57Y.18CKUS4NDDQT1@gmail.com/
 
---- Patch [1]: [PATCH bpf] bpf, sockmap: Account for receive queue in FIONR=
-EAD without a verdict program ---
-commit 9131d0861f04fc0f5fba703ea6f2e057df4b0975
-Author: Mattia Meleleo <mattia.meleleo@coralogix.com>
-
-bpf, sockmap: Account for receive queue in FIONREAD without a verdict progr=
-am
-
-This commit fixes tcp_bpf_ioctl() to account for data in the sk_receive_que=
-ue
-(via tcp_inq()) when answering SIOCINQ for a psock without a verdict progra=
-m.
-Previously, it only counted bytes diverted to ingress_msg.
-
-> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> index cc0bd73f36b6d..a001b1fff578a 100644
-> --- a/net/ipv4/tcp_bpf.c
-> +++ b/net/ipv4/tcp_bpf.c
-> @@ -344,7 +345,20 @@ static int tcp_bpf_ioctl(struct sock *sk, int cmd, i=
-nt *karg)
->  		return -EINVAL;
-> =20
->  	slow =3D lock_sock_fast(sk);
-> -	*karg =3D sk_psock_msg_inq(sk);
-> +	psock =3D sk_psock_get(sk);
-> +	if (unlikely(!psock)) {
-> +		unlock_sock_fast(sk, slow);
-> +		return tcp_ioctl(sk, cmd, karg);
-> +	}
-> +	*karg =3D sk_psock_get_msg_len_nolock(psock);
-> +	/* Without a verdict program, ingress data is never diverted to
-> +	 * ingress_msg: it stays in sk_receive_queue and is read through
-> +	 * the fallback to tcp_recvmsg(), so account for it like
-> +	 * tcp_ioctl() does.
-> +	 */
-> +	if (!psock->progs.stream_verdict && !psock->progs.skb_verdict)
-
-[Severity: Medium]
-Are READ_ONCE() wrappers needed when accessing these verdict program pointe=
-rs?
-
-These pointers can be updated concurrently by other threads via xchg() (for
-example, when sk_psock_stop_verdict() is called during map detachment under
-sk_callback_lock).
-
-Since tcp_bpf_ioctl() reads these pointers holding only lock_sock_fast(),
-reading them without READ_ONCE() might constitute a data race and lead to
-compiler optimization issues.
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does udp_bpf_ioctl() in
-net/ipv4/udp_bpf.c need an equivalent fix for UDP sockets?
-
-Looking at udp_bpf_ioctl():
-
-net/ipv4/udp_bpf.c:udp_bpf_ioctl() {
-    ...
-    if (cmd =3D=3D SIOCINQ) {
-        slow =3D lock_sock_fast(sk);
-        *karg =3D sk_msg_first_len(sk);
-        unlock_sock_fast(sk, slow);
-        return 0;
-    }
-    ...
-}
-
-It unconditionally answers SIOCINQ from sk_msg_first_len() and ignores
-the standard socket receive queue where data resides when no verdict
-program is attached.
-
-FIONREAD returning 0 for a pending UDP datagram causes applications
-to allocate insufficient buffer space. Since UDP datagrams are truncated
-if the provided buffer is too small, could this lead to silent data loss?
-
-> +		*karg +=3D tcp_inq(sk);
-> +	sk_psock_put(sk, psock);
->  	unlock_sock_fast(sk, slow);
-> =20
->  	return 0;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707-fionread-n=
-o-verdict-v1-1-ce94a72357ec@coralogix.com?part=3D1
+Ok, good, the sooner the better. Thank you.
