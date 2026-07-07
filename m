@@ -1,101 +1,131 @@
 Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F17B360ED0
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 19:02:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0785235B645
+	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 19:02:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783450938; cv=none; b=Oft+vscTJ8HF2xYpXnsFsCqnor5TzqigLGUY+0lj4zkTX3L0mOE+nYZBgayMTzaxd9yNK9NwvDq9ZWDVoKQBxKDFxBK4OvgXLFy+wWkKr42LBe0WeNHigqWIe07s7bOd156/tOaukg7mGsxyu9ZssJYv1QonwowOX5C8egdf4pA=
+	t=1783450940; cv=none; b=ICHQIg90A8YwhoSct6kWzsPg7uqsUCnNzInd5RP7VgncVydhC1YS5idI4gbcXMYCCre39Cg2Tgx5bVYuyKYIe8ft7xLgaZoIXUu+bQCSO+t8L+AzxMdSB6mRT6pWpexpbbCDzOViqcvRJ+Zw0HUS7su/c3x0zfDPnDMxUBqF6z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783450938; c=relaxed/simple;
-	bh=svsgUm/jJt+eXJnCt1RWCG8aEN7E3pO7GARa+R2sxeI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mlW+BaXEHTSOenDPzPf7PWpsojATG0iGO+h9kZk+307KoSOXy5RfVnqLQ+od/M/icotPXZpXPbYZG8V0rv7kLSONNt5Bn/v1jSWdnhKDv0aHdKWJmPyvUyfUjZxegY+NMMGVvJL/0g5RCQBNdCngqej8i796ZjmYOo9sABjfeHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l/ERuW9U; arc=none smtp.client-ip=74.125.225.64
+	s=arc-20240116; t=1783450940; c=relaxed/simple;
+	bh=IRwp4ODHFREcTq2vS7ls2bzevHTpG+IUZArHJDeEdiY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=INiiUDN1VLF+BDJdf/Zkq0FtKMKFEFXF5oCsqHrAwB7OcwYpZVe07N+KUWN4hqQdt0s0+8DWXOmcRhmQ05W8knSMwruAOt8qmSoZdZfXKLfzUlI3V5H3VQ5UdWPffLdKYnkA2NdlTIPEtnDKQZwwrTFfG4KK7uDthLcRqFHbn7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fhVKjKzI; arc=none smtp.client-ip=74.125.225.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l/ERuW9U"
-Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-47528970fbdso910512f8f.1
-        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 12:02:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fhVKjKzI"
+Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-4744516a312so154041f8f.1
+        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 12:02:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783450936; x=1784055736; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KNdKf3idjKg18UOSQxmR6B+n8nNVb0F/yYSMmRJDLrw=;
-        b=l/ERuW9U/7sh6sK0k2N3e/LBqMAjOqOA/LTtJu59VfIUmN4YAbX0Gr0SwhWlM0/DMm
-         BG1A0ePnMk1d+FSZtVCnI8q/TIQyHCf3sRck/n2FIXmkiMva9pSWAT30m5zcOSSa103H
-         nz4hepzjmqRtsr6Qk5a4GNbeGr25t/jhApKI/AyRB/dVVdXR6ltsjLwIheZ6zMWY6leG
-         MejHtfDW1EIxz2xz8/GGyAmC5a8Foi7AZ9PjXwyM5NHo+UssF9NxUCLtBy/wSLJ7nBOc
-         dOllpuaypTkCX+r7se9hfbCCu48UklMnEiY+vwlJ9EMwpUA0Ea+zxW9zwcXuY58Ejc7l
-         Yzew==
+        d=gmail.com; s=20251104; t=1783450937; x=1784055737; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ytyIpnKKpxa4qRJFmy+Ya4of1g7Ul0Mr3RS/+I2C/ds=;
+        b=fhVKjKzIB5c1S8cNrRHTXBfAg9igA5fFDUgk5KBrhR6QPThh/78BR++5JFoiT9zJqW
+         2vHdJnbGhtYW/XqZBKkSsuE9EgkxulHofDd56Is3s/jRXLu3F79m5uONYw4AFrL6qpxe
+         uJAThb01TInBpYSbnUZmeLrdMAJsxvtKN1Usj6roo52s5V86OzK1i+wubF2WGZTMkxhT
+         Ni7pFh5MykDU0Kg1rAkyIxc5e+C19n+VFhUb1fG0ksLDaFrR8mYYiqGV9+/pVM1BEiIv
+         Zx92mXUXkWcc1ae34xVJ2GxqWS4mxq01c24yJmbVqi0rg7zKxbvS/t7WlJpq7aKfHjzH
+         pCXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783450936; x=1784055736;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=KNdKf3idjKg18UOSQxmR6B+n8nNVb0F/yYSMmRJDLrw=;
-        b=Bhinor+lwd4llUpBVRVUJ3CHNAdQ0BTJZ2uZMx9zaNK7jej8G9lTdNrLEIAByBL9N3
-         EHqsKgldbqqFPRSKhXa5A62/thVUKPknC4li3NMHF4BcjQG229e0w8qYbBLZkvw0H4uk
-         3iWZwJzYpCvyoCuZHzCO09jNhwV6cb6PO7iv8cuT4chPAEmW8yhwmEn+mfwDS7Ps1GTG
-         tELsKNlIJX9M7qaOIvV5P44hU1NzgU7uIsFpLW0LmhHqIows6nfhosYTaABFWqk78Mbf
-         CdbVrwM7Ox2Ns7MfLehQLXlVCrbqDcuuL6DgRtZ9OOCWs3vRg2+U7rzkyrZgsy9pdAln
-         uiQQ==
-X-Gm-Message-State: AOJu0YzCKmcloz75aICjqRzvAQsZAHyWTyf5m3juxLRRXdrMq09N2TCj
-	KmubxmGE7D4I4euqXlviAaYFfl50lQeAEJ30pZbPY40tNTePRcuPi/Gx8MQiB8i7
-X-Gm-Gg: AfdE7ckDOdl528M51cUx+eBY13qH7kfwTeBTm5i3pgVezvPdu0xIn31fKw6BLYm3htS
-	lRAZzfc/HgpJTReAn+xqmyoqAyaEg3dpnlHFFXN5EcJVMzt4W0Fnd6GzONsxLWAwJvJS0VS8WQ9
-	3BwierUY4KZ11QdAmnJV7u4Xf0SiFeqgQvoT3+EC4v28nioKTfxwH+gpiIknRD0GMBRS2KjiXtB
-	q5By4MEBW5CH8/QrNBXeUw6QcNL7LkVuy3PWpdRxpLu6MJjtk0Q85My5lvynUzUZB1Ee5pW6axA
-	7Y8tezT8VhzNHGAQlHLFbEx5n76A8aHbZLAt18xn1OC//zK67Q9cyyy8c3QiChKdN/acz7Ixu/w
-	hy2fYzt643FP0MFZbNftwTbFXLG/ssLUkTXyVc05deaop7r2XPR13v2rChzPVMRTRaRYPIEkXbf
-	6Gn5Z3GKQMXmUQfnI4zO2PH6vthLcgfQFp4Syg3FJDz5HNhIzWzUMTl09v681gAH2AGkKeYP7Bo
-	dtbRBG+wBdSx/bV9azWmgIrkuxPkc092JC1OfwZ+xh8t8M2BQOygQs=
-X-Received: by 2002:adf:e807:0:b0:476:8d5:cf34 with SMTP id ffacd0b85a97d-47de6689f31mr5688306f8f.8.1783450935480;
-        Tue, 07 Jul 2026 12:02:15 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783450937; x=1784055737;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ytyIpnKKpxa4qRJFmy+Ya4of1g7Ul0Mr3RS/+I2C/ds=;
+        b=lZuAlkTBoxuDsd7D4WRHk7xngH5RCYh7AbUbFhQLYM6FgY/Og+yY3CfWTBEGo2A7Fu
+         GdUjKeYTSdjlGm77xUki6M+aQTk/lF1PDlCAb8+JAhXNP7pTqDiQzwHaRbvX8sGQdO3z
+         ZcvpUckr6+9oBRyWTocy9Grg50dn3l+zKxFTUegOUrITBMKWQHxlDfVivBvWNbF1Y48Q
+         FGDffVTb2eqtGccTzZL5YTTUO62GSdF1hJTHhD17Ng65+69mGIT8jJfajHqSkktN9dXb
+         QOq+8iMOQiV1a6ytjBTnpISU16HmljqUhmvc+yFjsALDnuD5q9MVkpSgTdrIPP6eXW4g
+         f1aw==
+X-Gm-Message-State: AOJu0YzTfiFAddwKCgLZU56s/Y0mlP1z3A4FLNp9SC8PReOEZZGgO2N5
+	W0SUL3nuYSs6w3zenhXQdsE2hJihmd0RXejPIw6qoyw8KJR5iJLk5TEZaOoEue7j
+X-Gm-Gg: AfdE7ckUtx6yYQgftCFFh+Bvd55AfXNZC/+k95gsx+W8of61UGeQi0L8SF0yDiZR6Vl
+	M/0hJcDOmPQ8tuYwHGZ7qU7zqOayPQniB4OCmzp6NCxKolDOaIe6b9yqQ49A8zF6Zjqq5kWCi1O
+	B+MxUhBEq05dpmwtFhzHtGXnNSfy9bzhBuCr/hVMZcWKQMb+W4GouOCSzRB02MeIaI5e1hlP4ky
+	xVCop3nNoILaFe7jq9bWzHEbtxlCqiiBU79A+3/xVE2tVvfPDJxVKzZU/Mr5GoAAxMkoRQy4l+S
+	N0KScOX0nDDKjZD2XVGcekdA9D/dnwE5FCwnUFjwafDO9eq7YDUitq+Uvog2X8lV4XqSCGF9e8o
+	aNv9ADAAzb5dV9bM+I4TOJlZdlJEsYMaStxovc7lJ6Nv9zGdyjcOtCyIqgbMNtA/SRcyZ4sQjRf
+	ncwaYPefH/rsx/bNUL5egU5U6yoGxIXKZ3lWuA8ftbLqqsasQFw0UPncZEmF3v8uZb+gRHCpGoa
+	RM4qHTfNdqydtazXq+TWv3rvcAd/3kfgLx4XvI9cJVCm425myWRnwU=
+X-Received: by 2002:a05:600c:2d08:b0:48f:e230:29f5 with SMTP id 5b1f17b1804b1-493e101f655mr26293765e9.16.1783450937183;
+        Tue, 07 Jul 2026 12:02:17 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47a9e3e2702sm36830361f8f.9.2026.07.07.12.02.14
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493e0ebf593sm80164575e9.0.2026.07.07.12.02.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 12:02:15 -0700 (PDT)
+        Tue, 07 Jul 2026 12:02:16 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+Cc: Nicholas Dudar <main.kalliope@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 0/2] Fix for untrusted BTF pointer writes
-Date: Tue,  7 Jul 2026 21:02:11 +0200
-Message-ID: <20260707190214.1997705-1-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 1/2] bpf: Reject writes through untrusted BTF pointers
+Date: Tue,  7 Jul 2026 21:02:12 +0200
+Message-ID: <20260707190214.1997705-2-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260707190214.1997705-1-memxor@gmail.com>
+References: <20260707190214.1997705-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=704; i=memxor@gmail.com; h=from:subject; bh=svsgUm/jJt+eXJnCt1RWCG8aEN7E3pO7GARa+R2sxeI=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIcvXJ5+xlee3Tc3dy2vll1z3jrpy8bgRx6813xd7JOwI0 7PPe6fUUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIl4SjMyfJZLa2VgaJpaWCEy 9U6utry29B6B0GPCDZsM7s+O/p/kxvBPwSb0zDF5wflNnr/frN1W8Uh7cz6bEeseVu2v1w8wxhs yAwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1739; i=memxor@gmail.com; h=from:subject; bh=Qm4jdWLUkCK3faugpCdP7QSW2I7AU7arqUbSvJ+2oAc=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIcvXJ/9Z9dxd/R4Wdc3x+uwbeRgT5q+aKfdXg+n2+4inW 9eoOOR3lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCInJRj+50iGrvsT9zCf4znL gWuMDnLbVH51fPnzSH7OgvdJpqez7RgZLr2IXLmVt6hs4ib2a2U9n9pNy88v1XG8e8nxCcdmXcH 7nAA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-When using custom btf_struct_access() callbacks, we miss rejecting
-unstrusted BTF pointer writes. Fix and add a selftest for coverage.
+From: Nicholas Dudar <main.kalliope@gmail.com>
 
-Kumar Kartikeya Dwivedi (1):
-  selftests/bpf: Add untrusted BTF write regression
+check_ptr_to_btf_access() lets program-type btf_struct_access callbacks
+validate writes before the default BTF access path rejects non-read
+accesses. That bypasses the read-only policy for untrusted BTF pointers
+created by helpers such as bpf_rdonly_cast().
 
-Nicholas Dudar (1):
-  bpf: Reject writes through untrusted BTF pointers
+Reject non-read accesses through PTR_UNTRUSTED BTF pointers at the
+common entry point, before the callback branch to handle all cases.
 
- kernel/bpf/verifier.c                         |  8 ++++--
- .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 12 +++++++++
- .../bpf/progs/tcp_ca_untrusted_btf_write.c    | 26 +++++++++++++++++++
- 3 files changed, 44 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/tcp_ca_untrusted_btf_write.c
+Signed-off-by: Nicholas Dudar <main.kalliope@gmail.com>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ kernel/bpf/verifier.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-
-base-commit: f425a0443b7f0221a4b34f6acc0c2924bf5877f2
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 3193b473762b..7cf555a7026c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5813,6 +5813,11 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 		return -EACCES;
+ 	}
+ 
++	if (atype != BPF_READ && (type_flag(reg->type) & PTR_UNTRUSTED)) {
++		verbose(env, "only read is supported\n");
++		return -EACCES;
++	}
++
+ 	if (env->ops->btf_struct_access && !type_is_alloc(reg->type) && atype == BPF_WRITE) {
+ 		if (!btf_is_kernel(reg->btf)) {
+ 			verifier_bug(env, "reg->btf must be kernel btf");
+@@ -5825,8 +5830,7 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 				reg_arg_name(env, argno), tname, off, size);
+ 	} else {
+ 		/* Writes are permitted with default btf_struct_access for
+-		 * program allocated objects (which always have id > 0),
+-		 * but not for untrusted PTR_TO_BTF_ID | MEM_ALLOC.
++		 * program allocated objects (which always have id > 0).
+ 		 */
+ 		if (atype != BPF_READ && !type_is_ptr_alloc_obj(reg->type)) {
+ 			verbose(env, "only read is supported\n");
 -- 
 2.53.0
 
