@@ -1,126 +1,178 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A345642088F
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 20:18:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D165405F7;
+	Tue,  7 Jul 2026 20:31:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783455497; cv=none; b=LHS/l5E2AETTU4sAHLgrZm2Yo1LMy2KiG60D+pYWr/lmRc6vD/ucNhswrxBVk8q7eMah8PNURnE5cRC7Vdqt6ntOy8pCtoFtN/9+MxoIhLuqmAMtieOWyIfnqDc0tDMbdr6DuaznjCnDObHk8TcYeGeaxFM4eqgRAqoNXcIsl4c=
+	t=1783456275; cv=none; b=VPFO8AUr93ueH0CPKpyTl5nkFg3JJedbWi5yPqKmKnIdwfkytzbAdOz/pfynmJiVFNVBJeTrVaHO+4dGMupkwATa2asygt1ZkXRJSglEjn29JmO6depWQCZhi15m8srtfQSXgdhgm+iaWaMtC3mxN5oRYnbRsBUr2FkmacV5myc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783455497; c=relaxed/simple;
-	bh=YvlbfEr42VgvDbDrD2oUGfJsl6AwqqIX692YUd9nhjQ=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=nZDUXzWi+t1D7+zhJMbLmbglzaCv4g+IRR5KLQoi2GxSBS3ZmPkhgm0f+bSftEuR5A6ysDCrUDfhU+/0gnSLxy1xsg+/T7WTZOIN+yhn9Jg2SrRLYMjRMmRYLSoWE/IpDiNO+a7WCjOiGyr0ls9mIiWw6ehKP6w8RsnDbkgym/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=digiscrypt.com; spf=pass smtp.mailfrom=digiscrypt.com; dkim=pass (2048-bit key) header.d=digiscrypt.com header.i=@digiscrypt.com header.b=mUYg9iLE; arc=none smtp.client-ip=74.125.82.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=digiscrypt.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digiscrypt.com
+	s=arc-20240116; t=1783456275; c=relaxed/simple;
+	bh=+c7Nub9g+n8EHHrwd16X0fxPgCYfVI7a/SXwquMfI8Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=q0Iv6qB/SMTRtCch1Shx2tnZyAqW7tBdO6y/+sDef0xTzmiCbN4ugQUWG3pDPFlxyFvXHKJmXBfgzyNEJ5RIqS/LjFT1S+rz4udnGnN9Vd/1z9Qz7y2IaFA15XmpoxN2iZ4ZVIYHG3wVYKGWteLlrBHYr1d97i75wW8KOf7J2X4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=ml6h349K; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=digiscrypt.com header.i=@digiscrypt.com header.b="mUYg9iLE"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-30f1c5dc047so20383eec.0
-        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 13:18:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=digiscrypt.com; s=google; t=1783455496; x=1784060296; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:content-type:message-id:date
-         :subject:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=s3YJuYaQ7M4UXYxxtI/b9rrGfHYQ+qlrA3fBcJCd5BE=;
-        b=mUYg9iLE2wycNy3q38Kbe7gUNKziJ5EdZJQ3h2amAaXrwwc3s5F2xiC86/kw93CdFM
-         37owFuToYSWgb3xnAx2Y3jX+bax3Pv4Ez3gCQaAA+6dMLu/Y5MXD95Ni3AjRQS9nTJy3
-         X2dSimHWYDTd7It9/MBvAUUsxUk0zpah/cC3HC1QlIfxEtxIy1cv1DEsuER5mA/AV548
-         sBIbbGz9JHJ5yYqHsyix1RHO7oqB/l+K5aGddZw2wViGOb5pd2Q9aXcKKQCdh8nzYnW0
-         5N0hLWzWqYOpXtxeCZUxvO3fL+DzGAP1lTZ1JgcLBP7m7ZXVujvQiyyHlIpdLViE0YTP
-         GBEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783455496; x=1784060296;
-        h=mime-version:content-transfer-encoding:content-type:message-id:date
-         :subject:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=s3YJuYaQ7M4UXYxxtI/b9rrGfHYQ+qlrA3fBcJCd5BE=;
-        b=kPilYcNjctCMqa81rxQ0hur+B8YVRDQ80gw4F6KyvYnqQp14iGJYNPQYTMm3UUpSgj
-         FoWT1GjqCP0A5PM9/vsU4VclieAAxZEi2OxOuA0rmMtupS37m3/ARtadrRPl7eGWPuNN
-         xgO57MT0waKayi81uusNOrPN/DyAxdWKPmrCCLrhmOiGjAZrGmkYttVvwKuWJxP4p9+P
-         LfPAzWK6rC35EbMzaA+MCRD9XuBYqBANDZIOR3cVlkuPrTD+NQGBsEZc/zliWjfk+R10
-         NippGXwsTIydWg3iDFn/jNQeFI4tlS7+wz3mFsgi6B84qwqNXb5DhgO2jCurVfJzncUK
-         zzOg==
-X-Gm-Message-State: AOJu0YxvB6XIi2quYqSG01mHdIzkQb8d6uXVnm3/Sp5A7e8qip5aP6gi
-	qJDLNtYeTXhf1xeCBaHGUTqoxHSObjUVfsEbR/yKzDOPaMBCl9qeUA9+plE8UJI2lE4RrqlEvU+
-	vmxvvN0037ig=
-X-Gm-Gg: AfdE7cnqPR84h1+UFs1+6IZCJT3arcOiU9Wmet7oOAZaRvCgzVhhMMdyHSZqAWhAewK
-	L61saApJKkrgRYCxDNbvoPO/q7d/vndS7sbuRbP5C+BDOmiG1fI4/gIP4217+mpbrS4ajY26mQ/
-	SSIGMHCXZxNN7ph13sfMuA4x8+oZKhvfMKNTWCpo/YO6s83Q1TAuWLoO0m6SlJ0g6xssrwtxDsm
-	mBlTmBpDobznaJEZtcSCQDhFrUVTXJK/RAifzpVzoUyeZ+x6KL4FSXl8ryE6o4vtt/tgbmLzf0u
-	VKHYnMVoO1NzjkZ0JThINtp443J9R+NjT0zuvmDEptXmK7r/SDJoqyYwiFLKYt78Yy/z6sYx1KA
-	VOZxzAlcJB0cCYftCBe75ww+7PvrpxP8O0PcfzFW1DZcm2XL8Eu4EiC0BIJuwEBU8aVZ/bsHPB0
-	dl5yvZx2j3rBN782HUaY2GpyRvO83XMBcWEaIvO1OtnqnF52Byx0+fkQd4wCtyFcC1J1kpp8hal
-	EzzHRwrocaxBDmeJsjDE88w4pgJAR2yggrMGEtF6MEY5aIsX9qTZo2UpvlOHm/mRHz2APyNiPyz
-	JpDaAGJSfkr9f1u9dqOKIg/QACyxFQ==
-X-Received: by 2002:a05:7300:f691:b0:30c:ab4d:3826 with SMTP id 5a478bee46e88-3116bc93ad9mr72611eec.40.1783455495656;
-        Tue, 07 Jul 2026 13:18:15 -0700 (PDT)
-Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2401:4900:62a5:8e1:38ee:5908:64f2:589])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31174ae6cd9sm12227799eec.31.2026.07.07.13.18.14
-        for <bpf@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 13:18:15 -0700 (PDT)
-From: Naveed Khan <naveed@digiscrypt.com>
-To: bpf@vger.kernel.org
-Subject:
- [PATCH] libbpf: fix double-free of distilled base BTF on .BTF.ext parse error
-Date: Wed, 08 Jul 2026 01:48:11 +0530
-Message-ID: <178345549172.94179.7948304165383170781@digiscrypt.com>
-X-CodeOps-Marker: d4ecb6eaf12f476582e9a327d30c69be
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="ml6h349K"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=ISsste53oDfiQAPBRfaIsEPZh0Xo6zksfj6/7gv7OKs=; b=ml6h349KGBGpH/oVp+gxQXQO8C
+	vUKrGNQk9AdElAbEy+kP+nxjdeN0yB6o9uEIp/leVtjaQdNt9qv/HxDn1jVcK0TuYjFmr4/x7+P15
+	Ae1IgzUtZuZ9GsFdTvsPHttI16tuEurJ2tGDXqXEfXdeDXzcClUf9MHB55JJ1/bvh2lFeKNGhRpnW
+	qYXgmISWivtvxF9e8Z/2x3DE551sVdKuVuapzgQMluPNEJ21T9U98MTA9JiR+LL7UBxK9OXf7XoZX
+	hVMys4fedlQNHWgmsYHQjOxzU1TiX05hk1rcVYcYH4iMMXb1hoKkk66akErnpJjDuOWRYo87sdBW+
+	0FBWRePw==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1whCRk-0002Lf-1f;
+	Tue, 07 Jul 2026 22:31:12 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1whCRj-0004JY-2n;
+	Tue, 07 Jul 2026 22:31:12 +0200
+Message-ID: <1c05d85a-2700-4849-be6c-ebecb2fde634@iogearbox.net>
+Date: Tue, 7 Jul 2026 22:31:11 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v5 2/8] bpf: Verify signed loader metadata at
+ load time
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260707193104.350066-1-daniel@iogearbox.net>
+ <20260707193104.350066-3-daniel@iogearbox.net>
+ <20260707195600.5C2851F000E9@smtp.kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260707195600.5C2851F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28053/Tue Jul  7 08:24:37 2026)
 
-When btf_parse_elf() is called without a caller-supplied base_btf (i.e.
-via the public btf__parse_elf()) and the object file carries a .BTF.base
-(distilled base) section, a dist_base_btf object is created and used as
-the base of the split BTF built from the .BTF section.  Because base_btf
-is NULL, the relocation block that would otherwise free and clear
-dist_base_btf is skipped, and ownership of dist_base_btf is instead
-transferred to the split btf by setting btf->owns_base = true.
+On 7/7/26 9:55 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> 
+> Pre-existing issues:
+> - [High] A lockless synchronization race between map_freeze() and map_update_elem() allows a TOCTOU bypass of BPF signature verification.
+> --
+> 
+> --- Patch [2]: [PATCH bpf-next v5 2/8] bpf: Verify signed loader metadata at load time ---
+> commit 5bc066f1169723d401bd2b1b6a80fa2ecfbca1a9
+> Author: Daniel Borkmann <daniel@iogearbox.net>
+> Subject: bpf: Verify signed loader metadata at load time
+> 
+> This patch introduces load-time BPF signature verification. It verifies the
+> signature over both the BPF instructions and the contents of any exclusive
+> metadata maps, relying on map->frozen to ensure the metadata cannot be
+> modified after verification.
+> 
+> Link: https://lore.kernel.org/bpf/2f71d6c03698eb17d51f7247efde777627ee578a.camel@HansenPartnership.com [0]
+> Link: https://lore.kernel.org/lkml/ecf0521ed302db672672ebfbc670ecfba36a6e00.camel@HansenPartnership.com [1]
+> Link: https://lore.kernel.org/bpf/88703f00d5b7a779728451008626efa45e42db3d.camel@HansenPartnership.com [2]
+> Link: https://lore.kernel.org/bpf/DJOFY21DYUI4.19WKQ3NPZ4H5R@gmail.com [3]
+> 
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 2e9e65297c706..462a1f8544b9d 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -19870,6 +19895,140 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>   	return 0;
+>>   }
+>>   
+> [ ... ]
+>> +static int bpf_prog_verify_signature(struct bpf_verifier_env *env,
+>> +				     union bpf_attr *attr, bool is_kernel)
+>> +{
+> [ ... ]
+>> +	for (i = 0; i < map_cnt; i++) {
+>> +		struct bpf_map *map = maps[i];
+>> +
+>> +		if (map->map_type != BPF_MAP_TYPE_ARRAY ||
+>> +		    !map->ops->map_direct_value_addr) {
+>> +			verbose(env, "signed program metadata map '%s' must be an array\n",
+>> +				map->name);
+>> +			err = -EINVAL;
+>> +			goto out;
+>> +		}
+>> +		if (!READ_ONCE(map->frozen)) {
+> 
+> [Severity: High]
+> This is a pre-existing issue, but does the current map freezing mechanism
+> provide the absolute immutability required here?
+> 
+> In kernel/bpf/syscall.c:map_update_elem(), the code increments the write
+> count and checks permissions:
+> 
+>      bpf_map_write_active_inc(map);
+>      if (!(map_get_sys_perms(map, f) & FMODE_CAN_WRITE)) {
+> 
+> Because bpf_map_write_active_inc() uses atomic64_inc(), it does not imply a
+> memory barrier on weakly-ordered architectures (like ARM64). Could the
+> read of map->frozen inside map_get_sys_perms() be reordered to occur
+> before the writecnt increment is globally visible?
+Oh well, so to make this air-tight on arm64, I'll add:
 
-That ownership transfer was performed before the fallible btf_ext__new()
-call that parses the .BTF.ext section.  If .BTF.ext is malformed,
-btf_ext__new() fails and the function jumps to the error path, which
-frees dist_base_btf directly and then frees btf.  Since owns_base is
-already set, btf__free(btf) also frees btf->base_btf, which is the same
-dist_base_btf object.  The result is a use-after-free read followed by a
-double free of the base BTF, driven entirely by a crafted object file
-(a .BTF + .BTF.base + malformed .BTF.ext combination) passed to
-btf__parse_elf(), as used by bpftool, pahole and similar tools.
+   if (bpf_map_write_active(map)) {
+           verbose(env, "signed program metadata map '%s' has active writers\n", map->name);
+           err = -EBUSY;
+           goto out;
+   }
 
-Transfer ownership only after .BTF.ext has been parsed successfully, so
-that any earlier failure leaves dist_base_btf owned solely by the local
-cleanup path and it is freed exactly once.
-
-Signed-off-by: Naveed Khan <naveed@digiscrypt.com>
----
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 823bce8951..35695f33c6 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -1506,9 +1506,6 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
- 		dist_base_btf = NULL;
- 	}
- 
--	if (dist_base_btf)
--		btf->owns_base = true;
--
- 	switch (gelf_getclass(elf)) {
- 	case ELFCLASS32:
- 		btf__set_pointer_size(btf, 4);
-@@ -1530,6 +1527,9 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
- 	} else if (btf_ext) {
- 		*btf_ext = NULL;
- 	}
-+
-+	if (dist_base_btf)
-+		btf->owns_base = true;
- done:
- 	if (elf)
- 		elf_end(elf);
+Thanks,
+Daniel
