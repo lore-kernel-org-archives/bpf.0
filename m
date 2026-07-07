@@ -1,184 +1,87 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136662F0661
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 07:55:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A1623E334;
+	Tue,  7 Jul 2026 08:15:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783410919; cv=none; b=cSJa5DAu8ZTLXmBzcxoO1cntrpB0sQOIIliZmLixPqbsDE+u8VBSlKfxdLetpzR/h18HWrr3Li1z1fvdu1mK0hBP6FX7Ql07obI32r6YySJ02dineqj0DejjBvOay4Gihk7kQ0UInHG3VBudydBeARuhfcnZVvv//K2q4GvgLV4=
+	t=1783412161; cv=none; b=f8p3p2qz2d7pj1oOTDQakMqA+ENZ8vlTa7AgHIRCx/U0RDwYZ4DbTfpiIXZAsBRbokHWhbEUiEDKDXM1bVuuGRSmuXYx8BXzq5E3YVVC0aPlQRlOMtT4pSEfFqK8NaG4SOumXt91sKLKD5xBoAUXbeXzlIaf8JsXVBaVTMe3/KM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783410919; c=relaxed/simple;
-	bh=/8OfFJPxd16gmKEv9BIH5kqe7oCrFM5n9xUnUc3AWyw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KUgeGHxc74BvdyNCmD3Ub7sXiXfMdx3QYAtcohR7pA5MiPHM/4dcM42T+k/2KfS0zGa81gps3H5Fedbxrwk5RKJ2+gjiC87F1OaMKndj89xTSUUri/TNcEnzm54HkDRHytZPqlnkzTWRBv3KQop1v+Hq5JfhfPSz2WFL+Yaqtf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=grimler.se; spf=pass smtp.mailfrom=grimler.se; dkim=pass (1024-bit key) header.d=grimler.se header.i=@grimler.se header.b=I2dbMFSb; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=grimler.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grimler.se
+	s=arc-20240116; t=1783412161; c=relaxed/simple;
+	bh=QqoJU/JG16Ze/tMMCEdTlKiakq3ltdOJBhDrntajUUU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JGEOeNIguLu5w3Rfu7DlyfJ4+fJDOxH5ZN7KleBcGZYmwTPyl8BQDkltCbH54MOjcsjfgHG42MwpE6Ep38pFJdf45SI6yU7Zmj/VGwe89K2JzK3b5z2Zry7xmm1Tlu8nRaKFeRZ1P+y9gsFbv6UL9RtlInWjXt07MKKlSWJQkuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=gcQUa6OU; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=grimler.se header.i=@grimler.se header.b="I2dbMFSb"
-Date: Tue, 7 Jul 2026 09:55:00 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grimler.se; s=key1;
-	t=1783410905;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z3ihn2xUU6xDos+/B+hJSXLBdz5rrV0eg6AHLWOipW0=;
-	b=I2dbMFSboh/zQjVcz/+0GpOtr8DL1l6GXWecpImZ0A3ZPzP5y5z7NkVjft43M6ndqJgF0t
-	b33rHS+BZTlPLJOd6N91qDYoTfPWRkkzeMesuZ2R0MQQNRGq8M6jEBeQBQPouNJRBB0GU0
-	8Q0ndEIC1PKeG0SamAKSaO4Vw9w1YO0=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Henrik Grimler <henrik@grimler.se>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Aelin Reidel <aelin@mainlining.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] resolve_btfids: preserve tag and parameter names when
- processing implicit args
-Message-ID: <20260707075500.GA10854@localhost>
-References: <20260620-resolve-btfids-implicit-args-use-after-free-v2-1-4132e1f639f0@mainlining.org>
- <0606be50-1f21-438f-bf00-024f31b9eda8@linux.dev>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="gcQUa6OU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=ho
+	dYro4wZAm6E+qsMZuopCMoS+bPSflPCXm/NCusRIQ=; b=gcQUa6OUdmHP126iKI
+	gnIqCIYP2TqdEE59LkU6ktX2oBBHn17Wx4F9VswMxjjoGwuHY8AnsjQbpC//1EE4
+	OUxP/SVbqqrjC7OKmPYL4jKSUjo2efnE/QhWXqGItIazO65u52IElwTOw9UvHEW5
+	bJXFlTcXCw9OWh0gwY198k0SQ=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wAnL8xqtUxq1q4tIA--.53457S2;
+	Tue, 07 Jul 2026 16:14:36 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] selftests/bpf: Fix memory leak in msg_alloc_iov
+Date: Tue,  7 Jul 2026 16:14:34 +0800
+Message-Id: <20260707081434.539327-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0606be50-1f21-438f-bf00-024f31b9eda8@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wAnL8xqtUxq1q4tIA--.53457S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7XF45Gw4UCr17tr4rZr43ZFb_yoWDZFg_Wr
+	40qwn7C3yqyF95Gw18Wr45Crs5Kan3Wr47JrZxXFy3Kr12qa15JFsF9rnYvay5WrZ8CryS
+	yF9YgryxtF15CjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU8e6wtUUUUU==
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8Qw2rmpMtWzODQAA3Z
 
-Hi Ihor,
+From: Feng Yang <yangfeng@kylinos.cn>
 
-On Thu, Jun 25, 2026 at 10:26:27PM -0700, Ihor Solodrai wrote:
-> On 2026-06-19 3:49 p.m., Aelin Reidel wrote:
-> > process_kfunc_with_implicit_args() obtains parameter names through
-> > btf__name_by_offset() and passes them to btf__add_func_param() while
-> > constructing a new function prototype. Tag names are processed in a
-> > similar fashion.
-> > 
-> > The returned name pointer references memory owned by the BTF object.
-> > btf__add_func_param(), btf__add_decl_tag(), etc. modify the same BTF and
-> > may grow its internal storage, invalidating previously returned string
-> > pointers.
-> > 
-> > This can result in btf__add_func_param(), btf__add_decl_tag(), etc.
-> > dereferencing a stale pointer when copying the string, leading to crashes
-> > in strset__add_str().
-> > 
-> > Duplicate the parameter name before calling btf__add_func_param() so it
-> > remains valid across BTF updates.
-> > 
-> > Fixes: 9d199965990c ("resolve_btfids: Support for KF_IMPLICIT_ARGS")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Aelin Reidel <aelin@mainlining.org>
-> > ---
-> > We were noticing resolve_btfids crashing almost all the time when
-> > building our kernels with BTF debuginfo in postmarketOS. I'm not sure
-> > why specificially our environment triggered this extremely reliably, but
-> > I'm glad I was able to track down the issue. With the patch, I haven't
-> > seen any further issues and our kernel builds are succeeding again.
-> 
-> Hi Aelin, thank you for the report and patch.
-> 
-> My first instinct was to dismiss the patch as over defensive, because
-> libbpf gracefully handles reallocation of existing strings, and we
-> don't add new strings here.
-> 
-> Take a look at strset_str_append() in libbpf (strset.c:131):
-> 
-> 	static long strset_str_append(struct strset *set, const char *s)
-> 	{
-> 		[...]
-> 
-> 		/*
-> 		 * The set->strs_data might have reallocated and if 's' pointed
-> 		 * to an internal string within the old buffer, then it became
-> 		 * dangling and needs to be reconstructed before the copy.
-> 		 */
-> 		if (old_data && old_data != (uintptr_t)set->strs_data &&
-> 		    old_s >= old_data && old_s < old_data + old_data_len)
-> 			s = set->strs_data + (old_s - old_data);
-> 
-> 		memcpy(p, s, len);
-> 
-> 		return len;
-> 	}
-> 
-> In process_kfunc_with_implicit_args() both tag_name and param_name are
-> read *after* the first btf__add_func() / btf__add_func_proto() has
-> made the BTF modifiable, so btf__name_by_offset() should return a
-> pointer into btf->strs_set. I don't see where the bad pointer comes
-> from.
-> 
-> However you have a stable reproducer, so your strdup() change probably
-> covers a real UAF bug somewhere else (in libbpf?).
-> 
-> Let's track this down before coming up with a fix.
-> 
-> What version/commit of libbpf are you using in your kernel tree?
+In the msg_alloc_iov function, the iov pointer is only assigned to
+msg->msg_iov after all memory allocations complete successfully.
+Therefore, when a calloc failure triggers the unwind_iov cleanup branch,
+we should use the local variable iov instead of msg->msg_iov.
 
-I use the same build environment as Aelin and get the same issue with
-resolve_btfids from linux v7.1.1. System libbpf is at v1.7.0 [1] (but
-I guess this is not relevant? resolve_btfids is not linked against
-it).
+Fixes: 753fb2ee0934 ("bpf: sockmap, add msg_peek tests to test_sockmap")
+Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+---
+ tools/testing/selftests/bpf/test_sockmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> You could build resolve_btfids with ASAN, or run it with valgrind.
+diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
+index 3e6be455d158..aaf2050e8845 100644
+--- a/tools/testing/selftests/bpf/test_sockmap.c
++++ b/tools/testing/selftests/bpf/test_sockmap.c
+@@ -435,7 +435,7 @@ static int msg_alloc_iov(struct msghdr *msg,
+ 	return 0;
+ unwind_iov:
+ 	for (i--; i >= 0 ; i--)
+-		free(msg->msg_iov[i].iov_base);
++		free(iov[i].iov_base);
+ 	free(iov);
+ 	return -ENOMEM;
+ }
+-- 
+2.43.0
 
-Valgrind reports some invalid reads, see log here:
-https://grimler.se/files/valgrind-resolve-btfids.txt
-
-and if run under gdb I get:
-
-```
-$ gdb -ex r --args tools/bpf/resolve_btfids/resolve_btfids --fatal_warnings --verbose --btf .tmp_vmlinux1.BTF.1 .tmp_vmlinux1
-[ ... ]
-found kfunc tcp_reno_ssthresh in BTF_ID_FLAGS bpf_tcp_ca_check_kfunc_ids
-found kfunc tcp_reno_undo_cwnd in BTF_ID_FLAGS bpf_tcp_ca_check_kfunc_ids
-found kfunc tcp_slow_start in BTF_ID_FLAGS bpf_tcp_ca_check_kfunc_ids
-resolve_btfids: function bpf_list_push_back_impl already exists in BTF
-
-Program received signal SIGSEGV, Segmentation fault.
-0x00007ffff7f7aaa0 in memcpy (dest=0x7fffebb05a93, src=<optimized out>, n=5) at src/string/memcpy.c:23
-warning: 23     src/string/memcpy.c: No such file or directory
-(gdb) bt
-#0  0x00007ffff7f7aaa0 in memcpy (dest=0x7fffebb05a93, src=<optimized out>, n=5) at src/string/memcpy.c:23
-#1  0x000055555559865b in _ZL6memcpyPvU17pass_object_size0PKvU17pass_object_size0m (__od=0x7fffeb115c71, __os=0x7fffeb115c71, __n=5) at /usr/include/fortify/string.h:57
-#2  strset__add_str (set=0x7fffebb85fd0, s=s@entry=0x7fffeb115c71 <error: Cannot access memory at address 0x7fffeb115c71>) at strset.c:162
-#3  0x0000555555587b2c in btf__add_str (btf=btf@entry=0x7fffebb860a0, s=0x7fffeb115c71 <error: Cannot access memory at address 0x7fffeb115c71>) at btf.c:2109
-#4  0x00005555555898b1 in btf__add_func_param (btf=0x7fffebb860a0, name=0x7fffeb115c71 <error: Cannot access memory at address 0x7fffeb115c71>, type_id=11011) at btf.c:3108
-#5  0x000055555555de50 in process_kfunc_with_implicit_args (ctx=0x7fffffffd7d0, kfunc=0x7fffebb739a0) at main.c:1196
-#6  0x000055555555cc02 in btf2btf (obj=0x7fffffffd868) at main.c:1229
-#7  0x000055555555b869 in main (argc=1, argv=0x7fffffffec08) at main.c:1535
-```
-
-> If you can share a reproducer that's easy to run, that would be
-> great too.
-
-I have uploaded .tmp_vmlinux1 and .tmp_vmlinux1.BTF.1 files (for an
-ARM kernel) that reproduce the issue here:
-
-https://grimler.se/files/tmp_vmlinux1
-https://grimler.se/files/tmp_vmlinux1.BTF.1
-
-When resolve_btfids is compiled with musl and alpine's toolchain, then
-the following command segfaults roughly 50 % of the time:
-
-tools/bpf/resolve_btfids/resolve_btfids --fatal_warnings --verbose --btf tmp_vmlinux1.BTF.1 tmp_vmlinux1
-
-With a resolve_btfids compiled for glibc it does not segfault, but valgrind still reports invalid reads.
-
-> Thanks!
-
-[1] https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/main/libbpf/APKBUILD#L3
-
-Best regards,
-Henrik Grimler
