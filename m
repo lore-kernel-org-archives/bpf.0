@@ -1,135 +1,81 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F21D3054C7
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 14:49:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37452E7379
+	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 15:01:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783435750; cv=none; b=jypinFsPnNUoq6CTGUDUZtRkKVfzxKtEt3CQ88ugJEelNoTjYYLxtB/vlAf2warO1YogMkYH0wKYtWHM9gx1P6XX1MNrcixZOzTI/1ldxUznqq4wlaYwbLH/7tvqPaxvLm2aBMJ2J86PWpezzyZ/JDFq1bxOguZQAIn8CDDdR5Q=
+	t=1783436499; cv=none; b=s9x4PIYF/w4RPAvK1+9ovLP5MWth9M68bHvhE7OCiYsNDqG8qnyH7q0tt7sfW+IHvdL/AbdIMPf8wcBUHIl5fzgxxW30os5oUrJeR9TMLS29nE0P8rpDtibZf4wDMjlzgTX5O1xy0k3jpNyEATFGBYew2bSgjiun6Fp+N+Sh4j0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783435750; c=relaxed/simple;
-	bh=6cUKWvbX6yq+Fd7Hha2K6IVSzIN5Z/y8Q57VcZlPxY0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=X7YZ9fbJoT1Qne3taO5U79H1eVIA434im/5dD5L3/ELVscPNMmOIV0LQWVQEGe2p+P/F7PlIELiZ8hu9QhBc9Z1ogHF2dlvTm6iBq+UvzzWpwKi3mPZBwL1gjZnmjbd3VLNRHzwTKLNsonEUBYc8raTqoJZsvVGz7F1jtdIxnDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UQy47ERK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783436499; c=relaxed/simple;
+	bh=3mS+KjhdFHDqHMEBVGKCMbWVK2wP3syP9PWdYZ8pKiE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eJzezOIC1+vnrvkh4uycPYhOTePZIIE6wl3rLK3WcmZYP/X8ACEIguZneYphjc+rAlKo0YsbrsPlfg6Zk5qlpm/CJvxId51yKI2Nr6XWvnkKYU5toO2tU3MxO1zenJ1MyAxoG6qDTy8oaKUttueOxiTZqxQNH25oH9zsDJ2DI40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GfXfNO4g; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UQy47ERK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB3151F000E9;
-	Tue,  7 Jul 2026 14:49:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783435748;
-	bh=NEECrIiuPg363T2lMe0+Y4dxEZOgscYxXLQf2360K5c=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UQy47ERKWSKmID8zofKcAZZFyMkBDKTtz5ABYBGkzSHIyfIwiKkgUBUIJJO71jOQe
-	 aMq9xFZoozxNyLntO7lffjMulEiPg4eHKXLCPDLD7K4ie6BlbzKYt1lSrIyz0W/lZK
-	 kzfCUkXXEBR8gD0DW7lT68zrHsTmZjBsMbpdzd6hns29qxn/Daqv1PrO3TZwm5LKQc
-	 Sww+yfUXDo+tubbvaOSXyzFKvdaY5zsq0b3uJxa/dHIp5B1gmW3rHZ/uraNsJcA9c2
-	 waZN0lGnwiI6R0m7AwUhswnyO5h7/0WWVXOiyCbdKyCrsPV7og+GiXrsvrAqyEV3QA
-	 Nre8Gs1Mo1jNg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 5/6] riscv, bpf: Mixing bpf2bpf and
- tailcalls
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pu Lehui" <pulehui@huaweicloud.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260707142219.2871758-6-pulehui@huaweicloud.com>
-References: <20260707142219.2871758-1-pulehui@huaweicloud.com>
- <20260707142219.2871758-6-pulehui@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 07 Jul 2026 14:49:07 +0000
-Message-Id: <20260707144908.AB3151F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GfXfNO4g"
+Message-ID: <10eafa42-1142-4ed2-a485-f46c496bddfb@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783436484;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PuQqxQg7r/xR/o3Ylk2pziM3Ibn3JhprjKIqfkLSpGg=;
+	b=GfXfNO4gP0tGatijwzLh+aPsLu2SAN6EOKMuANhj/xzaS0/RDhvnUt8w5DVXz+NeOTi/n6
+	MLTu26UFbLokzQkxwBjd08vUCCuA2tGyvTXgLprd3wstxgz3nNNVLFyFuUGNAN/ZEZMo6E
+	M5pNQylpw1Hv9qI3V3ceUL6k/JgyHNU=
+Date: Tue, 7 Jul 2026 16:01:13 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH 29/33] bpf: crypto: Use AES-CBC and AES-ECB libraries
+To: Eric Biggers <ebiggers@kernel.org>, linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, bpf <bpf@vger.kernel.org>
+References: <20260707053503.209874-1-ebiggers@kernel.org>
+ <20260707053503.209874-30-ebiggers@kernel.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
+In-Reply-To: <20260707053503.209874-30-ebiggers@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Extension programs (BPF_PROG_TYPE_EXT) targeting subprograms incor=
-rectly reset the Tail Call Counter (TCC), bypassing the tail call limit and=
- allowing infinite loops.
---
+cc +bpf
 
---- Patch [5]: [PATCH bpf-next v5 5/6] riscv, bpf: Mixing bpf2bpf and tailc=
-alls ---
-commit f7082c3640c8a167ff897d3870ee0dd71fc2faab
-Author: Pu Lehui <pulehui@huawei.com>
+On 07/07/2026 06:34, Eric Biggers wrote:
+> BPF crypto was implemented using the lskcipher API, which doesn't seem
+> to be going anywhere.  It supports only "arc4", "cbc(aes)", "ecb(aes)",
+> and only with unoptimized implementations.
+> 
+> Library APIs also have been found to be a much better approach, for a
+> variety of reasons, including reduced overhead, greater flexibility, and
+> having to be explicit about the crypto algorithms that are supported.
+> 
+> We can safely ignore the theoretical "arc4" support in BPF crypto as
+> unused, which leaves "cbc(aes)" and "ecb(aes)".  Why these algorithms
+> were chosen, it's unclear.  Regardless, I'll assume that "cbc(aes)" and
+> "ecb(aes)" need to continue to be supported for backwards compatibility.
 
-riscv, bpf: Mixing bpf2bpf and tailcalls
+That was done for single use case of decrypting small blocks in TC
+layer with "cbc(aes)", with assumption of extending it later.
 
-This commit implements mixed bpf2bpf and tailcalls for the RV64 JIT.
-It changes how the Tail Call Counter (TCC) is passed and preserved,
-storing it in a non-callee saved register and explicitly saving/restoring=20
-it around bpf2bpf calls and tail calls.
+This change looks great, but it would be great to CC bpf folks just to
+be aware of the refactoring.
 
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
-p64.c
-> index 7c6304e0b846a..823262ca47ebf 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
-[ ... ]
-> @@ -1836,10 +1829,18 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn=
-, struct rv_jit_context *ctx,
->  			}
->  		}
-> =20
-> +		/* restore TCC to RV_REG_TCC before bpf2bpf call */
-> +		if (aux->tail_call_reachable && insn->src_reg =3D=3D BPF_PSEUDO_CALL)
-> +			emit_ld(RV_REG_TCC, ctx->tcc_offset, RV_REG_SP, ctx);
-> +
->  		ret =3D emit_call(addr, fixed_addr, ctx);
->  		if (ret)
->  			return ret;
-> =20
-> +		/* store updated TCC back to stack after bpf2bpf call */
-> +		if (aux->tail_call_reachable && insn->src_reg =3D=3D BPF_PSEUDO_CALL)
-> +			emit_sd(RV_REG_SP, ctx->tcc_offset, RV_REG_TCC, ctx);
-> +
+> 
+> There are library APIs for these now, which are much easier to use and
+> more efficient.  Reimplement BPF crypto on top of them, greatly
+> simplifying the code.  As part of this, the bpf_crypto_type abstraction
+> layer is removed, as it's not useful.
+> 
+> Signed-off-by: Eric Biggers <ebiggers@kernel.org>
 
-[Severity: High]
-If the bpf2bpf call jumps to a BPF_PROG_TYPE_EXT program that incorrectly
-reset RV_REG_TCC, will the caller now save that clobbered value to its own
-stack?
+Reviewed-by: Vadim Fedorenko <vadim.fedorenko@linux.dev>
 
-If the TCC is continuously reset to 33 in this manner, could this bypass the
-tail call limit and allow an infinite loop resulting in a CPU soft lockup?
-
->  		if (insn->src_reg !=3D BPF_PSEUDO_CALL)
->  			emit_mv(bpf_to_rv_reg(BPF_REG_0, ctx), RV_REG_A0, ctx);
->  		break;
-[ ... ]
-> @@ -2038,11 +2038,10 @@ void bpf_jit_build_prologue(struct rv_jit_context=
- *ctx, bool is_subprog)
->  	for (i =3D 0; i < RV_FENTRY_NINSNS; i++)
->  		emit(rv_nop(), ctx);
-> =20
-> -	/* First instruction is always setting the tail-call-counter
-> -	 * (TCC) register. This instruction is skipped for tail calls.
-> -	 * Force using a 4-byte (non-compressed) instruction.
-> -	 */
-> -	emit(rv_addi(RV_REG_TCC, RV_REG_ZERO, MAX_TAIL_CALL_CNT), ctx);
-> +	if (!is_subprog)
-> +		emit(rv_addi(RV_REG_TCC, RV_REG_ZERO, MAX_TAIL_CALL_CNT), ctx);
-> +
-
-[Severity: High]
-Does this logic handle BPF_PROG_TYPE_EXT (freplace) programs correctly?
-
-When an extension program is loaded independently and attached to a global
-subprogram of another BPF program, is_subprog will be false because it is t=
-he
-main program of its own object.
-
-Won't this cause the EXT program to unconditionally emit this instruction,
-clobbering the inherited TCC passed in RV_REG_TCC from the caller?
-
-> +	/* tailcall starts here, emit insn before it must be fixed */
-> =20
->  	emit_addi(RV_REG_SP, RV_REG_SP, -stack_adjust, ctx);
->
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707142219.2871=
-758-1-pulehui@huaweicloud.com?part=3D5
