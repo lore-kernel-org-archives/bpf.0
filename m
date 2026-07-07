@@ -1,178 +1,79 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B3F3ADB9B
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 19:45:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9141417D6
+	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 19:48:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783453505; cv=none; b=pHrVMdPp3ZIhxJnoOb7fOd/sMMfGohmmrQB6KC6TmgmzFUzZ4H84eHQYZDlhx5nmFrmitB+cJIYpmfaR7f4VmxsoZeQpxIno8d/9wbYkX5LvUWWzKWYj/C1etUHPaVC1snrPf6BFJGhruWbw8jSwqNxibqwdnzAvaZCClbSvWbM=
+	t=1783453729; cv=none; b=BmZDF6aCxS6IyGcSeXNYrWqoivogJkollM3rHdtBrvFe9wKPvZOkhpXHO8Gkt5zI1YusUiy+1fEVOJrtrr40s6oWbKB84uOHBg+jN1haK3di5HWvmpYhESXVWGPcF908Q9Di9HBAm/LP/gntTfDzsOwxriO4uhSOQvNfs3FhGQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783453505; c=relaxed/simple;
-	bh=vpfGcDaKn93kO0c0pBHut+lxXP6vFT8v6Ae7YDmYrQU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ji/fPoxMNdNBnJZHm86ZPCOWL2UnQy05U3vLOteMrElwNu4MeBMmcXLwgx8iFXJponpkJqNc/Ngt1SCYoO/Rvb35p2jNBf2A6pFijSbx4Sc9Fno4lTb/ZrvYV7w/sTWNi4PBTBArG09k5AFwR471Ip5KFoJGwVWs8gOtL1Kt//M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XA6YjNGE; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783453729; c=relaxed/simple;
+	bh=KMEr6G6Jhg0yV1D501uXoprIpSNEPlUgZU2xfb5qyno=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=oAtiuByBd86vbXkvj0/2USkIzYzHwugwz5aY6iDIz9xUx8Q8W5trLWEz3PIbWHlzlrUw/kMr0OVJupZTTTwb+0pMblgyEwvh2KOZm68eRqpBZJykMjvygIHjdEfXvHo03HS6wahVM0VQGz8atNipL9FdVwRVu/PhCwYqgG9/KOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IpNhJrke; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XA6YjNGE"
-Message-ID: <bec46089-abc2-418e-9b27-34dd9f6d1dde@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783453500;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Fa9GDRjYxkf/DCTXoRTIYtmmpV/5FZvirgY/VRgV3Dg=;
-	b=XA6YjNGECwbiVp7XCLdWtDjDiszb+KoKrNuUEq50kBFjzH2naO39dtx+ZXnoY5ekQOi+wi
-	ysny/gl4qtDZCJXQg1arirNYR0APMwJfNeNmhiubvju/il8C96lBttCZNrRqO6B6fgASKn
-	KHZ9HyHvDuGlXHGhf+ehkd0JX+6dyyU=
-Date: Tue, 7 Jul 2026 12:44:47 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IpNhJrke"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6CD81F000E9;
+	Tue,  7 Jul 2026 19:48:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783453728;
+	bh=0r9il7/fOvS9cwlNJM2AuJDMAmTIYJH8f9kWHrZrwe0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=IpNhJrkeVIGpj1TcxFsql8xZdOi56ys5v38nBCpJspLnj42er9UObtemjIhYE/HxA
+	 X9d9NCyAQXc4AF+sLpuaLRN8nlfYDVYu+ETnprrpW+K5MiFAOJb1e2koPn7SD03wIW
+	 SA9MUpjZ0deZr8Wi9FAwuedNpgATehxtEGyA9emciOqSlC489vamh6h95edOdlnKVh
+	 wEbh+8DpocN+03DpfxyqkFCaEVDbqLEEznoHU5lRVicaV/Hg1+8H1iZMtVgmgkmxTp
+	 neYdmmwOvl3+2qlQKKU4twKoUSY5GCkcmsMxrPtU4sKuPt03qE6P3yt5ZI58E8TN8w
+	 1g7pkXGpbmCyw==
+Content-Type: multipart/mixed; boundary="===============5747701339641280040=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2] resolve_btfids: preserve tag and parameter names when
- processing implicit args
-To: Henrik Grimler <henrik@grimler.se>
-Cc: Aelin Reidel <aelin@mainlining.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20260620-resolve-btfids-implicit-args-use-after-free-v2-1-4132e1f639f0@mainlining.org>
- <0606be50-1f21-438f-bf00-024f31b9eda8@linux.dev>
- <20260707075500.GA10854@localhost>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260707075500.GA10854@localhost>
-Content-Type: text/plain; charset=UTF-8
+Message-Id: <922250504401f5ef6fc3998f372e522c5d1d6791fbb778f8d9d0534d371e4ac7@mail.kernel.org>
+In-Reply-To: <20260707190214.1997705-2-memxor@gmail.com>
+References: <20260707190214.1997705-2-memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/2] bpf: Reject writes through untrusted BTF pointers
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: main.kalliope@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  7 Jul 2026 19:48:47 +0000 (UTC)
+
+--===============5747701339641280040==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 7/7/26 12:55 AM, Henrik Grimler wrote:
-> Hi Ihor,
-> 
-> On Thu, Jun 25, 2026 at 10:26:27PM -0700, Ihor Solodrai wrote:
->> [...]
->>
->> However you have a stable reproducer, so your strdup() change probably
->> covers a real UAF bug somewhere else (in libbpf?).
->>
->> Let's track this down before coming up with a fix.
->>
->> What version/commit of libbpf are you using in your kernel tree?
-> 
-> I use the same build environment as Aelin and get the same issue with
-> resolve_btfids from linux v7.1.1. System libbpf is at v1.7.0 [1] (but
-> I guess this is not relevant? resolve_btfids is not linked against
-> it).
-> 
->> You could build resolve_btfids with ASAN, or run it with valgrind.
-> 
-> Valgrind reports some invalid reads, see log here:
-> https://grimler.se/files/valgrind-resolve-btfids.txt
-> 
-> and if run under gdb I get:
-> 
-> ```
-> $ gdb -ex r --args tools/bpf/resolve_btfids/resolve_btfids --fatal_warnings --verbose --btf .tmp_vmlinux1.BTF.1 .tmp_vmlinux1
-> [ ... ]
-> found kfunc tcp_reno_ssthresh in BTF_ID_FLAGS bpf_tcp_ca_check_kfunc_ids
-> found kfunc tcp_reno_undo_cwnd in BTF_ID_FLAGS bpf_tcp_ca_check_kfunc_ids
-> found kfunc tcp_slow_start in BTF_ID_FLAGS bpf_tcp_ca_check_kfunc_ids
-> resolve_btfids: function bpf_list_push_back_impl already exists in BTF
-> 
-> Program received signal SIGSEGV, Segmentation fault.
-> 0x00007ffff7f7aaa0 in memcpy (dest=0x7fffebb05a93, src=<optimized out>, n=5) at src/string/memcpy.c:23
-> warning: 23     src/string/memcpy.c: No such file or directory
-> (gdb) bt
-> #0  0x00007ffff7f7aaa0 in memcpy (dest=0x7fffebb05a93, src=<optimized out>, n=5) at src/string/memcpy.c:23
-> #1  0x000055555559865b in _ZL6memcpyPvU17pass_object_size0PKvU17pass_object_size0m (__od=0x7fffeb115c71, __os=0x7fffeb115c71, __n=5) at /usr/include/fortify/string.h:57
-> #2  strset__add_str (set=0x7fffebb85fd0, s=s@entry=0x7fffeb115c71 <error: Cannot access memory at address 0x7fffeb115c71>) at strset.c:162
-> #3  0x0000555555587b2c in btf__add_str (btf=btf@entry=0x7fffebb860a0, s=0x7fffeb115c71 <error: Cannot access memory at address 0x7fffeb115c71>) at btf.c:2109
-> #4  0x00005555555898b1 in btf__add_func_param (btf=0x7fffebb860a0, name=0x7fffeb115c71 <error: Cannot access memory at address 0x7fffeb115c71>, type_id=11011) at btf.c:3108
-> #5  0x000055555555de50 in process_kfunc_with_implicit_args (ctx=0x7fffffffd7d0, kfunc=0x7fffebb739a0) at main.c:1196
-> #6  0x000055555555cc02 in btf2btf (obj=0x7fffffffd868) at main.c:1229
-> #7  0x000055555555b869 in main (argc=1, argv=0x7fffffffec08) at main.c:1535
-> ```
-> 
->> If you can share a reproducer that's easy to run, that would be
->> great too.
-> 
-> I have uploaded .tmp_vmlinux1 and .tmp_vmlinux1.BTF.1 files (for an
-> ARM kernel) that reproduce the issue here:
-> 
-> https://grimler.se/files/tmp_vmlinux1
-> https://grimler.se/files/tmp_vmlinux1.BTF.1
+> check_ptr_to_btf_access() lets program-type btf_struct_access callbacks
+> validate writes before the default BTF access path rejects non-read
+> accesses. That bypasses the read-only policy for untrusted BTF pointers
+> created by helpers such as bpf_rdonly_cast().
+>
+> Reject non-read accesses through PTR_UNTRUSTED BTF pointers at the
+> common entry point, before the callback branch to handle all cases.
+>
+> Signed-off-by: Nicholas Dudar <main.kalliope@gmail.com>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-Hi Henrik,
+This fixes a write path that bypassed the read-only policy for untrusted
+BTF pointers, but there is no Fixes: tag.
 
-Thanks for the reproducer and the logs, very helpful.
-The crash you hit is a real UAF that was recently fixed in libbpf:
+The write-dispatch branch that took precedence over the untrusted
+read-only check in check_ptr_to_btf_access(), along with the "but not for
+untrusted PTR_TO_BTF_ID | MEM_ALLOC" comment that this patch removes, was
+added when program allocated objects support was introduced.
 
-    b23705e6afb6 ("libbpf: Fix UAF in strset__add_str()") [1]
+Should this include:
 
-strset__add_str() reallocs its buffer, then copies from a string that
-may point into that same buffer (what btf__name_by_offset() returns)
-dangling after the realloc.
+  Fixes: 282de143ead9 ("bpf: Introduce allocated objects support")
 
-I ran unpatched resolve_btfids under valgrind on your binaries,
-toggling only b23705e6afb6.
 
-Reverting b23705e6afb6:
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-    Invalid read of size 1
-       at memmove
-       by strset__add_str (strset.c:162)
-       by btf__add_str (btf.c:2109)
-       by btf__add_func_param (btf.c:3118)
-       by process_kfunc_with_implicit_args (main.c:1196)
-       by btf2btf (main.c:1229)
-       by main (main.c:1535)
-     Address 0x11dfb901 is 22,721 bytes inside a block of size 1,787,619 free'd
-       at realloc
-       by libbpf_add_mem (btf.c:224)
-       by strset_add_str_mem (strset.c:106)
-       by strset__add_str (strset.c:157)
-
-      [...]
-
-    ERROR SUMMARY: 5 errors from 2 contexts
-
-With b23705e6afb6 there are no errors.
-
-resolve_btfids statically links the in-tree tools/lib/bpf, so system
-libbpf 1.7.0 is irrelevant, as you correctly noted. v7.1.1 predates
-b23705e6afb6, which is why you are seeing the crash. It's been merged
-into 7.2-rc1, so it will be in the 7.2 release.
-
-I suggest you apply b23705e6afb6 for your build.
-
-Let's drop this resolve_btfids patch, since the root cause has already been fixed.
-
-Thank you!
-
-[1] https://lore.kernel.org/bpf/20260523162722.2718940-1-cmllamas@google.com/
-
-> 
-> When resolve_btfids is compiled with musl and alpine's toolchain, then
-> the following command segfaults roughly 50 % of the time:
-> 
-> tools/bpf/resolve_btfids/resolve_btfids --fatal_warnings --verbose --btf tmp_vmlinux1.BTF.1 tmp_vmlinux1
-> 
-> With a resolve_btfids compiled for glibc it does not segfault, but valgrind still reports invalid reads.
-> 
->> Thanks!
-> 
-> [1] https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/main/libbpf/APKBUILD#L3
-> 
-> Best regards,
-> Henrik Grimler
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28892378159
+--===============5747701339641280040==--
