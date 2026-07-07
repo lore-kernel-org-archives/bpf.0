@@ -1,110 +1,118 @@
-Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99A435F197;
-	Tue,  7 Jul 2026 02:30:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F293769EA;
+	Tue,  7 Jul 2026 04:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783391419; cv=none; b=SxqU8w+iSXCjDskGxHVBNFM3HPj9a+PmYvjjuhNzPztSbGaV0RPFRmDbJKgr4achmS8qtrVKpakToTLgwSlKqgNOIW9ZSmbxi6SpIqH6KcItDg3aIc1v4xk4jpsIH8jv6+L5SWY/0//BS5t4qYD7x6BP+lFJz8wf082MKD3AfMw=
+	t=1783398308; cv=none; b=ChL7CHwn5w9B3wjasZxaZ1Py7z2v8g3gRclVvCqpIqsdn1EEoe49fVnpWJ1A5IlKeIwbFeiUJadKINIBIGIly7UX4G3cSHY/Pd05pM8pA2yohPnSB5BAW9MLvi/p/ZNJTxYTRizysoR1ZQAuDGO8Y74FOU7SJuWpN1ykPGPl1Gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783391419; c=relaxed/simple;
-	bh=Knj3+Nkn4tycrPczd5i2ZsJyeYTbthvI/jr0YaPZGqs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=oETzhvkiOH4QSGIXlnsjiYLLSYfjpzUf2PpBIi7DKei65g3qSRT3vO9n6v8G0GkGgoZtu/GNFlaQdIKRO4dSjUpxFY7v03qR6oKGS5jz8FvtT2CWhw61gyAU81vALQ1KJtFZJal/99tNuHn+52pucoNDpLqibhQZjVE2vILAuG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=3TSi2fud; arc=none smtp.client-ip=113.46.200.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1783398308; c=relaxed/simple;
+	bh=85tq27hLD+jzwy3TCziJfyDxd7YsbuuJAEaNgXrCMDc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=cAmSIRd0vGui9WrTnMngRSHPsLvJRng44cK5yKbUESzorxe/EUSKu643S8LbSGP7WbJNSe4HzQ9N67cW1b4dj00D2lNMmL3ENh0TjHfO+VAUxTnyXsGJup1UFYYF0/xgFdu8dzByNUDAo6mwYIpnx7s87akmJJyvpIVTW7895XA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=e78bz5uy; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="3TSi2fud"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=7heSrC/IM7vJFta8mTohU08Ode+2cW0PEDQBN7m9SKM=;
-	b=3TSi2fudV+vFK8dyTFS/nc6dVlhHwt9ig4G6UYLObCbHfzLR9e35Qs5UatZbXBmhTu4R83fdE
-	vcb2ZbH06KEfISowNhH8/OyAiAv0e+T8C9v7v+M3pRqyKIGBQkyLNXuZr2WRrfgJ1JXPWEI4PSs
-	Z9XkVIS/izPkEP2qGYrhhVI=
-Received: from mail.maildlp.com (unknown [172.19.163.214])
-	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4gvQ200pwNzmVZt;
-	Tue,  7 Jul 2026 10:20:56 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8358A4056C;
-	Tue,  7 Jul 2026 10:30:09 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Tue, 7 Jul
- 2026 10:30:08 +0800
-Message-ID: <fa8a040f-64c4-484f-9538-fb0ec287639f@huawei.com>
-Date: Tue, 7 Jul 2026 10:30:08 +0800
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="e78bz5uy"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1wgxMa-00Dei1-F3; Tue, 07 Jul 2026 06:24:52 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
+	bh=tKhC+vAaiVHEXEq4FWXbZp0M6pkOOXe+U7ki5CbA0tc=; b=e78bz5uyJHHDEk1z7QSv5njRBF
+	tr3upiv/BLQ6TgGFTo4gPWNJHYfL9y/5QTtQ0KUmUuk6hYVeVpbpLzIkxAwDZzVFeJbMcYYcy/U0v
+	G5+f9JSAjQFfuid9jW2lhx2YdDokw/7qLzUG7E9qsZ5BdAobjPIxDrejLyq0U+ylhE1EKHTG9b2uW
+	H+xW443IRQFMP+c9zVhByeyKbyDOlbIeDNxQ/eQjodQRzSGMEBz/y489cIn3w9Cv1tOk+dNc98pzZ
+	YXBPcqzsgVpEAphS5RpmtvA2MTrDBgdsglYY3IcrGDFEmgMUpJuU8MBBJJHYQkmDYiBDfB3GH2igX
+	oZT5CC/A==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1wgxMY-00076O-Qb; Tue, 07 Jul 2026 06:24:50 +0200
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.95)
+	id 1wgxMP-00Ctdi-O2;
+	Tue, 07 Jul 2026 06:24:41 +0200
+From: Michal Luczaj <mhal@rbox.co>
+Date: Tue, 07 Jul 2026 06:23:56 +0200
+Subject: [PATCH bpf v4 1/4] selftests/bpf: Ensure UDP sockets are bound
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 1/3] riscv, bpf: Add support for BPF_SDIV and
- BPF_SMOD in RV32 JIT
-Content-Language: en-US
-To: <bot+bpf-ci@kernel.org>
-CC: <visitorckw@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-	<andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
-	<luke.r.nels@gmail.com>, <xi.wang@gmail.com>, <pjw@kernel.org>,
-	<palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <martin.lau@linux.dev>,
-	<song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
-	<emil@etsalapatis.com>, <alex@ghiti.fr>, <jserv@ccns.ncku.edu.tw>,
-	<eleanor15x@gmail.com>, <marscheng@google.com>, <bpf@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<martin.lau@kernel.org>, <clm@meta.com>, <ihor.solodrai@linux.dev>
-References: <20260706172846.3876436-2-visitorckw@gmail.com>
- <2ed385399f170538acc571665dca8036ccaa85dd1b9dfe987d8c7d566f59e8e5@mail.kernel.org>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <2ed385399f170538acc571665dca8036ccaa85dd1b9dfe987d8c7d566f59e8e5@mail.kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- kwepemf100007.china.huawei.com (7.202.181.221)
+Message-Id: <20260707-sockmap-lookup-udp-leak-v4-1-f878346f27ab@rbox.co>
+References: <20260707-sockmap-lookup-udp-leak-v4-0-f878346f27ab@rbox.co>
+In-Reply-To: <20260707-sockmap-lookup-udp-leak-v4-0-f878346f27ab@rbox.co>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, 
+ Jiayuan Chen <jiayuan.chen@linux.dev>, Eric Dumazet <edumazet@google.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Simon Horman <horms@kernel.org>, Cong Wang <cong.wang@bytedance.com>
+Cc: Michal Luczaj <mhal@rbox.co>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org
+X-Mailer: b4 0.15.2
 
+Update sockmap_basic tests to bind sockets before they are used. This
+accommodates the recent change in sockmap that rejects unbound UDP sockets.
 
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
+---
+ tools/testing/selftests/bpf/prog_tests/sockmap_basic.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On 2026/7/7 2:12, bot+bpf-ci@kernel.org wrote:
->> commit c5a973b7fc82eeb9b84aaf80fc2673a94ab795b2
->> Author: Kuan-Wei Chiu <visitorckw@gmail.com>
->>
->>      riscv, bpf: Add support for BPF_SDIV and BPF_SMOD in RV32 JIT
->>
->>      The current rv32 bpf jit compiler incorrectly treats BPF_SDIV and
->>      BPF_SMOD as unsigned operations. The BPF instruction set allows
->>      signed division and modulo by reusing the BPF_DIV and BPF_MOD opcodes
->>      with the instruction offset set to 1.
->>
->>      Update the emit_alu_r32() function to accept an 'is_sdiv' variable and
->>      emit the correct div and rem instructions when the offset is 1.
->>
->>      Before this patch:
->>      [   44.161771] test_bpf: #165 ALU_SDIV_X: -6 / 2 = -3 jited:1 ret 2147483645 != -3 (0x7ffffffd != 0xfffffffd)FAIL (1 times)
->>      [   44.167385] test_bpf: #166 ALU_SDIV_K: -6 / 2 = -3 jited:1 ret 2147483645 != -3 (0x7ffffffd != 0xfffffffd)FAIL (1 times)
->>      [   44.171053] test_bpf: #169 ALU_SMOD_X: -7 % 2 = -1 jited:1 ret 1 != -1 (0x1 != 0xffffffff)FAIL (1 times)
->>      [   44.172081] test_bpf: #170 ALU_SMOD_K: -7 % 2 = -1 jited:1 ret 1 != -1 (0x1 != 0xffffffff)FAIL (1 times)
->>
->>      After this patch:
->>      [   16.002192] test_bpf: #165 ALU_SDIV_X: -6 / 2 = -3 jited:1 95 PASS
->>      [   16.002983] test_bpf: #166 ALU_SDIV_K: -6 / 2 = -3 jited:1 1059 PASS
->>      [   16.017167] test_bpf: #169 ALU_SMOD_X: -7 % 2 = -1 jited:1 136 PASS
->>      [   16.023002] test_bpf: #170 ALU_SMOD_K: -7 % 2 = -1 jited:1 109 PASS
->>
->>      Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
-> 
-> This looks like a bug fix for the original RV32 BPF JIT implementation.
-> Should this include:
-> 
->    Fixes: 5f316b65e99f ("riscv, bpf: Add RV32G eBPF JIT")
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index cb3229711f93..2d22a9058a8e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -853,7 +853,7 @@ static void test_sockmap_many_socket(void)
+ 		return;
+ 	}
+ 
+-	udp = xsocket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, 0);
++	udp = socket_loopback(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK);
+ 	if (udp < 0) {
+ 		close(dgram);
+ 		close(tcp);
+@@ -922,7 +922,7 @@ static void test_sockmap_many_maps(void)
+ 		return;
+ 	}
+ 
+-	udp = xsocket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, 0);
++	udp = socket_loopback(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK);
+ 	if (udp < 0) {
+ 		close(dgram);
+ 		close(tcp);
+@@ -993,7 +993,7 @@ static void test_sockmap_same_sock(void)
+ 		return;
+ 	}
+ 
+-	udp = xsocket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, 0);
++	udp = socket_loopback(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK);
+ 	if (udp < 0) {
+ 		close(dgram);
+ 		close(tcp);
 
-not need to add fixes tag, as this not a bugfix
+-- 
+2.55.0
 
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28811594040
