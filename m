@@ -1,38 +1,38 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184B42E7F3E
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 13:44:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE063F39FB
+	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 14:05:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783431896; cv=none; b=lu2sQ8MUOHhSV+cYxwfYe8dQi8gixF4a6E/PiO1re/hJjcNi8PSN9N4k/tlEWONrcc4lWRFMFjxWzCvaYg+euwIHUeiSq/1kGP/m3at1QUEBZB0A7aLPLf1IcVYSEzgmyDmjgXan99B0Dv2x8s1Q8n2gGS15sjK1r0AVifxz/0E=
+	t=1783433108; cv=none; b=G/jutvE6UmbOfBnn0dbOR/WftILRdotsvLuDVQ38NuAeskmOaFtByGz/4GRduSOhf6v6IbYtRkT3yHkdAKpzsfE/RvecLJj4TpPe6nZtk9d+99G5N3sQqEDco6of08DhtbikfpyINtMmm0qS7AiTl6TGdbQX/B4s6GA0yhilGJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783431896; c=relaxed/simple;
-	bh=oTiKwW6pCc4LynyVt+qdpFUE2EDKuult/l7+T/efMbs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Subject:Cc:From:
-	 References:In-Reply-To; b=C8EFZT6Wy0JlkYSmZ7manPFfFdCUS5CbCu+nraLBwYcVtyl0Vvo7d6PHQ6YCaZAjauqsCa06mx0J0sqM9Riz9SuqcgdOm+bxnmbB09wHL55mGw4vTq0adqn5Ueve8B8DiVxIyRJnJ0Z6fTgs/s1mLDU3vrJ1do+RKNqwoJI0OAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GdHz5GMK; arc=none smtp.client-ip=185.171.202.116
+	s=arc-20240116; t=1783433108; c=relaxed/simple;
+	bh=pEFT6WeztpCTvfIFAjJAcG1cKkrs/gnI4BG5N0hY8CY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=Xk6cs50WPSPizVAq6MLtaSvBcgK0wUQatr6+ut0Tz9+QAMgA0jwgSYWFZjxEtecubQdff4h23uTqpEwrQu5RDNugOFxUi5NasilZsI7H+tNGQOW+NDRehPciFHrAk+y6UBiH6ZNY1o+dm4CMtqXFOfXpmd1kstiuD80muRBTVRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YpsiodHL; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GdHz5GMK"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YpsiodHL"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id EE3F6C8F1ED
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 13:45:04 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 360491A0EB6;
+	Tue,  7 Jul 2026 14:05:05 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 70CA660333;
-	Tue,  7 Jul 2026 13:44:51 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7CF5311BC24C6;
-	Tue,  7 Jul 2026 15:44:50 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 01CAE60333;
+	Tue,  7 Jul 2026 14:05:05 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4992E11BC01F8;
+	Tue,  7 Jul 2026 16:04:57 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1783431890; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1783433103; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=VRo3P7DD6QD27F8dM4vTbI4FMsYN5ProobK7FQGLKiQ=;
-	b=GdHz5GMKhtEd4hLCi5bnUcKCnqPAPmmcLPkuDhATdB297NRgGm59bWzCK8VokIpM+AKQ/T
-	x76+h5Mgc/ehiRjNwuiLqHDuZim3RB94SfaxMc5KPCnbZNb/sDRbe5gon5aiWme5gQgMI5
-	m+Y+lMvIfJEw5Aa3Yg7SNpRv3ZNCPy6uBUKecoMIzCMIon0WLkrM3OKgqKmIAyP8BkgrtY
-	WBUBb+Rq52mIGG90+Hy+GJaw19GeKEpeQRaUwnbayKIXPcQAVt7ZF7cwPs2eLoZryIinDB
-	XX4cLNtRUA4ZgStBMgtCMlKMJwEz1FQNbdvNKYp69TLstT5+Hbx39QnDH3S7FA==
+	bh=lcSDRtHq3Dpy3y/yyenKBFvLuGnIqUD0sdDpTe70hjs=;
+	b=YpsiodHLF4Fu2CN3/Ve3t0/lbJHwGcj0987mu1gwRA7IKBWIc1IS7PHhyc6+qLhrqKSMyj
+	xB8drnJHM5Vn6NNZ30y2N25GBvL9+hYZnmyt+eB6z+p/qZI7e3td929fAczfho+EFtfp1K
+	0dQvMPdUYy4jKaM4Y4azETEHdCJStY8bME1sQsxWoBtfg741R/kVsXr3BTRCqXvCAuXRFI
+	DgykAWTAKixa+TtmoPGGdW72zYb+UKXo3nvi6zoODu5387/6BmEv7RVg8raDTu9cQN0CZK
+	9bKzWP0+cul/H79GfGTFFdzx4wSPcLE/26ftqKtxOQq3sqlIFsQeNVEZydjYJQ==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -41,43 +41,31 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 07 Jul 2026 15:44:49 +0200
-Message-Id: <DJSDUBPVUJJ7.1A26I1W2L6RLH@bootlin.com>
-To: <sashiko-reviews@lists.linux.dev>
+Date: Tue, 07 Jul 2026 16:04:56 +0200
+Message-Id: <DJSE9Q4E27GM.1V83GRFWOE4E2@bootlin.com>
 Subject: Re: [PATCH bpf-next v3 04/10] bpf, x86: add helper to emit kasan
  checks in x86 JITed programs
-Cc: <bpf@vger.kernel.org>
+Cc: <ebpf@linuxfoundation.org>, <bastien.curutchet@bootlin.com>,
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <martin.lau@kernel.org>, <clm@meta.com>, <ihor.solodrai@linux.dev>
 From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: <bot+bpf-ci@kernel.org>, <alexis.lothore@bootlin.com>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
+ <martin.lau@linux.dev>, <eddyz87@gmail.com>, <memxor@gmail.com>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
+ <tglx@kernel.org>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+ <x86@kernel.org>, <hpa@zytor.com>, <shuah@kernel.org>, <mingo@redhat.com>,
+ <andreyknvl@gmail.com>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260701-kasan-v3-0-bd09bb942d86@bootlin.com>
- <20260701-kasan-v3-4-bd09bb942d86@bootlin.com>
- <20260701101645.D14D21F000E9@smtp.kernel.org>
-In-Reply-To: <20260701101645.D14D21F000E9@smtp.kernel.org>
+References: <20260701-kasan-v3-4-bd09bb942d86@bootlin.com>
+ <d173a3958e4fb9cfe928b4ecfb7799ffaf12029cdde1a1d9c493c5ecba1e9b7f@mail.kernel.org>
+In-Reply-To: <d173a3958e4fb9cfe928b4ecfb7799ffaf12029cdde1a1d9c493c5ecba1e9b7f@mail.kernel.org>
 X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed Jul 1, 2026 at 12:16 PM CEST, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Critical] emit_kasan_check() fails to save BPF_REG_AX (R10), leading t=
-o memory corruption when combined with constant blinding.
-> --
->
-> commit 4c7e1a72bec793ca4ed19fd754408dd627715a3c
-> Author: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.com=
->
->
-> bpf, x86: add helper to emit kasan checks in x86 JITed programs
->
-> This patch adds emit_kasan_check() to emit KASAN shadow memory checks bef=
-ore
-> memory accesses in x86 JIT-compiled BPF programs. The helper saves tempor=
-ary
-> registers before calling the KASAN functions, but deliberately omits r10 =
-and
-> r11 to reduce overhead.
->
+On Wed Jul 1, 2026 at 12:44 PM CEST, bot+bpf-ci wrote:
 >> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> index 054e043ffcd22..68c5f9f94e5e2 100644
+>> index 054e043ffcd2..68c5f9f94e5e 100644
 >> --- a/arch/x86/net/bpf_jit_comp.c
 >> +++ b/arch/x86/net/bpf_jit_comp.c
 >
@@ -85,80 +73,44 @@ and
 >
 >> @@ -1110,6 +1121,90 @@ static void maybe_emit_1mod(u8 **pprog, u32 reg, =
 bool is64)
->>  	*pprog =3D prog;
->>  }
->> =20
->> +static int emit_kasan_check(struct bpf_verifier_env *env, u8 **pprog,
->> +			    u32 addr_reg, struct bpf_insn *insn, u8 *ip,
->> +			    bool is_write, bool accesses_stack_only)
->> +{
 >
 > [ ... ]
 >
+>> +	/* Save rax */
+>> +	EMIT1(0x50);
+>> +	/* Save rcx */
+>> +	EMIT1(0x51);
+>> +	/* Save rdx */
+>> +	EMIT1(0x52);
+>> +	/* Save rsi */
+>> +	EMIT1(0x56);
+>> +	/* Save rdi */
+>> +	EMIT1(0x57);
 >> +	/* Save r8 */
 >> +	EMIT2(0x41, 0x50);
 >> +	/* Save r9 */
 >> +	EMIT2(0x41, 0x51);
->> +
->
-> [Severity: Critical]
-> Can this lead to data corruption when BPF constant blinding is enabled?
->
-> The commit message notes that r10 and r11 are skipped here to reduce
-> overhead. However, when constant blinding is enabled, bpf_jit_blind_insn(=
-)
-> in kernel/bpf/core.c translates BPF_ST_MEM into a sequence that uses
-> BPF_REG_AX (which maps to x86's r10) as the source register:
->
-> kernel/bpf/core.c:bpf_jit_blind_insn() {
->         ...
->         case BPF_ST | BPF_MEM | BPF_DW:
->                 *to++ =3D BPF_ALU64_IMM(BPF_MOV, BPF_REG_AX, imm_rnd ^ fr=
-om->imm);
->                 *to++ =3D BPF_ALU64_IMM(BPF_XOR, BPF_REG_AX, imm_rnd);
->                 *to++ =3D BPF_STX_MEM(from->code, from->dst_reg, BPF_REG_=
-AX,
->                                     from->off);
->         ...
-> }
->
-> When do_jit() processes this BPF_STX_MEM, it first calls emit_kasan_check=
-(),
-> which invokes the C function __asan_storeX. Since __asan_storeX is a stan=
-dard
-> C function, it is permitted by the System V AMD64 ABI to clobber caller-s=
-aved
-> registers like r10.
->
-> Upon returning from the KASAN check, r10 might contain garbage. Then do_j=
-it()
-> calls emit_stx() which will use this clobbered r10 as the data to be writ=
-ten,
-> potentially writing corrupted data to memory.
->
-> Should BPF_REG_AX (r10) be explicitly saved and restored here to prevent =
-this?
->
->> +	/* mov rdi, addr_reg */
->> +	EMIT_mov(BPF_REG_1, addr_reg);
->> +
-
-Sashiko keeps on raising concerns on r10/r11 being possibly clobbered by
-_asan functions. It has been suggested in the RFC to drop those
-registers, and I have already given a few elements here ([1]) and
-proposed to keep those skipped anyway. No one raised complaints about
-this so far, so unless it changes, I'll keep those registers skipped.
-
-Alexis
-
-[1] https://lore.kernel.org/all/DJ5HDX2K5CTF.YRZ9TDI6QCII@bootlin.com/
-
-
 >
 > [ ... ]
+>
+>> +	EMIT2(0x41, 0x59);
+>> +	EMIT2(0x41, 0x58);
+>> +	EMIT1(0x5F);
+>> +	EMIT1(0x5E);
+>> +	EMIT1(0x5A);
+>> +	EMIT1(0x59);
+>> +	EMIT1(0x58);
+>
+> This isn't a bug, but the save block annotates each push with its target
+> register (/* Save rax */, /* Save rcx */, ... /* Save r9 */), while the
+> matching restore block emits the seven pops with no comments at all.
+> Would adding the mirrored comments here (/* Restore r9 */, /* Restore r8 =
+*/,
+> ... /* Restore rax */) make the push/pop symmetry easier to check at a
+> glance?
 
-
-
+I am not convinced this brings much value, aside from adding more noise
+around the code.
 
 --=20
 Alexis Lothor=C3=A9, Bootlin
