@@ -1,139 +1,151 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2CF19CD0A
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 00:17:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2606B1684BE
+	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 00:21:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783383476; cv=none; b=KwT5HA7IjXEQ1gViSlPHg0Ddbvt7L6d33CGnHf7n8/rIM7ki2qeUybQb6VP4BqJbP1+negRrdJHp+BK7EHtp2NKYb8wr6t5qfg+4DdHa+OUfoKR0AWV+aeA/sMpyv2INJuxBZtEDNzCy38HUha+JbFmR9JIUn6b32zsYUCf8m64=
+	t=1783383667; cv=none; b=EObIP1yq7x8N5SgTvB/bVaLb+26ovYbJZ5rQ+EoaPJ4hIloYNkUU3u/AiDhq+1Q5aVFYgBzDmIZDSxf4nINbn0I+C4Xh4jiK/pM/0tXcE8peb15TrKTugBz6Bk2XnG5nT/nhACICbMH1TfSHwVVyEpgAMsRa/sbUSEhTc+6PhTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783383476; c=relaxed/simple;
-	bh=af72MIiNPASyMrPenWUlckSQNn+OURdtih1H9LpKlI4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LuqzwfvADIkm0I6+QlD4vj6g+jHBkzAs0cRtZTfi6Fm/EysjYD9GnKwBH+SmOsF4HFmJMtIJ5ykySKniB3TiO8xthhkkGtOnAOX8WJoVb9BjgMKe4BmEKh2+rqrvnfRwSwBgqv4SqovjbPYjwvsV49QVRg3QZBmLnK3ZH4Qr4m8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P2UChFPG; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783383667; c=relaxed/simple;
+	bh=miE+Y3WH60BzchHqGCDajC/ToVfvReRugfPL1D/wSno=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=dqzA9CIERqH/tCKOo/4wUwILjvukngs48pQIdtUKC99CRfcwNCZGnVNYgRaBtAUjfGfgvoTRxr10FisVs7gQJW1pJQRG05OQZb1DOkOp6b2QoM+aBu129ziIM9UELeUiP2rDEy8n34sbSAluxUMzOpNG7mNQ6g6s9SSnWZppEWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Skd6aLEV; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P2UChFPG"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-37df72c9984so3500106a91.3
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 17:17:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Skd6aLEV"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-842338c18e0so2931165b3a.1
+        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 17:21:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783383474; x=1783988274; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=NlYk0sNL0UkMJvtmh539AMWShHtruvV8sV0IdItG1l0=;
-        b=P2UChFPGk+gSselBw1l9QAitcDVL1UVr1rYuMfJAJp/H02DWIazkdCjUUQTqDHR+wE
-         gsPUm8oUz0Zdppyc1D7a6HBcy/zWtuvdA4up6FOx7SN3MJD5HSFAoBCvO9DumA5mg0Lw
-         a42EdP/KKa3XN/SOvd+wF5IuQrDFnPPrZJOouz0o952YAmIypE1+6eyCRtyWTv7I0n+R
-         u8tKEWp751lwecHjOhLXsn2Q/pxCtAVVWWyCaIYGu8wO3+zG4YOwwSiEhFgeKp4XFoo+
-         A8LwOVhCR0g0Os0yfMwZVSfh4fhRqxbQa51HnhL2FnR8wYxvWBW/MSwOnOfutcQjzdK+
-         f0zQ==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783383665; x=1783988465; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=4KanqF3ysTPoeu0lvcWR2n04d9CNPHluxwpkP6XXJRY=;
+        b=Skd6aLEVJXWzdJJ6/ktE8A1ndNPrYJ5821pDiPDkZa9k5kJX/4HhKrzT+3qmPbPGKU
+         DO/JomHl/q7zBw5q1Kkcs4Y7Qf3QtosNWGwpglJzXzTeiTqkCjpUWCGbJxRqP9l/812R
+         4PeNHJGP+03bxGqQS850wV/LfKf7VEoBC+r5KTHXBCVrRFqKTSHUh+E5uEAlBk1yGgKN
+         N8N79vLYv9p5GjAgu1PVgNM+kxVFjUpiZ3BN5RkQ1QR5oB6sPcTNGLHkPo8yfJZ7teaT
+         BobkCRUZGlM++LtySI1NVch6gVSZaB/6npYrevqmgmYJDwUPG0iMTXEFF8LGt+7hvCx3
+         ZTgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783383474; x=1783988274;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NlYk0sNL0UkMJvtmh539AMWShHtruvV8sV0IdItG1l0=;
-        b=gGeBkpO69eg3t+EhUH2ITDsBXAzjX9stjFo3LHsp5c7FbxstjPT8C5RQN4t8claiR1
-         xWcnf8ko7CmVKSArEM7jGufVLbg492ma2LXxtZkqLOwrOPf3MB6WmjyHqRwgRUJFeRCL
-         eqFF4w7Ir4g+0nSB4no4qaZx76d0q10+5119m2zcYMKENk6AakRBhLjk6T5NstUUWRb6
-         tDzOob1tpZvTmGSC31vl8AP4ckf/yxEW/vJTrxbvrz3L6nnUY3iiB2QlnlMvTCoSbVer
-         3xNLBJT6BnDsHiyus+1zuQkcmyu+CAfwirvjD2axL6CdFp4wqhVbpmweM9/iwtVb8sTi
-         H9XQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpW82BDPjLHIQYP12z+3Ps49W+AunuBhi1eDUD/UZ8Q7qW628HlmlgfDR4pU/ViUF+Su54=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywfa/Rn5xEndEsesXoGqTxjQanuZx7Lm9J3NSU0r4GdeeLiBYPS
-	UKmPxsCCl00N6PfSkyhAWuAkhbBVruovZ6JIeEfclS8zK5Ot8W6BJWYb
-X-Gm-Gg: AfdE7cm70Y7MIaDSMra2SrqZqyJ84AXijwdROobEFkLvEJXUaUqSDq4SVrJpTipLIuw
-	+SCIfDgcUZnKq3994uqW9wWHKQY4MKLsE0/tf+DGeP4YmcLbdEore7vGNUnqtE4qREEtxlWTqlZ
-	aUs1xU0LCASNpxEnvztGm4oBu3FYJVucTKMUbax5Olpz+Lws6/tinbZa9H/MOIXPgrR1/XVKaY4
-	ds5WqoAecyRs/MCTqHuHCzW4aUV0sHgN9BGVF4Se0s6oC16VwZ+CnmTFa1kTvHEiqq/FBuF2uQf
-	WwEtnA9yQXB7grKeou4kA7bQI3NiRkZA9cts+JhJ5mB3I7S7wXv9WQJpy6aWkp72b5Cqnp/T9Uh
-	AuxqNbneRYDutaIiJHrlzJjdcH1Qz09xMI0z64Xd2BQBedo1ZAudraAamr7C4k0R5pzBHI/HaBg
-	j4wDbdhjhQ7VFFD4OiX2O2xlaOud6qgZdYCOhV0g7Bu8785uI3XdaakaaP1rLAo8d8Rue4Uw==
-X-Received: by 2002:a17:90b:1845:b0:37f:9cdf:f0ad with SMTP id 98e67ed59e1d1-38757d76999mr2730666a91.28.1783383474243;
-        Mon, 06 Jul 2026 17:17:54 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:275a:65bb:602c:da1d? ([2620:10d:c090:500::1:7696])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31174a89a89sm1783645eec.20.2026.07.06.17.17.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 17:17:53 -0700 (PDT)
-Message-ID: <bc12730fe6eccde10d36e6544607ae2464357e05.camel@gmail.com>
-Subject: Re: [PATCH 0/3] selftests/bpf: compare BPF and memory.stat memcg
- stat readers
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ziyang Men <ziyang.meme@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
-  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>,
- bpf@vger.kernel.org, shakeel.butt@linux.dev
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil
- Tsalapatis <emil@etsalapatis.com>,  Shuah Khan <shuah@kernel.org>, Roman
- Gushchin <roman.gushchin@linux.dev>, kernel-team@meta.com, 
-	linux-mm@kvack.org, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, 	linux-kernel@vger.kernel.org, Shakeel
- Butt <shakeel.butt@linux.dev>
-Date: Mon, 06 Jul 2026 17:17:50 -0700
-In-Reply-To: <20260704045617.487664-1-ziyang.meme@gmail.com>
-References: <20260704045617.487664-1-ziyang.meme@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+        d=1e100.net; s=20251104; t=1783383665; x=1783988465;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=4KanqF3ysTPoeu0lvcWR2n04d9CNPHluxwpkP6XXJRY=;
+        b=Oyu31vqIn6JRVIk0uq8dywnzJ6XTPcR+0OMDZhAwxJvy9t91zbkdt7Ll62bhFJBHyx
+         7XC6K7JlW4hUFMDqSSCf3Dnll6T8lFgp2pjGA3IvmjT3/ur1iFaTCnZ0BHpAb/PH3ucH
+         LjNb7NaOu9HjIo3sE3NaCuOzCYnJX0kMc1R8TuTBbVJ8u4s8GNB/JSfyAU8fJJ6MU25x
+         3DA9CVMr+ULpsqWb32+IOCvAecMGarnB1xKr6LGZt/003OH+UaGVZTajFAp1NQZ23D1M
+         lsKK9+9V4kRk4SPfJ/2EFlgqHn3Q3vmk4YAQHEemUL+UQi2oVutr81eJ1CYJ/1zhWmv1
+         XZtQ==
+X-Gm-Message-State: AOJu0YxAOpiLLIrbRnxKqsiZGLeN96zccOKh3u2yVENwlgQLmHGFen9o
+	aKN8ryexR2sMEX/+KSJlAGcYc+DJtMACmBczcs6Wn6/gmH0AuaSbA9YP66S2rz91aFQ=
+X-Gm-Gg: AfdE7cmfBMzDHxomvZ6TTUcxgh2xi8jZsbydN3NOlXu1jgLY20aQ0uI8HwaOrqCBqxk
+	z34kojUhQ5NX8s9eDj6ZtYHDQwSKTU1FpQrVLaqo2lqaUtcRvUkBWQJDh/saqa2WPnMKrr8iOqI
+	dyKu+hDMLp2GLOLDwd++zLPKqU50wIIMErx6k5ovKoYFgkDDE/OYDDWOSKYWKyCWcHTMBDRTdzp
+	uQuIV2Erp0jBpRTp3uTLVNB0Q4z2bs9hvKjPxgILCcdH7GTYJ4562t6qQddVtA1gjLkd2rk8d8n
+	DXG8/nvMasTWk+/eFwWBfGFYeO57y89KFtDBq9nJCQ2TDC3qVOZDQpqlz5kmrd9I+PmbsFMTk/0
+	y4+K6ocNdmx73gOB0FWxL0MgRReVInvRpjYPSJlvDH8dA6EfM9LjYm21vhYAPBNq2tBxpVxVJm5
+	8wYgcbVwr6KnW3QYb3tbMmRGzVEPcyWebw+1G54UQ/qA==
+X-Received: by 2002:a05:6a00:27ab:b0:83a:3135:edbd with SMTP id d2e1a72fcca58-84826d122cdmr2602693b3a.7.1783383665277;
+        Mon, 06 Jul 2026 17:21:05 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ca5b36448e7sm147757a12.23.2026.07.06.17.21.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jul 2026 17:21:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 06 Jul 2026 20:21:03 -0400
+Message-Id: <DJRWQWKLMY87.5ING2IA83CYG@etsalapatis.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: veristat: Minimize map size
+ during verification
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: <sashiko-reviews@lists.linux.dev>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>
+Cc: <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260706225052.35543-1-emil@etsalapatis.com>
+ <20260706230339.A8A981F000E9@smtp.kernel.org>
+In-Reply-To: <20260706230339.A8A981F000E9@smtp.kernel.org>
 
-On Fri, 2026-07-03 at 21:56 -0700, Ziyang Men wrote:
+On Mon Jul 6, 2026 at 7:03 PM EDT, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [Medium] Setting `max_entries` to 1 for `BPF_MAP_TYPE_RHASH` maps cause=
+s map creation to fail if `map_extra` > 1.
+> --
+>
+> --- Patch [1]: [PATCH bpf-next] selftests/bpf: veristat: Minimize map siz=
+e during verification ---
+> commit a11623d3f77bb05764867d10c3ff357f2a8a1403
+> Author: Emil Tsalapatis <emil@etsalapatis.com>
+>
+> selftests/bpf: veristat: Minimize map size during verification
+>
+> The veristat tool loads objects and maps into the kernel to verify them.
+> This patch expands veristat to resize maps whose max_entries are not
+> relevant to verification to as low as possible to avoid -ENOMEM errors
+> on smaller test machines.
+>
+>> diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/self=
+tests/bpf/veristat.c
+>> index a7db6f04f7e14..8d374e1406532 100644
+>> --- a/tools/testing/selftests/bpf/veristat.c
+>> +++ b/tools/testing/selftests/bpf/veristat.c
+> [ ... ]
+>> @@ -1248,6 +1263,37 @@ static void fixup_obj_maps(struct bpf_object *obj=
+)
+>> =20
+>>  		/* fix up map size, if necessary */
+>>  		switch (bpf_map__type(map)) {
+>> +		/*
+>> +		 * if the verifier doesn't use max_entries
+>> +		 * then set to 1 to avoid -ENOMEM
+>> +		 */
+>> +		case BPF_MAP_TYPE_HASH:
+>> +		case BPF_MAP_TYPE_PERCPU_HASH:
+>> +		case BPF_MAP_TYPE_LRU_HASH:
+>> +		case BPF_MAP_TYPE_LRU_PERCPU_HASH:
+>> +		case BPF_MAP_TYPE_HASH_OF_MAPS:
+>> +		case BPF_MAP_TYPE_RHASH:
+>> +		case BPF_MAP_TYPE_SOCKHASH:
+>> +		case BPF_MAP_TYPE_DEVMAP_HASH:
+>> +		case BPF_MAP_TYPE_LPM_TRIE:
+>> +		case BPF_MAP_TYPE_QUEUE:
+>> +		case BPF_MAP_TYPE_STACK:
+>> +		case BPF_MAP_TYPE_BLOOM_FILTER:
+>> +		case BPF_MAP_TYPE_STACK_TRACE:
+>> +			bpf_map__set_max_entries(map, 1);
+>> +			break;
+>
+> [Severity: Medium]
+> Will setting max_entries to 1 cause map creation to fail for
+> BPF_MAP_TYPE_RHASH maps that have map_extra set to greater than 1?
+>
+> The kernel's rhtab_map_alloc_check() enforces that map_extra must be less
+> than or equal to max_entries. If a BPF program legitimately uses an RHASH
+> map with a map_extra preallocation hint greater than 1, this unconditiona=
+l
+> minimization will cause an -EINVAL load failure, making veristat erroneou=
+sly
+> report a verification failure.
+>
+> Does veristat also need to adjust map_extra when reducing max_entries for
+> RHASH maps?
 
-[...]
-
-Hi Ziyang,
-
-I'm a bit hesitant adding 2.5K lines of code to the BPF selftests,
-as this code would need to be (a) maintained, (b) run at each CI invocation=
-.
-Hence, the tests added need to be relevant for the BPF sub-system.
-
-Regarding the benchmarking part, as you state yourself:
-
-  > In my testing (a 60-CPU VM) the BPF path is roughly an order of magnitu=
-de
-  > faster than the per-cgroup memory.stat parse for a whole-tree scan, mai=
-nly
-  > because it avoids the per-cgroup open/read and string parsing.
-
-With this, I think the benchmarking code can be dropped altogether.
-
-Next, the three memcg_stat_{reader,churn,churn_percpu}.c files share a
-lot of utility code almost verbatim (e.g. tree definition/construction).
-Such duplication should be avoided.
-
-Finally, from the BPF point of view the test exercises the following functi=
-onality:
-- kfuncs:
-  - bpf_mem_cgroup_page_state
-  - bpf_mem_cgroup_vm_events
-  - bpf_put_mem_cgroup
-  - bpf_get_mem_cgroup
-- main iterator logic.
-
-All kfuncs but bpf_get_mem_cgroup() are thin wrappers around mm/memcontrol.=
-c code,
-all kfuncs including the bpf_get_mem_cgroup() are already exercised in the =
-selftests.
-The iterator logic itself is covered by 8 sub-tests in the prog_tests/cgrou=
-p_iter.c.
-Hence two questions:
-- What do these new tests add in terms of tests coverage?
-- Why do BPF selftests need to exercise the churn and churn_percpu scenario=
-s?
-
-Shakeel, could you please comment as well?
-
-Thanks,
-Eduard.
-
-[...]
+The concern is valid, the fix imo is not. Rhashtable is resizable in the
+first place, so we shouldn't be trying to reduce its maximum entries.
+Same holds for LPM_TRIE and for arena (my worry was we do a memcg
+reservation upfront but that's not the case). We can just remove all
+three from the list to fix this issue and simplify the patch.
