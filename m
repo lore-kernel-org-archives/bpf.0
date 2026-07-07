@@ -1,123 +1,135 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F6C923183F
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 04:53:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B896386429;
+	Tue,  7 Jul 2026 05:59:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783400020; cv=none; b=qHDDcbOR0ndE+G5Seq1af/auhcQ6/pT9ppTbWsVvAUFNXeAuGY/hnY7Hp99/IgdKB97IcyeWHp4vPwBuqdcCkB0yttx2iFJr8APTZimGupus8ifU0+g2gQcIjdGpeVzXpzSIdR5thf5B9rR8MEuILtAaQTtgdotOIHhb9+OHlxw=
+	t=1783403961; cv=none; b=AceC+zyb1RE2h6O86KcOiSICioq8PWNOWCXoUsL7zOt2aa3IYguuf6hvC8mvalMr8G4+3aNL97G3swsqRxymZwI7CbKMMeffL0K6vxrnSl5Spw+ske0BITvBhJJfEisrxCHANFbzZLYAlAAdYEnl+rtkbtMqbKFIHRkTFDYTJng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783400020; c=relaxed/simple;
-	bh=ctoFh4OqlX33U2KYSB6QGsqIH5/82LT4VUt/fpYCL7g=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ocv1UsnrIQGkEINSNGRsiIThjU/wsxMGWBhwaZhmz/YzLVtgKSI/O1hkdWirgB7E0Cgj4Ky7DIF1DcOR+6HcmNcQrfGa8sPEmumbF/o5tjZgr7v1WCjHR8cEnouIAfBRipO81+a/RtohCPvUZikVcvhPxiOmZ82cBM118x7NiMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UMfQ1cY4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783403961; c=relaxed/simple;
+	bh=tvp7tO/3/vp2vOMpQ0g7cifsMip31Y9+Y/tn8KvPKdQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BwB9nHJ4vmrG3QEsfQYD2kRCa6LD8ljBbkZfS84yPF6gMSSBWeXUGF1NDyei89ZxA0bYyTjZQk58Fv265lBw8rdXi+fDcXYtdeL1LlP2kNwnYuhOpyiRphHcQwqlKAa6FW8HJYcpYI0ZXGPcqnErOnGvTTd0x27NC5ModVcp0wY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BkyescGX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UMfQ1cY4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B30C41F00A3A;
-	Tue,  7 Jul 2026 04:53:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BkyescGX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3D331F000E9;
+	Tue,  7 Jul 2026 05:59:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783400018;
-	bh=lEQdRkOdPqXirRlW1jgTp898xIqmgfaKnVQYmpmc8AI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UMfQ1cY4XxPJUsWfNQEJVJlW8UBfAXtFeckCsQRX5dskg06dKBBuJ+eVt7q4qtgDb
-	 WZuby1fnhjDUfTVACRQFSZ8se1w7jefQn3CPoWEcYFnBAowjc0ILa7c4R86u0jAhOI
-	 kzWguBW5ZODSHWoNAFWxahFMZYVMxrPMNQhqXwn85ZcELM8GfHOyZx7Cfhz3R4X1fk
-	 hU/ElmUd5YK1pE9s3fvg2oby7XBt0/MJwxEUsYEh1S+59CxbU7Sfab0DGbIgdg6duw
-	 u2tHgv38hYz9bUEv1Db9m/Ymqxzx0q4oyMyGwHlmIx/tKaCmTuWcBgOSktOFsx03t5
-	 N5cB4StNxH9wg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v4 2/4] bpf, sockmap: Reject unhashed UDP sockets on
- sockmap update
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Michal Luczaj" <mhal@rbox.co>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260707-sockmap-lookup-udp-leak-v4-2-f878346f27ab@rbox.co>
-References: <20260707-sockmap-lookup-udp-leak-v4-0-f878346f27ab@rbox.co>
- <20260707-sockmap-lookup-udp-leak-v4-2-f878346f27ab@rbox.co>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 07 Jul 2026 04:53:38 +0000
-Message-Id: <20260707045338.B30C41F00A3A@smtp.kernel.org>
+	s=k20260515; t=1783403960;
+	bh=7D/m/W8tzZlfAqTmnTytTOiDe/2TNBGHcK9HiLWgM6Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=BkyescGXXlEUhKfFGug3euJywCIkhDGRElVJujQJxPcwe2MqPeBS72CZszGSkgtAq
+	 bpjgr27bKuHrDRKyj8Lsej68e0uxfVAR6aFzW9+C0BA5MsbQb97NlL/IQwzfUAPe56
+	 Kdb7YAhGTRv6x7CPt/2g12StlVW/0h72PNTO6o19vCGiS3IIfwJILJimySfH9BpcuI
+	 j/9XOOMxO6harw08eetHD9vg9SqQZJ5GL3r6VIUgPVh58edV/Ln3Bevnocn2Dx+0Er
+	 hFv5kTN3H/TZ5m8oqWVJ98glJ7uhBOZgE2hyAX+0JhK4QyZhSvTI6ttGmnnT1JYaPW
+	 0MLLGm70nS0Lw==
+Date: Mon, 6 Jul 2026 22:57:30 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Alexandre Knecht <knecht.alexandre@gmail.com>
+Cc: herbert@gondor.apana.org.au, "David S . Miller" <davem@davemloft.net>,
+	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH] crypto: ctr - Convert from skcipher to lskcipher
+Message-ID: <20260707055730.GB1791@sol>
+References: <20260510230901.1772949-1-knecht.alexandre@gmail.com>
+ <20260510233237.GA60510@quark>
+ <20260510234452.GB60510@quark>
+ <CAHAB8Wy1APeCcm7_OfrNYeZFcMXfZ5rUSeDX7-c7WO_rGg2Zig@mail.gmail.com>
+ <20260511001935.GC60510@quark>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260511001935.GC60510@quark>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On Sun, May 10, 2026 at 05:19:35PM -0700, Eric Biggers wrote:
+> On Mon, May 11, 2026 at 02:02:22AM +0200, Alexandre Knecht wrote:
+> > Le lun. 11 mai 2026 à 01:44, Eric Biggers <ebiggers@kernel.org> a écrit :
+> > > Also note that lskcipher doesn't provide access to the accelerated AES
+> > > mode implementations.  Indeed, almost nothing is supported by lskcipher.
+> > > The fact that you found something to be missing isn't surprising.
+> > >
+> > > I think "lskcipher" is kind of a dead end, to be honest.  It's not clear
+> > > why it got added.  The path forwards is to get the AES encryption modes
+> > > added to lib/crypto/ and to just use that instead.
+> > >
+> > > - Eric
+> > 
+> > Hi Eric,
+> > 
+> > Thanks for the review — you're asking the right questions.
+> > 
+> > I'm developing a VXLAN/EVPN-based CNI for Kubernetes (releasing in the
+> > coming months), and the goal is to implement datapath encryption for
+> > overlay traffic in a zero-trust datacenter model. The encryption
+> > happens in BPF programs attached via TC on the VXLAN device (encrypt
+> > inner frames on egress, decrypt on ingress).
+> > 
+> > The algorithm I actually need is AES-GCM (authenticated encryption of
+> > VXLAN inner frames, with the outer headers as AAD). When I looked at
+> > bpf_crypto, I found that:
+> > 
+> > 1. Only lskcipher ("skcipher" type) was implemented
+> > 2. ecb(aes) was the only usable algorithm
+> > 3. AEAD support was designed for (authsize field exists in
+> >  bpf_crypto_params, setauthsize in bpf_crypto_type) but never
+> >  implemented
+> > 4. ctr(aes) wasn't available as lskcipher either
+> > 
+> > I looked at Herbert's history converting ECB and CBC to lskcipher and
+> > assumed that was the path forward for CTR. But you're right, the
+> > real goal is AEAD, not CTR. CTR alone doesn't give me integrity.
+> > 
+> > Your point about lib/crypto/ is interesting. If there's a path to
+> > expose AES-GCM (or the building blocks) as direct library calls that
+> > BPF programs in TC/XDP could use (avoiding the template/instance
+> > machinery and getting hardware acceleration) that would be ideal for
+> > this use case.
+> > 
+> > What would that look like? Is there existing lib/crypto/ work for
+> > AES-GCM that could be wired up to BPF, or would that need to be
+> > built?
+> 
+> Sure, it makes sense that AES-GCM is what you actually need.  There's
+> actually a lot of demand for AES-GCM in lib/crypto/, and I've been
+> working on it.
+> 
+> There's already an existing AES-GCM lib/crypto/ API (see
+> include/crypto/gcm.h), and I optimized it a bit in 7.0 and 7.1.  For
+> example, it now uses the architecture-optimized single-block AES code.
+> 
+> You might be able to go ahead and use that right now.
+> 
+> However, it currently supports only one-shot computation, and it doesn't
+> yet take advantage of the fully optimized AES-GCM assembly code that
+> interleaves the AES and GHASH computations.  I'm planning to address
+> both of those limitations soon.
+> 
+> Anyway, that seems like the clear way forward.  The lskcipher thing
+> seems like a dead end to me.
 
-Pre-existing issues:
-- [High] The patch prevents a refcount leak for UDP sockets by rejecting un=
-hashed sockets, but an identical reference count leak can be triggered for =
-TCP sockets because `sk_is_refcounted()` relies on the mutable `SOCK_RCU_FR=
-EE` flag.
---
+FYI, the following series adds new library APIs for AES-GCM and other
+AES modes:
+https://lore.kernel.org/linux-crypto/20260707053503.209874-1-ebiggers@kernel.org/
 
---- Patch [2]: [PATCH bpf v4 2/4] bpf, sockmap: Reject unhashed UDP sockets=
- on sockmap update ---
-commit efe688dfced966a49066087e860ab73696a8f75a
-Author: Michal Luczaj <mhal@rbox.co>
-Date:   Tue Jul 7 04:23:57 2026 +0000
+It also includes proof-of-concept patches to convert BPF crypto to use
+the AES-ECB and AES-CBC library APIs, then add AES-GCM support.
 
-bpf, sockmap: Reject unhashed UDP sockets on sockmap update
+I think that is roughly what you're looking for, and also what should
+have been implemented in "BPF crypto" in the first place.  (Minus
+AES-ECB, which is silly and should never have been supported in BPF
+crypto.  And maybe minus AES-CBC too.)  But let me know what you think.
 
-This patch addresses a socket reference count leak by preventing unhashed U=
-DP
-sockets from being updated in sockmaps. It removes the ability for BPF prog=
-rams
-to increment a refcount on an unbound socket that subsequently gets bound a=
-nd
-skips the refcount decrement upon release.
+(I didn't Cc that series to everyone just for the proof-of-concept
+patches, as I wrote them for lots of kernel subsystems.  For now they're
+mainly for informing the API design and preparing for later.)
 
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
-> @@ -542,6 +542,8 @@ static bool sock_map_sk_state_allowed(const struct so=
-ck *sk)
->  {
->  	if (sk_is_tcp(sk))
->  		return (1 << sk->sk_state) & (TCPF_ESTABLISHED | TCPF_LISTEN);
-
-[Severity: High]
-This is a pre-existing issue, but can the exact same reference count leak
-happen for TCP sockets because sk_is_refcounted() relies on the mutable
-SOCK_RCU_FREE flag?
-
-If a user creates a TCP socket, connects it (entering TCP_ESTABLISHED), and
-adds it to a sockmap, a BPF program can call bpf_map_lookup_elem() on the
-sockmap. This increments the socket's refcount because SOCK_RCU_FREE is not
-set on established sockets.
-
-If a user thread concurrently calls connect(AF_UNSPEC) to disconnect the
-socket (moving it to TCP_CLOSE and removing it from the map), and then calls
-listen() on the same socket, inet_hash() unconditionally sets the
-SOCK_RCU_FREE flag.
-
-When the BPF program subsequently calls bpf_sk_release(sk):
-
-net/core/filter.c:bpf_sk_release() {
-    ...
-    if (sk && sk_is_refcounted(sk))
-        sock_gen_put(sk);
-    ...
-}
-
-sk_is_refcounted(sk) will now return false because SOCK_RCU_FREE is set,
-causing bpf_sk_release() to skip the decrement and permanently leak the
-acquired reference.=20
-
-Could this sequence be abused to cause memory exhaustion, and is there a way
-to safely track the acquired references without relying on a flag that might
-change mid-flight?
-
-> +	if (sk_is_udp(sk))
-> +		return sk_hashed(sk);
->  	if (sk_is_stream_unix(sk))
->  		return (1 << READ_ONCE(sk->sk_state)) & TCPF_ESTABLISHED;
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707-sockmap-lo=
-okup-udp-leak-v4-0-f878346f27ab@rbox.co?part=3D2
+- Eric
