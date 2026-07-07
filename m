@@ -1,135 +1,121 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA0C3BE14A
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 06:52:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0013AB47E
+	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 06:53:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783407168; cv=none; b=OEeeqKq+UrV72AOx2TD7AfwwdJ0hI5MyojnTZt7SKzii+EaPF2v0wnKbNGYEisH/74CoR5E8D4s1OeEyDiNTat3fpzdichssB7ogAquYcqe66mneHWIm8no6unbKUjPG0zQ2UUQRhMvqyOHMDt7+V0bDegwwyvDyff2Pej51dSg=
+	t=1783407193; cv=none; b=VAWiWUiPTqOIW78E3Eib3bQmQWcNyX1gw33MeZWFzd0KU9n8571aijZxU2PGsw4kQyc07dVT4CaRFiDd6X3HjX5ZDdvtt7MGt5Cr45J4/uMBXo6DDtuCM5hFhQudob79hevrwZiQj53GQTmofXMMM1zPO5uJppJOWwN8HrxC/7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783407168; c=relaxed/simple;
-	bh=mhdDcd6URVxpfo91I5Qyv3Eb0UvP2jLGecqvmCd3mrA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eMo8Xl+8Hf/Gr8TRG3b2KQfjdrTX6ZCUiNQkLa/eaYqV7lFz1CZKmwH1NDqSfPcy+e8jaqQsF4x24u2I6o8J9Fgb5lJCt6AOBzEMnxuK5Aj/40ErFf+wBsP1PsZ77D5Tfozyp+VCL4AzjRGa52p5YW1E4LVIzIhJ3hjSapiS8Ck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dgJ02Vs/; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1783407193; c=relaxed/simple;
+	bh=FaAdHSAO/J4U2UBAFWE2q2MTNidw43ZP6AkdFhuHJLk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uh0LJVna1aYfDqEhaaMB8NBuKMgh8wvs+1skNnjAEUSxcAhVR/zu2vS2Wn1HQP69PXH4aGnsOTFwbtc3DFc8bkEeWguvA7RdjDM7c9OkRYm34IWXjuYhzQ091IysY3ju0Eg9cJiUF6ogAMj3g3Dubs9JaN+gtlUKiOQpWcaF3WM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TmPXdYZG; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dgJ02Vs/"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-493b27c7451so2839835e9.0
-        for <bpf@vger.kernel.org>; Mon, 06 Jul 2026 23:52:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783407159; x=1784011959; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WfzRI5F82+Jj3jQo8VQaqjjU0jNv4SWrjulOFBbp/Nk=;
-        b=dgJ02Vs/aRyieeeK5ePOM2d98uTWuFifBd+sPhhc8pihWuf+7J0agaZSMnoceFoNBo
-         /7tV5CCHriCFZHuGMNeITuOuu+uAfAQYDRExfkSpQOIGhHfvRrIMsG+kZOIg3PV3QW/e
-         mEc/TaVgEbmTnJBbUtGeynCpV2OedgqMKkhXmRiG8TgG3JQ4Xk23R4YlbSvJtVQGfTlS
-         U37GazADHuElg3+f9HaCWIIkglJ2F1yvARnBMEaqjB4o9u6R8rzsbUvs4hRwcVPHoFFI
-         a2a522l+yr+zCnUJCUWvpwkYgGyKSldIZdPMaJ8jPyeyxGaMvfPOIRvQuHSHQgk/VqZz
-         jJTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783407159; x=1784011959;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WfzRI5F82+Jj3jQo8VQaqjjU0jNv4SWrjulOFBbp/Nk=;
-        b=JjPVVxFIL3LQaBPfbcuK/JLI7ngNJwuEIcxVl74eu6fsRLH46rrtiCWzzChOOe+yQ5
-         vhjLyRLCuLsmmx9QejsF6YK4kOWLrb1sOFt4iUCrExZbOsG9xWqPcnzRiAZmzi/WQtrV
-         kEEaMP9fwyFBakAs5oGkR6TuiHD4KWbI1d2mTxU8tVNAdMNYWrj8ygFDw03uxGDn3kVo
-         cSU39S8PFrww1AGbzgnPTIV5aQeIbzioMAeW3IDSmfUPtNVPwBaOzDjubP5BXjfN9ij6
-         tOSRLRCLdjlq0AwzKbBZ3WvECQUv8PyCU9IwbIx2zwtEr9TpGQM339F3aa2vzr1Qs1ss
-         tgpA==
-X-Gm-Message-State: AOJu0Yz724GRVJRDkj4cUWKg3gdqPI7EkUA58Zgmlo1icJe3vngthy0O
-	+PAGCZLLvETmsgi522Q5FsN9LnxSe8CZ/XM34awnnrA9mdNIPpHiGSnqdjQlP7VI0Qk=
-X-Gm-Gg: AfdE7clK3jp/qYSh3VElHaTPYYlPnlgHIHsFTHrL6WRuFA+EYYFZ+DM7Q9Qss0k3RPK
-	DwpH0JppwFcPljVDeB+I64ekPGzeDPEZoUIZyIirrHMijIPuIc6QK3zDsfyBsyce+wIwH9T1x0q
-	+OqqPdCFsaFJZLqCUkIDMZ34gVQ9D5PqU0TvI3VfDRLhrYKEnQ8uIx2BCGp5EenwEosm0uSX7xX
-	iULg2tZI3gfbIXiucatuEofI8YKF16Wu93A2ABKsmMlEAgs4RByiFD1dccadZ2u1Bd7sySecJ+5
-	zbOV2Ks1EqetxnNUCudDA+7q+Ek/RGsC+IwIiCm+jmwUKM4qiyoe7AWby3Azry5VNaF633eWCzB
-	WsCgShMcu+Fg2BD4fi1GBJ+flo30Yr89HYYuwIPufu/fvIRdlLf4m+HWJ147S2bFJOoDF1IwUSB
-	GBZqPUfQ0donp+SwAwHR2m21xs/T2cAkdP0LZO7wVEAwX3aQ==
-X-Received: by 2002:a05:600c:2284:b0:493:ca5d:b9b3 with SMTP id 5b1f17b1804b1-493e1029736mr8337345e9.12.1783407159009;
-        Mon, 06 Jul 2026 23:52:39 -0700 (PDT)
-Received: from u94a (27-53-112-249.adsl.fetnet.net. [27.53.112.249])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9d1e279sm6305125ad.45.2026.07.06.23.52.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 23:52:37 -0700 (PDT)
-Date: Tue, 7 Jul 2026 14:52:24 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
-	emil@etsalapatis.com, shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf] bpf: Reject negative const offsets for buffer
- pointers
-Message-ID: <akxwvAuGFIp76TFB@u94a>
-References: <20260703035137.109608-1-sun.jian.kdev@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TmPXdYZG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783407187;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Pr3yPHcDr2mKM+ppCJOW9bDPFauUOdmRxRLNd2K3bp4=;
+	b=TmPXdYZGI+qmqXEsLClNJNgvBQoe2DDeUFT9vcTboyexKx8Kv3HdOnwvVq3UR6o0WEPDA6
+	wnhNmRDcxmqc82yDzCwQMvEPCYAOOoAW9idautNjwyCYCq4uQBCFqodL7o/6wA/HO7HTpF
+	WcciKgcONeR3SRlXs6C2ffMLbAoddV8=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-589-J5tiqYR4N86rK4JdA_SBCw-1; Tue,
+ 07 Jul 2026 02:53:03 -0400
+X-MC-Unique: J5tiqYR4N86rK4JdA_SBCw-1
+X-Mimecast-MFC-AGG-ID: J5tiqYR4N86rK4JdA_SBCw_1783407181
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 83DEE1806CAF;
+	Tue,  7 Jul 2026 06:52:55 +0000 (UTC)
+Received: from vmalik-fedora.brq.redhat.com (unknown [10.43.17.109])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6260819560A2;
+	Tue,  7 Jul 2026 06:52:51 +0000 (UTC)
+From: Viktor Malik <vmalik@redhat.com>
+To: linux-perf-users@vger.kernel.org
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Viktor Malik <vmalik@redhat.com>,
+	Howard Chu <howardchu95@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Michael Petlan <mpetlan@redhat.com>
+Subject: [PATCH v4 0/2] perf trace: Refactor augmented_raw_syscalls using bpf_for
+Date: Tue,  7 Jul 2026 08:52:45 +0200
+Message-ID: <cover.1783406979.git.vmalik@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260703035137.109608-1-sun.jian.kdev@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Thu, Jul 02, 2026 at 08:51:37PM -0700, Sun Jian wrote:
-[...]
-> @@ -5344,6 +5348,29 @@ static int __check_buffer_access(struct bpf_verifier_env *env,
->  		return -EACCES;
->  	}
->  
-> +	var_off = (s64)reg->var_off.value;
-> +	if (check_add_overflow(var_off, (s64)off, &start)) {
-> +		verbose(env,
-> +			"%s invalid %s buffer access: off=%d, var_off=%lld\n",
-> +			reg_arg_name(env, argno), buf_info, off, var_off);
-> +		return -EACCES;
-> +	}
+The loop for processing syscall args in augment_raw_syscalls has a
+history of breaking with Clang updates. In the past, we've seen it break
+(i.e. stop passing the BPF verifier) between Clang 15 and 16 and now a
+similar thing happened between Clang 21 and 22. While the issue is
+mitigated on the main line by a recent verifier update, it remains
+broken on the 6.12 and 6.18 stable branches, effectively breaking
+`perf trace`.
 
-Other pointer offset checks (check_mem_region_access and
-adjust_ptr_min_max_vals) seem to check var_off against BPF_MAX_VAR_OFF,
-and that `off` being >= 0. It would be great if the convention can be
-kept for consistency, albeit being more conservative.
+The reason is that the loop is quite complex and the BPF verifier often
+struggles to prove that it terminates.
 
-From a blind guess I would guess that compiler does not product a
-pattern where `off` encoded in the instruction is negative but the net
-overall offset is positive for PTR_TO_TP_BUFFER/PTR_TO_BUF, and
-rejecting such pattern is fine.
+This series fixes the issue by replacing the standard for loop by the
+bpf_for macro, which uses numeric BPF iterator. This should prevent
+future breakages of this kind since the verifier has much easier job
+proving that the loop terminates. Small adjustments were necessary for
+the loop to make it work, see the second commit message for details.
 
-  r6 = *(u64 *)(r1 + 0);
-  r6 += 16;
-  r0 = *(u64 *)(r6 - 8);
+To keep perf compatible with older kernels, the first commit factors out
+the loop body into a function, which is then called either from bpf_for
+or from a standard for loop, depending on whether BPF numeric iterators
+are available.
 
-One more comment below.
+Changes from v3:
+- v3: https://lore.kernel.org/bpf/cover.1783339165.git.vmalik@redhat.com/
+- Do not remove any hacks from the BPF program to keep it backwards
+  compatible with older kernels and Clang versions (Sashiko).
 
-> +
-> +	if (start < 0) {
-> +		verbose(env,
-> +			"%s invalid negative %s buffer offset: off=%d, var_off=%lld\n",
-> +			reg_arg_name(env, argno), buf_info, off, var_off);
-> +		return -EACCES;
-> +	}
-> +
-> +	if (start > U32_MAX || size < 0 ||
-> +	    check_add_overflow((u32)start, (u32)size, access_end)) {
-> +		verbose(env,
-> +			"%s invalid %s buffer access: off=%lld, size=%d\n",
-> +			reg_arg_name(env, argno), buf_info, start, size);
-> +		return -EACCES;
-> +	}
+Changes from v2:
+- v2: https://lore.kernel.org/bpf/cover.1783070132.git.vmalik@redhat.com/T/
+- Small refactoring suggested by Namhhyung
+- Make `size` in augment_arg() an int (found by Sashiko)
+- Keep the original way of clamping aug_size to TRACE_AUG_MAX_BUF (found
+  by Sashiko)
 
-If we check that var_off is within BPF_MAX_VAR_OFF and that `off` is not
-negative, then `var_off + off + size` should be guaranteed to not
-overflow max_tp_access, since the maximum of `off` is S16_MAX and the
-maximum of `size` is 8.
+Changes from v1:
+- v1: https://lore.kernel.org/bpf/akWqIfWPMCdaGgGg@google.com/T/
+- Use bpf_for instead of bpf_loop (suggested by Alexei and Andrii)
+- Keep the change backwards compatible with older kernels (required by
+  Namhyung)
 
-> +
->  	return 0;
->  }
-[...]
+Viktor Malik (2):
+  perf trace: Factor out BPF loop body
+  perf trace: Refactor augmented_raw_syscalls using bpf_for
+
+ .../bpf_skel/augmented_raw_syscalls.bpf.c     | 155 +++++++++++-------
+ 1 file changed, 98 insertions(+), 57 deletions(-)
+
+-- 
+2.54.0
+
