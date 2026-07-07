@@ -1,99 +1,136 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CA762F8EA1;
-	Tue,  7 Jul 2026 01:31:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E822222301
+	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 01:37:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783387880; cv=none; b=nZcq/4sn2mTV112qPOg9UzCt5NLF68ZCgS7xrsp1aWnC5JUgrTJ19VGk+3JRNH4suNvtecFdugJSYx7DXSLvVH8c7TC+l2t082qz0fP8NWghHsFL3mnESyNEpjy3+0uzyrso3+EXUzlvYu51l11taJKUlBK5mzLFUulZ96Ua8Uw=
+	t=1783388261; cv=none; b=Y4UGQsDoLQ8G95adgn7tF6RHVXByooNfIjrtTM3IRcqEzn+Z2+Aoh66TWtff1tMfCQCYaF5gLlVmXcG6O3L/AQ2QJjihrwIDTof1mSCxYStD6KIE6qdO4kAtip8O1zeeLGxnLTcYbaI6fllKNsw/VqxcfO6IOpkd6B8HnRLxVzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783387880; c=relaxed/simple;
-	bh=qwbmjg8rIDVChG97HhEUKfS7+SDGM3C4aQ3URPossl8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ku3f9IroR/NN4RU1Lf636YC5+jZ6aNW2hkDYTQX5or7BSt3JT9vbLbfysir0S/CdMeGpzbUUQxsHemvtTqLJzfJ2TLjDcvqnexQrez7F7ME3YYS84TWeHkxXPuVekEK6SU72LEHZf9ZOUVIIhhgpfv7hFBlV3iVzflCFGPOmsoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gvNwc40gZzYQtLG;
-	Tue,  7 Jul 2026 09:31:12 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 16C674056E;
-	Tue,  7 Jul 2026 09:31:15 +0800 (CST)
-Received: from [10.67.110.68] (unknown [10.67.110.68])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgDnFljhVkxqvRxPAQ--.41591S2;
-	Tue, 07 Jul 2026 09:31:14 +0800 (CST)
-Message-ID: <b4ca552c-58b6-49dd-bd83-dc27ca49368a@huaweicloud.com>
-Date: Tue, 7 Jul 2026 09:31:13 +0800
+	s=arc-20240116; t=1783388261; c=relaxed/simple;
+	bh=iUITowo+9PWhdzus0MrkhZp1oBMeDP3Y/q6VGXSGD1o=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=kJArnHVb0/dXhEqaobSzE480+DBQRTWgqakqNYlcBrXZb3lQW5Q0irSHbMlpvQkPEwmOnfEPjnUcGJkPRuIpbrdATWVQZn9iO4GXEtwFOaMg8q6XUwINaMRmxVIVIDcLdEb9NOGiMFNZJ0ko6zhzFnRffvn3thIoo5y8d+VPbsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8AxRepZWExqV74AAA--.1918S3;
+	Tue, 07 Jul 2026 09:37:29 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJBxLsdLWExqeFIDAA--.19982S3;
+	Tue, 07 Jul 2026 09:37:17 +0800 (CST)
+Subject: Re: [PATCH bpf-next v8 2/2] bpf: Reject programs with inlined helpers
+ if JIT is not available
+To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, KaFai Wan <kafai.wan@linux.dev>
+Cc: bpf@vger.kernel.org, loongarch@lists.linux.dev,
+ Leon Hwang <leon.hwang@linux.dev>, Puranjay Mohan <puranjay@kernel.org>,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+References: <20260706040006.10331-1-yangtiezhu@loongson.cn>
+ <20260706040006.10331-3-yangtiezhu@loongson.cn>
+ <abd697d839043d80e0230d2b9ab30b214dfa34d7.camel@gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <33d3eb99-ef5a-5413-b2f6-3217b54cce4d@loongson.cn>
+Date: Tue, 7 Jul 2026 09:37:15 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 0/6] Mixing bpf2bpf and tailcalls for RV64
+In-Reply-To: <abd697d839043d80e0230d2b9ab30b214dfa34d7.camel@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To: Eduard Zingerman <eddyz87@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Alexandre Ghiti <alex@ghiti.fr>, Pu Lehui <pulehui@huawei.com>
-References: <20260629140048.733346-1-pulehui@huaweicloud.com>
- <CAJ+HfNhn9eK+3xsd3ewEsG-duCgBeYXeLAtNan=qefas2Ya0dQ@mail.gmail.com>
- <d6647f5eb213d2ece82753285a79f28f600420d7.camel@gmail.com>
-From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <d6647f5eb213d2ece82753285a79f28f600420d7.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgDnFljhVkxqvRxPAQ--.41591S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY37kC6x804xWl14x267AKxVW5JVWrJwAF
-	c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
-	0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xv
-	wVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4
-	x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8C
-	rVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxV
-	WUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka
-	0xkIwI1l42xK82IYc2Ij64vIr41l4c8EcI0Ec7CjxVAaw2AFwI0_GFv_Wryl4I8I3I0E4I
-	kC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
-	WwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr
-	0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWU
-	JVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJb
-	IYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-CM-TRANSID:qMiowJBxLsdLWExqeFIDAA--.19982S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxAw1kJFykWF4UZw4UAF1xtFc_yoW5Cw45pF
+	WrCw42kFyDXa429a97tw4IvF1avw4FqF17Wrn5G3s29a15Xr1SvrWSgw1Y9FykCr1v9a4I
+	yw4Ivry09a4UXFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
+	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+	k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l
+	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxV
+	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI
+	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+	4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+	42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2-VyUUUUU
 
-
-
-On 2026/7/7 3:29, Eduard Zingerman wrote:
-> On Mon, 2026-06-29 at 16:21 +0200, Björn Töpel wrote:
+On 2026/7/7 上午5:41, Eduard Zingerman wrote:
+> On Mon, 2026-07-06 at 12:00 +0800, Tiezhu Yang wrote:
+>> When an architecture (such as LoongArch, ARM64, and RISC-V) implements
+>> bpf_jit_inlines_helper_call(), the verifier skips rewriting the helper
+>> call offset (insn->imm) during the bpf_do_misc_fixups() phase, because
+>> the helper is expected to be inlined by the JIT compiler. As a result,
+>> insn->imm remains as the raw helper enum ID.
+>>
+>> However, if JIT is disabled at runtime (net.core.bpf_jit_enable=0) or
+>> if the JIT compilation later dynamically fails (e.g., due to OOM), the
+>> core BPF subsystem falls back to the BPF interpreter.
+>>
+>> When the interpreter executes (__bpf_call_base + insn->imm) with the
+>> unpatched raw helper ID, it jumps into an unaligned invalid address
+>> space, triggering an instruction alignment fault or a memory access
+>> panic.
+>>
+>> Fix this by setting 'jit_required' to 1 when helper call rewriting is
+>> skipped for JIT inlining. Loading will be rejected early with -EINVAL
+>> if JIT is disabled, or safely rejected with -ENOTSUPP during runtime
+>> selection if JIT compilation dynamically fails, effectively preventing
+>> the kernel panic.
+>>
+>> Fixes: 2ddec2c80b44 ("riscv, bpf: inline bpf_get_smp_processor_id()")
+>> Suggested-by: Alexei Starovoitov <ast@kernel.org>
+>> Suggested-by: KaFai Wan <kafai.wan@linux.dev>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
 > 
-> Hi Björn,
+> Sorry, I'm late to the party.
+> As far as I understand, the patch #1 doesn't really change anything functionally,
+> it just adds the flag, right?
 > 
-> I'm working through bpf patches queue and have a question regarding
-> this series. What's your stance, does it need changes or can I apply
-> it to bpf-next?
+> As for the patch #2 and looking at the helpers that jits currently inline:
+> - bpf_get_smp_processor_id (implemented as a function in the helpers.c)
+> - bpf_get_current_task (implemented as a function in the bpf_trace.c)
+> - bpf_get_current_task_btf (implemented as a function in the bpf_trace.c)
+> 
+> It is perfectly fine to call these as helper functions even if jit is
+> not available. But this was broken since:
+> 2ddec2c80b44 ("riscv, bpf: inline bpf_get_smp_processor_id()")
+> from May 2024, so I guess nobody really cares?
+> 
+> Imo, the simplest and least intrusive fix is to add a wrapper in the
+> verifier.c that would call both bpf_jit_inlines_helper_call() and
+> check if the jit is enabled and use that wrapper instead of direct
+> calls to bpf_jit_inlines_helper_call().
+> 
+> Anyway, since this was broken all-along, might as well land as-is.
+> Thoughts?
 
-Hi Eduard,
+In the previous v4 [1], there is a similar way to fix unaligned
+interpreter panic on JIT fallback path, but it was explicitly
+rejected by the BPF maintainer Alexei [2]. Furthermore, Alexei
+said "The interpreter has to be removed completely... sooner
+or later." [3]. So if JIT is not available, rejecting the program
+load is the intended design.
 
-I need to send out a new version to address the issue sashiko mentioned. 
-It's already fixed locally, and I'll send it out after Björn's review 
-feedback.
+[1] 
+https://lore.kernel.org/bpf/20260615025316.24429-1-yangtiezhu@loongson.cn/
+[2] https://lore.kernel.org/bpf/DJMRIZ5PDWP4.12OOZ8H881H6O@gmail.com/
+[3] https://lore.kernel.org/bpf/DJN001X0S57Y.18CKUS4NDDQT1@gmail.com/
 
 Thanks,
-Lehui
-
-
-> 
-> Thanks,
-> Eduard
-> 
-> [...]
+Tiezhu
 
