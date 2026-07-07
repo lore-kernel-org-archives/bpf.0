@@ -1,91 +1,135 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DEF13E00A0
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 10:22:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 708623E3156
+	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 10:26:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783419745; cv=none; b=HNbDtUo1V7xv5h1qpzDJScOY5nz9acqjOEIghVGHW5pdjee5drJdPyMEsTq4ygzL5d/OUnukOANvPx6oEGCIUOgfvvse/LXTpeqanA92rFhdpIO2OYvhaKdW4R1rz3MpNfU6RIDdTdkuxRQqesmjsTTK9iR2bmEMm8Kt3LFPQgc=
+	t=1783420006; cv=none; b=d2I4CkAV0KEN7/uQMP/x+ovryatcqyIv/FjKm+L+cnFMYAJP4zH3sUfGPfp3+OeHrgQV24wEhxfFY0AYMms7VhdkiuAXPCe2jcvjm4K/tFvIFcMlYDQAgAAmsywE0tlRg97QGK8ByFU5MBHzCvt5LWmjWL9kDWPVOWCtY+kYBiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783419745; c=relaxed/simple;
-	bh=VnnYlecLaLwHXRISSV7NLIvrUi+L9CcBQ3+Tx4ZEDw4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=r5bshz8zEPeSfrn1qCvL94dJfMZfXdnhssTROoQuqZIpTR8O2S4mePBTuBJsFYicEjzTOigqT9GQdnry7xwmJEARZSWPCRiYbm/IqC9SCOgqdphW7Lcy+RSfDN9ZkE7ntq5xLMjJ/lmbiR6DalqLDwyzpmhFLVh0+QafqyRQuRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fmRNCLtb; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783420006; c=relaxed/simple;
+	bh=P1kj2Vu9P6SS/tz4jR8CTq+OuE/6c25550Plw4ezev8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Dgz2t1lIOeQukC1PPwC8SNQ8MZyFpl4HvrkIg6mRZaVJTmfB3vXTXSp4K3oq1XPG5U1XeUYh/9c0cNW4EzYsSasOYcsyE8X7AJ4IUPN8qe+wdLmNqU1QHaBrCNXqG4yQgZNTSZmXc4tNI1FGNKqyJqqGq+yAawmuXtiIQGKjlas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jwpsdCrR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fmRNCLtb"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783419742;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=STGqFQ6c0/W7YnxQ28Rkz97qioLVzpiO3UkQvXf2pcA=;
-	b=fmRNCLtbgyAM5WXbEMwjP8Kzakn9gOCsUjH+4b178aE0C1+4yAmX3DTfldW1rh/G8xLTMi
-	UGW7zRYQiCU7y+5Kdf5cuRJ2Uu6zfFcqq9K8ohQB3A1oAyYi4vcYtIEKhVYmT7NHTXcYrp
-	xptfN5MbNx1vtgNE9s8DWvxNiY3sTWA=
-From: George Guo <dongtai.guo@linux.dev>
-To: yangtiezhu@loongson.cn
-Cc: chenhuacai@kernel.org,
-	hengqi.chen@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	kernel@xen0n.name,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	guodongtai@kylinos.cn,
-	bpf@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 02/11] LoongArch: BPF: Support internal-only MOV to resolve per-CPU addrs
-Date: Tue,  7 Jul 2026 18:22:11 +0800
-Message-Id: <20260707102211.342727-1-dongtai.guo@linux.dev>
-In-Reply-To: <bcdfd520-8f88-b8d9-37e1-52e0368d40d3@loongson.cn>
-References: <bcdfd520-8f88-b8d9-37e1-52e0368d40d3@loongson.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jwpsdCrR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEF191F000E9;
+	Tue,  7 Jul 2026 10:26:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783420002;
+	bh=a0f9hz8Ifldd8xjWrGusqUs6TmOISZbp3uDW/b4eJGY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=jwpsdCrRXXObSa5gkpW6gaHYQF/j8erUi2k4SabJOU3qd8sa1hUmNE2Zg5xzmYx/O
+	 oIUa+rFgQhD6jg3snKsgWjLcqw+RseIPDJxv/LT0Wdi7Gb9yhP9MGqX+AX5aYG94eS
+	 tlHMss7J+eb5TGOsCeKyHxmmTzLO2BP1csCc7TAt+DH9MV8VG+8MHX3Iof7mVh6Cb/
+	 jfm+/H0Z4O7/kN0pJfYPxtioYhsWuW70lTagIE7LuXPXxzwKVDhRvKjw9T1IPfeBPM
+	 k7vSR9fncd+VHzmNmWLI0v4BbmNO+cGpRxTPLNalORZOPC82vyUm89YuPGvVujsrVq
+	 zerTMQaCnn2VQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3 1/4] LoongArch: BPF: Optimize redundant TCC loads in
+ epilogue
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tiezhu Yang" <yangtiezhu@loongson.cn>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260707101508.32283-2-yangtiezhu@loongson.cn>
+References: <20260707101508.32283-1-yangtiezhu@loongson.cn>
+ <20260707101508.32283-2-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 07 Jul 2026 10:26:42 +0000
+Message-Id: <20260707102642.AEF191F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-> How to test? Did you test under !CONFIG_SMP?
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Good question -- here's why skipping the $r21 add under !CONFIG_SMP is
-correct, not just untested:
+Pre-existing issues:
+- [High] The macro BPF_TAIL_CALL_CNT_PTR_STACK_OFF does not account for the=
+ BPF Arena register, leading to an incorrect stack offset calculation and a=
+ deterministic kernel panic on tail calls when arena is used.
+--
 
-1. $r21 is unconditionally zeroed at the earliest point in boot,
-   regardless of CONFIG_SMP:
+--- Patch [1]: [PATCH v3 1/4] LoongArch: BPF: Optimize redundant TCC loads =
+in epilogue ---
+commit eabfba52164a1855119336bb138d22f9f54aedfe
+Author: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-     arch/loongarch/kernel/head.S:75
-       /* GPR21 used for percpu base (runtime), initialized as 0 */
-       move  u0, zero
+    LoongArch: BPF: Optimize redundant TCC loads in epilogue
+   =20
+    The legacy epilogue implementation pops the tail call counter (TCC)
+    context via a redundant double-load pattern. It first decrements the
+    load_offset by 2 slots to fetch 'tcc_ptr', and then immediately bumps
+    it back up by 1 slot to load the original 'tcc' value into REG_TCC,
+    unnecessarily overwriting the register.
+   =20
+    Optimize this sequence by adjusting the load_offset by only 1 slot.
+    This aligns the offset directly with the higher stack slot containing
+    the entry TCC counter (or caller state), allowing us to restore the
+    REG_TCC register safely with a single load.
 
-2. The only other writer, set_my_cpu_offset(), lives in
-   arch/loongarch/kernel/smp.c, which is `obj-$(CONFIG_SMP) += smp.o` --
-   i.e. not even compiled into a !CONFIG_SMP kernel. So on !CONFIG_SMP,
-   $r21 stays exactly 0 for the kernel's entire lifetime; nothing ever
-   touches it again after head.S.
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index 2738b4db11653..93a1813122564 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
+> @@ -246,14 +246,8 @@ static void __build_epilogue(struct jit_ctx *ctx, bo=
+ol is_tail_call)
+>  		emit_insn(ctx, ldd, REG_ARENA, LOONGARCH_GPR_SP, load_offset);
+>  	}
+> =20
+> -	/*
+> -	 * When push into the stack, follow the order of tcc then tcc_ptr.
+> -	 * When pop from the stack, first pop tcc_ptr then followed by tcc.
+> -	 */
+> -	load_offset -=3D 2 * sizeof(long);
+> -	emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, load_offset);
+> -
+> -	load_offset +=3D sizeof(long);
+> +	/* Only restore the TCC state into REG_TCC from the higher slot */
+> +	load_offset -=3D sizeof(long);
+>  	emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, load_offset);
 
-This also isn't a LoongArch-specific judgment call -- it's exactly the
-pattern x86's own upstream JIT uses for the identical instruction:
+[Severity: High]
+This isn't a bug introduced by this patch, but while looking at the dynamic
+stack offset handling for REG_ARENA here, I noticed an issue in how the sta=
+ck
+offset is calculated for the tail call counter pointer.
 
-  arch/x86/net/bpf_jit_comp.c, insn_is_mov_percpu_addr():
-    EMIT_mov(dst_reg, src_reg);
-  #ifdef CONFIG_SMP
-    /* add <dst>, gs:[<off>] */
+While the prologue and epilogue dynamically adjust load_offset for REG_ARENA
+(shifting the offsets down by 8 bytes when ctx->arena_vm_start is true),
+the macro BPF_TAIL_CALL_CNT_PTR_STACK_OFF uses a hardcoded subtraction:
+
+arch/loongarch/net/bpf_jit.c:
+#define BPF_TAIL_CALL_CNT_PTR_STACK_OFF(stack) (round_up(stack, 16) - 80)
+
+When a BPF program using the BPF arena makes a tail call, emit_bpf_tail_cal=
+l()
+uses this macro to calculate tcc_ptr_off:
+
+arch/loongarch/net/bpf_jit.c:emit_bpf_tail_call() {
     ...
-  #endif
+    int tcc_ptr_off =3D BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size);
+    ...
+    emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, tcc_ptr_off);
+    emit_insn(ctx, ldd, t3, REG_TCC, 0);
+    ...
+}
 
-Thanks,
-George
+Because the hardcoded macro doesn't account for the 8-byte shift from
+REG_ARENA, it will evaluate to the offset of the integer tail call count (t=
+cc)
+instead of tcc_ptr.
+
+Could this lead to the JIT loading the integer count (often 0) into REG_TCC
+and dereferencing it as a pointer, resulting in a kernel panic?
+
+> =20
+>  	emit_insn(ctx, addid, LOONGARCH_GPR_SP, LOONGARCH_GPR_SP, stack_adjust);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707101508.3228=
+3-1-yangtiezhu@loongson.cn?part=3D1
