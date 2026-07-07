@@ -1,101 +1,216 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AD8F2C181
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 16:39:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D28E437857
+	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 17:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783442394; cv=none; b=B2NPVpl5PIJArbbXxUaQMevY9fSeD99E/8nE4gT6dK/wUsQ1ZIErOYUFpaZQn3dwtBve7XffOgriy3QWeZSW73x1OQQtCkoEn7MEpmPqDHzqQ2ht7vy+4R9kRbPg6zyaCt6uh3CObaZtf8KeGOJv8q6V72xA/uol/TPSHoqfnlk=
+	t=1783444779; cv=none; b=HXh/94N98PmhHUL8WznYZaH9lWdDE9fGuibqVY4vgV46EzcDPv/Rjk1htAIJCTzbrf2u34bEpNEPxckdPAmlBzBzlEDsZKiMkAizE7t9PgkKshcL9LxZ95oMSKda8PrVoZmxk4vwVu5sH6PEfkjZ++3z5o2T6MJG0TaStptbj80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783442394; c=relaxed/simple;
-	bh=beRjEhqO/h+H60xDf8EcfxOsBJoufs0jBTg8YSJI/U4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=rOD919LD0x06MPp3atuWTYRuX3B4iv0Zd3f0los+kEjFbfTnohQrznF28Drn11tTEl/ldbWIxKaZestfsK7S9+waEdjdBuozOrKZ1MgE3Ir30Z1Bf60KkYtlkss5BlK6SsaWicLREzmIyT9gB6iKrm98c+8f8Ob6JEDWilGtwPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LHJ6RimM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783444779; c=relaxed/simple;
+	bh=uPrZr0iPVAccotWTb0olrTCBCteVhIpn+zqUu39DbfU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=XmK33bOC6lX3lfkmzG5BNIzm3SbHzUqnBDgGcUXD2gpxfATdtLCKrDxLuZY/0XGI2HogOXVuVMPjzZcyD90aq8PV82p5XFRREJL1P5CMyzH3U3HstsvfQ5M8tW1OeSb0bs6z2DjvJ9bdzjLdyklZDOeZ+3fJ+o4fHj7VESpdkbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=uGrBTLTG; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LHJ6RimM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 279CB1F000E9;
-	Tue,  7 Jul 2026 16:39:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783442393;
-	bh=u/B9HD7Ko1wQj7w2Q42ZfVN3sKZpYCBN1YlF8Ty2ljo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=LHJ6RimM5JcMNkPac/udVuBY3yg8amtBhMhbIR2VoNCsp7fv61LDEb2X4boW6j5Du
-	 RpEFfAAloQIWB4YeRF5xJJtIRTRZVwvtW8yHKBpu0CJ/UjWqoKq3KMEipthUbv3M+F
-	 ZahDb+Bg/tFX6kvSz56M64MOOfYumQ4ZRPBlXwIGwIq9HnRoPtjy7PfhMTCf13TViT
-	 yjI16EUS59mD0kPpwiNeRri+209YO+ohlAL25U1D4RXnlqhtGywWp594N6GeiBKoxm
-	 N2aLE3CFe1l4YHz3EXRPd1n+q6e5VCHN+ADlJXBhXeSfp9STc8voxbyqClKkW/bGrD
-	 X4s0x5wRuiQSA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RESEND bpf-next v2] selftests/bpf: veristat: Minimize
- map size during verification
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Emil Tsalapatis" <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260707162012.8063-1-emil@etsalapatis.com>
-References: <20260707162012.8063-1-emil@etsalapatis.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 07 Jul 2026 16:39:52 +0000
-Message-Id: <20260707163953.279CB1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="uGrBTLTG"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-84347ad88edso5929207b3a.1
+        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 10:19:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783444776; x=1784049576; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=jfN5epMTrTiNcBZABNNCrA6guMm8dgTEPl6doYRQ6BU=;
+        b=uGrBTLTGhrBeqno2q/X6/XjS/TRQN+AFUkqekixE7qH5iUVv0Ct/LxTIE2xb7w6B+O
+         5B76dZWbMdU/S9Cm9aZeUOxOPxIN3bGcAKbDBdqH6HrOeok8UaySq5eK8Lc4XtwqXqAk
+         wowZ9azz6tPQQ+v25oBM/P3dJL23wtwWM5pjUidqp2wF8y7B1+Y7PLJJ4xKTtA6wNUFt
+         6bMPvoWq03kimJz3fSXiC9UUWJJgeXICVTkqc5jCrCuJDmVrQ4ga584EEtIe8QPZYrVV
+         iL4BAegQlunlDkEdl7kNEBTAzPm+EXR1oAV5CiAZb+Xy5pg94WDJwXlAYRwX0xe2WUXc
+         FGXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783444776; x=1784049576;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jfN5epMTrTiNcBZABNNCrA6guMm8dgTEPl6doYRQ6BU=;
+        b=O65A+tYbTpVSh3wU3HR9ep8MM0g5eLHVFhrjJ2LkpB1eggzvSe7WDMKewkFvWPkMGr
+         N+NX6wDZ0jaxlXqjWPM2KKs1YXXbCsJBwE+CcgkfKddVqVRjPexufndUMLIayJqZEU4s
+         Ys9eb+GNG0rv+rRtPLb0PLJ1ey2tRYv48dakMgwIHganeg+8LFb1WIBuc90ixnh5xfZl
+         SGe3dPssWPMT00VHAs8ayrcCeXJZ8hIXWGYEG9tM+wqcFcKm1el/PCHLBMJc/GuCv1B+
+         /Yzj4H5apm82GgnyrsWi+LKonbZJQugr+DxIzTY+/Nwc/rAEA6haHvD4MS1b1JRL7Bmu
+         vg/g==
+X-Forwarded-Encrypted: i=1; AHgh+Rq7LP8eaMQ0CHLn5UueefEo7O7hM8pJXH1fmY5JNO/aJ88v1edZQvx6zUztI+wQDunWy4M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwfkGC459A3CDM4+ANsQK71gsQsoCUUhcjnecETpkxjxSVgGpN
+	hTx7vGpndP9otqK7zFxSwUw629nVW3t2BxYPwYDdipK25RkjEQUzpiBn2hCUURjsdjo=
+X-Gm-Gg: AfdE7ckQDaEIh1kC7x4Tx1HXslTKKB+OXli452bDw7fmh31l1EOQ10/bniH94qxmgEc
+	IfIOaBitKdG9w8p4RcNhyTcVEv/zJ0LSpQeVJtJEvMGu+c9EOfkgY1fE5kRDt0tdLXW/qkEhYcu
+	3R7c1317IRzmo6iHgtY0UA63MaFWDjLinQizYjI3y4JCotCXttW3QZeyjPYQ2Bs9Vxbeu9wOxLO
+	cyO7cTTPzSY7mvQHc1RxbTqJidDp4zO1B8N7WBI47Si9yIZJshe5KIqsAiwiiX8F1fG9+9a8bxN
+	BOsKrjq5C8Y72H2MeXJGK/EUhzME0Zfk4AlHigXzhcjM5wyxSNudS+I1l40BZheaLd3mHpOZ1TN
+	aXXnwZO/uI5BR7nB7aP3y9t+METxHemRWQ7AwoCHKbj7LBV4UMuQqdrF434PUWvxJNaCK23ICSv
+	gL9TKXAHOuGSbpY/UM3xhjIRcEckKjb59HlKnmwZ/URw==
+X-Received: by 2002:a05:6a00:4f93:b0:848:2f77:e2d7 with SMTP id d2e1a72fcca58-8482f77f29dmr3429036b3a.64.1783444775844;
+        Tue, 07 Jul 2026 10:19:35 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ca5afdb7534sm1321918a12.12.2026.07.07.10.19.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jul 2026 10:19:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 07 Jul 2026 13:19:34 -0400
+Message-Id: <DJSIEQSX3AFI.341HNU79LHFEF@etsalapatis.com>
+Cc: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf] bpf, sockmap: Account for receive queue in FIONREAD
+ without a verdict program
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: <mattia.meleleo@coralogix.com>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Jakub Sitnicki" <jakub@cloudflare.com>,
+ "Jiayuan Chen" <jiayuan.chen@linux.dev>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260707-fionread-no-verdict-v1-1-ce94a72357ec@coralogix.com>
+In-Reply-To: <20260707-fionread-no-verdict-v1-1-ce94a72357ec@coralogix.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] veristat overrides BPF_MAP_TYPE_HASH_OF_MAPS max_entries to 1, c=
-ausing map preparation to fail for declaratively initialized maps
---
+On Tue Jul 7, 2026 at 12:15 PM EDT, Mattia Meleleo via B4 Relay wrote:
+> From: Mattia Meleleo <mattia.meleleo@coralogix.com>
+>
+> tcp_bpf_ioctl() answers SIOCINQ from psock->msg_tot_len, which only
+> counts bytes in ingress_msg. Without a stream/skb verdict program
+> nothing is diverted there: data stays in sk_receive_queue, so FIONREAD
+> returns 0 even though read() returns data.
+>
+> Add tcp_inq() to the reported value when the psock has no verdict
+> program. The two queues are disjoint, so bytes redirected into
+> ingress_msg from other sockets stay correctly accounted through
+> msg_tot_len.
+>
+> Add a selftest covering FIONREAD without a verdict program.
+>
+> Fixes: 929e30f93125 ("bpf, sockmap: Fix FIONREAD for sockmap")
+> Signed-off-by: Mattia Meleleo <mattia.meleleo@coralogix.com>
 
---- Patch [1]: [PATCH RESEND bpf-next v2] selftests/bpf: veristat: Minimize=
- map size during verification ---
-commit be52ac6965be2ec63632786bb06d60b4e6152bc6
-Author: Emil Tsalapatis <emil@etsalapatis.com>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-selftests/bpf: veristat: Minimize map size during verification
+I don't think the Sashiko READ_ONCE() recommendation is that important,
+we're just checking for the pointers' existence and I don't see how the
+reads can be moved/optimized out/merged in a way that breaks this code.
 
-This commit updates veristat to resize BPF maps where max_entries is
-irrelevant to the verification process. By shrinking these maps to the
-minimum size, it avoids -ENOMEM errors on memory-constrained systems.
-
-> diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selft=
-ests/bpf/veristat.c
-> --- a/tools/testing/selftests/bpf/veristat.c
-> +++ b/tools/testing/selftests/bpf/veristat.c
-> @@ -1248,6 +1248,30 @@ static void fixup_obj_maps(struct bpf_object *obj)
+> ---
+>  net/ipv4/tcp_bpf.c                                 | 16 ++++++++-
+>  .../selftests/bpf/prog_tests/sockmap_basic.c       | 39 ++++++++++++++++=
+++++++
+>  2 files changed, 54 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+> index cc0bd73f3..a001b1fff 100644
+> --- a/net/ipv4/tcp_bpf.c
+> +++ b/net/ipv4/tcp_bpf.c
+> @@ -334,6 +334,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
 > =20
->  		/* fix up map size, if necessary */
->  		switch (bpf_map__type(map)) {
-> +		/*
-> +		 * if the verifier doesn't use max_entries
-> +		 * then set to 1 to avoid -ENOMEM
-> +		 */
-> +		case BPF_MAP_TYPE_HASH:
-> +		case BPF_MAP_TYPE_PERCPU_HASH:
-> +		case BPF_MAP_TYPE_LRU_HASH:
-> +		case BPF_MAP_TYPE_LRU_PERCPU_HASH:
-> +		case BPF_MAP_TYPE_HASH_OF_MAPS:
+>  static int tcp_bpf_ioctl(struct sock *sk, int cmd, int *karg)
+>  {
+> +	struct sk_psock *psock;
+>  	bool slow;
+> =20
+>  	if (cmd !=3D SIOCINQ)
+> @@ -344,7 +345,20 @@ static int tcp_bpf_ioctl(struct sock *sk, int cmd, i=
+nt *karg)
+>  		return -EINVAL;
+> =20
+>  	slow =3D lock_sock_fast(sk);
+> -	*karg =3D sk_psock_msg_inq(sk);
+> +	psock =3D sk_psock_get(sk);
+> +	if (unlikely(!psock)) {
+> +		unlock_sock_fast(sk, slow);
+> +		return tcp_ioctl(sk, cmd, karg);
+> +	}
+> +	*karg =3D sk_psock_get_msg_len_nolock(psock);
+> +	/* Without a verdict program, ingress data is never diverted to
+> +	 * ingress_msg: it stays in sk_receive_queue and is read through
+> +	 * the fallback to tcp_recvmsg(), so account for it like
+> +	 * tcp_ioctl() does.
+> +	 */
+> +	if (!psock->progs.stream_verdict && !psock->progs.skb_verdict)
+> +		*karg +=3D tcp_inq(sk);
+> +	sk_psock_put(sk, psock);
+>  	unlock_sock_fast(sk, slow);
+> =20
+>  	return 0;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/too=
+ls/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> index cb3229711..f0f368201 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> @@ -1373,6 +1373,43 @@ static void test_sockmap_multi_channels(int sotype=
+)
+>  	test_sockmap_pass_prog__destroy(skel);
+>  }
+> =20
+> +/* A socket in a sockmap without a verdict program keeps its ingress dat=
+a
+> + * in sk_receive_queue: FIONREAD must account for it.
+> + */
+> +static void test_sockmap_no_verdict_fionread(void)
+> +{
+> +	int err, map, zero =3D 0, sent, avail;
+> +	int c0 =3D -1, c1 =3D -1, p0 =3D -1, p1 =3D -1;
+> +	struct test_sockmap_pass_prog *skel;
+> +	char buf[256] =3D "0123456789";
+> +
+> +	skel =3D test_sockmap_pass_prog__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> +		return;
+> +	map =3D bpf_map__fd(skel->maps.sock_map_rx);
+> +
+> +	err =3D create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1);
+> +	if (!ASSERT_OK(err, "create_socket_pairs()"))
+> +		goto out;
+> +
+> +	err =3D bpf_map_update_elem(map, &zero, &c1, BPF_NOEXIST);
+> +	if (!ASSERT_OK(err, "bpf_map_update_elem(c1)"))
+> +		goto out_close;
+> +
+> +	sent =3D xsend(p1, &buf, sizeof(buf), 0);
+> +	ASSERT_EQ(sent, sizeof(buf), "xsend(p1)");
+> +	avail =3D wait_for_fionread(c1, sizeof(buf), IO_TIMEOUT_SEC);
+> +	ASSERT_EQ(avail, sizeof(buf), "ioctl(FIONREAD)");
+> +
+> +out_close:
+> +	close(c0);
+> +	close(p0);
+> +	close(c1);
+> +	close(p1);
+> +out:
+> +	test_sockmap_pass_prog__destroy(skel);
+> +}
+> +
+>  void test_sockmap_basic(void)
+>  {
+>  	if (test__start_subtest("sockmap create_update_free"))
+> @@ -1415,6 +1452,8 @@ void test_sockmap_basic(void)
+>  		test_sockmap_skb_verdict_shutdown();
+>  	if (test__start_subtest("sockmap skb_verdict fionread"))
+>  		test_sockmap_skb_verdict_fionread(true);
+> +	if (test__start_subtest("sockmap no_verdict fionread"))
+> +		test_sockmap_no_verdict_fionread();
+>  	if (test__start_subtest("sockmap skb_verdict fionread on drop"))
+>  		test_sockmap_skb_verdict_fionread(false);
+>  	if (test__start_subtest("sockmap skb_verdict change tail"))
+>
+> ---
+> base-commit: d2c9a99135da931377240942d44f3dea104cedb8
+> change-id: 20260707-fionread-no-verdict-a4f8697ac9f9
+>
+> Best regards,
+> -- =20
+> Mattia Meleleo <mattia.meleleo@coralogix.com>
 
-[Severity: Medium]
-Will this cause map preparation to fail with -E2BIG if there are multiple
-inner maps declaratively initialized?
-
-In fixup_obj_maps(), if the outer map's max_entries is forcibly overridden =
-to 1,
-when libbpf later attempts to populate the slots via bpf_map_update_elem()
-during bpf_object__prepare(), the first insertion succeeds, but subsequent
-insertions fail because the hash map's capacity is constrained to 1.
-
-Does this mean tests that declaratively initialize multiple inner maps
-(such as test_btf_map_in_map.bpf.o) will fail to load with invalid map FDs,
-subsequently causing the verifier to reject the programs?
-
-> +		case BPF_MAP_TYPE_SOCKHASH:
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707162012.8063=
--1-emil@etsalapatis.com?part=3D1
