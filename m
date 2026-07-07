@@ -1,135 +1,74 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 708623E3156
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 10:26:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEABD317177;
+	Tue,  7 Jul 2026 10:30:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783420006; cv=none; b=d2I4CkAV0KEN7/uQMP/x+ovryatcqyIv/FjKm+L+cnFMYAJP4zH3sUfGPfp3+OeHrgQV24wEhxfFY0AYMms7VhdkiuAXPCe2jcvjm4K/tFvIFcMlYDQAgAAmsywE0tlRg97QGK8ByFU5MBHzCvt5LWmjWL9kDWPVOWCtY+kYBiY=
+	t=1783420234; cv=none; b=qXAMr5gAoL8mW33skW6rKN0kLcK6tQYRMnEd3oHF97Q+wTe7m2CdYq/pl9SDSLRkxvQP5IZHDV1Cn/NQAhIvmhSbKOmP4InwG7lpNDm5PCG7se+XAwxzr4nN8iI13TSqvvQyGYJXPicEccdU8Cf6lJBsCTAUZV++IGfV9YDrp6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783420006; c=relaxed/simple;
-	bh=P1kj2Vu9P6SS/tz4jR8CTq+OuE/6c25550Plw4ezev8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Dgz2t1lIOeQukC1PPwC8SNQ8MZyFpl4HvrkIg6mRZaVJTmfB3vXTXSp4K3oq1XPG5U1XeUYh/9c0cNW4EzYsSasOYcsyE8X7AJ4IUPN8qe+wdLmNqU1QHaBrCNXqG4yQgZNTSZmXc4tNI1FGNKqyJqqGq+yAawmuXtiIQGKjlas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jwpsdCrR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783420234; c=relaxed/simple;
+	bh=P1LPUyfTT6UNum5H1lPiHnGnvr9XA7zAn97Ggh5udtA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=X70dvFV7CSDX59JrQfEkNYIaX+SOSHX8sc7zKwbQIXZ05NtbPJToKTLHwHDUXRKm5NMypJOe7/EZ4rBzFvKpmHLw8MVzxyoMXYAoHufM4cm0Spzu8zAT/yec9EnsN4SO/9LI4q1zB5bO80MjXrJuxkauEVX+ddRrrGnF78A2U+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fG7eHL4w; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jwpsdCrR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEF191F000E9;
-	Tue,  7 Jul 2026 10:26:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fG7eHL4w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01ACB1F000E9;
+	Tue,  7 Jul 2026 10:30:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783420002;
-	bh=a0f9hz8Ifldd8xjWrGusqUs6TmOISZbp3uDW/b4eJGY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jwpsdCrRXXObSa5gkpW6gaHYQF/j8erUi2k4SabJOU3qd8sa1hUmNE2Zg5xzmYx/O
-	 oIUa+rFgQhD6jg3snKsgWjLcqw+RseIPDJxv/LT0Wdi7Gb9yhP9MGqX+AX5aYG94eS
-	 tlHMss7J+eb5TGOsCeKyHxmmTzLO2BP1csCc7TAt+DH9MV8VG+8MHX3Iof7mVh6Cb/
-	 jfm+/H0Z4O7/kN0pJfYPxtioYhsWuW70lTagIE7LuXPXxzwKVDhRvKjw9T1IPfeBPM
-	 k7vSR9fncd+VHzmNmWLI0v4BbmNO+cGpRxTPLNalORZOPC82vyUm89YuPGvVujsrVq
-	 zerTMQaCnn2VQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 1/4] LoongArch: BPF: Optimize redundant TCC loads in
- epilogue
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tiezhu Yang" <yangtiezhu@loongson.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260707101508.32283-2-yangtiezhu@loongson.cn>
-References: <20260707101508.32283-1-yangtiezhu@loongson.cn>
- <20260707101508.32283-2-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 07 Jul 2026 10:26:42 +0000
-Message-Id: <20260707102642.AEF191F000E9@smtp.kernel.org>
+	s=k20260515; t=1783420233;
+	bh=V27VjV4O2guipQj7TJBil7hD2n4t6eT/HIHVLroM7DI=;
+	h=Date:From:To:Cc:Subject;
+	b=fG7eHL4wb5Owayi0Cvoua3RnstPq3sZeo/FUyxWFjV/YgUgZZSakL0Nz9hbV61BAN
+	 NQwREMGsOFA5XXGvXXFKnmms+6lgk51XOsA9xtP7cS+kPzhjG+VhksHtxCaZRI+9HX
+	 XEC98Dt0afBO593we0EniHIDr24XJL2mpJYif5doMg6k1aU7HQPlAqaWm890JU0hcy
+	 aefQJdk29gFbSBzyNHmC8OboBt/CUgdYZDeh0aRYKtT2sN3maowMr+fdziSMfvFW10
+	 adb0Wpv4m7G7BQAqs1A87E2gC21GqWAhm2xJVzQWU1WXG8UBjlAo7xS321VBDv3yjT
+	 n7eTfSAxgwXOw==
+Date: Tue, 7 Jul 2026 11:30:29 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+	Networking <netdev@vger.kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Missing signoff in the bpf-next tree
+Message-ID: <akzVRW-FyZ8HCDdx@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="e8+9Np68LcNTiq9c"
+Content-Disposition: inline
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
 
-Pre-existing issues:
-- [High] The macro BPF_TAIL_CALL_CNT_PTR_STACK_OFF does not account for the=
- BPF Arena register, leading to an incorrect stack offset calculation and a=
- deterministic kernel panic on tail calls when arena is used.
---
+--e8+9Np68LcNTiq9c
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
---- Patch [1]: [PATCH v3 1/4] LoongArch: BPF: Optimize redundant TCC loads =
-in epilogue ---
-commit eabfba52164a1855119336bb138d22f9f54aedfe
-Author: Tiezhu Yang <yangtiezhu@loongson.cn>
+Commit
 
-    LoongArch: BPF: Optimize redundant TCC loads in epilogue
-   =20
-    The legacy epilogue implementation pops the tail call counter (TCC)
-    context via a redundant double-load pattern. It first decrements the
-    load_offset by 2 slots to fetch 'tcc_ptr', and then immediately bumps
-    it back up by 1 slot to load the original 'tcc' value into REG_TCC,
-    unnecessarily overwriting the register.
-   =20
-    Optimize this sequence by adjusting the load_offset by only 1 slot.
-    This aligns the offset directly with the higher stack slot containing
-    the entry TCC counter (or caller state), allowing us to restore the
-    REG_TCC register safely with a single load.
+  83a93e3b80bd3 ("selftests/bpf: libarena: Replace leftover st_ prefix with test_")
 
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index 2738b4db11653..93a1813122564 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -246,14 +246,8 @@ static void __build_epilogue(struct jit_ctx *ctx, bo=
-ol is_tail_call)
->  		emit_insn(ctx, ldd, REG_ARENA, LOONGARCH_GPR_SP, load_offset);
->  	}
-> =20
-> -	/*
-> -	 * When push into the stack, follow the order of tcc then tcc_ptr.
-> -	 * When pop from the stack, first pop tcc_ptr then followed by tcc.
-> -	 */
-> -	load_offset -=3D 2 * sizeof(long);
-> -	emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, load_offset);
-> -
-> -	load_offset +=3D sizeof(long);
-> +	/* Only restore the TCC state into REG_TCC from the higher slot */
-> +	load_offset -=3D sizeof(long);
->  	emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, load_offset);
+is missing a Signed-off-by from its author
 
-[Severity: High]
-This isn't a bug introduced by this patch, but while looking at the dynamic
-stack offset handling for REG_ARENA here, I noticed an issue in how the sta=
-ck
-offset is calculated for the tail call counter pointer.
+--e8+9Np68LcNTiq9c
+Content-Type: application/pgp-signature; name="signature.asc"
 
-While the prologue and epilogue dynamically adjust load_offset for REG_ARENA
-(shifting the offsets down by 8 bytes when ctx->arena_vm_start is true),
-the macro BPF_TAIL_CALL_CNT_PTR_STACK_OFF uses a hardcoded subtraction:
+-----BEGIN PGP SIGNATURE-----
 
-arch/loongarch/net/bpf_jit.c:
-#define BPF_TAIL_CALL_CNT_PTR_STACK_OFF(stack) (round_up(stack, 16) - 80)
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmpM1UQACgkQJNaLcl1U
+h9ALQgf/foItRvZA/3Ri6vG1+O/n1a71wTFxutjBdm8YxgWjCXWDi2u5MTlKxRh9
+4h5nslBeD2UQ4gHy0gM0MFHbZR7lQ3UyERXVRiXacLJyXjBhC4BxpY4BLeAqy7+f
+UbC4HQ0kQS+ylxKLEILBFdSwrUvWK74f7mEyeYiBjL+6SFofqwBxuwaV6TZsAfEd
+xjlRCDd/7TM9v8GKaapz8besB7g5VkFeIGgJPfCnPMDbf3p9EG4yoCH7FtOeF8Ia
+jKuNxiPZ8M31lIyWb29HMvQFpOxsYmAuVr5xY15mXg9odIsREnmCgCeSgKnxKzia
+s7vQHZBwMPfd0QGWgE3Uv0cYkd6OZA==
+=8LRB
+-----END PGP SIGNATURE-----
 
-When a BPF program using the BPF arena makes a tail call, emit_bpf_tail_cal=
-l()
-uses this macro to calculate tcc_ptr_off:
-
-arch/loongarch/net/bpf_jit.c:emit_bpf_tail_call() {
-    ...
-    int tcc_ptr_off =3D BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size);
-    ...
-    emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, tcc_ptr_off);
-    emit_insn(ctx, ldd, t3, REG_TCC, 0);
-    ...
-}
-
-Because the hardcoded macro doesn't account for the 8-byte shift from
-REG_ARENA, it will evaluate to the offset of the integer tail call count (t=
-cc)
-instead of tcc_ptr.
-
-Could this lead to the JIT loading the integer count (often 0) into REG_TCC
-and dereferencing it as a pointer, resulting in a kernel panic?
-
-> =20
->  	emit_insn(ctx, addid, LOONGARCH_GPR_SP, LOONGARCH_GPR_SP, stack_adjust);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707101508.3228=
-3-1-yangtiezhu@loongson.cn?part=3D1
+--e8+9Np68LcNTiq9c--
