@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F220C3B42DB
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 19:50:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F12B3B9D9E
+	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 19:52:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783453846; cv=none; b=RP1KTHCYEjyJRRQMsRMEd7zOgAZYTRPGYBcf1E/8gQVr4g2eF2YbgieSniRXa/AtioGvm7SQiOCtwrly0UK6/5f3jCakNSJaiP1TiD0U2i4abWLz+BYreHczaa2OO2O4FNXZ80K2kFGG7B+6Cuk/wkcpyegjKRWYynO6d6R0khA=
+	t=1783453979; cv=none; b=r0rmFVzjYjnEVUNitIxJO3u9aD2cmBVfKEo7y1i/lPvT37cYAuLraTizteY0HMbydsbxWmARpfyDhrrmvJL8HKox3UoyiBh6IyVQJ6Oj1dmwsS/wKf/jZfHbI4hjbKmI8yUC880fuBZ8EOy5oeJuqbjo9Hhj5Wr7ZqgvYefX6ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783453846; c=relaxed/simple;
-	bh=Qs9cGq/noyZ9RjUV2/GFkA6VMK9rQ5wyF3mqCgfq5B4=;
+	s=arc-20240116; t=1783453979; c=relaxed/simple;
+	bh=U7UlhFVIu8c9Mkyl5vrpAcxEKiqCLBIvugRKWM1ubUc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=bZSXIxGk0maQWAupx5tadNxjSi4GCd+T7dgQydCP1mhIAxzW1oLwXovNZNsZMBFhKEMai7eRzw2/QBUHincDU2NKZPmn0YY3UL6ttCo0nwB3OJcb/4d1Y1s7JjIRnw+/ewoEvj7vjssE8IfBKIp49DDJSQDjt3BD1lMYRvoNpRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A+f7JZh6; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=HZg+S9AYgCc8lmX9NpwkcF+eGsrk2OR70tJGPn5BgJjXdWqNKGpnvIT05Re5eopQm6qDGudh6HsXt1+CdfELM+xJD26A4Ct9TNXmvS6QyOpkq4hKLPNqPGbwT9Y9GkmpUwOEP7Si3A6GSFC+nMxlBRA5FcCAX8yVZXy+MC7SdEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K7eW1Tu0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A+f7JZh6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 729391F000E9;
-	Tue,  7 Jul 2026 19:50:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K7eW1Tu0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F0681F000E9;
+	Tue,  7 Jul 2026 19:52:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783453844;
-	bh=OQPAR35p0L9sfC0hMSaBcLsYEgai5diAfh0tkQG0+IU=;
+	s=k20260515; t=1783453978;
+	bh=fBbpnmPSADLPwWbHqqO+vAm4BGq3PLDLZhqV3F4ms44=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=A+f7JZh6WYwXG//AfrejA0Fw1ft5vfacgAv2FVUkeypWHLeFKW0PmcPc+339ZfUE9
-	 UYTnOmRwzvhxQdjIJnyuyDmQ0CMKow+RMqdELE7q5G0087V5orkzwaYPW4+j4Je2v/
-	 QSfI93Mwgk5cx6cPdyjHJoit+pBg/Spabe46nFV1GDszfYvSy+8xrJecKTnZER0Mgg
-	 mKh342RjICpksJIKdUNDfssgAnSRUecQCy4ADLkVWA6FW51G2XyiBxuaXLs26b2miu
-	 +v2GUciv2Nn/1HNc2ZRZOR27ZeJDD0w8mgEoejwvjdZLJIa1tfahMPrCEkYtd62R0b
-	 vla6rhbx2on3w==
+	b=K7eW1Tu0hLRcjxMDpq+J2iIKgpFDHbrBNbnVVLxMqsGUtkmZaLEfI9Cq2BnT78M2q
+	 YbUanwbKNYga++lcSk9mqt3eKVS3An0+hFcz5tH63wvVZdpv8ZCPvz8DctL1pR7s/K
+	 ChNFdYiMHo4rg/ifIwhY92sLfNM9A6MMla0v2O7jYW72oBEcJG7XAWZDcT2OUCTG/2
+	 42t7Bb7K0/0JiO/jMLQKixx0XQ3jChxusm4j0T5e5Hyk8FKNHX9wMI4C2OZ0jIJ2nu
+	 rEB+M7/F5wHa51S3gXcEuFEBx1Dh/ijj6L3XWgjajc6c4BVlIZh/mBS9Byrv6Ersa9
+	 ZBvVmFPghUh2Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 6/8] selftests/bpf: Adjust bpf_map layout in
- verifier_map_ptr
+Subject: Re: [PATCH bpf-next v5 3/8] libbpf: Drop in-loader metadata check
+ for load-time verification
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Daniel Borkmann" <daniel@iogearbox.net>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260707193104.350066-7-daniel@iogearbox.net>
+In-Reply-To: <20260707193104.350066-4-daniel@iogearbox.net>
 References: <20260707193104.350066-1-daniel@iogearbox.net>
- <20260707193104.350066-7-daniel@iogearbox.net>
+ <20260707193104.350066-4-daniel@iogearbox.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 07 Jul 2026 19:50:44 +0000
-Message-Id: <20260707195044.729391F000E9@smtp.kernel.org>
+Date: Tue, 07 Jul 2026 19:52:57 +0000
+Message-Id: <20260707195258.0F0681F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,81 +47,113 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Unmodified selftests fail due to removed in-loader signature val=
-idation logic.
+- [Critical] Removal of the 'excl' field from 'struct bpf_map' and the new =
+requirement for 'fd_array_cnt > 0' on signed programs breaks backward compa=
+tibility with statically compiled userspace binaries containing BPF light s=
+keletons generated by older versions of bpftool.
 --
 
---- Patch [6]: [PATCH bpf-next v5 6/8] selftests/bpf: Adjust bpf_map layout=
- in verifier_map_ptr ---
-commit 044ddeab6141689800cc4332d820c23c210957a8
+--- Patch [3]: [PATCH bpf-next v5 3/8] libbpf: Drop in-loader metadata chec=
+k for load-time verification ---
+commit 71f58a2f5fe9ee159ac24a6b1705395d7bc4519c
 Author: Daniel Borkmann <daniel@iogearbox.net>
 
-selftests/bpf: Adjust bpf_map layout in verifier_map_ptr
+libbpf: Drop in-loader metadata check for load-time verification
 
-This commit updates the expected verifier messages in the verifier_map_ptr
-test to account for the removal of the write-only excl member from
-struct bpf_map.
+The kernel now verifies the metadata at BPF_PROG_LOAD time by folding
+the frozen contents of the loader's exclusive fd_array maps into the
+signature, so the loader no longer checks anything itself. Generated
+loaders thus carry no verification logic of their own anymore. The struct
+bpf_map layout BUILD_BUG_ON()s on the kernel side are removed as well.
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c b/tools=
-/testing/selftests/bpf/progs/verifier_map_ptr.c
-> index 1661936598703..e0a65835c861b 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
-[ ... ]
-> @@ -97,23 +98,23 @@ __naked void read_non_existent_field_rejected(void)
->  }
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index adf53f7edf287..c1a98fa367381 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -299,7 +299,6 @@ struct bpf_map_owner {
 > =20
->  /*
-> - * The u32 excl field spans offsets 32..35 (mend 36). Reading a u32 at o=
-ffset
-> - * 33 starts inside excl but extends past its end, which the verifier re=
-jects
-> + * The sha byte array spans offsets 0..31 (mend 32). Reading a u32 at of=
-fset
-> + * 30 starts inside sha but extends past its end, which the verifier rej=
+>  struct bpf_map {
+>  	u8 sha[SHA256_DIGEST_SIZE];
+> -	u32 excl;
+>  	const struct bpf_map_ops *ops;
+>  	struct bpf_map *inner_map_meta;
+
+[Severity: Critical]
+Does removing the excl field break backward compatibility with older
+userspace binaries that contain statically compiled BPF light skeletons?
+
+Older skeletons generated by bpftool (with gen_hash=3Dtrue) include a BPF l=
+oader
+that hardcodes a 4-byte read at offset 32 of struct bpf_map to verify the
+signature by reading the excl field:
+
+emit_signature_match()
+...
+emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, SHA256_DIGEST_LENGTH));
+
+With the excl field removed, this offset now points to the 8-byte ops point=
+er
+(on 64-bit platforms).
+
+Will the BPF verifier's btf_struct_access() reject partial reads of pointers
+and return -EACCES?
+
+On 32-bit architectures, could this result in a pointer-to-scalar comparison
+failing verification?
+
+Will this cause existing, statically compiled binaries to unconditionally
+fail to load on the new kernel?
+
+[ ... ]
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index e898fad01aafe..358f2b0ce2bd3 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -1598,13 +1598,6 @@ static int map_create_alloc(union bpf_attr *attr, =
+bpfptr_t uattr, struct bpf_ver
+>  			err =3D -EFAULT;
+>  			goto free_map;
+>  		}
+> -
+> -		/* See libbpf: emit_signature_match() */
+> -		BUILD_BUG_ON(offsetof(struct bpf_map, excl) !=3D SHA256_DIGEST_SIZE);
+
+[Severity: Critical]
+Is it safe to remove this ABI contract guarantee?
+
+Older generated loaders depend on this exact layout to successfully load.
+
+[ ... ]
+> diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
+> index 74503d358bc8a..53fee53d36d51 100644
+> --- a/tools/lib/bpf/skel_internal.h
+> +++ b/tools/lib/bpf/skel_internal.h
+[ ... ]
+> @@ -400,6 +371,8 @@ static inline int bpf_load_and_run(struct bpf_load_an=
+d_run_opts *opts)
+>  #ifndef __KERNEL__
+>  	attr.signature =3D (long) opts->signature;
+>  	attr.signature_size =3D opts->signature_sz;
+> +	if (opts->signature)
+> +		attr.fd_array_cnt =3D 1;
+
+[Severity: Critical]
+Can relying on fd_array_cnt break old skeleton loaders?
+
+The verifier in kernel/bpf/verifier.c:fd_array_get_map_idx() explicitly rej=
 ects
->   * as an out-of-bounds scalar access.
->   */
+signed BPF programs that do not set fd_array_cnt:
 
-[Severity: Medium]
-Does this patch series also need to update signed_loader.c to account for t=
-he
-removal of the excl member and emit_signature_match logic?
+if (env->signature) {
+	verbose(env, "signed program must bind maps via a continuous fd_array (fd_=
+array_cnt)\n");
+	return -EACCES;
+}
 
-It appears that leaving tools/testing/selftests/bpf/prog_tests/signed_loade=
-r.c
-unmodified causes several tests to fail.
-
-For example, check_sig_match_shape() explicitly looks for
-emit_signature_match instructions which are no longer generated:
-
-    for (i =3D 0; i + 1 < n; i++) {
-        if (in[i].code =3D=3D (BPF_LD | BPF_IMM | BPF_DW) &&
-            in[i].src_reg =3D=3D BPF_PSEUDO_MAP_IDX) {
-            a =3D i;
-            break;
-        }
-    }
-    if (!ASSERT_GE(a, 0, "emit_signature_match present"))
-        return;
-
-Additionally, metadata_not_exclusive(), metadata_sha_mismatch(), and
-metadata_hash_not_computed() test validation failures by passing a NULL
-signature. Without a signature, the kernel verifier skips metadata validati=
-on
-entirely.
-
-Since the runtime check was removed, the loader now successfully executes
-and returns 0 instead of -EINVAL, causing these tests to fail:
-
-    r =3D run_gen_loader(f.gopts.insns, f.gopts.insns_sz, f.blob,
-                       f.data_sz, NULL, 0, NULL, 0, true, f.ctx,
-                       f.ctx_sz, &ran);
-    ASSERT_TRUE(ran, "loader ran");
-    ASSERT_EQ(r, -EINVAL, "non-exclusive metadata map rejected");
-
-Are there missing updates to signed_loader.c that should be included here?
+Since older bpftool-generated user-space stubs did not set fd_array_cnt,
+will this cause all existing signed skeletons to fail to load on the new ke=
+rnel?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707193104.3500=
-66-1-daniel@iogearbox.net?part=3D6
+66-1-daniel@iogearbox.net?part=3D3
