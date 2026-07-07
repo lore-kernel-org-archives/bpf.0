@@ -1,110 +1,135 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C4F3112B2
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 14:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F21D3054C7
+	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 14:49:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783435657; cv=none; b=OzBGvBvw1ceNF2SM6PztSHEz0xucQ/USiHxHflrD5l3gtE3LmpphfYucHmx/8W86hBS4T4p70PHRY0aCZr/6m0UcarfFJZlLvX76OBzHMGKRMKB/jlXN0qCuvN4nJFe7IwFpHq3zGuxRFGY7DT3g5Nr6sb+XOa+1OGWaNAP9oTs=
+	t=1783435750; cv=none; b=jypinFsPnNUoq6CTGUDUZtRkKVfzxKtEt3CQ88ugJEelNoTjYYLxtB/vlAf2warO1YogMkYH0wKYtWHM9gx1P6XX1MNrcixZOzTI/1ldxUznqq4wlaYwbLH/7tvqPaxvLm2aBMJ2J86PWpezzyZ/JDFq1bxOguZQAIn8CDDdR5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783435657; c=relaxed/simple;
-	bh=PNv9zdSBVU59fmU9/7lEi5eHPqc+E/VlzTgKu/fSaII=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lSoH4q9pJXzummkW+dshOQO5UufXSq80+KZvMqxB99PyAaqNdE1i706aqWjWII4TNnBIA5PawjF6ggmyMaR/30pi242RjXBpIUwNTdNPdin0jqtFNZof01Af4Tao6V8fDgz8rj7gtsvXaoGIgIRAe+v9PSID9R92lPPNQEnCUb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q/IAw+ZW; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783435750; c=relaxed/simple;
+	bh=6cUKWvbX6yq+Fd7Hha2K6IVSzIN5Z/y8Q57VcZlPxY0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=X7YZ9fbJoT1Qne3taO5U79H1eVIA434im/5dD5L3/ELVscPNMmOIV0LQWVQEGe2p+P/F7PlIELiZ8hu9QhBc9Z1ogHF2dlvTm6iBq+UvzzWpwKi3mPZBwL1gjZnmjbd3VLNRHzwTKLNsonEUBYc8raTqoJZsvVGz7F1jtdIxnDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UQy47ERK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q/IAw+ZW"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-381b831d535so4877324a91.0
-        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 07:47:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783435655; x=1784040455; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=3aTkXAIBSsu3lXmX/xa/IfupA1waQVd+Dz2CaONflns=;
-        b=Q/IAw+ZWgCHVf5meSUufA7niqEEkVq+BlEdLKGGCRLNTJ4JQvhbGdZifl6P4DgPVFe
-         Q19RrYpKj3aNyEdtxlb+ouafq9sg28YC8JZGTUJbVZGjfsog73SmSI59avEcWj6bSOZJ
-         aHIyvdy48Xi8QZBfaaz/ZHVyGmdMWR++7MFdwAIJ8gvxc50I5bd9FloJmFpMAhPKd7+q
-         SnJk8Gmz8pGWrUc7Jhi0Rod+Jq7wSWvGFfIHT8mukBmFOA7h26o6kUXcSUVxY1epoimU
-         5IQTEDUEBYd/sMQ12apPAEk87pmwWrxeiaZ8P7/LQtU7ayY2gxdm4VVkZDmOfmo9ZnJ4
-         QczQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783435655; x=1784040455;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3aTkXAIBSsu3lXmX/xa/IfupA1waQVd+Dz2CaONflns=;
-        b=DNpNA5RZs3k6PvzdT2PUDEAzsqIkwiSqrpCWIiAIxEpt9PwVg8ubiYOrWMj29lVcgm
-         KBEhVYil0prEa83c0iemfgfq51c4uSIu3ksRPK2ikvmi/avBRshmDdWytgtDoQVYubiW
-         eBvki2StryhpdXkl8bScIWnon9nkPfYyJlpnC3ZptkUztL/REfiJWHDrQyglPf63bFIM
-         TQpD4ZsyfFo6WpqBMgJ8KgjG8aR2m9EF11la8AdP9DMOQLq1niMStY3e1aTLv+Td0kGr
-         od6T+hldr+g997h6E6aAKayCygGDgA9lpBSvxj1fv7h8nDF3ol/h22Yfcdg3cM4feo9Q
-         z/Ow==
-X-Gm-Message-State: AOJu0YymdExNfqOYS/AV+u/WKELx1X74RbCoE1kmO6wT/VxYwhNK/Ona
-	eJVmWTQzcr0FdEmQxeLlUragkUMpBFfaT8hdfDcxzDURQ8LheoxS1OPDsnz5mQ==
-X-Gm-Gg: AfdE7cnn6hGfmYs2RnP0yYJquMwijX24hLD5DcPGhMyJxnTTx+ussySCMZEdK2eAqgj
-	Mlxkt1mFWqd1w+p5Vr+ufdDLYhpHa87sb3FnVD4kXy6377KNkiLJBPz6x4lf4xibGwauUThkfxn
-	K+y8IGOKF/SJE1gx4G/tc2DWl4O/p3yzmzahFQjjbtJej2zwgpH64vJVMagOHgRdynDjDkvhZpQ
-	ecq28Mj1KXwcgWwEFbxCaqr0a/h5mhNE5ws75aTimO4zCMroFUO5vCs4n/iQFv+vWfco8ccw1fn
-	YjtKeYuVQRsv/9UePlK8uPr4DXbxBO47cWkZ4I++MB+/Y6Rjvg87Yakc1+7nCRYiNduAe8jPPjE
-	sqllEhrOCoeNh8vAuF4F873Uv/G8ILVvMMeUkeLAf0qNhPHMxC1fOk92ByAOhy10Ef6e9E+Nuuk
-	QbXRZ2qIzkLQ==
-X-Received: by 2002:a17:90b:562c:b0:37e:144d:7f6e with SMTP id 98e67ed59e1d1-3875650bd7cmr5588414a91.3.1783435654718;
-        Tue, 07 Jul 2026 07:47:34 -0700 (PDT)
-Received: from john-p8 ([98.97.43.67])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-387d100b5a1sm1253150a91.1.2026.07.07.07.47.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 07:47:34 -0700 (PDT)
-Date: Tue, 7 Jul 2026 07:47:32 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: Vuln seeker Cyber Security Team <security@vulnseeker.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UQy47ERK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB3151F000E9;
+	Tue,  7 Jul 2026 14:49:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783435748;
+	bh=NEECrIiuPg363T2lMe0+Y4dxEZOgscYxXLQf2360K5c=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=UQy47ERKWSKmID8zofKcAZZFyMkBDKTtz5ABYBGkzSHIyfIwiKkgUBUIJJO71jOQe
+	 aMq9xFZoozxNyLntO7lffjMulEiPg4eHKXLCPDLD7K4ie6BlbzKYt1lSrIyz0W/lZK
+	 kzfCUkXXEBR8gD0DW7lT68zrHsTmZjBsMbpdzd6hns29qxn/Daqv1PrO3TZwm5LKQc
+	 Sww+yfUXDo+tubbvaOSXyzFKvdaY5zsq0b3uJxa/dHIp5B1gmW3rHZ/uraNsJcA9c2
+	 waZN0lGnwiI6R0m7AwUhswnyO5h7/0WWVXOiyCbdKyCrsPV7og+GiXrsvrAqyEV3QA
+	 Nre8Gs1Mo1jNg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v5 5/6] riscv, bpf: Mixing bpf2bpf and
+ tailcalls
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Pu Lehui" <pulehui@huaweicloud.com>
 Cc: bpf@vger.kernel.org
-Subject: Re: Responsible Disclosure: Heap Out-of-Bounds Write via Integer
- Underflow in libbpf parse_cpu_mask_str() (libbpf.c:14446)
-Message-ID: <ak0QM9G74dc3jpWc@john-p8>
-References: <CAO_sQLjn=hghkb7SZr2UWexf=opgLTu5_AHR2uTQrJ1r13vpjg@mail.gmail.com>
+In-Reply-To: <20260707142219.2871758-6-pulehui@huaweicloud.com>
+References: <20260707142219.2871758-1-pulehui@huaweicloud.com>
+ <20260707142219.2871758-6-pulehui@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 07 Jul 2026 14:49:07 +0000
+Message-Id: <20260707144908.AB3151F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAO_sQLjn=hghkb7SZr2UWexf=opgLTu5_AHR2uTQrJ1r13vpjg@mail.gmail.com>
 
-On Fri, Jul 03, 2026 at 05:22:30PM +0500, Vuln seeker Cyber Security Team wrote:
->Dear libbpf Security Team,
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Extension programs (BPF_PROG_TYPE_EXT) targeting subprograms incor=
+rectly reset the Tail Call Counter (TCC), bypassing the tail call limit and=
+ allowing infinite loops.
+--
 
-[...]
+--- Patch [5]: [PATCH bpf-next v5 5/6] riscv, bpf: Mixing bpf2bpf and tailc=
+alls ---
+commit f7082c3640c8a167ff897d3870ee0dd71fc2faab
+Author: Pu Lehui <pulehui@huawei.com>
 
->libbpf's CPU mask parser. An integer underflow in parse_cpu_mask_str()
->causes a memset to write far past a shrunk heap allocation, reachable
->end-to-end through the public libbpf_num_possible_cpus() API.
+riscv, bpf: Mixing bpf2bpf and tailcalls
 
-Send the fix seems worth checking to me if we are already checking
-start/end. If some app is exposing user input to this then I would
-push a report to them.
+This commit implements mixed bpf2bpf and tailcalls for the RV64 JIT.
+It changes how the Tail Call Counter (TCC) is passed and preserved,
+storing it in a non-callee saved register and explicitly saving/restoring=20
+it around bpf2bpf calls and tail calls.
 
-[...]
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
+p64.c
+> index 7c6304e0b846a..823262ca47ebf 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+[ ... ]
+> @@ -1836,10 +1829,18 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn=
+, struct rv_jit_context *ctx,
+>  			}
+>  		}
+> =20
+> +		/* restore TCC to RV_REG_TCC before bpf2bpf call */
+> +		if (aux->tail_call_reachable && insn->src_reg =3D=3D BPF_PSEUDO_CALL)
+> +			emit_ld(RV_REG_TCC, ctx->tcc_offset, RV_REG_SP, ctx);
+> +
+>  		ret =3D emit_call(addr, fixed_addr, ctx);
+>  		if (ret)
+>  			return ret;
+> =20
+> +		/* store updated TCC back to stack after bpf2bpf call */
+> +		if (aux->tail_call_reachable && insn->src_reg =3D=3D BPF_PSEUDO_CALL)
+> +			emit_sd(RV_REG_SP, ctx->tcc_offset, RV_REG_TCC, ctx);
+> +
 
->  - Any downstream consumer that feeds untrusted CPU-mask strings to 
->  the
->internal parse_cpu_mask_str helper directly
+[Severity: High]
+If the bpf2bpf call jumps to a BPF_PROG_TYPE_EXT program that incorrectly
+reset RV_REG_TCC, will the caller now save that clobbered value to its own
+stack?
 
+If the TCC is continuously reset to 33 in this manner, could this bypass the
+tail call limit and allow an infinite loop resulting in a CPU soft lockup?
 
-Not sure why untrusted input is getting here but sure if someone
-is piping user input to libbpf let them know. I think if you have
-untrusted user input hitting libbpf you have bigger problems.
+>  		if (insn->src_reg !=3D BPF_PSEUDO_CALL)
+>  			emit_mv(bpf_to_rv_reg(BPF_REG_0, ctx), RV_REG_A0, ctx);
+>  		break;
+[ ... ]
+> @@ -2038,11 +2038,10 @@ void bpf_jit_build_prologue(struct rv_jit_context=
+ *ctx, bool is_subprog)
+>  	for (i =3D 0; i < RV_FENTRY_NINSNS; i++)
+>  		emit(rv_nop(), ctx);
+> =20
+> -	/* First instruction is always setting the tail-call-counter
+> -	 * (TCC) register. This instruction is skipped for tail calls.
+> -	 * Force using a 4-byte (non-compressed) instruction.
+> -	 */
+> -	emit(rv_addi(RV_REG_TCC, RV_REG_ZERO, MAX_TAIL_CALL_CNT), ctx);
+> +	if (!is_subprog)
+> +		emit(rv_addi(RV_REG_TCC, RV_REG_ZERO, MAX_TAIL_CALL_CNT), ctx);
+> +
 
-[...]
+[Severity: High]
+Does this logic handle BPF_PROG_TYPE_EXT (freplace) programs correctly?
 
+When an extension program is loaded independently and attached to a global
+subprogram of another BPF program, is_subprog will be false because it is t=
+he
+main program of its own object.
+
+Won't this cause the EXT program to unconditionally emit this instruction,
+clobbering the inherited TCC passed in RV_REG_TCC from the caller?
+
+> +	/* tailcall starts here, emit insn before it must be fixed */
+> =20
+>  	emit_addi(RV_REG_SP, RV_REG_SP, -stack_adjust, ctx);
 >
->  if (start < *mask_sz)
->      return -EINVAL;  // "CPU range out of order or overlapping"
->
 
-Send a fix. Thanks.
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707142219.2871=
+758-1-pulehui@huaweicloud.com?part=3D5
