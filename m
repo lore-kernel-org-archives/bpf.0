@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E826D2566D3
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 04:31:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F6C923183F
+	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 04:53:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783398668; cv=none; b=MhVQgOWo6MfP81s2mGN822XAgoa2mytAqmRzlkcbNq3I5NiHpv0doOH8d17g3O7QTGiy9BHA9T9RxL9uanno+wyvI8lGnnYR8MD2dA2ird0lz/JC9poNDclCRx/pZqBPhvAc2Op5jBXkEDO5ApYyWk/dz2fuGaBP2sNTD/yRjr4=
+	t=1783400020; cv=none; b=qHDDcbOR0ndE+G5Seq1af/auhcQ6/pT9ppTbWsVvAUFNXeAuGY/hnY7Hp99/IgdKB97IcyeWHp4vPwBuqdcCkB0yttx2iFJr8APTZimGupus8ifU0+g2gQcIjdGpeVzXpzSIdR5thf5B9rR8MEuILtAaQTtgdotOIHhb9+OHlxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783398668; c=relaxed/simple;
-	bh=l7dkB4S/4+BORe2Qmei5tXusHZdDDfvUgtEq21+18p4=;
+	s=arc-20240116; t=1783400020; c=relaxed/simple;
+	bh=ctoFh4OqlX33U2KYSB6QGsqIH5/82LT4VUt/fpYCL7g=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=oArN/IrMlH6K5EKdZ9zR1Ugc43/FYewijCBIhXxBvO4AA9JWT+5xs/bv7n2IVJOEhQO5nSY2/XSPFxY5aXplNyMcn9Iu5ihhdjisx4XLlKQ1WPRpVOdQaKM5vBpZ5kKzfu8ortE8rLU9Bii+UewWjXgronJIwQb/lM6uF2hfj0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cq+riwwJ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ocv1UsnrIQGkEINSNGRsiIThjU/wsxMGWBhwaZhmz/YzLVtgKSI/O1hkdWirgB7E0Cgj4Ky7DIF1DcOR+6HcmNcQrfGa8sPEmumbF/o5tjZgr7v1WCjHR8cEnouIAfBRipO81+a/RtohCPvUZikVcvhPxiOmZ82cBM118x7NiMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UMfQ1cY4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cq+riwwJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1CEF1F000E9;
-	Tue,  7 Jul 2026 04:31:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UMfQ1cY4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B30C41F00A3A;
+	Tue,  7 Jul 2026 04:53:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783398666;
-	bh=YF8rXObOUW0dHKGAeZsTdahR/bjkQQTAgxsPHdrT6fg=;
+	s=k20260515; t=1783400018;
+	bh=lEQdRkOdPqXirRlW1jgTp898xIqmgfaKnVQYmpmc8AI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cq+riwwJkOQYlJPjmjZrs/gCzkboKlfzhltdo4HPkPSalgNQNqC/EV7qA6Q1lNUZq
-	 H+crvPc6tUSQfq18Oi5aQo/ybzoNQDZmTCynklLM5CQgRq1s6/DWAi7CmoUtM7JHij
-	 sAhqn+X5Tdvh+gqjRm/BhyqTmmSmHNtkkLT/HzoMBE1dNcAz448DkVx9Xm8o7d5eDo
-	 ahk+ABj7/R0P0VU3aG5lXHXQYyrCh5pWYAOkR5029FjaEO5enCwEydFzexSd9qxJce
-	 2LeB0MARJwX6zfjwlH4FJgWnTYkjwOuWqyF6SUDFI4QSUP8ab6HMPaWndCA380lOEI
-	 kVhyOyeG3wRDA==
+	b=UMfQ1cY4XxPJUsWfNQEJVJlW8UBfAXtFeckCsQRX5dskg06dKBBuJ+eVt7q4qtgDb
+	 WZuby1fnhjDUfTVACRQFSZ8se1w7jefQn3CPoWEcYFnBAowjc0ILa7c4R86u0jAhOI
+	 kzWguBW5ZODSHWoNAFWxahFMZYVMxrPMNQhqXwn85ZcELM8GfHOyZx7Cfhz3R4X1fk
+	 hU/ElmUd5YK1pE9s3fvg2oby7XBt0/MJwxEUsYEh1S+59CxbU7Sfab0DGbIgdg6duw
+	 u2tHgv38hYz9bUEv1Db9m/Ymqxzx0q4oyMyGwHlmIx/tKaCmTuWcBgOSktOFsx03t5
+	 N5cB4StNxH9wg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v4 4/4] selftests/bpf: Fail unbound UDP on sockmap
- update
+Subject: Re: [PATCH bpf v4 2/4] bpf, sockmap: Reject unhashed UDP sockets on
+ sockmap update
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Michal Luczaj" <mhal@rbox.co>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260707-sockmap-lookup-udp-leak-v4-4-f878346f27ab@rbox.co>
+In-Reply-To: <20260707-sockmap-lookup-udp-leak-v4-2-f878346f27ab@rbox.co>
 References: <20260707-sockmap-lookup-udp-leak-v4-0-f878346f27ab@rbox.co>
- <20260707-sockmap-lookup-udp-leak-v4-4-f878346f27ab@rbox.co>
+ <20260707-sockmap-lookup-udp-leak-v4-2-f878346f27ab@rbox.co>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 07 Jul 2026 04:31:06 +0000
-Message-Id: <20260707043106.B1CEF1F000E9@smtp.kernel.org>
+Date: Tue, 07 Jul 2026 04:53:38 +0000
+Message-Id: <20260707045338.B30C41F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,46 +47,77 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] Usage of the deprecated CHECK() macro in new patch code.
+
+Pre-existing issues:
+- [High] The patch prevents a refcount leak for UDP sockets by rejecting un=
+hashed sockets, but an identical reference count leak can be triggered for =
+TCP sockets because `sk_is_refcounted()` relies on the mutable `SOCK_RCU_FR=
+EE` flag.
 --
 
---- Patch [4]: [PATCH bpf v4 4/4] selftests/bpf: Fail unbound UDP on sockma=
-p update ---
-commit 97dab8be7b651b7cede0184ca7321b97bf080f13
+--- Patch [2]: [PATCH bpf v4 2/4] bpf, sockmap: Reject unhashed UDP sockets=
+ on sockmap update ---
+commit efe688dfced966a49066087e860ab73696a8f75a
 Author: Michal Luczaj <mhal@rbox.co>
+Date:   Tue Jul 7 04:23:57 2026 +0000
 
-selftests/bpf: Fail unbound UDP on sockmap update
+bpf, sockmap: Reject unhashed UDP sockets on sockmap update
 
-This commit adjusts test_maps to reflect that sockmap now rejects unbound
-UDP sockets. It adds a check for the socket() return value and effectively
-reverts an earlier commit.
+This patch addresses a socket reference count leak by preventing unhashed U=
+DP
+sockets from being updated in sockmaps. It removes the ability for BPF prog=
+rams
+to increment a refcount on an unbound socket that subsequently gets bound a=
+nd
+skips the refcount decrement upon release.
 
-> diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/self=
-tests/bpf/test_maps.c
-> --- a/tools/testing/selftests/bpf/test_maps.c
-> +++ b/tools/testing/selftests/bpf/test_maps.c
-> @@ -759,16 +759,15 @@ static void test_sockmap(unsigned int tasks, void *=
-data)
->  		goto out_sockmap;
->  	}
-> =20
-> -	/* Test update with unsupported UDP socket */
-> +	/* Test update with unsupported unbound UDP socket */
->  	udp =3D socket(AF_INET, SOCK_DGRAM, 0);
-> -	i =3D 0;
-> -	err =3D bpf_map_update_elem(fd, &i, &udp, BPF_ANY);
-> -	if (err) {
-> -		printf("Failed socket update SOCK_DGRAM '%i:%i'\n",
-> -		       i, udp);
-> +	CHECK(udp < 0, "socket(AF_INET, SOCK_DGRAM)", "errno:%d\n", errno);
+> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> --- a/net/core/sock_map.c
+> +++ b/net/core/sock_map.c
+> @@ -542,6 +542,8 @@ static bool sock_map_sk_state_allowed(const struct so=
+ck *sk)
+>  {
+>  	if (sk_is_tcp(sk))
+>  		return (1 << sk->sk_state) & (TCPF_ESTABLISHED | TCPF_LISTEN);
 
-[Severity: Low]
-This isn't a bug, but could we use ASSERT_OK_FD() or ASSERT_GE() instead of
-the deprecated CHECK() macro here?=20
+[Severity: High]
+This is a pre-existing issue, but can the exact same reference count leak
+happen for TCP sockets because sk_is_refcounted() relies on the mutable
+SOCK_RCU_FREE flag?
 
-The BPF subsystem coding guidelines prefer using the modern ASSERT_* family
-of macros for new tests and updates.
+If a user creates a TCP socket, connects it (entering TCP_ESTABLISHED), and
+adds it to a sockmap, a BPF program can call bpf_map_lookup_elem() on the
+sockmap. This increments the socket's refcount because SOCK_RCU_FREE is not
+set on established sockets.
+
+If a user thread concurrently calls connect(AF_UNSPEC) to disconnect the
+socket (moving it to TCP_CLOSE and removing it from the map), and then calls
+listen() on the same socket, inet_hash() unconditionally sets the
+SOCK_RCU_FREE flag.
+
+When the BPF program subsequently calls bpf_sk_release(sk):
+
+net/core/filter.c:bpf_sk_release() {
+    ...
+    if (sk && sk_is_refcounted(sk))
+        sock_gen_put(sk);
+    ...
+}
+
+sk_is_refcounted(sk) will now return false because SOCK_RCU_FREE is set,
+causing bpf_sk_release() to skip the decrement and permanently leak the
+acquired reference.=20
+
+Could this sequence be abused to cause memory exhaustion, and is there a way
+to safely track the acquired references without relying on a flag that might
+change mid-flight?
+
+> +	if (sk_is_udp(sk))
+> +		return sk_hashed(sk);
+>  	if (sk_is_stream_unix(sk))
+>  		return (1 << READ_ONCE(sk->sk_state)) & TCPF_ESTABLISHED;
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707-sockmap-lo=
-okup-udp-leak-v4-0-f878346f27ab@rbox.co?part=3D4
+okup-udp-leak-v4-0-f878346f27ab@rbox.co?part=3D2
