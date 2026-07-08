@@ -1,21 +1,21 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C97A2D97A6
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:10:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6674F3E5EC0
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783541431; cv=none; b=bxhA+W7ZeQbpcFQXSdjzUcDMs27GbpFqCnW8iJl9mTXsa2oZEUPn8viT5MEaq4IXOfFV4Znzv5Ih8WG+MUg2RB7XcPwcYPtk4xiMEG14da4O6ITvWVGV46FDl2g5KG7evO278wt4AYx/AEOU76nuNv3kfQrM6TSvPCn0q2vMIWo=
+	t=1783541435; cv=none; b=D+t2z3Fg/TfhyEc1gBWrUdrFiEIl7jJFBcx5HeHvQiY1mC3dhteQeJXp/zuwHYSDFV4F6vgIRiRm168K/wcnnsFzm2TG5cNxgMMIQNizOTsS5QZV5KH5keBhFLO9lCxxqC6CUcNhqdUax2xACgTPdc7owr0DFZKOAOx5FozeGEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783541431; c=relaxed/simple;
-	bh=logokV+cAV+yMOKcSHA/fccHV+v1Kr03eX1Y4i+8G20=;
+	s=arc-20240116; t=1783541435; c=relaxed/simple;
+	bh=D79dVg8vkpHJn8r2tMTF+JUxih+w/syUhB0RP8czEFs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Vbokpxa1aeHA12igT/gissGDEq8BYUItprlRPiYoA5vYGhcbNO0y9CY3YdqtUSqHcSGgpJx32H3uQXmj1u56rm1kiJSEk0IwKhLmYKhLEu6f2NCAZmbKS4zjllDCjaxGswayYPBxCGRta2WrucjNMAXPgFzoz7AG2zcOELjaqOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+	 MIME-Version; b=d5mCzGbOIbT7x6nVIkaK1rgXIj3a1PTyHpDo8hdWY+hIeKcSATA0SVmWB8h6oP6Nsnm1GuKIDGw9t/s3qqSraXywG/RBZY/poqVYWWpl87VC14I++Cj8ilPpPnm/+U+oiSmM9bJhAYJL6zlelb17C+heF3U4xAKT1caDUzruIS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 6C87D1D0B6F89D; Wed,  8 Jul 2026 13:10:10 -0700 (PDT)
+	id 987C21D0B6F8F3; Wed,  8 Jul 2026 13:10:15 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next 06/12] bpf: Force JIT for programs using the R0:R2 register pair
-Date: Wed,  8 Jul 2026 13:10:10 -0700
-Message-ID: <20260708201010.2158718-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 07/12] bpf: Reject >8 byte return values on return-reading trampoline paths
+Date: Wed,  8 Jul 2026 13:10:15 -0700
+Message-ID: <20260708201015.2159760-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260708200939.2153664-1-yonghong.song@linux.dev>
 References: <20260708200939.2153664-1-yonghong.song@linux.dev>
@@ -37,89 +37,124 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The R0:R2 return convention introduced in this series is only implemented
-in the JIT. The BPF interpreter has no notion of a second return register=
-,
-so a program relying on the R0:R2 convention would compute wrong results
-under the interpreter. Force the JIT when bpf_prog_aux->ret_reg_pair is
-set.
+btf_distill_func_proto() builds the function model used for kfunc calls,
+the fentry/fexit/fmod_ret/fsession trampolines and struct_ops. A followin=
+g
+patch relaxes it to accept a >8 and <=3D16 byte return value, which for t=
+he
+BPF target is passed back in the R0:R2 register pair.
+
+But the BPF trampoline cannot preserve such a return. It saves and restor=
+es
+only 8 bytes of the return value (RAX on x86, i.e. R0), so the second hal=
+f
+(RDX / R2) is not preserved across a program that observes the return
+value. A program attached to a function returning a 16-byte value (e.g.
+current_time() or ns_to_timespec64(), which return struct timespec64)
+would corrupt the value seen by the real caller and read a partial return
+value itself. struct_ops trampolines have the same limitation.
+
+This only matters for the attach types that actually read the target's
+return value: fexit, fmod_ret and fsession (plus the _multi variants of
+fexit and fsession). fentry and fentry_multi run before the target return=
+s
+and never touch the return value, so they can attach to a >8 byte-returni=
+ng
+function safely.
+
+Reject a >8 byte return value for the return-reading attach types in
+bpf_check_attach_target() and bpf_check_attach_btf_id_multi(), and for
+struct_ops in bpf_struct_ops_desc_init(), ahead of the following patch th=
+at
+would otherwise let such a return through. kfunc and BPF-to-BPF subprogra=
+m
+calls, which the JIT does handle, are unaffected.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf.h   |  1 +
- kernel/bpf/core.c     |  2 +-
- kernel/bpf/verifier.c | 13 +++++++++++--
- 3 files changed, 13 insertions(+), 3 deletions(-)
+ kernel/bpf/bpf_struct_ops.c | 12 ++++++++++++
+ kernel/bpf/verifier.c       | 25 +++++++++++++++++++++++++
+ 2 files changed, 37 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c1a98fa36738..10966aba69a2 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1780,6 +1780,7 @@ struct bpf_prog_aux {
- 	bool changes_pkt_data;
- 	bool might_sleep;
- 	bool kprobe_write_ctx;
-+	bool ret_reg_pair;
- 	struct {
- 		s32 keyring_serial;
- 		u8 keyring_type;
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 73dc3ee879de..819a97d25173 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2676,7 +2676,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct b=
-pf_verifier_env *env, struct
- 		goto finalize;
+diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+index 51b16e5f5534..bbb44ef8f87a 100644
+--- a/kernel/bpf/bpf_struct_ops.c
++++ b/kernel/bpf/bpf_struct_ops.c
+@@ -445,6 +445,18 @@ int bpf_struct_ops_desc_init(struct bpf_struct_ops_d=
+esc *st_ops_desc,
+ 			goto errout;
+ 		}
 =20
- 	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
--	    bpf_prog_has_kfunc_call(fp))
-+	    bpf_prog_has_kfunc_call(fp) || fp->aux->ret_reg_pair)
- 		jit_needed =3D true;
-=20
- 	if (!bpf_prog_select_interpreter(fp))
++		/*
++		 * A >8 byte return value is passed back in the R0:R2 register
++		 * pair, which the struct_ops trampoline does not preserve (only
++		 * 8 bytes of the return value are saved and restored).
++		 */
++		if (st_ops->func_models[i].ret_size > 8) {
++			pr_warn("func ptr %s in struct %s has a >8 byte return value, which i=
+s not supported\n",
++				mname, st_ops->name);
++			err =3D -EOPNOTSUPP;
++			goto errout;
++		}
++
+ 		stub_func_addr =3D *(void **)(st_ops->cfi_stubs + moff);
+ 		err =3D prepare_arg_info(btf, st_ops->name, mname,
+ 				       func_proto, stub_func_addr,
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index fcbf532159a5..ca8b2f436c20 100644
+index ca8b2f436c20..121f56e3fb16 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -453,6 +453,15 @@ bool bpf_ret_reg_pair(struct bpf_verifier_env *env, =
-int subprog)
- 	return false;
+@@ -19112,6 +19112,20 @@ static int btf_id_allow_sleepable(u32 btf_id, un=
+signed long addr, const struct b
+ 	return -EINVAL;
  }
 =20
-+static bool bpf_ret_reg_pair_mark(struct bpf_verifier_env *env, int subp=
-rog)
++static bool attach_uses_trampoline_retval(enum bpf_attach_type type)
 +{
-+	if (!bpf_ret_reg_pair(env, subprog))
++	switch (type) {
++	case BPF_MODIFY_RETURN:
++	case BPF_TRACE_FEXIT:
++	case BPF_TRACE_FEXIT_MULTI:
++	case BPF_TRACE_FSESSION:
++	case BPF_TRACE_FSESSION_MULTI:
++		return true;
++	default:
 +		return false;
-+
-+	env->prog->aux->ret_reg_pair =3D true;
-+	return true;
++	}
 +}
 +
- static const char *subprog_name(const struct bpf_verifier_env *env, int =
-subprog)
- {
- 	struct bpf_func_info *info;
-@@ -9877,7 +9886,7 @@ static int prepare_func_exit(struct bpf_verifier_en=
-v *env, int *insn_idx)
- 	} else {
- 		/* return to the caller whatever r0 had in the callee */
- 		caller->regs[BPF_REG_0] =3D *r0;
--		if (bpf_ret_reg_pair(env, callee->subprogno)) {
-+		if (bpf_ret_reg_pair_mark(env, callee->subprogno)) {
- 			if (callee->regs[BPF_REG_2].type =3D=3D PTR_TO_STACK) {
- 				verbose(env, "cannot return stack pointer to the caller\n");
- 				return -EINVAL;
-@@ -16806,7 +16815,7 @@ static int check_global_subprog_return_code(struc=
-t bpf_verifier_env *env)
- 	if (err)
+ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 			    const struct bpf_prog *prog,
+ 			    const struct bpf_prog *tgt_prog,
+@@ -19376,6 +19390,14 @@ int bpf_check_attach_target(struct bpf_verifier_=
+log *log,
+ 		if (ret < 0)
+ 			return ret;
+=20
++		if (tgt_info->fmodel.ret_size > 8 &&
++		    attach_uses_trampoline_retval(prog->expected_attach_type)) {
++			bpf_log(log,
++				"Attach to function %s with a >8 byte return value is not supported =
+for this attach type\n",
++				tname);
++			return -EOPNOTSUPP;
++		}
++
+ 		/*
+ 		 * *.multi programs don't need an address during program
+ 		 * verification, we just take the module ref if needed.
+@@ -19652,6 +19674,9 @@ int bpf_check_attach_btf_id_multi(struct btf *btf=
+, struct bpf_prog *prog, u32 bt
+ 	err =3D btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
+ 	if (err < 0)
  		return err;
-=20
--	if (!bpf_ret_reg_pair(env, subprog))
-+	if (!bpf_ret_reg_pair_mark(env, subprog))
- 		return 0;
-=20
- 	return check_global_ret_scalar_reg(env, BPF_REG_2);
++	if (tgt_info->fmodel.ret_size > 8 &&
++	    attach_uses_trampoline_retval(prog->expected_attach_type))
++		return -EOPNOTSUPP;
+ 	if (btf_is_module(btf)) {
+ 		/* The bpf program already holds reference to module. */
+ 		if (WARN_ON_ONCE(!prog->aux->mod))
 --=20
 2.53.0-Meta
 
