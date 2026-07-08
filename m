@@ -1,98 +1,80 @@
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF1E3B7777
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 02:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474953AE19B
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 02:58:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783479480; cv=none; b=bTE8mxrhk0O8ZBNWbSuA1kgfzUQ//MY55n1z0v5TILsTGNu3Pccs4hZfFSn+ExkaloHepo9rA7ZMOG6HT8NuUefSX7DSoHT9ERPswtAlFA0iF9pdUEvFnqJjJXS9OppsW88+zqM2shyt4Lq6dmAkszg2zJS+UBi1r7t8TPNjciQ=
+	t=1783479506; cv=none; b=BWsUQaZATuVXHimIuZyv56UrsgQqZ7Q6X01OsvVKcXdiNDpbv7yDp4aQIC5oi9GeN5kz7RUIwg2VCZe42T8Jmcyl9R1WGSwKyPoAruhqc1Fwv+ipPNX9lq8skhTwBOExLM2DzqHVylHmHCTvGkeu5TA1CuHgzZnIG6Qq/kvbgXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783479480; c=relaxed/simple;
-	bh=3aBIeFzxjG5hLOVJxWC8DtcQqIoZzqgdSPM0MbUrphM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HiPuohbhlraogBZWy+DeZ+OjIKXj0ZiIVD4o/uzRiLr3kxKt+Elu+KAEvCFirjOR5FlphKeDFY4iG6Us5B00XzAxgmEVXnuPoP3kAqnFYyji91gD4FsrmZJmLwQ6MGfCM7cK7TSxertlyNbkb6FyEKmOPyxQSY0zrEqtisk24yA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eiUenpzF; arc=none smtp.client-ip=209.85.219.43
+	s=arc-20240116; t=1783479506; c=relaxed/simple;
+	bh=s5FTQdbOnM7OXuG5ACRl496Z55u8vQXvSfGirL8UMqE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YT8YsY/iHFk7WQx8mckq6RhBYEzHL0gymZbbntb2IWDsuymfd2Q8NoY7BKBBVvI04DbYDrK9n4t057+Si6gIce5sFM+Sb1gLf6kzObNMCKTyWvpQMyYsu/JC7a0TWgMBYkGtjsU5nTo2u44k4vnOy2ddbXwujd0g64qTrHaCunA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L0FNx5Kn; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eiUenpzF"
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-8ef1dc934d1so1637536d6.0
-        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 19:57:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L0FNx5Kn"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2cc84e77e78so1924825ad.2
+        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 19:58:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783479478; x=1784084278; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=RGIUqyeZoqmDFWmO4W/wGNuga+EJTtkIgRxdOVhDU04=;
-        b=eiUenpzFlT5fcVQlHrZ/RUhG1ygCmdmAxEr1r1yD47x3Bto48VQtIZtbn2t9ZMRHIE
-         dIELj9rLiVFXEdOChEYenlTSQbpUNtCNcv10UEv7jewTG31jRuAAe3iy5T8J8GyPpx6K
-         UXgBg2Ps/b4ObdlzYr2NYV9dXKrsxqbkp1sIFfgTqgy9VeS8asJSdElQX7yMjFRb4dYL
-         c7akt82HuFBaJKrgsM8tkRVvpHHHPL6LD+ySp0Yhr9ChTq0VS8eeuSaiQCyIuDYsjqK1
-         y+BRlT4u3xtAf2p6A2LimxBAX1HqtT4cBcA6WmowVVvk0tioc4gaQeX/C4VSLWxAf3Ws
-         82og==
+        d=gmail.com; s=20251104; t=1783479505; x=1784084305; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gu0Oj5H+ScjgHzDAloVQBDSsZh3OVcVLQKoErfepCiE=;
+        b=L0FNx5KnKYTSrWIQ16mvH5yeson68xFFn3PUA0Tw+i+wgw+CYH9idSzd7RkHispmeJ
+         mgxNlWfdQR8NeIqzUlw4wYwr+cskZA4s93+eBcVRAnv/U87JBhyTemPGucW0e4or2U4o
+         PL19AJapj34AaSyWA/uiMfwhmscdlNCoBSjv2KrV/Bo39LUrhBTktcUtPz4ktJwwusm/
+         TU+Hf9VO5oZ6FOMd55caS54Xe7CUVt6iJeVeeHqxjak4mRaBqv1UA9sM1R7Y9UCq6zuY
+         5jVycxd9mmonIfopusPXagL6ESFQ2eukjoBwapWy5IpzaSt/R5C7La5YqeqwfEe+59if
+         Pp0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783479478; x=1784084278;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=RGIUqyeZoqmDFWmO4W/wGNuga+EJTtkIgRxdOVhDU04=;
-        b=DZMwITnQ7/6t3KioZa/OePtUA7abRbYXQ9WJ1j/ntPCtzn89dRPXVXnkg1D0onXSfH
-         i7oZi7fMqXV/XeYjb2jSWvpY6YM32DqyLmEJL0sGNiMHFCQ3RExRtHqobUkEyLyrt1Kt
-         pkhUFheJktC6hDqpbnm9mzTOjhUlCQkx5JSConXBRDadZ5tdyetHNn4wbP7NqfqFVhUZ
-         HZNxiv8FVMOb6O635ttX1Bxt9D3TClVetPjjnFJgVMWPUbOn6e3UwOK59+MTMC9sY/4K
-         um+/07PTjAVPcQAFw0e7USU+1U6KxgQTZBtB2tYTydu2i/tP8yEJ0wCrGQ2WicQhWfcV
-         DJ/g==
-X-Gm-Message-State: AOJu0YzpxrrwHVYQl7K4AFY/qSvAp4ENpbDwWhBTEm0FfdyyJw599AdK
-	FTFRjSExsyAuD9VcrQZ5NNLkv+xTSkvb3tSKvqgdEzm/Uz7lNhTHSjggL6b1ZQhdiP4=
-X-Gm-Gg: AfdE7cmpjd1OAwEOdy+PJRQksOzuItAHM1/dFhM/KgGduztTzCj3m/BSjizc6GC0lNP
-	zeQofY9vcMM4q1c/8lZ0HTjbtzJa3TEYrwqPDzdHYfgz0gpAOd69DMGF2Ghr3DXeWoyQ8Suh2Ht
-	qMwJRpooKJi1MEimG1NgT/ez32eX7wUlsTmDxv4UEWpM9r8dJdMjDLPef8sNZHePAK/qJbFvfN6
-	ESNpc1+gdhwu+zys3fmeVzWOdsdVvlqQ89lwELE8cmqo0WL/GSF15p5oYjGweqvzL4xvjzb3F0N
-	d5Ad27uIKkxHggHsBOpkdFXkIyE/mcTQbPNLGN1JSgfjNhhkbB/p7K/UQrCHchCcw+m4oHeI5ov
-	sYguqY8arAb24tLSR07B++3cPqbH2IZQODnkEQtvsgU1I5pe1JEeLTLa4WBuprWWn402P8JCJp6
-	Zs2tARCVY39RPDlip4rWlyjoG7mRXNl/pyUKTCKNqnhTp2kiPc3gXKkgScyAG17zQPg6/fCW82z
-	6BY50KPjSMcfAs=
-X-Received: by 2002:a0c:f40f:0:b0:8f1:505c:1d2d with SMTP id 6a1803df08f44-8fea11c8be7mr8129896d6.14.1783479478388;
-        Tue, 07 Jul 2026 19:57:58 -0700 (PDT)
-Received: from battery.lan (pool-138-88-31-60.washdc.fios.verizon.net. [138.88.31.60])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8f471de83f8sm175762936d6.33.2026.07.07.19.57.57
+        d=1e100.net; s=20251104; t=1783479505; x=1784084305;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gu0Oj5H+ScjgHzDAloVQBDSsZh3OVcVLQKoErfepCiE=;
+        b=NRQAoIDyO3LtARZklyZ7cs66s7q3TK+hUgT0p1i+5amaZ3pKY+wwMgjSDJo+R8YOfF
+         WDIjLX9xjdai3Ays4PKIcnoLlgZG6s+qWdLCSH7QKVDVuiJY3jQ6AQpgPpxLxEaL/ej0
+         nKg858QQiZNqj5I1MEn+gzCw+MuIk7pmOt7vzgxIkhZxHDiQJowlRbcTqTFMFpTVTgQ2
+         Dbccen0MCg3D80MmOZGINEwLghoPqyV8XJrk39VQ2AdiGmwmLvf66tDuQr7/W4KMyOJP
+         Kpp4yCKNYmxhqa25hqDGgB5VUMt39edv/U06ligRyQsNqx5aoXjMF603KhbAbI6mboCp
+         b72w==
+X-Forwarded-Encrypted: i=1; AHgh+RpBdg79uhwJfT6hToquzta8ySkNdjWzgc/7dORa9Dmyi7aBfVPw2i97Zhk5tm0kStxtqO4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3nRPaW/2+MTVVrun99uYhhG4K2toTX9www81E4oYALKalbupS
+	rBHPkbPHA5f9clfzs1nn7W1VH+3Y6md8KzgFj29qrKbuA7R3GeA7gPvV
+X-Gm-Gg: AfdE7ck06Fb167d7NHpbDplpoDuR35hF2Lab2NbKGZShB0p41Ak8Uv2N6CLI5kj1gKu
+	DT7zEhpf82/il8XUqpZuWQJByYXtsJq11vYTq0NlCFv5Qi+hS3jRZA2bNlf+PerTlOubEIlWHK0
+	n3CIGMAag52Xh3tuc94Fa9LQNiH9u5JLCADkjvTAO/sJa0JrKlyWk708yQSC9E5eOPAb5Ge8+MZ
+	xwNZUVHbB/4jREmwCT+h+NbJ+sdaAmo9E+4t33bku7wL1eRhnAc6+xWz+2KKZ+0k/O0VRWJjCwR
+	CIsZeh7T4+hH73XPlPktqQBNHSfEBvCMwpc/14f+DhcWSgKxDS5FD0yvqc9w0I4lGc5uqTU/ihE
+	yq1Y+xCdZ37xCtdg4I6r8uMilCSePE58+HGPp++vpuIuQaina05PO+jk3Aig6lye4y/7+pCKOsn
+	52+gMcsAOs8RlT
+X-Received: by 2002:a17:903:15c8:b0:2c9:97a8:8c13 with SMTP id d9443c01a7336-2ccea582aedmr5730825ad.38.1783479504583;
+        Tue, 07 Jul 2026 19:58:24 -0700 (PDT)
+Received: from lgs.. ([152.32.188.52])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bf8d80sm20568755ad.25.2026.07.07.19.58.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 19:57:58 -0700 (PDT)
-From: David Windsor <dwindsor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
+        Tue, 07 Jul 2026 19:58:23 -0700 (PDT)
+From: Guangshuo Li <lgs201920130244@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Shuah Khan <shuah@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	David Windsor <dwindsor@gmail.com>
-Subject: [PATCH bpf 2/2] selftests/bpf: Add XDP dispatcher FineIBT regression test
-Date: Tue,  7 Jul 2026 22:57:56 -0400
-Message-ID: <f6df1bf381517f7ff6927d82de7680e7826adf94.1783479101.git.dwindsor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <c5a6bff16c0885d3ec756a1cdfb623636d0bdb4a.1783479101.git.dwindsor@gmail.com>
-References: <c5a6bff16c0885d3ec756a1cdfb623636d0bdb4a.1783479101.git.dwindsor@gmail.com>
+	Varun R Mallya <varunrmallya@gmail.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Guangshuo Li <lgs201920130244@gmail.com>
+Subject: [PATCH] libbpf: Limit bitfield dump reads to checked bytes
+Date: Wed,  8 Jul 2026 10:58:07 +0800
+Message-ID: <20260708025807.702010-1-lgs201920130244@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -101,97 +83,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a regression test for the x86 BPF dispatcher's indirect-jump fallback
-under FineIBT.
+btf_dump_get_bitfield_value() bounds-checks the number of bytes covered
+by the bitfield, but the value-building loops read the full backing type
+size. For narrow bitfields this can read past the checked range.
 
-This test can crash the kernel on an unfixed FineIBT build and so should
-be run in a VM.
+Checking the full backing type size is too strict for packed bitfields.
+For example, a packed structure can contain an 8-bit field backed by an
+int type whose BTF size is 4, while the actual object bytes covering the
+field are only 1 byte.
 
-Signed-off-by: David Windsor <dwindsor@gmail.com>
+Keep the bounds check based on the bytes covered by the field, and make
+the value-building loops consume the same checked byte range. Preserve
+the full-size read for the non-bitfield path used by unaligned enum
+values.
+
+Fixes: 5714ca8cba5e ("libbpf: Fix OOB read in btf_dump_get_bitfield_value")
+Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
 ---
- .../bpf/prog_tests/xdp_dispatcher_fineibt.c   | 47 +++++++++++++++++++
- .../bpf/progs/xdp_dispatcher_fineibt.c        | 18 +++++++
- 2 files changed, 65 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_dispatcher_fineibt.c
- create mode 100644 tools/testing/selftests/bpf/progs/xdp_dispatcher_fineibt.c
+ tools/lib/bpf/btf_dump.c | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_dispatcher_fineibt.c b/tools/testing/selftests/bpf/prog_tests/xdp_dispatcher_fineibt.c
-new file mode 100644
-index 000000000000..2d3fc4034eb9
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_dispatcher_fineibt.c
-@@ -0,0 +1,47 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 David Windsor */
-+
-+/*
-+ * Regression test for the x86 BPF dispatcher's indirect-jump fallback
-+ * under FineIBT.
-+ *
-+ * WARNING
-+ * -------
-+ *  This test can crash the kernel, thus should be run in a VM.
-+ */
-+#include <uapi/linux/if_link.h>
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+#include "xdp_dispatcher_fineibt.skel.h"
-+
-+#define IFINDEX_LO		1
-+
-+void test_xdp_dispatcher_fineibt(void)
-+{
-+	struct xdp_dispatcher_fineibt *skel;
-+	int err, attached_fd, unattached_fd;
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.data_in = &pkt_v4,
-+		.data_size_in = sizeof(pkt_v4),
-+	);
-+
-+	skel = xdp_dispatcher_fineibt__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-+		return;
-+
-+	attached_fd = bpf_program__fd(skel->progs.xdp_dispatcher_attached);
-+	unattached_fd = bpf_program__fd(skel->progs.xdp_dispatcher_unattached);
-+
-+	err = bpf_xdp_attach(IFINDEX_LO, attached_fd, XDP_FLAGS_SKB_MODE, NULL);
-+	if (!ASSERT_OK(err, "attach_prog"))
-+		goto out;
-+
-+	err = bpf_prog_test_run_opts(unattached_fd, &topts);
-+	ASSERT_OK(err, "unattached_test_run");
-+	ASSERT_EQ(topts.retval, XDP_PASS, "unattached_retval");
-+
-+	bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
-+out:
-+	xdp_dispatcher_fineibt__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/xdp_dispatcher_fineibt.c b/tools/testing/selftests/bpf/progs/xdp_dispatcher_fineibt.c
-new file mode 100644
-index 000000000000..b49b84f01c8e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/xdp_dispatcher_fineibt.c
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 David Windsor */
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+SEC("xdp")
-+int xdp_dispatcher_attached(struct xdp_md *ctx)
-+{
-+	return XDP_PASS;
-+}
-+
-+SEC("xdp")
-+int xdp_dispatcher_unattached(struct xdp_md *ctx)
-+{
-+	return XDP_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index cc1ba65bb6c5..5d185f7961ff 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -1766,17 +1766,21 @@ static int btf_dump_get_bitfield_value(struct btf_dump *d,
+ 	__u64 num = 0;
+ 	int i;
+ 
+-	/* Calculate how many bytes cover the bitfield */
+-	start_bit = bits_offset % 8;
+-	nr_bytes = (start_bit + bit_sz + 7) / 8;
++	if (bit_sz) {
++		/* Calculate how many bytes cover the bitfield */
++		start_bit = bits_offset % 8;
++		nr_bytes = (start_bit + bit_sz + 7) / 8;
++	} else {
++		nr_bytes = t->size;
++	}
+ 
+ 	/* Bound check */
+ 	if (data + nr_bytes > d->typed_dump->data_end)
+ 		return -E2BIG;
+ 
+ 	/* Maximum supported bitfield size is 64 bits */
+-	if (t->size > 8) {
+-		pr_warn("unexpected bitfield size %d\n", t->size);
++	if (nr_bytes < 1 || nr_bytes > 8) {
++		pr_warn("unexpected bitfield size %d\n", nr_bytes);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -1784,13 +1788,13 @@ static int btf_dump_get_bitfield_value(struct btf_dump *d,
+ 	 * stored in num, then we left/right shift num to eliminate irrelevant bits.
+ 	 */
+ #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+-	for (i = t->size - 1; i >= 0; i--)
++	for (i = nr_bytes - 1; i >= 0; i--)
+ 		num = num * 256 + bytes[i];
+-	nr_copy_bits = bit_sz + bits_offset;
++	nr_copy_bits = bit_sz ? bit_sz + bits_offset : nr_bytes * 8;
+ #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+-	for (i = 0; i < t->size; i++)
++	for (i = 0; i < nr_bytes; i++)
+ 		num = num * 256 + bytes[i];
+-	nr_copy_bits = t->size * 8 - bits_offset;
++	nr_copy_bits = nr_bytes * 8 - bits_offset;
+ #else
+ # error "Unrecognized __BYTE_ORDER__"
+ #endif
 -- 
-2.53.0
+2.43.0
 
