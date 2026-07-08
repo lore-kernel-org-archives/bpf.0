@@ -1,35 +1,55 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E466E1632E7
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 07:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7723F58E5;
+	Wed,  8 Jul 2026 07:53:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783496435; cv=none; b=Lx6a737KTK+pM1xl4xu9DP6JFPZxvev8eQ2sujz58e9yaTfihx6pXq1SuWD+q7fejaF9Og6ScDUlcCnYeMkUtY68Yc6MQVUrM/77aJ33BlAAgCyLMJoZSBZ/WlgsA9vVsd2TVu1GwLNOJqq/9qhrOf4LuMvyqbEInnRGJ89NnYM=
+	t=1783497242; cv=none; b=jCOSQrLips9XAeNro4XoO8xrr+hgLa/rI9l4pEbpYAr9672if7vNypQheqjgc63cAGyW4csRqXn7Qb30Dd8FnR+sGB+pKVmDidrGJo7LM9dvuuIRdS3euYG548u3DBLyHvc1haePe92T2MeWABi9+1614IFXAE14szqkOxWhtmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783496435; c=relaxed/simple;
-	bh=xYb2jHQPQiUs3GmvWTIx5BYqgK2WreRFhEFjqODv+Es=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=PbpaiEr85pmwxFH0ZMcUaR7+Msvoz3emHA0tAOMlXkD8plGnTcSdXuHSwPvP6HBqj172jEoMovIgReQ+bo467t+vko4TbnZY4H2wVY5FTTCpAdjAtogcJ8VZ9tGqzuKhWqMNSJQJJ2BZ2joVpyleUAshi3XPljADclaQhKueiyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iF0a0NcE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783497242; c=relaxed/simple;
+	bh=pcDq4NbrjGH+jQFnA9KjaALKY0CKT6ybpFa8Q0UEvlM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=BUyVGCeXmx3RZH4CUkBTUq3TQRqpPVYprshYAoQL0sOnzxOwWBPwvfiQAyCGOrYIXnL5+FYKVELnSM3HIcr/s0KkrosrrevFptIMWCq/p8f7J//3TELu4pSTGZnMCBlniP1zzZNwvSALbWjDsL8s7WRyN84iHN3Le58dxWZ8/s4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=O411BCW0; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iF0a0NcE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2C161F000E9;
-	Wed,  8 Jul 2026 07:40:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783496429;
-	bh=5o5R9No+ryXaDg0eP/qIRyHUUawmL/4tl2FcioyzBUs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=iF0a0NcEURG6Y9VGkMJG4ex+bD3tehgcpbmGLkSb/EsX7vk5DGDVQR6RXNuBmbaht
-	 556d5CsaT5q9jbWBvhMJIsQjHyGrxM6ehPl3IMHWwsukVUNGcMyd6wzXMeNRHTe1od
-	 u35I6JbNE2gQ3vGNTGZL1wjonAd0ufw9/wLNK/XHvODo4vTbwII/BMWOwI7mV5qg0W
-	 6P0MAqQlaPNXtppANpasjMKZioQzs7ejVknstzbcuYE89GKTcfuhfqdSPYsW8DQljt
-	 wifJqbpRq5GhazYic+7l1DoNSOMpuwBn+4tA65G0azsGEtnd/SRg6rAIhaZOzEtDx8
-	 V4bttXCrGDsww==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56AFA3926266;
-	Wed,  8 Jul 2026 07:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="O411BCW0"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=Fqx6ojbpajiobyI4Lzc0PA8hQj2/Xu7CNaTSYwlllAI=; b=O411BCW0tMSDGQmnhyTDE9wwHl
+	vAjOfuUfhiKOOdThEe7hMHWHuSaX0TBuNYMVkReDwIfK6QtW727fNtXYqK8oSl9vrBd3bYJiopEth
+	mhurQabhZEvcnn3zS1u8rdS6JYaUB+62RDYcuonYJLfDjXHPUBGnW7uotYQTIKTaaYj8ThgoMId1b
+	zAAzt5PnNX6I9aH479oABwJVlJGXyNfSbkL1wegYVv2MHkDA2YONW3YshSaTNtuBsdeg70kbq0eVl
+	NpgpMMT/GaCU3mVYhlGZhAE+bX3BcZU2SdVwPpaGis2ebSXAqDNDyOlqWIiAuOrP8I6F2ITD18wSm
+	ofX/Aglw==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1whN6L-000GeU-1D;
+	Wed, 08 Jul 2026 09:53:49 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: ast@kernel.org
+Cc: kpsingh@kernel.org,
+	James.Bottomley@hansenpartnership.com,
+	paul@paul-moore.com,
+	bboscaccy@linux.microsoft.com,
+	memxor@gmail.com,
+	torvalds@linux-foundation.org,
+	a.s.protopopov@gmail.com,
+	bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [PATCH bpf-next v6 5/8] bpftool: Cover loader metadata with the program signature
+Date: Wed,  8 Jul 2026 09:53:40 +0200
+Message-ID: <20260708075343.358712-6-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260708075343.358712-1-daniel@iogearbox.net>
+References: <20260708075343.358712-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,43 +57,87 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/2] Fix for untrusted BTF pointer writes
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178349640889.2347541.7352741986692664220.git-patchwork-notify@kernel.org>
-Date: Wed, 08 Jul 2026 07:40:08 +0000
-References: <20260708030752.2503467-1-memxor@gmail.com>
-In-Reply-To: <20260708030752.2503467-1-memxor@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com, kkd@meta.com,
- kernel-team@meta.com
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28054/Wed Jul  8 08:24:53 2026)
 
-Hello:
+bpftool_prog_sign() signed only the loader instructions. The metadata
+blob the loader installs was left to an in-loader hash check, which
+the kernel now performs at load time over insns || metadata.
 
-This series was applied to bpf/bpf-next.git (master)
-by Eduard Zingerman <eddyz87@gmail.com>:
+Sign that same concatenation: pass the metadata blob (gen_loader_opts
+data) through to bpftool_prog_sign() and feed insns || metadata to
+CMS_final(). The excl_prog_hash stays a digest of the instructions
+alone; it binds the metadata map to the loader and is matched against
+prog->digest by the verifier, independent of what the signature covers.
 
-On Wed,  8 Jul 2026 05:07:49 +0200 you wrote:
-> When using custom btf_struct_access() callbacks, we miss rejecting
-> unstrusted BTF pointer writes. Fix and add a selftest for coverage.
-> 
-> Changelog:
-> ----------
-> v1 -> v2
-> v1: https://lore.kernel.org/bpf/20260707190214.1997705-1-memxor@gmail.com
-> 
-> [...]
+The signed artifact is now plain data: both bytes the signature
+covers are embedded verbatim in the generated skeleton, so signing
+and verifying an lskel is an ordinary CMS operation that a signer or
+auditor can perform (or reproduce) offline, without analyzing loader
+bytecode to establish what the signature actually attests to.
 
-Here is the summary with links:
-  - [bpf-next,v2,1/2] bpf: Reject writes through untrusted BTF pointers
-    https://git.kernel.org/bpf/bpf-next/c/ac65c710cc64
-  - [bpf-next,v2,2/2] selftests/bpf: Add untrusted BTF write regression
-    https://git.kernel.org/bpf/bpf-next/c/9eab4790f11f
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ tools/bpf/bpftool/gen.c  |  2 ++
+ tools/bpf/bpftool/sign.c | 17 +++++++++++++++--
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
-You are awesome, thank you!
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index 6ae7262ebe0c..a01d06d22d1a 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -793,6 +793,8 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
+ 	if (sign_progs) {
+ 		sopts.insns = opts.insns;
+ 		sopts.insns_sz = opts.insns_sz;
++		sopts.data = opts.data;
++		sopts.data_sz = opts.data_sz;
+ 		sopts.excl_prog_hash = prog_sha;
+ 		sopts.excl_prog_hash_sz = sizeof(prog_sha);
+ 		sopts.signature = sig_buf;
+diff --git a/tools/bpf/bpftool/sign.c b/tools/bpf/bpftool/sign.c
+index 1257dba8ef2f..88726a6db6d0 100644
+--- a/tools/bpf/bpftool/sign.c
++++ b/tools/bpf/bpftool/sign.c
+@@ -135,9 +135,21 @@ int bpftool_prog_sign(struct bpf_load_and_run_opts *opts)
+ 	CMS_ContentInfo *cms = NULL;
+ 	long actual_sig_len = 0;
+ 	X509 *x509 = NULL;
++	void *data = NULL;
++	size_t data_sz;
+ 	int err = 0;
+ 
+-	bd_in = BIO_new_mem_buf(opts->insns, opts->insns_sz);
++	data_sz = (size_t)opts->insns_sz + opts->data_sz;
++	data = malloc(data_sz);
++	if (!data) {
++		err = -ENOMEM;
++		goto cleanup;
++	}
++	memcpy(data, opts->insns, opts->insns_sz);
++	if (opts->data_sz)
++		memcpy((char *)data + opts->insns_sz, opts->data, opts->data_sz);
++
++	bd_in = BIO_new_mem_buf(data, data_sz);
+ 	if (!bd_in) {
+ 		err = -ENOMEM;
+ 		goto cleanup;
+@@ -181,7 +193,7 @@ int bpftool_prog_sign(struct bpf_load_and_run_opts *opts)
+ 		goto cleanup;
+ 	}
+ 
+-		bd_out = BIO_new(BIO_s_mem());
++	bd_out = BIO_new(BIO_s_mem());
+ 	if (!bd_out) {
+ 		err = -ENOMEM;
+ 		goto cleanup;
+@@ -215,6 +227,7 @@ int bpftool_prog_sign(struct bpf_load_and_run_opts *opts)
+ 	X509_free(x509);
+ 	EVP_PKEY_free(private_key);
+ 	BIO_free(bd_in);
++	free(data);
+ 	DISPLAY_OSSL_ERR(err < 0);
+ 	return err;
+ }
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
