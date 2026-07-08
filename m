@@ -1,152 +1,99 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E3D02EA72A
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 00:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20B136A35B
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 00:44:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783470838; cv=none; b=jqa71G/7V/kr/RVxYW6HuE0zxcwfz11Jz4sYcP0HuIpGab3S8KSoPXaDYdSeGcpAUPdZVaH1IeK1KmcrL9rS7gnS49Uyslv5ALEdnDFT1xSx1uyiZzMio2fi+WYWSmJuBbC7NCTc4lnvkYQcfn/LDc7X3NdTF6OptffbbTdI8uA=
+	t=1783471486; cv=none; b=bnBEjV2t3dGX2ssnK94yA5xfNZuFT2CLYozehGTvGiniL0JULskpOmcTTd9Oet4stivXct51W5FzfPnRlNPe9yJUdNL65ouA416xHJASYgPnHzuFIvv3vmOFSXs/P91x5fFMMwDM1b+hRhJa6a02R2O/x6YLpn/dSvqL5RIsp0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783470838; c=relaxed/simple;
-	bh=O8dlhXGaKZVLXNWM+o64TPqGISoXyx4XSm5T4i4QYg0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CdCuJ53lEwwZs7A5dnJeaLjTorZ88xrk1EI4HTCeFCk6jOlfP38o82L9mdIaraKizV4JHZUG+F9KFy4asicX9o7AcZHIkgUzpmWmXvZ5KBgmszsyQ1wi6ZLWsar8zYaGzEYqcdwVypzfXois4Bw57CnOuHN3eArq84Sig9ndycs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ktbeh1//; arc=none smtp.client-ip=209.85.215.181
+	s=arc-20240116; t=1783471486; c=relaxed/simple;
+	bh=Wx19ZE2zP3gFp9WiYMlSru9Iwp2aXn8g74oL7BLzqjM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=daB8aUazdKmWknvzuAcoT0EDxPtRpMz9ee5qi3W92QBX+Tj/xkDU53a27GSD10Gw7EHfhw01kQ1K+IjVcJ4owA0ZjyllNPliF23B64kkCGIp6y1NGeZFXR3NuRnld88G9hAOxWnWYpZpQqNknrjPO40VZ+ZPPGzhREK0xMdzvmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FkcTJLAC; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ktbeh1//"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-ca00f126b7eso31793a12.2
-        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 17:33:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FkcTJLAC"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-383b4a3755fso124693a91.3
+        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 17:44:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783470831; x=1784075631; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=6PPCHw1C4s9wB8+ak3IGBUi1NrCIfjVxm5EQeAbcpyE=;
-        b=Ktbeh1//7+N3DxvK+f6VKqWUItIjmxmhQgtPWIH9NHPeU5iLF9YQzAr94iegew2tVn
-         QJRB23/JdrTOZ8tOp2X/2NfVQ2S2fjkob1wnCTJuDDaUJWkzME+XeZDsa3to7zTCSsAL
-         qKWhEsACssY+HTq66AIFmIW1uHUba0BwiYKuJplIPXgzg3fwkxNsxvln9JsauINjMrH4
-         GV6fZ2TlwqE4txmntQqtHmJ2avFR94vnzqfk3enrufZW2gTrCV3t/Ep3l5JmjB81iunJ
-         FfqwXOFW15TCBHngaCYxg0ZFoNxebp78lWH181oWdWM16pUkWyy4TvvwHQzu4RcCakMn
-         qw4Q==
+        d=gmail.com; s=20251104; t=1783471485; x=1784076285; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=uF1z0i2mWzwSAJJ9hzgV5t32xzkuToRsVsiUns1u7Jc=;
+        b=FkcTJLACkxdKmGN6STud+FM9zFBx1cn/1vriZSqAi9rEaxV7qEaOv4dypbDDpvMJAl
+         j6oryB54mhQjYGYDo032snioQao7KCI2wWM8va650CpsWZttP2+Y8KGHYiXWF1xR0il1
+         ssXWL5NO9R6eSzP2irF3Oz/tHZP3VJwe16XzCDb/Dq1JP0VycVQeRM2Cwk2g2TizGXC3
+         tf5VX+Wmb7744uTGP5WzgRd+qmTFK/cpFmsTx6gQoe6mvdsDZX0dit/hw2WUXcr2Dknr
+         7HUSYB1dTNFBkQYZpDSprENhhTdpIj64Irm8DcHAVz55Olbsck7hbkC1JwRmXTDme8NI
+         qrAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783470831; x=1784075631;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6PPCHw1C4s9wB8+ak3IGBUi1NrCIfjVxm5EQeAbcpyE=;
-        b=bJrpnscC3lOSCeE156wKy1mZ+ppRtUFXRRc+U47cAv5beRi17sEyW1XohNiuHkyQIr
-         HeBjqVxiXD7/SDKDWYnWklL+6Qg4oZqhKLsgng6UiLnbQiSBHPohapPqm5ixw/xKgi4F
-         YMCRaHCScSVvky9fRCS8Earg6ierraIMBHjvZNKk6hAyvG9URA/rP5LqhKHgD0F+Mnkj
-         ZUyO2kua//YNqa4Nbw0u0aJl1CW7kwVtHXKiqRedPg0a/+za8M0KfAPxEy8WT5dyS69e
-         lP82W0UdQdlM4ptpwEz4bbMBqRua/8rN6EkNkkKflTlM8x9tFfcyRlrrT2c1tu6En4WE
-         Flng==
-X-Forwarded-Encrypted: i=1; AHgh+RonVZoku8R+0L/JdRdf15ysZ6eszO/5pRVS+KQY5uSrefz4AN9V3wMN+/KNgfZeetASwLI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzroDOg/7so/9tRUsFGHgrFhWGzhqx0BDKubIDNgtfA2/Loyksl
-	wCqNW6Bb6v4GrTMTXM7HL4MwHrvG0BjghFgI35rf4eChOyF8217uO+rd
-X-Gm-Gg: AfdE7cnrGdOyt0dFv99eSjt9YdvvVtQhVeMU4FKOQl3qpRMhwaipwHfede/o7Zq5PbP
-	AsFD2h8iNuRuDik4s7alZU8pkjqUXKRZ/OUsJlxvpz4UPSuf788C3xZn9Ba/5rW/PPdISIFFvk8
-	1mcCcsfUYukACfiEbXq9ChrC+LO3qBR/DhrI7IdYGhW1sE2mDvkGcOyK0l55KY3DmZT0qdo+hOm
-	eBHYxGEMW+f16dbCAvLUVjgn09bXOH1nkWrqx03br4dXS3zC3cFtd7qEGOveWuGmeuxOY/Fa+2S
-	xZblIJr6Cdq0p2PuAtIN45VURstsJe3kSrKu8nMX9o4AHyCrgfxELbAwsao2sY26ISrRbjmFtZG
-	zkh5/aQhas6QXwGyKzOMZupJR1FJq5bGwD6JkOoSbkrGHPv78d44J7GG/Hwho73Z/YlJH3imQWn
-	3H5oj3B/fV52yMTeOawq/Pg+LF4g59HYUKVe3at6YzVBPgAH4LryxJneERUTP0CQShUSJUJmdVn
-	PFh26FO
-X-Received: by 2002:a05:6a21:7706:b0:3b3:1c7b:ff7 with SMTP id adf61e73a8af0-3c08ef16b7emr8743089637.46.1783470830910;
-        Tue, 07 Jul 2026 17:33:50 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:f2fe:14ed:44aa:14cf? ([2620:10d:c090:500::2:84e7])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b659c865asm13266118c88.11.2026.07.07.17.33.49
+        d=1e100.net; s=20251104; t=1783471485; x=1784076285;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=uF1z0i2mWzwSAJJ9hzgV5t32xzkuToRsVsiUns1u7Jc=;
+        b=oT+cjLwpbA5GBLzdXzV0z/Sg7t+fCGtuhZRM/CsJjbhWD4TAGFdEgc3Xn38b0n1wFM
+         SxSoCTyewFDXmBFGzemAyilj0vW56X7eBxwyEMhmE150vdp0xwU3u1JH0m0nsj+27ojh
+         oLKuz2yVD8NrmEpRNo439pku+C84v4pjuEE8ZXOzSdhDvVnpmxR6unPy7fsga/tESmBh
+         wpNVDqiRCRdXagL3EFlSBm8K/sY6kbeFFphIsj5PMGT0R6XnEcgeEGDWRvaWL5M99cRK
+         3XkKVVWJHKqLP9+W0acwyvby60dbfCrgWEwV+jjm3RdlBcnq6P7OJfHfvWJbNY6zicPH
+         L2Tg==
+X-Gm-Message-State: AOJu0YyjKg3x9jQ2FjDOAM2UH6O/aXQwQXGbUTeL+f8hsf+YNgNuUvZI
+	lj56rJV5epAalMUlq+dR+pffnESWgFyjjqIPwwXH2Vfp018ccHOh2221Oaethoqb
+X-Gm-Gg: AfdE7cnTFlhTzUiDlOgiN8VPkw9JZsrAWuB5CwMNv3asXKLaCsad/OrAFupN79IQA14
+	utsFLqrThXoBwo5Iiso91ofXd3WdTPcicO9ofBLLFRkgaK8z7WWsoaK15kBLP4ns1a2pV927boo
+	FC/Vtn+Cmzsuyd9dBCIXPcxuk6DtNoqIfpA02vL+hSPMd/Tvjpt+UYO/RUu/uf1VR/nla06nkR5
+	2Ms0HWWodIVEVXbr99WAh2WdfbsWF6K7/F5Hr2hY0/i3904qPYkQg6/fO5dxxYffsb99VBW1DGL
+	aB3A4SM9/pLal5Rox7GNGwTmGKsOyU9NgWzBUvJp18TxHCIMG5u0NfD6YdJX5gG3VVQVXSnbQLw
+	TQtM1KhTFaMFlI6ISfyeN2+wfaRQb4xcvghPxLyL7K1u5eaJx0SZVdAzzIc8Um8NA6K3PXXAgEW
+	p+xU/x1T2hyg5XT/8O//Tc0CWwfkDAL4eMvo+x1HxBD1snpEKoPBbNp3Q+KJcIcONoiipy
+X-Received: by 2002:a17:90b:2ccd:b0:381:528a:808a with SMTP id 98e67ed59e1d1-38941cc5987mr173619a91.27.1783471484825;
+        Tue, 07 Jul 2026 17:44:44 -0700 (PDT)
+Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::2:84e7])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3117483e0a2sm12371054eec.12.2026.07.07.17.44.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 17:33:50 -0700 (PDT)
-Message-ID: <030dc01fa51430f4ac27d3f4eb4a6147322cb51d.camel@gmail.com>
-Subject: Re: [PATCH 0/3] selftests/bpf: compare BPF and memory.stat memcg
- stat readers
+        Tue, 07 Jul 2026 17:44:44 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: Ziyang Men <ziyang.meme@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
-  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>,
- bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>,  Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan
- <shuah@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	kernel-team@meta.com, linux-mm@kvack.org, cgroups@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Tue, 07 Jul 2026 17:33:48 -0700
-In-Reply-To: <ak2Wpk6OnhTyon65@linux.dev>
-References: <20260704045617.487664-1-ziyang.meme@gmail.com>
-	 <bc12730fe6eccde10d36e6544607ae2464357e05.camel@gmail.com>
-	 <akxW5dzvR9e2CfGq@linux.dev>
-	 <eccfd9a8dd1af1668e142b9b866194333647b0d5.camel@gmail.com>
-	 <ak2LXDWoPFSJL2Q9@devvm16600.scu0.facebook.com>
-	 <bc47c75a00acab57e7fea72612e0f6f089ddecc9.camel@gmail.com>
-	 <ak2Wpk6OnhTyon65@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	andrii@kernel.org
+Cc: daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	kernel-team@fb.com,
+	yonghong.song@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH bpf-next 0/2] bpf: remove artificial limitations on pointer types eligable for spilling
+Date: Tue,  7 Jul 2026 17:44:27 -0700
+Message-ID: <20260707-missing-spillable-types-v1-0-44a92121dc41@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20260707-missing-spillable-types-4cd9350dc3d7
+Content-Transfer-Encoding: 8bit
 
-On Tue, 2026-07-07 at 17:31 -0700, Shakeel Butt wrote:
-> On Tue, Jul 07, 2026 at 04:50:11PM -0700, Eduard Zingerman wrote:
-> > On Tue, 2026-07-07 at 16:27 -0700, Ziyang Men wrote:
-> > > But the patch also carries functional value: alongside that compariso=
-n, it
-> > > checks the correctness of the stats the kfuncs return.
-> > >=20
-> > > Let me first answer the main question -- what these tests add over wh=
-at we
-> > > already have -- and then lay out a plan.
-> > >=20
-> > > First, the static test (memcg_stat_reader) vs the existing cgroup_ite=
-r_memcg.
-> > >=20
-> > > The existing test calls the kfuncs, but for each value it only checks=
- whether it
-> > > is greater than zero. For example, in prog_tests/cgroup_iter_memcg.c:
-> > >=20
-> > >      memset(map, 1, len);                    /* dirty some anon */
-> > >      if (!ASSERT_OK(read_stats(link), "read stats"))
-> > >              goto cleanup;
-> > >      ASSERT_GT(memcg_query->nr_anon_mapped, 0, "final anon mapped val=
-");
-> > >=20
-> > > It never checks the value is actually correct -- i.e. compares it aga=
-inst the
-> > > value in cgroupfs -- only that it is non-zero.
-> > >=20
-> > > Besides, it also walks a single cgroup:
-> > >=20
-> > >      .cgroup.order =3D BPF_CGROUP_ITER_SELF_ONLY,
-> > >=20
-> > > and reads only five fields.
-> >=20
-> > Arguably one of the the cgroup_iter_memcg.c tests can be extended to
-> > allocate some mem and check if the value is reflected in the stats.
-> > But there is a line between MM tests and BPF tests.
-> > All BPF kfuncs except iterator logic itself are thin wrappers on
-> > top of the existing MM functionality. Hence, I don't think that
-> > BPF selftests are a place to stress-test these things.
->=20
-> That is actually a good discussion point. Where does such kind of tests (=
-i.e.
-> testing that bpf based memcg stats read functionality is equivalent to
-> traditional memcg stats reading). As more subsystems are exposed to bpf, =
-similar
-> questions would arise more often.
->=20
-> In this particular case, IIUC you want only tests for bpf related code (w=
-rappers
-> & iterator) to be present in bpf selftests, right?
+Track spills for the following register types precisely:
+- PTR_TO_TP_BUFFER
+- PTR_TO_INSN
+- CONST_PTR_TO_DYNPTR
 
-Yes, I think this makes most sense.
+---
+Eduard Zingerman (2):
+      bpf: remove artificial limitations on pointer types eligable for spilling
+      selftests/bpf: test cases for missing spill types
 
-> Personally I don't have strong opinion where this test should live.
-> Functionality wise as it is testing rstat infra, I think cgroup selftests=
- might
-> be better home for this.
+ kernel/bpf/verifier.c                              | 39 +++++---------------
+ tools/testing/selftests/bpf/progs/verifier_gotox.c | 25 +++++++++++++
+ .../selftests/bpf/progs/verifier_spill_fill.c      | 42 ++++++++++++++++++++++
+ 3 files changed, 75 insertions(+), 31 deletions(-)
+---
+base-commit: 602701718649936eb287bf6c7ecf870ec54c6f71
+change-id: 20260707-missing-spillable-types-4cd9350dc3d7
