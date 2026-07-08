@@ -1,135 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC94375ACF
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 21:10:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6803EFD07
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 21:10:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783545049; cv=none; b=nW22zAF+RLE8dFlQrEdjQVIHZT4RwZxKemeN7eBnPFXYHYPlmz1fogEd4H+SYMWMXdmUUdckSCTLFtMkGu0X3IyczzSmuPhECOLC6a8pPnpo2BM6B6PlaSFEqBxZGuMWCYFD+B/W6jZt8F0Jb+xOAxFgu+Y5IxfZIWHJ74dP5Ts=
+	t=1783545050; cv=none; b=Aa2OFm+rdZRSIgcfZA+GFOuxfVK538TX0iIA7cK778e/jQzPVhXxV2fGHS1qblsSbmtAC37wTiXpegUlys/aRFChLhQ9JbZ1sInaHZceTznADDQiMMNEQuO7L23LfrsrFuD/CRhsj5SqwYkQsdmWvdEie3rg0IfvTbqFQh5ulFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783545049; c=relaxed/simple;
-	bh=QM6RsTMmhOWAgRWGMU3L5L0nKnclOG4M4iSOH6aP1So=;
+	s=arc-20240116; t=1783545050; c=relaxed/simple;
+	bh=vcqB4QnoiY7g9UNdAJyWdlFe1inqxdVT3G3BhyrOmPM=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Tr7vvc+JPJd78vF5tl7FD0T+QReBvtZ88rljnD/1iRLn5zo7WQzn79Skr7pWsUjoT90qNIz6VQBkZmpeM8mtgrDoE1xXyJDdSjmGOYen82H2XJF9yQc3qtQYLFjCT6ORr/rlfe9ssaCf5Gz9wiUaLTxi23kACmxvrGoxKV1RAjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ocaqaz1n; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=Ohhc7s8s2mwwbHln04bWEy5+XuYTRBsol1m2nEX4Ni7heSyac4NlXe39GAW2rYG7LJ6S93F0poKchYINN3It4FRQopvx9Z3W8CPIBKNIbTCpcwKqLbyk2vKVVJTldSWXSli8wC71e4MUZ8+EYlmnq8EJ/ar7PHA5iyRoGjIv7Dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IPN3EYfF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ocaqaz1n"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1D3F1F000E9;
-	Wed,  8 Jul 2026 21:10:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IPN3EYfF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92BB01F00A3A;
+	Wed,  8 Jul 2026 21:10:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783545047;
-	bh=NCBVupJfE3WLb6UTOcPoGM8XAhlEzuZHvUSigEMMHFE=;
+	s=k20260515; t=1783545048;
+	bh=fEIZAwdimLXxDYFs9eAc4f8VMBV7EzAeeQO8FVR+bhc=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Ocaqaz1n/08ulPqBhhxYRGwaHtv8pG94fU0ef4vm0m4fRukcduHy8RyB6xv/OCzcI
-	 hp+TnW3llpoZkFJF41HDfYXuXExnt8Ij6lAsx/Bze3DyFdcEqZnt0sxIEHk2n+7/yq
-	 t6jGcWyEJC4H++LLVS8mH/2q4GP0IU6TSbcYGwOXAN6siNQ+qCzZBMGTc62xjRX3PU
-	 T+lH2hrJWiq+Uz5IQy0C9D6JuUNsQDdL5SzW45PMzSIpaZJmxJcC3tEbOEqjq7IHX6
-	 v4UCGZrriCnuM3EUQRjBCgeiAQjYnKCCRD7hBQU62SkCq9cbHAlKiLhtW+QCtItRAb
-	 GdrmovNFD5U4Q==
-Content-Type: multipart/mixed; boundary="===============1037113179140476373=="
+	b=IPN3EYfFxon34HKolB28Hwsju2r4417ZIQC0xpiP1Z4J41WD2NAPNk76OGRaz9GcA
+	 gvlRF+bjCZzwSEEauLH2d268BqAbzDvPt3XIJDZ7E1E0ja3Nya7bNw+cQLtrL6WSXA
+	 9BUZMJtkqccI4yCs+AsgMIVW0fsdoR/La4K+iw0s7QZQ0UYPQDHhV4Z7gS6b0quRTW
+	 unSeJNwuxq01Z8t2USXGXzpWCcxpBZfWBJIvFNpAY2LM6EdEJg1DPDA+amrqGxyyfo
+	 +kPBZoGnbk1RkvcLT72QoyfGwxek9pDNf8+TbmqtCFz4wiOcoKr8b1O4yP7odYAtC6
+	 MaklDJgUWhtng==
+Content-Type: multipart/mixed; boundary="===============6204347742307451886=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b4271ab7b2a5eb033b22efc367ad93796a92d63f65b7f1acafc80f9ef24d55ca@mail.kernel.org>
-In-Reply-To: <20260708201025.2160583-1-yonghong.song@linux.dev>
-References: <20260708201025.2160583-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next 09/12] selftests/bpf: Add C tests for 16-byte returns in R0:R2
+Message-Id: <183b9ca3d36237d6c00c590958b2564323a79166de874e17e65be888b1864236@mail.kernel.org>
+In-Reply-To: <20260708201005.2158063-1-yonghong.song@linux.dev>
+References: <20260708201005.2158063-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next 05/12] bpf: Account R2 of register-pair returns in live register analysis
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  8 Jul 2026 21:10:46 +0000 (UTC)
+Date: Wed,  8 Jul 2026 21:10:48 +0000 (UTC)
 
---===============1037113179140476373==
+--===============6204347742307451886==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c b/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c
-> new file mode 100644
-> index 0000000000000..d4ecc19684cef
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c
-> @@ -0,0 +1,96 @@
-
-[ ... ]
-
-> +/*
-> + * Run one program and check its result. The program returns 0 on success, or
-> + * 1..4 identifying which half of which aggregate (R0:R2) return value came back
-> + * wrong. A return of -1 means the program was built with an LLVM that lacks
-> + * R0:R2 16-byte return support, in which case the subtest is skipped.
-> + */
-
-[ ... ]
-
-> +	/* C variant (__int128): relies on LLVM 23 R0:R2 codegen, skipped otherwise. */
-> +	if (test__start_subtest("int128_c"))
-> +		run_prog(skel_c->progs.aggregate_ret_test, true);
-> +
-> +	aggregate_ret_int128_c__destroy(skel_c);
-> +
-> +	skel_struct_c = aggregate_ret_struct_c__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel_struct_c, "skel_struct_c_open_load"))
-> +		return;
-> +
-> +	/*
-> +	 * C variant returning a 16-byte struct by value: exercises the struct
-> +	 * branch of bpf_ret_reg_pair(). Also LLVM 23 only.
-> +	 */
-> +	if (test__start_subtest("struct_c"))
-> +		run_prog(skel_struct_c->progs.aggregate_ret_struct_c_test, true);
-> +
-> +	/*
-> +	 * Same 16-byte struct return, but from a global (non-static) callee:
-> +	 * exercises the compiler lowering a global struct-returning function to
-> +	 * R0:R2 and the verifier's global return path end to end. Also LLVM 23
-> +	 * only.
-> +	 */
-> +	if (test__start_subtest("global_struct_c"))
-> +		run_prog(skel_struct_c->progs.aggregate_ret_global_struct_c_test, true);
-> +
-> +	/*
-> +	 * Same 16-byte struct, but returned by value from a kfunc: exercises
-> +	 * the struct branch of check_kfunc_call() and the JIT RDX->R2 move.
-> +	 * Also LLVM 23 only.
-> +	 */
-> +	if (test__start_subtest("kfunc_struct_c"))
-> +		run_prog(skel_struct_c->progs.aggregate_ret_kfunc_struct_c_test, true);
-
-this isn't a bug, but the "Also LLVM 23 only." note is repeated on each
-of these per-subtest comments, and the run_prog() comment above already
-states that programs built without R0:R2 support return -1 and get
-skipped.  Could that note be stated once rather than on every block?
-
-Related, do the per-subtest comments need to name the specific internals
-(bpf_ret_reg_pair(), check_kfunc_call(), "the JIT RDX->R2 move"), or
-would a shorter note serve here?
-
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-> index c36bb911defa7..34d0a352e70dd 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-> @@ -55,6 +55,15 @@ struct prog_test_big_arg {
->  	__u64 b;
->  };
+> commit 29d6a87c34e27de90ba01d71870930baf27d4b33
+> Author: Yonghong Song <yonghong.song@linux.dev>
+> Date:   Wed Jul 8 13:10:05 2026 -0700
 >
-> +/*
-> + * A 16-byte struct returned by value from a kfunc, returned in the R0:R2
-> + * register pair.
-> + */
-> +struct bpf_kfunc_ret_ll {	/* 16 bytes: R0:R2 */
+>     bpf: Account R2 of register-pair returns in live register analysis
+>
+>     A BPF_EXIT of a subprogram returning a value larger than 8 bytes (a
+>     struct/union or an __int128) reads R2 as well as R0, since the second half
+>     of the return value is passed back in R2. compute_insn_live_regs() only
+>     marked R0 used at exit, so the callee's R2 could be considered dead and
+>     cleaned from checkpointed states, which would allow unsound state pruning.
+>
+>     Mark R2 used at a BPF_EXIT when the enclosing subprogram returns via the
+>     R0:R2 register pair. The call site already treats the caller-saved
+>     registers R0-R5 as clobbered, so R2 as a result register is covered there.
+>
+>     For example, for a subprogram returning an __int128, the live-registers
+>     dump (log level 2) shows both R0 and R2 live before the callee's exit
+>     (insn 5):
+>
+>       Live regs before insn:
+>             0: .12345.... (85) call pc+2
+>             1: ..2....... (bf) r0 = r2
+>             2: 0......... (95) exit
+>             3: .......... (b7) r0 = 1
+>             4: 0......... (b7) r2 = 2
+>             5: 0.2....... (95) exit
+>
+>     Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 
-this isn't a bug, but the block comment already says the struct is 16
-bytes and returned in the R0:R2 register pair, and the trailing
-/* 16 bytes: R0:R2 */ on the next line repeats that.  Could one of the
-two be dropped?
+This looks like a bug fix for 16-byte return type support. Should this
+include:
 
-> +	__u64 a;
-> +	__u64 b;
-> +};
+  Fixes: ec219322a9a71 ("bpf: Add verifier support for 16-byte returns in R0:R2")
 
 
 ---
@@ -137,4 +88,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28973410219
---===============1037113179140476373==--
+--===============6204347742307451886==--
