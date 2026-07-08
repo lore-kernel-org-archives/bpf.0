@@ -1,135 +1,127 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66802420896
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 03:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783481425; cv=none; b=lfAe/qXt4RV4iTBu45aYpslVdMk+iDWvAQTYh8rUq1HT9WQ+qvISuTKPjjiHHgDF9ICpWvell/e3AQOKtnGIqDA8/jU4/ov1LbPUXfrKnKmtUmMm+h5YARNw/LN4X5/V43mPYMnHD0YXAk2KohNkQ9sRljZMgKMEQ7/GjMK7BD0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783481425; c=relaxed/simple;
-	bh=4SeRtoGkiJ0YU+DChKH2d4yuDJUGWWHBlkzM6OpeQFU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d3xoytbKCY+YF8hBr8WVcf8k7gVu1fR1fEkK/ZfMP0FCBdGFu46/nofkF3JsvtsrPvzTzjwDns/dI3eVpp80l4TIxooFKCLAGMn3Jwo4mNfYes6r4C5Ef/WOL95J3RM03fPsvi31qL9kslEAjGvuP+oeY58zVuYEBpUHM5MX3tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KeC+qsRv; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6AC713AA2F
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 03:40:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.182
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783482039; cv=pass; b=ncz5tOA7RpXlIiS42qdLJh4E7h2/SaZFtxEFmJaiVac2z4XnO9CwodHbjpECnXiGnQ46tCkV2B3+Y09XVatB+BRU/8zKUWC5cww1CdF4rzi3K2aGdppkbdjrpgmK0cT0ldvJIOLU81Yr8945tfiQW1Ki/TkznFDr5F03frsoiIs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783482039; c=relaxed/simple;
+	bh=vyejKawb6c81OKzUc/Dy5VVny4R59bH07JH+ZWAtYmM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DOodFtQVPyoHNExjpTlEgtGp/eOEkCiP91yYnT8ndlXiqLNWqe11UPrpRLWD1vduD1ME6GP3lHnwSEQOf1FEfkf4sdFZyp0PMXwswGsAhklpI950YpNTKk2MpqKY5P9AU2kHSGvR5LWYjFvTsq+iZoTGQpPLpb9Mf4TCsvShFHU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PIA/f1zE; arc=pass smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KeC+qsRv"
-Message-ID: <6702d2f1-dcd4-4b68-b1ac-daa8661235a0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783481422;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hAfIYp1qkUw5nv6HMpuzXiAFinGF8d61HsxbLIT9CoI=;
-	b=KeC+qsRvkercaCeJMK0baG7g9L7IgTKrKgPQLRzPzmRJhODWz3t6hFjU3qk3vjnirrr/PY
-	LEAGp/rwAN1aiEXn0JNmpcePjQBzkbz42gsEWfYnJ5dCk0RlqCHZAPCVHFv3oTVnUGadbf
-	4XsOUfePghJg0y58QGJAtrnwoi4vNvk=
-Date: Wed, 8 Jul 2026 11:30:06 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PIA/f1zE"
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-92e7c6ec9dbso8133385a.0
+        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 20:40:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783482037; cv=none;
+        d=google.com; s=arc-20260327;
+        b=MIs2xG+sgJMH0qkt86xrKD1JWbowtyOsL8A9WQVKyGLXR+4yVS3nQG0qYGUZKKQu7z
+         nh8F84E6B6MfffDlviDlNE63mbo0M49hxTKpD167Kzc4gPbCyGOPW4OsvBr+3l5purSU
+         74Z5bPmsUuPh/DOdo0YeWGeRdxH5CmfUCVuMlDZKnUgn0/MeusnxfUYNlwO8qRFWGisX
+         oBlB3/cSZsxJrXHG6UFSMXxf4Z3YglVOvlnluPNkT8Oxo5tsV8ywoc0l9HywpsNj6vZf
+         c2arkt8y5oeGt1P1HRYm7Y+NkibPnsNiCSlVzg3mJzFkMg4Z3UkQPMPaRXgCw+dYmdgY
+         n/EQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=/Qa+4EiSp2Mydw7M6P1zopsrBJak/NLQvEazW1nO0ks=;
+        fh=3kAaT87vUtL3jbQ+nsGborhQL0U+tAH6eaEQs+mE4qQ=;
+        b=DiAiDpIJiUCny8+Bld9WpOt1414lD2EJ3Po8+IUn1xhlE4K7erFsxl+9SJwn3I5cwH
+         lw2TcQBW6ZOwld5wnZO1MlrxVrp1WR6+pm8mVnLms+F7XU/uiRgJ3J/V+7Gce+3ADYbR
+         ReHsYRdH8khzKpZ9VOR5En2KxNWUz3Z9CMVLqG62WUjYY69MOa29H3pSuJh+Cjju7eSM
+         3s6K74/gxP2AIfAQRNUmIVmubvzI+umsVumrpqGvgLgQBlCUfAo29EVUaY5dT+6DC2dR
+         8je4xF5kAlIU9SKhNczCNPvMqO0z58KtKQxRn7RvwIF+iQW03o35ATSUNRdz2CmXAlvh
+         CEGw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783482037; x=1784086837; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=/Qa+4EiSp2Mydw7M6P1zopsrBJak/NLQvEazW1nO0ks=;
+        b=PIA/f1zEKPkjsbA4Wzh2/sJo8Hbo1i7/WqlfHYfPZNz0nrI1wuRvqcCMDI9YgC97Q6
+         rgluiVYRbc/waOrqlgIFbPXTMeWbFwTlRVCOvLD/fBkwypIvGJLN32voAlVlC6isV/X0
+         lGSi5+jKraBAtjdwdcBBzUEyLsaproyf/OwPHDCG0wc/EZBEJjYJ4gZR21M3QeO5i/DP
+         5+6oNbMQTO5w3W28SPBLdIiQtDf6l0jD17RGpB1HTjnTa96Z2/zwnNkcEltVIOYc3ip4
+         UAW3WLDIYfNCO7PD51E9s5a80lGGoE9LhceJpxTsN8qGI9jntdzGjlpJfdiddXfh6Qw/
+         91tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783482037; x=1784086837;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/Qa+4EiSp2Mydw7M6P1zopsrBJak/NLQvEazW1nO0ks=;
+        b=QdQ/6CX0+DJej7B9ToT2FyhnGSJhkTqbATZUAgaHKjiG60Z0ToWMR3Sa8Gn81VmGmU
+         PUCcBmcpR/7FSNdKl5DMyfWzSCn6maM2v+aczUoaPB2zsitaNQ5B6lXJYBoGUxxUzph4
+         80FKQIwxt6Z7OU4MwMGxi07NLTXtASI4hAvR09jUj6lqV28sHmvMsOEe0hLneugiSkCX
+         HWDIEt+KoxuChyzYM8ZftAAjzujtqXYkOeySwJ7JkAPLRxZLiAuPJ1Ghhp9Ba1N5FHTh
+         CYpoipAqIpK9Pf+yDoZTCF/ZCTJXFJ9b5ubTT9JOVrKLKavOZ+b94rbTFHwEsOYto6eC
+         i3lg==
+X-Gm-Message-State: AOJu0YzJGIdbjA95w7F7xs3/u5gLmVuej9VB8S2t+BiJ9KQEPsBTsXNi
+	IB+FD08aWvRxlYP++/6AKEiUU4srgkRymX2mBXQF0mbS4GfnGqB2hMX+FoVkwwTQ7nlipjmh98w
+	l4p44twdPDLgCb1bXT8iPYQ6I5lAm71mozS8RptA=
+X-Gm-Gg: AfdE7clNfXnrsRJYxFatib+rMF41eqKwWZiqh3BmpoAY0BkRO7bhNLnrlt8HlWZ5bse
+	e2Xavpywf8F2HW/6mL0NBJMDU8scRjqmdzEbMvtrvH8rPB4UukuwxDhWhOcu5kGAGFs5vqwtNj5
+	fWyrGo3eNXfKVtYFkVlmEF57rxIlfazXSuOdk1ra3Sr6d6Q1APXOoIQa5ScqL/f1nWCtP8b2Y51
+	gTNlZGQOjRQyVnGb/Z6VbOUl9TwsKDRr0IM8ITVRt6rCjcoMjw6qnQ83kO3aJhfDoo4DnwnReL7
+	zJdz4Egjdm+zDZfS0E+A5g0M+D7R/qgCY3lljA==
+X-Received: by 2002:a05:620a:2913:b0:92b:67e6:8ac0 with SMTP id
+ af79cd13be357-92ecf6965ebmr59211785a.74.1783482036798; Tue, 07 Jul 2026
+ 20:40:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <c5a6bff16c0885d3ec756a1cdfb623636d0bdb4a.1783479101.git.dwindsor@gmail.com>
+ <6702d2f1-dcd4-4b68-b1ac-daa8661235a0@linux.dev>
+In-Reply-To: <6702d2f1-dcd4-4b68-b1ac-daa8661235a0@linux.dev>
+From: David Windsor <dwindsor@gmail.com>
+Date: Tue, 7 Jul 2026 23:40:25 -0400
+X-Gm-Features: AVVi8Cephjp7dZrQ7HVqOogT0cobirvdNaVw4_nk_zdryglSi4jSG3SZ13lnB_Y
+Message-ID: <CAEXv5_gC_ze_CURdJMHBQ0aLS=uA8GyisSwnwo1YFTd_++4phA@mail.gmail.com>
 Subject: Re: [PATCH bpf 1/2] bpf, x86: Fix FineIBT #CP in BPF dispatcher's
  indirect-jump fallback
-Content-Language: en-US
-To: David Windsor <dwindsor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H . Peter Anvin" <hpa@zytor.com>, "David S . Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <c5a6bff16c0885d3ec756a1cdfb623636d0bdb4a.1783479101.git.dwindsor@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <c5a6bff16c0885d3ec756a1cdfb623636d0bdb4a.1783479101.git.dwindsor@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/7/26 10:57, David Windsor wrote:
-> commit 4f9087f16651 ("x86/cfi,bpf: Fix BPF JIT call") updated
-> emit_cfi() to emit FineIBT preambles for JIT-compiled BPF programs, but
-> did not update emit_bpf_dispatcher(). When prog->bpf_func is not in the
-> dispatcher table (e.g. an XDP_REDIRECT target program in a CPUMAP or
-> DEVMAP, or BPF_PROG_TEST_RUN of an unattached prog), the dispatcher
-> still jumps directly to prog->bpf_func. Without a FineIBT caller
-> sequence, under FineIBT this raises #CP:
-> 
->   Missing ENDBR: __cfi_bpf_prog_..._xdp_dispatcher_unattached+0x10/0x10
->   ------------[ cut here ]------------
->   kernel BUG at arch/x86/kernel/cet.c:133!
->   Oops: invalid opcode: 0000 [#1] SMP NOPTI
->   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.17.0-0-gb52ca86e094d-prebuilt.qemu.org 04/01/2014
->   RIP: 0010:do_kernel_cp_fault+0x126/0x130
->   Call Trace:
->    <TASK>
->    exc_control_protection+0x46/0x80
->    asm_exc_control_protection+0x2b/0x30
->   RIP: 0010:__cfi_bpf_prog_..._xdp_dispatcher_unattached+0x10/0x10
->    bpf_prog_test_run+0xda/0x1b0
->    __sys_bpf+0x70b/0x990
->    __x64_sys_bpf+0x2d/0x50
->    x64_sys_call+0x1079/0x2d40
->    do_syscall_64+0x12a/0x3c0
->    entry_SYSCALL_64_after_hwframe+0x76/0x7e
->    </TASK>
-> 
-> To fix this, we precede the indirect jump in emit_bpf_dispatcher() with
-> the FineIBT caller sequence: load cfi_bpf_hash into %eax and subtract
-> cfi_get_offset() from the target so it enters the preamble's real ENDBR.
-> Only needed for CFI_FINEIBT.
-> 
-> Fixes: 4f9087f16651 ("x86/cfi,bpf: Fix BPF JIT call")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: David Windsor <dwindsor@gmail.com>
-> ---
->  arch/x86/net/bpf_jit_comp.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index de7515ea1bea..1c8249d8ca3b 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -3740,6 +3740,15 @@ static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs, u8 *image,
->  		if (err)
->  			return err;
->  
-> +		/* If running under FineIBT, enter the preamble so the following
-> +		 * indirect jump lands on a real ENDBR instead of the poison.
-> +		 */
+On Tue, Jul 7, 2026 at 11:30=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
+>
+> Comment style: /* should stay at its own line.
+>
+> > +             if (cfi_mode =3D=3D CFI_FINEIBT) {
+> > +                     EMIT1_off32(0xb8, cfi_bpf_hash);        /* mov $c=
+fi_bpf_hash, %eax */
+> > +                     EMIT1(add_1mod(0x48, BPF_REG_3));       /* sub rd=
+x, cfi_get_offset() */
+> > +                     EMIT2_off32(0x81, add_1reg(0xE8, BPF_REG_3), cfi_=
+get_offset());
+> > +             }
+>
+>
+> Better to emit_cfi()?
+>
 
-
-Comment style: /* should stay at its own line.
-
-> +		if (cfi_mode == CFI_FINEIBT) {
-> +			EMIT1_off32(0xb8, cfi_bpf_hash);	/* mov $cfi_bpf_hash, %eax */
-> +			EMIT1(add_1mod(0x48, BPF_REG_3));	/* sub rdx, cfi_get_offset() */
-> +			EMIT2_off32(0x81, add_1reg(0xE8, BPF_REG_3), cfi_get_offset());
-> +		}
-
-
-Better to emit_cfi()?
-
-Thanks,
-Leon
-
-> +
->  		emit_indirect_jump(&prog, BPF_REG_3 /* R3 -> rdx */, image + (prog - buf));
->  
->  		*pprog = prog;
-
+Yes, thanks. Will do this for v2.
