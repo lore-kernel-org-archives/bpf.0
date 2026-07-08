@@ -1,87 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3FEE33F591;
-	Wed,  8 Jul 2026 13:28:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 325B43803C6;
+	Wed,  8 Jul 2026 13:42:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783517310; cv=none; b=FBQBi4B7hjTsRsr6y07jRBkst4Lldpuu4HdnKosjpzz8N3V41aftmIpsEReTh/SuW/1r4DKFBCTHQqMlGkm9lp2xuE8Bxw+C/p5+exuUp1DcP+FVRhtSE0kKEXxCaKWFik5oeF4zeJpZNzifaZRxTaWgyf++NO3ms21Ei0sVFpo=
+	t=1783518121; cv=none; b=e+uKz7K1kL4jhzTc885l9ELHO62MpHBuUMzUjUhgVRWXQzUCS/uGa4fdHypW3pARu87tJY9NGEuQpHMWG10Ymb9fioCAAAQrNxR7ATURZ9SN6wNeMMxnMo8Udcnc28DL8NIc2SIJyz4/3z00bs/dbgDBjBT/zsps9p2QPffhXk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783517310; c=relaxed/simple;
-	bh=zDaESKBTYy4jlyC3dl7SAdhWIb6bcGpfhcnF1zMQ4QI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=tCB6rKEG3FINLgS6vyciNKte4Y7PrsriBjsBh3I0I2uVolIxNoHG6LuPvxpaX6gkYJvHPq3sEnNaniqURCvKW8ef9uiMPI/95EaxmSygUbk9ISITRhWKDiiwK2Jn2YiN4sXn3v0fPneZzGfHT/XEIMCKuO9G2iseBYrhjdO7Jg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cf9eQrzY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783518121; c=relaxed/simple;
+	bh=Bm7RObp9s++cBMV9gkbZTmjkcWOyReBVOW6pz3ieI9I=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=GX9PyY7rYOIFKboFBrdrU0qj1EbyChYDmD3lm5eEfJKDpSuwmfToMRYgFtq31iX6XEdEwnr0c/vsVYtS+vriLqPzHhsa9TeHMaAIk2gAB6VxFqmLhQMuxLm/UP3C9RMgRe1UI4vIvsrcOvgl3BWXdVlE2pv3jP8MPcQY4n4nMoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z4nAj4EH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cf9eQrzY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0F871F000E9;
-	Wed,  8 Jul 2026 13:28:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783517307;
-	bh=ErTICou7hVajnT0Tkw4wgoMeIyyZeH0Ei8wY6hC32YE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=cf9eQrzY/qXpDWv94NIcSNOogqURsFqT5oeggOZh3wXmktJmDNexK6hxrimRyhBIk
-	 TKe+WhQOTz9pBAypnCuf9szvS7c+/oWS/9jQzAhbqS/wCUnQQuD9fBihnWeoak8p7D
-	 +JkHyR+pUreDy0N0cm76qLWkFf1C1UsKzix80go8ezNeszoKwkOVhBOv2cl8UWN+ph
-	 o6sIhvSuCk4OjJIMfYv8REmbSlcQ3Qh9bscQ/0c6O7WCdGqc2SPJEAxDAHmkHvuhN3
-	 aFAAV41C7oVu6gibY5VbQ5dg/uoei+RZ/GSUH4AYoXlx9qQ8uxcoyXPzevdojPQevq
-	 EXVE+rbfLRmcA==
-Content-Type: multipart/mixed; boundary="===============9166916302589270823=="
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z4nAj4EH"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E2C48C2BCF5;
+	Wed,  8 Jul 2026 13:42:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1783518120;
+	bh=Bm7RObp9s++cBMV9gkbZTmjkcWOyReBVOW6pz3ieI9I=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=Z4nAj4EHwFWipzPWBGfUODXCzMvclcqA5zEg4UL6KMhyPiCq177S8frkzkTGtj+/0
+	 eVxRgPovQ6F6URO87oF5K5fnoxzG4HqFeBj1lk9yTukurj3fyeNrKYruF0hPxQTXB2
+	 MoKsBrOoCmy1/jRU8mpew5f+fuYWkj5dlw4AR0Xwv0qcnIrrRqY7h6lfUF9bpRtBaT
+	 VSSRvrcxlDg/KvVl4tttRC/Aw8wN6XoRmnt8aeJ64KyeLrPaqyqRIzAUF675vYJkVT
+	 nZ4CkpAiuDQVIc0BN7B8L+c8arOFu7pmCz5dEuUbTSMYa3OQ8cCoMZewB6XwMoFEsa
+	 JA1JhofaMfC1Q==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C445FC43602;
+	Wed,  8 Jul 2026 13:42:00 +0000 (UTC)
+From: Mattia Meleleo via B4 Relay <devnull+mattia.meleleo.coralogix.com@kernel.org>
+Date: Wed, 08 Jul 2026 15:40:56 +0200
+Subject: [PATCH bpf v2 1/2] bpf, sockmap: Account for receive queue in
+ FIONREAD without a verdict program
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0b7502b52100d29cb13a190835864be85e2d69967a8df8125b9762492ba4f368@mail.kernel.org>
-In-Reply-To: <6c7a059057d309e999b706b5b547be9c620ce544.1783514455.git.deliran@verdict.gg>
-References: <6c7a059057d309e999b706b5b547be9c620ce544.1783514455.git.deliran@verdict.gg>
-Subject: Re: [PATCH bpf-next 1/1] selftests: drv-net: add XDP RX checksum metadata tests
-From: bot+bpf-ci@kernel.org
-To: deliran@verdict.gg,lorenzo@kernel.org
-Cc: sdf@fomichev.me,kuba@kernel.org,andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,hawk@kernel.org,john.fastabend@gmail.com,martin.lau@linux.dev,sdf.kernel@gmail.com,bpf@vger.kernel.org,netdev@vger.kernel.org,deliran@verdict.gg,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  8 Jul 2026 13:28:26 +0000 (UTC)
-
---===============9166916302589270823==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260708-fionread-no-verdict-v2-1-29dd293621c7@coralogix.com>
+References: <20260708-fionread-no-verdict-v2-0-29dd293621c7@coralogix.com>
+In-Reply-To: <20260708-fionread-no-verdict-v2-0-29dd293621c7@coralogix.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, 
+ Jiayuan Chen <jiayuan.chen@linux.dev>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Mattia Meleleo <mattia.meleleo@coralogix.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1783518119; l=1935;
+ i=mattia.meleleo@coralogix.com; s=20260707; h=from:subject:message-id;
+ bh=+7W+UywcmQEf+EMNYloJybeZfGEOpWtaZ50KeeVhEPM=;
+ b=rJB40xzHsfzfq0DEE+iaFOQymdme8+o6xox98Q11IEKechOz/K1/KHm8zeoZ2APnI/TVR2O9w
+ fsSRAZyQig+DF1kGPzTppidER3cP+Y58qa1D5Tb5IDxoN47xojab04N
+X-Developer-Key: i=mattia.meleleo@coralogix.com; a=ed25519;
+ pk=cs1zLoe3YDm4bJ7bfbPaZH0lHnd871JyJLiSh2eEzLs=
+X-Endpoint-Received: by B4 Relay for mattia.meleleo@coralogix.com/20260707
+ with auth_id=857
+X-Original-From: Mattia Meleleo <mattia.meleleo@coralogix.com>
+Reply-To: mattia.meleleo@coralogix.com
 
-> diff --git a/tools/testing/selftests/drivers/net/hw/xdp_metadata.py b/tools/testing/selftests/drivers/net/hw/xdp_metadata.py
-> index 33a1985356d9..687c43a1797a 100644
-> --- a/tools/testing/selftests/drivers/net/hw/xdp_metadata.py
-> +++ b/tools/testing/selftests/drivers/net/hw/xdp_metadata.py
+From: Mattia Meleleo <mattia.meleleo@coralogix.com>
 
-[ ... ]
+tcp_bpf_ioctl() answers SIOCINQ from psock->msg_tot_len, which only
+counts bytes in ingress_msg. Without a stream/skb verdict program
+nothing is diverted there: data stays in sk_receive_queue, so FIONREAD
+returns 0 even though read() returns data.
 
-> @@ -81,8 +83,22 @@ _RSS_KEY_TYPE = 1
->  _RSS_KEY_PKT_CNT = 2
->  _RSS_KEY_ERR_CNT = 3
->
-> +_CSUM_KEY_IP_SUMMED = 0
-> +_CSUM_KEY_CKSUM = 1
-> +_CSUM_KEY_LEVEL = 2
-> +_CSUM_KEY_PKT_CNT = 3
-> +_CSUM_KEY_ERR_CNT = 4
-> +
->  XDP_RSS_L4 = 0x8  # BIT(3) from enum xdp_rss_hash_type
->
-> +# Mirror of enum xdp_checksum from include/net/xdp.h
-> +XDP_CHECKSUM_NONE = 0x1
-> +XDP_CHECKSUM_UNNECESSARY = 0x2
-> +XDP_CHECKSUM_COMPLETE = 0x4
+Add tcp_inq() to the reported value when the psock has no verdict
+program. The two queues are disjoint, so bytes redirected into
+ingress_msg from other sockets stay correctly accounted through
+msg_tot_len.
 
-This isn't a bug, but XDP_CHECKSUM_NONE does not seem to be used anywhere
-in the test; was it intended to mirror the full enum for documentation, or
-could it be dropped to match the nearby XDP_RSS_L4 which defines only the
-bit it uses?
-
-[ ... ]
-
-
+Fixes: 929e30f93125 ("bpf, sockmap: Fix FIONREAD for sockmap")
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Signed-off-by: Mattia Meleleo <mattia.meleleo@coralogix.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ net/ipv4/tcp_bpf.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28945032378
---===============9166916302589270823==--
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index cc0bd73f3..8e905b50d 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -334,6 +334,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 
+ static int tcp_bpf_ioctl(struct sock *sk, int cmd, int *karg)
+ {
++	struct sk_psock *psock;
+ 	bool slow;
+ 
+ 	if (cmd != SIOCINQ)
+@@ -344,7 +345,21 @@ static int tcp_bpf_ioctl(struct sock *sk, int cmd, int *karg)
+ 		return -EINVAL;
+ 
+ 	slow = lock_sock_fast(sk);
+-	*karg = sk_psock_msg_inq(sk);
++	psock = sk_psock_get(sk);
++	if (unlikely(!psock)) {
++		unlock_sock_fast(sk, slow);
++		return tcp_ioctl(sk, cmd, karg);
++	}
++	*karg = sk_psock_get_msg_len_nolock(psock);
++	/* Without a verdict program, ingress data is never diverted to
++	 * ingress_msg: it stays in sk_receive_queue and is read through
++	 * the fallback to tcp_recvmsg(), so account for it like
++	 * tcp_ioctl() does.
++	 */
++	if (!READ_ONCE(psock->progs.stream_verdict) &&
++	    !READ_ONCE(psock->progs.skb_verdict))
++		*karg += tcp_inq(sk);
++	sk_psock_put(sk, psock);
+ 	unlock_sock_fast(sk, slow);
+ 
+ 	return 0;
+
+-- 
+Git-155)
+
+
