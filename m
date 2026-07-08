@@ -1,42 +1,42 @@
 Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4585C3FC5A9
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 08:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9AA5348C47;
+	Wed,  8 Jul 2026 08:02:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783497759; cv=none; b=OE1oiLqyGm7GdASCYOBeWrPAW/Ko+2/C8o20qoaheWKf4XYGkO6jkvioufYWvyGahUFNyrmCJAU4cPpv76FbO8bW494yj+saT+u2HGHejdL+zoLTX8pB4CUgTNZ1shZEaQ2C+gJdM9GTFNAjWLCE+0uqHThwYsVlG9YMUZcCf2g=
+	t=1783497760; cv=none; b=gcYQGOLULXA/kbeoghslZya9TECqQkXFMRWviirvL1IcYSg/+a7zlqRI4okOkjvVqQ9yhJ4S9mGd3gu9YB/GlbDCO6buStYH8sp66eIYTQXALxANCLB5sAWbkjz7YqMmqmQW/bNuV0MdmsM2aijBsIyWA96OE9+Pr4/Zxsxwh90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783497759; c=relaxed/simple;
-	bh=iZZ2PBHmZPBN0aYPVqp7i+Hypr1WUjOmlCyjUh5wbxQ=;
+	s=arc-20240116; t=1783497760; c=relaxed/simple;
+	bh=GvQbMv4aWYczt2UxlfqqyLiU3kL1p/nohCeMk2tFyFg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=X7/nzj4KvAXOARsiJZ7PvQleBwZqK47d7JRsfuxUjUXzGnFq1lzdXaStzKBBtYOxNK/dmyNksudnbxrszVBMRJ6ZNNfbbqX1ZbzJ0tEEu3JRi6ikwigzqM9WjJXN4u0jsMcINapsG1jp4Ipw+yU/Vdooqun2Tjidkd1vJbYh/34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dOHxWCLl; arc=none smtp.client-ip=185.171.202.116
+	 In-Reply-To:To:Cc; b=I2HieKLu6xE9REH9OTJq5f+AkfadefzGnocexf40679KhQF9Qzj1QbDA6hOIDlkr3PAy9DCr0vI9jyys+6qXLcdVji4n5Zu6I0HcPAKzHQFHRfEBxXHsO48XiJPkWvrr9sUmSTlTFoW7Rf/5N5qihzVgXVnTw2mnaOqAV6IVSzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=AbFHo1T0; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dOHxWCLl"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="AbFHo1T0"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id BAE2CC8F455;
-	Wed,  8 Jul 2026 08:02:45 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 4D78CC8F448;
+	Wed,  8 Jul 2026 08:02:39 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id E0EF760337;
-	Wed,  8 Jul 2026 08:02:31 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5FF1611BC325A;
-	Wed,  8 Jul 2026 10:02:27 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 72C6260337;
+	Wed,  8 Jul 2026 08:02:25 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5F95311BC3257;
+	Wed,  8 Jul 2026 10:02:21 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1783497750; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1783497743; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=Opkt6b3+GbYxHiyz50Ifh9CTGFN4f2m40rUrrqYk9es=;
-	b=dOHxWCLlrGLrmU1tYn8arT2UOsfxXcaVvs+YyjP0uPotb8knBE8QeDUMxB6+LG9YIXB0Yp
-	B4N+Glywn74GbYud3BHxnZ43SUYhQnD5GMMPr6zgJ0b97npgj05aJ32jm1NEPoJNLm/BYU
-	HYdETeDbDDDLzbnUjW8yIrMGL4llVFTNNZNQHtSXO1OugmeCnRHERYz4XpqITyI95bFxY3
-	6BSMb4IOK8vugBmmJ7PO1h0ZyQM3w2Am506NfoYSTO9+2yoJsgXLJcExf6bX8fVksA01n4
-	2oBMx7/WAdAhNFOJZ8utN5dEyikeapafz82ktya3weuZtpbIwlsyuVX9NDwZyw==
+	bh=Ufws7vw7vrQJ7BzZi4UiRX/hrPCKh7LKE2BoePRTiOE=;
+	b=AbFHo1T0Ursgfwg9q0UD2DVaLkMD0/aYsfMBZ9IVbndJIk7LHk0m6MwiXqiZ8ax/j0CZy/
+	nrWi3eh75ku8VtH3SV/5UNQVXNnnod+s1Fpq1Ps9/YiGzT38BvjxgRIjS5N8g/286ikJb0
+	vl/pIRTdzeyh13FoXcvC5I4j8Kg/ex8IbOoVXDECgrRJSBMnrPeadsWmuVY7x/O6FWI/lB
+	IIxRSuixXevfOlNeTVZCUg0eHa1S6wfHzE1TcBg0JT/xMxe3fFgPdwEhIpasF+PezneUix
+	dO3r4PjLuUiTTwyahPwLKO8Xf+F/D+lD/O1la905YWApTwaONwVhbBOwWe38nw==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Wed, 08 Jul 2026 10:00:26 +0200
-Subject: [PATCH bpf-next v4 03/10] bpf: add BPF_JIT_KASAN for KASAN
- instrumentation of JITed programs
+Date: Wed, 08 Jul 2026 10:00:24 +0200
+Subject: [PATCH bpf-next v4 01/10] bpf: propagate original instruction
+ offset when patching program
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260708-kasan-v4-3-d5c177ab8227@bootlin.com>
+Message-Id: <20260708-kasan-v4-1-d5c177ab8227@bootlin.com>
 References: <20260708-kasan-v4-0-d5c177ab8227@bootlin.com>
 In-Reply-To: <20260708-kasan-v4-0-d5c177ab8227@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -68,62 +68,491 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.15.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-Add a new Kconfig option CONFIG_BPF_JIT_KASAN that automatically enables
-generic KASAN (Kernel Address SANitizer) memory access checks for
-JIT-compiled BPF programs as well, when both KASAN (and more
-specifically, generic KASAN with KASAN_VMALLOC) and JIT compiler are
-enabled. This new Kconfig is not a user selectable one: it is either
-automatically enabled if KASAN is enabled on a compatible platform. When
-enabled, the JIT compiler will emit shadow memory checks before memory
-loads and stores to detect use-after-free or out-of-bounds accesses at
-runtime. The option is gated behind HAVE_EBPF_JIT_KASAN, as it needs
-proper arch-specific implementation.
+When the verifier patches an ebpf program with bpf_patch_insn_data, it
+then calls adjust_insn_aux_data to make sure that insn_aux_data takes
+into account the newly inserted patch. Some of the data offset is pretty
+straightforward to deduce, it is for example the case for
+indirect_target, as any patch affecting indirect calls will
+systematically move the original instruction to the end of the new
+patch.
+
+In order to introduce KASAN support for eBPF JIT, we need to mark any
+load/store instruction that accesses non-stack memory, but updating this
+new marking after a patch is not as straightforward as for indirect
+calls: the original BPF_ST/BPF_STX/BPF_LDX can be at the beginning, at
+the end or somewhere in the middle of the new patch: we then need some
+additional info to properly update this marking.
+
+Add a new parameter to bpf_patch_insn_data and adjust_insn_aux_data to
+convey the info about the new location in the patch of the original
+instruction. This info does not always make sense depending on the
+generated patch (eg, some bpf helpers being inlined by the verifier, and
+so turned into multiple new instructions without any remaining BPF_CALL),
+the parameter can then be set to -1. It will be used in next patches to
+properly handle insn_aux_data adjustment for the new KASAN
+instrumentation
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
 Changes in v4:
-- reorganize dependencies (Andrey)
-- drop VMAP_STACK dependency
+- define insn_off_in_patch inside convert_ctx_accesses main loop to
+  avoid old value leakage
 
-Changes in v2:
-- add dependency on kasan for vmalloc and vmalloc'ed stack
+Changes in v3:
+- new patch
 ---
- kernel/bpf/Kconfig | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ include/linux/filter.h |  10 +++--
+ kernel/bpf/core.c      |   2 +-
+ kernel/bpf/fixups.c    | 105 +++++++++++++++++++++++++++++++++----------------
+ 3 files changed, 79 insertions(+), 38 deletions(-)
 
-diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-index eb3de35734f0..e1f3850d2f5a 100644
---- a/kernel/bpf/Kconfig
-+++ b/kernel/bpf/Kconfig
-@@ -17,6 +17,10 @@ config HAVE_CBPF_JIT
- config HAVE_EBPF_JIT
- 	bool
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 14acb2455746..1ebcd247ef4e 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1210,13 +1210,17 @@ struct bpf_prog *bpf_patch_insn_single(struct bpf_prog *prog, u32 off,
  
-+# KASAN support for JIT compiler
-+config HAVE_EBPF_JIT_KASAN
-+	bool
-+
- # Used by archs to tell that they want the BPF JIT compiler enabled by
- # default for kernels that were compiled with BPF JIT support.
- config ARCH_WANT_DEFAULT_BPF_JIT
-@@ -101,4 +105,17 @@ config BPF_LSM
+ #ifdef CONFIG_BPF_SYSCALL
+ struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env, u32 off,
+-				     const struct bpf_insn *patch, u32 len);
++				     const struct bpf_insn *patch, u32 len,
++				     s32 insn_off_in_patch);
+ struct bpf_insn_aux_data *bpf_dup_insn_aux_data(struct bpf_verifier_env *env);
+ void bpf_restore_insn_aux_data(struct bpf_verifier_env *env,
+ 			       struct bpf_insn_aux_data *orig_insn_aux);
+ #else
+-static inline struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env, u32 off,
+-						   const struct bpf_insn *patch, u32 len)
++static inline struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env,
++						   u32 off,
++						   const struct bpf_insn *patch,
++						   u32 len,
++						   s32 insn_off_in_patch)
+ {
+ 	return ERR_PTR(-ENOTSUPP);
+ }
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 6e19a030da6f..1e18b999f1b5 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1598,7 +1598,7 @@ struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bp
+ 			continue;
  
- 	  If you are unsure how to answer this question, answer N.
+ 		if (env)
+-			tmp = bpf_patch_insn_data(env, i, insn_buff, rewritten);
++			tmp = bpf_patch_insn_data(env, i, insn_buff, rewritten, rewritten - 1);
+ 		else
+ 			tmp = bpf_patch_insn_single(clone, i, insn_buff, rewritten);
  
-+config BPF_JIT_KASAN
-+	bool
-+	depends on HAVE_EBPF_JIT_KASAN
-+	depends on KASAN_GENERIC
-+	depends on KASAN_VMALLOC
-+	depends on BPF_JIT
-+	default y if KASAN
-+	help
-+	  Makes JIT compiler insert generic outline KASAN checks in BPF
-+	  programs when they are inserted in the kernel. This feature is
-+	  automatically enabled if the needed set of KASAN and BPF
-+	  configuration options is enabled.
-+
- endmenu # "BPF subsystem"
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 12a8a4eb757f..f515fc9669ce 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -157,7 +157,8 @@ static int get_callee_stack_depth(struct bpf_verifier_env *env,
+  * [0, off) and [off, end) to new locations, so the patched range stays zero
+  */
+ static void adjust_insn_aux_data(struct bpf_verifier_env *env,
+-				 struct bpf_prog *new_prog, u32 off, u32 cnt)
++				 struct bpf_prog *new_prog, u32 off, u32 cnt,
++				 s32 insn_off_in_patch)
+ {
+ 	struct bpf_insn_aux_data *data = env->insn_aux_data;
+ 	struct bpf_insn *insn = new_prog->insnsi;
+@@ -245,7 +246,8 @@ static void adjust_poke_descs(struct bpf_prog *prog, u32 off, u32 len)
+ }
+ 
+ struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env, u32 off,
+-				     const struct bpf_insn *patch, u32 len)
++				     const struct bpf_insn *patch, u32 len,
++				     s32 insn_off_in_patch)
+ {
+ 	struct bpf_prog *new_prog;
+ 	struct bpf_insn_aux_data *new_data = NULL;
+@@ -269,7 +271,7 @@ struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env, u32 off,
+ 				env->insn_aux_data[off].orig_idx);
+ 		return NULL;
+ 	}
+-	adjust_insn_aux_data(env, new_prog, off, len);
++	adjust_insn_aux_data(env, new_prog, off, len, insn_off_in_patch);
+ 	adjust_subprog_starts(env, off, len);
+ 	adjust_insn_arrays(env, off, len);
+ 	adjust_poke_descs(new_prog, off, len);
+@@ -668,7 +670,7 @@ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
+ 		patch = zext_patch;
+ 		patch_len = 2;
+ apply_patch_buffer:
+-		new_prog = bpf_patch_insn_data(env, adj_idx, patch, patch_len);
++		new_prog = bpf_patch_insn_data(env, adj_idx, patch, patch_len, 0);
+ 		if (!new_prog)
+ 			return -ENOMEM;
+ 		env->prog = new_prog;
+@@ -713,7 +715,7 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 			insn_buf[cnt++] = BPF_STX_MEM(BPF_DW, BPF_REG_FP, BPF_REG_1,
+ 						      -subprogs[0].stack_depth);
+ 			insn_buf[cnt++] = env->prog->insnsi[0];
+-			new_prog = bpf_patch_insn_data(env, 0, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, 0, insn_buf, cnt, 1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 			env->prog = new_prog;
+@@ -736,7 +738,8 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 			verifier_bug(env, "prologue is too long");
+ 			return -EFAULT;
+ 		} else if (cnt) {
+-			new_prog = bpf_patch_insn_data(env, 0, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, 0, insn_buf, cnt,
++						       cnt - 1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -759,6 +762,7 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 
+ 	for (i = 0; i < insn_cnt; i++, insn++) {
+ 		bpf_convert_ctx_access_t convert_ctx_access;
++		s32 insn_off_in_patch = -1;
+ 		u8 mode;
+ 
+ 		if (env->insn_aux_data[i + delta].nospec) {
+@@ -768,7 +772,8 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 			*patch++ = BPF_ST_NOSPEC();
+ 			*patch++ = *insn;
+ 			cnt = patch - insn_buf;
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, cnt - 1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -841,7 +846,8 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 			*patch++ = *insn;
+ 			*patch++ = BPF_ST_NOSPEC();
+ 			cnt = patch - insn_buf;
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, 0);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -856,16 +862,20 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 			if (!ops->convert_ctx_access)
+ 				continue;
+ 			convert_ctx_access = ops->convert_ctx_access;
++			insn_off_in_patch = 0;
+ 			break;
+ 		case PTR_TO_SOCKET:
+ 		case PTR_TO_SOCK_COMMON:
+ 			convert_ctx_access = bpf_sock_convert_ctx_access;
++			insn_off_in_patch = 0;
+ 			break;
+ 		case PTR_TO_TCP_SOCK:
+ 			convert_ctx_access = bpf_tcp_sock_convert_ctx_access;
++			insn_off_in_patch = 0;
+ 			break;
+ 		case PTR_TO_XDP_SOCK:
+ 			convert_ctx_access = bpf_xdp_sock_convert_ctx_access;
++			insn_off_in_patch = 0;
+ 			break;
+ 		case PTR_TO_BTF_ID:
+ 		case PTR_TO_BTF_ID | PTR_UNTRUSTED:
+@@ -971,7 +981,8 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 						       size * 8, 0);
+ 
+ patch_insn_buf:
+-		new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++		new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt,
++					       insn_off_in_patch);
+ 		if (!new_prog)
+ 			return -ENOMEM;
+ 
+@@ -1464,7 +1475,7 @@ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *pat
+ 	 * ones for the hidden subprog. Hence all of the adjustment operations
+ 	 * in bpf_patch_insn_data are no-ops.
+ 	 */
+-	prog = bpf_patch_insn_data(env, env->prog->len - 1, patch, len);
++	prog = bpf_patch_insn_data(env, env->prog->len - 1, patch, len, -1);
+ 	if (!prog)
+ 		return -ENOMEM;
+ 	env->prog = prog;
+@@ -1549,7 +1560,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 
+ 			cnt = patch - insn_buf;
+ 
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, 0);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -1569,6 +1581,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			bool is_sdiv = isdiv && insn->off == 1;
+ 			bool is_smod = !isdiv && insn->off == 1;
+ 			struct bpf_insn *patch = insn_buf;
++			s32 insn_off_in_patch;
+ 
+ 			if (is_sdiv) {
+ 				/* [R,W]x sdiv 0 -> 0
+@@ -1595,6 +1608,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 				*patch++ = BPF_JMP_IMM(BPF_JA, 0, 0, 1);
+ 				*patch++ = *insn;
+ 				cnt = patch - insn_buf;
++				insn_off_in_patch = cnt - 1;
+ 			} else if (is_smod) {
+ 				/* [R,W]x mod 0 -> [R,W]x */
+ 				/* [R,W]x mod -1 -> 0 */
+@@ -1611,6 +1625,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 				*patch++ = BPF_MOV32_IMM(insn->dst_reg, 0);
+ 				*patch++ = BPF_JMP_IMM(BPF_JA, 0, 0, 1);
+ 				*patch++ = *insn;
++				insn_off_in_patch = patch - insn_buf - 1;
+ 
+ 				if (!is64) {
+ 					*patch++ = BPF_JMP_IMM(BPF_JA, 0, 0, 1);
+@@ -1626,12 +1641,14 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 				*patch++ = BPF_JMP_IMM(BPF_JA, 0, 0, 1);
+ 				*patch++ = *insn;
+ 				cnt = patch - insn_buf;
++				insn_off_in_patch = cnt - 1;
+ 			} else {
+ 				/* [R,W]x mod 0 -> [R,W]x */
+ 				*patch++ = BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
+ 							BPF_JEQ | BPF_K, insn->src_reg,
+ 							0, 1 + (is64 ? 0 : 1), 0);
+ 				*patch++ = *insn;
++				insn_off_in_patch = patch - insn_buf - 1;
+ 
+ 				if (!is64) {
+ 					*patch++ = BPF_JMP_IMM(BPF_JA, 0, 0, 1);
+@@ -1640,7 +1657,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 				cnt = patch - insn_buf;
+ 			}
+ 
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, insn_off_in_patch);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -1656,6 +1674,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 		     BPF_MODE(insn->code) == BPF_PROBE_MEMSX)) {
+ 			struct bpf_insn *patch = insn_buf;
+ 			u64 uaddress_limit = bpf_arch_uaddress_limit();
++			s32 insn_off_in_patch;
+ 
+ 			if (!uaddress_limit)
+ 				goto next_insn;
+@@ -1666,11 +1685,13 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			*patch++ = BPF_ALU64_IMM(BPF_RSH, BPF_REG_AX, 32);
+ 			*patch++ = BPF_JMP_IMM(BPF_JLE, BPF_REG_AX, uaddress_limit >> 32, 2);
+ 			*patch++ = *insn;
++			insn_off_in_patch = patch - insn_buf - 1;
+ 			*patch++ = BPF_JMP_IMM(BPF_JA, 0, 0, 1);
+ 			*patch++ = BPF_MOV64_IMM(insn->dst_reg, 0);
+ 
+ 			cnt = patch - insn_buf;
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, insn_off_in_patch);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -1690,7 +1711,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 				return -EFAULT;
+ 			}
+ 
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, 0);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -1743,7 +1765,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 				*patch++ = BPF_ALU64_IMM(BPF_MUL, off_reg, -1);
+ 			cnt = patch - insn_buf;
+ 
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, -1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -1788,7 +1811,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			insn_buf[6] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off_cnt);
+ 			cnt = 7;
+ 
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, 3);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -1809,7 +1833,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			insn_buf[3] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off);
+ 			cnt = 4;
+ 
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, 2);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -1830,7 +1855,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			if (cnt == 0)
+ 				goto next_insn;
+ 
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, cnt - 1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -1915,7 +1941,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 								 map)->index_mask);
+ 			insn_buf[2] = *insn;
+ 			cnt = 3;
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, cnt - 1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -1948,7 +1975,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			insn_buf[2] = *insn;
+ 			cnt = 3;
+ 
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, cnt - 1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -1967,7 +1995,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			insn_buf[1] = *insn;
+ 			cnt = 2;
+ 
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, cnt - 1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -2007,8 +2036,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 					return -EFAULT;
+ 				}
+ 
+-				new_prog = bpf_patch_insn_data(env, i + delta,
+-							       insn_buf, cnt);
++				new_prog = bpf_patch_insn_data(
++					env, i + delta, insn_buf, cnt, -1);
+ 				if (!new_prog)
+ 					return -ENOMEM;
+ 
+@@ -2091,7 +2120,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			cnt = 3;
+ 
+ 			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
+-						       cnt);
++						       cnt, -1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -2119,7 +2148,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			insn_buf[0] = BPF_ALU32_REG(BPF_XOR, BPF_REG_0, BPF_REG_0);
+ 			cnt = 1;
+ #endif
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, -1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -2137,7 +2167,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			insn_buf[2] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, 0);
+ 			cnt = 3;
+ 
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, -1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -2171,7 +2202,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			insn_buf[cnt++] = BPF_JMP_A(1);
+ 			insn_buf[cnt++] = BPF_MOV64_IMM(BPF_REG_0, -EINVAL);
+ 
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, -1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -2203,7 +2235,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 				cnt = 1;
+ 			}
+ 
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, -1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -2229,7 +2262,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 				cnt = 2;
+ 			}
+ 
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, -1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -2245,7 +2279,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			/* Load IP address from ctx - 16 */
+ 			insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -16);
+ 
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, 1);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       1, -1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -2300,7 +2335,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			insn_buf[10] = BPF_MOV64_IMM(BPF_REG_0, -ENOENT);
+ 			cnt = 11;
+ 
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, -1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -2318,7 +2354,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			insn_buf[1] = BPF_ATOMIC_OP(BPF_DW, BPF_XCHG, BPF_REG_1, BPF_REG_0, 0);
+ 			cnt = 2;
+ 
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt, -1);
+ 			if (!new_prog)
+ 				return -ENOMEM;
+ 
+@@ -2386,7 +2423,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 		/* Copy first actual insn to preserve it */
+ 		insn_buf[cnt++] = env->prog->insnsi[subprog_start];
+ 
+-		new_prog = bpf_patch_insn_data(env, subprog_start, insn_buf, cnt);
++		new_prog = bpf_patch_insn_data(env, subprog_start, insn_buf, cnt, cnt - 1);
+ 		if (!new_prog)
+ 			return -ENOMEM;
+ 		env->prog = prog = new_prog;
+@@ -2485,7 +2522,7 @@ static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
+ 	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_8, BPF_REG_10, r8_offset);
+ 
+ 	*total_cnt = cnt;
+-	new_prog = bpf_patch_insn_data(env, position, insn_buf, cnt);
++	new_prog = bpf_patch_insn_data(env, position, insn_buf, cnt, -1);
+ 	if (!new_prog)
+ 		return new_prog;
+ 
 
 -- 
 2.54.0
