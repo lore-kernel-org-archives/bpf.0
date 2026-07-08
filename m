@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A87125A655
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:24:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4FD63ACA41
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:28:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783542298; cv=none; b=H6MkgMkw/NOBtFzGTF1xfqcEer+ZFx0NPc5YiYiwoPBiVae7WmYIPUXlgbwQ7n1iOAJrvl6q63PsTZtzvWlrZldk1o3mLKFbxYwygvOVMZc3eLwA286aMEQ9IKdWS1JtrhdvXaO4ZaV7weXklnPQMN3D4ZTTJck0obwpLlIFp0w=
+	t=1783542512; cv=none; b=TltvRw23CtwAixrlWvmqrg1MKt2kHMqTTWNwVGnjPXTf+wMXYtC9b8J4KJ5JgczBsR52KIMcFmyzLj/zt1j0f/2LcSrLuJE9H19Lypv29fSkrlfjUJH2SQFv5uiTtcNr88JKEYPjSHcZcEsgZxX5gei1YU/5w1Dd/5fiVm5yqLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783542298; c=relaxed/simple;
-	bh=1oHy+TLSON0YSTEfXDVVXlVWHoeC8PRxc0HAympFt7E=;
+	s=arc-20240116; t=1783542512; c=relaxed/simple;
+	bh=mjokCchFw8ljRB86sL9OAu5+ikzod9jcenoDCJskDW8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=vCTcjluEzLzkbopS1xmokNj6cnrEPMgWeZr7CeFmJMZZDavuyS7RlckbX0AS/gyhZRhPJB0NyQUA2K5jwLyQ3NtQOeV3puVYIjUY2noKZbr9GBuYO+TQKEmFo8eshLHWIVIQQMnSxKkuVZ5ZM2pMM5R6U+LX8YxASjfhjdl4ZEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Np+MTl8d; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Eibyo3THAoTcfZolkaGcpzvyWZldffS/yNigHzv/vd1HuGHE3/vxRn9GBTMA9nItHshi8SQEKIrKELf0Z6XU7i4KF/67JqsROqb+3kTNkCDhkoy5diKC8bkV9snhsxBfN/bWvjG+tU0huuW5KlyCRHRG5kLDNxuV8B7Dl1l9v9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nMaqUErH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Np+MTl8d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A5E91F000E9;
-	Wed,  8 Jul 2026 20:24:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nMaqUErH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BBDE1F000E9;
+	Wed,  8 Jul 2026 20:28:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783542296;
-	bh=qUGmXjqHgHhMGBTF/BkBF+HsbWvNIUZCV6XrHp61H4Q=;
+	s=k20260515; t=1783542510;
+	bh=7HuErWhxcW7znwXnCKpoDCSeRGzhd2ResnJT3ttmook=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Np+MTl8d6dE1hYRerwxWrGwmZ5WSW5dGWI5vekV9U38usVUwrjF2ZZ7o6iNkJd950
-	 DyYTvOS0XJCBKTpMTTX+y+c+L3C6KbfNHn5v+LBDUwpOBao4nDlKEbgbiP16WclJWg
-	 1bOeYZPH9ieyyxPjkCAWcOBU+DPa5YQuYxLf+wBrKwjhcSLtU5bXTiVPx61vgihw5t
-	 mrsXYzzTumIZIv7i2r6M7dw7SqHMrG2QJqd8/+nMfzkMgNrhZydqLeNYlcvVcbTa9Y
-	 0o6PlcxZnx8ZrKzB4BU0y3N3PhpBrrghvfMnYUcLWwQ4xMwcxaFhf7tI/ZHi/FhH1L
-	 AwS4SDw5ZzPBg==
+	b=nMaqUErHB8uZS1noZOAUmSuAXs+jC4wYP3pAT8zzIch7J+ij+xkCm9kcjleRFFy06
+	 VSYpn9r6MIpf4qFeDxbUcxY0ykXF+mREDHyxI4IqHTPptx6uusTKjyTy/i7ma9NR51
+	 ZEY+2v6bS+IMSn21o/s0KMZLcPpFwzOvqQKi4F+XzKUe8e3UY8MMBTjQTfis0dvfUx
+	 JYRfcOXU3iMIu8wfHB06hDvdDWdXBAYWcjMdaUUgVKzyyPZFgKcDJ3sYDGywpTutrG
+	 hEW++/X2gg5pfrCY2Yh+vWb8NV+RS5SlCzNDEVLJFU9Iom3pnlUamiPaGlChZPbQY+
+	 l3L52LRj1TIVg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 09/12] selftests/bpf: Add C tests for 16-byte
- returns in R0:R2
+Subject: Re: [PATCH bpf-next 10/12] selftests/bpf: Add inline-asm and
+ subprog tests for R0:R2 returns
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260708201025.2160583-1-yonghong.song@linux.dev>
+In-Reply-To: <20260708201030.2161016-1-yonghong.song@linux.dev>
 References: <20260708200939.2153664-1-yonghong.song@linux.dev>
- <20260708201025.2160583-1-yonghong.song@linux.dev>
+ <20260708201030.2161016-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 08 Jul 2026 20:24:56 +0000
-Message-Id: <20260708202456.8A5E91F000E9@smtp.kernel.org>
+Date: Wed, 08 Jul 2026 20:28:29 +0000
+Message-Id: <20260708202830.4BBDE1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,80 +47,125 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] Unconditional use of `__int128` in `bpf_testmod` breaks compilation=
- on 32-bit host architectures.
+- [Medium] Hardcoded little-endian assumptions in struct and `__int128` reg=
+ister unpacking will cause selftest failures on big-endian architectures li=
+ke s390x.
 --
 
---- Patch [9]: [PATCH bpf-next 09/12] selftests/bpf: Add C tests for 16-byt=
-e returns in R0:R2 ---
-commit 5ed3844739f04c920bb1c37cdf474501b3ca9fef
+--- Patch [10]: [PATCH bpf-next 10/12] selftests/bpf: Add inline-asm and su=
+bprog tests for R0:R2 returns ---
+commit dcf423ead16608630f40807ad0cde33d495c941d
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-selftests/bpf: Add C tests for 16-byte returns in R0:R2
+selftests/bpf: Add inline-asm and subprog tests for R0:R2 returns
 
-This commit adds selftests to exercise 16-byte return values passed in the
-R0:R2 register pair. The tests include an __int128 return, a 16-byte struct
-return, and a 16-byte union return.
+Add inline-asm and subprogram tests for more coverage, including
+BPF-to-BPF cases, kfunc cases, backtracking and liveness. Both positive
+and negative tests are added.
+
+> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_run.c b/tool=
+s/testing/selftests/bpf/progs/aggregate_ret_run.c
+> new file mode 100644
+> index 0000000000000..d6300b31733d8
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/aggregate_ret_run.c
 
 [ ... ]
 
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> @@ -0,0 +1,160 @@
 
 [ ... ]
 
-> @@ -825,6 +825,18 @@ __bpf_kfunc int bpf_kfunc_call_test5(u8 a, u16 b, u3=
-2 c)
->  	return 0;
->  }
-> =20
-> +__bpf_kfunc __int128 bpf_kfunc_call_test_i128(u64 a, u64 b)
+> +SEC("tc")
+> +int aggregate_ret_asm_test(struct __sk_buff *skb)
 > +{
-> +	return ((__int128)a << 64) | b;
+> +	__u64 a =3D skb->len;
+> +	__u64 b =3D skb->len ^ 0xdeadbeefULL;
+> +	__u64 lo, hi;
+
+[ ... ]
+
+> +	asm volatile (
+> +	"r1 =3D %[a];"
+> +	"r2 =3D %[b];"
+> +	"call %[kfunc];"
+> +	"%[lo] =3D r0;"
+> +	"%[hi] =3D r2;"
+> +	: [lo]"=3Dr"(lo), [hi]"=3Dr"(hi)
+> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_i128)
+> +	: "r0", "r1", "r2", "r3", "r4", "r5"
+> +	);
+> +	if (hi !=3D a)
+> +		return 3;
+> +	if (lo !=3D b)
+> +		return 4;
+
+[Severity: Medium]
+The test expects the high 64 bits (a) in r2 and the low 64 bits (b) in
+r0. On a big-endian ABI, the most significant 64 bits (a) will be returned
+in the first register (r0).
+
+Will this cause the test to fail on big-endian architectures like s390x?
+
+> +
+> +	return 0;
 > +}
-
-[Severity: Low]
-Will this unconditional use of __int128 break the build on 32-bit host
-architectures?=20
-
-The __int128 type is a compiler extension that is typically only available
-on 64-bit systems.
-
-[ ... ]
-
-> @@ -1358,6 +1370,8 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test2)
->  BTF_ID_FLAGS(func, bpf_kfunc_call_test3)
->  BTF_ID_FLAGS(func, bpf_kfunc_call_test4)
->  BTF_ID_FLAGS(func, bpf_kfunc_call_test5)
-> +BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128)
-
-[Severity: Low]
-If bpf_kfunc_call_test_i128 needs to be conditionally excluded for 32-bit
-builds to fix the issue above, should this BTF ID registration also be
-conditionally excluded to prevent a missing symbol error during the build?
+> +
+> +SEC("tc")
+> +int aggregate_ret_struct_test(struct __sk_buff *skb)
+> +{
+> +	__u64 a =3D skb->len;
+> +	__u64 b =3D skb->len ^ 0xdeadbeefULL;
+> +	__u64 lo, hi;
 
 [ ... ]
 
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b=
-/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+> +	/* struct { u64 a; int b; }: R0 =3D a, low 32 bits of R2 =3D b. */
+> +	asm volatile (
+> +	"r1 =3D %[a];"
+> +	"r2 =3D %[b];"
+> +	"call %[kfunc];"
+> +	"%[lo] =3D r0;"
+> +	"%[hi] =3D r2;"
+> +	: [lo]"=3Dr"(lo), [hi]"=3Dr"(hi)
+> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_ret_li)
+> +	: "r0", "r1", "r2", "r3", "r4", "r5"
+> +	);
+> +	if (lo !=3D a)
+> +		return 3;
+> +	if ((int)hi !=3D (int)b)
+> +		return 4;
 
-[ ... ]
+[Severity: Medium]
+The bitwise extraction (int)hi assumes the 4-byte b is in the lower 32
+bits of r2. On big-endian, wouldn't b be placed in the upper 32 bits of
+the register, causing this assertion to fail?
 
-> @@ -118,6 +127,8 @@ int bpf_kfunc_call_test2(struct sock *sk, __u32 a, __=
-u32 b) __ksym;
->  struct sock *bpf_kfunc_call_test3(struct sock *sk) __ksym;
->  long bpf_kfunc_call_test4(signed char a, short b, int c, long d) __ksym;
->  int bpf_kfunc_call_test5(__u8 a, __u16 b, __u32 c) __ksym;
-> +__int128 bpf_kfunc_call_test_i128(__u64 a, __u64 b) __ksym;
+> +
+> +	/* struct { int a; int b; }: 8 bytes, packed into R0; R2 is not used. */
+> +	asm volatile (
+> +	"r1 =3D %[a];"
+> +	"r2 =3D %[b];"
+> +	"call %[kfunc];"
+> +	"%[lo] =3D r0;"
+> +	: [lo]"=3Dr"(lo)
+> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_ret_ii)
+> +	: "r0", "r1", "r2", "r3", "r4", "r5"
+> +	);
+> +	if ((int)lo !=3D (int)a)
+> +		return 5;
+> +	if ((int)(lo >> 32) !=3D (int)b)
+> +		return 6;
 
-[Severity: Low]
-Does this declaration also need to be guarded for 64-bit architectures,
-so that including this header doesn't fail on 32-bit host compilers?
+[Severity: Medium]
+The bitwise extraction (int)lo and (lo >> 32) assumes a little-endian
+register layout for the returned 8-byte struct. On big-endian, wouldn't a
+be in the upper 32 bits and b in the lower 32 bits?
+
+> +
+> +	return 0;
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260708200939.2153=
-664-1-yonghong.song@linux.dev?part=3D9
+664-1-yonghong.song@linux.dev?part=3D10
