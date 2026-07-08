@@ -1,21 +1,21 @@
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1FBD3E5562
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:10:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC883AFCE3
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:10:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783541450; cv=none; b=O6cmnGc5SxTKJ3phYBfx6aLivkWHl3kGmY+8TSfUxz36mCyjYq7tI9wO4UeAp+FUmdh7j5uLVjEk/vpZL5ee7sLnaa5FKSMG3W+i1GRR7ws1O+yl9qUBc0+CQGe2iNvPPbnYKkByFBnpjMn5r8a+jyj0zadD0qjNzluazouziqQ=
+	t=1783541447; cv=none; b=q03/24y9GMDhjN8Oad2sNXWp6tEUGzHNuhfrCBBy3COIVVN/n4xDutqLnjbGSifnOxixM9FdLCltLwsHjq616qV7ee5WFYOLfFhLzDGBixnb5OxNe+igKr8f7dcAEodc1ww6EeEQ9vUL6lXefJbw70twz0s0pWg6L+rGWQz+dMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783541450; c=relaxed/simple;
-	bh=j7E3vSvVZTDL03b/uid7glR4UEwGM8TyS2TT18wwsD0=;
+	s=arc-20240116; t=1783541447; c=relaxed/simple;
+	bh=xh98FGcKccH7TqzrAFbAa2esqDLEtm712CRrqpNkDpc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ik42PcP/5YqcDyf/Sk3l3CZ03GIKcr3Kghvmp98aO3JFJ6kl7s7pgoO9v7uLfwWgsobeH6xYU7K4jf54UYrJegmwIeEgtNIzL0NlVKqVomT6cO5a9qwSvdejnYX1WFW+N1jbLGMX+XBOdLTErYuZuQaOJiwIg18c2wfNeAbuoHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
+	 MIME-Version; b=LOW/5GQrctoYvpJjnj0MNnh/bzN/vg0KehgbJnYdCTj5k6OlU8V+Q895Ta24pbtE3iI27tWYCWDRk9DvgEY3FIE+7DbLIGtJDzXDPdmUonqVENLrZRo9x1IEfVNfemlpYoceXFyWKaZkl3fnCW0BlKy9ywS4OefVSfwSV0dMfCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 22EBC1D0B6F9FB; Wed,  8 Jul 2026 13:10:36 -0700 (PDT)
+	id D87AE1D0B6F972; Wed,  8 Jul 2026 13:10:25 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next 11/12] selftests/bpf: Cover tracing on >8 and <=16 byte return targets
-Date: Wed,  8 Jul 2026 13:10:36 -0700
-Message-ID: <20260708201036.2162000-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 09/12] selftests/bpf: Add C tests for 16-byte returns in R0:R2
+Date: Wed,  8 Jul 2026 13:10:25 -0700
+Message-ID: <20260708201025.2160583-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260708200939.2153664-1-yonghong.song@linux.dev>
 References: <20260708200939.2153664-1-yonghong.song@linux.dev>
@@ -37,334 +37,433 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Tracing attach types differ in whether they need the target's return valu=
-e
-preserved across the BPF trampoline, which saves and restores only 8 byte=
-s
-of it. fentry runs before the target returns and never observes the retur=
-n
-value, so it can attach to a function returning a >8 byte value; fexit,
-fmod_ret and fsession read the return value and must keep rejecting such =
-a
-target.
+Add selftests that exercise a 16-byte return value passed in the R0:R2
+register pair, expressed in C so they rely on the compiler lowering the
+register-pair return. Tests include an __int128 return (from a subprogram
+and a kfunc), a 16-byte struct return (from static and global subprograms
+and a kfunc) and a 16-byte union return.
 
-Add fentry, fexit, fentry_multi and fexit_multi tests that attach to
-functions returning a >8 and <=3D16 byte value (a 16-byte struct and an
-__int128).
+The R0:R2 return convention is only emitted by LLVM 23 and newer, so the
+programs are gated on __clang_major__ >=3D 23; with an older compiler the=
+y
+return a sentinel and the "int128_c", "struct_c", "global_struct_c",
+"kfunc_struct_c" and "union_c" subtests are skipped.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/prog_tests/aggregate_ret.c  | 128 ++++++++++++++++++
- .../selftests/bpf/progs/aggregate_ret_trace.c |  44 ++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  32 +++++
- .../selftests/bpf/test_kmods/bpf_testmod.h    |   5 +
- 4 files changed, 209 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_trace=
-.c
+ .../selftests/bpf/prog_tests/aggregate_ret.c  | 96 ++++++++++++++++++
+ .../bpf/progs/aggregate_ret_int128_c.c        | 48 +++++++++
+ .../bpf/progs/aggregate_ret_struct_c.c        | 98 +++++++++++++++++++
+ .../bpf/progs/aggregate_ret_union_c.c         | 51 ++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    | 14 +++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        | 11 +++
+ 6 files changed, 318 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/aggregate_ret.=
+c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_int12=
+8_c.c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_struc=
+t_c.c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_union=
+_c.c
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c b/too=
 ls/testing/selftests/bpf/prog_tests/aggregate_ret.c
-index 2f1e5c704959..7caf815a2c06 100644
---- a/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c
-+++ b/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c
-@@ -8,6 +8,7 @@
- #include "aggregate_ret_run.skel.h"
- #include "aggregate_ret_func.skel.h"
- #include "aggregate_ret_kfunc.skel.h"
-+#include "aggregate_ret_trace.skel.h"
-=20
- /*
-  * Run one program and check its result. The program returns 0 on succes=
-s, or
-@@ -37,6 +38,131 @@ static void run_prog(struct bpf_program *prog, bool m=
-ay_skip)
- 	ASSERT_EQ(topts.retval, 0, "aggregate_ret_result");
- }
-=20
-+/*
-+ * Multi-attach (BPF_TRACE_*_MULTI) requires CONFIG_HAVE_SINGLE_FTRACE_D=
-IRECT_OPS,
-+ * which today only x86_64 selects. Otherwise bpf_tracing_multi_attach()=
- returns
-+ * -EOPNOTSUPP unconditionally.
-+ */
-+static bool tracing_multi_supported(struct bpf_program *prog)
-+{
-+	const char *small_pat =3D "bpf_testmod:bpf_testmod_trampoline_count_tes=
-t";
-+	struct bpf_link *link;
-+
-+	link =3D bpf_program__attach_tracing_multi(prog, small_pat, NULL);
-+	if (libbpf_get_error(link) =3D=3D -EOPNOTSUPP)
-+		return false;
-+	bpf_link__destroy(link);
-+	return true;
-+}
-+
-+static void test_tracing_attach_types(void)
-+{
-+	const char *i128_pat =3D "bpf_testmod:bpf_testmod_aggregate_ret_i128_fn=
-";
-+	int err;
-+
-+	if (test__start_subtest("trace_fentry")) {
-+		struct aggregate_ret_trace *trace =3D NULL;
-+
-+		trace =3D aggregate_ret_trace__open();
-+		if (!ASSERT_OK_PTR(trace, "trace_fentry_open"))
-+			return;
-+
-+		bpf_program__set_autoload(trace->progs.fexit_bpf_testmod_aggregate_ret=
-_fn, false);
-+		bpf_program__set_autoload(trace->progs.fentry_multi, false);
-+		bpf_program__set_autoload(trace->progs.fexit_multi, false);
-+
-+		err =3D aggregate_ret_trace__load(trace);
-+		if (!ASSERT_OK(err, "trace_fentry_load"))
-+			goto destroy_trace_fentry;
-+
-+		err =3D aggregate_ret_trace__attach(trace);
-+		if (!ASSERT_OK(err, "trace_fentry_attach"))
-+			goto destroy_trace_fentry;
-+
-+		ASSERT_OK(trigger_module_test_read(1), "trace_fentry_trigger");
-+		ASSERT_EQ(trace->bss->fentry_hit, 1, "trace_fentry_hit");
-+
-+destroy_trace_fentry:
-+		aggregate_ret_trace__destroy(trace);
-+	}
-+
-+	if (test__start_subtest("trace_fexit_reject")) {
-+		struct aggregate_ret_trace *trace =3D NULL;
-+
-+		trace =3D aggregate_ret_trace__open();
-+		if (!ASSERT_OK_PTR(trace, "trace_fexit_open"))
-+			return;
-+
-+		bpf_program__set_autoload(trace->progs.fentry_bpf_testmod_aggregate_re=
-t_fn, false);
-+		bpf_program__set_autoload(trace->progs.fentry_multi, false);
-+		bpf_program__set_autoload(trace->progs.fexit_multi, false);
-+
-+		err =3D aggregate_ret_trace__load(trace);
-+		ASSERT_EQ(err, -EOPNOTSUPP, "trace_fexit_load");
-+
-+		aggregate_ret_trace__destroy(trace);
-+	}
-+
-+	if (test__start_subtest("trace_fentry_multi")) {
-+		struct aggregate_ret_trace *trace =3D NULL;
-+		struct bpf_link *link;
-+
-+		trace =3D aggregate_ret_trace__open();
-+		if (!ASSERT_OK_PTR(trace, "trace_fentry_multi_open"))
-+			return;
-+
-+		bpf_program__set_autoload(trace->progs.fentry_bpf_testmod_aggregate_re=
-t_fn, false);
-+		bpf_program__set_autoload(trace->progs.fexit_bpf_testmod_aggregate_ret=
-_fn, false);
-+		bpf_program__set_autoload(trace->progs.fexit_multi, false);
-+
-+		if (!ASSERT_OK(aggregate_ret_trace__load(trace), "trace_fentry_multi_l=
-oad"))
-+			goto destroy_fentry_multi;
-+
-+		if (!tracing_multi_supported(trace->progs.fentry_multi)) {
-+			test__skip();
-+			goto destroy_fentry_multi;
-+		}
-+
-+		link =3D bpf_program__attach_tracing_multi(trace->progs.fentry_multi, =
-i128_pat, NULL);
-+		if (!ASSERT_OK_PTR(link, "trace_fentry_multi_attach"))
-+			goto destroy_fentry_multi;
-+
-+		ASSERT_OK(trigger_module_test_read(1), "trace_fentry_multi_trigger");
-+		ASSERT_EQ(trace->bss->fentry_multi_hit, 1, "trace_fentry_multi_hit");
-+
-+		bpf_link__destroy(link);
-+destroy_fentry_multi:
-+		aggregate_ret_trace__destroy(trace);
-+	}
-+
-+	if (test__start_subtest("trace_fexit_multi_reject")) {
-+		struct aggregate_ret_trace *trace =3D NULL;
-+		struct bpf_link *link;
-+
-+		trace =3D aggregate_ret_trace__open();
-+		if (!ASSERT_OK_PTR(trace, "trace_fexit_multi_open"))
-+			return;
-+
-+		bpf_program__set_autoload(trace->progs.fentry_bpf_testmod_aggregate_re=
-t_fn, false);
-+		bpf_program__set_autoload(trace->progs.fexit_bpf_testmod_aggregate_ret=
-_fn, false);
-+		bpf_program__set_autoload(trace->progs.fentry_multi, false);
-+
-+		if (!ASSERT_OK(aggregate_ret_trace__load(trace), "trace_fexit_multi_lo=
-ad"))
-+			goto destroy_fexit_multi;
-+
-+		if (!tracing_multi_supported(trace->progs.fexit_multi)) {
-+			test__skip();
-+			goto destroy_fexit_multi;
-+		}
-+
-+		link =3D bpf_program__attach_tracing_multi(trace->progs.fexit_multi, i=
-128_pat, NULL);
-+		ASSERT_EQ(libbpf_get_error(link), -EOPNOTSUPP, "trace_fexit_multi_reje=
-ct");
-+		bpf_link__destroy(link);
-+destroy_fexit_multi:
-+		aggregate_ret_trace__destroy(trace);
-+	}
-+}
-+
- void test_aggregate_ret(void)
- {
- 	struct aggregate_ret_struct_c *skel_struct_c;
-@@ -118,4 +244,6 @@ void test_aggregate_ret(void)
-=20
- 	RUN_TESTS(aggregate_ret_func);
- 	RUN_TESTS(aggregate_ret_kfunc);
-+
-+	test_tracing_attach_types();
- }
-diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_trace.c b/to=
-ols/testing/selftests/bpf/progs/aggregate_ret_trace.c
 new file mode 100644
-index 000000000000..ff9fd4036121
+index 000000000000..d4ecc19684ce
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/aggregate_ret_trace.c
-@@ -0,0 +1,44 @@
++++ b/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c
+@@ -0,0 +1,96 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
++#include <test_progs.h>
++#include <network_helpers.h>
++#include "aggregate_ret_int128_c.skel.h"
++#include "aggregate_ret_struct_c.skel.h"
++#include "aggregate_ret_union_c.skel.h"
 +
-+struct bpf_testmod_aggregate_ret {
-+	__u64 lo;
++/*
++ * Run one program and check its result. The program returns 0 on succes=
+s, or
++ * 1..4 identifying which half of which aggregate (R0:R2) return value c=
+ame back
++ * wrong. A return of -1 means the program was built with an LLVM that l=
+acks
++ * R0:R2 16-byte return support, in which case the subtest is skipped.
++ */
++static void run_prog(struct bpf_program *prog, bool may_skip)
++{
++	char buf[64] =3D {};
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		.data_in =3D buf,
++		.data_size_in =3D sizeof(buf),
++		.repeat =3D 1,
++	);
++	int err;
++
++	err =3D bpf_prog_test_run_opts(bpf_program__fd(prog), &topts);
++	if (!ASSERT_OK(err, "test_run"))
++		return;
++
++	if (may_skip && (int)topts.retval =3D=3D -1) {
++		test__skip();
++		return;
++	}
++
++	ASSERT_EQ(topts.retval, 0, "aggregate_ret_result");
++}
++
++void test_aggregate_ret(void)
++{
++	struct aggregate_ret_struct_c *skel_struct_c;
++	struct aggregate_ret_union_c *skel_union_c;
++	struct aggregate_ret_int128_c *skel_c;
++
++	skel_c =3D aggregate_ret_int128_c__open_and_load();
++	if (!ASSERT_OK_PTR(skel_c, "skel_c_open_load"))
++		return;
++
++	/* C variant (__int128): relies on LLVM 23 R0:R2 codegen, skipped other=
+wise. */
++	if (test__start_subtest("int128_c"))
++		run_prog(skel_c->progs.aggregate_ret_test, true);
++
++	aggregate_ret_int128_c__destroy(skel_c);
++
++	skel_struct_c =3D aggregate_ret_struct_c__open_and_load();
++	if (!ASSERT_OK_PTR(skel_struct_c, "skel_struct_c_open_load"))
++		return;
++
++	/*
++	 * C variant returning a 16-byte struct by value: exercises the struct
++	 * branch of bpf_ret_reg_pair(). Also LLVM 23 only.
++	 */
++	if (test__start_subtest("struct_c"))
++		run_prog(skel_struct_c->progs.aggregate_ret_struct_c_test, true);
++
++	/*
++	 * Same 16-byte struct return, but from a global (non-static) callee:
++	 * exercises the compiler lowering a global struct-returning function t=
+o
++	 * R0:R2 and the verifier's global return path end to end. Also LLVM 23
++	 * only.
++	 */
++	if (test__start_subtest("global_struct_c"))
++		run_prog(skel_struct_c->progs.aggregate_ret_global_struct_c_test, true=
+);
++
++	/*
++	 * Same 16-byte struct, but returned by value from a kfunc: exercises
++	 * the struct branch of check_kfunc_call() and the JIT RDX->R2 move.
++	 * Also LLVM 23 only.
++	 */
++	if (test__start_subtest("kfunc_struct_c"))
++		run_prog(skel_struct_c->progs.aggregate_ret_kfunc_struct_c_test, true)=
+;
++
++	aggregate_ret_struct_c__destroy(skel_struct_c);
++
++	skel_union_c =3D aggregate_ret_union_c__open_and_load();
++	if (!ASSERT_OK_PTR(skel_union_c, "skel_union_c_open_load"))
++		return;
++
++	/*
++	 * C variant returning a 16-byte union by value: exercises the union BT=
+F
++	 * kind through the same struct branch of bpf_ret_reg_pair().
++	 * Also LLVM 23 only.
++	 */
++	if (test__start_subtest("union_c"))
++		run_prog(skel_union_c->progs.aggregate_ret_union_c_test, true);
++
++	aggregate_ret_union_c__destroy(skel_union_c);
++}
+diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_int128_c.c b=
+/tools/testing/selftests/bpf/progs/aggregate_ret_int128_c.c
+new file mode 100644
+index 000000000000..0b0c4fa52b62
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/aggregate_ret_int128_c.c
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "../test_kmods/bpf_testmod_kfunc.h"
++
++#if __clang_major__ >=3D 23
++
++typedef unsigned __int128 u128;
++
++static __attribute__((noinline)) u128 make_i128(__u64 a, __u64 b)
++{
++	return ((u128)a << 64) | b;
++}
++
++SEC("tc")
++int aggregate_ret_test(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len;
++	__u64 b =3D skb->len ^ 0xdeadbeefULL;
++	u128 v;
++
++	v =3D make_i128(a, b);
++	if ((__u64)(v >> 64) !=3D a)
++		return 1;
++	if ((__u64)v !=3D b)
++		return 2;
++
++	v =3D bpf_kfunc_call_test_i128(a, b);
++	if ((__u64)(v >> 64) !=3D a)
++		return 3;
++	if ((__u64)v !=3D b)
++		return 4;
++
++	return 0;
++}
++
++#else
++
++SEC("tc")
++int aggregate_ret_test(struct __sk_buff *skb)
++{
++	return -1;
++}
++
++#endif
++
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_struct_c.c b=
+/tools/testing/selftests/bpf/progs/aggregate_ret_struct_c.c
+new file mode 100644
+index 000000000000..ad8d44755d24
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/aggregate_ret_struct_c.c
+@@ -0,0 +1,98 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "../test_kmods/bpf_testmod_kfunc.h"
++
++#if __clang_major__ >=3D 23
++
++struct pair {
 +	__u64 hi;
++	__u64 lo;
 +};
 +
-+int fentry_hit;
-+int fexit_hit;
-+int fentry_multi_hit;
-+
-+SEC("fentry/bpf_testmod:bpf_testmod_aggregate_ret_fn")
-+int BPF_PROG2(fentry_bpf_testmod_aggregate_ret_fn, __u64, lo, __u64, hi)
++static __attribute__((noinline)) struct pair make_pair(__u64 a, __u64 b)
 +{
-+	fentry_hit++;
++	struct pair p =3D { .hi =3D a, .lo =3D b };
++
++	return p;
++}
++
++SEC("tc")
++int aggregate_ret_struct_c_test(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len;
++	__u64 b =3D skb->len ^ 0xdeadbeefULL;
++	struct pair p;
++
++	p =3D make_pair(a, b);
++	if (p.hi !=3D a)
++		return 1;
++	if (p.lo !=3D b)
++		return 2;
++
 +	return 0;
 +}
 +
-+SEC("fexit/bpf_testmod:bpf_testmod_aggregate_ret_fn")
-+int BPF_PROG2(fexit_bpf_testmod_aggregate_ret_fn, __u64, lo, __u64, hi,
-+	      struct bpf_testmod_aggregate_ret, ret)
++__attribute__((noinline)) struct pair make_pair_global(__u64 a, __u64 b)
 +{
-+	fexit_hit +=3D ret.lo =3D=3D lo && ret.hi =3D=3D hi;
++	struct pair p =3D { .hi =3D a, .lo =3D b };
++
++	return p;
++}
++
++SEC("tc")
++int aggregate_ret_global_struct_c_test(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len;
++	__u64 b =3D skb->len ^ 0xcafef00dULL;
++	struct pair p;
++
++	p =3D make_pair_global(a, b);
++	if (p.hi !=3D a)
++		return 1;
++	if (p.lo !=3D b)
++		return 2;
++
 +	return 0;
 +}
 +
-+SEC("fentry.multi/bpf_testmod:bpf_testmod_aggregate_ret_i128_fn")
-+int BPF_PROG(fentry_multi)
++SEC("tc")
++int aggregate_ret_kfunc_struct_c_test(struct __sk_buff *skb)
 +{
-+	fentry_multi_hit++;
++	__u64 a =3D skb->len;
++	__u64 b =3D skb->len ^ 0xfeedfaceULL;
++	struct bpf_kfunc_ret_ll p;
++
++	p =3D bpf_kfunc_call_test_ret_ll(a, b);
++	if (p.a !=3D a)
++		return 1;
++	if (p.b !=3D b)
++		return 2;
++
 +	return 0;
 +}
 +
-+SEC("fexit.multi/bpf_testmod:bpf_testmod_aggregate_ret_i128_fn")
-+int BPF_PROG(fexit_multi)
++#else
++
++SEC("tc")
++int aggregate_ret_struct_c_test(struct __sk_buff *skb)
 +{
++	return -1;
++}
++
++SEC("tc")
++int aggregate_ret_global_struct_c_test(struct __sk_buff *skb)
++{
++	return -1;
++}
++
++SEC("tc")
++int aggregate_ret_kfunc_struct_c_test(struct __sk_buff *skb)
++{
++	return -1;
++}
++
++#endif
++
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_union_c.c b/=
+tools/testing/selftests/bpf/progs/aggregate_ret_union_c.c
+new file mode 100644
+index 000000000000..53e21753291b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/aggregate_ret_union_c.c
+@@ -0,0 +1,51 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++#if __clang_major__ >=3D 23
++
++union pair {
++	__u64 halves[2];
++	struct {
++		__u64 lo;
++		__u64 hi;
++	} parts;
++};
++
++static __attribute__((noinline)) union pair make_pair(__u64 a, __u64 b)
++{
++	union pair p;
++
++	p.parts.lo =3D a;
++	p.parts.hi =3D b;
++	return p;
++}
++
++SEC("tc")
++int aggregate_ret_union_c_test(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len;
++	__u64 b =3D skb->len ^ 0xdeadbeefULL;
++	union pair p;
++
++	p =3D make_pair(a, b);
++	if (p.parts.lo !=3D a)
++		return 1;
++	if (p.parts.hi !=3D b)
++		return 2;
++
 +	return 0;
 +}
++
++#else
++
++SEC("tc")
++int aggregate_ret_union_c_test(struct __sk_buff *skb)
++{
++	return -1;
++}
++
++#endif
 +
 +char _license[] SEC("license") =3D "GPL";
 diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
 /testing/selftests/bpf/test_kmods/bpf_testmod.c
-index c9e211d8a719..b558c538400e 100644
+index 30f1cd23093c..3511a4873d6c 100644
 --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
 +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -469,12 +469,34 @@ noinline void bpf_testmod_stacktrace_test_1(void)
- }
-=20
- int bpf_testmod_fentry_ok;
-+u64 bpf_testmod_aggregate_ret_seen;
-=20
- noinline int bpf_testmod_trampoline_count_test(void)
- {
+@@ -825,6 +825,18 @@ __bpf_kfunc int bpf_kfunc_call_test5(u8 a, u16 b, u3=
+2 c)
  	return 0;
  }
 =20
-+__noclone noinline struct bpf_testmod_aggregate_ret
-+bpf_testmod_aggregate_ret_fn(u64 lo, u64 hi)
++__bpf_kfunc __int128 bpf_kfunc_call_test_i128(u64 a, u64 b)
 +{
-+	struct bpf_testmod_aggregate_ret ret =3D {
-+		.lo =3D lo,
-+		.hi =3D hi,
-+	};
-+
-+	bpf_testmod_aggregate_ret_seen +=3D lo + hi;
-+	return ret;
++	return ((__int128)a << 64) | b;
 +}
 +
-+__noclone noinline __int128
-+bpf_testmod_aggregate_ret_i128_fn(u64 lo, u64 hi)
++__bpf_kfunc struct bpf_kfunc_ret_ll bpf_kfunc_call_test_ret_ll(u64 a, u6=
+4 b)
 +{
-+	__int128 ret =3D ((__int128)hi << 64) | lo;
++	struct bpf_kfunc_ret_ll r =3D { .a =3D a, .b =3D b };
 +
-+	bpf_testmod_aggregate_ret_seen +=3D lo + hi;
-+	return ret;
++	return r;
 +}
 +
- noinline ssize_t
- bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 		      const struct bin_attribute *bin_attr,
-@@ -492,6 +514,8 @@ bpf_testmod_test_read(struct file *file, struct kobje=
-ct *kobj,
- 	struct bpf_testmod_struct_arg_5 struct_arg5 =3D {23, 24, 25, 26};
- 	union bpf_testmod_union_arg_1 union_arg1 =3D { .arg =3D {1} };
- 	union bpf_testmod_union_arg_2 union_arg2 =3D { .arg =3D {2, 3} };
-+	struct bpf_testmod_aggregate_ret agg_ret;
-+	__int128 agg_i128;
- 	int i =3D 1;
-=20
- 	while (bpf_testmod_return_ptr(i))
-@@ -534,6 +558,14 @@ bpf_testmod_test_read(struct file *file, struct kobj=
-ect *kobj,
-=20
- 	trace_bpf_testmod_test_nullable_bare_tp(NULL);
-=20
-+	agg_ret =3D bpf_testmod_aggregate_ret_fn(len, off);
-+	if (agg_ret.lo =3D=3D U64_MAX && agg_ret.hi =3D=3D U64_MAX)
-+		goto out;
-+
-+	agg_i128 =3D bpf_testmod_aggregate_ret_i128_fn(len, off);
-+	if (agg_i128 =3D=3D (__int128)-1)
-+		goto out;
-+
- 	/* Magic number to enable writable tp */
- 	if (len =3D=3D 64) {
- 		struct bpf_testmod_test_writable_ctx writable =3D {
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.h
-index 863fd10f1619..4dcbfd64de62 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-@@ -25,6 +25,11 @@ struct bpf_testmod_test_writable_ctx {
- 	int val;
+ __bpf_kfunc u64 bpf_kfunc_call_stack_arg(u64 a, u64 b, u64 c, u64 d,
+ 					 u64 e, u64 f, u64 g, u64 h,
+ 					 u64 i, u64 j)
+@@ -1358,6 +1370,8 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test2)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test3)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test4)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test5)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_ll)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_ptr)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_mix)
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b=
+/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+index c36bb911defa..34d0a352e70d 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -55,6 +55,15 @@ struct prog_test_big_arg {
+ 	__u64 b;
  };
 =20
-+struct bpf_testmod_aggregate_ret {
-+	__u64 lo;
-+	__u64 hi;
++/*
++ * A 16-byte struct returned by value from a kfunc, returned in the R0:R=
+2
++ * register pair.
++ */
++struct bpf_kfunc_ret_ll {	/* 16 bytes: R0:R2 */
++	__u64 a;
++	__u64 b;
 +};
 +
- /* BPF iter that returns *value* *n* times in a row */
- struct bpf_iter_testmod_seq {
- 	s64 value;
+ struct prog_test_fail1 {
+ 	void *p;
+ 	int x;
+@@ -118,6 +127,8 @@ int bpf_kfunc_call_test2(struct sock *sk, __u32 a, __=
+u32 b) __ksym;
+ struct sock *bpf_kfunc_call_test3(struct sock *sk) __ksym;
+ long bpf_kfunc_call_test4(signed char a, short b, int c, long d) __ksym;
+ int bpf_kfunc_call_test5(__u8 a, __u16 b, __u32 c) __ksym;
++__int128 bpf_kfunc_call_test_i128(__u64 a, __u64 b) __ksym;
++struct bpf_kfunc_ret_ll bpf_kfunc_call_test_ret_ll(__u64 a, __u64 b) __k=
+sym;
+ __u64 bpf_kfunc_call_stack_arg(__u64 a, __u64 b, __u64 c, __u64 d,
+ 			       __u64 e, __u64 f, __u64 g, __u64 h,
+ 			       __u64 i, __u64 j) __ksym;
 --=20
 2.53.0-Meta
 
