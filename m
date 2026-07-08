@@ -1,61 +1,63 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4FF3EA969
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 09:02:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5779D3FC5CC
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 09:02:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783501327; cv=none; b=fdsN8zZOzpRROWnhi0Kw9qxNMxTlL2gFwppthdw7hw7xeamTD/xpPTMPt02c7Tg/6abwqhrDJAmp4AuIP5rE18Mqk0Wn5Bppul6+HGJnSDZ+JZeFrCvkfE02o23kyk3aqX3HhUwNKV1ejm8G2lv06JTmYZGCScIMiggXAetOup0=
+	t=1783501343; cv=none; b=RDDwQFqB0egQ3qfUNqxQKkJmPlGXg55HypaoWz7P9UDHPkutDrQCHm/ZKqFTyCxxAafQKrBp5lHCNLewyp1gdkbEI3IpZc0dY4Nzc80tYVhBl2uNBXfir7rrS0wBzY5e3YoEJVnJFEZjGssZuhN+SUqTC01OEir8ovFIpWHH99o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783501327; c=relaxed/simple;
-	bh=M1P4/cPSFe+WUlSiXFOFYdixMqAxgBQz5tvO8+L8ULM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UNt7g18kwwyeUF67IahZst/p0z73hu7bb5C+cbz6BJVmO5ZbHNRC71XznWJLftltauzUbRxTaUQJImpzTwyYQv5VxQ/8JCUZXyIifHU+VVs0oEugwBxbcnSAilCiHLriBS4GApYYWCS4lpOfi4aRGUQr0zbDnJcmZr7az8663bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y6NUFI4/; arc=none smtp.client-ip=209.85.214.174
+	s=arc-20240116; t=1783501343; c=relaxed/simple;
+	bh=bHWXqygn5s9sdyxCIh4Jm+Z9uvZV1D9ZipD3thyoL2w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Xj2zoTIaUvO3IXbQ/DCGDxVaKk1Qjqb77a/rPqPKzq9oXwKAQ5/hskpiplAOHjv+OkFeZngRBuLXPlei4NRRDGx3d+MZvtdoFfSCPRAceE6UvTT7gPTAp3i/JG5MkQdJEBhbvuTFlbh7oVdX8jSSOQbhZwiuyy8EUdJenUzBupw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c1yLFKnH; arc=none smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y6NUFI4/"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2caed617615so4215685ad.3
-        for <bpf@vger.kernel.org>; Wed, 08 Jul 2026 02:02:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c1yLFKnH"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-381b831d535so566631a91.0
+        for <bpf@vger.kernel.org>; Wed, 08 Jul 2026 02:02:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783501326; x=1784106126; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=zJQzme8jzbB96K3QvlmGt0r3KOuvo5Qma1CtSmtIkL0=;
-        b=Y6NUFI4/RyFPywcEmi6jt5TPey6KLqdTPlqU9MQezey4TDnrO4EjwO6zPfvOAv/oco
-         BQ+WDTz4/wwV/ewpbv8/SpnLeUxeVMOsfs7cbiRtqgm6jdCM26OiGVDa7qzxmJ+h/M+T
-         KpjrISxIZDh/MCILPC4afB8rqwWmqnkAa79RCeYj0UONHyW+OV0pBGemcfnlicIlcDLy
-         ZFauA5HCfjaZ1yO9sNu6RZ8MsXRbaRkqKzg3UfANZvpTmCcvrsZIBajx/xV4MMA4E+ta
-         iGAYKv91JIKX/IwuHhIqULBGdGWj/NMUM/AAHix/nQYaxs73gw/P1qbiOXkx8712Ot46
-         q/lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783501326; x=1784106126;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1783501341; x=1784106141; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=zJQzme8jzbB96K3QvlmGt0r3KOuvo5Qma1CtSmtIkL0=;
-        b=ekt1ilJdDXhYd+WMQ1uowJlgEXUNPiLMYSgx2qWa3OlIcysYRECnGm/Dg+zHnDVYW6
-         ow0jHep8wuAvRRgWCh94/obyDxU5qPPYNQ+eUopzNzGOqhkwuVBFI000AWU6lh1Nac3T
-         EiUiHtZri4O+ZQaWoTjAChyUhcneER2p9a1x6+TSo7XSHG/UzGN2Ct/DnCDgQhpUWjax
-         ksz12/Dpow3lIP+klcxTvnApWj43Mqkxky23xHYfn9S4bmLWlnOibGbEifr3r2reZOO+
-         Uz3u24QOn/yMFFejmS4M3nSWncfegjsGBnGJ3shtLNutOOf4dSNf3k7Wm/FfLC8SFI0Z
-         2vlw==
-X-Gm-Message-State: AOJu0Yy85M6RqeBUiq4PF1pbx2fPIgJJTvR7UUyI0B9iXviK9YtjtsMl
-	KEAsevx2yOpPz9zqCeUfKGCNv0RKItvW9aNgTn+dM7eFtJwt+mgL1xeSyEXvf02pFoAa3w==
-X-Gm-Gg: AfdE7cnLimH0Jk+BvD3vgPb4gIqOQ4CYDaWjbFHsh1LOVJQXCFtYnV0AlWEaB5AMTZU
-	D3CCy9yI5IopI+6rdAffo2QGPvLONFo9WWPbTJyVqi6hbc68WerRTVK/TenLwZED7GYxoGpCp4E
-	nEGEpTWt/JVD1REd+MWIyYAXUiJJTIbXQRau2LpSYfNYYHfpb5TrI3jO93BSqcrtGAgyCb4mJVJ
-	nfd8JcLQancn3/yzCkmwyNt1h7bcH6DUWtsmTZ5AxPHnyqgM+13fGDFz5um334zjiYadlV+PKdL
-	J/FMEXCf5YnicVVAP3rhMqLACtfXNSFv6UHHdGH08MW1+57OE6iR3pBm8B2eGTzpHLJcwTX9SSs
-	z9ZUbS8zCGrMdpMTLBU6ExW1gLb6wvSDkyg6dIZzixtghOO6/6lOg6OEDbeG5xYrmuP8efYuyPX
-	S94RfsAfOJbnOjhyCHMh+VFoH7PUISlQToJaZ+FzPUaTxWPQpz40D+oYQKl4Sr+24toPYq/Ct32
-	LEcqe4zRnxdpOywPAdbyZ9C3rbe6kAeAw==
-X-Received: by 2002:a17:90b:5290:b0:381:6466:7160 with SMTP id 98e67ed59e1d1-38941acc1ddmr1716634a91.26.1783501325649;
-        Wed, 08 Jul 2026 02:02:05 -0700 (PDT)
+        bh=SAADf0PxLEf8SBsG4zFMkckYY7+WHsHRBHPNP6wI940=;
+        b=c1yLFKnHANHlZekw9qwzW2Svd9D7ORLvvy7RnOD29sXQ/4zRH+ZF0ZkoocLmwTHxya
+         Ve74FudEFWp7nCxyLi/9KQkL8pdeKY1u6iZaMN30B3Zi3gRSvbyG8PV48IWrmJh25uaf
+         nlAZOxcVp5POdUp/je0hq7MU3RS+uUlla9fI99TAFin8yqz/9gJLVvggp587fPPYkvyc
+         cyAugxwavKB/VV1ZzKLGiMDfi0o8ikcPsGfjf+H3pfH/394odNAGMyKQ5RV8i0VfS5wF
+         FAGvLCAUJAbaZjnZaPM/KtEx6s/Vvh4x7bHpPPnNoUVo8e5eN5q2YbNeVXN8pxS5jo8c
+         nrPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783501341; x=1784106141;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=SAADf0PxLEf8SBsG4zFMkckYY7+WHsHRBHPNP6wI940=;
+        b=gSDPJikgLAYZTAAA6jZ8vRN+P40b+Yw05MbzFRxITaOYPF3hTyJjLW2BHsATucrdVh
+         nQk5YzvhfJJZcQZI50LHyaSdR7UghhXArMtMm1Qx7T2kD3s5JSubfSTAAW/LHWuoKnIu
+         5vtWS8Z5rEkpgYilb3SkJJ3FKQba1fxlNc2fNX1K9lAEWtvG8FP0ewmzEYQt6UzSRRV3
+         XzTHL8S8FjzMehTQ4sTAz6r4i6cR88c6vUzUQvdd4jKyGHODn/tD7eK3pNziur+YPohB
+         wwG3EzASLFzfYVtv0iQWlp1hViWLEZcyU6nqZjGn2AoFvqmL5fQgsnTWd63eA2V8V4Hl
+         cZCQ==
+X-Gm-Message-State: AOJu0YyMBvJ/x/t/OZkqDTISxX4pvL8+mBkauwBZsgomaJw9JHlfUOiT
+	4HvAFp0uUpTDLvbCCk3n6h5oOUwPFHMQufzmIfPLdCZW/aOi85Azt9JC2o6QSBZ6/tKIMg==
+X-Gm-Gg: AfdE7cmlZ0DL121uKacpLGEEHaCTEDL/GEhNMZN2cihy9z2AcFY+Q9S9FV06WIYx0lp
+	sto4D/O5jF26lMzZ2x2Y/7DJ3/l/uKWWOh+KLsqjxqxzCikCMAjJ0cJeZRCF5LfRPuJpfBbV8Nf
+	8qJ3JKSevmxWrasCKrYtVRQCY+aJ/d+obUuIq20VdgncXkkomTn3SM2We2nj9iqtXUTfDr4dGWK
+	yS5uQL8iYRuBHEoGyg4fuu0Rou0L1AayHVYs5Dqik4egJxJRpl5Lr8ys0j250VE/Bmq7KJiXk9E
+	vOxO+PkXiqxCyS7p9DsSE2YM3AzewIqwLz+q4kKtgBpOM2MBZGcqREO4hzbyi5bjZ3/tbJetSie
+	DJdy3kNrrLqHDICqsHoJkGebafy0ZXdq0cz6eq9+gKdgSjIxkBUjgQWc9gNW106x71pIblhWAnk
+	N/7sU2YKhmb3MSxorxh3r+AUzTEzsdxggwdALo1cLFRxRdpf1EJGposJSE//tdLNXEMGjhELUWD
+	LfgXbUNeMgrVR6oAWWsb2k81aujEwO82g==
+X-Received: by 2002:a17:90b:2803:b0:381:abcc:c8e9 with SMTP id 98e67ed59e1d1-3893fd5f5b7mr1562072a91.7.1783501340571;
+        Wed, 08 Jul 2026 02:02:20 -0700 (PDT)
 Received: from u2404-VMware-Virtual-Platform.tailf6b5e0.ts.net ([24.4.24.156])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31174accb0esm19515493eec.30.2026.07.08.02.01.58
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31174accb0esm19515493eec.30.2026.07.08.02.02.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2026 02:02:05 -0700 (PDT)
+        Wed, 08 Jul 2026 02:02:20 -0700 (PDT)
 From: Sun Jian <sun.jian.kdev@gmail.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -75,10 +77,12 @@ Cc: ast@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH bpf v4 0/2] bpf: Reject negative const offsets for buffer pointers
-Date: Wed,  8 Jul 2026 02:01:49 -0700
-Message-ID: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
+Subject: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer pointers
+Date: Wed,  8 Jul 2026 02:01:50 -0700
+Message-ID: <20260708090151.151729-2-sun.jian.kdev@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
+References: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -87,53 +91,115 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Reject negative effective offsets for PTR_TO_TP_BUFFER and PTR_TO_BUF
-buffer accesses, and add raw tracepoint writable coverage for both
-load-time rejection and the attach-time max_tp_access path.
+The verifier rejects variable offsets for PTR_TO_TP_BUFFER and PTR_TO_BUF
+accesses, but it currently accepts a constant negative offset produced by
+pointer arithmetic.
 
+For example, a raw tracepoint writable program can load ctx[0] as a
+PTR_TO_TP_BUFFER, move it by -8, and then access the adjusted pointer.
+The access is before the tracepoint writable buffer base and should be
+rejected.
+
+Keep rejecting negative instruction offsets explicitly. Once the register
+offset is known to be constant, reject const var_off values outside the
+same +/-BPF_MAX_VAR_OFF range used by other verifier pointer offset
+checks before computing the effective access range.
+
+Fixes: 022ac0750883 ("bpf: use reg->var_off instead of reg->off for pointers")
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
 ---
+ kernel/bpf/verifier.c | 40 ++++++++++++++++++++++++++++++++++------
+ 1 file changed, 34 insertions(+), 6 deletions(-)
 
-Changes in v4:
-- Correct the Fixes tag to point to 022ac0750883, where pointer offsets
-  were folded into reg->var_off.
-- Drop the end > U32_MAX check, which is unreachable after bounding const
-  var_off with BPF_MAX_VAR_OFF while keeping instruction offsets and access
-  sizes bounded.
-
-Changes in v3:
-- Check constant var_off against +/-BPF_MAX_VAR_OFF before computing
-  the effective access range, matching the existing verifier pointer
-  offset convention.
-- Keep explicit rejection of negative instruction offsets and keep
-  bounded negative constant var_off valid when the effective offset is
-  non-negative.
-
-Changes in v2:
-- Split the kernel fix and selftests into separate patches.
-- Add an attach-time raw tracepoint writable test that exercises
-  max_tp_access against nbd_send_request's writable size.
-- Adjust selftest formatting to use the 100 character line width.
-
-Tested:
-- ./test_progs -t verifier_raw_tp_writable
-- ./test_progs -t raw_tp_writable_reject_nbd_invalid -v
-- ./test_progs -t raw_tp_writable_test_run
-
-v3: https://lore.kernel.org/bpf/20260708040715.116680-1-sun.jian.kdev@gmail.com/
-v2: https://lore.kernel.org/bpf/20260707060804.93561-1-sun.jian.kdev@gmail.com/
-v1: https://lore.kernel.org/bpf/20260703035137.109608-1-sun.jian.kdev@gmail.com/
-
-Sun Jian (2):
-  bpf: Reject negative const offsets for buffer pointers
-  selftests/bpf: Cover negative raw_tp writable buffer offsets
-
- kernel/bpf/verifier.c                         | 40 +++++++++++--
- .../raw_tp_writable_reject_nbd_invalid.c      | 58 +++++++++++--------
- .../bpf/progs/verifier_raw_tp_writable.c      | 16 +++++
- 3 files changed, 85 insertions(+), 29 deletions(-)
-
-
-base-commit: 12091470c6b4c1c14b2de12dcbae2ada6cb6d20b
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 21a365d436a5..6fe4fcf93e5f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5326,14 +5326,18 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ static int __check_buffer_access(struct bpf_verifier_env *env,
+ 				 const char *buf_info,
+ 				 const struct bpf_reg_state *reg,
+-				 argno_t argno, int off, int size)
++				 argno_t argno, int off, int size,
++				 u32 *access_end)
+ {
++	s64 start, var_off;
++
+ 	if (off < 0) {
+ 		verbose(env,
+ 			"%s invalid %s buffer access: off=%d, size=%d\n",
+ 			reg_arg_name(env, argno), buf_info, off, size);
+ 		return -EACCES;
+ 	}
++
+ 	if (!tnum_is_const(reg->var_off)) {
+ 		char tn_buf[48];
+ 
+@@ -5344,6 +5348,29 @@ static int __check_buffer_access(struct bpf_verifier_env *env,
+ 		return -EACCES;
+ 	}
+ 
++	var_off = (s64)reg->var_off.value;
++	if (var_off >= BPF_MAX_VAR_OFF || var_off <= -BPF_MAX_VAR_OFF) {
++		verbose(env, "%s %s buffer offset %lld is not allowed\n",
++			reg_arg_name(env, argno), buf_info, var_off);
++		return -EACCES;
++	}
++
++	start = var_off + off;
++	if (start < 0) {
++		verbose(env,
++			"%s invalid negative %s buffer offset: off=%d, var_off=%lld\n",
++			reg_arg_name(env, argno), buf_info, off, var_off);
++		return -EACCES;
++	}
++
++	if (size < 0) {
++		verbose(env, "%s invalid %s buffer access: off=%lld, size=%d\n",
++			reg_arg_name(env, argno), buf_info, start, size);
++		return -EACCES;
++	}
++
++	*access_end = (u32)start + (u32)size;
++
+ 	return 0;
+ }
+ 
+@@ -5351,14 +5378,14 @@ static int check_tp_buffer_access(struct bpf_verifier_env *env,
+ 				  const struct bpf_reg_state *reg,
+ 				  argno_t argno, int off, int size)
+ {
++	u32 access_end;
+ 	int err;
+ 
+-	err = __check_buffer_access(env, "tracepoint", reg, argno, off, size);
++	err = __check_buffer_access(env, "tracepoint", reg, argno, off, size, &access_end);
+ 	if (err)
+ 		return err;
+ 
+-	env->prog->aux->max_tp_access = max(reg->var_off.value + off + size,
+-					    env->prog->aux->max_tp_access);
++	env->prog->aux->max_tp_access = max(access_end, env->prog->aux->max_tp_access);
+ 
+ 	return 0;
+ }
+@@ -5370,13 +5397,14 @@ static int check_buffer_access(struct bpf_verifier_env *env,
+ 			       u32 *max_access)
+ {
+ 	const char *buf_info = type_is_rdonly_mem(reg->type) ? "rdonly" : "rdwr";
++	u32 access_end;
+ 	int err;
+ 
+-	err = __check_buffer_access(env, buf_info, reg, argno, off, size);
++	err = __check_buffer_access(env, buf_info, reg, argno, off, size, &access_end);
+ 	if (err)
+ 		return err;
+ 
+-	*max_access = max(reg->var_off.value + off + size, *max_access);
++	*max_access = max(access_end, *max_access);
+ 
+ 	return 0;
+ }
 -- 
 2.43.0
 
