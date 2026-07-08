@@ -1,111 +1,146 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3953F54B4;
-	Wed,  8 Jul 2026 08:26:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD67401A2E
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 08:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783499213; cv=none; b=VDflo+78ZiugSkmrnqG0clqq7bREG6T/ilgzdEbJ/NPdYuFcqfnisiFsOiEGvOK9HkRg0ael9wgHNDTrDVaXRbWAh4tRYCWLqsKpvq7UE5PZXaVzGysn5w7FTscPj+gshoBvx63m1J154/RPY8iK/qqJhQkCBxPYMvqzWmAVVcM=
+	t=1783499324; cv=none; b=OWRgvc+XXgj7HPmvetm3nb6UmEqhOjpL7W4o0+yvoxxBqR2r21iXcMc6f/cYxajobSwbd3ZyFd3iczrS4uisJUzJz6pQpQtLx9Sf0C0BRa9Z7X3avqGfqmJWuvWkXD43kQrHkVQikN0GykbYW847fnQTmEaZYr84FlSePvftkbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783499213; c=relaxed/simple;
-	bh=vEcF2x7xj4o5l+jlvE3nPe9DOlQxh/TmYyYsD0e/pIE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GMpeaJPN8Z5tsR/FAa0urRhK4d3/x6YkUm4up2lXTc1eDGA8EXiZhakO8PXkgaO0YIaJu/ey1on02x1GV4YUwG9iete8WynUmDuBsIWOV9T9AJMgQDUgfBRPVrY/sb+O13ZNCkuAd29MN5OyewV20sJJ14yPhfO50cwMzOzuMs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=TIAgwJSM; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1783499324; c=relaxed/simple;
+	bh=3yP9LSetzvy1l9yUXk/RqagviFiyPzjb8NXMn2DOY/I=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=OghGVNCsibxaj5iV2TMJf1kCjYXBTlHTNwlDCY1OqQV84yB8i1fKpxvRRa2wsg/dO92bbtqYH32PbhyT+MRQCxrvv2VNsWYufGRto/DuvqS3Nu8oqQ1ikB2zjQFpjUuUSHjN5kxiLblnBm3QkoVzfunbJ626X0XVEFVo4Pk5kVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EAoCZmpV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="TIAgwJSM"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=vEcF2x7xj4o5l+jlvE3nPe9DOlQxh/TmYyYsD0e/pIE=; b=TIAgwJSMWNsXnEs7nU+POYFRNL
-	8v95QaNlwYUUaT2R2/PvmNAC7Z/MjTYeI+IK7hNk0lW3OLAUQio4lEno1oCkna+3t7DnBlGcm93aG
-	3VY9JIsVvRaRAIa0iRlrHiIXTPWW5YoVSHgupOGBcHyJsqEmNvDbMsOspt2ZxaeDmYhQ3RKF9JyUL
-	5OXPX3Z5HfmbuOU31NxEklpnGhlkmiWTL5VnPlOkTSzK3MdpGkTf1XXeI9F/HpsFJyquXJPsbYwf0
-	7EhrfLKwZ3tv5vzgLDezQ/8EpeCJwiSnYHuTF4asqh+d5oP89iY8ujYn5v3ZUVyPPR3i7awCfcvGT
-	Oe+Ng38g==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1whNcI-000LXc-12;
-	Wed, 08 Jul 2026 10:26:50 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1whNcH-0002rq-2F;
-	Wed, 08 Jul 2026 10:26:50 +0200
-Message-ID: <8996be19-6662-459d-924e-52a51e33ca6a@iogearbox.net>
-Date: Wed, 8 Jul 2026 10:26:49 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EAoCZmpV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FF7C1F00A3A;
+	Wed,  8 Jul 2026 08:28:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783499321;
+	bh=xBpSDCXB3jFyDYIRf7k2ZwU9oEsjeEzm+I3HY99eUok=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=EAoCZmpV0G66UFBLkQ80uDfdGqL0LShR6kQnvzX7JIK28//JOPMIVk8MC7sLNHYli
+	 AnoleyGq56V7nWxYy52E48KUGj0quWYNI+qi1hr0Ps5LDQVk5Vwlh6h3L9PZ5VKiM4
+	 cAAsdTDAYRLy9fiDu7f9L+c7i4qHZ9EQpyqUf1fp4x2lG0pq89hKqbGU5gMLVIToMR
+	 Pm6YC/onUtiNvRKXGFUCGuA3Va7+qq1IZhak0urgG1r5f4da80ItbpxsY+mB0AQxqs
+	 TbiInLj0QnEPM8y6uJk4FMYrba2HH71qS6DRCbqavA1IuUglu3yhzV2jBR0MLhq625
+	 kulHB99I5t69g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4 10/10] selftests/bpf: add tests to validate
+ KASAN on JIT programs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?= <alexis.lothore@bootlin.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260708-kasan-v4-10-d5c177ab8227@bootlin.com>
+References: <20260708-kasan-v4-0-d5c177ab8227@bootlin.com>
+ <20260708-kasan-v4-10-d5c177ab8227@bootlin.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 08 Jul 2026 08:28:41 +0000
+Message-Id: <20260708082841.9FF7C1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v6 7/8] selftests/bpf: Verify load-time signed
- loader metadata
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260708075343.358712-1-daniel@iogearbox.net>
- <20260708075343.358712-8-daniel@iogearbox.net>
- <20260708080705.A1DDD1F00A3D@smtp.kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260708080705.A1DDD1F00A3D@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28054/Wed Jul  8 08:24:53 2026)
 
-On 7/8/26 10:07 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] Missing file descriptor cleanup on unexpected test failure.
-That one makes sense, if there's nothing else, I'll send this as a small follow-up.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] Test fails spuriously on default kernels due to missing verifica=
+tion of the kasan_multi_shot requirement.
+- [Low] The variable `nsize` is assigned but never used, constituting dead =
+code.
+--
+
+--- Patch [10]: [PATCH bpf-next v4 10/10] selftests/bpf: add tests to valid=
+ate KASAN on JIT programs ---
+commit c15c25b993ae0bc70091046fa0c6b2bb1e71d099
+Author: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.com>
+
+selftests/bpf: add tests to validate KASAN on JIT programs
+
+This patch adds a basic test runner to load and run BPF programs that
+trigger memory management bugs to validate KASAN instrumentation.
+It runs various memory access tests and checks kernel logs for the expected
+KASAN splat, requiring the kernel to be configured with kasan_multi_shot.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/kasan.c b/tools/testi=
+ng/selftests/bpf/prog_tests/kasan.c
+> new file mode 100644
+> index 0000000000000..f006b92ee131a
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/kasan.c
+
+[ ... ]
+
+> +static int check_kasan_report_in_kernel_logs(char *buf, struct test_ctx =
+*ctx,
+> +					     bool is_write, int size)
+> +{
+> +	char access_log[READ_CHUNK_SIZE];
+> +	char *kasan_report_start;
+> +	int nsize;
+> +
+> +	snprintf(access_log, READ_CHUNK_SIZE, KASAN_PATTERN_SLAB_UAF,
+> +		 ctx->prog_tag[0], ctx->prog_tag[1], ctx->prog_tag[2],
+> +		 ctx->prog_tag[3], ctx->prog_tag[4], ctx->prog_tag[5],
+> +		 ctx->prog_tag[6], ctx->prog_tag[7], ctx->prog_name);
+
+[ ... ]
+
+> +	kasan_report_start =3D strstr(buf, access_log);
+> +
+> +	if (!kasan_report_start)
+> +		return 1;
+> +
+> +	nsize =3D snprintf(access_log, READ_CHUNK_SIZE, KASAN_PATTERN_REPORT,
+> +			 is_write ? "Write" : "Read", size);
+
+[Severity: Low]
+This isn't a bug, but the variable nsize is assigned here and never used.
+Should this assignment be removed to avoid dead code?
+
+> +
+> +	if (!strstr(kasan_report_start, access_log))
+> +		return 1;
+> +
+> +	return 0;
+> +}
+
+[ ... ]
+
+> +void test_kasan(void)
+> +{
+> +	struct kasan_write_val val;
+> +	struct test_spec *test;
+> +	struct test_ctx *ctx;
+> +	struct kasan *skel;
+> +	__u32 key =3D 0;
+> +	int i, ret;
+> +
+> +	ctx =3D calloc(1, sizeof(struct test_ctx));
+> +	if (!ASSERT_OK_PTR(ctx, "alloc test ctx"))
+> +		return;
+> +
+> +	if (!is_jit_enabled() || !get_kasan_jit_enabled()) {
+> +		test__skip();
+> +		goto end;
+> +	}
+
+[Severity: Medium]
+Since the commit message notes that the kernel must run with the
+kasan_multi_shot configuration, what happens if this parameter is missing?
+
+Could this test fail spuriously on default kernels where multi-shot is
+disabled, since it doesn't verify if kasan_multi_shot is active before
+triggering multiple reports?
+
+> +
+> +	skel =3D kasan__open();
+> +	if (!ASSERT_OK_PTR(skel, "open prog"))
+> +		goto end;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260708-kasan-v4-0=
+-d5c177ab8227@bootlin.com?part=3D10
