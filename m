@@ -1,352 +1,184 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D8331ED7C
-	for <bpf@vger.kernel.org>; Tue,  7 Jul 2026 23:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA2A4883F
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 00:10:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783468216; cv=none; b=f8yc8vPc8gyaaeLCsTBHOGu8KNZjV7F+Bb+GEU7EuvZldHb7NnPmGZWGtcLsX8VtYc/0qsjShviJ9g2G/M/oVcdSW0YTeyDjv/t1Xe11hI9bAFg8PKMqVQT633VZpj9pKYJPHFyTXCU1Ef8hscOudGWn4gbrJDD5p4SLnfxA930=
+	t=1783469403; cv=none; b=FIK/3gaLvz57w1jttMOQ2KSGkbw6Bj1JDNPoT6qi8DdsRMTYLb7opND4FFk/RcG5fPQyJy49+qZDXJG+4VZPG/PR6NLEQF45duTlH1xkYvPxeYOp0W6TOC1F5t4LguPtFjoh82x8kpVFM0naR9kSYKTDIbxwEJJrKuTgmEBLIpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783468216; c=relaxed/simple;
-	bh=1M3v9ZAKeTOtwfF2kbO3O3vUSC1SJ1Oe8/V8bBAYYxU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Y+555FxwGyqQgilTopoYIX2AZ9Y277CFMbvymTdliLO+txhfjQgNb5Gg+sa4fmtKPgCzPq/tOr6Eh0+/a88CXhycU9tizGaT+pxr5TtCIBTRyt0EkqVLN/CHF4p2nSR67B68h7cy8S5+WIjBk64JFfhfPCOl15Px+gNV2Y7DnW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b7yS9Nqv; arc=none smtp.client-ip=209.85.215.170
+	s=arc-20240116; t=1783469403; c=relaxed/simple;
+	bh=c58fnOiwEsN7lUj0DmXeQk2wWyvK7VT5Pt/ChD76cJU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IPJLHpq2BJ2M9szy+/iJca5gWCEGrfxB41BuBT/mGk82tKd2QASIquZvMyOSeTQlZ04TfcmI0WMbbxlD8HJYZk+M61sXFMTlIJsNv4RtfpsP5w6bgCKhDWFoWFmfkUGKRKVKvB/NL1Bx2ukf8EpAuiU7PvExPJiKu7fLF4ugsy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PUVlOCJr; arc=none smtp.client-ip=209.85.222.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b7yS9Nqv"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c998fd549a8so23792a12.2
-        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 16:50:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PUVlOCJr"
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-922ff615c14so3923985a.3
+        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 17:10:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783468214; x=1784073014; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=jR5FDbXPbDj7uRWgGm0G3zwUJBd3PGR+m1Sli1Axe2k=;
-        b=b7yS9Nqv9WFf/NGmx5gV8UzW/6Wbq+tVsK3utgmh18x3hS9I7L9ZOvwarJn90ekpdU
-         FI5EzolXevApwgqVAzzaV9Yhgir0C9L+Pwmw69nREu0XFiodzWPbolJ8UmoA0BQT4mVP
-         gx1qFyiOFWK2jTkcmM4ap7ID10hO/r0HaBL2tg7pEoeBnN5dAFXxYbOdCb58oQEYCzw4
-         YdkZ15d26CEZ62NHdvNq/L/LaXn34TWNlJG3/alnTvQPZldcy9/2sUhVykIvGeO10Qgi
-         E70uTgyxLnDsNjTowq1yv3W/NWphMuCpUvdZFOl6vLSDzwfDgiNJrZ9kjhE+LUa6v6/c
-         2diQ==
+        d=gmail.com; s=20251104; t=1783469400; x=1784074200; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=X5YW1Vp33W4R7ClL7Q/jKwGiZ/RqUWzBm7jRzsfKd+8=;
+        b=PUVlOCJrUkLuEsI+OMjFuJKsGa+l4JaMsu7vrh3aCQKgwbb6G2N1kmia8DPz4HVdQW
+         CgRC71bA4obYOXHAljFXW1RsJygheVmQXgOH8GfoeQiCjiYwPH++jG1H2rhl4xkmgVq/
+         AeLgvgRCUMyjM1il7xFIyGlUUkZJjllO41FTEEb3q9IebTucD21lXmIUojFRckwKQoiA
+         QWDWqRcdEh9x8qJb+Qe5JJf8RXJSPMqJSEhj1tPFT0DYuT/RbEAeTxiMfhzIhZ0Cqb9K
+         6x2A6ikZZnJTYl8pqUs+JsE5QVVWuhRDYn4D6WoQay6FzWEiKoKJE/Xx8sI/9Xu/jRCN
+         2FIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783468214; x=1784073014;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jR5FDbXPbDj7uRWgGm0G3zwUJBd3PGR+m1Sli1Axe2k=;
-        b=oeMKz7MnRbrhSYy9hKMuDuVtv09q2NZUK784ytR0JuJ960BGRHyiduXVrmw98ZQcV3
-         ssDWBNVn6jz9rkqttZbMeytzLODrE6PWSl1hRNValyqIvo55stSsu1ab5eGA5FDCX/hD
-         X8KfbB9v8r/FStCiSAXalY4q79PjoDlON/xVoo0BToDI989gz8mnSnxebOSyt1zqWn9l
-         WtIRllGXyjw2RyauRGWYOQNGVjpPrQbBsy4UqLTiOqt76jyzAQkOYQnfxM0C7reTIsPI
-         z/8xJvuSx56xlQEFlvV1iE4kkkUkxPWge1xTBngo0TgmqLGhEV7c7PuT8QGFrm0QsvJ0
-         5elw==
-X-Forwarded-Encrypted: i=1; AHgh+RpaHJ4v6opGtKmoJ/6bFvlLi74DhfbrChuLpydqzhYUG+asUzqZiC270Mtu7F3YnHUZ1/I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzX6xbp/9HMhEtM5BdTPEGkU3T0MLTqHDmlmAxZIsxdZMStw16n
-	/pZKLH01hCNITJ6lewctopPzlXgZzmoCH70FrjSn/7nPMPvTOfH6Wvsx
-X-Gm-Gg: AfdE7clrfvgE2K6j6pS9Nh/smV0tP/sRgz6lXiscclu1bzOTRf961x1ir9UZVR4MLuw
-	w5Lj1j+ks/eZhRvcE4xGJ4wgfgTq++CcVp6zlC7FSwjI5TsANXaDwHjM9tV2u93OMXZVwFtd3k0
-	x+hIU8K/Fs8YtQCluu+qbBcgAcvbIaL7J6RB3aIoe+g1wmtP7rLW6ZhMTBZheFusATt+GnVthEb
-	Lpkyraptu4MKNfFAX6IL8D4KNQrjnvB+fxvHebJ8zlBIhK/+ScjTUYa4A4D9lxI4aEFZziUw+HN
-	ZSI3DjrL2f1hzstUHlNjyEvF+SDmpmuwF3VxbJI6CPEQgDx9XhIjafyEAwuXx/ZrGkPIQPO2FY1
-	GSN8BJJpJquj1hKoQEpoBf6OIJTj1IRf8RkCV0Uc96avtrCIp561SCi912yuM7hS6q2YdLQELS7
-	tIEM//J5sNMwrrKjj3Pesp045MqV1DMl+5EZZ0kAXxF+reoLrJedjv2iyVEmiIbogem2oVkw==
-X-Received: by 2002:a05:6a21:3295:b0:3bf:7fa5:8922 with SMTP id adf61e73a8af0-3c08ed13de2mr7843747637.2.1783468214356;
-        Tue, 07 Jul 2026 16:50:14 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:f2fe:14ed:44aa:14cf? ([2620:10d:c090:500::2:84e7])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b659d7c8bsm13083613c88.12.2026.07.07.16.50.12
+        d=1e100.net; s=20251104; t=1783469400; x=1784074200;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=X5YW1Vp33W4R7ClL7Q/jKwGiZ/RqUWzBm7jRzsfKd+8=;
+        b=TdxGrLv400rag9yFyr/KJj67tTA6ZHmfNKTgjVcBdUP6HbQMO9WBNYql+mKwklxkhU
+         RS10v6rnK659CWfpy7eQQnCQyRYl9xHyny14gHAH6szVbFIw/9j6Ja7OsRIY9fUTG80J
+         ORMAgD/tAQaHRuwZrBFm1QoKtMKjNdY4PEwHH2XKP0k7J8Gg0ap3HNl9M3vE0IrBAj7d
+         hj/ShOV1BMsCsIqxujiLk8qP1X+nRgtHZ7bt+SoxKM2tJ+v6HMgg660a682Yp3YMInhS
+         40emcKuY2JuFscg7AesdEV4/N7A2sWPVySn9KECfLxqEAxAb8TVuIx5aYgnN8KQAFQfA
+         Tttw==
+X-Gm-Message-State: AOJu0YwtBxjuAUMZB6qyMFYr1S03WIhWeEkelbInXDIwxQ5lXU4cSGn5
+	ho3oCbOaNGC3R/Ml6pn6sW8ViSw1N4FG+jYRlzioQCLm0DaFK/vr0SlN
+X-Gm-Gg: AfdE7cktM1enQskJioC93Nk8XKxIyz8kGpqFc/BGbsBxrdkng02YlxqFq4EtP3IulnO
+	TCZ6IHYfPLPVIxOAejSsqG/LVYLjIAQmLkaMZ3du015kNWU6oox2e+4Q+jae6JE/IITj3KnalyK
+	h/jWzSkaAl/sRCbRDCoxoJ5ze9hqImfvQ+Km6aEBmoZgeym5S1FZ6BsZqOc0/Sr1sZA9HHS8dsk
+	iQLcaelzzoqruatwdTTd9/3vixtZQUPfCWElWCGYzImwbKLNxOQ+TsYjI5711UV5xZKCR3nNwVu
+	bXA6qJK06Vds9PIlyvKa+n9oPQqBLyfd9WAg6booFzqng1yHVw6/DfublFoDGXETgqj1ZmNj7Em
+	JepcqQ9Ct/pRqIa2SNrpqjLpF3Z7ePcugFz9qoRfOL+IasO3a8v8iDJJVmvDH1xwHoyEKj3idK5
+	qTtANokeZPVbB2GX1BLcw1J9rbaw/M+N4N3wxCLKQieEuFxf6T+xPXLyfn/3xbs5+3FMqJUryvQ
+	zMNrSTheNk7apE=
+X-Received: by 2002:a05:620a:2b4d:b0:920:6061:816e with SMTP id af79cd13be357-92ecf629324mr5879185a.7.1783469400172;
+        Tue, 07 Jul 2026 17:10:00 -0700 (PDT)
+Received: from battery.lan (pool-138-88-31-60.washdc.fios.verizon.net. [138.88.31.60])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-92e93ea5ed3sm1191281885a.29.2026.07.07.17.09.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 16:50:13 -0700 (PDT)
-Message-ID: <bc47c75a00acab57e7fea72612e0f6f089ddecc9.camel@gmail.com>
-Subject: Re: [PATCH 0/3] selftests/bpf: compare BPF and memory.stat memcg
- stat readers
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ziyang Men <ziyang.meme@gmail.com>
-Cc: Shakeel Butt <shakeel.butt@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>,
- bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>,  Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan
- <shuah@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	kernel-team@meta.com, linux-mm@kvack.org, cgroups@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Tue, 07 Jul 2026 16:50:11 -0700
-In-Reply-To: <ak2LXDWoPFSJL2Q9@devvm16600.scu0.facebook.com>
-References: <20260704045617.487664-1-ziyang.meme@gmail.com>
-	 <bc12730fe6eccde10d36e6544607ae2464357e05.camel@gmail.com>
-	 <akxW5dzvR9e2CfGq@linux.dev>
-	 <eccfd9a8dd1af1668e142b9b866194333647b0d5.camel@gmail.com>
-	 <ak2LXDWoPFSJL2Q9@devvm16600.scu0.facebook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+        Tue, 07 Jul 2026 17:09:59 -0700 (PDT)
+From: David Windsor <dwindsor@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E . Hallyn" <serge@hallyn.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	selinux@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	David Windsor <dwindsor@gmail.com>
+Subject: [PATCH v5 bpf-next 0/3] bpf: add bpf_init_inode_xattr kfunc for atomic inode labeling
+Date: Tue,  7 Jul 2026 20:09:53 -0400
+Message-ID: <20260708000956.46138-1-dwindsor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, 2026-07-07 at 16:27 -0700, Ziyang Men wrote:
-> On Tue, Jul 07, 2026 at 02:21:59AM -0700, Eduard Zingerman wrote:
-> > On Mon, 2026-07-06 at 18:50 -0700, Shakeel Butt wrote:
-> > > On Mon, Jul 06, 2026 at 05:17:50PM -0700, Eduard Zingerman wrote:
-> > > > On Fri, 2026-07-03 at 21:56 -0700, Ziyang Men wrote:
-> > > >=20
-> > > > [...]
-> > > >=20
-> > > > Hi Ziyang,
-> > > >=20
-> > > > I'm a bit hesitant adding 2.5K lines of code to the BPF selftests,
-> > > > as this code would need to be (a) maintained, (b) run at each CI in=
-vocation.
-> > > > Hence, the tests added need to be relevant for the BPF sub-system.
-> > > >=20
-> > > > Regarding the benchmarking part, as you state yourself:
-> > > >=20
-> > > > =C2=A0 > In my testing (a 60-CPU VM) the BPF path is roughly an ord=
-er of magnitude
-> > > > =C2=A0 > faster than the per-cgroup memory.stat parse for a whole-t=
-ree scan, mainly
-> > > > =C2=A0 > because it avoids the per-cgroup open/read and string pars=
-ing.
-> > > >=20
-> > > > With this, I think the benchmarking code can be dropped altogether.
-> > > >=20
-> > > > Next, the three memcg_stat_{reader,churn,churn_percpu}.c files shar=
-e a
-> > > > lot of utility code almost verbatim (e.g. tree definition/construct=
-ion).
-> > > > Such duplication should be avoided.
-> > > >=20
-> > > > Finally, from the BPF point of view the test exercises the followin=
-g functionality:
-> > > > - kfuncs:
-> > > > =C2=A0 - bpf_mem_cgroup_page_state
-> > > > =C2=A0 - bpf_mem_cgroup_vm_events
-> > > > =C2=A0 - bpf_put_mem_cgroup
-> > > > =C2=A0 - bpf_get_mem_cgroup
-> > > > - main iterator logic.
-> > > >=20
-> > > > All kfuncs but bpf_get_mem_cgroup() are thin wrappers around mm/mem=
-control.c code,
-> > > > all kfuncs including the bpf_get_mem_cgroup() are already exercised=
- in the selftests.
-> > > > The iterator logic itself is covered by 8 sub-tests in the prog_tes=
-ts/cgroup_iter.c.
-> > > > Hence two questions:
-> > > > - What do these new tests add in terms of tests coverage?
-> > > > - Why do BPF selftests need to exercise the churn and churn_percpu =
-scenarios?
-> > > >=20
-> > > > Shakeel, could you please comment as well?
-> > >=20
-> > > Hi Eduard,
-> > >=20
-> > > Thanks a lot for taking a look. The main motivation I had behind requ=
-esting
-> > > Ziyang to send this series (beside making him learn the tooling and p=
-rocess of
-> > > sending patches to lkml) was to have a reference implementation and p=
-erformance
-> > > comparison for BPF based cgroup/memcg stats collection.
-> > >=20
-> > > However you have correctly pointed out that selftests might not be th=
-e right
-> > > place for such kind of code as selftests are more focused on function=
-al tests
-> > > and run by a lot of CIs while this is a performance benchmarking code=
-.
-> > >=20
-> > > I am wondering if there is a place for this benchmarking code in kern=
-el under
-> > > tools folder but archiving it on lkml might be good enough and should=
- be easily
-> > > searchable. Anyways thanks again for your time.
-> >=20
-> > Hi Shakeel,
-> >=20
-> > We do have bpf benchmarks in the kernel tree, the entry point is
-> > tools/testing/selftests/bpf/bench.c. These are supposed to be
-> > performance measurements and are executed manually from time to time
-> > (quite rarely, as far as I understand), not by CI.
-> > However, if I understand Ziyang's assessment correctly, this code is
-> > not really a performance test, but kind of a load test.
-> >=20
-> > Thanks,
-> > Eduard
->=20
-> Hi Eduard,
->=20
-> Thanks a lot for the review. Yes, as Shakeel mentioned, the performance
-> comparison for BPF-based cgroup stats collection was the original motivat=
-ion.
+Many in-kernel LSMs (SELinux, Smack, IMA) store security labels in
+extended attributes. For these LSMs, atomic labeling during inode
+creation is critical: if the inode becomes accessible before its xattr
+is set, it is briefly unlabeled, which can disrupt LSMs making policy
+decisions based on file labels.
 
-You said yourself that the test is comparing an in-kernel walk to
-parsing strings and opening files.
+Existing LSMs solve this by setting xattrs directly in the
+inode_init_security hook, which runs before the inode becomes
+accessible. BPF LSM programs currently lack this capability because
+the hook uses an output parameter (xattr_count) that BPF programs
+cannot write to, and existing kfuncs like bpf_set_dentry_xattr
+require a dentry that isn't available until after the inode is
+accessible.
 
-> But the patch also carries functional value: alongside that comparison, i=
-t
-> checks the correctness of the stats the kfuncs return.
->=20
-> Let me first answer the main question -- what these tests add over what w=
-e
-> already have -- and then lay out a plan.
->=20
-> First, the static test (memcg_stat_reader) vs the existing cgroup_iter_me=
-mcg.
->=20
-> The existing test calls the kfuncs, but for each value it only checks whe=
-ther it
-> is greater than zero. For example, in prog_tests/cgroup_iter_memcg.c:
->=20
->      memset(map, 1, len);                    /* dirty some anon */
->      if (!ASSERT_OK(read_stats(link), "read stats"))
->              goto cleanup;
->      ASSERT_GT(memcg_query->nr_anon_mapped, 0, "final anon mapped val");
->=20
-> It never checks the value is actually correct -- i.e. compares it against=
- the
-> value in cgroupfs -- only that it is non-zero.
->=20
-> Besides, it also walks a single cgroup:
->=20
->      .cgroup.order =3D BPF_CGROUP_ITER_SELF_ONLY,
->=20
-> and reads only five fields.
+This series introduces the bpf_init_inode_xattr() kfunc, which takes
+the combined inode_init_security xattr context argument and claims a
+slot in it via the new security_lsmxattr_add() LSM helper.
 
-Arguably one of the the cgroup_iter_memcg.c tests can be extended to
-allocate some mem and check if the value is reflected in the stats.
-But there is a line between MM tests and BPF tests.
-All BPF kfuncs except iterator logic itself are thin wrappers on
-top of the existing MM functionality. Hence, I don't think that
-BPF selftests are a place to stress-test these things.
+v5:
+  - make the kfunc non-sleepable to avoid an ext4 deadlock (sashiko)
+  - move xattr creation logic to security_lsmxattr_add() (Paul)
+  - use distinct xattr names in init_inode_xattr_slot_limit
 
->=20
-> The memcg_stat_reader in this patch adds three things:
->=20
->    1. It compares the numbers. It reads the stats through the kfuncs and =
-checks
->       they match the values in memory.stat, instead of only checking they=
- are
->       non-zero (memcg_stat_reader.c, check_correctness()):
->=20
->          /*
->           * anon (NR_ANON_MAPPED) is rstat-flushed and, with the charger
->           * stopped, deterministic: BPF and memory.stat must agree.
->           */
->          if ((b.anon > f.anon ? b.anon - f.anon
->                               : f.anon - b.anon) > anon_tol)
->                  anon_mism++;
->          ...
->          ASSERT_EQ(anon_mism, 0, "bpf vs file anon (rstat-flushed)");
->=20
->       This is the main gap: b.anon comes from the kfunc, f.anon from pars=
-ing
->       memory.stat, and the test requires them to agree.
+v4:
+  - introduce struct lsm_xattrs in separate patch (Alexei, Paul)
+  - rename struct xattr_ctx to struct lsm_xattrs (Paul)
+  - make lsm_xattrs.xattr_count unsigned int (Paul)
+  - drop new_xattrs/xattr_count locals in
+    security_inode_init_security() (Paul)
+  - fold __bpf_init_inode_xattr() into bpf_init_inode_xattr() (Paul)
+  - drop bpf_fs_kfuncs_filter() attach-point check; rely on verifier
+    type enforcement (Alexei)
+  - drop attach-time cap; enforce slot budget in the kfunc (Alexei)
+  - allocate the combined xattr with GFP_NOFS (sashiko-bot)
+  - replace init_inode_xattr_attach_cap selftest with runtime
+    init_inode_xattr_slot_limit
 
-> "This is the main gap"
-I'd prefer interacting with a human, not LLM.
+v3:
+  - rename struct lsm_xattr_ctx to struct xattr_ctx (Paul)
+  - increase BPF_LSM_INODE_INIT_XATTRS to 4 (Song)
+  - enforce per-hook attachment cap at attach time to prevent
+    runtime rejection (Paul)
+  - add init_inode_xattr_attach_cap selftest
 
->    2. It covers a whole subtree, not a single cgroup:
->=20
->          linfo.cgroup.order =3D BPF_CGROUP_ITER_DESCENDANTS_PRE;
->    3. It reads a much broader field set (~40 fields, collect_full_stats()=
-).
->       Minor.
+v2:
+  - pass the xattr state as a combined context object and drop the
+    verifier fixup path (Kumar)
+  - restrict bpf_init_inode_xattr labels to bpf.* namespace (Matt)
+  - cap bpf_init_inode_xattr() at BPF_LSM_INODE_INIT_XATTRS slots per
+    invocation (AI)
 
-I don't think that it's responsibility of BPF selftests to check all
-these fields.
+David Windsor (3):
+  security: rework inode_init_security xattr handling
+  bpf: add bpf_init_inode_xattr kfunc for atomic inode labeling
+  selftests/bpf: add tests for bpf_init_inode_xattr kfunc
 
-> Second, the churn test adds something the static test cannot.
->=20
-> These counters are kept separately on each CPU for speed, and are only ad=
-ded
-> together when the code "flushes" them. The existing test does call the fl=
-ush,
-> right before reading (progs/cgroup_iter_memcg.c):
->=20
->      bpf_mem_cgroup_flush_stats(memcg);
->      memcg_query.nr_anon_mapped =3D bpf_mem_cgroup_page_state(
->              memcg, bpf_core_enum_value(enum node_stat_item, NR_ANON_MAPP=
-ED));
->=20
-> But if the cgroup is idle there is nothing to add up, so the flush does n=
-o real
-> work -- and since the result is only checked for non-zero, nothing verifi=
-es the
-> flush gathered anything. If bpf_mem_cgroup_flush_stats() were replaced by=
- an
-> empty stub, this test would very likely still pass (the kernel also flush=
-es on
-> its own, periodically and on thresholds).
->=20
-> With activity going on, especially spread across several CPUs, we can mak=
-e the
-> flush do real work and then check it by comparing the numbers after the a=
-ctivity
-> stops. That flush check is missing from all of the current tests, and thi=
-s is
-> where memcg_stat_churn / churn_percpu come in.
+ fs/bpf_fs_kfuncs.c                            |  36 +++++
+ include/linux/bpf_lsm.h                       |   3 +
+ include/linux/evm.h                           |   9 +-
+ include/linux/lsm_hook_defs.h                 |   4 +-
+ include/linux/lsm_hooks.h                     |  16 +--
+ include/linux/security.h                      |  15 +++
+ security/bpf/hooks.c                          |   1 +
+ security/integrity/evm/evm_main.c             |   8 +-
+ security/security.c                           | 108 +++++++++++++--
+ security/selinux/hooks.c                      |   4 +-
+ security/smack/smack_lsm.c                    |  27 ++--
+ tools/testing/selftests/bpf/bpf_kfuncs.h      |   5 +
+ .../selftests/bpf/prog_tests/fs_kfuncs.c      | 124 ++++++++++++++++++
+ .../bpf/progs/test_init_inode_xattr.c         |  31 +++++
+ 14 files changed, 344 insertions(+), 47 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_init_inode_xattr.c
 
-This sounds like an MM stress test.
 
-> Finally, my plan:
->=20
->    1. Keep the static (value-correctness) test, or fold it into cgroup_it=
-er_memcg
->       if that works better. I also noticed that several kfuncs are not ca=
-lled by
->        any test today (no callers anywhere under tools/testing/selftests/=
-bpf/,
->        only __ksym declarations in vmlinux.h): bpf_get_root_mem_cgroup,
->        bpf_mem_cgroup_usage, and bpf_mem_cgroup_memory_events. The static=
- test
->        would be a good place to cover them too.
+base-commit: 602701718649936eb287bf6c7ecf870ec54c6f71
+-- 
+2.53.0
 
-From BPF perspective the test is over-complicated.
-There is no need for a generic tree construction.
-Creating a hierarchy of several cgroups, allocating memory within
-these cgroups and walking them would work perfectly fine.
-Existing selftests already do that. Aside from querying actual memory
-amount what else do you want to cover?
-
->    2. Keep only one of the two churn tests -- most likely the per-CPU one=
-, since
->       it is the stronger of the two -- and change its correctness check t=
-o
->       actually verify the flush by comparing the numbers. The current che=
-ck is
->       weak; it only checks non-zero values and that every cgroup was visi=
-ted:
->=20
->          ASSERT_EQ(missing, 0, "all cgroups present in map");
->          ASSERT_GT(total_anon, 0, "tree carries anon under churn");
-
-These are MM tests, not BPF tests.
-
->    3. Move the code these tests share into a common header, to remove the
->       duplication you pointed out. Or we can combine these two tests into=
- a
->       single one if works better.
->=20
->    4. Keep the focus on functional testing in the selftests. The file-vs-=
-BPF
->       timing could stay as an extra bonus -- printed only as informationa=
-l
->       output in verbose mode, never as pass/fail -- but I'm happy to move=
- that
->       comparison to the bench framework if you think it fits better there=
-.
->=20
-> Please let me know if you have any concerns with this plan. I am happy to=
- take
-> any suggestions on how to improve the tests, or to change the focus of th=
-e
-> selftests
->=20
-> Thanks again,
-> Ziyang
