@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7E23F786F;
-	Wed,  8 Jul 2026 07:53:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BBF43A1687;
+	Wed,  8 Jul 2026 07:53:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783497249; cv=none; b=Yyzsz0tBgARaWWfGqVe+sgZqhLVv5OwxnYAMFlSXJ0QWrAitDIdLSIorhZ18b1XHvmYt9yXNTllmUGyxwH3LfCxhJQtAjyuCvL16cZv7TFwbS+Yt92JbulrHBjW05MGJyNxdyXg0VXpHN680BzZeCYDG0yZGjrhGFJr7Xn+poO4=
+	t=1783497253; cv=none; b=WcaJgQ0ZJEhULbcipjX8eoSDf7OMXNyFCuOjHQM3Dc5fLybP+9zRGwz/Q9FPS0GmSy9h6vGHlNjIfn+YfvYLJqi36SlT8Yxz7MA4GEh4WBC/wZmsKbGeRGafoq774eTSMrYu1yNQK3E8vDCmAkvGaBrwkzV2clOlNkIdm1LIt00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783497249; c=relaxed/simple;
-	bh=XFGU2x93lSg+NSTjIH6PwboaWDgVdQsIjAgopOHSqPA=;
+	s=arc-20240116; t=1783497253; c=relaxed/simple;
+	bh=1FMi6LyK4OKHwzXxiO2IAs361cAdNUrF4577NnWOaZI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VDy+EwkulvVluzKAydYapyiA1Gnm2yPE40XqNIrdD0+5CdyVyJ5BgIy/iU854jECqiyMmdHUdJfnAE+rdcpyErC1bRWK9rmAgYMpS+izM9EXT55gmDkyI0DBcturH3BWPcPw1CNnFywCREORoeUodymcAJZZoU4otLPL6fO5/3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=RceRWiYh; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=H2MMDY0qlGFLUWPc/gBO6z4LgM20i/QHG/1Z6tBzGG0OLLPWLWfkgCGuTwuhnE4iYXjbIXvEUd+4s8mTYMI9fROuHUWx/h935cPaXXHD6cb61UjTs2wGn4Q80yJqA8+/mBGCjWLsB8WpDBufJ9S+mKFcBf80Ent0kyvPhBj+Vu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=JtC9F5TB; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="RceRWiYh"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="JtC9F5TB"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=H7AqcvndU5UVSgb8+8eL3Mde8iNwa4gLkglqyfEqoaA=; b=RceRWiYhbzSMybYA0LtWNAP3qZ
-	K9sFOhOYl92hsy4x/1wN2hhMlA72mRW1lmURS2NZomkFL71/IEp3rDIS+XQQVviV2so6BnPhczp/y
-	rb/89tdd8DtPRxVHJL+c9edCcDVthLgYWrcNnugEb94UQmdr5icawU9Q7H5ECeE1ztiFJxPuFnlR2
-	2LW1eFtxNJK94utzyVrOUfURJ6V/23jUH/LqVInxVsEsErgbWgyhRFQxbaMJKOhQfS4QCwNC1VF7l
-	O0R1Ca6dpy7DPq2S2In4oky7m1U0hRFE61yx5dCIi3LyXx9m0jKIa7NJT7fWspD52/Xt4+CheEQiw
-	8iSW81ug==;
+	bh=mzkjhzyBXSSXHkPCoFKZkLEME05F+BB0MJEYvJZve2A=; b=JtC9F5TBOYsb/ahCdGbLb97Oqw
+	KqzJMlZJ7W27AZT3eNzPKNiWhJG2FKRGqjUppmofx04yGgCbm/cG00K0TvImEG4FXeuDtM0s8o5jy
+	Qx8/yog13JaRV2j44HpTZQE3lUpuedbdhopQUejN09a+qWnHIn9gpA/xkapG9BjkQu8iMuKbb3ySH
+	2MNWla/Ww2m14rJU4h4+/uNSkAruchrI+JL13+bha4+6WrE5CW/iTI17WJPam7ta3RIwK5Qi9iYQT
+	z/cici2GTtkW05lYh1x7Zuyc3ctZm5fQKSLzH/xO2QoLAntRULkO8Ca2H/OAeRAMqucIucMfa4LsK
+	AXkyBl7A==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1whN6I-000GdD-2R;
-	Wed, 08 Jul 2026 09:53:46 +0200
+	id 1whN6N-000GfV-2g;
+	Wed, 08 Jul 2026 09:53:51 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: ast@kernel.org
 Cc: kpsingh@kernel.org,
@@ -44,9 +44,9 @@ Cc: kpsingh@kernel.org,
 	a.s.protopopov@gmail.com,
 	bpf@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH bpf-next v6 2/8] bpf: Verify signed loader metadata at load time
-Date: Wed,  8 Jul 2026 09:53:37 +0200
-Message-ID: <20260708075343.358712-3-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v6 8/8] Documentation/bpf: Add BPF signing and enforcement doc
+Date: Wed,  8 Jul 2026 09:53:43 +0200
+Message-ID: <20260708075343.358712-9-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260708075343.358712-1-daniel@iogearbox.net>
 References: <20260708075343.358712-1-daniel@iogearbox.net>
@@ -59,557 +59,544 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28054/Wed Jul  8 08:24:53 2026)
 
-A signed gen_loader program carries the programs, maps and relocations
-it installs in a metadata array map. The loader instructions are covered
-by the PKCS#7 signature, but the metadata map is not: Today the loader
-compares the map contents from within BPF against a hash baked into its
-(signed) instructions, using the kernel-cached map hash. The kernel
-itself never actually attests that the metadata the loader installs is
-the metadata that was signed.
+Describe the BPF signing design end to end: why a trusted loader is
+needed, the signature(insns || metadata) contract, load-time
+verification via fd_array (exclusive + frozen maps), the binary
+BPF_SIG_{UNSIGNED,VERIFIED} verdict, and how [BPF] LSMs can enforce
+policy on it.
 
-This split is the core of the long-standing objection to the BPF signing
-scheme from the LSM / integrity side: the integrity check of a light
-skeleton only completes once the loader program runs, that is, after the
-security_bpf_prog_load() hook, so at admission time an LSM observes a
-program whose payload has not yet been verified. Auditing the chain
-link is also not a purely cryptographic operation: whoever signs or
-reviews an lskel has to disassemble the loader's preamble to convince
-themselves that the embedded hash check is present and correct [0][1].
-Two acceptable fixes were identified in those threads: Complete the
-integrity check before the admission hook fires, or add a second hook
-that collects the verification result after the loader ran [2]. Covering
-both the loader and its maps directly with the PKCS#7 signature is what
-Blaise Boscaccy's patchsets proposed in several forms. Let's implement
-the former, without growing the UAPI, and in particular as a single
-unified scheme where the signature spans the raw bytes rather than
-derived hashes.
-
-A signed loader binds its metadata map(s) through the existing fd_array,
-and an exclusive map is already bound to a program digest (excl_prog_hash).
-So when a signature is present, collect the exclusive maps from fd_array
-and append their frozen contents to the instructions before verification:
-The signature now covers insns || metadata_0 || metadata_1 || [...] in
-the fd_array order, and verification completes in bpf_check(), once the
-fd_array maps are resolved into used_maps, before the LSM admission hook
-and the rest of verification. A program is either BPF_SIG_UNSIGNED or
-BPF_SIG_VERIFIED, with nothing in between. While folding the fd_array
-maps, a non-exclusive map bound to a signed program is rejected, so every
-map folded into the signature is exclusive. A signed loader that fails
-to cover its metadata thus does not load, and BPF_SIG_VERIFIED always
-means the instructions and every exclusive map are authentic. The maps
-must be frozen so the hashed bytes cannot change before the loader runs;
-the map <-> program digest binding is enforced by the verifier for every
-used map. Binding maps through fd_array_cnt makes the verifier resolve
-and excl-check them (excl_prog_sha vs prog->digest) before it would
-otherwise compute the digest, so compute prog->digest up front in
-bpf_check(), over the unmodified instructions the signature covers, for
-a load that folds metadata.
-
-Unsigned programs are not affected by the signature path; for them the
-LSM admission hook merely moves below fd_array resolution, with minimal
-bounded work in between. Note, signed loaders generated by older libbpf/
-bpftool versions need to be regenerated; some of the recent fixes we've
-had on the signed loader side require the latter already to close gaps.
-
-Finally, some remarks around the security_bpf_prog_load() placement
-given there was discussion on whether a new hook is needed or the existing
-security_bpf_prog() hook should be reused [3]: For a new hook it would
-mean that just for loading a single BPF program it has to pass through
-four layers of LSM hooks:
-
-  1) security_bpf (cmd=PROG_LOAD): for gating various bpf subcmds
-  2) security_bpf_prog_load: historical admission hook (CAP/token,
-     prog_type, attach point), pre-verification
-  3) security_bpf_prog_verify_signature: newly asked admission hook,
-     same role as 2), plus the BPF signature verdict
-  4) security_bpf_prog: gate handing the prog fd back to userspace,
-     verification done & signature verified
-
-The use-cases of 2) and 3) conflate, thus BPF community prefers to just
-keep a total of 3 LSM hooks (as-is today): 3) makes 2) incoherent given
-they are the /same class/ of hook, that is, access-control admission on
-the load and split only by _what_ they can see. Worse, with the split,
-for a signed BPF program security_bpf_prog_load 2) admits a program whose
-signature has not been checked, so a policy gating at 2) is structurally
-unable to express "admit only verified" and every such policy is forced
-onto 3) *anyway*. In other words, one doesn't get two complementary hooks,
-but rather, one real admission hook aka 3) plus a now-degraded /legacy/
-hook 2) that can't answer the question operators actually want to ask.
-
-Reusing security_bpf_prog() 4) for admission is no alternative either:
-it fires only after the entire verifier (and JIT) pipeline ran, so
-denying a not-yet-verified program at that point burns exactly the
-work a denial is supposed to avoid, and by then the program has an id
-assigned and the kallsyms/perf/audit load events fired. Policies are
-free to also consume the signature verdict at 4), but admission control
-belongs into security_bpf_prog_load(). Hence the latter remains the only
-admission hook, merely moved past signature verification; with moving
-large allocations further down into the BPF verifier, there is now only
-minimal work between the old and new location: The preparation work in
-bpf_check() is reordered such that only the minimally necessary setup
-happens up front: Allocating the env, initializing the verifier log and
-resolving the fd_array that a signed BPF metadata map needs. The worst
-case allocation up until security_bpf_prog_load() is ~90K which is the
-env itself (~54K) plus the continuous fd_array cache (at most 32K). The
-insn_aux_data array is moved into a later stage in the verification.
+This writes down the contract on the discussion points with the LSM /
+integrity folks [0][1]: by the time security_bpf_prog_load() is
+called, signature verification has fully completed and covers the
+instructions plus the frozen contents of every bound exclusive map;
+there is no intermediate "loader verified, payload pending" state
+to reason about; and what BPF_SIG_VERIFIED means at each hook is
+spelled out explicitly.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/2f71d6c03698eb17d51f7247efde777627ee578a.camel@HansenPartnership.com [0]
-Link: https://lore.kernel.org/lkml/ecf0521ed302db672672ebfbc670ecfba36a6e00.camel@HansenPartnership.com [1]
-Link: https://lore.kernel.org/bpf/88703f00d5b7a779728451008626efa45e42db3d.camel@HansenPartnership.com [2]
-Link: https://lore.kernel.org/bpf/DJOFY21DYUI4.19WKQ3NPZ4H5R@gmail.com [3]
+Link: https://lore.kernel.org/bpf/bc823ddbaf63e0e177eb46d1cc15076e4e2e689d.camel@HansenPartnership.com [0]
+Link: https://lore.kernel.org/bpf/CAHC9VhSDkwGgPfrBUh7EgBKEJj_JjnY68c0YAmuuLT_i--GskQ@mail.gmail.com [1]
 ---
- include/linux/bpf_verifier.h |   1 +
- kernel/bpf/syscall.c         |  76 +-----------
- kernel/bpf/verifier.c        | 234 +++++++++++++++++++++++++++++++----
- 3 files changed, 215 insertions(+), 96 deletions(-)
+ Documentation/bpf/index.rst   |   1 +
+ Documentation/bpf/signing.rst | 497 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 498 insertions(+)
+ create mode 100644 Documentation/bpf/signing.rst
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index bb57773cde37..317e99b9acc0 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -947,6 +947,7 @@ struct bpf_verifier_env {
- 	bool bypass_spec_v4;
- 	bool seen_direct_write;
- 	bool seen_exception;
-+	bool signature;
- 	struct bpf_insn_aux_data *insn_aux_data; /* array of per-insn state */
- 	const struct bpf_line_info *prev_linfo;
- 	struct bpf_verifier_log log;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 6db306d23b47..e898fad01aaf 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -40,7 +40,6 @@
- #include <linux/tracepoint.h>
- #include <linux/overflow.h>
- #include <linux/cookie.h>
--#include <linux/verification.h>
- #include <linux/btf_ids.h>
- 
- #include <net/netfilter/nf_bpf_link.h>
-@@ -2886,64 +2885,6 @@ static bool is_perfmon_prog_type(enum bpf_prog_type prog_type)
- 	}
- }
- 
--static enum bpf_sig_keyring bpf_classify_keyring(s32 keyring_id)
--{
--	switch (keyring_id) {
--	case 0:
--		return BPF_SIG_KEYRING_BUILTIN;
--	case (s32)(unsigned long)VERIFY_USE_SECONDARY_KEYRING:
--		return BPF_SIG_KEYRING_SECONDARY;
--	case (s32)(unsigned long)VERIFY_USE_PLATFORM_KEYRING:
--		return BPF_SIG_KEYRING_PLATFORM;
--	default:
--		return BPF_SIG_KEYRING_USER;
--	}
--}
--
--static int bpf_prog_verify_signature(struct bpf_prog *prog, union bpf_attr *attr,
--				     bool is_kernel, s32 *keyring_serial)
--{
--	bpfptr_t usig = make_bpfptr(attr->signature, is_kernel);
--	struct bpf_dynptr_kern sig_ptr, insns_ptr;
--	struct bpf_key *key = NULL;
--	void *sig;
--	int err = 0;
--
--	/*
--	 * Don't attempt to use kmalloc_large or vmalloc for signatures.
--	 * Practical signature for BPF program should be below this limit.
--	 */
--	if (attr->signature_size > KMALLOC_MAX_CACHE_SIZE)
--		return -EINVAL;
--
--	if (system_keyring_id_check(attr->keyring_id) == 0)
--		key = bpf_lookup_system_key(attr->keyring_id);
--	else
--		key = bpf_lookup_user_key(attr->keyring_id, 0);
--
--	if (!key)
--		return -EINVAL;
--
--	sig = kvmemdup_bpfptr(usig, attr->signature_size);
--	if (IS_ERR(sig)) {
--		bpf_key_put(key);
--		return PTR_ERR(sig);
--	}
--
--	bpf_dynptr_init(&sig_ptr, sig, BPF_DYNPTR_TYPE_LOCAL, 0,
--			attr->signature_size);
--	bpf_dynptr_init(&insns_ptr, prog->insnsi, BPF_DYNPTR_TYPE_LOCAL, 0,
--			prog->len * sizeof(struct bpf_insn));
--
--	err = bpf_verify_pkcs7_signature((struct bpf_dynptr *)&insns_ptr,
--					 (struct bpf_dynptr *)&sig_ptr, key);
--	if (!err)
--		*keyring_serial = bpf_key_serial(key);
--	bpf_key_put(key);
--	kvfree(sig);
--	return err;
--}
--
- static int bpf_prog_mark_insn_arrays_ready(struct bpf_prog *prog)
- {
- 	int err;
-@@ -3133,17 +3074,8 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, struct bpf_log_at
- 
- 	/* eBPF programs must be GPL compatible to use GPL-ed functions */
- 	prog->gpl_compatible = license_is_gpl_compatible(license) ? 1 : 0;
--	if (attr->signature) {
--		err = bpf_prog_verify_signature(prog, attr, uattr.is_kernel,
--						&prog->aux->sig.keyring_serial);
--		if (err)
--			goto free_prog;
--		prog->aux->sig.keyring_type = bpf_classify_keyring(attr->keyring_id);
--		prog->aux->sig.verdict = BPF_SIG_VERIFIED;
--	} else {
--		prog->aux->sig.keyring_type = BPF_SIG_KEYRING_NONE;
--		prog->aux->sig.verdict = BPF_SIG_UNSIGNED;
--	}
-+	prog->aux->sig.keyring_type = BPF_SIG_KEYRING_NONE;
-+	prog->aux->sig.verdict = BPF_SIG_UNSIGNED;
- 	prog->orig_prog = NULL;
- 	prog->jited = 0;
- 
-@@ -3189,10 +3121,6 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, struct bpf_log_at
- 	if (err < 0)
- 		goto free_prog;
- 
--	err = security_bpf_prog_load(prog, attr, token, uattr.is_kernel);
--	if (err)
--		goto free_prog;
--
- 	/* run eBPF verifier */
- 	err = bpf_check(&prog, attr, uattr, attr_log);
- 	if (err < 0)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e8e21d1a919a..001ac53825da 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -22,6 +22,8 @@
- #include <linux/ctype.h>
- #include <linux/error-injection.h>
- #include <linux/bpf_lsm.h>
-+#include <linux/security.h>
-+#include <linux/verification.h>
- #include <linux/btf_ids.h>
- #include <linux/poison.h>
- #include <linux/module.h>
-@@ -2554,6 +2556,10 @@ fd_array_get_btf_sparse(struct bpf_verifier_env *env, u32 idx)
- 
- static struct btf *fd_array_get_btf(struct bpf_verifier_env *env, u32 idx)
- {
-+	if (env->signature) {
-+		verbose(env, "signed program cannot bind any BTF\n");
-+		return ERR_PTR(-EACCES);
-+	}
- 	if (env->fd_array)
- 		return fd_array_get_btf_continuous(env, idx);
- 	if (!bpfptr_is_null(env->fd_array_raw))
-@@ -17627,6 +17633,11 @@ static int __add_used_btf(struct bpf_verifier_env *env, struct btf *btf)
- 		if (env->used_btfs[i].btf == btf)
- 			goto ret_put;
- 
-+	if (env->signature) {
-+		verbose(env, "signed program cannot bind any BTF\n");
-+		ret = -EACCES;
-+		goto ret_put;
-+	}
- 	if (env->used_btf_cnt >= MAX_USED_BTFS) {
- 		verbose(env, "The total number of btfs per program has reached the limit of %u\n",
- 			MAX_USED_BTFS);
-@@ -17909,6 +17920,12 @@ static int __add_used_map(struct bpf_verifier_env *env, struct bpf_map *map)
- 		if (env->used_maps[i] == map)
- 			return i;
- 
-+	if (env->signature &&
-+	    env->prog->aux->sig.verdict == BPF_SIG_VERIFIED) {
-+		verbose(env, "signed program cannot bind map '%s' not covered by the signature\n",
-+			map->name);
-+		return -EACCES;
-+	}
- 	if (env->used_map_cnt >= MAX_USED_MAPS) {
- 		verbose(env, "The total number of maps per program has reached the limit of %u\n",
- 			MAX_USED_MAPS);
-@@ -17992,6 +18009,10 @@ static int fd_array_get_map_idx(struct bpf_verifier_env *env, u32 idx)
- {
- 	if (env->fd_array)
- 		return fd_array_get_map_idx_continuous(env, idx);
-+	if (env->signature) {
-+		verbose(env, "signed program must bind maps via a continuous fd_array (fd_array_cnt)\n");
-+		return -EACCES;
-+	}
- 	if (!bpfptr_is_null(env->fd_array_raw))
- 		return fd_array_get_map_idx_sparse(env, idx);
- 
-@@ -18270,6 +18291,10 @@ static int check_and_resolve_insns(struct bpf_verifier_env *env)
- 				map_idx = fd_array_get_map_idx(env, insn[0].imm);
- 				break;
- 			default:
-+				if (env->signature) {
-+					verbose(env, "signed program cannot reference a map by fd, only via fd_array index\n");
-+					return -EINVAL;
-+				}
- 				map_idx = add_used_map(env, insn[0].imm);
- 				break;
- 			}
-@@ -19851,6 +19876,146 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	return 0;
- }
- 
-+static enum bpf_sig_keyring bpf_classify_keyring(s32 keyring_id)
-+{
-+	switch (keyring_id) {
-+	case 0:
-+		return BPF_SIG_KEYRING_BUILTIN;
-+	case (s32)(unsigned long)VERIFY_USE_SECONDARY_KEYRING:
-+		return BPF_SIG_KEYRING_SECONDARY;
-+	case (s32)(unsigned long)VERIFY_USE_PLATFORM_KEYRING:
-+		return BPF_SIG_KEYRING_PLATFORM;
-+	default:
-+		return BPF_SIG_KEYRING_USER;
-+	}
-+}
+diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
+index 0d5c6f659266..638a00d42bc2 100644
+--- a/Documentation/bpf/index.rst
++++ b/Documentation/bpf/index.rst
+@@ -28,6 +28,7 @@ that goes into great technical depth about the BPF Architecture.
+    classic_vs_extended.rst
+    bpf_iterators
+    bpf_licensing
++   signing
+    test_debug
+    clang-notes
+    linux-notes
+diff --git a/Documentation/bpf/signing.rst b/Documentation/bpf/signing.rst
+new file mode 100644
+index 000000000000..e73eaaebd8b1
+--- /dev/null
++++ b/Documentation/bpf/signing.rst
+@@ -0,0 +1,497 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+/*
-+ * Verify the PKCS#7 signature of a loaded program. Called from bpf_check()
-+ * once the program's metadata maps have been resolved into used_maps, so
-+ * the exact maps folded into the signature are the ones the program binds.
-+ *
-+ * The signature covers the instructions followed by the frozen contents of
-+ * each map, in @maps order: insns || map_0 || map_1 || [...]. On success the
-+ * verdict and keyring info are recorded on prog->aux.
-+ */
-+static int bpf_prog_verify_signature(struct bpf_verifier_env *env,
-+				     union bpf_attr *attr, bool is_kernel)
-+{
-+	bpfptr_t usig = make_bpfptr(attr->signature, is_kernel);
-+	struct bpf_dynptr_kern sig_ptr, data_ptr;
-+	struct bpf_prog *prog = env->prog;
-+	struct bpf_map **maps = env->used_maps;
-+	struct bpf_key *key = NULL;
-+	void *sig, *data = NULL;
-+	u32 map_cnt = env->used_map_cnt;
-+	u32 i, off, insns_sz;
-+	u64 data_sz;
-+	int err = 0;
++============
++BPF signing
++============
 +
-+	/*
-+	 * Don't attempt to use kmalloc_large or vmalloc for signatures.
-+	 * Practical signature for BPF program should be below this limit.
-+	 */
-+	if (!attr->signature_size ||
-+	    attr->signature_size > KMALLOC_MAX_CACHE_SIZE)
-+		return -EINVAL;
-+	if (system_keyring_id_check(attr->keyring_id) == 0)
-+		key = bpf_lookup_system_key(attr->keyring_id);
-+	else
-+		key = bpf_lookup_user_key(attr->keyring_id, 0);
-+	if (!key) {
-+		verbose(env, "cannot resolve signing keyring with keyring_id %d\n",
-+			attr->keyring_id);
-+		return -EINVAL;
-+	}
++This document describes how BPF programs are cryptographically signed, how the
++kernel verifies them at load time, and how Linux Security Modules (LSMs) -
++including the BPF LSM - use the resulting verdict to enforce policy. It is
++written for developers who want to produce signed BPF objects, understand what
++the signature actually guarantees, or build a policy on top of it.
 +
-+	sig = kvmemdup_bpfptr(usig, attr->signature_size);
-+	if (IS_ERR(sig)) {
-+		bpf_key_put(key);
-+		return PTR_ERR(sig);
-+	}
++Motivation
++==========
 +
-+	insns_sz = prog->len * sizeof(struct bpf_insn);
-+	data_sz = insns_sz;
-+	for (i = 0; i < map_cnt; i++) {
-+		struct bpf_map *map = maps[i];
++A signed BPF program lets the kernel establish that the bytecode being loaded
++originates from a trusted producer and was not modified in transit. On its own
++the kernel does not *require* signatures - an unsigned program loads exactly as
++before - but it records a verdict (see `The verdict`_) that an LSM can gate on.
++This is the building block for policies such as "only run BPF that was signed by
++a key in the trusted keyring", as could in the future be enforced by an LSM
++such as IPE.
 +
-+		if (map->map_type != BPF_MAP_TYPE_ARRAY ||
-+		    !map->ops->map_direct_value_addr) {
-+			verbose(env, "signed program metadata map '%s' must be an array\n",
-+				map->name);
-+			err = -EINVAL;
-+			goto out;
-+		}
-+		if (!READ_ONCE(map->frozen)) {
-+			verbose(env, "signed program metadata map '%s' must be frozen\n",
-+				map->name);
-+			err = -EPERM;
-+			goto out;
-+		}
-+		if (bpf_map_write_active(map)) {
-+			verbose(env, "signed program metadata map '%s' has active writers\n",
-+				map->name);
-+			err = -EBUSY;
-+			goto out;
-+		}
-+		if (!map->excl_prog_sha) {
-+			verbose(env, "signed program metadata map '%s' must be exclusive\n",
-+				map->name);
-+			err = -EPERM;
-+			goto out;
-+		}
-+		data_sz += map->value_size;
-+	}
-+	if (bpf_dynptr_check_size(data_sz)) {
-+		verbose(env, "signed payload too large: %llu bytes\n", data_sz);
-+		err = -E2BIG;
-+		goto out;
-+	}
-+	data = kvmalloc(data_sz, GFP_KERNEL_ACCOUNT | __GFP_ZERO);
-+	if (!data) {
-+		err = -ENOMEM;
-+		goto out;
-+	}
-+	memcpy(data, prog->insnsi, insns_sz);
-+	off = insns_sz;
-+	for (i = 0; i < map_cnt; i++) {
-+		struct bpf_map *map = maps[i];
-+		u64 addr;
++Signing is orthogonal to the existing permission model: it does not replace the
++capability checks or the verifier. A signed load still requires the usual
++privileges (``CAP_BPF`` and any program-type-specific capability, subject to
++``kernel.unprivileged_bpf_disabled``), and the loader's instructions are still
++checked by the verifier like any other program. A valid signature establishes
++*origin and integrity*, not safety - it lets a policy trust where the bytecode
++came from, it does not let a load skip any check it would otherwise face.
 +
-+		err = map->ops->map_direct_value_addr(map, &addr, 0);
-+		if (err) {
-+			verbose(env, "failed to read signed metadata map '%s': %d\n",
-+				map->name, err);
-+			goto out;
-+		}
-+		memcpy(data + off, (void *)(unsigned long)addr,
-+		       map->value_size);
-+		off += map->value_size;
-+	}
++The hard part is *what* gets signed. A naive scheme would sign a program's
++instruction buffer at build time and verify that signature at
++``BPF_PROG_LOAD``. That does not survive contact with real BPF objects, because
++the bytes the kernel finally loads are not the bytes the developer built and
++signed. Between the two, libbpf and the kernel rewrite the program:
 +
-+	bpf_dynptr_init(&data_ptr, data, BPF_DYNPTR_TYPE_LOCAL, 0, data_sz);
-+	bpf_dynptr_init(&sig_ptr, sig, BPF_DYNPTR_TYPE_LOCAL, 0,
-+			attr->signature_size);
++- **map file descriptors** are patched into ``ld_imm64`` instructions
++  (``BPF_PSEUDO_MAP_FD``), and a map's fd is assigned at load time, so it
++  differs on every run;
++- **CO-RE relocations** rewrite field offsets, sizes and existence flags against
++  the *running* kernel's BTF, so the result differs from one kernel to the next;
++- **kfunc and ksym references** are resolved to ids/addresses in the running
++  kernel;
++- **global data** (``.rodata``/``.data``/``.bss``) is created and seeded as maps
++  at load.
 +
-+	err = bpf_verify_pkcs7_signature((struct bpf_dynptr *)&data_ptr,
-+					 (struct bpf_dynptr *)&sig_ptr, key);
-+	if (err) {
-+		verbose(env, "signature verification failed: %d\n", err);
-+	} else {
-+		verbose(env, "signature verification passed\n");
-+		prog->aux->sig.keyring_serial = bpf_key_serial(key);
-+		prog->aux->sig.keyring_type = bpf_classify_keyring(attr->keyring_id);
-+		prog->aux->sig.verdict = BPF_SIG_VERIFIED;
-+	}
-+out:
-+	kvfree(data);
-+	bpf_key_put(key);
-+	kvfree(sig);
-+	return err;
-+}
++So a signature over the original instructions cannot match the relocated
++instructions the verifier ends up checking, and the relocated form cannot be
++produced ahead of time because it depends on the target kernel. There is no
++fixed byte string that is both signable at build time and what the kernel
++actually loads - which is why a program cannot simply be signed and loaded
++directly.
 +
- int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	      struct bpf_log_attr *attr_log)
- {
-@@ -19873,18 +20038,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 		return -ENOMEM;
- 
- 	env->bt.env = env;
--
--	len = (*prog)->len;
--	env->insn_aux_data =
--		vzalloc(array_size(sizeof(struct bpf_insn_aux_data), len));
--	ret = -ENOMEM;
--	if (!env->insn_aux_data)
--		goto err_free_env;
--	for (i = 0; i < len; i++)
--		env->insn_aux_data[i].orig_idx = i;
--	env->succ = bpf_iarray_realloc(NULL, 2);
--	if (!env->succ)
--		goto err_free_env;
- 	env->prog = *prog;
- 	env->ops = bpf_verifier_ops[env->prog->type];
- 
-@@ -19893,22 +20046,51 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	env->bypass_spec_v1 = bpf_bypass_spec_v1(env->prog->aux->token);
- 	env->bypass_spec_v4 = bpf_bypass_spec_v4(env->prog->aux->token);
- 	env->bpf_capable = is_priv = bpf_token_capable(env->prog->aux->token, CAP_BPF);
--
--	bpf_get_btf_vmlinux();
--
--	/* grab the mutex to protect few globals used by verifier */
--	if (!is_priv)
--		mutex_lock(&bpf_verifier_lock);
-+	env->signature = attr->signature;
- 
- 	/* user could have requested verbose verifier output
- 	 * and supplied buffer to store the verification trace
- 	 */
- 	ret = bpf_vlog_init(&env->log, attr_log->level, attr_log->ubuf, attr_log->size);
- 	if (ret)
--		goto err_unlock;
-+		goto err_free_env;
-+	if (env->signature) {
-+		ret = bpf_prog_calc_tag(env->prog);
-+		if (ret < 0)
-+			goto err_prep;
-+	}
- 
- 	ret = process_fd_array(env, attr, uattr);
- 	if (ret)
-+		goto err_prep;
++The trusted loader
++==================
 +
-+	if (env->signature) {
-+		ret = bpf_prog_verify_signature(env, attr, uattr.is_kernel);
-+		if (ret)
-+			goto err_prep;
-+	}
++The solution is to move that setup work *into* a small BPF program - the
++**loader** - and sign the loader instead of the individual programs. libbpf's
++``gen_loader`` machinery (``bpftool gen skeleton -L``, the "light skeleton")
++emits a ``BPF_PROG_TYPE_SYSCALL`` program whose body performs the bpf() syscalls
++that create maps, apply relocations, and load the real programs. The payload it
++installs - the serialized programs, map descriptions, relocation data and
++initial values - lives in a separate array map, the **metadata map**
++(``__loader.map``).
 +
-+	ret = security_bpf_prog_load(env->prog, attr, env->prog->aux->token,
-+				     uattr.is_kernel);
-+	if (ret)
-+		goto err_prep;
++So the unit of trust is the loader, and the signing contract is::
 +
-+	bpf_get_btf_vmlinux();
++    Sig(I_loader || D_meta)
 +
-+	/* grab the mutex to protect few globals used by verifier */
-+	if (!is_priv)
-+		mutex_lock(&bpf_verifier_lock);
++where ``I_loader`` is the loader's instruction stream and ``D_meta`` is the
++content of the metadata map. Verifying the loader's signature establishes that
++both the loader *and* the payload it is about to install are authentic. The
++loader is reproducible: ``gen_loader`` builds it from primitives so the same
++object yields the same bytes on any build host.
 +
-+	len = env->prog->len;
-+	env->insn_aux_data =
-+		vzalloc(array_size(sizeof(struct bpf_insn_aux_data), len));
-+	ret = -ENOMEM;
-+	if (!env->insn_aux_data)
-+		goto skip_full_check;
-+	for (i = 0; i < len; i++)
-+		env->insn_aux_data[i].orig_idx = i;
-+	env->succ = bpf_iarray_realloc(NULL, 2);
-+	if (!env->succ)
- 		goto skip_full_check;
- 
- 	mark_verifier_state_clean(env);
-@@ -20132,18 +20314,26 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	*prog = env->prog;
- 
- 	module_put(env->attach_btf_mod);
--err_unlock:
- 	if (!is_priv)
- 		mutex_unlock(&bpf_verifier_lock);
--	bpf_clear_insn_aux_data(env, 0, env->prog->len);
-+	goto err_free_env;
-+err_prep:
-+	err = bpf_log_attr_finalize(attr_log, &env->log);
-+	if (err)
-+		ret = err;
-+	release_insn_arrays(env);
-+	release_maps(env);
-+	release_btfs(env);
- err_free_env:
-+	if (env->insn_aux_data)
-+		bpf_clear_insn_aux_data(env, 0, env->prog->len);
-+	vfree(env->insn_aux_data);
- 	kvfree(env->fd_array);
- 	bpf_stack_liveness_free(env);
- 	kvfree(env->cfg.insn_postorder);
- 	kvfree(env->scc_info);
- 	kvfree(env->succ);
- 	kvfree(env->gotox_tmp_buf);
--	vfree(env->insn_aux_data);
- 	kvfree(env);
- 	return ret;
- }
++Why the loader is signable when the program is not
++--------------------------------------------------
++
++The loader sidesteps every rewrite listed above, because the bytes that are
++signed are *relocation-invariant*:
++
++- The loader's own instructions are a fixed sequence of bpf() syscalls emitted
++  by ``gen_loader``; they carry no CO-RE relocations and resolve no ksyms, so
++  they are identical on every kernel. The metadata map is referenced by *index*
++  into ``fd_array`` (``BPF_PSEUDO_MAP_IDX_VALUE``), not by a baked-in file
++  descriptor, so even that reference does not change between build and load.
++  The loader instruction bytes the kernel verifies are exactly the bytes that
++  were signed.
++- The metadata map is opaque, frozen data - the serialized target programs,
++  their relocation records, map descriptions and initial values. Its bytes are
++  identical at build time and at load time, so they are simply appended to the
++  instructions and covered by the same signature (there is no separate metadata
++  hash to compute or compare).
++
++All the host-specific rewriting - creating maps, patching their fds into the
++target programs, applying CO-RE, resolving ksyms, seeding global data - still
++happens, but it happens *inside the loader at runtime*, on the verified
++metadata, **after** the kernel has verified the ``insns || metadata`` signature.
++The kernel never has to verify the relocated target programs: it verifies the
++loader and its inputs once, and trust transfers to whatever that now-trusted,
++deterministic loader installs. The relocation step is moved from "before the
++signature can be checked" to "after a trusted program runs" - which is exactly
++what makes it signable.
++
++Because the metadata map is the loader's only untrusted input, two existing map
++properties are reused to keep it trustworthy across the load:
++
++Exclusive maps
++    A map created with ``excl_prog_hash`` (see ``BPF_MAP_CREATE``) may only be
++    accessed by a program whose digest matches that hash. The verifier enforces
++    ``map->excl_prog_sha == prog->digest`` for every map a program uses, so the
++    metadata map is bound to exactly the signed loader and cannot be shared with
++    or mutated by another program.
++
++Frozen maps
++    The metadata map is frozen (``BPF_MAP_FREEZE``) before the loader is loaded.
++    Freezing blocks further userspace writes, so the bytes folded into the
++    signature cannot change before the loader runs. (Freezing does not make the
++    map read-only to the loader program itself, which still writes created file
++    descriptors back into the blob's scratch area.)
++
++Load-time verification
++=======================
++
++Rather than have the loader check its own metadata from within BPF, the kernel
++verifies it directly at ``BPF_PROG_LOAD``, with no new UAPI. The mechanism
++reuses the existing ``fd_array``:
++
++#. Userspace creates the metadata map with ``excl_prog_hash`` set to the
++   loader's digest, populates it, and freezes it.
++#. The loader is loaded with ``signature``/``signature_size``/``keyring_id``
++   set, the metadata map referenced through ``fd_array``, and ``fd_array_cnt``
++   set so the kernel knows the array's length.
++#. Signature verification runs inside the verifier (``bpf_check()``), once it
++   has resolved the ``fd_array`` entries into the program's ``used_maps``. The
++   maps folded into the signature are therefore the very objects the program
++   binds - a single resolution of ``fd_array``, not a separate read, so the
++   verified bytes cannot be swapped for a different map after the check (no
++   time-of-check/time-of-use window). Each folded map must be exclusive (carry
++   ``excl_prog_sha``) and a plain array map (``BPF_MAP_TYPE_ARRAY``); only an
++   array map exposes its value buffer through ``map_direct_value_addr()`` as a
++   kernel address spanning ``value_size`` bytes. A map that is not exclusive, not
++   frozen, or not a plain array is rejected, with a verifier log message naming
++   the offending map. The kernel appends each map's frozen
++   contents to the instruction buffer and verifies the PKCS#7 signature over the
++   concatenation ``insns || metadata_0 || metadata_1 || ...`` in ``used_maps``
++   order, before it rewrites the (signed) instructions.
++
++A signed program therefore takes one of exactly two shapes, both fully
++supported:
++
++- **No bound maps** (``fd_array_cnt == 0``): there is nothing to append, so the
++  kernel verifies the signature over the instructions alone. A valid signature
++  yields ``BPF_SIG_VERIFIED`` and the program loads. This is the ordinary case
++  for a directly-loaded signed program with no separate payload; it is *not*
++  rejected for "missing" metadata, because it has none to cover.
++- **Exclusive bound maps** (``fd_array_cnt > 0``): every entry is exclusive and
++  folded, so the signature covers ``insns || metadata``.
++
++There is no third shape: a non-exclusive map in a signed program's ``fd_array``
++is rejected rather than silently left out of the signature, so a signed loader
++never binds a map its signature does not cover.
++
++The digest binding (``excl_prog_sha == prog->digest``) is enforced by the
++verifier as usual; because that check runs while ``fd_array`` is resolved -
++before the verifier would otherwise compute the tag - ``prog->digest`` is
++computed up front in the verifier, over the unmodified (signature-covered)
++instructions, for any signed load.
++
++Coverage is then enforced as the verifier resolves instructions, at the point
++each object is bound rather than by a count taken afterwards. Once the signature
++has been verified, binding any further map is refused: a map reached by a
++directly-referenced fd, or a map swapped into an ``fd_array`` slot the loader
++reads, is not among those already folded, so it is rejected the moment the
++verifier tries to bind it. A BTF is refused outright for a signed program - a
++ksym or a BTF fd in ``fd_array``, whether resolved up front or lazily for a
++module kfunc, is rejected when it would be bound. Together with the fold rule
++above this keeps the verdict binary: a signed program cannot use a map its
++signature does not cover, and a different but equally digest-bound map cannot be
++substituted at an ``fd_array`` slot. Non-exclusive maps are never folded, so a
++signed program cannot use one at all.
++
++The verdict
++===========
++
++A program is either unsigned or fully verified - there is no intermediate
++state. The outcome is recorded in ``prog->aux->sig.verdict``:
++
++.. code-block:: c
++
++    enum bpf_sig_verdict {
++            BPF_SIG_UNSIGNED = 0,
++            BPF_SIG_VERIFIED,
++    };
++
++``BPF_SIG_VERIFIED`` means the signature is valid and covers the instructions
++*and* the frozen contents of every exclusive map the program uses:
++
++- For an ordinary, directly-loaded signed program the instructions are the whole
++  artifact and it uses no exclusive maps, so a valid instruction signature is
++  the complete verification.
++- For a signed loader the metadata map is exclusive, so its contents are folded
++  in and the signature covers ``insns || metadata``.
++
++There is deliberately no "instructions verified but metadata not" verdict: a
++signed loader that fails to cover its metadata is *rejected* (see above), not
++recorded with a weaker verdict. ``BPF_SIG_VERIFIED`` therefore always means the
++program and everything the signature is responsible for are authentic, which is
++what a policy can rely on.
++
++Alongside the verdict the kernel records which keyring validated the signature;
++see `Keyrings`_.
++
++Enforcement via LSMs
++====================
++
++Signing only *records* a verdict; an LSM turns it into policy. The verdict and
++keyring fields live in ``struct bpf_prog_aux``, so a BPF LSM program can read
++them directly (see Documentation/bpf/prog_lsm.rst for writing and attaching BPF
++LSM programs); the same fields are equally available to in-tree LSMs. Two hooks
++are useful at different points of the load: the dedicated
++``security_bpf_prog_load()`` gates admission before the main verification work,
++and the existing ``security_bpf_prog()`` observes a program that has fully
++loaded.
++
++Admission: ``security_bpf_prog_load()``
++---------------------------------------
++
++This hook gates admission **for every load**, from a single call site inside the
++verifier (``bpf_check()``), before the main verification work. It runs after the
++optional signature verification, so the verdict and keyring fields are final - the
++hook can see whether, and how strongly, the program was signed, which keyring
++validated it, the load ``attr``, the BPF token and whether the load came from the
++kernel. For a signed load the verdict is ``BPF_SIG_VERIFIED`` here (the signature
++has just been checked); for an unsigned load it is ``BPF_SIG_UNSIGNED``.
++
++This is the place for *coarse admission* that must also see unsigned and
++not-yet-verified loads: require a signature at all, restrict the acceptable
++keyring, restrict which token/credentials may load BPF, apply per-program-type
++rules, or audit every load attempt that makes it past signature verification -
++attempts failing the signature or the metadata binding abort before this hook
++fires. It is the primary deny point.
++
++One subtlety: this hook runs *before* the verifier finishes its work, so
++``BPF_SIG_VERIFIED`` *here* means only "validly signed" - not "loaded". Allowing
++a load at this point lets it *proceed*; it does not guarantee the program will
++load. A validly signed program can still be rejected afterwards on two
++independent grounds: the verifier may reject it like any other program (unsafe
++memory access, bad control flow, resource limits, ...), and the kernel separately
++refuses - as the verifier resolves instructions and binds each object - any map
++the signature does not cover or any BTF at all, regardless of what this hook
++returned. Only after the program has fully loaded, at the next hook
++(``security_bpf_prog()``), does ``BPF_SIG_VERIFIED`` carry its full meaning:
++validly signed *and* fully verified.
++
++A more realistic admission policy than "is it signed at all": accept programs
++signed by a system keyring, accept a user-keyring signature only if the
++key/keyring it was verified against is on an explicit allowlist, and emit a
++tamper-evident record of every decision so that even denied attempts are
++auditable. (Illustrative - error checking elided.)
++
++.. code-block:: c
++
++    /* Serials of user keys/keyrings we additionally trust. */
++    struct {
++            __uint(type, BPF_MAP_TYPE_HASH);
++            __type(key, __s32);             /* keyring_serial */
++            __type(value, __u8);
++            __uint(max_entries, 64);
++    } trusted_user_keys SEC(".maps");
++
++    /* Audit stream consumed by a userspace logger. */
++    struct {
++            __uint(type, BPF_MAP_TYPE_RINGBUF);
++            __uint(max_entries, 1 << 16);
++    } audit SEC(".maps");
++
++    struct decision { __u32 prog_type, verdict, ktype; __s32 serial, ret; };
++
++    SEC("lsm/bpf_prog_load")
++    int BPF_PROG(admit, struct bpf_prog *prog, union bpf_attr *attr,
++                 struct bpf_token *token, bool kernel)
++    {
++            __u32 verdict = prog->aux->sig.verdict;
++            __u32 ktype   = prog->aux->sig.keyring_type;
++            __s32 serial  = prog->aux->sig.keyring_serial;
++            struct decision *d;
++            int ret = 0;
++
++            if (kernel)
++                    return 0;                       /* trust in-kernel loads */
++
++            if (verdict != BPF_SIG_VERIFIED)
++                    ret = -EPERM;                   /* must be validly signed */
++            else if (ktype == BPF_SIG_KEYRING_USER &&
++                     !bpf_map_lookup_elem(&trusted_user_keys, &serial))
++                    ret = -EPERM;                   /* key/keyring not allowlisted */
++
++            d = bpf_ringbuf_reserve(&audit, sizeof(*d), 0);
++            if (d) {
++                    d->prog_type = attr->prog_type;
++                    d->verdict = verdict;
++                    d->ktype = ktype;
++                    d->serial = serial;
++                    d->ret = ret;
++                    bpf_ringbuf_submit(d, 0);       /* record allow *and* deny */
++            }
++            return ret;
++    }
++
++Observing a verified load: ``security_bpf_prog()``
++--------------------------------------------------
++
++There is deliberately no separate "metadata attested" hook. The coverage check
++above is enforced by the kernel unconditionally, so a signed loader that fails
++to cover its metadata never loads and an LSM never has to re-establish that
++fact. To *act on* a program that has successfully and fully loaded, use the
++existing ``security_bpf_prog()`` hook (``lsm/bpf_prog``), which fires from
++``bpf_prog_new_fd()`` - after the verifier, after the coverage check, and after
++``bpf_prog_alloc_id()``. Relative to the admission hook this point is strictly
++later and stronger:
++
++- the program has an id (``prog->aux->id``), so it can be recorded or correlated
++  with later events;
++- ``verdict == BPF_SIG_VERIFIED`` *here* means **fully** verified - a program
++  that used a map the signature does not cover was already rejected, so it cannot
++  reach this point;
++- it observes only programs that actually loaded; a failed load never mints an
++  fd, so it never reaches this hook.
++
++It takes only the ``prog`` and a non-zero return still aborts (the fd is not
++handed out), so it can veto as well as observe. One wrinkle: it also fires on
++other paths that mint a new program fd - notably ``bpf_prog_get_fd_by_id()`` -
++not just on a fresh load. Because the program already has its id here, an LSM
++can tell the two apart with a small hash map: the *first* time an id is seen is
++the load; a later sighting of the same id is just another fd to a program that
++already exists.
++
++To bound the map and let a reused id read as a fresh load, this can be paired
++with ``security_bpf_prog_free()`` (``lsm/bpf_prog_free``), which deletes the
++entry on teardown - keyed by the same ``prog`` pointer, since
++``bpf_prog_free_id()`` has already cleared ``prog->aux->id`` to ``0`` by the time
++that hook runs. (Illustrative - privileged LSM, error checking elided.)
++
++.. code-block:: c
++
++    struct rec { __u32 id, ktype; __s32 serial; };
++
++    struct {
++            __uint(type, BPF_MAP_TYPE_HASH);
++            __type(key, __u64);             /* struct bpf_prog * -- stable id */
++            __type(value, struct rec);
++            __uint(max_entries, 4096);
++    } live SEC(".maps");
++
++    SEC("lsm/bpf_prog")            /* fires after load and on every later fd */
++    int BPF_PROG(observe, struct bpf_prog *prog)
++    {
++            __u64 key = (__u64)(unsigned long)prog;
++            struct rec r;
++
++            if (prog->aux->sig.verdict != BPF_SIG_VERIFIED)
++                    return 0;
++            if (bpf_map_lookup_elem(&live, &key))
++                    return 0;               /* seen before: a later fd, not a load */
++
++            /* First sighting == this program just loaded; id is valid here. */
++            r.id     = prog->aux->id;
++            r.ktype  = prog->aux->sig.keyring_type;
++            r.serial = prog->aux->sig.keyring_serial;
++            bpf_map_update_elem(&live, &key, &r, BPF_NOEXIST);
++            /* ... newly-loaded verified-program action, e.g. record r.id ... */
++            return 0;
++    }
++
++Putting them together: to *require* verified BPF, deny at the admission hook
++unless the verdict is ``BPF_SIG_VERIFIED`` (and, if desired, restrict the
++keyring). The kernel then guarantees that any program which actually loads with
++that verdict covered all of its exclusive maps, rejecting any that did not - so
++a deny-by-default admission policy needs no second enforcement point. Use
++``security_bpf_prog()`` to record or finally gate the verified programs once
++they carry an id. The ``verdict``, ``keyring_type`` and ``keyring_serial`` fields
++let a policy distinguish, for example, "verified and signed by a builtin key"
++from "verified by a user key". A policy LSM such as IPE could consume the same
++hooks to enforce system policy without writing any BPF, though none implements
++this today.
++
++Keyrings
++========
++
++``keyring_id`` selects the trusted keyring the PKCS#7 signature is verified
++against. The well-known ids ``0`` (builtin), ``VERIFY_USE_SECONDARY_KEYRING``
++and ``VERIFY_USE_PLATFORM_KEYRING`` select the corresponding system keyrings;
++any other value is treated as the serial of a user/session key or keyring.
++The keyring is looked up first, before the signature bytes are examined, so a
++signature naming a non-existent keyring is rejected up front, and a failed
++verification aborts the load - so a program that loads successfully with a
++signature always has consistent keyring fields recorded.
++
++Two fields are recorded in ``prog->aux->sig`` for an LSM to inspect:
++
++``keyring_type`` (``enum bpf_sig_keyring``)
++    Classified purely from ``keyring_id`` whenever the program is signed:
++    ``BPF_SIG_KEYRING_BUILTIN``, ``_SECONDARY``, ``_PLATFORM`` for the system
++    keyrings, or ``_USER`` for a user/session keyring. It is
++    ``BPF_SIG_KEYRING_NONE`` for an unsigned program.
++
++``keyring_serial`` (``s32``)
++    Set **only** on a successful verification, to the serial of the
++    **user/session key or keyring** that ``keyring_id`` resolved to - the
++    object the signature was verified against, not the individual asymmetric
++    key inside it that matched the signer. Passing
++    ``KEY_SPEC_SESSION_KEYRING``, for example, records the session keyring's
++    serial. The system keyrings are trusted as a whole and expose no serial
++    here, so the serial is ``0`` for builtin, secondary and platform
++    signatures, and ``0`` for unsigned programs. In other words, a non-zero
++    ``keyring_serial`` is exactly "verified against the user key/keyring with
++    this serial".
++
++.. list-table::
++   :header-rows: 1
++
++   * - ``keyring_id``
++     - ``keyring_type``
++     - ``keyring_serial``
++   * - (no signature)
++     - ``BPF_SIG_KEYRING_NONE``
++     - ``0``
++   * - ``0``
++     - ``BPF_SIG_KEYRING_BUILTIN``
++     - ``0``
++   * - ``VERIFY_USE_SECONDARY_KEYRING``
++     - ``BPF_SIG_KEYRING_SECONDARY``
++     - ``0``
++   * - ``VERIFY_USE_PLATFORM_KEYRING``
++     - ``BPF_SIG_KEYRING_PLATFORM``
++     - ``0``
++   * - other (a user/session key serial)
++     - ``BPF_SIG_KEYRING_USER``
++     - serial of the resolved key/keyring
++
++Producing a signed object
++==========================
++
++``bpftool`` generates and signs a light skeleton in one step::
++
++    bpftool gen skeleton -L -S -k <private_key.pem> -i <certificate.x509> \
++            obj.bpf.o > obj.lskel.h
++
++``-L`` selects the light-skeleton (``gen_loader``) backend and ``-S`` enables
++signing; ``-k`` and ``-i`` supply the signing key and its X.509 certificate.
++``bpftool`` signs ``insns || metadata`` - the exact bytes the kernel
++reconstructs - and also computes ``excl_prog_hash`` as the digest of the loader
++instructions so the metadata map can be bound to the loader. The signature and
++hash are embedded in the generated header; the certificate is used only for
++signing and is not included. Loading the skeleton performs the
++create/populate/freeze/load sequence described above.
++
++At runtime the trusted public key must be present in the chosen keyring (for
++example added to the session keyring, or built into the kernel's builtin trusted
++keyring) for verification to succeed.
++
++UAPI reference
++==============
++
++``BPF_PROG_LOAD`` (``union bpf_attr``):
++
++``signature``, ``signature_size``
++    Pointer to and length of the PKCS#7 signature blob.
++
++``keyring_id``
++    Trusted keyring selector (see `Keyrings`_).
++
++``fd_array``, ``fd_array_cnt``
++    Array of map (and module BTF) file descriptors bound to the program.
++    ``fd_array_cnt`` must be set for the kernel to scan the array. When a
++    signature is present, a BTF entry is rejected outright, and every map must
++    be exclusive; its frozen contents are folded into the verified buffer, and
++    a non-exclusive entry is rejected.
++
++``BPF_MAP_CREATE`` (``union bpf_attr``):
++
++``excl_prog_hash``, ``excl_prog_hash_size``
++    SHA-256 digest of the program permitted to access this (exclusive) map. This
++    binds the metadata map to the loader; it is not a hash of the map *content*.
++    The map content is not hashed separately at all - it is covered, as bytes,
++    by the program signature.
++
++Notes and limitations
++======================
++
++- The instructions plus folded metadata are verified as one ``bpf_dynptr``,
++  which bounds the combined size (currently ~16 MiB); very large objects can
++  exceed it.
++- The metadata container is a single-element array map, accessed through
++  ``map_direct_value_addr``.
 -- 
 2.43.0
 
