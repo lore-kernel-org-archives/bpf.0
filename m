@@ -1,122 +1,161 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852673BB4A
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 02:57:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ABBE375AA8
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 02:57:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783479455; cv=none; b=ByunSSQBW9Zp2VocBuvYK4DVjS2zqcIIzSRyEuOBke6XdmgoNAg4xNl7hrgCZ9UFKbxIfmWU3RKx5lexs6XJvoyr6L5a1hNjUbngXfK3pyAouPNiQMbLz/NVI8Pn1zQ+0R/KNPWw28uaruWP6SL2nJeaZ1YdKvoBuwljBYZFPis=
+	t=1783479480; cv=none; b=Bd98BbKI0v8q1t29UQu1cuh1s39C8DmsvGG0cPt4yYAg+N3ZTDZIy2HTrYmZJxVcnTTNMeQmuKLaaX5O8RFsLtrp/qLhU9Kgj5MZ0GP0Kfp3B4LWRQiTpW0E3lem+TC0t2aS2/Lo+R0vrlU2RYOX2IMLD+bumlzf+IYoApVTcV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783479455; c=relaxed/simple;
-	bh=h562/F4Sii/Yn93c0IcVFU48VXfBRKVHbBCInoTfprg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E5ItrZsVDlC1Rv3lJOaGr8nOQ+Afh7IKsKRYVueMrfIIPEkdM+cydSOnCZCbH/CnLni+vFUwu914i4VYzXl1lHcP6ctrZHZIV6RO9TcyiK7T2zSnPVu1LKiYPvPqL4jIgBZdnb2tdcVORlQNEpnFcYqGha5uA81hVzvgnptC0HQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gw2nJ3fgvzKHLwm
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 10:57:08 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id CBFC14058F
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 10:57:28 +0800 (CST)
-Received: from [10.67.110.68] (unknown [10.67.110.68])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBnL6CXvE1qJg7KAQ--.41824S2;
-	Wed, 08 Jul 2026 10:57:28 +0800 (CST)
-Message-ID: <25326f37-b28a-45dc-bb84-7bfe5b078d75@huaweicloud.com>
-Date: Wed, 8 Jul 2026 10:57:27 +0800
+	s=arc-20240116; t=1783479480; c=relaxed/simple;
+	bh=3j56XRit/D5wuYL8ciIptQ9YfsZGFgj9aMucYagHQRI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DSVul2dslbuZOagSUkIM76FeffkXOMu8Hd3pDNZe5vjK+ZEf/kdAwyX+z3uXMWfqwXrnlJ89N2xWpb0vDl0VW60u3a2uB9NiUZfTIEBFV8L7VCC3nElhHlapCHBFAOZU0xkN23j17rAq2SWLzlY/EJaRaolBDQ0hkpBPghsVb1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U34DRz1Q; arc=none smtp.client-ip=209.85.219.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U34DRz1Q"
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8efec2c28f8so1565996d6.2
+        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 19:57:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783479477; x=1784084277; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=kWZHyi+T+vyeURiAwf3NckMe8YMnDEn+Lis3dCslKy4=;
+        b=U34DRz1QfXj7RcCG52IOUrymL1jAB3ILopNIj+nROKyIhEGMDX46eXxeLSUicoLIl+
+         aRdR8bB75PNgtoNdXjf5d3ehc328hr8BZKhc72T2wEuFsRwnTxWiy7uReqxJdVJzqjsp
+         JkVZm4Sj3jU57kX2rcfPZ1IYflWkwF2mRUpwTySAKmaIC4+KilJaf416Uc4gVN1ioHX4
+         G0Rb/D20ZWjTtEX5iJNmlac7LswQP7PRMhu2BboK7Jk7scHXmM50Zrxubx3hHJ1MZrQd
+         nrC6qiAPSuO2NQX0ALIQ692UX55WMOaMYYR0arifSEsvYsD84HI5aYJ8sfGSlE4GmzRj
+         Otig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783479477; x=1784084277;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=kWZHyi+T+vyeURiAwf3NckMe8YMnDEn+Lis3dCslKy4=;
+        b=b0tqJJkB3XxjhmhgznLWPQjcG2GWxX+VlZBmGGjNLJ4FIG1eCIwm0XyAb/KBWL2T9U
+         Xv6Xt26Z8ADPkA3Iv63w+1vogVtnEH9qVlxZTHQTMG1lKmEmZ5cIXtKGEh4QESthLEK3
+         EtnHX+uD1BGsj/hdNkZ64GHeSPMo7g/CSE1d4YTpHEBSYvN9UgsIZp//G9Wl8cgbH4b3
+         5x8aQT8vvIiXphnM7XhWR6VmsyAJjbITAT1N0JFTlMbY6X9d8tWZzgArtzS9AYXcw69J
+         ffz9jzfjarZqcXjVjX7da337ziyOEoBex45QTTrq86eczMGiJmu88EMktn9duUnZdDSf
+         XYnw==
+X-Gm-Message-State: AOJu0YyTDZc0sNSa32mIOeYS304UG4Cn6bRh3VQQRLuJZgbgzDkKRGoF
+	a4d04mu2K0FNEYOMrmlwb4pY73LQKvV0oVC9Nwih4Nbs0r4LVkpbtkKCBgnbIvvi77U=
+X-Gm-Gg: AfdE7cm1VnrpIuQrZ/H2lPj0LYHmqAuYGh0eeTj/gmzpo1yRdK6xBEEaXUibIjGy5T7
+	NOF0s8fQJz22ZNMzTqB3HcZeJsL/uGXPfdFzWlypKBy3U8USGZIoABd5wk9ikxo0wzsEkUmKU4j
+	z9WgxCuLDpqv9KzVxceY2HR5WZZdmZY1fAnWvnDmp3lK1YSni+fxnYHBYA5/Qt/aq+rHcYMuL3q
+	3ZcBjzxY+Tm/e4Tu4M4l8JlTxvaYZg6P3k2ctGXeSibfP5K3przcz/L8jublSHSLXsC6wjLjEyr
+	bbvQcVEGOGSSjqxZfZ9jJFi6rPg9JsSUwjy1mBrVNUR2glTrhRMaYABKZVEjplgit+ixQ3DVk/l
+	jyJwnZBjWDGv0KGfxIUh8gFFC/B4PzoauvvXzUCYfRCsc8rFc9VJPv0DlFJN/fUyzWOTCgxqG3a
+	/I6Owxd8i0GDNdhIwt+9Z7oQMhp6ljhX1lxVOnvAs5ok01veyFNxAzTkwQD7LNJ+dbMSMaU1HQu
+	VOBrSjcVPANQrA=
+X-Received: by 2002:a0c:f405:0:b0:8fd:6de3:dd8b with SMTP id 6a1803df08f44-8fec3bf69e6mr4016686d6.65.1783479477529;
+        Tue, 07 Jul 2026 19:57:57 -0700 (PDT)
+Received: from battery.lan (pool-138-88-31-60.washdc.fios.verizon.net. [138.88.31.60])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8f471de83f8sm175762936d6.33.2026.07.07.19.57.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2026 19:57:57 -0700 (PDT)
+From: David Windsor <dwindsor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Shuah Khan <shuah@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	David Windsor <dwindsor@gmail.com>
+Subject: [PATCH bpf 1/2] bpf, x86: Fix FineIBT #CP in BPF dispatcher's indirect-jump fallback
+Date: Tue,  7 Jul 2026 22:57:55 -0400
+Message-ID: <c5a6bff16c0885d3ec756a1cdfb623636d0bdb4a.1783479101.git.dwindsor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 2/6] riscv, bpf: Using kvzalloc_objs to
- allocate cache buffer
-Content-Language: en-US
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260707142219.2871758-1-pulehui@huaweicloud.com>
- <20260707142219.2871758-3-pulehui@huaweicloud.com>
- <20260707142908.466981F000E9@smtp.kernel.org>
-From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <20260707142908.466981F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:_Ch0CgBnL6CXvE1qJg7KAQ--.41824S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFW5Gw43Jr1kWFWfGrWkXrb_yoW8tFy7pF
-	Z8Ka43CrZ0gw1kKFsrJw18ur18tw4kW3W3KFyj9ryfXFsIgrykGFs0k3yrWFZ8CFW8Xa48
-	WrWYvrnxu34kJ3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7
-	CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
-	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
-	IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
-	bVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
-	AF67kF1VAFwI0_Jrv_JF1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
-	42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMI
-	IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
-	KfnxnUUI43ZEXa7IU1CPfJUUUUU==
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+Content-Transfer-Encoding: 8bit
 
+commit 4f9087f16651 ("x86/cfi,bpf: Fix BPF JIT call") updated
+emit_cfi() to emit FineIBT preambles for JIT-compiled BPF programs, but
+did not update emit_bpf_dispatcher(). When prog->bpf_func is not in the
+dispatcher table (e.g. an XDP_REDIRECT target program in a CPUMAP or
+DEVMAP, or BPF_PROG_TEST_RUN of an unattached prog), the dispatcher
+still jumps directly to prog->bpf_func. Without a FineIBT caller
+sequence, under FineIBT this raises #CP:
 
-On 2026/7/7 22:29, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> 
-> Pre-existing issues:
-> - [High] Missing `kvfree(jit_data->ctx.offset)` in `bpf_jit_free` causes a memory leak of the JIT context offsets when JIT compilation aborts during subprogram processing.
-> --
-> 
-> --- Patch [2]: [PATCH bpf-next v5 2/6] riscv, bpf: Using kvzalloc_objs to allocate cache buffer ---
-> commit a49923246dc7e8b492561a3a183fc88dc6914fa1
-> Author: Pu Lehui <pulehui@huawei.com>
-> 
-> riscv, bpf: Using kvzalloc_objs to allocate cache buffer
-> 
-> It is unnecessary to allocate continuous physical memory for cache
-> buffer, and when ebpf program is too large, it may cause memory
-> allocation failure.
-> 
->> diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
->> index ce3bd3762e08c..367ae923ea40c 100644
->> --- a/arch/riscv/net/bpf_jit_core.c
->> +++ b/arch/riscv/net/bpf_jit_core.c
->> @@ -72,7 +72,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
->>   	ctx->arena_vm_start = bpf_arena_get_kern_vm_start(prog->aux->arena);
->>   	ctx->user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
->>   	ctx->prog = prog;
->> -	ctx->offset = kzalloc_objs(int, prog->len);
->> +	ctx->offset = kvzalloc_objs(int, prog->len);
-> 
-> [Severity: High]
-> This is a pre-existing issue, but does this leak the ctx->offset array if JIT
-> compilation aborts during subprogram processing?
-> 
-> For subprograms during the first pass (!prog->is_func || extra_pass is false),
-> bpf_int_jit_compile() returns early, keeping ctx->offset alive for the
-> subsequent extra pass.
-> 
-> If a later subprogram fails JIT compilation, the BPF core aborts and calls
-> bpf_jit_free() to clean up the first subprogram:
-> 
-> arch/riscv/net/bpf_jit_core.c:bpf_jit_free() {
-> 	...
-> 		if (jit_data) {
-> 			bpf_jit_binary_pack_finalize(jit_data->ro_header, jit_data->header);
-> 			kfree(jit_data);
-> 		}
-> 	...
-> }
-> 
-> It appears jit_data->ctx.offset is not freed during this cleanup, which could
-> lead to a memory leak.
-> 
->>   	if (!ctx->offset)
->>   		goto out_offset;
-> 
+  Missing ENDBR: __cfi_bpf_prog_..._xdp_dispatcher_unattached+0x10/0x10
+  ------------[ cut here ]------------
+  kernel BUG at arch/x86/kernel/cet.c:133!
+  Oops: invalid opcode: 0000 [#1] SMP NOPTI
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.17.0-0-gb52ca86e094d-prebuilt.qemu.org 04/01/2014
+  RIP: 0010:do_kernel_cp_fault+0x126/0x130
+  Call Trace:
+   <TASK>
+   exc_control_protection+0x46/0x80
+   asm_exc_control_protection+0x2b/0x30
+  RIP: 0010:__cfi_bpf_prog_..._xdp_dispatcher_unattached+0x10/0x10
+   bpf_prog_test_run+0xda/0x1b0
+   __sys_bpf+0x70b/0x990
+   __x64_sys_bpf+0x2d/0x50
+   x64_sys_call+0x1079/0x2d40
+   do_syscall_64+0x12a/0x3c0
+   entry_SYSCALL_64_after_hwframe+0x76/0x7e
+   </TASK>
 
-right, will add this new fix in next
+To fix this, we precede the indirect jump in emit_bpf_dispatcher() with
+the FineIBT caller sequence: load cfi_bpf_hash into %eax and subtract
+cfi_get_offset() from the target so it enters the preamble's real ENDBR.
+Only needed for CFI_FINEIBT.
+
+Fixes: 4f9087f16651 ("x86/cfi,bpf: Fix BPF JIT call")
+Cc: stable@vger.kernel.org
+Signed-off-by: David Windsor <dwindsor@gmail.com>
+---
+ arch/x86/net/bpf_jit_comp.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index de7515ea1bea..1c8249d8ca3b 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -3740,6 +3740,15 @@ static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs, u8 *image,
+ 		if (err)
+ 			return err;
+ 
++		/* If running under FineIBT, enter the preamble so the following
++		 * indirect jump lands on a real ENDBR instead of the poison.
++		 */
++		if (cfi_mode == CFI_FINEIBT) {
++			EMIT1_off32(0xb8, cfi_bpf_hash);	/* mov $cfi_bpf_hash, %eax */
++			EMIT1(add_1mod(0x48, BPF_REG_3));	/* sub rdx, cfi_get_offset() */
++			EMIT2_off32(0x81, add_1reg(0xE8, BPF_REG_3), cfi_get_offset());
++		}
++
+ 		emit_indirect_jump(&prog, BPF_REG_3 /* R3 -> rdx */, image + (prog - buf));
+ 
+ 		*pprog = prog;
+-- 
+2.53.0
 
