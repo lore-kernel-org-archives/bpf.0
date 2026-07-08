@@ -1,64 +1,62 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C4C36AB56
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 00:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5129036CDF2
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 00:44:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783471488; cv=none; b=Qp+XHBsCCzzX3Bd0I3ItptVa1kgx2umQH4eDswCO3C9hVz1J3gB8aPlGa3od5mNe+MA0D97gyZGTMiE+ozhdZ166EvEWMxIuKabyQX+lZWGKLhCJ/nG6UqwnppETzMy/UcLkI0HNEtQfv0Oqc5zKJFPpnxxv4r2UaikyyNAXPCM=
+	t=1783471489; cv=none; b=Y2TT3EQzXKt8D+oUw6gR23XOETDHdyBv4W9/GuQkC7/Kot7vItIPjL/FH5u3HQSG8q26FuK2gJnBIlZH8ilDXl05JjcBQIjDDHjzZf/iGfnSTW+xbG6xqBNytt9qD6e0cO+t/FRAXZGBo0+NyqMNgArca3rkJqGGuEP3wuSi0Z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783471488; c=relaxed/simple;
-	bh=3tFYRggyFN6ghRSZ466IMISqMD0F2R8pZTt/MPw9OPg=;
+	s=arc-20240116; t=1783471489; c=relaxed/simple;
+	bh=Vivb5/Aj5UCagN5b8iBhZ5IQ9uRNCKj4gbYqbicq7IY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VKzwDIemS9uK/fU9Ft7FuHLrIge9xq8uNfsv0dRtoPc6bOFEFI+/erUiYydqMedxr1yEGtT3AVtY+lEABHRp+W3OXT8HhAkDAHFe9sxskVw0InlWo+0bn2kfGAQLQRZnJa1ibuAX94+mMD6NhhgVKuhm0Sql7r2/fFIO1jDSUeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nQwQPGBg; arc=none smtp.client-ip=209.85.214.169
+	 MIME-Version:Content-Type; b=OS5e+NECmb/gEvKhn2G5ul5dpyF1i9lOS45XmQLutHUKlvn+1EXnc9Da87jGvoosVJ+A+IEkb2fe2vuZvIiqrMKs5cu4Fm0xnSPdAV3KiRaTBB8aRMCbUCHrVuzQOwwiwg+R7+wzNEJDL3HwgDUleqAz9kp5vHvmEWcGL0NOT1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V9k1+vTm; arc=none smtp.client-ip=209.85.215.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nQwQPGBg"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2cad4170e8eso1857055ad.3
-        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 17:44:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V9k1+vTm"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c8b49639fbaso46009a12.0
+        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 17:44:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783471486; x=1784076286; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=9NdTh0XLsS9X7riUGdVU7aOZNNf6S5my4vAfjDCpg58=;
-        b=nQwQPGBgexApSWCLbrhWj6oKKLbcpZzEkXpxZhDbHTCDMAf4pRYa710v0wvUtH5D+0
-         2G9aFYSr/5c/tZa7T/V5sfRMOkcnBxOhN1d9MWYJS3O8zlj+l1m/Z6Z9g8G1DG5Hl/1S
-         oExgaFfpr7tNZXFkv/vRgvE+t60vShUY3P1h0zWENhQPt+Mjr7Z7+h0Vd/MvcQKhZWWn
-         WcRLemFMGfAv+oJewr0ba/eSNca7UNVICjlDVNVvde/FHb1f+W46alklX5bYodpDdTPc
-         dqZrZH0JYqgRfy6ZYm7nNM2Qoq0xUwiQQj4NOuOaHAKDDFrb96QtPOUCcoNaZU1xBBC7
-         KD/A==
+        d=gmail.com; s=20251104; t=1783471488; x=1784076288; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7uxoyVq5r2C9QxbYlGP0MyNTadEqaiRl4vJm9Qjg46k=;
+        b=V9k1+vTm187taACiAnlXw+kQkRnfmVPgpvzR3sY0WZ9uxIyKIZ3pqw/SzlXaOBPkGu
+         0uQuMTzGWNazGEhT6cYx3s5wcdsHONemb8sjUBRFku1h/dDKXg5RDwMWGwxHJIJ98WR3
+         /cO5140MRB8FsZuwFXRY+UEMbiZHEP7SxHAuAcrlJoAFnOSV92KxRuCKyjPxBcpQGesv
+         xbxQOaHrdoak6Tk62y3b60yOKZw/6N3SeAreDOcweEXKiWVwjVbRvVHUSLNy9M/3+i3S
+         LbrBxPOm+FCJm34m+DA4g5nXwANqv73NUZk9IU1a+2ofKFCIsDEW8GvndjSw0FmWSM2t
+         hdRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783471486; x=1784076286;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9NdTh0XLsS9X7riUGdVU7aOZNNf6S5my4vAfjDCpg58=;
-        b=fPuNqCYkBASnzN+tbv09dRHDlx1Cotukl7aLoXQRafrd7K/zh+4ccCVEmlG8hA4PrJ
-         zv+/3YHBmAZzrymZNQYTCtQiNxLmWAiLtTCt6z6kqXfxRfKIdPO3hHLmhBp3IMyF/vCK
-         W/AJn6adKE0tSP9dWVaABcYGlQ/S2j5pvfdW9su9JKKnIAA47q6swATEu9FL7IfK6IYq
-         nAnmQQaLRorNuNGut02sZRAxvly/ApaLrDEn1QiTywWRGGbouDnVksxJM/U8uSKD6f9g
-         uG2nLsjulWbAq/gaa6sPsJJ3feRwhOqxoWKYDnOT7vHVGcGg0XwcIR1WSb8yuhknSJ/T
-         XFrg==
-X-Gm-Message-State: AOJu0YzIFcA8tJ9XaZh4MKdfh/Kf9YyDsoA7Z1/DTIpTsZLsMLpbwH9D
-	jFblxDY5043+7fL06m0MCuWSlQ4wwUHiYf5OhG2N6HwjR0iNpckCQ/sm5SEs8GZU
-X-Gm-Gg: AfdE7cmUKoiTEX8Ldsm9WpUJgG9Y4alMXpW0Io8UMGkrJyD0D3EoIKCCAUkqEoZCj2C
-	1VrQhHKjmufHxElYx19uE9mHzaBUl+p/KACQY/sIj1wfkTz+vCuCNyvGMqmUZST9Bz7v8znY/JU
-	tb/gdLSqVxbDNZwIhVHL84dJz+aq4umATi1z5JMOoyjY+DSh8/0KXzNYcTzjkb6mhdCfzxS2jKj
-	QFMwHfwzqTJGYGZrn1rQWieYIfno8nM6QsjeVY2V/vRo1/YKLhlM/pt2iczKq0u/7xjA3e6w/wK
-	T8dU2zznVnnUgQAdFJZUjXjm+g4Z2WKTL8KXW38BopxKmvbMAT611EuEIyP76EBFkk3bRqfJLck
-	zkUZ7TBpXMVJh+c4E8chRIYh9ah29N5d4+JEXo4CXtlPRANh2+OkQNncpC3qxB4W7InCyPwT0VQ
-	Uq1kX+KNLUsUrlPN2tt/57QvEnsJjsy26hDoaCH6dQZYXY0zX0V0n8k+TIVNuTbHQ8/LVxU7D5m
-	h42rL4=
-X-Received: by 2002:a17:90b:1c0f:b0:381:18c3:1b99 with SMTP id 98e67ed59e1d1-38941205917mr243889a91.23.1783471486225;
-        Tue, 07 Jul 2026 17:44:46 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783471488; x=1784076288;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7uxoyVq5r2C9QxbYlGP0MyNTadEqaiRl4vJm9Qjg46k=;
+        b=gEEUVx7sMQ2XvcJYJjuvzswX+dW2E9fuFT6lv8/8tYNMiyttlGr54Y6m01xcvUddAf
+         i3IyVVBNn1Od9FMsyo0H1+DkM4MtrIdcbq1FghE4XqtV/5ZlwXzPMXQaO5vd65ylCovO
+         eahGZ7wRxV/IwWd9ywB6cD++Hbhu0mSIKQtC3nDsv97Icrqzmq3EWdo0OLXvx7QLyicA
+         6rKP2ObB73tFPs5RRJmlN93CZ7MQVpKHfRWx9VusNhf5Ie+nJSYdRNOxGHcXlQqthtir
+         AK7sO/QK1giQnxKFsoyC+I/Ri0Xx2ECFtg/UqW1+WMmXbHYJhW4heUoT0cBlq/OfiYMe
+         EEmg==
+X-Gm-Message-State: AOJu0Yx4OTzjaO1J4q3/uuIffgSG6ntMUYeuZFUSrFpSL73SXK2rUZH9
+	SuuIxMT112PNfYdmDOoQDcEnghjxRT9Ixw5WAyymcWqEJOuVzuMt187V1g0ia8dJ
+X-Gm-Gg: AfdE7clNcMK93yG1B4XTnEaOmODKw8RqzSxzd0w1l/l3v2Q/uu3j4YQAWn3A1Gc6RjZ
+	gcd8OHMt2BIcE7N63dJxJhNipxatZpiEO+UFyPNHf5bCY3ta4GyN23y+v5m1Gb2273BpZiRld76
+	ctn3+0Ajy53TqBeJ8q3NCIUTV0wncgO2QlkqRgItnolVqq1UtcgRZIVo/0i7C5og61psq5Yms1k
+	vPkVjE76iQ/GlrCPalISkfaFnGmj3iM//AYvgKdX3URKI/Evr5/onBzo+2DuBRhGbhtH94Aq56u
+	V+Ki2Jxtwx56fEJmkRrbipycGKh2PuLQjy6cM3+p5Oiy9VGxaZ91Jcwtts7xvq/EUca1tt50kd2
+	XliRDVUCshlqX8Z4fHyBv+F5cQLvIytq9FQaqoePottsDVIXPODCO/Jfb4UcvTVl2IKy8vz/SaI
+	qktEvcIRFuXiUYGoeHfKuwV0XE7axwx8Dj/+bQFTcuZd2X6+zfgie2uOkOLymgMgL7YgPs
+X-Received: by 2002:a05:6a20:12cf:b0:3bf:b3d5:ce1b with SMTP id adf61e73a8af0-3c0bcbe76c4mr29845637.12.1783471487634;
+        Tue, 07 Jul 2026 17:44:47 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::2:84e7])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3117483e0a2sm12371054eec.12.2026.07.07.17.44.44
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3117483e0a2sm12371054eec.12.2026.07.07.17.44.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 17:44:45 -0700 (PDT)
+        Tue, 07 Jul 2026 17:44:47 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -68,11 +66,10 @@ Cc: daniel@iogearbox.net,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
-	memxor@gmail.com,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Subject: [PATCH bpf-next 1/2] bpf: remove artificial limitations on pointer types eligable for spilling
-Date: Tue,  7 Jul 2026 17:44:28 -0700
-Message-ID: <20260707-missing-spillable-types-v1-1-44a92121dc41@gmail.com>
+	memxor@gmail.com
+Subject: [PATCH bpf-next 2/2] selftests/bpf: test cases for missing spill types
+Date: Tue,  7 Jul 2026 17:44:29 -0700
+Message-ID: <20260707-missing-spillable-types-v1-2-44a92121dc41@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260707-missing-spillable-types-v1-0-44a92121dc41@gmail.com>
 References: <20260707-missing-spillable-types-v1-0-44a92121dc41@gmail.com>
@@ -85,105 +82,105 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-The verifier loses precision when simulating stack spills for the
-following register types:
-- PTR_TO_TP_BUFFER
+A few selftests checking that the verifier represents spills for the
+following pointer types w/o losing precision:
 - PTR_TO_INSN
+- PTR_TO_TP_BUFFER
 - CONST_PTR_TO_DYNPTR
 
-These types are not allow-listed in the is_spillable_regtype(),
-because of that check_stack_write_fixed_off() takes the branch
-that marks the slots STACK_MISC.
-
-There are no technical reasons for this limititation.
-This commit replaces an explicit list of pointer types in
-is_spillable_regtype() with explicit list of non-pointer types.
-The function is renamed to is_pointer_regtype() for clarity.
-
-Reported-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/verifier.c | 39 ++++++++-------------------------------
- 1 file changed, 8 insertions(+), 31 deletions(-)
+ tools/testing/selftests/bpf/progs/verifier_gotox.c | 25 +++++++++++++
+ .../selftests/bpf/progs/verifier_spill_fill.c      | 42 ++++++++++++++++++++++
+ 2 files changed, 67 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3193b473762b..51f7965d42e3 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3304,34 +3304,6 @@ static int mark_chain_precision_batch(struct bpf_verifier_env *env,
- 	return bpf_mark_chain_precision(env, starting_state, -1, NULL);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_gotox.c b/tools/testing/selftests/bpf/progs/verifier_gotox.c
+index f88aa4cdb279..5b18c9a27717 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_gotox.c
++++ b/tools/testing/selftests/bpf/progs/verifier_gotox.c
+@@ -384,6 +384,31 @@ jt0_%=:								\
+ 	: __clobber_all);
  }
  
--static bool is_spillable_regtype(enum bpf_reg_type type)
--{
--	switch (base_type(type)) {
--	case PTR_TO_MAP_VALUE:
--	case PTR_TO_STACK:
--	case PTR_TO_CTX:
--	case PTR_TO_PACKET:
--	case PTR_TO_PACKET_META:
--	case PTR_TO_PACKET_END:
--	case PTR_TO_FLOW_KEYS:
--	case CONST_PTR_TO_MAP:
--	case PTR_TO_SOCKET:
--	case PTR_TO_SOCK_COMMON:
--	case PTR_TO_TCP_SOCK:
--	case PTR_TO_XDP_SOCK:
--	case PTR_TO_BTF_ID:
--	case PTR_TO_BUF:
--	case PTR_TO_MEM:
--	case PTR_TO_FUNC:
--	case PTR_TO_MAP_KEY:
--	case PTR_TO_ARENA:
--		return true;
--	default:
--		return false;
--	}
--}
--
--
- /* check if register is a constant scalar value */
- static bool is_reg_const(struct bpf_reg_state *reg, bool subreg32)
- {
-@@ -3345,13 +3317,18 @@ static u64 reg_const_value(struct bpf_reg_state *reg, bool subreg32)
- 	return subreg32 ? tnum_subreg(reg->var_off).value : reg->var_off.value;
- }
- 
-+static bool is_pointer_regtype(enum bpf_reg_type type)
++/* check valid spill/fill, ptr to insn */
++SEC("socket")
++__success
++__naked void spill_fill_ptr_to_insn(void)
 +{
-+	return type != SCALAR_VALUE && type != NOT_INIT;
++	asm volatile (
++	".pushsection .jumptables,\"\",@progbits;"
++	"jt0_%=:"
++	".quad ret0_%= - socket;"
++	".size jt0_%=, 8;"
++	".global jt0_%=;"
++	".popsection;"
++	"r0 = jt0_%= ll;"
++	"r0 = *(u64 *)(r0 + 0);"
++	"*(u64 *)(r10 - 8) = r0;"
++	"r0 = *(u64 *)(r10 - 8);"
++	".8byte %[gotox_r0];"
++	"ret0_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_insn(gotox_r0, BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X, BPF_REG_0, 0, 0, 0))
++	: __clobber_all);
 +}
 +
- static bool __is_pointer_value(bool allow_ptr_leaks,
- 			       const struct bpf_reg_state *reg)
- {
- 	if (allow_ptr_leaks)
- 		return false;
+ #endif /* __TARGET_ARCH_x86 || __TARGET_ARCH_arm64 || __TARGET_ARCH_powerpc*/
  
--	return reg->type != SCALAR_VALUE;
-+	return is_pointer_regtype(reg->type);
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+index 72c691333703..8b166c42c4e0 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
++++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+@@ -1403,4 +1403,46 @@ __naked void partial_fill_from_cleaned_pointer_spill(void)
+ 		      ::: __clobber_all);
  }
  
- static void clear_scalar_id(struct bpf_reg_state *reg)
-@@ -3476,7 +3453,7 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
- 	if (value_regno >= 0)
- 		reg = &cur->regs[value_regno];
- 	if (!env->bypass_spec_v4) {
--		bool sanitize = reg && is_spillable_regtype(reg->type);
-+		bool sanitize = reg && is_pointer_regtype(reg->type);
- 
- 		for (i = 0; i < size; i++) {
- 			u8 type = state->stack[spi].slot_type[(slot - i) %
-@@ -3517,7 +3494,7 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
- 		__mark_reg_known(tmp_reg, insn->imm);
- 		tmp_reg->type = SCALAR_VALUE;
- 		save_register_state(env, state, spi, tmp_reg, size);
--	} else if (reg && is_spillable_regtype(reg->type)) {
-+	} else if (reg && is_pointer_regtype(reg->type)) {
- 		/* register containing pointer is being spilled into stack */
- 		if (size != BPF_REG_SIZE) {
- 			verbose_linfo(env, insn_idx, "; ");
++/* check valid spill/fill, ptr to tp buffer */
++SEC("raw_tracepoint.w")
++__success
++__naked void spill_fill_ptr_to_tp_buffer(void)
++{
++	asm volatile (
++	"r6 = *(u64*)(r1 + 0);"	/* r6 is the writable tracepoint buffer */
++	"*(u64*)(r10 - 8) = r6;"
++	"r7 = *(u64*)(r10 - 8);"
++	"r0 = 0;"
++	"*(u64*)(r7 + 0) = r0;"	/* should be able to write through the buffer */
++	"r0 = 0;"
++	"exit;"
++	::: __clobber_all);
++}
++
++__noinline int spill_fill_dynptr_subprog(struct bpf_dynptr *dptr)
++{
++	long *p;
++
++	asm volatile ("*(u64 *)(r10 - 8) = %[dptr];" /* spill the CONST_PTR_TO_DYNPTR argument */
++		      "%[dptr] = *(u64 *)(r10 - 8);"
++		      : [dptr] "+r"(dptr) :: "memory");
++	p = bpf_dynptr_data(dptr, 0, sizeof(*p));
++	if (!p)
++		return 0;
++	return 0;
++}
++
++static char dptr_mem_buf[16];
++
++/* check valid spill/fill, const ptr to dynptr */
++SEC("socket")
++__success
++int spill_fill_const_ptr_to_dynptr(void)
++{
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_mem(dptr_mem_buf, sizeof(dptr_mem_buf), 0, &ptr);
++	return spill_fill_dynptr_subprog(&ptr);
++}
++
+ char _license[] SEC("license") = "GPL";
 
 -- 
 2.55.0
