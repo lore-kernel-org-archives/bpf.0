@@ -1,82 +1,114 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED7923E334
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 21:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720272D877B
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 21:17:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783545350; cv=none; b=Rn2V27mZIQDL8u3uU3GZDHojHXPBeAts4au3wcDcKGgqrQuStO5opskEUVwQV9erEHci4U5eUj/UO7GuTQ+7W8AYDs5PvJLVwsrmdV/xUpBT+W9PAdXHay1uNacb34/YVeVaYRPAs13NoP9JCFKvvcFuh9f6yRlTa+v6fTFjKGo=
+	t=1783545451; cv=none; b=Z54uSI3VU9e+DpFVIyJyny+XfnZH4hR7NzpBUFZIVKdo8CaswwV5jk8hN6HXtl4v56zDHfGi5loDueRVT/kpKecnGuN2+2OWzsbl2AHwCT5RK7Wy7F3u1BzM+FWtcy5TjWqDdt8A7jmTDyGamq4+oCeiz4H+iVK2fr2hrAjo1t4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783545350; c=relaxed/simple;
-	bh=2dN93JOTSM1ahE5zktw07DaDNe+T0Bv4o4hH+Ay09+Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YI429onZhjsLXdDooe7u9+EKP7vPi3cvrOCZHI0qv1+1JyVvXiMFI/uGqAUWUru1/zaS6H4GnoNVxlH3BHxy040/NAOQlLwozvg04PqpQDIsjDWOTewJLXvfG/T0X8LudpLDI4M33MBoFJ2ixAB5Jsi7fL5qRcPrRF8tkaW6me4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=XlGLrH47; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1783545451; c=relaxed/simple;
+	bh=3b7ZnWGI1aQFNqaq0eOQRMf+63NSMIaGaicIlevM4Ug=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=S48DJl2n7KzpL6wywVuyDMt2cP7mFbVo8AggTToOIxOQhVROXNDVw/gxa4+eivWqu0JJ3UAjbG9OP5xYlZCTXTqnySsr3y0niUjisYa4PHpYmcZX2Myy9SeL7VqtfsxurkNjmFpt7+sfbLhS2NeLwmPkEYbr4T2bIJdaVCZ3utw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f0rOaOaS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="XlGLrH47"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=UxecRz2pAe9aDYMiff3x04oFsOKEYpOQSBk1AFA8S2s=; b=XlGLrH47RmUzNmO0/L0v+qvHmA
-	ZwtsytS9gZ2a5LDJ8FYli7VupBx05tM82K1ZL886gATK4kZCkxa+iEpLgAPy6ra7usyUh1Gh8ihnC
-	GOv1PjSG954CD2evnRGzNhRblFX/eT4MjTbEj/Kiwv3N1u+dEqHc+xWEx4pF3NjvA8qkidzS7VgjL
-	WMjkXRzm+dGgjeRIbPFe+kIUGqkINvH5Rz/08AwIUyTAFjyjdVhU9Ythvedo480KboYV8gwShUKuQ
-	9PC4wHTs5t0WOVoJV3nG/aw0kI5AWKVAMrAVBnlR8tKLkzGgwTYL4aVnfm5Chd8h5T4I/XaBdkcik
-	3r2I9twA==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1whZcK-000OUm-1U;
-	Wed, 08 Jul 2026 23:15:40 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: memxor@gmail.com
-Cc: ast@kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf-next 4/4] bpf: Account scratch buffer in bpf_prog_calc_tag
-Date: Wed,  8 Jul 2026 23:15:37 +0200
-Message-ID: <20260708211537.371874-5-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260708211537.371874-1-daniel@iogearbox.net>
-References: <20260708211537.371874-1-daniel@iogearbox.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f0rOaOaS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D82A01F000E9;
+	Wed,  8 Jul 2026 21:17:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783545450;
+	bh=j5w7LBLPvyd/w3nH1/hiV1ZICQGRtvHfgDeTaaOiOdk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=f0rOaOaS5UPOtDaKd5JG1+QCo/k5dSr754Vl796GuWsyNb3pbKaG8YguEzx1yYhSv
+	 4p1QCAXD3qKMTF4UMrOAOPPggcHckUF9a8ahHwhd/BeEYf9AoXXC6tPYrMmQSsxOUi
+	 EUNBgAz0EPGtS6pv2pchbIEFr9/wW2ro580GQ2SluD9agLQ2UDaRhwDmb+wMe1ArgY
+	 4i+D/bXx84AQlrhd3zud1H56mprhXqlpQZkfFTCjRgxU2WJjOAf0cfd7mC4zMixSAm
+	 aXX6N6N+WDuBAdZYvbtxGeduqyThDk9JEtIFncAKryNHZaygaR2V1ee9uFsFCOOYw6
+	 IMAt6tTDVVrpA==
+Content-Type: multipart/mixed; boundary="===============0700488358235346988=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28054/Wed Jul  8 08:24:53 2026)
+Message-Id: <24d590de409218c14cbfe4124dbb59737c500b995ddf57d379851fe75c48c437@mail.kernel.org>
+In-Reply-To: <20260708200949.2156169-1-yonghong.song@linux.dev>
+References: <20260708200949.2156169-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next 02/12] bpf: Add verifier support for 16-byte returns in R0:R2
+From: bot+bpf-ci@kernel.org
+To: yonghong.song@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed,  8 Jul 2026 21:17:29 +0000 (UTC)
 
-bpf_prog_calc_tag() copies the instructions into a plain vmalloc() scratch
-buffer to blind the map fds before hashing. The buffer scales with the
-program, up to ~8MB at the 1M instruction limit, and is allocated on every
-program load, but unlike the rest of the load-time scratch memory it is
-not charged to the loader's memcg. Use GFP_KERNEL_ACCOUNT to account it
-like the other allocations scoped to the verification/load.
+--===============0700488358235346988==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 3f34ce1a3107d..03ffb5f839fa0 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -424,6 +424,35 @@ static bool subprog_returns_void(struct bpf_verifier_env *env, int subprog)
+>  	return btf_type_is_void(type);
+>  }
+>
+> +static bool bpf_ret_reg_pair(struct bpf_verifier_env *env, int subprog)
+> +{
+> +	const struct btf_type *type, *func, *func_proto;
+> +	const struct btf *btf = env->prog->aux->btf;
+> +	u32 btf_id;
+> +
+> +	if (!btf || !env->prog->aux->func_info)
+> +		return false;
+> +
+> +	btf_id = env->prog->aux->func_info[subprog].type_id;
+> +
+> +	func = btf_type_by_id(btf, btf_id);
+> +	if (!func)
+> +		return false;
+> +
+> +	func_proto = btf_type_by_id(btf, func->type);
+> +	if (!func_proto)
+> +		return false;
+> +
+> +	type = btf_type_skip_modifiers(btf, func_proto->type, NULL);
+> +	if (!type)
+> +		return false;
+> +
+> +	if (btf_type_is_struct(type) || btf_type_is_scalar(type))
+> +		return type->size > 8 && type->size <= 16;
+> +
+> +	return false;
+> +}
+
+This isn't a bug, but could bpf_ret_reg_pair() and subprog_returns_void()
+share a helper for the func_info -> func -> func_proto -> return type walk?
+
+Both functions repeat the same ~8 line sequence:
+
+subprog_returns_void():
+	btf_id = env->prog->aux->func_info[subprog].type_id;
+	func = btf_type_by_id(btf, btf_id);
+	if (!func)
+		return false;
+	func_proto = btf_type_by_id(btf, func->type);
+	if (!func_proto)
+		return false;
+	type = btf_type_skip_modifiers(btf, func_proto->type, NULL);
+
+They only differ in the final predicate: subprog_returns_void() checks
+btf_type_is_void(type), while bpf_ret_reg_pair() checks the struct/scalar
+size.
+
+[ ... ]
+
+
 ---
- kernel/bpf/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 6e19a030da6f..f2b6e4c888af 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -305,7 +305,7 @@ int bpf_prog_calc_tag(struct bpf_prog *fp)
- 	bool was_ld_map;
- 	u32 i;
- 
--	dst = vmalloc(size);
-+	dst = __vmalloc(size, GFP_KERNEL_ACCOUNT);
- 	if (!dst)
- 		return -ENOMEM;
- 
--- 
-2.43.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28973410219
+--===============0700488358235346988==--
