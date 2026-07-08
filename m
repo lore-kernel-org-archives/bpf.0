@@ -1,132 +1,167 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5303E9C0E
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 06:53:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8161E3E9C1F
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 06:54:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783493593; cv=none; b=gwVyR2Na306bL+IpSxJn8Kmta71FiaiLg3JysFpBNEmyml2bxZ8s+HIfYiCyifvWEo1KkHLSJnDYCW/pxR4j4wA7mjd9PgOIhx/RA6qoHGGs+bqNWyVBOqg8Ntsf8VzsIeeKhpFQlbvYiG0tzmjDMbvBTm1AhCLxcE6eUEs5Q60=
+	t=1783493658; cv=none; b=GEN2CgJFsxFfRpvivFdDvwhG/2ayOz8vPlHMHBReBgY9NY1Z0foZSwzror5brYtzSDR4ipbnSaJu/KXmmFHrJiMLLWKUESGfA9mk9krcP1Rdr62cQwSom4jmBTy2TIJbi8zxuLc4EQ3c7gwaJ9jcHCBkTIZ5T5cZse9Xm8tf6zA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783493593; c=relaxed/simple;
-	bh=YTZC1tr0nF6mz4Z+4cqem9+KX4IQ0CP2cybl++qADNQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QsAxoYFgmmSAZQnMujrRj3uenk7L8j6O6b07sUmdzfZpbOE9kDF6GJ0267cfbCpST5Dws4NerSA0UfXgKV8GqjUVHWGjQdHXxuAY4TCAVA30NQjnjzgbXfwMbVYgBb85eq2gJ2b4kMwfenMm8eFLoRoybMdSpfciPMXTUR2x2vY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Np8YW2Hn; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783493658; c=relaxed/simple;
+	bh=WhMldWnpgxnGKWeCKUmYe1TZBKuW99FUny9jjhd3eu8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=O4pOfdYu15TxA4Ncp+lbrpjhSlCLdUWbSwmHye2K+oZoClI362cMQpxjn9qb5nToyL4KWqIcfW9owDZJQiUh0eSK73zS4GfeTeLVzdtRxuAUHJRvttaSldzgi5NFJU6b7qU49V23LnsLHc11FGYvEPYxcJvYUyXWN9VddBc+jrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LeLhJIcd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Np8YW2Hn"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2c6b67d5fa1so4117595ad.2
-        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 23:53:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783493582; x=1784098382; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=YTZC1tr0nF6mz4Z+4cqem9+KX4IQ0CP2cybl++qADNQ=;
-        b=Np8YW2HnkALw/xRrFfngFUj8otJKmcYuTIIN/db4lY5ISBdJricV67NiABm5y2FS+f
-         MPNQ+HoPRztd7y+Ga/tm3kJIrHR4wGJ4znD153WbviAguRHlgblZ00A5KCNF6gtR2ZSI
-         kgorU6o2TvE6HG+SYBXCvA8x4AxyqEt5hU6OimI3DBoYFJJrybgCWpScUIrT+l72fOgK
-         le0WYDAlvjXSWGszj4tfOc6rlc69HhIKYPoADVM3i5hfxZQX4/DrciTD4S+lUGy6g+ZS
-         J514ayb6O2x99c5Z6x7mQ0UzYvBm4zrdAfVckr4i+3+0XR6FHaBixcyULUQ5skgqJFRO
-         1tBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783493582; x=1784098382;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YTZC1tr0nF6mz4Z+4cqem9+KX4IQ0CP2cybl++qADNQ=;
-        b=IQaJ1hO7GbNQ8YZ2F/LQd4vcBLJRp5YAa2tKDQh5Yh+QCKk+A9eh4FfFvX5c8fhPmY
-         K3Wm8l2uB9HmfmEultWfE8IO9V+qX/v86GWHefQRZT3bnA1npbrzlE9POyVbmoZXTAfd
-         EDEwDwKV44ND6sgcBEGtEX1FqO6tbTCc5j8mcRlTzMGz0Zbbalbjq1CXnxYGkx2LJCym
-         rqpz/x9FyHuu5AEHqqXOuFP49sYHunynKxdIHiw1yEbEWuY3XH+KLdHLY3/v5xFBB/oE
-         5ynUTZ0k6VxgvhsRPjvGDTDlJunD6I5jI9e7TRV6eIVBAwmHV6TMikAGn4xvWb4ve1AC
-         Iovg==
-X-Forwarded-Encrypted: i=1; AHgh+Rrv7lbcDpJ8I3PylCxOiwm+HOcpeMYnBJvG/noo/IqKIooQV+dHBY/Z+LJFnGDtBVbbZlI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzALo3DoVnqX15clBcnnPqavbZLc0fCF1prcnFyJUNe+3YTnyWs
-	0Q0rMpRtRd82c7Vcgr10jgWG74q06Nt8RS6gVBNN3c3c4WJNLE9aoHiG
-X-Gm-Gg: AfdE7clcxQqTh39MMk5fFDESnYK8LIQAyL0YHOR3KTdoLGksOXRpOlax3519J8xYdNL
-	2VKg4jEt13wMQEfr7xNbkLERbpYu/RENLN1pfEvBS6gDP87U97lldgbAleKsODCGwAv/6qh30an
-	ka7U0bxarC8+Un5uWRh3EIm1EaqRfw2ceOBhZowW+yA5RevTq086qQU8mfdikGyEl9wvQLlRzLe
-	P321+ZTCLGu63mDJhBd2Fm+gebBYXx5P2LGkSy9lSnMGNCfSZVeiWOVrG7lMdohaQzfWEBIMNqj
-	Vx1WA6rFxA/11JFy9mTjVYKpgWvUZg7de5KhFj++6etXPuvVx10wekICMcNAY/VKGABRBbzw5Ca
-	GRRvtt10WvDz554xdBfltWNzTrfsQseB0GKAZtZL3lywLWRiWdJrsLuLIPgC+P8mFZJPbJnuyEH
-	ZFPAb2WeV2tclabm7WBYLYNXs2xqJnRgOGPvfcxFiCg/BkyKxk2NRiD9T9m7dB
-X-Received: by 2002:a05:6a20:258b:b0:3b4:7eb0:47a1 with SMTP id adf61e73a8af0-3c0bceb6c9fmr1504879637.19.1783493582085;
-        Tue, 07 Jul 2026 23:53:02 -0700 (PDT)
-Received: from r912.tailbb6e1e.ts.net ([182.70.116.80])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b6596681fsm18477898c88.8.2026.07.07.23.52.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 23:53:01 -0700 (PDT)
-From: Avinash Duduskar <avinash.duduskar@gmail.com>
-To: emil@etsalapatis.com,
-	andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net
-Cc: a.s.protopopov@gmail.com,
-	ameryhung@gmail.com,
-	bpf@vger.kernel.org,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	eddyz87@gmail.com,
-	edumazet@google.com,
-	eyal.birger@gmail.com,
-	hawk@kernel.org,
-	horms@kernel.org,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	kuba@kernel.org,
-	leon.hwang@linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	rongtao@cestc.cn,
-	sdf@fomichev.me,
-	shuah@kernel.org,
-	song@kernel.org,
-	toke@redhat.com,
-	yatsenko@meta.com,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH bpf-next v6 3/3] selftests/bpf: Add bpf_fib_lookup() VLAN flag tests
-Date: Wed,  8 Jul 2026 12:22:50 +0530
-Message-ID: <20260708065250.707983-1-avinash.duduskar@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <DJSKN0TVIESF.1RVIJ8SRZRRBE@etsalapatis.com>
-References: <20260704092159.1256823-1-avinash.duduskar@gmail.com> <20260704092159.1256823-4-avinash.duduskar@gmail.com> <DJSKN0TVIESF.1RVIJ8SRZRRBE@etsalapatis.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LeLhJIcd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66B4A1F000E9;
+	Wed,  8 Jul 2026 06:54:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783493646;
+	bh=8A0crWUxVoqSCyEXFIuituX9pq0uSvsH3eYs8CdghJY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=LeLhJIcdRcrCTHXTAHdLFtpmzEYNFjls5YKe1qs/hB747MAxFooSdJXYDZYHPMq0Q
+	 THNqqRXRvwUpD/XqJKbxC3sm52qE5b5mufG57d356nYxYZaEji7SKJQjv4f2xttRbU
+	 8WgBKtULgTKaaCHus1SimwEzuAwiGYYWXazYVmtfsFJGD6Jd4vZ4gQjaQI0EuL7aSC
+	 2JgXsQgL8mCJI4J07IMfhTdvsFuDZc1s6sKyCAnGdk7SLVlTQvnnL3JwaHvyY9b/hU
+	 FzVXyZIij5viiQurEbOuO1nDBVLRwhNoN0viy+fhFJklWEjgq5M/TdxfmiTF9BOwum
+	 UcL9JpXFotALA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v6 2/7] riscv, bpf: Fix memory leak in
+ bpf_jit_free
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Pu Lehui" <pulehui@huaweicloud.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260708064436.2971933-3-pulehui@huaweicloud.com>
+References: <20260708064436.2971933-1-pulehui@huaweicloud.com>
+ <20260708064436.2971933-3-pulehui@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 08 Jul 2026 06:54:05 +0000
+Message-Id: <20260708065406.66B4A1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-> Here we add a bunch of shorthands for the topology we're setting up,
-> but not for all interfaces/IPs. E.g.,
-[...]
-> The IPs are hardcoded here (and in the rest of the code below). AFAICT the
-> logic is that the defines are to make it more obvious as to what the test
-> is about. Is there a logic of this kind behind the naming convention?
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-Yes, the rule is inherited from the file: a value gets a define when
-setup_netns() and the assertion table both use it, so the two sites
-cannot drift and a table arm names what it targets (.daddr =
-IPV4_VLAN_GW reads as intent). The new defines follow that.
+Pre-existing issues:
+- [Critical] bpf_jit_free() ignores the error return value of bpf_jit_binar=
+y_pack_finalize(), leading to a Use-After-Free, Double-Free, and potential =
+JIT memory charge limit corruption.
+- [High] The identical memory leak fixed in RISC-V remains present in ARM64=
+ and LoongArch BPF JIT implementations.
+- [High] Memory charge limit (modmem) is permanently leaked when bpf_jit_bi=
+nary_pack_finalize() fails in bpf_int_jit_compile().
+--
 
-The hardcoded addresses are in the netns and live-frames subtests,
-which build their own single-function topologies the table never
-references, so there is no second site to keep in sync. The bare
-"veth1"/"veth2" strings predate this series; I left them alone rather
-than churn lines the series does not otherwise touch.
+--- Patch [2]: [PATCH bpf-next v6 2/7] riscv, bpf: Fix memory leak in bpf_j=
+it_free ---
+commit 9c17e0351f5dcd9f2cb6815fc5c5e2c47b738ba2
+Author: Pu Lehui <pulehui@huawei.com>
 
-The netns subtest does repeat its 10.66.0.x addresses a few times,
-though, so I will give those a local define in v7 to keep the new code
-consistent with itself.
+riscv, bpf: Fix memory leak in bpf_jit_free
 
-Thanks for the reviews!
+This commit fixes a memory leak in the RISC-V BPF JIT compiler. When a
+subprogram fails to compile, it cleans up earlier subprograms but previously
+failed to free the jit_data->ctx.offset array.
 
-Avi
+> diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
+> --- a/arch/riscv/net/bpf_jit_core.c
+> +++ b/arch/riscv/net/bpf_jit_core.c
+> @@ -234,6 +234,7 @@ void bpf_jit_free(struct bpf_prog *prog)
+>  		 */
+>  		if (jit_data) {
+>  			bpf_jit_binary_pack_finalize(jit_data->ro_header, jit_data->header);
+
+[Severity: Critical]
+This is a pre-existing issue, but does ignoring the return value of
+bpf_jit_binary_pack_finalize() here cause a use-after-free and double-free?
+
+If bpf_jit_binary_pack_finalize() fails (for example, due to a text copy
+failure), it frees the ro_header memory chunk and returns an error:
+
+kernel/bpf/core.c:bpf_jit_binary_pack_finalize() {
+    ...
+    if (IS_ERR(ptr)) {
+        bpf_prog_pack_free(ro_header, ro_header->size);
+        return PTR_ERR(ptr);
+    }
+    ...
+}
+
+Since bpf_jit_free() ignores this failure, it extracts the now-freed
+ro_header via bpf_jit_binary_pack_hdr() below, and unconditionally passes
+it to bpf_jit_binary_pack_free(). Inside that function, the freed ro_header
+is dereferenced to read its size, leading to a use-after-free, double-free,
+and uncharging the modmem with garbage data.
+
+Can this be triggered by an unprivileged BPF program load?
+
+[Severity: High]
+This is also a pre-existing issue, but does bpf_jit_binary_pack_finalize()
+fail to uncharge the modmem limit when it returns an error?
+
+As shown above, bpf_jit_binary_pack_finalize() frees ro_header on failure
+but does not call bpf_jit_uncharge_modmem(). In other callers like
+bpf_int_jit_compile(), the error handler detects the failure, clears the
+header pointers, and skips calling bpf_jit_binary_pack_free() completely:
+
+arch/riscv/net/bpf_jit_core.c:bpf_int_jit_compile() {
+    ...
+    if (WARN_ON(bpf_jit_binary_pack_finalize(jit_data->ro_header, jit_data-=
+>header))) {
+        /* ro_header has been freed */
+        jit_data->ro_header =3D NULL;
+        jit_data->header =3D NULL;
+        goto out_free_hdr;
+    }
+    ...
+}
+
+Since out_free_hdr skips bpf_jit_binary_pack_free() when header is NULL,
+the modmem uncharge is permanently bypassed. Does this leak the
+bpf_jit_limit capacity?
+
+> +			kfree(jit_data->ctx.offset);
+
+[Severity: High]
+This isn't a bug introduced by this patch, but do arm64 and loongarch have
+the exact same memory leak that is being fixed here for riscv?
+
+Looking at bpf_jit_free() in arch/arm64/net/bpf_jit_comp.c:
+
+arch/arm64/net/bpf_jit_comp.c:bpf_jit_free() {
+    ...
+    if (jit_data) {
+        bpf_jit_binary_pack_finalize(jit_data->ro_header, jit_data->header);
+        kfree(jit_data);
+    }
+    ...
+}
+
+And similarly in arch/loongarch/net/bpf_jit.c:
+
+arch/loongarch/net/bpf_jit.c:bpf_jit_free() {
+    ...
+    if (jit_data) {
+        bpf_jit_binary_pack_finalize(jit_data->ro_header, jit_data->header);
+        kfree(jit_data);
+    }
+    ...
+}
+
+Neither architecture frees the jit_data->ctx.offset array before freeing
+jit_data. Should a similar fix be applied to those architectures?
+
+>  			kfree(jit_data);
+>  		}
+>  		hdr =3D bpf_jit_binary_pack_hdr(prog);
+>  		bpf_jit_binary_pack_free(hdr, NULL);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260708064436.2971=
+933-1-pulehui@huaweicloud.com?part=3D2
