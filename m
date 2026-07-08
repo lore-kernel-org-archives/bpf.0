@@ -1,128 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD393FD156
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 08:15:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BBF13FD156;
+	Wed,  8 Jul 2026 08:16:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783498532; cv=none; b=EjJAdDFOtFVK8/niy6nA/F4T4B7fU2OoHvFF2DV2aKHmYOqD+bkyc01RVSgQkaT/1tIrE5qmzx4Kn6mwnLsgU2F5bskL+aHWsg3hthvRK0g5ncS+Hs8tdivFk3vC43HKDka61aVrZskp3w4ot3o12QTym0SR6Lpsu7UgXeZBBvU=
+	t=1783498566; cv=none; b=MYhgbdFxWi3taxfczaqJU89UD3+sPFkwVOX4pKLgbUeSr83I5oWSmJaqSAZso4zRoGeAFgvaRjAeo6qvHOkFhG+5rrlFwCUNOiJxpZUHq8v9wbEVXTp4juwgodhfYB2u9i1nsH3ICawzDBO8s9aquDdPXy8aKkXxA/Vt5yT5QaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783498532; c=relaxed/simple;
-	bh=sYH+Bi1xi9tH7hq/v9xUNWJ0qm6lqvrTlHq9I/k7cA8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=d0Jn0vQ9KprFSi5yqnqzPt3WyFAm6rSrwUjzSt+6jezGoSV0tARlZGkjNPEfLtEEy6TtvLiBFBYZOezxXpBEzu6luT1xcfqubZaMdFWvXUjEP3q5plShI/Fl/WE9TCW/1VvqfAHh6psV2R2zbxf4uDH7PWlpuXSc+Mus1BhQGLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MHzWa7ML; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783498566; c=relaxed/simple;
+	bh=KhFfxdlb1rPGQio91346NUOHHR9gipSTSLSn9Y/OUmc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RnMKGFnPSVDyeyXQ0q9wiU1sos1Sv0mVXkleIitS6NQqE5r5DHmK+M3I7nS9NHL98fExWE+D/Ma5Ct+5TCnawkTJ36VNIdMPdd9l3vHp6gLb3tuvg23tFAnBeU5X6i2SAYhhKsAASk6w1gWz9EXjmyw5B3lbt/wGFZrQEgy8has=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Ng+XfT92; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MHzWa7ML"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37FDE1F000E9;
-	Wed,  8 Jul 2026 08:15:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783498531;
-	bh=8LIgJ8Fa6oABKnJIIcKAL0JqU6RIGHHj9zu/RfNIMaM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=MHzWa7MLcV4d6QFiEMqikEZEDud9mrTR43UMrH8a0PLAWdFfVkDiE9lK1Str7KMHE
-	 miRmYtG86F+T4IrycV7vBdjv4FFNaslwplYf+R7QKF0QiaazfnFiBmp8uUowGeCrz+
-	 FPZuV/MAi0BOKGIprB1yyg43fBMbzc2BpvNnW6kqveGZRLZSFu05q2XpsQvvORTTOf
-	 31jA48KUoJ+Fzw3rpBBRmoNMhBNZ4IEmt+8eYOLtdMDTI+0CtC/PlE2P7w43NP4lUS
-	 sjSVeudFrLv/7vWqeEgbFrb1u0WYa8iY50UlaAd2N8S7F4rDfOuNL7hQs0tudlvrF4
-	 Z5WvTfg379dBw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v6 3/8] libbpf: Drop in-loader metadata check
- for load-time verification
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Daniel Borkmann" <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260708075343.358712-4-daniel@iogearbox.net>
-References: <20260708075343.358712-1-daniel@iogearbox.net>
- <20260708075343.358712-4-daniel@iogearbox.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 08 Jul 2026 08:15:30 +0000
-Message-Id: <20260708081531.37FDE1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Ng+XfT92"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=KhFfxdlb1rPGQio91346NUOHHR9gipSTSLSn9Y/OUmc=; b=Ng+XfT92a0sEeT6zxsNnGKpLFU
+	WhhU4cjMIKSnfou9w2UUrfAmOtVwTFsdONqqKqOrdYyWLVUo5i2h1rstTJyawwSss3FwYcczLs+5y
+	BVRbfBkpruDraYAPDJ9SEwfST/qRs9KFcZbYZ+j44uDjxp6VIePd/2TKJu9+IeRCsYbsd6qOI4XCn
+	QnDTtb3miGOtPLCDmjbG2tj59plCDAx7MSxDYYDR7Mf3VlXuS6MK5VsVDmHGEJPS0JieAorDrrxwq
+	k4PRRxRRPoLQJ0Rz8zw40kyxwjP7Srgv4TdipPOPmwsYZ9pFnCgsE9x+vDhkNLa/i5edlwEzGR9YT
+	gTUVKrMA==;
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1whNRr-000JW5-19;
+	Wed, 08 Jul 2026 10:16:03 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1whNRr-0003ub-1C;
+	Wed, 08 Jul 2026 10:16:03 +0200
+Message-ID: <d523d378-7128-4bf5-b8da-6110b9691180@iogearbox.net>
+Date: Wed, 8 Jul 2026 10:16:02 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v6 6/8] selftests/bpf: Adjust bpf_map layout in
+ verifier_map_ptr
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260708075343.358712-1-daniel@iogearbox.net>
+ <20260708075343.358712-7-daniel@iogearbox.net>
+ <20260708081434.BCAFA1F000E9@smtp.kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260708081434.BCAFA1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28054/Wed Jul  8 08:24:53 2026)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] bpftool does not include the map contents when generating the PKCS=
-#7 signature, which causes the kernel to always reject signed loaders.
-- [High] The `run_gen_loader` function in the selftest does not set `attr.f=
-d_array_cnt`, causing the verifier to reject the loader program with `-EACC=
-ES`.
---
-
---- Patch [3]: [PATCH bpf-next v6 3/8] libbpf: Drop in-loader metadata chec=
-k for load-time verification ---
-commit 7b60178a5e722682c8474b704e91ce40e0fc21ed
-Author: Daniel Borkmann <daniel@iogearbox.net>
-
-libbpf: Drop in-loader metadata check for load-time verification
-
-This patch removes the in-BPF verification logic from the signed loader,
-relying on the kernel to verify the metadata at BPF_PROG_LOAD time. It
-also sets fd_array_cnt in skel_internal.h for signed loads so the kernel
-can scan fd_array for the exclusive metadata map.
-
-> libbpf: Drop in-loader metadata check for load-time verification
->=20
-> The signed gen_loader used to police its own metadata map from within
-> BPF: emit_signature_match() read the kernel-cached map->sha[] back
-> through hardcoded struct bpf_map offsets and compared it against a hash
-> that compute_sha_update_offsets() baked into the signed instructions,
-> after a BPF_OBJ_GET_INFO_BY_FD round-trip to populate map->sha[].
->=20
-> The kernel now verifies the metadata at BPF_PROG_LOAD time by folding
-> the frozen contents of the loader's exclusive fd_array maps into the
-> signature, so the loader no longer checks anything itself. Generated
-
-[Severity: High]
-Since the kernel now concatenates the map contents to the signed payload
-during signature verification in bpf_prog_verify_signature(), does
-bpftool need a corresponding update?
-
-Currently, bpftool_prog_sign() in tools/bpf/bpftool/sign.c only signs
-the BPF instructions (opts->insns) without including the map contents
-(opts->data). Won't this cause the kernel to consistently reject loaders
-signed by bpftool with -EKEYREJECTED?
-
-> loaders thus carry no verification logic of their own anymore: Nothing
-> in the signing chain depends on emitted loader bytecode doing the right
-> thing.
-
-[ ... ]
-
-> diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
-> index 74503d358bc8a..53fee53d36d51 100644
-> --- a/tools/lib/bpf/skel_internal.h
-> +++ b/tools/lib/bpf/skel_internal.h
-
-[ ... ]
-
-> @@ -400,6 +371,8 @@ static inline int bpf_load_and_run(struct bpf_load_an=
-d_run_opts *opts)
->  #ifndef __KERNEL__
->  	attr.signature =3D (long) opts->signature;
->  	attr.signature_size =3D opts->signature_sz;
-> +	if (opts->signature)
-> +		attr.fd_array_cnt =3D 1;
-
-[Severity: High]
-Does run_gen_loader() in
-tools/testing/selftests/bpf/prog_tests/signed_loader.c need a similar
-update to set attr.fd_array_cnt =3D 1?
-
-Without this, when run_gen_loader() loads the signed program,
-fd_array_cnt remains 0. The verifier's fd_array_get_map_idx() will then
-see env->signature is set but env->fd_array is missing, which causes
-the load to abort with -EACCES and breaks the selftest.
-
->  #else
->  	if (opts->signature || opts->signature_sz)
->  		pr_warn("signatures are not supported from bpf_preload\n");
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260708075343.3587=
-12-1-daniel@iogearbox.net?part=3D3
+On 7/8/26 10:14 AM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] Stale test logic in `signed_loader.c` causes selftest suite failure due to removed in-loader metadata checks.
+Same comment as last time, this is done in patch 7/8.
