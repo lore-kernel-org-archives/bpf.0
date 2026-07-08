@@ -1,42 +1,42 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CFB13C2764;
-	Wed,  8 Jul 2026 08:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5B93AE6FD;
+	Wed,  8 Jul 2026 08:02:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783497769; cv=none; b=AINPDH7mnzV4p36vmNsjq+KhArrZuF7fJn6R4OvjCut7eZGgEsHUm1iM62oVB5Hns/p6mOkIc6uN70YDNKyzxBQXPbbABNdoyzXZeo1+XEcF9pi3g8K6tb8d+E8K5h/Ki40riZ466KtWS8932mKNUA9UZeKNqu12ST0nfdGXU0I=
+	t=1783497773; cv=none; b=SJ9P1qf3XlsWhXqv7QH4reXsYcoA9lDRA4tuK2BpXQ5UvXAv1rPAWjgcImGcY3qo0UE3gzV0qjhl6fIHFW6MXa1o2cxvkCPt5Z+UDOGgnyOGp1nz6UbhOEGk1lSaIU7ucbbXd4IhWtHKG5rj0S6qwZgW8V2tu60D4WnMWWjl+Qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783497769; c=relaxed/simple;
-	bh=qjjzQ7OXQk11Rs7xOXeU5xJCPBvJ475cDaGEbOROl28=;
+	s=arc-20240116; t=1783497773; c=relaxed/simple;
+	bh=etE+N/MlYVxSd4KeNUi+uyfU/waPnCA4ygyLzHNTOPc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EKkPzfIgzdz44nrw1iQaTGzlYMu+UWxfbfCl6N4VYI3/g4gb5ZE/EFL9AwO+E+8IvRQPskqVckOnYTSM08X7YHiwM+ewfcWIKyiBBBzyVBA6WguuZ7qvow6jJ1UvRVLHOe6t62pVqyUO4iRW4qdN5BSucoEmHahBCHgjLZ8ylno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LJV4wTym; arc=none smtp.client-ip=185.171.202.116
+	 In-Reply-To:To:Cc; b=W2TfQ6mFI8VO96f14D25sxweGPY6WvaFhCmVFLyV4rrDu9HCJua95vGSe1mr/UohKZEuAxVkMr2OqxZfAIFEFhZUEndzcVJmG3ov4k15rKc/aIPEWIvOaqrri59XAEI7V47gy3RViHKO53nHlqaxjZp+JdIyQd9N1uwzjZuVf9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=aT+n/q5o; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LJV4wTym"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="aT+n/q5o"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 3D704C8F448;
-	Wed,  8 Jul 2026 08:02:54 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 9E4924E40CF4;
+	Wed,  8 Jul 2026 08:02:46 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 63E1360337;
-	Wed,  8 Jul 2026 08:02:40 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7FEE411BC325C;
-	Wed,  8 Jul 2026 10:02:36 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 6EE0260337;
+	Wed,  8 Jul 2026 08:02:46 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7FCBD11BC3260;
+	Wed,  8 Jul 2026 10:02:42 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1783497759; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1783497765; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=5VBHcO95Pib5eMKdQ5jsfrmkgo7wwTgYLoWNTJK/FP0=;
-	b=LJV4wTymzAN4l7W/3BWi3sWeQ4HN1uQZZvbH9Q1h1CXTYammYmm7LnMPwgz6SLES4ESfqJ
-	OUNf3lFq6WanH6HJoVW1ZvSQcuUVntF4zbIzFdAvA3RxglCt4x1F74QyG5ObeAYMoSLVX3
-	cEtHnRDySPofSAgh6+EX97dEvxiLBYnr77f1YL0FrqJS97SFfsOD4+1crp+yVRRq3sPfZR
-	Nm7J0N1Zk5nFzvmbLyVc5D4Nhfx47UWFIFwTxxAVIOtFLDZFYlD0L23fonqPxL72t7fP4B
-	o61rVzYLtFBzAvaMdYCYUFoGyJr/Mmpwx+njrYbGz254+w80CGC24TtbPZ3+eA==
+	bh=wdlnHacym1R+fO8OXKjuu51Mo8jbgvgR2Hwxia5FoqM=;
+	b=aT+n/q5oGbDGBR3wZxSi6ZXUQ55Pgqfu27SUkbD3m8bPMCQp1VsTe93im902oLVXi9ek9N
+	lKifCmAgecEIk5R2y576DWidX1VyNlxJ/skw76eZ06/kp8elcrVB2Fu9Bpxjd1NU5rzzzJ
+	nZXYxJZ+5KB82YbIAXAEpGUKvoctYNnniq9v6/bLHzs8gYttxeFcUh6tdS1uUzPFb8Ueha
+	RSR2hF9jejmuCZ86ZGP0+pKxDBOrUk+GavIjska0OLuio163gkBJDuEsARTeurkMQH1/zA
+	9P3Vh8wMsRNjapUVSXphzy62LujoO2nIDtDdiThd1MqwC3EXzoWXiM88emxxmg==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Wed, 08 Jul 2026 10:00:29 +0200
-Subject: [PATCH bpf-next v4 06/10] bpf, x86: emit KASAN checks into x86
- JITed programs
+Date: Wed, 08 Jul 2026 10:00:31 +0200
+Subject: [PATCH bpf-next v4 08/10] selftests/bpf: add helper to check
+ whether eBPF KASAN is active
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260708-kasan-v4-6-d5c177ab8227@bootlin.com>
+Message-Id: <20260708-kasan-v4-8-d5c177ab8227@bootlin.com>
 References: <20260708-kasan-v4-0-d5c177ab8227@bootlin.com>
 In-Reply-To: <20260708-kasan-v4-0-d5c177ab8227@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -68,200 +68,41 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.15.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-Insert KASAN shadow memory checks before memory load and store
-operations in JIT-compiled BPF programs. This helps detect memory safety
-bugs such as use-after-free and out-of-bounds accesses at runtime.
-
-The main instructions being targeted are BPF_ST, BPF_STX and BPF_LDX,
-but not all of them are being instrumented:
-- if the load/store instruction is in fact accessing the program stack,
-  emit_kasan_check silently skips the instrumentation, as we can already
-  benefit from guard pages to monitor stack accesses.
-- if the load/store instruction is a BPF_PROBE_MEM or a BPF_PROBE_ATOMIC
-  instruction, we do not instrument it, as the passed address can fault
-  (hence the custom fault management with BPF_PROBE_XXX instructions),
-  and so the corresponding kasan check could fault as well.
+Add a simple helper checking whether JIT compiler is able to insert
+KASAN checks in programs. This will allow to conditionally run
+selftests for KASAN checks in JITed programs.
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
-Changes in v4:
-- refactor BPF_FETCH handling
-
-Changes in v3:
-- fix LLVM23 build failure
-
 Changes in v2:
-- support BPF_ATOMICS
-- support BPF_ST
-- make sure to systematically pass correct instruction to kasan check
+- fix condition
 ---
- arch/x86/net/bpf_jit_comp.c | 79 ++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 63 insertions(+), 16 deletions(-)
+ tools/testing/selftests/bpf/unpriv_helpers.c | 5 +++++
+ tools/testing/selftests/bpf/unpriv_helpers.h | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 959fcaa0cde9..65a00e84799c 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1576,17 +1576,31 @@ static int emit_atomic_rmw_index(u8 **pprog, u32 atomic_op, u32 size,
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/unpriv_helpers.c b/tools/testing/selftests/bpf/unpriv_helpers.c
+index f997d7ec8fd0..11201b65a3d4 100644
+--- a/tools/testing/selftests/bpf/unpriv_helpers.c
++++ b/tools/testing/selftests/bpf/unpriv_helpers.c
+@@ -142,3 +142,8 @@ bool get_unpriv_disabled(void)
+ 	}
+ 	return mitigations_off;
  }
- 
--static int emit_atomic_ld_st(u8 **pprog, u32 atomic_op, u32 dst_reg,
--			     u32 src_reg, s16 off, u8 bpf_size)
-+static int emit_atomic_ld_st(struct bpf_verifier_env *env, u8 **pprog,
-+			     struct bpf_insn *insn, u8 *ip, u32 dst_reg,
-+			     u32 src_reg, bool accesses_stack_only)
- {
-+	u32 atomic_op = insn->imm;
-+	int err;
 +
- 	switch (atomic_op) {
- 	case BPF_LOAD_ACQ:
-+		err = emit_kasan_check(env, pprog, src_reg, insn, ip, false,
-+				       accesses_stack_only);
-+		if (err)
-+			return err;
- 		/* dst_reg = smp_load_acquire(src_reg + off16) */
--		emit_ldx(pprog, bpf_size, dst_reg, src_reg, off);
-+		emit_ldx(pprog, BPF_SIZE(insn->code), dst_reg, src_reg,
-+			 insn->off);
- 		break;
- 	case BPF_STORE_REL:
-+		err = emit_kasan_check(env, pprog, dst_reg, insn, ip, true,
-+				       accesses_stack_only);
-+		if (err)
-+			return err;
- 		/* smp_store_release(dst_reg + off16, src_reg) */
--		emit_stx(pprog, bpf_size, dst_reg, src_reg, off);
-+		emit_stx(pprog, BPF_SIZE(insn->code), dst_reg, src_reg,
-+			 insn->off);
- 		break;
- 	default:
- 		pr_err("bpf_jit: unknown atomic load/store opcode %02x\n",
-@@ -1964,10 +1978,12 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 		const s32 imm32 = insn->imm;
- 		u32 dst_reg = insn->dst_reg;
- 		u32 src_reg = insn->src_reg;
-+		bool accesses_stack_only;
- 		u8 b2 = 0, b3 = 0;
- 		u8 *start_of_ldx;
- 		s64 jmp_offset;
- 		s32 insn_off;
-+		int insn_idx;
- 		u8 jmp_cond;
- 		u8 *func;
- 		int nops;
-@@ -1984,6 +2000,10 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 			EMIT_ENDBR();
++bool get_kasan_jit_enabled(void)
++{
++	return config_contains("CONFIG_BPF_JIT_KASAN=y") == 1;
++}
+diff --git a/tools/testing/selftests/bpf/unpriv_helpers.h b/tools/testing/selftests/bpf/unpriv_helpers.h
+index 151f67329665..bc5f4c953c9d 100644
+--- a/tools/testing/selftests/bpf/unpriv_helpers.h
++++ b/tools/testing/selftests/bpf/unpriv_helpers.h
+@@ -5,3 +5,4 @@
+ #define UNPRIV_SYSCTL "kernel/unprivileged_bpf_disabled"
  
- 		ip = image + addrs[i - 1] + (prog - temp);
-+		insn_idx = i - 1 + bpf_prog->aux->subprog_start;
-+		accesses_stack_only =
-+			env ? !env->insn_aux_data[insn_idx].non_stack_access :
-+			      false;
- 
- 		switch (insn->code) {
- 			/* ALU */
-@@ -2364,6 +2384,11 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 		case BPF_ST | BPF_MEM | BPF_H:
- 		case BPF_ST | BPF_MEM | BPF_W:
- 		case BPF_ST | BPF_MEM | BPF_DW:
-+			err = emit_kasan_check(env, &prog, dst_reg, insn, ip,
-+					       true, accesses_stack_only);
-+			if (err)
-+				return err;
-+
- 			emit_st(&prog, insn, dst_reg, outgoing_arg_base,
- 				outgoing_rsp);
- 			break;
-@@ -2383,6 +2408,10 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 				insn_off = outgoing_arg_base - outgoing_rsp - insn_off - 16;
- 				dst_reg = BPF_REG_FP;
- 			}
-+			err = emit_kasan_check(env, &prog, dst_reg, insn, ip,
-+					       true, accesses_stack_only);
-+			if (err)
-+				return err;
- 			emit_stx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn_off);
- 			break;
- 
-@@ -2544,6 +2573,12 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 				/* populate jmp_offset for JAE above to jump to start_of_ldx */
- 				start_of_ldx = prog;
- 				end_of_jmp[-1] = start_of_ldx - end_of_jmp;
-+			} else {
-+				err = emit_kasan_check(env, &prog, src_reg,
-+						       insn, ip, false,
-+						       accesses_stack_only);
-+				if (err)
-+					return err;
- 			}
- 			if (BPF_MODE(insn->code) == BPF_PROBE_MEMSX ||
- 			    BPF_MODE(insn->code) == BPF_MEMSX)
-@@ -2605,15 +2640,16 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 			}
- 			fallthrough;
- 		case BPF_STX | BPF_ATOMIC | BPF_W:
--		case BPF_STX | BPF_ATOMIC | BPF_DW:
--			if (insn->imm == (BPF_AND | BPF_FETCH) ||
--			    insn->imm == (BPF_OR | BPF_FETCH) ||
--			    insn->imm == (BPF_XOR | BPF_FETCH)) {
--				bool is64 = BPF_SIZE(insn->code) == BPF_DW;
--				u32 real_src_reg = src_reg;
--				u32 real_dst_reg = dst_reg;
--				u8 *branch_target;
--
-+		case BPF_STX | BPF_ATOMIC | BPF_DW: {
-+			bool is64 = BPF_SIZE(insn->code) == BPF_DW;
-+			u32 real_src_reg = src_reg;
-+			u32 real_dst_reg = dst_reg;
-+			u8 *branch_target;
-+			bool is_atomic_fetch =
-+				(insn->imm == (BPF_AND | BPF_FETCH) ||
-+				 insn->imm == (BPF_OR | BPF_FETCH) ||
-+				 insn->imm == (BPF_XOR | BPF_FETCH));
-+			if (is_atomic_fetch) {
- 				/*
- 				 * Can't be implemented with a single x86 insn.
- 				 * Need to do a CMPXCHG loop.
-@@ -2626,7 +2662,17 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 				if (dst_reg == BPF_REG_0)
- 					real_dst_reg = BPF_REG_AX;
- 
-+				ip += 3;
-+			}
-+			if (!bpf_atomic_is_load_store(insn)) {
-+				err = emit_kasan_check(env, &prog, real_dst_reg,
-+						       insn, ip, false,
-+						       accesses_stack_only);
-+				if (err)
-+					return err;
- 				branch_target = prog;
-+			}
-+			if (is_atomic_fetch) {
- 				/* Load old value */
- 				emit_ldx(&prog, BPF_SIZE(insn->code),
- 					 BPF_REG_0, real_dst_reg, insn->off);
-@@ -2658,15 +2704,16 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 			}
- 
- 			if (bpf_atomic_is_load_store(insn))
--				err = emit_atomic_ld_st(&prog, insn->imm, dst_reg, src_reg,
--							insn->off, BPF_SIZE(insn->code));
-+				err = emit_atomic_ld_st(env, &prog, insn, ip,
-+							dst_reg, src_reg,
-+							accesses_stack_only);
- 			else
- 				err = emit_atomic_rmw(&prog, insn->imm, dst_reg, src_reg,
- 						      insn->off, BPF_SIZE(insn->code));
- 			if (err)
- 				return err;
- 			break;
--
-+		}
- 		case BPF_STX | BPF_PROBE_ATOMIC | BPF_B:
- 		case BPF_STX | BPF_PROBE_ATOMIC | BPF_H:
- 			if (!bpf_atomic_is_load_store(insn)) {
+ bool get_unpriv_disabled(void);
++bool get_kasan_jit_enabled(void);
 
 -- 
 2.54.0
