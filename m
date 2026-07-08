@@ -1,21 +1,21 @@
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A14A2D97A6
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:09:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F7883E5A08
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:10:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783541398; cv=none; b=gsFtk5FDnH2dW5NNjwCZx8wjtxyOFoEc/FiMgwH0FTHafhgf/fvyiqNkyAvQxSY2NVIlfA7z4qpr3HEwMXSsh7I/mg4m8Sy0GZbNo5RW2H2LjU+/8oWi/JWdyp83DwlAblh8p3/rYxp0qzStUggSvzklMUfcTzG91Vqd+3iJ91M=
+	t=1783541407; cv=none; b=pI3XHZVfU8/GCDIrP372sBFev0+dn+Rz1N4rLxvfGzHlUEPEDOetmpuKmDWOeFNEkPAUh+ZKvSg/Gv4YUdN/PpePo04QFnULZ1GgGioQWpvux8C+s2+HeKDXemcS8ATrtfwG7gGmrEgCqi3IZHmH/IwXz4ZCmJmKXv4b8O029xs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783541398; c=relaxed/simple;
-	bh=9sWl0RNKAUmppV/GW8f7Ioz2ivrrJHLDN2uK95w5aYM=;
+	s=arc-20240116; t=1783541407; c=relaxed/simple;
+	bh=TUHpXKR5lE7TIBrUTA2Ijan4nP3XjGYe7ThgS9GSsnM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DJaiXl3DLIld8+GROtuA4Nd3hJ8qNxVs8smdfb3gnG5/hz28P8S70iumQLZ5wewe7rsOgppWTqn3SR/0Hsf2e/sXNR45TCHUSPxR8SEoKoKOclxnSyE6LemSNpaZK2upr0SZrEzaUDl992H5Vwb9wJUlMLLeY7FoFY4qhoqCsCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
+	 MIME-Version; b=LX3ijuuelRlN6M9BjhG3aGhfTM2jArFtdiAgyX3Zws0Wlg28GfkJGZ4IlRM1/9zbFbtNi1BaoaJ98H2A9PI214/j4Dv920/YQPoqCFAucE4O9hEuqEz+/wc3Rj9pdTsRTVznnbNDTLUkZ8dptGgolC0WkJbRYNsc5ptd1gqUczY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 0D1141D0B6F7C0; Wed,  8 Jul 2026 13:09:55 -0700 (PDT)
+	id E06B51D0B6F78D; Wed,  8 Jul 2026 13:09:49 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next 03/12] bpf: Wire up JIT support for 16-byte kfunc returns
-Date: Wed,  8 Jul 2026 13:09:55 -0700
-Message-ID: <20260708200955.2156484-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 02/12] bpf: Add verifier support for 16-byte returns in R0:R2
+Date: Wed,  8 Jul 2026 13:09:49 -0700
+Message-ID: <20260708200949.2156169-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260708200939.2153664-1-yonghong.song@linux.dev>
 References: <20260708200939.2153664-1-yonghong.song@linux.dev>
@@ -37,161 +37,214 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Continue preparing <=3D16 byte aggregate return support by wiring up the =
-JIT
-side of the R0:R2 return convention for kfuncs.
+LLVM 23 added support for returning a value in two registers for an
+__int128, or a struct/union whose size is greater than 8 but not more
+than 16 bytes. See LLVM patches [1] and [2].
 
-A kfunc returning more than 8 bytes (a small aggregate or an __int128)
-hands the second half of the result back in RDX, the native x86-64 ABI's
-second return register. BPF instead expects a 16-byte return in the
-R0:R2 register pair. BPF R0 maps to RAX so it needs no move, but BPF R2
-maps to RSI, so emit a RDX->RSI move after a BPF_PSEUDO_KFUNC_CALL whose
-function model reports ret_size > 8.
+Before LLVM 23 the BPF backend could not return these values at all. A
+by-value struct or union return (of any size) was rejected at compile
+time with:
 
-Placing the second return half into R2 is possible on any JIT, but it
-needs architecture-specific JIT work. Rather than requiring every JIT to
-implement it at once, add a bpf_jit_supports_kfunc_ret_reg_pair()
-capability, defaulting to false in the generic core; an architecture opts
-in once its JIT handles the R0:R2 pair, and the remaining ones are left
-for future work. The verifier enforces it in bpf_add_kfunc_call(),
-rejecting a kfunc whose return is larger than 8 bytes with -EOPNOTSUPP
-when the JIT lacks the capability. Only x86, arm64 and riscv are
-supported so far.
+  error: aggregate returns are not supported
 
-On arm64 and riscv the native second return register is already BPF R2
-(x1 in bpf2a64[] and a1 in regmap[] respectively), so the value is in the
-R0:R2 register pair on return with no extra move, unlike x86 (RDX->RSI).
-This has been tested on x86 and arm64. The riscv path is expected to work
-by the same register-mapping reasoning as arm64 but has not been tested.
+and an __int128 return failed later in the backend with:
+
+  fatal error: error in backend: unable to allocate function return #1
+
+Both are resolved in LLVM 23, which lowers such returns into the R0:R2
+register pair.
+
+This patch is one of several preparation patches that build up
+<=3D16 byte return support incrementally:
+  - the verifier R0:R2 modelling in this patch,
+  - the x86 JIT move and JIT-capability gate,
+  - precision-backtracking and live-register tracking of R2,
+  - forcing the JIT for such programs, and
+  - guarding the trampoline paths.
+Finally, the patch "bpf: Enable 16-byte aggregate return types" enables
+support for 16-byte returns.
+
+This patch adds handling for '>8' byte returns in several places: BPF
+subprogram returns (the main program, and both global and static
+subprograms) and kfunc returns.
+
+  [1] https://github.com/llvm/llvm-project/pull/190894
+  [2] https://github.com/llvm/llvm-project/pull/206876
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- arch/arm64/net/bpf_jit_comp.c   |  5 +++++
- arch/riscv/net/bpf_jit_comp64.c |  5 +++++
- arch/x86/net/bpf_jit_comp.c     | 19 +++++++++++++++++++
- include/linux/filter.h          |  1 +
- kernel/bpf/core.c               |  5 +++++
- kernel/bpf/verifier.c           |  5 +++++
- 6 files changed, 40 insertions(+)
+ kernel/bpf/verifier.c | 93 ++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 88 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
-c
-index b0075ece4a6e..a4292e9ec075 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -2312,6 +2312,11 @@ bool bpf_jit_supports_kfunc_call(void)
- 	return true;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 3f34ce1a3107..03ffb5f839fa 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -424,6 +424,35 @@ static bool subprog_returns_void(struct bpf_verifier=
+_env *env, int subprog)
+ 	return btf_type_is_void(type);
  }
 =20
-+bool bpf_jit_supports_kfunc_ret_reg_pair(void)
++static bool bpf_ret_reg_pair(struct bpf_verifier_env *env, int subprog)
 +{
-+	return true;
-+}
++	const struct btf_type *type, *func, *func_proto;
++	const struct btf *btf =3D env->prog->aux->btf;
++	u32 btf_id;
 +
- bool bpf_jit_supports_stack_args(void)
- {
- 	return true;
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
-p64.c
-index f9d5347ba966..68faa7016d30 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -2107,6 +2107,11 @@ bool bpf_jit_supports_kfunc_call(void)
- 	return true;
- }
-=20
-+bool bpf_jit_supports_kfunc_ret_reg_pair(void)
-+{
-+	return true;
-+}
++	if (!btf || !env->prog->aux->func_info)
++		return false;
 +
- bool bpf_jit_supports_ptr_xchg(void)
- {
- 	return true;
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index de7515ea1bea..0c685c93df15 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -2592,6 +2592,20 @@ st:			insn_off =3D insn->off;
- 				return -EINVAL;
- 			if (priv_frame_ptr)
- 				pop_r9(&prog);
-+			if (src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL) {
-+				const struct btf_func_model *fm;
++	btf_id =3D env->prog->aux->func_info[subprog].type_id;
 +
-+				/*
-+				 * A kfunc returning a >8 byte aggregate hands the
-+				 * second half back in RDX (the native ABI's second
-+				 * return reg), but BPF expects it in R0:R2. BPF R0
-+				 * is RAX (no move needed), while BPF R2 is RSI, so
-+				 * copy RDX into RSI.
-+				 */
-+				fm =3D bpf_jit_find_kfunc_model(bpf_prog, insn);
-+				if (fm && fm->ret_size > 8)
-+					emit_mov_reg(&prog, true, BPF_REG_2, BPF_REG_3);
-+			}
- 			break;
- 		}
-=20
-@@ -4045,6 +4059,11 @@ bool bpf_jit_supports_kfunc_call(void)
- 	return true;
- }
-=20
-+bool bpf_jit_supports_kfunc_ret_reg_pair(void)
-+{
-+	return true;
-+}
++	func =3D btf_type_by_id(btf, btf_id);
++	if (!func)
++		return false;
 +
- bool bpf_jit_supports_stack_args(void)
- {
- 	return true;
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 14acb2455746..308a0e2d5988 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1182,6 +1182,7 @@ bool bpf_jit_inlines_helper_call(s32 imm);
- bool bpf_jit_supports_subprog_tailcalls(void);
- bool bpf_jit_supports_percpu_insn(void);
- bool bpf_jit_supports_kfunc_call(void);
-+bool bpf_jit_supports_kfunc_ret_reg_pair(void);
- bool bpf_jit_supports_stack_args(void);
- bool bpf_jit_supports_far_kfunc_call(void);
- bool bpf_jit_supports_exceptions(void);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 6e19a030da6f..73dc3ee879de 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -3294,6 +3294,11 @@ bool __weak bpf_jit_supports_kfunc_call(void)
- 	return false;
- }
-=20
-+bool __weak bpf_jit_supports_kfunc_ret_reg_pair(void)
-+{
++	func_proto =3D btf_type_by_id(btf, func->type);
++	if (!func_proto)
++		return false;
++
++	type =3D btf_type_skip_modifiers(btf, func_proto->type, NULL);
++	if (!type)
++		return false;
++
++	if (btf_type_is_struct(type) || btf_type_is_scalar(type))
++		return type->size > 8 && type->size <=3D 16;
++
 +	return false;
 +}
 +
- bool __weak bpf_jit_supports_stack_args(void)
+ static const char *subprog_name(const struct bpf_verifier_env *env, int =
+subprog)
  {
- 	return false;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 03ffb5f839fa..e3f934cf702d 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2851,6 +2851,11 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *en=
-v, u32 func_id, u16 offset)
- 	err =3D btf_distill_func_proto(&env->log, kfunc.btf, kfunc.proto, kfunc=
-.name, &func_model);
+ 	struct bpf_func_info *info;
+@@ -9459,10 +9488,17 @@ static int check_func_call(struct bpf_verifier_en=
+v *env, struct bpf_insn *insn,
+ 		clear_caller_saved_regs(env, caller->regs);
+ 		invalidate_outgoing_stack_args(env, cur_func(env));
+=20
+-		/* All non-void global functions return a 64-bit SCALAR_VALUE. */
++		/*
++		 * A non-void global function returns a 64-bit SCALAR_VALUE in
++		 * R0, or a >8 byte SCALAR_VALUE in the R0:R2 register pair.
++		 */
+ 		if (!subprog_returns_void(env, subprog)) {
+ 			mark_reg_unknown(env, caller->regs, BPF_REG_0);
+ 			caller->regs[BPF_REG_0].subreg_def =3D DEF_NOT_SUBREG;
++			if (bpf_ret_reg_pair(env, subprog)) {
++				mark_reg_unknown(env, caller->regs, BPF_REG_2);
++				caller->regs[BPF_REG_2].subreg_def =3D DEF_NOT_SUBREG;
++			}
+ 		}
+=20
+ 		if (env->subprog_info[subprog].might_throw) {
+@@ -9825,6 +9861,13 @@ static int prepare_func_exit(struct bpf_verifier_e=
+nv *env, int *insn_idx)
+ 	} else {
+ 		/* return to the caller whatever r0 had in the callee */
+ 		caller->regs[BPF_REG_0] =3D *r0;
++		if (bpf_ret_reg_pair(env, callee->subprogno)) {
++			if (callee->regs[BPF_REG_2].type =3D=3D PTR_TO_STACK) {
++				verbose(env, "cannot return stack pointer to the caller\n");
++				return -EINVAL;
++			}
++			caller->regs[BPF_REG_2] =3D callee->regs[BPF_REG_2];
++		}
+ 	}
+=20
+ 	/* for callbacks like bpf_loop or bpf_for_each_map_elem go back to call=
+site,
+@@ -10745,6 +10788,18 @@ static void mark_btf_func_reg_size(struct bpf_ve=
+rifier_env *env, u32 regno,
+ 	return __mark_btf_func_reg_size(env, cur_regs(env), regno, reg_size);
+ }
+=20
++static void mark_kfunc_ret_reg_size(struct bpf_verifier_env *env,
++				    struct bpf_reg_state *regs, u32 size)
++{
++	if (size > 8) {
++		mark_btf_func_reg_size(env, BPF_REG_0, 8);
++		mark_reg_unknown(env, regs, BPF_REG_2);
++		regs[BPF_REG_2].subreg_def =3D DEF_NOT_SUBREG;
++	} else {
++		mark_btf_func_reg_size(env, BPF_REG_0, size);
++	}
++}
++
+ static bool is_kfunc_acquire(struct bpf_kfunc_call_arg_meta *meta)
+ {
+ 	return meta->kfunc_flags & KF_ACQUIRE;
+@@ -13208,7 +13263,22 @@ static int check_kfunc_call(struct bpf_verifier_=
+env *env, struct bpf_insn *insn,
+ 		if (meta.btf =3D=3D btf_vmlinux && (meta.func_id =3D=3D special_kfunc_=
+list[KF_bpf_res_spin_lock] ||
+ 		    meta.func_id =3D=3D special_kfunc_list[KF_bpf_res_spin_lock_irqsav=
+e]))
+ 			__mark_reg_const_zero(env, &regs[BPF_REG_0]);
+-		mark_btf_func_reg_size(env, BPF_REG_0, t->size);
++		mark_kfunc_ret_reg_size(env, regs, t->size);
++	} else if (btf_type_is_struct(t)) {
++		/*
++		 * The returned struct comes back as raw register bits modeled
++		 * as an unknown scalar, so it must contain only scalars:
++		 * otherwise a pointer field would be laundered into a scalar
++		 * and escape provenance and reference tracking.
++		 */
++		if (!__btf_type_is_scalar_struct(env, desc_btf, t, 0)) {
++			verbose(env, "kernel function %s returns %s %s that is not composed o=
+f scalars\n",
++				func_name, btf_type_str(t),
++				btf_name_by_offset(desc_btf, t->name_off));
++			return -EINVAL;
++		}
++		mark_reg_unknown(env, regs, BPF_REG_0);
++		mark_kfunc_ret_reg_size(env, regs, t->size);
+ 	} else if (btf_type_is_ptr(t)) {
+ 		ptr_type =3D btf_type_skip_modifiers(desc_btf, t->type, &ptr_type_id);
+ 		err =3D check_special_kfunc(env, &meta, regs, insn_aux, ptr_type, desc=
+_btf);
+@@ -16711,11 +16781,19 @@ static int check_global_subprog_return_code(str=
+uct bpf_verifier_env *env)
+ {
+ 	struct bpf_func_state *cur_frame =3D cur_func(env);
+ 	u32 subprog =3D cur_frame->subprogno;
++	int err;
+=20
+ 	if (subprog_returns_void(env, subprog))
+ 		return 0;
+=20
+-	return check_global_ret_scalar_reg(env, BPF_REG_0);
++	err =3D check_global_ret_scalar_reg(env, BPF_REG_0);
++	if (err)
++		return err;
++
++	if (!bpf_ret_reg_pair(env, subprog))
++		return 0;
++
++	return check_global_ret_scalar_reg(env, BPF_REG_2);
+ }
+=20
+ /* Bitmask with 1s for all caller saved registers */
+@@ -17205,10 +17283,15 @@ static int process_bpf_exit_full(struct bpf_ver=
+ifier_env *env,
+ 	 */
+ 	if (cur_frame->subprogno &&
+ 	    !cur_frame->in_async_callback_fn &&
+-	    !cur_frame->in_exception_callback_fn)
++	    !cur_frame->in_exception_callback_fn) {
+ 		err =3D check_global_subprog_return_code(env);
+-	else
++	} else {
++		if (!cur_frame->subprogno && bpf_ret_reg_pair(env, 0)) {
++			verbose(env, "return value larger than 8 bytes is not supported at pr=
+ogram exit\n");
++			return -EINVAL;
++		}
+ 		err =3D check_return_code(env, BPF_REG_0, "R0");
++	}
  	if (err)
  		return err;
-+	if (func_model.ret_size > 8 && !bpf_jit_supports_kfunc_ret_reg_pair()) =
-{
-+		verbose(env, "kfunc %s with >8-byte return is not supported by JIT\n",
-+			kfunc.name);
-+		return -EOPNOTSUPP;
-+	}
-=20
- 	desc =3D &tab->descs[tab->nr_descs++];
- 	desc->func_id =3D func_id;
+ 	return PROCESS_BPF_EXIT;
 --=20
 2.53.0-Meta
 
