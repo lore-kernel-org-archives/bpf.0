@@ -1,56 +1,102 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD1C3DAC02;
-	Wed,  8 Jul 2026 06:40:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5303E9C0E
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 06:53:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783492830; cv=none; b=j/E29XG7MjpKLSMtDUslCxnwJ1o23QXeDSqn052yV9Ain4YF6Ix9Z6vMdvodVWstkDvXHvv/+cUpUfb2I6VZxf6TZbuNfsrhEPpmezc5JD+aRmTnoY6l3pvKlML/i7BKhhgJ5LwfcsAwbtAQTTfxGDFLARmtqbQfyvqJ2O3FL0A=
+	t=1783493593; cv=none; b=gwVyR2Na306bL+IpSxJn8Kmta71FiaiLg3JysFpBNEmyml2bxZ8s+HIfYiCyifvWEo1KkHLSJnDYCW/pxR4j4wA7mjd9PgOIhx/RA6qoHGGs+bqNWyVBOqg8Ntsf8VzsIeeKhpFQlbvYiG0tzmjDMbvBTm1AhCLxcE6eUEs5Q60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783492830; c=relaxed/simple;
-	bh=uPDrOmKkiVfLxAnuCBH4YsB3ireduL+GF9F4c0Zexyc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=TED/98PgVWxjnH/fQQRHPgBDaEy9nv9tX6AFO1Gyi8/bFCm+S7QIYfG7WcJg1w8ef8TC66irskfp0TxItbxyjvV7Wdy2u159RKCln8zsSpffhNXMxoKLJ6Sj1OMqAuZjYM2SCMOnVNTFTnYapA83cLij11WAZ5oL61gL8l5U/1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gw7kN4pndzKHMP0;
-	Wed,  8 Jul 2026 14:39:56 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 3E5DD4056B;
-	Wed,  8 Jul 2026 14:40:17 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgD32yfQ8E1qblLgAQ--.30661S9;
-	Wed, 08 Jul 2026 14:40:16 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next v6 7/7] selftests/bpf: Remove tailcalls tests from DENYLIST.riscv64
-Date: Wed,  8 Jul 2026 06:44:36 +0000
-Message-Id: <20260708064436.2971933-8-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260708064436.2971933-1-pulehui@huaweicloud.com>
-References: <20260708064436.2971933-1-pulehui@huaweicloud.com>
+	s=arc-20240116; t=1783493593; c=relaxed/simple;
+	bh=YTZC1tr0nF6mz4Z+4cqem9+KX4IQ0CP2cybl++qADNQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=QsAxoYFgmmSAZQnMujrRj3uenk7L8j6O6b07sUmdzfZpbOE9kDF6GJ0267cfbCpST5Dws4NerSA0UfXgKV8GqjUVHWGjQdHXxuAY4TCAVA30NQjnjzgbXfwMbVYgBb85eq2gJ2b4kMwfenMm8eFLoRoybMdSpfciPMXTUR2x2vY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Np8YW2Hn; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Np8YW2Hn"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2c6b67d5fa1so4117595ad.2
+        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 23:53:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783493582; x=1784098382; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=YTZC1tr0nF6mz4Z+4cqem9+KX4IQ0CP2cybl++qADNQ=;
+        b=Np8YW2HnkALw/xRrFfngFUj8otJKmcYuTIIN/db4lY5ISBdJricV67NiABm5y2FS+f
+         MPNQ+HoPRztd7y+Ga/tm3kJIrHR4wGJ4znD153WbviAguRHlgblZ00A5KCNF6gtR2ZSI
+         kgorU6o2TvE6HG+SYBXCvA8x4AxyqEt5hU6OimI3DBoYFJJrybgCWpScUIrT+l72fOgK
+         le0WYDAlvjXSWGszj4tfOc6rlc69HhIKYPoADVM3i5hfxZQX4/DrciTD4S+lUGy6g+ZS
+         J514ayb6O2x99c5Z6x7mQ0UzYvBm4zrdAfVckr4i+3+0XR6FHaBixcyULUQ5skgqJFRO
+         1tBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783493582; x=1784098382;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=YTZC1tr0nF6mz4Z+4cqem9+KX4IQ0CP2cybl++qADNQ=;
+        b=IQaJ1hO7GbNQ8YZ2F/LQd4vcBLJRp5YAa2tKDQh5Yh+QCKk+A9eh4FfFvX5c8fhPmY
+         K3Wm8l2uB9HmfmEultWfE8IO9V+qX/v86GWHefQRZT3bnA1npbrzlE9POyVbmoZXTAfd
+         EDEwDwKV44ND6sgcBEGtEX1FqO6tbTCc5j8mcRlTzMGz0Zbbalbjq1CXnxYGkx2LJCym
+         rqpz/x9FyHuu5AEHqqXOuFP49sYHunynKxdIHiw1yEbEWuY3XH+KLdHLY3/v5xFBB/oE
+         5ynUTZ0k6VxgvhsRPjvGDTDlJunD6I5jI9e7TRV6eIVBAwmHV6TMikAGn4xvWb4ve1AC
+         Iovg==
+X-Forwarded-Encrypted: i=1; AHgh+Rrv7lbcDpJ8I3PylCxOiwm+HOcpeMYnBJvG/noo/IqKIooQV+dHBY/Z+LJFnGDtBVbbZlI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzALo3DoVnqX15clBcnnPqavbZLc0fCF1prcnFyJUNe+3YTnyWs
+	0Q0rMpRtRd82c7Vcgr10jgWG74q06Nt8RS6gVBNN3c3c4WJNLE9aoHiG
+X-Gm-Gg: AfdE7clcxQqTh39MMk5fFDESnYK8LIQAyL0YHOR3KTdoLGksOXRpOlax3519J8xYdNL
+	2VKg4jEt13wMQEfr7xNbkLERbpYu/RENLN1pfEvBS6gDP87U97lldgbAleKsODCGwAv/6qh30an
+	ka7U0bxarC8+Un5uWRh3EIm1EaqRfw2ceOBhZowW+yA5RevTq086qQU8mfdikGyEl9wvQLlRzLe
+	P321+ZTCLGu63mDJhBd2Fm+gebBYXx5P2LGkSy9lSnMGNCfSZVeiWOVrG7lMdohaQzfWEBIMNqj
+	Vx1WA6rFxA/11JFy9mTjVYKpgWvUZg7de5KhFj++6etXPuvVx10wekICMcNAY/VKGABRBbzw5Ca
+	GRRvtt10WvDz554xdBfltWNzTrfsQseB0GKAZtZL3lywLWRiWdJrsLuLIPgC+P8mFZJPbJnuyEH
+	ZFPAb2WeV2tclabm7WBYLYNXs2xqJnRgOGPvfcxFiCg/BkyKxk2NRiD9T9m7dB
+X-Received: by 2002:a05:6a20:258b:b0:3b4:7eb0:47a1 with SMTP id adf61e73a8af0-3c0bceb6c9fmr1504879637.19.1783493582085;
+        Tue, 07 Jul 2026 23:53:02 -0700 (PDT)
+Received: from r912.tailbb6e1e.ts.net ([182.70.116.80])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b6596681fsm18477898c88.8.2026.07.07.23.52.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2026 23:53:01 -0700 (PDT)
+From: Avinash Duduskar <avinash.duduskar@gmail.com>
+To: emil@etsalapatis.com,
+	andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net
+Cc: a.s.protopopov@gmail.com,
+	ameryhung@gmail.com,
+	bpf@vger.kernel.org,
+	davem@davemloft.net,
+	dsahern@kernel.org,
+	eddyz87@gmail.com,
+	edumazet@google.com,
+	eyal.birger@gmail.com,
+	hawk@kernel.org,
+	horms@kernel.org,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	kuba@kernel.org,
+	leon.hwang@linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	martin.lau@linux.dev,
+	memxor@gmail.com,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	rongtao@cestc.cn,
+	sdf@fomichev.me,
+	shuah@kernel.org,
+	song@kernel.org,
+	toke@redhat.com,
+	yatsenko@meta.com,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH bpf-next v6 3/3] selftests/bpf: Add bpf_fib_lookup() VLAN flag tests
+Date: Wed,  8 Jul 2026 12:22:50 +0530
+Message-ID: <20260708065250.707983-1-avinash.duduskar@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <DJSKN0TVIESF.1RVIJ8SRZRRBE@etsalapatis.com>
+References: <20260704092159.1256823-1-avinash.duduskar@gmail.com> <20260704092159.1256823-4-avinash.duduskar@gmail.com> <DJSKN0TVIESF.1RVIJ8SRZRRBE@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -58,45 +104,29 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgD32yfQ8E1qblLgAQ--.30661S9
-X-Coremail-Antispam: 1UD129KBjvdXoW7GF13KFyUKFW3ur1kJF1DWrg_yoW3uFgEga
-	y0qrn3ZayrAF9rAF1fG3WrWry3uw43Wr4UJF45XasxJF4DWF18Aa1DZFZ8tFyrurWqqF9F
-	vFWkXFW3Kr4DKjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbgkYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r126s
-	0DM28IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
-	Y2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14
-	v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
-	AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
-	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
-	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
-	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
-	vjxUxrcTDUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-From: Pu Lehui <pulehui@huawei.com>
+> Here we add a bunch of shorthands for the topology we're setting up,
+> but not for all interfaces/IPs. E.g.,
+[...]
+> The IPs are hardcoded here (and in the rest of the code below). AFAICT the
+> logic is that the defines are to make it more obvious as to what the test
+> is about. Is there a logic of this kind behind the naming convention?
 
-The RV64 BPF JIT now supports mixing bpf2bpf and tailcalls.
-Therefore, the tailcall_bpf2bpf tests can be safely removed
-from the riscv64 denylist.
+Yes, the rule is inherited from the file: a value gets a define when
+setup_netns() and the assertion table both use it, so the two sites
+cannot drift and a table arm names what it targets (.daddr =
+IPV4_VLAN_GW reads as intent). The new defines follow that.
 
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- tools/testing/selftests/bpf/DENYLIST.riscv64 | 1 -
- 1 file changed, 1 deletion(-)
+The hardcoded addresses are in the netns and live-frames subtests,
+which build their own single-function topologies the table never
+references, so there is no second site to keep in sync. The bare
+"veth1"/"veth2" strings predate this series; I left them alone rather
+than churn lines the series does not otherwise touch.
 
-diff --git a/tools/testing/selftests/bpf/DENYLIST.riscv64 b/tools/testing/selftests/bpf/DENYLIST.riscv64
-index 4fc4dfdde293..ca1beae7fe8f 100644
---- a/tools/testing/selftests/bpf/DENYLIST.riscv64
-+++ b/tools/testing/selftests/bpf/DENYLIST.riscv64
-@@ -1,3 +1,2 @@
- # riscv64 deny list for BPF CI and local vmtest
- exceptions					# JIT does not support exceptions
--tailcalls/tailcall_bpf2bpf*			# JIT does not support mixing bpf2bpf and tailcalls
--- 
-2.34.1
+The netns subtest does repeat its 10.66.0.x addresses a few times,
+though, so I will give those a local define in v7 to keep the new code
+consistent with itself.
 
+Thanks for the reviews!
+
+Avi
