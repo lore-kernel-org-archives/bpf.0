@@ -1,165 +1,213 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9523289367
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 13:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D58A289367
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 13:19:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783516418; cv=none; b=Ew9wsn/3ZyGbt9d6HnHlTp3NLhUmQhGKwKcXaFoYb35PhGPG7f7t0R0U0eK2pTemkUiYkB8XVWGlF64Lhfxsb/OzWkcOzqAAdtkjaYFr9W44+U6h0Nlpsv+DNAdwepIJJLdAMbbDBoZOi6CCOcOLOYMUymtVRtKtx+b17vgSOSE=
+	t=1783516760; cv=none; b=qUgJt4RQpi4Q1xVzPEdRFhohraoQ/DFPiKsRykVvS1FN1KH8gDjknSBY2w9J3cFLo+/YK56gEWdoiF5i5F9xBccifhvoMCbA3/Wtfz5BpOMQeLvR6+/5j/lnNMNPywqJYhpoY1BhPr08IBeHdFORu6/2GTPmTzOQ6k/Nw/XBnYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783516418; c=relaxed/simple;
-	bh=JmX7s0EIPqd9t8N5KHt8I/muMfShONzCYy2F/a/pPug=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V0J+4mdswivT/0iNT/lXoQMgk8XjIBSMPYr6DEJzDIJ5sphEIXvN7Ezs15CEXipHrX4GqQ7OLVD+jtKds9esCgrmoXj5r4hUuvY5cUjg21eiQ6ITa25N3z+kzB3TF+QJ1Km4Cl1XEyKA1KJVF2OB7TC5Trdq9Mv9VL5hczpwGFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RGTseQPc; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1783516760; c=relaxed/simple;
+	bh=9ucH+ku4WCfHzAekKUX8jTMbLAXN9wYf2y4NAxewHrw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=cofhHWw0d+b8o5bH/O0RnPIvWCCKiFNJSIwpQOgneBh3DSO6Tts4gibe1Q4mn4lNbT4KZcEens1h2r8dUtmcfjzpikyvN1ZtgToyFNj3fGVigbZGw0hT0AnhlU+WvSmBjfgpKkRXqamGGu4CLD11A3y3Raz6UgiOW9LT0347MpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YEMEF8MT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RGTseQPc"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-493b27c7451so20567475e9.0
-        for <bpf@vger.kernel.org>; Wed, 08 Jul 2026 06:13:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783516415; x=1784121215; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N1JyDujhG3Sgv6jNuFackk7ytJpNfqoiBKPjDFE83CQ=;
-        b=RGTseQPcZtZCy+GKu8slT+uU23KKVJi0Hg6QKpofzMUFoqzr4nv/1+x3VgIee0StBM
-         rsgFTb/h6nbReydwTcouZ0k5aHSVBN3mq7fYTft6TCkcuTr4Tc3kLt7ayVjOSF+TcOXy
-         4EId9V14dif9/4WkwECtqq2L3+sWBN9ie+giCOcsMSPk+La6iwfuaP51+kxYYmvB1L8Z
-         /XyXkQZU2/2YQqeZR7XEX2caF51nFeSz2cNNq2q6ECsv2IsQ4Pcskh11oW/rFrJd9uv6
-         WESFMca7xn+71R9nAut/6oWrrevN3zdFE8+rF57s7YZpw8ofQHDJKiwIVpn0r0Vga5+N
-         EgzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783516415; x=1784121215;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N1JyDujhG3Sgv6jNuFackk7ytJpNfqoiBKPjDFE83CQ=;
-        b=WXD3am8iecQyo+aF7Vw0IFOJkD5xvASZd7wiZ/8EU9Vh/5HX4zJj1tRWr7ohNN7gzk
-         afEtSRsaeFIWNiGeqW8HIIHnepmOSxYsmsBYJCaUSmBKiQmmbshIkfU+g6lCaeC6lcjv
-         TNTG3ogq7oJWcz9VPGmRA5qoKgqJcFzr/L3P2X1nLJQNr8uOg5mgCmM4G6jwKYxgi/uE
-         BVJt4dqCBNwitwSbtmejI+tSR0X1RnO3wgkEsVRd0+ycJbcAeU8WH3dYuvz29xESojRV
-         JFs7ov0cnUqA/QFGAOOZpNWx2xmwrBsh9wLLeStWKllfWjv65Lv2x6KQcV5kXrFvm50S
-         6wJA==
-X-Gm-Message-State: AOJu0YwH43x1FTm0vlVr7bBQuiV8oFya23WkItZyWfmxst4vkcJ6MThe
-	Up7ZOyJ6eZbceNF/hzEhSRV0d31mIxpOmdvAo6Mbh5SY/XDPC9WYcvL5ZR0ZGN8GmEBdE8IdDtl
-	Hil/60NJP2w==
-X-Gm-Gg: AfdE7clchB9SvGESOrWeCTsLYCpS6mLyyahQO8wqXLNZHwjF1931WrSZ6Mr1gmFoUKm
-	OqswhpqBb6c1bi5QSAEwedmPkJk7HGl0ON1H825qRWwdNDqO8gdkWLRWiiDJnHjK8xzIFh5Edr/
-	UOjT3kZpDW16m0Xw7RACvUGXDUoXeFd1/WqXRkxk/lM1vtldBMle5vGs01apUlAshMCGjfyyNen
-	xBA6hUW8qyDpnBXF7xFgcl8oqgJxfn9Evvh5bMrrvz0n1xk99k9orWLZUliZ3wZqMpczWKJDG09
-	Utf48tGA7rOe9MYCBUYMsB/MR9UApqCpTFFD9oItXkkhJpYq3dq3vk4nTVurvxJaJM4mdj6k6QL
-	DoKkAPpHHoHkYXhdhdNiYeTgezsGO/oRInsPqaT+HBKFmj2c94o2NIfkjGYtm+TSVPvGo/wVEIZ
-	r362T6r6QxWcc+I/SE6mDJ1FEXxPoKsaqMvkedCdc=
-X-Received: by 2002:a05:600c:49a7:b0:493:b240:6a8b with SMTP id 5b1f17b1804b1-493e10358a8mr44551725e9.14.1783516414979;
-        Wed, 08 Jul 2026 06:13:34 -0700 (PDT)
-Received: from u94a (61-227-80-86.dynamic-ip.hinet.net. [61.227.80.86])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ca5b3a2bf6bsm2461568a12.27.2026.07.08.06.13.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2026 06:13:33 -0700 (PDT)
-Date: Wed, 8 Jul 2026 21:13:18 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
-	emil@etsalapatis.com, shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer
- pointers
-Message-ID: <ak5HLLrYK3R_g2y_@u94a>
-References: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
- <20260708090151.151729-2-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YEMEF8MT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C7691F000E9;
+	Wed,  8 Jul 2026 13:19:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783516759;
+	bh=XMp8o4UVPLJImlI46fzNFZBEgHclKqVFAyZ6/JeOABA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=YEMEF8MTyRxTa2O0zAor6e0o3WgCmqlTBg5eJosQhZP56upAZZuH3/9A+RqMFDzrw
+	 0Gr3QutZeBRTnPKAo7+RfJejnq3UAI7d0D0vcFRwGTYR2v0Osuq/fGYzHDoqhhi441
+	 WbLlYF2JzdNT7Ph+xLLEMKqeMuV7Chn7pqGVWJFfAVjWoaCbbm/jsOYw8KKF7sYWo0
+	 fogY3i4YFBYmrvhBd4QDBihdPdOTuyx42PAH8SGcf5hAWZxk1HFfhsqjhgB4zV9LlG
+	 7zRvR0IkPZswsRgjh90XKsu5VoIyI/oI70brkoklWR/Xjufix4/fwyKGfd6u5NtjDm
+	 XlIAfKet6oPeQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/1] selftests: drv-net: add XDP RX checksum
+ metadata tests
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Vladimir Vdovin" <deliran@verdict.gg>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <6c7a059057d309e999b706b5b547be9c620ce544.1783514455.git.deliran@verdict.gg>
+References: <akZ7QPfn83OUx5Vm@lore-desk>
+ <cover.1783514455.git.deliran@verdict.gg>
+ <6c7a059057d309e999b706b5b547be9c620ce544.1783514455.git.deliran@verdict.gg>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 08 Jul 2026 13:19:18 +0000
+Message-Id: <20260708131919.0C7691F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260708090151.151729-2-sun.jian.kdev@gmail.com>
 
-On Wed, Jul 08, 2026 at 02:01:50AM -0700, Sun Jian wrote:
-[...]
-> Fixes: 022ac0750883 ("bpf: use reg->var_off instead of reg->off for pointers")
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] The BPF program overwrites checksum metadata on every packet, wh=
+ich may cause TCP tests to spuriously fail if trailing control packets lack=
+ checksum offload.
+- [Low] Multi-line comments do not follow the mandatory BPF subsystem comme=
+nt style (opening `/*` must be on its own line).
+--
 
-Agree that above is the commit that introduced the issue.
+--- Patch [1]: [PATCH bpf-next 1/1] selftests: drv-net: add XDP RX checksum=
+ metadata tests ---
+commit d0f16a1bf595df9c0de880826075e44c316407e0
+Author: Vladimir Vdovin <deliran@verdict.gg>
 
-More comments below.
+selftests: drv-net: add XDP RX checksum metadata tests
 
-[...]
-> @@ -5326,14 +5326,18 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
->  static int __check_buffer_access(struct bpf_verifier_env *env,
->  				 const char *buf_info,
->  				 const struct bpf_reg_state *reg,
-> -				 argno_t argno, int off, int size)
-> +				 argno_t argno, int off, int size,
-> +				 u32 *access_end)
->  {
-> +	s64 start, var_off;
+Extend the xdp_metadata driver tests with coverage for
+bpf_xdp_metadata_rx_checksum(). Adds a BPF program to read and store
+the verdict, and Python tests to validate both valid and invalid RX
+checksums.
+
+> diff --git a/tools/testing/selftests/drivers/net/hw/xdp_metadata.py b/too=
+ls/testing/selftests/drivers/net/hw/xdp_metadata.py
+> index 33a1985356d90..687c43a1797a4 100644
+> --- a/tools/testing/selftests/drivers/net/hw/xdp_metadata.py
+> +++ b/tools/testing/selftests/drivers/net/hw/xdp_metadata.py
+[ ... ]
+> @@ -130,6 +146,91 @@ def test_xdp_rss_hash(cfg, proto):
+>              f"RSS hash type should include L4 for {proto.upper()} traffi=
+c")
+> =20
+> =20
+> +def _require_rx_csum_meta(cfg):
+[ ... ]
+> +@ksft_variants([
+> +    KsftNamedVariant("tcp", "tcp"),
+> +    KsftNamedVariant("udp", "udp"),
+> +])
+> +def test_xdp_rx_csum_valid(cfg, proto):
+[ ... ]
+> +    csum =3D bpf_map_dump(csum_map_id)
 > +
->  	if (off < 0) {
->  		verbose(env,
->  			"%s invalid %s buffer access: off=%d, size=%d\n",
->  			reg_arg_name(env, argno), buf_info, off, size);
->  		return -EACCES;
->  	}
+> +    pkt_cnt =3D csum.get(_CSUM_KEY_PKT_CNT, 0)
+> +    err_cnt =3D csum.get(_CSUM_KEY_ERR_CNT, 0)
+> +    ip_summed =3D csum.get(_CSUM_KEY_IP_SUMMED, 0)
 > +
->  	if (!tnum_is_const(reg->var_off)) {
->  		char tn_buf[48];
->  
-> @@ -5344,6 +5348,29 @@ static int __check_buffer_access(struct bpf_verifier_env *env,
->  		return -EACCES;
->  	}
->  
-> +	var_off = (s64)reg->var_off.value;
-> +	if (var_off >= BPF_MAX_VAR_OFF || var_off <= -BPF_MAX_VAR_OFF) {
-> +		verbose(env, "%s %s buffer offset %lld is not allowed\n",
-> +			reg_arg_name(env, argno), buf_info, var_off);
-> +		return -EACCES;
-> +	}
+> +    ksft_ge(pkt_cnt, 1, comment=3D"should have received at least one pac=
+ket")
+> +    ksft_eq(err_cnt, 0, comment=3Df"RX checksum error count: {err_cnt}")
 > +
-> +	start = var_off + off;
-> +	if (start < 0) {
-> +		verbose(env,
-> +			"%s invalid negative %s buffer offset: off=%d, var_off=%lld\n",
-> +			reg_arg_name(env, argno), buf_info, off, var_off);
-> +		return -EACCES;
-> +	}
+> +    ksft_pr(f"  ip_summed: {ip_summed:#x} cksum: "
+> +            f"{csum.get(_CSUM_KEY_CKSUM, 0):#010x} "
+> +            f"level: {csum.get(_CSUM_KEY_LEVEL, 0)}")
+> +    ksft_ne(ip_summed & (XDP_CHECKSUM_UNNECESSARY | XDP_CHECKSUM_COMPLET=
+E), 0,
+> +            "device should report a checksum verdict for a valid packet")
 
-I was thinking of suggest to just do a single unsigned check
-
-  var_off = reg->var_off.value;
-  if (var_off >= BPF_MAX_VAR_OFF) {
-    ...
-
-But looking at the code before 022ac0750883, what you have is closer
-aligned to the previous behavior, let's stick to this.
-
-> +
-> +	if (size < 0) {
-> +		verbose(env, "%s invalid %s buffer access: off=%lld, size=%d\n",
-> +			reg_arg_name(env, argno), buf_info, start, size);
-> +		return -EACCES;
-> +	}
-
-`size` comes from bpf_size_to_bytes(bpf_size) in check_mem_access(), and
-is already checked to be not negative; plus other check_* helpers does
-not check for this, so I think it can be dropped.
-
-Otherwise, LGTM:
-
-Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+[Severity: Medium]
+Will this test sporadically fail for TCP traffic? Since multiple packets mi=
+ght
+be exchanged, the final state of ip_summed could be from a trailing control
+packet (like FIN or RST) that lacks checksum offload, leading to a failure
+here.
 
 > +
-> +	*access_end = (u32)start + (u32)size;
-
-If you want, this could use a quick one-line comments regarding the fact
-that it won't overflow, or even verifier_bug_if().
-
 > +
+> +def test_xdp_rx_csum_invalid(cfg):
+[ ... ]
+> diff --git a/tools/testing/selftests/net/lib/xdp_metadata.bpf.c b/tools/t=
+esting/selftests/net/lib/xdp_metadata.bpf.c
+> index f71f59215239f..70decae0a6637 100644
+> --- a/tools/testing/selftests/net/lib/xdp_metadata.bpf.c
+> +++ b/tools/testing/selftests/net/lib/xdp_metadata.bpf.c
+[ ... ]
+> @@ -40,6 +41,24 @@ struct {
+>  	__uint(max_entries, 4);
+>  } map_rss SEC(".maps");
+> =20
+> +/* RX checksum results: key 0 =3D ip_summed bitmask, key 1 =3D hw cksum =
+value,
+> + * key 2 =3D cksum level, key 3 =3D packet count, key 4 =3D error count.
+> + */
+
+[Severity: Low]
+This isn't a bug, but the BPF subsystem prefers multi-line comments to have
+the opening /* on its own line. Could this be adjusted?
+
+> +enum {
+> +	CSUM_KEY_IP_SUMMED =3D 0,
+[ ... ]
+> @@ -55,8 +74,20 @@ enum xdp_rss_hash_type {
+>  	XDP_RSS_L4_ICMP =3D 1U << 8,
+>  };
+> =20
+> +/* Mirror of enum xdp_checksum from include/net/xdp.h.
+> + * Needed because the enum is not part of UAPI headers.
+> + */
+
+[Severity: Low]
+This isn't a bug, but could the opening /* be placed on its own line
+to match BPF comment style?
+
+> +enum xdp_checksum {
+> +	XDP_CHECKSUM_NONE =3D 1U << 0,
+[ ... ]
+> @@ -78,41 +109,39 @@ static __always_inline __u16 get_dest_port(void *l4,=
+ void *data_end,
 >  	return 0;
 >  }
->  
-[...]
+> =20
+> -SEC("xdp")
+> -int xdp_rss_hash(struct xdp_md *ctx)
+> +/* Return true when the packet matches the L4 protocol and destination
+> + * port configured in map_xdp_setup (zero/unset filters match anything).
+> + */
+
+[Severity: Low]
+This isn't a bug, but could the opening /* be placed on its own line
+to match BPF comment style?
+
+> +static __always_inline bool xdp_match_setup(struct xdp_md *ctx)
+>  {
+[ ... ]
+> @@ -160,4 +204,46 @@ int xdp_rss_hash(struct xdp_md *ctx)
+>  	return XDP_PASS;
+>  }
+> =20
+> +SEC("xdp")
+> +int xdp_rx_csum(struct xdp_md *ctx)
+> +{
+[ ... ]
+> +	ret =3D bpf_xdp_metadata_rx_checksum(ctx, &ip_summed, &cksum,
+> +					   &cksum_level);
+> +	if (ret < 0) {
+> +		key =3D CSUM_KEY_ERR_CNT;
+> +		cnt =3D bpf_map_lookup_elem(&map_csum, &key);
+> +		if (cnt)
+> +			__sync_fetch_and_add(cnt, 1);
+> +		return XDP_PASS;
+> +	}
+> +
+> +	key =3D CSUM_KEY_IP_SUMMED;
+> +	val =3D (__u32)ip_summed;
+> +	bpf_map_update_elem(&map_csum, &key, &val, BPF_ANY);
+
+[Severity: Medium]
+Does this update overwrite the checksum metadata on every packet? If so, the
+map will only contain the verdict of the last processed packet, which could
+be an empty control packet without checksum offload, leading to incorrect t=
+est
+failures. Can we accumulate the results or only update if the packet carrie=
+s a
+payload?
+
+> +
+> +	key =3D CSUM_KEY_CKSUM;
+> +	bpf_map_update_elem(&map_csum, &key, &cksum, BPF_ANY);
+> +
+> +	key =3D CSUM_KEY_LEVEL;
+> +	val =3D cksum_level;
+> +	bpf_map_update_elem(&map_csum, &key, &val, BPF_ANY);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/6c7a059057d309e999b=
+706b5b547be9c620ce544.1783514455.git.deliran@verdict.gg?part=3D1
