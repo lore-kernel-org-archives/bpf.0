@@ -1,115 +1,145 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF53439346
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:45:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507963E7BAF
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:54:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783543536; cv=none; b=FrTci6xDT3/g5yNtQy/82iFD3Kq7Rks8OCnzBTedAR92Bitl4TJKGzPsvrKZlD2lz3l0C0UiWSeDObAOoOpmxJrAknoZ5BG9rB3QmO47vHTW44bVYWuOlwScwFnvRsCwM+4fcZmfEi8kVnkp1H1lYpd5Lt7G1OR9nwHTvUBSCW8=
+	t=1783544075; cv=none; b=MzQH6VYypWxmDejVZPb2pNg14BlahVv9tQSCbECaTHPOFCNUk4W1egJtf9fkFiu0d8/iIHpxDTrdCiak5ysDU5rJQMF9bdFBnnYd1tbrkHbdKvCvJ9AymDjc+2UeotdulQ3a6qHVVfSi10MvHARG9rmcqq3R4Ebs19ETXJOrFQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783543536; c=relaxed/simple;
-	bh=qmf+5d8VvcXIbV/CLboFAl5DOBHD8TZYzt/ovlYj18Q=;
+	s=arc-20240116; t=1783544075; c=relaxed/simple;
+	bh=o910hwUD0ZINJIwmbX0SjoZemCb5MCyNYfU1oz/SwRc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=GuqWFJYlweBcfaP1C4zcJQ+EuEpQTnkQxmaF16n0ULdyrU4imd/wJMlwYtT1wVWl5OthH3Tds9RPXiEqLZNYodEyJtujWGKJ4mAEpd8mwcw9JIFUpE+IpQnXgC8OTm+ZpU0SHPFy6c9LJ6ZdAlA9ywChGEKb8xSEl9bRWWl/i00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dFdm4EJr; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=f7fGd0iBbXlBh+nBdyRMpGnQY3lie9Qi0QL+xV88air/jrGX6/qcAL2w9/UVpWA6GB71sv3B9S/dY2CU+ABmFCz1fmlz5WCtuCyyIalns2GK/Q0JXFTcGHdqxgDxIdW29NLlirQKNhYNpWV2bHC43+IE3UCpUsmO/AL5ogkRMKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eTWlnrMc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dFdm4EJr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C85F1F000E9;
-	Wed,  8 Jul 2026 20:45:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eTWlnrMc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 448C11F000E9;
+	Wed,  8 Jul 2026 20:54:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783543535;
-	bh=jiytFXpfCWHu5tDae87S0ODplipF+af5a82bzCeFN9s=;
+	s=k20260515; t=1783544072;
+	bh=RP2SFa0lyCKyKE9MSj57hGEfHKMAMrUYK/HD7cAMJhk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dFdm4EJrPajO4nm98qLQE1Dl8Q/DPBP/aPiVxSz0ESGZH/7IYjJmafoWEqMlKn4tt
-	 MhlpHfy51IoXPejXO8frjdgTkBv9p3wApEKUgF6B9ye6X4SIYyQfsfrWL0PyoxNm3C
-	 R7OBIuxs41bs74durOrIE1zdjSPU90C2Weq+N3w2JqoDuLo1k31CD+Q3v6QiGrrP7/
-	 IB5LKjZPZ8djwD4zXI+X7v8fnRvzF6pPOBv30vpcFAP006byW0neRdgVZpBgRC/9zH
-	 8QPSDY11YNrbK4amCnAnPso0aKRMr8aZCA3MTZECRJ7WzTHl1Ip0yK6dB4VxVj57UR
-	 smBXSf7N5b8SQ==
+	b=eTWlnrMcNo3b3xG84kezKzYZ23jck/quAo51qzWvyjQ9C3vbd7EBVjPl2VdfJ2qP0
+	 l4Yu0PKr3bKuV30qwi2GBoQuJ+ZzB7FyiwlcPPjHbJBAiT2exF7C3D1/GVR5SJK7At
+	 a4+lV39sTKDm1C+ccPXOjc1H42chHEQ5qF2CjR1pz/C5R8cSlV1qaPevCMyYMF/cC5
+	 UoTBZ1yDX6hVpqLA47lH/R71xeVty15YnPlg0znHEgYRjBpw6CbVcHM+YBBOYw+kRh
+	 rL5bMBp2SZPxHQ2Kpf+keGHl34Bqi12c3uynT1ODFaNMpl5PB4eLWglLwtCS9VbS0H
+	 NNhHrQKr5cumA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 5/6] selftests/bpf: Add
- bpf_xdp_metadata_rx_checksum support to xdp_hw_metadat prog
+Subject: Re: [PATCH bpf-next v4 2/6] net: veth: Add xmo_rx_checksum callback
+ to veth driver
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Vladimir Vdovin" <deliran@verdict.gg>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260708203410.45121-6-deliran@verdict.gg>
+In-Reply-To: <20260708203410.45121-3-deliran@verdict.gg>
 References: <20260708203410.45121-1-deliran@verdict.gg>
- <20260708203410.45121-6-deliran@verdict.gg>
+ <20260708203410.45121-3-deliran@verdict.gg>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 08 Jul 2026 20:45:34 +0000
-Message-Id: <20260708204535.0C85F1F000E9@smtp.kernel.org>
+Date: Wed, 08 Jul 2026 20:54:31 +0000
+Message-Id: <20260708205432.448C11F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Addition of fields to `struct xdp_meta` changes its size from 32=
- bytes to 44 bytes, causing an alignment-induced offset mismatch between 64=
--bit BPF programs and 32-bit userspace architectures.
+- [High] The XDP CHECKSUM_COMPLETE value returned by veth_xdp_rx_checksum l=
+acks the MAC header contribution, causing XDP programs to compute incorrect=
+ checksums.
+- [High] veth_xdp_rx_checksum incorrectly maps CHECKSUM_PARTIAL to XDP_CHEC=
+KSUM_NONE, causing XDP programs to drop valid locally generated traffic.
 --
 
---- Patch [5]: [PATCH bpf-next v4 5/6] selftests/bpf: Add bpf_xdp_metadata_=
-rx_checksum support to xdp_hw_metadat prog ---
-commit 1839c76747e10e7e5dc96d9eb03c1675cdf0e646
+--- Patch [2]: [PATCH bpf-next v4 2/6] net: veth: Add xmo_rx_checksum callb=
+ack to veth driver ---
+commit 5a562d33c7a2a6e1ab983df15c58e768727ee475
 Author: Lorenzo Bianconi <lorenzo@kernel.org>
+Date:   Wed Jul 8 20:34:06 2026 +0000
 
-selftests/bpf: Add bpf_xdp_metadata_rx_checksum support to xdp_hw_metadat p=
-rog
+    net: veth: Add xmo_rx_checksum callback to veth driver
+   =20
+    Implement xmo_rx_checksum callback in veth driver to report RX checksum
+    result to the eBPF program bounded to the veth device.
 
-This patch introduces the capability to dump the HW rx checksum in the
-xdp_hw_metadata program. It achieves this by using the new
-bpf_xdp_metadata_rx_checksum() kfunc.
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index 1c51421491753..498d894d043da 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
 
-> diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/s=
-elftests/bpf/xdp_metadata.h
-> index bca09b94af261..f864d4a8bd8c6 100644
-> --- a/tools/testing/selftests/bpf/xdp_metadata.h
-> +++ b/tools/testing/selftests/bpf/xdp_metadata.h
 [ ... ]
-> @@ -52,10 +53,13 @@ struct xdp_meta {
->  		};
->  		__s32 rx_vlan_tag_err;
->  	};
-> -	struct {
-> -		__u32 ip_summed;
-> -		__u32 cksum;
-> -		__u8 cksum_level;
-> +	union {
-> +		struct {
-> +			__u32 ip_summed;
-> +			__u32 cksum;
-> +			__u8 cksum_level;
-> +		};
-> +		__s32 rx_cksum_err;
->  	};
->  	enum xdp_meta_field hint_valid;
->  };
 
-[Severity: Medium]
-Does this change create an alignment mismatch between the 64-bit BPF program
-and 32-bit userspace architectures?
+> +static int veth_xdp_rx_checksum(const struct xdp_md *ctx,
+> +				enum xdp_checksum *ip_summed,
+> +				u32 *cksum, u8 *cksum_level)
+> +{
+> +	const struct veth_xdp_buff *_ctx =3D (void *)ctx;
+> +	const struct sk_buff *skb =3D _ctx->skb;
+> +
+> +	if (!skb)
+> +		return -ENODATA;
+> +
+> +	switch (skb->ip_summed) {
+> +	case CHECKSUM_COMPLETE:
+> +		*ip_summed =3D XDP_CHECKSUM_COMPLETE;
+> +		*cksum =3D skb->csum;
 
-The addition of these fields changes the size of struct xdp_meta to 44 byte=
-s.
-On a 32-bit x86 system, the __u64 fields earlier in the struct require only
-4-byte alignment, keeping the userspace struct size at exactly 44 bytes.
-However, the BPF program runs in a 64-bit context where __u64 requires 8-by=
-te
-alignment, causing the compiler to pad the struct to 48 bytes.
+[Severity: High]
+Does this return a checksum that is out of sync with the packet data exposed
+to the XDP program?
 
-When verify_xdp_metadata() is called in userspace:
+When the packet enters veth_xdp_rcv_skb(), the MAC header is pushed back
+into the packet data so it is visible to the XDP program:
 
-    meta =3D data - sizeof(*meta);
+drivers/net/veth.c:veth_xdp_rcv_skb() {
+    ...
+    __skb_push(skb, skb->data - skb_mac_header(skb));
+    ...
+}
 
-Userspace will subtract 44 bytes from the packet data pointer, while the
-BPF program actually placed it at data - 48. Could this shift all metadata
-reads by 4 bytes on 32-bit platforms, leading to incorrect results and
-metadata corruption?
+However, it doesn't look like skb_postpush_rcsum() is called to update the
+checksum. Since the earlier eth_type_trans() subtracted the MAC header from
+skb->csum, returning skb->csum here means the XDP program will receive a
+checksum that lacks the MAC header contribution, which might lead to a
+checksum mismatch when the program validates the packet.
+
+> +		*cksum_level =3D 0;
+> +		break;
+> +	case CHECKSUM_UNNECESSARY:
+> +		*ip_summed =3D XDP_CHECKSUM_UNNECESSARY;
+> +		*cksum_level =3D skb->csum_level;
+> +		*cksum =3D 0;
+> +		break;
+> +	default:
+
+[Severity: High]
+Will CHECKSUM_PARTIAL fall through to this default case and be reported as
+XDP_CHECKSUM_NONE?
+
+Locally generated traffic transmitted through a veth device defaults to
+skb->ip_summed =3D=3D CHECKSUM_PARTIAL because veth advertises NETIF_F_HW_C=
+SUM.
+
+If this falls through to XDP_CHECKSUM_NONE, strict XDP firewalls might try
+to manually validate the checksum. Since the payload checksum hasn't been
+populated by hardware yet, the validation will fail and valid local
+traffic will be incorrectly dropped. Should this explicitly handle
+CHECKSUM_PARTIAL?
+
+> +		*ip_summed =3D XDP_CHECKSUM_NONE;
+> +		*cksum_level =3D 0;
+> +		*cksum =3D 0;
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260708203410.4512=
-1-1-deliran@verdict.gg?part=3D5
+1-1-deliran@verdict.gg?part=3D2
