@@ -1,170 +1,122 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3DF8390228
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 14:47:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A545343935F;
+	Wed,  8 Jul 2026 15:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783522073; cv=none; b=fIFKuwqAO9Omv1NQRgfFVmAY83qxNkQBIWnOStGYsOxfeBB899xFmkIR1EtIpD+eZelLC5n/35nj20ZxoxGjiRfbidOa0r/s7c7eld0Fn03YkWn5cggI8ytJan1gJIBv6xySS87lHI2k92bW2+x1tF3cLWIxv5OtbbVQbNvvPjg=
+	t=1783523530; cv=none; b=XSze/4W1EcjFJk7vKKGgZblrdFQsohscW7k75nX+QZaD/uoQ+Q5qB1l3W/YoNvQpzrc9hKUvUFpxvLCCq5BNWchl7mWDH/n4v+h5qCC3n/ohp2gLksuQp1rLtPddZUIeRhuvzkNM1JdShEEEQYvfIi7iZjuyFLOJnXpmxo+fGN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783522073; c=relaxed/simple;
-	bh=YmjQx4atfVw6+lafnnHnNilMma8VwSAdVBri3N2n9+k=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=ZGJKWiEL726RIFm9GH4zRKJw0WkIPc8nmkIberLTHK7cLs6MThrnTx/I3J8H8+NlX3T7LatwVh8DCmwP8ffuTZL/2Hfie3JrDl2y4PQE8rNuvlqiVdSDCz0ZJQd09/ocq6em+muYXMVk+lb1M2syny1v1bvBJQ/U6L5NW3ZXjXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pEAM0LtW; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1783523530; c=relaxed/simple;
+	bh=eZm0r2DiTpoq/10mInPMNUJ6HALbq9YR8YcTjrOAKHI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mDGj/Zj97zCnKxcMBiDm7VRN7C8XT/y1yHwM6HNZnv+xkvwnoOUP31/fw0vmv+VrPkKEL28v6ZBhpOvSuG61rXi6dW/JhFLzRAvkjLK3nfsWK7o+4CNw/YmHjYufF8aWCZwWFqe5KQ/k8ZA0rq7Ur0MoK7AjvH9Yr5hSKlZZ2Cs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cr4sAWnz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pEAM0LtW"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 8F47CC8F452;
-	Wed,  8 Jul 2026 14:48:04 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 98A1660339;
-	Wed,  8 Jul 2026 14:47:50 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D107C11BC1702;
-	Wed,  8 Jul 2026 16:47:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1783522070; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=jFdbisRPKTRylapm7Tnzw1nhQbLz3Y0BP5aXIMzlsUU=;
-	b=pEAM0LtWBxngOCEsa3VItT6CTgF58OFxbJSL2KSGoLrhaZtKOdMwjX80OU6hVkQ4scOY77
-	f48Xt2UXBCVuVPEKfZGybShD8O0dV1rw/S0oO2rAxIeAFdZNTZy/O8CA1FmqM6YCQK8RJ8
-	bSedQhxoiJSsWQGzafFg2vtOt4FsFDPUCuMnlJZN86wjA82V8muZuN85sC6K5QPeNdxAw7
-	H4Qzj/4NofDzp14TADv0rhzuQoibkcz/uvvpmgYstkiKfIlKLl6wE0Xe7Rs52LMVqOPQtH
-	kx3yNq0LZcGBgx+JmFDhCdinp0LJaT9KD9wsfxFS9XNed50l1B8vMHi28PsJ/A==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cr4sAWnz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D14B1F000E9;
+	Wed,  8 Jul 2026 15:12:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783523529;
+	bh=nyY1MWhLb4Wq5gDtA7z3gSgPQVymbQDkrz21Siw0Hjk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=cr4sAWnzV4LQ0SCxq+97uhFdA9kAEz60uPyDydZ1AerCsEiKtbU7+a9Oy+hlstCNT
+	 /1LwCV9UfoBV5xfX6Q5nys+rPY4itZBiEkHrMLTsgl3CCQHLbAi6xLC0TjfQQ7Pksh
+	 Q0ZafeK84RnC9dhV7G8z5HLIMSOYDtsDMam3jQddzJSzoiDqG8NtktnYNbY2yJ+7lG
+	 BG+T9bZFWPYvg275MgzeHdJ5a1Gl+E138vs96qutdobF9PX8dJ3qD3Ado4tWhKQk9S
+	 UFG5L3Puy932ZMeqoWg5GLMruTguBhVM+neSK0jdsmi0kI5bsdlHPd7VnSaKpA45Js
+	 F+iWy2idbGY3g==
+Date: Wed, 8 Jul 2026 17:12:07 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Vladimir Vdovin <deliran@verdict.gg>
+Cc: sdf@fomichev.me, kuba@kernel.org, andrii@kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+	martin.lau@linux.dev, sdf.kernel@gmail.com, bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next 0/1] selftests: drv-net: XDP RX checksum
+ metadata test
+Message-ID: <ak5ox296M46FAcWX@lore-desk>
+References: <akZ7QPfn83OUx5Vm@lore-desk>
+ <cover.1783514455.git.deliran@verdict.gg>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="25fzO8AAG30TYajc"
+Content-Disposition: inline
+In-Reply-To: <cover.1783514455.git.deliran@verdict.gg>
+
+
+--25fzO8AAG30TYajc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 08 Jul 2026 16:47:49 +0200
-Message-Id: <DJT9T3MEILYQ.2KNU0Q7RKM3SW@bootlin.com>
-Subject: Re: [PATCH bpf-next v4 10/10] selftests/bpf: add tests to validate
- KASAN on JIT programs
-Cc: <bpf@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: <sashiko-reviews@lists.linux.dev>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260708-kasan-v4-0-d5c177ab8227@bootlin.com>
- <20260708-kasan-v4-10-d5c177ab8227@bootlin.com>
- <20260708082841.9FF7C1F00A3A@smtp.kernel.org>
-In-Reply-To: <20260708082841.9FF7C1F00A3A@smtp.kernel.org>
-X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed Jul 8, 2026 at 10:28 AM CEST, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issu=
-e(s) to consider:
-> - [Medium] Test fails spuriously on default kernels due to missing verifi=
-cation of the kasan_multi_shot requirement.
-> - [Low] The variable `nsize` is assigned but never used, constituting dea=
-d code.
-> --
->
-> --- Patch [10]: [PATCH bpf-next v4 10/10] selftests/bpf: add tests to val=
-idate KASAN on JIT programs ---
-> commit c15c25b993ae0bc70091046fa0c6b2bb1e71d099
-> Author: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.com=
->
->
-> selftests/bpf: add tests to validate KASAN on JIT programs
->
-> This patch adds a basic test runner to load and run BPF programs that
-> trigger memory management bugs to validate KASAN instrumentation.
-> It runs various memory access tests and checks kernel logs for the expect=
-ed
-> KASAN splat, requiring the kernel to be configured with kasan_multi_shot.
->
->> diff --git a/tools/testing/selftests/bpf/prog_tests/kasan.c b/tools/test=
-ing/selftests/bpf/prog_tests/kasan.c
->> new file mode 100644
->> index 0000000000000..f006b92ee131a
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/prog_tests/kasan.c
->
-> [ ... ]
->
->> +static int check_kasan_report_in_kernel_logs(char *buf, struct test_ctx=
- *ctx,
->> +					     bool is_write, int size)
->> +{
->> +	char access_log[READ_CHUNK_SIZE];
->> +	char *kasan_report_start;
->> +	int nsize;
->> +
->> +	snprintf(access_log, READ_CHUNK_SIZE, KASAN_PATTERN_SLAB_UAF,
->> +		 ctx->prog_tag[0], ctx->prog_tag[1], ctx->prog_tag[2],
->> +		 ctx->prog_tag[3], ctx->prog_tag[4], ctx->prog_tag[5],
->> +		 ctx->prog_tag[6], ctx->prog_tag[7], ctx->prog_name);
->
-> [ ... ]
->
->> +	kasan_report_start =3D strstr(buf, access_log);
->> +
->> +	if (!kasan_report_start)
->> +		return 1;
->> +
->> +	nsize =3D snprintf(access_log, READ_CHUNK_SIZE, KASAN_PATTERN_REPORT,
->> +			 is_write ? "Write" : "Read", size);
->
-> [Severity: Low]
-> This isn't a bug, but the variable nsize is assigned here and never used.
-> Should this assignment be removed to avoid dead code?
+> Hi Lorenzo,
 
-I'll rather add an ASSERT on it.
+Hi Vladimir,
 
->> +
->> +	if (!strstr(kasan_report_start, access_log))
->> +		return 1;
->> +
->> +	return 0;
->> +}
->
-> [ ... ]
->
->> +void test_kasan(void)
->> +{
->> +	struct kasan_write_val val;
->> +	struct test_spec *test;
->> +	struct test_ctx *ctx;
->> +	struct kasan *skel;
->> +	__u32 key =3D 0;
->> +	int i, ret;
->> +
->> +	ctx =3D calloc(1, sizeof(struct test_ctx));
->> +	if (!ASSERT_OK_PTR(ctx, "alloc test ctx"))
->> +		return;
->> +
->> +	if (!is_jit_enabled() || !get_kasan_jit_enabled()) {
->> +		test__skip();
->> +		goto end;
->> +	}
->
-> [Severity: Medium]
-> Since the commit message notes that the kernel must run with the
-> kasan_multi_shot configuration, what happens if this parameter is missing=
-?
->
-> Could this test fail spuriously on default kernels where multi-shot is
-> disabled, since it doesn't verify if kasan_multi_shot is active before
-> triggering multiple reports?
+>=20
+> Here is the driver selftest for your XDP RX checksum series, as
+> discussed. It is written against your b4/bpf-xdp-meta-rxcksum branch
+> (the bitmask ip_summed + cksum/cksum_level API) and applies on top of
+> it rebased onto net-next, since the drv-net xdp_metadata.py test it
+> extends only exists there. Feel free to pick it straight into v4.
+>=20
+> It adds an xdp_rx_csum program to xdp_metadata.bpf.o and two cases
+> gated on the "checksum" xdp-rx-metadata feature (SKIP on devices
+> without it, e.g. netdevsim):
+>=20
+>  - xdp_rx_csum_valid (tcp/udp variants): traffic with a correct
+>    checksum from the remote endpoint must be reported with a usable
+>    verdict (CHECKSUM_UNNECESSARY and/or CHECKSUM_COMPLETE);
+>=20
+>  - xdp_rx_csum_invalid: UDP with a corrupted L4 checksum (net/lib
+>    csum -E) must not be reported as CHECKSUM_UNNECESSARY.
 
-The current test design assumes that kasan_multi_shot is not enabled by
-the test itself but by the CI runner. This is actually already the case
-for the BPF CI. But maybe having a SKIP instead of FAIL is more friendly
-for anyone trying to run the tests and forgetting to enable
-kasan_multi_shot (some additional doc have been requested and added
-since first revision, but I guess the check would not hurt).
+thx for working on it. Unfortunately I do not have the time to look into it=
+ a
+the moment. I rebased my b4/bpf-xdp-meta-rxcksum branch on top of net-next =
+one.
+Feel free to repost it adding your patch on top of it.
 
-Alexis
+Regards,
+Lorenzo
 
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>=20
+>=20
+> One question on the invalid case: I assert only that UNNECESSARY is not
+> set for a corrupted checksum (COMPLETE may still legitimately be
+> reported, since it carries the raw sum for wrong packets too). Is that
+> the documented expectation you and Jakub want the test to encode, or
+> should it be stricter?
+>=20
+> Thanks,
+> Vladimir
+>=20
+> Vladimir Vdovin (1):
+>   selftests: drv-net: add XDP RX checksum metadata tests
+>=20
+>  .../selftests/drivers/net/hw/xdp_metadata.py  | 103 ++++++++++++++++
+>  .../selftests/net/lib/xdp_metadata.bpf.c      | 112 ++++++++++++++++--
+>  2 files changed, 202 insertions(+), 13 deletions(-)
+>=20
+> --=20
+> 2.47.0
+>=20
 
+--25fzO8AAG30TYajc
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCak5oxwAKCRA6cBh0uS2t
+rJryAP9qRx+2qAVR1A56PZcxxMhoGDEv8KyL++5yZgQrru6nIQEAtI8wSuvf/kHZ
+AF8m77h6e7pqD0n1l3s/QjHue4ib8AE=
+=zMyG
+-----END PGP SIGNATURE-----
+
+--25fzO8AAG30TYajc--
