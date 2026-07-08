@@ -1,35 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBFF4C8FE0;
-	Wed,  8 Jul 2026 18:30:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF2CD4C8FE4
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 18:41:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783535440; cv=none; b=gQlBEIH9gqdksjqguw3dk74aavTAsB/H2GhVnFewAv/bEbGjUljwsGExzJ8MGSYJNjAibKgobk8e/tP30D8R0oUWNPnVix+21Ldpvv0FC0LvtxNm+nwO8wr7dlW06eQVRmaBKd5PHMD3pJxFEUBh7RDvy0FN96ToM8svneKUGLk=
+	t=1783536073; cv=none; b=VkDUcCRI31VaBeTSBoTqq5hBaJAIkI6/ZXzkF8E1CZbCOt4Izyg8MR/dqa3HxwbPC66lmr6NLG7tMZzUcfa600IcwIHaWLlCnfFghYb8KmPl2LBZxspRgKHTGIdLtfBe7/i+qj5fuEk034ZBMEYwzWCpi5ZsUFhnZ6TUoKl9t24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783535440; c=relaxed/simple;
-	bh=cZh5DVsj/dPA/UKAu+pTws34ASs3e/hIPIj+rrHjBRo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=KhW4IWAyjNcWNQZH996BuzEYJ0ZUIxCzkMoSnlh/E4BNkI1Ngp45OT0tcZSAeb58xCMw39jVF9ewFMfO195GcxIZokScIaVQLtd0F8DOw8v6risaD0TEwwrcJUw+XSCo/ibNg1cL/lZnr+NwrYF6HpS/dCpnJayn3vCQ9A6P/4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HKOeGQYA; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783536073; c=relaxed/simple;
+	bh=9wINvG3GwsOR8TZB0CNO1URRZv0LBVCxJEpMwVP09Sg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OhOpw7F4BSNlzJm9IyRIlBIAvqjxlRkWRCioSxb51DISdgfzh7+6ZfQOLgCm3pJsBW53dVYCALpcv8jcpmCe5E2CuRzIMqM/pVOFsuVf7DmXB04AFXhH9Kfxst9i/79sQ5q2sNsjp7wC9ajtaXZHd9YsGhtw7c3HN+LxaVIFQXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=ADOlJNge; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HKOeGQYA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD5221F000E9;
-	Wed,  8 Jul 2026 18:30:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783535437;
-	bh=BmLAl7KP6I/cpRymj1fw5zYepPzOB3GSUa3VvQqInLg=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=HKOeGQYAzkYBKb/f4u+9J9wFnS0rGLEXyejNw4Yvd0IInUHBF5zTmFX4jdaHDcdh8
-	 cRssy4BevWUl/t1AGA+wlAKrYHBrQFXf/kIef2dfUeDWE2caE53sFf9JW25EbQd84Z
-	 S2pad7Vy12MCWWUdkFI3ZCoP94RwjKPc/7GX6Am4lZZD/gy09Gni8tbRplGwguImcc
-	 HgHfyBLHBnuNdRk2WUQj+til8TxJ+bxlCtl3oe9jQ3x9cG2CzWfhcuWvhK7/++8kpq
-	 ShiXQ57qhXtqdmsqhcPnoQTA6gNMJIN/hEEE+ckOpDxe9g+9HcyOKRrxmTYC8OdsnB
-	 jNAk8GP2nAGcw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 197D73938456;
-	Wed,  8 Jul 2026 18:30:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="ADOlJNge"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=dOhHhmHK5CAC8SmYdPP4x11GeOWPiyiHvsU5js6DPXU=; b=ADOlJNgePapfJmRaiJslbyXTg6
+	YCbBb8fBCdpcNb6Kv8nX1GEQubTYOicmjHTRcwa7xtKPvxnOZ0g93NiNnfwRX/2UXGgsdp2+GKpUl
+	7l44NETAd9MsAMxl4AUly9NlyDkLyIJYkoR8LcYoCb12afhDdAdTZ8Whp3V1ROei9ElpgLjedH6Xn
+	ejFHJ0+MyCNSifiDyJXghTPTlzL7TK6mdoEHCxNwngxaNF5tWedwFGHruEBLdEL+BOUB4t7pJOsQk
+	yYDlsmUGj/gF/FHa1CRBadZ3bes/IXEBOFqMRM1JIQWBVWQ7NEtqf0GZNECovi5DjTFZuo0wFvf8s
+	60wl4gMA==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1whXCm-0003uU-1L;
+	Wed, 08 Jul 2026 20:41:08 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: memxor@gmail.com
+Cc: ast@kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH bpf-next] selftests/bpf: Close fd on unexpected success in signed loader
+Date: Wed,  8 Jul 2026 20:41:07 +0200
+Message-ID: <20260708184107.369182-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,57 +47,59 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v6 0/8] Verify BPF signed loader at load time
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178353541664.3057345.9896047455904217211.git-patchwork-notify@kernel.org>
-Date: Wed, 08 Jul 2026 18:30:16 +0000
-References: <20260708075343.358712-1-daniel@iogearbox.net>
-In-Reply-To: <20260708075343.358712-1-daniel@iogearbox.net>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: ast@kernel.org, kpsingh@kernel.org, James.Bottomley@hansenpartnership.com,
- paul@paul-moore.com, bboscaccy@linux.microsoft.com, memxor@gmail.com,
- torvalds@linux-foundation.org, a.s.protopopov@gmail.com, bpf@vger.kernel.org,
- linux-security-module@vger.kernel.org
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28054/Wed Jul  8 08:24:53 2026)
 
-Hello:
+The signature_enforced, signature_too_large, signature_zero_size and
+signature_bad_keyring subtests load a program that must be rejected,
+but leave the fd open if the kernel unexpectedly accepts the load:
+test_progs asserts record the failure and continue, so the fd would
+linger for the rest of the run. Just close it.
 
-This series was applied to bpf/bpf-next.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ tools/testing/selftests/bpf/prog_tests/signed_loader.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-On Wed,  8 Jul 2026 09:53:35 +0200 you wrote:
-> The BPF signing scheme signs a light skeleton's loader program and lets
-> the loader vouch for everything else: bpftool bakes the SHA256 of the
-> metadata map into the loader's instructions, signs the instructions, and
-> the loader compares the (frozen, exclusive) map against that hash from
-> within BPF once it runs. The construction is sound as a trusted hash
-> chain, but the kernel itself never attests the metadata, and that split
-> has been the recurring objection from the LSM / integrity side since the
-> scheme was proposed.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v6,1/8] bpf: Resolve and cache fd_array objects at load time
-    https://git.kernel.org/bpf/bpf-next/c/d5a85392392c
-  - [bpf-next,v6,2/8] bpf: Verify signed loader metadata at load time
-    https://git.kernel.org/bpf/bpf-next/c/b707068e0ed9
-  - [bpf-next,v6,3/8] libbpf: Drop in-loader metadata check for load-time verification
-    https://git.kernel.org/bpf/bpf-next/c/a2d784869a0f
-  - [bpf-next,v6,4/8] bpftool: Check EVP_Digest when computing excl_prog_hash
-    https://git.kernel.org/bpf/bpf-next/c/576bcaa1f5c2
-  - [bpf-next,v6,5/8] bpftool: Cover loader metadata with the program signature
-    https://git.kernel.org/bpf/bpf-next/c/92c7717981bb
-  - [bpf-next,v6,6/8] selftests/bpf: Adjust bpf_map layout in verifier_map_ptr
-    https://git.kernel.org/bpf/bpf-next/c/77e5f3c91453
-  - [bpf-next,v6,7/8] selftests/bpf: Verify load-time signed loader metadata
-    https://git.kernel.org/bpf/bpf-next/c/99b321dde704
-  - [bpf-next,v6,8/8] Documentation/bpf: Add BPF signing and enforcement doc
-    https://git.kernel.org/bpf/bpf-next/c/84c42f515f18
-
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/bpf/prog_tests/signed_loader.c b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
+index 0019492cf07a..77381d345435 100644
+--- a/tools/testing/selftests/bpf/prog_tests/signed_loader.c
++++ b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
+@@ -326,6 +326,8 @@ static void signature_enforced(void)
+ 		fd = load_loader(f.gopts.insns, f.gopts.insns_sz, -1, junk,
+ 				 sizeof(junk), KEY_SPEC_SESSION_KEYRING, 0);
+ 		ASSERT_EQ(fd, -EBADMSG, "invalid signature rejected at load");
++		if (fd >= 0)
++			close(fd);
+ 	}
+ 	gen_loader_fixture_fini(&f);
+ }
+@@ -575,6 +577,8 @@ static void signature_too_large(void)
+ 		fd = load_loader(f.gopts.insns, f.gopts.insns_sz, -1, junk,
+ 				 64 << 20, KEY_SPEC_SESSION_KEYRING, 0);
+ 		ASSERT_EQ(fd, -EINVAL, "oversized signature rejected");
++		if (fd >= 0)
++			close(fd);
+ 	}
+ 	gen_loader_fixture_fini(&f);
+ }
+@@ -594,6 +598,8 @@ static void signature_zero_size(void)
+ 		fd = load_loader(f.gopts.insns, f.gopts.insns_sz, -1, junk,
+ 				 0, KEY_SPEC_SESSION_KEYRING, 0);
+ 		ASSERT_EQ(fd, -EINVAL, "zero-size signature rejected");
++		if (fd >= 0)
++			close(fd);
+ 	}
+ 	gen_loader_fixture_fini(&f);
+ }
+@@ -614,6 +620,8 @@ static void signature_bad_keyring(void)
+ 		fd = load_loader(f.gopts.insns, f.gopts.insns_sz, -1, junk,
+ 				 sizeof(junk), INT_MAX, 0);
+ 		ASSERT_EQ(fd, -EINVAL, "signature with bad keyring_id rejected");
++		if (fd >= 0)
++			close(fd);
+ 	}
+ 	gen_loader_fixture_fini(&f);
+ }
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
