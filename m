@@ -1,113 +1,126 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23EEB3B19D2
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:10:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A87125A655
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:24:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783541452; cv=none; b=BMD70XosewtMU+DvN/Ru8GUcXVNrYSZavEuj7eplxEQe1MCsq47KU+iStvNCFnHWnL9hpqy0aTQBrY+ddLO8UJx/xSirc7WewVekk8v3yrjBEm0+B3sCLy8EPdAbfzQOfpJ9MmkrR/BKY03O7h2+NIZclZtl0bjAN6E5gI1F8vI=
+	t=1783542298; cv=none; b=H6MkgMkw/NOBtFzGTF1xfqcEer+ZFx0NPc5YiYiwoPBiVae7WmYIPUXlgbwQ7n1iOAJrvl6q63PsTZtzvWlrZldk1o3mLKFbxYwygvOVMZc3eLwA286aMEQ9IKdWS1JtrhdvXaO4ZaV7weXklnPQMN3D4ZTTJck0obwpLlIFp0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783541452; c=relaxed/simple;
-	bh=4n1/NLhri3dILZaEJziw9DS9Gb6FcYU2RmRQiKFgZGs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PjocsAa/v0x0YOdgLPnjsLu1LZatHGhNvZ2LEjprDrKyTGdk4ARUYtYrR5AyNZNxzUeehHVdn5Je52uo+hyyJYjVfAoAdVP3K5hBP/84UpJ7PdMo/pW3gYVKYViGMuRq5scYSqeglGjC6kR1OsPxs/XNtFJoRBnowTdxoVCkPM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 5408F1D0B78CB3; Wed,  8 Jul 2026 13:10:41 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel-team@fb.com
-Subject: [PATCH bpf-next 12/12] Documentation/bpf: Document 16-byte kfunc return values in R0:R2
-Date: Wed,  8 Jul 2026 13:10:41 -0700
-Message-ID: <20260708201041.2164554-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260708200939.2153664-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1783542298; c=relaxed/simple;
+	bh=1oHy+TLSON0YSTEfXDVVXlVWHoeC8PRxc0HAympFt7E=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=vCTcjluEzLzkbopS1xmokNj6cnrEPMgWeZr7CeFmJMZZDavuyS7RlckbX0AS/gyhZRhPJB0NyQUA2K5jwLyQ3NtQOeV3puVYIjUY2noKZbr9GBuYO+TQKEmFo8eshLHWIVIQQMnSxKkuVZ5ZM2pMM5R6U+LX8YxASjfhjdl4ZEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Np+MTl8d; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Np+MTl8d"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A5E91F000E9;
+	Wed,  8 Jul 2026 20:24:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783542296;
+	bh=qUGmXjqHgHhMGBTF/BkBF+HsbWvNIUZCV6XrHp61H4Q=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Np+MTl8d6dE1hYRerwxWrGwmZ5WSW5dGWI5vekV9U38usVUwrjF2ZZ7o6iNkJd950
+	 DyYTvOS0XJCBKTpMTTX+y+c+L3C6KbfNHn5v+LBDUwpOBao4nDlKEbgbiP16WclJWg
+	 1bOeYZPH9ieyyxPjkCAWcOBU+DPa5YQuYxLf+wBrKwjhcSLtU5bXTiVPx61vgihw5t
+	 mrsXYzzTumIZIv7i2r6M7dw7SqHMrG2QJqd8/+nMfzkMgNrhZydqLeNYlcvVcbTa9Y
+	 0o6PlcxZnx8ZrKzB4BU0y3N3PhpBrrghvfMnYUcLWwQ4xMwcxaFhf7tI/ZHi/FhH1L
+	 AwS4SDw5ZzPBg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 09/12] selftests/bpf: Add C tests for 16-byte
+ returns in R0:R2
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yonghong Song" <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260708201025.2160583-1-yonghong.song@linux.dev>
 References: <20260708200939.2153664-1-yonghong.song@linux.dev>
+ <20260708201025.2160583-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 08 Jul 2026 20:24:56 +0000
+Message-Id: <20260708202456.8A5E91F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 
-kfuncs may now return a value larger than 8 bytes and up to 16 bytes (a
-16-byte struct or union, or an __int128), passed back in the R0:R2 regist=
-er
-pair. Add a kfunc return-value section documenting this, including that a
-struct or union up to 8 bytes is returned in R0 alone, that the R0:R2
-register pair requires JIT support
-(bpf_jit_supports_kfunc_ret_reg_pair()), and that a return value larger
-than 16 bytes is unsupported.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Unconditional use of `__int128` in `bpf_testmod` breaks compilation=
+ on 32-bit host architectures.
+--
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- Documentation/bpf/kfuncs.rst | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+--- Patch [9]: [PATCH bpf-next 09/12] selftests/bpf: Add C tests for 16-byt=
+e returns in R0:R2 ---
+commit 5ed3844739f04c920bb1c37cdf474501b3ca9fef
+Author: Yonghong Song <yonghong.song@linux.dev>
 
-diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index c801a330aece..be4f489a9f16 100644
---- a/Documentation/bpf/kfuncs.rst
-+++ b/Documentation/bpf/kfuncs.rst
-@@ -501,6 +501,42 @@ is also covered by this recovery. A kfunc handed an =
-arena pointer may
- therefore access up to ``GUARD_SZ / 2`` past it without bounds-checking
- against the arena. Larger accesses must verify the range explicitly.
-=20
-+2.9 kfunc Return Values
-+-----------------------
-+
-+A kfunc may return a scalar, a pointer, or a small struct or union by
-+value. A scalar or pointer of up to 8 bytes is returned in R0, as usual.
-+
-+A struct or union returned by value must be composed only of scalars
-+(recursively). Its bytes are handed back to the program as the raw conte=
-nts
-+of R0 (and R2), so a pointer field would otherwise be laundered into a s=
-calar
-+and escape the verifier's pointer provenance and reference tracking. Suc=
-h a
-+struct or union is therefore rejected at load time.
-+
-+A kfunc may also return a value larger than 8 bytes and up to 16 bytes -=
-- a
-+16-byte scalar-only struct or union, or an ``__int128``. Such a value is
-+returned in the register pair R0:R2, matching the convention LLVM uses f=
-or
-+the BPF target: the low 64 bits in R0 and the high 64 bits in R2. A stru=
-ct
-+or union of 8 bytes or less is returned in R0 alone.
-+
-+::
-+
-+        struct bpf_pair { __u64 a, b; };   /* 16 bytes */
-+
-+        __bpf_kfunc struct bpf_pair bpf_kfunc_get_pair(void)
-+        {
-+                struct bpf_pair p =3D { .a =3D 1, .b =3D 2 };
-+
-+                return p;      /* p.a in R0, p.b in R2 */
-+        }
-+
-+Returning a value in the R0:R2 pair requires the JIT to place the second
-+half of the return value into R2, which not every architecture supports
-+right now. A kfunc with a return value larger than 8 bytes is therefore
-+rejected at load time on a JIT that does not advertise this capability (=
-see
-+``bpf_jit_supports_kfunc_ret_reg_pair()``), and such a program is never =
-run
-+by the interpreter. A return value larger than 16 bytes is not supported=
-.
-+
- .. _BPF_kfunc_lifecycle_expectations:
-=20
- 3. kfunc lifecycle expectations
+selftests/bpf: Add C tests for 16-byte returns in R0:R2
+
+This commit adds selftests to exercise 16-byte return values passed in the
+R0:R2 register pair. The tests include an __int128 return, a 16-byte struct
+return, and a 16-byte union return.
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
+/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+
+[ ... ]
+
+> @@ -825,6 +825,18 @@ __bpf_kfunc int bpf_kfunc_call_test5(u8 a, u16 b, u3=
+2 c)
+>  	return 0;
+>  }
+> =20
+> +__bpf_kfunc __int128 bpf_kfunc_call_test_i128(u64 a, u64 b)
+> +{
+> +	return ((__int128)a << 64) | b;
+> +}
+
+[Severity: Low]
+Will this unconditional use of __int128 break the build on 32-bit host
+architectures?=20
+
+The __int128 type is a compiler extension that is typically only available
+on 64-bit systems.
+
+[ ... ]
+
+> @@ -1358,6 +1370,8 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test2)
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test3)
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test4)
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test5)
+> +BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128)
+
+[Severity: Low]
+If bpf_kfunc_call_test_i128 needs to be conditionally excluded for 32-bit
+builds to fix the issue above, should this BTF ID registration also be
+conditionally excluded to prevent a missing symbol error during the build?
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b=
+/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+
+[ ... ]
+
+> @@ -118,6 +127,8 @@ int bpf_kfunc_call_test2(struct sock *sk, __u32 a, __=
+u32 b) __ksym;
+>  struct sock *bpf_kfunc_call_test3(struct sock *sk) __ksym;
+>  long bpf_kfunc_call_test4(signed char a, short b, int c, long d) __ksym;
+>  int bpf_kfunc_call_test5(__u8 a, __u16 b, __u32 c) __ksym;
+> +__int128 bpf_kfunc_call_test_i128(__u64 a, __u64 b) __ksym;
+
+[Severity: Low]
+Does this declaration also need to be guarded for 64-bit architectures,
+so that including this header doesn't fail on 32-bit host compilers?
+
 --=20
-2.53.0-Meta
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260708200939.2153=
+664-1-yonghong.song@linux.dev?part=3D9
