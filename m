@@ -1,21 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D41BD3E63B5
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:10:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1FBD3E5562
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783541446; cv=none; b=Ey3B3si/kadkumJ5bGq+l2kV47xPeodCBM2CPXFY8Of2U3iAElTh2g6vdpc04BvYmYNpqXWIEjw2C6mQQ6gqZxYupuQi6SYQMK13jPx/zXYUAhgNKVdMu9BgCXU7rqk1WpPPjFK+btZn49lJnqhk1RPt0/7gytAL2y5MTGnqIfo=
+	t=1783541450; cv=none; b=O6cmnGc5SxTKJ3phYBfx6aLivkWHl3kGmY+8TSfUxz36mCyjYq7tI9wO4UeAp+FUmdh7j5uLVjEk/vpZL5ee7sLnaa5FKSMG3W+i1GRR7ws1O+yl9qUBc0+CQGe2iNvPPbnYKkByFBnpjMn5r8a+jyj0zadD0qjNzluazouziqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783541446; c=relaxed/simple;
-	bh=hPs4Rm8qsqvEjg+KAh6mNqFLyZGFX0qrxK7fCidMHRg=;
+	s=arc-20240116; t=1783541450; c=relaxed/simple;
+	bh=j7E3vSvVZTDL03b/uid7glR4UEwGM8TyS2TT18wwsD0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TJRzt88rvC+5mjwsomf5B75uXEXoik3A35xQSmilJJEBjmBIO1Zn8fhG9ZssW3jrhdcintrrA43Xr/jGaSScCPXiIhIK0yNeVncjrSTy3FG/qPgb77RKSKXCdyv2s90vanZFYXlW68Rq4JYqTeeejGc1r2veIGJbZGzEnvKROxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	 MIME-Version; b=ik42PcP/5YqcDyf/Sk3l3CZ03GIKcr3Kghvmp98aO3JFJ6kl7s7pgoO9v7uLfwWgsobeH6xYU7K4jf54UYrJegmwIeEgtNIzL0NlVKqVomT6cO5a9qwSvdejnYX1WFW+N1jbLGMX+XBOdLTErYuZuQaOJiwIg18c2wfNeAbuoHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 0309C1D0B6F9B1; Wed,  8 Jul 2026 13:10:31 -0700 (PDT)
+	id 22EBC1D0B6F9FB; Wed,  8 Jul 2026 13:10:36 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next 10/12] selftests/bpf: Add inline-asm and subprog tests for R0:R2 returns
-Date: Wed,  8 Jul 2026 13:10:30 -0700
-Message-ID: <20260708201030.2161016-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 11/12] selftests/bpf: Cover tracing on >8 and <=16 byte return targets
+Date: Wed,  8 Jul 2026 13:10:36 -0700
+Message-ID: <20260708201036.2162000-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260708200939.2153664-1-yonghong.song@linux.dev>
 References: <20260708200939.2153664-1-yonghong.song@linux.dev>
@@ -37,833 +37,334 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Add inline-asm and subprogram tests for more coverage, including
-BPF-to-BPF cases, kfunc cases, backtracking and liveness. Both positive
-and negative tests are added.
+Tracing attach types differ in whether they need the target's return valu=
+e
+preserved across the BPF trampoline, which saves and restores only 8 byte=
+s
+of it. fentry runs before the target returns and never observes the retur=
+n
+value, so it can attach to a function returning a >8 byte value; fexit,
+fmod_ret and fsession read the return value and must keep rejecting such =
+a
+target.
+
+Add fentry, fexit, fentry_multi and fexit_multi tests that attach to
+functions returning a >8 and <=3D16 byte value (a 16-byte struct and an
+__int128).
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/prog_tests/aggregate_ret.c  |  25 ++
- .../selftests/bpf/progs/aggregate_ret_func.c  | 361 ++++++++++++++++++
- .../selftests/bpf/progs/aggregate_ret_kfunc.c |  81 ++++
- .../selftests/bpf/progs/aggregate_ret_run.c   | 160 ++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  34 ++
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |  27 ++
- 6 files changed, 688 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_func.=
-c
- create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_kfunc=
+ .../selftests/bpf/prog_tests/aggregate_ret.c  | 128 ++++++++++++++++++
+ .../selftests/bpf/progs/aggregate_ret_trace.c |  44 ++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  32 +++++
+ .../selftests/bpf/test_kmods/bpf_testmod.h    |   5 +
+ 4 files changed, 209 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_trace=
 .c
- create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_run.c
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c b/too=
 ls/testing/selftests/bpf/prog_tests/aggregate_ret.c
-index d4ecc19684ce..2f1e5c704959 100644
+index 2f1e5c704959..7caf815a2c06 100644
 --- a/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c
 +++ b/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c
-@@ -5,6 +5,9 @@
- #include "aggregate_ret_int128_c.skel.h"
- #include "aggregate_ret_struct_c.skel.h"
- #include "aggregate_ret_union_c.skel.h"
-+#include "aggregate_ret_run.skel.h"
-+#include "aggregate_ret_func.skel.h"
-+#include "aggregate_ret_kfunc.skel.h"
+@@ -8,6 +8,7 @@
+ #include "aggregate_ret_run.skel.h"
+ #include "aggregate_ret_func.skel.h"
+ #include "aggregate_ret_kfunc.skel.h"
++#include "aggregate_ret_trace.skel.h"
 =20
  /*
   * Run one program and check its result. The program returns 0 on succes=
 s, or
-@@ -39,6 +42,7 @@ void test_aggregate_ret(void)
- 	struct aggregate_ret_struct_c *skel_struct_c;
- 	struct aggregate_ret_union_c *skel_union_c;
- 	struct aggregate_ret_int128_c *skel_c;
-+	struct aggregate_ret_run *skel_run;
-=20
- 	skel_c =3D aggregate_ret_int128_c__open_and_load();
- 	if (!ASSERT_OK_PTR(skel_c, "skel_c_open_load"))
-@@ -93,4 +97,25 @@ void test_aggregate_ret(void)
- 		run_prog(skel_union_c->progs.aggregate_ret_union_c_test, true);
-=20
- 	aggregate_ret_union_c__destroy(skel_union_c);
-+
-+	skel_run =3D aggregate_ret_run__open_and_load();
-+	if (!ASSERT_OK_PTR(skel_run, "skel_run_open_load"))
-+		return;
-+
-+	/* Inline-asm variant: compiler-version independent, always runs. */
-+	if (test__start_subtest("asm"))
-+		run_prog(skel_run->progs.aggregate_ret_asm_test, false);
-+
-+	/* Struct-by-value kfunc returns, also compiler-version independent. */
-+	if (test__start_subtest("struct"))
-+		run_prog(skel_run->progs.aggregate_ret_struct_test, false);
-+
-+	/* Union-by-value kfunc return, compiler-version independent. */
-+	if (test__start_subtest("union"))
-+		run_prog(skel_run->progs.aggregate_ret_union_test, false);
-+
-+	aggregate_ret_run__destroy(skel_run);
-+
-+	RUN_TESTS(aggregate_ret_func);
-+	RUN_TESTS(aggregate_ret_kfunc);
+@@ -37,6 +38,131 @@ static void run_prog(struct bpf_program *prog, bool m=
+ay_skip)
+ 	ASSERT_EQ(topts.retval, 0, "aggregate_ret_result");
  }
-diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_func.c b/too=
-ls/testing/selftests/bpf/progs/aggregate_ret_func.c
+=20
++/*
++ * Multi-attach (BPF_TRACE_*_MULTI) requires CONFIG_HAVE_SINGLE_FTRACE_D=
+IRECT_OPS,
++ * which today only x86_64 selects. Otherwise bpf_tracing_multi_attach()=
+ returns
++ * -EOPNOTSUPP unconditionally.
++ */
++static bool tracing_multi_supported(struct bpf_program *prog)
++{
++	const char *small_pat =3D "bpf_testmod:bpf_testmod_trampoline_count_tes=
+t";
++	struct bpf_link *link;
++
++	link =3D bpf_program__attach_tracing_multi(prog, small_pat, NULL);
++	if (libbpf_get_error(link) =3D=3D -EOPNOTSUPP)
++		return false;
++	bpf_link__destroy(link);
++	return true;
++}
++
++static void test_tracing_attach_types(void)
++{
++	const char *i128_pat =3D "bpf_testmod:bpf_testmod_aggregate_ret_i128_fn=
+";
++	int err;
++
++	if (test__start_subtest("trace_fentry")) {
++		struct aggregate_ret_trace *trace =3D NULL;
++
++		trace =3D aggregate_ret_trace__open();
++		if (!ASSERT_OK_PTR(trace, "trace_fentry_open"))
++			return;
++
++		bpf_program__set_autoload(trace->progs.fexit_bpf_testmod_aggregate_ret=
+_fn, false);
++		bpf_program__set_autoload(trace->progs.fentry_multi, false);
++		bpf_program__set_autoload(trace->progs.fexit_multi, false);
++
++		err =3D aggregate_ret_trace__load(trace);
++		if (!ASSERT_OK(err, "trace_fentry_load"))
++			goto destroy_trace_fentry;
++
++		err =3D aggregate_ret_trace__attach(trace);
++		if (!ASSERT_OK(err, "trace_fentry_attach"))
++			goto destroy_trace_fentry;
++
++		ASSERT_OK(trigger_module_test_read(1), "trace_fentry_trigger");
++		ASSERT_EQ(trace->bss->fentry_hit, 1, "trace_fentry_hit");
++
++destroy_trace_fentry:
++		aggregate_ret_trace__destroy(trace);
++	}
++
++	if (test__start_subtest("trace_fexit_reject")) {
++		struct aggregate_ret_trace *trace =3D NULL;
++
++		trace =3D aggregate_ret_trace__open();
++		if (!ASSERT_OK_PTR(trace, "trace_fexit_open"))
++			return;
++
++		bpf_program__set_autoload(trace->progs.fentry_bpf_testmod_aggregate_re=
+t_fn, false);
++		bpf_program__set_autoload(trace->progs.fentry_multi, false);
++		bpf_program__set_autoload(trace->progs.fexit_multi, false);
++
++		err =3D aggregate_ret_trace__load(trace);
++		ASSERT_EQ(err, -EOPNOTSUPP, "trace_fexit_load");
++
++		aggregate_ret_trace__destroy(trace);
++	}
++
++	if (test__start_subtest("trace_fentry_multi")) {
++		struct aggregate_ret_trace *trace =3D NULL;
++		struct bpf_link *link;
++
++		trace =3D aggregate_ret_trace__open();
++		if (!ASSERT_OK_PTR(trace, "trace_fentry_multi_open"))
++			return;
++
++		bpf_program__set_autoload(trace->progs.fentry_bpf_testmod_aggregate_re=
+t_fn, false);
++		bpf_program__set_autoload(trace->progs.fexit_bpf_testmod_aggregate_ret=
+_fn, false);
++		bpf_program__set_autoload(trace->progs.fexit_multi, false);
++
++		if (!ASSERT_OK(aggregate_ret_trace__load(trace), "trace_fentry_multi_l=
+oad"))
++			goto destroy_fentry_multi;
++
++		if (!tracing_multi_supported(trace->progs.fentry_multi)) {
++			test__skip();
++			goto destroy_fentry_multi;
++		}
++
++		link =3D bpf_program__attach_tracing_multi(trace->progs.fentry_multi, =
+i128_pat, NULL);
++		if (!ASSERT_OK_PTR(link, "trace_fentry_multi_attach"))
++			goto destroy_fentry_multi;
++
++		ASSERT_OK(trigger_module_test_read(1), "trace_fentry_multi_trigger");
++		ASSERT_EQ(trace->bss->fentry_multi_hit, 1, "trace_fentry_multi_hit");
++
++		bpf_link__destroy(link);
++destroy_fentry_multi:
++		aggregate_ret_trace__destroy(trace);
++	}
++
++	if (test__start_subtest("trace_fexit_multi_reject")) {
++		struct aggregate_ret_trace *trace =3D NULL;
++		struct bpf_link *link;
++
++		trace =3D aggregate_ret_trace__open();
++		if (!ASSERT_OK_PTR(trace, "trace_fexit_multi_open"))
++			return;
++
++		bpf_program__set_autoload(trace->progs.fentry_bpf_testmod_aggregate_re=
+t_fn, false);
++		bpf_program__set_autoload(trace->progs.fexit_bpf_testmod_aggregate_ret=
+_fn, false);
++		bpf_program__set_autoload(trace->progs.fentry_multi, false);
++
++		if (!ASSERT_OK(aggregate_ret_trace__load(trace), "trace_fexit_multi_lo=
+ad"))
++			goto destroy_fexit_multi;
++
++		if (!tracing_multi_supported(trace->progs.fexit_multi)) {
++			test__skip();
++			goto destroy_fexit_multi;
++		}
++
++		link =3D bpf_program__attach_tracing_multi(trace->progs.fexit_multi, i=
+128_pat, NULL);
++		ASSERT_EQ(libbpf_get_error(link), -EOPNOTSUPP, "trace_fexit_multi_reje=
+ct");
++		bpf_link__destroy(link);
++destroy_fexit_multi:
++		aggregate_ret_trace__destroy(trace);
++	}
++}
++
+ void test_aggregate_ret(void)
+ {
+ 	struct aggregate_ret_struct_c *skel_struct_c;
+@@ -118,4 +244,6 @@ void test_aggregate_ret(void)
+=20
+ 	RUN_TESTS(aggregate_ret_func);
+ 	RUN_TESTS(aggregate_ret_kfunc);
++
++	test_tracing_attach_types();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_trace.c b/to=
+ols/testing/selftests/bpf/progs/aggregate_ret_trace.c
 new file mode 100644
-index 000000000000..31e176103374
+index 000000000000..ff9fd4036121
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/aggregate_ret_func.c
-@@ -0,0 +1,361 @@
++++ b/tools/testing/selftests/bpf/progs/aggregate_ret_trace.c
+@@ -0,0 +1,44 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 +#include <linux/bpf.h>
 +#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
++#include <bpf/bpf_tracing.h>
 +
-+typedef unsigned __int128 u128;
-+
-+__naked u128 global_agg_good(void)
-+{
-+	asm volatile (
-+	"r0 =3D 0x1234;"	/* low 64 bits */
-+	"r2 =3D 0x5678;"	/* high 64 bits */
-+	"exit;"
-+	);
-+}
-+
-+__naked u128 global_agg_bad(void)
-+{
-+	asm volatile (
-+	"r0 =3D 0;"
-+	"exit;"
-+	);
-+}
-+
-+__naked u128 global_agg_bad_ptr(void)
-+{
-+	asm volatile (
-+	"r0 =3D 0;"
-+	"r2 =3D r10;"
-+	"exit;"
-+	);
-+}
-+
-+SEC("tc")
-+__success __retval(0)
-+int aggregate_ret_global(void *ctx)
-+{
-+	__u64 lo, hi;
-+
-+	asm volatile (
-+	"call %[global_agg_good];"
-+	"%[lo] =3D r0;"
-+	"%[hi] =3D r2;"
-+	: [lo]"=3Dr"(lo), [hi]"=3Dr"(hi)
-+	: __imm(global_agg_good)
-+	: "r0", "r1", "r2", "r3", "r4", "r5");
-+	if (lo !=3D 0x1234)
-+		return 1;
-+	if (hi !=3D 0x5678)
-+		return 2;
-+	return 0;
-+}
-+
-+SEC("tc")
-+__failure __msg("R2 !read_ok")
-+__naked int aggregate_ret_global_fail(void)
-+{
-+	asm volatile (
-+	"call %[global_agg_bad];"
-+	"r0 =3D r2;"
-+	"exit;"
-+	:
-+	: __imm(global_agg_bad)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__failure __msg("At subprogram exit the register R2 is not a scalar valu=
-e")
-+__naked int aggregate_ret_global_ptr_fail(void)
-+{
-+	asm volatile (
-+	"call %[global_agg_bad_ptr];"
-+	"r0 =3D r2;"
-+	"exit;"
-+	:
-+	: __imm(global_agg_bad_ptr)
-+	: __clobber_all);
-+}
-+
-+static __naked __attribute__((noinline)) u128 static_agg_bad_ptr(void)
-+{
-+	asm volatile (
-+	"r0 =3D 0;"
-+	"r2 =3D r10;"	/* stack pointer placed in the second return register */
-+	"exit;"
-+	);
-+}
-+
-+SEC("tc")
-+__failure __msg("cannot return stack pointer to the caller")
-+__naked int aggregate_ret_static_ptr_fail(void)
-+{
-+	asm volatile (
-+	"call %[static_agg_bad_ptr];"
-+	"r0 =3D 0;"
-+	"exit;"
-+	:
-+	: __imm(static_agg_bad_ptr)
-+	: __clobber_all);
-+}
-+
-+static __naked __attribute__((noinline)) u128 static_agg_no_r2(void)
-+{
-+	asm volatile (
-+	"r0 =3D 0;"
-+	"exit;"
-+	);
-+}
-+
-+SEC("tc")
-+__failure __msg("R2 !read_ok")
-+__naked int aggregate_ret_static_uninit_fail(void)
-+{
-+	asm volatile (
-+	"call %[static_agg_no_r2];"
-+	"r0 =3D r2;"
-+	"exit;"
-+	:
-+	: __imm(static_agg_no_r2)
-+	: __clobber_all);
-+}
-+
-+static __naked __attribute__((noinline)) u128 static_agg_precise(void)
-+{
-+	asm volatile (
-+	"r0 =3D 0;"
-+	"r2 =3D 4;"	/* second half; its value is made precise below */
-+	"exit;"
-+	);
-+}
-+
-+SEC("tc")
-+__success __retval(0)
-+__log_level(2)
-+__msg("mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 4: (07) r1 +=3D -=
-8")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 3: (bf) r1 =3D r1=
-0")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 2: (57) r6 &=3D 7=
-")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 1: (bf) r6 =3D r2=
-")
-+__msg("mark_precise: frame0: regs=3Dr2 stack=3D before 12: (95) exit")
-+__msg("mark_precise: frame1: regs=3Dr2 stack=3D before 11: (b7) r2 =3D 4=
-")
-+__naked int aggregate_ret_static_precise(void)
-+{
-+	asm volatile (
-+	"call %[static_agg_precise];"
-+	"r6 =3D r2;"		/* derived from the aggregate's second half */
-+	"r6 &=3D 7;"		/* keep it in [0, 7] to index the stack */
-+	"r1 =3D r10;"
-+	"r1 +=3D -8;"
-+	"r1 +=3D r6;"		/* ptr +=3D scalar marks r6 (hence R2) precise */
-+	"r0 =3D 0;"
-+	"*(u8 *)(r1 + 0) =3D r0;"
-+	"r0 =3D 0;"
-+	"exit;"
-+	:
-+	: __imm(static_agg_precise)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__success __retval(0)
-+__log_level(2)
-+__msg("mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 4: (07) r1 +=3D -=
-8")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 3: (bf) r1 =3D r1=
-0")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 2: (57) r6 &=3D 7=
-")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 1: (bf) r6 =3D r2=
-")
-+__msg("mark_precise: frame0: regs=3Dr2 stack=3D before 0: (85) call pc+9=
-")
-+__naked int aggregate_ret_global_precise(void)
-+{
-+	asm volatile (
-+	"call %[global_agg_good];"
-+	"r6 =3D r2;"		/* derived from the aggregate's second half */
-+	"r6 &=3D 7;"		/* keep it in [0, 7] to index the stack */
-+	"r1 =3D r10;"
-+	"r1 +=3D -8;"
-+	"r1 +=3D r6;"		/* ptr +=3D scalar marks r6 (hence R2) precise */
-+	"r0 =3D 0;"
-+	"*(u8 *)(r1 + 0) =3D r0;"
-+	"r0 =3D 0;"
-+	"exit;"
-+	:
-+	: __imm(global_agg_good)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__failure __msg("return value larger than 8 bytes is not supported at pr=
-ogram exit")
-+__naked u128 aggregate_ret_entry_fail(void)
-+{
-+	asm volatile (
-+	"r0 =3D 0;"
-+	"r2 =3D 0;"
-+	"exit;"
-+	);
-+}
-+
-+#if __clang_major__ >=3D 23
-+
-+struct pair {
-+	__u64 hi;
++struct bpf_testmod_aggregate_ret {
 +	__u64 lo;
++	__u64 hi;
 +};
 +
-+union upair {
-+	__u64 halves[2];
-+	struct {
-+		__u64 lo;
-+		__u64 hi;
-+	} parts;
-+};
++int fentry_hit;
++int fexit_hit;
++int fentry_multi_hit;
 +
-+/* A by-value struct that smuggles a pointer, which must be rejected. */
-+struct with_ptr {
-+	void *p;
-+	__u64 x;
-+};
-+
-+/* A by-value union that smuggles a pointer, which must be rejected too.=
- */
-+union upair_with_ptr {
-+	void *p;
-+	__u64 halves[2];
-+};
-+
-+/* Global subprogram returning a scalar-only 16-byte struct in R0:R2. */
-+__naked struct pair global_ret_struct(void)
++SEC("fentry/bpf_testmod:bpf_testmod_aggregate_ret_fn")
++int BPF_PROG2(fentry_bpf_testmod_aggregate_ret_fn, __u64, lo, __u64, hi)
 +{
-+	asm volatile (
-+	"r0 =3D 0x1234;"	/* struct's first half */
-+	"r2 =3D 0x5678;"	/* struct's second half */
-+	"exit;"
-+	);
-+}
-+
-+/* Global subprogram returning a scalar-only 16-byte union in R0:R2. */
-+__naked union upair global_ret_union(void)
-+{
-+	asm volatile (
-+	"r0 =3D 0x1234;"
-+	"r2 =3D 0x5678;"
-+	"exit;"
-+	);
-+}
-+
-+SEC("tc")
-+__success __retval(0)
-+int aggregate_ret_global_struct(void *ctx)
-+{
-+	__u64 lo, hi;
-+
-+	asm volatile (
-+	"call %[global_ret_struct];"
-+	"%[lo] =3D r0;"
-+	"%[hi] =3D r2;"
-+	: [lo]"=3Dr"(lo), [hi]"=3Dr"(hi)
-+	: __imm(global_ret_struct)
-+	: "r0", "r1", "r2", "r3", "r4", "r5");
-+	if (lo !=3D 0x1234)
-+		return 1;
-+	if (hi !=3D 0x5678)
-+		return 2;
++	fentry_hit++;
 +	return 0;
 +}
 +
-+SEC("tc")
-+__success __retval(0)
-+int aggregate_ret_global_union(void *ctx)
++SEC("fexit/bpf_testmod:bpf_testmod_aggregate_ret_fn")
++int BPF_PROG2(fexit_bpf_testmod_aggregate_ret_fn, __u64, lo, __u64, hi,
++	      struct bpf_testmod_aggregate_ret, ret)
 +{
-+	__u64 lo, hi;
-+
-+	asm volatile (
-+	"call %[global_ret_union];"
-+	"%[lo] =3D r0;"
-+	"%[hi] =3D r2;"
-+	: [lo]"=3Dr"(lo), [hi]"=3Dr"(hi)
-+	: __imm(global_ret_union)
-+	: "r0", "r1", "r2", "r3", "r4", "r5");
-+	if (lo !=3D 0x1234)
-+		return 1;
-+	if (hi !=3D 0x5678)
-+		return 2;
++	fexit_hit +=3D ret.lo =3D=3D lo && ret.hi =3D=3D hi;
 +	return 0;
 +}
 +
-+__naked struct with_ptr global_ret_struct_ptr(void)
++SEC("fentry.multi/bpf_testmod:bpf_testmod_aggregate_ret_i128_fn")
++int BPF_PROG(fentry_multi)
 +{
-+	asm volatile (
-+	"r0 =3D 0;"
-+	"r2 =3D 0;"
-+	"exit;"
-+	);
-+}
-+
-+SEC("tc")
-+__failure __msg("Global function global_ret_struct_ptr() has unsupported=
- return type")
-+__naked int aggregate_ret_global_struct_ptr_fail(void)
-+{
-+	asm volatile (
-+	"call %[global_ret_struct_ptr];"
-+	"r0 =3D 0;"
-+	"exit;"
-+	:
-+	: __imm(global_ret_struct_ptr)
-+	: __clobber_all);
-+}
-+
-+__naked union upair_with_ptr global_ret_union_ptr(void)
-+{
-+	asm volatile (
-+	"r0 =3D 0;"
-+	"r2 =3D 0;"
-+	"exit;"
-+	);
-+}
-+
-+SEC("tc")
-+__failure __msg("Global function global_ret_union_ptr() has unsupported =
-return type")
-+__naked int aggregate_ret_global_union_ptr_fail(void)
-+{
-+	asm volatile (
-+	"call %[global_ret_union_ptr];"
-+	"r0 =3D 0;"
-+	"exit;"
-+	:
-+	: __imm(global_ret_union_ptr)
-+	: __clobber_all);
-+}
-+
-+#endif /* __clang_major__ >=3D 23 */
-+
-+static __naked u128 agg_callee(void)
-+{
-+	asm volatile (
-+	"r0 =3D 1;"
-+	"r2 =3D 2;"
-+	"exit;"
-+	);
-+}
-+
-+SEC("tc")
-+__log_level(2)
-+__msg("Live regs before insn:")
-+__msg("0: .12345.... (85) call pc+2")
-+__msg("1: ..2....... (bf) r0 =3D r2")
-+__msg("2: 0......... (95) exit")
-+__msg("3: .......... (b7) r0 =3D 1")
-+__msg("4: 0......... (b7) r2 =3D 2")
-+__msg("5: 0.2....... (95) exit")
-+__naked int aggregate_ret_live(void)
-+{
-+	asm volatile (
-+	"call %[agg_callee];"
-+	"r0 =3D r2;"
-+	"exit;"
-+	:
-+	: [agg_callee]"i"(agg_callee)
-+	: __clobber_all);
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c b/to=
-ols/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
-new file mode 100644
-index 000000000000..d73d30abed55
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
-@@ -0,0 +1,81 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "../test_kmods/bpf_testmod_kfunc.h"
-+
-+/*
-+ * Reference kfunc addresses to force those BTF to be emitted. Taking th=
-e address
-+ * (rather than calling) avoids any dependence on the compiler lowering =
-an
-+ * __int128 or struct return value, which the BPF backend only supports =
-from
-+ * LLVM 23 on.
-+ */
-+void __kfunc_btf_root(void)
-+{
-+	asm volatile (""
-+	:
-+	: "r"(&bpf_kfunc_call_test_i128),
-+	  "r"(&bpf_kfunc_call_test_ret_ptr),
-+	  "r"(&bpf_kfunc_call_test_ret_ii));
-+}
-+
-+SEC("tc")
-+__success __retval(0)
-+__log_level(2)
-+__msg("mark_precise: frame0: last_idx 7 first_idx 0 subseq_idx -1")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 6: (07) r1 +=3D -=
-8")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 5: (bf) r1 =3D r1=
-0")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 4: (57) r6 &=3D 7=
-")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 3: (bf) r6 =3D r2=
-")
-+__msg("mark_precise: frame0: regs=3Dr2 stack=3D before 2: (85) call bpf_=
-kfunc_call_test_i128")
-+__naked int aggregate_ret_kfunc_precise(void)
-+{
-+	asm volatile (
-+	"r1 =3D 1;"
-+	"r2 =3D 2;"
-+	"call %[bpf_kfunc_call_test_i128];"
-+	"r6 =3D r2;"		/* second return half */
-+	"r6 &=3D 7;"		/* keep it in [0, 7] to index the stack */
-+	"r1 =3D r10;"
-+	"r1 +=3D -8;"
-+	"r1 +=3D r6;"		/* ptr +=3D scalar marks r6 (hence R2) precise */
-+	"r0 =3D 0;"
-+	"*(u8 *)(r1 + 0) =3D r0;"
-+	"r0 =3D 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_kfunc_call_test_i128)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__failure __msg("is not composed of scalars")
-+__naked int aggregate_ret_kfunc_ptr_fail(void)
-+{
-+	asm volatile (
-+	"r1 =3D 0;"
-+	"call %[bpf_kfunc_call_test_ret_ptr];"
-+	"r0 =3D 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_kfunc_call_test_ret_ptr)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__failure __msg("R2 !read_ok")
-+__naked int aggregate_ret_kfunc_small_no_r2(void)
-+{
-+	asm volatile (
-+	"r1 =3D 0;"
-+	"r2 =3D 0;"
-+	"call %[bpf_kfunc_call_test_ret_ii];"
-+	"r0 =3D r2;"	/* R2 is not a return register for a <=3D8 byte struct */
-+	"exit;"
-+	:
-+	: __imm(bpf_kfunc_call_test_ret_ii)
-+	: __clobber_all);
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_run.c b/tool=
-s/testing/selftests/bpf/progs/aggregate_ret_run.c
-new file mode 100644
-index 000000000000..d6300b31733d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/aggregate_ret_run.c
-@@ -0,0 +1,160 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "../test_kmods/bpf_testmod_kfunc.h"
-+
-+typedef unsigned __int128 u128;
-+
-+/*
-+ * Reference kfunc addresses to force those BTF to be emitted. Taking th=
-e address
-+ * (rather than calling) avoids any dependence on the compiler lowering =
-an __int128
-+ * or struct return value, which the BPF backend only supports from LLVM=
- 23 on.
-+ */
-+void __kfunc_btf_root(void)
-+{
-+	asm volatile (""
-+	:
-+	: "r"(&bpf_kfunc_call_test_i128),
-+	  "r"(&bpf_kfunc_call_test_ret_ll),
-+	  "r"(&bpf_kfunc_call_test_ret_li),
-+	  "r"(&bpf_kfunc_call_test_ret_ii),
-+	  "r"(&bpf_kfunc_call_test_ret_uu));
-+}
-+
-+#define I128_ASM_LO 0xABCDabcd12345678ULL
-+#define I128_ASM_HI 0x1234567890abcdefULL
-+
-+static __naked __attribute__((noinline)) u128 make_i128_asm(void)
-+{
-+	asm volatile (
-+	"r0 =3D %[lo] ll;"	/* low 64 bits */
-+	"r2 =3D %[hi] ll;"	/* high 64 bits */
-+	"exit;"
-+	:
-+	: __imm_const(lo, I128_ASM_LO), __imm_const(hi, I128_ASM_HI)
-+	);
-+}
-+
-+SEC("tc")
-+int aggregate_ret_asm_test(struct __sk_buff *skb)
-+{
-+	__u64 a =3D skb->len;
-+	__u64 b =3D skb->len ^ 0xdeadbeefULL;
-+	__u64 lo, hi;
-+
-+	asm volatile (
-+	"call %[callee];"
-+	"%[lo] =3D r0;"
-+	"%[hi] =3D r2;"
-+	: [lo]"=3Dr"(lo), [hi]"=3Dr"(hi)
-+	: [callee]"i"(make_i128_asm)
-+	: "r0", "r1", "r2", "r3", "r4", "r5"
-+	);
-+	if (lo !=3D I128_ASM_LO)
-+		return 1;
-+	if (hi !=3D I128_ASM_HI)
-+		return 2;
-+
-+	asm volatile (
-+	"r1 =3D %[a];"
-+	"r2 =3D %[b];"
-+	"call %[kfunc];"
-+	"%[lo] =3D r0;"
-+	"%[hi] =3D r2;"
-+	: [lo]"=3Dr"(lo), [hi]"=3Dr"(hi)
-+	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_i128)
-+	: "r0", "r1", "r2", "r3", "r4", "r5"
-+	);
-+	if (hi !=3D a)
-+		return 3;
-+	if (lo !=3D b)
-+		return 4;
-+
++	fentry_multi_hit++;
 +	return 0;
 +}
 +
-+SEC("tc")
-+int aggregate_ret_struct_test(struct __sk_buff *skb)
++SEC("fexit.multi/bpf_testmod:bpf_testmod_aggregate_ret_i128_fn")
++int BPF_PROG(fexit_multi)
 +{
-+	__u64 a =3D skb->len;
-+	__u64 b =3D skb->len ^ 0xdeadbeefULL;
-+	__u64 lo, hi;
-+
-+	/* struct { u64 a; u64 b; }: R0 =3D a, R2 =3D b. */
-+	asm volatile (
-+	"r1 =3D %[a];"
-+	"r2 =3D %[b];"
-+	"call %[kfunc];"
-+	"%[lo] =3D r0;"
-+	"%[hi] =3D r2;"
-+	: [lo]"=3Dr"(lo), [hi]"=3Dr"(hi)
-+	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_ret_ll)
-+	: "r0", "r1", "r2", "r3", "r4", "r5"
-+	);
-+	if (lo !=3D a)
-+		return 1;
-+	if (hi !=3D b)
-+		return 2;
-+
-+	/* struct { u64 a; int b; }: R0 =3D a, low 32 bits of R2 =3D b. */
-+	asm volatile (
-+	"r1 =3D %[a];"
-+	"r2 =3D %[b];"
-+	"call %[kfunc];"
-+	"%[lo] =3D r0;"
-+	"%[hi] =3D r2;"
-+	: [lo]"=3Dr"(lo), [hi]"=3Dr"(hi)
-+	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_ret_li)
-+	: "r0", "r1", "r2", "r3", "r4", "r5"
-+	);
-+	if (lo !=3D a)
-+		return 3;
-+	if ((int)hi !=3D (int)b)
-+		return 4;
-+
-+	/* struct { int a; int b; }: 8 bytes, packed into R0; R2 is not used. *=
-/
-+	asm volatile (
-+	"r1 =3D %[a];"
-+	"r2 =3D %[b];"
-+	"call %[kfunc];"
-+	"%[lo] =3D r0;"
-+	: [lo]"=3Dr"(lo)
-+	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_ret_ii)
-+	: "r0", "r1", "r2", "r3", "r4", "r5"
-+	);
-+	if ((int)lo !=3D (int)a)
-+		return 5;
-+	if ((int)(lo >> 32) !=3D (int)b)
-+		return 6;
-+
-+	return 0;
-+}
-+
-+SEC("tc")
-+int aggregate_ret_union_test(struct __sk_buff *skb)
-+{
-+	__u64 a =3D skb->len;
-+	__u64 b =3D skb->len ^ 0xdeadbeefULL;
-+	__u64 lo, hi;
-+
-+	asm volatile (
-+	"r1 =3D %[a];"
-+	"r2 =3D %[b];"
-+	"call %[kfunc];"
-+	"%[lo] =3D r0;"
-+	"%[hi] =3D r2;"
-+	: [lo]"=3Dr"(lo), [hi]"=3Dr"(hi)
-+	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_ret_uu)
-+	: "r0", "r1", "r2", "r3", "r4", "r5"
-+	);
-+	if (lo !=3D a)
-+		return 1;
-+	if (hi !=3D b)
-+		return 2;
-+
 +	return 0;
 +}
 +
 +char _license[] SEC("license") =3D "GPL";
 diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
 /testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 3511a4873d6c..c9e211d8a719 100644
+index c9e211d8a719..b558c538400e 100644
 --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
 +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -837,6 +837,36 @@ __bpf_kfunc struct bpf_kfunc_ret_ll bpf_kfunc_call_t=
-est_ret_ll(u64 a, u64 b)
- 	return r;
+@@ -469,12 +469,34 @@ noinline void bpf_testmod_stacktrace_test_1(void)
  }
 =20
-+__bpf_kfunc struct bpf_kfunc_ret_li bpf_kfunc_call_test_ret_li(u64 a, in=
-t b)
+ int bpf_testmod_fentry_ok;
++u64 bpf_testmod_aggregate_ret_seen;
+=20
+ noinline int bpf_testmod_trampoline_count_test(void)
+ {
+ 	return 0;
+ }
+=20
++__noclone noinline struct bpf_testmod_aggregate_ret
++bpf_testmod_aggregate_ret_fn(u64 lo, u64 hi)
 +{
-+	struct bpf_kfunc_ret_li r =3D { .a =3D a, .b =3D b };
++	struct bpf_testmod_aggregate_ret ret =3D {
++		.lo =3D lo,
++		.hi =3D hi,
++	};
 +
-+	return r;
++	bpf_testmod_aggregate_ret_seen +=3D lo + hi;
++	return ret;
 +}
 +
-+__bpf_kfunc struct bpf_kfunc_ret_ii bpf_kfunc_call_test_ret_ii(int a, in=
-t b)
++__noclone noinline __int128
++bpf_testmod_aggregate_ret_i128_fn(u64 lo, u64 hi)
 +{
-+	struct bpf_kfunc_ret_ii r =3D { .a =3D a, .b =3D b };
++	__int128 ret =3D ((__int128)hi << 64) | lo;
 +
-+	return r;
++	bpf_testmod_aggregate_ret_seen +=3D lo + hi;
++	return ret;
 +}
 +
-+__bpf_kfunc union bpf_kfunc_ret_uu bpf_kfunc_call_test_ret_uu(u64 a, u64=
- b)
-+{
-+	union bpf_kfunc_ret_uu r;
+ noinline ssize_t
+ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+ 		      const struct bin_attribute *bin_attr,
+@@ -492,6 +514,8 @@ bpf_testmod_test_read(struct file *file, struct kobje=
+ct *kobj,
+ 	struct bpf_testmod_struct_arg_5 struct_arg5 =3D {23, 24, 25, 26};
+ 	union bpf_testmod_union_arg_1 union_arg1 =3D { .arg =3D {1} };
+ 	union bpf_testmod_union_arg_2 union_arg2 =3D { .arg =3D {2, 3} };
++	struct bpf_testmod_aggregate_ret agg_ret;
++	__int128 agg_i128;
+ 	int i =3D 1;
+=20
+ 	while (bpf_testmod_return_ptr(i))
+@@ -534,6 +558,14 @@ bpf_testmod_test_read(struct file *file, struct kobj=
+ect *kobj,
+=20
+ 	trace_bpf_testmod_test_nullable_bare_tp(NULL);
+=20
++	agg_ret =3D bpf_testmod_aggregate_ret_fn(len, off);
++	if (agg_ret.lo =3D=3D U64_MAX && agg_ret.hi =3D=3D U64_MAX)
++		goto out;
 +
-+	r.halves[0] =3D a;
-+	r.halves[1] =3D b;
-+	return r;
-+}
++	agg_i128 =3D bpf_testmod_aggregate_ret_i128_fn(len, off);
++	if (agg_i128 =3D=3D (__int128)-1)
++		goto out;
 +
-+__bpf_kfunc struct bpf_kfunc_ret_ptr bpf_kfunc_call_test_ret_ptr(u64 tag=
-)
-+{
-+	struct bpf_kfunc_ret_ptr r =3D { .p =3D NULL, .tag =3D tag };
-+
-+	return r;
-+}
-+
- __bpf_kfunc u64 bpf_kfunc_call_stack_arg(u64 a, u64 b, u64 c, u64 d,
- 					 u64 e, u64 f, u64 g, u64 h,
- 					 u64 i, u64 j)
-@@ -1372,6 +1402,10 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test4)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test5)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_ll)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_li)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_ii)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_uu)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_ptr)
- BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg)
- BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_ptr)
- BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_mix)
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b=
-/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index 34d0a352e70d..9ac31d68e2c8 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -64,6 +64,29 @@ struct bpf_kfunc_ret_ll {	/* 16 bytes: R0:R2 */
- 	__u64 b;
+ 	/* Magic number to enable writable tp */
+ 	if (len =3D=3D 64) {
+ 		struct bpf_testmod_test_writable_ctx writable =3D {
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h b/tools=
+/testing/selftests/bpf/test_kmods/bpf_testmod.h
+index 863fd10f1619..4dcbfd64de62 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
+@@ -25,6 +25,11 @@ struct bpf_testmod_test_writable_ctx {
+ 	int val;
  };
 =20
-+struct bpf_kfunc_ret_li {	/* 16 bytes: R0:R2 */
-+	__u64 a;
-+	int b;
++struct bpf_testmod_aggregate_ret {
++	__u64 lo;
++	__u64 hi;
 +};
 +
-+struct bpf_kfunc_ret_ii {	/* 8 bytes: R0 only */
-+	int a;
-+	int b;
-+};
-+
-+union bpf_kfunc_ret_uu {	/* 16 bytes: R0:R2 */
-+	__u64 halves[2];
-+	struct {
-+		__u64 lo;
-+		__u64 hi;
-+	} parts;
-+};
-+
-+struct bpf_kfunc_ret_ptr {	/* 16 bytes: contains a pointer */
-+	void *p;
-+	__u64 tag;
-+};
-+
- struct prog_test_fail1 {
- 	void *p;
- 	int x;
-@@ -129,6 +152,10 @@ long bpf_kfunc_call_test4(signed char a, short b, in=
-t c, long d) __ksym;
- int bpf_kfunc_call_test5(__u8 a, __u16 b, __u32 c) __ksym;
- __int128 bpf_kfunc_call_test_i128(__u64 a, __u64 b) __ksym;
- struct bpf_kfunc_ret_ll bpf_kfunc_call_test_ret_ll(__u64 a, __u64 b) __k=
-sym;
-+struct bpf_kfunc_ret_li bpf_kfunc_call_test_ret_li(__u64 a, int b) __ksy=
-m;
-+struct bpf_kfunc_ret_ii bpf_kfunc_call_test_ret_ii(int a, int b) __ksym;
-+union bpf_kfunc_ret_uu bpf_kfunc_call_test_ret_uu(__u64 a, __u64 b) __ks=
-ym;
-+struct bpf_kfunc_ret_ptr bpf_kfunc_call_test_ret_ptr(__u64 tag) __ksym;
- __u64 bpf_kfunc_call_stack_arg(__u64 a, __u64 b, __u64 c, __u64 d,
- 			       __u64 e, __u64 f, __u64 g, __u64 h,
- 			       __u64 i, __u64 j) __ksym;
+ /* BPF iter that returns *value* *n* times in a row */
+ struct bpf_iter_testmod_seq {
+ 	s64 value;
 --=20
 2.53.0-Meta
 
