@@ -1,31 +1,31 @@
-Received: from outbound.qs.icloud.com (qs-2004a-snip4-8.eps.apple.com [57.103.84.11])
+Received: from outbound.qs.icloud.com (qs-2005b-snip4-11.eps.apple.com [57.103.86.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665983E51CC
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:35:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.84.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AB6331CA4E
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:35:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.86.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783542911; cv=none; b=ci/w07WvAeIimzK6Olys0hj/kbjG4PXkIZddQiLcQJiK7Ae6vd8RPcUpQHpG5VMmFhw7QLJPmRFm6TxX4y0KRsxQSDhBRw/P8/FaKiUJS7uI5Or8tl7ra6VlLWEr6S0IVmU7AC/0KmdR8EOLzT9+rDsNnrxno8J7WuiLskrlLh0=
+	t=1783542916; cv=none; b=o982xxIFsddAVs/VshWnU7s9ijpDFouIbokm+nNNz/AnJx6cLFWZh+UgIGQqC9MD8y9egriuUdqIre5fqUU3dfY7t+to1QihfZkRCuQwFWHCNULW2hFrkI45jomIFEgIi6nKzCqYJ1+CjQzOVN113iP+Ia9SOlEn1bYYf6gv5AA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783542911; c=relaxed/simple;
-	bh=tEC8DLNMKqipeVDrlO05Bwnu5qgfYWwskesSLfrM6tg=;
+	s=arc-20240116; t=1783542916; c=relaxed/simple;
+	bh=Q+/any6DcHinqwZLRkuj5dOQIBbBwaCx9zs4CHO5bu4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M8Z0duF1aQQ50Krl/SlMEmQRLqptErUH6ffTB2F1wiMKHPKBBqYrrkiJbuB//Gz3Avq/p+9rix8LJ/3S/sWokSbgGgQTFuBYeGqLBn4PEVsSH9vRIR7dkq3+zzZXohRj/1sLQ/AU3S+RC6D7Hl9HF+Uhkq2FJJn7H3M9jPF6SWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg; spf=pass smtp.mailfrom=verdict.gg; dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b=QBmNOqK7; arc=none smtp.client-ip=57.103.84.11
+	 MIME-Version; b=cwbrrAcEwtulICMWgyg+n5CO5+drt1RKH8AlCvDKv9R0kt0ZwWI/queZFBU4wOX40skkAVUOe4WS7JRW6xb3KeLadZYVrmmIJwpCP1JGUX18K673T5fZNYyszgn8mYZAsnJD1AJyjTv/vZ4RToMfFDaBiKIw0L3xh45fC01RKi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg; spf=pass smtp.mailfrom=verdict.gg; dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b=hHBJMgu1; arc=none smtp.client-ip=57.103.86.151
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verdict.gg
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b="QBmNOqK7"
+	dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b="hHBJMgu1"
 Received: from outbound.qs.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-2d-10-percent-0 (Postfix) with ESMTPS id 08BA130000C3;
-	Wed, 08 Jul 2026 20:34:59 +0000 (UTC)
-X-ICL-RepId: 019f4370-e4bf-78e7-b622-e53a71ef1a4d
-X-ICL-Out-Info: HUtFAUMHWwJACUgBTUQeDx5WFlZNRAJCTQhICkMGWQJeCEABQwVdEhVdRVcIWwJAEVc4RQhFD1sTTVZUChcNVk1PHUEJXghGXl4fEx9UVgFDGRBWAVhWXQVNGlwYWQ8cAUpWWg5bBEcUFxtcABcbRgIEIwJfAEUCXglWATAXD1ZNTx1BCV4IRl5eHxMAXg8PTAtIAVsHXAJIC0gAWQZbHEQMSQFcGl8fFFwUWh9WBXIGXApXBFQfHBdeRhMZThtXTVoNQBlYBm0UVhVSBFk=
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1; t=1783542906; x=1786134906; bh=0R7rSSkqTacn4eRr91WictHmBFApYWPcIKUA6H01yVc=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=QBmNOqK74cCqJJ+DneB+4N35Z6fFqHMCJJEZFvNDdtTbwB3m6pNz9O/f9dRYnMI6D1NIPO97N5L9XT736RZ9U6+IaetbCsP2frluMAEIIw7FN2H+kNb49XA2scdP/e7iTUBEifj9oqe+63yk2pv9GgY3BffbTOZ25oZQhITONgoBdRzRc/0fDpJRc0g4iTYqCdDFrgvgVM5633uA2Y4//dZhp7jLTg2k10BHTlD1BlxxcbcSLDnoH8vAqwCeSewUTFChlllrKTEfyJvoLRc/u5+ZQIwr4lLPWuiCBZIITU1a0hxPsbNkTgCavxe/fgP7wIQ44pcFHRd3h2+kT1w86A==
+	by p00-icloudmta-asmtp-us-east-2d-10-percent-0 (Postfix) with ESMTPS id 45D8130000A7;
+	Wed, 08 Jul 2026 20:35:10 +0000 (UTC)
+X-ICL-RepId: 019f4371-0cf5-78ee-8741-84716a342eec
+X-ICL-Out-Info: HUtFAUMHWwJACUgBTUQeDx5WFlZNRAJCTQhICkMGWQJeCEABQwVdEhVdRVcIWwJAEVc4RQhFD1sTTVZUChcNVk1PHUEJXghGXl4fEx9UVgFDGRBWAVhWXQVNGlwYWQ8cAUpWWg5bBEcUFxtcABcbRgIEIwJfAEUCXglWATAXD1ZNTx1BCV4IRl5eHxMAXg8PTAtIAVsHXAJIC0gAWQZbHEQMSQFcGl0fFFwUWh9WBXIGXApXBFQfHBdeRhMZThtXTVoNQBlYBm0UVhVSBFk=
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1; t=1783542914; x=1786134914; bh=P9yZ3D+W7OaCzN5HlpP15te0niQUHg9N2Yn3fSLJwKQ=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=hHBJMgu1UR7ZtQu0GfIWLTdpVm2+dzVDzTl/t6MkzU9GA3r6DYqXxrxQzuFQwJ39U3ccofZXAtg11ktElYbW1ov5btl/kyWawZxHu05tV3lkD7n2vBpwHYR8j0mYQ96tWilKgUi2Anth2GkgEh9/+ShVlTGG5Cz7+plQo9dPYhQs10LTxB8aGf0NYpcHkxkMhgxcy2ige5NfvZ52XSMz7+J+EtyBkQjbPfkRiJGG5KCkqa4olTSL4/+n1ZBARbA+998L5sb7ZWsbMJjhWNcExFWnCWB19N0tTOvnO0vRHMPdsFSF685WtXLpsYkk+hpOAjx7NYWeDXJhETZFrBnT1w==
 mail-alias-created-date: 1621344842221
 Received: from DelNac.mail.msk (unknown [17.57.155.37])
-	by p00-icloudmta-asmtp-us-east-2d-10-percent-0 (Postfix) with ESMTPSA id 305FF300111D;
-	Wed, 08 Jul 2026 20:34:54 +0000 (UTC)
+	by p00-icloudmta-asmtp-us-east-2d-10-percent-0 (Postfix) with ESMTPSA id 8DEF93001131;
+	Wed, 08 Jul 2026 20:35:04 +0000 (UTC)
 From: Vladimir Vdovin <deliran@verdict.gg>
 To: Lorenzo Bianconi <lorenzo@kernel.org>,
 	Donald Hunter <donald.hunter@gmail.com>,
@@ -60,9 +60,9 @@ Cc: Jakub Sitnicki <jakub@cloudflare.com>,
 	intel-wired-lan@lists.osuosl.org,
 	linux-kselftest@vger.kernel.org,
 	Vladimir Vdovin <deliran@verdict.gg>
-Subject: [PATCH bpf-next v4 3/6] net: ice: Add xmo_rx_checksum callback
-Date: Wed,  8 Jul 2026 23:34:07 +0300
-Message-ID: <20260708203410.45121-4-deliran@verdict.gg>
+Subject: [PATCH bpf-next v4 5/6] selftests/bpf: Add bpf_xdp_metadata_rx_checksum support to xdp_hw_metadat prog
+Date: Wed,  8 Jul 2026 23:34:09 +0300
+Message-ID: <20260708203410.45121-6-deliran@verdict.gg>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20260708203410.45121-1-deliran@verdict.gg>
 References: <20260708203410.45121-1-deliran@verdict.gg>
@@ -73,209 +73,131 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: Xc3ckwcLp0BEyAc5tgHAQkM2JZVoURXZ
-X-Proofpoint-GUID: Xc3ckwcLp0BEyAc5tgHAQkM2JZVoURXZ
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA4MDIwMiBTYWx0ZWRfX+OzZU1/BCEx3
- ZtDTz+/OjgDLr7jGXvgEcQmnk71DE2qspxAHQkFh83nL/OeOYzmi0fd7Y2rUNWioBpem1lKQYrp
- kGZkhLYUF8K3AsSIDC7Uyrx6prUpVKk+VA9NX29qh7P50Vhbplm4yepa+pbEM6j3vVtmsGn+Q8k
- OVsiTDOe4RfkjkSncYGnCewvCG3u2UcUQfUdBFn1EGnK2Ptvg53fiiu41Nu8D0N8kl1Uc0eUOaA
- NbiqSFP75OxWeKj+qYpohiK7dyXmVVsPAQVGCWveWQbiVqwdtwjlFc8FPaX2SkJ7uBqH+9vA/eM
- UuU4pqVRNE/l68eWdeO
+X-Proofpoint-GUID: KC7sGlHzL50hsQ8zFZqYikrF1tSlvV3G
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA4MDIwMiBTYWx0ZWRfX/6Cgds3nmqO8
+ FB6Wpi6p9x20KF9UFCxwVZax5liF9ajdkn7i+4tU/5aN/n62zmZpfRd6WFt5iUAKt46H1j7q35w
+ SHo9AMH3gENRRM+salepGNeCbjH8dOzJjul5JalHT/uQ4QnZ8WN9AS+FMOtNa2CDCGUVouCppus
+ O9bCuViIfCs+mHi1rqzjIZvzMwha+X7bq224VUwAREPulqIa2Iox47Vshv8p5MJD0klwpsFjbUp
+ LhD1X/P634jxGMaeOQg0zHqLtf2KRgYB5ESc2Oe4TdpQfFVFfBc55vYXr/g2ezMHPiu9JT8KN0K
+ R0/EC5A97Cx8JJ0lnd0
+X-Proofpoint-ORIG-GUID: KC7sGlHzL50hsQ8zFZqYikrF1tSlvV3G
 
 From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-Implement xmo_rx_checksum callback in ice driver to report RX checksum
-result to the eBPF program bounded to the NIC.
-Introduce ice_get_rx_csum utility routine in order to make the rx checksum
-code reusable from ice_rx_csum()
+Introduce the capability to dump HW rx checksum in xdp_hw_metadata
+program via bpf_xdp_metadata_rx_checksum() kfunc.
 
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
 ---
- drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 123 ++++++++++++------
- 1 file changed, 81 insertions(+), 42 deletions(-)
+ .../selftests/bpf/progs/xdp_hw_metadata.c     |  7 +++++
+ tools/testing/selftests/bpf/xdp_hw_metadata.c | 31 +++++++++++++++++++
+ tools/testing/selftests/bpf/xdp_metadata.h    | 12 ++++---
+ 3 files changed, 46 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-index e695a664e53d..3aa82ff03d9e 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-@@ -78,69 +78,48 @@ ice_rx_hash_to_skb(const struct ice_rx_ring *rx_ring,
- 		libeth_rx_pt_set_hash(skb, hash, decoded);
+diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+index 330ece2eabdb..5eeadb7e27cf 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+@@ -110,6 +110,13 @@ int rx(struct xdp_md *ctx)
+ 	else
+ 		meta->hint_valid |= XDP_META_FIELD_VLAN_TAG;
+ 
++	err = bpf_xdp_metadata_rx_checksum(ctx, &meta->ip_summed,
++					   &meta->cksum, &meta->cksum_level);
++	if (err)
++		meta->rx_cksum_err = err;
++	else
++		meta->hint_valid |= XDP_META_FIELD_CHECKSUM;
++
+ 	__sync_add_and_fetch(&pkts_redir, 1);
+ 	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
+ }
+diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+index 6db3b5555a22..c63a70a54075 100644
+--- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+@@ -8,6 +8,7 @@
+  * - Metadata verified:
+  *   - rx_timestamp
+  *   - rx_hash
++ *   - rx_checksum
+  *
+  * TX:
+  * - UDP 9091 packets trigger TX reply
+@@ -219,6 +220,30 @@ static void print_vlan_tci(__u16 tag)
+ 	printf("PCP=%u, DEI=%d, VID=0x%X\n", pcp, dei, vlan_id);
  }
  
--/**
-- * ice_rx_gcs - Set generic checksum in skb
-- * @skb: skb currently being received and modified
-- * @rx_desc: receive descriptor
-- */
--static void ice_rx_gcs(struct sk_buff *skb,
--		       const union ice_32b_rx_flex_desc *rx_desc)
--{
--	const struct ice_32b_rx_flex_desc_nic *desc;
--	u16 csum;
--
--	desc = (struct ice_32b_rx_flex_desc_nic *)rx_desc;
--	skb->ip_summed = CHECKSUM_COMPLETE;
--	csum = (__force u16)desc->raw_csum;
--	skb->csum = csum_unfold((__force __sum16)swab16(csum));
--}
--
--/**
-- * ice_rx_csum - Indicate in skb if checksum is good
-- * @ring: the ring we care about
-- * @skb: skb currently being received and modified
-- * @rx_desc: the receive descriptor
-- * @ptype: the packet type decoded by hardware
-- *
-- * skb->protocol must be set before this function is called
-- */
- static void
--ice_rx_csum(struct ice_rx_ring *ring, struct sk_buff *skb,
--	    union ice_32b_rx_flex_desc *rx_desc, u16 ptype)
-+ice_get_rx_csum(const union ice_32b_rx_flex_desc *rx_desc, u16 ptype,
-+		struct ice_rx_ring *ring, enum xdp_checksum *ip_summed,
-+		u32 *cksum, u8 *cksum_level)
- {
--	struct libeth_rx_pt decoded;
-+	struct libeth_rx_pt decoded = libie_rx_pt_parse(ptype);
- 	u16 rx_status0, rx_status1;
- 	bool ipv4, ipv6;
- 
--	/* Start with CHECKSUM_NONE and by default csum_level = 0 */
--	skb->ip_summed = CHECKSUM_NONE;
--
--	decoded = libie_rx_pt_parse(ptype);
- 	if (!libeth_rx_pt_has_checksum(ring->netdev, decoded))
--		return;
-+		goto checksum_none;
- 
- 	rx_status0 = le16_to_cpu(rx_desc->wb.status_error0);
- 	rx_status1 = le16_to_cpu(rx_desc->wb.status_error1);
--
- 	if ((ring->flags & ICE_RX_FLAGS_RING_GCS) &&
- 	    rx_desc->wb.rxdid == ICE_RXDID_FLEX_NIC &&
- 	    (decoded.inner_prot == LIBETH_RX_PT_INNER_TCP ||
- 	     decoded.inner_prot == LIBETH_RX_PT_INNER_UDP ||
- 	     decoded.inner_prot == LIBETH_RX_PT_INNER_ICMP)) {
--		ice_rx_gcs(skb, rx_desc);
-+		const struct ice_32b_rx_flex_desc_nic *desc;
-+		__wsum wcsum;
-+		u16 csum;
-+
-+		desc = (struct ice_32b_rx_flex_desc_nic *)rx_desc;
-+		*ip_summed = XDP_CHECKSUM_COMPLETE;
-+		csum = (__force u16)desc->raw_csum;
-+		wcsum = csum_unfold((__force __sum16)swab16(csum));
-+		*cksum = (__force u32)wcsum;
-+		*cksum_level = 0;
- 		return;
- 	}
- 
- 	/* check if HW has decoded the packet and checksum */
- 	if (!(rx_status0 & BIT(ICE_RX_FLEX_DESC_STATUS0_L3L4P_S)))
--		return;
-+		goto checksum_none;
- 
- 	ipv4 = libeth_rx_pt_get_ip_ver(decoded) == LIBETH_RX_PT_OUTER_IPV4;
- 	ipv6 = libeth_rx_pt_get_ip_ver(decoded) == LIBETH_RX_PT_OUTER_IPV6;
- 
- 	if (ipv4 && (rx_status0 & (BIT(ICE_RX_FLEX_DESC_STATUS0_XSUM_EIPE_S)))) {
- 		ring->vsi->back->hw_rx_eipe_error++;
--		return;
-+		goto checksum_none;
- 	}
- 
- 	if (ipv4 && (rx_status0 & (BIT(ICE_RX_FLEX_DESC_STATUS0_XSUM_IPE_S))))
-@@ -164,14 +143,51 @@ ice_rx_csum(struct ice_rx_ring *ring, struct sk_buff *skb,
- 	 * we need to bump the checksum level by 1 to reflect the fact that
- 	 * we are indicating we validated the inner checksum.
- 	 */
--	if (decoded.tunnel_type >= LIBETH_RX_PT_TUNNEL_IP_GRENAT)
--		skb->csum_level = 1;
--
--	skb->ip_summed = CHECKSUM_UNNECESSARY;
-+	*cksum_level = decoded.tunnel_type >= LIBETH_RX_PT_TUNNEL_IP_GRENAT;
-+	*ip_summed = XDP_CHECKSUM_UNNECESSARY;
-+	*cksum = 0;
- 	return;
- 
- checksum_fail:
- 	ring->vsi->back->hw_csum_rx_error++;
-+checksum_none:
-+	*ip_summed = XDP_CHECKSUM_NONE;
-+	*cksum_level = 0;
-+	*cksum = 0;
-+}
-+
-+/**
-+ * ice_rx_csum - Indicate in skb if checksum is good
-+ * @ring: the ring we care about
-+ * @skb: skb currently being received and modified
-+ * @rx_desc: the receive descriptor
-+ * @ptype: the packet type decoded by hardware
-+ *
-+ * skb->protocol must be set before this function is called
-+ */
-+static void
-+ice_rx_csum(struct ice_rx_ring *ring, struct sk_buff *skb,
-+	    union ice_32b_rx_flex_desc *rx_desc, u16 ptype)
++static void print_rx_cksum(__u8 ip_summed, __u32 cksum, __u8 cksum_level)
 +{
-+	enum xdp_checksum ip_summed;
-+	u8 cksum_level;
-+	u32 cksum;
++	const char *cksum_str;
 +
-+	ice_get_rx_csum(rx_desc, ptype, ring, &ip_summed, &cksum,
-+			&cksum_level);
 +	switch (ip_summed) {
++	case XDP_CHECKSUM_COMPLETE | XDP_CHECKSUM_UNNECESSARY:
++		cksum_str = "CHECKSUM_COMPLETE,CHECKSUM_UNNECESSARY";
++		break;
 +	case XDP_CHECKSUM_UNNECESSARY:
-+		skb->ip_summed = CHECKSUM_UNNECESSARY;
-+		skb->csum_level = cksum_level;
++		cksum_str = "CHECKSUM_UNNECESSARY";
 +		break;
 +	case XDP_CHECKSUM_COMPLETE:
-+		skb->ip_summed = CHECKSUM_COMPLETE;
-+		skb->csum = (__force __wsum)cksum;
++		cksum_str = "CHECKSUM_COMPLETE";
 +		break;
++	case XDP_CHECKSUM_NONE:
 +	default:
-+		skb->ip_summed = CHECKSUM_NONE;
++		cksum_str = "CHECKSUM_NONE";
 +		break;
 +	}
- }
- 
- /**
-@@ -566,6 +582,28 @@ static int ice_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
- 	return 0;
- }
- 
-+/**
-+ * ice_xdp_rx_checksum - RX checksum XDP hint handler
-+ * @ctx: XDP buff pointer
-+ * @ip_summed: RX checksum result destination address
-+ * @cksum: RX checksum value destination address
-+ * @cksum_level: RX checksum level value destination address
-+ */
-+static int ice_xdp_rx_checksum(const struct xdp_md *ctx,
-+			       enum xdp_checksum *ip_summed,
-+			       u32 *cksum, u8 *cksum_level)
-+{
-+	const struct libeth_xdp_buff *xdp_ext = (void *)ctx;
-+	const union ice_32b_rx_flex_desc *rx_desc = xdp_ext->desc;
-+	struct ice_rx_ring *ring;
 +
-+	ring = libeth_xdp_buff_to_rq(xdp_ext, typeof(*ring), xdp_rxq);
-+	ice_get_rx_csum(rx_desc, ice_get_ptype(rx_desc), ring, ip_summed,
-+			cksum, cksum_level);
-+
-+	return 0;
++	printf("rx-cksum: %s, csum=0x%x, cksum_level=0x%x\n",
++	       cksum_str, cksum, cksum_level);
 +}
 +
- /**
-  * ice_xdp_rx_vlan_tag - VLAN tag XDP hint handler
-  * @ctx: XDP buff pointer
-@@ -598,4 +636,5 @@ const struct xdp_metadata_ops ice_xdp_md_ops = {
- 	.xmo_rx_timestamp		= ice_xdp_rx_hw_ts,
- 	.xmo_rx_hash			= ice_xdp_rx_hash,
- 	.xmo_rx_vlan_tag		= ice_xdp_rx_vlan_tag,
-+	.xmo_rx_checksum		= ice_xdp_rx_checksum,
+ static void verify_xdp_metadata(void *data, clockid_t clock_id)
+ {
+ 	struct xdp_meta *meta;
+@@ -254,6 +279,12 @@ static void verify_xdp_metadata(void *data, clockid_t clock_id)
+ 		printf("No rx_vlan_tci or rx_vlan_proto, err=%d\n",
+ 		       meta->rx_vlan_tag_err);
+ 	}
++
++	if (meta->hint_valid & XDP_META_FIELD_CHECKSUM)
++		print_rx_cksum(meta->ip_summed, meta->cksum,
++			       meta->cksum_level);
++	else
++		printf("No rx_cksum, err=%d\n", meta->rx_cksum_err);
+ }
+ 
+ static void verify_skb_metadata(int fd)
+diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
+index bca09b94af26..f864d4a8bd8c 100644
+--- a/tools/testing/selftests/bpf/xdp_metadata.h
++++ b/tools/testing/selftests/bpf/xdp_metadata.h
+@@ -28,6 +28,7 @@ enum xdp_meta_field {
+ 	XDP_META_FIELD_TS	= BIT(0),
+ 	XDP_META_FIELD_RSS	= BIT(1),
+ 	XDP_META_FIELD_VLAN_TAG	= BIT(2),
++	XDP_META_FIELD_CHECKSUM = BIT(3),
+ };
+ 
+ #define XDP_CHECKSUM_NONE		BIT(0)
+@@ -52,10 +53,13 @@ struct xdp_meta {
+ 		};
+ 		__s32 rx_vlan_tag_err;
+ 	};
+-	struct {
+-		__u32 ip_summed;
+-		__u32 cksum;
+-		__u8 cksum_level;
++	union {
++		struct {
++			__u32 ip_summed;
++			__u32 cksum;
++			__u8 cksum_level;
++		};
++		__s32 rx_cksum_err;
+ 	};
+ 	enum xdp_meta_field hint_valid;
  };
 -- 
 2.47.0
