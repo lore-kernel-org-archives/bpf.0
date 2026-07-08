@@ -1,38 +1,38 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53E113783C3
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 14:15:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8151047DD47
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 14:20:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783520151; cv=none; b=TxTEaL/Q+5xNRrZDdit7AjIjW+hNEjP3DmETvdvd+gempbonka1LYEj5OtemlOqaZsKyPTi3XTkfMelv3tsjXndvY6LXbeEBnp4sky33IqZriKhwq6rZ+waJBGXR9ijPU6OjMGZ9ZeoawS7HqGVXtoyBX7js2Io7thrCIDNu5P0=
+	t=1783520432; cv=none; b=SQchycBznhM8IqmDV2YDB8jLX5eCjEJL+txGu3Sjs2/zrYiqkr+V0djZSWlUuZpFAPNtuig3o9kazk6eScmtnwbTRJb6dj1slKwbOpCN5oYlmgYPmfMF4RGR+AfHn2lvzChUi80qrOGh2vNqOF3C546tqICvGX8cdio68C7Lzw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783520151; c=relaxed/simple;
-	bh=qFYi9R5XF/tPfB9b8MczKI4Pm7qhRYAEoOgJudkQ9gM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:Cc:
-	 References:In-Reply-To; b=MTREYUrIp1o56dSvZERAz5rc2dzzxWUb5j5t4PrFep2sfcz12+eEZ/uGByZhKtETHdabrpsQ2wt90QBSnCx4FLaOWpzq5OEzxukJsZSWh/wb6MCnRjUPAwT9l07iBr2dhrLScpFkTZx4Ume2wQjKavTHWebES2DUdYFD2vsh6bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=CgkwsLHt; arc=none smtp.client-ip=185.246.85.4
+	s=arc-20240116; t=1783520432; c=relaxed/simple;
+	bh=jboNYxP/I7plW30fVByjPCcy3M964l2gryzw6AnbNgs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Subject:Cc:From:
+	 References:In-Reply-To; b=RLi+UGqXz//38g/3P+sC1JPVnvAEhhnJnmLKN7M1dqstDPEOv6Nezi3HSSAtXj5TZ4LGbLUnWokkNOmdCqH0iEzRwkcCibkEslWNgXZJKddSUjJXehB942HuKhRTFTALcI+MyeKadbGnjLLMciHKLA9HysN6lWR7xBMp3cic1i8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=qvTH96ob; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CgkwsLHt"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="qvTH96ob"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id BAF164E40CF6
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 14:15:48 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id D0F70C8F452
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 14:20:42 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 7558760339;
-	Wed,  8 Jul 2026 14:15:48 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id BC86211BC0E94;
-	Wed,  8 Jul 2026 16:15:47 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id C88B360339;
+	Wed,  8 Jul 2026 14:20:28 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id EAA2811BC16A2;
+	Wed,  8 Jul 2026 16:20:27 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1783520148; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1783520428; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=GiBSUKr/VC8/9k1Cknl66kr0ElTnjG9j76/41tHCAr4=;
-	b=CgkwsLHtrYibj5urTFHeuV9fJ1bfVQXH7fLMdDWvm7ndpZm05xlG7W0O1+vR3pztLM9r7E
-	tCkhE3d7o6ARUcGGHgBE04l0DYYWcHMnBUB+U9O78/zCy2uDz1fdM4qCEkFdNtsoJQugsA
-	t+fqgqIn4+5O3kOgQui4jUfuJV68k7akX4iuxu4nb8yaYxehXQmMmp3yo81X4NRZ4vK4JP
-	ISehL7W+GXwILVJ1UfmkaUEvldfVVifkDOZmH+2uUjEgD6I/MSuXxJPcGfvMX47vH3EABj
-	DUiRVi2u+vZgMdf2aCwxjN6aElkNXJ2fCXHOjTNA0TCBSrvvUt6WV4u3np2RrQ==
+	bh=cJozUiQzey/ZKXuISknh1/zGD2CG9O0eT/2wb2q0UcI=;
+	b=qvTH96obgk8oeEfbKgGOZGffkX7p78Sf5/r56pYF1UCwfO8VdJb1AkCfTPRwXgEdhHrpVx
+	u5FGC2Xi93aSbikyZ/l+0Gxdz2SWrsloyPpNOMjVLGbVea8NY7GK3xwEtlcMfhJPzO9S2K
+	yT/3TNr3z/UCDPUeo+QcEetTAFFX4xcfHo51RWmhbiZHIA58QT/9WnK1EhbvkPZ8taaCrh
+	q+Di2/4sva8OHYfWOV2RkixjLjCb1dnLY9kCE6A4HKprIXIMS7QnWlst7n7Z4wQlYUl/C2
+	dnooN1kxgacXi/9zBPCq6b2uX7WNRWZURt92PoYdAvPzfiP80tDKZnwZtFxgEQ==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -41,85 +41,94 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 08 Jul 2026 16:15:47 +0200
-Message-Id: <DJT94KN9O0VZ.1T3XAMIDEATEI@bootlin.com>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Date: Wed, 08 Jul 2026 16:20:27 +0200
+Message-Id: <DJT985A6ZGZ3.2496O5EXL4MDR@bootlin.com>
 To: <sashiko-reviews@lists.linux.dev>,
  =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
  <alexis.lothore@bootlin.com>
-Subject: Re: [PATCH bpf-next v4 02/10] bpf: mark instructions accessing
- program stack
+Subject: Re: [PATCH bpf-next v4 04/10] bpf, x86: add helper to emit kasan
+ checks in x86 JITed programs
 Cc: <bpf@vger.kernel.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
 References: <20260708-kasan-v4-0-d5c177ab8227@bootlin.com>
- <20260708-kasan-v4-2-d5c177ab8227@bootlin.com>
- <20260708081008.402A51F000E9@smtp.kernel.org>
-In-Reply-To: <20260708081008.402A51F000E9@smtp.kernel.org>
+ <20260708-kasan-v4-4-d5c177ab8227@bootlin.com>
+ <20260708081612.7006D1F000E9@smtp.kernel.org>
+In-Reply-To: <20260708081612.7006D1F000E9@smtp.kernel.org>
 X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed Jul 8, 2026 at 10:10 AM CEST, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+On Wed Jul 8, 2026 at 10:16 AM CEST, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
 e(s) to consider:
-> - [High] In `adjust_insn_aux_data()`, when replacing an instruction with =
-a single new instruction (`cnt =3D=3D 1`), `data[off].non_stack_access` is =
-incorrectly set by evaluating `is_mem_insn(insn)` instead of `is_mem_insn(i=
-nsn + off)`.
-> --
+> - [High] emit_kasan_check() fails to save caller-saved registers r10 (BPF=
+_REG_AX) and r11 (AUX_REG), causing them to be clobbered by C KASAN helpers=
+.
+> - [Low] The static function emit_kasan_check() is defined but never calle=
+d, leading to a -Wunused-function compiler warning and build failure.
+
+[...]
+
+>> +static int emit_kasan_check(struct bpf_verifier_env *env, u8 **pprog,
+>> +			    u32 addr_reg, struct bpf_insn *insn, u8 *ip,
+>> +			    bool is_write, bool accesses_stack_only)
+>> +{
 >
-> --- Patch [2]: [PATCH bpf-next v4 02/10] bpf: mark instructions accessing=
- program stack ---
-> commit 764c11844e954d2fc0370d170803b0deb684733a
-> Author: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.com=
->
->
-> bpf: mark instructions accessing program stack
->
-> This commit introduces tracking of instructions that access non-stack mem=
-ory
-> to help JIT compilers emit KASAN checks. It adds logic to mark BPF
-> instructions as stack-only by default and overrides this if any state
-> indicates non-stack access, including adjustments during verifier patchin=
-g.
->
->> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
->> index f515fc9669ce2..feee1f33de9d5 100644
->> --- a/kernel/bpf/fixups.c
->> +++ b/kernel/bpf/fixups.c
->
-> [ ... ]
->
->> @@ -172,8 +184,14 @@ static void adjust_insn_aux_data(struct bpf_verifie=
-r_env *env,
->>  	 */
->>  	data[off].zext_dst =3D insn_has_def32(insn + off + cnt - 1);
->> =20
->> -	if (cnt =3D=3D 1)
->> +	if (cnt =3D=3D 1) {
->> +		/* A non-memory accessing insn could have been replaced by a
->> +		 * memory accessing insn, systematically mark it for non-stack
->> +		 * access
->> +		 */
->> +		data[off].non_stack_access =3D is_mem_insn(insn);
+> [Severity: Low]
+> Does this introduce a -Wunused-function compiler warning? The static func=
+tion
+> emit_kasan_check() is added here but does not appear to be called anywher=
+e in
+> this patch. This could cause build failures on setups with -Werror, break=
+ing
+> git bisectability.
+
+True, that standalone definition was intended to ease the review. I'll
+keep it as is, unless anyone requires this to be squashed in the commit
+actually calling the new helper.
+
+[...]
+
+>> +	/* Save rax */
+>> +	EMIT1(0x50);
+>> +	/* Save rcx */
+>> +	EMIT1(0x51);
+>> +	/* Save rdx */
+>> +	EMIT1(0x52);
+>> +	/* Save rsi */
+>> +	EMIT1(0x56);
+>> +	/* Save rdi */
+>> +	EMIT1(0x57);
+>> +	/* Save r8 */
+>> +	EMIT2(0x41, 0x50);
+>> +	/* Save r9 */
+>> +	EMIT2(0x41, 0x51);
 >
 > [Severity: High]
-> Should this check be using is_mem_insn(insn + off) instead of
-> is_mem_insn(insn)?
-
-Aouch, true, my mistake.
-
-> Since insn points to the start of the program (new_prog->insnsi), calling
-> is_mem_insn(insn) evaluates the very first instruction of the program rat=
-her
-> than the newly patched instruction at the targeted offset.
+> Could omitting r10 and r11 here lead to data corruption?=20
 >
-> If the first instruction happens to not be a memory access, will this
-> incorrectly mark the patched instruction as not accessing non-stack memor=
-y
-> and cause us to miss KASAN instrumentation?
+> The commit message mentions skipping them to reduce overhead, but the cal=
+led
+> C functions (__asan_loadX, __asan_storeX) follow the System V AMD64 ABI a=
+nd
+> might clobber caller-saved registers like r10 and r11.=20
 >
->>  		return;
->> +	}
->>  	prog_len =3D new_prog->len;
+> In the x86 BPF JIT, r10 is mapped to BPF_REG_AX, which is used across
+> instructions to hold state (such as during constant blinding rewrites whe=
+re
+> BPF_ST_MEM is transformed into BPF_STX_MEM using BPF_REG_AX as its source=
+).
+>
+> Would this result in storing garbage data when the C helper clobbers
+> BPF_REG_AX?
+
+Already discussed multiple time in the previous revisions.
+
+Alexis
+>
+>> +
+>> +	/* mov rdi, addr_reg */
+>> +	EMIT_mov(BPF_REG_1, addr_reg);
+> [ ... ]
 
 
 
