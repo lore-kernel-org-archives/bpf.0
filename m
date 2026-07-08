@@ -1,27 +1,26 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22CE33D5676;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137E43D3CF4;
 	Wed,  8 Jul 2026 06:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783492824; cv=none; b=EFcHVRCWKT3Oq91+RR+rFUINyepqxEppHEoeCi8lkUQBzGj8zhRPI+BSqbVckfEd1x83ewCwkgsuyKyyST3/2InqCRE3uOV5dErJvd7bwbPMk2abP+POiWUmEkJSbeNu5mc8q99GsDv2f1EQe5Zmyz+Xcyoj2NIdpAtRSFMXvT0=
+	t=1783492824; cv=none; b=SfqcfHnuWP7OMIZsMZrvymudjqX7hK2LbH0/eIVrjjsSqTjLTHFDRQ4D2I88xNKt2ARsN+tUu9mFWAfcR2yOP3TRRPQc4PHm5OsQhZ/N5AB9iYa/iDy5vR58Yxr6aT+nZxJgRZyCDHDS5QBUbudmZyfl2K3bNu52sNbJoa1XI3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1783492824; c=relaxed/simple;
-	bh=1r2eN1dQAQtOYmAVbAY6FHIz31T5RzVNlEiryi6Atvk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WV9iqEoTNFvQx5LE0AvtSvI1sbtdEK3WkiriLpM96TRXbHwoLB3fIV4oQ9yFXzorDJDvrzOzGvY0ZS4O8zNIfq0VN5L77/ujl9J1hIkvifW9fsus5smZdxtnkKR3iNLf1Nent65IwDG2h0/vwCKJDMutsnjKYnsokML02e01sgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	bh=oc7Lfz2ZWwrXU+zFgwi2wLx+sBIofhLxH0j2BKDDX7k=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=AvZGDqo7vJaRRd5boXKQ/h2DBSf3+ZUoELhP3xx2Z9t2LJFPwjHKB6A2n8Wl1DdK/IqkVOnJbtqS1V6H6TA/9ETO5i0DADo+M53EvQ6FnTQ6sOZjXEWe+DIkCwV8XKEL8/StWQt/4p91m5JrSueZE6Cf7GXJVUdaSm39wD69pVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gw7kh32GJzYQtls;
-	Wed,  8 Jul 2026 14:40:12 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gw7kN1P4FzKHML3;
+	Wed,  8 Jul 2026 14:39:56 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 0993240AEB;
-	Wed,  8 Jul 2026 14:40:17 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id BC98F4056F;
+	Wed,  8 Jul 2026 14:40:16 +0800 (CST)
 Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgD32yfQ8E1qblLgAQ--.30661S6;
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgD32yfQ8E1qblLgAQ--.30661S2;
 	Wed, 08 Jul 2026 14:40:16 +0800 (CST)
 From: Pu Lehui <pulehui@huaweicloud.com>
 To: bpf@vger.kernel.org,
@@ -45,85 +44,100 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
 	Alexandre Ghiti <alex@ghiti.fr>,
 	Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next v6 4/7] riscv, bpf: Fix kernel stack corruption in tailcall with CFI
-Date: Wed,  8 Jul 2026 06:44:33 +0000
-Message-Id: <20260708064436.2971933-5-pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next v6 0/7] Mixing bpf2bpf and tailcalls for RV64
+Date: Wed,  8 Jul 2026 06:44:29 +0000
+Message-Id: <20260708064436.2971933-1-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260708064436.2971933-1-pulehui@huaweicloud.com>
-References: <20260708064436.2971933-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgD32yfQ8E1qblLgAQ--.30661S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7tryxGr4Uur4Dur15tr45GFg_yoW8Zw1DpF
-	45Gwn3urykXr1vkr9rAF4Dtw4YgrsY9a17Wr9ruayayan29r1xG3Z8Kw43ZFyrZFW8K3Wr
-	AFy29rn3u34DZ3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPmb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x02
-	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
-	80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
-	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4
-	kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E
-	5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZV
-	WrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY
-	1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
-	AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZE
-	Xa7IU0189tUUUUU==
+X-CM-TRANSID:Syh0CgD32yfQ8E1qblLgAQ--.30661S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGrWDuFyUZr1fCFyktF1rXrb_yoW5Cr1rpa
+	yfuw13Wryvgr40yan7Ga18Ja4rJan5u3W5Cr17Jw1rAa15uFyqgF1xGFWFva45AFZag34Y
+	vr1qqF15C3y8Z3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7
+	CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+	IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x02
+	62kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+	026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+	GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
+	vEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE
+	14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+	9x07j7l19UUUUU=
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-From: Pu Lehui <pulehui@huawei.com>
+In the current RV64 JIT, if we just don't initialize the TCC in subprog,
+the TCC can be propagated from the parent process to the subprocess, but
+the updated TCC of the parent process cannot be restored when the
+subprocess exits. Since the RV64 TCC is initialized before saving the
+callee saved registers into the stack, we cannot use the callee saved
+register to pass the TCC, otherwise the original value of the callee
+saved register will be destroyed. So we implemented mixing bpf2bpf and
+tailcalls similar to x86_64, i.e. using a non-callee saved register to
+transfer the TCC between functions, and saving that register to the
+stack to protect the TCC value. As for the tailcall hierarchy issue,
+inspired by the s390's low-overhead approach, we store TCC from
+RV_REG_TCC back to stack after calling bpf2bpf call or calling orig bpf
+func in bpf trampoline.
 
-When CONFIG_CFI_CLANG is enabled, prog->bpf_func already skips the kcfi
-instruction during setup. Including it again in the tailcall jump offset
-causes it to jump over an extra 4 bytes, skipping the stack pointer
-adjustment, which will result in kernel stack corruption.
+In addition, some code cleans are also attached to this patchset.
 
-Fixes: 30a59cc79754 ("riscv, bpf: Fix possible infinite tailcall when CONFIG_CFI_CLANG is enabled")
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- arch/riscv/net/bpf_jit_comp64.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Tests test_bpf.ko and test_verifier have passed, as well as the relative
+testcases of test_progs*.
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 2f06752fb036..cedf40927474 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -18,7 +18,6 @@
- #define RV_MAX_REG_ARGS 8
- #define RV_FENTRY_NINSNS 2
- #define RV_FENTRY_NBYTES (RV_FENTRY_NINSNS * 4)
--#define RV_KCFI_NINSNS (IS_ENABLED(CONFIG_CFI) ? 1 : 0)
- /* imm that allows emit_imm to emit max count insns */
- #define RV_MAX_COUNT_IMM 0x7FFF7FF7FF7FF7FF
- 
-@@ -272,8 +271,8 @@ static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
- 	if (!is_tail_call)
- 		emit_addiw(RV_REG_A0, RV_REG_A5, 0, ctx);
- 	emit_jalr(RV_REG_ZERO, is_tail_call ? RV_REG_T3 : RV_REG_RA,
--		  /* kcfi, fentry and TCC init insns will be skipped on tailcall */
--		  is_tail_call ? (RV_KCFI_NINSNS + RV_FENTRY_NINSNS + 1) * 4 : 0,
-+		  /* fentry and TCC init insns will be skipped on tailcall */
-+		  is_tail_call ? (RV_FENTRY_NINSNS + 1) * 4 : 0,
- 		  ctx);
- }
- 
-@@ -2033,6 +2032,8 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
- 	/* emit kcfi type preamble immediately before the  first insn */
- 	emit_kcfi(is_subprog ? cfi_bpf_subprog_hash : cfi_bpf_hash, ctx);
- 
-+	/* bpf prog starts here as kcfi skipped during prog->bpf_func setup */
-+
- 	/* nops reserved for auipc+jalr pair */
- 	for (i = 0; i < RV_FENTRY_NINSNS; i++)
- 		emit(rv_nop(), ctx);
+v6:
+- Add new patch to fix memory leak in bpf_jit_free. (Sashiko)
+
+v5: https://lore.kernel.org/bpf/20260707142219.2871758-1-pulehui@huaweicloud.com
+- Fix TCC value was not restored to RV_REG_TCC upon trampoline exit,
+  resulting in an infinite tail call. (Sashiko)
+- Fix epilogue not restored TCC value to RV_REG_TCC, resulting in
+  leaf tailcall callee may clobbered RV_REG_TCC. (Sashiko)
+- Remove patch of `Remove ctx->offset initialization` as it would hit
+  some corner case. (Sashiko)
+- Fix double-count kcfi insn when tailcall to target. (Sashiko)
+- Add detail for selftest commit message. (BPF BOT)
+
+v4: https://lore.kernel.org/bpf/20260629140048.733346-1-pulehui@huaweicloud.com
+- Fix tailcall hierarchy issue.
+- use is_struct_ops_tramp helper in bpf trampoline
+
+v3: https://lore.kernel.org/bpf/20240201083351.943121-1-pulehui@huaweicloud.com
+- Remove duplicate RV_REG_TCC load in epiloguei. (Björn Töpel)
+
+v2: https://lore.kernel.org/bpf/20240130040958.230673-1-pulehui@huaweicloud.com
+- Fix emit restore RV_REG_TCC double times when `flags &
+  BPF_TRAMP_F_CALL_ORIG`
+- Use bpf_is_subprog helper
+
+v1: https://lore.kernel.org/bpf/20230919035711.3297256-1-pulehui@huaweicloud.com
+
+Pu Lehui (7):
+  bpf: Extract the is_struct_ops_tramp helper
+  riscv, bpf: Fix memory leak in bpf_jit_free
+  riscv, bpf: Using kvzalloc_objs to allocate cache buffer
+  riscv, bpf: Fix kernel stack corruption in tailcall with CFI
+  riscv, bpf: Add RV_TAILCALL_OFFSET macro to format tailcall offset
+  riscv, bpf: Mixing bpf2bpf and tailcalls
+  selftests/bpf: Remove tailcalls tests from DENYLIST.riscv64
+
+ arch/arm64/net/bpf_jit_comp.c                |   6 -
+ arch/riscv/net/bpf_jit.h                     |   1 +
+ arch/riscv/net/bpf_jit_comp64.c              | 125 +++++++++----------
+ arch/riscv/net/bpf_jit_core.c                |   5 +-
+ include/linux/bpf.h                          |   6 +
+ tools/testing/selftests/bpf/DENYLIST.riscv64 |   1 -
+ 6 files changed, 72 insertions(+), 72 deletions(-)
+
 -- 
 2.34.1
 
