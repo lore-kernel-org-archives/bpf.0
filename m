@@ -1,119 +1,175 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from outbound.qs.icloud.com (qs-2004j-snip4-5.eps.apple.com [57.103.84.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C4F3ADB9B
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8F93E51FF
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:34:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.84.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783542517; cv=none; b=WFPV/VJnuW5M4uUEJMUMGyXNy03c6F/pT1YZxpHflQ8hX/Ng+6Hz6kRfI/6pLH8eDvBLKTxgzsixTpmZ7coGi/dhnAnFWeMODBdsrNfr4mFL97AjtsgVFqUZvbWX5qRd22uVoxeYirzhW03JiTbxzlmk47bG/SlA2sj24oeAWtQ=
+	t=1783542895; cv=none; b=j3ETz52w3zigeiSfyL8yJ/D49WR9+BcFG1tkwS4DtLRHs3MeVKdx2HC2g8Y6iH0sTNJXMYMzI5DwD5axcQI0vCvrWOlL7QS0ZLiqcwHPGdb6AItucpZgBIF1awWEYTgxrK5B9yzecewKW8+bj3725dBfKYW0cW2rTQT1/XVTY+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783542517; c=relaxed/simple;
-	bh=kVeJGY8Xe/cToqlhK9p9Fpk7aqq4/EuWoTM43hRZEdA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Y43bEDZ6U6EGknsgWhPjJmJQRJt5qkL5tBNjmprQOFfJokGJm6VUx++aTRbsvAP1AwQsr17h+17Emt7RDNqpG9P6/nAYDPqmT+SywCZonJl6cEgJQmYz/nAwgdYR82AIH+x0OXSBAaIKTs5D+EysDX0796a3vkGBe+A4SCBpBsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ojvfKP9f; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783542895; c=relaxed/simple;
+	bh=cKTqWKNeQpYFZKRzLGP3mK0x+DHNGDCBTEI86dwWR+8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AZixV/0yG5/ND6mSyd7HRzFJHrY3huwNuopZ0B8gQB2lqLubTcRzazCrGhgNp5TSMKZvk/TMfPtyETAcT2lrNTmXq39P7RdEb1DkzJiDGjaPWFYp6eat+SyIHnzpgdaeRbfwpJcfNzsQIVkDkwhhsGp3j/v4+DCLWXpmGVGdtVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg; spf=pass smtp.mailfrom=verdict.gg; dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b=BA/ERtkc; arc=none smtp.client-ip=57.103.84.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verdict.gg
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ojvfKP9f"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0308F1F000E9;
-	Wed,  8 Jul 2026 20:28:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783542516;
-	bh=BQt50OyZ/xENe2H/CeK/FGecxRddgSS7F5zUl+XliR0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ojvfKP9fiCkgnLeQJl/oJg9fOrJobF0t7C7h2lF70CqZO1Kov9fFMgJwgiSvC4BYC
-	 1yuxymtMTbvHPbHrUNRxw25bZSLs2BAXfOfJmHlOXcHerjQHCqCpQnmCKu3bO8XZ12
-	 /TfgaHDmrthfobNP9m+oJeVXDKGjWsSfKuJhgruYMS9qx4p5NgWXq7+T79TpFn/noq
-	 VSUhjGoAzW9N9/AogqQeQFVFlcki788+cZry8fRyggBy574BNT6VQTsn9YRzo0Hhb7
-	 muLlAYy1B/2LWUureJMFqLhp/gae55bkyPYwmNYm0yY2QF5FVWdtkeg/P8DoRmnnp3
-	 JvDdSUaoaYBkw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 08/12] bpf: Enable 16-byte aggregate return
- types
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260708201020.2160131-1-yonghong.song@linux.dev>
-References: <20260708200939.2153664-1-yonghong.song@linux.dev>
- <20260708201020.2160131-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 08 Jul 2026 20:28:35 +0000
-Message-Id: <20260708202836.0308F1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b="BA/ERtkc"
+Received: from outbound.qs.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-east-2d-10-percent-0 (Postfix) with ESMTPS id AAF11300009E;
+	Wed, 08 Jul 2026 20:34:44 +0000 (UTC)
+X-ICL-RepId: 019f4370-a882-708d-a5d5-81ada2bf8718
+X-ICL-Out-Info: HUtFAUMHWwJACUgBTUQeDx5WFlZNRAJCTQhICkMGWQJeCEABQwVdEhVdRVcIWwJAEVc4RQhFD1sTTVZUChcNVk1PHUEJXghGXl4fEx9UVgFDGRBWAVhWXQVNGlwYWQ8cAUpWWg5bBEcUFxtcABcbRgIEIwJfAEUCXglWATAXD1ZNTx1BCV4IRl5eHxMAXg8PTAtIAVsHXAJIC0gAWQZbHEQMSQFcGlofFFwUWh9WBXIGXApXBFQfHBdeRhMZThtXTVoNQBlYBm0UVhVSBFk=
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1; t=1783542889; x=1786134889; bh=vYoBJPpO2uL4VVlcC7jV1/CXwJbaRqJ4IBmz5iXbOPY=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=BA/ERtkciXMZdtqVL0IC3V5YrhWuOAuBDAEJHzjaZDvZchl4xVw1RkKMK8PIc5xKpuGqd/uKKmNcJzjSOrmZUYE8twb473mfaINObZcVWk84hoDdpTaIhF4l71NUUbZ7KNWecgQkcO7lIQhRHN/8bTmYb9ZJFXQkA4rrGZWwtyKct/wqO3luq8el0QS5TOnlW8A+HuK/xVHuiWzHDdIOobE0HiDdC4lBynQpnqpixjnU6/zK483FvoBnE7QIhhi2H313U+AMUXzbrVdj7kc3ojx3jKkaeeC+dZ4qMM0hvRh/y0cbZwwGW2LVpMdd0xYz/6cuWz/a1SGQldHC1LPfUg==
+mail-alias-created-date: 1621344842221
+Received: from DelNac.mail.msk (unknown [17.57.155.37])
+	by p00-icloudmta-asmtp-us-east-2d-10-percent-0 (Postfix) with ESMTPSA id 59B9B300110C;
+	Wed, 08 Jul 2026 20:34:37 +0000 (UTC)
+From: Vladimir Vdovin <deliran@verdict.gg>
+To: Lorenzo Bianconi <lorenzo@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: Jakub Sitnicki <jakub@cloudflare.com>,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org,
+	linux-kselftest@vger.kernel.org,
+	Vladimir Vdovin <deliran@verdict.gg>
+Subject: [PATCH bpf-next v4 0/6] Add the capability to load HW RX checksum in eBPF programs
+Date: Wed,  8 Jul 2026 23:34:04 +0300
+Message-ID: <20260708203410.45121-1-deliran@verdict.gg>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: zQNJaRqpKCjpeW_8rRYGsYSRCFrT5GZ0
+X-Proofpoint-GUID: zQNJaRqpKCjpeW_8rRYGsYSRCFrT5GZ0
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA4MDIwMiBTYWx0ZWRfX9zezX2Lhrufp
+ JjcrUWu/fiGOYri9228fif3ZL5UFWsHAyW2yPCtM5nktzM0kbacRld5p7G55OUi02SwgJvZxjaV
+ MHbc3uZad2dJ/4Kc78WXPZFfv4dUqA/wGw0kQtX3OoKX1UJnoW8ovhy3NLFMItV5jrxLk6h8lBw
+ w6GBtsUDJepJ3NmXWb1z8GtG+cdc9eLol5GqEsidmhlYpG/keEdOq5RvsDTfCJ8p/EHa+GFzzvT
+ 9E3UdJAkriVJ4HNebPWvQ8d0hlOP2+IyLt0YwD10zi2/3K5CzJqInJfLHI2/v+T4FJ9r7gto5KM
+ Mc3j51gPg8/YGpavaEh
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Leaking uninitialized kernel memory via kfunc R2 return register f=
-or structs of 9-15 bytes.
---
+Introduce bpf_xdp_metadata_rx_checksum() kfunc in order to load the HW
+RX checksum results in the eBPF program bound to the NIC.
+Implement xmo_rx_checksum callback for veth and ice drivers.
 
---- Patch [8]: [PATCH bpf-next 08/12] bpf: Enable 16-byte aggregate return =
-types ---
-commit 5b4b6cb320ef1b1f82ac557b6f90945992d8a0c5
-Author: Yonghong Song <yonghong.song@linux.dev>
-Subject: bpf: Enable 16-byte aggregate return types
+If the hardware detects a wrong/failed checksum, it will report
+CHECKSUM_NONE in the packet metadata. Moreover, CHECKSUM_NONE will be
+returned even if the NIC can't parse the packet (e.g. if it does not
+support a specific protocol). A possible use case for
+bpf_xdp_metadata_rx_checksum() would be to implement a XDP DDoS
+application [1] combining the info from bpf_xdp_metadata_rx_checksum()
+and bpf_xdp_metadata_rx_hash() kfuncs in order to filter packets with a
+wrong/failed checksum.
 
-This patch relaxes btf_distill_func_proto() and btf_validate_return_type()
-to allow kfuncs to return by-value structs or unions up to 16 bytes.
-This enables the <=3D16 byte aggregate return values end to end.
+This is a repost of Lorenzo's series, rebased on top of net-next, with
+a new drv-net selftest for the RX checksum metadata added on top of it,
+as Lorenzo suggested [2].
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index dff5c0d916412..bab82d1c8cb98 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -7572,7 +7572,12 @@ int btf_distill_func_proto(struct bpf_verifier_log=
- *log,
->  		return -EINVAL;
->  	}
->  	ret =3D __get_type_size(btf, func->type, &t);
-> -	if (ret < 0 || btf_type_is_struct(t)) {
-> +	/*
-> +	 * __get_type_size() already restricts a non-negative ret to void, a
-> +	 * pointer, an int, an enum or a struct/union, so only the size is chec=
-ked
-> +	 * here.
-> +	 */
-> +	if (ret < 0 || ret > 16) {
+A note on the new selftest semantics: for traffic with a correct
+checksum the test requires a usable verdict (CHECKSUM_UNNECESSARY
+and/or CHECKSUM_COMPLETE) but reports SKIP on CHECKSUM_NONE, since the
+API allows devices that do not verify the packets (e.g. veth reports
+NONE for locally generated CHECKSUM_PARTIAL traffic). For corrupted
+packets it only asserts that CHECKSUM_UNNECESSARY is not set, as
+CHECKSUM_COMPLETE legitimately carries the raw checksum of bad packets
+too.
 
-[Severity: High]
-Can this leak uninitialized kernel memory for structs between 9 and 15 byte=
-s?
+[1] https://blog.cloudflare.com/unimog-cloudflares-edge-load-balancer/
+[2] https://lore.kernel.org/r/ak5ox296M46FAcWX@lore-desk
 
-The x86_64 ABI leaves the unused upper bytes of the %rdx register undefined
-when returning a struct that is not a multiple of 8 bytes.
+---
+Changes in v4:
+- Report ip_summed as a bitmask of XDP_CHECKSUM_* values and return the
+  hw checksum and the checksum level via dedicated
+  bpf_xdp_metadata_rx_checksum() arguments
+- Rebase on top of net-next
+- Add a drv-net selftest for the XDP RX checksum metadata
+- Link to v3: https://lore.kernel.org/r/20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba71@kernel.org
 
-Looking at mark_kfunc_ret_reg_size() in kernel/bpf/verifier.c, if the struct
-size is greater than 8:
+Changes in v3:
+- Remove leftover assignment from v2 in veth_xdp_rx_checksum()
+- Fix typos
+- Fix commit logs
+- Link to v2: https://lore.kernel.org/r/20260213-bpf-xdp-meta-rxcksum-v2-0-a82c4802afbe@kernel.org
 
-	if (size > 8) {
-		mark_btf_func_reg_size(env, BPF_REG_0, 8);
-		mark_reg_unknown(env, regs, BPF_REG_2);
-		regs[BPF_REG_2].subreg_def =3D DEF_NOT_SUBREG;
-	}
+Changes in v2:
+- Remove XDP_CHECKSUM_PARTIAL definition
+- Improve veth_xdp_rx_checksum() callback
+- Fix uninitialized case for cksum_meta in ice_get_rx_csum()
+- Fix sparse warnings in ice driver
+- Fix typos
+- Link to v1: https://lore.kernel.org/r/20260210-bpf-xdp-meta-rxcksum-v1-0-e5d55caa0541@kernel.org
 
-The verifier explicitly marks BPF_REG_2 as fully initialized, bypassing sub=
-reg
-zero-extension.
+Changes in v1:
+- Rebase on top of bpf-next
+- Test ice driver using xdp_hw_metadata tool available in the bpf
+  kernel selftest
+- Improve cover letter with an use-case for
+  bpf_xdp_metadata_rx_checksum()
+- Link to RFC v2: https://lore.kernel.org/r/20250925-bpf-xdp-meta-rxcksum-v2-0-6b3fe987ce91@kernel.org
 
-And in the x86 JIT do_jit() in arch/x86/net/bpf_jit_comp.c, it moves the fu=
-ll
-64-bit register:
+change-id: 20250925-bpf-xdp-meta-rxcksum-900685e2909d
 
-				fm =3D bpf_jit_find_kfunc_model(bpf_prog, insn);
-				if (fm && fm->ret_size > 8)
-					emit_mov_reg(&prog, true, BPF_REG_2, BPF_REG_3);
+Lorenzo Bianconi (5):
+  netlink: specs: Add XDP RX checksum capability to XDP metadata specs
+  net: veth: Add xmo_rx_checksum callback to veth driver
+  net: ice: Add xmo_rx_checksum callback
+  selftests/bpf: Add selftest support for bpf_xdp_metadata_rx_checksum
+  selftests/bpf: Add bpf_xdp_metadata_rx_checksum support to
+    xdp_hw_metadat prog
 
-Could a BPF program read the undefined bytes from R2, resulting in an
-information leak?
+Vladimir Vdovin (1):
+  selftests: drv-net: add XDP RX checksum metadata tests
 
->  		bpf_log(log,
->  			"The function %s return type %s is unsupported.\n",
->  			tname, btf_type_str(t));
+ Documentation/netlink/specs/netdev.yaml       |   5 +
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 123 ++++++++++++------
+ drivers/net/veth.c                            |  32 +++++
+ include/net/xdp.h                             |  18 +++
+ include/uapi/linux/netdev.h                   |   3 +
+ net/core/xdp.c                                |  32 +++++
+ tools/include/uapi/linux/netdev.h             |   3 +
+ .../selftests/bpf/prog_tests/xdp_metadata.c   |   9 ++
+ .../selftests/bpf/progs/xdp_hw_metadata.c     |   7 +
+ .../selftests/bpf/progs/xdp_metadata.c        |   2 +
+ tools/testing/selftests/bpf/xdp_hw_metadata.c |  31 +++++
+ tools/testing/selftests/bpf/xdp_metadata.h    |  13 ++
+ .../selftests/drivers/net/hw/xdp_metadata.py  | 110 ++++++++++++++++
+ .../selftests/net/lib/xdp_metadata.bpf.c      | 112 ++++++++++++++--
+ 14 files changed, 445 insertions(+), 55 deletions(-)
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260708200939.2153=
-664-1-yonghong.song@linux.dev?part=3D8
+
+base-commit: 08030ddb87b4c6c6a2c03c82731b5e188f02f5b9
+-- 
+2.47.0
+
