@@ -1,88 +1,88 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C67E3EFD10
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 09:02:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CF941930A
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 09:35:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783501352; cv=none; b=f+YxkNJ+eAhccvJ5XiDQaXmY7C9j9trkfml35MtfR6E5x/y2arkSz40GNn4g5FKv95MLeiZseWYazgwHbM0c7dOea3iPyxPcduKl6s5ZnZIS1X3vX0r5SMFdSteBpQwo21J5CkBeLDzFqVma8//J93d33Qg5E6YgcdrDqbfrAEo=
+	t=1783503351; cv=none; b=BEX1hcaENyvOtJiMPZzH8G9kwVUR8qXK5c39TiRXoVUq/q3LWKclKIXZd7HBl9R/P8/cV+9Wvlw1f5tb9nejl+/vsDJOtjr1Mg55LQOEdiWTlZcMLo5vgNaUhiQRUQMf25FTBtHLa/AWuh18OudD6mkBXYMuTbIz4778MmooyrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783501352; c=relaxed/simple;
-	bh=FzKeTeF8JA+KsfuZhglVYUhLx5S0Q2O5ea+96KMWWzY=;
+	s=arc-20240116; t=1783503351; c=relaxed/simple;
+	bh=StteSp9fRcSPzilMyJoQaXo0nUGQEkeryVKN26Ddpbk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ITm1CNFneBpwpMWWqEIRHCHgjniHnnJuvQSxo7H87SmOGHVRqwPuVcZ4g/eYdaiBeXCuegxkqMfPUMihNaoobTISfc2I04pET02R+Dbd2WyJalH5hAfoxJKeHC0w16nwa7hWOYqwCPT/5bHKDH+eCJGD7EeVCNyUR+DeO34A/aI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DfwSfWkZ; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 MIME-Version; b=GECdVeZAJAeCGiC6i/+nVCIqH74je0/Y797vMp3rMxhONAkkq52oa7EWW3MAu4lS2lmggJ9+TrAKNKbSY4DgYRlzu/VfY1qZ9dZ298TGuCVWZzKyOtUmPEc81PkbOzwPMRsEKgFQkMaujc2FrXlnj0yw3fgzYzuHy5sBosvBYKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fXYDQMR0; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DfwSfWkZ"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-381065a7a03so328505a91.0
-        for <bpf@vger.kernel.org>; Wed, 08 Jul 2026 02:02:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783501348; x=1784106148; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VGJwch6uaoT+4VIjlzymTYDaLAmgt0JW6oLszFG1Jaw=;
-        b=DfwSfWkZi6CUlYoRujaPJqqShrHgWvJWQWZuvubHmwzOcTZXAKUssFB+RiPG2SU3vP
-         2T0L+k27SLUlsxRkF6LkApH3sg4bAfrePSCDiPba8z4llEyYpmZWVirqfizUs3eT/EiR
-         kdPKs0EUNalZnoKYqABT2kgbGQe0ABWIL9Gmkw04xIoX9GlBqZtRHrU/QAJ9uZuKDcwa
-         GqrTbrw9BD6DOQQOuOeTxq7Nu26CeyHhcCWvMkJnrKdfi7ZLM3fw73uJtM6iujiNq/Ku
-         +HCZTo9n41D2Kydz5XE2YHGYxQixHRigqYbLlLbxZ7RiiuVTJUgF9ma4WVjrKpD1PTuV
-         O6wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783501348; x=1784106148;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=VGJwch6uaoT+4VIjlzymTYDaLAmgt0JW6oLszFG1Jaw=;
-        b=IL4pf9Q5x6uSzX5ccR1QNOWmEJaa7Zxm/XNKcrPiSm21JPO/sL57fY+yA8xH8Kva3y
-         Q80wkBsxeMWcZyZ+dGJL2SfUktp3IOdwE4gwrc8TKSHZtewjYT1muKsC9pXJHh2zGrW0
-         G1ZbcRxZKgjXm6y9PSA1hBVOj7Zii92awCpQSiOc4IdqM+2qUNAo2CSdrUqnuMawmJpN
-         8pfD6+PPAUusT0OQJnQ40TrYBTwC/ufxrXS6WohFKgbpVlJVTyg3NfAOlx5vaU/atY2i
-         EaDFzDLF48b0I1/KV7ogU8cwxcuBC3dZvBFmnbhoKJo+OoEhaMVPRgMV9ij/eA4/garz
-         WlyQ==
-X-Gm-Message-State: AOJu0Yzie01/qjYZKGipfd39TnW0U+MTOYjO8dk61noaJgZl29FFH+FW
-	LhEoQBl0EqgTEqVb9IdBVBCox4FcOKvJqIfwaRcRK6UJ2iBN4y3ma1yPzHc25D91MaxYug==
-X-Gm-Gg: AfdE7clam3MFABaB3zuhFizsQsTvSbD2fNVvbnJUmHL2JyF9NdHZN6DwtFjKf1sEUV6
-	39cPSANck0uc6ZIko7kOlwe6wZzaY4H7WQUCjJ5WCaWbngEts0dgHn2KoilNFkHwlmdPc2FyIxk
-	6AaWVRWKG3Xkhzs0bVCXwvU2lNYecktYzRmqBa9Gu4uJ/yIYk332Gvk2G+r7HEI11U3GKCjsPNE
-	uNOYKAjXCz+ps9e2lEQSg7pqpyIA4wHNyzFy0tEu+5LWEx5FAP7yPawpYOOdHFjZ4CH/hzVXxBn
-	zK5HPfozojbklPJ/uZVThs1Rt1cvqjVhoRgXv4qTr3XYy0fr2G/QZwGh6ly4CNWVonyGiA5VyJn
-	5QoZbQ/Mq8Lirl/SCZOtS1MBt8EWRbJcI8QRx3WT0ImtM0g5DuoGSp1tdTQ7XfId4TunRgYqoh/
-	miPCwoOpkdZrZchCVWVLtsWiB5aRJKk+0FBNtiQY2eo6RKL1lOuTh8cax4ZLw6D3PrhlYHCKnOJ
-	H87w1g/2070MseUxr3S8GNy9frgnsVHPA==
-X-Received: by 2002:a17:90b:2f88:b0:36a:c4b:76cf with SMTP id 98e67ed59e1d1-38941acc562mr1783937a91.23.1783501347770;
-        Wed, 08 Jul 2026 02:02:27 -0700 (PDT)
-Received: from u2404-VMware-Virtual-Platform.tailf6b5e0.ts.net ([24.4.24.156])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31174accb0esm19515493eec.30.2026.07.08.02.02.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2026 02:02:27 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	shuah@kernel.org,
-	mmullins@fb.com,
-	shung-hsi.yu@suse.com,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fXYDQMR0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783503347;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WANXkYn/R4DaHane7E5z4t8hUV+EyVL6+p1Ml7qoTi0=;
+	b=fXYDQMR0EHZECzsQyB5C/oJKVXrvQ0xeFLD2+MmLvu9tGQT8s/uTp69pe7zVReftFiSJwX
+	o6Ha7Oh4k20q138WmU6IdHcmvhVzbZKAGsx0Pfs/+o5Q45YBbALYop42dvcbNWQ8GQXsg5
+	Qr5f35YX0HMKnY84WGeGHuhNsEMFcSY=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-488-6PA1K0UrPjKq-PzooXSccA-1; Wed,
+ 08 Jul 2026 05:35:43 -0400
+X-MC-Unique: 6PA1K0UrPjKq-PzooXSccA-1
+X-Mimecast-MFC-AGG-ID: 6PA1K0UrPjKq-PzooXSccA_1783503340
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 675121956051;
+	Wed,  8 Jul 2026 09:35:39 +0000 (UTC)
+Received: from gerbillo.redhat.com (unknown [10.44.49.133])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B7B321800480;
+	Wed,  8 Jul 2026 09:35:29 +0000 (UTC)
+From: Paolo Abeni <pabeni@redhat.com>
+To: dipayanroy@linux.microsoft.com
+Cc: kys@microsoft.com,
+	haiyangz@microsoft.com,
+	wei.liu@kernel.org,
+	decui@microsoft.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	leon@kernel.org,
+	longli@microsoft.com,
+	kotaranov@microsoft.com,
+	horms@kernel.org,
+	shradhagupta@linux.microsoft.com,
+	ssengar@linux.microsoft.com,
+	ernis@linux.microsoft.com,
+	shirazsaleem@microsoft.com,
+	linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH bpf v4 2/2] selftests/bpf: Cover negative raw_tp writable buffer offsets
-Date: Wed,  8 Jul 2026 02:01:51 -0700
-Message-ID: <20260708090151.151729-3-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
-References: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
+	linux-rdma@vger.kernel.org,
+	stephen@networkplumber.org,
+	jacob.e.keller@intel.com,
+	dipayanroy@microsoft.com,
+	leitao@debian.org,
+	kees@kernel.org,
+	john.fastabend@gmail.com,
+	hawk@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	ast@kernel.org,
+	sdf@fomichev.me,
+	yury.norov@gmail.com,
+	pavan.chebbi@broadcom.com
+Subject: Re: [PATCH net-next v11 2/2] net: mana: force full-page RX buffers via ethtool private flag
+Date: Wed,  8 Jul 2026 11:35:24 +0200
+Message-ID: <20260708093524.130524-1-pabeni@redhat.com>
+In-Reply-To: <20260701141808.461554-3-dipayanroy@linux.microsoft.com>
+References: <20260701141808.461554-3-dipayanroy@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -90,127 +90,241 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-Add raw tracepoint writable coverage for buffer accesses involving
-negative constant pointer adjustments.
+From: AI Reviewer <ai@example.com>
 
-The verifier case checks that a negative effective offset is rejected.
-The attach-time case adds incremental coverage beyond the existing nbd
-test and the verifier rejection case: it uses a negative var_off and a
-positive instruction offset whose effective offset remains non-negative.
-This exercises the checked access_end accounting path and verifies that
-the resulting max_tp_access is still checked against nbd_send_request's
-writable size at attach time.
-
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+Full review at: https://netdev-ai.bots.linux.dev/sashiko/
 ---
- .../raw_tp_writable_reject_nbd_invalid.c      | 58 +++++++++++--------
- .../bpf/progs/verifier_raw_tp_writable.c      | 16 +++++
- 2 files changed, 51 insertions(+), 23 deletions(-)
+net: mana: force full-page RX buffers via ethtool private flag
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
-index 216b0dfac0fe..efe4cad47b28 100644
---- a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
-+++ b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
-@@ -4,12 +4,31 @@
- #include <linux/nbd.h>
- #include "bpf_util.h"
- 
--void test_raw_tp_writable_reject_nbd_invalid(void)
-+static void check_nbd_attach_reject(const char *name,
-+				    const struct bpf_insn *program, size_t prog_len)
- {
--	__u32 duration = 0;
-+	LIBBPF_OPTS(bpf_prog_load_opts, opts);
- 	char error[4096];
--	int bpf_fd = -1, tp_fd = -1;
-+	int bpf_fd, tp_fd;
-+
-+	opts.log_level = 2;
-+	opts.log_buf = error;
-+	opts.log_size = sizeof(error);
-+
-+	bpf_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE, NULL, "GPL v2",
-+			       program, prog_len, &opts);
-+	if (!ASSERT_GE(bpf_fd, 0, "prog_load"))
-+		return;
-+
-+	tp_fd = bpf_raw_tracepoint_open("nbd_send_request", bpf_fd);
-+	if (!ASSERT_LT(tp_fd, 0, name))
-+		close(tp_fd);
-+
-+	close(bpf_fd);
-+}
- 
-+void test_raw_tp_writable_reject_nbd_invalid(void)
-+{
- 	const struct bpf_insn program[] = {
- 		/* r6 is our tp buffer */
- 		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
-@@ -19,25 +38,18 @@ void test_raw_tp_writable_reject_nbd_invalid(void)
- 		BPF_EXIT_INSN(),
- 	};
- 
--	LIBBPF_OPTS(bpf_prog_load_opts, opts,
--		.log_level = 2,
--		.log_buf = error,
--		.log_size = sizeof(error),
--	);
--
--	bpf_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE, NULL, "GPL v2",
--			       program, ARRAY_SIZE(program),
--			       &opts);
--	if (CHECK(bpf_fd < 0, "bpf_raw_tracepoint_writable load",
--		  "failed: %d errno %d\n", bpf_fd, errno))
--		return;
--
--	tp_fd = bpf_raw_tracepoint_open("nbd_send_request", bpf_fd);
--	if (CHECK(tp_fd >= 0, "bpf_raw_tracepoint_writable open",
--		  "erroneously succeeded\n"))
--		goto out_bpffd;
-+	const struct bpf_insn negative_var_off_program[] = {
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
-+		/* make var_off negative, but keep the effective access offset non-negative */
-+		BPF_ALU64_IMM(BPF_ADD, BPF_REG_6, -8),
-+		/* one byte beyond the end of the nbd_request struct */
-+		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_6,
-+			    sizeof(struct nbd_request) + 8),
-+		BPF_EXIT_INSN(),
-+	};
- 
--	close(tp_fd);
--out_bpffd:
--	close(bpf_fd);
-+	check_nbd_attach_reject("nbd_invalid", program, ARRAY_SIZE(program));
-+	check_nbd_attach_reject("nbd_invalid_negative_var_off",
-+				negative_var_off_program,
-+				ARRAY_SIZE(negative_var_off_program));
- }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c b/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
-index 14a0172e2141..4055a6443bc2 100644
---- a/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
-@@ -47,4 +47,20 @@ l0_%=:	/* shift the buffer pointer to a variable location */\
- 	: __clobber_all);
- }
- 
-+SEC("raw_tracepoint.w")
-+__description("raw_tracepoint_writable: reject negative const offset")
-+__failure
-+__msg("invalid negative tracepoint buffer offset")
-+__naked void tracepoint_writable_reject_negative_const_offset(void)
-+{
-+	asm volatile ("					\
-+	r6 = *(u64 *)(r1 + 0);				\
-+	r6 += -8;					\
-+	r0 = *(u64 *)(r6 + 0);				\
-+	exit;						\
-+"	:
-+	:
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
+This adds an ethtool private flag "full-page-rx" that forces one RX buffer
+per page to avoid a page_pool fragment path throughput regression on some
+4K PAGE_SIZE ARM64 platforms. Toggling the flag while the port is up
+triggers a mana_detach() + mana_attach() reconfiguration to apply the new
+buffer layout.
+
+A few questions inline.
+
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> index 7438ea6b3f26..38f50b4eef87 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+
+[ ... mana_use_single_rxbuf_per_page() and mana_get_rxbuf_cfg() hunks
+      unrelated to the comments below ... ]
+
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+> index 3531abfdaf43..24f6ce63b031 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+
+[ ... ]
+
+> @@ -611,6 +630,88 @@ static int mana_get_link_ksettings(struct net_device *ndev,
+>  	return 0;
+>  }
+>  
+> +static u32 mana_get_priv_flags(struct net_device *ndev)
+> +{
+> +	struct mana_port_context *apc = netdev_priv(ndev);
+> +
+> +	return apc->priv_flags;
+> +}
+> +
+> +static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
+> +{
+> +	struct mana_port_context *apc = netdev_priv(ndev);
+> +	u32 changed = apc->priv_flags ^ priv_flags;
+> +	u32 old_priv_flags = apc->priv_flags;
+> +	bool schedule_port_reset = false;
+> +	int err = 0;
+> +
+> +	if (!changed)
+> +		return 0;
+> +
+> +	/* Reject unknown bits */
+> +	if (priv_flags & ~GENMASK(MANA_PRIV_FLAG_MAX - 1, 0))
+> +		return -EINVAL;
+> +
+> +	if (changed & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF)) {
+> +		apc->priv_flags = priv_flags;
+
+[Low]
+Is the storage of priv_flags intentionally nested inside the per-flag
+branch?  With only one flag today this is fine, but when a second bit is
+added to enum mana_priv_flag_bits, a user toggling only the new bit
+passes the !changed and unknown-bits checks, the outer if is skipped,
+apc->priv_flags is never updated, and mana_set_priv_flags() returns 0
+while mana_get_priv_flags() keeps reporting the old state.
+
+Would it be cleaner to store priv_flags unconditionally after validation
+and use per-flag if (changed & BIT(...)) blocks only for the
+flag-specific reconfiguration?
+
+> +
+> +		if (!apc->port_is_up) {
+> +			/* Port is down, flag updated to apply on next up
+> +			 * so just return.
+> +			 */
+> +			return 0;
+> +		}
+> +
+> +		/* Pre-allocate buffers to prevent failure in mana_attach
+> +		 * later
+> +		 */
+> +		err = mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queues);
+
+[Low]
+When the MTU is already jumbo (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2) or
+XDP is attached, mana_use_single_rxbuf_per_page() already returns true
+regardless of the new priv flag:
+
+	if (apc->priv_flags & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF))
+		return true;
+
+	/* For xdp and jumbo frames make sure only one packet fits per page. */
+	if (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 || mana_xdp_get(apc))
+		return true;
+
+In that case mana_get_rxbuf_cfg() produces identical output whether the
+new flag is on or off, yet toggling the flag here always performs a full
+mana_pre_alloc_rxbufs() + mana_detach() + mana_attach() cycle and flaps
+the link.
+
+Would a pre/post comparison of mana_get_rxbuf_cfg() output be worth
+adding to skip the reconfiguration when nothing actually changes?
+
+[High]
+mana_set_priv_flags() drives the same detach/attach sequence used by
+mana_set_channels() and mana_per_port_queue_reset_work_handler(), but
+does not take apc->vport_mutex and set apc->channel_changing = true
+across the window.
+
+The struct comment on channel_changing spells out the invariant:
+
+	/* Set by mana_set_channels() under vport_mutex to block RDMA
+	 * from grabbing the vport during the detach/attach window.
+	 * Checked by mana_cfg_vport() when called from the RDMA path.
+	 */
+	bool channel_changing;
+
+Without it, after mana_detach() uncfg's the vport an RDMA client can
+call mana_cfg_vport() and bump vport_use_count, and then mana_attach()
+will fail with -EBUSY when it re-cfg's the vport.
+
+There is also no equivalent of the '!port_is_up && vport_use_count'
+early -EBUSY check that mana_set_channels() performs, so is the flag
+allowed to be changed silently while an RDMA client is using the vport?
+
+> +		if (err) {
+> +			netdev_err(ndev,
+> +				   "Insufficient memory for new allocations\n");
+> +			apc->priv_flags = old_priv_flags;
+> +			return err;
+> +		}
+> +
+> +		err = mana_detach(ndev, false);
+
+[High]
+mana_detach() begins with ASSERT_RTNL(), and so does mana_attach()
+called below.  Is RTNL guaranteed to be held on the SET priv-flags path?
+
+mana registers net_shaper_ops in mana_devops, which makes it an
+ops-locked driver, so netdev_need_ops_lock() is true and the ethtool
+core acquires rtnl only when the driver opts in via
+ETHTOOL_OP_NEEDS_RTNL_* for that specific command.
+
+Looking at mana_ethtool_ops.op_needs_rtnl:
+
+	.op_needs_rtnl		= ETHTOOL_OP_NEEDS_RTNL_SCHANNELS |
+				  ETHTOOL_OP_NEEDS_RTNL_SRINGPARAM |
+				  ETHTOOL_OP_NEEDS_RTNL_GLINK,
+
+ETHTOOL_OP_NEEDS_RTNL_SPFLAGS is not listed, so ASSERT_RTNL() in the
+detach/attach helpers below will WARN, and the code races with
+RTNL-serialized mutators (mana_open, mana_close, mana_change_mtu,
+mana_tx_timeout) that read and write apc->port_is_up, apc->rxqs,
+apc->tx_qp and apc->port_st_save.
+
+Should ETHTOOL_OP_NEEDS_RTNL_SPFLAGS be added to op_needs_rtnl, matching
+what is already done for SET channels?
+
+> +		if (err) {
+> +			netdev_err(ndev, "mana_detach failed: %d\n", err);
+> +			apc->priv_flags = old_priv_flags;
+> +
+> +			/* Port is in an inconsistent state. Restore
+> +			 * 'port_is_up' so that queue reset work handler
+> +			 * can properly detach and re-attach.
+> +			 */
+> +			apc->port_is_up = true;
+> +			schedule_port_reset = true;
+> +			goto out;
+> +		}
+> +
+> +		err = mana_attach(ndev);
+> +		if (err) {
+> +			netdev_err(ndev, "mana_attach failed: %d\n", err);
+> +			apc->priv_flags = old_priv_flags;
+> +
+> +			/* Restore 'port_is_up' so the reset work handler
+> +			 * can properly detach/attach. Without this,
+> +			 * the handler sees port_is_up=false and skips
+> +			 * queue allocation, leaving the port dead.
+> +			 */
+> +			apc->port_is_up = true;
+> +			schedule_port_reset = true;
+
+[High]
+On this branch, mana_detach() has already succeeded and run
+mana_cleanup_port_context(), so apc->rxqs is NULL and queues are torn
+down.  Setting apc->port_is_up = true here between now and when
+queue_reset_work runs opens a window where callers gate on port_is_up
+as their "safe to access rxqs/tx_qp" predicate.
+
+For example, mana_get_ethtool_stats() does:
+
+	if (!apc->port_is_up)
+		return;
+	...
+	rxq = apc->rxqs[q];
+	...
+
+A concurrent ethtool -S invocation during that window will pass the
+port_is_up gate and dereference apc->rxqs[q]->stats on a NULL rxqs.
+
+Is the port_is_up restore actually needed for the reset work handler's
+mana_detach() call?  On the reset path, mana_detach() takes its early
+return when !netif_device_present(ndev):
+
+	if (!from_close && !netif_device_present(ndev))
+		return 0;
+
+That early return does not touch apc->port_st_save, so the saved state
+from the earlier successful mana_detach() should already be intact for
+the follow-up mana_attach().
+
+There is also no smp_wmb() paired with this write, unlike the pattern
+used inside mana_detach()/mana_attach() proper.
+
+> +		}
+> +	}
+> +
+> +out:
+> +	mana_pre_dealloc_rxbufs(apc);
+> +
+> +	if (schedule_port_reset)
+> +		queue_work(apc->ac->per_port_queue_reset_wq,
+> +			   &apc->queue_reset_work);
+> +
+> +	return err;
+> +}
+> +
+
+[ ... remaining hunks unrelated to the comments above ... ]
 -- 
-2.43.0
+This is an AI-generated review.
 
