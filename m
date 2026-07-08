@@ -1,206 +1,182 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2379A4534B3
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 14:11:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783519880; cv=pass; b=Kwg03ZxZG0BjHeOsUkBIbd2C0lXRumn6MOe86ykXBuRaFM4tM6elcYa5Ju3EIBeR40eEP7wwrs9LChjiD5xeV15TZI4r2rr9ZBE/vl4i39opBiWBk6fa4YVkoN3fFEYIXfk/Jp/ZpW9Bn2+ZXPJv/RnBPFeA+5BIn8ugcai9M/I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783519880; c=relaxed/simple;
-	bh=JcmAKN11GlEZlCK3Tb7glDhGWHCZKu3R/gZN0IxBi44=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b3a1Hot01mGH3JrMRxSknSExkltG6YHMIw4ZlbI9t0PwzFPdQCzuttXuSlVBVIJjLJpVvZKu/jG9ffkxA1S5xNld0mEkyAFQCuxBYyjUvxrBu9bZGybHfMH8cFUY/BlapBQiOzmnB757o3QMSdKDH88peQ5GEzKWoA+coRPNtG0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gbjqtztN; arc=pass smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3A1C44B662
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 14:11:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783519900; cv=none; b=J/Uuo8ziUq1Kmjg2wek5nxRSiAtxcVdBtZ+jcvPQCW6KXsVOfIwOnAsD9YxZesDaCLbgGcQnD+cAH4xKG4ottXmfMw+u3wUCU2w274FjH/uIpXdcW/XO6oB9eGwhvtLrtM90sC4mYsvb53b+KFMC2AqQxLi7zZqK8Tewp6G0NiA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783519900; c=relaxed/simple;
+	bh=o5BKzQ5XVNoXoOY1PdEqzQzGn8pvVZbFhJ0nDTsuXlQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=MAyft+N/8HM6RIivOZNEJHeUwrUf4Nj5c/4vtdGMsyT/o/UqpCORTR5wzU1VOcA4ZcnYzWq6nagysW1qW/XfvHbSJfvg7We7Vm0O76xJQVYVmBv3byD+RthysX1skVe/znkc2L0FHuj/Iof/O+p2CbNQgudNT3CLR8EDI5u65EY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RKPDLJer; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gbjqtztN"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-8114a4542b2so10243287b3.1
-        for <bpf@vger.kernel.org>; Wed, 08 Jul 2026 07:11:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783519877; cv=none;
-        d=google.com; s=arc-20260327;
-        b=g6aNqomYaIW9asMlWjxUGIpYop+qFljvqfLNMJIX+4rP0pcfARADVHhUBrSuNhOOaP
-         SVO4Uc9cRKCnUr6kUf5JOUZx6QNqzdjKTcwfvwO0E1MLWFLVJAMTWj0Hvsi1AjEN25+M
-         enbkkj8zT7kM+Y7TiWj/viFoABBJf/HYobWcDxV/rIvJMcHdq8PGcWuWujgYV+KIUsBn
-         MEo9yC7zE6qKy0a7hI1QbLVn5BaUuOXlD8F8wchrBB0febO5PPhQ3fx5fk1+6ZgHUs/Z
-         NEXlCNNzg6CNeGQf0tPmM144CEzefdfWeqwFXAGYoaQl4vpz2ffgUjo4JOAYbVnZJOx1
-         ba0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=F6iCbqiFD/hdmKTE2DrZqekV252eUYkKKpzBqjT3c4Y=;
-        fh=Gb2jYWfnRE9tiVrycsLqut9UaWgVu/muX8TeT6TC36A=;
-        b=CYDs7ALLSx9vGfs75yAntn3519eINKHHJqU4/L9WJ+jShRILnM+SUonkAIvTx0FWLq
-         Tv9Ez+hOfuystfBKBksfBuhNF7fRiPzHZusVjNlkSA+sD7/nBPd4wyL3VqDusDDpPprK
-         jQ+RrRaCHkeZ71yUxZhK/NjD65g7ZhnMLDWgHvdsjNaKbW7K136WTo3wjdMoahp0RELf
-         ORdazib/MFyI662khxXHvTlchz8XGPUUPqs6i4Ofl44OS0S/U2FWxPY0ddOtIyznqYuS
-         BImNMs0CkahhvMMk5wsprrwZoXxDfoNmiZ3GU3y4+GDo1wniy3kMJu5Je8zar+LYUxnt
-         564Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783519877; x=1784124677; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=F6iCbqiFD/hdmKTE2DrZqekV252eUYkKKpzBqjT3c4Y=;
-        b=gbjqtztNoCnSOFk58/N4v30ST5t6baL6hHcN50mbJl6CmU5VbccQeXjnL4PncELpl5
-         UAbyoWVrI9X6UHzpSuNhqLFFA4lIHydFw/SR0nN7yw9zhXoYv6SHakpmkMxf040xssUa
-         CIYTpeOzFxwjLTbtsEIwEwZ338gV/YwEBkMMVRsID1VdgawM0zAz3tShpyF5k1FOJroJ
-         TPsexkiD0RHbqx8NrrnkwlNNtIRG3nAxx8Mwn+Sius47U2bY22luyBvYOC0FD18mbJO7
-         N8vPYOWkh1PAPUdiu418vQGiMm29jvrF2ImYTcBi0zMR3SpLEbJmOa2nfm+JqgbYxVvr
-         7sIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783519877; x=1784124677;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=F6iCbqiFD/hdmKTE2DrZqekV252eUYkKKpzBqjT3c4Y=;
-        b=CFg7rniPpNk3eEkU+rS5JNye9Y35UAlWCNVi8cI5eFqB0XCLJiVEIisZ46aJ0eRIe7
-         PPT05LtxVOtV8IP0c3wXQHhlAeesW88UGA+eUVX2qo58rOl36MsTYh7xobh5yo6QXjL/
-         jGGUZa4v0f9HLPZT0imMRpx8uJzF5azYc+jG7TMcPhqBSGZewjz36fMDjGOpvVOU8S9u
-         hoPOhrKdS5TjQEeWxSrUw9mqAENlJyzrB0y1xBJRa9xkqKUQJ+1krksFgSS8JGKiBZFB
-         ZHagPZRSJBiqvkWojRtH5c0wr/l4+U0DSFlHiKS0jZWMtkn+x6Y03JKcmE1Ol0vIkReU
-         ZlDg==
-X-Gm-Message-State: AOJu0Yx00+AUMsNYPN0Euh7vyQTKMvLmd46fTnHccDQIEFhtSMwlWuT/
-	phOjGbWvJNPTZlxohG+MpDlnb7HwXr/RS867PZdY9m0krCObt4RAMJXHk2Ih/kAJLfhsT0Nc0CL
-	L/wIxPMTSkpQe00Rr0BQVJJMvmHs7cdU=
-X-Gm-Gg: AfdE7ckja51SycZCWOgQ8ZQEKOMg+ujlfSRu1TuocUBQ9X1xjXVm3QqZMBqcjL1ZY6l
-	g09SqunaEyNMEiG03aMJ/If5ojKqPsL/JiuG/uT+95T9OS5X77ZsCOp1Oqey+O9ufHknn6c4iuk
-	ewfVZrmPjbaHMVZFd3/HH5TbiHu0dqIVJHbqIuAd2eJmPlt+KSfgb9BIhSAvVx7B3bDYQGYQbrg
-	ybzGhplXBx2HRfxR8YkYIu4VMjXGQLV3NNfNzrNpaRDGSnTXCriFbIwHxuv2P+RqXR7JydN84r/
-	CstwKXAs4UaZ6otJZbHB8B/lTEjHxnsJN5M23HRr
-X-Received: by 2002:a05:690c:9b11:b0:81c:c77b:3546 with SMTP id
- 00721157ae682-81dbc7217dbmr21323267b3.21.1783519876972; Wed, 08 Jul 2026
- 07:11:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RKPDLJer"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 5B1F34E40CF6
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 14:11:36 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 1ED1460339;
+	Wed,  8 Jul 2026 14:11:36 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3B7F311BC1671;
+	Wed,  8 Jul 2026 16:11:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1783519895; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=PY68Z4msWFK4F7TYEuMFCjHbxpm8rYeAoJBT3xUn7VM=;
+	b=RKPDLJermHgBJW/tmxMKD4VCPdLv9YEj3N7H+nsqMIrBNUtkQc/RrMgPizIkBJNFYmaPAS
+	u0yIA68Y3NzPqSoTQc44BArl0TcG4Q/T52ts/WH9PiJXFUEIIOqgN6UVvKBT1fgzRXkEiP
+	tFiwr5xoYP4wi+Qt5HFSUVmsZYXWznfqtYrnqI8OVYnuSXaBInZ3toM49HWmEkXiqN5U6G
+	zo5EBe5ErOxowdZ03RvN2kULrwBru+e7P/rQn2vvgFIFyG6mg+J07LZXoaOsFbb+qVtsGR
+	Fs1gcvdfc7hcLPDrRYT5hojd7GeNx0FBFaaExhrAyPUCJLzhzic5TEPlbgJvig==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
- <20260708090151.151729-2-sun.jian.kdev@gmail.com> <ak5HLLrYK3R_g2y_@u94a>
-In-Reply-To: <ak5HLLrYK3R_g2y_@u94a>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Wed, 8 Jul 2026 22:11:01 +0800
-X-Gm-Features: AVVi8Ce9tfUoastI5qlwZvx2Zc16Cxa5m1L5o1cpFV_Bz3b7ElwfOC-N99L74kg
-Message-ID: <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com>
-Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer pointers
-To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 08 Jul 2026 16:11:34 +0200
+Message-Id: <DJT91CC6V6TS.1U8K4LYH8LMZ2@bootlin.com>
+Subject: Re: [PATCH bpf-next v4 01/10] bpf: propagate original instruction
+ offset when patching program
+Cc: <bpf@vger.kernel.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: <sashiko-reviews@lists.linux.dev>,
+ =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
+ <alexis.lothore@bootlin.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260708-kasan-v4-0-d5c177ab8227@bootlin.com>
+ <20260708-kasan-v4-1-d5c177ab8227@bootlin.com>
+ <20260708081937.5D5031F000E9@smtp.kernel.org>
+In-Reply-To: <20260708081937.5D5031F000E9@smtp.kernel.org>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed, Jul 8, 2026 at 9:13=E2=80=AFPM Shung-Hsi Yu <shung-hsi.yu@suse.com>=
- wrote:
+On Wed Jul 8, 2026 at 10:19 AM CEST, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+e(s) to consider:
+> - [Medium] Incorrect or inconsistent calculation of `insn_off_in_patch` c=
+auses loss or misassignment of `aux_data`.
+> - [Medium] A single `insn_off_in_patch` integer is insufficient to propag=
+ate KASAN memory markings to patches that emit multiple memory accesses.
+> --
 >
-> On Wed, Jul 08, 2026 at 02:01:50AM -0700, Sun Jian wrote:
-> [...]
-> > Fixes: 022ac0750883 ("bpf: use reg->var_off instead of reg->off for poi=
-nters")
+> --- Patch [1]: [PATCH bpf-next v4 01/10] bpf: propagate original instruct=
+ion offset when patching program ---
+> commit 6ebaaf2368d2745f393ec38eb53d5857d5ec62b8
+> Author: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.com=
 >
-> Agree that above is the commit that introduced the issue.
 >
-> More comments below.
+> bpf: propagate original instruction offset when patching program
 >
-> [...]
-> > @@ -5326,14 +5326,18 @@ static int check_max_stack_depth(struct bpf_ver=
-ifier_env *env)
-> >  static int __check_buffer_access(struct bpf_verifier_env *env,
-> >                                const char *buf_info,
-> >                                const struct bpf_reg_state *reg,
-> > -                              argno_t argno, int off, int size)
-> > +                              argno_t argno, int off, int size,
-> > +                              u32 *access_end)
-> >  {
-> > +     s64 start, var_off;
-> > +
-> >       if (off < 0) {
-> >               verbose(env,
-> >                       "%s invalid %s buffer access: off=3D%d, size=3D%d=
-\n",
-> >                       reg_arg_name(env, argno), buf_info, off, size);
-> >               return -EACCES;
-> >       }
-> > +
-> >       if (!tnum_is_const(reg->var_off)) {
-> >               char tn_buf[48];
-> >
-> > @@ -5344,6 +5348,29 @@ static int __check_buffer_access(struct bpf_veri=
-fier_env *env,
-> >               return -EACCES;
-> >       }
-> >
-> > +     var_off =3D (s64)reg->var_off.value;
-> > +     if (var_off >=3D BPF_MAX_VAR_OFF || var_off <=3D -BPF_MAX_VAR_OFF=
-) {
-> > +             verbose(env, "%s %s buffer offset %lld is not allowed\n",
-> > +                     reg_arg_name(env, argno), buf_info, var_off);
-> > +             return -EACCES;
-> > +     }
-> > +
-> > +     start =3D var_off + off;
-> > +     if (start < 0) {
-> > +             verbose(env,
-> > +                     "%s invalid negative %s buffer offset: off=3D%d, =
-var_off=3D%lld\n",
-> > +                     reg_arg_name(env, argno), buf_info, off, var_off)=
-;
-> > +             return -EACCES;
-> > +     }
+> When the verifier patches an ebpf program with bpf_patch_insn_data, it
+> then calls adjust_insn_aux_data to make sure that insn_aux_data takes
+> into account the newly inserted patch.
 >
-> I was thinking of suggest to just do a single unsigned check
+>> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+>> index 12a8a4eb757f1..f515fc9669ce2 100644
+>> --- a/kernel/bpf/fixups.c
+>> +++ b/kernel/bpf/fixups.c
 >
->   var_off =3D reg->var_off.value;
->   if (var_off >=3D BPF_MAX_VAR_OFF) {
->     ...
+> [ ... ]
 >
-> But looking at the code before 022ac0750883, what you have is closer
-> aligned to the previous behavior, let's stick to this.
+>> @@ -856,16 +862,20 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_e=
+nv *env)
+>>  			if (!ops->convert_ctx_access)
+>>  				continue;
+>>  			convert_ctx_access =3D ops->convert_ctx_access;
+>> +			insn_off_in_patch =3D 0;
 >
-> > +
-> > +     if (size < 0) {
-> > +             verbose(env, "%s invalid %s buffer access: off=3D%lld, si=
-ze=3D%d\n",
-> > +                     reg_arg_name(env, argno), buf_info, start, size);
-> > +             return -EACCES;
-> > +     }
+> [Severity: Medium]
+> Will this properly track context accesses that are converted into multipl=
+e
+> chained memory loads?
 >
-> `size` comes from bpf_size_to_bytes(bpf_size) in check_mem_access(), and
-> is already checked to be not negative; plus other check_* helpers does
-> not check for this, so I think it can be dropped.
+> By relying on a single integer to track the offset, it seems we might fai=
+l to
+> account for multi-load patches emitted by ops->convert_ctx_access() (for
+> example, reading skb->dev followed by dev->ifindex). The secondary memory
+> accesses will receive zeroed aux_data and lack the required KASAN
+> non_stack_access marking.
 >
-> Otherwise, LGTM:
->
-> Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
->
-> > +
-> > +     *access_end =3D (u32)start + (u32)size;
->
-> If you want, this could use a quick one-line comments regarding the fact
-> that it won't overflow, or even verifier_bug_if().
->
-> > +
-> >       return 0;
-> >  }
-> >
-> [...]
+> Additionally, since the original instruction is completely replaced here,=
+ does
+> it make sense to unconditionally assign its aux_data to the first generat=
+ed
+> instruction, which might not even be the actual memory access?
 
-Thanks for taking another look, and thanks for the Ack.
+Hmmm, true, there's an issue here. I have checked many XXX_convert_ctx
+accesses and naively assumed that the generated patch was always a
+single ldx or stx, but indeed, there are corner cases:
+- bpf_convert_ctx: __skb->ifindex becomes LDX + JPM + LDX
+- bpf_convert_ctx: __skb->pkt_type becomes LDX + AND
+- bpf_convert_ctx: __skb->queue_mapping becomes (JMP +) ST or STX
+- and many more
 
-I agree that the size check is redundant given the current call path. I=E2=
-=80=99ll leave
-v4 as-is for now to avoid another respin unless maintainers prefer dropping=
- it
-or adding a short comment around the access_end calculation.
+For all of those XXX_convert_ctx_accesses, the accessed memory should
+always be checked with KASAN since we are dealing with ctx pointers, so
+it may be simpler just to pass -1 as insn_off_patches to
+bpf_patch_insn_data for all of those, so that any LDX/STX/ST in the new
+patch is instrumented.
 
-Best Regards
-Sun Jian
+>> @@ -1464,7 +1475,7 @@ static int add_hidden_subprog(struct bpf_verifier_=
+env *env, struct bpf_insn *pat
+>>  	 * ones for the hidden subprog. Hence all of the adjustment operations
+>>  	 * in bpf_patch_insn_data are no-ops.
+>>  	 */
+>> -	prog =3D bpf_patch_insn_data(env, env->prog->len - 1, patch, len);
+>> +	prog =3D bpf_patch_insn_data(env, env->prog->len - 1, patch, len, -1);
+>
+> [Severity: Medium]
+> Is it intentional to pass -1 for the offset here?
+>
+> Since the original instruction is explicitly preserved in the patch buffe=
+r
+> in bpf_do_misc_fixups():
+>
+> 	*patch++ =3D env->prog->insnsi[insn_cnt - 1];
+>
+> Passing -1 to bpf_patch_insn_data() will cause the aux_data associated wi=
+th
+> that instruction to be lost.
+
+True, but: unless I am missing some corner cases, eBPF programs end with BP=
+F_EXIT,
+so it is pointless to forward an original instruction offset. But for
+the sake of separating concerns, I'll update this to pass 0 instead of
+-1.
+
+>> @@ -1743,7 +1765,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *en=
+v)
+>>  				*patch++ =3D BPF_ALU64_IMM(BPF_MUL, off_reg, -1);
+>>  			cnt =3D patch - insn_buf;
+>> =20
+>> -			new_prog =3D bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+>> +			new_prog =3D bpf_patch_insn_data(env, i + delta, insn_buf,
+>> +						       cnt, -1);
+>
+> [Severity: Medium]
+> In this pointer arithmetic rewrite, the original ALU instruction is prese=
+rved
+> in the patch buffer (*patch++ =3D *insn).
+>
+> Should we calculate and pass its exact offset inside the patch buffer ins=
+tead
+> of passing -1, which discards its aux_data?
+
+Ditto: having the exact instruction offset for this case is not useful
+as it is not a load or store, but I'll still update the offset value (-1
+-> cnt - 1)
+
+Alexis
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
