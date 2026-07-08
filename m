@@ -1,215 +1,138 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B30DB3EB0F5
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 07:33:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783496031; cv=pass; b=UZs2TAbM9F39eXEfmherzOnttqPjqwnb1Zl5gEuI/RHgTorTbMN3DjM+3rlojscBi4pDrBxBebazg4L41vpxkF21RosUFEJOaNyK7u5vSfMmZlMmDa2XpQwHPgdeDx4iV4WIh7HOHAU29cZzvKEGk0dxhd/lbMhmCVmGIktvm6c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783496031; c=relaxed/simple;
-	bh=XQ0CKD1oaGYVXmuFtDQenNgKBbAtArhAeMNfL6jguJk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D+VrXcd5jBUZRq65UKRl2CImxW6rYhuFqvcjqkAyXJULQpVJrSSeVdRtsYwvvuqtsnUOXdDvqR4Fxh4VPZtiflNLHlEOH+MYfQ95jyrDCXTJsvP8BBqQhPbaxuiV8wWjBREOJTCJKejzCGi6o5ESaIX2E0t13AUBERbLmCSgQIk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vulnseeker.org; spf=pass smtp.mailfrom=vulnseeker.org; dkim=pass (2048-bit key) header.d=vulnseeker.org header.i=@vulnseeker.org header.b=uOZy8DiX; arc=pass smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vulnseeker.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vulnseeker.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4559B3B7742;
+	Wed,  8 Jul 2026 07:35:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783496128; cv=none; b=Nzec+goAxeF0zcobweK/LrQIiHb/1n/I+MbG7goBzccZ2Pk96pQSdI8iSlA1U8LMFp9mAO6WA+SzD3bK3G60BUPKZDr4lFrtP1i3scssIIkVYibBZ8UmglYs2R5LfmRhvxEcPVS+exuk657njrOXaBlBflgc6D0LqfEFougSHOE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783496128; c=relaxed/simple;
+	bh=rdBir2cu1lR0h2rEv1eHWLuddtntODNO9SD57dBZrr4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=e6b2L5NCS1Kr1KOWEdEt85tRgHQ3ILw8tuYqZSbTzovBpK8OWNiBUnodCdBJnWLtTX/9fl9oqF9KWAVpRfaHgIMrYn+Db0ssCjZbRIsvYljU384xxyUc6s6GmpXJBVA185aRKo2guDunHi3b5o6H54q/BSCCsT1GdeKR+A6ZE7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LvieW4vl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vulnseeker.org header.i=@vulnseeker.org header.b="uOZy8DiX"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8484a0b998fso143757b3a.2
-        for <bpf@vger.kernel.org>; Wed, 08 Jul 2026 00:33:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783496019; cv=none;
-        d=google.com; s=arc-20260327;
-        b=hozlZ6Uyea2cQglymiQnsrCY82+41cUQvH7K84hGAB9i5830jbe8RCWjJM4EMpHF5a
-         c8SouoRWGQvaZgGEh1rRyacMSeOihhgepye6/lZRGKWe7pOXoOGpaEAOMEWwrfVPRNKQ
-         nOw/noeCoGIEYhRKrp/mewUX/wdOASk6+bJk39ZVPDky9wPItEeWFgb92arhzY/2KcB1
-         1iyjI5THreWklCXS53Cmlz/WOimF0bL3p9Ws+0MWjpjw9zUFIgFAumS37aII5I4CsHNv
-         hZ//2UF5tw+lMzzJYXrpJSU9dTVBsAM252ELSHVTqiMpJAjpj7Oceq3pQjC5UbdjV67q
-         ovUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=KlMQd6zXc+b5QHrwlBayK+dOIb6p877m6hlMYxECNok=;
-        fh=QgFQjNoLTjJTwLzdrD5jnqiTgZxPJaZQuG1OuaVXS7g=;
-        b=jaB9PtRqlZyJPsk2bRbmODIn4O/4sW2BwSM7AI3W2U6rKtUpzhwsiuyJE+YiJNDaUU
-         KerEk5Cxo4wcQFIhBOclaa4BJkYUKEKJcKFYGFURxPZ4riX1LOZQYOWmVej1lOaCxoCh
-         i1laN2O+1/xnTx2Xkwev+4eTIxSJEhPurNd6Ys+1wdbDpwUl+iPpKlzRqAyXcrqOmBnj
-         16v40slXGlzJUENNyW2xADA/OZlYCIkROLCYHapqX7FLhJg2/WzRLD8SxF3Izr7lWfVg
-         7j2nGgmpF/CHdM/ijxcFkwtsiSJbcMMmTHKRz1CC7dAEJoKaX6BnVNuRXB+PQaUPEPOt
-         sf0Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vulnseeker.org; s=google; t=1783496019; x=1784100819; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KlMQd6zXc+b5QHrwlBayK+dOIb6p877m6hlMYxECNok=;
-        b=uOZy8DiXhlmjZuUSXTOD4PQOO50RbSi/Pret6pZnlYgzjpl0CbsPdr1U0eV4MoBnvC
-         rlDN5QT+cxUAuMNeeb1AgKcBA7pbLEcdruDb/LJwNBiSeGjROAXIXONE58Azkj30Fqrl
-         1GY1EvB0/ixFmJ4Xp1afeypkR7nhomRGJuc9ho369b6pXXFZDsA8XIdu+9LBK/w6qt3K
-         /IaPdWBE+SiYwAkcN+6xzZAeJ+Vl2/Y6dbD++mfhW7yUlLt/SlyAX41+TPsjHjI3Vsw/
-         Y8UAQ0Mcxbdzm1euAOHsz3Q6FxBBxGOgYv9cM9TRFcBIeb57F8ftxgDH4HHpndLwU9yy
-         yAmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783496019; x=1784100819;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=KlMQd6zXc+b5QHrwlBayK+dOIb6p877m6hlMYxECNok=;
-        b=GXcIxEgY3NUEZdGEJ+88EeZu4CwEp0xqBhHUWSK9USjWLZGhW8QHOsmwSlySLGEfzP
-         Z7cUD4YgntPTFVzaKybKhShiE+Yyx+NB8T0eAUqFRT+Rf12Lg8Snu0mIzC0X1cnUgwmn
-         0BNFfUA8B4A6q6RRpUSNxVhdJBgbHuH6W9tE2KIbh6p9/zoMcjHDzd4CJ7C2kcENnRIH
-         keatEJBcROrucrKUta7fPSNK3MWNmehXDdxRrXsD7t3CEQq873RUJrK5mpqM2IpL3UPb
-         vF3FQmScOGvwy1S4Yr/a46lShrxgXzKAkRGj5p3qJs4BaspZePfyHrcgx9NChRFm7xBd
-         eSKA==
-X-Gm-Message-State: AOJu0YwkIkXjf4N+4kl5Gwo9lI2doC1BvZFVTY8FpB44P5tQjoNenyBL
-	NMNmLVLhIUAM/ZOcPViL9aARd3WKHYgsVvUKYUb7evXRqikPvcubtdQo0m+A6q19+upQjcpupnM
-	l8S+/+QPvQk3Z+rf9kcydifrutQDvhCozh7/93ttCZg==
-X-Gm-Gg: AfdE7cnB1ZcAc6rUvEzAkvl3QZKOpyav1NoMSOBv8YLgvack5OgpCQxu9zQgijixVro
-	MJ3JhbhcJSHlT5gL3GEg1svlAd3QmG6JNBUHxm/ff+BIZSZRSa8eSkxQy98JapDEFJXQbQHoUxx
-	+s0lhtGrEU+C3ZISyep8WnUs76DPJNRFxB4dt9mJIxzDCSGN93EVHcGoJQbCIEhv3PT9yOkJIKp
-	EHpJCHVEp1cAjCfXoqOK76QH+Dqe02VuXfufm1od0FHr4BwD7A3Fp7tox7oZZc56fvUfjg8
-X-Received: by 2002:a05:6a00:2999:b0:848:46ea:bbe7 with SMTP id
- d2e1a72fcca58-84846eac02bmr1020274b3a.19.1783496018749; Wed, 08 Jul 2026
- 00:33:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LvieW4vl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEA9B1F000E9;
+	Wed,  8 Jul 2026 07:35:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783496118;
+	bh=P57j/DWZB4+uEQI3XzfbJrp9QFW+ToKKA6MqRAvGAcw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=LvieW4vl02wqy6B0cNtWpTJMX9qyAs4jd13SEp/glDJvlxkVdfqf6aW7qT4bPmjI2
+	 zARSqr+w/s1UhtZJ1MM8BoqipYjbZue0KwLZrFlw2KZP508hjXac4NC5L+4WKdduZo
+	 OdqrTKcbDT1RsxYw7+gNYLmuOatMjGSJfEQT9i5WBa6p0YN8386Hb2yfNTBY3WlR0E
+	 zpwZRFRIfa7/VTjrCWiUr8X2tsHGXoOADGDoyqJbC72Ou015x3CwDI7c9ak7ci8Q0G
+	 LxfY8M5ZY5paEJein5LsBQjUTLGQ23qkwISXV8NlKPfaarcV8GeQ9Onf1SnkC+qBTL
+	 K00aL8d2TWYEw==
+Content-Type: multipart/mixed; boundary="===============3837806813243507359=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAO_sQLjn=hghkb7SZr2UWexf=opgLTu5_AHR2uTQrJ1r13vpjg@mail.gmail.com>
- <ak0QM9G74dc3jpWc@john-p8>
-In-Reply-To: <ak0QM9G74dc3jpWc@john-p8>
-From: Vuln seeker Cyber Security Team <security@vulnseeker.org>
-Date: Wed, 8 Jul 2026 12:33:26 +0500
-X-Gm-Features: AVVi8CeKfNAMQDSajEbstb7QrPoVuuoy9USuJaLtHyzuCL9VlZMKEa37ovQagVM
-Message-ID: <CAO_sQLiUn3K71BhvNE2XN0kCkpTwo+gvO1R6HSo6MNF+iLs8AA@mail.gmail.com>
-Subject: Re: Responsible Disclosure: Heap Out-of-Bounds Write via Integer
- Underflow in libbpf parse_cpu_mask_str() (libbpf.c:14446)
-To: John Fastabend <john.fastabend@gmail.com>
-Cc: bpf@vger.kernel.org
-Content-Type: multipart/mixed; boundary="000000000000a81b9b0656148622"
+Message-Id: <a721df30ec2f824295000183c8e91f2c19d0bd56ae115b835b402be9eacc1c71@mail.kernel.org>
+In-Reply-To: <20260708064436.2971933-7-pulehui@huaweicloud.com>
+References: <20260708064436.2971933-7-pulehui@huaweicloud.com>
+Subject: Re: [PATCH bpf-next v6 6/7] riscv, bpf: Mixing bpf2bpf and tailcalls
+From: bot+bpf-ci@kernel.org
+To: pulehui@huaweicloud.com,bpf@vger.kernel.org,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org
+Cc: bjorn@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,puranjay@kernel.org,pjw@kernel.org,palmer@dabbelt.com,alex@ghiti.fr,pulehui@huawei.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed,  8 Jul 2026 07:35:17 +0000 (UTC)
 
---000000000000a81b9b0656148622
-Content-Type: multipart/alternative; boundary="000000000000a81b9a0656148620"
+--===============3837806813243507359==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
---000000000000a81b9a0656148620
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+> commit 64161f8a9f1c78ecd88b27109e6ed8b53282f94b
+> Author: Pu Lehui <pulehui@huawei.com>
+> Date:   Wed Jul 8 06:44:35 2026 +0000
+>
+>     riscv, bpf: Mixing bpf2bpf and tailcalls
+>
+>     In the current RV64 JIT, if we just don't initialize the TCC in subprog,
+>     the TCC can be propagated from the parent process to the subprocess, but
+>     the updated TCC of the parent process cannot be restored when the
+>     subprocess exits. Since the RV64 TCC is initialized before saving the
+>     callee saved registers into the stack, we cannot use the callee saved
+>     register to pass the TCC, otherwise the original value of the callee
+>     saved register will be destroyed. So we implemented mixing bpf2bpf and
+>     tailcalls similar to x86_64, i.e. using a non-callee saved register to
+>     transfer the TCC between functions, and saving that register to the
+>     stack to protect the TCC value. As for the tailcall hierarchy issue,
+>     inspired by the s390's low-overhead approach, we store TCC from
+>     RV_REG_TCC back to stack after calling bpf2bpf call or calling orig bpf
+>     func in bpf trampoline.
+>
+>     Tests test_bpf.ko and test_verifier have passed, as well as the relative
+>     testcases of test_progs*.
+>
+>     Signed-off-by: Pu Lehui <pulehui@huawei.com>
 
-Hello John,
+This looks like a bug fix for TCC handling across bpf2bpf calls and
+tailcalls. Should this include:
 
-As requested, I have reattached the fix for the identified vulnerability.
-Please let me know if you are able to access the file now.
+  Fixes: 2353ecc6f91f ("bpf, riscv: add BPF JIT for RV64G")
 
-Best regards,
+> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+> index da02717902442..419b9d795f2a7 100644
+> --- a/arch/riscv/net/bpf_jit.h
+> +++ b/arch/riscv/net/bpf_jit.h
+> @@ -81,6 +81,7 @@ struct rv_jit_context {
+>  	int ex_jmp_off;
+>  	unsigned long flags;
+>  	int stack_size;
+> +	int tcc_offset;
+>  	u64 arena_vm_start;
+>  	u64 user_vm_start;
+>  };
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+> index 7c6304e0b846a..823262ca47ebf 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
 
-On Tue, Jul 7, 2026 at 7:47=E2=80=AFPM John Fastabend <john.fastabend@gmail=
-.com>
-wrote:
+[ ... ]
 
-> On Fri, Jul 03, 2026 at 05:22:30PM +0500, Vuln seeker Cyber Security Team
-> wrote:
-> >Dear libbpf Security Team,
+> @@ -2038,11 +2038,10 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+>  	for (i = 0; i < RV_FENTRY_NINSNS; i++)
+>  		emit(rv_nop(), ctx);
 >
-> [...]
+> -	/* First instruction is always setting the tail-call-counter
+> -	 * (TCC) register. This instruction is skipped for tail calls.
+> -	 * Force using a 4-byte (non-compressed) instruction.
+> -	 */
+> -	emit(rv_addi(RV_REG_TCC, RV_REG_ZERO, MAX_TAIL_CALL_CNT), ctx);
+> +	if (!is_subprog)
+> +		emit(rv_addi(RV_REG_TCC, RV_REG_ZERO, MAX_TAIL_CALL_CNT), ctx);
+> +
+> +	/* tailcall starts here, emit insn before it must be fixed */
 >
-> >libbpf's CPU mask parser. An integer underflow in parse_cpu_mask_str()
-> >causes a memset to write far past a shrunk heap allocation, reachable
-> >end-to-end through the public libbpf_num_possible_cpus() API.
->
-> Send the fix seems worth checking to me if we are already checking
-> start/end. If some app is exposing user input to this then I would
-> push a report to them.
->
-> [...]
->
-> >  - Any downstream consumer that feeds untrusted CPU-mask strings to
-> >  the
-> >internal parse_cpu_mask_str helper directly
->
->
-> Not sure why untrusted input is getting here but sure if someone
-> is piping user input to libbpf let them know. I think if you have
-> untrusted user input hitting libbpf you have bigger problems.
->
-> [...]
->
-> >
-> >  if (start < *mask_sz)
-> >      return -EINVAL;  // "CPU range out of order or overlapping"
-> >
->
-> Send a fix. Thanks.
->
+>  	emit_addi(RV_REG_SP, RV_REG_SP, -stack_adjust, ctx);
 
---000000000000a81b9a0656148620
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+The TCC initialization is now conditionally emitted based on is_subprog.
+Does this affect the RV_TAILCALL_OFFSET calculation?
 
-<div dir=3D"ltr"><div>Hello John,</div><div><br></div><div>As requested, I =
-have reattached the fix for the identified vulnerability. Please let me kno=
-w if you are able to access the file now.</div><div><br></div><div>Best reg=
-ards,</div></div><br><div class=3D"gmail_quote gmail_quote_container"><div =
-dir=3D"ltr" class=3D"gmail_attr">On Tue, Jul 7, 2026 at 7:47=E2=80=AFPM Joh=
-n Fastabend &lt;<a href=3D"mailto:john.fastabend@gmail.com">john.fastabend@=
-gmail.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=
-=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
--left:1ex">On Fri, Jul 03, 2026 at 05:22:30PM +0500, Vuln seeker Cyber Secu=
-rity Team wrote:<br>
-&gt;Dear libbpf Security Team,<br>
-<br>
-[...]<br>
-<br>
-&gt;libbpf&#39;s CPU mask parser. An integer underflow in parse_cpu_mask_st=
-r()<br>
-&gt;causes a memset to write far past a shrunk heap allocation, reachable<b=
-r>
-&gt;end-to-end through the public libbpf_num_possible_cpus() API.<br>
-<br>
-Send the fix seems worth checking to me if we are already checking<br>
-start/end. If some app is exposing user input to this then I would<br>
-push a report to them.<br>
-<br>
-[...]<br>
-<br>
-&gt;=C2=A0 - Any downstream consumer that feeds untrusted CPU-mask strings =
-to <br>
-&gt;=C2=A0 the<br>
-&gt;internal parse_cpu_mask_str helper directly<br>
-<br>
-<br>
-Not sure why untrusted input is getting here but sure if someone<br>
-is piping user input to libbpf let them know. I think if you have<br>
-untrusted user input hitting libbpf you have bigger problems.<br>
-<br>
-[...]<br>
-<br>
-&gt;<br>
-&gt;=C2=A0 if (start &lt; *mask_sz)<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 return -EINVAL;=C2=A0 // &quot;CPU range out of or=
-der or overlapping&quot;<br>
-&gt;<br>
-<br>
-Send a fix. Thanks.<br>
-</blockquote></div>
+Looking at the RV_TAILCALL_OFFSET macro definition:
 
---000000000000a81b9a0656148620--
---000000000000a81b9b0656148622
-Content-Type: application/octet-stream; name="fix.diff"
-Content-Disposition: attachment; filename="fix.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mrbrdjbp0>
-X-Attachment-Id: f_mrbrdjbp0
+  #define RV_TAILCALL_OFFSET ((RV_FENTRY_NINSNS + 1) * 4)
 
-ZGlmZiAtLWdpdCBhL3NyYy9saWJicGYuYyBiL3NyYy9saWJicGYuYwppbmRleCBhYjIwNzFmLi43
-YWI4OTMyIDEwMDY0NAotLS0gYS9zcmMvbGliYnBmLmMKKysrIGIvc3JjL2xpYmJwZi5jCkBAIC0x
-NDQzNyw2ICsxNDQzNywxMSBAQCBpbnQgcGFyc2VfY3B1X21hc2tfc3RyKGNvbnN0IGNoYXIgKnMs
-IGJvb2wgKiptYXNrLCBpbnQgKm1hc2tfc3opCiAJCQllcnIgPSAtRUlOVkFMOwogCQkJZ290byBj
-bGVhbnVwOwogCQl9CisJCWlmIChzdGFydCA8ICptYXNrX3N6KSB7CisJCQlwcl93YXJuKCJDUFUg
-cmFuZ2Ugb3V0IG9mIG9yZGVyIG9yIG92ZXJsYXBwaW5nIGluICVzXG4iLCBzKTsKKwkJCWVyciA9
-IC1FSU5WQUw7CisJCQlnb3RvIGNsZWFudXA7CisJCX0KIAkJdG1wID0gcmVhbGxvYygqbWFzaywg
-ZW5kICsgMSk7CiAJCWlmICghdG1wKSB7CiAJCQllcnIgPSAtRU5PTUVNOwo=
---000000000000a81b9b0656148622--
+This assumes a fixed number of instructions before the tailcall entry
+point. When is_subprog is true, the rv_addi() instruction is not emitted,
+which means the tailcall entry point moves forward by 4 bytes relative to
+where RV_TAILCALL_OFFSET expects it to be.
+
+The tailcall entry is used in emit_bpf_tail_call() when calculating the
+jump target for the tail call. If RV_TAILCALL_OFFSET doesn't account for
+the conditional emission, could this cause the wrong entry point to be
+used when tail calling into subprograms?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28923410500
+--===============3837806813243507359==--
