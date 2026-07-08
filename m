@@ -1,81 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED043FFF9B;
-	Wed,  8 Jul 2026 08:20:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD10400E0D;
+	Wed,  8 Jul 2026 08:20:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783498828; cv=none; b=KRJKxoigTxlyyVMLBUqHjMhBN87/t5TWrGfpIv6ChWXLWK5j0WB/PtW/i9XS3QDYYxXap+p60B/98/Vbrw1lJZoEkWKymJrIDjIqQxObT1JQGT8iGgtX36tyGI+Iz/ggCq6UwBI9J+M6edgmpaIqG6L+Mkk/5lFCAm6rs3DmRRU=
+	t=1783498830; cv=none; b=bvpxlIaDOnXhFL+xWuxiy0mP16G+ITPC5CpuGrVSvGVNiBT1gTOEUjhpylShgs5yptIa7gVMZnUGPXPrmy16wOgnnuf8Lg0c0Nc7HsFYUH48HBzNSpt7tJ3B3zKztMg+2rrwvTE37vX/1zVc4p7SMPrksD48/fz0raQ0fsgvMOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783498828; c=relaxed/simple;
-	bh=e9Y+9vX7kUG/+sFDymQjExYkxiGsYQbZ+4rLH4B5CEk=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=bcUk2mI3LOpycPhISLQ8IHkd5FGzTpk2E1u/YVATIDMIKlKGooESV0/DwauGDa56XSDlIGMVozaAvZv5iV8IH97ETIXKtxrvCr+aufeO630QQ0a03UuB1q1kl2UNULYEqGdiYxsPSrUeSoGIkWKyTUgvhMKRK6KRFptg4uRUZrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gf9FVOx3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783498830; c=relaxed/simple;
+	bh=qdxQjAQOlaYLMuExFubP0CTJxy2mGPWojiXM3UaSDPA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W10FtLNiVrm1zc0IgXf/uTVAlBk6s5kW55SztiIzxh+DgLFDA0RvYDzcLn1pH5Hpt/L4n52KEhFpms1T0uogXfIMEyL+lzv4KbAKJRKkoUCQ9v2XI1gspPzSW/OMRWYm/CRMTVHRPL8OStYd+KyPK5YeS5Cx4t7Bpw9ZkLOC7vA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=andT+7Jt; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gf9FVOx3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7514D1F000E9;
-	Wed,  8 Jul 2026 08:20:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783498826;
-	bh=CjvLLLNQW00a75OTauCn6qsFRF0egL/0j/rjTC0xHeM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Gf9FVOx35r7tkRTgLFJo+6PiaZPH6083Zt3mbvkoQWqxttOSXHvedwM/FxjwYRl4n
-	 ea+m6fJpDwX3AyWMd8CdyveWv4ftR6qhV9TUTgkfvyVFBrB9YPKNPDCSGkYc8xFXFJ
-	 DAP6ozwVM38XO/zC00Shm0L1ceVewQIw9wNGCkQflQF29+S5djPDHdXtiy9Yfp7ZgV
-	 kNocuNktkmHO35SQ1R3LeGrVv2J7NPvLUY0SrrFVohfUlWWQ8afy7KYWPlRATJAYHJ
-	 d6U1+AXPGLFgu5HVReJrjNcK0AL74RH+d2V+XHLPbG0SLFX+VgMpQv6hOje6avlY6O
-	 mCxOeyI++qVvQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 12FA33926383;
-	Wed,  8 Jul 2026 08:20:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="andT+7Jt"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=qdxQjAQOlaYLMuExFubP0CTJxy2mGPWojiXM3UaSDPA=; b=andT+7JtQjNQhCR4SMQ9AUo0/o
+	19obyB8Fp8sgRXJtJFCbs3Jd7Xc0DQrwO2tUGVRzDP6bfdpoLKU/11NR90Mgkp2SWsshUJEX5Db8S
+	l/zj01sr/k1KMq/1Y+ibP9gV7H2lQ4W/MCV+7gG4tnia+pSivIQiW84lOnBKRKBaN5fZvZatwEIF1
+	T2GBTY9ADtj/i8/3RiH9u9V4ZCx8CU/pNJwBy16V6cjmwlTOXoOSyoUQAJ/mrPWCZ5ySkdl0IGQ6s
+	57fTSXavWlraBJ5VZapuuF30mIg+14KObOfGlhPbOe626WMTIIVy4XeLHd4sQhmlZQ/szGna/t8md
+	xQvN+ESQ==;
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1whNW6-000KgA-19;
+	Wed, 08 Jul 2026 10:20:26 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1whNW6-000Ieb-18;
+	Wed, 08 Jul 2026 10:20:26 +0200
+Message-ID: <e22fa9f3-0fe6-4176-bdae-40206a1eabc2@iogearbox.net>
+Date: Wed, 8 Jul 2026 10:20:25 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] tools/resolve_btfids: Include libsubcmd headers directly
- from source tree
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178349880566.2367097.17823362594573943433.git-patchwork-notify@kernel.org>
-Date: Wed, 08 Jul 2026 08:20:05 +0000
-References: <20260702-libsubcmd-spam-v1-1-300ec142a62f@linutronix.de>
-In-Reply-To: <20260702-libsubcmd-spam-v1-1-300ec142a62f@linutronix.de>
-To: =?utf-8?q?Thomas_Wei=C3=9Fschuh_=3Cthomas=2Eweissschuh=40linutronix=2Ede=3E?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
-Cc: acme@redhat.com, namhyung@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v6 3/8] libbpf: Drop in-loader metadata check for
+ load-time verification
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260708075343.358712-1-daniel@iogearbox.net>
+ <20260708075343.358712-4-daniel@iogearbox.net>
+ <20260708081531.37FDE1F000E9@smtp.kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260708081531.37FDE1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28054/Wed Jul  8 08:24:53 2026)
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Eduard Zingerman <eddyz87@gmail.com>:
-
-On Thu, 02 Jul 2026 10:26:30 +0200 you wrote:
-> Currently each build with resolve_btfids enabled unnecessarily prints
-> the line 'INSTALL libsubcmd_headers' from libsubcmd.
-> 
-> Use the libcmd headers from source tree instead, without installation.
-> 
-> The same was done for objtool in commit ac999926774a ("objtool: Include
-> libsubcmd headers directly from source tree"), albeit for a different
-> reason.
-> 
-> [...]
-
-Here is the summary with links:
-  - tools/resolve_btfids: Include libsubcmd headers directly from source tree
-    https://git.kernel.org/bpf/bpf-next/c/0bdbed9133fd
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+On 7/8/26 10:15 AM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [High] bpftool does not include the map contents when generating the PKCS#7 signature, which causes the kernel to always reject signed loaders.
+> - [High] The `run_gen_loader` function in the selftest does not set `attr.fd_array_cnt`, causing the verifier to reject the loader program with `-EACCES`.
+Both invalid as these are addressed in the patches of this series, just split
+among libbpf, bpftool, selftest.
