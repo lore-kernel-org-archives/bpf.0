@@ -1,217 +1,215 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 752022BE7DC
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 07:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783495353; cv=none; b=fdhAmHD7Z5jpiNvqZMnocmkypTA+DO1aEmIT1fXkGkCIQKG1ZvsJzAepbYCgFtclFwVLeP+ooK5tsKzjpHxgI9mBOySoVMKcZZ1Mfc6jAcegoFScKJg+e8418UrUc1M7YsXBeoBjptBB8M0iTGwYPQiiXUUUAFIhumSzQz/pFuk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783495353; c=relaxed/simple;
-	bh=p/0O9SSzQ9mSYaO0UPw4RrNra/6W1MxQrmNP0Kz8aoo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dLJ/D1/+KlsWvTpdvvjpzy+YsH90fyqG4eow6/fMgEfC52SVB/HXjLY77puRCfKVJCLJU4We7b5LWn1DNLkcuD8d/U6IFGbwaIanaQvVDXSjRe9siuvRkQv4t96Hk98D9/D/MEEZRckCGOBlRiog5l8suKoGq92jIrw7DLfZm6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q0AZNkVK; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B30DB3EB0F5
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 07:33:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783496031; cv=pass; b=UZs2TAbM9F39eXEfmherzOnttqPjqwnb1Zl5gEuI/RHgTorTbMN3DjM+3rlojscBi4pDrBxBebazg4L41vpxkF21RosUFEJOaNyK7u5vSfMmZlMmDa2XpQwHPgdeDx4iV4WIh7HOHAU29cZzvKEGk0dxhd/lbMhmCVmGIktvm6c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783496031; c=relaxed/simple;
+	bh=XQ0CKD1oaGYVXmuFtDQenNgKBbAtArhAeMNfL6jguJk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=D+VrXcd5jBUZRq65UKRl2CImxW6rYhuFqvcjqkAyXJULQpVJrSSeVdRtsYwvvuqtsnUOXdDvqR4Fxh4VPZtiflNLHlEOH+MYfQ95jyrDCXTJsvP8BBqQhPbaxuiV8wWjBREOJTCJKejzCGi6o5ESaIX2E0t13AUBERbLmCSgQIk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vulnseeker.org; spf=pass smtp.mailfrom=vulnseeker.org; dkim=pass (2048-bit key) header.d=vulnseeker.org header.i=@vulnseeker.org header.b=uOZy8DiX; arc=pass smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vulnseeker.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vulnseeker.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q0AZNkVK"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2cc73e322dbso3482235ad.1
-        for <bpf@vger.kernel.org>; Wed, 08 Jul 2026 00:22:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=vulnseeker.org header.i=@vulnseeker.org header.b="uOZy8DiX"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8484a0b998fso143757b3a.2
+        for <bpf@vger.kernel.org>; Wed, 08 Jul 2026 00:33:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783496019; cv=none;
+        d=google.com; s=arc-20260327;
+        b=hozlZ6Uyea2cQglymiQnsrCY82+41cUQvH7K84hGAB9i5830jbe8RCWjJM4EMpHF5a
+         c8SouoRWGQvaZgGEh1rRyacMSeOihhgepye6/lZRGKWe7pOXoOGpaEAOMEWwrfVPRNKQ
+         nOw/noeCoGIEYhRKrp/mewUX/wdOASk6+bJk39ZVPDky9wPItEeWFgb92arhzY/2KcB1
+         1iyjI5THreWklCXS53Cmlz/WOimF0bL3p9Ws+0MWjpjw9zUFIgFAumS37aII5I4CsHNv
+         hZ//2UF5tw+lMzzJYXrpJSU9dTVBsAM252ELSHVTqiMpJAjpj7Oceq3pQjC5UbdjV67q
+         ovUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=KlMQd6zXc+b5QHrwlBayK+dOIb6p877m6hlMYxECNok=;
+        fh=QgFQjNoLTjJTwLzdrD5jnqiTgZxPJaZQuG1OuaVXS7g=;
+        b=jaB9PtRqlZyJPsk2bRbmODIn4O/4sW2BwSM7AI3W2U6rKtUpzhwsiuyJE+YiJNDaUU
+         KerEk5Cxo4wcQFIhBOclaa4BJkYUKEKJcKFYGFURxPZ4riX1LOZQYOWmVej1lOaCxoCh
+         i1laN2O+1/xnTx2Xkwev+4eTIxSJEhPurNd6Ys+1wdbDpwUl+iPpKlzRqAyXcrqOmBnj
+         16v40slXGlzJUENNyW2xADA/OZlYCIkROLCYHapqX7FLhJg2/WzRLD8SxF3Izr7lWfVg
+         7j2nGgmpF/CHdM/ijxcFkwtsiSJbcMMmTHKRz1CC7dAEJoKaX6BnVNuRXB+PQaUPEPOt
+         sf0Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783495340; x=1784100140; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ABGZvOuLiWoxRSjZ3PNYnG6X2wEe+pNBW/beoBLeqy0=;
-        b=q0AZNkVKKl/lhZ08CUp9I0GU9+G9XvMcTrOvAX5ao1vmdcUXb+a6TPVMRrX71+HEn7
-         z9Kyx9NxfoO3/MK9IWFbjRGpnLg7IIm92aduiLV1gv/lAgCWjGakkxMi13HqvdZPqgyt
-         4zwmi3HOyRGv7oE3FrDOevFgBSUsmWe+oJhdq9nQcBgUBpGdxr9qD2etWtJiv4PpR/NA
-         PjgI6lpNJOi7UZpTa69UjaEYJBw+IJPxVJkR28Uex7jC7IRlmgBWOp8zcQdKtRgMcWFA
-         UwO+ocPmT5qlBYk/nLGSj+y/TZtzPVS+uKSiqn3B/rQd5VJEZtvH72xj1mj3RSDLLDPh
-         H/Kg==
+        d=vulnseeker.org; s=google; t=1783496019; x=1784100819; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=KlMQd6zXc+b5QHrwlBayK+dOIb6p877m6hlMYxECNok=;
+        b=uOZy8DiXhlmjZuUSXTOD4PQOO50RbSi/Pret6pZnlYgzjpl0CbsPdr1U0eV4MoBnvC
+         rlDN5QT+cxUAuMNeeb1AgKcBA7pbLEcdruDb/LJwNBiSeGjROAXIXONE58Azkj30Fqrl
+         1GY1EvB0/ixFmJ4Xp1afeypkR7nhomRGJuc9ho369b6pXXFZDsA8XIdu+9LBK/w6qt3K
+         /IaPdWBE+SiYwAkcN+6xzZAeJ+Vl2/Y6dbD++mfhW7yUlLt/SlyAX41+TPsjHjI3Vsw/
+         Y8UAQ0Mcxbdzm1euAOHsz3Q6FxBBxGOgYv9cM9TRFcBIeb57F8ftxgDH4HHpndLwU9yy
+         yAmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783495340; x=1784100140;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ABGZvOuLiWoxRSjZ3PNYnG6X2wEe+pNBW/beoBLeqy0=;
-        b=ogVvZCzaP48EVQPKOl2fPZDuMqjx2oRAFOL8KdjrmqNx8/k5DC2Gx+V250NySJspJp
-         5ey+EyXPXpub/gPtDcCfC8xf5aL/Yo9xapxSvD5rwC6p8JMc8QCgnqc91iHFDfeEhvNt
-         6fag/zuixSxqW/1qfU28yMvsJhzjWjtxXk1lIXmVPVnPYw1Y5lsNVwa/B8THnkN2TKLe
-         XQfCl1MroZEq4NcrHrm3ckxjVXrhcKJuKWw35BXk9NQtAo7LbvGrKnHZNJIkaSZ/wy8X
-         lOtYfKhmF07AngsYM5kL2dVoHI0SrlaPJ42/Mi+tIitdof/Ojahp6M85oLR7g5sHSybc
-         YIeA==
-X-Forwarded-Encrypted: i=1; AHgh+Rr2uM8cQEQW7/Gl0jzAs76+mDSqOHsUI7Y4zRTCTop6ApkUKjoChXsZRKdRYRdvRQQ0ifk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWAyNETH3eNKigs8WR3NWCcbkSgdyfmAaqtJuHaGYQuSxtoSg5
-	+VmEqmZQ+oPQfqktDxC3EJ23cr2E6igduwVvKY0I/XNmW8e9aGEqt7Kn
-X-Gm-Gg: AfdE7ckcCCTM+1SBnNyS80sEdbNojdWCOAsALQ0IT0xaSZmGyVaWZcKnieQiZLlF7I/
-	4cynrs+rZVp1wlOa4Yt9B1icnOCJcyYUDjUEQbksAxlyJRAakYbgDeDDts44CYy0em9AH9UCzTD
-	dURAaqt0upG2uTPTXDgcBjE1645di6oX7FaqWrqmsbLwQ3OUtETFVOk94TFnyXX0Ansja0zwY/i
-	XqpqWvmq/UDGggIRuq2EUXc7AdZjqM5c3bFV/GQ4MOH7iIcgX2UaDjm+jgsWzjRg/b+L89wOnWF
-	pUU9s/QaSL2dVVbVFvIW0K6v97I3KrBmFY9w1A0nd/Gc/QlTCvAGFL+TwO8Ch8SKG9F8BmtR53T
-	ldYOZ4kKv3r3MAwqHQhOgKFKg0WyrEAmXtn4Y8Z4HIgLmLaEGWuPlVCKJhXSwKNNqdSEWFIGQaM
-	FAcTMSzK9PBimurss+tUBpNGvtdLYI5uUOREi/VbLBnz2KYCaCW/jp/LcB8VDdbyYQ6BnE2r+JK
-	zx2
-X-Received: by 2002:a05:6a21:4e02:b0:3bf:c126:bb02 with SMTP id adf61e73a8af0-3c0bd0f8fdemr1412682637.47.1783495339766;
-        Wed, 08 Jul 2026 00:22:19 -0700 (PDT)
-Received: from secrnd-cstp.tailb7f510.ts.net ([125.131.91.97])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ca5af7d5946sm1935131a12.7.2026.07.08.00.22.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2026 00:22:19 -0700 (PDT)
-From: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Sanghyun Park <sanghyun.park.cnu@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v7] bpf: Fix use-after-free on mm_struct in bpf_find_vma()
-Date: Wed,  8 Jul 2026 16:21:04 +0900
-Message-ID: <20260708072106.199637-2-sanghyun.park.cnu@gmail.com>
-X-Mailer: git-send-email 2.48.1
+        d=1e100.net; s=20251104; t=1783496019; x=1784100819;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=KlMQd6zXc+b5QHrwlBayK+dOIb6p877m6hlMYxECNok=;
+        b=GXcIxEgY3NUEZdGEJ+88EeZu4CwEp0xqBhHUWSK9USjWLZGhW8QHOsmwSlySLGEfzP
+         Z7cUD4YgntPTFVzaKybKhShiE+Yyx+NB8T0eAUqFRT+Rf12Lg8Snu0mIzC0X1cnUgwmn
+         0BNFfUA8B4A6q6RRpUSNxVhdJBgbHuH6W9tE2KIbh6p9/zoMcjHDzd4CJ7C2kcENnRIH
+         keatEJBcROrucrKUta7fPSNK3MWNmehXDdxRrXsD7t3CEQq873RUJrK5mpqM2IpL3UPb
+         vF3FQmScOGvwy1S4Yr/a46lShrxgXzKAkRGj5p3qJs4BaspZePfyHrcgx9NChRFm7xBd
+         eSKA==
+X-Gm-Message-State: AOJu0YwkIkXjf4N+4kl5Gwo9lI2doC1BvZFVTY8FpB44P5tQjoNenyBL
+	NMNmLVLhIUAM/ZOcPViL9aARd3WKHYgsVvUKYUb7evXRqikPvcubtdQo0m+A6q19+upQjcpupnM
+	l8S+/+QPvQk3Z+rf9kcydifrutQDvhCozh7/93ttCZg==
+X-Gm-Gg: AfdE7cnB1ZcAc6rUvEzAkvl3QZKOpyav1NoMSOBv8YLgvack5OgpCQxu9zQgijixVro
+	MJ3JhbhcJSHlT5gL3GEg1svlAd3QmG6JNBUHxm/ff+BIZSZRSa8eSkxQy98JapDEFJXQbQHoUxx
+	+s0lhtGrEU+C3ZISyep8WnUs76DPJNRFxB4dt9mJIxzDCSGN93EVHcGoJQbCIEhv3PT9yOkJIKp
+	EHpJCHVEp1cAjCfXoqOK76QH+Dqe02VuXfufm1od0FHr4BwD7A3Fp7tox7oZZc56fvUfjg8
+X-Received: by 2002:a05:6a00:2999:b0:848:46ea:bbe7 with SMTP id
+ d2e1a72fcca58-84846eac02bmr1020274b3a.19.1783496018749; Wed, 08 Jul 2026
+ 00:33:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAO_sQLjn=hghkb7SZr2UWexf=opgLTu5_AHR2uTQrJ1r13vpjg@mail.gmail.com>
+ <ak0QM9G74dc3jpWc@john-p8>
+In-Reply-To: <ak0QM9G74dc3jpWc@john-p8>
+From: Vuln seeker Cyber Security Team <security@vulnseeker.org>
+Date: Wed, 8 Jul 2026 12:33:26 +0500
+X-Gm-Features: AVVi8CeKfNAMQDSajEbstb7QrPoVuuoy9USuJaLtHyzuCL9VlZMKEa37ovQagVM
+Message-ID: <CAO_sQLiUn3K71BhvNE2XN0kCkpTwo+gvO1R6HSo6MNF+iLs8AA@mail.gmail.com>
+Subject: Re: Responsible Disclosure: Heap Out-of-Bounds Write via Integer
+ Underflow in libbpf parse_cpu_mask_str() (libbpf.c:14446)
+To: John Fastabend <john.fastabend@gmail.com>
+Cc: bpf@vger.kernel.org
+Content-Type: multipart/mixed; boundary="000000000000a81b9b0656148622"
 
-bpf_find_vma() reads task->mm and calls mmap_read_trylock(mm) without
-holding a reference on the mm. On a foreign task, a concurrent exit_mm()
-can free the mm_struct between the lockless read and the trylock,
-resulting in a use-after-free. mm_struct is not SLAB_TYPESAFE_BY_RCU.
+--000000000000a81b9b0656148622
+Content-Type: multipart/alternative; boundary="000000000000a81b9a0656148620"
 
-For the current task, task->mm is stable. For a foreign task, pin the mm
-under task->alloc_lock and release it with mmput_async(), mirroring commit
-d8e27d2d22b6 ("bpf: fix mm lifecycle in open-coded task_vma iterator").
-Use spin_trylock() instead of get_task_mm() so BPF context does not block
-on alloc_lock. Reject irqs-disabled contexts and !CONFIG_MMU on the
-foreign-task path because dropping the mm reference is not safe there.
+--000000000000a81b9a0656148620
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Race:
+Hello John,
 
-  CPU0 (BPF program)                  CPU1 (exiting task)
-  ============================        ==========================
-  bpf_find_vma(foreign_task):
-    mm = task->mm
-                                      exit_mm():
-                                        task->mm = NULL
-                                        mmput(mm) -> frees mm_struct
-    mmap_read_trylock(mm)
-        // UAF on mm
+As requested, I have reattached the fix for the identified vulnerability.
+Please let me know if you are able to access the file now.
 
-Fixes: 7c7e3d31e785 ("bpf: Introduce helper bpf_find_vma")
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
-Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
-Signed-off-by: Sanghyun Park <sanghyun.park.cnu@gmail.com>
----
-v7:
- - Fix the sh/NOMMU W=1 "variable set but not used" warning by
-   marking mmput_needed as __maybe_unused.
- - Add Puranjay's Reviewed-by.
-v6: https://lore.kernel.org/r/20260630032543.3165720-1-sanghyun.park.cnu@gmail.com
- - Restore bpf_iter_mmput_async() because bpf_iter_task_vma_destroy()
-   still uses it.
- - Keep the direct mmput_async() call in bpf_find_vma(), but guard it with
-   CONFIG_MMU because the foreign-task path rejects !CONFIG_MMU builds.
-v5: https://lore.kernel.org/bpf/20260630023443.3026627-2-sanghyun.park.cnu@gmail.com/
- - Replace bpf_iter_mmput_async() with mmput_async() directly as suggested
-   by Yonghong.
- - Add Yonghong's Acked-by.
-v4: https://lore.kernel.org/bpf/20260610024637.343364-1-sanghyun.park.cnu@gmail.com/
- - Use [PATCH bpf-next] subject as requested by Alexei.
- - Add the missing BPF maintainers/reviewers to Cc.
-v3: https://lore.kernel.org/bpf/20260609105216.3536839-1-sanghyun.park.cnu@gmail.com/
- - Drop get_task_mm()+mmput(); mirror d8e27d2d22b6 with alloc_lock
-   trylock + mmput_async(). (Yonghong Song)
- - Reject irqs-disabled contexts on the foreign-task path.
- - Reject foreign-task path when !CONFIG_MMU: bpf_iter_mmput_async()
-   falls back to mmput() which may sleep, and bpf_find_vma() can run
-   in non-sleepable context.
- - Shorten the foreign-task rationale comment and trim the changelog body.
- - Fix the v2's whitespace damage.
-v2: https://lore.kernel.org/bpf/CAOrxSK5_7e4114VyfEU9htGi+UneuNt88fGVKOAa3_ZenPOFkA@mail.gmail.com/
+Best regards,
 
- kernel/bpf/task_iter.c | 36 +++++++++++++++++++++++++++++++++---
- 1 file changed, 33 insertions(+), 3 deletions(-)
+On Tue, Jul 7, 2026 at 7:47=E2=80=AFPM John Fastabend <john.fastabend@gmail=
+.com>
+wrote:
 
-diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-index e791ae065c39b..b256fb9c1214e 100644
---- a/kernel/bpf/task_iter.c
-+++ b/kernel/bpf/task_iter.c
-@@ -756,6 +756,7 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *, task, u64, start,
- 	struct mmap_unlock_irq_work *work = NULL;
- 	struct vm_area_struct *vma;
- 	bool irq_work_busy = false;
-+	bool __maybe_unused mmput_needed = false;
- 	struct mm_struct *mm;
- 	int ret = -ENOENT;
- 
-@@ -765,14 +766,38 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *, task, u64, start,
- 	if (!task)
- 		return -ENOENT;
- 
--	mm = task->mm;
-+	if (task == current) {
-+		mm = task->mm;
-+	} else {
-+		/*
-+		 * Foreign task: pin task->mm against a concurrent exit_mm().
-+		 * Use trylock on alloc_lock instead of get_task_mm()'s
-+		 * blocking task_lock() to avoid deadlocking the target task.
-+		 */
-+		if (!IS_ENABLED(CONFIG_MMU))
-+			return -EOPNOTSUPP;
-+		if (irqs_disabled())
-+			return -EBUSY;
-+		if (!spin_trylock(&task->alloc_lock))
-+			return -EBUSY;
-+		mm = task->mm;
-+		if (mm && !(task->flags & PF_KTHREAD)) {
-+			mmget(mm);
-+			mmput_needed = true;
-+		} else {
-+			mm = NULL;
-+		}
-+		spin_unlock(&task->alloc_lock);
-+	}
- 	if (!mm)
- 		return -ENOENT;
- 
- 	irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
- 
--	if (irq_work_busy || !mmap_read_trylock(mm))
--		return -EBUSY;
-+	if (irq_work_busy || !mmap_read_trylock(mm)) {
-+		ret = -EBUSY;
-+		goto out;
-+	}
- 
- 	vma = find_vma(mm, start);
- 
-@@ -782,6 +807,11 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *, task, u64, start,
- 		ret = 0;
- 	}
- 	bpf_mmap_unlock_mm(work, mm);
-+out:
-+#ifdef CONFIG_MMU
-+	if (mmput_needed)
-+		mmput_async(mm);
-+#endif
- 	return ret;
- }
- 
--- 
-2.48.1
+> On Fri, Jul 03, 2026 at 05:22:30PM +0500, Vuln seeker Cyber Security Team
+> wrote:
+> >Dear libbpf Security Team,
+>
+> [...]
+>
+> >libbpf's CPU mask parser. An integer underflow in parse_cpu_mask_str()
+> >causes a memset to write far past a shrunk heap allocation, reachable
+> >end-to-end through the public libbpf_num_possible_cpus() API.
+>
+> Send the fix seems worth checking to me if we are already checking
+> start/end. If some app is exposing user input to this then I would
+> push a report to them.
+>
+> [...]
+>
+> >  - Any downstream consumer that feeds untrusted CPU-mask strings to
+> >  the
+> >internal parse_cpu_mask_str helper directly
+>
+>
+> Not sure why untrusted input is getting here but sure if someone
+> is piping user input to libbpf let them know. I think if you have
+> untrusted user input hitting libbpf you have bigger problems.
+>
+> [...]
+>
+> >
+> >  if (start < *mask_sz)
+> >      return -EINVAL;  // "CPU range out of order or overlapping"
+> >
+>
+> Send a fix. Thanks.
+>
+
+--000000000000a81b9a0656148620
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hello John,</div><div><br></div><div>As requested, I =
+have reattached the fix for the identified vulnerability. Please let me kno=
+w if you are able to access the file now.</div><div><br></div><div>Best reg=
+ards,</div></div><br><div class=3D"gmail_quote gmail_quote_container"><div =
+dir=3D"ltr" class=3D"gmail_attr">On Tue, Jul 7, 2026 at 7:47=E2=80=AFPM Joh=
+n Fastabend &lt;<a href=3D"mailto:john.fastabend@gmail.com">john.fastabend@=
+gmail.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
+-left:1ex">On Fri, Jul 03, 2026 at 05:22:30PM +0500, Vuln seeker Cyber Secu=
+rity Team wrote:<br>
+&gt;Dear libbpf Security Team,<br>
+<br>
+[...]<br>
+<br>
+&gt;libbpf&#39;s CPU mask parser. An integer underflow in parse_cpu_mask_st=
+r()<br>
+&gt;causes a memset to write far past a shrunk heap allocation, reachable<b=
+r>
+&gt;end-to-end through the public libbpf_num_possible_cpus() API.<br>
+<br>
+Send the fix seems worth checking to me if we are already checking<br>
+start/end. If some app is exposing user input to this then I would<br>
+push a report to them.<br>
+<br>
+[...]<br>
+<br>
+&gt;=C2=A0 - Any downstream consumer that feeds untrusted CPU-mask strings =
+to <br>
+&gt;=C2=A0 the<br>
+&gt;internal parse_cpu_mask_str helper directly<br>
+<br>
+<br>
+Not sure why untrusted input is getting here but sure if someone<br>
+is piping user input to libbpf let them know. I think if you have<br>
+untrusted user input hitting libbpf you have bigger problems.<br>
+<br>
+[...]<br>
+<br>
+&gt;<br>
+&gt;=C2=A0 if (start &lt; *mask_sz)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 return -EINVAL;=C2=A0 // &quot;CPU range out of or=
+der or overlapping&quot;<br>
+&gt;<br>
+<br>
+Send a fix. Thanks.<br>
+</blockquote></div>
+
+--000000000000a81b9a0656148620--
+--000000000000a81b9b0656148622
+Content-Type: application/octet-stream; name="fix.diff"
+Content-Disposition: attachment; filename="fix.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_mrbrdjbp0>
+X-Attachment-Id: f_mrbrdjbp0
+
+ZGlmZiAtLWdpdCBhL3NyYy9saWJicGYuYyBiL3NyYy9saWJicGYuYwppbmRleCBhYjIwNzFmLi43
+YWI4OTMyIDEwMDY0NAotLS0gYS9zcmMvbGliYnBmLmMKKysrIGIvc3JjL2xpYmJwZi5jCkBAIC0x
+NDQzNyw2ICsxNDQzNywxMSBAQCBpbnQgcGFyc2VfY3B1X21hc2tfc3RyKGNvbnN0IGNoYXIgKnMs
+IGJvb2wgKiptYXNrLCBpbnQgKm1hc2tfc3opCiAJCQllcnIgPSAtRUlOVkFMOwogCQkJZ290byBj
+bGVhbnVwOwogCQl9CisJCWlmIChzdGFydCA8ICptYXNrX3N6KSB7CisJCQlwcl93YXJuKCJDUFUg
+cmFuZ2Ugb3V0IG9mIG9yZGVyIG9yIG92ZXJsYXBwaW5nIGluICVzXG4iLCBzKTsKKwkJCWVyciA9
+IC1FSU5WQUw7CisJCQlnb3RvIGNsZWFudXA7CisJCX0KIAkJdG1wID0gcmVhbGxvYygqbWFzaywg
+ZW5kICsgMSk7CiAJCWlmICghdG1wKSB7CiAJCQllcnIgPSAtRU5PTUVNOwo=
+--000000000000a81b9b0656148622--
