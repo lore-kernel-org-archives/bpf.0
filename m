@@ -1,130 +1,182 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15554388862
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 08:04:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B0D3ABD96
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 08:07:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783497890; cv=none; b=NhpTcQmAnXgkEDt4W242JQy9b04Nc4s3nT3uA5+EfGNQ1a9kp3Wg1m2JA79uM01FpGHF7AMbFCNIC9E2CUzfQzt8T5lfjrX97R/7dcpsrWQJqKVe3gtHJ8bYjS3S2HvAiZZXEN3cB/5ONwsbgj7R3aZiYx6TkOa5lD/Bc7s3x8o=
+	t=1783498030; cv=none; b=QiNn5hCTfqex2StZ+loblM3O3pjJyBtWMTF7LTguLIVkSJLndpZM6lVDG3MjphEoGze2TAw2k+61/Ds6ixbH85qKocexRBthdBfRmlP4lc8CE5de30VmQMSW0fXh+DuPaioLz3pu0G+VuhxShwyP8CLaj2BSZEfP9nlKtJJUPsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783497890; c=relaxed/simple;
-	bh=lhKSffhkWzsZ0/8rfDC7YE2ivqQOUh/Jm8bDdf9qJW4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nvlUNgk2V6C/orcGfRQ4BSpAV/128Tl8pK7loIQfgLYgTHOS25edRSn+S5rcakhVxLNzwBGVVtVXfgQ1RPVVwAFRdCGPYWJX/34FFfSispuwMBycEo2vPe/re3i+zM0+xbvbThKW4g/YdovZmIvoBmj8PggCmv4x12N4b+YQ2Qc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tESaesU1; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783498030; c=relaxed/simple;
+	bh=bHVop+QDlkBq0TztU88wPSbOwnYqIrKgLfSgEirTDjQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=u1Nyf1IZPej3bysCCKrMNehdh1Zro4FV0AOgFLmynOQUQWGt3UtBfVdQ4/nVx3T/E5HGTPC/lAs7+zR5lYlU0hwPFbArw9expaizza97st/Xq52c6LEPlONloDvE2eFVVdegIt8jdIVKeD6P0dfBQkItxLpGknWyKTJbYCrONYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZixBmtaB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tESaesU1"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c9c80265bd7so225912a12.1
-        for <bpf@vger.kernel.org>; Wed, 08 Jul 2026 01:04:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783497885; x=1784102685; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=lhKSffhkWzsZ0/8rfDC7YE2ivqQOUh/Jm8bDdf9qJW4=;
-        b=tESaesU1raCpuNWf2JvAnEeXLHI8sUQcmt9PGuNv5NbzcwZYHvL6troiP83gF6gWI8
-         NYcUj2N80mkAuGimeoTMcot4YlSmdqA/N3BFU9ofrgtB/fhL7J/uDmglEPxZhRzdWuYL
-         dD9p/b+0lfeCjxAPW1AT5JEkQH1vz6xiKjxv7q+OuszVamrdoxraPLmEpV/MB+MAMK2g
-         nilJV/I+veph0rnnV92UMTinF73W1/iObmDdTSH1dZJWQwUhjf+/9CssPM5pDC91+lNT
-         XUhvu42LseRDdw8rw7xhxoTK9w4S7MNCPbmRPMt817MXLVUXDc0DfnkqsfeUnytQAq5k
-         BMeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783497885; x=1784102685;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=lhKSffhkWzsZ0/8rfDC7YE2ivqQOUh/Jm8bDdf9qJW4=;
-        b=BpKd86YlfnM1UvD4VSAusIr1sUkpNll/UtR4aDyxrD+MW21P7i3fvDqSxb09Pxk5o/
-         fLhKzWr2YMQ06/ftuADRS/Pu/seoeVEDnQ0J5aL8DcgEchcEivTFqZi8+eV7Gy9v10iu
-         jKa23RX51gQumka6bArRgoVsnmjeeWSUzJKv2vIFc3GEfNWGf60nvKhwkzehjWZdo14Z
-         2llxb6v2lPnR6J664FwNO2/EyY/+qR7x/Cf18rx+iZDCOwzER977u6stnw6JC3PdtdTK
-         P6l78bOtmkEAQlvRYnvDw+bbhBUisUQuAs9nbFJrbN+EcD8zPegwwLl0rSYfkOzmoj7A
-         4aJg==
-X-Forwarded-Encrypted: i=1; AHgh+RqSI8+L35nzhA4BLmBJ8E+nbtr73tSMOwmByW8wzZi7mVHG6FIhT0aDp+dVQLXH7dtGlYY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwoSYqI47RVkPorcwtOUQ2GZQEr2sJYBEa3kWOhzWDdLos19erC
-	YHaTq4rN357um+S6mNln80+rkpY0yc/CuU2Y2Zp2OiST7lG+pM1MVQgw
-X-Gm-Gg: AfdE7cmD8oszNcaJ/bxNtaa3rEQTww1FopI96LNzYPfDi1mdZLpcWl8sG4SG7LHxSKS
-	BpWTNVB/A8hplg6cngvjoHD4V7/GNIWR0Vj2es8hWIvN5gTAl8AKnlcGMXShljvmYtiY+ZtVBcx
-	uHUrbIsr+qPpz+xAkG1oWgf+rAsLhsLfuPyTZ68ft6k5QjmCX2l1wOpb93mpDMk2WQslnqVEgUB
-	yAeFxzTvF6XFdi5gqH3Sxo25FcFMAiQ1YvugOwKdLPubwk6HX2077T6Sux7MBoM1zHxUGPIENPL
-	dZLkwskZYNCKO/SG1miv1slnQ1VCIFfo2jf2jX4jE4wH5WqMUMorQFw0rkqKj3MprepdOMoj9cO
-	6PHrPy4RPckY098w6+J2G/Iu2jzIeFm+MICG8zvGggfb0gntbZvaUvjikBLEQKwFjl7IxOj0q7u
-	t6wHjzB6qcuzmYGsFpx4NHWQh8AQocPHP+95+dzlsG6CHwW5RD198daNcrmaw/
-X-Received: by 2002:a05:6a20:1587:b0:3b2:86cb:929e with SMTP id adf61e73a8af0-3c0bd206b59mr1755177637.46.1783497885553;
-        Wed, 08 Jul 2026 01:04:45 -0700 (PDT)
-Received: from r912.tailbb6e1e.ts.net ([182.70.116.80])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-311950eb930sm2220581eec.8.2026.07.08.01.04.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2026 01:04:45 -0700 (PDT)
-From: Avinash Duduskar <avinash.duduskar@gmail.com>
-To: toke@redhat.com,
-	andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net
-Cc: a.s.protopopov@gmail.com,
-	ameryhung@gmail.com,
-	bpf@vger.kernel.org,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	eddyz87@gmail.com,
-	edumazet@google.com,
-	emil@etsalapatis.com,
-	eyal.birger@gmail.com,
-	hawk@kernel.org,
-	horms@kernel.org,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	kuba@kernel.org,
-	leon.hwang@linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	rongtao@cestc.cn,
-	sdf@fomichev.me,
-	shuah@kernel.org,
-	song@kernel.org,
-	yatsenko@meta.com,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH bpf-next v6 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to bpf_fib_lookup() helper
-Date: Wed,  8 Jul 2026 13:34:34 +0530
-Message-ID: <20260708080434.732503-1-avinash.duduskar@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260704092159.1256823-2-avinash.duduskar@gmail.com>
-References: <20260704092159.1256823-1-avinash.duduskar@gmail.com> <20260704092159.1256823-2-avinash.duduskar@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZixBmtaB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1DDD1F00A3D;
+	Wed,  8 Jul 2026 08:07:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783498025;
+	bh=mJj2OvIwCt2mmFAnTSjfaSkkqCVvJUEnjjNoaJlG5Fc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ZixBmtaB04DHIdDYZ8wlypYpgFlhgdMrg8++vpFvZnHWRClcFUJ/5OXEpqvGbIO2d
+	 3iI2aDzdVuNp6eUXlj34vjPWdpR0BROIAHNoUjzSErSaxJp+S8CCvunor2zaf83Ikp
+	 pRgsY7uAvzoVBR4eRzDpV4yLQDfwbrH3Yw6s299D4S+sHEVdiYGwgmHW/DkNpSO03A
+	 DfJbKHD8J4hMzUiug/ohunFpf4z7v+rItf4FvXaFyairB+DwSFVY2+HMP4haQDlZOd
+	 t4/qxcomDRtNpSNhZRrbegBHilT/pUYPrsX2nxtgFQFeNL2W2WqkwpZ6alV74R4VvV
+	 1XURIlNd664Qg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v6 7/8] selftests/bpf: Verify load-time signed
+ loader metadata
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Daniel Borkmann" <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260708075343.358712-8-daniel@iogearbox.net>
+References: <20260708075343.358712-1-daniel@iogearbox.net>
+ <20260708075343.358712-8-daniel@iogearbox.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 08 Jul 2026 08:07:05 +0000
+Message-Id: <20260708080705.A1DDD1F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The bpf ci bot flagged the VLAN_FAILURE re-issue advice in the uapi doc
-here, and the finding is real. By the time the lookup fails,
-params->tbid is gone (the h_vlan fields it shares storage with are
-zeroed on entry to bpf_fib_set_fwd_params()) and params->mark is gone
-on the resolved-neighbour path (overwritten by the smac output). A
-program that follows the advice with the same struct and DIRECT|TBID or
-MARK set runs the second lookup with a zero tbid or a garbage mark. The
-selftests did not catch it because every arm re-initializes params,
-which is the safe pattern.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Missing file descriptor cleanup on unexpected test failure.
+--
 
-Toke, the re-issue recovery came from
-https://lore.kernel.org/all/87jyrwf9g1.fsf@toke.dk/, so before I
-respin: my preference is to keep the mechanics and fix the sentence,
-"repeat the lookup without the flag, re-initializing *params* first;
-output fields overwrite the inputs they share storage with".
-Overwriting inputs on the way out is the helper's existing behaviour on
-every path (rt_metric lands on top of tos/flowinfo even on NO_NEIGH),
-so one rule, re-initialize before any reuse, seems better than making
-VLAN_FAILURE the only return code that preserves inputs. If you would
-rather VLAN_FAILURE restore tbid and mark the way it already restores
-ifindex, or lose the advice sentence entirely, I will do that instead.
+--- Patch [7]: [PATCH bpf-next v6 7/8] selftests/bpf: Verify load-time sign=
+ed loader metadata ---
+commit 64830bb6cea6aee71f09d788c841cd423f6308e6
+Author: Daniel Borkmann <daniel@iogearbox.net>
 
-Avi
+selftests/bpf: Verify load-time signed loader metadata
+
+This commit updates the signed loader tests to verify load-time signed load=
+er
+metadata end to end. It extends the tests with more cases, such as map-less
+programs and asserting the LSM admission hook, while retiring the older
+subtests that asserted the removed in-loader check.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/signed_loader.c b/too=
+ls/testing/selftests/bpf/prog_tests/signed_loader.c
+> index 5fc417e31fc61..0019492cf07a8 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/signed_loader.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
+
+[ ... ]
+
+> -static void metadata_sha_mismatch(void)
+> +static void signature_enforced(void)
+>  {
+> +	static const __u8 junk[64] =3D { 0x30, 0x42, 0x13, 0x37, };
+>  	struct gen_loader_fixture f;
+> -	bool ran;
+> -	int r;
+> +	int fd;
+> =20
+>  	if (gen_loader_fixture_init(&f) =3D=3D 0) {
+>  		/*
+> -		 * blob[0] lives in the loader's fd_array scratch (first add_data in
+> -		 * bpf_gen__init); a 0-map program never reads it, so flipping it
+> -		 * changes only map->sha. The metadata check is the only thing that
+> -		 * can notice -> isolates emit_signature_match.
+> +		 * A present-but-invalid signature (the cert bytes are not a
+> +		 * PKCS#7 signature) must be rejected at load: the signature
+> +		 * path is honored, not ignored. (The valid path is covered by
+> +		 * the signed lskels.) Pin -EBADMSG, the PKCS#7 parse failure:
+> +		 * a looser fd < 0 check could also be satisfied by the sparse
+> +		 * fd_array rejection (-EACCES) that the loader's map reference
+> +		 * would trip even if the signature were silently ignored.
+>  		 */
+> -		f.blob[0] ^=3D 0xff;
+> -		r =3D run_gen_loader(f.gopts.insns, f.gopts.insns_sz, f.blob,
+> -				   f.data_sz, f.excl, sizeof(f.excl), NULL, 0,
+> -				   true, f.ctx, f.ctx_sz, &ran);
+> -		ASSERT_TRUE(ran, "loader ran");
+> -		ASSERT_EQ(r, -EINVAL, "tampered blob rejected by emit_signature_match"=
+);
+> +		fd =3D load_loader(f.gopts.insns, f.gopts.insns_sz, -1, junk,
+> +				 sizeof(junk), KEY_SPEC_SESSION_KEYRING, 0);
+> +		ASSERT_EQ(fd, -EBADMSG, "invalid signature rejected at load");
+>  	}
+>  	gen_loader_fixture_fini(&f);
+>  }
+
+[Severity: Medium]
+If the kernel unexpectedly accepts the load during signature_enforced,
+load_loader will return a valid file descriptor. Does this file descriptor
+leak since the ASSERT_EQ macro allows execution to continue?=20
+
+Other tests introduced in this patch, such as signature_failure_logs, use
+the following pattern to ensure the file descriptor is closed on test failu=
+re:
+
+    if (fd >=3D 0)
+        close(fd);
+
+Would it make sense to include this cleanup here to prevent file descriptor
+exhaustion during a cascading test suite failure?
+
+[ ... ]
+
+> @@ -495,12 +573,31 @@ static void signature_too_large(void)
+>  		 * is rejected before the buffer is read.
+>  		 */
+>  		fd =3D load_loader(f.gopts.insns, f.gopts.insns_sz, -1, junk,
+> -				 64 << 20, KEY_SPEC_SESSION_KEYRING);
+> +				 64 << 20, KEY_SPEC_SESSION_KEYRING, 0);
+>  		ASSERT_EQ(fd, -EINVAL, "oversized signature rejected");
+>  	}
+>  	gen_loader_fixture_fini(&f);
+>  }
+> =20
+> +static void signature_zero_size(void)
+> +{
+> +	static const __u8 junk[64] =3D {};
+> +	struct gen_loader_fixture f;
+> +	int fd;
+> +
+> +	if (gen_loader_fixture_init(&f) =3D=3D 0) {
+> +		/*
+> +		 * A present signature with signature_size =3D=3D 0 is rejected
+> +		 * up front, before the keyring is resolved or the signature
+> +		 * buffer is read.
+> +		 */
+> +		fd =3D load_loader(f.gopts.insns, f.gopts.insns_sz, -1, junk,
+> +				 0, KEY_SPEC_SESSION_KEYRING, 0);
+> +		ASSERT_EQ(fd, -EINVAL, "zero-size signature rejected");
+> +	}
+> +	gen_loader_fixture_fini(&f);
+> +}
+> +
+>  static void signature_bad_keyring(void)
+>  {
+>  	static const __u8 junk[64] =3D {};
+> @@ -515,7 +612,7 @@ static void signature_bad_keyring(void)
+>  		 * large positive serial takes the user-keyring path and won't exist.
+>  		 */
+>  		fd =3D load_loader(f.gopts.insns, f.gopts.insns_sz, -1, junk,
+> -				 sizeof(junk), INT_MAX);
+> +				 sizeof(junk), INT_MAX, 0);
+>  		ASSERT_EQ(fd, -EINVAL, "signature with bad keyring_id rejected");
+>  	}
+>  	gen_loader_fixture_fini(&f);
+
+[Severity: Medium]
+Similar to signature_enforced, if load_loader unexpectedly succeeds in the
+newly added signature_zero_size test, or in the updated signature_too_large
+and signature_bad_keyring tests, could this result in leaked file descripto=
+rs?
+
+Adding the same close cleanup check here might help prevent test environment
+instability if these assertions ever fail.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260708075343.3587=
+12-1-daniel@iogearbox.net?part=3D7
