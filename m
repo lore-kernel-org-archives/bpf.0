@@ -1,41 +1,41 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A96223BB4A
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 03:22:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66802420896
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 03:30:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783480982; cv=none; b=W7QNp47EffyUsHyQDbYfAopLpbmpbz8d9BhzGpIIg8/l01kXiloEmmLV9bwJ3edgQ+pksTSlAKVmsPhT3NGc9yGyS+Rcohn5RtYjqlG2rR0W43qFObWU4wllZBnezU42KikF3zp6uhTfo/A3ffyIPUuH8JWIPU4XlgupAfV9LUM=
+	t=1783481425; cv=none; b=lfAe/qXt4RV4iTBu45aYpslVdMk+iDWvAQTYh8rUq1HT9WQ+qvISuTKPjjiHHgDF9ICpWvell/e3AQOKtnGIqDA8/jU4/ov1LbPUXfrKnKmtUmMm+h5YARNw/LN4X5/V43mPYMnHD0YXAk2KohNkQ9sRljZMgKMEQ7/GjMK7BD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783480982; c=relaxed/simple;
-	bh=LR8ZkF3VK3DQ+1b3NahwIArIM/D2QpLWCJHiyLBsbcA=;
+	s=arc-20240116; t=1783481425; c=relaxed/simple;
+	bh=4SeRtoGkiJ0YU+DChKH2d4yuDJUGWWHBlkzM6OpeQFU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KNZVTu7x5qRYwxnxCKjmD8TE5+nfNOyCixqNQQ9CXmZploIxOvPKZkaI9k5W9eHkbSsWFtrzJszf7MvXhzh4UcPnJRwAc7oGnx4IRxcV08qdulwKzV3fp/otKMBQZI1uXGZoHtZmQ2V/lb8fri1zysBIIrGIFhkciKgWvPonbGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lOC67acm; arc=none smtp.client-ip=91.218.175.183
+	 In-Reply-To:Content-Type; b=d3xoytbKCY+YF8hBr8WVcf8k7gVu1fR1fEkK/ZfMP0FCBdGFu46/nofkF3JsvtsrPvzTzjwDns/dI3eVpp80l4TIxooFKCLAGMn3Jwo4mNfYes6r4C5Ef/WOL95J3RM03fPsvi31qL9kslEAjGvuP+oeY58zVuYEBpUHM5MX3tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KeC+qsRv; arc=none smtp.client-ip=91.218.175.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lOC67acm"
-Message-ID: <2ea29553-b0bd-4d12-9ff9-9b6f99267fc0@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KeC+qsRv"
+Message-ID: <6702d2f1-dcd4-4b68-b1ac-daa8661235a0@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783480976;
+	t=1783481422;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=y1a2UG4qiDNeOYHH404Fpdk2UN9XF1jE5+XaJZ48Ojg=;
-	b=lOC67acmeaf3tcUhfAAiGGXM1A7NuahPyQs2Iqpm2I9o709r5Bl+5AZJILRy7VASo9jNQy
-	nyBP76d6/n3pXWbVAXKatcYwgjSGewR+JmrUKwd0R7iKokj12CJUrnQHJht7Ijm98t6fTi
-	TWpMHY8r43iaQweeu8Ho5Gb8XNUDr5Q=
-Date: Wed, 8 Jul 2026 11:22:44 +0800
+	bh=hAfIYp1qkUw5nv6HMpuzXiAFinGF8d61HsxbLIT9CoI=;
+	b=KeC+qsRvkercaCeJMK0baG7g9L7IgTKrKgPQLRzPzmRJhODWz3t6hFjU3qk3vjnirrr/PY
+	LEAGp/rwAN1aiEXn0JNmpcePjQBzkbz42gsEWfYnJ5dCk0RlqCHZAPCVHFv3oTVnUGadbf
+	4XsOUfePghJg0y58QGJAtrnwoi4vNvk=
+Date: Wed, 8 Jul 2026 11:30:06 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Add XDP dispatcher FineIBT
- regression test
+Subject: Re: [PATCH bpf 1/2] bpf, x86: Fix FineIBT #CP in BPF dispatcher's
+ indirect-jump fallback
 Content-Language: en-US
 To: David Windsor <dwindsor@gmail.com>, bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -54,115 +54,82 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
  Peter Zijlstra <peterz@infradead.org>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <c5a6bff16c0885d3ec756a1cdfb623636d0bdb4a.1783479101.git.dwindsor@gmail.com>
- <f6df1bf381517f7ff6927d82de7680e7826adf94.1783479101.git.dwindsor@gmail.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <f6df1bf381517f7ff6927d82de7680e7826adf94.1783479101.git.dwindsor@gmail.com>
+In-Reply-To: <c5a6bff16c0885d3ec756a1cdfb623636d0bdb4a.1783479101.git.dwindsor@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 On 8/7/26 10:57, David Windsor wrote:
-> Add a regression test for the x86 BPF dispatcher's indirect-jump fallback
-> under FineIBT.
+> commit 4f9087f16651 ("x86/cfi,bpf: Fix BPF JIT call") updated
+> emit_cfi() to emit FineIBT preambles for JIT-compiled BPF programs, but
+> did not update emit_bpf_dispatcher(). When prog->bpf_func is not in the
+> dispatcher table (e.g. an XDP_REDIRECT target program in a CPUMAP or
+> DEVMAP, or BPF_PROG_TEST_RUN of an unattached prog), the dispatcher
+> still jumps directly to prog->bpf_func. Without a FineIBT caller
+> sequence, under FineIBT this raises #CP:
 > 
-> This test can crash the kernel on an unfixed FineIBT build and so should
-> be run in a VM.
+>   Missing ENDBR: __cfi_bpf_prog_..._xdp_dispatcher_unattached+0x10/0x10
+>   ------------[ cut here ]------------
+>   kernel BUG at arch/x86/kernel/cet.c:133!
+>   Oops: invalid opcode: 0000 [#1] SMP NOPTI
+>   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.17.0-0-gb52ca86e094d-prebuilt.qemu.org 04/01/2014
+>   RIP: 0010:do_kernel_cp_fault+0x126/0x130
+>   Call Trace:
+>    <TASK>
+>    exc_control_protection+0x46/0x80
+>    asm_exc_control_protection+0x2b/0x30
+>   RIP: 0010:__cfi_bpf_prog_..._xdp_dispatcher_unattached+0x10/0x10
+>    bpf_prog_test_run+0xda/0x1b0
+>    __sys_bpf+0x70b/0x990
+>    __x64_sys_bpf+0x2d/0x50
+>    x64_sys_call+0x1079/0x2d40
+>    do_syscall_64+0x12a/0x3c0
+>    entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>    </TASK>
 > 
+> To fix this, we precede the indirect jump in emit_bpf_dispatcher() with
+> the FineIBT caller sequence: load cfi_bpf_hash into %eax and subtract
+> cfi_get_offset() from the target so it enters the preamble's real ENDBR.
+> Only needed for CFI_FINEIBT.
+> 
+> Fixes: 4f9087f16651 ("x86/cfi,bpf: Fix BPF JIT call")
+> Cc: stable@vger.kernel.org
 > Signed-off-by: David Windsor <dwindsor@gmail.com>
 > ---
->  .../bpf/prog_tests/xdp_dispatcher_fineibt.c   | 47 +++++++++++++++++++
->  .../bpf/progs/xdp_dispatcher_fineibt.c        | 18 +++++++
->  2 files changed, 65 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_dispatcher_fineibt.c
->  create mode 100644 tools/testing/selftests/bpf/progs/xdp_dispatcher_fineibt.c
+>  arch/x86/net/bpf_jit_comp.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_dispatcher_fineibt.c b/tools/testing/selftests/bpf/prog_tests/xdp_dispatcher_fineibt.c
-> new file mode 100644
-> index 000000000000..2d3fc4034eb9
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_dispatcher_fineibt.c
-> @@ -0,0 +1,47 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 David Windsor */
-> +
-> +/*
-> + * Regression test for the x86 BPF dispatcher's indirect-jump fallback
-> + * under FineIBT.
-> + *
-> + * WARNING
-> + * -------
-> + *  This test can crash the kernel, thus should be run in a VM.
-> + */
-> +#include <uapi/linux/if_link.h>
-> +#include <test_progs.h>
-> +#include <network_helpers.h>
-> +#include "xdp_dispatcher_fineibt.skel.h"
-> +
-> +#define IFINDEX_LO		1
-> +
-> +void test_xdp_dispatcher_fineibt(void)
-> +{
-> +	struct xdp_dispatcher_fineibt *skel;
-> +	int err, attached_fd, unattached_fd;
-> +
-> +	LIBBPF_OPTS(bpf_test_run_opts, topts,
-> +		.data_in = &pkt_v4,
-> +		.data_size_in = sizeof(pkt_v4),
-> +	);
-> +
-> +	skel = xdp_dispatcher_fineibt__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-> +		return;
-> +
-> +	attached_fd = bpf_program__fd(skel->progs.xdp_dispatcher_attached);
-> +	unattached_fd = bpf_program__fd(skel->progs.xdp_dispatcher_unattached);
-> +
-> +	err = bpf_xdp_attach(IFINDEX_LO, attached_fd, XDP_FLAGS_SKB_MODE, NULL);
-> +	if (!ASSERT_OK(err, "attach_prog"))
-> +		goto out;
-> +
-> +	err = bpf_prog_test_run_opts(unattached_fd, &topts);
-> +	ASSERT_OK(err, "unattached_test_run");
-> +	ASSERT_EQ(topts.retval, XDP_PASS, "unattached_retval");
-> +
-> +	bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
-> +out:
-> +	xdp_dispatcher_fineibt__destroy(skel);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/xdp_dispatcher_fineibt.c b/tools/testing/selftests/bpf/progs/xdp_dispatcher_fineibt.c
-> new file mode 100644
-> index 000000000000..b49b84f01c8e
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/xdp_dispatcher_fineibt.c
-> @@ -0,0 +1,18 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 David Windsor */
-> +#include <linux/bpf.h>
-> +#include <bpf/bpf_helpers.h>
-> +
-> +SEC("xdp")
-> +int xdp_dispatcher_attached(struct xdp_md *ctx)
-> +{
-> +	return XDP_PASS;
-> +}
-> +
-> +SEC("xdp")
-> +int xdp_dispatcher_unattached(struct xdp_md *ctx)
-> +{
-> +	return XDP_PASS;
-> +}
-> +
-> +char _license[] SEC("license") = "GPL";
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index de7515ea1bea..1c8249d8ca3b 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -3740,6 +3740,15 @@ static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs, u8 *image,
+>  		if (err)
+>  			return err;
+>  
+> +		/* If running under FineIBT, enter the preamble so the following
+> +		 * indirect jump lands on a real ENDBR instead of the poison.
+> +		 */
 
 
-Instead of creating xdp_dispatcher_fineibt.c, better to reuse
-xdp_dummy.c. Then, in xdp_dispatcher_fineibt.c, you can create two
-xdp_dummy skels, one for attaching, one for running.
+Comment style: /* should stay at its own line.
 
-And, add the test to xdp_attach.c instead of new file
-prog_tests/xdp_dispatcher_fineibt.c?
+> +		if (cfi_mode == CFI_FINEIBT) {
+> +			EMIT1_off32(0xb8, cfi_bpf_hash);	/* mov $cfi_bpf_hash, %eax */
+> +			EMIT1(add_1mod(0x48, BPF_REG_3));	/* sub rdx, cfi_get_offset() */
+> +			EMIT2_off32(0x81, add_1reg(0xE8, BPF_REG_3), cfi_get_offset());
+> +		}
+
+
+Better to emit_cfi()?
 
 Thanks,
 Leon
+
+> +
+>  		emit_indirect_jump(&prog, BPF_REG_3 /* R3 -> rdx */, image + (prog - buf));
+>  
+>  		*pprog = prog;
 
