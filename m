@@ -1,216 +1,180 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90385274B3B
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 04:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8291175A6C
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 04:30:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783483677; cv=none; b=eo5u/sKQE8MiaA76LEaCOEwDvLl5x3imSKJHEuBHCrqvWMtslDBhYTEX4WYCZmDL2T4OXDSmbW1B5rdnL07eoQyDdLCLSvw62fZ7UnWrwkwvm6RiIQQoRBnHJD3r7Jz/GKAjwt4lUdKqqCXHldklfHwhSqXff4ojxYMRk/cIEAE=
+	t=1783485052; cv=none; b=APHxuHkdLeRs2Y0BI4+NquNy0gHN9OUT3i+Xhr9byn/+hbUO1xvERTuFODki0MUnThkmQcc8c8yNGR6YvU+sNf4oHAccW1dun3vVZfw/WjAET6/g2TNLYb8KWeYxT3hgzX8AD1YNTxc2bGx2GDzSHywVz0XhJq6GbIPcX/+jX5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783483677; c=relaxed/simple;
-	bh=FzKeTeF8JA+KsfuZhglVYUhLx5S0Q2O5ea+96KMWWzY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QbT95wlx2Ak/vhjGDEIM+l28coV83BPc1Ux0CHEdaIyJbbxq6do5sct8biRz+nEhm/TjnSxDieI0KsSOvW6bzMOPThfIWsb3c8Dhgr5iPfZbZMHIkqrLGzx3NM7J511s3sPWWc4MKa+DJxbYFAD3FWqVWtLb3ZIlEysLeR8KOsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CgtJHMDc; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783485052; c=relaxed/simple;
+	bh=74C2TtOu2up1jk2PrAcpqlGMkAYFPs2QXhDSAf8d19U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YNjQlX2N5Gb9eyPJJaF38swQmNOaBpAQwU5JPlUEsmQ6s914cmnZ4xL26rwmevCd9r0lxlH5ISTyU02RmmdaqPSV/s2R0fB0J+r/oi8YtS0EthqWUZ5imqQKhvRlNwTnDRld8YIbFlDki82JloL06iLvLhGG52gu+ju8oWpG8l8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=S8thz/mc; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CgtJHMDc"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-381891a9525so306419a91.3
-        for <bpf@vger.kernel.org>; Tue, 07 Jul 2026 21:07:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783483676; x=1784088476; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=VGJwch6uaoT+4VIjlzymTYDaLAmgt0JW6oLszFG1Jaw=;
-        b=CgtJHMDcrFVIvpHnz8B+kqjJ2yXpOBR0aBfeT+aw3IZZCEdBDNXW4Ma2YW2MUejmNx
-         Fy+23++tAMsNhYDU88KQzycAs39i/MCWGbyNX0X3MVRjrJHGUwRW1RAV0N0/SH4dALr9
-         5895RVTLO4cBfRaoYMAyHHfVr4io6HA3vLiTfZWioRo5DrleRp0mk7b04QmSVNZYs4mR
-         PWqkzO3sAATpi0TIB3OhatI1hyfz29HdLWaVcnfFyN0NqkG1cKtM+kwJ8apBd5hYPYF3
-         ZNAuOAFKxuBZDQ5JB4L4EgKxbDhk15XGn1AJLLN3ZX94c8dY1QfnmpGnGk1Bi5F6gXJB
-         p6aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783483676; x=1784088476;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=VGJwch6uaoT+4VIjlzymTYDaLAmgt0JW6oLszFG1Jaw=;
-        b=d9mfGbrR/P5+wkJA3k2LwH66rL40zB4D0NjdxJNVtnPHTYJe7Oh1tQDG5Fsw2pJmw7
-         xxLNLw/0V5Gm87UMG1/86UNMcaNxFCT1wwagDrJq5uV00mej4QqXAjycNghJlHgOQHba
-         034KMinPRyF9kgxj8T9gF7T01X5OjH6LXM+lv+k3tRGU7/WjJ7x8XGlH9GuP14aJV34R
-         T15qJdbvV4tsJlDs97j/yAWnnaV6hM5pvEx9UzC2rLBzfWbCC+l+U24dd6qRPk8YlNZx
-         uaqg6ooD+n4TP7voq1y3kI2muQ99StnYeO0BD2DLg2wWqTcFshPy40peM7YlXnjh4Ger
-         QrnA==
-X-Gm-Message-State: AOJu0Yw9HzE42ivWP+zqABaS8hNbiTW0M+mq6T7acMbEMmJ3VDAasNVw
-	kwkqvg/ApoR1iaqXvVAjL/aWeu2CeJUHiI5dxwY80VNQS0jmpfvswmk+d3HH+wkdLrf47g==
-X-Gm-Gg: AfdE7cmVsolW1mTqVojRKHFvPtMnqmEbRV3giMw6aMe0vYxcLT5gcDKSkUbA01S54ng
-	l4FyES4dxKkWrzCyPcKOFaA9gfGCSVKMZiwE2+Nkxi6hvTNfsbMn+q9d+4a5c5it2qYmri42LWS
-	bKffrnMuQy6z7dEN5xCfudaU8EPKFbNdEf7w3jMB5MQt3hiuxdKUj2V4UoXNb1gSM0/tUv8DF8W
-	EU96rpTShEmVU5yw5HfnCjYRqkZ23dHcZ2CmtUs85IVGrmmbAbccp2274wB1QNIMDrH9O/cENbp
-	BhjYqqGXCZHFuWTjdgTtXDhs7lzjNuGBuy0Q2N+6WSVEvx1FARSr+ub5cMOz5NZQpq+aYdCjNFt
-	VaOVJTMvSTCLGsnFMWp/VBqw+AJgUUNxgNYakq1kqIWnMni3ggaL15lEl5HIpE99WQju7cufbnz
-	3O2oV9UNCYBRhQY6bCauOuD62QYqJ5zYTo1mgK8uGh2FoUkvJJpkwiuHgi55zkXrbeJmcSnSYob
-	Gf42F5R2vx2fwNNKwddah7J+SUgKaXriw==
-X-Received: by 2002:a17:90b:2f06:b0:381:50ab:1594 with SMTP id 98e67ed59e1d1-3894120590amr862773a91.27.1783483675857;
-        Tue, 07 Jul 2026 21:07:55 -0700 (PDT)
-Received: from u2404-VMware-Virtual-Platform.tailf6b5e0.ts.net ([24.4.24.156])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31189cd8234sm4198982eec.9.2026.07.07.21.07.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 21:07:55 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	shuah@kernel.org,
-	mmullins@fb.com,
-	shung-hsi.yu@suse.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH bpf v3 2/2] selftests/bpf: Cover negative raw_tp writable buffer offsets
-Date: Tue,  7 Jul 2026 21:07:15 -0700
-Message-ID: <20260708040715.116680-3-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260708040715.116680-1-sun.jian.kdev@gmail.com>
-References: <20260708040715.116680-1-sun.jian.kdev@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="S8thz/mc"
+Message-ID: <22d0ed54-5158-421d-a29a-99bcb69261f6@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783485038;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NhvKaMECGUw1fnFs7AF9b48+YMRB23fvuDdwExRvSwo=;
+	b=S8thz/mctdI+NuaDs7x+bm7z8lt0sSP8LnCZ8IkNowoXkRFFYYoNDvB2FiRKIyMAqEt9xW
+	HxOM5MVxcQiB0RuakQJUw2/a8op6vbVSOJ8TVD5KxcS1YWedX8/bsPyJ7Q0fNWSo+VpU49
+	2hcAiE6CZWGhdxjjwhttbnjhkZRVL5E=
+Date: Wed, 8 Jul 2026 12:30:26 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf] bpf, sockmap: Account for receive queue in FIONREAD
+ without a verdict program
+To: mattia.meleleo@coralogix.com, John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org
+References: <20260707-fionread-no-verdict-v1-1-ce94a72357ec@coralogix.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260707-fionread-no-verdict-v1-1-ce94a72357ec@coralogix.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Add raw tracepoint writable coverage for buffer accesses involving
-negative constant pointer adjustments.
 
-The verifier case checks that a negative effective offset is rejected.
-The attach-time case adds incremental coverage beyond the existing nbd
-test and the verifier rejection case: it uses a negative var_off and a
-positive instruction offset whose effective offset remains non-negative.
-This exercises the checked access_end accounting path and verifies that
-the resulting max_tp_access is still checked against nbd_send_request's
-writable size at attach time.
+On 7/8/26 12:15 AM, Mattia Meleleo via B4 Relay wrote:
+> From: Mattia Meleleo <mattia.meleleo@coralogix.com>
+>
+> tcp_bpf_ioctl() answers SIOCINQ from psock->msg_tot_len, which only
+> counts bytes in ingress_msg. Without a stream/skb verdict program
+> nothing is diverted there: data stays in sk_receive_queue, so FIONREAD
+> returns 0 even though read() returns data.
+>
+> Add tcp_inq() to the reported value when the psock has no verdict
+> program. The two queues are disjoint, so bytes redirected into
+> ingress_msg from other sockets stay correctly accounted through
+> msg_tot_len.
+>
+> Add a selftest covering FIONREAD without a verdict program.
+>
+> Fixes: 929e30f93125 ("bpf, sockmap: Fix FIONREAD for sockmap")
+> Signed-off-by: Mattia Meleleo <mattia.meleleo@coralogix.com>
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
- .../raw_tp_writable_reject_nbd_invalid.c      | 58 +++++++++++--------
- .../bpf/progs/verifier_raw_tp_writable.c      | 16 +++++
- 2 files changed, 51 insertions(+), 23 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
-index 216b0dfac0fe..efe4cad47b28 100644
---- a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
-+++ b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
-@@ -4,12 +4,31 @@
- #include <linux/nbd.h>
- #include "bpf_util.h"
- 
--void test_raw_tp_writable_reject_nbd_invalid(void)
-+static void check_nbd_attach_reject(const char *name,
-+				    const struct bpf_insn *program, size_t prog_len)
- {
--	__u32 duration = 0;
-+	LIBBPF_OPTS(bpf_prog_load_opts, opts);
- 	char error[4096];
--	int bpf_fd = -1, tp_fd = -1;
-+	int bpf_fd, tp_fd;
-+
-+	opts.log_level = 2;
-+	opts.log_buf = error;
-+	opts.log_size = sizeof(error);
-+
-+	bpf_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE, NULL, "GPL v2",
-+			       program, prog_len, &opts);
-+	if (!ASSERT_GE(bpf_fd, 0, "prog_load"))
-+		return;
-+
-+	tp_fd = bpf_raw_tracepoint_open("nbd_send_request", bpf_fd);
-+	if (!ASSERT_LT(tp_fd, 0, name))
-+		close(tp_fd);
-+
-+	close(bpf_fd);
-+}
- 
-+void test_raw_tp_writable_reject_nbd_invalid(void)
-+{
- 	const struct bpf_insn program[] = {
- 		/* r6 is our tp buffer */
- 		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
-@@ -19,25 +38,18 @@ void test_raw_tp_writable_reject_nbd_invalid(void)
- 		BPF_EXIT_INSN(),
- 	};
- 
--	LIBBPF_OPTS(bpf_prog_load_opts, opts,
--		.log_level = 2,
--		.log_buf = error,
--		.log_size = sizeof(error),
--	);
--
--	bpf_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE, NULL, "GPL v2",
--			       program, ARRAY_SIZE(program),
--			       &opts);
--	if (CHECK(bpf_fd < 0, "bpf_raw_tracepoint_writable load",
--		  "failed: %d errno %d\n", bpf_fd, errno))
--		return;
--
--	tp_fd = bpf_raw_tracepoint_open("nbd_send_request", bpf_fd);
--	if (CHECK(tp_fd >= 0, "bpf_raw_tracepoint_writable open",
--		  "erroneously succeeded\n"))
--		goto out_bpffd;
-+	const struct bpf_insn negative_var_off_program[] = {
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
-+		/* make var_off negative, but keep the effective access offset non-negative */
-+		BPF_ALU64_IMM(BPF_ADD, BPF_REG_6, -8),
-+		/* one byte beyond the end of the nbd_request struct */
-+		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_6,
-+			    sizeof(struct nbd_request) + 8),
-+		BPF_EXIT_INSN(),
-+	};
- 
--	close(tp_fd);
--out_bpffd:
--	close(bpf_fd);
-+	check_nbd_attach_reject("nbd_invalid", program, ARRAY_SIZE(program));
-+	check_nbd_attach_reject("nbd_invalid_negative_var_off",
-+				negative_var_off_program,
-+				ARRAY_SIZE(negative_var_off_program));
- }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c b/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
-index 14a0172e2141..4055a6443bc2 100644
---- a/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
-@@ -47,4 +47,20 @@ l0_%=:	/* shift the buffer pointer to a variable location */\
- 	: __clobber_all);
- }
- 
-+SEC("raw_tracepoint.w")
-+__description("raw_tracepoint_writable: reject negative const offset")
-+__failure
-+__msg("invalid negative tracepoint buffer offset")
-+__naked void tracepoint_writable_reject_negative_const_offset(void)
-+{
-+	asm volatile ("					\
-+	r6 = *(u64 *)(r1 + 0);				\
-+	r6 += -8;					\
-+	r0 = *(u64 *)(r6 + 0);				\
-+	exit;						\
-+"	:
-+	:
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
+
+I guess udp_bpf_ioctl has same issue. You can fix it if you want.
+
+> ---
+>   net/ipv4/tcp_bpf.c                                 | 16 ++++++++-
+>   .../selftests/bpf/prog_tests/sockmap_basic.c       | 39 ++++++++++++++++++++++
+>   2 files changed, 54 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+> index cc0bd73f3..a001b1fff 100644
+> --- a/net/ipv4/tcp_bpf.c
+> +++ b/net/ipv4/tcp_bpf.c
+> @@ -334,6 +334,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+>   
+>   static int tcp_bpf_ioctl(struct sock *sk, int cmd, int *karg)
+>   {
+> +	struct sk_psock *psock;
+>   	bool slow;
+>   
+>   	if (cmd != SIOCINQ)
+> @@ -344,7 +345,20 @@ static int tcp_bpf_ioctl(struct sock *sk, int cmd, int *karg)
+>   		return -EINVAL;
+>   
+>   	slow = lock_sock_fast(sk);
+> -	*karg = sk_psock_msg_inq(sk);
+> +	psock = sk_psock_get(sk);
+> +	if (unlikely(!psock)) {
+> +		unlock_sock_fast(sk, slow);
+> +		return tcp_ioctl(sk, cmd, karg);
+> +	}
+> +	*karg = sk_psock_get_msg_len_nolock(psock);
+> +	/* Without a verdict program, ingress data is never diverted to
+> +	 * ingress_msg: it stays in sk_receive_queue and is read through
+> +	 * the fallback to tcp_recvmsg(), so account for it like
+> +	 * tcp_ioctl() does.
+> +	 */
+> +	if (!psock->progs.stream_verdict && !psock->progs.skb_verdict)
+> +		*karg += tcp_inq(sk);
+> +	sk_psock_put(sk, psock);
+>   	unlock_sock_fast(sk, slow);
+>   
+>   	return 0;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> index cb3229711..f0f368201 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> @@ -1373,6 +1373,43 @@ static void test_sockmap_multi_channels(int sotype)
+>   	test_sockmap_pass_prog__destroy(skel);
+>   }
+>   
+> +/* A socket in a sockmap without a verdict program keeps its ingress data
+> + * in sk_receive_queue: FIONREAD must account for it.
+> + */
+> +static void test_sockmap_no_verdict_fionread(void)
+> +{
+> +	int err, map, zero = 0, sent, avail;
+> +	int c0 = -1, c1 = -1, p0 = -1, p1 = -1;
+> +	struct test_sockmap_pass_prog *skel;
+> +	char buf[256] = "0123456789";
+> +
+> +	skel = test_sockmap_pass_prog__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> +		return;
+> +	map = bpf_map__fd(skel->maps.sock_map_rx);
+> +
+> +	err = create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1);
+> +	if (!ASSERT_OK(err, "create_socket_pairs()"))
+> +		goto out;
+> +
+> +	err = bpf_map_update_elem(map, &zero, &c1, BPF_NOEXIST);
+> +	if (!ASSERT_OK(err, "bpf_map_update_elem(c1)"))
+> +		goto out_close;
+> +
+> +	sent = xsend(p1, &buf, sizeof(buf), 0);
+> +	ASSERT_EQ(sent, sizeof(buf), "xsend(p1)");
+> +	avail = wait_for_fionread(c1, sizeof(buf), IO_TIMEOUT_SEC);
+> +	ASSERT_EQ(avail, sizeof(buf), "ioctl(FIONREAD)");
+> +
+> +out_close:
+> +	close(c0);
+> +	close(p0);
+> +	close(c1);
+> +	close(p1);
+> +out:
+> +	test_sockmap_pass_prog__destroy(skel);
+> +}
+> +
+>   void test_sockmap_basic(void)
+>   {
+>   	if (test__start_subtest("sockmap create_update_free"))
+> @@ -1415,6 +1452,8 @@ void test_sockmap_basic(void)
+>   		test_sockmap_skb_verdict_shutdown();
+>   	if (test__start_subtest("sockmap skb_verdict fionread"))
+>   		test_sockmap_skb_verdict_fionread(true);
+> +	if (test__start_subtest("sockmap no_verdict fionread"))
+> +		test_sockmap_no_verdict_fionread();
+>   	if (test__start_subtest("sockmap skb_verdict fionread on drop"))
+>   		test_sockmap_skb_verdict_fionread(false);
+>   	if (test__start_subtest("sockmap skb_verdict change tail"))
+>
+> ---
+> base-commit: d2c9a99135da931377240942d44f3dea104cedb8
+> change-id: 20260707-fionread-no-verdict-a4f8697ac9f9
+>
+> Best regards,
+> --
+> Mattia Meleleo <mattia.meleleo@coralogix.com>
+>
+>
