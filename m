@@ -1,20 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C79563C2782
-	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:09:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB673E0250
+	for <bpf@vger.kernel.org>; Wed,  8 Jul 2026 20:09:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783541395; cv=none; b=uud8IuidHFX44EaLMvkiHaBn2GOoTNZIDQcowb6fqqsFxmIIxIVt13tC3cFfl4FbhX783yaJMiScDeeMRuhe2VruBTd8M4T5zKuEHktw/7sHoAu/ad0p5/l1pHrJcTVHt9jAZOl/kb7kihde+lzmmfjJgQNGf14FDtn6hC+Um5c=
+	t=1783541398; cv=none; b=aisR9QOY8awsrQT6QZpu6wPwPzpHe+oCTWTntHAKnzoJ0JLabCXeoG9GFMwoLQoo+UN+gr+9XgVmUTtvc/Jbu66Ct1rPfu3pplwiiBA2y3b72ELDWkQlU211E/aYssrxkPEumVmhdVrZY3hrpuCvg1Sruu5yo4gJRMDNmq5kdvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783541395; c=relaxed/simple;
-	bh=qc+qY8t4QQcneDcu1o2CmLgHtshQc1S3+dM8YvJbmG4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AkKi5VAk353wXdfaszzCVh/s0IhLKuj3zKnvP6b4OdNBlL1zEhaIVPoCdRcXn8exoCqbrAdWerq+K6xSzQzaEZGCAAHZPeGij7eUK2V/lIkCcT48h2MYqSIaX0cynjfaTyfnM4mO8SaNIqtuQ6KqFGXE/gAgDvig520vLmdSd1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	s=arc-20240116; t=1783541398; c=relaxed/simple;
+	bh=tIqqkSUrA34anda8eH9ICPhYJW0W5nJkiEaXeGEFjFg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=IdVk9ecHuqwR4Ll6zoz4YuvIe9QmT46h7bz+qr96ilccmOI1EbEKwT1xGPzfwY/pZD77yYiTcB50+71utuUzxgLzsvma6Fy7ofNMuxe8bZLmGGH5B9NhffDccYtNrKghwgSprLUN9DXmk/q2Qn3iY/rQWNVP9LyWgFGpyOubtVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id A99511D0B6F696; Wed,  8 Jul 2026 13:09:39 -0700 (PDT)
+	id C12531D0B6F6E7; Wed,  8 Jul 2026 13:09:44 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -22,10 +23,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next 00/12] bpf: Support 16-byte return values in the R0:R2 register pair
-Date: Wed,  8 Jul 2026 13:09:39 -0700
-Message-ID: <20260708200939.2153664-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 01/12] bpf: Factor check_global_ret_scalar_reg() out of the global return check
+Date: Wed,  8 Jul 2026 13:09:44 -0700
+Message-ID: <20260708200944.2153909-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260708200939.2153664-1-yonghong.song@linux.dev>
+References: <20260708200939.2153664-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -34,104 +37,90 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Until now a BPF subprogram or kfunc could only return a scalar value of u=
-p to 8
-bytes, passed back in R0. LLVM 23 added the ability to return a value in
-two registers for the BPF target [1][2]: an __int128, or a struct/union
-whose size is greater than 8 and up to 16 bytes, is returned in the
-R0:R2 register pair, with the low 64 bits in R0 and the high 64 bits in
-R2. (Before LLVM 23 the BPF backend could not return such values at all:
-a by-value aggregate return was rejected with "aggregate returns are not
-supported", and an __int128 return failed in the backend with "unable to
-allocate function return #1".)
-
-This series teaches the kernel about that convention so that a BPF-to-BPF
-subprogram call and a kfunc call can return up to 16 bytes. A returned
-struct or union must be composed only of scalars (recursively); the bytes
-are handed back as the raw contents of R0:R2. Otherwise allowing pointer
-members would launder a pointer into a scalar and escape the verifier's
-provenance and reference tracking. A value larger than 16 bytes remains
-unsupported, as does a <=3D8 byte return, which continues to use R0 alone=
+Function check_global_subprog_return_code() verifies that a global subpro=
+gram
+returns void, an arena pointer, or register R0 which holds a scalar value=
 .
+Later patches in this series add 16-byte aggregate return support, whose
+second half is returned in R2 and needs similar validation.
 
-Support is built up incrementally so each step is reviewable on its own,
-and the feature is only turned on end to end by the last enabling patch.
+Factor the per-register check into check_global_ret_scalar_reg(env, regno=
+) so
+it can be reused for R2.
 
-  - Patch 1 refactors the global-subprog return check so the per-register
-    scalar validation can be reused for R2.
-  - Patch 2 to Patch 7 are preparation patches for core verifier handling
-    of R0:R2 returns, JIT support, precision backtracking, liveness
-    analysis, and limitation on trampoline bpf programs.
-  - Patch 8 relaxes btf_distill_func_proto() and btf_validate_return_type=
-()
-    to accept <=3D16 byte aggregates, enabling the feature end to end.
-  - Patches 9-11 add selftests including C and inline asm tests.
-  - Patch 12 documents the kfunc return-value convention in kfuncs.rst.
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ kernel/bpf/verifier.c | 32 ++++++++++++++++++++------------
+ 1 file changed, 20 insertions(+), 12 deletions(-)
 
-Tested on x86 and arm64. The patch set is built on top of the following c=
-ommit:
-    Merge branch 'verify-bpf-signed-loader-at-load-time'
-
-    [1] https://github.com/llvm/llvm-project/pull/190894
-    [2] https://github.com/llvm/llvm-project/pull/206876
-
-Yonghong Song (12):
-  bpf: Factor check_global_ret_scalar_reg() out of the global return
-    check
-  bpf: Add verifier support for 16-byte returns in R0:R2
-  bpf: Wire up JIT support for 16-byte kfunc returns
-  bpf: Track R2 of register-pair returns in precision backtracking
-  bpf: Account R2 of register-pair returns in live register analysis
-  bpf: Force JIT for programs using the R0:R2 register pair
-  bpf: Reject >8 byte return values on return-reading trampoline paths
-  bpf: Enable 16-byte aggregate return types
-  selftests/bpf: Add C tests for 16-byte returns in R0:R2
-  selftests/bpf: Add inline-asm and subprog tests for R0:R2 returns
-  selftests/bpf: Cover tracing on >8 and <=3D16 byte return targets
-  Documentation/bpf: Document 16-byte kfunc return values in R0:R2
-
- Documentation/bpf/kfuncs.rst                  |  36 ++
- arch/arm64/net/bpf_jit_comp.c                 |   5 +
- arch/riscv/net/bpf_jit_comp64.c               |   5 +
- arch/x86/net/bpf_jit_comp.c                   |  19 +
- include/linux/bpf.h                           |   1 +
- include/linux/bpf_verifier.h                  |   4 +
- include/linux/filter.h                        |   1 +
- kernel/bpf/backtrack.c                        |  32 +-
- kernel/bpf/bpf_struct_ops.c                   |  12 +
- kernel/bpf/btf.c                              |  14 +-
- kernel/bpf/core.c                             |   7 +-
- kernel/bpf/liveness.c                         |  13 +-
- kernel/bpf/verifier.c                         | 179 ++++++++-
- .../selftests/bpf/prog_tests/aggregate_ret.c  | 249 ++++++++++++
- .../selftests/bpf/progs/aggregate_ret_func.c  | 361 ++++++++++++++++++
- .../bpf/progs/aggregate_ret_int128_c.c        |  48 +++
- .../selftests/bpf/progs/aggregate_ret_kfunc.c |  81 ++++
- .../selftests/bpf/progs/aggregate_ret_run.c   | 160 ++++++++
- .../bpf/progs/aggregate_ret_struct_c.c        |  98 +++++
- .../selftests/bpf/progs/aggregate_ret_trace.c |  44 +++
- .../bpf/progs/aggregate_ret_union_c.c         |  51 +++
- .../selftests/bpf/progs/exceptions_fail.c     |   2 +-
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  80 ++++
- .../selftests/bpf/test_kmods/bpf_testmod.h    |   5 +
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |  38 ++
- 25 files changed, 1517 insertions(+), 28 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/aggregate_ret.=
-c
- create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_func.=
-c
- create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_int12=
-8_c.c
- create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_kfunc=
-.c
- create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_run.c
- create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_struc=
-t_c.c
- create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_trace=
-.c
- create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_union=
-_c.c
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 001ac53825da..3f34ce1a3107 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -16679,37 +16679,45 @@ static int check_return_code(struct bpf_verifie=
+r_env *env, int regno, const char
+ 	return 0;
+ }
+=20
+-static int check_global_subprog_return_code(struct bpf_verifier_env *env=
+)
++static int check_global_ret_scalar_reg(struct bpf_verifier_env *env, u32=
+ regno)
+ {
+-	struct bpf_reg_state *reg =3D reg_state(env, BPF_REG_0);
+-	struct bpf_func_state *cur_frame =3D cur_func(env);
++	struct bpf_reg_state *reg;
+ 	int err;
+=20
+-	if (subprog_returns_void(env, cur_frame->subprogno))
+-		return 0;
+-
+-	err =3D check_reg_arg(env, BPF_REG_0, SRC_OP);
++	err =3D check_reg_arg(env, regno, SRC_OP);
+ 	if (err)
+ 		return err;
+=20
+ 	/* Pointers to arena are safe to pass between subprograms. */
+-	if (is_arena_reg(env, BPF_REG_0))
++	if (is_arena_reg(env, regno))
+ 		return 0;
+=20
+-	if (is_pointer_value(env, BPF_REG_0)) {
+-		verbose(env, "R%d leaks addr as return value\n", BPF_REG_0);
++	if (is_pointer_value(env, regno)) {
++		verbose(env, "R%d leaks addr as return value\n", regno);
+ 		return -EACCES;
+ 	}
+=20
++	reg =3D reg_state(env, regno);
+ 	if (reg->type !=3D SCALAR_VALUE) {
+-		verbose(env, "At subprogram exit the register R0 is not a scalar value=
+ (%s)\n",
+-			reg_type_str(env, reg->type));
++		verbose(env, "At subprogram exit the register R%d is not a scalar valu=
+e (%s)\n",
++			regno, reg_type_str(env, reg->type));
+ 		return -EINVAL;
+ 	}
+=20
+ 	return 0;
+ }
+=20
++static int check_global_subprog_return_code(struct bpf_verifier_env *env=
+)
++{
++	struct bpf_func_state *cur_frame =3D cur_func(env);
++	u32 subprog =3D cur_frame->subprogno;
++
++	if (subprog_returns_void(env, subprog))
++		return 0;
++
++	return check_global_ret_scalar_reg(env, BPF_REG_0);
++}
++
+ /* Bitmask with 1s for all caller saved registers */
+ #define ALL_CALLER_SAVED_REGS ((1u << CALLER_SAVED_REGS) - 1)
+=20
 --=20
 2.53.0-Meta
 
