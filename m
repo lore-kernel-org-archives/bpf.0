@@ -1,41 +1,42 @@
 Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC0FF3FC5D8;
-	Wed,  8 Jul 2026 08:02:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8FEA3F4DEF;
+	Wed,  8 Jul 2026 08:02:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783497751; cv=none; b=czfXrlNT4if8M8myqnxsD62R8J8Z/Ib9ZiUvfJcK7q6POHhoaLMdJpComdrRMRX0fuwpk40OoouvAMvyiSYq6aBOT3gFT8lfkCKmcN59aCrJUyoj5jjny5VkjZ3vxBl2CLakFu29xADI+0YCFJed/+vPBxMYeafGZic9YjMNpH0=
+	t=1783497756; cv=none; b=mg8hyB9b0qP7Bc+eSKrVMLbOtndr+gnYnVDeEdO3Slpx6GDr4Ua+1ugZxTu+L3UjaVwqCv1LOEKDL890NPbKjtzv3x1aCDnO43rFk8lJdAkZ7ZwZ9vatzj6dAci91DaYjIoLQb+wZPwR8rrrHzCsErNlCWEqKOOmUkP3DmhrgMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783497751; c=relaxed/simple;
-	bh=H4oN6LlgWLYOtrpcckiR8s+o1PXXKdcipcSqGosxgKw=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bFj64f6BmIp49EB04HiPvPfUnds8NzLp52FhOTcygwAJSNEmpTdiNTnsx/BXSy1rAwgm74AuVL50gAawh2nc+AGTpDxvHMv6pIkRkHw8MDHQktzzod82ERMrppd/vr8jGWWwY/Sc5zJRLOAzqTeTynI3hVABGejKn2w81irkSSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=do2zn17U; arc=none smtp.client-ip=185.246.85.4
+	s=arc-20240116; t=1783497756; c=relaxed/simple;
+	bh=ICcGFMql0/53TGtXq2GVwLo4/lsQZZKkSsJdg9umN9w=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=N/tYkKN+Mze1cIdUqal+cYfuVGVWG+0cXMhKdjT0o32WXiHyS3vx5gGpCnvtQfNBkUUmgmWbs13Yn+fJS77EmbwN69lYnX06ivOkEpYuMNlyOCRxz45YykCG76+V/+6PbHNOEpzzQdeS6+vdEHrwwlkWwAjsrPPYfk7xzDMD1fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HrhWrkoh; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="do2zn17U"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HrhWrkoh"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id AB12A4E40CF4;
-	Wed,  8 Jul 2026 08:02:22 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id C871F4E40CF7;
+	Wed,  8 Jul 2026 08:02:28 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 6B2A660337;
-	Wed,  8 Jul 2026 08:02:22 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 54A4511BC3255;
-	Wed,  8 Jul 2026 10:02:15 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 9B90A60337;
+	Wed,  8 Jul 2026 08:02:28 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4284311BC3258;
+	Wed,  8 Jul 2026 10:02:24 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1783497740; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=tzmRO55pkEUKwbCIQcEClqwtptnwp/BChQktCJ1uCpg=;
-	b=do2zn17URCtBlhfhEDSia1BQMpqq4yfJrtOc+yEH5w0B1xUGF29ta8Wnd0+my0M9IZNUl5
-	VSSXvFFzKDUtys6vv4t2OQYmsuIwg6Uc5eXcC1lNSTvcBsjIT/pjhz4mtcpMJDMe7bu4kt
-	BQvdB5gwLpb18eW6RB8V4GZV+c3nLHbYNmAlhvjkVmSoe5kI5BYY/RF/PYastq1nPrxABz
-	9m7nimlwPf5qo9bBTw4DTkjiEJtrCgWEMj60AP8eNy+akwvi+lPtCHFvV2uctpRDyA1AHj
-	UOawj0waUz9rATC8VFHDT0nyrG0wfS26gHtZn057DibMhtzSfT+dkoVQ6ibYRg==
+	t=1783497747; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=0GpZQpWBDaY5GP9D17bBmMBvjqxh4kQ27/0kjHtKvHw=;
+	b=HrhWrkohHvXRgdQa8dz9qyvZUw/xgQQZSDcZNc4/VpN0P9HtIbBsXWTWTmu0RIkz3TRurH
+	O8U574/n2YQS4zWePRh9xmntDR3H8c3bRhQNdhXAXQC2kZW2Kly8cE2hh51bwceC8k0F5W
+	tAfdGXEsEYDa93xBSNnYzCdzLfERd6fZOQaa79+BYXOpuwhXcgIGHxptYs+mQa/lZbIkwL
+	0t+FUBhce1YcifhC/skC/piVbnXBWxWspZFCIUkVZETwQk+7zaHWJRBjE58k38Bdwhhl7k
+	IdXUMPMLIRVaHiS9TH9gQ7ovn1TWKMN/kroAZyr9vC8ndZzQvMEzirn1EUO1Dw==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Subject: [PATCH bpf-next v4 00/10] bpf: add support for KASAN checks in
- JITed programs
-Date: Wed, 08 Jul 2026 10:00:23 +0200
-Message-Id: <20260708-kasan-v4-0-d5c177ab8227@bootlin.com>
+Date: Wed, 08 Jul 2026 10:00:25 +0200
+Subject: [PATCH bpf-next v4 02/10] bpf: mark instructions accessing program
+ stack
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,11 +45,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/2XNTQrCMBAF4KuUrI0kk5qmrryHuMivDWpSmlIqp
- Xc3BEsRl48335sFJTt4m9C5WtBgJ598DDnUhwrpToa7xd7kjIAAJxQ4fsgkA3bacOF4rU2jUL7
- tB+v8XHauSPUOBzuP6JabzqcxDu/yYKKlL1s1Zd+tiWKCqTwJRoERAfSiYhyfPhx1fJWNCXaX5
- eYgO004txwaZ6T4d2x3DaGbY9kpQ1ql2hqM4L9uXdcPZUUcGhYBAAA=
-X-Change-ID: 20260126-kasan-fcd68f64cd7b
+Message-Id: <20260708-kasan-v4-2-d5c177ab8227@bootlin.com>
+References: <20260708-kasan-v4-0-d5c177ab8227@bootlin.com>
+In-Reply-To: <20260708-kasan-v4-0-d5c177ab8227@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, 
  John Fastabend <john.fastabend@gmail.com>, 
@@ -69,149 +68,155 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.15.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-Hello,
-this is v4 of the series aiming to bring basic support for KASAN checks
-to BPF JITed programs.
+In order to prepare to emit KASAN checks in JITed programs, JIT
+compilers need to be aware about whether some load/store instructions
+are targeting the bpf program stack, as those should not be monitored
+(we already have guard pages for that, and it is difficult anyway to
+correctly monitor any kind of data passed on stack).
 
-Original cover letter:
+To support this need, make the BPF verifier mark the instructions
+depending on whether they could access or not memory other than stack.
+As different states in the verifier could lead to different memory types
+for the same access, just marking an instruction as accessing stack only
+is not enough (it could be some other memory type in another verifier
+state), so the algorithm rather sets by default any load/store
+instruction as stack only, and if _any_ state leads to any memory access
+type other than PTR_TO_STACK, it overrides this setting. It also takes
+care about shifting back the instruction marking in adjust_insn_aux_data
+if the verifier patches instructions. However, if the verifier generates
+new BPF_ST/BPF_STX/BPF_LDX while patching some instructions, those new
+ones are systematically marked as non-stack-accessing: this may
+over-instrument a few memory accessing instructions, but it allows
+making sure that we will not miss accidentally any.
 
-"Traditional" KASAN allows to spot memory management mistakes by
-reserving a fraction of memory as "shadow memory" that will map to the
-rest of the memory and allow its monitoring. Each memory-accessing
-instruction is then instrumented at build time to call some ASAN check
-function, that will analyze the corresponding bits in shadow memory, and
-if it detects the access as invalid, trigger a detailed report. The goal
-of this series is to replicate this mechanism for BPF programs when they
-are being JITed into native instructions: that's then the JIT compiler
-that is in charge of inserting calls to the corresponding kasan checks,
-when a program is being loaded into the kernel. This task involves:
-- identifying at program load time the instructions performing memory
-  accesses
-- identifying those accesses properties (size ? read or write ?) to
-  define the relevant kasan check function to call
-- just before the identified instructions:
-  - perform the basic context saving (ie: saving registers)
-  - inserting a call to the relevant kasan check function
-  - restore context
-- whenever the instrumented program executes, if it performs an invalid
-  access, it triggers a kasan report identical to those instrumented on
-  kernel side at build time.
-
-The series comes with new selftests programs that generate a wide
-variety of kasan reports: those need the kernel to be running with
-kasan_multi_shot enabled.
-
-As discussed in [1], this series is based on some choices and
-assumptions:
-- it focuses on x86_64 for now, and so only on KASAN_GENERIC
-- not all memory accessing BPF instructions are being instrumented:
-  - it discards instructions accessing BPF program stack (already
-    monitored by page guards)
-  - it discards possibly faulting instructions, like BPF_PROBE_MEM or
-    BPF_PROBE_ATOMIC insns
-
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
 Changes in v4:
-- fix insn_offs_in_patch leakage in bpf_convert_ctx_access
-- handle BPF_ATOMIC in is_mem_insn
-- correctly mark fixup instructions if a single insn is generated
-- clarify new kconfig (Andrey) and drop VMAP_STACK dep
-- refactor BPF_FETCH atomic handling in JIT loop
-- make kernel log reading resilient to unrelated, interleaved logs in
-  the selftests
-- make new test kfuncs depend on BPF_JIT_KASAN rather than KASAN_GENERIC
-- Link to v3: https://patch.msgid.link/20260701-kasan-v3-0-bd09bb942d86@bootlin.com
+- include BPF_ATOMIC in is_mem_insn
+- correctly mark instructions in adjust_insn_aux_data if patch generates
+  a single instruction (ie replace an instruction)
 
 Changes in v3:
-- Do not insert KASAN instrumentation when dealing with cBPF
-- Fix stack-accessing insn tracking for verifier patches, as original
-  instruction location in the generated patch may vary
-- drop cBPF support for stack-accessing insn marking
-- make sure to flag correctly memory access if different verifier states
-  involve different memory types (eg: stack in one path, non-stack in
-  another path)
-- refactor BPF_ST handling in x86 JIT compiler
-- improve tests coverage (cover instrumentation for a few patches
-  emitted by the verifier)
-- Link to v2: https://patch.msgid.link/20260604-kasan-v2-0-c066e627fda8@bootlin.com
+- drop getter
+- drop cBPF handling
+- update marking shifting logic to track more precisely orignal
+  instructions
+- systematically mark newly generated instructions as non-stack
+  accessing
 
 Changes in v2:
-- declare asan functions as extern in JIT compiler rather than exposing
-  them in kasan header
-- invert stack-accessing instructions marking to make sure not to skip
-  instructions that could end up accessing to-be-checked memory
-- fix stack accesses marking when verifier patches instructions
-- add best effort marking for cBPF
-- add missing call depth accounting in jited instrumentation
-- skip unused registers in kasan instrumentation save/restore
-- remove faulty stack align in kasan instrumentation
-- drop commit skipping some jit-related tests
-- cover missing instructions: BPF_ST and atomics
-- completely rework tests: directly tune shadow memory, increase
-  coverage, do not consume kernel logs
-- Link to v1: https://patch.msgid.link/20260413-kasan-v1-0-1a5831230821@bootlin.com
-
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: John Fastabend <john.fastabend@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-To: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: Song Liu <song@kernel.org>
-To: Yonghong Song <yonghong.song@linux.dev>
-To: Jiri Olsa <jolsa@kernel.org>
-To: Thomas Gleixner <tglx@kernel.org>
-To: Borislav Petkov <bp@alien8.de>
-To: Dave Hansen <dave.hansen@linux.intel.com>
-To: x86@kernel.org
-To: "H. Peter Anvin" <hpa@zytor.com>
-To: Shuah Khan <shuah@kernel.org>
-To: Ingo Molnar <mingo@redhat.com>
-To: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: ebpf@linuxfoundation.org
-Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-
+- invert marking logic to cover possible different reg types when the
+  verifier covers different states
+- add a best-effort processing for classical bpf programs, inspecting
+  directly src and dst registers since we don't have verifier env
+- make sure to keep marking in sync with prog when it is patched by
+  verifier
 ---
-Alexis Lothoré (eBPF Foundation) (10):
-      bpf: propagate original instruction offset when patching program
-      bpf: mark instructions accessing program stack
-      bpf: add BPF_JIT_KASAN for KASAN instrumentation of JITed programs
-      bpf, x86: add helper to emit kasan checks in x86 JITed programs
-      bpf, x86: refactor BPF_ST management in do_jit
-      bpf, x86: emit KASAN checks into x86 JITed programs
-      bpf, x86: enable KASAN for JITed programs on x86
-      selftests/bpf: add helper to check whether eBPF KASAN is active
-      selftests/bpf: move bpf_jit_harden helper into testing_helpers
-      selftests/bpf: add tests to validate KASAN on JIT programs
+ include/linux/bpf_verifier.h |  2 ++
+ kernel/bpf/fixups.c          | 32 +++++++++++++++++++++++++++++++-
+ kernel/bpf/verifier.c        |  9 +++++++++
+ 3 files changed, 42 insertions(+), 1 deletion(-)
 
- arch/x86/Kconfig                                   |   1 +
- arch/x86/net/bpf_jit_comp.c                        | 271 ++++++++++---
- include/linux/bpf_verifier.h                       |   2 +
- include/linux/filter.h                             |  10 +-
- kernel/bpf/Kconfig                                 |  17 +
- kernel/bpf/core.c                                  |   2 +-
- kernel/bpf/fixups.c                                | 137 +++++--
- kernel/bpf/verifier.c                              |   9 +
- .../selftests/bpf/prog_tests/bpf_insn_array.c      |  41 +-
- tools/testing/selftests/bpf/prog_tests/kasan.c     | 425 +++++++++++++++++++++
- tools/testing/selftests/bpf/progs/kasan.c          | 394 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/kasan_harden.c   |  41 ++
- .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  22 ++
- tools/testing/selftests/bpf/testing_helpers.c      |  32 ++
- tools/testing/selftests/bpf/testing_helpers.h      |   1 +
- tools/testing/selftests/bpf/unpriv_helpers.c       |   5 +
- tools/testing/selftests/bpf/unpriv_helpers.h       |   1 +
- 17 files changed, 1280 insertions(+), 131 deletions(-)
----
-base-commit: 066e13a096aa8bd787413a78aff34f6308e187d4
-change-id: 20260126-kasan-fcd68f64cd7b
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 76b8b7627a10..868101ef5002 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -723,6 +723,8 @@ struct bpf_insn_aux_data {
+ 	u16 const_reg_map_mask;
+ 	u16 const_reg_subprog_mask;
+ 	u32 const_reg_vals[10];
++	/* instruction can access non-stack memory */
++	bool non_stack_access;
+ };
+ 
+ #define MAX_USED_MAPS 64 /* max number of maps accessed by one eBPF program */
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index f515fc9669ce..feee1f33de9d 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -152,6 +152,18 @@ static int get_callee_stack_depth(struct bpf_verifier_env *env,
+ }
+ #endif
+ 
++static bool is_mem_insn(struct bpf_insn *insn)
++{
++	if (BPF_CLASS(insn->code) != BPF_ST &&
++	    BPF_CLASS(insn->code) != BPF_STX &&
++	    BPF_CLASS(insn->code) != BPF_LDX)
++		return false;
++
++	return (BPF_MODE(insn->code) == BPF_MEM ||
++		BPF_MODE(insn->code) == BPF_MEMSX ||
++		BPF_MODE(insn->code) == BPF_ATOMIC);
++}
++
+ /* single env->prog->insni[off] instruction was replaced with the range
+  * insni[off, off + cnt).  Adjust corresponding insn_aux_data by copying
+  * [0, off) and [off, end) to new locations, so the patched range stays zero
+@@ -172,8 +184,14 @@ static void adjust_insn_aux_data(struct bpf_verifier_env *env,
+ 	 */
+ 	data[off].zext_dst = insn_has_def32(insn + off + cnt - 1);
+ 
+-	if (cnt == 1)
++	if (cnt == 1) {
++		/* A non-memory accessing insn could have been replaced by a
++		 * memory accessing insn, systematically mark it for non-stack
++		 * access
++		 */
++		data[off].non_stack_access = is_mem_insn(insn);
+ 		return;
++	}
+ 	prog_len = new_prog->len;
+ 
+ 	memmove(data + off + cnt - 1, data + off,
+@@ -183,7 +201,19 @@ static void adjust_insn_aux_data(struct bpf_verifier_env *env,
+ 		/* Expand insni[off]'s seen count to the patched range. */
+ 		data[i].seen = old_seen;
+ 		data[i].zext_dst = insn_has_def32(insn + i);
++		if (i == off + insn_off_in_patch) {
++			data[i].non_stack_access = data[off + cnt - 1].non_stack_access;
++			data[off + cnt - 1].non_stack_access = false;
++		} else if (is_mem_insn(insn + i)) {
++			data[i].non_stack_access = true;
++		}
+ 	}
++	/*
++	 * Last slot instruction could be a newly generated
++	 * BPF_ST/BPF_LDX/BPF_STX
++	 */
++	if (is_mem_insn(insn + off + cnt - 1) && insn_off_in_patch != cnt - 1)
++		data[off + cnt - 1].non_stack_access = true;
+ 
+ 	/*
+ 	 * The indirect_target flag of the original instruction was moved to the last of the
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 51f7965d42e3..1246ce8f5f0f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3144,6 +3144,11 @@ static void mark_indirect_target(struct bpf_verifier_env *env, int idx)
+ 	env->insn_aux_data[idx].indirect_target = true;
+ }
+ 
++static void mark_non_stack_access(struct bpf_verifier_env *env, int idx)
++{
++	env->insn_aux_data[idx].non_stack_access = true;
++}
++
+ #define LR_FRAMENO_BITS	4
+ #define LR_SPI_BITS	6
+ #define LR_ENTRY_BITS	(LR_SPI_BITS + LR_FRAMENO_BITS + 1)
+@@ -6333,6 +6338,10 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
+ 		else
+ 			coerce_reg_to_size_sx(&regs[value_regno], size);
+ 	}
++
++	if (!err && reg->type != PTR_TO_STACK)
++		mark_non_stack_access(env, insn_idx);
++
+ 	return err;
+ }
+ 
 
-Best regards,
---  
-Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+-- 
+2.54.0
 
