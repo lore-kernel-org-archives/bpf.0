@@ -1,140 +1,267 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E3882DEA68;
-	Thu,  9 Jul 2026 12:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783599131; cv=none; b=nHUuFVhJ9m5yVuY5Lfpm8P+4CqtoISLAgJFjFot2N83ffbyISdUP5kyOUCmFzW9ZDUnrlCm3XGz2CX94jGEOJlLPYS3s1CxUKAqlOpJL5/kPYORteCwJALCjOlsdSqLQ6afVljUbyMm7VFo1rD6Iy7ZcYRqGwt11TGpPR7hoZug=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783599131; c=relaxed/simple;
-	bh=X3bkGHU/P8UK1QgRS2iCZ/aYuHdnjE8Aij95XjQa014=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DO6S31EfnNUnvJix+evx/m4wGkSg0X+UMdtQW85WU/Y4HgdldpeRf8jv3WuJOnOzc6xqvQiowBgimC1+lA5B2w20z6H88EGMjl6YyxFJ+5Bs7NcoaymFxazSI1oRoIOuTzKKJR60ZLtROGuSZWH41siHJJbii+qdYbjP7neoKTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=NgtobR6r; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE714212D86
+	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 12:47:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783601271; cv=pass; b=ks+KMTvNm3BIC3L3c4ZDy3sshJPf7Z9/NNLM/PbNCuoenbQ4HdT3zS78Qqaf1oiNmKqiPOndEF6+ThACpwydvUYorCqDXNf8yDN2bydfRggFrVoDG1SNxRWD7qCitPu7FVJqHLbPf3gzZBYglaa2qpPWyT4pkDxA2LsnxB5WIMU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783601271; c=relaxed/simple;
+	bh=ZqAVtC0zui/GEoBvIAUtspL9FoCa5rolrJYDNg/cF4E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Kc8il3iJvyrQY6X4+8yoymIVqTX+Zx0/5c9B/8riVRKykjVl/A8WTb96vubid1PU0W7Nj30bU8wLoP5VlQLL4XG3PjmU/tHeBrHNoMWpHBD3b0/PrkHBeMiayAbwZAoN/lSe0gD9aTBZJQTZxszIIph5GA756vbXjExwMiW9hDQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CNjnwfdS; arc=pass smtp.client-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="NgtobR6r"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=OpwRmcJgVwIsSOZaquJ2h1OufAcPJIejddSzVVunDH0=; b=NgtobR6r44I40703QGwTQNulXK
-	Jqul2QN4wG2vYx2/lobJUdpBxBejjF32jQflud1E5sGEWKLLFCiVzgBqRjqCsEzvpqsuARvcW/YAm
-	I70AEQ4r5uWNnvrhi0bfx3dbkb0P0Q2qKtploRYnTw30bhLVVu6b3xknwvMHJgzCJqoCVxDX4thls
-	fYS9kvRWo9aExX54IrtOyZuGBHlWSmlE+En06VZlp3sofE4hCr4R9tRzvcfwm/nCnegShqxJh8Lug
-	EPVPbZ+EbvixRCKhgSB5Jh/WH0DY8i8+PqHBlZKxYUPWAGJrZ6dq8LWmhG/Ds4cmfEI3TKy7UERNK
-	HBDvGITQ==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1whnbq-00043v-0E;
-	Thu, 09 Jul 2026 14:12:06 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1whnbp-000Bx0-0Y;
-	Thu, 09 Jul 2026 14:12:04 +0200
-Message-ID: <b2fb9a37-3810-45a5-97dd-ed500ae8207c@iogearbox.net>
-Date: Thu, 9 Jul 2026 14:12:04 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CNjnwfdS"
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-80bd5b5b3afso18724067b3.3
+        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 05:47:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783601269; cv=none;
+        d=google.com; s=arc-20260327;
+        b=SPEwD98hGzSyE0gsnGkMedr4GGYfzxw/SA7IXwxqvJI0gvnjNLvVTmq1QqpsowTaFf
+         Rt5GfuFagUyIeeLntauH33Gd+eNsBR/mdJhk3MRpy9w6zC0YjxBNRg7IkcmFGvd1X852
+         yA4NdGPrXiBykvKQjtZk74VXb6WWLXKwIfc4oGw7xYuFVnqgYMt8A/44T4P5NgnmqJTP
+         /laZtsQBiSmmiaSb6UgN+5F2qOY0jtkAR1deK+KA223/s3EksJZgjBJgLORhvOUWF6e/
+         shtRP0uR4SQrqKz8k5DbLfQK9B5H/c1M7MZDrDC93ZeuN5F13B6hoPUdCNpVh1CZ3uJE
+         73gw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=KbtfCdAsNe15E0EjVxF9jMshY329gv5ThshJ+2KYxgY=;
+        fh=Gb2jYWfnRE9tiVrycsLqut9UaWgVu/muX8TeT6TC36A=;
+        b=OQQ8/bUYVsuRJ6m20er3WhzWliFGBzV5mxd3zxCFjJ/F1hvwWrjD46Eqg2FY8FFsfi
+         gxg21ywN3XLztftcybvxY+J9utU3q0kHcxHSrfxK0xhWT1yZQ4Xhv6O18YwkmFGCuEGg
+         t9GC/TCWp+3XdcKxOSK2QMgZFJ+oGe+tlci5ymYfdBgDh2fuWxBaj2PUJ/QC+DoLvFJA
+         +kNoMxrXMWyuQUy7mYNAvuNY+9fOq5dlPnxIHYg0OhQOjx83uvMmJI3yGBgXdT0FxiCj
+         LRCSpmr/BpTwLvIWvr5sdAqeKy5PmdCaKctnMoiKCV37RcpEnHHCkkl5Ad9offmgtH0/
+         8k1g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783601269; x=1784206069; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=KbtfCdAsNe15E0EjVxF9jMshY329gv5ThshJ+2KYxgY=;
+        b=CNjnwfdSJBbBiraOmNerll9XX8TFKK9MhjYiRBt7VMKWTLbW81P6CPTitYAGlv3nXZ
+         7EX6nWvMj0v+6PlVLWDNKo+UqOhB5JfQEgE2IDc8oa6o4juj92rSUN1r2qhQtaV6agEJ
+         0hXNtQ7qG0eoM0lsa1cpBB3l6+I8lK+s4znDxDrbiC5CEzPUA9KgAe1xRoRhoesrLrL+
+         TrFihOMafu002P/5lu8Q8/9nUlALHTEPq1v4iRJRrLVrU0upL1yWTEXX84W086GksKFU
+         gW7Sf8QxdNpQr8hxE6VCgkqIMmbx6flYzA77Z09aSzE53ivGkCeWbNGBzqucweS9JqeG
+         fXGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783601269; x=1784206069;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=KbtfCdAsNe15E0EjVxF9jMshY329gv5ThshJ+2KYxgY=;
+        b=nFuaqdcYaxvn1rZRn/wjhqiPhXU3fydVtHgeIKW2YIs1sWvu7pagqYPbmLmF8X6++7
+         BNV/AHeXLMOiwKaL4GajYNTz0/aS+bZ6ssML2q/FShIyg3e0UZXIENBJ37Tc3EuneThP
+         XAI9NIvlX0aV4tGT4+Y+8qO46RcKx/Wduw0Ph9WkZZ6fyJdl/41W2Z9gTd50Jc4WYJ/F
+         h06abmLzZP7SgNx4nsvvafMeJ1Bt25CiaHMdG7PqLQvJex7oy028FK0VQPEhjkI6wFNq
+         AdcUgo57OAZ2leM/46PLJHMUkF+z8z5cPMZk9fIKeJff6CVZ2wkES/FUasTfc+VnOLsT
+         FczA==
+X-Gm-Message-State: AOJu0YywohfMeNJVLcO5R+do2nHVCY02jR0pEO4MDDUwQgYlvVotHSJz
+	Xev362PELfydaQUp0tP/ZIoi+uJbSxOOY2nTb1mAfnKqacu8PQKPdm/UHiFZS62m/yVzlri9OJd
+	y2iTDFvuAGsJ6aJ7aNEFaometav7gKPs=
+X-Gm-Gg: AfdE7clBLO989bNEDH9rEYvebJzLCprEDdvjCIkTmujW0XCa6B3yvAW7X/w5r7n2tAy
+	BeAZjFwjcddkNHD2+5btd6tdbvZkSCo75ChpaqD+unPUngE3v2IU9xJi9SeWX3uD6rRbuSGQEbz
+	nErSFqhQGs+p0HokmwEuTSNKy3W3LsdDkRE5GTgNCLr22HQ1qz1u1KkOJKwROxkgHLjE8H8fQOF
+	j/gI1UCx2cQmVU/8ZljkkF3ZmT9DNK9bTfHMWCpVI8jmpOOxy3xWRAvz+ENfuTg/6K1Dx+5jz9w
+	JlVR8E9d04q1wD220wVfS5t8+MRzMIx0wFDydudk
+X-Received: by 2002:a05:690c:e20c:20b0:81e:685a:2f78 with SMTP id
+ 00721157ae682-81e685a5adcmr26626937b3.43.1783601268652; Thu, 09 Jul 2026
+ 05:47:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 0/5] bpf, x86: enable EXECMEM_ROX_CACHE for BPF
- allocations
-To: Mike Rapoport <rppt@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Andy Lutomirski <luto@kernel.org>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- Eduard Zingerman <eddyz87@gmail.com>, Ingo Molnar <mingo@redhat.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>
-Cc: Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, "H. Peter Anvin" <hpa@zytor.com>,
- Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20260626-execmem-x86-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org>
- <ak9V1C-Y3x-KEcTW@kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <ak9V1C-Y3x-KEcTW@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28055/Thu Jul  9 08:25:20 2026)
+References: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
+ <20260708090151.151729-2-sun.jian.kdev@gmail.com> <ak5HLLrYK3R_g2y_@u94a>
+ <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com> <ak8XSRiLKx5WcIQw@u94a>
+In-Reply-To: <ak8XSRiLKx5WcIQw@u94a>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Thu, 9 Jul 2026 20:47:37 +0800
+X-Gm-Features: AVVi8CeXZdNci7kpIcIeMEoZGh__nXpYan_lq-qhUswwNCZeuYTPyhviupka2-8
+Message-ID: <CABFUUZHTCLh1nHa3VGjvgvS=iPk_rOrFyBEMs0fiPZNGz3nMxw@mail.gmail.com>
+Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer pointers
+To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mike,
+On Thu, Jul 9, 2026 at 2:47=E2=80=AFPM Shung-Hsi Yu <shung-hsi.yu@suse.com>=
+ wrote:
+>
+> On Wed, Jul 08, 2026 at 10:11:01PM +0800, sun jian wrote:
+> [...]
+> > > > @@ -5326,14 +5326,18 @@ static int check_max_stack_depth(struct bpf=
+_verifier_env *env)
+> > > >  static int __check_buffer_access(struct bpf_verifier_env *env,
+> > > >                                const char *buf_info,
+> > > >                                const struct bpf_reg_state *reg,
+> > > > -                              argno_t argno, int off, int size)
+> > > > +                              argno_t argno, int off, int size,
+> > > > +                              u32 *access_end)
+> > > >  {
+> > > > +     s64 start, var_off;
+> > > > +
+> > > >       if (off < 0) {
+> > > >               verbose(env,
+> > > >                       "%s invalid %s buffer access: off=3D%d, size=
+=3D%d\n",
+> > > >                       reg_arg_name(env, argno), buf_info, off, size=
+);
+> > > >               return -EACCES;
+> > > >       }
+> > > > +
+> > > >       if (!tnum_is_const(reg->var_off)) {
+> > > >               char tn_buf[48];
+> > > >
+> > > > @@ -5344,6 +5348,29 @@ static int __check_buffer_access(struct bpf_=
+verifier_env *env,
+> > > >               return -EACCES;
+> > > >       }
+> > > >
+> > > > +     var_off =3D (s64)reg->var_off.value;
+> > > > +     if (var_off >=3D BPF_MAX_VAR_OFF || var_off <=3D -BPF_MAX_VAR=
+_OFF) {
+> > > > +             verbose(env, "%s %s buffer offset %lld is not allowed=
+\n",
+> > > > +                     reg_arg_name(env, argno), buf_info, var_off);
+> > > > +             return -EACCES;
+> > > > +     }
+> > > > +
+> > > > +     start =3D var_off + off;
+> > > > +     if (start < 0) {
+> > > > +             verbose(env,
+> > > > +                     "%s invalid negative %s buffer offset: off=3D=
+%d, var_off=3D%lld\n",
+> > > > +                     reg_arg_name(env, argno), buf_info, off, var_=
+off);
+> > > > +             return -EACCES;
+> > > > +     }
+> > >
+> > > I was thinking of suggest to just do a single unsigned check
+> > >
+> > >   var_off =3D reg->var_off.value;
+> > >   if (var_off >=3D BPF_MAX_VAR_OFF) {
+> > >     ...
+> > >
+> > > But looking at the code before 022ac0750883, what you have is closer
+> > > aligned to the previous behavior, let's stick to this.
+>
+> Actually looking again at 022ac0750883, moving the `off < 0` after
+> tnum_is_const() and bringing back the `off +=3D reg->off` removed from
+> check_mem_access() is perhaps the more faithful restoration of the
+> original behavior.
+>
+> Though reg->off no longer exists, we have to use reg->var_off.value
+> instead. IIUC any register of pointer type should already have its
+> var_off bounded to +-BPF_MAX_VAR_OFF by adjust_ptr_min_max_vals() in
+> theory, and thus shouldn't overflow `int off`.
+>
+Thanks for the additional analysis.
 
-On 7/9/26 10:03 AM, Mike Rapoport wrote:
-> Gentle ping
-> 
-> On Fri, Jun 26, 2026 at 09:42:27PM +0300, Mike Rapoport (Microsoft) wrote:
->> Hi,
->>
->> BPF allocations of executable memory on x86 are essentially read-only. Most
->> paths that call bpf_jit_alloc_exec() immediately make it ROX with
->> set_memory_rox().
->>
->> The code generation, at least on x86, uses separately allocated writable
->> buffers and then updates the actual text memory with text_poke().
->>
->> These patches do several small adjustments to how BPF allocates executable
->> memory and enable EXECMEM_ROX_CACHE for BPF allocations on x86.
-I think there was an open Q from Alexei wrt the sashiko reports [0] and
-whether you could address them. Once done, please resend to bpf list.
+I checked the related verifier code paths and the following provenance item=
+s:
+
+1. The source and initial state of PTR_TO_TP_BUFFER on the raw_tp writable
+path.
+2. The shared PTR_TO_TP_BUFFER/PTR_TO_BUF buffer access checker path.
+3. The pointer arithmetic path through adjust_ptr_min_max_vals() and the
+BPF_MAX_VAR_OFF bounds.
+4. The source and range guarantees of the access size.
+5. The source and range of the instruction offset passed to buffer access
+checks.
+6.The accounting path from effective offset calculation to access_end and
+max_tp_access/max_access.
+
+Based on these checks, folding the constant var_off back into the access
+offset is consistent with the current pointer offset tracking model and is
+also closer to the pre-022ac0750883 behavior.
+
+> See the diff below.
+>
+> [...]
+>
+> > I agree that the size check is redundant given the current call path. I=
+=E2=80=99ll leave
+> > v4 as-is for now to avoid another respin unless maintainers prefer drop=
+ping it
+> > or adding a short comment around the access_end calculation.
+>
+> Agree and make sense. Let's see what @Eduard thinks.
+>
+> ---
+>
+One remaining question is the intended semantics after restoring the
+offset-folding behavior.
+
+For example:
+
+    r6 +=3D 16;
+    r0 =3D *(u64 *)(r6 - 8);
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index d46f7db20d8f..e116b33ad83e 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -5359,12 +5359,6 @@ static int __check_buffer_access(struct bpf_verifi=
+er_env *env,
+>                                  const struct bpf_reg_state *reg,
+>                                  argno_t argno, int off, int size)
+>  {
+> -       if (off < 0) {
+> -               verbose(env,
+> -                       "%s invalid %s buffer access: off=3D%d, size=3D%d=
+\n",
+> -                       reg_arg_name(env, argno), buf_info, off, size);
+> -               return -EACCES;
+> -       }
+
+The current v4 approach rejects this because the instruction offset is nega=
+tive.
+
+>         if (!tnum_is_const(reg->var_off)) {
+>                 char tn_buf[48];
+>
+> @@ -5375,6 +5369,14 @@ static int __check_buffer_access(struct bpf_verifi=
+er_env *env,
+>                 return -EACCES;
+>         }
+>
+> +       off +=3D reg->var_off.value;
+> +       if (off < 0) {
+> +               verbose(env,
+> +                       "%s invalid %s buffer access: off=3D%d, size=3D%d=
+\n",
+> +                       reg_arg_name(env, argno), buf_info, off, size);
+> +               return -EACCES;
+> +       }
+> +
+>         return 0;
+>  }
+>
+The folded-offset approach would accept it because the final effective
+offset is non-negative.
+
+So this would change the accepted program set if we choose to restore the
+previous offset-folding behavior. It would be good to clarify whether the
+effective-offset behavior or the current instruction-offset restriction is
+the desired convention.
+
+I'll wait for the maintainers' preference.
 
 Thanks,
-Daniel
-
-   [0] https://lore.kernel.org/bpf/20260626-execmem-x86-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org/#r
+Sun Jian
