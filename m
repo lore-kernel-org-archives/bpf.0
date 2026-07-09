@@ -1,178 +1,158 @@
-Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5472932B121
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 23:44:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783640701; cv=pass; b=KAaBcFywPVBz0oyUK1rjDjeP3cF7qfSpODa0oiM90xe2qpTbUUax0/zPmPBqdj7qzxaVMBEzisDigYEjT00TBwEaMM3DC3oK7idm8CQHqE3NZlDcvllwMOXITlMmcibdMYI+IG2tiDpBNwhZ7456MsjIptALaOvxng2vRUFEDVI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783640701; c=relaxed/simple;
-	bh=mycG0WIjcqFxC1i9zKchmdz6yos5TZRSwXdFbFARR5g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SiV+iQz6elVBn1AOsTaGi1eRbWOLSTWxQ5iDAxwO/wZRUL81QLzNzgtnbGI3IAzfejlFeXRLRCabQjzirOVD3JYRWi33UgZkJWO8tcUM9pYJjXL8RKa8hX5cYbTdphT3T3mG7NHnRXhRopu3dQCNpxUWLqXhu+9HJzVKbYn97Ug=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r/NgVSiy; arc=pass smtp.client-ip=74.125.224.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6233A3BF67E
+	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 23:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783641510; cv=none; b=e0Nw9BfPR9NRLNH9pU2STQJL5eUKWE3PJz2Pnf7BEI/QgT61mfvUTHttpgfI20WG4Y/GZGEqnI/mnElYqLr32kkLmSNMbuRQ9sLIB1hr/10+SiB3W0C+JBplxNwI4cvdcLm3d4ELl2X374KVJ9qmzEo8totfiNw1bryjF0qQeYw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783641510; c=relaxed/simple;
+	bh=nEX8EiOiM5oDYBbHnBGFbUmYUDGuUomG1BPJr5P5+CA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=nc/ongk8t3KNbZblilRDOHT8TmGPnCu+TNyfVIdDX/o4Zz7PcI3gVLgar90a2Jzj5X5easQ0P2HYQuZtz1ldXHgTRVpEJ9Kn6a+dAmRnUZIUTI33ALqFK+9s3UJIdN/DjonB+QKtU8CHBN709hFgbk3Uh3rTqBDxpaF6nwg0BqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gcvxZsYY; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r/NgVSiy"
-Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-6651bc5730dso491392d50.2
-        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 16:44:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783640697; cv=none;
-        d=google.com; s=arc-20260327;
-        b=f/Vy0rY6CLITBN/QZ5wXDvIt+kC2DjZ9DQWdSmdO7hXwkpf+wuEU947WXfwgZGjGPn
-         mjcB+w5YKbY+G1bWVHyNkpUcifIQrA1tdqbPycKet9j15Yt0SHw8NC57HdOxGgK/HJdJ
-         qkOELz06W8evBklbcurWV1jmzvliZi3rb7PVE/6geFWCgoqIa0ltKcVat4KGrRzLlV4K
-         g+BjRRprPfgAPwA5QDZs5WqnZyY8nZMLFr4ijXP6PMuUGabp5LVJOTRJJiuY8MPDhHxJ
-         /x+RSYka6+kdsfOLnil0x3yLdPd72YPnutO1EGHNKaivWi+gavtOn/IUDcpw/rdamTev
-         cEHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=OWohNBeQfOn/m+hJlzsn4NULDmDrEFw0IGuA43Bi8hc=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=BHJ1WXjlUr6ALasLOasQwQof4ZvAN4zhpNyovkgf5Gk6Z0/CEm6onCQzhIkpWP18gN
-         88ZrpsyYDk/BTkAgrRK2UKeN+ONaPuciSYpauXx/ib2P5x6wS5HUzV+jF9crV/6lqz9y
-         e6woGyVSkHlamB/mdJsqUZu+oQZ/x4ppXzS0KQi0t4ZScZZFxiveRL658R9uIb/fwED/
-         aMflxuj9eJ2zH8BFzNlbAWV35l+qSCeMALXyP4C0cYVGgp1TZqPO06o2JliLlf55TyWa
-         ce/WkLXMBJRe8hayMxVYWcayOfwDMx8G2IJANwDw/IfD8FBV2kaPFs7AFGCJQ9InJvXK
-         ggkA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783640697; x=1784245497; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=OWohNBeQfOn/m+hJlzsn4NULDmDrEFw0IGuA43Bi8hc=;
-        b=r/NgVSiyZaFjWcsl/lxZdJeiFhRpC36TmyJNue+n+4lcYwQCpzVaecXlL0YOeBJdqT
-         UwJuDoStik3nKQ/3ZSHDH5I+Mqq5TsIAh76jjPMltxoMggZV6rz4pGlOI27hcAjkALLo
-         63f45VAakT/rLpVCyS8V3dO6sEHpJN33vASmK1D7MgQzxpubj+3GEtm0ctJ6lkqNsyA4
-         ZHPg1NaKXGgzNm2fq9IdzCE4Fb2JH83lXlMFS2rY6iJSYh6ZbQstehWrx6Z8g5SuYcRH
-         MfpVJX6uAvfCeBBn6UJi5q+p9kck714Hx/8HsKscXo60q3fw3h3zC3qUeLMQhgZcKWjJ
-         o3sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783640697; x=1784245497;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OWohNBeQfOn/m+hJlzsn4NULDmDrEFw0IGuA43Bi8hc=;
-        b=pbk5ZUJJzML0dk3YzZJAP/0dDEU7IxrGsbTai/1/Rf3rDVAUuVO6XkvgKTJhR+zP+1
-         3hPMKR/QM/Dz+rxrOJJerOjI0VoLD8av+BVbt5PHnBrEtgOhiQ9LaSOE+D3crR3Ru6nE
-         EiMapKlyRlT73JMciS5uWbbooMRtUtnnEBvsSScAWdSFQdNLtp4JWya1/HxnDlmDXfXe
-         yNRq3L3Iqm+sChJni7h8yCHAw2K4lQE3CDYN1SlWvfe2KiLf75+Eas7FBNWqBZMdo4Mx
-         rtMGy6FGT2OsuexziV0RZhtx2MF3haGimnfwdXXSB6hDiHGKA8EZ9sQ46EXgRUvSBr3Y
-         DPVA==
-X-Gm-Message-State: AOJu0YwNj9E9id6odVlCW0M+YTEIvUEzI8xHTOXBms5zmzT65KQ4tio1
-	uFK+wn80nwRcJ86X3YOSXlC9EwuEvjYgiCKe2Tk/1aBKx9KXpUmRAMZsQIIvz4OJnahUXhtTT1h
-	mKdEWryvSYD+EeGNM8a1jeDCL4okYn14=
-X-Gm-Gg: AfdE7cm8TgOKf/3O4jAtxdPLcjW4m+ccd/ci3Ykz2j9dMgpmdDyc0RypPTTpF8lM/vg
-	3C200zdtYjH5vbUJ1g6JtQVTJzxf2Fe8IMkte//6M/GzkLJMIJBHmPaXEq/aFBIZhsWo7Qp5tzd
-	thtNhgfQWp2BCzsqJnpZs7CxSfZaLrppAEWWXQNQ3GZEdbAQUFDJ0cBih+vtOhlyTWc74ojztro
-	QNdpUuJwzl3bZBVggTaNgL/73R72HwppA7o+xP4m5XjiwXKFtTuEMp7tsYeBgGZdF7rHnlK3map
-	sJeGZ9I=
-X-Received: by 2002:a05:690e:190e:b0:667:ba34:51a2 with SMTP id
- 956f58d0204a3-667ba345c2cmr2765001d50.101.1783640697335; Thu, 09 Jul 2026
- 16:44:57 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gcvxZsYY"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783641496;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XMg5+V70ET+LwmUtIv1O0gOzGmuC80IGO9iv3tkecmA=;
+	b=gcvxZsYYPLF9IcBcdgM72yIrui/q9AfsRw9Evu8EFATvusjpgdSuPlZejR8IVIV2ExET9A
+	WEVvNk3yMYkfxeyGIOlpNq4JinHnk2auBcYj0H/eUGSMkyS18eWNDRGVn+2w4gy2GPD51I
+	a92k6/XbILgvZwXzkd9R+gatKdpDiFU=
+From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+Date: Thu, 09 Jul 2026 23:57:50 +0000
+Subject: [PATCH bpf] bpf: Avoid soft lockup in
+ __htab_map_lookup_and_delete_batch()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260709230242.2003459-1-ameryhung@gmail.com> <20260709230242.2003459-5-ameryhung@gmail.com>
- <20260709231615.0519D1F000E9@smtp.kernel.org>
-In-Reply-To: <20260709231615.0519D1F000E9@smtp.kernel.org>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Thu, 9 Jul 2026 16:44:46 -0700
-X-Gm-Features: AUfX_mzYJXMOtOOJaJMklifYptVOVdovtn8Z00cd9H3jAzrszap3HC_txOOMSuk
-Message-ID: <CAMB2axO42=jbaOzy72DzNH_wRBE9Oxm_FJcnYG8tSFArOUaYLw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 4/4] bpf: Unify helper and kfunc call argument meta
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260709-b4-htab-batch-resched-v1-1-ad7a6b3b4513@linux.dev>
+X-B4-Tracking: v=1; b=H4sIAH01UGoC/yWMQQrCMBBFr1Jm7WBaS1q8irjITKYmgrFkogild
+ zfR5Xu8/zdQyVEUzt0GWd5R4zNV6A8dcHDpJhh9ZRjMYM1kZqQRQ3GE5AoHzKIcxGNPLPPJjJO
+ 1Hup2zbLEz+/3ArQucP1LfdFduLTHlpFTQcoucWiqhseH0yIZ9v0LMwq3dpsAAAA=
+X-Change-ID: 20260708-b4-htab-batch-resched-1bce8304766d
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Brian Vazquez <brianvv@google.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Jul 9, 2026 at 4:16=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
->
-> Pre-existing issues:
-> - [High] Uninitialized stack memory read in `check_kfunc_call` when handl=
-ing kfunc calls in signed BPF programs.
-> --
->
-> --- Patch [4]: [PATCH bpf-next v1 4/4] bpf: Unify helper and kfunc call a=
-rgument meta ---
-> commit b1105689a4b2bf6e2532e6d414d410ef55c0694b
-> Author: Amery Hung <ameryhung@gmail.com>
->
-> bpf: Unify helper and kfunc call argument meta
->
-> Helper and kfunc argument checking carried two separate meta structs: the
-> verifier-local struct bpf_call_arg_meta and bpf_kfunc_call_arg_meta.
-> Merge them into a single struct bpf_call_arg_meta. This is groundwork for
-> sharing argument checking between helpers and kfuncs.
->
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index fcd9715eff017..5ccb00a8c84ce 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
->
-> [ ... ]
->
-> > @@ -12972,7 +12953,7 @@ static int check_kfunc_call(struct bpf_verifier=
-_env *env, struct bpf_insn *insn,
-> >       struct bpf_reg_state *regs =3D cur_regs(env);
-> >       const char *func_name, *ptr_type_name;
-> >       const struct btf_type *t, *ptr_type;
-> > -     struct bpf_kfunc_call_arg_meta meta;
-> > +     struct bpf_call_arg_meta meta;
-> >       struct bpf_insn_aux_data *insn_aux;
-> >       int err, insn_idx =3D *insn_idx_p;
-> >       const struct btf_param *args;
->
-> [Severity: High]
-> This is a pre-existing issue, but does this lead to reading an uninitiali=
-zed
-> pointer if bpf_fetch_kfunc_arg_meta() returns early?
->
-> In check_kfunc_call() in kernel/bpf/verifier.c, the local variable meta i=
-s
-> declared without initialization and passed to bpf_fetch_kfunc_arg_meta().
-> If the call to fetch_kfunc_meta() inside it returns an error like -EACCES=
-,
-> it returns early before initializing meta:
->
-> kernel/bpf/verifier.c:bpf_fetch_kfunc_arg_meta() {
->         struct bpf_kfunc_meta kfunc;
->         int err;
->
->         err =3D fetch_kfunc_meta(env, func_id, offset, &kfunc);
->         if (err)
->                 return err;
->     ...
-> }
->
-> Back in check_kfunc_call(), the error path evaluates meta.func_name:
->
->         err =3D bpf_fetch_kfunc_arg_meta(env, insn->imm, insn->off, &meta=
-);
->         if (err =3D=3D -EACCES && meta.func_name)
->                 verbose(env, "calling kernel function %s is not allowed\n=
-", meta.func_name);
->
-> If the stack memory is uninitialized, could meta.func_name contain a garb=
-age
-> pointer that leads to a crash or an info leak when dereferenced by vsnpri=
-ntf
-> during the verbose() call?
+__htab_map_lookup_and_delete_batch() has no rescheduling point. The
+batch count bounds how many entries are copied out, not how many
+buckets are visited, so one BPF_MAP_LOOKUP_BATCH call can walk the
+map end to end. The empty-bucket fast path is worse: it stays inside
+a single rcu_read_lock() / bpf_disable_instrumentation() section for
+any run of consecutive empty buckets.
 
-Confirmed the bug is reachable. I will include the fix in the next respin.
+That holds up on small maps, but it falls apart at scale. On a
+144-CPU arm64 host running a CONFIG_PREEMPT_NONE kernel, periodic
+BPF_MAP_LOOKUP_BATCH calls against an LRU hash map with 16,777,216
+buckets held a CPU inside the batch op for 77+ seconds and triggered
+the soft lockup watchdog.
 
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260709230242.20=
-03459-1-ameryhung@gmail.com?part=3D4
+Commit 75134f16e7dd ("bpf: Add schedule points in batch ops") fixed this
+same problem in the generic batch ops, but not in this htab-native path,
+which every htab-based hash map variant uses for its lookup[_and_delete]
+batch ops.
+
+Complete that fix here. Leave the critical section after 64 consecutive
+empty buckets, call cond_resched(), and resume at the saved bucket
+cursor. No locks are held at that point, and resuming from the cursor is
+already the function's behavior for non-empty buckets. Add a
+cond_resched() to the per-bucket loop after copy_to_user(), where every
+lock has been dropped. cond_resched_rcu() is not enough here: sleeping
+with bpf_prog_active elevated makes tracing programs on that CPU
+silently skip their invocations.
+
+Fixes: 057996380a42 ("bpf: Add batch ops to all htab bpf map")
+Assisted-by: Claude:unspecified
+Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+---
+ kernel/bpf/hashtab.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 9f394e1aa2e8..b208a567892a 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1769,6 +1769,11 @@ static int htab_lru_percpu_map_lookup_and_delete_elem(struct bpf_map *map,
+ 						 flags);
+ }
+ 
++/* Max consecutive empty buckets to walk in one RCU +
++ * instrumentation-disabled section before rescheduling.
++ */
++#define HTAB_BATCH_EMPTY_RESCHED 64
++
+ static int
+ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 				   const union bpf_attr *attr,
+@@ -1790,6 +1795,7 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 	unsigned long flags = 0;
+ 	bool locked = false;
+ 	struct htab_elem *l;
++	u32 empty_cnt = 0;
+ 	struct bucket *b;
+ 	int ret = 0;
+ 
+@@ -1969,11 +1975,19 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 
+ next_batch:
+ 	/* If we are not copying data, we can go to next bucket and avoid
+-	 * unlocking the rcu.
++	 * unlocking the rcu. Bound the walk though: after
++	 * HTAB_BATCH_EMPTY_RESCHED consecutive empty buckets, fully exit
++	 * the critical section (no locks are held here) and reschedule.
+ 	 */
+ 	if (!bucket_cnt && (batch + 1 < htab->n_buckets)) {
+ 		batch++;
+-		goto again_nocopy;
++		if (++empty_cnt < HTAB_BATCH_EMPTY_RESCHED)
++			goto again_nocopy;
++		empty_cnt = 0;
++		rcu_read_unlock();
++		bpf_enable_instrumentation();
++		cond_resched();
++		goto again;
+ 	}
+ 
+ 	rcu_read_unlock();
+@@ -1987,11 +2001,13 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 	}
+ 
+ 	total += bucket_cnt;
++	empty_cnt = 0;
+ 	batch++;
+ 	if (batch >= htab->n_buckets) {
+ 		ret = -ENOENT;
+ 		goto after_loop;
+ 	}
++	cond_resched();
+ 	goto again;
+ 
+ after_loop:
+
+---
+base-commit: d2c9a99135da931377240942d44f3dea104cedb8
+change-id: 20260708-b4-htab-batch-resched-1bce8304766d
+
+Best regards,
+--  
+Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+
