@@ -1,204 +1,237 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010021.outbound.protection.outlook.com [52.101.69.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D615E39A7F5;
-	Thu,  9 Jul 2026 11:55:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783598126; cv=none; b=b2xQN5W7FPhRLuspO7xYoZ/cX2A+Ajd5REOzeGMQU7GCh1t8aMijSWl/FwmXxsiStSMNiOAdjzqpYniBjvMDIzL+hEhMk4enFm3+P3vg6B5x2uveHFch5aPsdzv6KMNm0J8ZsDbcm6HAuqRoOHup8Jw1kDoof6w/i8g7O0gD7+0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783598126; c=relaxed/simple;
-	bh=bCNossEeZ0inwxzXPkoSEYgfKI5nca1J7WOrQta5+ow=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qmYgl/M2g4wzJLWlo2ilgCSde0t7X11GBr/V4uVf5njHuNe4ZLwTTIeeySvE1t8S35DJfz/q40PPt+DcHEljJBnR/nDnndOjxJKY8pgH2yFGwphOG2ubUAp8DjfJrk5Ni+RiYRX4/yll3HJIj9Y9/05EoPonXTMRpULjYUs2HgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=eOxqtakS; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A22A2FFF8F;
+	Thu,  9 Jul 2026 12:06:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.21
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783598795; cv=fail; b=Pk7hsoqPhHI9aTKJqXZuwdNk+BhuEPoUxKMfkGCc52TlUqBQJzDkaD77kVn9hlMTsictZ/V8pbdZaqKNUQewTNnaOAJbveizlS8Zd8kzQ517Xl5gZZJy/qHA96Kg3rXv37iA7JOg5PQXA0AVJ1tcydSGz3PJmcGZB/Md8j0+ByA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783598795; c=relaxed/simple;
+	bh=fNNNQYxsb90jlQmUEvBlw1nalB4w9zvvrT35tXiYe7w=;
+	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=calHMUkRYbSn+VkKzihpUQFSTNCQjNSuvmeWPGknMHZV1e1r6vRLX5ENXTIr2HHGdn8qVfxKh+r4bWK4Xr62zOhDTCq4b5SBop/WIZupED0ws208k2VUf6L7wr/yFjKpfcM6pQr+Y9+ICOu1sK3QTcn0x8waqLEfn2fU0AV1waY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=jwc2cyBd; arc=fail smtp.client-ip=52.101.69.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="eOxqtakS"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=ksXUMFlciHDceRDaryNPqxWMMDzzkTmWa9cZy3atTSY=; b=eOxqtakSjpjVlsnI84sOkEbrt8
-	ysi9ZE+0iuCdr4MMDCjqT2UIg/nfYeMB36YEhrMo0UM8r8ibMB/kCBA7Z6yEJpdk2Qyk+wpzx6TIc
-	FT+dPNwDge/8Ow1VcyrNNw4Impwj7CzVvxYBwclk8GShdNGFqe19ULRVqFEpGBegHXPpMQ3FVXgst
-	+swcVCRQqn9ZyIRDysIlQV9tL7cVo2RVrLt6hA6famqwhPIc2QQDeKizS7eHSomdBT4d+UMaRQ+vw
-	Pjc3Wn68mcLg3Oi8jRCDWuTjIbei14n11X/2UCDOAdlDjPTeR1b22qVjD+siX5TDVrazXCzzBu6jw
-	HEH9SmMA==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1whnLe-00027s-2v;
-	Thu, 09 Jul 2026 13:55:23 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1whnLe-000FXS-0c;
-	Thu, 09 Jul 2026 13:55:22 +0200
-Message-ID: <b0ebaa8e-108d-451f-a7b2-26810f3d9b03@iogearbox.net>
-Date: Thu, 9 Jul 2026 13:55:22 +0200
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="jwc2cyBd"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=rJI4EupTFGQoMjkk2tmsjbxFzjnOj7DtKzrqifo3YhHV4sy+wql0FzfaGas8eSK6gBnpsp6HXyix5XkhcWe4xW7b49yPixx4wBxRn/5f81FRjRuj39/iKa1OWaq+q797fKJOvk5KLTyupUXfL27oCMWr4tB5m0s3+CNPWFk5JoMp058evWgTZ8WHtibmr6ShumWFHXKaSCkq3X/7gL72v8LVxfgK1zTdN6GgxcqI0qeiRyi3JzPYu5Xkc//66UIXjA6Wz17jcaUZs5A+5KCvtVqiwR1EFjhNDCMWXLoXDmlFhiwjnjNfrWJJ0Sm/rq2bIKquRbEOQ+dNMmFa8uxZUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZGCDsIFadpQCcTk5HBCbu62Be2nbV9CVSMo3DG3OVG4=;
+ b=GzlnNekat/rRYJKa6Z/iGKqlI9dlpSVcEFr/JxnERCremU7KeoLT46q1FhyxpoOQjBfUoiyw7FaoEJHoM+aqh/u7+cq/4QIxtKAyV0rXhNPqftK3N79FOUJRX1ztmJsxzQEm++JOK2W1OXDvYEvpuTDMSAV7wf3JMQVWuMdGc+qEtg5KU+HI7rk/APE+qBh+DT3Qq1rWvtrSvJ4HHl4WQhZipR3NV41RIKbMt6SoGUc9/HAFdRpoBaEs0BfZzsptS0d+uxSNYp5PC2imJ7yVNQEoswwdvktTXUSs/QkKv+u+ELBBhAHabYKncC4ws/eRzx1i0BjXqO7bFXgKNcFN/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
+ header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZGCDsIFadpQCcTk5HBCbu62Be2nbV9CVSMo3DG3OVG4=;
+ b=jwc2cyBd+wyQJf4nKwt75oTxg+yE9cFSHvbD7Z/mY/3d5l/+2Y6oZwrtfE3dJz75MSZEy6rBkPwy9ZEQ9cesIXQQcBcQnjEvEoiEMoSTccZuiVieTgfMMzlCEnFxGf4KqJFB11RdDJYaHiQkPoxLlYUvXVwUsaSGPRnR3fG9qxYPqWEyqAFZILmB+SKy33odUe33OLsk8YOzMBd4MoH5d9ItajM5m6vbtph+Gs+rhG8xF6xaQs5+GMlHQjtNosIr/Z1OH3TA/SnLxjXJua4Ml0qxutEHhI7ccaN6prZe8CvDOhEgqkaBjsInsrl6cuu2APgZfKGZoggJ+C5ErSTOtg==
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
+ by PAXPR07MB8493.eurprd07.prod.outlook.com (2603:10a6:102:2b8::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.11; Thu, 9 Jul
+ 2026 12:06:26 +0000
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::f708:4bd3:9987:b9e5]) by PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::f708:4bd3:9987:b9e5%2]) with mapi id 15.21.0202.007; Thu, 9 Jul 2026
+ 12:06:25 +0000
+From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+To: "Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>, Alexei
+ Starovoitov <alexei.starovoitov@gmail.com>, "jolsa@kernel.org"
+	<jolsa@kernel.org>, "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+	"song@kernel.org" <song@kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "memxor@gmail.com" <memxor@gmail.com>,
+	"shuah@kernel.org" <shuah@kernel.org>, "martin.lau@linux.dev"
+	<martin.lau@linux.dev>, "ast@kernel.org" <ast@kernel.org>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org"
+	<andrii@kernel.org>, "eddyz87@gmail.com" <eddyz87@gmail.com>,
+	"horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org"
+	<dsahern@kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, "pabeni@redhat.com"
+	<pabeni@redhat.com>, "jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org"
+	<kuba@kernel.org>, "stephen@networkplumber.org" <stephen@networkplumber.org>,
+	"davem@davemloft.net" <davem@davemloft.net>, "edumazet@google.com"
+	<edumazet@google.com>, "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	"donald.hunter@gmail.com" <donald.hunter@gmail.com>, "kuniyu@google.com"
+	<kuniyu@google.com>, "ij@kernel.org" <ij@kernel.org>, "ncardwell@google.com"
+	<ncardwell@google.com>, "g.white@cablelabs.com" <g.white@cablelabs.com>,
+	"ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>,
+	"mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>,
+	"cheshire@apple.com" <cheshire@apple.com>, "rs.ietf@gmx.at" <rs.ietf@gmx.at>,
+	"Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>,
+	"vidhi_goel@apple.com" <vidhi_goel@apple.com>
+Subject: RE: [PATCH v3 net-next 1/1] tcp: Replace min_tso_segs() with
+ tso_segs() CC callback
+Thread-Topic: [PATCH v3 net-next 1/1] tcp: Replace min_tso_segs() with
+ tso_segs() CC callback
+Thread-Index: AQHdCIg87j/hTMue6UG+Foq9E1ysYrZXvRwAgABpS5CAAAUrgIAArVuAgAxI2hA=
+Date: Thu, 9 Jul 2026 12:06:25 +0000
+Message-ID:
+ <PAXPR07MB7984969F16F5C9E1611B6C01A3FE2@PAXPR07MB7984.eurprd07.prod.outlook.com>
+References: <20260630120145.286497-1-chia-yu.chang@nokia-bell-labs.com>
+ <DJMRPJEUTY5G.30HYOMPLBGZOJ@gmail.com>
+ <PAXPR07MB7984443B70E713F016EAA550A3F62@PAXPR07MB7984.eurprd07.prod.outlook.com>
+ <DJN048GYRBCZ.M83AO0MXTKSV@gmail.com>
+ <DU0PR07MB844141FCBD1AD6F40FE08D2EB9F62@DU0PR07MB8441.eurprd07.prod.outlook.com>
+In-Reply-To:
+ <DU0PR07MB844141FCBD1AD6F40FE08D2EB9F62@DU0PR07MB8441.eurprd07.prod.outlook.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|PAXPR07MB8493:EE_
+x-ms-office365-filtering-correlation-id: d3c49177-da06-4654-79bd-08deddb28029
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|7416014|23010399003|1800799024|376014|38070700021|921020|56012099006|4143699003|11063799006|22082099003|18002099003|3023799007;
+x-microsoft-antispam-message-info:
+ FeZyBErkIjMWuTpuyekkBiQbh6a9qC6cPHcoIx5Lf2VGnxzcPW3T5eTxwA2hHAWhynQZHhRFlKdKHfAwb6cX4w6bYbO2do2k8FUFee0RBzdb/J4XuJqp6tJkdGuhaMFo9K6588Sm8UwkA5jPDjCuFLKHQtIMjAJGgAzWy8DghDiMp+Hoh00vY+z8DVd5kO6zA5XDDf1LTNTzhJZ8hDV6XuIX7XLViQmBRi7K6UmcUOy2BM56phLmu1i9aqvUViMm7AgHmECxv8mvL+Y4v8Mt65DfoiOx30ikScn/uLEn8IKlsqCeN+hraTRFWhrakngiHG5MOUHj9dICmOJ2OttUkxh97inHtCSktJxEiH9GH4S8r3FkztRj5RXbyMEjMzPiDJhxICpJvOLTQVCjowoQqjxhRe4ZjJ0CorkjHhSOiyXYpfJcUD/UmqRdo0sew/fIvcX8PrNpFPhCcgPb4wYuZEB1nUeQS/ZyPTGfbtsoi6NdkOVfh0RFn6Oh0TJy/eClIVsxIXunKirJ7vylACsWHBcqkJKSTYa1V8r7j7PYbJ4mJK7bldikgWxUnEEoYpvqDNoBZQqYIocvllgYWL9aJZ3E0Ixlfk7smzF/TMlxjfhJC6gm/dxbR/F/szsjIZQ9Kh1bWB2PoByT94QczecwQbJQMyCofMjL0cnmMo0tNJn0N16Bizw87kejwmDZJyCr0zxlE92Bgb7O26R3u0DzYsN7V9nNzv3e/QIBGV4s+R84d5yJ9z45z+6VgFWwKvWD
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(23010399003)(1800799024)(376014)(38070700021)(921020)(56012099006)(4143699003)(11063799006)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?Q57ubw6by7Q1Q8eEK3xmJi9oaV23qubkGiKkt7IVkH9QMm+ubPM72+JZ5irZ?=
+ =?us-ascii?Q?nc7YgZ9tra9YQ24CkNsVATBysvR4Pxey9lhGP8YXI1Mraxe3DIQF5yWU+SAj?=
+ =?us-ascii?Q?2fd1awV5LTuTPUFDS75c9MBSA/Ou26UK5ayik+BdANY9WK0JdHGo5lnN8x+/?=
+ =?us-ascii?Q?EH7vlipf8sztTx72VmGoyHK94vxdVSxoEWmOh9VShuF6JNpwblcs+4G6XNr2?=
+ =?us-ascii?Q?JnTCuLUiI0a5N7pOBRzGuGZcvLSx/CTbUf1D8YQxs+/SfL9f2NlvcbwCsx8B?=
+ =?us-ascii?Q?kn3f4IcVZ9ZOT/baV2b3p2B+YKfdPGMdGJRqNAOzARxdJG/IYdtokM+BxD3y?=
+ =?us-ascii?Q?fuqM1ST31WVX8QvqNfi6UZJP139Acg+4SxC3Px6neVxBhzXbVJwWPymX9eWZ?=
+ =?us-ascii?Q?ZfNAObmmHFzsgWlKPLvZrpYVlnRcBV5yDUSIZMp0uzIHnRjJ+IfLh7qoUvEW?=
+ =?us-ascii?Q?JuSWYfqGX6zQPw0FEBDLgsCHi5xhooaMJ+wEVxwUZ9jWtwQ/V0BSIea4eB82?=
+ =?us-ascii?Q?AxQHFmOv7zt4qDR0C5i0Wbtuf6hbfaKQpvQ1JWjmOlRZiKUv8HeRedbfVsmk?=
+ =?us-ascii?Q?a+Hrc6JPdapFzXT4awWhqHgQvYCsF0FQe+1QImCtQla6cXmpDvs0FCPly4ma?=
+ =?us-ascii?Q?4kuKIZhfXbkvzYjZ+3nCrwDoJoi5pj3EcW/3CdvxQeshORg0dTbPAQ2BtdeX?=
+ =?us-ascii?Q?AmCCaNIEdQ99MpSaxZdi/fpZL5750aozwHb3go1O4CjCLZuQsTUcDfz8K6LA?=
+ =?us-ascii?Q?X8m3fuKdlAsuwF44FFP1EY+1byLuC5vDjtftFTGrVtyNn7dkEoMzehB/Sks9?=
+ =?us-ascii?Q?M6CY0xE5pVjPXCc4ZsyaZ/GuIzC20H8Tz9IVMasTgKSerXxEja6PlQbSR2HY?=
+ =?us-ascii?Q?nZpK/F167R/zdn5FnBleNzCbAnRybjNCA7LIWjzGuG3IwPUcTp7M2YF18GYE?=
+ =?us-ascii?Q?Ia7fWFbEcCtPWHmFTzsxnMqBx94QK82WJEetNeRZGlZbjXesgL835jk6Shop?=
+ =?us-ascii?Q?g8uCRbcdqO/tHdnKpH8GEDGFrQWXidajBmJwy8Ko3Q7Tm9P3rSW9iQt6EwLo?=
+ =?us-ascii?Q?lmE6WXOLpiLLgz5dz9cwUtNeNdju8oYCwqI0Q8xuMmI0KgO/J/gvw2uRTyf3?=
+ =?us-ascii?Q?KUsjNyEFtdynS2ox7MlUPaf5gO9wNky7cO1oUJrbnl2WheLqP0+bYD7/GT6L?=
+ =?us-ascii?Q?J0OSjYIR0DnlI9jU7Zr0qRR59MySLii/kjnOYCg/bVJXT3n2H4sKN+roV5PR?=
+ =?us-ascii?Q?HNQSzqhapLzKA3E3/sYGbWSaRz3+z+AhZsfgXYsRZxgs1u57vay58WHPYObU?=
+ =?us-ascii?Q?2HbyiopcjlK/8Q6r5bMJTRIShrUtsmJkuIYaw47VO94qqghjFZhNcTKhFiUE?=
+ =?us-ascii?Q?I4EzTNti0Kp9whNRrq777yHYq0Pxu8cV+6kVbzLBy/FFTGLNTeeWaOIbNn8D?=
+ =?us-ascii?Q?6Toq2UDZDDdgg8aDxc9D0NB608eJZGYXK0nWpUArgN7Jn0lwEUKk9d1VWkMe?=
+ =?us-ascii?Q?ZSS6aEwe8ppDr574ue+zp5Oj1zqKyhhmOkacpuE2herW066314fM6OB6kKrG?=
+ =?us-ascii?Q?bKO2cJ4NoL2jjUlHwk1klfvC8Fcu/t+H/8CtdG8p9vU22/S2sxz63FkoFuf2?=
+ =?us-ascii?Q?94qvR53xs9C6n700dTOLhsctQSFCRpxGtVjGRfjx/uXUSjp5XoN8PKrL2hDx?=
+ =?us-ascii?Q?ySwSmQcMy7H+udqfw/zjY91VgqxGTkRffqj9dFf4z/wLMaEUX3pxghcbc2Al?=
+ =?us-ascii?Q?fnTREXvS8zQPCtKV/DzC4Zh/HfYN4qs=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf: fix UAF in sock clone early bailouts
-To: sashiko-reviews@lists.linux.dev, Matt Bobrowski <mattbobrowski@google.com>
-Cc: bpf@vger.kernel.org, Kuniyuki Iwashima <kuniyu@google.com>
-References: <20260709025316.999913-1-mattbobrowski@google.com>
- <20260709032007.9E4D61F000E9@smtp.kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260709032007.9E4D61F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28055/Thu Jul  9 08:25:20 2026)
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3c49177-da06-4654-79bd-08deddb28029
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jul 2026 12:06:25.6898
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: AyTYsl3E+YYkX9WHF956xfVz6zQFJS+HpGfc7HAZmMKBYEKQ58btXkRjYDxvGTiCm0/J1DTpNBYB9BUehDDcKbD92qov7vegmAcqjQiKvKW3Cih0WU01Z3KUjZsmLNHL
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR07MB8493
 
-Hi Matt, hi Kuniyuki,
+> -----Original Message-----
+> From: Koen De Schepper (Nokia) <koen.de_schepper@nokia-bell-labs.com>=20
+> Sent: Wednesday, July 1, 2026 6:17 PM
+> To: Alexei Starovoitov <alexei.starovoitov@gmail.com>; Chia-Yu Chang (Nok=
+ia) <chia-yu.chang@nokia-bell-labs.com>; jolsa@kernel.org; yonghong.song@li=
+nux.dev; song@kernel.org; linux-kselftest@vger.kernel.org; memxor@gmail.com=
+; shuah@kernel.org; martin.lau@linux.dev; ast@kernel.org; daniel@iogearbox.=
+net; andrii@kernel.org; eddyz87@gmail.com; horms@kernel.org; dsahern@kernel=
+.org; bpf@vger.kernel.org; netdev@vger.kernel.org; pabeni@redhat.com; jhs@m=
+ojatatu.com; kuba@kernel.org; stephen@networkplumber.org; davem@davemloft.n=
+et; edumazet@google.com; andrew+netdev@lunn.ch; donald.hunter@gmail.com; ku=
+niyu@google.com; ij@kernel.org; ncardwell@google.com; g.white@cablelabs.com=
+; ingemar.s.johansson@ericsson.com; mirja.kuehlewind@ericsson.com; cheshire=
+@apple.com; rs.ietf@gmx.at; Jason_Livingood@comcast.com; vidhi_goel@apple.c=
+om
+> Subject: RE: [PATCH v3 net-next 1/1] tcp: Replace min_tso_segs() with tso=
+_segs() CC callback
+[...]
+>=20
+> > You have to explain why Prague CC cannot rely on autosizing.
+> > To me it sounds like a red flag. autosizing logic was there for a decad=
+e, if not more.
+> > And now you're arguing that your CC logic is special and it deserves ne=
+w API and breakage of existing convention.
+> > Maybe you should step back and reconsider.
+>
+> Hi Alexei,
+>=20
+> >>You have to explain why Prague CC cannot rely on autosizing.
+> >>To me it sounds like a red flag. autosizing logic was there for a decad=
+e, if not more.
+> >>And now you're arguing that your CC logic is special and it deserves ne=
+w API and breakage of existing convention.
+> >>Maybe you should step back and reconsider.
+>=20
+> The objective behind Prague auto-sizing is that the TSO burst should not =
+create a queuing latency bigger than 250us, on a bottleneck link rate that =
+is the pacing rate. The rationale is that the L4S AQMs are allowed to have =
+a very small threshold (often somewhere between 0.5ms to 1ms). When the pac=
+ing rate is 96Mbps we start allowing TSO size of 2, etc... Below 96Mbps the=
+ TSO size is 1, and below 48Mbps the potential serialization time of a sing=
+le packet is bigger than 250us. You will also see in other patches that we =
+limit the serialization time of one MTU to 10ms when the rate goes lower th=
+an 1Mbps by limiting the max MTU (going down to a minimum pacing rate of 10=
+0kbps as the minimum sending rate).=20
+> L4S AQMs are designed with these parameters in mind. As AQMs usually work=
+ packet per packet and evaluate waiting time in the queue, definitely the m=
+inimum inter-packet departure time needs to be bigger than the serializatio=
+n time - 0.5ms or packets will get marked without necessarily using the ful=
+l link capacity.
+>=20
+> The current autosizing algo has as objective to scale the TSO size depend=
+ing on both pacing rate and RTT. It targets a 1ms queue delay burst when th=
+e RTT is bigger than 3ms, but when the RTT is smaller it further increases =
+the TSO-size. The rationale behind this is that a bigger TSO-size results i=
+n a bigger chance of loss, and that loss is easier to retransmit if the RTT=
+ is smaller.=20
+>=20
+> So, the current algorithm does not line up with the Prague expectations. =
+Is allows bursts of 1ms instead of 250us and it allows even bigger bursts i=
+f the minimum RTT is below 3ms (for instance 27ms burst at 10Mbps and 1ms R=
+TT).
+>=20
+> I see following options how to include the Prague requirement of 250us bu=
+rst instead of 1ms and not increasing TSO if the RTT is lower than 3ms:
+> - Let Prague do the calculation and set the desired TSO size
+>        - previously done with an extra hook to overwrite the autosize, bu=
+t it was already commented to avoid the extra hook
+>        - change the existing hook and add a fixed or max TSO size (curren=
+t patch did the fixed TSO overruling, maybe a max could be more general as =
+it would always be lower than the current calculated autosize)
+> - Add a cc settable parameter max-TSO-burst-time to let the current autos=
+ize do the extra calculation and take this extra check into account
+> - we are open to any other suggestions...
+>=20
+> Koen.
 
-On 7/9/26 5:20 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> 
-> Pre-existing issues:
-> - [High] BPF map corruption via shallow-copied sk_user_data and sk_reuseport_cb during sk_clone early bailouts.
-> - [High] Unbalanced decrement of global network timestamp static key during sk_clone early bailouts.
+Hi Alexei,
 
-Do either one of you also have a chance to look into these?
+I see Koen had responded to your question in above email.
 
-Thanks a lot,
-Daniel
+Would you please let us know what's the suggested to proceed?
 
-> --- Patch [1]: [PATCH bpf] bpf: fix UAF in sock clone early bailouts ---
-> commit 81577dfc9f1b10000a3b1dfc19a5b577e986ec33
-> Author: Matt Bobrowski <mattbobrowski@google.com>
-> 
-> bpf: fix UAF in sock clone early bailouts
-> 
-> This commit fixes a use-after-free on parent socket's BPF local storage
-> caused by an early bailout in sk_clone() prior to clearing
-> newsk->sk_bpf_storage. By resetting newsk->sk_bpf_storage to NULL
-> immediately after sock_copy(), the deallocation path won't destroy the
-> parent socket's storage.
-> 
->> diff --git a/net/core/sock.c b/net/core/sock.c
->> index 8a59bfaa8096e..498a57f34f5b5 100644
->> --- a/net/core/sock.c
->> +++ b/net/core/sock.c
->> @@ -2492,6 +2492,9 @@ struct sock *sk_clone(const struct sock *sk, const gfp_t priority,
->>   	sock_copy(newsk, sk);
->>   
->>   	newsk->sk_prot_creator = prot;
->> +#ifdef CONFIG_BPF_SYSCALL
->> +	RCU_INIT_POINTER(newsk->sk_bpf_storage, NULL);
->> +#endif
-> 
-> [Severity: High]
-> This is a pre-existing issue, but I noticed there might be a similar issue
-> with sk_reuseport_cb and sk_user_data. Since sock_copy() does a shallow
-> copy, newsk initially points to the parent's sk_reuseport_cb and
-> sk_user_data.
-> 
-> If sk_clone() bails out early (e.g., sk_filter_charge() fails):
-> 
-> net/core/sock.c:sk_clone() {
->      ...
->      if (unlikely(!is_charged || xfrm_sk_clone_policy(newsk, sk))) {
->          ...
->          goto free;
->      }
-> 
->      RCU_INIT_POINTER(newsk->sk_reuseport_cb, NULL);
->      ...
-> }
-> 
-> The bailout happens before sk_reuseport_cb is cleared. When newsk is freed,
-> bpf_sk_reuseport_detach() can follow the copied sk_user_data to the parent's
-> BPF map slot and write NULL to it:
-> 
-> kernel/bpf/reuseport_array.c:bpf_sk_reuseport_detach() {
->      ...
->      RCU_INIT_POINTER(*socks, NULL);
->      ...
-> }
-> 
-> Does this corrupt the parent socket's BPF map during early bailouts?
-> 
-> 
-> [Severity: High]
-> This is also a pre-existing issue, but could the same early bailout pattern
-> cause an unbalanced decrement of the global network timestamp static key?
-> 
-> sock_copy() copies SK_FLAGS_TIMESTAMP into newsk->sk_flags. The global
-> timestamp counter is only incremented at the end of sk_clone():
-> 
-> net/core/sock.c:sk_clone() {
->      ...
->      if (sock_needs_netstamp(sk) && newsk->sk_flags & SK_FLAGS_TIMESTAMP)
->          net_enable_timestamp();
-> }
-> 
-> However, during destruction of the aborted clone, the global counter is
-> decremented unconditionally because the copied flag was set:
-> 
-> net/core/sock.c:__sk_destruct() {
->      ...
->      sock_disable_timestamp(sk, SK_FLAGS_TIMESTAMP);
->      ...
-> }
-> 
-> Could an early bailout skip the net_enable_timestamp() call but still
-> execute the sock_disable_timestamp() call on free, leading to an underflow?
-> 
->>   	/* SANITY */
->>   	if (likely(newsk->sk_net_refcnt)) {
-> 
-
+Thanks!
+Chia-Yu
