@@ -1,110 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4594D1D6195;
-	Thu,  9 Jul 2026 22:24:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F361D5160
+	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 22:27:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783635889; cv=none; b=Q+bPZ4EmkFgBoLRUuYZt6R9qPII63q1vvzo55CXwV6Yj2T/ZyJwwQMBk6AS/tgBYCThAb+38fJx3lM3LG8M80BTSC1OvLC6EaH22oAvpBV/7Pp7ZKIKroR5VcsF2fAYudBhMyNEPVIK79VOR4AMqtnnuEqoDWtPv+Pfxz65goXA=
+	t=1783636062; cv=none; b=odXiev89ko43w1bi0goykYPpJ1bl+ZiZv98hlvvXkuITyzZ09jlUrpHuu7tCm02D6GQCPmFyEASqGfZjyeDhxu1vBfXcDkGZE0DgBUDHq4T8HIdiBaKlXZCm5vBzkJguiK/PyxSRQD18hX+EhKMZ9vZXQiKmFUnilTeSEPhEGBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783635889; c=relaxed/simple;
-	bh=j+SGpxnxcXP2jP/D2FzTuZpBaLImj0yoHLCpJzVrAQQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eUJ/+Bg2O5lkjyCj58gwEecdFLhczPFiiAkUrrng6hXeXRQXz9Rn/eSX1tbI+lBudFPpM98m4GUEnUoX4tOvriTmnuCEEt3uXlPAwmEAn5sM6u4pUZYp6arTnL5FMVhdy7gjAuxfrxBaaS7A4uoafF80lj/yAEn8ZZMSw/gzi1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OFXpWgY+; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1783636062; c=relaxed/simple;
+	bh=jQgpQTUHCQ9bQ3cOZgehCFwrBFnXHAKQ0fxmSz3qPLY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=F/vvwYgLnILHLyhu9OT19tblLx+LTy6rbl74TbmYfHew9JMnkfZ9tXGyU6NRkFr5pl9fACfi5ElZtLsaY+qvZKxExbyJCuNciWoULa4EX/1ST+FlAHz520miQZfBSrW0HDSE2isOuPukDgkuReLauez0onZzFbqUGn77IbkSPMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T/uqS2e5; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OFXpWgY+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783635888; x=1815171888;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=j+SGpxnxcXP2jP/D2FzTuZpBaLImj0yoHLCpJzVrAQQ=;
-  b=OFXpWgY+ZzWYKKz2eWNPkVCCUkPuYURBezgEIjnQfA1DMB7cdEiq8pna
-   541Otjlk18BHGmQqPzoWda9xqug01z4qahNOV/A3Nu6a3iGTxJGhgAZ33
-   ENkdHbV8qiHZlJg3AuHgFuk6PZWwAnehIhJerScxOr8EHY3cWXI/O+edw
-   L4BSk9/mi/Ek+BS/5YAv8MRxa1kTubMzWDsQyvvY3fV38cqNpcb9EHGqw
-   LuWK3r8pchJD/G4R9+uDSkKn5czHJf3Z9IJqTTMLwKfzMuJqZbDvSsvQ0
-   aleKkFoMZY2kg7Nnsw13KIQ8i40eXOi1djEffzJasTj09jlWBYgPb6DE0
-   A==;
-X-CSE-ConnectionGUID: 1za2hnrwTiWbNsYebWoAhw==
-X-CSE-MsgGUID: hmcSMFo2RmaJB+aZXOWX2Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="84213776"
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="84213776"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2026 15:24:47 -0700
-X-CSE-ConnectionGUID: ibAssKHeRbmUZQiMyyryAg==
-X-CSE-MsgGUID: ffWZe+IPSh2xsAc9y1Tnaw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="248335750"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2026 15:24:47 -0700
-Date: Thu, 9 Jul 2026 15:24:47 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: stable@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
-Cc: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
-	x86@kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH 7.1.y 6/6] bpf: Prefer dirty packs for eBPF allocations
-Message-ID: <20260709-cbpf-jit-spray-hardening-7-1-y-v1-6-5ac5a2d6797f@linux.intel.com>
-X-Mailer: b4 0.16-dev
-References: <20260709-cbpf-jit-spray-hardening-7-1-y-v1-0-5ac5a2d6797f@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T/uqS2e5"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2c6b67d5fa1so4217455ad.2
+        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 15:27:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783636061; x=1784240861; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=wKxXdOTpiYi7Cf8pfKD1AsF9D9BGTQXH06cCCSpGd7E=;
+        b=T/uqS2e5KtsAV2V3jn0/AN32qPRgfVBZd0+CON7ipXlYLZGk+kJxakNrWzrdw8q9VE
+         ZNP7BDaEKMboTqUEbm5Gj7VyJvuGTRb6oKROTBsbPQNc0hYfisFzGvMhGVL5M+sIV0ol
+         gukyT3NDPke3CFeDRAl8GfWS/PTy0TDLSa4avkgz/eQrW34eV4zEl1BZBzrd4iCqrZbJ
+         bdTVfc2/BJWRVhwLu/oFLkKhU2KEUbGHBJJ8FKSQJ2jAoMw6REh6aXpuTFvzLhxeT/U4
+         8VrDqvBDCeU09XGMdAZurDx/q0tT5jRHtSlOO9ZH62IraYj8q4XEy3fIMWo9dkQ9iXqM
+         AiDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783636061; x=1784240861;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=wKxXdOTpiYi7Cf8pfKD1AsF9D9BGTQXH06cCCSpGd7E=;
+        b=FTeFdlCc3YZ6dy1/Uu0diV1uNVAsNpiaJ7/VNx4bLs18jpGBqdJefOTKE8AtwyRoGh
+         aOWSuBjOG23hElqU2FwOIEgRwOjsZEutwDPxbiBkmjfAk/T8i3UnC2BpwoRIsH0FLYVq
+         y2T6UmaJNZOi1chkxBW2EYqdAt+PMp+i0o/aVBBGLFJvUMJaqcFuahKEX2noMoK8TDym
+         Izlph5KomxG4dPKwHXbyuulsH1SF0+Ayk1z6FjEebTEj1Ey+sNIG6XCV7U1LRRoTNrVn
+         jHZQPbXTyM3UsvyJnHC9v3iSMZm4q0T8bhDv2IXaWTlJ2aubUSz5iqm03YAJo7UOwOxh
+         gHGA==
+X-Forwarded-Encrypted: i=1; AHgh+RrFp3zoDf5xiRoV6RK3WYV9akDJebLYrtZY4sxS+tqUjAczAII9i+3HHMpBiXEWWKyRqSg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx09lfM2FTC5D5pP33LAVRUJTmRKoJwpz5RUBljunCXlAGCNlyF
+	3hsGse9cioklej68hMcg7znK0OsNIymTU5lHLhYE7ibD5xysvuFLQ1pR3GXOFQ==
+X-Gm-Gg: AfdE7cljwQSHtjnxb0gCdECWUhKrc0iesOsISYer72wOBJvrBdss6qosPHSmTbm0agI
+	8rQsLCkvqD//yfXrMkHLK0R+NbI37HHCFxlfWiptg0U+url3Fk9Z0/wgBYyZY6gypn9nq6w+JGU
+	2oRcyhhe1OZ7maU1TTQYAuHKt6xqzUtISyInLs5OG4xqr2qHBmdY1aaRr0V8FA5yZi0llQp5aSl
+	/4WL2dGjlEiBRRfAHbzO/Cz5Xo24M1hgKzQ9solNtAgEUpNmijkpdgnXfxMK9f5q/l5so1siGnJ
+	AdWz3NEb/ULgAuMvMnRtzW5+jWopSCu+d3tT2vwlg5Bmw3AXWrhlRz7hToBvW3XiwCnhk9P6LBk
+	XLOjxQKFVYsOmuyKTBOY2HHTfXAoxfWCUhPEtfKtdTOkGYu1MgULOYnFUcaHrJ2m84OwWJoLOJE
+	pI4TKc+9UTsg0c6sNAtuvFXZ0yuxplxG1AhD+F/myH
+X-Received: by 2002:a17:903:1ad0:b0:2cc:307c:51f2 with SMTP id d9443c01a7336-2ccea444eaamr105267135ad.22.1783636061022;
+        Thu, 09 Jul 2026 15:27:41 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bf737bsm49868005ad.19.2026.07.09.15.27.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jul 2026 15:27:40 -0700 (PDT)
+Message-ID: <cdff0944003193d4224a1fec5f1fb9fa8bd76801.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 06/12] bpf: Force JIT for programs using the
+ R0:R2 register pair
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
+ kernel-team@fb.com
+Date: Thu, 09 Jul 2026 15:27:37 -0700
+In-Reply-To: <20260708201010.2158718-1-yonghong.song@linux.dev>
+References: <20260708200939.2153664-1-yonghong.song@linux.dev>
+	 <20260708201010.2158718-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260709-cbpf-jit-spray-hardening-7-1-y-v1-0-5ac5a2d6797f@linux.intel.com>
 
-commit b72e29e0f7ee329d89f86db8700c8ea99b4a370a upstream.
+On Wed, 2026-07-08 at 13:10 -0700, Yonghong Song wrote:
 
-The pack allocator only flushes predictors when reusing a dirty pack for
-cBPF, eBPF allocations never trigger a flush. Currently, eBPF picks the
-first free pack, which could be a clean pack. As an optimization, leaving
-a clean pack for cBPF can avoid flushes.
+[...]
 
-Prefer dirty packs for eBPF and keep clean packs free for cBPF. This
-mirrors the existing cBPF preference for clean packs: each program kind
-prefers the pack that avoids an extra flush, and falls back to the other
-kind only when no preferred pack has room. eBPF reuse of a dirty pack is
-harmless since eBPF being privileged does not flush.
+> @@ -9877,7 +9886,7 @@ static int prepare_func_exit(struct bpf_verifier_en=
+v *env, int *insn_idx)
+> =C2=A0	} else {
+> =C2=A0		/* return to the caller whatever r0 had in the callee */
+> =C2=A0		caller->regs[BPF_REG_0] =3D *r0;
+> -		if (bpf_ret_reg_pair(env, callee->subprogno)) {
+> +		if (bpf_ret_reg_pair_mark(env, callee->subprogno)) {
 
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- kernel/bpf/core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Also, doing this while processing exit is a bit strange.
+I think this should be done in do_check_common().
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index bba4acd61d41..de61e1894452 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -988,10 +988,10 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns, bool
- 			goto found_free_area;
- 		/*
- 		 * cBPF reuse of a dirty pack triggers a flush, so prefer a
--		 * clean pack for cBPF. eBPF never flushes, so pick the first
--		 * free pack, dirty or clean.
-+		 * clean pack for cBPF. eBPF never flushes, so steer it to a
-+		 * dirty pack and keep clean packs free for cBPF.
- 		 */
--		if (!was_classic || !pack->arch_flush_needed)
-+		if (was_classic ^ pack->arch_flush_needed)
- 			goto found_free_area;
- 		if (!fallback_pack) {
- 			fallback_pack = pack;
+> =C2=A0			if (callee->regs[BPF_REG_2].type =3D=3D PTR_TO_STACK) {
+> =C2=A0				verbose(env, "cannot return stack pointer to the caller\n");
+> =C2=A0				return -EINVAL;
 
--- 
-2.43.0
-
-
+[...]
