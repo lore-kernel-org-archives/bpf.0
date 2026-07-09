@@ -1,42 +1,42 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69348409283;
-	Thu,  9 Jul 2026 10:03:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE06405855;
+	Thu,  9 Jul 2026 10:03:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783591418; cv=none; b=Y6ZfUNR5MrSZexIs8WE/sv5l2JLkRWrJE3qTLT3Zo3u0D04KWaESo7Cs6bHP2zlX01rxK6acEqeKIV2SgPtJv1CW2IVZxe6q2jN5vm5J5YQoF2AlCvFuFBEPczue3l5OQq1GzSctintPzk7mCZiXUgD59ldSS5Si4xMa9t8Syls=
+	t=1783591421; cv=none; b=kzpLnOIw18rgifrQvkp4am3wpRFAdV4er4BrlYzxtzoRgYtVrd9d+3KZuT4bvCG7JJRmz8sLSNSmmgGkszLxpd6S43vNGK/0h/hjQojynGTIWQcYzK1YB8yezVUW5xRVrRiGeAzcVL/xQU/9BVjFgcrFXAimMwWYP2kf3hInVYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783591418; c=relaxed/simple;
-	bh=vLnbofPmzM0UJ+7cLvOGt1OWQNfColilU7P6fmGcrE0=;
+	s=arc-20240116; t=1783591421; c=relaxed/simple;
+	bh=hANZ/y7CoXj3Gzilljhef9yYe7inszCEDzBwC+ylOHA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Vf+7csY3dYAdN2GvaPDqqb6nBnb8YKC7B7t8K2LjgaPO9x/6sxhyEFcLyvfkn/kA5zUSDUJKC7GOtLkGkNU+HGKkCgk5BySq/mRPe0YmwouM4vMxY+6VE0xm70cYlhJ7H8nqX4bseh1jKEtoCVbdpapN/19ggFUdvBLYJwMJMT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=syG83foy; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=FT9kpMQ3cYVLmxrEMuEmOhUgG0UO7482Ld0nN3WSHvXmxP24Q1sBvVIqBgXHTVdEknjesVt6O9U3EfD4YkkfGyfU+tUGJFuhZx16RO6Ub6d1DP3tQmsfNneq703sGCRsoL6zW3jdIjjVkQ0/qARq30BVSgrq7YH529S3tw2yPto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=d/6gqjzb; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="syG83foy"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="d/6gqjzb"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id E99591A0F04;
-	Thu,  9 Jul 2026 10:03:35 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 2D1A1C2F4C2;
+	Thu,  9 Jul 2026 10:03:53 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id BCE635FF03;
-	Thu,  9 Jul 2026 10:03:35 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A0B3311BC374A;
-	Thu,  9 Jul 2026 12:03:31 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id D24625FF03;
+	Thu,  9 Jul 2026 10:03:38 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9891811BC374B;
+	Thu,  9 Jul 2026 12:03:34 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1783591414; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1783591417; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=gPhF6YNtK2Clk0Rg5nOKIYm+sr20SVQzQ8oU0s08pKg=;
-	b=syG83foya6FdF/rPtL3xP8fhZWnXbPJR9WRTlPJSx7mMhGlaa/hJXYOhFh5ZJQCfvxncaX
-	j5xw3tQE/AiqY3s4H+JSHkt8sP48hvJC46650aMqmsk+eM/LHrmpDYpEN6IT0wG2HDzyfZ
-	vDO8p+g/TgYYGZwy6gre8EExyTrpDX0vrnN0Swyk/gSmWTBnKRdVycSQIcEYSqujACNNlT
-	E1oLHnFslyKz7O5qEqHT8X/TRoDNRZpeK0MJHKEsncRgKI2gWmNr9k7l77OdHaaDF0e5qk
-	N1k7aKWSBIuw1pfXq1EhDruMGRA3rKE4B4gs/L3i01xgsR/Bjh983+Bd8UChlQ==
+	bh=unUdDMU0gKLGOyEOx1tzKElYwdackbPgPQ7PiZyXPpY=;
+	b=d/6gqjzbaOAHIVRucoI2G4qwYVJIJJdQPQOQAdOeSHeDf8ZizQ3Vy0RjUCm56AQc+KM1TG
+	ToMU6r6bRdCTTkhio4WApguU/RMSnQmyW4NpVCf8wCoToGncIQKTk77Y5uHtF+FtOnJhdr
+	u3UhzhWDphZF0n65FkKpky8BoW495ri6gHRCGTIOlG7eSUFUkZjLm3dzgox5zqJl+vkkbR
+	409HS7rqG3r7YTY2flVjqQh1x8cTcyR8P6iuNfUYKYqm6IOoYSGlrGbDKM8heZMgrwjHlM
+	9SWTlQJnXKiY7TiAs5jGGznXR14yPTCnqgmCKC6wduuckJ05n+LWjKSlq6flng==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Thu, 09 Jul 2026 12:01:48 +0200
-Subject: [PATCH bpf-next v5 07/10] bpf, x86: enable KASAN for JITed
- programs on x86
+Date: Thu, 09 Jul 2026 12:01:49 +0200
+Subject: [PATCH bpf-next v5 08/10] selftests/bpf: add helpers for KASAN in
+ JIT testing
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260709-kasan-v5-7-1c64af8e4e1e@bootlin.com>
+Message-Id: <20260709-kasan-v5-8-1c64af8e4e1e@bootlin.com>
 References: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
 In-Reply-To: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -68,27 +68,53 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.15.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-Mark x86 as supporting KASAN checks in JITed programs so that the
-corresponding JIT compiler inserts checks on the translated
-instructions.
+Add two simple helpers to allow checking whether KASAN for eBPF tests
+should be executed:
+- one helper to check if BPF_JIT_KASAN is enabled in kernel
+  configuration
+- one helper to check if the kernel is running with kasan_multi_shot
+  (otherwise only the first test will be able to trigger a report)
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
- arch/x86/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Changes in v5:
+- add kasan_multi_shot helper
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index bdad90f210e4..705a9ab85f3a 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -233,6 +233,7 @@ config X86
- 	select HAVE_SAMPLE_FTRACE_DIRECT	if X86_64
- 	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI	if X86_64
- 	select HAVE_EBPF_JIT
-+	select HAVE_EBPF_JIT_KASAN		if X86_64
- 	select HAVE_EFFICIENT_UNALIGNED_ACCESS
- 	select HAVE_EISA			if X86_32
- 	select HAVE_EXIT_THREAD
+Changes in v2:
+- fix condition
+---
+ tools/testing/selftests/bpf/unpriv_helpers.c | 10 ++++++++++
+ tools/testing/selftests/bpf/unpriv_helpers.h |  2 ++
+ 2 files changed, 12 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/unpriv_helpers.c b/tools/testing/selftests/bpf/unpriv_helpers.c
+index f997d7ec8fd0..95be83937883 100644
+--- a/tools/testing/selftests/bpf/unpriv_helpers.c
++++ b/tools/testing/selftests/bpf/unpriv_helpers.c
+@@ -142,3 +142,13 @@ bool get_unpriv_disabled(void)
+ 	}
+ 	return mitigations_off;
+ }
++
++bool get_kasan_jit_enabled(void)
++{
++	return config_contains("CONFIG_BPF_JIT_KASAN=y") == 1;
++}
++
++bool get_kasan_multi_shot_enabled(void)
++{
++	return cmdline_contains("kasan_multi_shot");
++}
+diff --git a/tools/testing/selftests/bpf/unpriv_helpers.h b/tools/testing/selftests/bpf/unpriv_helpers.h
+index 151f67329665..a7ceb51577cd 100644
+--- a/tools/testing/selftests/bpf/unpriv_helpers.h
++++ b/tools/testing/selftests/bpf/unpriv_helpers.h
+@@ -5,3 +5,5 @@
+ #define UNPRIV_SYSCTL "kernel/unprivileged_bpf_disabled"
+ 
+ bool get_unpriv_disabled(void);
++bool get_kasan_jit_enabled(void);
++bool get_kasan_multi_shot_enabled(void);
 
 -- 
 2.54.0
