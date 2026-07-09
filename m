@@ -1,42 +1,56 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B86E175A73;
-	Thu,  9 Jul 2026 12:53:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA53175A73;
+	Thu,  9 Jul 2026 12:55:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783601632; cv=none; b=TLO95Uu3594QZuPBMVz/I6oUHBLkS2iw2S6Q/xurAcnaQYcfvILyFiooIc1r4UvTwrK/zvukrodY65VasJtIyVFGIJJqmUlqqAAJbD4PG1zNoTfdC47LMzMEcr997i59sweZ9BbgVQ7Uo5y1dtKto7KkUdwIswLvfWIIIY8jJD8=
+	t=1783601731; cv=none; b=GAJMXRKC0W2e5pEpvqvy32NP1XJnq5N4k/OC6+fWCg77MHUQx5ossoP2c5uqTtuaKlXt0XsOxHK72etLVvQCRQS0XH8oJSK1bWUFdoYhTfQef6wO7lcREsEumgXiA1xOBjlV+k2WmqWOUR6KEx5yWqSP2szRP3OGrUgn0zmjXJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783601632; c=relaxed/simple;
-	bh=UhNd1qyYkVLvCpT/UELRc02R+FO81RIZlTbnYq6g7Hk=;
+	s=arc-20240116; t=1783601731; c=relaxed/simple;
+	bh=lgmW/9fuiA36TiD3uKsMlmKXfZqkOl52hD77GE42H18=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ntYEoNj/06+BjHc7pNE5xaWrLkZPt+nZil6KdpW/sruIo4Yc5a2wa3O9h5jjN6VoXQkVYv14OiMPD+RIyBKmbY3LeqEFzBO2DiGIf+ERYeJlZ9gF+3nEEJBbQWxoItlF8twQw/wK1uQjjTbyYi/ICwcUKYUiekUfuWt5NmOt9CI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OSx8KBYA; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=nBDs+HafPRIs6D3h0UMb4USZ8F07rS1A0eIfNjjKjqd1Tq0N7L3UTt1kmn+FDyBVZhEp4ddJUaKsJu2pxVwOwwpDYlrDrIxbbJRQ51aoa/cJMLxEiNRc3jq9xDVIX5VjKhxPFTsF27jM8RSerUyKK8DEaEnsab1Lf3Ikj3+WcZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n1kYneIo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OSx8KBYA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC2261F000E9;
-	Thu,  9 Jul 2026 12:53:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n1kYneIo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56AC61F000E9;
+	Thu,  9 Jul 2026 12:55:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783601631;
-	bh=FC9MFe7HbooU5CANXSl1jvM6WkO22fSJR+L4v+f4h8I=;
+	s=k20260515; t=1783601730;
+	bh=fy+WU+sPrTYSQua5IuDks8DlMF9qDRu6nwaevDw60y4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=OSx8KBYAARHJO/liqXd0R569PzagVrb1uM/kqRz0PNASDSR/BOsJ0y0SVLS9s9m1Q
-	 WwvZAtWT0X7xFbv437tEL6ZDcUCrA4EpOOIFWAs5+yo9OWe5lCSSYcvgUm2GQVeabS
-	 0/1QU+O19hxO2DXBQ9OSClXbACeTtqh7NOOEGwXqV5ompy+lbfbWrY8s9wTdQFF4VF
-	 8Hc/7X+7pIcVFv49Pjw/QE/Qs/Wrsc8DqeV83IlFZjtlyltYKvLzX8T7tv4oj+sR38
-	 VPpmA3m4KLm75svMoUXXaO4qUd3WTuHp7OvWXFmOxnAu77K508OnlW8dM6bdQbtRU9
-	 00ARzM/d9oz6Q==
-Date: Thu, 9 Jul 2026 15:53:46 +0300
+	b=n1kYneIo2IwG1zBn3OrekwgThhMsV1q7/J3uEWhRRLVYQ68D+6fzljE9kxmZrSLAx
+	 yHQ/g9nCHjzge4rmKoi2fSvUdI13mc0PC0o+GVX/mTpVQ2CzCXqckZPoWbKAe5s1nj
+	 dKrbwI71BIRpGAcVUem9wv20D1M2L7OxujYoVzAi771bDmUooUJUMlIvJF6aosHdmz
+	 Zt6O6acpJ1l5evgu4qIldVZlDdo8Y8PisnOqlCF/ntt5+eWX+lAI84rQbtQowEIxNX
+	 ro+FESi9MMtU0aAjxu8lHaNDK1KPkXCtobDnCliyFUoDpejDOIN4ErJ9FXzqApe94R
+	 dBu3pGVeBYwpw==
+Date: Thu, 9 Jul 2026 15:55:21 +0300
 From: Mike Rapoport <rppt@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 5/5] x86/bpf: enable EXECMEM_ROX_CACHE for BPF
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH bpf-next 0/5] bpf, x86: enable EXECMEM_ROX_CACHE for BPF
  allocations
-Message-ID: <ak-Z2mLTWFUbgMVF@kernel.org>
+Message-ID: <ak-aOUZ1waAIKtpQ@kernel.org>
 References: <20260626-execmem-x86-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org>
- <20260626-execmem-x86-rox-bpf-v0-v1-5-45a0b0ed4fe9@kernel.org>
- <20260626185945.2F7BB1F000E9@smtp.kernel.org>
- <DJJWUQWQ6Y6W.2J1E1SKVHQAPO@gmail.com>
+ <ak9V1C-Y3x-KEcTW@kernel.org>
+ <b2fb9a37-3810-45a5-97dd-ed500ae8207c@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,20 +59,40 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DJJWUQWQ6Y6W.2J1E1SKVHQAPO@gmail.com>
+In-Reply-To: <b2fb9a37-3810-45a5-97dd-ed500ae8207c@iogearbox.net>
 
-On Sat, Jun 27, 2026 at 07:44:44AM -0700, Alexei Starovoitov wrote:
-> On Fri Jun 26, 2026 at 11:59 AM PDT, sashiko-bot wrote:
-> > Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> >
-> > Pre-existing issues:
-> > - [Critical] Pages freed from the ROX cache via vfree() are returned to the page allocator with Read-Only permissions, causing kernel panics on subsequent allocations.
-> > - [High] The return value of execmem_restore_rox() is ignored in __execmem_cache_free(), potentially leaving cached memory as Non-Executable (NX) and crashing the kernel when BPF programs are executed.
+Hi Daniel,
+
+On Thu, Jul 09, 2026 at 02:12:04PM +0200, Daniel Borkmann wrote:
+> Hi Mike,
 > 
-> The pre-existing issues sounds real and probably should be addressed
-> before cleanups in this series? Or altogether?
+> On 7/9/26 10:03 AM, Mike Rapoport wrote:
+> > Gentle ping
+> > 
+> > On Fri, Jun 26, 2026 at 09:42:27PM +0300, Mike Rapoport (Microsoft) wrote:
+> > > Hi,
+> > > 
+> > > BPF allocations of executable memory on x86 are essentially read-only. Most
+> > > paths that call bpf_jit_alloc_exec() immediately make it ROX with
+> > > set_memory_rox().
+> > > 
+> > > The code generation, at least on x86, uses separately allocated writable
+> > > buffers and then updates the actual text memory with text_poke().
+> > > 
+> > > These patches do several small adjustments to how BPF allocates executable
+> > > memory and enable EXECMEM_ROX_CACHE for BPF allocations on x86.
+>
+> I think there was an open Q from Alexei wrt the sashiko reports [0] and
+> whether you could address them. Once done, please resend to bpf list.
 
-Both are false positives.
+Thanks for the link!
+I'm not subscribed to bpf@ and it took me a few minutes to realize why I
+don't see this in my inbox.
+ 
+> Thanks,
+> Daniel
+> 
+>   [0] https://lore.kernel.org/bpf/20260626-execmem-x86-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org/#r
 
 -- 
 Sincerely yours,
