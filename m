@@ -1,172 +1,202 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E59844999A
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 19:57:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783627043; cv=none; b=CupP+0cFiYYP/lxC4kKLIdy+Z49eSiT68oGmTjniSMMcnjn4pEnQSYGfNxH0fegmhPYmGk5LphMob4565GTEQNNorl0E14m3HRMpqljF61ZdUloez1X3dreTNXAqWlDbaKepOW9gK+HR0ogLgjxcjhXUM67qYU1o7VT44xcC2cM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783627043; c=relaxed/simple;
-	bh=7mSDSVe1ihtK8CuWSfwLLXAjdvPaSbq2o+Yb8lJWrjc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aJUx87hgVHsUuiEzny5q8USgVhA+nkLsU+c9BLvym5gJROdSwwnzUQpypTjQOJ+Sj3RhzOGOqqq2+kd0BjZejXWByWQBAK27rDFdN0Ek3J00wq8pXmqN5u4RUi++3sAcbI6PYeTO/9xBlIxuScW+Lp8DgMXBV+map/UCsWCx5qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VBQGsO9w; arc=none smtp.client-ip=95.215.58.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41B14499B2
+	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 20:01:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783627279; cv=pass; b=DuHCQGlKug05z2+XTBlde5CbEUTEn9rlUzBmO8iGLEjnMri/n+64mgKQhh/t3yvdW+dpkZwoQenjVJ/c1ieQtTkj4ky/OofXG/AcPwgPiErEPcClTB0R+9LbNsY6KQJ/bDzUI+IzTpkaOD+I/Xxyfl7Sjk3RTVsOHDRnF/WzK48=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783627279; c=relaxed/simple;
+	bh=w17eX4Jkmr+FsItCPkabrTfffyNgjO4WCwf8MwfNxw0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ESrMyxZySt0G7mub5HIIplT74nfVHiRLwgE9hGhDJpvYUDDU1Ftu4pDTba610GxcXLsITM5LSM3ewRCB6N36VYNJslDpPMoKL0J8zlAh6xesegORzE7O2auS0ar9a0vs512N231giurkttKaFXiqn6neIycELeX5eJM4acj6SLQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dBi3k4TI; arc=pass smtp.client-ip=74.125.224.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VBQGsO9w"
-Message-ID: <1c92fd18-73e8-4fb0-9b7d-7cc943f7a9f5@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783627040;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=egztOJTU4NSZW6IcLd49xGTxM5RMw1TvOixu2gAEzgw=;
-	b=VBQGsO9wHtSNAdCg9Fa2kkT4SpijnTVrXmmPEBPsk4Rg/aG9M8wJpSld4Dg8L6HlFUNfvA
-	ryr8IkBujR0Jxe7xNrAW4rAWd9Wnla/nih1ZwG+14Ha8wh/5fxABfOBP25IBfmJ2I/1UNR
-	X963etPnEs/gN0Wk/I4GnMCBBF3RtLQ=
-Date: Thu, 9 Jul 2026 12:57:14 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dBi3k4TI"
+Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-667bae10ba3so178494d50.2
+        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 13:01:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783627277; cv=none;
+        d=google.com; s=arc-20260327;
+        b=EEuilJ9KUElXZkm4pnPAdHmq4H/zC00gB/NTaMmowKhgl/loOXQX/fNjwBoKxOfZwt
+         oWeFUFdPyYqfn9wkBj8SkkCOBw1d8x8WlWvYIXJtScEbk0l9yaD7sbK00GQxqA2GcSDV
+         c6HpdmX0cZIGC4dwZveUd45Q/T2xei41Z8ZpH6SLPKmKBw+M7bwPf1oM/ROnUAaoL9g0
+         R+unBocTDRU3CHx85c7PF+Y2rlVVkop/tPBkaT4gPo8Lv++0zAeZoMgyAQNJ6FfyutVo
+         xsj54uGWVR4+jUWgg2O8WP5xJgMw0QRQtGMi1//uM42gH5th8jhXoklBBDZORQNtEQLS
+         tmgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=UdaAx5E3GxIJv4e+ntEXnbFwxYgeCSAWQNtuiLCa5yo=;
+        fh=ocfAnOMxq5+8/MZ8ziz5LwGsdHdhgWR5um302BDLP2E=;
+        b=mMNi1yeTpCqm6SAdqG7THCp2Hufa7HqiH+dvVbCVSEbi1LXeGfg0hXp/6skBwVT5vY
+         UQedR0q1QUNtDImpsHXsw5qPIOF2OG8G0JVZ2Kk5fRvIdTfUtQ+9s/Gf5mOqOa3V767k
+         /7jDebZ5S8M78wnrOgIguSfu22ac1zejrMaW4r2bmw8Z8r8JV5yCBKcj9jXu7lPB2cjn
+         VCjKb3cN5fzXVuzJ5cZniUJtQn3rJryuPkd0CKaNuzDGGcdAuIABZbWFDP+rkUoipfrW
+         W11Q9ibZIysZ2WbXwtAryFR5XreARQZDJWWcbuZK8ksMVLDGobTHkDn6yTl7cKWHzMij
+         KQPw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783627277; x=1784232077; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=UdaAx5E3GxIJv4e+ntEXnbFwxYgeCSAWQNtuiLCa5yo=;
+        b=dBi3k4TIWd43+q7G7Yvma02Mk+ZsazjBN3m/UL8VPcZX4/MaWbaK4HxNknak72fYO2
+         RV0/FSA13ddAy0OPmZAPWqatFuBMUgTREl9r7L2Y4+79bdlhyyWJJNpLMb+N8Cmaa9lw
+         C8aqrBWI61cS7z9jqLacu0xb7yDHEAe2TVTZlOwrAR4pdFDsI3bKz1Bhh6iiInKrOxWw
+         AaeU/+N3zDrsDHojmlymtweIE+/YCIc2qO6jmNaHixHA6E+LI4+ZiRwj/tl+6GbasLu5
+         FREkWvvRHVfLCps1zfn+15NurkNo2is7EoaODMMW2i98ipsf3qFy5fiMPR8B1Zz7r2LF
+         JXEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783627277; x=1784232077;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=UdaAx5E3GxIJv4e+ntEXnbFwxYgeCSAWQNtuiLCa5yo=;
+        b=E2uQYpxK8LLancKlUBX2mpcEoiIwQWyiZDFhJLPsoA8Lri/gVljeyCRmlXnfx+4yCr
+         UH8ugF/j4aVJwCbqaMfW3AjlALwe8y5wXKVbdQ+Dd+V2ey9OybtdPqFayJXXaKgoTNlO
+         P9JZKZyjf+E1tvEnr5cE3JNOXlwxDoARF1YO1HOboogj1eC5Ot5nv54/H/S+EiewHzze
+         Of6kcu1omGOBWntEfmOmUh++iq/qMIlc4r5SU2CXkn8WC0+6ayyNRqn/S1dsPTIGmqrG
+         to+UewQapLx37JmqVOTfvfCw6NpWUQ8zPibw6bCmE33zXJtJcTd/zIDNhd1kmYd3FtaA
+         h9vA==
+X-Forwarded-Encrypted: i=1; AHgh+Rr3amXL1E1vaCkb9Jyih484DCzYdmYNdn8TGvFlte1Mh5cAl5Wdv22DA8LR9+4nQM1fYCI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYdeZdB1c/RjwWG45bQL/wfVnIQ9uggAOMr4XOmP+zS3b90R4W
+	jM+iBSbAuoZQoVGKDN3mqyUO04CxCurchGsL6KP9E9+Oeajh8wYkU5oEybH4jSwCsxUNK4xy8C0
+	BZoas74V3EP7wAJ+DdOCqz3zYHy0ggIs=
+X-Gm-Gg: AfdE7cmN5y+7daituT8lvTh+TvvM9cbV1fY2FjxIpd3yMA8zv+/rwY2VKVqcB6xtWqA
+	EmEffwAaDDDblJjJxUepk+XoWMWDmyddgKERNgm4b4tzO/36y8IvJ7Zl84bhuO869O3G1IbhEWp
+	qf0daKKJhAp8/yy8505/GQah/vAGJQAIsGLizEH9HS66zCEOtUgNg2+aobVBbGbvb/vR+vxXT1G
+	Z6dACASYboKl+cnganuyr/fBSfxA/f2hsZkOh50BP7RAjcT7Fc1V7JydjyS+1Jgn3E0SSnGzz5g
+	D4aH7FexZg==
+X-Received: by 2002:a05:690e:458a:10b0:667:b314:aea4 with SMTP id
+ 956f58d0204a3-667b314d9ccmr3503746d50.16.1783627276609; Thu, 09 Jul 2026
+ 13:01:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 10/12] selftests/bpf: Add inline-asm and subprog
- tests for R0:R2 returns
-Content-Language: en-GB
+References: <20260709155837.1879230-1-main.kalliope@gmail.com>
+ <20260709155837.1879230-2-main.kalliope@gmail.com> <20260709161557.794E01F000E9@smtp.kernel.org>
+In-Reply-To: <20260709161557.794E01F000E9@smtp.kernel.org>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Thu, 9 Jul 2026 13:01:03 -0700
+X-Gm-Features: AVVi8CfU-FLHyOf2gmxnebYvCzxCj6hmKslGaI-cs-0STr_UKds8Lxhcdl5flWY
+Message-ID: <CAMB2axMeZbxWry=P5JTVo_xDw7TUeUKdK6X0_LKjvLWnLJyHMw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: reject rdonly/rdwr_buf_size kfunc
+ arguments that exceed u32 max
 To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260708200939.2153664-1-yonghong.song@linux.dev>
- <20260708201030.2161016-1-yonghong.song@linux.dev>
- <20260708202830.4BBDE1F000E9@smtp.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260708202830.4BBDE1F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Cc: Nicholas Dudar <main.kalliope@gmail.com>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Jul 9, 2026 at 9:22=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+e(s) to consider:
+>
+> Pre-existing issues:
+> - [High] 32-bit integer overflow in `hid_bpf_get_data()` allows arbitrary=
+ out-of-bounds kernel memory access.
+> - [High] Explicit 0-sized requests to kfuncs result in out-of-bounds read=
+ due to verifier BTF fallback.
 
+I also noticed the second preexisting issue when working on a patchset
+unifying helper and kfunc handling. The patchset will fix it.
 
-On 7/8/26 1:28 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] Hardcoded little-endian assumptions in struct and `__int128` register unpacking will cause selftest failures on big-endian architectures like s390x.
 > --
 >
-> --- Patch [10]: [PATCH bpf-next 10/12] selftests/bpf: Add inline-asm and subprog tests for R0:R2 returns ---
-> commit dcf423ead16608630f40807ad0cde33d495c941d
-> Author: Yonghong Song <yonghong.song@linux.dev>
+> --- Patch [1]: [PATCH bpf-next v2 1/2] bpf: reject rdonly/rdwr_buf_size k=
+func arguments that exceed u32 max ---
+> commit 440bc8eb1e0c84aa93160b0ebdb9ef4731dce2ea
+> Author: Nicholas Dudar <main.kalliope@gmail.com>
 >
-> selftests/bpf: Add inline-asm and subprog tests for R0:R2 returns
+> bpf: reject rdonly/rdwr_buf_size kfunc arguments that exceed u32 max
 >
-> Add inline-asm and subprogram tests for more coverage, including
-> BPF-to-BPF cases, kfunc cases, backtracking and liveness. Both positive
-> and negative tests are added.
+> This commit fixes a truncation issue where a 64-bit size argument was
+> incorrectly truncated into a 32-bit field without a bounds check. It reje=
+cts
+> sizes that exceed U32_MAX in check_kfunc_args() before assigning to the
+> PTR_TO_MEM register.
 >
->> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_run.c b/tools/testing/selftests/bpf/progs/aggregate_ret_run.c
->> new file mode 100644
->> index 0000000000000..d6300b31733d8
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/aggregate_ret_run.c
-> [ ... ]
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 233472a871be5..c7fabe50e4874 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -12097,6 +12097,11 @@ static int check_kfunc_args(struct bpf_verifie=
+r_env *env, struct bpf_kfunc_call_
+> >                               }
+> >
+> >                               meta->r0_size =3D reg->var_off.value;
 >
->> @@ -0,0 +1,160 @@
-> [ ... ]
+> [Severity: High]
+> This is a pre-existing issue, but how does the verifier handle an explici=
+t
+> 0-sized buffer request here?
 >
->> +SEC("tc")
->> +int aggregate_ret_asm_test(struct __sk_buff *skb)
->> +{
->> +	__u64 a = skb->len;
->> +	__u64 b = skb->len ^ 0xdeadbeefULL;
->> +	__u64 lo, hi;
-> [ ... ]
+> If a BPF program calls hid_bpf_get_data() with rdwr_buf_size =3D 0 and
+> offset =3D ctx->allocated_size, the bounds check passes:
 >
->> +	asm volatile (
->> +	"r1 = %[a];"
->> +	"r2 = %[b];"
->> +	"call %[kfunc];"
->> +	"%[lo] = r0;"
->> +	"%[hi] = r2;"
->> +	: [lo]"=r"(lo), [hi]"=r"(hi)
->> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_i128)
->> +	: "r0", "r1", "r2", "r3", "r4", "r5"
->> +	);
->> +	if (hi != a)
->> +		return 3;
->> +	if (lo != b)
->> +		return 4;
-> [Severity: Medium]
-> The test expects the high 64 bits (a) in r2 and the low 64 bits (b) in
-> r0. On a big-endian ABI, the most significant 64 bits (a) will be returned
-> in the first register (r0).
+> drivers/hid/bpf/hid_bpf_dispatch.c:hid_bpf_get_data()
+>     if (rdwr_buf_size + offset > ctx->allocated_size)
+>         return NULL;
 >
-> Will this cause the test to fail on big-endian architectures like s390x?
-
-Good point. I need to test it for s390x.
-
+> The function legally returns a pointer exactly at the end of the buffer.
+> However, in check_kfunc_call(), the verifier seems to misinterpret an
+> explicit 0 size as an absent size:
 >
->> +
->> +	return 0;
->> +}
->> +
->> +SEC("tc")
->> +int aggregate_ret_struct_test(struct __sk_buff *skb)
->> +{
->> +	__u64 a = skb->len;
->> +	__u64 b = skb->len ^ 0xdeadbeefULL;
->> +	__u64 lo, hi;
-> [ ... ]
+> kernel/bpf/verifier.c:check_kfunc_call()
+>     if (!meta.r0_size) {
+>         __u32 sz;
+>         if (!IS_ERR(btf_resolve_size(desc_btf, ptr_type, &sz))) {
+>             meta.r0_size =3D sz;
+>             meta.r0_rdonly =3D true;
+>         }
+>     }
 >
->> +	/* struct { u64 a; int b; }: R0 = a, low 32 bits of R2 = b. */
->> +	asm volatile (
->> +	"r1 = %[a];"
->> +	"r2 = %[b];"
->> +	"call %[kfunc];"
->> +	"%[lo] = r0;"
->> +	"%[hi] = r2;"
->> +	: [lo]"=r"(lo), [hi]"=r"(hi)
->> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_ret_li)
->> +	: "r0", "r1", "r2", "r3", "r4", "r5"
->> +	);
->> +	if (lo != a)
->> +		return 3;
->> +	if ((int)hi != (int)b)
->> +		return 4;
-> [Severity: Medium]
-> The bitwise extraction (int)hi assumes the 4-byte b is in the lower 32
-> bits of r2. On big-endian, wouldn't b be placed in the upper 32 bits of
-> the register, causing this assertion to fail?
-
-The same as above. Need tests with s390x.
-
+> Does this fall back to the BTF type size (1 byte for __u8 *) and incorrec=
+tly
+> grant a 1-byte read permission from the out-of-bounds pointer?
 >
->> +
->> +	/* struct { int a; int b; }: 8 bytes, packed into R0; R2 is not used. */
->> +	asm volatile (
->> +	"r1 = %[a];"
->> +	"r2 = %[b];"
->> +	"call %[kfunc];"
->> +	"%[lo] = r0;"
->> +	: [lo]"=r"(lo)
->> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_ret_ii)
->> +	: "r0", "r1", "r2", "r3", "r4", "r5"
->> +	);
->> +	if ((int)lo != (int)a)
->> +		return 5;
->> +	if ((int)(lo >> 32) != (int)b)
->> +		return 6;
-> [Severity: Medium]
-> The bitwise extraction (int)lo and (lo >> 32) assumes a little-endian
-> register layout for the returned 8-byte struct. On big-endian, wouldn't a
-> be in the upper 32 bits and b in the lower 32 bits?
-
-Will test as the above.
-
+> > +                             if (meta->r0_size > U32_MAX) {
 >
->> +
->> +	return 0;
->> +}
-
+> [Severity: High]
+> This is a pre-existing issue, but does allowing the size to reach U32_MAX
+> expose a 32-bit integer overflow in hid_bpf_get_data()?
+>
+> If a BPF program calls hid_bpf_get_data() with rdwr_buf_size =3D U32_MAX =
+and
+> offset =3D 1, on 32-bit architectures size_t is 32 bits. This would cause=
+ the
+> addition to wrap around to 0:
+>
+> drivers/hid/bpf/hid_bpf_dispatch.c:hid_bpf_get_data()
+>     if (rdwr_buf_size + offset > ctx->allocated_size)
+>         return NULL;
+>
+> This bypasses the bounds check and returns a pointer to data + 1. Since t=
+he
+> verifier records the returned register's mem_size as U32_MAX, does this
+> allow arbitrary out-of-bounds read/write access to kernel memory?
+>
+> > +                                     verbose(env, "%s rdonly/rdwr_buf_=
+size exceeds u32 max\n",
+> > +                                             reg_arg_name(env, argno))=
+;
+> > +                                     return -EINVAL;
+> > +                             }
+> >                               if (regno >=3D 0)
+> >                                       ret =3D mark_chain_precision(env,=
+ regno);
+> >                               else
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260709155837.18=
+79230-1-main.kalliope@gmail.com?part=3D1
+>
