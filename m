@@ -1,143 +1,119 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1361D43746E
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 18:44:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05A6449991;
+	Thu,  9 Jul 2026 18:54:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783622641; cv=none; b=tJJ7ZGhWbNMwzJ0wa51s8MM4cXibKMKb/RkT398MYSo2EhTdvow504vd8/yn2djIyMcW7HwZGDl0+7ANV7dQthpTAZdcbOB4auHllyjkFNWH7UnbiOg95F7lR4n3ypY1lcQg+JJA2RWAFF/0IRD/W6St6YvBUSHEJdxG5S21YX4=
+	t=1783623292; cv=none; b=C6wXvZgyDQOj7OZbR0L3/1nfl6gV/rKtMPiJaVY25ph68rGCWNwxGiJAD+BKeWAz6v+yO9HOXdovPF5psXcGxDoLZXOXLOxUQlezQk1HUM/DWZTsKq/iWvPKqgxrdjCP4GymK8toP1w3xySWydJa/PF4H25mt58sXhsjoctN8M0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783622641; c=relaxed/simple;
-	bh=AzEDPy4n/tg2P9pNqq6HFSvn16Pn7gioI4RLhq1dSCY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PAmIq5EgT+E1DZVcwHW6mRo8rfL/zTsJtHF7pOYx5wnYjxCb7tjiheZOkvbmiJTJyvZB2xLt8aBkas3Flu1eH8bwAFXnq4xxsfTsjtAaQFjUrYPhAnaXeXJ8ALif2he13nf+sW3oNBUJXkKC9af1NboJ0ms/IqPkiOzIHilSToM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k/AxyOAX; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783623292; c=relaxed/simple;
+	bh=nOp9dRAkZZmsy/4LfZiAoN1/cIRVppzj441qbWbpMuI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ch857iYNGkcHIpXopiXe1FZpWTBGzIAmRrPhcnQtK01jpZLnNUcBtUT5/QarB1WuWY3mWTpXNPgQ1V+nhU2IzwDAs45w6zVrQ9DNctwiOHNOWqqDr/iNp2NC5bXlLyNTnc2a6nadExwgmJeGvQpmVanR5I6eM0472Nqw1r/sKP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=emhDrfC3 reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k/AxyOAX"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-493ec555a26so900885e9.0
-        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 11:43:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783622638; x=1784227438; darn=vger.kernel.org;
-        h=content-disposition:content-type:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=sBGn3ij6+2HsbaUjO7lwDiZD87M45vBU8uaHQgq/mEw=;
-        b=k/AxyOAX7qJMRw0x6qVpp4p7muM/ahM1miwmZcUqwaDoqMu8uUhIH5J5RyNg7ndtml
-         y1cn5oiPvNovwNHTvjtSaIzpx9ngA3NattfCNmSpe87vxXGDL23COese01rEcF7YZauh
-         I+ALiHQ0JeHFz+SG2qUDfTRgHQpRv1Wo0kYSx+YtTPj/EawGxURUnCNxSH3HN32IfyfQ
-         gqwCrTH8Ip47hdnuDPyt6gAHGxVkwgbr90GVcNo07VhXyZtL5POrdyqji4RlwloH3CeA
-         c97SfYt6Bh1cvXG1X2VzckG8MTO1O0um1c5egDSl0kxccs3UaWXCFYGfRFkVMsk2oVj5
-         Wz+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783622638; x=1784227438;
-        h=content-disposition:content-type:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=sBGn3ij6+2HsbaUjO7lwDiZD87M45vBU8uaHQgq/mEw=;
-        b=bWudny8BivJ+W3tWFyu5OdG72C3UnvEfKiKlRJZv7SB8BkL8eSFB0jBAnOvRC7L74/
-         8wb7GssMqu4PUmV4j9WHZK86F7i0C6uEDGoxaYiiwmpYwje4Njc0uVNHm26GvDoVxfze
-         dg8kArQGm9AaeV68TAG0N4WO0pUOBpoht2s+ynAfKngmm5dI7NC+0G5ZZAYE8xz0R/xb
-         QXG/XUX9IijUnVQlkOlY0Eb1JtpRK6t1Ckuq5LX6TiX5G+Mgp79JVcSuBiGl/I2zsLt+
-         kHLOYzJ8j435lG1gznpDS/zE1Axc5n9Tz4vnqY6NFN2OpPqvAMupN00nGiNGfef8Ezhi
-         g2Wg==
-X-Forwarded-Encrypted: i=1; AHgh+RpaXU7uR14I5CHvjRGFtgnqJj9iImw38kEdNSnkSij2GMqxcm+yk58DHj/es9fDXaaduj0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxImVdV3uTVkoZ37KilF/RDrLegwqeDnYwB2zldeZ/3KCG7gT9V
-	WT8k89efpRTQWD2OZP/b6E5lW/H+GJCB59TaF6wlEFUMNfwQW19pQf7w
-X-Gm-Gg: AfdE7cmOQin0s56td70U6MVic+5DVZUNsEoe3i5yF7/o/q9lriILiLA78QuorS5QyQG
-	XunAXZ8sXSjHoe8mD8YTDAg+XYnhQ/+dDWqcYcm7Tev3iFpfPb9YBqonmUqjjObiuPiTT8ztAo9
-	/+F/hb3ucZbqc4CroZZaM6kBvFtfGo0+f4X1SUPxASAO+L+8CBDTRaiywYgcuksMEDrsuDfezT6
-	O+wNRDS2UJR6wIPCHfHKlCiMHP+WU4iAsAh0b5fSsU+h4jYJc4DyuJfoJwvul3pX7hS2u2b8XZt
-	MwGsstvG+hicX791+omg4qBz2f+RebkLnJsJ8cISZ8AH75d6oSwsm78MdEOEOiIqEU5W/IqUWMD
-	jnWJqOJPX6u0ZXwC/dUuiZKRBSwFgdGWh0Il/pbuQ7WKd0/UeB80PjKHYI5nNjmTBQtvzpOXlau
-	GwJawWq0RiUYNzh8NGdyR3xCqSfZlolyunnDrWVgSte2qXNmOk/AKHcErl7+CZ0bjETdreO086g
-	9QF
-X-Received: by 2002:a05:600c:4f90:b0:493:e404:3727 with SMTP id 5b1f17b1804b1-493e68c6da4mr94463245e9.23.1783622638328;
-        Thu, 09 Jul 2026 11:43:58 -0700 (PDT)
-Received: from localhost.localdomain (host86-153-201-25.range86-153.btcentralplus.com. [86.153.201.25])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493f2a2e499sm8261895e9.0.2026.07.09.11.43.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 11:43:57 -0700 (PDT)
-Date: Thu, 9 Jul 2026 19:43:56 +0100
-From: Nnamdi Onyeyiri <nnamdio@gmail.com>
-To: nnamdio@gmail.com, nnamdi.onyeyiri@squarepoint-capital.com, 
-	john.fastabend@gmail.com, jakub@cloudflare.com, jiayuan.chen@linux.dev, 
-	edumazet@google.com, ncardwell@google.com, kuniyu@google.com, davem@davemloft.net, 
-	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [BUG] bpf, sockmap: spurious wakeup by tcp_msg_wait_data() causing
- unexpected EAGAIN in recvfrom()
-Message-ID: <ak_rR-Skd8Mvn4mH@localhost.localdomain>
+	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="emhDrfC3"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6C6AA40E014C;
+	Thu,  9 Jul 2026 18:54:38 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
+	reason="fail (body has been altered)" header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id QSY5mcnhEz1a; Thu,  9 Jul 2026 18:54:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1783623268; bh=Yt27dIER6EH7BwDBybe7TUBMtfov7ivN1wC7w3HKW/A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=emhDrfC3quKVcEPIFTu8eG9PS1i4nA82mTENb6wCFa3nSbzzVN/RWuSWGXNkNzBH1
+	 f9bD3lriYyfsVUj9PSHvksBJ6VCuYlX65BPUixuw77oLzFYQfm3PhV8IyzpvSF8GQq
+	 0zWHDal2OEZJKekYcN3dYewXT/t0u/vcGxNT8hi5dzHJnLwx3vjm7X8FedJQkrV6lJ
+	 Nz0ftw7VxbjBJ7k3f7z00lnSZHw4LnSGmds+dljejm3SrPOLjYiMFub1s/WSq/nroW
+	 7YbNo1ZKD2Rmh8rX1psPIu1/1cM/G51xW89Z+uwj1m7JR0pIvYvk6ZlBXAI+JBLGGU
+	 +4RiWZT6djLdeQFZl4N0BUP4Lq/PbBnz6YUXFR9GFgOlraXVlDtRz0LaXFuVNu6irG
+	 iiGKSwjNVQaFX3vRQCt6NU/SjH4N74jUoImsEk98GIIU/4ahmg9E1KmY7/JkZxuCJo
+	 UG4twzvTzKc5+sT9YXiZdYADOdBizMf1Kbqh8rpE76naHzWzYUFT4MhetNhuQB95XA
+	 dn42pG34NPEtgsqs6io8G9OY1ogmyzZTOSXl0wHL8FzU2Vz4K+oGQZ9ZiEEwIncqW9
+	 V5Nrb+/Z9nfr126ItKmxS1cSZVYhlnubllLwAaarX9Ohs+wiCIyFwk5XoFwTsKByLP
+	 HbMjSzJ5vUUJpKGvWoeUchRw=
+Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::3a])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5420B40E02B5;
+	Thu,  9 Jul 2026 18:54:03 +0000 (UTC)
+Date: Thu, 9 Jul 2026 11:53:59 -0700
+From: Borislav Petkov <bp@alien8.de>
+To: Alexis =?utf-8?Q?Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>, ebpf@linuxfoundation.org,
+	Bastien Curutchet <bastien.curutchet@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5 00/10] bpf: add support for KASAN checks in
+ JITed programs
+Message-ID: <20260709185359.GAak_uRxyxfsSjCSyA@fat_crate.local>
+References: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Thu, Jul 09, 2026 at 12:01:41PM +0200, Alexis Lothor=C3=A9 (eBPF Found=
+ation) wrote:
+> Hello,
+> this is v5 of the series aiming to bring basic support for KASAN checks
+> to BPF JITed programs.
 
-We've encounted what appears to be a bug with bpf when invoking recvfrom() on
-an ipv4 tcp socket that has been added to a sockmap.  It results in unexpected
-EAGAIN errors, that we've diagnosed as the result of spurious wakeups from
-tcp_msg_wait_data().
+Can we slow down a bit here please?
 
-This has been confirmed to still be present on the mainline kernel, and I have
-written a reproducer at: https://github.com/Nnamdi/recvfrom_sockmap_eagain/
+From: Documentation/process/submitting-patches.rst
 
-Attched is a patch that we found resolved this using kpatch locally.  It just
-causes spurious wakups to go round the loop again.  I'd like to get a sense of
-whether this is expected behaviour, or really is a bug, in which case, is this
-the correct fix?
+Don't get discouraged - or impatient
+------------------------------------
 
-Thanks,
-Nnamdi.
+After you have submitted your change, be patient and wait.  Reviewers are
+busy people and may not get to your patch right away.
 
-----8<----
-From 0e0c342363b2e435297ab1feda402cde6ad54525 Mon Sep 17 00:00:00 2001
-From: Nnamdi Onyeyiri <nnamdio@gmail.com>
-Date: Thu, 9 Jul 2026 13:06:33 +0100
-Subject: [PATCH] bpf, sockmap: handle spurious tcp_msg_wait_data() wakeup
+Once upon a time, patches used to disappear into the void without comment=
+,
+but the development process works more smoothly than that now.  You shoul=
+d
+receive comments within a week or so; if that does not happen, make sure
+that you have sent your patches to the right place.  Wait for a minimum o=
+f
+						     ^^^^^^^^^^^^^^^^^^^^^
 
-recvfrom()/recv() are documented as only returning EAGAIN for blocking sockets
-when they have a receive timeout configured.  however, adding a blocking
-ipv4 tcp socket without a receive timeout to a sockmap will cause EAGAIN errors
-sporadically.
+one week before resubmitting or pinging reviewers - possibly longer durin=
+g
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-this happens when tcp_msg_wait_data() wakes spuriously (returning 0) in which
-case, if no receive timeout is configured, we loop again instead of returning
--EAGAIN.
+busy times like merge windows.
 
-Signed-off-by: Nnamdi Onyeyiri <nnamdio@gmail.com>
----
- net/ipv4/tcp_bpf.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index cc0bd73f3..38fd391ff 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -317,6 +317,8 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
- 		}
- 		if (data && !sk_psock_queue_empty(psock))
- 			goto msg_bytes_ready;
-+		if (!data && timeo == MAX_SCHEDULE_TIMEOUT)
-+			goto msg_bytes_ready;
- 		copied = -EAGAIN;
- 	}
- out:
-@@ -390,6 +392,8 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
- 			sk_psock_put(sk, psock);
- 			return tcp_recvmsg(sk, msg, len, flags);
- 		}
-+		if (!data && timeo == MAX_SCHEDULE_TIMEOUT)
-+			goto msg_bytes_ready;
- 		copied = -EAGAIN;
- 	}
- 	ret = copied;
--- 
-2.52.0
+--=20
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
