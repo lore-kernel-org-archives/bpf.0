@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED243F5BF3;
-	Thu,  9 Jul 2026 09:47:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF76381AFF;
+	Thu,  9 Jul 2026 09:51:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783590437; cv=none; b=PaOmBMDKaRaxF7qqGw2oVAZbfEfONzmTcGQtGRCuCVZMrM3N52sFqhE8SmGaszgGViF4MlnmdnEXBZoCdPdFsJ4cggsSIelgkwZw4u05Eh4qAip083zIr6ZHE3pyUuM4okiyMsScCNKepnVsdbtwq8eAgksf+HJ2aICbiXI+FNc=
+	t=1783590683; cv=none; b=Tc0d4wRo8a/+eJMqiO8gCer5xQS7Sjijoh9gtV9y6jTohc8L9CQ+AFXjiWsPndNEg7ZFcgxqveFfGnOhiOGcj0xA7kIFuRijOopojzeNtyOvMcZ/Tj/lLcelaj2qS7jVxCUO0TdChF5raL6zQk63Ymp7ksfZqiEGMpofVRlzh+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783590437; c=relaxed/simple;
-	bh=L33ZmEtAntdJq9G+RQNOid3OLGO0SzibP7boL0cJXZk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BILA0kmK7V7LXzeAGTtbjEJ3b9F7GiNtl9Bt6ehe7rmyfxAapiLyfV1SrURdNkbmF/NlpI+vS9BrboD8zXCBoMVb9y/KguFnr5vvb2W+tDJGqo+ZxSFLkkIRzZMsISDG9aazMtJclyPjD5lhAD7xJiOxrs4QFsZje3NNtRQRVc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=q0gbZXDX; arc=none smtp.client-ip=213.133.104.62
+	s=arc-20240116; t=1783590683; c=relaxed/simple;
+	bh=0U25bYtFjVVWOw0Fyb+E9vbcnPC+AThYCcohTtmdMdk=;
+	h=Message-ID:Date:MIME-Version:Subject:References:To:Cc:From:
+	 In-Reply-To:Content-Type; b=S0VlvCaiCOBRANC2G81uESIGvf6elhoZbb5RopIvhfICx+HYWjdv0rsc3P0Xzb0qDzgMtNnxp9L6/booVjWgt2UWAqLYc8BOrkV8j0IZk/uPsWAvAfvs8PYxouYrKB0Fv/0JDBdgR8OARUTIselxWy+Z0Jaii6uVNz1stLgmGDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=UbKcmgDT; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="q0gbZXDX"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="UbKcmgDT"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	In-Reply-To:From:Cc:To:References:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=xT9YDdIetGp8YBUHJqc9YfcejpsTesscK5wLIdgieSg=; b=q0gbZXDXRPbjBGit2CkmDZ1gRo
-	lQSy0YFfsTbvyRAovLP031sFpX2dP07SYZdox2MJ8kXxzxKXUEmiOGS+j/D8hX3IiPOCbelVFLw+n
-	tXRqIs/LC6JUPxfNa4ymvcaJyGO0SGjJGDOZPKoCDg+kSQTI/DY1z2ACyFg8zF+Rs8n/AeLixhUDx
-	Tv9IzrL3G7O/tTxLk6EpoYE5RjK9JnUyNAlTx3z3F3JngOCyxHI2pL3cVTSziIPR71aSkhwSMiS91
-	F4UqSZEJqLMBAzgb4JkCFYsajM5tV8Dav6uPwzTht3Yx41RiZTp1hTwojJaXz5ZTr+LOSLDTyHlVG
-	qD3upM2Q==;
+	bh=wt6DiEMteCEm1lhgoNFvSLYoFznRlgRcQ6OPddERu2k=; b=UbKcmgDT3ADx4W11jAWYevZC55
+	oTNu8YmBdi+MENbpePKFVuD7Sy1V/3dVKQ75mjNj7opLT0t5obCAS0e2JSHmz/6t8N7A7HKRglORw
+	+E2lZ+AmMOe7MjyVTafKDnoPAkHZQNbbr8wKFdSmFfTF8KAAL++NJW1GuBG7k6jbmttEtCaxlugh2
+	BXEyD8kkwk9leEG8hpr6o1CGqHlyzcauHMZgbLpulgMZ4C2e+fIkwY3BWsJNvg/BmNKJ3aTx1ctrZ
+	ZZtULp5gZ1RuPw9e7r13DdfN7IBIMrtULZvV2azaHxNu9hgVFSyShimjNCAxyh4xPyemQ5uyNplCh
+	CDeeM8Yw==;
 Received: from sslproxy06.your-server.de ([78.46.172.3])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1whlLa-000A66-0k;
-	Thu, 09 Jul 2026 11:47:10 +0200
+	id 1whlPb-000Ahf-2J;
+	Thu, 09 Jul 2026 11:51:19 +0200
 Received: from localhost ([127.0.0.1])
 	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1whlLZ-0002NR-0o;
-	Thu, 09 Jul 2026 11:47:09 +0200
-Message-ID: <a5adfd8c-3aba-4158-9491-5aae324fe1c8@iogearbox.net>
-Date: Thu, 9 Jul 2026 11:47:09 +0200
+	id 1whlPb-000CF8-0C;
+	Thu, 09 Jul 2026 11:51:19 +0200
+Message-ID: <4cb2df58-1774-46c1-90fa-139d3db443d9@iogearbox.net>
+Date: Thu, 9 Jul 2026 11:51:19 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,15 +48,11 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/4] Fix and optimize BPF tailcall for LoongArch
-To: Huacai Chen <chenhuacai@kernel.org>, Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260707101508.32283-1-yangtiezhu@loongson.cn>
- <5c81752f-5c57-47c4-afad-7cef78729feb@iogearbox.net>
- <054a69e5-c497-d8de-6acd-1625333d0ca8@loongson.cn>
- <CAAhV-H55YcyXRewC+0YzTHXb1jab0GkAV13EF9nFbTx=UkX4ww@mail.gmail.com>
+Subject: [REMINDER#2] LPC 2026 BPF Track CFP
 Content-Language: en-US
+References: <474fdcb2-5372-4d8b-9231-f686e74c62b2@iogearbox.net>
+To: "open list:BPF [RINGBUF]" <bpf@vger.kernel.org>
+Cc: Xdp <xdp-newbies@vger.kernel.org>
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
  xsFNBGNAkI0BEADiPFmKwpD3+vG5nsOznvJgrxUPJhFE46hARXWYbCxLxpbf2nehmtgnYpAN
@@ -101,49 +97,45 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <CAAhV-H55YcyXRewC+0YzTHXb1jab0GkAV13EF9nFbTx=UkX4ww@mail.gmail.com>
+In-Reply-To: <474fdcb2-5372-4d8b-9231-f686e74c62b2@iogearbox.net>
+X-Forwarded-Message-Id: <474fdcb2-5372-4d8b-9231-f686e74c62b2@iogearbox.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28055/Thu Jul  9 08:25:20 2026)
 
-On 7/9/26 11:25 AM, Huacai Chen wrote:
-> On Thu, Jul 9, 2026 at 5:15 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->> On 2026/7/9 下午4:58, Daniel Borkmann wrote:
->>> On 7/7/26 12:15 PM, Tiezhu Yang wrote:
->>>> Based on 7.2-rc2, tested on a Loongson-3A6000 physical machine.
->>>>
->>>> Here are the test results:
->>>>
->>>>     $ sudo modprobe test_bpf test_suite=test_tail_calls
->>>>     $ dmesg -t | tail -1
->>>>     test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10
->>>> JIT'ed]
->>>>
->>>>     $ sudo ./test_progs -t tailcalls | tail -1
->>>>     Summary: 1/37 PASSED, 0 SKIPPED, 0 FAILED
->>>>
->>>> v2 -> v3:
->>>>     -- Patch 1: Add Fixes tag.
->>>>     -- Patch 2: Update the commit message and add Fixes tag.
->>>>     -- Patch 3: Update the commit message and add Fixes tag.
->>>>     -- Patch 4: Condense the code comments and update the commit message.
->>>>
->>>> No code changes.
->>>
->>> Tiezhu/Huacai, do you want us to route these via bpf-next tree?
->>
->> Hi Daniel,
->>
->> Yes, routing via bpf-next looks better to me
->> because it is updated much more frequently,
->> allowing developers to rebase quickly.
->>
->> However, Huacai usually takes LoongArch BPF
->> JIT patches into the loongarch-next tree.
->> Let's hear his thoughts on this.
-> Yes, I indeed prefer to take these patches into the arch tree, which
-> is similar to powerpc.
-Ok, sgtm, then I'll toss them from our queue.
+We are pleased to announce the Call for Proposals (CFP) for the BPF track at
+the 2026 edition of the Linux Plumbers Conference (LPC), which is taking place
+in Prague, Czechia, from October 5th to 7th, 2026.
 
-Thanks,
-Daniel
+Note that the conference is planned to be primarily in person. CFP submitters
+should be able to give their presentation in person to minimize technical issues,
+although presenting remotely will be possible as a last resort.
+
+The BPF track technical committee consists of:
+
+       Alexei Starovoitov <ast@kernel.org>
+       Daniel Borkmann <daniel@iogearbox.net>
+       Andrii Nakryiko <andrii@kernel.org>
+
+We are seeking proposals of 30 minutes in length (including Q&A discussion).
+
+The gathering is designed to foster collaboration and face to face discussion
+of ongoing development topics as well as to encourage bringing new ideas into
+the development community for the advancement of the BPF subsystem.
+
+Proposals can cover a wide range of topics related to BPF covering improvements
+in areas such as (but not limited to) BPF infrastructure and its use in tracing,
+security, networking, scheduling and beyond, as well as non-kernel components
+like libraries, compilers, testing infra and tools.
+
+Please submit your proposals through the official LPC website at:
+
+       https://lpc.events/event/20/abstracts/
+
+Make sure to select "eBPF Track" in the track pull-down menu.
+
+Proposals must be submitted by July 24, and submitters will be notified of
+acceptance by July 31st. Final slides (as PDF) are due on the first day of
+the conference.
+
+We are very much looking forward to a great conference and seeing you all!
