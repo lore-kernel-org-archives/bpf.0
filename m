@@ -1,65 +1,143 @@
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22F81607A4
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 03:16:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36A8B3403FA
+	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 03:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783567020; cv=none; b=orV0b4kuTWfBq7Xv3lFTjzFbg2dOgtz9VkaIf5Wwawth6XOLZ8W8+0STS5jZT726AS5InJpyki9keixT6G56ARouqXT4tws1DY+stYkN2jsawgqWCYUgWd5R6mjWznLMQJSLD2TDFLnGk+eA21pLSbYHRBe2CtoIlTUK153RNmo=
+	t=1783567209; cv=none; b=bw0ziXpDvoR2DkUF57gxwdDktGXIVppj1OmiWEhA64qgNXzWQOkxwZdh1Jx1yRn67RClRgn/As1n/qAtU/81GF4XebtX5FMxHVywKYzR3IXRUAw7CgwbjfVP6w8B/20WA277/RS1ert0d+7oPzRbptTT1O9nojbi10hjZiEbP+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783567020; c=relaxed/simple;
-	bh=gbmNOcysCc80qJ0seajEtcPfi6jpKNTKyehDc4Yr+oQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gExVc4IPI6ey6UOrArvCEhtFWl7PqitoWVWp22bTTjSUTf6cUKu1f0XxkGe9EqVFrLPzTOG9LeTNTas5vBhQnXIq6bPdWZKbvTaOSNq76xtAkyXQTWkAvEIxZB0EmT8wlRgupQfNI+60h9SoaLY3Dc3jvYg2ErIFg3VbuGsHTuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JQex0ttx; arc=none smtp.client-ip=95.215.58.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783567209; c=relaxed/simple;
+	bh=vFtHrmRS6i6s9c+5qFQGm2cKshyNcVCGx/dmUx/Plek=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=iEs5gBmpDqBnma1VtybVVOPp8ZxXmWfHsrEmcr3itOY2Bpxi/9By0FyzR9mQMbf1h4L15bMrqCB9Fo0KIdO5UYNOJDL/sN57qsyf8Ey+Aeet/MbEFLmkDkYj+LPQhv/LIejYDEMHIekope7bs2w9Lpf2wjr9J7vf0gBLOBj0yLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OR5BUozd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JQex0ttx"
-Message-ID: <b1e6bb7d-8729-4baf-b64a-e514118fef75@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783567017;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gbmNOcysCc80qJ0seajEtcPfi6jpKNTKyehDc4Yr+oQ=;
-	b=JQex0ttxEgdAxRQrwkGJlcrWlxnlie8XVn0zgmZ4XKeP+IuvOqYIsBpKd4X9KzZ9WgEHdy
-	2PvzQLzhVn06VQku6bwqn9L5o64yHPMNld3kflWLUSNhWeOnab0Ojmx78uXE+t8ZO0NNZ6
-	aaANTrP9AypbKDIPsllhqoAXf8DiAuc=
-Date: Thu, 9 Jul 2026 11:16:07 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OR5BUozd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E4D61F000E9;
+	Thu,  9 Jul 2026 03:20:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783567207;
+	bh=NC/JoWseIQ6flwRW6VtbFOyKDSHnExocseh9RabD5ak=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=OR5BUozdMnJEZJVoiYhdSRq5y7QbVQwBajvIJ/I77BF8IpvM5DzCUk6j261TSbYea
+	 HinZ1jJbYYK9YqDJXU2NrjkHZ6IvfJ1vXccz1GrxbUiASoWkM8gTOBtx5cG233ltPY
+	 gk4NiBhEKslUex9OvxFvImFjex+kqaCn6eCGtXxh+gcZpWuVvV7d3hIN3LM66ycs+A
+	 d81auZIPe/w2eQj281A6z8CFgiwA8GX3nExvFi6nMj2prox1BzxDhokQhdYvVEQRCh
+	 1yANebFCki+DvOVLdl54YdgxxIwqiLbhCHYOxIdLUK68sVLesyR+pKp6yXc7aLfu1q
+	 SeGGCLdsGRlxw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf] bpf: fix UAF in sock clone early bailouts
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Matt Bobrowski" <mattbobrowski@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260709025316.999913-1-mattbobrowski@google.com>
+References: <20260709025316.999913-1-mattbobrowski@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 09 Jul 2026 03:20:07 +0000
+Message-Id: <20260709032007.9E4D61F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 07/12] bpf: Reject >8 byte return values on
- return-reading trampoline paths
-Content-Language: en-US
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, kernel-team@fb.com
-References: <20260708200939.2153664-1-yonghong.song@linux.dev>
- <20260708201015.2159760-1-yonghong.song@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260708201015.2159760-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 9/7/26 04:10, Yonghong Song wrote:
-> btf_distill_func_proto() builds the function model used for kfunc calls,
-> the fentry/fexit/fmod_ret/fsession trampolines and struct_ops. A following
-> patch relaxes it to accept a >8 and <=16 byte return value, which for the
-> BPF target is passed back in the R0:R2 register pair.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+
+Pre-existing issues:
+- [High] BPF map corruption via shallow-copied sk_user_data and sk_reusepor=
+t_cb during sk_clone early bailouts.
+- [High] Unbalanced decrement of global network timestamp static key during=
+ sk_clone early bailouts.
+--
+
+--- Patch [1]: [PATCH bpf] bpf: fix UAF in sock clone early bailouts ---
+commit 81577dfc9f1b10000a3b1dfc19a5b577e986ec33
+Author: Matt Bobrowski <mattbobrowski@google.com>
+
+bpf: fix UAF in sock clone early bailouts
+
+This commit fixes a use-after-free on parent socket's BPF local storage
+caused by an early bailout in sk_clone() prior to clearing
+newsk->sk_bpf_storage. By resetting newsk->sk_bpf_storage to NULL
+immediately after sock_copy(), the deallocation path won't destroy the
+parent socket's storage.
+
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 8a59bfaa8096e..498a57f34f5b5 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -2492,6 +2492,9 @@ struct sock *sk_clone(const struct sock *sk, const =
+gfp_t priority,
+>  	sock_copy(newsk, sk);
+> =20
+>  	newsk->sk_prot_creator =3D prot;
+> +#ifdef CONFIG_BPF_SYSCALL
+> +	RCU_INIT_POINTER(newsk->sk_bpf_storage, NULL);
+> +#endif
+
+[Severity: High]
+This is a pre-existing issue, but I noticed there might be a similar issue
+with sk_reuseport_cb and sk_user_data. Since sock_copy() does a shallow
+copy, newsk initially points to the parent's sk_reuseport_cb and
+sk_user_data.
+
+If sk_clone() bails out early (e.g., sk_filter_charge() fails):
+
+net/core/sock.c:sk_clone() {
+    ...
+    if (unlikely(!is_charged || xfrm_sk_clone_policy(newsk, sk))) {
+        ...
+        goto free;
+    }
+
+    RCU_INIT_POINTER(newsk->sk_reuseport_cb, NULL);
+    ...
+}
+
+The bailout happens before sk_reuseport_cb is cleared. When newsk is freed,
+bpf_sk_reuseport_detach() can follow the copied sk_user_data to the parent's
+BPF map slot and write NULL to it:
+
+kernel/bpf/reuseport_array.c:bpf_sk_reuseport_detach() {
+    ...
+    RCU_INIT_POINTER(*socks, NULL);
+    ...
+}
+
+Does this corrupt the parent socket's BPF map during early bailouts?
 
 
-Do you have a plan to add >8 byte return value support for them?
+[Severity: High]
+This is also a pre-existing issue, but could the same early bailout pattern
+cause an unbalanced decrement of the global network timestamp static key?
 
-Thanks,
-Leon
+sock_copy() copies SK_FLAGS_TIMESTAMP into newsk->sk_flags. The global
+timestamp counter is only incremented at the end of sk_clone():
 
-> [...]
+net/core/sock.c:sk_clone() {
+    ...
+    if (sock_needs_netstamp(sk) && newsk->sk_flags & SK_FLAGS_TIMESTAMP)
+        net_enable_timestamp();
+}
+
+However, during destruction of the aborted clone, the global counter is
+decremented unconditionally because the copied flag was set:
+
+net/core/sock.c:__sk_destruct() {
+    ...
+    sock_disable_timestamp(sk, SK_FLAGS_TIMESTAMP);
+    ...
+}
+
+Could an early bailout skip the net_enable_timestamp() call but still
+execute the sock_disable_timestamp() call on free, leading to an underflow?
+
+>  	/* SANITY */
+>  	if (likely(newsk->sk_net_refcnt)) {
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260709025316.9999=
+13-1-mattbobrowski@google.com?part=3D1
