@@ -1,45 +1,50 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1581154723;
-	Thu,  9 Jul 2026 15:47:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D940426694;
+	Thu,  9 Jul 2026 15:48:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783612036; cv=none; b=TH6vX6pQKRop0POy9opkDYtiHMaoH8z8vfeBUq8rXB+CpWatXB+d/P/glpBHdC6ZcnCziDjIpLjLcwUm2SzvpvjQ2jUIDmdVOHjDqSzIcy6vieGCgQGxkzNCJR1wxBJ9SewMEtj+c8tUoFb4P0/hcslxexYXxlxa48KKyegpan4=
+	t=1783612091; cv=none; b=EXRxQFjifsFOjk9hiZ+qakn2CyFCOBWLUImlbdvBsa6VWeTE67r+ts4Nrt7inrwPqmDGCWBcHcGu43R96QoqeMhiBIGO1Ym8QsmIBVDzQLXBmj48JKig0gh6rPtPiCDAJUE7kVwXTiHAMyoEEYLXma8h82xHOa2aGShBgWsW11s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783612036; c=relaxed/simple;
-	bh=GVCbjF+A4VSV4RiKd3PnGb4Zfkm9Eg/koEAbHJbvzDw=;
+	s=arc-20240116; t=1783612091; c=relaxed/simple;
+	bh=Gx3BetVdOhK9tL3J4kYCUB6lFM5K/OloIYl5fsDDOFQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i8eDhFYx66qc0n1vkurUelbVvgy6IirewabWw+MR+dFqTI5gWJIZUEMzPvrimG9n7pj9LH4rhM6WX8lEBtnjBqrdu/YMDpLUnDtsBXVYTlHrSTwmbSsAcsagEGjNwZfh6DvqWIgEGQd78j/XznEJA8wLFVmXqhJORHt0rnpo7oQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LKsuqrl4; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=QxgeSQEfIQQPWeSNYLLnwq/PaUNrNgx9g1d8wc+/t9taQ94rKlrH6ySRkRvazFjxROYzaVqm5anRqfk6/rteT43IU94waTjqJ/U8T1SH+uQm2SFvE4nsUyet93KPkH04XKM1bmwrdCYlDNjHCEoRdZXyCMSIHbwpwCuyP/Tz9nY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=ECJiMV3l; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LKsuqrl4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A68991F000E9;
-	Thu,  9 Jul 2026 15:47:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783612035;
-	bh=DDBTZE6NaalyA2hbP+96rCdb52x67RTX0930I1VznkI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=LKsuqrl4VNkM812QBSwyAAHx/zksQk3ssvSSg3/kI/w9H31LFOxTc2VKsgfu0e9+C
-	 Mu+BdBTgWHTKZrOKtoOKX5Hzc0zR9c+Zw7j1sY6qEbVkxTC++FVzwCqOBlQ9A0+H1o
-	 wYKZVaiYx65iVT55zK41q8Awp6jfpSx4tZdRXNHGqFzhVEUUBqVxp4cpnaHOiZdSh4
-	 ZoHILkAp7HW2KCxaOLdYZUjC8EyFdjz8bmEqdMsrYovHdibrWaBRkxLIZzKZvgXoji
-	 QvdxNewJYwMsmaaYiA08P3Czom3nqctQ0Zo+/C2PvnoA16VCKB66pNjBGBumOzYSid
-	 j+z67Am5ElW0g==
-Date: Thu, 9 Jul 2026 11:47:13 -0400
-From: Eric Biggers <ebiggers@kernel.org>
-To: Vadim Fedorenko <vadim.fedorenko@linux.dev>
-Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH 29/33] bpf: crypto: Use AES-CBC and AES-ECB libraries
-Message-ID: <20260709154713.GB6853@quark>
-References: <20260707053503.209874-1-ebiggers@kernel.org>
- <20260707053503.209874-30-ebiggers@kernel.org>
- <10eafa42-1142-4ed2-a485-f46c496bddfb@linux.dev>
- <20260707182049.GA2238@quark>
- <d1cdfc23-b336-49a9-8833-29f05b5b9fec@linux.dev>
- <20260707231652.GA2264445@google.com>
- <5f9c3aab-5339-463c-a86d-edac297e1e95@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ECJiMV3l"
+Received: by linux.microsoft.com (Postfix, from userid 1204)
+	id 1852720B716D; Thu,  9 Jul 2026 08:48:03 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1852720B716D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1783612083;
+	bh=KrNo05al+iHU65EqWsm2pT9OTDN3Qql+zzSQH5XVV/o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ECJiMV3l1QuK0yFx8wTLGR+6qMqz3l/AwK74cYG7G/q0DsO9ufiapDLnJulAJdhxn
+	 iTsI/WZQrL25aOZYr8+bbdAUrTxPlfgUth1SLpdHeSd6P/welskVBuGGl0VRn6a1Qe
+	 4AKFz8rByCM3n2haE/ILCOdfP2VGxXoUhvN3rc4c=
+Date: Thu, 9 Jul 2026 08:48:03 -0700
+From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+To: Simon Horman <horms@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	leon@kernel.org, longli@microsoft.com, kotaranov@microsoft.com,
+	shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
+	ernis@linux.microsoft.com, shirazsaleem@microsoft.com,
+	linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+	stephen@networkplumber.org, jacob.e.keller@intel.com,
+	dipayanroy@microsoft.com, leitao@debian.org, kees@kernel.org,
+	john.fastabend@gmail.com, hawk@kernel.org, bpf@vger.kernel.org,
+	daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me,
+	yury.norov@gmail.com, pavan.chebbi@broadcom.com
+Subject: Re: [PATCH net-next v11 2/2] net: mana: force full-page RX buffers
+ via ethtool private flag
+Message-ID: <ak/Cs/qWVJD57qgl@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20260701141808.461554-3-dipayanroy@linux.microsoft.com>
+ <20260708155741.1509815-2-horms@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,28 +53,273 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5f9c3aab-5339-463c-a86d-edac297e1e95@linux.dev>
+In-Reply-To: <20260708155741.1509815-2-horms@kernel.org>
 
-On Wed, Jul 08, 2026 at 12:47:43PM +0100, Vadim Fedorenko wrote:
-> On 08/07/2026 00:16, Eric Biggers wrote:
-> > On Tue, Jul 07, 2026 at 11:50:33PM +0100, Vadim Fedorenko wrote:
-> > > > Does this mean the AES-ECB support is unnecessary and can be dropped?
-> > > 
-> > > Let's keep it if it doesn't hurt.
-> > 
-> > It kind of does.  It is "bad" crypto that would have to continue to be
-> > maintained, and someone might start using it accidentally.
+On Wed, Jul 08, 2026 at 04:57:42PM +0100, Simon Horman wrote:
+> This is an AI-generated review of your patch. The human sending this
+> email has considered the AI review valid, or at least plausible.
+> Full review at: https://netdev-ai.bots.linux.dev/sashiko/
+> ---
+> net: mana: force full-page RX buffers via ethtool private flag
 > 
-> AES-ECB was introduced as a cipher to use in QUIC-LB draft,
-> draft-ietf-quic-load-balancers-21
+> This adds an ethtool private flag "full-page-rx" that forces one RX buffer
+> per page to avoid a page_pool fragment path throughput regression on some
+> 4K PAGE_SIZE ARM64 platforms. Toggling the flag while the port is up
+> triggers a mana_detach() + mana_attach() reconfiguration to apply the new
+> buffer layout.
 > 
-> I know it is expired draft, but it may be worth keeping this cipher
-> as QUIC WG github is still active
+> A few questions inline.
+> 
+> > diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> > index 7438ea6b3f26..38f50b4eef87 100644
+> > --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> > +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> 
+> [ ... mana_use_single_rxbuf_per_page() and mana_get_rxbuf_cfg() hunks
+>       unrelated to the comments below ... ]
+> 
+> > diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+> > index 3531abfdaf43..24f6ce63b031 100644
+> > --- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+> > +++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+> 
+> [ ... ]
+> 
+> > @@ -611,6 +630,88 @@ static int mana_get_link_ksettings(struct net_device *ndev,
+> >  	return 0;
+> >  }
+> >  
+> > +static u32 mana_get_priv_flags(struct net_device *ndev)
+> > +{
+> > +	struct mana_port_context *apc = netdev_priv(ndev);
+> > +
+> > +	return apc->priv_flags;
+> > +}
+> > +
+> > +static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
+> > +{
+> > +	struct mana_port_context *apc = netdev_priv(ndev);
+> > +	u32 changed = apc->priv_flags ^ priv_flags;
+> > +	u32 old_priv_flags = apc->priv_flags;
+> > +	bool schedule_port_reset = false;
+> > +	int err = 0;
+> > +
+> > +	if (!changed)
+> > +		return 0;
+> > +
+> > +	/* Reject unknown bits */
+> > +	if (priv_flags & ~GENMASK(MANA_PRIV_FLAG_MAX - 1, 0))
+> > +		return -EINVAL;
+> > +
+> > +	if (changed & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF)) {
+> > +		apc->priv_flags = priv_flags;
+> 
+> [Low]
+> Is the storage of priv_flags intentionally nested inside the per-flag
+> branch?  With only one flag today this is fine, but when a second bit is
+> added to enum mana_priv_flag_bits, a user toggling only the new bit
+> passes the !changed and unknown-bits checks, the outer if is skipped,
+> apc->priv_flags is never updated, and mana_set_priv_flags() returns 0
+> while mana_get_priv_flags() keeps reporting the old state.
+> 
+> Would it be cleaner to store priv_flags unconditionally after validation
+> and use per-flag if (changed & BIT(...)) blocks only for the
+> flag-specific reconfiguration?
+> 
 
-Sigh.  We shouldn't implement Internet-Drafts that have clear issues
-with how they use cryptography.  They're likely to change when they
-undergo cryptography review.  We went through this same thing with
-TCP-AO, where I ended up joining the tcpm working group and getting the
-draft fixed.  Do I need to do the same with this one too?
+Hi Simon, Paolo,
 
-- Eric
+Agreed on this future concern,
+but also we donot plan to have another mana driver private flag.
+
+
+> > +
+> > +		if (!apc->port_is_up) {
+> > +			/* Port is down, flag updated to apply on next up
+> > +			 * so just return.
+> > +			 */
+> > +			return 0;
+> > +		}
+> > +
+> > +		/* Pre-allocate buffers to prevent failure in mana_attach
+> > +		 * later
+> > +		 */
+> > +		err = mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queues);
+> 
+> [Low]
+> When the MTU is already jumbo (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2) or
+> XDP is attached, mana_use_single_rxbuf_per_page() already returns true
+> regardless of the new priv flag:
+> 
+> 	if (apc->priv_flags & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF))
+> 		return true;
+> 
+> 	/* For xdp and jumbo frames make sure only one packet fits per page. */
+> 	if (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 || mana_xdp_get(apc))
+> 		return true;
+> 
+> In that case mana_get_rxbuf_cfg() produces identical output whether the
+> new flag is on or off, yet toggling the flag here always performs a full
+> mana_pre_alloc_rxbufs() + mana_detach() + mana_attach() cycle and flaps
+> the link.
+> 
+> Would a pre/post comparison of mana_get_rxbuf_cfg() output be worth
+> adding to skip the reconfiguration when nothing actually changes?
+Good point will add a pre and post comparison as well to skip the
+detach/attach when already in that configuration.
+
+> 
+> [High]
+> mana_set_priv_flags() drives the same detach/attach sequence used by
+> mana_set_channels() and mana_per_port_queue_reset_work_handler(), but
+> does not take apc->vport_mutex and set apc->channel_changing = true
+> across the window.
+> 
+> The struct comment on channel_changing spells out the invariant:
+> 
+> 	/* Set by mana_set_channels() under vport_mutex to block RDMA
+> 	 * from grabbing the vport during the detach/attach window.
+> 	 * Checked by mana_cfg_vport() when called from the RDMA path.
+> 	 */
+> 	bool channel_changing;
+> 
+> Without it, after mana_detach() uncfg's the vport an RDMA client can
+> call mana_cfg_vport() and bump vport_use_count, and then mana_attach()
+> will fail with -EBUSY when it re-cfg's the vport.
+> 
+> There is also no equivalent of the '!port_is_up && vport_use_count'
+> early -EBUSY check that mana_set_channels() performs, so is the flag
+> allowed to be changed silently while an RDMA client is using the vport?
+> 
+Agreed. Will add the same vport_mutex + channel_changing pattern used by
+mana_set_channels() and mana_per_port_queue_reset_work_handler() to
+block RDMA from grabbing the vport during the detach/attach window.
+
+> > +		if (err) {
+> > +			netdev_err(ndev,
+> > +				   "Insufficient memory for new allocations\n");
+> > +			apc->priv_flags = old_priv_flags;
+> > +			return err;
+> > +		}
+> > +
+> > +		err = mana_detach(ndev, false);
+> 
+> [High]
+> mana_detach() begins with ASSERT_RTNL(), and so does mana_attach()
+> called below.  Is RTNL guaranteed to be held on the SET priv-flags path?
+> 
+> mana registers net_shaper_ops in mana_devops, which makes it an
+> ops-locked driver, so netdev_need_ops_lock() is true and the ethtool
+> core acquires rtnl only when the driver opts in via
+> ETHTOOL_OP_NEEDS_RTNL_* for that specific command.
+> 
+> Looking at mana_ethtool_ops.op_needs_rtnl:
+> 
+> 	.op_needs_rtnl		= ETHTOOL_OP_NEEDS_RTNL_SCHANNELS |
+> 				  ETHTOOL_OP_NEEDS_RTNL_SRINGPARAM |
+> 				  ETHTOOL_OP_NEEDS_RTNL_GLINK,
+> 
+> ETHTOOL_OP_NEEDS_RTNL_SPFLAGS is not listed, so ASSERT_RTNL() in the
+> detach/attach helpers below will WARN, and the code races with
+> RTNL-serialized mutators (mana_open, mana_close, mana_change_mtu,
+> mana_tx_timeout) that read and write apc->port_is_up, apc->rxqs,
+> apc->tx_qp and apc->port_st_save.
+> 
+> Should ETHTOOL_OP_NEEDS_RTNL_SPFLAGS be added to op_needs_rtnl, matching
+> what is already done for SET channels?
+> 
+Agreed, Will add ETHTOOL_OP_NEEDS_RTNL_SPFLAGS to .op_needs_rtnl.
+> > +		if (err) {
+> > +			netdev_err(ndev, "mana_detach failed: %d\n", err);
+> > +			apc->priv_flags = old_priv_flags;
+> > +
+> > +			/* Port is in an inconsistent state. Restore
+> > +			 * 'port_is_up' so that queue reset work handler
+> > +			 * can properly detach and re-attach.
+> > +			 */
+> > +			apc->port_is_up = true;
+> > +			schedule_port_reset = true;
+> > +			goto out;
+> > +		}
+> > +
+> > +		err = mana_attach(ndev);
+> > +		if (err) {
+> > +			netdev_err(ndev, "mana_attach failed: %d\n", err);
+> > +			apc->priv_flags = old_priv_flags;
+> > +
+> > +			/* Restore 'port_is_up' so the reset work handler
+> > +			 * can properly detach/attach. Without this,
+> > +			 * the handler sees port_is_up=false and skips
+> > +			 * queue allocation, leaving the port dead.
+> > +			 */
+> > +			apc->port_is_up = true;
+> > +			schedule_port_reset = true;
+> 
+> [High]
+> On this branch, mana_detach() has already succeeded and run
+> mana_cleanup_port_context(), so apc->rxqs is NULL and queues are torn
+> down.  Setting apc->port_is_up = true here between now and when
+> queue_reset_work runs opens a window where callers gate on port_is_up
+> as their "safe to access rxqs/tx_qp" predicate.
+> 
+> For example, mana_get_ethtool_stats() does:
+> 
+> 	if (!apc->port_is_up)
+> 		return;
+> 	...
+> 	rxq = apc->rxqs[q];
+> 	...
+> 
+> A concurrent ethtool -S invocation during that window will pass the
+> port_is_up gate and dereference apc->rxqs[q]->stats on a NULL rxqs.
+> 
+> Is the port_is_up restore actually needed for the reset work handler's
+> mana_detach() call?  On the reset path, mana_detach() takes its early
+> return when !netif_device_present(ndev):
+> 
+> 	if (!from_close && !netif_device_present(ndev))
+> 		return 0;
+> 
+> That early return does not touch apc->port_st_save, so the saved state
+> from the earlier successful mana_detach() should already be intact for
+> the follow-up mana_attach().
+> 
+> There is also no smp_wmb() paired with this write, unlike the pattern
+> used inside mana_detach()/mana_attach() proper.
+> 
+
+For the mana_attach() failure path: agreed, will remove port_is_up =
+true. After a successful mana_detach(ndev, false), netif_device_detach()
+has already been called so the reset handler's mana_detach() takes the
+early return via !netif_device_present(), preserving port_st_save for
+the subsequent mana_attach().
+
+For the mana_detach() failure path: keeping port_is_up = true is
+intentional. Here netif_device_detach() was never reached, so the reset
+handler's mana_detach() would re-enter fully and overwrite port_st_save
+from port_is_up, if left as false, mana_attach() would skip queue
+allocation and leave the port dead.
+
+
+> > +		}
+> > +	}
+> > +
+> > +out:
+> > +	mana_pre_dealloc_rxbufs(apc);
+> > +
+> > +	if (schedule_port_reset)
+> > +		queue_work(apc->ac->per_port_queue_reset_wq,
+> > +			   &apc->queue_reset_work);
+> > +
+> > +	return err;
+> > +}
+> > +
+> 
+> [ ... remaining hunks unrelated to the comments above ... ]
+
+Thanks for the review comments, I will address them in the next
+version.
+
+
+Regards
+Dipayaan Roy
