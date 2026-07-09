@@ -1,124 +1,118 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2EAD2EAB72
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 23:08:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA6E4499A1
+	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 23:16:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783638502; cv=none; b=hCRKDfETJFhEGSlMcM/3KB5r1ux3sCLqRE1yOwA5uU6jjRUdkt4fPk6vUqotJTh0ex1YRhlhv5iBuWXMejaQC4L6yCnJOz4dhtp/1luZA2sIx12e44IYdJgIGKTiIHIggEGUaT0ziJv0xwxZJqLnKZ49UUMKyr7ebx8KPhjWUjQ=
+	t=1783638976; cv=none; b=nz+BNc1sUHREVwQGjkXdPll88PTB3nOxXoLOjDflpgWir9i9T2GgU4Jnr2SBMSex6W479fjKGMlEDv82HwlvE6sBbeEHpmvh4GMWnArDYudqDJSBTNqBCJbDoPrxtlBfkaWGuHUW+R999eB6VaWSLzUf4MnbVqm96i/hYHfktpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783638502; c=relaxed/simple;
-	bh=Kwy/lIZG4jZPLnwWCC4JuzR48BZR7MoWws+ux2PyiVc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Ao1rPzIqfTJyA0a4T3l5O51IsloAt1AbF3sWfMY8KPI5lAzvXQWBxrCn28NassZAwdbpA9Ri2cYzrfwgxuGCk68pSQ+lN+kobht3+/YsX+9e52UZGX28kXHIdeFneAEW1lTxC1tQN2j0ho2ZUIg0PiosBDm13DX9fmJ6ja9wzag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R68qvFvH; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783638976; c=relaxed/simple;
+	bh=hNfjj2Fa1QCBn6YE+JASbVmhu3V2AXCNc1UDkd64WW4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=lqhD0OQ9GmdVO79Kf8AR4H3B33Pp6UJF61I2AAR6P3jVPWewE9bOg5fvIl1g2NAulv/ZofgugWB52yZ7/4W/aStKRJyz1mP6T5Y78BbzOI/kAiCEAIeqCso0AhaWs7qTwotJXdFce0i3EFYL126l1aFUTYL1BMe8zRMaUQ5m1WY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tc0VMCXI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R68qvFvH"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c88a4d79ba5so249486a12.2
-        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 16:08:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783638500; x=1784243300; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=Kwy/lIZG4jZPLnwWCC4JuzR48BZR7MoWws+ux2PyiVc=;
-        b=R68qvFvHS/MTkWfuH6gk4mdgCeKhoKDh1Z1ZsNBuRHtUkN7kOpj9EZy1JdFYfr6ni5
-         yv6NFtUW/Jr87cAEHCFzCHcIzdtM/ZbrlT9JryOytv418HFdi4BsrqXnX5tcRMGaGsyj
-         L5OrHX9xb3joCvStTcoLqXKgAtgVVghnLEzGpWbiTHiBHEM20TzeIx+p3a0b+CzNJipU
-         XQyjuffj3zqvtMgULAaMHVR/Ajgg9X+3ca/Kba21sYPRdvrmKhRkDzrLau9xPpmJloPU
-         XQ4UbqozeszAVlCggTRT3u5GIdgxXk6mfV6LUCJzt4EC6JcLtYluHG/y7ytEIXJFqAsN
-         jSaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783638500; x=1784243300;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Kwy/lIZG4jZPLnwWCC4JuzR48BZR7MoWws+ux2PyiVc=;
-        b=BQlpyxZFd6wu4CuCJCWmQM2jA/fNPOwF4MldVHTfZoXu0E5MucGf9r4BoFHdUED1Xn
-         4oSUvRZynEcnqw7Y1w53ECvnnNi0He9D7ZeEo9kh0kG+hYYmq0ujvDXpKnhFfxxCL2l4
-         Ca0xaLpoOOc4868x1tbNRIY+yjV9MJ3ufTc3qEZ8EWqBOg7G8UpJrDc8XUwV26vUEEOQ
-         WKNO369Co92kyezWjnJMCFRsw1/kEIkilAGp/TV61xYOGbIElEEobwvkEvagqGd9J9ew
-         ENYa14WRPJHCdR16WEHy79j4zJr/9cm7/zAn7v/I69YavML0Ws7dJ6LA+mvcU8hIOgkv
-         UdRw==
-X-Forwarded-Encrypted: i=1; AHgh+RqHdbpCRcIE98KMm4BqkAyk5y0vxJgGFzeDfJqlROjMqQSfDTekwlVXxwNus+1QOfawA20=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygTQAkhBM+rqGka1GEs/GkvtRa9xo38HnaflhH6h4fBY4OFF19
-	B/WzujgqFUwbkZ2ss2TWRJooapmFkEGOTnErJk/7hrJurg0BzgonnKQ4
-X-Gm-Gg: AfdE7ckxENI3aJQ84J8Gjm54tfw7biSrDoLRodbpuXAFntqGq2xtV4/8x4mDQlC/5II
-	ZSPt/YmhBRGTrHHP+g4WexsS4oqUpwmJAbKpxl5xDwDVjI6kNqz+da/VUCdMzZWd5r6YvSVFYrA
-	JUNGXHyN/YhbAFUttw7XpOtUWJXHdIydmHP0xxgX1TVs0nDMjQbf0qSgsl4LtDeApwivMunW935
-	Iz9rTHm6driSR/uYuG/doRgik17PEhxjCgwlTksR4ECj+Rn6U5X8HYEr6eZXNUaXkS5Uu945pu6
-	7Sfa9iaw3rrs9G5ZxnXO/87R4JAUcGdQXzorR5PLnWm25XPp4bY1lHoSX73u0Lrx0dS2SLqb3Tb
-	/J0xx7GCYSXywVAm9FpkdT4jQimVxhBam/OWLVHx9kbIVxPt+Y15y4movutOjhw4YXSzss3oC6m
-	BNnwbcuDAgp+diC7fUwkDfO84w+qBmDVCJz27odTGK
-X-Received: by 2002:a05:6a21:496:b0:3bf:b9de:854d with SMTP id adf61e73a8af0-3c0bcc6a209mr11205185637.23.1783638499871;
-        Thu, 09 Jul 2026 16:08:19 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ca5b3162d56sm4297903a12.20.2026.07.09.16.08.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 16:08:19 -0700 (PDT)
-Message-ID: <b571171588e42e40e9bed69fb3f1bc9021573445.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 07/12] bpf: Reject >8 byte return values on
- return-reading trampoline paths
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com
-Date: Thu, 09 Jul 2026 16:08:16 -0700
-In-Reply-To: <20260708201015.2159760-1-yonghong.song@linux.dev>
-References: <20260708200939.2153664-1-yonghong.song@linux.dev>
-	 <20260708201015.2159760-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tc0VMCXI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0519D1F000E9;
+	Thu,  9 Jul 2026 23:16:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783638975;
+	bh=45wyXJVodmCNChUIkzhIAU2xScXx3oubOfmCnhM9WLY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Tc0VMCXIbyKwy4Pd2WDlxJVDHLWzIayQO35DeJ7NpCjpYU2M0aeVgLy2eH4vYfCjO
+	 5aM3zKLv1FnhXvBq5m53IKTXGJhIFDNzgTFR16TrGEPscnoZXSYl3KwTM4AdUuIH1s
+	 sUzcSrLn9rUKGFZNBNWgaPMo8SRAgyRlANNNaJp80j5Qa+3z9g6OTfYCYSPxaCIu9K
+	 9GutlqSVaL8rBgacTbqsBXRBo2AsQRTO62GP1iboFTYI09bVKpFHUlXZfcV+rsTCJU
+	 6JR+L9H3aSePfdlqNor+8Gy3t6yGMm6SuNs3pje4QzcZqOtli9w6SKArG8sKLtuSgi
+	 X9l19mcTViXXQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1 4/4] bpf: Unify helper and kfunc call
+ argument meta
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Amery Hung" <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260709230242.2003459-5-ameryhung@gmail.com>
+References: <20260709230242.2003459-1-ameryhung@gmail.com>
+ <20260709230242.2003459-5-ameryhung@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+Date: Thu, 09 Jul 2026 23:16:14 +0000
+Message-Id: <20260709231615.0519D1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Wed, 2026-07-08 at 13:10 -0700, Yonghong Song wrote:
-> btf_distill_func_proto() builds the function model used for kfunc calls,
-> the fentry/fexit/fmod_ret/fsession trampolines and struct_ops. A followin=
-g
-> patch relaxes it to accept a >8 and <=3D16 byte return value, which for t=
-he
-> BPF target is passed back in the R0:R2 register pair.
->=20
-> But the BPF trampoline cannot preserve such a return. It saves and restor=
-es
-> only 8 bytes of the return value (RAX on x86, i.e. R0), so the second hal=
-f
-> (RDX / R2) is not preserved across a program that observes the return
-> value. A program attached to a function returning a 16-byte value (e.g.
-> current_time() or ns_to_timespec64(), which return struct timespec64)
-> would corrupt the value seen by the real caller and read a partial return
-> value itself. struct_ops trampolines have the same limitation.
->=20
-> This only matters for the attach types that actually read the target's
-> return value: fexit, fmod_ret and fsession (plus the _multi variants of
-> fexit and fsession). fentry and fentry_multi run before the target return=
-s
-> and never touch the return value, so they can attach to a >8 byte-returni=
-ng
-> function safely.
->=20
-> Reject a >8 byte return value for the return-reading attach types in
-> bpf_check_attach_target() and bpf_check_attach_btf_id_multi(), and for
-> struct_ops in bpf_struct_ops_desc_init(), ahead of the following patch th=
-at
-> would otherwise let such a return through. kfunc and BPF-to-BPF subprogra=
-m
-> calls, which the JIT does handle, are unaffected.
->=20
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
+Pre-existing issues:
+- [High] Uninitialized stack memory read in `check_kfunc_call` when handlin=
+g kfunc calls in signed BPF programs.
+--
 
-Maybe post this independently from the current patch-set?
-Seem to be a standalone fix.
+--- Patch [4]: [PATCH bpf-next v1 4/4] bpf: Unify helper and kfunc call arg=
+ument meta ---
+commit b1105689a4b2bf6e2532e6d414d410ef55c0694b
+Author: Amery Hung <ameryhung@gmail.com>
+
+bpf: Unify helper and kfunc call argument meta
+   =20
+Helper and kfunc argument checking carried two separate meta structs: the
+verifier-local struct bpf_call_arg_meta and bpf_kfunc_call_arg_meta.
+Merge them into a single struct bpf_call_arg_meta. This is groundwork for
+sharing argument checking between helpers and kfuncs.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index fcd9715eff017..5ccb00a8c84ce 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -12972,7 +12953,7 @@ static int check_kfunc_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn,
+>  	struct bpf_reg_state *regs =3D cur_regs(env);
+>  	const char *func_name, *ptr_type_name;
+>  	const struct btf_type *t, *ptr_type;
+> -	struct bpf_kfunc_call_arg_meta meta;
+> +	struct bpf_call_arg_meta meta;
+>  	struct bpf_insn_aux_data *insn_aux;
+>  	int err, insn_idx =3D *insn_idx_p;
+>  	const struct btf_param *args;
+
+[Severity: High]
+This is a pre-existing issue, but does this lead to reading an uninitialized
+pointer if bpf_fetch_kfunc_arg_meta() returns early?
+
+In check_kfunc_call() in kernel/bpf/verifier.c, the local variable meta is
+declared without initialization and passed to bpf_fetch_kfunc_arg_meta().
+If the call to fetch_kfunc_meta() inside it returns an error like -EACCES,
+it returns early before initializing meta:
+
+kernel/bpf/verifier.c:bpf_fetch_kfunc_arg_meta() {
+	struct bpf_kfunc_meta kfunc;
+	int err;
+
+	err =3D fetch_kfunc_meta(env, func_id, offset, &kfunc);
+	if (err)
+		return err;
+    ...
+}
+
+Back in check_kfunc_call(), the error path evaluates meta.func_name:
+
+	err =3D bpf_fetch_kfunc_arg_meta(env, insn->imm, insn->off, &meta);
+	if (err =3D=3D -EACCES && meta.func_name)
+		verbose(env, "calling kernel function %s is not allowed\n", meta.func_nam=
+e);
+
+If the stack memory is uninitialized, could meta.func_name contain a garbage
+pointer that leads to a crash or an info leak when dereferenced by vsnprintf
+during the verbose() call?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260709230242.2003=
+459-1-ameryhung@gmail.com?part=3D4
