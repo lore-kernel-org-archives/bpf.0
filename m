@@ -1,1108 +1,959 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from mailrelay.tu-berlin.de (mailrelay.tu-berlin.de [130.149.7.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A01940BCAB;
-	Thu,  9 Jul 2026 10:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3928D404889;
+	Thu,  9 Jul 2026 10:04:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.149.7.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783591428; cv=none; b=rylnfQYjqQizvXXzaOrXmEFtf8VaWv+InzxhFo1o2RtPkCxs7p6ymgT4cmyN7mpja3jF57oo8ZrLjRAnK5qhqRvB9bcPAt91lP+XoMKfrpAgfjq1M3EF8LTXa8PncOJcCaRJ0bW+/TL6pfYmVBNGKNWha8DZKdQg+B1dczaU1VU=
+	t=1783591469; cv=none; b=aotJAzJ+wGl4ChqxU5Gf1BCvvZ2P3OYAOrJAthVcpZ50ARrlQh4smxBX93Sz0YZ28PVEU1aEG3ZltyjXnza5jlXOo2iJDi2qU3S7WvbYpeYMPuaYG1TAJw/bw1dZhCs7LTjxIpsNlLnmb5O+tCLb0R1V/Tz718rQ+vgWyAmXEKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783591428; c=relaxed/simple;
-	bh=HSHC0krnP3yM6YKctCogtvMCS6qrTIvgH9jPGW/IHiU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fpiocFi8bFkL9FLpqCgpHPh7I8F8bOZ+CA5AwJRe3gBxbzmvPEHL14Mmmz4xNsoB/Cuyao3X9eCD3aWVgzQZuPFG3qsOF6L1mYXgBqWECpylRg3ufV7Z2QxMPnv59dKzhy2dEHlJkbXsdQowRcRw4ov379B6zt7WOUxow6e/4Vw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GiDphGCY; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1783591469; c=relaxed/simple;
+	bh=fNOd/eU3h/R1BAPcj10CY/Ovo1jrT3rHH23CB6iM2Ts=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=a5juHH7VzGoKW9fHl6EV8di43Nsxg4evWvrq1wJSyo1PizSrbQADE6YO7diGbn2pAOPhjPfpI+rjl3AamurmZEwiFlTB8kDetswQbGze12dhB9qJc+c5GkHrTUz37SDtNMhX0A5Q7MfELm2n6bMgFY43rUPLm5RKFqofUHeum/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de; spf=pass smtp.mailfrom=tu-berlin.de; dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b=CntqECQe; arc=none smtp.client-ip=130.149.7.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-berlin.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GiDphGCY"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id EE4284E40D15;
-	Thu,  9 Jul 2026 10:03:44 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id BBCF05FF03;
-	Thu,  9 Jul 2026 10:03:44 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CA89911BC3741;
-	Thu,  9 Jul 2026 12:03:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1783591423; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=NHfDobr1YvIOB6zs95Ywr4qOKmlK8vhJxNx7caf9nu4=;
-	b=GiDphGCYt102lrFuLmNh9Vs4OrFCs6eCvkbFoh4AL9tvVbXbGEYubmFXIQvcHPjcAAog6p
-	PScdbSiNiTYCOxsrOjuiBf3iK7zTmggVtyPy+2HAMuOHEcFzh6HUnwvnlntGx/oo3I1lW9
-	4VRML7xK6bvr9+jjmhoQFvn7qr+0YO8TeOy7z4iFO3gb/UYgUlqo/as6FM4NdBi/xJ2gQW
-	xa4via6QIX9o3kc0p5EAEymYMzRaFYaoQuhuTolTW4eKzHtaqV+Ssp2+NfsUvwewMysrvj
-	PW9pHFGFmII71xEB7BZUJHMxhxcQ5qVPnX9ggv3lM+GxBZp210XybjUrtXojXQ==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Thu, 09 Jul 2026 12:01:51 +0200
-Subject: [PATCH bpf-next v5 10/10] selftests/bpf: add tests to validate
- KASAN on JIT programs
+	dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b="CntqECQe"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed;
+  d=tu-berlin.de; s=dkim-tub26; t=1783591462;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/7o+ZshKyZOz5cy3k1R9QWg2vfjJNG7PkA6NFzyabaU=;
+  b=CntqECQe6NTodwC1M6glZfGAc3WaxZurP/kFhrmE/UC9Xpa8jciojL74
+   XYAJZan1jCXEdo/5COb0VDBY22ArSFuDhwOsz+L4R/3zKcItFtPRyITWb
+   1derv0bzUsW+R15CRDBx3N48EtpEr/TNojUjwIAhlDJ8qcE/EGjQxhtgu
+   yyowfF2x7/zkaspF0PiPjnI5r5fVUN7ujJKNvT6Lnpmgkpg90XVqfWHHo
+   XkTEnJWzOw0O3aBrxKcHLPGlYDqZHrFKetDvvCdivSyn/kYWKqp3E9mY5
+   qP/ER1hVGMMnBEUpDdAbPPkvs2G8nk5DH7Y2tyovzwYWDz/TPvVfVJD6N
+   A==;
+X-CSE-ConnectionGUID: C/PBFcK9RsSszigqwHHe5g==
+X-CSE-MsgGUID: sl//wWv2Ra2BXCQO0pEOCg==
+X-IronPort-AV: E=Sophos;i="6.25,154,1779141600"; 
+   d="scan'208";a="49745254"
+Received: from mail.tu-berlin.de ([141.23.12.141])
+  by mailrelay.tu-berlin.de with ESMTP; 09 Jul 2026 12:03:10 +0200
+Message-ID: <e025c9af-84e6-4549-bb65-0a6f9b6af98a@tu-berlin.de>
+Date: Thu, 9 Jul 2026 12:03:07 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v7 5/5] veth: time-based BQL completion
+ coalescing via ethtool tx-usecs
+To: Simon Schippers <simon.schippers@tu-dortmund.de>, <hawk@kernel.org>,
+	<netdev@vger.kernel.org>
+CC: <kernel-team@cloudflare.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John
+ Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+References: <20260612083530.1650245-1-hawk@kernel.org>
+ <20260612083530.1650245-6-hawk@kernel.org>
+ <f120fd22-1ee5-4d5b-9cdd-71804353e6a7@tu-dortmund.de>
+ <c4154d9c-8930-436d-b8b8-01951e8bd9f4@tu-berlin.de>
+ <9205d83f-2c9e-4abb-91a0-488704bcdef3@tu-dortmund.de>
+Content-Language: en-US
+From: =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>
+Autocrypt: addr=j.koeppeler@tu-berlin.de; keydata=
+ xsFNBGKoX2oBEADALIAULJM44m9N+afmComnvXvE0htMn8fjTk5ht1lvR+YoGNvu+V011yGw
+ BAs46yE35u4DyUF+YqQM95meSQZCJcV/sCjZi9qtOqnEAX+Ympz5JtRiG1SkWJ0S5X5tg1hH
+ nQyI5MYfwDpefWpij79jyGAL72lgWBMZRHvCriGkt5/hRI4S4zyweeljqojaG2ZHDbgqW0TG
+ uVAllHwCnEJ4NDqAMkMUU6Zt6NWBPspZKftGTGIBT21uBA8ttJgfQSvTPHmAytPq3C1+Cfka
+ pBV7B1BaI0rbw6Kr3uDYwrNJ17ZEAEhg7OYIIkxueUjq+5fW1P7cccfNEhYWv/8FFUYCm98a
+ NQmZns5wfq8C2KSSptpT8Yztpbsd292XUjZMAH3katujnzwnRq0QjexFZ4wQtSjZu7LR2+LC
+ x2OrwAcLcPfWYfBsE2qOkGZU0q3X1IAjfoJ2LDw4RxyhNLcv/6zEddvU4Y1EGf7S75lxzNHo
+ ttpz/dQ3toEEegq75MEz6ss1cYN4P5vxajvPZd5KMZKwrTEr1jNwzzuTCN3hKArRup9AHsxz
+ g9U0dCtY+lxiSzDORLqKOZ4OLFDBau6vMF7IbNX1fs8HA3UnGgWKmRwI6wjic66JVlB4sGcL
+ fL/sMdcoRTDvfnwrleHjLuKXYQ8yv8XUfnQxJkCQhfvdEHR2tQARAQABzSpKb25hcyBLw7Zw
+ cGVsZXIgPGoua29lcHBlbGVyQHR1LWJlcmxpbi5kZT7CwYcEEwEIADEWIQTqFylTGDYSCHaY
+ fE10M20hpTcQ9QUCaL7VWAIbAwQLCQgHBRUICQoLBRYCAwEAAAoJEHQzbSGlNxD1dpwQAKZT
+ oHwBH7f5n9JFn2zHy8vIzyyhBFw7SVwJSEChXCVx47EEFmkiNSmBWUxNZZEyAbDFbeDrh/fO
+ g7fUoQLsXJ0e1QWEXo4W6XhtFlx1TYSrPCIpCOAc9eetCksm/oO9/WJkCdk4PaJR0OJqoO5O
+ yEZpb8PAwqIFvXfFkJn8nwY3lWVC1jdkE6dYMpjmC2T5rbf0KMDYH2uJV/opa6uvZUlQzmHN
+ E88276ubWIFMuuYxIBdvTL1SrwGWRNwQDWOe6fBJ8/xReP3AVWHSehwzL2AyCyeBdVDCDoyz
+ 5k0tusI/UuZP9aco5+nyg+jRB5Jb0DYTZAm2KLA3bAls4p/AAa0bi+9bIdNgPeVAG4HnY67V
+ fQDSlFhBO32rGn6GX72c2dzKw4nQ5HjtbuSszp4rH0rYPTOene6zpJ8dGsJ2Mc4agjIhYEB5
+ BFDgeFGlsEI0lFWUMI77QuMZ59b8Zx6WXqrh7iKM2Oi4e91htyFVDCzCilaECM2kwUV1eavi
+ vrsoGxczOc6rxNtTw56KYQCMHHVSlKt1b+zY9XdA6sVNulW7zsZaDTvG5Jbyw9cwpd7slNEK
+ r8mbQ11TrRv1baUil9GKfdi8WhyLOUgYyUKSIXIFzeCutr4++2cqZW5B/GcBe40Vik8FTHSy
+ 1uwnTHW5fFV1cVhA+W103e1PxY8qlPlCzsFNBGKoX2wBEADFqdvGoBmerSMSa8SBElSt065u
+ a3nkX8KQ33pFFF5uXAxhmie770dGnO80Nfd9O1fguq+atM0xjA+OWfInGtAJVfKauYS6lIMJ
+ sONv2s76lmkO6WqJeMiiysjKV+0cSKWLeUTuIeJCy0WLUNUFJZelT0wJ3gj/2q+4K4IS79gs
+ G72B0+pe5PyluG6CEhQc4Lo6OHNIllbREhFhl5xjycDtWWAEitdAPQ4Bt3oBBzNsQ496j0GE
+ jqy0DKItEiF6QcojzVO3/PH9hxku2QqcEmyKbea2zcyIjUkuuaB8RVHTyuDaJJYhuXymObNB
+ Bgimk2RAyg2tktGGv5r204WX+V4kWvH0ZLCCx+hVw/VRZofZMQYBkf87VsaYmQxFdbO8OnQx
+ GVjO/Kc50h3QoVbXMwl85fExbFgsAKbwugnwEQpay/ongpzdMFROrcCSD+TZz/DQ/DlMUe4C
+ YKax0IIA6mBa0mhcT8jXjpyabple9fNaHAaE2MdGhDw6UnQtAuTF3xWN75LDBNJjxTKTtVOY
+ ye4JTnlqEDOa2I4IvZhMT2MX/nNJA7n9nsRHcFm2o9NTkPV5B8NyZCvgsy3SLnsOZTCxWSNG
+ uw0Cdcm+uqgPUPJNimBxptrPT+4BciB1z81sKfyh5GoAitEZgFlntZ1JFk31YUmk5kIh2NNh
+ /Lfh8Hr2hQARAQABwsF2BBgBCAAgFiEE6hcpUxg2Egh2mHxNdDNtIaU3EPUFAmi+1VgCGwwA
+ CgkQdDNtIaU3EPWD4RAAo0fatobyXEHYTZx8QSR4qS0/53eY7iAerZs4IJ4w8qE1gAcq6Iej
+ nX+tqzV5paqJTxRTalD38OAyglkJgCj2HSOusZZPlbeuBfbQzJida9TtRRC2EJzunVM8reu1
+ VRisERIwlnfvPzXQBrwe/kudKmWOF0M/hvH7F7ME1GJUoFxxAjB4tqGbiCAo5Y4bxAz/AoPJ
+ 1pC7rr+qLIwfs7hVAymKmEswjUkDI0Ivq5wHSjwnKFVgZAHNsa7gfmJjZyyOFQwsGnWlCjiu
+ dkrfYJvbcF3Qs5aqIfEoZduQJGOL3KZeCdfJNP/2p7SMKHs9zu73x0UKS/GFy64eCaHmTzIJ
+ Lg8CMrYAaoX+8PmLTUjDrlAtISjaVkxrbDOus2c5r9LlMkOb3JT6UgLR7ga6/JHYZI5hY7G3
+ chAdCroPnAhXD6ig1NxbpiP8yiIIMtJ2ETjlQn+BdQ3eXDR+5xg4NV7TWYMGTbNpjFOlWRGy
+ b2JTUKogGs8gv+VHCsbTEX7OgGtcLCP6KYm+HR1ck1OgCR26TEx391l7GhKYqSuz6+W/2sPV
+ CikGA/IZrRg3uRfoZhhPv8zgn9I7eUL3szWhj+QD0h2LBCAmAMAWcmfFQkevMq0O2Q5zgSkb
+ wAlsQfDpMEv9+nJcdit2gRZimHjbfuZSHZnaJeWnwsKDBh278W8VHQM=
+In-Reply-To: <9205d83f-2c9e-4abb-91a0-488704bcdef3@tu-dortmund.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260709-kasan-v5-10-1c64af8e4e1e@bootlin.com>
-References: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
-In-Reply-To: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, 
- Ingo Molnar <mingo@redhat.com>, Andrey Konovalov <andreyknvl@gmail.com>
-Cc: ebpf@linuxfoundation.org, 
- Bastien Curutchet <bastien.curutchet@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.15.2
-X-Last-TLS-Session-Version: TLSv1.3
 
-Add a basic KASAN test runner that loads and test-run programs that can
-trigger memory management bugs. The test captures kernel logs and ensure
-that the expected KASAN splat is emitted by searching for the
-corresponding first lines in the report, hence validated that the needed
-instrumentation has been inserted by the JIT compiler before the
-relevant memory accesses. To allow each test to trigger the expected
-report, the kernel must run with the kasan_multi_shot configuration.
+On 6/30/26 21:07, Simon Schippers wrote:
+> On 6/30/26 16:00, Jonas Köppeler wrote:
+>> On 6/13/26 4:14 PM, Simon Schippers wrote:
+>>> On 6/12/26 10:35, hawk@kernel.org wrote:
+>>>> From: Simon Schippers <simon.schippers@tu-dortmund.de>
+>>>>
+>>>> Per-packet BQL completion forces DQL to converge on limit=2, causing
+>>>> excessive NAPI scheduling overhead and qdisc requeues.
+>>>>
+>>>> Accumulate BQL completions and flush them when a configurable time
+>>>> threshold (tx-usecs) is exceeded, letting DQL discover a limit that
+>>>> bounds actual queuing delay to the configured interval. Coalescing
+>>>> state persists across NAPI polls in struct veth_rq so completions can
+>>>> accumulate beyond a single budget=64 cycle.
+>>>>
+>>>> The flush condition is:
+>>>>
+>>>> state->time + bql_flush_ns <= current_time || state->n_bql > dql.limit
+>>>>
+>>>> Flushing when n_bql exceeds dql.limit handles BQL starvation.
+>>>>
+>>>> The comparison is strictly greater-than because netdev_tx_sent_queue()
+>>>> always lets the producer exceed the limit by one before it stops, so
+>>>> n_bql == dql.limit is a normal in-flight state. dql.limit lives in
+>>>> the same cacheline as the completion path, so the check is cheap.
+>>>>
+>>>> Add ethtool tx-usecs support for runtime tuning. Default is 100 us;
+>>>> setting tx-usecs to 0 disables coalescing and falls back to per-packet
+>>>> completion.
+>>>>
+>>>>     ethtool -C <veth-dev> tx-usecs 500  # 500us coalescing
+>>>>     ethtool -C <veth-dev> tx-usecs 0    # per-packet (no coalescing)
+>>>>
+>>>> Co-developed-by: Jesper Dangaard Brouer <hawk@kernel.org>
+>>>> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+>>>> Co-developed-by: Jonas Köppeler <j.koeppeler@tu-berlin.de>
+>>>> Signed-off-by: Jonas Köppeler <j.koeppeler@tu-berlin.de>
+>>>> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
+>>>> ---
+>>>>    drivers/net/veth.c | 123 ++++++++++++++++++++++++++++++++++++++++++---
+>>>>    1 file changed, 117 insertions(+), 6 deletions(-)
+>>>>
+>>>> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+>>>> index 2473f730734b..c62d87a8402c 100644
+>>>> --- a/drivers/net/veth.c
+>>>> +++ b/drivers/net/veth.c
+>>>> @@ -28,6 +28,7 @@
+>>>>    #include <linux/bpf_trace.h>
+>>>>    #include <linux/net_tstamp.h>
+>>>>    #include <linux/skbuff_ref.h>
+>>>> +#include <linux/sched/clock.h>
+>>>>    #include <net/page_pool/helpers.h>
+>>>>      #define DRV_NAME    "veth"
+>>>> @@ -50,6 +51,7 @@
+>>>>     * delay => 64 * 250 ms = 16 s.
+>>>>     */
+>>>>    #define VETH_WATCHDOG_TIMEOUT_MS    (64 * 250)
+>>>> +#define VETH_BQL_COAL_TX_USECS    100 /* default tx-usecs for BQL batching*/
+>>>>      struct veth_stats {
+>>>>        u64    rx_drops;
+>>>> @@ -69,6 +71,11 @@ struct veth_rq_stats {
+>>>>        struct u64_stats_sync    syncp;
+>>>>    };
+>>>>    +struct veth_bql_state {
+>>>> +    u64    time;    /* sched_clock() when current coalescing window started */
+>>>> +    uint    n_bql;    /* BQL completions batched in the current window */
+>>>> +};
+>>>> +
+>>>>    struct veth_rq {
+>>>>        struct napi_struct    xdp_napi;
+>>>>        struct napi_struct __rcu *napi; /* points to xdp_napi when the latteris initialized */
+>>>> @@ -76,6 +83,7 @@ struct veth_rq {
+>>>>        struct bpf_prog __rcu    *xdp_prog;
+>>>>        struct xdp_mem_info    xdp_mem;
+>>>>        struct veth_rq_stats    stats;
+>>>> +    struct veth_bql_state    bql_state;
+>>>>        bool            rx_notify_masked;
+>>>>        struct ptr_ring        xdp_ring;
+>>>>        struct xdp_rxq_info    xdp_rxq;
+>>>> @@ -88,6 +96,7 @@ struct veth_priv {
+>>>>        struct bpf_prog        *_xdp_prog;
+>>>>        struct veth_rq        *rq;
+>>>>        unsigned int        requested_headroom;
+>>>> +    unsigned int        tx_coal_usecs;    /* BQL completion coalescing */
+>>>>    };
+>>>>      struct veth_xdp_tx_bq {
+>>>> @@ -272,7 +281,56 @@ static void veth_get_channels(struct net_device *dev,
+>>>>    static int veth_set_channels(struct net_device *dev,
+>>>>                     struct ethtool_channels *ch);
+>>>>    +static int veth_get_coalesce(struct net_device *dev,
+>>>> +                 struct ethtool_coalesce *ec,
+>>>> +                 struct kernel_ethtool_coalesce *kernel_coal,
+>>>> +                 struct netlink_ext_ack *extack)
+>>>> +{
+>>>> +    struct veth_priv *priv = netdev_priv(dev);
+>>>> +
+>>>> +    ec->tx_coalesce_usecs = priv->tx_coal_usecs;
+>>>> +    return 0;
+>>>> +}
+>>>> +
+>>>> +static int veth_set_coalesce(struct net_device *dev,
+>>>> +                 struct ethtool_coalesce *ec,
+>>>> +                 struct kernel_ethtool_coalesce *kernel_coal,
+>>>> +                 struct netlink_ext_ack *extack)
+>>>> +{
+>>>> +    struct veth_priv *priv = netdev_priv(dev);
+>>>> +    struct net_device *peer;
+>>>> +
+>>>> +    /* The coalescing window delays BQL completions, so keep tx-usecs well
+>>>> +     * below the tx_timeout watchdog; otherwise a large value could stall a
+>>>> +     * stopped queue long enough to trip a false watchdog timeout. Cap at
+>>>> +     * half the watchdog to leave a generous safety margin. tx-usecs is
+>>>> +     * microseconds, the watchdog is milliseconds.
+>>>> +     */
+>>>> +    if (ec->tx_coalesce_usecs > VETH_WATCHDOG_TIMEOUT_MS / 2 * USEC_PER_MSEC) {
+>>>> +        NL_SET_ERR_MSG_MOD(extack,
+>>>> +                   "tx-usecs must stay below half the tx_timeout watchdog");
+>>>> +        return -ERANGE;
+>>>> +    }
+>>>> +
+>>>> +    /* Paired with READ_ONCE in veth_xdp_rcv(). */
+>>>> +    WRITE_ONCE(priv->tx_coal_usecs, ec->tx_coalesce_usecs);
+>>>> +
+>>>> +    /* veth_xdp_rcv() reads each device's own value, so mirror it onto
+>>>> +     * the peer to keep the pair symmetric: both directions coalesce
+>>>> +     * with the same tx-usecs. Called under RTNL, rtnl_dereference() is safe.
+>>>> +     */
+>>>> +    peer = rtnl_dereference(priv->peer);
+>>>> +    if (peer) {
+>>>> +        struct veth_priv *peer_priv = netdev_priv(peer);
+>>>> +
+>>>> +        WRITE_ONCE(peer_priv->tx_coal_usecs, ec->tx_coalesce_usecs);
+>>>> +    }
+>>>> +
+>>>> +    return 0;
+>>>> +}
+>>>> +
+>>>>    static const struct ethtool_ops veth_ethtool_ops = {
+>>>> +    .supported_coalesce_params = ETHTOOL_COALESCE_TX_USECS,
+>>>>        .get_drvinfo        = veth_get_drvinfo,
+>>>>        .get_link        = ethtool_op_get_link,
+>>>>        .get_strings        = veth_get_strings,
+>>>> @@ -282,6 +340,8 @@ static const struct ethtool_ops veth_ethtool_ops ={
+>>>>        .get_ts_info        = ethtool_op_get_ts_info,
+>>>>        .get_channels        = veth_get_channels,
+>>>>        .set_channels        = veth_set_channels,
+>>>> +    .get_coalesce        = veth_get_coalesce,
+>>>> +    .set_coalesce        = veth_set_coalesce,
+>>>>    };
+>>>>      /* general routines */
+>>>> @@ -969,13 +1029,54 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+>>>>        return NULL;
+>>>>    }
+>>>>    +static void veth_bql_maybe_complete(struct veth_bql_state *state,
+>>>> +                    struct netdev_queue *peer_txq,
+>>>> +                    u64 bql_flush_ns)
+>>>> +{
+>>>> +    u64 current_time;
+>>>> +
+>>>> +    /* There is no reason to complete with 0 and
+>>>> +     * peer_txq could go away.
+>>>> +     */
+>>>> +    if (!state->n_bql || !peer_txq)
+>>>> +        return;
+>>>> +
+>>>> +    current_time = sched_clock();
+>>>> +
+>>>> +    /* We complete if:
+>>>> +     * 1. We reach bql_flush_ns.
+>>>> +     * 2. We potentially have BQL starvation.
+>>>> +     */
+>>>> +    if (state->time + bql_flush_ns <= current_time ||
+>>>> +        state->n_bql > peer_txq->dql.limit) {
+>>>
+>> Indeed, this does not compile when CONFIG_BQL is not set. I think we should just bring back the 'queue is empty + queue is stopped' check from v6 back at the end of the poll and remove the n_bql > dql.limit check.
+> 
+> We would put #ifdef CONFIG_BQL around that logic aswell.
+> 
+>> It also feels not obvious why this is handling the starvation case. This only works, because the producer has went overlimit previously and was stopped. So more than 'limit' packets have been enqueued to the ring, and they are eventually drained when this check is true.
+> 
+> I think it just needs some comment tweaking:
+> 
+> /* We complete if:
+>   * 1. We reach bql_flush_ns.
+>   * 2. We have BQL starvation. This means that the queue was over-limit
+>   *    in the last interval, and there is no more data in the queue,
+>   *    which is equivalent to we consumed more than limit items.
+>   */
+> 
+>> By removing this we can also avoid accessing dql internal members, but if you don't think that's a problem we can leave as is.
+> 
+> I agree accessing dql internal variables is not perfect.
+> 
+> That is why I have locally implemented DQL for software interfaces in
+> a generic way inside dynamic_queue_limits.{h,c}.
+> I was able to squeeze the time and n_bql variables into the completion
+> cacheline of the dql struct by moving around variables.
+> The logic applies inside dql_completed() if enabled.
+> With this we just have to call netdev_completed_queue().
+> Also it allows for per-queue tweaking of tx_usecs via sysfs.
+> Works well for me, can share it if we want to use it.
+> 
+>>
+>> Further, this is only works if VETH_BQL_UNIT stays 1, otherwise it will never fire. Anyway, still its necessary to check for CONFIG_BQL. But we could solve this by adding VETH_BQL_UNIT to n_bql instead of 1. This is also safe from any overflows, since limit is bound to limit_max, inflight is always less than limit + 1*VETH_BQL_UNIT and n_bql <= inflight.
+> 
+> You are right.
+> 
+> But I think there is no reason for VETH_BQL_UNIT anyway.
+> There should be no difference in the BQL algorithm, I personally
+> would replace VETH_BQL_UNIT with a hard-coded 1.
+> 
+>>
+>> In a version of bringing back the 'queue-empty' check and keeping most of the current logic (so a mixture of v6 and v7) resulted in the same performance on an x86_64 architecture.
+>>
+>>> Both Sashiko-Nipa and Sashiko-Gemini are right, this is missing a
+>>> #ifdef CONFIG_BQL. Not sure what is the best way to add them.
+>>> And for the struct we could maybe do:
+>>>
+>>> #ifdef CONFIG_BQL
+>>> struct veth_bql_state {
+>>>       u64    time;    /* sched_clock() when current coalescing window started */
+>>>       uint    n_bql;    /* BQL completions batched in the current window */
+>>> };
+>>> #else
+>>> struct veth_bql_state {};
+>>> #endif
+>> Regarding the configs: we can just do something along those lines.
+>> struct veth_rq {
+>> ...
+>> #ifdef CONFIG_BQL
+>>      struct veth_bql_state        dql;
+>> #endif
+>> ...
+>> }
+>>
+>> and we put the rest of the code that accesses or performs an action regarding bql in some functions and do it like in netdev_* functions with
+>>
+>> Function-Signature()
+>> {
+>> #ifdef CONFIG_BQL
+>> // Code
+>> #endif
+>> }
+>>
+>> Wdyt?
+>> - Jonas
+> 
+> Yes, we have to. Unless we put it into dynamic_queue_limits.{h,c}
+> of course :^)
+> 
+> Thanks,
+> Simon
+> I did implement the CONFIG_BQL guard, and reordered the completion call,
+dropping the pre-loop completion call and moved the in-loop
+completion call in front of the packet processing. I think we can drop
+one of the completion calls, since the there is only a difference of one
+packet more or less that is completed.
 
-The runner covers different cases and settings: in the nominal case, it
-validates kasan reports on basic instructions (on all supported accesses
-sizes) but also when report _should not_ be emitted (eg: for accesses on
-program stack). The runner also comes with a few specialized tests that
-are then not executed for all sizes/locations:
-- specific atomic ops
-- test for instructions involving different verifier states, with some
-  states flagging memory as stack, and other states as non-stack memory
-- tests that validate the stack marking shifting when a patch is emitted
-  by the verifier (zext/rnd_hi32, constant blindind)
+Two patches on top of 5/5, inline below as RFC (not for application):
 
-A few of those tests depends on cpuv4 (load_acquire and store_release).
+   1) veth: simplify BQL completion condition
+   2) veth: Add CONFIG_BQL guards
 
-  # ./test_progs -a kasan
-  #165/1   kasan/st_1_not_on_stack:OK
-  #165/2   kasan/st_1_on_stack:OK
-  #165/3   kasan/st_2_not_on_stack:OK
-  #165/4   kasan/st_2_on_stack:OK
-  #165/5   kasan/st_4_not_on_stack:OK
-  #165/6   kasan/st_4_on_stack:OK
-  #165/7   kasan/st_8_not_on_stack:OK
-  #165/8   kasan/st_8_on_stack:OK
-  #165/9   kasan/stx_1_not_on_stack:OK
-  #165/10  kasan/stx_1_on_stack:OK
-  #165/11  kasan/stx_2_not_on_stack:OK
-  #165/12  kasan/stx_2_on_stack:OK
-  #165/13  kasan/stx_4_not_on_stack:OK
-  #165/14  kasan/stx_4_on_stack:OK
-  #165/15  kasan/stx_8_not_on_stack:OK
-  #165/16  kasan/stx_8_on_stack:OK
-  #165/17  kasan/ldx_1_not_on_stack:OK
-  #165/18  kasan/ldx_1_on_stack:OK
-  #165/19  kasan/ldx_2_not_on_stack:OK
-  #165/20  kasan/ldx_2_on_stack:OK
-  #165/21  kasan/ldx_4_not_on_stack:OK
-  #165/22  kasan/ldx_4_on_stack:OK
-  #165/23  kasan/ldx_8_not_on_stack:OK
-  #165/24  kasan/ldx_8_on_stack:OK
-  #165/25  kasan/simple_atomic_4_not_on_stack:OK
-  #165/26  kasan/simple_atomic_4_on_stack:OK
-  #165/27  kasan/simple_atomic_8_not_on_stack:OK
-  #165/28  kasan/simple_atomic_8_on_stack:OK
-  #165/29  kasan/load_acquire_1_not_on_stack:SKIP
-  #165/30  kasan/load_acquire_1_on_stack:SKIP
-  #165/31  kasan/load_acquire_2_not_on_stack:SKIP
-  #165/32  kasan/load_acquire_2_on_stack:SKIP
-  #165/33  kasan/load_acquire_4_not_on_stack:SKIP
-  #165/34  kasan/load_acquire_4_on_stack:SKIP
-  #165/35  kasan/load_acquire_8_not_on_stack:SKIP
-  #165/36  kasan/load_acquire_8_on_stack:SKIP
-  #165/37  kasan/store_release_1_not_on_stack:SKIP
-  #165/38  kasan/store_release_1_on_stack:SKIP
-  #165/39  kasan/store_release_2_not_on_stack:SKIP
-  #165/40  kasan/store_release_2_on_stack:SKIP
-  #165/41  kasan/store_release_4_not_on_stack:SKIP
-  #165/42  kasan/store_release_4_on_stack:SKIP
-  #165/43  kasan/store_release_8_not_on_stack:SKIP
-  #165/44  kasan/store_release_8_on_stack:SKIP
-  #165/45  kasan/ldx_patched:OK
-  #165/46  kasan/ldx_patched_on_stack:OK
-  #165/47  kasan/verifier_paths_stack_and_non_stack:OK
-  #165/48  kasan/st_blinded:OK
-  #165     kasan:OK (SKIP: 16/48)
-  Summary: 1/32 PASSED, 16 SKIPPED, 0 FAILED
+Patch 1 is the "bring back the queue-empty check" idea: it drops the
+state->n_bql > dql.limit test and splits the flush into (a) the
+time-based completion, kept per packet, and (b) an explicit post-loop
+"ring drained + peer stopped" wake. So veth no longer touches dql.limit.
+Basically the same we had in v6.
 
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+However, if we like we can just replace it in the eth_bql_flush_starved
+with the barrier-free alternative:
+
+	if (peer_txq &&
+	    (u64)state->n_bql * VETH_BQL_UNIT > peer_txq->dql.limit)
+		veth_bql_complete(...);
+
+Once the producer is stopped, num_queued/num_completed/limit are frozen,
+so as the ring drains n_bql rises to inflight and this becomes true
+exactly when the ring empties under backpressure — same event, no
+barrier.
+
+So there are three options how to handle this case:
+
+   a) barrier + STACK_XOFF (patch 1 as posted).
+
+   b) n_bql * VETH_BQL_UNIT > dql.limit.
+
+   c) Simon's generic DQL-for-software-interfaces in
+      dynamic_queue_limits.{h,c}
+
+I do not have a strong opinion. For a and b I could not measure any 
+performance difference.
+
+Patch 2 does the CONFIG_BQL wrapping the way I sketched (BQL-only 
+helpers with no-op stubs so veth_xdp_rcv()/teardown stay ifdef-free) and 
+rejects `ethtool -C tx-usecs` with -EOPNOTSUPP when BQL is compiled out.
+
+Performance of !CONFIG_BQL+v7+patch-2 and net-next/main is the same.
+
+Full diffs below.
+
+- Jonas
+
+---8<--- patch 1 ---8<---
+
+From: =?UTF-8?q?Jonas=20K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>
+Date: Sun, 28 Jun 2026 10:26:15 +0200
+Subject: [PATCH] veth: simplify BQL completion condition
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The previous patch flushed batched BQL completions when either the
+coalescing window elapsed or the batch grew past the DQL limit
+(state->n_bql > peer_txq->dql.limit). The latter test reaches into DQL
+internals and is unit-fragile: it compares the raw count n_bql against
+dql.limit, dropping the VETH_BQL_UNIT factor of the charge
+(n_bql * VETH_BQL_UNIT), so it only holds because that unit is 1.
+
+Replace that test. The time-based completion stays per packet in
+veth_xdp_rcv(), issued before veth_xdp_rcv_skb() so the producer wake
+overlaps with the first skb processing. The wake-a-stalled-producer case
+becomes an explicit post-loop block: once the ring has drained, if the
+peer TX queue is stopped by BQL backpressure (STACK_XOFF), release the
+batched completions to unblock it. DRV_XOFF is left to the existing wake
+in veth_poll().
+
+Reading STACK_XOFF after the drain needs an smp_rmb(): the producer sets
+STACK_XOFF before publishing into the ring, so a consumer on another CPU
+that observed the packet must order its ring read ahead of the state
+read, or it may read a stale, un-stopped state and drop the wakeup. 
+Pairs with the set_bit()/smp_wmb() on the producer side.
+
+Signed-off-by: Jonas Köppeler <j.koeppeler@tu-berlin.de>
 ---
-Changes in v5:
-- check snprintf return codes when checking kernel logs
-- skip tests in kasan_multi_shot is not enabled
-- update simple atomic test expected access type (read -> write)
+  drivers/net/veth.c | 53 ++++++++++++++++++++++++++++++----------------
+  1 file changed, 35 insertions(+), 18 deletions(-)
 
-Changes in v4:
-- prevent interleaved kernel logs from breaking kasan report search
-- make new kfuncs in bpf_testmod depend on BPF_JIT_KASAN rather than
-  KASAN_GENERIC
-- initialize buffer passed to bpf_prog_test_run_opts
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index c62d87a8402c..2963f190988f 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -1029,11 +1029,21 @@ static struct sk_buff *veth_xdp_rcv_skb(struct 
+veth_rq *rq,
+  	return NULL;
+  }
 
-Changes in v3:
-- increase kernel log buffer size
-- fix comment style
-- check bpf_program__fd return code
-- document kasan_multi_shot
-- fix copy-paste mistakes on poisoning/unpoisoning sequences
-- add test for patch due to constant blinding
-
-Changes in v2:
-- simplify tests by just manually poisoning test areas with a dedicated
-  kfunc
-- introduce one prog per covered instruction family
-- make sure that tests do not consume kernel logs (use /dev/kmgs rather
-  than klogctl)
-- add tests for stack accesses:
-  - marking correctly set when there are diverging verifier states
-    leading to different memory types
-  - marking kept in sync with prog when it is patched
----
- tools/testing/selftests/bpf/prog_tests/kasan.c     | 430 +++++++++++++++++++++
- tools/testing/selftests/bpf/progs/kasan.c          | 394 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/kasan_harden.c   |  41 ++
- .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  22 ++
- 4 files changed, 887 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/kasan.c b/tools/testing/selftests/bpf/prog_tests/kasan.c
-new file mode 100644
-index 000000000000..2bc545e96259
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/kasan.c
-@@ -0,0 +1,430 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+
-+/*
-+ * Tests validating that KASAN reports are properly instrumented and
-+ * generated on a wide variety of instructions. The running kernel needs
-+ * kasan_multi_shot to run multiple kasan-generating subtests at once
-+ */
-+#include <bpf/bpf.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/if_ether.h>
-+#include <unistd.h>
-+#include <test_progs.h>
-+#include <unpriv_helpers.h>
-+#include "kasan.skel.h"
-+#include "kasan_harden.skel.h"
-+
-+#define SUBTEST_NAME_MAX_LEN	128
-+#define PROG_NAME_MAX_LEN	128
-+
-+#define MAX_LOG_SIZE		(8 * 1024)
-+#define READ_CHUNK_SIZE		256
-+
-+#define KASAN_PATTERN_SLAB_UAF "BUG: KASAN: slab-use-after-free " \
-+	"in bpf_prog_%02x%02x%02x%02x%02x%02x%02x%02x_%s"
-+#define KASAN_PATTERN_REPORT "%s of size %d at addr"
-+
-+static char klog_buffer[MAX_LOG_SIZE];
-+static char record[MAX_LOG_SIZE];
-+
-+struct test_spec {
-+	char *prog_type;
-+	bool is_write;
-+	bool only_32_or_64;
-+	bool needs_load_acq_store_rel;
-+	bool skip_multi_size_testing;
-+	bool skip_on_stack_testing;
-+	int run_size;
-+	bool expect_no_report;
-+	bool rnd_hi32;
-+};
-+
-+struct kasan_write_val {
-+	__u8 data_1;
-+	__u16 data_2;
-+	__u32 data_4;
-+	__u64 data_8;
-+};
-+
-+struct test_ctx {
-+	__u8  prog_tag[BPF_TAG_SIZE];
-+	struct bpf_object *obj;
-+	int *access_size;
-+	bool skip_load_acq_store_rel;
-+	struct bpf_program *prog;
-+	char prog_name[SUBTEST_NAME_MAX_LEN];
-+	int klog_fd;
-+};
-+
-+static int open_kernel_logs(void)
++static void veth_bql_complete(struct veth_bql_state *state,
++			      struct netdev_queue *peer_txq,
++			      u64 now)
 +{
-+	int fd;
-+
-+	fd = open("/dev/kmsg", O_RDONLY | O_NONBLOCK);
-+
-+	return fd;
++	netdev_tx_completed_queue(peer_txq, state->n_bql,
++				  state->n_bql * VETH_BQL_UNIT);
++	state->time = now;
++	state->n_bql = 0;
 +}
 +
-+static void skip_kernel_logs(int fd)
-+{
-+	lseek(fd, 0, SEEK_END);
-+}
-+
-+static int read_kernel_logs(int fd, char *buf, size_t max_len)
-+{
-+	size_t total = 0;
-+	ssize_t n;
-+
-+	buf[0] = '\0';
-+	while (1) {
-+		char *msg, *eol;
-+		size_t len;
-+
-+		n = read(fd, record, sizeof(record) - 1);
-+		if (n < 0) {
-+			if (errno == EAGAIN)
-+				break;
-+			return n;
-+		}
-+		record[n] = '\0';
-+
-+		/*
-+		 * Each kmsg record starts with some metadata, separated
-+		 * from the actual content by a semi-colon
+  static void veth_bql_maybe_complete(struct veth_bql_state *state,
+  				    struct netdev_queue *peer_txq,
+  				    u64 bql_flush_ns)
+  {
+-	u64 current_time;
++	u64 now;
+
+  	/* There is no reason to complete with 0 and
+  	 * peer_txq could go away.
+@@ -1041,19 +1051,12 @@ static void veth_bql_maybe_complete(struct 
+veth_bql_state *state,
+  	if (!state->n_bql || !peer_txq)
+  		return;
+
+-	current_time = sched_clock();
+-
+-	/* We complete if:
+-	 * 1. We reach bql_flush_ns.
+-	 * 2. We potentially have BQL starvation.
++	/* Release the batched completions once the coalescing window has
++	 * elapsed.
+  	 */
+-	if (state->time + bql_flush_ns <= current_time ||
+-	    state->n_bql > peer_txq->dql.limit) {
+-		netdev_tx_completed_queue(peer_txq, state->n_bql,
+-					  state->n_bql * VETH_BQL_UNIT);
+-		state->time = current_time;
+-		state->n_bql = 0;
+-	}
++	now = sched_clock();
++	if (state->time + bql_flush_ns <= now)
++		veth_bql_complete(state, peer_txq, now);
+  }
+
+  static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+@@ -1075,9 +1078,6 @@ static int veth_xdp_rcv(struct veth_rq *rq, int 
+budget,
+  	 */
+  	state->time = min(state->time, sched_clock());
+
+-	/* Flush completions that timed out since the previous NAPI poll. */
+-	veth_bql_maybe_complete(state, peer_txq, bql_flush_ns);
+-
+  	for (i = 0; i < budget; i++) {
+  		void *ptr = __ptr_ring_consume(&rq->xdp_ring);
+
+@@ -1105,8 +1105,12 @@ static int veth_xdp_rcv(struct veth_rq *rq, int 
+budget,
+
+  			if (veth_ptr_is_bql(ptr))
+  				state->n_bql++;
+-			stats->xdp_bytes += skb->len;
++			/* Complete before processing so the producer wakes
++			 * sooner; ring-empty case handled after the loop.
++			 */
++			veth_bql_maybe_complete(state, peer_txq, bql_flush_ns);
+
++			stats->xdp_bytes += skb->len;
+  			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
+  			if (skb) {
+  				if (skb_shared(skb) || skb_unclone(skb, GFP_ATOMIC))
+@@ -1115,13 +1119,26 @@ static int veth_xdp_rcv(struct veth_rq *rq, int 
+budget,
+  					napi_gro_receive(&rq->xdp_napi, skb);
+  			}
+  		}
+-		veth_bql_maybe_complete(state, peer_txq, bql_flush_ns);
+  		done++;
+  	}
+
+  	if (n_xdpf)
+  		veth_xdp_rcv_bulk_skb(rq, xdpf, n_xdpf, bq, stats);
+
++	/* If the ring drained and the peer TX queue is stalled by BQL
++	 * backpressure (STACK_XOFF), release the batched completions now to
++	 * unblock the producer. DRV_XOFF is handled by the wake in veth_poll().
++	 */
++	if (peer_txq && state->n_bql && __ptr_ring_empty(&rq->xdp_ring)) {
++		/* The consume above observed the producer's publish; order it
++		 * before reading STACK_XOFF. Pairs with the smp_wmb() and XOFF
++		 * set_bit() on the producer side.
 +		 */
-+		msg = strchr(record, ';');
-+		if (!msg)
-+			continue;
-+		msg++;
-+		eol = strchr(msg, '\n');
-+		if (eol)
-+			*eol = '\0';
-+
-+		len = strlen(msg);
-+		if (total + len + 2 > max_len)
-+			break;
-+		memcpy(buf + total, msg, len);
-+		total += len;
-+		buf[total++] = '\n';
-+		buf[total] = '\0';
++		smp_rmb();
++		if (test_bit(__QUEUE_STATE_STACK_XOFF, &peer_txq->state))
++			veth_bql_complete(state, peer_txq, sched_clock());
 +	}
 +
-+	return total;
-+}
-+
-+static int check_kasan_report_in_kernel_logs(char *buf, struct test_ctx *ctx,
-+					     bool is_write, int size)
-+{
-+	char access_log[READ_CHUNK_SIZE];
-+	char *kasan_report_start;
-+	int nsize;
-+
-+	nsize = snprintf(access_log, READ_CHUNK_SIZE, KASAN_PATTERN_SLAB_UAF,
-+			 ctx->prog_tag[0], ctx->prog_tag[1], ctx->prog_tag[2],
-+			 ctx->prog_tag[3], ctx->prog_tag[4], ctx->prog_tag[5],
-+			 ctx->prog_tag[6], ctx->prog_tag[7], ctx->prog_name);
-+	if (!ASSERT_GE(nsize, 0, "format kasan access header line"))
-+		return nsize;
-+	/*
-+	 * Searched kasan report is valid if
-+	 * - it contains the expected kasan pattern
-+	 * - the description of the faulty access is found somewhere
-+	 *   after the header (not necessarily on the very next line,
-+	 *   because other kernel messages may interleave)
-+	 * - faulty access properties match the tested type and size
-+	 */
-+	kasan_report_start = strstr(buf, access_log);
-+
-+	if (!kasan_report_start)
-+		return 1;
-+
-+	nsize = snprintf(access_log, READ_CHUNK_SIZE, KASAN_PATTERN_REPORT,
-+			 is_write ? "Write" : "Read", size);
-+	if (!ASSERT_GE(nsize, 0, "format kasan access report line"))
-+		return nsize;
-+
-+	if (!strstr(kasan_report_start, access_log))
-+		return 1;
-+
-+	return 0;
-+}
-+
-+static void exec_subtest(struct test_ctx *ctx, struct test_spec *test,
-+			 int access_size, bool on_stack)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	struct bpf_prog_info info;
-+	uint8_t buf[ETH_HLEN] = {0};
-+	int ret, prog_fd;
-+	__u32 info_len;
-+
-+	ctx->prog = bpf_object__find_program_by_name(ctx->obj,
-+						     ctx->prog_name);
-+	if (!ASSERT_OK_PTR(ctx->prog, "find test prog"))
-+		return;
-+
-+	info_len = sizeof(info);
-+	memset(&info, 0, info_len);
-+	prog_fd = bpf_program__fd(ctx->prog);
-+	if (!ASSERT_OK_FD(prog_fd, "get prog fd"))
-+		return;
-+	ret = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
-+	if (!ASSERT_OK(ret, "fetch loaded program info"))
-+		return;
-+	memcpy(ctx->prog_tag, info.tag, BPF_TAG_SIZE);
-+
-+	skip_kernel_logs(ctx->klog_fd);
-+
-+	topts.sz = sizeof(struct bpf_test_run_opts);
-+	topts.data_size_in = ETH_HLEN;
-+	topts.data_in = buf;
-+	if (ctx->access_size)
-+		*ctx->access_size = access_size;
-+	ret = bpf_prog_test_run_opts(bpf_program__fd(ctx->prog),
-+				     &topts);
-+	if (!ASSERT_OK(ret, "run prog"))
-+		return;
-+
-+	ret = read_kernel_logs(ctx->klog_fd, klog_buffer, MAX_LOG_SIZE);
-+	if (!ASSERT_GE(ret, 0, "read kernel logs"))
-+		return;
-+
-+	ret = check_kasan_report_in_kernel_logs(klog_buffer, ctx,
-+						test->is_write, access_size);
-+	if (on_stack || test->expect_no_report)
-+		ASSERT_NEQ(ret, 0, "no report should be generated");
-+	else
-+		ASSERT_OK(ret, "report should be generated");
-+}
-+
-+static void run_subtest_with_size_and_location(struct test_ctx *ctx,
-+					       struct test_spec *test,
-+					       int access_size,
-+					       bool on_stack)
-+{
-+	char subtest_name[SUBTEST_NAME_MAX_LEN];
-+
-+	if (test->skip_multi_size_testing) {
-+		snprintf(subtest_name, SUBTEST_NAME_MAX_LEN, "%s",
-+			 test->prog_type);
-+		strncpy(ctx->prog_name, test->prog_type, PROG_NAME_MAX_LEN);
-+	} else {
-+		snprintf(subtest_name, SUBTEST_NAME_MAX_LEN, "%s_%d_%s",
-+			 test->prog_type, access_size,
-+			 on_stack ? "on_stack" : "not_on_stack");
-+		snprintf(ctx->prog_name, PROG_NAME_MAX_LEN, "%s_%s",
-+			 test->prog_type,
-+			 on_stack ? "on_stack" : "not_on_stack");
-+	}
-+
-+	if (!test__start_subtest(subtest_name))
-+		return;
-+
-+	if (test->needs_load_acq_store_rel && ctx->skip_load_acq_store_rel) {
-+		test__skip();
-+		return;
-+	}
-+
-+	exec_subtest(ctx, test, access_size, on_stack);
-+}
-+
-+static void run_subtest_with_size(struct test_ctx *ctx, struct test_spec *test,
-+				  int size)
-+{
-+	run_subtest_with_size_and_location(ctx, test, size, false);
-+	if (!test->skip_on_stack_testing)
-+		run_subtest_with_size_and_location(ctx, test, size, true);
-+}
-+
-+static void run_subtest(struct test_ctx *ctx, struct test_spec *test)
-+{
-+	if (test->skip_multi_size_testing) {
-+		run_subtest_with_size(ctx, test, test->run_size);
-+		return;
-+	}
-+
-+	if (!test->only_32_or_64) {
-+		run_subtest_with_size(ctx, test, 1);
-+		run_subtest_with_size(ctx, test, 2);
-+	}
-+	run_subtest_with_size(ctx, test, 4);
-+	run_subtest_with_size(ctx, test, 8);
-+}
-+
-+static void run_blinding_subtest(void)
-+{
-+	struct test_spec blinding_spec = {
-+		.prog_type = "st_blinded",
-+		.is_write = true,
-+	};
-+	char bpf_jit_harden = '2';
-+	struct kasan_harden *skel;
-+	struct test_ctx *ctx;
-+
-+	if (!test__start_subtest("st_blinded"))
-+		return;
-+
-+	ctx = calloc(1, sizeof(*ctx));
-+	if (!ASSERT_OK_PTR(ctx, "alloc blinding ctx"))
-+		return;
-+	ctx->klog_fd = -1;
-+
-+	if (set_bpf_jit_harden(&bpf_jit_harden))
-+		goto free_ctx;
-+
-+	skel = kasan_harden__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open and load blinded prog"))
-+		goto restore;
-+
-+	ctx->klog_fd = open_kernel_logs();
-+	if (!ASSERT_OK_FD(ctx->klog_fd, "open kernel logs"))
-+		goto destroy;
-+
-+	ctx->obj = skel->obj;
-+	strncpy(ctx->prog_name, "st_blinded", PROG_NAME_MAX_LEN);
-+
-+	exec_subtest(ctx, &blinding_spec, 1, false);
-+
-+destroy:
-+	close(ctx->klog_fd);
-+	kasan_harden__destroy(skel);
-+restore:
-+	set_bpf_jit_harden(&bpf_jit_harden);
-+free_ctx:
-+	free(ctx);
-+}
-+
-+static struct test_spec tests[] = {
-+	{
-+		.prog_type = "st",
-+		.is_write = true
-+	},
-+	{
-+		.prog_type = "stx",
-+		.is_write = true
-+	},
-+	{
-+		.prog_type = "ldx",
-+		.is_write = false
-+	},
-+	{
-+		.prog_type = "simple_atomic",
-+		.is_write = true,
-+		.only_32_or_64 = true
-+	},
-+	{
-+		.prog_type = "load_acquire",
-+		.is_write = false,
-+		.needs_load_acq_store_rel = true
-+	},
-+	{
-+		.prog_type = "store_release",
-+		.is_write = true,
-+		.needs_load_acq_store_rel = true
-+	},
-+	{
-+		.prog_type = "ldx_patched",
-+		.is_write = false,
-+		.skip_multi_size_testing = true,
-+		.skip_on_stack_testing = true,
-+		.run_size = 4,
-+		.rnd_hi32 = true
-+	},
-+	{
-+		.prog_type = "ldx_patched_on_stack",
-+		.is_write = false,
-+		.skip_multi_size_testing = true,
-+		.skip_on_stack_testing = true,
-+		.run_size = 4,
-+		.expect_no_report = true,
-+		.rnd_hi32 = true
-+	},
-+	{
-+		.prog_type = "verifier_paths_stack_and_non_stack",
-+		.is_write = true,
-+		.skip_multi_size_testing = true,
-+		.skip_on_stack_testing = true,
-+		.run_size = 1
-+	}
-+};
-+
-+void test_kasan(void)
-+{
-+	struct kasan_write_val val;
-+	struct test_spec *test;
-+	struct test_ctx *ctx;
-+	struct kasan *skel;
-+	__u32 key = 0;
-+	int i, ret;
-+
-+	ctx = calloc(1, sizeof(struct test_ctx));
-+	if (!ASSERT_OK_PTR(ctx, "alloc test ctx"))
-+		return;
-+
-+	if (!is_jit_enabled() || !get_kasan_jit_enabled() ||
-+	    !get_kasan_multi_shot_enabled()) {
-+		test__skip();
-+		goto end;
-+	}
-+
-+	skel = kasan__open();
-+	if (!ASSERT_OK_PTR(skel, "open prog"))
-+		goto end;
-+
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		struct bpf_program *prog;
-+
-+		if (!tests[i].rnd_hi32)
-+			continue;
-+
-+		prog = bpf_object__find_program_by_name(skel->obj,
-+							tests[i].prog_type);
-+		if (!ASSERT_OK_PTR(prog, "find rnd_hi32 prog"))
-+			goto destroy;
-+		bpf_program__set_flags(prog, BPF_F_TEST_RND_HI32);
-+	}
-+
-+	if (!ASSERT_OK(kasan__load(skel), "load prog"))
-+		goto destroy;
-+
-+	ctx->obj = skel->obj;
-+	ctx->access_size = &skel->bss->access_size;
-+	ctx->skip_load_acq_store_rel = skel->data->skip_load_acq_store_rel_tests;
-+
-+	ctx->klog_fd = open_kernel_logs();
-+	if (!ASSERT_OK_FD(ctx->klog_fd, "open kernel logs"))
-+		goto destroy;
-+
-+	/* Fill map with recognizable values */
-+	ret = bpf_map__lookup_elem(skel->maps.test_map, &key, sizeof(key),
-+				   &val, sizeof(val), 0);
-+	if (!ASSERT_OK(ret, "get map"))
-+		goto close;
-+	val.data_1 = 0xAA;
-+	val.data_2 = 0xBBBB;
-+	val.data_4 = 0xCCCCCCCC;
-+	val.data_8 = 0xDDDDDDDDDDDDDDDD;
-+	ret = bpf_map__update_elem(skel->maps.test_map, &key, sizeof(key),
-+				   &val, sizeof(val), 0);
-+	if (!ASSERT_OK(ret, "set map"))
-+		goto close;
-+
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		test = &tests[i];
-+		run_subtest(ctx, test);
-+	}
-+
-+	/*
-+	 * Blinding subtest is handled differently as it needs the
-+	 * corresponding program to be loaded with bpf_jit_harden raised
-+	 */
-+	run_blinding_subtest();
-+
-+close:
-+	close(ctx->klog_fd);
-+destroy:
-+	kasan__destroy(skel);
-+end:
-+	free(ctx);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/kasan.c b/tools/testing/selftests/bpf/progs/kasan.c
-new file mode 100644
-index 000000000000..82ddce3059ae
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kasan.c
-@@ -0,0 +1,394 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+#include <stdbool.h>
-+
-+extern void bpf_kfunc_kasan_poison(void *mem, __u32 mem__sz) __ksym;
-+extern void bpf_kfunc_kasan_unpoison(void *mem, __u32 mem__sz) __ksym;
-+
-+int access_size;
-+
-+struct kasan_write_val {
-+	__u8 data_1;
-+	__u16 data_2;
-+	__u32 data_4;
-+	__u64 data_8;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct kasan_write_val);
-+} test_map SEC(".maps");
-+
-+SEC("tcx/ingress")
-+int st_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_write_val val;
-+
-+	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_write_val));
-+	switch (access_size) {
-+	case 1:
-+		val.data_1 = 0xAA;
-+		break;
-+	case 2:
-+		val.data_2 = 0xAA;
-+		break;
-+	case 4:
-+		val.data_4 = 0xAA;
-+		break;
-+	case 8:
-+		val.data_8 = 0xAA;
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_write_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int st_not_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_write_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_write_val));
-+	switch (access_size) {
-+	case 1:
-+		val->data_1 = 0xAA;
-+		break;
-+	case 2:
-+		val->data_2 = 0xAA;
-+		break;
-+	case 4:
-+		val->data_4 = 0xAA;
-+		break;
-+	case 8:
-+		val->data_8 = 0xAA;
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_write_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int stx_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_write_val val;
-+
-+	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_write_val));
-+	switch (access_size) {
-+	case 1:
-+		val.data_1 = access_size;
-+		break;
-+	case 2:
-+		val.data_2 = access_size;
-+		break;
-+	case 4:
-+		val.data_4 = access_size;
-+		break;
-+	case 8:
-+		val.data_8 = access_size;
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_write_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int stx_not_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_write_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_write_val));
-+	switch (access_size) {
-+	case 1:
-+		val->data_1 = access_size;
-+		break;
-+	case 2:
-+		val->data_2 = access_size;
-+		break;
-+	case 4:
-+		val->data_4 = access_size;
-+		break;
-+	case 8:
-+		val->data_8 = access_size;
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_write_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int ldx_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_write_val val;
-+
-+	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_write_val));
-+	switch (access_size) {
-+	case 1:
-+		__sink(val.data_1);
-+		break;
-+	case 2:
-+		__sink(val.data_2);
-+		break;
-+	case 4:
-+		__sink(val.data_4);
-+		break;
-+	case 8:
-+		__sink(val.data_8);
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_write_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int ldx_not_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_write_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_write_val));
-+	switch (access_size) {
-+	case 1:
-+		__sink(val->data_1);
-+		break;
-+	case 2:
-+		__sink(val->data_2);
-+		break;
-+	case 4:
-+		__sink(val->data_4);
-+		break;
-+	case 8:
-+		__sink(val->data_8);
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_write_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int ldx_patched(struct __sk_buff *skb)
-+{
-+	struct kasan_write_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_write_val));
-+	__sink(val->data_4);
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_write_val));
-+
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int ldx_patched_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_write_val val;
-+
-+	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_write_val));
-+	__sink(val.data_4);
-+	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_write_val));
-+
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int simple_atomic_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_write_val val;
-+
-+	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_write_val));
-+	switch (access_size) {
-+	case 4:
-+		__sync_fetch_and_add(&val.data_4, 4);
-+		break;
-+	case 8:
-+		__sync_fetch_and_add(&val.data_8, 8);
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_write_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int simple_atomic_not_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_write_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_write_val));
-+	switch (access_size) {
-+	case 4:
-+		__sync_fetch_and_add(&val->data_4, 4);
-+		break;
-+	case 8:
-+		__sync_fetch_and_add(&val->data_8, 8);
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_write_val));
-+	return 0;
-+}
-+
-+#ifdef __BPF_FEATURE_LOAD_ACQ_STORE_REL
-+bool skip_load_acq_store_rel_tests SEC(".data") = 0;
-+
-+SEC("tcx/ingress")
-+int load_acquire_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_write_val val;
-+
-+	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_write_val));
-+	switch (access_size) {
-+	case 1:
-+		__atomic_load_n(&val.data_1, __ATOMIC_ACQUIRE);
-+		break;
-+	case 2:
-+		__atomic_load_n(&val.data_2, __ATOMIC_ACQUIRE);
-+		break;
-+	case 4:
-+		__atomic_load_n(&val.data_4, __ATOMIC_ACQUIRE);
-+		break;
-+	case 8:
-+		__atomic_load_n(&val.data_8, __ATOMIC_ACQUIRE);
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_write_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int load_acquire_not_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_write_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_write_val));
-+	switch (access_size) {
-+	case 1:
-+		__atomic_load_n(&val->data_1, __ATOMIC_ACQUIRE);
-+		break;
-+	case 2:
-+		__atomic_load_n(&val->data_2, __ATOMIC_ACQUIRE);
-+		break;
-+	case 4:
-+		__atomic_load_n(&val->data_4, __ATOMIC_ACQUIRE);
-+		break;
-+	case 8:
-+		__atomic_load_n(&val->data_8, __ATOMIC_ACQUIRE);
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_write_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int store_release_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_write_val val;
-+
-+	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_write_val));
-+	switch (access_size) {
-+	case 1:
-+		__atomic_store_n(&val.data_1, 0xAA, __ATOMIC_RELEASE);
-+		break;
-+	case 2:
-+		__atomic_store_n(&val.data_2, 0xBBBB, __ATOMIC_RELEASE);
-+		break;
-+	case 4:
-+		__atomic_store_n(&val.data_4, 0xCCCCCCCC, __ATOMIC_RELEASE);
-+		break;
-+	case 8:
-+		__atomic_store_n(&val.data_8, 0xDDDDDDDDDDDDDDDD,
-+				 __ATOMIC_RELEASE);
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_write_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int store_release_not_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_write_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_write_val));
-+	switch (access_size) {
-+	case 1:
-+		__atomic_store_n(&val->data_1, 0xAA, __ATOMIC_RELEASE);
-+		break;
-+	case 2:
-+		__atomic_store_n(&val->data_2, 0xBBBB, __ATOMIC_RELEASE);
-+		break;
-+	case 4:
-+		__atomic_store_n(&val->data_4, 0xCCCCCCCC, __ATOMIC_RELEASE);
-+		break;
-+	case 8:
-+		__atomic_store_n(&val->data_8, 0xDDDDDDDDDDDDDDDD,
-+				 __ATOMIC_RELEASE);
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_write_val));
-+	return 0;
-+}
-+#else
-+bool skip_load_acq_store_rel_tests SEC(".data") = 1;
-+#endif
-+
-+SEC("tcx/ingress")
-+int verifier_paths_stack_and_non_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_write_val stack_val = {};
-+	struct kasan_write_val *val;
-+	void *ptr;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	if (access_size)
-+		ptr = val;
-+	else
-+		ptr = &stack_val;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(*val));
-+	*(__u8 *)ptr = 0xAA;
-+	bpf_kfunc_kasan_unpoison(val, sizeof(*val));
-+	return 0;
-+}
-+
-+char LICENSE[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/kasan_harden.c b/tools/testing/selftests/bpf/progs/kasan_harden.c
-new file mode 100644
-index 000000000000..808d7da64421
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kasan_harden.c
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+extern void bpf_kfunc_kasan_poison(void *mem, __u32 mem__sz) __ksym;
-+extern void bpf_kfunc_kasan_unpoison(void *mem, __u32 mem__sz) __ksym;
-+
-+struct kasan_write_val {
-+	__u8 data_1;
-+	__u16 data_2;
-+	__u32 data_4;
-+	__u64 data_8;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct kasan_write_val);
-+} test_map SEC(".maps");
-+
-+SEC("tcx/ingress")
-+int st_blinded(struct __sk_buff *skb)
-+{
-+	struct kasan_write_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_write_val));
-+	val->data_1 = 0xAA;
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_write_val));
-+
-+	return 0;
-+}
-+
-+char LICENSE[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 30f1cd23093c..5d6a834f7d75 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -271,6 +271,26 @@ __bpf_kfunc void bpf_kfunc_put_default_trusted_ptr_test(struct prog_test_member
- 	 */
- }
- 
-+#ifdef CONFIG_BPF_JIT_KASAN
-+
-+extern void kasan_poison(const void *addr, size_t size, u8 value, bool init);
-+
-+#define KASAN_SLAB_FREE 0xFB
-+
-+__bpf_kfunc void bpf_kfunc_kasan_poison(void *mem, u32 mem__sz)
-+{
-+	kasan_poison(mem, mem__sz, KASAN_SLAB_FREE, false);
-+}
-+
-+__bpf_kfunc void bpf_kfunc_kasan_unpoison(void *mem, u32 mem__sz)
-+{
-+	kasan_poison(mem, mem__sz, 0x00, false);
-+}
-+#else
-+__bpf_kfunc void bpf_kfunc_kasan_poison(void *mem, u32 mem__sz) { }
-+__bpf_kfunc void bpf_kfunc_kasan_unpoison(void *mem, u32 mem__sz) { }
-+#endif
-+
- __bpf_kfunc struct bpf_testmod_ctx *
- bpf_testmod_ctx_create(int *err)
- {
-@@ -740,6 +760,8 @@ BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_1)
- BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_2)
- BTF_ID_FLAGS(func, bpf_kfunc_get_default_trusted_ptr_test);
- BTF_ID_FLAGS(func, bpf_kfunc_put_default_trusted_ptr_test);
-+BTF_ID_FLAGS(func, bpf_kfunc_kasan_poison)
-+BTF_ID_FLAGS(func, bpf_kfunc_kasan_unpoison)
- BTF_KFUNCS_END(bpf_testmod_common_kfunc_ids)
- 
- BTF_ID_LIST(bpf_testmod_dtor_ids)
-
+  	u64_stats_update_begin(&rq->stats.syncp);
+  	rq->stats.vs.xdp_redirect += stats->xdp_redirect;
+  	rq->stats.vs.xdp_bytes += stats->xdp_bytes;
 -- 
-2.54.0
+2.53.0
+
+---8<--- patch 2 ---8<---
+
+From: =?UTF-8?q?Jonas=20K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>
+Date: Thu, 2 Jul 2026 10:13:02 +0000
+Subject: [PATCH] veth: Add CONFIG_BQL guards
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Wrap the BQL-only code under CONFIG_BQL and expose it to the driver
+through a small set of helpers with no-op stubs for the !CONFIG_BQL
+case, so veth_xdp_rcv() and the NAPI teardown path stay free of ifdefs:
+
+   veth_bql_poll_prepare()   per-poll setup: clamps the coalescing window
+                             timestamp and returns the interval length, so
+                             !CONFIG_BQL builds never read tx_coal_usecs
+   veth_bql_account()        counts a consumed BQL-tagged skb and releases
+                             the batch once the interval window has elapsed
+   veth_bql_flush_starved()  releases the batch early when the ring has
+                             drained and the peer txq is stopped by BQL
+                             backpressure (STACK_XOFF)
+   veth_bql_state_init()
+   veth_bql_drain_and_reset() per-queue state setup and teardown
+
+Since tx-usecs only batches BQL completions, reject ethtool -C tx-usecs
+with -EOPNOTSUPP when BQL is compiled out instead of silently storing an
+inert value.
+
+Signed-off-by: Jonas Köppeler <j.koeppeler@tu-berlin.de>
+---
+  drivers/net/veth.c | 173 +++++++++++++++++++++++++++++----------------
+  1 file changed, 111 insertions(+), 62 deletions(-)
+
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 2963f190988f..5c3b7820c55c 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -73,7 +73,7 @@ struct veth_rq_stats {
+
+  struct veth_bql_state {
+  	u64	time;	/* sched_clock() when current coalescing window started */
+-	uint	n_bql;	/* BQL completions batched in the current window */
++	unsigned int	n_bql;	/* BQL completions batched in the current window */
+  };
+
+  struct veth_rq {
+@@ -83,7 +83,9 @@ struct veth_rq {
+  	struct bpf_prog __rcu	*xdp_prog;
+  	struct xdp_mem_info	xdp_mem;
+  	struct veth_rq_stats	stats;
++#ifdef CONFIG_BQL
+  	struct veth_bql_state	bql_state;
++#endif
+  	bool			rx_notify_masked;
+  	struct ptr_ring		xdp_ring;
+  	struct xdp_rxq_info	xdp_rxq;
+@@ -300,6 +302,12 @@ static int veth_set_coalesce(struct net_device *dev,
+  	struct veth_priv *priv = netdev_priv(dev);
+  	struct net_device *peer;
+
++	/* tx-usecs only batches BQL completions; without BQL it is inert. */
++	if (!IS_ENABLED(CONFIG_BQL)) {
++		NL_SET_ERR_MSG_MOD(extack, "tx-usecs requires CONFIG_BQL");
++		return -EOPNOTSUPP;
++	}
++
+  	/* The coalescing window delays BQL completions, so keep tx-usecs well
+  	 * below the tx_timeout watchdog; otherwise a large value could stall a
+  	 * stopped queue long enough to trip a false watchdog timeout. Cap at
+@@ -351,11 +359,6 @@ static bool veth_is_xdp_frame(void *ptr)
+  	return (unsigned long)ptr & VETH_XDP_FLAG;
+  }
+
+-static bool veth_ptr_is_bql(void *ptr)
+-{
+-	return (unsigned long)ptr & VETH_BQL_FLAG;
+-}
+-
+  static struct sk_buff *veth_ptr_to_skb(void *ptr)
+  {
+  	return (void *)((unsigned long)ptr & ~VETH_BQL_FLAG);
+@@ -384,25 +387,6 @@ static void veth_ptr_free(void *ptr)
+  		kfree_skb(veth_ptr_to_skb(ptr));
+  }
+
+-/* Drain frames left in the ptr_ring at teardown, freeing each one and
+- * returning the number of BQL-charged SKBs.  The caller completes these
+- * via netdev_tx_completed_queue() to balance the DQL accounting, avoiding
+- * the racy netdev_tx_reset_queue()/dql_reset().
+- */
+-static unsigned int veth_ptr_ring_drain(struct ptr_ring *ring)
+-{
+-	unsigned int n_bql = 0;
+-	void *ptr;
+-
+-	while ((ptr = ptr_ring_consume(ring))) {
+-		if (veth_ptr_is_bql(ptr))
+-			n_bql++;
+-		veth_ptr_free(ptr);
+-	}
+-
+-	return n_bql;
+-}
+-
+  static void __veth_xdp_flush(struct veth_rq *rq)
+  {
+  	/* Write ptr_ring before reading rx_notify_masked */
+@@ -1029,6 +1013,31 @@ static struct sk_buff *veth_xdp_rcv_skb(struct 
+veth_rq *rq,
+  	return NULL;
+  }
+
++#ifdef CONFIG_BQL
++static bool veth_ptr_is_bql(void *ptr)
++{
++	return (unsigned long)ptr & VETH_BQL_FLAG;
++}
++
++/* Drain frames left in the ptr_ring at teardown, freeing each one and
++ * returning the number of BQL-charged SKBs.  The caller completes these
++ * via netdev_tx_completed_queue() to balance the DQL accounting, avoiding
++ * the racy netdev_tx_reset_queue()/dql_reset().
++ */
++static unsigned int veth_bql_ring_drain(struct ptr_ring *ring)
++{
++	unsigned int n_bql = 0;
++	void *ptr;
++
++	while ((ptr = ptr_ring_consume(ring))) {
++		if (veth_ptr_is_bql(ptr))
++			n_bql++;
++		veth_ptr_free(ptr);
++	}
++
++	return n_bql;
++}
++
+  static void veth_bql_complete(struct veth_bql_state *state,
+  			      struct netdev_queue *peer_txq,
+  			      u64 now)
+@@ -1039,18 +1048,18 @@ static void veth_bql_complete(struct 
+veth_bql_state *state,
+  	state->n_bql = 0;
+  }
+
+-static void veth_bql_maybe_complete(struct veth_bql_state *state,
+-				    struct netdev_queue *peer_txq,
+-				    u64 bql_flush_ns)
++static void veth_bql_account(struct veth_rq *rq,
++			     struct netdev_queue *peer_txq,
++			     void *ptr, u64 bql_flush_ns)
+  {
++	struct veth_bql_state *state = &rq->bql_state;
+  	u64 now;
+
+-	/* There is no reason to complete with 0 and
+-	 * peer_txq could go away.
+-	 */
+-	if (!state->n_bql || !peer_txq)
++	if (!peer_txq || !veth_ptr_is_bql(ptr))
+  		return;
+
++	state->n_bql++;
++
+  	/* Release the batched completions once the coalescing window has
+  	 * elapsed.
+  	 */
+@@ -1059,24 +1068,81 @@ static void veth_bql_maybe_complete(struct 
+veth_bql_state *state,
+  		veth_bql_complete(state, peer_txq, now);
+  }
+
++/* Per-poll setup: clamp the window timestamp and return the length of the
++ * coalescing window in ns.
++ */
++static u64 veth_bql_poll_prepare(struct veth_rq *rq)
++{
++	struct veth_priv *priv = netdev_priv(rq->dev);
++	struct veth_bql_state *state = &rq->bql_state;
++
++	/* Clamp stored timestamp in case we migrated to a CPU with a behind
++	 * sched_clock(); tries to reduce late BQL flushes.
++	 */
++	state->time = min(state->time, sched_clock());
++
++	/* Mirrored to both peers; paired with WRITE_ONCE() in 
+veth_set_coalesce */
++	return (u64)READ_ONCE(priv->tx_coal_usecs) * NSEC_PER_USEC;
++}
++
++static void veth_bql_flush_starved(struct veth_rq *rq,
++				   struct netdev_queue *peer_txq)
++{
++	struct veth_bql_state *state = &rq->bql_state;
++
++	if (!peer_txq)
++		return;
++
++	/* If the ring drained and the peer TX queue is stalled by BQL
++	 * backpressure (STACK_XOFF), release the batched completions now to
++	 * unblock the producer. DRV_XOFF is handled by the wake in veth_poll().
++	 */
++	if (state->n_bql && __ptr_ring_empty(&rq->xdp_ring)) {
++		/* The consume above observed the producer's publish; order it
++		 * before reading STACK_XOFF. Pairs with the smp_wmb() and XOFF
++		 * set_bit() on the producer side.
++		 */
++		smp_rmb();
++		if (test_bit(__QUEUE_STATE_STACK_XOFF, &peer_txq->state))
++			veth_bql_complete(state, peer_txq, sched_clock());
++	}
++}
++
++static void veth_bql_state_init(struct veth_rq *rq)
++{
++	rq->bql_state.time = sched_clock();
++	rq->bql_state.n_bql = 0;
++}
++
++static unsigned int veth_bql_drain_and_reset(struct veth_rq *rq)
++{
++	unsigned int n_bql = veth_bql_ring_drain(&rq->xdp_ring) + 
+rq->bql_state.n_bql;
++
++	rq->bql_state.n_bql = 0;
++	rq->bql_state.time = 0;
++	return n_bql;
++}
++#else
++static inline void veth_bql_account(struct veth_rq *rq,
++				    struct netdev_queue *peer_txq,
++				    void *ptr, u64 bql_flush_ns) {}
++static inline u64 veth_bql_poll_prepare(struct veth_rq *rq) { return 0; }
++static inline void veth_bql_flush_starved(struct veth_rq *rq,
++					  struct netdev_queue *peer_txq) {}
++static inline void veth_bql_state_init(struct veth_rq *rq) {}
++static inline unsigned int veth_bql_drain_and_reset(struct veth_rq *rq) 
+{ return 0; }
++#endif
++
+  static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+  			struct veth_xdp_tx_bq *bq,
+  			struct veth_stats *stats,
+  			struct netdev_queue *peer_txq)
+  {
+-	struct veth_priv *priv = netdev_priv(rq->dev);
+-	struct veth_bql_state *state = &rq->bql_state;
+  	int i, done = 0, n_xdpf = 0;
+  	void *xdpf[VETH_XDP_BATCH];
+  	u64 bql_flush_ns;
+
+-	/* Mirrored to both peers; paired with WRITE_ONCE() in 
+veth_set_coalesce */
+-	bql_flush_ns = (u64)READ_ONCE(priv->tx_coal_usecs) * 1000;
+-
+-	/* Clamp stored timestamp in case we migrated to a CPU with a behind
+-	 * sched_clock(); tries to reduce late BQL flushes.
+-	 */
+-	state->time = min(state->time, sched_clock());
++	bql_flush_ns = veth_bql_poll_prepare(rq);
+
+  	for (i = 0; i < budget; i++) {
+  		void *ptr = __ptr_ring_consume(&rq->xdp_ring);
+@@ -1103,12 +1169,10 @@ static int veth_xdp_rcv(struct veth_rq *rq, int 
+budget,
+  			/* ndo_start_xmit */
+  			struct sk_buff *skb = veth_ptr_to_skb(ptr);
+
+-			if (veth_ptr_is_bql(ptr))
+-				state->n_bql++;
+  			/* Complete before processing so the producer wakes
+  			 * sooner; ring-empty case handled after the loop.
+  			 */
+-			veth_bql_maybe_complete(state, peer_txq, bql_flush_ns);
++			veth_bql_account(rq, peer_txq, ptr, bql_flush_ns);
+
+  			stats->xdp_bytes += skb->len;
+  			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
+@@ -1125,19 +1189,7 @@ static int veth_xdp_rcv(struct veth_rq *rq, int 
+budget,
+  	if (n_xdpf)
+  		veth_xdp_rcv_bulk_skb(rq, xdpf, n_xdpf, bq, stats);
+
+-	/* If the ring drained and the peer TX queue is stalled by BQL
+-	 * backpressure (STACK_XOFF), release the batched completions now to
+-	 * unblock the producer. DRV_XOFF is handled by the wake in veth_poll().
+-	 */
+-	if (peer_txq && state->n_bql && __ptr_ring_empty(&rq->xdp_ring)) {
+-		/* The consume above observed the producer's publish; order it
+-		 * before reading STACK_XOFF. Pairs with the smp_wmb() and XOFF
+-		 * set_bit() on the producer side.
+-		 */
+-		smp_rmb();
+-		if (test_bit(__QUEUE_STATE_STACK_XOFF, &peer_txq->state))
+-			veth_bql_complete(state, peer_txq, sched_clock());
+-	}
++	veth_bql_flush_starved(rq, peer_txq);
+
+  	u64_stats_update_begin(&rq->stats.syncp);
+  	rq->stats.vs.xdp_redirect += stats->xdp_redirect;
+@@ -1241,8 +1293,7 @@ static int __veth_napi_enable_range(struct 
+net_device *dev, int start, int end)
+  	for (i = start; i < end; i++) {
+  		struct veth_rq *rq = &priv->rq[i];
+
+-		rq->bql_state.time = sched_clock();
+-		rq->bql_state.n_bql = 0;
++		veth_bql_state_init(rq);
+
+  		napi_enable(&rq->xdp_napi);
+  		rcu_assign_pointer(priv->rq[i].napi, &priv->rq[i].xdp_napi);
+@@ -1298,10 +1349,8 @@ static void veth_napi_del_range(struct net_device 
+*dev, int start, int end)
+  		 * (consumed by NAPI but not yet flushed).  Both were charged
+  		 * via netdev_tx_sent_queue() and are still outstanding.
+  		 */
+-		n_bql = veth_ptr_ring_drain(&rq->xdp_ring) + rq->bql_state.n_bql;
++		n_bql = veth_bql_drain_and_reset(rq);
+  		ptr_ring_cleanup(&rq->xdp_ring, veth_ptr_free);
+-		rq->bql_state.n_bql = 0;
+-		rq->bql_state.time = 0;
+
+  		if (!peer || i >= peer->num_tx_queues)
+  			continue;
+-- 
+2.53.0
+>>>
+>>>> +        netdev_tx_completed_queue(peer_txq, state->n_bql,
+>>>> +                      state->n_bql * VETH_BQL_UNIT);
+>>>> +        state->time = current_time;
+>>>> +        state->n_bql = 0;
+>>>> +    }
+>>>> +}
+>>>> +
+>>>>    static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>>>>                struct veth_xdp_tx_bq *bq,
+>>>>                struct veth_stats *stats,
+>>>>                struct netdev_queue *peer_txq)
+>>>>    {
+>>>> +    struct veth_priv *priv = netdev_priv(rq->dev);
+>>>> +    struct veth_bql_state *state = &rq->bql_state;
+>>>>        int i, done = 0, n_xdpf = 0;
+>>>>        void *xdpf[VETH_XDP_BATCH];
+>>>> +    u64 bql_flush_ns;
+>>>> +
+>>>> +    /* Mirrored to both peers; paired with WRITE_ONCE() in veth_set_coalesce */
+>>>> +    bql_flush_ns = (u64)READ_ONCE(priv->tx_coal_usecs) * 1000;
+>>>> +
+>>>> +    /* Clamp stored timestamp in case we migrated to a CPU with a behind
+>>>> +     * sched_clock(); tries to reduce late BQL flushes.
+>>>> +     */
+>>>> +    state->time = min(state->time, sched_clock());
+>>>> +
+>>>> +    /* Flush completions that timed out since the previous NAPI poll. */
+>>>> +    veth_bql_maybe_complete(state, peer_txq, bql_flush_ns);>>
+>>>>        for (i = 0; i < budget; i++) {
+>>>>            void *ptr = __ptr_ring_consume(&rq->xdp_ring);
+>>>> @@ -1000,12 +1101,11 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>>>>                }
+>>>>            } else {
+>>>>                /* ndo_start_xmit */
+>>>> -            bool bql_charged = veth_ptr_is_bql(ptr);
+>>>>                struct sk_buff *skb = veth_ptr_to_skb(ptr);
+>>>>    +            if (veth_ptr_is_bql(ptr))
+>>>> +                state->n_bql++;
+>>>>                stats->xdp_bytes += skb->len;
+>>>> -            if (peer_txq && bql_charged)
+>>>> -                netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_UNIT);
+>>>>                  skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
+>>>>                if (skb) {
+>>>> @@ -1015,6 +1115,7 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>>>>                        napi_gro_receive(&rq->xdp_napi, skb);
+>>>>                }
+>>>>            }
+>>>> +        veth_bql_maybe_complete(state, peer_txq, bql_flush_ns);
+>>>>            done++;
+>>>
+>>> Sashiko-Nipa reports:
+>>>
+>>> "If veth_xdp_rcv() finishes and returns a done count less than the budget,
+>>> NAPI will go to sleep in veth_poll(). Do we need to unconditionally flush
+>>> any stranded BQL completions in veth_poll() before sleeping?
+>>> If completions are left in rq->bql_state indefinitely across NAPI idle
+>>> periods, it might present an artificially massive delay to DQL. This could
+>>> cause DQL to mistakenly conclude the hardware is extremely slow and
+>>> aggressively shrink dql.limit to its minimum, crippling throughput on
+>>> subsequent bursts."
+>>>
+>>> Again the issue that I found to be non-problematic in [1] and can be
+>>> seen by an BQL inflight > 0 when for example pktgen suddenly stops.
+>>>
+>>> If we would "unconditionally flush any stranded BQL completions in
+>>> veth_poll() before sleeping" we would *not* accumulate BQL completions
+>>> across NAPI polls but we want to do that.
+>>>
+>>> Do you agree?
+>>>
+>>> [1] https://lore.kernel.org/netdev/c8650d3a-e488-4279-b28f-549d766c23a1@tu-dortmund.de/
+>>
 
