@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA1D3EBF07;
-	Thu,  9 Jul 2026 08:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9023DE44C;
+	Thu,  9 Jul 2026 08:58:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783586820; cv=none; b=CoZVbvFY0ZRHQ/f893iO4cotM7/TcJk5j56qUfR095v2/pKWWejJK4jIAGZLrb6ca6BQLKWMH4kaPu4J3NkFOSLS1nyONVqZeRP3FT5OF4+DwGNicBiXbZtF2VptdoZvvUUMduH+KboHFtzBcRYQn2QBsNIv0rZFVdkMoD2Vg+4=
+	t=1783587501; cv=none; b=s27h3GZRhWsoyzwJpbq2BQEVHusnaOISidRnRGC7irgwelkh1r9Vs+Wq6Q1twOR7qxUITuAChVer06S+/CulYNwb+Jh8TXtju19jvFh+58jr7EOyhmlOxsDbZs4hpWcNpSJl6GLwudvCzZR1WT4Z2smFEorFHb46V7XkBfXXNTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783586820; c=relaxed/simple;
-	bh=BczvAh6Zv0GAX6SUWCHTX7t668sOk5y0+cCK3HIc8VQ=;
+	s=arc-20240116; t=1783587501; c=relaxed/simple;
+	bh=p1Oy7/s2LdHQyB5UzoUPUlsGyyzMDwCj4pMnGUs7Yjw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cHL5jw3XEzcXnuNVx3Az7HWsk6dOOOxTRH72aWoVVKEeeeVHWlleV+K0czZKxJPPZiPLwStITgenmF+/2uJ/Ch6CTIN3J44jjP6Pozbql0l8S1vESOWeDJv8QDKcmIxBb/vuZo+UaO+A8o0xoNU5wmDMcTxaNweR6/fk7Qj+85o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=fu3qFK0z; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=pE8b5rucFfwTOrk2RrZMJMmLidCkfOpnHt1B/G0bjtqHKzIfTqQBeL1/uuYYd+B98VDzev4qHSPDPvSJTeQgaKENdpdmYfprmP1N8s23rz4tBW4eSlIqEw0yeVy3NNmcRV3HTpEuqp9yYk3amGLN6cNTFINrKckGhS77CUYdqA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=DHrocTN0; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="fu3qFK0z"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="DHrocTN0"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=h+w+9wmHpWJd8cFGNu/fprIuzgYEMZMAKThejEcRrLc=; b=fu3qFK0zHEFPIOC92XA/MmfmUA
-	htMDFLa3wfmFqgdsKUuIZyFu4F9vIPqi2HSfvVrASkn7tDO+fSITHSgyNftTVmNhj2NNV3E1EKd1M
-	tZQEUY0ZYt8YGvN9J+Rj91LB8vs2rtALe8br+ErS0Ly8xIFsAX+2XXSDoFJqtfa26ivPKhOMFwcU2
-	+RgYEM6UIxJjIX5EzEJzLr8dmxtC9BPGgqsqwHP4lubMDcuI0twwRvzNNTDWF7Bgxu4JoeUJ2n/n2
-	RceQwRaMTDWLCeCiFFmxbwic9l+xZN3yPXcr0LxWPnV9CVYqDBzupClYDxXJyt5O0+dPWAReuLMD7
-	3SFn9fqg==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
+	bh=qAWKoI7QfOE19eHyLyr3k+FJWvqF88CPxVy83uz+8DE=; b=DHrocTN0871WUGe0d6bbZay2wK
+	Vr6DuKEmsJKnkJne9G06W7VwiM6fbPydElyXna0pgEY8CZHLYENFGSjG4NZi+LHXDpYi+BUGMOqS0
+	sFw7tAh45bFM4ya1m3AB76EDRtu7EJSeh9xyqunjgFQibr6vGg/OcxprYuRGAyZXLO8nzGq0+VNAl
+	b5R7XR2zS5YLzHQn/jchzICp/D7o8g6XJ9JujV2YfljqrUGx4YNl55QON2ip7keoqjNpaNFRMeUcR
+	17bjofYIu4G4JjsDooHioeU1eu40C9lYJ6HZqbPLInLFX53I0HBDzJS9I+eqhX28pHubB8Nl08ntE
+	LoPW9B2Q==;
+Received: from sslproxy07.your-server.de ([78.47.199.104])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1whkPH-000PIQ-03;
-	Thu, 09 Jul 2026 10:46:55 +0200
+	id 1whkaF-0001AF-1o;
+	Thu, 09 Jul 2026 10:58:15 +0200
 Received: from localhost ([127.0.0.1])
-	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1whkPG-000P4u-13;
-	Thu, 09 Jul 2026 10:46:54 +0200
-Message-ID: <28ba19a4-b487-49fd-bbba-04410acdb113@iogearbox.net>
-Date: Thu, 9 Jul 2026 10:46:50 +0200
+	id 1whkaF-000GpQ-2k;
+	Thu, 09 Jul 2026 10:58:15 +0200
+Message-ID: <5c81752f-5c57-47c4-afad-7cef78729feb@iogearbox.net>
+Date: Thu, 9 Jul 2026 10:58:14 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,14 +48,12 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v6 2/7] riscv, bpf: Fix memory leak in
- bpf_jit_free
-To: Pu Lehui <pulehui@huaweicloud.com>, sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260708064436.2971933-1-pulehui@huaweicloud.com>
- <20260708064436.2971933-3-pulehui@huaweicloud.com>
- <20260708065406.66B4A1F000E9@smtp.kernel.org>
- <7218a234-df3b-40d9-aea3-1e1c69a2bc1f@huaweicloud.com>
+Subject: Re: [PATCH v3 0/4] Fix and optimize BPF tailcall for LoongArch
+To: Tiezhu Yang <yangtiezhu@loongson.cn>, Huacai Chen
+ <chenhuacai@kernel.org>, Hengqi Chen <hengqi.chen@gmail.com>
+Cc: loongarch@lists.linux.dev, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260707101508.32283-1-yangtiezhu@loongson.cn>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -101,24 +99,41 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <7218a234-df3b-40d9-aea3-1e1c69a2bc1f@huaweicloud.com>
+In-Reply-To: <20260707101508.32283-1-yangtiezhu@loongson.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28055/Thu Jul  9 08:25:20 2026)
 
-On 7/8/26 10:51 AM, Pu Lehui wrote:
-> On 2026/7/8 14:54, sashiko-bot@kernel.org wrote:
->> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
->>
->> Pre-existing issues:
->> - [Critical] bpf_jit_free() ignores the error return value of bpf_jit_binary_pack_finalize(), leading to a Use-After-Free, Double-Free, and potential JIT memory charge limit corruption.
->> - [High] The identical memory leak fixed in RISC-V remains present in ARM64 and LoongArch BPF JIT implementations.
->> - [High] Memory charge limit (modmem) is permanently leaked when bpf_jit_binary_pack_finalize() fails in bpf_int_jit_compile().
->> -- 
+On 7/7/26 12:15 PM, Tiezhu Yang wrote:
+> Based on 7.2-rc2, tested on a Loongson-3A6000 physical machine.
 > 
-> These are all pre-existing issues unrelated to the mixing of tail calls and bpf2bpf; they will be analyzed and fixed in a new patch series, as addressing them here would make this patchset be more large.
-Makes sense, please follow-up on these; meanwhile once Bjorn acked we
-can land these.
+> Here are the test results:
+> 
+>    $ sudo modprobe test_bpf test_suite=test_tail_calls
+>    $ dmesg -t | tail -1
+>    test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
+> 
+>    $ sudo ./test_progs -t tailcalls | tail -1
+>    Summary: 1/37 PASSED, 0 SKIPPED, 0 FAILED
+> 
+> v2 -> v3:
+>    -- Patch 1: Add Fixes tag.
+>    -- Patch 2: Update the commit message and add Fixes tag.
+>    -- Patch 3: Update the commit message and add Fixes tag.
+>    -- Patch 4: Condense the code comments and update the commit message.
+> 
+> No code changes.
 
-Thanks,
-Daniel
+Tiezhu/Huacai, do you want us to route these via bpf-next tree?
+
+> Tiezhu Yang (4):
+>    LoongArch: BPF: Optimize redundant TCC loads in epilogue
+>    LoongArch: BPF: Move arena register slot below TCC context
+>    LoongArch: BPF: Refactor jump offset calculation in tail call
+>    LoongArch: BPF: Implement branchless conditional move for TCC
+> 
+>   arch/loongarch/include/asm/inst.h |  6 +++
+>   arch/loongarch/net/bpf_jit.c      | 85 +++++++++++--------------------
+>   2 files changed, 36 insertions(+), 55 deletions(-)
+> 
+
