@@ -1,42 +1,42 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE06405855;
-	Thu,  9 Jul 2026 10:03:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36BD940B37B;
+	Thu,  9 Jul 2026 10:03:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783591421; cv=none; b=kzpLnOIw18rgifrQvkp4am3wpRFAdV4er4BrlYzxtzoRgYtVrd9d+3KZuT4bvCG7JJRmz8sLSNSmmgGkszLxpd6S43vNGK/0h/hjQojynGTIWQcYzK1YB8yezVUW5xRVrRiGeAzcVL/xQU/9BVjFgcrFXAimMwWYP2kf3hInVYU=
+	t=1783591424; cv=none; b=C5eVcI0VO4p/VkttB1MJf75gzNamrBu65RClsLUkZLGtT85l+7Tv+JPBjLYdOUGTXs33egK9v+iJtPx+wFysUsBm4YUtWEoz0yJ073g2FN1+9vSOgnBIfSnZ0iS2rG70OMwjaRKvfKvB9dHkFyLr3OdPDz2aiximQQ5zZLg1o0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783591421; c=relaxed/simple;
-	bh=hANZ/y7CoXj3Gzilljhef9yYe7inszCEDzBwC+ylOHA=;
+	s=arc-20240116; t=1783591424; c=relaxed/simple;
+	bh=P5vr14w2jPhWbOKQycMZkDakDXaxz0szpDZ7BTTpesg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FT9kpMQ3cYVLmxrEMuEmOhUgG0UO7482Ld0nN3WSHvXmxP24Q1sBvVIqBgXHTVdEknjesVt6O9U3EfD4YkkfGyfU+tUGJFuhZx16RO6Ub6d1DP3tQmsfNneq703sGCRsoL6zW3jdIjjVkQ0/qARq30BVSgrq7YH529S3tw2yPto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=d/6gqjzb; arc=none smtp.client-ip=185.171.202.116
+	 In-Reply-To:To:Cc; b=rVokDHN7Dj5UXKMeuJs79+rNAjGaqHbt5TNxGMXDUe/BdsQVLVLgLNY2WSJiWFxKpghNJ3KmuoYX6O8B5ROtrFriv0Bvep/22u1ksKWomrZd5g/WB9gSvE7Xe4/iz8Bb55Ty0lfJ3B3EM1dX8pp9Nn/6vOKdAmbFA213IwHGhrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=P49YLAgW; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="d/6gqjzb"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="P49YLAgW"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 2D1A1C2F4C2;
-	Thu,  9 Jul 2026 10:03:53 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 0F4414E40D13;
+	Thu,  9 Jul 2026 10:03:42 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id D24625FF03;
-	Thu,  9 Jul 2026 10:03:38 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9891811BC374B;
-	Thu,  9 Jul 2026 12:03:34 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id D821D5FF03;
+	Thu,  9 Jul 2026 10:03:41 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id BF58811BC3747;
+	Thu,  9 Jul 2026 12:03:37 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1783591417; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1783591420; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=unUdDMU0gKLGOyEOx1tzKElYwdackbPgPQ7PiZyXPpY=;
-	b=d/6gqjzbaOAHIVRucoI2G4qwYVJIJJdQPQOQAdOeSHeDf8ZizQ3Vy0RjUCm56AQc+KM1TG
-	ToMU6r6bRdCTTkhio4WApguU/RMSnQmyW4NpVCf8wCoToGncIQKTk77Y5uHtF+FtOnJhdr
-	u3UhzhWDphZF0n65FkKpky8BoW495ri6gHRCGTIOlG7eSUFUkZjLm3dzgox5zqJl+vkkbR
-	409HS7rqG3r7YTY2flVjqQh1x8cTcyR8P6iuNfUYKYqm6IOoYSGlrGbDKM8heZMgrwjHlM
-	9SWTlQJnXKiY7TiAs5jGGznXR14yPTCnqgmCKC6wduuckJ05n+LWjKSlq6flng==
+	bh=fYm1kP1M7fb0+cA42RUh4WwgYhDm73UuY5LUlWxI1wk=;
+	b=P49YLAgWjlf+NnXiniDlUsoI0ugNQE4R3h/z2KaF1jzv237DDDgMHaT7TdDKS8TMgOWLcS
+	neA0eUpQtZbAAfliA60pX8OIR5HdQGuoDK2YLi3zEqZB2FxW+t5hb5GLOG2VeH98SJQ5Kw
+	YF8KIUcj1oMa44KZVL1iJphlh6yOTY9KatJ9n0eKZbS+tqBUSMWJ2erLZZPuEGUxtRmaVt
+	6iyFh9vAy6VIhnUXjq+oTcFvvZGpS40f5Dd9nn0MeOc8IrZwiqrUaLIfuswAmxdFi02rHs
+	7rwUJgAR8RJL1JivN0Q2yYyW7wQ0ZAeahG+1fahZiCaGddAPpE5F5xJr95g+9w==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Thu, 09 Jul 2026 12:01:49 +0200
-Subject: [PATCH bpf-next v5 08/10] selftests/bpf: add helpers for KASAN in
- JIT testing
+Date: Thu, 09 Jul 2026 12:01:50 +0200
+Subject: [PATCH bpf-next v5 09/10] selftests/bpf: move bpf_jit_harden
+ helper into testing_helpers
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260709-kasan-v5-8-1c64af8e4e1e@bootlin.com>
+Message-Id: <20260709-kasan-v5-9-1c64af8e4e1e@bootlin.com>
 References: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
 In-Reply-To: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -68,53 +68,153 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.15.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-Add two simple helpers to allow checking whether KASAN for eBPF tests
-should be executed:
-- one helper to check if BPF_JIT_KASAN is enabled in kernel
-  configuration
-- one helper to check if the kernel is running with kasan_multi_shot
-  (otherwise only the first test will be able to trigger a report)
+Move set_bpf_jit_harden to testing helpers so that other selftests can
+change the hardening configuration without re-implementing a helper.
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
 Changes in v5:
-- add kasan_multi_shot helper
+- check set_bpf_jit_harden return code in cleanup path
 
-Changes in v2:
-- fix condition
+Changes in v3:
+- new patch
 ---
- tools/testing/selftests/bpf/unpriv_helpers.c | 10 ++++++++++
- tools/testing/selftests/bpf/unpriv_helpers.h |  2 ++
- 2 files changed, 12 insertions(+)
+ .../selftests/bpf/prog_tests/bpf_insn_array.c      | 44 +++-------------------
+ tools/testing/selftests/bpf/testing_helpers.c      | 32 ++++++++++++++++
+ tools/testing/selftests/bpf/testing_helpers.h      |  1 +
+ 3 files changed, 38 insertions(+), 39 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/unpriv_helpers.c b/tools/testing/selftests/bpf/unpriv_helpers.c
-index f997d7ec8fd0..95be83937883 100644
---- a/tools/testing/selftests/bpf/unpriv_helpers.c
-+++ b/tools/testing/selftests/bpf/unpriv_helpers.c
-@@ -142,3 +142,13 @@ bool get_unpriv_disabled(void)
- 	}
- 	return mitigations_off;
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c b/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
+index 0222a9a5d076..815f3e04540f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
+@@ -227,42 +227,6 @@ static void check_incorrect_index(void)
+ 	check_mid_insn_index();
  }
-+
-+bool get_kasan_jit_enabled(void)
-+{
-+	return config_contains("CONFIG_BPF_JIT_KASAN=y") == 1;
-+}
-+
-+bool get_kasan_multi_shot_enabled(void)
-+{
-+	return cmdline_contains("kasan_multi_shot");
-+}
-diff --git a/tools/testing/selftests/bpf/unpriv_helpers.h b/tools/testing/selftests/bpf/unpriv_helpers.h
-index 151f67329665..a7ceb51577cd 100644
---- a/tools/testing/selftests/bpf/unpriv_helpers.h
-+++ b/tools/testing/selftests/bpf/unpriv_helpers.h
-@@ -5,3 +5,5 @@
- #define UNPRIV_SYSCTL "kernel/unprivileged_bpf_disabled"
  
- bool get_unpriv_disabled(void);
-+bool get_kasan_jit_enabled(void);
-+bool get_kasan_multi_shot_enabled(void);
+-static int set_bpf_jit_harden(char *level)
+-{
+-	char old_level;
+-	int err = -1;
+-	int fd = -1;
+-
+-	fd = open("/proc/sys/net/core/bpf_jit_harden", O_RDWR | O_NONBLOCK);
+-	if (fd < 0) {
+-		ASSERT_FAIL("open .../bpf_jit_harden returned %d (errno=%d)", fd, errno);
+-		return -1;
+-	}
+-
+-	err = read(fd, &old_level, 1);
+-	if (err != 1) {
+-		ASSERT_FAIL("read from .../bpf_jit_harden returned %d (errno=%d)", err, errno);
+-		err = -1;
+-		goto end;
+-	}
+-
+-	lseek(fd, 0, SEEK_SET);
+-
+-	err = write(fd, level, 1);
+-	if (err != 1) {
+-		ASSERT_FAIL("write to .../bpf_jit_harden returned %d (errno=%d)", err, errno);
+-		err = -1;
+-		goto end;
+-	}
+-
+-	err = 0;
+-	*level = old_level;
+-end:
+-	if (fd >= 0)
+-		close(fd);
+-	return err;
+-}
+-
+ static void check_blindness(void)
+ {
+ 	struct bpf_insn insns[] = {
+@@ -272,7 +236,7 @@ static void check_blindness(void)
+ 		BPF_MOV64_IMM(BPF_REG_0, 1),
+ 		BPF_EXIT_INSN(),
+ 	};
+-	int prog_fd = -1, map_fd;
++	int prog_fd = -1, map_fd, ret;
+ 	struct bpf_insn_array_value val = {};
+ 	char bpf_jit_harden = '@'; /* non-exizsting value */
+ 	int i;
+@@ -291,7 +255,8 @@ static void check_blindness(void)
+ 		goto cleanup;
+ 
+ 	bpf_jit_harden = '2';
+-	if (set_bpf_jit_harden(&bpf_jit_harden)) {
++	ret = set_bpf_jit_harden(&bpf_jit_harden);
++	if (!ASSERT_OK(ret, "set bpf_jit_harden")) {
+ 		bpf_jit_harden = '@'; /* open, read or write failed => no write was done */
+ 		goto cleanup;
+ 	}
+@@ -313,7 +278,8 @@ static void check_blindness(void)
+ cleanup:
+ 	/* restore the old one */
+ 	if (bpf_jit_harden != '@')
+-		set_bpf_jit_harden(&bpf_jit_harden);
++		ASSERT_OK(set_bpf_jit_harden(&bpf_jit_harden),
++			  "restore hardening configuration");
+ 
+ 	close(prog_fd);
+ 	close(map_fd);
+diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
+index c970e7793dfc..737f668b35e2 100644
+--- a/tools/testing/selftests/bpf/testing_helpers.c
++++ b/tools/testing/selftests/bpf/testing_helpers.c
+@@ -519,6 +519,38 @@ bool is_jit_enabled(void)
+ 	return enabled;
+ }
+ 
++int set_bpf_jit_harden(char *level)
++{
++	char old_level;
++	int err = -1;
++	int fd = -1;
++
++	fd = open("/proc/sys/net/core/bpf_jit_harden", O_RDWR | O_NONBLOCK);
++	if (fd < 0)
++		return -1;
++
++	err = read(fd, &old_level, 1);
++	if (err != 1) {
++		err = -1;
++		goto end;
++	}
++
++	lseek(fd, 0, SEEK_SET);
++
++	err = write(fd, level, 1);
++	if (err != 1) {
++		err = -1;
++		goto end;
++	}
++
++	err = 0;
++	*level = old_level;
++end:
++	if (fd >= 0)
++		close(fd);
++	return err;
++}
++
+ int stack_mprotect(void)
+ {
+ 	void *buf;
+diff --git a/tools/testing/selftests/bpf/testing_helpers.h b/tools/testing/selftests/bpf/testing_helpers.h
+index 2edc6fb7fc52..e00642afe86f 100644
+--- a/tools/testing/selftests/bpf/testing_helpers.h
++++ b/tools/testing/selftests/bpf/testing_helpers.h
+@@ -59,6 +59,7 @@ struct bpf_insn;
+ int get_xlated_program(int fd_prog, struct bpf_insn **buf, __u32 *cnt);
+ int testing_prog_flags(void);
+ bool is_jit_enabled(void);
++int set_bpf_jit_harden(char *level);
+ int stack_mprotect(void);
+ 
+ #endif /* __TESTING_HELPERS_H */
 
 -- 
 2.54.0
