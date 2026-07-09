@@ -1,119 +1,138 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05A6449991;
-	Thu,  9 Jul 2026 18:54:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2BA1449991
+	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 18:55:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783623292; cv=none; b=C6wXvZgyDQOj7OZbR0L3/1nfl6gV/rKtMPiJaVY25ph68rGCWNwxGiJAD+BKeWAz6v+yO9HOXdovPF5psXcGxDoLZXOXLOxUQlezQk1HUM/DWZTsKq/iWvPKqgxrdjCP4GymK8toP1w3xySWydJa/PF4H25mt58sXhsjoctN8M0=
+	t=1783623330; cv=none; b=qmD8n+dMQwamxq6HmqHfPeUgdyViN+BLEEZz4o8fN1sxq0yD6t1BtAZa4JAWtNn3ZWl1nK4HlD3peOG0BzbxlwpBy7E+Kl7M0ajTXB/z0UTXlb0o1+wnArpzYSpyRUZ3/1FQHfCWGoFUCRYFOtyRVMhCwlHcXasL1ujtgZ7LDHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783623292; c=relaxed/simple;
-	bh=nOp9dRAkZZmsy/4LfZiAoN1/cIRVppzj441qbWbpMuI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ch857iYNGkcHIpXopiXe1FZpWTBGzIAmRrPhcnQtK01jpZLnNUcBtUT5/QarB1WuWY3mWTpXNPgQ1V+nhU2IzwDAs45w6zVrQ9DNctwiOHNOWqqDr/iNp2NC5bXlLyNTnc2a6nadExwgmJeGvQpmVanR5I6eM0472Nqw1r/sKP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=emhDrfC3 reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1783623330; c=relaxed/simple;
+	bh=aMTYAUn7llZZIPNmb6iRnHHXE8mHMkvDlMwRwb/LBjA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=E4KkswzcLM350WoBgg0M33o7NYuM+eR2bwe085XehHzQoh/K6pmv9Jh2djpVYvexiakQGCMlPfTZMimG6DHzP3kl2e4G3WFetIvIutVLIfq42mbdjkYi3n8nz20gJWWkbpzkFBll+I8l6xbJPrY5+9zRcxZ4tBTihUjngInEG7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oFwJTNYa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="emhDrfC3"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6C6AA40E014C;
-	Thu,  9 Jul 2026 18:54:38 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
-	reason="fail (body has been altered)" header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id QSY5mcnhEz1a; Thu,  9 Jul 2026 18:54:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1783623268; bh=Yt27dIER6EH7BwDBybe7TUBMtfov7ivN1wC7w3HKW/A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=emhDrfC3quKVcEPIFTu8eG9PS1i4nA82mTENb6wCFa3nSbzzVN/RWuSWGXNkNzBH1
-	 f9bD3lriYyfsVUj9PSHvksBJ6VCuYlX65BPUixuw77oLzFYQfm3PhV8IyzpvSF8GQq
-	 0zWHDal2OEZJKekYcN3dYewXT/t0u/vcGxNT8hi5dzHJnLwx3vjm7X8FedJQkrV6lJ
-	 Nz0ftw7VxbjBJ7k3f7z00lnSZHw4LnSGmds+dljejm3SrPOLjYiMFub1s/WSq/nroW
-	 7YbNo1ZKD2Rmh8rX1psPIu1/1cM/G51xW89Z+uwj1m7JR0pIvYvk6ZlBXAI+JBLGGU
-	 +4RiWZT6djLdeQFZl4N0BUP4Lq/PbBnz6YUXFR9GFgOlraXVlDtRz0LaXFuVNu6irG
-	 iiGKSwjNVQaFX3vRQCt6NU/SjH4N74jUoImsEk98GIIU/4ahmg9E1KmY7/JkZxuCJo
-	 UG4twzvTzKc5+sT9YXiZdYADOdBizMf1Kbqh8rpE76naHzWzYUFT4MhetNhuQB95XA
-	 dn42pG34NPEtgsqs6io8G9OY1ogmyzZTOSXl0wHL8FzU2Vz4K+oGQZ9ZiEEwIncqW9
-	 V5Nrb+/Z9nfr126ItKmxS1cSZVYhlnubllLwAaarX9Ohs+wiCIyFwk5XoFwTsKByLP
-	 HbMjSzJ5vUUJpKGvWoeUchRw=
-Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::3a])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5420B40E02B5;
-	Thu,  9 Jul 2026 18:54:03 +0000 (UTC)
-Date: Thu, 9 Jul 2026 11:53:59 -0700
-From: Borislav Petkov <bp@alien8.de>
-To: Alexis =?utf-8?Q?Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>, ebpf@linuxfoundation.org,
-	Bastien Curutchet <bastien.curutchet@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v5 00/10] bpf: add support for KASAN checks in
- JITed programs
-Message-ID: <20260709185359.GAak_uRxyxfsSjCSyA@fat_crate.local>
-References: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oFwJTNYa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4DAB1F000E9;
+	Thu,  9 Jul 2026 18:55:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783623327;
+	bh=ZYClI+GMwP/CIfuZcEQcGNjXdJDj4Oz7ZY7r9fwlzV4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=oFwJTNYaAYI2y0ABojPqRiiBT5ywM3eV65WzNxI6yCJUaIw+s4exsmZAY6Lh1OsAM
+	 m3yPDfxwMpOOEwjNp9ySPk2Obv96qdEbJigdhQgD6kvpgIt4uxVfvBfyl07qH1z0sI
+	 i/UnvgWPIv6qaIjBlWgAijTaThq6X1jS/rHuGyFgcS5qp2XVNoz/9mDf4Cs/+delvI
+	 oY1GIsNt7lHV0g0/b8moTVlgZhtmKTpgtRDGijyvdHP+PetlP6nxdFkoR6IhzCaHPw
+	 Z54D5aM0EGk8GaH4w9gxi5r0AP5FB9z2pPtspYBCcTzwaSgW0+Yq8feHsnl7ivlS5e
+	 b0RxMIz7OUavQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [BUG] bpf, sockmap: spurious wakeup by tcp_msg_wait_data()
+ causing unexpected EAGAIN in recvfrom()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Nnamdi Onyeyiri" <nnamdio@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <ak_rR-Skd8Mvn4mH@localhost.localdomain>
+References: <ak_rR-Skd8Mvn4mH@localhost.localdomain>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 09 Jul 2026 18:55:26 +0000
+Message-Id: <20260709185526.E4DAB1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 09, 2026 at 12:01:41PM +0200, Alexis Lothor=C3=A9 (eBPF Found=
-ation) wrote:
-> Hello,
-> this is v5 of the series aiming to bring basic support for KASAN checks
-> to BPF JITed programs.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-Can we slow down a bit here please?
+New issues:
+- [Critical] The patch introduces an unkillable infinite kernel loop (DoS) =
+in `tcp_bpf_recvmsg` when a blocking socket without a receive timeout recei=
+ves a signal.
 
-From: Documentation/process/submitting-patches.rst
+Pre-existing issues:
+- [High] A race condition during stream parsing causes blocking sockets to =
+prematurely return `-EAGAIN` when data is present.
+- [High] The patch fails to fix spurious wakeups for sockets with finite re=
+ceive timeouts (SO_RCVTIMEO), leaving them susceptible to premature -EAGAIN=
+ returns.
+--
 
-Don't get discouraged - or impatient
-------------------------------------
+--- Patch [1]: [BUG] bpf, sockmap: spurious wakeup by tcp_msg_wait_data() c=
+ausing unexpected EAGAIN in recvfrom() ---
+commit 39fdd170f1532151400920cba0bc08398cb63cb8
+Author: Nnamdi Onyeyiri <nnamdio@gmail.com>
 
-After you have submitted your change, be patient and wait.  Reviewers are
-busy people and may not get to your patch right away.
+bpf, sockmap: handle spurious tcp_msg_wait_data() wakeup
 
-Once upon a time, patches used to disappear into the void without comment=
-,
-but the development process works more smoothly than that now.  You shoul=
-d
-receive comments within a week or so; if that does not happen, make sure
-that you have sent your patches to the right place.  Wait for a minimum o=
-f
-						     ^^^^^^^^^^^^^^^^^^^^^
+This patch attempts to resolve unexpected EAGAIN errors on blocking
+ipv4 tcp sockets added to a sockmap by looping on spurious wakeups.
+It adds checks in tcp_bpf_recvmsg and tcp_bpf_recvmsg_parser to
+jump back to msg_bytes_ready when no data is found and there is no
+receive timeout configured.
 
-one week before resubmitting or pinging reviewers - possibly longer durin=
-g
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+> index cc0bd73f36b6d..38fd391ffdb31 100644
+> --- a/net/ipv4/tcp_bpf.c
+> +++ b/net/ipv4/tcp_bpf.c
+> @@ -317,6 +317,8 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+>  		}
+>  		if (data && !sk_psock_queue_empty(psock))
+>  			goto msg_bytes_ready;
 
-busy times like merge windows.
+[Severity: High]
+This is a pre-existing issue, but does this logic incorrectly assume that if
+data is present, the parsed data is already in the psock?
 
+If data arrives in sk_receive_queue and triggers a wakeup, but the
+thread re-acquires lock_sock before the stream parser can execute and
+populate psock->ingress_msg, we bypass the retry and erroneously return
+-EAGAIN.
+
+> +		if (!data && timeo =3D=3D MAX_SCHEDULE_TIMEOUT)
+> +			goto msg_bytes_ready;
+
+[Severity: High]
+This is a pre-existing issue, but does this skip the fix for sockets
+configured with finite timeouts (SO_RCVTIMEO)?
+
+By explicitly checking for MAX_SCHEDULE_TIMEOUT, finite timeouts will
+still randomly fail with -EAGAIN on spurious wakeups.
+
+Additionally, because tcp_msg_wait_data() takes timeo by value, the
+remaining time calculated by sk_wait_event() is discarded. If this loop
+were enabled for finite timeouts, it would reset the timeout on every
+iteration.
+
+[ ... ]
+
+> @@ -390,6 +392,8 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct ms=
+ghdr *msg, size_t len,
+>  			sk_psock_put(sk, psock);
+>  			return tcp_recvmsg(sk, msg, len, flags);
+>  		}
+> +		if (!data && timeo =3D=3D MAX_SCHEDULE_TIMEOUT)
+> +			goto msg_bytes_ready;
+
+[Severity: Critical]
+Could this new unconditional branch cause an infinite kernel loop if the
+process receives a signal?
+
+Unlike tcp_bpf_recvmsg_parser(), tcp_bpf_recvmsg() lacks a
+signal_pending(current) check inside its loop. If a blocking socket
+without a timeout receives a signal, sk_wait_event() returns immediately
+without sleeping.=20
+
+The new check then jumps back to msg_bytes_ready, causing the kernel=20
+to spin indefinitely without delivering the signal, resulting in a=20
+denial of service.
+
+>  		copied =3D -EAGAIN;
+>  	}
+>  	ret =3D copied;
 
 --=20
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/ak_rR-Skd8Mvn4mH@lo=
+calhost.localdomain?part=3D1
