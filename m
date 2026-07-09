@@ -1,128 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEEFF3B6354
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 22:37:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2958C3AFD08;
+	Thu,  9 Jul 2026 22:52:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783636640; cv=none; b=PU6PkFf1rOq02t6a4BsnCbtL/9iGB1NiAT+GnBQ8qXatolIXPt1l5D/MgHTjP2rra+vleHLVlSsWs75ngN6KCnr9sOOn2ngLCoLsoLJ1ROaUMV5MKC7ScwSJ0BhnO2P/kIKFaDXgVjC21kW33GvLu5b7pnkrMeJ+3vKKc6eDz9A=
+	t=1783637527; cv=none; b=kmXyJAKrihYBT82ouOJCHgRljwcY5yo9gnarNird0PmQavcuKCG84kBkf73uqOy8x+Fd8vYwzPtRzs1mgAvvbphgdtMTSoeFd+QPnScgpRi+KeVyyUUWkDtAvr7TM94akqcOD/9szsdr5XSK9w2B1si+AIDPIYbrV9ws4k+p6Nk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783636640; c=relaxed/simple;
-	bh=c4cGBRKEM9VXzwB6u9iE+Uyo++Qrnn4fMvGHWydzuE0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PGbaKLhmPRvHFeV6A1F+pf4l8Hw9NQJfGvo4ddpupfmcYwgjiLprqt4kKGVClett4ia2e6CizGnEPoGf5OJ0/oo1CWBcBVRs5Mf//8nkUwOYxeH3TAZxBMnkCvc2GviIbkpGFUqYfHrks8Mo+6MLcSAcrPGPLfJMjJevteJW6R8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TOkYiWfo; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783637527; c=relaxed/simple;
+	bh=gBaIPN33LfmDg4hHIaBoNItQlZ83Bm6USbEWS9KyhIY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=i3Z9tKAi7XOwYz4w2dZDmrJnd4ZzdViE8PTL3Y2KKXQJkjkO1F3zmceT03ZlBJOw+o0JszkpLf0M4q18Se/Q+kaiffE27ftMWvDUCOeEQE8FR9VUx04Im6h8m42UViPtL/r4/GDvew+yJsopmhlcOnkTivcr5tjJHWflbP0b0t4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=casgykTh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TOkYiWfo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C6291F00A3F;
-	Thu,  9 Jul 2026 22:37:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="casgykTh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 791EE1F000E9;
+	Thu,  9 Jul 2026 22:52:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783636637;
-	bh=w8ZxxBzqDzuAlymX9PQPzpS1o0vgaTLnf0ehnqVLvHE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=TOkYiWfoZIG3uqvqTfy7IoY+1W4009ampMMrpwIiI2WdP3fDjuUO5Jmd+RekiXHwR
-	 V+AX0j3sjMXd8QhN0J7P43EK4W5NCGiwRoUnoRLRVZOnL+F0KeB2lFPfR5rxk7c/x+
-	 Hl71du+OTQ+W4iBiJvENNSfRH9RIJA8KipdCvbTFb1wmuCMxCsRfSgMh+o8LikXwrU
-	 d+dUUYckIhudmRd90SpEZUWK81+73i3J3RV69xd+3PLpNIj4QTyqudmQpUbLVwni+5
-	 0Ip+2pczHNTTqsogzr7u04O5GtNqRIIMEwZoW6HMBRYUvvxWeElhQSniS94K3YpCpD
-	 XVbUXzQo9spEw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 7.1.y 1/6] bpf: Support for hardening against JIT
- spraying
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pawan Gupta" <pawan.kumar.gupta@linux.intel.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260709-cbpf-jit-spray-hardening-7-1-y-v1-1-5ac5a2d6797f@linux.intel.com>
-References: <20260709-cbpf-jit-spray-hardening-7-1-y-v1-0-5ac5a2d6797f@linux.intel.com>
- <20260709-cbpf-jit-spray-hardening-7-1-y-v1-1-5ac5a2d6797f@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 09 Jul 2026 22:37:15 +0000
-Message-Id: <20260709223717.3C6291F00A3F@smtp.kernel.org>
+	s=k20260515; t=1783637524;
+	bh=Hw0YEWuasSELzyN3iJrE8ZYwT4ynNuVYIAHj0t2PlKA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=casgykThI4O4unGWnXTN9WG4KF/VKUV9GE6wYwIRge1Tt+l0NfI/WlVJnsZzjY+Dn
+	 FPytoxw9GkCKjWGqUuHcEuDMu38yUmPcrSFXSAYAG08vHsPut/iQvlgqLzQeRpqunK
+	 SlYYhv7OobZIYv4bhXb/mK9KVFa9Ff/2fMi9UEXHWUSzBlq1xGLr0LpXT5uqy5Ap73
+	 WyILKIFInr0hVE29AWhzb1PjGfL0WBJmPtIctAzxitq98MJ/5Cg/lHePzfoxYtyZtI
+	 sCf+/tG8zIvS8yNKLqRZ0VImJ4H+4D7g0gp0P2dE6i/524P30v40jS/HNxRPNe2Akd
+	 twoEoZCkL4JWA==
+Content-Type: multipart/mixed; boundary="===============2104876237906351994=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <de3ebfe684f280473617b560a9dcf501df07833f835a08eb6e75720cd03662b4@mail.kernel.org>
+In-Reply-To: <20260709-cbpf-jit-spray-hardening-7-1-y-v1-1-5ac5a2d6797f@linux.intel.com>
+References: <20260709-cbpf-jit-spray-hardening-7-1-y-v1-1-5ac5a2d6797f@linux.intel.com>
+Subject: Re: [PATCH 7.1.y 1/6] bpf: Support for hardening against JIT spraying
+From: bot+bpf-ci@kernel.org
+To: pawan.kumar.gupta@linux.intel.com,stable@vger.kernel.org,gregkh@linuxfoundation.org,sashal@kernel.org
+Cc: bpf@vger.kernel.org,linux-arm-kernel@lists.infradead.org,loongarch@lists.linux.dev,linuxppc-dev@lists.ozlabs.org,linux-riscv@lists.infradead.org,x86@kernel.org,ast@kernel.org,daniel@iogearbox.net,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu,  9 Jul 2026 22:52:04 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Security Mitigation Bypass: Indirect branch predictor flush is ski=
-pped for large BPF allocations and when packs are freed to the system pool.
---
+--===============2104876237906351994==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
---- Patch [1]: [PATCH 7.1.y 1/6] bpf: Support for hardening against JIT spr=
-aying ---
-commit 3f99052f0f28956849dd13889694d621bc46be60
-Author: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> commit 96cce16e26dd02a8678f1e87f88a4b5cdb63b995 upstream.
+> The BPF JIT allocator packs many small programs into larger executable
+> allocations and reuses space within those allocations as programs are
+> loaded and freed. When fresh code is written into space that a previous
+> program occupied, an indirect jump into the new program can reuse a branch
+> prediction left behind by the old one.
+> Flush the indirect branch predictors before reusing JIT memory so that
+> indirect jumps into a newly written program don't reuse predictions from an
+> old program that occupied the same space.
+> Introduce bpf_arch_pred_flush_enabled static key and bpf_arch_pred_flush
+> static call for flushing the branch predictors on JIT memory reuse.
+> Architectures that need a flush, can update it to a predictor flush
+> function. By default, its a NOP and does not emit any CALL.
+> Allocations larger than a pack are not covered by this flush. That is safe
+> because cBPF programs (the unprivileged attack surface) are bounded well
+> below a pack size. Issue a warning if this assumption is ever violated
+> while the flush is active.
+> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 
-bpf: Support for hardening against JIT spraying
+The reuse path this patch hardens (bpf_prog_pack_alloc() finding a free
+area within a pack, and the size > BPF_PROG_PACK_SIZE branch) comes from
+the pack allocator that first packed many programs into shared executable
+allocations and reused freed space within a pack.
 
-This patch introduces the bpf_arch_pred_flush mechanism to flush indirect
-branch predictors before reusing JIT memory. This aims to protect new BPF
-programs from using branch predictions left behind by previous programs that
-occupied the same space. However, it intentionally skips flushing for large
-allocations and when returning packs to the system pool.
+Should this carry a Fixes: tag pointing at that commit?
 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 6aa2a8b240306..f49b9b23f95e6 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-[ ... ]
-> @@ -941,6 +951,14 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hol=
-e_t bpf_fill_ill_insns)
-> =20
->  	mutex_lock(&pack_mutex);
->  	if (size > BPF_PROG_PACK_SIZE) {
-> +		/*
-> +		 * Allocations larger than a pack get their own pages, and
-> +		 * predictors are not flushed for such allocation. This is only
-> +		 * safe because cBPF programs (the unprivileged attack surface)
-> +		 * are bounded well below a pack size.
-> +		 */
-> +		if (static_branch_unlikely(&bpf_pred_flush_enabled))
-> +			pr_warn_once("BPF: Predictors not flushed for allocations greater tha=
-n BPF_PROG_PACK_SIZE\n");
->  		size =3D round_up(size, PAGE_SIZE);
->  		ptr =3D bpf_jit_alloc_exec(size);
+  Fixes: 57631054fae6 ("bpf: Introduce bpf_prog_pack allocator")
 
-[Severity: High]
-Does skipping the flush for allocations larger than BPF_PROG_PACK_SIZE leave
-large BPF programs and Kernel Modules vulnerable to poisoned predictions?
 
-If an unprivileged attacker loads cBPF programs to fill a BPF pack and trai=
-ns
-the indirect branch predictor, they leave poisoned predictions for that mem=
-ory.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-When the attacker unloads the cBPF programs, the BPF pack is freed. If a
-privileged user subsequently allocates a large BPF program, this new
-allocation might reuse the freed memory.
-
-Since bpf_prog_pack_alloc() explicitly skips bpf_arch_pred_flush() for these
-allocations, wouldn't the privileged victim program inherit the attacker's
-poisoned predictions?
-
-Additionally, does freeing an empty pack back to the system pool bypass the
-mitigation completely?
-
-When a pack is fully emptied in bpf_prog_pack_free(), it is returned to the
-system pool without a predictor flush:
-
-kernel/bpf/core.c:bpf_prog_pack_free() {
-	...
-	if (bitmap_find_next_zero_area(pack->bitmap, BPF_PROG_CHUNK_COUNT, 0,
-				       BPF_PROG_CHUNK_COUNT, 0) =3D=3D 0) {
-		list_del(&pack->list);
-		bpf_jit_free_exec(pack->ptr);
-		kfree(pack);
-	}
-	...
-}
-
-Could Kernel Modules or large BPF programs that subsequently allocate this
-memory via execmem inherit these poisoned predictions?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260709-cbpf-jit-s=
-pray-hardening-7-1-y-v1-0-5ac5a2d6797f@linux.intel.com?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29054648899
+--===============2104876237906351994==--
