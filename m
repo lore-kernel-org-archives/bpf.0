@@ -1,111 +1,102 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D632E3DBD77;
-	Thu,  9 Jul 2026 07:49:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2BA53A0B3B;
+	Thu,  9 Jul 2026 08:03:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783583389; cv=none; b=aYoGQSZWFT3Tr7GyzZVRrzlWf5azBFGSufbdlycM9S3YQraPsYFX098dIlMrgfJ5pzhpC/TVZDThCtOsM9RiZ8mxM+It2WW7vjKlN3yyBCiyXqkj30G/pRh4GCqoB+o2nxSJ5Q87MtBKjKlk2PK0B/S9qU98Ag41QBUMAgof92M=
+	t=1783584222; cv=none; b=aOH9M+EqC7LTKCqJBognDJypIAMB5I5jzvtuOUO5g4RDs/2iLAgxjMr19/+EYEgvGj6PdIxaz3OaGbnzElsoYhtpp1KqGHYnndiWhTmk6jfUnco+ZtAecPTLFk8rq5OQItkacLUGjzESwamV5a6ocSdfacoGl5CKkxCSDCF2Znw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783583389; c=relaxed/simple;
-	bh=TQ3SZoQYVlZB70d32KZDJfEGT9K3fxsjmn3hPFpWnbg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JMN9OJbANTnVzZrdfyUszoGO7NyOxENLFuWUlYbDxNMt568Y+O98sne8+hmPyCipG91yycoqaceNJN8aT5RoDGhv4GoAkPeR03O/+VjkmtP1KRdkbQqR64VzBqn8cyi3u5W8AHyXT+eR1Fdydq+rh3PjErtx3e1fGgu5ukzHPS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=a4DBbnaY; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1783584222; c=relaxed/simple;
+	bh=2j+GQrEsmpVM5zmmaRQe6uY9KuXEMkO+LjBNCttCGOA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=APIyhrzmXHmHBlpPNIg2SAG828Y5YGaY4FRxFpnEoo4mmkunQsztI3aGc6FaDB5KhA2liVI7xJ8s2Bbo+LxBCt0vuFpvp9wvcN/E/W3iCPiNn5Arkk608Ondsk5CCpKVqMqgSDh2rbUYxptj28/VAmkvO4LEkoPD/S13ot/N214=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C4E37u/d; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="a4DBbnaY"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=qU5PVEl9y2sqwPMvgCKxoRh26dBeMc8A1hT/JDQT4+A=; b=a4DBbnaYW0AAlSAkSiOEPPTORO
-	qL4vXJAsTrD4RYiDBQhNJCQLq3fQBQrEK23Vh4W4ZWtCCeSdr4nL9Hed/AhvMcwAtPh47pXjEcNB4
-	SlQmD8gmeE+ecOFUn5VXD04D0j8FdyW0S1g74bxNbRht9gxGK1GH2pU3j/2nFalCQQijm05yNBNeT
-	l7qg0z7TNgLdC/Y2VXD38UEF3O5FhDFRsmbUDDYdkxJXNFDmvVNwNMlGfzkaJgNUUI6GHnvthF+nE
-	8/T9BdTkF52x2h5/8dbyzJGnbmqq+gy0t9beb1nBKs1PYNSMOrstpGYf1js2syUpN6ts2Op5kDXFt
-	CCPxVQ+A==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1whjVr-000GIT-1Z;
-	Thu, 09 Jul 2026 09:49:39 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1whjVq-000IHx-2I;
-	Thu, 09 Jul 2026 09:49:39 +0200
-Message-ID: <1aa2111f-1901-4a68-880d-db92fd0dda5e@iogearbox.net>
-Date: Thu, 9 Jul 2026 09:49:38 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C4E37u/d"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD6CB1F000E9;
+	Thu,  9 Jul 2026 08:03:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783584220;
+	bh=9tetKMDD9MEjR8+3VbwnlIcq5PeiPAYUmSMxBSBWKMM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=C4E37u/dEStL09kYvkgw++nswEEcd0QFE7+evk9fHjGPCCjXkLVRMPCU9B6sr31Y5
+	 apVkqENe9puMhx/GMH5MlB8dOX5sQwQULyvcoVqlxuWZMf701lmR4fh5CvSqQxbkrP
+	 JDcff/QNj8zq91WOEgMjt33gCaacxcf738Z26Wl6wi/x2JfGJel35mMhz2JFnaLai1
+	 T6ymw+XIYb+L2bHJ+gUSNUnIJ3fwtjZclMlygKti+rhaFlA/1mLLcPgBbxH58tZUwG
+	 to4rftYSuHll+Gth7pVJ2L5jIR0pg5TyOKY6PBfRexWx5vAPwfKmZMwXNH/BvBj/jy
+	 RiO5lOBNSIFcg==
+Date: Thu, 9 Jul 2026 11:03:32 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH bpf-next 0/5] bpf, x86: enable EXECMEM_ROX_CACHE for BPF
+ allocations
+Message-ID: <ak9V1C-Y3x-KEcTW@kernel.org>
+References: <20260626-execmem-x86-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] bpf: Fix security_bpf_map_create error handling
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260709073422.379247-1-daniel@iogearbox.net>
- <20260709074823.C1E381F000E9@smtp.kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260709074823.C1E381F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28055/Thu Jul  9 08:25:20 2026)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260626-execmem-x86-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org>
 
-On 7/9/26 9:48 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+Gentle ping
+
+On Fri, Jun 26, 2026 at 09:42:27PM +0300, Mike Rapoport (Microsoft) wrote:
+> Hi,
 > 
-> Pre-existing issues:
-> - [Medium] Incomplete fix: the double LSM hook invocation bug fixed for maps also exists in the BPF program load path.
-Yeap, I'm on that one as well, but sending separately.
+> BPF allocations of executable memory on x86 are essentially read-only. Most
+> paths that call bpf_jit_alloc_exec() immediately make it ROX with
+> set_memory_rox().
+> 
+> The code generation, at least on x86, uses separately allocated writable
+> buffers and then updates the actual text memory with text_poke().
+> 
+> These patches do several small adjustments to how BPF allocates executable
+> memory and enable EXECMEM_ROX_CACHE for BPF allocations on x86.
+> 
+> ---
+> Mike Rapoport (Microsoft) (5):
+>       bpf: dispatcher: allocate bpf_dispatcher->rw_image with vmalloc()
+>       bpf: drop __weak from bpf_jit_alloc_exec() and bpf_jit_free_exec()
+>       bpf: alloc_prog_pack(): skip ROX management for already ROX memory
+>       bpf, x86: make sure allocation in arch_bpf_trampoline_size() is writable
+>       x86/bpf: enable EXECMEM_ROX_CACHE for BPF allocations
+> 
+>  arch/x86/mm/init.c          |  4 ++--
+>  arch/x86/net/bpf_jit_comp.c |  5 ++---
+>  include/linux/filter.h      |  1 +
+>  kernel/bpf/core.c           | 30 +++++++++++++++++++++---------
+>  kernel/bpf/dispatcher.c     |  5 ++++-
+>  5 files changed, 30 insertions(+), 15 deletions(-)
+> ---
+> base-commit: 53435562a725962e4de0c29653223129ba11643a
+> change-id: 20260626-execmem-x86-rox-bpf-v0-b4241ade80df
+> 
+> Best regards,
+> --  
+> Sincerely yours,
+> Mike.
+> 
+
+-- 
+Sincerely yours,
+Mike.
