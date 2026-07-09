@@ -1,143 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36A8B3403FA
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 03:20:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9C3338C40C
+	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 03:33:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783567209; cv=none; b=bw0ziXpDvoR2DkUF57gxwdDktGXIVppj1OmiWEhA64qgNXzWQOkxwZdh1Jx1yRn67RClRgn/As1n/qAtU/81GF4XebtX5FMxHVywKYzR3IXRUAw7CgwbjfVP6w8B/20WA277/RS1ert0d+7oPzRbptTT1O9nojbi10hjZiEbP+o=
+	t=1783567985; cv=none; b=rrYo7DvPWXSz20HYlcSO9tuz4DR1sUARWMiXGH77XFeelj2Emt1vOC0IqXuuTqBH3CHeapa+vSQEEp1UNTcrXVKgHcBbcUM+3boYT4yu0g86qsksA2pksz4wHjiBtd4efksICgETihmztnT1hroXtvsUvoKGpXWl0oLUGN+tW3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783567209; c=relaxed/simple;
-	bh=vFtHrmRS6i6s9c+5qFQGm2cKshyNcVCGx/dmUx/Plek=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=iEs5gBmpDqBnma1VtybVVOPp8ZxXmWfHsrEmcr3itOY2Bpxi/9By0FyzR9mQMbf1h4L15bMrqCB9Fo0KIdO5UYNOJDL/sN57qsyf8Ey+Aeet/MbEFLmkDkYj+LPQhv/LIejYDEMHIekope7bs2w9Lpf2wjr9J7vf0gBLOBj0yLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OR5BUozd; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OR5BUozd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E4D61F000E9;
-	Thu,  9 Jul 2026 03:20:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783567207;
-	bh=NC/JoWseIQ6flwRW6VtbFOyKDSHnExocseh9RabD5ak=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=OR5BUozdMnJEZJVoiYhdSRq5y7QbVQwBajvIJ/I77BF8IpvM5DzCUk6j261TSbYea
-	 HinZ1jJbYYK9YqDJXU2NrjkHZ6IvfJ1vXccz1GrxbUiASoWkM8gTOBtx5cG233ltPY
-	 gk4NiBhEKslUex9OvxFvImFjex+kqaCn6eCGtXxh+gcZpWuVvV7d3hIN3LM66ycs+A
-	 d81auZIPe/w2eQj281A6z8CFgiwA8GX3nExvFi6nMj2prox1BzxDhokQhdYvVEQRCh
-	 1yANebFCki+DvOVLdl54YdgxxIwqiLbhCHYOxIdLUK68sVLesyR+pKp6yXc7aLfu1q
-	 SeGGCLdsGRlxw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf] bpf: fix UAF in sock clone early bailouts
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Matt Bobrowski" <mattbobrowski@google.com>
+	s=arc-20240116; t=1783567985; c=relaxed/simple;
+	bh=q9V5s5y1iSQ74XrB5P54HxA0czOtEoTctnz/+G4QLNE=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=oNRsY2Rckzu5qdNhvL4YCDdQQYUAzW9szOGWSRg5vgcF9RmhQEpBNsRapmSu+fyA9vunY/5vkHH4Md8lsznr7pJ9ydUX42oIdeNNfcDBn96Wz1q3F/MfGTwbH572LAO2Q0ykh//U1SBWw8LJickgpZNaLZAoy80WI9dp9hHUpkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8AxBOpqFk9qb7UBAA--.2124S3;
+	Thu, 09 Jul 2026 11:32:58 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJCxPsdgFk9qRWsGAA--.11757S2;
+	Thu, 09 Jul 2026 11:32:49 +0800 (CST)
+Subject: Re: [PATCH bpf-next v9 2/2] bpf: Reject programs with inlined helpers
+ if JIT is not available
+To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260709025316.999913-1-mattbobrowski@google.com>
-References: <20260709025316.999913-1-mattbobrowski@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 09 Jul 2026 03:20:07 +0000
-Message-Id: <20260709032007.9E4D61F000E9@smtp.kernel.org>
+References: <20260708101806.18885-1-yangtiezhu@loongson.cn>
+ <20260708101806.18885-3-yangtiezhu@loongson.cn>
+ <20260708104324.BE58C1F000E9@smtp.kernel.org>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <03339dc1-f23e-e4a0-2f9c-a97f8fe51897@loongson.cn>
+Date: Thu, 9 Jul 2026 11:32:48 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+In-Reply-To: <20260708104324.BE58C1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxPsdgFk9qRWsGAA--.11757S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxXF4ftr47Kr48JF47Cry8WFX_yoW5GrWfpF
+	sxKw4ak34DXF92kasrt3y8Ww1Ygw48G3W7Gr1rGry0k3WavFn3XF1fKw17u3W5Cr4vy3WI
+	vr4I9ryvk3WDGFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzV
+	AYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jrv_JF1lIx
+	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8czVUUU
+	UUU==
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On 2026/7/8 下午6:43, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] The patch unconditionally sets `prog->jit_required = 1` and skips instruction patching for helpers that can be JIT-inlined, which unnecessarily breaks the execution of these BPF helpers under the BPF interpreter when JIT is globally disabled.
+> --
+> 
+> --- Patch [2]: [PATCH bpf-next v9 2/2] bpf: Reject programs with inlined helpers if JIT is not available ---
+> commit 28807bd656d66a091e77d8589e0c48bef3c4c778
+> Author: Tiezhu Yang <yangtiezhu@loongson.cn>
+> 
+> bpf: Reject programs with inlined helpers if JIT is not available
+> 
+> This commit modifies bpf_do_misc_fixups() to set prog->jit_required = 1
+> when bpf_jit_inlines_helper_call() returns true. This is intended to prevent
+> a kernel panic when JIT compilation fails or is disabled and the interpreter
+> tries to execute an unpatched helper call with a raw ID.
+> 
+>> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+>> index 02246df2f6c36..d3be972714b22 100644
+>> --- a/kernel/bpf/fixups.c
+>> +++ b/kernel/bpf/fixups.c
+>> @@ -1840,8 +1840,10 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+>>   		}
+>>   
+>>   		/* Skip inlining the helper call if the JIT does it. */
+>> -		if (bpf_jit_inlines_helper_call(insn->imm))
+>> +		if (bpf_jit_inlines_helper_call(insn->imm)) {
+>> +			prog->jit_required = 1;
+>>   			goto next_insn;
+>> +		}
+> 
+> [Severity: High]
+> Does this unnecessarily reject valid programs when JIT is globally disabled?
+> 
+> If JIT is disabled (net.core.bpf_jit_enable=0), prog->jit_requested will be
+> false. By unconditionally skipping the instruction patching and setting
+> prog->jit_required = 1, valid BPF programs using standard helpers (like
+> bpf_get_smp_processor_id) will be rejected on architectures supporting this
+> JIT inlining.
+> 
+> If this code instead checked whether JIT was actually requested:
+> 
+>      if (prog->jit_requested && bpf_jit_inlines_helper_call(insn->imm)) {
+>          prog->jit_required = 1;
+>          goto next_insn;
+>      }
+> 
+> Would this allow the code to fall through and rewrite the offset when JIT is
+> disabled? This would correctly resolve the helper's C function address,
+> safely allowing the BPF interpreter to execute these standard helpers without
+> crashing, while still preventing the runtime panic if dynamic JIT compilation
+> fails.
 
-Pre-existing issues:
-- [High] BPF map corruption via shallow-copied sk_user_data and sk_reusepor=
-t_cb during sk_clone early bailouts.
-- [High] Unbalanced decrement of global network timestamp static key during=
- sk_clone early bailouts.
---
+If JIT is not available, rejecting the loading of programs
+with inlined helpers is the intended design.
 
---- Patch [1]: [PATCH bpf] bpf: fix UAF in sock clone early bailouts ---
-commit 81577dfc9f1b10000a3b1dfc19a5b577e986ec33
-Author: Matt Bobrowski <mattbobrowski@google.com>
+Thanks,
+Tiezhu
 
-bpf: fix UAF in sock clone early bailouts
-
-This commit fixes a use-after-free on parent socket's BPF local storage
-caused by an early bailout in sk_clone() prior to clearing
-newsk->sk_bpf_storage. By resetting newsk->sk_bpf_storage to NULL
-immediately after sock_copy(), the deallocation path won't destroy the
-parent socket's storage.
-
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index 8a59bfaa8096e..498a57f34f5b5 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -2492,6 +2492,9 @@ struct sock *sk_clone(const struct sock *sk, const =
-gfp_t priority,
->  	sock_copy(newsk, sk);
-> =20
->  	newsk->sk_prot_creator =3D prot;
-> +#ifdef CONFIG_BPF_SYSCALL
-> +	RCU_INIT_POINTER(newsk->sk_bpf_storage, NULL);
-> +#endif
-
-[Severity: High]
-This is a pre-existing issue, but I noticed there might be a similar issue
-with sk_reuseport_cb and sk_user_data. Since sock_copy() does a shallow
-copy, newsk initially points to the parent's sk_reuseport_cb and
-sk_user_data.
-
-If sk_clone() bails out early (e.g., sk_filter_charge() fails):
-
-net/core/sock.c:sk_clone() {
-    ...
-    if (unlikely(!is_charged || xfrm_sk_clone_policy(newsk, sk))) {
-        ...
-        goto free;
-    }
-
-    RCU_INIT_POINTER(newsk->sk_reuseport_cb, NULL);
-    ...
-}
-
-The bailout happens before sk_reuseport_cb is cleared. When newsk is freed,
-bpf_sk_reuseport_detach() can follow the copied sk_user_data to the parent's
-BPF map slot and write NULL to it:
-
-kernel/bpf/reuseport_array.c:bpf_sk_reuseport_detach() {
-    ...
-    RCU_INIT_POINTER(*socks, NULL);
-    ...
-}
-
-Does this corrupt the parent socket's BPF map during early bailouts?
-
-
-[Severity: High]
-This is also a pre-existing issue, but could the same early bailout pattern
-cause an unbalanced decrement of the global network timestamp static key?
-
-sock_copy() copies SK_FLAGS_TIMESTAMP into newsk->sk_flags. The global
-timestamp counter is only incremented at the end of sk_clone():
-
-net/core/sock.c:sk_clone() {
-    ...
-    if (sock_needs_netstamp(sk) && newsk->sk_flags & SK_FLAGS_TIMESTAMP)
-        net_enable_timestamp();
-}
-
-However, during destruction of the aborted clone, the global counter is
-decremented unconditionally because the copied flag was set:
-
-net/core/sock.c:__sk_destruct() {
-    ...
-    sock_disable_timestamp(sk, SK_FLAGS_TIMESTAMP);
-    ...
-}
-
-Could an early bailout skip the net_enable_timestamp() call but still
-execute the sock_disable_timestamp() call on free, leading to an underflow?
-
->  	/* SANITY */
->  	if (likely(newsk->sk_net_refcnt)) {
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260709025316.9999=
-13-1-mattbobrowski@google.com?part=3D1
