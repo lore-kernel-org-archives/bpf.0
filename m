@@ -1,148 +1,121 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 737AE449980
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 19:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 326213A2549
+	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 19:51:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783626050; cv=none; b=jM3NDh3qfkl0MhW8bFfu6AKQWiLRo+kMqthVTMZHgAiNPbi6wgx7E+GBpZTKEUBMndHFGfJUYYpcAGViC+poccDhqOU3+8pK9f6Cg0+pnc4wxRZhmG8pWheYnzM/m9pPlM/zH2uqXQpLPIzGphibq5ntHoOUd88iOFzuOQxuxJw=
+	t=1783626689; cv=none; b=DcCXnau+YttZEeh38aF4XWDWeV+zhrIhyLBAmHFfhdLc4j7bGMRT+Tw7/ZpG61FXE62spOLAOZRPDLQTDT66izFWZiYW5pniY1EaWvMwTHrkWNaVt4kWIBbMXtVStvkY7etmQuJLhc+lxeYqC3aEJ3WhVGIjRr4ww7dkd9DbuSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783626050; c=relaxed/simple;
-	bh=0YDvwgLQEnkkpcG5jtU7pRdyrltyLiFcCJWfTSdh4Ds=;
+	s=arc-20240116; t=1783626689; c=relaxed/simple;
+	bh=AC1/fNgqBVPZyi6+9RpZzs/aCo5JFhGPgyefkz5sOTE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nMTMC5lWOSZA/OlPQpTuza6LlR2a5nrlqFuOAFPknQ++Bj5F57hqOaf3j+4qDgLhT35nYL8nn4e+X66xfRfuLr/bqnnnkKLiPF8I82/6jw0lLJ7QQP/MEHdRNJnTEfk8rb+BVIH1ibZ/48IfMGhBr6HuC6Ckef5x0ycLItXQSqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Pqh66trC; arc=none smtp.client-ip=95.215.58.173
+	 In-Reply-To:Content-Type; b=EBAVU1gdmHRdi7mVcccH59tV8KqWYH1oYqCAK2nHmEfbyNbd1xACFytqY0TeUBk+JgTUbL0byqeHqIN5LhTcxOApsl+TUBdQdQAz1un73c/HDK9nrxdvOmHjJ7Kvb11NyOILwWCYkJ6J+1oKvo0KpdiqCin5f6AOJjcQaYE20Kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=s1JTg8tN; arc=none smtp.client-ip=91.218.175.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Pqh66trC"
-Message-ID: <b344f190-ac57-4185-b5e6-e9c9db6c6249@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="s1JTg8tN"
+Message-ID: <f186b429-66e6-4468-a901-cbead8fcca08@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783626036;
+	t=1783626675;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=mS5cj0se9QcQQ34zS5YlgQmQWLzaB0xTLMO+WjoKy94=;
-	b=Pqh66trCfq17jreg/W3iOLx6H8A12GucCAMF3MdBqH8lbvsEao5xuJ7thDkx/GwAQ1Y9lL
-	p002UYsxFSbT628Oe22y06yIPVSBNjimQyOzRymd479hjb5dT5jw2oWML25+yo1aE22TOP
-	Wl6Yce/s00VHz3KNDiSNQBUnVGplIzY=
-Date: Thu, 9 Jul 2026 12:40:15 -0700
+	bh=M6Xnl4UdvQxwiAToaTN9V+4Hqu1vsN/08HKZxMAbOSw=;
+	b=s1JTg8tNP/WtQdDVczlu7DmXEeftSKzUjxSsxSNkdd2m8/7RqTrCZcIapxulDM6pT+UAw4
+	Gs67psjuUPJvklE0nwNF6N98GAp/YFjhctRve8OPKoCZnOpUxhi5V+4IZ4ZovGEd5nze3p
+	5mX4J7fgEjh1Ooq26WlJBrhtOPt5Zqg=
+Date: Thu, 9 Jul 2026 12:51:02 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 08/12] bpf: Enable 16-byte aggregate return types
+Subject: Re: [PATCH bpf-next 09/12] selftests/bpf: Add C tests for 16-byte
+ returns in R0:R2
 Content-Language: en-GB
 To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
 References: <20260708200939.2153664-1-yonghong.song@linux.dev>
- <20260708201020.2160131-1-yonghong.song@linux.dev>
- <20260708202836.0308F1F000E9@smtp.kernel.org>
+ <20260708201025.2160583-1-yonghong.song@linux.dev>
+ <20260708202456.8A5E91F000E9@smtp.kernel.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260708202836.0308F1F000E9@smtp.kernel.org>
+In-Reply-To: <20260708202456.8A5E91F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 7/8/26 1:28 PM, sashiko-bot@kernel.org wrote:
+On 7/8/26 1:24 PM, sashiko-bot@kernel.org wrote:
 > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] Leaking uninitialized kernel memory via kfunc R2 return register for structs of 9-15 bytes.
+> - [Low] Unconditional use of `__int128` in `bpf_testmod` breaks compilation on 32-bit host architectures.
 > --
 >
-> --- Patch [8]: [PATCH bpf-next 08/12] bpf: Enable 16-byte aggregate return types ---
-> commit 5b4b6cb320ef1b1f82ac557b6f90945992d8a0c5
+> --- Patch [9]: [PATCH bpf-next 09/12] selftests/bpf: Add C tests for 16-byte returns in R0:R2 ---
+> commit 5ed3844739f04c920bb1c37cdf474501b3ca9fef
 > Author: Yonghong Song <yonghong.song@linux.dev>
-> Subject: bpf: Enable 16-byte aggregate return types
 >
-> This patch relaxes btf_distill_func_proto() and btf_validate_return_type()
-> to allow kfuncs to return by-value structs or unions up to 16 bytes.
-> This enables the <=16 byte aggregate return values end to end.
+> selftests/bpf: Add C tests for 16-byte returns in R0:R2
 >
->> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
->> index dff5c0d916412..bab82d1c8cb98 100644
->> --- a/kernel/bpf/btf.c
->> +++ b/kernel/bpf/btf.c
->> @@ -7572,7 +7572,12 @@ int btf_distill_func_proto(struct bpf_verifier_log *log,
->>   		return -EINVAL;
->>   	}
->>   	ret = __get_type_size(btf, func->type, &t);
->> -	if (ret < 0 || btf_type_is_struct(t)) {
->> +	/*
->> +	 * __get_type_size() already restricts a non-negative ret to void, a
->> +	 * pointer, an int, an enum or a struct/union, so only the size is checked
->> +	 * here.
->> +	 */
->> +	if (ret < 0 || ret > 16) {
-> [Severity: High]
-> Can this leak uninitialized kernel memory for structs between 9 and 15 bytes?
+> This commit adds selftests to exercise 16-byte return values passed in the
+> R0:R2 register pair. The tests include an __int128 return, a 16-byte struct
+> return, and a 16-byte union return.
 >
-> The x86_64 ABI leaves the unused upper bytes of the %rdx register undefined
-> when returning a struct that is not a multiple of 8 bytes.
+> [ ... ]
 >
-> Looking at mark_kfunc_ret_reg_size() in kernel/bpf/verifier.c, if the struct
-> size is greater than 8:
+>> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+>> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+>> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> [ ... ]
 >
-> 	if (size > 8) {
-> 		mark_btf_func_reg_size(env, BPF_REG_0, 8);
-> 		mark_reg_unknown(env, regs, BPF_REG_2);
-> 		regs[BPF_REG_2].subreg_def = DEF_NOT_SUBREG;
-> 	}
+>> @@ -825,6 +825,18 @@ __bpf_kfunc int bpf_kfunc_call_test5(u8 a, u16 b, u32 c)
+>>   	return 0;
+>>   }
+>>   
+>> +__bpf_kfunc __int128 bpf_kfunc_call_test_i128(u64 a, u64 b)
+>> +{
+>> +	return ((__int128)a << 64) | b;
+>> +}
+> [Severity: Low]
+> Will this unconditional use of __int128 break the build on 32-bit host
+> architectures?
 >
-> The verifier explicitly marks BPF_REG_2 as fully initialized, bypassing subreg
-> zero-extension.
+> The __int128 type is a compiler extension that is typically only available
+> on 64-bit systems.
 >
-> And in the x86 JIT do_jit() in arch/x86/net/bpf_jit_comp.c, it moves the full
-> 64-bit register:
+> [ ... ]
 >
-> 				fm = bpf_jit_find_kfunc_model(bpf_prog, insn);
-> 				if (fm && fm->ret_size > 8)
-> 					emit_mov_reg(&prog, true, BPF_REG_2, BPF_REG_3);
+>> @@ -1358,6 +1370,8 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test2)
+>>   BTF_ID_FLAGS(func, bpf_kfunc_call_test3)
+>>   BTF_ID_FLAGS(func, bpf_kfunc_call_test4)
+>>   BTF_ID_FLAGS(func, bpf_kfunc_call_test5)
+>> +BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128)
+> [Severity: Low]
+> If bpf_kfunc_call_test_i128 needs to be conditionally excluded for 32-bit
+> builds to fix the issue above, should this BTF ID registration also be
+> conditionally excluded to prevent a missing symbol error during the build?
 >
-> Could a BPF program read the undefined bytes from R2, resulting in an
-> information leak?
+> [ ... ]
+>
+>> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+>> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+>> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+> [ ... ]
+>
+>> @@ -118,6 +127,8 @@ int bpf_kfunc_call_test2(struct sock *sk, __u32 a, __u32 b) __ksym;
+>>   struct sock *bpf_kfunc_call_test3(struct sock *sk) __ksym;
+>>   long bpf_kfunc_call_test4(signed char a, short b, int c, long d) __ksym;
+>>   int bpf_kfunc_call_test5(__u8 a, __u16 b, __u32 c) __ksym;
+>> +__int128 bpf_kfunc_call_test_i128(__u64 a, __u64 b) __ksym;
+> [Severity: Low]
+> Does this declaration also need to be guarded for 64-bit architectures,
+> so that including this header doesn't fail on 32-bit host compilers?
 
-We should be fine here. See llvm patch https://reviews.llvm.org/D131598
-which specifically tries to address this issue. The following is an example
-for R2:
-
-$ cat t.c
-struct foo { long a; short b; };
-struct foo bar(void);
-
-int tar(void) {
-   struct foo t = bar();
-   return t.a + t.b;
-}
-$ clang --target=bpf -O2 -S t.c
-$ cat t.s
-         .file   "t.c"
-         .text
-         .globl  tar                             # -- Begin function tar
-         .p2align        3
-         .type   tar,@function
-tar:                                    # @tar
-# %bb.0:
-         call bar
-         w2 <<= 16
-         w2 s>>= 16
-         w2 += w0
-         w0 = w2
-         exit
-.Lfunc_end0:
-         .size   tar, .Lfunc_end0-tar
-                                         # -- End function
-         .addrsig
-
-The caller will do proper narrowing immediately after call return.
-
->
->>   		bpf_log(log,
->>   			"The function %s return type %s is unsupported.\n",
->>   			tname, btf_type_str(t));
+We may need to guard with __SIZEOF_INT128__ in selftests. But current CI all supports 64bit,
+so I am not sure whether we should do it or not.
 
