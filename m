@@ -1,151 +1,172 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 105D044999A
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 19:55:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E59844999A
+	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 19:57:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783626903; cv=none; b=SQABr0CqgkCW5v/vBQZUGg2om2yGAL00RWZUiw/4gW/KS8TXqXhg/Uh6Gh8qr7juX/FEFzxG2/HrJ0QvjvAK+GQ5rFSHKoKsJkSzMimxINs7xOrgoGyLrlbxb2PYhRsO7PzfQzovINEjr4z6f2IbVBN1v5Wl2JmbCicOR6a/o70=
+	t=1783627043; cv=none; b=CupP+0cFiYYP/lxC4kKLIdy+Z49eSiT68oGmTjniSMMcnjn4pEnQSYGfNxH0fegmhPYmGk5LphMob4565GTEQNNorl0E14m3HRMpqljF61ZdUloez1X3dreTNXAqWlDbaKepOW9gK+HR0ogLgjxcjhXUM67qYU1o7VT44xcC2cM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783626903; c=relaxed/simple;
-	bh=tu5B7qQIDTPnW/i0rxWfXCEXZ/pFQ4ga9iA5FCzX0Ck=;
+	s=arc-20240116; t=1783627043; c=relaxed/simple;
+	bh=7mSDSVe1ihtK8CuWSfwLLXAjdvPaSbq2o+Yb8lJWrjc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZatQTe/ONu/X/dz7nMh36DsH+ZcNwWvWCncpoYbMXa4oypO7TntYXCJWF/X5s9xD4bo8acaVCZUaS2Z1Rmu6uZ8HgxEDltMFupwAtVtyutNY2uCKRIFBGbLlyr9RYFe/9nbvbkuk0M1xQoqhxGmMfTJdb9kxijqLe236BgUv/aY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ilH6iENW; arc=none smtp.client-ip=95.215.58.174
+	 In-Reply-To:Content-Type; b=aJUx87hgVHsUuiEzny5q8USgVhA+nkLsU+c9BLvym5gJROdSwwnzUQpypTjQOJ+Sj3RhzOGOqqq2+kd0BjZejXWByWQBAK27rDFdN0Ek3J00wq8pXmqN5u4RUi++3sAcbI6PYeTO/9xBlIxuScW+Lp8DgMXBV+map/UCsWCx5qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VBQGsO9w; arc=none smtp.client-ip=95.215.58.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ilH6iENW"
-Message-ID: <24e9b4a4-2ddb-431c-8821-c260a6641255@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VBQGsO9w"
+Message-ID: <1c92fd18-73e8-4fb0-9b7d-7cc943f7a9f5@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783626900;
+	t=1783627040;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=1ADkbJHwXAoybo60wPzpMX11G3ZSo+o9NtfAAIE+fm4=;
-	b=ilH6iENWQw0+OQ3f1f87LSo79NzXBwRmewFmCh+yuLHoRZZtI9zlPB7n0CZC5jQF3ma6kp
-	d0HmOZ3WqQT0bPXysK8aduJ+2hgqCkxziWo1zx4ENNVJU/AkSfTIvyy6BbsUsiEarcAp8G
-	wmmtKOFGKgh8j3kPoP6AhgCAlgVDJxE=
-Date: Thu, 9 Jul 2026 12:54:45 -0700
+	bh=egztOJTU4NSZW6IcLd49xGTxM5RMw1TvOixu2gAEzgw=;
+	b=VBQGsO9wHtSNAdCg9Fa2kkT4SpijnTVrXmmPEBPsk4Rg/aG9M8wJpSld4Dg8L6HlFUNfvA
+	ryr8IkBujR0Jxe7xNrAW4rAWd9Wnla/nih1ZwG+14Ha8wh/5fxABfOBP25IBfmJ2I/1UNR
+	X963etPnEs/gN0Wk/I4GnMCBBF3RtLQ=
+Date: Thu, 9 Jul 2026 12:57:14 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 09/12] selftests/bpf: Add C tests for 16-byte
- returns in R0:R2
+Subject: Re: [PATCH bpf-next 10/12] selftests/bpf: Add inline-asm and subprog
+ tests for R0:R2 returns
 Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260708201025.2160583-1-yonghong.song@linux.dev>
- <b4271ab7b2a5eb033b22efc367ad93796a92d63f65b7f1acafc80f9ef24d55ca@mail.kernel.org>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260708200939.2153664-1-yonghong.song@linux.dev>
+ <20260708201030.2161016-1-yonghong.song@linux.dev>
+ <20260708202830.4BBDE1F000E9@smtp.kernel.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <b4271ab7b2a5eb033b22efc367ad93796a92d63f65b7f1acafc80f9ef24d55ca@mail.kernel.org>
+In-Reply-To: <20260708202830.4BBDE1F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 7/8/26 2:10 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c b/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c
+On 7/8/26 1:28 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] Hardcoded little-endian assumptions in struct and `__int128` register unpacking will cause selftest failures on big-endian architectures like s390x.
+> --
+>
+> --- Patch [10]: [PATCH bpf-next 10/12] selftests/bpf: Add inline-asm and subprog tests for R0:R2 returns ---
+> commit dcf423ead16608630f40807ad0cde33d495c941d
+> Author: Yonghong Song <yonghong.song@linux.dev>
+>
+> selftests/bpf: Add inline-asm and subprog tests for R0:R2 returns
+>
+> Add inline-asm and subprogram tests for more coverage, including
+> BPF-to-BPF cases, kfunc cases, backtracking and liveness. Both positive
+> and negative tests are added.
+>
+>> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_run.c b/tools/testing/selftests/bpf/progs/aggregate_ret_run.c
 >> new file mode 100644
->> index 0000000000000..d4ecc19684cef
+>> index 0000000000000..d6300b31733d8
 >> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c
->> @@ -0,0 +1,96 @@
+>> +++ b/tools/testing/selftests/bpf/progs/aggregate_ret_run.c
 > [ ... ]
 >
->> +/*
->> + * Run one program and check its result. The program returns 0 on success, or
->> + * 1..4 identifying which half of which aggregate (R0:R2) return value came back
->> + * wrong. A return of -1 means the program was built with an LLVM that lacks
->> + * R0:R2 16-byte return support, in which case the subtest is skipped.
->> + */
+>> @@ -0,0 +1,160 @@
 > [ ... ]
 >
->> +	/* C variant (__int128): relies on LLVM 23 R0:R2 codegen, skipped otherwise. */
->> +	if (test__start_subtest("int128_c"))
->> +		run_prog(skel_c->progs.aggregate_ret_test, true);
->> +
->> +	aggregate_ret_int128_c__destroy(skel_c);
->> +
->> +	skel_struct_c = aggregate_ret_struct_c__open_and_load();
->> +	if (!ASSERT_OK_PTR(skel_struct_c, "skel_struct_c_open_load"))
->> +		return;
->> +
->> +	/*
->> +	 * C variant returning a 16-byte struct by value: exercises the struct
->> +	 * branch of bpf_ret_reg_pair(). Also LLVM 23 only.
->> +	 */
->> +	if (test__start_subtest("struct_c"))
->> +		run_prog(skel_struct_c->progs.aggregate_ret_struct_c_test, true);
->> +
->> +	/*
->> +	 * Same 16-byte struct return, but from a global (non-static) callee:
->> +	 * exercises the compiler lowering a global struct-returning function to
->> +	 * R0:R2 and the verifier's global return path end to end. Also LLVM 23
->> +	 * only.
->> +	 */
->> +	if (test__start_subtest("global_struct_c"))
->> +		run_prog(skel_struct_c->progs.aggregate_ret_global_struct_c_test, true);
->> +
->> +	/*
->> +	 * Same 16-byte struct, but returned by value from a kfunc: exercises
->> +	 * the struct branch of check_kfunc_call() and the JIT RDX->R2 move.
->> +	 * Also LLVM 23 only.
->> +	 */
->> +	if (test__start_subtest("kfunc_struct_c"))
->> +		run_prog(skel_struct_c->progs.aggregate_ret_kfunc_struct_c_test, true);
-> this isn't a bug, but the "Also LLVM 23 only." note is repeated on each
-> of these per-subtest comments, and the run_prog() comment above already
-> states that programs built without R0:R2 support return -1 and get
-> skipped.  Could that note be stated once rather than on every block?
+>> +SEC("tc")
+>> +int aggregate_ret_asm_test(struct __sk_buff *skb)
+>> +{
+>> +	__u64 a = skb->len;
+>> +	__u64 b = skb->len ^ 0xdeadbeefULL;
+>> +	__u64 lo, hi;
+> [ ... ]
+>
+>> +	asm volatile (
+>> +	"r1 = %[a];"
+>> +	"r2 = %[b];"
+>> +	"call %[kfunc];"
+>> +	"%[lo] = r0;"
+>> +	"%[hi] = r2;"
+>> +	: [lo]"=r"(lo), [hi]"=r"(hi)
+>> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_i128)
+>> +	: "r0", "r1", "r2", "r3", "r4", "r5"
+>> +	);
+>> +	if (hi != a)
+>> +		return 3;
+>> +	if (lo != b)
+>> +		return 4;
+> [Severity: Medium]
+> The test expects the high 64 bits (a) in r2 and the low 64 bits (b) in
+> r0. On a big-endian ABI, the most significant 64 bits (a) will be returned
+> in the first register (r0).
+>
+> Will this cause the test to fail on big-endian architectures like s390x?
 
-Ack. Will do.
+Good point. I need to test it for s390x.
 
 >
-> Related, do the per-subtest comments need to name the specific internals
-> (bpf_ret_reg_pair(), check_kfunc_call(), "the JIT RDX->R2 move"), or
-> would a shorter note serve here?
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +SEC("tc")
+>> +int aggregate_ret_struct_test(struct __sk_buff *skb)
+>> +{
+>> +	__u64 a = skb->len;
+>> +	__u64 b = skb->len ^ 0xdeadbeefULL;
+>> +	__u64 lo, hi;
+> [ ... ]
+>
+>> +	/* struct { u64 a; int b; }: R0 = a, low 32 bits of R2 = b. */
+>> +	asm volatile (
+>> +	"r1 = %[a];"
+>> +	"r2 = %[b];"
+>> +	"call %[kfunc];"
+>> +	"%[lo] = r0;"
+>> +	"%[hi] = r2;"
+>> +	: [lo]"=r"(lo), [hi]"=r"(hi)
+>> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_ret_li)
+>> +	: "r0", "r1", "r2", "r3", "r4", "r5"
+>> +	);
+>> +	if (lo != a)
+>> +		return 3;
+>> +	if ((int)hi != (int)b)
+>> +		return 4;
+> [Severity: Medium]
+> The bitwise extraction (int)hi assumes the 4-byte b is in the lower 32
+> bits of r2. On big-endian, wouldn't b be placed in the upper 32 bits of
+> the register, causing this assertion to fail?
 
-I guess I can rename these comments, function names themselves already have
-enough information.
+The same as above. Need tests with s390x.
 
 >
->> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
->> index c36bb911defa7..34d0a352e70dd 100644
->> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
->> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
->> @@ -55,6 +55,15 @@ struct prog_test_big_arg {
->>   	__u64 b;
->>   };
->>
->> +/*
->> + * A 16-byte struct returned by value from a kfunc, returned in the R0:R2
->> + * register pair.
->> + */
->> +struct bpf_kfunc_ret_ll {	/* 16 bytes: R0:R2 */
-> this isn't a bug, but the block comment already says the struct is 16
-> bytes and returned in the R0:R2 register pair, and the trailing
-> /* 16 bytes: R0:R2 */ on the next line repeats that.  Could one of the
-> two be dropped?
+>> +
+>> +	/* struct { int a; int b; }: 8 bytes, packed into R0; R2 is not used. */
+>> +	asm volatile (
+>> +	"r1 = %[a];"
+>> +	"r2 = %[b];"
+>> +	"call %[kfunc];"
+>> +	"%[lo] = r0;"
+>> +	: [lo]"=r"(lo)
+>> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_ret_ii)
+>> +	: "r0", "r1", "r2", "r3", "r4", "r5"
+>> +	);
+>> +	if ((int)lo != (int)a)
+>> +		return 5;
+>> +	if ((int)(lo >> 32) != (int)b)
+>> +		return 6;
+> [Severity: Medium]
+> The bitwise extraction (int)lo and (lo >> 32) assumes a little-endian
+> register layout for the returned 8-byte struct. On big-endian, wouldn't a
+> be in the upper 32 bits and b in the lower 32 bits?
 
-Yes, will drop.
+Will test as the above.
 
 >
->> +	__u64 a;
->> +	__u64 b;
->> +};
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28973410219
+>> +
+>> +	return 0;
+>> +}
 
