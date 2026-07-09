@@ -1,147 +1,81 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F5036CDF3
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 16:44:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F37F2DEA9D
+	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 16:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783615453; cv=none; b=UtUvwpV1VD4+yT4fw8W6FMGgOfkNLzkywMVX9JKPno1AABv3+zFVSaqfV84csBZ3Lhjty4yB4GLlLl0KFekX7J5FkVv0rdm75hk0MQ6srY70qAo+6hicV/Pg4VyjguAD0Revd0PcvFnewrdjnzcLBOHduZPnX/ivRDomu4WMrlw=
+	t=1783615579; cv=none; b=qQC2iODd7NHe7B0ItEU8QoGbeCpinqsICEKTWFXqatMxvYd3XSOGFsxfqJleB+2/OZthIsHx1rZJpi5SO7RrMR4kDU2uZnHUidsBRTRksweBcMbbVCdLvG7fyBI6yTKBiIogrk62Oy9+dzJyKOeoXANgnQ+kJ5pigoar4elfUjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783615453; c=relaxed/simple;
-	bh=TUcoX2fAupP5L1XMKzv2447RXMv1kZxxsWT/Ns/ZOFw=;
+	s=arc-20240116; t=1783615579; c=relaxed/simple;
+	bh=otTC6SWPYJMqjzpxVTTZFK7pUqDlvYF9xisxG/ze9rs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PWp7VE8n/QwsYJnnyahWbKhfZqbS75FeX1qpmLkqspTKjE/6XaCJVQr2Qdsj66tUmYrHOAqMT2dwuCuzr3MsRpfu7M5y7UfLV1tn5L5MkcS7LNuWaz7Li3BTHTXNlFui4on1q7LQHZCeJ6hg59t01dAX6+C3tzEz2gP/sywyCIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TXfpGXUn; arc=none smtp.client-ip=95.215.58.188
+	 In-Reply-To:Content-Type; b=bvxjnQkkhhc9OSq4PsddmmBaVPMFuRIyo2k10ZolAmGsZHbgDMC+hXv1gdachrZZ3UZP4Fw4jllZxXprmx+nTEm8W3woK8aONqM4GPdgk9/yE3+l2XtBiVtFSFfhqbWLb59DqiEl9ARVgFMQOh+Mp8MJegEUDvRDvtSp38xs7eE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VEgBn30C; arc=none smtp.client-ip=95.215.58.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TXfpGXUn"
-Message-ID: <876c0616-aa03-488b-8d18-8a383bfe1958@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VEgBn30C"
+Message-ID: <00f69e6f-9c8a-40fa-8f90-783923852554@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783615449;
+	t=1783615576;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=u/Zfw6jFAqBI/oK4du3DNsA+YMD6AlbSQplEFQvjWMg=;
-	b=TXfpGXUn/kQnA4E7Vml/apQiO7hz0k5J5TUOHpQDSyxuB3S8MOMUpsrnkj5MirNmnL3ezn
-	rmukgIX3uPabwhZiTz5bzRIM4c5+uhYXQ0aS2l6t7nQ9ft0bKmVZ19jFzV/2kEhdMokdYz
-	+DCUmMcrtUNKnULeBZjQDN+2xtzDWqE=
-Date: Thu, 9 Jul 2026 09:44:03 -0700
+	bh=tDEpryh+SyUxaQOwREu9yoL0dzQRuks+AVWoUMvWH+Y=;
+	b=VEgBn30CHTdK7CxCe8VsvHk1a+iCuix3qq23Y/QMRtkn7G7lfZW2itY1ZE4fxSPHjXx5Kv
+	P4RRk2YOyCpe1bhBQSZgdyIcfVFAkLXCT1Q3LUgmIJcsIXjB4Hhh3liHWXU78ImijFhD6M
+	GGY/hIApEhcChOXZ0PZQ/MtgK9rT8/E=
+Date: Thu, 9 Jul 2026 17:46:03 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 06/12] bpf: Force JIT for programs using the
- R0:R2 register pair
-Content-Language: en-GB
-To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, kernel-team@fb.com
-References: <20260708200939.2153664-1-yonghong.song@linux.dev>
- <20260708201010.2158718-1-yonghong.song@linux.dev>
- <6143095a-7d01-4ff5-b6b1-c38335ab9dcf@linux.dev>
+Subject: Re: [PATCH 29/33] bpf: crypto: Use AES-CBC and AES-ECB libraries
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf <bpf@vger.kernel.org>
+References: <20260707053503.209874-1-ebiggers@kernel.org>
+ <20260707053503.209874-30-ebiggers@kernel.org>
+ <10eafa42-1142-4ed2-a485-f46c496bddfb@linux.dev>
+ <20260707182049.GA2238@quark>
+ <d1cdfc23-b336-49a9-8833-29f05b5b9fec@linux.dev>
+ <20260707231652.GA2264445@google.com>
+ <5f9c3aab-5339-463c-a86d-edac297e1e95@linux.dev>
+ <20260709154713.GB6853@quark>
+Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <6143095a-7d01-4ff5-b6b1-c38335ab9dcf@linux.dev>
+From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
+In-Reply-To: <20260709154713.GB6853@quark>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-
-
-On 7/8/26 8:15 PM, Leon Hwang wrote:
-> On 9/7/26 04:10, Yonghong Song wrote:
->> The R0:R2 return convention introduced in this series is only implemented
->> in the JIT. The BPF interpreter has no notion of a second return register,
->> so a program relying on the R0:R2 convention would compute wrong results
->> under the interpreter. Force the JIT when bpf_prog_aux->ret_reg_pair is
->> set.
+On 09/07/2026 16:47, Eric Biggers wrote:
+> On Wed, Jul 08, 2026 at 12:47:43PM +0100, Vadim Fedorenko wrote:
+>> On 08/07/2026 00:16, Eric Biggers wrote:
+>>> On Tue, Jul 07, 2026 at 11:50:33PM +0100, Vadim Fedorenko wrote:
+>>>>> Does this mean the AES-ECB support is unnecessary and can be dropped?
+>>>>
+>>>> Let's keep it if it doesn't hurt.
+>>>
+>>> It kind of does.  It is "bad" crypto that would have to continue to be
+>>> maintained, and someone might start using it accidentally.
 >>
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->> ---
->>   include/linux/bpf.h   |  1 +
->>   kernel/bpf/core.c     |  2 +-
->>   kernel/bpf/verifier.c | 13 +++++++++++--
->>   3 files changed, 13 insertions(+), 3 deletions(-)
+>> AES-ECB was introduced as a cipher to use in QUIC-LB draft,
+>> draft-ietf-quic-load-balancers-21
 >>
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index c1a98fa36738..10966aba69a2 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -1780,6 +1780,7 @@ struct bpf_prog_aux {
->>   	bool changes_pkt_data;
->>   	bool might_sleep;
->>   	bool kprobe_write_ctx;
->> +	bool ret_reg_pair;
->>   	struct {
->>   		s32 keyring_serial;
->>   		u8 keyring_type;
->> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
->> index 73dc3ee879de..819a97d25173 100644
->> --- a/kernel/bpf/core.c
->> +++ b/kernel/bpf/core.c
->> @@ -2676,7 +2676,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
->>   		goto finalize;
->>   
->>   	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
->> -	    bpf_prog_has_kfunc_call(fp))
->> +	    bpf_prog_has_kfunc_call(fp) || fp->aux->ret_reg_pair)
->>   		jit_needed = true;
->>   
->>   	if (!bpf_prog_select_interpreter(fp))
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index fcbf532159a5..ca8b2f436c20 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -453,6 +453,15 @@ bool bpf_ret_reg_pair(struct bpf_verifier_env *env, int subprog)
->>   	return false;
->>   }
->>   
->> +static bool bpf_ret_reg_pair_mark(struct bpf_verifier_env *env, int subprog)
->> +{
->> +	if (!bpf_ret_reg_pair(env, subprog))
->> +		return false;
->> +
->> +	env->prog->aux->ret_reg_pair = true;
->
-> With 'jit_required' introduction [1], it has no need to introduce
-> 'ret_reg_pair'. 'env->prog->jit_required = true;' is enough.
->
-> [1]
-> https://lore.kernel.org/bpf/20260708101806.18885-1-yangtiezhu@loongson.cn/
+>> I know it is expired draft, but it may be worth keeping this cipher
+>> as QUIC WG github is still active
+> 
+> Sigh.  We shouldn't implement Internet-Drafts that have clear issues
+> with how they use cryptography.  They're likely to change when they
+> undergo cryptography review.  We went through this same thing with
+> TCP-AO, where I ended up joining the tcpm working group and getting the
+> draft fixed.  Do I need to do the same with this one too?
 
-Thanks! I will use jit_required in the next revision. I guess this will
-be useful for many other cases who do not want to support interpreter.
-
->
-> Thanks,
-> Leon
->> +	return true;
->> +}
->> +
->>   static const char *subprog_name(const struct bpf_verifier_env *env, int subprog)
->>   {
->>   	struct bpf_func_info *info;
->> @@ -9877,7 +9886,7 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
->>   	} else {
->>   		/* return to the caller whatever r0 had in the callee */
->>   		caller->regs[BPF_REG_0] = *r0;
->> -		if (bpf_ret_reg_pair(env, callee->subprogno)) {
->> +		if (bpf_ret_reg_pair_mark(env, callee->subprogno)) {
->>   			if (callee->regs[BPF_REG_2].type == PTR_TO_STACK) {
->>   				verbose(env, "cannot return stack pointer to the caller\n");
->>   				return -EINVAL;
->> @@ -16806,7 +16815,7 @@ static int check_global_subprog_return_code(struct bpf_verifier_env *env)
->>   	if (err)
->>   		return err;
->>   
->> -	if (!bpf_ret_reg_pair(env, subprog))
->> +	if (!bpf_ret_reg_pair_mark(env, subprog))
->>   		return 0;
->>   
->>   	return check_global_ret_scalar_reg(env, BPF_REG_2);
-
+Looks like they need some crypto expert joining WG, but I'm not
+currently following the group, unfortunately.
