@@ -1,161 +1,144 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EC30449997
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 21:07:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783631268; cv=none; b=eJb8XFteHkL6ksbbh+rnnVdkxGpHEj9722lOngxZvRM9Bi5zOJe7W/yB1unpGoDC96GDKSt+Y7iac7OK8NM0lg5KweARBHKPTz/DkhkKLmqQfQVvKOJQadzG6uqdgxPaIwooZS/hfFHMeRKE09+Giwec5ClHbhEfwCykvHfXU2o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783631268; c=relaxed/simple;
-	bh=OE3FZInE7kf6xsYmqhsPZwA5G72oTPhBnyce8ICjrhQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rw3M0Dx3nNGlsoyBamgyqLmsC0z+PAJJH0RDTY7CtNs59zcGUqS9+wg2q172zry+0GwBsjeSMHxHQ1Xl46WMUUWt4lILfiwFlDRIXbp0+pYmFSch1NMjTLjO46YRaQCxTtRMSvIlofDCu2TEXn69OS4Hz3g/u+tD8EwJzJiqm4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rbOiHgkD; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 175B03C8C5D
+	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 21:50:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783633830; cv=pass; b=gvTAwBl/KJ7oWo89KuaMhBQdRlvn3sPepYu/acCDEqMqbTc1z3u0EFOg2htaOWIbtf/Q4zUC1kYPuGnFny+f5Whb4IlnLRtNsLuFcKRoEENV3v2HPBdnAkOSG/iFqsDWX3jSzZtZ9BHwHWwsNpHzn/CEQALQXXOQBlv/9Jx7+1g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783633830; c=relaxed/simple;
+	bh=QZU1CA1cQeL2WvZUsAarUegvdKd7AYzS4BOYt8+niWY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FLDZ1AkSw9sh/ycRz3mTP2kL2ZmgMvcOqxGomNJlGSo+b1kv/HKc5+2Qe3AVDkOAriNaWL0cNAGdrcs5+GFB+shF5qWkpJZewKnugftYlAP869mz8m2MCKvj46y7V+tyjdvWiMe0QhT79qiHR73B4Bcn6fWjqjTQk/7KoE+XX40=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FuNvKGI2; arc=pass smtp.client-ip=74.125.224.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rbOiHgkD"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-84862b0d5aeso169283b3a.2
-        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 14:07:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FuNvKGI2"
+Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-66771ded50aso455016d50.1
+        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 14:50:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783633828; cv=none;
+        d=google.com; s=arc-20260327;
+        b=JFe5+JlNEdhsjQU/ONsId2UQW2sH9AqXs2cp6qZfX+tfIMaSxROt7Xq8lU7TH3tmVd
+         ZbK4gsOQGP5jmku6c43XhgjIR2abUJbwC1OvloM8ULbWKW/gEMQsU6hSieHC4OM9d3kH
+         CIX35BcrPVaZTsO5N5kjYuuWeajMXUp38XkRGMgU+9jHbab5qVHTknJwabSeXO5cDxjR
+         T5knVyeZxCFXJpmJtQ7nBGA7EjjpKQw1/uiPwxWtP32+KBPfb8cxRTMYlugJelt0w/0s
+         Wc2Gz4RRsOm+wNnKAHhiVk/CllrT1BtVONPNbOU3PpPf184LHZRQFJPsOJuxe7K2Pe5d
+         Bfaw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=QZU1CA1cQeL2WvZUsAarUegvdKd7AYzS4BOYt8+niWY=;
+        fh=ag6O94OH92ZQTvEhfXWmc938ny+4TK6R774SOnpXDqQ=;
+        b=Mj1hUff8HrXfBtsvAz2DuGCtj++R6OSi0LbHRVSHJc8Xijn91VaQ8xEl08PEjiHzKm
+         I/52FHg3/PK7CqAHwwuO+JPJgFZEYHPJtJU7IoHKAu+eWp+r3OLIbdxGZTU/tkc9zQbI
+         E0MqoCFjKq6jQu8Ngq359QQYLg6plZblZOSB8hEEo40ipvAImO3bqxA/5/c0f+03rtBF
+         Fzk5X2EhlPKNJ80V5dR+RG8JGiu3sOftwebe3SNY7jXJt7hZgkjJQNTTnRFQzx4ua/05
+         j4/POcqkqLamkyv6A2X/0f3hVCofbMS6z8xwOR40gPJwKjE3YZjV5jYJ4J+hOia8QiR4
+         xfzw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783631267; x=1784236067; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=rPuPvXowPtcow16dMkrbToVxdWAibRyIOhNc322mQvU=;
-        b=rbOiHgkDib9+KRKR3bydYKzFsczfshkMMjcRhCVvV5pkiFuhkbgAR4onNcfH38Tqhh
-         xMzpdcvjqwL1zU6wrVt/I1UhLh8Y0KC3FpJBC04uoPflNd0tDnwCmLToIS/9n/1NDTUy
-         mlQcs8/iajuhAC8T4Hxuunmsuu9Wr9cEwJZ/JeLnH9raDFWWa1ICmNmha2bCTRLecgj7
-         5X/8ndIdlabCjL/YkA1+ws5GE5KVjVCYjzbBirC5Vuf4GR966YJm3M0Bk1tWUB1Km60z
-         LUO5CcL3vooM02XfIXXdzK4u31mZGrfpMHFWPLQOZc0IT6/sm9D73k1EGF+vzys9YWuM
-         5o/g==
+        d=gmail.com; s=20251104; t=1783633828; x=1784238628; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=QZU1CA1cQeL2WvZUsAarUegvdKd7AYzS4BOYt8+niWY=;
+        b=FuNvKGI2AZDJcefp4cfVpzg8zWts9tTpidzXrvkNHB7TQyxN4c7UIrJ0bwWJNc6VFb
+         U+l+3Nzz/8K3OmM5BhcigqWMlQ9z7TtHtlsbD9yMg7Bu8CjHm7tpiITyO7eDzW7TfcYl
+         8zEqxcPV50cH+1/OCOTQ82YA2uJKGntVa8rcLEi5YBR35G1ZHOMLirssP+fvG2lgT2OE
+         XRfy35+FxomT741jWij/nxiSit9yDP4eD7PUfjA5QqlL/7oSDWfsHPuR7HWpShJ3/aKr
+         8CbTeSxEi6Oz9KCppA+0oh1F+wvH7liHgsh45eKifpU6Z6PaDgY6azjFv1HAaj0Ox8Dz
+         prAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783631267; x=1784236067;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20251104; t=1783633828; x=1784238628;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=rPuPvXowPtcow16dMkrbToVxdWAibRyIOhNc322mQvU=;
-        b=gdDXBApmRTYaCUIS+QcTEr0n2HV0unuIBxrxgvrZzfBysmYqhozLSFyYJNxCjQSMMe
-         Z4mxY4j+G5f827qFWAcybY7u6TpIlB9JU/2+19fL2i48gVipLBdqJ6/9MVPc7LyPCpdu
-         zcPROaDwb7vASyF+zN1NjxjBPhqVO1/ruYdDNzR2/ONeWtVwYNEsiTxAgJ1fHqW2Gibv
-         wxej95xJGN0uQL9pYNxi5sUwCVZ2gUBl1qFk1nEicloYerlz7RiuNFIS1XHZZvFNMLj9
-         58FatbAXNmoKXedF5E1Do369oH4G6ETERCUVFTfeQn8RpekWhwDod38JEPJ61/RFAwx1
-         0hGg==
-X-Forwarded-Encrypted: i=1; AHgh+RpYgAq3g29w15b8jdvw96QdRgMpViOrGATDXfzmiV6THlZ/zXL62k3GTOIGNt+tCqNuH4I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAWgfmzG14GJgbgXjdKnZIHjWMuJ3lkmOoZH/thriCqUEd+5KM
-	wp2WWC6U+7Cri3C3Py+WM5a51nnmWDvalqtYGfg34a6MxJQBXFBsBxxgHVWyOw==
-X-Gm-Gg: AfdE7cnMXH6Zb1jWI1Ue2EQ7b/kCvBnZrivaYOrf8dtxRSqZYr3mxowgLksPiDvhG/v
-	zSW5SjfB3iO4ra630ahw8gPSh3JeFNt+G59ILy4y9AlF44VGEijmvZdQHcAE+sMCo8vwFlC7NiT
-	c17aXHPDED4h9osg1uRqED9LTkRbZ2u7w1E+A239oj/oGUFlhKATfjURgl3NgvVP3gg3jVq1Ctu
-	LIdm3s+ljKMqkQmFzZCnl8kOjOYDgUlxFRhu+bpvVmO5vYw8aDKWrQ7tHOJuy/a6ltg8UZ2tkBf
-	N8dXapn5IjTCCv8CP36WxtjydyFGBAMgyBeCsddHsaI4l8djEH6xKKyX9ja8Bbbj/FEM/d8AnBo
-	qalwqGFB46SpYrDtE77ZNw8NTmRvoWyrkCd4Ut/85AUAoF6dXz43GrYpNHSQ3Dg929oqV6vTQpJ
-	7+uXY+QweNtKd5SP8fm/4DIY+rV424LQOwtY61oZ6z
-X-Received: by 2002:a05:6a00:1826:b0:848:3d18:2700 with SMTP id d2e1a72fcca58-84843233f36mr8433928b3a.71.1783631266711;
-        Thu, 09 Jul 2026 14:07:46 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-848337d12ccsm4616823b3a.48.2026.07.09.14.07.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 14:07:46 -0700 (PDT)
-Message-ID: <825b731a390d0ecb7827c5a421aebd1dd1ee8d84.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 05/12] bpf: Account R2 of register-pair returns
- in live register analysis
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com
-Date: Thu, 09 Jul 2026 14:07:43 -0700
-In-Reply-To: <20260708201005.2158063-1-yonghong.song@linux.dev>
-References: <20260708200939.2153664-1-yonghong.song@linux.dev>
-	 <20260708201005.2158063-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+        bh=QZU1CA1cQeL2WvZUsAarUegvdKd7AYzS4BOYt8+niWY=;
+        b=Uh72aOL/CpDK9xgv5qkjxjZCz6+cmehvN494uqEHTmQWu60I3yGHxCvbfquhefvYXI
+         PFoveoXcu8YZcQU8lO8KMdXj49X3RBiLvuuuWaxFP/s1hLWesj8EbkG6k0OxIgarz3Mn
+         bUBjf54AUQHKKThrMBrrGn99h4uo2Ko4XzsQ2omlZeHjU/0CmwRiAJVa2icx4gdOfCpJ
+         zupGfwZocHcg4E34ftITMtNSn3I8HxicE7D2DfmxdOxv+gZ9OHQ26LpYwnGQ/aEL6cHd
+         iHab+xV1KNUoW7GMA4rRDalzZXdb2E84kS1+kAGFWZSWqQALUcqid3L5JNwa30wtqIhk
+         qdAw==
+X-Forwarded-Encrypted: i=1; AHgh+RqdiUbMAyo/EfffnTMg6ovebypDpywFMK1fgJZbEX0MYPlgbBPfMyt5Vn6fiAr3NIb9UEk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxos9bDJKagz2LLEUCECmeRDTmI6T6HjXHVKJ5h6iODjcma73ME
+	380934mSu5M+bhpevmohfaBfiNRgqGNU1LWh2XNuQAoij8rHx0xDTz4SnblAS4jzUz7C4ko9Jn0
+	lpTR6l9EENGxIPzeZdDJsfQc9VQPd54s=
+X-Gm-Gg: AfdE7cnwrkm2KajSudelTbXplWNbA5YjGIodNXDJfp28pWkToS/TijWF/pLYdC1+yE/
+	g79fhLSy/GUzkbm9TpUgUyqu5xCWUKqGKMnxGac1c76RK94odvOV+FvmG1ICkBRzAoczE60ccL4
+	3PHmxIZP8cPc+2ZdWleQbLq8c8PJbWdoE9MAQF8VYVyPCn+Mq/Y02lK3p0XWUVZcG8wNRNwFxrT
+	MVdomdIP11S9kT7p26XWmC+TK90aeXS28EsPrIi6H6rt7eRgnCo47KKTLo5b803QVjmRqNZyuu5
+	0HuxLng=
+X-Received: by 2002:a05:690e:23cb:b0:667:8b90:3570 with SMTP id
+ 956f58d0204a3-6679f26f8dfmr4940312d50.98.1783633827971; Thu, 09 Jul 2026
+ 14:50:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260709155837.1879230-1-main.kalliope@gmail.com>
+ <20260709155837.1879230-2-main.kalliope@gmail.com> <20260709161557.794E01F000E9@smtp.kernel.org>
+ <CAMB2axMeZbxWry=P5JTVo_xDw7TUeUKdK6X0_LKjvLWnLJyHMw@mail.gmail.com> <DJUBOWHO347N.1EKHIDMTB7DSA@gmail.com>
+In-Reply-To: <DJUBOWHO347N.1EKHIDMTB7DSA@gmail.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Thu, 9 Jul 2026 14:50:13 -0700
+X-Gm-Features: AVVi8Cf4Kfn7RAMd0LquKodZ2ffbhqy7yZbq71rdlefclCRwUQX49MGqTd6h5Bg
+Message-ID: <CAMB2axN+ePA_eFKBMBP1kuK8yhr+6PhRmyjX3EDgYthkw4YdDg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: reject rdonly/rdwr_buf_size kfunc
+ arguments that exceed u32 max
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: sashiko-reviews@lists.linux.dev, Nicholas Dudar <main.kalliope@gmail.com>, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 2026-07-08 at 13:10 -0700, Yonghong Song wrote:
-> A BPF_EXIT of a subprogram returning a value larger than 8 bytes (a
-> struct/union or an __int128) reads R2 as well as R0, since the second hal=
-f
-> of the return value is passed back in R2. compute_insn_live_regs() only
-> marked R0 used at exit, so the callee's R2 could be considered dead and
-> cleaned from checkpointed states, which would allow unsound state pruning=
-.
->=20
-> Mark R2 used at a BPF_EXIT when the enclosing subprogram returns via the
-> R0:R2 register pair. The call site already treats the caller-saved
-> registers R0-R5 as clobbered, so R2 as a result register is covered there=
-.
->=20
-> For example, for a subprogram returning an __int128, the live-registers
-> dump (log level 2) shows both R0 and R2 live before the callee's exit
-> (insn 5):
->=20
-> =C2=A0 Live regs before insn:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0: .12345.... (85) call pc+2
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1: ..2....... (bf) r0 =3D r2
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 2: 0......... (95) exit
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 3: .......... (b7) r0 =3D 1
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 4: 0......... (b7) r2 =3D 2
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 5: 0.2....... (95) exit
->=20
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
-> =C2=A0kernel/bpf/liveness.c | 13 ++++++++++---
-> =C2=A01 file changed, 10 insertions(+), 3 deletions(-)
->=20
-> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> index 0aadfbae0acc..0977d32fcf01 100644
-> --- a/kernel/bpf/liveness.c
-> +++ b/kernel/bpf/liveness.c
-> @@ -2062,7 +2062,8 @@ struct insn_live_regs {
-> =C2=A0/* Compute info->{use,def} fields for the instruction */
-> =C2=A0static void compute_insn_live_regs(struct bpf_verifier_env *env,
-> =C2=A0				=C2=A0=C2=A0 struct bpf_insn *insn,
-> -				=C2=A0=C2=A0 struct insn_live_regs *info)
-> +				=C2=A0=C2=A0 struct insn_live_regs *info,
-> +				=C2=A0=C2=A0 int subprog)
-> =C2=A0{
-> =C2=A0	struct bpf_call_summary cs;
-> =C2=A0	u8 class =3D BPF_CLASS(insn->code);
-> @@ -2175,6 +2176,8 @@ static void compute_insn_live_regs(struct bpf_verif=
-ier_env *env,
-> =C2=A0		case BPF_EXIT:
-> =C2=A0			def =3D 0;
-> =C2=A0			use =3D r0;
-> +			if (bpf_ret_reg_pair(env, subprog))
-> +				use |=3D BIT(BPF_REG_2);
-> =C2=A0			break;
-> =C2=A0		case BPF_CALL:
-> =C2=A0			def =3D ALL_CALLER_SAVED_REGS;
-> @@ -2237,8 +2240,12 @@ int bpf_compute_live_registers(struct bpf_verifier=
-_env *env)
-> =C2=A0		goto out;
-> =C2=A0	}
-> =C2=A0
-> -	for (i =3D 0; i < insn_cnt; ++i)
-> -		compute_insn_live_regs(env, &insns[i], &state[i]);
-> +	for (i =3D 0, j =3D 0; i < insn_cnt; ++i) {
-> +		/* Advance to the subprog that contains instruction i. */
-> +		while (j + 1 < env->subprog_cnt && env->subprog_info[j + 1].start <=3D=
- i)
-> +			j++;
+On Thu, Jul 9, 2026 at 1:29=E2=80=AFPM Kumar Kartikeya Dwivedi <memxor@gmai=
+l.com> wrote:
+>
+> On Thu Jul 9, 2026 at 10:01 PM CEST, Amery Hung wrote:
+> > On Thu, Jul 9, 2026 at 9:22=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
+> >>
+> >> Thank you for your contribution! Sashiko AI review found 2 potential i=
+ssue(s) to consider:
+> >>
+> >> Pre-existing issues:
+> >> - [High] 32-bit integer overflow in `hid_bpf_get_data()` allows arbitr=
+ary out-of-bounds kernel memory access.
+> >> - [High] Explicit 0-sized requests to kfuncs result in out-of-bounds r=
+ead due to verifier BTF fallback.
+> >
+> > I also noticed the second preexisting issue when working on a patchset
+> > unifying helper and kfunc handling. The patchset will fix it.
+> >
+>
+> Exciting! Are you also planning to unify global function calls (and exten=
+d the
+> type system so that we have parity with what helpers/kfuncs can take), or=
+ is the
+> scope only helpers and kfuncs for now? Just curious, but I think it the
+> unification would be a good base to bring their argument types and the ha=
+ndling
+> at parity with helpers/kfuncs.
 
-This loop is very in-elegant. The outer loop can be changed to iterate
-subprograms, with inner loop iterating instructions. Or just use
-bpf_find_subprog() when processing EXIT.
+Yeah. I'd like to cover global function calls. The incoming patchsets
+will only cover helper and kfunc though due to the size of changes.
 
-> +		compute_insn_live_regs(env, &insns[i], &state[i], j);
-> +	}
-> =C2=A0
-> =C2=A0	/* Forward pass: resolve stack access through FP-derived pointers =
-*/
-> =C2=A0	err =3D bpf_compute_subprog_arg_access(env);
+The basic idea is to have a common function call descriptor for
+helper, kfunc and global function call using bpf_func_proto. Then have
+a bpf_func_proto-based verification. Hopefully most of it will be
+helper/kfunc/subprog agnostic.
+
+As for the logistical refactoring:
+
+- First step is to unify bpf{_kfunc}_call_arg_meta, which many
+verfication logic {e.g., alloc memory size in this thread} rely on.
+- Then, KF_ARG types and their verification will be aligned more
+closely with helper's arg type.
+- Finally, drop KF_ARG and unify core of check_func_arg and check_kfunc_arg=
+s.
