@@ -1,103 +1,116 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F361D5160
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 22:27:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CCD4499A4
+	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 22:35:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783636062; cv=none; b=odXiev89ko43w1bi0goykYPpJ1bl+ZiZv98hlvvXkuITyzZ09jlUrpHuu7tCm02D6GQCPmFyEASqGfZjyeDhxu1vBfXcDkGZE0DgBUDHq4T8HIdiBaKlXZCm5vBzkJguiK/PyxSRQD18hX+EhKMZ9vZXQiKmFUnilTeSEPhEGBk=
+	t=1783636539; cv=none; b=raxtPpXXw4DawOpo5gRVkp4owDsfKfiSvF2ckdWAufDsn2gLo0tJxhm2XSNk7u4YZEJJRcHYfs19v5uNmB4ZcTdRFDVOe8xrF3Vn5M/H+RmoagZIhh3AzPORcfdaSK/hnXhRrFDsJozqXVyLDYTgLGlNSlRNJwkrwMBX33jW7bM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783636062; c=relaxed/simple;
-	bh=jQgpQTUHCQ9bQ3cOZgehCFwrBFnXHAKQ0fxmSz3qPLY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=F/vvwYgLnILHLyhu9OT19tblLx+LTy6rbl74TbmYfHew9JMnkfZ9tXGyU6NRkFr5pl9fACfi5ElZtLsaY+qvZKxExbyJCuNciWoULa4EX/1ST+FlAHz520miQZfBSrW0HDSE2isOuPukDgkuReLauez0onZzFbqUGn77IbkSPMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T/uqS2e5; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783636539; c=relaxed/simple;
+	bh=b4T8f4Zm+2DMsfYCshoe3irI5zfsmjwIarYoJf1mz4I=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=uYpDLAdS7vt2+Erg7hqa4qi0nrqlj23bt947yPnZGD0osLzKqrWpVNbtgmCQBccfzwejfnxq5gxvMJXb7M/gAizBnDC1hVyDe86A4JzAOMPOHZ037ZmqKNyTig4qIH3R+t/mdQEK6jS/qvG3rdgWeACotHCV0WV3uwyKw8WHA7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LBKxUwRv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T/uqS2e5"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2c6b67d5fa1so4217455ad.2
-        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 15:27:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783636061; x=1784240861; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=wKxXdOTpiYi7Cf8pfKD1AsF9D9BGTQXH06cCCSpGd7E=;
-        b=T/uqS2e5KtsAV2V3jn0/AN32qPRgfVBZd0+CON7ipXlYLZGk+kJxakNrWzrdw8q9VE
-         ZNP7BDaEKMboTqUEbm5Gj7VyJvuGTRb6oKROTBsbPQNc0hYfisFzGvMhGVL5M+sIV0ol
-         gukyT3NDPke3CFeDRAl8GfWS/PTy0TDLSa4avkgz/eQrW34eV4zEl1BZBzrd4iCqrZbJ
-         bdTVfc2/BJWRVhwLu/oFLkKhU2KEUbGHBJJ8FKSQJ2jAoMw6REh6aXpuTFvzLhxeT/U4
-         8VrDqvBDCeU09XGMdAZurDx/q0tT5jRHtSlOO9ZH62IraYj8q4XEy3fIMWo9dkQ9iXqM
-         AiDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783636061; x=1784240861;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wKxXdOTpiYi7Cf8pfKD1AsF9D9BGTQXH06cCCSpGd7E=;
-        b=FTeFdlCc3YZ6dy1/Uu0diV1uNVAsNpiaJ7/VNx4bLs18jpGBqdJefOTKE8AtwyRoGh
-         aOWSuBjOG23hElqU2FwOIEgRwOjsZEutwDPxbiBkmjfAk/T8i3UnC2BpwoRIsH0FLYVq
-         y2T6UmaJNZOi1chkxBW2EYqdAt+PMp+i0o/aVBBGLFJvUMJaqcFuahKEX2noMoK8TDym
-         Izlph5KomxG4dPKwHXbyuulsH1SF0+Ayk1z6FjEebTEj1Ey+sNIG6XCV7U1LRRoTNrVn
-         jHZQPbXTyM3UsvyJnHC9v3iSMZm4q0T8bhDv2IXaWTlJ2aubUSz5iqm03YAJo7UOwOxh
-         gHGA==
-X-Forwarded-Encrypted: i=1; AHgh+RrFp3zoDf5xiRoV6RK3WYV9akDJebLYrtZY4sxS+tqUjAczAII9i+3HHMpBiXEWWKyRqSg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx09lfM2FTC5D5pP33LAVRUJTmRKoJwpz5RUBljunCXlAGCNlyF
-	3hsGse9cioklej68hMcg7znK0OsNIymTU5lHLhYE7ibD5xysvuFLQ1pR3GXOFQ==
-X-Gm-Gg: AfdE7cljwQSHtjnxb0gCdECWUhKrc0iesOsISYer72wOBJvrBdss6qosPHSmTbm0agI
-	8rQsLCkvqD//yfXrMkHLK0R+NbI37HHCFxlfWiptg0U+url3Fk9Z0/wgBYyZY6gypn9nq6w+JGU
-	2oRcyhhe1OZ7maU1TTQYAuHKt6xqzUtISyInLs5OG4xqr2qHBmdY1aaRr0V8FA5yZi0llQp5aSl
-	/4WL2dGjlEiBRRfAHbzO/Cz5Xo24M1hgKzQ9solNtAgEUpNmijkpdgnXfxMK9f5q/l5so1siGnJ
-	AdWz3NEb/ULgAuMvMnRtzW5+jWopSCu+d3tT2vwlg5Bmw3AXWrhlRz7hToBvW3XiwCnhk9P6LBk
-	XLOjxQKFVYsOmuyKTBOY2HHTfXAoxfWCUhPEtfKtdTOkGYu1MgULOYnFUcaHrJ2m84OwWJoLOJE
-	pI4TKc+9UTsg0c6sNAtuvFXZ0yuxplxG1AhD+F/myH
-X-Received: by 2002:a17:903:1ad0:b0:2cc:307c:51f2 with SMTP id d9443c01a7336-2ccea444eaamr105267135ad.22.1783636061022;
-        Thu, 09 Jul 2026 15:27:41 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bf737bsm49868005ad.19.2026.07.09.15.27.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 15:27:40 -0700 (PDT)
-Message-ID: <cdff0944003193d4224a1fec5f1fb9fa8bd76801.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 06/12] bpf: Force JIT for programs using the
- R0:R2 register pair
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com
-Date: Thu, 09 Jul 2026 15:27:37 -0700
-In-Reply-To: <20260708201010.2158718-1-yonghong.song@linux.dev>
-References: <20260708200939.2153664-1-yonghong.song@linux.dev>
-	 <20260708201010.2158718-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LBKxUwRv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D189A1F000E9;
+	Thu,  9 Jul 2026 22:35:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783636538;
+	bh=7DUjyHkRG0XL05owURiwbMhi0FFrY7SmZqFH0Djc/RM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=LBKxUwRvdIUh7mu6FKfI22NAZey7NDf5axuWHMAeipJsHDJitCDyzzm7VRl+P9PQo
+	 rLRX17q0Xykt/019ZX21JKrOy2UMnLNYiMoHEhG5/un71WM2iYkxHm+lAqLHBqd2Vg
+	 MieNNAxuSGBNTHUG4bOOYEcOor/gganwF0bvYL3+DdR9lnSWCfvjv/m0nC/d+Q9DRV
+	 eISgmYYuZZOIzqQJ03cOJcYZu+r4B9CMMmrzDuQ8O4N+GDExZ917qfQEJ/8jiFiLto
+	 cBUQl4q0VUMl1o2jT9Mw8HPoKRQTfzcfIVBtdWIi5QHh8IPB9sOgYOQGT5jmOCR4UL
+	 vrM6mYUrWrUEw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 7.1.y 3/6] bpf: Restrict JIT predictor flush to cBPF
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Pawan Gupta" <pawan.kumar.gupta@linux.intel.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260709-cbpf-jit-spray-hardening-7-1-y-v1-3-5ac5a2d6797f@linux.intel.com>
+References: <20260709-cbpf-jit-spray-hardening-7-1-y-v1-0-5ac5a2d6797f@linux.intel.com>
+ <20260709-cbpf-jit-spray-hardening-7-1-y-v1-3-5ac5a2d6797f@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+Date: Thu, 09 Jul 2026 22:35:37 +0000
+Message-Id: <20260709223537.D189A1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Wed, 2026-07-08 at 13:10 -0700, Yonghong Song wrote:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Restricting JIT predictor flush to cBPF bypasses Spectre v2 mitiga=
+tions for unprivileged native eBPF programs.
+--
 
-[...]
+--- Patch [3]: [PATCH 7.1.y 3/6] bpf: Restrict JIT predictor flush to cBPF =
+---
+commit 96d12fd545f6cf1b750e18b7bd03c2fd3abf27be
+Author: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 
-> @@ -9877,7 +9886,7 @@ static int prepare_func_exit(struct bpf_verifier_en=
-v *env, int *insn_idx)
-> =C2=A0	} else {
-> =C2=A0		/* return to the caller whatever r0 had in the callee */
-> =C2=A0		caller->regs[BPF_REG_0] =3D *r0;
-> -		if (bpf_ret_reg_pair(env, callee->subprogno)) {
-> +		if (bpf_ret_reg_pair_mark(env, callee->subprogno)) {
+bpf: Restrict JIT predictor flush to cBPF
 
-Also, doing this while processing exit is a bit strange.
-I think this should be done in do_check_common().
+This commit restricts the branch predictor flush on BPF JIT memory reuse to
+only execute for cBPF programs. The rationale provided is that only cBPF
+programs can be loaded by an unprivileged user, whereas eBPF is privileged
+by default.
 
-> =C2=A0			if (callee->regs[BPF_REG_2].type =3D=3D PTR_TO_STACK) {
-> =C2=A0				verbose(env, "cannot return stack pointer to the caller\n");
-> =C2=A0				return -EINVAL;
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index f49b9b23f95e6..1b7e74e63bd4b 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+[ ... ]
+> @@ -957,7 +957,7 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole=
+_t bpf_fill_ill_insns)
+>  		 * safe because cBPF programs (the unprivileged attack surface)
+>  		 * are bounded well below a pack size.
+>  		 */
+> -		if (static_branch_unlikely(&bpf_pred_flush_enabled))
+> +		if (was_classic && static_branch_unlikely(&bpf_pred_flush_enabled))
+>  			pr_warn_once("BPF: Predictors not flushed for allocations greater tha=
+n BPF_PROG_PACK_SIZE\n");
+>  		size =3D round_up(size, PAGE_SIZE);
+>  		ptr =3D bpf_jit_alloc_exec(size);
 
-[...]
+[Severity: High]
+Does this bypass the Spectre v2 mitigations for unprivileged native eBPF
+programs?
+
+If kernel.unprivileged_bpf_disabled=3D0 (which is the default when
+CONFIG_BPF_UNPRIV_DEFAULT_OFF is not set), unprivileged users can load nati=
+ve
+eBPF programs such as BPF_PROG_TYPE_SOCKET_FILTER. Since these are not cBPF,
+was_classic is false, and the warning logic for large allocations explicitly
+bypasses the check in bpf_prog_pack_alloc().
+
+[ ... ]
+> @@ -989,7 +989,9 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole=
+_t bpf_fill_ill_insns)
+>  	pos =3D 0;
+> =20
+>  found_free_area:
+> -	static_call_cond(bpf_arch_pred_flush)();
+> +	/* Flush only for cBPF as it may contain a crafted gadget */
+> +	if (static_branch_unlikely(&bpf_pred_flush_enabled) && was_classic)
+> +		static_call_cond(bpf_arch_pred_flush)();
+>  	bitmap_set(pack->bitmap, pos, nbits);
+>  	ptr =3D (void *)(pack->ptr) + (pos << BPF_PROG_CHUNK_SHIFT);
+
+[Severity: High]
+For unprivileged native eBPF programs, the predictor flush during memory pa=
+ck
+reuse is also skipped here. Could this allow an unprivileged attacker to lo=
+ad
+a crafted JIT gadget into a reused memory chunk and exploit leftover branch
+predictor state from previously executed privileged BPF programs?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260709-cbpf-jit-s=
+pray-hardening-7-1-y-v1-0-5ac5a2d6797f@linux.intel.com?part=3D3
