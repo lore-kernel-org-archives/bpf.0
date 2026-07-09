@@ -1,141 +1,225 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF76381AFF;
-	Thu,  9 Jul 2026 09:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B70D3BFE4F
+	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 10:03:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783590683; cv=none; b=Tc0d4wRo8a/+eJMqiO8gCer5xQS7Sjijoh9gtV9y6jTohc8L9CQ+AFXjiWsPndNEg7ZFcgxqveFfGnOhiOGcj0xA7kIFuRijOopojzeNtyOvMcZ/Tj/lLcelaj2qS7jVxCUO0TdChF5raL6zQk63Ymp7ksfZqiEGMpofVRlzh+I=
+	t=1783591398; cv=none; b=pCzttBvLfndSNc5q1OveSu/PAzL/zkjVWFSpQr+H5lnde64asufL/sQSP1+u+wr3+Ze9U7YMlcbN9JvN3YHmL7U2OgGJaMWqsd2HGr6OPq+DnwFsNRjVVv8qHu8Iq/i48gR5blcJetryMOZ5DHh1HHARA+fWSEA5MQzP91YN26M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783590683; c=relaxed/simple;
-	bh=0U25bYtFjVVWOw0Fyb+E9vbcnPC+AThYCcohTtmdMdk=;
-	h=Message-ID:Date:MIME-Version:Subject:References:To:Cc:From:
-	 In-Reply-To:Content-Type; b=S0VlvCaiCOBRANC2G81uESIGvf6elhoZbb5RopIvhfICx+HYWjdv0rsc3P0Xzb0qDzgMtNnxp9L6/booVjWgt2UWAqLYc8BOrkV8j0IZk/uPsWAvAfvs8PYxouYrKB0Fv/0JDBdgR8OARUTIselxWy+Z0Jaii6uVNz1stLgmGDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=UbKcmgDT; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1783591398; c=relaxed/simple;
+	bh=2yi1AIreDfbfLC82t3O2dQa6CCAV6BYRbNdcYJV/L9Y=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fCaIpiDKkrcYsFb0717b4IlWB0D8FYK087KbY3eXodVmFN12r7ucJc0dK8IFPyiM1I2YG7OvPb1nxFheeE12T703eLq9PUCLucdtz1JC0JxlScloTpOBWm7xwzdLoVPpW5LGbMfbkdE++MGhyxr+ofi3zRUGaG8tqZugHHHdUkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dTZqK+gd; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="UbKcmgDT"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:Cc:To:References:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=wt6DiEMteCEm1lhgoNFvSLYoFznRlgRcQ6OPddERu2k=; b=UbKcmgDT3ADx4W11jAWYevZC55
-	oTNu8YmBdi+MENbpePKFVuD7Sy1V/3dVKQ75mjNj7opLT0t5obCAS0e2JSHmz/6t8N7A7HKRglORw
-	+E2lZ+AmMOe7MjyVTafKDnoPAkHZQNbbr8wKFdSmFfTF8KAAL++NJW1GuBG7k6jbmttEtCaxlugh2
-	BXEyD8kkwk9leEG8hpr6o1CGqHlyzcauHMZgbLpulgMZ4C2e+fIkwY3BWsJNvg/BmNKJ3aTx1ctrZ
-	ZZtULp5gZ1RuPw9e7r13DdfN7IBIMrtULZvV2azaHxNu9hgVFSyShimjNCAxyh4xPyemQ5uyNplCh
-	CDeeM8Yw==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1whlPb-000Ahf-2J;
-	Thu, 09 Jul 2026 11:51:19 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1whlPb-000CF8-0C;
-	Thu, 09 Jul 2026 11:51:19 +0200
-Message-ID: <4cb2df58-1774-46c1-90fa-139d3db443d9@iogearbox.net>
-Date: Thu, 9 Jul 2026 11:51:19 +0200
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dTZqK+gd"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 9B5A21A0F04;
+	Thu,  9 Jul 2026 10:03:13 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 6C1A85FF03;
+	Thu,  9 Jul 2026 10:03:13 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 37C2411BC373F;
+	Thu,  9 Jul 2026 12:03:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1783591391; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=cVBE1aiZ3HG5WuEi1Kbl3vGiCq8T4ImIrpSHvZbX6Hs=;
+	b=dTZqK+gdLi8BsOyPfPTXgxMg6BhJaQgBPhqfyBhtRL/Zftsddim+AG2EvqjrmzAiGvYgW2
+	D0NBt272g5KGbHbZcDHX5EJteXkpDevtTNaxmjW6wGbdtCVnf5C2Kdvnkw5b6NUpE2REgG
+	dn3KQ7+WTNGtInwW8v04GFc4T8FAb2hIfwPE0+8NGGxpwVWon2PoYh/x4EfxKOE0402iFL
+	7z+aRieJEvrNVhJajX3hVVV/jSqad1mVKKQ6scI7arMyL6RCQbmCn2VwiIVFZShZWbkifU
+	Ry1A8SVnTJO1+XlpfUWsrKfQ718UXMhDSh0Kf71IXSZO2oB7J7sfJJd4gXP8fg==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Subject: [PATCH bpf-next v5 00/10] bpf: add support for KASAN checks in
+ JITed programs
+Date: Thu, 09 Jul 2026 12:01:41 +0200
+Message-Id: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: [REMINDER#2] LPC 2026 BPF Track CFP
-Content-Language: en-US
-References: <474fdcb2-5372-4d8b-9231-f686e74c62b2@iogearbox.net>
-To: "open list:BPF [RINGBUF]" <bpf@vger.kernel.org>
-Cc: Xdp <xdp-newbies@vger.kernel.org>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <474fdcb2-5372-4d8b-9231-f686e74c62b2@iogearbox.net>
-X-Forwarded-Message-Id: <474fdcb2-5372-4d8b-9231-f686e74c62b2@iogearbox.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28055/Thu Jul  9 08:25:20 2026)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/2XNTY4CIRAF4KsY1oOhChrQlfcwLvgdycyAaTodj
+ em7S4gdnbh8efW9upMaxhQq2W/uZAxzqqnkFoavDXFnk78DTb5lggwlA5T0x1STaXRe6iiF88q
+ SdnsZQ0zXvnMk9hJpDteJnFpzTnUq460/mKH3fUsAf27NQBkFM2gOyJlGONhSpt+Ut6789Y0ZX
+ 67J1WFzjkkZJKrojf50/OUUg9Xx5qxnO2t3Ar2Wn068O7060ZwfHChlrEZU/92yLA9YKMWJTgE
+ AAA==
+X-Change-ID: 20260126-kasan-fcd68f64cd7b
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, 
+ Ingo Molnar <mingo@redhat.com>, Andrey Konovalov <andreyknvl@gmail.com>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
 
-We are pleased to announce the Call for Proposals (CFP) for the BPF track at
-the 2026 edition of the Linux Plumbers Conference (LPC), which is taking place
-in Prague, Czechia, from October 5th to 7th, 2026.
+Hello,
+this is v5 of the series aiming to bring basic support for KASAN checks
+to BPF JITed programs.
 
-Note that the conference is planned to be primarily in person. CFP submitters
-should be able to give their presentation in person to minimize technical issues,
-although presenting remotely will be possible as a last resort.
+Original cover letter:
 
-The BPF track technical committee consists of:
+"Traditional" KASAN allows to spot memory management mistakes by
+reserving a fraction of memory as "shadow memory" that will map to the
+rest of the memory and allow its monitoring. Each memory-accessing
+instruction is then instrumented at build time to call some ASAN check
+function, that will analyze the corresponding bits in shadow memory, and
+if it detects the access as invalid, trigger a detailed report. The goal
+of this series is to replicate this mechanism for BPF programs when they
+are being JITed into native instructions: that's then the JIT compiler
+that is in charge of inserting calls to the corresponding kasan checks,
+when a program is being loaded into the kernel. This task involves:
+- identifying at program load time the instructions performing memory
+  accesses
+- identifying those accesses properties (size ? read or write ?) to
+  define the relevant kasan check function to call
+- just before the identified instructions:
+  - perform the basic context saving (ie: saving registers)
+  - inserting a call to the relevant kasan check function
+  - restore context
+- whenever the instrumented program executes, if it performs an invalid
+  access, it triggers a kasan report identical to those instrumented on
+  kernel side at build time.
 
-       Alexei Starovoitov <ast@kernel.org>
-       Daniel Borkmann <daniel@iogearbox.net>
-       Andrii Nakryiko <andrii@kernel.org>
+The series comes with new selftests programs that generate a wide
+variety of kasan reports: those need the kernel to be running with
+kasan_multi_shot enabled.
 
-We are seeking proposals of 30 minutes in length (including Q&A discussion).
+As discussed in [1], this series is based on some choices and
+assumptions:
+- it focuses on x86_64 for now, and so only on KASAN_GENERIC
+- not all memory accessing BPF instructions are being instrumented:
+  - it discards instructions accessing BPF program stack (already
+    monitored by page guards)
+  - it discards possibly faulting instructions, like BPF_PROBE_MEM or
+    BPF_PROBE_ATOMIC insns
 
-The gathering is designed to foster collaboration and face to face discussion
-of ongoing development topics as well as to encourage bringing new ideas into
-the development community for the advancement of the BPF subsystem.
+---
+Changes in v5:
+- fixed a few instruction offset for generated fixups
+- fix insn marking for single insn patches
+- enforce more checks in tests
+- skip tests if kasan_multi_shot isn't enabled
+- Link to v4: https://patch.msgid.link/20260708-kasan-v4-0-d5c177ab8227@bootlin.com
 
-Proposals can cover a wide range of topics related to BPF covering improvements
-in areas such as (but not limited to) BPF infrastructure and its use in tracing,
-security, networking, scheduling and beyond, as well as non-kernel components
-like libraries, compilers, testing infra and tools.
+Changes in v4:
+- fix insn_offs_in_patch leakage in bpf_convert_ctx_access
+- handle BPF_ATOMIC in is_mem_insn
+- correctly mark fixup instructions if a single insn is generated
+- clarify new kconfig (Andrey) and drop VMAP_STACK dep
+- refactor BPF_FETCH atomic handling in JIT loop
+- make kernel log reading resilient to unrelated, interleaved logs in
+  the selftests
+- make new test kfuncs depend on BPF_JIT_KASAN rather than KASAN_GENERIC
+- Link to v3: https://patch.msgid.link/20260701-kasan-v3-0-bd09bb942d86@bootlin.com
 
-Please submit your proposals through the official LPC website at:
+Changes in v3:
+- Do not insert KASAN instrumentation when dealing with cBPF
+- Fix stack-accessing insn tracking for verifier patches, as original
+  instruction location in the generated patch may vary
+- drop cBPF support for stack-accessing insn marking
+- make sure to flag correctly memory access if different verifier states
+  involve different memory types (eg: stack in one path, non-stack in
+  another path)
+- refactor BPF_ST handling in x86 JIT compiler
+- improve tests coverage (cover instrumentation for a few patches
+  emitted by the verifier)
+- Link to v2: https://patch.msgid.link/20260604-kasan-v2-0-c066e627fda8@bootlin.com
 
-       https://lpc.events/event/20/abstracts/
+Changes in v2:
+- declare asan functions as extern in JIT compiler rather than exposing
+  them in kasan header
+- invert stack-accessing instructions marking to make sure not to skip
+  instructions that could end up accessing to-be-checked memory
+- fix stack accesses marking when verifier patches instructions
+- add best effort marking for cBPF
+- add missing call depth accounting in jited instrumentation
+- skip unused registers in kasan instrumentation save/restore
+- remove faulty stack align in kasan instrumentation
+- drop commit skipping some jit-related tests
+- cover missing instructions: BPF_ST and atomics
+- completely rework tests: directly tune shadow memory, increase
+  coverage, do not consume kernel logs
+- Link to v1: https://patch.msgid.link/20260413-kasan-v1-0-1a5831230821@bootlin.com
 
-Make sure to select "eBPF Track" in the track pull-down menu.
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: John Fastabend <john.fastabend@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Thomas Gleixner <tglx@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+To: Dave Hansen <dave.hansen@linux.intel.com>
+To: x86@kernel.org
+To: "H. Peter Anvin" <hpa@zytor.com>
+To: Shuah Khan <shuah@kernel.org>
+To: Ingo Molnar <mingo@redhat.com>
+To: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: ebpf@linuxfoundation.org
+Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
 
-Proposals must be submitted by July 24, and submitters will be notified of
-acceptance by July 31st. Final slides (as PDF) are due on the first day of
-the conference.
+---
+Alexis Lothoré (eBPF Foundation) (10):
+      bpf: propagate original instruction offset when patching program
+      bpf: mark instructions accessing program stack
+      bpf: add BPF_JIT_KASAN for KASAN instrumentation of JITed programs
+      bpf, x86: add helper to emit kasan checks in x86 JITed programs
+      bpf, x86: refactor BPF_ST management in do_jit
+      bpf, x86: emit KASAN checks into x86 JITed programs
+      bpf, x86: enable KASAN for JITed programs on x86
+      selftests/bpf: add helpers for KASAN in JIT testing
+      selftests/bpf: move bpf_jit_harden helper into testing_helpers
+      selftests/bpf: add tests to validate KASAN on JIT programs
 
-We are very much looking forward to a great conference and seeing you all!
+ arch/x86/Kconfig                                   |   1 +
+ arch/x86/net/bpf_jit_comp.c                        | 271 ++++++++++---
+ include/linux/bpf_verifier.h                       |   2 +
+ include/linux/filter.h                             |  10 +-
+ kernel/bpf/Kconfig                                 |  17 +
+ kernel/bpf/core.c                                  |   2 +-
+ kernel/bpf/fixups.c                                | 132 +++++--
+ kernel/bpf/verifier.c                              |   9 +
+ .../selftests/bpf/prog_tests/bpf_insn_array.c      |  44 +--
+ tools/testing/selftests/bpf/prog_tests/kasan.c     | 430 +++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/kasan.c          | 394 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/kasan_harden.c   |  41 ++
+ .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  22 ++
+ tools/testing/selftests/bpf/testing_helpers.c      |  32 ++
+ tools/testing/selftests/bpf/testing_helpers.h      |   1 +
+ tools/testing/selftests/bpf/unpriv_helpers.c       |  10 +
+ tools/testing/selftests/bpf/unpriv_helpers.h       |   2 +
+ 17 files changed, 1288 insertions(+), 132 deletions(-)
+---
+base-commit: 950d646b505ae37ee75f4c2b11d41e7190036c42
+change-id: 20260126-kasan-fcd68f64cd7b
+
+Best regards,
+--  
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+
