@@ -1,123 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11FDA285CAD
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 07:48:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D632E3DBD77;
+	Thu,  9 Jul 2026 07:49:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783583305; cv=none; b=a/twxfoXU18FAeTv8Jz30WOjFVlZsxYXDA9w07DhSX+D9mzz+TJZIO4+PV+Ow8Zz4PTcwNRL3yG15FdiyHBLNeuyr898v7W+kdBaJjxcccsdB3jnmaZMnUcT/Ow0BPhMdRKvaRP0dqrU2yR7tewZywBU+iZ6y9DSzbPPvAr8y3w=
+	t=1783583389; cv=none; b=aYoGQSZWFT3Tr7GyzZVRrzlWf5azBFGSufbdlycM9S3YQraPsYFX098dIlMrgfJ5pzhpC/TVZDThCtOsM9RiZ8mxM+It2WW7vjKlN3yyBCiyXqkj30G/pRh4GCqoB+o2nxSJ5Q87MtBKjKlk2PK0B/S9qU98Ag41QBUMAgof92M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783583305; c=relaxed/simple;
-	bh=jnzahiFZnYDNS1oQkLLOB6imI4HZwC5VHCneX2u0gHU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=TGFPYjobXbprUeiOTe0bcYz+sogy+1QrPknEVQagfKlat4LkcQF/0zi/QCtnc8UkAVXK22hlbTQeihhifeEFE+dw483090NLHE99HO8LYaN3eKlhP+DYZrQQZ46x39aueYOJmOy/nXjJNgfcN1Bx23Kgl01jZOB2ql3tSuEP8W8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=INb/srcV; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783583389; c=relaxed/simple;
+	bh=TQ3SZoQYVlZB70d32KZDJfEGT9K3fxsjmn3hPFpWnbg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JMN9OJbANTnVzZrdfyUszoGO7NyOxENLFuWUlYbDxNMt568Y+O98sne8+hmPyCipG91yycoqaceNJN8aT5RoDGhv4GoAkPeR03O/+VjkmtP1KRdkbQqR64VzBqn8cyi3u5W8AHyXT+eR1Fdydq+rh3PjErtx3e1fGgu5ukzHPS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=a4DBbnaY; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="INb/srcV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1E381F000E9;
-	Thu,  9 Jul 2026 07:48:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783583304;
-	bh=nkxa4dGtodvmgqJ4TwPAqgStsTpse2YYdZCvUhyvhQ0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=INb/srcVK8XlA+weSBFenTg9+qs/UjqBAxBU9Z2c1U97wa90eXuKs7CGm0X9/bYyB
-	 FEw99uE0rECIL9ONxsqhONP5zEFIZOyCJTCjOsMXpmyAZGHBEWl+SKnYuO2wYbbdtk
-	 TqaK7qKMW7Ac7hKHvwvFdiRgnjblCT/Lwk3lzny/ZdxdZKujAPvc4UF70X8l8MSGtr
-	 bqXe92KdqtTL8W8UQbiSanP+QcYeVy0SWBlazVq8umEjjdSRwsWzBjmhrt4UEkwxrm
-	 TWocFgcOgHhUzXzOre9gOXSuujG6m3pRTdVv7Eu3g1bkDvwZWKe15qIgOvabvn+uat
-	 ijWgXG6GraEHA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next] bpf: Fix security_bpf_map_create error
- handling
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Daniel Borkmann" <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260709073422.379247-1-daniel@iogearbox.net>
-References: <20260709073422.379247-1-daniel@iogearbox.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 09 Jul 2026 07:48:23 +0000
-Message-Id: <20260709074823.C1E381F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="a4DBbnaY"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=qU5PVEl9y2sqwPMvgCKxoRh26dBeMc8A1hT/JDQT4+A=; b=a4DBbnaYW0AAlSAkSiOEPPTORO
+	qL4vXJAsTrD4RYiDBQhNJCQLq3fQBQrEK23Vh4W4ZWtCCeSdr4nL9Hed/AhvMcwAtPh47pXjEcNB4
+	SlQmD8gmeE+ecOFUn5VXD04D0j8FdyW0S1g74bxNbRht9gxGK1GH2pU3j/2nFalCQQijm05yNBNeT
+	l7qg0z7TNgLdC/Y2VXD38UEF3O5FhDFRsmbUDDYdkxJXNFDmvVNwNMlGfzkaJgNUUI6GHnvthF+nE
+	8/T9BdTkF52x2h5/8dbyzJGnbmqq+gy0t9beb1nBKs1PYNSMOrstpGYf1js2syUpN6ts2Op5kDXFt
+	CCPxVQ+A==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1whjVr-000GIT-1Z;
+	Thu, 09 Jul 2026 09:49:39 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1whjVq-000IHx-2I;
+	Thu, 09 Jul 2026 09:49:39 +0200
+Message-ID: <1aa2111f-1901-4a68-880d-db92fd0dda5e@iogearbox.net>
+Date: Thu, 9 Jul 2026 09:49:38 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] bpf: Fix security_bpf_map_create error handling
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260709073422.379247-1-daniel@iogearbox.net>
+ <20260709074823.C1E381F000E9@smtp.kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260709074823.C1E381F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28055/Thu Jul  9 08:25:20 2026)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-
-Pre-existing issues:
-- [Medium] Incomplete fix: the double LSM hook invocation bug fixed for map=
-s also exists in the BPF program load path.
---
-
---- Patch [1]: [PATCH bpf-next] bpf: Fix security_bpf_map_create error hand=
-ling ---
-commit cf9b2144a32439abed11faad9a9b189d6b3f71f7
-Author: Daniel Borkmann <daniel@iogearbox.net>
-
-bpf: Fix security_bpf_map_create error handling
-
-This commit prevents the security_bpf_map_free() hook from being called
-twice when map creation is denied. It routes the map_create() denial
-path to free_map instead of free_map_sec.
-
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -1649,7 +1649,7 @@ static int map_create(union bpf_attr *attr, bpfptr_=
-t uattr, struct bpf_common_at
-> =20
->  	err =3D security_bpf_map_create(map, attr, token, uattr.is_kernel);
->  	if (err)
-> -		goto free_map_sec;
-> +		goto free_map;
-> =20
->  	err =3D bpf_map_alloc_id(map);
->  	if (err)
-
-[Severity: Medium]
-This isn't a bug introduced by this patch, but since you are fixing the
-double invocation for maps, does the exact same issue also exist in the
-BPF program load path?
-
-Looking at the program load path, security_bpf_prog_load() cleans up the
-LSM state internally upon denial:
-
-security/security.c:security_bpf_prog_load() {
-    ...
-	if (unlikely(rc))
-		security_bpf_prog_free(prog);
-    ...
-}
-
-However, the error path in bpf_prog_load() eventually initiates an
-unconditional program teardown:
-
-kernel/bpf/syscall.c:bpf_prog_load() {
-    ...
-free_used_maps:
-	/* In case we have subprogs, we need to wait for a grace
-	 * period before we can tear down JIT memory since symbols
-	 * are already exposed under kallsyms.
-	 */
-	__bpf_prog_put_noref(prog, prog->aux->real_func_cnt);
-    ...
-}
-
-Which then unconditionally calls the free hook again:
-
-kernel/bpf/syscall.c:__bpf_prog_put_rcu() {
-    ...
-	security_bpf_prog_free(aux->prog);
-    ...
-}
-
-Could this lead to double invocations for denied programs (or unbalanced
-invocations if verification fails before reaching the LSM load hook),
-creating unexpected states for BPF LSM programs attached to bpf_prog_free?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260709073422.3792=
-47-1-daniel@iogearbox.net?part=3D1
+On 7/9/26 9:48 AM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> 
+> Pre-existing issues:
+> - [Medium] Incomplete fix: the double LSM hook invocation bug fixed for maps also exists in the BPF program load path.
+Yeap, I'm on that one as well, but sending separately.
