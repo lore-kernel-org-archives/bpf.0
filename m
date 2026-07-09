@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB6C6381AFF;
-	Thu,  9 Jul 2026 11:53:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D615E39A7F5;
+	Thu,  9 Jul 2026 11:55:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783598007; cv=none; b=E5jHTEmhJ1uacjpGVDO4AFUR3E7H9mlmRjy2DE6kw1Py3ZDk3/XCD0benNJvE/BVCpycgw3Ob5+NXUylhfKr1tuilglkrLZV8X8f80ILyGLhfngRqB2JlbWzags1D+9pKjzq1WyWRvYUMf+AjfwCuVdqR8ERSttRSdnXcC6MlDo=
+	t=1783598126; cv=none; b=b2xQN5W7FPhRLuspO7xYoZ/cX2A+Ajd5REOzeGMQU7GCh1t8aMijSWl/FwmXxsiStSMNiOAdjzqpYniBjvMDIzL+hEhMk4enFm3+P3vg6B5x2uveHFch5aPsdzv6KMNm0J8ZsDbcm6HAuqRoOHup8Jw1kDoof6w/i8g7O0gD7+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783598007; c=relaxed/simple;
-	bh=tz7wxxNEV/4kEzCgnlblJbKSUMoWw6JwRukQ64PN/zw=;
+	s=arc-20240116; t=1783598126; c=relaxed/simple;
+	bh=bCNossEeZ0inwxzXPkoSEYgfKI5nca1J7WOrQta5+ow=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YRPECZIv0HZfuFFVGXe2osNqMiBElMb/CQpbUq2UrSPzBkSlVEdQ+TBStFYvM37olLwE1x6eI5Tk/jCsgwS6vk9mkYUsvqpDUG9ZHokN2F4io20FEpj7CWE7ZI3UmfRllKjJcFquXCKz1T2L3gvIGEPPmrpIbkPZ21HIsEMsTjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=pFpddwwp; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=qmYgl/M2g4wzJLWlo2ilgCSde0t7X11GBr/V4uVf5njHuNe4ZLwTTIeeySvE1t8S35DJfz/q40PPt+DcHEljJBnR/nDnndOjxJKY8pgH2yFGwphOG2ubUAp8DjfJrk5Ni+RiYRX4/yll3HJIj9Y9/05EoPonXTMRpULjYUs2HgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=eOxqtakS; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="pFpddwwp"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="eOxqtakS"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=wTsbFPng4nRn9k/g8RF7ssMzIf9aCU+tT518nWT311k=; b=pFpddwwpu7ZaeU1UawtdwTr9At
-	a0s3hLn8EQzW5OpZWl4sZTrH3rQje3c3W07R7WanoS8GbdXo4h+2t1G1PYE3kz2mFrNWdp7LGAF6V
-	tjaf9q8CFvWoVtDfGKs6TrcudDGZXAHLD9UTHvOMa5MfWEqR87VWUud5lFQDCSItmUOaYL1i9Tzp3
-	028CkZ3bC28yZP+b6OVz2xuxrAupwlOVsrEjWUr3edheCj06k295H83T6tvQ5KAYB1W3NXTDuDFKO
-	0M+tkdbl6agtDMCoqqs69HJ15KJ+WrRps4sDutJ3enLsgv9lnhNEF8o4vzJA76ZDs7q3lZk+l4IWN
-	+3KCh3Iw==;
+	bh=ksXUMFlciHDceRDaryNPqxWMMDzzkTmWa9cZy3atTSY=; b=eOxqtakSjpjVlsnI84sOkEbrt8
+	ysi9ZE+0iuCdr4MMDCjqT2UIg/nfYeMB36YEhrMo0UM8r8ibMB/kCBA7Z6yEJpdk2Qyk+wpzx6TIc
+	FT+dPNwDge/8Ow1VcyrNNw4Impwj7CzVvxYBwclk8GShdNGFqe19ULRVqFEpGBegHXPpMQ3FVXgst
+	+swcVCRQqn9ZyIRDysIlQV9tL7cVo2RVrLt6hA6famqwhPIc2QQDeKizS7eHSomdBT4d+UMaRQ+vw
+	Pjc3Wn68mcLg3Oi8jRCDWuTjIbei14n11X/2UCDOAdlDjPTeR1b22qVjD+siX5TDVrazXCzzBu6jw
+	HEH9SmMA==;
 Received: from sslproxy05.your-server.de ([78.46.172.2])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1whnJh-0001w3-1s;
-	Thu, 09 Jul 2026 13:53:21 +0200
+	id 1whnLe-00027s-2v;
+	Thu, 09 Jul 2026 13:55:23 +0200
 Received: from localhost ([127.0.0.1])
 	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1whnJg-000Kpf-0y;
-	Thu, 09 Jul 2026 13:53:20 +0200
-Message-ID: <e30f1c25-bc81-4a2a-a997-9b7007890b03@iogearbox.net>
-Date: Thu, 9 Jul 2026 13:53:20 +0200
+	id 1whnLe-000FXS-0c;
+	Thu, 09 Jul 2026 13:55:22 +0200
+Message-ID: <b0ebaa8e-108d-451f-a7b2-26810f3d9b03@iogearbox.net>
+Date: Thu, 9 Jul 2026 13:55:22 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,14 +49,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH bpf] bpf: fix UAF in sock clone early bailouts
-To: Matt Bobrowski <mattbobrowski@google.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- jannh@google.com, stable@vger.kernel.org,
- Kuniyuki Iwashima <kuniyu@google.com>
+To: sashiko-reviews@lists.linux.dev, Matt Bobrowski <mattbobrowski@google.com>
+Cc: bpf@vger.kernel.org, Kuniyuki Iwashima <kuniyu@google.com>
 References: <20260709025316.999913-1-mattbobrowski@google.com>
+ <20260709032007.9E4D61F000E9@smtp.kernel.org>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -102,68 +98,107 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <20260709025316.999913-1-mattbobrowski@google.com>
+In-Reply-To: <20260709032007.9E4D61F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28055/Thu Jul  9 08:25:20 2026)
 
-[ +Kuniyuki ]
+Hi Matt, hi Kuniyuki,
 
-On 7/9/26 4:53 AM, Matt Bobrowski wrote:
-> Similar to recent commit 9b51a6155d14 ("bpf,fork: wipe ->bpf_storage
-> before bailouts that access it"), sk_clone() performs an initial
-> shallow copy of the socket field ->sk_bpf_storage via sock_copy() for
-> the cloned socket newsk.
+On 7/9/26 5:20 AM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
 > 
-> If sk_clone() bails out early (e.g. if sk_filter_charge() fails) prior
-> to calling bpf_sk_storage_clone(), newsk->sk_bpf_storage still points
-> to the parent socket's BPF local storage. When newsk is subsequently
-> freed via sk_free(), the deallocation path (__sk_destruct() ->
-> bpf_sk_storage_free()) destroys the parent socket's BPF local storage,
-> leading to a use-after-free (UAF) on the parent socket.
-> 
-> Fix this by resetting newsk->sk_bpf_storage to NULL immediately after
-> sock_copy() in sk_clone(), and remove the now redundant initialization
-> from bpf_sk_storage_clone().
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
-> Fixes: f12dd75959b0 ("bpf: net: Set sk_bpf_storage back to NULL for cloned sk")
-> Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
+> Pre-existing issues:
+> - [High] BPF map corruption via shallow-copied sk_user_data and sk_reuseport_cb during sk_clone early bailouts.
+> - [High] Unbalanced decrement of global network timestamp static key during sk_clone early bailouts.
 
-LGTM, thanks!
+Do either one of you also have a chance to look into these?
 
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+Thanks a lot,
+Daniel
 
->   net/core/bpf_sk_storage.c | 2 --
->   net/core/sock.c           | 3 +++
->   2 files changed, 3 insertions(+), 2 deletions(-)
+> --- Patch [1]: [PATCH bpf] bpf: fix UAF in sock clone early bailouts ---
+> commit 81577dfc9f1b10000a3b1dfc19a5b577e986ec33
+> Author: Matt Bobrowski <mattbobrowski@google.com>
 > 
-> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-> index ecd659f79fd4..1d295a8769fa 100644
-> --- a/net/core/bpf_sk_storage.c
-> +++ b/net/core/bpf_sk_storage.c
-> @@ -158,8 +158,6 @@ int bpf_sk_storage_clone(const struct sock *sk, struct sock *newsk)
->   	struct bpf_local_storage_elem *selem;
->   	int ret = 0;
->   
-> -	RCU_INIT_POINTER(newsk->sk_bpf_storage, NULL);
-> -
->   	rcu_read_lock_dont_migrate();
->   	sk_storage = rcu_dereference(sk->sk_bpf_storage);
->   
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index 8a59bfaa8096..498a57f34f5b 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -2492,6 +2492,9 @@ struct sock *sk_clone(const struct sock *sk, const gfp_t priority,
->   	sock_copy(newsk, sk);
->   
->   	newsk->sk_prot_creator = prot;
-> +#ifdef CONFIG_BPF_SYSCALL
-> +	RCU_INIT_POINTER(newsk->sk_bpf_storage, NULL);
-> +#endif
->   
->   	/* SANITY */
->   	if (likely(newsk->sk_net_refcnt)) {
+> bpf: fix UAF in sock clone early bailouts
+> 
+> This commit fixes a use-after-free on parent socket's BPF local storage
+> caused by an early bailout in sk_clone() prior to clearing
+> newsk->sk_bpf_storage. By resetting newsk->sk_bpf_storage to NULL
+> immediately after sock_copy(), the deallocation path won't destroy the
+> parent socket's storage.
+> 
+>> diff --git a/net/core/sock.c b/net/core/sock.c
+>> index 8a59bfaa8096e..498a57f34f5b5 100644
+>> --- a/net/core/sock.c
+>> +++ b/net/core/sock.c
+>> @@ -2492,6 +2492,9 @@ struct sock *sk_clone(const struct sock *sk, const gfp_t priority,
+>>   	sock_copy(newsk, sk);
+>>   
+>>   	newsk->sk_prot_creator = prot;
+>> +#ifdef CONFIG_BPF_SYSCALL
+>> +	RCU_INIT_POINTER(newsk->sk_bpf_storage, NULL);
+>> +#endif
+> 
+> [Severity: High]
+> This is a pre-existing issue, but I noticed there might be a similar issue
+> with sk_reuseport_cb and sk_user_data. Since sock_copy() does a shallow
+> copy, newsk initially points to the parent's sk_reuseport_cb and
+> sk_user_data.
+> 
+> If sk_clone() bails out early (e.g., sk_filter_charge() fails):
+> 
+> net/core/sock.c:sk_clone() {
+>      ...
+>      if (unlikely(!is_charged || xfrm_sk_clone_policy(newsk, sk))) {
+>          ...
+>          goto free;
+>      }
+> 
+>      RCU_INIT_POINTER(newsk->sk_reuseport_cb, NULL);
+>      ...
+> }
+> 
+> The bailout happens before sk_reuseport_cb is cleared. When newsk is freed,
+> bpf_sk_reuseport_detach() can follow the copied sk_user_data to the parent's
+> BPF map slot and write NULL to it:
+> 
+> kernel/bpf/reuseport_array.c:bpf_sk_reuseport_detach() {
+>      ...
+>      RCU_INIT_POINTER(*socks, NULL);
+>      ...
+> }
+> 
+> Does this corrupt the parent socket's BPF map during early bailouts?
+> 
+> 
+> [Severity: High]
+> This is also a pre-existing issue, but could the same early bailout pattern
+> cause an unbalanced decrement of the global network timestamp static key?
+> 
+> sock_copy() copies SK_FLAGS_TIMESTAMP into newsk->sk_flags. The global
+> timestamp counter is only incremented at the end of sk_clone():
+> 
+> net/core/sock.c:sk_clone() {
+>      ...
+>      if (sock_needs_netstamp(sk) && newsk->sk_flags & SK_FLAGS_TIMESTAMP)
+>          net_enable_timestamp();
+> }
+> 
+> However, during destruction of the aborted clone, the global counter is
+> decremented unconditionally because the copied flag was set:
+> 
+> net/core/sock.c:__sk_destruct() {
+>      ...
+>      sock_disable_timestamp(sk, SK_FLAGS_TIMESTAMP);
+>      ...
+> }
+> 
+> Could an early bailout skip the net_enable_timestamp() call but still
+> execute the sock_disable_timestamp() call on free, leading to an underflow?
+> 
+>>   	/* SANITY */
+>>   	if (likely(newsk->sk_net_refcnt)) {
+> 
 
