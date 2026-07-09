@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A053EFFDC;
-	Thu,  9 Jul 2026 08:31:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA1D3EBF07;
+	Thu,  9 Jul 2026 08:46:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783585916; cv=none; b=llgLo5LanM7+zZ7FVA2OVzcdq7zGp0d86K5wKUuO69KM/xoye/Vhb/wB8Opdnf5aU+TiPbNpG8QhG/4TjNkdGk+zta26NoULaieLm7cKDjXAmSUx+zZ1s7SzqNxm77LIdQPgme/UQf8mUD7nYOaszJ+sra4K3PnuSKX+Fr3VFTY=
+	t=1783586820; cv=none; b=CoZVbvFY0ZRHQ/f893iO4cotM7/TcJk5j56qUfR095v2/pKWWejJK4jIAGZLrb6ca6BQLKWMH4kaPu4J3NkFOSLS1nyONVqZeRP3FT5OF4+DwGNicBiXbZtF2VptdoZvvUUMduH+KboHFtzBcRYQn2QBsNIv0rZFVdkMoD2Vg+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783585916; c=relaxed/simple;
-	bh=Dtmon6vaQdULeooMR9XgBXuSxuCy4G1aKiy/0dMhAZg=;
+	s=arc-20240116; t=1783586820; c=relaxed/simple;
+	bh=BczvAh6Zv0GAX6SUWCHTX7t668sOk5y0+cCK3HIc8VQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ibaHGTrIpj3iyU32uUik7aYJAXRBpeBJHlAwr01wzMcl8SZFG6IYWfgj6MXpV8Nq1YeqPHsFh2KRTaqnI41bAzydmFqwF49D7ZrjiIkOfWc2W0U7HRcewWg1AwFqRYO0t75OhUG+hPMo2799qLdJ4RXW+X8Rw8OxU/Oo8LsG6M0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=gtnv9J4x; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=cHL5jw3XEzcXnuNVx3Az7HWsk6dOOOxTRH72aWoVVKEeeeVHWlleV+K0czZKxJPPZiPLwStITgenmF+/2uJ/Ch6CTIN3J44jjP6Pozbql0l8S1vESOWeDJv8QDKcmIxBb/vuZo+UaO+A8o0xoNU5wmDMcTxaNweR6/fk7Qj+85o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=fu3qFK0z; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="gtnv9J4x"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="fu3qFK0z"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=zyJYfoN2AkhAREfybHYcueWfFEi8XhN3BVKByEKGZ6I=; b=gtnv9J4x2xU6CMTYY2QeyTKLcn
-	czcvtvbwYTQqZaNKV0+vyettuduOs92CZfzhtjbO6ABOZK1k1G5mOkEC0eeNOdG1vR3Bkf6ustA7r
-	9rvbpLeka7UicmpQ0eXyCJQS3UQeYOgP5MuzN+esBf2bXh0BIxG9lmYHRla+5Gd/+6CVsTg8YkYPF
-	OnGn0YQ+znH6vbvhQL6omFaoQDjOg1JijLp6efn2GM0vsS7Kv8StvQW/4waAlJKrSrhAtm6LmDM9F
-	92jAkkc7cgryB7Orbx8Dt0p0htHRz3v7V/kgs9bS958ika0PB8kSJu7k7x52bVd86iDkbOHycrxhW
-	NFVKWdLQ==;
+	bh=h+w+9wmHpWJd8cFGNu/fprIuzgYEMZMAKThejEcRrLc=; b=fu3qFK0zHEFPIOC92XA/MmfmUA
+	htMDFLa3wfmFqgdsKUuIZyFu4F9vIPqi2HSfvVrASkn7tDO+fSITHSgyNftTVmNhj2NNV3E1EKd1M
+	tZQEUY0ZYt8YGvN9J+Rj91LB8vs2rtALe8br+ErS0Ly8xIFsAX+2XXSDoFJqtfa26ivPKhOMFwcU2
+	+RgYEM6UIxJjIX5EzEJzLr8dmxtC9BPGgqsqwHP4lubMDcuI0twwRvzNNTDWF7Bgxu4JoeUJ2n/n2
+	RceQwRaMTDWLCeCiFFmxbwic9l+xZN3yPXcr0LxWPnV9CVYqDBzupClYDxXJyt5O0+dPWAReuLMD7
+	3SFn9fqg==;
 Received: from sslproxy01.your-server.de ([78.46.139.224])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1whkAX-000N6r-1B;
-	Thu, 09 Jul 2026 10:31:41 +0200
+	id 1whkPH-000PIQ-03;
+	Thu, 09 Jul 2026 10:46:55 +0200
 Received: from localhost ([127.0.0.1])
 	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1whkAW-0005e7-1Z;
-	Thu, 09 Jul 2026 10:31:40 +0200
-Message-ID: <6bcf9de7-c28b-4397-8e3f-503a22d26a80@iogearbox.net>
-Date: Thu, 9 Jul 2026 10:31:39 +0200
+	id 1whkPG-000P4u-13;
+	Thu, 09 Jul 2026 10:46:54 +0200
+Message-ID: <28ba19a4-b487-49fd-bbba-04410acdb113@iogearbox.net>
+Date: Thu, 9 Jul 2026 10:46:50 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,18 +48,14 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v10 1/5] bpf: add bpf_icmp_send kfunc
-To: Mahe Tardy <mahe.tardy@gmail.com>,
- Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
- john.fastabend@gmail.com, jordan@jrife.io, martin.lau@linux.dev,
- yonghong.song@linux.dev, emil@etsalapatis.com, netdev@vger.kernel.org,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- davem@davemloft.net, horms@kernel.org
-References: <20260625110321.28236-1-mahe.tardy@gmail.com>
- <20260625110321.28236-2-mahe.tardy@gmail.com>
- <aj1V2ZdzY1EGtsma@devvm7509.cco0.facebook.com> <aj1b_z6h5xn42Hxe@gmail.com>
- <aj6kdnfAB0LJKDcR@devvm7509.cco0.facebook.com> <akJKY_x1GdO3MZJS@gmail.com>
+Subject: Re: [PATCH bpf-next v6 2/7] riscv, bpf: Fix memory leak in
+ bpf_jit_free
+To: Pu Lehui <pulehui@huaweicloud.com>, sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260708064436.2971933-1-pulehui@huaweicloud.com>
+ <20260708064436.2971933-3-pulehui@huaweicloud.com>
+ <20260708065406.66B4A1F000E9@smtp.kernel.org>
+ <7218a234-df3b-40d9-aea3-1e1c69a2bc1f@huaweicloud.com>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -105,172 +101,24 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <akJKY_x1GdO3MZJS@gmail.com>
+In-Reply-To: <7218a234-df3b-40d9-aea3-1e1c69a2bc1f@huaweicloud.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28055/Thu Jul  9 08:25:20 2026)
 
-On 6/29/26 12:35 PM, Mahe Tardy wrote:
-> On Fri, Jun 26, 2026 at 09:18:39AM -0700, Stanislav Fomichev wrote:
->> On 06/25, Mahe Tardy wrote:
->>> On Thu, Jun 25, 2026 at 09:24:59AM -0700, Stanislav Fomichev wrote:
->>>> On 06/25, Mahe Tardy wrote:
->>>
->>> [...]
->>>
->>>>> +__bpf_kfunc int bpf_icmp_send(struct __sk_buff *skb_ctx, int type, int code)
->>>>> +{
->>>>> +	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
->>>>> +	struct sk_buff *nskb;
->>>>> +	struct sock *sk;
->>>>> +
->>>>> +	sk = skb_to_full_sk(skb);
->>>>> +	if (sk && sk->sk_kern_sock &&
->>>>> +	    (sk->sk_protocol == IPPROTO_ICMP || sk->sk_protocol == IPPROTO_ICMPV6))
->>>>> +		return -EBUSY;
->>>>> +
->>>>> +	switch (skb->protocol) {
->>>>> +#if IS_ENABLED(CONFIG_INET)
->>>>> +	case htons(ETH_P_IP): {
->>>>> +		if (type != ICMP_DEST_UNREACH)
->>>>> +			return -EOPNOTSUPP;
->>>>> +		if (code < 0 || code > NR_ICMP_UNREACH ||
->>>>> +		    code == ICMP_FRAG_NEEDED) /* needs a valid next-hop MTU */
->>>>> +			return -EINVAL;
->>>>> +
->>>>> +		/* icmp_send expects skb_dst to be a real rtable. */
->>>>> +		if (!skb_valid_dst(skb))
->>>>> +			return -ENETUNREACH;
->>>>> +
->>>>> +		nskb = skb_clone(skb, GFP_ATOMIC);
->>>>> +		if (!nskb)
->>>>> +			return -ENOMEM;
->>>>> +
->>>>> +		memset(IPCB(nskb), 0, sizeof(*IPCB(nskb)));
->>>>> +		icmp_send(nskb, type, code, 0);
->>>>> +		consume_skb(nskb);
->>>>> +		break;
->>>>> +	}
->>>>> +#endif
->>>>> +#if IS_ENABLED(CONFIG_IPV6)
->>>>> +	case htons(ETH_P_IPV6):
->>>>> +		if (type != ICMPV6_DEST_UNREACH)
->>>>> +			return -EOPNOTSUPP;
->>>>> +		if (code < 0 || code > ICMPV6_REJECT_ROUTE)
->>>>> +			return -EINVAL;
->>>>
->>>> [..]
->>>>
->>>>> +		/* icmpv6_send may treat skb_dst as rt6_info. */
->>>>> +		if (skb_metadata_dst(skb))
->>>>> +			return -ENETUNREACH;
->>>>
->>>> A bit confused about this. Which part of icmpv6_send treats skb_dst as rt6_info?
->>>> (I see the original sashiko report about dst, but icmp6 seems to be not
->>>> requiring it)
->>>
->>> Yeah I was also a bit confused because this came out of nowhere as soon
->>> as I put the skb_valid_dst only on the IPv4 path (for different
->>> reasons), but there is actually a potential trace in which we have type
->>> confusion indeed:
->>>
->>> - icmp6_send() checks scoped source addresses and calls icmp6_iif() at net/ipv6/icmp.c:702
->>> - icmp6_iif() calls icmp6_dev() at net/ipv6/icmp.c:441
->>> - icmp6_dev() does skb_rt6_info(skb) for loopback/L3 master devices at net/ipv6/icmp.c:428
->>> - skb_rt6_info() casts any non-NULL dst to struct rt6_info at include/net/ip6_route.h:233
->>> - rt6->rt6i_idev is then dereferenced at net/ipv6/icmp.c:434
->>>
->>> When checking with pahole, we can find this on my local kernel:
->>>
->>> struct rt6_info {
->>> 	struct dst_entry           dst;                  /*     0   136 */
->>> 	/* --- cacheline 2 boundary (128 bytes) was 8 bytes ago --- */
->>> 	struct fib6_info *         from;                 /*   136     8 */
->>> 	int                        sernum;               /*   144     4 */
->>> 	struct rt6key              rt6i_dst;             /*   148    20 */
->>> 	struct rt6key              rt6i_src;             /*   168    20 */
->>> 	struct in6_addr            rt6i_gateway;         /*   188    16 */
->>>
->>> 	/* XXX 4 bytes hole, try to pack */
->>>
->>> 	/* --- cacheline 3 boundary (192 bytes) was 16 bytes ago --- */
->>> 	struct inet6_dev *         rt6i_idev;            /*   208     8 */  <--- we dereference this
->>> 	u32                        rt6i_flags;           /*   216     4 */
->>> 	short unsigned int         rt6i_nfheader_len;    /*   220     2 */
->>>
->>> 	/* size: 224, cachelines: 4, members: 9 */
->>> 	/* sum members: 218, holes: 1, sum holes: 4 */
->>> 	/* padding: 2 */
->>> 	/* last cacheline: 32 bytes */
->>> };
->>>
->>> And the metadata_dst would look like this:
->>>
->>> struct metadata_dst {
->>> 	struct dst_entry           dst;                  /*     0   136 */
->>> 	/* --- cacheline 2 boundary (128 bytes) was 8 bytes ago --- */
->>> 	enum metadata_type         type;                 /*   136     4 */
->>>
->>> 	/* XXX 4 bytes hole, try to pack */
->>>
->>> 	union {
->>> 		struct ip_tunnel_info tun_info;          /*   144    96 */
->>> 		struct hw_port_info port_info;           /*   144    16 */
->>> 		struct macsec_info macsec_info;          /*   144     8 */
->>> 		struct xfrm_md_info xfrm_info;           /*   144    16 */
->>> 	} u;                                             /*   144    96 */  <--- we land on this union
->>>
->>> 	/* size: 240, cachelines: 4, members: 3 */
->>> 	/* sum members: 236, holes: 1, sum holes: 4 */
->>> 	/* last cacheline: 48 bytes */
->>> };
->>>
->>> Let's say it's a struct ip_tunnel_info:
->>>
->>> struct ip_tunnel_info {
->>> 	struct ip_tunnel_key       key;                  /*     0    64 */
->>>
->>> 	/* XXX last struct has 7 bytes of padding */
->>>
->>> 	/* --- cacheline 1 boundary (64 bytes) --- */
->>> 	struct ip_tunnel_encap     encap;                /*    64     8 */  <--- 144 + 64 = 208 we land here
->>> 	struct dst_cache           dst_cache;            /*    72    16 */
->>> 	u8                         options_len;          /*    88     1 */
->>> 	u8                         mode;                 /*    89     1 */
->>>
->>> 	/* size: 96, cachelines: 2, members: 5 */
->>> 	/* padding: 6 */
->>> 	/* paddings: 1, sum paddings: 7 */
->>> 	/* last cacheline: 32 bytes */
->>> };
->>>
->>> So I imagine this is fairly tricky to trigger but still a case of type
->>> confusion. I have actually no idea how likely this can happen from my
->>> call but the trace makes sense at least.
+On 7/8/26 10:51 AM, Pu Lehui wrote:
+> On 2026/7/8 14:54, sashiko-bot@kernel.org wrote:
+>> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
 >>
->> That logic seems to exist for the icmp6_send to find the input device
->> (since the expected use-case for calling icmp6_send is to the incoming
->> skb). And since you're mainly doing egress, I don't think this path will
->> ever trigger (iow the check is not needed)?
->>
->> Maybe you can add cgroup_ingress test case? Looks like this rt6_info
->> path might trigger for ipv6 lo? I don't see any ingress test in your
->> series, so might be good to have one regardless?
+>> Pre-existing issues:
+>> - [Critical] bpf_jit_free() ignores the error return value of bpf_jit_binary_pack_finalize(), leading to a Use-After-Free, Double-Free, and potential JIT memory charge limit corruption.
+>> - [High] The identical memory leak fixed in RISC-V remains present in ARM64 and LoongArch BPF JIT implementations.
+>> - [High] Memory charge limit (modmem) is permanently leaked when bpf_jit_binary_pack_finalize() fails in bpf_int_jit_compile().
+>> -- 
 > 
-> The initial reason I added only egress is because the use case of this
-> makes more sense if that's your local kernel giving you feedback about a
-> connection you are trying to establish, as a process, but is prevented.
-> 
-> But indeed, I could extend the test to ingress as well, I'd just like
-> ideally getting an ack from networking maintainers since this is already
-> v10 of this, before making some new changes.
-
-Sry for the delay, Mahe. Not speaking for net maintainers, but if the
-skb_metadata_dst() test in IPv6 would be made more strict and align with
-IPv4 by erroring out on !skb_valid_dst(skb), would this work? It would
-reject NULL dst for IPv6 case when someone would push a synthetic TEST_RUN
-skb to spoofe an icmpv6 injection without CAP_NET_ADMIN fwiw. Otherwise
-lgtm.
+> These are all pre-existing issues unrelated to the mixing of tail calls and bpf2bpf; they will be analyzed and fixed in a new patch series, as addressing them here would make this patchset be more large.
+Makes sense, please follow-up on these; meanwhile once Bjorn acked we
+can land these.
 
 Thanks,
 Daniel
