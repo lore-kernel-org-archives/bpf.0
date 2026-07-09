@@ -1,118 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB4D3B8412
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 19:51:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 105D044999A
+	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 19:55:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783626709; cv=none; b=fAsrqYtcpzT7AZ2lyydjbc42YeUUH7pyiayLxzhxhtAZzwajZ3ae0PQu5x3Qks4wewtNPLOHsjWEqynHuouHM22GFwy42M/lr9E5zr9Z7N4xytQ40DOlLp+DTqOKa0S+UUh/yLo5bw9HoZRpE2lj8TfS2gq3lZzRluhsFkdpj80=
+	t=1783626903; cv=none; b=SQABr0CqgkCW5v/vBQZUGg2om2yGAL00RWZUiw/4gW/KS8TXqXhg/Uh6Gh8qr7juX/FEFzxG2/HrJ0QvjvAK+GQ5rFSHKoKsJkSzMimxINs7xOrgoGyLrlbxb2PYhRsO7PzfQzovINEjr4z6f2IbVBN1v5Wl2JmbCicOR6a/o70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783626709; c=relaxed/simple;
-	bh=kBZwb2cRE68I1czVBQGrvfPjZQW9fylv6EksNu1C5sY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gv+1Hm9lhRuL+7ic6jH903RehlulmlTyULxPxcJ8qat5KQg+OzPWU2vdFss62lfsamB0pOIjYxTcYUShYzogS8iTuyysFBZSQWkRzdRJQ6lgr4COuVULFDcwu7FN48cXXYefYctEvg+vEPcgs28GvFG84nKGFMlXnXgM7tW0s4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OCt0doGX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783626903; c=relaxed/simple;
+	bh=tu5B7qQIDTPnW/i0rxWfXCEXZ/pFQ4ga9iA5FCzX0Ck=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZatQTe/ONu/X/dz7nMh36DsH+ZcNwWvWCncpoYbMXa4oypO7TntYXCJWF/X5s9xD4bo8acaVCZUaS2Z1Rmu6uZ8HgxEDltMFupwAtVtyutNY2uCKRIFBGbLlyr9RYFe/9nbvbkuk0M1xQoqhxGmMfTJdb9kxijqLe236BgUv/aY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ilH6iENW; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OCt0doGX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15F9F1F00ACF
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 19:51:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783626708;
-	bh=kBZwb2cRE68I1czVBQGrvfPjZQW9fylv6EksNu1C5sY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=OCt0doGXrYzRVeJfu/G9t3TVkpeL0XPF2B6u5RcuM3cR3odlHTd8QdDJdaCJv/gSp
-	 5jERAHatgrl7aSgS6t2v6spBqvCio4NEXvSkT1vtEyX3txUM/vbbbb/6wSUqICd0OP
-	 XYOPc0a3eBqY0n5BM4v6YFlBX9RMVB4vxxMfd3A8Zw3s43OIenlgUeI20orjLVec5c
-	 tyh9MMYZJhToVS65UkcC6h1cIFWs16aYt9TpUDdoZCjDHmIejRwMTRdg4+aDUmJNGr
-	 X1R97gzkMMN+yDOLpUFxplAti7qjfSYyG5IXhrAEh6FIISoqxK0d4BnJonirH6U5g8
-	 rU+9RsLEgQpOA==
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-80cebd41372so2525607b3.3
-        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 12:51:48 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RpysBmjSOJuWBsYZbgJK6yTrMXCHOQpYzOcAuO/wSoHKdTwQxLoqx5kwY7P9k6zu6AFlDo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/FVdLgmftcJSEeGHx6gHEETU4fy+F15zy9geS4tXLAp7wzRkn
-	v/QXzPkw76ZnflIYy+VRqDEW14W9IVd/8p0yO9MJ4K67kxGI3owo2xLIgpL1xoGaZYKvIEtK7AI
-	7XefL9DgNUqAiHXopDOdL4qZnVIEr+9U=
-X-Received: by 2002:a05:690c:6982:b0:81d:3b37:30c1 with SMTP id
- 00721157ae682-81dbeb62c28mr66172477b3.58.1783626707206; Thu, 09 Jul 2026
- 12:51:47 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ilH6iENW"
+Message-ID: <24e9b4a4-2ddb-431c-8821-c260a6641255@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783626900;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1ADkbJHwXAoybo60wPzpMX11G3ZSo+o9NtfAAIE+fm4=;
+	b=ilH6iENWQw0+OQ3f1f87LSo79NzXBwRmewFmCh+yuLHoRZZtI9zlPB7n0CZC5jQF3ma6kp
+	d0HmOZ3WqQT0bPXysK8aduJ+2hgqCkxziWo1zx4ENNVJU/AkSfTIvyy6BbsUsiEarcAp8G
+	wmmtKOFGKgh8j3kPoP6AhgCAlgVDJxE=
+Date: Thu, 9 Jul 2026 12:54:45 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260708064436.2971933-7-pulehui@huaweicloud.com>
- <a721df30ec2f824295000183c8e91f2c19d0bd56ae115b835b402be9eacc1c71@mail.kernel.org>
- <b4aadfde-9745-4c71-8dd4-ce433331f91b@huaweicloud.com> <CAJ+HfNi_icVbeB=jw-xnXrwzigZwP2OVRbzaF3VC87i6fDpdDw@mail.gmail.com>
- <fc972c33-1b66-4979-97e9-71627fb6179f@huaweicloud.com>
-In-Reply-To: <fc972c33-1b66-4979-97e9-71627fb6179f@huaweicloud.com>
-From: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Date: Thu, 9 Jul 2026 21:51:36 +0200
-X-Gmail-Original-Message-ID: <CAJ+HfNgPWwX3dfu=62TSMKeLD8m9S0rc2k9G8rVN7r2SuzQ6MQ@mail.gmail.com>
-X-Gm-Features: AUfX_mzRdJWsTfK-NsIC-FwuP0A4MWVi9F1vZPgfsDKDjIV5ebRacxEBUg4UWps
-Message-ID: <CAJ+HfNgPWwX3dfu=62TSMKeLD8m9S0rc2k9G8rVN7r2SuzQ6MQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 6/7] riscv, bpf: Mixing bpf2bpf and tailcalls
-To: Pu Lehui <pulehui@huaweicloud.com>
-Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
-	haoluo@google.com, jolsa@kernel.org, puranjay@kernel.org, pjw@kernel.org, 
-	palmer@dabbelt.com, alex@ghiti.fr, pulehui@huawei.com, martin.lau@kernel.org, 
-	clm@meta.com, ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next 09/12] selftests/bpf: Add C tests for 16-byte
+ returns in R0:R2
+Content-Language: en-GB
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260708201025.2160583-1-yonghong.song@linux.dev>
+ <b4271ab7b2a5eb033b22efc367ad93796a92d63f65b7f1acafc80f9ef24d55ca@mail.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <b4271ab7b2a5eb033b22efc367ad93796a92d63f65b7f1acafc80f9ef24d55ca@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 9 Jul 2026 at 17:09, Pu Lehui <pulehui@huaweicloud.com> wrote:
->
->
-> On 2026/7/9 19:37, Bj=C3=B6rn T=C3=B6pel wrote:
-> > Sorry for the delay here -- the bot had me thinking a bit.
-> >
-> > On Wed, 8 Jul 2026 at 10:54, Pu Lehui <pulehui@huaweicloud.com> wrote:
-> >
-> > ...
-> >
-> >>> This assumes a fixed number of instructions before the tailcall entry
-> >>> point. When is_subprog is true, the rv_addi() instruction is not emit=
-ted,
-> >>> which means the tailcall entry point moves forward by 4 bytes relativ=
-e to
-> >>> where RV_TAILCALL_OFFSET expects it to be.
-> >>>
-> >>> The tailcall entry is used in emit_bpf_tail_call() when calculating t=
-he
-> >>> jump target for the tail call. If RV_TAILCALL_OFFSET doesn't account =
-for
-> >>> the conditional emission, could this cause the wrong entry point to b=
-e
-> >>> used when tail calling into subprograms?
-> >>
-> >> This is not an issue, subprog can not be the tailcall callee.
-> >
-> > Say, that we have an entry function that does bpf_for_each_map_array()
-> > into a callback cb(). cb() is a subprogram, so no init of TCC. Now,
-> > cb() calls another subprogram that does a tailcall.
-> >
-> > The callback to cb() is coming from the kernel, so a6 could have been
-> > clobbered, no? We're entering a subprogram coming from the C ABI. Now,
-> > if the callback calls a subprog that's tail-call reachable, the TCC
-> > can be garbage?
->
-> Sashiko reported the same issue yesterday. I verified that the verifier
-> rejects cases where a tail call is invoked within a callback;
-> specifically, while the callback's return value range is [0, 1], the
-> simulation of the exit path in `check_helper_call` (handling the tail
-> call helper) marks R0 as UNKNOWN, causing the verifier to reject it=E2=80=
-=94so I
-> didn't investigate further. However, I just verified that the verifier
-> *does* accept the scenario where a callback calls a subprogram, and that
-> subprogram subsequently calls a tail call. I believe this scenario ought
-> to be rejected; perhaps some changes are needed in the verifier,
-> otherwise tail calls on other architectures (like x86) would also be
-> susceptible to infinite loop issues.
 
-Thanks for trying it out!
 
-Ok, so seems like we need a verifier fix pre-landing?
+On 7/8/26 2:10 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c b/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c
+>> new file mode 100644
+>> index 0000000000000..d4ecc19684cef
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c
+>> @@ -0,0 +1,96 @@
+> [ ... ]
+>
+>> +/*
+>> + * Run one program and check its result. The program returns 0 on success, or
+>> + * 1..4 identifying which half of which aggregate (R0:R2) return value came back
+>> + * wrong. A return of -1 means the program was built with an LLVM that lacks
+>> + * R0:R2 16-byte return support, in which case the subtest is skipped.
+>> + */
+> [ ... ]
+>
+>> +	/* C variant (__int128): relies on LLVM 23 R0:R2 codegen, skipped otherwise. */
+>> +	if (test__start_subtest("int128_c"))
+>> +		run_prog(skel_c->progs.aggregate_ret_test, true);
+>> +
+>> +	aggregate_ret_int128_c__destroy(skel_c);
+>> +
+>> +	skel_struct_c = aggregate_ret_struct_c__open_and_load();
+>> +	if (!ASSERT_OK_PTR(skel_struct_c, "skel_struct_c_open_load"))
+>> +		return;
+>> +
+>> +	/*
+>> +	 * C variant returning a 16-byte struct by value: exercises the struct
+>> +	 * branch of bpf_ret_reg_pair(). Also LLVM 23 only.
+>> +	 */
+>> +	if (test__start_subtest("struct_c"))
+>> +		run_prog(skel_struct_c->progs.aggregate_ret_struct_c_test, true);
+>> +
+>> +	/*
+>> +	 * Same 16-byte struct return, but from a global (non-static) callee:
+>> +	 * exercises the compiler lowering a global struct-returning function to
+>> +	 * R0:R2 and the verifier's global return path end to end. Also LLVM 23
+>> +	 * only.
+>> +	 */
+>> +	if (test__start_subtest("global_struct_c"))
+>> +		run_prog(skel_struct_c->progs.aggregate_ret_global_struct_c_test, true);
+>> +
+>> +	/*
+>> +	 * Same 16-byte struct, but returned by value from a kfunc: exercises
+>> +	 * the struct branch of check_kfunc_call() and the JIT RDX->R2 move.
+>> +	 * Also LLVM 23 only.
+>> +	 */
+>> +	if (test__start_subtest("kfunc_struct_c"))
+>> +		run_prog(skel_struct_c->progs.aggregate_ret_kfunc_struct_c_test, true);
+> this isn't a bug, but the "Also LLVM 23 only." note is repeated on each
+> of these per-subtest comments, and the run_prog() comment above already
+> states that programs built without R0:R2 support return -1 and get
+> skipped.  Could that note be stated once rather than on every block?
+
+Ack. Will do.
+
+>
+> Related, do the per-subtest comments need to name the specific internals
+> (bpf_ret_reg_pair(), check_kfunc_call(), "the JIT RDX->R2 move"), or
+> would a shorter note serve here?
+
+I guess I can rename these comments, function names themselves already have
+enough information.
+
+>
+>> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+>> index c36bb911defa7..34d0a352e70dd 100644
+>> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+>> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+>> @@ -55,6 +55,15 @@ struct prog_test_big_arg {
+>>   	__u64 b;
+>>   };
+>>
+>> +/*
+>> + * A 16-byte struct returned by value from a kfunc, returned in the R0:R2
+>> + * register pair.
+>> + */
+>> +struct bpf_kfunc_ret_ll {	/* 16 bytes: R0:R2 */
+> this isn't a bug, but the block comment already says the struct is 16
+> bytes and returned in the R0:R2 register pair, and the trailing
+> /* 16 bytes: R0:R2 */ on the next line repeats that.  Could one of the
+> two be dropped?
+
+Yes, will drop.
+
+>
+>> +	__u64 a;
+>> +	__u64 b;
+>> +};
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28973410219
+
