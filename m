@@ -1,105 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0859F3FC5CF
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 09:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED243F5BF3;
+	Thu,  9 Jul 2026 09:47:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783589132; cv=none; b=uRYdjk7m3hAZW3pz5vRfT21AMYV/m32zDIcFtAjvOjDAUzE5+lb79EkOv1aO8x9QgQI/4meghS9WZK77WO0Gry00r+GdzAfljn2AqtA7xhWizMhcrHY6XKpmEbeWr9svrGMIIodqeab3Yl9G/4MOfmM9kq9Y45VX21Lh4B+dA/w=
+	t=1783590437; cv=none; b=PaOmBMDKaRaxF7qqGw2oVAZbfEfONzmTcGQtGRCuCVZMrM3N52sFqhE8SmGaszgGViF4MlnmdnEXBZoCdPdFsJ4cggsSIelgkwZw4u05Eh4qAip083zIr6ZHE3pyUuM4okiyMsScCNKepnVsdbtwq8eAgksf+HJ2aICbiXI+FNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783589132; c=relaxed/simple;
-	bh=INljEtR9XuimqnnnM0cBOeMB6UbVuHZzfXfOlFCEE18=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RbzXjDUq6S85Wa6EvyDKYhOJDBTdSF9VPjyOSH65aYIHct20OlBzDOjp+T5K77k0E7Qc/gqWpFWiJ6L1V1gzBECP2qMa3gkepqoGcDUfd9T4KMTFu21XK4MoaSxm3ifFJW93cfzkW2SQ4hUeyXhoAe+E6yI9aqrXhSv6fyuUdYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bw0Y1lxj; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783590437; c=relaxed/simple;
+	bh=L33ZmEtAntdJq9G+RQNOid3OLGO0SzibP7boL0cJXZk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BILA0kmK7V7LXzeAGTtbjEJ3b9F7GiNtl9Bt6ehe7rmyfxAapiLyfV1SrURdNkbmF/NlpI+vS9BrboD8zXCBoMVb9y/KguFnr5vvb2W+tDJGqo+ZxSFLkkIRzZMsISDG9aazMtJclyPjD5lhAD7xJiOxrs4QFsZje3NNtRQRVc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=q0gbZXDX; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bw0Y1lxj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9EAF1F00A3D
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 09:25:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783589130;
-	bh=pZ+whLM1ddrhmsje/lOYyteKiFq3zY0rHsjFJw3yK/M=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=Bw0Y1lxjwAa0ERK7GDH3hMU2jFCmTJCUEMAGRudJaj0Lg6mFi5jV/xWHehRmEM54e
-	 WPoJuZqfmeWEm0w6bj7gbEe3JfR1wL/7yTMunFYyOpm4c5EwNhHlviDCy4W1b3u5Sk
-	 AOXHiBnvo7wyynvxZnjv/wcT8wfatN0UVrtVp3aJ9uV1cLA1JeXwU8mSQxELkoJwNG
-	 6+ac45FIyqdteyMv9Q1+GhC4Ji9ZfsJiVmEpsPreU0wFcHA+O0VxDTPh61vErUrqum
-	 haIQ89PaprkeZM3Bnz5POfYJ7GZczCrGMLCSlaj/cHxVmLRK293wqPSv0s10R1G8sK
-	 gbhJqnvkFvTKw==
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-698ae09e356so945482a12.2
-        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 02:25:30 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+Ropy0vNt8POWCIMW2H5RPKUeAUrz91rryySxJpO77IfQOxLl0EvKIOaDJlJEF7xgEWT3HE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+Pj6BZr9z93l34s/CizejOmUjO5dnuzGbtp/F5qbChBTqtVSE
-	cN2i3/wpEAXG9pShXkaesymrjIi02fU/042CwSTXrOIVQ1Vri+PjzFVGHXeyn5hwoZPqR/gXhmL
-	ExaPWkk9/PON7brAlj/zzDZDiiq31uaY=
-X-Received: by 2002:a05:6402:e8d:b0:69a:a036:e164 with SMTP id
- 4fb4d7f45d1cf-69ab4493b99mr2574789a12.25.1783589129333; Thu, 09 Jul 2026
- 02:25:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="q0gbZXDX"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=xT9YDdIetGp8YBUHJqc9YfcejpsTesscK5wLIdgieSg=; b=q0gbZXDXRPbjBGit2CkmDZ1gRo
+	lQSy0YFfsTbvyRAovLP031sFpX2dP07SYZdox2MJ8kXxzxKXUEmiOGS+j/D8hX3IiPOCbelVFLw+n
+	tXRqIs/LC6JUPxfNa4ymvcaJyGO0SGjJGDOZPKoCDg+kSQTI/DY1z2ACyFg8zF+Rs8n/AeLixhUDx
+	Tv9IzrL3G7O/tTxLk6EpoYE5RjK9JnUyNAlTx3z3F3JngOCyxHI2pL3cVTSziIPR71aSkhwSMiS91
+	F4UqSZEJqLMBAzgb4JkCFYsajM5tV8Dav6uPwzTht3Yx41RiZTp1hTwojJaXz5ZTr+LOSLDTyHlVG
+	qD3upM2Q==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1whlLa-000A66-0k;
+	Thu, 09 Jul 2026 11:47:10 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1whlLZ-0002NR-0o;
+	Thu, 09 Jul 2026 11:47:09 +0200
+Message-ID: <a5adfd8c-3aba-4158-9491-5aae324fe1c8@iogearbox.net>
+Date: Thu, 9 Jul 2026 11:47:09 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260707101508.32283-1-yangtiezhu@loongson.cn>
- <5c81752f-5c57-47c4-afad-7cef78729feb@iogearbox.net> <054a69e5-c497-d8de-6acd-1625333d0ca8@loongson.cn>
-In-Reply-To: <054a69e5-c497-d8de-6acd-1625333d0ca8@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Thu, 9 Jul 2026 17:25:55 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H55YcyXRewC+0YzTHXb1jab0GkAV13EF9nFbTx=UkX4ww@mail.gmail.com>
-X-Gm-Features: AUfX_mwfnNTVafM0_AL0AV1DHSYXFI2uglDgd1xN9bSw3VK9g5Lg-9qKZrX_qYQ
-Message-ID: <CAAhV-H55YcyXRewC+0YzTHXb1jab0GkAV13EF9nFbTx=UkX4ww@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 0/4] Fix and optimize BPF tailcall for LoongArch
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, Hengqi Chen <hengqi.chen@gmail.com>, 
-	loongarch@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Huacai Chen <chenhuacai@kernel.org>, Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260707101508.32283-1-yangtiezhu@loongson.cn>
+ <5c81752f-5c57-47c4-afad-7cef78729feb@iogearbox.net>
+ <054a69e5-c497-d8de-6acd-1625333d0ca8@loongson.cn>
+ <CAAhV-H55YcyXRewC+0YzTHXb1jab0GkAV13EF9nFbTx=UkX4ww@mail.gmail.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <CAAhV-H55YcyXRewC+0YzTHXb1jab0GkAV13EF9nFbTx=UkX4ww@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28055/Thu Jul  9 08:25:20 2026)
 
-Hi, Tiezhu and Daniel,
+On 7/9/26 11:25 AM, Huacai Chen wrote:
+> On Thu, Jul 9, 2026 at 5:15 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>> On 2026/7/9 下午4:58, Daniel Borkmann wrote:
+>>> On 7/7/26 12:15 PM, Tiezhu Yang wrote:
+>>>> Based on 7.2-rc2, tested on a Loongson-3A6000 physical machine.
+>>>>
+>>>> Here are the test results:
+>>>>
+>>>>     $ sudo modprobe test_bpf test_suite=test_tail_calls
+>>>>     $ dmesg -t | tail -1
+>>>>     test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10
+>>>> JIT'ed]
+>>>>
+>>>>     $ sudo ./test_progs -t tailcalls | tail -1
+>>>>     Summary: 1/37 PASSED, 0 SKIPPED, 0 FAILED
+>>>>
+>>>> v2 -> v3:
+>>>>     -- Patch 1: Add Fixes tag.
+>>>>     -- Patch 2: Update the commit message and add Fixes tag.
+>>>>     -- Patch 3: Update the commit message and add Fixes tag.
+>>>>     -- Patch 4: Condense the code comments and update the commit message.
+>>>>
+>>>> No code changes.
+>>>
+>>> Tiezhu/Huacai, do you want us to route these via bpf-next tree?
+>>
+>> Hi Daniel,
+>>
+>> Yes, routing via bpf-next looks better to me
+>> because it is updated much more frequently,
+>> allowing developers to rebase quickly.
+>>
+>> However, Huacai usually takes LoongArch BPF
+>> JIT patches into the loongarch-next tree.
+>> Let's hear his thoughts on this.
+> Yes, I indeed prefer to take these patches into the arch tree, which
+> is similar to powerpc.
+Ok, sgtm, then I'll toss them from our queue.
 
-On Thu, Jul 9, 2026 at 5:15=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn>=
- wrote:
->
-> On 2026/7/9 =E4=B8=8B=E5=8D=884:58, Daniel Borkmann wrote:
-> > On 7/7/26 12:15 PM, Tiezhu Yang wrote:
-> >> Based on 7.2-rc2, tested on a Loongson-3A6000 physical machine.
-> >>
-> >> Here are the test results:
-> >>
-> >>    $ sudo modprobe test_bpf test_suite=3Dtest_tail_calls
-> >>    $ dmesg -t | tail -1
-> >>    test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10
-> >> JIT'ed]
-> >>
-> >>    $ sudo ./test_progs -t tailcalls | tail -1
-> >>    Summary: 1/37 PASSED, 0 SKIPPED, 0 FAILED
-> >>
-> >> v2 -> v3:
-> >>    -- Patch 1: Add Fixes tag.
-> >>    -- Patch 2: Update the commit message and add Fixes tag.
-> >>    -- Patch 3: Update the commit message and add Fixes tag.
-> >>    -- Patch 4: Condense the code comments and update the commit messag=
-e.
-> >>
-> >> No code changes.
-> >
-> > Tiezhu/Huacai, do you want us to route these via bpf-next tree?
->
-> Hi Daniel,
->
-> Yes, routing via bpf-next looks better to me
-> because it is updated much more frequently,
-> allowing developers to rebase quickly.
->
-> However, Huacai usually takes LoongArch BPF
-> JIT patches into the loongarch-next tree.
-> Let's hear his thoughts on this.
-Yes, I indeed prefer to take these patches into the arch tree, which
-is similar to powerpc.
-
-Huacai
->
-> Thanks,
-> Tiezhu
->
+Thanks,
+Daniel
