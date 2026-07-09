@@ -1,170 +1,111 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590103446CB
-	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 15:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CEF62DB78B
+	for <bpf@vger.kernel.org>; Thu,  9 Jul 2026 15:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783610169; cv=none; b=O0WOiCEYu8b7L7UuhgqylJxbXleaf3ZZhsnonK9QB/FaAvtT5MhdZ7k6OXpS+XcVDB3ymdxytdsU/ymi6W4Qwjbwy7BZ/ZNA/AJdcyrQhHaBcLKVcBIrQtEParjakaZojm80Uiouov6OE2vMuiKKaXc1LNKhAOhp21cCBLFGOm4=
+	t=1783611097; cv=none; b=lsQD4ek8GZ+g5JIXE80xM3rsbX3gtBI3NKEVQTbwTwRbFEvOooWrYWdsKeAPOn7M4jiscwLud0amC0wuew27UOImjZ6efA5khISLnqzVcCWTUoBedAW4kcADzR/8eTNUvN7LYmKxujS7Sl9/UWBPnpcVKQhKh4DY5tWTlEfPy1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783610169; c=relaxed/simple;
-	bh=XlDVHbbqaybpQbgdbUDPIbkf0uGmKfP/dfOP7mDZykg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YVmlCu9OWX6Ijn43JjsFWJhj6XrPff4nTISIVxB8aIaYQEA9B1S92FA5n/QVymA6a/AOkrDp72sJdlba+4R+laFtIDECKZ7EZWfnk+dLH3stzg+937rbZTSJFjznlMx5+uTnJebUJf0CvSF1EvghdWk/A+PrG+zpRYfDV3IDQ+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TtmEGfjn; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783611097; c=relaxed/simple;
+	bh=ffYKnvNMgDILkQQ6R2JzR3raRnZZ/rTOBb6FYmGpSYE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q4LdAW9cMkJCufoj4iHqu9EgMJSdhFBoqXcsPxpQtUbMyJpoNLddaYZTpHqeqE+H/WkklOcmXRdXd0VNW0LbClkikFJNE+/lCroGtvsQ8pFrzvkUCXhXzwpoIghF7JGpwTZp+Z29tT8na9cksCKKQGLNx4X3GfU/guRUDENEHdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=GCeSx9RK; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TtmEGfjn"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-493b77b150aso16261135e9.2
-        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 08:16:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783610167; x=1784214967; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NFYmaVP7IkRtJHTG1nFkCzplQnsxbW+oLvmDOphxNFk=;
-        b=TtmEGfjnuZbNyjdnhx7h+56C45c9LADdOKagvcq5Xq3lwQS1eaxgnZyCU22YDd7vSx
-         ZVBh1VhkwqELT2Cts99ulgHefShJ47NsUVlgp7ffhV+A4f+ii/DCJZR395wmYx9MGXRA
-         8j5ZI0KEf3QVVVaHeCAtgeWSAut+weWicbKuGZEgL4gDg+0yErA/Y/E39JfGUCRfPAsM
-         ujSFYqTL+2zlza+Wea/UHOlTsTouzhWTtJm0iFn9sJHey6HUqPiqoYG2ahpXY0120Pds
-         Kf5OZH88CgjBmTTB9GTalhE44InEBWAVWje51jPmLP70lxv6MtnYWENLpJK1NGfpKnfO
-         +ZvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783610167; x=1784214967;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=NFYmaVP7IkRtJHTG1nFkCzplQnsxbW+oLvmDOphxNFk=;
-        b=WAJ3CyPsq1TSOdde6hqE/cPQvmd0Cux9IdVYGeM4R26FbDuBKeA4byVfPn9WZ52/Pb
-         CEqq5Vth90Jt13RnZ2pRWzc76qkP/vEajLDvY2+OH1vNGFRx4RTj+gy/7mspfe/f8hXZ
-         qzkohte9gD7ldhCRkpkQ1M/vPCVdlqjIDAQj5LenrAga88kvyS+/2b4i3O5jiiX2kZCj
-         jhJZHHfjkLQR4iyDUCTawRgp6Zd3/g9CabNZqHpYnyhBx439GUXByZqpYzg0Ymve+C24
-         MNpQKd8ZiV0vYBTBPTFvEGayk1XVJJWs6sAnCbIrsP0udl8670UeBpU3HsKTYcnEVwPX
-         vc2w==
-X-Gm-Message-State: AOJu0Yx4FNmZe36C35mjMBUeT8H9ToKd+2lrHJ25/lDOE4p1KJ/7oGEy
-	h0HHPPhPJDrem9uRcYzquh7fklR3fGRoGinGka+BxPaSIyXkNHgYzSMD3e50iCYjoBE=
-X-Gm-Gg: AfdE7cklN2OwQD2AXp4H+2h/EGczFFb8pYJQ+cgajymPUmelskyOpzGmukzL6zvrKfF
-	5DfV59wA7v78YF7sirt74bJ7oZUW8HjwgsdpsfahamVrPTxLGTT9kk9pnZXQulyiMNCNC1O3y5p
-	bdG8QURL+UFBA1WVRDol304wR+dLlmzo+N+HBpQoaZElKIjsqbotE0qTe7Co7MuJwayVYlVbBUF
-	iMBjiFSaLUMct9xwUKafj/JLwJX+FJ+ojPlPLVmveFfi4QAYcHt5yaN2jg4+faSVAZCjXIxpBQ2
-	tb1KYVh11vbdoS3spIs5oCbjPPdRWUBlISG3zGdBRNxRk3dHCDc+hqg0U22/xPxe+8sDqISAvcQ
-	VUarJka+IIJBTDnlqq/VkINtG5vI66jXU9VyKqOHD75eSFNTL3AbGAjLkE6BHSg6mfl5Km+8C9g
-	xgQUmKL1lsZVtc8PNYbl2zU1ia+O8jZ1cbW3/LElBUahf+
-X-Received: by 2002:a05:600c:821a:b0:493:a570:df7d with SMTP id 5b1f17b1804b1-493e68bef51mr76105255e9.20.1783610166609;
-        Thu, 09 Jul 2026 08:16:06 -0700 (PDT)
-Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47aa039ad21sm50983155f8f.20.2026.07.09.08.16.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 08:16:06 -0700 (PDT)
-Date: Thu, 9 Jul 2026 17:16:04 +0200
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v11 5/5] selftests/bpf: add bpf_icmp_send no
- route test
-Message-ID: <ak-7NIJ5wkBjvHTd@gmail.com>
-References: <20260709144900.245904-1-mahe.tardy@gmail.com>
- <20260709144900.245904-6-mahe.tardy@gmail.com>
- <20260709150010.672651F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="GCeSx9RK"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=ph0D6DVrkT0iq0ujgtBEyoUZhLb+P7+h7gdkGkD3pIs=; b=GCeSx9RK3h5j2R3M14KJJZKHTo
+	XyTWh3XCatv4OVYpZthl1dkdlarUe0nAtEU4UiuqJBAgzl7hcx5li+8WGo5F0yWerIHXEz7nF8jBw
+	O4BkIKqR+MSU+x3tl8fvmoHfgR1njKPymET8zRX82K8Gd8YTekQOIintGmANQ4y28ZFebRiUvNJoU
+	UBJVa7IYB0kDO7vTXCJCg56PtAQ79LQy+QiVY3klXaw1zeidLZ/Bl6JQpgBXknhIwcZpircAyVdPM
+	F+X+pN5weXsiAKcyIj9Ah0xHVVnGY/C4b2s9557EzBT20RGgKfRCV8OFbS4X5u7pf0RJWD2Pg1Kmo
+	VlrpKjkg==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1whqiq-0007da-0G;
+	Thu, 09 Jul 2026 17:31:32 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: eddyz87@gmail.com
+Cc: puranjay@kernel.org,
+	memxor@gmail.com,
+	yonghong.song@linux.dev,
+	info@starlabs.sg,
+	bpf@vger.kernel.org
+Subject: [PATCH bpf-next 1/2] bpf: Drop scalar id on sign-extending narrowing stack fills
+Date: Thu,  9 Jul 2026 17:31:30 +0200
+Message-ID: <20260709153131.386599-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260709150010.672651F00A3A@smtp.kernel.org>
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28055/Thu Jul  9 08:25:20 2026)
 
-On Thu, Jul 09, 2026 at 03:00:10PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] The run_icmp_no_route_test subtest suffers from state pollution because it fails to reset skel->bss->unreach_code, passing stale or invalid ICMP codes to the BPF program.
-> --
-> 
-> --- Patch [5]: [PATCH bpf-next v11 5/5] selftests/bpf: add bpf_icmp_send no route test ---
-> commit 43111be9123ff27205045da2a59f2daf8fc9a986
-> Author: Mahe Tardy <mahe.tardy@gmail.com>
-> 
-> selftests/bpf: add bpf_icmp_send no route test
-> 
-> This commit adds a test to verify that the bpf_icmp_send kfunc returns
-> -ENETUNREACH when a test run is performed on an skb without a destination
-> route.
-> 
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> > index bb532aa0d1580..9318d4bc7ce8b 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> 
-> [ ... ]
-> 
-> > @@ -169,6 +169,49 @@ static void run_icmp_test(struct icmp_send *skel, int af, const char *ip,
-> > +static void run_icmp_no_route_test(struct icmp_send *skel, int af)
-> > +{
-> > +	union {
-> > +		struct ipv4_packet v4;
-> > +		struct ipv6_packet v6;
-> > +	} pkt;
-> > +	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-> > +		.data_in = &pkt,
-> > +	);
-> > +	int err;
-> > +
-> > +	switch (af) {
-> > +	case AF_INET:
-> > +		pkt.v4 = pkt_v4;
-> > +		pkt.v4.iph.version = 4;
-> > +		pkt.v4.iph.daddr = htonl(INADDR_LOOPBACK);
-> > +		pkt.v4.tcp.dest = htons(80);
-> > +		opts.data_size_in = sizeof(pkt.v4);
-> > +		skel->bss->unreach_type = ICMP_DEST_UNREACH;
-> > +		break;
-> > +	case AF_INET6:
-> > +		pkt.v6 = pkt_v6;
-> > +		pkt.v6.iph.version = 6;
-> > +		pkt.v6.iph.daddr = in6addr_loopback;
-> > +		pkt.v6.tcp.dest = htons(80);
-> > +		opts.data_size_in = sizeof(pkt.v6);
-> > +		skel->bss->unreach_type = ICMPV6_DEST_UNREACH;
-> > +		break;
-> > +	default:
-> > +		ASSERT_FAIL("af_not_supported");
-> > +		return;
-> > +	}
-> > +
-> > +	skel->bss->server_port = 80;
-> 
-> [Severity: Low]
-> Does this leave skel->bss->unreach_code uninitialized for this test?
-> 
-> Since the run_icmp_no_route_test subtests share the same BPF skeleton as the
-> previous run_icmp_test subtests, if they run after the ipv6 subtest,
-> unreach_code is left at 7 (max_code + 1 from testing invalid codes).
-> 
-> For no_route_ipv6, code 7 is passed to the kernel, which is an invalid ICMPv6
-> code (max is 6). The test currently passes only because the kernel's
-> bpf_icmp_send implementation checks for a missing destination route and returns
-> early before validating the code parameter.
-> 
-> Would it be better to reset skel->bss->unreach_code to a valid value here to
-> prevent test state pollution?
+When a spilled scalar is filled back with a sign-extending narrowing load
+(BPF_MEMSX), check_stack_read_fixed_off() copies the spilled register
+including its scalar id, but coerce_reg_to_size_sx() then sign-extends the
+filled register's value. If the same slot is also filled with a plain
+zero-extending load (BPF_MEM), both destination registers share the id yet
+hold different values. A later 'if <zext-reg> == const' then refines the
+sign-extended register through sync_linked_regs() to a value it does not
+have at runtime (e.g. the verifier believes 0x80000000 while the register
+is 0xffffffff80000000), which can be turned into an out-of-bounds access.
 
-I'd say it's indeed not a big deal since the test triggers a check that
-is before it reaches the EINVAL, but would be more theoritically correct
-to reset to 0 for both v4 and v6. So mostly a nit.
+Drop the shared scalar id at the sign-extension site in check_mem_access()
+when sign extension actually changes the value, mirroring the BPF_MOVSX
+handling in check_alu_op() (no_sext = reg_umax < 2^(size*8-1)).
 
-> 
-> > +	skel->data->kfunc_ret = KFUNC_RET_UNSET;
-> > +
-> > +	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.egress), &opts);
-> > +	if (!ASSERT_OK(err, "test_run"))
-> > +		return;
-> > +
-> > +	ASSERT_EQ(skel->data->kfunc_ret, -ENETUNREACH, "kfunc_ret_no_route");
-> > +}
-> 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260709144900.245904-1-mahe.tardy@gmail.com?part=5
+Fixes: 3cd5c890652b ("bpf: Let the verifier assign ids on stack fills")
+Reported-by: STAR Labs SG <info@starlabs.sg>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Puranjay Mohan <puranjay@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>
+---
+ kernel/bpf/verifier.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 233472a871be..a0830ad6bebb 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6394,11 +6394,23 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
+ 
+ 	if (!err && size < BPF_REG_SIZE && value_regno >= 0 && t == BPF_READ &&
+ 	    regs[value_regno].type == SCALAR_VALUE) {
+-		if (!is_ldsx)
++		if (!is_ldsx) {
+ 			/* b/h/w load zero-extends, mark upper bits as known 0 */
+ 			coerce_reg_to_size(&regs[value_regno], size);
+-		else
++		} else {
++			/*
++			 * Sign-extension can change the register value relative
++			 * to a scalar it is linked with by id (e.g. a zero-
++			 * extending fill of the same spilled stack slot), thus
++			 * drop the shared id in that case.
++			 */
++			bool no_sext = reg_umax(&regs[value_regno]) <
++					(1ULL << (size * BITS_PER_BYTE - 1));
++
+ 			coerce_reg_to_size_sx(&regs[value_regno], size);
++			if (!no_sext)
++				clear_scalar_id(&regs[value_regno]);
++		}
+ 	}
+ 	return err;
+ }
+-- 
+2.43.0
+
