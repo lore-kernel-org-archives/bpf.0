@@ -1,63 +1,63 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFA0135F163
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 23:43:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4B940861C
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 23:51:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783727031; cv=none; b=qwgqLov5YYFA1PzUce+9dHKyjEGPskMPj1shnL5Ff/FUPgkxrrPd1vFk6/97LFdIAdC0Fmwo6O8Gfgn+eAUHPAjLa5o0jce+wijtrPkMRDbkKaITqDS7kW6U6v2J9VM5Tyv4T4F2glZ8kddqoOEUv1Umb8GNfzHmKv1uuCL8TNs=
+	t=1783727504; cv=none; b=BqDlGPKXCt+dl9rKiHXqigSJ5p5FmAb4+/F4Sa1bFSKJcvx49QPjtXdbKmBN4tuiJUaRQAduopQWNdJuNy3P8/oNRnnrwvoNkYMvsFgHVadJ6oHtPRSY9ohW5yEjdZe8q/tiDnBINeVTHrrMRKIXaY3lh7V4BRjgZhDemdBC8ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783727031; c=relaxed/simple;
-	bh=PK5r5CSk1B7XeUp5Kcu4wbVddW3ItH3De22ETA07fPU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=Esbal1BCGTmdOdnycYk9faXC7DGNAdwlWL/qvZuTaG5KcRt0zlzXe/kJOuNBOJHYnkc7OmdDIOrVT6Elv6ofw6DuSdU+nSxUdXwotj9USqWuVAGRG+zRIGczKX5nBuMdaneg+zT51x/O4jxMZtpmvC9y6yIUf4v3MV3z2MuNwyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=eXxlp/9z; arc=none smtp.client-ip=209.85.215.175
+	s=arc-20240116; t=1783727504; c=relaxed/simple;
+	bh=M2LYlek18/SB1FwIlRPhotmjnWvh7cFNxln01OnmkGw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=ak0seMscpFM1Nrh4/VcnMoBpiZluHVuGJRwj9CCvSKclJi1Qo0H/kXpXbbmPZh73FcVAsMsiT2w61a/x8iAO2rzRNRa6i4Z5dSS22OC3rqgRecWxlQDZf95dQMMLcn0bv73g+hbyfBywRUtv+GQNY70IOjjHXmmO4RBW9B95aMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=KH47oWZ1; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="eXxlp/9z"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c88a4d79ba5so1050793a12.2
-        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 16:43:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="KH47oWZ1"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-382a3fe0d28so1528148a91.0
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 16:51:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783727029; x=1784331829; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783727502; x=1784332302; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=PK5r5CSk1B7XeUp5Kcu4wbVddW3ItH3De22ETA07fPU=;
-        b=eXxlp/9zbJH1NNXJoKalDj9nnLDgfTOKUABHWnM/0+62h7sUYpdCw1eOrk2yS1b73T
-         guJxaYzkVcM3LJghLUtF5Cw98J2RCbJuhAMgA25WMOap7k3w3XKw+HC8E702D43E6Kkc
-         kSFOpH+WeS/1X7MibV7yGLvAMdkwoXUdaMbyWLU33u6DZWj2Bxm5ZH9WrN/HPFf2m3Ux
-         2+ITubGyij/mXxftxC6Cp3Nlc7SYPiItssU9zDme5oSgu4noM5R4DTz72SB9H4wkf9K4
-         7Hh3NMaSJXIPpUu7Gj21IDQWE6moayQ5i7+UMVqITx+zzm++WbkUl9DaBLJyt1Kw0WQh
-         oCqA==
+        bh=xDBJh71NIluoymLki2hOB+D5KgIyGHjvz4ujUNdEcn4=;
+        b=KH47oWZ18i/LgduI8L7UBaGdwVnIf2X2DRcPUY98OOutSoGhj0RZmUetyAAVakLxmR
+         5SHjkaSTI9xvil3x6Q3zpaRSAS8WBVib1MnACihoUkxu+LmVIbGdvB/aTws1YorqN3l0
+         X8buaU3qsPupv5LD1yYnCh5A5cfEa8Row3XzhcWXxbK4H+AZnuB/d0jLr390zRzzbN16
+         Jsd/PlAv3oir1AT7//RXZTw6tMMxVzqeR/HUyAJg6PmZa3N4OFrsa2kRkAUToM4hZKY6
+         EVEgCy6pUZCdYuGWjR4fcSlYVKX5lDMQ4MvjUC5hHojx+Z2SGngDIiHcGc2kTn+E6S2x
+         5SQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783727029; x=1784331829;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20251104; t=1783727502; x=1784332302;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=PK5r5CSk1B7XeUp5Kcu4wbVddW3ItH3De22ETA07fPU=;
-        b=d1dzp6rk/iF8dmJQOxoGJceBaSZWZdmUfexZMvY2+DwuwkOGBxUSqlHt8X0YsylQOP
-         +0UiMTLqhsB3pK9kxTivbdNv27vPAEVRNMiynvfQl83Sb59gsX4USNQI040S6nWc8ELD
-         YJAh56niV31UPsbq3iDGgUnRBY+i8PCRMifHPgfM3MwBZmg9O8G1/AlCjkbKaFXqn+RL
-         9bsJtp/NQ2uiEGgZ48wIyuvE1xJAGjvylZtFDVq5P4P+EVmYzs1UX+lnkN7jX1wqASl0
-         /xV5icXAQpAkZdYuzgO94b+DUBNllAwTgr2WfwVS7RgrXpRhnlzHNY6WTeAedNyUd7xL
-         ja5Q==
-X-Forwarded-Encrypted: i=1; AHgh+RrnxHRvTEpOU/A4pUNFsY+xSlCTaz7pdJeOCIhOHea4nynkYJFPdjH2aFk8DpQGx1ZqIO8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKWu1+q6c/fDIFekU2pMkCN1Uce0hj9MQrYoSfbo4c4pW4MQbX
-	fCpmIAbCuAfnGNXj7i1p0Ou5a4KgF4Sd6jZlnDBMhii8Y+kFsU5eDQUnHrDUp9NQOqs=
-X-Gm-Gg: AfdE7cn/tzc5EfhHmK7qzKPbS6Q6024IoHLKuYLAXsb/AEsJ+ytCFb5HKl+HbAvqi3T
-	Uy5ILRAG4FfMrOb9ISovfWeTlo/e4sDoeBnRXlfwvqyLYK3v9gLcd7ZaKwijN/hCYvJ6ZuPeo7W
-	ofO5da7d1flHcnzuUMiNsoshkLsWLL/dCsbw+wO/VCbYsgdpp4/ZkPBJDBDVH9samO/V5lV9qyC
-	370Mv+vbydW3uJmnHrBnl+Ti3FmnEmu2eOigOqJx1l28IdvLE7rYKnMhTZpVr/oPw0LCI6Qtbe2
-	NTcJMuf+ecKtdL/7nPG2G+NhUgwukJyfVzq9tbebTRkPZhxTGnsslQgQDcFK1YzQeWimEPGZv+n
-	FnJjvfxWR0n8B+op1DpAi6ijn73edLQyIT3lWtlKqz/1IhtMw0Ep9UPNF1okf+k52oaF+Jg==
-X-Received: by 2002:a05:6a20:d489:b0:3bf:6c08:fba4 with SMTP id adf61e73a8af0-3c110ba29f4mr1116014637.56.1783727029145;
-        Fri, 10 Jul 2026 16:43:49 -0700 (PDT)
+        bh=xDBJh71NIluoymLki2hOB+D5KgIyGHjvz4ujUNdEcn4=;
+        b=AqSM8NXzhilc4+EGIB+NbLdVrr8ZcsCTG7u9PSLEGI0l7j8Sko8XFkA7pq532L9Frl
+         THnorS7XPEtoHhcARTe1AXq9xQQLdFBF30BuQr1HLYk+HjzS+If0R8so3K9VoGiKFG0M
+         wMCU8JbAWUGnaAMkwGbVchbJXmBN/KGaUL3mgwD1Yy3z1uluD+bJl6F+A9QgeuoPzIOc
+         QPh1dKOhVMElI6yf6jqc792kI/c5enxtXKarroi4fQgqhqAbuXfAxnwNfixpruJV8Gwj
+         l55F7+YwZhkQdv97tl76UMAvbUjQfgx/2xOfvRuqTAV+OBxrQxb7fkaFtgX1PdZncKo2
+         uAtw==
+X-Forwarded-Encrypted: i=1; AHgh+Rqw7PSVcdvs0jAdsgGyjbgRwpj03PXS1XnG2FWU7Hp2l2CyTtd5CgaRIkx3YiMoFCLc4PY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/sJCyVwa7irxSg2Xp0Hylh+IU8FLlgGYHh+0RMmNe6gKWr0fy
+	9aw7NWfwXijTETHYS3F9XaIqSvdvlxZuvQXHya4G51KyZ14mQTHKVpuLjNUu6YnSEHQ=
+X-Gm-Gg: AfdE7cnHjaQkH042mSkFE1uExLXsfo/Uai5IgYq3Mf2I+XhCo+3X2nlirhCf238VEGz
+	OHa39dEIo4isTUIMT9QesW7HKVmptJPLWq18InlkSgrvoZ3obZoAr5ZC3sLHdsyZUSuRYoaAPTs
+	K6hnahCyFYRgKR+qQ33i0Fx0jbFG2NhqlPRbPtMO7E8mcbrzDqMxWYL65vaq2ieelqSBXE0+Vgt
+	kYHZyy0g8PCO16bd3z7wLmROt2v3mjKSI2G/6+eJts56Q0e6ItoTAOAdPWF5xP7RVdjtl/90Ga9
+	DSQu4IdliDyuqYZtZtk9ah8JcHuI+0cetJluhScszKuzjmINGKZ8BqmDrl66gNv6vtFSPN4WMRw
+	+oyPBuK13FT9i386qKyruZ3EMmfNpgi0ypLuJMkcCRcO8plxo8doBChTLSqYAzLqErJVrhQ==
+X-Received: by 2002:a05:6a20:3d02:b0:3a2:dc51:458 with SMTP id adf61e73a8af0-3c110be6e17mr1117243637.41.1783727502204;
+        Fri, 10 Jul 2026 16:51:42 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:600::6185])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-313b9ca880fsm4980155eec.23.2026.07.10.16.43.48
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b659c8665sm44079029c88.10.2026.07.10.16.51.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jul 2026 16:43:48 -0700 (PDT)
+        Fri, 10 Jul 2026 16:51:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,38 +66,153 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 10 Jul 2026 19:43:47 -0400
-Message-Id: <DJVAGK2ZNM3C.HAVUMJES6MGY@etsalapatis.com>
-Cc: <sashiko-reviews@lists.linux.dev>, <bpf@vger.kernel.org>,
- <sched-ext@lists.linux.dev>
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: Require a BPF cpumask for
- bpf_cpumask_populate()
+Date: Fri, 10 Jul 2026 19:51:39 -0400
+Message-Id: <DJVAML1EF9NM.3GAXGFLUZB5GW@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: test
+ bpf_cpumask_populate() rejects a borrowed cpumask
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Admin"
- <main.kalliope@gmail.com>
+To: "Nicholas Dudar" <main.kalliope@gmail.com>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>
+Cc: <tj@kernel.org>, <void@manifault.com>, <arighi@nvidia.com>,
+ <changwoo@igalia.com>, <bpf@vger.kernel.org>, <sched-ext@lists.linux.dev>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
 References: <20260709182800.2037938-1-main.kalliope@gmail.com>
- <20260709182800.2037938-2-main.kalliope@gmail.com>
- <20260709183918.E42371F000E9@smtp.kernel.org>
- <DJV4TO9OH6AN.58C10SBPE8FF@gmail.com>
- <CAJZwKki8MwOmij3JZK=KnnO0hEUuxWA-iY=GK-TtvtVRvOkjOA@mail.gmail.com>
- <CAP01T76KdhEsbZj8yZN-yg5ogx99Ud87qqrhOGXTrX1ALdAgyg@mail.gmail.com>
-In-Reply-To: <CAP01T76KdhEsbZj8yZN-yg5ogx99Ud87qqrhOGXTrX1ALdAgyg@mail.gmail.com>
+ <20260709182800.2037938-3-main.kalliope@gmail.com>
+In-Reply-To: <20260709182800.2037938-3-main.kalliope@gmail.com>
 
-On Fri Jul 10, 2026 at 4:34 PM EDT, Kumar Kartikeya Dwivedi wrote:
-> On Fri, 10 Jul 2026 at 22:17, Admin <main.kalliope@gmail.com> wrote:
->>
->> On Fri, Jul 10, 2026 at 3:18=E2=80=AFPM Kumar Kartikeya Dwivedi
->> <memxor@gmail.com> wrote:
->> > Once this lands, please send a follow up to address this.
->>
->> Thanks. Patch 2/2 covers this, which updates the cpumask_common.h
->> declaration to take struct bpf_cpumask *, drops
->> the struct cpumask * casts from the existing populate tests, and adds
->> the borrowed-destination rejection test.
+On Thu Jul 9, 2026 at 2:28 PM EDT, Nicholas Dudar wrote:
+> bpf_cpumask_populate() now takes a struct bpf_cpumask *, so update the
+> kfunc declaration and drop the struct cpumask * casts in the existing
+> populate tests. Add test_populate_borrowed_destination, which passes a
+> borrowed task->cpus_ptr and asserts the verifier rejects it as a writable
+> destination.
 >
-> Ah, my bad, makes sense. Let's just wait for others to ack it then.
+> Signed-off-by: Nicholas Dudar <main.kalliope@gmail.com>
+> Assisted-by: Claude:claude-opus-4-8
 
-Patchset looks good to me, and is consistent with the "mutation requires
-passing bpf_cpumask, reading requires plain cpumask" throughout the
-file.
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+One thing that'd be nice is an explicit test that checks modifying the
+cpumask being returned by scx_bpf_get_idle_cpumask, since this was the
+motivation in the first place. But we don't have a sched_ext test in
+selftests/bpf, so it's not worth the complexity. Since what we're really
+testing is that bpf_cpumask -> cpumask conversions are acceptable but
+not the opposite, I think the tp test suffices.
+
+> ---
+>  .../selftests/bpf/progs/cpumask_common.h      |  2 +-
+>  .../selftests/bpf/progs/cpumask_failure.c     | 23 +++++++++++++++++--
+>  .../selftests/bpf/progs/cpumask_success.c     |  6 ++---
+>  3 files changed, 25 insertions(+), 6 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/cpumask_common.h b/tools/t=
+esting/selftests/bpf/progs/cpumask_common.h
+> index 86085b79f5ca..8fe01308d210 100644
+> --- a/tools/testing/selftests/bpf/progs/cpumask_common.h
+> +++ b/tools/testing/selftests/bpf/progs/cpumask_common.h
+> @@ -61,7 +61,7 @@ u32 bpf_cpumask_any_distribute(const struct cpumask *sr=
+c) __ksym __weak;
+>  u32 bpf_cpumask_any_and_distribute(const struct cpumask *src1,
+>  				   const struct cpumask *src2) __ksym __weak;
+>  u32 bpf_cpumask_weight(const struct cpumask *cpumask) __ksym __weak;
+> -int bpf_cpumask_populate(struct cpumask *cpumask, void *src, size_t src_=
+_sz) __ksym __weak;
+> +int bpf_cpumask_populate(struct bpf_cpumask *cpumask, void *src, size_t =
+src__sz) __ksym __weak;
+> =20
+>  void bpf_rcu_read_lock(void) __ksym __weak;
+>  void bpf_rcu_read_unlock(void) __ksym __weak;
+> diff --git a/tools/testing/selftests/bpf/progs/cpumask_failure.c b/tools/=
+testing/selftests/bpf/progs/cpumask_failure.c
+> index 4c45346fe6f7..74b4cd4bcdbb 100644
+> --- a/tools/testing/selftests/bpf/progs/cpumask_failure.c
+> +++ b/tools/testing/selftests/bpf/progs/cpumask_failure.c
+> @@ -231,7 +231,7 @@ int BPF_PROG(test_populate_invalid_destination, struc=
+t task_struct *task, u64 cl
+>  	u64 bits;
+>  	int ret;
+> =20
+> -	ret =3D bpf_cpumask_populate((struct cpumask *)invalid, &bits, sizeof(b=
+its));
+> +	ret =3D bpf_cpumask_populate(invalid, &bits, sizeof(bits));
+>  	if (!ret)
+>  		err =3D 2;
+> =20
+> @@ -252,7 +252,7 @@ int BPF_PROG(test_populate_invalid_source, struct tas=
+k_struct *task, u64 clone_f
+>  		return 0;
+>  	}
+> =20
+> -	ret =3D bpf_cpumask_populate((struct cpumask *)local, garbage, 8);
+> +	ret =3D bpf_cpumask_populate(local, garbage, 8);
+>  	if (!ret)
+>  		err =3D 2;
+> =20
+> @@ -260,3 +260,22 @@ int BPF_PROG(test_populate_invalid_source, struct ta=
+sk_struct *task, u64 clone_f
+> =20
+>  	return 0;
+>  }
+> +
+> +SEC("tp_btf/task_newtask")
+> +__failure __msg("expected pointer to STRUCT bpf_cpumask but R1 has a poi=
+nter to STRUCT cpumask")
+> +int BPF_PROG(test_populate_borrowed_destination, struct task_struct *tas=
+k, u64 clone_flags)
+> +{
+> +	u64 bits;
+> +	int ret;
+> +
+> +	/*
+> +	 * task->cpus_ptr is a borrowed, read-only struct cpumask *, not an
+> +	 * owned struct bpf_cpumask *. The verifier must reject it as a
+> +	 * writable destination for bpf_cpumask_populate().
+> +	 */
+> +	ret =3D bpf_cpumask_populate((struct bpf_cpumask *)task->cpus_ptr, &bit=
+s, sizeof(bits));
+> +	if (!ret)
+> +		err =3D 2;
+> +
+> +	return 0;
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/cpumask_success.c b/tools/=
+testing/selftests/bpf/progs/cpumask_success.c
+> index 774706e7b058..36f77b9732d4 100644
+> --- a/tools/testing/selftests/bpf/progs/cpumask_success.c
+> +++ b/tools/testing/selftests/bpf/progs/cpumask_success.c
+> @@ -785,7 +785,7 @@ int BPF_PROG(test_populate_reject_small_mask, struct =
+task_struct *task, u64 clon
+>  		return 0;
+> =20
+>  	/* The kfunc should prevent this operation */
+> -	ret =3D bpf_cpumask_populate((struct cpumask *)local, &toofewbits, size=
+of(toofewbits));
+> +	ret =3D bpf_cpumask_populate(local, &toofewbits, sizeof(toofewbits));
+>  	if (ret !=3D -EACCES)
+>  		err =3D 2;
+> =20
+> @@ -824,7 +824,7 @@ int BPF_PROG(test_populate_reject_unaligned, struct t=
+ask_struct *task, u64 clone
+>  	/* Misalign the source array by a byte. */
+>  	src =3D &((char *)bits)[1];
+> =20
+> -	ret =3D bpf_cpumask_populate((struct cpumask *)mask, src, CPUMASK_TEST_=
+MASKLEN);
+> +	ret =3D bpf_cpumask_populate(mask, src, CPUMASK_TEST_MASKLEN);
+>  	if (ret !=3D -EINVAL)
+>  		err =3D 2;
+> =20
+> @@ -855,7 +855,7 @@ int BPF_PROG(test_populate, struct task_struct *task,=
+ u64 clone_flags)
+>  	}
+> =20
+>  	/* Pass the entire bits array, the kfunc will only copy the valid bits.=
+ */
+> -	ret =3D bpf_cpumask_populate((struct cpumask *)mask, bits, CPUMASK_TEST=
+_MASKLEN);
+> +	ret =3D bpf_cpumask_populate(mask, bits, CPUMASK_TEST_MASKLEN);
+>  	if (ret) {
+>  		err =3D 2;
+>  		goto out;
+
