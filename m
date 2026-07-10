@@ -1,133 +1,175 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8E203D6CD7
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 22:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783721403; cv=none; b=aFaHJZLUIAwT7xRmLmRzGb9DINil8hwEdlDHF3qRJmRaW5Ub8leqcYOXrY98ggEwjxIp6XF8XP3O4RiFPp6u3XQydWn+XPqFUPmVG75J6XqV28UIWLDSBFMHqje6mYh60XR5C35LrTFgxkJ9YTTx0yezh7oloAgrJfiBIzIwMb8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783721403; c=relaxed/simple;
-	bh=6lkAv+z1VdbJq3O3jTSPjcCfj4Q5wG5BSAJJAOcOXHA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=M6UouwWj6J0COZUo54ziK6Avtv3LjPWZAXMFHzjbjQ3Hs1JgrrqDpjKFzHgHs4XZYW+Gcl7kcQLEyWUpt33DlTPyAotNJ3ZbYAKkiiaFQUpmWeLwB2tqJlom7xxWvCyI5lQIw7n5buwANciK00CAfwovINUKBVAhCT1ur2YMDW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=S0tI3mbP; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA85320CB1
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 22:12:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783721531; cv=pass; b=XOUYJHpBzVp33AR5t3ZIfC6kci+t9bd1NLLKblH0//RtxPRz9MeimYDtXBeYLTc6gh8XbKN86r0Re6oU1CxCMawAyYZ5mbwpnqnjk5aAp/IBXjByCNkDdnr5Mj1EZ+DFuxFyBRrN8xwv4EcUGZToYHWHvDeG990K8RVx7d/p8HE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783721531; c=relaxed/simple;
+	bh=g8fjNY3YSyzv3MtcGZX+932NsJ3mmzQFtGH2hRcBLTM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uHVaLiUpfcOsHKPz0ybWxZPQdZCOF/Dte06BVg6wnHYi4GxQtOAPbWmqB3qmGDEv/uq6p+G0j5tPO/aJuVj8xORD/RScI3EjgKPYJ8SZMz83mpPWbVVACS6dEFW8CqLcd+yXcs4xWTp7EXC3i1t5u5EAmFHGg8gQy50oggvq/AQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iHNFpUPU; arc=pass smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="S0tI3mbP"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-493c52cde9eso11956665e9.3
-        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 15:10:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iHNFpUPU"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-84847482584so1029366b3a.0
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 15:12:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783721530; cv=none;
+        d=google.com; s=arc-20260327;
+        b=hZRzguTyJyluYinMZsoDpp7SdHAJU+4A94tZEBo6W1l++PQeJLpYC16JvG/V1GrpbH
+         CgNQjQD+/c7ms8e7iXM1AKphDR1pWJU1ZO3kylfysOiiy5fgOpidGPKnTTbNw+dA1gYI
+         qzksNk53NdtgYFwSUHK322Wqb4QoUvSvbZPNfwNF4N5lnVhmfrFzqD317dHn52oHplCO
+         ODKqHKOXN5hUX1Y5SqBcP2oNro1VeyO1Y0TE22FReMDcnE/ctEjUBLBhPJaTEseTTmvh
+         72svEpO+4DRekMiPxhThDiklKMmJXDaH6bcVLWChh6k/oeluzialtQVSbGbLGr2B8v1Y
+         RTLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=jUo9aFQ2pXsv1o4JFAUjBiYQaHzopddbFAu8p4X92qw=;
+        fh=AYXZ3bO46wdVz3Nu3dObWbdSnAZMRerIFAb+H1sZZJ0=;
+        b=JuNCaDunWVQu0B+INUpmuXUafd2y/QW3yxzI6PAAYPuQzUh44+x2uolT71uCX4GIKo
+         Z2gtaZZwfMZMyTy0izNRgS9k+kioY0b9FqdZuxOiDWm6oQQcv+AOqtI9ziRGQdLAhfXb
+         ucq90v3rXx/I6nMaWigCergYjPWHS5jDi3q2gD4RQqyJxabvJtjdkZNecNlVl0iVjT7a
+         oBS2po1BQDffrMBFKuvbAn6nvpND8Q9P0TEZ/c9FPdoX2yYRyrw+4NUrgzhyuSJX5KNv
+         zbbI+CSeeV4Koupx+i3BlC+xKWftv3vTRpAHpQ+fX8KWC+mJtDJH5qBskdw7Jvv63Oh0
+         Rh6w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783721400; x=1784326200; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=KzUlPYC5qPANfrz/AaLisWernv7XLVGLrQnhU/QY2L0=;
-        b=S0tI3mbPcygfc3OSyYX7yza6E53e6IPoU6DnHzkKppI/FxuWIssCLORe9s7IzhTWiF
-         HFXTr4nQek69yYuMmQQ78z90awnGxaAqLkKtwqWqIMEJf4KE7USFeBDhXSAuPjomO5vW
-         q2YajYYlSTkXmQp9xi2xPTtChMqhbaGEjPO4pEbMHvWbM464zhz2DOz3uVVBK4Fxggzc
-         API859Iioy/WDMaR4v363l3yFj6SdzsmX1kcqP0t/Q0QTQe8c/BDRhnA47sHfuDe5rmv
-         x2j42OECujTon9b6S/Lfp52kL38MnRegsF/P7yqGv53JW3Y8wEkfES2WwNOQYU7xI9cF
-         p2JQ==
+        d=gmail.com; s=20251104; t=1783721530; x=1784326330; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=jUo9aFQ2pXsv1o4JFAUjBiYQaHzopddbFAu8p4X92qw=;
+        b=iHNFpUPUXt6huqoH6BU+Q/PxJn4BqEDTPhhAufIg4yuRvbYqcCAmkAqax0dsUU/KfG
+         N8Q7r9FSqWhVLWLkzhm2OFH1wlyvTTdg8a6RK/v74Bx6Jg/5xrZflK5i3i6lS7HIkAGw
+         uB5XDtISoDK48tWBzUXYMLkTh5zGIqJKeFW/g+vUuKTyBUWoHK9Hfnh30nW+p1Jyk41d
+         wVuFR2hke3sr2IrS3qMiO/l4kScPW38/v3OC9MN/iXi8wMAcuZ0s3k2rLTWOr7Ae88e2
+         PXBIPCV6adJ6Pva4FGjc89mIzMhmeDDqPlBuISqVCROEZ9HXSmZ1Tot/3oxA0v4mFZnn
+         Pidg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783721400; x=1784326200;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
+        d=1e100.net; s=20251104; t=1783721530; x=1784326330;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=KzUlPYC5qPANfrz/AaLisWernv7XLVGLrQnhU/QY2L0=;
-        b=cAiIMjcDBkOXh3/nKlf3+JJV1n2FCLXyuAV/BYcV4P4xqTCET0QcdqImPCtk9W7We8
-         mnXOfO7ED+qVLtYkgYwGSaAAzxXzvuMRCc6Em3qNtc27x4l7P6IhxVRcszGp0I35aN9y
-         LKN0qesWb9KdO3E52aNV56g5ZjfZMO1r5Rp1t3pOqUJ8GADwsbXp5Z0QxGO/6wyvKHvr
-         n7HwaRgoznIUV0BekN/9i6f+/KMmBrZX8W69jwu0pDg5bvBSbR2Lf/DtQ53M1NrELaFf
-         KKpmqcxwdQVXu728jWChETca4A4KJjRbUgjy01FAwyVUFIES5RIvIDSXIA134FQS3PWt
-         QLxw==
-X-Gm-Message-State: AOJu0YxhxTqKJdFAwMXVgfy3IUsOsfSTO40IiQ6l3CGzdkJxo/6L7iws
-	LDaaGQ0sEfIn7VaMcr4ta+HB1IjqFILT9/WDTAcdadv77vh0iYHm6a4s8g/yj2kPmpI=
-X-Gm-Gg: AfdE7cmte13A42Jcl4VrneCmjnFTFWywMtdBb2UCDZoDN8U0kofpTkfcq6W7XFKUHS+
-	GVodzOl0b0ee3P1MFRvHIZlbpt9KlwlsJCmThtodGc1VWmjBwixkA2Wwck2k1q8rLnwr63iG4nh
-	hYzOXtrig8FB0I8P4EZGj9wuT7/OEt4zRUEPQE/xLrvy6fDW4+1aQj6+JlNVGjim4n9x9wR4Lto
-	EN/QYtDuW9bKddwDhop/0EaTDfb8rohTuWE6mbKJI6Ro3dWZOjMfz18rRBQnB4oWMTm+gqwfqfp
-	wcX865ifIx9KdpM2u2rVArzUHlQh22nT9bFr6mifF0W29t8QBBEl+s4fzB+PHzZb/alw5pr/STu
-	xGd//g62BUjf9Ut2TP9gQull2uchZZZ0t6iA4djprvoJRjZ7VF5MlNGxZblWtjvwpELnA5UXhOx
-	JwDw==
-X-Received: by 2002:a05:600c:4ed4:b0:493:b8d9:f28b with SMTP id 5b1f17b1804b1-493f881f0fcmr5699615e9.23.1783721400302;
-        Fri, 10 Jul 2026 15:10:00 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:157e:cc5f:6c4b:db0a:5d2a])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-81e6bef1bdcsm57774077b3.12.2026.07.10.15.09.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 15:09:59 -0700 (PDT)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Fri, 10 Jul 2026 19:09:40 -0300
-Subject: [PATCH 4/4] libbpf: Search /lib64 and /lib in resolve_full_path()
+        bh=jUo9aFQ2pXsv1o4JFAUjBiYQaHzopddbFAu8p4X92qw=;
+        b=Rj3SZupR2B49L+kDYCLtgFm4pucwaCAF4u87M2ibMV1bYc6YUYWSVFjUNM45O6sAK1
+         7fVgDSt/U29DMT5948GkpN7x1VF/bYEma6LmCq6Begz/aSgiYM9M2h9EdU53I2Op2Uri
+         0X/2UGXqej8U3OOt4Vluj+mFOI4dFSeMbF5TKprcb/kqOwF37e6+yE1Hiav/FB9inV47
+         QvOSIdrkBqzzBQ138s3jdO8rGBdXC1uvd1jQeqPimYPusXb5QzNAk+DwxE77bBYkNkFx
+         TIej0pRPQ4jgZn6yb49G4Eak/KmDLTLghdo94662U1aYx+IsnZhO2zZG4ytcxQVLTSqq
+         r7Mw==
+X-Gm-Message-State: AOJu0Yxmuc7vxP8eJAooFDHCAr0Zti+0leGlsM6biwD+NyqddyGcjcH2
+	s5a6Do1j0J91zKbMf/6hQ1GZL9ou9Q+nDECe0U2Qowf0i3FYxrV1ER2leF16xvyMKdW8t0aSNN2
+	GPRPHmBa7SzUdPUbB2TDGycrtKl1sNWIx4jjV/NA=
+X-Gm-Gg: AfdE7clh2E1FTKCFBdGs/JIVZ1k6Sk5460wS72SQXb2y70g5i4zWiYqWCF/Bcmatunb
+	k8TMLYY+DcMi949klHiPQjZMeBqvTWvMlSo8mPhRjJD/5nY9nTQQvGh0/jp+jelCmMl2OYAkVxD
+	y+O6pIjRGFhhGuAw9pb6iHa/m7gGZ7frS1LPkl0C+Du1kMP//06lErAISgsNk2sTNZSsGz9gf0I
+	3TadVRMVUmihvtx4Jo14JueY6OqZvXhaQ4e6Q3SYMhgMW5dHi1KPnBueTvF6Z2+mp/zb9QslR1S
+	BsajNh3usboWseOFC+/093QU9M7+k79wDrbIgy1UYAhKKiAIf4pOxg==
+X-Received: by 2002:a05:6a00:9a6:b0:847:888f:9b0f with SMTP id
+ d2e1a72fcca58-8488abb38afmr485208b3a.15.1783721529929; Fri, 10 Jul 2026
+ 15:12:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260710-selftests-bpf_fixes-v1-4-aa24dfd6f4f9@suse.com>
-References: <20260710-selftests-bpf_fixes-v1-0-aa24dfd6f4f9@suse.com>
-In-Reply-To: <20260710-selftests-bpf_fixes-v1-0-aa24dfd6f4f9@suse.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Christian Brauner <brauner@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1783721384; l=1278;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=6lkAv+z1VdbJq3O3jTSPjcCfj4Q5wG5BSAJJAOcOXHA=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QFR/tut4OCyvgDwlGseV1WK7Te9XAEVFFha7CXAmadILbP0Na3iXB7sPAJthSMsus23eA2gfg4K
- BR9Z1mD/LWwA=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+References: <tencent_39A7924F2A472D74FA6AD444744E57027905@qq.com>
+In-Reply-To: <tencent_39A7924F2A472D74FA6AD444744E57027905@qq.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 10 Jul 2026 15:11:57 -0700
+X-Gm-Features: AVVi8CfFxh8mnvJBcRCfb11lIjrGuCXZMP71l0o-2HHtUE1_o7Q_3yP4hC_mVvo
+Message-ID: <CAEf4BzbQkgT_33qxEJiSxYFR46cw9b2+4sDzq83eBDdWhoAMoQ@mail.gmail.com>
+Subject: Re: [PATCH] bpf: return -EINVAL from bpf_ringbuf_query for unknown flags
+To: Jianlin Shi <shijianlin11@foxmail.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-attach_probe/uprobe-lib and uprobe_autoattach selftests fail with "failed
-to resolve full path for libc.so.6" on older non-usrmerged distros, where
-libc.so.6 lives under a top-level /lib64 or /lib rather than /usr/lib64 or
-/usr/lib. Add /lib64:/lib to the search paths, alongside the existing
-/usr/lib64:/usr/lib and Debian multiarch entries.
+On Thu, Jul 9, 2026 at 8:56=E2=80=AFPM Jianlin Shi <shijianlin11@foxmail.co=
+m> wrote:
+>
+> bpf_ringbuf_query() returns 0 for unrecognized flags, which is
+> indistinguishable from a successful BPF_RB_AVAIL_DATA query on an empty
+> ring buffer. Return -EINVAL instead so invalid flags are reported
+> explicitly.
+>
+> Update the helper documentation accordingly and document
+> BPF_RB_OVERWRITE_POS, which was missing from the description list.
+>
+> Signed-off-by: Jianlin Shi <shijianlin11@foxmail.com>
+> ---
+>  include/uapi/linux/bpf.h | 3 ++-
+>  kernel/bpf/ringbuf.c     | 2 +-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index c8d400b76..b18d5810d 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -4664,13 +4664,14 @@ union bpf_attr {
+>   *             * **BPF_RB_RING_SIZE**: The size of ring buffer.
+>   *             * **BPF_RB_CONS_POS**: Consumer position (can wrap around=
+).
+>   *             * **BPF_RB_PROD_POS**: Producer(s) position (can wrap aro=
+und).
+> + *             * **BPF_RB_OVERWRITE_POS**: Overwrite position (can wrap =
+around).
+>   *
+>   *             Data returned is just a momentary snapshot of actual valu=
+es
+>   *             and could be inaccurate, so this facility should be used =
+to
+>   *             power heuristics and for reporting, not to make 100% corr=
+ect
+>   *             calculation.
+>   *     Return
+> - *             Requested value, or 0, if *flags* are not recognized.
+> + *             Requested value on success. **-EINVAL** if *flags* are no=
+t recognized.
+>   *
+>   * long bpf_csum_level(struct sk_buff *skb, u64 level)
+>   *     Description
+> diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+> index 35ae64ade..e549acdc6 100644
+> --- a/kernel/bpf/ringbuf.c
+> +++ b/kernel/bpf/ringbuf.c
+> @@ -656,7 +656,7 @@ BPF_CALL_2(bpf_ringbuf_query, struct bpf_map *, map, =
+u64, flags)
 
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
----
- tools/lib/bpf/libbpf.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+bpf_ringbuf_query() is defined as returning u64, so this -1 is 0xfff...fff.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 1368752aa13c..1ab939dfb7f0 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -12973,13 +12973,14 @@ static const char *arch_specific_lib_paths(void)
- /* Get full path to program/shared library. */
- static int resolve_full_path(const char *file, char *result, size_t result_sz)
- {
--	const char *search_paths[3] = {};
-+	const char *search_paths[4] = {};
- 	int i, perm;
- 
- 	if (str_has_sfx(file, ".so") || strstr(file, ".so.")) {
- 		search_paths[0] = getenv("LD_LIBRARY_PATH");
- 		search_paths[1] = "/usr/lib64:/usr/lib";
- 		search_paths[2] = arch_specific_lib_paths();
-+		search_paths[3] = "/lib64:/lib";
- 		perm = R_OK;
- 	} else {
- 		search_paths[0] = getenv("PATH");
+I think it's fine to keep it at zero. There is no confusion for
+BPF_RB_AVAIL_SZ, if you provide correct flags (e.g.,
+BPF_RB_AVAIL_DATA), then zero is a valid value, you shouldn't
+double-guess anything. For BPF_RB_OVERWRITE_POS (yes, please send a
+doc update as a separate patch), on older kernels you will get zero
+because kernel doesn't recognize it, but if you are relying on
+overwrite_pos, you won't be able to create BPF ringbuf anyways.
 
--- 
-2.54.0
+tl;dr, yes, it's not ideal, but zero matches better with the semantics
+of this specific BPF helper, this was done intentionally back in 2020
+and is not an omission.
 
+pw-bot: cr
+
+
+>         case BPF_RB_OVERWRITE_POS:
+>                 return smp_load_acquire(&rb->overwrite_pos);
+>         default:
+> -               return 0;
+> +               return -EINVAL;
+>         }
+>  }
+>
+> --
+> 2.43.0
+>
