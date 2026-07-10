@@ -1,117 +1,171 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-pz2-f1.google.com (mail-pz2-f1.google.com [74.125.228.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B6FE573
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 00:06:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419A91DA23
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 00:13:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783642015; cv=none; b=qgmeXoOtEDWQMWxU1jrtQbk4Lp13lNnzYFTvOAtUx7S9fqaFrholj34y+begYFRgzhKjOkFDhGtyJMoPvQS5wIHodONENRt3Ef0E8ppQzzkGz1aIfcxV1ZYTHVSIvYYYXCmTyWmmHfnMT0kTTTRkw6uvIgEVq1g3+LNgwAcCJJU=
+	t=1783642421; cv=none; b=sZjM2YOcpZkhp9LC/DVrakiuHAUhXsRrNQPgn/+IwrC2Ao9CK2hh1SlzcCO0QnFbqqfr/begZluxaKbYXIj7RhbxCOQoiSmXaMiR1YLrnv4LV1WRv4AAcOd0Snd+5nJu+xQ4sXP1G4notaHKTS4gYPPsbJARq2n8/RFsDMHtgLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783642015; c=relaxed/simple;
-	bh=3EwLJBlDU0ygG45bGd9nPXY29tb2GvuOlJ+p/oegbuI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bF27T3yeQuZZbv1+o7t7ngTAIHAP9eVG4bgx6fLCFfioe+cnIMDj8n+ApD7UX8bdCJ7HiVx6ukw6CI/Sja4zTYmwA1QvtmMTllCjfW0wfpEGjIbvXhqVMMRk3fq0VKDg5+YEEUjoGgRGmID5NGse+U/D1KHfI4nU+dcyLQ6+Kr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ccS14Kyn; arc=none smtp.client-ip=209.85.215.170
+	s=arc-20240116; t=1783642421; c=relaxed/simple;
+	bh=Ugh/OpEP8n4AayGypRHKYHXqEemDcC9LJUjQgnKPGI4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TUYn5Bg2OS2sT+tvv4Qbh1nvKyQ275YUOICG+JDbJrqQ5Wn7Q6MmWs28ZgTWWv+HdL4zMLVMyVVURJ59i9m7xTx9tT9A/H/USKQtigG0ElXL8S86UMTkjFdA1T3NtqTfdBHMe47zNHfbYRWaM8UJH7T3zaVbY/XCHm0kTMYzZlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NaRXMUXK; arc=none smtp.client-ip=74.125.228.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ccS14Kyn"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c9e607d81fcso230952a12.2
-        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 17:06:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NaRXMUXK"
+Received: by mail-pz2-f1.google.com with SMTP id 41be03b00d2f7-c9fe62e0da3so121439a12.1
+        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 17:13:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783642014; x=1784246814; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=3EwLJBlDU0ygG45bGd9nPXY29tb2GvuOlJ+p/oegbuI=;
-        b=ccS14Kyn45bEO3mvRzkJGD+AB9x8xmcH5ZF95d5W+/qW1RVdEJj0yPfyijQpFw08t5
-         BgqFD5pqE26ofR/DEZ6ElUmMNLAh2+8kVDZ6alCVxwMqWzyxv+9xefJgC7CJxQ6I5Vpg
-         IehJYN+5b0M6mwNWYyI0nzzQFp6lwxT4TPJrNCKb5JtKYkVH642X3DeitQWr/I3MSxYB
-         67duZNLPPYg06bIB3PS9sGNuguagAHgjzjKLt1VGEeXKaAufnTw00kCuoHiXkaSWwyCg
-         PRTMrQ5yfhPq+1dwWMomiFrvxfqw+ngHJqL/mGDwlbofgSn+BklOGFBPW7014XKRtBlQ
-         J8AA==
+        d=gmail.com; s=20251104; t=1783642419; x=1784247219; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=wnhaarTkKMQdrEB7M6qZBuO7dhcx30S+q+s0SvQiViM=;
+        b=NaRXMUXKMbiLIAQ2ZXaFYbPwk7eIzWJGx5XRn0c7cVIBCB3Oxs4s7pY9ZdTb1nU+No
+         NiQVAqer4ujbMgpyf1zcwHzn1UWA9us6L0rSuHpgK3Rp0HXKYM/wm9XSB5sNvsnpSjt1
+         OOjHFsamm1ZmKwVghCWGh4GQyjwwh+cKg0LTVbdvfQW0HG8g6BaLSRcsOls01KtGLzml
+         c1hncM+EGUi882JbF3MpCtUzv15YHS1xR4j0BjrgfxA8N9v2tgmxWMeE9mz04wUcR/pP
+         NthUwsylKovEbq5m5szuCTly5vgNsCU3lR7xiUUQvafVjEFrYXYSIJNrcfAbs7X0n8TJ
+         VQYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783642014; x=1784246814;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20251104; t=1783642419; x=1784247219;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=3EwLJBlDU0ygG45bGd9nPXY29tb2GvuOlJ+p/oegbuI=;
-        b=Q39OoJS0mnXq/BD2XCMN8z6+Kog1tbzne+8Ov8naCZkGvKaukWOatIozLdYB3NbOdg
-         q5ne7US3UBQTLJ+Lr1j7FelsSzciyEbSsOPan1oFWHRF924QQPDjh8crn2WgG9NFdJRd
-         Ofkk7vTBZZUY7X5LpdXbzmSM5jcNEn5QgbZdTH4DpqTg79EFLRjpGYY0O7Pz4OVIpyEP
-         2ebuzWE/6lL3h4LlVjEcC2SOJmPKnHNyXHYtCr/plym9cL2+wQCVo5nNzYxXM3LSCbOS
-         mjdl41TtNppaFqC3UqikxbqcYVUCbJqdW1a37etT5IsNybiU1eOl9CSKmrh2bup7Tfxz
-         jS4A==
-X-Forwarded-Encrypted: i=1; AHgh+Rrw8Riw+W5WeR0W6+Ps7OT4UKD/Lolbx6zTeeoJlVFwnv3kOLUYZj5/dxmjMeaj9Cv4MAE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyx2jxraPxG+9eeZxIf5pf0+yezqHcgtebIu8REntlcbU/7dOM9
-	A3ITjBcC5V1txHueAnFGJ3TyYh1yxgdThoBf1rEVlQTKtIE2A/DoeeD5
-X-Gm-Gg: AfdE7cnn0uVwJizsVXj8ziYHGaSfPNvDhFcMo1R/1MT9h2NlUc+5CjGOP9yV60hRLhH
-	IGerBK3b0NKmekM4dT0OjDijGFNeOhvPD5UGtHVIODAn87OIAH55CdNlkdC6kCr5/k2kZRCYJz4
-	gC0HB4mR0JKNX9rAPAIH1TOtRTS4uJWLROAP9ou2iogO//1f/zg2bZtLACH8KgX6eFl0Qf0qH70
-	rEIE4F5wejSn/6GE9IzX6SGTNbJ+zeYKxoxKheNVIxM9vrKutDUI4jw1Rs0KZtzStXEyyFatQyW
-	463NCmI3CJBkmrI09EpnbQst81vk/fGJtb1K/jHHiywKYbSWwQe5Rcnd7uQh61zDNQCmPzkyoze
-	5xQbQv+lzE9Ge3dYn4cWvsPJPxmzVgL7Y2ElkzHjKbGKVxTw+PsENduQjIIZW77EfSaZzWlYhsT
-	UPfYIREMGC+++Uwm84sraJpK8Sgmu0xPK5jXVmMwqN
-X-Received: by 2002:a05:6a20:a106:b0:3bf:80c9:6b3e with SMTP id adf61e73a8af0-3c0bc9a6799mr10452182637.30.1783642013647;
-        Thu, 09 Jul 2026 17:06:53 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ca5b3162d56sm4333330a12.20.2026.07.09.17.06.53
+        bh=wnhaarTkKMQdrEB7M6qZBuO7dhcx30S+q+s0SvQiViM=;
+        b=iL91d96mFcQjk1i5CluMVsKGzZu8/Pd7b1adzBOOmyrmIUlXAU2LaUz94uIQFYOVsh
+         +M2sSxchA+Mo8eLhH3zNz+Labc9vFfqWPwMfH5H5hOtJjx+kdqPR2oISV/7Vmf7OFjIi
+         X2iOjvna6tMPSH/yv1SdCwpJeqb9XG4RllKtwAHIlTomwKR6zEMrEwSOU8o5puHSXeF1
+         R5n8wyWk2tYTbCj/41LhHPLmtoBk23qiOZo0LUPgNcgEVV7Eu+U+gBeJw0jesWgJJfAC
+         GAcfxiytvlcsHLb6i32Y95UfGFaNFBFE7AHTfH+T7oyWfYay2Rh2KCzGLh4w/aKxOhSm
+         09jA==
+X-Gm-Message-State: AOJu0YxaUQKejcb01vKOz9ovARX1s/DAtG2gennTauxndz4WM7xFxyFE
+	XAOWPXB4ACkfugUDPKXmcTtL0a20RXIjOfEEWSXUh0l6FR1VAxYNHAGV
+X-Gm-Gg: AfdE7cnBHHJkx5XsZ1chSaHkWThlVUhJuOlHw+bUsGVP9KuSLUpmSmwrNY/9/BIE38D
+	bAVaR9KUeuTsdFvFSMzOhgFUiRWsyqp3/tBFlhDeu8tSJ11g5LLZNSPaidbED3rywCd4cv40qBA
+	WSj1+orhiPGZoEtbHyUfLaZl4ntgsC3lcLDYj4sSZSJDeifH6xBX+R3CdLVLhW7oDnYj9a1kIfs
+	dwG5qanGkfXE9Yf1oZvi5Ps652t60VYndXkUpdHvj7m80TvX5o97tlo34E/2COX/2+K4vP5Qojz
+	bGHKxLWTz8f30Sn69FOSqR92kQ8uO48yO7DCKzlyXxqiJ093umRkSqNB4/a4sGbhKXgF8k7nXO4
+	LNQWrmLVo5mE9BvtyECHOT30Oti2MCIYG/nT+2+p2nFX23GF/xEatDxJIBGVEuQsI0BQwXWOODR
+	Yd6mH5
+X-Received: by 2002:a05:6a00:451a:b0:842:6a3b:60d1 with SMTP id d2e1a72fcca58-84842f01e28mr9455961b3a.31.1783642419243;
+        Thu, 09 Jul 2026 17:13:39 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:9::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8484123ce87sm3534608b3a.58.2026.07.09.17.13.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 17:06:53 -0700 (PDT)
-Message-ID: <924164ae0869fd1463694a48286bbd7e9f1ced65.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 03/12] bpf: Wire up JIT support for 16-byte
- kfunc returns
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com
-Date: Thu, 09 Jul 2026 17:06:50 -0700
-In-Reply-To: <20260708200955.2156484-1-yonghong.song@linux.dev>
-References: <20260708200939.2153664-1-yonghong.song@linux.dev>
-	 <20260708200955.2156484-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+        Thu, 09 Jul 2026 17:13:38 -0700 (PDT)
+Date: Thu, 9 Jul 2026 17:12:21 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Mahe Tardy <mahe.tardy@gmail.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, john.fastabend@gmail.com, jordan@jrife.io, martin.lau@linux.dev, 
+	yonghong.song@linux.dev, emil@etsalapatis.com, netdev@vger.kernel.org, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, davem@davemloft.net, 
+	horms@kernel.org
+Subject: Re: [PATCH bpf-next v11 1/5] bpf: add bpf_icmp_send kfunc
+Message-ID: <alA4xtY1HGl4Fygf@devvm7509.cco0.facebook.com>
+References: <20260709144900.245904-1-mahe.tardy@gmail.com>
+ <20260709144900.245904-2-mahe.tardy@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260709144900.245904-2-mahe.tardy@gmail.com>
 
-On Wed, 2026-07-08 at 13:09 -0700, Yonghong Song wrote:
-> Continue preparing <=3D16 byte aggregate return support by wiring up the =
-JIT
-> side of the R0:R2 return convention for kfuncs.
->=20
-> A kfunc returning more than 8 bytes (a small aggregate or an __int128)
-> hands the second half of the result back in RDX, the native x86-64 ABI's
-> second return register. BPF instead expects a 16-byte return in the
-> R0:R2 register pair. BPF R0 maps to RAX so it needs no move, but BPF R2
-> maps to RSI, so emit a RDX->RSI move after a BPF_PSEUDO_KFUNC_CALL whose
-> function model reports ret_size > 8.
->=20
-> Placing the second return half into R2 is possible on any JIT, but it
-> needs architecture-specific JIT work. Rather than requiring every JIT to
-> implement it at once, add a bpf_jit_supports_kfunc_ret_reg_pair()
-> capability, defaulting to false in the generic core; an architecture opts
-> in once its JIT handles the R0:R2 pair, and the remaining ones are left
-> for future work. The verifier enforces it in bpf_add_kfunc_call(),
-> rejecting a kfunc whose return is larger than 8 bytes with -EOPNOTSUPP
-> when the JIT lacks the capability. Only x86, arm64 and riscv are
-> supported so far.
->=20
-> On arm64 and riscv the native second return register is already BPF R2
-> (x1 in bpf2a64[] and a1 in regmap[] respectively), so the value is in the
-> R0:R2 register pair on return with no extra move, unlike x86 (RDX->RSI).
-> This has been tested on x86 and arm64. The riscv path is expected to work
-> by the same register-mapping reasoning as arm64 but has not been tested.
->=20
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+On 07/09, Mahe Tardy wrote:
+> This is needed in the context of Tetragon to provide improved feedback
+> (in contrast to just dropping packets) to east-west traffic when blocked
+> by policies using cgroup_skb programs.
+> 
+> This reuses concepts from netfilter reject target codepath with the
+> differences that:
+> * Packets are cloned since the BPF user can still let the packet pass
+>   (SK_PASS from the cgroup_skb progs for example) and the current skb
+>   need to stay untouched (cgroup_skb hooks only allow read-only skb
+>   payload).
+> * We protect against recursion since the kfunc, by generating an ICMP
+>   error message, could retrigger the BPF prog that invoked it.
+> 
+> Only ICMP_DEST_UNREACH and ICMPV6_DEST_UNREACH are currently supported.
+> The interface accepts a type parameter to facilitate future extension to
+> other ICMP control message types.
+> 
+> For normal cgroup_skb paths, the skb dst route should already be set.
+> However, bpf_prog_test_run_skb can create synthetic IPv4/IPv6 skbs
+> without an attached route. In that case, icmp_send returns early, and
+> the kfunc would otherwise report success despite no ICMP reply being
+> sent. This check also reject metadata dsts, which are not valid struct
+> rtable instances. While IPv6 would stricly require only rejecting
+> metadata dsts, same check is applied for API consistency.
+> 
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> Reviewed-by: Jordan Rife <jordan@jrife.io>
+> Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
 > ---
+>  net/core/filter.c | 90 +++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 90 insertions(+)
+> 
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 4f5cbcac3e78..e4697036c67b 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -84,6 +84,9 @@
+>  #include <linux/un.h>
+>  #include <net/xdp_sock_drv.h>
+>  #include <net/inet_dscp.h>
+> +#include <linux/icmpv6.h>
+> +#include <net/icmp.h>
+> +#include <net/ip6_route.h>
+> 
+>  #include "dev.h"
+> 
+> @@ -12548,6 +12551,83 @@ __bpf_kfunc int bpf_xdp_pull_data(struct xdp_md *x, u32 len)
+>  	return 0;
+>  }
+> 
+> +/**
+> + * bpf_icmp_send - Send an ICMP control message
+> + * @skb_ctx: Packet that triggered the control message
+> + * @type: ICMP type (only ICMP_DEST_UNREACH/ICMPV6_DEST_UNREACH supported)
+> + * @code: ICMP code (0-15 except ICMP_FRAG_NEEDED for IPv4, 0-6 for IPv6)
+> + *
+> + * Sends an ICMP control message in response to the packet. The original packet
+> + * is cloned before sending the ICMP message, so the BPF program can still let
+> + * the packet pass if desired.
+> + *
+> + * Currently only ICMP_DEST_UNREACH (IPv4) and ICMPV6_DEST_UNREACH (IPv6) are
+> + * supported.
+> + *
+> + * Return: 0 on success (send attempt), negative error code on failure:
+> + *         -EBUSY: Recursion detected
+> + *         -EPROTONOSUPPORT: Non-IP protocol
+> + *         -EOPNOTSUPP: Unsupported ICMP type
+> + *         -EINVAL: Invalid code parameter
+> + *         -ENETUNREACH: No usable route/dst for the ICMP reply
+> + *         -ENOMEM: Memory allocation failed
+> + */
+> +__bpf_kfunc int bpf_icmp_send(struct __sk_buff *skb_ctx, int type, int code)
+> +{
+> +	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
+> +	struct sk_buff *nskb;
+> +	struct sock *sk;
+> +
+> +	sk = skb_to_full_sk(skb);
+> +	if (sk && sk->sk_kern_sock &&
+> +	    (sk->sk_protocol == IPPROTO_ICMP || sk->sk_protocol == IPPROTO_ICMPV6))
+> +		return -EBUSY;
+> +
+> +	if (!skb_valid_dst(skb))
+> +		return -ENETUNREACH;
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+This looks much better, thanks!
 
-[...]
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
