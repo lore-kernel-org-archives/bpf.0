@@ -1,77 +1,83 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9942370D6C
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 06:13:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A563A9D9F
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 06:23:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783664040; cv=none; b=D7jM5FcR4bcH0REuyubpN1faL1KtfW5XowdEEGQbzBqtLmK0CJptTMaG7om7Z3wIFXvrhIHAur4PN2GwKSQ6neQPF6Yk6aVbfA8ay1MZMhf9qekgXQ9a2Us1JGKed8kaLh0kmlJakXQM7nLfVHJNhI1Rq1bXvUAMiUW6xEO5o0c=
+	t=1783664589; cv=none; b=GC6TEsalPGFcT6VZejBPD3JaOHW5LIarU9kd8K7CTlkCwvE35AFDUMZsMwlAXqAkNNqKEiG+6LtMhIB+JRCM5SERdBa68/523xnWUmTj/mbYbEKUCPaeqfNlu5Bm1zhcoAbJHnA0BwXnVeeuEFQZEp6V3WTuij5+x1vpG56rZ00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783664040; c=relaxed/simple;
-	bh=/1vSScoZMhzWwOgDlowE6Tvo3DJduGEKGOtEEMsqrJw=;
+	s=arc-20240116; t=1783664589; c=relaxed/simple;
+	bh=PVv2MCpFxt2nbQ3TmkpbKr8KYkb16+WqF2Z6hSpHJU0=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Lu7U4u5rJER+gLaeskCIgB0yAaHrnX6/efbmE3MG4eM9BeWbWkyrRX5iK/S8gKDep7ViJ4mhk0qtsuV26JRLF0NW5IVdphA79FaDX9CC/9d9eAVVjL61RnkMpbkwrTqF8yudwLUFGdXXRYwA+eom4xNRmwCbvQAko59ekGDmo+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f+aYeQBT; arc=none smtp.client-ip=209.85.214.181
+	 Content-Type:MIME-Version; b=Wc2uK6cbE2FT/vQvJPlNCb/9aBHBURXfj+i15A/Q/8pZswdhitJdgDiA7Zis/TpHYeIDe5GYy4/wx412at7qs3d4m4LU0m9UKOFhf2EIlYMl5+qVV4Y46Sumvbe32sO/GWlCWGpNJif+w0IGraPjFKHcoXbohK9v33pPwQu7Exc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oVcxYCC6; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f+aYeQBT"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2c7c61b5292so9023225ad.0
-        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 23:13:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oVcxYCC6"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-84862b0d5aeso528925b3a.2
+        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 23:23:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783664038; x=1784268838; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783664588; x=1784269388; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=/1vSScoZMhzWwOgDlowE6Tvo3DJduGEKGOtEEMsqrJw=;
-        b=f+aYeQBTtPDLvRogHSzTW2d7ZZmx6ePSKBrt3JZXTbFvTo7TfTLMqhRdxAo0ADIX2S
-         7uL4NATCJXtxxW50+YJKbqbjzJRNk7Zs/JhVVZNdnWlPDwOtJiMDOBFZOE9fvDW5jH3P
-         3yKUrlwv3JDg4Pe0RVF/WhVkAsc7ug/4s4TmT2bvn4qrxEFbu2LHzFqfSkt7/H6sJm+6
-         efA4W9pV4xeZsUvDmJUTGGKvQjvn/SHO5St3pf4VGQXaBTxmgR9ZgHF6A3GowU+FexKx
-         0RR2aeV9Lrt6uuLIdIN7SctwJk98F/mLj9uWGxmw9DCQO3i9kdR3w495u2AB2seoBiae
-         1JjA==
+        bh=PVv2MCpFxt2nbQ3TmkpbKr8KYkb16+WqF2Z6hSpHJU0=;
+        b=oVcxYCC6UfcO5GpsYhyGPl73/E0VLWOI/fSKouSFUmKhFxXOHWoiBi/84X9pfsSBe3
+         qv/0CACClL9NiEeefu2J1cTc5S/5bQcuDs7DiL3xg+YserrTTnhz26O7IaoeOe9yRR5m
+         Z6y7tNUnC4aPTk0qFYDzs4lOgTj4+EjPf7KiNFVD8u0mbWX3MfRHdPNets8vW1fiTcsk
+         ZsW3LLrvXqT9ok55jHkUNvrI4/blJ05fy4vCKoIicatUr37ghiBR0WyLMrtZ6Zoc0muL
+         t1NgAS6ZkU+C7f2G7WA7oc2uy8T9WH4pqi1nv3G7AH3qm0ViCg9IfARizlSjM9SFI7a1
+         gd3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783664038; x=1784268838;
+        d=1e100.net; s=20251104; t=1783664588; x=1784269388;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=/1vSScoZMhzWwOgDlowE6Tvo3DJduGEKGOtEEMsqrJw=;
-        b=dJX2sBjUb0nbQWGAugrQuzZV2ajnFc4Q06WF8e2VOKzpLCqe+w3ehG1Kp3Uwq1Nwc0
-         eX4AOsMfH09Csqw1lOvWiDIbc/65rX7BS0Q8mLnIu5auL0uUzYWLYsdRN8FIU/HY68k0
-         NgD9xCyrqKcyPPk/PZcL5YN2+7pwyfttYZTitQn9eP/Hh/0Z09ticQAjDUhZ2TsfFZYh
-         BCqtL33Ej6nEFk9rbtAjRtcfXz4uhG+g+IkE25uf1ueSiJQOowyOzXgpMW7nHJAMoMkF
-         y1jNVqfcpFG+X5ap83ETlv5QCiQ8CId1FHdq+akXDRmY0Cshx1/b9ANG6ab6Qxwimxmb
-         71Eg==
-X-Forwarded-Encrypted: i=1; AHgh+RqLqdfLKtEL7kqVAXpTiIdLeQt/Qv4JptpnUeuRKeutLUyxma0ZppWx04QJBLcdjypV5N8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIxMkGNAxMbp+5GHMuiWa4iJSvHfNtZnrE/zDZWipu8lS7cRgw
-	Xil/J9fFZNBdP/JZlSSE3dWf5V12v9BLwW56W0sVpWzvKzmb7xLQYJ1f
-X-Gm-Gg: AfdE7cn5Iu1C59iBeuYmJXvwBMAq0Y7W1yVOJaIFnn2fjJPe7LNpS+YVOnBCtuw7yJm
-	Wc6OohpA8piTUcgd35YArsnkC+O7uwym4fHhDSyNKn8dP1SdiaxSMijW6bMcbX4Q34QFOZ+7foC
-	Hg7E9bVIDM8idFCUZjgTKonHiUVTGqw0/RHHVmF0Y5fkwSlIQu3cYZMbVNbzgMpkWKR/AzIr9N4
-	YlGQiQ8u6FTvzN5HP1kpf7D+HKqdNAoseTgMd7lhgDS0nIHFUW3GaRs9cUW4xmfe9vBEtHePqDa
-	TqX/iPa8y24Q0Y7bjn+4mv03kNGoqf7z4UHtlBjs96gFEscOKkYZQk8qY1cEmbdDhDxSiRsks0J
-	cFe2LF3UwTHOI9MIBtnpyixIhqISD7vxQr13ui3mkEsh24KV5zRPNwZEHh4hflXGTBf2HE5YnNV
-	QG/fMmevBfdcRUlhuf/n2xTmICq0jUz8eUa1TRyuEf
-X-Received: by 2002:a17:903:1b0f:b0:2c9:c95e:5836 with SMTP id d9443c01a7336-2ccea2a5748mr105802515ad.5.1783664038094;
-        Thu, 09 Jul 2026 23:13:58 -0700 (PDT)
+        bh=PVv2MCpFxt2nbQ3TmkpbKr8KYkb16+WqF2Z6hSpHJU0=;
+        b=Jylivrw9C1WJJ7CxOSC1MbIrAUglGVbWsCJWbVOSrY6TMqYSowdBtaRvxoAtp8N0zC
+         OPLs294UanP+WPlb6OIPkX5OKxx8KNWejDenlnA6fbHhvdZeqVzssTEAUtAY7kf73V3l
+         f7U1Jqe1czWdhFFHz3Ilc29Yrr5aYvljTYDvw+EjfYS6IJi0d+ixN733KjdHFJM10LY2
+         2ZOX7aZPy33P/6f3U/pEfijLT+b4vIUfCWRgE056RCeAHYMMLF2erWA6lyDANhe6oyBo
+         p4kXTj/dQxfoqigIRO67Ss4BKcVPrj8S9SVCuylj8P2aJlilENWLKofmHSKjnWQmTUcg
+         BuGQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqWYQD/osC9jAxWLEW2uI+YJRB5xMAMfmz7+kBgiQofpULWOPlWuhilxmEEUlnsswSMBr4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5DhdokKrIhGwcoEQnNWH9bC9VEn00nCxk8euteFifEev+gjOF
+	PFOICz9c9KoBzcjhwy1jgKu07bky3cO7qiw2ztNMozMuxm+NGK7yoEpZ
+X-Gm-Gg: AfdE7cn05tFNUQzyZyoNiRqXxsLeDy1/RM16TbYD9ruPgp15aoV9wZNCZwliMbJLJb9
+	p5LQU0FEhp4gYZ+zH/RV0pd13kqNPSszWPH8xYeanP9uhP4JOa/GuAseAT6GGxfWQK6FCspE4RA
+	4gM/l9iJJbq8pWRLqs40YsxqVDF3BEHz3n9od+sl+lgF3XLVAP4vc+dlFzSb7f1ScCkHlSd4ArA
+	ulAldFLhGbNcIoc7m69IkEkdQn1gIT4x1l/THCfhBZtgDOtdhpsW8nkEH05HZq9j3QifEXnMLEj
+	BDqGMqbYl3P03zMhZtzO6cPlCVYKxvBRvsi3T8ytdxZRgNDDEnawf7qycibQFjvr7wSrV3wIQQG
+	o3BsPySdIH2cOnbS9ZraW1ARrUx5UkcmYhYwKHZFjmC3FxtatKO6DPkByC6krzyciHPUKzB3NVA
+	TXEj4YMYpd/89IcpnFjKHLvHK/uUd7HQyyKCnvDH8B
+X-Received: by 2002:a05:6a00:2e08:b0:848:7475:29bd with SMTP id d2e1a72fcca58-84874753fbcmr1656412b3a.7.1783664587901;
+        Thu, 09 Jul 2026 23:23:07 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bf92bfsm54539305ad.28.2026.07.09.23.13.57
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-848414a34f7sm3768820b3a.44.2026.07.09.23.23.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 23:13:57 -0700 (PDT)
-Message-ID: <531d227058b25adf099dbeb467d32507b95d8062.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 00/12] bpf: Support 16-byte return values in
- the R0:R2 register pair
+        Thu, 09 Jul 2026 23:23:07 -0700 (PDT)
+Message-ID: <4349d987d34f9426bdbb09a5d02de61da8f3e746.camel@gmail.com>
+Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for
+ buffer pointers
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com
-Date: Thu, 09 Jul 2026 23:13:55 -0700
-In-Reply-To: <29c790dc-2e14-4ffe-8231-db8dba4de0c1@linux.dev>
-References: <20260708200939.2153664-1-yonghong.song@linux.dev>
-	 <b364ef0ad5425d97180220af23be238a4c4281d7.camel@gmail.com>
-	 <29c790dc-2e14-4ffe-8231-db8dba4de0c1@linux.dev>
+To: sun jian <sun.jian.kdev@gmail.com>
+Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>, bpf@vger.kernel.org,
+ ast@kernel.org, 	daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, 	memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, 	jolsa@kernel.org,
+ emil@etsalapatis.com, shuah@kernel.org, mmullins@fb.com, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Thu, 09 Jul 2026 23:23:04 -0700
+In-Reply-To: <CABFUUZEXYduca34g22YZ1ESyYe3Yc3kYQrTEWLMxB5X0ZmYn8w@mail.gmail.com>
+References: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
+	 <20260708090151.151729-2-sun.jian.kdev@gmail.com> <ak5HLLrYK3R_g2y_@u94a>
+	 <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com>
+	 <ak8XSRiLKx5WcIQw@u94a>
+	 <1f8aad47f61fbf85eb55276e4bb01bfcff61393e.camel@gmail.com>
+	 <CABFUUZEXYduca34g22YZ1ESyYe3Yc3kYQrTEWLMxB5X0ZmYn8w@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10 
@@ -82,44 +88,23 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Thu, 2026-07-09 at 23:00 -0700, Yonghong Song wrote:
->=20
->=20
-> On 7/9/26 5:56 PM, Eduard Zingerman wrote:
-> > > On Wed, 2026-07-08 at 13:09 -0700, Yonghong Song wrote:
-> > A design question regarding to how this series handles local
-> > functions:
-> > - It relies on the BTF gate to decide if function returns multiple valu=
-es.
-> > - It also prohibits local functions from returning pointers as a part
-> > =C2=A0=C2=A0 of an aggregate return.
-> >=20
-> > I think this unnecessarily adds an additional discrepancy between how
-> > the return values are handled. The practical experience shows that
-> > existing differences between local and global functions are already a
-> > constant source of pain and confusion.
-> >=20
-> > I'd also argue that lifting the above limitations for local functions
-> > would make the implementation somewhat simpler.
-> >=20
-> > Therefore, I suggest to:
-> > - forgo the BTF check for local functions;
-> > - always copy r2 from callee to caller at EXIT
->=20
-> Not sure about this. If r2 is always copied from callee to caller, and
-> interpreter still only supports return r0, then this will imply interpret=
-er
-> will never be used? I know interpreter will be eventually removed, but
-> at this point, people still use interpreter?
+On Fri, 2026-07-10 at 13:52 +0800, sun jian wrote:
 
-We can detect this statically from compute_live_registers().
-If any r2's are alive after a function call the jit_required flag can be se=
-t.
+[...]
 
-> > - forgo the scalar struct requirement for local function
-> > =C2=A0=C2=A0 return types.
+> There is an observable effect on the target bpf base. I tested it with a
+> temporary raw_tp writable test_run reproducer, not part of the series. It
+> attaches a raw_tp writable program to bpf_test_finish and triggers it
+> through BPF_PROG_TEST_RUN. The program does:
 >=20
-> I think this is doable.
->=20
-> >=20
-> > Wdyt?
+> r6 =3D *(u64 *)(r1 + 0)
+> r6 +=3D -8
+> *(u64 *)(r6 + 0) =3D 0
+>
+> With KASAN enabled and the BPF JIT disabled, on the bpf base without the
+> verifier fix, the program loads, attaches, executes, and KASAN reports:
+
+Could you please identify why the behaviour differs between bpf and bpf-nex=
+t?
+
+[...]
