@@ -1,170 +1,148 @@
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 414D33B27ED
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 07:25:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783668352; cv=pass; b=dkvmlpyT/OvQDn/OYqmNKiagYQgsreIFQH4o/xGKMAZYRWFCSP6aC+JN0uLXYfEb5WADQ7dKYskdoKA5xL3vKo1PbhEwrpx9kdEAp+kjt4UxYXG75yK548q8NRBx2F6p6+gKeoNi2GE/kZmzg2L/BkfUILH5PEzq17vxzd2h3YA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783668352; c=relaxed/simple;
-	bh=mh9wE6hVtejwpqaCnWH4G3lR/r6ymmL6RvQu7O86Nl4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fUvhf8jFakMrds7bvgikrvopO0A/xnmByoe/j2OGMqac8LJSo2peSETB6Gz8hrrDUr2Nu2+CUdFtTHQazgl6S+Tr/umhH16irq7lXlOiGb7y+34yiocBcUZQJ3syxgFnto/MrVmtSM/Sa8+kaeIgBxxWyd+kT0v+HxanNzWKzFY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YBik+sEs; arc=pass smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A293B0AF7
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 07:40:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783669225; cv=none; b=b/2ktiTq3u2qhJAHRUtrihWlSWBXtBJ8LE/en6oZlhuobGTulSOMRO3s7cjQa0HtO35qNX6g4KswKU5g+3fbAodf61O2L2rhLziSN+tZKPP8SPWBV/koPylLWxvkjUsG1Al3MUhDSe6XZVK6ISZ6s8b7aucCK+f/MaUeqzGKAQA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783669225; c=relaxed/simple;
+	bh=86pzGDg38uXFCW2JGOwA3e085I/3QBH3sZ2DZZ2NCCI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sBzifMgw83o1AqLWDmSZMg3aNOc5Db/2ifSP5OuYglS2dAZoPKpevsXY9Lwh/S1V2ciAWs4DQGwfotLNnEsyy+OISbEeoHYJd6ifuRi8QUkhScLq0zMrrcMaftZXwoXJYOCJlI7PAZ8eXfArQ6MCr8xwyaajMRXVX30vS+LRe40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=j/kSjpFx; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YBik+sEs"
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-81dfdbd86d1so6226447b3.1
-        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 00:25:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783668350; cv=none;
-        d=google.com; s=arc-20260327;
-        b=WRS6O8rVXoB0ZBLWM/TJvTHGrcRwJvzd2CD0fv4ItbByS5fLCJsjbxfMAQGR0u8Jtl
-         xpdR0YN+IXP/9bJ44LRV0upnZGUiLQhyHC73V+bAOGF4ldQS53yDnRfZ0I/oymjMbTJo
-         QhgblNzrt935T1kD/lVAs/AWYVJUvkiLH0quu/5ZVoPbyHRjy8e4ZZEQBJr6mdth32rD
-         tPwerSyxs0nqy12wK+s0xffB3SgZXGWU8CbjeImmIFb03OyQZDO/ajpQTjZQz766k8d8
-         BO1kjsZYrqeHzJ+aQi8Q8qVST3ZMzPOJ9QOLyM3yg1y+ojjmN7v6hxN0Phqc5bPEisTp
-         u1hg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=mh9wE6hVtejwpqaCnWH4G3lR/r6ymmL6RvQu7O86Nl4=;
-        fh=2I4jl2koYt1NlMMq6LugbmD/PErzTQk51NRrWJWV2/I=;
-        b=iCgfgmcbi4K+fGCPpzYz22SGLyCVdxOb4v/JOnjpK2Yf9kYjdLIE23Rlg0daWbimDl
-         MjQIox2RO8g67/RphDP81Z9XOsiM6ElI12UsKxmfqd/14fJ0071QAx7t0XpcZW/BJSgu
-         QKYtQ3OhGwgJBoXL/QPIY/CA6et5lzc2T4nJLo+QUHlAaReNkMEmlj0xu9aJbprwuWfq
-         nwa1xSmSXRrOK7Q+jyH0HRDlq2uaRyYm8VzvU0WwC1p9FmLeXREd5wafZkEKQnpMyelY
-         ntANojJAHEMGJOY/CE7d4Z5kKYaPAIc8xYtPbeNtawis3A3sEcvN1Te10wa/tQc3hhcm
-         7lrA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783668350; x=1784273150; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=mh9wE6hVtejwpqaCnWH4G3lR/r6ymmL6RvQu7O86Nl4=;
-        b=YBik+sEsrE3WCU+KxB991u6zQ72Ve6Fdhzdj0CsaZBArzOQfDRclZo3wYYRE8NyAmD
-         pMFP5wxMO38WJaI+XeVlta3Wj0axrJ97Rq02PXGobb2Rp6qNY/pJZQtNg++JaqiUZE0y
-         7lerNZCc/aDCDfntKC3xLOeEFojhfBscH9+5c2RhAD+QN/Ba9LgblK8sQx0AL9AMqoQ7
-         g2xEc8jnr4tbrsDvMG4ns2Qw3l0io2xZ4AZQgZ/xRRIgXvRXrz2jHA9EE1i2UdhbXWVS
-         arQIsZhmwOYEnCOuvWXF00xcXcFbI0+3q+/F9GtN2MqwqbsTKZ7xrU1j2sY/jNb4ggvK
-         Muxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783668350; x=1784273150;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mh9wE6hVtejwpqaCnWH4G3lR/r6ymmL6RvQu7O86Nl4=;
-        b=p/6oBKAPXHqMAz7zvr3eGqStaBGIx11pTtKCpB/R2mGLi/VgPTAxAT4EU/8zzlwsb4
-         PKOCsF16Uq1hjvxgLj0hJU8AcbReYSFlzsVhR7DZlAm0uE6HLPMtapi53Lkj3LHUMWGU
-         TruvEcw4gRntKDJCWH0ph2cBr+uxW3JT5DlG2+wcHOJGNYK0z+/NzMt5d/H3Tk7a8hgQ
-         zzwyMcwthBaHqqbjLVLdlzZV8fZxfzw2n4+15BwyCSurGcXotmMrLOj8LJOQxQJnbrQk
-         4xFwYUn6+3NQyMejSgJ7X2nFj3lsI006KMxdYkXfOnIzWbJZXvG4b9Y77YaCZIxaQ1B6
-         fIWA==
-X-Forwarded-Encrypted: i=1; AHgh+Rps8DXN7mKOsrHOWFBBPFJAyQFHyE2YBJm19NCpepTQeek7hDHeMBMhBZFmBL5+mlpXAUE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPAKfBgWGWB0VQrBVRGMv2a7mlVQBqj+MTlduBL9suJjbVA+R7
-	Iwy9eWREBAdO3OUxgwqxXesKENFFqYisaB2eD2xlcEhhWf7N7lBgww8nOiqSbeLWSNN7Y0cntzu
-	jrzBVfgI+0LJunEcppiaWLpD8BZxhZlc=
-X-Gm-Gg: AfdE7cnfpd4s8TjhepyRR43SULJqAt47XmuZGCDCxsFaFS+0RkJr0u/6q6u4/gTUdRM
-	qvAd0JlaEmJkcoz5fV4dUhTTby97OFFAtB78p0hUqrHIRncu7XzY79CYnBQLiJb81JaAT23WJ4b
-	gbQSOj0FlBFQ/1FeUABK2EhuIscBDMRaoINPMYmRvI5lS7Ytm3sKkG5bRT0AaYZcGXwryKEKvJY
-	Y84kWf41VPvdc7cJ7rLQm47wCtNVzit9B2NRwbRpciBhT1DRj2AZdwc5Kar+jqwKfctmdisgNV1
-	6jX0BXO70XbFs9A680oXYXbMsjenFWA2GL4uDVCF
-X-Received: by 2002:a05:690c:650e:b0:81e:7034:2ec7 with SMTP id
- 00721157ae682-81e70343a1bmr37581077b3.50.1783668350063; Fri, 10 Jul 2026
- 00:25:50 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="j/kSjpFx"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783669221;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rAnobAo08XVC7dBk56KDBO/XbkEzdxpuiaM6tAGNrhk=;
+	b=j/kSjpFxwqdqn+fL4fjSsxFArocXZQCkElUZ6k8kB9P/B0NcyRHptDeOIPd/HQ5xEP3gpF
+	082wQYQfhWRV7iPi4IAbrTRLU+C0OuM8+7fPSJ2xHyZuuKBXYIotk4VIJ0JIno7Q8UOPVE
+	nXuwxp62d5mGIpuzA5xXx2QUsalUByg=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: menglong8.dong@gmail.com, Jakub Kicinski <kuba@kernel.org>,
+ jasowang@redhat.com, mst@redhat.com, xuanzhuo@linux.alibaba.com,
+ eperezma@redhat.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, pabeni@redhat.com, magnus.karlsson@intel.com,
+ sdf@fomichev.me, horms@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, john.fastabend@gmail.com, bjorn@kernel.org,
+ kerneljasonxing@gmail.com, netdev@vger.kernel.org,
+ virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+Subject: Re: [PATCH net-next 1/3] net: busy-poll: introduce sk_tx_busy_loop()
+Date: Fri, 10 Jul 2026 15:39:57 +0800
+Message-ID: <NCm5lbjeS9uYIxdwTdjp7g@linux.dev>
+In-Reply-To: <ajJrckiXEUztBQDz@boxer>
+References:
+ <20260611071242.2485058-1-dongml2@chinatelecom.cn>
+ <TYn10tJ2SIGF1pAhF26DRQ@linux.dev> <ajJrckiXEUztBQDz@boxer>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
- <20260708090151.151729-2-sun.jian.kdev@gmail.com> <ak5HLLrYK3R_g2y_@u94a>
- <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com>
- <ak8XSRiLKx5WcIQw@u94a> <1f8aad47f61fbf85eb55276e4bb01bfcff61393e.camel@gmail.com>
- <CABFUUZEXYduca34g22YZ1ESyYe3Yc3kYQrTEWLMxB5X0ZmYn8w@mail.gmail.com> <4349d987d34f9426bdbb09a5d02de61da8f3e746.camel@gmail.com>
-In-Reply-To: <4349d987d34f9426bdbb09a5d02de61da8f3e746.camel@gmail.com>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Fri, 10 Jul 2026 15:25:38 +0800
-X-Gm-Features: AVVi8CdDId0qAQuJjxIMlDaRDt9TMr1o0P2SW2pz0fSqjQyJjET2634wzxh5uAc
-Message-ID: <CABFUUZEropo5ROshFt+mD+AtF_6VRGcyaOES-wUjasL5J2W4eQ@mail.gmail.com>
-Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer pointers
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>, bpf@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, 
-	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Jul 10, 2026 at 2:23=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Fri, 2026-07-10 at 13:52 +0800, sun jian wrote:
->
-> [...]
->
-> > There is an observable effect on the target bpf base. I tested it with =
-a
-> > temporary raw_tp writable test_run reproducer, not part of the series. =
-It
-> > attaches a raw_tp writable program to bpf_test_finish and triggers it
-> > through BPF_PROG_TEST_RUN. The program does:
-> >
-> > r6 =3D *(u64 *)(r1 + 0)
-> > r6 +=3D -8
-> > *(u64 *)(r6 + 0) =3D 0
-> >
-> > With KASAN enabled and the BPF JIT disabled, on the bpf base without th=
-e
-> > verifier fix, the program loads, attaches, executes, and KASAN reports:
->
-> Could you please identify why the behaviour differs between bpf and bpf-n=
-ext?
+On 2026/6/17 17:40 Maciej Fijalkowski <maciej.fijalkowski@intel.com> write:
+> On Sun, Jun 14, 2026 at 06:12:46PM +0800, Menglong Dong wrote:
+> > On 2026/6/14 02:21, Jakub Kicinski wrote:
+> > > On Thu, 11 Jun 2026 15:12:40 +0800 menglong8.dong@gmail.com wrote:
+> > > > For now, we use sk_busy_loop() for both rx and tx path. The sk_busy_loop()
+> > > > will call napi_busy_loop() for the specified napi_id. However, some
+> > > > nic drivers have tx napi, such as virtio-net. In this case, sk_busy_loop()
+> > > > doesn't work, as it can only schedule the NAPI for the rx queue.
+> > > > 
+> > > > Therefore, introduce sk_tx_busy_loop() for the nic drivers that support tx
+> > > > napi, which will schedule the tx napi if available.
+> > > 
+> > > First, I thought the only difference with Tx NAPI is that it can't be
+> > > busy polled. So if you want to poll an instance don't register it as 
+> > > a Tx one instead of adding all this "tx polling" stuff in the core?
+> > 
+> > I see. Register the tx NAPI with netif_napi_add_config() allow us
+> > busy poll it. But we still have two NAPI instance: rx NAPI and tx NAPI.
+> > sk_busy_loop() can only busy poll on one of them.
+> > 
+> > Before AF_XDP, we don't have the need to send packet via tx NAPI, which
+> > means that we don't need to busy poll it.
+> > 
+> > I analyst some nic drivers on the implement of AF_XDP. Some of them
+> > will check xsk tx ring of current queue and send the data in it in the
+> > rx NAPI, such as mlx5. Some of them will allocate a extra "rxtx" NAPI
+> > for the AF_XDP zero-copy queue, which will poll both the data receiving
+> > and sending.
+> > 
+> > In the case about, they will do the data sending and receiving for the
+> > AF_XDP in a single NAPI instance.
+> > 
+> > However, some driver receiving the data in rx NAPI and send data in
+> > tx NAPI for AF_XDP. In this case, we can't use sk_busy_loop() for both
+> > rx path and tx path, as we need to wake different NAPI instance.
+> > 
+> > > 
+> > > Second, can this problem happen for any other NIC or is it purely 
+> > > an artifact of virtio's delayed Tx completion handling?
+> > 
+> > According to my analysis, only virtio-net and ICSSG driver have
+> > split NAPI for AF_XDP. I don't have a ICSSG nic, but the codex tell
+> > me that it does have the same problem.
+> > 
+> > I'm not sure if it is a good idea to introduce the sk_tx_busy_loop().
+> > Maybe we can modify the driver instead by using the same NAPI
+> > for both data sending and receiving, just like others do. The
+> > advantage of introduce sk_tx_busy_loop() is that we can split the
+> > data sending and receiving, which maybe more efficient.
+> 
+> Would be good if you back your changes by any performance numbers. I
+> believe that drivers do tx processing via rx napi as before AF_XDP it was
+> only about cleaning up writebacks, AF_XDP added more weight via actual tx
+> descriptors submission.
+> 
+> Maybe you can vibe-code virtio-net to work only with rx napi and see what
+> are the results.
 
-I checked the current bpf-next, but I could not reproduce the difference.
+According to my testing, there is no obvious performance improvement
+with tx napi. I'm going to implement the xsk tx queue consume in rx napi
+instead for virtio-net.
 
-Both the public cgit page and my local bpf-next/master and bpf-next/for-nex=
-t
-point to:
-a4553044d1af ("Merge branch 'bpf-bound-rdonly-rdwr_buf_size-kfunc-return-si=
-ze'")
+Thanks!
+Menglong Dong
 
-I tested that tree with only the selftest patch applied. The staged diff
-only contains:
+> 
+> Side note/question - Do you have a tx-only use case for AF_XDP ? I am
+> planning (for a long time actually) to implement asymmetric AF_XDP
+> sockets. Currently for ZC scenarios xsk socket occupies both rx and tx
+> queues even when you do rx or tx only.
+> 
+> > 
+> > > 
+> > > Third, this series does not apply.
+> > 
+> > Ah, I'll rebase this series if a V2 is acceptable.
+> > 
+> > Thanks!
+> > Menglong Dong
+> > 
+> > > 
+> > > 
+> > 
+> > 
+> > 
+> > 
+> 
 
-tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
-tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
 
-The negative const-offset case is still accepted at load time:
 
-#637/2 verifier_raw_tp_writable/raw_tracepoint_writable: reject
-negative const offset:FAIL
-run_subtest:FAIL:unexpected_load_success unexpected success: 0
 
-and the verifier log only shows:
-
-processed 4 insns (limit 1000000) max_states_per_insn 0 total_states 0
-peak_states 0 mark_read 0
-
-The current __check_buffer_access() in that tree still only rejects a
-negative instruction offset and a non-constant var_off. It does not check
-the folded effective offset, so this case still has off=3D0 and var_off=3D-=
-8 and
-is accepted.
-
-So, at least on a4553044d1af, I do not see bpf-next rejecting this case. If
-you have a bpf-next commit or verifier log where this case is rejected, I'd
-be glad to take a look and reconcile; I may well be missing something in my
-setup.
-
-Thanks,
-Sun Jian
->
-> [...]
