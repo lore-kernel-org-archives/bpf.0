@@ -1,156 +1,139 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D2A6301474
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 01:20:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB7EC8F49
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 01:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783646401; cv=none; b=V6JHjLsfoAZrQlk5xUyT+/wVZML541UNR8bxPzb+wXXNqsjVFCf2EJ1qwgSVbHYTjc/YORAJW/6AOoAK9L4sDNEzKk+xo4qvjX7Bhc1wLAsRWxTipinEugMJWj6IQLWgGC4o6j8F4tRB/nppTrvrCA5RVxEQSE368JeSuQBEFiY=
+	t=1783646473; cv=none; b=VO6FXGKqctegx5HHtmcl+M4gnMYM3f8VTMVpuUX2Kj9BGHWOnXXfO/NlLBqYVNEYxZf+UZAJO+h4NSdE4/JTIs7/GjiQCDQ8LyoslRqiAhQL9lxVvRTA+wUqUW1CBSJmBYHveqxpeNDeLbIRF2/lbvoVbM6wIltrYBjOgLocNKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783646401; c=relaxed/simple;
-	bh=SUil1jMFAUbO2hOUlJTuFsrtDwHXhw41oXX8DeL9ZfA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=TFsJyordEQGFQUBO1rJH3o/ou8lbgo7cGrDmw+2HWE1bxlz7faODmK1RWJoDJ9tzkPK9LzIV+MbDHOJney1UzfHACdZCXv0WHTTTehHq5x41qkogHRewFh0YDyJ16QLyQir6ZQdbSWlUUo6ULOh/BXsEevg0iyEYuNp2LJfKgQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DtDVdHiW; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783646473; c=relaxed/simple;
+	bh=4yukS/j8Ck2PVRXvA3tdbJh2BOqWdR4qjrXDtGjnXQU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=MbVBsXjt3IfrcJEWtXJdp5lDVnnJLqrQ9VuPzGgxEH7gYF89WNFFaHAoSt7qdCKbitBv6tV4QxI7+9nQH2ph6KkNXoGalPO93uqXeM4ms7usBsyX3HJ5JvuQG9PvTluhp0fUoc1lmmrkb6UA31aeyoWY3uv0LTIQKCu+RyGj3VA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DCVrY/4g; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DtDVdHiW"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2cc6ae3e7f1so2162345ad.0
-        for <bpf@vger.kernel.org>; Thu, 09 Jul 2026 18:20:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783646399; x=1784251199; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=o1rD6Pk1nfn1uMSACm9d58komzrKNW2qo5mOYfOfH9U=;
-        b=DtDVdHiWqX2QTvivItXMths8JJB/c/P2zlOuh+cD4eh9v0aPX+YhWzpU5JOg0GJpXI
-         hr7YF2fu2JaY/bXufxK9HWR3wYKoM38KYhkdsglMx7q7O1woKuE0rUnaWw9ehE/SXMvb
-         a/BbTBOuRk3ut5yHtLgRMXBWJ0b5aWHZzCAsX7zgQM1c8Siv7RKR2xD6D1isM967owsv
-         L6limUJEX5S4apN+9EgHo/FPbAo9Mi/IMKUlfeFMRm5jxznw+VYPbnsUMhxs7GT+xxZH
-         ob28SbhJciy8uNjX0Ivqf/jvfsT/3WbvK9QOQaoSqxto6j7gYn3FpXpycRI/uqtXo+RF
-         Z81A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783646399; x=1784251199;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=o1rD6Pk1nfn1uMSACm9d58komzrKNW2qo5mOYfOfH9U=;
-        b=sN8OFZXchcvKSaWNPAdxBOvxdJyJnin4yD6Xs2+UpGLrIbvW/tzERTC29e/IlsfnM1
-         m5YfvbFo7340UYSw8wwBFYVkuUs69j+u21k2NNWSzLdMW7UEeSU75qnydlS9SL1L9d1C
-         pfdwJHGIUKDf7tIh2uTesiIyMbhmdEFd18IfvoKlUuhc5Kk2I+cO5csadOFB2ur6awtx
-         NUzt7ZiUXCwvXuOdZJ5ATCfs2i4q1LOuVg3BcC5srf5S6CmCAqe/Sh4RemOtBENuv6I+
-         9mBwXEgRM8T+OwH+OIb0gpKglc8/nAlaGKzoP8Y0/zB6XdiSCfIXc5RTNFZxtcifX+CJ
-         TFAw==
-X-Forwarded-Encrypted: i=1; AHgh+RrigmKNWDwshh3KGtkesL7pxV7Zxp4DMtAE4z25T6r449BNE91ztNC0qDyl6FvnwIbAvJ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVQdnHC0wmhjORzw81YwH2gK6Ccu0RStNRRWnkpAT/rfHbFvBe
-	Py9NApCYwT1No8y1qX1MIQnb87kz8skq+l6gTgGtZ/XEAsivihYEwrWtFb8dkw==
-X-Gm-Gg: AfdE7cnxR7HozsKTf0/zXp5UZo9zFPO0NFaEGW1sJbZtMy2E28vZMJK6JOIyG4gg6Y8
-	E6I6FWoY09Ba/9I7zkfD6xooVgm9OIOB+p9XgbJzHZcNm3poVenNpAt/j8I4q0j0x/nQwOfH1ou
-	48s1aS7E4GbzE8xckkTlddMHHstkpY6GcznaiYn1aceGYTqxRxyk1ObDQj3CEAVjhHllEg5MZ5x
-	o5DflBMSE/uJnXOUdCxHySZebUc03yPgMqVi2BhVjM/Jgam3I9Tb85AUfuZEFRbZzd6VGRgXwmX
-	zTLgU88VIES/Q0ilVhe08cFshSzmyQwiCBszxAR5cozpUPhyV9izsaSyNU7nkJh6Ma5KufDeF5I
-	lClFmKezdOyVXtDAimHhjqPug58IzL9QeIwNfWcVxQeO2S4hvvS/FzpBljwSkdI+HExoRy8QMmq
-	gMad40PngVWKgvzKhst1imE1KwdkJk1nRrLWWNW3Kj
-X-Received: by 2002:a17:902:f68d:b0:2c9:c517:d078 with SMTP id d9443c01a7336-2ccea42e1efmr91898815ad.36.1783646399330;
-        Thu, 09 Jul 2026 18:19:59 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9d3bc1fsm51477485ad.55.2026.07.09.18.19.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 18:19:59 -0700 (PDT)
-Message-ID: <cd58c8e1e7265ab59dff6882a2e429da97077fd6.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 09/12] selftests/bpf: Add C tests for 16-byte
- returns in R0:R2
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com
-Date: Thu, 09 Jul 2026 18:19:56 -0700
-In-Reply-To: <20260708201025.2160583-1-yonghong.song@linux.dev>
-References: <20260708200939.2153664-1-yonghong.song@linux.dev>
-	 <20260708201025.2160583-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DCVrY/4g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 577F31F000E9;
+	Fri, 10 Jul 2026 01:21:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783646472;
+	bh=YON70PtO7oQhlpL41pTczYGhGXUGi5XG6Xh4ZeinT8I=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=DCVrY/4gWCjP92MKqlvi/KrBzvW+qxcxB1L38Rh316Lw007+udNaUX/st4kb9JOv9
+	 LD/ql626z+2p9+z7aTCYU2Tf1SXo0ETRixt29YTL7rh6WrnCtCMS6b644pAY9qkK5/
+	 2jBa/aJ6fTksw/Q73AHgAdfnF466LRUBdvd8EwUvjVz3NU8TbSpgKF8hH7VsNOfBCi
+	 8Kx5euGimDF/s1Msnuw8XK1+XrvSbCauIepgEMSBQhqyPci2IMGHFVbEcTdIFEyPSE
+	 e3DoydcVs9YdcGhKxBOi73g01LFA64LlWbSqtP1eF2Jd8EyMOctaF51uqjfu9Mefr4
+	 RD5RtsGqssApA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v1 1/2] bpf: Fix tracing of kfuncs with implicit
+ args
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260710005902.2234832-1-ihor.solodrai@linux.dev>
+References: <20260710005902.2234832-1-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+Date: Fri, 10 Jul 2026 01:21:11 +0000
+Message-Id: <20260710012112.577F31F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Wed, 2026-07-08 at 13:10 -0700, Yonghong Song wrote:
-> Add selftests that exercise a 16-byte return value passed in the R0:R2
-> register pair, expressed in C so they rely on the compiler lowering the
-> register-pair return. Tests include an __int128 return (from a subprogram
-> and a kfunc), a 16-byte struct return (from static and global subprograms
-> and a kfunc) and a 16-byte union return.
->=20
-> The R0:R2 return convention is only emitted by LLVM 23 and newer, so the
-> programs are gated on __clang_major__ >=3D 23; with an older compiler the=
-y
-> return a sentinel and the "int128_c", "struct_c", "global_struct_c",
-> "kfunc_struct_c" and "union_c" subtests are skipped.
->=20
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Accessing `btf->kfunc_set_tab` without holding a module reference =
+causes a use-after-free vulnerability.
+--
 
-[...]
+--- Patch [1]: [PATCH bpf v1 1/2] bpf: Fix tracing of kfuncs with implicit =
+args ---
+commit 13df91bf669b3a55c459c1663fbf726f9f52bc5c
+Author: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-> +static void run_prog(struct bpf_program *prog, bool may_skip)
+bpf: Fix tracing of kfuncs with implicit args
+
+A kfunc marked with KF_IMPLICIT_ARGS flag takes implicit arguments
+(such as bpf_prog_aux) that the verifier injects at load time.
+resolve_btfids strips those from the kfunc's BTF-visible prototype and
+keeps the real kernel ABI in a counterpart _impl prototype.
+
+Link: https://github.com/sched-ext/scx/issues/3687#issuecomment-4906694106
+
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 64572f85edc83..20aeca6b4f95c 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+[ ... ]
+> @@ -9114,6 +9114,26 @@ u32 *btf_kfunc_flags(const struct btf *btf, u32 kf=
+unc_btf_id, const struct bpf_p
+>  	return btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
+>  }
+> =20
+> +/*
+> + * Return the union of a kfunc's flags across all hooks.
+> + * Unlike btf_kfunc_flags(), not restricted to a calling
+> + * program's hook. Used when attaching to a kfunc for tracing.
+> + */
+> +u32 btf_kfunc_accumulated_flags(const struct btf *btf, u32 kfunc_btf_id)
 > +{
-> +	char buf[64] =3D {};
-> +	LIBBPF_OPTS(bpf_test_run_opts, topts,
-> +		.data_in =3D buf,
-> +		.data_size_in =3D sizeof(buf),
-> +		.repeat =3D 1,
-> +	);
-> +	int err;
+> +	enum btf_kfunc_hook hook;
+> +	u32 *hook_flags;
+> +	u32 flags =3D 0;
 > +
-> +	err =3D bpf_prog_test_run_opts(bpf_program__fd(prog), &topts);
-> +	if (!ASSERT_OK(err, "test_run"))
-> +		return;
-> +
-> +	if (may_skip && (int)topts.retval =3D=3D -1) {
-> +		test__skip();
-> +		return;
+> +	for (hook =3D 0; hook < BTF_KFUNC_HOOK_MAX; hook++) {
+> +		hook_flags =3D btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
+> +		if (hook_flags)
+> +			flags |=3D *hook_flags;
 > +	}
 > +
-> +	ASSERT_EQ(topts.retval, 0, "aggregate_ret_result");
+> +	return flags;
 > +}
 > +
-> +void test_aggregate_ret(void)
-> +{
+>  u32 *btf_kfunc_is_modify_return(const struct btf *btf, u32 kfunc_btf_id,
+>  				const struct bpf_prog *prog)
+>  {
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 6515d4d3c0032..fde11a2f6869a 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -19121,8 +19146,8 @@ int bpf_check_attach_target(struct bpf_verifier_l=
+og *log,
+>  		if (prog_extension &&
+>  		    btf_check_type_match(log, prog, btf, t))
+>  			return -EINVAL;
+> -		t =3D btf_type_by_id(btf, t->type);
+> -		if (!btf_type_is_func_proto(t))
+> +		t =3D btf_attach_func_proto(log, btf, btf_id);
+> +		if (!t || !btf_type_is_func_proto(t))
+>  			return -EINVAL;
 
-The test_aggregate_ret()/run_prog() duplicate functionality provided
-by the __retval tag from test_loader.c. To achieve the same skipping
-mechanics I suggest to:
-- extend test_loader.c / bpf_misc.h with a new tag: __skip("reason")
-- use this tag as:
+[Severity: High]
+Does this introduce a use-after-free race condition during module load?
 
-  #ifdef __clang_major__ >=3D 23
+The new btf_attach_func_proto() call executes before the module reference is
+safely acquired via btf_try_get_module() later in bpf_check_attach_target():
 
-  SEC("tc")
-  int aggregate_ret_test(struct __sk_buff *skb) { ... }
+bpf_check_attach_target()
+  btf_attach_func_proto()
+    btf_kfunc_accumulated_flags()
+      btf_kfunc_id_set_contains()
+        // Accesses btf->kfunc_set_tab->sets[hook]
 
-  #else
+If a module is just loading (in MODULE_STATE_COMING) and its BTF is already
+visible, a concurrent BPF_PROG_LOAD could trigger this path. Meanwhile, the
+module's init function might call register_btf_kfunc_id_set(), which uses
+krealloc() on the same array.
 
-  SEC("tc") __skip("... need clang23 ...")
-  int aggregate_ret_test(struct __sk_buff *skb) { ... }
+Could the sets array be freed by krealloc() while the verifier is performin=
+g a
+binary search on it here?
 
-  #endif
-
-[...]
-
-> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_int128_c.c .=
-..
-> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_struct_c.c .=
-..
-> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_union_c.c ..=
-.
-
-Nit: all three files can be merged into one.
-
-[...]
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260710005902.2234=
+832-1-ihor.solodrai@linux.dev?part=3D1
