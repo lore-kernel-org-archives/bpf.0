@@ -1,162 +1,155 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31DA63AA4F8
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 22:31:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783722673; cv=none; b=n2oKpI0aFYK+k+YEeBDMwUslkLSgXWrztet7/T5CkMMvteKosQ6usH5yPpT8Zk/5SJA+oiE9+JRHAef390PlHSCHEMs3A9BoD+V7BXr5cXD1u8oF6tDo4p8YellUFgeG+6/lCGAhPeaY6UsZq2MZeD9UKKQfS7l5sT0Cn+Em+44=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783722673; c=relaxed/simple;
-	bh=KNU956WbXUTuSnCzMU/9cD+JnhsZzaznC141dmSOsok=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SSTSAkr0ekQNgmUsxqIkJBW6SkxVp2Jn/mEjdgxgDN8YXLX+GA4izSMlTP6QNw+7N8MreevIJYorno77j9v/ysyAIiN9GwoP7pUSvxwXueeTlUdFufINNMxrZxrwIJvaKstKs/RNBa0BZNZpx/VEB5Ol8UO2HOKGDtq5/cy8vCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=v/h/SoCI; arc=none smtp.client-ip=95.215.58.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C85405C48
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 22:32:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783722727; cv=pass; b=HcLbNvaWDkLPhQFl1ELnJYFxcIvqWO3CKkiYwWt89iFrvblqeBP2KJy38Y9QXsK5LXVUrUuu/1QDFN7VrWT/UYLetFptjzx1g+qeBRB11iC5jaj+HbNl5fWiuQWjpMIfzYXDHiUuzdp7+hbcgQTYjsUphXfBScv1EAQOUHEBO/8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783722727; c=relaxed/simple;
+	bh=WXbjqKu+g5ONdz2wdFoLLO4mX1xfwAvvVyB7RpLnH20=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dW6eEFDrywqM1mJIoBd5KqTeuUsqeb3Ir+ZpaQOGod898zvnS8TnZsxuKsi8KCqPoxfvl896NkaQjerW8m6l2g1TkyK1tMQB8tw0QriiUtk4qg3VCCsilByW+ov1wsRcThJKPMLruvcHP799pOK1+x1LwQM+jt94WbK7JTVrz/I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kV+z0u6x; arc=pass smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="v/h/SoCI"
-Message-ID: <dc6cc14c-3ec8-48ee-8152-f24643679dfc@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783722670;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VoPzMG2SN6nIvki88FrSOBZdQ9DO7hqanhNeX70pujM=;
-	b=v/h/SoCIzt0ttRzOTf0222LerJN6TpFZXUrDgl+0eaDO49Meyn7V51LJkPhmIkJ1FcCWyS
-	P4WLRknp2ItKTuDgEAhKJHBOI4vK/UuJc+tOA8uAxFXXfWzJ+eLuzgLM6JITt1PyDwU8xP
-	uauauAP2P4eUuFfJEIcSonEnsZw7+rk=
-Date: Fri, 10 Jul 2026 15:30:58 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kV+z0u6x"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2ce9e39fccbso2242815ad.1
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 15:32:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783722726; cv=none;
+        d=google.com; s=arc-20260327;
+        b=OUxxR5iYdbE1EUH9tiQVEYjQSgTifX/Mmdy4x/huaciBLpB3Lav7BfLy1Ana3L6zFG
+         sGPzavce9SFrV6RpxWfSNw1gibCKINcMMJhgWVXbpVMXQGbPpGDvlc9wvsc0YhcEFozl
+         bsmb4VW4+XVdhyJl/h5kRXTAXWko3bna5u+xFbuEKopbjl3SIEjmQbkLph0ovN4WVFPF
+         u2tiBhb+cOBrrZmV4BpBmjgA/XBrQQYC/93+xPZI1msJEXkS3g+vMg/2hstx+VIg2aCQ
+         o4ZVP9n6WkFjtnlFg5Y8UeiYDJJErEhITEqHFdZ5aX7lUwAr4kiNKKWSPURKv22YsCQd
+         d1iw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=NyhOhTcFEIPyPVjmK5oFc5WLCsPA2TzQIHNnbE+6jhk=;
+        fh=zCSzYjVZ+wAlrZHTxMEgmtbOcOHVIiInm1RqIvj3hvY=;
+        b=SDpbL+4KJ3H42B5PL7h1IingT2s7nbdBdKN5UtkfQtltSZUQVLBxOhAcJLsmsqIXzC
+         if/Qh3eoIUHEPOZcJ3cRXqky7ghvlot1E45G5XG9B0eEiBjTIRZ92S4sa/DGEdTk2dIw
+         kz2I+L/j8QVHqrppxgsIfAZugvaf+u27+my7KvuKPqN+AQfognk/oZfWvVK7hqZnTLVL
+         ArgW8yrmTYXIv/GDBiqGLayjGSnmSNiplsHMeSbMLJYBlFi3CkeqIBFlMFAVSlFPE7Wt
+         jMsZhDW2t3qWLATrzPPmyWWnNxEc6CNyN7zEDhlL50jRCIxjQeDAs/9cOorDjKQkWOOP
+         QxlA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783722726; x=1784327526; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=NyhOhTcFEIPyPVjmK5oFc5WLCsPA2TzQIHNnbE+6jhk=;
+        b=kV+z0u6xcQsMp/Eko6ntJfNvDdcSG2XqOLbjr/P1zKHRs72XcBeFF4IiV4bTE9zD3k
+         +kJSLd3Wi9DZaofKdh9ObBTYI29v1eSPyeWco6Ct4KB/6c7fv3R4UjE4bLra3B5Gj7Gs
+         w/xCabX0d359OVFFTlLowjN6Q6z+NU11iY9LO+zRcjd5w1+Hh3SjLBnl1ayVnCTSBAn4
+         PfkJPQM9uUOTgwX6m0nchvmTbpMDdL4E+SKxBELjYLzmxJFftRQNSHKweigZFN+7OqHN
+         xcKezrd9X8Or2xrFvVoBJLQ2299v9CBIXZN8CR7l8mA0/Cdyqxjr313n/I8WmTHUXcmk
+         lYFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783722726; x=1784327526;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NyhOhTcFEIPyPVjmK5oFc5WLCsPA2TzQIHNnbE+6jhk=;
+        b=WYgtGpFH5GJucWgQ3J4JTEffkJbP/TMluAQkymfHrytzlvvJ6uxYADiiE1CXStpKZQ
+         rW8zlRa0Aab8wIon1+jdPNy4BkHKbug7hINhwO5d8XpYEmkI+hlOHgyGNQcVOYq5mKIY
+         mrhMDC49TRP57VVwNE0GchdaxclY9bZuHrYXQ62qLvOxwbZLl3oH2xN7E/37vWVwc5rT
+         6xFQ2TB2vvf+Af/QniSQb9pqShZRL8xqW8X+A420hHn0zqLhVTHKrfGwZX6Qus1u/fOE
+         7h9VjPsZs/atDCAnDwJ/Jeme1hjJkmhJ2gT6CF/T/sfpRsFoZ0g4iQqkJQImAKjJQ+x9
+         ACIA==
+X-Forwarded-Encrypted: i=1; AHgh+RqH51CbOMlJKs4VES6euwP+MsJBnz+AEeTz6z83TA/QtP47o8A15uTjQHoLSZFIsoNN1EI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YygQdXYl+kXitatZwZGFpovyld01obTVdL+KBl+EPV3JPDvKPxo
+	4zabBH20e8JPWSarzSImuFP05cy/muACtExSN43ls43pL/ACqEz75s0Xu79qhUfSiZa7dBFGeiw
+	3a3Sw4w/OfuWIj+kJayoPDqMN05Qcb0g=
+X-Gm-Gg: AfdE7ckUVLuOsKasb6aEnnXwiXeCqxzQk7xl50X6DLVdN0y/4kSH7FxmOpUW8n7mzva
+	G8IY1yTc19b31LHyVLaGssaUFmB5rqJdtvLQX296NumViTQQHXRtr2Zcno6HxBeqDBmRPNwarsn
+	LzuVGhamDeNOtVen8P++I8xu+JJMkr9QBw+bYlgbE6AOUJEYWHqFbiQQRoMQ5S0K5uIt65zsEoi
+	ddlo7t654h6OTLOSzhrqUuB+oNI4SRJdFhJqbAW9A4XSc8blB3TOdIXt4fc7/LcTR4CozWZzAFX
+	iicgQSNyUFMhKJpi7IHU7dxejOzevdE/0CEEzBiy0ruawUEajm6+4w==
+X-Received: by 2002:a05:6a20:3d0c:b0:3a8:800:bdf4 with SMTP id
+ adf61e73a8af0-3c0f0beee64mr6387057637.33.1783722725648; Fri, 10 Jul 2026
+ 15:32:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 5/6] tools/build: selftests: Allow versioning LLVM lld
-To: James Clark <james.clark@linaro.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-References: <20260518-james-perf-llvm-version-v2-0-f12cc4f031d8@linaro.org>
- <20260518-james-perf-llvm-version-v2-5-f12cc4f031d8@linaro.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260518-james-perf-llvm-version-v2-5-f12cc4f031d8@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260708193239.5063-1-emil@etsalapatis.com> <CAEf4Bzarum7QXKT+BuvBa9kSrjMX=BzknWFKQBQuROKOWFeuZQ@mail.gmail.com>
+ <cbee8f83f6e11ac58afa366317d52e64473b2736.camel@gmail.com>
+In-Reply-To: <cbee8f83f6e11ac58afa366317d52e64473b2736.camel@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 10 Jul 2026 15:31:51 -0700
+X-Gm-Features: AVVi8Cek6HCZx8SraJqjeiIqLYRBxL3CVi3Cj5oiM64DJj6tLvkViVaIAORy6c4
+Message-ID: <CAEf4Bza300gZu8PxspoF1VF8uNG4ihsANOMOhzZSxJHrGQUqww@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3] selftests/bpf: veristat: Minimize map size
+ during verification
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org, ast@kernel.org, 
+	andrii@kernel.org, memxor@gmail.com, daniel@iogearbox.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/18/26 2:03 AM, James Clark wrote:
-> Building with LLVM=... could result in a different version of lld being
-> used than the main toolchain for liburandom_read.so because it's
-> hardcoded to "lld" in this makefile.
-> 
-> Make it consistent with the rest of the LLVM toolchain by adding an LLD
-> variable to Makefile.include. Keep the fallback for other architectures
-> in tools/testing/selftests/bpf/Makefile as it seems like it's something
-> specific to this make rule and shouldn't be global.
-> 
-> Clang only accepts either a full path to "/x/x/ld.lld" or "lld-15" style
-> inputs to "-fuse-ld=", so the only way to make it work with both
-> prefixed and postfixed paths is to always take the full path. Also I
-> don't think the original use of "lld" over "ld.lld" was significant as
-> this is always a linux build, so that can be changed to make it work in
-> both cases.
-> 
-> Signed-off-by: James Clark <james.clark@linaro.org>
-> ---
->  tools/scripts/Makefile.include       | 2 ++
->  tools/testing/selftests/bpf/Makefile | 8 ++++----
->  2 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-> index 380ad84ac51e..5c2d505cba62 100644
-> --- a/tools/scripts/Makefile.include
-> +++ b/tools/scripts/Makefile.include
-> @@ -67,6 +67,7 @@ ifneq ($(LLVM),)
->    $(call allow-override,HOSTAR,$(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX))
->    $(call allow-override,LD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
->    $(call allow-override,HOSTLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
-> +  $(call allow-override,LLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
->    $(call allow-override,CXX,$(LLVM_PREFIX)clang++$(LLVM_SUFFIX))
->    $(call allow-override,STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
->    $(call allow-override,LLVM_STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
-> @@ -91,6 +92,7 @@ else
->    # Some tools still require Clang, LLC and/or LLVM utils
->    $(call allow-override,CLANG,clang)
->    $(call allow-override,LLC,llc)
-> +  $(call allow-override,LLD,ld.lld)
->    $(call allow-override,LLVM_CONFIG,llvm-config)
->    $(call allow-override,LLVM_OBJCOPY,llvm-objcopy)
->    $(call allow-override,LLVM_STRIP,llvm-strip)
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 6ef6872adbc3..836e783f0170 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -245,9 +245,9 @@ $(OUTPUT)/%:%.c
->  
->  # LLVM's ld.lld doesn't support all the architectures, so use it only on x86
->  ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
-> -LLD := lld
-> +USE_LD := $(shell command -v $(LLD))
->  else
-> -LLD := $(shell command -v $(LD))
-> +USE_LD := $(shell command -v $(LD))
+On Fri, Jul 10, 2026 at 2:50=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
+>
+> On Fri, 2026-07-10 at 14:44 -0700, Andrii Nakryiko wrote:
+>
+> [...]
+>
+> > > @@ -1248,6 +1248,29 @@ static void fixup_obj_maps(struct bpf_object *=
+obj)
+> > >
+> > >                 /* fix up map size, if necessary */
+> > >                 switch (bpf_map__type(map)) {
+> > > +               /*
+> > > +                * if the verifier doesn't use max_entries
+> > > +                * then set to 1 to avoid -ENOMEM
+> > > +                */
+> > > +               case BPF_MAP_TYPE_HASH:
+> >
+> >
+> > I'm wondering if we should add ARRAY here as that one is actually with
+> > high likelihood will be large, though there are some corner cases
+> > where size might matter (e.g., existing code omits error checking
+> > knowing that verifier will prove it can never fail; resizing to 1
+> > might pessimize such check, probably, if index is larger than 1). Can
+> > you actually try the latter scenario with some small program, I'm
+> > curious how the verifier will behave?
+>
+> For array maps there are several complications: first is the constant
+> maps handling and second is null check elision. The latter is somewhat
+> nasty, see check_helper_call():
+>
 
-Can confirm v2 fixes the v1 breakage I reported.
+yeah, I was thinking about that bit. Worst case, (valid) BPF code can
+have, say, 8-element array and have all the keys within [0, 7] range,
+by *decreasing* map to less than 8 elements we actually force NULL
+check.
 
-One nit on the empty USE_LD case the bot raised. It isn't actually a
-build failure: if command -v finds nothing, USE_LD is empty and clang
-gets a bare "-fuse-ld=".
+Anyways, ARRAY, I believe, is one of the maps that caused this
+feature, so I think maybe we should still do a dirt-but-practical
+approach, and just cap ARRAY size if it exceeds some modest size
+(e.g., 128K, or something).
 
-Since it's unintentional, how about we just add a check to ensure the
-linker was found?
+Oh well, capping non-ARRAYs is useful anyways, so let's keep it as is for n=
+ow.
 
-Something like:
-
-    $(Q)test -n "$(USE_LD)" || { \
-        echo "$@: linker '$(LINKER)' not found - add it to PATH, or pass \
-        LLVM=/path/ or LLD=/abs/ld.lld" >&2; exit 1; }
-
-
->  endif
->  
->  # Filter out -static for liburandom_read.so and its dependent targets so that static builds
-> @@ -258,7 +258,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom
->  		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) \
->  		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
->  		     -Wno-unused-command-line-argument \
-> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
->  		     -Wl,--version-script=liburandom_read.map \
->  		     -fPIC -shared -o $@
->  
-> @@ -268,7 +268,7 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_r
->  		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
->  		     -Wno-unused-command-line-argument \
->  		     -lurandom_read $(filter-out -static,$(LDLIBS)) -L$(OUTPUT) \
-> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
->  		     -Wl,-rpath=. -o $@
->  
->  $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
-> 
-
+>          case RET_PTR_TO_MAP_VALUE:
+>                  ...
+>                  if (func_id =3D=3D BPF_FUNC_map_lookup_elem &&
+>                      can_elide_value_nullness(meta.map.ptr) && <-------- =
+true for array maps
+>                      meta.const_map_key >=3D 0 &&
+>                      meta.const_map_key < meta.map.ptr->max_entries) <-- =
+checks max_entries
+>                          ret_flag &=3D ~PTR_MAYBE_NULL;
+>
+> [...]
