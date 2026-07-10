@@ -1,185 +1,174 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f0.google.com (mail-pz2-f0.google.com [74.125.228.0])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0050380FD9;
-	Fri, 10 Jul 2026 18:53:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C6CC37DE84
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 19:07:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.0
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783709612; cv=none; b=YPf0tXNl9Cwn8/r9L/1StKSgOWYtqESQuOp7x/S72mjogEZsY4F32Gy7BhXv3vINWjgRnIOms6BrPDy1BBB7iXjxwi8I6miKdYSTQrlCcXf6UYtD3Xw31Qnua3RK1Aqvc0gUzUBpQivFsJx5AncAOh7qOvicHuNnB/YuDfX2lJc=
+	t=1783710439; cv=none; b=nsukFhOG+SokwwUWkKFZS9MgN49lvq+bFrMzVKWSMOXROkkUNBg323z/5VZeZoLu4H17PKT1y/YRq7kclQJdcQnThCUVGr3WbJGvpoFeqx4pm46jNT/WxMNbHdjq7xMNDf2Jg1EW4GSTu8VB5zkZndEmuXhDom+D/Nb1Qt4xqZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783709612; c=relaxed/simple;
-	bh=QxUh8qX+2oRHGwcCLulJdwboWU2o16Zfn7rqZOdpTXM=;
+	s=arc-20240116; t=1783710439; c=relaxed/simple;
+	bh=SEmPD7JblkDJEFTqqdJbX3FS5ZS5bnh861fzGASB8Vs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iTj1QQGeR8Nbao6v8UbRE7meygSHD7egJ3wZJ+TluJD3rqYulDeXonfKFH5ciJvHz4+5UeEGSpYBWz/kLjAhXQDcQV5B16s/6vysurjFLyxPYyOhNSmISQXe2kXJxYYH1lBIHifcHb3AzshvJGuPDMwpliocxgXKZ4lGHBI8row=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nDhZgh/3; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fa06b04CapoFwlUEQOatiTCFov+mzwb6I1fkSNTg0b5kg0YeDJsgAaH0kLmkx2ahMJUR4wF3yd1OwH7eVKMKOm3WOgqflMMIlefOriwCNOMFZjhXSR3iclxIIF+//Bz5JzX7WD4+lfFXQsipRxjztvn4X21w6H1hXQ6wqVTatg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VY16zhBd; arc=none smtp.client-ip=74.125.228.0
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nDhZgh/3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F03D1F000E9;
-	Fri, 10 Jul 2026 18:53:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783709611;
-	bh=FWuowyvRtMvxp1pzf+XL1dPHmwjcwsc8o84lhpxUjy8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=nDhZgh/30Is3FEvL9cBN4+RE07BsiX5vquCpx0YGR4R77YJwGw3V6vuu+e3KDwjkY
-	 xE1KdGXHs8//VoP4+HeSYghjkWrTfj3sAIm9JCtQgyDY3teYqnzpEyIJNHaSF0oIap
-	 wvN5ncJ+wLhH9wkOKDRjcxv7PYE2iB5UFe8d50zc6h7h1nKgGMIQ+7+fcdsx4R97uc
-	 NqFcnFGQ75mp7gAitC3ITJDH/vBS/4Cwt8nq2HWkSUqk+7xDybMaCPv7LxzG+Almxt
-	 Yg7Ld21F69mTc3CmDydEZ3eyW6TKnoAtL7DRpmU7B85oPUytWzAruhS3LDhFge+1Pk
-	 YnLMjKx8pf/0w==
-Date: Fri, 10 Jul 2026 19:53:17 +0100
-From: Lorenzo Stoakes <ljs@kernel.org>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>, 
-	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>, Kiryl Shutsemau <kas@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Carlier <devnexen@gmail.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, David Hildenbrand <david@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] x86/mm/pat: acquire mmap lock on page table free to
- avoid ptdump UAF
-Message-ID: <alE6fUJZzELlUfxP@lucifer>
-References: <20260710-fix-cpa-ptdump-race-v1-1-d898699a7417@kernel.org>
- <529e37eb-ad4c-4b0f-8ba3-c5608aa7a893@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VY16zhBd"
+Received: by mail-pz2-f0.google.com with SMTP id 41be03b00d2f7-c95bd574471so512858a12.0
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 12:07:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783710437; x=1784315237; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=VWBjaJanp528VpTu2TOH4GFEEplwcn9VXFowenlC8oo=;
+        b=VY16zhBdtvy8kx0Qv3/hNaOhjnG+AsRpAtHwJdWQXyXY2iDIpqNvSe3OR78QpwFJef
+         9Z4Rs7WoagyIscid+iGekoOmkLJIqKgciOgSz9eTfjt12R/+DlUB8fotKygOdh8rXi2n
+         USfusKgkb56lRVfYj7taPDzNhnNkJOIjQZhrejCe2z8kmXi9eU5+nZmbfDWh9TiUpwOP
+         LzyCPX8mnj32gowWADaZ7I+kuMYEtm3khD5+2OmkGFCupUiM8n55Stk2+gxghiAc8tuj
+         rxszWrSknPTCWkBnTabQxFOZDUedGK20qcgPYyERN4ZwEPCYlDX8J7eUEYt+H92bRFO7
+         51mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783710437; x=1784315237;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=VWBjaJanp528VpTu2TOH4GFEEplwcn9VXFowenlC8oo=;
+        b=swt8JgxiyoMHjifITHRlqRIsSlgKrbuNBXWzufaM+bfL9Ui0zCWeRyygcJTAUPjw7l
+         jPzGUM15bwy0PJK92CWTjbUiVwdzmh6Q54qrYA+Ul4aE10qJFGMaiI2CWR0lA/CsZbGO
+         MwnJ40ikADgmJkAifyz9IK3WJYeH2ZcgiHS5tf1tQ0EzjO8V6YaiyEDNVdSils+CpQ9C
+         ZuB1nFBaiGOLmlJO97eOhKJXCDYgouCBWgRquCapefIiV92wneiL/JfsnXl01Zqgt9le
+         Ozv31z0J5Dd8uZ56VzTAfmS2Gk0dOMnXUEdFYh1NZOSKmOeVRqlP1uAEGd4xVh8c1pib
+         vqfg==
+X-Forwarded-Encrypted: i=1; AHgh+RpNfPjjruLgWQx6rdsipIDt+Z48/NxHe+6QsV9U8qBeO5UsOZvB1XN+36oPxJpBnCoTDcg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3n6GOkoqJ7Wt/XTBPNUDvpHOs3wbnaQKbUlMrBKM4QNUKplxK
+	Rqdt6DUEMf7b42JMCvNn4v4/U+7nbNaMYzTmnY8tsQUWgsEEwBb2bU/S
+X-Gm-Gg: AfdE7cmribvv/MGLOYcz93XAjOpHXGTR4LM+gm5ypzrJ5/NZHrLbrNU70QQqwvWE7tN
+	wLOY/zhvFQn2dtDVW0rVsvwxv5zBmT9o5N8wHuR27iXcTs1JVKEZLgcPw6c8gVQ+Do1tqFaJdbG
+	1gbMgpcv/JnoplwBjkJ/2gwgnZO4fgtB/2fYMcvZ1km9PRGdTtiTQ4JVuKhu1G+58WtudmfyNyU
+	mwakAXZRyLigeeKgz+n24vsH8QS1CxTsA8D6AXX7tjc9R5Wh4+nm8Ep0hWH//Y9+csvSZ4ozMRc
+	VEepg60II919tq48hMtOhGf6Iq6CHA4BnDy/qb9UN1ckKQ7auCHcQjm88Jxe8UwXKV3M5/5f8S2
+	AQ/0lb2v+6MZJQ7H7ZT9Gcf91NPfoOYVDzc2ZbJ2dUMMdv8IGgSkHsLzU/vr1waY9zxSsCxrT21
+	9f6cFykl+VIUoRs5/o
+X-Received: by 2002:a05:6a00:180b:b0:848:2eac:bfb2 with SMTP id d2e1a72fcca58-848895db4e2mr303610b3a.13.1783710437502;
+        Fri, 10 Jul 2026 12:07:17 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:4f::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84856e7c8edsm3299574b3a.36.2026.07.10.12.07.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jul 2026 12:07:17 -0700 (PDT)
+Date: Fri, 10 Jul 2026 12:05:23 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Vladimir Vdovin <deliran@verdict.gg>
+Cc: Lorenzo Bianconi <lorenzo@kernel.org>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v4 1/6] netlink: specs: Add XDP RX checksum
+ capability to XDP metadata specs
+Message-ID: <alE8oBxkrak8n602@devvm7509.cco0.facebook.com>
+References: <20260708203410.45121-1-deliran@verdict.gg>
+ <20260708203410.45121-2-deliran@verdict.gg>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <529e37eb-ad4c-4b0f-8ba3-c5608aa7a893@intel.com>
+In-Reply-To: <20260708203410.45121-2-deliran@verdict.gg>
 
-On Fri, Jul 10, 2026 at 09:26:48AM -0700, Dave Hansen wrote:
-> On 7/10/26 04:56, Lorenzo Stoakes wrote:
-> > This patch resolves the issue by acquiring the mmap read lock on init_mm to
-> > provide mutual exclusion against ptdump, which acquires the init_mm write
-> > lock.
->
-> Hey Lorenzo,
->
-> Thanks for looking at this!
->
-> This isn't wrong per-se. ptdump does _sometimes_ acquire the init_mm
-> write lock.
->
-> But the fun comes when ptdump_curknl_show() passes current->mm in to the
-> ptdump code. In that case, there's no init_mm locking. I think the
-> 'efi_mm' code has the same issue since it shares some of the kernel page
-> tables.
->
-> Is that your read on it too?
+On 07/08, Vladimir Vdovin wrote:
+> From: Lorenzo Bianconi <lorenzo@kernel.org>
+> 
+> Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
+> checksum will be use by devices capable of exposing receive checksum
+> result via bpf_xdp_metadata_rx_checksum().
+> Moreover, introduce xmo_rx_checksum netdev callback in order to allow
+> the eBPF program bound to the device to retrieve the RX checksum result
+> computed by the hw NIC and reported via DMA descriptors.
+> 
+> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
+> ---
+>  Documentation/netlink/specs/netdev.yaml |  5 ++++
+>  include/net/xdp.h                       | 18 ++++++++++++++
+>  include/uapi/linux/netdev.h             |  3 +++
+>  net/core/xdp.c                          | 32 +++++++++++++++++++++++++
+>  tools/include/uapi/linux/netdev.h       |  3 +++
+>  5 files changed, 61 insertions(+)
+> 
+> diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
+> index 5f143da7458c..6d0d90d3a614 100644
+> --- a/Documentation/netlink/specs/netdev.yaml
+> +++ b/Documentation/netlink/specs/netdev.yaml
+> @@ -61,6 +61,11 @@ definitions:
+>          doc: |
+>            Device is capable of exposing receive packet VLAN tag via
+>            bpf_xdp_metadata_rx_vlan_tag().
+> +      -
+> +        name: checksum
+> +        doc: |
+> +          Device is capable of exposing receive checksum result via
+> +          bpf_xdp_metadata_rx_checksum().
+>    -
+>      type: flags
+>      name: xsk-flags
+> diff --git a/include/net/xdp.h b/include/net/xdp.h
+> index aa742f413c35..e255ff786131 100644
+> --- a/include/net/xdp.h
+> +++ b/include/net/xdp.h
+> @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
+>  			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
+>  			   bpf_xdp_metadata_rx_vlan_tag, \
+>  			   xmo_rx_vlan_tag) \
+> +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
+> +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
+> +			   bpf_xdp_metadata_rx_checksum, \
+> +			   xmo_rx_checksum)
+>  
+>  enum xdp_rx_metadata {
+>  #define XDP_METADATA_KFUNC(name, _, __, ___) name,
+> @@ -643,12 +647,26 @@ enum xdp_rss_hash_type {
+>  	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_L3_DYNHDR,
+>  };
 
-Yeah sashiko reminded me of this, I had glossed over it :)
+[..]
+ 
+> +/* Please note the driver is required to invalidate the checksum if the NIC
+> + * reports CHECKSUM_UNNECESSARY or CHECKSUM_COMPLETE and the eBPF program
+> + * modifies the packet since it can change some fields validated by the
+> + * checksum.
+> + */
 
-I already came up with a fix at [0], I think it's fine to just take the init_mm
-lock in this case.
+Sorry, a bit confused about this part. IIUC this is in response to this
+discussion https://lore.kernel.org/bpf/aaLYfWnuuf_ne72u@lore-desk/ ?
 
-x86 is the only case in which an arbitrary process mm is read (fun!) arm64 does
-the efi_mm thing too.
+Looking at a few drivers:
+- bnxt (bnxt_rx_pkt) does UNNECESSARY - ok
+- mlx5 (mlx5e_handle_csum) does UNNECESSARY and skips COMPLETE if there is
+  bpf prog attached
+- fbnic (fbnic_rx_csum) - can do COMPLETE even with xdp attached?
+- gve (gve_rx) - can do COMPLETE even with xdp attached?
 
->
-> In the end, I think the issue is that there's not even *a* correct mmap
-> lock to take. The userspace half of the address space needs the
-> current->mm mmap lock and the kernel half needs the init_mm mmap lock.
+So none of the drivers invalidate anything (and nether the bpf machinery), some
+choose to (correctly?) not report COMPLETE when there is XDP. So was the
+discussion about documenting this and giving some guidance? This probably
+belongs to that `DOC: skb checksums` section of include/linux/skbuff.h?
 
-Well there's 2 that are correct because you are actually traversing both
-ranges...
-
->
-> The naming here doesn't help because the "current_kernel" file doesn't
-> dump the current kernel page tables, it dumps the whole kernel *copy*
-> (the only copy with PTI off) which includes userspace.
-
-Yeah this is misleading, and I misunderstood on assumption x86 wouldn't and
- be so silly to... and didn't read the code too closely assuming you did
- this PAGE_OFFSET split and... yeah :)) guys :)
-
->
-> (Note: maybe we should hide "current_user" when PTI is off at runtime)
->
-> So what do we do?
->
-> 1. We could just bite the bullet and have separate ptdump files for the
->    top and bottom of the address space:
-> 	current_kernel_top
-> 	current_kernel_bottom
-> 	current_user_top
-> 	current_user_bottom
-> 	etc..
->    Then the lock you take is dictated by the file.
-
-I mean that'd break userspace though wouldn't it?
-
-> 2. We could always take both init_mm and current->mm locks. That seems
->    icky.
-
-It's actually the least awful of all of these I think :) and the one I
-implemented ([0]).
-
-It logically makes sense because there's nothing that relies on an
-arbitrary mm in order to acquire an mmap lock around the init_mm. None of
-the mitigation relies on that.
-
-Also the user mappings (modulo PTI obv) share kernel mappings, so it's
-actually logical and reasonable to hold both.
-
-> 3. We could have ptdump_walk_pgd() take a different lock for each
->    'range'. Logically:
->
-> 	if (range->start < PAGE_OFFSET)
-> 		mmap_write_lock(mm);
-> 	else
-> 		mmap_write_lock(&init_mm);
-
-I don't love this. It feels a hack for x86 that's put in the wrong place,
-i.e. core code.
-
-And can you can make this assumption for efi_mm for all arches? Could other
-arches might be weird about this?
-
->
->    That's icky too and it means a range can't cross PAGE_OFFSET, but
->    that doesn't seem too bad (it could also WARN() if it sees bad
->    ranges).
-> 4. We do something fancier with the free like RCU (I think this may have
->    been discussed already).
-
-No :) please no.
-
- Implementing a crazy RCU scheme just for ptdump was already mad enough,
-but this is begging for an RCU stall. It's just not the right tool for
-this.
-
-Literally the issue is vmap (and CPA it turns out) not properly locking
-when freeing page tables.
-
-The convention already exists that the mmap lock on init_mm is how we
-handle this kind of thing and everything fits except vmap, CPA which I've
-now fixed.
-
-And with [0] I fix this too :)
-
-It's icky but the least bad IMO.
-
->
-> I'm kinda leaning toward #3.
-
-Another way forwards might be simply have the caller _call
-ptdump_walk_pgd() twice_ once with the range set to [0, PAGE_OFFSET) passing whatever mm
-!= init_mm, and again for [PAGE_OFFSET, ~0) passing init_mm?
-
-Are there cases where you expect to see a delta in the kernel range in x86
-for an arbitrary mm?
-
-And would this work for efi_mm and also for arm64?
-
-So far I think the 2 locks thing, as horrid as it is is the least fraught
-way. And we have a live UAF here so good to get a fix in ASAP.
-
-Thanks, Lorenzo
-
-[0]:https://lore.kernel.org/linux-mm/20260710-b4-fix-non-init_mm-ptdump-v1-1-2d40982c98ec@kernel.org/
+Also, can you add your new rx_checksum to
+Documentation/networking/xdp-rx-metadata.rst's list of supported kfuncs?
