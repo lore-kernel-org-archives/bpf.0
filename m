@@ -1,160 +1,253 @@
-Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2845B383316
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 19:18:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C88A02BE03B
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 19:19:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783711132; cv=none; b=ZZ33XVQ6DQrc9CscXiO0x+SoDVsTQ6vKjJtTdTnDfJD26sE6XNAS8GYaM0qGw9ycyAJ9D1Sv6xWD9+1hqwkLx5d5cVkuJwerzxF4VDhL85jZRwCrYnHnkV4X115PQ7iQR19t/uHqGW0rKyB8SLWZxoSv9AssXNbovKmQztC2A6Y=
+	t=1783711191; cv=none; b=FpnulH7KGdW5txlrdGGVgJ9JDwFX+T8mcF2vaK6dbmNCvxYEwl2/pEOlDtP2MMtZ4oqnOZylYhueGpqKrvgJleaQK30RWkfKhdzR2FJ7g268hGl9VFXKVMQds2B9XVFTW7oHCRYpqVU///iR4+O/2M0YFpVLGoXuCb5bSdYhqXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783711132; c=relaxed/simple;
-	bh=tz5l1P2egXZ+99pX+TrYhBbm0hYsBmZPTPE5maYt1kM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=abTIYtqS5NeRHi8I6NEZdDCpUBAe6UdJ8jreoX2OAvl/85PrLHR9up2G/schmircYnSoIgz+QamJlPzFQGdNs0/Jfgw+pl2Rv+0wGkGTZ7kN3lg6AjikJY1qH+g4nTuVTjkjAMmBm3MumuKlVOc0PnXw7DLPYx/Y0zsNxCxOsuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mq/tGkon; arc=none smtp.client-ip=74.125.225.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783711191; c=relaxed/simple;
+	bh=MDuyKwOnI4c8UkUFug0giLAGO1E70cqFGeZjVC9YgZY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jgFBsrFD9mHHnZ6bU4aqGE2JEmSN15AbTpvhZaMGVTFLm5ixyVu9AQv7yKOZZ+TF1RIggh0wT0g+uB3ybEHABaOc/g7a9QFzPN5k4GsbaVkfE5QSbXGm08O9YqQYQIWeyUeR1G2hWm7guVnRwOTtXY1EM8MWn5/UKxVIod36AyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asu.edu; spf=pass smtp.mailfrom=asu.edu; dkim=pass (2048-bit key) header.d=asu.edu header.i=@asu.edu header.b=bwAZe7UQ; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asu.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=asu.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mq/tGkon"
-Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-4667c5dfa9dso369102f8f.0
-        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 12:18:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=asu.edu header.i=@asu.edu header.b="bwAZe7UQ"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-ca97d139d5fso979606a12.0
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 12:19:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783711129; x=1784315929; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Tp/39SgrHI5z29550UsltrkPPkRKtfmpmPjcf1jfZbw=;
-        b=Mq/tGkonFACk1P9wdfWF/4R5RC/QlnyMrDlawuACBa69kydNIenmMEFr4JkK3r3ntz
-         qU4JbK9NJgVXltB8N42X+qH+lyF/FLRtHjdgi/Vrys+AFoqyubir7Ko1z4LMCPXZboe2
-         ozUOCJLcXjpZ83tkZSTxT+GjOk0O4zuaMn+iDhut5j9ucwiTEYxElXA51Nr1JXs+v7CU
-         T7WOoew2HLNqUQrhPjTR09QuZXuFF/ezyjxfawrt2jE/HAgffHqgT73a9svKfDHUimrb
-         XVo4naQn+ryYnwdgn5Cqzn6EzzxFjjPzedGPNoTO1caYj6Vlxr247JW/0MSIWsBwNbrJ
-         LlMw==
+        d=asu.edu; s=google; t=1783711188; x=1784315988; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=07skD6UBUnzDgRpfjlevYHiGMN3WuSNHUvliv5fl0GM=;
+        b=bwAZe7UQcrCpuzYmhRBeNRmfKKTRR9XrwufRREp5aNuocPtpoNUKxKQS9GCqNe7PD1
+         1D+vEclOFcZ+86WhR4M2tsKpLDrW8ptSzpVPZIr+fPWIMw6lL2uKpRdxxs7/Q5mLJyS/
+         dfXRwj07tjXUl5aDot7rTaJKlYJZpossn1Q1QZqj05mrbmIzWz0TDRPmgMmNzG3WfNFF
+         nFh1j1aNmQR8Gi19PYRatpIYrJ1FgDbqCvBpyM27vaTV5b345Xd1kq1l6/l94Y4oHWI9
+         qKaSiEXJJotkCN/BXj5D0eXxcWY9xjSHvNiBaDndwZ2UR+781Sx/4WfLcG4TdiM96AJ9
+         T81Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783711129; x=1784315929;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Tp/39SgrHI5z29550UsltrkPPkRKtfmpmPjcf1jfZbw=;
-        b=cxG48fdVfoGRI9BUSlk56JSV/7tUkH9de1RIIFX7/2ONaO7SKzEjYMnl3Agzp41u4B
-         rPvCAQpEtbn9zydKJR5eoOu4D83+0gIktkZvZ8iZ9mnm69a4CrSvtEnX5JhCFB5dGr46
-         bjBBcwrhAE2Q/QUv58gUOPTopVgczNgj7TQ+K/XaVVeHBVzWrMNqsgKaqi6TM7xbJS1X
-         qgH0e5mGS2NmRbt5DTbWH8PtzU6JIwX6us+Ylz7a0qBgKMapXlhwk1wEMaDAyGMhE0zd
-         1v9L4/u3U60TTfyFtDgxoUM/Uu9sWYi1Y6FR2qYxHRt9zqZQsNIW0D+c+6j9tz/dGqj/
-         Ng9A==
-X-Gm-Message-State: AOJu0YyfmThFzF1ESmpCPvBS6onGb4ZU1kDHawW31hiMiEoM35J8Knhy
-	4Y2cTyG4Ace04PtXqQoEW+MRk9IhLgQtZhwIufQh9LHVMwXAyVEgVrbmwN8l3XKN
-X-Gm-Gg: AfdE7cnFqTKkoPwi+99D87Ga0m5vw8mFPsI7gJW9DCWs+qPmvh5tG4WXcNBIylz6GpX
-	Z86E1kj9/m5t2oDf1+wpe26+waFqDfiFlyjlMDJX5aHz2Mqo0W3oiMlKqzy0uiir235VOEQLo3e
-	KvcXZPlXRBAa5H/9x0h+hmQc+eFaTnh4L0YyYY61OWCcoQukYNqeQWLfp4JMhnO4rtkgtUpzhVj
-	1parFIH+xEzayh0xR+CYPzh/aMFkPjR0UOF9zkCBerFBWxfYwjG1Y79hk0HQ6Lutc+eEvMefylt
-	RjlUNk5HugKYW0wiaviKYjwK9sWH7oz5sj3k+tLYSMZfloinbbUFJYU4qAspedgTxMqyJ6Hc8ks
-	laxtrFmw6Mced1NUGq9AREKh9FsotNI26nasSqPIZjwbgZ0vzYEf/taxtqIl9iopbytOIZ0Oyuh
-	D289N8tDH+WBb5ZaSeJM1JKYeMAx4L2YDRUGqSOl18SMsg0NBCSZrgejR9kSBVd3XZgGtjqBMHt
-	sfGu/BUPJ2UNBp4r7oXcSuq4tADPiMU1V6wdUK48TG0edSNSCe1k28=
-X-Received: by 2002:a05:6000:2912:b0:454:a41f:d082 with SMTP id ffacd0b85a97d-47f2dcb3f2fmr79469f8f.3.1783711129397;
-        Fri, 10 Jul 2026 12:18:49 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47a9e4d8410sm63392320f8f.15.2026.07.10.12.18.49
+        d=1e100.net; s=20251104; t=1783711188; x=1784315988;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=07skD6UBUnzDgRpfjlevYHiGMN3WuSNHUvliv5fl0GM=;
+        b=ELaoj8Dy0WAQZOowl5sv6ipgVwBLsezEBNqOTmUUFlVSvkjvQX2LJLMMlTAflZExm2
+         IUJz+wBTlCEWNVndwqLUTSFnVMhR62NlNYR1dRBTTmKhYHskpJ+oyEv4lQiYd+XRc277
+         znsTIIh3efnIrJm1POJ1ejwZ25ZKgfWzSW1s58d1bza30cmXWY7clf4moQNpXyDs64By
+         MUQhvtu4LxJ41M+ZJpMj7z0xs/UtULc4HWDMuJ9yqHMaSrJHjZLmgY95DsS9V72M+GB2
+         VeCtnPxCX7ylHEdcCzFgS2QZRiwxBjATFpNuA4TJTCHkoPesYhcXYgrbGP+GuomPwkAb
+         VAFQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpvcAuTLX+nc1b1Oq8WPHgRhMcqnb0DInQaqv/aohE0o+0zlIPYvTifiHFQVDUQQw/umYw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbWwI2HALmpjMdeLnfbBVxcOZxTTMdNkp53DEnrynIgeW1Z9JH
+	2IjCXQSXD2LQLUX3qz4d90nFaGw+nf5eZYj+WzbERC61OJ5lK6fhoqRMM5PaxklJdCsCdVid61r
+	fHbK7ytnwspM=
+X-Gm-Gg: AfdE7clQDK+fZjUl0J/fKIrCTVkQkBhesIbBcqYJoZ0sbys3HMCGYLgNHA5bmgs9P/1
+	J8YHqQkEdtwrHis+In5Lx3vP+twTOT0MLzZbAmhtyqH74gcTfNfozR2qbgC0+iNLpQu18OCd8PY
+	vt/j5at7TjGO47dXjrGdCoa14ggLmY4hcHsa2jWd8f0pHTRcslcDU1b1p3L9CIt1YGy+nv1tzOC
+	DKVOqsXgZZnovrWkWLZqpb5w6d3fjlkAawfTmkn4x9n8mMf9LcgIfBRKSOGOyFTNdhLdysYzIKg
+	8pXqMb7ubyTUQEwpPbl2eSyes2e3PY7HddvoB/Rd6nluMW8hAXtSCRaFVeg6kS/9TUd/tzfGGsn
+	GgM3trt2v9qs5veFODsN/XNpA8al8oJzFU8hjAkXKVK3/+48KtDdjEUq2BZkaDWhEy9LfsFtM+n
+	4fv8GtUtUniWeL1vfUoCC4ag8i1jUWITApiwa+60gIBlKGAVl5dICIDH8QEKeCMIhGiZ/y3A==
+X-Received: by 2002:a05:6a20:d49a:b0:3bf:6c08:fba2 with SMTP id adf61e73a8af0-3c110ba295dmr342869637.54.1783711188004;
+        Fri, 10 Jul 2026 12:19:48 -0700 (PDT)
+Received: from rip.tailfedc6c.ts.net (149-169-99-5.nat.asu.edu. [149.169.99.5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3118ee6091dsm41912582eec.14.2026.07.10.12.19.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 12:18:49 -0700 (PDT)
+        Fri, 10 Jul 2026 12:19:47 -0700 (PDT)
+From: Jennifer Miller <jmill@asu.edu>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	kees@kernel.org,
+	linux-hardening@vger.kernel.org
+Cc: jmill@asu.edu,
+	xmei5@asu.edu,
+	samitolvanen@google.com,
+	peterz@infradead.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RFC PATCH bpf-next v1 0/1] Enable BPF JIT hardening by default when x86_64 CFI is enabled
+Date: Fri, 10 Jul 2026 12:19:31 -0700
+Message-Id: <20260710191932.120911-1-jmill@asu.edu>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 10 Jul 2026 21:18:48 +0200
-Message-Id: <DJV4TO9OH6AN.58C10SBPE8FF@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>, "Nicholas Dudar"
- <main.kalliope@gmail.com>
-Cc: <bpf@vger.kernel.org>, <sched-ext@lists.linux.dev>
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: Require a BPF cpumask for
- bpf_cpumask_populate()
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260709182800.2037938-1-main.kalliope@gmail.com>
- <20260709182800.2037938-2-main.kalliope@gmail.com>
- <20260709183918.E42371F000E9@smtp.kernel.org>
-In-Reply-To: <20260709183918.E42371F000E9@smtp.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu Jul 9, 2026 at 8:39 PM CEST, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Low] The BPF selftests and their headers were not updated to reflect t=
-he new `struct bpf_cpumask *` signature for `bpf_cpumask_populate()`.
-> --
->
-> --- Patch [1]: [PATCH bpf-next v3 1/2] bpf: Require a BPF cpumask for bpf=
-_cpumask_populate() ---
-> commit 79080c077263fb184f42fe92f3d8db1f3967a4b5
-> Author: Nicholas Dudar <main.kalliope@gmail.com>
->
-> bpf: Require a BPF cpumask for bpf_cpumask_populate()
->
-> This commit changes the first argument of bpf_cpumask_populate() to requi=
-re
-> a struct bpf_cpumask pointer instead of a struct cpumask pointer. This
-> ensures the function follows the same ownership rules as other mutating
-> cpumask kfuncs.
->
->> diff --git a/kernel/bpf/cpumask.c b/kernel/bpf/cpumask.c
->> index b8c805b4b06a0..1336a4efa7553 100644
->> --- a/kernel/bpf/cpumask.c
->> +++ b/kernel/bpf/cpumask.c
-> [ ... ]
->> @@ -467,7 +467,7 @@ __bpf_kfunc int bpf_cpumask_populate(struct cpumask =
-*cpumask, void *src, size_t
->>  		!IS_ALIGNED(source, sizeof(long)))
->>  		return -EINVAL;
->>
->> -	bitmap_copy(cpumask_bits(cpumask), src, nr_cpu_ids);
->> +	bitmap_copy(cpumask_bits(&cpumask->cpumask), src, nr_cpu_ids);
->>
->>  	return 0;
->>  }
->> diff --git a/tools/sched_ext/include/scx/compat.bpf.h b/tools/sched_ext/=
-include/scx/compat.bpf.h
->> index 87f15f2962348..3f74d522f7e79 100644
->> --- a/tools/sched_ext/include/scx/compat.bpf.h
->> +++ b/tools/sched_ext/include/scx/compat.bpf.h
->> @@ -84,7 +84,7 @@ bool scx_bpf_dispatch_vtime_from_dsq___old(struct bpf_=
-iter_scx_dsq *it__iter, st
->>   *
->>   * Compat macro will be dropped on v6.19 release.
->>   */
->> -int bpf_cpumask_populate(struct cpumask *dst, void *src, size_t src__sz=
-) __ksym __weak;
->> +int bpf_cpumask_populate(struct bpf_cpumask *dst, void *src, size_t src=
-__sz) __ksym __weak;
->
-> [Severity: Low]
-> This isn't a bug, but should the BPF selftest headers also be updated to
-> reflect this new signature?
->
-> Looking at tools/testing/selftests/bpf/progs/cpumask_common.h, it appears=
- it
-> still declares the old signature for the kfunc:
->
-> int bpf_cpumask_populate(struct cpumask *cpumask, void *src, size_t src__=
-sz) __ksym __weak;
->
-> Because of this, the tests in cpumask_success.c and cpumask_failure.c und=
-er
-> tools/testing/selftests/bpf/progs/ continue to use explicit C-level casts
-> from struct bpf_cpumask * to struct cpumask *. For example, in
-> test_populate_success():
->
-> ret =3D bpf_cpumask_populate((struct cpumask *)mask, bits, CPUMASK_TEST_M=
-ASKLEN);
->
-> While this doesn't cause runtime failures since the BPF verifier matches =
-the
-> runtime register BTF type instead of C-level casts, updating the selftest=
-s
-> would ensure complete consistency with the new kfunc signature.
+Hi all,
 
-Once this lands, please send a follow up to address this.
+As part of some academic research we, Xiang (CC'd) and I, found three
+(closely-related) methods for bypassing different configurations of
+x86-64 CFI schemes (kCFI and FineIBT). The methods have some limitations
+which I will provide further details on in the rest of this mail.
+We previously reported this to security@k.o and were encouraged to have
+a public discussion about hardening against this, rather than dealing
+with it in private.
+
+In short, the cBPF JIT code can contain controlled 32-bit immediates
+which can be used to partially or fully craft CFI hashes and endbr64
+instructions to bypass control flow integrity mitigations. To mitigate
+these bypasses we'd recommend enabling JIT Constant Blinding for
+unprivileged users by default (bpf_jit_harden=1) when CFI is enabled.
+I have included a potential patch that does this, I am not sure though
+if this change could somehow be more local to CFI related code, or if
+it'd be better to modify the function that controls whether JIT blinding
+is enabled (bpf_jit_blinding_enabled) rather than touching the sysctl's
+default value.
+
+For some additional context, in the past few years misaligned
+instructions in the cBPF JIT region have become a somewhat common target
+for Control Flow Hijacking exploits because they provide constrained
+shellcode execution, a number of submissions to Google's KernelCTF
+program have used this approach[1-3]. There is randomization applied to
+start of the JIT code so it is probabilistic whether control flow is
+hijacked to the expected code, on a system where panic on oops is not
+enabled it is possible to retry until the attack succeeds.
+
+We have a PoC exploit for each method, where we took an existing exploit
+and demonstrated that we can get code execution from control flow
+hijacking on a kernel with CFI enabled, we can share more details about
+those about if desired.
+
+There are three methods, each under different configurations:
+1. Full Hash Forgery
+    - Bypasses kCFI, kernel versions >= 6.2
+2. Endbr64 Forgery + Pivot
+    - Bypasses FineIBT
+3. Opcode Collision Forgery
+    - Bypasses kCFI, for kernel versions < 6.2
+
+
+1. Full Hash Forgery
+
+This method applies when CONFIG_CFI=y and CONFIG_FINEIBT=n or when
+CONFIG_FINEIBT=y but kCFI is being used, either as a fallback (AMD) or
+forced via `cfi=kcfi` on the kernel cmdline. However, if
+CONFIG_FINEIBT=y then a leak of a kCFI hash or the random value that is
+xored with the hashes to randomize them (via an arbitrary read or
+otherwise) is necessary for this to work.
+
+CFI hashes are four bytes long and it is only possible to forge at most
+four consecutive bytes in JIT code using 32-bit immediates. When
+CONFIG_FINEIBT=y, the hash is stored at [dest-0xf] (offset depends on
+function alignment config but -0xf is where it is at by default) where
+'dest' is the target of indirect control flow. If the target hash is
+0x21524111 when kCFI is in use, then the negation of the hash is must
+be forged in the immediate (-0x21524111 == 0xdeadbeef).
+
+insn0 = {.code = BPF_LD + BPF_K, .k = 0xdeadbeef}; // hash
+insn1 = {.code = BPF_LD + BPF_K, .k = 0xcafeb0ba}; // filler
+insn2 = {.code = BPF_LD + BPF_K, .k = 0xcafeb0ba}; // filler
+insn3 = {.code = BPF_LD + BPF_K, .k = 0xc3d42948}; // code
+
+Produces:
+mov eax, 0xdeadbeef
+mov eax, 0xcafeb0ba
+mov eax, 0xcafeb0ba
+mov eax, 0xc3d42948
+
+At the kCFI protected callsite:
+[dest-0xf] == 0xdeadbeef (hash check succeeds)
+[dest] == 0xc3d42948 == `sub rsp, rdx; ret;` (pivots the stack)
+
+
+2. Endbr64 Forgery + Pivot
+
+This method applies when CONFIG_FINEIBT=y and FineIBT is used at
+run-time. An endbr64 instruction can be crafted in  a 32-bit JIT
+immediate and the aligned instructions that follow will be executed
+afterwards. This method is *highly* constrained in which callsites can
+be used, we have only found one viable callsite so far. If FineIBT
+paranoid is enabled, which is true by default for existing Intel CPUs
+but not for future CPUs with support for FRED, then a leak of a kCFI
+hash is required.
+
+Since the kernel uses rbp as a general purpose register when frame
+pointers are omitted it is possible to find call-sites where rbp points
+to a heap chunk. BPF JIT code ends in a `leave; ret` sequence, so if rbp
+points to the heap then after executing this sequence the heap pointer
+will become our new stack when returning from the JIT code, achieving a
+stack pivot to the heap. Not only does it need to point to a heap chunk
+but [rbp+0x8] must be controlled for the stack pivot to be useful (there
+needs to be at least one ROP gadget there to a longer ROP chain
+elsewhere in memory). As previously mentioned, we have only found one
+case of a call-site where this is possible. Enumerating all call-sites
+where this is possible is non-trivial, so we are still unsure of how many
+there actually are.
+
+
+3. Opcode Collision Forgery
+
+This method only really applies when CONFIG_CFI_CLANG=y on kernels with
+support for kCFI before FineIBT was merged (pre 6.2). More recent
+kernels default to placing padding after the CFI hash rather than before
+it. Without FineIBT, CFI hashes are not randomized on boot so a leak is
+not necessary.
+
+Prior to 6.2 the padding for CFI stubs was hardcoded to be before the
+hash, making it more difficult to forge a full hash in an unaligned JIT
+instruction while maintaining control flow hijacking. Using the full
+four bytes of a 32-bit immediate to forge a hash would result in aligned
+instructions after the hash being executed and would likely result in a
+fault when the JIT code tries to return. To maintain code execution
+avoid using all four-bytes of the immediate and instead reserve a few
+bytes following the hash to craft a jump instruction to the next 4 byte
+immediate and continue with the limited shellcode execution in unaligned
+instructions. Not crafting all four bytes of the hash in the 32-bit
+immediate means that an "opcode-collision" is necessary to craft the
+full hash, which looks something like this:
+
+insn0 = {.code = BPF_LD + BPF_K, .k = 0x7fdb0000}; // hash part 1
+insn1 = {.code = BPF_LD + BPF_K, .k = 0x9002eb1a}; // hash part 2 + insn
+
+Produces:
+mov eax, 0x7fdb0000
+mov eax, 0x9002eb1a
+
+Combined:
+b8 00 00 [db 7f b8 1a] eb 02 90
+
+At the kCFI protected callsite:
+[dest-0x4] == 0x1ab87fdb (hash check succeeds)
+[dest] == 0x02eb == `jmp .+4` (continue control flow hijacking)
+
+Since 0xb8 is the opcode byte for the `mov eax` instruction, it is
+possible to forge a kCFI hash such as 0x1ab87fdb using two instructions
+in the JIT region and still retain limited shellcode execution through
+code stored in 32-bit immediates.
+
+There are a number of instructions that take 32-bit immediates that can
+be generated in cBPF JIT (e.g., or, xor, and, sub, add, etc...), with
+various opcode bytes which can collide with a CFI hash. Xiang enumerated
+these instructions and did an analysis to see how many hashes could be
+bypassed with this method on a 6.1 LTS kernel (pre-FineIBT so no CFI
+hash rerandomization yet, compiled with the KernelCTF config plus the
+configs necessary for kCFI), and found that approx 14% of the hashes
+were able to be crafted via an opcode collision in the JIT code.
+
+
+~Jennifer
+
+[1] https://github.com/google/security-research/blob/master/pocs/linux/kernelctf/CVE-2023-3609_cos_mitigation/docs/exploit.md#spray-ebpf-programs
+[2] https://github.com/google/security-research/blob/master/pocs/linux/kernelctf/CVE-2024-36972_lts_cos/docs/exploit.md#spray-ebpf-programs
+[3] https://github.com/google/security-research/blob/master/pocs/linux/kernelctf/CVE-2025-21756_cos/docs/exploit.md#spray-ebpf-programs
+
+
+Jennifer Miller (1):
+  bpf: Enable JIT hardening by default when x86_64 CFI is enabled
+
+ kernel/bpf/core.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+--
+2.34.1
+
