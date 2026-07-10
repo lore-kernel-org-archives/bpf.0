@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 232B5408014;
-	Fri, 10 Jul 2026 12:17:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F136E423A80;
+	Fri, 10 Jul 2026 12:30:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783685853; cv=none; b=EqoFQ70/RoseaWxUGGi2DpDGpI9K43Umy62ErG3kWTnMqe4vxFPCSB43uKxirNIWEyxPXXWO07EAkeOayWpaozlMRrkeOmFwOayUVKnRIvthsoBIB8ZZReKiVAEPJncQihHSdm479DTvkXNYPfS4K60JyeAZcbxl9OXcPkQ0hq4=
+	t=1783686640; cv=none; b=g974deB6lxhzM+l9vGFHsos32T7RFKZITdII8S84cwCZ9m6o8GcsMV5PJLrSJu8pFe24h95RCxbm9yom+tPetPpv1/N5TBlK65Q02C/jDh/5X4fiPbV3DtVg9JijVmStGuesI4jwHqUDwuhpv5R82fit6XDiA7Kv6c9y/d7OPGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783685853; c=relaxed/simple;
-	bh=QH3ypTBThWLx2yzXbQtsMjbM9zD9szUxg1+lAOb70GM=;
+	s=arc-20240116; t=1783686640; c=relaxed/simple;
+	bh=NcioN6f4qh6+FIEzkrw9e1N4PdY6LxJgPsbpXnBds9I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WzjXH5DrMisjfuzbbcSzJereUiGLYgOUNPHzSnTNJhM14ws1/mkEAN0gVdF1ltN9XbzJxvoWu/y79vVdHiOwkqakop6KqyaSfBNg03n5qGuGsjKp3vN1Pkd4zZbJDE3Y0JcIiZ1dgC2ZIbZvJgoe/ljMKszPHwR73aZ8U86IKUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=fxZPDxOg; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=MsI0nS1jqqWWKiyYuE4Bhf9Z/Rl9sCZ772JBAKDBn1Tj8J5WKfRDRwvtHYx5C5yBC2O0D+/g4kyRfhtJp91nB5A7YoIPY9X9bhDvFTUWofp9fWOomKLUWtExsCkR87w9wDAiDPazci4+OxLDfmr7BY0YYcp6XCzekXAdUNDk29w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=bAOXeb82; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="fxZPDxOg"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="bAOXeb82"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=fgmRBpjGBlz4D8Ta3gytmcGGk/kFhfjPCclltIQNQxM=; b=fxZPDxOgsDn4BOI4RxZCxcfihD
-	oKyxBcwoBfKtl98B8qq499qYUqTAwBMytwi2UoZq0flwE0v9+n8bDSdVQKg6UqZ6X6J7GU5i58yX3
-	k6IVgvmVYQl802JiqXRYHFOoO+OmplN6hNdI7AEfp26KvHT9UjYteYLx7C/h3xkFOVhpPM2ZaPXRg
-	A2quFzV3zW59QLeJAGSuUcK18i8sICD+PDb2npqYKmmkzz1Y1Z53Vn4VT6SPSJkSz56haFnFgDZdX
-	pfeozxdQ6FplFW9I0/CQtr+q8li5qbJrViB/9LMnd+p3ok/AI4QGfbOKRfBamolUERaEhK0NQ14lT
-	Zcw1n0sA==;
-Received: from sslproxy07.your-server.de ([78.47.199.104])
+	bh=jFf7H1XTeaELsSiaGEln46fzlwLjLIh5DdZWiTTb72Y=; b=bAOXeb82C0cNAFdfUEszeYcnJH
+	iw0C0DlfXrF1wZ2ji7ccJy74f4d0PBjzBsekAwaZAzotAwk42kLMxOtPjJ+GqkhZYrTC/QUwJUSXH
+	OOL/UJcXKV2wIo2w4p8WcZzoCdiYxyrv7zI87gd1wfdnqztkgkYSdEo22BbMSCoSjyqsHSjnibnt7
+	nQG7pigoq5Olm55W4hIEdIGlM0XbWUchWzVGNyMl/IY8Crny06MKTnCXXRjm9KNvHH3hWeujWvDhy
+	xITz+yAXT1dDXWz0mF3cKwJs8i91u3nVBeeK5ynFuv0LxW3HCKTqmmECu1nFtTRZmK9Et6UWUcMHz
+	v00+OEFA==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wiAAZ-000Fub-2B;
-	Fri, 10 Jul 2026 14:17:27 +0200
+	id 1wiAND-000Hfv-0q;
+	Fri, 10 Jul 2026 14:30:31 +0200
 Received: from localhost ([127.0.0.1])
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wiAAZ-0003f2-2q;
-	Fri, 10 Jul 2026 14:17:27 +0200
-Message-ID: <01421d53-c379-4044-9da3-5990186303ef@iogearbox.net>
-Date: Fri, 10 Jul 2026 14:17:26 +0200
+	id 1wiANC-0000oN-0G;
+	Fri, 10 Jul 2026 14:30:30 +0200
+Message-ID: <5a1781b5-75c5-4589-b20c-d15ccabaa8e7@iogearbox.net>
+Date: Fri, 10 Jul 2026 14:30:29 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,15 +48,24 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH vfs/vfs-7.2.xattr v3] bpf: Add simple xattr support to
- bpffs
-To: Carlos Llamas <cmllamas@google.com>,
- Christian Brauner <brauner@kernel.org>
-Cc: bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>
-References: <20260602074012.416289-1-daniel@iogearbox.net>
- <20260603-abwenden-plagiat-abtropfen-31bd59c3140b@brauner>
- <akWdcp6P0FkNDzBk@google.com>
+Subject: Re: [PATCH bpf-next 0/5] bpf, x86: enable EXECMEM_ROX_CACHE for BPF
+ allocations
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Eduard Zingerman <eddyz87@gmail.com>, Ingo Molnar <mingo@redhat.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, "H. Peter Anvin" <hpa@zytor.com>,
+ Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20260626-execmem-x86-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org>
+ <ak9V1C-Y3x-KEcTW@kernel.org>
+ <b2fb9a37-3810-45a5-97dd-ed500ae8207c@iogearbox.net>
+ <ak-aOUZ1waAIKtpQ@kernel.org>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -102,85 +111,40 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <akWdcp6P0FkNDzBk@google.com>
+In-Reply-To: <ak-aOUZ1waAIKtpQ@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28056/Fri Jul 10 08:24:04 2026)
 
-On 7/2/26 1:06 AM, Carlos Llamas wrote:
-> On Wed, Jun 03, 2026 at 09:07:55AM +0200, Christian Brauner wrote:
->> On Tue, 02 Jun 2026 09:40:12 +0200, Daniel Borkmann wrote:
->>> Add support for extended attributes on bpffs inodes so that user space
->>> and BPF LSM programs can attach metadata, for example, a content hash
->>> or a security label - to a pinned object or directory. BPF LSM or user
->>> space tooling can then uniformly look at this (e.g. security.bpf.*) in
->>> similar way to other fs'es. The store is in-memory and non-persistent:
->>> it lives only for the lifetime of the mount, like everything else in
->>> bpffs. The modelling is similar to tmpfs.
+Hi Mike,
+
+On 7/9/26 2:55 PM, Mike Rapoport wrote:
+> On Thu, Jul 09, 2026 at 02:12:04PM +0200, Daniel Borkmann wrote:
+>> On 7/9/26 10:03 AM, Mike Rapoport wrote:
+>>> Gentle ping
 >>>
->>> [...]
+>>> On Fri, Jun 26, 2026 at 09:42:27PM +0300, Mike Rapoport (Microsoft) wrote:
+>>>> Hi,
+>>>>
+>>>> BPF allocations of executable memory on x86 are essentially read-only. Most
+>>>> paths that call bpf_jit_alloc_exec() immediately make it ROX with
+>>>> set_memory_rox().
+>>>>
+>>>> The code generation, at least on x86, uses separately allocated writable
+>>>> buffers and then updates the actual text memory with text_poke().
+>>>>
+>>>> These patches do several small adjustments to how BPF allocates executable
+>>>> memory and enable EXECMEM_ROX_CACHE for BPF allocations on x86.
 >>
->> Applied to the vfs-7.2.xattr branch of the vfs/vfs.git tree.
->> Patches in the vfs-7.2.xattr branch should appear in linux-next soon.
->>
->> Please report any outstanding bugs that were missed during review in a
->> new review to the original patch series allowing us to drop it.
->>
->> It's encouraged to provide Acked-bys and Reviewed-bys even though the
->> patch has now been applied. If possible patch trailers will be updated.
->>
->> Note that commit hashes shown below are subject to change due to rebase,
->> trailer updates or similar. If in doubt, please check the listed branch.
->>
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
->> branch: vfs-7.2.xattr
->>
->> [1/1] bpf: Add simple xattr support to bpffs
->>        https://git.kernel.org/vfs/vfs/c/a146500e1144
+>> I think there was an open Q from Alexei wrt the sashiko reports [0] and
+>> whether you could address them. Once done, please resend to bpf list.
 > 
-> Hey Christian / Daniel,
-> 
-> I'm getting a regression with this patch when using genfs for bpffs. It
-> seems like calling selinux_inode_init_security() with !SBLABEL_MNT will
-> leave the isec->initialized before doing the EOPNOTSUPP exit.
-> 
-> The genfs path is later skipped because inode_doinit_with_dentry() sees
-> the inode initialized and I get denials in userspace.
-> 
-> I don't know if this would be correct but doing the check for
-> SBLABEL_MNT before marking the isec as initialized worked for me.
-> 
-> Any thoughts? Should I send a formal patch?
+> Thanks for the link!
+> I'm not subscribed to bpf@ and it took me a few minutes to realize why I
+> don't see this in my inbox.
 
-Yeap, sorry for the delay; fwiw looks reasonable.
+Ok, np. Despite the sashiko false positives, could you pls resend against
+latest bpf-next, so your set can run through the upstream BPF CI?
 
-> Carlos Llamas
-> 
-> ---
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index 0f704380a8c8..9cb1724d2bbc 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -2980,6 +2980,10 @@ static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
->   	if (rc)
->   		return rc;
->   
-> +	if (!selinux_initialized() ||
-> +	    !(sbsec->flags & SBLABEL_MNT))
-> +		return -EOPNOTSUPP;
-> +
->   	/* Possibly defer initialization to selinux_complete_init. */
->   	if (sbsec->flags & SE_SBINITIALIZED) {
->   		struct inode_security_struct *isec = selinux_inode(inode);
-> @@ -2988,10 +2992,6 @@ static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
->   		isec->initialized = LABEL_INITIALIZED;
->   	}
->   
-> -	if (!selinux_initialized() ||
-> -	    !(sbsec->flags & SBLABEL_MNT))
-> -		return -EOPNOTSUPP;
-> -
->   	xattr = lsm_get_xattr_slot(xattrs, xattr_count);
->   	if (xattr) {
->   		rc = security_sid_to_context_force(newsid,
-
+Thanks,
+Daniel
