@@ -1,176 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f2.google.com (mail-wm2-f2.google.com [74.125.225.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB42138F253;
-	Fri, 10 Jul 2026 19:45:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37AB9377566
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 19:49:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783712713; cv=none; b=oOJMYdZODqL/njZLx5M3k7Zngw5dB39h44UXvWLk3yQZuetDZ7Mlys4TNcEZlEBpIoL7VR5ww+tGAOYaNss2vjIi7Jbvdjta42V5FVw7WgKc4y418NTQYs6cHQ8tjUw9XiqRecHG1CE3TvPhSGt0IQ98pSfL15YDOkUYygQ07xU=
+	t=1783712947; cv=none; b=HuAFd7FfnwuwfltoPfd3oBO792QhsPn/CR/AmsIEQ4pXsdWOzG79EJqDNht4xLmJLON3LMA24iLe87ziA+2SjilbQ7nhVlhxyDOhf+lQO1YXJdFMKeVdRo4PXNirXeXxFfxZRBTzLLXx+bEsCp1muZOjsf12K8V1BDvVOF2Cr4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783712713; c=relaxed/simple;
-	bh=woEMa072B6FgiX3OZeS/66WbdJR6hpOoNhGZbMu0y18=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=g1/wOvoAMXGdqQH7JZfdVrn2aGlfTe00BzxmqUr69ejIv7y7UkKz9txgdipBSIR6zvF2DlIgkZg9y/dEklqo0XksnwtmPoJNsxNY8ilMnYFloUfk97WZu4tJ62+JC9itxKkRajiBox1F8vEpb82OW/Im893JiHi/zAFBC4l/Evk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ISs7k0Ly; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1783712947; c=relaxed/simple;
+	bh=9ffiN42qaC1jpsImMXKTd2bML44rwupDWgL0tCrKHHM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=ZHq43x1a4TxMvN4A2v7k9aIeGXZtxY4JEb8EVWGlnVawFQcyP3aIC7ok/nij3webJlZgtx+3ewrT01ldusaJEYX2I4CZo2KXutwmVT4A5s58aaRpoRwj8cX8Rr2vKgSyjf4hRo+ksX4M1LRogNlKX5Xdi/KSsRLNaA7E8U7afQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g1e+jbnk; arc=none smtp.client-ip=74.125.225.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ISs7k0Ly"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783712709; x=1815248709;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=woEMa072B6FgiX3OZeS/66WbdJR6hpOoNhGZbMu0y18=;
-  b=ISs7k0LyiK4z9sZNAGUkDfrx9NxtcuHOY9BsdelBvrbsOD89/9KzlGv7
-   dMDWc/X8sS8HmapXeYlGlh2dnf3rhUjTdkOyceX7ZDQdmPu6qgOBxNk+n
-   sYpqTaiH3EclcCjxVtO9RfpWqQzz6EBXGIiWYjROyCzI4kTvX6EbNyLrv
-   94fPw3wtwBd6VY/M4I6w+TLLly7I/Av0/uuCwNetZTbklc6cj0e5eib1B
-   NfE+5gKYSNRndOcso6A8rEfxNObsmRiFUYceTpc4j04R0YMlzewm/435a
-   TJZtTiX9YXssXOsSTkl62kdiPYtKFbG2dxJTwxfmYXjwxm7+ozguAh1JP
-   A==;
-X-CSE-ConnectionGUID: YjwCULbMRYacq8kYfMC4aQ==
-X-CSE-MsgGUID: Y/qsTDBWSsyfzyumpI77mg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="101965234"
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="101965234"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2026 12:45:07 -0700
-X-CSE-ConnectionGUID: tFbq0+ObRtChixwozf2rbw==
-X-CSE-MsgGUID: 2eY4j9w6Rw6EOORRzJfulQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="293157373"
-Received: from boxer.igk.intel.com ([10.102.20.173])
-  by orviesa001.jf.intel.com with ESMTP; 10 Jul 2026 12:45:04 -0700
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	magnus.karlsson@intel.com,
-	stfomichev@gmail.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	bjorn@kernel.org,
-	kerneljasonxing@gmail.com,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v2 net 5/5] selftests/xsk: account invalid multi-buffer Tx descriptors
-Date: Fri, 10 Jul 2026 21:44:24 +0200
-Message-Id: <20260710194424.84844-6-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20260710194424.84844-1-maciej.fijalkowski@intel.com>
-References: <20260710194424.84844-1-maciej.fijalkowski@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g1e+jbnk"
+Received: by mail-wm2-f2.google.com with SMTP id 5b1f17b1804b1-493af9b574cso4658855e9.0
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 12:49:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783712944; x=1784317744; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=9ffiN42qaC1jpsImMXKTd2bML44rwupDWgL0tCrKHHM=;
+        b=g1e+jbnkJmSaNDHsIJ64qyQYZlumSYLB/a10JIwFRjjwaW2a0xREGFAWIgyNyGWmnd
+         kDQ8o1OEMpd+I9WP0S1bfPXZd6+DZCBbeYhM5h01rOlwAeCxLZkgNFSzn7mlPygUt8rv
+         H/UU0KL15590crrsVGz00Z7NPciqvZGEkwImz+TdSKvMs3xxywlJtQysgrVJk0EXo+sB
+         QMM/q5ZXdo5O8ulg2ippLjLncjFrwtFo9uE2nZX3ZnkmtEVB2s1B+bVGbqeGG9R8C0Wb
+         irZ3qR3huZbVJfA1Jbw+N05WTczBI65j9SqimuSUd9EOMpkcob6yNw6QSmqAf/tlpKbP
+         C7GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783712944; x=1784317744;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9ffiN42qaC1jpsImMXKTd2bML44rwupDWgL0tCrKHHM=;
+        b=O0O42GO1SFn28iKyRgHIz/lp4o3IkISRP2DPzAUh7zkU+CoHhG0mUtI0cx9TKPeoMM
+         DU05BfvWfPiZ46+O0jeguK8PYK0l+GLGpNKYDNjmN9QE0IqE6cf9iGN2DZjpWhQ10DSz
+         sANeYi/EGEhf18jjSI/gV+GktizYxHXkoaIx3xuZozzKahNFuKoaeLbU5i9Kn3qRq/hV
+         qdBsptqI5iNgqOhPESCL1WsQfpQ8aWQeoKYllDyODv0t4pc2lRibJQJw50Z9csSE38DT
+         jrt/iZo60kAN5xU/1x0fV8moJj39uFtrskN7bA4A8oKpbKWD+qc0x2B9taO2PUnEFrQo
+         mcsQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpDs7htXmXCckxgdotlm9i8AWvNSu1hwO8sDAdayKeiC+utr6GExxqAwx65am/Syl0l6T0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy17hUvfqex7Zj8+BI+jCdl6EZvrYFmXL2rmksLTIZzrG5FCgEZ
+	y14GcTHitoAO+YOvsnnT38uFYLJL6TLg0nV7vUozApp1QfkcwMcvm9o3
+X-Gm-Gg: AfdE7cmVgYc+4PKBOpCjXHAx/j5GYvAZvhI6BwTHnti/5WzCj6eJTXUmvxEv6W9PJwj
+	bJZG+DjEKLdmKfTi519rUyI3kHXb4vxcCLhI4Ewc5wV3U/QuB29H5Mek30p6PP7z6zcWzIdHqtV
+	MHOQtOiluHTlNY9ISM72s1uxepzvUsnJdfxTIGrGRlZEYU9fYwIbeHxma5exDPJQ6QDV741+jDV
+	BsJqmRa7KTGhqQSK909bbu74CDSXQQkUbMqgLJrAUMsQjG1AkKAFq7lNrh3H1ewT868l7Bl4E6o
+	aBtrJkhsCoP4VdX760FuT5zqF2oHg55ufuH01dp7MMsMKHkC4jLEkd8AH6Hb+b7uldL6j3aDg4R
+	6DeuvnDpAtxVg6zvPNIkimaI4MMKRWySzl11prTjFEeG22Yar9k0O072mT/LmXHltCGFtr3ZV6O
+	qJ5nr81SiUnD8+gtFxdlhJF3anf2kv5rqnbvAWuJ9y548W6Q0J5gCjmiVRgi3IhmLFQgDyrE30U
+	OAJm3fH1WQ5Zf1Ljo0JvipvDGSUInZv0B6pGmJeTW3Qaj7dWrExrk8=
+X-Received: by 2002:a5d:64ef:0:b0:475:f0d1:eb5a with SMTP id ffacd0b85a97d-47f2dd132e0mr127404f8f.53.1783712944499;
+        Fri, 10 Jul 2026 12:49:04 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47a9de1d8cdsm66202553f8f.1.2026.07.10.12.49.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jul 2026 12:49:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 10 Jul 2026 21:49:03 +0200
+Message-Id: <DJV5GU2AGDJB.2YWAL2MA7FM6T@gmail.com>
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Mahe Tardy" <mahe.tardy@gmail.com>, <bpf@vger.kernel.org>
+Cc: "kernel test robot" <lkp@intel.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "David
+ S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>,
+ "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
+ "Simon Horman" <horms@kernel.org>, "Jordan Rife" <jordan@jrife.io>,
+ <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next] bpf: Fix unused nskb warning in bpf_icmp_send
+X-Mailer: aerc 0.21.0
+References: <20260710180915.7105-1-mahe.tardy@gmail.com>
+In-Reply-To: <20260710180915.7105-1-mahe.tardy@gmail.com>
 
-Invalid descriptors in the middle of a multi-buffer packet still belong
-to the packet being consumed from the Tx ring. The tests should therefore
-count the whole invalid packet as outstanding in verbatim mode, even
-though the packet must not be expected on the Rx side.
+On Fri Jul 10, 2026 at 8:09 PM CEST, Mahe Tardy wrote:
+> Declare nskb inside the IPv4 and IPv6 case blocks so it is only present
+> when the corresponding code is built. The case braces are intentional to
+> scope the local declarations under the switch labels.
+>
+> Fixes: f3603df9aebb ("bpf: Add bpf_icmp_send kfunc")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202607110140.JeJZ6GIa-lkp@i=
+ntel.com/
+> Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
+> ---
 
-Make fragment counting follow the packet boundary instead of stopping at
-the first invalid fragment. Update custom stream generation so invalid
-middle fragments terminate the generated Rx packet while Tx accounting
-still covers all descriptors consumed from the invalid multi-buffer
-packet.
-
-Also add explicit end fragments after invalid middle descriptors. This
-exercises the kernel drain logic and verifies that subsequent valid
-packets are not interpreted as continuations of the invalid packet.
-
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
- .../selftests/bpf/prog_tests/test_xsk.c       | 24 ++++++++++++-------
- 1 file changed, 15 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-index de17dd48f176..7abb4935edf9 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-@@ -427,14 +427,14 @@ static u32 pkt_nb_frags(u32 frame_size, struct pkt_stream *pkt_stream, struct pk
- 	}
- 
- 	/* Search for the end of the packet in verbatim mode */
--	if (!pkt_continues(pkt->options) || !pkt->valid)
-+	if (!pkt_continues(pkt->options))
- 		return nb_frags;
- 
- 	next_frag = pkt_stream->current_pkt_nb;
- 	pkt++;
- 	while (next_frag++ < pkt_stream->nb_pkts) {
- 		nb_frags++;
--		if (!pkt_continues(pkt->options) || !pkt->valid)
-+		if (!pkt_continues(pkt->options))
- 			break;
- 		pkt++;
- 	}
-@@ -665,11 +665,11 @@ static struct pkt_stream *__pkt_stream_generate_custom(struct ifobject *ifobj, s
- 			if (!frame->valid || !pkt_continues(frame->options))
- 				payload++;
- 		} else {
--			if (frame->valid)
-+			if (frame->valid) {
- 				len += frame->len;
--			if (frame->valid && pkt_continues(frame->options))
--				continue;
--
-+				if (pkt_continues(frame->options))
-+					continue;
-+			}
- 			pkt->pkt_nb = pkt_nb;
- 			pkt->len = len;
- 			pkt->valid = frame->valid;
-@@ -1209,6 +1209,7 @@ static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk,
- 	for (i = 0; i < xsk->batch_size; i++) {
- 		struct pkt *pkt = pkt_stream_get_next_tx_pkt(pkt_stream);
- 		u32 nb_frags_left, nb_frags, bytes_written = 0;
-+		struct pkt *first_pkt = pkt;
- 
- 		if (!pkt)
- 			break;
-@@ -1253,6 +1254,8 @@ static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk,
- 		if (pkt && pkt->valid) {
- 			valid_pkts++;
- 			valid_frags += nb_frags;
-+		} else if (pkt_stream->verbatim && pkt_continues(first_pkt->options)) {
-+			valid_frags += nb_frags;
- 		}
- 	}
- 
-@@ -2099,13 +2102,16 @@ int testapp_invalid_desc_mb(struct test_spec *test)
- 		{0, 0, 0, false, 0},
- 		/* Invalid address in the second frame */
- 		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
--		{umem_sz, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
-+		{umem_sz * 2, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
-+		{0, MIN_PKT_SIZE, 0, false, 0},
- 		/* Invalid len in the middle */
- 		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
- 		{0, XSK_UMEM__INVALID_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
-+		{0, MIN_PKT_SIZE, 0, false, 0},
- 		/* Invalid options in the middle */
- 		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
- 		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XSK_DESC__INVALID_OPTION},
-+		{0, MIN_PKT_SIZE, 0, false, 0},
- 		/* Transmit 2 frags, receive 3 */
- 		{0, XSK_UMEM__MAX_FRAME_SIZE, 0, true, XDP_PKT_CONTD},
- 		{0, XSK_UMEM__MAX_FRAME_SIZE, 0, true, 0},
-@@ -2117,8 +2123,8 @@ int testapp_invalid_desc_mb(struct test_spec *test)
- 
- 	if (umem->unaligned_mode) {
- 		/* Crossing a chunk boundary allowed */
--		pkts[12].valid = true;
--		pkts[13].valid = true;
-+		pkts[15].valid = true;
-+		pkts[16].valid = true;
- 	}
- 
- 	test->mtu = MAX_ETH_JUMBO_SIZE;
--- 
-2.43.0
-
+pw-bot is asleep, applied.
