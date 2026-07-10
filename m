@@ -1,199 +1,192 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 784B83C13F2
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 21:26:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE8BA3B4EB3
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 21:44:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783718800; cv=fail; b=OVKQ6zmGeklTIeWqJltXG8BlQjlA9jLgWFgwd5BRLJOF0hgeqNAu7gihnh9Qxv1YI5Y+HM4sz1k7eF+OnpEd6+Ffa0UhIVWLXcfb5rtWunzcAZUCh8UmCXMT0GNamaB1swOiss+7PWCSQJ9vDRZZ8JI95039QKRQHwetkpZMi2s=
+	t=1783719893; cv=pass; b=t6inV9TaoeVrqwtx8pHw1YYUPlPgcUq+nM0z+HNyEnf/yNXqMKy8Sq8OkvU4+OJ2ZyuytVXSOlb1p+J9sgK0TkC0aO1/UtmoqJOoZiXwVCdUJreMTatSN3t9/32rD+zf1sn8OxkXQCf5EisQFuHdPZuvHj61RVL/u71VArI9XLM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783718800; c=relaxed/simple;
-	bh=VkC6ASY6hMpcb2N3FQ3m7UCF3tlkExQIcMsQcc5KFgQ=;
+	s=arc-20240116; t=1783719893; c=relaxed/simple;
+	bh=6JwpDtiP5lWk2HyCdZWziynZDzhadtq7h2q1KexfBb0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TvPL6mOiEuncIn4Arcna1rORbxDxyBAIdU5jr5iDMB1yw8980sXUVtGhZSrfmBQ1scHXI269xf2NffmclnlYa9DUFv0nCCyU5g51wCig2jCBwJ/ZTZf//oJIcW7TlMguU3Wm02eKMpxM4sn+N31odOc+To76wZ3v18Fa+/Y0UjE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=MHyYFJ8T; arc=fail smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	 To:Cc:Content-Type; b=D6OwhGRjPia/M6G45dnTb+bFPDKfoLcu44y+FseN8gj4f1vN/6QAftxMs6Jc4r6scE+0zs+evZt5SAvOiiafV0EFUk/1cO2a2hTAWrefEDi2OuZTm98pD486VuziIfXsiijSpDQtsLfqkIA2IKr21gzo4Ce8kWjUtBwTkx82e7E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T/mK9CaO; arc=pass smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="MHyYFJ8T"
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66AK36rd2450570
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 14:26:33 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
-	 bh=4rVTCVe8LWbzPm0wjrSAG/mKG3KG/lwpsyIV2TiZsYM=; b=MHyYFJ8T0cAB
-	L2thTi2mW0tU4fKtEkEPlTuNlGSYNbAUHm2cGN71mq4XJ4e9JRvXbECAO+LUE4wt
-	K1IoCs6xDb82FhZ25qMZbkgIExbpGLxJb+j7vZQklv61ikYvgVa3EdM8bUKoN2kn
-	qVAEIzWte1NFNwu9+oa2TdM0NR/dky97cKPGNGaJFWix6NXSrHe/BFvk2SDDVAKM
-	E9UpXcQv9/N0fhLIFCRg7OHIzQeeZ6I1uG2uWvQ0XeZG1mAzAhXXnkNT0bLeIzcc
-	ALSpjILyQaLkuXvHF8KPQQBD1/CJXMd9rnIQNZB/myvXMIMoLEeh/K7YDpFPbdMZ
-	F1lIpqYrqg==
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4faku8xvpg-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 14:26:33 -0700 (PDT)
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c15ddb61f13so128695966b.0
-        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 14:26:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783718792; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T/mK9CaO"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3817f800c8bso1275128a91.1
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 14:44:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783719891; cv=none;
         d=google.com; s=arc-20260327;
-        b=dbOmpnXxmcbWAI+Ys5jRu18Ki61bOhTHRIZQTfLORx7CIYUozuUl+Xaw4Ri31Z45b4
-         ljaDO0jj/nODU8Ib4DChGwfceWsiGeDf6FPO8F4L/AvL74MWj/FmzR2hkA85gy4lu4Uw
-         zfi3+v4AuoIEjlNDhzA2fC98EC2PXrxdwW6XK/HyJHdAbwtE3Clm3HBvJFLJpXb5eWQv
-         GDjNn4SKRFtBXym1asb6/QGu0yHUrKYaNH6sTHnnsAT2YN8o2JFqDQKJ3JMd1j6PY/Ks
-         WO2dCf/rvKSa83FwyIaGyNVFcWv0LNCYpfaX8/2w7WLTSmfeTTg9cDxE5a8XiudDlrTe
-         oCQQ==
+        b=omObhglpMTToUOQ8RNtY+Zc2NjZ8eE51vlxm2zy1Iw1LriOaVb4puG6gDTEeGq+qRi
+         ocjRiY4XMTfXo/ePsXfAFqcyBOHhlsKpQ9gatRC5LLQVO1hmVAkflNwcyQu3weiUb5Xb
+         mNVjmbHZKm3n/Jwyrae3/HU5loctWufjIRvNdTic38rfigDJlF5wHNm9p+HCZpib4bkN
+         Jp5Dp8eN9WWRIvR9cjjSAbljeCYxVQ39ay5svurDuUdERalNF2Yll7PQQ2NlC0hydagV
+         rodODk0K0TQGAsq6OSMfrIPUjbkyEddoYmS8xdR2rkOn/zRm9C1/ztrcM5SOfyR7PBCw
+         2FzA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version;
-        bh=FNJYGUchRZc+yyibQEoFJBWXm2WlrbE2kAvLAMOngVI=;
-        fh=rmtCzUeBM84u+hkgXIOdvh1v0fLzOnUHkUTjq18Dd4M=;
-        b=dqgvtxQOlogMqDiZsW6TiYJocx8P0WfKJBn3tv+2+yHHlCatJK0ymj/9wTAK+NCRmL
-         fa2wkH9+VrVwB9McjkSS/WP2giDpFqMp6v4u6U0JCiefRu6yaj7m2yM4QMyNPkN1kMtc
-         IPlG0db7PT7JV0iudNWly/Xkf8eP6K9QvLXRZh3OrVlrcTmuhE/1pm8hsmya3eZ8WAIQ
-         ngoFquh51YfnRZoaILhrFDat0hFYISO31pZT2JCLISvAuRJDAfUY9wMZL7wByaHT3NV7
-         TThJVQcrBr+OOcMaXq4/foCl+NOfK4KQGW43rhMPltKnhFQ5pyIrALXLj/29Y0Ky3Q5M
-         Lfjg==;
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=gOpPI7YcO+DIQhHPYShATl6XVIWuImfrdEloB2zFr8U=;
+        fh=RsjPANiLgsSCHrT8J1CaTGl4A/Be/5EGMv1XQChm8yc=;
+        b=ehhSJpy8PGYSq/7PwdSnZY5RYUTH4YIBvXI1IOoC5XXpoAAcrRDGWWnZV+YsPXS2Ms
+         qsv0Wq53VUkaImUw8tOynEPDghQ43F5Wvz62ARwjEZwV43AF/OE0/b9dn1aSJjGBIFSu
+         CdgZhBjmIHqdiUV5gS2aeoZbIjZIzYj1sZMzgFRJwr5wv/tUFVnIo5W4fSUlnwbfs2bk
+         +sV+exMXsHyC+H1UMViUfnya3/2ElnLFM2wEUQ26FwgOA4tmevtM2wrdAM4QSS32fSKN
+         l8WwnE6vUkJzAzKtdburRWY5DWESIEpgrBWp1Jf7UCMgoD9+tsEE/AGj0BGpOMr4PEBQ
+         +OEA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783719891; x=1784324691; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=gOpPI7YcO+DIQhHPYShATl6XVIWuImfrdEloB2zFr8U=;
+        b=T/mK9CaOUls73BrZGk4aJj/OTPJnZVMnjvDC3p813YFPIjBxavPJorvg4VmySNo8P8
+         19eaPkt7JclSkq60uhaSr4z8gpMJct+1PYbb31CKfetkL3fj0UKwByDE44NorXvAQC1T
+         blToOUdylFHq47dxLMzKg7x8cFSgHCFvQCiJ4YwQYCL4omo0ruOtYI+q0vXi2wQoAsfn
+         IJyFkZdFDv//8d51TLxGqyqLKP9V2GzQLk0Iy3NkySmL1x+znByHpGmvWe/x77Nz8kvh
+         WymfqZnBYMNv1jcOqMzIFJM0MEeW1ocX3kWuJj4zptDPw0OdTC3anI/PzUcEJWpGWug6
+         nQBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783718792; x=1784323592;
+        d=1e100.net; s=20251104; t=1783719891; x=1784324691;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=FNJYGUchRZc+yyibQEoFJBWXm2WlrbE2kAvLAMOngVI=;
-        b=lSy4lpdVESlYYTMrTT3K2qYxd0FTXxZA8rj8xWYcGuSO+b606ixf69F9dhANH2THhC
-         yX3UAHW9OcblCrtWM0W8FKfvIFdRfQhjAjazFS16VVwa3x0t9Ab/JnEBjam/ZbkrdwtZ
-         eY7B4BnhKuMtGt5AcmCLvAnpC97U388QFoamOSGr4meFVQz3h69L2b84ql6xOGcBScmf
-         3mhU5sSu4qDM6R9W9YK5egenSBBQzezFm2QN08c23Yx2NPQ8o2WA188cGEVo9g7+HWSm
-         uFcIAcYw2twGN9TDJBEKycAWM/TbyeWa4I4rBwmynsHMItq35Wgbog8R66HEeOMxKgL0
-         nPaA==
-X-Forwarded-Encrypted: i=1; AHgh+RpgZB8iMBCTFEOuQVbeaFRnBX5saQcp/hcSfjCpLqRor/FswFk0c4LqhyHBt9cpjYMNb7Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzJpsQjQwsAJa3ATXvlGdTmVNdsmm38HhZdM00VYU9XWxobV6z
-	urfPhAQcl3R3FYxL20DMaO5dtm5KoZoamPPOG+bWMviBOwvRHvI8hqaY6WaEP0UoxnbnSp95WpH
-	s6hAUYbEiX8Oihc+c5u1NsRBhySjToimHlqgxFK7pS/X3Ynp97YjzajJpeoA71t1ie3uFHBMtzf
-	XkRCIVKTTMA5aipOhnwqXOBZdYhP6L5JZ1mQ==
-X-Gm-Gg: AfdE7cmeveKFwWBMjJ++/gWWmZ00g3wso0vPQKQGDfSKge7FsKiC+/KhoIrbnhOoOVU
-	1+/Y4roJ97Dg6dGATCpSexa/+ZNu/jo/zG9HhPpG+ZGtzfRDQ5/Td/2x4+UX46kg5WGv6HStqIO
-	1T064hITLaNNhP7IYgVZN6qDIxvhTD4noCrVUD3Eq09RivBwQs9Xa0VLDj/e742GwUp0ProzNN
-X-Received: by 2002:a17:907:c084:b0:c0e:883e:93fd with SMTP id a640c23a62f3a-c161ea934b9mr22612366b.48.1783718792372;
-        Fri, 10 Jul 2026 14:26:32 -0700 (PDT)
-X-Received: by 2002:a17:907:c084:b0:c0e:883e:93fd with SMTP id
- a640c23a62f3a-c161ea934b9mr22610966b.48.1783718791996; Fri, 10 Jul 2026
- 14:26:31 -0700 (PDT)
+        bh=gOpPI7YcO+DIQhHPYShATl6XVIWuImfrdEloB2zFr8U=;
+        b=mp/NJrr9Zj5AglI89vNWSSE/gwmaa54qPNQn9B9mqOgol3sCNlm38dgU9g7w+1tLre
+         aGYPtDg3FpIIjlTPuehVBh1uScpd0GsHTM3jjjUMSfLJWDWHdvhp03QbDTGQBSNlT2eJ
+         5/r4beOvHIcZv4++o9l8oY3hFEBN/h6pQFk0il0SeQmjISEAz8tWs5WYFfTr/jB2Tmcl
+         jw9a3jQGR/ic1rzDn3lp0jiUtsuoECecFfnZycLmMj9eYis+kRxPFfR1Crv0vCLwyDLq
+         e2deCQR49Sy4JE1zZIkAFxAX2JiXdQMPOgxObl8jjEXN69LGX6mUUpmnC7H1+EE00A0h
+         xY+Q==
+X-Gm-Message-State: AOJu0YzMIMqSdldIJ8ynHyal/ZW6bmtXW8CEA7tR2z7yV3IR5maYHcx0
+	dUMWFB0nlyP049B92lm0PcHruvNEFGI7fq0oJXN73gQqrR6e7vC5F9Rh9BONtJPA73OxBOmxSJo
+	ZReSYOBloQ5GUGjKx1TWKONJ6oBIzEkgySjAxZ+Q=
+X-Gm-Gg: AfdE7cnj7ezFNkaQZfj6CKJtjpC0OBWPwXXDIPzGkRDcnyLev9Oo6RV14cfrImpZgMf
+	hvIHwOS2MZDbe6QnbmnjFGsL+69RaBMKueruiqp7AHvvbkTEhPhsM4YOW4W66iRLRCswjJb4ncx
+	l/U54BEtF61Md6uSbOCdTm4fLhy53eT5KvxrW6imO3OGzyXZY5lO2v4uro2hDNfVA7rU8shOdI0
+	ADhPjk1KQcrxxrLMFkR1RqZf+S9T0bgZ2X3Bg/54v4ySkFwSu/eqqZQgWmT9PPW6nxhFpCYP4WY
+	FJFDJAscxAuiHMKL7xIZwTxfzvS1bHFYMPJq7LmB/znoYCEBaMaEAA==
+X-Received: by 2002:a17:90b:3bc7:b0:37f:9cdf:f0ab with SMTP id
+ 98e67ed59e1d1-38dc77ee692mr651360a91.26.1783719891088; Fri, 10 Jul 2026
+ 14:44:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260710-net-sft-fix-containers-v1-0-a2915c294ef5@kernel.org> <20260710-net-sft-fix-containers-v1-6-a2915c294ef5@kernel.org>
-In-Reply-To: <20260710-net-sft-fix-containers-v1-6-a2915c294ef5@kernel.org>
-From: Wei Wang <weibunny@meta.com>
-Date: Fri, 10 Jul 2026 14:26:20 -0700
-X-Gm-Features: AVVi8CfAds6-1QvMPvHqFEOGQj6cDhKRwM4ua7wpqufDJTfdW3NOUKcxL1Pga9E
-Message-ID: <CADe0Y=tMSQerM4or_QNO6tjc6GaEiysaGpmcHnWhaDKQocN86w@mail.gmail.com>
-Subject: Re: [PATCH net 6/7] selftests: drv-net: add missing kconfig for psp.py
-To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrew Lunn <andrew+netdev@lunn.ch>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>,
-        Mohsin Bashir <mohsin.bashr@gmail.com>, David Wei <dw@davidwei.uk>,
-        Wei Wang <weibunny@fb.com>, bpf@vger.kernel.org
+References: <20260708193239.5063-1-emil@etsalapatis.com>
+In-Reply-To: <20260708193239.5063-1-emil@etsalapatis.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 10 Jul 2026 14:44:38 -0700
+X-Gm-Features: AVVi8CeUx3WxmGBczLYns2fxE7-g2gULa4j1gRY4UCmR7RQFZcoDM87oF30Ec0o
+Message-ID: <CAEf4Bzarum7QXKT+BuvBa9kSrjMX=BzknWFKQBQuROKOWFeuZQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3] selftests/bpf: veristat: Minimize map size
+ during verification
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, memxor@gmail.com, 
+	daniel@iogearbox.net, eddyz87@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Authority-Analysis: v=2.4 cv=eo3vCIpX c=1 sm=1 tr=0 ts=6a516389 cx=c_pps
- a=jJvPsHQLKLf2UdvVr97r4g==:117 a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=wpfVPzegXHpEFt3DAXn9:22
- a=VwQbUJbxAAAA:8 a=hWMQpYRtAAAA:8 a=pGLkceISAAAA:8 a=FOH2dFAWAAAA:8
- a=ctOhbmcJb_RA1L7furcA:9 a=QEXdDO2ut3YA:10 a=q7aydO1c4wibL4nb3gNS:22
- a=KCsI-UfzjElwHeZNREa_:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzEwMDIxNSBTYWx0ZWRfXy4MMy2Zgwvbi
- PuNSoBeAVw8WdYJq9m5LNvHlCrGwSVjdOMrhRiJU/UxmllIvmfLiDmJDFMONri1dSXQrE0lKBlo
- Bx9+ZIMp88MO3gZYH88/KBgn8I5/Ncc=
-X-Proofpoint-GUID: PAgu7zi9yq047vkZXlF_0YN6EgWrwcm5
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzEwMDIxNSBTYWx0ZWRfX/KC1lCwbrNkN
- UpRETE7kMKr95i+PMxC6FsEpLQBtiEoiE1chRZPv5RTtDqqzPV24qXvg8wGMWZzIekc6IJM/ix2
- hb+PfYquE11ubHYFPYr/kTP8QeObdGhdvJLMVlPZUBjYUbwtD7a1/X4Q3E+0pGYrAK3C8sbhn8J
- 0QVOKzIxXqkyMbhVPiO9ZMhgPfrk/2BqdwMra613OQwPPnvlxr/QQFRDXqx8gvEzuenhEpipIgb
- fRnEdjJs7qtcU3bAlpqb/LhZWiDaPinOdWQQ9ACgm7klDr2ss6aXOrQ2FVS8q1H2yt8opI60NvI
- TmmrgbSxKX6TpjohexiDHVxs4oeienZvP64rjUgOBf2Jnmo/t5dIkFQXjCFpauIKBXDkb9a2FPW
- O060qp+IrKAsJP5XX/29Zt+cixSYlaQxmGe26+Lh7npHE7D7NZbQe/d9AqPXoZgX0RERpeOGHhM
- SHDU//Seyn8gGKWNlVw==
-X-Proofpoint-ORIG-GUID: PAgu7zi9yq047vkZXlF_0YN6EgWrwcm5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-07-10_06,2026-07-10_01,2025-10-01_01
 
-On Fri, Jul 10, 2026 at 11:05=E2=80=AFAM Matthieu Baerts (NGI0)
-<matttbe@kernel.org> wrote:
+On Wed, Jul 8, 2026 at 12:32=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.c=
+om> wrote:
 >
-> >
-> This psp.py selftest was failing on my side when only using the
-> drivers/net config file on top of the default one -- the recommended way
-> to execute selftest targets.
+> The veristat tool verifies that BPF objects along with their
+> maps pass verification for a given kernel version. To do so,
+> veristat loads the objects and maps into the kernel in order
+> to pass them through the verifier.
 >
-> It looks like some kernel config are needed to execute the new tc
-> commands.
+> Currently, veristat sizes the maps according to the max_entries
+> field provided by the program author. Depending on the map type
+> this field may be irrelevant to the verification process. However,
+> loading a large map can fail because of -ENOMEM errors.
 >
-> Note that this was not visible on NIPA, because these tests are executed
-> with the drivers/net/hw ones, combining the two config files, and the hw
-> one contains the missing ones.
+> This is a problem when the map is supposed to run on large machines,
+> but veristat tests it machines with significantly less RAM (e.g.,
+> CI). In that case veristat fails even if the program verifies.
 >
-> Fixes: 3f74d5bb807e ("selftests/net: Add env for container based tests")
-> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+> Expand veristat to resize maps whose max_entries are not relevant
+> to verification. Set the max_entries value as low as possible to
+> avoid -ENOMEM errors.
+>
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+>
+> CHANGELOG
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+
+for individual patches we normally don't commit changelog, so next
+time put it under `---` below so it will be stripped out during
+applying (I cleaned this up manually)
+
+> v2->v3
+>
+> - Do not resize HASH_OF_MAPS because it can be declaratively populated
+> from BPF at compile time (Sashiko)
+>
+> v1->v2
+>
+> - Removed unnecessary ARENA, LPM_TRIE, and RHASH handling (Sashiko)
 > ---
-> To: Andrew Lunn <andrew+netdev@lunn.ch>
-> To: Alexei Starovoitov <ast@kernel.org>
-> To: Daniel Borkmann <daniel@iogearbox.net>
-> To: Jesper Dangaard Brouer <hawk@kernel.org>
-> To: John Fastabend <john.fastabend@gmail.com>
-> To: Stanislav Fomichev <sdf@fomichev.me>
-> To: Mohsin Bashir <mohsin.bashr@gmail.com>
-> To: David Wei <dw@davidwei.uk>
-> Cc: Wei Wang <weibunny@fb.com>
-> Cc: bpf@vger.kernel.org
-> ---
-
-The fix makes sense to me.
-
-Reviewed-by: Wei Wang <weibunny@fb.com>
-
->  tools/testing/selftests/drivers/net/config | 3 +++
->  1 file changed, 3 insertions(+)
+>  tools/testing/selftests/bpf/veristat.c | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
 >
-> diff --git a/tools/testing/selftests/drivers/net/config b/tools/testing/s=
-elftests/drivers/net/config
-> index 91d4fd410914..2070e890e064 100644
-> --- a/tools/testing/selftests/drivers/net/config
-> +++ b/tools/testing/selftests/drivers/net/config
-> @@ -4,6 +4,8 @@ CONFIG_DEBUG_INFO_BTF_MODULES=3Dn
->  CONFIG_INET_PSP=3Dy
->  CONFIG_IPV6=3Dy
->  CONFIG_MACSEC=3Dm
-> +CONFIG_NET_CLS_ACT=3Dy
-> +CONFIG_NET_CLS_BPF=3Dy
->  CONFIG_NETCONSOLE=3Dm
->  CONFIG_NETCONSOLE_DYNAMIC=3Dy
->  CONFIG_NETCONSOLE_EXTENDED_LOG=3Dy
-> @@ -11,6 +13,7 @@ CONFIG_NETDEVSIM=3Dm
->  CONFIG_NETKIT=3Dy
->  CONFIG_NET_SCH_ETF=3Dm
->  CONFIG_NET_SCH_FQ=3Dm
-> +CONFIG_NET_SCH_INGRESS=3Dy
->  CONFIG_PPP=3Dy
->  CONFIG_PPPOE=3Dy
->  CONFIG_VLAN_8021Q=3Dm
+> diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selft=
+ests/bpf/veristat.c
+> index a7db6f04f7e1..c9c257784ee3 100644
+> --- a/tools/testing/selftests/bpf/veristat.c
+> +++ b/tools/testing/selftests/bpf/veristat.c
+> @@ -1248,6 +1248,29 @@ static void fixup_obj_maps(struct bpf_object *obj)
 >
+>                 /* fix up map size, if necessary */
+>                 switch (bpf_map__type(map)) {
+> +               /*
+> +                * if the verifier doesn't use max_entries
+> +                * then set to 1 to avoid -ENOMEM
+> +                */
+> +               case BPF_MAP_TYPE_HASH:
+
+
+I'm wondering if we should add ARRAY here as that one is actually with
+high likelihood will be large, though there are some corner cases
+where size might matter (e.g., existing code omits error checking
+knowing that verifier will prove it can never fail; resizing to 1
+might pessimize such check, probably, if index is larger than 1). Can
+you actually try the latter scenario with some small program, I'm
+curious how the verifier will behave?
+
+anyways, applied to bpf-next, thanks!
+
+> +               case BPF_MAP_TYPE_PERCPU_HASH:
+> +               case BPF_MAP_TYPE_LRU_HASH:
+> +               case BPF_MAP_TYPE_LRU_PERCPU_HASH:
+> +               case BPF_MAP_TYPE_SOCKHASH:
+> +               case BPF_MAP_TYPE_DEVMAP_HASH:
+> +               case BPF_MAP_TYPE_QUEUE:
+> +               case BPF_MAP_TYPE_STACK:
+> +               case BPF_MAP_TYPE_BLOOM_FILTER:
+> +               case BPF_MAP_TYPE_STACK_TRACE:
+> +                       bpf_map__set_max_entries(map, 1);
+> +                       break;
+> +
+> +               /* ringbufs must be page-aligned */
+> +               case BPF_MAP_TYPE_RINGBUF:
+> +               case BPF_MAP_TYPE_USER_RINGBUF:
+> +                       bpf_map__set_max_entries(map, sysconf(_SC_PAGESIZ=
+E));
+> +                       break;
+> +
+>                 case BPF_MAP_TYPE_SK_STORAGE:
+>                 case BPF_MAP_TYPE_TASK_STORAGE:
+>                 case BPF_MAP_TYPE_INODE_STORAGE:
 > --
-> 2.53.0
+> 2.54.0
 >
