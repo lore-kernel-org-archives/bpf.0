@@ -1,356 +1,208 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f6.google.com (mail-wm2-f6.google.com [74.125.225.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC0336A379
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 17:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 309FF24E4C6
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 17:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783705097; cv=none; b=hHP3+IScI+M35H60WzPFLnMCO9ZwxLcfrrBdnmi72VMfK4g+VlB3ainrs6UDb4r+Nx7uGjdVNvvBVGsF6mpvdTKd2PBZSTgXchb2gr3+44QZu7cT6DO9qZnpE3EcgmleXKgK70acIon9XHokF3OcKGrT/ESihxedxWZellOAb00=
+	t=1783705213; cv=none; b=Bj26m+AtTJ6qXeGAmjnDIUm2xf/kNUZD1PSv5PT2q6iHu541nhp8sGomM+wEEh9JrsyccJtgC4NR5VZvWyTc4ObNwZWwlRhI2DRCJLg2TY6zpJBqH1kclBpsR5QvuuwDt46CXR+xyXYMjBH4vQ1SxDyosXEdHzUHfuH1XRbfzxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783705097; c=relaxed/simple;
-	bh=xqmBs9nRsDs2OdV/mGmPRCDiikdU9VPQgNarYNuO6vs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ekSA7yG2oH9f+BF8I+2gnz+AhX86ZAxR/YyOAW5YnkhmNVIFetvyj7aEDYjEkO709QskxHRgbqs4unepbBmhIWRRg2fLmAIT6h2wCc41D4wgV9U6Zj+hoQmLRM+s1snrpvQmtD2kf2PhrV9vvVx0JrM0UXrRqmlshFepqWbIfxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZgdUhilu; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783705213; c=relaxed/simple;
+	bh=XPEclRDiV6omwaNGtbkvqNxg8v1YbFaAyQAFObbhTHM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=i0C+NapfzGqQl5PqwFTV1J8VIISa+xq/A0daZNWIScQyurWYc12NRPcz1RN/quQHP5C6Ul57VvgTLR+rEdAc2I1DzSG+9VkBf+b6m9va5RvySiXd6wl3ov5N9Bea+X2O5rHSUvs93gFxfSv7lv/hrXYIiq/a3qOVSS3Q4BeKX/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bxJph1NN; arc=none smtp.client-ip=74.125.225.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZgdUhilu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE08B1F00A3A;
-	Fri, 10 Jul 2026 17:38:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783705096;
-	bh=gj85/WBfT6jiCym8zFm8Q5J7zi4JCJ2+5+QvVNpMWgg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZgdUhiluaVn3OOP/kU7D4WoM9BnG91WWjcXm0zaqWgu9rv0wEyZvET/+4WDGUiiGj
-	 l3si8hTgvl3prFZr28LAKBeVUNxs25UwgSyyqQ4OmarXQX3I+5cPFvGi+HjkuWg7+h
-	 qRRzqOm2BlzAUiGFRLpuiVrwhWM1rCHwVJDk52YBJeoSp+0lsU8uIEsxwwefG6EFzY
-	 3TLJZoVIUaFVTg+JKR3ruVXIUFA4o+zH+dAxQm9Br0Qy/LU48IyLVfdN1Z8rvUe0w6
-	 Xse63M4ZbNq3zJtAa0wZ6kuPQFBvSUJlISIFLT7Ge3snV+hmNduvqaEADiAHNdotmS
-	 tZJ5nXQNda9GA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 2/2] net: atlantic: convert RX path to
- page_pool
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yangyu Chen" <cyy@cyyself.name>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <tencent_164779DC8B18AB10B9C636BE23C178ED5907@qq.com>
-References: <tencent_7DB01BE7F8FA056BB5F11D3570CF636C4309@qq.com>
- <tencent_164779DC8B18AB10B9C636BE23C178ED5907@qq.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 10 Jul 2026 17:38:15 +0000
-Message-Id: <20260710173815.DE08B1F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bxJph1NN"
+Received: by mail-wm2-f6.google.com with SMTP id 5b1f17b1804b1-493e93e58b9so530515e9.1
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 10:40:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783705210; x=1784310010; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=/5RW30ZGJk1qNi/VtLris2HIPVm+vUZFh/AIp9+9TfI=;
+        b=bxJph1NNd3D5qWRgmpt9tT68qiA4ip3coStQQ9FOvCUcONIRe/w1SBWbu/oXIHnF7n
+         vc3qeH86C2y/mn4WZaBb+DkKefZPz+Ulw6zftJrMWKyB/iukpErmDCzgNahqRXr8pzRI
+         kSfNC4T8baqjP9NsT9zWk5aMsCg1EeNBVa3KCC56dPzbY7VxhWPpa9NeOu3e0UqOxC0i
+         QXOxpb+Dpan33Y09NHW6Z5tYl7KtBL3EUlJWW2ynRu2n9tCcIvpoOnhGiFwEc1cEO8h2
+         QxZAWmMg68i57KhRU1cAfiRzQhPzvcbujlu6zSx++/56/WOW74UNs6ktaVnpcO/ZCJP1
+         xUJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783705210; x=1784310010;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/5RW30ZGJk1qNi/VtLris2HIPVm+vUZFh/AIp9+9TfI=;
+        b=NzV7HddECpMckx6IuJ7me993zoXB1lVktIg/cfKJnfE+HVPqcivZdBISZDVQAfxZn8
+         C5dLgOUpNilCY7RD2YfEvEtw84fG6Y7lHEJVzNv6+8Ikbs0nACaY0deSzrsj7gx76aqM
+         x0vGfYnt7P+I7sBkxM8Tossb0o+WKWhwB1L0P4flN25nJGjMQ1tKMyDkDVf36AMPuSId
+         2BLGjTfUhvLTgp2VeoSxRoD+ZdoG1Stlq5lpZKc7c9qea7uX+S6EnX1FNK3BBYq7xr8Q
+         8xvtnbp1RsqIdlm4yItNztaqa9D/GKvfSbAH6xvb7PWVY0oxNG2nP13x0t4yvP9or4EQ
+         4Z1w==
+X-Gm-Message-State: AOJu0YzDPgb9SFnJsGX3v2m5pnbO58byveIrpVKJu/IJp6JD612Kb+EO
+	ZFILpYTRouKcv9W1X0n7u0SXCKaeYxKwd7Z9mP2dc0cY3/z3y2gP0zzBRu4DcvAe
+X-Gm-Gg: AfdE7cna1qDmIVflP8zi4TtP7NUDQDri0RFCiIBH5k/uNEA4E/ugbfFT2TWGr8WhonY
+	gC23KP09JXqwQSzcp1y35CtFRdaco1kKEz4BD/2o7YCNofREd07XaOlarE8ShQQNJJ8lD9ERmGn
+	81uz0ZVWFNZunMLkCJsJhzDCttgdxg7G8NoRGlIFyipqNz2ZxSLv8l3YaFH87Hrwcwn+ezLXnao
+	gA97dc1SU3Ai1VFxPMuAFwKkRcn3OFl7yLEiQK8sDo2WSwABSppf72QGhPOgONF/89VceRkXATx
+	kr50NmgsAURppavkWpZ/DFcDAnwVwbsyJqYjtPYBd3FDKMKKT5u1QxuzLDKCfrppKj+ghMgM0oJ
+	YIQFUZKX7AUrBU16u2Ea0Uc3AyiUve8PKScwE+anYz7MHzhKe9LRBGtl5F4CVCKigaoWHhIO26y
+	5A6K/WDldzBrpUkXARlvAS8p+moFGANvYhi62Kaafz4hzRlfty7jlfkxtFzoL7YkuVwhtg+59EG
+	GyMuBTolwBUzFYl06b3trCT+Wl1OJOrIHFu4VBNyP2dvnMoXDe2AlyZi5UpoX+S4g==
+X-Received: by 2002:a05:600c:4ec8:b0:48f:e230:29f5 with SMTP id 5b1f17b1804b1-493f2b445dbmr41872275e9.16.1783705210491;
+        Fri, 10 Jul 2026 10:40:10 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493eb6d5055sm153090725e9.5.2026.07.10.10.40.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jul 2026 10:40:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 10 Jul 2026 19:40:09 +0200
+Message-Id: <DJV2Q54OF8BU.1H6KXCS93P3N6@gmail.com>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf v1 1/2] bpf: Fix tracing of kfuncs with implicit
+ args
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, <sashiko-reviews@lists.linux.dev>
+X-Mailer: aerc 0.21.0
+References: <20260710005902.2234832-1-ihor.solodrai@linux.dev>
+ <20260710012112.577F31F000E9@smtp.kernel.org>
+ <ce047740-79fe-4fc5-a118-40252b169be8@linux.dev>
+ <DJV2D826YVRY.WSTQ4Z6CFX1I@gmail.com>
+ <7a5bb678-4fab-44c8-98b5-272124e08847@linux.dev>
+In-Reply-To: <7a5bb678-4fab-44c8-98b5-272124e08847@linux.dev>
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
-s) to consider:
+On Fri Jul 10, 2026 at 7:34 PM CEST, Ihor Solodrai wrote:
+> On 7/10/26 10:23 AM, Kumar Kartikeya Dwivedi wrote:
+>> On Fri Jul 10, 2026 at 7:08 PM CEST, Ihor Solodrai wrote:
+>>> On 7/9/26 6:21 PM, sashiko-bot@kernel.org wrote:
+>>>> Thank you for your contribution! Sashiko AI review found 1 potential i=
+ssue(s) to consider:
+>>>> - [High] Accessing `btf->kfunc_set_tab` without holding a module refer=
+ence causes a use-after-free vulnerability.
+>>>> --
+>>>>
+>>>> --- Patch [1]: [PATCH bpf v1 1/2] bpf: Fix tracing of kfuncs with impl=
+icit args ---
+>>>> commit 13df91bf669b3a55c459c1663fbf726f9f52bc5c
+>>>> Author: Ihor Solodrai <ihor.solodrai@linux.dev>
+>>>>
+>>>> bpf: Fix tracing of kfuncs with implicit args
+>>>>
+>>>> A kfunc marked with KF_IMPLICIT_ARGS flag takes implicit arguments
+>>>> (such as bpf_prog_aux) that the verifier injects at load time.
+>>>> resolve_btfids strips those from the kfunc's BTF-visible prototype and
+>>>> keeps the real kernel ABI in a counterpart _impl prototype.
+>>>>
+>>>> Link: https://github.com/sched-ext/scx/issues/3687#issuecomment-490669=
+4106
+>>>>
+>>>>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+>>>>> index 64572f85edc83..20aeca6b4f95c 100644
+>>>>> --- a/kernel/bpf/btf.c
+>>>>> +++ b/kernel/bpf/btf.c
+>>>> [ ... ]
+>>>>> @@ -9114,6 +9114,26 @@ u32 *btf_kfunc_flags(const struct btf *btf, u3=
+2 kfunc_btf_id, const struct bpf_p
+>>>>>  	return btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
+>>>>>  }
+>>>>>
+>>>>> +/*
+>>>>> + * Return the union of a kfunc's flags across all hooks.
+>>>>> + * Unlike btf_kfunc_flags(), not restricted to a calling
+>>>>> + * program's hook. Used when attaching to a kfunc for tracing.
+>>>>> + */
+>>>>> +u32 btf_kfunc_accumulated_flags(const struct btf *btf, u32 kfunc_btf=
+_id)
+>>>>> +{
+>>>>> +	enum btf_kfunc_hook hook;
+>>>>> +	u32 *hook_flags;
+>>>>> +	u32 flags =3D 0;
+>>>>> +
+>>>>> +	for (hook =3D 0; hook < BTF_KFUNC_HOOK_MAX; hook++) {
+>>>>> +		hook_flags =3D btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
+>>>>> +		if (hook_flags)
+>>>>> +			flags |=3D *hook_flags;
+>>>>> +	}
+>>>>> +
+>>>>> +	return flags;
+>>>>> +}
+>>>>> +
+>>>>>  u32 *btf_kfunc_is_modify_return(const struct btf *btf, u32 kfunc_btf=
+_id,
+>>>>>  				const struct bpf_prog *prog)
+>>>>>  {
+>>>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>>>>> index 6515d4d3c0032..fde11a2f6869a 100644
+>>>>> --- a/kernel/bpf/verifier.c
+>>>>> +++ b/kernel/bpf/verifier.c
+>>>> [ ... ]
+>>>>> @@ -19121,8 +19146,8 @@ int bpf_check_attach_target(struct bpf_verifi=
+er_log *log,
+>>>>>  		if (prog_extension &&
+>>>>>  		    btf_check_type_match(log, prog, btf, t))
+>>>>>  			return -EINVAL;
+>>>>> -		t =3D btf_type_by_id(btf, t->type);
+>>>>> -		if (!btf_type_is_func_proto(t))
+>>>>> +		t =3D btf_attach_func_proto(log, btf, btf_id);
+>>>>> +		if (!t || !btf_type_is_func_proto(t))
+>>>>>  			return -EINVAL;
+>>>>
+>>
+>> Also, why not do it for BPF_TRACE_ITER case as well? I just feel keeping=
+ it
+>> consistent may outweigh figuring out whether it's necessary in that case=
+ or not,
+>> etc.
+>
+>
+> I mentioned this in the patch description:
+>
+>   The BPF_TRACE_ITER case distills a registered iterator's
+>   prototype, and bpf_struct_ops_desc_init() distills the
+>   function-pointer members of a struct_ops type. Neither is
+>   a kfunc, and so can't have implicit arguments.
+>
 
-New issues:
-- [Critical] Uninitialized physical addresses cause severe DMA memory corru=
-ption during RX buffer refill.
+Yeah, I saw that, but abstracting that inside the function and not having t=
+o
+think from the caller about those details would be better. That said, I don=
+'t
+have any strong preference, it is obviously correct as it is.
 
-Pre-existing issues:
-- [High] The ndo_xdp_xmit callback violates API contract by not repacking a=
-rrays on failure, causing UAF and memory leaks.
-- [High] Malformed RX packets exceeding MAX_SKB_FRAGS cause a permanent inf=
-inite NAPI polling loop.
-- [High] Aborting XDP assembly on oversized packets leaves trailing fragmen=
-ts uncleaned, leading to packet injection.
-- [High] Updating u64_stats without disabling preemption causes a system li=
-velock on 32-bit architectures.
---
+>
+>>
+>> Please supply a cover letter in the next version too since you're sendin=
+g
+>> multiple patches.
+>
+> I used the first patch's message as a cover letter, since it's
+> just a fix + selftest pair.
+>
+> The series could be split further into refactoring changes, but I thought
+> it'll be easier to backport if the fix is in a single self-contained patc=
+h.
+>
+> I think we want the fix to get into 7.2, and backport it to 7.1.
+>
+> If it's ok to carry separate refactoring patches there, then I'll split.
+> Kartikeya, wdyt?
+>
 
---- Patch [2]: [PATCH net-next 2/2] net: atlantic: convert RX path to page_=
-pool ---
-commit d3fa6dc4118e01fdb55de72ea89c2b574594ac08
-Author: Yangyu Chen <cyy@cyyself.name>
-
-net: atlantic: convert RX path to page_pool
-
-This commit converts the atlantic driver's RX path to use page_pool for
-fragment management to reduce DMA map/unmap overhead. It also registers the
-PTP RX ring's xdp_rxq and cleans up deprecated ethtool counters.
-
-> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c b/drivers/n=
-et/ethernet/aquantia/atlantic/aq_ring.c
-> index c59b6c0b37f1e..e06c502b59f95 100644
-> --- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-
-[ ... ]
-
-> -static int aq_get_rxpages(struct aq_ring_s *self, struct aq_ring_buff_s =
-*rxbuf)
-> +static int aq_get_rxpages(struct aq_ring_s *self, struct aq_ring_buff_s =
-*rxbuf)
->  {
-> -	unsigned int order =3D self->page_order;
-> -	u16 page_offset =3D self->page_offset;
-> -	u16 frame_max =3D self->frame_max;
-> -	u16 tail_size =3D self->tail_size;
-> -	int ret;
-> -
-> -	if (rxbuf->rxdata.page) {
-> -		/* One means ring is the only user and can reuse */
-> -		if (page_ref_count(rxbuf->rxdata.page) > 1) {
-> -			/* Try reuse buffer */
-> -			rxbuf->rxdata.pg_off +=3D frame_max + page_offset +
-> -						tail_size;
-> -			if (rxbuf->rxdata.pg_off + frame_max + tail_size <=3D
-> -			    (PAGE_SIZE << order)) {
-> -				u64_stats_update_begin(&self->stats.rx.syncp);
-> -				self->stats.rx.pg_flips++;
-> -				u64_stats_update_end(&self->stats.rx.syncp);
-> -
-> -			} else {
-> -				/* Buffer exhausted. We have other users and
-> -				 * should release this page and realloc
-> -				 */
-> -				aq_free_rxpage(&rxbuf->rxdata,
-> -					       aq_nic_get_dev(self->aq_nic));
-> -				u64_stats_update_begin(&self->stats.rx.syncp);
-> -				self->stats.rx.pg_losts++;
-> -				u64_stats_update_end(&self->stats.rx.syncp);
-> -			}
-> -		} else {
-> -			rxbuf->rxdata.pg_off =3D page_offset;
-> -			u64_stats_update_begin(&self->stats.rx.syncp);
-> -			self->stats.rx.pg_reuses++;
-> -			u64_stats_update_end(&self->stats.rx.syncp);
-> -		}
-> +	unsigned int size =3D self->page_offset + self->frame_max +
-> +			    self->tail_size;
-> +	unsigned int pg_off;
->  	struct page *page;
-> -	int ret =3D -ENOMEM;
-> -	dma_addr_t daddr;
-> -
-> -	page =3D dev_alloc_pages(order);
-> -	if (unlikely(!page))
-> -		goto err_exit;
-> =20
-> -	daddr =3D dma_map_page(dev, page, 0, PAGE_SIZE << order,
-> -			     DMA_FROM_DEVICE);
-> +	/* Buffers whose page was not passed up the stack are reposted
-> +	 * with the data they already carry discarded.
-> +	 */
-> +	if (rxbuf->rxdata.page)
-> +		return 0;
-> =20
-> -	if (unlikely(dma_mapping_error(dev, daddr)))
-> -		goto free_page;
-> -
-> -	rxpage->page =3D page;
-> -	rxpage->daddr =3D daddr;
-> -	rxpage->order =3D order;
-> -	rxpage->pg_off =3D rx_ring->page_offset;
-> -
-> -	return 0;
-> -
-> -free_page:
-> -	__free_pages(page, order);
-> -
-> -err_exit:
-> -	return ret;
-> -}
-> -
-> -static int aq_get_rxpages(struct aq_ring_s *self, struct aq_ring_buff_s =
-*rxbuf)
-> -{
-> -	unsigned int order =3D self->page_order;
-> -	u16 page_offset =3D self->page_offset;
-> -	u16 frame_max =3D self->frame_max;
-> -	u16 tail_size =3D self->tail_size;
-> -	int ret;
-> -
-> -	if (rxbuf->rxdata.page) {
-> -		/* One means ring is the only user and can reuse */
-> -		if (page_ref_count(rxbuf->rxdata.page) > 1) {
-> -			/* Try reuse buffer */
-> -			rxbuf->rxdata.pg_off +=3D frame_max + page_offset +
-> -						tail_size;
-> -			if (rxbuf->rxdata.pg_off + frame_max + tail_size <=3D
-> -			    (PAGE_SIZE << order)) {
-> -				u64_stats_update_begin(&self->stats.rx.syncp);
-> -				self->stats.rx.pg_flips++;
-> -				u64_stats_update_end(&self->stats.rx.syncp);
-> -
-> -			} else {
-> -				/* Buffer exhausted. We have other users and
-> -				 * should release this page and realloc
-> -				 */
-> -				aq_free_rxpage(&rxbuf->rxdata,
-> -					       aq_nic_get_dev(self->aq_nic));
-> -				u64_stats_update_begin(&self->stats.rx.syncp);
-> -				self->stats.rx.pg_losts++;
-> -				u64_stats_update_end(&self->stats.rx.syncp);
-> -			}
-> -		} else {
-> -			rxbuf->rxdata.pg_off =3D page_offset;
-> -			u64_stats_update_begin(&self->stats.rx.syncp);
-> -			self->stats.rx.pg_reuses++;
-> -			u64_stats_update_end(&self->stats.rx.syncp);
-> -		}
-> +	page =3D page_pool_dev_alloc_frag(self->pg_pool, &pg_off, size);
-> +	if (unlikely(!page)) {
-> +		u64_stats_update_begin(&self->stats.rx.syncp);
-> +		self->stats.rx.alloc_fails++;
-> +		u64_stats_update_end(&self->stats.rx.syncp);
-
-[Severity: High]
-This is a pre-existing issue, but can this cause a system livelock on 32-bit
-architectures?
-
-The u64_stats_update_begin() function is called here in process context
-(e.g., during aq_ring_rx_fill() via aq_vec_start()) without disabling
-preemption.
-
-If a writer is preempted by a reader (such as ndo_get_stats64() invoked from
-a different CPU), the reader will spin forever in the
-u64_stats_fetch_retry() loop on 32-bit systems because the sequence counter
-will never become even.
-
-> +		return -ENOMEM;
-> +	}
-> =20
-> -	if (!rxbuf->rxdata.page) {
-> -		ret =3D aq_alloc_rxpages(&rxbuf->rxdata, self);
-> -		if (ret) {
-> -			u64_stats_update_begin(&self->stats.rx.syncp);
-> -			self->stats.rx.alloc_fails++;
-> -			u64_stats_update_end(&self->stats.rx.syncp);
-> -		}
-> -		return ret;
-> -	}
-> +	rxbuf->rxdata.page =3D page;
-> +	rxbuf->rxdata.daddr =3D page_pool_get_dma_addr(page);
-> +	rxbuf->rxdata.pg_off =3D pg_off + self->page_offset;
-
-[Severity: Critical]
-Can this cause severe DMA memory corruption during RX buffer refill?
-
-The initialization of buff->pa appears to be missing or was removed here,
-but the hardware callback still executes immediately after and
-unconditionally overwrites the descriptor's physical address:
-
-hw_atl_b0_hw_ring_rx_fill() {
-    ...
-    rxd->buf_addr =3D buff->pa;
-    rxd->hdr_addr =3D 0U;
-    ...
-}
-
-Because buff->pa is no longer initialized for RX, it contains garbage from
-the previous packet (specifically rss_hash and next, due to the union in
-the aq_ring_buff_s struct).
-
-This programs the NIC with arbitrary physical addresses, causing it to DMA
-incoming network packets into random physical memory.
-
-[ ... ]
-
-> @@ -438,22 +380,15 @@ int aq_xdp_xmit(struct net_device *dev, int num_fra=
-mes,
->  }
-
-[Severity: High]
-This is a pre-existing issue, but does the error handling in aq_xdp_xmit()
-violate the ndo_xdp_xmit API contract?
-
-When transmitting a batch of XDP frames, if a frame in the middle fails
-(returning NETDEV_TX_BUSY), the function increments a drop counter and
-returns num_frames - drop:
-
-aq_xdp_xmit() {
-    ...
-    if (aq_nic_xmit_xdpf(aq_nic, ring, xdpf) =3D=3D NETDEV_TX_BUSY)
-        drop++;
-    ...
-    return num_frames - drop;
-}
-
-The loop drops frames but does not repack the frames array. The network
-stack (e.g., devmap) assumes that a partial success count N means the first
-N frames succeeded and the rest failed.
-
-It will free the frames at the end of the array, some of which were actually
-successfully queued for transmission by the driver. This leads to freeing
-memory that the NIC is actively trying to DMA, while leaking the memory of
-the frame that actually failed.
-
-[ ... ]
-
-> @@ -547,8 +490,11 @@ static bool aq_add_rx_fragment(struct device *dev,
->  	do {
->  		skb_frag_t *frag;
-> =20
-> -		if (unlikely(sinfo->nr_frags >=3D MAX_SKB_FRAGS))
-> +		if (unlikely(sinfo->nr_frags >=3D MAX_SKB_FRAGS)) {
-> +			/* Attached frags must reach xdp_return_buff() */
-> +			xdp_buff_set_frags_flag(xdp);
->  			return true;
-
-[Severity: High]
-This is a pre-existing issue, but does aborting XDP assembly on oversized
-packets leave trailing fragments uncleaned?
-
-When an RX packet exceeds MAX_SKB_FRAGS during XDP processing, this early
-return aborts but fails to set buff_->is_cleaned =3D 1 for the remaining
-descriptors of the malformed packet.
-
-The outer loop in __aq_ring_xdp_clean() handles the abort by advancing
-sw_head by 1. Because the trailing fragments were never marked as cleaned,
-subsequent iterations of the loop will encounter them and incorrectly parse
-them as the Start-Of-Packet (SOP) for new frames.
-
-This forces the driver to interpret raw middle-of-packet payload data as
-Ethernet/IP headers, leading to arbitrary packet injection.
-
-> +		}
-> =20
->  		frag =3D &sinfo->frags[sinfo->nr_frags++];
->  		buff_ =3D &ring->buff_ring[buff_->next];
-
-[ ... ]
-
-> @@ -675,6 +626,7 @@ static int __aq_ring_rx_clean(struct aq_ring_s *self,=
- struct napi_struct *napi,
->  			err =3D -ENOMEM;
->  			goto err_exit;
->  		}
-> +		skb_mark_for_recycle(skb);
-
-[Severity: High]
-This is a pre-existing issue, but does the bailout logic in
-__aq_ring_rx_clean() create an unrecoverable infinite loop?
-
-If a remote attacker sends a highly fragmented or malformed packet that
-spans more than MAX_SKB_FRAGS descriptors, the driver detects this and
-jumps to err_exit:
-
-__aq_ring_rx_clean() {
-    ...
-    if (unlikely(!is_rsc_completed) || frag_cnt > MAX_SKB_FRAGS) {
-        err =3D 0;
-        goto err_exit;
-    }
-    ...
-}
-
-Because it bails out without advancing the sw_head ring pointer or dropping
-the packet, the driver will process the exact same malformed packet on the
-next NAPI poll, hit the exact same condition, and bail out again.
-
-This creates a permanent infinite loop in softirq context, leading to a
-complete denial of service for the CPU core processing RX queues.
-
->  		if (is_ptp_ring)
->  			buff->len -=3D
->  				aq_ptp_extract_ts(self->aq_nic, skb_hwtstamps(skb),
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/tencent_7DB01BE7F8F=
-A056BB5F11D3570CF636C4309@qq.com?part=3D2
+You can still keep the patches as is, but just add a cover letter, it will =
+not
+affect backporting. The cover letter is just to summarize the series and th=
+e fix
+in the merge commit. Also, my understanding is that with the Fixes: tag, it
+should automatically be picked up for stable kernels.
