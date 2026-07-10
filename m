@@ -1,121 +1,91 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9DD43712F
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 15:45:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F373943800A
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 15:45:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783698343; cv=none; b=JbGyypQwT7slSXJafQT6Nj2nsqC4lhsdUe7C2joyyl/Epu+Hyxr1wDhM7nMAuM2UwmyPE8PpIxzX6iM7/b8+Dge8mIGTqOC+FxP3oOO1xJ9fhnjUCFN25sF1wrYhJO8vuucAnxPi446S9YDUGbnPXgBVdrhK9neaYe7sf+7y+pY=
+	t=1783698351; cv=none; b=A+lZJO3sesGoeSJPFclQA2aBcYgN6+4Bj+2lHf46R17Ax0zkudwTT6xHMiXNr2OmimRWlWvwHueC2iIa2vx0b3UQ0vgB+KqjsJAcXpmoad8ylZIuD9JQLCIrbgP/bqA6AF4qhIdDtWt+w944DxHyu2fY4pNwBkDx9kphw/x3nS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783698343; c=relaxed/simple;
-	bh=BhwVYfpFR79oYTShacDUr2hlzhTnFWDFl2R+6GXiWSU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nT5mPI8kxRKO6jq2u7b4kTlSWJRogcgslFtDZFkic0j+JwK9PpZmqfxrAAd+wQooj4RDJgwz8JcChEE67MO14DlPE2muC/hmkSaYcO8gJTCM8XYmmeaCECY73kYFfaTaLw2rC8A6Vn/zOavrX5iJVjoaZkQWvqi59Fm9EXIXHro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=V590BP5E; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783698351; c=relaxed/simple;
+	bh=/8w4cg3G0sz49ntb0AfSThhT1fR15YhZSUKEzoSGPW8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Hx20y7Ds99r8sIENdTHaIDr9aVhZml+wEgYzKdbNu8RikdG57P7TkJCPs5ZkXLt9fMQi3/nj5V7c5iCDeSbDE6QFV8VOn0z0TpcUwts/oiKDkOW6b23j9HYaCJAd8o8Wy/aUrbrQEq34PsjUGparvq56kjCIRRw9kSPOGkRg6lg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BUwyEt7J; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="V590BP5E"
-Message-ID: <6c9ed329-02a4-4de4-b6e9-3eacdfe11922@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783698339;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5MJAkNAixLcOAQy5WKBTS0fpHbyVG0CUx183CCa+0bk=;
-	b=V590BP5E2QpV20oswvuV7SRxE4Wc+z3MzTBiP5kcsmGVn2BWCByMQg7mDp8QYFBbcyPY/l
-	1J01HPfLwqHlox7zuW1PJBjST08EoQOdXwcVru7AU6Dp+tTATARSLThUWbOTgGtiTtS7xs
-	KqkGmBe0EyNPZzkU27Tt91ZgyiqQAHg=
-Date: Fri, 10 Jul 2026 08:45:36 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BUwyEt7J"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D24B1F000E9;
+	Fri, 10 Jul 2026 15:45:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783698349;
+	bh=j88XhhDhq467nmXHadIa3AfQnRxJvwZQkWbcisEzIBA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=BUwyEt7JtJ61c9412CxUmP8GiIU62GIoJsyWHxc+X8Df5USxF87ETrXnYSoprQ2Tt
+	 Fum0nElDROuOw4spuucVxhfaE1WYNBxuPAaq8yggUnzaG76btJYyLhq5lWMT3hRkZE
+	 HKKwsYSTtBWAM6UX2xvFrm/a160oAqIU5Bsv1Lmid1kq2zucpRF93k5TV9n9KHPCcv
+	 pjJcnp3MZRiO/8CXtERb71Eb3Y54fdXG23DsG2+aY0BXkmqO44fqieR1qyEH78RT6o
+	 +nNCyZNWRygNvYjDtDNa+kHT7wuJlWrkeErwOBSwbUNrtH96lp8e+dqtpxXmw3W5bl
+	 v1g83tLY5KEpQ==
+Content-Type: multipart/mixed; boundary="===============4457655665606767974=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf 1/2] bpf: Reject >8 byte return values on
- return-reading trampoline paths
-Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
+Message-Id: <a45c78cf3167aa868b8a50fae2a4979c09f21890212e2013e05303b1fff30add@mail.kernel.org>
+In-Reply-To: <20260710144404.2579671-1-yonghong.song@linux.dev>
 References: <20260710144404.2579671-1-yonghong.song@linux.dev>
- <20260710145845.883411F000E9@smtp.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260710145845.883411F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH bpf 1/2] bpf: Reject >8 byte return values on return-reading trampoline paths
+From: bot+bpf-ci@kernel.org
+To: yonghong.song@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,leon.hwang@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 10 Jul 2026 15:45:49 +0000 (UTC)
+
+--===============4457655665606767974==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+
+> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+> index 51b16e5f5534..bbb44ef8f87a 100644
+> --- a/kernel/bpf/bpf_struct_ops.c
+> +++ b/kernel/bpf/bpf_struct_ops.c
+> @@ -445,6 +445,18 @@ int bpf_struct_ops_desc_init(struct bpf_struct_ops_desc *st_ops_desc,
+>  		goto errout;
+>  	}
+>
+> +	/*
+> +	 * A >8 byte return value is passed back in the R0:R2 register
+                                                                  ^^^^
+
+Does this comment have the correct register pair? Looking at the commit
+message, it states the second half of the return value is "RDX / R3", and
+in arch/x86/net/bpf_jit_comp.c reg2hex[] shows BPF_REG_0 = RAX and
+BPF_REG_3 = RDX, while BPF_REG_2 = RSI (an argument register).
+
+Should this be R0:R3 instead of R0:R2 to match the x86-64 ABI return pair?
+
+> +	 * pair, which the struct_ops trampoline does not preserve (only
+> +	 * 8 bytes of the return value are saved and restored).
+> +	 */
+> +	if (st_ops->func_models[i].ret_size > 8) {
+> +		pr_warn("func ptr %s in struct %s has a >8 byte return value, which is not supported\n",
+> +			mname, st_ops->name);
+> +		err = -EOPNOTSUPP;
+> +		goto errout;
+> +	}
+> +
+>  	stub_func_addr = *(void **)(st_ops->cfi_stubs + moff);
+>  	err = prepare_arg_info(btf, st_ops->name, mname,
+>  			       func_proto, stub_func_addr,
+
+[ ... ]
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-On 7/10/26 7:58 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
->
-> Pre-existing issues:
-> - [High] The x86 BPF trampoline generation under-allocates stack space for 16-byte scalar arguments (e.g., __int128), leading to an out-of-bounds stack write that overwrites the saved RBP and return address.
-> --
->
-> --- Patch [1]: [PATCH bpf 1/2] bpf: Reject >8 byte return values on return-reading trampoline paths ---
-> commit 8947b8106804bc7e7328c045366441fc0d165459
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> bpf: Reject >8 byte return values on return-reading trampoline paths
->
-> This patch rejects BPF trampoline attachments for types like fexit, fmod_ret,
-> and struct_ops if the target function has a return value larger than 8 bytes.
-> Previously, the trampoline accepted 16-byte return values (e.g., __int128) but
-> only saved and restored 8 bytes, which corrupted the return value seen by the
-> caller.
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 6515d4d3c0032..26d281b77a6e7 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> [ ... ]
->
->> @@ -19137,6 +19151,14 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
->>   		if (ret < 0)
->>   			return ret;
->>   
->> +		if (tgt_info->fmodel.ret_size > 8 &&
->> +		    attach_uses_trampoline_retval(prog->expected_attach_type)) {
-> [Severity: High]
-> This is a pre-existing issue, but while this patch addresses >8 byte return
-> values, does the BPF trampoline also have a similar problem with >8 byte
-> arguments?
->
-> In kernel/bpf/btf.c:btf_distill_func_proto(), 16-byte arguments like __int128
-> are accepted, but __get_type_fmodel_flags() does not set BTF_FMODEL_STRUCT_ARG
-> for them because they are BTF_KIND_INT, not structs.
->
-> In arch/x86/net/bpf_jit_comp.c:__arch_prepare_bpf_trampoline(), the stack
-> size calculation relies on this flag:
->
-> 		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
-> 			nr_regs += (m->arg_size[i] + 7) / 8 - 1;
->
-> Because the flag isn't set for __int128, it is incorrectly counted as
-> 1 register, under-allocating the stack space by 8 bytes per 16-byte
-> scalar argument.
->
-> Later during code generation, save_args() computes
-> arg_regs = (m->arg_size[i] + 7) / 8, which evaluates to 2. It performs
-> two 8-byte stack stores, which will underflow the allocated boundary and
-> overwrite the saved RBP and potentially the return address.
->
-> Could this lead to out-of-bounds stack writes for fentry/fexit programs
-> attached to functions with 16-byte scalar arguments?
-
-Looks like this indeed an issue for x86.
-Since the __int128 issue exists for both return value and argument,
-I will send v2 to address both of them together.
-
->
->> +			bpf_log(log,
->> +				"Attach to function %s with a >8 byte return value is not supported for this attach type\n",
->> +				tname);
->> +			return -EOPNOTSUPP;
->> +		}
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29101893933
+--===============4457655665606767974==--
