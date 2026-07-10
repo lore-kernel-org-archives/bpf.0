@@ -1,152 +1,105 @@
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F3E2331EC4
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 17:34:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B4E9368D69
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 17:38:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783704889; cv=none; b=K8ySaAsYvH/fhe0QZeY3+yZBhXUpEOy7JVkiq1ljYw48JzbVCk2GMRqOOnbPWDXHoBr4n8Ux3/VIaSkgeM408ALR/9izqyyy9GXyp2EakO2rWMkAujamxP55XHYUoThObNT+Wj5Mw3TiouWQfXnWd1Y3z9yxqtbWQokEPsYHvWE=
+	t=1783705096; cv=none; b=H3vzNxe1mFugqRfItDivmxV8sDA7auiBkLbdBXDXJtl9KmhAa2gpSHgMlHuAayoBzBgtPyRoaZuVxNcZjqhH0m3pE9ex6QTDU9K06pba1sbDm8GMcbL+9ERImuNWA9MoNr4vnLD7juG41L3JEGVr4Ok81XW2PvptPit+7Xcf5jc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783704889; c=relaxed/simple;
-	bh=ICG5PYu+dLFMP0xjcxozbcoMTn1WvweqdtojniIMawQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pKWnzHol7fqEbT2J4QkEam08rwxdmw5dbLKPqRWnAkUd3YRlIVfFdiyi//x+vq8pDhw2lx+Sq/VUNVUM3LBu3W9Emc0YTT6NY9sZp7nkd5l1X2l6S7bntT+q0ZtC7c1uXwUSUUo7aE4yde6NNAq420+U7Pr3HbSUcqhMDAJ3KLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ct90uAeN; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783705096; c=relaxed/simple;
+	bh=f/TZEVrX6anFOg/ecW4/KqjZnmcFZd6vTMr6QBPwXHg=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=FOL4iNNA05COmj0V8baPmnoxEtL0W2MuvlmVFOpQRzPFKNL+lAEviyFYu73huZKI9u97EYEnKUjVZeQoZeQwdmZeen9RPjrlszRoMJsv2tcrLm2lmBl5b/lpHwWx+SSeQ0ynRVRbUdMKZfsEyCpcRaKcYWT8h5+U4E4PrzqOGqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h6BjYLWY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ct90uAeN"
-Message-ID: <7a5bb678-4fab-44c8-98b5-272124e08847@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783704885;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0YtIjyFM2vSqXcvUf8ZxdADa5amnRS+FdkPTHI+ToH0=;
-	b=ct90uAeNCriiuutrANW0E4LINkS+sGVSOGbYkiKW+OtJB9JAenr+wE7yNssYHxXiIZR6rg
-	9UxoPccq33esVUDr32CqBp7rRDEkzee9kDeBy92In6vybBKzGzPXPx9db0cHYBqhxYMa8S
-	yzEvTLLo78S5iS8QAU8LRC9tZv1ckhs=
-Date: Fri, 10 Jul 2026 10:34:33 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h6BjYLWY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E0741F000E9;
+	Fri, 10 Jul 2026 17:38:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783705095;
+	bh=z02ZxiH+10xlB+MwwRKKmHW1pU1RDvEH/1CD3gvmgIc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=h6BjYLWYw+wYGWAjawiPET9k60qKGTINSa34V6woI1o5uDDrOKNVk4V5u26Ko/1b4
+	 vn9sjrkkPBqctxnt7xa3vh6Yl7uPO2NutARI6MDESO0MHD6/0qwbbmOQ9s9F6gDuIa
+	 GAN2RO64o7VuCalegraNstG+vZ9zbmP9FfatQ7HbnDuOAQ8yujBc5dhpFme3MWQswA
+	 OCEGJDqmxCvrw4B+ifZra7704ViVJxdYUMG5/kQMXYJorSPTBjPegmLpjAjoMmZ/wC
+	 TT5mx084JINRpLutJ3C9Q4lRc0e6C5T6f4WV4oK0a3tcYKzbO67uA+dMmz7tnqib++
+	 oGIuI4xTTYLPg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next 1/2] net: atlantic: free stranded TX buffers on
+ ring deinit
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yangyu Chen" <cyy@cyyself.name>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <tencent_8FE30FDFA32089B69BA3112E4A4C5E886D06@qq.com>
+References: <tencent_7DB01BE7F8FA056BB5F11D3570CF636C4309@qq.com>
+ <tencent_8FE30FDFA32089B69BA3112E4A4C5E886D06@qq.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 10 Jul 2026 17:38:14 +0000
+Message-Id: <20260710173815.2E0741F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf v1 1/2] bpf: Fix tracing of kfuncs with implicit args
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260710005902.2234832-1-ihor.solodrai@linux.dev>
- <20260710012112.577F31F000E9@smtp.kernel.org>
- <ce047740-79fe-4fc5-a118-40252b169be8@linux.dev>
- <DJV2D826YVRY.WSTQ4Z6CFX1I@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <DJV2D826YVRY.WSTQ4Z6CFX1I@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 7/10/26 10:23 AM, Kumar Kartikeya Dwivedi wrote:
-> On Fri Jul 10, 2026 at 7:08 PM CEST, Ihor Solodrai wrote:
->> On 7/9/26 6:21 PM, sashiko-bot@kernel.org wrote:
->>> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
->>> - [High] Accessing `btf->kfunc_set_tab` without holding a module reference causes a use-after-free vulnerability.
->>> --
->>>
->>> --- Patch [1]: [PATCH bpf v1 1/2] bpf: Fix tracing of kfuncs with implicit args ---
->>> commit 13df91bf669b3a55c459c1663fbf726f9f52bc5c
->>> Author: Ihor Solodrai <ihor.solodrai@linux.dev>
->>>
->>> bpf: Fix tracing of kfuncs with implicit args
->>>
->>> A kfunc marked with KF_IMPLICIT_ARGS flag takes implicit arguments
->>> (such as bpf_prog_aux) that the verifier injects at load time.
->>> resolve_btfids strips those from the kfunc's BTF-visible prototype and
->>> keeps the real kernel ABI in a counterpart _impl prototype.
->>>
->>> Link: https://github.com/sched-ext/scx/issues/3687#issuecomment-4906694106
->>>
->>>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
->>>> index 64572f85edc83..20aeca6b4f95c 100644
->>>> --- a/kernel/bpf/btf.c
->>>> +++ b/kernel/bpf/btf.c
->>> [ ... ]
->>>> @@ -9114,6 +9114,26 @@ u32 *btf_kfunc_flags(const struct btf *btf, u32 kfunc_btf_id, const struct bpf_p
->>>>  	return btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
->>>>  }
->>>>
->>>> +/*
->>>> + * Return the union of a kfunc's flags across all hooks.
->>>> + * Unlike btf_kfunc_flags(), not restricted to a calling
->>>> + * program's hook. Used when attaching to a kfunc for tracing.
->>>> + */
->>>> +u32 btf_kfunc_accumulated_flags(const struct btf *btf, u32 kfunc_btf_id)
->>>> +{
->>>> +	enum btf_kfunc_hook hook;
->>>> +	u32 *hook_flags;
->>>> +	u32 flags = 0;
->>>> +
->>>> +	for (hook = 0; hook < BTF_KFUNC_HOOK_MAX; hook++) {
->>>> +		hook_flags = btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
->>>> +		if (hook_flags)
->>>> +			flags |= *hook_flags;
->>>> +	}
->>>> +
->>>> +	return flags;
->>>> +}
->>>> +
->>>>  u32 *btf_kfunc_is_modify_return(const struct btf *btf, u32 kfunc_btf_id,
->>>>  				const struct bpf_prog *prog)
->>>>  {
->>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->>>> index 6515d4d3c0032..fde11a2f6869a 100644
->>>> --- a/kernel/bpf/verifier.c
->>>> +++ b/kernel/bpf/verifier.c
->>> [ ... ]
->>>> @@ -19121,8 +19146,8 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
->>>>  		if (prog_extension &&
->>>>  		    btf_check_type_match(log, prog, btf, t))
->>>>  			return -EINVAL;
->>>> -		t = btf_type_by_id(btf, t->type);
->>>> -		if (!btf_type_is_func_proto(t))
->>>> +		t = btf_attach_func_proto(log, btf, btf_id);
->>>> +		if (!t || !btf_type_is_func_proto(t))
->>>>  			return -EINVAL;
->>>
-> 
-> Also, why not do it for BPF_TRACE_ITER case as well? I just feel keeping it
-> consistent may outweigh figuring out whether it's necessary in that case or not,
-> etc.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
+Pre-existing issues:
+- [High] The patch fixes a resource leak of stranded TX buffers on interfac=
+e teardown by replacing `aq_ring_tx_clean()` with the restored `aq_ring_tx_=
+deinit()` in `aq_vec_deinit()`, but misses the identical leak pattern in `a=
+q_ptp_ring_deinit()`.
+--
 
-I mentioned this in the patch description:
+--- Patch [1]: [PATCH net-next 1/2] net: atlantic: free stranded TX buffers=
+ on ring deinit ---
+commit 0bceee292a00058408f6f3baf2ae8103a4e90f9c
+Author: Yangyu Chen <cyy@cyyself.name>
 
-  The BPF_TRACE_ITER case distills a registered iterator's
-  prototype, and bpf_struct_ops_desc_init() distills the
-  function-pointer members of a struct_ops type. Neither is 
-  a kfunc, and so can't have implicit arguments.
+net: atlantic: free stranded TX buffers on ring deinit
 
+This commit brings back aq_ring_tx_deinit() to properly drain TX rings
+during teardown. This prevents silent memory leaks of stranded buffers and
+stalls during page pool destruction when the interface goes down under
+TX or XDP_TX load.
 
-> 
-> Please supply a cover letter in the next version too since you're sending
-> multiple patches.
+> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_vec.c b/drivers/ne=
+t/ethernet/aquantia/atlantic/aq_vec.c
+> index 2f9033ceed8ce..05814fea0f5f7 100644
+> --- a/drivers/net/ethernet/aquantia/atlantic/aq_vec.c
+> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_vec.c
+[ ... ]
+> @@ -275,7 +275,7 @@ void aq_vec_deinit(struct aq_vec_s *self)
+> =20
+>  	for (i =3D 0U; self->tx_rings > i; ++i) {
+>  		ring =3D self->ring[i];
+> -		aq_ring_tx_clean(&ring[AQ_VEC_TX_ID]);
+> +		aq_ring_tx_deinit(&ring[AQ_VEC_TX_ID]);
 
-I used the first patch's message as a cover letter, since it's
-just a fix + selftest pair.
+[Severity: High]
+This is a pre-existing issue, but should aq_ptp_ring_deinit() also be
+updated to use aq_ring_tx_deinit() instead of aq_ring_tx_clean()?
 
-The series could be split further into refactoring changes, but I thought
-it'll be easier to backport if the fix is in a single self-contained patch.
+In drivers/net/ethernet/aquantia/atlantic/aq_ptp.c:aq_ptp_ring_deinit():
 
-I think we want the fix to get into 7.2, and backport it to 7.1.
+	aq_ring_tx_clean(&aq_ptp->ptp_tx);
+	aq_ring_rx_deinit(&aq_ptp->ptp_rx);
 
-If it's ok to carry separate refactoring patches there, then I'll split.
-Kartikeya, wdyt?
+Since aq_ring_tx_clean() stops at hw_head and applies a budget, any
+in-flight SKBs and their DMA mappings on the PTP TX ring might still be
+permanently leaked when the hardware is stopped and the interface is
+brought down.
 
+Does the PTP ring teardown need the same fix applied here?
 
-> 
-> Thanks
+>  		aq_ring_rx_deinit(&ring[AQ_VEC_RX_ID]);
+>  	}
+>
 
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/tencent_7DB01BE7F8F=
+A056BB5F11D3570CF636C4309@qq.com?part=3D1
