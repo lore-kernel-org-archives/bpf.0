@@ -1,132 +1,153 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775D43B4EAA
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 21:18:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46DD93B840E
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 21:23:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.48
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783718328; cv=pass; b=BBb2GuGy3YZUAz3xlCaiVP1c9dU4aNZF0eh2yi8KxfOKh96KL9Kk4vx7xWNiVOiEc7w0KE8DxpOv9jk87/rqn7SuidO1lnnXSVl2dIXashCCIGc6OxdYZdzREf+JK64+r9RSrhv50AGGqTmmoRDOIJFMviRK84ArVJl45WpF1Sk=
+	t=1783718634; cv=pass; b=onyg7BKIi2EF/vnWEzqlgq+AUx/eFkYUozSYR9eSnpEzhfCZI8FbaFCQk6QW8qDZY/yFHlwuoOTeZZXckUVCSifkKrL/S16719hZrsvG6wbee4ck8j532qBpxifiYQLOEeKHyS653FNtfPKLAQXi7LXxl7sSl1J9sbysaAQziIY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783718328; c=relaxed/simple;
-	bh=GiCC4yWZSZ7UIG2TMvBSXnbbYHY4f/eC33dIeVrWUvM=;
+	s=arc-20240116; t=1783718634; c=relaxed/simple;
+	bh=ZffsXEKRzy6BPrYFDZBFjLeefjvojwkwyzHgCSgBeJE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZcmZaCqQmJEWdA5WRnYxU0cMw2WfQVWc6of+fTOelnE3GW9Xq38jd02ZDjSqLF/b2iceEjWKna7mIjOqXvpgzXgsuOMetbK4LIv1un2mUaustpVGbkzPjMORmkA5tP9QXwhWrlh/C/3LrUEaNE6DVsU8mmsvq6rMdoXAAqycljg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mqrQdBH8; arc=pass smtp.client-ip=209.85.214.177
+	 To:Cc:Content-Type; b=ByDxLH79LjsL3vZX7sfmQDceWMgt+03FtVceCtYPqMwiozI4pKJM9DRoVyaOt8XFQGYuu3GYfNlXR0DYWwlZ8xOVYFUH1ijWMrCWfnU+UUnno6Dh4dJkf5DBJ7iaK5Q8c6CO0fR4+HPWgyWQIz6wUFht7ma0L1CHqsOR/beeKxo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gfiEZkVR; arc=pass smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mqrQdBH8"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2c7c61b5292so23685195ad.0
-        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 14:18:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783718326; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gfiEZkVR"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-38101f85591so1875695a91.1
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 14:23:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783718632; cv=none;
         d=google.com; s=arc-20260327;
-        b=kXkTna9/VNg9zhrtGfwjMcHSDHKqZbozxb3ZOf64lr6UCLQbS2WyPx7zLGBXmdQWdM
-         Dir71p+T3gcUerQ6XsStsGd/Y8VAmj8sT74NdIjTy8qQx/9S9p2dVz0LrKuFScfzehdZ
-         6LTupfUi/H4AOlxVFd8G3PaiT8BhHyZn/ao/wh1UZEPTiEatztUiP58Q9EDw0pjbjhmm
-         15B79LYMz79sOezaxCcjdvLqmiAec4fOmzZeYuOAeJWeYwI/Upg3qUYWPEdGTvSNWzVr
-         3USxOCW7bc3XhFrzQebH6PwM1NeN9lu+NhxPqEFSMQeygiw+UnSTfupRmdluNBiZJaD9
-         BqEQ==
+        b=LZJqg0lmu/BzToHpZ4ESxikH9nHakFMon5iP+SrdWtk3Yy5+fSoorAp65UKDvzGTCq
+         bunPgw7yjjWQzGKGECcM7MAiOClqxNI6Ek2uvo0GPbROnkbIyoITfqCe057jXuSt2OfS
+         Bovs78KnvNjT8YkUGuWVjEUPEhJQdjcEhbBH8blRKRHZ6kZdyX7lqEB2IoBBtKUx9s2F
+         14xpsKh8zu54WLt9xe6Ddxbc5G2B40gSwo3keajdDgN9XLE0P/OvuB5Wb5VloDGcpc2w
+         pEVswtgnVK0H0PKZxj4Sdz1ZK3kEv7Hsxx7EcvXnOUGjR/CBwMUozVTQmhkgXvGeTxN9
+         bZvQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=pgJ1gfbiLnrPYiVKgfk5rYd29jlG0/PTDNNdbkrgtPk=;
-        fh=hKJj9zsZ9dO6WjZ9zefeCiLqjNfC3WfgcEOmK0adJMc=;
-        b=m+5Ctcvjrjb30WQFytDC5hmu7h6jR+SKYrsVnvgVBgUiteoDP8Uy1tttgLegsZW59o
-         Ez3XwqRoBSL+IRT350hCx9ciOir3NjIqqbygaNDVQMBYXKUtriQ/JETL2oam+CZzE2uq
-         Z1duevILefc6BmayuaOf2XODWgvcmc99tkoBn6KR0ODCuUMjExL4E6ZQa6qcwA/Z43GK
-         MnXsmZAmNmqOqCijbQd84TCRL61m5sjWjmm6VQJKzCghj0nyRiMJynqjoEeDTVHYWnyX
-         N7nXakyE+kk1x3+FwE9K3SOvF8EPNZI1E+/QHgqDMLhs2YBtckTlkDvLosVGV/Ef73np
-         EJDg==;
+        bh=X3OYMFo4gk2Qm3Y1GCk0JrLQvP6s+kDSI3H/HQZhhkE=;
+        fh=16zXCooJbldFWjG80Gpr1DVo0Lmk44gk4UkvJGtyy+s=;
+        b=CT+QRDWvM3BpyRmGvTzGLU/eGqA0qGVxY2hY9myLMSupx/0//IgH9nxyG233dqrkko
+         n1vuMcL1LteiwZQNCwLFSSTWs6JV/6WfXO8pPQVyNX+opxrIZbjmPdnyy/MFEqMo99Vv
+         R3wyHF+EE6ZF6s8VVj30/7PJ8L6KJZrJcM3+Wfn00WVBDT4h9244fsbzICKifJQIRXWL
+         OhY6WIT5QSSvGMwvxjhKI6PnK20/z7pPKR50BudaJ5fbmgqExXSdwzhhvqa3/emriQzZ
+         4UBGQimlBfg8NQzaPseXAO3x1gXSGV0hTR+SHvYx7rDA4QSNlxpazwME4VYvOtF5xd/t
+         8t7w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783718326; x=1784323126; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783718632; x=1784323432; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=pgJ1gfbiLnrPYiVKgfk5rYd29jlG0/PTDNNdbkrgtPk=;
-        b=mqrQdBH89c/VnqkFLjDDp+hjeSfDbbRndG8GXS8yivRqx2c+b0P56ctLheAWefET2I
-         hU9Q/hv8dFm99Uhu8ILnxyJS/f9VzS/Mm63U/5MW/xCqmVUxlqhXCCsVKIzY1K+1q23l
-         5Y0+RsbwgNSLkyl3wcqXEuTz/5FpTrRyjUGXBEyfT3dYGDvQ9WLyYDeq/jdT3QWAHhpi
-         AdH9lBbSeRMgSaTc3NjyjYrX2VcSrcMFT5g709waVgmT36h5dIA+C+piW8ojtsDjEsar
-         ARsJZut2unklXGixslG3Q/Lqu2JshXqjLQzTOoVC9h+S2I/HhnVLU174y/wArpBu94YO
-         Zb8g==
+        bh=X3OYMFo4gk2Qm3Y1GCk0JrLQvP6s+kDSI3H/HQZhhkE=;
+        b=gfiEZkVRkxY3zvcQlPbas/3Cycw47n3fcFyJ5mfu46UrrgcTvkI0356jgCEZcaZafW
+         X6cbSUJanZS0Mo6YOChyU/8CzukJyrdbK3RXgTB3KdWymKLh2qd67PwMA3WpUcZFIW10
+         r6wgLSZ8WUnZACqQ8DlT2qkuqJSTPx1a/HQ0pI4+wbP48h1SofJJoDlHNaEiGr+1iRpp
+         oSALXPlMh62CoSf+dubbQCWTGgAZMRWYEEfE+hs9vLnezx0k6tktUQL31TPkHk/465HC
+         I7VEdO3fKkg/syWpwHvbBCjr2Ykni/j2Zgp9pmCrXJssapi1k2eceXGm5OYVZMRwLIcE
+         ioQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783718326; x=1784323126;
+        d=1e100.net; s=20251104; t=1783718632; x=1784323432;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=pgJ1gfbiLnrPYiVKgfk5rYd29jlG0/PTDNNdbkrgtPk=;
-        b=EGdYlW45qi7CW/HkzELU9zsxKa8rcVOiipeBhR74teGlMjwnU3x6AmxSGn3CZJXOFg
-         nLHlB7/jx1SYKvvYS2A0X6n1UoGHcR2X37qlIkzKsYmssJy/yt40BTjIu1zCpGb0AkoR
-         m3t3sxdhdISZnpH2LtXXiYwc5Xvuvdt5Nd4Pi+76yq+y9bXAf455qzEK7M1x4VRFOEUG
-         mSgwBqLuxD8bmGiGsDPh6Fshe9vpeINBG/Q0GaMpzgYVQQgQ9t9zareF/6J1a+vnmrpg
-         31nxnLyZbwBcsPyHo5eDlWyA+IYHnmsm9WY2N6Q1OuTtulpMGOmcYiGyoTGNfONRnRGH
-         7cbQ==
-X-Forwarded-Encrypted: i=1; AHgh+RokpmPF+RAT8CA5/J1W0Db2gaBA27KyZsG0QsUOVsWzyXS/RnNdxNDKa3ndgciRGUqP/n8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzezTe6INnKLQmKz1YMvDVIPqW2PQMXsQXHNGf674YmejtmLz+
-	JqFSImuUrBxwRe5Y0wbpomhL+xsSSPnA6LcaFgjx+qm8qoSHzUCJSTHdviAaR7FOD3itL8/2JHV
-	K13ilrhypnGujfexdH3pFqHzRffVq5xs=
-X-Gm-Gg: AfdE7ck8PRhJQU0rXlQPWZ2G8TebqwntnOm02KDb64Brq1qG41wZeMGJWxqHidaRT5c
-	CR4ZKztxUp7jvJgOKwenefIch7zq4BB4HUbMH5lbFb+rtQy7v8DAgZP0xL6v74sXBbQnwMSq3eJ
-	7rSU0RbnDc06650WngCNVqot+eQCB0DzpBGdCg29Zf2O0J2UGR3h7D48bhf3Oc5oVKpaYbSHfsM
-	XIG/HnY9qSLlZXVYy6R+74b7km4JCy2kHWV4ynhEvcmWurUhdn7UPVV8sAVr/AZWqKCTn/FxE7w
-	BLUpFXF3lfF0nYv2X+26LJeTQSB7tNcPJsXp6S1NEkn+L5Dip073kg==
-X-Received: by 2002:a05:6a21:9187:b0:3bf:a698:ce40 with SMTP id
- adf61e73a8af0-3c1108c1b22mr596690637.58.1783718326320; Fri, 10 Jul 2026
- 14:18:46 -0700 (PDT)
+        bh=X3OYMFo4gk2Qm3Y1GCk0JrLQvP6s+kDSI3H/HQZhhkE=;
+        b=gdyPRjT0subYtT1DWRb3oDH342pFf0sa+zX/8BCWrPg/p7wHMBdn4QgidjrpLu6ONq
+         Qfd77vtx75o489VOrz1zppKWMJsnga67KdPPH74AzyrQVne+VlbWu9vyY+Xw1DPjGuR5
+         MN7lK2J7cQwyeUZRDpxi3Yje5NNRLKQhGE9uieaS8NDFuwPhY31wFmXNfyGNAadIQyc8
+         S45A8MChyHs7gBckRcd31x32FosEAgGf5LDdAujNpT8ekJzy52DCbGQbEBiQ+8LQ1wn6
+         n6ZHr6ulfuenuw9msoi1Ep0O4mQBRfkf4nI6W/3ygcLP5nuD9UpWlviwlUa4kBlOFqXO
+         ciXg==
+X-Forwarded-Encrypted: i=1; AHgh+Rpvmr3aXzB1WyBz9o53GhjHBY7JXcEMIuTGA8PlZ5XN8RY96SKpoyI8C61TRzrW4m/uMfs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIxNrsHHHpXpgJlXjlZp6AKQP/LK9iEycRygTiiurya2/OlP/w
+	MgR7mP3NLTELi/DvgwKE3z6v12llfkVI5meJCBzu/JKCStKwUNIeQ7UDOTh/z0QOAgaSPM0VorT
+	FWcpVQ9zmBvxuT+4Yi1v+bElgF7ySU1U=
+X-Gm-Gg: AfdE7cn2JDupQC4wKABRDdbeRWXem3/Ht/NZCVhcSKJ5TTv3E5xAO5csGQByLM+ayaJ
+	bFxVmTZFxqvjJCMAdrV9eJDxlDabJ4PUgK5+Qu6rwWUNu0iUx3S+vps1xjFupZwprgWTf7r93At
+	/5G/39TNaeD5I68xhPlzikpt8pYPQ3KTMAjwSd1TfYyY7hVA3cAX8aRSwb64aeHG1M2VqF2zKOP
+	Cvi0qQqVCEhkcO29WUZq1KPUYzaZm/XJabaH+dIEVbiQkfF0K4hNu/AeuOgWPfZFIo5UNJXK5Y2
+	rKmeEFppDWwO43y3cy3qYd86kqRNSz9fGYPI2PAZ3t36eMEKLTd5FQ==
+X-Received: by 2002:a17:90b:5903:b0:37f:9e21:91d8 with SMTP id
+ 98e67ed59e1d1-38dc834de8fmr359486a91.15.1783718632544; Fri, 10 Jul 2026
+ 14:23:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260518-generic_tracepoint-v2-0-b755a5cf67bb@meta.com> <20260707120046.31573548@gandalf.local.home>
-In-Reply-To: <20260707120046.31573548@gandalf.local.home>
+References: <20260706172744.3920417-1-puranjay@kernel.org> <20260706172744.3920417-3-puranjay@kernel.org>
+In-Reply-To: <20260706172744.3920417-3-puranjay@kernel.org>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 10 Jul 2026 14:18:32 -0700
-X-Gm-Features: AVVi8CfrRzjVYUtzteFA-fYu5IC19YXoUvmg6lzUqxBqnajl5GV1bbXCnexW1M0
-Message-ID: <CAEf4BzYDZKiRg689VZL==ZNetTgdC2a5-6DHrhU7f4afXKxE2A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/3] tracing: Expose tracepoint BTF ids via tracefs
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, ast@kernel.org, 
-	andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
-	eddyz87@gmail.com, memxor@gmail.com, Mykyta Yatsenko <yatsenko@meta.com>, 
-	linux-trace-kernel@vger.kernel.org
+Date: Fri, 10 Jul 2026 14:23:39 -0700
+X-Gm-Features: AVVi8CeESE7KrO4SofyyKXRIq0UuNC-RWDudhRYzrwkmSGZKKMPllM8AreG8cCk
+Message-ID: <CAEf4BzaDSeUxeZmHjXRYXnXDZj8Obwd3rmOsfNygjcXJ0yy5bA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] uprobes: Switch uretprobes_srcu to SRCU-fast-updown
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Josh Triplett <josh@joshtriplett.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	James Clark <james.clark@linaro.org>, rcu@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 7, 2026 at 9:00=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org>=
- wrote:
+On Mon, Jul 6, 2026 at 10:28=E2=80=AFAM Puranjay Mohan <puranjay@kernel.org=
+> wrote:
 >
-> On Mon, 18 May 2026 08:23:14 -0700
-> Mykyta Yatsenko <mykyta.yatsenko5@gmail.com> wrote:
+> uretprobes_srcu currently uses normal SRCU, which issues
+> two smp_mb() per read lock/unlock pair. This overhead is
+> paid on every uretprobe hit.
 >
-> > BPF and other consumers that want to attach to or decode a generic
-> > tracepoint need three pieces of BTF information for it:
-> >
-> >   - the BTF of the object that owns the tracepoint's types
-> >   - the FUNC_PROTO describing the tracepoint arguments (with names),
-> >     consumed by raw_tp / tp_btf BPF programs
-> >   - the STRUCT id of trace_event_raw_<call>, the ring-buffer record
-> >     consumed by classic BPF_PROG_TYPE_TRACEPOINT programs
-> >
-> > Today none of this is easily discoverable from userspace. The kernel
-> > knows the ids - resolve_btfids fills them in at link time - but
-> > consumers have to search them by the naming convention
-> > ("__bpf_trace_<name>", "trace_event_raw_<name>"), walking BTF for
-> > every tracepoint.
+> Switch to SRCU-fast-updown, which eliminates the per-reader
+> memory barriers by moving the ordering cost to the
+> grace-period side (synchronize_rcu() instead of smp_mb()).
+> This is acceptable because grace periods (uprobe
+> unregistration) are infrequent compared to reader-side
+> uretprobe hits.
 >
-> I'll pull this in even though it adds 100K to the kernel:
+> The updown flavor is required because the SRCU read lock is
+> taken in prepare_uretprobe() when a return instance is
+> created and is held until that return instance is finalized.
+> The traced thread returns to user space in between, so the
+> lock is inherently released in a different context from
+> where it was acquired: on the normal return path via
+> uprobe_handle_trampoline() -> hprobe_finalize(), or from
+> ri_timer() (expiry) or dup_utask() (fork) via
+> hprobe_expire(). srcu_down_read_fast() / srcu_up_read_fast()
+> are designed for this acquire-here / release-elsewhere
+> pattern and, unlike the same-context srcu_read_lock_fast()
+> variant, do not carry the lockdep read-side tracking that
+> would warn on it.
+>
+> The short, same-context SRCU sections in ri_timer() and
+> dup_utask() (which guard the uprobe against reuse across the
+> hprobe_expire() cmpxchg) instead use guard(srcu_fast_updown)
+> for proper lockdep coverage.
+>
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> ---
+>  include/linux/uprobes.h |  5 +++--
+>  kernel/events/uprobes.c | 29 +++++++++++++++++------------
+>  2 files changed, 20 insertions(+), 14 deletions(-)
+>
 
-Great news, thank you, Steven!
+Very straightforward replacement and will improve performance, thanks!
+LGTM. Peter or Mingo, I assume you guys will want to route this
+through your tip tree, right?
 
->
->    text    data     bss     dec     hex filename
-> 40506047        15709518        16661184        72876749        45802cd /=
-tmp/vmlinux.new
-> 40499064        15615294        16661184        72775542        4567776 /=
-tmp/vmlinux.old
->
-> -- Steve
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+[...]
