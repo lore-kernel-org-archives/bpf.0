@@ -1,144 +1,94 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 148622BDC28
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 14:44:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4D441166A
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 14:48:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783694663; cv=none; b=KQnOAtJGL4F1DRcPo2jKxlkROCZcD45vGoc6gQ4yJDUAWneY713A0kgY1iIKhHJvRs1Vk1wTYhJWX5FmOmW6EMshtvJBjsHV86yNK0ALlYapzyYYkZwRDOb1SvgJHseGpSwRWByUQmQ49WG1HLYpomFAuYPoyQ2w4aqnsm5bTN0=
+	t=1783694910; cv=none; b=ZIOUQDPM04+g3p41GRZnflg7UmlTtCy8BZqSMgCFYvAH//Vt8RAl6jD5aW3plpmTxbeduZ447BirAX8s7+uJ4Rkzxw8sQYF1jWoaoHLKZL9ozciiHcZh2RuXkmWd+oTw8Hbvi2v2CZk+WOXFzI/is4fX8BjAaP5+ac0QhzUB2rY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783694663; c=relaxed/simple;
-	bh=m6UHOuR3LcpL3VFCAzi3HyVmWN6sRi7Sup6TPBG5iAs=;
+	s=arc-20240116; t=1783694910; c=relaxed/simple;
+	bh=ikz2NH0HmLH9i3GQLFLN+FlT2xswhVZKdG1nuTo2Xiw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YaSMNRhtelBBVYW42HJiVEshjz5dZmbxxL613Nc6+vNAxfrrXvNBBmooCWTZOqJK4yytHUHJQUETPYD26culAZs7Ew+xLR5+64t+LkOQv+XE2j5fCxQPk6Dn4hWARlJ07/Ok/WPY2cb6kDivEvk02xhuqHBHyCwMgDJMV1lRg7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id AD5021D6982D8A; Fri, 10 Jul 2026 07:44:09 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
+	 MIME-Version; b=Ju6gVABjZ3KrB1sSPQ2wwxfUNX5xHnNLUkhV2ydGEVcqAwF4DasNAgwtxCCQJUj8FDGCkx1uQdOaI7KOSeFndbaIMD6wrjWYqSUW7rpPAtAIVTgFMsSS+FLovk7/OfGTJBNjay/NIgEI/ULWx7FRFHacGFp4EzAELUwRpuny9v0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ptkm7okA; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ptkm7okA"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783694905;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E4uXMXuRn9j+LTje2Yxn9MrG3YrwyITp+GwXCevnXQk=;
+	b=Ptkm7okAdJAK7AnKgzhZAzk+d9rioyfuOj9FMPROP2fVkEcVALvLbISIcmuOSb74Wixpkx
+	IzWh02RE9yvu1LoLeCI4d0Wa/tea8L7g5FPbFQ/d8BJEzG6fgOYNPf0A/2x7dWM31mxk5S
+	W3XqpwfjGICb9e9Oemi981vt3ybOMro=
+From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel-team@fb.com
-Subject: [PATCH bpf 2/2] selftests/bpf: Add test for >8 byte return value on fexit attach
-Date: Fri, 10 Jul 2026 07:44:09 -0700
-Message-ID: <20260710144409.2580215-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260710144404.2579671-1-yonghong.song@linux.dev>
-References: <20260710144404.2579671-1-yonghong.song@linux.dev>
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next 1/2] bpf: Mark tracing_multi trampolines as ftrace managed
+Date: Fri, 10 Jul 2026 22:47:33 +0800
+Message-ID: <20260710144734.78203-2-leon.hwang@linux.dev>
+In-Reply-To: <20260710144734.78203-1-leon.hwang@linux.dev>
+References: <20260710144734.78203-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-The BPF trampoline preserves only 8 bytes of the target's return value
-(R0), so attaching an fexit/fmod_ret/fsession program to a function that
-returns a >8 byte value is now rejected by the verifier.
+Since tracing_multi link does not set ftrace_managed, it would fail to
+release the tracing_multi link when attaching tracing_multi link and
+then attaching fentry link.
 
-Add a bpf_testmod function returning __int128 and an fexit program that
-targets it. The program is expected to fail to load with the
-"with a >8 byte return value is not supported for this attach type"
-message.
+[    3.714215] WARNING: kernel/bpf/trampoline.c:1727 at bpf_trampoline_multi_detach+0x20b/0x240, CPU#1: test_progs/97
+...
+[    3.733170]  bpf_tracing_multi_link_release+0x14/0x30
+[    3.733890]  bpf_link_free+0x58/0x130
+[    3.734414]  bpf_link_release+0x23/0x30
 
-__int128 is only available on 64-bit targets (where the compiler defines
-__SIZEOF_INT128__). Guard the testmod function and the test with
-__SIZEOF_INT128__ so a 32-bit build still compiles; on such builds
-the subtest is simply not run.
+Fix it by setting 'ftrace_managed = true' in register_fentry_multi().
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+Fixes: aef4dfa790b2 ("bpf: Add bpf_trampoline_multi_attach/detach functions")
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- .../selftests/bpf/prog_tests/tracing_failure.c      | 12 ++++++++++++
- tools/testing/selftests/bpf/progs/tracing_failure.c |  6 ++++++
- .../testing/selftests/bpf/test_kmods/bpf_testmod.c  | 13 +++++++++++++
- 3 files changed, 31 insertions(+)
+ kernel/bpf/trampoline.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_failure.c b/t=
-ools/testing/selftests/bpf/prog_tests/tracing_failure.c
-index f9f9e1cb87bf..6c199f5ff4db 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_failure.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_failure.c
-@@ -76,6 +76,14 @@ static void test_fexit_noreturns(void)
- 			       "Attaching fexit/fsession/fmod_ret to __noreturn function 'do_=
-exit' is rejected.");
- }
-=20
-+#ifdef __SIZEOF_INT128__
-+static void test_fexit_int128_ret(void)
-+{
-+	test_tracing_fail_prog("fexit_int128_ret",
-+			       "with a >8 byte return value is not supported for this attach =
-type");
-+}
-+#endif
-+
- void test_tracing_failure(void)
- {
- 	if (test__start_subtest("bpf_spin_lock"))
-@@ -86,4 +94,8 @@ void test_tracing_failure(void)
- 		test_tracing_deny();
- 	if (test__start_subtest("fexit_noreturns"))
- 		test_fexit_noreturns();
-+#ifdef __SIZEOF_INT128__
-+	if (test__start_subtest("fexit_int128_ret"))
-+		test_fexit_int128_ret();
-+#endif
- }
-diff --git a/tools/testing/selftests/bpf/progs/tracing_failure.c b/tools/=
-testing/selftests/bpf/progs/tracing_failure.c
-index 65e485c4468c..f7a095767679 100644
---- a/tools/testing/selftests/bpf/progs/tracing_failure.c
-+++ b/tools/testing/selftests/bpf/progs/tracing_failure.c
-@@ -30,3 +30,9 @@ int BPF_PROG(fexit_noreturns)
- {
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 1a721fc4bef5..6eadf64f7ec9 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -1536,6 +1536,7 @@ static int register_fentry_multi(struct bpf_trampoline *tr, struct bpf_tramp_ima
+ 	if (bpf_trampoline_use_jmp(tr->flags))
+ 		addr = ftrace_jmp_set(addr);
+ 
++	tr->func.ftrace_managed = true;
+ 	ftrace_hash_add(data->reg, data->entry, ip, addr);
+ 	tr->cur_image = im;
  	return 0;
- }
-+
-+SEC("?fexit/bpf_testmod_test_int128_ret")
-+int BPF_PROG(fexit_int128_ret)
-+{
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 30f1cd23093c..902dbf658250 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -161,6 +161,15 @@ bpf_testmod_test_arg_ptr_to_struct(struct bpf_testmo=
-d_struct_arg_1 *a) {
- 	return bpf_testmod_test_struct_arg_result;
- }
-=20
-+#ifdef __SIZEOF_INT128__
-+noinline __int128
-+bpf_testmod_test_int128_ret(int a)
-+{
-+	bpf_testmod_test_struct_arg_result =3D a;
-+	return (__int128)a;
-+}
-+#endif
-+
- __weak noinline void bpf_testmod_looooooooooooooooooooooooooooooong_name=
-(void)
- {
- }
-@@ -514,6 +523,10 @@ bpf_testmod_test_read(struct file *file, struct kobj=
-ect *kobj,
-=20
- 	(void)bpf_testmod_test_arg_ptr_to_struct(&struct_arg1_2);
-=20
-+#ifdef __SIZEOF_INT128__
-+	(void)bpf_testmod_test_int128_ret(i);
-+#endif
-+
- 	(void)trace_bpf_testmod_test_raw_tp_null_tp(NULL);
-=20
- 	bpf_testmod_test_struct_ops3();
---=20
-2.53.0-Meta
+-- 
+2.55.0
 
