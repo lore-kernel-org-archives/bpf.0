@@ -1,102 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC57449992
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 00:02:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E71B9182D6
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 00:05:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783641736; cv=none; b=l75MvBd2ZxJobpozK4DPiM8vSuRj1iEwt0blOReEbFggLO/NdlLbTJwVCetMXLio16LT0D/KbHdWmJ7k8bvPGj/BpYwPeHGPU37w8Kwu3g+1DPdGhvmni+ZiyMYp5hH3hd1VfyaQlXJTQped5ZZ2PeEAqtUWQsSTKU7cO2rthxw=
+	t=1783641904; cv=none; b=laH6ot0byc69BrxBlshFQKmPULpFpnXy+o/BfUCkAdSGAvVn3ywkZvMqxzs2E1H0TEGfhG5XPcXeddWj4fKT1M7g2IEYOVrNOTBxdVSh2zla5aD6GHmJjo6anacYgaVjQwdYktnL3LNDzFWFEUqVaggOKZ4ypGE4ojn81rLeJ6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783641736; c=relaxed/simple;
-	bh=2MtfCDdBjD2zStaCOaudWLu0EoNyIOuqHHyPP/yJCa0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=VvYNmGKzTFiAlJ1MSe0GxYZBUBwL2ilnqmVYKNQh7P4izoC9/NF4+zxSaF5dvpF7ZWQbL6v7ft3CPPfgkJOhOq8Fdhud6dYN8EW1b0/15Z/2seM4QdfZpXKvvSLY2XXMcJLIfydSL/LxjW3Np3s3sxOJ4UbWHZdQpC+VayEKjwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hg4IUJ8T; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783641904; c=relaxed/simple;
+	bh=awZDdYd8EQCu3Gtf8N0vaTqN9pkdLRlukSDGV1hW8og=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=q45lV0D+GHU/1Abqs4vMdM/4vxBjDE8yBfrGxqqPUXwSfRhXoM6AS80Biruo0P/JiEerZ91w7bYJ3ua4DuSOR1gL00EnQwyZxjSfbalFjL64qZtDr29G5QDJmNNUd8w3nAFBtg0RNs6SetHNb2J77K7aG6O/IhBW+BLVGp01zQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OdWTUA5b; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hg4IUJ8T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E47E1F000E9;
-	Fri, 10 Jul 2026 00:02:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OdWTUA5b"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D7B01F000E9;
+	Fri, 10 Jul 2026 00:05:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783641734;
-	bh=ptKpKSrLWKgbXzy9kiWCAMHbsTxonY7QILSMSDdOrEE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=hg4IUJ8TFZ0HfPiVSLMUSHR8KDYFZ4RsOWdQv85Zn9gVXPuGvwx/rWdjgMdGfkUs/
-	 /pZr7symd4KA35CAbFKM+TSzHMDFVVQZtww2QqMvn13PmIMTunMRY4WGJo7HvEjbsQ
-	 xLRngJq/hCPLh/T3CPJAy9xcZ1gka5CVJm4ct+qR8d4RioN8nGO/pgiCE6rufa+rpc
-	 O6Ktrv4dobhfjbJL/K2OH5xoTChmCs/qysFG+2Snd2tSVtotjsoULIf1azM/v5Upl+
-	 CVSDexcMD7Pt+92NZ4PjoGsIJP8zveZUrbsbuoXfAlZM+H34V9ZOlqrBdbBqXi/QUa
-	 mnYp3po/tXoJQ==
-Content-Type: multipart/mixed; boundary="===============7516700718939624386=="
+	s=k20260515; t=1783641902;
+	bh=zNIE9m355WmNP3+WQVhWkCE02XbO0Qcjzrz+kD/6fPw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=OdWTUA5bMfsm8nIY30rYaaH0tTWLuQQFU1TuUsttCr7oH/YQaa4ThBGiUpWIlIcef
+	 lYKOKNMZpishsFWRaJZcelgobmc9aXnniSSO6hq13CNEX32rwVuBCWo84/ix+EJ1MD
+	 hxfEUVlb5UC2QCQmaH6mJYeB3dgP+Ff8MiyAzo2kas2+iRPcnaadDzZNbGf1iARBrM
+	 UdkzxRxyXMr4LdJ3sjKpnC3z34KWMCzA4qO/LS1z1drLiClWhdjER700i/7msVw0/R
+	 +3uclOzgx/HtiUHrya7+UBvHUATn99NdhRGEefIfpzQDt4uYAdqymPP+QM+I6E3rbm
+	 ArhrPxM2FWNHA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf] bpf: Avoid soft lockup in
+ __htab_map_lookup_and_delete_batch()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?Sm9zZSBGZXJuYW5kZXogKEFudGhyb3BpYyk=?= <jose.fernandez@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260709-b4-htab-batch-resched-v1-1-ad7a6b3b4513@linux.dev>
+References: <20260709-b4-htab-batch-resched-v1-1-ad7a6b3b4513@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 10 Jul 2026 00:05:01 +0000
+Message-Id: <20260710000502.5D7B01F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <20627c9430fb5b3386a52b95973fc39936e205e23a15995d8bfce3aceafdb567@mail.kernel.org>
-In-Reply-To: <20260709230242.2003459-4-ameryhung@gmail.com>
-References: <20260709230242.2003459-4-ameryhung@gmail.com>
-Subject: Re: [PATCH bpf-next v1 3/4] bpf: Unify helper and kfunc allocation-size argument handling
-From: bot+bpf-ci@kernel.org
-To: ameryhung@gmail.com,bpf@vger.kernel.org
-Cc: alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 10 Jul 2026 00:02:14 +0000 (UTC)
 
---===============7516700718939624386==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Multi-line comments do not follow BPF subsystem guidelines.
+--
 
->     bpf: Unify helper and kfunc allocation-size argument handling
->
->     The constant "size of the PTR_TO_MEM returned in R0" argument is handled by
->     both helpers (ARG_CONST_ALLOC_SIZE_OR_ZERO) and kfuncs (__rdonly_buf_size /
->     __rdwr_buf_size), each with its own meta field (meta->mem_size,
->     meta->r0_size) and duplicated validation. Add struct arg_alloc_mem_desc
->     and a shared process_const_alloc_mem_size(), and replace both fields with
->     meta->arg_alloc_mem.
->
->     The desc records presence with a 'found' flag instead of using a non-zero
->     size as the sentinel. This also fixes a pre-existing bug on the kfunc
->     return path: "no size argument" was tested as r0_size == 0, so an explicit
->     __rdonly_buf_size/__rdwr_buf_size of 0 was treated as absent and fell
->     through to btf_resolve_size(), giving R0 the size of the pointed-to return
->     type instead of 0. With 'found', an explicit zero size is honored and
->     btf_resolve_size() is used only when no size argument was passed.
->
->     The size is stored in a u32, matching regs[R0].mem_size. The U32_MAX
->     check now apply to both helper and kfunc through
->     process_const_alloc_mem_size().
->
->     Fold bpf_session_cookie return size assignment into current kfunc return
->     size resolution path.
->
->     Note that verifier saves kfunc return size through r0_size instead of
->     mem_size. The later has no active readers so remove it.
->
->     Signed-off-by: Amery Hung <ameryhung@gmail.com>
+--- Patch [1]: [PATCH bpf] bpf: Avoid soft lockup in __htab_map_lookup_and_=
+delete_batch() ---
+commit a1114e030dd1f8d190db49effffca17e5da09d3f
+Author: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
 
-The changelog describes fixing a pre-existing bug on the kfunc return path,
-where an explicit __rdonly_buf_size/__rdwr_buf_size of 0 was treated as
-absent and fell through to btf_resolve_size().
+bpf: Avoid soft lockup in __htab_map_lookup_and_delete_batch()
 
-That sentinel-based fallback looks like it dates back to when fixed-size
-memory pointer returns were added for kfuncs, where the
-"if (!meta.r0_size) { ... btf_resolve_size(...) }" block first appeared
-alongside the rdonly_buf_size/rdwr_buf_size handling that set meta->r0_size.
+This commit limits the number of consecutive empty buckets visited in
+__htab_map_lookup_and_delete_batch() before yielding. It drops locks and
+calls cond_resched() to prevent soft lockup watchdogs from firing on
+large sparse maps.
 
-Should this carry a Fixes: tag so the fix can be backported?
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -1769,6 +1769,11 @@ static int htab_lru_percpu_map_lookup_and_delete_e=
+lem(struct bpf_map *map,
+>  						 flags);
+>  }
+> =20
+> +/* Max consecutive empty buckets to walk in one RCU +
+> + * instrumentation-disabled section before rescheduling.
+> + */
+> +#define HTAB_BATCH_EMPTY_RESCHED 64
 
-  Fixes: f4b4eee6169b ("bpf: add support for fixed-size memory pointer returns for kfuncs")
+[Severity: Low]
+This isn't a bug, but does this multi-line comment follow the preferred BPF
+subsystem comment style? The guidelines specify that the opening /* should
+be on its own line, rather than having text on the same line.
 
-This isn't a bug, but would it be worth tidying the changelog wording?
-"The later has no active readers" reads as "The latter", and "The U32_MAX
-check now apply to both" reads as "now applies".
+[ ... ]
 
+> @@ -1969,11 +1975,19 @@ __htab_map_lookup_and_delete_batch(struct bpf_map=
+ *map,
+> =20
+>  next_batch:
+> -	/* If we are not copying data, we can go to next bucket and avoid
+> -	 * unlocking the rcu.
+> +	/* If we are not copying data, we can go to next bucket and avoid
+> +	 * unlocking the rcu. Bound the walk though: after
+> +	 * HTAB_BATCH_EMPTY_RESCHED consecutive empty buckets, fully exit
+> +	 * the critical section (no locks are held here) and reschedule.
+>  	 */
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+[Severity: Low]
+Similarly, could this multi-line comment be updated to place the opening /*
+on its own line to match the modern BPF comment style?
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29057017398
---===============7516700718939624386==--
+>  	if (!bucket_cnt && (batch + 1 < htab->n_buckets)) {
+>  		batch++;
+> -		goto again_nocopy;
+> +		if (++empty_cnt < HTAB_BATCH_EMPTY_RESCHED)
+> +			goto again_nocopy;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260709-b4-htab-ba=
+tch-resched-v1-1-ad7a6b3b4513@linux.dev?part=3D1
