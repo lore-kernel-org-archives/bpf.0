@@ -1,110 +1,93 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE5334CDD
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 15:15:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB25136358
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 15:18:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783696551; cv=none; b=S7MlJ2ceazWE4yRV3nO3Rmg6Dvmo2mC4zXaAj1Lf1Z8QzXeR1pmIT/x6Cwsir4xByzUTF5woSC80x+c4mjB+HV2vMRmzZ7UAGVDlZkOQtetfBPKuE7dCN32cTc09emEufTz3uS9cYVbP28zsjadrD0unJkIo3QMtyBwrGqqDv3s=
+	t=1783696717; cv=none; b=eMrYfFqj1q8lpGxMTuoUNWBzw+PGP+hr2+O4rNXMT4xO7vviWdmPuc8yYdhuOfZyYxJ9aGFLdRyDpKo3iKYI8aoV5e6M+5mc++3f4vUnElbqP5eMx8QTWd5FlwdNErWhVgrVbI/aDc8Ae49pOdj09xjKUw5tgYxPxNDgBJ379bM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783696551; c=relaxed/simple;
-	bh=1Rd4oIKqX9SKQQHvtsM8kGWsJqTTLH5ZyMXq7FyonDA=;
+	s=arc-20240116; t=1783696717; c=relaxed/simple;
+	bh=wbx719+hcKisxWjP4rWXbwjuiLxXrdoJo31gb+Uf2nY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lY9yzwVY0lk18v/K9T/e7oKn+xH7BGlBW/wu6FRh4lPuxp6G+cmvnx6nlOLbWAJJqWzjykOjjmvaoRKnYYWrPz/mBEW9y8qkcGympoZGdpDkEuTbA+0T4E5Xc7H2beKXMIeycZMmMYiER4hFM1CUUxZT6bmxzzjitpaeGguyIkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Wga810wc; arc=none smtp.client-ip=91.218.175.188
+	 In-Reply-To:Content-Type; b=BWpLOdv7874CVF1iFSY/eaSWC9wUmfcm396Z1r3moAjDVsHfZJ/DVg9IgpR9dGaEIHPUVVwvIKMnY8vR/NyhwL97U7ALkobB52vncBetyViz8Mu+Wv9j/+R1mqfI0+r2nBXHZkD/pnb+SFMKOtPMefz9nc0KvP8Q3cJPpngcuD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UyBXG1mr; arc=none smtp.client-ip=91.218.175.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Wga810wc"
-Message-ID: <49cc5acf-24d4-4e1a-86a0-d05e29a75d42@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UyBXG1mr"
+Message-ID: <9beb3bb9-3d11-4ee1-b51d-b80870051b5a@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783696531;
+	t=1783696714;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=aF7FpZSUJmToTSbrChBipcg4Sj4NSH21xfjUv2dgBgk=;
-	b=Wga810wcfj/NgzEW21KmkjBt0Z820hc8+vICWet+GqpHsLO+oBHTdNYJvy3TtcqzQEfxnj
-	HhOp7aTi8Y4Y5GHQ1Jrzc5zdvypGyxhi8G+iLlvhOYxaz/muEpAN4D0btWI8Oad7ISk9/j
-	JDvX8w0yomy58BeoP5nXFl0K9lJB6ow=
-Date: Fri, 10 Jul 2026 23:14:55 +0800
+	bh=jQYY0PfYPWRE+QVtqlTaAeUHkZgECaALx1Y8KnNkfos=;
+	b=UyBXG1mrSfkwb+ogA3DftHntqVX1NeyBNmpAZrDUEvlWkDE6e1Ki7G+nQRqv5LBQRhovr+
+	lHELerUV959Fu+5rgajzKkIsItaUEaPFfPQ5fo9q3RsG6EQ3nEvpRJgpSrptFcQoMsz+Qf
+	/YqFGgB+V4GxonGEv+sWwaDd32kgtqA=
+Date: Fri, 10 Jul 2026 08:18:25 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Test fentry link after
- tracing_multi link
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260710144734.78203-1-leon.hwang@linux.dev>
- <20260710144734.78203-3-leon.hwang@linux.dev>
- <20260710150412.5E8981F000E9@smtp.kernel.org>
+Subject: Re: [PATCH bpf-next 00/12] bpf: Support 16-byte return values in the
+ R0:R2 register pair
+Content-Language: en-GB
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
+References: <20260708200939.2153664-1-yonghong.song@linux.dev>
+ <b364ef0ad5425d97180220af23be238a4c4281d7.camel@gmail.com>
+ <29c790dc-2e14-4ffe-8231-db8dba4de0c1@linux.dev>
+ <531d227058b25adf099dbeb467d32507b95d8062.camel@gmail.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20260710150412.5E8981F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <531d227058b25adf099dbeb467d32507b95d8062.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On 2026/7/10 23:04, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] Test Flakiness due to Missing PID Filtering in BPF `fentry` Program
-> --
-> 
-> --- Patch [2]: [PATCH bpf-next 2/2] selftests/bpf: Test fentry link after tracing_multi link ---
-> commit 7dc95a7a3d3a0ca96e45e5ad2ebebe5157ae17ed
-> Author: Leon Hwang <leon.hwang@linux.dev>
-> 
-> selftests/bpf: Test fentry link after tracing_multi link
-> 
-> This commit adds a selftest to verify that an fentry link can be attached
-> safely after a tracing_multi link. It introduces a new fentry BPF program
-> and a corresponding user-space test case.
-> 
->> diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c b/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
->> index cd5be0bb6ffdd..5ebbe3b602a4f 100644
->> --- a/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
->> +++ b/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
-> 
-> [ ... ]
-> 
->> @@ -11,6 +11,14 @@ __u64 test_result_fentry_1 = 0;
->>  __u64 test_result_fentry_2 = 0;
->>  __u64 test_result_fexit_1 = 0;
->>  __u64 test_result_fexit_2 = 0;
->> +__u64 test_result_fentry = 0;
->> +
->> +SEC("fentry/bpf_fentry_test1")
->> +int BPF_PROG(fentry, int a)
->> +{
->> +	test_result_fentry += a == 1;
-> 
-> [Severity: Medium]
-> Can this cause test flakiness during parallel selftest runs?
-> 
-> Because bpf_fentry_test1 is a global kernel function widely used across
-> various BPF selftests, parallel test executions might trigger this program.
-> Since the counter is incremented blindly without filtering by the executing
-> process PID, could parallel executions increase test_result_fentry above 1
-> and cause the userland assertion ASSERT_EQ(skel->bss->test_result_fentry, 1)
-> to sporadically fail?
-> 
 
 
-Correct.
+On 7/9/26 11:13 PM, Eduard Zingerman wrote:
+> On Thu, 2026-07-09 at 23:00 -0700, Yonghong Song wrote:
+>>
+>> On 7/9/26 5:56 PM, Eduard Zingerman wrote:
+>>>> On Wed, 2026-07-08 at 13:09 -0700, Yonghong Song wrote:
+>>> A design question regarding to how this series handles local
+>>> functions:
+>>> - It relies on the BTF gate to decide if function returns multiple values.
+>>> - It also prohibits local functions from returning pointers as a part
+>>>     of an aggregate return.
+>>>
+>>> I think this unnecessarily adds an additional discrepancy between how
+>>> the return values are handled. The practical experience shows that
+>>> existing differences between local and global functions are already a
+>>> constant source of pain and confusion.
+>>>
+>>> I'd also argue that lifting the above limitations for local functions
+>>> would make the implementation somewhat simpler.
+>>>
+>>> Therefore, I suggest to:
+>>> - forgo the BTF check for local functions;
+>>> - always copy r2 from callee to caller at EXIT
+>> Not sure about this. If r2 is always copied from callee to caller, and
+>> interpreter still only supports return r0, then this will imply interpreter
+>> will never be used? I know interpreter will be eventually removed, but
+>> at this point, people still use interpreter?
+> We can detect this statically from compute_live_registers().
+> If any r2's are alive after a function call the jit_required flag can be set.
 
-I should use tracing_multi_arg_check() here, which would filter the PID.
+Sounds good, I will do some investigation on this.
 
-Thanks,
-Leon
-
->> +	return 0;
->> +}
->>  
->>  SEC("fentry.multi")
->>  int BPF_PROG(fentry_1)
-> 
+>
+>>> - forgo the scalar struct requirement for local function
+>>>     return types.
+>> I think this is doable.
+>>
+>>> Wdyt?
 
