@@ -1,21 +1,21 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D532D40912B
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 22:52:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CAFF40861E
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 22:52:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783723943; cv=none; b=YE+Zw9cDde4Oeff5FmP0y2RaGxpWMd6NbTWOo1Pdpw9yq8WwSv2Uz+P5prfv9w04jWKNdvZARA1qCeNgPu/4giH3JsHU6IN4RLcONn8JY0J9X/uj51hwRHydwHg4PZM5sPsOZDDFz+fnv/C8CtpWlhE3aPBC7/d+kOt7/n3DNcY=
+	t=1783723955; cv=none; b=IUGoPx0BRXT89zsPHTbXJ24ObV0i84M2Ljs3w4wdlg27uMFoGUnSL4fF9bXggCXnbaC47rwfPAeNJr8QTUEI2ZRBq+VlruyFc1PYggzgsfbw3AXDRaZM9eU9n+LCmcCi+TGhvq/zxjMlFNCPYBBTdonQZ6XZTToBrZeRDmoYVhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783723943; c=relaxed/simple;
-	bh=5HjyDVoT/7PCpCX78t1Hvn5ETIt76MrTeaLepuqyHjI=;
+	s=arc-20240116; t=1783723955; c=relaxed/simple;
+	bh=4PwN/DbfYDmRJbI+8T4C5lrfLnkKLp1ubC8DAUTMKNA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IBNjD827KtMTbBoK27N2zEF/FjyyiBFXbRcayjfKibk61Z2Br+1Ljox9VPYaKFnOvGh/uONH5ujEXxPBGVWU67lI8SK+rmL4+1WSSOyKl9R6i79FB6M5iv2skShWCydgOrsI6QfYIGd4G2mrn5/u3W0Q17wGhBGkWa9sTecuQrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+	 MIME-Version; b=NuQ77Uq2481PJ+AonsxsGA0CmamEFQgbFBI/oI3xo3qGrZg3sN+KDU46Nx6Igv6bfgUnKsqeo+0C2un/Kr21l5XAzxcSq4aTLP+dZAoFy6h/ECwBuGzqEhjK8IloTn/KQ0HA4BUh3LhTVQtdd+BnHYEMxmZWlTLtQPF4yHU0PUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 2017E1D7B99603; Fri, 10 Jul 2026 15:52:17 -0700 (PDT)
+	id 3E15C1D7B99646; Fri, 10 Jul 2026 15:52:22 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v3 2/3] bpf, x86: Fix trampoline stack size for 128-bit arguments
-Date: Fri, 10 Jul 2026 15:52:17 -0700
-Message-ID: <20260710225217.4014393-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 3/3] selftests/bpf: Add tests for >8 byte return value and 128-bit arguments
+Date: Fri, 10 Jul 2026 15:52:22 -0700
+Message-ID: <20260710225222.4015115-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260710225206.4013062-1-yonghong.song@linux.dev>
 References: <20260710225206.4013062-1-yonghong.song@linux.dev>
@@ -37,40 +37,229 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-btf_distill_func_proto() accepts a function argument up to 16 bytes, so a
-128-bit scalar such as __int128 reaches the x86 trampoline with
-arg_size =3D=3D 16. But the current implementation assumes an __int128
-argument only needs one register, so the register save area is
-under-allocated and save_args() overwrites adjacent stack slots.
+The BPF trampoline preserves only 8 bytes of the target's return value
+(R0), so attaching an fexit/fmod_ret/fsession program to a function that
+returns a >8 byte value is now rejected by the verifier. Add a bpf_testmo=
+d
+function returning __int128 and an fexit program that targets it. The
+program is expected to fail to load with the "with a >8 byte return value
+is not supported for this attach type" message.
 
-Compute the register count from arg_size for all arguments to fix it.
+A 128-bit __int128 argument is passed in a register pair and occupies two
+trampoline context slots. Add a bpf_testmod function taking a leading
+__int128 argument followed by an int and a long, and an fexit program tha=
+t
+reads those two trailing arguments and the return value, verifying that t=
+he
+trampoline reserves enough stack for the 128-bit argument and places the
+following arguments and the return value at the right context slots.
 
-Fixes: a9c5ad31fbdc ("bpf: x86: Support in-register struct arguments in t=
-rampoline programs")
+__int128 is only available on 64-bit targets (where the compiler defines
+__SIZEOF_INT128__). The argument test additionally depends on the calling
+convention: x86_64 and arm64 pass an __int128 in a register pair as the
+trampoline expects, while other architectures pass it differently (e.g.
+s390x passes larger arguments by reference), so that subtest runs only on
+x86_64 and arm64 and is skipped elsewhere.
+
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- arch/x86/net/bpf_jit_comp.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ .../bpf/prog_tests/tracing_failure.c          | 12 +++++++
+ .../selftests/bpf/prog_tests/tracing_struct.c | 36 +++++++++++++++++++
+ .../selftests/bpf/progs/tracing_failure.c     |  6 ++++
+ .../bpf/progs/tracing_struct_int128.c         | 18 ++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    | 32 +++++++++++++++++
+ 5 files changed, 104 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
+28.c
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index de7515ea1bea..0b8bd30f7c87 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -3369,11 +3369,8 @@ static int __arch_prepare_bpf_trampoline(struct bp=
-f_tramp_image *im, void *rw_im
- 	WARN_ON_ONCE((flags & BPF_TRAMP_F_INDIRECT) &&
- 		     (flags & ~(BPF_TRAMP_F_INDIRECT | BPF_TRAMP_F_RET_FENTRY_RET)));
+diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_failure.c b/t=
+ools/testing/selftests/bpf/prog_tests/tracing_failure.c
+index f9f9e1cb87bf..345dd21ad621 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tracing_failure.c
++++ b/tools/testing/selftests/bpf/prog_tests/tracing_failure.c
+@@ -76,6 +76,16 @@ static void test_fexit_noreturns(void)
+ 			       "Attaching fexit/fsession/fmod_ret to __noreturn function 'do_=
+exit' is rejected.");
+ }
 =20
--	/* extra registers for struct arguments */
--	for (i =3D 0; i < m->nr_args; i++) {
--		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
--			nr_regs +=3D (m->arg_size[i] + 7) / 8 - 1;
--	}
-+	for (i =3D 0; i < m->nr_args; i++)
-+		nr_regs +=3D (m->arg_size[i] + 7) / 8 - 1;
++static void test_fexit_int128_ret(void)
++{
++#ifdef __SIZEOF_INT128__
++	test_tracing_fail_prog("fexit_int128_ret",
++			       "with a >8 byte return value is not supported for this attach =
+type");
++#else
++	test__skip();
++#endif
++}
++
+ void test_tracing_failure(void)
+ {
+ 	if (test__start_subtest("bpf_spin_lock"))
+@@ -86,4 +96,6 @@ void test_tracing_failure(void)
+ 		test_tracing_deny();
+ 	if (test__start_subtest("fexit_noreturns"))
+ 		test_fexit_noreturns();
++	if (test__start_subtest("fexit_int128_ret"))
++		test_fexit_int128_ret();
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/to=
+ols/testing/selftests/bpf/prog_tests/tracing_struct.c
+index 6f8c0bfb0415..15b95d0235b5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
++++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+@@ -4,6 +4,7 @@
+ #include <test_progs.h>
+ #include "tracing_struct.skel.h"
+ #include "tracing_struct_many_args.skel.h"
++#include "tracing_struct_int128.skel.h"
 =20
- 	/* x86-64 supports up to MAX_BPF_FUNC_ARGS arguments. 1-6
- 	 * are passed through regs, the remains are through stack.
+ static void test_struct_args(void)
+ {
+@@ -112,6 +113,39 @@ static void test_struct_many_args(void)
+ 	tracing_struct_many_args__destroy(skel);
+ }
+=20
++static void test_int128_args(void)
++{
++	/*
++	 * __int128 arguments are passed in a register pair on x86_64 and
++	 * arm64, which the trampoline packs into two context slots. Other
++	 * architectures pass a __int128 differently (e.g. s390x passes larger
++	 * arguments by reference), so only exercise this on x86_64 and arm64.
++	 */
++#if defined(__x86_64__) || defined(__aarch64__)
++	struct tracing_struct_int128 *skel;
++	int err;
++
++	skel =3D tracing_struct_int128__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "tracing_struct_int128__open_and_load"))
++		return;
++
++	err =3D tracing_struct_int128__attach(skel);
++	if (!ASSERT_OK(err, "tracing_struct_int128__attach"))
++		goto destroy_skel;
++
++	ASSERT_OK(trigger_module_test_read(256), "trigger_read");
++
++	ASSERT_EQ(skel->bss->t_b, 2, "t:b");
++	ASSERT_EQ(skel->bss->t_c, 3, "t:c");
++	ASSERT_EQ(skel->bss->t_ret, 6, "t ret");
++
++destroy_skel:
++	tracing_struct_int128__destroy(skel);
++#else
++	test__skip();
++#endif
++}
++
+ static void test_union_args(void)
+ {
+ 	struct tracing_struct *skel;
+@@ -145,6 +179,8 @@ void test_tracing_struct(void)
+ 		test_struct_args();
+ 	if (test__start_subtest("struct_many_args"))
+ 		test_struct_many_args();
++	if (test__start_subtest("int128_args"))
++		test_int128_args();
+ 	if (test__start_subtest("union_args"))
+ 		test_union_args();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/tracing_failure.c b/tools/=
+testing/selftests/bpf/progs/tracing_failure.c
+index 65e485c4468c..f7a095767679 100644
+--- a/tools/testing/selftests/bpf/progs/tracing_failure.c
++++ b/tools/testing/selftests/bpf/progs/tracing_failure.c
+@@ -30,3 +30,9 @@ int BPF_PROG(fexit_noreturns)
+ {
+ 	return 0;
+ }
++
++SEC("?fexit/bpf_testmod_test_int128_ret")
++int BPF_PROG(fexit_int128_ret)
++{
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128.c b/=
+tools/testing/selftests/bpf/progs/tracing_struct_int128.c
+new file mode 100644
+index 000000000000..4638dfec1f38
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128.c
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_helpers.h>
++
++long t_b, t_c, t_ret;
++
++SEC("fexit/bpf_testmod_test_int128_arg")
++int test_int128_arg_fexit(unsigned long long *ctx)
++{
++	t_b =3D (int)ctx[2];
++	t_c =3D (long)ctx[3];
++	t_ret =3D (long)ctx[4];
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
+/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 30f1cd23093c..eb0f9b5e18d8 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -161,6 +161,33 @@ bpf_testmod_test_arg_ptr_to_struct(struct bpf_testmo=
+d_struct_arg_1 *a) {
+ 	return bpf_testmod_test_struct_arg_result;
+ }
+=20
++#ifdef __SIZEOF_INT128__
++noinline __int128
++bpf_testmod_test_int128_ret(int a)
++{
++	bpf_testmod_test_struct_arg_result =3D a;
++	return (__int128)a;
++}
++
++/*
++ * The __int128 'a' is the first argument on purpose. On arm64 a 16-byte
++ * argument must start in an even-numbered register pair, so placing it
++ * after a single-register scalar would leave a padding register (x1)
++ * unused. pahole maps parameters to registers positionally and would th=
+en
++ * see the following argument in an "unexpected" register and skip BTF
++ * encoding of the whole function, making it unattachable. Keeping the
++ * __int128 first (x0:x1) avoids the padding while still exercising the
++ * trampoline packing of a 128-bit argument together with the trailing
++ * int and long arguments.
++ */
++noinline long
++bpf_testmod_test_int128_arg(__int128 a, int b, long c)
++{
++	bpf_testmod_test_struct_arg_result =3D (long)a + b + c;
++	return bpf_testmod_test_struct_arg_result;
++}
++#endif
++
+ __weak noinline void bpf_testmod_looooooooooooooooooooooooooooooong_name=
+(void)
+ {
+ }
+@@ -514,6 +541,11 @@ bpf_testmod_test_read(struct file *file, struct kobj=
+ect *kobj,
+=20
+ 	(void)bpf_testmod_test_arg_ptr_to_struct(&struct_arg1_2);
+=20
++#ifdef __SIZEOF_INT128__
++	(void)bpf_testmod_test_int128_ret(i);
++	(void)bpf_testmod_test_int128_arg((__int128)1, 2, 3);
++#endif
++
+ 	(void)trace_bpf_testmod_test_raw_tp_null_tp(NULL);
+=20
+ 	bpf_testmod_test_struct_ops3();
 --=20
 2.53.0-Meta
 
