@@ -1,150 +1,116 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com [34.218.115.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F136E423A80;
-	Fri, 10 Jul 2026 12:30:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348D5403EAE;
+	Fri, 10 Jul 2026 12:50:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.218.115.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783686640; cv=none; b=g974deB6lxhzM+l9vGFHsos32T7RFKZITdII8S84cwCZ9m6o8GcsMV5PJLrSJu8pFe24h95RCxbm9yom+tPetPpv1/N5TBlK65Q02C/jDh/5X4fiPbV3DtVg9JijVmStGuesI4jwHqUDwuhpv5R82fit6XDiA7Kv6c9y/d7OPGo=
+	t=1783687809; cv=none; b=MMweYJkCkQsO5Pa1jjj4cB2Bx2fjmXax4sR68QWQPEAuc8dfUqnrLFALYPWFOQFtEoNtzmp1HRzlNuSQhJVSID4Lulto2pTo7vnItTFNPD39olckJfbcRTOhuRSQcA8GjlSZTQK8Aj2C0L8Mwpg3UQMtMAuUUFcvK0Hq1PQfFn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783686640; c=relaxed/simple;
-	bh=NcioN6f4qh6+FIEzkrw9e1N4PdY6LxJgPsbpXnBds9I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MsI0nS1jqqWWKiyYuE4Bhf9Z/Rl9sCZ772JBAKDBn1Tj8J5WKfRDRwvtHYx5C5yBC2O0D+/g4kyRfhtJp91nB5A7YoIPY9X9bhDvFTUWofp9fWOomKLUWtExsCkR87w9wDAiDPazci4+OxLDfmr7BY0YYcp6XCzekXAdUNDk29w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=bAOXeb82; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1783687809; c=relaxed/simple;
+	bh=s7FK3uy0wyTmiT30bqnatZgOuAJHS1beiJ6EgyUxc5U=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JGhZe99ty7qBz71hQiUQ/aXgkQPdcv1J97sTcc9x7WAnpYksT1sCmnb8kVPQj52WEXUQKOxJrAgN9h0dqPsT/iE1AioTv87Ko6cqVHxyxGvXeEADM0kI3/pbzpiA2S9f8OYwv46Sc/6bzHpNXqTnBWIp9T8OiZKvj6ROLas7UvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b=P90cKxXP; arc=none smtp.client-ip=34.218.115.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="bAOXeb82"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=jFf7H1XTeaELsSiaGEln46fzlwLjLIh5DdZWiTTb72Y=; b=bAOXeb82C0cNAFdfUEszeYcnJH
-	iw0C0DlfXrF1wZ2ji7ccJy74f4d0PBjzBsekAwaZAzotAwk42kLMxOtPjJ+GqkhZYrTC/QUwJUSXH
-	OOL/UJcXKV2wIo2w4p8WcZzoCdiYxyrv7zI87gd1wfdnqztkgkYSdEo22BbMSCoSjyqsHSjnibnt7
-	nQG7pigoq5Olm55W4hIEdIGlM0XbWUchWzVGNyMl/IY8Crny06MKTnCXXRjm9KNvHH3hWeujWvDhy
-	xITz+yAXT1dDXWz0mF3cKwJs8i91u3nVBeeK5ynFuv0LxW3HCKTqmmECu1nFtTRZmK9Et6UWUcMHz
-	v00+OEFA==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wiAND-000Hfv-0q;
-	Fri, 10 Jul 2026 14:30:31 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wiANC-0000oN-0G;
-	Fri, 10 Jul 2026 14:30:30 +0200
-Message-ID: <5a1781b5-75c5-4589-b20c-d15ccabaa8e7@iogearbox.net>
-Date: Fri, 10 Jul 2026 14:30:29 +0200
+	dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b="P90cKxXP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
+  t=1783687808; x=1815223808;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Fw2vftZ+PMLxv43trdP7hYgE/5hVii1GM/a6mEOhYM0=;
+  b=P90cKxXPWwVuj2/EuhI1epGZQu9iwXVEbvUax3lGWYlcJlxYgsXkYWXE
+   AGLNiJHVpGnrR4jXgF9uhwqhiAD9+W3WAn6GDMIzeOrUID/EZYqceXsQj
+   gs2sHO0r1/PqWpapE4Qp8NEYTQ9VMjOZJfrtzoC7PBxA/qjQknlCSNL9R
+   +LAGw1tArlW7AtSOfxW0XqjyGM7RRutQJ/di6TiYEFMN7t4Tp9gLSEVwW
+   cIlS4TjzSHOXElorCERYZAZiUxwCz9kTIXc6vzNciRTTqVJLVfnGJ56ze
+   c9BP9TWh1VuzNVOSaO1zlG+p2i1tnlprxCeDz4/5i3USka0BaHgUmMmHG
+   A==;
+X-CSE-ConnectionGUID: XQNd2qLCRgyq+BAfiY3SJA==
+X-CSE-MsgGUID: EttK6KOnQDGVmOZy4i9VYw==
+X-IronPort-AV: E=Sophos;i="6.25,154,1779148800"; 
+   d="scan'208";a="23233577"
+Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
+  by internal-pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2026 12:50:05 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.234:30472]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.26.212:2525] with esmtp (Farcaster)
+ id 0975f33c-db1f-41e4-94f8-4c7a86ae8d76; Fri, 10 Jul 2026 12:50:05 +0000 (UTC)
+X-Farcaster-Flow-ID: 0975f33c-db1f-41e4-94f8-4c7a86ae8d76
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.43;
+ Fri, 10 Jul 2026 12:50:04 +0000
+Received: from dev-dsk-mheyne-1b-8cc83676.eu-west-1.amazon.com (10.13.235.223)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.43;
+ Fri, 10 Jul 2026 12:50:02 +0000
+Date: Fri, 10 Jul 2026 12:49:54 +0000
+From: Maximilian Heyne <mheyne@amazon.de>
+To: Greg KH <gregkh@linuxfoundation.org>
+CC: <stable@vger.kernel.org>, Marc Kleine-Budde <mkl@pengutronix.de>, "Vincent
+ Mailhol" <mailhol.vincent@wanadoo.fr>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>,
+	"Eric W. Biederman" <ebiederm@aristanetworks.com>,
+	<linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH 6.12.y] net: add missing ns_capable check for peer netns
+Message-ID: <20260710-wry-moral-3892dd17@mheyne-amazon>
+References: <20260617-pats-coif-316245c6@mheyne-amazon>
+ <2026062556-residue-anybody-e756@gregkh>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 0/5] bpf, x86: enable EXECMEM_ROX_CACHE for BPF
- allocations
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Eduard Zingerman <eddyz87@gmail.com>, Ingo Molnar <mingo@redhat.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
- Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, "H. Peter Anvin" <hpa@zytor.com>,
- Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20260626-execmem-x86-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org>
- <ak9V1C-Y3x-KEcTW@kernel.org>
- <b2fb9a37-3810-45a5-97dd-ed500ae8207c@iogearbox.net>
- <ak-aOUZ1waAIKtpQ@kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <ak-aOUZ1waAIKtpQ@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28056/Fri Jul 10 08:24:04 2026)
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <2026062556-residue-anybody-e756@gregkh>
+X-ClientProxiedBy: EX19D037UWB002.ant.amazon.com (10.13.138.121) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-Hi Mike,
+Hi Greg,
 
-On 7/9/26 2:55 PM, Mike Rapoport wrote:
-> On Thu, Jul 09, 2026 at 02:12:04PM +0200, Daniel Borkmann wrote:
->> On 7/9/26 10:03 AM, Mike Rapoport wrote:
->>> Gentle ping
->>>
->>> On Fri, Jun 26, 2026 at 09:42:27PM +0300, Mike Rapoport (Microsoft) wrote:
->>>> Hi,
->>>>
->>>> BPF allocations of executable memory on x86 are essentially read-only. Most
->>>> paths that call bpf_jit_alloc_exec() immediately make it ROX with
->>>> set_memory_rox().
->>>>
->>>> The code generation, at least on x86, uses separately allocated writable
->>>> buffers and then updates the actual text memory with text_poke().
->>>>
->>>> These patches do several small adjustments to how BPF allocates executable
->>>> memory and enable EXECMEM_ROX_CACHE for BPF allocations on x86.
->>
->> I think there was an open Q from Alexei wrt the sashiko reports [0] and
->> whether you could address them. Once done, please resend to bpf list.
+On Thu, Jun 25, 2026 at 12:37:31PM +0100, Greg KH wrote:
+> On Wed, Jun 17, 2026 at 08:25:31AM +0000, Maximilian Heyne wrote:
+> > The upstream commit 7b735ef81286 ("rtnetlink: add missing
+> > netlink_ns_capable() check for peer netns") doesn't apply on older
+> > stable kernels due to refactoring. Therefore, this patch is an attempt
+> > to implement the same capability check just directly in the respective
+> > interface types.
 > 
-> Thanks for the link!
-> I'm not subscribed to bpf@ and it took me a few minutes to realize why I
-> don't see this in my inbox.
+> Why can't we take the full series of patches instead?  Otherwise this is
+> going to be a pain over time for any other fixes/updates in this area,
+> right?
 
-Ok, np. Despite the sashiko false positives, could you pls resend against
-latest bpf-next, so your set can run through the upstream BPF CI?
+Agree that this would be a pain. The issue is that this requires to
+backport >10 patches. I think for 6.12 it would be like 15 patches so
+that each patch doesn't need to be reworked too much.
 
-Thanks,
-Daniel
+The reason for me submitting this was that it's easily backports to all
+stable kernels. I haven't tested for 6.6 or earlier how many patches
+would need to be backported.
+
+I can try to post the series for 6.12 after some more testing (after my
+vacation) but I'm think I won't succeed backporting the refactoring
+patches back to, say, 5.10.
+
+> 
+> And if not, then we need acks from the maintainers here...
+
+So for the backports to older stable kernels we might need this.
+
+Links:
+- 6.6.y backport: https://lore.kernel.org/all/20260617-sprain-dye-86c242ac@mheyne-amazon/
+- 6.1.y backport: https://lore.kernel.org/all/20260617-keyed-dude-3493dbdb@mheyne-amazon/
+- 5.15.y backport: https://lore.kernel.org/all/20260617-forgot-manic-27dda774@mheyne-amazon/
+- 5.10.y backport: https://lore.kernel.org/all/20260617-thaws-enid-af4ad67d@mheyne-amazon/
+
+Regards,
+
+Maximilian
