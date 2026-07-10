@@ -1,118 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C4F37C906;
-	Fri, 10 Jul 2026 18:05:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D50223328
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 18:09:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783706736; cv=none; b=eyZPk/aZgj2DJQEVdG02do9NDJc6iQIkbad68tFzrwZpv2YpVw297u3C5VV9HTWWmSJYGW+IeFVYrxWVGObq0pOMHkk3yULnUwdgCNqrKahGq1GvuS4NWC/xkFnYyINfw/ouaxTxVDAdAH5QNFTpT4jXqoWY42obDRQ2iUzDeSI=
+	t=1783706973; cv=none; b=M05b5j1d8l8H9djAJTHdsYWKg3aDs54ANR09nlGSShSHwgqV/E99mIHscJOHxrxvoS8ckvIgtxFVdTNjhzbKvSqpKwKchnqnp0ZO/lLPokKB08K8enFOzZ9fJm52m/yuShDO4eQyrTVPfQm8h2EwKFIMHIWUS27AkHO/sX+BpnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783706736; c=relaxed/simple;
-	bh=+02xMsEzYQhTIPnJ8zKzodVzMyFz6JZjuiiF1KJILz8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mladaZ4TaK4d2FWr4YHkdLGlQJjsPg1QWYAW7BPGeZxrSY3uAOq4WIUWKFwnbp0JhhYLRBXaaQwPD7DpRlBDI5vY1KUcdZZb7nf1AYITT7tdjO9enaj9ZzBPVH4b15vLHJMBuQV7E2PHzzY3VzYmWORkE2O2jHqGswGe7jTilkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JXySV4gN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783706973; c=relaxed/simple;
+	bh=MH9pMA5tBj76KKVaDsd/HxMdOB1/Yo5Uc23GxTClXWw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=taFlLRZ/m90mIjhXhMA7YWXkCJ+1PQliwzFeySKQL1w1FJrdEZbXsXCOG+LoTrOij3bStlkAeUt7GRa4HVbdYBFu7vSZnBq1WMTCwf39KBfapbDGU1OOXskZyH6EqXIrEp+n+2NvWVasmflB5ChBiiijZo2U2rwqHwZcmDPAOyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VxLCV63f; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JXySV4gN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B3C91F000E9;
-	Fri, 10 Jul 2026 18:05:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783706735;
-	bh=RZ1C7cejQoOIpWusJN2i5Bj8ujw9QzmP3ENC6NA6vFo=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=JXySV4gN1ipI4PVPBNL2m8WnXBDTX49PckAfXSNHC4Uin91BdXlroxbotgzYowlkH
-	 eKC9rprjLjiW5rYof/12NBWQr74Ny8cyhTmeckULJ0ViBwQwn++LktT8Svls5JLvuN
-	 70wR8cikrsM7igVxGojhcx6ICxHEH3UQX6k1Csx31oHn4q2t8hP1J0EOKixGUFjUOe
-	 SZsEDQ0HWB+0c30S5W8jffNVaM7E6AfC3l4MllsEDmX5FLFmcDbTwaW5r+gDj/qSu4
-	 Jt4eY7fcTMZd49YpwWIxn0/gKOQmEcmjEA+o4uGCLfYzQETlGw0x2ZDTs3yrAWauIm
-	 yts7FNMqmlEMQ==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 10 Jul 2026 20:04:46 +0200
-Subject: [PATCH net 6/7] selftests: drv-net: add missing kconfig for psp.py
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VxLCV63f"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-493b1710405so6211865e9.2
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 11:09:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783706969; x=1784311769; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=62LK1B4AP8fb0CoLCmSu1gxf8mNW3/RpPJK1TqUpKKA=;
+        b=VxLCV63fpV6UX0Q6cfat1bbXyGFv3bg2nqkDfwWeg9/1cM1osXnrCCjqbbegCsEst1
+         hzBj4jOzio1cFVtF428czlUV3MWrlzU/fWPF7qHuIL1Y5sgTfvPsfoDPkNVPiuohiOZp
+         7vX111WWY53wMoKLVYZWDwHy6rOZcEtX13HIg94Sfw6mqt6KjFpajc4lO9G1gU/l+/8r
+         Gp+4U8vsSiK0AdFtqo82U68Nw5r5hUrUKGssTCSREXUeWGoqnsxo2aTmCx/XkzcHYStB
+         YtrHNymR+SGdsJThRaNvFVJ33ndAan5JCbssyaUpm+1oQIkmJuMwx3bSjuiGrtRSq9o7
+         620w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783706969; x=1784311769;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=62LK1B4AP8fb0CoLCmSu1gxf8mNW3/RpPJK1TqUpKKA=;
+        b=TdJaxbotKjlvjnPNrKq38mTEO4pcFb3Yvb7Y6KfrZxo7GMw4PMQK4Bo/sfQI1Ox9Rd
+         W8p8EaV52hM2CQAwc4DJSlBFZ+/DmspNM79IQnkiZwpozhljSMOB6AbeJTEUjf2j4Eaf
+         Y6IxdMIIQ++9EhHwQ+mE8/W2PkggXv8cycdwUyMdSUZOV6hO7SZufyV8M9AEFHKsLv/q
+         EiuNGsjj5Qm/+XJ4ZnTAz1tGRmPJbunyTm16SPK8irGfSFTbQQI1qjwOlqLvvHvPrd89
+         yrFpSml3zLleisw22YAuOgXwCwZhk6mb8uBC7UeEXqCwttVHBEOHJkik53BSkeApI7JD
+         sCAg==
+X-Gm-Message-State: AOJu0YzZpGuSBWVVwEPLdmR/BkksUJ3t35Gb6TbE5MwZHh01NP8accdZ
+	/jRJjOg1+pxfqtUiyJ8g5RBPMncDEM9HT4mHATiL3gD5TVBlQJ8Tb5ulgQih9n1UcpA=
+X-Gm-Gg: AfdE7cmSJCWPU6RI1kNbVhipGSm91X0oZRmcPVj/e+402oPE055G1JSyuVu+r3fatAj
+	7swhMKXt+6iHkKC+8HglMxuFLutkA8ARCJoqzhokiIKtIvC30WdtATFyFUP4Vbt7HdbhMCclSbi
+	CtO7os8hf11wqNWDVC/fb+Hahxd50i21RCXvRniecyoAy9+2f7unW1QyNbx2WTw2MG0UMa3vJAx
+	msoMNKdytoOC6MjtB3FVkRtDgBcEARqqKp6ec28xJo/tK31oxVNJsoJgmCDtrcfP/Ok7rBbtbqH
+	H+t1wW5tFix9LN5v2VNfZ+x2mpDYG0XOUTU3LYXe/oUb4ljNmrNNDWT1WziaUdCtK2uI1kwmLll
+	sU686A+6pXCD0C6yYazuC8RI42X5xGel+d1wOfNOEJg6BwhX4P8X8T1ywsg+jrz3+n9xZbi7UA7
+	Tudb+ag5NHaOhcRZNDQMseJlX4bq1w/Femey/YXxoKmjjQ6ANn6NZ6arH1Jg==
+X-Received: by 2002:a05:600c:1c0b:b0:492:4c2e:9613 with SMTP id 5b1f17b1804b1-493e6864191mr133210795e9.18.1783706969079;
+        Fri, 10 Jul 2026 11:09:29 -0700 (PDT)
+Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-493eb670a41sm148593095e9.0.2026.07.10.11.09.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jul 2026 11:09:28 -0700 (PDT)
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Mahe Tardy <mahe.tardy@gmail.com>,
+	kernel test robot <lkp@intel.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jordan Rife <jordan@jrife.io>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] bpf: Fix unused nskb warning in bpf_icmp_send
+Date: Fri, 10 Jul 2026 18:09:15 +0000
+Message-Id: <20260710180915.7105-1-mahe.tardy@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260710-net-sft-fix-containers-v1-6-a2915c294ef5@kernel.org>
-References: <20260710-net-sft-fix-containers-v1-0-a2915c294ef5@kernel.org>
-In-Reply-To: <20260710-net-sft-fix-containers-v1-0-a2915c294ef5@kernel.org>
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, 
- Mohsin Bashir <mohsin.bashr@gmail.com>, David Wei <dw@davidwei.uk>, 
- Wei Wang <weibunny@fb.com>, bpf@vger.kernel.org
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1736; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=+02xMsEzYQhTIPnJ8zKzodVzMyFz6JZjuiiF1KJILz8=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLICTSJXNhUc3VVWYxf4M26p1r1DXZ9el+bzrCoINWvdl
- 1nnEszeUcrCIMbFICumyCLdFpk/83kVb4mXnwXMHFYmkCEMXJwCMJEzlowMjSmSJ9zfJakvCzds
- eb5cr676upXLIblHU6bvsHt4Prk6hpHhYRjnswDHFcGTO79Odt/6/Ujj6u77id7ND275dzn0fzv
- MBAA=
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Content-Transfer-Encoding: 8bit
 
-This psp.py selftest was failing on my side when only using the
-drivers/net config file on top of the default one -- the recommended way
-to execute selftest targets.
+Declare nskb inside the IPv4 and IPv6 case blocks so it is only present
+when the corresponding code is built. The case braces are intentional to
+scope the local declarations under the switch labels.
 
-It looks like some kernel config are needed to execute the new tc
-commands.
-
-Note that this was not visible on NIPA, because these tests are executed
-with the drivers/net/hw ones, combining the two config files, and the hw
-one contains the missing ones.
-
-Fixes: 3f74d5bb807e ("selftests/net: Add env for container based tests")
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Fixes: f3603df9aebb ("bpf: Add bpf_icmp_send kfunc")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202607110140.JeJZ6GIa-lkp@intel.com/
+Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
 ---
-To: Andrew Lunn <andrew+netdev@lunn.ch>
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: Jesper Dangaard Brouer <hawk@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>
-To: Stanislav Fomichev <sdf@fomichev.me>
-To: Mohsin Bashir <mohsin.bashr@gmail.com>
-To: David Wei <dw@davidwei.uk>
-Cc: Wei Wang <weibunny@fb.com>
-Cc: bpf@vger.kernel.org
----
- tools/testing/selftests/drivers/net/config | 3 +++
- 1 file changed, 3 insertions(+)
+ net/core/filter.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/config b/tools/testing/selftests/drivers/net/config
-index 91d4fd410914..2070e890e064 100644
---- a/tools/testing/selftests/drivers/net/config
-+++ b/tools/testing/selftests/drivers/net/config
-@@ -4,6 +4,8 @@ CONFIG_DEBUG_INFO_BTF_MODULES=n
- CONFIG_INET_PSP=y
- CONFIG_IPV6=y
- CONFIG_MACSEC=m
-+CONFIG_NET_CLS_ACT=y
-+CONFIG_NET_CLS_BPF=y
- CONFIG_NETCONSOLE=m
- CONFIG_NETCONSOLE_DYNAMIC=y
- CONFIG_NETCONSOLE_EXTENDED_LOG=y
-@@ -11,6 +13,7 @@ CONFIG_NETDEVSIM=m
- CONFIG_NETKIT=y
- CONFIG_NET_SCH_ETF=m
- CONFIG_NET_SCH_FQ=m
-+CONFIG_NET_SCH_INGRESS=y
- CONFIG_PPP=y
- CONFIG_PPPOE=y
- CONFIG_VLAN_8021Q=m
+diff --git a/net/core/filter.c b/net/core/filter.c
+index e4697036c67b..056deb9b3fc3 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -12575,7 +12575,6 @@ __bpf_kfunc int bpf_xdp_pull_data(struct xdp_md *x, u32 len)
+ __bpf_kfunc int bpf_icmp_send(struct __sk_buff *skb_ctx, int type, int code)
+ {
+ 	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
+-	struct sk_buff *nskb;
+ 	struct sock *sk;
 
--- 
-2.53.0
+ 	sk = skb_to_full_sk(skb);
+@@ -12589,6 +12588,8 @@ __bpf_kfunc int bpf_icmp_send(struct __sk_buff *skb_ctx, int type, int code)
+ 	switch (skb->protocol) {
+ #if IS_ENABLED(CONFIG_INET)
+ 	case htons(ETH_P_IP): {
++		struct sk_buff *nskb;
++
+ 		if (type != ICMP_DEST_UNREACH)
+ 			return -EOPNOTSUPP;
+ 		if (code < 0 || code > NR_ICMP_UNREACH ||
+@@ -12606,7 +12607,9 @@ __bpf_kfunc int bpf_icmp_send(struct __sk_buff *skb_ctx, int type, int code)
+ 	}
+ #endif
+ #if IS_ENABLED(CONFIG_IPV6)
+-	case htons(ETH_P_IPV6):
++	case htons(ETH_P_IPV6): {
++		struct sk_buff *nskb;
++
+ 		if (type != ICMPV6_DEST_UNREACH)
+ 			return -EOPNOTSUPP;
+ 		if (code < 0 || code > ICMPV6_REJECT_ROUTE)
+@@ -12620,6 +12623,7 @@ __bpf_kfunc int bpf_icmp_send(struct __sk_buff *skb_ctx, int type, int code)
+ 		icmpv6_send(nskb, type, code, 0);
+ 		consume_skb(nskb);
+ 		break;
++	}
+ #endif
+ 	default:
+ 		return -EPROTONOSUPPORT;
+--
+2.34.1
 
