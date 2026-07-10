@@ -1,192 +1,189 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C76F1434408
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 16:37:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973EA369D4B
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 16:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783701458; cv=none; b=cEyBAcrNGx5Ozs/DtTsIf1BSxfSZ8mDz0vV4SX4jD65JzQvf1DNKIG+0nxNQsobn4MQNVkr6sajE7tRS/TvdVDxvVhHYaoh2eYJpJ4MSIyti14gPMEara8VKuMKLDsIQeK8mQXFeo6aOfKtIDsKfICdL+ra+ZKJcIt+bVzCKmSQ=
+	t=1783701529; cv=none; b=Si/BwM8WzUeFlTZnEe6O8vv2uvlwx7IhCwtZ+RPHRlTHaCONki76+6sg2d+yAmOT7RQzK9Ksvs8PkGTJ71jvgTMPz2JluNeWuyHwaJfupo1pefQEzw5Nk1cvqRflroz1HQXeA+2M3X/Q0/kP7rj68YrhkuAXwRZ32euCsuJ5Y9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783701458; c=relaxed/simple;
-	bh=WV/CzCWdpakuQbiitgpBCQAOYEQTLBphafuZOAsTf1I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LQxq2Pj/3Dy6bvIM55qJQfrYQzNCJ/cIur77tz3WEGpKOXJ6Oytm+FtDK7BqxLMCxHrd4vvlf5Q608ngfWFlciTwv3hFg/aNgIpxHgbJrjLxE0gQy4QOxa/LN1Tu4Jr2FDd70rg1/lUfen/B9dLnSfoP1jil65Y0TXFV1A8YuqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eTO/lciu; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783701529; c=relaxed/simple;
+	bh=ZPNcJGr4jET8+wX9qzX/Ku0wxWKr33LabA34lYSlVeg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=aKEGqpEU3LxdkcuVycwP9Vp/xoGa2nwjWn47pdof5bj2YaasLbwrwv264E5ugZg5haZ+nfK3OgkTnnPHtrel+Kpk3WkwItHTdhElWJGQFC/5t0ek2OZ8bLZ/Ef4avmoFWD40wK500q0qPssx1SxSVuGdwIytQ1P4ihBRxLwOoTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=wvRYj7mA; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eTO/lciu"
-Message-ID: <67bf1951-96be-4ccf-adc4-012c7e7f0055@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783701453;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=L417h4tCnrnPuhBeBOXh4lLcXpTENg8gUbg+MqPcqp4=;
-	b=eTO/lciu8egyh/wXht9pL3lPjFo2YDTwY3JvvAPt9vhFe2lpZerBVcOH/aF4vNJ2a4s+Ty
-	SEzgqD3NpDgwI9YBFhwrLYIeuwU8OJebSeRdNmArh6CIJyyFZE74v4KGHKnLuclRQ6YJrK
-	mmv4EIs0PYmIZE1UiVIWJAPc+3AdDV0=
-Date: Sat, 11 Jul 2026 00:37:23 +0800
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="wvRYj7mA"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 080064E40D46;
+	Fri, 10 Jul 2026 16:38:45 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id BBEAF60342;
+	Fri, 10 Jul 2026 16:38:44 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 93D5011BD2A81;
+	Fri, 10 Jul 2026 18:38:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1783701523; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=cActg0ZuiluOTvW6fkhk0aXHYtC97UmzZgGeZw4PjUY=;
+	b=wvRYj7mAxw138yzW9/sSLEPCMBHjGskKAwYqEWKyD6GLZ7bNadawGPwGgWP7fzfIZgz2M1
+	rqi4WX4qv57j69GTg+/JoCrTmWzxXI7vj0K8ckiEfpsa4BkDPtJqaBAKnKPLAt3s55Uqd0
+	tRBfrFKyN8565qPz3EXziVplSGNsrlJ18XzXFFXTjEcZgGueKCqFWHmcShg2ffiKzBRvqO
+	3E5WSv5MO3T1a0cPb2WhgOtcLTr6XWo1W1YPp9BqL8bTKbsU+AaernBY0lDgRVm90BWq1D
+	xvBsTrkUhCgWbr4ARgB6YcVqZY5gvyo1PFe7pL1jk2jJOxWjXkHsj/CwK8Dm/w==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Fri, 10 Jul 2026 18:38:23 +0200
+Subject: [PATCH bpf] selftests/bpf: keep polling connection that is still
+ in progress
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf 1/2] bpf: Reject >8 byte return values on
- return-reading trampoline paths
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, kernel-team@fb.com
-References: <20260710144404.2579671-1-yonghong.song@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20260710144404.2579671-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260710-tc_tunnel_flaky-v1-1-42aab5399a49@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWM0QqDIBhGXyW+6wnqoGivMkao/dbfwoXa2IjeP
+ bcuz4FzNiSKTAm3akOkNyd+hQLqUsGNJgwkuC8MLXUtGyVFdl1eQ6C587N5foVuqDWqVbaXV5R
+ qieT58z/eYRePxynTaidy+ffCvh/TiLC5eAAAAA==
+X-Change-ID: 20260710-tc_tunnel_flaky-27e9a191bd03
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 2026/7/10 22:44, Yonghong Song wrote:
+Some tests, like tc_tunnel or tc_edt, sporadically fail in CI with the
+following logs:
 
-[...]
+  (network_helpers.c:309: errno: Operation now in progress) \
+    Failed to connect to server
+  send_and_test_data:FAIL:connect to server unexpected error: -115
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 6515d4d3c003..26d281b77a6e 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -18873,6 +18873,20 @@ static int btf_id_allow_sleepable(u32 btf_id, unsigned long addr, const struct b
->  	return -EINVAL;
->  }
->  
-> +static bool attach_uses_trampoline_retval(enum bpf_attach_type type)
-> +{
-> +	switch (type) {
-> +	case BPF_MODIFY_RETURN:
-> +	case BPF_TRACE_FEXIT:
-> +	case BPF_TRACE_FEXIT_MULTI:
-> +	case BPF_TRACE_FSESSION:
-> +	case BPF_TRACE_FSESSION_MULTI:
-> +		return true;
-> +	default:
-> +		return false;
-> +	}
-> +}
-> +
->  int bpf_check_attach_target(struct bpf_verifier_log *log,
->  			    const struct bpf_prog *prog,
->  			    const struct bpf_prog *tgt_prog,
-> @@ -19137,6 +19151,14 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
->  		if (ret < 0)
->  			return ret;
->  
-> +		if (tgt_info->fmodel.ret_size > 8 &&
-> +		    attach_uses_trampoline_retval(prog->expected_attach_type)) {
-> +			bpf_log(log,
-> +				"Attach to function %s with a >8 byte return value is not supported for this attach type\n",
-> +				tname);
-> +			return -EOPNOTSUPP;
-> +		}
-> +
->  		/*
->  		 * *.multi programs don't need an address during program
->  		 * verification, we just take the module ref if needed.
-> @@ -19413,6 +19435,9 @@ int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 bt
->  	err = btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
->  	if (err < 0)
->  		return err;
-> +	if (tgt_info->fmodel.ret_size > 8 &&
-> +	    attach_uses_trampoline_retval(prog->expected_attach_type))
-> +		return -EOPNOTSUPP;
->  	if (btf_is_module(btf)) {
->  		/* The bpf program already holds reference to module. */
->  		if (WARN_ON_ONCE(!prog->aux->mod))
+This is due to SO_RCVTIMEO and SO_SNDTIMEO being set on the client
+socket (see settimeo() in client_socket()), allowing connect() to return
+an error and to set errno to EINPROGRESS instead of blocking until
+connection result is known. Increasing the timeout value for those tests
+is likely not a good solution (and it has already been done by commit
+2790db208b44 ("selftests/bpf: Improve tc_tunnel test reliability")):
+they involve subtests that expect the connection to fail, and so
+increasing the timeout value would increase overall test execution
+duration again (not only the connection, but any socket operation).
 
+Another solution, as documented in man 2 connect, is to poll the socket
+for POLLOUT once connect has returned EINPROGRESS, and to get the actual
+connection result through getsockopt: this allows to keep the overall
+timeout values low for the general traffic, while letting a chance to
+the connection to succeed even if CI runners are loaded.
 
-I think there's no need to introduce the helper
-attach_uses_trampoline_retval().
+When connect() returns EINPROGRESS, poll the socket for POLLOUT and
+check the connection result via getsockopt(SO_ERROR).
 
-See this untested diff:
+Fixes: 99126abec5e5 ("bpf: selftests: A few improvements to network_helpers.c")
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+I manage to reproduce the issue locally by running `./test_progs -a
+tc_tunnel` in a qemu machine, while making all my CPUs busy with
+stress-ng on host side; the issue happens pretty quickly. I have not
+been able to reproduce the issue anymore with this fix.
+---
+ tools/testing/selftests/bpf/network_helpers.c | 43 +++++++++++++++++++++++----
+ 1 file changed, 38 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 03e2202cca13..899d5b129b54 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19023,6 +19023,7 @@ int bpf_check_attach_target(struct
-bpf_verifier_log *log,
- 	const char prefix[] = "btf_trace_";
- 	struct bpf_raw_event_map *btp;
- 	int ret = 0, subprog = -1, i;
-+	bool attach_retval = false;
- 	const struct btf_type *t;
- 	bool conservative = true;
- 	const char *tname, *fname;
-@@ -19232,19 +19233,21 @@ int bpf_check_attach_target(struct
-bpf_verifier_log *log,
- 		if (ret)
- 			return ret;
- 		break;
-+	case BPF_MODIFY_RETURN:
-+	case BPF_TRACE_FEXIT:
-+	case BPF_TRACE_FEXIT_MULTI:
-+	case BPF_TRACE_FSESSION:
-+	case BPF_TRACE_FSESSION_MULTI:
-+		attach_retval = true;
-+		fallthrough;
- 	default:
--		if (!prog_extension)
-+		if (!prog_extension && !attach_retval)
- 			return -EINVAL;
- 		fallthrough;
--	case BPF_MODIFY_RETURN:
- 	case BPF_LSM_MAC:
- 	case BPF_LSM_CGROUP:
- 	case BPF_TRACE_FENTRY:
--	case BPF_TRACE_FEXIT:
--	case BPF_TRACE_FSESSION:
--	case BPF_TRACE_FSESSION_MULTI:
- 	case BPF_TRACE_FENTRY_MULTI:
--	case BPF_TRACE_FEXIT_MULTI:
- 		if ((prog->expected_attach_type == BPF_TRACE_FSESSION ||
- 		    prog->expected_attach_type == BPF_TRACE_FSESSION_MULTI) &&
- 		    !bpf_jit_supports_fsession()) {
-@@ -19275,6 +19278,13 @@ int bpf_check_attach_target(struct
-bpf_verifier_log *log,
- 		if (ret < 0)
- 			return ret;
-
-+		if (tgt_info->fmodel.ret_size > 8 && attach_retval) {
-+			bpf_log(log,
-+				"Attach to function %s with a >8 byte return value is not supported
-for this attach type\n",
-+				tname);
-+			return -EOPNOTSUPP;
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index db935a9d9fc1..43c9e215c3f1 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -14,6 +14,7 @@
+ #include <sys/types.h>
+ #include <sys/un.h>
+ #include <sys/eventfd.h>
++#include <sys/poll.h>
+ 
+ #include <linux/err.h>
+ #include <linux/in.h>
+@@ -40,6 +41,8 @@
+ #define IPPROTO_MPTCP 262
+ #endif
+ 
++#define CONNECTION_IN_PROGRESS_TIMEOUT_MS	3000
++
+ #define clean_errno() (errno == 0 ? "None" : strerror(errno))
+ #define log_err(MSG, ...) ({						\
+ 			int __save = errno;				\
+@@ -294,7 +297,8 @@ int client_socket(int family, int type,
+ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t addrlen,
+ 		    const struct network_helper_opts *opts)
+ {
+-	int fd;
++	socklen_t errlen;
++	int fd, err;
+ 
+ 	if (!opts)
+ 		opts = &default_opts;
+@@ -305,13 +309,42 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
+ 		return -1;
+ 	}
+ 
+-	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
+-		log_err("Failed to connect to server");
+-		save_errno_close(fd);
+-		return -1;
++	err = connect(fd, (const struct sockaddr *)addr, addrlen);
++	if (err && errno == EINPROGRESS) {
++		struct pollfd pfd = { .fd = fd, .events = POLLOUT };
++
++		err = 0;
++		err = poll(&pfd, 1, CONNECTION_IN_PROGRESS_TIMEOUT_MS);
++
++		if (err <= 0) {
++			if (err == 0) {
++				log_err("Connection timeout");
++				errno = ETIMEDOUT;
++			} else {
++				log_err("Failed to poll connection status");
++			}
++			goto close;
 +		}
 +
- 		/*
- 		 * *.multi programs don't need an address during program
- 		 * verification, we just take the module ref if needed.
-@@ -19551,6 +19561,13 @@ int bpf_check_attach_btf_id_multi(struct btf
-*btf, struct bpf_prog *prog, u32 bt
- 	err = btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
- 	if (err < 0)
- 		return err;
-+	switch (prog->expected_attach_type) {
-+	case BPF_TRACE_FEXIT_MULTI:
-+	case BPF_TRACE_FSESSION_MULTI:
-+		if (tgt_info->fmodel.ret_size > 8)
-+			return -EOPNOTSUPP;
-+		break;
-+	}
- 	if (btf_is_module(btf)) {
- 		/* The bpf program already holds reference to module. */
- 		if (WARN_ON_ONCE(!prog->aux->mod))
++		errlen = sizeof(err);
++		if (getsockopt(fd, SOL_SOCKET, SO_ERROR, &err, &errlen) < 0) {
++			log_err("Failed to getsockopt");
++			goto close;
++		}
++
++		if (err) {
++			log_err("Failed to connect to server");
++			errno = err;
++			goto close;
++		}
++	} else if (err) {
++		goto close;
+ 	}
+ 
+ 	return fd;
++close:
++	save_errno_close(fd);
++	return -1;
+ }
+ 
+ int connect_to_addr_str(int family, int type, const char *addr_str, __u16 port,
 
+---
+base-commit: 3d40a7b2210fcab4b147c006a5291d9eb4f6241f
+change-id: 20260710-tc_tunnel_flaky-27e9a191bd03
 
-WDYT?
-
-Thanks,
-Leon
+Best regards,
+--  
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 
