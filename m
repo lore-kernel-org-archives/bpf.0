@@ -1,174 +1,192 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB65735CBCB;
-	Fri, 10 Jul 2026 16:26:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C76F1434408
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 16:37:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783700814; cv=none; b=F/zDcdRGHuOGn9wYBtHwvGCjCdp1o1PvMCr/ECoGCNqeE2D2+viHj+UZ6g2QZJUQGOWGdzEGn5Z9rtgd0q4PqQsVvx6U2KIyVlA07Dw+9oQ9Dic6DawIBK9zEUEB/XsOxJjVnNs3AknmHgWlZC6VXz4z/JXAa7NFUi0BMgD8ctk=
+	t=1783701458; cv=none; b=cEyBAcrNGx5Ozs/DtTsIf1BSxfSZ8mDz0vV4SX4jD65JzQvf1DNKIG+0nxNQsobn4MQNVkr6sajE7tRS/TvdVDxvVhHYaoh2eYJpJ4MSIyti14gPMEara8VKuMKLDsIQeK8mQXFeo6aOfKtIDsKfICdL+ra+ZKJcIt+bVzCKmSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783700814; c=relaxed/simple;
-	bh=+s0ZPcndBl+o2igU7pe64a8opX6QJ32QnPIg93N/eb4=;
+	s=arc-20240116; t=1783701458; c=relaxed/simple;
+	bh=WV/CzCWdpakuQbiitgpBCQAOYEQTLBphafuZOAsTf1I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nfwhTOs0px77dC2dawmf2+PgpBhPFCfb3BKPTd5Kbrx9FiehLYAdgTWrw5UjXo+zYYnCjGREVFCrXJWRC7n1soOvOz/vcAFvfU201838hMvBSVLkbw2jYlS+X19ETHrQuNx6coAe6n37y1Zsi0zSwYbtnqj0CD1GPKoLlPBsoOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LT7bnw8j; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 In-Reply-To:Content-Type; b=LQxq2Pj/3Dy6bvIM55qJQfrYQzNCJ/cIur77tz3WEGpKOXJ6Oytm+FtDK7BqxLMCxHrd4vvlf5Q608ngfWFlciTwv3hFg/aNgIpxHgbJrjLxE0gQy4QOxa/LN1Tu4Jr2FDd70rg1/lUfen/B9dLnSfoP1jil65Y0TXFV1A8YuqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eTO/lciu; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LT7bnw8j"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783700811; x=1815236811;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+s0ZPcndBl+o2igU7pe64a8opX6QJ32QnPIg93N/eb4=;
-  b=LT7bnw8jpvfZQ0uyXliXeEcHeF3HhrSp1bij5iBwhJXcypjBgGJgV81O
-   PqFC11WPlimbhi4NTZlvndxfDrJQ+PCfqJFEASjAaXgvgtr9rftX9paew
-   WVpKwbrecpJGdHaC1gd9IXwEoSVGFuxEMet2KIoVVipl67CPjxxyphYJ/
-   TEfyopmL7yCa4VRL+rFLikDjwg16bwhN/nLrhfftqnvzGy58lulsWoA6D
-   he/WsChooW1RoRHD4+YIqQNut3klfk1aHHKOqXsSP7xtJFItVzPu5ae95
-   e11tLdRlUOZ6alq8JgYko8smJONbUyOipfOU9F4077+usSGKnGASyY25/
-   w==;
-X-CSE-ConnectionGUID: dem7cgcnS7OPSCl9IknWiw==
-X-CSE-MsgGUID: Ihr0Y8uCQ9CS2ririytLQA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="84281219"
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="84281219"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2026 09:26:49 -0700
-X-CSE-ConnectionGUID: CkOkBgw8ReKAnD3cCXISxQ==
-X-CSE-MsgGUID: tBS2iAC0RLmjQqQ6q1/k5w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="250937338"
-Received: from sghuge-mobl2.amr.corp.intel.com (HELO [10.125.111.199]) ([10.125.111.199])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2026 09:26:49 -0700
-Message-ID: <529e37eb-ad4c-4b0f-8ba3-c5608aa7a893@intel.com>
-Date: Fri, 10 Jul 2026 09:26:48 -0700
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eTO/lciu"
+Message-ID: <67bf1951-96be-4ccf-adc4-012c7e7f0055@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783701453;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=L417h4tCnrnPuhBeBOXh4lLcXpTENg8gUbg+MqPcqp4=;
+	b=eTO/lciu8egyh/wXht9pL3lPjFo2YDTwY3JvvAPt9vhFe2lpZerBVcOH/aF4vNJ2a4s+Ty
+	SEzgqD3NpDgwI9YBFhwrLYIeuwU8OJebSeRdNmArh6CIJyyFZE74v4KGHKnLuclRQ6YJrK
+	mmv4EIs0PYmIZE1UiVIWJAPc+3AdDV0=
+Date: Sat, 11 Jul 2026 00:37:23 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] x86/mm/pat: acquire mmap lock on page table free to avoid
- ptdump UAF
-To: Lorenzo Stoakes <ljs@kernel.org>,
- Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski
- <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, "Mike Rapoport (Microsoft)"
- <rppt@kernel.org>, Kiryl Shutsemau <kas@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- David Carlier <devnexen@gmail.com>, Vlastimil Babka <vbabka@kernel.org>,
- David Hildenbrand <david@kernel.org>, "Liam R. Howlett"
- <liam@infradead.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, stable@vger.kernel.org
-References: <20260710-fix-cpa-ptdump-race-v1-1-d898699a7417@kernel.org>
+Subject: Re: [PATCH bpf 1/2] bpf: Reject >8 byte return values on
+ return-reading trampoline paths
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, kernel-team@fb.com
+References: <20260710144404.2579671-1-yonghong.song@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
 Content-Language: en-US
-From: Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <20260710-fix-cpa-ptdump-race-v1-1-d898699a7417@kernel.org>
+In-Reply-To: <20260710144404.2579671-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On 7/10/26 04:56, Lorenzo Stoakes wrote:
-> This patch resolves the issue by acquiring the mmap read lock on init_mm to
-> provide mutual exclusion against ptdump, which acquires the init_mm write
-> lock.
+On 2026/7/10 22:44, Yonghong Song wrote:
 
-Hey Lorenzo,
+[...]
 
-Thanks for looking at this!
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 6515d4d3c003..26d281b77a6e 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -18873,6 +18873,20 @@ static int btf_id_allow_sleepable(u32 btf_id, unsigned long addr, const struct b
+>  	return -EINVAL;
+>  }
+>  
+> +static bool attach_uses_trampoline_retval(enum bpf_attach_type type)
+> +{
+> +	switch (type) {
+> +	case BPF_MODIFY_RETURN:
+> +	case BPF_TRACE_FEXIT:
+> +	case BPF_TRACE_FEXIT_MULTI:
+> +	case BPF_TRACE_FSESSION:
+> +	case BPF_TRACE_FSESSION_MULTI:
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+>  int bpf_check_attach_target(struct bpf_verifier_log *log,
+>  			    const struct bpf_prog *prog,
+>  			    const struct bpf_prog *tgt_prog,
+> @@ -19137,6 +19151,14 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+>  		if (ret < 0)
+>  			return ret;
+>  
+> +		if (tgt_info->fmodel.ret_size > 8 &&
+> +		    attach_uses_trampoline_retval(prog->expected_attach_type)) {
+> +			bpf_log(log,
+> +				"Attach to function %s with a >8 byte return value is not supported for this attach type\n",
+> +				tname);
+> +			return -EOPNOTSUPP;
+> +		}
+> +
+>  		/*
+>  		 * *.multi programs don't need an address during program
+>  		 * verification, we just take the module ref if needed.
+> @@ -19413,6 +19435,9 @@ int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 bt
+>  	err = btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
+>  	if (err < 0)
+>  		return err;
+> +	if (tgt_info->fmodel.ret_size > 8 &&
+> +	    attach_uses_trampoline_retval(prog->expected_attach_type))
+> +		return -EOPNOTSUPP;
+>  	if (btf_is_module(btf)) {
+>  		/* The bpf program already holds reference to module. */
+>  		if (WARN_ON_ONCE(!prog->aux->mod))
 
-This isn't wrong per-se. ptdump does _sometimes_ acquire the init_mm
-write lock.
 
-But the fun comes when ptdump_curknl_show() passes current->mm in to the
-ptdump code. In that case, there's no init_mm locking. I think the
-'efi_mm' code has the same issue since it shares some of the kernel page
-tables.
+I think there's no need to introduce the helper
+attach_uses_trampoline_retval().
 
-Is that your read on it too?
+See this untested diff:
 
-In the end, I think the issue is that there's not even *a* correct mmap
-lock to take. The userspace half of the address space needs the
-current->mm mmap lock and the kernel half needs the init_mm mmap lock.
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 03e2202cca13..899d5b129b54 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19023,6 +19023,7 @@ int bpf_check_attach_target(struct
+bpf_verifier_log *log,
+ 	const char prefix[] = "btf_trace_";
+ 	struct bpf_raw_event_map *btp;
+ 	int ret = 0, subprog = -1, i;
++	bool attach_retval = false;
+ 	const struct btf_type *t;
+ 	bool conservative = true;
+ 	const char *tname, *fname;
+@@ -19232,19 +19233,21 @@ int bpf_check_attach_target(struct
+bpf_verifier_log *log,
+ 		if (ret)
+ 			return ret;
+ 		break;
++	case BPF_MODIFY_RETURN:
++	case BPF_TRACE_FEXIT:
++	case BPF_TRACE_FEXIT_MULTI:
++	case BPF_TRACE_FSESSION:
++	case BPF_TRACE_FSESSION_MULTI:
++		attach_retval = true;
++		fallthrough;
+ 	default:
+-		if (!prog_extension)
++		if (!prog_extension && !attach_retval)
+ 			return -EINVAL;
+ 		fallthrough;
+-	case BPF_MODIFY_RETURN:
+ 	case BPF_LSM_MAC:
+ 	case BPF_LSM_CGROUP:
+ 	case BPF_TRACE_FENTRY:
+-	case BPF_TRACE_FEXIT:
+-	case BPF_TRACE_FSESSION:
+-	case BPF_TRACE_FSESSION_MULTI:
+ 	case BPF_TRACE_FENTRY_MULTI:
+-	case BPF_TRACE_FEXIT_MULTI:
+ 		if ((prog->expected_attach_type == BPF_TRACE_FSESSION ||
+ 		    prog->expected_attach_type == BPF_TRACE_FSESSION_MULTI) &&
+ 		    !bpf_jit_supports_fsession()) {
+@@ -19275,6 +19278,13 @@ int bpf_check_attach_target(struct
+bpf_verifier_log *log,
+ 		if (ret < 0)
+ 			return ret;
 
-The naming here doesn't help because the "current_kernel" file doesn't
-dump the current kernel page tables, it dumps the whole kernel *copy*
-(the only copy with PTI off) which includes userspace.
++		if (tgt_info->fmodel.ret_size > 8 && attach_retval) {
++			bpf_log(log,
++				"Attach to function %s with a >8 byte return value is not supported
+for this attach type\n",
++				tname);
++			return -EOPNOTSUPP;
++		}
++
+ 		/*
+ 		 * *.multi programs don't need an address during program
+ 		 * verification, we just take the module ref if needed.
+@@ -19551,6 +19561,13 @@ int bpf_check_attach_btf_id_multi(struct btf
+*btf, struct bpf_prog *prog, u32 bt
+ 	err = btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
+ 	if (err < 0)
+ 		return err;
++	switch (prog->expected_attach_type) {
++	case BPF_TRACE_FEXIT_MULTI:
++	case BPF_TRACE_FSESSION_MULTI:
++		if (tgt_info->fmodel.ret_size > 8)
++			return -EOPNOTSUPP;
++		break;
++	}
+ 	if (btf_is_module(btf)) {
+ 		/* The bpf program already holds reference to module. */
+ 		if (WARN_ON_ONCE(!prog->aux->mod))
 
-(Note: maybe we should hide "current_user" when PTI is off at runtime)
 
-So what do we do?
+WDYT?
 
-1. We could just bite the bullet and have separate ptdump files for the
-   top and bottom of the address space:
-	current_kernel_top
-	current_kernel_bottom
-	current_user_top
-	current_user_bottom
-	etc..
-   Then the lock you take is dictated by the file.
-2. We could always take both init_mm and current->mm locks. That seems
-   icky.
-3. We could have ptdump_walk_pgd() take a different lock for each
-   'range'. Logically:
+Thanks,
+Leon
 
-	if (range->start < PAGE_OFFSET)
-		mmap_write_lock(mm);
-	else
-		mmap_write_lock(&init_mm);
-
-   That's icky too and it means a range can't cross PAGE_OFFSET, but
-   that doesn't seem too bad (it could also WARN() if it sees bad
-   ranges).
-4. We do something fancier with the free like RCU (I think this may have
-   been discussed already).
-
-I'm kinda leaning toward #3.
