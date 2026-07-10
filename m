@@ -1,155 +1,154 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C85405C48
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 22:32:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783722727; cv=pass; b=HcLbNvaWDkLPhQFl1ELnJYFxcIvqWO3CKkiYwWt89iFrvblqeBP2KJy38Y9QXsK5LXVUrUuu/1QDFN7VrWT/UYLetFptjzx1g+qeBRB11iC5jaj+HbNl5fWiuQWjpMIfzYXDHiUuzdp7+hbcgQTYjsUphXfBScv1EAQOUHEBO/8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783722727; c=relaxed/simple;
-	bh=WXbjqKu+g5ONdz2wdFoLLO4mX1xfwAvvVyB7RpLnH20=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dW6eEFDrywqM1mJIoBd5KqTeuUsqeb3Ir+ZpaQOGod898zvnS8TnZsxuKsi8KCqPoxfvl896NkaQjerW8m6l2g1TkyK1tMQB8tw0QriiUtk4qg3VCCsilByW+ov1wsRcThJKPMLruvcHP799pOK1+x1LwQM+jt94WbK7JTVrz/I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kV+z0u6x; arc=pass smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kV+z0u6x"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2ce9e39fccbso2242815ad.1
-        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 15:32:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783722726; cv=none;
-        d=google.com; s=arc-20260327;
-        b=OUxxR5iYdbE1EUH9tiQVEYjQSgTifX/Mmdy4x/huaciBLpB3Lav7BfLy1Ana3L6zFG
-         sGPzavce9SFrV6RpxWfSNw1gibCKINcMMJhgWVXbpVMXQGbPpGDvlc9wvsc0YhcEFozl
-         bsmb4VW4+XVdhyJl/h5kRXTAXWko3bna5u+xFbuEKopbjl3SIEjmQbkLph0ovN4WVFPF
-         u2tiBhb+cOBrrZmV4BpBmjgA/XBrQQYC/93+xPZI1msJEXkS3g+vMg/2hstx+VIg2aCQ
-         o4ZVP9n6WkFjtnlFg5Y8UeiYDJJErEhITEqHFdZ5aX7lUwAr4kiNKKWSPURKv22YsCQd
-         d1iw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=NyhOhTcFEIPyPVjmK5oFc5WLCsPA2TzQIHNnbE+6jhk=;
-        fh=zCSzYjVZ+wAlrZHTxMEgmtbOcOHVIiInm1RqIvj3hvY=;
-        b=SDpbL+4KJ3H42B5PL7h1IingT2s7nbdBdKN5UtkfQtltSZUQVLBxOhAcJLsmsqIXzC
-         if/Qh3eoIUHEPOZcJ3cRXqky7ghvlot1E45G5XG9B0eEiBjTIRZ92S4sa/DGEdTk2dIw
-         kz2I+L/j8QVHqrppxgsIfAZugvaf+u27+my7KvuKPqN+AQfognk/oZfWvVK7hqZnTLVL
-         ArgW8yrmTYXIv/GDBiqGLayjGSnmSNiplsHMeSbMLJYBlFi3CkeqIBFlMFAVSlFPE7Wt
-         jMsZhDW2t3qWLATrzPPmyWWnNxEc6CNyN7zEDhlL50jRCIxjQeDAs/9cOorDjKQkWOOP
-         QxlA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783722726; x=1784327526; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=NyhOhTcFEIPyPVjmK5oFc5WLCsPA2TzQIHNnbE+6jhk=;
-        b=kV+z0u6xcQsMp/Eko6ntJfNvDdcSG2XqOLbjr/P1zKHRs72XcBeFF4IiV4bTE9zD3k
-         +kJSLd3Wi9DZaofKdh9ObBTYI29v1eSPyeWco6Ct4KB/6c7fv3R4UjE4bLra3B5Gj7Gs
-         w/xCabX0d359OVFFTlLowjN6Q6z+NU11iY9LO+zRcjd5w1+Hh3SjLBnl1ayVnCTSBAn4
-         PfkJPQM9uUOTgwX6m0nchvmTbpMDdL4E+SKxBELjYLzmxJFftRQNSHKweigZFN+7OqHN
-         xcKezrd9X8Or2xrFvVoBJLQ2299v9CBIXZN8CR7l8mA0/Cdyqxjr313n/I8WmTHUXcmk
-         lYFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783722726; x=1784327526;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=NyhOhTcFEIPyPVjmK5oFc5WLCsPA2TzQIHNnbE+6jhk=;
-        b=WYgtGpFH5GJucWgQ3J4JTEffkJbP/TMluAQkymfHrytzlvvJ6uxYADiiE1CXStpKZQ
-         rW8zlRa0Aab8wIon1+jdPNy4BkHKbug7hINhwO5d8XpYEmkI+hlOHgyGNQcVOYq5mKIY
-         mrhMDC49TRP57VVwNE0GchdaxclY9bZuHrYXQ62qLvOxwbZLl3oH2xN7E/37vWVwc5rT
-         6xFQ2TB2vvf+Af/QniSQb9pqShZRL8xqW8X+A420hHn0zqLhVTHKrfGwZX6Qus1u/fOE
-         7h9VjPsZs/atDCAnDwJ/Jeme1hjJkmhJ2gT6CF/T/sfpRsFoZ0g4iQqkJQImAKjJQ+x9
-         ACIA==
-X-Forwarded-Encrypted: i=1; AHgh+RqH51CbOMlJKs4VES6euwP+MsJBnz+AEeTz6z83TA/QtP47o8A15uTjQHoLSZFIsoNN1EI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygQdXYl+kXitatZwZGFpovyld01obTVdL+KBl+EPV3JPDvKPxo
-	4zabBH20e8JPWSarzSImuFP05cy/muACtExSN43ls43pL/ACqEz75s0Xu79qhUfSiZa7dBFGeiw
-	3a3Sw4w/OfuWIj+kJayoPDqMN05Qcb0g=
-X-Gm-Gg: AfdE7ckUVLuOsKasb6aEnnXwiXeCqxzQk7xl50X6DLVdN0y/4kSH7FxmOpUW8n7mzva
-	G8IY1yTc19b31LHyVLaGssaUFmB5rqJdtvLQX296NumViTQQHXRtr2Zcno6HxBeqDBmRPNwarsn
-	LzuVGhamDeNOtVen8P++I8xu+JJMkr9QBw+bYlgbE6AOUJEYWHqFbiQQRoMQ5S0K5uIt65zsEoi
-	ddlo7t654h6OTLOSzhrqUuB+oNI4SRJdFhJqbAW9A4XSc8blB3TOdIXt4fc7/LcTR4CozWZzAFX
-	iicgQSNyUFMhKJpi7IHU7dxejOzevdE/0CEEzBiy0ruawUEajm6+4w==
-X-Received: by 2002:a05:6a20:3d0c:b0:3a8:800:bdf4 with SMTP id
- adf61e73a8af0-3c0f0beee64mr6387057637.33.1783722725648; Fri, 10 Jul 2026
- 15:32:05 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C39D407CD0
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 22:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783723940; cv=none; b=fyzVVVsc+uYD3gYTKNcWiEhzEEoZ2WKFbpja+1OZJAbI0g6B2EhJ4EtVwBdnyEe7VfT65bQeLdQRgltNeN2NmFbnuevPKny6+De7oefQVpiyLqsvHrucjgySRGm7ripBl2flC2UeY0KY0ZtBPOJ/2jPl7MxXRlqQ404uJ9OdwYw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783723940; c=relaxed/simple;
+	bh=6/qRW75XChC7jhCjvD2gM2hqJiLnMtNMZRyECY2rcwQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Vwvkqjf/tVO//DiOs6me1AI43XZ74aJJSD0P3nKmuI9YHJHS1wGY/ZIrKsQnYArIRdov3LrBP47drXNS3h2vwm/aan2v13NFiBsh3WofjVDtrTObVJQGVU2pYzhDW0F21Q38/fEoUJdGaG/1nSbFFYB6N7TmLkH/QtuaWktS9HQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 0216A1D7B995C5; Fri, 10 Jul 2026 15:52:12 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	kernel-team@fb.com,
+	Leon Hwang <leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v3 1/3] bpf: Reject >8 byte return values on return-reading trampoline paths
+Date: Fri, 10 Jul 2026 15:52:11 -0700
+Message-ID: <20260710225211.4013521-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260710225206.4013062-1-yonghong.song@linux.dev>
+References: <20260710225206.4013062-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260708193239.5063-1-emil@etsalapatis.com> <CAEf4Bzarum7QXKT+BuvBa9kSrjMX=BzknWFKQBQuROKOWFeuZQ@mail.gmail.com>
- <cbee8f83f6e11ac58afa366317d52e64473b2736.camel@gmail.com>
-In-Reply-To: <cbee8f83f6e11ac58afa366317d52e64473b2736.camel@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 10 Jul 2026 15:31:51 -0700
-X-Gm-Features: AVVi8Cek6HCZx8SraJqjeiIqLYRBxL3CVi3Cj5oiM64DJj6tLvkViVaIAORy6c4
-Message-ID: <CAEf4Bza300gZu8PxspoF1VF8uNG4ihsANOMOhzZSxJHrGQUqww@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: veristat: Minimize map size
- during verification
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org, ast@kernel.org, 
-	andrii@kernel.org, memxor@gmail.com, daniel@iogearbox.net
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 10, 2026 at 2:50=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Fri, 2026-07-10 at 14:44 -0700, Andrii Nakryiko wrote:
->
-> [...]
->
-> > > @@ -1248,6 +1248,29 @@ static void fixup_obj_maps(struct bpf_object *=
-obj)
-> > >
-> > >                 /* fix up map size, if necessary */
-> > >                 switch (bpf_map__type(map)) {
-> > > +               /*
-> > > +                * if the verifier doesn't use max_entries
-> > > +                * then set to 1 to avoid -ENOMEM
-> > > +                */
-> > > +               case BPF_MAP_TYPE_HASH:
-> >
-> >
-> > I'm wondering if we should add ARRAY here as that one is actually with
-> > high likelihood will be large, though there are some corner cases
-> > where size might matter (e.g., existing code omits error checking
-> > knowing that verifier will prove it can never fail; resizing to 1
-> > might pessimize such check, probably, if index is larger than 1). Can
-> > you actually try the latter scenario with some small program, I'm
-> > curious how the verifier will behave?
->
-> For array maps there are several complications: first is the constant
-> maps handling and second is null check elision. The latter is somewhat
-> nasty, see check_helper_call():
->
+btf_distill_func_proto() builds the function model used for the
+fentry/fexit/fmod_ret/fsession trampolines and struct_ops. It has
+accepted a 16-byte __int128 return value since the trampoline was
+introduced: __get_type_size() returns the integer's type size, and the
+return-type check only rejected ret < 0.
 
-yeah, I was thinking about that bit. Worst case, (valid) BPF code can
-have, say, 8-element array and have all the keys within [0, 7] range,
-by *decreasing* map to less than 8 elements we actually force NULL
-check.
+But the BPF trampoline preserves only 8 bytes of the return value (RAX on
+x86, i.e. R0). For an attach type that reads the target's return value th=
+e
+second half (RDX / R3) is neither saved nor restored, so a program
+attached to a function returning a 16-byte value corrupts the value seen
+by the real caller and itself observes only half of it. struct_ops
+trampolines have the same limitation.
 
-Anyways, ARRAY, I believe, is one of the maps that caused this
-feature, so I think maybe we should still do a dirt-but-practical
-approach, and just cap ARRAY size if it exceeds some modest size
-(e.g., 128K, or something).
+This affects the attach types that read the target's return value: fexit,
+fmod_ret and fsession (plus the _multi variants of fexit and fsession),
+and struct_ops. fentry/fentry_multi run before the target returns and are
+unaffected.
 
-Oh well, capping non-ARRAYs is useful anyways, so let's keep it as is for n=
-ow.
+Reject a >8 byte return value for these attach types in
+bpf_check_attach_target() and bpf_check_attach_btf_id_multi(), and for
+struct_ops in bpf_struct_ops_desc_init().
 
->          case RET_PTR_TO_MAP_VALUE:
->                  ...
->                  if (func_id =3D=3D BPF_FUNC_map_lookup_elem &&
->                      can_elide_value_nullness(meta.map.ptr) && <-------- =
-true for array maps
->                      meta.const_map_key >=3D 0 &&
->                      meta.const_map_key < meta.map.ptr->max_entries) <-- =
-checks max_entries
->                          ret_flag &=3D ~PTR_MAYBE_NULL;
->
-> [...]
+Fixes: fec56f5890d9 ("bpf: Introduce BPF trampoline")
+Cc: Leon Hwang <leon.hwang@linux.dev>
+Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ kernel/bpf/bpf_struct_ops.c | 12 ++++++++++++
+ kernel/bpf/verifier.c       | 25 +++++++++++++++++++++++++
+ 2 files changed, 37 insertions(+)
+
+diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+index 51b16e5f5534..4e7a48c02be5 100644
+--- a/kernel/bpf/bpf_struct_ops.c
++++ b/kernel/bpf/bpf_struct_ops.c
+@@ -445,6 +445,18 @@ int bpf_struct_ops_desc_init(struct bpf_struct_ops_d=
+esc *st_ops_desc,
+ 			goto errout;
+ 		}
+=20
++		/*
++		 * A >8 byte return value is passed back in a register pair,
++		 * which the struct_ops trampoline does not preserve (only
++		 * 8 bytes of the return value are saved and restored).
++		 */
++		if (st_ops->func_models[i].ret_size > 8) {
++			pr_warn("func ptr %s in struct %s has a >8 byte return value, which i=
+s not supported\n",
++				mname, st_ops->name);
++			err =3D -EOPNOTSUPP;
++			goto errout;
++		}
++
+ 		stub_func_addr =3D *(void **)(st_ops->cfi_stubs + moff);
+ 		err =3D prepare_arg_info(btf, st_ops->name, mname,
+ 				       func_proto, stub_func_addr,
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 6515d4d3c003..26d281b77a6e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -18873,6 +18873,20 @@ static int btf_id_allow_sleepable(u32 btf_id, un=
+signed long addr, const struct b
+ 	return -EINVAL;
+ }
+=20
++static bool attach_uses_trampoline_retval(enum bpf_attach_type type)
++{
++	switch (type) {
++	case BPF_MODIFY_RETURN:
++	case BPF_TRACE_FEXIT:
++	case BPF_TRACE_FEXIT_MULTI:
++	case BPF_TRACE_FSESSION:
++	case BPF_TRACE_FSESSION_MULTI:
++		return true;
++	default:
++		return false;
++	}
++}
++
+ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 			    const struct bpf_prog *prog,
+ 			    const struct bpf_prog *tgt_prog,
+@@ -19137,6 +19151,14 @@ int bpf_check_attach_target(struct bpf_verifier_=
+log *log,
+ 		if (ret < 0)
+ 			return ret;
+=20
++		if (tgt_info->fmodel.ret_size > 8 &&
++		    attach_uses_trampoline_retval(prog->expected_attach_type)) {
++			bpf_log(log,
++				"Attach to function %s with a >8 byte return value is not supported =
+for this attach type\n",
++				tname);
++			return -EOPNOTSUPP;
++		}
++
+ 		/*
+ 		 * *.multi programs don't need an address during program
+ 		 * verification, we just take the module ref if needed.
+@@ -19413,6 +19435,9 @@ int bpf_check_attach_btf_id_multi(struct btf *btf=
+, struct bpf_prog *prog, u32 bt
+ 	err =3D btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
+ 	if (err < 0)
+ 		return err;
++	if (tgt_info->fmodel.ret_size > 8 &&
++	    attach_uses_trampoline_retval(prog->expected_attach_type))
++		return -EOPNOTSUPP;
+ 	if (btf_is_module(btf)) {
+ 		/* The bpf program already holds reference to module. */
+ 		if (WARN_ON_ONCE(!prog->aux->mod))
+--=20
+2.53.0-Meta
+
