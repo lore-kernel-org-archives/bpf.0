@@ -1,265 +1,74 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CAFF40861E
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 22:52:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98FBC409113;
+	Fri, 10 Jul 2026 22:58:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783723955; cv=none; b=IUGoPx0BRXT89zsPHTbXJ24ObV0i84M2Ljs3w4wdlg27uMFoGUnSL4fF9bXggCXnbaC47rwfPAeNJr8QTUEI2ZRBq+VlruyFc1PYggzgsfbw3AXDRaZM9eU9n+LCmcCi+TGhvq/zxjMlFNCPYBBTdonQZ6XZTToBrZeRDmoYVhg=
+	t=1783724296; cv=none; b=RTMK2P4OVbzvvRWmwi8vikjPyhs4IesrcnAsr+AycP4KUpeaBbv/f0x/3drH0/tGUv5PFz2BydoTuZpc/vyN1Dgz4LN3lpDO8s1LS7/Q0xA/IP124M2+5LX1ARF+Dq9rMEzxZvTMqXS4w4Y/rRgQeNCDcmnC7gLCNEtUBBuNuzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783723955; c=relaxed/simple;
-	bh=4PwN/DbfYDmRJbI+8T4C5lrfLnkKLp1ubC8DAUTMKNA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NuQ77Uq2481PJ+AonsxsGA0CmamEFQgbFBI/oI3xo3qGrZg3sN+KDU46Nx6Igv6bfgUnKsqeo+0C2un/Kr21l5XAzxcSq4aTLP+dZAoFy6h/ECwBuGzqEhjK8IloTn/KQ0HA4BUh3LhTVQtdd+BnHYEMxmZWlTLtQPF4yHU0PUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 3E15C1D7B99646; Fri, 10 Jul 2026 15:52:22 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel-team@fb.com
-Subject: [PATCH bpf-next v3 3/3] selftests/bpf: Add tests for >8 byte return value and 128-bit arguments
-Date: Fri, 10 Jul 2026 15:52:22 -0700
-Message-ID: <20260710225222.4015115-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260710225206.4013062-1-yonghong.song@linux.dev>
-References: <20260710225206.4013062-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1783724296; c=relaxed/simple;
+	bh=ksk5xHB55C1gKPFKRtj+3WonSiaIUl5BUqL+zBJMUSo=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=ZqRyIewGi3guOFtWU4kQGFWVWkWxrzVl+IXXZNzCcsIDcODPCsNd2exY+GVIOj1HIU5lCMFqCm1/XT3LiaBb9C1ddaE9ZN/QgGbv7/z32zFhQZsuMkSiHmIu9Gh6VGDf9+Yooq+gH5ZGI7zDPtnnPhaoh/osK15rS+n/C3E22BE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jp/Vt/Q2; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jp/Vt/Q2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F19DA1F00A3D;
+	Fri, 10 Jul 2026 22:58:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783724295;
+	bh=ksk5xHB55C1gKPFKRtj+3WonSiaIUl5BUqL+zBJMUSo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=jp/Vt/Q2RrYsDMxOPy2ypsXz2I5dT3bnIEuw0mvudzhrLevg9vhfBQs8Y7bJrssz2
+	 RI9CedBQjEXoNBgomZNwJBA8Rn9jh7sVvEm37zvVIN8QLQO6BBUge18PIbYqnjIUeb
+	 eq5p3Wlm+SIor5mSs7aJefo5DXfseHpbHo9kyWGAyRPnAtngMHkiAnB9cN8TA30xxD
+	 7RA25DrTVvaegPuAx2/2rYIwLhe87sTSNFCoJshm4SU+yuNH8odUr5yLfkpPhCJSVt
+	 mB3uP0YOaaoUm9mNxOBb9OwDzqRf7dqUUi4uBsguND56GSH6HBfpOguwXK83nqAzKK
+	 ORQTDKTrAU2nA==
+Content-Type: multipart/mixed; boundary="===============7832514225920395158=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <05a45237020c1f414f43eb56439781f439671e039d14d8384e5ed852d52ee3bd@mail.kernel.org>
+In-Reply-To: <20260710-selftests-bpf_fixes-v1-4-aa24dfd6f4f9@suse.com>
+References: <20260710-selftests-bpf_fixes-v1-4-aa24dfd6f4f9@suse.com>
+Subject: Re: [PATCH 4/4] libbpf: Search /lib64 and /lib in resolve_full_path()
+From: bot+bpf-ci@kernel.org
+To: rbm@suse.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,alexis.lothore@bootlin.com,ihor.solodrai@linux.dev,brauner@kernel.org
+Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 10 Jul 2026 22:58:14 +0000 (UTC)
 
-The BPF trampoline preserves only 8 bytes of the target's return value
-(R0), so attaching an fexit/fmod_ret/fsession program to a function that
-returns a >8 byte value is now rejected by the verifier. Add a bpf_testmo=
-d
-function returning __int128 and an fexit program that targets it. The
-program is expected to fail to load with the "with a >8 byte return value
-is not supported for this attach type" message.
+--===============7832514225920395158==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
 
-A 128-bit __int128 argument is passed in a register pair and occupies two
-trampoline context slots. Add a bpf_testmod function taking a leading
-__int128 argument followed by an int and a long, and an fexit program tha=
-t
-reads those two trailing arguments and the return value, verifying that t=
-he
-trampoline reserves enough stack for the 128-bit argument and places the
-following arguments and the return value at the right context slots.
+PiAgICAgbGliYnBmOiBTZWFyY2ggL2xpYjY0IGFuZCAvbGliIGluIHJlc29sdmVfZnVsbF9wYXRo
+KCkKPgo+ICAgICBhdHRhY2hfcHJvYmUvdXByb2JlLWxpYiBhbmQgdXByb2JlX2F1dG9hdHRhY2gg
+c2VsZnRlc3RzIGZhaWwgd2l0aCAiZmFpbGVkCj4gICAgIHRvIHJlc29sdmUgZnVsbCBwYXRoIGZv
+ciBsaWJjLnNvLjYiIG9uIG9sZGVyIG5vbi11c3JtZXJnZWQgZGlzdHJvcywgd2hlcmUKPiAgICAg
+bGliYy5zby42IGxpdmVzIHVuZGVyIGEgdG9wLWxldmVsIC9saWI2NCBvciAvbGliIHJhdGhlciB0
+aGFuIC91c3IvbGliNjQgb3IKPiAgICAgL3Vzci9saWIuIEFkZCAvbGliNjQ6L2xpYiB0byB0aGUg
+c2VhcmNoIHBhdGhzLCBhbG9uZ3NpZGUgdGhlIGV4aXN0aW5nCj4gICAgIC91c3IvbGliNjQ6L3Vz
+ci9saWIgYW5kIERlYmlhbiBtdWx0aWFyY2ggZW50cmllcy4KPgo+ICAgICBTaWduZWQtb2ZmLWJ5
+OiBSaWNhcmRvIEIuIE1hcmxpw6hyZSA8cmJtQHN1c2UuY29tPgoKVGhpcyBsb29rcyBsaWtlIGEg
+YnVnIGZpeCBmb3IgdGhlIHNoYXJlZC1saWJyYXJ5IHNlYXJjaCBwYXRoLiAgU2hvdWxkCnRoaXMg
+aW5jbHVkZSBhIEZpeGVzOiB0YWc/CgpyZXNvbHZlX2Z1bGxfcGF0aCgpIHdhcyBpbnRyb2R1Y2Vk
+IHdpdGggYSBzZWFyY2gtcGF0aCBsaXN0IG9mIG9ubHkKTERfTElCUkFSWV9QQVRIIGFuZCAiL3Vz
+ci9saWI2NDovdXNyL2xpYiIsIHdoaWNoIG9taXR0ZWQgdGhlIHRvcC1sZXZlbAovbGliNjQgYW5k
+IC9saWIgZGlyZWN0b3JpZXMgZnJvbSB0aGUgc3RhcnQuICBUaGUgbGF0ZXIgYWRkaXRpb24gb2Yg
+dGhlCkRlYmlhbiBtdWx0aWFyY2ggL2xpYi88dHJpcGxlPiBwYXRocyBkaWQgbm90IGFkZCAvbGli
+NjQ6L2xpYiBlaXRoZXIsIHNvCnRoZSBvbWlzc2lvbiBoYXMgZXhpc3RlZCBzaW5jZSB0aGUgZnVu
+Y3Rpb24gd2FzIGNyZWF0ZWQ6CgogIEZpeGVzOiAxY2UzYTYwZTNjMjggKCJsaWJicGY6IGF1dG8t
+cmVzb2x2ZSBwcm9ncmFtcy9saWJyYXJpZXMgd2hlbiBuZWNlc3NhcnkgZm9yIHVwcm9iZXMiKQoK
+Ci0tLQpBSSByZXZpZXdlZCB5b3VyIHBhdGNoLiBQbGVhc2UgZml4IHRoZSBidWcgb3IgZW1haWwg
+cmVwbHkgd2h5IGl0J3Mgbm90IGEgYnVnLgpTZWU6IGh0dHBzOi8vZ2l0aHViLmNvbS9rZXJuZWwt
+cGF0Y2hlcy92bXRlc3QvYmxvYi9tYXN0ZXIvY2kvY2xhdWRlL1JFQURNRS5tZAoKQ0kgcnVuIHN1
+bW1hcnk6IGh0dHBzOi8vZ2l0aHViLmNvbS9rZXJuZWwtcGF0Y2hlcy9icGYvYWN0aW9ucy9ydW5z
+LzI5MTI3NjY4NzA4
 
-__int128 is only available on 64-bit targets (where the compiler defines
-__SIZEOF_INT128__). The argument test additionally depends on the calling
-convention: x86_64 and arm64 pass an __int128 in a register pair as the
-trampoline expects, while other architectures pass it differently (e.g.
-s390x passes larger arguments by reference), so that subtest runs only on
-x86_64 and arm64 and is skipped elsewhere.
-
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../bpf/prog_tests/tracing_failure.c          | 12 +++++++
- .../selftests/bpf/prog_tests/tracing_struct.c | 36 +++++++++++++++++++
- .../selftests/bpf/progs/tracing_failure.c     |  6 ++++
- .../bpf/progs/tracing_struct_int128.c         | 18 ++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    | 32 +++++++++++++++++
- 5 files changed, 104 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
-28.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_failure.c b/t=
-ools/testing/selftests/bpf/prog_tests/tracing_failure.c
-index f9f9e1cb87bf..345dd21ad621 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_failure.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_failure.c
-@@ -76,6 +76,16 @@ static void test_fexit_noreturns(void)
- 			       "Attaching fexit/fsession/fmod_ret to __noreturn function 'do_=
-exit' is rejected.");
- }
-=20
-+static void test_fexit_int128_ret(void)
-+{
-+#ifdef __SIZEOF_INT128__
-+	test_tracing_fail_prog("fexit_int128_ret",
-+			       "with a >8 byte return value is not supported for this attach =
-type");
-+#else
-+	test__skip();
-+#endif
-+}
-+
- void test_tracing_failure(void)
- {
- 	if (test__start_subtest("bpf_spin_lock"))
-@@ -86,4 +96,6 @@ void test_tracing_failure(void)
- 		test_tracing_deny();
- 	if (test__start_subtest("fexit_noreturns"))
- 		test_fexit_noreturns();
-+	if (test__start_subtest("fexit_int128_ret"))
-+		test_fexit_int128_ret();
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/to=
-ols/testing/selftests/bpf/prog_tests/tracing_struct.c
-index 6f8c0bfb0415..15b95d0235b5 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-@@ -4,6 +4,7 @@
- #include <test_progs.h>
- #include "tracing_struct.skel.h"
- #include "tracing_struct_many_args.skel.h"
-+#include "tracing_struct_int128.skel.h"
-=20
- static void test_struct_args(void)
- {
-@@ -112,6 +113,39 @@ static void test_struct_many_args(void)
- 	tracing_struct_many_args__destroy(skel);
- }
-=20
-+static void test_int128_args(void)
-+{
-+	/*
-+	 * __int128 arguments are passed in a register pair on x86_64 and
-+	 * arm64, which the trampoline packs into two context slots. Other
-+	 * architectures pass a __int128 differently (e.g. s390x passes larger
-+	 * arguments by reference), so only exercise this on x86_64 and arm64.
-+	 */
-+#if defined(__x86_64__) || defined(__aarch64__)
-+	struct tracing_struct_int128 *skel;
-+	int err;
-+
-+	skel =3D tracing_struct_int128__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "tracing_struct_int128__open_and_load"))
-+		return;
-+
-+	err =3D tracing_struct_int128__attach(skel);
-+	if (!ASSERT_OK(err, "tracing_struct_int128__attach"))
-+		goto destroy_skel;
-+
-+	ASSERT_OK(trigger_module_test_read(256), "trigger_read");
-+
-+	ASSERT_EQ(skel->bss->t_b, 2, "t:b");
-+	ASSERT_EQ(skel->bss->t_c, 3, "t:c");
-+	ASSERT_EQ(skel->bss->t_ret, 6, "t ret");
-+
-+destroy_skel:
-+	tracing_struct_int128__destroy(skel);
-+#else
-+	test__skip();
-+#endif
-+}
-+
- static void test_union_args(void)
- {
- 	struct tracing_struct *skel;
-@@ -145,6 +179,8 @@ void test_tracing_struct(void)
- 		test_struct_args();
- 	if (test__start_subtest("struct_many_args"))
- 		test_struct_many_args();
-+	if (test__start_subtest("int128_args"))
-+		test_int128_args();
- 	if (test__start_subtest("union_args"))
- 		test_union_args();
- }
-diff --git a/tools/testing/selftests/bpf/progs/tracing_failure.c b/tools/=
-testing/selftests/bpf/progs/tracing_failure.c
-index 65e485c4468c..f7a095767679 100644
---- a/tools/testing/selftests/bpf/progs/tracing_failure.c
-+++ b/tools/testing/selftests/bpf/progs/tracing_failure.c
-@@ -30,3 +30,9 @@ int BPF_PROG(fexit_noreturns)
- {
- 	return 0;
- }
-+
-+SEC("?fexit/bpf_testmod_test_int128_ret")
-+int BPF_PROG(fexit_int128_ret)
-+{
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128.c b/=
-tools/testing/selftests/bpf/progs/tracing_struct_int128.c
-new file mode 100644
-index 000000000000..4638dfec1f38
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128.c
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+long t_b, t_c, t_ret;
-+
-+SEC("fexit/bpf_testmod_test_int128_arg")
-+int test_int128_arg_fexit(unsigned long long *ctx)
-+{
-+	t_b =3D (int)ctx[2];
-+	t_c =3D (long)ctx[3];
-+	t_ret =3D (long)ctx[4];
-+	return 0;
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 30f1cd23093c..eb0f9b5e18d8 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -161,6 +161,33 @@ bpf_testmod_test_arg_ptr_to_struct(struct bpf_testmo=
-d_struct_arg_1 *a) {
- 	return bpf_testmod_test_struct_arg_result;
- }
-=20
-+#ifdef __SIZEOF_INT128__
-+noinline __int128
-+bpf_testmod_test_int128_ret(int a)
-+{
-+	bpf_testmod_test_struct_arg_result =3D a;
-+	return (__int128)a;
-+}
-+
-+/*
-+ * The __int128 'a' is the first argument on purpose. On arm64 a 16-byte
-+ * argument must start in an even-numbered register pair, so placing it
-+ * after a single-register scalar would leave a padding register (x1)
-+ * unused. pahole maps parameters to registers positionally and would th=
-en
-+ * see the following argument in an "unexpected" register and skip BTF
-+ * encoding of the whole function, making it unattachable. Keeping the
-+ * __int128 first (x0:x1) avoids the padding while still exercising the
-+ * trampoline packing of a 128-bit argument together with the trailing
-+ * int and long arguments.
-+ */
-+noinline long
-+bpf_testmod_test_int128_arg(__int128 a, int b, long c)
-+{
-+	bpf_testmod_test_struct_arg_result =3D (long)a + b + c;
-+	return bpf_testmod_test_struct_arg_result;
-+}
-+#endif
-+
- __weak noinline void bpf_testmod_looooooooooooooooooooooooooooooong_name=
-(void)
- {
- }
-@@ -514,6 +541,11 @@ bpf_testmod_test_read(struct file *file, struct kobj=
-ect *kobj,
-=20
- 	(void)bpf_testmod_test_arg_ptr_to_struct(&struct_arg1_2);
-=20
-+#ifdef __SIZEOF_INT128__
-+	(void)bpf_testmod_test_int128_ret(i);
-+	(void)bpf_testmod_test_int128_arg((__int128)1, 2, 3);
-+#endif
-+
- 	(void)trace_bpf_testmod_test_raw_tp_null_tp(NULL);
-=20
- 	bpf_testmod_test_struct_ops3();
---=20
-2.53.0-Meta
-
+--===============7832514225920395158==--
