@@ -1,208 +1,201 @@
-Received: from mail-wm2-f6.google.com (mail-wm2-f6.google.com [74.125.225.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 309FF24E4C6
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 17:40:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD7920C00C
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 17:45:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783705213; cv=none; b=Bj26m+AtTJ6qXeGAmjnDIUm2xf/kNUZD1PSv5PT2q6iHu541nhp8sGomM+wEEh9JrsyccJtgC4NR5VZvWyTc4ObNwZWwlRhI2DRCJLg2TY6zpJBqH1kclBpsR5QvuuwDt46CXR+xyXYMjBH4vQ1SxDyosXEdHzUHfuH1XRbfzxg=
+	t=1783705538; cv=none; b=fcL2oGOlLhtW6E/DogqiWG7celubhQW+M0wWFDter0rtTtbtccsYthIF5SCy9SVGSDIa8Inso0eTfqoR/6VsF4zHbPH1mZiinkzHnPCepASJwO0oaCefkcrpF9kV8tii47x9PYZfgSIh5EPSpYEv6xno6pbMF87QCDeNGJ4cidk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783705213; c=relaxed/simple;
-	bh=XPEclRDiV6omwaNGtbkvqNxg8v1YbFaAyQAFObbhTHM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=i0C+NapfzGqQl5PqwFTV1J8VIISa+xq/A0daZNWIScQyurWYc12NRPcz1RN/quQHP5C6Ul57VvgTLR+rEdAc2I1DzSG+9VkBf+b6m9va5RvySiXd6wl3ov5N9Bea+X2O5rHSUvs93gFxfSv7lv/hrXYIiq/a3qOVSS3Q4BeKX/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bxJph1NN; arc=none smtp.client-ip=74.125.225.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783705538; c=relaxed/simple;
+	bh=nY7Kr3ZkR2wIycYZFiJm76QQaOfw8DQR3G+56wMiVOs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GWh78ifjmFshoI6al2x1EsfPItF7YBWT4Oso6vB+E3lLL943siF+gUg10wEGkO16uSakJuH2Ou6dlxNG0RSP7zbR/q8EiMl7KifA1OrryUoCqR+Ho7KgXRX7XBxlxNBXqqGZf+pP1f2/N7uxHMTpC3ugnvzrXIyXGSL4lJuRzFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Sv2PXtpC; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bxJph1NN"
-Received: by mail-wm2-f6.google.com with SMTP id 5b1f17b1804b1-493e93e58b9so530515e9.1
-        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 10:40:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783705210; x=1784310010; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=/5RW30ZGJk1qNi/VtLris2HIPVm+vUZFh/AIp9+9TfI=;
-        b=bxJph1NNd3D5qWRgmpt9tT68qiA4ip3coStQQ9FOvCUcONIRe/w1SBWbu/oXIHnF7n
-         vc3qeH86C2y/mn4WZaBb+DkKefZPz+Ulw6zftJrMWKyB/iukpErmDCzgNahqRXr8pzRI
-         kSfNC4T8baqjP9NsT9zWk5aMsCg1EeNBVa3KCC56dPzbY7VxhWPpa9NeOu3e0UqOxC0i
-         QXOxpb+Dpan33Y09NHW6Z5tYl7KtBL3EUlJWW2ynRu2n9tCcIvpoOnhGiFwEc1cEO8h2
-         QxZAWmMg68i57KhRU1cAfiRzQhPzvcbujlu6zSx++/56/WOW74UNs6ktaVnpcO/ZCJP1
-         xUJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783705210; x=1784310010;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/5RW30ZGJk1qNi/VtLris2HIPVm+vUZFh/AIp9+9TfI=;
-        b=NzV7HddECpMckx6IuJ7me993zoXB1lVktIg/cfKJnfE+HVPqcivZdBISZDVQAfxZn8
-         C5dLgOUpNilCY7RD2YfEvEtw84fG6Y7lHEJVzNv6+8Ikbs0nACaY0deSzrsj7gx76aqM
-         x0vGfYnt7P+I7sBkxM8Tossb0o+WKWhwB1L0P4flN25nJGjMQ1tKMyDkDVf36AMPuSId
-         2BLGjTfUhvLTgp2VeoSxRoD+ZdoG1Stlq5lpZKc7c9qea7uX+S6EnX1FNK3BBYq7xr8Q
-         8xvtnbp1RsqIdlm4yItNztaqa9D/GKvfSbAH6xvb7PWVY0oxNG2nP13x0t4yvP9or4EQ
-         4Z1w==
-X-Gm-Message-State: AOJu0YzDPgb9SFnJsGX3v2m5pnbO58byveIrpVKJu/IJp6JD612Kb+EO
-	ZFILpYTRouKcv9W1X0n7u0SXCKaeYxKwd7Z9mP2dc0cY3/z3y2gP0zzBRu4DcvAe
-X-Gm-Gg: AfdE7cna1qDmIVflP8zi4TtP7NUDQDri0RFCiIBH5k/uNEA4E/ugbfFT2TWGr8WhonY
-	gC23KP09JXqwQSzcp1y35CtFRdaco1kKEz4BD/2o7YCNofREd07XaOlarE8ShQQNJJ8lD9ERmGn
-	81uz0ZVWFNZunMLkCJsJhzDCttgdxg7G8NoRGlIFyipqNz2ZxSLv8l3YaFH87Hrwcwn+ezLXnao
-	gA97dc1SU3Ai1VFxPMuAFwKkRcn3OFl7yLEiQK8sDo2WSwABSppf72QGhPOgONF/89VceRkXATx
-	kr50NmgsAURppavkWpZ/DFcDAnwVwbsyJqYjtPYBd3FDKMKKT5u1QxuzLDKCfrppKj+ghMgM0oJ
-	YIQFUZKX7AUrBU16u2Ea0Uc3AyiUve8PKScwE+anYz7MHzhKe9LRBGtl5F4CVCKigaoWHhIO26y
-	5A6K/WDldzBrpUkXARlvAS8p+moFGANvYhi62Kaafz4hzRlfty7jlfkxtFzoL7YkuVwhtg+59EG
-	GyMuBTolwBUzFYl06b3trCT+Wl1OJOrIHFu4VBNyP2dvnMoXDe2AlyZi5UpoX+S4g==
-X-Received: by 2002:a05:600c:4ec8:b0:48f:e230:29f5 with SMTP id 5b1f17b1804b1-493f2b445dbmr41872275e9.16.1783705210491;
-        Fri, 10 Jul 2026 10:40:10 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493eb6d5055sm153090725e9.5.2026.07.10.10.40.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 10:40:10 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Sv2PXtpC"
+Message-ID: <d989e94b-c84f-454d-a6b1-75a7eabfd3af@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783705533;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Cyq/I1pYpj9Z1uU76p5JNkjqODQ4MdT5oNHILYfJAJA=;
+	b=Sv2PXtpCOXRFcBozOBV4E6c5KvFf5ZD8ztq3+/cTsUnjeCwKhVTgRWMunhMMIu4Oqcyvot
+	waVzOEzViWshVGojFbEHes24U86vh5Lq02ut2p7BE7/0fNBj6ZngK8LzdaVWL7Drg8/hvI
+	CrKng2BmjGEmZtDnqVP+b3crhX69x5U=
+Date: Fri, 10 Jul 2026 10:45:03 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 10 Jul 2026 19:40:09 +0200
-Message-Id: <DJV2Q54OF8BU.1H6KXCS93P3N6@gmail.com>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf v1 1/2] bpf: Fix tracing of kfuncs with implicit
- args
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, <sashiko-reviews@lists.linux.dev>
-X-Mailer: aerc 0.21.0
-References: <20260710005902.2234832-1-ihor.solodrai@linux.dev>
- <20260710012112.577F31F000E9@smtp.kernel.org>
- <ce047740-79fe-4fc5-a118-40252b169be8@linux.dev>
- <DJV2D826YVRY.WSTQ4Z6CFX1I@gmail.com>
- <7a5bb678-4fab-44c8-98b5-272124e08847@linux.dev>
-In-Reply-To: <7a5bb678-4fab-44c8-98b5-272124e08847@linux.dev>
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf 1/2] bpf: Reject >8 byte return values on
+ return-reading trampoline paths
+Content-Language: en-GB
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, kernel-team@fb.com
+References: <20260710144404.2579671-1-yonghong.song@linux.dev>
+ <67bf1951-96be-4ccf-adc4-012c7e7f0055@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <67bf1951-96be-4ccf-adc4-012c7e7f0055@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri Jul 10, 2026 at 7:34 PM CEST, Ihor Solodrai wrote:
-> On 7/10/26 10:23 AM, Kumar Kartikeya Dwivedi wrote:
->> On Fri Jul 10, 2026 at 7:08 PM CEST, Ihor Solodrai wrote:
->>> On 7/9/26 6:21 PM, sashiko-bot@kernel.org wrote:
->>>> Thank you for your contribution! Sashiko AI review found 1 potential i=
-ssue(s) to consider:
->>>> - [High] Accessing `btf->kfunc_set_tab` without holding a module refer=
-ence causes a use-after-free vulnerability.
->>>> --
->>>>
->>>> --- Patch [1]: [PATCH bpf v1 1/2] bpf: Fix tracing of kfuncs with impl=
-icit args ---
->>>> commit 13df91bf669b3a55c459c1663fbf726f9f52bc5c
->>>> Author: Ihor Solodrai <ihor.solodrai@linux.dev>
->>>>
->>>> bpf: Fix tracing of kfuncs with implicit args
->>>>
->>>> A kfunc marked with KF_IMPLICIT_ARGS flag takes implicit arguments
->>>> (such as bpf_prog_aux) that the verifier injects at load time.
->>>> resolve_btfids strips those from the kfunc's BTF-visible prototype and
->>>> keeps the real kernel ABI in a counterpart _impl prototype.
->>>>
->>>> Link: https://github.com/sched-ext/scx/issues/3687#issuecomment-490669=
-4106
->>>>
->>>>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
->>>>> index 64572f85edc83..20aeca6b4f95c 100644
->>>>> --- a/kernel/bpf/btf.c
->>>>> +++ b/kernel/bpf/btf.c
->>>> [ ... ]
->>>>> @@ -9114,6 +9114,26 @@ u32 *btf_kfunc_flags(const struct btf *btf, u3=
-2 kfunc_btf_id, const struct bpf_p
->>>>>  	return btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
->>>>>  }
->>>>>
->>>>> +/*
->>>>> + * Return the union of a kfunc's flags across all hooks.
->>>>> + * Unlike btf_kfunc_flags(), not restricted to a calling
->>>>> + * program's hook. Used when attaching to a kfunc for tracing.
->>>>> + */
->>>>> +u32 btf_kfunc_accumulated_flags(const struct btf *btf, u32 kfunc_btf=
-_id)
->>>>> +{
->>>>> +	enum btf_kfunc_hook hook;
->>>>> +	u32 *hook_flags;
->>>>> +	u32 flags =3D 0;
->>>>> +
->>>>> +	for (hook =3D 0; hook < BTF_KFUNC_HOOK_MAX; hook++) {
->>>>> +		hook_flags =3D btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
->>>>> +		if (hook_flags)
->>>>> +			flags |=3D *hook_flags;
->>>>> +	}
->>>>> +
->>>>> +	return flags;
->>>>> +}
->>>>> +
->>>>>  u32 *btf_kfunc_is_modify_return(const struct btf *btf, u32 kfunc_btf=
-_id,
->>>>>  				const struct bpf_prog *prog)
->>>>>  {
->>>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->>>>> index 6515d4d3c0032..fde11a2f6869a 100644
->>>>> --- a/kernel/bpf/verifier.c
->>>>> +++ b/kernel/bpf/verifier.c
->>>> [ ... ]
->>>>> @@ -19121,8 +19146,8 @@ int bpf_check_attach_target(struct bpf_verifi=
-er_log *log,
->>>>>  		if (prog_extension &&
->>>>>  		    btf_check_type_match(log, prog, btf, t))
->>>>>  			return -EINVAL;
->>>>> -		t =3D btf_type_by_id(btf, t->type);
->>>>> -		if (!btf_type_is_func_proto(t))
->>>>> +		t =3D btf_attach_func_proto(log, btf, btf_id);
->>>>> +		if (!t || !btf_type_is_func_proto(t))
->>>>>  			return -EINVAL;
->>>>
->>
->> Also, why not do it for BPF_TRACE_ITER case as well? I just feel keeping=
- it
->> consistent may outweigh figuring out whether it's necessary in that case=
- or not,
->> etc.
+
+
+On 7/10/26 9:37 AM, Leon Hwang wrote:
+> On 2026/7/10 22:44, Yonghong Song wrote:
+>
+> [...]
+>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 6515d4d3c003..26d281b77a6e 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -18873,6 +18873,20 @@ static int btf_id_allow_sleepable(u32 btf_id, unsigned long addr, const struct b
+>>   	return -EINVAL;
+>>   }
+>>   
+>> +static bool attach_uses_trampoline_retval(enum bpf_attach_type type)
+>> +{
+>> +	switch (type) {
+>> +	case BPF_MODIFY_RETURN:
+>> +	case BPF_TRACE_FEXIT:
+>> +	case BPF_TRACE_FEXIT_MULTI:
+>> +	case BPF_TRACE_FSESSION:
+>> +	case BPF_TRACE_FSESSION_MULTI:
+>> +		return true;
+>> +	default:
+>> +		return false;
+>> +	}
+>> +}
+>> +
+>>   int bpf_check_attach_target(struct bpf_verifier_log *log,
+>>   			    const struct bpf_prog *prog,
+>>   			    const struct bpf_prog *tgt_prog,
+>> @@ -19137,6 +19151,14 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+>>   		if (ret < 0)
+>>   			return ret;
+>>   
+>> +		if (tgt_info->fmodel.ret_size > 8 &&
+>> +		    attach_uses_trampoline_retval(prog->expected_attach_type)) {
+>> +			bpf_log(log,
+>> +				"Attach to function %s with a >8 byte return value is not supported for this attach type\n",
+>> +				tname);
+>> +			return -EOPNOTSUPP;
+>> +		}
+>> +
+>>   		/*
+>>   		 * *.multi programs don't need an address during program
+>>   		 * verification, we just take the module ref if needed.
+>> @@ -19413,6 +19435,9 @@ int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 bt
+>>   	err = btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
+>>   	if (err < 0)
+>>   		return err;
+>> +	if (tgt_info->fmodel.ret_size > 8 &&
+>> +	    attach_uses_trampoline_retval(prog->expected_attach_type))
+>> +		return -EOPNOTSUPP;
+>>   	if (btf_is_module(btf)) {
+>>   		/* The bpf program already holds reference to module. */
+>>   		if (WARN_ON_ONCE(!prog->aux->mod))
+>
+> I think there's no need to introduce the helper
+> attach_uses_trampoline_retval().
+>
+> See this untested diff:
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 03e2202cca13..899d5b129b54 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -19023,6 +19023,7 @@ int bpf_check_attach_target(struct
+> bpf_verifier_log *log,
+>   	const char prefix[] = "btf_trace_";
+>   	struct bpf_raw_event_map *btp;
+>   	int ret = 0, subprog = -1, i;
+> +	bool attach_retval = false;
+>   	const struct btf_type *t;
+>   	bool conservative = true;
+>   	const char *tname, *fname;
+> @@ -19232,19 +19233,21 @@ int bpf_check_attach_target(struct
+> bpf_verifier_log *log,
+>   		if (ret)
+>   			return ret;
+>   		break;
+> +	case BPF_MODIFY_RETURN:
+> +	case BPF_TRACE_FEXIT:
+> +	case BPF_TRACE_FEXIT_MULTI:
+> +	case BPF_TRACE_FSESSION:
+> +	case BPF_TRACE_FSESSION_MULTI:
+> +		attach_retval = true;
+> +		fallthrough;
+>   	default:
+> -		if (!prog_extension)
+> +		if (!prog_extension && !attach_retval)
+>   			return -EINVAL;
+>   		fallthrough;
+> -	case BPF_MODIFY_RETURN:
+>   	case BPF_LSM_MAC:
+>   	case BPF_LSM_CGROUP:
+>   	case BPF_TRACE_FENTRY:
+> -	case BPF_TRACE_FEXIT:
+> -	case BPF_TRACE_FSESSION:
+> -	case BPF_TRACE_FSESSION_MULTI:
+>   	case BPF_TRACE_FENTRY_MULTI:
+> -	case BPF_TRACE_FEXIT_MULTI:
+>   		if ((prog->expected_attach_type == BPF_TRACE_FSESSION ||
+>   		    prog->expected_attach_type == BPF_TRACE_FSESSION_MULTI) &&
+>   		    !bpf_jit_supports_fsession()) {
+> @@ -19275,6 +19278,13 @@ int bpf_check_attach_target(struct
+
+Thanks for the suggestion. I still prefers the helper approach. It provides
+a single place in verifier.c to handle this case (tgt_info->fmodel.ret_size > 8).
+The above switch already very subtle and the change makes it even more subtle.
+
+> bpf_verifier_log *log,
+>   		if (ret < 0)
+>   			return ret;
+>
+> +		if (tgt_info->fmodel.ret_size > 8 && attach_retval) {
+> +			bpf_log(log,
+> +				"Attach to function %s with a >8 byte return value is not supported
+> for this attach type\n",
+> +				tname);
+> +			return -EOPNOTSUPP;
+> +		}
+> +
+>   		/*
+>   		 * *.multi programs don't need an address during program
+>   		 * verification, we just take the module ref if needed.
+> @@ -19551,6 +19561,13 @@ int bpf_check_attach_btf_id_multi(struct btf
+> *btf, struct bpf_prog *prog, u32 bt
+>   	err = btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
+>   	if (err < 0)
+>   		return err;
+> +	switch (prog->expected_attach_type) {
+> +	case BPF_TRACE_FEXIT_MULTI:
+> +	case BPF_TRACE_FSESSION_MULTI:
+> +		if (tgt_info->fmodel.ret_size > 8)
+> +			return -EOPNOTSUPP;
+> +		break;
+> +	}
+>   	if (btf_is_module(btf)) {
+>   		/* The bpf program already holds reference to module. */
+>   		if (WARN_ON_ONCE(!prog->aux->mod))
 >
 >
-> I mentioned this in the patch description:
+> WDYT?
 >
->   The BPF_TRACE_ITER case distills a registered iterator's
->   prototype, and bpf_struct_ops_desc_init() distills the
->   function-pointer members of a struct_ops type. Neither is
->   a kfunc, and so can't have implicit arguments.
+> Thanks,
+> Leon
 >
 
-Yeah, I saw that, but abstracting that inside the function and not having t=
-o
-think from the caller about those details would be better. That said, I don=
-'t
-have any strong preference, it is obviously correct as it is.
-
->
->>
->> Please supply a cover letter in the next version too since you're sendin=
-g
->> multiple patches.
->
-> I used the first patch's message as a cover letter, since it's
-> just a fix + selftest pair.
->
-> The series could be split further into refactoring changes, but I thought
-> it'll be easier to backport if the fix is in a single self-contained patc=
-h.
->
-> I think we want the fix to get into 7.2, and backport it to 7.1.
->
-> If it's ok to carry separate refactoring patches there, then I'll split.
-> Kartikeya, wdyt?
->
-
-You can still keep the patches as is, but just add a cover letter, it will =
-not
-affect backporting. The cover letter is just to summarize the series and th=
-e fix
-in the merge commit. Also, my understanding is that with the Fixes: tag, it
-should automatically be picked up for stable kernels.
