@@ -1,47 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4DAC78F26;
-	Fri, 10 Jul 2026 13:31:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B3B3DB635
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 13:44:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783690294; cv=none; b=AFIEw+Rsbb9F2sLWiR4e7+kXifRxQM4f0MqQR7PExLzroHvompAPM0yxpu3hOakzMDHxCtXn4/sUAPNX7CuzLLld7+AsoD0+2TgVKiGTozXBFdzUoWrENQMpxiIfTQUKf4+DGQpiltaHwWDRp9dSq+aY535lR9ftaNT51Kt2VJ8=
+	t=1783691062; cv=none; b=RivNXb78i34Iw2onZIcS3ObczhQzjxH2uDs4WsONz0x9Ysee/GywqXH4m645gu/LEDT5VYoJABNhbb9Kl7Z9Q/+f0DIWlbEiJZVmf9ODu+WG7YSS/r0+s6pPPkoUOWvamL3wniA9hfOw/JWOsU+nwAgcjyL1TwSeZQXSdnSEoVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783690294; c=relaxed/simple;
-	bh=54spsH38fkltmlTeS0fPxbfcoNt0muhafJ6arfo+/VI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iZVGblnf8ch2SFF6HzKpaXpUFJaCznlFMUVDPOIObPoEja1cfjCU/eyB5rqICaF29TjM07sCre8usMx6ZdwAcTqFRK5jkg8hdWSwqd36kC7fAvSp1ZK76qXA3fxS2xFDk+DyQ9zq7vFVa0B6nZu8u69vSG5ZccXr/Ou7J3Kd8Do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NvUWuuRX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783691062; c=relaxed/simple;
+	bh=qwHMDBFWR1k0UWvLNdMIuMrKrhMgKDoR4V6F0IWSv50=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=Zce3wWOXRRuYfpDF0mxEJTfn7GZfk9dSsaB/sNg8I21gHXsjtPjWQMKR9qCjLHQkhigxc31zle7n6+lj6y+leN3D8LYvT/xvpyC15FZzjGjipnpB9fl1C68AQCaLE29rfaWR34aHGi+oYHF/rmuSx6zNIrrgiufhG7hY8eWEW2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G5U0bpbF; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NvUWuuRX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E64591F000E9;
-	Fri, 10 Jul 2026 13:31:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1783690292;
-	bh=gd67u83X9mD7rQ0A2ywYAeabi5MI/7ohcs3gZ3c5PNE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=NvUWuuRXo+5/hGFE0H65WiXZ6Joaj0mhYLvEwlcRqnljpQ47JJ/JNPu0N+Cx1tMjT
-	 VkYxTHIwsWOpsxbRjiqeLKs6lJdRiZiNLhfzlb4WAsiYYkNNjFGKefc8a1Va158B3h
-	 4uTTGzW9cP2c/EWCTQSmsHTNSSi8h64ZtZA3wR+I=
-Date: Fri, 10 Jul 2026 15:31:28 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Maximilian Heyne <mheyne@amazon.de>
-Cc: stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	"Eric W. Biederman" <ebiederm@aristanetworks.com>,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 6.12.y] net: add missing ns_capable check for peer netns
-Message-ID: <2026071049-barrier-quote-624f@gregkh>
-References: <20260617-pats-coif-316245c6@mheyne-amazon>
- <2026062556-residue-anybody-e756@gregkh>
- <20260710-wry-moral-3892dd17@mheyne-amazon>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G5U0bpbF"
+Date: Fri, 10 Jul 2026 13:44:04 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783691057;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to; bh=qwHMDBFWR1k0UWvLNdMIuMrKrhMgKDoR4V6F0IWSv50=;
+	b=G5U0bpbF8agEPDE3klPjEPUiVMRwvLWMOCQDLOBiTTFttIkVuITo+SWIKp7K8Z7O+aSQsM
+	ia7a1twdK4oDPN2EXFW8J2Sbd6cS4glBsUkcPNiwx+I6hv+a/6cXIh0wAceJlOyz1rbJCT
+	8zTWxfRoJNLHUjXvMsCDyrXBKMguYEA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+To: Eric Dumazet <edumazet@google.com>, 
+	Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Jiayuan Chen <jiayuan.chen@linux.dev>, 
+	Emil Tsalapatis <emil@etsalapatis.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, Ben Cressey <ben@cressey.dev>
+Subject: Re: [PATCH bpf] bpf: tcp: Fix use-after-free in
+ bpf_iter_tcp_established_batch()
+Message-ID: <alD1FJjR5r5n5Eau@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,40 +47,21 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260710-wry-moral-3892dd17@mheyne-amazon>
+In-Reply-To: <20260620-bpf-iter-tcp-refcnt-v1-1-883bf9e69495@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Jul 10, 2026 at 12:49:54PM +0000, Maximilian Heyne wrote:
-> Hi Greg,
-> 
-> On Thu, Jun 25, 2026 at 12:37:31PM +0100, Greg KH wrote:
-> > On Wed, Jun 17, 2026 at 08:25:31AM +0000, Maximilian Heyne wrote:
-> > > The upstream commit 7b735ef81286 ("rtnetlink: add missing
-> > > netlink_ns_capable() check for peer netns") doesn't apply on older
-> > > stable kernels due to refactoring. Therefore, this patch is an attempt
-> > > to implement the same capability check just directly in the respective
-> > > interface types.
-> > 
-> > Why can't we take the full series of patches instead?  Otherwise this is
-> > going to be a pain over time for any other fixes/updates in this area,
-> > right?
-> 
-> Agree that this would be a pain. The issue is that this requires to
-> backport >10 patches. I think for 6.12 it would be like 15 patches so
-> that each patch doesn't need to be reworked too much.
+Hi all,
 
-15 is trivial, we have taken hundreds in the past :)
+Gentle ping. This has Reviewed-by from Jiayuan Chen and Emil Tsalapatis
+and no outstanding objections since Jun 29. Is anything else needed for
+bpf-fixes?
 
-> The reason for me submitting this was that it's easily backports to all
-> stable kernels. I haven't tested for 6.6 or earlier how many patches
-> would need to be backported.
-> 
-> I can try to post the series for 6.12 after some more testing (after my
-> vacation) but I'm think I won't succeed backporting the refactoring
-> patches back to, say, 5.10.
+On the automated review's flag about the pre-existing double-put on the
+bpf_iter_tcp_realloc_batch() failure path (cur_sk/end_sk not reset
+before seq_stop, so cookies can be re-put as pointers): agreed it is
+real, and it predates this change. As Jiayuan noted, it is a separate,
+pre-existing issue best addressed on its own; I kept this patch minimal
+for stable.
 
-Full series is best because maintaining this over time will be easier if
-you do that, not harder.
-
-thanks,
-
-greg k-h
+Thanks,
+Jose
