@@ -1,192 +1,121 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE8BA3B4EB3
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 21:44:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783719893; cv=pass; b=t6inV9TaoeVrqwtx8pHw1YYUPlPgcUq+nM0z+HNyEnf/yNXqMKy8Sq8OkvU4+OJ2ZyuytVXSOlb1p+J9sgK0TkC0aO1/UtmoqJOoZiXwVCdUJreMTatSN3t9/32rD+zf1sn8OxkXQCf5EisQFuHdPZuvHj61RVL/u71VArI9XLM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783719893; c=relaxed/simple;
-	bh=6JwpDtiP5lWk2HyCdZWziynZDzhadtq7h2q1KexfBb0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D6OwhGRjPia/M6G45dnTb+bFPDKfoLcu44y+FseN8gj4f1vN/6QAftxMs6Jc4r6scE+0zs+evZt5SAvOiiafV0EFUk/1cO2a2hTAWrefEDi2OuZTm98pD486VuziIfXsiijSpDQtsLfqkIA2IKr21gzo4Ce8kWjUtBwTkx82e7E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T/mK9CaO; arc=pass smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A0925C818
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 21:50:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783720235; cv=none; b=nrh3aLciL1Dc6dj3WMIZbQeio2pg2yFaOfjQIz7qrxO4rT/Ssox906w3GiptHNhP3jWUE/OYlk9q05lqOa0MbOHd6pD7iRCFGq+WoSV4JIEMjO5QvpMLcnoWvugbBSLMLah2konabI9OdgZiLcQ89dXExLg2+qlvfbnRbDZ6rqM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783720235; c=relaxed/simple;
+	bh=wT65fJgWgHtQWTJFDFoMVfcmeTe2UBqWRp7dgaZs8Iw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=GBBU7zV5Ydi4ycUQREJm7V+8mcsaHgoQ33eCYihZmIr7rs/ZO3QUhN7PUygjGGDTgM9gce0LSYid9ezCJJzZbUOVmQ9D2ma1a007d+NLxERhv2mKqwU68G1nEKfzP9OaAOdyWmEsPupFRT7tADaRbmGwtq3eKgeIbelJ61GvwGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lBil9bfg; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T/mK9CaO"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3817f800c8bso1275128a91.1
-        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 14:44:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783719891; cv=none;
-        d=google.com; s=arc-20260327;
-        b=omObhglpMTToUOQ8RNtY+Zc2NjZ8eE51vlxm2zy1Iw1LriOaVb4puG6gDTEeGq+qRi
-         ocjRiY4XMTfXo/ePsXfAFqcyBOHhlsKpQ9gatRC5LLQVO1hmVAkflNwcyQu3weiUb5Xb
-         mNVjmbHZKm3n/Jwyrae3/HU5loctWufjIRvNdTic38rfigDJlF5wHNm9p+HCZpib4bkN
-         Jp5Dp8eN9WWRIvR9cjjSAbljeCYxVQ39ay5svurDuUdERalNF2Yll7PQQ2NlC0hydagV
-         rodODk0K0TQGAsq6OSMfrIPUjbkyEddoYmS8xdR2rkOn/zRm9C1/ztrcM5SOfyR7PBCw
-         2FzA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=gOpPI7YcO+DIQhHPYShATl6XVIWuImfrdEloB2zFr8U=;
-        fh=RsjPANiLgsSCHrT8J1CaTGl4A/Be/5EGMv1XQChm8yc=;
-        b=ehhSJpy8PGYSq/7PwdSnZY5RYUTH4YIBvXI1IOoC5XXpoAAcrRDGWWnZV+YsPXS2Ms
-         qsv0Wq53VUkaImUw8tOynEPDghQ43F5Wvz62ARwjEZwV43AF/OE0/b9dn1aSJjGBIFSu
-         CdgZhBjmIHqdiUV5gS2aeoZbIjZIzYj1sZMzgFRJwr5wv/tUFVnIo5W4fSUlnwbfs2bk
-         +sV+exMXsHyC+H1UMViUfnya3/2ElnLFM2wEUQ26FwgOA4tmevtM2wrdAM4QSS32fSKN
-         l8WwnE6vUkJzAzKtdburRWY5DWESIEpgrBWp1Jf7UCMgoD9+tsEE/AGj0BGpOMr4PEBQ
-         +OEA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lBil9bfg"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3811074a8c5so1246713a91.1
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 14:50:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783719891; x=1784324691; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=gOpPI7YcO+DIQhHPYShATl6XVIWuImfrdEloB2zFr8U=;
-        b=T/mK9CaOUls73BrZGk4aJj/OTPJnZVMnjvDC3p813YFPIjBxavPJorvg4VmySNo8P8
-         19eaPkt7JclSkq60uhaSr4z8gpMJct+1PYbb31CKfetkL3fj0UKwByDE44NorXvAQC1T
-         blToOUdylFHq47dxLMzKg7x8cFSgHCFvQCiJ4YwQYCL4omo0ruOtYI+q0vXi2wQoAsfn
-         IJyFkZdFDv//8d51TLxGqyqLKP9V2GzQLk0Iy3NkySmL1x+znByHpGmvWe/x77Nz8kvh
-         WymfqZnBYMNv1jcOqMzIFJM0MEeW1ocX3kWuJj4zptDPw0OdTC3anI/PzUcEJWpGWug6
-         nQBw==
+        d=gmail.com; s=20251104; t=1783720233; x=1784325033; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=xvcl9feyIjfIY7ZgBrz4qoj0VATxg12ZzvEDUGDEy5s=;
+        b=lBil9bfgMmQycl/JYPZltwFjA8tQ63jL3d4ThZsUlvIURhYpgw2UhdTHi8JwFCZfHD
+         S3xDrsYTrC7Zc3lIn3XFPsv27o5czFpDN/viP+T5YkpLmL4O9whN9CPyyZoyM0TEhgFK
+         Ot7TSqyJZ7s04UULqcKmqVRfv1F1VCOxOh692ErNXfKYYlYsC3nCVXff0PeGAMxKehFV
+         FVgHCr2vK7iSYQDkFWXo4zjZO397/j/gBRHHSFYIdJZVdHo4LOznRkgeqBiYIWxZl5RS
+         sN/ZJSIsSZ3q6qA4DglO7Koki0x/Y+U4Y9tV6KuOjtNJ8mjNeGSZQz+vcEuGZHlW2aIA
+         68lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783719891; x=1784324691;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1783720233; x=1784325033;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gOpPI7YcO+DIQhHPYShATl6XVIWuImfrdEloB2zFr8U=;
-        b=mp/NJrr9Zj5AglI89vNWSSE/gwmaa54qPNQn9B9mqOgol3sCNlm38dgU9g7w+1tLre
-         aGYPtDg3FpIIjlTPuehVBh1uScpd0GsHTM3jjjUMSfLJWDWHdvhp03QbDTGQBSNlT2eJ
-         5/r4beOvHIcZv4++o9l8oY3hFEBN/h6pQFk0il0SeQmjISEAz8tWs5WYFfTr/jB2Tmcl
-         jw9a3jQGR/ic1rzDn3lp0jiUtsuoECecFfnZycLmMj9eYis+kRxPFfR1Crv0vCLwyDLq
-         e2deCQR49Sy4JE1zZIkAFxAX2JiXdQMPOgxObl8jjEXN69LGX6mUUpmnC7H1+EE00A0h
-         xY+Q==
-X-Gm-Message-State: AOJu0YzMIMqSdldIJ8ynHyal/ZW6bmtXW8CEA7tR2z7yV3IR5maYHcx0
-	dUMWFB0nlyP049B92lm0PcHruvNEFGI7fq0oJXN73gQqrR6e7vC5F9Rh9BONtJPA73OxBOmxSJo
-	ZReSYOBloQ5GUGjKx1TWKONJ6oBIzEkgySjAxZ+Q=
-X-Gm-Gg: AfdE7cnj7ezFNkaQZfj6CKJtjpC0OBWPwXXDIPzGkRDcnyLev9Oo6RV14cfrImpZgMf
-	hvIHwOS2MZDbe6QnbmnjFGsL+69RaBMKueruiqp7AHvvbkTEhPhsM4YOW4W66iRLRCswjJb4ncx
-	l/U54BEtF61Md6uSbOCdTm4fLhy53eT5KvxrW6imO3OGzyXZY5lO2v4uro2hDNfVA7rU8shOdI0
-	ADhPjk1KQcrxxrLMFkR1RqZf+S9T0bgZ2X3Bg/54v4ySkFwSu/eqqZQgWmT9PPW6nxhFpCYP4WY
-	FJFDJAscxAuiHMKL7xIZwTxfzvS1bHFYMPJq7LmB/znoYCEBaMaEAA==
-X-Received: by 2002:a17:90b:3bc7:b0:37f:9cdf:f0ab with SMTP id
- 98e67ed59e1d1-38dc77ee692mr651360a91.26.1783719891088; Fri, 10 Jul 2026
- 14:44:51 -0700 (PDT)
+        bh=xvcl9feyIjfIY7ZgBrz4qoj0VATxg12ZzvEDUGDEy5s=;
+        b=nYOsSIXPTRPNzEFwEinxgtrhoBVl7kVmV1bIyCoh1CzUYj1+d6vUA9hCu+dUhIgwQS
+         4rFstHCzjD74uouDkJ5F+duc4IozdCklEsFAkSEGljQJ51HtrVa95b2cnVm4GInqJpk/
+         t8ZZgXYZFFgAcZlAObBwL//edq29fX3wi0FQwiaPT12ttv9dJQueaZm2hhEXlh9vjbEX
+         ceY29/3uO1CF2rry/40iG4/bckZZfPijPxy6fO+QYOj+5Zu4xNa1LydtzCMa2mKeKyDo
+         R2GLRAjontm+oOYAausemEbBHujMExYgFa2kl2dVWUMYF5y9jnm/YuDAMzaPzmRGXnvW
+         vPhw==
+X-Gm-Message-State: AOJu0YxjMkjgfXJo4+yCJpxggLXfXdHg64yjz/I/C+7bT+MIj+ad+1HD
+	JF+bT1tEDjl+iyEW9vNndzabZSj4s9RcvjKm6asyrRpfnqL89YYYb//m
+X-Gm-Gg: AfdE7cnVWdTHrr/75EmIM8NmvRCeu0zwdUhHKqZzXHEDbv12NzTI+kEFODgb35ONLds
+	TJ5OfDnYc1KuFRS00qOeYWrAphP9n+CQaL5Rc6WdH4xe6deWgknR1cosE7BCq7lp1a2q+4gUCfX
+	tO6wB1Dp8bGZqKJl04tmjdXlhUv8DzOjWEcYbqUS+xy2TP5ms6ZGxyzIRpXIfDLX7+mx/EeIvIx
+	Gnq0deppnwLEIGxEHr1Eu2X30z3Utu/+QbR3u6x6aNbKLCmwP+3Iq2AE5/d82UC36UpU97LHt06
+	qxOMUHXs7GM0bUO4+oET6SibBFVXWLhvMOHWFobuSsXsARx48Gi+JYvGMccvTZnjwbr3/3fUwLg
+	/J9j/6glzMXzVMc7CQzZV00b4ouYKcYfMmuBiaUhB/5YCc2T6yRlE4DtAkfnWKGGylaqeyCt410
+	qSwONVdERqwjgvC61oOHsURABsS18U7ebG0M6icgK/NMsy3C0d4Z2hzlqHfjuC8lLQpgntUw==
+X-Received: by 2002:a17:90b:5247:b0:387:e0db:bc24 with SMTP id 98e67ed59e1d1-38dc77c5839mr612260a91.36.1783720233566;
+        Fri, 10 Jul 2026 14:50:33 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:f4c5:3e8e:8ddd:d3f0? ([2620:10d:c090:500::3:1728])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3117462f5c7sm47983420eec.0.2026.07.10.14.50.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jul 2026 14:50:33 -0700 (PDT)
+Message-ID: <cbee8f83f6e11ac58afa366317d52e64473b2736.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3] selftests/bpf: veristat: Minimize map size
+ during verification
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Emil Tsalapatis
+	 <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ memxor@gmail.com, 	daniel@iogearbox.net
+Date: Fri, 10 Jul 2026 14:50:31 -0700
+In-Reply-To: <CAEf4Bzarum7QXKT+BuvBa9kSrjMX=BzknWFKQBQuROKOWFeuZQ@mail.gmail.com>
+References: <20260708193239.5063-1-emil@etsalapatis.com>
+	 <CAEf4Bzarum7QXKT+BuvBa9kSrjMX=BzknWFKQBQuROKOWFeuZQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260708193239.5063-1-emil@etsalapatis.com>
-In-Reply-To: <20260708193239.5063-1-emil@etsalapatis.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 10 Jul 2026 14:44:38 -0700
-X-Gm-Features: AVVi8CeUx3WxmGBczLYns2fxE7-g2gULa4j1gRY4UCmR7RQFZcoDM87oF30Ec0o
-Message-ID: <CAEf4Bzarum7QXKT+BuvBa9kSrjMX=BzknWFKQBQuROKOWFeuZQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: veristat: Minimize map size
- during verification
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, memxor@gmail.com, 
-	daniel@iogearbox.net, eddyz87@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 8, 2026 at 12:32=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.c=
-om> wrote:
->
-> The veristat tool verifies that BPF objects along with their
-> maps pass verification for a given kernel version. To do so,
-> veristat loads the objects and maps into the kernel in order
-> to pass them through the verifier.
->
-> Currently, veristat sizes the maps according to the max_entries
-> field provided by the program author. Depending on the map type
-> this field may be irrelevant to the verification process. However,
-> loading a large map can fail because of -ENOMEM errors.
->
-> This is a problem when the map is supposed to run on large machines,
-> but veristat tests it machines with significantly less RAM (e.g.,
-> CI). In that case veristat fails even if the program verifies.
->
-> Expand veristat to resize maps whose max_entries are not relevant
-> to verification. Set the max_entries value as low as possible to
-> avoid -ENOMEM errors.
->
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
->
-> CHANGELOG
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D
->
+On Fri, 2026-07-10 at 14:44 -0700, Andrii Nakryiko wrote:
 
-for individual patches we normally don't commit changelog, so next
-time put it under `---` below so it will be stripped out during
-applying (I cleaned this up manually)
+[...]
 
-> v2->v3
+> > @@ -1248,6 +1248,29 @@ static void fixup_obj_maps(struct bpf_object *ob=
+j)
+> >
+> >                 /* fix up map size, if necessary */
+> >                 switch (bpf_map__type(map)) {
+> > +               /*
+> > +                * if the verifier doesn't use max_entries
+> > +                * then set to 1 to avoid -ENOMEM
+> > +                */
+> > +               case BPF_MAP_TYPE_HASH:
 >
-> - Do not resize HASH_OF_MAPS because it can be declaratively populated
-> from BPF at compile time (Sashiko)
 >
-> v1->v2
->
-> - Removed unnecessary ARENA, LPM_TRIE, and RHASH handling (Sashiko)
-> ---
->  tools/testing/selftests/bpf/veristat.c | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selft=
-ests/bpf/veristat.c
-> index a7db6f04f7e1..c9c257784ee3 100644
-> --- a/tools/testing/selftests/bpf/veristat.c
-> +++ b/tools/testing/selftests/bpf/veristat.c
-> @@ -1248,6 +1248,29 @@ static void fixup_obj_maps(struct bpf_object *obj)
->
->                 /* fix up map size, if necessary */
->                 switch (bpf_map__type(map)) {
-> +               /*
-> +                * if the verifier doesn't use max_entries
-> +                * then set to 1 to avoid -ENOMEM
-> +                */
-> +               case BPF_MAP_TYPE_HASH:
+> I'm wondering if we should add ARRAY here as that one is actually with
+> high likelihood will be large, though there are some corner cases
+> where size might matter (e.g., existing code omits error checking
+> knowing that verifier will prove it can never fail; resizing to 1
+> might pessimize such check, probably, if index is larger than 1). Can
+> you actually try the latter scenario with some small program, I'm
+> curious how the verifier will behave?
 
+For array maps there are several complications: first is the constant
+maps handling and second is null check elision. The latter is somewhat
+nasty, see check_helper_call():
 
-I'm wondering if we should add ARRAY here as that one is actually with
-high likelihood will be large, though there are some corner cases
-where size might matter (e.g., existing code omits error checking
-knowing that verifier will prove it can never fail; resizing to 1
-might pessimize such check, probably, if index is larger than 1). Can
-you actually try the latter scenario with some small program, I'm
-curious how the verifier will behave?
+         case RET_PTR_TO_MAP_VALUE:
+                 ...
+                 if (func_id =3D=3D BPF_FUNC_map_lookup_elem &&
+                     can_elide_value_nullness(meta.map.ptr) && <-------- tr=
+ue for array maps
+                     meta.const_map_key >=3D 0 &&
+                     meta.const_map_key < meta.map.ptr->max_entries) <-- ch=
+ecks max_entries
+                         ret_flag &=3D ~PTR_MAYBE_NULL;
 
-anyways, applied to bpf-next, thanks!
-
-> +               case BPF_MAP_TYPE_PERCPU_HASH:
-> +               case BPF_MAP_TYPE_LRU_HASH:
-> +               case BPF_MAP_TYPE_LRU_PERCPU_HASH:
-> +               case BPF_MAP_TYPE_SOCKHASH:
-> +               case BPF_MAP_TYPE_DEVMAP_HASH:
-> +               case BPF_MAP_TYPE_QUEUE:
-> +               case BPF_MAP_TYPE_STACK:
-> +               case BPF_MAP_TYPE_BLOOM_FILTER:
-> +               case BPF_MAP_TYPE_STACK_TRACE:
-> +                       bpf_map__set_max_entries(map, 1);
-> +                       break;
-> +
-> +               /* ringbufs must be page-aligned */
-> +               case BPF_MAP_TYPE_RINGBUF:
-> +               case BPF_MAP_TYPE_USER_RINGBUF:
-> +                       bpf_map__set_max_entries(map, sysconf(_SC_PAGESIZ=
-E));
-> +                       break;
-> +
->                 case BPF_MAP_TYPE_SK_STORAGE:
->                 case BPF_MAP_TYPE_TASK_STORAGE:
->                 case BPF_MAP_TYPE_INODE_STORAGE:
-> --
-> 2.54.0
->
+[...]
