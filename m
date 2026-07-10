@@ -1,97 +1,112 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4B14369A
-	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 02:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E9129994B
+	for <bpf@vger.kernel.org>; Fri, 10 Jul 2026 03:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783649015; cv=none; b=mWlfxmCbvDHOUWybbbs4GeV10JeLNXKcX/fDLsBFyrucDLRvnPKmODsooGMG0aSJM3uithfn0QmBjnBNxLXz+eLkEe4y9knJg23odPmK7kWziST9h4jqrQDxI+3Fz5SAh+dc6OrnUDV8D49hmx45ocwig2FebJFyzsIj6INSECk=
+	t=1783655769; cv=none; b=O7N0+KmsHMEH4sIi2xQxPTxgXFyTxA5Txo/6VXZ4GQUtBCdJGDGmiBVU5fG3LQXEZkE9lzuJY2liUOkXPwa00r/zbkbbN5YSzRYcDiYLy5upTprgIvdV1I2X1Hrskw5n4Ay/qWJvy0/G9dazoEUusTeP1OojQqu8oBYay9UssHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783649015; c=relaxed/simple;
-	bh=8r9L3S+1S6pJb9iqZak2CDmDU0pjq9erldv2bNpi5uw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sPPvTMsVaGPkONoT8JPEH69ASY4xQ0hfFaCeTtNe2WHovsu30fSYr0fEvstA6uesBzpoiuXRWNl7oveSLOQu5YcX3PwZ/n6Bx7gwHg3i2JfyfVE4iPzCnEnt/Xc+X09GhYAZGd+Kxgleqpq1VR1jTGc6xvLGjruyuDwvC/HvBNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GGIdlOni; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783655769; c=relaxed/simple;
+	bh=5BLxZUryZC6JV0WKMgu8rlXcL1QpjStH3KOvVwWpDyY=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=NUibhsGkidQzLrHgzoBuUsC6+yfn72WETuk4bgZBw6Y222nYyeqwOGY8cRteDJNwhsrvhwKygSwTGVg2om9nX/fE7zjdyDyYilYrxXYokDSzR/fp3nCW8eOLCwJKIOtysAPAmn5BATfYp6Y5bk8burZtO4inz1w8+ZrxbGuibtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=dQLI4qpx; arc=none smtp.client-ip=43.163.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GGIdlOni"
-Message-ID: <a0fd6263-fb5b-4eb3-9438-40b518e75c33@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783649011;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=j3bwFFl1jG9W7ACEziqGXI/gPTBu4gZbVkq/6TlyKuU=;
-	b=GGIdlOniK8RUB6zak2WSQcubiS1SgOw2IeSEEQrW36I7JPxajU/T8LtcECDkZJ0cvnM1mh
-	vWL/qhW6W/Z2/jJFC1jU+61Y7DjtNLtxEdBh2kG1FQCLF2u0Hnsm1J2WizRULxBclilm+W
-	1FVwpmW33lNyomuWjMFRZvYXn1qSAtk=
-Date: Fri, 10 Jul 2026 10:02:38 +0800
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="dQLI4qpx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1783655757;
+	bh=LHDHBvsYiuaNGKVD6rCi5sbkUiJTHY/x4SBF7dLSCnw=;
+	h=From:To:Cc:Subject:Date;
+	b=dQLI4qpxSHKVxjZKrnnQ7UevToyZO4gtnJ2JF8SRZcv560KnjSSdGD4bkOOlRthbU
+	 QFx1gKQzobODPeJnmllBTpeSCyX6ZDPQXihezYYPwBNUiboh6L3zbgfnMg7dWCtQY2
+	 U0GuewC6ZeECZWoJtywuJfRvd2MzpFXzlKMu6CFM=
+Received: from localhost.localdomain ([180.153.160.8])
+	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
+	id DF79DC9A; Fri, 10 Jul 2026 11:55:55 +0800
+X-QQ-mid: xmsmtpt1783655755ts9hsy36d
+Message-ID: <tencent_39A7924F2A472D74FA6AD444744E57027905@qq.com>
+X-QQ-XMAILINFO: N7Z3XQrOpILuGmPbNn393wsieOP7ItbFr7zbvWPLsKPFjIaJkOKTD9TEskXGdH
+	 QTOzBl4+HdxYcB7tgOcmmZXIRJL1u7SrTyIOmmkYgnPc07MCv9pU5DJt5y2dYfy0a9v6jRHp7CJ3
+	 63kI2AAOfWd8kzLNOoWJakGeWGGZRfB2UlNRRs8aGWedDFAjumjk1ENv5KV2V6nEqkl+3xofO55o
+	 ZZg1JoPLx2QX2AHJ6NytmWVk00mm1fR03iNyf/0RkCc+Pu7XNSvqvwtjycaehGpBI2hnXZRsGShY
+	 j21EBix/nlsyUM4FfvLj38hIWtkjGuIWeRiSvOKBqE/vhaeAblzax4fh2cgZjn02q65uL8lFdhHL
+	 hvmXJNUCWgHvd/AYQYcdLMia1KOuuuAui394fBl5fqiMM0Ai6xvcminWv+jjT8GxZYXW5QpMEgsG
+	 RzhWqGsfHKMOYOVnlsZAjQo7/esCZ2U7O1wMiKOJPuvgJBNkRbZjz7WAP8oyEV4hdD1FCW5LHTqQ
+	 Kflb9YRzZV4giw0B7Sv9zTnl0w5hLezwk4bL53OivPNBEOmKDhuQmR7NejLybstfaCCqo8vdjlNW
+	 6xRwsMKO8z62vgbVRxUG/7j4J9ec/JfN3/F3kcN6r7Au+0iB7YlOrPCQE/yo/fGVGuUf1212XILZ
+	 44HxP8I7vUbvCfa2KNAnmBpjTzCwO6WpDpqVNtzhEf2c8jKhZX5tYMve59NnqiuJlOLaCaIdXj1I
+	 4KVKaLFgFflwGryIURkGqs/0hOzQqAEsstPNvh6NG7XChlkICP41SWWlugeUxJ6V9rBw0N0REoIY
+	 FL4WKpkAkvFk7N58TyemQgnM4ilmL1tftUgIaBSImJ/Bll71w59R8K1l0Qrcrsz6qrXIIYmd++Lh
+	 NcX//BzFfWH66/0VSFmWbVEiua3qNRHsPbq0vFp8h85zdB2r6KYcEh9fzbaVDtIzLuZVNzO96JhM
+	 wFo6amfOCfNU+lBEYiqYBRxGEeH1xWhcSK10VZ9AyJYFk1PJ1cj/A6nkAY0eznn1q2oR+g0txFS8
+	 ixSUv82wjIbLVOI1tQ
+X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
+From: Jianlin Shi <shijianlin11@foxmail.com>
+To: bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net
+Subject: [PATCH] bpf: return -EINVAL from bpf_ringbuf_query for unknown flags
+Date: Fri, 10 Jul 2026 11:55:55 +0800
+X-OQ-MSGID: <20260710035555.3725522-1-shijianlin11@foxmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 07/12] bpf: Reject >8 byte return values on
- return-reading trampoline paths
-To: Eduard Zingerman <eddyz87@gmail.com>,
- Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
-References: <20260708200939.2153664-1-yonghong.song@linux.dev>
- <20260708201015.2159760-1-yonghong.song@linux.dev>
- <b571171588e42e40e9bed69fb3f1bc9021573445.camel@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-Content-Language: en-US
-In-Reply-To: <b571171588e42e40e9bed69fb3f1bc9021573445.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-On 10/7/26 07:08, Eduard Zingerman wrote:
-> On Wed, 2026-07-08 at 13:10 -0700, Yonghong Song wrote:
->> btf_distill_func_proto() builds the function model used for kfunc calls,
->> the fentry/fexit/fmod_ret/fsession trampolines and struct_ops. A following
->> patch relaxes it to accept a >8 and <=16 byte return value, which for the
->> BPF target is passed back in the R0:R2 register pair.
->>
->> But the BPF trampoline cannot preserve such a return. It saves and restores
->> only 8 bytes of the return value (RAX on x86, i.e. R0), so the second half
->> (RDX / R2) is not preserved across a program that observes the return
->> value. A program attached to a function returning a 16-byte value (e.g.
->> current_time() or ns_to_timespec64(), which return struct timespec64)
->> would corrupt the value seen by the real caller and read a partial return
->> value itself. struct_ops trampolines have the same limitation.
->>
->> This only matters for the attach types that actually read the target's
->> return value: fexit, fmod_ret and fsession (plus the _multi variants of
->> fexit and fsession). fentry and fentry_multi run before the target returns
->> and never touch the return value, so they can attach to a >8 byte-returning
->> function safely.
->>
->> Reject a >8 byte return value for the return-reading attach types in
->> bpf_check_attach_target() and bpf_check_attach_btf_id_multi(), and for
->> struct_ops in bpf_struct_ops_desc_init(), ahead of the following patch that
->> would otherwise let such a return through. kfunc and BPF-to-BPF subprogram
->> calls, which the JIT does handle, are unaffected.
->>
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->> ---
-> 
-> Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
-> 
-> Maybe post this independently from the current patch-set?
-> Seem to be a standalone fix.
-> 
+bpf_ringbuf_query() returns 0 for unrecognized flags, which is
+indistinguishable from a successful BPF_RB_AVAIL_DATA query on an empty
+ring buffer. Return -EINVAL instead so invalid flags are reported
+explicitly.
 
+Update the helper documentation accordingly and document
+BPF_RB_OVERWRITE_POS, which was missing from the description list.
 
-Agreed.
+Signed-off-by: Jianlin Shi <shijianlin11@foxmail.com>
+---
+ include/uapi/linux/bpf.h | 3 ++-
+ kernel/bpf/ringbuf.c     | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-A Fixes tag should be added.
-
-Thanks,
-Leon
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index c8d400b76..b18d5810d 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4664,13 +4664,14 @@ union bpf_attr {
+  *		* **BPF_RB_RING_SIZE**: The size of ring buffer.
+  *		* **BPF_RB_CONS_POS**: Consumer position (can wrap around).
+  *		* **BPF_RB_PROD_POS**: Producer(s) position (can wrap around).
++ *		* **BPF_RB_OVERWRITE_POS**: Overwrite position (can wrap around).
+  *
+  *		Data returned is just a momentary snapshot of actual values
+  *		and could be inaccurate, so this facility should be used to
+  *		power heuristics and for reporting, not to make 100% correct
+  *		calculation.
+  *	Return
+- *		Requested value, or 0, if *flags* are not recognized.
++ *		Requested value on success. **-EINVAL** if *flags* are not recognized.
+  *
+  * long bpf_csum_level(struct sk_buff *skb, u64 level)
+  * 	Description
+diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+index 35ae64ade..e549acdc6 100644
+--- a/kernel/bpf/ringbuf.c
++++ b/kernel/bpf/ringbuf.c
+@@ -656,7 +656,7 @@ BPF_CALL_2(bpf_ringbuf_query, struct bpf_map *, map, u64, flags)
+ 	case BPF_RB_OVERWRITE_POS:
+ 		return smp_load_acquire(&rb->overwrite_pos);
+ 	default:
+-		return 0;
++		return -EINVAL;
+ 	}
+ }
+ 
+-- 
+2.43.0
 
