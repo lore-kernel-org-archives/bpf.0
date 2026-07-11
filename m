@@ -1,106 +1,173 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810672F39C7;
-	Sat, 11 Jul 2026 07:40:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2571B24336D;
+	Sat, 11 Jul 2026 08:27:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783755645; cv=none; b=KQMd5U/pR+RuizsnseoeZEmZdC0clqUzZIPpmBkX9tyWNvNdzFwt5XnR+KPXtUgYJNMPOtLLOHLAuUfgDqBD//ytU4AS/OsGkIbdEo6UIquVvSg91iGCM7HeO1Un6Zll07/Jys7QnJGwwi0oEod5UyRr+LaQTaWRpRtSohSGrhQ=
+	t=1783758467; cv=none; b=sEyvisr1+i4d41OpVkGA4hyjQZ7Rgx4bJkGc7Y73QY1X01CeuEm2u1N8D/0e3QZ1h0Zq6oJB3WdlcyScjmF7Ar3vE5j6CFHCbV4BeAy+eMIqZZ0EEY6I41o9fOJp4x36q0zYeeOhQDd3clwIj1XB/A9BdAHDEjzxh1R1BPP8Wb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783755645; c=relaxed/simple;
-	bh=jyaVMBgBdH3BdAcMDeQs+QsdiDd8yWss8V2bp69B1UY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YSwHi11OD+nwkPM/cJ0IztHwG4lAphuUWlx1UMPCxRFws3wXRII0BQyu2v2XFg/1dcLeT7GOgPHYXVpE7qM2blfFsqyseIkBKUKgdoixo853fqZOX/I5cZcbZ6vphOT3bGI13EcSTg7NFhxcmQjG0uDh+F3xnHsMfLic3/m1j7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gy0wb4yrtzKHLtj;
-	Sat, 11 Jul 2026 15:40:15 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 2F9114073D;
-	Sat, 11 Jul 2026 15:40:41 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgDnzCh481FqcZNPAw--.188S2;
-	Sat, 11 Jul 2026 15:40:41 +0800 (CST)
-Message-ID: <1d4101d0-e84e-4af6-a07f-b269c2d98f3a@huaweicloud.com>
-Date: Sat, 11 Jul 2026 15:40:40 +0800
+	s=arc-20240116; t=1783758467; c=relaxed/simple;
+	bh=Sh0BG3OaVGa+q2GPtfq3zxIc9aKKQrT95SBJzzgDxaM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EIsE05BSWKzkG1j/7SOlj9sDBHy5bX+g4OoaETirANzdjbNbfat40EMvqgrHQeJpk+bmFoLARzUoixO52CjniInn0PSTxEODRzcRhX+FEJbK3NBesMgrfoKRwUb22k23sJAApAefCczJztZTkX0z/Yi/5kWTu+Fw1oiq0qcz+Og=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZmJcywno; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZmJcywno"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72AA81F00A3D;
+	Sat, 11 Jul 2026 08:27:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783758465;
+	bh=o+9YUEALLTL+0259dlnNxroPvNI9JdmPox5B/61vnaM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ZmJcywnoP8pPUDaImC5Qgcr5kg1sl/cTQdYsbPJKkAaHXp6XTAodQLk25zI+RO+E6
+	 vlVmvzA8B51o5fWTM6JdeeUL+Xfa/Pzo8JNGor0Rtswishsat7zGPuRwOM8FBSzsiw
+	 JlqJRXxL6R/nzkixHrrVUf7/Uzkc2Xjw+6JIp7obqP9nVuhOnjahos/YYoSJc6EgU1
+	 k1x1QFlXGk4pOumZZpLv/4Tql4QK4/6sN5TJcXixaLH+zP/PKTf8vKR8bTq2jUU/s9
+	 C5y2Xkvg1AQdWKQLXYIFaHwKaPOFVU8foh2ckIST4j6o+HWI2vh5P/wM+2vdKMVsr7
+	 ToCVy8ckpgvFQ==
+Date: Sat, 11 Jul 2026 09:27:32 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>, 
+	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>, Kiryl Shutsemau <kas@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, David Carlier <devnexen@gmail.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, David Hildenbrand <david@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, stable@vger.kernel.org, Brendan Jackman <jackmanb@google.com>
+Subject: Re: [PATCH] x86/mm/pat: acquire mmap lock on page table free to
+ avoid ptdump UAF
+Message-ID: <alH8fAnP1JlevCPU@lucifer>
+References: <20260710-fix-cpa-ptdump-race-v1-1-d898699a7417@kernel.org>
+ <529e37eb-ad4c-4b0f-8ba3-c5608aa7a893@intel.com>
+ <alE6fUJZzELlUfxP@lucifer>
+ <f2af8fae-62b8-4c5a-8f8d-594b93912dc0@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/2] bpf: Remove unnecessary dup/restore
- subprog_starts and prog clone
-Content-Language: en-US
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, emil@etsalapatis.com,
- yonghong.song@linux.dev, a.s.protopopov@gmail.com, martin.lau@kernel.org,
- clm@meta.com, ihor.solodrai@linux.dev
-References: <329e83120f0d88c2e5dc9d7bb2c0d38988959d32.1783775928.git.xukuohai@huaweicloud.com>
- <8cb15a4684938f4f0766c752a8cedaffde40f0abed7cb3e5247b390e3a68c84a@mail.kernel.org>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <8cb15a4684938f4f0766c752a8cedaffde40f0abed7cb3e5247b390e3a68c84a@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgDnzCh481FqcZNPAw--.188S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7JF1rXFW5Xr17ur4DJrW3Awb_yoWkZwcEy3
-	y8AF48Cw4Dua1jqa1vkwsrWr40gw4kAr1xCr1kXr15Jwn8Aws5A3y8Jas5uFy5Xws3Grs8
-	AanYq3ZY9wn8WjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbxxYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-	67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOB
-	MKDUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f2af8fae-62b8-4c5a-8f8d-594b93912dc0@intel.com>
 
-On 7/11/2026 2:28 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/include/linux/filter.h b/include/linux/filter.h
->> index 25148865f9c76..232c02031fecb 100644
->> --- a/include/linux/filter.h
->> +++ b/include/linux/filter.h
-> 
-> [ ... ]
-> 
->> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
->> index 37f22eb418540..80c8beb45ea04 100644
->> --- a/kernel/bpf/fixups.c
->> +++ b/kernel/bpf/fixups.c
-> 
-> [ ... ]
-> 
->> @@ -1309,13 +1309,13 @@ int bpf_jit_subprogs(struct bpf_verifier_env *env)
->>   	return 0;
->>
->>   out_jit_err:
->> -	if (blinded) {
->> +	if (cloned) {
->>   		bpf_jit_prog_release_other(orig_prog, prog);
->> -		/* roll back to the clean original prog */
->> +		/* roll back to the clean  original prog */
->>   		prog = env->prog = orig_prog;
-> 
-> This isn't a bug, but does the comment need the extra space between
-> 'clean' and 'original'?
-> 
++cc Brendan for fun's sake ;)
 
-No, the extra space should be removed.
+On Fri, Jul 10, 2026 at 12:50:26PM -0700, Dave Hansen wrote:
+> On 7/10/26 11:53, Lorenzo Stoakes wrote:
+> > On Fri, Jul 10, 2026 at 09:26:48AM -0700, Dave Hansen wrote:
+> >> 1. We could just bite the bullet and have separate ptdump files for the
+> >>    top and bottom of the address space:
+> >> 	current_kernel_top
+> >> 	current_kernel_bottom
+> >> 	current_user_top
+> >> 	current_user_bottom
+> >> 	etc..
+> >>    Then the lock you take is dictated by the file.
+> >
+> > I mean that'd break userspace though wouldn't it?
+>
+> It's debugfs. So, yeah, I can see it breaking things, but it's also way
+> less of a concern. Nobody ever complained about the new PTI file getting
+> added in there.
 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29141596379
+I wonder how many people use this :P but I expect some do and would moan about a
+_removal_.
 
+I guess we could have a warning if somebody used it.
+
+>
+> >> 2. We could always take both init_mm and current->mm locks. That seems
+> >>    icky.
+> >
+> > It's actually the least awful of all of these I think :) and the one I
+> > implemented ([0]).
+>
+> Oh, cool, I missed that. That's a good pairing with this one!
+
+Yeah, sent it separately as they stand separately and this already addresses the
+init_mm side of it anyway.
+
+>
+> >> 3. We could have ptdump_walk_pgd() take a different lock for each
+> >>    'range'. Logically:
+> >>
+> >> 	if (range->start < PAGE_OFFSET)
+> >> 		mmap_write_lock(mm);
+> >> 	else
+> >> 		mmap_write_lock(&init_mm);
+> >
+> > I don't love this. It feels a hack for x86 that's put in the wrong place,
+> > i.e. core code.
+> >
+> > And can you can make this assumption for efi_mm for all arches? Could other
+> > arches might be weird about this?
+>
+> Yeah, it's possible they're weird. But I thought the whole idea of
+> efi_mm was to reuse the non-kernel part of the address space. So oddly
+> enough it kinda makes sense.
+>
+> But, yeah, I totally get the reluctance to do this.
+
+Yeah it's all a bit sucky this :(
+
+>
+> >> I'm kinda leaning toward #3.
+> >
+> > Another way forwards might be simply have the caller _call
+> > ptdump_walk_pgd() twice_ once with the range set to [0, PAGE_OFFSET) passing whatever mm
+> > != init_mm, and again for [PAGE_OFFSET, ~0) passing init_mm?
+>
+> Ahh, yeah, that's a good point. It could be done a layer up too.
+>
+> > Are there cases where you expect to see a delta in the kernel range in x86
+> > for an arbitrary mm?
+>
+> Are you asking if current->mm->pgd[255->511] is always the same as
+> init_mm->pgd[255->511]?
+
+Yes :)
+
+>
+> I think so, except for the LDT PGD when PTI is on. That can be different
+> between mms, and it's a single pgd_t entry. I think Brendan had some
+> grand plans to use this PGD for other things for ASI as well.
+
+Yeah I wondered if PTI or something else funky (Brendan's mermap?) might have
+changed this.
+
+But whether that'd actually be accessible from the debugfs "this mm's "?
+
+>
+> So, yeah, the upper half of the address space is *normally* identical.
+> But PTI plus set_ldt() is abnormal and we have to deal with it. The only
+> times that code frees page tables is at exit time and in an error path.
+>
+> So, how does this interact with mmap_lock? Surely, someone looked at
+> this recently because the comment says:
+>
+>  * Lock order:
+>  *      context.ldt_usr_sem
+>  *        mmap_lock
+>  *          context.lock
+>
+> and not mmap_sem. But, alas, I don't see any mmap_lock anywhere. Someone
+> changed the comment and didn't look at the code.
+
+Was a simple mmap_sem -> mmap_lock change since we renamed the lock right?
+
+>
+> Is there some mmap_lock interaction that I'm missing? I don't see it
+> _anywhere_ in the ldt code.
+
+Presumably dup_mmap() -> arch_dup_mmap() -> ldt_dup_context()?
+
+But I don't think that interacts with the init_mm nested lock stuff we're
+looking at here, as it's not touching init_mm and in any case ptdump is
+unconditionally taking the mm's mmap write lock as-is without issue.
+
+Cheers, Lorenzo
