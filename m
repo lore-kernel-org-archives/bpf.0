@@ -1,41 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE192367B8;
-	Sat, 11 Jul 2026 15:27:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E3F529BD9A;
+	Sat, 11 Jul 2026 15:36:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783783650; cv=none; b=KE4XbQoAgvsc2xmSrE8b7DxFdI6eV/Od/a58DGw+GPCsv6JPVO0q682ROnwPTK2Jy8YcO/cH20qYzwb870PXwZGE28TwGZRByu+kGDWB3y+yFYP/HTmRXbkMBPpa+GzseoV+3st/j3D1ko8fhflG9s7tDxOYQC6qRD6szdEXlpg=
+	t=1783784196; cv=none; b=t4XAD2vFjLX65JV8pdiQmdg3wUDvbZBZNDkd/Wt/5vqVlNb5gJOVpDYEm/vJj9o0iwGS0pUfZ4qkypKUyvywid9aeMrhY/V7SwVPevHWUd1JcC4pXn4Wcc3mUCImoZRVy+ycM1YtsFoRFLeXxN1ASrnP4ntJFycV2nSptFMPlYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783783650; c=relaxed/simple;
-	bh=4FhbT1roqH5pubu5uI5tCeFPNFFKV24ExU6tscwO9zM=;
+	s=arc-20240116; t=1783784196; c=relaxed/simple;
+	bh=bqqLc70tV4VoPXTl/mIWe+tLn6W5AiWgeqZujrBRBno=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rDwPANsRJdZxFM4hD6M4cqhAlOSsXJoh4CqWerNjWvLOVf8fm0z2RH9mtxP/6rrj2abfMUWomqauVY5C5Z8kFvoq5PhtibIFZaQuwhjONNJ5dT/RQ85qMnpIWoHhTxKzT1E6MXd9iD3bjXn9VkRi3m1Mi35hpwp7qa8IORW41Wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hg7gGNgA; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=boxLK9oYPjGmf+hYN7J2ddTpVhrMg4wfoG4KdhBymldYoDDDADQNgdSokcltC4vJ+5CZjnwPDwVShFGqFQ+jwKrrCs/QzdRIH7x3dxBqle9K6BvrDglASlbywAoNXPq25nbUG8/btA4Me9ogDL5hjyr3CeNZf9QuWRQagJ5D++s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GQhOJusu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hg7gGNgA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F264C1F000E9;
-	Sat, 11 Jul 2026 15:27:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GQhOJusu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB1EB1F000E9;
+	Sat, 11 Jul 2026 15:36:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783783649;
-	bh=0O9D9pDNfZYmsRf/d2dCrEHeCBY53yw+re1nqSW9KrI=;
+	s=k20260515; t=1783784190;
+	bh=ElPHFUw4BORNodBTDK/eDIXnDqLH0jyos22YI/OxWQI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=hg7gGNgAGxQo6yBWzhjzEmGjTBqWM0jykjjLXmtDENT6JrCAiDHsQGIIE63aKbkFl
-	 pTDvjkv9OQJNOHeXufnpA7MbPE+oJTElVxhGL7CnOmfhsxKRVZXV60f4d3IM1553pb
-	 hnlIaGZhyYgZCeVTbZ0pK03NsJjrwjTPNyP4LUTOpAViHWaUzoSJ0S8u5eH3E/+uqA
-	 jqz3oIsA6n/nK3Xgj6oKmcerocZBMw0ti36476hzT7G0E/2USRWU2zjCEIshcyUQWE
-	 rBlbF4ezCNFGpgDZ6QlQu7QZXvO55YQdt6G6gntnrem1IeQ5XHMNqSjmCFbi9ufBxF
-	 LK5GkUN5Nj9ug==
-Date: Sat, 11 Jul 2026 18:27:24 +0300
+	b=GQhOJusuAhE+F4pY84V0XjUvcpk7dnx4F1bhw22NjVrXXnjyLcW5rqG5dbJ/VIzoX
+	 Jw6yMApQz0Be0aM9Hg3EYwXjAGSLAlN/K32n7ik2Ri0JipgNlmgONNzNY8psSBmYYw
+	 XJ3EkBf401JBNS7IvYpNmIkFEAmtdxUgpVaYmQzMCF8nKbpT5/Dqg4GNbKIsJLL1W4
+	 DxfN+KmvHUsrLQauF4rJ3sO+1DkM0LqOvxb6m+QnRzzA1cjAxsr/JfQnQPdL5ThEJi
+	 ffyGre01rPmKuWOKHtmcW1XxnCsqQZxuVDE/Bvlk8+YWH79OhJysXXYx1L/YYEm9hY
+	 8wXPNWHUh5aSQ==
+Date: Sat, 11 Jul 2026 18:36:25 +0300
 From: Mike Rapoport <rppt@kernel.org>
 To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 3/5] bpf: alloc_prog_pack(): skip ROX
- management for already ROX memory
-Message-ID: <alJg3N5uANoLzIna@kernel.org>
+Subject: Re: [PATCH bpf-next v2 4/5] bpf, x86: make sure allocation in
+ arch_bpf_trampoline_size() is writable
+Message-ID: <alJi-ftl5zRS2foS@kernel.org>
 References: <20260711-execmem-x86-rox-bpf-v0-v2-0-bfd956d35119@kernel.org>
- <20260711-execmem-x86-rox-bpf-v0-v2-3-bfd956d35119@kernel.org>
- <20260711100032.58B1C1F000E9@smtp.kernel.org>
+ <20260711-execmem-x86-rox-bpf-v0-v2-4-bfd956d35119@kernel.org>
+ <20260711100246.331B21F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,64 +44,68 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260711100032.58B1C1F000E9@smtp.kernel.org>
+In-Reply-To: <20260711100246.331B21F000E9@smtp.kernel.org>
 
-On Sat, Jul 11, 2026 at 10:00:31AM +0000, sashiko-bot@kernel.org wrote:
+On Sat, Jul 11, 2026 at 10:02:45AM +0000, sashiko-bot@kernel.org wrote:
 >
-> bpf: alloc_prog_pack(): skip ROX management for already ROX memory
+> bpf, x86: make sure allocation in arch_bpf_trampoline_size() is writable
+>     
+> arch_bpf_trampoline_size() allocates a buffer to get actual size required
+> for a trampoline.
+>     
+> This buffer must be in the module address space because
+> __arch_prepare_bpf_trampoline() calculates rel32 offsets relatively to
+> that buffer.
 > 
-> > @@ -965,7 +972,7 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns, bool
-> >  			pr_warn_once("BPF: Predictors not flushed for allocations greater than BPF_PROG_PACK_SIZE\n");
-> >  		size = round_up(size, PAGE_SIZE);
-> >  		ptr = bpf_jit_alloc_exec(size);
-> > -		if (ptr) {
-> > +		if (ptr && !bpf_jit_mem_is_rox()) {
-> >  			int err;
+> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> > index de7515ea1beae..b2feec81e2312 100644
+> > --- a/arch/x86/net/bpf_jit_comp.c
+> > +++ b/arch/x86/net/bpf_jit_comp.c
+> > @@ -3703,13 +3703,12 @@ int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
+> >  	int ret;
 > >  
-> >  			bpf_fill_ill_insns(ptr, size);
+> >  	/* Allocate a temporary buffer for __arch_prepare_bpf_trampoline().
+> > -	 * This will NOT cause fragmentation in direct map, as we do not
+> > -	 * call set_memory_*() on this buffer.
+> >  	 *
+> >  	 * We cannot use kvmalloc here, because we need image to be in
+> >  	 * module memory range.
+> > +	 * Since it must be writable use bpf_jit_alloc_exec_rw().
+> >  	 */
+> > -	image = bpf_jit_alloc_exec(PAGE_SIZE);
+> > +	image = bpf_jit_alloc_exec_rw(PAGE_SIZE);
 > 
 > [Severity: Medium]
-> Since this patch protects bpf_prog_pack_alloc() and alloc_new_pack() from
-> writing to memory that might already be ROX, does it also need to protect
-> other callers of bpf_jit_alloc_exec() that write directly to the allocated
-> memory?
-> 
-> For example, bpf_jit_binary_alloc() allocates memory and directly writes
-> illegal instructions:
-> 
-> kernel/bpf/core.c:bpf_jit_binary_alloc() {
->     ...
->     hdr = bpf_jit_alloc_exec(size);
->     if (!hdr) {
->         bpf_jit_uncharge_modmem(size);
->         return NULL;
->     }
-> 
->     /* Fill space with illegal/arch-dep instructions. */
->     bpf_fill_ill_insns(hdr, size);
->     ...
-> }
+> Does this allocation cause unnecessary page table modifications and hugepage 
+> shattering?
 
-ROX caches are only supported on x86-64, and this is never called there.
+No.
  
-> Similarly, on x86, arch_bpf_trampoline_size() allocates memory and passes
-> it as a read-write buffer:
+> Allocating via bpf_jit_alloc_exec_rw() forces page table permission changes
+> (set_memory_nx and set_memory_rw), which triggers cross-CPU TLB flushes
+> and permanently splits 2MB hugepages in the ROX cache's direct map. When
+> the buffer is immediately freed, these operations are repeated.
+
+2M page is split temporarily. When the buffer is freed and ROX is restored,
+2M page is collapsed.
+ 
+> [Severity: High]
+> This is a pre-existing issue, but there appears to be a flaw when freeing
+> memory to the ROX cache in __execmem_cache_free():
 > 
-> arch/x86/net/bpf_jit_comp.c:arch_bpf_trampoline_size() {
->     ...
->     image = bpf_jit_alloc_exec(PAGE_SIZE);
->     if (!image)
->         return -ENOMEM;
+> mm/execmem.c:__execmem_cache_free() {
+> ...
+> 	execmem_fill_trapping_insns(ptr, size);
+> 	execmem_restore_rox(ptr, size);
 > 
->     ret = __arch_prepare_bpf_trampoline(&im, image, image + PAGE_SIZE, image,
->                                         m, flags, tnodes, func_addr);
->     ...
+> 	err = execmem_cache_add_locked(ptr, size, gfp_mask);
+> ...
 > }
 > 
-> Could these paths cause a page fault when EXECMEM_ROX_CACHE is enabled,
-> since they attempt to write directly to the read-only memory?
+> Does this ignore the return value of execmem_restore_rox()?
 
-This is handled by the next patch.
+Answered this one already:
+https://lore.kernel.org/bpf/ak-ZubgH13_MrXy4@kernel.org/
 
 -- 
 Sincerely yours,
