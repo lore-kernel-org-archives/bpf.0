@@ -1,30 +1,30 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80042F39C7
-	for <bpf@vger.kernel.org>; Sat, 11 Jul 2026 07:39:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810672F39C7;
+	Sat, 11 Jul 2026 07:40:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783755593; cv=none; b=jBia/52Jv1fn/qgBep+gaRWTSCL/GZ+A5+cqVTPP/W6/2+VpyrnWUEUQiSIqitUlNEQJuP0kXkIF+bIsphVOV7BgtNA2kRFurGqWqao0tDRTRk+441tzuyXxg7wOfLcF8Uz1aF9MDO1lBofSTPYnDV+sFLYKIV/AX6os5AMYCB0=
+	t=1783755645; cv=none; b=KQMd5U/pR+RuizsnseoeZEmZdC0clqUzZIPpmBkX9tyWNvNdzFwt5XnR+KPXtUgYJNMPOtLLOHLAuUfgDqBD//ytU4AS/OsGkIbdEo6UIquVvSg91iGCM7HeO1Un6Zll07/Jys7QnJGwwi0oEod5UyRr+LaQTaWRpRtSohSGrhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783755593; c=relaxed/simple;
-	bh=2RUymcIbxvQDys706y4njEZ/V9NBQGo48VnBGQUoF3g=;
+	s=arc-20240116; t=1783755645; c=relaxed/simple;
+	bh=jyaVMBgBdH3BdAcMDeQs+QsdiDd8yWss8V2bp69B1UY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mrqoSUNBhz71ISYn2d/TRiyCA1fQngNjI3YNBk+iGlkSXILxCNqOXnoymOde98WMWx8It6j3F6/IKiShfXtwebR9/z3PoXLIgSfSsuPTbdH7WieHX24ymkl67jXYZ9NGAcVT94zw/bkwRknaEZF+dvBR8LnyvzmAwEvAItz1r5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 In-Reply-To:Content-Type; b=YSwHi11OD+nwkPM/cJ0IztHwG4lAphuUWlx1UMPCxRFws3wXRII0BQyu2v2XFg/1dcLeT7GOgPHYXVpE7qM2blfFsqyseIkBKUKgdoixo853fqZOX/I5cZcbZ6vphOT3bGI13EcSTg7NFhxcmQjG0uDh+F3xnHsMfLic3/m1j7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gy0vp1428zYQtFR
-	for <bpf@vger.kernel.org>; Sat, 11 Jul 2026 15:39:34 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gy0wb4yrtzKHLtj;
+	Sat, 11 Jul 2026 15:40:15 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id EDFB240578
-	for <bpf@vger.kernel.org>; Sat, 11 Jul 2026 15:39:43 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 2F9114073D;
+	Sat, 11 Jul 2026 15:40:41 +0800 (CST)
 Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgBXPCg+81FquH5PAw--.6S2;
-	Sat, 11 Jul 2026 15:39:43 +0800 (CST)
-Message-ID: <f4010090-babc-4d25-ac80-e0abee9cfcbe@huaweicloud.com>
-Date: Sat, 11 Jul 2026 15:39:42 +0800
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgDnzCh481FqcZNPAw--.188S2;
+	Sat, 11 Jul 2026 15:40:41 +0800 (CST)
+Message-ID: <1d4101d0-e84e-4af6-a07f-b269c2d98f3a@huaweicloud.com>
+Date: Sat, 11 Jul 2026 15:40:40 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,48 +35,43 @@ User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH bpf-next 2/2] bpf: Remove unnecessary dup/restore
  subprog_starts and prog clone
 Content-Language: en-US
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <cover.1783775928.git.xukuohai@huaweicloud.com>
- <329e83120f0d88c2e5dc9d7bb2c0d38988959d32.1783775928.git.xukuohai@huaweicloud.com>
- <20260711054000.BC62D1F000E9@smtp.kernel.org>
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, emil@etsalapatis.com,
+ yonghong.song@linux.dev, a.s.protopopov@gmail.com, martin.lau@kernel.org,
+ clm@meta.com, ihor.solodrai@linux.dev
+References: <329e83120f0d88c2e5dc9d7bb2c0d38988959d32.1783775928.git.xukuohai@huaweicloud.com>
+ <8cb15a4684938f4f0766c752a8cedaffde40f0abed7cb3e5247b390e3a68c84a@mail.kernel.org>
 From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <20260711054000.BC62D1F000E9@smtp.kernel.org>
+In-Reply-To: <8cb15a4684938f4f0766c752a8cedaffde40f0abed7cb3e5247b390e3a68c84a@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgBXPCg+81FquH5PAw--.6S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxurykWFWfJF4fJw4DGF45KFg_yoW5CF18pF
-	95Jry8CF4qqa1xtw47XF48CFWkJr40qw12kr48Ww17Jw1UWF93WF1xKw4SvF9xZry0kw4I
-	vr4qv3sxWw1xuFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-	6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
-	CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
-	0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
-	AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
-	KfnxnUUI43ZEXa7IU1CPfJUUUUU==
+X-CM-TRANSID:Syh0CgDnzCh481FqcZNPAw--.188S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7JF1rXFW5Xr17ur4DJrW3Awb_yoWkZwcEy3
+	y8AF48Cw4Dua1jqa1vkwsrWr40gw4kAr1xCr1kXr15Jwn8Aws5A3y8Jas5uFy5Xws3Grs8
+	AanYq3ZY9wn8WjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbxxYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+	67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOB
+	MKDUUUU
 X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On 7/11/2026 1:40 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Critical] Use-After-Free of `env->prog` in `bpf_fixup_call_args()` due to cached pointer being freed by `bpf_jit_blind_constants()`.
-> --
+On 7/11/2026 2:28 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/include/linux/filter.h b/include/linux/filter.h
+>> index 25148865f9c76..232c02031fecb 100644
+>> --- a/include/linux/filter.h
+>> +++ b/include/linux/filter.h
 > 
-> --- Patch [2]: [PATCH bpf-next 2/2] bpf: Remove unnecessary dup/restore subprog_starts and prog clone ---
-> commit bd1c64739bd8085adba51ce9687069c667da314d
-> Author: Xu Kuohai <xukuohai@huawei.com>
-> 
-> bpf: Remove unnecessary dup/restore subprog_starts and prog clone
-> 
-> This commit removes unnecessary cloning of BPF programs and saving of
-> subprog states when JIT is required. It skips these steps because the
-> kernel will reject the program on JIT failure rather than falling back
-> to the interpreter.
+> [ ... ]
 > 
 >> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
 >> index 37f22eb418540..80c8beb45ea04 100644
@@ -85,70 +80,27 @@ On 7/11/2026 1:40 PM, sashiko-bot@kernel.org wrote:
 > 
 > [ ... ]
 > 
->> @@ -1273,35 +1275,33 @@ static int jit_subprogs(struct bpf_verifier_env *env)
->>   int bpf_jit_subprogs(struct bpf_verifier_env *env)
->>   {
->>   	int err, i;
->> -	bool blinded = false;
->>   	struct bpf_insn *insn;
->>   	struct bpf_prog *prog, *orig_prog;
->> -	u32 *orig_subprog_starts;
->> +	u32 *orig_subprog_starts = NULL;
->> +	bool cloned = false;
->>   
->>   	if (env->subprog_cnt <= 1)
->>   		return 0;
->>   
->>   	prog = orig_prog = env->prog;
->>   	if (bpf_prog_need_blind(prog)) {
->> -		orig_subprog_starts = bpf_dup_subprog_starts(env);
->> -		if (!orig_subprog_starts) {
->> -			err = -ENOMEM;
->> -			goto out_cleanup;
->> +		if (!prog->jit_required) {
->> +			orig_subprog_starts = bpf_dup_subprog_starts(env);
->> +			if (!orig_subprog_starts) {
->> +				err = -ENOMEM;
->> +				goto out_cleanup;
->> +			}
->>   		}
->> -		prog = bpf_jit_blind_constants(env, prog);
->> -		if (IS_ERR(prog)) {
->> -			err = -ENOMEM;
->> -			prog = orig_prog;
->> +		err = bpf_jit_blind_constants(env, &prog, !prog->jit_required, &cloned);
->> +		if (err)
->>   			goto out_restore;
+>> @@ -1309,13 +1309,13 @@ int bpf_jit_subprogs(struct bpf_verifier_env *env)
+>>   	return 0;
+>>
+>>   out_jit_err:
+>> -	if (blinded) {
+>> +	if (cloned) {
+>>   		bpf_jit_prog_release_other(orig_prog, prog);
+>> -		/* roll back to the clean original prog */
+>> +		/* roll back to the clean  original prog */
+>>   		prog = env->prog = orig_prog;
 > 
-> [Severity: Critical]
-> Can this lead to a use-after-free if bpf_jit_blind_constants() reallocates
-> the program?
+> This isn't a bug, but does the comment need the extra space between
+> 'clean' and 'original'?
 > 
-> When prog->jit_required is true, we pass false for the clone_needed parameter.
-> This means bpf_jit_blind_constants() modifies the original program directly.
-> 
-> If a patch requires expansion, bpf_patch_insn_data() triggers
-> bpf_prog_realloc(), which allocates a new program structure and frees the
-> original one.
-> 
-> If functions higher up in the call stack have cached the env->prog pointer
-> before JIT processing, won't they be left with a dangling pointer? For
-> example, in bpf_fixup_call_args():
-> 
-> kernel/bpf/fixups.c:bpf_fixup_call_args() {
->      struct bpf_prog *prog = env->prog;
->      struct bpf_insn *insn = prog->insnsi;
->      
->      ...
->      
->      if (prog->jit_required) {
->          verbose(env, "program requires BPF JIT compiler...\n");
->          ...
->      }
-> }
-> 
-> If an error occurs and triggers this fallback path, does it end up
-> dereferencing the freed prog pointer?
 
-Yes, the local prog variable should be refreshed.
+No, the extra space should be removed.
+
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29141596379
 
