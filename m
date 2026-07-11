@@ -1,178 +1,126 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FED93C5826;
-	Sat, 11 Jul 2026 12:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D54873C141F
+	for <bpf@vger.kernel.org>; Sat, 11 Jul 2026 13:01:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783774147; cv=none; b=t/asI38W8EW5STIm5xfErEJY0JmwnfeydDweW8mFqc8vksaGgCZnyO8UgFzdR7kwgpg69epHwUaTXi7LfNvwilSxbgi9CTTe6n8k4z3vM2QVpdJQMvnG1P/s0Z1xxv2mhH9lEADIEG6EMEu5jHKScFqfMvUohbcCERYVhBPzkWw=
+	t=1783774915; cv=none; b=nSN9AOsvP2nszlgZzrgRG1bk4sF/Av59Vf6PyVZDt7/oJgFxp1UZMBE4Za5wFz3gkfsixfaLFaZyFYWVYCYQB3de3xHvMRO3bZtsLx9qloSGQpycTYb2lwqGBj8dO6GIvIRkUSBFzthrlK1cmVskFGEYMcZPdckCM/zl3z9hnhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783774147; c=relaxed/simple;
-	bh=0dWDNl7crilbCQSqN9tYgFiSuT0qpf6TG1Zum8iGacE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JPcI2mv6NtO1ILjTt2kz6C7XP4fgC6NOqsc3VXX7zdlUXvc2X3Bj4+qVVctjd6MdPfpJZaKnVJ8lWiEyKBRlf2MtR+hT8V/RSZfBNt/0+WbSeBVAxQ74vdt0utKDG0mEPG1K707WRYSn25v6HpthHka5T2hx0WfT8VK6M5ephXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fZRwj7mZ; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783774915; c=relaxed/simple;
+	bh=7sRtOZF+YPTQA4fFn6HdZmoBJ2AcEBCS9lMdLmotymc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bc4TjwbdjUqP/QDQoHQUqf7YC1Rg2mONbMX19ANoI55p6OTQfWorLn2QkHZ9ic1oKjyWquG7+7qT9N3hIXpSbcT/stXEFxbglJbz0V7FQtV4b4SiZtxxw7c2IfafmRu/h5gwROS16xdLbtvo9+tvLtzxCzvCU7hcPCl5c7Fg0rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FMUcg1cs; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fZRwj7mZ"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783774143;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FMUcg1cs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783774912;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Ai1KcpgNUI4QdqfPIyJUWqcgePxLUR94N3w947XBtW8=;
-	b=fZRwj7mZmfr0znN16LT7kWoxSiTVvFpZ5G3kmSccDrG9F/5rMT3Tc3u9Kv5w0x81Y+4gxX
-	7xKMKzTFb7rIsi+1+sLK4L38D69g7XNXujZjj3juqxC+D/ydu6e5jP+ew9WlAUajUXymX2
-	RVZcTptHYxrghME2bsuZYxrCjZIGVv8=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
+	bh=a6vDyJk3Cy2WXcJVb9Fz2t23mdGudHpQUdVcvkmNRO8=;
+	b=FMUcg1csdEVl1fQfIu680BFdQIR44T5BGLX+23FXhfdsGWyNP28CgU9qyN5vPND7y99gsI
+	8ZWAKoBVbqGYi6nAeWH5jmvUE01Yv41+2F3NZ+lsdznwSIckALvrdjrtTkGB+5GbJ8e0p0
+	jo3IvX/9j3jZbJ2yb1+D3Yt9sGBeFk4=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-410-Zf1DJUG4OMunXLcWCMzOvg-1; Sat,
+ 11 Jul 2026 09:01:48 -0400
+X-MC-Unique: Zf1DJUG4OMunXLcWCMzOvg-1
+X-Mimecast-MFC-AGG-ID: Zf1DJUG4OMunXLcWCMzOvg_1783774905
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5F89119560BB;
+	Sat, 11 Jul 2026 13:01:44 +0000 (UTC)
+Received: from fedora (unknown [10.44.49.164])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 8AFE918005B7;
+	Sat, 11 Jul 2026 13:01:35 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Sat, 11 Jul 2026 15:01:43 +0200 (CEST)
+Date: Sat, 11 Jul 2026 15:01:32 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Test fentry link after tracing_multi link
-Date: Sat, 11 Jul 2026 20:48:22 +0800
-Message-ID: <20260711124822.29406-3-leon.hwang@linux.dev>
-In-Reply-To: <20260711124822.29406-1-leon.hwang@linux.dev>
-References: <20260711124822.29406-1-leon.hwang@linux.dev>
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>, rcu@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next 2/2] uprobes: Switch uretprobes_srcu to
+ SRCU-fast-updown
+Message-ID: <alI-rKAWUdoPCy5k@redhat.com>
+References: <20260706172744.3920417-1-puranjay@kernel.org>
+ <20260706172744.3920417-3-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260706172744.3920417-3-puranjay@kernel.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Verify that there's no any issue to attach tracing_multi link, then attach
-fentry link.
+On 07/06, Puranjay Mohan wrote:
+>
+> uretprobes_srcu currently uses normal SRCU, which issues
+> two smp_mb() per read lock/unlock pair. This overhead is
+> paid on every uretprobe hit.
+>
+> Switch to SRCU-fast-updown, which eliminates the per-reader
+> memory barriers by moving the ordering cost to the
+> grace-period side (synchronize_rcu() instead of smp_mb()).
+> This is acceptable because grace periods (uprobe
+> unregistration) are infrequent compared to reader-side
+> uretprobe hits.
+>
+> The updown flavor is required because the SRCU read lock is
+> taken in prepare_uretprobe() when a return instance is
+> created and is held until that return instance is finalized.
+> The traced thread returns to user space in between, so the
+> lock is inherently released in a different context from
+> where it was acquired: on the normal return path via
+> uprobe_handle_trampoline() -> hprobe_finalize(), or from
+> ri_timer() (expiry) or dup_utask() (fork) via
+> hprobe_expire(). srcu_down_read_fast() / srcu_up_read_fast()
+> are designed for this acquire-here / release-elsewhere
+> pattern and, unlike the same-context srcu_read_lock_fast()
+> variant, do not carry the lockdep read-side tracking that
+> would warn on it.
+>
+> The short, same-context SRCU sections in ri_timer() and
+> dup_utask() (which guard the uprobe against reuse across the
+> hprobe_expire() cmpxchg) instead use guard(srcu_fast_updown)
+> for proper lockdep coverage.
+>
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> ---
+>  include/linux/uprobes.h |  5 +++--
+>  kernel/events/uprobes.c | 29 +++++++++++++++++------------
+>  2 files changed, 20 insertions(+), 14 deletions(-)
 
-Assisted-by: Codex:gpt-5.6-sol
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/tracing_multi.c  | 69 +++++++++++++++++++
- .../progs/tracing_multi_intersect_attach.c    |  8 +++
- 2 files changed, 77 insertions(+)
+And the commit d3f52f53a562 ("srcu: Create an SRCU-fast-updown API")
+even mentions uretprobes as a likely user.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-index f02ffc7f41d7..0aa9532a05cf 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-@@ -460,6 +460,73 @@ static void test_intersect(void)
- 	tracing_multi_intersect__destroy(skel);
- }
- 
-+static void test_fentry_after_multi(void)
-+{
-+	static const char * const funcs[] = {
-+		"bpf_fentry_test1",
-+	};
-+	struct bpf_link *fentry_link = NULL, *multi_link = NULL;
-+	struct tracing_multi_intersect *skel = NULL;
-+	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	__u32 *ids = NULL;
-+	int err;
-+
-+	skel = tracing_multi_intersect__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "tracing_multi_intersect__open_and_load"))
-+		return;
-+
-+	skel->bss->pid = getpid();
-+
-+	ids = get_ids(funcs, ARRAY_SIZE(funcs), NULL);
-+	if (!ASSERT_OK_PTR(ids, "get_ids"))
-+		goto cleanup;
-+
-+	opts.ids = ids;
-+	opts.cnt = ARRAY_SIZE(funcs);
-+	multi_link = bpf_program__attach_tracing_multi(skel->progs.fentry_1, NULL, &opts);
-+	if (!ASSERT_OK_PTR(multi_link, "attach_multi"))
-+		goto cleanup;
-+
-+	fentry_link = bpf_program__attach(skel->progs.fentry);
-+	if (!ASSERT_OK_PTR(fentry_link, "attach_fentry"))
-+		goto cleanup;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.fentry_1), &topts);
-+	if (!ASSERT_OK(err, "test_run"))
-+		goto cleanup;
-+	ASSERT_EQ(skel->bss->test_result_fentry_1, 1, "multi_fentry");
-+	ASSERT_EQ(skel->bss->test_result_fentry, 1, "fentry");
-+
-+	err = bpf_link__destroy(fentry_link);
-+	fentry_link = NULL;
-+	if (!ASSERT_OK(err, "destroy_fentry"))
-+		goto cleanup;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.fentry_1), &topts);
-+	if (!ASSERT_OK(err, "test_run_multi"))
-+		goto cleanup;
-+	ASSERT_EQ(skel->bss->test_result_fentry_1, 2, "multi_fentry_only");
-+	ASSERT_EQ(skel->bss->test_result_fentry, 1, "fentry_detached");
-+
-+	err = bpf_link__destroy(multi_link);
-+	multi_link = NULL;
-+	if (!ASSERT_OK(err, "destroy_multi"))
-+		goto cleanup;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.fentry_1), &topts);
-+	if (!ASSERT_OK(err, "test_run_detached"))
-+		goto cleanup;
-+	ASSERT_EQ(skel->bss->test_result_fentry_1, 2, "multi_fentry_detached");
-+	ASSERT_EQ(skel->bss->test_result_fentry, 1, "fentry_still_detached");
-+
-+cleanup:
-+	bpf_link__destroy(fentry_link);
-+	bpf_link__destroy(multi_link);
-+	free(ids);
-+	tracing_multi_intersect__destroy(skel);
-+}
-+
- static void test_session(void)
- {
- 	LIBBPF_OPTS(bpf_test_run_opts, topts);
-@@ -957,4 +1024,6 @@ void test_tracing_multi_test(void)
- 	if (test__start_subtest("attach_api_fails"))
- 		test_attach_api_fails();
- 	RUN_TESTS(tracing_multi_verifier);
-+	if (test__start_subtest("fentry_after_multi"))
-+		test_fentry_after_multi();
- }
-diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c b/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
-index cd5be0bb6ffd..5b0af8f4c62f 100644
---- a/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
-+++ b/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
-@@ -11,6 +11,14 @@ __u64 test_result_fentry_1 = 0;
- __u64 test_result_fentry_2 = 0;
- __u64 test_result_fexit_1 = 0;
- __u64 test_result_fexit_2 = 0;
-+__u64 test_result_fentry = 0;
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(fentry)
-+{
-+	tracing_multi_arg_check(ctx, &test_result_fentry, false);
-+	return 0;
-+}
- 
- SEC("fentry.multi")
- int BPF_PROG(fentry_1)
--- 
-2.55.0
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 
