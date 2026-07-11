@@ -1,46 +1,41 @@
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5E91D7E41
-	for <bpf@vger.kernel.org>; Sat, 11 Jul 2026 15:00:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE192367B8;
+	Sat, 11 Jul 2026 15:27:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783782027; cv=none; b=Fomh1xoASTHrBubR+PhKoS4EOe1F7A1Ar+72RR7QZuuPWwIbMyGAmoBFcHO6UtQ1DHr84K9nF9ZfPgTTJk8cbNEPjWqgv8aznsWpyxpHkZ2BH0s4dxnyxeQWLzOLzG5sYbaDeXhQ/VpwW2efG8j9G7j2onR3dqZPYuyydXSbfDI=
+	t=1783783650; cv=none; b=KE4XbQoAgvsc2xmSrE8b7DxFdI6eV/Od/a58DGw+GPCsv6JPVO0q682ROnwPTK2Jy8YcO/cH20qYzwb870PXwZGE28TwGZRByu+kGDWB3y+yFYP/HTmRXbkMBPpa+GzseoV+3st/j3D1ko8fhflG9s7tDxOYQC6qRD6szdEXlpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783782027; c=relaxed/simple;
-	bh=q6/0ee91SdTYyL74lFn1JDDja2kBQezSep4iHVBr2go=;
+	s=arc-20240116; t=1783783650; c=relaxed/simple;
+	bh=4FhbT1roqH5pubu5uI5tCeFPNFFKV24ExU6tscwO9zM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IFAqXbvmX38o88CUjl43vba/pxVYr5hhtX402JB3tcmkRMT3J8bKQmRZ7d11Rf0xPIZ74OPoSrruDGpnJZZaOfuL6JydbFckfl7fK7t+tI1Wj4JZ3QFzsCWqWXrEkLoO3Nmoa4LbwbFAuDS8kgZa3OWlqIpdnYsX15g4M0ODq9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p69eOUrv; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=rDwPANsRJdZxFM4hD6M4cqhAlOSsXJoh4CqWerNjWvLOVf8fm0z2RH9mtxP/6rrj2abfMUWomqauVY5C5Z8kFvoq5PhtibIFZaQuwhjONNJ5dT/RQ85qMnpIWoHhTxKzT1E6MXd9iD3bjXn9VkRi3m1Mi35hpwp7qa8IORW41Wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hg7gGNgA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p69eOUrv"
-Date: Sat, 11 Jul 2026 15:00:13 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783782024;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BGF3iX+K0NL0zlGPvkZZrqYfr9pO3LSag2iM3Ynip78=;
-	b=p69eOUrvU2OkobEpkcDYVUay9HaMmCCDRZd7GzWYKmNCruMoJ+l2t50eCUHh5Nm4Bo0GaF
-	UXWzlCgB9wPeFMHyLFQemxY9Mre+fjQg37hu1Y3Pj9xivNEmaxoFdicWfnN9g5QVqAbglT
-	MOkxeC1CORtiJKpDBEd7m1qeg4Ug22U=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Eric Dumazet <edumazet@google.com>, 
-	Neal Cardwell <ncardwell@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, Ben Cressey <ben@cressey.dev>, 
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [PATCH bpf] bpf: tcp: Fix use-after-free in
- bpf_iter_tcp_established_batch()
-Message-ID: <alJXbCGnSXck4B7e@linux.dev>
-References: <20260620-bpf-iter-tcp-refcnt-v1-1-883bf9e69495@linux.dev>
- <CAAVpQUDiLwSYwFStRGpMQkGbm3j8_KJm9LVj0ykV7V3nYQ4YTg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hg7gGNgA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F264C1F000E9;
+	Sat, 11 Jul 2026 15:27:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783783649;
+	bh=0O9D9pDNfZYmsRf/d2dCrEHeCBY53yw+re1nqSW9KrI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=hg7gGNgAGxQo6yBWzhjzEmGjTBqWM0jykjjLXmtDENT6JrCAiDHsQGIIE63aKbkFl
+	 pTDvjkv9OQJNOHeXufnpA7MbPE+oJTElVxhGL7CnOmfhsxKRVZXV60f4d3IM1553pb
+	 hnlIaGZhyYgZCeVTbZ0pK03NsJjrwjTPNyP4LUTOpAViHWaUzoSJ0S8u5eH3E/+uqA
+	 jqz3oIsA6n/nK3Xgj6oKmcerocZBMw0ti36476hzT7G0E/2USRWU2zjCEIshcyUQWE
+	 rBlbF4ezCNFGpgDZ6QlQu7QZXvO55YQdt6G6gntnrem1IeQ5XHMNqSjmCFbi9ufBxF
+	 LK5GkUN5Nj9ug==
+Date: Sat, 11 Jul 2026 18:27:24 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 3/5] bpf: alloc_prog_pack(): skip ROX
+ management for already ROX memory
+Message-ID: <alJg3N5uANoLzIna@kernel.org>
+References: <20260711-execmem-x86-rox-bpf-v0-v2-0-bfd956d35119@kernel.org>
+ <20260711-execmem-x86-rox-bpf-v0-v2-3-bfd956d35119@kernel.org>
+ <20260711100032.58B1C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,40 +44,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAVpQUDiLwSYwFStRGpMQkGbm3j8_KJm9LVj0ykV7V3nYQ4YTg@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20260711100032.58B1C1F000E9@smtp.kernel.org>
 
-Hi Kuniyuki,
-
-Thanks for the review!
-
-On Sat, Jul 11, 2026 at 05:36:05AM -0700, Kuniyuki Iwashima wrote:
-> > +               } else if (!*start_sk) {
-> > +                       /* Remember where we left off. */
-> > +                       *start_sk = sk;
-> >                 }
-> > +               expected++;
+On Sat, Jul 11, 2026 at 10:00:31AM +0000, sashiko-bot@kernel.org wrote:
 >
-> This should be incremented just after seq_sk_match()
-> (see below)
+> bpf: alloc_prog_pack(): skip ROX management for already ROX memory
+> 
+> > @@ -965,7 +972,7 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns, bool
+> >  			pr_warn_once("BPF: Predictors not flushed for allocations greater than BPF_PROG_PACK_SIZE\n");
+> >  		size = round_up(size, PAGE_SIZE);
+> >  		ptr = bpf_jit_alloc_exec(size);
+> > -		if (ptr) {
+> > +		if (ptr && !bpf_jit_mem_is_rox()) {
+> >  			int err;
+> >  
+> >  			bpf_fill_ill_insns(ptr, size);
+> 
+> [Severity: Medium]
+> Since this patch protects bpf_prog_pack_alloc() and alloc_new_pack() from
+> writing to memory that might already be ROX, does it also need to protect
+> other callers of bpf_jit_alloc_exec() that write directly to the allocated
+> memory?
+> 
+> For example, bpf_jit_binary_alloc() allocates memory and directly writes
+> illegal instructions:
+> 
+> kernel/bpf/core.c:bpf_jit_binary_alloc() {
+>     ...
+>     hdr = bpf_jit_alloc_exec(size);
+>     if (!hdr) {
+>         bpf_jit_uncharge_modmem(size);
+>         return NULL;
+>     }
+> 
+>     /* Fill space with illegal/arch-dep instructions. */
+>     bpf_fill_ill_insns(hdr, size);
+>     ...
+> }
 
-Will do.
+ROX caches are only supported on x86-64, and this is never called there.
+ 
+> Similarly, on x86, arch_bpf_trampoline_size() allocates memory and passes
+> it as a read-write buffer:
+> 
+> arch/x86/net/bpf_jit_comp.c:arch_bpf_trampoline_size() {
+>     ...
+>     image = bpf_jit_alloc_exec(PAGE_SIZE);
+>     if (!image)
+>         return -ENOMEM;
+> 
+>     ret = __arch_prepare_bpf_trampoline(&im, image, image + PAGE_SIZE, image,
+>                                         m, flags, tnodes, func_addr);
+>     ...
+> }
+> 
+> Could these paths cause a page fault when EXECMEM_ROX_CACHE is enabled,
+> since they attempt to write directly to the read-only memory?
 
-> > @@ -3167,6 +3168,10 @@ static struct sock *bpf_iter_tcp_batch(struct seq_file *seq)
-> >         WARN_ON_ONCE(iter->end_sk != expected);
->
-> Let's say the batch array was smaller than the hash chain length
-> and we reallocate the array based on "expected" w/ the bucket lock.
->
-> What happens if refcount_set(..., 3) is called during reallocation ?
-> bpf_iter_fill_batch() will see the larger "expected", and WARN_ON_ONCE()
-> will be triggered.
+This is handled by the next patch.
 
-Right. Moving expected++ up fixes the sizing. Since end_sk == expected
-then no longer holds when a socket is skipped, I'll make the
-batch-complete check and the WARN look for a leftover socket instead.
-
-I'll send a v2 early next week.
-
-Thanks,
-Jose
+-- 
+Sincerely yours,
+Mike.
