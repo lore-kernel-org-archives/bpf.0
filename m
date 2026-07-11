@@ -1,83 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD0525B0B6;
-	Sat, 11 Jul 2026 11:33:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ECC425B0B6;
+	Sat, 11 Jul 2026 12:09:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783769632; cv=none; b=COI6xVztfWIogmWXVJ7Pfab0SjkfEeg8IAGhJiNeTYF1rkfXzFGn5fYkDbcV2JHTLkX7dymuUrs6Iy7UuLwBAf2KK9G8rgKg4THHgB9d97uUSKbkvXfJBECmE3Vc4AXo2r/SkewaEvKKP806yOzV6FfaaBXNq+g7bmrhUGhF0Mk=
+	t=1783771793; cv=none; b=WE+d7lNosJ2Qkz1diDbqqCJPZwyil+LzvZAD/YqzHv9BtyltMaZ9lm9Z9/odHndLFoAnTNXnG7Zz5vKgO+S2aTeC+fo1TstiEp1dqZONN/m+Oqln+vnZVfORvzVZqaV0QwdNwId+Xnt/BviPESkNOh7kf3E98yEQmOYVAN9Wms8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783769632; c=relaxed/simple;
-	bh=8LmPRFDPlAnIc1m/H2DRLrBOfEKUJh5ZpUUWKbCrYHc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=YmWCl9EYOiyIXteZ8Kz+fUbrtGELJz9zl4TligSCA0+cy4da96YRzkGSOLlzQEDv8E0YvQL8oJz98RlmRVKtHBpoCfoxmsAdCPwMtSLm5YHVsjv4b79/MCh5sZVDVNZ4tFfBXvtzS+DyWJvqV507YY2pCm9D9Gpv1zcpgKyugxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MNy5riVj; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783771793; c=relaxed/simple;
+	bh=vqS+W1jU6KbctOdHjdtMfnextmJZlOJ9Cn/6aDbg6IA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hbwdoaQtx1RxfUP3UWoDx26GTfZ8nspf7P/NfsLFLVRh1jogcpgjifsztfukVT4QPw2/GpZmc1EpcDclyV2mnLljftWOuHaprM3bF81xOYytJKfynJmpsF7YKTjR8GFIZj5UNotPmLGWauNyaCqx4QouOGwjBMnNH8V6lnWDAUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PpygNmqn; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MNy5riVj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07E111F000E9;
-	Sat, 11 Jul 2026 11:33:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783769631;
-	bh=F9q0YlDvI/Js7FeGCONKApl9mEpT+pYemA5mpwvtMP8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=MNy5riVjmET07iBxOlZkYKoIeF1/zoeszrV2/6UJP8ba5eXThtIfi+3GxTp9KV1lq
-	 ZUCmminQFmWsSlsZE56KurFK9gY+Zv4tMnWG1p/Or5bDCavmd5YSkaGOk9sCgVZpNZ
-	 r7536o1nI9WXYbLjqLg0c+Z6PFtoGZHhxcEFxjHez3dlgxKZdEvf1kL94/JkXv6mPD
-	 dL7JJM0rQXPM4qEVwXTY1I6WxInkUja+Kfs82jiVIHIFjL4R5rqa385cczab65/c/s
-	 OZUDz52POxXQ6uiUZH9XvfaHervcb68tZaC7vSg4KwxySctAh7oBTVcEkaxuZCyAvP
-	 pYFiKzW3wxrjw==
-Content-Type: multipart/mixed; boundary="===============5699139597305415616=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PpygNmqn"
+Message-ID: <3b473dcf-54de-4925-8939-4a8c08f48341@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783771788;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KBR2/ci64dEFqKoBwWixeRCc/qpnm8OhZ34VDlvHtzA=;
+	b=PpygNmqnaIXUOESeF1UzYLC5kiOqvsNJdxifAMxpLWiMGwNxLn+2qESHABY54LgixDaS71
+	IAeKY6QdmHS9Fuq9FvNbkMj9pqKFVxUHrdHrvsdzzIUtPTyVrhi/lq/9z1SHtSnZ/vmSVt
+	ohTtVnAkMajZl2NNG44m2dRa//CluXA=
+Date: Sat, 11 Jul 2026 20:09:28 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <ba107f614b57dcc666c3eaae4a14180187fdf5b0d47ee339a557dc43bea5b0e1@mail.kernel.org>
-In-Reply-To: <20260711104727.4023420-2-pulehui@huaweicloud.com>
-References: <20260711104727.4023420-2-pulehui@huaweicloud.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Reject callback subprogs invoke tailcall
-From: bot+bpf-ci@kernel.org
-To: pulehui@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,bjorn@kernel.org,daniel@iogearbox.net
-Cc: ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,yonghong.song@linux.dev,martin.lau@linux.dev,john.fastabend@gmail.com,song@kernel.org,jolsa@kernel.org,emil@etsalapatis.com,pulehui@huawei.com,pulehui@huaweicloud.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 11 Jul 2026 11:33:51 +0000 (UTC)
-
---===============5699139597305415616==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next 1/2] bpf: Mark tracing_multi trampolines as
+ ftrace managed
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-patches-bot@fb.com
+References: <20260710144734.78203-1-leon.hwang@linux.dev>
+ <20260710144734.78203-2-leon.hwang@linux.dev> <alFvBaC7moSlJMh6@krava>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+Content-Language: en-US
+In-Reply-To: <alFvBaC7moSlJMh6@krava>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
->     bpf: Reject callback subprogs invoke tailcall
->
->     Some JIT compilers, such as x86_64, rely on a register to pass the TCC.
->     When subprograms of synchronous callback invoke tailcall, C helpers
->     invoking bpf callback clobber this register, and the corrupted TCC may
->     bypass the TCC limit, leading to infinite tailcall.
->
->     Fix this by rejecting tailcall inside all subprogs of sync callback.
->     This also cleanly consolidates the existing async and exception callback
->     checks into a single unified `is_cb` check.
->
->     Signed-off-by: Pu Lehui <pulehui@huawei.com>
+On 2026/7/11 06:15, Jiri Olsa wrote:
+> On Fri, Jul 10, 2026 at 10:47:33PM +0800, Leon Hwang wrote:
+>> Since tracing_multi link does not set ftrace_managed, it would fail to
+>> release the tracing_multi link when attaching tracing_multi link and
+>> then attaching fentry link.
+>>
+>> [    3.714215] WARNING: kernel/bpf/trampoline.c:1727 at bpf_trampoline_multi_detach+0x20b/0x240, CPU#1: test_progs/97
+>> ...
+>> [    3.733170]  bpf_tracing_multi_link_release+0x14/0x30
+>> [    3.733890]  bpf_link_free+0x58/0x130
+>> [    3.734414]  bpf_link_release+0x23/0x30
+>>
+>> Fix it by setting 'ftrace_managed = true' in register_fentry_multi().
+>>
+>> Fixes: aef4dfa790b2 ("bpf: Add bpf_trampoline_multi_attach/detach functions")
+>> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+>> ---
+>>  kernel/bpf/trampoline.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+>> index 1a721fc4bef5..6eadf64f7ec9 100644
+>> --- a/kernel/bpf/trampoline.c
+>> +++ b/kernel/bpf/trampoline.c
+>> @@ -1536,6 +1536,7 @@ static int register_fentry_multi(struct bpf_trampoline *tr, struct bpf_tramp_ima
+>>  	if (bpf_trampoline_use_jmp(tr->flags))
+>>  		addr = ftrace_jmp_set(addr);
+>>  
+>> +	tr->func.ftrace_managed = true;
+> 
+> I wonder we could set tr->func.ftrace_managed early in bpf_trampoline_get,
+> but we could do that as follow up
 
-This looks like a bug fix, but there is no Fixes: tag.
 
-The change broadens the tail_call_reachable guard in
-check_max_stack_depth_subprog() from the exception-only test to the
-unified is_cb test:
+Makes sense. Let me try it when adding tracing_multi link support for
+bpf progs.
 
-    if (subprog[tmp].is_cb)
-
-The narrower "cannot tail call within exception cb" guard it replaces was
-added by commit b9ae0c9dd0ac, which only covered exception callbacks and
-left synchronous callbacks unprotected. Should this carry:
-
-  Fixes: b9ae0c9dd0ac ("bpf: Add support for custom exception callbacks")
+> 
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Thanks for your review.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29150078207
---===============5699139597305415616==--
+Leon
+
+> 
+> thanks,
+> jirka
+> 
+> 
+>>  	ftrace_hash_add(data->reg, data->entry, ip, addr);
+>>  	tr->cur_image = im;
+>>  	return 0;
+>> -- 
+>> 2.55.0
+>>
+
