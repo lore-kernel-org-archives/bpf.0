@@ -1,628 +1,195 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0CB71FECBA
-	for <bpf@vger.kernel.org>; Sun, 12 Jul 2026 01:41:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6542D739C
+	for <bpf@vger.kernel.org>; Sun, 12 Jul 2026 04:08:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783820493; cv=none; b=q34zJegETByDbTCqMF4Qa7n26ERGu7Njf6LAxnSK4/kzEdGHW0Jsk5pl+q++PLeqNqma4su/WvLKN9ZcbCdQ8dTiiWShkSKJQN005CV+7zLt2iGapCEvbMyBa+iWO1DKGo1MeT6OVGHGs9+0F8sXa8fHqAkFst5RcHsvcl1PIoY=
+	t=1783829332; cv=none; b=kifKnS93ChLoHYynxKXIqa30Ca17RVD7pw5njfjRdiX7WXlIS+1mgicALoBc4KtrC4kE4vU7gOPAdZSSZZYLANpPrtFhmJadmImkZtwV9fNkxPT1desoEWpBN+6X4Jk763KPRlLmMuzjcBX7Fto0aPZj5c6kv1n5GEZyFsqFNLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783820493; c=relaxed/simple;
-	bh=EcHUbyvurR82V3HdX3eLhi+/TiiljyMvzLS6SUo2/rU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XO5cu5WIrzqlpnmK5QVADq4YI96lrN52Qgno5Qti1Q80DKutkwpsERM8g5EpzNIe+ZifXGSNecN/GYspBTSwWIUCXBhgo4p6Jgui8/boYhHeMD8vdD3UFA+8iY9L449Wk8da0/qMXNSYBFN4e+BrSpZbOhMLsnnmiIKoKGcQ+sU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 2FF7877052;
-	Sun, 12 Jul 2026 01:41:29 +0000 (UTC)
-Authentication-Results: smtp-out1.suse.de;
-	none
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id AF570779B5;
-	Sun, 12 Jul 2026 01:41:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id GI+zJ8fwUmqRegAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Sun, 12 Jul 2026 01:41:27 +0000
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	dsahern@kernel.org,
-	horms@kernel.org,
-	idosch@nvidia.com,
-	Fernando Fernandez Mancera <fmancera@suse.de>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Florian Westphal <fw@strlen.de>,
-	Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ij@kernel.org>,
-	Yung Chih Su <yuuchihsu@gmail.com>,
-	Wyatt Feng <bronzed_45_vested@icloud.com>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH 09/13 RFC net-next] net: fib: split common nexthop logic to fib_core.c
-Date: Sun, 12 Jul 2026 03:39:07 +0200
-Message-ID: <20260712013941.4570-10-fmancera@suse.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260712013941.4570-1-fmancera@suse.de>
-References: <20260712013941.4570-1-fmancera@suse.de>
+	s=arc-20240116; t=1783829332; c=relaxed/simple;
+	bh=h6B0OjtVcGTWtjlzNMQQRejqoZpZDRXhjwZUYIoAIUs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bchKJNoNU2f7lxNE5NEZSc3ztYak0bFqwOgXAnn80p/FtNXtEevtzNJuz65YivtLjiYRKjo3ObGy3cjEnYZ2YKs2bMZU4gVKIoygtPhvBbfHIhaXnQBkfybhHIMXUngXkIPMurS0m5oW9C1cYnFMzegUmdIhQ3OR1ZVzgqAxuB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UYFO8J+T; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UYFO8J+T"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-388b404ea89so1797931a91.0
+        for <bpf@vger.kernel.org>; Sat, 11 Jul 2026 21:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783829330; x=1784434130; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=t37Gu0kxoMG3/ekSSSPa6GLm4FmEdZkOax2Tk1RKTwE=;
+        b=UYFO8J+T9mdKCwwncTHii6Rnnng+fAt2iuWC7rA9o6ZyZtHiG/5RvvgoSv/KW4IGXt
+         sVZegZyK+Mjozbl1VXowKrbo+fGY5aNFMvMff6xD1GpGUtRPwu7sh4INH6h3YKUW1uhx
+         NRoCFlqbzp7thOuoBbiYsF5cpP1N2VXa8gfnLv5FcXM4FtjH2BaJcPK2Rkk+gtcMl3A9
+         2BcLXGKSWm13xJhUNEKBTAmWp3m2+tEzuV/5a+5ir6Rv/XVnMvmAbsbbRcFFiRHaUyWJ
+         76hcA21SlxBM1hL/F/AIdlt1Dy+pUJt70cFAjCZs5k/rgl0wAcgM/V+dikdILKKNobK4
+         3RuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783829330; x=1784434130;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=t37Gu0kxoMG3/ekSSSPa6GLm4FmEdZkOax2Tk1RKTwE=;
+        b=eTXxZxpSIEMh7uXENGvQ3aaTKYMWGsLVmMhozsaSDC2INmPFD31d7iZEBtWKgQFNbx
+         cvqvWLT+BNcpkx3PrzWkBJuL87rutiwjkRDSeDcKqmCOrZ3fFlYqbPQi6yzg97Tmya2z
+         GnwcKZiDPKyyuzBcl1nEx8bBge5/GLwOOis0NK11+Z2DroEnkC7XCQ+C1TRspKNRGcxi
+         jtf+NsPUvlD1cfz5Ne2ZNV40rBMftYcbiORmxsnRburnUGZT/jrkag17zSQqs24ga5dd
+         EKOtDVmI5TlFJ7sJgCT663rPT1sug7FARH/Uaq9bqAfW47CqfyINrH5a8iGsgW1QoMJq
+         286Q==
+X-Forwarded-Encrypted: i=1; AHgh+RrF1H6edMpqGlJrhp/Z6H5sb87zURaYbFpbk1rwFjMVEdpBdpLajXsOxgnHmI3mxoHL5Ag=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzq6e/WZwdEd1a/C5Q4i9urBC4p2L0Zmtf3QtwlM4WBne18NWRL
+	EascKbDf8RcVHuz19g4q9WTOY3ZB+MSaxBw5k9zKKQSMD18Q61444lNm
+X-Gm-Gg: AfdE7cktTmYOj6gklSaI1YygzWklfoTMzV/Ht33mZlzLAvxmEwPbU15q3AThSYaiRbr
+	yNG7SWdn3LKuOFgDm4Lr8Xlm5sw9uXZIWpoFZeGGmy5aJ3/UrIJqLY4o+A+p7csqMdJyaFHlv/z
+	d8WNYhi0gR/AkiXdKFGOCLDfPv5yqSg61RC0RS+lHZnZ0vscQGJ+UP2A5kudhTBmI2wmUkdBX7b
+	iRoQf4Ea4sRU15bxRGNeH1bbOlT8C/JWBqDd4CK4MQ/6M0ZmGnidUqRoXVu9TNG2mAQUUWbmYW9
+	LELhPC6FGpjbeSUlAw1BKWFhD7zNnfMQWj7vBSNsqrgBszIuG3Z6A34AZ2xSRNWQ8IRi0us+Z2h
+	JIujSdvwtkBa1wx+UUKI0DEbqPoo0bKu3BfHqQDnXspP9KXLjU3E50oY0iImy/iAK4JWQV3Y7za
+	NVSwAaZr44SlVbQC/a
+X-Received: by 2002:a17:90b:2585:b0:38d:ec55:7aa7 with SMTP id 98e67ed59e1d1-38dec5589c6mr496049a91.19.1783829330453;
+        Sat, 11 Jul 2026 21:08:50 -0700 (PDT)
+Received: from [127.0.0.2] ([98.35.8.117])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31174839f89sm56808928eec.10.2026.07.11.21.08.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Jul 2026 21:08:49 -0700 (PDT)
+From: Farid Zakaria <farid.m.zakaria@gmail.com>
+Subject: [PATCH v2 0/5] binfmt_misc: bpf-backed binary type handlers
+Date: Sat, 11 Jul 2026 21:08:13 -0700
+Message-Id: <20260711-binfmt-misc-bpf-v2-v2-0-d6591ceaf207@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Spam-Flag: NO
-X-Spam-Score: -4.00
-X-Spam-Level: 
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-4.00 / 50.00];
-	REPLY(-4.00)[];
-	TAGGED_RCPT(0.00)[]
-X-Rspamd-Queue-Id: 2FF7877052
-X-Rspamd-Action: no action
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAC4TU2oC/y3NQQ7CIBCF4asY1o4B0lpx5T1MY4QO7aQWGmhQ0
+ /TuIrr8XzLfrCxiIIzsvFtZwESRvMsh9ztmhrvrEajLzSSXR94IAZqcnRaYKBrQs4UkgdvaCKu
+ UVtixfDgHtPQq6LXNPVBcfHiXH0l81z/HG3j6MBbn596KmwRwaCqtVG1OFRpxGTE4fBx86Fm7b
+ dsH8KzV07cAAAA=
+X-Change-ID: 20260711-binfmt-misc-bpf-v2-0f5c1f99b9ed
+To: Christian Brauner <brauner@kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+ Jonathan Corbet <corbet@lwn.net>, Jann Horn <jannh@google.com>, 
+ John Ericson <mail@johnericson.me>, linux-fsdevel@vger.kernel.org, 
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Farid Zakaria <farid.m.zakaria@gmail.com>
+X-Mailer: b4 0.14.3
 
-To enable compiling INET subsystem without IPv4, shared FIB and nexthop
-logic must be accessible to IPv6 when IPv4 routing stack is omitted.
+This is a continuation of Christian's bpf-backed binfmt_misc POC [1], which he offered
+to hand off to me. I am carrying it forward. The kernel design is his and is
+unchanged. This series rebases it onto his binfmt_misc locking/cleanup series [2]
+and adds selftests (+ fixed from the one's shared), and therefore does
+not apply to mainline alone.
 
-This patch creates fib_core.c and move all the functions for common
-nexthop initialization and release from fib_semantics.c to fib_core.c.
-Note that fib_core.c is under net/core.
+As for motivation for this whole change, Christian did a great VL;MR;
+write-up [1].
 
-Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+TL;DR: binfmt_misc can match a binary and hand it to a fixed interpreter,
+but it can't match programmatically or compute the interpreter per binary.
+The Nix community would love to support relocatable binaries, where the
+correct loader can only be found relative to the binary itself.
+This adds a 'B' handler type: a binfmt_misc_ops struct_ops program that
+inspects the binary and picks the interpreter with one new kfunc,
+bpf_binprm_set_interp(). 
+
+  bpftool struct_ops register nix_origin.bpf.o /sys/fs/bpf
+  echo ':nix-origin:B:nix_origin::::' > /proc/sys/fs/binfmt_misc/register
+
+Patch 5's nix_origin.bpf.c is Christian's example program with a small fix
+so it passes the verifier. Christian, happy to add a Co-developed-by: and your
+Signed-off-by: if you would like the credit in the trailer.
+
+For those that want to validate this functionality on a NixOS machine,
+you may find my flake.nix handy [3]. It builds the kernel, compiles the
+bpf objects against its BTF, and runs the selftest on boot,
+
+  # be sure to change virtualisation.sharedDirectories in flake.nix to your checkout
+  $ nix build .#nixosConfigurations.micro-vm.config.system.build.vm -o /tmp/vm
+  $ NIXPKGS_QEMU_KERNEL_micro_vm=$PWD/arch/x86/boot/bzImage \
+  $ NIX_DISK_IMAGE=/tmp/vm.qcow2 \
+  $ QEMU_KERNEL_PARAMS="binfmt_autotest console=ttyS0" \
+  $ QEMU_OPTS="-nographic -no-reboot" \
+  /tmp/vm/bin/run-micro-vm-vm
+
+[1] https://lore.kernel.org/r/20260707-work-bpf-binfmt_misc-v1-0-74b995c84ec1@kernel.org
+[2] https://lore.kernel.org/all/20260710-work-binfmt_misc-locking-v3-0-a162f7cb58d6@kernel.org/
+[3] https://gist.github.com/fzakaria/0155e11a0882bd3d6e63f4070e7fac0c
+
+To: Christian Brauner <brauner@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Kees Cook <kees@kernel.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Jan Kara <jack@suse.cz>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Jann Horn <jannh@google.com>
+Cc: John Ericson <mail@johnericson.me>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+
+Signed-off-by: Farid Zakaria <farid.m.zakaria@gmail.com>
 ---
- include/net/ip_fib.h       |  43 +++++++++++
- include/net/route.h        |   6 ++
- net/core/Makefile          |   2 +-
- net/core/fib_core.c        | 146 +++++++++++++++++++++++++++++++++++++
- net/ipv4/Makefile          |   2 +
- net/ipv4/fib_semantics.c   | 142 ------------------------------------
- net/ipv4/netlink.c         |   2 +
- net/ipv4/nexthop.c         |   2 +-
- net/ipv4/sysctl_net_ipv4.c |   2 +
- net/ipv6/ip6_fib.c         |   2 +
- 10 files changed, 205 insertions(+), 144 deletions(-)
- create mode 100644 net/core/fib_core.c
+Changes in v2:
+- Patch 5 adds new tests that validate the functionality:
+  - a bpf handler matches a synthetic aarch64 header and routes it to a fixed
+     interpreter the program chooses;
+  - a handler resolves a "$ORIGIN/..."-relative PT_INTERP to an
+     interpreter co-located with the binary (i.e, Nix usecase);
+- Patch 3 is rebased to fit the new binfmt_misc code style: the 'B' field parsing is now a
+  parse_bpf_fields() helper matching the new parse_{magic,extension}_fields()
+  split, and load_misc_binary() keeps the bpf retry loop in the
+  __free() cleanup style.
+- Link to v1: https://lore.kernel.org/r/20260707-work-bpf-binfmt_misc-v1-0-74b995c84ec1@kernel.org
 
-diff --git a/include/net/ip_fib.h b/include/net/ip_fib.h
-index 0a35355fb0f3..0c56d8690e00 100644
---- a/include/net/ip_fib.h
-+++ b/include/net/ip_fib.h
-@@ -250,7 +250,13 @@ int call_fib4_notifiers(struct net *net, enum fib_event_type event_type,
- int __net_init fib4_notifier_init(struct net *net);
- void __net_exit fib4_notifier_exit(struct net *net);
- 
-+#if IS_ENABLED(CONFIG_IPV4)
- void fib_info_notify_update(struct net *net, struct nl_info *info);
-+#else
-+static inline void fib_info_notify_update(struct net *net, struct nl_info *info)
-+{
-+}
-+#endif
- int fib_notify(struct net *net, struct notifier_block *nb,
- 	       struct netlink_ext_ack *extack);
- 
-@@ -578,10 +584,23 @@ void fib_select_multipath(struct fib_result *res, int hash,
- void fib_select_path(struct net *net, struct fib_result *res,
- 		     struct flowi4 *fl4, const struct sk_buff *skb);
- 
-+#if IS_ENABLED(CONFIG_IPV4)
- int fib_nh_init(struct net *net, struct fib_nh *fib_nh,
- 		struct fib_config *cfg, int nh_weight,
- 		struct netlink_ext_ack *extack);
- void fib_nh_release(struct net *net, struct fib_nh *fib_nh);
-+#else
-+static inline int fib_nh_init(struct net *net, struct fib_nh *fib_nh,
-+			      struct fib_config *cfg, int gfp,
-+			      struct netlink_ext_ack *extack)
-+{
-+	return -EAFNOSUPPORT;
-+}
-+
-+static inline void fib_nh_release(struct net *net, struct fib_nh *fib_nh)
-+{
-+}
-+#endif
- int fib_nh_common_init(struct net *net, struct fib_nh_common *nhc,
- 		       struct nlattr *fc_encap, u16 fc_encap_type,
- 		       void *cfg, gfp_t gfp_flags,
-@@ -620,7 +639,13 @@ static inline void fib_combine_itag(u32 *itag, const struct fib_result *res)
- #endif
- }
- 
-+#if IS_ENABLED(CONFIG_IPV4)
- void fib_flush(struct net *net);
-+#else
-+static inline void fib_flush(struct net *net)
-+{
-+}
-+#endif
- void free_fib_info(struct fib_info *fi);
- 
- static inline void fib_info_hold(struct fib_info *fi)
-@@ -658,8 +683,26 @@ int ip_valid_fib_dump_req(struct net *net, const struct nlmsghdr *nlh,
- 			  struct fib_dump_filter *filter,
- 			  struct netlink_callback *cb);
- 
-+#if IS_ENABLED(CONFIG_IPV4)
- int fib_nexthop_info(struct sk_buff *skb, const struct fib_nh_common *nh,
- 		     u8 rt_family, unsigned char *flags, bool skip_oif);
- int fib_add_nexthop(struct sk_buff *skb, const struct fib_nh_common *nh,
- 		    int nh_weight, u8 rt_family, u32 nh_tclassid);
-+#else
-+static inline int fib_nexthop_info(struct sk_buff *skb,
-+				   const struct fib_nh_common *nh,
-+				   u8 rt_family, unsigned char *flags,
-+				   bool skip_oif)
-+{
-+	return 0;
-+}
-+
-+static inline int fib_add_nexthop(struct sk_buff *skb,
-+				  const struct fib_nh_common *nh,
-+				  int nh_weight, u8 rt_family,
-+				  u32 nh_tclassid)
-+{
-+	return 0;
-+}
-+#endif
- #endif  /* _NET_FIB_H */
-diff --git a/include/net/route.h b/include/net/route.h
-index 08adb14224a9..29944be291f8 100644
---- a/include/net/route.h
-+++ b/include/net/route.h
-@@ -128,7 +128,13 @@ extern struct ip_rt_acct __percpu *ip_rt_acct;
- struct in_device;
- 
- int ip_rt_init(void);
-+#if IS_ENABLED(CONFIG_IPV4)
- void rt_cache_flush(struct net *net);
-+#else
-+static inline void rt_cache_flush(struct net *net)
-+{
-+}
-+#endif
- void rt_flush_dev(struct net_device *dev);
- 
- static inline void inet_sk_init_flowi4(const struct inet_sock *inet,
-diff --git a/net/core/Makefile b/net/core/Makefile
-index b3fdcb4e355f..63ebcdc6b9f1 100644
---- a/net/core/Makefile
-+++ b/net/core/Makefile
-@@ -12,7 +12,7 @@ obj-$(CONFIG_SYSCTL) += sysctl_net_core.o
- obj-y		     += dev.o dev_api.o dev_addr_lists.o dst.o netevent.o \
- 			neighbour.o rtnetlink.o utils.o link_watch.o filter.o \
- 			sock_diag.o dev_ioctl.o tso.o sock_reuseport.o \
--			fib_notifier.o xdp.o flow_offload.o gro.o \
-+			fib_notifier.o fib_core.o xdp.o flow_offload.o gro.o \
- 			netdev-genl.o netdev-genl-gen.o netdev_work.o gso.o
- 
- obj-$(CONFIG_NETDEV_ADDR_LIST_TEST) += dev_addr_lists_test.o
-diff --git a/net/core/fib_core.c b/net/core/fib_core.c
-new file mode 100644
-index 000000000000..93894b5847e9
---- /dev/null
-+++ b/net/core/fib_core.c
-@@ -0,0 +1,146 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <linux/types.h>
-+#include <net/lwtunnel.h>
-+#include <net/route.h>
-+
-+static void rt_fibinfo_free(struct rtable __rcu **rtp)
-+{
-+	struct rtable *rt = rcu_dereference_protected(*rtp, 1);
-+
-+	if (!rt)
-+		return;
-+
-+	/* Not even needed : RCU_INIT_POINTER(*rtp, NULL);
-+	 * because we waited an RCU grace period before calling
-+	 * free_fib_info_rcu()
-+	 */
-+
-+	dst_dev_put(&rt->dst);
-+	dst_release_immediate(&rt->dst);
-+}
-+
-+static void free_nh_exceptions(struct fib_nh_common *nhc)
-+{
-+	struct fnhe_hash_bucket *hash;
-+	int i;
-+
-+	hash = rcu_dereference_protected(nhc->nhc_exceptions, 1);
-+	if (!hash)
-+		return;
-+	for (i = 0; i < FNHE_HASH_SIZE; i++) {
-+		struct fib_nh_exception *fnhe;
-+
-+		fnhe = rcu_dereference_protected(hash[i].chain, 1);
-+		while (fnhe) {
-+			struct fib_nh_exception *next;
-+
-+			next = rcu_dereference_protected(fnhe->fnhe_next, 1);
-+
-+			rt_fibinfo_free(&fnhe->fnhe_rth_input);
-+			rt_fibinfo_free(&fnhe->fnhe_rth_output);
-+
-+			kfree(fnhe);
-+
-+			fnhe = next;
-+		}
-+	}
-+	kfree(hash);
-+}
-+
-+static void rt_fibinfo_free_cpus(struct rtable __rcu * __percpu *rtp)
-+{
-+	int cpu;
-+
-+	if (!rtp)
-+		return;
-+
-+	for_each_possible_cpu(cpu) {
-+		struct rtable *rt;
-+
-+		rt = rcu_dereference_protected(*per_cpu_ptr(rtp, cpu), 1);
-+		if (rt) {
-+			dst_dev_put(&rt->dst);
-+			dst_release_immediate(&rt->dst);
-+		}
-+	}
-+	free_percpu(rtp);
-+}
-+
-+void fib_nh_common_release(struct fib_nh_common *nhc)
-+{
-+	netdev_put(nhc->nhc_dev, &nhc->nhc_dev_tracker);
-+	lwtstate_put(nhc->nhc_lwtstate);
-+	rt_fibinfo_free_cpus(nhc->nhc_pcpu_rth_output);
-+	rt_fibinfo_free(&nhc->nhc_rth_input);
-+	free_nh_exceptions(nhc);
-+}
-+
-+int fib_nh_common_init(struct net *net, struct fib_nh_common *nhc,
-+		       struct nlattr *encap, u16 encap_type,
-+		       void *cfg, gfp_t gfp_flags,
-+		       struct netlink_ext_ack *extack)
-+{
-+	int err;
-+
-+	nhc->nhc_pcpu_rth_output = alloc_percpu_gfp(struct rtable __rcu *,
-+						    gfp_flags);
-+	if (!nhc->nhc_pcpu_rth_output)
-+		return -ENOMEM;
-+
-+	if (encap) {
-+		struct lwtunnel_state *lwtstate;
-+
-+		err = lwtunnel_build_state(net, encap_type, encap,
-+					   nhc->nhc_family, cfg, &lwtstate,
-+					   extack);
-+		if (err)
-+			goto lwt_failure;
-+
-+		nhc->nhc_lwtstate = lwtstate_get(lwtstate);
-+	}
-+
-+	return 0;
-+
-+lwt_failure:
-+	rt_fibinfo_free_cpus(nhc->nhc_pcpu_rth_output);
-+	nhc->nhc_pcpu_rth_output = NULL;
-+	return err;
-+}
-+
-+/* Update the PMTU of exceptions when:
-+ * - the new MTU of the first hop becomes smaller than the PMTU
-+ * - the old MTU was the same as the PMTU, and it limited discovery of
-+ *   larger MTUs on the path. With that limit raised, we can now
-+ *   discover larger MTUs
-+ * A special case is locked exceptions, for which the PMTU is smaller
-+ * than the minimal accepted PMTU:
-+ * - if the new MTU is greater than the PMTU, don't make any change
-+ * - otherwise, unlock and set PMTU
-+ */
-+void fib_nhc_update_mtu(struct fib_nh_common *nhc, u32 new, u32 orig)
-+{
-+	struct fnhe_hash_bucket *bucket;
-+	int i;
-+
-+	bucket = rcu_dereference_protected(nhc->nhc_exceptions, 1);
-+	if (!bucket)
-+		return;
-+
-+	for (i = 0; i < FNHE_HASH_SIZE; i++) {
-+		struct fib_nh_exception *fnhe;
-+
-+		for (fnhe = rcu_dereference_protected(bucket[i].chain, 1);
-+		     fnhe;
-+		     fnhe = rcu_dereference_protected(fnhe->fnhe_next, 1)) {
-+			if (fnhe->fnhe_mtu_locked) {
-+				if (new <= fnhe->fnhe_pmtu) {
-+					fnhe->fnhe_pmtu = new;
-+					fnhe->fnhe_mtu_locked = false;
-+				}
-+			} else if (new < fnhe->fnhe_pmtu ||
-+				   orig == fnhe->fnhe_pmtu) {
-+				fnhe->fnhe_pmtu = new;
-+			}
-+		}
-+	}
-+}
-diff --git a/net/ipv4/Makefile b/net/ipv4/Makefile
-index 83c25f52eb58..b540d549f25a 100644
---- a/net/ipv4/Makefile
-+++ b/net/ipv4/Makefile
-@@ -19,7 +19,9 @@ obj-$(CONFIG_IPV4) += route.o ip_input.o ip_fragment.o ip_forward.o ip_options.o
- obj-$(CONFIG_NET_IP_TUNNEL) += ip_tunnel.o
- obj-$(CONFIG_SYSCTL) += sysctl_net_ipv4.o
- obj-$(CONFIG_PROC_FS) += proc.o
-+ifeq ($(CONFIG_IPV4),y)
- obj-$(CONFIG_IP_MULTIPLE_TABLES) += fib_rules.o
-+endif
- obj-$(CONFIG_IP_MROUTE) += ipmr.o
- obj-$(CONFIG_IP_MROUTE_COMMON) += ipmr_base.o
- obj-$(CONFIG_NET_IPIP) += ipip.o
-diff --git a/net/ipv4/fib_semantics.c b/net/ipv4/fib_semantics.c
-index 4f3c0740dde9..6ed252e9559e 100644
---- a/net/ipv4/fib_semantics.c
-+++ b/net/ipv4/fib_semantics.c
-@@ -136,78 +136,6 @@ const struct fib_prop fib_props[RTN_MAX + 1] = {
- 	},
- };
- 
--static void rt_fibinfo_free(struct rtable __rcu **rtp)
--{
--	struct rtable *rt = rcu_dereference_protected(*rtp, 1);
--
--	if (!rt)
--		return;
--
--	/* Not even needed : RCU_INIT_POINTER(*rtp, NULL);
--	 * because we waited an RCU grace period before calling
--	 * free_fib_info_rcu()
--	 */
--
--	dst_dev_put(&rt->dst);
--	dst_release_immediate(&rt->dst);
--}
--
--static void free_nh_exceptions(struct fib_nh_common *nhc)
--{
--	struct fnhe_hash_bucket *hash;
--	int i;
--
--	hash = rcu_dereference_protected(nhc->nhc_exceptions, 1);
--	if (!hash)
--		return;
--	for (i = 0; i < FNHE_HASH_SIZE; i++) {
--		struct fib_nh_exception *fnhe;
--
--		fnhe = rcu_dereference_protected(hash[i].chain, 1);
--		while (fnhe) {
--			struct fib_nh_exception *next;
--
--			next = rcu_dereference_protected(fnhe->fnhe_next, 1);
--
--			rt_fibinfo_free(&fnhe->fnhe_rth_input);
--			rt_fibinfo_free(&fnhe->fnhe_rth_output);
--
--			kfree(fnhe);
--
--			fnhe = next;
--		}
--	}
--	kfree(hash);
--}
--
--static void rt_fibinfo_free_cpus(struct rtable __rcu * __percpu *rtp)
--{
--	int cpu;
--
--	if (!rtp)
--		return;
--
--	for_each_possible_cpu(cpu) {
--		struct rtable *rt;
--
--		rt = rcu_dereference_protected(*per_cpu_ptr(rtp, cpu), 1);
--		if (rt) {
--			dst_dev_put(&rt->dst);
--			dst_release_immediate(&rt->dst);
--		}
--	}
--	free_percpu(rtp);
--}
--
--void fib_nh_common_release(struct fib_nh_common *nhc)
--{
--	netdev_put(nhc->nhc_dev, &nhc->nhc_dev_tracker);
--	lwtstate_put(nhc->nhc_lwtstate);
--	rt_fibinfo_free_cpus(nhc->nhc_pcpu_rth_output);
--	rt_fibinfo_free(&nhc->nhc_rth_input);
--	free_nh_exceptions(nhc);
--}
--
- void fib_nh_release(struct net *net, struct fib_nh *fib_nh)
- {
- #ifdef CONFIG_IP_ROUTE_CLASSID
-@@ -607,38 +535,6 @@ static int fib_detect_death(struct fib_info *fi, int order,
- 	return 1;
- }
- 
--int fib_nh_common_init(struct net *net, struct fib_nh_common *nhc,
--		       struct nlattr *encap, u16 encap_type,
--		       void *cfg, gfp_t gfp_flags,
--		       struct netlink_ext_ack *extack)
--{
--	int err;
--
--	nhc->nhc_pcpu_rth_output = alloc_percpu_gfp(struct rtable __rcu *,
--						    gfp_flags);
--	if (!nhc->nhc_pcpu_rth_output)
--		return -ENOMEM;
--
--	if (encap) {
--		struct lwtunnel_state *lwtstate;
--
--		err = lwtunnel_build_state(net, encap_type, encap,
--					   nhc->nhc_family, cfg, &lwtstate,
--					   extack);
--		if (err)
--			goto lwt_failure;
--
--		nhc->nhc_lwtstate = lwtstate_get(lwtstate);
--	}
--
--	return 0;
--
--lwt_failure:
--	rt_fibinfo_free_cpus(nhc->nhc_pcpu_rth_output);
--	nhc->nhc_pcpu_rth_output = NULL;
--	return err;
--}
--
- int fib_nh_init(struct net *net, struct fib_nh *nh,
- 		struct fib_config *cfg, int nh_weight,
- 		struct netlink_ext_ack *extack)
-@@ -1864,44 +1760,6 @@ static int call_fib_nh_notifiers(struct fib_nh *nh,
- 	return NOTIFY_DONE;
- }
- 
--/* Update the PMTU of exceptions when:
-- * - the new MTU of the first hop becomes smaller than the PMTU
-- * - the old MTU was the same as the PMTU, and it limited discovery of
-- *   larger MTUs on the path. With that limit raised, we can now
-- *   discover larger MTUs
-- * A special case is locked exceptions, for which the PMTU is smaller
-- * than the minimal accepted PMTU:
-- * - if the new MTU is greater than the PMTU, don't make any change
-- * - otherwise, unlock and set PMTU
-- */
--void fib_nhc_update_mtu(struct fib_nh_common *nhc, u32 new, u32 orig)
--{
--	struct fnhe_hash_bucket *bucket;
--	int i;
--
--	bucket = rcu_dereference_protected(nhc->nhc_exceptions, 1);
--	if (!bucket)
--		return;
--
--	for (i = 0; i < FNHE_HASH_SIZE; i++) {
--		struct fib_nh_exception *fnhe;
--
--		for (fnhe = rcu_dereference_protected(bucket[i].chain, 1);
--		     fnhe;
--		     fnhe = rcu_dereference_protected(fnhe->fnhe_next, 1)) {
--			if (fnhe->fnhe_mtu_locked) {
--				if (new <= fnhe->fnhe_pmtu) {
--					fnhe->fnhe_pmtu = new;
--					fnhe->fnhe_mtu_locked = false;
--				}
--			} else if (new < fnhe->fnhe_pmtu ||
--				   orig == fnhe->fnhe_pmtu) {
--				fnhe->fnhe_pmtu = new;
--			}
--		}
--	}
--}
--
- void fib_sync_mtu(struct net_device *dev, u32 orig_mtu)
- {
- 	struct hlist_head *head = fib_nh_head(dev);
-diff --git a/net/ipv4/netlink.c b/net/ipv4/netlink.c
-index b920e1bdcf58..57d4dca16d3e 100644
---- a/net/ipv4/netlink.c
-+++ b/net/ipv4/netlink.c
-@@ -16,10 +16,12 @@ int rtm_getroute_parse_ip_proto(struct nlattr *attr, u8 *ip_proto, u8 family,
- 	case IPPROTO_TCP:
- 	case IPPROTO_UDP:
- 		return 0;
-+#if IS_ENABLED(CONFIG_IPV4)
- 	case IPPROTO_ICMP:
- 		if (family != AF_INET)
- 			break;
- 		return 0;
-+#endif
- #if IS_ENABLED(CONFIG_IPV6)
- 	case IPPROTO_ICMPV6:
- 		if (family != AF_INET6)
-diff --git a/net/ipv4/nexthop.c b/net/ipv4/nexthop.c
-index 6205bd57aa85..b113a31f6150 100644
---- a/net/ipv4/nexthop.c
-+++ b/net/ipv4/nexthop.c
-@@ -1414,7 +1414,7 @@ static bool nexthop_is_good_nh(const struct nexthop *nh)
- 
- 	switch (nhi->family) {
- 	case AF_INET:
--		return ipv4_good_nh(&nhi->fib_nh);
-+		return IS_ENABLED(CONFIG_IPV4) && ipv4_good_nh(&nhi->fib_nh);
- 	case AF_INET6:
- 		return IS_ENABLED(CONFIG_IPV6) && ipv6_good_nh(&nhi->fib6_nh);
- 	}
-diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-index ca1180dba1de..9c343c9566b7 100644
---- a/net/ipv4/sysctl_net_ipv4.c
-+++ b/net/ipv4/sysctl_net_ipv4.c
-@@ -613,6 +613,7 @@ static struct ctl_table ipv4_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_doulongvec_minmax,
- 	},
-+#if IS_ENABLED(CONFIG_IPV4)
- 	{
- 		.procname	= "fib_sync_mem",
- 		.data		= &sysctl_fib_sync_mem,
-@@ -622,6 +623,7 @@ static struct ctl_table ipv4_table[] = {
- 		.extra1		= &sysctl_fib_sync_mem_min,
- 		.extra2		= &sysctl_fib_sync_mem_max,
- 	},
-+#endif
- };
- 
- static struct ctl_table ipv4_net_table[] = {
-diff --git a/net/ipv6/ip6_fib.c b/net/ipv6/ip6_fib.c
-index a130cdfaebfb..8b5f855c8dcb 100644
---- a/net/ipv6/ip6_fib.c
-+++ b/net/ipv6/ip6_fib.c
-@@ -645,9 +645,11 @@ static int inet6_dump_fib(struct sk_buff *skb, struct netlink_callback *cb)
- 
- 	rcu_read_lock();
- 	if (cb->strict_check) {
-+#if IS_ENABLED(CONFIG_IPV4)
- 		err = ip_valid_fib_dump_req(net, nlh, &arg.filter, cb);
- 		if (err < 0)
- 			goto unlock;
-+#endif
- 	} else if (nlmsg_len(nlh) >= sizeof(struct rtmsg)) {
- 		struct rtmsg *rtm = nlmsg_data(nlh);
- 
+---
+Christian Brauner (4):
+      exec: stash a bpf-selected interpreter in struct linux_binprm
+      binfmt_misc: add binfmt_misc_ops bpf struct_ops
+      binfmt_misc: wire up bpf-backed 'B' entries
+      bpf: allow fs kfuncs for binfmt_misc_ops programs
+
+Farid Zakaria (1):
+      selftests/exec: add binfmt_misc bpf-backed handler test
+
+ Documentation/admin-guide/binfmt-misc.rst        |  40 +++-
+ fs/Kconfig.binfmt                                |  14 ++
+ fs/Makefile                                      |   1 +
+ fs/binfmt_misc.c                                 | 149 +++++++++++-
+ fs/binfmt_misc_bpf.c                             | 275 +++++++++++++++++++++++
+ fs/bpf_fs_kfuncs.c                               |  23 +-
+ fs/exec.c                                        |   1 +
+ include/linux/binfmt_misc.h                      |  49 ++++
+ include/linux/binfmts.h                          |   1 +
+ tools/testing/selftests/exec/Makefile            |  37 +++
+ tools/testing/selftests/exec/binfmt_bpf_app.c    |  12 +
+ tools/testing/selftests/exec/binfmt_bpf_interp.c |  15 ++
+ tools/testing/selftests/exec/binfmt_misc_bpf.c   | 260 +++++++++++++++++++++
+ tools/testing/selftests/exec/bpf_interp.bpf.c    |  52 +++++
+ tools/testing/selftests/exec/nix_origin.bpf.c    | 179 +++++++++++++++
+ 15 files changed, 1091 insertions(+), 17 deletions(-)
+---
+base-commit: 6203a47c1d78f948cd5e9ad1a4c089745e466870
+change-id: 20260711-binfmt-misc-bpf-v2-0f5c1f99b9ed
+
+Best regards,
 -- 
-2.54.0
+Farid Zakaria <farid.m.zakaria@gmail.com>
 
