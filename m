@@ -1,149 +1,178 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555B43126B0;
-	Sun, 12 Jul 2026 12:32:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 644EE1A239A;
+	Sun, 12 Jul 2026 13:17:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783859557; cv=none; b=iejbJR13mF5KXgRJQEwGaxo85V3BDglLl0gO3o1qp/a77npuAhi/5B2P4UsViSe0etXv2HeLVIXxAzTkdd9zhy9DDzUV1znACCHS1PV+nRU7K7gs19NVkidmQSH/7N2S6DMEu4/rNn+QGuRpZzYiYD25QtKpA9zVsAO/wXX5xes=
+	t=1783862254; cv=none; b=Dzy/j79ximraAzykYsFg+av5H8FYBrNFUhN3p/NlTa4k2+VVlJ0FAorCjwqLkQWISbL2Sg+Nfmc6txsjsgaymVZ8cOyLV8MBMJRav8dqQe572mB953wWrIBcHnVclo3lzNu+0vdHHvMpZVpQQ4gd+sfC7cxazhoGT2ByYpmUGF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783859557; c=relaxed/simple;
-	bh=VU5CHIyaoqNRjqMq+N8FVvGRvPUNlYegA5+LAVSgSdo=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=EZd9z9xl70ofn07ivkByg8OFQbS/jI6bKzmLdVJ+tHFgic6h6sSaWqedqNFc5LqsWExBC4Hlyqqsr0JkXo01+CZLcAXVCfUcWW8BPESq9+HOgOywKesNsnv25YNq7TEBs7DkgvW4b6UjGgnggKud8KvttRPLsUUX1D8y5JSq8eo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=geJcKo8l; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783862254; c=relaxed/simple;
+	bh=Hcs/GzepDdIetzHjiaaCoZ2JnUmYACvmukBnUhnWH7o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qDUhz0z0fTZq6+xPDNML96vKkowhFUoLurjBfxhAAKHsATFfeqMQv27Jq0ugMZWzzSzkn8y4fIT9fz+9gw5tPERrrWN6BiDnNXiw+0IJWzTqoxStTz+AIadSARVbhIVoV/yww3h5L6qLRaN94fRSMmeGsYfHoYtGxWIwxzZClYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=jhlBoNmp; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="geJcKo8l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 625101F000E9;
-	Sun, 12 Jul 2026 12:32:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783859553;
-	bh=MtkGjiGoIClKqYf6WbMTADgvs1VSC4RCPwgWlBMIBnc=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=geJcKo8lmOCwLH8xvS3pjM6MSkf7G28eQyFiSG6nCT2g2bYC/iGbTzTX5BCP6XbKF
-	 8Rf5ExjwECx/W8ibPyCuvsaX6aIkGQeiXyzKVftKkSGaYcFpgb74pWSYDni7dIY711
-	 YwWiczEPH1l/JKVndl2Wd6OPsX5pkefjuJUQ8pQ58zGRZyM7GKVo50Yg5UJNXFZksh
-	 lgbpBhkNVQtqTbIFDCgXAbTjGE8fS3Ko6ejgWF4SOtfEweQ1AuICRDoUYLG8ex795L
-	 Ib/03fjU59OzPmCxaypFwa3282e1OH6uu7kpx0M0YeW+mz2cd0LFmQ3Pnx4DR9/8gE
-	 qc/wwrqo7bpwA==
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="jhlBoNmp"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F7191684;
+	Sun, 12 Jul 2026 06:17:19 -0700 (PDT)
+Received: from [10.163.128.224] (unknown [10.163.128.224])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 296AC3F85F;
+	Sun, 12 Jul 2026 06:17:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1783862243; bh=Hcs/GzepDdIetzHjiaaCoZ2JnUmYACvmukBnUhnWH7o=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=jhlBoNmp4V+xpb5NnhaUMiVCTOtAElGvdQk7fmpFrcS3v0g3VNy1OuWqR8pPZ36kN
+	 Xun5IY8YwezHpllvFoP1/LKdzEH5CvNT0edOT6q7i7+wR+IdF2iMKGDqrG9dMx+IDw
+	 FKr3DEZcQp7SsjUU3ircfCWMmXgwcGC/xv4PruhA=
+Message-ID: <72e034d9-adcd-4302-93eb-96326846199c@arm.com>
+Date: Sun, 12 Jul 2026 18:47:12 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH mm-hotfixes v2 1/4] mm/vmalloc: acquire init_mm lock on
+ huge vmap to avoid ptdump UAF
+To: Lorenzo Stoakes <ljs@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Suren Baghdasaryan <surenb@google.com>, "Liam R. Howlett"
+ <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Shakeel Butt <shakeel.butt@linux.dev>, David Hildenbrand <david@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Toshi Kani <toshi.kani@hpe.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski
+ <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Kiryl Shutsemau <kas@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Ryan Roberts <ryan.roberts@arm.com>
+Cc: David Carlier <devnexen@gmail.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org,
+ syzbot+fd95a72470f5a44e464c@syzkaller.appspotmail.com
+References: <20260712-series-vmap-race-fix-v2-0-ad134cc3a12a@kernel.org>
+ <20260712-series-vmap-race-fix-v2-1-ad134cc3a12a@kernel.org>
+Content-Language: en-US
+From: Dev Jain <dev.jain@arm.com>
+In-Reply-To: <20260712-series-vmap-race-fix-v2-1-ad134cc3a12a@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2 0/5] binfmt_misc: bpf-backed binary type handlers
-From: Christian Brauner <brauner@kernel.org>
-To: Farid Zakaria <farid.m.zakaria@gmail.com>
-Cc: Christian Brauner <brauner@kernel.org>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>, Kees Cook <kees@kernel.org>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- Jonathan Corbet <corbet@lwn.net>, Jann Horn <jannh@google.com>, 
- John Ericson <mail@johnericson.me>, linux-fsdevel@vger.kernel.org, 
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-In-Reply-To: <20260711-binfmt-misc-bpf-v2-v2-0-d6591ceaf207@gmail.com>
-References: <20260711-binfmt-misc-bpf-v2-v2-0-d6591ceaf207@gmail.com>
-Date: Sun, 12 Jul 2026 14:32:22 +0200
-Message-Id: <20260712-abluft-brutkasten-aufladen-c8063a4a1a0a@brauner>
-X-Mailer: b4 0.16-dev-4217c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4203; i=brauner@kernel.org;
- h=from:subject:message-id; bh=VU5CHIyaoqNRjqMq+N8FVvGRvPUNlYegA5+LAVSgSdo=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQFd8ZM3PJB2fnw3h2pDk1m9m0T/M/E6025wn7fzfpOW
- d7C5AbXjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgIkI/GNkeHPQiL3GYesmrc1v
- tSZ2fPxUztu58LPf8We7040t9978e57hr8j8bbGpuRPkD7t/1zq2+011XTWvyL61nwVVJl7m3fb
- NmAMA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-> This is a continuation of Christian's bpf-backed binfmt_misc POC [1], which he offered
-> to hand off to me. I am carrying it forward. The kernel design is his and is
-> unchanged. This series rebases it onto his binfmt_misc locking/cleanup series [2]
-> and adds selftests (+ fixed from the one's shared), and therefore does
-> not apply to mainline alone.
+
+
+On 12/07/26 4:12 pm, Lorenzo Stoakes wrote:
+> Currently there is a nasty race between ptdump and vmap when attempting to
+> map a huge P4D, PMD or PUD entry.
 > 
-> As for motivation for this whole change, Christian did a great VL;MR;
-> write-up [1].
+> ptdump is invoked by arch code to walk kernel or EFI page tables, either to
+> output it for debugging purposes, or to assert that there are no
+> W+X (i.e. executable writable pages) exposed in these ranges.
 > 
-> TL;DR: binfmt_misc can match a binary and hand it to a fixed interpreter,
-> but it can't match programmatically or compute the interpreter per binary.
-> The Nix community would love to support relocatable binaries, where the
-> correct loader can only be found relative to the binary itself.
-> This adds a 'B' handler type: a binfmt_misc_ops struct_ops program that
-> inspects the binary and picks the interpreter with one new kfunc,
-> bpf_binprm_set_interp().
+> The feature is enabled generally via CONFIG_PTDUMP (whose implementation is
+> in mm/ptdump.c), and expose a debugfs interface for it if
+> CONFIG_PTDUMP_DEBUGFS is defined.
 > 
->   bpftool struct_ops register nix_origin.bpf.o /sys/fs/bpf
->   echo ':nix-origin:B:nix_origin::::' > /proc/sys/fs/binfmt_misc/register
+> If CONFIG_PTDUMP is enabled, then /sys/kernel/debug/check_wx_pages is
+> enabled which checks kernel ranges to perform the W+X check. If
+> CONFIG_DEBUG_WX is enabled, this is done on boot.
+> 
+> (Note that arm32 implements its own page table walker and uses
+> CONFIG_ARM_DEBUG_WX and CONFIG_ARM_PTDUMP_DEBUGFS for this.)
+> 
+> The EFI implementations vary by architecture, but are not relevant to the
+> bug, as the issue is when kernel page ranges are walked.
+> 
+> ptdump_walk_pgd() holds both the mem hotplug lock and the mmap write lock
+> before invoking walk_page_range_debug(), however this runs into an issue
+> with vmalloc ranges.
+> 
+> When vmap maps a P4D, PUD or a PMD sized range and encounters an existing
+> P4d/PUD/PMD entry pointing to a PUD/PMD/PTE page table, it invokes
+> vmap_try_huge_[p4d,pud,pmd]() to try to convert it to a huge page table
+> mapping if possible.
+> 
+> However, when it does this, it holds no meaningful locks against other
+> kernel page table walkers, invoking [p4d,pud,pmd]_free_[pud,pmd,pte]_page()
+> which calls pagetable_free() and pagetable_free_kernel() in
+> turn (pte_fragment_free() for powerpc).
+> 
+> This means that a use-after-free becomes possible if the ptdump page table
+> walker happens to be walking a PUD, PMD or PTE page table after it has been
+> freed.
+> 
+> Since commit 5ba2f0a15564 ("mm: introduce deferred freeing for kernel page
+> tables"), if CONFIG_ASYNC_KERNEL_PGTABLE_FREE is set,
+> pagetable_free_kernel() will batch the page table freeing operation,
+> otherwise it frees the page table directly.
+> 
+> While the KASAN report that syzbot highlighted indicated that the issue
+> arose in a workqueue introduced by this change, this is coincidental and
+> the commit did not alter the race which has existed for quite some time.
+> 
+> This patch resolves the issue by simply having
+> vmap_try_huge_[p4d,pud,pmd]() hold the mmap read lock on init_mm while
+> invoking [p4d,pud,pmd]_free_[pud,pmd,pte]_page() and
+> [p4d,pud,pmd]_set_huge().
+> 
+> This way, page table walkers either observe a newly promoted huge
+> P4D/PUD/PMD leaf entry or the prior PUD/PMD/PTE entry and never get passed
+> a dangling pointer, whether the page is freed asynchronously or not.
+> 
+> All other kernel page table walkers that touch vmalloc ranges either
+> exclusively own the memory walked or acquire the mmap lock, so this
+> correctly excludes those walkers.
+> 
+> We acquire the mmap read lock as a trylock, as this is an optimisation that
+> is permitted not to succeed, a race is very unlikely, and doing so
+> eliminates latency sleeping on the lock would have otherwise caused.
+> 
+> We also define a guard class for mmap_read_trylock() so we can use
+> cleanup.h to make the scope handling cleaner in the implementation.
+> 
+> One wrinkle here is commit fa93b45fd397 ("arm64: Enable vmalloc-huge with
+> ptdump"), which addresses the issue for arm64 only by explicitly acquiring
+> the mmap read lock on kernel page table freeing should a concurrent ptdump
+> be in progress.
+> 
+> This is problematic as vmap may acquire the mmap read lock prior to ptdump
+> attempting to acquire an mmap write lock, leading to a deadlock when the
+> mmap read lock is slept upon on page table freeing due to rwsem
+> anti-starvation.
+> 
+> We work around this by predicating the mmap lock being taken on
+> !CONFIG_ARM64 for the time being.
+> 
+> With this patch applied, a follow up will partially revert commit
+> fa93b45fd397 ("arm64: Enable vmalloc-huge with ptdump") and at that stage
+> remove the arm64 ifdeffery.
+> 
+> We also update walk_page_range_debug() to assert the mmap write lock
+> unconditionally and update the comment here to reflect this change.
+> 
+> The issue has existed as long as ptdump was available and vmap freed page
+> tables when promoting to a huge leaf entry, that is, since commit
+> b6bdb7517c3d ("mm/vmalloc: add interfaces to free unmapped page table") for
+> huge ioremap, and commit 121e6f3258fe ("mm/vmalloc: hugepage vmalloc
+> mappings") for huge vmalloc.
+> 
+> Since the former is the earlier of the two we choose that for our Fixes
+> tag.
+> 
+> This patch is based on work by David Carlier (linked), with gratitude!
+> 
+> Fixes: b6bdb7517c3d ("mm/vmalloc: add interfaces to free unmapped page table")
+> Cc: stable@vger.kernel.org
+> Reported-by: syzbot+fd95a72470f5a44e464c@syzkaller.appspotmail.com
+> Closes: https://lore.kernel.org/all/6a287988.39669fcc.33b062.00a0.GAE@google.com/T/
+> Link: https://lore.kernel.org/linux-mm/20260706203128.162335-1-devnexen@gmail.com/
+> Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
+> ---
+Reviewed-by: Dev Jain <dev.jain@arm.com>
 
-Thanks! So I've spent some more time working on this because I had some
-future ideas that I needed to make sure could be accomodated by this
-(currently on vacation but hey...). So the version I have givex this a
-better design and has future extensibility in mind:
 
-- The single sleepable load op is split into two ops:
-
-      struct binfmt_misc_ops {
-      	bool (*match)(struct linux_binprm *bprm);
-      	int (*load)(struct linux_binprm *bprm);
-      	char name[BINFMT_MISC_OPS_NAME_MAX];
-      };
-
-  The non-sleepable match program runs from the RCU entry lookup
-  walk itself, exactly like magic and extension matching: same
-  registration order, same first-match-wins semantics, and it can
-  only rely on the prefetched bprm->buf. It must be free of side
-  effects since the walk may be restarted.
-
-  The sleepable load program runs once the walk has committed to the
-  entry and does the file reading and the interpreter selection. Both
-  ops are mandatory, the struct_ops plumbing enforces the sleepability
-  of each, and since bpf_binprm_set_interp() is KF_SLEEPABLE a match
-  program cannot select an interpreter by construction.
-
-- A match is a commitment. A failing load program fails the exec instead
-  of falling through to later entries. -ENOEXEC keeps its usual meaning
-  and hands the binary to the remaining binary formats, for a handler
-  that discovers it cannot serve the binary after all.
-
-  This kills the part of v1 I disliked the most: the skip cursor and the
-  leave-and-rescan loop in load_misc_binary() are gone. The walk is
-  never left and re-entered, and 'B' entries need no special semantics
-  against concurrent (un)registration anymore.
-
-  Your v2 changelog note about keeping the bpf retry loop in the
-  __free() style is moot as a consequence. The loop no longer exists.
-
-- The load return convention flipped: 0 now means success after the
-  program called bpf_binprm_set_interp(). Returning 0 without having
-  selected an interpreter or returning a positive value is treated as
-  -ENOEXEC, other negative errnos fail the exec.
-
-  So the "return bpf_binprm_set_interp(...) ?: 1" idiom from the v1-era
-  programs becomes plain "return bpf_binprm_set_interp(...)".
-
-- The handler name moved from the offset field to the interpreter field
-  that field consistently names whoever supplies the interpreter, a path
-  for static entries, a handler for 'B' entries. Offset, magic, and mask
-  must be empty:
-
-	echo ':nix-origin:B::::nix_origin:' > register
-
-- 'C' is allowed now, v1 rejected it. It behaves exactly as for a static
-   entry. The setuid transition stays gated by vfsuid_has_mapping() in
-   the caller's user namespace. Which makes 'B' handlers usable for a
-   per-binary loader over setuid binaries. 'F' stays rejected as there
-   is no fixed interpreter to pre-open (I have other ideas how we'll do
-   something like it later.).
-
-Nothing changed in the exec patch, the fs kfuncs patch, the kfunc
-itself, or the registry/namespacing model.
-
-I can send v3 in a bit if that's ok.
-
--- 
-Christian Brauner <brauner@kernel.org>
