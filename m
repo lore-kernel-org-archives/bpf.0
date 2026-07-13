@@ -1,58 +1,78 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D79A344DB1
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 17:13:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A06F29B228;
+	Mon, 13 Jul 2026 17:19:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783962823; cv=none; b=gQq+iDDb5g4PP4uJBDNKSeUFqj7XQ5R0OnOqUnx5LTeC0k03sb6ldW3gMED1IUogk5CszOOtVdF+m206hprCxUWBRYVVU/mWZDWXvYVmRSGVjEIlra4ZuN/Mkk7utlAt7QyyoqOk3fHObv1vOt7Ixb+dX+MgQf7HQ7crjQoOL+k=
+	t=1783963149; cv=none; b=Pu+uZn129EvF+muTSzLabBxg79mX6MTLPD+gQVtJo7IQFyrYgsxhm8Qb1UVa+Wv+lfoK50KEP92KmEb1fFKWG3lJ3R9s2FcOq5l4C48HHW912coEGQNirUQDoykZlY1edXtVxjCqeG1+uxT08YfVPGTmYvb3T2jk1r9MDCV7PPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783962823; c=relaxed/simple;
-	bh=5oxj3vvHEgTfwqNINOmt0/SP0khXE8MNUvRqLxRms6Q=;
+	s=arc-20240116; t=1783963149; c=relaxed/simple;
+	bh=OP5zFLSF2uBJkImUkWMBqP948PbgqJn0AGqQgF1gQDw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tHRUdXB9gu7cNmz9LXPUbo0iSr58w37XxNZCrWx2PJgsoksIwozJoh+590Xcq8s79yH8sEOU3szTJzKwVfO3fQNvnqSQ761XfwdovA+P2diYQKtZkfspvmk6jPHNpJt6GwRlZCClhNRGey2hozzp9sS7J9j2uzBv7Nwc4P/Kb4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AnaP83sN; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=qIFHgKRjeyiSQq1fAXwgBKs9LWt4cnOvhOYe0m8osLmFfi5bGAGDkO1QBmpf10AIH7QGsg0IphJc9Z31hSKYlTzvxOb1QHV3vZig1VIxY1lLl2lXWswYjnzdHwnP/Qifm/jUnJztzVNAz86flM/ONoPxV4SGIeYHtF8PoMO8XoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=boJ4VxME; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AnaP83sN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783962820; x=1815498820;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5oxj3vvHEgTfwqNINOmt0/SP0khXE8MNUvRqLxRms6Q=;
-  b=AnaP83sNCc7tpfEC+sRqe3dZT6fI+6XAkBbx2ImYduUKzDlPVBYd5cYA
-   MW4F4F7A/StS0PXj8V66KnDn/UuEyMhnMIssbMypmibXY8Zh53odLWc8V
-   cR+8FOxviBl2WfupdGd45HmClkxmOHbHd6VgszaPN9KL32+oOkgHD6SKw
-   6PJfSJaWFfKMe5eUzb05fmJXKe0EdYwpI2hwE9pM6vP1gJpasbQm/TjRi
-   nidXay3/Ew2KIQjL/vBBcGV/PXV1AkmsuxMybKU94LzQTMj6eeiBIz2CL
-   s5vR+NBIIEKTLw9fm4vZ1Qep31CUmfGfof7VRYQOkjA26gE2tDvd45g5i
-   Q==;
-X-CSE-ConnectionGUID: dhznX7rCRTGeV4E1E1BqLQ==
-X-CSE-MsgGUID: K7e57nA/QuOU8dzwVRlHEQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="102003664"
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="102003664"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2026 10:13:40 -0700
-X-CSE-ConnectionGUID: gj8jA3VpQNiY8xHQdAHPCQ==
-X-CSE-MsgGUID: mFKYidqPTJqVFgpZy/OP8g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="249251344"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2026 10:13:40 -0700
-Date: Mon, 13 Jul 2026 10:13:32 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH 7.1.y 2/6] x86/bugs: Enable IBPB flush on BPF JIT
- allocation
-Message-ID: <eey2q4s3oolarx3nflw4ky6p2ylcxbd4vys5e3iymjed57ce43@jzztbgueqoqt>
-References: <20260709-cbpf-jit-spray-hardening-7-1-y-v1-0-5ac5a2d6797f@linux.intel.com>
- <20260709-cbpf-jit-spray-hardening-7-1-y-v1-2-5ac5a2d6797f@linux.intel.com>
- <20260709223715.93C851F00A3E@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="boJ4VxME"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A44D1F00A3A;
+	Mon, 13 Jul 2026 17:19:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783963148;
+	bh=sT8ncCoskQ+pPBlVmZsj1ldkcql22WoFMry/YNTn7dY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=boJ4VxMEmG63STqe+XFCnj16oQ7l+0rEaBTr5BJHY/4QyYwdcOPLk/CHmde/re4iF
+	 fEh0mglmtEmzRuQhUOEqnWlQt0tNYHyA87uDBHT4b4eL/9psB7SXrBl/4bqVXFwHh0
+	 l7qy6tODw0b+aIxGBGn7vD44LU8rX1Zp+c/ToNTc2uPGrxPaPSqjqSs2f5z9OBXHUd
+	 6Ay1qFpyMD142+txfZQ+JBuhv8KK+GOMsU6TVRKs/7SR2+5/454lJUVIwvwoNuuOuL
+	 ASVfuIEZbms/fzPv86YOTlYqCDS7kM8Ui9XQKZ/7H784DFE+qnfoQFLk9EJJ4zKObG
+	 AuoKKLf26ZUYw==
+Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
+	by mailfauth.phl.internal (Postfix) with ESMTP id BF36FF4027E;
+	Mon, 13 Jul 2026 13:19:06 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-12.internal (MEProxy); Mon, 13 Jul 2026 13:19:06 -0400
+X-ME-Sender: <xms:Ch5Vapkw_J_hWklNR21wK1KKIBeblcJH9nG69vBtUr8uQjtvdjbPzA>
+    <xme:Ch5VaoEfePqA02oVSHz1UNta3XSzzWuL7PMDrX_CqI7wdD4WRaeY1Lg0laPXMYiCN
+    wCRW_Yo5Hc-hxCmB9N_B7KSofxg-hYvVALdgo1XQkJBX2WtxtdL8H0>
+X-ME-Received: <xmr:Ch5VanIsgv6d1HLy3wvj80hRkRg2wnsowoe86iILxc08bdfEiELSDRpW4Pq-ZQ>
+X-ME-Proxy-Cause: dmFkZTEJ4lXnpy7cJu3kFZKie8XWmk7c16mf9c3dcg0mO/FRWw9JnqjgAXFL0YAMoBP1EJ
+    3xyuhbt9BpRDEzXMxnJfwaKFHYcsya5wGuyrDMTWWxzCkKI4Pv2rog+fL8gPL5WqfWAbUY
+    ICsHYG56N5Gu45mM1QaSisXid9T5TyNpxl5uf69gdMIrqWPh+JXRP5hXTFb/mkMc+UZAKA
+    CjLTsZZCg8zJeTPMIApQmEoo4QI6fow3qIeTeBGGYfSrtF8keWO2+L4+L3246fvQcvYPsD
+    o3OWDXJkLyganHi/46YNGLhBEpkTvo55OAnPmHxwvEvEXua41QXG/KQ5VQtjTJBqbr2LtQ
+    dDHAxskcep2CzldPvnyC0cQU9W5m7ZnNLvHQD32nI/REFI51GAnENKrKi4nGZu44nogMkA
+    M8DvSGtHMwaG3Tq9XiOUMo/oggtZVqfJkJPMieBMIykGMstIdx+hkm4v7j82UolMzsQaKn
+    70uRX+2FasfCx9DVifeP+mFUBYMOEemngKsgGj32mI1qPdvsXdWFgZt7NlfGVd7V1zgeGB
+    DeSZN38Ez3MKW0qgKNsGPX+mFRnIWtMdEJfdqszTSk7PJbHp4kYi0PT6dwN/ZcHV+jX76K
+    2xvLHjPdyR5tLmOwT7JWSXJxl4RH8Aa4m3eU/bqdZeoNZrBgBUfZ+bMC9wNQ
+X-ME-Proxy: <xmx:Ch5VanNriCjfnz8yYshIDIf3p97N9HWCROMmDfgsNcmm-xkWsAc9kw>
+    <xmx:Ch5VapEYQMiAAASjG9sGsIVxLSdOmHJNRPEhZi9iQBk3ZTFu7vi6sw>
+    <xmx:Ch5VaomSoAAa4XNbLcCuZxhmsnahq9uskwAhdsHd75mnMcxahDPxRg>
+    <xmx:Ch5VakcdkwWfOV1Xn37kJWx2WqlIHFcP2GCFH0zriKVprx1VvV2Dow>
+    <xmx:Ch5VaiYvYAoJxn7KpCO1wmZUIlSx6AbdaYmo4o1S8m3emWW2DXghwl4Q>
+Feedback-ID: i10464835:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 13 Jul 2026 13:19:05 -0400 (EDT)
+Date: Mon, 13 Jul 2026 18:19:05 +0100
+From: Kiryl Shutsemau <kas@kernel.org>
+To: Lorenzo Stoakes <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Suren Baghdasaryan <surenb@google.com>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+	Uladzislau Rezki <urezki@gmail.com>, Toshi Kani <toshi.kani@hpe.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Dev Jain <dev.jain@arm.com>, Ryan Roberts <ryan.roberts@arm.com>, 
+	David Carlier <devnexen@gmail.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org
+Subject: Re: [PATCH mm-hotfixes v2 3/4] mm/ptdump: always stabilise against
+ page table freeing using init_mm
+Message-ID: <alUdUKk0zGmskSib@thinkstation>
+References: <20260712-series-vmap-race-fix-v2-0-ad134cc3a12a@kernel.org>
+ <20260712-series-vmap-race-fix-v2-3-ad134cc3a12a@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -61,89 +81,27 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260709223715.93C851F00A3E@smtp.kernel.org>
+In-Reply-To: <20260712-series-vmap-race-fix-v2-3-ad134cc3a12a@kernel.org>
 
-On Thu, Jul 09, 2026 at 10:37:15PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [High] Incomplete Spectre v2 / BHI mitigation for BPF JIT spraying on CPUs with RRSBA.
-> - [High] Unprivileged local Denial of Service (DoS) via synchronous IPI broadcast storm.
-> --
-> 
-> --- Patch [2]: [PATCH 7.1.y 2/6] x86/bugs: Enable IBPB flush on BPF JIT allocation ---
-> commit 9b68eba3d351f7dea03fa0a56d5f7eb7c06e801c
-> Author: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> 
-> x86/bugs: Enable IBPB flush on BPF JIT allocation
-> 
-> Enable hardening against JIT spraying when Spectre-v2 mitigations are in
-> use. Specifically, issue an IBPB flush on BPF JIT memory reuse. Skip
-> enabling the IBPB flush if the BPF dispatcher is already using a retpoline
-> sequence.
-> 
-> > diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-> > index 83f51cab0b1e3..d9af230c05125 100644
-> > --- a/arch/x86/kernel/cpu/bugs.c
-> > +++ b/arch/x86/kernel/cpu/bugs.c
-> [ ... ]
-> > @@ -2238,6 +2251,27 @@ static void __init spectre_v2_update_mitigation(void)
-> >  		pr_info("%s\n", spectre_v2_strings[spectre_v2_enabled]);
-> >  }
-> >  
-> > +#ifdef CONFIG_BPF_JIT
-> > +static void __bpf_arch_ibpb(void *unused)
-> > +{
-> > +	write_ibpb();
-> > +}
-> > +
-> > +void bpf_arch_ibpb(void)
-> > +{
-> > +	on_each_cpu(__bpf_arch_ibpb, NULL, 1);
-> > +}
-> 
-> [Severity: High]
-> Does this expose the system to a Denial of Service (DoS) attack from
-> unprivileged users?
+On Sun, Jul 12, 2026 at 11:42:26AM +0100, Lorenzo Stoakes wrote:
+> x86 and arm64 invoke ptdump_walk_pgd() with non-init_mm mm whilst still
+> walking kernel page table ranges.
 
-Partially, but it does not open a new attack vector. Sending IPIs via
-unprivileged userspace is already possible with other interfaces like
-membarrier().
+The code looks good to me.
 
-> Since this static call is invoked during BPF JIT allocations (e.g. via
-> bpf_arch_pred_flush() in bpf_prog_pack_alloc()), an unprivileged user can
-> repeatedly attach and detach classic BPF socket filters using
-> setsockopt(SO_ATTACH_FILTER).
-> 
-> This would trigger on_each_cpu(..., 1) repeatedly, overwhelming all online
-> CPUs with a synchronous IPI broadcast and waiting for them to complete the
-> expensive write_ibpb() operation.
+Same comment as on patch 1 about the commit message structure, only
+more so: the race itself is never actually stated -- that these walks
+hold only the walked mm's lock, while the freeing exclusion built by
+patches 1 and 2 hangs off the init_mm lock. The fact that makes it
+possible (x86 shares kernel pgd entries with every mm) is hidden in a
+parenthesis. And the last three paragraphs read like v2 changelog
+rather than commit message material.
 
-These are blocking IPIs, and are serialized by the pack_mutex. Allocating a
-new BPF program does become slower, but it does not block other CPUs
-(unless they are also trying to allocate a BPF program). Since allocating a
-BPF program is not a frequent operation, this is not a significant concern.
-Although, it is good to watch out for this case if it proves to be a
-problem.
+> We take this after mmap write locking the non-init_mm mm. Nothing acquires
+> the init_mm lock first before locking an arbitrary mm, so no deadlock is
+> possible.
 
-> > +
-> > +static bool __init cpu_wants_ibpb_bpf(void)
-> > +{
-> > +	/* A genuine retpoline already neutralizes ring0 indirect predictions */
-> > +	if (retpoline_seq_enabled())
-> > +		return false;
-> 
-> [Severity: High]
-> Is it safe to assume retpolines are a complete mitigation here without also
-> verifying that RRSBA is safely disabled?
-> 
-> In other mitigation paths like bhi_apply_mitigation() and spectre_bhi_state(),
-> the kernel checks rrsba_disabled along with retpoline_seq_enabled() because
-> an RSB underflow on CPUs with Restricted Return Stack Buffer Alternate (RRSBA)
-> behavior can cause RET instructions to fall back to the BTB (which could be
-> poisoned by an attacker).
-> 
-> If a system has RRSBA that cannot be disabled, skipping the IBPB flush here
-> could leave the BPF JIT spraying mitigation incomplete.
+Do we want to document this locking order somewhere?
 
-If the system is using retpoline for spectre-v2 mitigation, it either means
-that it is safe to use retpoline or the user has accepted the risk of using
-retpoline. This hardening honors the mitigation choice already made.
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
