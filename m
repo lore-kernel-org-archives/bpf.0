@@ -1,108 +1,65 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24FF8364EAF;
-	Sun, 12 Jul 2026 16:54:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6944E56A
+	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 01:31:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783875271; cv=none; b=ct5CQFU145RMR3Ffw0nlGpkeKZqXqhx/I/nPewEvRVNB16n1J00YvH4q0MbXzG5Zh7MMhYAx+pMSZzojwSUvwO0t9MxTfkeXXCC28JgCivE27uiBwJwET5xf1BxPjHblBDkv6f5z3w5ySF1afh/jYI8C0eb2srmFjXM10xRvq5I=
+	t=1783906282; cv=none; b=sRmgLRcL7cPUJlupLcgC3SLjvvXRKnpVu9p/UFJ/17FCAJs93je1i6NfYkaEXphzNBfhAc7QmsIoj+1TSboQpAjy8Ia4u94UCozRRhT7LUERk2R+mZSIvTb6e1qELRLoS0h7OOnBF+yY3h0W3z0zhCEirajLzBohO2cOaUZ4jE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783875271; c=relaxed/simple;
-	bh=3t/8oLbvVkCPegE8QAQn71oA+Q4HfSxM+oHBOvO26rY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jtd2LG/LTLXyRnjevNQqSCwHgd2XcfMRNvK0p3gwdXxozxW/rR7huxNrgW+ufduJw9kLfDYJ4K92FF+fAvg8wqDByfXALmH9/yxTgO0Txw7ShcwVnUS/ttV7LrD8PsdPVuhabm1UyVsTTQkhhWW7mC2he5uOxLVj0WipM1PuY6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=hZd3B02y; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1783906282; c=relaxed/simple;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=DOENIdA9OcyunYhMCqPP+sq8Lw5XyfXbc4wq0GNv6BB/03/CTzggAHc2n9T24u3gKgb/+auXyRa4RAkeYR22HJq+p0lCJI4A1RyPINpIibOUZro0+sFjZxOs6c0FNZcwenwfa6cG49Zn1jQx+0tgAmYbcHy6CHb78eYoyODSy0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=osiKoNRc; arc=none smtp.client-ip=43.163.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="hZd3B02y"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0C99240E029F;
-	Sun, 12 Jul 2026 16:54:25 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id srior6ed563w; Sun, 12 Jul 2026 16:54:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1783875255; bh=y0mSGKSljGbp3wm1OkPuo0d6XMXK1FIsRCwQHXpgKVI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hZd3B02yURgxnaN2bOuG5eS5BGaZkYAs2AweWjgF8MPvxxPq1Pt2vhEEqnCqz6wWA
-	 8dNkaOdtd19u+IcSBM/HjAx7JcHZLN7A5upeotFOjvVZJuJPXZ2xLlJORfsSwePPkj
-	 s2QScnUZnorDzAAJHT7r+lAsUwSUICK0TK1gzPA+4BNove0iPem796CCGh6+vQ2uTF
-	 IaaWP96Soy2OIRtZQ4wj3sYYMzUU7eb9vJwS5dkoeTmPjJv/vViw09zNDbqo+F8B9q
-	 AyltvY6d3w6OaBCUM9eOqQsnsnrBBcZmFjmra1vn3CEnFOv/wKIU6VNf/oyr4hwPGu
-	 7M7+2UxNFU+pg0Lto33EIt9lKX7i+Z29412SELwxHS1ldaxuC8r38fIiiBJ/60gssa
-	 pi0hvyvsYutR7Ji2QjYroHz3Tz4NoMG/Ar3Egs6W/tT79qOi1QngXwmUMBYQyqPoUH
-	 Ruz1xqCCFqxR3bLPqeiF9m4mB9wan85MmnjIRAYyecU6ELmJSYolJcfG5wxdEz+Bdf
-	 GsCumXAiqGmZg2okklasr3ESHBzuoOl7c9q1iHAJ7QaMfNvEci61R9mQ2/96kYvjQ6
-	 X2EbOcc7yHrtpWfN6qHdZShRWsJAMFRBQB9QrCT/E+9KlUi/jyYAcpQpaMbn/8DBjw
-	 Da+sRgL8/If7qfYW8RZJTeHc=
-Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::3a])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 22D5740E00C3;
-	Sun, 12 Jul 2026 16:53:45 +0000 (UTC)
-Date: Sun, 12 Jul 2026 09:53:41 -0700
-From: Borislav Petkov <bp@alien8.de>
-To: Lorenzo Stoakes <ljs@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	David Hildenbrand <david@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Toshi Kani <toshi.kani@hpe.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-	Kiryl Shutsemau <kas@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Dev Jain <dev.jain@arm.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	David Carlier <devnexen@gmail.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org
-Subject: Re: [PATCH mm-hotfixes v2 2/4] x86/mm/pat: acquire mmap lock on page
- table free to avoid ptdump UAF
-Message-ID: <20260712165341.GAalPGldsKpBs5treJ@fat_crate.local>
-References: <20260712-series-vmap-race-fix-v2-0-ad134cc3a12a@kernel.org>
- <20260712-series-vmap-race-fix-v2-2-ad134cc3a12a@kernel.org>
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="osiKoNRc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1783906269;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=osiKoNRcDUMtpCgqqN5NPj+eY/sBpXsoeZMUWjWGZScu70oBrWprnnixAN+8TVDxi
+	 IuaxJ69UHzLHLtC3Y+n8FNe/CBpNvSCI//OknmP8oZMRf3a5dCP22m6P1nA6k50G0A
+	 y8RzyOBKDciEi6jlPNRnA9auvtEzmDjZPbO0j2vA=
+Received: from localhost.localdomain ([180.153.160.8])
+	by newxmesmtplogicsvrszc50-0.qq.com (NewEsmtp) with SMTP
+	id 7C7B72BE; Mon, 13 Jul 2026 09:31:07 +0800
+X-QQ-mid: xmsmtpt1783906267tvqqvz89f
+Message-ID: <tencent_3C1483DACD74E0E89BE888AE193273258C06@qq.com>
+X-QQ-XMAILINFO: N7qqMxIPUfzlzTNKKnVCNChqqRbZlom0xnt5Ny+Y7XcZbXgMl5SVCHEgtifO/N
+	 w+SwyFHdxdCpg062Y6IGam+NfFZMOod8/lAg1Q+TNjKK9poSfdpJBE4Xsv4FS/zsBu7lAH+6kizS
+	 70R0J4+pr1WgzUQuJwWBF1WWbeueMYsNymeZS0FDDUXoOAwEzArqXcR9sILJJYHWO4V9yYLVrbd/
+	 nrLdK17nK7KFvrfFDDE6ehLGetL+xlWpKn7g1K9m8mKrNx0YmummR08oGejdSJ0EVlby1L4vwml2
+	 okqmUcRCmNW+O+QLy7od97yWPOm3uovaBGrff78aS3060borqVvHvfNpIR/4keCm+tJKQjurXdwY
+	 hznVsJRPp/Vxw8hT4bkjjS/FmpMdB2rGkOrj2nQsbStJN/HLP+gqsMj78pnc+X/9zDqJeHBBkimD
+	 ZK0WWOVBdOAqR9TejlPqKMPJAn8v8A9u+81iD6YDq5huDx5i9YF/+DIzX4T9Dpoag23yylslLK0i
+	 J3cMvi5jEatSYHPwgeN1qJjPCxZzfkVkaHNTFe3H7U9RJWLblI/yix381bicjTcSaViFXJ3xiS9e
+	 +Z+tYEJMwcABY0nQE20PKouZ7zRAQoh5rVpAPD2l9LXAGyfQ1FmX4fkJceuWosUPDiEApitsv+go
+	 Tgh3CIgdWR/MN2pYJUeey+6Ab4LCThDovQyvsgczPZTZ5zSjgZLSBvZRYOY5sxuYqfGAzHn+L5ke
+	 2stxaeNiL85FyWsBVcf8fiw/2oNzST3muXpqB7V7t/q8dmHYTvxHf6L4Rqzf6NMicK6klV9faqGl
+	 HVFO0XsEcsaDchkTJow+K83z7/WQZMF2uJ3Hx9zHTcwNNLz2sZ3khyZGO/sfyO7/1mDzA3u6/Ax5
+	 v+0NQoIIFVd89fStpHvVz0RL9TI0bWqQRxQnW60zI1n/kVrijnlerDSVtVDNi1d6fXk+jMsgOvHh
+	 1kD2p5L3PYjk637dbtJTqGWy+HpOlyO2z4oxbM1Z87bdaTMQJt4UkBKByX1juA
+X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
+From: Jianlin Shi <shijianlin11@foxmail.com>
+To: bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net
+Subject: Re: [PATCH] bpf: return -EINVAL from bpf_ringbuf_query for unknown flags
+Date: Mon, 13 Jul 2026 09:31:07 +0800
+X-OQ-MSGID: <20260713013107.1721142-1-shijianlin11@foxmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260710035555.3725522-1-shijianlin11@foxmail.com>
+References: <20260710035555.3725522-1-shijianlin11@foxmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260712-series-vmap-race-fix-v2-2-ad134cc3a12a@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Sun, Jul 12, 2026 at 11:42:25AM +0100, Lorenzo Stoakes wrote:
-> This patch resolves the issue by acquiring the mmap read lock on init_mm to
 
-s/This patch resolves/Resolve/
-
-> provide mutual exclusion against ptdump, which acquires the init_mm write
-> lock.
-
-...
-
-> We also include cleanup.h in order to use a scoped_guard() to implement
-> this cleanly.
-
-You don't need to explain that.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
