@@ -1,63 +1,63 @@
-Received: from mail-wm2-f7.google.com (mail-wm2-f7.google.com [74.125.225.135])
+Received: from mail-wm2-f1.google.com (mail-wm2-f1.google.com [74.125.225.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F5143B3C3
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 15:39:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51F383DF001
+	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 15:39:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783957174; cv=none; b=Sxao5utR/RpLsq3VZjp0RLwKNu+RvAioAVyaisCkBVq7Ymus8ZLy4Zm3IhYDF8X4cqEJ9gqXzuN+gCySKMyhbV4naSfgpaifIgY88S8lPb87/69Jh2ZIWnmDRv2wNXxBhRyPj01QJG0dkGXLzKmp6mNtLznJtVtmbip0VwO/lLc=
+	t=1783957175; cv=none; b=g0N1ZlmytJj3A8cSrFQozIBGV+Go4Rzyw8c3+gDUw6WLAD0XQ7zCFdzcmfZZgl7IlHZ1XgAKGnehlRUwqLpeCg4FOK6YzCz5f+MnOT/pYEkZUvoNaH1/wcRSlVrBbiDwRF+xDw7kpQG3kI3gDKqkkwXE/ep/yDH9kalv6naF4+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783957174; c=relaxed/simple;
-	bh=sonBAX87yd6OCXfuconfeoiiWrvFwmaEJUPftE//TC8=;
+	s=arc-20240116; t=1783957175; c=relaxed/simple;
+	bh=bcMtLfGWMJQNIqk0MGwvLy/12lR1s81Gi6heGoigo+c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q5QfzHzODzspmb8uqk8VKoR4ZlUMXJ1IeDWra1gKHVnbk97gpAv6oEcoPRYaYubEyyEJH3lBqBCKmMtmvVWG1mjIEtBee/jbeigd30XRPk3QeZPoix6F81lkeBttB13HnTRafdHX86ZBW3zW60XcpAkWh6Sw9fE/qKckfNEk2lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nvnRmkx8; arc=none smtp.client-ip=74.125.225.135
+	 MIME-Version; b=joSM/UI7/skjMKtjaonygj9RsAbL/Ist0IJnJVV1Avw9Enj+ygegXUr5V6PdPFeM3VSpPJwK/D4vfekQ7zzlOoS0DK4uWUkH8d9/Sl0ZW8EQ++/aCsSOaFuxMnadNSTXk2pmDv1fhngcLzSAIpafmb5hB2q6pVOeUwjXwZhnPs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R2FjKWla; arc=none smtp.client-ip=74.125.225.129
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nvnRmkx8"
-Received: by mail-wm2-f7.google.com with SMTP id 5b1f17b1804b1-493e61727d9so252815e9.0
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 08:39:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R2FjKWla"
+Received: by mail-wm2-f1.google.com with SMTP id 5b1f17b1804b1-492367f3094so14127925e9.0
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 08:39:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783957171; x=1784561971; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783957173; x=1784561973; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=XhIlYmF8AwEc29joOMq6hwPHJ7AoCluw4YQOLlsaQx4=;
-        b=nvnRmkx8jcwkG+bfznS9z+Q43aWzj0XPvxe4+3fZxriqRNUAW62dIKisjonw8k0K0V
-         ydNrfrg/LDnUQ0HyqDCsv5vuBdST22dqLWyTeN7Eaxsv4LCRRZVM0iSMms+s5pozU9nl
-         k+PKpN8oi6ErpRhfAKYQq6TRY7r0gkXTfqVHiU9UvyzoSn9mAvL+Yxm6pnFRm7VinG19
-         J3pk7xJsmOwXYNTFhUpHHFznviHIzuDBQBLuqa4Ar+Y3+gYv1+ZRWs8pIrLPVo2xbAXX
-         mk9I3W2avWks+dLEA9dDFr15aPzdVgp2uI28Xx20GPpSP4vYZ3f8apEOpeUvJ9+5PX8K
-         w/Qw==
+        bh=uyXv1jlGNi5gWQHSrHKfaHv4rZ648rwU5hHD0pjWKmI=;
+        b=R2FjKWlaNo7TKX3DqBaWyx868+zE1Vg+70H81fg+AMHcUW7cuq0qxnSSEAqyD91j6g
+         pKlKLCejUR34edoztZ4JdIhGdUN/1MF0RiMTuuUoWkYd92lFl+N5825gPCTe9QD9ndI6
+         WL407+bEOpwfCNOLWPtSxX3fhPye+JI7Gjtz/8TE32rHdU7TXltsFx194NzYrJHetR0U
+         nKITowJ6rXN+XvmttgYC9+AFEJ+LT+cnJYLyas9dCpISypf9FLGkXAYlcBNMgj6/14S/
+         AjJtBPmqDzaxb55+h2QsdX/iPTuwpmECEWmP78/iR3ah8dwBW2VdIi5n4Vl0GsCe7rGZ
+         lYFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783957171; x=1784561971;
+        d=1e100.net; s=20251104; t=1783957173; x=1784561973;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=XhIlYmF8AwEc29joOMq6hwPHJ7AoCluw4YQOLlsaQx4=;
-        b=tJD9r2riJHLTzmKTsGLOyjeqJYir+QnheSq8fwV+A+mDtaXNYEXUoOOinlkiDbZmWu
-         xl1HT/lWvVr/9X10241tbUHfhM10MOrq9u606MlIoMV8troyvTaF955wmKrfgZKgw5eu
-         gEV6s0OH6zBFXJS1linyAj1s/QCI67Gu34Wjeq0hlxkVH0UcwamYCWuAAl0wSUEd7kK7
-         wYs47SZWgRl6pHeHxy6dH7etD2HSCT5yKXH9E5Odf1Zj5ufhDIi0L9hQq3ZZE0hovfe1
-         5mVM9mSs0Squ8j/CbjtsRiEmIn4+tWwdC/DsTsCUkOVyx1OWbiQWLO4sFXkZD1Q9UzA+
-         uEtg==
-X-Gm-Message-State: AOJu0Yx6QOahDWMLb2uKgLGj4rOH4aiAhiAtrXtzgvpRGq6vcsCj6duw
-	BrDQj+Du5lpaqabvQW0Lq/Lk67zgdMkre7n1TTn5h3lPTqEkJK6jmimjZizG1U58
-X-Gm-Gg: AfdE7cleJ28GF/5fDw+CfDyfXAsjMe86RyCgi48cGanKhU6135yzIZqmfQNCUOCDbHC
-	rTv8YSpyQvN142AoNejZpZBjfALejmXhtqYuYbgWF1fTF4+bQZxRUfZKTaqvnAscvPcWxJOohtY
-	TRefGNbnJmi5/zf4LEDZi5SKzISyMfXuEhrt0RTwjD0cUh9QK/ToZkcAhh267vAg+7dnPGybTy4
-	mQWjQKbrRl1gcHVKP1GLxsfx1TDQ8bhd2ROpa1TV3TafI9dmo/cvnpdokL5DJO+g41BbhdntRuN
-	lxXwkGAwBfLiLRFE6yqUMH/pb+lgyM6XrFjNuGK+jt/zZsB+QT52CVL5qPCh1/CRcsgVX+W0KCL
-	xxiacpbf9kHIdP5XWHZI69zaBg9I9g6+owNVicEU+yTG6chl/JefcUQjSOGlVOcSxk7hE30iLjz
-	x5aawXLS9phPIjoua6/I66XAxLiVsnjMwvbRnB8i1ZarhuBooo3CQTLrL5ZEJk1sfyM81MUtcJK
-	DjiX73C+E8vLyny6uHJsQMzhIJXY8HOdv7IaiudCycCiqH3sriUL9aPHuZJWCb7mQ==
-X-Received: by 2002:a05:600d:8444:20b0:492:6447:7a7f with SMTP id 5b1f17b1804b1-493f87d8909mr80386435e9.6.1783957170930;
-        Mon, 13 Jul 2026 08:39:30 -0700 (PDT)
+        bh=uyXv1jlGNi5gWQHSrHKfaHv4rZ648rwU5hHD0pjWKmI=;
+        b=hmhKAhZJPzNlYHZykH0TCALmIMvcI2M+N3EhWCNwScapZuvIg5peTZ+Md0BRk7sR0k
+         C/6p6wANInUc6l1/HPE/cIqVxF/wcoTyrhbnkASwFvHeD4FfDUqFhQ4xY3lnBvmLWmP4
+         gCxqyGTAojJTGL5ubO3wsJIePUHpQcC8Vyuxmgk76n571ajaHwzSrtZV+/qodpaPf2WQ
+         vZrUuAZpK14QGMIcuOUevh0ACAVo6KJkyGa5Dnn3w1HD5+am7K9yujTYbRBemHWw1rG9
+         0EFB8bubUiyJrKCz5pcuE8pVs56Lfozf2q4yNFyun/PLMhsS5AG8ETPyBMAkli+thHwR
+         cgGg==
+X-Gm-Message-State: AOJu0Yyq68ZG6aXJ+Z8w0gUs/+wkR7mD9Ay2DTnoekV4ra8FUAabGhIo
+	fTv/7ALC4h9s6RzF41xw5bEbDH+m12x4UMDGcjqf6Uz1METaAF8W7pnof+CuCU0R
+X-Gm-Gg: AfdE7cldfYWnTHmfNj0yFaFXziVEsAZcbY4c7stxEv9irhR8mZML62hhZPA6QkX8RR6
+	0/SJouEkocd7qXpq8VlhNmubl92fARCwBDnAvs8u9mDflgAVJoj2nqFfym+e67MLmIsYN5bsulf
+	bc8V/te+pcsqMphakSY8l8xK4kDAV+ZNFYycN2HRKnAPx8m9j7gv/6ndfjlnGTobkxl+AFMXtfo
+	cWwTP0w/5TrndUxr8MtchgYOETEUxfBpp9HhZFGQ0WErBPcgDVGFXDBFa4/nBXky7YsNnDx4YX7
+	P01eYsp1Q9XfJrHFbZ+M4C+FCi3Zkjmyzje6gnVDiPqHiPFEXQNEEmZBR6H68glBtmc+ub9r5HQ
+	XnPjzDZPJHwXvACI3G9SKhF9YEZZ0wzdkgVS3rg1MZSoW1AG/bN+TxEFSPDoIK0/oIat4GDAG6U
+	tDFaZFHJRL1QSBAXhsTqkEKu245x7CsaVwCbcGqNGt12PHs/R5Nu6pnAqO0rlWtuEVtX+6iPbLd
+	ihkxS12ddkEEPRr4TPYOe8cGAxw150unRFdnvhl7tKO0xqHcaUGHoA=
+X-Received: by 2002:a05:600c:4746:b0:493:e034:a3b5 with SMTP id 5b1f17b1804b1-493f8818cb0mr109982975e9.24.1783957172293;
+        Mon, 13 Jul 2026 08:39:32 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4950a2ed840sm3658165e9.10.2026.07.13.08.39.30
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49508727fc0sm3534735e9.6.2026.07.13.08.39.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 08:39:30 -0700 (PDT)
+        Mon, 13 Jul 2026 08:39:31 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -67,9 +67,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 15/17] bpf: Report Verifier Limit errors
-Date: Mon, 13 Jul 2026 17:39:04 +0200
-Message-ID: <20260713153910.2556007-16-memxor@gmail.com>
+Subject: [PATCH bpf-next v3 16/17] bpf: Report Verifier Internal errors
+Date: Mon, 13 Jul 2026 17:39:05 +0200
+Message-ID: <20260713153910.2556007-17-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260713153910.2556007-1-memxor@gmail.com>
 References: <20260713153910.2556007-1-memxor@gmail.com>
@@ -79,316 +79,147 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11880; i=memxor@gmail.com; h=from:subject; bh=sonBAX87yd6OCXfuconfeoiiWrvFwmaEJUPftE//TC8=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JISuURcnt5KIdxmpTu/rjHM/Wspe29GTxHj689cgVxb//n k5wmC/YUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIm8t2P4xTS5NTVXh0Uh4131 hkzBxR9i+39LlO608f3s4pZddY2Bg5HhZuPf2U7u/u0b7is6m1pNWn7R6rk0j0ido7j2uUUn51/ gBgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5322; i=memxor@gmail.com; h=from:subject; bh=bcMtLfGWMJQNIqk0MGwvLy/12lR1s81Gi6heGoigo+c=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JISuURcnf02Nj7sn89NDY1oytbk/em2ec+/lU2tFD51s14 1yOD10dpSwMYlwMsmKKLCX/9zEZn6j8HWi7jBtmDisTyBAGLk4BmMjxKIY/HNtX9XIdjVz082jp vUXsqwrenWUpscyOWiEQtdcydmn2dkaGmW7Tuyx3rT72w3+y1k/uink30yL+fWXa9rChfdfSpR/ juQE=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Augment selected verifier limit failures with Verifier Limit reports. These
-reports focus on the limit that was exceeded and the observed value or
-condition, rather than causal branch history.
+Augment selected existing internal-error paths with Verifier Internal Error
+reports. These reports avoid suggesting source-level fixes and instead identify
+the verifier invariant that failed.
 
-Cover tail-call stack constraints, per-subprogram stack depth, combined call
-stack depth, static and runtime bpf2bpf call-frame depth, processed-instruction
-complexity, and liveness analysis complexity.
-
-Format reason text in diagnostics.c and allocate call-chain descriptions only
-on failure paths, preserving useful call-chain context without adding large
-local buffers to verifier frames.
+Cover non-overwritten BPF_PTR_POISON helper argument types and inconsistent
+kfunc graph-node argument classification.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/diagnostics.c |  37 ++++++++++++
- kernel/bpf/diagnostics.h |   2 +
- kernel/bpf/liveness.c    |   7 +++
- kernel/bpf/verifier.c    | 119 ++++++++++++++++++++++++++++++++++++++-
- 4 files changed, 164 insertions(+), 1 deletion(-)
+ include/linux/bpf_verifier.h | 10 +++++---
+ kernel/bpf/diagnostics.c     | 50 ++++++++++++++++++++++++++++++++++++
+ kernel/bpf/verifier.c        | 13 +++++-----
+ 3 files changed, 62 insertions(+), 11 deletions(-)
 
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 625ea3e394a2..a120110aaf3e 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -1090,6 +1090,8 @@ __printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
+ 				  u32 insn_off,
+ 				  const char *prefix_fmt, ...);
+ 
++__printf(2, 3) void bpf_verifier_log_bug(struct bpf_verifier_env *env, const char *fmt, ...);
++
+ #define verifier_bug_if(cond, env, fmt, args...)						\
+ 	({											\
+ 		bool __cond = (cond);								\
+@@ -1097,10 +1099,10 @@ __printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
+ 			verifier_bug(env, fmt " (" #cond ")", ##args);				\
+ 		(__cond);									\
+ 	})
+-#define verifier_bug(env, fmt, args...)								\
+-	({											\
+-		BPF_WARN_ONCE(1, "verifier bug: " fmt "\n", ##args);				\
+-		bpf_log(&env->log, "verifier bug: " fmt "\n", ##args);				\
++#define verifier_bug(env, fmt, args...)                              \
++	({                                                           \
++		BPF_WARN_ONCE(1, "verifier bug: " fmt "\n", ##args); \
++		bpf_verifier_log_bug(env, fmt, ##args);              \
+ 	})
+ 
+ static inline void mark_prune_point(struct bpf_verifier_env *env, int idx)
 diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index 8bf5aef0315b..e2772c1deaff 100644
+index e2772c1deaff..eb4c2817e0f1 100644
 --- a/kernel/bpf/diagnostics.c
 +++ b/kernel/bpf/diagnostics.c
-@@ -1309,6 +1309,43 @@ void bpf_diag_report_policy(struct bpf_verifier_env *env, u32 insn_idx, const ch
+@@ -1346,6 +1346,56 @@ void bpf_diag_report_limit(struct bpf_verifier_env *env, u32 insn_idx, const cha
  	diag_report_suggestion(env, "%s", suggestion);
  }
  
-+void bpf_diag_report_limit(struct bpf_verifier_env *env, u32 insn_idx, const char *limit,
-+			   const char *suggestion, const char *reason_fmt, ...)
++static void diag_internal_error(struct bpf_verifier_env *env, u32 insn_idx, const char *problem,
++				const char *reason)
 +{
-+	char *reason, *text;
-+	va_list args;
++	bpf_diag_report_header(env, CATEGORY_VERIFIER_INTERNAL_ERROR, problem);
++	diag_report_reason(env, "The verifier hit an internal error: %s", reason);
++
++	diag_report_section(env, "At");
++	bpf_diag_report_source(env, insn_idx, "error", "%s", problem);
++
++	diag_report_suggestion(env, "Report this problem to bpf@vger.kernel.org with the full "
++				    "verifier log and program.");
++}
++
++void bpf_verifier_log_bug(struct bpf_verifier_env *env, const char *fmt, ...)
++{
++	const char *fallback = "the verifier could not format details for this invariant violation";
++	va_list args, copy;
++	char *reason;
++	size_t len;
++
++	va_start(args, fmt);
++	if (bpf_verifier_log_needed(&env->log)) {
++		bpf_verifier_log_write(env, "verifier bug: ");
++		va_copy(copy, args);
++		bpf_verifier_vlog(&env->log, fmt, copy);
++		va_end(copy);
++		bpf_verifier_log_write(env, "\n");
++	}
 +
 +	if (!bpf_diag_enabled(env))
-+		return;
++		goto out;
 +
-+	bpf_diag_report_header(env, CATEGORY_VERIFIER_LIMIT, "limit exceeded");
-+	diag_report_section(env, "Reason");
-+
-+	va_start(args, reason_fmt);
-+	reason = kvasprintf(GFP_KERNEL_ACCOUNT, reason_fmt, args);
-+	va_end(args);
++	va_copy(copy, args);
++	reason = kvasprintf(GFP_KERNEL_ACCOUNT, fmt, copy);
++	va_end(copy);
 +	if (!reason) {
-+		diag_write(env, "%s<failed to allocate diagnostic text>\n", BPF_DIAG_TEXT_INDENT);
-+		goto source;
++		diag_internal_error(env, env->insn_idx, "verifier invariant violation", fallback);
++		goto out;
 +	}
 +
-+	text = kasprintf(GFP_KERNEL_ACCOUNT, "The %s limit was exceeded: %s.", limit, reason);
++	len = strlen(reason);
++	while (len && reason[len - 1] == '\n')
++		reason[--len] = '\0';
++	diag_internal_error(env, env->insn_idx, "verifier invariant violation",
++			    *reason ? reason : fallback);
 +	kfree(reason);
-+	if (!text) {
-+		diag_write(env, "%s<failed to allocate diagnostic text>\n", BPF_DIAG_TEXT_INDENT);
-+		goto source;
-+	}
-+
-+	diag_print_wrapped_text(env, text);
-+	kfree(text);
-+
-+source:
-+	diag_report_section(env, "At");
-+	bpf_diag_report_source(env, insn_idx, "error", "limit exceeded: %s", limit);
-+
-+	diag_report_suggestion(env, "%s", suggestion);
++out:
++	va_end(args);
 +}
 +
  void bpf_diag_report_invalid_deref(struct bpf_verifier_env *env, u32 insn_idx, int regno,
  				   const char *reg_name, const struct bpf_reg_state *reg,
  				   enum bpf_diag_invalid_deref_kind kind, s64 offset)
-diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
-index 64ab9de2bbf6..6a013f1e748b 100644
---- a/kernel/bpf/diagnostics.h
-+++ b/kernel/bpf/diagnostics.h
-@@ -173,6 +173,8 @@ void bpf_diag_report_program_structure(struct bpf_verifier_env *env, u32 insn_id
- 				       const char *reason_fmt, ...) __printf(5, 6);
- void bpf_diag_report_policy(struct bpf_verifier_env *env, u32 insn_idx, const char *operation,
- 			    const char *reason, const char *suggestion);
-+void bpf_diag_report_limit(struct bpf_verifier_env *env, u32 insn_idx, const char *limit,
-+			   const char *suggestion, const char *reason_fmt, ...) __printf(5, 6);
- int bpf_diag_record_branch(struct bpf_verifier_env *env, u32 insn_idx, bool cond_true);
- void bpf_diag_record_mod(struct bpf_verifier_env *env, u32 insn_idx,
- 			 struct bpf_diag_mod_target target, enum bpf_diag_mod_reason reason,
-diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index 0aadfbae0acc..9003be0e5fb8 100644
---- a/kernel/bpf/liveness.c
-+++ b/kernel/bpf/liveness.c
-@@ -8,6 +8,8 @@
- #include <linux/slab.h>
- #include <linux/sort.h>
- 
-+#include "diagnostics.h"
-+
- #define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##args)
- 
- struct per_frame_masks {
-@@ -1862,6 +1864,11 @@ static int analyze_subprog(struct bpf_verifier_env *env,
- 	if (++env->liveness->subprog_calls > 10000) {
- 		verbose(env, "liveness analysis exceeded complexity limit (%d calls)\n",
- 			env->liveness->subprog_calls);
-+		bpf_diag_report_limit(env, start, "liveness analysis complexity",
-+				      "Reduce the number of distinct call paths or argument "
-+				      "patterns reaching these subprograms.",
-+				      "The verifier recomputed subprogram liveness too many times "
-+				      "while tracking stack and register reads across call paths");
- 		return -E2BIG;
- 	}
- 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c67646f98134..552b3d4dd5ae 100644
+index 552b3d4dd5ae..f7c5beb88217 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -5431,6 +5431,42 @@ struct bpf_subprog_call_depth_info {
- 	int frame; /* # of consecutive static call stack frames on top of stack */
- };
+@@ -8650,9 +8650,8 @@ static int check_reg_type(struct bpf_verifier_env *env, struct bpf_reg_state *re
+ 				return -EACCES;
+ 		} else {
+ 			if (arg_btf_id == BPF_PTR_POISON) {
+-				verbose(env, "verifier internal error:");
+-				verbose(env, "%s has non-overwritten BPF_PTR_POISON type\n",
+-					reg_arg_name(env, argno));
++				verifier_bug(env, "%s has non-overwritten BPF_PTR_POISON type",
++					     reg_arg_name(env, argno));
+ 				return -EACCES;
+ 			}
  
-+static char *bpf_diag_append_subprog_chain(const struct bpf_verifier_env *env, char *chain,
-+					   int subprog)
-+{
-+	const char *prefix = chain && *chain ? " -> " : "";
-+	const char *name = bpf_verifier_subprog_name(env, subprog);
-+	const char *old = chain ?: "";
-+	char *next;
-+
-+	if (name && *name)
-+		next = kasprintf(GFP_KERNEL_ACCOUNT, "%s%s%s", old, prefix, name);
-+	else
-+		next = kasprintf(GFP_KERNEL_ACCOUNT, "%s%ssubprogram %d", old, prefix, subprog);
-+	if (!next)
-+		return chain;
-+
-+	kfree(chain);
-+	return next;
-+}
-+
-+static char *bpf_diag_alloc_subprog_call_chain(const struct bpf_verifier_env *env,
-+					       struct bpf_subprog_call_depth_info *dinfo, int idx)
-+{
-+	int call_chain[MAX_CALL_FRAMES + 1];
-+	int i, subprog, cnt = 0;
-+	char *chain = NULL;
-+
-+	for (subprog = idx; subprog >= 0 && cnt < ARRAY_SIZE(call_chain);
-+	     subprog = dinfo[subprog].caller)
-+		call_chain[cnt++] = subprog;
-+
-+	for (i = cnt - 1; i >= 0; i--)
-+		chain = bpf_diag_append_subprog_chain(env, chain, call_chain[i]);
-+
-+	return chain;
-+}
-+
- /* starting from main bpf function walk all instructions of the function
-  * and recursively walk all callees that given function can call.
-  * Ignore jump and exit insns.
-@@ -5473,9 +5509,19 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
- 	 * of caller's stack as shown on the example above.
- 	 */
- 	if (idx && subprog[idx].has_tail_call && depth >= 256) {
-+		char *chain = bpf_diag_alloc_subprog_call_chain(env, dinfo, idx);
-+
- 		verbose(env,
- 			"tail_calls are not allowed when call stack of previous frames is %d bytes. Too large\n",
- 			depth);
-+		bpf_diag_report_limit(env, subprog[idx].start, "call stack with tail calls",
-+				      "Reduce stack usage in caller frames, or avoid combining "
-+				      "deep bpf2bpf calls with tail calls.",
-+				      "Call chain %s reaches a subprogram with tail calls after "
-+				      "caller frames already use %d bytes; tail-call paths are "
-+				      "limited to 256 bytes in caller frames",
-+				      chain ?: "the current call chain", depth);
-+		kfree(chain);
- 		return -EACCES;
+@@ -12748,14 +12747,14 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
+ 		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_right]);
+ 		break;
+ 	default:
+-		verbose(env, "verifier internal error: unexpected graph node argument type %s\n",
+-			btf_field_type_name(node_field_type));
++		verifier_bug(env, "unexpected graph node argument type %s",
++			     btf_field_type_name(node_field_type));
+ 		return false;
  	}
  
-@@ -5497,8 +5543,20 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
- 		if (subprog_depth > env->max_stack_depth)
- 			env->max_stack_depth = subprog_depth;
- 		if (subprog_depth > MAX_BPF_STACK) {
-+			char *chain;
-+
- 			verbose(env, "stack size of subprog %d is %d. Too large\n",
- 				idx, subprog_depth);
-+			chain = bpf_diag_alloc_subprog_call_chain(env, dinfo, idx);
-+			bpf_diag_report_limit(env, subprog[idx].start, "subprogram stack depth",
-+					      "Reduce stack usage in this subprogram, or move "
-+					      "large data out of the BPF stack.",
-+					      "Call chain %s reaches a subprogram that uses %d "
-+					      "bytes of stack, exceeding the %d byte limit for one "
-+					      "BPF stack frame",
-+					      chain ?: "the current call chain", subprog_depth,
-+					      MAX_BPF_STACK);
-+			kfree(chain);
- 			return -EACCES;
- 		}
- 	} else {
-@@ -5512,13 +5570,28 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
- 
- 			verbose(env, "combined stack size of %d calls is %d. Too large\n",
- 				total, depth);
-+			{
-+				char *chain;
-+
-+				chain = bpf_diag_alloc_subprog_call_chain(env, dinfo, idx);
-+				bpf_diag_report_limit(env, subprog[idx].start,
-+						      "combined call stack depth",
-+						      "Reduce stack usage or call depth along this "
-+						      "call chain.",
-+						      "Call chain %s uses %d bytes of stack across "
-+						      "%d nested calls, exceeding the %d byte "
-+						      "limit",
-+						      chain ?: "the current call chain", depth,
-+						      total, MAX_BPF_STACK);
-+				kfree(chain);
-+			}
- 			return -EACCES;
- 		}
- 	}
- continue_func:
- 	subprog_end = subprog[idx + 1].start;
- 	for (; i < subprog_end; i++) {
--		int next_insn, sidx;
-+		int next_insn, call_insn, sidx;
- 
- 		if (bpf_pseudo_kfunc_call(insn + i) && !insn[i].off) {
- 			bool err = false;
-@@ -5569,6 +5642,7 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
- 		/* push caller idx into callee's dinfo */
- 		dinfo[sidx].caller = idx;
- 
-+		call_insn = i;
- 		i = next_insn;
- 
- 		idx = sidx;
-@@ -5580,8 +5654,19 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
- 
- 		frame = bpf_subprog_is_global(env, idx) ? 0 : frame + 1;
- 		if (frame >= MAX_CALL_FRAMES) {
-+			char *chain;
-+
- 			verbose(env, "the call stack of %d frames is too deep !\n",
- 				frame);
-+			chain = bpf_diag_alloc_subprog_call_chain(env, dinfo, idx);
-+			bpf_diag_report_limit(env, call_insn, "bpf2bpf call frames",
-+					      "Reduce the number of nested bpf2bpf calls on this "
-+					      "path.",
-+					      "Call chain %s reaches %d static bpf2bpf call "
-+					      "frames, exceeding the %d frame limit",
-+					      chain ?: "the current call chain", frame,
-+					      MAX_CALL_FRAMES);
-+			kfree(chain);
- 			return -E2BIG;
- 		}
- 		goto process_func;
-@@ -9851,6 +9936,22 @@ typedef int (*set_callee_state_fn)(struct bpf_verifier_env *env,
- 				   struct bpf_func_state *callee,
- 				   int insn_idx);
- 
-+static char *bpf_diag_alloc_state_call_chain(const struct bpf_verifier_env *env,
-+					     const struct bpf_verifier_state *state,
-+					     int next_subprog)
-+{
-+	char *chain = NULL;
-+	int i;
-+
-+	for (i = 0; i <= state->curframe; i++)
-+		chain = bpf_diag_append_subprog_chain(env, chain, state->frame[i]->subprogno);
-+
-+	if (next_subprog >= 0)
-+		chain = bpf_diag_append_subprog_chain(env, chain, next_subprog);
-+
-+	return chain;
-+}
-+
- static int set_callee_state(struct bpf_verifier_env *env,
- 			    struct bpf_func_state *caller,
- 			    struct bpf_func_state *callee, int insn_idx);
-@@ -9863,8 +9964,18 @@ static int setup_func_entry(struct bpf_verifier_env *env, int subprog, int calls
- 	int err;
- 
- 	if (state->curframe + 1 >= MAX_CALL_FRAMES) {
-+		char *chain;
-+
- 		verbose(env, "the call stack of %d frames is too deep\n",
- 			state->curframe + 2);
-+		chain = bpf_diag_alloc_state_call_chain(env, state, subprog);
-+		bpf_diag_report_limit(env, callsite, "bpf2bpf call frames",
-+				      "Reduce the number of nested bpf2bpf calls on this path.",
-+				      "Call chain %s would create %d verifier call frames, "
-+				      "exceeding the %d frame limit",
-+				      chain ?: "the current call chain", state->curframe + 2,
-+				      MAX_CALL_FRAMES);
-+		kfree(chain);
- 		return -E2BIG;
- 	}
- 
-@@ -18597,6 +18708,12 @@ static int do_check(struct bpf_verifier_env *env)
- 			verbose(env,
- 				"BPF program is too large. Processed %d insn\n",
- 				env->insn_processed);
-+			bpf_diag_report_limit(env, env->insn_idx,
-+					      "processed instruction complexity",
-+					      "Simplify control flow, reduce branching, or split "
-+					      "the program into smaller pieces.",
-+					      "The verifier explored more instructions than the "
-+					      "complexity limit allows");
- 			return -E2BIG;
- 		}
+ 	if (!ret)
+-		verbose(env, "verifier internal error: %s node arg for unknown kfunc\n",
+-			btf_field_type_name(node_field_type));
++		verifier_bug(env, "%s node arg for unknown kfunc",
++			     btf_field_type_name(node_field_type));
+ 	return ret;
+ }
  
 -- 
 2.53.0
