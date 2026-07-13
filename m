@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D25C31F9B7;
-	Mon, 13 Jul 2026 02:44:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E4D371CE9;
+	Mon, 13 Jul 2026 02:44:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783910658; cv=none; b=oyOjQFu7x39EAkEtuzgPbzREU9vgZh42Lue73Uw8XHXxLamM4f0P+3Tkw+e8gsouqjXrFeSK0+TcuA+LCewINf18ea3UWrMF1/0++8AbakT6w3/IO9w9IQEND9SlJ6D8lQwhB3q61HA5NyaSvHff2fcOEJnWf/gRiYeGCQ+2qbg=
+	t=1783910660; cv=none; b=I5SyvQbentT/aoMldPk44CofOY41tf4j+09BtLECVUkNr0TCeg290T82MBIuK4n+2K7TNpVi5nxqrkCMxDT4I6csdCSQDnDPM7Y1HWD8+gvpL7wTcQM7tMsq6rG8KE+6/umO93kYA1OgJIp/raMECrPm3/NifCR5lW1KtCc+2wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783910658; c=relaxed/simple;
-	bh=undR9u0NMDBm8Fk/FfEdax7WV4xMh3NFoI1kOYBGmQw=;
+	s=arc-20240116; t=1783910660; c=relaxed/simple;
+	bh=r6eZKf1Py+AjIeeMe5G+N4judbNG+2UPCdSbWq1M6EE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Z90jEPGmc9aQKK7JivYJaRYMHZgfQsdaMN878Wq2cnxPR9PDZXiSsyVN+EgIVo4ZHLWihYzkWrnvrI4r0KF3NlVjJptl+qdlKMC1LqE9PeupZke0lEYbm/57RekoFYJkwndqIOJuKRs5rQ3V2OJuBrPFH4cKmA9j/yWBkx3zHtw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=isMeg9vB; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=gSKbqb97/gjNvd0iSBt1DrrqFtMIANB8boYMNc4xq73/G2t7+08oM4dlbGacgYHc8GiKzFg2VFOg1/qkcclQ7ueHh4QAuBFASK8pjh1hn8BkDWVPwJ28PpjCzR0i2H/KwzSdSvwifJBWYiPzwXkZwhn+2tdF7OllWK4ZOfyY7UQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nQUOO+yC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="isMeg9vB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E04261F00A3A;
-	Mon, 13 Jul 2026 02:44:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nQUOO+yC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04F011F000E9;
+	Mon, 13 Jul 2026 02:44:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783910657;
-	bh=gzyRii9mw/0NcKb7ElmsK5Shp+DDYGHTpEmZBaBolpg=;
+	s=k20260515; t=1783910658;
+	bh=RVcQpqbO4up4g0Hy0J+YgHqp9iQS+fAn5yaVmEvP0So=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=isMeg9vB81wSI6j8U2MuDx+r/Ogc/RHNT0ydK0uz8eddd2xqaN2ph2r+moWq9UXVP
-	 iqyGRqrVDY33BzrjqJrehNpm2/fn7sHfArhxdUIGmZU/h/ls2o7CkzprjvI9moo77P
-	 p8UA7XKlOTke2RjyZPUcOnTOTEMHtP7LB1CAEZ0QTlPCdda+nKOFSH2rJrASpZbhxe
-	 dGK13yvOA5zyF0IkCp3vuGm1LtE7diD17tg12mUKU5KCX8O/j80+yZbz46JrE24MFF
-	 rE/B8S4/DLVBNvWZBjpcGhpdpnOlPch3jT1QH26d02ZW2UtHMB/Xc0QtELEzdpqbgt
-	 sb3f6mUi8iD4w==
+	b=nQUOO+yC3Pp/M8nP23+TslF1FOmsaYNqEBdIuyO/LlnvQmR0cnO5TH9k3dGzkm7aV
+	 OG0m+Iy6sD57PH9i+yr+GwR3xNreIVB2LDt6QDhG0WtHf4W5zK8w80Z9gWQrfH9IMt
+	 6jmwsfjak9tmqBwdAgXckiUt6zpPcciP7YnOAGIhSOtpgulDDf6ie8iovnILMRBONe
+	 KuMki/NETSUGukuRaPgFd6PqHipR40wFbNz7tFKEP9wdxAAg9zUffvk8TjixVnQ3hd
+	 31E95M8Esujf7N99NfuzPzOq82X/s52Hnj2c0OjJH87a++BTmX2Dq3G246dbwBips9
+	 sPLHQB01jpgog==
 From: Tejun Heo <tj@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -41,9 +41,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	sched-ext@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCHSET SLOP RFC 1/6] bpf: Support __arena suffix for kfunc arguments
-Date: Sun, 12 Jul 2026 16:44:09 -1000
-Message-ID: <20260713024414.3759854-2-tj@kernel.org>
+Subject: [PATCHSET SLOP RFC 2/6] selftests/bpf: Add kfunc __arena argument tests
+Date: Sun, 12 Jul 2026 16:44:10 -1000
+Message-ID: <20260713024414.3759854-3-tj@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260713024414.3759854-1-tj@kernel.org>
 References: <20260713024414.3759854-1-tj@kernel.org>
@@ -55,193 +55,251 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Passing an arena pointer to a kfunc takes two steps today. There is no
-arena pointer argument type, so the pointer crosses the boundary as a bare
-scalar, and the kfunc then offsets it by the arena base and casts it
-before it can touch the memory. Every such kfunc open-codes the same
-translation.
-
-Add the __arena argument suffix and both steps go away. The kfunc declares
-the parameter by its real pointer type and dereferences it directly. The
-verifier rebases each one at the call site, rN = kern_vm_start + (u32)rN
-with NULL preserved. No bounds check is needed: the u32 offset stays within
-the guard-padded arena kernel mapping, and a fault on an unpopulated page
-recovers through the per-arena scratch page. A suffixed argument accepts a
-PTR_TO_ARENA or scalar register, matching global subprog arena arguments.
+Add arena-argument kfuncs to bpf_testmod, which also exercises the
+argument rebasing on module kfuncs, and tests covering the accepted
+argument forms (arena pointer, low 32 bits as a scalar, full user address
+as a scalar, NULL), five arena arguments in one call with NULLs mixed in,
+a kernel-side dereference of an unpopulated page recovering through the
+scratch page, and the rejections (no arena in the program, incompatible
+register type).
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 ---
- Documentation/bpf/kfuncs.rst | 22 +++++++++
- include/linux/bpf_verifier.h |  2 +
- kernel/bpf/verifier.c        | 86 +++++++++++++++++++++++++++++++++---
- 3 files changed, 105 insertions(+), 5 deletions(-)
+ .../selftests/bpf/prog_tests/arena_kfunc.c    |  14 ++
+ .../testing/selftests/bpf/progs/arena_kfunc.c | 135 ++++++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  33 +++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |   4 +
+ 4 files changed, 186 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_kfunc.c
 
-diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index c801a330aece..bad2ac85b318 100644
---- a/Documentation/bpf/kfuncs.rst
-+++ b/Documentation/bpf/kfuncs.rst
-@@ -250,6 +250,26 @@ This annotation is used to indicate that the argument is a constant string.
-                 ...
-         }
- 
-+2.3.7 __arena Annotation
-+------------------------
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_kfunc.c b/tools/testing/selftests/bpf/prog_tests/arena_kfunc.c
+new file mode 100644
+index 000000000000..8946184553ea
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/arena_kfunc.c
+@@ -0,0 +1,14 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Tejun Heo <tj@kernel.org> */
++#include <test_progs.h>
 +
-+This annotation is used to indicate that the pointer argument points into
-+the program's arena. The verifier translates it to a directly
-+dereferenceable kernel address before the call, subject to the access
-+rules described in :ref:`BPF_kfunc_arena_access`. NULL is preserved and the
-+kfunc is responsible for checking for NULL before dereferencing.
++#include "arena_kfunc.skel.h"
 +
-+An example is given below::
-+
-+        __bpf_kfunc int bpf_process_item(struct item *item__arena)
-+        {
-+        ...
-+        }
-+
-+Calling such a kfunc requires the program to use an arena map. The program
-+can pass any value without compromising the kernel. A value that does not
-+point into the arena is a program bug.
-+
- .. _BPF_kfunc_nodef:
- 
- 2.4 Using an existing kernel function
-@@ -487,6 +507,8 @@ In order to accommodate such requirements, the verifier will enforce strict
- PTR_TO_BTF_ID type matching if two types have the exact same name, with one
- being suffixed with ``___init``.
- 
-+.. _BPF_kfunc_arena_access:
-+
- 2.8 Accessing arena memory through kfunc arguments
- --------------------------------------------------
- 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 317e99b9acc0..2153d546736a 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -690,6 +690,8 @@ struct bpf_insn_aux_data {
- 	 */
- 	u8 fastcall_spills_num:3;
- 	u8 arg_prog:4;
-+	/* bitmask of R1-R5 kfunc args to rebase to arena kernel addresses */
-+	u8 arg_arena_regs;
- 
- 	/* below fields are initialized once */
- 	unsigned int orig_idx; /* original instruction index */
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 03e2202cca13..b2b00a612e58 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10856,6 +10856,11 @@ static bool is_kfunc_arg_irq_flag(const struct btf *btf, const struct btf_param
- 	return btf_param_match_suffix(btf, arg, "__irq_flag");
- }
- 
-+static bool is_kfunc_arg_arena(const struct btf *btf, const struct btf_param *arg)
++/* The test kfuncs live in bpf_testmod. Resolving kfuncs against module
++ * BTFs needs CAP_SYS_ADMIN, so run with full capabilities instead of
++ * through the verifier tests' capability-restricted runner.
++ */
++void test_arena_kfunc(void)
 +{
-+	return btf_param_match_suffix(btf, arg, "__arena");
++	RUN_TESTS(arena_kfunc);
++}
+diff --git a/tools/testing/selftests/bpf/progs/arena_kfunc.c b/tools/testing/selftests/bpf/progs/arena_kfunc.c
+new file mode 100644
+index 000000000000..b5996944ed73
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/arena_kfunc.c
+@@ -0,0 +1,135 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Tejun Heo <tj@kernel.org> */
++
++#define BPF_NO_KFUNC_PROTOTYPES
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++#include "bpf_experimental.h"
++#include <bpf_arena_common.h>
++#include "../test_kmods/bpf_testmod_kfunc.h"
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(max_entries, 1);
++} arena SEC(".maps");
++
++/* volatile to force the scalar reloads below */
++volatile u64 stash;
++
++SEC("syscall")
++__success __retval(0)
++int arena_arg_forms(void *ctx)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
++	u64 __arena *val;
++	u64 ret;
++
++	val = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
++	if (!val)
++		return 1;
++
++	/* PTR_TO_ARENA argument */
++	*val = 41;
++	ret = bpf_kfunc_arena_arg_test((u64 *)val);
++	if (ret != 41 || *val != 42)
++		return 2;
++
++	/* the low 32 bits as a scalar */
++	stash = (u64)val;
++	ret = bpf_kfunc_arena_arg_test((u64 *)stash);
++	if (ret != 42 || *val != 43)
++		return 3;
++
++	/* the full user address as a scalar */
++	stash = (u64)val;
++	bpf_addr_space_cast(stash, 1, 0);
++	ret = bpf_kfunc_arena_arg_test((u64 *)stash);
++	if (ret != 43 || *val != 44)
++		return 4;
++
++	/* NULL is preserved */
++	ret = bpf_kfunc_arena_arg_test(NULL);
++	if (ret != 0xdeadbeef)
++		return 5;
++
++	bpf_arena_free_pages(&arena, (void __arena *)val, 1);
++#endif
++	return 0;
 +}
 +
- static bool is_kfunc_arg_scalar_with_name(const struct btf *btf,
- 					  const struct btf_param *arg,
- 					  const char *name)
-@@ -12060,6 +12065,32 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 			continue;
- 		}
++SEC("syscall")
++__success __retval(0)
++int arena_args5(void *ctx)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
++	u64 __arena *val;
++
++	val = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
++	if (!val)
++		return 1;
++
++	val[0] = 1;
++	val[1] = 2;
++	val[2] = 4;
++	val[3] = 8;
++	val[4] = 16;
++
++	if (bpf_kfunc_arena_args5_test((u64 *)&val[0], (u64 *)&val[1],
++				       (u64 *)&val[2], (u64 *)&val[3],
++				       (u64 *)&val[4]) != 31)
++		return 2;
++
++	/* mix in NULLs */
++	if (bpf_kfunc_arena_args5_test((u64 *)&val[0], NULL, (u64 *)&val[2],
++				       NULL, (u64 *)&val[4]) != 21)
++		return 3;
++
++	bpf_arena_free_pages(&arena, (void __arena *)val, 1);
++#endif
++	return 0;
++}
++
++/* kernel-side faults on unpopulated pages recover via the scratch page */
++SEC("syscall")
++__success __retval(0)
++int arena_arg_unpopulated(void *ctx)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) && \
++	(defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64))
++	u64 __arena *val;
++
++	val = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
++	if (!val)
++		return 1;
++
++	stash = (u64)val + PAGE_SIZE;
++	bpf_kfunc_arena_arg_test((u64 *)stash);
++
++	bpf_arena_free_pages(&arena, (void __arena *)val, 1);
++#endif
++	return 0;
++}
++
++SEC("syscall")
++__failure __msg("arena pointer requires a program with an associated arena")
++int arena_arg_no_arena(void *ctx)
++{
++	bpf_kfunc_arena_arg_test((u64 *)1);
++	return 0;
++}
++
++SEC("syscall")
++__failure __msg("is not a pointer to arena or scalar")
++int arena_arg_bad_reg(void *ctx)
++{
++	u64 buf = 0;
++
++	/* use the arena so the program passes the arena presence check */
++	bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
++	bpf_kfunc_arena_arg_test(&buf);
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 30f1cd23093c..9cc10c48a2d6 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -210,6 +210,37 @@ __bpf_kfunc void bpf_kfunc_common_test(void)
+ {
+ }
  
-+		if (is_kfunc_arg_arena(btf, &args[i])) {
-+			t = btf_type_skip_modifiers(btf, args[i].type, NULL);
-+			if (verifier_bug_if(!btf_type_is_ptr(t), env,
-+					    "kfunc %s arg#%d has __arena tag on non-pointer",
-+					    func_name, i))
-+				return -EFAULT;
-+			if (!env->prog->aux->arena) {
-+				verbose(env,
-+					"%s arena pointer requires a program with an associated arena\n",
-+					reg_arg_name(env, argno));
-+				return -EINVAL;
-+			}
-+			if (regno < 0) {
-+				verbose(env, "%s arena pointer cannot be a stack argument\n",
-+					reg_arg_name(env, argno));
-+				return -EINVAL;
-+			}
-+			if (reg->type != PTR_TO_ARENA && reg->type != SCALAR_VALUE) {
-+				verbose(env, "%s is not a pointer to arena or scalar\n",
-+					reg_arg_name(env, argno));
-+				return -EINVAL;
-+			}
-+			cur_aux(env)->arg_arena_regs |= BIT(regno - BPF_REG_1);
-+			continue;
-+		}
++__bpf_kfunc u64 bpf_kfunc_arena_arg_test(u64 *val__arena)
++{
++	u64 old;
 +
- 		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, i))
- 			continue;
++	if (!val__arena)
++		return 0xdeadbeef;
++
++	old = *val__arena;
++	*val__arena = old + 1;
++	return old;
++}
++
++__bpf_kfunc u64 bpf_kfunc_arena_args5_test(u64 *a__arena, u64 *b__arena,
++					   u64 *c__arena, u64 *d__arena,
++					   u64 *e__arena)
++{
++	u64 sum = 0;
++
++	if (a__arena)
++		sum += *a__arena;
++	if (b__arena)
++		sum += *b__arena;
++	if (c__arena)
++		sum += *c__arena;
++	if (d__arena)
++		sum += *d__arena;
++	if (e__arena)
++		sum += *e__arena;
++	return sum;
++}
++
+ __bpf_kfunc void bpf_kfunc_dynptr_test(struct bpf_dynptr *ptr,
+ 				       struct bpf_dynptr *ptr__nullable)
+ {
+@@ -723,6 +754,8 @@ BTF_ID_FLAGS(func, bpf_iter_testmod_seq_next, KF_ITER_NEXT | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_iter_testmod_seq_destroy, KF_ITER_DESTROY)
+ BTF_ID_FLAGS(func, bpf_iter_testmod_seq_value)
+ BTF_ID_FLAGS(func, bpf_kfunc_common_test)
++BTF_ID_FLAGS(func, bpf_kfunc_arena_arg_test)
++BTF_ID_FLAGS(func, bpf_kfunc_arena_args5_test)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_pass1)
+ BTF_ID_FLAGS(func, bpf_kfunc_dynptr_test)
+ BTF_ID_FLAGS(func, bpf_kfunc_nested_acquire_nonzero_offset_test, KF_ACQUIRE)
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+index c36bb911defa..932acf86c73f 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -98,6 +98,10 @@ void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) __ksym;
+ void bpf_kfunc_call_test_ref(struct prog_test_ref_kfunc *p) __ksym;
  
-@@ -19890,13 +19921,58 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		*cnt = 6;
- 	}
- 
--	if (env->insn_aux_data[insn_idx].arg_prog) {
--		u32 regno = env->insn_aux_data[insn_idx].arg_prog;
--		struct bpf_insn ld_addrs[2] = { BPF_LD_IMM64(regno, (long)env->prog->aux) };
-+	if (env->insn_aux_data[insn_idx].arg_prog ||
-+	    env->insn_aux_data[insn_idx].arg_arena_regs) {
-+		unsigned long arena_regs = env->insn_aux_data[insn_idx].arg_arena_regs;
-+		u64 kern_vm_start = bpf_arena_get_kern_vm_start(env->prog->aux->arena);
-+		u32 prog_regno = env->insn_aux_data[insn_idx].arg_prog;
- 		int idx = *cnt;
-+		int bit;
- 
--		insn_buf[idx++] = ld_addrs[0];
--		insn_buf[idx++] = ld_addrs[1];
-+		if (verifier_bug_if(idx, env, "kfunc call at %d already patched", insn_idx))
-+			return -EFAULT;
-+
-+		/*
-+		 * A kfunc may take both an __arena arg and the __prog aux. Emit
-+		 * each present fixup, then append the call once.
-+		 */
-+		if (arena_regs) {
-+			bool blinding = env->prog->blinding_requested;
-+			int base_reg = blinding ? BPF_REG_0 : BPF_REG_AX;
-+			struct bpf_insn ld[2] = { BPF_LD_IMM64(base_reg, kern_vm_start) };
-+
-+			/*
-+			 * rN = kern_vm_start + (u32)rN, NULL left as 0.
-+			 * Constant blinding rewrites immediate-carrying insns
-+			 * unless they use BPF_REG_AX. With hardening, the
-+			 * constant sits in R0 (an AX-destined LD_IMM64 would be
-+			 * corrupted) and NULL is tested against AX = 0. Without
-+			 * hardening, use the cheaper AX constant and immediate
-+			 * test.
-+			 */
-+			insn_buf[idx++] = ld[0];
-+			insn_buf[idx++] = ld[1];
-+			if (blinding)
-+				insn_buf[idx++] = BPF_MOV64_IMM(BPF_REG_AX, 0);
-+
-+			for_each_set_bit(bit, &arena_regs, MAX_BPF_FUNC_REG_ARGS) {
-+				int regno = BPF_REG_1 + bit;
-+
-+				insn_buf[idx++] = BPF_ZEXT_REG(regno);
-+				insn_buf[idx++] = blinding ?
-+					BPF_JMP_REG(BPF_JEQ, regno, BPF_REG_AX, 1) :
-+					BPF_JMP_IMM(BPF_JEQ, regno, 0, 1);
-+				insn_buf[idx++] = BPF_ALU64_REG(BPF_ADD, regno, base_reg);
-+			}
-+		}
-+		if (prog_regno) {
-+			struct bpf_insn ld_addrs[2] = {
-+				BPF_LD_IMM64(prog_regno, (long)env->prog->aux)
-+			};
-+
-+			insn_buf[idx++] = ld_addrs[0];
-+			insn_buf[idx++] = ld_addrs[1];
-+		}
- 		insn_buf[idx++] = *insn;
- 		*cnt = idx;
- 	}
+ void bpf_kfunc_call_test_mem_len_pass1(void *mem, int len) __ksym;
++__u64 bpf_kfunc_arena_arg_test(__u64 *val__arena) __ksym;
++__u64 bpf_kfunc_arena_args5_test(__u64 *a__arena, __u64 *b__arena,
++				 __u64 *c__arena, __u64 *d__arena,
++				 __u64 *e__arena) __ksym;
+ int *bpf_kfunc_call_test_get_rdwr_mem(struct prog_test_ref_kfunc *p, const int rdwr_buf_size) __ksym;
+ int *bpf_kfunc_call_test_get_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size) __ksym;
+ int *bpf_kfunc_call_test_acq_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size) __ksym;
 -- 
 2.55.0
 
