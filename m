@@ -1,140 +1,145 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2378634CFC6
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 21:22:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A32E633A005
+	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 21:27:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783977752; cv=none; b=a1SzGsKsG0HF9KTBqYQscokqxR0tXfLlarIx+8FfsGOzbd5ZKaFAf4ui/7QB3vU7ryrU9uiesLw6uZcx4Nam6MOt5edE2GtaONGA+1elRIlgG/R9Q8qziVY+nGRL889UGTrj+rz6wr0aSWpZelMSIHLBj1mKV0JYdP6YvH4THbU=
+	t=1783978045; cv=none; b=l9IcgA6SefiwrVU9v8EWSN/1RCsCsnutrQ9xtcTTnh3JJrhqes+Z7puLYqqtlvr6BYOImFxiuNy7pC0oMvxxKCP2R1/buF2jwW1UvR9rKb13YIgiefU6CAF6If+4KTKvCYw3ZqhTN0nud9kkeWM+0g2aJUPwj7yKftotsnRD11M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783977752; c=relaxed/simple;
-	bh=0911x5z746DSBGrJQdRd7PT2mgv7GWq115asLXG13ZU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VIX7B6PLemk2o/CQAFQ6UR3yVjATd93wE3yA8JiKT14WaXVWePIrDPFXHnerXE5ftPKWlkaNDqnImFO+m1b74LLRnhSDf6k5NT6DsgawZlXraHFfvaz+iLROelKQ+ovtnsW/L4e1C+eezoGZi23Kg90l7UcxCATE2BcyT1F0nag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rI53V3nQ; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783978045; c=relaxed/simple;
+	bh=6D4BSK+3T1nAiGUpMmtNjk230tXko9pc9t83etZFzeI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=CS4k58YeK4jVCdExTyeSxU4VRuWgbmww59pieVV+K4FVn3aKdVRWEs/I9JU4DiVMFMg6mYQPzUel2TeaUqhMIH4zwhQdVajXmXi9PFNvk98e1egv9O05YVSSTUFayHuPCi2Gg0lsp5EeOlgRN1hF94KE5lh/kdKhnWcGA9n41wY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=occITeni; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rI53V3nQ"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c966b9ee9cbso2020595a12.1
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 14:22:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="occITeni"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-38e07ebd263so257766a91.1
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 14:27:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783977750; x=1784582550; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=012KWSmGKH9yQYdoYG3G0PrW1DobnL7zQ0ZLH/2ph6s=;
-        b=rI53V3nQ2ig2TZ8WN48uvIgiYPv7S5jGO939hN+TXwG1MLYZ31CunGTLy6btueEakt
-         GA4uPHOy3s3G/50KVDoXwXWvpMh2f64VRP+JKY6BXhmx6FGie8ltEddOUoZGBXwdQ9s1
-         nVsqkYBjUIfRIS9TLFz30pBsWvaXzkWGFQv1Bvy05o/hlb5ESnchyvHNuuUgiyQf5juB
-         vJlWfr1aqDep5VlM7WQ8gWqM5r6a4ysdIf4iiqJLIvfVNbFCgNi3n2XKxB1AoQRX7HXV
-         j/naa0Qj8rljz6EtIJxfwLplMa7OGcHXCiBIz7MN4LwS8aVK5hI7on8hYu4+87HeVghH
-         Dp0A==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783978044; x=1784582844; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=+USb3n4BDL969RhM6AFut2RcEXsxb0pNRXhYra/sKHA=;
+        b=occITeni3/o9TT3l1OusAcPoV8PGL/cch5kYRpqzXUZcwB1uNaULdpCcrogGpDsncp
+         Oe4HsCEUjuFcrxy3SdWykfqxz1nSjVEoyOtYf49ktgS4aQj9NnBjdND8ChOtVUSomzP3
+         2/7lY29kf0kJYnJOxT0imCbQ4F7hlNcSrc81s4AO10OVxIaz6d+FpK+6O0l3kjtXEpPw
+         euqb694AyWe1Ne6GzTQSDcRr0H2NQI8hDA+HRYrpgv7mQCLtpcvnNNPyGr3BCVVse0ig
+         jTdOkO8SlFu5Am1xJTOnp/WQoEGVzDh8VQapRd1D+9QgwvsFGieAj5IrD8DNK0/x1Rse
+         yMmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783977750; x=1784582550;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20251104; t=1783978044; x=1784582844;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=012KWSmGKH9yQYdoYG3G0PrW1DobnL7zQ0ZLH/2ph6s=;
-        b=N06Z5IVrM5r3vg2V/ggTWTIqPOPse45RHyrgjabuZEUDnVVPn2zc9TME7P2MM8Iwpy
-         ekqKpHQ6LtyaDCe64JWdhxexm97Rgd6oVfVRcp2B5NXrpnmgKDPQ/KQdiSJVRhq2go5S
-         55EL1m/qiYH3jSKVexl5I12eeXiYePqrxnpia0EkthLp4IXYkGOZt66Z2AAlPMPyIMtb
-         7KoLlmD3tu8g+a3CDr+3VgsBexDQ4cdVw1u3sw+/ifJiQGNMj08FD26VfamQibnT78tY
-         rMLHl4WWSFjg96APl9K871NeqbmLEBN4jfAYjIw01uG3qZWyw+bQ6cmizOiD9gQo/DLr
-         k3/Q==
-X-Forwarded-Encrypted: i=1; AHgh+Rov83MbSZYO4+pFHntZ/hFGhns8oNdFWN+NNPhkVGeQvKBZ0mbY2BiecMFnQsxx2bcWvr4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOjLHrpavjcmBmCggZRWVw/LzYpe5dltQGSNDNaZ1ykHufFw84
-	eXAMX6Qh/fL0SY3srHq7k7Pc9B2PRvej+aBft3n3GnscpUxdmvdRgiYn
-X-Gm-Gg: AfdE7cmfUo1mBleoW3Ebbgm/IJovcxCii8EDThQxulPTYb4eQQBJbyU12r9J3WLQNZT
-	rX/4llwAKOTqcprxdZAKcYcXyU+ylWu2/SP/I/zTqsiKqEh9zkc724puc0Z/izcBraKolHR5qle
-	KTK4kv0rUA20TuJNQ9qOUkCuIc4QQL0VLF/mm/J0PZd7g9p9BCEV0zjuRhWD8tM9UybduvepG2h
-	L7sSHxtzSG2GlLH3OGTtv4ga+wb3J5wZ0MsP+68Ac5d4GicGt63N6yncai5O9Uwy/IEih9qJ+XX
-	56McvCoAxu+NQxmzFQU6pEoszBi0EfaORoJsGrxsuprHKrDUo5aRUORxASneAXmtbgVdX1Na8Em
-	z/qITQwpaPZd/ZErROzo49sMW8IAnG2UNyZtJYWR9HpFARX1rodNY5xp+ULqxlIZUiAhgoF9Ctr
-	8y05oJ4A2nSlHDA0M2kqbzXyNU6QFPG6t32tsS+TnM
-X-Received: by 2002:a05:6a00:1954:b0:845:c373:6525 with SMTP id d2e1a72fcca58-8488975a5b1mr9606193b3a.41.1783977750383;
-        Mon, 13 Jul 2026 14:22:30 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f6bf016sm359029b3a.28.2026.07.13.14.22.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 14:22:30 -0700 (PDT)
-Message-ID: <77e5d785ca08a5fa57c661d9494f4551d0b55425.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Check byte type when validating
- helper stack reads
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
-	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
-	 <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	
- <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
- 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Mon, 13 Jul 2026 14:22:27 -0700
-In-Reply-To: <855140e07cebafa6770d577ed107b2541b92f95e.1783920884.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1783920884.git.chenyy23@mails.tsinghua.edu.cn>
-	 <855140e07cebafa6770d577ed107b2541b92f95e.1783920884.git.chenyy23@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+        bh=+USb3n4BDL969RhM6AFut2RcEXsxb0pNRXhYra/sKHA=;
+        b=NsDFrmJhfGvJ9sxKMCn66+Nx1Rdscdvk5Blb1iXIO9upXrTNDxrPDYCwcknTIwqsSS
+         DCxP4e+AScP0F28jVe8s0l9M7nuISKjfAWgqbiyZAaVb71N1WHOF+MRav/yv06ZA3tmn
+         365OXE3NNylKkzUB8NTjLLw2+AMURc/aCcGg6aB4MeyvPBTgNEdBT0Jl48/I2g9Src6X
+         30t7CgW+XQgF+0UUYoVLileLosIjLSbLeC0nhGJOD2OyuKkxe/oHpHet2+QDQ+sa+b4M
+         CCLUTbSUfh/dyR8BCOp/NXMYi8MNlirZzjq83NtqTN+VJ/P0Rlm0S8lbfHRgEC4pcl8c
+         jAbg==
+X-Forwarded-Encrypted: i=1; AHgh+Ro/Dhhf/ZMK3wavfra5gF26+Uw/erRyciX9kIqA1kw0jMeoKtHGQeiIvKmDMJTRY1vXRdY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8cSA0oWnqKmIBLxjKc3EilaNOlkBcXJbgqNy9KbTbC2MdtFVH
+	iUl1+snVlA8zM3+n0cFzsKqhMB5xcscwUgKRFRbgRG/5KK7raYjnE6+I9At7yYbUxtVFr6NRmaC
+	YGtuDiY0=
+X-Gm-Gg: AfdE7clb7KNvVyvaYCfLDiIbU3ADuJIfguEovO5fCyBwB072aE2EY8JLdsite5oadJc
+	LlGe0D8bo6mMtizp3I0sPAuw7LLV0BWpQxrnulBYix0SLSM3NU3iUOBvapazDOEHDInGV2ujEVx
+	kbGmB1LSRlX63vYkP0tvwUYpcgK6JqDDniBGPXmycp9Rdj61zkwpCiZm4Snuw58nUwPmpFK6oSS
+	Qpx5uT+APTQhDf1ABcpjRlhfnXurEkfDQeRd40fyY4ZfHW99FkNncP0bLVMNjJMQugFPiOAt4nG
+	9bqIwjUGV3RshDMs6H33xMHR2B0yB4ojTcFPMpjU+PAPFlcdMcbuupXjHvVC9JtNJyWRvMa3op6
+	9Vk9LpDeB2EXaPmmytVyRn9LG0P5dI2aqMfJzl9I3VyohFRgTvp1gI3QZq1/3wGwTPksdI4zbPp
+	MOazgYFmhKSRppKoAQbT+EiRyvmRnyjCCYTc3DtjLJdAZPaJJYc9qq
+X-Received: by 2002:a17:90b:2d10:b0:37f:9ce1:735f with SMTP id 98e67ed59e1d1-38dc779f507mr9978583a91.32.1783978044021;
+        Mon, 13 Jul 2026 14:27:24 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38e172faba3sm433937a91.11.2026.07.13.14.27.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jul 2026 14:27:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 13 Jul 2026 17:27:22 -0400
+Message-Id: <DJXRFQTMYRTX.16Q66ORKV2WCA@etsalapatis.com>
+Cc: <netdev@vger.kernel.org>, <alexei.starovoitov@gmail.com>,
+ <andrii@kernel.org>, <daniel@iogearbox.net>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <martin.lau@kernel.org>, <shakeel.butt@linux.dev>,
+ <roman.gushchin@linux.dev>, <kuniyu@google.com>,
+ <kerneljasonxing@gmail.com>, <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v3 05/15] bpf: Replace prog_list_prog() check
+ with direct pl->prog and pl->link check
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Amery Hung" <ameryhung@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260706171918.317102-1-ameryhung@gmail.com>
+ <20260706171918.317102-6-ameryhung@gmail.com>
+In-Reply-To: <20260706171918.317102-6-ameryhung@gmail.com>
 
-On Mon, 2026-07-13 at 06:16 +0000, Yiyang Chen wrote:
-> check_stack_range_initialized() validates helper ranges byte by byte, but
-> bpf_is_spilled_reg() only checks the slot-wide spill marker. For a CAP_BP=
-F
-> load, a narrow scalar spill marks only the covered bytes as STACK_SPILL. =
-An
-> untouched sibling remains STACK_INVALID, but the helper still accepts the
-> read when the slot contains a spilled scalar.
->=20
-> Require the byte being checked to be STACK_SPILL before accepting the
-> slot-wide scalar spill state.
->=20
-> Fixes: 354e8f1970f8 ("bpf: Support <8-byte scalar spill and refill")
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+On Mon Jul 6, 2026 at 1:19 PM EDT, Amery Hung wrote:
+> From: Martin KaFai Lau <martin.lau@kernel.org>
+>
+> prog_list_length() and compute_effective_progs() use !prog_list_prog(pl)
+> to skip a 'detaching' pl.
+>
+> When pl->link is not NULL, prog_list_prog(pl) returns
+> the pl->link->link.prog. This does not work for the upcoming struct_ops
+> patch where pl->link is not NULL but pl->link->link.prog is NULL,
+> because a struct_ops map is attached to the cgroup instead of a BPF prog.
+>
+> To prepare for the upcoming struct_ops patch, this patch
+> replaces the prog_list_prog() test with the
+> "!pl->prog && !pl->link". In __cgroup_bpf_detach(),
+> both pl->prog and pl->link are set to NULL, so testing
+> "!pl->prog && !pl->link" is the same test to tell
+> if a pl is being detached. This change should be a no-op.
+>
+> Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+
+This change itself is ok, but now prog_list_prog never returns NULL
+under normal operation AFAICT. Can we add error handling in the
+remaining two call sites? prog_list_id() especially, since it blindly
+dereferences the result like so:
+
+	return prog_list_prog(pl)->aux->id;
+
+Imo it's worth it even if the code gets slightly more verbose.
+
 > ---
-> =C2=A0kernel/bpf/verifier.c | 3 ++-
-> =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 03e2202cca13d..c971cf34c760b 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -6785,7 +6785,8 @@ static int check_stack_range_initialized(
-> =C2=A0			goto mark;
-> =C2=A0		}
-> =C2=A0
-> -		if (bpf_is_spilled_reg(&state->stack[spi]) &&
-> +		if (*stype =3D=3D STACK_SPILL &&
-> +		=C2=A0=C2=A0=C2=A0 bpf_is_spilled_reg(&state->stack[spi]) &&
+>  kernel/bpf/cgroup.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index b64f6757096c..b100c04cb9c8 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+> @@ -408,7 +408,7 @@ static u32 prog_list_length(struct hlist_head *head, =
+int *preorder_cnt)
+>  	u32 cnt =3D 0;
+> =20
+>  	hlist_for_each_entry(pl, head, node) {
+> -		if (!prog_list_prog(pl))
+> +		if (!pl->prog && !pl->link)
+>  			continue;
+>  		if (preorder_cnt && (pl->flags & BPF_F_PREORDER))
+>  			(*preorder_cnt)++;
+> @@ -482,7 +482,7 @@ static int compute_effective_progs(struct cgroup *cgr=
+p,
+> =20
+>  		init_bstart =3D bstart;
+>  		hlist_for_each_entry(pl, &p->bpf.progs[atype], node) {
+> -			if (!prog_list_prog(pl))
+> +			if (!pl->prog && !pl->link)
+>  				continue;
+> =20
+>  			if (pl->flags & BPF_F_PREORDER) {
 
-Sorry, could you please explain again what's wrong with the original check?
-Here it is:
-
-                if (bpf_is_spilled_reg(&state->stack[spi]) &&
-                    (state->stack[spi].spilled_ptr.type =3D=3D SCALAR_VALUE=
- || env->allow_ptr_leaks)) {
-                        ... accepted ...
-                }
-
-And it says: if there is a register spill at 'spi':
-- always allow access if the spilled register is scalar
-- when allow_ptr_leaks is true, allow access when spilled
-  register is either scalar or pointer.
-
-The goal here is to avoid leaking pointers, and pointers are always 8-bytes=
-.
-
-> =C2=A0		=C2=A0=C2=A0=C2=A0 (state->stack[spi].spilled_ptr.type =3D=3D SCA=
-LAR_VALUE ||
-> =C2=A0		=C2=A0=C2=A0=C2=A0=C2=A0 env->allow_ptr_leaks)) {
-> =C2=A0			if (clobber) {
-
-pw-bot: cr.
