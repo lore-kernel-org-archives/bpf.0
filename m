@@ -1,363 +1,244 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D792F42DFF5
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 14:23:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.152.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783952600; cv=pass; b=t+GQNmG2ikt6DUIu/214IqPfnFfWiERpykRM2F3Ls9PLupxa65/zdTPeK55FPE7+cm4Z5fxQjG4+th3Nbjj99fLhXD1uNYmZvUC1/bZspHxDxXwp11ife4e1Sjaultu8RGsE8dFWIa/OFfke0pBx7RzXeDmzXF9gIt4Nd86fOM0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783952600; c=relaxed/simple;
-	bh=NZwhCQzuNwR93eVgivOgdbv59Ot1fi3ozfXk+zFBRE0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g8gCmAl0rxPX+I1VEDhKCFba+idNty2uSTp5so0URQkfA/4EX9LGImMSp0OY8vWlszhSdRSyZJ+J0A/RmdXr76oKlKdEKbxr37wI1UzSeBhXPQ6luPS8/CozJffqeMUOkSvadeMguggdhhUa5H+/DwGzJzCa+YTynyV4bmyZOOY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=YxTuKceW; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=LNBmsDhL; arc=pass smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85909372076
+	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 15:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783955969; cv=none; b=rpSHPjM+kKIK4LbydWfTBsf1I0AFQ/6MMeQkDQR5PUx/p1Ct4TmStZHejGRWIjJxSARpRPqP5hQK2buPtirt+RLsddXmGbYgKcEP0ROuahfvlISvCsNmGHJ5yWvxo35aTH5rG/LAPsQERGh7WGDl73uoxdiyKUhmpgpGUpNVDTs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783955969; c=relaxed/simple;
+	bh=XgfMyReXk9WbmWlpqj5QpOsH9T7Axa67XF6W7nxC6hw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=V5JLHODvPtKZOQIqld3/BxIOnh/Op2z62FETm6y/9NsbS7ob2qCjFKaLferpvNT8Bx1sb8zrZsvklZZnbmScNykjd42nKOA3T1AmOUq7YIUg7zuexOWvKSzFpPGADR0n4uGgOrL6fk3LCF+H4pObeBzFhimCpxnalUr6Y7NoAcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IE9gFOzQ; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="YxTuKceW";
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="LNBmsDhL"
-Received: from pps.filterd (m0354655.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66DCAWEL1070620
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 13:56:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=8VG8L95Re9xUzZH9ed/HsdnWDFV+pJA6I+pHtnKXZ6o=; b=YxTu
-	KceW54NW5/nomQqV7R4+YWbqNueA1S1ev9YVYLCBYkXlBO3pi5nef6LcLhYgqu8O
-	P10Oe7Huz7zpVGwv90XjVTcwfILVE3SUrYfL6lpiMP1nGXckMifLvkAYMmKQUh6J
-	LauZqnpqX70NP2A15Gg6p5gz3e/TLjE1o3MxDzHfEW9UoNe64gcGP0RoEu7q+BcU
-	/eCido8xqRkJwWzAXoYs0sMYtNoMGJw3SkB3pumhsV5/YVF2H36uVGrPvn51XqGg
-	iMcokTgGQGfEgyIQHjZvtg3RX45BOAXGiX7o9ab6uPnRvzzJsKhmBuKUL8ukFjB1
-	A2fzL/1r57MmtAo8Vg==
-Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com [209.85.128.198])
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4fc23abs26-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 13:56:27 +0000 (GMT)
-Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-81eb83325b5so1618967b3.0
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 06:56:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783950987; cv=none;
-        d=google.com; s=arc-20260327;
-        b=W0b7uoZhq6SMc3v1RQXJmH369XUjd4HPQLoxFdTpFRIzI9voFEpYfKsiz06ItlAWih
-         5BIpEEDm3syIMRrl/hpB6qcSGbZ41w01n/BxgYvpghnmPfDCh1nWaJSZ7pa/AadMt7+u
-         Sx70Es/1yddc6YsG0j9bn5SAfF0yOwCSP0ZrzooKEDxcgR655db94LmCc1MvNi3O6aO5
-         b8aTjIVHHR54B8Ioo5pOoRWrOCEYh9TUAHYL/n4YkrV9AYV70ssAvPG0nGlF/ShyqYWS
-         ADpT8cads6daFkvROk39iF9r0CC6+lIEWiSTJmxH/Nj9+SQuLHY8Phs4rH3CP1sYkOzm
-         LKNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=8VG8L95Re9xUzZH9ed/HsdnWDFV+pJA6I+pHtnKXZ6o=;
-        fh=/T1mQyQYEvsYAUPDrUlcfC5719jpKbo/XmBxspmxCHs=;
-        b=b0MYA7PtD0fZTLR0lslV4orhiyVCR1tQrMrmV3bQok/EbGlVZc3xzmKIp27KP6EwkK
-         fsT2Fee/akJqMJRSzivEjczYHjr1LMSNCl6I+SNnyzz7FIvzYKExV18FpK259FctmSLD
-         mJ8uY3LG5t3ShsMMYF5wN8x64KnRJ/ZwkZI0MLnmGv/IBQIWXTfKVPXcg8fn31qDRuro
-         W072kFaZCPNR2xtSUc2h06xbCY0+KrazIoiE7DKdGtr3rF6IEHBjj2wXCn2EICZyws58
-         dVKwGHX3JzBCWS5mr8nY86xD5yASS+ykrQ7saBU9lmqThthKkG1QS4QYr7dWaIUYZLUu
-         NOkQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IE9gFOzQ"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-ca80d708489so1990882a12.1
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 08:19:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=crowdstrike.com; s=google; t=1783950987; x=1784555787; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=8VG8L95Re9xUzZH9ed/HsdnWDFV+pJA6I+pHtnKXZ6o=;
-        b=LNBmsDhLQxb44ixfPzksFr4x+aO/dgkQ6xM5bPO64WM5wheFApULHmKa4GCDucmtpe
-         9x1quSFVdFiYr0lyO6DYU3r8j5u7Sevpk2qCYz8OFvHNe+di6V7Ecg4J67wIpe9LNit/
-         Fuci/TCw92pRuzxwV/cfTDuySWZkbNnuylBGDtHXBbi1oQiS7ZGRoFZU1LIRzJidQUrj
-         sCHscWqHb2G912yvzln7nwoPOUhXywlbj/TdBrocioCyxdB4MtV2W80MQvij6+8i6q/t
-         v/12gdiDWBzBIOAEjJin6mt+tOLiW7YMp7g1qCTUPhcrQde8ulKWLZnvXg4e/o9xVXfB
-         XYDQ==
+        d=gmail.com; s=20251104; t=1783955967; x=1784560767; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Y+ujhi7qr+5PDvfWnrugr3cptYcf6a5ot8pqDt3RfQQ=;
+        b=IE9gFOzQxBDi0IVIrhm0xXbwtjhN28eJ/IpULeUzVkLrp4WItFQSjycxXQBT8F/RRf
+         ZZDKLuohqee4ndlVWfcJeRLAzaEOAxov7d3xU6on6CPD7dOtfB9dMJ+KpDdJQcax1rPO
+         /iHly/a+oJlxoRMoniQYQ0dRecTsxtPtRRXJ7eCTHymRpN2542pMfENTlXrM17TP0zZr
+         SH2hL9lc9jcxx5xbK9FU8/Rl4hZZGma36UhIX0MwY25wxVho40B2I/jLLdhXeIq4Zxqj
+         /fFquG9TDC48spLnFuf55vNQDeZpXvs1mPYRL/uru0NCAz7cFtsNQF4QoULbvbwe4jj/
+         r0Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783950987; x=1784555787;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1783955967; x=1784560767;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=8VG8L95Re9xUzZH9ed/HsdnWDFV+pJA6I+pHtnKXZ6o=;
-        b=kF/swvaN1nUE/hJPpxZKI9D/zTlMjdezDdmwkj5JWfKNqJdDG3iZEqBWGKsJpRwboQ
-         YfsfBj5SKjLMyyXq2Sx9sjkL37L+NzV285J4GqTXCZfC3oBQvOxx0X4EFBKTYU9CpMLp
-         wuds/cQW069yd+OT3ZsC3KdYbOuf52losvPSjUFdPPn/vKdhBzDycvPLV+zN4BLFmcnk
-         P+v7nOpZdZ53KuBdWvbSYjzRnI0SRu/Kay9WuRYQp/6WXWRI9oa8wMUrWxNM+myK5xmW
-         f14qtvuYMYVqlenExgYomnz2++8TZvOA450eQuUl7LsjPoKPL2q4SMvQe5147+04cTa6
-         x8EQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpgnpUfOM3ivDO0ZtdTvp8n9D0AUwcXcblyC6qOiJ51bj4dIs5H9h3ZI1p6G1z/oOedVAY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFIkcgXegG8Hynrj1Qb2OEmrfKmMXyI0Oe2YZ9CY7zHG1eG9Hm
-	rNjzmWWJCX7OwXSQ7sN8byDsRtYjvq34IsG0M+J5tIp04ryiqxnz/PIEcZiuzOtQ3Oj0JUDvdEs
-	VQma5cLleyeX9+2OaS2fq4tZ3e6bzIjrSQKr1JcvLrJQmtzveUVzIez39piMAaq38fJDo5EyVCB
-	j+Iuasn5jT/mDlvKUt0Tay3oBbQTFy
-X-Gm-Gg: AfdE7cn14cEbw8nFVJRQ6p83TI5hYNlvMiS6sfhNmhitjp/wz5qeEsDcuggxzmSiMdk
-	r1BxvFKyyKS4l7jx0Jx5eT4usHhwJYjJEnHsLvnFwQ02BXq8ygoACGJOWvi7IXQXyROfn/UIWRG
-	01py3AgcqC7vHrJr0q0abGpXxJQ57d2Nkp1gNF8UWnL3LDj8rDT6ONcAEA7MNaMNhXMfRchQ==
-X-Received: by 2002:a05:690c:688e:b0:81c:8370:fa62 with SMTP id 00721157ae682-81e9010c677mr71742707b3.41.1783950987357;
-        Mon, 13 Jul 2026 06:56:27 -0700 (PDT)
-X-Received: by 2002:a05:690c:688e:b0:81c:8370:fa62 with SMTP id
- 00721157ae682-81e9010c677mr71742487b3.41.1783950986698; Mon, 13 Jul 2026
- 06:56:26 -0700 (PDT)
+        bh=Y+ujhi7qr+5PDvfWnrugr3cptYcf6a5ot8pqDt3RfQQ=;
+        b=Mui5m6NzQgvE+0I+/lJmnKFelAttScHlb1O5Smk/Ye2AOic7JSvEoSmlbAw5NC4eBx
+         Xuo369F25lz+8HXHdkihOSwOz7P4EFhru8t2vRdUfKH4QBxPm/iVV/P4mlx0bkB/P3G9
+         HujcccSGhHIw+zeRQuq8oxYBJwype51yqkBJkwsTxmFIu09Kf5WiCnlklVm02RTC+Lqi
+         Z4rJcdKxsTd5aqNMoDym7kqKDXQFKnB1YypKxIqfUhqDCOv4g1ZmIAsX1mM0F2eLO0nx
+         ZcrwjPsn8J82NxT12PzOsYq+o7qiJ3282ld+WJA7lGfOKHu+36ttv6N1CZglQy+wnXgt
+         BHrw==
+X-Forwarded-Encrypted: i=1; AHgh+RrfxoOUlML354Tc1JSFUHuSf9ZrlKTBIz+8kmbhYy8lgPRcG/xBLgK009aAkL/2TOdXDAY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOIxHcIRORAf6lhNbOm4n+ZkjkafbPPm5WKY48qJ/Pucxwnunr
+	52Db/7MWJbhKA0mlJwLW0m6i8z35UBbXt2eNJmw34N0SMvF/ug5AhDG1
+X-Gm-Gg: AfdE7clUspsBmVVgMWBZO4Uo4sdXxcZlrVoDQJNlLOR7cYcneWNmwkhKc7Z1x/qWXZh
+	A+oOjoVxYbLZ1vWn4hGHqoTTzrT6iZA2Psrj8wLVp7Mkna5xypSfGv0+MQk46qfMBDzcOkTYHBP
+	TP7fdiFflJARP+E61jtDezlmN7KWtAg96e19E1xAK/5JsJIt2vI5ZhIoSn8/lBc0ZrjqGlbemaW
+	qm1F2/yyRsb83moQ6XYhHh5JwHb1x3BLZ1LgZUnmBSugI+e02OFkbswpy0Kt5uVRyuM/LZB1GzO
+	meD1W9MTvCz7VWe4ziepkQ4w244FrgODjVdAStzLWML5VpX4AmaIG1+nC5Uc6ZDOh3i81OHC+B8
+	KrCS5T0GryIduFm3MV0mJWafn7usdeZNR0XzOKswOOg5rrKqY8srMZsZhO7uTDnwCTIHShho2LM
+	zJ903Vro0AwwtM3A==
+X-Received: by 2002:a05:6a20:244b:b0:3a0:c246:bb98 with SMTP id adf61e73a8af0-3c0f0b9158emr16049895637.29.1783955966577;
+        Mon, 13 Jul 2026 08:19:26 -0700 (PDT)
+Received: from localhost ([98.35.8.117])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b924258a2sm54513605c88.1.2026.07.13.08.19.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jul 2026 08:19:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260220-veristat_prepare-v2-0-15bff49022a7@meta.com>
- <20260220-veristat_prepare-v2-1-15bff49022a7@meta.com> <CAOu3gNgW9+C7bOPkt0CGs8d_ad_TNyQ0AKv7_Jfg4=F5PET4ow@mail.gmail.com>
- <CAEf4BzYbUhpwP3nq=M4Ph12LwRYO+mYSQB8SJjsw0AzZAFqyVQ@mail.gmail.com>
- <CAOu3gNgv_nJ6tjZOZ-FnJNYntbnpKn+nRnO4G6j0fkBmeeu=GQ@mail.gmail.com>
- <CAOu3gNjg5vQ=t0C5UmStNpK8zutFC7kcYTrKt9aiR8Gia+rdNw@mail.gmail.com> <CAEf4BzY2ucQUsNbbaKcOyLhXNbMBS4ouoJknAqNJ6CN8rPG92Q@mail.gmail.com>
-In-Reply-To: <CAEf4BzY2ucQUsNbbaKcOyLhXNbMBS4ouoJknAqNJ6CN8rPG92Q@mail.gmail.com>
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Date: Mon, 13 Jul 2026 09:56:15 -0400
-X-Gm-Features: AUfX_mxAS1IJFYan_n5rHFwG4_uTUSR2CIAglUnrU6hyC5XcKqDeV7GMvcTvNjU
-Message-ID: <CAOu3gNggJbiDO+_2tq8W9mAY=BtP+wnpn314sJaq2e-y=vcpbg@mail.gmail.com>
-Subject: Re: [External] [PATCH bpf-next v2 1/2] libbpf: Introduce bpf_program__clone()
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, kernel-team@meta.com,
-        DL Linux Open Source Team <linux-open-source@crowdstrike.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-GUID: VTeewVqvgzvwVE-GzOx82mrzj5hpi5sl
-X-Proofpoint-ORIG-GUID: VTeewVqvgzvwVE-GzOx82mrzj5hpi5sl
-X-Authority-Analysis: v=2.4 cv=V8VNF+ni c=1 sm=1 tr=0 ts=6a54ee8b cx=c_pps
- a=g1v0Z557R90hA0UpD/5Yag==:117 a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10
- a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
- a=vDKVRhTs-M86Ea50iKLw:22 a=VwQbUJbxAAAA:8 a=pl6vuDidAAAA:8 a=pGLkceISAAAA:8
- a=4Zh9gSnVrSdOt92HVi0A:9 a=QEXdDO2ut3YA:10 a=MFSWADHSvvjO3QEy5MdX:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzEzMDE0NSBTYWx0ZWRfX5U98OZNQyKHK
- +N9AaSJV7zSxAj+OGQdChk5IFtxnOet6mv/naKz+SGscMO9pbIE499RaHDgRuow8W7+K9tozsEh
- +ctAGRWKhT4Wkw2eV4a4Dk1MQUKPNcAcUWJrJOfBTuYHlEr9J65HetQ95s0ifU5o2GFZREHcENZ
- 4fZ8vkEVbopTySTNANkHW0+EFPzBwpb0B7nsAI6iDCfU2iwoIB3jlW0usCDDMusaQ90bTKilAqN
- yyM2BLrMfBFrwlv+4Y6ICLVG1Hszh3rOH+ze2K6QOpiu5CIpbKEZdQaDTszrPkvqzmtyaGL/Evr
- zoFutGdmLqwkX9sa+KSuwU58pBju6QgQ9fg8j0TmeHqijmUHmH3evLJp3amz1SgS6sKJjmwQjVf
- IVMXptMN2kcTdgtjf8grR8LdXq++8J9SDEQCMAZ3SduVpyV9HDIQZhPDavfYu/IbE3hYsYE195m
- kPFvOPBOnMyeGClvOHQ==
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzEzMDE0NSBTYWx0ZWRfX9pNA9AB5cOjM
- xdAcA7aUzQxu6EVdiUXUyk77i9yunnZTCirlWZj7OlCpMGwTn7RlOur2LP9zJeBvyB9xy8/yB/Q
- cevVW1cpPiOhKUik2rJz0MV8LGh/kdwque6Pb+RskKY6q4JXqfGK
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11846
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 clxscore=1015 suspectscore=0 spamscore=0 malwarescore=0
- lowpriorityscore=0 phishscore=0 impostorscore=0 priorityscore=1501
- adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
- definitions=main-2607130145
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 13 Jul 2026 08:19:24 -0700
+Message-Id: <DJXJM0838IJN.3AJ9MMQ89SUUR@gmail.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Shuah
+ Khan" <shuah@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Kees
+ Cook" <kees@kernel.org>, "Alexander Viro" <viro@zeniv.linux.org.uk>, "Jan
+ Kara" <jack@suse.cz>, "Jonathan Corbet" <corbet@lwn.net>, "Jann Horn"
+ <jannh@google.com>, "John Ericson" <mail@johnericson.me>,
+ <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
+ <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 0/5] binfmt_misc: bpf-backed binary type handlers
+From: "Farid Zakaria" <farid.m.zakaria@gmail.com>
+To: "Christian Brauner" <brauner@kernel.org>, "Farid Zakaria"
+ <farid.m.zakaria@gmail.com>
+X-Mailer: aerc 0.21.0
+References: <20260711-binfmt-misc-bpf-v2-v2-0-d6591ceaf207@gmail.com>
+ <20260712-abluft-brutkasten-aufladen-c8063a4a1a0a@brauner>
+ <DJX4IFO55D9S.3IV3K5XICJAEV@gmail.com>
+ <20260713-unerlaubt-luftkammer-kosmetik-46532d395f9b@brauner>
+In-Reply-To: <20260713-unerlaubt-luftkammer-kosmetik-46532d395f9b@brauner>
 
-On Fri, Jul 10, 2026 at 6:19=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Mon Jul 13, 2026 at 1:20 AM PDT, Christian Brauner wrote:
+>> > - The single sleepable load op is split into two ops:
+>> >
+>> >       struct binfmt_misc_ops {
+>> >       	bool (*match)(struct linux_binprm *bprm);
+>> >       	int (*load)(struct linux_binprm *bprm);
+>> >       	char name[BINFMT_MISC_OPS_NAME_MAX];
+>> >       };
+>> >
+>> >   The non-sleepable match program runs from the RCU entry lookup
+>> >   walk itself, exactly like magic and extension matching: same
+>> >   registration order, same first-match-wins semantics, and it can
+>> >   only rely on the prefetched bprm->buf. It must be free of side
+>> >   effects since the walk may be restarted.
+>> >
+>>=20
+>> Is relying on brpm->buf enough?
+>> Right now that's only 256 bytes I think, which is not enough to read
+>> segments we might care about. That worked fine when it was just a magic
+>> number but the idea with the eBPF program is to make decisions based on
+>> more data.
+>>=20
+>> In the selftest I provided, the `PT_INTERP` segment is already at file
+>> offset 0x318 (792). I was imaginging NixOS having to support
+>> `PT_INTERP_NIX` in order for the produced binaries to be backwards
+>> compatible with older kernels.
+>>=20
+>> The other idea would be to make the `match()` broad and select
+>> everything but then nearly all ELF64 binaries would match and then pay
+>> the price to `load()` and ultimately `-ENOEXEC`. Seems like it would
+>> make multiple BPF binfmt programs less useful.
 >
-> On Wed, Jul 8, 2026 at 1:58=E2=80=AFPM Andrey Grodzovsky
-> <andrey.grodzovsky@crowdstrike.com> wrote:
-> >
-> > On Mon, Mar 16, 2026 at 10:23=E2=80=AFAM Andrey Grodzovsky
-> > <andrey.grodzovsky@crowdstrike.com> wrote:
-> > >
-> > > On Wed, Mar 11, 2026 at 6:52=E2=80=AFPM Andrii Nakryiko
-> > > <andrii.nakryiko@gmail.com> wrote:
-> > > >
-> > > > On Fri, Mar 6, 2026 at 9:22=E2=80=AFAM Andrey Grodzovsky
-> > > > <andrey.grodzovsky@crowdstrike.com> wrote:
-> > > > >
-> > > > > Mykyta and Andrii Hi!
-> > > > >
-> > > > > We're evaluating the bpf_object__prepare() +
-> > > > > bpf_program__clone() API for use in a production BPF
-> > > > > application that manages hundreds of BPF programs with
-> > > > > selective (dynamic) loading =E2=80=94 some programs are loaded at
-> > > > > startup, others loaded/unloaded at runtime based on feature
-> > > > > configuration.
-> > > > >
-> > > > > We have a few questions about the intended usage and
-> > > > > potential extensions of this API:
-> > > > >
-> > > > > 1. Compatibility with bpf_object__load() and object state
-> > > > >
-> > > > > After bpf_object__prepare(), the object is in OBJ_PREPARED
-> > > > > state. Several libbpf APIs (e.g., bpf_program__set_type())
-> > > > > gate on OBJ_LOADED state.
-> > > > >
-> > > > > Is there a recommended way to transition the object to
-> > > > > OBJ_LOADED after cloning all desired programs? For example,
-> > > > > would a bpf_object__finalize() or similar API that runs
-> > > > > post_load_cleanup() and sets OBJ_LOADED be in scope? This
-> > > > > would allow users to benefit from prepare() + clone() for
-> > > > > selective loading while keeping the object in a state that
-> > > > > the rest of libbpf expects. Or, is the new API not intended
-> > > > > to work with bpf_object in the first place ?
-> > > >
-> > > > exactly, it's not. It's an escape hatch out of bpf_object into
-> > > > low-level FD, it was never designed to produce something that shoul=
+> Ok, so your idea is to have multiple bpf programs that look for
+> different interpreters. Yeah, then you have to be able to sleep because
+> you need to be able to fault. It makes the code uglier but I can see how
+> that's useful. I'll see how nice I can make that.
+>
+
+I mean... I thought that's the intent to binfmt_misc, to have multiple
+handlers -- with the expressiveness of eBPF vs. the limited
+magic/extension, it seems like a natural extension to support multiple.
+Otherwise anyone on NixOS would be limited to our single handler for all
+binaries which seems not ideal?
+
+I'm not knowledgeable enough to comment on the sleep/faulting aspect so
+I leave that to your expertise.
+
+>> >   The sleepable load program runs once the walk has committed to the
+>> >   entry and does the file reading and the interpreter selection. Both
+>> >   ops are mandatory, the struct_ops plumbing enforces the sleepability
+>> >   of each, and since bpf_binprm_set_interp() is KF_SLEEPABLE a match
+>> >   program cannot select an interpreter by construction.
+>> >
+>> > - A match is a commitment. A failing load program fails the exec inste=
+ad
+>> >   of falling through to later entries. -ENOEXEC keeps its usual meanin=
+g
+>> >   and hands the binary to the remaining binary formats, for a handler
+>> >   that discovers it cannot serve the binary after all.
+>> >
+>> >   This kills the part of v1 I disliked the most: the skip cursor and t=
+he
+>> >   leave-and-rescan loop in load_misc_binary() are gone. The walk is
+>> >   never left and re-entered, and 'B' entries need no special semantics
+>> >   against concurrent (un)registration anymore.
+>> >
+>> >   Your v2 changelog note about keeping the bpf retry loop in the
+>> >   __free() style is moot as a consequence. The loop no longer exists.
+>> >
+>> > - The load return convention flipped: 0 now means success after the
+>> >   program called bpf_binprm_set_interp(). Returning 0 without having
+>> >   selected an interpreter or returning a positive value is treated as
+>> >   -ENOEXEC, other negative errnos fail the exec.
+>> >
+>> >   So the "return bpf_binprm_set_interp(...) ?: 1" idiom from the v1-er=
+a
+>> >   programs becomes plain "return bpf_binprm_set_interp(...)".
+>> >
+>> > - The handler name moved from the offset field to the interpreter fiel=
 d
-> > > > be put back into bpf_object. This clone stuff if for generic low-le=
-vel
-> > > > tooling like veristat and/or maybe bpftool's generic program loadin=
-g.
-> > > > And another one is cloning the same fentry program to be attached i=
-nto
-> > > > multiple uniform targets (I do a similar hack in retsnoop, for
-> > > > instance).
-> > > >
-> > > > In none of those cases cloned FDs are meant to be interoperable wit=
-h
-> > > > bpf_object/bpf_program abstractions.
-> > > >
-> > > > >
-> > > > > 2. Storing the clone FD back on struct bpf_program
-> > > > >
-> > > > > bpf_program__clone() returns a caller-owned FD, but APIs
-> > > > > like bpf_program__attach() read prog->fd internally.
-> > > > > Without a way to set the FD back on the program struct, the
-> > > > > caller must reimplement attach logic (section-type dispatch
-> > > > > for kprobe, fentry, raw_tp, etc.).
-> > > > >
-> > > > > Would a bpf_program__set_fd() setter (similar to the
-> > > > > existing btf__set_fd()) be acceptable to store the clone FD
-> > > > > back, making bpf_program__attach() and related APIs usable
-> > > > > with cloned programs?
-> > > >
-> > > > technically this could be done, probably, but it just feels too dir=
-ty,
-> > > > tbh... there is so much program-specific information that libbpf
-> > > > internally preserves (and gives access to most of it through
-> > > > bpf_program's getter) that would need to be invalidated and/or
-> > > > re-fetched with this set_fd() approach, that I don't really even wa=
-nt
-> > > > to consider this too seriously... but see below
-> > > >
-> > > > >
-> > > > > 3. Use case: selective program loading from a single BPF
-> > > > >  object
-> > > > >
-> > > > > Our use case involves a single large BPF object (skeleton)
-> > > > > with hundreds of programs where a subset is loaded at
-> > > > > startup and others are loaded/unloaded dynamically based on
-> > > > > runtime configuration. The current approach requires either:
-> > > > > - Loading all programs upfront (wasteful), or
-> > > > > - Maintaining out-of-tree patches to libbpf for selective
-> > > > > loading
-> > > > >
-> > > > > Last year we made an attempt to upstream our solution to
-> > > > > this use case to libbpf[1] but Andrii pointed out how our
-> > > > > approach was problematic for upstream. He then proposed
-> > > > > splitting bpf_object__load() into two steps:
-> > > > > bpf_object__prepare() (creates maps, loads BTF, does
-> > > > > relocations, produces final program instructions) and then
-> > > > > bpf_object__load().  We are trying to follow up on his
-> > > > > input and become more upstream compliant.
-> > > > >
-> > > > > The prepare() + clone() API seems similiar to this,
-> > > > > but the questions above about object state and FD ownership
-> > > > > are the main gaps for production adoption. Are there plans
-> > > > > to address these in future revisions, or is this
-> > > > > intentionally scoped to testing/tooling use cases only?
-> > > >
-> > > > I remember your use case. I don't think clone is really a great fit
-> > > > *if* you still want to stay at bpf_object/bpf skeleton high-level o=
-f
-> > > > API (i.e., if you want to use bpf_program__attach() APIs and BPF
-> > > > links).
-> > > >
-> > > > While definitely a complication, I think we can add support for
-> > > > loading BPF program after bpf_object__load() happened. You'd have t=
+>> >   that field consistently names whoever supplies the interpreter, a pa=
+th
+>> >   for static entries, a handler for 'B' entries. Offset, magic, and ma=
+sk
+>> >   must be empty:
+>> >
+>> > 	echo ':nix-origin:B::::nix_origin:' > register
+>> >
+>> > - 'C' is allowed now, v1 rejected it. It behaves exactly as for a stat=
+ic
+>> >    entry. The setuid transition stays gated by vfsuid_has_mapping() in
+>> >    the caller's user namespace. Which makes 'B' handlers usable for a
+>> >    per-binary loader over setuid binaries. 'F' stays rejected as there
+>> >    is no fixed interpreter to pre-open (I have other ideas how we'll d=
 o
-> > > > keep your optional programs as non-autoloaded (or
-> > > > bpf_program__set_autoload(false) explicitly), and I'm thinking we
-> > > > might want to make this behavior opt-in explicitly through
-> > > > bpf_object_open_opts(), as there are various points in bpf_object
-> > > > lifetime where we make some decisions with the assumption that
-> > > > programs will never be loaded, so we'll need to explicitly indicate
-> > > > that *all* programs would need to be considered loadable, but maybe
-> > > > much later.
-> > > >
-> > > > Another thing that won't (or rather might not) work is declarative
-> > > > prog_array initialization and struct_ops. Those two steps happen in
-> > > > bpf_object__load() after all programs are loaded. I don't think tha=
-t
-> > > > is the problem for you, but I just want to point out that program
-> > > > loading is not always the last step.
-> > > >
-> > > > But other than that, despite added complications, it's probably bet=
-ter
-> > > > to just allow to load programs lazily after bpf_object__load(), aft=
-er
-> > > > all.
-> > >
-> > > Thanks for the detailed info! We can start working on this ourselves
-> > > once we have some available time, we hope for your guidance during th=
-e process.
-> > >
-> > > Andrey
-> >
-> > Hey Andrii, getting back to this important topic -
-> >
-> > I reviewed the proposed solution and the code . An object-wide
-> > bpf_object_open_opts flag that means "all programs must be
-> > considered loadable, but maybe later" collapses two things that need
-> > to stay separate: a program that is not currently loaded but may load
-> > later (feature gated, config-driven), and a program that is
-> > permanently not going to load on this object instance (e.g. it
-> > targets a kernel symbol/struct field that doesn't exist on the running
-> > kernel, or it lost out to an equivalent alternative implementation and
-> > will never be used). Today those are distinguished by the autoload
-> > bool: false + never load =3D the second case. If the semantics of "not
-> > autoloaded" change object-wide to "loadable later," we lose the
-> > ability to express the second case at all -- every non-autoloaded
-> > program in the object now implicitly carries the cost and risk of
-> > being treated as eventually loadable, even the ones that never will
-> > be. So, every non-autoloaded program is implicitly pulled into
-> > relocation resolution and map creation, since nothing can rule out
-> > that it might load. For a program that  never will, that's
-> > wasted preprocessing, and if its relocations fail against this
-> > kernel's BTF, that failure is no longer isolated to just that program.
-> >
-> > Given this I wonder if it's reasonable to re-evaluate the approach of
-> > per-program enum from the original patch series we prosposed , rather t=
-han a
-> > boolean plus an object-wide opt-in flag. Keeping disabled as its own
-> > per-program state (excluded from relocation and map-creation, failures
-> > isolated) alongside auto and the new dynamic case state gets us
-> > the capabilities we want without forcing every already-
-> > disabled program in an object to be reclassified as "maybe loadable.
-> >
+>> >    something like it later.).
+>> >
+>> > Nothing changed in the exec patch, the fs kfuncs patch, the kfunc
+>> > itself, or the registry/namespacing model.
+>> >
+>> > I can send v3 in a bit if that's ok.
+>>=20
+>> I don't mind at all you sending v3 and in fact I've been enjoying your
+>> involvement. I didn't know what to expect when I offered this idea up to
+>> the community.=20
+>>=20
+>> I'm happy to keep co-developing this with you within a design you feel
+>> acceptable with. Please let me know how I can remain engaged and
+>> helpful.
+>>=20
+>> One last thing I was thinking about is that we will also need to support
+>> $ORIGIN in the shebang path, however I just tested it and this current b=
+road
+>> BPF solution can largely handle it [1], with a small wrinkle.
+>>=20
+>>   $ printf '#!$ORIGIN/interp\n' > /opt/app/greet
+>>   $ cp ./interp /opt/app/interp     # any interpreter/loader
+>>   $ chmod +x /opt/app/greet /opt/app/interp
+>>=20
+>>   # stock kernel: binfmt_script opens the literal "$ORIGIN/interp"
+>>   $ /opt/app/greet
+>>   bash: /opt/app/greet: $ORIGIN/interp: bad interpreter: No such file or=
+ directory
+>>=20
+>>   # with the handler registered, $ORIGIN resolves to the script's dir
+>>   $ bpftool struct_ops register shebang_origin.bpf.o /sys/fs/bpf
+>>   $ echo ':shebang-origin:B:shebang_origin::::' > /proc/sys/fs/binfmt_mi=
+sc/register
+>>   $ /opt/app/greet
+>>   <runs /opt/app/interp, the loader found next to the script>
+>>=20
+>> The wrinkle is that it can't express today is the single optional argume=
+nt.
+>> (i.e. `#!interp arg" -> argv[1]=3Darg`). We might ned a way to express
+>> that in the load.
 >
-> Goodness, 4 month since that discussion... I don't remember all the
-> details, we can start a new conversation and go over details, but I'm
-> just about to leave for vacation and Mykyta is still out on vacation,
-> so I'd suggest to restart this conversation with all the details anew
-> in about a month of so, if that's ok?
+> Ah, fun. binfmt_misc wasn't able to express this at all. It's good to
+> close that gap. This can just be done by adding
+> bpf_binprm_set_interp_arg().
 
-Defenetly! So just to clarify, per your advice from earlier in this thread,
-we don't plan to rely on the cloned sessions concept anymore and suggest
-instead to review again the approach we proposed initially [1].
-
->
-> Explicit tri-state per program vs implicit tri-state (if not
-> explicitly disabled -> maybe enabled, if per-object setting is set) is
-> probably not the most blocking part of this. But again, let's come
-> back to this with fresh heads :)
-
-We will gladly review it again and adapt it so that it is acceptable
-to the community and can be
-beneficial to all users of libbpf.
-
-I will reach out again in the second half of August.
-
-Thans,
-Andrey
-
-[1] -https://lore.kernel.org/all/20250122215206.59859-1-slava.imameev@crowd=
-strike.com/t/#m93ec917b3dfe3115be2a4b6439e2c649c791686d
+What is "cool" about this is now it's also a net-new feature for shebags
+which the "old" binfmt_misc didn't support. Anyways, I was thining ahead
+about what I would need to support $ORIGIN fully and this was
+a remaining gap. We also explored this idea in a patch pre-BPF [1] but
+now that we've settled on this solution it seems much more natural.
 
 
+I was recently reached out by some Bazel people who are also interested
+in this $ORIGIN support. Interestingly they let me know that
+IllumOS/Solaris had support for it as well.
 
->
->
-> > Thanks!
-> > Andrey
-> > >
-> > >
->
-> [...]
+[1] https://github.com/alurm/relocatable-shebangs/blob/18db0da6cd69ce19bb02=
+73f2548a2d96bdaa82b1/relocatable-shebangs.patch
