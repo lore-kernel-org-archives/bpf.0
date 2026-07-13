@@ -1,64 +1,65 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4B636A37F
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 21:57:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20463241C8C
+	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 22:02:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783979862; cv=none; b=nDi9RprDY9SyHACKcdAKkEv1SSFORHasxMzRhRCpp9l3hnOvoH8W6tosYDI3B1Dz2oTmwZSyqTU92icxiIBWjLDVq4T0C/4L5HZq08hc5L1fBU+buLpW5+mi82CjS4moiN32G+HK3TOQbDhedw3PJUZRxI/bqRbqScfKbayhYGI=
+	t=1783980147; cv=none; b=MdUrRyjp6iXoTuB/xJTLr+9aQuCa7PhMcDw4zKK7sQdCmu9feBk+MZVIiRN/O/g4uCYfh0nkn0hNkW5d5WWvzBlGHdIcPQinbf4VNIt6Nk4wsW7o+25q8tnjJ3TobWOoZOY1zKWB0wc5TJAXEVcZBAyM64aya9bDAKQnZYj8iXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783979862; c=relaxed/simple;
-	bh=l2HeouvYQiBlOik9N5RDS+J9OXY/j0FBrbam0gPdL6s=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=IDYbEJbgyuNrvsFh7WHM6zXKupn6OBWKOrg2AqOKe5VlnjvXS8TIHqkxNc4RSR+KTOgWHK4E1CDxCBbidbhTqZ6r9DiGh8xOstloQnF/FAGWttVAKudeLkWM60LYZGfl0ClKarLPdLF2KU1joWH0W6VaxU14BV3sXFO514Kt5kU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=E84QfuNT; arc=none smtp.client-ip=209.85.214.169
+	s=arc-20240116; t=1783980147; c=relaxed/simple;
+	bh=9yS1UvlUrfI9KheCLuEuSRoWZobPi0nd+1A15hyorw8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=tGMJswXO0IMWCPFhsq7fJg+M69orwuEJznWDwWcVfh9MXAlhbU1eC8PhsFmztQUZtUdzcFQWxoL07SDLqlVxJZ9UVTmwqO2FVBEttqe3zkJ9E1z50/msqaJ0rMGj4VRiUDR1xQSnLha5yC8dxMjbCuh9MGFNZ7W0iW6toiTY93k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Rr165AVC; arc=none smtp.client-ip=209.85.222.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="E84QfuNT"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2cae1a3a744so25159055ad.3
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 14:57:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Rr165AVC"
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-96925a563b5so296293241.0
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 15:02:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783979860; x=1784584660; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783980145; x=1784584945; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=At8KsE6lJsmXZegcPrwsTNDpPIz3pgQ9ysWfzm54lJA=;
-        b=E84QfuNTkz6WdVH1avsdSoTlQ9lmJWGb0uu7prs72OZs3M7CnlA1ZD6mkuh6R3YKeE
-         TLSNe7Ky9y6vRiBs3sDjTM4c6iv7kEI1brlHmE69ohfGCv/hod7QUEwXQOIYIorrO4tI
-         Jmv8VhdNnc/wTYOoWXfUa567CMNerMw84kq6BJRatrhJVC3KplWSYCTz8Sfkl5zW1bWG
-         v87gfLmavbi0HOp99tDxSlUKXlN0wd2vE5dmuehLeHbf3nerwVGzOaqP7yfZZU7WPkT2
-         41vz33kzG5vWfWIJrs+wqlQ6ikS8d7VCNQBHlY33f8dKEdgrbSnGOPa0zTW/2pIpwfGb
-         ex3Q==
+        bh=D6Y7Xe1SbiMFbOzf01pbOyxaH8rw40mxymdbfU2kNyQ=;
+        b=Rr165AVCAlPQhbOjF6rODbV+KA0nvTKClCB5A+8Jm/FOWMDNmxNZTUrJFUsCC/BWKA
+         Q1M7bkgFZQ1WVEwdVoditivmKWIJVi2x8HNNLLqOn77YjvKCRtQUXfSGakonD7nVwTCK
+         TgzwgDVpNFdeBVTHX2MItOM3pcByyEnuR6/wdEuOLOrhJG1Qkel45QQmDcrb7eSm2JSl
+         cZSPYx22oHo/3qkicc8jcNZPdVqw6AkYCirqRFr2YK735EUkEZf6pyLjbhHtUX1qrz74
+         KigTkNqbydSbdjg46Lcj8D+pkE5CR8wDes7U8yL54aIsYW/aY3xAYm+vFY6ix3hO4Pch
+         q+9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783979860; x=1784584660;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=1e100.net; s=20251104; t=1783980145; x=1784584945;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=At8KsE6lJsmXZegcPrwsTNDpPIz3pgQ9ysWfzm54lJA=;
-        b=s61lBi6SrGf4QmeHPLO0I0YOK4cn/+OSP9xFDYH8NlgMEsWoHsPfVggVwIKxXPvH48
-         xeEWdSvYJV9B/3M32/vhi2UTLC+wAKsPiNOnnZkD9hXiyOKVJgebFVi1QjwlTJ88ovzx
-         xCX4ZgM1Vvy4X0jR55SzlfLx5l07KlnURz2AsFaGFtLyTpW+wVzp8nUHRA6Sdhfkf7vG
-         KL5EXPpp9EmzCKQa19aClU/nZgavjpk6aO+MCGyrV/WXtGESR4UBSmIYZ/p4gdGJvR/t
-         dJ6fGLJPtmbk4705vTANu/QiWHgYaMiccel38WTUZnQxWyiTHiq4zRBatwQ8rrRdWKTk
-         bH4Q==
-X-Forwarded-Encrypted: i=1; AHgh+Rq78R1+deSOtw686LHxq0jAIXn/nt/NG5X+o31sUlAbuscfzDgCGARmjKwPdE7G/a3Ml5A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAlzgGqc1ERX7VOX1v0lcQMkot/OUnAnTKIwlaVTz7trsfHMcm
-	zrFU7FEeyE1gc4YA27o1n4w1w3odjpadfldCPKojpdwrQ6CHL4KladZwuNJmSlLeu0Q=
-X-Gm-Gg: AfdE7cnqU8o8eWxbPgHganAxlHlJMp3ZRqmcsd6tRAwjRhAGKhPKFjf0Xea+dYFPsGh
-	HhwX7tVmfciZui7O7Kub7ZJBxfJl83H415ZJgHJWiktr4PfqogXXxzCumPomVwd0zsG2JJBOYpL
-	udmEcVkwtxJl4Lv2tMGlXr31DrBrsd8ir1IprmEp7opuOBYiLGndrgox0Zh2If1k2dz/CtwY/Q1
-	2tVeXOLvOCqPRB0qDkU4pet4Kp53EH1bw9fIkm8S6F5hQFEKvq98BkmcThrgnPmpy02lj116DVi
-	a42x78c4BaITGlt/5nuG1x5J+46cL5pudYjqfEjvzL9usxkiak3IbqXE+K1lUFheaKz2G/DaY9a
-	NYx6ONrco8BWHH+4WrudtNeybTPQziaO2pY9/Tmwiv4dPObazPyDHCnSW7L/vHDC43W4HDhH5KO
-	PW9PHn/QvF/KynRHfgqeCU6Cn3w80Jx+k/MtBWFlxFkw==
-X-Received: by 2002:a17:903:3205:b0:2c7:f4bd:91b5 with SMTP id d9443c01a7336-2cee98446f9mr9888315ad.0.1783979859553;
-        Mon, 13 Jul 2026 14:57:39 -0700 (PDT)
+        bh=D6Y7Xe1SbiMFbOzf01pbOyxaH8rw40mxymdbfU2kNyQ=;
+        b=ABBPbNxLZW/VsKZ4eqI3RIBdWWhzzMPmW4fvRHzrPhCoR7Nfh3QlT4OEreIuG7jwBt
+         qkDKQHa+h1OGt4AluA/6s0zewBm8b2rOTAU/mckZSVUqOHykhIcex49+8vM480dNDRmX
+         swJ6uta1na9gYtpxNR4Z1Vfxt00/O2mlG/wjunDqf5d7soFkktRFNhjsXKsh3rmksiFL
+         VDi9cRMTJ+dgLzuXpNdUlpw4eboF8GTSbG+DCMZmHzBRl5yXOMCesqlPlQKQ56o3WwPg
+         InmDQ6jGyREWnYMIQrqiGQO9N7qSdqNGnw+zUzpbcOPDlC0wXOPmfYXu0IXyS3xsPV2A
+         fpsg==
+X-Forwarded-Encrypted: i=1; AHgh+Rq9OAh2iTFDMLJ5/2sadQ4sQ1xjVLcgmPhp//6AHCX9a4PdboWyJpH9OjPmKaVgOsA2vMs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGKI0qX1PGgYCatL5NQ0E/h6dkvz09Ed/pXeM+Pcn+wUwRHO/F
+	AziHD6fq0oKfTZQppmLJoSWdWNru4ebUzHNh3ZJ2YEZiSwFU9aG4h3I5LUfhNiX8InZyLtGHfZH
+	hUBnrv98=
+X-Gm-Gg: AfdE7cnsCneZTb1zlmNDJAtK5XhM3nnHhHaWU/oegDbs0B5jGwQEjVz13XQuzHKdGHn
+	Mak7Z2/Tt3FWu+TiByBen5e8WhsKvZbpWp2RKgteLpw/1Nn+F/4PBNWk9Q1Trt/Sl/HVBN4sErB
+	z2tmDhY9kQsG7OPxr6hw0ltv8V9wciwP+OsbBD7TAREnvYvcuj9UtB5HV+8M8lDwE8+jrM0fzlF
+	wXqihKO8YtTyOY6dDJd5sbsG57rKBjtiN48A/iLfNi5oXHnbj+76CzBHU7l6lySE7WbS59iLz5q
+	RTeNUUoJ7f/9EvsLO/AUGUN7HXfnB6ElREgmyXtkkfOjqWW8Q74xNXeByn3VwCtXfIrDL8jEprA
+	LY54T39QgtkWs7IDCKSlZHPEvG1YYk1RwKmiBwq8V0eEMWZ4pn0/qbk5M8QU8RjT83FLKD6zkt6
+	74uzhQ8EgMUlS5Vmai7PtR2hlxqVYlTPse/bIoGVORCA==
+X-Received: by 2002:a05:690e:dc6:b0:666:5727:4d70 with SMTP id 956f58d0204a3-667d978ecb3mr7088216d50.13.1783979764886;
+        Mon, 13 Jul 2026 14:56:04 -0700 (PDT)
 Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9d3d57bsm104668175ad.59.2026.07.13.14.57.38
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6678775d59bsm14750206d50.4.2026.07.13.14.56.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jul 2026 14:57:39 -0700 (PDT)
+        Mon, 13 Jul 2026 14:56:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,69 +68,124 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 13 Jul 2026 17:57:38 -0400
-Message-Id: <DJXS2WYYPTBK.F3KORRKBRAGY@etsalapatis.com>
-Subject: Re: [PATCH bpf-next v3 07/15] bpf: Move LSM trampoline unlink into
- bpf_cgroup_link_auto_detach()
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
+Date: Mon, 13 Jul 2026 17:56:02 -0400
+Message-Id: <DJXS1OUUJXX5.15RH1OEET2EB7@etsalapatis.com>
 To: "Amery Hung" <ameryhung@gmail.com>, <bpf@vger.kernel.org>
 Cc: <netdev@vger.kernel.org>, <alexei.starovoitov@gmail.com>,
  <andrii@kernel.org>, <daniel@iogearbox.net>, <eddyz87@gmail.com>,
  <memxor@gmail.com>, <martin.lau@kernel.org>, <shakeel.butt@linux.dev>,
  <roman.gushchin@linux.dev>, <kuniyu@google.com>,
  <kerneljasonxing@gmail.com>, <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v3 06/15] bpf: Add prog_list_init_item(),
+ prog_list_replace_item(), and prog_list_id()
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
 References: <20260706171918.317102-1-ameryhung@gmail.com>
- <20260706171918.317102-8-ameryhung@gmail.com>
-In-Reply-To: <20260706171918.317102-8-ameryhung@gmail.com>
+ <20260706171918.317102-7-ameryhung@gmail.com>
+In-Reply-To: <20260706171918.317102-7-ameryhung@gmail.com>
 
 On Mon Jul 6, 2026 at 1:19 PM EDT, Amery Hung wrote:
 > From: Martin KaFai Lau <martin.lau@kernel.org>
 >
-> Move the LSM trampoline unlink into bpf_cgroup_link_auto_detach().
-> The purpose is to consolidate the auto_detach cleanup logic.
+> Add three helpers to abstract operations on a bpf_prog_list entry.
 >
-> It prepares for the upcoming struct_ops cgroup attachment patch where
-> bpf_cgroup_link_auto_detach() will need to handle the struct_ops case
-> (link->map !=3D NULL).
+> Right now, bpf_prog_array_item is initialized from prog_list_prog(pl),
+> which returns either pl->prog or pl->link->link.prog. This will not work
+> when struct_ops is attached to a cgroup because the attachment is backed
+> by a struct_ops map instead of a BPF prog.
+>
+> The same applies to __cgroup_bpf_query(). Instead of always copying a
+> prog id to userspace, struct_ops cgroup attachment will need to copy the
+> struct_ops map id.
+>
+> Refactor bpf_prog_array_item initialization into prog_list_init_item()
+> and prog_list_replace_item(), and refactor id lookup into prog_list_id().
+> These helpers will be extended to support pl->link->map in a later patch.
 >
 > This is a no-op change.
->
-> Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
-> Signed-off-by: Amery Hung <ameryhung@gmail.com>
 
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
+Followup on prog_list_prog() since I hadn't realized it was moved to the
+helpers in this patchset: Maybe we can just make it not return NULL
+since it's impossible instead of adding error handling to minimize
+churn.
+
+>
+> Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
 > ---
->  kernel/bpf/cgroup.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+>  kernel/bpf/cgroup.c | 26 +++++++++++++++++++-------
+>  1 file changed, 19 insertions(+), 7 deletions(-)
 >
 > diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index b43f0bff184c..7abbe12e108f 100644
+> index b100c04cb9c8..b43f0bff184c 100644
 > --- a/kernel/bpf/cgroup.c
 > +++ b/kernel/bpf/cgroup.c
-> @@ -313,6 +313,8 @@ static void bpf_cgroup_storages_link(struct bpf_cgrou=
-p_storage *storages[],
->   */
->  static void bpf_cgroup_link_auto_detach(struct bpf_cgroup_link *link)
->  {
-> +	if (link->link.prog->expected_attach_type =3D=3D BPF_LSM_CGROUP)
-> +		bpf_trampoline_unlink_cgroup_shim(link->link.prog);
->  	cgroup_put(link->cgroup);
->  	link->cgroup =3D NULL;
+> @@ -399,6 +399,22 @@ static struct bpf_prog *prog_list_prog(struct bpf_pr=
+og_list *pl)
+>  	return NULL;
 >  }
-> @@ -346,11 +348,8 @@ static void cgroup_bpf_release(struct work_struct *w=
-ork)
->  					bpf_trampoline_unlink_cgroup_shim(pl->prog);
->  				bpf_prog_put(pl->prog);
+> =20
+> +static void prog_list_init_item(struct bpf_prog_list *pl, struct bpf_pro=
+g_array_item *item)
+> +{
+> +	item->prog =3D prog_list_prog(pl);
+> +	bpf_cgroup_storages_assign(item->cgroup_storage, pl->storage);
+> +}
+> +
+> +static void prog_list_replace_item(struct bpf_prog_list *pl, struct bpf_=
+prog_array_item *item)
+> +{
+> +	WRITE_ONCE(item->prog, pl->link->link.prog);
+> +}
+> +
+> +static u32 prog_list_id(struct bpf_prog_list *pl)
+> +{
+> +	return prog_list_prog(pl)->aux->id;
+> +}
+> +
+>  /* count number of elements in the list.
+>   * it's slow but the list cannot be long
+>   */
+> @@ -492,9 +508,7 @@ static int compute_effective_progs(struct cgroup *cgr=
+p,
+>  				item =3D &progs->items[fstart];
+>  				fstart++;
 >  			}
-> -			if (pl->link) {
-> -				if (pl->link->link.prog->expected_attach_type =3D=3D BPF_LSM_CGROUP)
-> -					bpf_trampoline_unlink_cgroup_shim(pl->link->link.prog);
-> +			if (pl->link)
->  				bpf_cgroup_link_auto_detach(pl->link);
-> -			}
->  			kfree(pl);
->  			static_branch_dec(&cgroup_bpf_enabled_key[atype]);
+> -			item->prog =3D prog_list_prog(pl);
+> -			bpf_cgroup_storages_assign(item->cgroup_storage,
+> -						   pl->storage);
+> +			prog_list_init_item(pl, item);
+>  			cnt++;
 >  		}
+> =20
+> @@ -1015,7 +1029,7 @@ static void replace_effective_prog(struct cgroup *c=
+grp,
+>  				desc->bpf.effective[atype],
+>  				lockdep_is_held(&cgroup_mutex));
+>  		item =3D &progs->items[pos];
+> -		WRITE_ONCE(item->prog, pl->link->link.prog);
+> +		prog_list_replace_item(pl, item);
+>  	}
+>  }
+> =20
+> @@ -1318,15 +1332,13 @@ static int __cgroup_bpf_query(struct cgroup *cgrp=
+, const union bpf_attr *attr,
+>  		} else {
+>  			struct hlist_head *progs;
+>  			struct bpf_prog_list *pl;
+> -			struct bpf_prog *prog;
+>  			u32 id;
+> =20
+>  			progs =3D &cgrp->bpf.progs[atype];
+>  			cnt =3D min_t(int, prog_list_length(progs, NULL), total_cnt);
+>  			i =3D 0;
+>  			hlist_for_each_entry(pl, progs, node) {
+> -				prog =3D prog_list_prog(pl);
+> -				id =3D prog->aux->id;
+> +				id =3D prog_list_id(pl);
+>  				if (copy_to_user(prog_ids + i, &id, sizeof(id)))
+>  					return -EFAULT;
+>  				if (++i =3D=3D cnt)
 
