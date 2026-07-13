@@ -1,61 +1,63 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8886239B49E
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 15:39:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C836A348C5C
+	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 15:39:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783957157; cv=none; b=a9pH9yudLB/+OBxrj/6It5d10NuP4ZqG1CYTW+LCkoVMn8xF8wygT61IJIccte0Q0+u8uIA8+youDz8CKDopqrxPFg3/pZeOLXIMYOrm+b8ZqHK6Ov1iiGS4jWq08lDkcLoPmNMURsz5GKkLnOlqN14G64uInAioJVPCHZF2OE8=
+	t=1783957160; cv=none; b=aYi2MPx4cqcZoxNOKF0KmwMNAdKmzg7DDfOwZZtksbnRGGfceWGeXnqGO14Vvz5y3Sd2q4ELyhlY0+hOXpm90eZ3rcwfNF8pn8S+rYIVq+f4k6ib2O3ZzL/vlx7LP9X23r9IXpbkgLzRLSbtfEUwWwg67QnzqXAK2ZutO3n5Faw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783957157; c=relaxed/simple;
-	bh=KAdGKbB3mCT5K+pOVIbkkeO4/UKMYRSgH2Co0v2BgR0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=icazP/hKZPpvgVP7QqyDMC5CFAeEYvPKw66UBupaMaFaq8af371WMEKRwyLuXiN6e/mi/zeyn+C56N1oDa2NnqvJ1gqWm/v/qxYQ4sQF8M0Cji/9eVZ2I2i0t+JQRLbfRg+vxjLsFoCzRYPOJ+0tHZdKXKhHwyf5+pN4w5lMiHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pOBOQn6/; arc=none smtp.client-ip=74.125.225.137
+	s=arc-20240116; t=1783957160; c=relaxed/simple;
+	bh=xYI5Dkdmmfbtvhm56WSq5CeiK+sfZnOM99lOvzpeqWU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KqCsQBxdrhYKdww5omUqG257x1zjMnvl9QyOQ7tHmo7Fp8+5MLOd4F2oKAQRAXrCjIegtvOLbaOGEYOfwp+NzuRFRXWS3byo5ExIN7Ck4m/qoDDFfBfgtuEJNQwgQShdq3JFkk0nUpb+Eqr3NJ+haI/fL9WjpQPn2mb2hBIVaLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pRam8+8C; arc=none smtp.client-ip=74.125.225.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pOBOQn6/"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-493e55619a2so9304905e9.1
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 08:39:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pRam8+8C"
+Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-47825ef4012so923041f8f.1
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 08:39:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783957153; x=1784561953; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=aZvhr0xnegzREPcLB14fnXYej8qJoCpouv4QpZdo6i8=;
-        b=pOBOQn6/vhCqzxbnQp2mQIATrR+88xYGR4dZ9pzDP4ggLPy4B4mSDkRX0Dd/ih8AeE
-         kQe7+q9i3ZFPBdpE4QBfdtaFEtzXYgwgiw6uYnGDnWc9asZqDc23MvZx2ErzN14YIcaT
-         SMiVASRYS3gJqAusqc1yjXbYSsC72HdzZRPYWRoYOnHE1FNitn0zpU6+VnY29aZtt7Vq
-         pAJwbVTrMziPJpJYMbDzmYehcdDU5awbxLXEChj0UidPTSNmCU1RgEPDrjLN3eLNY8Ro
-         6wuQEVxwIRdIxRPgdCSBNKWWepv4Ce3/NoWdfLeB7mWn3lJOzOU/mRA9HMX+EZQfOvc2
-         qDkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783957153; x=1784561953;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1783957155; x=1784561955; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=aZvhr0xnegzREPcLB14fnXYej8qJoCpouv4QpZdo6i8=;
-        b=jU+piLOlc0CDzE0u/+3vENnGvsVonIxVdRzOIKsnkzP+IMeJS9NrFYvuUixPUyJdLg
-         eJsiehAUdG4XM+TACgG/TRpE7pqdS9WJwawywgXU52DpdWElOkjoxI3s+ajbD/J5sONJ
-         zkTrMsB421VKc5Mh223/84ETZ26Eoy9qsAW8bf67TjIa/xkLn92o9mRlVFUbb2+F3C32
-         2ScD8Ki35CfCwjy99CMoaL8PI0bXXtMfZ/G7VQfV/TmOrEogHHOiqSdYf6q7Yr/llstw
-         CUmiZUW8zAc+0VXOH5AVPg3IPntDI6boO9840m3lb4srDliCIS1DjcHn0dLd9IUykey9
-         2XtA==
-X-Gm-Message-State: AOJu0YxPqf4GdIs53i/MMRyeNnF7ZURZRI6K9MO7By8w14xUzLPnbfkN
-	SxhZsU4YoMYYascf7HE8hS6aHMiW1fgT1kGJPyxwKJFne/G6ZP4BTfq/BXgkXYdp
-X-Gm-Gg: AfdE7claBdMyi5HDOiMVEvffpB+Gkv983ksa00rGMYiMjY5c5Bca84yTDT82SCmTjt4
-	PQ14i/sRrzIlzZsfr6bVKc7ynkoz/M5/9ftYfL/XvThHxPjFeg8kHjUGUbB0DYHGnPmnVWcJsCM
-	/0bHw/6Gj1Xo7MAKGdgcUF2hGLsr6vYLa3LgafFUJznSV57fV6Q3VHsJ2WIvJpXL1Gsm1pzlwt1
-	BE5h4es4Yms3kAHbHWyRZSIzYJs7/gG/qs9CRNhyY8scWg9ABrCT7sqfJzhwAH/ZNDTaM/9vJvr
-	TQn8DaKQt/wXm9cKI0CAw457f7S3jTx8u+feQArqchOoLYu0Kfj9T5PYSvwXumCjfThdf7seeet
-	Ny+je+QVplQUqjOrh0vcWmJQiZuP62r5IaTPqxm+9O+JDpF+vgqPtbur+WFMsHIui9VQ5e3aVgO
-	1B08dvCaNYG4WxkgK8ejdrk+dHkJ6uZq7R477ucozU6FtDpnICb+4172hTuRCGXCp10yrSNatSa
-	CL6QP+oWuV765MPYPuqgzcQ2byVlGFziTc5B4X11NQgI6p4ehdz7hA=
-X-Received: by 2002:a05:600c:c16e:b0:493:f734:f121 with SMTP id 5b1f17b1804b1-493f881d3b6mr101589995e9.23.1783957152386;
-        Mon, 13 Jul 2026 08:39:12 -0700 (PDT)
+        bh=lZBOqqt3ouBLbhYCJ9Psn13Z/ps5zrK0j2NMl/SCAg0=;
+        b=pRam8+8CETgAqNXKwe5kgJ3ZOSapm28JwcvIs3pWNFCehT+cwfWqIlW0G59dTAR1ed
+         nyrbhxhnoDQgsQyUr/UCe4d7R+Hj3X6jTtgNFC/z967SKiPWCYvcfBHp2QryPNjLLpH1
+         GZJYZ+CZ6nmx622Q7OnF6MkfxgatIreZDjnMHyYIF4qSLMDZNoBImK+v1IS0JVSi2mJ5
+         YXw+tZgtlxtf/TYrnPCpY7XSowog4MBzr3/lBxtcowbWjnvPZEqZwkFDUBdD6dCyknU9
+         joMZIlymWd2JlotGCa3y00B7cgILWYTTQbS/UbH72zKi0XzQVXZ7g1/eloSojRe5oc69
+         9oEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783957155; x=1784561955;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=lZBOqqt3ouBLbhYCJ9Psn13Z/ps5zrK0j2NMl/SCAg0=;
+        b=VdNSJmKpZJKUAyr7H4mbulFrn+o2f0XjxqCjWNzWg6YEohnJggt7dzbJvhMvZPZx7o
+         IPoWzyFw2M6o44gleV1zCaKDFBnORCSyn6hMeMK0+i+myQVdcG+KMCH3+MuPvTN50j9a
+         7zVq8ft0qRRtL9hssyoSWmyzBb4l8tsYeZF0WN1ZIeDfNiNTrdoSOhgjiWelVr58KcAC
+         oCQqwtRWXk2qp3veq0XlqP2eLezez0HefBRmcTNHBUt+U7vX4SxE9DnHov9ZWXTpYm0x
+         3GDn6eU+i6NNaSKN4Kt5FpYWPDSbMvGPNnmVELyJB3q/6IPldq+UOy5uNKcVf52zh3oR
+         MBYA==
+X-Gm-Message-State: AOJu0YyZXmGsJrSgtQzjlh2YvkDOIXRF49jbxYGST7HNL0q8hacRWaQc
+	/IWFaYxSTYcu9MWA6rtGoNf6VjB9/LXwTOUyl5VZgCJRiBdveLUn/R1bUMZenlzM
+X-Gm-Gg: AfdE7ckwRPPY1/jXC3+eXjv19kns2wogHq5oNVr/FME7uBrcMe0TmRgvcb5TlHO1HKT
+	o9kkcdQiDsopaw7FGeaHa1iwxqph0Z9h5OzSk+pgdgSDtNcWP9uuUDOgs1ox9nsKKtMCXiM+R3D
+	fm7Z8ELk/hwJvrVACY8VWtez6LB8jR+FmPX5byFbr8Lw7OJuWN9INaPfX3pi253OIjESaz3YL6N
+	Dq6pArBw6lcylhrWFHvkK0WkNARIiJLPcVuTAGe2mLgsk4qW17sYcWkfuyRBcpZTny9pU1PjN+1
+	VhwNiu9pahsm8SNcoumOXkO+vXNDfoIJpyDTb8zS7pQjOYE3YEnmrvIHRxq1c2Gm74CVYUY8Bkh
+	gR79DswnFTu7EjxtnTBGz3y4RhyAEZXKhilMAaYfG/sadbxRwawgYD2NqRSLaI8GF8FilTXQJca
+	g44wI1QJZCtTku0PBIYVAnxOVqZ74SlB5JPoTLADAgZw9ixKKDwNr16BvBbZz7TtrJPc0xQkYLe
+	g7wRMsB1P0D5v0S8FOxw+jKCZ/WLoTeTWO26pkHABht9f1pr7zy/7k=
+X-Received: by 2002:a5d:64eb:0:b0:472:d154:facf with SMTP id ffacd0b85a97d-47f2dd2bd5fmr12618704f8f.42.1783957154743;
+        Mon, 13 Jul 2026 08:39:14 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493f2a38b19sm209534275e9.0.2026.07.13.08.39.11
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f4635aa34sm227663f8f.15.2026.07.13.08.39.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 08:39:11 -0700 (PDT)
+        Mon, 13 Jul 2026 08:39:14 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -65,696 +67,832 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 00/17] Redesign Verification Errors
-Date: Mon, 13 Jul 2026 17:38:49 +0200
-Message-ID: <20260713153910.2556007-1-memxor@gmail.com>
+Subject: [PATCH bpf-next v3 02/17] bpf: Add source and instruction diagnostic context
+Date: Mon, 13 Jul 2026 17:38:51 +0200
+Message-ID: <20260713153910.2556007-3-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260713153910.2556007-1-memxor@gmail.com>
+References: <20260713153910.2556007-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=31328; i=memxor@gmail.com; h=from:subject; bh=KAdGKbB3mCT5K+pOVIbkkeO4/UKMYRSgH2Co0v2BgR0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JISuURVbpo87zY72HT/+1+vzk5KZ5FumemfznP/5IzXX9f +/9t8k/O0pZGMS4GGTFFFlK/u9jMj5R+TvQdhk3zBxWJpAhDFycAjCRTycZGfoXXXcvnl96pXop m8sGoWX8zxfdyV5i6Lr31EeTqQYrzr1jZGgPtN+94aDcQ2/1yx2mk58znP/KKTXjs8gZptuv/xz WuMwIAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=25822; i=memxor@gmail.com; h=from:subject; bh=xYI5Dkdmmfbtvhm56WSq5CeiK+sfZnOM99lOvzpeqWU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JISuURVbrve9uee2Ynzs3q/ht43/AnGoYPuGYmhxTudxlh wMeS752lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCK7XRkZvov+mHFJ7GT/52Dv C1X9K3d8rDu7WPdQa9iT1bvmhqRphTEyHC7Sq0rf/2W9pn/9Ph2RdQaZ+7ml/1/eZlAXtaMp4Eg KOwA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-TL;DR: This set reworks verifier error messages to include source and
-instruction annotations, together with more causal context, making
-failures easier to understand and more actionable when debugging and
-repairing BPF programs.
-
-Changelog:
-----------
-v2 -> v3
-v2: https://lore.kernel.org/bpf/20260619205934.1312876-1-memxor@gmail.com
-
- * Address various comments from Eduard and Sashiko.
- * Move instruction context from a separate gutter into a new section
-   following source context, since surrounding source lines and BPF
-   instructions do not map one-to-one.
- * Fix active-path branch reconstruction when switching to queued states,
-   and expand register histories to follow value lineage across spills,
-   fills, stack reads, helper/kfunc clobbers, and dynptr invalidation.
- * Misc improvements and refinements.
-
-v1 -> v2
-v1: https://lore.kernel.org/bpf/20260605063412.974640-1-memxor@gmail.com
-
- * Reworked diagnostic history from per-verifier-state log to active
-   path log with positions saved and reset when verifier search
-   backtracks. (Eduard)
- * Moved reusable diagnostic formatting storage into struct bpf_diag
-   under struct bpf_verifier_env, and removed large per-report scratch
-   buffers from verifier stack frames. (Eduard)
- * Added stack-slot events so diagnostics follow ordinary stack
-   spill/fill value flow and invalidations in register-scoped
-   histories. (Eduard)
- * Reused existing source and BTF formatting helpers for diagnostics,
-   including bpf_get_linfo_file_line() and
-   btf_type_snprintf_show_name(). (Eduard)
- * Fixed diagnostic edge cases around signed offset text,
-   BPF_MAX_VAR_OFF reporting, negative-offset clamping, poisoned
-   stack reads, and borrowed-reference invalidations. (Eduard)
- * Fixed various miscellaneous diagnostic bugs. (Sashiko)
- * Misc improvements and refinements.
-
---
-
-Motivation
-~~~~~~~~~~
-
-The verifier log is the primary interface through which the verifier
-communicates to the user its verdict on whether a program was accepted
-or rejected.
-
-To aid the debugging of rejection decisions, the verifier also reports
-the symbolic state of the program at each instruction, across every explored
-path of the BPF program. Such detailed information is critical to
-introspect the correctness of verification decisions, and provide
-insight into why a given program may have failed to load in the kernel.
-
-A constant pain point in the BPF ecosystem throughout the years has
-been the difficulty of debugging verification errors. The human-readable error
-messages produced in response to a failure in satisfying safety-related
-constraints are often terse, context-dependent, or insufficient for
-understanding why a given error may have happened. Users must fall back
-to the verbose instruction-by-instruction breakdown of how the symbolic
-state evolved to surface the root cause. For programs with a huge log
-volume due to high verification complexity, such logs quickly become
-inscrutable.
-
-All of this has made life difficult for users lacking an understanding
-of how the verifier works, and the various heuristics and idiosyncrasies
-used by it. In some cases, even seasoned BPF experts spend significant
-time reverse engineering why a program may have failed, and have to
-reach into the verifier's source code to form a complete picture of the
-verification process.
-
-Such a steep learning curve and cognitive burden also hurts the speed of
-BPF development, as the verifier sits right in the middle of the user's
-iteration loop while they make use of BPF to solve any given problem.
-Expertise in debugging verifier errors does not scale in terms of teams
-deploying these programs in production across a diverse set of kernels.
-
-Overall, this leads to a poorer developer experience, causes visible
-user dissatisfaction, and remains a drag on wider BPF adoption. With
-some of the more recent developments where users increasingly leverage
-AI tooling [0] to author their code, this bottleneck becomes even more
-critical to address, since it throttles the much faster iteration loop
-of AI agents.
-
-  [0]: https://lwn.net/Articles/1075067
-
-Approach
-~~~~~~~~
-
-This series starts moving selected failures from terse terminal messages
-toward diagnostics that carry the relevant context for a verification
-failure. The existing verbose log remains the low-level trace. For selected
-failures, the new report is emitted after this trace and answers the
-immediate debugging questions:
-
-  - what verifier rule failed,
-  - why the current state does not satisfy it,
-  - where the failing instruction maps to source,
-  - which earlier branch or state event made this path fail,
-  - what kind of source change would satisfy the verifier.
-
-The series adds a text-only diagnostics framework under kernel/bpf and
-uses it to augment selected verifier errors. Existing verbose(env, ...)
-messages are kept, so current selftest expectations and existing log
-consumers continue to see the legacy text. The new report has a uniform
-outer shape:
-
-  Verification failed: <category>: <problem>
-
-  Reason:
-    exact reason for the verification failure, with details
-
-  At:
-    source and instruction annotation
-
-  Causal path:
-    compressed branch and verifier-state events relevant for debugging
-
-  Suggestion:
-    speculation on potential fixes to repair the program
-
-The outer shape is shared, but report construction is category-specific.
-
-The categories are intentionally broad and reviewable. This revision
-covers representative cases in Register Type Safety, Memory Safety,
-Resource Lifetime Safety, Call Type Safety, Execution Context Safety,
-Program Structure, Policy, Verifier Limit, and Verifier Internal errors.
-It does not attempt to convert every verbose(env, ...) site for now.
-Additional verbose-only errors can be moved into the same framework
-incrementally.
-
-The following excerpts are copied from this current run on this branch:
-
-  ./test_progs -j1 \
-    -a cpumask/test_populate_invalid_destination,\
-    cpumask/test_alloc_no_release,\
-    verifier_helper_value_access/via_variable_no_max_check_1,\
-    verifier_sock/invalidate_pkt_pointers_from_global_func \
-    -vv
-
-They show the old terminal error and the exact new diagnostic report,
-including the source and instruction annotations.
-
-Call Type Safety, cpumask/test_populate_invalid_destination:
-
-  Legacy:
-    R1 type=scalar expected=fp
-
-  Diagnostic:
-    Verification failed: Call Type Safety: Invalid call argument
-
-    Reason:
-      The first argument (R1) to bpf_cpumask_populate does not satisfy the verifier contract: the kfunc
-      expects 24 bytes of memory for (struct bpf_cpumask), but it is an integer scalar and not
-      verifier-known memory.
-
-    At:
-      test_populate_invalid_destination @ cpumask_failure.c:234:8
-      Source context:
-          232 | ...
-          233 | ...
-      >>> 234 |         ret = bpf_cpumask_populate(invalid, &bits, sizeof(bits));
-              |         ^-- error: invalid first argument (R1) for bpf_cpumask_populate
-          235 |         if (!ret)
-          236 |                 err = 2;
-      Instruction context:
-           2 | (b7) r1 = 1193046
-           3 | (b7) r3 = 8
-      >>>  4 | (85) call bpf_cpumask_populate#62860
-           5 | (56) if w0 != 0x0 goto pc+4
-           6 | (18) r1 = 0xffffc9000028e000
-
-    Causal path:
-      test_populate_invalid_destination @ cpumask_failure.c:234:8
-      Source context:
-          232 | ...
-          233 | ...
-      >>> 234 |         ret = bpf_cpumask_populate(invalid, &bits, sizeof(bits));
-              |         ^-- update: R1 changed from context pointer at offset 0 to integer scalar value
-              |             1193046
-          235 |         if (!ret)
-          236 |                 err = 2;
-      Instruction context:
-           0 | (bf) r2 = r10
-           1 | (07) r2 += -8
-      >>>  2 | (b7) r1 = 1193046
-           3 | (b7) r3 = 8
-           4 | (85) call bpf_cpumask_populate#62860
-
-    Suggestion:
-      Pass stack, map, context, or other verifier-known memory of the expected type and size, not an
-      integer cast to a pointer.
-
-Register Type Safety, verifier_sock/invalidate_pkt_pointers_from_global_func:
-
-  Legacy:
-    R7 invalid mem access 'scalar'
-
-  Diagnostic:
-    Verification failed: Register Type Safety: Invalid dereference
-
-    Reason:
-      R7 is an integer scalar here, not a pointer to memory.
-
-    At:
-      invalidate_pkt_pointers_from_global_func @ verifier_sock.c:1067:5
-      Source context:
-          1065 | ...
-          1066 |         skb_pull_data1(sk, 0);
-      >>> 1067 |         *p = 42; /* this is unsafe */
-               |         ^-- error: invalid dereference of R7 (an integer scalar)
-          1068 | ...
-          1069 | }
-      Instruction context:
-           8 | (85) call pc+4
-           9 | (b4) w1 = 42
-      >>> 10 | (63) *(u32 *)(r7 +0) = r1
-          11 | (bc) w0 = w6
-          12 | (95) exit
-
-    Causal path:
-      invalidate_pkt_pointers_from_global_func @ verifier_sock.c:1062:29
-      Source context:
-          1060 | int invalidate_pkt_pointers_from_global_func(struct __sk_buff *sk)
-          1061 | ...
-      >>> 1062 |         int *p = (void *)(long)sk->data;
-               |         ^-- update: R7 changed from uninitialized value to pkt at offset 0
-          1063 | ...
-          1064 |         if ((void *)(p + 1) > (void *)(long)sk->data_end)
-      Instruction context:
-           0 | (b4) w6 = 2
-           1 | (61) r2 = *(u32 *)(r1 +80)
-      >>>  2 | (61) r7 = *(u32 *)(r1 +76)
-           3 | (bf) r3 = r7
-           4 | (07) r3 += 4
-
-      invalidate_pkt_pointers_from_global_func @ verifier_sock.c:1064:22
-      Source context:
-          1062 |         int *p = (void *)(long)sk->data;
-          1063 | ...
-      >>> 1064 |         if ((void *)(p + 1) > (void *)(long)sk->data_end)
-               |         ^-- branch: took the false branch of this conditional, goto not followed
-          1065 | ...
-          1066 |         skb_pull_data1(sk, 0);
-      Instruction context:
-           3 | (bf) r3 = r7
-           4 | (07) r3 += 4
-      >>>  5 | (2d) if r3 > r2 goto pc+5
-           6 | (b4) w6 = 0
-           7 | (b4) w2 = 0
-
-      invalidate_pkt_pointers_from_global_func @ verifier_sock.c:1066:2
-      Source context:
-          1064 |         if ((void *)(p + 1) > (void *)(long)sk->data_end)
-          1065 | ...
-      >>> 1066 |         skb_pull_data1(sk, 0);
-               |         ^-- invalidated: R7: packet data may have moved; previous value was pkt at
-               |             offset 0
-          1067 |         *p = 42; /* this is unsafe */
-          1068 | ...
-      Instruction context:
-           6 | (b4) w6 = 0
-           7 | (b4) w2 = 0
-      >>>  8 | (85) call pc+4
-           9 | (b4) w1 = 42
-          10 | (63) *(u32 *)(r7 +0) = r1
-
-    Suggestion:
-      Preserve a pointer-valued register where needed, or reload and revalidate the pointer after scalar
-      arithmetic, helper calls, or other operations that can invalidate it.
-
-Memory Safety, verifier_helper_value_access/via_variable_no_max_check_1:
-
-  Legacy:
-    R1 unbounded memory access, make sure to bounds check any such access
-
-  Diagnostic:
-    Verification failed: Memory Safety: Access outside bounds
-
-    Reason:
-      The verifier cannot prove offset + access_size <= object_size. Here, the maximal bound for a
-      memory access is 4294967295 and exceeds maximum allowed offset of 536870912. R1 is map_value;
-      offset is variable: known bits 0x0, unknown mask 0xffffffff; signed range [0, 4294967295],
-      unsigned range [0, 4294967295]; access_size is 1; object_size is 48.
-
-    At:
-      via_variable_no_max_check_1 @ verifier_helper_value_access.c:627:2
-      Source context:
-          625 | ...
-          626 | ...
-      >>> 627 |         asm volatile ("                                 \
-              |         ^-- error: access may be outside object bounds
-          628 | ...
-          629 | ...
-      Instruction context:
-          11 | (b7) r2 = 1
-          12 | (b7) r3 = 0
-      >>> 13 | (85) call bpf_probe_read_kernel#113
-          14 | (95) exit
-
-    Causal path:
-      via_variable_no_max_check_1 @ verifier_helper_value_access.c:627:2
-      Source context:
-          625 | ...
-          626 | ...
-      >>> 627 |         asm volatile ("                                 \
-              |         ^-- update: R0 changed from uninitialized value to nullable map value from
-              |             map_hash_48b at offset 0
-          628 | ...
-          629 | ...
-      Instruction context:
-           4 | (18) r1 = 0xffff88810a3ea000
-      >>>  6 | (85) call bpf_map_lookup_elem#1
-           7 | (15) if r0 == 0x0 goto pc+6
-           8 | (bf) r1 = r0
-
-      via_variable_no_max_check_1 @ verifier_helper_value_access.c:627:2
-      Source context:
-          625 | ...
-          626 | ...
-      >>> 627 |         asm volatile ("                                 \
-              |         ^-- branch: took the false branch of this conditional, goto not followed
-          628 | ...
-          629 | ...
-      Instruction context:
-           6 | (85) call bpf_map_lookup_elem#1
-      >>>  7 | (15) if r0 == 0x0 goto pc+6
-           8 | (bf) r1 = r0
-           9 | (61) r3 = *(u32 *)(r0 +0)
-
-      via_variable_no_max_check_1 @ verifier_helper_value_access.c:627:2
-      Source context:
-          625 | ...
-          626 | ...
-      >>> 627 |         asm volatile ("                                 \
-              |         ^-- update: R1 changed from uninitialized value to map value from map_hash_48b
-              |             at offset 0
-          628 | ...
-          629 | ...
-      Instruction context:
-           6 | (85) call bpf_map_lookup_elem#1
-           7 | (15) if r0 == 0x0 goto pc+6
-      >>>  8 | (bf) r1 = r0
-           9 | (61) r3 = *(u32 *)(r0 +0)
-          10 | (0f) r1 += r3
-
-      via_variable_no_max_check_1 @ verifier_helper_value_access.c:627:2
-      Source context:
-          625 | ...
-          626 | ...
-      >>> 627 |         asm volatile ("                                 \
-              |         ^-- update: R1 changed from map value from map_hash_48b at offset 0 to map value
-              |             from map_hash_48b with variable offset: known bits 0x0, unknown mask
-              |             0xffffffff, signed range [0, 4294967295], unsigned range [0, 4294967295]
-          628 | ...
-          629 | ...
-      Instruction context:
-           8 | (bf) r1 = r0
-           9 | (61) r3 = *(u32 *)(r0 +0)
-      >>> 10 | (0f) r1 += r3
-          11 | (b7) r2 = 1
-          12 | (b7) r3 = 0
-
-    Suggestion:
-      Add or adjust a bounds check that proves offset + access_size stays within the object.
-
-Resource Lifetime Safety, cpumask/test_alloc_no_release:
-
-  Legacy:
-    Unreleased reference id=2 alloc_insn=0
-    BPF_EXIT instruction in main prog would lead to reference leak
-
-  Diagnostic:
-    Verification failed: Resource Lifetime Safety: Unreleased resource
-
-    Reason:
-      Owned resource (id=2) was acquired at instruction 0 and still needs to be released before this
-      exit path.
-
-    At:
-      test_alloc_no_release @ cpumask_failure.c:36:5
-      Source context:
-          34 | ...
-          35 | ...
-      >>> 36 | int BPF_PROG(test_alloc_no_release, struct task_struct *task, u64 clone_flags)
-             | ^-- error: owned resource (id=2) still needs release
-          37 | ...
-          38 | ...
-      Instruction context:
-          19 | (7b) *(u64 *)(r10 -8) = r6
-          20 | (b4) w0 = 0
-      >>> 21 | (95) exit
-
-    Causal path:
-      test_alloc_no_release @ cpumask_common.h:78:12
-      Source context:
-          76 | ...
-          77 | ...
-      >>> 78 |         cpumask = bpf_cpumask_create();
-             |         ^-- acquired: owned resource (id=2)
-          79 |         if (!cpumask) {
-          80 |                 err = 1;
-      Instruction context:
-      >>>  0 | (85) call bpf_cpumask_create#62851
-           1 | (bf) r6 = r0
-           2 | (55) if r6 != 0x0 goto pc+5
-
-      test_alloc_no_release @ cpumask_common.h:79:6
-      Source context:
-          77 | ...
-          78 |         cpumask = bpf_cpumask_create();
-      >>> 79 |         if (!cpumask) {
-             |         ^-- branch: took the true branch of this conditional, goto followed
-          80 |                 err = 1;
-          81 | ...
-      Instruction context:
-           0 | (85) call bpf_cpumask_create#62851
-           1 | (bf) r6 = r0
-      >>>  2 | (55) if r6 != 0x0 goto pc+5
-           3 | (18) r1 = 0xffffc90000252000
-
-      test_alloc_no_release @ cpumask_common.h:84:6
-      Source context:
-          82 | ...
-          83 | ...
-      >>> 84 |         if (!bpf_cpumask_empty(cast(cpumask))) {
-             |         ^-- branch: took the true branch of this conditional, goto followed
-          85 |                 err = 2;
-          86 |                 bpf_cpumask_release(cpumask);
-      Instruction context:
-           9 | (85) call bpf_cpumask_empty#62852
-          10 | (54) w0 &= 1
-      >>> 11 | (56) if w0 != 0x0 goto pc+7
-          12 | (18) r1 = 0xffffc90000252000
-
-    Suggestion:
-      Release or transfer ownership of the acquired resource on every path before the program exits.
-
-Patch layout:
-
-  - Patches 1-2 add the common infrastructure: report sections, diagnostic
-    categories, source-line lookup, and separate source and instruction
-    context blocks.
-  - Patches 3-7 add growable environment-owned diagnostic history. The
-    history follows the active verifier path and is pruned when
-    backtracking; it records branch outcomes, material register changes,
-    reference lifetime events, and execution-context events so reports can
-    explain the path and causal state transitions that led to the failure.
-  - Patches 8-16 add the first category-specific reports. These patches
-    hook selected verifier failure sites and choose the evidence that is
-    useful for that error class.
-  - Patch 17 gates diagnostic collection and rendering on verifier log
-    level, so stats-only loads do not collect the extra path history.
-    The overhead is limited to verbose log mode through this change.
-
-Evaluation
-~~~~~~~~~~
-
-To quantitatively assess diagnostic quality beyond subjective human
-feedback, we use AI models (called over APIs) and veristat metrics to
-compare results.
-
-Models are used as a way to measure repair utility of the extra
-diagnostics over a fixed test set. Each prompt contains only a sanitized
-source snippet and either the legacy verifier log or the new diagnostic
-log. To avoid leaking the answer through the test itself, comments,
-annotations, and other source hints that describe the intended failure
-were removed. The model is not given internet access, repository access,
-test execution, verifier access, or the expected fix. The expected
-causes and intended repairs are kept outside the prompt. Under those
-constraints, correctness, exact repair rate, output size, reasoning
-tokens, cost, and wall time provide a proxy for whether the additional
-verifier context makes the failure easier to understand and turn into a
-source-level fix.
-
-Verifier cost is assessed by forcing the collection of diagnostics
-information during normal verification. By default, this information is
-collected and processed only when verbose logs are enabled, but forcing
-it even without a verbose log helps us measure the CPU time and memory
-cost of the extra data.
-
-Both evaluations are covered in the sections below.
-
-Repair Quality
---------------
-
-Repair quality is measured by asking API-only models to propose source
-fixes from a sanitized source snippet and verifier log. The criterion is
-score >= 3 on a 0-4 local grading scale, where 3 means a likely fix with
-incomplete detail and 4 means an actionable source-level fix. Score 4 is
-reported separately as the exact repair rate. The reported model set
-contains 596 completed API responses: 298 diagnostic and 298 legacy.
-
-Main results (details available in Appendix):
-
-  Metric                              Diagnostic   Legacy       Delta
-  ----------------------------------  -----------  -----------  --------
-  Answers                             298          298
-  Success rate                        97.0%        97.3%        -0.3 pp
-  Exact repair rate                   82.2%        72.1%        +10.1 pp
-  Mean score                          3.79         3.69         +0.10
-  Solver cost                         $8.93        $10.37       -13.8%
-  Mean output tokens per answer       1662         1975         -15.8%
-  Mean reasoning tokens per answer    951          1080         -11.9%
-  Mean wall time per answer           37.3s        44.1s        -15.4%
-
-Diagnostic prompts carry more input context. The resulting answers are
-still shorter and cheaper. In this run, diagnostics do not materially
-change the coarse success rate, but they increase exact repairs by 10.1
-percentage points while reducing cost, output tokens, reasoning tokens,
-and wall time.
-
-Verifier cost
--------------
-
-Verifier cost is measured with veristat over the BPF selftest programs
-selected by tools/testing/selftests/bpf/veristat.cfg, with five
-repetitions per configuration. With diagnostics gated by log level, wall
-time and verifier duration stay close to baseline. Forcing diagnostics
-on for every verifier run adds modest overhead on this workload.
-
-memory.peak is measured with cgroup v2 memory accounting for each
-program load. The table reports the mean wall time, the mean summed
-verifier duration, and the mean of the per-repetition maximum
-memory.peak values.
-
-  Configuration                 Wall time mean   Verifier duration    memory.peak
-  ----------------------------  --------------   -----------------    -----------
-  bpf-next baseline                 25.78s            9.86s              142 MiB
-  diagnostics, gated                26.64s           10.16s              144 MiB
-  diagnostics, forced on            28.01s           11.00s              148 MiB
-
-TODO
-~~~~
-
-Known follow-up work:
-
-  - Convert more verbose-only verifier errors into category-specific
-    reports.
-  - Integrate loop-convergence failure summarization from Eduard.
-  - Report candidate kfuncs/helpers for releasing owned resources.
-  - Explore association of source variables with verifier registers
-    where debug info permits it.
-  - Refine suggestions per category and, where useful, link diagnostics
-    to maintained documentation.
-  - Bring verifier warnings into the same reporting framework.
-
-Appendix: AI repair details
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The 20 verifier-failing selftest cases are:
-
-  Case     Diff    Category                    Selftest selector
-  -------  ------  --------------------------  ---------------------------------------------
-  case-001 easy    Call Type Safety            cpumask/test_populate_invalid_destination
-  case-002 easy    Resource Lifetime Safety    cpumask/test_alloc_no_release
-  case-003 easy    Register Type Safety        verifier_spill_fill/check_corrupted_spill_fill
-  case-004 easy    Register Type Safety        test_global_funcs/global_func12
-  case-005 easy    Execution Context Safety    preempt_lock/preempt_sleepable_helper
-  case-006 easy    Policy                      verifier_helper_restricted/in_bpf_prog_type_kprobe_1
-  case-007 medium  Memory Safety               dynptr/dynptr_slice_var_len1
-  case-008 medium  Call Type Safety            dynptr/test_dynptr_skb_small_buff
-  case-009 medium  Call Type Safety            task_kfunc/task_kfunc_acquire_untrusted
-  case-010 medium  Register Type Safety        test_global_funcs/global_func6
-  case-011 medium  Resource Lifetime Safety    dynptr/ringbuf_missing_release2
-  case-012 medium  Execution Context Safety    irq/irq_sleepable_helper_global_subprog
-  case-013 medium  Verifier Limit              test_global_funcs/global_func1
-  case-014 hard    Memory Safety               verifier_helper_value_access/via_variable_no_max_check_1
-  case-015 hard    Register Type Safety        verifier_sock/invalidate_pkt_pointers_from_global_func
-  case-016 hard    Resource Lifetime Safety    verifier_ref_tracking/check_free_in_one_subbranch
-  case-017 hard    Resource Lifetime Safety    irq/irq_restore_ooo
-  case-018 hard    Resource Lifetime Safety    res_spin_lock_failure/res_spin_lock_ooo_unlock
-  case-019 hard    Program Structure           verifier_loops1/bounded_recursion
-  case-020 hard    Verifier Limit              verifier_liveness_exp/liveness_exponential_complexity
-
-The grading scale is:
-
-  - 4: identifies the verifier cause and gives an actionable source-level fix.
-  - 3: gives a likely fix, but with incomplete explanation or detail.
-  - 2: identifies part of the issue, but not enough to fix confidently.
-  - 1: gives only a broad verifier-area answer, or a wrong/insufficient fix.
-  - 0: does not identify the intended verifier failure.
-
-Detailed effort metrics for the model set:
-
-  Metric                   Variant      Mean      Median       P99
-  -----------------------  ----------  --------  --------  --------
-  Cost per answer          diagnostic   $0.030    $0.019    $0.203
-  Cost per answer          legacy       $0.035    $0.018    $0.223
-  Input tokens             diagnostic     1391      1220      4048
-  Input tokens             legacy         1052       805      3655
-  Output tokens            diagnostic     1662       954      8680
-  Output tokens            legacy         1975      1034      9912
-  Reasoning tokens         diagnostic      951       208      8108
-  Reasoning tokens         legacy         1080       228      6322
-  Wall time                diagnostic    37.3s     18.3s    222.7s
-  Wall time                legacy        44.1s     19.8s    255.5s
-
-Per-model results for diagnostic prompts:
-
-  Model profile                              Ans  Succ   Exact  Mean  Cost     OutK  ReasK  Wall
-  -----------------------------------------  ---  -----  -----  ----  -------  ----  -----  -----
-  anthropic-haiku-4.5-default                 20   90.0   80.0  3.70  $0.087   11.4    0.0   5.0s
-  anthropic-opus-4.8-high                     20  100.0   90.0  3.90  $0.819   25.5    0.0  15.5s
-  anthropic-opus-4.8-medium                   20   95.0   90.0  3.85  $0.870   27.5    0.0  12.7s
-  anthropic-sonnet-4.6-high                   20   95.0   80.0  3.75  $0.824   48.9    0.0  21.6s
-  anthropic-sonnet-4.6-medium                 20  100.0   65.0  3.65  $0.278   12.4    0.0   6.6s
-  openai-gpt-5.3-codex-high                   20  100.0   80.0  3.80  $0.601   39.8   33.9  25.0s
-  openai-gpt-5.3-codex-medium                 20   95.0   85.0  3.80  $0.287   17.5   11.4  13.5s
-  openai-gpt-5.5-high                         20  100.0   90.0  3.90  $2.356   74.4   65.2  56.8s
-  openai-gpt-5.5-low                          20  100.0   90.0  3.90  $0.686   18.7    8.5  21.3s
-  openai-gpt-5.5-medium                       19  100.0   84.2  3.84  $1.353   41.1   31.8  37.4s
-  openai-gpt-5.5-none                         20   95.0   90.0  3.85  $0.457   11.1    0.0  10.4s
-  openrouter-deepseek-r1-0528                 20  100.0   75.0  3.75  $0.145   61.5   53.8  98.3s
-  openrouter-deepseek-v3.2                    19  100.0   78.9  3.79  $0.028   64.2   58.1  87.3s
-  openrouter-glm-5.1-high                     20   95.0   80.0  3.75  $0.113   28.8   20.7  19.3s
-  openrouter-qwen3-coder                      20   90.0   75.0  3.65  $0.028   12.4    0.0   7.1s
-
-Per-model results for legacy prompts:
-
-  Model profile                              Ans  Succ   Exact  Mean  Cost     OutK  ReasK  Wall
-  -----------------------------------------  ---  -----  -----  ----  -------  ----  -----  -----
-  anthropic-haiku-4.5-default                 20   90.0   45.0  3.35  $0.081   11.6    0.0   5.0s
-  anthropic-opus-4.8-high                     20   90.0   70.0  3.60  $1.192   42.2    0.0  17.5s
-  anthropic-opus-4.8-medium                   20   95.0   85.0  3.80  $1.001   34.5    0.0  13.4s
-  anthropic-sonnet-4.6-high                   20  100.0   75.0  3.75  $1.181   74.1    0.0  24.4s
-  anthropic-sonnet-4.6-medium                 20   95.0   65.0  3.60  $0.420   23.4    0.0  12.3s
-  openai-gpt-5.3-codex-high                   20  100.0   85.0  3.85  $0.562   37.8   31.6  27.1s
-  openai-gpt-5.3-codex-medium                 20  100.0   75.0  3.75  $0.318   20.3   13.7  13.6s
-  openai-gpt-5.5-high                         19  100.0   78.9  3.79  $2.613   84.0   75.4  98.1s
-  openai-gpt-5.5-low                          20  100.0   75.0  3.75  $0.664   19.0    9.7  21.7s
-  openai-gpt-5.5-medium                       20  100.0   75.0  3.75  $1.602   50.2   41.0  56.1s
-  openai-gpt-5.5-none                         20   95.0   85.0  3.80  $0.416   10.7    0.0  10.9s
-  openrouter-deepseek-r1-0528                 20   95.0   70.0  3.65  $0.149   64.6   57.5  92.5s
-  openrouter-deepseek-v3.2                    20  100.0   60.0  3.60  $0.030   74.3   67.8  98.3s
-  openrouter-glm-5.1-high                     19  100.0   63.2  3.63  $0.115   32.1   24.9  30.4s
-  openrouter-qwen3-coder                      20  100.0   75.0  3.75  $0.022    9.5    0.0   5.4s
-
-Kumar Kartikeya Dwivedi (17):
-  bpf: Add verifier diagnostics report helpers
-  bpf: Add source and instruction diagnostic context
-  bpf: Add verifier diagnostic event log
-  bpf: Prune verifier diagnostics when switching paths
-  bpf: Track verifier register diagnostic events
-  bpf: Track verifier reference diagnostic events
-  bpf: Track verifier context diagnostic events
-  bpf: Report Register Type Safety errors
-  bpf: Report Memory Safety bounds errors
-  bpf: Report Resource Lifetime reference leaks
-  bpf: Report Call Type Safety argument errors
-  bpf: Report Execution Context Safety errors
-  bpf: Report Program Structure CFG errors
-  bpf: Report Policy helper and kfunc errors
-  bpf: Report Verifier Limit errors
-  bpf: Report Verifier Internal errors
-  bpf: Gate verifier diagnostics on log level
-
- include/linux/bpf.h          |   15 +-
- include/linux/bpf_verifier.h |   26 +-
- include/linux/btf.h          |    1 +
- kernel/bpf/Makefile          |    2 +-
- kernel/bpf/btf.c             |   10 +
- kernel/bpf/cfg.c             |   55 +
- kernel/bpf/core.c            |   36 +-
- kernel/bpf/diagnostics.c     | 2492 ++++++++++++++++++++++++++++++++++
- kernel/bpf/diagnostics.h     |  188 +++
- kernel/bpf/liveness.c        |    7 +
- kernel/bpf/log.c             |   11 -
- kernel/bpf/verifier.c        | 1555 +++++++++++++++++++--
- 12 files changed, 4229 insertions(+), 169 deletions(-)
- create mode 100644 kernel/bpf/diagnostics.c
- create mode 100644 kernel/bpf/diagnostics.h
-
-
-base-commit: 9a3a07d06e7d74f4aecc51396c771149336ac55d
+Teach verifier diagnostics to annotate an instruction with BTF source
+line information and nearby BPF instructions. The renderer keeps source
+text in a fixed-width lane and prints instructions in a stable right-hand
+gutter.
+
+Wrap annotation text under the source line so long error labels remain
+readable while the source and instruction lanes keep their fixed layout.
+
+Keeping source and instruction context in one commit preserves the visual
+layout contract that later diagnostic reports rely on.
+
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ include/linux/bpf.h          |  15 +-
+ include/linux/bpf_verifier.h |   4 +
+ include/linux/btf.h          |   1 +
+ kernel/bpf/btf.c             |  10 +
+ kernel/bpf/core.c            |  36 +--
+ kernel/bpf/diagnostics.c     | 464 +++++++++++++++++++++++++++++++++++
+ kernel/bpf/diagnostics.h     |   9 +
+ kernel/bpf/verifier.c        |  32 ++-
+ 8 files changed, 541 insertions(+), 30 deletions(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 31181e0c2b80..9bf3eda75ed3 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -4142,8 +4142,19 @@ static inline bool bpf_is_subprog(const struct bpf_prog *prog)
+ }
+ 
+ const struct bpf_line_info *bpf_find_linfo(const struct bpf_prog *prog, u32 insn_off);
+-void bpf_get_linfo_file_line(struct btf *btf, const struct bpf_line_info *linfo,
+-			     const char **filep, const char **linep, int *nump);
++#define BPF_LINFO_LINE_TRIM 1
++struct bpf_linfo_source {
++	const char *file;
++	const char *line;
++	u32 file_name_off;
++	int line_num;
++	int line_col;
++};
++
++void bpf_get_linfo_source(struct btf *btf, const struct bpf_line_info *linfo,
++			  struct bpf_linfo_source *src, u32 flags);
++void bpf_get_linfo_file_line(struct btf *btf, const struct bpf_line_info *linfo, const char **filep,
++			     const char **linep, int *nump, u32 flags);
+ int bpf_prog_get_file_line(struct bpf_prog *prog, unsigned long ip, const char **filep,
+ 			   const char **linep, int *nump);
+ struct bpf_prog *bpf_prog_find_from_stack(void);
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 317e99b9acc0..3ff27863e34d 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -835,6 +835,7 @@ static inline u16 bpf_in_stack_arg_cnt(const struct bpf_subprog_info *sub)
+ 	return 0;
+ }
+ 
++struct bpf_diag;
+ struct bpf_verifier_env;
+ 
+ struct backtrack_state {
+@@ -951,6 +952,7 @@ struct bpf_verifier_env {
+ 	struct bpf_insn_aux_data *insn_aux_data; /* array of per-insn state */
+ 	const struct bpf_line_info *prev_linfo;
+ 	struct bpf_verifier_log log;
++	struct bpf_diag *diag;
+ 	struct bpf_subprog_info subprog_info[BPF_MAX_SUBPROGS + 2]; /* max + 2 for the fake and exception subprogs */
+ 	/* subprog indices sorted in topological order: leaves first, callers last */
+ 	int subprog_topo_order[BPF_MAX_SUBPROGS + 2];
+@@ -1425,8 +1427,10 @@ void print_verifier_state(struct bpf_verifier_env *env, const struct bpf_verifie
+ void print_insn_state(struct bpf_verifier_env *env, const struct bpf_verifier_state *vstate,
+ 		      u32 frameno);
+ u32 bpf_vlog_alignment(u32 pos);
++const char *bpf_disasm_kfunc_name(void *data, const struct bpf_insn *insn);
+ 
+ struct bpf_subprog_info *bpf_find_containing_subprog(struct bpf_verifier_env *env, int off);
++const char *bpf_verifier_subprog_name(const struct bpf_verifier_env *env, int subprog);
+ int bpf_jmp_offset(struct bpf_insn *insn);
+ struct bpf_iarray *bpf_insn_successors(struct bpf_verifier_env *env, u32 idx);
+ void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, u64 stack_mask);
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 240401d9b25b..90e865d116b8 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -213,6 +213,7 @@ int btf_type_seq_show_flags(const struct btf *btf, u32 type_id, void *obj,
+  */
+ int btf_type_snprintf_show(const struct btf *btf, u32 type_id, void *obj,
+ 			   char *buf, int len, u64 flags);
++int btf_type_snprintf_show_name(const struct btf *btf, u32 type_id, char *buf, int len);
+ 
+ int btf_get_fd_by_id(u32 id);
+ u32 btf_obj_id(const struct btf *btf);
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 8c04c340f499..abe8f6a9f361 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -8297,6 +8297,16 @@ int btf_type_snprintf_show(const struct btf *btf, u32 type_id, void *obj,
+ 	return ssnprintf.len;
+ }
+ 
++int btf_type_snprintf_show_name(const struct btf *btf, u32 type_id, char *buf, int len)
++{
++	struct btf_show show = {
++		.btf = btf,
++		.state.type_id = type_id,
++	};
++
++	return snprintf(buf, len, "%s", btf_show_name(&show));
++}
++
+ #ifdef CONFIG_PROC_FS
+ static void bpf_btf_show_fdinfo(struct seq_file *m, struct file *filp)
+ {
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 47fe047ad30b..b35721ab3712 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -3460,24 +3460,30 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(xdp_bulk_tx);
+ 
+ #ifdef CONFIG_BPF_SYSCALL
+ 
+-void bpf_get_linfo_file_line(struct btf *btf, const struct bpf_line_info *linfo,
+-			     const char **filep, const char **linep, int *nump)
++void bpf_get_linfo_source(struct btf *btf, const struct bpf_line_info *linfo,
++			  struct bpf_linfo_source *src, u32 flags)
+ {
+-	/* Get base component of the file path. */
+-	if (filep) {
+-		*filep = btf_name_by_offset(btf, linfo->file_name_off);
+-		*filep = kbasename(*filep);
+-	}
++	src->file = kbasename(btf_name_by_offset(btf, linfo->file_name_off));
++	src->line = btf_name_by_offset(btf, linfo->line_off);
++	while ((flags & BPF_LINFO_LINE_TRIM) && isspace(*src->line))
++		src->line++;
++	src->file_name_off = linfo->file_name_off;
++	src->line_num = BPF_LINE_INFO_LINE_NUM(linfo->line_col);
++	src->line_col = BPF_LINE_INFO_LINE_COL(linfo->line_col);
++}
+ 
+-	/* Obtain the source line, and strip whitespace in prefix. */
+-	if (linep) {
+-		*linep = btf_name_by_offset(btf, linfo->line_off);
+-		while (isspace(**linep))
+-			*linep += 1;
+-	}
++void bpf_get_linfo_file_line(struct btf *btf, const struct bpf_line_info *linfo, const char **filep,
++			     const char **linep, int *nump, u32 flags)
++{
++	struct bpf_linfo_source src;
+ 
++	bpf_get_linfo_source(btf, linfo, &src, flags);
++	if (filep)
++		*filep = src.file;
++	if (linep)
++		*linep = src.line;
+ 	if (nump)
+-		*nump = BPF_LINE_INFO_LINE_NUM(linfo->line_col);
++		*nump = src.line_num;
+ }
+ 
+ const struct bpf_line_info *bpf_find_linfo(const struct bpf_prog *prog, u32 insn_off)
+@@ -3551,7 +3557,7 @@ int bpf_prog_get_file_line(struct bpf_prog *prog, unsigned long ip, const char *
+ 	if (idx == -1)
+ 		return -ENOENT;
+ 
+-	bpf_get_linfo_file_line(btf, &linfo[idx], filep, linep, nump);
++	bpf_get_linfo_file_line(btf, &linfo[idx], filep, linep, nump, BPF_LINFO_LINE_TRIM);
+ 	return 0;
+ }
+ 
+diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+index 6d28a3481cfa..49106115621d 100644
+--- a/kernel/bpf/diagnostics.c
++++ b/kernel/bpf/diagnostics.c
+@@ -1,12 +1,16 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ // Copyright (c) 2026 Meta Platforms, Inc. and affiliates.
+ 
++#include <linux/bpf.h>
+ #include <linux/bpf_verifier.h>
++#include <linux/btf.h>
+ #include <linux/ctype.h>
++#include <linux/kernel.h>
+ #include <linux/slab.h>
+ #include <linux/stdarg.h>
+ #include <linux/string.h>
+ 
++#include "disasm.h"
+ #include "diagnostics.h"
+ 
+ #define CATEGORY_MEMORY_SAFETY "Memory Safety"
+@@ -21,12 +25,136 @@
+ 
+ #define BPF_DIAG_TEXT_WIDTH 100
+ #define BPF_DIAG_TEXT_INDENT "  "
++#define BPF_DIAG_MSG_LEN 512
++#define BPF_DIAG_CONTEXT 2
++#define BPF_DIAG_CONTEXT_CNT (1 + BPF_DIAG_CONTEXT * 2)
++#define BPF_DIAG_SOURCE_LANE_WIDTH 88
++#define BPF_DIAG_TAB_WIDTH 8
++#define BPF_DIAG_REG_DESC_LEN 512
++#define BPF_DIAG_REG_TMP_LEN 192
++#define BPF_DIAG_SCRATCH_STR_CNT 3
++#define BPF_DIAG_SCRATCH_STR_LEN 256
++#define BPF_DIAG_TEXT_LEN 160
++
++struct bpf_diag_source_line {
++	const char *line;
++	int line_num;
++};
++
++struct bpf_diag_insn {
++	char text[BPF_DIAG_TEXT_LEN];
++	int idx;
++	bool valid;
++};
++
++struct bpf_diag_insn_buf {
++	char *buf;
++	size_t size;
++	size_t len;
++};
++
++struct bpf_diag_insn_ctx {
++	struct bpf_verifier_env *env;
++	struct bpf_diag_insn_buf buf;
++};
++
++struct bpf_diag_scratch {
++	char str[BPF_DIAG_SCRATCH_STR_CNT][BPF_DIAG_SCRATCH_STR_LEN];
++	struct bpf_linfo_source source;
++	struct bpf_diag_source_line source_lines[BPF_DIAG_CONTEXT_CNT];
++	struct bpf_diag_insn insns[BPF_DIAG_CONTEXT_CNT];
++};
++
++struct bpf_diag {
++	struct bpf_diag_scratch scratch;
++};
+ 
+ bool bpf_diag_enabled(const struct bpf_verifier_env *env)
+ {
+ 	return env->log.level & BPF_LOG_LEVEL;
+ }
+ 
++static struct bpf_diag *diag_env(struct bpf_verifier_env *env)
++{
++	return env->diag;
++}
++
++int bpf_diag_init(struct bpf_verifier_env *env)
++{
++	if (!bpf_diag_enabled(env))
++		return 0;
++
++	env->diag = kzalloc_obj(struct bpf_diag, GFP_KERNEL_ACCOUNT);
++	return env->diag ? 0 : -ENOMEM;
++}
++
++static struct bpf_diag_scratch *diag_scratch(struct bpf_verifier_env *env)
++{
++	struct bpf_diag *diag = diag_env(env);
++
++	return diag ? &diag->scratch : NULL;
++}
++
++char *bpf_diag_scratch_buf(struct bpf_verifier_env *env, unsigned int slot, size_t *size)
++{
++	struct bpf_diag_scratch *scratch = diag_scratch(env);
++	char *buf = NULL;
++	size_t buf_size = 0;
++
++	if (!scratch)
++		goto out;
++
++	if ((unsigned int)slot >= BPF_DIAG_SCRATCH_STR_CNT)
++		goto out;
++
++	buf = scratch->str[slot];
++	buf_size = sizeof(scratch->str[slot]);
++
++out:
++	if (size)
++		*size = buf_size;
++	return buf;
++}
++
++const char *bpf_diag_scratch_strcpy(struct bpf_verifier_env *env, unsigned int slot,
++				    const char *str)
++{
++	size_t size;
++	char *buf = bpf_diag_scratch_buf(env, slot, &size);
++
++	if (!buf)
++		return "";
++	strscpy(buf, str ?: "", size);
++	return buf;
++}
++
++const char *bpf_diag_scratch_printf(struct bpf_verifier_env *env, unsigned int slot,
++				    const char *fmt, ...)
++{
++	size_t size;
++	va_list args;
++	char *buf = bpf_diag_scratch_buf(env, slot, &size);
++
++	if (!buf)
++		return "";
++
++	va_start(args, fmt);
++	vscnprintf(buf, size, fmt, args);
++	va_end(args);
++	return buf;
++}
++
++void bpf_diag_free(struct bpf_verifier_env *env)
++{
++	struct bpf_diag *diag = env->diag;
++
++	if (!diag)
++		return;
++
++	kfree(diag);
++	env->diag = NULL;
++}
++
+ static void diag_log(struct bpf_verifier_env *env, const char *fmt, ...)
+ {
+ 	va_list args;
+@@ -96,6 +224,238 @@ static void diag_vprint_indented(struct bpf_verifier_env *env, const char *fmt,
+ 	kfree(buf);
+ }
+ 
++static int diag_line_width(unsigned int line)
++{
++	int width = 1;
++
++	while (line >= 10) {
++		line /= 10;
++		width++;
++	}
++
++	return width;
++}
++
++static const char *diag_func_name(struct bpf_verifier_env *env, u32 insn_idx)
++{
++	const struct bpf_subprog_info *subprog;
++	int subprogno;
++
++	subprog = bpf_find_containing_subprog(env, insn_idx);
++	if (!subprog)
++		return NULL;
++
++	subprogno = subprog - env->subprog_info;
++	return bpf_verifier_subprog_name(env, subprogno);
++}
++
++static bool diag_fill_source(struct bpf_verifier_env *env, const struct bpf_line_info *linfo,
++			     struct bpf_linfo_source *src)
++{
++	if (!env->prog->aux->btf)
++		return false;
++
++	bpf_get_linfo_source(env->prog->aux->btf, linfo, src, 0);
++	return src->file && *src->file && src->line && *src->line;
++}
++
++static bool diag_get_source(struct bpf_verifier_env *env, u32 insn_idx,
++			    struct bpf_linfo_source *src)
++{
++	const struct bpf_line_info *linfo;
++
++	linfo = bpf_find_linfo(env->prog, insn_idx);
++	if (!linfo)
++		return false;
++
++	return diag_fill_source(env, linfo, src);
++}
++
++static void diag_fill_source_lines(struct bpf_verifier_env *env, const struct bpf_linfo_source *src,
++				   int start_line, int end_line, struct bpf_diag_source_line *lines)
++{
++	const struct bpf_line_info *linfo = env->prog->aux->linfo;
++	struct btf *btf = env->prog->aux->btf;
++	u32 i;
++
++	for (i = 0; i < BPF_DIAG_CONTEXT_CNT; i++)
++		lines[i].line_num = start_line + i;
++
++	if (!btf || !env->prog->aux->nr_linfo)
++		return;
++
++	for (i = 0; i < env->prog->aux->nr_linfo; i++) {
++		struct bpf_linfo_source line_src;
++		int idx;
++
++		bpf_get_linfo_source(btf, &linfo[i], &line_src, 0);
++		if (line_src.file_name_off != src->file_name_off ||
++		    line_src.line_num < start_line || line_src.line_num > end_line ||
++		    !line_src.line || !*line_src.line)
++			continue;
++
++		idx = line_src.line_num - start_line;
++		if (!lines[idx].line)
++			lines[idx].line = line_src.line;
++	}
++}
++
++static int diag_line_indent(const char *line)
++{
++	int indent = 0;
++
++	while (*line == ' ' || *line == '\t') {
++		if (*line == '\t')
++			indent = round_up(indent + 1, BPF_DIAG_TAB_WIDTH);
++		else
++			indent++;
++		line++;
++	}
++
++	return indent;
++}
++
++static void diag_insn_print(void *private_data, const char *fmt, ...)
++{
++	struct bpf_diag_insn_ctx *ctx = private_data;
++	struct bpf_diag_insn_buf *buf = &ctx->buf;
++	va_list args;
++
++	if (buf->len >= buf->size)
++		return;
++
++	va_start(args, fmt);
++	buf->len += vscnprintf(buf->buf + buf->len, buf->size - buf->len, fmt, args);
++	va_end(args);
++}
++
++static const char *diag_disasm_kfunc_name(void *private_data, const struct bpf_insn *insn)
++{
++	struct bpf_diag_insn_ctx *ctx = private_data;
++
++	return bpf_disasm_kfunc_name(ctx->env, insn);
++}
++
++static void diag_format_insn(struct bpf_verifier_env *env, int insn_idx,
++			     struct bpf_diag_insn *diag_insn)
++{
++	struct bpf_insn *insn;
++	struct bpf_diag_insn_ctx ctx = {
++		.env = env,
++		.buf = {
++			.buf = diag_insn->text,
++			.size = sizeof(diag_insn->text),
++		},
++	};
++	const struct bpf_insn_cbs cbs = {
++		.cb_call = diag_disasm_kfunc_name,
++		.cb_print = diag_insn_print,
++		.private_data = &ctx,
++	};
++
++	diag_insn->idx = insn_idx;
++	diag_insn->valid = false;
++	diag_insn->text[0] = '\0';
++
++	if (insn_idx < 0 || insn_idx >= env->prog->len)
++		return;
++
++	if (insn_idx > 0 && bpf_is_ldimm64(&env->prog->insnsi[insn_idx - 1]))
++		return;
++
++	insn = &env->prog->insnsi[insn_idx];
++	if (bpf_is_ldimm64(insn) && insn_idx + 1 >= env->prog->len)
++		return;
++
++	print_bpf_insn(&cbs, insn, env->allow_ptr_leaks);
++	while (ctx.buf.len && diag_insn->text[ctx.buf.len - 1] == '\n')
++		diag_insn->text[--ctx.buf.len] = '\0';
++
++	diag_insn->valid = true;
++}
++
++static void diag_format_source_text(char *buf, size_t size, const char *line, int width)
++{
++	int col = 0, len = 0;
++
++	if (!size)
++		return;
++	if (width <= 0) {
++		buf[0] = '\0';
++		return;
++	}
++
++	line = line ?: "...";
++	while (*line && col < width && len + 1 < size) {
++		if (*line == '\t') {
++			int next = round_up(col + 1, BPF_DIAG_TAB_WIDTH);
++
++			while (col < next && col < width && len + 1 < size) {
++				buf[len++] = ' ';
++				col++;
++			}
++			line++;
++			continue;
++		}
++
++		buf[len++] = *line++;
++		col++;
++	}
++
++	if (*line) {
++		int ellipsis_len = min(3, width);
++
++		while (len > 0 && col > width - ellipsis_len) {
++			len--;
++			col--;
++		}
++		while (ellipsis_len-- && len + 1 < size)
++			buf[len++] = '.';
++	}
++
++	buf[len] = '\0';
++}
++
++static void diag_format_source_lane(char *buf, size_t size, const char *source_prefix,
++				    int source_line_width, int line_num, const char *line)
++{
++	int len, text_width;
++
++	if (line_num <= 0) {
++		buf[0] = '\0';
++		return;
++	}
++
++	len = scnprintf(buf, size, "%s%*d | ", source_prefix, source_line_width, line_num);
++	if (len >= (int)size)
++		return;
++
++	text_width = BPF_DIAG_SOURCE_LANE_WIDTH - len;
++	diag_format_source_text(buf + len, size - len, line, text_width);
++}
++
++static void diag_print_source_line(struct bpf_verifier_env *env, const char *source_prefix,
++				   int source_line_width, const struct bpf_diag_source_line *line)
++{
++	size_t source_lane_size;
++	char *source_lane;
++
++	source_lane = bpf_diag_scratch_buf(env, 0, &source_lane_size);
++	diag_format_source_lane(source_lane, source_lane_size, source_prefix, source_line_width,
++				line->line_num, line->line);
++	diag_write(env, "  %s\n", source_lane);
++}
++
++static void diag_print_insn_line(struct bpf_verifier_env *env,
++				 const struct bpf_diag_insn *diag_insn, int focus_insn_idx,
++				 int insn_width)
++{
++	if (!diag_insn->valid)
++		return;
++	diag_write(env, "  %s%*d | %s\n", diag_insn->idx == focus_insn_idx ? ">>> " : "    ",
++		   insn_width, diag_insn->idx, diag_insn->text);
++}
++
+ void bpf_diag_report_header(struct bpf_verifier_env *env, const char *category, const char *problem)
+ {
+ 	char first;
+@@ -155,3 +515,107 @@ static void diag_report_suggestion(struct bpf_verifier_env *env, const char *fmt
+ 	va_end(args);
+ 	diag_log(env, "\n");
+ }
++
++static void diag_print_source_annotation(struct bpf_verifier_env *env, int line_width, int indent,
++					 const char *label, const char *msg)
++{
++	size_t first_prefix_size, next_prefix_size;
++	char *first_prefix, *next_prefix;
++	char *text;
++
++	first_prefix = bpf_diag_scratch_buf(env, 0, &first_prefix_size);
++	next_prefix = bpf_diag_scratch_buf(env, 1, &next_prefix_size);
++	indent = min_t(int, indent, max_t(int, 0, BPF_DIAG_SOURCE_LANE_WIDTH - line_width - 8));
++	text = kasprintf(GFP_KERNEL_ACCOUNT, "%s: %s", label, msg);
++	if (!text) {
++		diag_write(env, "  %*s | %*s^-- %s: %s\n", line_width + 4, "", indent, "", label,
++			   msg);
++		return;
++	}
++
++	scnprintf(first_prefix, first_prefix_size, "  %*s | %*s^-- ", line_width + 4, "", indent,
++		  "");
++	scnprintf(next_prefix, next_prefix_size, "  %*s | %*s    ", line_width + 4, "", indent, "");
++
++	diag_print_wrapped_prefixed(env, first_prefix, next_prefix, text);
++	kfree(text);
++}
++
++void bpf_diag_report_source(struct bpf_verifier_env *env, u32 insn_idx, const char *label,
++			    const char *fmt, ...)
++{
++	struct bpf_diag_scratch *scratch;
++	struct bpf_diag_source_line *source_lines;
++	struct bpf_diag_insn *diag_insn;
++	struct bpf_linfo_source *src;
++	char *msg;
++	const char *func;
++	int start_line, end_line, width, indent, insn_width, i;
++	va_list args;
++
++	if (!bpf_diag_enabled(env))
++		return;
++
++	va_start(args, fmt);
++	msg = kvasprintf(GFP_KERNEL_ACCOUNT, fmt, args);
++	va_end(args);
++	if (!msg)
++		msg = kstrdup("<failed to allocate diagnostic text>", GFP_KERNEL_ACCOUNT);
++	if (!msg)
++		return;
++
++	label = label ?: "note";
++	scratch = diag_scratch(env);
++
++	src = &scratch->source;
++	source_lines = scratch->source_lines;
++	diag_insn = scratch->insns;
++	memset(source_lines, 0, sizeof(scratch->source_lines));
++	memset(diag_insn, 0, sizeof(scratch->insns));
++
++	if (!diag_get_source(env, insn_idx, src)) {
++		diag_log(env, "  insn %u\n", insn_idx);
++		diag_print_source_annotation(env, 0, 0, label, msg);
++		goto out_free_msg;
++	}
++
++	func = diag_func_name(env, insn_idx);
++	if (func && *func)
++		diag_log(env, "  %s @ %s:%d:%d\n", func, src->file, src->line_num, src->line_col);
++	else
++		diag_log(env, "  %s:%d:%d\n", src->file, src->line_num, src->line_col);
++
++	start_line = src->line_num - BPF_DIAG_CONTEXT;
++	end_line = src->line_num + BPF_DIAG_CONTEXT;
++	width = diag_line_width(end_line);
++	indent = diag_line_indent(src->line);
++	insn_width = diag_line_width(env->prog->len ? env->prog->len - 1 : 0);
++	diag_fill_source_lines(env, src, start_line, end_line, source_lines);
++
++	for (i = 0; i < BPF_DIAG_CONTEXT_CNT; i++) {
++		int row = i - BPF_DIAG_CONTEXT;
++
++		diag_format_insn(env, insn_idx + row, &diag_insn[i]);
++	}
++
++	/*
++	 * Source lines and BPF instructions are independent context windows.
++	 * Only their focused entries describe the same location, so render
++	 * separate blocks instead of pairing neighboring rows.
++	 */
++	diag_write(env, "  Source context:\n");
++	for (i = 0; i < BPF_DIAG_CONTEXT_CNT; i++) {
++		const char *source_prefix;
++
++		source_prefix = source_lines[i].line_num == src->line_num ? ">>> " : "    ";
++		diag_print_source_line(env, source_prefix, width, &source_lines[i]);
++		if (source_lines[i].line_num == src->line_num)
++			diag_print_source_annotation(env, width, indent, label, msg);
++	}
++	diag_write(env, "  Instruction context:\n");
++	for (i = 0; i < BPF_DIAG_CONTEXT_CNT; i++)
++		diag_print_insn_line(env, &diag_insn[i], insn_idx, insn_width);
++
++out_free_msg:
++	kfree(msg);
++}
+diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
+index be7ad5142726..d852386bf5f2 100644
+--- a/kernel/bpf/diagnostics.h
++++ b/kernel/bpf/diagnostics.h
+@@ -10,7 +10,16 @@
+ struct bpf_verifier_env;
+ 
+ bool bpf_diag_enabled(const struct bpf_verifier_env *env);
++int bpf_diag_init(struct bpf_verifier_env *env);
++char *bpf_diag_scratch_buf(struct bpf_verifier_env *env, unsigned int slot, size_t *size);
++const char *bpf_diag_scratch_strcpy(struct bpf_verifier_env *env, unsigned int slot,
++				    const char *str);
++const char *bpf_diag_scratch_printf(struct bpf_verifier_env *env, unsigned int slot,
++				    const char *fmt, ...) __printf(3, 4);
++void bpf_diag_free(struct bpf_verifier_env *env);
+ void bpf_diag_report_header(struct bpf_verifier_env *env, const char *category,
+ 			    const char *problem);
++void bpf_diag_report_source(struct bpf_verifier_env *env, u32 insn_idx, const char *label,
++			    const char *fmt, ...) __printf(4, 5);
+ 
+ #endif /* __BPF_DIAGNOSTICS_H */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 03e2202cca13..4f127c8db134 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -34,6 +34,7 @@
+ #include <linux/trace_events.h>
+ #include <linux/kallsyms.h>
+ 
++#include "diagnostics.h"
+ #include "disasm.h"
+ 
+ static const struct bpf_verifier_ops * const bpf_verifier_ops[] = {
+@@ -425,7 +426,7 @@ static bool subprog_returns_void(struct bpf_verifier_env *env, int subprog)
+ 	return btf_type_is_void(type);
+ }
+ 
+-static const char *subprog_name(const struct bpf_verifier_env *env, int subprog)
++const char *bpf_verifier_subprog_name(const struct bpf_verifier_env *env, int subprog)
+ {
+ 	struct bpf_func_info *info;
+ 
+@@ -3014,8 +3015,8 @@ static int sort_subprogs_topo(struct bpf_verifier_env *env)
+ 					if (bpf_pseudo_func(&insn[idx]))
+ 						continue;
+ 					verbose(env, "recursive call from %s() to %s()\n",
+-						subprog_name(env, cur),
+-						subprog_name(env, callee));
++						bpf_verifier_subprog_name(env, cur),
++						bpf_verifier_subprog_name(env, callee));
+ 					ret = -EINVAL;
+ 					goto out;
+ 				}
+@@ -3035,8 +3036,8 @@ static int sort_subprogs_topo(struct bpf_verifier_env *env)
+ 
+ 	if (env->log.level & BPF_LOG_LEVEL2)
+ 		for (i = 0; i < cnt; i++)
+-			verbose(env, "topo_order[%d] = %s\n",
+-				i, subprog_name(env, env->subprog_topo_order[i]));
++			verbose(env, "topo_order[%d] = %s\n", i,
++				bpf_verifier_subprog_name(env, env->subprog_topo_order[i]));
+ out:
+ 	kvfree(dfs_stack);
+ 	kvfree(color);
+@@ -3290,7 +3291,7 @@ static void linked_regs_unpack(u64 val, struct linked_regs *s)
+ 	}
+ }
+ 
+-static const char *disasm_kfunc_name(void *data, const struct bpf_insn *insn)
++const char *bpf_disasm_kfunc_name(void *data, const struct bpf_insn *insn)
+ {
+ 	const struct btf_type *func;
+ 	struct btf *desc_btf;
+@@ -3309,9 +3310,9 @@ static const char *disasm_kfunc_name(void *data, const struct bpf_insn *insn)
+ void bpf_verbose_insn(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ {
+ 	const struct bpf_insn_cbs cbs = {
+-		.cb_call	= disasm_kfunc_name,
+-		.cb_print	= verbose,
+-		.private_data	= env,
++		.cb_call = bpf_disasm_kfunc_name,
++		.cb_print = verbose,
++		.private_data = env,
+ 	};
+ 
+ 	print_bpf_insn(&cbs, insn, env->allow_ptr_leaks);
+@@ -9439,7 +9440,7 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	if (err == -EFAULT)
+ 		return err;
+ 	if (bpf_subprog_is_global(env, subprog)) {
+-		const char *sub_name = subprog_name(env, subprog);
++		const char *sub_name = bpf_verifier_subprog_name(env, subprog);
+ 
+ 		if (env->cur_state->active_locks) {
+ 			verbose(env, "global function calls are not allowed while holding a lock,\n"
+@@ -18515,7 +18516,7 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog)
+ 
+ 	regs = state->frame[state->curframe]->regs;
+ 	if (subprog || env->prog->type == BPF_PROG_TYPE_EXT) {
+-		const char *sub_name = subprog_name(env, subprog);
++		const char *sub_name = bpf_verifier_subprog_name(env, subprog);
+ 		struct bpf_subprog_arg_info *arg;
+ 		struct bpf_reg_state *reg;
+ 
+@@ -18685,8 +18686,9 @@ static int do_check_subprogs(struct bpf_verifier_env *env)
+ 		if (ret) {
+ 			return ret;
+ 		} else if (env->log.level & BPF_LOG_LEVEL) {
+-			verbose(env, "Func#%d ('%s') is safe for any args that match its prototype\n",
+-				i, subprog_name(env, i));
++			verbose(env,
++				"Func#%d ('%s') is safe for any args that match its prototype\n", i,
++				bpf_verifier_subprog_name(env, i));
+ 		}
+ 
+ 		/* We verified new global subprog, it might have called some
+@@ -20081,6 +20083,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	ret = bpf_vlog_init(&env->log, attr_log->level, attr_log->ubuf, attr_log->size);
+ 	if (ret)
+ 		goto err_free_env;
++	ret = bpf_diag_init(env);
++	if (ret)
++		goto err_prep;
+ 	if (env->signature) {
+ 		ret = bpf_prog_calc_tag(env->prog);
+ 		if (ret < 0)
+@@ -20362,6 +20367,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	kvfree(env->scc_info);
+ 	kvfree(env->succ);
+ 	kvfree(env->gotox_tmp_buf);
++	bpf_diag_free(env);
+ 	kvfree(env);
+ 	return ret;
+ }
 -- 
 2.53.0
 
