@@ -1,32 +1,32 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A173388390
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 23:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F19388E51
+	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 23:52:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783986763; cv=none; b=HkbJ0MaU5TQQoqcwP0MxR2UC8msUwMFfXFq9ZTwDJf63zfnyC+w17xLDUoq6WejR5BOnb4N+g+AZ5HwO7HPsMd0T83Q20IJ1nwDjBrW1KLnUS9JGppHMkVXEyzQAKZT/ESRg/fBJZH1x4ZXJekOS0lSEJ6XM/QCPlxgf1qHtCzI=
+	t=1783986765; cv=none; b=tQX7TLm2hDNErBumBnkyAVEDcouCcSi0Wa9dWtGFEHymkbHxYiDAh3ZmMdvuse1+X8ygYGZG+3uRh14x3manu8dI989JmI4wc7pe6JCSRCaBm7u6GqtZJu248Zv2bUOMg7gSZWtA+F7YNN14hGWYIUnXBpU2dg2/10DWA9bRVaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783986763; c=relaxed/simple;
-	bh=K5nfJZKfz1nhLlF5uZiseGskPTi/Zt7/3s7Cng8pO/4=;
+	s=arc-20240116; t=1783986765; c=relaxed/simple;
+	bh=OJyuDRFw5yM7/ipRBHROAtI1htqYGWkRB6CFsrEems0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rRHRDkODnC+wm2S99EekfnrbJygM886mGyYiX4Ce2K2LY6KRa/MQ1bEIxXkSxELZ5xYYrotYY3HH53zf1opHDMgFTYgmvdxpm3t5ujgdrdcqSQyfbBPELq52eB1Ft1fn8c490nLg9KYGOIM43iG8nkYdfkHdL/PPjgrK+ItaVaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lmCXxbTK; arc=none smtp.client-ip=95.215.58.180
+	 MIME-Version; b=LXtFv5pjSQj1k5qI4xVPiS9tRrRbha97OoH8u4R3noS72tVEE8nDO+IbZFQma1xdIwfz0ecagC8T8Ephp7ztSqPfV0qHr6vMMD763znrDdptYYTE8QOdJYr6Z7ec5FSfae1PL10XKMB21PTPuBlHkvVKlnUBIlQdpHlAzKOHhc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sPuX/Daw; arc=none smtp.client-ip=95.215.58.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lmCXxbTK"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sPuX/Daw"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783986759;
+	t=1783986762;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8VurXxk2cP482r1ak/cF4fZkLgK/+UDaIRsGeJUyNss=;
-	b=lmCXxbTK4dPOH+QNrXYFg5+RQo/Kk95DXT2OXYJg2hOzpv567SNz+P9v+z7bUm/rm6FfHN
-	o72MDvtH49azgCdcaIDRWp+ufBwXCC3zMpa0VGfETRu28MkFw7tymKHXhNVn8HlYH1J56O
-	S1ckriAC7x5AasIEHPkgG7Kqr+Mzn2g=
+	bh=qOS7ND7S/XqEDQUm5xhB/QBTb8cHZ1II1QNdq1LwFY8=;
+	b=sPuX/DawhS+3eOllU3EEjfEJCkKZK0Y6DVIRxCCTSmwOUELD/qTQ1HuFp4Eezv/SX7EWl/
+	4DnbpOlM25Bkh2/tViRqZVZwM4Xyd+XpXWorwRk+RgkRL1FiVR9N3qdqnB6opoUZqQ6by1
+	Uejr9Oq5CJqGYkqRcpHyCHzURsZHihA=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -37,9 +37,9 @@ Cc: Tejun Heo <tj@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf v3 1/2] bpf: Fix tracing of kfuncs with implicit args
-Date: Mon, 13 Jul 2026 16:52:22 -0700
-Message-ID: <20260713235223.1639022-2-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf v3 2/2] selftests/bpf: Cover tracing implicit kfunc args
+Date: Mon, 13 Jul 2026 16:52:23 -0700
+Message-ID: <20260713235223.1639022-3-ihor.solodrai@linux.dev>
 In-Reply-To: <20260713235223.1639022-1-ihor.solodrai@linux.dev>
 References: <20260713235223.1639022-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -51,226 +51,149 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-A kfunc marked with KF_IMPLICIT_ARGS flag takes implicit arguments
-(such as bpf_prog_aux) that the verifier injects at load time.
-resolve_btfids strips those from the kfunc's BTF-visible prototype and
-keeps the real kernel ABI in a counterpart _impl prototype [1].
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-fentry/fexit/fmod_ret/fsession programs may attach to the BPF kernel
-functions, including those with implicit args. However
-bpf_check_attach_target() and bpf_check_attach_btf_id_multi() extract
-the struct btf_func_model from the wrong BTF prototype of the
-kfunc. The btf_func_model is later read to construct the trampoline,
-which then causes the injected implicit argument to be clobbered and
-the kfunc dereferencing garbage.
+KF_IMPLICIT_ARGS kfuncs have a BPF-call prototype and a real kernel
+target prototype. Add a tracing selftest that attaches fentry and fexit
+programs to bpf_kfunc_implicit_arg(), runs a syscall BPF program that
+calls it, and checks that the tracing context exposes both the explicit
+argument and the implicit prog aux pointer.
 
-Add btf_attach_func_proto() to resolve the real ABI prototype of the
-kfunc the way the call site does: by looking up the _impl prototype
-for a KF_IMPLICIT_ARGS kfunc. Use it at both attach-target model
-construction sites.
-
-To enable this, make two supporting changes:
-  * pass bpf_verifier_log instead of bpf_verifier_env to
-    find_kfunc_impl_proto(), so it can be reused from the attach path
-  * add btf_kfunc_check_flag() to test a flag across all of a kfunc's
-    hook sets, because a program attaching to a kfunc is not in the
-    kfunc's call-set
-
-KF_IMPLICIT_ARGS must be consistent across the sets, so
-btf_kfunc_check_flag() returns -EINVAL on inconsistency.
-
-btf_kfunc_check_flag() reads the kfunc's flags from the target's
-kfunc_set_tab. For a module BTF that table is stable only after the
-module is live, so take a module reference around the read, mirroring
-how the kfunc call path gates the same lookup with btf_try_get_module().
-
-The remaining call sites of btf_distill_func_proto() are safe as
-is. The BPF_TRACE_ITER case distills a registered iterator's
-prototype, and bpf_struct_ops_desc_init() distills the
-function-pointer members of a struct_ops type. Neither is a kfunc, and
-so can't have implicit arguments.
-
-[1] https://lore.kernel.org/all/20260120222638.3976562-1-ihor.solodrai@linux.dev/
-
-Fixes: 64e1360524b9 ("bpf: Verifier support for KF_IMPLICIT_ARGS")
-Reported-by: Tejun Heo <tj@kernel.org>
-Link: https://github.com/sched-ext/scx/issues/3687#issuecomment-4906694106
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Co-developed-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- include/linux/btf.h   |  1 +
- kernel/bpf/btf.c      | 29 +++++++++++++++++++
- kernel/bpf/verifier.c | 66 ++++++++++++++++++++++++++++++++++---------
- 3 files changed, 83 insertions(+), 13 deletions(-)
+ .../prog_tests/kfunc_implicit_args_tracing.c  | 36 +++++++++
+ .../bpf/progs/kfunc_implicit_args_tracing.c   | 77 +++++++++++++++++++
+ 2 files changed, 113 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/kfunc_implicit_args_tracing.c
+ create mode 100644 tools/testing/selftests/bpf/progs/kfunc_implicit_args_tracing.c
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 240401d9b25b..c09b7994de4e 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -578,6 +578,7 @@ const char *btf_str_by_offset(const struct btf *btf, u32 offset);
- struct btf *btf_parse_vmlinux(void);
- struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog);
- u32 *btf_kfunc_flags(const struct btf *btf, u32 kfunc_btf_id, const struct bpf_prog *prog);
-+int btf_kfunc_check_flag(const struct btf *btf, u32 kfunc_btf_id, u32 flag);
- bool btf_kfunc_is_allowed(const struct btf *btf, u32 kfunc_btf_id, const struct bpf_prog *prog);
- u32 *btf_kfunc_is_modify_return(const struct btf *btf, u32 kfunc_btf_id,
- 				const struct bpf_prog *prog);
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 64572f85edc8..c4673a54c4ba 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -9114,6 +9114,35 @@ u32 *btf_kfunc_flags(const struct btf *btf, u32 kfunc_btf_id, const struct bpf_p
- 	return btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
- }
- 
-+/*
-+ * Check a single KF_* @flag on a kfunc across all of its hook sets.
-+ * Returns:
-+ *   * 1 if @flag is set
-+ *   * 0 if @flag is not set
-+ *   * -EINVAL if @flag is set inconsistently across the sets
-+ *   * -ENOENT if kfunc_btf_id is not a registered kfunc
-+ */
-+int btf_kfunc_check_flag(const struct btf *btf, u32 kfunc_btf_id, u32 flag)
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_implicit_args_tracing.c b/tools/testing/selftests/bpf/prog_tests/kfunc_implicit_args_tracing.c
+new file mode 100644
+index 000000000000..61cc5aaba025
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/kfunc_implicit_args_tracing.c
+@@ -0,0 +1,36 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include <test_progs.h>
++#include "kfunc_implicit_args_tracing.skel.h"
++
++void test_kfunc_implicit_args_tracing(void)
 +{
-+	enum btf_kfunc_hook hook;
-+	int res = -ENOENT;
-+	bool is_set;
-+	u32 *flags;
++	struct kfunc_implicit_args_tracing *skel;
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	int err, fd;
 +
-+	for (hook = 0; hook < BTF_KFUNC_HOOK_MAX; hook++) {
-+		flags = btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
-+		if (!flags)
-+			continue;
-+		is_set = *flags & flag;
-+		if (res < 0)
-+			res = is_set;
-+		else if (res != is_set)
-+			return -EINVAL;
-+	}
++	skel = kfunc_implicit_args_tracing__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
 +
-+	return res;
++	err = kfunc_implicit_args_tracing__attach(skel);
++	if (!ASSERT_OK(err, "attach"))
++		goto cleanup;
++
++	fd = bpf_program__fd(skel->progs.trigger_implicit_arg);
++	err = bpf_prog_test_run_opts(fd, &topts);
++	if (!ASSERT_OK(err, "test_run"))
++		goto cleanup;
++
++	ASSERT_EQ(topts.retval, 5, "kfunc_retval");
++	ASSERT_EQ(skel->bss->fentry_arg_cnt, 2, "fentry_arg_cnt");
++	ASSERT_NEQ(skel->bss->fentry_aux_arg, 0, "fentry_aux_arg");
++	ASSERT_EQ(skel->bss->fentry_result, 1, "fentry_result");
++	ASSERT_EQ(skel->bss->fexit_arg_cnt, 2, "fexit_arg_cnt");
++	ASSERT_NEQ(skel->bss->fexit_aux_arg, 0, "fexit_aux_arg");
++	ASSERT_EQ(skel->bss->fexit_result, 1, "fexit_result");
++
++cleanup:
++	kfunc_implicit_args_tracing__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/kfunc_implicit_args_tracing.c b/tools/testing/selftests/bpf/progs/kfunc_implicit_args_tracing.c
+new file mode 100644
+index 000000000000..995f8b8b5b9e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/kfunc_implicit_args_tracing.c
+@@ -0,0 +1,77 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <errno.h>
++
++extern int bpf_kfunc_implicit_arg(int a) __weak __ksym;
++
++char _license[] SEC("license") = "GPL";
++
++/* Shared arg checks; reports arg count and aux, returns 1 on success. */
++static __always_inline __u64
++check_implicit_args(void *ctx, __u64 *arg_cnt, __u64 *aux_arg)
++{
++	__u64 a = 0, aux = 0, z = 0;
++	__u64 result;
++	__s64 err;
++
++	*arg_cnt = bpf_get_func_arg_cnt(ctx);
++	result = *arg_cnt == 2;
++
++	err = bpf_get_func_arg(ctx, 0, &a);
++	result &= err == 0 && (int)a == 5;
++
++	err = bpf_get_func_arg(ctx, 1, &aux);
++	*aux_arg = aux;
++	result &= err == 0 && aux != 0;
++
++	err = bpf_get_func_arg(ctx, 2, &z);
++	result &= err == -EINVAL;
++
++	return result;
 +}
 +
- u32 *btf_kfunc_is_modify_return(const struct btf *btf, u32 kfunc_btf_id,
- 				const struct bpf_prog *prog)
- {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6515d4d3c003..5d47f58dbe13 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2584,24 +2584,25 @@ static struct btf *find_kfunc_desc_btf(struct bpf_verifier_env *env, s16 offset)
- 
- #define KF_IMPL_SUFFIX "_impl"
- 
--static const struct btf_type *find_kfunc_impl_proto(struct bpf_verifier_env *env,
-+static const struct btf_type *find_kfunc_impl_proto(struct bpf_verifier_log *log,
- 						    struct btf *btf,
- 						    const char *func_name)
- {
--	char *buf = env->tmp_str_buf;
- 	const struct btf_type *func;
-+	char buf[KSYM_NAME_LEN];
- 	s32 impl_id;
- 	int len;
- 
--	len = snprintf(buf, TMP_STR_BUF_LEN, "%s%s", func_name, KF_IMPL_SUFFIX);
--	if (len < 0 || len >= TMP_STR_BUF_LEN) {
--		verbose(env, "function name %s%s is too long\n", func_name, KF_IMPL_SUFFIX);
-+	len = snprintf(buf, sizeof(buf), "%s%s", func_name, KF_IMPL_SUFFIX);
-+	if (len < 0 || len >= sizeof(buf)) {
-+		bpf_log(log, "function name %s%s is too long\n",
-+			func_name, KF_IMPL_SUFFIX);
- 		return NULL;
- 	}
- 
- 	impl_id = btf_find_by_name_kind(btf, buf, BTF_KIND_FUNC);
- 	if (impl_id <= 0) {
--		verbose(env, "cannot find function %s in BTF\n", buf);
-+		bpf_log(log, "cannot find function %s in BTF\n", buf);
- 		return NULL;
- 	}
- 
-@@ -2653,7 +2654,7 @@ static int fetch_kfunc_meta(struct bpf_verifier_env *env,
- 	 * can be found through the counterpart _impl kfunc.
- 	 */
- 	if (kfunc_flags && (*kfunc_flags & KF_IMPLICIT_ARGS))
--		func_proto = find_kfunc_impl_proto(env, btf, func_name);
-+		func_proto = find_kfunc_impl_proto(&env->log, btf, func_name);
- 	else
- 		func_proto = btf_type_by_id(btf, func->type);
- 
-@@ -18873,6 +18874,47 @@ static int btf_id_allow_sleepable(u32 btf_id, unsigned long addr, const struct b
- 	return -EINVAL;
- }
- 
-+/*
-+ * Resolve the prototype describing a trace target's real ABI. A
-+ * KF_IMPLICIT_ARGS kfunc has its injected args stripped from the public
-+ * prototype, so use the _impl prototype; other targets use their own.
-+ */
-+static const struct btf_type *
-+btf_attach_func_proto(struct bpf_verifier_log *log, struct btf *btf, u32 func_id)
++__u64 fentry_result;
++__u64 fentry_arg_cnt;
++__u64 fentry_aux_arg;
++
++SEC("fentry/bpf_kfunc_implicit_arg")
++int BPF_PROG(trace_implicit_arg_fentry)
 +{
-+	const struct btf_type *func;
-+	struct module *mod = NULL;
-+	const char *name;
-+	int implicit;
++	__u64 ret = 0;
++	__s64 err;
 +
-+	func = btf_type_by_id(btf, func_id);
-+	if (!func || !btf_type_is_func(func))
-+		return NULL;
-+	name = btf_name_by_offset(btf, func->name_off);
++	fentry_result = check_implicit_args(ctx, &fentry_arg_cnt, &fentry_aux_arg);
 +
-+	/*
-+	 * btf_kfunc_check_flag() reads kfunc_set_tab, which for a module is
-+	 * stable only once it is live; hold a module ref across the read to
-+	 * exclude a concurrent module load.
-+	 */
-+	if (btf_is_module(btf)) {
-+		mod = btf_try_get_module(btf);
-+		if (!mod)
-+			return NULL;
-+	}
-+	implicit = btf_kfunc_check_flag(btf, func_id, KF_IMPLICIT_ARGS);
-+	module_put(mod);
++	err = bpf_get_func_ret(ctx, &ret);
++	fentry_result &= err == -EOPNOTSUPP;
 +
-+	if (implicit == -EINVAL) {
-+		bpf_log(log, "kfunc %s has inconsistent KF_IMPLICIT_ARGS\n", name);
-+		return NULL;
-+	}
-+	if (implicit > 0)
-+		return find_kfunc_impl_proto(log, btf, name);
-+
-+	return btf_type_by_id(btf, func->type);
++	return 0;
 +}
 +
- int bpf_check_attach_target(struct bpf_verifier_log *log,
- 			    const struct bpf_prog *prog,
- 			    const struct bpf_prog *tgt_prog,
-@@ -19121,8 +19163,8 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 		if (prog_extension &&
- 		    btf_check_type_match(log, prog, btf, t))
- 			return -EINVAL;
--		t = btf_type_by_id(btf, t->type);
--		if (!btf_type_is_func_proto(t))
-+		t = btf_attach_func_proto(log, btf, btf_id);
-+		if (!t || !btf_type_is_func_proto(t))
- 			return -EINVAL;
- 
- 		if ((prog->aux->saved_dst_prog_type || prog->aux->saved_dst_attach_type) &&
-@@ -19405,10 +19447,8 @@ int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 bt
- 	tname = btf_name_by_offset(btf, t->name_off);
- 	if (!tname)
- 		return -EINVAL;
--	if (!btf_type_is_func(t))
--		return -EINVAL;
--	t = btf_type_by_id(btf, t->type);
--	if (!btf_type_is_func_proto(t))
-+	t = btf_attach_func_proto(NULL, btf, btf_id);
-+	if (!t || !btf_type_is_func_proto(t))
- 		return -EINVAL;
- 	err = btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
- 	if (err < 0)
++__u64 fexit_result;
++__u64 fexit_arg_cnt;
++__u64 fexit_aux_arg;
++
++SEC("fexit/bpf_kfunc_implicit_arg")
++int BPF_PROG(trace_implicit_arg_fexit)
++{
++	__u64 ret = 0;
++	__s64 err;
++
++	fexit_result = check_implicit_args(ctx, &fexit_arg_cnt, &fexit_aux_arg);
++
++	err = bpf_get_func_ret(ctx, &ret);
++	fexit_result &= err == 0 && ret == 5;
++
++	return 0;
++}
++
++SEC("syscall")
++int trigger_implicit_arg(void *ctx)
++{
++	return bpf_kfunc_implicit_arg(5);
++}
 -- 
 2.55.0
 
