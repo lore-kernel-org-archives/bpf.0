@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07201320CBE;
-	Mon, 13 Jul 2026 02:55:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4822A3164D8;
+	Mon, 13 Jul 2026 02:58:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783911339; cv=none; b=DE9hTsSJs9pMejKnkT+XnFxwn0jKXJe7VrwZjuj5as5zigiJCN58fR+wZ1dNvMl+bJhbcVNQtTEDIa2JszegOmBOMJinOPRDLZ+4KUgI2zhZh7g5W3GWs8TK8cIZjkllh8jtEKTu2grtLuUCcWNV9M+8bJLNgz3xy+6Zi2MmQpo=
+	t=1783911501; cv=none; b=iLE7TIKwDmnCqWhUvP4UABFIToLFw5vqL1c+jBhblEoM+GaQGt/Wwlvi9Suzk1fAjvsJbu/gt+fZZ66ZsxqHaXZPETXPOeIx0zueKS1B4dqze9hw8GxonvuAtSnsWpxx2zWAYrGb7tCtfwbAo+JHJ+UYFijG0KFilITu4M3Yryg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783911339; c=relaxed/simple;
-	bh=nsDmopJv61ZtdkJuevuFBgL/0ghQZkO95M/waHmtZmw=;
+	s=arc-20240116; t=1783911501; c=relaxed/simple;
+	bh=1qnQwtrnZ3iuhLpQOci/811WEm+7zlzEYwAEB+PqJeQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=FfvXmOKq8cu3Q+wyL6hGLmzwYbP+tS4zIQl7Srvn535kPgH4k5xaXfLxA4nrwGfPkaysDYchgu1YQIPvI/j9aD3cApLG9QbdiUU/G0EV3yzxpTHvAN07v1JOXHC8zTZOmMyUG4XHzlfOL0F32hG/A3nRgHv13w3o3E+GshItB/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WslQGV4R; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=lCrfL6ZixWUg2TxoTq2VXgdItdpiSnVgN7Iq7hVc6ft+OV3KR6jcTmHVtN4WgT+p7xRpK1tObEw7K6ffC8I8498YB4tu1U2iVwOt0aGUdCF39Gv8XRDgXHEXoZBf6JMhkkeg6RJt3p06lKWtQ8Q7G8YABLVgZ10e1YMZ5wppo2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MqezkPBl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WslQGV4R"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 510321F000E9;
-	Mon, 13 Jul 2026 02:55:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MqezkPBl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A302C1F000E9;
+	Mon, 13 Jul 2026 02:58:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783911337;
-	bh=MwznUtjF0twSqnfMAiTA/YGoecULIgGDrdCEF38rAbw=;
+	s=k20260515; t=1783911499;
+	bh=gUliRMgy08p0JS/yD8cg3tmpQyN+I3IMYF8QggJAZbU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=WslQGV4RN2Ekh1WScACchA1kvSsQjFqXIzX0cte4ojfdsQBi8WXNeJ4p/CXRJ1Xeh
-	 DmFBmpHw0GHfqwyqfGxvFQ+9NsgPIwX1yGW8QnmqVg38AVJeYhkXR1DMEYTMEbFWxJ
-	 WzdKOCuvItTL2+K4TuMHPk2fRBa69ZwUgOXzI7RsgEfmJqMWqNr1ddhylrHk58Fi5l
-	 ek5Km+yJTIJGkAAYnWLDpGGHCiQmDldOQKMqr4k07CSW51v1N70KYoyzStjf0TZ5ot
-	 jlPBhWwm0bkcDfD/t7KYi8IvYQBI+OvDZs/il9F7YbzomKyv02iZLmuPQ2Nef01bj3
-	 sp+9uj0caCR6A==
+	b=MqezkPBluODLRr8vDACBqPqHEU7v3x0VpYMAd9wpbuaU9uOa0YMOFOpCk1/QF7sQx
+	 +Pr3Bb7iYu5LxAExrFPf5lTcCJYLGJz9J0izvV98SGgz8FThzSa/F11P616laU8nzn
+	 /CLIrZnoa7Fe1+QzsYFTvJzL9g8D2MCLHWX4c1CEXc4uaZOu4ftFYXrTbxZCP8M23x
+	 iJPYL9c3z3b10RLjwePnVKNDYU7KfYhSmMOl8vJELh2Ou8DcEOTHei3GMCY94BA1cc
+	 CGH9isVsBrCWYcJbPriRJZbQOh3GE8tpRvPvCaOQO6VeCHUGP9hbNWjeUJf7ifBRAa
+	 xvJlFBPf30XKA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCHSET SLOP RFC 4/6] selftests/bpf: Add struct_ops __arena
- argument tests
+Subject: Re: [PATCHSET SLOP RFC 1/6] bpf: Support __arena suffix for kfunc
+ arguments
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Tejun Heo" <tj@kernel.org>
-Cc: bpf@vger.kernel.org, sched-ext@lists.linux.dev
-In-Reply-To: <20260713024414.3759854-5-tj@kernel.org>
+Cc: sched-ext@lists.linux.dev, bpf@vger.kernel.org
+In-Reply-To: <20260713024414.3759854-2-tj@kernel.org>
 References: <20260713024414.3759854-1-tj@kernel.org>
- <20260713024414.3759854-5-tj@kernel.org>
+ <20260713024414.3759854-2-tj@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 13 Jul 2026 02:55:36 +0000
-Message-Id: <20260713025537.510321F000E9@smtp.kernel.org>
+Date: Mon, 13 Jul 2026 02:58:19 +0000
+Message-Id: <20260713025819.A302C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,65 +47,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] Multi-line comments in BPF-related code must have the opening `/*` =
-on its own line.
+- [High] The verifier skips size and bounds checks for `__arena` kfunc argu=
+ments, relying entirely on a 32KB hardware guard region. This allows a mali=
+cious BPF program to overshoot the guard region and cause a kernel oops by =
+passing an offset that results in reading or writing a large struct or buff=
+er.
 --
 
---- Patch [4]: [PATCHSET SLOP RFC 4/6] selftests/bpf: Add struct_ops __aren=
-a argument tests ---
-commit 9e21274b1ecab24a7e9f15aad54b02d04ae38d78
+--- Patch [1]: [PATCHSET SLOP RFC 1/6] bpf: Support __arena suffix for kfun=
+c arguments ---
+commit 228de70b9e4499793706318f5047bb9d51313346
 Author: Tejun Heo <tj@kernel.org>
 
-selftests/bpf: Add struct_ops __arena argument tests
+bpf: Support __arena suffix for kfunc arguments
+   =20
+This patch adds the __arena suffix for kfunc arguments, allowing BPF
+programs to pass arena pointers directly to kfuncs. The verifier rebases
+the register at the call site, avoiding the need for open-coded translation
+in every kfunc.
 
-This commit adds tests for struct_ops members with an __arena argument.
-It creates a callback, forwards an arena pointer through a kfunc, and
-verifies the read/write access as well as attach rejection for programs
-without an arena.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena=
-.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
-> new file mode 100644
-> index 0000000000000..75a3a649060cf
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
-> @@ -0,0 +1,61 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Tejun Heo <tj@kernel.org> */
-> +#include <test_progs.h>
-> +
-> +#include "struct_ops_arena.skel.h"
-> +#include "struct_ops_arena_fail.skel.h"
-> +
-> +/* Attach a callback with an __arena argument and drive it through the
-> + * bpf_testmod_ops3_call_test_arena() kfunc.
-> + */
-
-[Severity: Low]
-This isn't a bug, but the BPF subsystem prefers multi-line comments to have
-the opening /* on its own line. Should this be updated to match the modern
-kernel multi-line comment style?
-
-> +static void arena_arg(void)
-> +{
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 6515d4d3c0032..71d1459c8f2a0 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -11975,6 +11980,32 @@ static int check_kfunc_args(struct bpf_verifier_=
+env *env, struct bpf_kfunc_call_
+>  			continue;
+>  		}
+> =20
+> +		if (is_kfunc_arg_arena(btf, &args[i])) {
+> +			t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
+> +			if (verifier_bug_if(!btf_type_is_ptr(t), env,
+> +					    "kfunc %s arg#%d has __arena tag on non-pointer",
+> +					    func_name, i))
+> +				return -EFAULT;
 
 [ ... ]
 
-> +	bpf_link__destroy(link);
-> +	struct_ops_arena__destroy(skel);
-> +}
-> +
-> +/* A program with no arena cannot attach to a member with an __arena
-> + * argument.
-> + */
+> +			if (reg->type !=3D PTR_TO_ARENA && reg->type !=3D SCALAR_VALUE) {
+> +				verbose(env, "%s is not a pointer to arena or scalar\n",
+> +					reg_arg_name(env, argno));
+> +				return -EINVAL;
+> +			}
+> +			cur_aux(env)->arg_arena_regs |=3D BIT(regno - BPF_REG_1);
+> +			continue;
+> +		}
 
-[Severity: Low]
-This isn't a bug, but similarly here, could the opening /* be placed on its
-own line to align with the subsystem's preferred comment style?
+[Severity: High]
+Does skipping the rest of the checks here bypass BTF memory size and buffer
+bounds tracking for __arena arguments?
 
-> +static void arena_arg_fail(void)
-> +{
+Because this relies entirely on the hardware guard region to catch out-of-b=
+ounds
+accesses, could a BPF program pass an offset close to the 4GB arena limit=20
+(like 4GB - 1) to a kfunc that takes a large struct or buffer size paramete=
+r?
+
+The fault handler strictly limits recovery to the 4GB limit plus a 32KB
+guard region:
+
+kernel/bpf/arena.c:bpf_arena_handle_page_fault() {
+    ...
+    if (page_addr < kbase || page_addr >=3D kbase + SZ_4G + GUARD_SZ / 2)
+        return false;
+    ...
+}
+
+If a kfunc access extends beyond this guard region, it seems like it would
+bypass the fault handler and cause a kernel oops or memory corruption.
+
+Should there be size validation for __arena arguments similar to other memo=
+ry
+pointers?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260713024414.3759=
-854-1-tj@kernel.org?part=3D4
+854-1-tj@kernel.org?part=3D1
