@@ -1,140 +1,161 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D180F37DE89
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 13:32:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D675742A7BC
+	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 13:35:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783949533; cv=none; b=H+GNVWOZ/wTCnL1SEqiCWjzDXFjrpwzXpcazgwtxbgUVk5F/4LGcl5EFln4b60F2CIZYT5jVCnyC/zA97uqsMP73AmDLbFw2cLSiNdkd9Gku0JED2PS0K9DvRz/MWbpsv6sZPGnfg2heW6LhI/G6WicHIBJRMHpLFEcv0Gy74OA=
+	t=1783949753; cv=none; b=S+H9edZJynFrxbXf/gWnaMG178PeCdRpAPTaFxZzf2EMitPV//vIZRxGxHBWoYxeWMhZlycDWVCWujRTpUYUYSRCnB+tEEPO0SKOeunYiEXrE16jBFuc/78P52TN+VcPvAIiGOAb3AC3mcpLs2c9WujvftvYFL8JHPRbZ3M5yXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783949533; c=relaxed/simple;
-	bh=RMBNf0nz6UqVKObHbtRoALMqXm0jYPaVeg/zELKfVqI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CUC1LgUF+JizTmoFLjUk1TutP1IrGuJ3R8Vz8OtUj8eOGoXX9pKjcrh6QYQgNwvZs4ieu+FmQ6m9ewNx1vWZbIqb/o396pxDDO3QWlKQEjKZ7dRP/JQTkkLv15TZdKuKGTiMvWGBOZetaP/rn0N+lyXsERNUgUKzSr3HO9O9Bl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HaxJIDin; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783949753; c=relaxed/simple;
+	bh=R+AkNxKKgWcb3aoPQz7bxZ2YXMJ1hV66OOAf1FBAOsA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=I1t6MTShJu9ENO6HW0oJL4/FyP5qX3IoNXSrgbfrHXl2ZVVNV0IAvLhl856cIA4wbO70QCYeDh4uAmaX9kJC4+3dIW4Ixo2iavhcGoNEXl9pTm15eZk56qXFEiCRzKofM0Bv9kKUjQm8b7dHC4c76pw2gVU41LeDkzXgXsVCNyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y7HyVe8V; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HaxJIDin"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE2D11F00A3D;
-	Mon, 13 Jul 2026 13:32:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y7HyVe8V"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61F191F000E9;
+	Mon, 13 Jul 2026 13:35:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783949532;
-	bh=HebesSjqW6Ei186xyy2KHgsVFXclOSjyLdpPX4+hId0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=HaxJIDinBW7qhd8TWrNK4s8T3PTUfLTXFXS85kDKWcN4pWvtuL6xy0nsCIx7iq40O
-	 QxcAYjybAjwroqbFOs9TRta3swb5bYhfKBvWawcyqH0Zge2Lx6VdtiZhiBafycuXNH
-	 i4/Vlvk4FSU2fyS8bhx8BrQr4NQvM3DRQrVhBKQMkp91hb5Fa4g7Pw14ueQNVgVdTi
-	 /h2k/N+9tWkQ4UDofeftbfgEXnxzcX8poyxZ4F8EiUKIMqeXWUW1W0KUWktE6mpRmX
-	 RGfWv776A9M5DdWrONyX3UluBAo//ouIVD4GlnqfJmLYmgxG+cxXo7deuEwlEEEjCb
-	 MiFOa9IU3UB2A==
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfauth.phl.internal (Postfix) with ESMTP id DF046F40119;
-	Mon, 13 Jul 2026 09:32:10 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Mon, 13 Jul 2026 09:32:10 -0400
-X-ME-Sender: <xms:2uhUajOJ6o0IkHECCjHAkKUVhPE0Boq32n16IxuwUb8qx_me03fgwg>
-    <xme:2uhUaua0NvhWILEF9Sxf9_9wz151PQ8fPiEp73LaeMgWC-DQJaiXxn4HYApdFNqVD
-    pkxd-bsOBJpRWdPvlmMSXRDek6HhjKp5vhX3BvtHxdpR6RBZu_qS1H->
-X-ME-Received: <xmr:2uhUajtAPLpWxfCImZEQ7-lfeyLnIftK-qeVlUcWfWQghfbRNQiHsjuNUz5QMA>
-X-ME-Proxy-Cause: dmFkZTGZpmVpeDsjZ8Vo2Jq64/2U20HFa/JrgfKn6CiNifuBo1pzPMXk0a4NqT0VMciG8K
-    SugdcXNhzIz2GGRAcNPbldLn+3yx1gRLwC0eqh8SjcuMzzoyAOiQcW15pHkFoUU8sU93Ol
-    20upXRjRc9bBvKSvF+ldu18a4Su7mlFUTAvgOHmfQ4EOLFyHDZ9CXRB5B0cLlRIRNNuJ69
-    LDPcIZFQurDXONw9w7x2l+i30vbvXOnao60OZfbfVAcAC/fcUzZNKRbLUxuPN7zU2u+h2L
-    lu3b55TVWwqQsO6vcM7WnlDCmGUWatjBJ4CSoYLZcP+x21iYiTGDYJ0lfqOuP9kAzP2JPg
-    j8w8DwhG5wOdhN2Rk3Rdg8n9nLNaujJTGC620J5zoH7n5t3hX39aCaLsRBN9JGDO7mcmWL
-    IzaLYY9N+V442PvDjYSTXuP4EHvI6v+fcV6Q/yTDaPZDQgnHPe1yyzGNJzxCUjaYKCCdpO
-    z/OkCkLFvQT3MiYbDmeWq3a8qm4Z/Agi5IGGkB4PZs8GgeaaaXu1uHQ/ufm4VZ9+64V+QE
-    8QtfNFMPv+xm7WYMT9O2psU2UIaozivzoRxbp2UTRKG5DvsMUoVZyOCnD4i8d0NJq/Rqe9
-    jTIL8srd7T6/FERCHRYF/A9blfowGsOrxRZc+ML2aNnL8IwcxIqNnPaId1jw
-X-ME-Proxy: <xmx:2uhUanuCa_oH3IVyt_HoThgNWUvv1acMMJfbjC90H2Nq77p1x1F7Lw>
-    <xmx:2uhUaq189DO0V2p_spqOaFhIiqFBrCec7III9gjx4U0IMtDvOnqvgQ>
-    <xmx:2uhUasO-I4V3wpEwkUedoK1wopX28y3s7esdQvgnTjYsrDF-dVm1hg>
-    <xmx:2uhUan593b1xCOHaLKH3StbrybHDors6AC91jhpaHmP9qnHIgWbSqw>
-    <xmx:2uhUara1OWRFLjD_9gN1CsUt5A0pYmkwSJBsl-81U2gW-oJMg0OqiWDs>
-Feedback-ID: i10464835:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 13 Jul 2026 09:32:09 -0400 (EDT)
-Date: Mon, 13 Jul 2026 14:32:09 +0100
-From: Kiryl Shutsemau <kas@kernel.org>
-To: Lorenzo Stoakes <ljs@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- 	Suren Baghdasaryan <surenb@google.com>,
- "Liam R. Howlett" <liam@infradead.org>,
- 	Vlastimil Babka <vbabka@kernel.org>,
- Shakeel Butt <shakeel.butt@linux.dev>,
- 	David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Michal Hocko <mhocko@suse.com>, 	Uladzislau Rezki <urezki@gmail.com>,
- Toshi Kani <toshi.kani@hpe.com>,
- 	Dave Hansen <dave.hansen@linux.intel.com>,
- Andy Lutomirski <luto@kernel.org>,
- 	Peter Zijlstra <peterz@infradead.org>,
- Thomas Gleixner <tglx@kernel.org>, 	Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, x86@kernel.org,
- 	"H. Peter Anvin" <hpa@zytor.com>,
- Catalin Marinas <catalin.marinas@arm.com>,
- 	Will Deacon <will@kernel.org>, Dev Jain <dev.jain@arm.com>,
- Ryan Roberts <ryan.roberts@arm.com>, 	David Carlier <devnexen@gmail.com>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, 	bpf@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org,
- 	syzbot+fd95a72470f5a44e464c@syzkaller.appspotmail.com
-Subject: Re: [PATCH mm-hotfixes v2 0/4] mm: fix UAF caused by race between
- ptdump and vmap pgtable freeing
-Message-ID: <alTn7NguEW_4bodu@thinkstation>
-References: <20260712-series-vmap-race-fix-v2-0-ad134cc3a12a@kernel.org>
+	s=k20260515; t=1783949751;
+	bh=Qr3QU4L1Te809HuGU7oXNuelthlUg1Edkk7zPqbA5wU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Y7HyVe8Vr+P2+dguDNon0HIosiQfbNzrI7sPM1iJhM6ULPhI4LjZ9Y/EFT53Xq4K3
+	 dk8uhfjVSQWwFpFvSAs3FV3dN0Taug2NsPiyJO9myiKGVZkOpyPz7GNZnGIph/dIRt
+	 yh0iZVN8+osgWnkcW2DxVrjXGLd5gxe60qOGOnjguuiwue9ag4GSTLQ89FtKDWv6ro
+	 kdUhPXZ3M2E69yghDCY90mhkXZdcIfzKovESgHg2TMRgv6Mce1l4b/ualVFqVYqDdE
+	 ZWNE71ADY+80r3q/h+pxycdikcIiY2LDpjbVNWCbidciiX0zeEcrnsIFsFV01E2Tlv
+	 O5WEyUeoQ2vxg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] libbpf: reject linker STT_SECTION symbols with
+ out-of-range st_shndx
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Naveed Khan" <naveed@digiscrypt.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <178394859382.2.942623981274846749@digiscrypt.com>
+References: <178394859382.2.942623981274846749@digiscrypt.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 13 Jul 2026 13:35:51 +0000
+Message-Id: <20260713133551.61F191F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260712-series-vmap-race-fix-v2-0-ad134cc3a12a@kernel.org>
 
-On Sun, Jul 12, 2026 at 11:42:23AM +0100, Lorenzo Stoakes wrote:
-> This series addresses the issue by having the vmap huge promotion
-> logic acquire the mmap read lock while both setting the huge page
-> table entry and freeing the prior leaf page table.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-Hi Lorenzo,
+Pre-existing issues:
+- [Critical] Missing bounds check on relocation `r_offset` allows arbitrary=
+ out-of-bounds heap read/write during ELF linking.
+- [High] A NULL pointer dereference occurs in `linker_append_elf_sym` when =
+resolving global symbols with reserved section indices (e.g., `SHN_ABS`).
+- [High] Integer overflow in `sym_idx` bounds check on 32-bit systems allow=
+s massive out-of-bounds heap read and information leak.
+--
 
-Before we settle on the mmap lock scheme, have you considered handling
-this the way GUP-fast handles page table freeing -- RCU-defer the free
-and make ptdump a lockless walker?
+--- Patch [1]: [PATCH] libbpf: reject linker STT_SECTION symbols with out-o=
+f-range st_shndx ---
+commit a15a7b75755bef67d993d3117ac49d59af2c299e
+Author: Naveed Khan <naveed@digiscrypt.com>
 
-The locking here is inverted from what one would normally expect
-(walker takes the write lock, mutators take read locks, mutators safe
-against each other only by range ownership). It works, but it is
-subtle, it is what produced the arm64 deadlock and the ifdeffery, and
-it depends on every current and future freeing site remembering the
-rule -- patch 3 exists because two walkers did not fit the scheme.
+libbpf: reject linker STT_SECTION symbols with out-of-range st_shndx
 
-The free side looks cheap: kernel page table freeing already funnels
-through pagetable_free_kernel(), which already has a deferred path
-(used for IOMMU SVA). Adding a grace period there -- synchronize_rcu()
-in the worker, amortized over the batch -- covers every freeing site
-by construction.
+This patch adds a bounds check in linker_sanity_check_elf_symtab() to
+ensure that STT_SECTION symbols do not have an out-of-range st_shndx.
+This prevents out-of-bounds reads when processing relocations against
+such symbols.
 
-On the walk side, nothing on the ptdump path can sleep -- the pagewalk
-core only allocates for install_pte ops, kernel PTE level uses
-pte_offset_kernel(), and the arch note_page() implementations are
-seq_printf()/printk() into a preallocated buffer. So the walk could run
-under rcu_read_lock() as is. The real work is bounding the read-side
-sections: a full walk can take dozens of seconds on a KASAN kernel per
-the comment in mm/ptdump.c, so it would need to drop RCU and
-cond_resched() periodically, re-descending from the top. Note we
-currently hold the init_mm mmap write lock across those same dozens of
-seconds, and this series makes that load-bearing: during a long walk
-every promotion trylock fails, silently degrading vmalloc to small
-pages, and CPA collapse blocks.
+> diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
+> index 78f92c39290af..8a93faa41d903 100644
+> --- a/tools/lib/bpf/linker.c
+> +++ b/tools/lib/bpf/linker.c
+> @@ -973,7 +973,7 @@ static int linker_sanity_check_elf_symtab(struct src_=
+obj *obj, struct src_sec *s
+>  			return -EINVAL;
+>  		}
+>  		if (sym_type =3D=3D STT_SECTION) {
+> -			if (sym->st_value !=3D 0)
+> +			if (sym->st_value !=3D 0 || sym->st_shndx >=3D obj->sec_cnt)
+>  				return -EINVAL;
+>  			continue;
+>  		}
 
-That would give us: no inverted locking, no arm64 deadlock possibility
-(your patch 4 stands on its own), the patch 3 walkers covered
-structurally rather than by locking init_mm as well, and ptdump
-invisible to production paths.
+[Severity: High]
+This isn't a bug introduced by this patch, but can we experience a NULL
+pointer dereference in linker_append_elf_sym() when resolving global symbols
+with reserved section indices like SHN_ABS?
 
-Given the live UAF, this could also be a follow-up rather than a
-respin. But I would like to hear whether you see a fatal flaw in the
-approach first.
+When resolving a global symbol, we update the destination symbol:
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+tools/lib/bpf/linker.c:linker_append_elf_sym() {
+    ...
+		dst_sym->st_shndx =3D dst_sec->sec_idx;
+		dst_sym->st_value =3D src_sec->dst_off + sym->st_value;
+		dst_sym->st_size =3D sym->st_size;
+    ...
+}
+
+If the symbol uses a reserved section index, could src_sec and dst_sec be
+NULL, causing a crash here?
+
+
+[Severity: Critical]
+This is a pre-existing issue, but does linker_sanity_check_elf_relos() miss=
+ a
+bounds check on the relocation offset against the section size?
+
+tools/lib/bpf/linker.c:linker_sanity_check_elf_relos() {
+    ...
+		if (link_sec->shdr->sh_flags & SHF_EXECINSTR) {
+			if (relo->r_offset % sizeof(struct bpf_insn) !=3D 0) {
+    ...
+}
+
+Without validating r_offset against the section size, when
+linker_append_elf_relos() processes relocations, could it lead to an
+out-of-bounds heap read and write?
+
+tools/lib/bpf/linker.c:linker_append_elf_relos() {
+    ...
+					insn =3D dst_linked_sec->raw_data + dst_rel->r_offset;
+					if (insn->code =3D=3D (BPF_JMP | BPF_CALL))
+						insn->imm +=3D sec->dst_off / sizeof(struct bpf_insn);
+					else
+						insn->imm +=3D sec->dst_off;
+    ...
+}
+
+
+[Severity: High]
+This is a pre-existing issue, but can the symbol index bounds check overflow
+on 32-bit systems?
+
+tools/lib/bpf/linker.c:linker_sanity_check_elf_relos() {
+    ...
+		if (!sym_idx || sym_idx * sizeof(Elf64_Sym) >=3D sym_sec->shdr->sh_size) {
+    ...
+}
+
+If sym_idx is maliciously crafted (e.g., 0xaaaaaaab), could the multiplicat=
+ion
+wrap around and bypass the check?
+
+Later in linker_append_elf_relos(), the unchecked index is used to access
+the symbol map:
+
+tools/lib/bpf/linker.c:linker_append_elf_relos() {
+    ...
+			dst_sym_idx =3D obj->sym_map[src_sym_idx];
+    ...
+}
+
+Could this lead to an out-of-bounds heap read being leaked into the relocat=
+ed
+output?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/178394859382.2.9426=
+23981274846749@digiscrypt.com?part=3D1
