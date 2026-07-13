@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E831F91F6;
-	Mon, 13 Jul 2026 02:59:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 723AD1F91F6;
+	Mon, 13 Jul 2026 02:59:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783911558; cv=none; b=KoZiQQKkDyw2QyAKw4HzXJg3Ar22Ou4ho28A4x698Gd80X+R6QqUAK8xv95C4BJGiFXAC8ew+LrhTUYsamentIFoMOD7DYu39f4TsLK8rNcAH5lSD9F54DT44SzL20Ww8zR1RWFV3ajNb9D8ubZdUmj8V1IZbmMdj/OINwepfM0=
+	t=1783911589; cv=none; b=TMBYHSGYqQ5LUs6MNzH11MK70lRde7Qc6CVJByufkZcPQMMMLjzOKX6CgSLRdVOHuUBIf4ZUleWKz/EJDsd57ZrN51X+/+S/DBtV48CJ8+IrWnlnDOPNrl1O/YVdG5M9M+zp8vBTJClidY0DycqAUd50ojyc6Aik0P3sv9A10rU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783911558; c=relaxed/simple;
-	bh=HTRyhcc/qN58USeJ9eVkO/cCQOk3o43lfBhkZKaeVgg=;
+	s=arc-20240116; t=1783911589; c=relaxed/simple;
+	bh=GhAs1JyKRTTPHtgdZplptvRdM/7X74aAFz8Ov+nFg28=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ocMqdcvqJwZA3ZFtUEpKrQ9dU5QpwYXi64mwOthPvWMjMoxSG6Gdm91UI2hzuM+J2ENIMFmozG8Wrbyqrc200z0gvoWnof1Q2T0bRmyKqwz7htl4xgr9WqteywVQyNoRHVoPhF5uW4+svHlzHuNn6let63twp4hHNLMP+9AOydU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gj8DpWcT; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=U76HdUXLr8+b7hdq7Qhp1LvOWJmHK7iH30pLGNV13Kbk5/7bwJqx7CVC25DCue5vsmEoYDw2B6OPYZrSDtmdWepGV9o7I42DGY2pYujOvheDJr2WVhq4f6lI6ssh4gLMyDQYxMbs5QU4/QNLIQm2+CeIyhN7y3t2T/2uGOPs9lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bOOzDlXp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gj8DpWcT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A941F000E9;
-	Mon, 13 Jul 2026 02:59:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bOOzDlXp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9CC41F000E9;
+	Mon, 13 Jul 2026 02:59:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783911556;
-	bh=y6MyiMjgVSv5G8GXHj6PRKFf506/otqsdvkkiVYkFgU=;
+	s=k20260515; t=1783911588;
+	bh=7DBw4eCHRMg53hdQZdFUi5Ks27TXGVCGZRAnsHsYWIY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gj8DpWcTPpuNry9IRsvv5QWMJf/V65cdkvrwrs5OTWgkqokCKp//5/AhRM5khGWgg
-	 Bb6cMv0ovuG2M/5T818yj2c9Sebk/KPOBLr8/MSbNX/WjVjWQDsMqWzonA0TstWe3D
-	 HR48qQYf6cTeUnTKlLQTJUnool7KkovQFIM8KlHHvGV0FrslNi8kGoPfQpAr4u7UTJ
-	 6XkT4eg58MHqWXyho770+N7/diyHFGrJ6/u81XjRKnYcT0hOi8mFmKSWTTVd0//NXk
-	 f9531XOWJkpsL6lb18LRkSnN+tP7mYal7Ku6zxVggU5kz/bBGe8OVJbaq1/5PuNhX4
-	 w3O4mb5mVpxpA==
+	b=bOOzDlXpJar8GiPGpi+zOIgfQwxkIJqfTNQbPjixb5rXozps0gI32+1BFZ3/XEzGm
+	 BnVA5xGV87eymXgGcBOqFAGoHSQcx3vU5niYCqzLDsKkTLN3oJHWXjR5MkkUGT6Ylr
+	 /kUlXghuJCTQwYyCDnFqs/Hvj7BI8PkWpQ4W70sla+TkEJk1Z1eXmZRyi3wZIjGVR7
+	 XBqF9Zcm6OFDdnmbViFDV2jaqesc64oXM2eANMjSDMi66ya2WocfqNp1/bXw5J/WSe
+	 zjQLDEVCf9xVcQilUuMF8ow23IK+Ii6y+GDmgsJ3A9SZ/Poolnucvjnay1KCUmV6Pw
+	 x2+I7cNi6PUjQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCHSET SLOP RFC 6/6] sched_ext: Convert
- scx_bpf_cid_override() to take an arena pointer
+Subject: Re: [PATCHSET SLOP RFC 3/6] bpf: Support __arena suffix on
+ struct_ops stub arguments
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Tejun Heo" <tj@kernel.org>
-Cc: sched-ext@lists.linux.dev, bpf@vger.kernel.org
-In-Reply-To: <20260713024414.3759854-7-tj@kernel.org>
+Cc: bpf@vger.kernel.org, sched-ext@lists.linux.dev
+In-Reply-To: <20260713024414.3759854-4-tj@kernel.org>
 References: <20260713024414.3759854-1-tj@kernel.org>
- <20260713024414.3759854-7-tj@kernel.org>
+ <20260713024414.3759854-4-tj@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 13 Jul 2026 02:59:15 +0000
-Message-Id: <20260713025916.68A941F000E9@smtp.kernel.org>
+Date: Mon, 13 Jul 2026 02:59:47 +0000
+Message-Id: <20260713025947.E9CC41F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,64 +47,102 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] Missing READ_ONCE() when reading from shared arena memory allows a=
- TOCTOU race leading to out-of-bounds writes.
+- [High] Tail-calling another struct_ops program causes double-subtraction =
+of the arena base address, corrupting arena pointers in the context.
 --
 
---- Patch [6]: [PATCHSET SLOP RFC 6/6] sched_ext: Convert scx_bpf_cid_overr=
-ide() to take an arena pointer ---
-commit 0bba9b04cbf24d912ae66699e643f62ba90a630b
+--- Patch [3]: [PATCHSET SLOP RFC 3/6] bpf: Support __arena suffix on struc=
+t_ops stub arguments ---
+commit 7fff65a383d9791611afe2d53ac2633d4bac8dda
 Author: Tejun Heo <tj@kernel.org>
 
-sched_ext: Convert scx_bpf_cid_override() to take an arena pointer
+bpf: Support __arena suffix on struct_ops stub arguments
 
-This commit changes scx_bpf_cid_override() to take an arena pointer for the
-cpu_to_cid array instead of a verifier-visible buffer. It validates the
-entry count against nr_cpu_ids, relying on the arena's guard region to
-prevent out-of-bounds memory accesses.
+A struct_ops callback cannot receive an arena pointer directly, so passing
+one takes two steps. The pointer arrives as a bare u64 that the callback
+casts, and because the two sides address the arena through different bases
+it also has to be rebased by hand on the way in. Add the __arena stub
+argument suffix and both steps go away.
 
-> diff --git a/kernel/sched/ext/cid.c b/kernel/sched/ext/cid.c
-> index af83084ec740a..872f699cb1acc 100644
-> --- a/kernel/sched/ext/cid.c
-> +++ b/kernel/sched/ext/cid.c
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+> @@ -680,6 +680,64 @@ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_ver=
+ifier_env *env,
 [ ... ]
-> @@ -314,14 +314,24 @@ __bpf_kfunc void scx_bpf_cid_override(const s32 *cp=
-u_to_cid, u32 cpu_to_cid__sz,
+> +static int gen_arena_arg_prologue(struct bpf_verifier_env *env,
+> +				  struct bpf_insn *insn_buf)
+> +{
 [ ... ]
-> +	/*
-> +	 * @cpu_to_cid__arena arrives rebased to the arena kernel mapping.
-> +	 * nr_cpu_ids * sizeof(s32) stays within the guard region covered by
-> +	 * arena fault recovery, so no explicit bounds check is needed.
-> +	 */
->  	for_each_possible_cpu(cpu) {
-> -		s32 c =3D cpu_to_cid[cpu];
-> +		s32 c =3D cpu_to_cid__arena[cpu];
-> =20
->  		if (!cid_valid(sch, c))
->  			return;
+> +	for (i =3D 0; i < aux->ctx_arg_info_size; i++) {
+> +		int off;
+> +
+> +		if (base_type(aux->ctx_arg_info[i].reg_type) !=3D PTR_TO_ARENA)
+> +			continue;
+> +		off =3D aux->ctx_arg_info[i].offset;
+> +		insn_buf[cnt++] =3D BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, off);
+> +		insn_buf[cnt++] =3D blinding ?
+> +			BPF_JMP_REG(BPF_JEQ, BPF_REG_2, BPF_REG_AX, 2) :
+> +			BPF_JMP_IMM(BPF_JEQ, BPF_REG_2, 0, 2);
+> +		insn_buf[cnt++] =3D BPF_ALU64_REG(BPF_SUB, BPF_REG_2, base_reg);
+> +		insn_buf[cnt++] =3D BPF_ZEXT_REG(BPF_REG_2);
+> +		insn_buf[cnt++] =3D BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, off);
+> +	}
+> +	insn_buf[cnt++] =3D env->prog->insnsi[0];
+> +	return cnt;
+> +}
 
 [Severity: High]
-This is a pre-existing issue, but since the array resides in shared
-userspace-mapped memory (and now an mmaped arena), should READ_ONCE() be
-used when reading cpu_to_cid__arena[cpu]?
+Does this in-place modification cause an issue if the program performs a ta=
+il
+call to another struct_ops program?
 
-Without READ_ONCE(), the compiler could potentially reload the value of c
-from memory after the bounds check in cid_valid(sch, c). If userspace
-concurrently modifies the arena memory between the check and its subsequent
-use as an array index:
+Since tail calls pass the exact same context array to the callee, and the
+callee will also have this prologue injected, it seems the already-rebased
+32-bit offset will be read and the arena base address will be subtracted a
+second time. This could severely corrupt the arena pointer offset.
 
-    if (cpumask_test_and_set_cpu(c, seen)) {
-        scx_error(sch, "cid %d assigned to multiple cpus", c);
-        return;
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -18729,10 +18730,17 @@ static int check_struct_ops_btf_id(struct bpf_v=
+erifier_env *env)
+[ ... ]
+> -	for (i =3D 0; i < st_ops_desc->arg_info[member_idx].cnt; i++) {
+> -		if (st_ops_desc->arg_info[member_idx].info[i].refcounted) {
+> +	arg_info =3D &st_ops_desc->arg_info[member_idx];
+> +	for (i =3D 0; i < arg_info->cnt; i++) {
+> +		const struct bpf_ctx_arg_aux *info =3D &arg_info->info[i];
+> +
+> +		if (info->refcounted)
+>  			has_refcounted_arg =3D true;
+> -			break;
+> +		if (base_type(info->reg_type) =3D=3D PTR_TO_ARENA && !prog->aux->arena=
+) {
+> +			verbose(env,
+> +				"arena argument of %s requires a program with an associated arena\n",
+> +				mname);
+> +			return -EINVAL;
+>  		}
+>  	}
+
+[Severity: High]
+Should we also restrict tail calls for programs with __arena arguments here?
+
+Right below this loop, check_struct_ops_btf_id() blocks tail calls if
+has_refcounted_arg is true:
+
+    for (i =3D 0; i < env->subprog_cnt; i++) {
+        if (has_refcounted_arg && env->subprog_info[i].has_tail_call) {
+            verbose(env, "program with __ref argument cannot tail call\n");
+            return -EINVAL;
+        }
     }
-    scx_cpu_to_cid_tbl[cpu] =3D c;
-    scx_cid_to_cpu_tbl[c] =3D cpu;
 
-Could this Time-of-Check to Time-of-Use (TOCTOU) race result in an
-out-of-bounds write to scx_cid_to_cpu_tbl[c]?
+Since gen_arena_arg_prologue() modifies the context in-place, blocking
+tail calls for programs with arena arguments would prevent the double
+subtraction issue entirely.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260713024414.3759=
-854-1-tj@kernel.org?part=3D6
+854-1-tj@kernel.org?part=3D3
