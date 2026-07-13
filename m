@@ -1,76 +1,135 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1AB427F4F5;
-	Mon, 13 Jul 2026 16:47:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD9A30BB80
+	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 16:48:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783961249; cv=none; b=E3shHbolajrXkDhaGY52k66j8W7L4nqYf8trV+LYAAQfST4IFXq1I8R3ce+sh71udvr3ZSUakQn/YoaR1b8WGnO0dtbzdV60cJE44JMhuDxVnq85zlRepsDJD3YJI/X7CZbhM/r0hRbk00IrtnRgytF4JRHee68GRDYLWxLnx04=
+	t=1783961303; cv=none; b=RGFaQAZpHo+72s7v/acG0fCXtxfYap9I6tVDm3ZI/Pgdgu65BhBgL1LW8pt/p2EVc0YZCiAfcx5TKLOrvrypJpeeH/KfEyEwY8mZKYHWbkdFk0w39nVhjU3z09a83nV9j2E8uuGcxm5/A09aR+uq8WHQ6sYlITDywKTIe13cv/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783961249; c=relaxed/simple;
-	bh=C7m0ay4Wok2aZExypT2fKxodJ0Su4287V+SfZq2ie30=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LlNVID74L54hQce0JaDA8UbZQXC2c3UYczUEYLs0LvvODQTUhwucy8gyQz7IcqWtUfgB5HcjIuKKt/AaHUMmNeDdUF17EVXA5P+3dRK11BWyImJy5+WFTmRvpJ7yjRg8nTUuNefcIuKYhbTJWdRKJ/eqX1TH2KRgjKDDpXrUjAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=tFthWxMY; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1783961303; c=relaxed/simple;
+	bh=rllRCONuXR/41cxuzszfvBDkSYEgoLCZ/m/yVzrkiEM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=enVOvSRZ6FJQ2xKDbFVn/lp430MzNckRF3uhiK3ycRcYGGmaa9xhwFYxNkIZMY8rlvSmcahVDZHUbgjsJCfY9aLuifxmvRL1AVmEr04mJDOey9fOaI8PO2ha7T+kDDXLF3cJhWRft5o2eubhtq84fMftDyvXmbH28ow+ChLNfps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CDaExw/Y; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="tFthWxMY"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7B34B1576;
-	Mon, 13 Jul 2026 09:47:22 -0700 (PDT)
-Received: from J2N7QTR9R3.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D1EF33F7B4;
-	Mon, 13 Jul 2026 09:47:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1783961246; bh=C7m0ay4Wok2aZExypT2fKxodJ0Su4287V+SfZq2ie30=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tFthWxMYZoBdRiXm+DKTNJJJ8ueHX6N1C6OLGagBXpDRcCQbEVRkb2LQNyiK/JdZK
-	 8SQHnGOQUIUqf1s8HGA1iiDWjhzEI6ya8owNxNlvwxRbJ2GyEyjFSan1P9yJoO1ORN
-	 2noH3F3ijOd274JXEQkP1H9P6R+JhL5xvnihHKvc=
-Date: Mon, 13 Jul 2026 17:47:18 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Clayton Craft <clayton@craftyguy.net>,
-	Xu Kuohai <xukuohai@huaweicloud.com>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-	bpf@vger.kernel.org, Florent Revest <revest@chromium.org>,
-	Xu Kuohai <xukuohai@huawei.com>, Ben Cressey <ben@cressey.dev>
-Subject: Re: [PATCH 0/2] arm64: ftrace: support DIRECT_CALLS without CALL_OPS
-Message-ID: <alUWljnhfgLB_4a-@J2N7QTR9R3.cambridge.arm.com>
-References: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
- <alD7Rr659mGVznQp@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CDaExw/Y"
+Message-ID: <9b2196dd-443b-4632-ae11-030cdbdc59b4@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783961298;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LT6LUEotyGC5IGoHUHi3tdJ4oqkrHoHeSXvbUIYFcPU=;
+	b=CDaExw/YDor84Rmwy1Lv8I/aS2DkQ0LqTvEVBUN54Scykf+EpPyfeYNlpAL+NcNgOYAiJ0
+	TDyg5EjytL8syAFoSFcdEvb93ePypnChPZ5w35SjbRD9n76EXNMJQMRx8J9doFHg9yQW8k
+	MC/DSS4USmc+g2SQjUyL7GxbDKhrrGE=
+Date: Mon, 13 Jul 2026 09:48:06 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alD7Rr659mGVznQp@linux.dev>
+Subject: Re: [PATCH bpf v2 1/2] bpf: Fix tracing of kfuncs with implicit args
+To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-team@meta.com
+References: <20260710192940.3020280-1-ihor.solodrai@linux.dev>
+ <20260710192940.3020280-2-ihor.solodrai@linux.dev>
+ <a183b4d6f3e814f9ffb79c8e0efca8b5f162e127.camel@gmail.com>
+ <3b272469-9563-4843-8126-5c6698a84d98@linux.dev>
+ <55f4d7bba39f0fd1e85f436423a4b9a967470701.camel@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <55f4d7bba39f0fd1e85f436423a4b9a967470701.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Jul 10, 2026 at 02:07:01PM +0000, Jose Fernandez (Anthropic) wrote:
-> Hi all,
+On 2026-07-11 4:51 p.m., Eduard Zingerman wrote:
+> On Sat, 2026-07-11 at 10:57 -0700, Ihor Solodrai wrote:
+>> On 2026-07-11 3:43 a.m., Eduard Zingerman wrote:
+>>> On Fri, 2026-07-10 at 12:29 -0700, Ihor Solodrai wrote:
+>>>
+>>> [...]
+>>>
+>>> If I am not confused, I think that resolve_btfids() has to verify that
+>>> kfunc flags are always the same across multiple sets.
+>>
+>> Some form of build-time enforcement will be implemented as part of
+>> resolve_btfids() BTF handling, see the v1 here:
+>> https://lore.kernel.org/bpf/20260601221805.821394-1-ihor.solodrai@linux.dev/
+>>
+>> *If* you're right about no valid use-case for incosistent kfunc flags,
+>> then long-term I agree: build-time enforcement of consistency, and
+>> then the acummulation can be replaced by a search (find first) here.
+>>
+>> But this has to be confirmed somehow (by thoroughly inspecting all
+>> current inconsistencies and flags?..)
+>>
+>> However if there is even one valid use-case, then we are in trouble,
+>> because then depending on the flag semantics it may or may not make
+>> sense for it to be consistent accross kfunc sets. And it's not even
+>> clear what a good solution to that might look like: separate groups of
+>> flags? consistency enforcement for some flags, but not others (this is
+>> literally what Andrii suggested in resolve_btfids thread)?
+>>
+>> Accumulating flags across the sets is an acceptable workaround for
+>> this fix IMO. We can be more specific and *only* check for the
+>> KF_IMPLICIT_ARGS for the purposes of this fix though, but we still
+>> have to walk all hooks and OR.
 > 
-> Just a gentle ping on this series. It has Reviewed-by from Puranjay
-> Mohan, Acked-by from Xu Kuohai on both patches, and Tested-by from
-> Clayton Craft and Nathan Chancellor, with no outstanding comments since
-> Jun 11.
+> And what would that mean for the same function to have
+> KF_IMPLICIT_ARGS in one set and not to have it in another?
+
+That would mean a bug in a kfunc set declaration, yeah.
+
+> Given that actual function address is resolved to the exact same
+> function. Such accumulator would only proliferate already confusing
+> behaviour.
 > 
-> Could you please consider picking this up for the next cycle?
+> I don't think that the analysis of existing cases would take longer
+> than 1-2h.
 
-Sorry, this is on my queue to look at, but I have been busy elsewhere
-over the last few weeks.
+It was silly of me to mention the analysis as an obstacle (which I'm
+not excited to do, sure). We are at -rc3, so there is a couple of
+weeks still if we are targeting 7.2
 
-I'll get to it shortly.
+But resolve_btfids series is certainly a merge-window thing, so the
+fix shouldn't depend on it. And even carving out build-time KF_ flag
+consistentcy enforcement from there is too potentially disruptive for
+a "fix" IMO.
 
-Mark.
+How about the following plan.
+
+In the fix:
+   * delete btf_kfunc_accumulated_flags()
+   * expose (back) btf_kfunc_id_set_contains() from btf.c
+   * in btf_attach_func_proto() walk the hooks and specifically check
+     for *consistent* KF_IMPLICIT_ARGS
+   * -EINVAL on inconsistency
+
+In the v2 of resolve_btfids series (targeting 7.3):
+   * implement kbuild/module-time enforcement of consistency
+     for *all* KF_ flags
+   * fix in-tree cases where that's not true
+   * if there is a valid use-case, it should show up as a blocker, but
+     I'll also eyeball all the kfunc set declarations
+
+Does this make sense?
+
+> 
+>> I don't think it's reasonable to wait for the comprehensive kfunc flags
+>> analysis and resolve_btfids series landing before fixing the garbage
+>> dereference bug.
+>>
+>>>
+>>>> [...]
