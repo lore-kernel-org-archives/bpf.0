@@ -1,241 +1,95 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E108E235C01
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 05:05:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C203214E2F2;
+	Mon, 13 Jul 2026 06:16:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783919149; cv=none; b=eH29Dw7nfuaG6L/JWjIdkRmDDBpqk43AMZMDuY5pnl/2UxDZ7UtwqdW2rFH7kUfLGUT5dGFhw5D3nPvjBVW//CocB7ZtvJQWQUCzrQYdRh3uSLk/96rsY6vDoY384fAHSY6rwFW0QU7rJ8k9sJnJQdgetLjLPF4NOSWtt6ID6/A=
+	t=1783923410; cv=none; b=dwZzLfuiJH8GZGihwsoCvB0kn5KHAsJIZyuMl+L6KJ+JoV43Z5fsRt7kVUN9huysh1SjWJiVSoqGUrZZ2D1WwSXLJQbj/WggdIwIAwlbVlm7HUvob1hHr9J882G+RoVYGz3N6zTK4P39ExSkls5lpv/fMyTIv1Mqi7i3sRI0TXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783919149; c=relaxed/simple;
-	bh=m0A8EozCH90mxhahYcpCYb0x5lm8UVBXtH/iWhiwtjo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j0w+K1zccBEEhK2QZ00TgG1RQygwaHqR2Y7+8MzTyhUGScO8wO5Yc9vtEi0FzDlvei1MGh6j8AZItw/uUVHY2h2fHkS90uozO8Co/5wOfCq8DVz8vraixrepnCJbllxWpZZAYcxxIFlKQ+k5ruF45C78MIkZUZtTS64ukNjHEGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=YAcr+4+K; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1783923410; c=relaxed/simple;
+	bh=lm8H0UjsLM1CR0i52ojSjVWkSqAI3K6+0IAr+BhRGOg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YHguqeiud4x0joGg+87bOFas/FTNTzbMzhwvLYM0AVkc3N+xIftwJpG6onu1giaFA6c/tZEW71pcA1uEFrjq/VHd8t5yto3yy9vdxbwN7LL7FjbpIFdUGYy0Bdjaa/NX6FPZEZdzBjZ9JaJMKqz/NqnUXZsuTOhl1cWlkOHza48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=OsczCrSD; arc=none smtp.client-ip=209.97.182.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="YAcr+4+K"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-493f6de72faso10006015e9.0
-        for <bpf@vger.kernel.org>; Sun, 12 Jul 2026 22:05:47 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="OsczCrSD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783919146; x=1784523946; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=noLX6ODwuKJAk11/kbsaLVVFKD51XS5bO5LrY4X2cno=;
-        b=YAcr+4+K8zuEV2BH5mHpAkS3IrnT4P4KGrySkzkhgeTSM0ci2l3dmhM4qqOHbM0lXS
-         RivXcQAtul2K15K/acrhWRXvkbbbYcOMquXv0+ttpIz8HXoPsJaKFHxRvbrQIDY4cywx
-         FvtV23k6vkBih3UKJAB2WU5fAkMEtR2eZ13JKaWlP5jyGvvZxkFqdWILPV1WLm6DcLTY
-         QP2cvs01jOGdUrj1SOQpW5Mye8UygxN8mu1VdCWR2Xo+okJSaxHE1IoBImPBt1uQIRQc
-         eiVD44zwRdD/9jXoPsR3qAZFhMIAlX5KECQjHICRJtc67yWEn463Pf+MIZL5VW/t+PkW
-         lI6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783919146; x=1784523946;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=noLX6ODwuKJAk11/kbsaLVVFKD51XS5bO5LrY4X2cno=;
-        b=sqRJlxmNRwu63N7YT3qLqdr2/3VP+/Mamfc0PXScIdr0N2dbTltXny8V+ImWVdW+pV
-         qEyDlRpdn5yC+6nu900ElTKwAHy+MkJloO8n1X2lpuGVurvmHl+klKNzn6sHo65SAogI
-         dfIZMOSwyeMekpY3cfQRePzay9NjXD4kN53Ew4BKh9yadrS+kqZGrR3IgM/uY5/IPb1w
-         gAHBBKZWXed5HidNKHg82ySSiIQtUfWVXjSZ+JsmHOE3j1tiYwtqwpZRxQIV+6zQ0Oi9
-         rkZ4WCTsQdgYCjFJeZtK9zr6aJq9c4QlPk2t93tw4AxEjjb/6C8/ybDP7yYwOpnyxBM9
-         73zw==
-X-Gm-Message-State: AOJu0YyrLkF3fKfCK9k+CT9kSgKfh+DEtPSwuiiK+7NklXGYCt3Xs5gM
-	UXuJntMKggaUYB+1Bke4EIkc7pR0vP/hIJXSMNnPBE/jzwxdxnX5s1Z5n06QcV1aHYk=
-X-Gm-Gg: AfdE7ckzdZISadLR5BSMNkWwwhhPDc3MDA63Www+wsLgsXx45g9h+Co7gNS6bizPkyk
-	EWzzno9rQwHs1F0e+nBKhyYc0gJc5DthnikOqxAJNfe5nGzEbWeC93aqpALnYxbznq0xfIGiVgk
-	Ro1FdVWaj1MbI0wW4O+kld9kX4pIld2G9FxDqt3i+LNeCMLdatP0Ja9XTPvoSlMZ6F1u/HJ997W
-	EwxKKdQ59PcoBz72LnQzU790Egr03Aenldij1QP5xzUPfirR7rKscQrPnOfAAPxsMWBf78JxHi0
-	IfijcVV24WXNGY6sRaPDeRuVRY4pR4E/r4bn86Duqu6QQO9HpZPimEKxrHRTdX89NQjKaja67Ro
-	alzxaAx/xdtNtrOU02fSMmp94rASysy+y29uMQZcmifKsu1iPH2widjncyArBKJ3VgdvUH0v4un
-	sxsMQEnb6CHxmw+eU8gHHzNgzKSqJmQbcaJc3wIa27
-X-Received: by 2002:a05:600c:998:b0:493:a63b:1f62 with SMTP id 5b1f17b1804b1-493f2ac8ca3mr74593225e9.16.1783919146276;
-        Sun, 12 Jul 2026 22:05:46 -0700 (PDT)
-Received: from u94a (27-51-9-144.adsl.fetnet.net. [27.51.9.144])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-451916f31d4sm12679932fac.16.2026.07.12.22.05.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jul 2026 22:05:44 -0700 (PDT)
-Date: Mon, 13 Jul 2026 13:05:03 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: sun jian <sun.jian.kdev@gmail.com>, 
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	john.fastabend@gmail.com, andrii@kernel.org, memxor@gmail.com, martin.lau@linux.dev, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer
- pointers
-Message-ID: <alRtilWhKw4zzMkI@u94a>
-References: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
- <20260708090151.151729-2-sun.jian.kdev@gmail.com>
- <ak5HLLrYK3R_g2y_@u94a>
- <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com>
- <ak8XSRiLKx5WcIQw@u94a>
- <1f8aad47f61fbf85eb55276e4bb01bfcff61393e.camel@gmail.com>
- <CABFUUZEXYduca34g22YZ1ESyYe3Yc3kYQrTEWLMxB5X0ZmYn8w@mail.gmail.com>
- <alCgmxFh9q-vjE0O@u94a>
- <CABFUUZEnd9f7tV-+jT+cgL7sFVp7pL5-tjdwMvxcR9ist1s-xg@mail.gmail.com>
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=Qscm0
+	rC8uiUpdrQ5hpDMMTPaYHfRgRsy/aSfaGBQz/E=; b=OsczCrSDL/1U7LWojzGvk
+	BX0sEL+MVIYll0avAv6bMpxcCczIO109cYJrpVpJ/NI+EtDzGeQViTRHy279mhP0
+	+/+DJcqzWimXHVOWhBdTD/7wbqhwWhEw4zmz7DnssU+D11bdYTt+7PsfLnTkS1j+
+	o62WE+aIps9DyfOf/6h0YQ=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web3 (Coremail) with SMTP id ygQGZQBXpJGwglRqEFAjAw--.21425S2;
+	Mon, 13 Jul 2026 14:16:31 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 0/2] bpf: Validate byte type for helper stack reads
+Date: Mon, 13 Jul 2026 06:16:10 +0000
+Message-Id: <cover.1783920884.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABFUUZEnd9f7tV-+jT+cgL7sFVp7pL5-tjdwMvxcR9ist1s-xg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:ygQGZQBXpJGwglRqEFAjAw--.21425S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZFW5WF45Gr4ruw4UZF4rAFb_yoW3Krb_Z3
+	4Fkas7Zw40vF4IyFy2kF4vvrWUCw45JFy8Gay7Jr47X34vvF13WrWDWr12qryDAw45KrZr
+	AFsIkayIyr1F9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbD8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+	Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+	0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8Jw
+	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
+	YxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxkIecxEwVAFwV
+	W8AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
+	6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2
+	Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
+	Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
+	IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUT6wZUUUUU
+	=
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-On Fri, Jul 10, 2026 at 06:27:41PM +0800, sun jian wrote:
-[...]
-> One detail about the attach-time check: I agree that some negative-offset
-> constructions can still be rejected later if the max_tp_access accounting
-> produces a large value. But the runtime reproducer I used exercises this
-> specific access:
-> 
->     r6 = *(u64 *)(r1 + 0)
->     r6 += -8
->     *(u64 *)(r6 + 0) = 0
-> 
-> Here reg->var_off.value is (u64)-8, off is 0, and size is 8. With the current
-> accounting,
->     reg->var_off.value + off + size
-> wraps to 0. So max_tp_access records 0 and the attach-time writable_size check
-> does not reject it, even though the effective access starts at -8.
+The verifier checks helper memory arguments byte by byte, but its scalar
+spill fast path only checks the slot-wide spill marker. For a CAP_BPF load,
+a narrow scalar spill can therefore make an untouched sibling byte appear
+initialized when the sibling is passed to a helper.
 
-Yes, that should had been rejected.
+Patch 1 makes the fast path require STACK_SPILL for the byte being checked.
+Patch 2 adds verifier_spill_fill coverage for a CAP_BPF map update helper
+reading an invalid sibling byte.
 
-> On the bpf base without the verifier fix, the temporary reproducer did load
-> and attach successfully:
->     negative_bpf_load: PASS
->     negative_raw_tp_open: PASS
->     negative_test_run: PASS
-> and KASAN reported the stack-out-of-bounds write in ___bpf_prog_run.
-> 
-> So for this particular range, this looks like more than a load-time policy
-> difference: the missing lower-bound check leaves the access executable on the
-> bpf tree.
+Yiyang Chen (2):
+  bpf: Check byte type when validating helper stack reads
+  selftests/bpf: Cover helper reads of invalid spill siblings
 
-Actually I got this reproduced in the *bpf-next* tree now. And I think I
-know why Eduard wasn't able to reproduce the issue.
+ kernel/bpf/verifier.c                         |  3 +-
+ .../selftests/bpf/progs/verifier_spill_fill.c | 33 +++++++++++++++++++
+ 2 files changed, 35 insertions(+), 1 deletion(-)
 
-The main problem was that CONFIG_BLK_DEV_NBD was not enabled in the
-default BPF selftests configuration, so nbd_send_request wasn't
-available, and thus the attachment always fail with -2 without
-exercising the checks that we have in bpf_probe_register().
 
-With CONFIG_BLK_DEV_NBD enabled, and negative_var_off_program[] updated
-to do use offset of 0 (instead of 28 + 8), I was able to reproduce the
-issue on top of commit `9a3a07d06e7d` "Merge branch
-'bpf-fix-warning-in-bpf_trampoline_multi_detach'" with the following
-updated version of your patch.
+base-commit: 9a3a07d06e7d74f4aecc51396c771149336ac55d
+-- 
+2.34.1
 
-  0: R1=ctx() R10=fp0
-  0: (79) r6 = *(u64 *)(r1 +0)          ; R1=ctx() R6=tp_buffer()
-  1: (07) r6 += -8                      ; R6=tp_buffer(imm=-8)
-  2: (79) r0 = *(u64 *)(r6 +0)          ; R0=scalar() R6=tp_buffer(imm=-8)
-  3: (95) exit
-  processed 4 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
-  tp_fd: 8
-  check_nbd_attach_reject:FAIL:nbd_invalid_negative_var_off unexpected nbd_invalid_negative_var_off: actual 8 >= expected 0
-  #319     raw_tp_writable_reject_nbd_invalid:FAIL
-
-So I would say a fixes tag that points to 022ac0750883 is still needed
-after all.
-
----
-
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index adb25146e88c..e1797bd87904 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -1,4 +1,5 @@
- CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_NBD=y
- CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
- CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1
- CONFIG_BPF=y
-diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
-index 216b0dfac0fe..0ed1d560a2f4 100644
---- a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
-+++ b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
-@@ -4,12 +4,34 @@
- #include <linux/nbd.h>
- #include "bpf_util.h"
- 
-+static void check_nbd_attach_reject(const char *name,
-+				    const struct bpf_insn *program, size_t prog_len)
-+{
-+	LIBBPF_OPTS(bpf_prog_load_opts, opts);
-+	char error[8192];
-+	int bpf_fd, tp_fd;
-+
-+	opts.log_level = 2;
-+	opts.log_buf = error;
-+	opts.log_size = sizeof(error);
-+
-+	bpf_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE, NULL, "GPL v2",
-+			       program, prog_len, &opts);
-+	if (!ASSERT_GE(bpf_fd, 0, "prog_load"))
-+		return;
-+
-+	printf("verifier log: %s", error);
-+
-+	tp_fd = bpf_raw_tracepoint_open("nbd_send_request", bpf_fd);
-+	printf("tp_fd: %d\n", tp_fd);
-+	if (!ASSERT_LT(tp_fd, 0, name))
-+		close(tp_fd);
-+
-+	close(bpf_fd);
-+}
-+
- void test_raw_tp_writable_reject_nbd_invalid(void)
- {
--	__u32 duration = 0;
--	char error[4096];
--	int bpf_fd = -1, tp_fd = -1;
--
- 	const struct bpf_insn program[] = {
- 		/* r6 is our tp buffer */
- 		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
-@@ -19,25 +41,17 @@ void test_raw_tp_writable_reject_nbd_invalid(void)
- 		BPF_EXIT_INSN(),
- 	};
- 
--	LIBBPF_OPTS(bpf_prog_load_opts, opts,
--		.log_level = 2,
--		.log_buf = error,
--		.log_size = sizeof(error),
--	);
-+	const struct bpf_insn negative_var_off_program[] = {
-+		/* r6 is our tp buffer */
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
-+		/* eight bytes before the start of the nbd_request struct */
-+		BPF_ALU64_IMM(BPF_ADD, BPF_REG_6, -8),
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_6, 0),
-+		BPF_EXIT_INSN(),
-+	};
- 
--	bpf_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE, NULL, "GPL v2",
--			       program, ARRAY_SIZE(program),
--			       &opts);
--	if (CHECK(bpf_fd < 0, "bpf_raw_tracepoint_writable load",
--		  "failed: %d errno %d\n", bpf_fd, errno))
--		return;
--
--	tp_fd = bpf_raw_tracepoint_open("nbd_send_request", bpf_fd);
--	if (CHECK(tp_fd >= 0, "bpf_raw_tracepoint_writable open",
--		  "erroneously succeeded\n"))
--		goto out_bpffd;
--
--	close(tp_fd);
--out_bpffd:
--	close(bpf_fd);
-+	check_nbd_attach_reject("nbd_invalid", program, ARRAY_SIZE(program));
-+	check_nbd_attach_reject("nbd_invalid_negative_var_off",
-+				negative_var_off_program,
-+				ARRAY_SIZE(negative_var_off_program));
- }
