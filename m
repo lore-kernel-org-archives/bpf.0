@@ -1,241 +1,256 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF1F317173
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 03:29:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B589236A369
+	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 04:14:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783913373; cv=none; b=ai/xLV5aEX112dkL3um4nVwZmkC8nlkW7/bNuMJoxAvgG982bJKAqO+VBugb00EOuQATMpboDqb5teA1i24FxI7hL739DE3ulZFRdY0gVryumVvqgbAQuUaZzIiK+EcxN/zN2VauBmjNQgcIfpFafFMfuzbmZdMp0l5UXA+XJ/I=
+	t=1783916080; cv=none; b=nkiGTOOtAaEpnRIA15hu10u+u/LMSCtOAHEHJl78LNC9jxrTY7uTm7OLUrQbASJRK4VrJhgMcLvkczhwjTngpf5rkne78OOm8fuwGTU/l7iNeYmtr8YCSomPKo+EuREm66jWpwo5Yot5qfkEIz6aRHnSmfDmnp3NokVxCSHiMBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783913373; c=relaxed/simple;
-	bh=yPcb2yhm4K2GOkEJfjvSUv790XphbvJ6WzOdoBRLa/g=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=tPs3RpIyptoqLA+5A/mN6f+TDEEwC/2FwY1zSadXItiovpGciAMoMVg31olwOZ60Z0RDMOGFwoinlVkQcgqZHX+eZYxnA4Iy3qfACzbe+XVj31DM2oixqj+q5WpzSmSz4/UAY5eeaKR/yAV1q/HPnXHY/3iiXoMkG8LLT+GxUt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=abWHddLW; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783916080; c=relaxed/simple;
+	bh=y1Yt2fykqjsWvs7kXOwQ+eAkXv958ODFE7VheXPWId0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IqJoJM01NbZNYFp8cIoQi6zTQTamgx6vkV0v7UNaNJW/Eu8qoEVDPdJNB66jgmv6KBOuL8Z5TFO12claXl8MYKI3+llaNfHOxb030yt4BZ4Su0Hv/73TVg55B4cKBRnLsBkh0v3U/mqBHZ3ek2aVVtr4zJTYvd5M9GFy85P5m78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xDOBaWfl; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="abWHddLW"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2cc6dd436c6so32550245ad.2
-        for <bpf@vger.kernel.org>; Sun, 12 Jul 2026 20:29:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783913370; x=1784518170; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=N5LwUqjbpPHissd18BCl9UcC6YRNwOX+ZmfwwTb7nug=;
-        b=abWHddLW8gruXrxJtTArQg2G0cJAjmJcTESDjp943KYljubchkU1a9PALBxN50vj69
-         N0u6t3ou/ROShlxyary2jM4S1K9/pdHiVenqpRg52bMx8xlOrT81j2nJNKSLUjH2sekN
-         BMiYLwwJq4Ux45SMyTzvy//pobtLpND14rQmgfKMZZIQ4Y8c4IcVhyo2JjYsP0DJtMHC
-         3lLYqfHAcqtUgSW5XjqGyxGuk6VYXoSyROf7CUduOTo7lt9oUNrQhP4UEkdl7dVnbPrg
-         OZPzuMAqMfcoFyV06J4RaHbb/Ne93xqUJ7hEj0q2+YBzZfMC1ZGTJvxyAce7kCfEQ7qP
-         aEIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783913370; x=1784518170;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=N5LwUqjbpPHissd18BCl9UcC6YRNwOX+ZmfwwTb7nug=;
-        b=EEoRUGQGd8DypLp8IzM+HDRN9CCjczy6xgA68ytIu9RMz8OSN/pcQpGYuTfZ8I+g/W
-         JQy2lTvHkIJ04epV8gnwPCAzaTArzbDBFVrn4T3zWBtC8d8KPJwxwrxl5k70OerBuknU
-         ynTxLy91EM3JfaGFZVjTv/6WqqSKwMJ3ds89+EAJX3COfcMcNuH1tBlwbvd+i40YucaP
-         NV+IG0lx1H/QmTRIJ6sMSsg3Er6or5AKpjkxmjXJ1GHxdR4w/7u+LZfW122jGxMJAsc5
-         Cf8CVVQMc3TcpPATtenANIdyRZr1v12qp83NB6AC6EYS4Cb3t2Wsc0uqzAWux5fT2Npo
-         880w==
-X-Forwarded-Encrypted: i=1; AHgh+Rr+C1NqrdrlNF1pGOncCi45XxZq+2O1b6o80xu5+Okjj9ShzICfK+8XMllaannPyPMw6Mg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzp9e74GCvyOl5F4NLn8rtg3YkBfMqsf2GvqVbpvJbsrjmYQDLS
-	DvE0ocDi9rNsxSXe1bE1Io2C/aOWI9+kGw3+PVTBV+AWN6hur8BXB7mq
-X-Gm-Gg: AfdE7cn82ybippwWyRh2bSA4DvaXtl0+z3SNysJjGRhX/mv3hB9L7yymT/FNtiA8Udz
-	XFelaCKRvtRj5rv14kLb4Gj7V0PK3c/pzDxL40YY4zQHTD3tnF5nu5rGQYW8G6467xo0beJ+8XV
-	RXdcdAKONRakJK+7Xbsh/InSJ6bc6QbiV4apjA5kkflwOpOyWZq3i1iFTHYW/3SoLnyA48g+j1u
-	zXOS78fkh3P4oXOziF4botSk7bKlfZ/MbHGbu0NGo+2kMmicsbCf4XPv6uDtXF1u0LfoHVzBOQq
-	VaFuKStl6lqqvMhGOMDNtCfQjHlfAXbv7vVACoLNX1+qsLVRqBnTN8RvqO8veivOpulLWX/taNI
-	ICBZG+20GYf3KKaCvAg1xWYRG+VHP1CEsbRa3Fi1UdaGAG1FyEYjiJAUqmoru+XD4yDEcTx1oFs
-	iBCKdnAgsQS6i6bH2g2MpozRAj
-X-Received: by 2002:a05:6a21:4d8f:b0:3c0:9c1a:894f with SMTP id adf61e73a8af0-3c110b33403mr8114739637.71.1783913370254;
-        Sun, 12 Jul 2026 20:29:30 -0700 (PDT)
-Received: from localhost ([98.35.8.117])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b84d6ce15sm26187778c88.5.2026.07.12.20.29.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Jul 2026 20:29:29 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xDOBaWfl"
+Message-ID: <5b07d2ab-84ee-46ae-84c9-7542499d26d7@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783916064;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nUYIJ9DN/aj3dekLHrJVHchQB1flIZYdeNNZTWSaweE=;
+	b=xDOBaWfl3M9diHS22ZehJhE9K0+bazKqg07i01Jz9Bxz5GvdXr5OMrd8A2frtvubdRqQf2
+	KNaR7BSVLYCk4kvDUpn6sOVgWTELSYzKr3EAaQ382ThUJO86Njg7vByw2X+XVJWvxMzXAO
+	K3k54fLG9xNwnnEFPgf6NqboCdsm6Ow=
+Date: Mon, 13 Jul 2026 12:14:07 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 12 Jul 2026 20:29:27 -0700
-Message-Id: <DJX4IFO55D9S.3IV3K5XICJAEV@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Shuah
- Khan" <shuah@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Kees
- Cook" <kees@kernel.org>, "Alexander Viro" <viro@zeniv.linux.org.uk>, "Jan
- Kara" <jack@suse.cz>, "Jonathan Corbet" <corbet@lwn.net>, "Jann Horn"
- <jannh@google.com>, "John Ericson" <mail@johnericson.me>,
- <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
- <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2 0/5] binfmt_misc: bpf-backed binary type handlers
-From: "Farid Zakaria" <farid.m.zakaria@gmail.com>
-To: "Christian Brauner" <brauner@kernel.org>, "Farid Zakaria"
- <farid.m.zakaria@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260711-binfmt-misc-bpf-v2-v2-0-d6591ceaf207@gmail.com>
- <20260712-abluft-brutkasten-aufladen-c8063a4a1a0a@brauner>
-In-Reply-To: <20260712-abluft-brutkasten-aufladen-c8063a4a1a0a@brauner>
+MIME-Version: 1.0
+Subject: Re: [BUG] bpf, sockmap: spurious wakeup by tcp_msg_wait_data()
+ causing unexpected EAGAIN in recvfrom()
+To: Nnamdi Onyeyiri <nnamdio@gmail.com>, sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, john.fastabend@gmail.com,
+ jakub@cloudflare.com, edumazet@google.com, ncardwell@google.com,
+ kuniyu@google.com, davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org
+References: <ak_rR-Skd8Mvn4mH@localhost.localdomain>
+ <20260709185526.E4DAB1F000E9@smtp.kernel.org>
+ <alFRK66z45eDNZA7@localhost.localdomain>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <alFRK66z45eDNZA7@localhost.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sun Jul 12, 2026 at 5:32 AM PDT, Christian Brauner wrote:
->> This is a continuation of Christian's bpf-backed binfmt_misc POC [1], wh=
-ich he offered
->> to hand off to me. I am carrying it forward. The kernel design is his an=
-d is
->> unchanged. This series rebases it onto his binfmt_misc locking/cleanup s=
-eries [2]
->> and adds selftests (+ fixed from the one's shared), and therefore does
->> not apply to mainline alone.
->>=20
->> As for motivation for this whole change, Christian did a great VL;MR;
->> write-up [1].
->>=20
->> TL;DR: binfmt_misc can match a binary and hand it to a fixed interpreter=
-,
->> but it can't match programmatically or compute the interpreter per binar=
-y.
->> The Nix community would love to support relocatable binaries, where the
->> correct loader can only be found relative to the binary itself.
->> This adds a 'B' handler type: a binfmt_misc_ops struct_ops program that
->> inspects the binary and picks the interpreter with one new kfunc,
->> bpf_binprm_set_interp().
->>=20
->>   bpftool struct_ops register nix_origin.bpf.o /sys/fs/bpf
->>   echo ':nix-origin:B:nix_origin::::' > /proc/sys/fs/binfmt_misc/registe=
-r
+
+On 7/11/26 4:17 AM, Nnamdi Onyeyiri wrote:
+> Hi,
 >
-> Thanks! So I've spent some more time working on this because I had some
-> future ideas that I needed to make sure could be accomodated by this
-> (currently on vacation but hey...). So the version I have givex this a
-> better design and has future extensibility in mind:
+> The updated patch below addresses the issues raised by sashiko-bot.  The closed
+> socket and signal handling code was added to tcp_bpf_recvmsg(), and the fix was
+> updated to work for sockets with SO_RCVTIMEO set.
 >
-
-I also enjoy hacking over my vacation. I'm often told to take break but
-some of the best ideas come when on vacation :)
-
-> - The single sleepable load op is split into two ops:
+> Please let me know if any more changes are required, or if the patch would need
+> to be submitted some other way, I'm happy to adjust as necessary.
 >
->       struct binfmt_misc_ops {
->       	bool (*match)(struct linux_binprm *bprm);
->       	int (*load)(struct linux_binprm *bprm);
->       	char name[BINFMT_MISC_OPS_NAME_MAX];
->       };
+> Thanks!
+
+
+Thanks for the report.
+
+
+What's your use case here? With a verdict prog attached, we'd normally
+
+expect the data to be redirected in kernel rather than read back via
+
+  recvmsg(). Are you using SK_PASS? If so, please state that in the
+
+commit message instead of the email body.
+
+
+Also, this message could be included into commit message.
+
 >
->   The non-sleepable match program runs from the RCU entry lookup
->   walk itself, exactly like magic and extension matching: same
->   registration order, same first-match-wins semantics, and it can
->   only rely on the prefetched bprm->buf. It must be free of side
->   effects since the walk may be restarted.
+> ----8<----
+>  From 20a1275aa5ecb927ff049971454b62682356ef0e Mon Sep 17 00:00:00 2001
+> From: Nnamdi Onyeyiri <nnamdio@gmail.com>
+> Date: Fri, 10 Jul 2026 20:47:36 +0100
+> Subject: [PATCH v2 1/1] bpf, sockmap: handle spurious tcp_msg_wait_data()
+>   wakeup
 >
-
-Is relying on brpm->buf enough?
-Right now that's only 256 bytes I think, which is not enough to read
-segments we might care about. That worked fine when it was just a magic
-number but the idea with the eBPF program is to make decisions based on
-more data.
-
-In the selftest I provided, the `PT_INTERP` segment is already at file
-offset 0x318 (792). I was imaginging NixOS having to support
-`PT_INTERP_NIX` in order for the produced binaries to be backwards
-compatible with older kernels.
-
-The other idea would be to make the `match()` broad and select
-everything but then nearly all ELF64 binaries would match and then pay
-the price to `load()` and ultimately `-ENOEXEC`. Seems like it would
-make multiple BPF binfmt programs less useful.
-
-
->   The sleepable load program runs once the walk has committed to the
->   entry and does the file reading and the interpreter selection. Both
->   ops are mandatory, the struct_ops plumbing enforces the sleepability
->   of each, and since bpf_binprm_set_interp() is KF_SLEEPABLE a match
->   program cannot select an interpreter by construction.
+> recvfrom()/recv() are documented as only returning EAGAIN for blocking sockets
+> when they have a receive timeout configured.  however, adding a blocking
+> ipv4 tcp socket without a receive timeout to a sockmap will cause EAGAIN errors
+> sporadically.  a socket with a receive timeout may return EAGAIN before the
+> timeout expires.
 >
-> - A match is a commitment. A failing load program fails the exec instead
->   of falling through to later entries. -ENOEXEC keeps its usual meaning
->   and hands the binary to the remaining binary formats, for a handler
->   that discovers it cannot serve the binary after all.
+> this happens when tcp_msg_wait_data() wakes spuriously (returning 0) in which
+> case, if there is no timeout, or the timeout has not yet expired, we loop
+> again instead of returning.
+
+Also please add a selftest and send both as a patchset.
+
+
 >
->   This kills the part of v1 I disliked the most: the skip cursor and the
->   leave-and-rescan loop in load_misc_binary() are gone. The walk is
->   never left and re-entered, and 'B' entries need no special semantics
->   against concurrent (un)registration anymore.
+> Signed-off-by: Nnamdi Onyeyiri <nnamdio@gmail.com>
+> ---
+>   net/ipv4/tcp_bpf.c | 55 ++++++++++++++++++++++++++++++++++++++--------
+>   1 file changed, 46 insertions(+), 9 deletions(-)
 >
->   Your v2 changelog note about keeping the bpf retry loop in the
->   __free() style is moot as a consequence. The loop no longer exists.
->
-> - The load return convention flipped: 0 now means success after the
->   program called bpf_binprm_set_interp(). Returning 0 without having
->   selected an interpreter or returning a positive value is treated as
->   -ENOEXEC, other negative errnos fail the exec.
->
->   So the "return bpf_binprm_set_interp(...) ?: 1" idiom from the v1-era
->   programs becomes plain "return bpf_binprm_set_interp(...)".
->
-> - The handler name moved from the offset field to the interpreter field
->   that field consistently names whoever supplies the interpreter, a path
->   for static entries, a handler for 'B' entries. Offset, magic, and mask
->   must be empty:
->
-> 	echo ':nix-origin:B::::nix_origin:' > register
->
-> - 'C' is allowed now, v1 rejected it. It behaves exactly as for a static
->    entry. The setuid transition stays gated by vfsuid_has_mapping() in
->    the caller's user namespace. Which makes 'B' handlers usable for a
->    per-binary loader over setuid binaries. 'F' stays rejected as there
->    is no fixed interpreter to pre-open (I have other ideas how we'll do
->    something like it later.).
->
-> Nothing changed in the exec patch, the fs kfuncs patch, the kfunc
-> itself, or the registry/namespacing model.
->
-> I can send v3 in a bit if that's ok.
+> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+> index cc0bd73f36b6..e3109edb9621 100644
+> --- a/net/ipv4/tcp_bpf.c
+> +++ b/net/ipv4/tcp_bpf.c
+> @@ -179,7 +179,7 @@ EXPORT_SYMBOL_GPL(tcp_bpf_sendmsg_redir);
+>   
+>   #ifdef CONFIG_BPF_SYSCALL
+>   static int tcp_msg_wait_data(struct sock *sk, struct sk_psock *psock,
+> -			     long timeo)
+> +			     long *timeo)
+>   {
+>   	DEFINE_WAIT_FUNC(wait, woken_wake_function);
+>   	int ret = 0;
+> @@ -187,12 +187,12 @@ static int tcp_msg_wait_data(struct sock *sk, struct sk_psock *psock,
+>   	if (sk->sk_shutdown & RCV_SHUTDOWN)
+>   		return 1;
+>   
+> -	if (!timeo)
+> +	if (!(*timeo))
+>   		return ret;
 
-I don't mind at all you sending v3 and in fact I've been enjoying your
-involvement. I didn't know what to expect when I offered this idea up to
-the community.=20
+'if (!*timeo)'  is enough
 
-I'm happy to keep co-developing this with you within a design you feel
-acceptable with. Please let me know how I can remain engaged and
-helpful.
 
-One last thing I was thinking about is that we will also need to support
-$ORIGIN in the shebang path, however I just tested it and this current broa=
-d
-BPF solution can largely handle it [1], with a small wrinkle.
-
-  $ printf '#!$ORIGIN/interp\n' > /opt/app/greet
-  $ cp ./interp /opt/app/interp     # any interpreter/loader
-  $ chmod +x /opt/app/greet /opt/app/interp
-
-  # stock kernel: binfmt_script opens the literal "$ORIGIN/interp"
-  $ /opt/app/greet
-  bash: /opt/app/greet: $ORIGIN/interp: bad interpreter: No such file or di=
-rectory
-
-  # with the handler registered, $ORIGIN resolves to the script's dir
-  $ bpftool struct_ops register shebang_origin.bpf.o /sys/fs/bpf
-  $ echo ':shebang-origin:B:shebang_origin::::' > /proc/sys/fs/binfmt_misc/=
-register
-  $ /opt/app/greet
-  <runs /opt/app/interp, the loader found next to the script>
-
-The wrinkle is that it can't express today is the single optional argument.
-(i.e. `#!interp arg" -> argv[1]=3Darg`). We might ned a way to express
-that in the load.
-
-Anywyas, thanks again. All your ideas made sense modulo I'm unsure if
-`bprm->buf` is enough to make a decision...
-
-[1] https://gist.github.com/fzakaria/2e1e1c44fa488a951674f8761c672366
-
+>   
+>   	add_wait_queue(sk_sleep(sk), &wait);
+>   	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+> -	ret = sk_wait_event(sk, &timeo,
+> +	ret = sk_wait_event(sk, timeo,
+>   			    !list_empty(&psock->ingress_msg) ||
+>   			    !skb_queue_empty_lockless(&sk->sk_receive_queue), &wait);
+>   	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+> @@ -229,6 +229,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+>   	int copied_from_self = 0;
+>   	int copied = 0;
+>   	u32 seq;
+> +	long timeo;
+>   
+>   	if (unlikely(flags & MSG_ERRQUEUE))
+>   		return inet_recv_error(sk, msg, len);
+> @@ -262,6 +263,8 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+>   		}
+>   	}
+>   
+> +	timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
+> +
+>   msg_bytes_ready:
+>   	copied = __sk_msg_recvmsg(sk, psock, msg, len, flags, &copied_from_self);
+>   	/* The typical case for EFAULT is the socket was gracefully
+> @@ -280,7 +283,6 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+>   	}
+>   	seq += copied_from_self;
+>   	if (!copied) {
+> -		long timeo;
+>   		int data;
+>   
+>   		if (sock_flag(sk, SOCK_DONE))
+> @@ -299,7 +301,6 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+>   			goto out;
+>   		}
+>   
+> -		timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
+>   		if (!timeo) {
+>   			copied = -EAGAIN;
+>   			goto out;
+> @@ -310,13 +311,15 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+>   			goto out;
+>   		}
+>   
+> -		data = tcp_msg_wait_data(sk, psock, timeo);
+> +		data = tcp_msg_wait_data(sk, psock, &timeo);
+>   		if (data < 0) {
+>   			copied = data;
+>   			goto unlock;
+>   		}
+>   		if (data && !sk_psock_queue_empty(psock))
+>   			goto msg_bytes_ready;
+> +		if (!data && timeo > 0)
+> +			goto msg_bytes_ready;
+>   		copied = -EAGAIN;
+>   	}
+>   out:
+> @@ -355,6 +358,7 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+>   {
+>   	struct sk_psock *psock;
+>   	int copied, ret;
+> +	long timeo;
+>   
+>   	if (unlikely(flags & MSG_ERRQUEUE))
+>   		return inet_recv_error(sk, msg, len);
+> @@ -371,14 +375,45 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+>   		return tcp_recvmsg(sk, msg, len, flags);
+>   	}
+>   	lock_sock(sk);
+> +
+> +	timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
+> +
+>   msg_bytes_ready:
+>   	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
+>   	if (!copied) {
+> -		long timeo;
+>   		int data;
+>   
+> -		timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
+> -		data = tcp_msg_wait_data(sk, psock, timeo);
+> +		if (sock_flag(sk, SOCK_DONE)) {
+> +			ret = 0;
+> +			goto unlock;
+> +		}
+> +
+> +		if (sk->sk_err) {
+> +			ret = sock_error(sk);
+> +			goto unlock;
+> +		}
+> +
+> +		if (sk->sk_shutdown & RCV_SHUTDOWN) {
+> +			ret = 0;
+> +			goto unlock;
+> +		}
+> +
+> +		if (sk->sk_state == TCP_CLOSE) {
+> +			ret = -ENOTCONN;
+> +			goto unlock;
+> +		}
+> +
+> +		if (!timeo) {
+> +			ret = -EAGAIN;
+> +			goto unlock;
+> +		}
+> +
+> +		if (signal_pending(current)) {
+> +			ret = sock_intr_errno(timeo);
+> +			goto unlock;
+> +		}
+> +
+> +		data = tcp_msg_wait_data(sk, psock, &timeo);
+>   		if (data < 0) {
+>   			ret = data;
+>   			goto unlock;
+> @@ -390,6 +425,8 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+>   			sk_psock_put(sk, psock);
+>   			return tcp_recvmsg(sk, msg, len, flags);
+>   		}
+> +		if (!data && timeo > 0)
+> +			goto msg_bytes_ready;
+>   		copied = -EAGAIN;
+>   	}
+>   	ret = copied;
