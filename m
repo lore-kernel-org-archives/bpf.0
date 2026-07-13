@@ -1,123 +1,122 @@
-Received: from mail-ej2-f2.google.com (mail-ej2-f2.google.com [74.125.228.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BF1381B02
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 06:35:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4829038333C;
+	Mon, 13 Jul 2026 07:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783924532; cv=none; b=rjby36KE7u114rF8LXGN8+xflSO+oUN5MD87dRD4VU+P+H9ikx95keAhzH8Uf7dbgCKokI3eduxURu5SfnXRDGkFclLiWvjKPXIzI+Q7ZsDnKXvDqeW/znlDt0C79VlnSMvVpSwxiGNptH/ANzBnplTv1VNtshH7edE2Iyf8ftY=
+	t=1783927057; cv=none; b=CFuVACGImowT9dK2JMNBUJkX7a0qwE2BNa4GV9tqFZdAVKM5ZSkgdY+gIKG7XMaHwzo/zL6GdhRlmEWV3rOgbVCRuMdx+0gnA5KIueh0JULi9jcGq0zqIXOoGUxSozC0ekk/sIA5HG9uUbeihaz5aX/jpoln10XKDJ1lSVv0hqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783924532; c=relaxed/simple;
-	bh=BEORnXxM6ZYhnHtAqG/+pG3egOgrrwmAumn/RU0cg3c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LCVyIdTjbBdQKylSin119WdDf5ixRrkiDZW38wWfOuFTjMrXU/UPtktGZMqOpenfNacxZNM81ujlzv+QQlPHv3+E71yGgp0Wm8/xZjr1kWD0+wPhoevU1pcn9/6xSdkH/ako40AsC+YkmZsMTaA2iqr7OdiLyE/xNLdEYLGxnMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=e6V3KcTt; arc=none smtp.client-ip=74.125.228.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1783927057; c=relaxed/simple;
+	bh=V7XXSr1TdJRrGt7usJPyRU02xjG3Q7AKnaJV6x7W3Vg=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Xku5iqhbaR5GuM3IcXE7tmkEAlxtsE94ZwuPW4oU07gLOmnwHsCSwM6LMjVSnyYf9dGp66r03+vFp/utDmkfnt6iHzQ9Q465WRY70q2X9DB7J2pd3eIAWeuT/lh/pQUO99ids1VPtrSJpOQRH97Bb3CG8Rq3Y5yQqgS+k0ovMnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ACvrqW4n; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="e6V3KcTt"
-Received: by mail-ej2-f2.google.com with SMTP id a640c23a62f3a-c15f8dd6f18so181445066b.1
-        for <bpf@vger.kernel.org>; Sun, 12 Jul 2026 23:35:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783924529; x=1784529329; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=h7vE7Szm3XNqCxlRDi2ZCo5mo4ITxmNYPLIe9N/Lh5s=;
-        b=e6V3KcTtU1nidHXUy0FCya7HuXMYKPCqDSrA6ShZ5fHZe6NelMvR9aHnFV4Nh1hUC9
-         HNIyOK6D+1Qf7JeQfL0FF1WoqhMo5sOEw7+kOgjsNyyrj2ziBVujWWBPK1UpgQ2sNQn5
-         tGolzTOesew44igiCUX0Sd1SzXDKiCAZ3trRlUCV7YS+/pQMIzKNptJDzqDVvn4Fcngg
-         vBj+vwEPzIyXm4ms+x98Ntw6iOaLQfB24t/isu0CUHd+YKcuSHelJX3Oqq8GTZxEGvxz
-         WMKuIPW+TDNBSHQUvD2fcobuamztg0OcvTHN+jyjXwY7J2CxbIuqxPs3Fial7aeqsIjS
-         3Y9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783924529; x=1784529329;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=h7vE7Szm3XNqCxlRDi2ZCo5mo4ITxmNYPLIe9N/Lh5s=;
-        b=dTKqNrxl+zvd9iO1xY3RsUh3ERQuA0njXKQJALi/aMbhJYZDzsAPJp8IFS58MmWsu6
-         ZXk7BKEihVopTEti8KDBRm87jg2vKVNj+QW/Vs1yK0X/iUHOoIEeVeWGLrs+RTSZ2rAn
-         NmEIZI2aWchlBUCte/aia8DxWpG0HxKwxkxMp+Mo10MbPNJ70Z2X+f1FtvmDjAH0ajtA
-         wuklFZduyjiO25Jat7iVecm3pKNA/aWMSlwMZu9R0gYwAjqI5naRAFm/jb3KyBIxrRCz
-         C/H99u8D571lO9YpslE12fpW1ThLqnbsLJ8d9Vv3Q1ML+UoCJ4xuzqL+hFheX2qQeSaF
-         96nA==
-X-Gm-Message-State: AOJu0YwuPzdxpxQo7I98LzzqDyW0Yirg/PUXXndI4HuggmV6Kxtl8cbE
-	u2MHgQuEURxhH8EkHleHxrBgP2RNjBEFMHTXxqoF5b3h6pkPX9WJ6lwxUihU/zeI26aL/SmVPrm
-	rj9GNkrEATvN/
-X-Gm-Gg: AfdE7ckal6Og29DInAqojfVjxYyr9+0ziNiQHACMj/puOosqKZyx0NiGyMiDy+g6fWR
-	cJtEEo6V5YjUw8QpdFo6hulvJoUpNiDKcDf+TXEnUJk4h7g4xS4ZiNU4DXmGHfMjQGkLKwYmYDt
-	59TbNWNcH3dvE36EicfE+r42Wi8KRzK8EMfcYiBgDyKvpCsdM/dXTmHd+7xBZota3/y9pzmHgLA
-	2Sg1JHST7eCaxaR9uQxOBBzIkCfWQHRXZeUvdulJSOj5H19MwXtmAGHV1E0Ms6+R8ls/vDKHcZT
-	KBm4MqUcTjykriHOrZJ3TIDMnQd6MwT63Bh/4L60+Uo2AnRGBY18j+1QRqki/wJeLHQZPqGoGhc
-	0NLF9Fv5e+pFpu+POZtkAC/ypXybxPhj6pDmxqEVdFkjnqm1Lnds71caDPwSQXPNyOBwrq1x9oa
-	RZkhK9xCrGpL0MhXryXSbyNIO+m4o0OZpnL+EI
-X-Received: by 2002:a17:907:e1d3:20b0:c15:c81c:d6fc with SMTP id a640c23a62f3a-c161e9416a9mr199248766b.9.1783924529478;
-        Sun, 12 Jul 2026 23:35:29 -0700 (PDT)
-Received: from localhost (27-51-9-144.adsl.fetnet.net. [27.51.9.144])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4a42ae81f1esm5074320b6e.11.2026.07.12.23.35.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jul 2026 23:35:27 -0700 (PDT)
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: bpf@vger.kernel.org
-Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	sun jian <sun.jian.kdev@gmail.com>,
-	Matt Mullins <mmullins@mmlx.us>,
-	stable@vger.kernel.org
-Subject: [PATCH bpf 1/1] selftests/bpf: Enable BLK_DEV_NBD for raw_tp_writable_reject_nbd_invalid
-Date: Mon, 13 Jul 2026 14:35:11 +0800
-Message-ID: <20260713063513.215781-1-shung-hsi.yu@suse.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ACvrqW4n"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6EF31F00A3A;
+	Mon, 13 Jul 2026 07:17:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783927056;
+	bh=53ZHr3cMIylOLjl4WEN6FgAdOLZb+0qyaR+2VpwbnsM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ACvrqW4nfa+YV4T2t6H70bsB8YiZ+Kav799ogaObmItmjDNd2lGHVBcYSvXOijxsd
+	 JgGnPN9XEJb7z+7EGQzQyLcTNlREzteEULMRUjXCmT01aWMHwX/0xir9WiF77x3+XN
+	 mmpewK3GEvMkP83HIHirSAKBlwPMu5bqBPCcJlrlFdbfG0JByaAzHic9zVuYE407i2
+	 S5FSBmvl9vNGK5kXhHXK2JjXOwUse8G3XMs3MLfz27aCzI3bJGTW9KQan/2APzLiJX
+	 Dj2q20as2X2mkKnWYOZyWqo9OoYnBvghIcUhTyjIboe4RKlNEplza4r9O+i7LSbQDO
+	 +XgkIDuVWK0oA==
+Content-Type: multipart/mixed; boundary="===============0820187192493825405=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <2cc3bdacec86e02e36a627faa455d53fabfd5333403eb629ad812717288d67d6@mail.kernel.org>
+In-Reply-To: <feb30511a4b3e198253666b5ea2499d0944c153f.1783920884.git.chenyy23@mails.tsinghua.edu.cn>
+References: <feb30511a4b3e198253666b5ea2499d0944c153f.1783920884.git.chenyy23@mails.tsinghua.edu.cn>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover helper reads of invalid spill siblings
+From: bot+bpf-ci@kernel.org
+To: chenyy23@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: chenyy23@mails.tsinghua.edu.cn,john.fastabend@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 13 Jul 2026 07:17:35 +0000 (UTC)
+
+--===============0820187192493825405==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> selftests/bpf: Cover helper reads of invalid spill siblings
+>
+>     Add a verifier_spill_fill case that passes an untouched byte next to a
+>     one-byte scalar spill to bpf_map_update_elem(). The full-capability load
+>     retains the existing uninitialized-stack behavior, while the CAP_BPF-only
+>     load must reject the STACK_INVALID helper read.
+>
+>     Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+
+This test covers a verifier bug where a helper read accepted an
+uninitialized (STACK_INVALID) sibling byte next to a narrow (<8-byte) scalar
+spill.  That behavior came in when sub-8-byte scalar spill/refill support was
+added, which left sibling bytes STACK_INVALID while the slot still reported a
+spilled scalar.
+
+Should this carry the same Fixes: tag as the companion verifier fix so stable
+backports pull the test in alongside it?
+
+  Fixes: 354e8f1970f8 ("bpf: Support <8-byte scalar spill and refill")
+
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+> index 8b166c42c4e0e..e686f6d8d5656 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+
+[ ... ]
+
+> @@ -1307,6 +1314,32 @@ __naked void stack_noperfmon_spill_32bit_onto_64bit_slot(void)
+>  	: __clobber_all);
+>  }
+>
+> +SEC("socket")
+> +__description("helper read must reject an invalid sibling of a narrow spill")
+> +__success
+> +__caps_unpriv(CAP_BPF)
+> +__failure_unpriv __msg_unpriv("invalid read from stack R3 off -7+0 size 1")
+> +__naked void helper_read_invalid_partial_spill_sibling(void)
+> +{
+> +	asm volatile ("r5 = 1;\n\t"
+> +	"*(u8 *)(r10 - 8) = r5;\n\t"
+> +	"r2 = 0;\n\t"
+> +	"*(u32 *)(r10 - 16) = r2;\n\t"
+
+this isn't a bug, but could this asm block use the same backslash
+line-continuation style as the neighbouring tests in this file?  The two
+tests just above it, stack_noperfmon_reject_invalid_read() and
+stack_noperfmon_spill_32bit_onto_64bit_slot(), write a single string with
+trailing tab-backslash, and this is the only "\n\t" per-line block in
+verifier_spill_fill.c.
+
+> +	"r1 = %[map_partial_spill] ll;\n\t"
+> +	"r2 = r10;\n\t"
+> +	"r2 += -16;\n\t"
+> +	"r3 = r10;\n\t"
+> +	"r3 += -7;\n\t"
+> +	"r4 = 0;\n\t"
+> +	"call %[bpf_map_update_elem];\n\t"
+> +	"r0 = 0;\n\t"
+> +	"exit;\n\t"
+> +	:
+> +	: __imm(bpf_map_update_elem),
+> +	  __imm_addr(map_partial_spill)
+> +	: __clobber_all);
+> +}
+>
 
 
-The raw_tp_writable_reject_nbd_invalid test relies on availability of the
-nbd_send_request tracepoint, which is only present if the selftest kernel is
-built with CONFIG_BLK_DEV_NBD=y and the kernel built from current BPF selftests
-config lacks.
-
-Without it, the bpf_raw_tracepoint_open() call always returns with -2, leaving
-raw_tp_writable_reject_nbd_invalid test always passing without exercising the
-checks bpf_probe_register().
-
-Cc: <stable@vger.kernel.org> # 5.2.0
-Link: https://lore.kernel.org/bpf/alRtilWhKw4zzMkI@u94a
-Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
 ---
-Not sure if fixes tag is the right thing to use here, so use the cc
-stable tag instead to get this config change propogated to other stable
-branches to make stable BPF CI's job easier.
----
- tools/testing/selftests/bpf/config | 1 +
- 1 file changed, 1 insertion(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index adb25146e88c..e1797bd87904 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -1,4 +1,5 @@
- CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_NBD=y
- CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
- CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1
- CONFIG_BPF=y
--- 
-2.54.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29229349078
+--===============0820187192493825405==--
