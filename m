@@ -1,111 +1,125 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91ABD154425
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 15:53:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABCE2305968
+	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 15:54:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783958009; cv=none; b=NWaE0JmMD5JaB2Z3dTjjde6fcbgw00Ypkrdj6U3Bo+0/xKnReLUnpL129jSHFE0NAodiYiPLaUaTza766YEtwdC72baN7FKO/uFqOcFCBiuYT1TnLjKhk0U1hyynO0SNmsJDgWPt3JinA+6+HUThomY3CYoBXMIpGwyLHmibgYM=
+	t=1783958055; cv=none; b=VJ4u3ceei2m+8NVlqpOffzdA0Lro9NzM39TnvpQAc5qfu5/+Tles5cQo9LjzGXtIFbzUWqGGP91d0xMr1rouMm0aH16l8Do8CR82XYwk7tVHyyNG++kMOwRcQq5NhX9Go0Un7A+c/skPMWGTAPoOomSJpSjSVw8GP7nZe5vyCTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783958009; c=relaxed/simple;
-	bh=xTrTulLN8eiqiikIm/XqhCskn7iW2F82EhJx6ao5j1g=;
+	s=arc-20240116; t=1783958055; c=relaxed/simple;
+	bh=ddKf8ndAEeBabQs46azWueIkzxoT5KFgXRksnCL2ee4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=H3XkASfjHnOpwpoKWZQ5F0BFAoLwnyBvYcVQi3tUnkPiBJoPQXTo/oTDDsF8RNC/dTdDzYRwxgjv0GfZPheu1grVqZa6ADhL6nkjomLjnxGyHy3/HpvJ/YXiom1yqrvMHWOhGQ4Fms5eOqy6bbOFOVBn8aeg9jeFQI1S//Zgj+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hgSwWh2f; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=HEi/NbLENIGdn2x4pUgbleBDZosibAAAdkgwRQ2v3Dyz7i+3h3lQ6LytvTjJP//JABTXzQnDvAH9/J5G9cq0G8PBPu9P47wdaVZJDyLkpmRzyTDi4GRpgfcwsTDJorKw2pcdYfbcnf8Q8oJQ21aXmrSBrLN5AM8HwWh8tTOBY+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ineGNvx7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hgSwWh2f"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D4831F000E9;
-	Mon, 13 Jul 2026 15:53:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ineGNvx7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1672C1F000E9;
+	Mon, 13 Jul 2026 15:54:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783958008;
-	bh=M+LhhvK0xU/q1HIfF3Qn4Ik4tXl9fz/0QBE5Bjvl1Js=;
+	s=k20260515; t=1783958054;
+	bh=NolQ1GJUP/99/QcDDOW/72jcu5n7XTlaCqyCiISQDXQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hgSwWh2fmaK+rlzy1iVpitU2+Xn6RuIM3pqufuDMQSl8cqVcyrtjEbpI2o9IifRQW
-	 C940Flue8o/jgnAG59bnp1lQ4vXguW7Gc+nzxpBgEH9owxHFq6uxcHugRPR34Ho5rc
-	 6UcsWKojONkpDjIg+z5+GsqiFRBD6Vnk9OS/dEzf/jWRMbQpG5WyKgpGHD6sfBga/2
-	 tZhLLMS4VZE8SXFVcc+g6bC+/2Uom8MiBYQ7MvhAtv1uhvfKUKJmMjGS5uhX0zi1HJ
-	 APLtb7rIqxB4+cc7eXO+o19vckahMcycOorGuKwCNqEraEcpLQPtSVTJiF36LNwlbc
-	 Jg6p10Eepva1g==
+	b=ineGNvx7cmphbHqs2j1sPZXYL4z+ge0oJZj0L7Boodq+qUInLGLXVbmpyrGelUgYf
+	 tX18X9gEMz8K3MdANG37h5J9f6CM1dE1KQu6NNvoxK8VZZr0uik8qtpdu0cSyS7Xkh
+	 3SBqaLi+4eHqJ/KvbjsyWvKM4Cs0iox4QoLEgtKiM8WcgzHw2j1nPhsuwkKvKPYjPs
+	 hyYq1bCqJCeij/v2HrlNL9ozg5TiwxdzNCF0RWtLIsTlEFrbeMi3CVmC7oHUO6b7HM
+	 dW1FWPJt9/2ygmjn2A1jU3DzDq5/52vXee6EeKVpTewmP33ZBjJJ9dyms6U+/J9BZ/
+	 qeK8L4fbPEoBw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 12/17] bpf: Report Execution Context Safety
- errors
+Subject: Re: [PATCH bpf-next v3 03/17] bpf: Add verifier diagnostic event
+ log
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260713153910.2556007-13-memxor@gmail.com>
+In-Reply-To: <20260713153910.2556007-4-memxor@gmail.com>
 References: <20260713153910.2556007-1-memxor@gmail.com>
- <20260713153910.2556007-13-memxor@gmail.com>
+ <20260713153910.2556007-4-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 13 Jul 2026 15:53:27 +0000
-Message-Id: <20260713155328.2D4831F000E9@smtp.kernel.org>
+Date: Mon, 13 Jul 2026 15:54:13 +0000
+Message-Id: <20260713155414.1672C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Incorrect diagnostic constraint explanation for global function =
-calls under locks
+- [High] Unbounded growth of diagnostic event log causes `-ENOMEM` verifica=
+tion failures for valid BPF programs due to memory fragmentation.
+- [Low] Unused static function `diag_print_history` causes build failure wi=
+th `-Werror`.
 --
 
---- Patch [12]: [PATCH bpf-next v3 12/17] bpf: Report Execution Context Saf=
-ety errors ---
-commit 4c2714bc706956dcdd83f54e5db8f96839c37f55
+--- Patch [3]: [PATCH bpf-next v3 03/17] bpf: Add verifier diagnostic event=
+ log ---
+commit 84f2d0d4f3731edb22773c28c7395e2076557ddb
 Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-bpf: Report Execution Context Safety errors
+bpf: Add verifier diagnostic event log
 
-This commit augments selected sleepability and critical-section failures
-with Execution Context Safety reports. It adds source context, path history,
-and suggestions tied to the active context while keeping existing verifier
-messages.
+This commit adds an environment-owned diagnostic history for verifier repor=
+ts
+to track branch events. The event array grows as entries are appended, savi=
+ng
+positions for future truncation when the verifier backtracks.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 07e2c1ed8fbe6..e253fbc733a48 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -10109,17 +10111,32 @@ static int check_func_call(struct bpf_verifier_=
-env *env, struct bpf_insn *insn,
->  	if (err =3D=3D -EFAULT)
->  		return err;
->  	if (bpf_subprog_is_global(env, subprog)) {
-> +		const char *context;
->  		const char *sub_name =3D bpf_verifier_subprog_name(env, subprog);
-> +		const char *operation;
-> =20
->  		if (env->cur_state->active_locks) {
->  			verbose(env, "global function calls are not allowed while holding a l=
-ock,\n"
->  				     "use static function instead\n");
-> +			operation =3D
-> +				bpf_diag_scratch_printf(env, 1, "global function %s()", sub_name);
-> +			bpf_diag_ctx(env, BPF_DIAG_CTX_FORBIDDEN, *insn_idx, operation,
-> +				     BPF_DIAG_CONTEXT_LOCK, "lock region",
-> +				     "Release the lock before calling the global function, or use "
-> +				     "a static function instead.");
+> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+> index 49106115621db..ed19220aca9a9 100644
+> --- a/kernel/bpf/diagnostics.c
+> +++ b/kernel/bpf/diagnostics.c
 
-[Severity: Medium]
-Will this result in an incorrect diagnostic reason being printed?
+[ ... ]
 
-Since BPF_DIAG_CTX_FORBIDDEN triggers diag_ctx_forbidden(), which in turn
-uses diag_context_constraint() for the constraint explanation:
+> +	cap =3D log->cap ? log->cap * 2 : 64;
+> +	if (cap < log->cap) {
+> +		log->error =3D -EOVERFLOW;
+> +		return log->error;
+> +	}
+> +
+> +	events =3D krealloc_array(log->events, cap, sizeof(*events), GFP_KERNEL=
+_ACCOUNT);
 
-kernel/bpf/diagnostics.c:diag_context_constraint() {
-	...
-	case BPF_DIAG_CONTEXT_LOCK:
-		return "code holding a BPF spin lock cannot call operations that may slee=
-p";
-	...
-}
+[Severity: High]
+The bpf_diag_record_branch function is called for every evaluated condition=
+al
+jump without corresponding truncation during verifier backtracking, which
+records all explored paths instead of just the active causal path.
 
-Doesn't this incorrectly tell the developer that their global function call
-was rejected because it "may sleep"? Global function calls are generally
-disallowed under locks due to verifier state limitations rather than just
-sleepability.
+For complex programs approaching the one million instruction limit, the log
+can grow to several megabytes.
+
+Since krealloc_array requires physically contiguous memory, these large
+allocations are highly likely to fail due to memory fragmentation.
+
+Could this unbounded reallocation cause memory allocation failures for valid
+BPF programs?
+
+> +	if (!events) {
+> +		log->error =3D -ENOMEM;
+> +		return log->error;
+> +	}
+
+[ ... ]
+
+> +static void diag_print_history(struct bpf_verifier_env *env)
+> +{
+
+[Severity: Low]
+It appears this is defined but never called in this patch.
+
+This triggers a compiler warning for an unused function and breaks the build
+when the kernel is compiled with warnings as errors.
+
+Is this static function currently used anywhere in the file?
+
+> +	const struct bpf_diag_history_event *event;
+> +	const struct bpf_diag_log *log;
+> +	bool printed =3D false;
+> +	u32 i;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260713153910.2556=
-007-1-memxor@gmail.com?part=3D12
+007-1-memxor@gmail.com?part=3D3
