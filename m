@@ -1,128 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561C6335BB4
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 16:38:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A43331A53
+	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 16:42:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783960708; cv=none; b=T2IW4b6cG0KzR53fbw+mH1Gdbm1culRkoFgqKeRLd2UOk/axhqDswpOH1J+TNP9aeaF03eBsUn1AtAr/cutaTCkGYsDGJ4ehPK/Uev0dCq9a5HjvmzjPkLhGe2/8o86gz+Xhn8mppAaGNwcJ95sMjSWhDXtq2fENMSvUCq1uqHI=
+	t=1783960947; cv=none; b=Y+wvOhaiptZINxIbT2YOKENcAfDoFB6vFexRUoBw59nsBz2emtgMNlq6a1E1zaPR5CxdVaBccLAB8zJAPoDXFFqLBjKf7WUHqnN395qqfeLEtLkINIc+XfzCYUiDAzo4Q2lgi0N2LPkFbvpvj88+BnINrQPEb3Ua7oX1xHtDg+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783960708; c=relaxed/simple;
-	bh=TGqNklRmFfYBCBzh00MzxLOeUe/02Ig++aWTe+vFT7w=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Ump/LCGaIb8rArWaaakx/Dww1yfZEMYsJulNM5ekpHdumzf/2UFg6gm7NMocegL5yyLaNws2jO1tuBVKMI14MhI2XlPuQvgv9KCICIF7CAR/EL7rsAonv4s8HngmYBcB/fbFHaMYR8W4jYk5vnqz7O0fbbVdbbtK4x4dwFNcArw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D87lis2B; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783960947; c=relaxed/simple;
+	bh=0x4QPJy3oGRMxfHWoYqSLp4a5w7gPSX6tWw8LsKJyyI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aLUENkmHbhqD5TgxfcR5pwRnB55L7/VFQGSA1edLZd25hYkPFUl4SYALlHUjXR8xQu+WFxOHMmhSgfaCbXSirwyji9X9PeEk1ymx13aIc+JSbtOyAarGvVCMVmVdifDklvZ54LbnA/fybp296VThNTK76D0NgW3sVushRo8mejI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YMD95T5g; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D87lis2B"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D70201F000E9;
-	Mon, 13 Jul 2026 16:38:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YMD95T5g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 005511F00A3D;
+	Mon, 13 Jul 2026 16:42:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783960707;
-	bh=wFDTA1Dx1oEwfaDUg9NYDRssYMwh/pMMy8eMr0LfbqQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=D87lis2Bo8Vh+gxd7NCGJ5cjMVQleMxk/Ml+3tMF21NfiPXfXmBV3bEMWO5PAELLe
-	 7ue9UpBiUf7KulNyaYYiEuSP3obD/5SNHK8kx57ImbAzfSfs02N9GCwpKJzcyPIT3y
-	 BvGejQEXR37JkDLRFBTAjnLO5B5/B6Kqz165lriYZNVChHJgJ3F7gtznMvJmv6rebf
-	 litR1kqviUqQLf8sO7whQGZv3AGnBA9IbcB1U4wyTIVViLhAIgSl0e/CJ+meojpydX
-	 w6/sHYgsrrTGtrPwsGGp6fX6Ndf5jFlonh/hoFFd2Y6SaCFHlLt87lkuD15pefVgfR
-	 jGz2W/D45cCeA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v7 3/3] selftests/bpf: Add bpf_fib_lookup()
- VLAN flag tests
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Avinash Duduskar" <avinash.duduskar@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260713162305.1237211-4-avinash.duduskar@gmail.com>
-References: <20260713162305.1237211-1-avinash.duduskar@gmail.com>
- <20260713162305.1237211-4-avinash.duduskar@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 13 Jul 2026 16:38:26 +0000
-Message-Id: <20260713163826.D70201F000E9@smtp.kernel.org>
+	s=k20260515; t=1783960945;
+	bh=Zltyqt7dF1hkJN/jP/CdnhprTdfvpBe1oag9qSSox24=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=YMD95T5gB5V6T1KmPKUt3jBxes75nLN+JrX7ufd6wzFcjrcdf4OPFO5O/6KEGbI4p
+	 /qPsJdKgM1VcjGX+E9RJOqAdM796/JvnoQaOR0QS92oa5R1put/ZxPUddbroI2Tu71
+	 FefurKURKfoiisCy/CjS7hvxUrfgD1Ex8u47gMffmBu9NPWCSru1kAE1rx7Y29oejY
+	 7i1zDqIEnOgFDcMGP2JEkipfRSoxeoDToKGDEsej2BP1w2RYFvievCeyzKg1L1xlH/
+	 YKrYIjUxFoY2yWG5K3uqnUsZ7F3Xt7FFGhZzEg5MwswwfwagH1A1r0Bqd8ZvZEmx63
+	 Lmwi+0z29/2Zw==
+Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 2C724F40209;
+	Mon, 13 Jul 2026 12:42:24 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-07.internal (MEProxy); Mon, 13 Jul 2026 12:42:24 -0400
+X-ME-Sender: <xms:cBVVaunnabxwFOWElc-2hiBfATA0yTqjWE3aMVTIQndTuJglQjbcMA>
+    <xme:cBVVaoKqoeQWkiAxePVsb5xWtY9UPuGCuRv4lu1mcCUm8WG1U-9bL-DnSuJHayltB
+    kbDhU-jlolP3PSyv8edC4uYgNZkwxEWwbaV4_70CFloi6rugs7NFZC4>
+X-ME-Received: <xmr:cBVVaraMibBRTCi72ti4GcRWQ5JyV8HJ7ZlaaQ-tw8zj4r8k8gVN2Tc0ga1NXA>
+X-ME-Proxy-Cause: dmFkZTGMoWnWRGMKpgIRcZga9S7P7sHAGK5d+gFuMURcEOT0aJUrqozEaYj6fAMVLY196L
+    c7Q9Qx95Y6WcY327qRelJqkKmKiY8PyHcdZc3JZu/hVxbAUCmEOUcUUvGZPJlzK+Zg1A7p
+    E1M4Hr0gckN5dJRqg90LQ0EHm2k1fI/i+fUhPF+S0gisFoPy96WSVpdPglvA43z/98UfZS
+    77zo20OTGrNknxecuDjYSkHGwSxjzQ1LYlvgazPzK8oFp3YKDb/rYy0YfHXnH6tiE3ZJF7
+    ZokTq2XxIK+Yzvex9+lS2uKqt+BJb+586vgE/3bYp3UeKEBWyikgLa9l9cHHjIxzYEIHil
+    oF2jNkQA3L0opoOSBPQ21b1KwnAtX+7mm1hI1VkIvCQ4Sd8xTjNlbp2bhYvHJ2okcMR4ns
+    hsRCs5wvczPDK1sHUQYigsqKB7ZtUPERQqVE+pr7t0diJqU2CJ0D6rKy0JLWAbPnh0PP+w
+    GMO82NWmJpzPCDTYl7tKUndgaEXCJlprGOkG6oO+jiyNiJ6ompZ9Gl/0s/kkHRKHMwro8s
+    R9WYSyj47gkweDae0dm64/jnpgoYlfQRkSg8eWsf6jTGBGtei9aL7PRaOPj+mFaLXnfhGc
+    FUKxgsObsfGFTX1wCE5bSoek7+u19U/q8fwZmEcgbsplA5BpMngGDPZ0RlYA
+X-ME-Proxy: <xmx:cBVVaszZU1TD3CD3AsVnwyX518CY3FWJekcfZ1uGZO0tyLXOt_73IQ>
+    <xmx:cBVVavY-_LVEzdVDUJGtqVbrXGgvLeKIZpGs4SCglyb0k4KXp2XSCw>
+    <xmx:cBVVajXlPXaX2BcJ5bBNoWT8IgmSVzr_trhD-_ioOaq5hELW3DCn8g>
+    <xmx:cBVVaqFIKNFRiu1WcDspECKkHRpK8vBhy5plkTOPM4mCrQJ8NdAXpA>
+    <xmx:cBVVamEIjRt3MpSq9SGrtev-xed03Gb6y-njY6BZpA-E3wjOpAI01VIx>
+Feedback-ID: i10464835:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 13 Jul 2026 12:42:22 -0400 (EDT)
+Date: Mon, 13 Jul 2026 17:42:21 +0100
+From: Kiryl Shutsemau <kas@kernel.org>
+To: Lorenzo Stoakes <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ 	Suren Baghdasaryan <surenb@google.com>,
+ "Liam R. Howlett" <liam@infradead.org>,
+ 	Vlastimil Babka <vbabka@kernel.org>,
+ Shakeel Butt <shakeel.butt@linux.dev>,
+ 	David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Michal Hocko <mhocko@suse.com>, 	Uladzislau Rezki <urezki@gmail.com>,
+ Toshi Kani <toshi.kani@hpe.com>,
+ 	Dave Hansen <dave.hansen@linux.intel.com>,
+ Andy Lutomirski <luto@kernel.org>,
+ 	Peter Zijlstra <peterz@infradead.org>,
+ Thomas Gleixner <tglx@kernel.org>, 	Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+ 	"H. Peter Anvin" <hpa@zytor.com>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ 	Will Deacon <will@kernel.org>, Dev Jain <dev.jain@arm.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, 	David Carlier <devnexen@gmail.com>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, 	bpf@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org,
+ 	syzbot+fd95a72470f5a44e464c@syzkaller.appspotmail.com
+Subject: Re: [PATCH mm-hotfixes v2 1/4] mm/vmalloc: acquire init_mm lock on
+ huge vmap to avoid ptdump UAF
+Message-ID: <alUUfGnM_vbhOTVK@thinkstation>
+References: <20260712-series-vmap-race-fix-v2-0-ad134cc3a12a@kernel.org>
+ <20260712-series-vmap-race-fix-v2-1-ad134cc3a12a@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260712-series-vmap-race-fix-v2-1-ad134cc3a12a@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The input netns boundary check in `test_fib_lookup_vlan_netns` i=
-s a tautology and cannot detect regressions.
---
+On Sun, Jul 12, 2026 at 11:42:24AM +0100, Lorenzo Stoakes wrote:
+> Currently there is a nasty race between ptdump and vmap when attempting to
+> map a huge P4D, PMD or PUD entry.
 
---- Patch [3]: [PATCH bpf-next v7 3/3] selftests/bpf: Add bpf_fib_lookup() =
-VLAN flag tests ---
-commit dd8cb85eafac54bc022600352c949874324b276d
-Author: Avinash Duduskar <avinash.duduskar@gmail.com>
+<... skip 145 lines of commit message :P >
 
-selftests/bpf: Add bpf_fib_lookup() VLAN flag tests
+The code looks good to me, but I think the commit message needs some
+love. It is long, and the pieces of the story are scattered: the race
+itself only shows up around the middle, after several paragraphs of
+ptdump background (including the arm32 and EFI notes that the text
+itself says are not relevant to the bug), and the one genuinely subtle
+part -- why the read lock is sufficient -- is not spelled out at all.
 
-Cover both new VLAN flags in the fib_lookup test. BPF_FIB_LOOKUP_VLAN
-reduces a VLAN egress to its physical parent plus the tag, and
-BPF_FIB_LOOKUP_VLAN_INPUT scopes the lookup to a VLAN subinterface.
+Something along these lines would be much easier to follow:
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/fib_lookup.c b/tools/=
-testing/selftests/bpf/prog_tests/fib_lookup.c
-> index bd76589580041..f7361f9a34592 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/fib_lookup.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/fib_lookup.c
-[ ... ]
-> @@ -851,0 +852,136 @@ void test_fib_lookup(void)
-> +void test_fib_lookup_vlan_netns(void)
-> +{
-[ ... ]
-> +	/*
-> +	 * input: the moved device is still in veth7's VLAN group, but it
-> +	 * lives in another netns, so the lookup must fail closed
-> +	 */
-> +	skb.ifindex =3D parent_idx;
-> +	memset(fib_params, 0, sizeof(*fib_params));
-> +	fib_params->family =3D AF_INET;
-> +	fib_params->l4_protocol =3D IPPROTO_TCP;
-> +	fib_params->ifindex =3D parent_idx;
-> +	fib_params->h_vlan_proto =3D htons(ETH_P_8021Q);
-> +	fib_params->h_vlan_TCI =3D htons(66);
-> +	if (!ASSERT_EQ(inet_pton(AF_INET, IPV4_VLAN_NETNS_DST, &fib_params->ipv=
-4_dst),
-> +		       1, "inet_pton(dst)"))
-> +		goto fail;
-> +
-> +	skel->bss->fib_lookup_ret =3D -1;
-> +	skel->bss->lookup_flags =3D BPF_FIB_LOOKUP_VLAN_INPUT |
-> +				  BPF_FIB_LOOKUP_SKIP_NEIGH;
-> +	err =3D bpf_prog_test_run_opts(prog_fd, &run_opts);
-> +	if (!ASSERT_OK(err, "test_run(input)"))
-> +		goto fail;
-> +	ASSERT_EQ(skel->bss->fib_lookup_ret, BPF_FIB_LKUP_RET_NOT_FWDED,
-> +		  "input across netns fails closed");
+1. The race, up front. Diagram, if we you feel like it;
+2. The fix, and why the read lock is enough;
+3. Why a trylock;
+4. The arm64 wrinkle and the temporary ifdeffery patch 4 removes;
+5. Secondary changes (guard class, walk_page_range_debug() assert);
+6. History, if you feel like it.
 
-[Severity: Medium]
-Is this test effectively a tautology?
+Point 2 is the one I care about most -- the same reasoning would also
+help in the comment in vmap_try_huge_pmd(), where "Therefore, acquire
+the mmap read lock" is doing a lot of unexplained work.
 
-The IP and routing configuration for the target namespace NS_VLAN_B isn't
-set up until after this input test runs.=20
-
-If a kernel bug completely skipped the netns boundary check, wouldn't the
-route lookup fail anyway and return BPF_FIB_LKUP_RET_NOT_FWDED, causing this
-assertion to falsely pass?
-
-> +	ASSERT_EQ(fib_params->ifindex, parent_idx, "ifindex untouched");
-> +	ASSERT_EQ(fib_params->h_vlan_TCI, htons(66), "tag untouched");
-> +
-> +	close_netns(nstoken);
-> +	nstoken =3D open_netns(NS_VLAN_B);
-> +	if (!ASSERT_OK_PTR(nstoken, "open_netns(b)"))
-> +		goto fail;
-> +
-> +	/*
-> +	 * egress: the fib result is the VLAN device here, but its parent
-> +	 * is in the other netns, so the swap must not happen
-> +	 */
-> +	SYS(fail, "ip addr add %s/24 dev veth7.66", IPV4_VLAN_NETNS_ADDR);
-> +	err =3D write_sysctl("/proc/sys/net/ipv4/conf/veth7.66/forwarding", "1"=
-);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260713162305.1237=
-211-1-avinash.duduskar@gmail.com?part=3D3
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
