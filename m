@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4822A3164D8;
-	Mon, 13 Jul 2026 02:58:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E831F91F6;
+	Mon, 13 Jul 2026 02:59:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783911501; cv=none; b=iLE7TIKwDmnCqWhUvP4UABFIToLFw5vqL1c+jBhblEoM+GaQGt/Wwlvi9Suzk1fAjvsJbu/gt+fZZ66ZsxqHaXZPETXPOeIx0zueKS1B4dqze9hw8GxonvuAtSnsWpxx2zWAYrGb7tCtfwbAo+JHJ+UYFijG0KFilITu4M3Yryg=
+	t=1783911558; cv=none; b=KoZiQQKkDyw2QyAKw4HzXJg3Ar22Ou4ho28A4x698Gd80X+R6QqUAK8xv95C4BJGiFXAC8ew+LrhTUYsamentIFoMOD7DYu39f4TsLK8rNcAH5lSD9F54DT44SzL20Ww8zR1RWFV3ajNb9D8ubZdUmj8V1IZbmMdj/OINwepfM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783911501; c=relaxed/simple;
-	bh=1qnQwtrnZ3iuhLpQOci/811WEm+7zlzEYwAEB+PqJeQ=;
+	s=arc-20240116; t=1783911558; c=relaxed/simple;
+	bh=HTRyhcc/qN58USeJ9eVkO/cCQOk3o43lfBhkZKaeVgg=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=lCrfL6ZixWUg2TxoTq2VXgdItdpiSnVgN7Iq7hVc6ft+OV3KR6jcTmHVtN4WgT+p7xRpK1tObEw7K6ffC8I8498YB4tu1U2iVwOt0aGUdCF39Gv8XRDgXHEXoZBf6JMhkkeg6RJt3p06lKWtQ8Q7G8YABLVgZ10e1YMZ5wppo2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MqezkPBl; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ocMqdcvqJwZA3ZFtUEpKrQ9dU5QpwYXi64mwOthPvWMjMoxSG6Gdm91UI2hzuM+J2ENIMFmozG8Wrbyqrc200z0gvoWnof1Q2T0bRmyKqwz7htl4xgr9WqteywVQyNoRHVoPhF5uW4+svHlzHuNn6let63twp4hHNLMP+9AOydU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gj8DpWcT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MqezkPBl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A302C1F000E9;
-	Mon, 13 Jul 2026 02:58:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gj8DpWcT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A941F000E9;
+	Mon, 13 Jul 2026 02:59:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783911499;
-	bh=gUliRMgy08p0JS/yD8cg3tmpQyN+I3IMYF8QggJAZbU=;
+	s=k20260515; t=1783911556;
+	bh=y6MyiMjgVSv5G8GXHj6PRKFf506/otqsdvkkiVYkFgU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=MqezkPBluODLRr8vDACBqPqHEU7v3x0VpYMAd9wpbuaU9uOa0YMOFOpCk1/QF7sQx
-	 +Pr3Bb7iYu5LxAExrFPf5lTcCJYLGJz9J0izvV98SGgz8FThzSa/F11P616laU8nzn
-	 /CLIrZnoa7Fe1+QzsYFTvJzL9g8D2MCLHWX4c1CEXc4uaZOu4ftFYXrTbxZCP8M23x
-	 iJPYL9c3z3b10RLjwePnVKNDYU7KfYhSmMOl8vJELh2Ou8DcEOTHei3GMCY94BA1cc
-	 CGH9isVsBrCWYcJbPriRJZbQOh3GE8tpRvPvCaOQO6VeCHUGP9hbNWjeUJf7ifBRAa
-	 xvJlFBPf30XKA==
+	b=gj8DpWcTPpuNry9IRsvv5QWMJf/V65cdkvrwrs5OTWgkqokCKp//5/AhRM5khGWgg
+	 Bb6cMv0ovuG2M/5T818yj2c9Sebk/KPOBLr8/MSbNX/WjVjWQDsMqWzonA0TstWe3D
+	 HR48qQYf6cTeUnTKlLQTJUnool7KkovQFIM8KlHHvGV0FrslNi8kGoPfQpAr4u7UTJ
+	 6XkT4eg58MHqWXyho770+N7/diyHFGrJ6/u81XjRKnYcT0hOi8mFmKSWTTVd0//NXk
+	 f9531XOWJkpsL6lb18LRkSnN+tP7mYal7Ku6zxVggU5kz/bBGe8OVJbaq1/5PuNhX4
+	 w3O4mb5mVpxpA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCHSET SLOP RFC 1/6] bpf: Support __arena suffix for kfunc
- arguments
+Subject: Re: [PATCHSET SLOP RFC 6/6] sched_ext: Convert
+ scx_bpf_cid_override() to take an arena pointer
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Tejun Heo" <tj@kernel.org>
 Cc: sched-ext@lists.linux.dev, bpf@vger.kernel.org
-In-Reply-To: <20260713024414.3759854-2-tj@kernel.org>
+In-Reply-To: <20260713024414.3759854-7-tj@kernel.org>
 References: <20260713024414.3759854-1-tj@kernel.org>
- <20260713024414.3759854-2-tj@kernel.org>
+ <20260713024414.3759854-7-tj@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 13 Jul 2026 02:58:19 +0000
-Message-Id: <20260713025819.A302C1F000E9@smtp.kernel.org>
+Date: Mon, 13 Jul 2026 02:59:15 +0000
+Message-Id: <20260713025916.68A941F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,79 +47,64 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] The verifier skips size and bounds checks for `__arena` kfunc argu=
-ments, relying entirely on a 32KB hardware guard region. This allows a mali=
-cious BPF program to overshoot the guard region and cause a kernel oops by =
-passing an offset that results in reading or writing a large struct or buff=
-er.
+
+Pre-existing issues:
+- [High] Missing READ_ONCE() when reading from shared arena memory allows a=
+ TOCTOU race leading to out-of-bounds writes.
 --
 
---- Patch [1]: [PATCHSET SLOP RFC 1/6] bpf: Support __arena suffix for kfun=
-c arguments ---
-commit 228de70b9e4499793706318f5047bb9d51313346
+--- Patch [6]: [PATCHSET SLOP RFC 6/6] sched_ext: Convert scx_bpf_cid_overr=
+ide() to take an arena pointer ---
+commit 0bba9b04cbf24d912ae66699e643f62ba90a630b
 Author: Tejun Heo <tj@kernel.org>
 
-bpf: Support __arena suffix for kfunc arguments
-   =20
-This patch adds the __arena suffix for kfunc arguments, allowing BPF
-programs to pass arena pointers directly to kfuncs. The verifier rebases
-the register at the call site, avoiding the need for open-coded translation
-in every kfunc.
+sched_ext: Convert scx_bpf_cid_override() to take an arena pointer
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 6515d4d3c0032..71d1459c8f2a0 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -11975,6 +11980,32 @@ static int check_kfunc_args(struct bpf_verifier_=
-env *env, struct bpf_kfunc_call_
->  			continue;
->  		}
-> =20
-> +		if (is_kfunc_arg_arena(btf, &args[i])) {
-> +			t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
-> +			if (verifier_bug_if(!btf_type_is_ptr(t), env,
-> +					    "kfunc %s arg#%d has __arena tag on non-pointer",
-> +					    func_name, i))
-> +				return -EFAULT;
+This commit changes scx_bpf_cid_override() to take an arena pointer for the
+cpu_to_cid array instead of a verifier-visible buffer. It validates the
+entry count against nr_cpu_ids, relying on the arena's guard region to
+prevent out-of-bounds memory accesses.
 
+> diff --git a/kernel/sched/ext/cid.c b/kernel/sched/ext/cid.c
+> index af83084ec740a..872f699cb1acc 100644
+> --- a/kernel/sched/ext/cid.c
+> +++ b/kernel/sched/ext/cid.c
 [ ... ]
-
-> +			if (reg->type !=3D PTR_TO_ARENA && reg->type !=3D SCALAR_VALUE) {
-> +				verbose(env, "%s is not a pointer to arena or scalar\n",
-> +					reg_arg_name(env, argno));
-> +				return -EINVAL;
-> +			}
-> +			cur_aux(env)->arg_arena_regs |=3D BIT(regno - BPF_REG_1);
-> +			continue;
-> +		}
+> @@ -314,14 +314,24 @@ __bpf_kfunc void scx_bpf_cid_override(const s32 *cp=
+u_to_cid, u32 cpu_to_cid__sz,
+[ ... ]
+> +	/*
+> +	 * @cpu_to_cid__arena arrives rebased to the arena kernel mapping.
+> +	 * nr_cpu_ids * sizeof(s32) stays within the guard region covered by
+> +	 * arena fault recovery, so no explicit bounds check is needed.
+> +	 */
+>  	for_each_possible_cpu(cpu) {
+> -		s32 c =3D cpu_to_cid[cpu];
+> +		s32 c =3D cpu_to_cid__arena[cpu];
+> =20
+>  		if (!cid_valid(sch, c))
+>  			return;
 
 [Severity: High]
-Does skipping the rest of the checks here bypass BTF memory size and buffer
-bounds tracking for __arena arguments?
+This is a pre-existing issue, but since the array resides in shared
+userspace-mapped memory (and now an mmaped arena), should READ_ONCE() be
+used when reading cpu_to_cid__arena[cpu]?
 
-Because this relies entirely on the hardware guard region to catch out-of-b=
-ounds
-accesses, could a BPF program pass an offset close to the 4GB arena limit=20
-(like 4GB - 1) to a kfunc that takes a large struct or buffer size paramete=
-r?
+Without READ_ONCE(), the compiler could potentially reload the value of c
+from memory after the bounds check in cid_valid(sch, c). If userspace
+concurrently modifies the arena memory between the check and its subsequent
+use as an array index:
 
-The fault handler strictly limits recovery to the 4GB limit plus a 32KB
-guard region:
+    if (cpumask_test_and_set_cpu(c, seen)) {
+        scx_error(sch, "cid %d assigned to multiple cpus", c);
+        return;
+    }
+    scx_cpu_to_cid_tbl[cpu] =3D c;
+    scx_cid_to_cpu_tbl[c] =3D cpu;
 
-kernel/bpf/arena.c:bpf_arena_handle_page_fault() {
-    ...
-    if (page_addr < kbase || page_addr >=3D kbase + SZ_4G + GUARD_SZ / 2)
-        return false;
-    ...
-}
-
-If a kfunc access extends beyond this guard region, it seems like it would
-bypass the fault handler and cause a kernel oops or memory corruption.
-
-Should there be size validation for __arena arguments similar to other memo=
-ry
-pointers?
+Could this Time-of-Check to Time-of-Use (TOCTOU) race result in an
+out-of-bounds write to scx_cid_to_cpu_tbl[c]?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260713024414.3759=
-854-1-tj@kernel.org?part=3D1
+854-1-tj@kernel.org?part=3D6
