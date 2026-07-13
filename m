@@ -1,166 +1,124 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A473414DE3
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 13:05:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E521420E6C
+	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 13:16:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783947904; cv=none; b=MhCs7UzSq7CFBBxn+Tzvjb9U8k1pym47FCY1jCq2/2V0ssj1HZc0TSRIvIaanugzI7KPoHLckBX1iBdCZ8WznmeL41xis0KtAPKi2dLE3zi9ccqGtlmt6yWAmLnLUoygFPfuEeSZahUavzdXJREf9lSi97NDVvlQfUhKoLNAydo=
+	t=1783948598; cv=none; b=X2W0Vbs3PnHHXTpq6+ILdUzq+6Zgv/5tLANY4TTUeQYzvgj9JEwVAIXxUJ4b9KOiTFbXtFnT8/e/30qiNcAnP9hEm+HV8X9jgsdHvoBNQTmapYtkg104u4UzQnDmtahyUs9AwFCL/gp7kNLaqj/KSZKX/6asO3Y4sJd5vWJw/Bc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783947904; c=relaxed/simple;
-	bh=u+ZBEElfAJ8Fq7BiwKa+i+7tojuy99yuqEYvtggGZY4=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M8Z59RiNXPUXIMb2/kjD8bU4yIdqF0OMgenURjAwnMo7Y60f8fTZspwQ0qrhPJ/Z9DrXDjRnMfRoZGFs0VOlQQ9jxUimfZ3RTUW0xoXdhQ8dCtnd2J0zxrombKQpayRRTdZomP/xDsCK/2F4EDI7C7xHaCwWupFLg2RArTDbuhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=maKLI9Dq; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783948598; c=relaxed/simple;
+	bh=gkPtij8saZRgAahhMThOlUWUpVh7SsZyL1UOtnXMLF0=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=B2TAdB/bZQ8qOlIJxhjeICPNRXfhVcpf5Mq0wqv/1jXgdUZ72fg1G5LfXvN0/Eg2uCeJBOjXSKPbx54Hv5G6zXM93AyZWfRkV2ZU4GeziuZQLU76EcM+2yKRAM459U9NJSOX1mbdo4NRXw6wUtoiMQHGtkU6nLmc36GIhgt5iFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=digiscrypt.com; spf=none smtp.mailfrom=digiscrypt.com; dkim=pass (2048-bit key) header.d=digiscrypt.com header.i=@digiscrypt.com header.b=YLBgpUsj; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=digiscrypt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=digiscrypt.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="maKLI9Dq"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4938d5f86f3so23686205e9.1
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 06:05:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=digiscrypt.com header.i=@digiscrypt.com header.b="YLBgpUsj"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c999f162c9aso1733252a12.3
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 06:16:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783947901; x=1784552701; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=c6vHqEs/nvT9xdY9MIonzknsd0pq8kf18zBI3Kv7BPY=;
-        b=maKLI9DqVNeSfn4asMB4gKNZJj9rHB6EUyyroJpUcljp0LBTsqqeh7vB7R9TTyYJPH
-         /pGOlsrLHQolUDxyND13YRb8wciwlhuTZpCb8VU4tQssLi1yXdUCPEl3MekPS2rruugI
-         qWg/6LDbZUEtFTXpG84zDgztX6K8Lcn7sBQMl/SJqC54N/IAQOzGE5xleRBq4Mq/YPaB
-         BM6AbP6UFZWip7BjmQVEnEea/5u464z8wW8fpV4+z95HVU11FNAbLUilnp9b1UPyPgi5
-         M3WDft9KunU5CS66/gvzpnzXLxKLT/UEIXdgW0oaNrRvzyXgdibOqwull71QWLYipo0+
-         uYrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783947901; x=1784552701;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=digiscrypt.com; s=google; t=1783948596; x=1784553396; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:content-type:message-id:date
+         :subject:to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=c6vHqEs/nvT9xdY9MIonzknsd0pq8kf18zBI3Kv7BPY=;
-        b=W1FJNd+ho9h77KB5SnpXC+g4nUhj9MFCFYc4cZ2ttgapM+HSZq+HqMnojiXPy1Cvg7
-         sIMC5W41NTEvaDEO+N5KqJ4HhV4ObxFsFH4Dqn+L7txoRyZuY0+TICMImVgf7wZfS3K5
-         gh0jbY/u+nyrM81f3qNqn+NtrTt3Q5hnJChWrsl6u43dK9pbtf+V3zYee5xTNSZsORqG
-         9n6sAlBxP4gpn/H3HcLt5yz4ROxjH+F1fPL0ld7xKn6QIcUSTwW1BAq3KwxvcfojZF14
-         BFRk3UcikDZqyeqBGQ9Sw/Ny2ehF6NwN+O5bOsZcfJlJhN0xFRA4CAw8Kn93r0F6FJxF
-         riyQ==
-X-Gm-Message-State: AOJu0YybE/BcTCXiGbAkDShPNoRmMjpdl6pajxYOkzL+PshkCzpiG4pa
-	Q82Wc0XoSo09P6eDwYKT2MwBtzu90YdmkX+dRbf0A7plOv8vDiz3OCj4
-X-Gm-Gg: AfdE7cmkWrgljjrR7Bx5GR0w1MnrKwa5yWTyhHa8nYY/L1+aseXaIEE2E3eF4Dfnk5r
-	IPgqEjVXCrq78GNoC34c5f/geybMmu0Hv7b47sNyQx7gvicBGtZt7YyaP6hF+CpO796ASdQwD42
-	rRkuwCVu9Rm5QFSz5NP7RDF0K/RSF1iAf3ySZcMlgLNYqj1wlFYmrH9snuavajDT8Jx4P2vN4uG
-	qDeWPNszr4b3UaWoSB6Iimns9Lr3zeoToe4TMaJxY43hlqurqFds+FLkdLY7mdaBRka5kvFuunr
-	mcM9vXsP5T6M0AFt9ro+Vmrz47Drvie1RYgcyEQ3QiTZhYrwmuPXf9w1j3J1TlyOAC4Kfof44hc
-	OGMoUS5S22pP346kKKsNOe0OiPBPao2VUM+OrZslJfrnHBbyunESq7Ey+L9n3Gw==
-X-Received: by 2002:a05:600c:1c27:b0:492:3fb5:3a17 with SMTP id 5b1f17b1804b1-493f887ab70mr97426965e9.2.1783947901194;
-        Mon, 13 Jul 2026 06:05:01 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::86b6])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493eb6f3c42sm355887235e9.1.2026.07.13.06.05.00
+        bh=LvNHgh5W7s/63zsAYDOarIm7l7DKKEyod/RpiToacD0=;
+        b=YLBgpUsjCCNQHhPNvsqppBDlIE33VrtIxpAiTbvL9BCtJiDT/LjGAhv8HSpN3T4xKa
+         sqeHkTC0PjDaa/zzH4zWFjhdBb6byj98250bXKMAZkdPkdGK0tItQa3NUmVLb9OTRTRH
+         3EYT81A708ilSdxfPFHkO6RrjSo8eyCGCdvt7FzPFt2RVAi7MVCyjOmz3jRDmp3B2QTr
+         65F3Tl9F2Izeiwfk+brDi7Z3PRDbJZYYEjSAhb+gHhIvTS8MOuM75zFqhhjRlExdDTrm
+         9ZmL7VJhZDEElc1aZUAJd35NahL2bZv7GXX/R2LeonBB+QSdXl6HJOO+dm+n9VVoEFeH
+         vpZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783948596; x=1784553396;
+        h=mime-version:content-transfer-encoding:content-type:message-id:date
+         :subject:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=LvNHgh5W7s/63zsAYDOarIm7l7DKKEyod/RpiToacD0=;
+        b=b+3HvJsOK0lUyTKHfG3A0c/TStBRg4LRyHjzOTlBm/JF3JskoT2o04A50qMkcRu/O1
+         eL89JTo4g3dt771Nbp0r+8GNAtlU7g36hcEV40XrjbJZOzOXp6o1d3xGqO0zW4ZIpKtz
+         EX0jlpD2MZ8S1vrFsCVTebMcOEqMs8HaYO9zlUYs3uMXNlVD+zmcfGftKr39WlLfyURk
+         7iBFbZRhtobUv6Xodof9YAnFQ1KM4aDmC1xt8/Q/F6xBIv088z3ymg/LGeu0dr6i5tCB
+         97yCD9ca+1mTzwJn79hT7deldJevVP8lVONlNkRiTGQgRNxjCBKSdOpNRyk49qrppX1e
+         1vNQ==
+X-Gm-Message-State: AOJu0YzHCTKAw+VhCPw1SUvlGGUrfBtr26uMNnAtw8Va53RuQzihJCcu
+	bf0ozXD47akEYiPFg0PJfVV5kQpcwY+awSlAICNeWMnxKP4egqcIsqsOJCHXgldDslXSXwqxqUP
+	AXXe/I+H7BxQ=
+X-Gm-Gg: AfdE7cm2BCb3YaDYR5+0HDZ0XAP9XMAu4e/+4A4fCOwTqnqpcMlaJrEa83zYtrZB83p
+	REmzYVzMiOEQ0BV6hiDSNQlWP5S34CtLTHSFsyImVuldKzCTjtd/QWtHsUYCr171g9pvAKgjfrO
+	6SIzEBxi5S7QMmVVAr8MGxi4mnLhOX0436RIyHk7KUQK0rBWngRkWiA9lX8WPlKiWZ1bRa3dNV4
+	LUw8NGN4L7ompSv2PmVABHH9TwMAFk/9SXGtAoQG24VyFvMieK2qjPvjB0REXdY4qcX4Nj1pTkZ
+	rtvgh1/HP/sO+KBYk0XsJ2BHCtDgQ513zWfp3NxLaukrztzd/6aQDwB4nZ0t+Vb+2Z4pKV2aahs
+	HPv8PgnshQDJae9oFNyGQqaEhDbTgY50igvQ5HwEnaIzapIgroqJvSPq4fbFtmAeHZuIrpKYwWg
+	Le2RRPzrMegjYFUxRsscgTwwWyQWp9iX1z0w8s9RB2PN1FWtZ9P1inVImKqWyqopZkV1NqB9mAf
+	cueQoE0ffP0xTgGqNVM0Y7ytnUQ+ugYfa9tRHIXdoAub8AOC1nyu+RNgIHv
+X-Received: by 2002:a05:6a21:4593:b0:3bf:b182:94b with SMTP id adf61e73a8af0-3c110a1935bmr8647088637.6.1783948596375;
+        Mon, 13 Jul 2026 06:16:36 -0700 (PDT)
+Received: from 169.254.75.85 (ec2-3-108-4-54.ap-south-1.compute.amazonaws.com. [3.108.4.54])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13ba45b7049sm4624261c88.12.2026.07.13.06.16.35
+        for <bpf@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 06:05:00 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 13 Jul 2026 15:04:59 +0200
-To: Naveed Khan <naveed@digiscrypt.com>
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH v2] libbpf: initialize btf_ext out-parameter early in
- btf_parse_elf()
-Message-ID: <alTie0_4pu-T5Bik@krava>
-References: <CAEf4BzbBqysGiHFuEW0b+tg6uA-gv4s8gGCeF_QZ-L3nhDc8yA@mail.gmail.com>
- <178378853022.49961.12254894397759137901@digiscrypt.com>
+        Mon, 13 Jul 2026 06:16:36 -0700 (PDT)
+From: Naveed Khan <naveed@digiscrypt.com>
+To: bpf@vger.kernel.org
+Subject:
+ [PATCH] libbpf: reject linker STT_SECTION symbols with out-of-range st_shndx
+Date: Mon, 13 Jul 2026 18:46:33 +0530
+Message-ID: <178394859382.2.942623981274846749@digiscrypt.com>
+X-CodeOps-Marker: da2b6f4c518044acbcfe3bfd66b54170
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <178378853022.49961.12254894397759137901@digiscrypt.com>
 
-On Sat, Jul 11, 2026 at 10:18:50PM +0530, Naveed Khan wrote:
-> btf_parse_elf() only stores to *btf_ext once it reaches the .BTF.ext
-> parsing step.  If the function fails before that point (open() aside,
-> e.g. elf_begin() failure, missing .BTF section, or a malformed .BTF /
-> .BTF.base section), the cleanup path still runs
-> 
-> 	if (btf_ext)
-> 		btf_ext__free(*btf_ext);
-> 
-> and reads a value that was never written.  A caller that passes an
-> uninitialized pointer, e.g.
-> 
-> 	struct btf_ext *ext;
-> 	btf = btf__parse_elf(path, &ext);
-> 
-> ends up with btf_ext__free() operating on stack garbage, which can
-> crash or corrupt the heap.  Current in-tree callers happen to
-> NULL-initialize their pointer, but the API contract should not rely
-> on that.
-> 
-> Initialize *btf_ext to NULL on entry so every exit path leaves the
-> out-parameter in a defined state.
-> 
-> Reported-by: sashiko-bot@kernel.org
-> Signed-off-by: Naveed Khan <naveed@digiscrypt.com>
-> ---
-> >From 4dc7d1c8a2a2ec4c00ec038a94a86e26ab6cf75a Mon Sep 17 00:00:00 2001
-> From: Naveed Khan <naveed@digiscrypt.com>
-> Date: Sat, 11 Jul 2026 16:19:36 +0530
-> Subject: [PATCH] libbpf: initialize btf_ext out-parameter early in
->  btf_parse_elf()
+linker_sanity_check_elf_symtab() only validates a symbol's st_shndx
+against the section count when it is below SHN_LORESERVE:
 
-hi,
-looks like subject/changelog mishap ?
+	if (sym->st_shndx < SHN_LORESERVE && sym->st_shndx >= obj->sec_cnt)
+		return -EINVAL;
 
-> 
-> btf_parse_elf() only stores to *btf_ext once it reaches the .BTF.ext
-> parsing step.  If the function fails before that point (open() aside,
-> e.g. elf_begin() failure, missing .BTF section, or a malformed .BTF /
-> .BTF.base section), the cleanup path still runs
-> 
-> 	if (btf_ext)
-> 		btf_ext__free(*btf_ext);
-> 
-> and reads a value that was never written.  A caller that passes an
-> uninitialized pointer, e.g.
-> 
-> 	struct btf_ext *ext;
-> 	btf = btf__parse_elf(path, &ext);
-> 
-> ends up with btf_ext__free() operating on stack garbage, which can
-> crash or corrupt the heap.  Current in-tree callers happen to
-> NULL-initialize their pointer, but the API contract should not rely
-> on that.
-> 
-> Initialize *btf_ext to NULL on entry so every exit path leaves the
-> out-parameter in a defined state.
-> 
-> Reported-by: sashiko-bot@kernel.org
-> Signed-off-by: Naveed Khan <naveed@digiscrypt.com>
-> ---
->  tools/lib/bpf/btf.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index 823bce8951..cabe8286f0 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
-> @@ -1453,6 +1453,9 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
->  	int err = 0, fd = -1;
->  	Elf *elf = NULL;
->  
-> +	if (btf_ext)
-> +		*btf_ext = NULL;
+For a STT_SECTION symbol the following check only rejects a non-zero
+st_value, so a section symbol carrying a reserved index such as
+SHN_ABS (0xfff1) with st_value == 0 passes validation.
 
-there's already this setup in btf_parse and it can be removed now
-when we do that in btf_parse_elf
+When a relocation references such a symbol, linker_append_elf_relos()
+indexes the per-object section array with no bound check:
 
-jirka
+	if (ELF64_ST_TYPE(src_sym->st_info) == STT_SECTION) {
+		struct src_sec *sec = &obj->secs[src_sym->st_shndx];
+		...
+			insn->imm += sec->dst_off;
 
-> +
->  	if (elf_version(EV_CURRENT) == EV_NONE) {
->  		pr_warn("failed to init libelf for %s\n", path);
->  		return ERR_PTR(-LIBBPF_ERRNO__LIBELF);
-> -- 
-> 2.52.0
-> 
+obj->secs holds only obj->sec_cnt entries, so obj->secs[0xfff1]
+dereferences memory tens of thousands of entries past the allocation
+(reading sec->dst_off) when linking a crafted relocatable object,
+an out-of-bounds read that faults or folds unrelated heap contents
+into the patched instruction.
+
+A STT_SECTION symbol must reference a real section, so reject one whose
+st_shndx is not a valid section index. Reserved indices are always
+>= SHN_LORESERVE, which exceeds sec_cnt, and the in-range case is
+already handled above, so a single sec_cnt bound closes the gap without
+affecting valid inputs.
+
+Signed-off-by: Naveed Khan <naveed@digiscrypt.com>
+---
+diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
+index 78f92c3929..8a93faa41d 100644
+--- a/tools/lib/bpf/linker.c
++++ b/tools/lib/bpf/linker.c
+@@ -973,7 +973,7 @@ static int linker_sanity_check_elf_symtab(struct src_obj *obj, struct src_sec *s
+ 			return -EINVAL;
+ 		}
+ 		if (sym_type == STT_SECTION) {
+-			if (sym->st_value != 0)
++			if (sym->st_value != 0 || sym->st_shndx >= obj->sec_cnt)
+ 				return -EINVAL;
+ 			continue;
+ 		}
+-- 
+2.52.0
