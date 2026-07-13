@@ -1,64 +1,38 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85909372076
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 15:19:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC4382D24B7
+	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 15:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783955969; cv=none; b=rpSHPjM+kKIK4LbydWfTBsf1I0AFQ/6MMeQkDQR5PUx/p1Ct4TmStZHejGRWIjJxSARpRPqP5hQK2buPtirt+RLsddXmGbYgKcEP0ROuahfvlISvCsNmGHJ5yWvxo35aTH5rG/LAPsQERGh7WGDl73uoxdiyKUhmpgpGUpNVDTs=
+	t=1783956789; cv=none; b=qPg+7gLRnLutG08MUtWtOOnPJZLRHDHkf9ilTSZv8pXdQrmrOGwpPOhuHfgfmzup8LPZ9tcHOGK0SZv7ypkLhP/Yyw4d+ghFiIF0F4fP7HFa6bxae1Ze4cdtXA+2qQgFfGeIbFKoA3cGFw6WImy2TCKnpWWe2E+g9IsLLzbh9SA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783955969; c=relaxed/simple;
-	bh=XgfMyReXk9WbmWlpqj5QpOsH9T7Axa67XF6W7nxC6hw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=V5JLHODvPtKZOQIqld3/BxIOnh/Op2z62FETm6y/9NsbS7ob2qCjFKaLferpvNT8Bx1sb8zrZsvklZZnbmScNykjd42nKOA3T1AmOUq7YIUg7zuexOWvKSzFpPGADR0n4uGgOrL6fk3LCF+H4pObeBzFhimCpxnalUr6Y7NoAcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IE9gFOzQ; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783956789; c=relaxed/simple;
+	bh=mM2m2Iv09FCmXKxsnnnY41Pvn6pTqfbZKQfmUKONGPc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=pSLK2dR83OLjZhmECC6Q9whqxGnalive5TWItNanIIjTIJM9I44fpxCesghPsbs4T8t2hVpxMwrGk8DCSvPqVSlO93+oZZjYiXUFXJlAINYumURjl51HiHQjfYcoGwVCWeu0mNiQZpaMl3q/K8typdtTeTh8UT5sWcGfrqUjbC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=0n2JaYlb; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IE9gFOzQ"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-ca80d708489so1990882a12.1
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 08:19:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783955967; x=1784560767; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Y+ujhi7qr+5PDvfWnrugr3cptYcf6a5ot8pqDt3RfQQ=;
-        b=IE9gFOzQxBDi0IVIrhm0xXbwtjhN28eJ/IpULeUzVkLrp4WItFQSjycxXQBT8F/RRf
-         ZZDKLuohqee4ndlVWfcJeRLAzaEOAxov7d3xU6on6CPD7dOtfB9dMJ+KpDdJQcax1rPO
-         /iHly/a+oJlxoRMoniQYQ0dRecTsxtPtRRXJ7eCTHymRpN2542pMfENTlXrM17TP0zZr
-         SH2hL9lc9jcxx5xbK9FU8/Rl4hZZGma36UhIX0MwY25wxVho40B2I/jLLdhXeIq4Zxqj
-         /fFquG9TDC48spLnFuf55vNQDeZpXvs1mPYRL/uru0NCAz7cFtsNQF4QoULbvbwe4jj/
-         r0Kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783955967; x=1784560767;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Y+ujhi7qr+5PDvfWnrugr3cptYcf6a5ot8pqDt3RfQQ=;
-        b=Mui5m6NzQgvE+0I+/lJmnKFelAttScHlb1O5Smk/Ye2AOic7JSvEoSmlbAw5NC4eBx
-         Xuo369F25lz+8HXHdkihOSwOz7P4EFhru8t2vRdUfKH4QBxPm/iVV/P4mlx0bkB/P3G9
-         HujcccSGhHIw+zeRQuq8oxYBJwype51yqkBJkwsTxmFIu09Kf5WiCnlklVm02RTC+Lqi
-         Z4rJcdKxsTd5aqNMoDym7kqKDXQFKnB1YypKxIqfUhqDCOv4g1ZmIAsX1mM0F2eLO0nx
-         ZcrwjPsn8J82NxT12PzOsYq+o7qiJ3282ld+WJA7lGfOKHu+36ttv6N1CZglQy+wnXgt
-         BHrw==
-X-Forwarded-Encrypted: i=1; AHgh+RrfxoOUlML354Tc1JSFUHuSf9ZrlKTBIz+8kmbhYy8lgPRcG/xBLgK009aAkL/2TOdXDAY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOIxHcIRORAf6lhNbOm4n+ZkjkafbPPm5WKY48qJ/Pucxwnunr
-	52Db/7MWJbhKA0mlJwLW0m6i8z35UBbXt2eNJmw34N0SMvF/ug5AhDG1
-X-Gm-Gg: AfdE7clUspsBmVVgMWBZO4Uo4sdXxcZlrVoDQJNlLOR7cYcneWNmwkhKc7Z1x/qWXZh
-	A+oOjoVxYbLZ1vWn4hGHqoTTzrT6iZA2Psrj8wLVp7Mkna5xypSfGv0+MQk46qfMBDzcOkTYHBP
-	TP7fdiFflJARP+E61jtDezlmN7KWtAg96e19E1xAK/5JsJIt2vI5ZhIoSn8/lBc0ZrjqGlbemaW
-	qm1F2/yyRsb83moQ6XYhHh5JwHb1x3BLZ1LgZUnmBSugI+e02OFkbswpy0Kt5uVRyuM/LZB1GzO
-	meD1W9MTvCz7VWe4ziepkQ4w244FrgODjVdAStzLWML5VpX4AmaIG1+nC5Uc6ZDOh3i81OHC+B8
-	KrCS5T0GryIduFm3MV0mJWafn7usdeZNR0XzOKswOOg5rrKqY8srMZsZhO7uTDnwCTIHShho2LM
-	zJ903Vro0AwwtM3A==
-X-Received: by 2002:a05:6a20:244b:b0:3a0:c246:bb98 with SMTP id adf61e73a8af0-3c0f0b9158emr16049895637.29.1783955966577;
-        Mon, 13 Jul 2026 08:19:26 -0700 (PDT)
-Received: from localhost ([98.35.8.117])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b924258a2sm54513605c88.1.2026.07.13.08.19.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jul 2026 08:19:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="0n2JaYlb"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 6E24C1A0FA0;
+	Mon, 13 Jul 2026 15:33:04 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 3944860345;
+	Mon, 13 Jul 2026 15:33:04 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0E71011BD21E7;
+	Mon, 13 Jul 2026 17:32:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1783956783; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=MA6mxJIo1x+dTMvwPcn/qU2Jkn4kB67D529MAoNiIY8=;
+	b=0n2JaYlbMk4CsI/36ows0HBYeEMraw7UfRAXjY3dHZDJn56Z8Ol+hPp2YpRA7t461YNjFY
+	+h5mfHAMYio4orHWwO0D6uXbxa7R5JA+C852N/KcYZXwGs1xc26rdIToRvEq7ndxbXoqE6
+	9bbYMk3NkW3XOalvTdWnGDaB1C0W2XmxLTzanRqGLgdyB8NuDRQLF1V53a62w9GojyhPDY
+	5FFapEVx/+D5tl7Vi8t+QWvFOfiSFnW1VNXAb8xVzlmwAcWNSE0YrYL1jxd0uVbfkvITgy
+	TTfxw0Eb7XYHmSwKKpdwuO+yRqnLf7i3kOKnZBJtXVFmcgC+2l7Q6cTTLILMOg==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,178 +41,98 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 13 Jul 2026 08:19:24 -0700
-Message-Id: <DJXJM0838IJN.3AJ9MMQ89SUUR@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Shuah
- Khan" <shuah@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Kees
- Cook" <kees@kernel.org>, "Alexander Viro" <viro@zeniv.linux.org.uk>, "Jan
- Kara" <jack@suse.cz>, "Jonathan Corbet" <corbet@lwn.net>, "Jann Horn"
- <jannh@google.com>, "John Ericson" <mail@johnericson.me>,
- <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
- <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2 0/5] binfmt_misc: bpf-backed binary type handlers
-From: "Farid Zakaria" <farid.m.zakaria@gmail.com>
-To: "Christian Brauner" <brauner@kernel.org>, "Farid Zakaria"
- <farid.m.zakaria@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260711-binfmt-misc-bpf-v2-v2-0-d6591ceaf207@gmail.com>
- <20260712-abluft-brutkasten-aufladen-c8063a4a1a0a@brauner>
- <DJX4IFO55D9S.3IV3K5XICJAEV@gmail.com>
- <20260713-unerlaubt-luftkammer-kosmetik-46532d395f9b@brauner>
-In-Reply-To: <20260713-unerlaubt-luftkammer-kosmetik-46532d395f9b@brauner>
+Date: Mon, 13 Jul 2026 17:32:58 +0200
+Message-Id: <DJXJWE3X286K.16LM4LUS201ZP@bootlin.com>
+Subject: Re: [PATCH 1/4] selftests/bpf: Install bpftool where test_progs
+ expects to find it
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>,
+ =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
+ <alexis.lothore@bootlin.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>,
+ "Christian Brauner" <brauner@kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260710-selftests-bpf_fixes-v1-0-aa24dfd6f4f9@suse.com>
+ <20260710-selftests-bpf_fixes-v1-1-aa24dfd6f4f9@suse.com>
+In-Reply-To: <20260710-selftests-bpf_fixes-v1-1-aa24dfd6f4f9@suse.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon Jul 13, 2026 at 1:20 AM PDT, Christian Brauner wrote:
->> > - The single sleepable load op is split into two ops:
->> >
->> >       struct binfmt_misc_ops {
->> >       	bool (*match)(struct linux_binprm *bprm);
->> >       	int (*load)(struct linux_binprm *bprm);
->> >       	char name[BINFMT_MISC_OPS_NAME_MAX];
->> >       };
->> >
->> >   The non-sleepable match program runs from the RCU entry lookup
->> >   walk itself, exactly like magic and extension matching: same
->> >   registration order, same first-match-wins semantics, and it can
->> >   only rely on the prefetched bprm->buf. It must be free of side
->> >   effects since the walk may be restarted.
->> >
->>=20
->> Is relying on brpm->buf enough?
->> Right now that's only 256 bytes I think, which is not enough to read
->> segments we might care about. That worked fine when it was just a magic
->> number but the idea with the eBPF program is to make decisions based on
->> more data.
->>=20
->> In the selftest I provided, the `PT_INTERP` segment is already at file
->> offset 0x318 (792). I was imaginging NixOS having to support
->> `PT_INTERP_NIX` in order for the produced binaries to be backwards
->> compatible with older kernels.
->>=20
->> The other idea would be to make the `match()` broad and select
->> everything but then nearly all ELF64 binaries would match and then pay
->> the price to `load()` and ultimately `-ENOEXEC`. Seems like it would
->> make multiple BPF binfmt programs less useful.
+Hi,
+
+On Sat Jul 11, 2026 at 12:09 AM CEST, Ricardo B. Marli=C3=A8re wrote:
+> bpftool_helpers.c looks for bpftool at "tools/sbin/bpftool" or
+> "../tools/sbin/bpftool" relative to the running test_progs binary, matchi=
+ng
+> the build directory layout where bpftool sits at
+> $(OUTPUT)/tools/sbin/bpftool.
 >
-> Ok, so your idea is to have multiple bpf programs that look for
-> different interpreters. Yeah, then you have to be able to sleep because
-> you need to be able to fault. It makes the code uglier but I can see how
-> that's useful. I'll see how nice I can make that.
+> INSTALL_RULE installs bpftool through the generic TEST_GEN_PROGS_EXTENDED
+> mechanism, which flattens it straight into $(INSTALL_PATH) and loses the
+> tools/sbin/ prefix. After "make install", every flavor of test_progs,
+> including the default one, fails to locate bpftool, and bpftool_maps_acce=
+ss
+> and bpftool_metadata error out with "Failed to detect bpftool path", even
+> though bpftool itself built and installed fine.
 >
-
-I mean... I thought that's the intent to binfmt_misc, to have multiple
-handlers -- with the expressiveness of eBPF vs. the limited
-magic/extension, it seems like a natural extension to support multiple.
-Otherwise anyone on NixOS would be limited to our single handler for all
-binaries which seems not ideal?
-
-I'm not knowledgeable enough to comment on the sleep/faulting aspect so
-I leave that to your expertise.
-
->> >   The sleepable load program runs once the walk has committed to the
->> >   entry and does the file reading and the interpreter selection. Both
->> >   ops are mandatory, the struct_ops plumbing enforces the sleepability
->> >   of each, and since bpf_binprm_set_interp() is KF_SLEEPABLE a match
->> >   program cannot select an interpreter by construction.
->> >
->> > - A match is a commitment. A failing load program fails the exec inste=
-ad
->> >   of falling through to later entries. -ENOEXEC keeps its usual meanin=
-g
->> >   and hands the binary to the remaining binary formats, for a handler
->> >   that discovers it cannot serve the binary after all.
->> >
->> >   This kills the part of v1 I disliked the most: the skip cursor and t=
-he
->> >   leave-and-rescan loop in load_misc_binary() are gone. The walk is
->> >   never left and re-entered, and 'B' entries need no special semantics
->> >   against concurrent (un)registration anymore.
->> >
->> >   Your v2 changelog note about keeping the bpf retry loop in the
->> >   __free() style is moot as a consequence. The loop no longer exists.
->> >
->> > - The load return convention flipped: 0 now means success after the
->> >   program called bpf_binprm_set_interp(). Returning 0 without having
->> >   selected an interpreter or returning a positive value is treated as
->> >   -ENOEXEC, other negative errnos fail the exec.
->> >
->> >   So the "return bpf_binprm_set_interp(...) ?: 1" idiom from the v1-er=
-a
->> >   programs becomes plain "return bpf_binprm_set_interp(...)".
->> >
->> > - The handler name moved from the offset field to the interpreter fiel=
-d
->> >   that field consistently names whoever supplies the interpreter, a pa=
-th
->> >   for static entries, a handler for 'B' entries. Offset, magic, and ma=
-sk
->> >   must be empty:
->> >
->> > 	echo ':nix-origin:B::::nix_origin:' > register
->> >
->> > - 'C' is allowed now, v1 rejected it. It behaves exactly as for a stat=
-ic
->> >    entry. The setuid transition stays gated by vfsuid_has_mapping() in
->> >    the caller's user namespace. Which makes 'B' handlers usable for a
->> >    per-binary loader over setuid binaries. 'F' stays rejected as there
->> >    is no fixed interpreter to pre-open (I have other ideas how we'll d=
-o
->> >    something like it later.).
->> >
->> > Nothing changed in the exec patch, the fs kfuncs patch, the kfunc
->> > itself, or the registry/namespacing model.
->> >
->> > I can send v3 in a bit if that's ok.
->>=20
->> I don't mind at all you sending v3 and in fact I've been enjoying your
->> involvement. I didn't know what to expect when I offered this idea up to
->> the community.=20
->>=20
->> I'm happy to keep co-developing this with you within a design you feel
->> acceptable with. Please let me know how I can remain engaged and
->> helpful.
->>=20
->> One last thing I was thinking about is that we will also need to support
->> $ORIGIN in the shebang path, however I just tested it and this current b=
-road
->> BPF solution can largely handle it [1], with a small wrinkle.
->>=20
->>   $ printf '#!$ORIGIN/interp\n' > /opt/app/greet
->>   $ cp ./interp /opt/app/interp     # any interpreter/loader
->>   $ chmod +x /opt/app/greet /opt/app/interp
->>=20
->>   # stock kernel: binfmt_script opens the literal "$ORIGIN/interp"
->>   $ /opt/app/greet
->>   bash: /opt/app/greet: $ORIGIN/interp: bad interpreter: No such file or=
- directory
->>=20
->>   # with the handler registered, $ORIGIN resolves to the script's dir
->>   $ bpftool struct_ops register shebang_origin.bpf.o /sys/fs/bpf
->>   $ echo ':shebang-origin:B:shebang_origin::::' > /proc/sys/fs/binfmt_mi=
-sc/register
->>   $ /opt/app/greet
->>   <runs /opt/app/interp, the loader found next to the script>
->>=20
->> The wrinkle is that it can't express today is the single optional argume=
-nt.
->> (i.e. `#!interp arg" -> argv[1]=3Darg`). We might ned a way to express
->> that in the load.
+> Explicitly install bpftool under tools/sbin/ in the installed tree
+> so its relative location matches what detect_bpftool_path() already
+> expects, restoring the pre-install layout instead of introducing a
+> new one.
 >
-> Ah, fun. binfmt_misc wasn't able to express this at all. It's good to
-> close that gap. This can just be done by adding
-> bpf_binprm_set_interp_arg().
+> Fixes: f21fae577446 ("selftests/bpf: Add a few helpers for bpftool testin=
+g")
+> Signed-off-by: Ricardo B. Marli=C3=A8re <rbm@suse.com>
 
-What is "cool" about this is now it's also a net-new feature for shebags
-which the "old" binfmt_misc didn't support. Anyways, I was thining ahead
-about what I would need to support $ORIGIN fully and this was
-a remaining gap. We also explored this idea in a patch pre-BPF [1] but
-now that we've settled on this solution it seems much more natural.
+I did not face the issue because I am running the selftests in-tree, and
+the CI seems to do the same, but for users using selftests after running
+`make install`, I guess the change makes sense.
+
+That's not the first fix aiming to improve bpftool
+detection/installation (eg the BPFTOOL env variable, see [1]), so it
+makes me wonder if we shouldn't just make bpftool part of
+TRUNNER_EXTRA_FILES for all flavours of test_progs, similarly to other
+binaries needed during tests (eg: urandom_read), instead of just adding
+some bpftool-specific details in this generic install rule, and just
+make the test runners assume that the needed binary is in the same
+directory.
+
+Alexis
+
+[1] https://lore.kernel.org/all/20260223191118.655185-2-ihor.solodrai@linux=
+.dev/
+
+> ---
+>  tools/testing/selftests/bpf/Makefile | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
+ts/bpf/Makefile
+> index b642ee489ea6..47911c9b4977 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -1055,6 +1055,8 @@ endif
+>  DEFAULT_INSTALL_RULE :=3D $(INSTALL_RULE)
+>  override define INSTALL_RULE
+>  	$(DEFAULT_INSTALL_RULE)
+> +	@mkdir -p $(INSTALL_PATH)/tools/sbin
+> +	@rsync -a $(if $(PERMISSIVE),--ignore-missing-args) $(TRUNNER_BPFTOOL) =
+$(INSTALL_PATH)/tools/sbin/
+>  	@for DIR in $(TEST_INST_SUBDIRS); do				  \
+>  		mkdir -p $(INSTALL_PATH)/$$DIR;				  \
+>  		rsync -a $(if $(PERMISSIVE),--ignore-missing-args)	  \
 
 
-I was recently reached out by some Bazel people who are also interested
-in this $ORIGIN support. Interestingly they let me know that
-IllumOS/Solaris had support for it as well.
 
-[1] https://github.com/alurm/relocatable-shebangs/blob/18db0da6cd69ce19bb02=
-73f2548a2d96bdaa82b1/relocatable-shebangs.patch
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
