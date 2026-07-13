@@ -1,191 +1,108 @@
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20463241C8C
-	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 22:02:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E917C4A0C
+	for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 22:09:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783980147; cv=none; b=MdUrRyjp6iXoTuB/xJTLr+9aQuCa7PhMcDw4zKK7sQdCmu9feBk+MZVIiRN/O/g4uCYfh0nkn0hNkW5d5WWvzBlGHdIcPQinbf4VNIt6Nk4wsW7o+25q8tnjJ3TobWOoZOY1zKWB0wc5TJAXEVcZBAyM64aya9bDAKQnZYj8iXw=
+	t=1783980591; cv=none; b=co6tit0relRkeAw8P/ns4a2NjaLxvF7k/3OtMrKT+D1/wKCZmkOtwaq9U3KBrITHdRGmDmN0CQHJciXAMhLL4p9caNq858k+yPkEJ7rRxFtSGoE4GcLpzzaJ3MKczgNwAhKUDy6fcTha6keN2F1Nw+zvBJQ/sM40tyIFDGD1Fp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783980147; c=relaxed/simple;
-	bh=9yS1UvlUrfI9KheCLuEuSRoWZobPi0nd+1A15hyorw8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=tGMJswXO0IMWCPFhsq7fJg+M69orwuEJznWDwWcVfh9MXAlhbU1eC8PhsFmztQUZtUdzcFQWxoL07SDLqlVxJZ9UVTmwqO2FVBEttqe3zkJ9E1z50/msqaJ0rMGj4VRiUDR1xQSnLha5yC8dxMjbCuh9MGFNZ7W0iW6toiTY93k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Rr165AVC; arc=none smtp.client-ip=209.85.222.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1783980591; c=relaxed/simple;
+	bh=gsD/yMciq6j/2dAEmngjHdGj+1UyGMFNx2TIoF99TTk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=KlaRa0um3FUoQWdqzpzKzyn3qtpy/05G634R2hzt2qXMFPu6r/TYbOmZzbcIIBX7ztClFKj+IwdSetTo3z9HVpSBN8Rxtpz9ag4uVtiV68lvdKELAY1SPFiQYPd7+IBv2k9pDOlyD9+IM4kn4ET/pe0efWt2+cx4ha5n1juUCLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rxBWUgdM; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Rr165AVC"
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-96925a563b5so296293241.0
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 15:02:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rxBWUgdM"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ceab75934dso26485895ad.2
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 15:09:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783980145; x=1784584945; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=D6Y7Xe1SbiMFbOzf01pbOyxaH8rw40mxymdbfU2kNyQ=;
-        b=Rr165AVCAlPQhbOjF6rODbV+KA0nvTKClCB5A+8Jm/FOWMDNmxNZTUrJFUsCC/BWKA
-         Q1M7bkgFZQ1WVEwdVoditivmKWIJVi2x8HNNLLqOn77YjvKCRtQUXfSGakonD7nVwTCK
-         TgzwgDVpNFdeBVTHX2MItOM3pcByyEnuR6/wdEuOLOrhJG1Qkel45QQmDcrb7eSm2JSl
-         cZSPYx22oHo/3qkicc8jcNZPdVqw6AkYCirqRFr2YK735EUkEZf6pyLjbhHtUX1qrz74
-         KigTkNqbydSbdjg46Lcj8D+pkE5CR8wDes7U8yL54aIsYW/aY3xAYm+vFY6ix3hO4Pch
-         q+9w==
+        d=gmail.com; s=20251104; t=1783980589; x=1784585389; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=gsD/yMciq6j/2dAEmngjHdGj+1UyGMFNx2TIoF99TTk=;
+        b=rxBWUgdMaN0/ptGAotpKubxqPXVD+8DAJzCx4DH2eA2ud1tu8Ig1MZjQuLVeM3Zopo
+         My+xfKnsBtEzAbBEQibVen3Z9l1BdxrQn+tHhYQov1yCSmrqp2iX9eJlT1RS8EWVRAfp
+         Vw0BXb+Vdz0f3tCbLeH2qcgULUw15SGhtBbo0bAYJN0oVH598Dzdxzl5ne46YkhPr+GQ
+         uydlLjTC4FHp2+l58UchcWstBzX6QhUJDPdP3+TAFPyt+bMEb4l1B6t2QgNz/2iSwIIz
+         BkjqFmUD5Oz8FSh8tu2WVHL+Nr22MEBPS7nWkSxJ/UvR8rFWqK/CdsAAzxu7yxtILlBT
+         YxiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783980145; x=1784584945;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1783980589; x=1784585389;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=D6Y7Xe1SbiMFbOzf01pbOyxaH8rw40mxymdbfU2kNyQ=;
-        b=ABBPbNxLZW/VsKZ4eqI3RIBdWWhzzMPmW4fvRHzrPhCoR7Nfh3QlT4OEreIuG7jwBt
-         qkDKQHa+h1OGt4AluA/6s0zewBm8b2rOTAU/mckZSVUqOHykhIcex49+8vM480dNDRmX
-         swJ6uta1na9gYtpxNR4Z1Vfxt00/O2mlG/wjunDqf5d7soFkktRFNhjsXKsh3rmksiFL
-         VDi9cRMTJ+dgLzuXpNdUlpw4eboF8GTSbG+DCMZmHzBRl5yXOMCesqlPlQKQ56o3WwPg
-         InmDQ6jGyREWnYMIQrqiGQO9N7qSdqNGnw+zUzpbcOPDlC0wXOPmfYXu0IXyS3xsPV2A
-         fpsg==
-X-Forwarded-Encrypted: i=1; AHgh+Rq9OAh2iTFDMLJ5/2sadQ4sQ1xjVLcgmPhp//6AHCX9a4PdboWyJpH9OjPmKaVgOsA2vMs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGKI0qX1PGgYCatL5NQ0E/h6dkvz09Ed/pXeM+Pcn+wUwRHO/F
-	AziHD6fq0oKfTZQppmLJoSWdWNru4ebUzHNh3ZJ2YEZiSwFU9aG4h3I5LUfhNiX8InZyLtGHfZH
-	hUBnrv98=
-X-Gm-Gg: AfdE7cnsCneZTb1zlmNDJAtK5XhM3nnHhHaWU/oegDbs0B5jGwQEjVz13XQuzHKdGHn
-	Mak7Z2/Tt3FWu+TiByBen5e8WhsKvZbpWp2RKgteLpw/1Nn+F/4PBNWk9Q1Trt/Sl/HVBN4sErB
-	z2tmDhY9kQsG7OPxr6hw0ltv8V9wciwP+OsbBD7TAREnvYvcuj9UtB5HV+8M8lDwE8+jrM0fzlF
-	wXqihKO8YtTyOY6dDJd5sbsG57rKBjtiN48A/iLfNi5oXHnbj+76CzBHU7l6lySE7WbS59iLz5q
-	RTeNUUoJ7f/9EvsLO/AUGUN7HXfnB6ElREgmyXtkkfOjqWW8Q74xNXeByn3VwCtXfIrDL8jEprA
-	LY54T39QgtkWs7IDCKSlZHPEvG1YYk1RwKmiBwq8V0eEMWZ4pn0/qbk5M8QU8RjT83FLKD6zkt6
-	74uzhQ8EgMUlS5Vmai7PtR2hlxqVYlTPse/bIoGVORCA==
-X-Received: by 2002:a05:690e:dc6:b0:666:5727:4d70 with SMTP id 956f58d0204a3-667d978ecb3mr7088216d50.13.1783979764886;
-        Mon, 13 Jul 2026 14:56:04 -0700 (PDT)
-Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6678775d59bsm14750206d50.4.2026.07.13.14.56.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jul 2026 14:56:04 -0700 (PDT)
+        bh=gsD/yMciq6j/2dAEmngjHdGj+1UyGMFNx2TIoF99TTk=;
+        b=NQHhShw0zgImJb3GERaqbi6t+gH5LsAmMZqF1NZktb7p/UrMVhTzwm4eiMWPVIMUZ6
+         EGqpEBXUE7n0aFfxr5LvSArHtFoNIc6usax3mIC4SL1DGBZ5PPc1iKlujMmcVyjzA5OO
+         2Qh1w9nYLPKq2VJBreevhQHSZpwymFxhSdhDsxo7OW3fEii6i4fMR7z9D/VKA5WTc85p
+         cKdVlhSu9QdzeqwzJfLZBUYZUtuICG3dgRqoQOdQRqBt2V1UbmMjtNz9pkIE/pRf9hdT
+         A+xF0o3bx3RreDL4cI7eo7fM4IE3irohRG+7pILwVAILNXLZaTFRE2VD4kT5d0ku9Ebn
+         zP7A==
+X-Forwarded-Encrypted: i=1; AHgh+Rq8O2JFBaDlfSTfB0Y7lxFxcvXnX3SDbmseJyDsWlo4UGTwteBv+9FmHgsrdwyOubOQoUQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJKW5KD2KkBE4zcPJzsv5v2bCnbZ1NpMHaLERqSqC4Kke7rXxY
+	mbVPeON0QUX0BvWKd5ymf7PxfDT6yZFdpRpteQY1Pihzjepx7jxWC3hK
+X-Gm-Gg: AfdE7cl5XtRQl29SUpC/SPcYaUgO1Z1OMQht/OnY1hbt8Ov8NOcT2LXPkEME161NquZ
+	yZwT41tH8SMcU6F5MSLtPZE4iGxxIDxg5DIsD6Iv/PgINCglqN58tzjupRngOX0/weVzmb+GYE3
+	6a+ex5Opp+JwxNG94bmoVeu2QZLVzDFrDSzfQ1Xq4DU6HgdnwFt71jKHDGLBll9+OyrpwiHV6qU
+	dtLsTFrn8CCPF0/IKUKQtEXz9n4B1vu1XpSn3y4hOi0cfH+7r+CR+6HAFiDh940zzmUFytgfJ9h
+	pugrx/gzK1S8dnAbXZbyJfPwVayDwAiyVct3bupu1yClKR8qngYIPXlBSiIOmx3662pJ6gph85d
+	ycATQ3gOKGRSgQ3zT+1X0au1gQxuHvNjqCscVBU8PKj8vQfJ3jSxp2k02oAjSPsL1O69qTHqF1W
+	bTYIZLSQVHxk2Fg6cB+a/S1GhN5FFp0trMXtzHk7JnKGnVSh10S5NXripuOEEzOw==
+X-Received: by 2002:a17:903:19ec:b0:2be:3850:297e with SMTP id d9443c01a7336-2ce9f052d20mr101568855ad.31.1783980589319;
+        Mon, 13 Jul 2026 15:09:49 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9d59e33sm103432975ad.74.2026.07.13.15.09.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2026 15:09:48 -0700 (PDT)
+Message-ID: <3e15d4b9ce4e24e94e0a95d3785fcc0c90448c10.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Reject callback subprogs invoke
+ tailcall
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?=
+ <bjorn@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Kumar Kartikeya Dwivedi	 <memxor@gmail.com>, Yonghong
+ Song <yonghong.song@linux.dev>, Martin KaFai Lau	 <martin.lau@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, Song Liu	 <song@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	 <emil@etsalapatis.com>, Pu
+ Lehui <pulehui@huawei.com>
+Date: Mon, 13 Jul 2026 15:09:45 -0700
+In-Reply-To: <20260711104727.4023420-2-pulehui@huaweicloud.com>
+References: <20260711104727.4023420-1-pulehui@huaweicloud.com>
+	 <20260711104727.4023420-2-pulehui@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 13 Jul 2026 17:56:02 -0400
-Message-Id: <DJXS1OUUJXX5.15RH1OEET2EB7@etsalapatis.com>
-To: "Amery Hung" <ameryhung@gmail.com>, <bpf@vger.kernel.org>
-Cc: <netdev@vger.kernel.org>, <alexei.starovoitov@gmail.com>,
- <andrii@kernel.org>, <daniel@iogearbox.net>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <martin.lau@kernel.org>, <shakeel.butt@linux.dev>,
- <roman.gushchin@linux.dev>, <kuniyu@google.com>,
- <kerneljasonxing@gmail.com>, <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next v3 06/15] bpf: Add prog_list_init_item(),
- prog_list_replace_item(), and prog_list_id()
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260706171918.317102-1-ameryhung@gmail.com>
- <20260706171918.317102-7-ameryhung@gmail.com>
-In-Reply-To: <20260706171918.317102-7-ameryhung@gmail.com>
+MIME-Version: 1.0
 
-On Mon Jul 6, 2026 at 1:19 PM EDT, Amery Hung wrote:
-> From: Martin KaFai Lau <martin.lau@kernel.org>
->
-> Add three helpers to abstract operations on a bpf_prog_list entry.
->
-> Right now, bpf_prog_array_item is initialized from prog_list_prog(pl),
-> which returns either pl->prog or pl->link->link.prog. This will not work
-> when struct_ops is attached to a cgroup because the attachment is backed
-> by a struct_ops map instead of a BPF prog.
->
-> The same applies to __cgroup_bpf_query(). Instead of always copying a
-> prog id to userspace, struct_ops cgroup attachment will need to copy the
-> struct_ops map id.
->
-> Refactor bpf_prog_array_item initialization into prog_list_init_item()
-> and prog_list_replace_item(), and refactor id lookup into prog_list_id().
-> These helpers will be extended to support pl->link->map in a later patch.
->
-> This is a no-op change.
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
-Followup on prog_list_prog() since I hadn't realized it was moved to the
-helpers in this patchset: Maybe we can just make it not return NULL
-since it's impossible instead of adding error handling to minimize
-churn.
-
->
-> Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
-> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+On Sat, 2026-07-11 at 10:47 +0000, Pu Lehui wrote:
+> From: Pu Lehui <pulehui@huawei.com>
+>=20
+> Some JIT compilers, such as x86_64, rely on a register to pass the TCC.
+> When subprograms of synchronous callback invoke tailcall, C helpers
+> invoking bpf callback clobber this register, and the corrupted TCC may
+> bypass the TCC limit, leading to infinite tailcall.
+>=20
+> Fix this by rejecting tailcall inside all subprogs of sync callback.
+> This also cleanly consolidates the existing async and exception callback
+> checks into a single unified `is_cb` check.
+>=20
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Reported-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
 > ---
->  kernel/bpf/cgroup.c | 26 +++++++++++++++++++-------
->  1 file changed, 19 insertions(+), 7 deletions(-)
->
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index b100c04cb9c8..b43f0bff184c 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -399,6 +399,22 @@ static struct bpf_prog *prog_list_prog(struct bpf_pr=
-og_list *pl)
->  	return NULL;
->  }
-> =20
-> +static void prog_list_init_item(struct bpf_prog_list *pl, struct bpf_pro=
-g_array_item *item)
-> +{
-> +	item->prog =3D prog_list_prog(pl);
-> +	bpf_cgroup_storages_assign(item->cgroup_storage, pl->storage);
-> +}
-> +
-> +static void prog_list_replace_item(struct bpf_prog_list *pl, struct bpf_=
-prog_array_item *item)
-> +{
-> +	WRITE_ONCE(item->prog, pl->link->link.prog);
-> +}
-> +
-> +static u32 prog_list_id(struct bpf_prog_list *pl)
-> +{
-> +	return prog_list_prog(pl)->aux->id;
-> +}
-> +
->  /* count number of elements in the list.
->   * it's slow but the list cannot be long
->   */
-> @@ -492,9 +508,7 @@ static int compute_effective_progs(struct cgroup *cgr=
-p,
->  				item =3D &progs->items[fstart];
->  				fstart++;
->  			}
-> -			item->prog =3D prog_list_prog(pl);
-> -			bpf_cgroup_storages_assign(item->cgroup_storage,
-> -						   pl->storage);
-> +			prog_list_init_item(pl, item);
->  			cnt++;
->  		}
-> =20
-> @@ -1015,7 +1029,7 @@ static void replace_effective_prog(struct cgroup *c=
-grp,
->  				desc->bpf.effective[atype],
->  				lockdep_is_held(&cgroup_mutex));
->  		item =3D &progs->items[pos];
-> -		WRITE_ONCE(item->prog, pl->link->link.prog);
-> +		prog_list_replace_item(pl, item);
->  	}
->  }
-> =20
-> @@ -1318,15 +1332,13 @@ static int __cgroup_bpf_query(struct cgroup *cgrp=
-, const union bpf_attr *attr,
->  		} else {
->  			struct hlist_head *progs;
->  			struct bpf_prog_list *pl;
-> -			struct bpf_prog *prog;
->  			u32 id;
-> =20
->  			progs =3D &cgrp->bpf.progs[atype];
->  			cnt =3D min_t(int, prog_list_length(progs, NULL), total_cnt);
->  			i =3D 0;
->  			hlist_for_each_entry(pl, progs, node) {
-> -				prog =3D prog_list_prog(pl);
-> -				id =3D prog->aux->id;
-> +				id =3D prog_list_id(pl);
->  				if (copy_to_user(prog_ids + i, &id, sizeof(id)))
->  					return -EFAULT;
->  				if (++i =3D=3D cnt)
 
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+
+[...]
