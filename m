@@ -1,116 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D7C20DD51
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 01:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159E6360EE8;
+	Tue, 14 Jul 2026 01:42:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783992294; cv=none; b=uQwR7mHG9zreMSuEqi7mIuAJt+ehmdULKFTN5jHayc5m6kmafUtGZZt+CM2ie1gljhfxL/uX/4xRVpCCsbXDNJCkYUMk40jQZRKQeW7AHvx8IVkmHpkwlklrUMR/2zpc6kriIOK3vglO1/Fv+A8TfXl0ww+R+6OPGJR0SVNkgEQ=
+	t=1783993362; cv=none; b=gBP7/Zaswtbp9rnTq6CX3Q7D8JW4HqoZb6pwQEyRglai5AJPevX8HwOnJ1DADjns5+xYLs/rFXx81Zld8p9sYAEuFMSO1DqU/5bE8u813GTTXqEnvPoifTitZNBvWVz2R7uUnJ4DYNL/hed2FS3LRHkWQGEfNtrnoqgaB062nGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783992294; c=relaxed/simple;
-	bh=hsD/Qs5312yqG0I7u1kNX/1JW78HsXkcVLsYHzspNok=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=T4p0MIpmrW45GWfiT3Kpp2I9996t6XTp4b4RyesUKOMt3QX6GHGS6pHhZ9lL1mHxQpXZOZTV3PbwTkj4aWVJ77OiTHYRh64brKciPvmYxhH4zYQCXswd6gZwzVPwl8XmLUSJSTJFfp3g62P/6Of0w9giWtUEcxId+qxeScwq7iU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WaxyfFdd; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WaxyfFdd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC7E61F000E9;
-	Tue, 14 Jul 2026 01:24:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783992293;
-	bh=mspRl3hp7xX88o73A1Y4fNuuvS9f5NucUWps5KJXTdA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=WaxyfFddfG5/ssxQJlmSpR8OIdfWgcdS8IWIZLDlaVXSJb9jtHBQCGnbDSmZ0RaDJ
-	 OkI3sxyI44loYNh+JcNV4EhrZ5ybkoKsEOSKAnAQsQ1/9tccpADH3fM2gjc7IUfZWv
-	 ofLhdynD6SZHiHD/OlFIOvbYB0wuAP6t3b2oOT5A47ZzuATv8TKGYSwclJ5l4w2b7+
-	 8D0nk1ch3Yeksof0Zg+qccW+cTSUs72YM5hBS30qXK7VBlg3FDo4216YnspA0uAjp/
-	 LmzKuGNjszBsKXTC9daN3E79UdGZZpZTxiwMbzuet+jsnoqbhJaigLKD7OBvyqvj9D
-	 f1kE346SMncSQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 6.18.y 3/6] bpf: Restrict JIT predictor flush to cBPF
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pawan Gupta" <pawan.kumar.gupta@linux.intel.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260713-cbpf-jit-spray-hardening-6-18-y-v1-3-755f60c55705@linux.intel.com>
-References: <20260713-cbpf-jit-spray-hardening-6-18-y-v1-0-755f60c55705@linux.intel.com>
- <20260713-cbpf-jit-spray-hardening-6-18-y-v1-3-755f60c55705@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 14 Jul 2026 01:24:52 +0000
-Message-Id: <20260714012452.EC7E61F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1783993362; c=relaxed/simple;
+	bh=TxyDTbPp2PXipIXcyClqbS3UeeIpc8msDZDYyfyZPm4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VdEOmb7qCd1bFAI9oP0XVve1/QWb+lAJZOKae7BDuexRz6IfbAsBBGu6NonzbVZG8uqLAzh81ASM7VUYpEDYc8bKd529jEWDHI6VCqGz/u2fQx8dW4zqu5ZKp1lOcY7Afa5aXZCY5vePC+FRqO/45T8HYexjz0nrNdDOViyIWOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gzhqy39crzKHMLR;
+	Tue, 14 Jul 2026 09:42:06 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 5849B40593;
+	Tue, 14 Jul 2026 09:42:36 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgAHGHQLlFVqtl2ZBA--.34178S2;
+	Tue, 14 Jul 2026 09:42:36 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Pu Lehui <pulehui@huawei.com>,
+	Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf] bpf, cgroup: Fix storage null-ptr-deref after replacing prog
+Date: Tue, 14 Jul 2026 01:46:59 +0000
+Message-Id: <20260714014659.401063-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgAHGHQLlFVqtl2ZBA--.34178S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zr1fZw1kKr43KrWrAw4Dtwb_yoW8KF1xpF
+	1DXwnxtw15GwsYvF1kta9FvryfZa10qr15KrZ8Xw1Fka1aqrZYgryxuryqvF9xZFyDur1S
+	vw1Yqr4jkw12vF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+	1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+	6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+	0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+	8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFV
+	Cjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWl
+	x4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r
+	1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_
+	JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+	sGvfC2KfnxnUUI43ZEXa7VUbGQ6JUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Bypass of Spectre v2 / Branch History Injection (BHI) mitigation f=
-or unprivileged native eBPF programs.
---
+From: Pu Lehui <pulehui@huawei.com>
 
---- Patch [3]: [PATCH 6.18.y 3/6] bpf: Restrict JIT predictor flush to cBPF=
- ---
-commit 33a895ebe7da61c93f5b498141c865b22c5d29e7
-Author: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Syzkaller reported a storage null-ptr-deref issue after replacing prog.
+This occurs in the following scenario:
+1. prog A, an empty prog, is attached to a cgrp.
+2. prog B uses BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE and calls the
+   bpf_get_local_storage helper.
+3. link_update is called to replace prog A with prog B.
 
-bpf: Restrict JIT predictor flush to cBPF
+The reason is that __cgroup_bpf_replace fails to alloc and assign the
+required cgrp storage for the incoming replacement prog. Consequently,
+the new prog inherits an uninit storage, leading to null-ptr-deref panic
+when kick the new prog.
 
-This commit modifies the BPF JIT allocator to only perform predictor flushes
-on memory reuse for cBPF programs. It skips the flush for eBPF allocations
-under the assumption that only cBPF programs can be loaded by unprivileged
-users.
+Fix this by properly alloc, assign and link the storage for the new prog
+during link_update.
 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
+Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ kernel/bpf/cgroup.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-[ ... ]
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 4355ccb78a9c..52b5b685a93c 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1014,6 +1014,7 @@ static void replace_effective_prog(struct cgroup *cgrp,
+ 				desc->bpf.effective[atype],
+ 				lockdep_is_held(&cgroup_mutex));
+ 		item = &progs->items[pos];
++		bpf_cgroup_storages_assign(item->cgroup_storage, pl->storage);
+ 		WRITE_ONCE(item->prog, pl->link->link.prog);
+ 	}
+ }
+@@ -1032,6 +1033,8 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
+ 				struct bpf_cgroup_link *link,
+ 				struct bpf_prog *new_prog)
+ {
++	struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
++	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
+ 	enum cgroup_bpf_attach_type atype;
+ 	struct bpf_prog *old_prog;
+ 	struct bpf_prog_list *pl;
+@@ -1056,10 +1059,16 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
+ 	if (!found)
+ 		return -ENOENT;
+ 
++	if (bpf_cgroup_storages_alloc(storage, new_storage, link->link.attach_type,
++				      new_prog, cgrp))
++		return -ENOMEM;
++
+ 	cgrp->bpf.revisions[atype] += 1;
+ 	old_prog = xchg(&link->link.prog, new_prog);
++	bpf_cgroup_storages_assign(pl->storage, storage);
+ 	replace_effective_prog(cgrp, atype, pl);
+ 	bpf_prog_put(old_prog);
++	bpf_cgroup_storages_link(new_storage, cgrp, link->link.attach_type);
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
 
-> @@ -939,7 +939,7 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole=
-_t bpf_fill_ill_insns)
->  		 * safe because cBPF programs (the unprivileged attack surface)
->  		 * are bounded well below a pack size.
->  		 */
-> -		if (static_branch_unlikely(&bpf_pred_flush_enabled))
-> +		if (was_classic && static_branch_unlikely(&bpf_pred_flush_enabled))
-
-[Severity: High]
-Does this inadvertently suppress the warning when unprivileged eBPF is
-enabled?
-
-If an administrator sets kernel.unprivileged_bpf_disabled =3D 0, unprivileg=
-ed
-users can load native eBPF programs (like BPF_PROG_TYPE_SOCKET_FILTER). For
-these native eBPF programs, was_classic evaluates to false, which seems to
-improperly suppress this warning for large allocations.
-
->  			pr_warn_once("BPF: Predictors not flushed for allocations greater tha=
-n BPF_PROG_PACK_SIZE\n");
->  		size =3D round_up(size, PAGE_SIZE);
->  		ptr =3D bpf_jit_alloc_exec(size);
-> @@ -971,7 +971,9 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole=
-_t bpf_fill_ill_insns)
->  	pos =3D 0;
-> =20
->  found_free_area:
-> -	static_call_cond(bpf_arch_pred_flush)();
-> +	/* Flush only for cBPF as it may contain a crafted gadget */
-> +	if (static_branch_unlikely(&bpf_pred_flush_enabled) && was_classic)
-> +		static_call_cond(bpf_arch_pred_flush)();
-
-[Severity: High]
-Can an unprivileged attacker use JIT spraying in native eBPF to execute a
-speculative execution attack (Spectre v2 / BHI) here?
-
-Since native eBPF programs loaded by an unprivileged user (when
-kernel.unprivileged_bpf_disabled =3D 0) will have was_classic =3D=3D false,=
- the
-predictor flush is entirely skipped. This appears to leave unprivileged
-native eBPF exposed to JIT spraying attacks, as the mitigation is completely
-bypassed.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260713-cbpf-jit-s=
-pray-hardening-6-18-y-v1-0-755f60c55705@linux.intel.com?part=3D3
