@@ -1,116 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ECA42931C7
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 19:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D69CD2931D7
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 19:21:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784056663; cv=none; b=EgD+LOXPJFeOIrZjpnuwJcN895pwuO8UHWwnYtsXRgvswT8jxcXh2R/hPxiitNe2EK0We9YSk27CUaB7KiDi31RMgt1DI5MRWbwf+sKvhgMa3obEIFsoVoxFogR4kC+XlYCj4Fbm2RbqYbARTs8+1iY45w1RItPGi/bjA8VoKR8=
+	t=1784056884; cv=none; b=EwLLk/sQ5InJsBQMBP+d5n6apzHaf/E7kw+vdvdwp8DQp1Atwig3jeFMJeLEYgVDx8bCkFW8releMJuio2Vb6bjfw3gZrMKf+LPuVlTw8QSOyAMxU+yjcB30R2neJzBYjUZ2VIfUIKgroUDdqk09Qi+/+ouO/xToE74bNiN+w8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784056663; c=relaxed/simple;
-	bh=m3PDCgERRzNJX3HzUg988ijwQifKMGI0V0uMgi6yOzI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=TMIiN3zvlSiKh2A1UMwxstwDdZvUgilf8oXlVK5TYtWYudG5hng24u0HH9b8b4Ry1pD7qBKCAnxLU4L9oiyG38tSXxsUhig5hU1nj9IgWcakC1zJ9D+91AcxXXsyAvVAA0WtIAVwYva9ltnBngZswcYomaxuxjEobqg8eojhGn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kfOmb8dt; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784056884; c=relaxed/simple;
+	bh=tWniBlvSYvLc9mXjbuv76SfuUK88aGrLRBkLHUZFF10=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qCA28be9nBzSTsX5I1N0U8W6e7i+XedXycWP7/gtx9Fzx+kIkQoxr9piSJppynxXpZHkwC/apvn8o6RHJUmLruvcp0g+JQsLCpGRIm9up68ClFQhUtkG3XZxcoYtCUUY7tz41hy0cyk7P76gueUoSnesvSE5Km1bOBkt3Ed+kcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XCt8Lfj2; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kfOmb8dt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 283AD1F000E9;
-	Tue, 14 Jul 2026 19:17:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784056662;
-	bh=QKVAoefZ2E8ePaHgHMEnFo3UCN1cXY1O730SneDGln8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kfOmb8dt+fRlHSo6+17T0fAhL+Y95xxLcqsYy3/bw1OLIgL10kZNtFQAHLB4vdzgB
-	 JiZM3aIwcfjGNhO0ywnvfmrrcf7VgVOVW4xuU/+Sgn1FTmsTXtVpj8M5d9sIle6Qte
-	 ggcScUhXJUdtcarocTMhrJs5rOcit3lH51J89GFG9k8jh4L9s6EONMYY0fhmdFyFCt
-	 HSPKFNLU8wE/+ZxbOkg/aA7r3GOCAciZybzCuqEfSZlBTErs5U+hZjpTxNiFGiCTxC
-	 Pn0SRZU5Y6cGtLHSoCrYwo0hTqpAliPYSl6z5q3QYVw1qnQE8aBq4PCiObI7PkXrj3
-	 quATbRO51dlYQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 6.16.y 1/6] bpf: Support for hardening against JIT
- spraying
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pawan Gupta" <pawan.kumar.gupta@linux.intel.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260714-cbpf-jit-spray-hardening-6-16-y-v1-1-2fc3e16263ac@linux.intel.com>
-References: <20260714-cbpf-jit-spray-hardening-6-16-y-v1-0-2fc3e16263ac@linux.intel.com>
- <20260714-cbpf-jit-spray-hardening-6-16-y-v1-1-2fc3e16263ac@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 14 Jul 2026 19:17:41 +0000
-Message-Id: <20260714191742.283AD1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XCt8Lfj2"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2cc891373e0so56233655ad.2
+        for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 12:21:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784056882; x=1784661682; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=mHy8t4zKOYGLPi7aUYeTB15EGxexEveRnk5KK7uTm0c=;
+        b=XCt8Lfj2mZnBma3+2nbP50NeVeN67/4hD9v4Dy0VIb/Vifq1ftMBeRVCtEtJ4KJ86L
+         SBDTKo3JpVRSRZOUD4x/z+7l3MGMhaxgyQjGfFIROhj5mez1rF13GFpFeFq75gZXWpF7
+         qyuSt0aNparC+9MD8dpaY2EUUkX+jwRaNsLadGIzURw4F/KxGZ6+r0Ej235pjUQNsoJF
+         FE2oN+C5NUD86VRKG6degaXXYFzcEs2PEoTd/2YE5I3ZUvcv32Bihsobx4+O9ovyCECF
+         uhR2ezBUG/OY03Mvz37xvS0ACeLVlWU0dE95qCaZx3RBVHeqLkws/M4sxkxk6wG0vJLV
+         9Uwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784056882; x=1784661682;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mHy8t4zKOYGLPi7aUYeTB15EGxexEveRnk5KK7uTm0c=;
+        b=JwBl3p88BU3kffY7f1DmnPIq1MGaj0EFHyKFcsXHDkvjsoAZyYtQdYO8zx4/ENR1Sj
+         Coq9QvImLm9DnsRoMv/9DEmefkHTZtQ1A0JEsZ49UfwLeFHNis2jl7pqd0w8HY6oHqsX
+         3oDE6rsqyCCkHlzjO0U7DEOUlBT0/VizlCaT+N4uJZxAqUSiVoa+MNmcLB4Q4UMWVk8j
+         aG4v2c52tbU2LPj4SwlBldLYEASryGSetAfn/ypxKfwhc1l2TVSueLkPiGDpRyB2rKy+
+         nVebyyhDVpTLyCSgrnnLAPM5+ZVjkCnrDCfWM+NWesoOZ6hgM+d0WzSf1quCt0PB3bdu
+         ydjQ==
+X-Gm-Message-State: AOJu0YzW2Nmbgt6+fW1e7MS2GDPvHyatvv9pogUe9EB2ocum4S1Lm8rj
+	e4RqnHsnQCm7Vc/Ybc1oJD0PMlph3hgjAO91Gv2mvwa1AzXKxpp+Bwl1mfg59w==
+X-Gm-Gg: AfdE7cmdkLsrB3F0rykUfYrME6loK1MdhWlZxTYuUCE+Xi+wy/ezcklAffZAOeU1LzW
+	QypGHqCnlA82YohVzLSNDQ60iThAOXNTNAAQneZLHgtga9VDf2w1uER00osFEUh6MBK6t0+7qWD
+	FN9MJssgHyYqyRv/hhq9eMD7BrYraNZCQDyTMiPSHdi8X/jmKSMMy8SMf6gi/G9hnGxM4QxQOoX
+	IniK3bRQu2PRhfl1ZgpiWdAoOgUhQvNMIUrw8EuoCfJUl3NEwBY2P2ng9oiZmtZ8QOwFpF+wBLG
+	CSIBAacCCNyoWnCzlSyrrUJVb39XGCMA5k5KjxxKO21BQWs7LxRho4r1oN+ZMNCr6KFyz3druhj
+	S6QkicMXeNbhFKY+skH+Vj1nlHjhMSx/I1UUCwP991HeZG0ltGTUT6oa4BzVdMsmNMjEnRwWG8C
+	PNU2vGGGgvOg==
+X-Received: by 2002:a17:903:1aef:b0:2cc:f7c6:8353 with SMTP id d9443c01a7336-2ce9f1605e1mr141816505ad.41.1784056882165;
+        Tue, 14 Jul 2026 12:21:22 -0700 (PDT)
+Received: from john-p8 ([98.97.42.39])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bf74cbsm120804945ad.18.2026.07.14.12.21.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2026 12:21:21 -0700 (PDT)
+Date: Tue, 14 Jul 2026 12:21:19 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: mattia.meleleo@coralogix.com
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Jakub Sitnicki <jakub@cloudflare.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>
+Subject: Re: [PATCH bpf v3 1/2] bpf, sockmap: Account for receive queue in
+ FIONREAD without a verdict program
+Message-ID: <alaD1E0nOLZ59kT8@john-p8>
+References: <20260708-fionread-no-verdict-v3-0-b4ee31b3af53@coralogix.com>
+ <20260708-fionread-no-verdict-v3-1-b4ee31b3af53@coralogix.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20260708-fionread-no-verdict-v3-1-b4ee31b3af53@coralogix.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] The branch predictor flush is bypassed for BPF allocations larger =
-than BPF_PROG_PACK_SIZE, leaving privileged BPF programs vulnerable to Bran=
-ch Target Injection (BTI) / Spectre v2 attacks. The author's rationale for =
-skipping the flush assumes attackers cannot allocate large programs. Howeve=
-r, an attacker can train the BTB using small programs and free them; a vict=
-im's subsequent large allocation can reuse the same virtual memory and will=
- skip the flush, inheriting the poisoned BTB entries. Additionally, on conf=
-igurations where PMD_SIZE is undefined, BPF_PROG_PACK_SIZE defaults to PAGE=
-_SIZE (typically 4KB), which unprivileged cBPF programs (up to 32KB) can ex=
-ceed, directly bypassing the flush.
---
+On Wed, Jul 08, 2026 at 06:55:00PM +0200, Mattia Meleleo via B4 Relay wrote:
+>From: Mattia Meleleo <mattia.meleleo@coralogix.com>
+>
+>tcp_bpf_ioctl() answers SIOCINQ from psock->msg_tot_len, which only
+>counts bytes in ingress_msg. Without a stream/skb verdict program
+>nothing is diverted there: data stays in sk_receive_queue, so FIONREAD
+>returns 0 even though read() returns data.
+>
+>Add tcp_inq() to the reported value when the psock has no verdict
+>program. The two queues are disjoint, so bytes redirected into
+>ingress_msg from other sockets stay correctly accounted through
+>msg_tot_len.
+>
+>Remove unused sk_psock_msg_inq().
+>
+>Fixes: 929e30f93125 ("bpf, sockmap: Fix FIONREAD for sockmap")
+>Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+>Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+>Signed-off-by: Mattia Meleleo <mattia.meleleo@coralogix.com>
+>---
 
---- Patch [1]: [PATCH 6.16.y 1/6] bpf: Support for hardening against JIT sp=
-raying ---
-commit 86ef6d6286895019e1dbe8a1db211825e4c28b04
-Author: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+This would be good to merge. The bots had some good callouts but mostly 
+they should be follow ups IMO. There is some concern that the FIONREAD
+may not be accurate on transitioning add/remove of progs, but mostly
+this is done at connect and then removed only done on socket tear down.
+At the moment this is causing real application problems.
 
-bpf: Support for hardening against JIT spraying
+The most relevant bot callout would be to make this work for UDP progs
+correctly as well.
 
-This commit introduces a branch predictor flush before reusing BPF JIT memo=
-ry.
-It aims to prevent indirect jumps in a newly written program from reusing
-predictions left behind by an old program that occupied the same space.
-
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 17e5cf18da1ef..48208c3f58143 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-
-[ ... ]
-
-> @@ -951,6 +961,14 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hol=
-e_t bpf_fill_ill_insns)
-> =20
->  	mutex_lock(&pack_mutex);
->  	if (size > BPF_PROG_PACK_SIZE) {
-> +		/*
-> +		 * Allocations larger than a pack get their own pages, and
-> +		 * predictors are not flushed for such allocation. This is only
-> +		 * safe because cBPF programs (the unprivileged attack surface)
-> +		 * are bounded well below a pack size.
-> +		 */
-> +		if (static_branch_unlikely(&bpf_pred_flush_enabled))
-> +			pr_warn_once("BPF: Predictors not flushed for allocations greater tha=
-n BPF_PROG_PACK_SIZE\n");
->  		size =3D round_up(size, PAGE_SIZE);
->  		ptr =3D bpf_jit_alloc_exec(size);
->  		if (ptr) {
-
-[Severity: High]
-Does skipping the flush for large allocations leave them vulnerable to BTB
-poisoning if the virtual memory is reused?
-
-If an attacker trains the BTB using small programs and frees them, and then=
- a
-victim loads a large program that reuses the same virtual memory, wouldn't =
-the
-large allocation skip the flush and inherit the poisoned BTB entries?
-
-Additionally, on configurations where PMD_SIZE is undefined,
-BPF_PROG_PACK_SIZE defaults to PAGE_SIZE (typically 4KB). Could unprivileged
-cBPF programs (which can be up to 32KB) exceed this and bypass the flush
-directly?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260714-cbpf-jit-s=
-pray-hardening-6-16-y-v1-0-2fc3e16263ac@linux.intel.com?part=3D1
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
