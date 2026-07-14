@@ -1,112 +1,151 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 666D237A82E
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 19:59:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784059187; cv=pass; b=LqqEb4fTcQi8gmfoYUfbaztxJXWQuj+eqHEwdypWLZSzE9tQCQnztg2QncHODx5GB7JKkWcPvDu/ZFeIOaYfv9Jx8DaNTQ4V5l6mgoxuoUv4m1UnRnXjg0PPfYKs3eAj4+MMhez3MjUbCWhwZMJ/MhviVJOxwnsX0qtIdsP09cs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784059187; c=relaxed/simple;
-	bh=jI5V3tWpdMHRo0QrWwUwJBIeKxjIwvEQeenkJyJuwxQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ajru1VJ1T9U2awqbDDnAyUhh26kd9Oqpj9UzwWgL5EtwMjOjfM9Xyby5angZF0NKvkpOj2hsT1oOweOnR9/0i5LWxHwvfNYX9TsVhkMkeRlwQZqRbU7QlB8isoKoFvVy4jlrMMSUr0rviAX44L3oTKr7xLGc6Y+AzHVHiIdhwjk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pC3z9B41; arc=pass smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CDF9443A8A
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 20:00:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784059217; cv=none; b=dFjkyLJouGc84qGqdEHTNcz2SdDo0fOlCRNjMkiF5CROTy8Al/vbLzfEW0Ejp2JieXsU3Pc8E9I/Xzlz85eVtKkKWLWOzYu7Jhv9dvRjWLZNaU2OtnYIkPaTq2fhEFyVP52QxIWACuQJhClOb9IRGy1qtbqI+2eNO1Jzt6lj58k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784059217; c=relaxed/simple;
+	bh=PsIbMJRTSmMcKUepU2LL7YXBwU6P3f9ZWFk+Ikj41AU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=CzzQ5Jy3ETUlLunQ0Yi6FXzvMs1qgQYkf/Tu5HY8KGCHMw2RHicbClPJXQb4oA79jqGkoBw3EwjPrF7VyAvtL9WByiuC8rzL1aGrBCmKXqRcFuVJ3/2crMO8kSJRRhwKWiqPCrjRM3h/3n/MUs/K5Atm+hr6NAqHpM0GL/Kixt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s7ImQ8O/; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pC3z9B41"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c15f6d667bcso591321766b.2
-        for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 12:59:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784059185; cv=none;
-        d=google.com; s=arc-20260327;
-        b=UlwTRAUlo/RrvfpHY6EReUnlDmMvgqx8hAz/EilGb60VASs/kpVb7hz0/6qBsTOBKZ
-         xOSI8cdbDTZJhLFHymXoec4/QLTlyS0guApnqcLvBZTB8ptSE5hG4pRFhPtT4AH8EIE9
-         CVDmvijiVObJ9erYTeikmp1LZGC5WSLGv+fr8o24gNr1h9G63+cq8iNEfeSO+YLK5ztg
-         +/KunkrVIDxvdOZZ9sVU0gGP0m8I2rZWNIR2G9bQRoe/9mHwIbymDW1mqauUpSVzJxrl
-         iV53MZZ8mH37JGWDQbNfh3mdkNl4nE14DUQETwEBlfA0SDLFlcxe6vIwk+VJNJ880W0L
-         Ne3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=buY38vxHP2OUQVk5XzFGddWBnQtMpHC1RojiGdPVoiU=;
-        fh=qGtVJODNCOMvWgzKIKsl7uq2aTmX4nd1RttMg/zz63Y=;
-        b=pu+EW+OCtyVtuC1y0OZQT7mivv034pPyUCq3JxyzgoyO6OOrCIq4+BCyRLJ3ZNRhI8
-         SzYf03sxG+cDIKbpHekvkUE1LC2oWfytll+kUzZKPOgSvj2zyWYCbMzjOze5qnFgeC4o
-         HpiJ6qvDqRJ784lQkCdR1BA5QVb1/oH1MXTI3V6wR5FGi/UVOPcI37QGCRm06hbdApUi
-         rO1CuOLWuah9Fsc5bckMnj9Lrj+OBBlBXcV7ysv0u3ep87IDjQQRDSsk3THTfJ2f0D3a
-         p93334/UmvpYFYbxd4xH54fE+SfLQ0WECvi2Y8ME5JDhn1po85uPN/m3ikCTjVoE0ouk
-         QwcQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s7ImQ8O/"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-38dc4553f62so3382374a91.0
+        for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 13:00:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784059185; x=1784663985; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=buY38vxHP2OUQVk5XzFGddWBnQtMpHC1RojiGdPVoiU=;
-        b=pC3z9B4142qVHqqBr0hUyPxTlm6hZ5c+tMZ0nsG/N8/8Pw0sJfSBaFsTk5Y21zafW0
-         64sGSbHEkzJnlEPXJp6Cxfb0FO2ZLblS3aPcovNex30cEnl+slTTEs/xMsUNh3C+JRE6
-         mZO9dUqTOAPPYovOpu06ODybD+Ekd/+f0xSQFKR8lkhh0d+5RA0JmMY3scYLO8dExcEZ
-         aYjo6hkkhQO1Y67Ky70oO2o2pzyjXl+jUF5ZnNS7KZjoVrCQ0lX2jEoaSfO8AEBcWLcd
-         tnkPAg6lNoriJnFHCrcxHcJF2/anXcP6iOLdUnMXLoiFnnoR+0Ja7JFQ1pGO17OZUdhk
-         20pg==
+        d=gmail.com; s=20251104; t=1784059214; x=1784664014; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=0pBHx4swSqG8KyzMQR2LJ5Uo9kHMF29Tk5WBtrSEv9s=;
+        b=s7ImQ8O/tpARNRcOxHarokqnYBi03CC11F954yGUWlCCXZ11jlJScvIBaeANBmUVE4
+         1oC2nuC6hrt006eKlWgfp3r3FqD742dvczgVA3KTjw4NDJ75FArR1UjrHjWBEpr7ldpN
+         KBe5Yj+HNzoC/C+2upJFKArIO4t5vNeggg1MkUg1r1fhNFjGnNOIS3MYp49R0AmlcQbZ
+         P5vFd8kCZAKLpoRyZi1F3386EBGMf5ftQEFXPvTJ/cwsePcz1ZevkNYOKvbZDQqO05ky
+         /1gOMcOh5pz8+zasb1Iqivz8homB2UWlUOl/X/1ven4gclJ7BykoutBdemWdws3e0ecC
+         bkTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784059185; x=1784663985;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=buY38vxHP2OUQVk5XzFGddWBnQtMpHC1RojiGdPVoiU=;
-        b=kxcHNewaV/Ifeux39ZBAEpKxrvkPPifWtSkBUB5W2akT82gurechpYuUGpWLV4Ahpr
-         pcu5d1L+6lY0riLOBqCMJ+led7129KXiGlqr5TCkL7qRVa8+r+qnIT/ngscrdxvICiuK
-         OHSLTV3F60vQGJfX6wq5yj0WfcMEsGnl1bVwbXRgNdm13iQsiFTp8BxZ/3RP7C7vBCdP
-         F8pOLEIQIky214pzv/aQEOp5gesWOuYvM+TGsn2oDJ5mPT7XIxfVbbj0dmYa10nba5Sd
-         Y9/YWp7kORIGTck9JjuM2aei0vrbBn2OXV0Efct+TiSe+8K4e2C1z9lEbQ6NNt+Momkr
-         evmw==
-X-Gm-Message-State: AOJu0YyYq4zl08+auPGHdGYyKFGbYb4edqOmCYqjEcSKdBezss0LCv+c
-	jucViFc/O4BjF5PbFlswGoNLrZdUP+zcWIQ+SOo6PGYh5ItD+fSV0Q+5i7XerkChAN6RFX9hNdR
-	F7/pvsD3P6nD3bGwUQCbhMAlOLRXcSmLgLMbcvjtsyA==
-X-Gm-Gg: AfdE7cmFsPELpoqV5b6Cxgzh1CVSfpLht5PG8vE8jltECRvJwj2R42Av9Gjgja1pxL6
-	dAnBe5u5DAFEEjo9iJfEAgLGghPt2nKe9KPGh44plR7Qe3zNlebN0edGPiMmncLgLbUBqHP7HYQ
-	UgmDGsqx5EqOMK+PVEoqCoB0EYtW17giTg23BUWR8KfX68tOyCVl0Ooo+5DwEgs6b1kRdZYt05k
-	cIRj4ktrDZzOaiuDhOmxfP8iJpchHptkWuZtMUfuEzTPlzDjQKjS2hVZA0FY/Z5pTrFsqxTrFU=
-X-Received: by 2002:a17:906:9c87:b0:c15:cfb4:6a6 with SMTP id
- a640c23a62f3a-c1679447ac0mr8575966b.30.1784059184321; Tue, 14 Jul 2026
- 12:59:44 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784059214; x=1784664014;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0pBHx4swSqG8KyzMQR2LJ5Uo9kHMF29Tk5WBtrSEv9s=;
+        b=NV1Ftzh6eFfkfGSUTjAEOoP8oaloAgECcpXOCr8E3Ij+YVZra7J0Qc7Ruc3c1tuvKZ
+         kLIUMzEDDeznpwhxYixBeeI0rjis8QtlFqBsdyFK1XpgtLIhK9H1dQs9ZAz/NRKSB8p3
+         eNT95TnfKcykZHQVgWX2kleiQTmmxrkNOZZd3rcmXtFITEDzioGZKv29vESmFrgVP3vQ
+         otCZyyF65JJIHHeLF5luFyhLFKWVS6TBJruPqcwAsuJ2twUmH7pknuGmsEZ8mi/4d4jC
+         eOx2XkqUXYK2+ipoefYXbl4xrwImNv1ANiUVbdZPs2HlglvCBrd/In/Q0MnKoWcjVcu9
+         DAUg==
+X-Forwarded-Encrypted: i=1; AHgh+RrCkAh7VV2VaUfjeZEvFLPRlIwL183MBK0CWNhnxDntWqMHB3XVYNX2PvR2DKqCk2NqqUA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywij+ITQCWvthvdRToaiXlWFXfneVgeMUI9XCikW4xUJrn/JxEI
+	Yhyphv1UVlSAYTFDGx94s062dUMXN7JFXOu/5rl+Ul/h7EI9mi2+TcZP
+X-Gm-Gg: AfdE7cljLZnaK96pLtGntBElyiGSB5aYyo47UhSxrTpSPxFb1sYoYe8m6MYqadZkdo4
+	F4j9oXBR8BRQ0pmZCx+HVMrkVduPEsch87cVj10NhKLZxVnzCZu7BEHErqm+a6vpk/1Eq7CfS3V
+	RaymNyydRRERttrC5I818dnYIiUWVfHIDJysvFXQWKt8jPMc5jEixwXPZpBsdX/7RD+zQZJqqU1
+	HlGwj362uksyoXb6wOw0bKrMiq+E2wbGaLExirFKBlZUA+5cRiYP/6U1sv3pMw15hv9IiWZlVmO
+	qUBkKhoOs1YXcG9gVnzTzIwlw9YCvIquDFC+cU8rkiR3JlIv20ehyq35JHI4XwmH2WSpixOJGaw
+	BHkogGDFLLu34l1haFjV7ZxGXIRz54catOFbbVh4FH+K5nnjXxvnB5dsziHKUvORyJ+G2hMBlJo
+	7IJGXH6I3beX0v2m9Gzuvmu1CBkasaIUh1MZ3vH4qlDnIvHyAo75LUDrYK4woGA/uX+EQ=
+X-Received: by 2002:a05:6a21:681:b0:3bf:b9de:854d with SMTP id adf61e73a8af0-3c3573959b2mr4193196637.23.1784059214071;
+        Tue, 14 Jul 2026 13:00:14 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:11d2:f935:a412:8fad? ([2620:10d:c090:500::972d])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-311b00048a3sm53943891eec.5.2026.07.14.13.00.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2026 13:00:13 -0700 (PDT)
+Message-ID: <9d9ec72059ef2855c3e2a47982e44cff9dd1165a.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 13/17] bpf: Report Program Structure CFG
+ errors
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
+Date: Tue, 14 Jul 2026 13:00:12 -0700
+In-Reply-To: <20260713153910.2556007-14-memxor@gmail.com>
+References: <20260713153910.2556007-1-memxor@gmail.com>
+	 <20260713153910.2556007-14-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260714023939.616686-1-main.kalliope@gmail.com> <b72813f0ba5f1b0477d538a852642fc8b07240ea61714931893d59d659e2f4be@mail.kernel.org>
-In-Reply-To: <b72813f0ba5f1b0477d538a852642fc8b07240ea61714931893d59d659e2f4be@mail.kernel.org>
-From: Admin <main.kalliope@gmail.com>
-Date: Tue, 14 Jul 2026 15:59:32 -0400
-X-Gm-Features: AUfX_mwJmm4GaHzoriii73SskjFE016gUQgVqJvqNOsCBBKFHg9lmg9keP7jh18
-Message-ID: <CAJZwKkg2Q2sJUS+2A-r1TB9sWoZuZmhyrLkLWZsDTMHH+rL0sA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf, x86: Add support for BPF_SDIV and
- BPF_SMOD in the i386 JIT
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, udknight@gmail.com, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
-	visitorckw@gmail.com, martin.lau@kernel.org, yonghong.song@linux.dev, 
-	clm@meta.com, ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jul 14, 2026 at 03:36:45AM +0000, bot+bpf-ci@kernel.org wrote:
-> This looks like a bug fix for the i386 JIT compiler. The function
-> emit_ia32_div_mod_r() has only supported unsigned division since it was
-> introduced. Should this include:
->
->   Fixes: 03f5781be2c7 ("bpf, x86_32: add eBPF JIT compiler for ia32")
+On Mon, 2026-07-13 at 17:39 +0200, Kumar Kartikeya Dwivedi wrote:
+> Augment selected subprogram CFG validation failures with Program Structur=
+e
+> reports. These errors are structural rather than path-dependent, so the r=
+eport
+> focuses on source and instruction context instead of causal history.
+>=20
+> Cover jumps that leave the current subprogram, subprograms whose last
+> instruction can fall through into the next subprogram, and recursive bpf2=
+bpf
+> call graph edges.
+>=20
+> Format long jump-range reasons directly in diagnostics.c, and keep the
+> fallthrough suggestion aligned with the verifier check by suggesting exit=
+ or
+> explicit jumps.
+>=20
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+>  kernel/bpf/cfg.c         | 55 ++++++++++++++++++++++++++++++++++++++++
+>  kernel/bpf/diagnostics.c | 19 ++++++++++++++
+>  kernel/bpf/diagnostics.h |  3 +++
+>  kernel/bpf/verifier.c    | 32 +++++++++++++++++++++++
+>  4 files changed, 109 insertions(+)
+>=20
+> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
+> index 26d37066465f..376f6b6d469c 100644
+> --- a/kernel/bpf/cfg.c
+> +++ b/kernel/bpf/cfg.c
+> @@ -5,6 +5,8 @@
+>  #include <linux/filter.h>
+>  #include <linux/sort.h>
+> =20
+> +#include "diagnostics.h"
+> +
+>  #define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##ar=
+gs)
+> =20
+>  /* non-recursive DFS pseudo code
+> @@ -113,6 +115,12 @@ static int push_insn(int t, int w, int e, struct bpf=
+_verifier_env *env)
+>  	if (w < 0 || w >=3D env->prog->len) {
+>  		verbose_linfo(env, t, "%d: ", t);
+>  		verbose(env, "jump out of range from insn %d to %d\n", t, w);
+> +		bpf_diag_report_program_structure(env, t, "jump out of range",
+> +						  "Keep branch targets inside the program.",
+> +						  "Instruction %d jumps to instruction %d, but the "
+> +						  "program only contains instructions 0 through "
+> +						  "%d.",
+> +						  t, w, env->prog->len - 1);
 
-The i386 JIT does not implement signed BPF_SDIV/BPF_SMOD. Commit
-ec0e2da95f72 added these instructions and updated the verifier,
-interpreter, and x86-64 JIT, but not the other arch JITs. This patch
-adds that support, targeting bpf-next as a feature, so the Fixes tag
-does not apply.
+Nit: I'd forgo the formatting rules and just write the above like:
 
-Commit 03f5781be2c7 predates these instructions.
+		bpf_diag_report_program_structure(
+		  env, t, "jump out of range",
+		  "Keep branch targets inside the program.",
+		  "Instruction %d jumps to instruction %d, but the program only contains =
+instructions 0 through %d.",
+		   t, w, env->prog->len - 1);
 
-Nick
+     Easier to read and easier to grep.
+
+>  		return -EINVAL;
+>  	}
+> =20
+
+[...]
