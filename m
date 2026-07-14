@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E7836A34D
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 03:07:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29465377023
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 03:08:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783998436; cv=none; b=FW1vNPtHGlUL/hEb/ipdJlhH3X0/C3gLGTNSpSa4zDXiFUUOxOusc5r4hCqTgjrkj+lbDWH9L2kAKcFwKU3oS5AOhKsibIyhCOV3R/2LDsUD89QB3d5NGGKGPrRhDpfCv/v7TwFPzt5HNyY4PZhZPeOyPUhpNlPwwt2T3mJQCBY=
+	t=1783998529; cv=none; b=WhJcAyZrJbf6xr8pQo1I2+/j+zmC3/F2Ut7XXbjbDH2yW2DcnEX0maVkTK3pHpg/cvWFo8UAXrudEb6ZcP54oyD/lHgdvagrjPDuXlOHI9Llet4GTw+1auNXLIzAm0WTuapoIBeiQ8gfExI6lIDZHGmzFWNsLUrJ9Kimym0mAk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783998436; c=relaxed/simple;
-	bh=YbQCZV6rOc7nM21Fs81Kg2maHH7UzcGmTCpKzJVTdSw=;
+	s=arc-20240116; t=1783998529; c=relaxed/simple;
+	bh=RGPIQvo+6RezGITTY5TlxaZGH4plblmXtELXC3KGNlg=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=NKaPNua/wsj2Y6dJdCrOda0a0rdWikMOCt8THimf/DaZCYqtzHgsXfnGAS48IEHuiIQBPiGmc4W3zLBuY/sOlBv9/22x6iHFXBHYTDUwQl4PEwc6ldqsmg12VViFPrDDkgEpwvN4NIw+KRCWwlYYnwL0skcuSV+X/GVwJ6qxahw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OvoJKT9H; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Z1GC6nON22h0zB9a55O18rVDKvSyceAw/Ipojmc3w+uTkG/6wImqL796c6f7OvkzJ/+VknQUeKc04L72Q/fFDTplSFjz95k231XiGwaKH0Mcn5BKE9MN/VhuI1+HyQ7m5G2EmVojjGp5PbrM/WNg21ub5r85CJMPzQEmT8/JVzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KV7sbPgR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OvoJKT9H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DDED1F000E9;
-	Tue, 14 Jul 2026 03:07:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KV7sbPgR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3BE41F000E9;
+	Tue, 14 Jul 2026 03:08:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783998435;
-	bh=h8O2eiIfH6RAM0mL2Zjo1uWaChBG2TeQkEREaTxtfR4=;
+	s=k20260515; t=1783998528;
+	bh=IpOxy6KJVKvEBb4tbTsQdRiZSdRue0D3ebGwXAmTQOw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=OvoJKT9H7gwEET8xp08L0rU34w8fEgNgRLkVfQrbLV/CuMvj6XJNkOVrpGDTy6JWv
-	 7ebrnX0FNJDXFi5Yrtm0MW/5VJK1r82JdoL2Ndz/h9tzMqo23QLXnUoYvvUcQJRuHs
-	 FVf7X2poiDrXr9Npy4DEJ21nnkgOkS7vDTJN6Ck3SL6xYr4NmFLfzF47L2Uf4fRb2O
-	 cnuHcmJ/eBwcK6yVzDbj/RLaReyM3DbSS7M9NsMdujXBayaPAnVUPivG+WLN9Xo6lm
-	 DiIpdvIYSDj8AbqywJ/bZYgXPZvvxtdG9HExPuL0vES3L6sf+mhADO/fTAYj4LltMh
-	 g1vS81Y7NPfjw==
+	b=KV7sbPgRqdtk69fmxCuq4f4tGDv5tKX1jse4poGL9tXLuxitkhTiJAHh5Tu1uiaGf
+	 YYoIea1mveqKNrM5JSQnqCFxoQlCNX8gAgJQpvu26dQr2qBhrNmhPWsqu1roAqByi5
+	 FHJqanzjv8LacZNuXPF6QhTxcFXitSPqYcNyG1xx7otut4G0HDL23lLNEIa4qXgrUd
+	 FTELnef6d/Ef6GpGSOdYLhRN98WTMZk5pJGptHrN4/quc9O0LfZF0IQJnDqcuzjH0V
+	 H9DX3ntL2QRiaNJisY0+ujsvrKDWmNVslrXAJKVxfuyWfIgPJTJnuHnTJNRVuEm9yu
+	 k53VD8t/coEwQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/2] bpf, riscv: add support for timed may_goto
+Subject: Re: [PATCH 2/2] selftests/bpf: enable timed may_goto tests for
+ riscv64
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Feng Jiang" <jiangfeng@kylinos.cn>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260714-riscv-bpf-timed-may-goto-v1-1-3988601fe6ac@kylinos.cn>
+In-Reply-To: <20260714-riscv-bpf-timed-may-goto-v1-2-3988601fe6ac@kylinos.cn>
 References: <20260714-riscv-bpf-timed-may-goto-v1-0-3988601fe6ac@kylinos.cn>
- <20260714-riscv-bpf-timed-may-goto-v1-1-3988601fe6ac@kylinos.cn>
+ <20260714-riscv-bpf-timed-may-goto-v1-2-3988601fe6ac@kylinos.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 14 Jul 2026 03:07:14 +0000
-Message-Id: <20260714030715.3DDED1F000E9@smtp.kernel.org>
+Date: Tue, 14 Jul 2026 03:08:47 +0000
+Message-Id: <20260714030847.E3BE41F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,62 +47,59 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Critical] The RISC-V BPF JIT unconditionally moves the native return val=
-ue (a0) into BPF_REG_0 (a5) after calling arch_bpf_timed_may_goto, silently=
- corrupting BPF_REG_0.
+- [Medium] Missing test enablement for riscv64 timed may_goto expansion and=
+ bpf_fastcall interaction.
 --
 
---- Patch [1]: [PATCH 1/2] bpf, riscv: add support for timed may_goto ---
-commit ed55df1d87b981cbd59d17bd2c3b607f3fa418d9
+--- Patch [2]: [PATCH 2/2] selftests/bpf: enable timed may_goto tests for r=
+iscv64 ---
+commit c54da59713ded8c765c2c6ab6331451df77083c9
 Author: Feng Jiang <jiangfeng@kylinos.cn>
 
-bpf, riscv: add support for timed may_goto
+selftests/bpf: enable timed may_goto tests for riscv64
 
-This patch implements arch_bpf_timed_may_goto() for the RV64 JIT. It also
-enables bpf_jit_supports_timed_may_goto() to allow the verifier to use the
-timed expansion path. The assembly trampoline is designed to preserve BPF
-registers R0-R5 across the call to the generic bpf_check_timed_may_goto().
+This commit enables the verifier_may_goto_1 and stream_cond_break tests
+on riscv64 now that the JIT supports timed may_goto.
 
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
-p64.c
-> index c03c1de16b79a..9832a19200c75 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/s=
+elftests/bpf/progs/stream.c
+> index 92ba1d72e0ece..8d8e53d37266c 100644
+> --- a/tools/testing/selftests/bpf/progs/stream.c
+> +++ b/tools/testing/selftests/bpf/progs/stream.c
+> @@ -64,6 +64,7 @@ SEC("syscall")
+>  __arch_x86_64
+>  __arch_arm64
+>  __arch_s390x
+> +__arch_riscv64
+>  __success __retval(0)
+>  __stderr("ERROR: Timeout detected for may_goto instruction")
+
 [ ... ]
-> @@ -2157,3 +2157,8 @@ bool bpf_jit_supports_fsession(void)
->  {
->  	return true;
->  }
-> +
-> +bool bpf_jit_supports_timed_may_goto(void)
-> +{
-> +	return true;
-> +}
 
-[Severity: Critical]
-Will enabling this feature cause the JIT to silently corrupt BPF_REG_0?
+[Severity: Medium]
+Should tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c also be
+updated to include __arch_riscv64 for the may_goto_interaction_arm64 test?
 
-When the verifier emits a call to arch_bpf_timed_may_goto with src_reg =3D=
-=3D 0,
-the RISC-V JIT's BPF_JMP | BPF_CALL case handles it. Because src_reg !=3D
-BPF_PSEUDO_CALL, it appears the JIT will unconditionally emit:
+This test verifies the expansion of timed may_goto when interacting with
+bpf_fastcall, but currently lacks the riscv64 architecture tag.
 
-arch/riscv/net/bpf_jit_comp64.c:bpf_jit_emit_insn() {
-	...
-		if (insn->src_reg !=3D BPF_PSEUDO_CALL)
-			emit_mv(bpf_to_rv_reg(BPF_REG_0, ctx), RV_REG_A0, ctx);
-	...
-}
+riscv64 shares the exact same verifier translation and fastcall behavior for
+this path:
 
-Even though the new assembly trampoline properly restores BPF_REG_0 (a5) and
-BPF_REG_1 (a0) before returning, won't this newly emitted mv a5, a0
-instruction overwrite BPF_REG_0 with BPF_REG_1 immediately after the call
-returns?
+tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c:
+    ...
+    SEC("raw_tp")
+    __arch_arm64
+    __log_level(4) __msg("stack depth 24")
+    /* may_goto counter at -24 */
+    ...
+    __success
+    __naked void may_goto_interaction_arm64(void)
+    ...
 
-Since the verifier assumes BPF_REG_0 is untouched by may_goto, could this
-allow unverified pointers in BPF_REG_1 to bypass the verifier and lead to
-memory corruption?
+Without this tag, the test for this specific timed may_goto interaction is
+silently skipped when running BPF selftests on riscv64.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260714-riscv-bpf-=
-timed-may-goto-v1-0-3988601fe6ac@kylinos.cn?part=3D1
+timed-may-goto-v1-0-3988601fe6ac@kylinos.cn?part=3D2
