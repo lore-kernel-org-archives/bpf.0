@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF43D3F210A
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 07:53:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9475B3F210A
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 07:55:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784015631; cv=none; b=Ikvfsbv8u1zDzb2pG1H5sq/1bVhoEcdvUi597dabfXUg5KJo5Itv4CSH8nVOAZkva9OdLlADoXlbYiGdUh+Dv1UJFqlIHEo1rJTl9ZH+g+lrf88SSARbBwdHPJlk3NxI58WH/tGXr1QoYtjCADIe23epULXgK0TYEADDcnt2QMs=
+	t=1784015724; cv=none; b=BW6GK3nG5gvVVmq+/JpztskBk+XpfJeLLGFcL2zXtRA9QoTzDdnGhsn3cBxSe4aKdOm6niI+dt3TJJvVpYnGWnxMt7OsOCUS8yfK7ge2tgX3J3/ckhqEnlNWkOJuVuJw0JwEUcbqYsHhEaNaLv9UYRx87HGsKdBMXTNgzTSwOKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784015631; c=relaxed/simple;
-	bh=eOQZSJdXsQLGIUUV9MqQ+OWxWkMNqb13/qo66E5KSNI=;
+	s=arc-20240116; t=1784015724; c=relaxed/simple;
+	bh=nsFBhsJ93BHzXkLZh7+ztjuii9Ry9VOIb29u2Z0nCGA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=WXuE9cLqDPw1Z2CMgGXNHpfNV76f9B/J1Tw8NsybDtL7Ffd3M7W6K1SVcCrav9d5tNKMJYCd/GtJXQukWimMn8WZelym61FVQcEbTq6oTvNJuqvVSrJN43gni8CKrpo58fz+CTLQvaezw0h+D9C8RziaCWxFBFA/42Fb5g7PADE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GxD4eItr; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=dAGqbOxOGqvId2YSddCk1MADcx+klAvmmQ9274JIp6ot14RX3TjtaJLznSFFn6/YkxOb/sPq2PzuCGknXrtjcIALDMODkHJVDEGX2ls6DZXZxDeh9si8JNXUD46oIo8e4KHYotkAgrY4NRIbCsyCmQHY1Bk/WhV7YLh/UDc74/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lmKPjZRW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GxD4eItr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43DE51F000E9;
-	Tue, 14 Jul 2026 07:53:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lmKPjZRW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79A8D1F000E9;
+	Tue, 14 Jul 2026 07:55:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784015630;
-	bh=IcK188Zz61I8hEI3THVK1U9iIvAfujHcpJotpDp5uFA=;
+	s=k20260515; t=1784015722;
+	bh=joi3YMgRUE0is5r7Nj83IZxS7xyEo2NB1Nc7RT8wUyA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GxD4eItrNOOw0oAByhwn5Ox2p0e2rwYaypiFkZXhNewYvfK0512HBl2j8Z6kvxqeF
-	 TWdunFIToo2Hh6iS7q158uzQKtEDbZ326gTtV2CmycdUUZE+h0+oJNE6a+5dYdtwYr
-	 cTm4IG3caF2Zc0dBprlIl7hAWgbE9+W9GUyEN2GZnnA4LWJXlnvAMbGS+YM6o0ORs9
-	 8eKmSvjdT3Vkcc/qAVB3wt0jRliO+FZtykp8MqyZDbXD/xQ0X7nY/5Ny2Z63wOqNCI
-	 K1myYJ3iLV725nGEOMaBlT0i34zj8sc5piMeZsaecguZOq2N0UxW4Rn+2aHOQWLywg
-	 D2/2DckRhqseA==
+	b=lmKPjZRWfkc3WsXyXmeUBViprtsRu+ITXSqWpIOGwJbJ6JTXooW3QVd2zEr5pZNdj
+	 M2lEAviV9dVewMqhtN7+WZBHo3tnpyAI/qZXxWNFBGLG46iWw2yc9CXpg1tVSyKL5Y
+	 39gsy1T8udItZpudliY4EcIYtzh7tm1WoyP7Y5btpw9t3gTjkEtb1hkwDQTs1RFHgm
+	 XabLjFRUc4UxziRRoNFGxKIbU09i7+oPFrs9hAOB/9KzkzRLNorLUoJ+s5MiKGfP1R
+	 jY2XqyjE8fYGumvPXKOHnI955ehRa+74MfoavN4QVAIW7GkyrHtWiqd3hvol3/7FeT
+	 itWgU80lDNm+w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v14 04/15] arm64: support WFET in
- smp_cond_load_relaxed_timeout()
+Subject: Re: [PATCH v14 14/15] barrier: add tests for
+ smp_cond_load_*_timeout()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ankur Arora" <ankur.a.arora@oracle.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260714073041.40250-5-ankur.a.arora@oracle.com>
+In-Reply-To: <20260714073041.40250-15-ankur.a.arora@oracle.com>
 References: <20260714073041.40250-1-ankur.a.arora@oracle.com>
- <20260714073041.40250-5-ankur.a.arora@oracle.com>
+ <20260714073041.40250-15-ankur.a.arora@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 14 Jul 2026 07:53:49 +0000
-Message-Id: <20260714075350.43DE51F000E9@smtp.kernel.org>
+Date: Tue, 14 Jul 2026 07:55:22 +0000
+Message-Id: <20260714075522.79A8D1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,69 +47,86 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Using `NSECS_TO_CYCLES()` for large macroscopic timeouts causes =
-a 64-bit integer overflow, resulting in a premature return and a CPU-burnin=
-g spin loop.
-- [Low] Any loadable kernel module using `smp_cond_load_relaxed_timeout()` =
-will fail to link due to the unexported symbol `__delay_cycles()`.
+- [Low] The string pointers `clk` and `update` in `param_to_desc()` may be =
+left uninitialized.
+- [Low] Typo in Kconfig help text for `BARRIER_TIMEOUT_KUNIT_TEST`: 'unusur=
+e' instead of 'unsure'.
 --
 
---- Patch [4]: [PATCH v14 04/15] arm64: support WFET in smp_cond_load_relax=
-ed_timeout() ---
-commit 7ff3bc2dcc6f4fa787700453b8fc2f2fe6133304
+--- Patch [14]: [PATCH v14 14/15] barrier: add tests for smp_cond_load_*_ti=
+meout() ---
+commit a30c2efa70f8be2b1654f46db86c3a29fe02abf2
 Author: Ankur Arora <ankur.a.arora@oracle.com>
 
-arm64: support WFET in smp_cond_load_relaxed_timeout()
+barrier: add tests for smp_cond_load_*_timeout()
 
-This commit introduces support for the WFET instruction in=20
-smp_cond_load_relaxed_timeout(). It adds __cmpwait_timeout() and related
-architecture-specific macros to handle the wait state with a timeout.
+Add success and failure case tests for smp_cond_load_*_timeout().
+Success or failure cases depend on the expected bit being set (or not).
+Additionally in failure cases smp_cond_load_*_timeout() cannot return
+before timeout.
 
-> diff --git a/arch/arm64/include/asm/cmpxchg.h b/arch/arm64/include/asm/cm=
-pxchg.h
-> index 6cf3cd6873f5f..9e4cdc9e41d1b 100644
-> --- a/arch/arm64/include/asm/cmpxchg.h
-> +++ b/arch/arm64/include/asm/cmpxchg.h
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 8ff5adcfe1e0a..ce75655863f49 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
 [ ... ]
-> @@ -235,20 +237,52 @@ __CMPWAIT_CASE( ,  , 64);
+> @@ -2551,6 +2551,16 @@ config FFS_KUNIT_TEST
+>  	  For more information on KUnit and unit tests in general,
+>  	  please refer to Documentation/dev-tools/kunit/.
 > =20
->  #undef __CMPWAIT_CASE
-> =20
-> -#define __CMPWAIT_GEN(sfx)						\
-> -static __always_inline void __cmpwait##sfx(volatile void *ptr,		\
-> -				  unsigned long val,			\
-> -				  int size)				\
-> +#define __CMPWAIT_TIMEOUT_CASE(w, sfx, sz)				\
-> +static inline void __cmpwait_case_timeout_##sz(volatile void *ptr,	\
-> +					       unsigned long val,	\
-> +					       u64 timeout_ns)		\
-> +{									\
-> +	unsigned long tmp;						\
-> +	u64 ecycles =3D __delay_cycles() +				\
-> +			NSECS_TO_CYCLES(timeout_ns);			\
+> +config BARRIER_TIMEOUT_KUNIT_TEST
+> +	tristate "KUnit tests for smp_cond_load_relaxed_timeout()" if !KUNIT_AL=
+L_TESTS
+> +	depends on KUNIT
+> +	default KUNIT_ALL_TESTS
+> +	help
+> +	  Builds KUnit tests that validate wake-up and timeout handling paths
+> +	  in smp_cond_load_relaxed_timeout().
+> +
+> +	  If unusure, say N.
 
 [Severity: Low]
-Will loadable kernel modules fail to link if they use=20
-smp_cond_load_relaxed_timeout()?=20
+This isn't a bug, but there's a typo (unusure instead of unsure) in the help
+text.
 
-It appears __delay_cycles() is not exported to modules, which might cause=20
-an undefined symbol error during the modpost build stage.
-
-[Severity: Medium]
-Can NSECS_TO_CYCLES() overflow if passed a large macroscopic timeout?=20
-
-Because its internal fixed-point arithmetic caps at 32 bits, passing a=20
-large timeout (e.g., > 4.29 seconds on a 1GHz timer) might overflow and=20
-produce a small truncated cycle count.=20
-
-Could this cause the WFET instruction to complete prematurely and degrade=20
-the wait into a CPU-burning loop, leading to a performance regression?
-
-> +	asm volatile(							\
-> +	"	sevl\n"							\
-> +	"	wfe\n"							\
+> diff --git a/lib/tests/barrier-timeout-test.c b/lib/tests/barrier-timeout=
+-test.c
+> new file mode 100644
+> index 0000000000000..4226fb6456b35
+> --- /dev/null
+> +++ b/lib/tests/barrier-timeout-test.c
 [ ... ]
+> +static void param_to_desc(const struct smp_cond_update_params *p, char *=
+desc)
+> +{
+> +	char *clk, *update;
+> +
+> +	if (p->clock =3D=3D &mocked_clock) {
+> +		clk =3D "mocked";
+> +		update =3D "inline";
+> +	} else if (p->clock =3D=3D &basic_clock) {
+> +		clk =3D "basic";
+> +		update =3D "none";
+> +	}
+> +
+> +
+> +	snprintf(desc, KUNIT_PARAM_DESC_SIZE, "smp_cond_%s_timeout: clock-%s, u=
+pdate=3D%s",
+> +		p->acquire ? "acquire" : "relaxed", clk, update);
+
+[Severity: Low]
+Could the string pointers clk and update be left uninitialized here?
+
+If a different clock function is ever added and passed into param_to_desc,
+the conditional chain will fall through without assigning these pointers.
+This would result in passing uninitialized variables to snprintf, and might
+also trigger -Wmaybe-uninitialized compiler warnings.
+
+Would it be safer to add a default else branch or initialize these variables
+to a fallback string like "unknown"?
+
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260714073041.4025=
-0-1-ankur.a.arora@oracle.com?part=3D4
+0-1-ankur.a.arora@oracle.com?part=3D14
