@@ -1,156 +1,213 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14717342524
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 03:36:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396CF188596
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 04:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784000209; cv=none; b=tLA5yVsVGNAU8yTrHgq6uZtaDp0IvKLvEHKEBpD1WhS4yF5Z84HHOncomCwiPtoLN7sPJc3TtlnwSINpBbo5/dx5bkRGqpOOoGOsZfciKkgu2aMwTPPskbCJqoLr5RvIogOY1U/dt8bhR2vMa007qtdRhaWuKZc0gFR2Cc+Uu90=
+	t=1784003515; cv=none; b=Tdq9nOG6ge28ZsWQ7v1hW9IUgb2sAknJMxIda1t2Iov+Ae8HsI2VjzRG7ALTt0K+J+gOe2IF4Xm2vy58RILuNdhXQ2z4ZNuDAkj2SspsSlPrCpy/ggNf7YymczqSDNO2482iLwQvgEVjilw+jlluc3FfEAbxeGAVFE9dRA+2z1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784000209; c=relaxed/simple;
-	bh=5eCcIL4oxMV+SkkS0K44HVewVkr6API4IPwHUXYMYU0=;
+	s=arc-20240116; t=1784003515; c=relaxed/simple;
+	bh=amcnccEfV2zMP1CmqZTPxJKIVmiE92ewOOkbR/0ra+Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uOgbkZOvE9tizr/eK0g4PYUezvuQe345FUsAfGPwJ+RmeEBZuz+mA+Zy+9FSGFuQ2Uw/grVG94jjRnzlfMT6TbDZAs/SPG91YEVXgU73AHH2M+xpd0VSEs8d3V03afeZ/T9DLbZMT4u362ln5F5bquy1W9Zoto2k25TrQAnXniM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W0E+4kzm; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=eJ+vJ6okF9Ttga8lFbU5NsMraN3U1WnGOE8X9xEddwDHwe2tma2furWhGGmtE2I4dw4glVn+p7n2cTJgedaxgUwfO+sQUb7wosZwabXySja4eFnwLqSypQuszgVbMhtWBIfxf1mtKwvwRkDm93aGsB8ykZzM5PiU6Cy5L7oFwUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=DS/PD253; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W0E+4kzm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784000208; x=1815536208;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5eCcIL4oxMV+SkkS0K44HVewVkr6API4IPwHUXYMYU0=;
-  b=W0E+4kzm3Jxrbyyy0aIsQuEoNWYJf17D8cCXa8QTKyk4todDPJHOjafD
-   /C9kOSTjP4A1jG16Eq3YGtF186dOnCFRl3NzeNX74JhEL43hrdqUnykwM
-   PHHLTt4GYl6nPtTUbDirAJOiT0sDcfzH/owSeELtioJM8QbIMNaeSBebX
-   +E4sslrbmDgxNX3wGRs0kT/M82TGns+BCu6Oh4stcPMJSe7ZEyZGsNPw+
-   ar+6CWGqxvJDJTn/uw/Vzyvl3dElTgdVBnZUiG8m+nu60nADdsTcYZVND
-   D95JC24/EhLV7scHdGM1YxHwhPtRpON8bOHwZa6TYivKZ5WJqGMtu1wXE
-   Q==;
-X-CSE-ConnectionGUID: +wCdhShPR/2WD6hfO5AdyA==
-X-CSE-MsgGUID: JeRXhIAoTKGsRiCRPsfACg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="110162102"
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="110162102"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2026 20:36:47 -0700
-X-CSE-ConnectionGUID: VzoiWrt2TreOTxJFUMVWJA==
-X-CSE-MsgGUID: xq3MnKdWQwO5PsCiajxmbQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="259308756"
-Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
-  by orviesa003.jf.intel.com with ESMTP; 13 Jul 2026 20:36:45 -0700
-Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wjTwo-000000003rt-2uLo;
-	Tue, 14 Jul 2026 03:36:42 +0000
-Date: Tue, 14 Jul 2026 05:36:18 +0200
-From: kernel test robot <lkp@intel.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com,
-	kernel-team@meta.com
-Subject: Re: [PATCH bpf-next v3 17/17] bpf: Gate verifier diagnostics on log
- level
-Message-ID: <202607140517.PEmgml8m-lkp@intel.com>
-References: <20260713153910.2556007-18-memxor@gmail.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="DS/PD253"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c15d111ca99so375661866b.0
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 21:31:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1784003512; x=1784608312; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=5QjGoG5qAeIc1Na3vyNRDThJoCp+F3AJc5d4xY+kAQs=;
+        b=DS/PD253eqzhAgKlUyYRQArdVNddzxBQ4DWdN9ld/umA7XgYdwBc2eKRgDj/FOOh+L
+         6as1CRTWNVK6FvvsAzCJsdac+YZH2Ul5XoznPmdEA9AxH3IyFaJsNa8nL2uCYsuZUi8e
+         zDxSOl5OqgCmWHoTa9iMV/6csmmML+kfGdMawqyKODgxd/FdGr2cVVksPHArBPLgow6I
+         rmnh2Shn9bi+qIdFks3wZSQYDrf2XAPde8D+zH2Rlor8OVXQctSL28p5MEkrPSt0nhxS
+         bXje33XABMIolW9bXAQ93AZQ+B5xrOAsW0zg0QKQY6+gD7kXIECq7VPmShtKi8YLsySk
+         08ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784003512; x=1784608312;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=5QjGoG5qAeIc1Na3vyNRDThJoCp+F3AJc5d4xY+kAQs=;
+        b=Lw+46EsQwBGWdVZ+QHV0Lw1jxws39AgmmxGczyXCkQ68f1DrWD0XVJBmc8JLm6Uk3P
+         NjxjkWljKPrQXdjaruEtD4zjDv0oKD7q4g7ldFThEdRADeNvkpCFgybcW4vN5B4UoIUr
+         5N6CbdcR6PbE6AT68wD7emfaxC15Az3WTr/6ZZxoqe69D4XyaZWO5UZye+x8FKBjQ3As
+         l/vw0XUOD6LQEl+j4TR6vgoXGIvvT5ffE8q8bu8sQFMv9UT6/BOnT2hTiE2lecCb4Img
+         1uWat9N7PFzTkFtVeKZGWWLQrtjvqDQZTw8C2hHkrhXlZzphHb4eeq18gGav8p4fSjH0
+         HgQA==
+X-Gm-Message-State: AOJu0YwduzOipiDynHHtrf3BoGvyjWbHHHHr1O/VviWfxU1Msswxvobj
+	UdI0TYyzVgrpxhmqrrBXwBZhIiInl0ks4tBKh7dXbCBkn/MBzN9dWqQnBfU8NK2tyYE=
+X-Gm-Gg: AfdE7clCNu33O9DSI9ePG7zgzESZoQtdgjFTT9bZajn0DoaHbAastgQ5plfatvcBSxj
+	76cUljwRf2868rE/d/J7ZSgO+/Nrfluyn+VYl72Jm5ziBsNNWgHUfx6gWpUB/8TFYciGj01kUnl
+	6GsMWoIAfM5+ZqUKgpVHXSpsHMguqWZFkOHnzGLb4WAHGC1OFsgOVyLT9eh2SafgqqBWLww8rNJ
+	pixyzATwWLIoVorIoXqv0mcrL35VFpVBCuEXiXJJ6bBPEqRWlaGku2V8wZrnBhPWKY8VTduUJiu
+	OLNFXpoZGXaHE7F7V1FQqHK12tKKa0Jks3ltCqxWE9xp9ZdPeypCZ34NUzrFpjPLNTdatjgwuN7
+	Ua7Z0Cs0oIDteJY0iLnOGS5SJMT34z9UjtX83V4gy1UyNk3NxF0995cuuBlncw28pUWWX+9cNTe
+	moTaAHOQMPj168nsfCAkN4LLwNmVmiRLf6ImggLdA/e8Q=
+X-Received: by 2002:a17:907:6e89:b0:c11:ff2c:4f33 with SMTP id a640c23a62f3a-c161f3886bdmr502412366b.45.1784003512434;
+        Mon, 13 Jul 2026 21:31:52 -0700 (PDT)
+Received: from u94a (27-51-48-151.adsl.fetnet.net. [27.51.48.151])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ebcafdf8f2sm14419654a34.11.2026.07.13.21.31.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2026 21:31:50 -0700 (PDT)
+Date: Tue, 14 Jul 2026 12:31:38 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: sun jian <sun.jian.kdev@gmail.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, andrii@kernel.org, memxor@gmail.com, martin.lau@linux.dev, 
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer
+ pointers
+Message-ID: <alWvvwpn3z9Nn0zw@u94a>
+References: <20260708090151.151729-2-sun.jian.kdev@gmail.com>
+ <ak5HLLrYK3R_g2y_@u94a>
+ <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com>
+ <ak8XSRiLKx5WcIQw@u94a>
+ <1f8aad47f61fbf85eb55276e4bb01bfcff61393e.camel@gmail.com>
+ <CABFUUZEXYduca34g22YZ1ESyYe3Yc3kYQrTEWLMxB5X0ZmYn8w@mail.gmail.com>
+ <alCgmxFh9q-vjE0O@u94a>
+ <CABFUUZEnd9f7tV-+jT+cgL7sFVp7pL5-tjdwMvxcR9ist1s-xg@mail.gmail.com>
+ <alRtilWhKw4zzMkI@u94a>
+ <3430dc0a2a141769a596ab21d7abdd86a0a804db.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260713153910.2556007-18-memxor@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3430dc0a2a141769a596ab21d7abdd86a0a804db.camel@gmail.com>
 
-Hi Kumar,
+On Mon, Jul 13, 2026 at 01:44:18PM -0700, Eduard Zingerman wrote:
+> On Mon, 2026-07-13 at 13:05 +0800, Shung-Hsi Yu wrote:
+> > On Fri, Jul 10, 2026 at 06:27:41PM +0800, sun jian wrote:
+> > [...]
+> > > One detail about the attach-time check: I agree that some negative-offset
+> > > constructions can still be rejected later if the max_tp_access accounting
+> > > produces a large value. But the runtime reproducer I used exercises this
+> > > specific access:
+> > > 
+> > >     r6 = *(u64 *)(r1 + 0)
+> > >     r6 += -8
+> > >     *(u64 *)(r6 + 0) = 0
+> > > 
+> > > Here reg->var_off.value is (u64)-8, off is 0, and size is 8. With the current
+> > > accounting,
+> > >     reg->var_off.value + off + size
+> > > wraps to 0. So max_tp_access records 0 and the attach-time writable_size check
+> > > does not reject it, even though the effective access starts at -8.
+> > 
+> > Yes, that should had been rejected.
+> > 
+> > > On the bpf base without the verifier fix, the temporary reproducer did load
+> > > and attach successfully:
+> > >     negative_bpf_load: PASS
+> > >     negative_raw_tp_open: PASS
+> > >     negative_test_run: PASS
+> > > and KASAN reported the stack-out-of-bounds write in ___bpf_prog_run.
+> > > 
+> > > So for this particular range, this looks like more than a load-time policy
+> > > difference: the missing lower-bound check leaves the access executable on the
+> > > bpf tree.
+> > 
+> > Actually I got this reproduced in the *bpf-next* tree now. And I think I
+> > know why Eduard wasn't able to reproduce the issue.
+> > 
+> > The main problem was that CONFIG_BLK_DEV_NBD was not enabled in the
+> > default BPF selftests configuration, so nbd_send_request wasn't
+> > available, and thus the attachment always fail with -2 without
+> > exercising the checks that we have in bpf_probe_register().
+> > 
+> > With CONFIG_BLK_DEV_NBD enabled, and negative_var_off_program[] updated
+> > to do use offset of 0 (instead of 28 + 8), I was able to reproduce the
+> > issue on top of commit `9a3a07d06e7d` "Merge branch
+> > 'bpf-fix-warning-in-bpf_trampoline_multi_detach'" with the following
+> > updated version of your patch.
+> > 
+> >   0: R1=ctx() R10=fp0
+> >   0: (79) r6 = *(u64 *)(r1 +0)          ; R1=ctx() R6=tp_buffer()
+> >   1: (07) r6 += -8                      ; R6=tp_buffer(imm=-8)
+> >   2: (79) r0 = *(u64 *)(r6 +0)          ; R0=scalar() R6=tp_buffer(imm=-8)
+> >   3: (95) exit
+> >   processed 4 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
+> >   tp_fd: 8
+> >   check_nbd_attach_reject:FAIL:nbd_invalid_negative_var_off unexpected nbd_invalid_negative_var_off: actual 8 >= expected 0
+> >   #319     raw_tp_writable_reject_nbd_invalid:FAIL
+> > 
+> > So I would say a fixes tag that points to 022ac0750883 is still needed
+> > after all.
+> 
+> Hi Shung-Hsi, Sun,
+> 
+> Shung-Hsi, thank you for figuring out the quirk with the config.
+> Indeed if I modify the test to be config independent the following
+> program is both accepted at load and attached:
+> 
+>   *r6 = *(u64 *)(r1 +0)
+>   r6 += -8
+>   r0 = *(u64 *)(r6 +0)
+> 
+> Worse yet, the mechanism affects both PTR_TO_TP_BUFFER and PTR_TO_BUF.
+> The PTR_TO_BUF is reachable from helpers/kfuncs with custom 'size' assignments,
+> as far as I understand.
+> 
+> Sun, of checks added by this patch:
+> 
+> >	var_off = (s64)reg->var_off.value;
+> >	if (var_off >= BPF_MAX_VAR_OFF || var_off <= -BPF_MAX_VAR_OFF)
+> 
+> This should hold already.
 
-kernel test robot noticed the following build warnings:
+FWIW, I had thought so, but after checking I realize that the verifier
+only ensure that
 
-[auto build test WARNING on 9a3a07d06e7d74f4aecc51396c771149336ac55d]
+  -BPF_MAX_VAR_OFF < smin < BPF_MAX_VAR_OFF
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kumar-Kartikeya-Dwivedi/bpf-Add-verifier-diagnostics-report-helpers/20260713-235352
-base:   9a3a07d06e7d74f4aecc51396c771149336ac55d
-patch link:    https://lore.kernel.org/r/20260713153910.2556007-18-memxor%40gmail.com
-patch subject: [PATCH bpf-next v3 17/17] bpf: Gate verifier diagnostics on log level
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260714/202607140517.PEmgml8m-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260714/202607140517.PEmgml8m-lkp@intel.com/reproduce)
+holds true in check_reg_sane_offset_{scalar,ptr}(), and does not check
+smax, so technically var_off.value can be greater than BPF_MAX_VAR_OFF
+when we reach here, just that it doesn't really matter much as it is
+rejected anyway. And if it is a constant then smin=smax, so for a
+constant value it does always falls between +-BPF_MAX_VAR_OFF.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607140517.PEmgml8m-lkp@intel.com/
+  0: (79) r6 = *(u64 *)(r1 +0)          ; R1=ctx() R6=tp_buffer()
+  1: (85) call bpf_get_prandom_u32#7    ; R0=scalar()
+  2: (bf) r2 = r0                       ; R0=scalar(id=1) R2=scalar(id=1)
+  3: (67) r2 <<= 32                     ; R2=scalar(smax=0x7fffffff00000000,smin32=0,smax32=umax32=0,var_off=(0x0; 0xffffffff00000000))
+  4: (77) r2 >>= 32                     ; R2=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))
+  5: (07) r2 += 536870911               ; R2=scalar(smin=umin=0x1fffffff,smax=umax=0x11ffffffe,var_off=(0x0; 0x1ffffffff))
+                /* r2 is now [2^29 - 1, 2^32 + 2^29 - 2] */
+  6: (0f) r6 += r2
+  7: R2=scalar(smin=umin=0x1fffffff,smax=umax=0x11ffffffe,var_off=(0x0; 0x1ffffffff)) R6=tp_buffer(smin=umin=0x1fffffff,smax=umax=0x11ffffffe,var_off=(0x0; 0x1ffffffff))
+  7: (79) r0 = *(u64 *)(r6 +0)
+  R6 invalid variable buffer offset: off=0, var_off=(0x0; 0x1ffffffff)
 
-All warnings (new ones prefixed by >>):
+In short, it is much simpler to just check tnum_is_const() right away
+before using var_off.value.
 
-   kernel/bpf/diagnostics.c:38:40: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'diag_log' [-Wmissing-format-attribute]
-      30 | static void diag_log(struct bpf_verifier_env *env, const char *fmt, ...)
-         | __attribute__((format(printf, 2, 3))) 
-      31 | {
-      32 |         va_list args;
-      33 | 
-      34 |         if (!bpf_diag_enabled(env))
-      35 |                 return;
-      36 | 
-      37 |         va_start(args, fmt);
-      38 |         bpf_verifier_vlog(&env->log, fmt, args);
-         |                                               ^
-   kernel/bpf/diagnostics.c:30:13: note: 'diag_log' declared here
-      30 | static void diag_log(struct bpf_verifier_env *env, const char *fmt, ...)
-         |             ^
->> kernel/bpf/diagnostics.c:89:48: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 0)' attribute to the declaration of 'diag_vprint_indented' [-Wmissing-format-attribute]
-      82 | static void diag_vprint_indented(struct bpf_verifier_env *env, const char *fmt, va_list args)
-         | __attribute__((format(printf, 2, 0))) 
-      83 | {
-      84 |         char *buf;
-      85 | 
-      86 |         if (!bpf_diag_enabled(env))
-      87 |                 return;
-      88 | 
-      89 |         buf = kvasprintf(GFP_KERNEL_ACCOUNT, fmt, args);
-         |                                                       ^
-   kernel/bpf/diagnostics.c:82:13: note: 'diag_vprint_indented' declared here
-      82 | static void diag_vprint_indented(struct bpf_verifier_env *env, const char *fmt, va_list args)
-         |             ^
-   kernel/bpf/diagnostics.c:130:13: warning: unused function 'diag_report_reason' [-Wunused-function]
-     130 | static void diag_report_reason(struct bpf_verifier_env *env, const char *fmt, ...)
-         |             ^~~~~~~~~~~~~~~~~~
-   kernel/bpf/diagnostics.c:144:13: warning: unused function 'diag_report_suggestion' [-Wunused-function]
-     144 | static void diag_report_suggestion(struct bpf_verifier_env *env, const char *fmt, ...)
-         |             ^~~~~~~~~~~~~~~~~~~~~~
-   4 warnings generated.
+> >	start = var_off + off;
+> >	if (start < 0)
+> 
+> This one is necessary.
+> 
+> >	if (size < 0) {
+> 
+> Technically this one is bounded by 1,2,4,8 in case of instructions and
+> by BPF_MAX_VAR_SIZ in case of a helper/kfunc (see check_mem_size_reg()).
 
+Oh right, missed the check_mem_size_reg() case. But as Eduard said, this
+should still be bounded, so can drop this check.
 
-vim +89 kernel/bpf/diagnostics.c
-
-    81	
-    82	static void diag_vprint_indented(struct bpf_verifier_env *env, const char *fmt, va_list args)
-    83	{
-    84		char *buf;
-    85	
-    86		if (!bpf_diag_enabled(env))
-    87			return;
-    88	
-  > 89		buf = kvasprintf(GFP_KERNEL_ACCOUNT, fmt, args);
-    90		if (!buf) {
-    91			diag_log(env, "%s<failed to allocate diagnostic text>\n", BPF_DIAG_TEXT_INDENT);
-    92			return;
-    93		}
-    94	
-    95		diag_print_wrapped_text(env, buf);
-    96		kfree(buf);
-    97	}
-    98	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[...]
