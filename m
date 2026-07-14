@@ -1,121 +1,165 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 262162EBB8C
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 05:46:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3077C3D8105
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 06:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784007973; cv=none; b=gAVG5k9uZoM6BT49RIKPe64TJsXjh6vulxYD32VUSh/KYGut3NONn83K+dt888gf5xEZm/b2JW0ZY5E96BSNlJpFPPGgX4WFi0hjoEvh9Q/TqXFgLrL3yx24PKIhOoqLfMMTuuIOt74TAqM8OBUsFZGg2lrDwT9nqHQpL8nRQ4c=
+	t=1784009431; cv=none; b=fko6scCMTH5vZs/ODSr/QU0RBopP+/bK+cZJ/hoy9jWbEnlvvrXPS70fwxDX3MEBtzC0dQ9M+m/pLFFcUlBuLx4LKs8p8S+RXxsi0MgZRsvMiazFJeyR6UtMWuRp0bnvO191wA97w2/eBksk7PI0R3brkl7WF7SltydVw1tbZjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784007973; c=relaxed/simple;
-	bh=EcrvypcgfB6svpY8rm/3nkYGWSyZUZ99YmlZsFVnpxA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=soOZMQ6cWDxFX681jygFrqefEZJM246lXvGi8caw9i3ycyKCaAhEHbxmbat6/BvdK+MNQIwYzIg7xDyy1dN2iD22gQAEuH+t7ozooft+mDyCIvbHgGSGOdK9k2BSHSPgNLIyDPjKTYGw6/JvHnRGEYovEm+WYaQ7dgZNeUl2UW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LMPycfj9; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LMPycfj9"
-Message-ID: <ea6d7a5e-c4f1-46de-9b8b-37a76b17b74a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784007956;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=guuvEhHaIBFxPQPJ5Yngg6bGOgfH8Gk5niG8LRyqVgY=;
-	b=LMPycfj9zQ+eAcw50IGs9ZTIua0P+DcQX9k/MgMYA/0TFlfjcOw3U/5fym6iy/+XLnBnZ9
-	+nzJaVfUjmQWvqxY/Gndg2KLGcLTTRKsF1ASoAYB0o41adc0DDRwZlnbCDAeFcHuArcpj3
-	/uA0lmZTmex9mjBuaqTekI2XHdBGfA4=
-Date: Tue, 14 Jul 2026 13:45:50 +0800
+	s=arc-20240116; t=1784009431; c=relaxed/simple;
+	bh=SUcmW9JpLIDwpeJ/fJvj/IPUrQzj4l348ovpDmD7X2w=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=S7pK2TS972FHnNm64CiGdZZoW7S839n78nkLpVNCOS+f7u/zP4Db5BQ8cfFRTDtRWpzJayz20KeajglluFYeT9waTUSBMiChFib8JaDWqQx3MLVevkxf2tfXUOe49x03BfRh5B2MbEWR8l3ZKYDDLaTsioMRgMzEoZMBLTMRz+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-4a36606e230so1056947b6e.2
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 23:10:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784009429; x=1784614229;
+        h=content-type:cc:to:from:subject:message-id:in-reply-to:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=xrLyxo8J+xyfqhCeG9L1qs6l8wXfAZP2lM4ML4xysHM=;
+        b=lFM4G2bAolnU5BCK4Ywt2CCvftJsr39g+zoi1Ulo9DX5a9cYNpuHlAyvEr+NNAN8xB
+         iimg9SlJV1ZSIG3aARCVA8BqtHhgr+A3tD37TSEu2Y9qYo88VrP/sT/pxQZqT6twu0bP
+         3ryhiezhFNJ88d414cxjNtDEiCnj+mK9gE3SI81IsB/GwvsIfpUttZPITobWE+/yoJr5
+         Xn6C/XoL2WljR2fvOd3e7bXSLDrdBxWHXh1ShImS6oVa6AhjdRRFxOOwal1rfG0UWxJ8
+         bSMVhGrMAmF5YM4qqyiDzHsetJlJPE4GDmtiOTJLcHG5u2jXSH1BZtk8oDkTU4Sa1tFI
+         KRtQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+RzuIU5w3nBWR8K9tyJSJQLRb489wdc9dflSFJ+fEDX4HxQuL3iQMOxFqsLMdzkO6lqgY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+M34uVEUliqWMxWXOknG69MwnnGolvUPrjpOUBwTy6UTIp/Ei
+	yAkj+fieq1cMcilasIOne51KCA2OnW4X/6Aw4Jo4Ex84YCPaIcRxBMNHEAZC/eM7Qn2gLcOy+6T
+	RRkZbk6mBwRLs2l/sWI7bzX6UHIhgKcOy6Uew3QspIa26C4EGb9n8JIKITc4=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v9 5/9] bpftool: Generate skeleton for global
- percpu data
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260713154024.30851-1-leon.hwang@linux.dev>
- <20260713154024.30851-6-leon.hwang@linux.dev>
- <20260713164824.46FA71F000E9@smtp.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20260713164824.46FA71F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-Received: by 2002:a05:6808:1310:b0:49c:86d1:d130 with SMTP id
+ 5614622812f47-4a42ac8655emr8337379b6e.18.1784009429235; Mon, 13 Jul 2026
+ 23:10:29 -0700 (PDT)
+Date: Mon, 13 Jul 2026 23:10:29 -0700
+In-Reply-To: <20260713153910.2556007-1-memxor@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6a55d2d5.c90005c7.37d349.0015.GAE@google.com>
+Subject: [syzbot ci] Re: Redesign Verification Errors
+From: syzbot ci <syzbot+ci531a8a6cb57d8920@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com, 
+	kernel-team@meta.com, kkd@meta.com, memxor@gmail.com
+Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 14/7/26 00:48, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> 
-> Pre-existing issues:
-> - [High] In light skeletons, `BPF_MAP_TYPE_ARENA` maps with initial values are permanently leaked because `__destroy()` skips them, failing to unmap their memory.
-> --
-> 
-> --- Patch [5]: [PATCH bpf-next v9 5/9] bpftool: Generate skeleton for global percpu data ---
-> commit b822b756947c191db53a46cfd85674008d72587c
-> Author: Leon Hwang <leon.hwang@linux.dev>
-> 
-> bpftool: Generate skeleton for global percpu data
-> 
-> Enhance bpftool to generate skeletons that properly handle global percpu
-> variables. The generated skeleton now includes a dedicated structure for
-> percpu data, allowing users to initialize and access percpu variables more
-> efficiently.
-> 
->> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
->> index a01d06d22d1a3..b60db11081497 100644
->> --- a/tools/bpf/bpftool/gen.c
->> +++ b/tools/bpf/bpftool/gen.c
-> 
-> [ ... ]
-> 
->> @@ -669,7 +693,8 @@ static void codegen_destroy(struct bpf_object *obj, const char *obj_name)
->>  		if (!get_map_ident(map, ident, sizeof(ident)))
->>  			continue;
->>  		if (bpf_map__is_internal(map) &&
->> -		    (bpf_map__map_flags(map) & BPF_F_MMAPABLE))
->> +		    ((bpf_map__map_flags(map) & BPF_F_MMAPABLE) ||
->> +		     bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY))
->>  			printf("\tskel_free_map_data(skel->%1$s, skel->maps.%1$s.initial_value, %2$zu);\n",
->>  			       ident, bpf_map_mmap_sz(map));
-> 
-> [Severity: High]
-> This is a pre-existing issue, but does this manual internal map check cause
-> BPF_MAP_TYPE_ARENA maps to be permanently leaked in light skeletons?
-> 
+syzbot ci has tested the following series
+
+[v3] Redesign Verification Errors
+https://lore.kernel.org/all/20260713153910.2556007-1-memxor@gmail.com
+* [PATCH bpf-next v3 01/17] bpf: Add verifier diagnostics report helpers
+* [PATCH bpf-next v3 02/17] bpf: Add source and instruction diagnostic context
+* [PATCH bpf-next v3 03/17] bpf: Add verifier diagnostic event log
+* [PATCH bpf-next v3 04/17] bpf: Prune verifier diagnostics when switching paths
+* [PATCH bpf-next v3 05/17] bpf: Track verifier register diagnostic events
+* [PATCH bpf-next v3 06/17] bpf: Track verifier reference diagnostic events
+* [PATCH bpf-next v3 07/17] bpf: Track verifier context diagnostic events
+* [PATCH bpf-next v3 08/17] bpf: Report Register Type Safety errors
+* [PATCH bpf-next v3 09/17] bpf: Report Memory Safety bounds errors
+* [PATCH bpf-next v3 10/17] bpf: Report Resource Lifetime reference leaks
+* [PATCH bpf-next v3 11/17] bpf: Report Call Type Safety argument errors
+* [PATCH bpf-next v3 12/17] bpf: Report Execution Context Safety errors
+* [PATCH bpf-next v3 13/17] bpf: Report Program Structure CFG errors
+* [PATCH bpf-next v3 14/17] bpf: Report Policy helper and kfunc errors
+* [PATCH bpf-next v3 15/17] bpf: Report Verifier Limit errors
+* [PATCH bpf-next v3 16/17] bpf: Report Verifier Internal errors
+* [PATCH bpf-next v3 17/17] bpf: Gate verifier diagnostics on log level
+
+and found the following issue:
+WARNING in bpf_diag_record_mod
+
+Full report is available here:
+https://ci.syzbot.org/series/60c41043-96fb-4c6b-bc8e-3ddab76db3ec
+
+***
+
+WARNING in bpf_diag_record_mod
+
+tree:      bpf-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
+base:      9a3a07d06e7d74f4aecc51396c771149336ac55d
+arch:      amd64
+compiler:  Debian clang version 22.1.6 (++20260514074242+fc4aad7b5db3-1~exp1~20260514074407.73), Debian LLD 22.1.6
+config:    https://ci.syzbot.org/builds/bb13c0f7-c05e-4ad3-b3f3-365157b560a0/config
+syz repro: https://ci.syzbot.org/findings/fa0ac02b-def4-401c-ac09-aea8fa6688a1/syz_repro
+
+------------[ cut here ]------------
+1
+WARNING: mm/page_alloc.c:5280 at __alloc_frozen_pages_noprof+0x2ce/0x380 mm/page_alloc.c:5280, CPU#0: syz.0.17/5810
+Modules linked in:
+CPU: 0 UID: 0 PID: 5810 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+RIP: 0010:__alloc_frozen_pages_noprof+0x2ce/0x380 mm/page_alloc.c:5280
+Code: 74 10 4c 89 e7 89 54 24 0c e8 4e 2c 0e 00 8b 54 24 0c 49 83 3c 24 00 0f 85 ab fe ff ff e9 ac fe ff ff c6 05 74 45 f6 0d 01 90 <0f> 0b 90 e9 17 ff ff ff a9 00 00 08 00 48 8b 4c 24 10 4c 8d 44 24
+RSP: 0018:ffffc90003abef40 EFLAGS: 00010246
+RAX: ffffc90003abef00 RBX: 000000000000000b RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffc90003abefa8
+RBP: ffffc90003abf040 R08: ffffc90003abefa7 R09: 0000000000000000
+R10: ffffc90003abef80 R11: fffff52000757df5 R12: 0000000000000000
+R13: 1ffff92000757dec R14: 0000000000440cc0 R15: dffffc0000000000
+FS:  00007f71b81f66c0(0000) GS:ffff88818dc0e000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b33463fff CR3: 000000016f8e4000 CR4: 00000000000006f0
+Call Trace:
+ <TASK>
+ alloc_pages_mpol+0x212/0x380 mm/mempolicy.c:2490
+ ___kmalloc_large_node+0x4c/0x120 mm/slub.c:5302
+ __kmalloc_large_node_noprof+0x18/0x90 mm/slub.c:5333
+ __do_kmalloc_node mm/slub.c:5350 [inline]
+ __kmalloc_node_track_caller_noprof+0x164/0x730 mm/slub.c:5497
+ __do_krealloc mm/slub.c:6865 [inline]
+ krealloc_node_align_noprof+0x19a/0x390 mm/slub.c:6886
+ _krealloc_array_noprof include/linux/slab.h:1213 [inline]
+ diag_append_history kernel/bpf/diagnostics.c:464 [inline]
+ bpf_diag_record_mod+0xcbc/0x1590 kernel/bpf/diagnostics.c:1666
+ check_alu_op kernel/bpf/verifier.c:16428 [inline]
+ do_check_insn+0x1125c/0x1b4a0 kernel/bpf/verifier.c:18578
+ do_check kernel/bpf/verifier.c:18817 [inline]
+ do_check_common+0x416c/0x5930 kernel/bpf/verifier.c:19902
+ do_check_main+0x63/0x1f0 kernel/bpf/verifier.c:19994
+ bpf_check+0x25df/0x2cb0 kernel/bpf/verifier.c:21502
+ bpf_prog_load+0x13ec/0x1ac0 kernel/bpf/syscall.c:3118
+ __sys_bpf+0xd0d/0xd90 kernel/bpf/syscall.c:6339
+ __do_sys_bpf kernel/bpf/syscall.c:6458 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:6455 [inline]
+ __x64_sys_bpf+0xba/0xd0 kernel/bpf/syscall.c:6455
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0x174/0x580 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f71b8b9ce59
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f71b81f6028 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007f71b8e15fa0 RCX: 00007f71b8b9ce59
+RDX: 0000000000000094 RSI: 0000200000000b00 RDI: 0000000000000005
+RBP: 00007f71b8c32e6f R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f71b8e16038 R14: 00007f71b8e15fa0 R15: 00007ffe3ec24ce8
+ </TASK>
 
 
-No, this is not a pre-existing issue.
+***
 
-When tried to generate light skeleton for internal arena map, got:
+If these findings have caused you to resend the series or submit a
+separate fix, please add the following tag to your commit message:
+  Tested-by: syzbot@syzkaller.appspotmail.com
 
-  GEN-SKEL     [test_progs] arena.lskel.h
-Bus error
+---
+This report is generated by a bot. It may contain errors.
+syzbot ci engineers can be reached at syzkaller@googlegroups.com.
 
-Instead of such implicit error, I'd like to send a separate patch to
-reject generating light skeleton for internal arena map explicitly.
+To test a patch for this bug, please reply with `#syz test`
+(should be on a separate line).
 
-Thanks,
-Leon
-
-> ARENA maps with initial values appear to be skipped here because
-> bpf_map__is_internal() evaluates to false for them. This skips the generation
-> of the skel_free_map_data() call.
-> 
-> Since ARENA maps can be very large, skipping them during skeleton destruction
-> leaks both the userspace virtual memory (VMA) and the underlying kernel
-> bpf_map object, as the VMA holds a file reference to it. This can lead to
-> resource exhaustion if a daemon repeatedly reloads BPF policies.
-> 
-> Could this code be updated to use is_skel_data() instead of get_map_ident()
-> and bpf_map__is_internal() so that ARENA map memory is correctly unmapped and
-> freed?
-> 
->>  		codegen("\
-> 
-
+The patch should be attached to the email.
+Note: arguments like custom git repos and branches are not supported.
