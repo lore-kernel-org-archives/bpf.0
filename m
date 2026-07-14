@@ -1,214 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF7417A300
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 10:41:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4B72D0292;
+	Tue, 14 Jul 2026 12:16:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784025720; cv=none; b=hWkAA4/coWidF3BOrcHlZolAa4IsVHtDsHzMHWgRu7SPukOrR/gvC52OyITm/bx4+cYLNwZ6HGM+dgMY7EwSKu+qrvDNia3KnnweShssnI88OlULH+SARTZ77uWqmR8tUJWjC2Lc1aLqha0aF4TC01E1TZyWVZA13rQGay11tS4=
+	t=1784031395; cv=none; b=Fgben52sVO+5QOpUX7uaQmFMB3UwW2yPOUDpncyofuceRGGG1y68JJB8819Vs9ALjsRHAR1Hb4+KS/UBcvB812KvDG2VL2OaKCI4liTTKfN1ahZBUgraZG/qlUbyYcY/BX3UG4tiWbmzF2zWc7hJ7NQN4nZL5Evoczg1Dl04C0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784025720; c=relaxed/simple;
-	bh=5A7gkjxxqVt3PUjopZf+P8ojYfIWpwI1E0v+QZvZFR8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UsjbQjXd+JzQD2ew4MBtiKyeDU0CvXYHlHoIKQ7N6etaux5WdqbBoSPKlj6X1kMZ5ZD9plRSS78zBdz02C6cLsiG52x5wtPsXeKDQyXJBwECBk16lMtcFLTf5XDsP0p+rE1R739a8imQBKDc7Ro6i3BY0gX/xkxwW8U0wXMi11Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=omECVR0m; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="omECVR0m"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBC8B1F000E9;
-	Tue, 14 Jul 2026 10:41:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784025718;
-	bh=pOzWR9Cm1ZQa1hsYIqSABGfKH3OnyF0J82LiaEXOCJ8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=omECVR0moGW4ofZLnuIboNxvAqhdRzH3igcz/BgtS7wSONI9jVNrZqL9ZDrO+1h9P
-	 Q1I3+0LD+AocCgpQn+tcYxnU66ScA5HRy8MdfDwAhAtoY39UG7peKDtGqx64O7eE9w
-	 agvWDG5WsTlOBAVfXj7jHqq4etLVmMmCk1GkVSUigAQXxcGtc8eWQ5jxacIWncLFbo
-	 a24aY+g3Z0iG9Zw+oOGLUhtJrL4SdtFfkdE8oBcmBpa1iH5kMhli5lLryPb4GUKXZE
-	 1R2BRqiwM8xIq0dpVGVvEtuap1+yqECQJoyNw7S6xvkH5YaqsLghvtE/DZmiVi9Dnu
-	 7E8uTidFol79w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Test bpf_strcat,bpf_strncat
- kfuncs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Rong Tao" <rtoax@foxmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <tencent_FB0E71C06045E8278BE9B254A5E7756D7405@qq.com>
-References: <cover.1784021302.git.rongtao@cestc.cn>
- <tencent_FB0E71C06045E8278BE9B254A5E7756D7405@qq.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 14 Jul 2026 10:41:58 +0000
-Message-Id: <20260714104158.BBC8B1F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1784031395; c=relaxed/simple;
+	bh=b3suPx7hUYdGQ8iOin6Tff7waXW1OGF1IwvO5AptfY4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ALwQy3/aZUp5DuuRNqOlQjpc31mKiezY4ryVkpvbQsDOPeRl0bgelKHthRmfEmr4Cjr5NTTRRxx8BFQ7v9VgKYYftkhFDPiemAl64EzyltTlqYLE3Ej0egbsamxkK6aPsuqj28R3MmmPGwI0nQk+vQfkvFyv7GJcSkUuy/c8rDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: d30591827f7d11f1aa26b74ffac11d73-20260714
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:65e49d9b-65f5-41a1-a931-ce6cdd9a7377,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:e7bac3a,CLOUDID:f2db2523097771b0a60b2a2a278609e7,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|136|850|865|898,TC:nil,Content:0|15|
+	50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0
+	,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: d30591827f7d11f1aa26b74ffac11d73-20260714
+X-User: jiangfeng@kylinos.cn
+Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <jiangfeng@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 620455899; Tue, 14 Jul 2026 20:16:21 +0800
+From: Feng Jiang <jiangfeng@kylinos.cn>
+Subject: [PATCH v2 0/2] bpf, riscv: add timed may_goto support
+Date: Tue, 14 Jul 2026 20:16:14 +0800
+Message-Id: <20260714-riscv-bpf-timed-may-goto-v2-0-eeb6201aedcc@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAI4oVmoC/x3MTQqAIBBA4avErBswKfu5SrQwHW0WZWhEEd09a
+ fkt3nsgUWRKMBQPRDo5cdgyZFmAWfTmCdlmgxRSibYSGDmZE+fd4cErWVz1jT4cAYU11Ki67xr
+ tIOd7JMfXvx6n9/0AABaH+2oAAAA=
+X-Change-ID: 20260710-riscv-bpf-timed-may-goto-0dce564985af
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
+ Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
+ Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Feng Jiang <jiangfeng@kylinos.cn>
+X-Mailer: b4 0.14.3
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Critical] The `bpf_strcat` and `bpf_strncat` kfuncs use the `__ign` suff=
-ix for their destination pointer arguments, bypassing the BPF verifier's sa=
-fety checks and creating an arbitrary kernel memory write vulnerability.
-- [Medium] `__bpf_strncat` performs out-of-bounds reads on the source strin=
-g by ignoring the user-provided limit during length calculation and uncondi=
-tionally fetching an extra byte after the copy loop.
-- [Low] The API documentation for `bpf_strcat` and `bpf_strncat` incorrectl=
-y states they return the total length of the concatenated string.
---
+This series adds RISC-V JIT support for the timed may_goto loop bound.
 
---- Patch [2]: [PATCH bpf-next 2/2] selftests/bpf: Test bpf_strcat,bpf_strn=
-cat kfuncs ---
-commit a7b2e5fa67dde4d93faf939b8283a2aa59b8ca2d
-Author: Rong Tao <rongtao@cestc.cn>
+Patch 1 implements arch_bpf_timed_may_goto() and enables
+bpf_jit_supports_timed_may_goto() so the verifier uses the timed
+expansion path.
 
-bpf: add bpf_strcat,bpf_strncat kfunc
+Patch 2 enables the verifier_may_goto_1, stream_cond_break, and
+may_goto_interaction fastcall tests on riscv64.
 
-Add string concatenation kfuncs bpf_strcat and bpf_strncat. This allows
-BPF programs to concatenate strings, differing from glibc by requiring
-the target string's memory size for safety.
+Tested on riscv64 QEMU (rva23s64): may_goto programs load and JIT
+correctly, and the 250ms timeout path works as expected.
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index c18f1e16edee4..e99b643136822 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
+Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+---
+Changes in v2:
+- Fix BPF_REG_0 being clobbered after arch_bpf_timed_may_goto() calls.
+- Enable the may_goto_interaction fastcall test on riscv64.
 
-[ ... ]
+---
+Feng Jiang (2):
+      bpf, riscv: add support for timed may_goto
+      selftests/bpf: enable timed may_goto tests for riscv64
 
-> @@ -4195,6 +4195,95 @@ __bpf_kfunc int bpf_strncasestr(const char *s1__ig=
-n, const char *s2__ign,
->  	return __bpf_strnstr(s1__ign, s2__ign, len, true);
->  }
-> =20
-> +static int __bpf_strncat(char *dst, u32 dsz, const char *src, u32 sz)
-> +{
-> +	int dlen, slen, space, copied;
-> +	char cs =3D '?';
-> +
-> +	if (!copy_from_kernel_nofault_allowed(dst, 1) ||
-> +	    !copy_from_kernel_nofault_allowed(src, 1)) {
-> +		return -ERANGE;
-> +	}
-> +
-> +	dlen =3D bpf_strnlen(dst, XATTR_SIZE_MAX);
-> +	if (dlen < 0)
-> +		return dlen;
-> +	slen =3D bpf_strnlen(src, XATTR_SIZE_MAX);
+ arch/riscv/net/Makefile                            |  2 +-
+ arch/riscv/net/bpf_jit_comp64.c                    | 13 ++++++-
+ arch/riscv/net/bpf_timed_may_goto.S                | 44 ++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/stream.c         |  1 +
+ .../selftests/bpf/progs/verifier_bpf_fastcall.c    |  1 +
+ .../selftests/bpf/progs/verifier_may_goto_1.c      |  4 ++
+ 6 files changed, 63 insertions(+), 2 deletions(-)
+---
+base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
+change-id: 20260710-riscv-bpf-timed-may-goto-0dce564985af
 
-[Severity: Medium]
-Does this calculate the length of the source string past the user-provided
-limit sz?
+Best regards,
+-- 
+Feng Jiang <jiangfeng@kylinos.cn>
 
-If src is exactly sz bytes long and not null-terminated, won't this read
-out of bounds up to XATTR_SIZE_MAX and potentially return -EFAULT?
-
-> +	if (slen < 0)
-> +		return slen;
-> +
-> +	if (dlen >=3D dsz || sz =3D=3D 0 || dsz =3D=3D 0)
-> +		return -EINVAL;
-> +
-> +	space =3D dsz - dlen;
-> +	if (space <=3D 1 || space < min(slen, sz) + 1)
-> +		return -E2BIG;
-> +
-> +	for (copied =3D 0; copied < space - 1 && copied < sz; copied++) {
-> +		__get_kernel_nofault(&cs, src, char, err_out);
-> +		if (cs =3D=3D '\0')
-> +			break;
-> +
-> +		__put_kernel_nofault(dst + dlen + copied, &cs, char, err_out);
-> +
-> +		src++;
-> +	}
-> +	cs =3D '\0';
-> +	__put_kernel_nofault(dst + dlen + copied, &cs, char, err_out);
-> +
-> +	__get_kernel_nofault(&cs, src, char, err_out);
-
-[Severity: Medium]
-If the copy loop ends because copied =3D=3D sz, does this unconditional read
-fetch an extra byte from the advanced src pointer?
-
-Could this cause an out-of-bounds read and a false -EFAULT failure?
-
-> +	if (cs !=3D '\0' && sz > copied)
-> +		return -E2BIG;
-> +
-> +	return copied;
-> +err_out:
-> +	return -EFAULT;
-> +}
-> +
-> +/**
-> + * bpf_strcat - Append non-null bytes from a source string, and null-ter=
-minate
-> + *              the result
-> + * @dst__ign: Destination string.
-> + * @dst__sz: Maximum bytes of @dst__ign, includes the trailing NUL.
-> + * @src__ign: Source string.
-> + *
-> + * Return:
-> + * * >=3D0      - Length of the concatenated string.
-
-[Severity: Low]
-Is this documentation misleading?
-
-It claims to return the length of the concatenated string, but __bpf_strncat
-returns copied, which is the number of newly appended characters.
-
-> + *
-> + * * %-EINVAL - String @dst__ign is invalid.
-> + * * %-EFAULT - Cannot read or write one of the strings.
-> + * * %-E2BIG  - String @src__ign is too large or the remaining space in
-> + *              @dst__ign is too small.
-> + * * %-ERANGE - One of the strings is outside of kernel address space
-> + */
-> +__bpf_kfunc int bpf_strcat(char *dst__ign, u32 dst__sz, const char *src_=
-_ign)
-
-[Severity: Critical]
-Does the __ign suffix on dst__ign bypass the BPF verifier's safety checks?
-
-Since is_kfunc_arg_ignore() in kernel/bpf/verifier.c skips validation for
-arguments with the __ign suffix, can a BPF program pass an arbitrary kernel
-address (like modprobe_path) instead of a validated PTR_TO_MEM, allowing an
-arbitrary kernel memory write?
-
-> +{
-> +	return __bpf_strncat(dst__ign, dst__sz, src__ign, XATTR_SIZE_MAX);
-> +}
-> +
-> +/**
-> + * bpf_strncat - Append non-null bytes from a source string, and null-te=
-rminate
-> + *               the result
-> + * @dst__ign: Destination string.
-> + * @dst__sz: Maximum bytes of @dst__ign, includes the trailing NUL.
-> + * @src__ign: Source string.
-> + * @len: the maximum number of characters to concatenate
-> + *
-> + * Return:
-> + * * >=3D0      - Length of the concatenated string.
-> + *
-> + * * %-EINVAL - String @dst__ign is invalid.
-> + * * %-EFAULT - Cannot read or write one of the strings.
-> + * * %-E2BIG  - String @src__ign is too large or the remaining space in
-> + *              @dst__ign is too small.
-> + * * %-ERANGE - One of the strings is outside of kernel address space
-> + */
-> +__bpf_kfunc int bpf_strncat(char *dst__ign, u32 dst__sz, const char *src=
-__ign,
-> +			    u32 len)
-
-[Severity: Critical]
-Does the dst__ign parameter here also bypass verifier safety checks for the
-same reason, allowing arbitrary memory writes?
-
-> +{
-> +	return __bpf_strncat(dst__ign, dst__sz, src__ign, len);
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1784021302.gi=
-t.rongtao@cestc.cn?part=3D2
