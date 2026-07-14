@@ -1,50 +1,50 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82DF939CCFA;
-	Tue, 14 Jul 2026 17:29:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152932DC791;
+	Tue, 14 Jul 2026 17:31:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784050191; cv=none; b=P6H7kpfU8z543gAks5DaD/rB7xpmarKwjNlzbW7jU+YBLoQIXgDCrW3ypEniMt9aUDFpD/C5wg0nnuwFYi8/MdVYyqDi9Ag2TzA5OTrmci22WYL3YS4nJ0TZbMd2Zs/0WjA9ybg+Wr6g9BjuiLUgxvCMeZGzzUtGZNd2Q5GES8U=
+	t=1784050317; cv=none; b=g3Qcr0ByGN5SleKavHefvKufsivtdb5D1Kj79yNRONpvusbPYBR5i66jqSEpAsmWvd05610101mS6ahHfdBOLCEFD24Jra2DbD1jO0WziXvEUILhwRd6KlmdvTmbskDyAnljmIZuOL9q/XJ8SrupB7KstbW2DCWrz6YIujDozZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784050191; c=relaxed/simple;
-	bh=T9nDWMGUUMYK4zdgmduf9ZJ/16QHCvDwhtGJVdrnzuY=;
+	s=arc-20240116; t=1784050317; c=relaxed/simple;
+	bh=s6g0qpuKqxGTnfu11FpV5HyC4k/FYmzxINNYeN67niA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=loTBNi2VJLI/3hI69B5VLr6+rTskITPZS/fhVwOe0+9NWaTHG/0g/BnG3l4ktP3pns1djxooS8T0rnuKB7iO662sfqfOlUKAK1kHQbKdqN2bMQR30VBm5DPla9/9Ur3C2+I650hDuC5ozW9MoGReZkHHIPbYNbSsr7F+Cz2z15Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OQVTwuBi; arc=none smtp.client-ip=198.175.65.20
+	 In-Reply-To:Content-Type; b=YRSvpk+V47nBSrk+x5i+GkC6cP8a/5pI9As3wDv6iwUljtTxIyk+I/QExdAHZQPxec2mUN1SNg8I1+yjC1J/ski66DkaUH1pr3gDmK+2iXjpI2w/4QlOmQRMq6GyWmVYAonUDBz7uFc3EdnloFKzc7jgGwsWxH5/Uu3UOwvRD4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c/h3eNxr; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OQVTwuBi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c/h3eNxr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784050190; x=1815586190;
+  t=1784050316; x=1815586316;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=T9nDWMGUUMYK4zdgmduf9ZJ/16QHCvDwhtGJVdrnzuY=;
-  b=OQVTwuBiH8pGI+8zsuOfzvbJMEaT2vHBdiHrf6izxTsdCilwAZjFuxTp
-   wKuz5+eVvYM9jrsLHd8xz7FmZi1BL7uIo8vyWIzXV/HVt2dbePaRifrWZ
-   2ASwgNxDxqHF+Oo+4rAMeTzt8SwUpxdb8AV/qm6Fk7cJ1gNauRAArQpzH
-   QAE+DAEbh/3iyZdLGAHRs+ITqXqMhtmM2V1OdcwNV7bpgejrcqQD2kBkQ
-   tbbktxCxF3+3PSYHuIUA6u6abba/tYNRTo+XRWpQin8YuoPGuyAbUs6OH
-   LeETekGfTxwYWufTM8cMI+LGNxwXAqVb8/2BqcTD1HDfQBrWvZG87dh6I
+  bh=s6g0qpuKqxGTnfu11FpV5HyC4k/FYmzxINNYeN67niA=;
+  b=c/h3eNxrgSzL6jGrFxuq0OKHrEPZ+w+vbq8a+ZPkEFnqkawqootKdt3m
+   X23exfStDlVp2vihJrOcr78ov0wrJjkV7AFklZQtwX/pkloZ+oDbbHEcp
+   toYefdeyUDxc27zk10RasHFwnDRGI4YrqSMKEm6qwPRykWS+Mw1r+L0At
+   Ust0L8s/AUx31BrGWbMLs++ISAEqE6Yq2sWAhs9xR3os7ANX85aDHB27g
+   fpSii9GCRdvRDK/BQFW+TwtXpMRI5AaE+yLP77e5noVuHegNCBuozpXeb
+   1yX3CiIrRmtp3uhlzoZx/S0i1xG58/Q3k+kqQfODHmjwL+mKjCaMUV/qg
    Q==;
-X-CSE-ConnectionGUID: mlZu+RTmS22rODwziCadgg==
-X-CSE-MsgGUID: qTCNEHe+QbuACDkZ1l/hyA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11846"; a="84463060"
+X-CSE-ConnectionGUID: IRMBpaBGTLuYSiSu1eZ3jA==
+X-CSE-MsgGUID: U5XUg6JISYGW9adb0905Mw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11846"; a="84463280"
 X-IronPort-AV: E=Sophos;i="6.25,164,1779174000"; 
-   d="scan'208";a="84463060"
+   d="scan'208";a="84463280"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2026 10:29:49 -0700
-X-CSE-ConnectionGUID: JVAk0EKWSyOAbtmWxbWciQ==
-X-CSE-MsgGUID: gb3gmc2+RamLrgmELZSMvA==
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2026 10:31:51 -0700
+X-CSE-ConnectionGUID: 8IQBNJerQKGX6bgmgii7KA==
+X-CSE-MsgGUID: RDwDNHbdSNWIo/GfdPUBTg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,164,1779174000"; 
-   d="scan'208";a="259497092"
+   d="scan'208";a="259498483"
 Received: from aschende-mobl.amr.corp.intel.com (HELO [10.125.108.120]) ([10.125.108.120])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2026 10:29:48 -0700
-Message-ID: <13fcd4d7-0efc-4aa5-9425-8f4fa05c8eee@intel.com>
-Date: Tue, 14 Jul 2026 10:29:51 -0700
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2026 10:31:48 -0700
+Message-ID: <e2d9f516-2dae-4356-830a-14b99fd32a90@intel.com>
+Date: Tue, 14 Jul 2026 10:31:52 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,8 +52,8 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH mm-hotfixes v3 2/4] x86/mm/pat: acquire mmap lock on page
- table free to avoid ptdump UAF
+Subject: Re: [PATCH mm-hotfixes v3 0/4] mm: fix UAF caused by race between
+ ptdump and vmap pgtable freeing
 To: Lorenzo Stoakes <ljs@kernel.org>,
  Andrew Morton <akpm@linux-foundation.org>,
  Suren Baghdasaryan <surenb@google.com>, "Liam R. Howlett"
@@ -70,9 +70,9 @@ To: Lorenzo Stoakes <ljs@kernel.org>,
  Dev Jain <dev.jain@arm.com>, Ryan Roberts <ryan.roberts@arm.com>
 Cc: David Carlier <devnexen@gmail.com>, linux-mm@kvack.org,
  linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org
+ linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org,
+ syzbot+fd95a72470f5a44e464c@syzkaller.appspotmail.com
 References: <20260714-series-vmap-race-fix-v3-0-b812eccfa0f9@kernel.org>
- <20260714-series-vmap-race-fix-v3-2-b812eccfa0f9@kernel.org>
 From: Dave Hansen <dave.hansen@intel.com>
 Content-Language: en-US
 Autocrypt: addr=dave.hansen@intel.com; keydata=
@@ -118,17 +118,22 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
  hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
  vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-In-Reply-To: <20260714-series-vmap-race-fix-v3-2-b812eccfa0f9@kernel.org>
+In-Reply-To: <20260714-series-vmap-race-fix-v3-0-b812eccfa0f9@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 7/14/26 10:24, Lorenzo Stoakes wrote:
-...
-> Resolve the issue by acquiring the mmap read lock on init_mm which prevents
-> a concurrent ptdump as it acquires the write lock.
+>  arch/arm64/include/asm/ptdump.h |  2 --
+>  arch/arm64/mm/mmu.c             | 43 ++++-------------------------------------
+>  arch/arm64/mm/ptdump.c          | 11 ++---------
+>  arch/x86/mm/pat/set_memory.c    | 14 +++++++++++---
+>  include/linux/mmap_lock.h       |  1 +
+>  mm/pagewalk.c                   | 36 ++++++++++++++++++++--------------
+>  mm/ptdump.c                     |  7 +++++++
+>  mm/vmalloc.c                    | 41 ++++++++++++++++++++++++++++++---------
+>  8 files changed, 78 insertions(+), 77 deletions(-)
 
-The move over to locking on init_mm instead of current->mm fixes the
-earlier issues I saw with this. Thanks for doing that!
+BTW, this is super nice. It fixes a bug, makes the architectures more
+consistent, and is effectively neutral on lines-of-code.
 
-Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
-
+Very cool.
