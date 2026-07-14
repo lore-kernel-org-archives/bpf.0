@@ -1,161 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35AE6477E37;
-	Tue, 14 Jul 2026 13:47:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074D4207DF7;
+	Tue, 14 Jul 2026 13:50:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784036861; cv=none; b=N+NlzfSuIUyCyCgLYgS+l1+lkdIFTmevQMvvHdr7ExMijvZSeWF0vam5F95dj6/dXJTJymGH83pbndAj1iKZ789cT/cJLTxOZOGjPPSwjwcOkCjOnc9NCGkvYQ1sNKv04ot/8Y8B3iI93hM0+vxvx+trvCUZmhm3eZyliEerlW4=
+	t=1784037043; cv=none; b=HOc592YQXoVEXO1sLLsazirwnrcXH8KgRGNvubjvzo+q98kHxDpWCu7wXImpFkG8L1CTYU9FoAJEVJTt/+gQTFPjCCe2BxVI/jk5jaKCeAmsqvz3qnVnMcJE8ap7Dw68igv4S+5qsnxffJzFazPBBiEwXz/bFT7jqDQRdq+a6TA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784036861; c=relaxed/simple;
-	bh=P10sqAu3BTK8QXsnc5a9Gq9byauFTrhK3vFf7HyJ1s0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ow8ixGmom6u7DlnxcOyQbEw3AJnNeWkOlBMHcKEsFopuMOnNrHMfKXiqpjox/AziYK0hki95fxoumGZiBriEcyUo0ocD/EWA2J2J8vbdw37v//LEtZuktJfw9YMqz6HdwvLbg5bKhO4cyUygAvBWPMp0j+ilUGwFf0TQP1z6Pjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mq6CQBhi; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784037043; c=relaxed/simple;
+	bh=S8MwiPSFtg2HQJwfNovLWXqWhq+RHCp2laLuQzZ12Do=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tvjmqMgu78/yWtedOQEcgeoIxo7b7XxmzHkrONs98pfzO8JSBi8POc2vCO3GEaxm5IZTJAjfZEoAdpljKnF6gIdDiqsikWFALczciG83MAX5exXfJe0Ila07/uTZYJvMVH/Y7TDdWTP5pXdr9E9R+9t2eWvzXUhGm8DOs9zsrTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=d4fA7NqF; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mq6CQBhi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 509351F000E9;
-	Tue, 14 Jul 2026 13:47:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784036860;
-	bh=as1hyUElsqNDN3xfNf1AKsFKYJ7NSurFjoig00Tsl0w=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=Mq6CQBhidmTO/xi6/EQBvn3kuphYWrZcjPY7r7O+6F2aLfm47t+tVk8Ux8qKX9x3U
-	 C5pk9MAiD5/82RF4GQRqFrcaKjCm/gY0JI4iqUOe2pu5LVrUKls/zpxNnnm5428lxo
-	 eFzc49P4G+rmvU6ND4EMjKsNIwvquNR+oQkAa2u3OMR5pCGcdQfh5Lc2EEc9pkKB8l
-	 x78ucXLTZohQWunRsTCZ0ZUGaXOuak55NSEXaQtjqSng0tlZn+KcQPREr4msApwhBF
-	 qTweKKFUnT3k1k/+CeuSWh+vr/fQvF+3DlAy0iNvjF7AcicM694QCYw3GZQef4cp9s
-	 z/O3bI9aA5GFg==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: sashiko-reviews@lists.linux.dev, Pu Lehui <pulehui@huaweicloud.com>
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Reject callback subprogs invoke
- tailcall
-In-Reply-To: <20260714025645.101971F000E9@smtp.kernel.org>
-References: <20260714024459.420075-1-pulehui@huaweicloud.com>
- <20260714024459.420075-2-pulehui@huaweicloud.com>
- <20260714025645.101971F000E9@smtp.kernel.org>
-Date: Tue, 14 Jul 2026 15:47:35 +0200
-Message-ID: <87ech5wumg.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="d4fA7NqF"
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66ECO5eT1377234;
+	Tue, 14 Jul 2026 13:50:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=WpHKcVTV03NtgCbsF1959OZu2kG2m
+	van6Q6xdWZ8Rb4=; b=d4fA7NqFLlsHPlyv+lW5OoIhC4TVDKuTWfmEyDid2Jeyi
+	KvP94xmQMBj687ExG7Iw2SJLaYVYfXLu5KTWMpNNj2hKxGpxQyxR04FJHznN42Ho
+	3WVCH+Gm41uM1yCK4r6vasaIuIcNS8NSh7S3WGoO96Nh7Yszktj1eqsn0gjbkHK7
+	m7O1v4RsHVeWgFRy4NSvpcpIlQXqACioh2XHBji47Ldkno83yUwXx0roDFCh9orx
+	T2cSEVxPxhvt9mAb3YUBiqrjqceV2j+ykD7XSBoWAQTzNR+ZWAe91CHtZ4NwSkBW
+	2nXilyvb2ezJBE48OcWyNsUnzrDpLMZJyLqwiZt4Q==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4fbeedm6n4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 14 Jul 2026 13:50:38 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 66EDm8LR032350;
+	Tue, 14 Jul 2026 13:50:37 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-154-50-49.vpn.oracle.com [10.154.50.49])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4fbc9dtr8p-1;
+	Tue, 14 Jul 2026 13:50:37 +0000 (GMT)
+From: Alan Maguire <alan.maguire@oracle.com>
+To: yonghong.song@linux.dev, olsajiri@gmail.com
+Cc: arnaldo.melo@gmail.com, bpf@vger.kernel.org, dwarves@vger.kernel.org
+Subject: [PATCH dwarves 0/2] clang true signature follow-on
+Date: Tue, 14 Jul 2026 14:50:33 +0100
+Message-ID: <20260714135035.814273-1-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-14_03,2026-07-10_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
+ mlxlogscore=999 lowpriorityscore=0 suspectscore=0 adultscore=0 phishscore=0
+ malwarescore=0 mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2606160000 definitions=main-2607140144
+X-Authority-Analysis: v=2.4 cv=d+bFDxjE c=1 sm=1 tr=0 ts=6a563eae cx=c_pps
+ a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
+ a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
+ a=RD47p0oAkeU5bO7t-o6f:22 a=VwQbUJbxAAAA:8 a=NEAV23lmAAAA:8
+ a=BEG9pr17Aq1srr6O9tEA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzE0MDE0MyBTYWx0ZWRfX97TrNcaVDkDx
+ ZPWuWA7J+EP87c4bmFJM/qqoIrJdT1Ek6PKnHIMMJXz39Okb0ZUR7XIeiJx1e8iT9txcErt555t
+ /4HEmSYZyChjX/WjAt1qKJunIz+ZMRr/9aca7ECDBOZB+n6Lx48jFR+1pxqbigKyMqC19Khhd64
+ aMuSDBfJPhMo6dsgIpPanuRmMDxhb6Ob1WEzi3h/uUnpWNXVad9Ws6Hzld8P/Z6LCjgFXu0zeSF
+ qHkiNswp/BHMGBtoqHCwgsCGGijW7pE9xwQoK3vlgAI3wRl/kchYoD85w0N16Y2ZcyPJvzkCAw8
+ uNISwHBELftWJdLrVjlBezyMh7OP4/F65Y1zvYzO08ctqgMY+rkPIMXidQ+mT/7s154wTT0PIcv
+ jQaAw5UHmo9r8z5t9Cd/7ioBcrZ+h/9VJzNMd0JWBBDRbr1vpbeSvR2Ldt1bUapeD8iNImVlqTZ
+ eVN26i7O5Y4kfEE7efQ==
+X-Proofpoint-GUID: FiNsdEj2V3O84q4m3urQIjbexruCL0F5
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzE0MDE0MyBTYWx0ZWRfX9hDhdpzcAefs
+ GQQFI/w7liDWuk/9vVL2Kel7pxhrV6sGjQK4yItcEZDI1wSQnj+Y7qcxfldVFG9fvCRzNKi+Hda
+ cqWeMvUvK+aS1ftB7WQ37UgsvETlr9+eBPB38QhRGw1FdeYLtJta
+X-Proofpoint-ORIG-GUID: FiNsdEj2V3O84q4m3urQIjbexruCL0F5
 
-sashiko-bot@kernel.org writes:
+Though the true signature series [1] has not landed yet, this
+is intended as a follow-on series to resolve an issue it raises;
+by sharing the optimization detection code it can result in
+the non true signature case being overly aggressive in omitting
+functions from BTF that have optimized parameters.
 
-> Thank you for your contribution! Sashiko AI review found 2 potential issu=
-e(s) to consider:
-> - [High] The patch inadvertently allows async and exception callbacks to =
-execute tail calls, bypassing verifier protections and reintroducing the TC=
-C register clobbering vulnerability.
-> - [High] The unified `is_cb` check introduces a DFS state leakage that in=
-correctly rejects valid BPF programs containing both a tail call and an unr=
-elated synchronous callback.
-> --
->
-> --- Patch [1]: [PATCH bpf-next v2 1/2] bpf: Reject callback subprogs invo=
-ke tailcall ---
-> commit d260c3afbc5fedfa9c5c074686a31f057a21a53a
-> Author: Pu Lehui <pulehui@huawei.com>
->
-> bpf: Reject callback subprogs invoke tailcall
->
-> This patch rejects tailcalls inside all subprograms of synchronous callba=
-cks
-> to prevent clobbering the TCC limit register on some JIT compilers. It al=
-so
-> consolidates async and exception callback checks into a single unified
-> is_cb check.
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 03e2202cca13d..3f6c8b8fc04d0 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -5258,10 +5258,6 @@ static int check_max_stack_depth_subprog(struct b=
-pf_verifier_env *env, int idx,
->>  		if (verifier_bug_if(sidx < 0, env, "callee not found at insn %d", nex=
-t_insn))
->>  			return -EFAULT;
->>  		if (subprog[sidx].is_async_cb) {
->> -			if (subprog[sidx].has_tail_call) {
->> -				verifier_bug(env, "subprog has tail_call and async cb");
->> -				return -EFAULT;
->> -			}
->
-> [Severity: High]
-> Does removing this explicit check allow async and exception callbacks to
-> execute tail calls when they contain no further subprogram calls?
->
-> Because async and exception callbacks are evaluated as the root of their =
-own
-> call graphs by check_max_stack_depth_subprog() (with idx > 0), the local
-> tail_call_reachable variable remains false throughout the evaluation loop=
- if
-> the callback makes no normal subprogram calls.
->
-> When the loop ends, the new unified is_cb check is bypassed because
-> tail_call_reachable is false, and the fallback check is skipped because !=
-idx
-> is false for async callbacks. Can this bypass the TCC limit protections a=
-nd
-> lead to infinite tailcalls?
->
->>  			/* async callbacks don't increase bpf prog stack size unless called =
-directly */
->>  			if (!bpf_pseudo_call(insn + i))
->>  				continue;
->> @@ -5302,8 +5298,8 @@ static int check_max_stack_depth_subprog(struct bp=
-f_verifier_env *env, int idx,
->>  	 */
->>  	if (tail_call_reachable) {
->>  		for (tmp =3D idx; tmp >=3D 0; tmp =3D dinfo[tmp].caller) {
->> -			if (subprog[tmp].is_exception_cb) {
->> -				verbose(env, "cannot tail call within exception cb\n");
->> +			if (subprog[tmp].is_cb) {
->> +				verbose(env, "cannot tail call within callback\n");
->>  				return -EINVAL;
->>  			}
->
-> [Severity: High]
-> Can the local tail_call_reachable variable leak across unrelated subprogr=
-ams
-> during the verifier's Depth-First Search?
->
-> If a BPF program first calls a subprogram containing a tail call, the DFS
-> will set tail_call_reachable =3D true and mark it true for all ancestors.
-> When backtracking from the callee to the main program, tail_call_reachable
-> is restored to the ancestor's state:
->
-> kernel/bpf/verifier.c:check_max_stack_depth_subprog() {
->     ...
-> 	/* reset tail_call_reachable to the parent's actual state */
-> 	tail_call_reachable =3D subprog[idx].tail_call_reachable;
->
-> 	goto continue_func;
->     ...
-> }
->
-> If the program subsequently sets up a synchronous callback (e.g., via
-> bpf_loop()), the loop jumps back up without resetting tail_call_reachable=
- to
-> false. When it reaches the end of the callback subprogram,
-> tail_call_reachable will still be true from the leaked state.
->
-> Will this cause the new unified is_cb check to incorrectly reject perfect=
-ly
-> valid BPF programs that contain both a tail call and an unrelated synchro=
-nous
-> callback?
+See patch 1 for the details; patch 2 tests the change for gcc.
 
-Don't about "high severity", but this seems legit. It seems like we can
-get "random" (depending of ordering) rejects of legit program, no? ...at
-least the LLM I asked could construct a fix/PoC for it...
+This series applies on top of [1]; the danger is we do not
+want to land the true signature series without resolving this
+issue first so hopefully folks can test with this series on top to
+see if issues are resolved.  CI passed with this series on top
+of the true signature series at [2].
 
+[1] https://lore.kernel.org/dwarves/20260625020148.1883082-1-yonghong.song@linux.dev/
+[2] https://github.com/alan-maguire/dwarves/actions/runs/29270441984
 
-Bj=C3=B6rn
+Alan Maguire (2):
+  btf_encoder: Only skip optimized parms when ABI changed
+  tests: Add GCC default-BTF optimized parameter coverage
+
+ btf_encoder.c                  | 97 +++++++++++++++++++++++++---------
+ tests/gcc_optimized_default.sh | 69 ++++++++++++++++++++++++
+ 2 files changed, 142 insertions(+), 24 deletions(-)
+ create mode 100755 tests/gcc_optimized_default.sh
+
+-- 
+2.43.5
 
