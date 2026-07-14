@@ -1,151 +1,155 @@
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BBC638332A
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 06:23:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784010206; cv=pass; b=Ig8ZMTXbKwzPFw8PCL3yLCJ/9KEwgZTiOqvMPtnVXeHZGRoR3AZ4/rNbfIT5aIRehEltSkptCLsjwZXWsf4oSsGfrNAflnrApa9ISTi3ohtM7L1FdSUmuD7YSbHLi4cKlyoDPeLpwhjtXkOj3ufX0gZ5bGazmcuo9tFYg8UvqQU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784010206; c=relaxed/simple;
-	bh=Wnrg0Gu0f2+9+eCpNmhH2Vvi2/B647p4odZ67Sj98Qg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m1rTEcx46e88QUCoZrX/0KBYclX5ykDYmK6o2qCWoQTWk+COvjwkDyhngikdm4USwAdZXMuvUI8nDuijGQUmDESzNLmP/iFAwunIdGYgkEU5sk73PbVqs2JN8ecCJth2mHNskSYhGlRGXi3tAE2DcOZuSwPnZdZYua+0kjCI1gQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=C5yZtrYa; arc=pass smtp.client-ip=209.85.160.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559B332AABA
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 06:23:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784010214; cv=none; b=POch79bFIKS6eLGOihQKtnVDOAFzaDCA+dUOkKbEI1go43OZAbXWD1v5lpNCctFXrKRt8tQo7jRjKZDmIjBfRQx0mz+fxJpc3YkmbBSn3XisHPzd7Vtcozk54IVyJ8nvXFUoM7yMK8MjfWa8PheJKRGUTynfd/4/b5o1XtWoElk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784010214; c=relaxed/simple;
+	bh=mrLR48Akm9GQ2K04C7ZMgBaqTqlOBP8oQOM8nbOCalE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=UZ/8IDp90SDSjgaIDgjWJyPW+gIIS9mxqE0TnbnsLDgZNGQDoysyeA0lnluscF1qVQqcQw38rDTN+1K1jypn9i5PCcphVJCuer2mW/6FufJmKc26ZlMkFNIscKSj/ABkG8dHSwxyR3d1pvDsP1jXLhyPRJnhaCCevApy98xPSbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=M7z8CGqy; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="C5yZtrYa"
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-447a81776e9so1260056fac.0
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 23:23:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784010203; cv=none;
-        d=google.com; s=arc-20260327;
-        b=SIohtFQjwF4sOaKNxZMaSzGxBUThHJ2033Pr2TDjjEhL014m6dgm4Pb7yB1RuarT/A
-         VcFzm5rCzYqDGzpYCxmsQVjU55k8L68+0zPUiLGpUuQdftQ20V6SjLB5t3Grnaz+Oe/v
-         Tt8ShcuNLMDJV2HMEPMYaAXqS4amlFm+Jy8fqKUi25sFd3D5cwV5OWm+3/eedp9eias3
-         mKsxK1t/rzJyCLrbQ9DVu9QliUb21Qf4QTu75dLoAAC6CLhqUMm9cBbpaMQFFbziBXL0
-         ostEWBMFT9tFZJqQCfpNpIkDTmDTb1TabI72QAIaMgEhxNZxwmr0S8AN7C0G0tAfVE2j
-         YeWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=UmwZ2JdGpnQjzlIbtGvTSfdYg7lmImsp/NzZpGZ4h5M=;
-        fh=Lfbewpn7/1EFZk9aZXXWqdWhONNzd78YvWXCDr0xnNo=;
-        b=DHV8RvRJtiVteJsfqxC9CNzQDsKs+CkFUed/ijjhI2954+9zZXc3K119MbCGxaudja
-         ISZ4fzqo7tdSYxt0caozVb84KU0h4X2f813IOqCaz6vWlqoN2XiWBm2zVPhZ99agepLo
-         iDYxvJ6fuK+uJ1kGE6ktWw+F98ieldVWjUiizSVrq9QTBD17f0XhAemRG0OsnHh47PHh
-         JKIcZ8ruDhDGDvXmof5ekN5Vs0CkTHEA1z0cCYbMSdRVsjgQox16i8mae2Q9z1+hJFzK
-         FPLAC8pX5ZoVtqaU2w/HnCmufqO8JvgrpBHyjiix8Q+x/CJarVU8NqeMtLH2mmD48Gha
-         E6eA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="M7z8CGqy"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-84867f07d63so4371021b3a.2
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 23:23:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1784010203; x=1784615003; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=UmwZ2JdGpnQjzlIbtGvTSfdYg7lmImsp/NzZpGZ4h5M=;
-        b=C5yZtrYaiOai+7as/nU2LgehtiklETKyJnzwc2vxBneqEmyzoH+JQh4eQyBUziM0lG
-         C5BFzgkQ0c2YxmZDEwST2r64De/ECjJmxzDv2TrvOOCpuQTfRfVb87y/yoDNNyxYiYGK
-         hGT+t4qBr1h2v3f0HU25s3P6QndmCuieG7ZWLNGT48IjDmJevjgX4rG6V0Kt7bbf0DHg
-         wfJwy951dE9B5rrv9Xvd3Zl37pc6fokNAUUTN/MbomosKUGuFZnUbp3pbRH5WLoo9fxQ
-         5PXbFNjVnwVb/4ZUmvXNnJapsE4j+3FyH/bOMiIVDa7gFXhWuKtSN1CJrzKAthipaDP2
-         LOkA==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784010213; x=1784615013; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=w4wsNoFBM5WdmRxP3Hm6ojL5xYGbiFYjA567+qOElRI=;
+        b=M7z8CGqyc9WAJzkAQ4rQajfi/AheoIgOU2BGTgaxzRgra1R7xAUpus7T/c+KwnPEhk
+         Mru+b4Sb8C33cspJ7E+UV1mzYj4VxY9/YLdRnhHw2mSw3YYf5qUV4gJd0KvdBGYoI0Lq
+         YrriGplFLUCNUnnlhOdEl0scqklRNKM/Wffx5t/DkRy7B54nLlu30BS/fGQnQKD9uLA/
+         P82EBFwm9RdK1+JH0dREcBRYPrElEoqRnirLgmo5wuOwOuHAeWxoh9c3RX9mPpS28S4d
+         zPPyA7BCA+qwhqCilvEgqMwZYD13t9uC6g+lRlBHK5YlIFY+PFOYX3pIUNot0UY644uj
+         Zx1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784010203; x=1784615003;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1784010213; x=1784615013;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=UmwZ2JdGpnQjzlIbtGvTSfdYg7lmImsp/NzZpGZ4h5M=;
-        b=pTxYCwJ4U8faebdd3P1ivKIdOCuQA0KHsvolXZhGdq5ZgiFmj958VO98od+1+ywLMU
-         GkG63yJFzgaWshnAd6yizWoRz6zyZrAoyVAUB1ok2NcIi73XYzr3tYgVxkb2B9khnN8R
-         mY2P/bEg+wJNTd7n+bYZGmB/PGMveWw1hPigIRQOBjcZAuKt68TZho2tHDpwXdbhaA5R
-         4S8LWW3L9dVBJJ0kE5I83bWgwo/Wzy5SQJ/RrUoPNhUbu0VafIGEhuJ8FAu2nKiYmUPM
-         HfWQetyl5S5vsjDL0Pz21C0s9yMOt+z9dwycjYzDl1EXLau2WzuCg4uSe0HWXczvTa39
-         J/wQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/3Cp2mwFjL7yVOIe/yCpIfE/bhDms28qiELRfmorPOQbnmAk1l8Tx1uiBB4IFNmfbnUmM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnwY1CW5fdmKONFepovBe/5M/rBZ3YqPPOgVpzE7FAAuBgcMd4
-	ugY+KULa6HjC4FaSsbQYO0q4Yy6zZcZhS1GGNU1yxvqIMkLKDm43fcOpWXdxchV6qUPHbZakjS6
-	ssoP0IhUvoW4dz+A0Hn5VIFdqiXMsyr0urY8myJunow==
-X-Gm-Gg: AfdE7cl+P9bdMC4cd6bF3yNKsT8sniBIhWBlY5hwGO3TRWjP48El51121kXeNFPxJFN
-	DDQeSKRsxuACEd23mmICcKWafy8ExsN7BwmR7aB6VivNhmrLCV2Z6j5IiR4DujrjtgH1YOZAbnw
-	s5MRHgPm/74BT7tCaYSIK1lxrwY2rMqjk7vug9gSfZMwH5/prYKNnE17wUG576b54KP1hIeK/U8
-	XT+vfbwN+KhoW5vKIHOQ/iyzIfR5upLOh0LSM77hNZwlSU6UJsOfzEh2c1oXxIblSBnN/eO45A=
-X-Received: by 2002:a05:6808:1b24:b0:495:f79d:b08e with SMTP id
- 5614622812f47-4a47a6c1d27mr439710b6e.21.1784010203197; Mon, 13 Jul 2026
- 23:23:23 -0700 (PDT)
+        bh=w4wsNoFBM5WdmRxP3Hm6ojL5xYGbiFYjA567+qOElRI=;
+        b=AoLX+cNNqhNtuMRWAwXJdv8t4PYVPsE6DPKxO/kjIDQ3e19qU+N57TQraLQMabLJy6
+         NVho8BoCv8aE08rA2mC79SfAgresIcLsWPUFra8Y6DeRQ51tvQadxKSGOX7Ojd5sHdM1
+         TjalxBIVfi9H+NU0lhtAHSr3tQGQADUhrXeulOn1rhwZ/LFT6YhULnmxuR2lDK1MkL+V
+         GnCDJWnKduS/q3nlhaHzaWDzIEzGgOzC5uGgYlmIP8rT5pabgYXXZ4CgE299DYe4vHvv
+         QcFcDdLwHcd3v3GkskDZwwTKR9GTaDTS9tUbxOAHbnrs/DjFN3YlcjIVUs5ZP8ZYcxlQ
+         fTYA==
+X-Forwarded-Encrypted: i=1; AHgh+RpPe+flF0JjKeRqGIJ7fD4YUxYdEYUsnpKlR/kniuN7c3lwWEQMV2mSaSXLiCa/vpQj110=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7hQSZ7kb4qjNhDUpGCC0/SygSDNyQY9nk3Vss7CNo0WWXraxi
+	R6itVErQtMtQuzr8YbkiYJfvscw2IMB+1tc/gJ9pLbG0luppFOvQV0HotM2VaenAagE=
+X-Gm-Gg: AfdE7clkQbtguLWFBmxZWfaOBBRZLi/Xyr2TBhxAltGRStuIbD01k66egYLeZmPXZ0S
+	9v29RbOMAomFOwnWGOOgqghYxEnc4ZJYbU33HZAf8feb3Rwfl20Odf0T+6r8vaQy90WAZVRCYPh
+	4t7fW6n5bNNd/kgOEzmBJ6HldMCo/J8ArFUtoZw8CqCcyJvyDgaHOmrTvG2FAt+5bK6BlgBCbps
+	X80IeIBX64Lf4hz0AWMzrgDx7ac63jYZpifhkwBLMLUDj1TRFzdpIligqIMNyvWCVz1nS/2WWwS
+	pPngOsjCc/agMIl0h0MHxMgmO9RxCZdHr6BbHHuHKLRmydYA7ipzHAM9Wa7jHqz/hXXjeY0wSPc
+	1X8KDeO7i2ESgxr9k3mHLzG0vp3hGYMZwHAt1iWdzR7VvZil8jxHOc0Cye+BcJonlANM0pEaNmx
+	LiMmKaqLvvgIRif1bGno/YwVzt6UILTJoZNxwNYSOLzg==
+X-Received: by 2002:a05:6a00:14c2:b0:847:b2e4:9f68 with SMTP id d2e1a72fcca58-848895dc8ffmr11323221b3a.9.1784010212598;
+        Mon, 13 Jul 2026 23:23:32 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f7de23asm902775b3a.49.2026.07.13.23.23.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jul 2026 23:23:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260703122832.15984-1-cuiyunhui@bytedance.com>
- <20260703122832.15984-2-cuiyunhui@bytedance.com> <74ffb0c5-4edd-7b64-3d3f-be76c2aec4c2@kernel.org>
-In-Reply-To: <74ffb0c5-4edd-7b64-3d3f-be76c2aec4c2@kernel.org>
-From: yunhui cui <cuiyunhui@bytedance.com>
-Date: Tue, 14 Jul 2026 14:23:12 +0800
-X-Gm-Features: AUfX_mxF_EkkHPpXwVLSHWKREo9gY6a3BeqhKBMKR6LcYXx54wa2zu3a3fsDMQ8
-Message-ID: <CAEEQ3wk8gK9pam2da=o5mbfzU3-5EtfH5nyhAoVfCoy+7UuCGA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v8 1/3] riscv: io: avoid null-pointer
- arithmetic in PIO helpers
-To: Paul Walmsley <pjw@kernel.org>
-Cc: palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, 
-	dennis@kernel.org, tj@kernel.org, cl@gentwo.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, bjorn@kernel.org, pulehui@huawei.com, puranjay@kernel.org, 
-	thuth@redhat.com, ajones@ventanamicro.com, ben.dooks@codethink.co.uk, 
-	rkrcmar@ventanamicro.com, samuel.holland@sifive.com, zong.li@sifive.com, 
-	conor.dooley@microchip.com, tglx@kernel.org, debug@rivosinc.com, 
-	seanwascoding@gmail.com, andybnac@gmail.com, menglong8.dong@gmail.com, 
-	cyrilbur@tenstorrent.com, wangruikang@iscas.ac.cn, atishp@rivosinc.com, 
-	apatel@ventanamicro.com, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
-	arnd@arndb.de, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
-	morbo@google.com, justinstitt@google.com, qingfang.deng@siflower.com.cn, 
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 14 Jul 2026 02:23:31 -0400
+Message-Id: <DJY2U8WBO9RL.Y30LKYAJB2AM@etsalapatis.com>
+Cc: <netdev@vger.kernel.org>, <alexei.starovoitov@gmail.com>,
+ <andrii@kernel.org>, <daniel@iogearbox.net>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <martin.lau@kernel.org>, <shakeel.butt@linux.dev>,
+ <roman.gushchin@linux.dev>, <kuniyu@google.com>,
+ <kerneljasonxing@gmail.com>, <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v3 10/15] bpf: Allow all struct_ops to use
+ bpf_dynptr_from_skb()
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Amery Hung" <ameryhung@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260706171918.317102-1-ameryhung@gmail.com>
+ <20260706171918.317102-11-ameryhung@gmail.com>
+In-Reply-To: <20260706171918.317102-11-ameryhung@gmail.com>
 
-Hi Paul,
-
-On Tue, Jul 14, 2026 at 2:04=E2=80=AFAM Paul Walmsley <pjw@kernel.org> wrot=
-e:
+On Mon Jul 6, 2026 at 1:19 PM EDT, Amery Hung wrote:
+> bpf_dynptr_from_skb() was only made available to bpf_qdisc, so far the
+> only struct_ops type that needs to read an skb. The upcoming bpf_tcp_ops
+> header-option hooks (parse_hdr/write_hdr_opt) also want to access the TCP
+> options of an skb through a dynptr.
 >
-> On Fri, 3 Jul 2026, Yunhui Cui wrote:
+> All struct_ops programs share BPF_PROG_TYPE_STRUCT_OPS, so register
+> bpf_kfunc_set_skb (which holds bpf_dynptr_from_skb) for that program type
+> once, instead of per struct_ops. This makes bpf_dynptr_from_skb()
+> available to bpf_tcp_ops and any future struct_ops.
 >
-> > When port I/O is not supported, exposing the port-string helpers is bot=
-h
-> > unnecessary and can make clang diagnose null-pointer arithmetic from th=
-e
-> > PCI_IOBASE based address expression.  Keep the MMIO string helpers
-> > available as before, but only provide the port I/O variants when
-> > CONFIG_HAS_IOPORT is enabled.
-> >
-> > Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
-> > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> With the kfunc now provided to all of struct_ops, the bpf_qdisc-specific
+> registration becomes redundant and is dropped: bpf_qdisc_kfunc_filter()
+> only constrains kfuncs listed in qdisc_kfunc_ids, so removing
+> bpf_dynptr_from_skb from that set (and from qdisc_common_kfunc_set) lets
+> it fall through the filter unchanged, and bpf_qdisc keeps access via the
+> generic struct_ops registration.
 >
-> Thanks, queued for v7.2-rc.
-
-Thanks for queuing patch 1.
-
-That patch is independent and safe to take as-is.
-
-For patches 2/3, we later found that the percpu try_cmpxchg fallback path c=
-an
-expose a variable-shadowing issue in the current RISC-V cmpxchg macro
-implementation in arch/riscv/include/asm/cmpxchg.h.
-
-I'll address that in the next revision of the percpu patches, so please jus=
-t
-take patch 1 from v8 for now.
-
+> Widening the registration is safe: a struct_ops that does not receive an
+> skb in its context has nothing to pass to the helper.
 >
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+> ---
+>  net/core/filter.c     | 1 +
+>  net/sched/bpf_qdisc.c | 2 --
+>  2 files changed, 1 insertion(+), 2 deletions(-)
 >
-> - Paul
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 4f5cbcac3e78..05f492c215e0 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -12635,6 +12635,7 @@ static int __init bpf_kfunc_init(void)
+>  	ret =3D ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LWT_SEG6LOCAL, &=
+bpf_kfunc_set_skb);
+>  	ret =3D ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_NETFILTER, &bpf_=
+kfunc_set_skb);
+>  	ret =3D ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_kf=
+unc_set_skb);
+> +	ret =3D ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &bpf=
+_kfunc_set_skb);
+>  	ret =3D ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_=
+kfunc_set_skb_meta);
+>  	ret =3D ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_ACT, &bpf_=
+kfunc_set_skb_meta);
+>  	ret =3D ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &bpf_kfunc_=
+set_xdp);
+> diff --git a/net/sched/bpf_qdisc.c b/net/sched/bpf_qdisc.c
+> index 098ca02aed89..5691c13781a8 100644
+> --- a/net/sched/bpf_qdisc.c
+> +++ b/net/sched/bpf_qdisc.c
+> @@ -280,7 +280,6 @@ BTF_KFUNCS_START(qdisc_kfunc_ids)
+>  BTF_ID_FLAGS(func, bpf_skb_get_hash)
+>  BTF_ID_FLAGS(func, bpf_kfree_skb, KF_RELEASE)
+>  BTF_ID_FLAGS(func, bpf_qdisc_skb_drop, KF_RELEASE)
+> -BTF_ID_FLAGS(func, bpf_dynptr_from_skb)
+>  BTF_ID_FLAGS(func, bpf_qdisc_watchdog_schedule)
+>  BTF_ID_FLAGS(func, bpf_qdisc_init_prologue)
+>  BTF_ID_FLAGS(func, bpf_qdisc_reset_destroy_epilogue)
+> @@ -290,7 +289,6 @@ BTF_KFUNCS_END(qdisc_kfunc_ids)
+>  BTF_SET_START(qdisc_common_kfunc_set)
+>  BTF_ID(func, bpf_skb_get_hash)
+>  BTF_ID(func, bpf_kfree_skb)
+> -BTF_ID(func, bpf_dynptr_from_skb)
+>  BTF_SET_END(qdisc_common_kfunc_set)
+> =20
+>  BTF_SET_START(qdisc_enqueue_kfunc_set)
 
-
-Thanks,
-Yunhui
