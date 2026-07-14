@@ -1,122 +1,154 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C896635028D
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 03:32:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CE94342524
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 03:36:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783999964; cv=none; b=aD0nZ/i3tzeWHtQO7vUnGyLFPSBYuU3jwu/qtrE+ceeXT3MtfWq/QMtutJhV9MWOLe1mYks9XyaC4QmTVgz9Hey0qqCIpj1o4JroDJp1piXP5niykQri0JXwQFNA08QpPZSpStgz/hjVX4xx/bphkO9+0Hl/M+XgwGGXGcuw9S8=
+	t=1784000200; cv=none; b=NIPWPCV9yJ7hGYzw62GOnlj7R0nK6hAm7lwPPeDM8ahX09cAcdfG+3D1cjj5YIQP5OWQkV1Gi/3nbimXjXo7gkxzflxRURb2uDCDALejypi/RRt9+vPYyUUYtwQHPJFb1UEP57ejAv9VJPubfvu5EtmPRlUpyAnMkPEiWjrvvZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783999964; c=relaxed/simple;
-	bh=5l6nLVdO88+2acJsOr1UCToSieAPDX3Bwyvphb8xIls=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZZg0ssF/6zTUHOld8vOFWwDHOZJRw1HKk1nX+UyAoiJx+I8D2tGQh0onv/tao2QoA4F0SPNMnIIL4zFDhEj5TBFGM1BSbLJVWWMy3W1DwMEsXHI+aYKKheaOgZ7n31JkEZ2mX4MJMeO/Kq5GIjIwIPnrr37SqHcBZ3Dg8IXeDrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ArqdH1rX; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1784000200; c=relaxed/simple;
+	bh=RLJl2QN0aWmHCCrxH0baI8DlMu2mxkJdxXrW0rQTWAU=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=eTSzGGRfKWSazjAnW+/A1o+AFGyZntLKYsQfUB6Cr3l7OCt/pCqYE/GpIPyqYew8H/psyIA284oU7BOIBOcKWZGjKx4fHtkZoXWOQA5xyzZ+YCj7yUtpY2ng1RjRDtMhOjM8WwlkSPfUUqRopRYiTlDOUr/YbXKZkXW+/WG1Qik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=omgvzeRt; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ArqdH1rX"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c15d3cd51b2so446714966b.3
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 20:32:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="omgvzeRt"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8487b7b3fc7so1597340b3a.0
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 20:36:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783999959; x=1784604759; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=bdiM3wGZvU9W32ITVwJWXfEY5ZH1jUwmribSUCxIuno=;
-        b=ArqdH1rXOesSkDeZcyrn/gwmYeGCPfhD9ycpZxDFlq1zBr3byohbWaORK5xuqH9P+i
-         Kp7BWm7ILY2LeTUxrHADGfcElxoWDlnPpBhtJ9OwCTU5hkGqqiTWQm0Ywi8VvSYSQhx4
-         +Cg5J5j7gww51+d9kU01an3h1a3e4Rabush3KBhThPMvWOTRQiNcoknZwBpdgg/mzsTi
-         QmsDm3aZlF/Affo/XDS+kP0YFn2VN/nccOxyxycivjBO/FYoSzCL+K9til6FtgxEq2Qd
-         WLyI7qrwMz4UBX9JArXVYtfRCWB0a9sca3WoLrGIZ9Q8L8TRKbN899ZQjDFxMkn3yxz7
-         Tg0A==
+        d=gmail.com; s=20251104; t=1784000198; x=1784604998; darn=vger.kernel.org;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:content-type:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=gAuM5M3KA28cxh47JFCQwmkbYWzL0Rnh2NzqCwCHs/Y=;
+        b=omgvzeRthN5T7XB7tfOdCY5rtWH4u8Wfgml3haLlFmuvkQItyVG4QqffJfJyfE0Z+f
+         lkE0MbI2HK072SKWWQu88PH2Knp2JT9TA4y0seu/bqukdelSVq7giVQVelkToEZ0KgzJ
+         4Gcw02WdrD/CqvzcjgnSG2PgqsZn7Vk5lEDgtQCAqYjz1HMmUKKstrfUp2eE3lk+X4iF
+         WWUlK8wdEt1WdfPzSFGmZO1WBx6+re8XmhXlTvnwcezGn8m64NDG/XDkosPra0zn/2ti
+         IIg7SDnuVcHxM0OVwriGrEYEfoxKce4slYaXtNTHSF/C/eMNcg2D7msI0Cm+hfe4aA0w
+         x+CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783999959; x=1784604759;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1784000198; x=1784604998;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=bdiM3wGZvU9W32ITVwJWXfEY5ZH1jUwmribSUCxIuno=;
-        b=s9BDf/eFekbYZTR4MJxyGPkTAmhFFJ5wzUzfNnpcfjCnq64uYG8U/BeucvczozZo0j
-         Wy96P4rn9MAK6ght8hLmOBPh79qVY4KjEPddDl3FRRVgStiBGIVXwyBUO32JUKsAWLgf
-         9rOSmp9k4narBHE7krUQoYYJqnOTNu6pFagkPZRCvjynne06YX1ONW4Se8Ts1k7zPy1E
-         2E7vFmTCPiY074mi6fpajppfQ+0AKQl5VJkLf7crOOI2rR3gIo23FfmsahBtOfgTyJ4/
-         VW7wEbjXNjJYqgV4uN0V+sggS+A2vdyVkVZBCDisAzye0DhmVYesa2GuBp6sGafAcwxc
-         0aoA==
-X-Gm-Message-State: AOJu0Yz1q1oLbHIUAfjr/8TvYC5s5gE2dO5A3KSC86MbA3XpAToFj+i6
-	4UiziJe0kC0Tin/MepNZFum0LapdFWiEAUKpoXK0r+k1eKIIKbLGOatyhpU0cf0gitE=
-X-Gm-Gg: AfdE7ck2qvVdVWLofgueDSyydMyFys8OR8GL4hoC0wQ6fUL2RHuQa5rQA+DcvIshn0e
-	NGCdinNiTYBrik/ztqg5aFnC8hJWEL2OB/1K6GnACS7OaiNhWt/MJBwDqqLe1wx4ZlL5gegQ6QQ
-	M6j8ReZhrbkXzj694nR9qKjuH0wYjUipZVkYMIbnBs2ON7gGMu3nKbEXF08q5cHammgZYOMhtY/
-	Ch2ReiK40mxv5di/+VwGpkhDZvmInQDn2r9IOn8VkPiQH3v3YwLXsw75lj+1kcOH4g7dtSdNWER
-	4v/mJpY93BcJWCicHJnp0j19WXKC/Rwh4JYBqf8sUF7j4uh6J/rbLGz5GYL9nN5JCKVma04+is1
-	aVaVUYMwfavKvK5pLsCYe05HK+Pija/WjkY15Mi/FSIWm8Ryabv/YIEZLlXfY7ueacX7NvNNyva
-	6bwgG+12NgrqztkZNr1A+BCP2dZQ+gi71S3xmncPpwZn4=
-X-Received: by 2002:a17:906:f587:b0:c15:e8c8:34f with SMTP id a640c23a62f3a-c161e84b4a7mr493269566b.13.1783999959174;
-        Mon, 13 Jul 2026 20:32:39 -0700 (PDT)
-Received: from u94a (27-51-48-151.adsl.fetnet.net. [27.51.48.151])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ebcb2b79c9sm14334466a34.22.2026.07.13.20.32.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 20:32:38 -0700 (PDT)
-Date: Tue, 14 Jul 2026 11:32:29 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Eduard Zingerman <eddyz87@gmail.com>, 
-	sun jian <sun.jian.kdev@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Matt Mullins <mmullins@mmlx.us>, stable@vger.kernel.org
-Subject: Re: [PATCH bpf 1/1] selftests/bpf: Enable BLK_DEV_NBD for
- raw_tp_writable_reject_nbd_invalid
-Message-ID: <alWsBzShn4sgDRl-@u94a>
-References: <20260713063513.215781-1-shung-hsi.yu@suse.com>
- <08508d2133284d49e1da297895c85cf854a97bf3.camel@gmail.com>
+        bh=gAuM5M3KA28cxh47JFCQwmkbYWzL0Rnh2NzqCwCHs/Y=;
+        b=AC9ixkXA/Oh80q6Rxo1KwGSrq+cJbhWQTB3hbx5hIZIfMjM1+ygsP5ZMYEtxLabSoU
+         KoOk/bXYidGo8m/7JxQ5zvqC4T7vrrbr9caEPHFsxQ1HO0dbI+z4NjCaOqWhlWO/PeKg
+         mujnO73+Qq8XOueBsYCKwg215bWkKrRDYSVVfltZhJacXu8NeDEl8/72l2AixTB15j4f
+         Lri+YO6lncpSMzBVrqASFvPLGcg8hKVKcXaY4X5tHGrlrSuHQKjrpsHD2XlIN9U9RxFk
+         yYpdG7bGrzYwPI8Sn05cLoUOJRz0vESF+HkEtA+F6CiwUmRvsQKBjOc3F+QWeku07jTu
+         cyrg==
+X-Forwarded-Encrypted: i=1; AHgh+Rq3OxxEsTp2UzwzQ8KiL+oQbn+1r+wnU0/IBg7Li90/cSIxnnJ96zyIlXGf/8nM+By2xHA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2qdOt0c9fsniOLL4dstvsjYlodEqLi3QY7TYGeXHdvi3d/qAf
+	nT73W0rYgDzvGqF2VzXXA64Vrvggfye3fTD2ZvrSNY92ZzAfVHIf3mLV
+X-Gm-Gg: AfdE7cnAXcbCBEnXl7KTZUGq9u5Cj3bHlAPmJSQFvYYNILgPW1qIWRApuX5FElkXTEF
+	tunirG+sZ/XbVF1hj0todAA5wk/0PAhfebIcNNFPFFoHy+k1XrLz2ZMyTVROaGW11P6ZM3ZPb/u
+	dGvQ/GxUnadI4PL8dQ4OMC3yn9fZ2Au4eHiwPdhU/yRv5q6GiR2IrkOanrO2lFVVvDqRPK1b/vB
+	m/EQ4itgA3LNmKpgP5HkkqIqyG/i3pZAWph/6Vn+zr2B3STo5Gbp8BYEM5M+pIndz5Kcmac0VBi
+	d5M8ibklYQuGfyJDuBTcohQMBCLqBz0kigM5g2Q+BNrqVNSlbgkS7DtF/LTThoXRiFdClO8FAuZ
+	D8kD9xXOjZzQBviIkdlHI7S6+GGStKOOIHp524T4OCEQAhQ5W/laxjkWqaLi4S/zAWhMQSmtOnq
+	T+HUOTZ8WVwKHQxkN/uIvsuUQ1jD85eeTYBnQMHMqVkNRCUA==
+X-Received: by 2002:a05:6a00:f89:b0:842:2419:6c0b with SMTP id d2e1a72fcca58-84889637ff9mr9302291b3a.10.1784000198378;
+        Mon, 13 Jul 2026 20:36:38 -0700 (PDT)
+Received: from smtpclient.apple ([43.224.245.231])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f242999sm723429b3a.1.2026.07.13.20.36.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 13 Jul 2026 20:36:38 -0700 (PDT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <08508d2133284d49e1da297895c85cf854a97bf3.camel@gmail.com>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.600.51.1.1\))
+Subject: Re: [PATCH] sched_ext: Validate cid override before updating tables
+From: zhidao su <soolaugust@gmail.com>
+In-Reply-To: <20260714025524.04EA31F000E9@smtp.kernel.org>
+Date: Tue, 14 Jul 2026 11:36:24 +0800
+Cc: sched-ext@lists.linux.dev,
+ bpf@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <F5759324-507F-435F-A29B-CA8B1CC40FA9@gmail.com>
+References: <20260714024704.3318132-1-soolaugust@gmail.com>
+ <20260714025524.04EA31F000E9@smtp.kernel.org>
+To: sashiko-reviews@lists.linux.dev
+X-Mailer: Apple Mail (2.3864.600.51.1.1)
 
-On Mon, Jul 13, 2026 at 01:47:18PM -0700, Eduard Zingerman wrote:
-> On Mon, 2026-07-13 at 14:35 +0800, Shung-Hsi Yu wrote:
-> > The raw_tp_writable_reject_nbd_invalid test relies on availability of the
-> > nbd_send_request tracepoint, which is only present if the selftest kernel is
-> > built with CONFIG_BLK_DEV_NBD=y and the kernel built from current BPF selftests
-> > config lacks.
-> > 
-> > Without it, the bpf_raw_tracepoint_open() call always returns with -2, leaving
-> > raw_tp_writable_reject_nbd_invalid test always passing without exercising the
-> > checks bpf_probe_register().
-> > 
-> > Cc: <stable@vger.kernel.org> # 5.2.0
-> > Link: https://lore.kernel.org/bpf/alRtilWhKw4zzMkI@u94a
-> > Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-> > ---
-> > Not sure if fixes tag is the right thing to use here, so use the cc
-> > stable tag instead to get this config change propogated to other stable
-> > branches to make stable BPF CI's job easier.
-> 
-> Shung-Hsi,
-> 
-> Thank you for figuring this out.
-> I'd suggest we switch to bpf_testmod_test_writable_bare_tp() [1]
-> from the test module to avoid the config dependency and let
-> Sun pack all of this as a single patch-set to simplify backports
-> (if such are necessary). Wdyt?
+Thanks for the review.
+The current in-tree caller passes a BPF .bss array populated by =
+userspacebefore SCX_OPS_LOAD, and doesn't modify it afterwards. The =
+kfunc is alsoonly callable from the root scheduler's ops.init(), so the =
+mapping isexpected to stay stable for the duration of the call.
+If we later allow a different input source or concurrent mutation =
+duringthe call, we'd need to cache the validated values before updating =
+thetables. I don't think that's needed for the current contract,
 
-Make sense, that's probably for the better.
+> 2026=E5=B9=B47=E6=9C=8814=E6=97=A5 10:55=EF=BC=8Csashiko-bot@kernel.org =
+=E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> Thank you for your contribution! Sashiko AI review found 1 potential =
+issue(s) to consider:
+> - [High] Splitting the `cpu_to_cid` array validation and update into =
+two loops introduces a critical double-fetch TOCTOU vulnerability, =
+allowing an out-of-bounds kernel memory write.
+> --
+>=20
+> --- Patch [1]: [PATCH] sched_ext: Validate cid override before =
+updating tables ---
+> commit 3a1a6d6109297fa0a7f1d91d2dccc68df1527d12
+> Author: zhidao su (Xiaomi) <soolaugust@gmail.com>
+>=20
+> sched_ext: Validate cid override before updating tables
+>=20
+> This patch splits the validation and table updates in =
+scx_bpf_cid_override()
+> into separate loops. This prevents partial table updates if the =
+validation
+> fails midway through the user-supplied mapping.
+>=20
+>> diff --git a/kernel/sched/ext/cid.c b/kernel/sched/ext/cid.c
+>> index af83084ec740a..e398e3f209bd4 100644
+>> --- a/kernel/sched/ext/cid.c
+>> +++ b/kernel/sched/ext/cid.c
+>> @@ -329,6 +329,11 @@ __bpf_kfunc void scx_bpf_cid_override(const s32 =
+*cpu_to_cid, u32 cpu_to_cid__sz,
+>> 			scx_error(sch, "cid %d assigned to multiple =
+cpus", c);
+>> 			return;
+>> 		}
+>> +	}
+>> +
+>> +	for_each_possible_cpu(cpu) {
+>> +		s32 c =3D cpu_to_cid[cpu];
+>> +
+>> 		scx_cpu_to_cid_tbl[cpu] =3D c;
+>> 		scx_cid_to_cpu_tbl[c] =3D cpu;
+>> 	}
+>=20
+> [Severity: High]
+> Can the contents of cpu_to_cid change concurrently between these two =
+loops in
+> scx_bpf_cid_override()?
+>=20
+> If cpu_to_cid points to shared memory, such as a BPF map, could =
+another thread
+> or BPF program modify cpu_to_cid[cpu] after it passes the validation =
+in the
+> first loop?
+>=20
+> If this happens, the second loop would fetch the unvalidated value and =
+use it
+> as an index for scx_cid_to_cpu_tbl[c], potentially resulting in an
+> out-of-bounds write.
+>=20
+> --=20
+> Sashiko AI review =C2=B7 =
+https://sashiko.dev/#/patchset/20260714024704.3318132-1-soolaugust@gmail.c=
+om?part=3D1
 
-pw-bot: changes-requested
-
-@Sun can you make sure to include the follow tag for [1] when you send
-it? Should give a better guarantee that is will be picked up by AUTOSEL.
-Thanks!
-
-  Cc: <stable@vger.kernel.org> # 5.2.0
