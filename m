@@ -1,142 +1,124 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B901925B0BD
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 07:42:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205882DB7BD
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 07:44:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784014959; cv=none; b=g69iMxas3SpIFOFW5kCFXTzyQLF0mtFlNvFQCoSzyHqfkMm+J2VQ/yR3WDUTc9N0xRIhwM/J6grMTue3VrhcvuMVWVNOi0WlPXOjfZjuOVANCQz2TE8wnsa7i0cIlLcpFM1/D56e7pOJ+37ewxJr87smeMgWBR6woczj1QS47jY=
+	t=1784015048; cv=none; b=nZVHWduqnZ0J/uNUr+WdLj95a+QyUbIHdK1nAJMHOxSkYYKmrCJp+hPaBYd/Va8wpDaLDNLPKya6c0HIrQSTV3Sag/U55nAhi02CZfCRQnepdXb3+xk6q3BTtIQILbmC4NuPndGSeKGVuX5yWsbvruV/r4ijZTwQyH0O6RSrA+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784014959; c=relaxed/simple;
-	bh=QNCrW7vy4nmJDHA8keuOQWZ1wvuLEsm04ExcMMCnKs8=;
+	s=arc-20240116; t=1784015048; c=relaxed/simple;
+	bh=twgFHp23//RTwnlp+Jeb5pbr6gcTZJuCDRl7J0nvuJA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=KlahUwhPOusAEiMJjOteywjtGbbQYPGLaWI5w2Ty0eywE0TOtHSwpwZoSVV6SrGTV+UiPoXe0WSVsl04nQxFb8AyrI4eF4idKzP12ku9K/ksn20qig/x4CJPkUy7wJ//ynNgjTdsB5Ol1JWMvhf4KnzNrTUPh4+w7GHmophY5fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f+9ElNED; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=qJrs61D57e1vojLjMU3Od+2QP2NzN2F88kSBV/hVTsLsKTL+IHdTaHKfjXZgwFqi8F1MsmEWJvqWu8S0Jsu6+Uf/1FAfDQl4ccyyU1IK+WxRf+Kw3ZzUAmN8j2y1ohcJ//tFqRFfT9VUFnNnndYjKboaITh+hlX98bXRqkJoagg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QjCD/jEi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f+9ElNED"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3989E1F000E9;
-	Tue, 14 Jul 2026 07:42:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QjCD/jEi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95EDF1F000E9;
+	Tue, 14 Jul 2026 07:44:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784014958;
-	bh=fRBvVmENgn6LAMthM/NA7HK7da1aXniyKMEWYcPE5GM=;
+	s=k20260515; t=1784015046;
+	bh=cFXjVtkjsEZ2BRnACaQ45sFXXtdweLfShiF9KjDYrHQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=f+9ElNEDqe0zr48eQKwzJ6xJzYIOqdfqPjgDoblgJlUp/cpM+o7co0TmpC9g7ruba
-	 cLuRQhMN6PEhrxYzr9U2G04IB+hO6iJPz+9tzxIT1Qx6bCeOhEyZlZZH99XqB8EUMy
-	 CNkgLJXLKtSSBW5GFPtK+2yyS5g9YZv+lT1vGihBPF4MxAPXICZdXhUVtQIfTpx0fh
-	 T7xCQtkVGAVn5t74DE9UmUUIQJwF86i/gvvO5EIGUNgAjybCSBxbp5IKmMCjKT72wg
-	 qzUI2rO4MK5OZJj02V0Qy0m2YfIDOeDysL+vFBJlMR0j2KLFiocHjxC4KLValLwP6c
-	 rEO5cRa5faXzA==
+	b=QjCD/jEig8LUST30ufOqJcPXeRAjfEzQw64RvS0RYxovWbXAND8YizSrU/28J1X+b
+	 SuExTgQ1ugXa5dq29uX+bZ+WNlR6nJ6qYsr57JjzJJbiReNYJ7uM0eYwp8PYbxx+3x
+	 +A4gCYT73QmyPP2ZcsD/gtsnBTXngxPuh0L/QxDKlP+O48zFt4TuCIJWF29GEOhfB4
+	 584ktPqUuH/8wb9lMjlwUdhMvga1QH9i3qRrP9hcc9P6VGtSakaKt4IErnkd6Q6dz6
+	 xB6X4bvI2ajxeG0NNGRP5dQAMhig22bXMDdE9MeZNoH7+g7dPnvZPci8pTD096klkF
+	 uHqHWaVTs0pcQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v14 01/15] asm-generic: barrier: Add
- smp_cond_load_relaxed_timeout()
+Subject: Re: [PATCH v14 05/15] arm64: rqspinlock: Remove private copy of
+ smp_cond_load_acquire_timewait()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ankur Arora" <ankur.a.arora@oracle.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260714073041.40250-2-ankur.a.arora@oracle.com>
+In-Reply-To: <20260714073041.40250-6-ankur.a.arora@oracle.com>
 References: <20260714073041.40250-1-ankur.a.arora@oracle.com>
- <20260714073041.40250-2-ankur.a.arora@oracle.com>
+ <20260714073041.40250-6-ankur.a.arora@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 14 Jul 2026 07:42:37 +0000
-Message-Id: <20260714074238.3989E1F000E9@smtp.kernel.org>
+Date: Tue, 14 Jul 2026 07:44:06 +0000
+Message-Id: <20260714074406.95EDF1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Deferred time check causes massive timeout multiplication on archi=
-tectures with precise waits.
-- [High] Unchecked negative initial timeout leads to an infinite hardware s=
-leep.
-- [High] Generic local variable names in the macro cause dangerous variable=
- shadowing.
-- [Medium] Missing parentheses around the `timeout_ns` macro argument.
+- [High] Removing the ARM64-specific `smp_cond_load_acquire_timewait()` fal=
+lback before replacing it with a working alternative breaks BPF `rqspinlock=
+` timeout functionality, causing indefinite hangs on platforms without a ti=
+mer event stream.
 --
 
---- Patch [1]: [PATCH v14 01/15] asm-generic: barrier: Add smp_cond_load_re=
-laxed_timeout() ---
-commit fd56d26a441207368c7c3704e10f44093698b198
+--- Patch [5]: [PATCH v14 05/15] arm64: rqspinlock: Remove private copy of =
+smp_cond_load_acquire_timewait() ---
+commit e150f6dc634a9b6af6666a67d9bc5ea262bedad7
 Author: Ankur Arora <ankur.a.arora@oracle.com>
-Subject: asm-generic: barrier: Add smp_cond_load_relaxed_timeout()
 
-This patch introduces smp_cond_load_relaxed_timeout, extending the relaxed
-condition loader with a timeout mechanism. It implements a loop with
-cpu_poll_relax and defers time checks to a slowpath to minimize performance
-overhead.
+arm64: rqspinlock: Remove private copy of smp_cond_load_acquire_timewait()
 
-> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> index d4f581c1e21da..ecdaddbbd7b64 100644
-> --- a/include/asm-generic/barrier.h
-> +++ b/include/asm-generic/barrier.h
+This commit removes the private definition of smp_cond_load_acquire_timewai=
+t()
+and its helper macros from arch/arm64/include/asm/rqspinlock.h. The commit
+message notes this is in preparation for defining
+smp_cond_load_acquire_timeout(), allowing rqspinlock to fall back to using
+smp_cond_load_acquire() in the interim.
+
+> diff --git a/arch/arm64/include/asm/rqspinlock.h b/arch/arm64/include/asm=
+/rqspinlock.h
+> index 9ea0a74e58927..a385603436e98 100644
+> --- a/arch/arm64/include/asm/rqspinlock.h
+> +++ b/arch/arm64/include/asm/rqspinlock.h
 [ ... ]
-> +#ifndef smp_cond_load_relaxed_timeout
-> +#define smp_cond_load_relaxed_timeout(ptr, cond_expr,			\
-> +				      time_expr_ns, timeout_ns)		\
-> +({									\
-> +	typeof(ptr) __PTR =3D (ptr);					\
-> +	__unqual_scalar_typeof(*(ptr)) VAL;				\
-> +	u32 __count =3D 0, __spin =3D SMP_TIMEOUT_POLL_COUNT;		\
+> -#define smp_cond_load_acquire_timewait(ptr, cond_expr,			\
+> -				      time_expr_ns, time_limit_ns)	\
+> -({									\
+> -	__unqual_scalar_typeof(*ptr) _val;				\
+> -	int __wfe =3D arch_timer_evtstrm_available();			\
+> -									\
+> -	if (likely(__wfe)) {						\
+> -		_val =3D __smp_cond_load_acquire_timewait(ptr, cond_expr,	\
+> -							time_expr_ns,	\
+> -							time_limit_ns);	\
+> -	} else {							\
+> -		_val =3D __smp_cond_load_relaxed_spinwait(ptr, cond_expr,	\
+> -							time_expr_ns,	\
+> -							time_limit_ns);	\
+> -		smp_acquire__after_ctrl_dep();				\
+> -	}								\
+> -	(typeof(*ptr))_val;						\
+> -})
+> -
+> -#endif
+> -
+> -#define res_smp_cond_load_acquire(v, c) smp_cond_load_acquire_timewait(v=
+, c, 0, 1)
 
 [Severity: High]
-Could these generic variable names cause variable shadowing issues?
-
-If a caller passes an expression for time_expr_ns or cond_expr that uses a
-variable named __count or __timeout, would it evaluate using the macro's
-internal variables instead of the caller's? For example, if the caller's
-timeout variable is named __timeout, might it initialize the macro's local
-variable with its own uninitialized value?
-
-> +	s64 __timeout =3D (s64)timeout_ns;				\
-
-[Severity: Medium]
-Is it possible for operator precedence to cause incorrect timeout calculati=
-ons
-here?
-
-Since the timeout_ns macro argument is not enclosed in parentheses during t=
-he
-cast, if a caller passes an expression like a << b, the cast would apply on=
+With this custom fallback removed, the BPF rqspinlock code will use the gen=
+eric
+smp_cond_load_acquire(). Does this mean on platforms without a timer event
+stream (arch_timer_evtstrm_available() is false), a CPU could get permanent=
 ly
-to the first operand instead of the entire expression.
+stuck in a WFE instruction during a lock timeout?
 
-> +	s64 __time_now, __time_end =3D 0;					\
-> +									\
-> +	for (;;) {							\
-> +		VAL =3D READ_ONCE(*__PTR);				\
-> +		if (cond_expr)						\
-> +			break;						\
-> +		cpu_poll_relax(__PTR, VAL, (u64)__timeout);		\
+In kernel/bpf/rqspinlock.c:resilient_queued_spin_lock_slowpath(), the timeo=
+ut is
+evaluated as part of the condition expression:
 
-[Severity: High]
-What happens if the initial timeout_ns passed by the caller is zero or
-negative?
+    res_smp_cond_load_acquire(&lock->locked, !VAL || RES_CHECK_TIMEOUT(ts, =
+ret, _Q_LOCKED_MASK));
 
-Because the time validation is deferred for SMP_TIMEOUT_POLL_COUNT iteratio=
-ns,
-a negative initial timeout is cast to u64 on the very first loop iteration.=
- On
-architectures that implement a precise hardware wait, could this extremely
-large unsigned value cause an infinite hardware sleep instead of returning
-immediately?
+But smp_cond_load_acquire() calls __cmpwait_relaxed() which executes WFE:
 
-> +		if (++__count < __spin)					\
-> +			continue;					\
+    __cmpwait_relaxed(__PTR, VAL);
 
-[Severity: High]
-Does this loop inadvertently multiply the wait time on architectures with
-precise waits?
-
-Since __timeout is repeatedly passed to cpu_poll_relax without being
-decremented inside the SMP_TIMEOUT_POLL_COUNT deferral loop, if the CPU wak=
-es
-up spuriously, it appears it will sleep again for the full initial timeout
-duration up to 200 times. Could this cause significant latency spikes?
-
-[ ... ]
+If no stores occur to the locked byte, WFE will wait indefinitely, and the
+embedded timeout check won't be evaluated while the CPU is asleep.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260714073041.4025=
-0-1-ankur.a.arora@oracle.com?part=3D1
+0-1-ankur.a.arora@oracle.com?part=3D5
