@@ -1,73 +1,83 @@
-Received: from out203-205-221-173.mail.qq.com (out203-205-221-173.mail.qq.com [203.205.221.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7B135F615;
-	Tue, 14 Jul 2026 09:37:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2F53F412C
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 09:39:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784021826; cv=none; b=XtZ5iiyufPAw9dvoYNCFrNEUj7bk1uWG3UxSzkkTuGBHw3M116TkAu6KFr3SYnSHN5yPfRTpKa7Eqdk+YN89Llnik3Np3CkFUql3cBpQXwpgSMibynsCFlN91eS/8mwHNOTMimrheBx/jz9eVhHH5D5bidh0Ps5jTJpBK8lOeIk=
+	t=1784021946; cv=none; b=NfNMIdV0Mk6VgwBrCP5J2rv8QCCMbLOVqAPZSCga/6qvyN/+P3fcUPD7cnqdb+21cOuHO39dCUC8hDcYQBbUYZ6YR/HZXdSeLR1/k/m77F5+yMmy/+aH32S6tngASsTzwhmc3vF3o5eu/eoF0490EWImvxaQ34qeJLwtVuF31GA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784021826; c=relaxed/simple;
-	bh=Cru6fDZogsABYZJ+P7BSvoByrQ+uu09YAV2JQuIR7U8=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=GwMn+RhXCybRza8FfbPmCQPD1r78d0K7AvMtAXfslF2tM8wLyoppP+Xpum2Pnu0Xj92kHtKRp30czrz/XjXFyhYRJyLuTxNJoMkbHRSGyvFaPC3ielJCVcW9O212nQkLeAvw70ab1w8P8SV+yAheUzkfNKH3vf2huH+OEw5XUHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=zF+W1TZo; arc=none smtp.client-ip=203.205.221.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1784021946; c=relaxed/simple;
+	bh=q4FOW+IFo8rnGMWf5TfWHsFPOMl10UYg6rO8gBqFIRs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QCTkNuyW/ZhkA1LAcykORmO0dTp4OB+aiHFftHL3jg7uQMrEQgpE2w9IHVgHHw9BBSVRtpOYgM74fpdJU/4CcwQ+XGwIAf/IIS5L/G7XTKjvQ2Mq4wOS6HKyq1pw10LOS2k5I6IuGJ8yshJT8gQmhQuTkyfT/UZ3iRtNxsfcdRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AF5yRpBG; arc=none smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="zF+W1TZo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1784021816;
-	bh=4mWVHUITD2rsW66ieYeCmmssDwQzf0+u/pXs2tYU2E0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=zF+W1TZoMqu6NNKOhI1Xq9LOOTI0Hie5oLEF5JxyCODiL2R2A1ZP2qepgtW7DvwHm
-	 IqtkJMaRp02uGf682iTAf/UH1u1ZjcRu6mnMuMgdTgyr3E24KIB3UxtboOh50/EQe+
-	 x5OcFseLIJciiO0796hGY5gl1al2d9v1o9EQNNi8=
-Received: from NUC10 ([39.156.73.14])
-	by newxmesmtplogicsvrszc50-0.qq.com (NewEsmtp) with SMTP
-	id 924940A8; Tue, 14 Jul 2026 17:36:36 +0800
-X-QQ-mid: xmsmtpt1784021807tnwse8ma3
-Message-ID: <tencent_FB0E71C06045E8278BE9B254A5E7756D7405@qq.com>
-X-QQ-XMAILINFO: OATpkVjS499uULkKPqNIOFj1owK3Fjd59PLUfDjOYkrwXHmKgpGhPWuZabLXAB
-	 BQbGFVcwNyDCaTa+cIaHOybvJi6YTO+yuG8XOpgNKAAY23Lbtn4vQt/zwEaCOe8touJgt9lTJAgn
-	 8/L13KM815mVDQkNX9K7DnGGqnqH/x5F0Ku+sUrZ1pAv50PLcplWkKVqbMS7gHZ+qqqCOEUKNRas
-	 Y3PUcni4Z6Yifz6AvekJyot2YxBsbu+Xlqx9WrbW9n7EvzIrU8akcLfGhilrxTY9901+lnsBSRua
-	 HXPWhLuNwH4XmSziBB9MOu1oRAgnqbgd61EPSIkLB1N1bLBKVNdtRCsZBvv9KQ2FdkI3nInGZQED
-	 q6URmiZIESPFVDlZ4GNlKiSjlVro47jW2dcM4gkgQ3mdBIck74E3V5jm8fxdzjyEBO6t2Yz13cCg
-	 v7+ZjYGvctOKu0dMsfo2FsgU4oh637yMgKKKfqsWpbs/+pfMm2eAeG5EchF7BNwi6hx4deWZoJqL
-	 pl6Y38ojanZBFAoG3AXDhlUMHYsmabO/ALNCzqiZkjYg2dKZXC2qmMLrIetQd82RwQ3udE9rjFqK
-	 5YZrNNqYLzXQR2ujRTY5Bdh2HtmCWHcElTHRLMiyTNAQjlAlIDHpU+cSTxvGehhwJg7ZqxZP4idc
-	 cBrZB7fSuHSBPa/9p4pyi68fkmEiH54tv9Jfa9a4IdiAPeZrfS3dYYMyEKjddWoKbuskgvx2ekD3
-	 Tz7H7KNR6OR9hyYHBbdLV+xUdXsODyPEQUhYB5hkXDMBkgIJXw9OMsgAhS/0XtJXJjNtS95OxjKJ
-	 YJBhS4Wm4J2IBcpV5cIyc17/Z+SFqOD2YKnjeosGtq6wMzgWB1ZU77UckaqTqn5SMn/al9vAGPxi
-	 HA1agm7ngp/QRz7iwbR0iiQU7zphqRgwlZvkeVE/TFchkscmhBBGwTE4qPFKZkSaiNc/GsHrXPdV
-	 1Sl8oGWxsw9aOA9xQ8m0p26lo32ppY4gEnGLEf/yU2/6MC0S7Lg/vyeLo0huUzax52kXrHW8byAi
-	 Xz1fTxgyM441K9G5if0L46SHohjbz9egLAo1kAh6HV6Tjl/9mb
-X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
-From: Rong Tao <rtoax@foxmail.com>
-To: andrii@kernel.org,
-	vmalik@redhat.com,
-	ast@kernel.org
-Cc: Rong Tao <rongtao@cestc.cn>,
-	Eduard Zingerman <eddyz87@gmail.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AF5yRpBG"
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-51bf2479349so31479821cf.2
+        for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 02:39:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784021944; x=1784626744; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=GXSPexmHoqrmcExG3G7G81Rt80PKXXj/iAwlL6QDuik=;
+        b=AF5yRpBGqDBrzxAT9CjKUakKG+Eh2RSmNJ8VFYIEieukDMkba+wFndrghQaz1J1Ha9
+         jx7g+PCrOcXZNZ8DbwZrjmwAdRc/ap5+/3N+0FBBBu/aXPwpqyCJCFh9s/Ej+k7od10+
+         nvZuUDQgcPxEckpLifjOMB4TwUToPtnm8DmBR3yO0Aex+bseVl2Z6lYJu9DPhdRBTsUV
+         cW8NrAUe0U6oaPsnXnJo/2+uowmk05Lx1OQEMy7QeyiWixOhLh1pCNGxcy9vEQ+MNd8U
+         O8dm4+o24zOsGwolthA5EJpV20vmNFPaesCq55nrKRTBaJwLqbnAINri6p51BYxuk/PU
+         2FfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784021944; x=1784626744;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=GXSPexmHoqrmcExG3G7G81Rt80PKXXj/iAwlL6QDuik=;
+        b=lfRIEWU04hII1hY0Cp5bPrH+JQ8ZT6EQi8XaAAxqZM/JHTh7QUh64paggubyr5C32c
+         OoDwQLZYzlUOjbrskkndAtRfMUiu+YTtAR03J6ldhqmq7nqAzS9uDHLbO8dYP1vAhj5c
+         Rommnv8Tf2mcTRwulY585CsswkRkPlWVmTovt1g9w1aQcXzLRnWFe33IZUVTKgKYdd7d
+         qsIkwoR104EhumqoKL3t9SlM6WEB+XdazHkMwQUwc/9REJEC5rIft6DLXtwF8d4GutLn
+         drhvvq24oXdnPXfEwW3u0A0uwdoo0hF9/RMA7EfJtwmC7e6BMB0d4dMY8NawqhChV2O4
+         jUYw==
+X-Gm-Message-State: AOJu0YwlLntJ0Q9woja36ycwbvGQDSTheKCmBELO27SeNpuYUcYgcLSx
+	4zgxRIayDEHftUCIurW+N6E359X56cXKvQsnhQD6d9cGqOh2HsDpr2QRGQ7xFg==
+X-Gm-Gg: AfdE7cnWX+DHX13VI2HN47hYl1LCvIcUf7axwW+ixZdbFiiAUkj6FXnAS4B2jgcFgqn
+	Y7r1UnFUyPYem2HtIeJ2VUWoknfKhwOi1kQMBaK0Hz+TXNMme0L22XTrRjMPRT0PUetZYrtcnsJ
+	AHCeEBjaI1Ie5b8c2+TVt6wZwQoLgTmi3LASn9ys38mnkMDJeRKJNWkmpsTK9WbDBHlmUK0o5Wo
+	ByWeJL9IZZB2R6US/iinuiuUJqOSRpYs1z/3wcolKdc/mBk6/WllAaWSbq3CeeJzg2ffFVnkq0F
+	C3BSzROf6WBRa4hYNZfIoWgsyGxY9+1H72otGdtwZ9HTRWAy7pR4xisgq7riEPoxDgFxHjm0xW5
+	DBxH2XU0lzdLqqXeE+ml9d5g7j6LcLq3sEN+cnU/qaUBGHJcBAz4H2uYP4/yPXRPo29wxkT3si8
+	Yw/nq2cWL2CgIplp8Ch2sxsA9HpH5oPRpZ2bOm1Y2pLwVPDZtXZNitSEqBOgrFs1qeQYLXW6tx
+X-Received: by 2002:ac8:5a45:0:b0:51b:fb4f:afdc with SMTP id d75a77b69052e-51e42364132mr10365921cf.11.1784021943874;
+        Tue, 14 Jul 2026 02:39:03 -0700 (PDT)
+Received: from localhost.localdomain ([202.8.105.115])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51caacf2a75sm111460511cf.13.2026.07.14.02.38.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2026 02:39:03 -0700 (PDT)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>,
-	bpf@vger.kernel.org (open list:BPF [SELFTESTS] (Test Runners & Infrastructure)),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Test bpf_strcat,bpf_strncat kfuncs
-Date: Tue, 14 Jul 2026 17:36:00 +0800
-X-OQ-MSGID: <2f5bc28625860c8215acde8ce06fd423aec2b189.1784021302.git.rongtao@cestc.cn>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <cover.1784021302.git.rongtao@cestc.cn>
-References: <cover.1784021302.git.rongtao@cestc.cn>
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	Matt Mullins <mmullins@mmlx.us>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Sun Jian <sun.jian.kdev@gmail.com>
+Subject: [PATCH bpf v5 0/2] bpf: Reject negative const offsets for buffer pointers
+Date: Tue, 14 Jul 2026 02:38:44 -0700
+Message-ID: <20260714093846.18159-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -76,107 +86,82 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Rong Tao <rongtao@cestc.cn>
+Reject negative effective offsets for PTR_TO_TP_BUFFER and PTR_TO_BUF
+accesses. Calculate the effective access start using signed arithmetic
+to prevent unsigned access-end accounting from wrapping, and cover both
+load-time rejection and the raw tracepoint writable attach-time path.
 
-Add tests for new kfuncs bpf_strcat() and bpf_strncat().
-
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
- .../selftests/bpf/prog_tests/string_kfuncs.c        |  2 ++
- .../selftests/bpf/progs/string_kfuncs_failure1.c    | 13 +++++++++++++
- .../selftests/bpf/progs/string_kfuncs_failure2.c    |  2 ++
- .../selftests/bpf/progs/string_kfuncs_success.c     |  3 +++
- 4 files changed, 20 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-index 300032a19445..460567ef622a 100644
---- a/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-+++ b/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-@@ -24,6 +24,8 @@ static const char * const test_cases[] = {
- 	"strcasestr",
- 	"strnstr",
- 	"strncasestr",
-+	"strcat",
-+	"strncat",
- };
- 
- void run_too_long_tests(void)
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-index bddc4e8579d2..29bc7eabbb6a 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-@@ -8,6 +8,7 @@
- 
- char *user_ptr = (char *)1;
- char *invalid_kern_ptr = (char *)-1;
-+char kern_buf[32] = { "hello" };
- 
- /*
-  * When passing userspace pointers, the error code differs based on arch:
-@@ -53,6 +54,10 @@ SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null1(void *ctx) { return
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null2(void *ctx) { return bpf_strnstr("hello", NULL, 1); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strncasestr_null1(void *ctx) { return bpf_strncasestr(NULL, "hello", 1); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strncasestr_null2(void *ctx) { return bpf_strncasestr("hello", NULL, 1); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strcat_null1(void *ctx) { return bpf_strcat(NULL, 6, "hello"); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strcat_null2(void *ctx) { return bpf_strcat(kern_buf, sizeof(kern_buf), NULL); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strncat_null1(void *ctx) { return bpf_strncat(NULL, 6, "hello", 2); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strncat_null2(void *ctx) { return bpf_strncat(kern_buf, sizeof(kern_buf), NULL, 2); }
- 
- /* Passing userspace ptr to string kfuncs */
- SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_user_ptr1(void *ctx) { return bpf_strcmp(user_ptr, "hello"); }
-@@ -79,6 +84,10 @@ SEC("syscall") __retval(USER_PTR_ERR) int test_strnstr_user_ptr1(void *ctx) { re
- SEC("syscall") __retval(USER_PTR_ERR) int test_strnstr_user_ptr2(void *ctx) { return bpf_strnstr("hello", user_ptr, 1); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strncasestr_user_ptr1(void *ctx) { return bpf_strncasestr(user_ptr, "hello", 1); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strncasestr_user_ptr2(void *ctx) { return bpf_strncasestr("hello", user_ptr, 1); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcat_user_ptr1(void *ctx) { return bpf_strcat(user_ptr, 1, "hello"); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcat_user_ptr2(void *ctx) { return bpf_strcat(kern_buf, sizeof(kern_buf), user_ptr); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strncat_user_ptr1(void *ctx) { return bpf_strncat(user_ptr, 1, "hello", 2); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strncat_user_ptr2(void *ctx) { return bpf_strncat(kern_buf, sizeof(kern_buf), user_ptr, 1); }
- 
- #endif /* __TARGET_ARCH_s390 */
- 
-@@ -107,5 +116,9 @@ SEC("syscall") __retval(-EFAULT) int test_strnstr_pagefault1(void *ctx) { return
- SEC("syscall") __retval(-EFAULT) int test_strnstr_pagefault2(void *ctx) { return bpf_strnstr("hello", invalid_kern_ptr, 1); }
- SEC("syscall") __retval(-EFAULT) int test_strncasestr_pagefault1(void *ctx) { return bpf_strncasestr(invalid_kern_ptr, "hello", 1); }
- SEC("syscall") __retval(-EFAULT) int test_strncasestr_pagefault2(void *ctx) { return bpf_strncasestr("hello", invalid_kern_ptr, 1); }
-+SEC("syscall") __retval(-EFAULT) int test_strcat_pagefault1(void *ctx) { return bpf_strcat(invalid_kern_ptr, 1, "hello"); }
-+SEC("syscall") __retval(-EFAULT) int test_strcat_pagefault2(void *ctx) { return bpf_strcat(kern_buf, sizeof(kern_buf), invalid_kern_ptr); }
-+SEC("syscall") __retval(-EFAULT) int test_strncat_pagefault1(void *ctx) { return bpf_strncat(invalid_kern_ptr, 1, "hello", 2); }
-+SEC("syscall") __retval(-EFAULT) int test_strncat_pagefault2(void *ctx) { return bpf_strncat(kern_buf, sizeof(kern_buf), invalid_kern_ptr, 2); }
- 
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-index 412c53b87b18..38f0a5f326b5 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-@@ -23,5 +23,7 @@ SEC("syscall") int test_strstr_too_long(void *ctx) { return bpf_strstr(long_str,
- SEC("syscall") int test_strcasestr_too_long(void *ctx) { return bpf_strcasestr(long_str, "hello"); }
- SEC("syscall") int test_strnstr_too_long(void *ctx) { return bpf_strnstr(long_str, "hello", sizeof(long_str)); }
- SEC("syscall") int test_strncasestr_too_long(void *ctx) { return bpf_strncasestr(long_str, "hello", sizeof(long_str)); }
-+SEC("syscall") int test_strcat_too_long(void *ctx) { return bpf_strcat(long_str, sizeof(long_str), "hello"); }
-+SEC("syscall") int test_strncat_too_long(void *ctx) { return bpf_strncat(long_str, sizeof(long_str), "hello", 3); }
- 
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-index f65b1226a81a..b45e559a3178 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-@@ -6,6 +6,7 @@
- #include "errno.h"
- 
- char str[] = "hello world";
-+char buf[32] = "hello";
- 
- #define __test(retval) SEC("syscall") __success __retval(retval)
- 
-@@ -59,5 +60,7 @@ __test(-ENOENT) int test_strncasestr_notfound1(void *ctx) { return bpf_strncases
- __test(-ENOENT) int test_strncasestr_notfound2(void *ctx) { return bpf_strncasestr(str, "hello", 4); }
- __test(-ENOENT) int test_strncasestr_notfound3(void *ctx) { return bpf_strncasestr("", "a", 0); }
- __test(0) int test_strncasestr_empty(void *ctx) { return bpf_strncasestr(str, "", 1); }
-+__test(5) int test_strcat_success(void *ctx) { return bpf_strcat(buf, sizeof(buf), "world"); }
-+__test(3) int test_strncat_success(void *ctx) { return bpf_strncat(buf, sizeof(buf), "world", 3); }
- 
- char _license[] SEC("license") = "GPL";
+Changes in v5:
+
+- Simplify __check_buffer_access() to reject a negative effective start
+  after confirming that var_off is constant. Validate the combined
+  offset instead of rejecting negative instruction offsets separately.
+  Drop the duplicate BPF_MAX_VAR_OFF check because pointer arithmetic
+  already bounds constant offsets, and remove the redundant size < 0
+  check.
+- Switch the raw tracepoint writable attach tests from nbd_send_request
+  to bpf_testmod_test_writable_bare_tp, avoiding the NBD configuration
+  dependency and its false-pass condition.
+- Split the attach coverage into named subtests and require
+  bpf_raw_tracepoint_open() to return -EINVAL.
+- Add verifier coverage for a negative constant PTR_TO_BUF offset.
+
+Changes in v4:
+
+- Correct the Fixes tag to point to 022ac0750883, where pointer offsets
+  were folded into reg->var_off.
+- Drop the end > U32_MAX check, which is unreachable after bounding const
+  var_off with BPF_MAX_VAR_OFF while keeping instruction offsets and
+  access sizes bounded.
+
+Changes in v3:
+
+- Check constant var_off against +/-BPF_MAX_VAR_OFF before computing
+  the effective access range, matching the existing verifier pointer
+  offset convention.
+- Keep explicit rejection of negative instruction offsets and keep
+  bounded negative constant var_off valid when the effective offset is
+  non-negative.
+
+Changes in v2:
+
+- Split the kernel fix and selftests into separate patches.
+- Add an attach-time raw tracepoint writable test that exercises
+  max_tp_access against nbd_send_request's writable size.
+- Adjust selftest formatting to use the 100 character line width.
+
+Tested:
+
+- ./test_progs -v -t verifier_raw_tp_writable
+- ./test_progs -v -t verifier_ptr_to_buf
+- ./test_progs -v -t raw_tp_writable_reject_bad_access
+- ./test_progs -v -t raw_tp_writable_test_run
+
+v4: https://lore.kernel.org/bpf/20260708090151.151729-1-sun.jian.kdev@gmail.com/
+v3: https://lore.kernel.org/bpf/20260708040715.116680-1-sun.jian.kdev@gmail.com/
+v2: https://lore.kernel.org/bpf/20260707060804.93561-1-sun.jian.kdev@gmail.com/
+v1: https://lore.kernel.org/bpf/20260703035137.109608-1-sun.jian.kdev@gmail.com/
+
+
+Sun Jian (2):
+  bpf: Reject negative const offsets for buffer pointers
+  selftests/bpf: Cover negative buffer pointer offsets
+
+ kernel/bpf/verifier.c                         | 31 ++++++----
+ .../raw_tp_writable_reject_bad_access.c       | 57 +++++++++++++++++++
+ .../raw_tp_writable_reject_nbd_invalid.c      | 43 --------------
+ .../selftests/bpf/prog_tests/verifier.c       |  2 +
+ .../selftests/bpf/progs/verifier_ptr_to_buf.c | 27 +++++++++
+ .../bpf/progs/verifier_raw_tp_writable.c      | 16 ++++++
+ 6 files changed, 121 insertions(+), 55 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_bad_access.c
+ delete mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_ptr_to_buf.c
+
+
+base-commit: 7cbd0c4cebe4c9f678d15e6b9ba975e1155a107f
 -- 
-2.55.0
+2.43.0
 
