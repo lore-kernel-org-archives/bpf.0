@@ -1,109 +1,173 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC7443D4F7;
-	Tue, 14 Jul 2026 09:49:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3BA036492A
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 10:19:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784022599; cv=none; b=XMvFbRTHOpnv7tBU4DM832LpAE9q7sTM5KN11fYCLcDpqjnzqwU/QZKT8NbDIFeLyR6xzXPvHunS3pmJrgkL/4F9kITwYV0IPzO3GMLwexsrAdlxWQTyqcjFPic/HVafBilh9MKkkYLRaBpumRe0HPduLSIJxtrEAzGRgzB6ZLo=
+	t=1784024374; cv=none; b=L31aCsbE/B65hBu6MTHIEg+qhH/NiYJQjlpmhNZ4Z2INrTtczzM35Hx+Xtr8fGSTMYrz9RpBWAYG2RCM2s1PD4+9tvB01njI+Z46Wu7IF9LNOaMCY/AOJOFRDtAwv9+jDMbKZaab4OE1aK0bnDjhFIq+tlHk/BFXcDgGceHy9oA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784022599; c=relaxed/simple;
-	bh=ZepVuhzW21/hUCaWiKuOK4e1luh7TWvi44wNV50RL3I=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=uMAM7T6ybiFW+3kLpZyjG2/OnxF50eX12IqZwajLkoOgxCXAbUe4UXDZQ1Zx92fVlBpW974xnqbC3+t0/KtI4iC1Uehw2HrOzYwx4xkWcHCTFgOrtCcj5vM24V8lGRNd2K+IjifxRuF/ZumJzfTTjpxNHfbreYpvdXrRJvhU5YQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZVZmAc6Q; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784024374; c=relaxed/simple;
+	bh=u9kcBbIaszkd8/pWZ3oWtJ7KW87Gtk32GB1zoydXttQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=jIOy3op1jRd8POaC3/eY0kTkUqtCiNCvdIehWAhymzeVOFCk5PsiXqaIcZUcDAic7cFwNBeeUVUHyDEOkEZdN0p/cEVsLeB2gWR+MWJwihoIDKS8kJ3qUy6vjqMr46eMK2DUNJ5rqD8PDsvtCsxaOVQJu6rBBehmebiTOzMMOe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cdU9EGrw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZVZmAc6Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F87B1F000E9;
-	Tue, 14 Jul 2026 09:49:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cdU9EGrw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AD381F000E9;
+	Tue, 14 Jul 2026 10:19:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784022595;
-	bh=HctaYC25xmi723t9mpPbmCLQP3IBod29aBYdTrLa6xA=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=ZVZmAc6QGPyLQjp4Kd7I0ZXRjuVkK/fsGkjzg7Dr9mX68oMKo9p3bz+tPlc9xds1y
-	 UL5BGrb2JOckIQ3juGIhe7VJK+QkjeM6nnsuJYMzZXYtJXKNQ99wMk/eiz7pupxkAQ
-	 jIWNA6wpCcUeZdhpNzb3kZeMeNa6FQp7AsWpRzMLvYH+0NX5EVmxxAD3VIaqycp5n/
-	 fR8iCRtltXt5S3iLSXOf/lOTBdD8B0DVWq/fclNd47VRzfLxNulbsMTZnWwsk9qtQI
-	 MksoMVOSqDFAVPPTUlB7Tza6Oua913SFqFJWY+RR5/0oikgUyWkmQy2X++jb9LUBXd
-	 pI9mgDHReg4Zw==
+	s=k20260515; t=1784024373;
+	bh=pOySnvlciH8zvefst10OFK+Mj6nmoL9r9Rnh9c/PEI8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=cdU9EGrwKy/1lBcNNBcOSndbgj/EWfPQ4XT5hbBBmGzIkHS8Bjf4FaeWl/rur5oBM
+	 TLNq6VMzF/zE+B2ySWmzMH+rPovOolHWZWBtMqOTsfuwmqO/JH0ngXE35rNGTj7R0v
+	 eihJEkLfYnN6kjiPTX1hSwGQBu8ajzBiV6NwsYiIO9nE2nHWbGdJhAcx80INc11et8
+	 a93RntCTuY+/C4m0XSQ7ZPIyY39CyGiK2mQ5+MT3NylesAkVkZ0qpJreH6IS0pffQj
+	 ErR/LaIfkq71uuoGo+6TQWQJpYjodmJAGafn7rpEkGSxRtbASYKqfDFVwqpwuC2sbk
+	 Iw1NZvPKplzFw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/2] bpf: add bpf_strcat,bpf_strncat kfunc
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Rong Tao" <rtoax@foxmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <tencent_59689407B1C3204B08362BEEF244A5FE5505@qq.com>
+References: <cover.1784021302.git.rongtao@cestc.cn>
+ <tencent_59689407B1C3204B08362BEEF244A5FE5505@qq.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 14 Jul 2026 10:19:32 +0000
+Message-Id: <20260714101933.4AD381F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH mm-hotfixes v2 3/4] mm/ptdump: always stabilise against
- page table freeing using init_mm
-From: Lorenzo Stoakes <ljs@kernel.org>
-To: Kiryl Shutsemau <kas@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Suren Baghdasaryan <surenb@google.com>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Shakeel Butt <shakeel.butt@linux.dev>, David Hildenbrand <david@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
- Uladzislau Rezki <urezki@gmail.com>, Toshi Kani <toshi.kani@hpe.com>, 
- Dave Hansen <dave.hansen@linux.intel.com>, 
- Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Dev Jain <dev.jain@arm.com>, 
- Ryan Roberts <ryan.roberts@arm.com>, David Carlier <devnexen@gmail.com>, 
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org
-In-Reply-To: <alUdUKk0zGmskSib@thinkstation>
-References: <20260712-series-vmap-race-fix-v2-0-ad134cc3a12a@kernel.org>
- <20260712-series-vmap-race-fix-v2-3-ad134cc3a12a@kernel.org>
- <alUdUKk0zGmskSib@thinkstation>
-Date: Tue, 14 Jul 2026 10:49:39 +0100
-Message-Id: <178402257936.69739.4642059153515341814.b4-reply@b4>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1203; i=ljs@kernel.org;
- h=from:subject:message-id; bh=ZepVuhzW21/hUCaWiKuOK4e1luh7TWvi44wNV50RL3I=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLLC2Exfud25crSsetf8mCsrnNnW9nV/7tLPT5/09cimd
- V/3ln6W6ChlYRDjYpAVU2R5/kV8f5BI2LzOC/5uMHNYmUCGMHBxCsBEfG8w/Heo1PuZ62TUtlIh
- 9PHGKMH9iscZlofvkWJ9l3JPsbM15D4jw7rfdXP/RV1/G7ynQ8DgSIePeCH/0w8C349m1Jy4KKe
- pxQsA
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-On 2026-07-13 18:19 +0100, Kiryl Shutsemau wrote:
-> On Sun, Jul 12, 2026 at 11:42:26AM +0100, Lorenzo Stoakes wrote:
-> > x86 and arm64 invoke ptdump_walk_pgd() with non-init_mm mm whilst still
-> > walking kernel page table ranges.
->
-> The code looks good to me.
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+s) to consider:
+- [Critical] Arbitrary Kernel Memory Write via Verifier Bypass
+- [High] Missing page fault protection leading to sleeping in atomic context
+- [High] Time-Of-Check to Time-Of-Use (TOCTOU) race leading to unbounded lo=
+op and soft lockup
+- [Medium] Unbounded out-of-bounds read on destination buffer
+- [Medium] Unbounded out-of-bounds read on source buffer
+--
 
-Thanks!
+--- Patch [1]: [PATCH bpf-next 1/2] bpf: add bpf_strcat,bpf_strncat kfunc -=
+--
+commit a7b2e5fa67dde4d93faf939b8283a2aa59b8ca2d
+Author: Rong Tao <rongtao@cestc.cn>
 
->
-> Same comment as on patch 1 about the commit message structure, only
-> more so: the race itself is never actually stated -- that these walks
-> hold only the walked mm's lock, while the freeing exclusion built by
-> patches 1 and 2 hangs off the init_mm lock. The fact that makes it
-> possible (x86 shares kernel pgd entries with every mm) is hidden in a
-> parenthesis. And the last three paragraphs read like v2 changelog
-> rather than commit message material.
+bpf: add bpf_strcat,bpf_strncat kfunc
 
-OK, will reword.
+This commit introduces bpf_strcat and bpf_strncat kfuncs to allow string
+concatenation in BPF programs. It requires the destination buffer size as a
+parameter for safety.
 
->
-> > We take this after mmap write locking the non-init_mm mm. Nothing acquires
-> > the init_mm lock first before locking an arbitrary mm, so no deadlock is
-> > possible.
->
-> Do we want to document this locking order somewhere?
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index c18f1e16edee4..e99b643136822 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+[ ... ]
+> @@ -4195,6 +4195,95 @@ __bpf_kfunc int bpf_strncasestr(const char *s1__ig=
+n, const char *s2__ign,
+>  	return __bpf_strnstr(s1__ign, s2__ign, len, true);
+>  }
+> =20
+> +static int __bpf_strncat(char *dst, u32 dsz, const char *src, u32 sz)
+> +{
+> +	int dlen, slen, space, copied;
+> +	char cs =3D '?';
+> +
+> +	if (!copy_from_kernel_nofault_allowed(dst, 1) ||
+> +	    !copy_from_kernel_nofault_allowed(src, 1)) {
+> +		return -ERANGE;
+> +	}
+> +
+> +	dlen =3D bpf_strnlen(dst, XATTR_SIZE_MAX);
 
-I guess Documentation/mm/process_addrs.rst is the best place, I'll send that as
-a follow-up separately. todo++; :)
+[Severity: Medium]
+Does this code perform an unbounded read on the destination buffer? The lim=
+it
+should be bounded by the provided size dsz, rather than statically set to
+XATTR_SIZE_MAX.
 
->
-> --
->   Kiryl Shutsemau / Kirill A. Shutemov
->
+> +	if (dlen < 0)
+> +		return dlen;
+> +	slen =3D bpf_strnlen(src, XATTR_SIZE_MAX);
 
-Thanks, Lorenzo
+[Severity: Medium]
+Does this scan read out-of-bounds on the source buffer? The limit could be
+bounded by the requested copy length sz rather than unconditionally reading
+up to XATTR_SIZE_MAX.
 
+> +	if (slen < 0)
+> +		return slen;
+> +
+> +	if (dlen >=3D dsz || sz =3D=3D 0 || dsz =3D=3D 0)
+> +		return -EINVAL;
+> +
+> +	space =3D dsz - dlen;
+> +	if (space <=3D 1 || space < min(slen, sz) + 1)
+> +		return -E2BIG;
+> +
+> +	for (copied =3D 0; copied < space - 1 && copied < sz; copied++) {
+
+[Severity: High]
+Does this code introduce a Time-Of-Check to Time-Of-Use race? The loop boun=
+ds
+omit checking copied < slen, relying entirely on encountering a null
+terminator.
+
+If a concurrent thread modifies the source buffer to remove the null termin=
+ator
+after bpf_strnlen() executes, could this loop run out of bounds and lead to=
+ a
+soft lockup?
+
+> +		__get_kernel_nofault(&cs, src, char, err_out);
+
+[Severity: High]
+Does this sequence lack page fault protection? Unlike other string helpers,
+__bpf_strncat() fails to wrap its memory accesses in guard(pagefault)().
+
+If a BPF program executing in a non-sleepable context calls this on an unma=
+pped
+address, it seems the generic page fault handler will attempt to take sleep=
+able
+locks.
+
+> +		if (cs =3D=3D '\0')
+> +			break;
+> +
+> +		__put_kernel_nofault(dst + dlen + copied, &cs, char, err_out);
+
+[Severity: Critical]
+Can this write to arbitrary kernel memory? The function writes to the unche=
+cked
+destination pointer.
+
+Because the bpf_strcat() kfunc signature uses the __ign suffix for dst__ign,
+verifier safety checks are bypassed. Any user capable of loading BPF progra=
+ms
+could potentially use this to write user-controlled bytes to arbitrary kern=
+el
+memory.
+
+> +
+> +		src++;
+> +	}
+[ ... ]
+> +__bpf_kfunc int bpf_strcat(char *dst__ign, u32 dst__sz, const char *src_=
+_ign)
+
+[Severity: Critical]
+Does the dst__ign argument bypass verifier checks? The __ign suffix explici=
+tly
+instructs the BPF verifier to ignore this argument, which removes all memory
+safety and bounds checks for the destination pointer.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1784021302.gi=
+t.rongtao@cestc.cn?part=3D1
