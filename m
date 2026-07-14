@@ -1,966 +1,135 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4C7A362133
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 17:48:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D54B3CA4B9;
+	Tue, 14 Jul 2026 18:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784051348; cv=none; b=IaW35Jola67wO1LefdZnigbnitzvlyEThiGFsFoJwpDYxDEE9ShDKjISURoHLcV8SN2JmIJQg3pu/OTlagkIViGJkkq2Lr5VtSARBnKQAySKz4XHxc4Wmrc9kC3SWaAttunSQxbFwHCgOdqfbTVM/jf/sWxcljMQWRC073KC4S8=
+	t=1784052383; cv=none; b=rKJsJxS8TN8ZeBTKNzI1ctjlP+INsbkfCq4vVgU1URC25vGHKSyCz16Lc1NoXiODaQoTwm5s1YZBgzuP4D4O61RE7cHPtwV6o+FRNvDqGICMuTi6FhNHn22jNiXVELDDFSkk1y12BPDaHnst7sWjEnoDrdX40+m3m9BaSnzYb18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784051348; c=relaxed/simple;
-	bh=bTpIqRJD7Q7xr7H9o9DhZ24FTRPWuwH/UVe+e/TPYhw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=d9OjrTCZGbAoqVhPxepw09uEeV8WRNAsmQlG7UKPe9VU2ziq4HF3m0AaCbkO4/RWa6prkRHZG5nB0fpr/hZgY/+e05gVzOUPfCcGeME5DtLGeaixWGe9n1oACl/UPv1F9bsmEcV+2jqgiNe/hbW5Wmj1uoF/OR6HUG6KRIX18vE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=BiiqVhOr; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1784052383; c=relaxed/simple;
+	bh=I4vFO55K1s9+271KQFTCPFyP2QEfRBU94YL8Fjlva8E=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ZM8BorNbQW4fOlpVal9BR1ivQ9F3F454g0Tmv1uOOlfUJk5+JpoMRHE2742AbsCfTHntv2RmRz3bZ/e6wyNAsUsFaYYB0vzApQkikJNH6/B6DjrDZEnkBs4C6rpP9UESryKgHuODqxPPWUJ+Th81m2lwP6RcA/NnBFv+L4rQ8m4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=mMSDxHOI; arc=none smtp.client-ip=209.97.182.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="BiiqVhOr"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-493c7902f47so40918215e9.1
-        for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 10:48:38 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="mMSDxHOI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1784051314; x=1784656114; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=/i/x02dtZj5S5NQOerY7DACGhttbTq4eQT4EUMGcGq8=;
-        b=BiiqVhOrb6+tCrrlIcz2CQe+s/4PWaYJgvYqrt8xjntl1NgLL4aV6dLhY1CsgODTrw
-         pQeBobJFxtQ0lnCeSoyz1urHJhpNFFljfVBfce+l34RhZJYdE7UXTHTAP7nZKw/EYdXu
-         VEb+qYOypaMtw8GwA6479JIW3bN6jMUGRxy0z8e/cYk7wfXZwpBgWE+bR3tfDj7+kemj
-         N0WlcbKchbzDudJmRJXzJrz0HLPkiOEMeq/1K9WHFDnPMyMio0uVFGhrZHUmkfTmh3fs
-         7im70EeNOYvg29IAIfvLVmf6GYaHreY3k/+brEGXiSHdFy8zpXVJ6JjHxd3J4AUIzRgZ
-         1prw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784051314; x=1784656114;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/i/x02dtZj5S5NQOerY7DACGhttbTq4eQT4EUMGcGq8=;
-        b=iUYd1bp7CibwsPN0nbChIUHKABt8UR19dR9kd9f61laffxziC1ms6d4oWHRweJbsof
-         kGyhdq4DMGj6Lf0dh+I0Fz8Ute/WWAdRexhAmZQj0mk2saSIm/MxftFPO1I0nh4VLsvJ
-         qZwHu/pLCN5nqQNMGHWvb14NBDY2qgZ82UlbHTcmeGJo9nRdP6s585cNTUmcvzl+Whc7
-         acomxatbpKQIyqZ7fx+oBdFEn/TeiLhbMFYXIOFGmBPr3ag4NfGimWqGEjDhPnOGrlzR
-         sWGC5ooGEuZW5R3SGk/Hz0c3PSZ80uVZ0MlksRxsrZPhCoz26yOYGFcqp4dNYrgi+UHH
-         isJw==
-X-Gm-Message-State: AOJu0YwiR8uGVwAtpY21WQUWe9pPcXxmCxQkgICMOe3JhjL7f9nwCx5h
-	/52DqqVbosiHunpJr3yRtD4UBzYNXmOq3rR29Vr4yonafomDtHrSkFm7LWAdLb2Uk80bPabwEcq
-	cYDthBpg=
-X-Gm-Gg: AfdE7cnLNtuBnD2Ndv7h/A2qQX3eYnml0H2Btb8uB1BhUuHdhgDh6RZ+oFRbWwJucGh
-	j+cjtVyN6v96rVz7uMWORWXeeaGp0qwmn2x1akM14qzjB1hMOxP/TyrTUPa08a+KfXd7nGKtAPF
-	wl93QI1d+AxA1t7XsDgkAY7Jud0f6HgKQQhgQt64d0+7mwBffDp48O3NxLRtPdte+1Jp61atRw/
-	CcP7JceTN/03mDxqol5q1Ja2pZpaagk2KAMIX4uJoILTd4zStsyRsGo32vHau12ucphqyKx7dDC
-	vg6uICjSTd+mvoA44F1DyPXdER0Pm9oUN7kgh+UnOsbxa/ES5fK94/5HmlpKTXPdRUReNnD+VF/
-	IXEyf47FPWrm56S5w+kEESKycktvU0aBFCvapP0RVe7qTAjZwW0V5CHEO54w2m6x2xKnh/4nCi0
-	jmulcmeQkZFZiaZVsAoUyAvaqIuoFpQ+jPQK67NIBJeuG9ReOCghI0/zcAxw==
-X-Received: by 2002:a05:600c:3e15:b0:493:eccb:8cb2 with SMTP id 5b1f17b1804b1-493f882e148mr155052255e9.30.1784051313629;
-        Tue, 14 Jul 2026 10:48:33 -0700 (PDT)
-Received: from cloudflare.com (93-57-92-86.ip163.fastwebnet.it. [93.57.92.86])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f464a96cfsm10275668f8f.20.2026.07.14.10.48.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 10:48:32 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-Date: Tue, 14 Jul 2026 19:48:23 +0200
-Subject: [PATCH RFC net-next 4/6] selftests/bpf: Add tests for
- bpf_dynptr_from_skb_ext
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:In-Reply-To:References:MIME-Version:
+	Content-Transfer-Encoding; bh=FIj06gQZO2J73HIo/WORiPffzOUtPsehf5
+	3MLXgA94k=; b=mMSDxHOI0HaJ7JlBoM5Erp+l/MMFHGcEo/kd08i8zquad2hE3n
+	95PWMZKRGJ0V+tdcCsiy1PZDzEVyTpCdTKmhIR1IBohcnKDwz/5To7zNp/g1XXZ7
+	JvJMZ65tQSMvrE72a7BNvzVQKIWi2w02GCqWT6HArTebXt10oH+AigeIs=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web2 (Coremail) with SMTP id yQQGZQAXwZNlelZq_PPtAg--.1090S2;
+	Wed, 15 Jul 2026 02:05:52 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: eddyz87@gmail.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	chenyy23@mails.tsinghua.edu.cn,
+	daniel@iogearbox.net,
+	emil@etsalapatis.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	martin.lau@linux.dev,
+	memxor@gmail.com,
+	shuah@kernel.org,
+	song@kernel.org,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH bpf-next 1/2] bpf: Check byte type when validating helper stack reads
+Date: Tue, 14 Jul 2026 18:05:11 +0000
+Message-Id: <20260714180512.3910011-1-chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <77e5d785ca08a5fa57c661d9494f4551d0b55425.camel@gmail.com>
+References: <77e5d785ca08a5fa57c661d9494f4551d0b55425.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260714-bpf-meta-inside-skb-ext-v1-4-5871c07a8dd6@cloudflare.com>
-References: <20260714-bpf-meta-inside-skb-ext-v1-0-5871c07a8dd6@cloudflare.com>
-In-Reply-To: <20260714-bpf-meta-inside-skb-ext-v1-0-5871c07a8dd6@cloudflare.com>
-To: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org, kernel-team@cloudflare.com
-X-Mailer: b4 0.15.2
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:yQQGZQAXwZNlelZq_PPtAg--.1090S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZrWrJFW3GFy3Jw4rWrWxJFb_yoW5Ww4UpF
+	4rGw13Wr1kXrZ7C3ZIvF4xta4rGrZ5JFy5uFs5WryUCry5uryaqFWfKrW5CFnrCr1vqayF
+	yF4Sq398ua98AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+	1j6F4UJwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+	FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+	0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
+	x2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Avz4
+	vE14v_XwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIx
+	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+	wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUrhL8U
+	UUUU=
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-Test the bpf_dynptr_from_skb_ext() kfunc and skb_ext survival across
-network stack hooks.
+On Mon, 2026-07-13 at 21:22 +0000, Eduard Zingerman wrote:
+> Sorry, could you please explain again what's wrong with the original check?
+> Here it is:
+>
+>                 if (bpf_is_spilled_reg(&state->stack[spi]) &&
+>                     (state->stack[spi].spilled_ptr.type == SCALAR_VALUE || env->allow_ptr_leaks)) {
+>                         ... accepted ...
+>                 }
+>
+> And it says: if there is a register spill at 'spi':
+> - always allow access if the spilled register is scalar
+> - when allow_ptr_leaks is true, allow access when spilled
+>   register is either scalar or pointer.
+>
+> The goal here is to avoid leaking pointers, and pointers are always 8-bytes.
 
-Cover the dynptr interface with TC-to-TC tests on a tuntap device:
+You're right that this block is a pointer-leak check, and a scalar spill
+can't leak a pointer -- so the fix isn't justified on those grounds. The
+invariant it targets is the other one this function enforces: rejecting
+reads of uninitialized stack when !allow_uninit_stack.
 
-- write/read via bpf_dynptr_read and bpf_dynptr_write
-- write/read via bpf_dynptr_slice and bpf_dynptr_slice_rdwr
-- clone read via bpf_dynptr_clone
-- error paths: no allocation without F_CREATE, invalid flags, read-only
-  enforcement without F_CREATE
-- double allocation: data from first alloc survives second skb_ext_add
+The block just above already gates that:
 
-Cover cross-hook survival by writing skb_ext at TC ingress and reading
-it at later hooks:
+  /* verifier.c:6780 */
+  if ((*stype == STACK_ZERO) ||
+      (*stype == STACK_INVALID && env->allow_uninit_stack)) { ... goto mark; }
 
-- TC -> cgroup/skb ingress (UDP loopback)
-- TC -> socket filter (UDP loopback)
-- TC -> sock_ops passive established (TCP loopback)
-- TC -> LSM inet_conn_established (TCP loopback)
-- cgroup/skb egress -> tp_btf/kfree_skb (survival until skb free)
+For a CAP_BPF-only load allow_uninit_stack is false, so a STACK_INVALID
+byte should reach the -EACCES below. allow_ptr_leaks and allow_uninit_stack
+are both keyed on CAP_PERFMON today but are separate flags; reads-of-invalid
+is independent of pointer leaks. The existing fix for the related
+producer-side bug, 69772f509e08 ("bpf: Don't mark STACK_INVALID as
+STACK_MISC in mark_stack_slot_misc"), frames it the same way:
 
-Cover skb clone isolation:
+  "we should not upgrade STACK_INVALID to STACK_MISC when allow_ptr_leaks
+   is false, since invalid contents shouldn't be read unless the program
+   has the relevant capabilities."
 
-- clone_ext_read: ext read from a mirred clone shares data with
-  original
-- clone_ext_cow: F_CREATE on clone triggers COW, writes to clone do
-  not affect original
+After a 1-byte scalar spill to fp-8, save_register_state() marks only the
+covered byte STACK_SPILL; the sibling fp-7 goes to mark_stack_slot_misc(),
+which (verifier.c:1234) won't promote STACK_INVALID. So slot_type[7]
+(fp-8) is STACK_SPILL and slot_type[6] (fp-7) is STACK_INVALID. When the
+helper walk reaches fp-7, the uninit gate above fails correctly, but the
+spill block accepts it anyway -- bpf_is_spilled_reg() tests
+slot_type[BPF_REG_SIZE-1], the fp-8 sibling, not the fp-7 byte being checked.
 
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
----
- .../bpf/prog_tests/xdp_context_test_run.c          | 412 +++++++++++++++++++++
- tools/testing/selftests/bpf/progs/test_xdp_meta.c  | 392 ++++++++++++++++++++
- 2 files changed, 804 insertions(+)
+The patch makes the fast path cover only bytes it actually marked, so the
+invalid sibling falls through to the -EACCES the upper gate chose for it.
+It's the consumer-side counterpart to 69772f509e08 (producer side) and its
+direct-read selftest f513c3635078: the direct read was already covered, the
+helper-argument path was not.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-index 26159e0499c7..c603f2484803 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-@@ -427,6 +427,338 @@ static void test_tuntap_mirred(struct bpf_program *xdp_prog,
- 	netns_free(ns);
- }
- 
-+/* Send test_payload over loopback UDP to recv_fd */
-+static int send_loopback_udp(int recv_fd)
-+{
-+	struct sockaddr_in addr = {
-+		.sin_family = AF_INET,
-+		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
-+	};
-+	char buf[TEST_PAYLOAD_LEN];
-+	int ret = -1;
-+	int fd = -1;
-+	__be16 port;
-+
-+	port = get_socket_local_port(recv_fd);
-+	if (!ASSERT_GE(port, 0, "get_port"))
-+		goto out;
-+
-+	fd = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (!ASSERT_GE(fd, 0, "socket"))
-+		goto out;
-+
-+	addr.sin_port = port;
-+	sendto(fd, test_payload, TEST_PAYLOAD_LEN, 0,
-+	       (void *)&addr, sizeof(addr));
-+	recvfrom(recv_fd, buf, sizeof(buf), 0, NULL, NULL);
-+	ret = 0;
-+out:
-+	if (fd >= 0)
-+		close(fd);
-+	return ret;
-+}
-+
-+enum udp_reader_type {
-+	READER_CGRP_SKB,
-+	READER_SK_FILTER,
-+};
-+
-+/* Test skb_ext survival across TC ingress -> UDP reader hook */
-+static void test_skb_ext_udp(struct test_xdp_meta *skel, const char *name,
-+			     enum udp_reader_type reader)
-+{
-+	LIBBPF_OPTS(bpf_tc_hook, tc_hook,
-+		    .ifindex = 1 /* IFINDEX_LO */,
-+		    .attach_point = BPF_TC_INGRESS);
-+	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1);
-+	struct bpf_link *reader_link = NULL;
-+	struct netns_obj *ns = NULL;
-+	int server_fd = -1;
-+	int cgroup_fd = -1;
-+	int filter_fd;
-+	int ret;
-+
-+	ns = netns_new(name, true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
-+		return;
-+
-+	cgroup_fd = test__join_cgroup(name);
-+	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
-+		goto cleanup;
-+
-+	server_fd = start_server(AF_INET, SOCK_DGRAM, "127.0.0.1", 0, 0);
-+	if (!ASSERT_GE(server_fd, 0, "start_server"))
-+		goto cleanup;
-+
-+	skel->bss->test_pass = false;
-+
-+	ret = bpf_tc_hook_create(&tc_hook);
-+	if (!ASSERT_OK(ret, "bpf_tc_hook_create"))
-+		goto cleanup;
-+
-+	tc_opts.prog_fd = bpf_program__fd(skel->progs.tc_skb_ext_write);
-+	ret = bpf_tc_attach(&tc_hook, &tc_opts);
-+	if (!ASSERT_OK(ret, "bpf_tc_attach"))
-+		goto cleanup;
-+
-+	switch (reader) {
-+	case READER_CGRP_SKB:
-+		reader_link = bpf_program__attach_cgroup(skel->progs.cgrp_skb_ext_read,
-+							 cgroup_fd);
-+		if (!ASSERT_OK_PTR(reader_link, "attach_cgroup"))
-+			goto cleanup;
-+		break;
-+	case READER_SK_FILTER:
-+		filter_fd = bpf_program__fd(skel->progs.sk_filter_skb_ext_read);
-+		ret = setsockopt(server_fd, SOL_SOCKET, SO_ATTACH_BPF,
-+				 &filter_fd, sizeof(filter_fd));
-+		if (!ASSERT_OK(ret, "attach_socket_filter"))
-+			goto cleanup;
-+		break;
-+	}
-+
-+	if (send_loopback_udp(server_fd))
-+		goto cleanup;
-+
-+	ASSERT_TRUE(skel->bss->test_pass, "test_pass");
-+
-+cleanup:
-+	bpf_link__destroy(reader_link);
-+	bpf_tc_hook_destroy(&tc_hook);
-+	if (server_fd >= 0)
-+		close(server_fd);
-+	if (cgroup_fd >= 0)
-+		close(cgroup_fd);
-+	netns_free(ns);
-+}
-+
-+enum tcp_reader_type {
-+	READER_SKOPS,
-+	READER_LSM,
-+};
-+
-+/* Test skb_ext survival across TC ingress -> TCP reader hook */
-+static void test_skb_ext_tcp(struct test_xdp_meta *skel, const char *name,
-+			     enum tcp_reader_type reader)
-+{
-+	LIBBPF_OPTS(bpf_tc_hook, tc_hook,
-+		    .ifindex = 1 /* IFINDEX_LO */,
-+		    .attach_point = BPF_TC_INGRESS);
-+	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1);
-+	struct bpf_link *reader_link = NULL;
-+	struct netns_obj *ns = NULL;
-+	int server_fd = -1;
-+	int cgroup_fd = -1;
-+	int client_fd = -1;
-+	int conn_fd = -1;
-+	__be16 port;
-+	int ret;
-+
-+	ns = netns_new(name, true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
-+		return;
-+
-+	cgroup_fd = test__join_cgroup(name);
-+	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
-+		goto cleanup;
-+
-+	server_fd = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, 0);
-+	if (!ASSERT_GE(server_fd, 0, "start_server"))
-+		goto cleanup;
-+
-+	port = get_socket_local_port(server_fd);
-+	if (!ASSERT_GE(port, 0, "get_port"))
-+		goto cleanup;
-+
-+	skel->bss->target_port = port;
-+	skel->bss->test_pass = false;
-+
-+	ret = bpf_tc_hook_create(&tc_hook);
-+	if (!ASSERT_OK(ret, "bpf_tc_hook_create"))
-+		goto cleanup;
-+
-+	tc_opts.prog_fd = bpf_program__fd(skel->progs.tc_skb_ext_write_port);
-+	ret = bpf_tc_attach(&tc_hook, &tc_opts);
-+	if (!ASSERT_OK(ret, "bpf_tc_attach"))
-+		goto cleanup;
-+
-+	switch (reader) {
-+	case READER_SKOPS:
-+		reader_link = bpf_program__attach_cgroup(skel->progs.skops_skb_ext_read,
-+							 cgroup_fd);
-+		if (!ASSERT_OK_PTR(reader_link, "attach_skops"))
-+			goto cleanup;
-+		break;
-+	case READER_LSM:
-+		reader_link = bpf_program__attach_lsm(skel->progs.lsm_skb_ext_read);
-+		if (!ASSERT_OK_PTR(reader_link, "attach_lsm"))
-+			goto cleanup;
-+		break;
-+	}
-+
-+	client_fd = connect_to_fd(server_fd, 0);
-+	if (!ASSERT_GE(client_fd, 0, "connect"))
-+		goto cleanup;
-+
-+	conn_fd = accept(server_fd, NULL, NULL);
-+	if (!ASSERT_GE(conn_fd, 0, "accept"))
-+		goto cleanup;
-+
-+	ASSERT_TRUE(skel->bss->test_pass, "test_pass");
-+
-+cleanup:
-+	if (conn_fd >= 0)
-+		close(conn_fd);
-+	if (client_fd >= 0)
-+		close(client_fd);
-+	bpf_link__destroy(reader_link);
-+	bpf_tc_hook_destroy(&tc_hook);
-+	if (server_fd >= 0)
-+		close(server_fd);
-+	if (cgroup_fd >= 0)
-+		close(cgroup_fd);
-+	netns_free(ns);
-+}
-+
-+/* Test skb_ext survives skb clone (via tc mirred).
-+ * dummy_prog runs on the clone (dummy ingress).
-+ */
-+static void test_mirred_clone_ext(struct test_xdp_meta *skel,
-+				  struct bpf_program *dummy_prog)
-+{
-+	LIBBPF_OPTS(bpf_tc_hook, tc_hook, .attach_point = BPF_TC_INGRESS);
-+	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1);
-+	struct netns_obj *ns = NULL;
-+	int dummy_ifindex;
-+	int tap_ifindex;
-+	int tap_fd = -1;
-+	int ret;
-+
-+	skel->bss->test_pass = false;
-+
-+	ns = netns_new("mirred_clone", true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
-+		return;
-+
-+	/* Dummy dev: attach reader */
-+	SYS(close, "ip link add name " DUMMY_NAME " type dummy");
-+	SYS(close, "ip link set dev " DUMMY_NAME " up");
-+
-+	dummy_ifindex = if_nametoindex(DUMMY_NAME);
-+	if (!ASSERT_GE(dummy_ifindex, 0, "dummy_ifindex"))
-+		goto close;
-+
-+	tc_hook.ifindex = dummy_ifindex;
-+	ret = bpf_tc_hook_create(&tc_hook);
-+	if (!ASSERT_OK(ret, "dummy_hook_create"))
-+		goto close;
-+
-+	tc_opts.prog_fd = bpf_program__fd(dummy_prog);
-+	ret = bpf_tc_attach(&tc_hook, &tc_opts);
-+	if (!ASSERT_OK(ret, "dummy_attach"))
-+		goto close;
-+
-+	/* TAP dev: attach writer + mirred to dummy */
-+	tap_fd = open_tuntap(TAP_NAME, true);
-+	if (!ASSERT_GE(tap_fd, 0, "open_tuntap"))
-+		goto close;
-+
-+	SYS(close, "ip link set dev " TAP_NAME " up");
-+
-+	tap_ifindex = if_nametoindex(TAP_NAME);
-+	if (!ASSERT_GE(tap_ifindex, 0, "tap_ifindex"))
-+		goto close;
-+
-+	tc_hook.ifindex = tap_ifindex;
-+	ret = bpf_tc_hook_create(&tc_hook);
-+	if (!ASSERT_OK(ret, "tap_hook_create"))
-+		goto close;
-+
-+	tc_opts.prog_id = 0;
-+	tc_opts.prog_fd = bpf_program__fd(skel->progs.tc_skb_ext_write);
-+	ret = bpf_tc_attach(&tc_hook, &tc_opts);
-+	if (!ASSERT_OK(ret, "tap_attach"))
-+		goto close;
-+
-+	SYS(close, "tc filter add dev " TAP_NAME " ingress "
-+		   "protocol all matchall "
-+		   "action mirred ingress mirror dev " DUMMY_NAME);
-+
-+	ret = write_test_packet(tap_fd);
-+	if (!ASSERT_OK(ret, "write_test_packet"))
-+		goto close;
-+
-+	ASSERT_TRUE(skel->bss->test_pass, "test_pass");
-+
-+close:
-+	if (tap_fd >= 0)
-+		close(tap_fd);
-+	netns_free(ns);
-+}
-+
-+/* Test skb_ext survival until skb free: cgroup/skb egress -> kfree_skb.
-+ * Send UDP to a closed port. The packet is dropped, triggering kfree_skb.
-+ */
-+static void test_cgrp_egress_to_kfree_skb(struct test_xdp_meta *skel)
-+{
-+	struct sockaddr_in addr = {
-+		.sin_family = AF_INET,
-+		.sin_port = htons(4321),
-+		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
-+	};
-+	struct bpf_link *cg_link = NULL;
-+	struct bpf_link *tp_link = NULL;
-+	struct netns_obj *ns = NULL;
-+	int cgroup_fd = -1;
-+	char buf[1];
-+	int fd = -1;
-+	int ret;
-+
-+	cgroup_fd = test__join_cgroup("/cgrp_to_kfree");
-+	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
-+		return;
-+
-+	ns = netns_new("cgrp_to_kfree", true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
-+		goto cleanup;
-+
-+	skel->bss->test_pass = false;
-+
-+	cg_link = bpf_program__attach_cgroup(skel->progs.cgrp_skb_ext_write,
-+					     cgroup_fd);
-+	if (!ASSERT_OK_PTR(cg_link, "attach_cgroup"))
-+		goto cleanup;
-+
-+	tp_link = bpf_program__attach_trace(skel->progs.tp_kfree_skb_ext_read);
-+	if (!ASSERT_OK_PTR(tp_link, "attach_tp"))
-+		goto cleanup;
-+
-+	fd = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (!ASSERT_GE(fd, 0, "socket"))
-+		goto cleanup;
-+
-+	ret = connect(fd, (void *)&addr, sizeof(addr));
-+	if (!ASSERT_OK(ret, "connect"))
-+		goto cleanup;
-+
-+	send(fd, test_payload, TEST_PAYLOAD_LEN, 0);
-+
-+	/* Wait for ICMP error -- confirms the packet was freed */
-+	ret = recv(fd, buf, sizeof(buf), 0);
-+	ASSERT_EQ(errno, ECONNREFUSED, "recv_econnrefused");
-+
-+	ASSERT_TRUE(skel->bss->test_pass, "test_pass");
-+
-+cleanup:
-+	if (fd >= 0)
-+		close(fd);
-+	bpf_link__destroy(tp_link);
-+	bpf_link__destroy(cg_link);
-+	netns_free(ns);
-+	if (cgroup_fd >= 0)
-+		close(cgroup_fd);
-+}
-+
- void test_xdp_context_tuntap(void)
- {
- 	struct test_xdp_meta *skel = NULL;
-@@ -515,6 +847,86 @@ void test_xdp_context_tuntap(void)
- 			    skel->progs.helper_skb_change_proto,
- 			    NULL, /* tc prio 2 */
- 			    &skel->bss->test_pass);
-+	/* Tests for BPF dynptr from skb_ext */
-+	if (test__start_subtest("tc_skb_ext__write_read"))
-+		test_tuntap(NULL, /* xdp */
-+			    skel->progs.tc_skb_ext_write,
-+			    skel->progs.tc_skb_ext_read,
-+			    &skel->bss->test_pass);
-+	if (test__start_subtest("tc_skb_ext__write_clone_read"))
-+		test_tuntap(NULL, /* xdp */
-+			    skel->progs.tc_skb_ext_write,
-+			    skel->progs.tc_skb_ext_clone_read,
-+			    &skel->bss->test_pass);
-+	if (test__start_subtest("tc_skb_ext__write_slice_read"))
-+		test_tuntap(NULL, /* xdp */
-+			    skel->progs.tc_skb_ext_write,
-+			    skel->progs.tc_skb_ext_slice_read,
-+			    &skel->bss->test_pass);
-+	if (test__start_subtest("tc_skb_ext__slice_write_read"))
-+		test_tuntap(NULL, /* xdp */
-+			    skel->progs.tc_skb_ext_slice_write,
-+			    skel->progs.tc_skb_ext_read,
-+			    &skel->bss->test_pass);
-+	if (test__start_subtest("tc_skb_ext__no_alloc"))
-+		test_tuntap(NULL, /* xdp */
-+			    skel->progs.tc_skb_ext_no_alloc,
-+			    NULL, /* tc prio 2 */
-+			    &skel->bss->test_pass);
-+	if (test__start_subtest("tc_skb_ext__invalid_flags"))
-+		test_tuntap(NULL, /* xdp */
-+			    skel->progs.tc_skb_ext_invalid_flags,
-+			    NULL, /* tc prio 2 */
-+			    &skel->bss->test_pass);
-+	if (test__start_subtest("tc_skb_ext__rdonly"))
-+		test_tuntap(NULL, /* xdp */
-+			    skel->progs.tc_skb_ext_rdonly,
-+			    NULL, /* tc prio 2 */
-+			    &skel->bss->test_pass);
-+	if (test__start_subtest("tc_skb_ext__double_alloc"))
-+		test_tuntap(NULL, /* xdp */
-+			    skel->progs.tc_skb_ext_double_alloc,
-+			    NULL, /* tc prio 2 */
-+			    &skel->bss->test_pass);
-+
-+	test_xdp_meta__destroy(skel);
-+}
-+
-+static void test_mirred_clone_ext_cow(struct test_xdp_meta *skel)
-+{
-+	struct bpf_link *tp_link;
-+
-+	skel->bss->clone_cow_done = false;
-+	tp_link = bpf_program__attach(skel->progs.tp_kfree_skb_cow_check);
-+	if (!ASSERT_OK_PTR(tp_link, "attach_tp"))
-+		return;
-+
-+	test_mirred_clone_ext(skel, skel->progs.tc_skb_ext_clone_redir_cow);
-+	bpf_link__destroy(tp_link);
-+}
-+
-+void test_skb_ext_cross_hook(void)
-+{
-+	struct test_xdp_meta *skel = NULL;
-+
-+	skel = test_xdp_meta__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open and load skeleton"))
-+		return;
-+
-+	if (test__start_subtest("tc_to_cgrp"))
-+		test_skb_ext_udp(skel, "tc_to_cgrp", READER_CGRP_SKB);
-+	if (test__start_subtest("tc_to_sk_filter"))
-+		test_skb_ext_udp(skel, "tc_to_sk_filter", READER_SK_FILTER);
-+	if (test__start_subtest("tc_to_lsm"))
-+		test_skb_ext_tcp(skel, "tc_to_lsm", READER_LSM);
-+	if (test__start_subtest("tc_to_skops"))
-+		test_skb_ext_tcp(skel, "tc_to_skops", READER_SKOPS);
-+	if (test__start_subtest("cgrp_egress_to_kfree_skb"))
-+		test_cgrp_egress_to_kfree_skb(skel);
-+	if (test__start_subtest("clone_ext_read"))
-+		test_mirred_clone_ext(skel, skel->progs.tc_skb_ext_read);
-+	if (test__start_subtest("clone_ext_cow"))
-+		test_mirred_clone_ext_cow(skel);
- 
- 	test_xdp_meta__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_meta.c b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
-index fa73b17cb999..25fbdc00657c 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_meta.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
-@@ -3,9 +3,11 @@
- 
- #include <bpf/bpf_endian.h>
- #include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
- #include <errno.h>
- 
- #include "bpf_kfuncs.h"
-+#include "bpf_misc.h"
- #include "bpf_tracing_net.h"
- 
- #define META_SIZE 32
-@@ -64,6 +66,21 @@ static bool check_skb_metadata(const char *file, int line, struct __sk_buff *skb
- 
- #define check_skb_metadata(skb) check_skb_metadata(__FILE__, __LINE__, skb)
- 
-+/* Test packets carry test metadata pattern as payload. */
-+static bool is_test_packet_tc(struct __sk_buff *ctx)
-+{
-+	__u8 meta_have[META_SIZE];
-+
-+	if (ctx->len < META_SIZE)
-+		return false;
-+	if (bpf_skb_load_bytes(ctx, ctx->len - META_SIZE, meta_have, META_SIZE))
-+		return false;
-+	if (__builtin_memcmp(meta_have, meta_want, META_SIZE))
-+		return false;
-+
-+	return true;
-+}
-+
- SEC("tc")
- int ing_cls(struct __sk_buff *ctx)
- {
-@@ -670,4 +687,379 @@ int helper_skb_change_proto(struct __sk_buff *ctx)
- 	return TC_ACT_SHOT;
- }
- 
-+/* Write to skb_ext using bpf_dynptr_write helper */
-+SEC("tc")
-+int tc_skb_ext_write(struct __sk_buff *ctx)
-+{
-+	struct bpf_dynptr meta;
-+
-+	if (!is_test_packet_tc(ctx))
-+		return TC_ACT_SHOT;
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, BPF_SKB_EXT_F_CREATE, &meta))
-+		return TC_ACT_SHOT;
-+	if (bpf_dynptr_write(&meta, 0, (void *)meta_want, ARRAY_SIZE(meta_want), 0))
-+		return TC_ACT_SHOT;
-+
-+	return TC_ACT_UNSPEC;
-+}
-+
-+/* Read from skb-ext metadata using bpf_dynptr_read helper */
-+SEC("tc")
-+int tc_skb_ext_read(struct __sk_buff *ctx)
-+{
-+	__u8 meta_have[META_SIZE];
-+	struct bpf_dynptr meta;
-+
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, 0, &meta))
-+		return TC_ACT_SHOT;
-+	if (bpf_dynptr_read(meta_have, ARRAY_SIZE(meta_have), &meta, 0, 0))
-+		return TC_ACT_SHOT;
-+	if (!check_metadata(meta_have))
-+		return TC_ACT_SHOT;
-+
-+	test_pass = true;
-+	return TC_ACT_UNSPEC;
-+}
-+
-+/* Read from a cloned skb_ext dynptr */
-+SEC("tc")
-+int tc_skb_ext_clone_read(struct __sk_buff *ctx)
-+{
-+	struct bpf_dynptr meta, clone;
-+	__u8 meta_have[META_SIZE];
-+
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, 0, &meta))
-+		return TC_ACT_SHOT;
-+	if (bpf_dynptr_clone(&meta, &clone))
-+		return TC_ACT_SHOT;
-+	if (bpf_dynptr_read(meta_have, ARRAY_SIZE(meta_have), &clone, 0, 0))
-+		return TC_ACT_SHOT;
-+	if (!check_metadata(meta_have))
-+		return TC_ACT_SHOT;
-+
-+	test_pass = true;
-+	return TC_ACT_UNSPEC;
-+}
-+
-+/* Read from skb_ext using bpf_dynptr_slice */
-+SEC("tc")
-+int tc_skb_ext_slice_read(struct __sk_buff *ctx)
-+{
-+	struct bpf_dynptr meta;
-+	__u8 *meta_have;
-+
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, 0, &meta))
-+		return TC_ACT_SHOT;
-+	meta_have = bpf_dynptr_slice(&meta, 0, NULL, META_SIZE);
-+	if (!meta_have)
-+		return TC_ACT_SHOT;
-+	if (!check_metadata(meta_have))
-+		return TC_ACT_SHOT;
-+
-+	test_pass = true;
-+	return TC_ACT_UNSPEC;
-+}
-+
-+/* Write to skb_ext using bpf_dynptr_slice_rdwr */
-+SEC("tc")
-+int tc_skb_ext_slice_write(struct __sk_buff *ctx)
-+{
-+	struct bpf_dynptr meta;
-+	__u8 *dst;
-+
-+	if (!is_test_packet_tc(ctx))
-+		return TC_ACT_SHOT;
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, BPF_SKB_EXT_F_CREATE, &meta))
-+		return TC_ACT_SHOT;
-+	dst = bpf_dynptr_slice_rdwr(&meta, 0, NULL, META_SIZE);
-+	if (!dst)
-+		return TC_ACT_SHOT;
-+	__builtin_memcpy(dst, meta_want, META_SIZE);
-+
-+	return TC_ACT_UNSPEC;
-+}
-+
-+/* Opening skb_ext without F_CREATE on a fresh skb should fail */
-+SEC("tc")
-+int tc_skb_ext_no_alloc(struct __sk_buff *ctx)
-+{
-+	struct bpf_dynptr meta;
-+
-+	if (!is_test_packet_tc(ctx))
-+		return TC_ACT_SHOT;
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, 0, &meta) != -ENOENT)
-+		return TC_ACT_SHOT;
-+
-+	test_pass = true;
-+	return TC_ACT_UNSPEC;
-+}
-+
-+/* Invalid flags are rejected */
-+SEC("tc")
-+int tc_skb_ext_invalid_flags(struct __sk_buff *ctx)
-+{
-+	struct bpf_dynptr meta;
-+
-+	if (!is_test_packet_tc(ctx))
-+		return TC_ACT_SHOT;
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, ~0ULL, &meta) != -EINVAL)
-+		return TC_ACT_SHOT;
-+
-+	test_pass = true;
-+	return TC_ACT_UNSPEC;
-+}
-+
-+/* Without F_CREATE the dynptr is read-only */
-+SEC("tc")
-+int tc_skb_ext_rdonly(struct __sk_buff *ctx)
-+{
-+	__u8 meta_have[META_SIZE];
-+	struct bpf_dynptr meta;
-+
-+	if (!is_test_packet_tc(ctx))
-+		return TC_ACT_SHOT;
-+
-+	/* Create and populate the ext */
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, BPF_SKB_EXT_F_CREATE, &meta))
-+		return TC_ACT_SHOT;
-+	if (bpf_dynptr_write(&meta, 0, (void *)meta_want, META_SIZE, 0))
-+		return TC_ACT_SHOT;
-+
-+	/* Reopen without F_CREATE -- should be read-only */
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, 0, &meta))
-+		return TC_ACT_SHOT;
-+
-+	/* Verify read-only: writes must fail, reads must work */
-+	if (!bpf_dynptr_is_rdonly(&meta))
-+		return TC_ACT_SHOT;
-+	if (!bpf_dynptr_write(&meta, 0, (void *)meta_want, META_SIZE, 0))
-+		return TC_ACT_SHOT;
-+	if (bpf_dynptr_read(meta_have, META_SIZE, &meta, 0, 0))
-+		return TC_ACT_SHOT;
-+	if (!check_metadata(meta_have))
-+		return TC_ACT_SHOT;
-+
-+	test_pass = true;
-+	return TC_ACT_UNSPEC;
-+}
-+
-+/* Double alloc: data from first alloc survives second skb_ext_add */
-+SEC("tc")
-+int tc_skb_ext_double_alloc(struct __sk_buff *ctx)
-+{
-+	__u8 meta_have[META_SIZE];
-+	struct bpf_dynptr meta;
-+
-+	if (!is_test_packet_tc(ctx))
-+		return TC_ACT_SHOT;
-+
-+	/* First alloc + write */
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, BPF_SKB_EXT_F_CREATE, &meta))
-+		return TC_ACT_SHOT;
-+	if (bpf_dynptr_write(&meta, 0, (void *)meta_want, META_SIZE, 0))
-+		return TC_ACT_SHOT;
-+
-+	/* Second alloc -- skb_ext_add returns existing ext */
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, BPF_SKB_EXT_F_CREATE, &meta))
-+		return TC_ACT_SHOT;
-+	if (bpf_dynptr_read(meta_have, META_SIZE, &meta, 0, 0))
-+		return TC_ACT_SHOT;
-+	if (!check_metadata(meta_have))
-+		return TC_ACT_SHOT;
-+
-+	test_pass = true;
-+	return TC_ACT_UNSPEC;
-+}
-+
-+/* Read skb_ext from cgroup/skb ingress -- tests cross-hook survival */
-+SEC("cgroup_skb/ingress")
-+int cgrp_skb_ext_read(struct __sk_buff *ctx)
-+{
-+	__u8 meta_have[META_SIZE];
-+	struct bpf_dynptr meta;
-+
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, 0, &meta))
-+		return 1;
-+	if (bpf_dynptr_read(meta_have, META_SIZE, &meta, 0, 0))
-+		return 1;
-+	if (!check_metadata(meta_have))
-+		return 1;
-+
-+	test_pass = true;
-+	return 1;
-+}
-+
-+volatile __be16 target_port;
-+
-+#define TCPV4_HDR_OFF	(sizeof(struct ethhdr) + sizeof(struct iphdr))
-+#define TCPV4_SPORT_OFF	(TCPV4_HDR_OFF + offsetof(struct tcphdr, source))
-+#define TCPV4_DPORT_OFF	(TCPV4_HDR_OFF + offsetof(struct tcphdr, dest))
-+
-+/* Write skb_ext on TCP packets to/from target_port */
-+SEC("tc")
-+int tc_skb_ext_write_port(struct __sk_buff *ctx)
-+{
-+	struct bpf_dynptr meta;
-+	__be16 sport, dport;
-+
-+	if (ctx->protocol != __bpf_constant_htons(ETH_P_IP))
-+		return TC_ACT_UNSPEC;
-+	if (bpf_skb_load_bytes(ctx, TCPV4_SPORT_OFF, &sport, sizeof(sport)))
-+		return TC_ACT_UNSPEC;
-+	if (bpf_skb_load_bytes(ctx, TCPV4_DPORT_OFF, &dport, sizeof(dport)))
-+		return TC_ACT_UNSPEC;
-+	if (sport != target_port && dport != target_port)
-+		return TC_ACT_UNSPEC;
-+
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, BPF_SKB_EXT_F_CREATE, &meta))
-+		return TC_ACT_UNSPEC;
-+	bpf_dynptr_write(&meta, 0, (void *)meta_want, META_SIZE, 0);
-+
-+	return TC_ACT_UNSPEC;
-+}
-+
-+/* Read skb_ext from sock_ops passive established -- tests TC -> sock_ops path */
-+SEC("sockops")
-+int skops_skb_ext_read(struct bpf_sock_ops *ctx)
-+{
-+	struct bpf_sock_ops_kern *kctx;
-+	__u8 meta_have[META_SIZE];
-+	struct bpf_dynptr meta;
-+	struct sk_buff *skb;
-+
-+	if (ctx->op != BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB)
-+		return 1;
-+
-+	kctx = bpf_cast_to_kern_ctx(ctx);
-+	skb = kctx->skb;
-+	if (!skb)
-+		return 1;
-+
-+	if (bpf_dynptr_from_skb_ext((struct __sk_buff *)skb, 0, 0, &meta))
-+		return 1;
-+	if (bpf_dynptr_read(meta_have, META_SIZE, &meta, 0, 0))
-+		return 1;
-+	if (!check_metadata(meta_have))
-+		return 1;
-+
-+	test_pass = true;
-+	return 1;
-+}
-+
-+/* Read skb_ext from LSM inet_conn_established -- tests TC -> LSM path */
-+SEC("lsm/inet_conn_established")
-+int BPF_PROG(lsm_skb_ext_read, struct sock *sk, struct sk_buff *skb)
-+{
-+	__u8 meta_have[META_SIZE];
-+	struct bpf_dynptr meta;
-+
-+	if (bpf_dynptr_from_skb_ext((struct __sk_buff *)skb, 0, 0, &meta))
-+		return 0;
-+	if (bpf_dynptr_read(meta_have, META_SIZE, &meta, 0, 0))
-+		return 0;
-+	if (!check_metadata(meta_have))
-+		return 0;
-+
-+	test_pass = true;
-+	return 0;
-+}
-+
-+/* Read skb_ext from socket filter -- tests TC -> sk_filter path */
-+SEC("socket")
-+int sk_filter_skb_ext_read(struct __sk_buff *ctx)
-+{
-+	__u8 meta_have[META_SIZE];
-+	struct bpf_dynptr meta;
-+
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, 0, &meta))
-+		goto out;
-+	if (bpf_dynptr_read(meta_have, META_SIZE, &meta, 0, 0))
-+		goto out;
-+	if (!check_metadata(meta_have))
-+		goto out;
-+
-+	test_pass = true;
-+out:
-+	return ctx->len;
-+}
-+
-+/* Write skb_ext from cgroup/skb egress */
-+SEC("cgroup_skb/egress")
-+int cgrp_skb_ext_write(struct __sk_buff *ctx)
-+{
-+	struct bpf_dynptr meta;
-+
-+	if (!is_test_packet_tc(ctx))
-+		return 1;
-+
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, BPF_SKB_EXT_F_CREATE, &meta))
-+		return 1;
-+	bpf_dynptr_write(&meta, 0, (void *)meta_want, META_SIZE, 0);
-+
-+	return 1;
-+}
-+
-+static const __u8 meta_zero[META_SIZE] = {};
-+
-+volatile bool clone_cow_done;
-+
-+/* Overwrite skb_ext on the clone via F_CREATE (COW) -- must not affect original.
-+ * Runs on the dummy ingress (clone side), synchronously during tc mirred.
-+ */
-+SEC("tc")
-+int tc_skb_ext_clone_redir_cow(struct __sk_buff *ctx)
-+{
-+	struct bpf_dynptr meta;
-+
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, BPF_SKB_EXT_F_CREATE, &meta))
-+		return TC_ACT_SHOT;
-+
-+	/* Zero out the clone's ext -- must not affect original */
-+	bpf_dynptr_write(&meta, 0, (void *)meta_zero, META_SIZE, 0);
-+
-+	clone_cow_done = true;
-+	return TC_ACT_SHOT;
-+}
-+
-+/* Verify COW isolation at kfree_skb time: once clone_cow_done is set,
-+ * check that the original skb still has meta_want.
-+ */
-+SEC("tp_btf/kfree_skb")
-+int BPF_PROG(tp_kfree_skb_cow_check, struct sk_buff *skb)
-+{
-+	__u8 meta_have[META_SIZE];
-+	struct bpf_dynptr meta;
-+
-+	if (!clone_cow_done)
-+		return 0;
-+
-+	if (bpf_dynptr_from_skb_ext((struct __sk_buff *)skb, 0, 0, &meta))
-+		return 0;
-+	if (bpf_dynptr_read(meta_have, META_SIZE, &meta, 0, 0))
-+		return 0;
-+
-+	if (check_metadata(meta_have))
-+		test_pass = true;
-+
-+	return 0;
-+}
-+
-+/* Read skb_ext from tp_btf/kfree_skb -- tests survival until skb free */
-+SEC("tp_btf/kfree_skb")
-+int BPF_PROG(tp_kfree_skb_ext_read, struct sk_buff *skb)
-+{
-+	__u8 meta_have[META_SIZE];
-+	struct bpf_dynptr meta;
-+
-+	if (bpf_dynptr_from_skb_ext((struct __sk_buff *)skb, 0, 0, &meta))
-+		return 0;
-+	if (bpf_dynptr_read(meta_have, META_SIZE, &meta, 0, 0))
-+		return 0;
-+	if (!check_metadata(meta_have))
-+		return 0;
-+
-+	test_pass = true;
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
+Runtime: for a CAP_BPF-only load, passing fp-7 as the value to
+bpf_map_update_elem() after the spill to fp-8 exports a byte the program
+never wrote. A direct read of fp-7 rejects; only the helper path accepts.
 
--- 
-2.43.0
+The commit message should say this rather than just restating the mechanism
+-- I'll send a v2. Happy to move the fix elsewhere if you'd prefer.
 
