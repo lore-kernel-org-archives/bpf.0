@@ -1,53 +1,62 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 717D6207DF7;
-	Tue, 14 Jul 2026 13:50:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338D747D952;
+	Tue, 14 Jul 2026 14:08:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784037048; cv=none; b=j3dFYKM6UxDeJNQGI1BKDtRXRRzkrG2CoeBDWCXBFQgaJxlysSKxknHrWDfyJM0rC1ccUeqW7mmhEAgYoH2tdk/QboR29VG2ZBXo0GaZovPYGe43jNDnqfgw8sYnCUAFPvpA8cjnUGaNVUv482oyhrB9cpBQRzR21KKN47FH04o=
+	t=1784038105; cv=none; b=PYrUsMkJ7POP+zIpDMYFpLFQAu406ETLxiMyMMVMO2Su+EU479e9Y0fEC9QIzd9m/wNICMSQE0yNxmdBVtnSDp2ws5aQI+AyDWpK8TowusP7LgbA7TYcDlf7aQxJ8a7CEbBfInwPPWAdT3EiDgK20C5iB/g4j2O782G+VDrv8dM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784037048; c=relaxed/simple;
-	bh=eb7Wg99SqP1/Uj7f+PQPKr5nKmnahVoc+rU1osGLDZI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PG3+l3s51kyMFgpGC1DKGA6GgdeDG9Onj2RtnCWXyXiozaKkF0xr17b0OdteoBpkPLes/1oYn6xwIiWh7IsJqdaIdrslKiRNZWmWKgz1SqeNvFozUUwbBdV7vAyn27MBXEngYkCE0qxAEKXPCwkicMhFNvPZsMb3VNn+4QtHc94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=msvetfZZ; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1784038105; c=relaxed/simple;
+	bh=EyHLAJfFo0MzMeMvQQspVA6hvbymiP7lG7Y+Z7qv2Ac=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EE5MWdnK3uJFdeNlH9M3UHg71Wsuaga4/Kclt0K+4cKJWRf8zerclivSJoIs6ND3N3gSyaR2JuY5l7wGgZvND/kkKbtvllKXtsFZEG/dEuL9YHrYrA6sBWGvcAqAfuVC7ZysJY3jNeXU5NPWqlzaSdhA2wNRr+9xji0bEsBDwsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XWPrp0QO; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="msvetfZZ"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66EBnWgV1376579;
-	Tue, 14 Jul 2026 13:50:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=PREiQ
-	5WktrqOelL6zLhfK8jb5Egsp3dhvHrd02REZKA=; b=msvetfZZoTepcAsPy0XIh
-	OG74ToUWQeOQ8DFAn0XJA+LerQhuieuEfpl9ge7pNuzOMYPWvDs5aDqXKVFrm0hy
-	rYM46jC+0GhpzCr1iDxpK39nteALmU7pEdNj/PO1RcGQpy12jSKD6Yq74NYJ3pzG
-	bnqxM2Q8sWFN9YyBRpzBFf+ZLVKyDzW4nCS7vE9mWX4JqvPZV7jbQ02exL7CnkqK
-	Un2ME36/QNjFziArgIz7qPZoK0/JMFpGC2bgQbpwwFTQdbIjoH7WM+GD/4pujxg+
-	8k5A+wwvg81izRBwsznqQHNIWK11I0McNNGl7MLgacjkOFQqNZpT1V1jYnhX+uYN
-	g==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4fbeedm6n7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 14 Jul 2026 13:50:40 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 66EDm8LU032350;
-	Tue, 14 Jul 2026 13:50:39 GMT
-Received: from bpf.uk.oracle.com (dhcp-10-154-50-49.vpn.oracle.com [10.154.50.49])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4fbc9dtr8p-2;
-	Tue, 14 Jul 2026 13:50:39 +0000 (GMT)
-From: Alan Maguire <alan.maguire@oracle.com>
-To: yonghong.song@linux.dev, olsajiri@gmail.com
-Cc: arnaldo.melo@gmail.com, bpf@vger.kernel.org, dwarves@vger.kernel.org
-Subject: [PATCH dwarves 1/2] btf_encoder: Only skip optimized parms when ABI changed
-Date: Tue, 14 Jul 2026 14:50:34 +0100
-Message-ID: <20260714135035.814273-2-alan.maguire@oracle.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20260714135035.814273-1-alan.maguire@oracle.com>
-References: <20260714135035.814273-1-alan.maguire@oracle.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XWPrp0QO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1784038101; x=1815574101;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=EyHLAJfFo0MzMeMvQQspVA6hvbymiP7lG7Y+Z7qv2Ac=;
+  b=XWPrp0QOuFVoO7cJHp8Ppuv2pw0u4x2cEXpULEqnFRVDZuuPxmmxpOpt
+   XCPlG30TvOj6Ui3kknLAFGrK+N8LJa7iWhgjsktRQDvJVKLMmBTs6TGQt
+   YsyX4q2CqtyugWEruKSR1x788YTY+HwcExMI8w0UwpI4mWKLzdhFc4Z56
+   m9HBKldHNaTId94FWO6pElvgHajRnSnpxGxdgLNqttAnQ64rgtXAGE44y
+   X250m2L1npPiZyaJQ3xs5rMpxoOhcJEuOPEO0wnEUWqwOtlkYmUUFMk45
+   OVIj6je5XRs3gZVmPMIsklGGvTKspFIJ4POqqsMyHlvVeWSZNqWlwWVck
+   w==;
+X-CSE-ConnectionGUID: h8vVohtBQL2f8T33O+XpAQ==
+X-CSE-MsgGUID: tcF/Q0h2TraqPYkh9O44Yw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11846"; a="110207002"
+X-IronPort-AV: E=Sophos;i="6.25,163,1779174000"; 
+   d="scan'208";a="110207002"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2026 07:07:32 -0700
+X-CSE-ConnectionGUID: m9zqryGvRNmFcRex+3QoUw==
+X-CSE-MsgGUID: ORyR0VznQHmGoUdgR+Zu4Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,163,1779174000"; 
+   d="scan'208";a="254120937"
+Received: from boxer.igk.intel.com ([10.102.20.173])
+  by orviesa006.jf.intel.com with ESMTP; 14 Jul 2026 07:07:28 -0700
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	magnus.karlsson@intel.com,
+	stfomichev@gmail.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	bjorn@kernel.org,
+	kerneljasonxing@gmail.com,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH v3 net 0/6] xsk: fix AF_XDP multi-buffer Tx descriptor reclaim
+Date: Tue, 14 Jul 2026 16:07:16 +0200
+Message-Id: <20260714140722.111645-1-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.38.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,251 +64,137 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-07-14_03,2026-07-10_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
- mlxlogscore=999 lowpriorityscore=0 suspectscore=0 adultscore=0 phishscore=0
- malwarescore=0 mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2606160000 definitions=main-2607140144
-X-Authority-Analysis: v=2.4 cv=d+bFDxjE c=1 sm=1 tr=0 ts=6a563eb0 cx=c_pps
- a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
- a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=RD47p0oAkeU5bO7t-o6f:22 a=yPCof4ZbAAAA:8 a=JilMT0JfPp54oRQC3lIA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzE0MDE0MyBTYWx0ZWRfX2s6Pqesv6nXe
- 8mrwklwwOiIepFwfg5B3uUUmhe2NarSz2zC7Bcm3rzu5bydAU/ADPhB2RtawORCYWG8mylEM5D5
- ibpDBrLetKQflMdgeJKcLUvjR5sE4EK9w40WubKg4CAka1oR8ikdkshzXMfUyeSLQk8X3u24K/Q
- LXBGRTDAG0YFJpO0jFXiqPKAUb3KD303VTTvCHOIpnyPywfDoSaK6ZUM05ymu+0tnSwAY2pJYtn
- 6W5zYfmSdWvEcj1CCscxuIzkBn4LRrn6PvZVC7HICc3nSrkI4ty44aHVA1QvtLt+/0rfvMGHshy
- +wAyhMKPYVFFdR3ltQZHvuKwZ4I1IDoO4do+heaSgq9UJDBUX2Yi9BUSPdVCWiqzUr6ssdhBKWz
- y/9uWG6+7ToX+J0CxYZaKOCsJkaj3REBfBQ2udP9pdEDlUTtfQLAxk2nS4hWAnihhT1Xl/TA2rp
- 46yfdn269Jjtkh+SG6g==
-X-Proofpoint-GUID: UgUXiZbK5Sp3lwUZDnjjUad1W9RP3b0S
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzE0MDE0MyBTYWx0ZWRfX6p88KqjVdOT1
- jMR/YUpZ3pBE6S+B8EugwlRNYaDcDT36V8brMd2DRzF+HNvty1mP9544+FHp+n88TY0ijiwYX3S
- vABa6go9yIuHpoWqEaoOGwGvsUrSuO4ZglzgvtazRZcpT33ZNeWs
-X-Proofpoint-ORIG-GUID: UgUXiZbK5Sp3lwUZDnjjUad1W9RP3b0S
 
-The true-signature series made optimized-parameter state more visible to
-the BTF encoder.  Skipping every function with optimized parameters is too
-broad, though: an unused parameter can still be part of the real calling
-ABI, so default BTF should continue to encode that function.
+v2: https://lore.kernel.org/netdev/20260710194424.84844-1-maciej.fijalkowski@intel.com/
+v2->v3:
 
-Limit the optimized-parameter skip to cases where default BTF cannot
-represent the concrete ABI safely:
- - clang functions marked as signature-changed via DW_CC_nocall
- - GCC optimized clones with ELF suffixes such as .isra or .constprop
+* Added a preceding patch that sizes the pool-wide temporary Tx descriptor
+  array to the larger of the first Tx ring and the device's
+  xdp_zc_max_segs capability. This guarantees that the shared-UMEM path can
+  inspect one maximum-sized valid packet even when the socket that creates
+  the pool has a smaller Tx ring. Consequently, this patch now records the
+  actual allocated size in pool->tx_descs_nentries rather than the first
+  socket's Tx ring size.
 
-When multiple saved states share the same base ELF function, prefer a
-canonical state that does not require this optimized-parameter skip, so a
-usable concrete instance is not dropped just because another optimized clone
-exists.
+* Fixed a possible infinite retry loop when a shared-UMEM socket contains
+  an incomplete multi-buffer packet. Pass the original descriptor budget
+  to xskq_cons_read_desc_batch() instead of the number of descriptors
+  currently available, so the parser can distinguish producer exhaustion
+  from actual budget exhaustion.
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- btf_encoder.c | 97 ++++++++++++++++++++++++++++++++++++++-------------
- 1 file changed, 73 insertions(+), 24 deletions(-)
+* Moved the completion-ring space check to the common batched Tx path, so
+  it is performed exactly once for both singular and shared-SG pools. Keep
+  the legacy shared non-SG fallback outside this handling, as it reserves
+  completion entries one descriptor at a time.
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 38455a4..2e6eab0 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -95,6 +95,8 @@ struct btf_encoder_func_state {
- 	uint8_t inconsistent_proto:1;
- 	uint8_t uncertain_parm_loc:1;
- 	uint8_t reordered_parm:1;
-+	uint8_t signature_changed:1;
-+	uint8_t optimized_symbol:1;
- 	uint8_t ambiguous_addr:1;
- 	int ret_type_id;
- 	struct btf_encoder_func_parm *parms;
-@@ -1209,27 +1211,44 @@ static struct btf_encoder_func_state *btf_encoder__alloc_func_state(struct btf_e
- 	return state;
- }
- 
--/* some "." suffixes do not correspond to real functions;
-- * - .part for partial inline
-- * - .cold for rarely-used codepath extracted for better code locality
-- */
--static bool str_contains_non_fn_suffix(const char *str) {
--	static const char *skip[] = {
--		".cold",
--		".part"
--	};
-+static bool str_contains_suffix(const char *str, const char * const *suffixes, int nr_suffixes)
-+{
- 	const char *suffix = strchr(str, '.');
- 	int i;
- 
- 	if (!suffix)
- 		return false;
--	for (i = 0; i < ARRAY_SIZE(skip); i++) {
--		if (strstr(suffix, skip[i]))
-+	for (i = 0; i < nr_suffixes; i++) {
-+		if (strstr(suffix, suffixes[i]))
- 			return true;
- 	}
- 	return false;
- }
- 
-+/* some "." suffixes do not correspond to real functions;
-+ * - .part for partial inline
-+ * - .cold for rarely-used codepath extracted for better code locality
-+ */
-+static bool str_contains_non_fn_suffix(const char *str)
-+{
-+	static const char * const skip[] = {
-+		".cold",
-+		".part"
-+	};
-+
-+	return str_contains_suffix(str, skip, ARRAY_SIZE(skip));
-+}
-+
-+static bool str_contains_optimized_fn_suffix(const char *str)
-+{
-+	static const char * const suffixes[] = {
-+		".constprop",
-+		".isra",
-+	};
-+
-+	return str_contains_suffix(str, suffixes, ARRAY_SIZE(suffixes));
-+}
-+
- static bool elf_function__has_ambiguous_address(struct elf_function *func)
- {
- 	struct elf_function_sym *sym;
-@@ -1295,6 +1314,17 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
- 	state->optimized_parms = ftype->optimized_parms;
- 	state->uncertain_parm_loc = ftype->uncertain_parm_loc;
- 	state->reordered_parm = ftype->reordered_parm;
-+	state->signature_changed = ftype->signature_changed;
-+	if (state->addr) {
-+		for (int i = 0; i < func->sym_cnt; i++) {
-+			if (state->addr != func->syms[i].addr)
-+				continue;
-+			if (str_contains_optimized_fn_suffix(func->syms[i].name)) {
-+				state->optimized_symbol = 1;
-+				break;
-+			}
-+		}
-+	}
- 	ftype__for_each_parameter(ftype, param) {
- 		const char *name;
- 		char *final_name = NULL;
-@@ -1497,19 +1527,17 @@ static int saved_functions_combine(struct btf_encoder *encoder,
- 				   struct btf_encoder_func_state *a,
- 				   struct btf_encoder_func_state *b)
- {
--	uint8_t optimized, unexpected, inconsistent, uncertain_parm_loc, reordered_parm;
-+	uint8_t unexpected, inconsistent, uncertain_parm_loc, reordered_parm;
- 
- 	if (a->elf != b->elf)
- 		return 1;
- 
--	optimized = a->optimized_parms | b->optimized_parms;
- 	unexpected = a->unexpected_reg | b->unexpected_reg;
- 	inconsistent = a->inconsistent_proto | b->inconsistent_proto;
- 	uncertain_parm_loc = a->uncertain_parm_loc | b->uncertain_parm_loc;
- 	reordered_parm = a->reordered_parm | b->reordered_parm;
- 	if (!unexpected && !inconsistent && !reordered_parm && !funcs__match(encoder, a, b))
- 		inconsistent = 1;
--	a->optimized_parms = b->optimized_parms = optimized;
- 	a->unexpected_reg = b->unexpected_reg = unexpected;
- 	a->inconsistent_proto = b->inconsistent_proto = inconsistent;
- 	a->uncertain_parm_loc = b->uncertain_parm_loc = uncertain_parm_loc;
-@@ -1574,7 +1602,16 @@ static int btf_encoder__add_true_signature(struct btf_encoder *encoder,
- 	return 0;
- }
- 
--static struct btf_encoder_func_state *btf_encoder__select_canonical_state(struct btf_encoder_func_state *combined_states,
-+static bool btf_encoder_func_state__skip_optimized_parms(struct btf_encoder *encoder,
-+							 struct btf_encoder_func_state *state)
-+{
-+	return !encoder->true_signature &&
-+	       state->optimized_parms &&
-+	       (state->signature_changed || state->optimized_symbol);
-+}
-+
-+static struct btf_encoder_func_state *btf_encoder__select_canonical_state(struct btf_encoder *encoder,
-+									  struct btf_encoder_func_state *combined_states,
- 									  int combined_cnt)
- {
- 	int i, j;
-@@ -1584,17 +1621,22 @@ static struct btf_encoder_func_state *btf_encoder__select_canonical_state(struct
- 	 * as per saved_functions_combine().
- 	 */
- 	struct elf_function *elf = combined_states[0].elf;
-+	struct btf_encoder_func_state *first = NULL;
- 
- 	for (i = 0; i < combined_cnt; i++) {
- 		struct btf_encoder_func_state *state = &combined_states[i];
- 
- 		for (j = 0; j < elf->sym_cnt; j++) {
--			if (state->addr == elf->syms[j].addr)
-+			if (state->addr != elf->syms[j].addr)
-+				continue;
-+			if (!first)
-+				first = state;
-+			if (!btf_encoder_func_state__skip_optimized_parms(encoder, state))
- 				return state;
- 		}
- 	}
- 
--	return &combined_states[0];
-+	return first ?: &combined_states[0];
- }
- 
- static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_encoding_inconsistent_proto)
-@@ -1613,6 +1655,7 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
- 
- 	for (i = 0; i < nr_saved_fns; i = j) {
- 		struct btf_encoder_func_state *state = &saved_fns[i];
-+		struct btf_encoder_func_state *canonical_state;
- 		char *skip_reason = NULL;
- 
- 		/* Compare across sorted functions that match by name/prefix;
-@@ -1640,11 +1683,16 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
- 			}
- 		}
- 
--		/* do not exclude functions with optimized-out parameters; they
--		 * may still be _called_ with the right parameter values, they
--		 * just do not _use_ them.  Only exclude functions with
--		 * unexpected register use, multiple inconsistent prototypes or
--		 * uncertain parameters location
-+		canonical_state = j - i > 1 ?
-+			btf_encoder__select_canonical_state(encoder, state, j - i) : state;
-+
-+		/* Do not exclude functions with optimized-out parameters by
-+		 * default; they may still be called with the right parameter
-+		 * values, and just not use them.  Exclude optimized parameters
-+		 * only when default BTF cannot represent a changed ABI
-+		 * signature; true_signature can rewrite those signatures.
-+		 * Also exclude functions with unexpected register use, multiple
-+		 * inconsistent prototypes or uncertain parameter locations.
- 		 */
- 		if (state->unexpected_reg)
- 			skip_reason = "unexpected register usage for parameter\n";
-@@ -1654,6 +1702,8 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
- 			skip_reason = "uncertain parameter location\n";
- 		if (state->reordered_parm)
- 			skip_reason = "reordered parameters\n";
-+		if (btf_encoder_func_state__skip_optimized_parms(encoder, canonical_state))
-+			skip_reason = "optimized parameters\n";
- 		if (state->elf->ambiguous_addr)
- 			skip_reason = "ambiguous address\n";
- 
-@@ -1669,8 +1719,7 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
- 			 * select and emit BTF for the most canonical
- 			 * function definition.
- 			 */
--			if (j - i > 1)
--				state = btf_encoder__select_canonical_state(state, j - i);
-+			state = canonical_state;
- 			if (is_kfunc_state(state))
- 				err = btf_encoder__add_bpf_kfunc(encoder, state);
- 			else
+* Reworked xsk_tx_peek_release_desc_batch() to use a common singular/shared
+  batched flow. Resolve an empty Tx socket list before checking CQ space,
+  select the shared-SG walker through an explicit shared-pool condition,
+  and commit the resulting batch through one common path.
+
+* Simplified xsk_tx_commit_batch() by moving the cached CQ producer
+  snapshot into the helper instead of passing it from each caller.
+
+v1: https://lore.kernel.org/netdev/20260623133240.1048434-1-maciej.fijalkowski@intel.com/
+v1->v2:
+
+* Reduced the series from seven to five patches by squashing the three
+  generic Tx drain and reclaim changes into a single patch. The resulting
+  patch handles overflow, invalid descriptors in the middle of a packet,
+  and reclaim of the offending descriptor as one coherent change. This
+  so it will be less likely to have things reported by Sashiko that are
+  fixed in later commits;
+
+* Reworked the zero-copy implementation substantially:
+  * removed the bind-transition mechanism, including tx_share_pending,
+    xp_prepare_xsk_tx_share(), xp_finish_xsk_tx_share(),
+    synchronize_net(), and the transient bind() -EAGAIN behavior;
+  * added packet-framed parsing for shared-UMEM SG pools, allowing
+    per-socket drain state to be resumed by both singular and shared Tx
+    paths;
+  * retained the legacy one-descriptor fallback for shared non-SG pools;
+  * preserved the existing per-socket fairness quota while allowing the
+    shared walker to consume multiple complete packets and continue
+    filling the requested batch across fairness rounds;
+  * made the fairness quota large enough to process one maximum-sized
+    valid multi-buffer packet;
+  * extended the parser result with consumed-descriptor and
+    budget-limited accounting needed by the shared walker;
+  * recorded the size of the pool's temporary Tx descriptor array and
+    capped batch processing at that size;
+  * kept reclaim-only descriptors ordered after preceding driver-visible
+    descriptors and protected the delayed-reclaim state with
+    READ_ONCE()/WRITE_ONCE().
+
+* Rewrote the zero-copy patch description to cover oversized packets,
+  continuation draining across calls, shared-UMEM SG handling, and CQ
+  publication ordering.
+
+* Corrected the too-many-frags selftest description to state that the
+  invalid packet contains max_frags + 1 fragments and terminates at an
+  explicit packet boundary.
+
+
+Hi,
+
+This series fixes several AF_XDP multi-buffer Tx paths where descriptors
+consumed from the Tx ring are not consistently returned to userspace
+through the completion ring when the packet is later dropped as invalid.
+
+The affected cases are invalid or oversized multi-buffer Tx packets in
+both the generic and zero-copy paths. In these cases, the kernel can
+consume one or more Tx descriptors while building or validating a
+multi-buffer packet, then drop the packet before it reaches the device.
+Userspace still owns the UMEM buffers only after the corresponding
+addresses are returned through the CQ. Missing completions therefore
+make userspace lose track of those buffers.
+
+The generic path fixes cover following related cases:
+* partially built multi-buffer skbs dropped by xsk_drop_skb();
+  continuation descriptors left in the Tx ring after xsk_build_skb()
+  reports overflow;
+* invalid descriptors encountered in the middle of a multi-buffer
+  packet, including the offending invalid descriptor itself.
+
+The zero-copy path is handled separately. The batched Tx parser now
+distinguishes descriptors that can be passed to the driver from
+descriptors that are consumed only because they belong to an invalid
+multi-buffer packet. Reclaim-only descriptors are written to the CQ
+address area and published in completion order, after any earlier
+driver-visible Tx descriptors.
+
+The last two patches update xskxceiver so the tests account invalid
+multi-buffer Tx packets as descriptors that must be reclaimed, while
+still not expecting those invalid packets on the Rx side.
+
+This is a follow-up to Jason's changes [0] which were addressing generic
+xmit only and this set allows me to pass full xskxceiver test suite run
+against ice driver.
+
+Thanks,
+Maciej
+
+[0]: https://lore.kernel.org/netdev/20260520004244.55663-1-kerneljasonxing@gmail.com/
+
+
+Jason Xing (2):
+  xsk: fix buffer leak in xsk_drop_skb() for AF_XDP multi-buffer Tx
+  xsk: drain continuation descs after overflow in xsk_build_skb()
+
+Maciej Fijalkowski (4):
+  xsk: provide sufficient space in pool->tx_descs
+  xsk: reclaim invalid multi-buffer Tx descs in ZC path
+  selftests/xsk: fix too-many-frags multi-buffer Tx test
+  selftests/xsk: account invalid multi-buffer Tx descriptors
+
+ include/net/xdp_sock.h                        |   1 +
+ include/net/xsk_buff_pool.h                   |   9 +-
+ net/xdp/xsk.c                                 | 254 ++++++++++++++++--
+ net/xdp/xsk_buff_pool.c                       |  13 +-
+ net/xdp/xsk_queue.h                           |  76 ++++--
+ .../selftests/bpf/prog_tests/test_xsk.c       |  48 ++--
+ 6 files changed, 329 insertions(+), 72 deletions(-)
+
 -- 
-2.43.5
+2.43.0
 
