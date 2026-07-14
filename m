@@ -1,204 +1,124 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 068794156CB
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 18:50:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD183346A8;
+	Tue, 14 Jul 2026 18:58:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784055035; cv=none; b=oRa1UZe5nkkPnFQqI+6fzU5Kc5H0j4uxsCj3ko+ne1l7VJzNpJaWyWq1VQVaBuEKto5wL9hYdS0jhPVMUjtBnVynJIhiRbZXcFDmdDCioxMYogQ5v/WaYzhNmuY7AJQdjuBl9eTxde/lloOBeAIQwcay91OHpiOFRqcV90TvV80=
+	t=1784055507; cv=none; b=pvf5TD23F/QEknWoNO4863NvmMh2muOb3gVkSC2I5GNE5zNy1tgA2DeL2pMupMAdKAKc5gnKcex169bse8LClk/1Xn2oF4G6k4odh60z0vEpFzsGA3APDotVKmd+gDqKD26rIh+HTcMsPFgP6q4juj5r9MmwC96n954hDXJo3EE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784055035; c=relaxed/simple;
-	bh=8gV82+0UyXLzRqJEc8152IuhQOWP9zRMXTH7Xpqcnl4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OOSyaMfy+HyTf8Ue3WejCHORYxsQTirJtKDr/tfvHeP2HWBYOw4rsueRwG4QiOWLqLnHFgXLogkJSLVPc3PVSX46OLFu35OYJ6KmJShTPuy9lu4Te+bWlliPur82MCxyUndtYV9YU87sC6XZ3VDKoY4mAyBEJ4U2Cv0518wTMvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JQoc7Hng; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784055507; c=relaxed/simple;
+	bh=DzLA4w38CFwdzu/Uzj79RDIxzZT2AwfMc39nX/r/t9k=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=P2RzxZJd4CnzdZW+qmtdJ6u4zlIvPkvMzj4rg6AQELpWFQam/UGboYv63MKsOgLXBqy4HrUioGl8FQiCOWCoM214/IZUJDUoF3q6SvTv/b/JFYm3fIGlJzgVygQJ+D4WZtPL8TCdTSkCoSs/3qIds4xEkYeJBOcRWMco//va2V4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aTtq2MfB; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JQoc7Hng"
-Message-ID: <13496da8-5a8b-41ef-8467-21fe8fc1b6d4@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784055015;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=u8TXEVwUzCPMp5B4snUA8uisSOClNLly7wLIZE9Dkd4=;
-	b=JQoc7HngQg+B0RPYr1LfAM5p+YrsVIxkBvb52nFoP6iHi2Jx/YN0yqn7AFG6wfIySaC59L
-	5SBK8WEm06C8TZBsxyBsXJ3BFU7D/GyT4VmmuEArl9UrFjBQYDAGYx8oo+3kYjK4qngDU+
-	iPTb0C4Y5hql0GKxMTt2MN9P6lu6OLE=
-Date: Tue, 14 Jul 2026 11:49:51 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aTtq2MfB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1784055506; x=1815591506;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DzLA4w38CFwdzu/Uzj79RDIxzZT2AwfMc39nX/r/t9k=;
+  b=aTtq2MfBexiXXwNaPQE4ohjtNWTDrut4Sr9F4jTpzh3iKCyK3rpe7Cl5
+   eeHlNHiKV+qo0OR3/Wjsb6Lz01PJy0k2fTAgDjY2fd7GIdBaOqLP7rfaZ
+   HT/jXhHWK5+Y+/jw4yZgmlvwtrA6CZ+9sTEihtwTKV/f2bM31bwl6Po68
+   rxkbpr19l15IwP/KxsPkwg8CEHY3iEjwH5Q5wShVYrr9NIGOnuhQTvLxr
+   t2EWTFPqSzZ7bjCXZZzcvK7JlsVzaAVZ/tAFia2P1aqjPDKOD0EZmGS8O
+   h4AAQw2a+h7zgawEVDZBZ1tHkfgP82N88OtSQ3K4UYCelDiiphUGMeepR
+   A==;
+X-CSE-ConnectionGUID: xGBJg+B8QqyDCuMj3Gl5sw==
+X-CSE-MsgGUID: B5ESX4YpTRuhCZZWsxo14A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11847"; a="88586658"
+X-IronPort-AV: E=Sophos;i="6.25,164,1779174000"; 
+   d="scan'208";a="88586658"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2026 11:58:25 -0700
+X-CSE-ConnectionGUID: zJdJZMFdTvexCooRz9Lb5w==
+X-CSE-MsgGUID: eYih6CtRRc+2gVaty5xw2A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,164,1779174000"; 
+   d="scan'208";a="255442489"
+Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2026 11:58:25 -0700
+Date: Tue, 14 Jul 2026 11:58:24 -0700
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: stable@vger.kernel.org, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
+Cc: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
+	x86@kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Dave Hansen <dave.hansen@linux.intel.com>
+Subject: [PATCH 6.16.y 0/6] cBPF JIT spray hardening
+Message-ID: <20260714-cbpf-jit-spray-hardening-6-16-y-v1-0-2fc3e16263ac@linux.intel.com>
+X-B4-Tracking: v=1; b=H4sIAGOGVmoC/yWNvQ6CMBRGX4Xc2UvaBurPRlwcHdyMQykXuAy1a
+ dHYEN7douP58uWcBSIFpginYoFAb478dBnkrgA7GjcQcpcZlFBa7GWFtvU9Tjxj9MEkHE3oyLE
+ bUKPUmLC2taiqY39QwkK2+EA9f36FO1yb2/myrbqUukzw+B/iq53IzlsH1vULVVaQGZQAAAA=
+X-Change-ID: 20260714-cbpf-jit-spray-hardening-6-16-y-5c50449f820c
+X-Mailer: b4 0.16-dev
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 4/6] tools/build: Allow versioning LLVM readelf
-To: James Clark <james.clark@linaro.org>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>
-References: <20260518-james-perf-llvm-version-v2-0-f12cc4f031d8@linaro.org>
- <20260518-james-perf-llvm-version-v2-4-f12cc4f031d8@linaro.org>
- <c366293c-7bcd-4e28-b3c4-575203403489@linux.dev>
- <a8d4ab9b-b2e3-407c-9898-1b9f7339f448@linaro.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <a8d4ab9b-b2e3-407c-9898-1b9f7339f448@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 7/14/26 9:41 AM, James Clark wrote:
-> 
-> 
-> On 10/07/2026 23:29, Ihor Solodrai wrote:
->> On 5/18/26 2:03 AM, James Clark wrote:
->>> Documentation/kbuild/llvm.rst mentions that readelf is included in the
->>> LLVM toolchain, but it's not currently included in this block.
->>>
->>> Add it so that LLVM=... options also apply to readelf. Users in tools/
->>> were Perf which was hardcoding it, and another was the BPF makefile.
->>> Both already include Makefile.include so convert them to use the new
->>> variable.
->>>
->>> It also didn't have the cross compile prefix, so either readelf didn't
->>> mind opening cross binaries, or it wasn't working for cross builds.
->>
->> I'm pretty sure it's the former. readelf/llvm-readelf are only used
->> libbpf makefile to read ELF symbol tables, which should be arch-independent.
->>
->> We've been cross-compiling the kernel (and libbpf) on BPF CI for a
->> long time. So the unprefixed readelf is already working, and adding
-> 
-> I think "working" isn't technically correct when you take into account the documented behavior of the versioned LLVM= option [1]. You would get one version of the toolchain used for some of the build and a different version used here. That's what caused the build failure in Perf that resulted in the tidyup, because they're not always compatible.
-> 
-> [1]: Documentation/kbuild/llvm.rst
-> 
->> the $(CROSS_COMPILE) prefix only adds a new requirement.
->>
->> I don't think this change in tools/lib/bpf/Makefile is a good idea,
->> we could potentially break some environments. Even though hardcoded
->> readelf doesn't look nice.
->>
->>
-> 
-> IMO it's worth the risk for the cleanup, it also helps to stop propagating it with future copy pastes.
-> 
-> Do you think it's likely that someone has CROSS_COMPILE set but doesn't have that readelf installed? Installing gcc-aarch64-linux-gnu on Debian/Ubuntu gives you aarch64-linux-gnu-readelf, so it would have to be a unique setup to not have it.
+Hi,
 
-Fair points.
+These backports harden BPF JIT against spectre-v2 class of attacks. Without
+a predictor flush, execution of new BPF program may use stale prediction
+left behind by the freed one.
 
-Still, here readelf only enumerates symbol names from already-built
-objects to count them, so a version or arch mismatch shouldn't matter,
-and didn't so far.
+To avoid this, issue an IBPB flush on all CPUs on JIT program allocation.
+The flush is conditional to spectre-v2 mitigation applied.
 
-> 
-> It sounds like maybe you want this bpf makefile to explicitly use 'HOSTREADELF', if you're really sure it never requires arch specific stuff? If we added that it would fit better with the rest of the cleanup. But I think 'READELF' is less confusing and take the risk of some build breakages.
+Patch 1-2: Adds the predictor flush hook and enables it on x86 via IBPB.
 
-Yes, that's a good idea.
+	  bpf: Support for hardening against JIT spraying
+	  x86/bugs: Enable IBPB flush on BPF JIT allocation
 
-So maybe something like this in Makefile.include:
+Patch 3-6: Narrow the flush to only unprivileged JIT allocations
+	   to avoid redundant flushes. Also adds pack-selection changes
+	   that minimizes flushes.
 
-  # if LLVM
-  $(call allow-override,HOSTREADELF,$(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX))
-  # else
-  $(call allow-override,HOSTREADELF,readelf)
+	  bpf: Restrict JIT predictor flush to cBPF
+	  bpf: Skip redundant IBPB in pack allocator
+	  bpf: Prefer packs that won't trigger an IBPB flush on allocation
+	  bpf: Prefer dirty packs for eBPF allocations
 
-and use $(HOSTREADELF) in tools/lib/bpf/Makefile.
+This one is mostly similar to 6.18:
 
-Thanks.
+  https://lore.kernel.org/all/20260713-cbpf-jit-spray-hardening-6-18-y-v1-0-755f60c55705@linux.intel.com/
 
-> 
->>>
->>> Signed-off-by: James Clark <james.clark@linaro.org>
->>> ---
->>>   tools/lib/bpf/Makefile         | 8 ++++----
->>>   tools/perf/Makefile.perf       | 1 -
->>>   tools/scripts/Makefile.include | 2 ++
->>>   3 files changed, 6 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
->>> index 168140f8e646..180dca9c57c8 100644
->>> --- a/tools/lib/bpf/Makefile
->>> +++ b/tools/lib/bpf/Makefile
->>> @@ -114,12 +114,12 @@ PC_FILE        := $(addprefix $(OUTPUT),$(PC_FILE))
->>>     TAGS_PROG := $(if $(shell which etags 2>/dev/null),etags,ctags)
->>>   -GLOBAL_SYM_COUNT = $(shell readelf -s --wide $(BPF_IN_SHARED) | \
->>> +GLOBAL_SYM_COUNT = $(shell $(READELF) -s --wide $(BPF_IN_SHARED) | \
->>>                  cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' | \
->>>                  sed 's/\[.*\]//' | \
->>>                  awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
->>>                  sort -u | wc -l)
->>> -VERSIONED_SYM_COUNT = $(shell readelf --dyn-syms --wide $(OUTPUT)libbpf.so | \
->>> +VERSIONED_SYM_COUNT = $(shell $(READELF) --dyn-syms --wide $(OUTPUT)libbpf.so | \
->>>                     sed 's/\[.*\]//' | \
->>>                     awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
->>>                     grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | sort -u | wc -l)
->>> @@ -182,12 +182,12 @@ check_abi: $(OUTPUT)libbpf.so $(VERSION_SCRIPT)
->>>                "versioned symbols in $^ ($(VERSIONED_SYM_COUNT))." \
->>>                "Please make sure all LIBBPF_API symbols are"     \
->>>                "versioned in $(VERSION_SCRIPT)." >&2;         \
->>> -        readelf -s --wide $(BPF_IN_SHARED) |             \
->>> +        $(READELF) -s --wide $(BPF_IN_SHARED) |             \
->>>               cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' |     \
->>>               sed 's/\[.*\]//' |                     \
->>>               awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}'|  \
->>>               sort -u > $(OUTPUT)libbpf_global_syms.tmp;         \
->>> -        readelf --dyn-syms --wide $(OUTPUT)libbpf.so |         \
->>> +        $(READELF) --dyn-syms --wide $(OUTPUT)libbpf.so |         \
->>
->>>               sed 's/\[.*\]//' |                     \
->>>               awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}'|  \
->>>               grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 |         \
->>> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
->>> index 0aba14f22a06..63276bf55856 100644
->>> --- a/tools/perf/Makefile.perf
->>> +++ b/tools/perf/Makefile.perf
->>> @@ -215,7 +215,6 @@ FLEX    ?= flex
->>>   BISON   ?= bison
->>>   STRIP   = strip
->>>   AWK     = awk
->>> -READELF ?= readelf
->>>     # include Makefile.config by default and rule out
->>>   # non-config cases
->>> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
->>> index e81e5b479c56..380ad84ac51e 100644
->>> --- a/tools/scripts/Makefile.include
->>> +++ b/tools/scripts/Makefile.include
->>> @@ -73,6 +73,7 @@ ifneq ($(LLVM),)
->>>     $(call allow-override,LLC,$(LLVM_PREFIX)llc$(LLVM_SUFFIX))
->>>     $(call allow-override,LLVM_CONFIG,$(LLVM_PREFIX)llvm-config$(LLVM_SUFFIX))
->>>     $(call allow-override,LLVM_OBJCOPY,$(LLVM_PREFIX)llvm-objcopy$(LLVM_SUFFIX))
->>> +  $(call allow-override,READELF,$(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX))
->>>   else
->>>     # Allow setting various cross-compile vars or setting CROSS_COMPILE as a prefix.
->>>     $(call allow-override,CC,$(CROSS_COMPILE)gcc)
->>> @@ -80,6 +81,7 @@ else
->>>     $(call allow-override,LD,$(CROSS_COMPILE)ld)
->>>     $(call allow-override,CXX,$(CROSS_COMPILE)g++)
->>>     $(call allow-override,STRIP,$(CROSS_COMPILE)strip)
->>> +  $(call allow-override,READELF,$(CROSS_COMPILE)readelf)
->>>       # Host versions aren't prefixed
->>>     $(call allow-override,HOSTAR,ar)
->>>
->>
-> 
+---
+Pawan Gupta (6):
+      bpf: Support for hardening against JIT spraying
+      x86/bugs: Enable IBPB flush on BPF JIT allocation
+      bpf: Restrict JIT predictor flush to cBPF
+      bpf: Skip redundant IBPB in pack allocator
+      bpf: Prefer packs that won't trigger an IBPB flush on allocation
+      bpf: Prefer dirty packs for eBPF allocations
+
+ arch/arm64/net/bpf_jit_comp.c        |  4 +--
+ arch/powerpc/net/bpf_jit_comp.c      |  4 +--
+ arch/riscv/net/bpf_jit_comp64.c      |  2 +-
+ arch/riscv/net/bpf_jit_core.c        |  3 +-
+ arch/x86/include/asm/nospec-branch.h |  4 +++
+ arch/x86/kernel/cpu/bugs.c           | 50 +++++++++++++++++++++++---
+ arch/x86/net/bpf_jit_comp.c          |  5 +--
+ include/linux/filter.h               | 15 ++++++--
+ kernel/bpf/core.c                    | 68 ++++++++++++++++++++++++++++++++----
+ kernel/bpf/dispatcher.c              |  2 +-
+ 10 files changed, 135 insertions(+), 22 deletions(-)
+---
+base-commit: d997d33eb340e2add100eac1222e107cc1396e76
+change-id: 20260714-cbpf-jit-spray-hardening-6-16-y-5c50449f820c
+
+Best regards,
+--  
+Pawan
+
 
