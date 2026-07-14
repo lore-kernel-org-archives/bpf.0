@@ -1,202 +1,209 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C7F42BC28
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 20:51:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A1A42BC28
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 20:52:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784062279; cv=none; b=guiVxycSXD5YQAk/KXYl79wpdqsQEV95GAiVGewn4tgv9cJUb/ddhIq4cE9WZJRwsdvvhiILZFtAhASA2YZAa9iqDeh27i4WNy1MDP5rkIoWCv3QiTiaYVkrInu8esflRXZnLTk7qwusKZLYcZ7PUSb+u+FJ9P348Q3FAnpGT2I=
+	t=1784062332; cv=none; b=kOpPwMlleHPlyA+qcseK+VQOgTlzl/A9+C2xPf7lNMXYpnqsvC3kDgT5ROVIbGrxRWLgFE6yGWkLTfSUzsyajRba97TYUGPYXyUwxe/d/e2MmtzSGbRoTIxb+Tuv5ki4OeD/wcTOCW2ErQF25Opr+oNDtE88aRq1iewmpENefOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784062279; c=relaxed/simple;
-	bh=a3z+2YImoaTBrzUyyYklSb2cBf55excf0S63KhzHJ2Y=;
+	s=arc-20240116; t=1784062332; c=relaxed/simple;
+	bh=hOPBDPXR4bdNsrF9FmoLC3nlmFer9sFgQPSy83ogEtE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=CLYd//uNpd0UaoxDzn6qbt8sp8BtoHNEYXIaYOs9IW60qDzJa1Ygr/GixoEQTqRnv3/EugwzZtp8qeEiqHbndMi8FoTBb5e/3KdfwxqL0PgULsMr4sEBV/ooOtbKpEw1fChsAYoO12kcfXTkzCS+I4OV/DiRUTos0PXEwUsC/X8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GizcrnQQ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=lT57uJif6JlAtLbnIuMuoVKCKco7v2OC2oImZx3rEMxEBLiPpVDOBfhSir6jIpuCX3U6vTZvSzpcSVG9YJQkENtZM34IYtI/A3yBMWEcF8HuMu1vrdw41Z+cFC29lroAseKi0tcOMV0Z4MIsOKTww6zJX/EF90mF15NTYCcX5Z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fCzbEzNa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GizcrnQQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17DB11F000E9;
-	Tue, 14 Jul 2026 20:51:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fCzbEzNa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFF221F000E9;
+	Tue, 14 Jul 2026 20:52:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784062278;
-	bh=xyCmOsMU+Vw31Hd0AfS+ls1vJ/f156O2wrjPq1lZHBU=;
+	s=k20260515; t=1784062331;
+	bh=eRrwBHwJhXFeLFnfofEBRqsAv2LZIZ4h8rlhtGIVixk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GizcrnQQdFceIPERR6+Ivb2nEVoIk9cAN9vTgrL9yIuDCjWO5I8OzqhSG0tJhEmHz
-	 jb6OybdQWxks5SLRJ8kQCZFusuczouKQHCZ88qEK3q07xIcsrTaKKXidGBbNOpBnm/
-	 y70rM0kXgOV9Nl3G9SBCyxp+rR7LKeH5BhfknmrIeydHtGl5eSLvAB8wgqgJP0qFvZ
-	 ljl/eh0W3Z1JidpElmEj4Hlwb7a8RXN+SPvytzPR/A6w5cOFlWnHg9JfRfnk0LymEW
-	 zK8Dayz2dhKzYZN/SvQ4wE4dfICi3ZEEXi+CsQDtI8xklFmyUqSkDYjlHPKpYLY/D5
-	 k32L2A7ygu86A==
+	b=fCzbEzNa+A5W2XH1OrUs7l4dewaX+1efCdfQuno2K1Yy4G3lyxYPpTm0jOMB85TBr
+	 FLzMgvQhjCNRUDMlhxisP3LLyrAfAtz1AB9tx4VTiEh+XSoI/vY+pTwU3yLHUOu7tx
+	 Z4WQJrocIhI7epqS3s/hFYZD11zK5Za3BjO/r2OwbaXGagnA6VQ+tUCJEi0uliIOB/
+	 Y+8M6ezHzE2ckaH1/EeUzvhVMNQIMp3uZlCfiMtSxmnd2OgcZDq5lmG+DUSWLdtpXZ
+	 EMlj7/fo4ogDbze75blRSBGl4I+SbU3UsdTfEiXIIEfGS+yj19X1DQDkk/rZF7+2L5
+	 y/Wvq6FX/rsxw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 1/2] bpf, sockmap: handle spurious
+Subject: Re: [PATCH v3 2/2] bpf, sockmap: handle spurious
  tcp_msg_wait_data() wakeup
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Nnamdi Onyeyiri" <nnamdio@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260714203927.32289-2-nnamdio@gmail.com>
+In-Reply-To: <20260714203927.32289-3-nnamdio@gmail.com>
 References: <5b07d2ab-84ee-46ae-84c9-7542499d26d7@linux.dev>
  <20260714203927.32289-1-nnamdio@gmail.com>
- <20260714203927.32289-2-nnamdio@gmail.com>
+ <20260714203927.32289-3-nnamdio@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 14 Jul 2026 20:51:17 +0000
-Message-Id: <20260714205118.17DB11F000E9@smtp.kernel.org>
+Date: Tue, 14 Jul 2026 20:52:10 +0000
+Message-Id: <20260714205210.EFF221F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
-
-New issues:
-- [High] Socket state checks in `tcp_bpf_recvmsg` bypass unread data in `sk=
-_receive_queue`, causing data loss on concurrent socket teardown or errors.
-
-Pre-existing issues:
-- [High] Sporadic EAGAIN can still occur on blocking sockets with a verdict=
- parser due to a race with the BPF parser workqueue.
-- [High] `tcp_bpf_recvmsg()` incorrectly returns -EAGAIN instead of reading=
- redirected data after waking up.
+- [Medium] The test attaches its BPF cgroup program directly to the root cg=
+roup (`/sys/fs/cgroup`), lacking isolation and risking system-wide side-eff=
+ects.
+- [Medium] Unchecked `pthread_create` failure causes the test suite to hang=
+ indefinitely.
+- [Medium] The test incorrectly validates the return values of libbpf attac=
+h APIs using `ASSERT_NE(..., NULL)`, which fails to detect error pointers (=
+`ERR_PTR`).
+- [Medium] The assertion checking the elapsed time against `timeo.tv_usec *=
+ 1000` is flaky due to timer granularity and jiffy alignment.
 --
 
---- Patch [1]: [PATCH v3 1/2] bpf, sockmap: handle spurious tcp_msg_wait_da=
+--- Patch [2]: [PATCH v3 2/2] bpf, sockmap: handle spurious tcp_msg_wait_da=
 ta() wakeup ---
-commit 9cbdba3468945420ba116295ae1dbc0bc188c729
+commit b46e4566e9f7fd3ddd12a149005b03389686104c
 Author: Nnamdi Onyeyiri <nnamdio@gmail.com>
 
 bpf, sockmap: handle spurious tcp_msg_wait_data() wakeup
 
-This commit modifies tcp_bpf_recvmsg() and tcp_bpf_recvmsg_parser() to hand=
-le
-spurious wakeups from tcp_msg_wait_data(). It updates sk_wait_event() to
-maintain the timeout by passing it as a pointer. The commit also introduces
-socket state checks into tcp_bpf_recvmsg() to match tcp_bpf_recvmsg_parser(=
-).
+This selftest exercises the tcp_bpf_recvmsg() and tcp_bpf_recvmsg_parser()
+functions, to ensure that they are properly handling spurious wakeups in
+tcp_msg_wait_data().
 
-> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> index cc0bd73f36b6d..e58ab2d1ee943 100644
-> --- a/net/ipv4/tcp_bpf.c
-> +++ b/net/ipv4/tcp_bpf.c
-
+> diff --git a/tools/testing/selftests/net/sockmap_recvfrom.c b/tools/testi=
+ng/selftests/net/sockmap_recvfrom.c
+> new file mode 100644
+> index 0000000000000..f96b4673c977c
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/sockmap_recvfrom.c
 [ ... ]
-
-> @@ -310,13 +311,15 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
->  			goto out;
->  		}
-> =20
-> -		data =3D tcp_msg_wait_data(sk, psock, timeo);
-> +		data =3D tcp_msg_wait_data(sk, psock, &timeo);
->  		if (data < 0) {
->  			copied =3D data;
->  			goto unlock;
->  		}
->  		if (data && !sk_psock_queue_empty(psock))
->  			goto msg_bytes_ready;
-> +		if (!data && timeo > 0)
-> +			goto msg_bytes_ready;
->  		copied =3D -EAGAIN;
->  	}
-
-[Severity: High]
-This is a pre-existing issue, but does this logic still sporadically return
--EAGAIN on blocking sockets when data =3D=3D 1?
-
-If a blocking recv() is called on a sockmap socket with a verdict parser, a=
-nd a
-packet arrives in sk_receive_queue, tcp_msg_wait_data() will return 1.
-
-However, if the BPF workqueue hasn't yet processed the data into
-psock->ingress_msg, sk_psock_queue_empty(psock) could still be true.
-
-It looks like the loop fails to handle data =3D=3D 1 with an empty psock, b=
-ypassing
-the new !data check and falling through to return -EAGAIN.
-
+> +static void setup_bpf(struct __test_metadata *_metadata, const char *pat=
+h, bool recv,
+> +						struct bpf_t *bpf)
+> +{
 [ ... ]
-
-> @@ -371,14 +375,45 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct =
-msghdr *msg, size_t len,
->  		return tcp_recvmsg(sk, msg, len, flags);
->  	}
->  	lock_sock(sk);
+> +	cgroup =3D open("/sys/fs/cgroup", O_RDONLY);
+> +	ASSERT_NE(cgroup, -1);
 > +
-> +	timeo =3D sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
+> +	bpf->on_sockops =3D bpf_program__attach_cgroup(prog, cgroup);
+
+[Severity: Medium]
+Is it safe to attach the BPF program directly to the global root cgroup her=
+e?
+
+Since this is a test, attaching globally to /sys/fs/cgroup impacts the
+entire system and subjects unrelated background connections to the test's
+stream verdict logic. This could disrupt host networking and easily
+overflow the 1024 max_entries of map_socks.
+
+Should the test create and attach to an isolated test cgroup instead?
+
+> +	close(cgroup);
 > +
->  msg_bytes_ready:
->  	copied =3D sk_msg_recvmsg(sk, psock, msg, len, flags);
->  	if (!copied) {
->  		int data;
-> =20
-> -		timeo =3D sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
-> -		data =3D tcp_msg_wait_data(sk, psock, timeo);
-> +		if (sock_flag(sk, SOCK_DONE)) {
-> +			ret =3D 0;
-> +			goto unlock;
-> +		}
+> +	ASSERT_NE(bpf->on_sockops, NULL);
+
+[Severity: Medium]
+Does ASSERT_NE() properly handle libbpf error pointers here?
+
+Modern libbpf functions like bpf_program__attach_cgroup() return an ERR_PTR,
+not NULL, on failure.
+
+If the attachment fails, ASSERT_NE(link, NULL) evaluates to true, masking
+the failure. The test will proceed without the BPF programs attached and
+pass vacuously.
+
+Would ASSERT_OK_PTR() be more appropriate for checking this return value?
+
 > +
-> +		if (sk->sk_err) {
-> +			ret =3D sock_error(sk);
-> +			goto unlock;
-> +		}
+> +	if (recv) {
+> +		struct bpf_map *map =3D bpf_object__find_map_by_name(bpf->obj, "map_so=
+cks");
 > +
-> +		if (sk->sk_shutdown & RCV_SHUTDOWN) {
-> +			ret =3D 0;
-> +			goto unlock;
-> +		}
+> +		ASSERT_NE(map, NULL);
+> +
+> +		prog =3D bpf_object__find_program_by_name(bpf->obj, "on_recv");
+> +		ASSERT_NE(prog, NULL);
+> +
+> +		bpf->on_recv =3D bpf_program__attach_sockmap(prog, bpf_map__fd(map));
+> +		ASSERT_NE(bpf->on_recv, NULL);
 
-[Severity: High]
-Does evaluating these state flags before falling back to tcp_recvmsg() cause
-data loss?
+[Severity: Medium]
+Will this assertion correctly catch a failure in bpf_program__attach_sockma=
+p()?
 
-If normal data arrives and is queued in sk_receive_queue, and a FIN
-(RCV_SHUTDOWN) or RST (sk_err) arrives immediately after, recv() would see
-psock->ingress_msg as empty.
+Like bpf_program__attach_cgroup(), this function returns an ERR_PTR on
+failure, so checking against NULL will allow error pointers to bypass
+this check.
 
-It seems like this newly added code evaluates the state flags and immediate=
-ly
-returns 0 or an error, bypassing the fallback to tcp_recvmsg() which would =
-have
-correctly drained the unread data.
-
+> +	}
+> +}
 [ ... ]
+> +FIXTURE_SETUP(sockmap_recvfrom)
+> +{
+> +	memset(&self->addr, 0, sizeof(self->addr));
+> +
+> +	self->payload_len =3D 1024 * 1024 * 25;
+> +	self->payload =3D malloc(self->payload_len);
+> +	ASSERT_NE(self->payload, NULL);
+> +
+> +	memset(self->payload, 0, self->payload_len);
+> +	self->payload[self->payload_len - 1] =3D PAYLOAD_END;
+> +
+> +	setup_bpf(_metadata, "sockmap_recvfrom.bpf.o", variant->with_recv, &sel=
+f->bpf);
+> +	atomic_store(&self->server.running, 1);
+> +	self->server.fd =3D start_listening(_metadata, &self->addr.sin_port);
+> +	self->server.metadata =3D _metadata;
+> +
+> +	self->addr.sin_family =3D AF_INET;
+> +	self->addr.sin_addr.s_addr =3D htonl(INADDR_LOOPBACK);
+> +
+> +	pthread_create(&self->server.thread, NULL, &run_server, &self->server);
 
->  		data =3D tcp_msg_wait_data(sk, psock, &timeo);
->  		if (data < 0) {
->  			ret =3D data;
->  			goto unlock;
->  		}
->  		if (data && !skb_queue_empty_lockless(&sk->sk_receive_queue)) {
->  			sk_psock_put(sk, psock);
->  			return tcp_recvmsg(sk, msg, len, flags);
->  		}
-> +		if (!data && timeo > 0)
-> +			goto msg_bytes_ready;
->  		copied =3D -EAGAIN;
->  	}
+[Severity: Medium]
+What happens if pthread_create() fails here?
 
-[Severity: High]
-This is a pre-existing issue, but could this return -EAGAIN instead of read=
-ing
-redirected data?
+If the server thread fails to start, it looks like the main thread will
+subsequently call send_payload() with a 25MB payload. Because no server
+thread is calling accept() or reading the data, the TCP receive window
+will fill up and the main thread's write() will block forever.
 
-If data =3D=3D 1 because of redirected data in psock->ingress_msg, but
-sk_receive_queue is empty, the condition:
+Should we check the return value of pthread_create() to prevent the
+test suite from hanging indefinitely on resource limits?
 
-    if (data && !skb_queue_empty_lockless(&sk->sk_receive_queue)) {
+> +}
+[ ... ]
+> +TEST_F(sockmap_recvfrom, with_timeout)
+> +{
+[ ... ]
+> +		ASSERT_EQ(setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timeo, sizeof(timeo=
+)), 0);
+> +
+> +		clock_gettime(CLOCK_MONOTONIC, &beg);
+> +		ASSERT_EQ(recvfrom(fd, ignored, sizeof(ignored), 0, NULL, NULL), -1);
+> +		err =3D errno;
+> +		clock_gettime(CLOCK_MONOTONIC, &end);
+> +
+> +		ASSERT_EQ(err, EAGAIN);
+> +		ASSERT_GE(to_nanos(&end) - to_nanos(&beg), timeo.tv_usec * 1000);
 
-will be false.
+[Severity: Medium]
+Is this strict time assertion susceptible to jiffy alignment flakiness?
 
-The next check:
+The kernel handles SO_RCVTIMEO timeouts in units of jiffies. When
+requesting a 5000us timeout on a system with HZ=3D1000, it converts to 5
+ticks. Because the sleep can start just prior to a tick boundary, the
+actual elapsed time can be slightly less than the absolute 5000us requested.
 
-    if (!data && timeo > 0)
+Could this cause intermittent test failures where the elapsed time is just
+under the requested 5000000ns?
 
-will also be false.
-
-It seems the code then falls through to return -EAGAIN instead of looping b=
-ack
-to read the redirected data from the psock.
+> +
+> +		close(fd);
+> +	}
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260714203927.3228=
-9-1-nnamdio@gmail.com?part=3D1
+9-1-nnamdio@gmail.com?part=3D2
