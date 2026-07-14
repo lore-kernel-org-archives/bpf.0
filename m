@@ -1,212 +1,199 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C41F2E7635
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 18:45:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB46377AA0
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 18:48:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784054735; cv=none; b=uzjTwZ1OmjU7+Dq5CW7QaLtMUx/rX4Ky1O6sSywq3Z4Yo5HyhgrqPjGVrz+t8ZGfeNAXYhcHqrYFyK2PeC+L+04GtsBssiJbtacw/79DV4OC91zR58znrYEILQJ6cDzv83tbU2pd2CLGVxTChpJYl/x70sLiTAwCzG3oTigrFWI=
+	t=1784054932; cv=none; b=bUCKj+oK8E3esgyW0CET3OX27K83VsU6cspFZjfcq+42xSCkW7Oqkdr7Y3gEnooT+JN8pImcFAiVVweVy0Lt2qTwiPCoRFNo41RLSO8UbE+wiwL0AGcm33zeLFpZBjG9KGfawlXaj6RTkYt4ov+jD4a8rLvMNd3isDW0WVxwxgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784054735; c=relaxed/simple;
-	bh=62uohTRKl0OM+sEC4Vkt/hhO6ul8Eq0uykp/8L9mEVw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WQ3vbHctu6+PcIuM394KGhwocY7X/N9tB8FbAENp/yE1ZS8ic6583K8ywb3vs1pnwnngkxXgErKF5o7JMx7EQQAbzop2/FMvi7kAXgDscS09C4dNkxOduFCkPK0XRIWwSAful7fztLPy2REvnCP8/nIIofj7O0GLeF51j6tPtHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YV4hRQn6; arc=none smtp.client-ip=209.85.216.54
+	s=arc-20240116; t=1784054932; c=relaxed/simple;
+	bh=aphYMmiYNr1JeIPA8T50mwkLquMt+pfKAidWzhIQaWc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Cck9F8bne1ot0yJyG59A3Vmcx1REn0qCV5gVNcAbHIIgjmnqUrv9Ko1A96Rb7CijExt9noWa/frtaTeuaTpOqv6Vdv4s3ZVuJxBTkY6kRGjOIxm+ttktdvgznxWIQ8WukTBvLFmDT5hf68daptZnl48SrEKWsXw6OTwTG37bZQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SOS9UqGW; arc=none smtp.client-ip=209.85.215.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YV4hRQn6"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-381018b9375so5260244a91.0
-        for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 11:45:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SOS9UqGW"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c95d0a54ea5so3359796a12.0
+        for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 11:48:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784054730; x=1784659530; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=b6nkP4rSjqnpaQArQbVk/tr97ZX+rJm31+SVlfb5Lu0=;
-        b=YV4hRQn6dzehF2rVe/iwKs8Ffg2aJT72hWb9hMocZ7ve9m5r5YPUnbJ/ZxWSCn44eP
-         G+elCIbjDz40B+mIlCGp57BE8n+Gbz5NXnpNrjBGaW8SndfXT0ksdMfzjg0qGeNQwS7r
-         olBIIF6wRgPJ6fV+G4mCwT0NkYDmqRqVLKcuCGsIVR3lxq1oPvYZHWwtuKXJcIxJV6/L
-         0UO+h0D6311ColeRvds1jfBH6FqIwkf/jQb5Hqh8urC+LvPf6OrGjz+/9UQIerWBk0gw
-         WIg7YIi7W9FvIAdy/eCWGNfp1UzVnmscDJq4Skl+F8ASwhiVD41EAiPtw3MdCD4wyT8Y
-         0sFg==
+        d=gmail.com; s=20251104; t=1784054927; x=1784659727; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=DmCrz+++FMRpOB+di1aYQDQQrE92WmtTbq/JiOrgj7c=;
+        b=SOS9UqGWAD6hYraVY7yLlXHCKBt+xZY9QHa64+9QeEjKJISWbr9SH7dO5aOftpeld0
+         zBM7stdIWaD5XbGbf252JcvlCH9gI7EXfqXTHYmZ3TNgBTKdQSoCBa9gvzSgeRzFLWTl
+         +zft1a2qq+AqwpTRXYokzRBdneJ+KYyAOdiGpNBnVs0m4ISX9j3TYLL5+tmKeCj18vSg
+         MQ6VlUGaghhOcS/odOKrKZB4js9sDi5PjI41I1FluwM8LIypmCJLiTDhCU5khoTPtv2h
+         suDt04Kc54yQgFhVLvL78tOrYegQfOxcHLLN4htowh4a+3vn6Z6gwRBSW4q2aKDatbpM
+         NTRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784054730; x=1784659530;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=b6nkP4rSjqnpaQArQbVk/tr97ZX+rJm31+SVlfb5Lu0=;
-        b=VPAVi3dodefETXKvpenBh2DkwkQw7GnhSLQVjuJuglNiuETErCNbsyWgkDlDe3Da+L
-         v776VN9WEtX0uH3YvUhwDaAFYYsIL9DDsUeislrBsrb4SgKXXpmuQBf8j5xMFNdcbvg+
-         rU3SZs3eCDf4cX3QYvW45BC/Oyk0GGBjoasei8QAto9i18X497b5bUzYTbX12Bi6xwJD
-         T/E6FcaPa2Q8P2IDA8yycoIfVnKEiohKTg3MjM1+fwUQeY5ZSJSlzmd/Q48TLu4qcfmF
-         EvO0jGBVfVYKe1Rv7okLtVShThkr06eAMl/QW7QP4/bH5fMbTyujg7kUcBo5C0TL0w1e
-         iQ4A==
-X-Forwarded-Encrypted: i=1; AHgh+RqEpq+IUCo9yRk4XTRewrJU4K+aWbIRKzqX9BKSO0sQHlVTjLHce8WYgsA6U0g5v1tcJVk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz67aTsUMEDRDiH2jh49fNcU2ZrRtUerA3K7DYHiEMOJNStfOtf
-	vHXInopTQC1Ep3y90y2TbhNKwp2HBT+m+erTaJnIuUzTDywL4BmJa6Oz
-X-Gm-Gg: AfdE7clmhspfCRKdHkmoofSPfKbhuDqYLheho/jqH44NNxWlLOQ8MlQj1pyZ/qwFKh9
-	qj48hcsGN8LdSANDvmVF2IXI5le1CTGa2rhRM3Ur9KRHze5KORRybN6bONKv2qx6HDGTNtVhYxR
-	pwRamgSzFpoLHyTY8mvfcZGGTSihTY9ZlxGuf01cGLxctVNF3jL9KQ8fBwmwqqKkrz9m0TJ6B95
-	ePPD/eJr+wjG8jo31IBK0DMd+XdU3THQox+wGYfQ+JXh/GL1p7+rUtnBrAtSNKFIVjoa145BhMC
-	voP8UfscNuz4ennmeOwa6DO8otbdgE7RGfghPpn/POwrOl6Zc4vfPHDjUymY18zaqWzSnKQd2iB
-	CqY/FuusICP1YyFi8MxLmYx2rktvBLFZGrLkDJhocHvK7/NRaV7CvC+0VHs4s4A4793w5OfYt6D
-	juBzmdZ21SIA==
-X-Received: by 2002:a17:90b:1fc6:b0:382:5c31:1f8a with SMTP id 98e67ed59e1d1-38dc7769973mr13933137a91.27.1784054730379;
-        Tue, 14 Jul 2026 11:45:30 -0700 (PDT)
-Received: from john-p8 ([98.97.42.39])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38e172b6da2sm1946213a91.4.2026.07.14.11.45.29
+        d=1e100.net; s=20251104; t=1784054927; x=1784659727;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=DmCrz+++FMRpOB+di1aYQDQQrE92WmtTbq/JiOrgj7c=;
+        b=S1LwqJ6iQqqcka05/lznalGXzW5VFJXuVoN3gGbwSnwK7KhUJED58vmD2Chdo4AF2Y
+         /ZTdRewqv3bHMYBTYsISjycXWP5wA6Qf87QgegrrcdQo5isba9aRhHL9D8ck3EAQgh7f
+         1+CT/iUb6yjBYKWLTNUFBIayzvjxoUWfeSWY+Al7+53b8yqxrfepTUW1bgwDfBlAuSr8
+         P+GIce5yBlwi83lLmZIZNVvdbGXOiqxU6qucQGI2IWubq3sP134roPukba8mu33/7+U8
+         CtCpzh2KgMmTSNk/i03yipGQStIjU6Jx3GtdzdVl1i3azBWgcx2P4BerFoKMgHEVziUL
+         4Wkg==
+X-Forwarded-Encrypted: i=1; AHgh+RqabLReU/Ssd5pqWzsdY2V9ZF11B4d01SmpcplAoJofEb+LZVxDpcvmJhVH/iFEaYTR+dU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZRCZAa0CjzmOmdhO1N4uj37z2gzwscX2/ese8J5ejnbTbwFSt
+	b6RjkFGp/JjXXhGWQyHLDWXRN/kQSmy5YH9gSQydsLX3xTaRL8e+GA6wXdpw6W5n
+X-Gm-Gg: AfdE7clyH6AzCKLNOPajkVU1TspXtu25dkZlFvMDoloZoeOd+yxZReLz43HWzNIrPtb
+	cvzs1lwPbF1eF2aSUn7bntJIZnKPLgPJmzmeTRvQb/LHd5tows1OHhQxsuwu/uOkzSoNo4TlNqD
+	Ux3EmC1iv+U0s7Z73pMWW8ruS3i2PHuWZAdEcRbSXdG6B2HIjOOpsjaORlHz39hD0s/eC5lyWzA
+	QYr55MOx0wSSPLDkz1nO4zA5l5QqwC525o1wGDAZ0BLa5QgF09exHlU5/FlgCBem32MN9onwExp
+	i9twvB6yha4eaXP/vgiSL8UXqwOvNCsGrXUWXVDU0/F2x4Wpt1fuHE4UEwKyLzxGRlnEtcdW+NU
+	d83MIXe6Do7P5A1vxFh4HIt0ZUn6xdz8su9RHrDLkHdVkEXOuo0g7A8V8DNO90tGK2IvhzY/UJ3
+	nR9h3tgkfZd3RNWbcz9CKWm4tpFo1FXbNbEFAW+PJHET/KMWkBJcmFicywoUdTzFN0n7I=
+X-Received: by 2002:a05:6a21:8884:b0:3c3:68a5:50b3 with SMTP id adf61e73a8af0-3c368a55207mr467413637.57.1784054927410;
+        Tue, 14 Jul 2026 11:48:47 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:11d2:f935:a412:8fad? ([2620:10d:c090:500::972d])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3119c2a7bb5sm56512564eec.25.2026.07.14.11.48.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 11:45:29 -0700 (PDT)
-Date: Tue, 14 Jul 2026 11:45:27 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: Mattia Meleleo <mattia.meleleo@coralogix.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf v3 1/2] bpf, sockmap: Account for receive queue in
- FIONREAD without a verdict program
-Message-ID: <alaAp3qrrn3XYd8u@john-p8>
-References: <20260708-fionread-no-verdict-v3-0-b4ee31b3af53@coralogix.com>
- <20260708-fionread-no-verdict-v3-1-b4ee31b3af53@coralogix.com>
- <20260708171659.8695B1F000E9@smtp.kernel.org>
+        Tue, 14 Jul 2026 11:48:47 -0700 (PDT)
+Message-ID: <08cc4cf4992b72088e59cd9aafe2bfa78d87f738.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 4/4] bpf: Unify helper and kfunc call
+ argument meta
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com, andrii@kernel.org, daniel@iogearbox.net, 
+	memxor@gmail.com, kernel-team@meta.com
+Date: Tue, 14 Jul 2026 11:48:45 -0700
+In-Reply-To: <20260709230242.2003459-5-ameryhung@gmail.com>
+References: <20260709230242.2003459-1-ameryhung@gmail.com>
+	 <20260709230242.2003459-5-ameryhung@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260708171659.8695B1F000E9@smtp.kernel.org>
 
-On Wed, Jul 08, 2026 at 05:16:59PM +0000, sashiko-bot@kernel.org wrote:
->Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
->
->New issues:
->- [High] FIONREAD (SIOCINQ) double-counts available bytes when a verdict program is detached, exposes negative values, and under-reports bytes when a verdict program is active.
->
->Pre-existing issues:
->- [High] udp_bpf_ioctl() suffers from the exact same bug that this patch fixes for tcp_bpf_ioctl(). Without a verdict program, data stays in sk_receive_queue and UDP FIONREAD returns 0.
->- [High] Data race and sequence number corruption in psock->ingress_bytes during SK_REDIRECT.
->--
->
->--- Patch [1]: [PATCH bpf v3 1/2] bpf, sockmap: Account for receive queue in FIONREAD without a verdict program ---
->commit fc144ea49f61a51adcd404a526d68065c61d0452
->Author: Mattia Meleleo <mattia.meleleo@coralogix.com>
->
->bpf, sockmap: Account for receive queue in FIONREAD without a verdict program
->
->This commit modifies tcp_bpf_ioctl() to add the output of tcp_inq() to the
->reported FIONREAD value when no stream or skb verdict program is attached.
->This correctly accounts for data resting in sk_receive_queue that has not
->been diverted to the ingress_msg list.
->
->> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
->> index cc0bd73f36b6d..8e905b50deadb 100644
->> --- a/net/ipv4/tcp_bpf.c
->> +++ b/net/ipv4/tcp_bpf.c
->[ ... ]
->> @@ -344,7 +345,21 @@ static int tcp_bpf_ioctl(struct sock *sk, int cmd, int *karg)
->>  		return -EINVAL;
->>
->>  	slow = lock_sock_fast(sk);
->> -	*karg = sk_psock_msg_inq(sk);
->> +	psock = sk_psock_get(sk);
->> +	if (unlikely(!psock)) {
->> +		unlock_sock_fast(sk, slow);
->> +		return tcp_ioctl(sk, cmd, karg);
->> +	}
->> +	*karg = sk_psock_get_msg_len_nolock(psock);
->> +	/* Without a verdict program, ingress data is never diverted to
->> +	 * ingress_msg: it stays in sk_receive_queue and is read through
->> +	 * the fallback to tcp_recvmsg(), so account for it like
->> +	 * tcp_ioctl() does.
->> +	 */
->> +	if (!READ_ONCE(psock->progs.stream_verdict) &&
->> +	    !READ_ONCE(psock->progs.skb_verdict))
->> +		*karg += tcp_inq(sk);
->
->[Severity: High]
->Does this conditional logic double-count available bytes or under-report them
->in some situations?
->
->If a stream verdict program is attached, data is queued (which delays
->tp->copied_seq), and then the program is detached. The unread bytes sit in
->both msg_tot_len (ingress_msg) and are also reflected in tcp_inq(sk) because
->copied_seq was held back. Adding them together here would double-count the
->available data.
+On Thu, 2026-07-09 at 16:02 -0700, Amery Hung wrote:
+> Helper and kfunc argument checking carried two separate meta structs: the
+> verifier-local struct bpf_call_arg_meta and bpf_kfunc_call_arg_meta.
+> Merge them into a single struct bpf_call_arg_meta. This is groundwork for
+> sharing argument checking between helpers and kfuncs.
+>=20
+> While merging, drop the btf_id field from the helper meta since it is
+> never used.
+>=20
+> No functional change.
+>=20
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> ---
 
-This is fine lets ignore this for now. Every system we have adds sockets
-to the sockmap on connect so this condition is not seen. And above 
-solves common case.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
->
->Conversely, when a verdict program is active, tcp_inq(sk) is ignored. Could
->this fail to account for unparsed data in sk_receive_queue, leading to an
->under-reported value?
->
->> +	sk_psock_put(sk, psock);
->>  	unlock_sock_fast(sk, slow);
->>
->>  	return 0;
->
->[Severity: High]
->This isn't a bug introduced by this patch, but udp_bpf_ioctl() in
->net/ipv4/udp_bpf.c appears to suffer from the exact same bug that this patch
->fixes for tcp_bpf_ioctl().
+>  include/linux/bpf_verifier.h | 40 +++++++++------
+>  kernel/bpf/cfg.c             |  2 +-
+>  kernel/bpf/verifier.c        | 95 +++++++++++++++---------------------
+>  3 files changed, 63 insertions(+), 74 deletions(-)
+>=20
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 3ed788ec6afc..5fbc3dfe5b19 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -1479,18 +1479,24 @@ struct arg_alloc_mem_desc {
+>  	bool found;
+>  };
+> =20
+> -struct bpf_kfunc_call_arg_meta {
+> -	/* In parameters */
+> +struct bpf_call_arg_meta {
+> +	/* Common */
+>  	struct btf *btf;
+>  	u32 func_id;
+> -	u32 kfunc_flags;
+> -	const struct btf_type *func_proto;
+> -	const char *func_name;
+> -	/* Out parameters */
+>  	u8 release_regno;
+> -	bool r0_rdonly;
+>  	u32 ret_btf_id;
+>  	u32 subprogno;
+> +	struct bpf_map_desc map;
+> +	struct bpf_dynptr_desc dynptr;
+> +	struct ref_obj_desc ref_obj;
+> +	struct arg_raw_mem_desc arg_raw_mem;
+> +	struct arg_alloc_mem_desc arg_alloc_mem;
+> +
+> +	/* Only set by kfunc */
+> +	bool r0_rdonly;
+> +	u32 kfunc_flags;
+> +	const struct btf_type *func_proto;
+> +	const char *func_name;
+>  	struct {
+>  		u64 value;
+>  		bool found;
+> @@ -1521,29 +1527,31 @@ struct bpf_kfunc_call_arg_meta {
+>  		u8 spi;
+>  		u8 frameno;
+>  	} iter;
+> -	struct bpf_map_desc map;
+> -	struct bpf_dynptr_desc dynptr;
+> -	struct ref_obj_desc ref_obj;
+> -	struct arg_raw_mem_desc arg_raw_mem;
+> -	struct arg_alloc_mem_desc arg_alloc_mem;
+> +
+> +	/* Only set by helper */
+> +	bool pkt_access;
 
-Sure but doesn't need to hold up this patch. Mattia would you want to
-fix this as well? Otherwise I'll put it on my list and get to it at
-some point.
+It appears this one can be dropped altogether:
 
->
->net/ipv4/udp_bpf.c:udp_bpf_ioctl() {
->    ...
->    *karg = sk_msg_first_len(sk);
->    ...
->}
->
->Without a verdict program, data stays in sk_receive_queue, and UDP FIONREAD
->constantly returns 0. Could a similar fallback to the native receive queue be
->applied there to prevent user-space applications from hanging or dropping
->packets when relying on ioctl(FIONREAD)?
+    diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+    index 5ccb00a8c84c..b1d5a359c78b 100644
+    --- a/kernel/bpf/verifier.c
+    +++ b/kernel/bpf/verifier.c
+    @@ -4654,7 +4654,7 @@ static int check_map_access(struct bpf_verifier_e=
+nv *env, struct bpf_reg_state *
+     }
 
-yes we should do something here.
+     static bool may_access_direct_pkt_data(struct bpf_verifier_env *env,
+    -                              const struct bpf_call_arg_meta *meta,
+    +                              const struct bpf_func_proto *fn,
+                                   enum bpf_access_type t)
+     {
+            enum bpf_prog_type prog_type =3D resolve_prog_type(env->prog);
+    @@ -4678,8 +4678,8 @@ static bool may_access_direct_pkt_data(struct bpf=
+_verifier_env *env,
+            case BPF_PROG_TYPE_LWT_XMIT:
+            case BPF_PROG_TYPE_SK_SKB:
+            case BPF_PROG_TYPE_SK_MSG:
+    -               if (meta)
+    -                       return meta->pkt_access;
+    +               if (fn)
+    +                       return fn->pkt_access;
 
->
->[Severity: High]
->This is a pre-existing issue, but is there a data race and sequence number
->corruption in psock->ingress_bytes during SK_REDIRECT?
+                    env->seen_direct_write =3D true;
+                    return true;
+    @@ -8307,7 +8307,7 @@ static int check_func_arg(struct bpf_verifier_env=
+ *env, u32 arg,
+            }
 
-yep pre-existing needs another patch.
+            if (type_is_pkt_pointer(type) &&
+    -           !may_access_direct_pkt_data(env, meta, BPF_READ)) {
+    +           !may_access_direct_pkt_data(env, fn, BPF_READ)) {
+                    verbose(env, "helper access to the packet is not allowe=
+d\n");
+                    return -EACCES;
+            }
 
->
->In sk_psock_skb_ingress_enqueue(), psock->ingress_bytes is incremented without
->locks:
->
->net/core/skmsg.c:sk_psock_skb_ingress_enqueue() {
->    ...
->    psock->ingress_bytes += len;
->    ...
->}
->
->Concurrently, tcp_bpf_strp_read_sock() locklessly resets psock->ingress_bytes
->to 0 and uses it to adjust tp->copied_seq:
->
->net/ipv4/tcp_bpf.c:tcp_bpf_strp_read_sock() {
->    ...
->    psock->ingress_bytes = 0;
->    ...
->    tp->copied_seq = psock->copied_seq - psock->ingress_bytes;
->    ...
->}
->
->If another socket redirects data to this socket, the target socket's
->psock->ingress_bytes is incremented by the workqueue or softirq. Does the race
->with tcp_bpf_strp_read_sock() cause redirected bytes to be incorrectly
->subtracted from the target socket's tp->copied_seq, artificially holding back
->the ACK sequence and corrupting the TCP state?
->
->-- 
->Sashiko AI review · https://sashiko.dev/#/patchset/20260708-fionread-no-verdict-v3-0-b4ee31b3af53@coralogix.com?part=1
+> +	u64 msize_max_value;
+> +	s64 const_map_key;
+> +	struct btf *ret_btf;
+> +	struct btf_field *kptr_field;
+>  };
+
+[...]
