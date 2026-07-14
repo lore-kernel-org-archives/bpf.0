@@ -1,134 +1,121 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C731299A87
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 05:01:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 262162EBB8C
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 05:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784005307; cv=none; b=Bhq0HDMQPKGx0gnqQX5ARb+cY+dvk848j2q25QZgeSahW/6e5WyI1W8Sz17ONzWnoHqySWKMBf4dtTmzsbsYGP6mpm2lAKhJOs2a2Bd01rjsumyIqqSSt+JpSbNL07Yl0mxr+A+HQ3iQg1ndTK/HE+jjjHsKq5rAilpzuZh5JVI=
+	t=1784007973; cv=none; b=gAVG5k9uZoM6BT49RIKPe64TJsXjh6vulxYD32VUSh/KYGut3NONn83K+dt888gf5xEZm/b2JW0ZY5E96BSNlJpFPPGgX4WFi0hjoEvh9Q/TqXFgLrL3yx24PKIhOoqLfMMTuuIOt74TAqM8OBUsFZGg2lrDwT9nqHQpL8nRQ4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784005307; c=relaxed/simple;
-	bh=FCPW8Mm9ioFQS/wDdx5VCJNPs/X3lZS2KcJ9ZczL4JU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SomuqN84DdRuyReN8j3CHJdz2oeIThbWA9U7pa41fruFBZrMK42sYGZaAKrt75dGzvenCy3XQeJbtc22OJNfi+T8jb5jvR2x0bpynpFDP5bHH9l5TOz5p81NboB2i+eR2UZbwZ+rc5IaTMbMGEMM83rYmBgPg5K6Ibbf9MNCh4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=OqvFkh+C; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1784007973; c=relaxed/simple;
+	bh=EcrvypcgfB6svpY8rm/3nkYGWSyZUZ99YmlZsFVnpxA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=soOZMQ6cWDxFX681jygFrqefEZJM246lXvGi8caw9i3ycyKCaAhEHbxmbat6/BvdK+MNQIwYzIg7xDyy1dN2iD22gQAEuH+t7ozooft+mDyCIvbHgGSGOdK9k2BSHSPgNLIyDPjKTYGw6/JvHnRGEYovEm+WYaQ7dgZNeUl2UW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LMPycfj9; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="OqvFkh+C"
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c15f6de6cdfso480616566b.0
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 22:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1784005304; x=1784610104; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=w9LEcgwtvSHopCw2U3XmWpNwJWVPsCyK67cqWbn8b9c=;
-        b=OqvFkh+Cy8Be9BClbFua91QIIJlCGrcYXLDSrUQZUjsS/s4tTGq58Jn2aPRedXmiUr
-         WMnWwuzlzhwaHH20xWXnrDeA82//r9cs532AfovHS0IhpXFpjoVgt2s5KTu2asS15PXo
-         gGiDEz0Okege71OplohtQvfJYayxZ/B2Fr29Uopkh8hnzfVB3UK4RX1OqDztWBW8vohv
-         gOTUrrhq8k8ya9SxIJAxQjWTnLPu4zVcHW15PKyWim4BX+IQP5bAGU9iinCcDw44RV7O
-         E9LNIg3Y1DPPkv+BGtUlK0awaLHecr8NVqfndw9rcQAkta0ZFAvJ1yMuXRKzhCwD+Gwn
-         8Bug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784005304; x=1784610104;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=w9LEcgwtvSHopCw2U3XmWpNwJWVPsCyK67cqWbn8b9c=;
-        b=rf5WjCYhxCUru4k1uaAMsXUYUaNDBZWCVqZBSKwfypU9J4CEx3Zfjn0X6iqt2EnRdm
-         Q3p3F3g/X/xv9Mjmqw0F7NIrbxx3eYrqy97Q+Cam7xK23qmT/UOnlAyoq8F4IviGVw8m
-         IgS7v5HjalyJDCGSYhUVCG0cONlYcXxXO3g8aIfsDoyl0ONKIp1yEhlmSqbqrkN36vgw
-         71IjpPCA9M7Cg9mxS8hE6WbDLSZh40JWhEYGjVEXKJPHp/hutksJOQhvXkRYPcx/KaLH
-         PsAYbbJbu15E8b4DM1rbYG9nkNybRByvbX9NcfBqpe5uWQ3ToqwoeDkAOwnRbq/dQ7GV
-         LjJQ==
-X-Gm-Message-State: AOJu0YzbQdR37iTa8ZwseCs9f/R/ZOy/MPjQwOfRQGgzmcP7tlGdJPFU
-	jz7bcUgbopgWGSkWoN51ZdDpJwno89LGiEOtuIgsNAHEpLh+iEufOUui+yFY2YjfKOQ=
-X-Gm-Gg: AfdE7cnDDmSjRSkgUHAXFvs+bm6B2BfSD1X14xSdHWEbgdM5/m8H2uJynAxtN3OUxjo
-	SJRl5ZqAnzc0j/S1fMjCKof7s6BlI2eAkY9QDJrddobLMlDBYr534g+pNJKWJM9wWS6S1gQv9PA
-	r5ftiWwkxSj2Q52YH+mdmvV3vX7OJBQEV7/oQucLNLC4h6Ew82S+bOWzjvxZZ+ZLsmf9ygtJmS4
-	5KlXqlDUBZ3QbzRNeJ5SU6a2F4PZFqXIGC5EfwHhB8YI19eSi9L6632n0B9WeSYgvYLL9sP+znm
-	LPuzNhuk0DODVhfw9cjaO7y/ZfVjHhC+/678N+ThwCz/8ieFHZwtkz0V+Co1Jn3fDCqiJFqs2Sf
-	hcleUC5+YjUt6cV58u7U2P3jxBMxiaXBQZGgmch1ZwuVvq7GLvSuzpJl3x+YMi9mR2632+9zp4C
-	mMfGpA34eFnxVJPjrFTAXJqNYT3q41Qd0u
-X-Received: by 2002:a17:907:1ca0:b0:c15:f005:63fb with SMTP id a640c23a62f3a-c161e940115mr425942166b.3.1784005303928;
-        Mon, 13 Jul 2026 22:01:43 -0700 (PDT)
-Received: from u94a (27-51-48-151.adsl.fetnet.net. [27.51.48.151])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ebcae1dce3sm14429042a34.3.2026.07.13.22.01.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 22:01:42 -0700 (PDT)
-Date: Tue, 14 Jul 2026 13:01:32 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: sun jian <sun.jian.kdev@gmail.com>, 
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	john.fastabend@gmail.com, andrii@kernel.org, memxor@gmail.com, martin.lau@linux.dev, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer
- pointers
-Message-ID: <alXBjNMotfDYXeNX@u94a>
-References: <ak5HLLrYK3R_g2y_@u94a>
- <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com>
- <ak8XSRiLKx5WcIQw@u94a>
- <1f8aad47f61fbf85eb55276e4bb01bfcff61393e.camel@gmail.com>
- <CABFUUZEXYduca34g22YZ1ESyYe3Yc3kYQrTEWLMxB5X0ZmYn8w@mail.gmail.com>
- <alCgmxFh9q-vjE0O@u94a>
- <CABFUUZEnd9f7tV-+jT+cgL7sFVp7pL5-tjdwMvxcR9ist1s-xg@mail.gmail.com>
- <alRtilWhKw4zzMkI@u94a>
- <3430dc0a2a141769a596ab21d7abdd86a0a804db.camel@gmail.com>
- <alWvvwpn3z9Nn0zw@u94a>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LMPycfj9"
+Message-ID: <ea6d7a5e-c4f1-46de-9b8b-37a76b17b74a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784007956;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=guuvEhHaIBFxPQPJ5Yngg6bGOgfH8Gk5niG8LRyqVgY=;
+	b=LMPycfj9zQ+eAcw50IGs9ZTIua0P+DcQX9k/MgMYA/0TFlfjcOw3U/5fym6iy/+XLnBnZ9
+	+nzJaVfUjmQWvqxY/Gndg2KLGcLTTRKsF1ASoAYB0o41adc0DDRwZlnbCDAeFcHuArcpj3
+	/uA0lmZTmex9mjBuaqTekI2XHdBGfA4=
+Date: Tue, 14 Jul 2026 13:45:50 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alWvvwpn3z9Nn0zw@u94a>
+Subject: Re: [PATCH bpf-next v9 5/9] bpftool: Generate skeleton for global
+ percpu data
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260713154024.30851-1-leon.hwang@linux.dev>
+ <20260713154024.30851-6-leon.hwang@linux.dev>
+ <20260713164824.46FA71F000E9@smtp.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20260713164824.46FA71F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Jul 14, 2026 at 12:31:38PM +0800, Shung-Hsi Yu wrote:
-...
-> > >	var_off = (s64)reg->var_off.value;
-> > >	if (var_off >= BPF_MAX_VAR_OFF || var_off <= -BPF_MAX_VAR_OFF)
-> > 
-> > This should hold already.
+On 14/7/26 00:48, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
 > 
-> FWIW, I had thought so, but after checking I realize that the verifier
-> only ensure that
+> Pre-existing issues:
+> - [High] In light skeletons, `BPF_MAP_TYPE_ARENA` maps with initial values are permanently leaked because `__destroy()` skips them, failing to unmap their memory.
+> --
 > 
->   -BPF_MAX_VAR_OFF < smin < BPF_MAX_VAR_OFF
+> --- Patch [5]: [PATCH bpf-next v9 5/9] bpftool: Generate skeleton for global percpu data ---
+> commit b822b756947c191db53a46cfd85674008d72587c
+> Author: Leon Hwang <leon.hwang@linux.dev>
 > 
-> holds true in check_reg_sane_offset_{scalar,ptr}(), and does not check
-> smax, so technically var_off.value can be greater than BPF_MAX_VAR_OFF
-> when we reach here...
+> bpftool: Generate skeleton for global percpu data
+> 
+> Enhance bpftool to generate skeletons that properly handle global percpu
+> variables. The generated skeleton now includes a dedicated structure for
+> percpu data, allowing users to initialize and access percpu variables more
+> efficiently.
+> 
+>> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+>> index a01d06d22d1a3..b60db11081497 100644
+>> --- a/tools/bpf/bpftool/gen.c
+>> +++ b/tools/bpf/bpftool/gen.c
+> 
+> [ ... ]
+> 
+>> @@ -669,7 +693,8 @@ static void codegen_destroy(struct bpf_object *obj, const char *obj_name)
+>>  		if (!get_map_ident(map, ident, sizeof(ident)))
+>>  			continue;
+>>  		if (bpf_map__is_internal(map) &&
+>> -		    (bpf_map__map_flags(map) & BPF_F_MMAPABLE))
+>> +		    ((bpf_map__map_flags(map) & BPF_F_MMAPABLE) ||
+>> +		     bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY))
+>>  			printf("\tskel_free_map_data(skel->%1$s, skel->maps.%1$s.initial_value, %2$zu);\n",
+>>  			       ident, bpf_map_mmap_sz(map));
+> 
+> [Severity: High]
+> This is a pre-existing issue, but does this manual internal map check cause
+> BPF_MAP_TYPE_ARENA maps to be permanently leaked in light skeletons?
+> 
 
-Scratch that, it cannot. Below just shows that (var_off.value |
-var_off.mask) can be greater than BPF_MAX_VAR_OFF, not var_off.value.
 
-So what Eduard said is correct, and
-  
-  -BPF_MAX_VAR_OFF < var_off.value < BPF_MAX_VAR_OFF
+No, this is not a pre-existing issue.
 
-does always hold.
+When tried to generate light skeleton for internal arena map, got:
 
-> ..., just that it doesn't really matter much as it is
-> rejected anyway. And if it is a constant then smin=smax, so for a
-> constant value it does always falls between +-BPF_MAX_VAR_OFF.
+  GEN-SKEL     [test_progs] arena.lskel.h
+Bus error
+
+Instead of such implicit error, I'd like to send a separate patch to
+reject generating light skeleton for internal arena map explicitly.
+
+Thanks,
+Leon
+
+> ARENA maps with initial values appear to be skipped here because
+> bpf_map__is_internal() evaluates to false for them. This skips the generation
+> of the skel_free_map_data() call.
 > 
->   0: (79) r6 = *(u64 *)(r1 +0)          ; R1=ctx() R6=tp_buffer()
->   1: (85) call bpf_get_prandom_u32#7    ; R0=scalar()
->   2: (bf) r2 = r0                       ; R0=scalar(id=1) R2=scalar(id=1)
->   3: (67) r2 <<= 32                     ; R2=scalar(smax=0x7fffffff00000000,smin32=0,smax32=umax32=0,var_off=(0x0; 0xffffffff00000000))
->   4: (77) r2 >>= 32                     ; R2=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))
->   5: (07) r2 += 536870911               ; R2=scalar(smin=umin=0x1fffffff,smax=umax=0x11ffffffe,var_off=(0x0; 0x1ffffffff))
->                 /* r2 is now [2^29 - 1, 2^32 + 2^29 - 2] */
->   6: (0f) r6 += r2
->   7: R2=scalar(smin=umin=0x1fffffff,smax=umax=0x11ffffffe,var_off=(0x0; 0x1ffffffff)) R6=tp_buffer(smin=umin=0x1fffffff,smax=umax=0x11ffffffe,var_off=(0x0; 0x1ffffffff))
->   7: (79) r0 = *(u64 *)(r6 +0)
->   R6 invalid variable buffer offset: off=0, var_off=(0x0; 0x1ffffffff)
+> Since ARENA maps can be very large, skipping them during skeleton destruction
+> leaks both the userspace virtual memory (VMA) and the underlying kernel
+> bpf_map object, as the VMA holds a file reference to it. This can lead to
+> resource exhaustion if a daemon repeatedly reloads BPF policies.
 > 
-[...]
+> Could this code be updated to use is_skel_data() instead of get_map_ident()
+> and bpf_map__is_internal() so that ARENA map memory is correctly unmapped and
+> freed?
+> 
+>>  		codegen("\
+> 
+
