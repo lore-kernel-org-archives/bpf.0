@@ -1,120 +1,113 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE0025B0B2
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 02:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0C03624B2
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 02:53:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783997235; cv=none; b=SXwbwW/QXtrtzq1ufAPQKEssuSgAijNHzAPH29umorj/KTrep4XsYPcGzZVTGeuuPNx5ImrAGXlmpTE8SJpNYsVY5ZGonTq88Pik+04tOGiSgV9pScGGjGPrZVKdRfhNKE7FjjA9rKzPHPajRYRnUzIpFQ32+Qm4+fp7y7lYpSs=
+	t=1783997601; cv=none; b=SXLDNSQ+nHxv7gnq4nkT7NK9/350CtjOFctOhz193nPuBZq5lNb8CtHTD6b/ud5Vre9UpmT7pEwYuWWPVkoaEv0joBGusAapKnLEoxOyQZT8BhiABnJvqoOlolae4qjnt3lQG8IMiozyQwwGjl3G0ma/dzxPYnLaC/pPnM9sbMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783997235; c=relaxed/simple;
-	bh=Jmbq4Z26iQHkmKxrnQWds2dMifspHX44AzT9QT2tZJ4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=G9KV/HKUTButfK3BtyweDKEXmzrwWgKfmAitSO6n9sZ5dXMbDYy74eU07ugBdjolQwQVHS9uVVpvNJXin0XoEq5UkvI/q96hsxD3SgSTeTuslPTwdDDZVtoMvxhakA/SezBTzpqDDie6yIMifXijQh6QTXbp6U/1DFYpoNvKQ6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cLL2BHep; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783997601; c=relaxed/simple;
+	bh=r6MhhHUMydWMGZAPupYulst8Gq443GA7hBgMyI/K5SA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=BT/H9zOq07jgoPIscQCjxCuhcdXhSnngt0ZOaD+UvqHChEKm/w7T3YsNNlDzwHk0Bg5s/bv4/yQWl5rcz/0UDt69y8JIzsjgqd3UJU+KzR/OItkDgeMXkEO3hV5E1ESO641i4vITZoQxURFSq5Wr+DL7PBJ/T9ruPd0oTqlV+/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cAnzyfcc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cLL2BHep"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c966b9ee9cbso2122420a12.1
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2026 19:47:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783997233; x=1784602033; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=C/jMBU38+ad+mYHMb9OoGQI14GFwZsPgUUyAfPzMVGI=;
-        b=cLL2BHep5GnbdtjZWLOklxl7i55FZc+gVX8Nt28uZfCgevk2yWeNcRv9CPMlMA99E0
-         rIX6dVZNZOH2yAT/iKqWVIJ4rZ/Cudg9kEr135VgrnDhw7GRckIMPGusDdXyyAdY7/eM
-         7EhB3BBBaxHj/xTD6WS13CxwljcQ2S5yvZryjctzc8AGZwUFg0Uazz1OQ9467w8mGFeH
-         HyxGCrz8V+HwV/sNw2X9DS7BqPxpMVtuA8wsF9QYAW5ly4uEbDYFUyra42tOkTdmulvk
-         vGZLaFs8dQ3VJQSOhC3OCmkV0xUMZZsXVzT7Ek4/XopAT8b1SEM2Q4DPsuotyBbIWVkH
-         Lwkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783997233; x=1784602033;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=C/jMBU38+ad+mYHMb9OoGQI14GFwZsPgUUyAfPzMVGI=;
-        b=BvBCqntY05PHkAVtDKhxibyx6dNA68cy3AAtQ/OZK6vEtgOslmPntdTGdUBUjTP1bC
-         ORcx8U0F5tpahu/ocXVx2NRw454dbNhIwOPlJ8VLohtoL6mTcpkfAVW9tNxXB+p3G27T
-         spmxWvzQKC/XsIATeQgYcmMag95tUv2719HtjVLQZSuOEtEawkalFS2Mo+glw3yvbegd
-         +Av1tr3QI2ZhPcwkvKjzKwfjdGbvTVcA262AgHEq+xOW867apI59OQBmXSixALWhph/Y
-         QqsKf/K1ofHnKYNWfXo4x4t9E4FCkbgu4WMIpmE5srKajG807oSjXnebgefbfdlAdWfH
-         OBUg==
-X-Forwarded-Encrypted: i=1; AHgh+RqCTLDXlCYM07vTz9oVNbzys7MQ82kpakgpvFGzRYCUJ0OUBinjXCn+IeZLxd5QXQ4PjsQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyePPQu+UiKJdxEkmoEXLZFh3ctJrmlTZ/bOqQF7TgC0OaRa1sI
-	8fKjgh+b64mgDzUnC8sBdzQfn3Xhvk+ZZTavGtSDg/ubclnbjm1gaof+
-X-Gm-Gg: AfdE7ckktWnFO7iI148jqSD//RVTL6CdgqXZnck7/nZVr6QUb0VhVpIUVLpIdEm6zdi
-	vQ59/b8gLAIxrmRcrTBhbWo8myZeN8SXp7HEoSCan20z5bVwCn3f1eqJhbguaf5da3maoj7RmfK
-	ojwB6OAUaRuwRS1pVbbfe4VECotwZLCJDYPBbM08BDCNZx5fLPjgcWJVDeDCWDuR4sqJzsgqwbw
-	WzpIuqGcgVWhN3H++YMQZD6mBIj9TKiCGONSIQMvcyiDwJZyZKK51iXNPqits/Q3IsoZLZzBVAZ
-	xGKg8/kDnTtattmmKahl7dN6C9RLWJihU8ukOeYceNwDml4Gbqv6+8icbkKD/lFFJeIPYP+RgG/
-	EiwHLsbscTgWZPRzIngu8TYO5t5GN1Twrdh6vfHdC02/jYTCPLM/HwLLcYSNPNTkwyN4Gnazwt5
-	d9bLaBQ4IsQsiJeR30QTmlpYhCpuCmX3mYgeIzOZ2dt2ayWiUVdSTzDGSHGG5Azwo+Ng==
-X-Received: by 2002:a05:6a00:f89:b0:842:2419:6c0b with SMTP id d2e1a72fcca58-84889637ff9mr9176103b3a.10.1783997233424;
-        Mon, 13 Jul 2026 19:47:13 -0700 (PDT)
-Received: from mi-HP-ProDesk-680-G6-PCI-Microtower-PC.mioffice.cn ([43.224.245.226])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f29c7d9sm671460b3a.26.2026.07.13.19.47.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 19:47:13 -0700 (PDT)
-From: "zhidao su (Xiaomi)" <soolaugust@gmail.com>
-To: Tejun Heo <tj@kernel.org>
-Cc: David Vernet <void@manifault.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	"zhidao su (Xiaomi)" <soolaugust@gmail.com>
-Subject: [PATCH] sched_ext: Validate cid override before updating tables
-Date: Tue, 14 Jul 2026 10:47:04 +0800
-Message-ID: <20260714024704.3318132-1-soolaugust@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cAnzyfcc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 200C71F000E9;
+	Tue, 14 Jul 2026 02:53:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783997600;
+	bh=WHYniaFivQZgdujGNZmEfLO5nUJRfcYcGN4oDQ0Ebig=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=cAnzyfcc5pE0U8+CDmTLQTsVz8xr5qOmmkGcPHRex/JGxzDQuq1Nl4D52JlA0jCSi
+	 hI22FhXIstfuRpcFpS5jZiZe6GUl67PqVWX467g5sppV/NjVptrMb6gLIeRte0XbKv
+	 kogSBUybCg3q8lDVnimHkHWm0UGJxsF+usPRwk/GCVIB8lFNRJX1DYVBhkS5a4dJVo
+	 kmspNE7cO94uVg2pbNZv069fe5A7c16zWprmbeUrDjtOwVW51xIp6UI1zNOu4W/DNf
+	 aqYkCmDgpOrx+im02Aj5fn5mHMhnmCeS7fiHKxQ5IuFKbqTk45d3rEmKAEfcNONzJi
+	 qdQiUorbo7MFQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add testcase for
+ callback with tailcall
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Pu Lehui" <pulehui@huaweicloud.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260714024459.420075-3-pulehui@huaweicloud.com>
+References: <20260714024459.420075-1-pulehui@huaweicloud.com>
+ <20260714024459.420075-3-pulehui@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 14 Jul 2026 02:53:19 +0000
+Message-Id: <20260714025320.200C71F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-scx_bpf_cid_override() currently updates the cid lookup tables as it
-walks the user supplied mapping. If validation fails midway, earlier
-entries may remain installed.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Out-of-bounds map index used in bpf_tail_call_static in the test pr=
+ogram.
+--
 
-Split validation and table updates so a failed override leaves the
-existing mapping unchanged.
+--- Patch [2]: [PATCH bpf-next v2 2/2] selftests/bpf: Add testcase for call=
+back with tailcall ---
+commit 6b7ff517c87bc3ed869da7118100965c0668a781
+Author: Pu Lehui <pulehui@huawei.com>
 
-Signed-off-by: zhidao su (Xiaomi) <soolaugust@gmail.com>
----
- kernel/sched/ext/cid.c | 5 +++++
- 1 file changed, 5 insertions(+)
+selftests/bpf: Add testcase for callback with tailcall
 
-diff --git a/kernel/sched/ext/cid.c b/kernel/sched/ext/cid.c
-index f31113b080e9..9e3a466f296f 100644
---- a/kernel/sched/ext/cid.c
-+++ b/kernel/sched/ext/cid.c
-@@ -329,6 +329,11 @@ __bpf_kfunc void scx_bpf_cid_override(const s32 *cpu_to_cid, u32 cpu_to_cid__sz,
- 			scx_error(sch, "cid %d assigned to multiple cpus", c);
- 			return;
- 		}
-+	}
-+
-+	for_each_possible_cpu(cpu) {
-+		s32 c = cpu_to_cid[cpu];
-+
- 		scx_cpu_to_cid_tbl[cpu] = c;
- 		scx_cid_to_cpu_tbl[c] = cpu;
- 	}
--- 
-2.43.0
+This commit adds a new BPF selftest to verify that a callback involving a
+subprogram with a tail call is properly rejected by the verifier.
 
+> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_callback.=
+c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_callback.c
+> new file mode 100644
+> index 0000000000000..dfe9c49cfeb1d
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_callback.c
+> @@ -0,0 +1,62 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <linux/bpf.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include "bpf_misc.h"
+> +#include "bpf_test_utils.h"
+> +
+> +int classifier_0(struct __sk_buff *skb);
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+> +	__uint(max_entries, 1);
+> +	__uint(key_size, sizeof(__u32));
+> +	__array(values, void (void));
+> +} jmp_table SEC(".maps") =3D {
+> +	.values =3D {
+> +		[0] =3D (void *) &classifier_0,
+> +	},
+> +};
+> +
+> +static __noinline
+> +int subprog_tail0(struct __sk_buff *skb)
+> +{
+> +	int ret =3D 0;
+> +
+> +	bpf_tail_call_static(skb, &jmp_table, 1);
+
+[Severity: Low]
+Does this code use an out-of-bounds index for the tail call? The jmp_table
+map has max_entries set to 1 and populates index 0 with classifier_0, but
+this bpf_tail_call_static() invocation uses index 1.
+
+Even though this test is designed to be rejected by the verifier, should
+this pass index 0 to correctly match the intended tail call target?
+
+> +	barrier_var(ret);
+> +	return ret;
+> +}
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260714024459.4200=
+75-1-pulehui@huaweicloud.com?part=3D2
