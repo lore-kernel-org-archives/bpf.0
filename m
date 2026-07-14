@@ -1,113 +1,161 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A99E34D4FE
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 12:46:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35AE6477E37;
+	Tue, 14 Jul 2026 13:47:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784033174; cv=none; b=LCC9T6ZX1jcIvX3i6XHKa1kSzyd0RMG+6EqONMbDPjmh6kPufHpF8XkkxYwoRIQNsSRodashWIwhsrdBm/LwQodxPAIXTV90h7PumIEU2tuoiFEwhrHPaafF8k7J6d5eEBQb4JPt89rpwCqtnP7T4x8gFnq7lLMe8wszJKydxS8=
+	t=1784036861; cv=none; b=N+NlzfSuIUyCyCgLYgS+l1+lkdIFTmevQMvvHdr7ExMijvZSeWF0vam5F95dj6/dXJTJymGH83pbndAj1iKZ789cT/cJLTxOZOGjPPSwjwcOkCjOnc9NCGkvYQ1sNKv04ot/8Y8B3iI93hM0+vxvx+trvCUZmhm3eZyliEerlW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784033174; c=relaxed/simple;
-	bh=TwnCrAoeVyiFWJ3KP+QspY8FsG63ElTMGHDe2LkZ2Wg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=HLnEVySLTbkAtAyOFi5PGUZidXCYMYefVldBN9qE6Xo7zleyOD3q+WK/JaBEa5kaJl1pK0hl3RTfpXE0qA5M7glIqDNACKhPBV1US2D82XibGzjpfPBu13hqUJP7P+pKv98kQ/s7p07WblU9nkJejJOLJqmLXxvDdh5ZI0zH4HQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YgbYkYDT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784036861; c=relaxed/simple;
+	bh=P10sqAu3BTK8QXsnc5a9Gq9byauFTrhK3vFf7HyJ1s0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ow8ixGmom6u7DlnxcOyQbEw3AJnNeWkOlBMHcKEsFopuMOnNrHMfKXiqpjox/AziYK0hki95fxoumGZiBriEcyUo0ocD/EWA2J2J8vbdw37v//LEtZuktJfw9YMqz6HdwvLbg5bKhO4cyUygAvBWPMp0j+ilUGwFf0TQP1z6Pjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mq6CQBhi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YgbYkYDT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB0C21F000E9;
-	Tue, 14 Jul 2026 12:46:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mq6CQBhi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 509351F000E9;
+	Tue, 14 Jul 2026 13:47:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784033173;
-	bh=CXQzN6XP2xrKvESK8FlyvucOQhJFW6xpcNhVU7fqgnU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YgbYkYDTzQ02I5rQOui/Uv7BhMvyd54K0KFfYgEJeQqePrpeodPMr9FnbxrKndpYr
-	 s+BFG8tJtws4fbR173X57YpktSrmRO+d2vION23jXJHABAK4vBKNsu/iwkPiO50YGa
-	 CqcrwLxxALyFLOYkySbocWdJBdCF2JHU6lP0mPS03OA409DBrEqyCe5juCIWV6kn5x
-	 y/d4wsp62KWBgynxIjTjnJ23h14ZolSsbPwQa1k8HsUa/WpL//IUlmicFuE/PeBQhF
-	 jyqMBVGsn+QnO0gVexV8rmF18LKaSbQocgpgy6EHRo/hQzdy2Mh95OsCjpMQmL809S
-	 10SZWwIoEMzvQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/2] bpf, riscv: add support for timed may_goto
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Feng Jiang" <jiangfeng@kylinos.cn>
+	s=k20260515; t=1784036860;
+	bh=as1hyUElsqNDN3xfNf1AKsFKYJ7NSurFjoig00Tsl0w=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=Mq6CQBhidmTO/xi6/EQBvn3kuphYWrZcjPY7r7O+6F2aLfm47t+tVk8Ux8qKX9x3U
+	 C5pk9MAiD5/82RF4GQRqFrcaKjCm/gY0JI4iqUOe2pu5LVrUKls/zpxNnnm5428lxo
+	 eFzc49P4G+rmvU6ND4EMjKsNIwvquNR+oQkAa2u3OMR5pCGcdQfh5Lc2EEc9pkKB8l
+	 x78ucXLTZohQWunRsTCZ0ZUGaXOuak55NSEXaQtjqSng0tlZn+KcQPREr4msApwhBF
+	 qTweKKFUnT3k1k/+CeuSWh+vr/fQvF+3DlAy0iNvjF7AcicM694QCYw3GZQef4cp9s
+	 z/O3bI9aA5GFg==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: sashiko-reviews@lists.linux.dev, Pu Lehui <pulehui@huaweicloud.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260714-riscv-bpf-timed-may-goto-v2-1-eeb6201aedcc@kylinos.cn>
-References: <20260714-riscv-bpf-timed-may-goto-v2-0-eeb6201aedcc@kylinos.cn>
- <20260714-riscv-bpf-timed-may-goto-v2-1-eeb6201aedcc@kylinos.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 14 Jul 2026 12:46:12 +0000
-Message-Id: <20260714124612.CB0C21F000E9@smtp.kernel.org>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Reject callback subprogs invoke
+ tailcall
+In-Reply-To: <20260714025645.101971F000E9@smtp.kernel.org>
+References: <20260714024459.420075-1-pulehui@huaweicloud.com>
+ <20260714024459.420075-2-pulehui@huaweicloud.com>
+ <20260714025645.101971F000E9@smtp.kernel.org>
+Date: Tue, 14 Jul 2026 15:47:35 +0200
+Message-ID: <87ech5wumg.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The assembly trampoline `arch_bpf_timed_may_goto` does not set u=
-p a frame pointer (`s0`), which breaks stack unwinding when `CONFIG_FRAME_P=
-OINTER` is enabled and omits the BPF program from stack traces.
---
+sashiko-bot@kernel.org writes:
 
---- Patch [1]: [PATCH v2 1/2] bpf, riscv: add support for timed may_goto ---
-commit 08fb72c94674edd23d2e12eda1b3dd76cb372fdc
-Author: Feng Jiang <jiangfeng@kylinos.cn>
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+e(s) to consider:
+> - [High] The patch inadvertently allows async and exception callbacks to =
+execute tail calls, bypassing verifier protections and reintroducing the TC=
+C register clobbering vulnerability.
+> - [High] The unified `is_cb` check introduces a DFS state leakage that in=
+correctly rejects valid BPF programs containing both a tail call and an unr=
+elated synchronous callback.
+> --
+>
+> --- Patch [1]: [PATCH bpf-next v2 1/2] bpf: Reject callback subprogs invo=
+ke tailcall ---
+> commit d260c3afbc5fedfa9c5c074686a31f057a21a53a
+> Author: Pu Lehui <pulehui@huawei.com>
+>
+> bpf: Reject callback subprogs invoke tailcall
+>
+> This patch rejects tailcalls inside all subprograms of synchronous callba=
+cks
+> to prevent clobbering the TCC limit register on some JIT compilers. It al=
+so
+> consolidates async and exception callback checks into a single unified
+> is_cb check.
+>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 03e2202cca13d..3f6c8b8fc04d0 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -5258,10 +5258,6 @@ static int check_max_stack_depth_subprog(struct b=
+pf_verifier_env *env, int idx,
+>>  		if (verifier_bug_if(sidx < 0, env, "callee not found at insn %d", nex=
+t_insn))
+>>  			return -EFAULT;
+>>  		if (subprog[sidx].is_async_cb) {
+>> -			if (subprog[sidx].has_tail_call) {
+>> -				verifier_bug(env, "subprog has tail_call and async cb");
+>> -				return -EFAULT;
+>> -			}
+>
+> [Severity: High]
+> Does removing this explicit check allow async and exception callbacks to
+> execute tail calls when they contain no further subprogram calls?
+>
+> Because async and exception callbacks are evaluated as the root of their =
+own
+> call graphs by check_max_stack_depth_subprog() (with idx > 0), the local
+> tail_call_reachable variable remains false throughout the evaluation loop=
+ if
+> the callback makes no normal subprogram calls.
+>
+> When the loop ends, the new unified is_cb check is bypassed because
+> tail_call_reachable is false, and the fallback check is skipped because !=
+idx
+> is false for async callbacks. Can this bypass the TCC limit protections a=
+nd
+> lead to infinite tailcalls?
+>
+>>  			/* async callbacks don't increase bpf prog stack size unless called =
+directly */
+>>  			if (!bpf_pseudo_call(insn + i))
+>>  				continue;
+>> @@ -5302,8 +5298,8 @@ static int check_max_stack_depth_subprog(struct bp=
+f_verifier_env *env, int idx,
+>>  	 */
+>>  	if (tail_call_reachable) {
+>>  		for (tmp =3D idx; tmp >=3D 0; tmp =3D dinfo[tmp].caller) {
+>> -			if (subprog[tmp].is_exception_cb) {
+>> -				verbose(env, "cannot tail call within exception cb\n");
+>> +			if (subprog[tmp].is_cb) {
+>> +				verbose(env, "cannot tail call within callback\n");
+>>  				return -EINVAL;
+>>  			}
+>
+> [Severity: High]
+> Can the local tail_call_reachable variable leak across unrelated subprogr=
+ams
+> during the verifier's Depth-First Search?
+>
+> If a BPF program first calls a subprogram containing a tail call, the DFS
+> will set tail_call_reachable =3D true and mark it true for all ancestors.
+> When backtracking from the callee to the main program, tail_call_reachable
+> is restored to the ancestor's state:
+>
+> kernel/bpf/verifier.c:check_max_stack_depth_subprog() {
+>     ...
+> 	/* reset tail_call_reachable to the parent's actual state */
+> 	tail_call_reachable =3D subprog[idx].tail_call_reachable;
+>
+> 	goto continue_func;
+>     ...
+> }
+>
+> If the program subsequently sets up a synchronous callback (e.g., via
+> bpf_loop()), the loop jumps back up without resetting tail_call_reachable=
+ to
+> false. When it reaches the end of the callback subprogram,
+> tail_call_reachable will still be true from the leaked state.
+>
+> Will this cause the new unified is_cb check to incorrectly reject perfect=
+ly
+> valid BPF programs that contain both a tail call and an unrelated synchro=
+nous
+> callback?
 
-bpf, riscv: add support for timed may_goto
+Don't about "high severity", but this seems legit. It seems like we can
+get "random" (depending of ordering) rejects of legit program, no? ...at
+least the LLM I asked could construct a fix/PoC for it...
 
-Implement arch_bpf_timed_may_goto() for the RV64 JIT. The argument and
-return value are carried in BPF_REG_AX, and BPF R0-R5 are preserved
-across the call to the generic bpf_check_timed_may_goto(). Enable
-bpf_jit_supports_timed_may_goto() so the verifier uses the timed
-expansion path.
 
-> diff --git a/arch/riscv/net/bpf_timed_may_goto.S b/arch/riscv/net/bpf_tim=
-ed_may_goto.S
-> new file mode 100644
-> index 0000000000000..f54f389d921e0
-> --- /dev/null
-> +++ b/arch/riscv/net/bpf_timed_may_goto.S
-> @@ -0,0 +1,44 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* Copyright (c) 2026 Feng Jiang <jiangfeng@kylinos.cn> */
-> +
-> +#include <linux/linkage.h>
-> +#include <asm/asm.h>
-> +
-> +/*
-> + * Trampoline for the BPF timed may_goto loop bound. Custom calling conv=
-ention:
-> + *	- input:  stack offset in BPF_REG_AX (t0)
-> + *	- output: updated count in BPF_REG_AX (t0)
-> + *
-> + * Calls bpf_check_timed_may_goto(ptr) with the standard RISC-V ABI, whe=
-re
-> + * ptr =3D BPF_REG_FP (s5) + BPF_REG_AX (t0). BPF R0-R5 (a5, a0-a4) are =
-saved
-> + * across the call; BPF_REG_FP (s5) is callee-saved and needs no saving.
-> + */
-> +
-> +SYM_FUNC_START(arch_bpf_timed_may_goto)
-> +	addi	sp, sp, -64
-> +	sd	ra, 56(sp)
+Bj=C3=B6rn
 
-[Severity: Medium]
-Does this code need to set up a frame pointer (s0)?
-
-When CONFIG_FRAME_POINTER is enabled on RISC-V, the unwinder relies on
-the frame pointer to chain frames. Because arch_bpf_timed_may_goto() alloca=
-tes
-stack space and saves ra but fails to save the caller's s0 or update s0 to
-point to its own stack frame, stack traces triggered from within
-bpf_check_timed_may_goto() (or functions it calls) might omit the JITed BPF
-program.
-
-> +
-> +	/* Save BPF registers R0-R5 (a5, a0-a4) */
-> +	sd	a5, 48(sp)
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260714-riscv-bpf-=
-timed-may-goto-v2-0-eeb6201aedcc@kylinos.cn?part=3D1
