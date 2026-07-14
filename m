@@ -1,132 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9475B3F210A
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 07:55:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27D863F44C8
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 07:58:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784015724; cv=none; b=BW6GK3nG5gvVVmq+/JpztskBk+XpfJeLLGFcL2zXtRA9QoTzDdnGhsn3cBxSe4aKdOm6niI+dt3TJJvVpYnGWnxMt7OsOCUS8yfK7ge2tgX3J3/ckhqEnlNWkOJuVuJw0JwEUcbqYsHhEaNaLv9UYRx87HGsKdBMXTNgzTSwOKc=
+	t=1784015939; cv=none; b=Z9HO9szmsMk+uiGMwlIe0qrJxffC0CV1OHbb1vHD6E+SsCo2FpQlPxzYKjQ0wBflSGSuL6OswmDhX/N2D0xvJfS4BT8oqFY4yWoypoQqn9LW27VAYwxYudvMi48dO4nQQH4ccHphrPNqxRV05IbSFU4RPrd5ZT3ia4LO064o4HY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784015724; c=relaxed/simple;
-	bh=nsFBhsJ93BHzXkLZh7+ztjuii9Ry9VOIb29u2Z0nCGA=;
+	s=arc-20240116; t=1784015939; c=relaxed/simple;
+	bh=IHYuLzsJLWbXwX/7ChGR69PEWr/11XQBOkWFtyBa5Xc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=dAGqbOxOGqvId2YSddCk1MADcx+klAvmmQ9274JIp6ot14RX3TjtaJLznSFFn6/YkxOb/sPq2PzuCGknXrtjcIALDMODkHJVDEGX2ls6DZXZxDeh9si8JNXUD46oIo8e4KHYotkAgrY4NRIbCsyCmQHY1Bk/WhV7YLh/UDc74/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lmKPjZRW; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=tVqt5DH4Ohfkf5Y4CFSyti+b5qZZHy9pn54mULswSQtnPHTD2HTpvZQ2f4ByX+1JR6REr0n8vuESp0jSmRtKRTXAImNxDi8aAbUqvSGQNqUtD7MqDA7Av09U/s8u6B4DyAEIfRrqKebxy9gmCSY1eXxyb1eKa675pKitwIDn+cY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fUJeFaEL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lmKPjZRW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79A8D1F000E9;
-	Tue, 14 Jul 2026 07:55:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fUJeFaEL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 971F71F000E9;
+	Tue, 14 Jul 2026 07:58:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784015722;
-	bh=joi3YMgRUE0is5r7Nj83IZxS7xyEo2NB1Nc7RT8wUyA=;
+	s=k20260515; t=1784015937;
+	bh=QkCdP8iwZqJ3ChdtLpAzr9c/wPzruAvW26ouiTXRsMs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lmKPjZRWfkc3WsXyXmeUBViprtsRu+ITXSqWpIOGwJbJ6JTXooW3QVd2zEr5pZNdj
-	 M2lEAviV9dVewMqhtN7+WZBHo3tnpyAI/qZXxWNFBGLG46iWw2yc9CXpg1tVSyKL5Y
-	 39gsy1T8udItZpudliY4EcIYtzh7tm1WoyP7Y5btpw9t3gTjkEtb1hkwDQTs1RFHgm
-	 XabLjFRUc4UxziRRoNFGxKIbU09i7+oPFrs9hAOB/9KzkzRLNorLUoJ+s5MiKGfP1R
-	 jY2XqyjE8fYGumvPXKOHnI955ehRa+74MfoavN4QVAIW7GkyrHtWiqd3hvol3/7FeT
-	 itWgU80lDNm+w==
+	b=fUJeFaELSy1QOxC8PAknDnpSVPCn3EaZ5bvupHuv5F7BVGywynpCd81zakzem6kKG
+	 9XhjM1XwkUXRAOCRKVdQ+sijA82q5vVbfaiaupBR3F+IcXrHkpsflNfNx9n9mr+kG5
+	 ghcBUApJbmj3KHAXL22dCT1FAYQ1Rn3nqrPAUEMjwJd5Hr63J+RfTlyOitWxNAl+R5
+	 0nJZPQEMh+srHFQIq+PENw9NBrGZ/oPEI7aCz8uj7HMaQEGO36qRd49k+YMlipiSq4
+	 ffeX5zzlF1dTzQBK14MUqVMT9aspcbY/gJfScqoVGby+2vlqXSG6D+tWHrkCLfMWdO
+	 SL72TuL0VdVdA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v14 14/15] barrier: add tests for
- smp_cond_load_*_timeout()
+Subject: Re: [PATCH v14 13/15] arm64/delay: enable testing
+ smp_cond_load_relaxed_timeout()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ankur Arora" <ankur.a.arora@oracle.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260714073041.40250-15-ankur.a.arora@oracle.com>
+In-Reply-To: <20260714073041.40250-14-ankur.a.arora@oracle.com>
 References: <20260714073041.40250-1-ankur.a.arora@oracle.com>
- <20260714073041.40250-15-ankur.a.arora@oracle.com>
+ <20260714073041.40250-14-ankur.a.arora@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 14 Jul 2026 07:55:22 +0000
-Message-Id: <20260714075522.79A8D1F000E9@smtp.kernel.org>
+Date: Tue, 14 Jul 2026 07:58:56 +0000
+Message-Id: <20260714075857.971F71F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] The string pointers `clk` and `update` in `param_to_desc()` may be =
-left uninitialized.
-- [Low] Typo in Kconfig help text for `BARRIER_TIMEOUT_KUNIT_TEST`: 'unusur=
-e' instead of 'unsure'.
+- [Medium] Conditionally exporting `__delay_cycles` and `arch_timer_evtstrm=
+_available` only for KUnit prevents standard kernel modules from using gene=
+ric atomic timeout APIs on arm64.
 --
 
---- Patch [14]: [PATCH v14 14/15] barrier: add tests for smp_cond_load_*_ti=
-meout() ---
-commit a30c2efa70f8be2b1654f46db86c3a29fe02abf2
+--- Patch [13]: [PATCH v14 13/15] arm64/delay: enable testing smp_cond_load=
+_relaxed_timeout() ---
+commit 66ad403e3794b9907fdbe044468423d2877131a1
 Author: Ankur Arora <ankur.a.arora@oracle.com>
 
-barrier: add tests for smp_cond_load_*_timeout()
+arm64/delay: enable testing smp_cond_load_relaxed_timeout()
 
-Add success and failure case tests for smp_cond_load_*_timeout().
-Success or failure cases depend on the expected bit being set (or not).
-Additionally in failure cases smp_cond_load_*_timeout() cannot return
-before timeout.
+This commit exports __delay_cycles() and arch_timer_evtstrm_available()
+using EXPORT_SYMBOL_IF_KUNIT() to allow testing barrier timeout functions
+as a module.
 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 8ff5adcfe1e0a..ce75655863f49 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
+> diff --git a/arch/arm64/lib/delay.c b/arch/arm64/lib/delay.c
+> index c660a7ea26dd6..dfb102ce30098 100644
+> --- a/arch/arm64/lib/delay.c
+> +++ b/arch/arm64/lib/delay.c
 [ ... ]
-> @@ -2551,6 +2551,16 @@ config FFS_KUNIT_TEST
->  	  For more information on KUnit and unit tests in general,
->  	  please refer to Documentation/dev-tools/kunit/.
+> @@ -30,6 +31,7 @@ u64 notrace __delay_cycles(void)
+>  	guard(preempt_notrace)();
+>  	return __arch_counter_get_cntvct_stable();
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(__delay_cycles);
+
+[Severity: Medium]
+Will this cause linking errors for standard kernel modules that use generic
+atomic timeout APIs when CONFIG_KUNIT is disabled?
+
+If a module uses macros like smp_cond_load_relaxed_timeout(), they expand
+inline into the compilation unit, which relies on __delay_cycles().
+Restricting this export to KUnit could prevent non-test modules from
+building on arm64.
+
 > =20
-> +config BARRIER_TIMEOUT_KUNIT_TEST
-> +	tristate "KUnit tests for smp_cond_load_relaxed_timeout()" if !KUNIT_AL=
-L_TESTS
-> +	depends on KUNIT
-> +	default KUNIT_ALL_TESTS
-> +	help
-> +	  Builds KUnit tests that validate wake-up and timeout handling paths
-> +	  in smp_cond_load_relaxed_timeout().
-> +
-> +	  If unusure, say N.
-
-[Severity: Low]
-This isn't a bug, but there's a typo (unusure instead of unsure) in the help
-text.
-
-> diff --git a/lib/tests/barrier-timeout-test.c b/lib/tests/barrier-timeout=
--test.c
-> new file mode 100644
-> index 0000000000000..4226fb6456b35
-> --- /dev/null
-> +++ b/lib/tests/barrier-timeout-test.c
+>  void __delay(unsigned long cycles)
+>  {
 [ ... ]
-> +static void param_to_desc(const struct smp_cond_update_params *p, char *=
-desc)
-> +{
-> +	char *clk, *update;
-> +
-> +	if (p->clock =3D=3D &mocked_clock) {
-> +		clk =3D "mocked";
-> +		update =3D "inline";
-> +	} else if (p->clock =3D=3D &basic_clock) {
-> +		clk =3D "basic";
-> +		update =3D "none";
-> +	}
-> +
-> +
-> +	snprintf(desc, KUNIT_PARAM_DESC_SIZE, "smp_cond_%s_timeout: clock-%s, u=
-pdate=3D%s",
-> +		p->acquire ? "acquire" : "relaxed", clk, update);
+> diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/a=
+rm_arch_timer.c
+> index 90aeff44a2764..1de63e1a2cd2f 100644
+> --- a/drivers/clocksource/arm_arch_timer.c
+> +++ b/drivers/clocksource/arm_arch_timer.c
+[ ... ]
+> @@ -896,6 +897,7 @@ bool arch_timer_evtstrm_available(void)
+>  	 */
+>  	return cpumask_test_cpu(raw_smp_processor_id(), &evtstrm_available);
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(arch_timer_evtstrm_available);
 
-[Severity: Low]
-Could the string pointers clk and update be left uninitialized here?
+[Severity: Medium]
+Could this also cause modpost failures for standard modules?
 
-If a different clock function is ever added and passed into param_to_desc,
-the conditional chain will fall through without assigning these pointers.
-This would result in passing uninitialized variables to snprintf, and might
-also trigger -Wmaybe-uninitialized compiler warnings.
+Like __delay_cycles(), arch_timer_evtstrm_available() may be called by the
+inline expansion of generic barrier macros. Exporting it only for KUnit
+restricts these generic APIs from being used in standard modules.
 
-Would it be safer to add a default else branch or initialize these variables
-to a fallback string like "unknown"?
-
-> +}
+> =20
+>  static struct arch_timer_kvm_info arch_timer_kvm_info;
+>
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260714073041.4025=
-0-1-ankur.a.arora@oracle.com?part=3D14
+0-1-ankur.a.arora@oracle.com?part=3D13
