@@ -1,276 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F6147DD7A;
-	Tue, 14 Jul 2026 17:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82DF939CCFA;
+	Tue, 14 Jul 2026 17:29:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784049915; cv=none; b=GifNEkL8Kg6oZw2/aLZbF6UscyN51fUjHTT46n7lZSQLsCcQ5EQxRmJju8IifJxPdJgVHmCvWTcUiY+pXmEfSndNQdPlT/vf7NTlkPjHkGuRGIyGh9w9pVfHHztmp/Hkw8Wr17K0toKkzYZRloxCbttADwr/k8wKWQqRo44H/gA=
+	t=1784050191; cv=none; b=P6H7kpfU8z543gAks5DaD/rB7xpmarKwjNlzbW7jU+YBLoQIXgDCrW3ypEniMt9aUDFpD/C5wg0nnuwFYi8/MdVYyqDi9Ag2TzA5OTrmci22WYL3YS4nJ0TZbMd2Zs/0WjA9ybg+Wr6g9BjuiLUgxvCMeZGzzUtGZNd2Q5GES8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784049915; c=relaxed/simple;
-	bh=QfkQiauRr1PTaQoDS6zXfYa+8p/BKdWZL6M6VQqRgS0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Hm8ViroIN6Y32b5YUuGVUcv6nmYQEjlVUm2TmoxhlLtx+916daNYH5Y9gA58t8kGzXkm0gBhDVwjn+GnvCU+qaU56kNxyn1eJ0kY9d/RvRhJiI8xPVub95bw5rFaaoSNdHJKCI12kwXP3YZwPh3O16iEfeReujAPk7jotMqTNBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PC17pXS2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784050191; c=relaxed/simple;
+	bh=T9nDWMGUUMYK4zdgmduf9ZJ/16QHCvDwhtGJVdrnzuY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=loTBNi2VJLI/3hI69B5VLr6+rTskITPZS/fhVwOe0+9NWaTHG/0g/BnG3l4ktP3pns1djxooS8T0rnuKB7iO662sfqfOlUKAK1kHQbKdqN2bMQR30VBm5DPla9/9Ur3C2+I650hDuC5ozW9MoGReZkHHIPbYNbSsr7F+Cz2z15Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OQVTwuBi; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PC17pXS2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 279171F00A3A;
-	Tue, 14 Jul 2026 17:25:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784049913;
-	bh=6X5YMXpvKlN1rtFZuXWP5ezzGqrHft5cjQkbgIqQagg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=PC17pXS2WHaTYBIL1Slqx4PrZnyY8dMc2smCQYBF/0yu4Wi4jL/xj6gSsjw9azwsH
-	 h2PBo0E+0nEYjR6EkiARz92BXhIqmjmW4a6zK34FpYcajUMzqcWO7elmfDzKcaoqr7
-	 dsgozGajBE7ht5bjTWhV9wjAMcphziVzf5Wcuoh1s1jsrCx8EIiwXgedkDdnqhJv/y
-	 KyApJKXEtaOZR2x9QFGqMRtDHMBG3iTiLsarzRks95WAQ6NzX5+pCm4pDlv19UfUKt
-	 ZtJx4I31XHtkTgIb9cpQS7AVdPrHfrSmd0TmDewmewNFNK/PJKo1UzNVdV3ivRcQKH
-	 uERmQC+kxoAVA==
-From: Lorenzo Stoakes <ljs@kernel.org>
-Date: Tue, 14 Jul 2026 18:24:26 +0100
-Subject: [PATCH mm-hotfixes v3 4/4] arm64: remove redundant concurrent
- ptdump UAF mitigation
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OQVTwuBi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1784050190; x=1815586190;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=T9nDWMGUUMYK4zdgmduf9ZJ/16QHCvDwhtGJVdrnzuY=;
+  b=OQVTwuBiH8pGI+8zsuOfzvbJMEaT2vHBdiHrf6izxTsdCilwAZjFuxTp
+   wKuz5+eVvYM9jrsLHd8xz7FmZi1BL7uIo8vyWIzXV/HVt2dbePaRifrWZ
+   2ASwgNxDxqHF+Oo+4rAMeTzt8SwUpxdb8AV/qm6Fk7cJ1gNauRAArQpzH
+   QAE+DAEbh/3iyZdLGAHRs+ITqXqMhtmM2V1OdcwNV7bpgejrcqQD2kBkQ
+   tbbktxCxF3+3PSYHuIUA6u6abba/tYNRTo+XRWpQin8YuoPGuyAbUs6OH
+   LeETekGfTxwYWufTM8cMI+LGNxwXAqVb8/2BqcTD1HDfQBrWvZG87dh6I
+   Q==;
+X-CSE-ConnectionGUID: mlZu+RTmS22rODwziCadgg==
+X-CSE-MsgGUID: qTCNEHe+QbuACDkZ1l/hyA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11846"; a="84463060"
+X-IronPort-AV: E=Sophos;i="6.25,164,1779174000"; 
+   d="scan'208";a="84463060"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2026 10:29:49 -0700
+X-CSE-ConnectionGUID: JVAk0EKWSyOAbtmWxbWciQ==
+X-CSE-MsgGUID: gb3gmc2+RamLrgmELZSMvA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,164,1779174000"; 
+   d="scan'208";a="259497092"
+Received: from aschende-mobl.amr.corp.intel.com (HELO [10.125.108.120]) ([10.125.108.120])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2026 10:29:48 -0700
+Message-ID: <13fcd4d7-0efc-4aa5-9425-8f4fa05c8eee@intel.com>
+Date: Tue, 14 Jul 2026 10:29:51 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260714-series-vmap-race-fix-v3-4-b812eccfa0f9@kernel.org>
-References: <20260714-series-vmap-race-fix-v3-0-b812eccfa0f9@kernel.org>
-In-Reply-To: <20260714-series-vmap-race-fix-v3-0-b812eccfa0f9@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- Suren Baghdasaryan <surenb@google.com>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Shakeel Butt <shakeel.butt@linux.dev>, David Hildenbrand <david@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
- Uladzislau Rezki <urezki@gmail.com>, Toshi Kani <toshi.kani@hpe.com>, 
- Dave Hansen <dave.hansen@linux.intel.com>, 
- Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>, Kiryl Shutsemau <kas@kernel.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH mm-hotfixes v3 2/4] x86/mm/pat: acquire mmap lock on page
+ table free to avoid ptdump UAF
+To: Lorenzo Stoakes <ljs@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Suren Baghdasaryan <surenb@google.com>, "Liam R. Howlett"
+ <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Shakeel Butt <shakeel.butt@linux.dev>, David Hildenbrand <david@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Toshi Kani <toshi.kani@hpe.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski
+ <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Kiryl Shutsemau <kas@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
  Dev Jain <dev.jain@arm.com>, Ryan Roberts <ryan.roberts@arm.com>
-Cc: David Carlier <devnexen@gmail.com>, ljs@kernel.org, linux-mm@kvack.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+Cc: David Carlier <devnexen@gmail.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6970; i=ljs@kernel.org;
- h=from:subject:message-id; bh=QfkQiauRr1PTaQoDS6zXfYa+8p/BKdWZL6M6VQqRgS0=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLLCCs6xNmyP28KoEf/gWoHNpG1/fXYf2zhlta4S669uy
- QXX9WxudZSyMIhxMciKKbI8/yK+P0gkbF7nBX83mDmsTCBDGLg4BWAidnEMv5gadq15wVohonZt
- 46eHq3Ii/Q9Jlk7gEDx3kf/ot3Ui4jcYGToXsTs9EnRJnC5rsyE2cO1k6wOFbXMibap49z40L3u
- 3lAEA
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
+References: <20260714-series-vmap-race-fix-v3-0-b812eccfa0f9@kernel.org>
+ <20260714-series-vmap-race-fix-v3-2-b812eccfa0f9@kernel.org>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20260714-series-vmap-race-fix-v3-2-b812eccfa0f9@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-This partially reverts commit fa93b45fd397 ("arm64: Enable vmalloc-huge
-with ptdump"), retaining vmalloc-huge support but eliminating the now
-redundant mitigation against a race between huge vmap page table freeing
-and ptdump, as this issue has now been fixed at core.
+On 7/14/26 10:24, Lorenzo Stoakes wrote:
+...
+> Resolve the issue by acquiring the mmap read lock on init_mm which prevents
+> a concurrent ptdump as it acquires the write lock.
 
-We also simultaneously remove the arm64 if-deffery when acquiring the mmap
-read lock upon vmap huge page table promotion as it is no longer required.
+The move over to locking on init_mm instead of current->mm fixes the
+earlier issues I saw with this. Thanks for doing that!
 
-Note that this patch relies on the preceding vmalloc patch, and should not
-be backported alone.
-
-Fixes: fa93b45fd397 ("arm64: Enable vmalloc-huge with ptdump")
-Cc: stable@vger.kernel.org
-Reviewed-by: Dev Jain <dev.jain@arm.com>
-Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
-Acked-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
-Acked-by: Will Deacon <will@kernel.org>
----
- arch/arm64/include/asm/ptdump.h |  2 --
- arch/arm64/mm/mmu.c             | 43 ++++-------------------------------------
- arch/arm64/mm/ptdump.c          | 11 ++---------
- mm/vmalloc.c                    | 15 +++-----------
- 4 files changed, 9 insertions(+), 62 deletions(-)
-
-diff --git a/arch/arm64/include/asm/ptdump.h b/arch/arm64/include/asm/ptdump.h
-index 5b374a6ab34a..50a195eda8ed 100644
---- a/arch/arm64/include/asm/ptdump.h
-+++ b/arch/arm64/include/asm/ptdump.h
-@@ -7,8 +7,6 @@
- 
- #include <linux/ptdump.h>
- 
--DECLARE_STATIC_KEY_FALSE(arm64_ptdump_lock_key);
--
- #ifdef CONFIG_PTDUMP
- 
- #include <linux/mm_types.h>
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index a25d8beacc83..bd52fca6e872 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -49,8 +49,6 @@
- #define NO_CONT_MAPPINGS	BIT(1)
- #define NO_EXEC_MAPPINGS	BIT(2)	/* assumes FEAT_HPDS is not used */
- 
--DEFINE_STATIC_KEY_FALSE(arm64_ptdump_lock_key);
--
- u64 kimage_voffset __ro_after_init;
- EXPORT_SYMBOL(kimage_voffset);
- 
-@@ -1864,8 +1862,7 @@ int pmd_clear_huge(pmd_t *pmdp)
- 	return 1;
- }
- 
--static int __pmd_free_pte_page(pmd_t *pmdp, unsigned long addr,
--			       bool acquire_mmap_lock)
-+int pmd_free_pte_page(pmd_t *pmdp, unsigned long addr)
- {
- 	pte_t *table;
- 	pmd_t pmd;
-@@ -1877,25 +1874,13 @@ static int __pmd_free_pte_page(pmd_t *pmdp, unsigned long addr,
- 		return 1;
- 	}
- 
--	/* See comment in pud_free_pmd_page for static key logic */
- 	table = pte_offset_kernel(pmdp, addr);
- 	pmd_clear(pmdp);
- 	__flush_tlb_kernel_pgtable(addr);
--	if (static_branch_unlikely(&arm64_ptdump_lock_key) && acquire_mmap_lock) {
--		mmap_read_lock(&init_mm);
--		mmap_read_unlock(&init_mm);
--	}
--
- 	pte_free_kernel(NULL, table);
- 	return 1;
- }
- 
--int pmd_free_pte_page(pmd_t *pmdp, unsigned long addr)
--{
--	/* If ptdump is walking the pagetables, acquire init_mm.mmap_lock */
--	return __pmd_free_pte_page(pmdp, addr, /* acquire_mmap_lock = */ true);
--}
--
- int pud_free_pmd_page(pud_t *pudp, unsigned long addr)
- {
- 	pmd_t *table;
-@@ -1911,36 +1896,16 @@ int pud_free_pmd_page(pud_t *pudp, unsigned long addr)
- 	}
- 
- 	table = pmd_offset(pudp, addr);
--
--	/*
--	 * Our objective is to prevent ptdump from reading a PMD table which has
--	 * been freed. In this race, if pud_free_pmd_page observes the key on
--	 * (which got flipped by ptdump) then the mmap lock sequence here will,
--	 * as a result of the mmap write lock/unlock sequence in ptdump, give
--	 * us the correct synchronization. If not, this means that ptdump has
--	 * yet not started walking the pagetables - the sequence of barriers
--	 * issued by __flush_tlb_kernel_pgtable() guarantees that ptdump will
--	 * observe an empty PUD.
--	 */
--	pud_clear(pudp);
--	__flush_tlb_kernel_pgtable(addr);
--	if (static_branch_unlikely(&arm64_ptdump_lock_key)) {
--		mmap_read_lock(&init_mm);
--		mmap_read_unlock(&init_mm);
--	}
--
- 	pmdp = table;
- 	next = addr;
- 	end = addr + PUD_SIZE;
- 	do {
- 		if (pmd_present(pmdp_get(pmdp)))
--			/*
--			 * PMD has been isolated, so ptdump won't see it. No
--			 * need to acquire init_mm.mmap_lock.
--			 */
--			__pmd_free_pte_page(pmdp, next, /* acquire_mmap_lock = */ false);
-+			pmd_free_pte_page(pmdp, next);
- 	} while (pmdp++, next += PMD_SIZE, next != end);
- 
-+	pud_clear(pudp);
-+	__flush_tlb_kernel_pgtable(addr);
- 	pmd_free(NULL, table);
- 	return 1;
- }
-diff --git a/arch/arm64/mm/ptdump.c b/arch/arm64/mm/ptdump.c
-index 1c20144700d7..5a76c59b5ada 100644
---- a/arch/arm64/mm/ptdump.c
-+++ b/arch/arm64/mm/ptdump.c
-@@ -283,13 +283,6 @@ void note_page_flush(struct ptdump_state *pt_st)
- 	note_page(pt_st, 0, -1, pte_val(pte_zero));
- }
- 
--static void arm64_ptdump_walk_pgd(struct ptdump_state *st, struct mm_struct *mm)
--{
--	static_branch_inc(&arm64_ptdump_lock_key);
--	ptdump_walk_pgd(st, mm, NULL);
--	static_branch_dec(&arm64_ptdump_lock_key);
--}
--
- void ptdump_walk(struct seq_file *s, struct ptdump_info *info)
- {
- 	unsigned long end = ~0UL;
-@@ -318,7 +311,7 @@ void ptdump_walk(struct seq_file *s, struct ptdump_info *info)
- 		}
- 	};
- 
--	arm64_ptdump_walk_pgd(&st.ptdump, info->mm);
-+	ptdump_walk_pgd(&st.ptdump, info->mm, NULL);
- }
- 
- static void __init ptdump_initialize(void)
-@@ -360,7 +353,7 @@ bool ptdump_check_wx(void)
- 		}
- 	};
- 
--	arm64_ptdump_walk_pgd(&st.ptdump, &init_mm);
-+	ptdump_walk_pgd(&st.ptdump, &init_mm, NULL);
- 
- 	if (st.wx_pages || st.uxn_pages) {
- 		pr_warn("Checked W+X mappings: FAILED, %lu W+X pages found, %lu non-UXN pages found\n",
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 1fa9ac6e43d4..400563ac6d5d 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -170,10 +170,7 @@ static int vmap_try_huge_pmd(pmd_t *pmd, unsigned long addr, unsigned long end,
- 	 * Therefore, acquire the mmap read lock to prevent use-after-free when
- 	 * freeing page tables.
- 	 */
--#ifndef CONFIG_ARM64
--	scoped_cond_guard(mmap_read_lock_try, return 0, &init_mm)
--#endif
--	{
-+	scoped_cond_guard(mmap_read_lock_try, return 0, &init_mm) {
- 		if (!pmd_free_pte_page(pmd, addr))
- 			return 0;
- 		return pmd_set_huge(pmd, phys_addr, prot);
-@@ -230,10 +227,7 @@ static int vmap_try_huge_pud(pud_t *pud, unsigned long addr, unsigned long end,
- 		return pud_set_huge(pud, phys_addr, prot);
- 
- 	/* See comment in vmap_try_huge_pmd(). */
--#ifndef CONFIG_ARM64
--	scoped_cond_guard(mmap_read_lock_try, return 0, &init_mm)
--#endif
--	{
-+	scoped_cond_guard(mmap_read_lock_try, return 0, &init_mm) {
- 		if (!pud_free_pmd_page(pud, addr))
- 			return 0;
- 		return pud_set_huge(pud, phys_addr, prot);
-@@ -290,10 +284,7 @@ static int vmap_try_huge_p4d(p4d_t *p4d, unsigned long addr, unsigned long end,
- 		return p4d_set_huge(p4d, phys_addr, prot);
- 
- 	/* See comment in vmap_try_huge_pmd(). */
--#ifndef CONFIG_ARM64
--	scoped_cond_guard(mmap_read_lock_try, return 0, &init_mm)
--#endif
--	{
-+	scoped_cond_guard(mmap_read_lock_try, return 0, &init_mm) {
- 		if (!p4d_free_pud_page(p4d, addr))
- 			return 0;
- 		return p4d_set_huge(p4d, phys_addr, prot);
-
--- 
-2.55.0
+Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
 
