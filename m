@@ -1,151 +1,122 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CDF9443A8A
-	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 20:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5009D35E1AC
+	for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 20:39:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784059217; cv=none; b=dFjkyLJouGc84qGqdEHTNcz2SdDo0fOlCRNjMkiF5CROTy8Al/vbLzfEW0Ejp2JieXsU3Pc8E9I/Xzlz85eVtKkKWLWOzYu7Jhv9dvRjWLZNaU2OtnYIkPaTq2fhEFyVP52QxIWACuQJhClOb9IRGy1qtbqI+2eNO1Jzt6lj58k=
+	t=1784061582; cv=none; b=GAdTzyqviWSrYO/weaG2MnJfb007NBcLU/X/wnqTuZz+A48u5E1a5Vmu7PUQChQSIXYRBe3T/fjRsuXiTsToUzipDEeSV+kFtBNVCg5LJbofAV0EJGVByttBOO39ZKDrcbkp3qdiU0WAo8Eq5gYnoqS132wY18QWbY8nSjT/VsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784059217; c=relaxed/simple;
-	bh=PsIbMJRTSmMcKUepU2LL7YXBwU6P3f9ZWFk+Ikj41AU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CzzQ5Jy3ETUlLunQ0Yi6FXzvMs1qgQYkf/Tu5HY8KGCHMw2RHicbClPJXQb4oA79jqGkoBw3EwjPrF7VyAvtL9WByiuC8rzL1aGrBCmKXqRcFuVJ3/2crMO8kSJRRhwKWiqPCrjRM3h/3n/MUs/K5Atm+hr6NAqHpM0GL/Kixt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s7ImQ8O/; arc=none smtp.client-ip=209.85.216.41
+	s=arc-20240116; t=1784061582; c=relaxed/simple;
+	bh=p3ty0i+wWfdktVq9nRg6b13I6JNyf7ok7A0AV4/xQ6k=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ROV3XBJMcWwujajIyCL/0KSThzuRpg7fe6qKVapVRjWnx9aMfu/tBdBLiJJBPgXH2S1Wde1jGbT+l8Gmwx1AU5vVsdHOTgDwm7+nQNzVNqUQxNolJ2FzlZL0YF2R/kZjzX1JLINAVXkOWkdZboG1bw0yn9iO+Jt5DKpDWgEkA0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oY2XZupy; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s7ImQ8O/"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-38dc4553f62so3382374a91.0
-        for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 13:00:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oY2XZupy"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-493b1710405so25222125e9.2
+        for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 13:39:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784059214; x=1784664014; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=0pBHx4swSqG8KyzMQR2LJ5Uo9kHMF29Tk5WBtrSEv9s=;
-        b=s7ImQ8O/tpARNRcOxHarokqnYBi03CC11F954yGUWlCCXZ11jlJScvIBaeANBmUVE4
-         1oC2nuC6hrt006eKlWgfp3r3FqD742dvczgVA3KTjw4NDJ75FArR1UjrHjWBEpr7ldpN
-         KBe5Yj+HNzoC/C+2upJFKArIO4t5vNeggg1MkUg1r1fhNFjGnNOIS3MYp49R0AmlcQbZ
-         P5vFd8kCZAKLpoRyZi1F3386EBGMf5ftQEFXPvTJ/cwsePcz1ZevkNYOKvbZDQqO05ky
-         /1gOMcOh5pz8+zasb1Iqivz8homB2UWlUOl/X/1ven4gclJ7BykoutBdemWdws3e0ecC
-         bkTA==
+        d=gmail.com; s=20251104; t=1784061579; x=1784666379; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=5D2M+8JC0T4UT29HnUPeI2z7I2/miIRrXwPjpYCuscY=;
+        b=oY2XZupy2BbDi+jM8PdfvhXqKK7jgIKpkvPsb4J9K4w1EDU3e/aVcG52qey12iP0Cr
+         nplNFknaPWpGSA6bXx8eA2rMZ0zSWp9trh8l3FTF454xhWhYgEudGsm1fbS6HaYQFyrY
+         qs5M0F6a3WaxEPy+v5I9w4CPoEHaYeEZi5kfbuKJxn6mGZrB1wpQJRzMvADZG51tNDeF
+         z38Q4e3dME/vzxrJtf9/hEHsHdJlVjDVhC9EaQ/gN2RHyK1pzpIBS+VQ4xGvzeCfSge+
+         qfvp96Y/yHbXXBVN74EJg1kKqPCwwzMlseNNwGFW8cHZ2bMVMMowjPDogTBvuJUeH1Vn
+         vxug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784059214; x=1784664014;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0pBHx4swSqG8KyzMQR2LJ5Uo9kHMF29Tk5WBtrSEv9s=;
-        b=NV1Ftzh6eFfkfGSUTjAEOoP8oaloAgECcpXOCr8E3Ij+YVZra7J0Qc7Ruc3c1tuvKZ
-         kLIUMzEDDeznpwhxYixBeeI0rjis8QtlFqBsdyFK1XpgtLIhK9H1dQs9ZAz/NRKSB8p3
-         eNT95TnfKcykZHQVgWX2kleiQTmmxrkNOZZd3rcmXtFITEDzioGZKv29vESmFrgVP3vQ
-         otCZyyF65JJIHHeLF5luFyhLFKWVS6TBJruPqcwAsuJ2twUmH7pknuGmsEZ8mi/4d4jC
-         eOx2XkqUXYK2+ipoefYXbl4xrwImNv1ANiUVbdZPs2HlglvCBrd/In/Q0MnKoWcjVcu9
-         DAUg==
-X-Forwarded-Encrypted: i=1; AHgh+RrCkAh7VV2VaUfjeZEvFLPRlIwL183MBK0CWNhnxDntWqMHB3XVYNX2PvR2DKqCk2NqqUA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywij+ITQCWvthvdRToaiXlWFXfneVgeMUI9XCikW4xUJrn/JxEI
-	Yhyphv1UVlSAYTFDGx94s062dUMXN7JFXOu/5rl+Ul/h7EI9mi2+TcZP
-X-Gm-Gg: AfdE7cljLZnaK96pLtGntBElyiGSB5aYyo47UhSxrTpSPxFb1sYoYe8m6MYqadZkdo4
-	F4j9oXBR8BRQ0pmZCx+HVMrkVduPEsch87cVj10NhKLZxVnzCZu7BEHErqm+a6vpk/1Eq7CfS3V
-	RaymNyydRRERttrC5I818dnYIiUWVfHIDJysvFXQWKt8jPMc5jEixwXPZpBsdX/7RD+zQZJqqU1
-	HlGwj362uksyoXb6wOw0bKrMiq+E2wbGaLExirFKBlZUA+5cRiYP/6U1sv3pMw15hv9IiWZlVmO
-	qUBkKhoOs1YXcG9gVnzTzIwlw9YCvIquDFC+cU8rkiR3JlIv20ehyq35JHI4XwmH2WSpixOJGaw
-	BHkogGDFLLu34l1haFjV7ZxGXIRz54catOFbbVh4FH+K5nnjXxvnB5dsziHKUvORyJ+G2hMBlJo
-	7IJGXH6I3beX0v2m9Gzuvmu1CBkasaIUh1MZ3vH4qlDnIvHyAo75LUDrYK4woGA/uX+EQ=
-X-Received: by 2002:a05:6a21:681:b0:3bf:b9de:854d with SMTP id adf61e73a8af0-3c3573959b2mr4193196637.23.1784059214071;
-        Tue, 14 Jul 2026 13:00:14 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:11d2:f935:a412:8fad? ([2620:10d:c090:500::972d])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-311b00048a3sm53943891eec.5.2026.07.14.13.00.12
+        d=1e100.net; s=20251104; t=1784061579; x=1784666379;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=5D2M+8JC0T4UT29HnUPeI2z7I2/miIRrXwPjpYCuscY=;
+        b=PHhLE3yjInbaMAjS78MwIs+r+1QyS4aDasVvoCW+yw1hgX9SFvX2eivTY6SrxYx+M1
+         XJPUmxeQFI0YdleGoAnzNwAF4q8tGDs9ipqUEdDBDTHePyk77LfzeV1yvlFgqq2L77DB
+         k+MP4t7kLlarao23y8w8Xce4pDdh60D634tJjb41i4ROPYBWbIgkRor1gvt9n+l0Xm6G
+         ywYBo+nq2x8ruijM4xzoFiCaG7pfWqihWlRL6fICr5AVfU5Uyf6q4ylhzDQBP2lqzG/Y
+         4zxg6oBZt1f3aDTCDeBVs1iwrVBfrbFrTmWZI3aNfdximfJiZFd0PSFPkS7I5fXM8jMZ
+         X7XA==
+X-Forwarded-Encrypted: i=1; AHgh+RoJ9Uy1d/SE9KaLKYXp1X100YDu+Z3UcZ64FZo+UlDgEHAxQ6HaQVnNPGxMwHpobpbUlvk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yww0JU4lMI9mBgZdjUglh9E/X36d24WciujX1ZMkOuVmmtqoDsV
+	8aQT+zVUKOwJknGHaEUu4AgFZwv0Obo0v6vZEKzkI3OwGwOnDJcmyzBd
+X-Gm-Gg: AfdE7clOIKijGRnV0V45QI9zbHN3OdPNKesiEqVbvNqIIOZBBFt0DywuFxVLwDX/xvS
+	SIDcX+Ni0VM9wl4q4ZBqYsw3hi3vKjXf4hZiXz1CFdvOWgRW2rOEvWFXtSl5vZ1BdIreoI28qSy
+	g6cewlredBXYrjzhcQ1OSaNpu8g6pdA89cWnIKToKd9MS51O38r9HnBbigVmZLuSc+VK++DGR0M
+	WSEyoXB8qQs5/rVxrrqLlNNcIsLhy3FfiJiPXZH0pLehSmOn/P8FNrE27y+48uFXJZObr3g+Z5G
+	CBkGGxki7x8B7JdQUhGQkPBhts70FsgPjPHF1xO52UEPxC7e9uQtyOsTD2EdFoaFojxE9zh9uM9
+	HmCTDnd8DW9sqwnSJwSBXpbechT3EL9M5HEmD9biEGJHCxkv9NnxAQ8IqaK0LWu+iSR8jp9WTu8
+	k6mK9Rw61tUQRdsdG6Prq+0E3BTTvpBxbrfY+5cFMGyEujG4II09/gtTGLwcz+Y8Srv4XFG53pU
+	FdlnvazA/fXVJs=
+X-Received: by 2002:a05:600c:283:b0:490:688b:f9f8 with SMTP id 5b1f17b1804b1-49518306db9mr41584185e9.27.1784061579422;
+        Tue, 14 Jul 2026 13:39:39 -0700 (PDT)
+Received: from localhost.localdomain (host86-153-201-25.range86-153.btcentralplus.com. [86.153.201.25])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4950a32c65asm98894115e9.14.2026.07.14.13.39.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 13:00:13 -0700 (PDT)
-Message-ID: <9d9ec72059ef2855c3e2a47982e44cff9dd1165a.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 13/17] bpf: Report Program Structure CFG
- errors
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
- Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Tue, 14 Jul 2026 13:00:12 -0700
-In-Reply-To: <20260713153910.2556007-14-memxor@gmail.com>
-References: <20260713153910.2556007-1-memxor@gmail.com>
-	 <20260713153910.2556007-14-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+        Tue, 14 Jul 2026 13:39:38 -0700 (PDT)
+From: Nnamdi Onyeyiri <nnamdio@gmail.com>
+To: jiayuan.chen@linux.dev
+Cc: nnamdio@gmail.com,
+	john.fastabend@gmail.com,
+	jakub@cloudflare.com,
+	edumazet@google.com,
+	ncardwell@google.com,
+	kuniyu@google.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	sashiko-reviews@lists.linux.dev
+Subject: [PATCH v3 0/2] bpf, sockmap: handle spurious tcp_msg_wait_data() wakeup
+Date: Tue, 14 Jul 2026 21:39:25 +0100
+Message-ID: <20260714203927.32289-1-nnamdio@gmail.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <5b07d2ab-84ee-46ae-84c9-7542499d26d7@linux.dev>
+References: <5b07d2ab-84ee-46ae-84c9-7542499d26d7@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2026-07-13 at 17:39 +0200, Kumar Kartikeya Dwivedi wrote:
-> Augment selected subprogram CFG validation failures with Program Structur=
-e
-> reports. These errors are structural rather than path-dependent, so the r=
-eport
-> focuses on source and instruction context instead of causal history.
->=20
-> Cover jumps that leave the current subprogram, subprograms whose last
-> instruction can fall through into the next subprogram, and recursive bpf2=
-bpf
-> call graph edges.
->=20
-> Format long jump-range reasons directly in diagnostics.c, and keep the
-> fallthrough suggestion aligned with the verifier check by suggesting exit=
- or
-> explicit jumps.
->=20
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
->  kernel/bpf/cfg.c         | 55 ++++++++++++++++++++++++++++++++++++++++
->  kernel/bpf/diagnostics.c | 19 ++++++++++++++
->  kernel/bpf/diagnostics.h |  3 +++
->  kernel/bpf/verifier.c    | 32 +++++++++++++++++++++++
->  4 files changed, 109 insertions(+)
->=20
-> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-> index 26d37066465f..376f6b6d469c 100644
-> --- a/kernel/bpf/cfg.c
-> +++ b/kernel/bpf/cfg.c
-> @@ -5,6 +5,8 @@
->  #include <linux/filter.h>
->  #include <linux/sort.h>
-> =20
-> +#include "diagnostics.h"
-> +
->  #define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##ar=
-gs)
-> =20
->  /* non-recursive DFS pseudo code
-> @@ -113,6 +115,12 @@ static int push_insn(int t, int w, int e, struct bpf=
-_verifier_env *env)
->  	if (w < 0 || w >=3D env->prog->len) {
->  		verbose_linfo(env, t, "%d: ", t);
->  		verbose(env, "jump out of range from insn %d to %d\n", t, w);
-> +		bpf_diag_report_program_structure(env, t, "jump out of range",
-> +						  "Keep branch targets inside the program.",
-> +						  "Instruction %d jumps to instruction %d, but the "
-> +						  "program only contains instructions 0 through "
-> +						  "%d.",
-> +						  t, w, env->prog->len - 1);
+Spurious wakeups in tcp_msg_wait_data() isn't being handled by
+tcp_bpf_recvmsg() and tcp_bpf_recvmsg_parser(), leading to unexpected
+EAGAIN errors returned by recvfrom()/recv().  Adding handling for the
+wakeup and a selftest.
 
-Nit: I'd forgo the formatting rules and just write the above like:
+Changes in v2:
+- In tcp_bpf_recvmsg, handle signals and the socket closing in the loop.
+- Fix spurious wakeups when SO_RCVTIMEO has been set on the socket.
+- Link to v1: https://patch.msgid.link/ak_rR-Skd8Mvn4mH@localhost.localdomain
 
-		bpf_diag_report_program_structure(
-		  env, t, "jump out of range",
-		  "Keep branch targets inside the program.",
-		  "Instruction %d jumps to instruction %d, but the program only contains =
-instructions 0 through %d.",
-		   t, w, env->prog->len - 1);
+Changes in v3:
+- Added the sockmap_recvfrom selftest.
+- Link to v2: https://patch.msgid.link/alFRK66z45eDNZA7@localhost.localdomain
 
-     Easier to read and easier to grep.
+Signed-off-by: Nnamdi Onyeyiri <nnamdio@gmail.com>
+---
+Nnamdi Onyeyiri (2):
+  bpf, sockmap: handle spurious tcp_msg_wait_data() wakeup
+  bpf, sockmap: handle spurious tcp_msg_wait_data() wakeup
 
->  		return -EINVAL;
->  	}
-> =20
+ net/ipv4/tcp_bpf.c                            |  55 +++-
+ tools/testing/selftests/net/.gitignore        |   2 +
+ tools/testing/selftests/net/Makefile          |   6 +
+ .../selftests/net/sockmap_recvfrom.bpf.c      |  31 ++
+ .../testing/selftests/net/sockmap_recvfrom.c  | 288 ++++++++++++++++++
+ 5 files changed, 373 insertions(+), 9 deletions(-)
+ create mode 100644 tools/testing/selftests/net/sockmap_recvfrom.bpf.c
+ create mode 100644 tools/testing/selftests/net/sockmap_recvfrom.c
 
-[...]
+-- 
+2.52.0
+
