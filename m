@@ -1,179 +1,129 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F6B385D76;
-	Wed, 15 Jul 2026 07:12:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16EF37DE9D
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 07:13:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784099579; cv=none; b=pLiykpPXog4XNeTDhYOZr61eoMcX9XcwJXeXy6+Mu3zs3OwEmPdUSsLoCqCdwEGgl459RConxnQzp3eQUh69q8ICtSK33JuZlQsT1UA1xknFMkwZJPsUYGtWJYJYpxZdwtBi3vE9EIfchQ2Am4LJ4r91mX6KxgZoTUdRxcm89vY=
+	t=1784099588; cv=none; b=mR4cW2vX7i6+R6QmktR3E1O3FNqbDfNze+BgM7iKEpkcmZJ+SgrUk6JLYqiQ7z01LjreNMs7CATAGeH9fDxwVY5/WOr/X8/dx6h7jP0Q0Efa3WWm9y9QNPU2KYNiu3RapmZZi40PYO17XWkn5JEmNlkxE7w5riskUsaC1FfqmtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784099579; c=relaxed/simple;
-	bh=02SI7iE0lGhXuUmbRtzFC6rHTFqehR6cWMnWlQl1OOw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ndRhZqB9h/yA4JSWUctCGjNR3xImBNnfZKB8kWT/OFzpUAGugmJ3QWU4A1xXHzZ1nt/VXKm/cAaWowaBK0uPq6d1acZpBgjCggYEFCFHuqESrgC9UMVdjyu8o7I5f3qhMrKRQHd6Sl3dS5U2LgSvV9yt2t3ttw+TITIdbbD1/L4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 916423e8801c11f1aa26b74ffac11d73-20260715
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:5515df0e-86b2-41a0-9efc-ac1cc5e2e52e,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:d523b6c8de346b41a4dd3fd13ff1fde6,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|136|850|865|898,TC:nil,Content
-	:0|15|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-	,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 916423e8801c11f1aa26b74ffac11d73-20260715
-X-User: jiangfeng@kylinos.cn
-Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jiangfeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1419687284; Wed, 15 Jul 2026 15:12:41 +0800
-From: Feng Jiang <jiangfeng@kylinos.cn>
-Date: Wed, 15 Jul 2026 07:12:25 +0000
-Subject: [PATCH v3 1/2] bpf, riscv: add support for timed may_goto
+	s=arc-20240116; t=1784099588; c=relaxed/simple;
+	bh=9GnXkmZA6D4ZCZ//ji0b24bA4CjarR7CUrGGMoV1OIw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cWXzeWHiXKPtmNgGTGPMRQQiUOeGXsvOl9WWXHS9FlMONAyKIt90F2h/loosZLnG9M5IGjnGNrx3AHRZv0nW/j+cKYeNJXM2O2WHbyazCahMYO5jF7IJmZM4q+dh+YCzHr0VxGXq20CWOZ24M2YOfHDTj18d6F2lCeW9wdbOlPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h0S6x0s2fzYQtt1
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 15:12:41 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id BB20D4058F
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 15:12:57 +0800 (CST)
+Received: from [10.67.110.68] (unknown [10.67.110.68])
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgCn1lf4MldqC9E0BQ--.23688S2;
+	Wed, 15 Jul 2026 15:12:57 +0800 (CST)
+Message-ID: <3a08e895-606f-4b54-9c4a-2a500424afaa@huaweicloud.com>
+Date: Wed, 15 Jul 2026 15:12:56 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add testcase for callback
+ with tailcall
+Content-Language: en-US
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260714024459.420075-1-pulehui@huaweicloud.com>
+ <20260714024459.420075-3-pulehui@huaweicloud.com>
+ <20260714025320.200C71F000E9@smtp.kernel.org>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <20260714025320.200C71F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260715-riscv-bpf-timed-may-goto-v3-1-cf2a9c3d843f@kylinos.cn>
-References: <20260715-riscv-bpf-timed-may-goto-v3-0-cf2a9c3d843f@kylinos.cn>
-In-Reply-To: <20260715-riscv-bpf-timed-may-goto-v3-0-cf2a9c3d843f@kylinos.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Luke Nelson <luke.r.nels@gmail.com>, 
- Xi Wang <xi.wang@gmail.com>, 
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
- Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Feng Jiang <jiangfeng@kylinos.cn>
-X-Mailer: b4 0.14.3
+X-CM-TRANSID:gCh0CgCn1lf4MldqC9E0BQ--.23688S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFW8uF13CFWxAF18WFWktFb_yoW8ury8pF
+	y5XwsFkayxWF17Ga47ZrWIkF4rtw4kXFyUtr48Kr90vrn29r97tFs7KrWjgF9xK395K34r
+	ZasFqrn3Aw4kX3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
+	6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
+	CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
+	0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
+	AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
+	KfnxnUUI43ZEXa7IU1CPfJUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-Implement arch_bpf_timed_may_goto() for the RV64 JIT. The argument and
-return value are carried in BPF_REG_AX, and BPF R0-R5 are preserved
-across the call to the generic bpf_check_timed_may_goto().
 
-Enable bpf_jit_supports_timed_may_goto() so the verifier uses the timed
-expansion path.
+On 2026/7/14 10:53, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Low] Out-of-bounds map index used in bpf_tail_call_static in the test program.
+> --
+> 
+> --- Patch [2]: [PATCH bpf-next v2 2/2] selftests/bpf: Add testcase for callback with tailcall ---
+> commit 6b7ff517c87bc3ed869da7118100965c0668a781
+> Author: Pu Lehui <pulehui@huawei.com>
+> 
+> selftests/bpf: Add testcase for callback with tailcall
+> 
+> This commit adds a new BPF selftest to verify that a callback involving a
+> subprogram with a tail call is properly rejected by the verifier.
+> 
+>> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_callback.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_callback.c
+>> new file mode 100644
+>> index 0000000000000..dfe9c49cfeb1d
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_callback.c
+>> @@ -0,0 +1,62 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +#include <linux/bpf.h>
+>> +#include <bpf/bpf_helpers.h>
+>> +#include "bpf_misc.h"
+>> +#include "bpf_test_utils.h"
+>> +
+>> +int classifier_0(struct __sk_buff *skb);
+>> +
+>> +struct {
+>> +	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+>> +	__uint(max_entries, 1);
+>> +	__uint(key_size, sizeof(__u32));
+>> +	__array(values, void (void));
+>> +} jmp_table SEC(".maps") = {
+>> +	.values = {
+>> +		[0] = (void *) &classifier_0,
+>> +	},
+>> +};
+>> +
+>> +static __noinline
+>> +int subprog_tail0(struct __sk_buff *skb)
+>> +{
+>> +	int ret = 0;
+>> +
+>> +	bpf_tail_call_static(skb, &jmp_table, 1);
 
-Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
----
- arch/riscv/net/Makefile             |  2 +-
- arch/riscv/net/bpf_jit_comp64.c     | 13 +++++++++-
- arch/riscv/net/bpf_timed_may_goto.S | 47 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 60 insertions(+), 2 deletions(-)
+my bad, it should be `0`
 
-diff --git a/arch/riscv/net/Makefile b/arch/riscv/net/Makefile
-index 9a1e5f0a94e5..6458d4d51990 100644
---- a/arch/riscv/net/Makefile
-+++ b/arch/riscv/net/Makefile
-@@ -3,7 +3,7 @@
- obj-$(CONFIG_BPF_JIT) += bpf_jit_core.o
- 
- ifeq ($(CONFIG_ARCH_RV64I),y)
--	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o
-+	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o bpf_timed_may_goto.o
- else
- 	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
- endif
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index c03c1de16b79..4f88a446278a 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1841,7 +1841,13 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		if (ret)
- 			return ret;
- 
--		if (insn->src_reg != BPF_PSEUDO_CALL)
-+		/*
-+		 * arch_bpf_timed_may_goto() is emitted by the verifier and
-+		 * returns its result in BPF_REG_AX instead of BPF_REG_0, so
-+		 * skip the normal "move return register into R0".
-+		 */
-+		if (insn->src_reg != BPF_PSEUDO_CALL &&
-+		    addr != (u64)arch_bpf_timed_may_goto)
- 			emit_mv(bpf_to_rv_reg(BPF_REG_0, ctx), RV_REG_A0, ctx);
- 		break;
- 	}
-@@ -2157,3 +2163,8 @@ bool bpf_jit_supports_fsession(void)
- {
- 	return true;
- }
-+
-+bool bpf_jit_supports_timed_may_goto(void)
-+{
-+	return true;
-+}
-diff --git a/arch/riscv/net/bpf_timed_may_goto.S b/arch/riscv/net/bpf_timed_may_goto.S
-new file mode 100644
-index 000000000000..f4bf2cd10586
---- /dev/null
-+++ b/arch/riscv/net/bpf_timed_may_goto.S
-@@ -0,0 +1,47 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2026 Feng Jiang <jiangfeng@kylinos.cn> */
-+
-+#include <linux/linkage.h>
-+#include <asm/asm.h>
-+
-+/*
-+ * Trampoline for the BPF timed may_goto loop bound. Custom calling convention:
-+ *	- input:  stack offset in BPF_REG_AX (t0)
-+ *	- output: updated count in BPF_REG_AX (t0)
-+ *
-+ * Calls bpf_check_timed_may_goto(ptr) with the standard RISC-V ABI, where
-+ * ptr = BPF_REG_FP (s5) + BPF_REG_AX (t0). BPF R0-R5 (a5, a0-a4) are saved
-+ * across the call; BPF_REG_FP (s5) is callee-saved and needs no saving.
-+ */
-+
-+SYM_FUNC_START(arch_bpf_timed_may_goto)
-+	addi	sp, sp, -64
-+	sd	ra, 56(sp)
-+	sd	s0, 48(sp)
-+	addi	s0, sp, 64
-+
-+	/* Save BPF registers R0-R5 (a5, a0-a4) */
-+	sd	a5, 40(sp)
-+	sd	a0, 32(sp)
-+	sd	a1, 24(sp)
-+	sd	a2, 16(sp)
-+	sd	a3, 8(sp)
-+	sd	a4, 0(sp)
-+
-+	add	a0, t0, s5
-+	call	bpf_check_timed_may_goto
-+	mv	t0, a0
-+
-+	/* Restore BPF registers R0-R5 */
-+	ld	a4, 0(sp)
-+	ld	a3, 8(sp)
-+	ld	a2, 16(sp)
-+	ld	a1, 24(sp)
-+	ld	a0, 32(sp)
-+	ld	a5, 40(sp)
-+
-+	ld	s0, 48(sp)
-+	ld	ra, 56(sp)
-+	addi	sp, sp, 64
-+	ret
-+SYM_FUNC_END(arch_bpf_timed_may_goto)
-
--- 
-2.53.0
+> 
+> [Severity: Low]
+> Does this code use an out-of-bounds index for the tail call? The jmp_table
+> map has max_entries set to 1 and populates index 0 with classifier_0, but
+> this bpf_tail_call_static() invocation uses index 1.
+> 
+> Even though this test is designed to be rejected by the verifier, should
+> this pass index 0 to correctly match the intended tail call target?
+> 
+>> +	barrier_var(ret);
+>> +	return ret;
+>> +}
+> 
+> [ ... ]
+> 
 
