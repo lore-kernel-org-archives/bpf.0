@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 793A8387348;
-	Wed, 15 Jul 2026 01:55:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A440A381B1F;
+	Wed, 15 Jul 2026 01:58:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784080510; cv=none; b=hfDmczNYu8cO+tVGRlOVCkQ1l5OyoAJWvgPZgESMRZsy90AlUYtu3HYIj2M47w/3lUs+hy7JYZ1kXDrs/XDns8Ni7scVMJHw0v65G4nvT8EriEEV73oDs7OU4LVzvNOgIFrnzRg4L1zd0jaISohZjrFD7kf+4CWjyAFzjVVHdr0=
+	t=1784080730; cv=none; b=HqI0WHuIE/kn7VHgdu72P/1Bhfs16A28BYK2I00f1etUvyzxc4AWPXnU4DEVo36oxzh0QmRDnSdAspsOcEKMPTzku7KKZwlDHz+d7vD7Y0ScOIAnc0UAg5n44HnLKYi8lhz3UnqDXlBNU5GMbN9F0AtcLRVj/ENCHIeideqPEnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784080510; c=relaxed/simple;
-	bh=ZAFgEZSm0P2dS3532tmTHnyAoYVg+4XupTImuJXj3JA=;
+	s=arc-20240116; t=1784080730; c=relaxed/simple;
+	bh=YOtyiO7OxqSb0TGMBpRd4dRXDtEOFcTT312kAmCw42w=;
 	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Kb687atgGTWzxTedUe0lYR06faeW1WtssC0kZYzBBphW7Lv/hb5GYcg9DzesRw18xiZgnAi2MVZLVKfxkq2roFiHaKLRmFLqnei/HQttCOyySMg6yR0z49kiOBzUPBv9rxMD/FA2Jd47PmsT/1TGIqUZiQXNbPvmvY4jmEICmCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j8MEP1Lx; arc=none smtp.client-ip=100.103.45.18
+	 Mime-Version:Content-Type; b=C5yKx7fbnN82xeVbUqthtD8LiVEtz6XMbhVbBFIuYKFjP1BiTr85jjcZQOCveBHswHi22gOtrsIsgzgpP+gOjuiOCRaPCUOXGlWWml9TUgzCyhCljkoTqblj7YgAHoAEMxZeS/8JR8dJ0nLs+40jH2j4TrUaE9eIT/erYAUCb10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nO76q4Ff; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j8MEP1Lx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AB6D1F000E9;
-	Wed, 15 Jul 2026 01:55:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nO76q4Ff"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 377A21F000E9;
+	Wed, 15 Jul 2026 01:58:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784080509;
-	bh=eFmbCdDlULb9hkByxB37nmiCBfWhMNDBwbxTccYr5vY=;
+	s=k20260515; t=1784080729;
+	bh=cSLs5Kao3oKAx4FSyWlx7rK0pyi01ywYmA2Ww4Xd+3w=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=j8MEP1LxGo9h9CDj5rd2vT44ekEyAJXM8R6uOdx+eBSHYhG3nIhWZxPhamJDQ86rq
-	 ZpYTlSpRDn0wtQyQE0WkMepUP8qcEyEzlw8Mfk+AmS26CWjI2r+PlYcpdpE4ocwp2C
-	 c1bKQkgaeZ1u83E4UyJS/aIwDir4OCRBXYhrWK1JhM97VmDhh3qcfw2DC0HIu3aVny
-	 Q2DFaC/zSGX4ulwYEEU6LLAi4sBDirymxHsDol0c0MqFB3537gn0/gzWx9oVPqJoDT
-	 wfQ1XgopJcyJL1UuWB3OtV9g856ST2oQ3m3c4qbmADRwKS6ggQJHOqDYU5aG56d0IB
-	 7NOrsZubymUFw==
-Date: Wed, 15 Jul 2026 10:55:05 +0900
+	b=nO76q4FfwycF46nmYRsH0+ctIgJp6gJ5icL/o8z3+HLSmp03/u9OA1vCLEHvHkhQv
+	 CKZLgU7haefv8mxy9tZPqdoMd22kHJBDaquZTjQR6TxJug9dpT3M/GDNphv0UXUq9v
+	 fjtacTX3NfGgdAs22kwHBjN8i8ecRDHFaeRarHPUOSnPGinj44PKjmVTBD8kYImof8
+	 sDcYgYiAgIj8706pgVYC/bIGIJojvHxR+2g9Agbpi9mBk1ur7b0WL008L1egp4mQ8a
+	 z1sGKwhVko2jKPdwoqav4OlofSdZZr4V7LzNoHVItG35fCfGg8/VBm5SGmd4puFSag
+	 GtKjtdlIhqgwg==
+Date: Wed, 15 Jul 2026 10:58:44 +0900
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>
 Cc: Shuah Khan <skhan@linuxfoundation.org>, Andrii Nakryiko
@@ -35,7 +35,7 @@ Cc: Shuah Khan <skhan@linuxfoundation.org>, Andrii Nakryiko
  linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH] selftests/ftrace: Add test case for a symbol in a
  module without module name
-Message-Id: <20260715105505.7fa8488621ec59c154edc082@kernel.org>
+Message-Id: <20260715105844.9d2e139ece02aa86468b47c2@kernel.org>
 In-Reply-To: <20260714104210.28cc4c59@gandalf.local.home>
 References: <169846405196.88147.17766692778800222203.stgit@devnote2>
 	<20260714104210.28cc4c59@gandalf.local.home>
@@ -49,6 +49,10 @@ Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
+OK, this seems good to me, and tested. Let me pick it to probes/for-next.
+
+Thanks!
+
 On Tue, 14 Jul 2026 10:42:10 -0400
 Steven Rostedt <rostedt@goodmis.org> wrote:
 
@@ -56,9 +60,6 @@ Steven Rostedt <rostedt@goodmis.org> wrote:
 > Is this still a think, or can we remove it from patchwork?
 > 
 >   https://patchwork.kernel.org/project/linux-trace-kernel/patch/169846405196.88147.17766692778800222203.stgit@devnote2/
-
-Oops, thanks for reminding. Let me check.
-
 > 
 > -- Steve
 > 
