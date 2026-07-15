@@ -1,67 +1,67 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4571747799E
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 12:39:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2537F478874
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 12:39:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784119195; cv=none; b=qWjEMFlL4LZdlJw1vNRfnIHKg2h+/nRbN9w5dqUjxuCx8jKYF7NrWm1joriUu28707wHQXPi+XF+uscH6poWoSd5FdnlOhN6zhGM0zl+8WiFMgAfzKIq0K4ME+9k9rNsOQu+4MvmzxN4suEoo0PNbtUEwb+4DeO+DZOkO+uCE+I=
+	t=1784119197; cv=none; b=fX1Bk6W1lyBJm77wb9JvbBAtFNw25Q9gXRAXyHrUsXdC08U7a2SmlHvTlLaojkGWQNg5wItKFeQ+n4kEvq1mGfANDaREt94EL7yTuB2OtaBtAOHhsD8ooe1PJpF82fIn7dhQ4j9k6NK3Ee8nSrToCgQbsL5ndzildi+1hmD4+i8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784119195; c=relaxed/simple;
-	bh=ZkYJs35jQmspYZV+7P7rdW/XJsOQuNs1+0xfbRaBumg=;
+	s=arc-20240116; t=1784119197; c=relaxed/simple;
+	bh=XKzOXI7bmhKLzFjpe/X1ZB5NXfAm20n90mj21jdtQJ4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Rg066/ulDDXNCcB4cjbawKSNfkLLlR0Aamgp3y8PtsSUaeCnIdkujD0zf4riM+L6512kMRUENvqRXmCOzvuk0WugRdz69e4P2rpviOjb1zE+4QsfoNBOwvQWL1y2fkrO4ne179+KJA1g8AgF36md7XfcEntm6+rwlGssHaFqScA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=G1l0I46k; arc=none smtp.client-ip=209.85.128.47
+	 In-Reply-To:To:Cc; b=aBiq6lNywKHvnBgrila3mB/ZL/bexxCM+8M2RqRACcnu8+Iu7yp63TVLIW9CJZEMqldfAdXpgNcCqVj0DklQcmK4CtNzBMVsNSCLTZwQQdLLN+dy6XpJ0FqeyY3BpA5tY79IbZOHv6lLQJMa5oNRifJ214kenwaDkzNlmvr2dKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fXSYPceX; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="G1l0I46k"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4921eed3fa2so45243575e9.0
-        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 05:39:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fXSYPceX"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-493bb510ce4so37229605e9.1
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 05:39:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1784119191; x=1784723991; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1784119193; x=1784723993; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=IYLoZSOwmX0k8MESmwiGJgNO1yzq3b1PVclurYMHFiw=;
-        b=G1l0I46kSGQoY7D+w2hYlu5iuXi2nygQsGEAxwUOJr6JKu/wzYqkruB27VbYrZkb9t
-         01AmMN/JZ23x+fWhBm/1cRgOv6PeXsBAFx3i4j8hhwNr1xATAAAltTE/aoWL9t499MFW
-         RLvSHjm4EOBXXkjv4Gptrp9VCGY8DG7+q09KNBI8qkCp4wR5ZJUgTx7y/4HF8CBUy9IY
-         QK348XBaYCzpiBJjLe6GS6Kf35zElm00hwfkD3j8gpJv+w8H37Dyomi61HvNhmjHSEkN
-         MxW0mrxvrIyBjQSLopoPBP4SdVSPOVWutHB0b1/raxDOjrHyyC95MIyAoZGFh77LuhEj
-         ew7Q==
+        bh=+xgEUm86ElH+02LcY3CjjDGbQavQuTnhydinV3UlFp4=;
+        b=fXSYPceXzVIcyzI0VFhIMxg7hI/m7Dt2y/RDfHeil1OhCALUNCTsba9zS+RB2wrgoh
+         w3zu9IAg/xntYGeUOH0NATYBwmMzunCJK817KBPLbUbX50a7Mao2aJwFUqJGmCCzzj/Q
+         sQ95hjPtqhEMxKd6NK8CqHaToCakSV5xCcbhS0RzroSthB/eSghhzC2TgzlrmeGJrGeD
+         UB/02zyiee1HZXQQNW61tcBKg4sMDpFaLMFSi+STqppwLKpAhctGnvUm+ZvriK/2qCgL
+         rijnWsIa6ES8bceu7O5gj+6OmathMskqe7bKhsgRPmudyJav/aebk9GTyZj0nifwz0OZ
+         2N3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784119191; x=1784723991;
+        d=1e100.net; s=20251104; t=1784119193; x=1784723993;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=IYLoZSOwmX0k8MESmwiGJgNO1yzq3b1PVclurYMHFiw=;
-        b=LALkwBoNmlaBhjGAGBDspJ9NYVl6MbcIDvgmmdfWngtbqvrHtAjbarIRNrvgqeOF7f
-         OsE3kA/RYvG6sqDWuPUTwtqrP+nz/AIFJ2UcqA6Q40FV4Tf1G69UW7DpwC+A3xPjuKU4
-         Nligf8I+WqHO1/DUxQ8Wz3t5sNFUNAI6rnuaQq+qYbqCPFlKN8c+kYI1MlRaxoN3FJrn
-         v+ohP09GMex1KNVKyvKR5r52mLrXmplL8VqObmFPzYQgmu96Y2VxVED5PPPaPpMxUJk8
-         ckPYLJZlS0U/mSx75O8/Sr+wP2apRoOnufzJkPy2oJXdw3ro2q73jLV1xDNNNoZOIXGe
-         G1Sw==
-X-Forwarded-Encrypted: i=1; AHgh+RoXlSkKwZPfKOKBqeXYPfAvn0F+K3/CLAuROXerbnsdM+OUGG9wxos5kMznDnIG3Md36hQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6lgzqAw5fYwi1Iedr3tCun4EQt+pH1W4dBeTW+MwwK/P+PYeT
-	MnZQxx9aGm72vgE9o8Xcm9Q0g2jE6JE54fN9ZHX+dqQpYaVXL8T/kgD9vF0waR9/LUA=
-X-Gm-Gg: AfdE7cla75K2vyCNzO06Sga1YWEDFyC+h+RH3hvQ2uHuvqLTebP/WXq9v02k4YKkRL8
-	T16NOVA300UqGi6OiBZHtKXuvxv6pu8RiO9C+amG+eb9OQ04nLCWfrmef+JNX+0E6KmnryMObSO
-	Jzv+rfTWO6LUL8iP73TO+kjW5VV7wgnqbkdUqj1zQFl3TS2ndDXqSCLzxsMc+kHhJ/4fvrRy8A6
-	Ny+o9FCMbmLye7XRyWpY69JEiW5DlKOQ7Xo+Ex4Yx4bUo9RDdePfHEteVsJ6fuLyfm1WUHYegyp
-	ky/shmCBrdcXRogq2NtAI/LKpJaAuaQnHX0sp9lfbnqoDkgj9cQY0f0f2pgV/eEUEspUlvVKcTv
-	uy87+k73biiMOuj3CjJ/2ghYqIFdQl6Gc5an/xVbQXbw1AiFANRy396lDMFFEgadeMOYvXVwTmQ
-	36t9C9RTA1OveTHLg9ZkFiMg==
-X-Received: by 2002:a05:600d:644d:20b0:493:c601:3e23 with SMTP id 5b1f17b1804b1-49538992cfbmr54535535e9.5.1784119191529;
-        Wed, 15 Jul 2026 05:39:51 -0700 (PDT)
+        bh=+xgEUm86ElH+02LcY3CjjDGbQavQuTnhydinV3UlFp4=;
+        b=TeSLmMcU1w3hu6ugsz4OXNaX7OK8Fw7/SWmf0/Yf0Pb42xov3hbZkNDSGG19cTf6ac
+         twofPoTTu4b0h6GKLH3m0PNaRG4HF3YRQQdTb5rnhNR2bA4YhgjZtyuW18ubgD00LIxe
+         fHJaYUkmuwFJ+Ixmz2sapShOCZ+KtVCWqBWRti2E8eWW72IXNCr4xx7BcJf581uaPMSR
+         q3Tyg1Xb8UqclsxksXMpZAT7bnISDEvcraoPOE9pw/kA1vujEeiPdqzx99l2xUJPPZ8H
+         uamDeo9Qh57oQQSVW9uHLkLCKpY2zAXBXBODolaBo5gN/SqkHmzKEb/XCsPT8FeCnyRe
+         OA5g==
+X-Forwarded-Encrypted: i=1; AHgh+Rrp+po2ZCI+H566KLvqQSWzlm2lb8Z84wQ4eC/vg6lmjzyTB1kuZSgLj6LROizChauisTA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKVfsg4d49stu094NapddefkAZAtdWdRpl2cwmnja55izTrvTB
+	QZedO/4EvSyaaapZSvS7LMPdN0MantsHpI35C5DOi058NSKEnVWkJ30s+tr/aASEDuI=
+X-Gm-Gg: AfdE7clr5t3ols6g2X8yl91otxa+L71lbb4ZHEr3llNdk8nt2kfTltEPkFBrk7qEWqw
+	ZT/LN8MO1/BX8QTK6Hx5DxDep3n2EcLZCPOuHXJAnTvVhsLpiMrpMsNOePH13od7+Z+WTxPZ0gs
+	1+MuMXz16A2qCsEfPPwocYdqhNvKj3GcCTJq6Al0zXueqbnoGF5VkPV+mAVrSOuG+/ixByxO+QI
+	Bepxj6LXiff08ECMKJP3CPLiVKrOJDEYAEuH7vy/TYdYxBHuco8wDRO2C/lcaaYsLJxB26PqG0m
+	HMCK5XYMhiuk5qG83aRh+wgOeZnitmEPTXx1L2qlMQEtGzJxsJztQOQ9pcEh9hZ/sgFIQJrhigt
+	omkKAcmK0BN7WuIN38B/y4afmd/LeMtzoHcHA29n7uvB67p9niyaa9vPOokXhn26+vE01uPqSc0
+	vrzI0C3w2bj9dxOhVPVgE/SQ==
+X-Received: by 2002:a05:600c:c0c3:10b0:493:bfad:9d99 with SMTP id 5b1f17b1804b1-4953899588amr55205575e9.13.1784119193314;
+        Wed, 15 Jul 2026 05:39:53 -0700 (PDT)
 Received: from e133063.arm.com ([212.187.182.162])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4953c710facsm32360695e9.2.2026.07.15.05.39.50
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4953c710facsm32360695e9.2.2026.07.15.05.39.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2026 05:39:50 -0700 (PDT)
+        Wed, 15 Jul 2026 05:39:52 -0700 (PDT)
 From: James Clark <james.clark@linaro.org>
-Date: Wed, 15 Jul 2026 13:39:19 +0100
-Subject: [PATCH v3 3/5] tools/build: Allow versioning LLVM readelf
+Date: Wed, 15 Jul 2026 13:39:20 +0100
+Subject: [PATCH v3 4/5] tools/build: selftests: Allow versioning LLVM lld
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260715-james-perf-llvm-version-v3-3-8854bfe5af7e@linaro.org>
+Message-Id: <20260715-james-perf-llvm-version-v3-4-8854bfe5af7e@linaro.org>
 References: <20260715-james-perf-llvm-version-v3-0-8854bfe5af7e@linaro.org>
 In-Reply-To: <20260715-james-perf-llvm-version-v3-0-8854bfe5af7e@linaro.org>
 To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
@@ -93,98 +93,94 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
  linux-kselftest@vger.kernel.org, James Clark <james.clark@linaro.org>
 X-Mailer: b4 0.14.2
 
-Documentation/kbuild/llvm.rst mentions that readelf is included in the
-LLVM toolchain, but it's not currently included in this block.
+Building with LLVM=... could result in a different version of lld being
+used than the main toolchain for liburandom_read.so because it's
+hardcoded to "lld" in this makefile.
 
-Add it so that LLVM=... options also apply to readelf. Users in tools/
-were Perf which was hardcoding it, and another was the BPF makefile.
-Both already include Makefile.include so convert them to use the new
-variables.
+Make it consistent with the rest of the LLVM toolchain by adding an LLD
+variable to Makefile.include. Keep the fallback for other architectures
+in tools/testing/selftests/bpf/Makefile as it seems like it's something
+specific to this make rule and shouldn't be global.
 
-Where readelf wasn't doing anything arch specific, use HOSTREADELF
-because it's more likely to be installed.
+Clang only accepts either a full path to "/x/x/ld.lld" or "lld-15" style
+inputs to "-fuse-ld=", so the only way to make it work with both
+prefixed and postfixed paths is to always take the full path. Also I
+don't think the original use of "lld" over "ld.lld" was significant as
+this is always a linux build, so that can be changed to make it work in
+both cases.
 
-Reviewed-by: Ian Rogers <irogers@google.com>
+Add a warning for an empty USE_LD as "shell command -v" can return empty
+and GCC won't complain.
+
 Signed-off-by: James Clark <james.clark@linaro.org>
 ---
- tools/lib/bpf/Makefile         | 8 ++++----
- tools/perf/Makefile.perf       | 1 -
- tools/scripts/Makefile.include | 4 ++++
- 3 files changed, 8 insertions(+), 5 deletions(-)
+ tools/scripts/Makefile.include       |  2 ++
+ tools/testing/selftests/bpf/Makefile | 12 ++++++++----
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index eca584fb061e16013e76827e4203f6be0477a73e..269fe21fc8da73083367b3c122bdd2b718e12bc5 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -115,12 +115,12 @@ PC_FILE		:= $(addprefix $(OUTPUT),$(PC_FILE))
- 
- TAGS_PROG := $(if $(shell which etags 2>/dev/null),etags,ctags)
- 
--GLOBAL_SYM_COUNT = $(shell readelf -s --wide $(BPF_IN_SHARED) | \
-+GLOBAL_SYM_COUNT = $(shell $(HOSTREADELF) -s --wide $(BPF_IN_SHARED) | \
- 			   cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' | \
- 			   sed 's/\[.*\]//' | \
- 			   awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
- 			   sort -u | wc -l)
--VERSIONED_SYM_COUNT = $(shell readelf --dyn-syms --wide $(OUTPUT)libbpf.so | \
-+VERSIONED_SYM_COUNT = $(shell $(HOSTREADELF) --dyn-syms --wide $(OUTPUT)libbpf.so | \
- 			      sed 's/\[.*\]//' | \
- 			      awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
- 			      grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | sort -u | wc -l)
-@@ -183,12 +183,12 @@ check_abi: $(OUTPUT)libbpf.so $(VERSION_SCRIPT)
- 		     "versioned symbols in $^ ($(VERSIONED_SYM_COUNT))." \
- 		     "Please make sure all LIBBPF_API symbols are"	 \
- 		     "versioned in $(VERSION_SCRIPT)." >&2;		 \
--		readelf -s --wide $(BPF_IN_SHARED) |			 \
-+		$(HOSTREADELF) -s --wide $(BPF_IN_SHARED) |		 \
- 		    cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' |	 \
- 		    sed 's/\[.*\]//' |					 \
- 		    awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}'|  \
- 		    sort -u > $(OUTPUT)libbpf_global_syms.tmp;		 \
--		readelf --dyn-syms --wide $(OUTPUT)libbpf.so |		 \
-+		$(HOSTREADELF) --dyn-syms --wide $(OUTPUT)libbpf.so |	 \
- 		    sed 's/\[.*\]//' |					 \
- 		    awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}'|  \
- 		    grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 |		 \
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 476b8dcaef58cb1f3fa75f46a647c2cfe2352767..4d0d7ae02e06b117487a17691c4e62a138428ac5 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -215,7 +215,6 @@ FLEX    ?= flex
- BISON   ?= bison
- STRIP   = strip
- AWK     = awk
--READELF ?= readelf
- 
- # include Makefile.config by default and rule out
- # non-config cases
 diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-index e81e5b479c563321e458b2a7ad8fca2b4607a254..46a3872b87624a7bf475d9b42a3e471f36789dfd 100644
+index 46a3872b87624a7bf475d9b42a3e471f36789dfd..92056d3e330eb6596250635b6d932b3b73e7f45f 100644
 --- a/tools/scripts/Makefile.include
 +++ b/tools/scripts/Makefile.include
-@@ -73,6 +73,8 @@ ifneq ($(LLVM),)
-   $(call allow-override,LLC,$(LLVM_PREFIX)llc$(LLVM_SUFFIX))
-   $(call allow-override,LLVM_CONFIG,$(LLVM_PREFIX)llvm-config$(LLVM_SUFFIX))
-   $(call allow-override,LLVM_OBJCOPY,$(LLVM_PREFIX)llvm-objcopy$(LLVM_SUFFIX))
-+  $(call allow-override,READELF,$(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX))
-+  $(call allow-override,HOSTREADELF,$(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX))
- else
-   # Allow setting various cross-compile vars or setting CROSS_COMPILE as a prefix.
-   $(call allow-override,CC,$(CROSS_COMPILE)gcc)
-@@ -80,11 +82,13 @@ else
-   $(call allow-override,LD,$(CROSS_COMPILE)ld)
-   $(call allow-override,CXX,$(CROSS_COMPILE)g++)
-   $(call allow-override,STRIP,$(CROSS_COMPILE)strip)
-+  $(call allow-override,READELF,$(CROSS_COMPILE)readelf)
- 
-   # Host versions aren't prefixed
-   $(call allow-override,HOSTAR,ar)
-   $(call allow-override,HOSTCC,gcc)
-   $(call allow-override,HOSTLD,ld)
-+  $(call allow-override,HOSTREADELF,readelf)
- 
+@@ -67,6 +67,7 @@ ifneq ($(LLVM),)
+   $(call allow-override,HOSTAR,$(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX))
+   $(call allow-override,LD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
+   $(call allow-override,HOSTLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
++  $(call allow-override,LLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
+   $(call allow-override,CXX,$(LLVM_PREFIX)clang++$(LLVM_SUFFIX))
+   $(call allow-override,STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
+   $(call allow-override,LLVM_STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
+@@ -93,6 +94,7 @@ else
    # Some tools still require Clang, LLC and/or LLVM utils
    $(call allow-override,CLANG,clang)
+   $(call allow-override,LLC,llc)
++  $(call allow-override,LLD,ld.lld)
+   $(call allow-override,LLVM_CONFIG,llvm-config)
+   $(call allow-override,LLVM_OBJCOPY,llvm-objcopy)
+   $(call allow-override,LLVM_STRIP,llvm-strip)
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index b642ee489ea64046a9b19852780c3a6f009cbd82..d829979861eeabd33272a0d6eca82e7066eabfd7 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -264,30 +264,34 @@ $(OUTPUT)/%:%.c
+ 
+ # LLVM's ld.lld doesn't support all the architectures, so use it only on x86
+ ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
+-LLD := lld
++USE_LD := $(shell command -v $(LLD))
++USE_LD_ERR = linker '$(LLD)' not found - add it to PATH, or pass LLVM=/path/ or LLD=/abs/ld.lld)
+ else
+-LLD := $(shell command -v $(LD))
++USE_LD := $(shell command -v $(LD))
++USE_LD_ERR = linker '$(LD)' not found - add it to PATH, or pass LLVM=/path/ or LD=/abs/ld)
+ endif
+ 
+ # Filter out -static for liburandom_read.so and its dependent targets so that static builds
+ # do not fail. Static builds leave urandom_read relying on system-wide shared libraries.
+ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom_read.map
+ 	$(call msg,LIB,,$@)
++	$(Q)test -n "$(USE_LD)" || { echo "$@: $(USE_LD_ERR)" >&2; exit 1; }
+ 	$(Q)$(CLANG) $(CLANG_TARGET_ARCH) \
+ 		     $(filter-out -static,$(COMMON_CFLAGS) $(LDFLAGS)) \
+ 		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
+ 		     -Wno-unused-command-line-argument \
+-		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
++		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
+ 		     -Wl,--version-script=liburandom_read.map \
+ 		     -fPIC -shared -o $@
+ 
+ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
+ 	$(call msg,BINARY,,$@)
++	$(Q)test -n "$(USE_LD)" || { echo "$@: $(USE_LD_ERR)" >&2; exit 1; }
+ 	$(Q)$(CLANG) $(CLANG_TARGET_ARCH) \
+ 		     $(filter-out -static,$(COMMON_CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
+ 		     -Wno-unused-command-line-argument \
+ 		     -lurandom_read $(filter-out -static,$(LDLIBS)) -L$(OUTPUT) \
+-		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
++		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
+ 		     -Wl,-rpath=. -o $@
+ 
+ $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
 
 -- 
 2.34.1
