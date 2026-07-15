@@ -1,127 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1EA3AEB2D
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 17:38:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93ECB4A13A4
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 17:41:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784137135; cv=none; b=BUyERbpDaXedgt+lvotzkdarUpNgMTyyjsuxzIbjQHXkb8FqOucvzHznLhLcRjeLwOFKFEqymvDQIA/iKY+y9ef+Lsy/fkWX+IHZ06gnLTVJBJf95asxV9+n4BEcCAc7dnpuDdAaIQprJYyiVlcgG04NWmd4e1v2z6nUZ0A/vi0=
+	t=1784137317; cv=none; b=gQIcWDCHVAROtKDl98hrt8c5kfDM71MW3HJ5Sb4RyIg+G5h2Y1I71b08vS2PQ0IQ4gJbXQBin0NMNpmzrI4MAjedROKOrcdWd6CoJbQqQxl4fL0xqyMmOWHJUnwJJSzmkX5XmaRT7huZsJCBqdL1K0uHPibsuydquiMIA6JSMN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784137135; c=relaxed/simple;
-	bh=ZixzLe6UWMsqAvehv1EHJmSvzXHfjIY/fLOi1ZV0Lpc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IFYHpmmEiai2+OOzwZE5o2io1iPV16gCPWq8Etc5Q+jBse/B6SeBGB2oES3VyDt4MpMQW9X9P4u7Mojl3g/wHcHLhqz7N+BcqmQsBR21IYE6+SP8HgAhHoc9OphxCQvPBZfSoAUKyF+9bAjHI6Xi/jroXHLb/FiKwuEGaWhCTMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cP8Jw4Ex; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784137317; c=relaxed/simple;
+	bh=g/FkcdpRE4R0tn+Q1qbct0qceIo3EXzzJncWQuMz9+w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aYFFR125j0O7oQnlcxzf3tFZj3t95XBtPyF+nJZXzxpXCzS5K6uObyOdqnOr0d4CJox7Xxh68KIHvVtB82WWaLVwzX3MCb/cd0eU3f3TLoqGbOWHBMwY5BL+pUPpu3jNlu2qD6De62gwSYv8ZbasYwxlfMgL79vTInSd+mVweQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=opH63vg7; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cP8Jw4Ex"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 886C81F00A3D;
-	Wed, 15 Jul 2026 17:38:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784137133;
-	bh=SuSIfszJ9n+UF4U2fd/MzwIjw2cihZQI1g52ZYzlDJU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cP8Jw4Ex3az/0J9MdrHqhalpnMIS374naRXPz8K3Vu1lzJeBq7TeXXRHEWVYgW1qE
-	 K9E29QYtQghdepa4E+g0EVk/fu9gh/oqHjjPJazMzisZKwH17s98xMq7Zwk0O7xdwj
-	 3gRP76TRe5CAXb177QZsk21wyZnpFSSTWY5ILr79f0CT+FCgJlnaE2g0AbXghO4wQG
-	 u49j5Or0k1e8mpbflYWiflZar0MjxKmoLxvzqX9tdqoKBGdRluP/Cw93HFSyJrurrs
-	 xN9g+5nQh3z1F6KxMIZIXhdxY6YcYSuJrLienZAYvP8SfBdf3s0rGK03nWNmPY625i
-	 typRNscAj4NEg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 2/2] bpf: Zero kfunc arg meta before error
- paths can read it
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Amery Hung" <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260715172127.2416388-3-ameryhung@gmail.com>
-References: <20260715172127.2416388-1-ameryhung@gmail.com>
- <20260715172127.2416388-3-ameryhung@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 15 Jul 2026 17:38:53 +0000
-Message-Id: <20260715173853.886C81F00A3D@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="opH63vg7"
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-8f29ec73064so51717686d6.1
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 10:41:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1784137314; x=1784742114; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=uDRO6QnIuhEalRt5fJnXrzp5+6VFXuv7uQsJZiUJYuI=;
+        b=opH63vg7rMyKuWaL0T4BpcikdteK1JUez3hnULji3WebGIOyqsY+FxvHpTfPrFoDSM
+         2y7y2j/fr6G3MGoukENeDBZ6asmPfW9GAGMP9pvf8WntmValzu3LhhuKKh4WPCQxC2xX
+         IB0fieEEfCi+YxRZt0vKchAKfslOmOAfHg9JhphlDZfyiNUtOirErwqEL9wZTDD2OEUO
+         g1sfZ9gcf8IEgKaneNDE1ABP075E3kq4Gqx25yK1iEs9DzvBXHVT6ooQOBb0a6P1coRV
+         v9L7TZef+joM3blbEH7MpD68dfEmJJ86ekruSyhU0xj3Q3TJxW0BKfd7zmzS+WE2VQ40
+         I8IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784137314; x=1784742114;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=uDRO6QnIuhEalRt5fJnXrzp5+6VFXuv7uQsJZiUJYuI=;
+        b=q9gK0zfCmphjFRSBescIE0fFqGTCqHg5AEKHFUblqDWOYKL5w3MaMSfc7K6w8GAufl
+         2yXES+gsp8MXhji4tGfCKebWRqzKnapp+PUf3b5rpX/LkE7+PQP1e+KM71UDzm4fJJ8m
+         Z6PTsXFYc79E5NULUffy3OEflmw2ajooHgnkOESmXzbptDJ88kN0XLvBZBGU5L/TyRmP
+         oLHwltX9zRx5mMYfnVkN2sEj66SrXqdk00+1DAJ1wTz2yMlXZJWKLA+3iU0S08F3ghQ9
+         BMZvvGN+B0SImSKVQjC0t/h3V4Doc5dHnx8i3x6NMmiwwUasYHOcv2au23oP3wA2s44c
+         44Hg==
+X-Forwarded-Encrypted: i=1; AHgh+RqHW/E3LNpcQZ6VxYcCRv0bbnbHicPr1vudTokfQnQZ5hgL0K9kbLl3rPxiQ3G+zjZSIpU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYmRlk2jITAbkWn5pzEDEGFDIyDDi+SX3bxrj/9+2WNRrCKb6D
+	JIKq5T8ij2G3tCaLeKxpoIBd3dYHoK6jCKV4nhiI1hLucaKu9CF9iNicjAWSzSQHZqg=
+X-Gm-Gg: AfdE7cmxD+EBkUcVWmZPoBeCmF3O2BobTu8cnLOIjgOhm5JP3qiPWiaU41G9AiEiX9J
+	QYKgtPJrV3tZFTM4EQeoeuTudCsklbtEOoGrIMDI1r5yEToewMoaneLB4QbpudOelA0VuJcInuw
+	gxEr3qtNnUMkFk81aRqMTWodXRD8IDUlnv4uERHh7BTTKcXVG8jwLH/iLZ8x+JSoCo+QEoAwB5L
+	JuqDs19WOP/R1TOODL8VLkuFNzW4GKaQGhWR8Zfj9Q4bCYMrHF6TGzX88qTlrTB/fQvBZP2Oex7
+	kfyYt1JUdUKfsY9BoKMv6FnY+byUKa9mHm6UaVGB1FwKepF7h+TtPycZC5JIN+D65QS28ygzIMN
+	gvVIGqK7xMahsUUHqaZqc1Hwiw1fWQPIZXJVt6weGyN0+EizWteQCAmNUXrlQ
+X-Received: by 2002:a05:6214:3284:b0:8f0:448c:f9db with SMTP id 6a1803df08f44-9074c73bac7mr82792716d6.19.1784137314423;
+        Wed, 15 Jul 2026 10:41:54 -0700 (PDT)
+Received: from ziepe.ca ([159.2.72.92])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ffd5bbac2asm199815136d6.21.2026.07.15.10.41.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2026 10:41:53 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1wk3cH-00000000i1c-0sGw;
+	Wed, 15 Jul 2026 14:41:53 -0300
+Date: Wed, 15 Jul 2026 14:41:53 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Derek Barbosa <debarbos@redhat.com>,
+	Matthieu Baerts <matttbe@kernel.org>,
+	Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>, users@kernel.org,
+	Linux Media Mailing List <linux-media@vger.kernel.org>,
+	Stephen Finucane <stephenfin@redhat.com>, bpf <bpf@vger.kernel.org>,
+	Chris Mason <clm@meta.com>, Christian Brauner <brauner@kernel.org>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Subject: Re: Linking Patchwork with Sashiko?
+Message-ID: <20260715174153.GB3846105@ziepe.ca>
+References: <20260710074528.5a6e4457@foz.lan>
+ <20260710083845.23c753ca@foz.lan>
+ <87wlv2jq4t.fsf@linux.dev>
+ <20260713095538.3d5e86f1@foz.lan>
+ <20260713094120.GD1127719@killaraus.ideasonboard.com>
+ <20260713220427.582b28bf@foz.lan>
+ <7ia4mrvtrxjl.fsf@castle.c.googlers.com>
+ <20260715005909.GF1656185@killaraus.ideasonboard.com>
+ <00a244f8-5be6-4ee7-b5b1-e4cbdcd4fc77@linux.dev>
+ <20260715163921.GH1778116@killaraus.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260715163921.GH1778116@killaraus.ideasonboard.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On Wed, Jul 15, 2026 at 07:39:21PM +0300, Laurent Pinchart wrote:
+> > Yes, assessing whether AI report is "real" is work, but it's not
+> > reasonable to push this work on already overwhelmed maintainers. And
+> > if AI is wrong, again it's the job of the author to convince the
+> > maintainers it's wrong.
+> 
+> We disagree on this as well. This would force contributors to constantly
+> justify their value against a machine that is known to produce a
+> non-negligible quantity of nonsense. Furthermore, if those generative AI
+> tools are as good as their supporters claim, the time they free for
+> maintainers should outweight the need workload to triage the comments.
 
-Pre-existing issues:
-- [High] BPF kfuncs bpf_mem_cgroup_memory_events and bpf_mem_cgroup_vm_even=
-ts do not handle negative enum values, bypassing bounds checks and allowing=
- out-of-bounds array reads.
---
+I feel Sashiko and this whole AI world has created alot more work. It
+is not saving time at all. Now I have to go and read every Sashiko
+report to see if there is something important that normal review
+missed. I have fix all the drive by 'this is already broken' stuff it
+finds. We get way more patches than we did before. Now *everything*
+has to be looked at more skeptically if came from some AI slop. I get
+crazy real security reports that need special hand holding now that we
+never got before.
 
---- Patch [2]: [PATCH bpf-next v1 2/2] bpf: Zero kfunc arg meta before erro=
-r paths can read it ---
-commit 53f60dae3990fbb436a03cb878e7564339ccd1e9
-Author: Amery Hung <ameryhung@gmail.com>
+Even on the submitting side now I have to run patches through all
+kinds of AI tools to have a solid chance to navigate the new guantlet
+upstream.
 
-bpf: Zero kfunc arg meta before error paths can read it
+We aren't saving time, or creating less work. My hope is we are
+creating better quality, higher security and less bugs.
 
-check_kfunc_call() reads meta.func_name when bpf_fetch_kfunc_arg_meta()
-returns -EACCES, but that error can come from fetch_kfunc_meta() (e.g.
-fd_array_get_btf() rejecting BTF binding for a signed program) before
-meta is memset(), leaving it uninitialized and risking a garbage deref
-in verbose().
-
-Move the memset() to the start of bpf_fetch_kfunc_arg_meta() so meta is
-zeroed on every error return. The intended "not allowed" -EACCES path
-still sets func_name first, so its message is unchanged.
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index c87e5fec5a857..ddfa4f57016b7 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-[Severity: High]
-This isn't a bug introduced by this patch, but this is a pre-existing issue.
-Do the bounds checks in bpf_mem_cgroup_memory_events() and
-bpf_mem_cgroup_vm_events() properly handle negative values?
-
-Since enums evaluate to signed integers in C, and the BPF verifier does
-not enforce enum ranges, a BPF program could pass a negative value to
-bpf_mem_cgroup_memory_events() in mm/bpf_memcontrol.c:
-
-	if (unlikely(event >=3D MEMCG_NR_MEMORY_EVENTS))
-		return (unsigned long)-1;
-
-	return atomic_long_read(&memcg->memory_events[event]);
-
-For a negative value, the bounds check above evaluates to false, which
-allows an out-of-bounds read on the memory_events array.
-
-Can a similar out-of-bounds read happen in bpf_mem_cgroup_vm_events()?
-
-	if (unlikely(!memcg_vm_event_item_valid(event)))
-		return (unsigned long)-1;
-
-	return memcg_events(memcg, event);
-
-The validation routine in mm/memcontrol.c uses the same signed comparison:
-
-bool memcg_vm_event_item_valid(enum vm_event_item idx)
-{
-	if (idx >=3D NR_VM_EVENT_ITEMS)
-		return false;
-
-	return !BAD_STAT_IDX(memcg_events_index(idx));
-}
-
-This allows negative index values to reach memcg_events_index():
-
-static inline int memcg_events_index(enum vm_event_item idx)
-{
-	return mem_cgroup_events_index[idx];
-}
-
-Could this allow a BPF program to read arbitrary out-of-bounds kernel memor=
-y?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260715172127.2416=
-388-1-ameryhung@gmail.com?part=3D2
+Jason
