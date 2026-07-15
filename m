@@ -1,41 +1,41 @@
 Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD4A242D97
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 00:50:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A44A41C5799
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 00:53:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784076620; cv=none; b=pxpoGXoIwkUwqOBOcaRyuDSBBC3NJRzmOhlQeMAOSOhBn9ROFpE9qSzc+AJv4oTW3cXTmh0KmnKRJYTfj/tQaIJQh87F9VSjZWenlYfgByih0A1EylDVgVbZvD0e0W4NHLqn61tDaI910cpHTWyh15bt2Ch04wZI9bQHH/kCzjg=
+	t=1784076838; cv=none; b=OqvUcAs3vQ8m+n14r2TjetoPwBndcA+hEpZf6iwgWDC2pDv2KPiP/+u0VCXjNZODWgxb557CkwaBxKMcQN8gH6aOUmdfpLfz1xSJTnTlN2horyUJ0OblyU/Bc4xehK0m15O6dsPz/uQob++8wCFKRgPffOysvc8ynME17Aun3Gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784076620; c=relaxed/simple;
-	bh=8oD83Vg62iWKSoW7nAe1kNmwlMvXhCczRt0wQXGiccY=;
+	s=arc-20240116; t=1784076838; c=relaxed/simple;
+	bh=dzR4chfAqelA0jb4wh+0QfOekInSKSeLvL31Fd25vA4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AP04FsyzwbcNjvhtWM33Q8gLuACMXOFybsZOlop2NspXtv2lTVOTpnXWHDkY61E+zGeapoa5yrfMH5sXcksJrgGV7h9nt7/iO8HZaCUk/5DIGRBTLuBL5HAzvkuvJOFdQf9rT9XoKdeWIzMD8nXWAQ9JgMnT6b0vaatElA12xSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YtdXpQ35; arc=none smtp.client-ip=95.215.58.186
+	 In-Reply-To:Content-Type; b=TOag/4/fxlflx7ygL27QrLzBdL5vUhxXUgpGlIF9H9pnUVsRd7/n8/20kGeenS0Zgn0HeQ3MDoOGoEZX36NjagKd/cAMht57rzZZ16bMt2Uu0hg8WgnoaNDL5GVZI7xlxnJCIzNMLC911Mspvd2GWA50IE7BBQwYocK6r2fgBik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EuKIt3bQ; arc=none smtp.client-ip=95.215.58.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YtdXpQ35"
-Message-ID: <c8c698cc-4083-48e9-bab5-f542a9626f4a@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EuKIt3bQ"
+Message-ID: <5f38c9a5-a8a3-4bed-bb8c-b7260a1c1a11@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784076612;
+	t=1784076830;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=9CtLT5r3vCFoSDu0jg1wqBwyY2gyOh6s+DJ3Ec/Fg24=;
-	b=YtdXpQ35RG4ObUqoqKngCfES8pEIbXCZYuE9hT+HM64hIQkP/nSxamZg9xiEP1jrly+mvk
-	1lw7WTiPIaRt68zVdBcjrfB4W3W/mFOLwvrbW3v+2YXAUxm9GXUe2Rx/iYc8SvrT6OP5Aq
-	AbNDpu1z8AEmVtdB8CEl/hqQEwYZ0WQ=
-Date: Tue, 14 Jul 2026 17:49:43 -0700
+	bh=S8Xr4dGhJZKjGNNQ6pEqCn3LF/D8kyTDL/foZNruU/k=;
+	b=EuKIt3bQcp/69RLnkg8I8UrqG+DVbETJ5/MW5J7hZp0Z04CDFQhz9cvkCTvBpj8lh7YOdf
+	s5aZ40lBh1GDs5aLXsbrX51qOjeHTrlRY2VwDkorbJOrQP93xsZ9gaGI/hPd8JZ3TM4Nqo
+	b8X8LFYIOwe59C/DseApJESGNqckITk=
+Date: Tue, 14 Jul 2026 17:53:28 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v5 03/10] bpf: add BPF_JIT_KASAN for KASAN
- instrumentation of JITed programs
+Subject: Re: [PATCH bpf-next v5 04/10] bpf, x86: add helper to emit kasan
+ checks in x86 JITed programs
 To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
  <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
  Daniel Borkmann <daniel@iogearbox.net>,
@@ -53,86 +53,130 @@ Cc: ebpf@linuxfoundation.org,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
- <20260709-kasan-v5-3-1c64af8e4e1e@bootlin.com>
+ <20260709-kasan-v5-4-1c64af8e4e1e@bootlin.com>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260709-kasan-v5-3-1c64af8e4e1e@bootlin.com>
+In-Reply-To: <20260709-kasan-v5-4-1c64af8e4e1e@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 On 7/9/26 3:01 AM, Alexis LothorÃ© (eBPF Foundation) wrote:
-> Add a new Kconfig option CONFIG_BPF_JIT_KASAN that automatically enables
-> generic KASAN (Kernel Address SANitizer) memory access checks for
-> JIT-compiled BPF programs as well, when both KASAN (and more
-> specifically, generic KASAN with KASAN_VMALLOC) and JIT compiler are
-> enabled.
+> Add the emit_kasan_check() function that emits KASAN shadow memory
+> checks before memory accesses in JIT-compiled BPF programs. The
+> implementation relies on the existing __asan_{load,store}X functions
+> from KASAN subsystem. The helper:
+> - ensures that the kasan instrumention is actually needed: if the
+>   instruction being processed accesses the program stack, we skip the
+>   instrumentation, as those accesses are already protected with page
+>   guards
+> - saves registers. This includes caller-saved registers, but also
+>   temporary registers, as those were possibly used by the
+>   affected program. Theoretically, r10 and r11 should be saved as well,
+>   but the number of called function and their scope being limited, they
+>   are skipped for the sake of reducing the overhead
 
-An auto-selected flag makes sense to me.
+My clanker got very excited about r10 and r11 not being saved, just
+like sashiko. So I looked at this a bit closer. TL;DR it's fine
 
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+I built the kernel with gcc 11.5, gcc 15.2 and clang 22 and
+disassembled __asan_{load,store}{1,2,4,8}: none of them touch r10 or
+r11. gcc goes up to r8, clang uses nothing above rdi.
 
-Two nits below.
+However, kasan_check_range() does use r10/r11.  And looks like we are
+ok only because the fixed-size helpers inline the shadow check and
+never call kasan_check_range().
 
-> ... This new Kconfig is not a user selectable one: it is either
-> automatically enabled if KASAN is enabled on a compatible platform. When
+If any of the fixed-size 1/2/4/8 helpers ever actually call
+kasan_check_range(), r10 may get clobbered.
 
-nit: dangling "either"
+Maybe we should leave a comment on emit_kasan_check() about this?..
 
-> enabled, the JIT compiler will emit shadow memory checks before memory
-> loads and stores to detect use-after-free or out-of-bounds accesses at
-> runtime. The option is gated behind HAVE_EBPF_JIT_KASAN, as it needs
-> proper arch-specific implementation.
+> - computes the accessed address and stores it in %rdi
+> - calls the relevant function, depending on the instruction being a load
+>   or a store, and the size of the access.
+> - restores registers
+> 
+> The special care needed when inserting this instrumentation comes at the
+> cost of a non negligeable increase in JITed code size. For example, a
+> bare
+> 
+>   mov 	0x0(%si),rbx # Load in rbx content at address stored in rsi
+> 
+> becomes
+> 
+>   push    %rax
+>   push    %rcx
+>   push    %rdx
+>   push    %rsi
+>   push    %rdi
+>   push    %r8
+>   push    %r9
+>   mov     %rsi,%rdi
+>   call    0xffffffff81da0a60 <__asan_load8>
+>   pop     %r9
+>   pop     %r8
+>   pop     %rdi
+>   pop     %rsi
+>   pop     %rdx
+>   pop     %rcx
+>   pop     %rax
+>   mov     0x0(%rsi),rbx
 > 
 > Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 > ---
-> Changes in v4:
-> - reorganize dependencies (Andrey)
-> - drop VMAP_STACK dependency
+> Changes in v3:
+> - skip kasan instrumentation if there is no verifier env (cBPF)
+> - move helper up in the file
 > 
 > Changes in v2:
-> - add dependency on kasan for vmalloc and vmalloc'ed stack
+> - move asan functions declaration directly into jit compiler, and guard
+>   them with IS_ENABLED
+> - remove faulty stack alignment, no arg is passed to kasan funcs on the
+>   stack anyway
+> - make sure to emit call depth accounting code
+> - do not save unneeded registers
+> - update helper signature to let caller configure some values (eg:
+>   is_write)
 > ---
->  kernel/bpf/Kconfig | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
+>  arch/x86/net/bpf_jit_comp.c | 95 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 95 insertions(+)
 > 
-> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-> index eb3de35734f0..e1f3850d2f5a 100644
-> --- a/kernel/bpf/Kconfig
-> +++ b/kernel/bpf/Kconfig
-> @@ -17,6 +17,10 @@ config HAVE_CBPF_JIT
->  config HAVE_EBPF_JIT
->  	bool
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index de7515ea1bea..d35f58350d71 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -21,6 +21,17 @@
+>  #include <asm/unwind.h>
+>  #include <asm/cfi.h>
 >  
-> +# KASAN support for JIT compiler
-> +config HAVE_EBPF_JIT_KASAN
-> +	bool
+> +#if IS_ENABLED(CONFIG_BPF_JIT_KASAN)
+> +void __asan_load1(void *p);
+> +void __asan_store1(void *p);
+> +void __asan_load2(void *p);
+> +void __asan_store2(void *p);
+> +void __asan_load4(void *p);
+> +void __asan_store4(void *p);
+> +void __asan_load8(void *p);
+> +void __asan_store8(void *p);
+> +#endif
 > +
->  # Used by archs to tell that they want the BPF JIT compiler enabled by
->  # default for kernels that were compiled with BPF JIT support.
->  config ARCH_WANT_DEFAULT_BPF_JIT
-> @@ -101,4 +105,17 @@ config BPF_LSM
+>  static bool all_callee_regs_used[4] = {true, true, true, true};
 >  
->  	  If you are unsure how to answer this question, answer N.
+>  static u8 *emit_code(u8 *ptr, u32 bytes, unsigned int len)
+> @@ -1110,6 +1121,90 @@ static void maybe_emit_1mod(u8 **pprog, u32 reg, bool is64)
+>  	*pprog = prog;
+>  }
 >  
-> +config BPF_JIT_KASAN
-> +	bool
-> +	depends on HAVE_EBPF_JIT_KASAN
-> +	depends on KASAN_GENERIC
-> +	depends on KASAN_VMALLOC
-> +	depends on BPF_JIT
-> +	default y if KASAN
+> +static int emit_kasan_check(struct bpf_verifier_env *env, u8 **pprog,
+> +			    u32 addr_reg, struct bpf_insn *insn, u8 *ip,
+> +			    bool is_write, bool accesses_stack_only)
 
-nit: KASAN_GENERIC already implies KASAN, so "if KASAN" is always true
-when this symbol is visible, should be safe to drop.
 
-> +	help
-> +	  Makes JIT compiler insert generic outline KASAN checks in BPF
-> +	  programs when they are inserted in the kernel. This feature is
-> +	  automatically enabled if the needed set of KASAN and BPF
-> +	  configuration options is enabled.
-> +
->  endmenu # "BPF subsystem"
-> 
+nit: IMO it's not nice to introduce functions with no caller as a
+separate patch: it triggers -Wunused-function on this commit, which
+may or may not be used in a build. I'd fold this in patch #6 where the
+function is actually called.
 
+> [...]
