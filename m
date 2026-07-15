@@ -1,41 +1,41 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C671245031;
-	Wed, 15 Jul 2026 00:47:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD4A242D97
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 00:50:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784076479; cv=none; b=rA0kv6H/g4ur/DzUK5hoa9WhA2+ZFMFAfVXtNtpeVjno5oDC3vFQ9L5eT8R4IV9TUJEtIW0E1P2hSgJ5uuXO2M4m1aFhMcd0xUfqYBaOFS0MQ8/ludnwNUrbVmcmUZNMlRovxYt/LF99/Ed8+DXBRH2QIH9siucHB6lBedEBDCc=
+	t=1784076620; cv=none; b=pxpoGXoIwkUwqOBOcaRyuDSBBC3NJRzmOhlQeMAOSOhBn9ROFpE9qSzc+AJv4oTW3cXTmh0KmnKRJYTfj/tQaIJQh87F9VSjZWenlYfgByih0A1EylDVgVbZvD0e0W4NHLqn61tDaI910cpHTWyh15bt2Ch04wZI9bQHH/kCzjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784076479; c=relaxed/simple;
-	bh=CMWoIAlQe4026XLJXAknd45XqNVkuiHlvjw8b7o0aFM=;
+	s=arc-20240116; t=1784076620; c=relaxed/simple;
+	bh=8oD83Vg62iWKSoW7nAe1kNmwlMvXhCczRt0wQXGiccY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l0Hp56zrjfs06ksQUP0fWexraiyb3Tn3lAveZQbyNcpgTVKcI2+GK+bVCbFSWoCBgQc0jw41faWt/dyKIotYtJMMEPl4xX8uskIXaUE/UxDx2xuo+6rcvsbxfaoLvwojKDeHViGz8NKW/TLmsEcUah9MtVCOjQI0vvh3bgB29QQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FBG1bEGG; arc=none smtp.client-ip=91.218.175.182
+	 In-Reply-To:Content-Type; b=AP04FsyzwbcNjvhtWM33Q8gLuACMXOFybsZOlop2NspXtv2lTVOTpnXWHDkY61E+zGeapoa5yrfMH5sXcksJrgGV7h9nt7/iO8HZaCUk/5DIGRBTLuBL5HAzvkuvJOFdQf9rT9XoKdeWIzMD8nXWAQ9JgMnT6b0vaatElA12xSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YtdXpQ35; arc=none smtp.client-ip=95.215.58.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FBG1bEGG"
-Message-ID: <bbbcbae7-a819-4f86-b116-6d5e31973a0e@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YtdXpQ35"
+Message-ID: <c8c698cc-4083-48e9-bab5-f542a9626f4a@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784076461;
+	t=1784076612;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=s9b4kcf/MkCEqYe2P7LACEUaqcpaFs0ud1FC011M9A4=;
-	b=FBG1bEGG78L1Hu4Drppib6EcinfhBJnghbSbhuTxL3vSteCSyPPrnx67f4WE2DZOskGXV/
-	5b/HY63ajfPqZJQ5LNAU6zwyN3eH357itugDk6A/uvVt6AMUQtmOi3ZTsoRGZ81tPcuyqJ
-	p0LKNi2caGLrKEw3yUezpI3nRfhc0/s=
-Date: Tue, 14 Jul 2026 17:47:32 -0700
+	bh=9CtLT5r3vCFoSDu0jg1wqBwyY2gyOh6s+DJ3Ec/Fg24=;
+	b=YtdXpQ35RG4ObUqoqKngCfES8pEIbXCZYuE9hT+HM64hIQkP/nSxamZg9xiEP1jrly+mvk
+	1lw7WTiPIaRt68zVdBcjrfB4W3W/mFOLwvrbW3v+2YXAUxm9GXUe2Rx/iYc8SvrT6OP5Aq
+	AbNDpu1z8AEmVtdB8CEl/hqQEwYZ0WQ=
+Date: Tue, 14 Jul 2026 17:49:43 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v5 01/10] bpf: propagate original instruction
- offset when patching program
+Subject: Re: [PATCH bpf-next v5 03/10] bpf: add BPF_JIT_KASAN for KASAN
+ instrumentation of JITed programs
 To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
  <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
  Daniel Borkmann <daniel@iogearbox.net>,
@@ -53,116 +53,86 @@ Cc: ebpf@linuxfoundation.org,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
- <20260709-kasan-v5-1-1c64af8e4e1e@bootlin.com>
+ <20260709-kasan-v5-3-1c64af8e4e1e@bootlin.com>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260709-kasan-v5-1-1c64af8e4e1e@bootlin.com>
+In-Reply-To: <20260709-kasan-v5-3-1c64af8e4e1e@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 On 7/9/26 3:01 AM, Alexis LothorÃ© (eBPF Foundation) wrote:
-> When the verifier patches an ebpf program with bpf_patch_insn_data, it
-> then calls adjust_insn_aux_data to make sure that insn_aux_data takes
-> into account the newly inserted patch. Some of the data offset is pretty
-> straightforward to deduce, it is for example the case for
-> indirect_target, as any patch affecting indirect calls will
-> systematically move the original instruction to the end of the new
-> patch.
+> Add a new Kconfig option CONFIG_BPF_JIT_KASAN that automatically enables
+> generic KASAN (Kernel Address SANitizer) memory access checks for
+> JIT-compiled BPF programs as well, when both KASAN (and more
+> specifically, generic KASAN with KASAN_VMALLOC) and JIT compiler are
+> enabled.
 
-I think an additional KASAN-specific argument to adjust_insn_aux_data()
-is not a good idea. It's threaded through ~30 call sites, and it's
-been error-prone too: you had to fix the offsets a few times already.
+An auto-selected flag makes sense to me.
 
-indirect_target needs no help from the callers, so it's not really the
-same pattern. Similar for the other aux fields: seen is broadcast and
-zext_dst is re-derived.
+Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-> 
-> In order to introduce KASAN support for eBPF JIT, we need to mark any
-> load/store instruction that accesses non-stack memory, but updating this
-> new marking after a patch is not as straightforward as for indirect
-> calls: the original BPF_ST/BPF_STX/BPF_LDX can be at the beginning, at
-> the end or somewhere in the middle of the new patch: we then need some
-> additional info to properly update this marking.
+Two nits below.
 
-I don't think we need to track the exact offset here.
+> ... This new Kconfig is not a user selectable one: it is either
+> automatically enabled if KASAN is enabled on a compatible platform. When
 
-It looks like .non_stack_access is set to is_mem_insn(insn + off) in
-every single case *except* for when a stack access happens to be in
-the middle of a patch.
+nit: dangling "either"
 
-Given that the cost of getting the flag "wrong" is an unnecessary
-kasan check only for that case, I think it'll be cleaner to just
-unconditionally do:
-
-    data[off].non_stack_access = is_mem_insn(insn + off);
-
-in adjust_insn_aux_data()
-
-And then the code change can be folded in patch #2
-
-The only problem with this I can think of is that in reality *most*
-stack accesses go trough that special case, which would defeat the
-purpose of the .non_stack_access flag. This can be checked empirically
-however.
-
-Anything else I'm missing here?
-
-> 
-> Add a new parameter to bpf_patch_insn_data and adjust_insn_aux_data to
-> convey the info about the new location in the patch of the original
-> instruction. This info does not always make sense depending on the
-> generated patch (eg, some bpf helpers being inlined by the verifier, and
-> so turned into multiple new instructions without any remaining BPF_CALL),
-> the parameter can then be set to -1. It will be used in next patches to
-> properly handle insn_aux_data adjustment for the new KASAN
-> instrumentation
+> enabled, the JIT compiler will emit shadow memory checks before memory
+> loads and stores to detect use-after-free or out-of-bounds accesses at
+> runtime. The option is gated behind HAVE_EBPF_JIT_KASAN, as it needs
+> proper arch-specific implementation.
 > 
 > Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 > ---
-> Changes in v5:
-> - fix a few incorrect offset values
-> 
 > Changes in v4:
-> - define insn_off_in_patch inside convert_ctx_accesses main loop to
->   avoid old value leakage
+> - reorganize dependencies (Andrey)
+> - drop VMAP_STACK dependency
 > 
-> Changes in v3:
-> - new patch
+> Changes in v2:
+> - add dependency on kasan for vmalloc and vmalloc'ed stack
 > ---
->  include/linux/filter.h |  10 +++--
->  kernel/bpf/core.c      |   2 +-
->  kernel/bpf/fixups.c    | 100 ++++++++++++++++++++++++++++++++-----------------
->  3 files changed, 74 insertions(+), 38 deletions(-)
+>  kernel/bpf/Kconfig | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 > 
-> diff --git a/include/linux/filter.h b/include/linux/filter.h
-> index 14acb2455746..1ebcd247ef4e 100644
-> --- a/include/linux/filter.h
-> +++ b/include/linux/filter.h
-> @@ -1210,13 +1210,17 @@ struct bpf_prog *bpf_patch_insn_single(struct bpf_prog *prog, u32 off,
+> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
+> index eb3de35734f0..e1f3850d2f5a 100644
+> --- a/kernel/bpf/Kconfig
+> +++ b/kernel/bpf/Kconfig
+> @@ -17,6 +17,10 @@ config HAVE_CBPF_JIT
+>  config HAVE_EBPF_JIT
+>  	bool
 >  
->  #ifdef CONFIG_BPF_SYSCALL
->  struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env, u32 off,
-> -				     const struct bpf_insn *patch, u32 len);
-> +				     const struct bpf_insn *patch, u32 len,
-> +				     s32 insn_off_in_patch);
->  struct bpf_insn_aux_data *bpf_dup_insn_aux_data(struct bpf_verifier_env *env);
->  void bpf_restore_insn_aux_data(struct bpf_verifier_env *env,
->  			       struct bpf_insn_aux_data *orig_insn_aux);
->  #else
-> -static inline struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env, u32 off,
-> -						   const struct bpf_insn *patch, u32 len)
-> +static inline struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env,
-> +						   u32 off,
-> +						   const struct bpf_insn *patch,
-> +						   u32 len,
-> +						   s32 insn_off_in_patch)
->  {
->  	return ERR_PTR(-ENOTSUPP);
->  }
-> [...]
+> +# KASAN support for JIT compiler
+> +config HAVE_EBPF_JIT_KASAN
+> +	bool
+> +
+>  # Used by archs to tell that they want the BPF JIT compiler enabled by
+>  # default for kernels that were compiled with BPF JIT support.
+>  config ARCH_WANT_DEFAULT_BPF_JIT
+> @@ -101,4 +105,17 @@ config BPF_LSM
 >  
+>  	  If you are unsure how to answer this question, answer N.
+>  
+> +config BPF_JIT_KASAN
+> +	bool
+> +	depends on HAVE_EBPF_JIT_KASAN
+> +	depends on KASAN_GENERIC
+> +	depends on KASAN_VMALLOC
+> +	depends on BPF_JIT
+> +	default y if KASAN
+
+nit: KASAN_GENERIC already implies KASAN, so "if KASAN" is always true
+when this symbol is visible, should be safe to drop.
+
+> +	help
+> +	  Makes JIT compiler insert generic outline KASAN checks in BPF
+> +	  programs when they are inserted in the kernel. This feature is
+> +	  automatically enabled if the needed set of KASAN and BPF
+> +	  configuration options is enabled.
+> +
+>  endmenu # "BPF subsystem"
 > 
 
