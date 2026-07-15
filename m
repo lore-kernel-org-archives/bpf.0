@@ -1,105 +1,118 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E734A2E04
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 20:02:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1CA3CB91E;
+	Wed, 15 Jul 2026 20:32:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784145782; cv=none; b=uZWvxH6Oq0RqYIqIepkKydKrVxX97eB/csEN0arkSbWoH397JofEAOK31Eb2EDFw54HgZTyEx3T/46ay6ZWSm+ltWA4fwQTlU13+KUqeSh1PhiclFbw3503wgBB+/gNqSqmG4JOC/AJqVS0SNhkERGnWouQGJv2bhL8Z8yvCMSc=
+	t=1784147542; cv=none; b=nb6x95Rk0v8rNNaAnpDF5uj+nj6KNdMdVmn763pDqy9vhDuz6F0guN1MfPQsAIH7vcA6Xk6eEI5h7E2poQK8gCYwADtljUSrzN8Q49XByL7OJgP8GRHAALC7jraz2sU4BWDHCYdAHnS/wsAxEeuExAnacHCRZ1B99/oScXt3+CM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784145782; c=relaxed/simple;
-	bh=wBmEZDzYRvWOYr5klbQELQXSgjjyjWGnQiwI/wr/IaA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CGxXzvlQcuPC2vxP2fHfPYxiFuwHVqDXO5EPpfLHaif9jsAqm1vTiTRq5uKSz+cbCNDT8ChkCOj5GHDk4TyuDrFOo8S0zb3ES1TKXBOaQzUN/sTpxw0rkmBaXRLKGZo6T036j5OALEGe9DI0pxvXh8cPlP05TnY26gCoPDQyxcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=w+sjgD9k; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784147542; c=relaxed/simple;
+	bh=cnHpsTUiHTDqWI7/AqTx+APZ17YU6PDQiXtFGPx7VRA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oMa7sFks3KMIp1aXggs2w5qnE6PTj3DBxnuRUGdDYqI0e5UxfT7SPgwRutODDUUf3XTAhuUdx4tda5pi1xf9vBYspo5oXeVUctR7H9JkSME051NNiG4xjtKO643i+0VGnIv32I9j8NUzmfiDZWDKDoQKX/wBHKiY+qXLd0jV2IQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kI+V16gT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="w+sjgD9k"
-Message-ID: <45986fae-1abd-4ff9-91f1-35181e3c352d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784145774;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lHdKvQh/rlWKeApfpf/tzMK4TSbvkElaRfjKMW0v+s4=;
-	b=w+sjgD9kRBTS4n/JBtM49px5s+fkS9PIsiCxnbaDy0j/AnFF1vYfPzgn0TizoQ4m9ag1Ec
-	YvVmNjyIK8m0uAMcuRtJ36RHRXMHnrw0uOtEE3lpEGjh72LmyZdEGgsM7TAhFsS5jU9a/h
-	xBMgCohVBD057+oXaSIrshSKq+YK/E0=
-Date: Wed, 15 Jul 2026 13:02:44 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kI+V16gT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 892631F00ACF;
+	Wed, 15 Jul 2026 20:32:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784147540;
+	bh=s9WceP14hrbFBd0TV4fMurFRNynb7F4OB5T6Cda6+NQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=kI+V16gTa4Ld3ydhhsukuNq+RHPJMNlC9y0CYEeHn4Cw0MZdgbN25jY9c9sOS2YOe
+	 9ANRaN57ljpPpmMJZR3fD3ezRoOijcg8gK0MEBhbjh6vfSrQoVSmToPQNYi14Jupps
+	 of8ub2LRLD/CKWDiETvS7/VoXn7cXJXsgmoeRgAqaq18Va9WC3McTXpxUR5oqGhlD1
+	 T3mFToQEiap0sp2vhvLgewbxY2Ez8YFs9e9Z42is6nM0336dd7upiY1d0l/wy3wolR
+	 Z25n8PrLlvlxrnrsfpYLBv6f6JP0MsbkkKzocMzZDvWv0bIgHjGW6+UsiyhgveW5s7
+	 M2lygSPyGvRJw==
+Date: Wed, 15 Jul 2026 21:32:15 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Derek Barbosa <debarbos@redhat.com>,
+	Matthieu Baerts <matttbe@kernel.org>,
+	Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Steven Rostedt <rostedt@goodmis.org>, users@kernel.org,
+	Linux Media Mailing List <linux-media@vger.kernel.org>,
+	Stephen Finucane <stephenfin@redhat.com>, bpf <bpf@vger.kernel.org>,
+	Chris Mason <clm@meta.com>, Christian Brauner <brauner@kernel.org>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Subject: Re: Linking Patchwork with Sashiko?
+Message-ID: <e03b97a6-c30c-4c12-ad77-9e5c663b1329@sirena.org.uk>
+References: <20260713095538.3d5e86f1@foz.lan>
+ <20260713094120.GD1127719@killaraus.ideasonboard.com>
+ <20260713220427.582b28bf@foz.lan>
+ <7ia4mrvtrxjl.fsf@castle.c.googlers.com>
+ <20260715005909.GF1656185@killaraus.ideasonboard.com>
+ <00a244f8-5be6-4ee7-b5b1-e4cbdcd4fc77@linux.dev>
+ <20260715163921.GH1778116@killaraus.ideasonboard.com>
+ <153db0fa-65ac-49de-9bf5-456c9639954c@linux.dev>
+ <f690c44b-bb03-4085-a9f1-0321a3f33e30@sirena.org.uk>
+ <6a0f487f-540b-4d47-be4c-db6a0799d2d7@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v4 4/4] tools/build: selftests: Remove some duplicate
- toolchain definitions
-To: James Clark <james.clark@linaro.org>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Peter Zijlstra
- <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
- <20260715-james-perf-llvm-version-v4-4-6dfdf984b435@linaro.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260715-james-perf-llvm-version-v4-4-6dfdf984b435@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Tr85jkGtzsLOQ/hM"
+Content-Disposition: inline
+In-Reply-To: <6a0f487f-540b-4d47-be4c-db6a0799d2d7@linux.dev>
+X-Cookie: "Speed is subsittute fo accurancy."
 
-On 7/15/26 7:53 AM, James Clark wrote:
-> Try to remove some, but not all duplicate toolchain definitions. In
-> these instances, their makefiles already include
-> tools/scripts/Makefile.include which defines these in a consistent way.
-> 
-> STRIP is the only one that was set with an '=', but I don't think it
-> was significant so that difference can be dropped.
-> 
-> Signed-off-by: James Clark <james.clark@linaro.org>
-> ---
->  tools/bpf/resolve_btfids/Makefile    | 3 ---
->  tools/lib/api/Makefile               | 4 ----
->  tools/lib/subcmd/Makefile            | 4 ----
->  tools/lib/symbol/Makefile            | 4 ----
->  tools/perf/Makefile.perf             | 6 ------
->  tools/testing/selftests/bpf/Makefile | 1 -
->  6 files changed, 22 deletions(-)
-> 
-> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> index 7672208f65e4bc245c03603634d3aa0093a91096..6fdb6302e0a28e9166175822f42cfbb4f4eb24e5 100644
-> --- a/tools/bpf/resolve_btfids/Makefile
-> +++ b/tools/bpf/resolve_btfids/Makefile
-> @@ -20,9 +20,6 @@ HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)
->  		  CROSS_COMPILE="" CLANG_CROSS_FLAGS="" EXTRA_CFLAGS="$(HOSTCFLAGS)"
->  
->  RM      ?= rm
-> -HOSTCC  ?= gcc
-> -HOSTLD  ?= ld
-> -HOSTAR  ?= ar
 
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+--Tr85jkGtzsLOQ/hM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->  HOSTPKG_CONFIG ?= pkg-config
->  CROSS_COMPILE =
->  
-> [...]
-> 
+On Wed, Jul 15, 2026 at 11:39:41AM -0700, Ihor Solodrai wrote:
+> On 7/15/26 10:35 AM, Mark Brown wrote:
+> > On Wed, Jul 15, 2026 at 10:12:03AM -0700, Ihor Solodrai wrote:
 
+> >> However it seems that you are suggesting to simply delegate this work
+> >> to maintainers, and I very much disagree with that approach (even
+> >> though I'm not a maintainer myself).
+
+> > This is something that already happens with human written reviews,
+> > indeed I have a canned reply for one particular reviewer telling
+> > submitters it's OK to ignore them.  It goes in both directions - it can
+> > be ignoring some issues or postponing them for later, or it can be
+> > making sure that there's input from particular people.
+
+> My objection is to a suggested expectation for every review to be
+> triaged by maintainers/reviewers *before* it's sent or the author
+> engages with it.
+
+> I think the author should be the first one to engage, it's a feedback
+> on their patch after all. And of course reviewers/maintainers are free
+> to jump in whenever they can and feel it's necessary, and they do. Opt-in.
+
+OTOH I don't really want to have to not only look at whatever random
+tool is sending reports but also have to check replies from submitters
+for routine stuff, I already have a perfectly adequate supply of email.
+What I'm seeing is more at the level where I'm likely to want to provide
+some additional feedback to people, or where there's a lot of false
+reports to ignore.  If people look themselves and take appropriate
+action then great, but it's not at the level of the build test bots.
+
+--Tr85jkGtzsLOQ/hM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmpX7k4ACgkQJNaLcl1U
+h9AInQf/cJTDCsp43Jz8xDcECVTZK2OWf2kF+4e5BZY+++RH7KlqjpVhWYVZ22ZK
+VSg0MkA+zNqUJB9BYgbHa1IJXieg4nChS+S0JsT4dIXcADSqBUcU7S5rRrYFpdSE
+7LRE6XZUCCTNb7PnFr9FdyYGmZRYbRId5yigNFIclDQpZdWSFWh7Nvw9WXGh5HHD
+drcEWoJZ+qlDMsUu+pRHU4WTRrh26Sp53F2256aj59NVVkoMZ9pGqMiHMJFOFN9s
+tpV00izqudWxZfWlzQOJhQtVgZ30ijptfDe767rgOWjBVJXxzOwV5LJzFTZJ5GEW
+SFLUqVxKaCtuaceMnoBaVvkzBNgB4g==
+=Td4z
+-----END PGP SIGNATURE-----
+
+--Tr85jkGtzsLOQ/hM--
