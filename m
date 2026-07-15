@@ -1,44 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 736C22356D9
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 21:46:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED233CA4BB
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 21:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784152004; cv=none; b=kkj8r+qIUH10xWhUwJ0sc/O+jqnOyqjThpn4fD7xJgPh5A23i2MI6XuiPNb2IDtk0wVwy1RTnt3T7T+Jikeezcx5rdvn4EYdXMozck87NcPeiFmXadjBy+l+Cf8aTFRxnj/4JIO9PJ8DDhOZsnQeJNQfhJtg37StXuJoCVqhi8k=
+	t=1784152036; cv=none; b=LcYfG8I/M3LDNArWIxHaGwKuVRQm62SAT7kJga0f09zWvs28HMRA4fAuvVg/EEfNihkdjQQYlqB6gGq0mExtPanC8OIHRx7FR/b6Hp+HWB9AF2gRcJST7EjRTR/3vbKA/NcSl8gJ42W9fG5YgwP9xe2YbIKMpjmL9JrTU1Tl+sg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784152004; c=relaxed/simple;
-	bh=jlQU3rkwzcGWUbsPL3DpLL7eDUIIas0fmsL8Cvnbc+c=;
+	s=arc-20240116; t=1784152036; c=relaxed/simple;
+	bh=EM9H+0uo2o6e/bmohYGZuvifJFIsvbKCH98d0noV1GE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=D7aLTTQCmIHe2OApUEqmjEKdcEbJwOjUj9gxeL4KlgZRTwZiO42RQAkhwDitI9ASGoUy4S8xJX9fZigwPsJLjgjDwSVpcDeYfjNtv+uLc+lAYT+ySd8O334SUneyycCO0BX8Nwg/gnIMMH0fnD/tCZfK5b72eqK0gfImJ7UdhtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m1jYFM+z; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=cxe/sUF4qX3Kay+I77h1gta7OZdhUrgUDuE9PbftvwivVV+wUwZDQ8mJhi4FwlnislK48Z0i4rNAjy89dDfDLw91pUUgdZ0gfsUw8vAyV5nEHiwPwzxLV1CdW/cCP0Rir6yTMALS5GrVVPvZp/lfigmRGmzu0cKzUR/WG2i+o6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HnJxcpAP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m1jYFM+z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDDE01F000E9;
-	Wed, 15 Jul 2026 21:46:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HnJxcpAP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 518671F00A3A;
+	Wed, 15 Jul 2026 21:47:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784152003;
-	bh=Wd61CyD7h11bWj4VM7FMtDnv+/cEYT9Jl4tWyIARuRo=;
+	s=k20260515; t=1784152029;
+	bh=IpvoQSzd5iV2txM40z22MuR9k/L+bbdsWakBsoExD5g=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=m1jYFM+zR6V7ptze13t67T0TNXHw9MZYCtfRUFwbzAs2t64rYPu7RHLhVMN7eQ6Jf
-	 aqNsAVfFeSTeVHhNk6nVg/uQwISDOv+ZdaJHrNSCIF8puDpAxAYuXKKlFk1GLDJind
-	 I1h5Xo8xN7tKD343Qq+6G05oJXGR5zTNS0y3moVYhbO4kz+0XCijed9NDO/y1TGUU1
-	 ri8Xo2FcsaVqjjRjEVGq4T5IJzTKtr9lP1Bg1Lakgb+ItbYHbcFXOvtByiShA2Rgsk
-	 h1rM8uuYjizjeBO3hMywEiAfWWRZlrTc8DgXmzKslH6qr9LvGDRxwAV6CLlU7LaTTe
-	 5QJ+bvVmDXJ7Q==
+	b=HnJxcpAPMNe1TqlCSZf4RbiK7EeJT2mwtS8dQ9MqaiSPvW4BqXMo/VM+QHQTuR23T
+	 5jMN2VL57Y097+WtN6tK7pGPink8UQioInlF28JD0J6ypzaj6ekhVBqhSPN/Hp2ySE
+	 nJtntcWitjafbizzoOsxxe61rpntrjdzxhQyHWApi3HQ2aGx1si1/+dmV/S8fmD3JF
+	 BqaOo+xIixvFYQU4vlOYUr0Lc3Ynt0f53WRc1qE7ax6v9TxhXS/00MRCIZwvlJuxvL
+	 zZS+vnKp4bQpCjo04BlrtuqVHkr2ImTIGRzFmMj2GHBFR39/oxy4QmiFu7ZasHSvf4
+	 pHF17cFsOn1RA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 6.12.y 1/6] bpf: Support for hardening against JIT
- spraying
+Subject: Re: [PATCH v4 2/2] bpf, sockmap: handle spurious
+ tcp_msg_wait_data() wakeup
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pawan Gupta" <pawan.kumar.gupta@linux.intel.com>
+To: "Nnamdi Onyeyiri" <nnamdio@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260715-cbpf-jit-spray-hardening-6-12-y-v1-1-d8585a9aed80@linux.intel.com>
-References: <20260715-cbpf-jit-spray-hardening-6-12-y-v1-0-d8585a9aed80@linux.intel.com>
- <20260715-cbpf-jit-spray-hardening-6-12-y-v1-1-d8585a9aed80@linux.intel.com>
+In-Reply-To: <20260715213538.37229-3-nnamdio@gmail.com>
+References: <5b07d2ab-84ee-46ae-84c9-7542499d26d7@linux.dev>
+ <20260715213538.37229-1-nnamdio@gmail.com>
+ <20260715213538.37229-3-nnamdio@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 15 Jul 2026 21:46:41 +0000
-Message-Id: <20260715214641.BDDE01F000E9@smtp.kernel.org>
+Date: Wed, 15 Jul 2026 21:47:08 +0000
+Message-Id: <20260715214709.518671F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,91 +48,119 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] Bypass of JIT spraying mitigation for large BPF allocations and tr=
-ampolines due to shared virtual address pools.
-- [High] Local-only branch predictor flush fails to protect against cross-C=
-PU Spectre v2 attacks on SMP systems.
+- [Medium] Flaky test assertion due to jiffy-based timeout resolution.
+- [Medium] Infinite busy-loop in server thread on fatal socket error.
 --
 
---- Patch [1]: [PATCH 6.12.y 1/6] bpf: Support for hardening against JIT sp=
-raying ---
-commit e0ddacc731d8368cbba4bdc358a8403f702c92da
-Author: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+--- Patch [2]: [PATCH v4 2/2] bpf, sockmap: handle spurious tcp_msg_wait_da=
+ta() wakeup ---
+commit f1fdd86e116d5c194a4d7e31256e4a2e38d105e0
+Author: Nnamdi Onyeyiri <nnamdio@gmail.com>
 
-bpf: Support for hardening against JIT spraying
+bpf, sockmap: handle spurious tcp_msg_wait_data() wakeup
 
-This commit introduces a branch predictor flush mechanism before reusing
-JIT memory to mitigate indirect jump prediction poisoning. It adds a static
-call for architectures to define their flush routine and skips flushing
-for allocations larger than a single pack size.
+This commit adds a selftest to ensure tcp_bpf_recvmsg() and
+tcp_bpf_recvmsg_parser() correctly handle spurious wakeups in
+tcp_msg_wait_data(). It verifies that recvfrom() doesn't return EAGAIN with=
+out
+a timeout and properly respects SO_RCVTIMEO when configured.
 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-
-[ ... ]
-
-> @@ -951,6 +961,14 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hol=
-e_t bpf_fill_ill_insns)
-> =20
->  	mutex_lock(&pack_mutex);
->  	if (size > BPF_PROG_PACK_SIZE) {
-> +		/*
-> +		 * Allocations larger than a pack get their own pages, and
-> +		 * predictors are not flushed for such allocation. This is only
-> +		 * safe because cBPF programs (the unprivileged attack surface)
-> +		 * are bounded well below a pack size.
-> +		 */
-> +		if (static_branch_unlikely(&bpf_pred_flush_enabled))
-> +			pr_warn_once("BPF: Predictors not flushed for allocations greater tha=
-n BPF_PROG_PACK_SIZE\n");
-
-[Severity: High]
-Does skipping the flush for allocations larger than a pack leave them
-vulnerable to poisoning?
-
-Since all BPF allocations and trampolines share the same global virtual
-address pool, could an attacker load a small unprivileged program to poison
-the branch predictors for that virtual address, and then free it?
-
-Once the empty pack is freed and its virtual addresses return to the
-global pool, it seems a large privileged BPF program or trampoline could
-be allocated that exact same virtual address range. Because large allocatio=
-ns
-explicitly skip the flush here, would the privileged program end up executi=
-ng
-using the attacker's poisoned branch targets?
-
->  		size =3D round_up(size, PAGE_SIZE);
->  		ptr =3D bpf_jit_alloc_exec(size);
->  		if (ptr) {
+> diff --git a/tools/testing/selftests/net/sockmap_recvfrom.c b/tools/testi=
+ng/selftests/net/sockmap_recvfrom.c
+> new file mode 100644
+> index 0000000000000..25657fc3dbcd2
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/sockmap_recvfrom.c
 
 [ ... ]
 
-> @@ -981,6 +999,7 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole=
-_t bpf_fill_ill_insns)
->  	pos =3D 0;
-> =20
->  found_free_area:
-> +	static_call_cond(bpf_arch_pred_flush)();
+> +static void process_client(int fd, atomic_int *running, bool *failed)
+> +{
 
-[Severity: High]
-Is a local-only flush sufficient to protect against cross-CPU attacks on
-SMP systems?
+[ ... ]
 
-Branch target buffers are typically per-CPU. If an attacker executes a
-program and poisons the predictors on CPU B, and a new privileged program
-is subsequently allocated and flushes on CPU A, it appears CPU B's
-predictors would remain poisoned.
+> +	while (atomic_load(running)) {
+> +		ssize_t len =3D recvfrom(fd, buf, sizeof(buf), 0, NULL, NULL);
+> +
+> +		if (len =3D=3D -1) {
+> +			if (errno !=3D EAGAIN && errno !=3D EINTR)
+> +				*failed =3D true;
+> +			continue;
 
-If the victim program later executes on CPU B, for instance via a network
-packet in softirq context, could it reuse the poisoned predictions left
-behind by the attacker?
+[Severity: Medium]
+Will this result in an infinite busy-loop if a fatal socket error occurs?
 
->  	bitmap_set(pack->bitmap, pos, nbits);
->  	ptr =3D (void *)(pack->ptr) + (pos << BPF_PROG_CHUNK_SHIFT);
->
+If recvfrom() encounters a fatal error like ECONNRESET, *failed is set to t=
+rue
+but the loop continues. Since the socket remains in an error state, subsequ=
+ent
+calls to recvfrom() will immediately return -1 without blocking.=20
+
+This creates a tight busy-wait loop that starves the CPU until the global t=
+est
+timeout intervenes. Should this break out of the loop on fatal errors inste=
+ad?
+
+> +		}
+> +
+> +		if (len <=3D 0 || buf[len - 1] =3D=3D PAYLOAD_END)
+> +			break;
+> +	}
+
+[ ... ]
+
+> +TEST_F(sockmap_recvfrom, with_timeout)
+> +{
+
+[ ... ]
+
+> +	for (int i =3D 0; i < MAX_ITERATIONS; ++i) {
+> +		struct timespec beg;
+> +		struct timespec end;
+> +		int err;
+> +
+> +		int fd =3D socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+> +
+> +		ASSERT_NE(fd, -1);
+> +		ASSERT_EQ(connect(fd, (struct sockaddr *)&self->addr, sizeof(self->add=
+r)), 0);
+> +
+> +		ASSERT_EQ(send_payload(_metadata, fd, self->payload, self->payload_len=
+), 0);
+> +
+> +		ASSERT_EQ(setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timeo, sizeof(timeo=
+)), 0);
+> +
+> +		clock_gettime(CLOCK_MONOTONIC, &beg);
+> +		ASSERT_EQ(recvfrom(fd, ignored, sizeof(ignored), 0, NULL, NULL), -1);
+> +		err =3D errno;
+> +		clock_gettime(CLOCK_MONOTONIC, &end);
+> +
+> +		ASSERT_EQ(err, EAGAIN);
+> +		ASSERT_GE(to_nanos(&end) - to_nanos(&beg), timeo.tv_usec * 1000);
+
+[Severity: Medium]
+Is it safe to assume strict microsecond precision for SO_RCVTIMEO here?
+
+The test expects the blocked duration to be strictly greater than or equal =
+to
+5ms. However, in the kernel, socket timeouts are converted to jiffies via
+sk_rcvtimeo.
+
+On systems with HZ=3D100, 5ms translates to less than a jiffy. Even on HZ=
+=3D1000,
+waiting 5 jiffies can complete in slightly over 4ms depending on tick
+alignment.=20
+
+Because the test demands strict microsecond accuracy from a jiffy-based tim=
+er,
+could this cause intermittent test failures?
+
+> +
+> +		close(fd);
+> +	}
+> +}
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260715-cbpf-jit-s=
-pray-hardening-6-12-y-v1-0-d8585a9aed80@linux.intel.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260715213538.3722=
+9-1-nnamdio@gmail.com?part=3D2
