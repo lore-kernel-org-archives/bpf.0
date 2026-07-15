@@ -1,41 +1,41 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C7229A309
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 22:33:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8C143F0BB
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 22:35:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784154806; cv=none; b=XRWCbsxqi14MGN1i4dV/ZScSInj5R5fEEHwhBS5LIsIubuMEEseNqcVQB27ZPKnDgrWhtZlqF3HgNoC6kukGvIlK/47TeL3sUyLHFBx4Y2/m33vpI7U8jtgVWNm3cuqLgKfcju4veFhcZPKcp7d6MUVQGQm0MQag0mPX0vUCaig=
+	t=1784154947; cv=none; b=uExEpzXtjx7Psmc1KZoNRDsa6niusvp9n5/vs3URyRUa0YQ7kDjFWfGtDxngj1O74HOqCH4jwwq3KIVtA+wZw08rS+E2BTEYkKNJVy1mTiEowCP2ITdu0K81boyx87c/pFddFLxoMOWfnfPxL5JMvi5OcmzdSx/N+2WQp2H1qns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784154806; c=relaxed/simple;
-	bh=kycoD6ocH1vvEHpxLfPNaz7rjOryPBvEeP6fbIKtITU=;
+	s=arc-20240116; t=1784154947; c=relaxed/simple;
+	bh=SDsZdw6OMSNqS29Bbj+Cm8FUJaBh4xusjt5qSIOht9g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lOc9K41mkVW3VoFHqMHWztWQX2IwVfQPzGmYE/Wy6RsgJL2g/vz2oGZZNobERfQFMdeflR2iuFh5m2DHfbBud2t5lRsfmoooDxkESmNs/xDkTlg6r1VS14n8co44Av0duDJem2Kr6O+CuH8Nft5NINn0GcG41Lv3EiGmX/mrN5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TqoRk4zu; arc=none smtp.client-ip=95.215.58.171
+	 In-Reply-To:Content-Type; b=P6DYoy0TKxjZ9i9h9VC+LFnubkMM9FFJ7fzZvm5uzFTHijWHD+tNzGfJxMuCwjVWCD11Bj4OtRKpLRV1ZfJ9GDCdW0l5EQNQ/oUm8oVddDFEo6T/vLVur/zRbf19Pv92N657gTJlraiTsP9gg4Q9jXO9PEl6vadrFTvROSv7Hsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iYmhV0Dl; arc=none smtp.client-ip=91.218.175.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TqoRk4zu"
-Message-ID: <d66bd191-f610-46b9-9721-61479d72eb32@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iYmhV0Dl"
+Message-ID: <d326caf4-3d43-4880-8081-c21ef9748cdd@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784154802;
+	t=1784154943;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=6NHklgCKhoWbuhsbY3mggoE+rsczXG1c68wkQEkwbmc=;
-	b=TqoRk4zufGGJTsvZpUibKx+GcL12MeKHDrBU6edwGIVN1pVM3vj8v5WuOuG1hjD8HDdbh6
-	KMrsStQTYRHGCY/njGR98gAJG+mxZEjg3Wccm8PYp0w7FfnHBDqlcSqKKq/fNvyaJZb96A
-	qTnU9/qd2dDVSKPp7+x828tEeWenbvE=
-Date: Wed, 15 Jul 2026 15:33:13 -0700
+	bh=bAl/tZhe92Vx98Y5GuS5KBzuHkCzcmMeO9fblaVAisA=;
+	b=iYmhV0Dl38ZI1TQxO2ccbqLGdv9IIVDNaIBRxJWsgSaJLDzbETw2fGhu4acwOEANr4LlSy
+	Y5QBJta0f52rFnXwVAcmqXWFQcAzoEDa8cp3JuYICzPcJVW4rMJIkWTQlzyg/XnONsGujc
+	m2nc0LoJSGRgUYRorRw8Lmk8Dwsak6Y=
+Date: Wed, 15 Jul 2026 15:35:35 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v5 09/10] selftests/bpf: move bpf_jit_harden
- helper into testing_helpers
+Subject: Re: [PATCH bpf-next v5 10/10] selftests/bpf: add tests to validate
+ KASAN on JIT programs
 To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
  <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
  Daniel Borkmann <daniel@iogearbox.net>,
@@ -53,167 +53,158 @@ Cc: ebpf@linuxfoundation.org,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
- <20260709-kasan-v5-9-1c64af8e4e1e@bootlin.com>
+ <20260709-kasan-v5-10-1c64af8e4e1e@bootlin.com>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260709-kasan-v5-9-1c64af8e4e1e@bootlin.com>
+In-Reply-To: <20260709-kasan-v5-10-1c64af8e4e1e@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 On 7/9/26 3:01 AM, Alexis LothorÃ© (eBPF Foundation) wrote:
-> Move set_bpf_jit_harden to testing helpers so that other selftests can
-> change the hardening configuration without re-implementing a helper.
+> Add a basic KASAN test runner that loads and test-run programs that can
+> trigger memory management bugs. The test captures kernel logs and ensure
+> that the expected KASAN splat is emitted by searching for the
+> corresponding first lines in the report, hence validated that the needed
+> instrumentation has been inserted by the JIT compiler before the
+> relevant memory accesses. To allow each test to trigger the expected
+> report, the kernel must run with the kasan_multi_shot configuration.
+> 
+> The runner covers different cases and settings: in the nominal case, it
+> validates kasan reports on basic instructions (on all supported accesses
+> sizes) but also when report _should not_ be emitted (eg: for accesses on
+> program stack). The runner also comes with a few specialized tests that
+> are then not executed for all sizes/locations:
+> - specific atomic ops
+> - test for instructions involving different verifier states, with some
+>   states flagging memory as stack, and other states as non-stack memory
+> - tests that validate the stack marking shifting when a patch is emitted
+>   by the verifier (zext/rnd_hi32, constant blindind)
+> 
+> A few of those tests depends on cpuv4 (load_acquire and store_release).
+> 
+>   # ./test_progs -a kasan
+>   #165/1   kasan/st_1_not_on_stack:OK
+>   #165/2   kasan/st_1_on_stack:OK
+>   #165/3   kasan/st_2_not_on_stack:OK
+>   #165/4   kasan/st_2_on_stack:OK
+>   #165/5   kasan/st_4_not_on_stack:OK
+>   #165/6   kasan/st_4_on_stack:OK
+>   #165/7   kasan/st_8_not_on_stack:OK
+>   #165/8   kasan/st_8_on_stack:OK
+>   #165/9   kasan/stx_1_not_on_stack:OK
+>   #165/10  kasan/stx_1_on_stack:OK
+>   #165/11  kasan/stx_2_not_on_stack:OK
+>   #165/12  kasan/stx_2_on_stack:OK
+>   #165/13  kasan/stx_4_not_on_stack:OK
+>   #165/14  kasan/stx_4_on_stack:OK
+>   #165/15  kasan/stx_8_not_on_stack:OK
+>   #165/16  kasan/stx_8_on_stack:OK
+>   #165/17  kasan/ldx_1_not_on_stack:OK
+>   #165/18  kasan/ldx_1_on_stack:OK
+>   #165/19  kasan/ldx_2_not_on_stack:OK
+>   #165/20  kasan/ldx_2_on_stack:OK
+>   #165/21  kasan/ldx_4_not_on_stack:OK
+>   #165/22  kasan/ldx_4_on_stack:OK
+>   #165/23  kasan/ldx_8_not_on_stack:OK
+>   #165/24  kasan/ldx_8_on_stack:OK
+>   #165/25  kasan/simple_atomic_4_not_on_stack:OK
+>   #165/26  kasan/simple_atomic_4_on_stack:OK
+>   #165/27  kasan/simple_atomic_8_not_on_stack:OK
+>   #165/28  kasan/simple_atomic_8_on_stack:OK
+>   #165/29  kasan/load_acquire_1_not_on_stack:SKIP
+>   #165/30  kasan/load_acquire_1_on_stack:SKIP
+>   #165/31  kasan/load_acquire_2_not_on_stack:SKIP
+>   #165/32  kasan/load_acquire_2_on_stack:SKIP
+>   #165/33  kasan/load_acquire_4_not_on_stack:SKIP
+>   #165/34  kasan/load_acquire_4_on_stack:SKIP
+>   #165/35  kasan/load_acquire_8_not_on_stack:SKIP
+>   #165/36  kasan/load_acquire_8_on_stack:SKIP
+>   #165/37  kasan/store_release_1_not_on_stack:SKIP
+>   #165/38  kasan/store_release_1_on_stack:SKIP
+>   #165/39  kasan/store_release_2_not_on_stack:SKIP
+>   #165/40  kasan/store_release_2_on_stack:SKIP
+>   #165/41  kasan/store_release_4_not_on_stack:SKIP
+>   #165/42  kasan/store_release_4_on_stack:SKIP
+>   #165/43  kasan/store_release_8_not_on_stack:SKIP
+>   #165/44  kasan/store_release_8_on_stack:SKIP
+>   #165/45  kasan/ldx_patched:OK
+>   #165/46  kasan/ldx_patched_on_stack:OK
+>   #165/47  kasan/verifier_paths_stack_and_non_stack:OK
+>   #165/48  kasan/st_blinded:OK
+>   #165     kasan:OK (SKIP: 16/48)
+>   Summary: 1/32 PASSED, 16 SKIPPED, 0 FAILED
+
+That's quite comprehensive, good work!
+
 > 
 > Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 > ---
-> Changes in v5:
-> - check set_bpf_jit_harden return code in cleanup path
-> 
-> Changes in v3:
-> - new patch
-> ---
->  .../selftests/bpf/prog_tests/bpf_insn_array.c      | 44 +++-------------------
->  tools/testing/selftests/bpf/testing_helpers.c      | 32 ++++++++++++++++
->  tools/testing/selftests/bpf/testing_helpers.h      |  1 +
->  3 files changed, 38 insertions(+), 39 deletions(-)
+> [...]
+> +
+> +#define MAX_LOG_SIZE		(8 * 1024)
+> +#define READ_CHUNK_SIZE		256
+> +
+> +#define KASAN_PATTERN_SLAB_UAF "BUG: KASAN: slab-use-after-free " \
+> +	"in bpf_prog_%02x%02x%02x%02x%02x%02x%02x%02x_%s"
+> +#define KASAN_PATTERN_REPORT "%s of size %d at addr"
 
-The move makes sense, thanks.
+I don't know how feasible that is, but I think it would be good to
+have a test or two for other KASAN errors, like OOB for example.
 
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c b/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
-> index 0222a9a5d076..815f3e04540f 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
-> @@ -227,42 +227,6 @@ static void check_incorrect_index(void)
->  	check_mid_insn_index();
->  }
->  
-> -static int set_bpf_jit_harden(char *level)
-> -{
-> -	char old_level;
-> -	int err = -1;
-> -	int fd = -1;
-> -
-> -	fd = open("/proc/sys/net/core/bpf_jit_harden", O_RDWR | O_NONBLOCK);
-> -	if (fd < 0) {
-> -		ASSERT_FAIL("open .../bpf_jit_harden returned %d (errno=%d)", fd, errno);
-> -		return -1;
-> -	}
-> -
-> -	err = read(fd, &old_level, 1);
-> -	if (err != 1) {
-> -		ASSERT_FAIL("read from .../bpf_jit_harden returned %d (errno=%d)", err, errno);
-> -		err = -1;
-> -		goto end;
-> -	}
-> -
-> -	lseek(fd, 0, SEEK_SET);
-> -
-> -	err = write(fd, level, 1);
-> -	if (err != 1) {
-> -		ASSERT_FAIL("write to .../bpf_jit_harden returned %d (errno=%d)", err, errno);
-> -		err = -1;
-> -		goto end;
-> -	}
-> -
-> -	err = 0;
-> -	*level = old_level;
-> -end:
-> -	if (fd >= 0)
-> -		close(fd);
-> -	return err;
-> -}
-> -
->  static void check_blindness(void)
->  {
->  	struct bpf_insn insns[] = {
-> @@ -272,7 +236,7 @@ static void check_blindness(void)
->  		BPF_MOV64_IMM(BPF_REG_0, 1),
->  		BPF_EXIT_INSN(),
->  	};
-> -	int prog_fd = -1, map_fd;
-> +	int prog_fd = -1, map_fd, ret;
->  	struct bpf_insn_array_value val = {};
->  	char bpf_jit_harden = '@'; /* non-exizsting value */
->  	int i;
-> @@ -291,7 +255,8 @@ static void check_blindness(void)
->  		goto cleanup;
->  
->  	bpf_jit_harden = '2';
-> -	if (set_bpf_jit_harden(&bpf_jit_harden)) {
-> +	ret = set_bpf_jit_harden(&bpf_jit_harden);
-> +	if (!ASSERT_OK(ret, "set bpf_jit_harden")) {
->  		bpf_jit_harden = '@'; /* open, read or write failed => no write was done */
->  		goto cleanup;
->  	}
-> @@ -313,7 +278,8 @@ static void check_blindness(void)
->  cleanup:
->  	/* restore the old one */
->  	if (bpf_jit_harden != '@')
-> -		set_bpf_jit_harden(&bpf_jit_harden);
-> +		ASSERT_OK(set_bpf_jit_harden(&bpf_jit_harden),
-> +			  "restore hardening configuration");
->  
->  	close(prog_fd);
->  	close(map_fd);
-> diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
-> index c970e7793dfc..737f668b35e2 100644
-> --- a/tools/testing/selftests/bpf/testing_helpers.c
-> +++ b/tools/testing/selftests/bpf/testing_helpers.c
-> @@ -519,6 +519,38 @@ bool is_jit_enabled(void)
->  	return enabled;
->  }
->  
-> +int set_bpf_jit_harden(char *level)
+> [...]
+> +
+> +SEC("tcx/ingress")
+> +int simple_atomic_on_stack(struct __sk_buff *skb)
 > +{
-> +	char old_level;
-> +	int err = -1;
-> +	int fd = -1;
+> +	struct kasan_write_val val;
 > +
-> +	fd = open("/proc/sys/net/core/bpf_jit_harden", O_RDWR | O_NONBLOCK);
-> +	if (fd < 0)
-> +		return -1;
-> +
-> +	err = read(fd, &old_level, 1);
-> +	if (err != 1) {
-> +		err = -1;
-> +		goto end;
+> +	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_write_val));
+> +	switch (access_size) {
+> +	case 4:
+> +		__sync_fetch_and_add(&val.data_4, 4);
+> +		break;
+> +	case 8:
+> +		__sync_fetch_and_add(&val.data_8, 8);
+
+It looks like the BPF_FETCH wouldn't execute this way, because the
+result is discarded? And the whole if (is_atomic_fetch) branch in
+do_jit() is also not covered?
+
+Maybe it's worth adding a test with __sync_val_compare_and_swap() into
+a poisoned map value, or something of the sort?
+
+> +		break;
 > +	}
-> +
-> +	lseek(fd, 0, SEEK_SET);
-> +
-> +	err = write(fd, level, 1);
-> +	if (err != 1) {
-> +		err = -1;
-> +		goto end;
-> +	}
-> +
-> +	err = 0;
-> +	*level = old_level;
-> +end:
-> +	if (fd >= 0)
-> +		close(fd);
-> +	return err;
+> +	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_write_val));
+> +	return 0;
 > +}
 > +
->  int stack_mprotect(void)
->  {
->  	void *buf;
-> diff --git a/tools/testing/selftests/bpf/testing_helpers.h b/tools/testing/selftests/bpf/testing_helpers.h
-> index 2edc6fb7fc52..e00642afe86f 100644
-> --- a/tools/testing/selftests/bpf/testing_helpers.h
-> +++ b/tools/testing/selftests/bpf/testing_helpers.h
-> @@ -59,6 +59,7 @@ struct bpf_insn;
->  int get_xlated_program(int fd_prog, struct bpf_insn **buf, __u32 *cnt);
->  int testing_prog_flags(void);
->  bool is_jit_enabled(void);
-> +int set_bpf_jit_harden(char *level);
->  int stack_mprotect(void);
->  
->  #endif /* __TESTING_HELPERS_H */
+> +SEC("tcx/ingress")
+> +int simple_atomic_not_on_stack(struct __sk_buff *skb)
+> +{
+> +	struct kasan_write_val *val;
+> +	__u32 key = 0;
+> +
+> +	val = bpf_map_lookup_elem(&test_map, &key);
+> +	if (!val)
+> +		return 0;
+> +
+> +	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_write_val));
+> +	switch (access_size) {
+> +	case 4:
+> +		__sync_fetch_and_add(&val->data_4, 4);
+> +		break;
+> +	case 8:
+> +		__sync_fetch_and_add(&val->data_8, 8);
+> +		break;
+> +	}
+> +	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_write_val));
+> +	return 0;
+> +}
+> +
+> [...]
 > 
 
