@@ -1,63 +1,63 @@
-Received: from mail-wm2-f1.google.com (mail-wm2-f1.google.com [74.125.225.129])
+Received: from mail-wr2-f2.google.com (mail-wr2-f2.google.com [74.125.225.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48DC3C09EF
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 22:01:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797803C98B7
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 22:01:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784152865; cv=none; b=hntu24A8wUEVU+jRw0gXzNO9sCdxLDqrDbrTo1pNSuw2SaAUpibmNjqxtVq5UT1IOZmW1mruLTeKj14dvYW29X/0uatEFyZTN4id2+1kqfcUDi0O2yahiR6J3RbWT+N8GncPhmNFygetHpGtA2vQPdUFqkPqbdCzfr65/Yz93qk=
+	t=1784152865; cv=none; b=RLe0aZQIbnQsx+VfBXup1aDhS/MeWT8IYO0f8DKcuka3rLmwrVzhzflDQj+3SHppkDjG/u0BFHB6cwwbbMIzkoldBdaiVlt0wXlKetN3TixvqV/4zjEJBgRLYxJWbagEP2ey/dyQIBPtbBm02UEKxsgJYTaxIddiKlXDnRSl1BE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1784152865; c=relaxed/simple;
-	bh=lkvNzLS83JVBxQELw+YDPVvVIWT9bNm+UUjHQvqSYSQ=;
+	bh=nWWa4WteqCUom8MJ/zy5E2zD42S1pM8iQdC2q6g/pLA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D0v/6OkE8wZo/cl6MG/o81a4Xw2a+cXOwyz6SorOUVH38kPvKuZb2tFNDD5c1rNdliQ2yWnYI0d5vhMTUuUwzvyA1r56h+blHu7UtaQ3vkBOY4B9+nGERtpl4hjNZL72ICVSg5BCkoeRaJzVJXmrVYAHxlfifkJpR3EpMKf/zJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G8WfuYqX; arc=none smtp.client-ip=74.125.225.129
+	 MIME-Version; b=MDfhP8VENeyoL8tvZZcXIYf8i+YJZiuXloFSprLs/YGBRAhZVo6ubYaB13QRi7TesPhBfQkO3zGr+yRtriLEI4mK0w7qnXS8HOKIF0NvwUO/WMCyYrV/UxFit+Z3nnmNuSITd3fJsUbU4+Z1LBnGtOmj5+HjHyuwRrYTMJt1li0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a+O1MPhN; arc=none smtp.client-ip=74.125.225.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G8WfuYqX"
-Received: by mail-wm2-f1.google.com with SMTP id 5b1f17b1804b1-493b7dd83e8so6001585e9.1
-        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 15:01:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a+O1MPhN"
+Received: by mail-wr2-f2.google.com with SMTP id ffacd0b85a97d-4730b8edae6so969747f8f.0
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 15:01:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784152862; x=1784757662; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784152863; x=1784757663; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=OMvnid6WlD1luACt8W/mNqTDXICfXxrpBmuWc7r/sLk=;
-        b=G8WfuYqXd8pzy8Pg93Yl+FEkjmyZPMdT2Uk9jGhTDdW1bzIlj/d3EzW/Jbn2vDuAQW
-         Ak1Fgva/1hZGUuOwEaQ40BCLSzRgJcSn+/2E/ReGmnadTdElseOz+md3iTTKkTKtw+Wy
-         6rKXyIS/hgZV7NjRbix0ZDq+41XI+YVKo+yxGQKimwL3rXmGBSKXViAHTBfF6nfRIUTV
-         CrVKQ5m0B3WnfkQ08NPDp/RvS3JYCn4gVMP7WA+cJS0nSzl4ca9TpaRd84cPVOx6lSNt
-         v5vCJkpo1bqp1kNJbFRLrY7y+MSK8znIfOOaMvgohpp1t/V381qfIZjMoj5x9elT16Ux
-         egcA==
+        bh=QJalazeNXHmJU72TXaYLe8TdoQ5UevYjLb9B+4VMgwA=;
+        b=a+O1MPhNixTOcFjrXzn1tZQKI7zntW7pHcnQDv9lBiNWzIHFDPElAfPPBcd3O0JOKG
+         qyRVV7wla5N/SOTz7IoA0EQQNJPxHaPBPLrJUQbPKo8tuEnDqmq60c7yYVtZOGILEETn
+         utG+2pYA2EmxBd8K5KYtKXOOl06ZdIqbBfcSz8xWJqR2dS3g2Y1avrJDMeGg51I0fRXX
+         BqaMDIdSCS5gP37hT8m++VoYdssPNboTsJYwcx4vuYy3pJ+G9+nNvZMip/ZG8qshuxPX
+         KlhC+oAXKLGIlWkFCVV0YGYiI58cmkRIvHnZnrYVwtgwtGBpzv5EqT789B1oLJGQhINL
+         FyvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784152862; x=1784757662;
+        d=1e100.net; s=20251104; t=1784152863; x=1784757663;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=OMvnid6WlD1luACt8W/mNqTDXICfXxrpBmuWc7r/sLk=;
-        b=Xl3xdemlO5IS+qP9f55uxO8gw3IWNh5Wr1MuFPsjLj1j40m/4nGAO1wnr+YJd0dmvT
-         +K7H2InieXNJX1WsguV+PEp/qseNNR9iGjB+t+sASta9NTVq58lcHU2Bi7E9ajGsibIZ
-         Rvk09YjE0ofuIUMYlMSt/cOdy+rVCVMpvyTWmHqFVKDU+gfLkat7icIJs/oUMbGn0Yjg
-         FcQzp+YaCADr+T/nG1Oml073xfCSTJMmasRUnUDkXw8T/d98mALUvf+oSHr8ODQXT2dm
-         jGj0lW4UuIAELNz5WgzP5q+CA120wZbV+QIvGEFwNUPIdOgXQezZrL//uAYoUI9RAbfW
-         zUrw==
-X-Gm-Message-State: AOJu0YxmyZQnO3DfHJfkVKYmk4AZ6GRcUYlLGkdFOt+WcsuI74QZKrYT
-	yGcUi+eB3GIis75gKiS7ObcJAjxh3zeXKsbo5YXhnxHdurf+VsD8xVxV+IkdjfAI
-X-Gm-Gg: AfdE7cndklLqttMePQ1Zc+L5yCuLQ8J0yW+HbBpcPQkNV3DHQvUY6dXgdQl+B8qxTo+
-	g3912JkhMYVbCZpzrXvqT/vBwsZHayPZP/ioIbtroYYqbSz6GOhh0acoh3fCJ2zxxZafX1bn1WS
-	W6zoH25Nj90PmN8SBenckit7QsCcMX4IYpljXcXqlLrHWk/l9ZwFy4OXgs0aOFfZIgBgcpL0yno
-	1+x0bfv3tuvei36RnbQjRac/xsNg8mizpzrUS34RBIiDuomtqarjRprejrNtq3hrTS9dfrmVM3G
-	y1u1KuejhmxyM8eTQN95gB0NbbgnwhiSkPxa9ccityEnntTAr5OkjT6vuGgGhV1m3O5o3+FXJoK
-	C8aEId4xZuvwGaxLCw3WWrZPFNX+y1mfGe522w9yEbQuXHJjqu4aMKxf205IPbT2r3Pgcy3fbPz
-	1FXMyQb6mltbZWRt3/dCaK9RUUPSL4EUU0gV3waJk9Hbq+eQU0pl68zeKXxzTDeEsyw46OQ9s7K
-	Q524CSHCnYqb5hajnq/jZ1D2CoW38Du2OOlfF2uGZyE
-X-Received: by 2002:a05:600c:4693:b0:493:a5d0:d1a1 with SMTP id 5b1f17b1804b1-493f882993fmr197737645e9.31.1784152861692;
-        Wed, 15 Jul 2026 15:01:01 -0700 (PDT)
+        bh=QJalazeNXHmJU72TXaYLe8TdoQ5UevYjLb9B+4VMgwA=;
+        b=hwRgpBnpKU6yDLNli7rLF+5KzGicZqmxAnMzYSuodpJX7DO0OCWchZX1CnHKYonlz4
+         xxpqBlJxxL9ZG37JZVrLsDvhi17L9PlXGMTuGuMrORRpbMzfQcW9h5LbyG7kiB52k0Ls
+         YcxL24I/72KnSuiOTSMO/HXS/HrK2fxPhs1l0pSZa/5w8+D0MigXnCObfYj8fJZy3xVo
+         fPHtLsO0kLLOOYLppI7PhpaWP2uvU3upTldCtuzR8PfpOksRWcRmF3gnRbMip/+vt7MW
+         sYfZpLaCFNPMcRyvboDoe68JdxCJgr7n7RXBuf2MIao1TZzTfKGdhaluA/Z0vKRTmJxA
+         MFDQ==
+X-Gm-Message-State: AOJu0Yxgep1NxykeU6/jfliy/xCMjtX6Kbl6V9toaNQ/5iazlDIAOxeu
+	nwtCERYy7Bh405gmDCGrxBGEtpGEOeFBJ6WR2t08ScWTE3bzDZ6AGF5rsNuvhDOR
+X-Gm-Gg: AfdE7cmgBqikITUQa3MeL/IiHEHF5EgI0svcoKRQ7g3xKQ5N/8Q3bYCUaf4wacc2aTT
+	jdxpGpwbBIWf/28R4twAbmaNqfR32m1koNH3DX7GTBzq12RU1OSIbp/DVVU2rnv8IzA8gaTzKac
+	XqpeRyaPcEoTYSvMMf2X92R76Ipde1XXXjcrxtPncECKIxZQm5r9UX2aCZ0mr8gM5ISmH4N9+9Z
+	8FRZMAaPIWIemkA8SgIiViirIkJ8o5sEb/xVU032Qzs5a8fV1txVFSdI32YMsaO3Vn9XpLR4P3C
+	7ZAdD5lAiNoIs+swmUGvg0DDwIr5TXDGR4LymTYvkNcXeTRwXxJV9Q9A95U9/flv86lUgTfVIuB
+	P45HQulyA91bfuHpJeRt5mUoXh6GIhpJEhJ4UX2WgT7HBZow7ClCgwtxPWJorlN38iFDbViCJCf
+	yy0zoDvjQWmZeKDf6MoD6551tVpqDMxJTWNxO0GgFihRKevrmTi9ppy4G3+XWyi2Qaypp1nboO3
+	kVcr8ooFMyijGLYU5MlWd1xXQ2gHnqiwkd47upMq7L+
+X-Received: by 2002:a05:6000:178e:b0:47d:eddb:c10f with SMTP id ffacd0b85a97d-47f4fc9983amr5588655f8f.7.1784152862606;
+        Wed, 15 Jul 2026 15:01:02 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4953c599049sm66346835e9.0.2026.07.15.15.01.01
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f4635ac2esm19913865f8f.13.2026.07.15.15.01.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2026 15:01:01 -0700 (PDT)
+        Wed, 15 Jul 2026 15:01:02 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Tejun Heo <tj@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Tejun Heo <tj@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 7/9] selftests/bpf: Add struct_ops __arena and __arena_nullable argument tests
-Date: Thu, 16 Jul 2026 00:00:47 +0200
-Message-ID: <20260715220052.1590783-8-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 8/9] bpf, x86: Fix stack-passed arguments for indirect trampolines
+Date: Thu, 16 Jul 2026 00:00:48 +0200
+Message-ID: <20260715220052.1590783-9-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260715220052.1590783-1-memxor@gmail.com>
 References: <20260715220052.1590783-1-memxor@gmail.com>
@@ -80,325 +80,68 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10513; i=memxor@gmail.com; h=from:subject; bh=yobRw5rCCxme28KnV+IGFiGzByjuvIvvN5HmSqa9+p0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JISuC6c79wqNsdxyTum+nbu7nLdj+wtrLMOhl6CUp0W5F/ X1nw9w7SlkYxLgYZMUUWUr+72MyPlH5O9B2GTfMHFYmkCEMXJwCMJFt1xn+R6rdVK5zWXN+mdQU ob8n/x6/IvHp2oa601n8QXGnVm6a/Ijhn8rxC4uO+blxnDo8RfdCbXPPvopoNYWSls3RTrc9b5w 2YwEA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2605; i=memxor@gmail.com; h=from:subject; bh=1ct/hxltmnSiXyjXwfPj7VSv8n/pmFE1tLV22VQsZzM=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JISuC6Q5rTPIn154Ut7m/7NqtegLjGB7wtMmXfSv4F3Dwz +aAnMcdpSwMYlwMsmKKLCX/9zEZn6j8HWi7jBtmDisTyBAGLk4BmMjTXQz/1IwYJwkELmK6s8VW Jmb6xO0ae6svb9r+66jsY45vcvXtXQz/o2RVXfXW1nf5/XgYMn2rxLIQlSvMO8s/flaZc/15esp jbgA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
 From: Tejun Heo <tj@kernel.org>
 
-Add test_arena and test_arena_nullable members to bpf_testmod_ops3 with
-arena-tagged stub arguments and kfuncs that forward a caller-provided
-pointer to them. The kfuncs take arena-tagged arguments, so each round
-trip exercises both conversion directions end to end: the kfunc receives
-a kernel arena address and the trampoline converts it back to an arena
-pointer for the callback.
+save_args() reads stack-passed arguments relative to rbp assuming two
+return addresses sit between the saved rbp and the arguments, which
+holds when the trampoline is entered through the fentry call from a
+traced function. An indirect trampoline is called through a function
+pointer, so only the caller's return address is on the stack and the
+arguments start at rbp + 16, not rbp + 24. Every stack-passed argument
+of a struct_ops callback with more than six argument slots is read one
+slot off.
 
-The non-nullable callback dereferences its argument with no NULL branch
-and captures the raw ctx value, which the trigger program compares
-against the arena offset of the passed object, pinning the exact
-(u32)(kaddr - kern_vm_start) conversion. The nullable callback verifies
-that only a true kernel NULL arrives as NULL. Failure coverage: a
-program with no arena is rejected when it loads. The tests run on x86-64
-and skip elsewhere, as the programs fail verification where the JIT
-lacks arena argument support.
+This has gone unnoticed because no in-tree struct_ops member passes
+arguments on the stack. The jmp-entry form already accounts for having
+a single return address; treat BPF_TRAMP_F_INDIRECT the same way.
 
+Fixes: 473e3150e30a ("bpf, x86: allow function arguments up to 12 for TRACING")
 Signed-off-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../bpf/prog_tests/test_struct_ops_arena.c    | 72 ++++++++++++++
- .../selftests/bpf/progs/struct_ops_arena.c    | 94 +++++++++++++++++++
- .../bpf/progs/struct_ops_arena_fail.c         | 20 ++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    | 24 +++++
- .../selftests/bpf/test_kmods/bpf_testmod.h    |  3 +
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |  2 +
- 6 files changed, 215 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_fail.c
+ arch/x86/net/bpf_jit_comp.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
-new file mode 100644
-index 000000000000..fbf1a29d9af6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <test_progs.h>
-+
-+#include "struct_ops_arena.skel.h"
-+#include "struct_ops_arena_fail.skel.h"
-+
-+/*
-+ * Attach callbacks with __arena and __arena_nullable arguments and drive
-+ * them through the bpf_testmod_ops3_call_test_arena*() kfuncs.
-+ */
-+static void arena_arg(void)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	struct struct_ops_arena *skel;
-+	struct bpf_link *link = NULL;
-+	int err;
-+
-+	skel = struct_ops_arena__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "struct_ops_arena__open_and_load"))
-+		return;
-+
-+	link = bpf_map__attach_struct_ops(skel->maps.testmod_arena);
-+	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
-+		goto out;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.trigger),
-+				     &topts);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(topts.retval, 0, "trigger_retval");
-+
-+out:
-+	bpf_link__destroy(link);
-+	struct_ops_arena__destroy(skel);
-+}
-+
-+/*
-+ * A program with no arena cannot attach to a member with an __arena
-+ * argument.
-+ */
-+static void arena_arg_fail(void)
-+{
-+	struct struct_ops_arena_fail *skel;
-+
-+	skel = struct_ops_arena_fail__open_and_load();
-+	if (ASSERT_ERR_PTR(skel, "struct_ops_arena_fail__open_and_load"))
-+		return;
-+
-+	struct_ops_arena_fail__destroy(skel);
-+}
-+
-+/*
-+ * Serialized because it attaches the singleton bpf_testmod_ops3, which
-+ * test_struct_ops_private_stack also attaches; registering it twice fails
-+ * with -EEXIST.
-+ */
-+void serial_test_struct_ops_arena(void)
-+{
-+	/*
-+	 * Arena struct_ops arguments need JIT support, currently x86-64 only.
-+	 * Elsewhere verification fails with "JIT does not support arena
-+	 * arguments", so the programs cannot even load.
-+	 */
-+#if defined(__x86_64__)
-+	if (test__start_subtest("arena_arg"))
-+		arena_arg();
-+	if (test__start_subtest("arena_arg_fail"))
-+		arena_arg_fail();
-+#else
-+	test__skip();
-+#endif
-+}
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena.c b/tools/testing/selftests/bpf/progs/struct_ops_arena.c
-new file mode 100644
-index 000000000000..40c856a748d2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_arena.c
-@@ -0,0 +1,94 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#define BPF_NO_KFUNC_PROTOTYPES
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_experimental.h"
-+#include <bpf_arena_common.h>
-+#include "../test_kmods/bpf_testmod.h"
-+#include "../test_kmods/bpf_testmod_kfunc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	/* page 0 hosts the arena globals, page 1 is for allocations */
-+	__uint(max_entries, 2);
-+} arena SEC(".maps");
-+
-+/* also associates the callbacks with the arena */
-+u64 __arena arena_touch;
-+/* raw value of the last __arena ctx argument, captured by test_arena_cb */
-+u64 __arena cb_ptr_val;
-+
-+SEC("struct_ops/test_arena")
-+int test_arena_cb(unsigned long long *ctx)
-+{
-+	u64 __arena *ptr = (u64 __arena *)ctx[0];
-+
-+	arena_touch++;
-+	cb_ptr_val = ctx[0];
-+	*ptr += 1;
-+	return 0;
-+}
-+
-+SEC("struct_ops/test_arena_nullable")
-+int test_arena_nullable_cb(unsigned long long *ctx)
-+{
-+	u64 __arena *ptr = (u64 __arena *)ctx[0];
-+
-+	arena_touch++;
-+	if (!ptr)
-+		return 0xbee;
-+	*ptr += 1;
-+	return 0;
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops3 testmod_arena = {
-+	.test_arena = (void *)test_arena_cb,
-+	.test_arena_nullable = (void *)test_arena_nullable_cb,
-+};
-+
-+SEC("syscall")
-+int trigger(void *ctx)
-+{
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
-+	u64 __arena *val;
-+	int ret;
-+
-+	val = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-+	if (!val)
-+		return 1;
-+
-+	*val = 41;
-+	ret = bpf_testmod_ops3_call_test_arena((u64 *)val);
-+	if (ret)
-+		return 2;
-+	if (*val != 42)
-+		return 3;
-+
-+	/*
-+	 * The callback must have seen exactly (u32)(kaddr - kern_vm_start),
-+	 * which is the arena offset of val with the upper 32 bits clear.
-+	 */
-+	if (cb_ptr_val != (u32)(u64)val)
-+		return 4;
-+
-+	ret = bpf_testmod_ops3_call_test_arena_nullable((u64 *)val);
-+	if (ret)
-+		return 5;
-+	if (*val != 43)
-+		return 6;
-+
-+	/* NULL survives the nullable kfunc and the trampoline as NULL */
-+	ret = bpf_testmod_ops3_call_test_arena_nullable(NULL);
-+	if (ret != 0xbee)
-+		return 7;
-+
-+	bpf_arena_free_pages(&arena, (void __arena *)val, 1);
-+#endif
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_fail.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_fail.c
-new file mode 100644
-index 000000000000..1c0ec727d637
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_fail.c
-@@ -0,0 +1,20 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "../test_kmods/bpf_testmod.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+/* No arena in the program: attaching to test_arena must be rejected. */
-+SEC("struct_ops/test_arena")
-+int test_arena_no_arena(unsigned long long *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops3 testmod_arena_fail = {
-+	.test_arena = (void *)test_arena_no_arena,
-+};
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index fad106b1549c..48ce36a6b82f 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -370,9 +370,21 @@ static int bpf_testmod_test_4(void)
- 	return 0;
- }
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 2f25353f135b..672fe54dfeb8 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -3074,6 +3074,7 @@ static void save_args(const struct btf_func_model *m, u8 **prog,
+ {
+ 	int arg_regs, first_off = 0, nr_regs = 0, nr_stack_slots = 0;
+ 	bool use_jmp = bpf_trampoline_use_jmp(flags);
++	int stack_args_off = (use_jmp || (flags & BPF_TRAMP_F_INDIRECT)) ? 16 : 24;
+ 	int i, j, slot = 0;
  
-+static int bpf_testmod_ops3__test_arena(u64 *ptr__arena)
-+{
-+	return 0;
-+}
-+
-+static int bpf_testmod_ops3__test_arena_nullable(u64 *ptr__arena_nullable)
-+{
-+	return 0;
-+}
-+
- static struct bpf_testmod_ops3 __bpf_testmod_ops3 = {
- 	.test_1 = bpf_testmod_test_3,
- 	.test_2 = bpf_testmod_test_4,
-+	.test_arena = bpf_testmod_ops3__test_arena,
-+	.test_arena_nullable = bpf_testmod_ops3__test_arena_nullable,
- };
- 
- static void bpf_testmod_test_struct_ops3(void)
-@@ -391,6 +403,16 @@ __bpf_kfunc void bpf_testmod_ops3_call_test_2(void)
- 	st_ops3->test_2();
- }
- 
-+__bpf_kfunc int bpf_testmod_ops3_call_test_arena(u64 *ptr__arena)
-+{
-+	return st_ops3->test_arena(ptr__arena);
-+}
-+
-+__bpf_kfunc int bpf_testmod_ops3_call_test_arena_nullable(u64 *ptr__arena_nullable)
-+{
-+	return st_ops3->test_arena_nullable(ptr__arena_nullable);
-+}
-+
- struct bpf_testmod_btf_type_tag_1 {
- 	int a;
- };
-@@ -795,6 +817,8 @@ BTF_ID_FLAGS(func, bpf_testmod_ctx_create, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_testmod_ctx_release, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_1)
- BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_2)
-+BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_arena)
-+BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_arena_nullable)
- BTF_ID_FLAGS(func, bpf_kfunc_get_default_trusted_ptr_test);
- BTF_ID_FLAGS(func, bpf_kfunc_put_default_trusted_ptr_test);
- BTF_KFUNCS_END(bpf_testmod_common_kfunc_ids)
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-index 863fd10f1619..c367ec856776 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-@@ -106,6 +106,9 @@ struct bpf_testmod_ops2 {
- struct bpf_testmod_ops3 {
- 	int (*test_1)(void);
- 	int (*test_2)(void);
-+	/* Used to test arena pointer arguments. */
-+	int (*test_arena)(u64 *ptr);
-+	int (*test_arena_nullable)(u64 *ptr);
- };
- 
- struct st_ops_args {
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index 42d3fccc6ff9..ff0d3894d7af 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -121,6 +121,8 @@ u32 bpf_kfunc_call_test_static_unused_arg(u32 arg, u32 unused) __ksym;
- #endif
- 
- void bpf_testmod_test_mod_kfunc(int i) __ksym;
-+int bpf_testmod_ops3_call_test_arena(__u64 *ptr__arena) __ksym;
-+int bpf_testmod_ops3_call_test_arena_nullable(__u64 *ptr__arena_nullable) __ksym;
- 
- __u64 bpf_kfunc_call_test1(struct sock *sk, __u32 a, __u64 b,
- 				__u32 c, __u64 d) __ksym;
+ 	/* Store function arguments to stack.
+@@ -3105,16 +3106,16 @@ static void save_args(const struct btf_func_model *m, u8 **prog,
+ 			/* copy function arguments from origin stack frame
+ 			 * into current stack frame.
+ 			 *
+-			 * The starting address of the arguments on-stack
+-			 * is:
+-			 *   rbp + 8(push rbp) +
+-			 *   8(return addr of origin call) +
+-			 *   8(return addr of the caller)
+-			 * which means: rbp + 24
++			 * The arguments on-stack start above the saved rbp
++			 * and the return addresses: two return addresses
++			 * (origin call and caller) when the trampoline is
++			 * entered through the fentry call, so rbp + 24, and
++			 * a single one when it is entered with a jmp or
++			 * called indirectly, so rbp + 16.
+ 			 */
+ 			for (j = 0; j < arg_regs; j++) {
+ 				emit_ldx(prog, BPF_DW, BPF_REG_0, BPF_REG_FP,
+-					 nr_stack_slots * 8 + 16 + (!use_jmp) * 8);
++					 nr_stack_slots * 8 + stack_args_off);
+ 				if (aargs && (aargs->slots & BIT(slot)))
+ 					emit_arena_arg_conv(prog, BPF_REG_0,
+ 							    aargs->nullable_slots & BIT(slot),
 -- 
 2.53.0
 
