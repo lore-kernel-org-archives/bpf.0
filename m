@@ -1,65 +1,64 @@
-Received: from mail-ed2-f5.google.com (mail-ed2-f5.google.com [74.125.228.69])
+Received: from mail-ej2-f2.google.com (mail-ej2-f2.google.com [74.125.228.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C087443E2B
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 18:09:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA6C443E36
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 18:11:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784139000; cv=none; b=fUypZb7AdAMDf8VBCZX27lL8mgwCkIMFcfZlzEMx0rk8+OeEhXAaHixGq0aEES+mBEUFt+JKdFYew3EvmQSSYZbilbwHvsFb05GTZxPxQfXgPBwWpni4FymJV1xwuv85UmlijgWOAuL31pCqjzv132J2PhbVRQxI9Vy5S4toEiA=
+	t=1784139080; cv=none; b=LKjgd95W4s5RrQd2MgaePiBI3bXjW6Pmed/0ZoPt+8BKOc/xBKFulxFXuOdSy3MicUa/mmOJzly6+rcwN8NRN0kPSzVosg5FYJBGwKC6GNLLbwg/uxokGlt5rIUOwtQNzQBgbAbwTRjqVbghVmq63i/cd9bRVAM/ImeEOcnkh1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784139000; c=relaxed/simple;
-	bh=wFdPoMUXQm/WB4ZSQLwu+3wH3z6IFqAhDlGmGjFR1P0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=oRpA/pEK1Vu8+EEa5Q6qQD5aaX3gn6IzJNSvA05Lwwc3UUQReMCUF/WtENwzUI6pbovePdM4xJAbkj0/1Fq7cjna5Gkyp1kRUynNHPv4WEjVvtMKho15auWb05rovximRcSdPAgwv3WQJYB7rwHHuJ16aEl8P/pglrmBqPshLaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TujQuPEI; arc=none smtp.client-ip=74.125.228.69
+	s=arc-20240116; t=1784139080; c=relaxed/simple;
+	bh=Htkoo/9cO7CIKP0jO4iIc3KDWoevJ0e/Ac9yRQ3UJXk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=ZEAB59/7ukatO3W0PBR8CGugrWOGUyQrqLLaTJ5Fewv2oht3sarR0HrVZmyio/eA717st76JUeBQ8Z00TdvDd13veGW2i/NgTzY7vQIAdK76/ucILB9L/ERK2JmZXV/1BDuTZXxvy/5KKh1GNsfwaR5ymEWHuqK0HJiyFNA2Buk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pnHS8tyR; arc=none smtp.client-ip=74.125.228.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TujQuPEI"
-Received: by mail-ed2-f5.google.com with SMTP id 4fb4d7f45d1cf-69c566c2cc7so2374315a12.1
-        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 11:09:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pnHS8tyR"
+Received: by mail-ej2-f2.google.com with SMTP id a640c23a62f3a-c159467cca6so130062866b.0
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 11:11:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784138997; x=1784743797; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=gmail.com; s=20251104; t=1784139077; x=1784743877; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=wFdPoMUXQm/WB4ZSQLwu+3wH3z6IFqAhDlGmGjFR1P0=;
-        b=TujQuPEI1260m65Ft6Z66eDYKpOAw2+kAdXbOr/O+on8xQCOzcTi4jrKiz65nA26Dv
-         OePVJzDTHxE/A0Mgiv+jgxPviJnrCUFZRrPDIkavNSxr1y0gpx1Hzv6+gZUHBQgoyB1h
-         J9VHI8wpDX/liEYu0IkAXOZZBkOOxT0u4LmukC+NcqaYjBGghKhn5vyVoaGiiMPyNFjx
-         /yj6p8GrBU3rWoh+pf4P8iKW41Acy3NUuBqgngR52dYaR882koLLzfWrPn5pwdWesBhQ
-         qKpNAeMYJb3ZOXa9eAmC+SAmjRj/omjRSjJsRBrt3c3vu4FTeg+XHRkKyrfAFLBtrfJR
-         DiXA==
+        bh=HlBALkHxWRmALUuOT5uGqcGnPT4o5St+F0S3DDKC6sQ=;
+        b=pnHS8tyRcY4LQnGkF63YaIAVDoBZUJt8FGDVb2x9aL5XCLttwvNB9lnv/V9sa4r2dY
+         PU0aEtr7qmUqFXuRS6VV3+ZIntLLo5nT5r5UmxaKvbr2mqGb2IvC2u46yzhsxP/BClch
+         oTXlePNUoXBg/k9mnY6zIvrGeuNOb4hiGb4nSJHaFvgPFlTeJMbJEeTvBlLeaFbxgcNE
+         VqlKK0Y4PET+aD4AIYmgZBO3sdh0m62ED2bifFj5wUonEYO7oTA3otCATY8xY7Ptgauz
+         lahjgX8ejqf0XvtWnvgA01qKKbQHlrsC9HUsgaZ8Ty4R6kPOSFaviTNULBbT6j+l9p6m
+         dGTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784138997; x=1784743797;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20251104; t=1784139077; x=1784743877;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=wFdPoMUXQm/WB4ZSQLwu+3wH3z6IFqAhDlGmGjFR1P0=;
-        b=P9rQvJMRYN+LbNs3VLCuYPu45pREB9TjG3i/B1URNtAkeZfr3S54GXZWACJGkowMld
-         +sw3w4Qs1qoIsT5xnfryAQ8ufNC5gQcHhruGQ4WoFmhuoyPNskrEqHSLXxNKgw1vF088
-         ilZU8eZHw5fFPKWtgb1x4z4wrPAaE23nGHCfJDaFH8qvQwkoQMT3IiYsBok+rZy159GE
-         7BOXt2JQx4oThYJ7I3SNxeXh6HDOMlRq1245t4Th+/MQ/uxXdoT77Xew5Wz17SL0OIop
-         QH/2YIpn0VHiciaDLMPrJMO3uwM32HFuYSmXPVGQxoWtVi97ndxflCcSn4YaIBjOmv9b
-         CwOA==
-X-Forwarded-Encrypted: i=1; AHgh+RqSHT/E1em4fvAOBokBU++RbWAWLSJaOVNGcOkI+zCu8EgczEpb9VBJ7uL3KzIfADapIXI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYsxs2v1g3T5UEp23cViJbCsl7pTcffDMyfeX84XfaJuSD2Ps9
-	AiDFbMD0chHcl7jwaK7aAgGS48CAQVd7HK1YpD81VFu/68kpADMlLeBW
-X-Gm-Gg: AfdE7clWvrHp4X11HjrCd7O16qkLVUgEKx0O4B5CMvYuq0tzwN6C5UCwfhQ6p+I5jlB
-	6DVHw4yi8oW8djsyap5bglsr8eKm1dIOh1dcxApXWXDiWOD4oD1RCT0mZZeJcKe5Qc3el81wbs2
-	zDcmg30/q8jlQoptNDfsfIB+oy/vlkzw1Z8ykYutdVerRjREcl2cUrHpZ0Dydzd+Z8nEN7H8m5L
-	46KeggyXGE6vHhL8d2qDUqH+oj8thVqNju0hAR+vckXbAgk38HS1lP3PFqeMqoMhUkJ2iFN1qx7
-	b92GjUyOVe9E/E62drg1hV1sdIsZYQtX5m2/msfl9mn9tFzMhReDfyfGOyreuoTJDk3tsm+J2JW
-	3MtWuZ6a6/Hl8rF8RhVk5v2iHkFA3tUlDmQWrSnQ3yPtsVjXcTuXYol9E5uTBglgE2T0SAvbGKm
-	4cFKnCfDEuDSUkJXxD7FYE/eS5tev3xliZm4THXwtSPeHKVwdu50AkKU5NAsX777CrrWY+hsYNa
-	b7XDs3TahtKcZRKLRcqJ22ecd0sSJypbbDLx/niFypmso6f3sjaU6o=
-X-Received: by 2002:a05:6402:551b:b0:69c:2ffe:114a with SMTP id 4fb4d7f45d1cf-69cd6f15bfamr4629465a12.39.1784138997243;
-        Wed, 15 Jul 2026 11:09:57 -0700 (PDT)
+        bh=HlBALkHxWRmALUuOT5uGqcGnPT4o5St+F0S3DDKC6sQ=;
+        b=ArG5nbR0u9nmEIAA7y/xmPhCCK/y8xmbiF5nqzFxJlQQY/F/98cdOLH2XwR4R+05o7
+         qTyXOUq4cau/D8w3B7sPwHMCT6aIqkeLsG7zb+cucziwK999Sb/TuYIBTuvjpT5nDEwN
+         dC20Gj/frKN7GjDRZY+3SUXeDFzCW/7geBpjtBM0eWTimQM4kUBJvHt5Itg3N0CSUTO8
+         crjsno+NYKkiJP1qlRkurrDRsAWt7+xyPYYlTCVwXtqdIOxr2xmk0pgwXX08poI8TZRe
+         5BePpammjPGuSTvUCOP06+fm7C2TInkNCOeUyXY3uNX3XQn3NqqHLK7U4KwcTp0ULEII
+         mAHg==
+X-Gm-Message-State: AOJu0YxkCqB79277BvxOQFgM5PixRQ5e6+25nhAG7kCqFw9jYiZByXTa
+	ISZKoly2xZfvXH9Ks23VOXJimWtNGCnvAQkH/stu52b5n3xIINkNEImG
+X-Gm-Gg: AfdE7cnqrlHmdgRrlBC9LlZMmX3PsTf0cJnq+KSpnpEPl1txlcbks1ttGQD6KJZx4qu
+	AXlmDcfH3I9kMNoFxhPswY+jsHhl9Gv08moz2hZyDS19qCYpimWrUxbppO5p5EWGkZJwEm0uWZT
+	J0KX8hqv3rTHR1byzg+94oqyjpnxAx/Qx42sRMxmiOi8oMK+Ga+2eevGm9adLQ9YkL2TZG5b5rA
+	hikqMQZ6UeQcEfisxHRV9ubXxTbjoyKB4a1lwOnhsP8kr9TDatD/7ReT5Xc19E3QgyWdg8j8HTG
+	3Jmz9mfIkxXiAKAUsyaFBZAXruD0R8d7j9JRm0NV0qjABkFd8/6diSfY78VV6sekYj3W3T18SmJ
+	oS93Q+Ev1GU6CmVE8VoDAaFHuHw12/AbfEnNug5zvFTP/+iD80IDpTvMGeTDsnE2RU2coXJeV2o
+	sQrQfLafYkkmW7BGV85iDVTV518HxTaVyfveN5yf4WdR56z4hKxVXkZVi4CaYLUEiixySMvN978
+	tUSEjJSGtFQisazUyBAbX+7fGHkUCtyTVDVIAe+5ityRTXe/2KL3+A=
+X-Received: by 2002:a17:907:1685:b0:c16:6dac:a004 with SMTP id a640c23a62f3a-c166dacb0bbmr433642266b.24.1784139076860;
+        Wed, 15 Jul 2026 11:11:16 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-69cd2922f9esm3441879a12.17.2026.07.15.11.09.56
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c1687170e24sm74925566b.20.2026.07.15.11.11.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2026 11:09:56 -0700 (PDT)
+        Wed, 15 Jul 2026 11:11:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,21 +67,36 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 15 Jul 2026 20:09:56 +0200
-Message-Id: <DJZCHNTTXDXY.2SETI3I98235S@gmail.com>
-Cc: <alexei.starovoitov@gmail.com>, <andrii@kernel.org>,
- <daniel@iogearbox.net>, <eddyz87@gmail.com>, <memxor@gmail.com>,
- <kernel-team@meta.com>
+Date: Wed, 15 Jul 2026 20:11:15 +0200
+Message-Id: <DJZCIOHS5WIH.UOBSKB42OXMZ@gmail.com>
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: <sashiko-reviews@lists.linux.dev>, "Amery Hung" <ameryhung@gmail.com>
+Cc: <bpf@vger.kernel.org>, "Roman Gushchin" <roman.gushchin@linux.dev>
 Subject: Re: [PATCH bpf-next v1 2/2] bpf: Zero kfunc arg meta before error
  paths can read it
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Amery Hung" <ameryhung@gmail.com>, <bpf@vger.kernel.org>
 X-Mailer: aerc 0.21.0
 References: <20260715172127.2416388-1-ameryhung@gmail.com>
  <20260715172127.2416388-3-ameryhung@gmail.com>
-In-Reply-To: <20260715172127.2416388-3-ameryhung@gmail.com>
+ <20260715173853.886C81F00A3D@smtp.kernel.org>
+In-Reply-To: <20260715173853.886C81F00A3D@smtp.kernel.org>
 
-On Wed Jul 15, 2026 at 7:21 PM CEST, Amery Hung wrote:
+On Wed Jul 15, 2026 at 7:38 PM CEST, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+>
+> Pre-existing issues:
+> - [High] BPF kfuncs bpf_mem_cgroup_memory_events and bpf_mem_cgroup_vm_ev=
+ents do not handle negative enum values, bypassing bounds checks and allowi=
+ng out-of-bounds array reads.
+> --
+>
+> --- Patch [2]: [PATCH bpf-next v1 2/2] bpf: Zero kfunc arg meta before er=
+ror paths can read it ---
+> commit 53f60dae3990fbb436a03cb878e7564339ccd1e9
+> Author: Amery Hung <ameryhung@gmail.com>
+>
+> bpf: Zero kfunc arg meta before error paths can read it
+>
 > check_kfunc_call() reads meta.func_name when bpf_fetch_kfunc_arg_meta()
 > returns -EACCES, but that error can come from fetch_kfunc_meta() (e.g.
 > fd_array_get_btf() rejecting BTF binding for a signed program) before
@@ -93,7 +107,66 @@ On Wed Jul 15, 2026 at 7:21 PM CEST, Amery Hung wrote:
 > zeroed on every error return. The intended "not allowed" -EACCES path
 > still sets func_name first, so its message is unchanged.
 >
-> Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> ---
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index c87e5fec5a857..ddfa4f57016b7 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>
+> [ ... ]
+>
+> [Severity: High]
+> This isn't a bug introduced by this patch, but this is a pre-existing iss=
+ue.
+> Do the bounds checks in bpf_mem_cgroup_memory_events() and
+> bpf_mem_cgroup_vm_events() properly handle negative values?
+>
+> Since enums evaluate to signed integers in C, and the BPF verifier does
+> not enforce enum ranges, a BPF program could pass a negative value to
+> bpf_mem_cgroup_memory_events() in mm/bpf_memcontrol.c:
+>
+> 	if (unlikely(event >=3D MEMCG_NR_MEMORY_EVENTS))
+> 		return (unsigned long)-1;
+>
+> 	return atomic_long_read(&memcg->memory_events[event]);
+>
+> For a negative value, the bounds check above evaluates to false, which
+> allows an out-of-bounds read on the memory_events array.
+>
+> Can a similar out-of-bounds read happen in bpf_mem_cgroup_vm_events()?
+>
+> 	if (unlikely(!memcg_vm_event_item_valid(event)))
+> 		return (unsigned long)-1;
+>
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
++Cc Roman
+
+I think we should just do:
+
+	if (unlikely(event < 0 || !memcg_vm_event_item_valid(event)))
+ 		return (unsigned long)-1;
+
+as fix?
+
+> 	return memcg_events(memcg, event);
+>
+> The validation routine in mm/memcontrol.c uses the same signed comparison=
+:
+>
+> bool memcg_vm_event_item_valid(enum vm_event_item idx)
+> {
+> 	if (idx >=3D NR_VM_EVENT_ITEMS)
+> 		return false;
+>
+> 	return !BAD_STAT_IDX(memcg_events_index(idx));
+> }
+>
+> This allows negative index values to reach memcg_events_index():
+>
+> static inline int memcg_events_index(enum vm_event_item idx)
+> {
+> 	return mem_cgroup_events_index[idx];
+> }
+>
+> Could this allow a BPF program to read arbitrary out-of-bounds kernel mem=
+ory?
+
