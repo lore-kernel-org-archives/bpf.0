@@ -1,118 +1,181 @@
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B08D4949F6
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 17:21:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784136096; cv=none; b=XAK6IUPLDOTnsYR/CNYMyjI/2zOVphIHNx2LAb/OwqoXE7bNJnmgdrCQVlnFTJ20TS4jFr71lRDL2imNSoWZrvAapNhJRF775VbkFphjR/rAVYoC/bleH70XwOijAyr9d6Aa9pF5QvYaL/iEXxcJgWR9j0yszaNekw/e4aCOkWQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784136096; c=relaxed/simple;
-	bh=WqZ3N8Z9GMhOpoU8cNQY5CHAna/3bR5F9MzG9CZ+kCs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cNQZpYIhauDER5mwXWOMjj4i7gPY6fF5IoIOD4fC3NduHuwIjKvDdfeSpmF9E/cs1qzcJQ0jeIyfKQ33UXNx/te4ZHBD8HFsbjbtYk8l3cfWBuV/MCbxhomfp2MbItnPDycmrEEIpgykDaphPVGrif6izeMkxgQPXOG5E5CoNlI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TwidsIOw; arc=none smtp.client-ip=209.85.210.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC5D47A0B8
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 17:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784136272; cv=pass; b=P/NAP67BKQWSQrtFaOOXgERd1SvHAF/WjdcYWfF2+vDSYz1VPyrq94+ri9OOtY0eiTyAWn+3SWfVQXuieNZS26/VDe4dqoBX3yRJkbN0fcLaM82jq7m7+xQ+Q9ZT1KhgverOLDtSwWePo7vD02mY5QGGYUnXVIKU4zqimDSsi/w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784136272; c=relaxed/simple;
+	bh=cNuKMIcek4rkNIhg1DjvTNY6u94NrZCdTQHA/3wIBW8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NnqLl726Ndw1mh5ObIn5P0kBBCFd4FOX3hBXdzjJmGHVj9QbcsyOpGzHtTt11pJ+JOdXGCaqy9YFLpVXg99I1A3nypXxk3P2kj5+lwAF+yWL2bcm24c5xZv54/PvPKvVBhNrZFBbmaLjmpejiZmLWgoWNwV6eLS4YhrqY/oukwE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dNCYOZMT; arc=pass smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TwidsIOw"
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7e9f1f24cbcso1664643a34.0
-        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 10:21:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dNCYOZMT"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2cab97c86bdso4795ad.1
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 10:24:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784136263; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Y7g6a6EOMlPBN0QoLezWaPILfRyaOhECstADIrU1mrX5PZ3umZ52jH4U6VAE0Pssa5
+         iNCL8Jnf4oHhmUWiZEIe1CAiqtshcg3Cz7+m8KEY48CHEGxvoTSLmaiItklbUxn2oqwK
+         qg1ySeDz7ILmSDMTXaMnj76pZRsOPriDeLDY8l1aCHIe94Cr8AVbyW2xf32njvNqghWV
+         P8Ws4vcA7dTffSZuQVxcuKpJZmnF0OaPNQK/XCEie73Fym3ohpeOKxFij8BWctCTGV32
+         zRY445e5ZGrvBmR/BTzpsKgm/x+nqYbt8ybZJP5KSmKE8o2PUXRCPs6qxrut7fmLgmPS
+         wRzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=kZWZPrQd54BSDgxOyeSGv4OPeqvj2vn4bH0lrJGj4Ms=;
+        fh=VaJUAPTQIC/Vl8q3puA1TEFOP0Uhut6IPRXmOlHq/Fc=;
+        b=PyEP+/gv16sCzw9BaK8bzUdtuc8+EP1tJOQm69HTd0G2KyQPQqiaBKQGcBwXVHWt6h
+         RD93yHNm2zj07uSEcRoPjdK1GM5GpBZxoSiVaFCgt+4G089DiSenXv5tj9mMSEf56dPo
+         D/f0wsqcBVe/nIqGuwnjEjYJZFmJavuEV/CMv7BKPkKsa1vC5NnHt+Cf7x2p92TFIIZ3
+         vWkmJK900JPFcP3TbPlq04h6AEIip3V6NBUjFAT0LmaURk/nWcGe2i5odD8XKNnxjWmt
+         UeTcnsiU3nZvmVWc+XHh3EH07B9Yvv3Upcqemuotz8ihP5T3PyCu+rmFSzVbcWLj05Vy
+         nsgg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784136092; x=1784740892; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=M4vNV3CqeULTmndH7AF/LHNbSZMxBy/oI/o/Kp0rSlk=;
-        b=TwidsIOwrfCaFwGcLDbwJEeTX6+r+7NsoIeIjQYGuRHHXsjkf3yuzCon4HBbo8/ZgI
-         oW68JM0v4VaXytVp8s3av/b8Gd4H7/CUAA27ItvhXkU110nwsJSwY7PHzGT4a2Xu5mPb
-         BoeonYalUpauhhAeWCh37T1hH45ZcVsdhZsf7nb8DgMAxaHnFmiNea3xttvke1Wuv1gZ
-         p8IlmGOJsVVTACkfVIZypcbDra4/4cQmHOmwk/EfUSEORp1SZRBto8T49gt8PVpyecys
-         zsVUVKS8uP+ZJdF0XlShSSwP0q/WpbEw2c20dHRr2taNK0Mm4sDRar8S/pYIaemGZsHI
-         f6yg==
+        d=google.com; s=20251104; t=1784136263; x=1784741063; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=kZWZPrQd54BSDgxOyeSGv4OPeqvj2vn4bH0lrJGj4Ms=;
+        b=dNCYOZMTjKvT0n9mozUVbvLRG1A14M16Z1TvZR3ewSOJ+92NuK981pCGbz0cJR8G/v
+         HZ9PCP8U3kNdzdLB1nQyZOJmoUURtDQjt5G4xiEnxaLmIB+YqZ+OmhOctzJMfTUzSCyl
+         8dIAR1FJOjGZN1ZxAcLnf+sedUEutez2ZDGxHHev48ljqHuf9Ac7o3Nh6ehLVcbCH9UY
+         1d2hJZCCJDaxcxpxH1DPiMp+AoH0JjEUkUWT/MkCA5BElQ5kA1voBaGJZhKWrG08qtIG
+         9feO3TtNOD5T7kkt8prcTYd2hJICs34SDy19QNYsZjM7y5d2BOIsiaScDe+/TN9LTuaB
+         OWrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784136092; x=1784740892;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=M4vNV3CqeULTmndH7AF/LHNbSZMxBy/oI/o/Kp0rSlk=;
-        b=PvY3/KTbNOT6uaprYH/G+Akgm1o8Ut+YA8t7UpU52qNnEACTusHamn49J55InodrgM
-         ZwN06RTxCp1xgXqgljZnZTKyj/FGM4EYXQquVd/SiifEDCQc8Rf8BLx06WURF8UFhV8q
-         g2qWJjbSCdE+Y/AtSwpj0o4yNWD89mgA+OJzHOGb9l4WI0zJdTf+277JZp45lBgKdsvg
-         2cAKAIeZ/MDZDx01hqVLzUfwmOkCBtblmoCOTAdqmS6hQhqSZKYgb3huyTdrrMqMXZLM
-         pj/rO77tzLgY7NE1WzwC2JDEsYZztwXwvD6V1CYd81h30EQ3nAX13nHyi/VeJw/+iB8v
-         KRbA==
-X-Gm-Message-State: AOJu0YwtZs7X02Io8BU9BYPSDhBaB1nrwWvi0zthRec1SDmH2PADc2eZ
-	nZksPbHEHm1gXT6byRtZYME5/CRsCn8GMh6DOA92nJbAYH5O3TMTb920/yPI4A==
-X-Gm-Gg: AfdE7ckfnct+YBnBQTMeHasmxHgKZqpuHewhIeAaYHxGgJqJVBq95YYxYUVlMFBhy/B
-	xlgpVYO5SsFmPKT4FgtFBfriyYoWhAz54gt+H1889cXHRtQi2fTuzBgFTlH4DuVIqpSjTJeM1Va
-	WUhr/MmnRPbS38TV3Bez3VQVGzT002JIlW+3FhmIYJ/sHujie0x/qXyo/FKqnsLDsTDpsvE71vW
-	s01hSqof4yCVp2AvHQyxyRMAC3N11E2lDlh7FJZZNlayiWOP9JYGrG96x0BXNWKD/5Ge7pFcHN4
-	nMpdR3xVflfl6GoM6w1M1NqCZ9+PMAXJkEYfKIktJ7c7fM8HeND7ljTF2nMiQlJKTfAb19XJBpD
-	Dc9J+DsvmHjE5d1qVb2OXfkDkbOsb7hQY0FeiWg9COlfIbaN+k918y7ngh/Ztx533wGjsJeKMlZ
-	eIiGg=
-X-Received: by 2002:a05:6830:3989:b0:7e9:dc11:5920 with SMTP id 46e09a7af769-7ec68ae8fb3mr168463a34.8.1784136091809;
-        Wed, 15 Jul 2026 10:21:31 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:44::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ebcb3f2b86sm17627342a34.26.2026.07.15.10.21.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2026 10:21:31 -0700 (PDT)
-From: Amery Hung <ameryhung@gmail.com>
-To: bpf@vger.kernel.org
-Cc: alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	ameryhung@gmail.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 2/2] bpf: Zero kfunc arg meta before error paths can read it
-Date: Wed, 15 Jul 2026 10:21:27 -0700
-Message-ID: <20260715172127.2416388-3-ameryhung@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260715172127.2416388-1-ameryhung@gmail.com>
-References: <20260715172127.2416388-1-ameryhung@gmail.com>
+        d=1e100.net; s=20251104; t=1784136263; x=1784741063;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=kZWZPrQd54BSDgxOyeSGv4OPeqvj2vn4bH0lrJGj4Ms=;
+        b=LRTtsZPpBYk7Rk3kGVpowFqBPqpcKhhVoxIImJM5EOfd/BQckooo4Yqcj+PPtj5WZr
+         +jVl9a+lOhj6Kgqyx0YNvqw/hAGt3NaDRnVyUp2U/Yc1ErQiF9FfeWq7EaHAIQOH0Z/g
+         IJ/eKh1G4KK4FtP2HluwmqifLtjaOpAe7JYxbxK6+lpTNbO2xllDxF4Gn/8uY8K3cfRW
+         ThaLv1W85+8fMmfLXLO2Q9NHEfBeo0DANsh89wvH2g3KrjHYqSsDAgM2FYOzWucg5R6D
+         bO2gJVKdnwXISMq93IQ4Ya4A2HHnYIzxOy92lc1wgja0J1GIfNecgbokVP3TZ1+/uxX0
+         Eplg==
+X-Forwarded-Encrypted: i=1; AHgh+Rr92oaJx1i+UKUK0I51u9amSm4B0inoBPnyFabFLqlwcR0dt+F/UyyL94qDuBQNgW/Pshc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywzs6zUh6jdGJvD1no7BkgSRWSsaqzK3JenWyCW5fGuGQi7c0AB
+	KSTCLlcYT27pLMGHvnDKg6xw7k0cykWe0D6ItQpTGR+6zbxUj2U0xVyat4H9Ej12ujOuGlE3V36
+	eXAZwSbkdItOn1nqiyVKTVQINnP+Jf1/tvk6i6SrC
+X-Gm-Gg: AfdE7ckFFjjbDpMg5NlpkVgc8wboTU9BpU1NCekgRjf69lVGd3wYVFBnRM4RCIMab2v
+	k9IfnOXDQEboL7RE86h+kpUuIGniaN697MSzuLg9/c0U5mKQqpephCj/BDurNaY078Ec2VAr6IK
+	PaMESOL6VlrOKSmOBqc8YK7chKZ1+uX93HYVebN1N6aZfNpC89X5WGlawYyLG7x5EbiA7CXvdmA
+	t7V0vwNYJ06XW58GCM9uqxWGskBc0tWcsVMQ7TW0FPSkxngfzLmKb3XiLCg+REzAsmD4emg57W1
+	Ii8I1nToN+x8Ms4DaeVaP2+EEcg=
+X-Received: by 2002:a17:903:3807:b0:2cb:14c8:1ab9 with SMTP id
+ d9443c01a7336-2cf18cd4872mr182285ad.0.1784136262817; Wed, 15 Jul 2026
+ 10:24:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
+In-Reply-To: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
+From: Ian Rogers <irogers@google.com>
+Date: Wed, 15 Jul 2026 10:24:11 -0700
+X-Gm-Features: AUfX_mybqHGCI446L5L7h2Zp_6_VyrODdqkNsCPAiWVWAbvp3R1ALNx_UrcHOIY
+Message-ID: <CAP-5=fV=_CsZFJf9HhNrJ+=jXCTqqDGd=HvwjMWu2WEn9bXqbA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] tools/build: Allow versioning of all LLVM tools
+To: James Clark <james.clark@linaro.org>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-check_kfunc_call() reads meta.func_name when bpf_fetch_kfunc_arg_meta()
-returns -EACCES, but that error can come from fetch_kfunc_meta() (e.g.
-fd_array_get_btf() rejecting BTF binding for a signed program) before
-meta is memset(), leaving it uninitialized and risking a garbage deref
-in verbose().
+On Wed, Jul 15, 2026 at 7:54=E2=80=AFAM James Clark <james.clark@linaro.org=
+> wrote:
+>
+> I ran into the build issue mentioned in the first commit, because using
+> an option like LLVM=3D-15 is a documented way to build [1], but only
+> some of the LLVM tools defined in tools/ support this.
+>
+> After fixing that, a lot of other tidyups fell out. I didn't go too far,
+> for example some selftests include tools/testing/selftests/lib.mk which
+> reimplements some of the LLVM_SUFFIX stuff, but other selftests include
+> tools/scripts/Makefile.include and I stopped before touching the former.
+> Some other non build scripts hard code toolchains and I didn't touch
+> those either, this change is only focused on things that already
+> include Makefile.include.
+>
+> [1]: Documentation/kbuild/llvm.rst
+>
+> Signed-off-by: James Clark <james.clark@linaro.org>
 
-Move the memset() to the start of bpf_fetch_kfunc_arg_meta() so meta is
-zeroed on every error return. The intended "not allowed" -EACCES path
-still sets func_name first, so its message is unchanged.
+For the series:
 
-Signed-off-by: Amery Hung <ameryhung@gmail.com>
----
- kernel/bpf/verifier.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Reviewed-by: Ian Rogers <irogers@google.com>
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c87e5fec5a85..ddfa4f57016b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12571,11 +12571,12 @@ int bpf_fetch_kfunc_arg_meta(struct bpf_verifier_env *env,
- 	struct bpf_kfunc_meta kfunc;
- 	int err;
- 
-+	memset(meta, 0, sizeof(*meta));
-+
- 	err = fetch_kfunc_meta(env, func_id, offset, &kfunc);
- 	if (err)
- 		return err;
- 
--	memset(meta, 0, sizeof(*meta));
- 	meta->btf = kfunc.btf;
- 	meta->func_id = kfunc.id;
- 	meta->func_proto = kfunc.proto;
--- 
-2.52.0
+Thanks,
+Ian
 
+> ---
+> Changes in v4:
+> - Drop "tools/build: selftests: Allow versioning LLVM lld", clang
+>   already picks the correct sibling lld version. (Sashiko)
+> - Link to v3: https://lore.kernel.org/r/20260715-james-perf-llvm-version-=
+v3-0-8854bfe5af7e@linaro.org
+>
+> Changes in v3:
+> - Add warning for empty $USE_LD
+> - Use $HOSTREADELF in bpf Makefile
+> - Rebase on v7.2-rc3
+> - Link to v2: https://lore.kernel.org/r/20260518-james-perf-llvm-version-=
+v2-0-f12cc4f031d8@linaro.org
+>
+> Changes in v2:
+> - Fix selftests/bpf build. LLD needs to take the full path to be used
+>   with -fuse-ld=3D
+> - Link to v1: https://lore.kernel.org/r/20260514-james-perf-llvm-version-=
+v1-0-6cac1a9a4c8d@linaro.org
+>
+> ---
+> James Clark (4):
+>       tools/build: Allow versioning of all LLVM tools defined in Makefile=
+.include
+>       tools/build: Indent if else blocks
+>       tools/build: Allow versioning LLVM readelf
+>       tools/build: selftests: Remove some duplicate toolchain definitions
+>
+>  tools/bpf/resolve_btfids/Makefile    |  3 --
+>  tools/lib/api/Makefile               |  4 --
+>  tools/lib/bpf/Makefile               |  8 ++--
+>  tools/lib/subcmd/Makefile            |  4 --
+>  tools/lib/symbol/Makefile            |  4 --
+>  tools/perf/Makefile.perf             |  7 ----
+>  tools/scripts/Makefile.include       | 77 ++++++++++++++++++++----------=
+------
+>  tools/testing/selftests/bpf/Makefile |  1 -
+>  8 files changed, 46 insertions(+), 62 deletions(-)
+> ---
+> base-commit: a13c140cc289c0b7b3770bce5b3ad42ab35074aa
+> change-id: 20260511-james-perf-llvm-version-43ab1cb5bc7d
+>
+> Best regards,
+> --
+> James Clark <james.clark@linaro.org>
+>
