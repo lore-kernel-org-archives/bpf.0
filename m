@@ -1,62 +1,62 @@
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2113A313283
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 06:41:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A83E31A56D
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 06:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784097661; cv=none; b=TaKT/dtYfCnrBq3LCgqCTrNdvbiTjKhyB5OKtTM1KFzEiYiltsTr/e5wo882aK93q4vU8lr2T2L3RO8qN+IO4ZYHVwOFNMV/HXQ7o+TQlqAS8mkzvc7A9MV9NDZDB4pjo5p8z5IHiyj3f+Zd9xAn3gEC5gVkinqKavZDw1qQ3aE=
+	t=1784097663; cv=none; b=sUlkGFN9f/4nFtoIOrlgWYck0PYW0zTHC6KLyFKk4o2EaeI9i8qgkFryQy9rQH8yvCRAPpViW/lVq9542uCgO8PvSrn/mwjKrbqt++MSPIPdex9v/02udcCFeQikVGD3RIYR8HUGXjLDvI+KEUMiubYJ9bZoxXu8ianOcQRAj7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784097661; c=relaxed/simple;
-	bh=f/M2fiqgudxqd7zGlXp00ebs8J8lc1fmZ/ceysiFP0o=;
+	s=arc-20240116; t=1784097663; c=relaxed/simple;
+	bh=cEaAEuSAGNj1fxKYcJwFURTmxJ9v0QxCyf2y/blU6wA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ir+rzgZwIr9ScpLpdavPtgMamOjKdY7CBtp7Ad42m4pAlaPJIUo/j7vJBbnYuwAo8tF516J0zJiKTETs+xK6ntnzFk2f7V2cEXZTANoobTSGMBJqLIBZdK+xt/Mn1xJkPknksmWQ2T7eMOUORa2U2mfDaE+g9onatEu4obZh8+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EcAY4pEO; arc=none smtp.client-ip=209.85.210.53
+	 MIME-Version; b=WW1j6Nygs/Tp3DOD2rATAmfGq5WBnlIrA//SVel7C4yIVZcgUDZYQ3cglzaUZU1ngLWeiY10DEtyKFfkqyeNeGfGZehVQXAn4X8+d4NXCvFX2h6Wz9CTE2yp+M3FOT8KO4xf6F0bvgPPyCSg6F0GDLX0zezH+TknwZeafNO+hjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cFOKZkiF; arc=none smtp.client-ip=209.85.161.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EcAY4pEO"
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7eb64085c45so3198956a34.2
-        for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 23:40:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cFOKZkiF"
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-6a376ad8fc0so1720241eaf.0
+        for <bpf@vger.kernel.org>; Tue, 14 Jul 2026 23:41:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784097659; x=1784702459; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784097660; x=1784702460; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=mPNQs5TwrjEX2lxzY40Aw6m/ZaTAn9YZ5N4zk7cl7MQ=;
-        b=EcAY4pEO198QeoeU/x3Q22F+/9gyelFdDpeXaCZ8zz02Fy+keQm0dqD6YP2w2S9Fi8
-         lKlIlvVoV5KGJa1oeaxKGAAu6bTNXKQ1bwV/TBJL6nCxnb4riRju8ntDKNI7ii6B+pCz
-         6QBf/WvE4YfXzrpd1E/6TeUg5iVeS2gVwNVqxq3hvQPE4x0PFHILPlMCOZXRcuvchWUO
-         9Ku/03aFAQppdvvEUvuWpSEd8fMHgCU4kr2a2ivQ+7p5uDqMQlxoXJ/txs5O4Itn/TEi
-         sXX9jB6PKi1zN2/sgtW5DLbqRna3m8+KIUtlSA/Kyr51pFGUFWRuAgvm8g5+hfbzWa7n
-         +Asg==
+        bh=CgdxwtswujcD1lbnDGYKOuZgqeLk3KdEHvY3Ljl53As=;
+        b=cFOKZkiFXK4nAvvv1qgp7InICa12r40e/9dYkzdPJFzcOvJnbB9u2mfO/2R3AhEhie
+         TCX4t0K/l4FQcPKmNpgeDBzjSnolectFRkc8mkgo7do8Bmy2CI3PNJwdFrQtlvOGzwyr
+         cXy1vbAfbZt4hGfTF38DY7XSE/+39gvP6bKmCy69ufJPjV5mVlc3gGeV6XX0dvQHWim2
+         8TZ9MUIVhBCjVG8LO54XksLE6N4+3+jE2T8K5X8/gLPG+S4JjQvQQ3QqpT6J21m5yWXP
+         HfxIWVFFNnmiEoyOl3iIzrbfGYDnXtf3rtpz8XoQVc6yQSM7WtvAcFILHbv/qLuMl023
+         arMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784097659; x=1784702459;
+        d=1e100.net; s=20251104; t=1784097660; x=1784702460;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mPNQs5TwrjEX2lxzY40Aw6m/ZaTAn9YZ5N4zk7cl7MQ=;
-        b=NSEPM9fky7JyUBz6QObVEoE3Sfn9u6LG18FPDv4CnD76MA4UYKWDYudNLV1RKBRVnJ
-         fwudOv6UykqvSg7oWJ1OP72bzcdrlFQ5oGK+NN7wz+kRoU3zjnXmJCOlIE2FIBxzVaS2
-         qWA6sBbkMxxOoV91JXklHSlmY77FVAmv2a+Q9tJfhAL6iH4GHRi2BfKmMeVDAHZpO2Et
-         5zKtxLdwz/5CbQtZsvQXkTleQ0dEim4V/BmZONCZNSrq/cJ81Q012HxQwfx5zY7jN9XO
-         BzIL+umcj1QgwVmlgYBy2+/sIDsH0V61aw4I1/gZpEstNyhjSAaAaUaAyy1GMRTFsBI+
-         vlkg==
-X-Gm-Message-State: AOJu0YxxKJpTdnyJ5VzqHvJrb0nla+RkFofCVgYBOJWrWjPUV2gQC5k3
-	gaqJTT2t7xahyQlDmqJTTI1cng0w+WcivgUeeqK2dT4n7eLiYpP12vb8w//mag==
-X-Gm-Gg: AfdE7ckiyvBuW73dOZ787/Blo5/aytYOSJ1F2oat+95omSVDpjCEi+/2jBt8Qfxzqqs
-	igos0DHQ8seXa3rn1D+yvXLxq0lGaQIA+u4yN4ZaXHDo5zzuyO+hEKBuXy9D8iYBSlzEBUmm768
-	qeh3dXDc2W15uGl2ihHDIKS4ZWHpD41u+tTCQRtqverPEXFPb7CjVRGYCiOkbzBeBMCsCyOGBcE
-	hHmm0cFBzMDsmTWxfBI9nQ6uAtGg9gS6thvNXviAu4VBa7bnwDFv8ywYwwDF9IwZukbjBPKv2vp
-	IQTDBWa5M+bGD+pH/Wj/8eebvMhSv+tak6tOPWAXRP25xXVRHkqmd2VDvJvnpwgBntK6C3bNk7/
-	68g/QoRlI3riiA7mk1V3JduRiiYrLvqG5SWm5RsgdOS4MQkCYPmzVjLWzyQ0a6QOdsWG+5/vHgy
-	dKhQ==
-X-Received: by 2002:a05:6830:358f:b0:7dc:4947:36a1 with SMTP id 46e09a7af769-7ec59b7c70amr975746a34.12.1784097659058;
-        Tue, 14 Jul 2026 23:40:59 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:7::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ec2183a28fsm7649089a34.24.2026.07.14.23.40.58
+        bh=CgdxwtswujcD1lbnDGYKOuZgqeLk3KdEHvY3Ljl53As=;
+        b=o1gaS+sfX1pJ+UNefTkbSyIs7vh/f1hDYgfY+sd8zduP7QRD2Tp2/CA8hRqX4F1K/j
+         f3JPdIJFzHbRwUYjCrAdECnFRYWcp+HlpVFbr74Tl4J3DJdFD53HXCF9hWpn7jeTLTrI
+         hD9PgDz7Yi+AWjluvOc/bM/Jl96MDCUInOE6LA84Y2K4IiHM7tyq/0alLQwff0MUKKOy
+         a/2EwTywVzhRnEibUMUsUAlyRbsGhRnw47Qo1DIO3zszyw5wV0e4EiEiMZBN8R8FXIQ0
+         leZDTxt1QiXZimSK2PwRLxzL9jL5Rqw38MGJL35m/JEdNy1tRqEO8HEiWvnj4hwaSNaM
+         +UNA==
+X-Gm-Message-State: AOJu0YyvC0/fjK7wQ3qhUJXgo1bKtafcPkdNpI8/M3xC3+RttP0mAUT4
+	lPYzRyCfoboqBpxKIUeBjDun1ABZLEJrREaoOKxPA0+/JonRV7WqNJwN5GiLKA==
+X-Gm-Gg: AfdE7cm0k7NafcAdn2ybMIYK5V2umYBQ1kBnchG5YREesgBKcqMPNuQrud+T3xYsEdL
+	+eX7tjFcd+t3AUgF/pcAQjjK5iIrni6HBu1lMMUwkEfyqADZMpI/jtkhPhrsDDsyQAUTRhyWKW2
+	nLLLTLAlb0QrElP+ggB26qNCuAzyH2xW9Bcc7nPTrsOVVqPmzFgGCgHb9GC2C3JairXyD/NP3hA
+	mRqWJcVBbK3FCFSpeYkfRQouTGcnNHnfRN1Azg+/ObXe4tsPO5cRdG5SMYI/k+ekMgEOwc+iXsk
+	Uy6DNGeUdn5FjExueKyv847ZUKFZVoMQmCtIMo/3qZJP4OcGmCA2h6oLl5H1uqzO1Mw5LGA19ti
+	j4C/LRE8PWNumhHLHtTsVO7jiPk+nbrCEZ8bdYx0vigAFtdSFWthA5fhejnhzTf0cAXmsVSZrJ9
+	I=
+X-Received: by 2002:a05:6820:1c94:b0:6a1:8125:fee with SMTP id 006d021491bc7-6a3d9e708b6mr1050292eaf.14.1784097660448;
+        Tue, 14 Jul 2026 23:41:00 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4546f12a6casm10944119fac.8.2026.07.14.23.41.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 23:40:58 -0700 (PDT)
+        Tue, 14 Jul 2026 23:41:00 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -66,9 +66,9 @@ Cc: alexei.starovoitov@gmail.com,
 	memxor@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 5/7] selftests/bpf: Test kfunc returning zero-sized allocation buffer
-Date: Tue, 14 Jul 2026 23:40:45 -0700
-Message-ID: <20260715064047.1793790-6-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v2 6/7] bpf: Drop redundant pkt_access from bpf_call_arg_meta
+Date: Tue, 14 Jul 2026 23:40:46 -0700
+Message-ID: <20260715064047.1793790-7-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260715064047.1793790-1-ameryhung@gmail.com>
 References: <20260715064047.1793790-1-ameryhung@gmail.com>
@@ -80,73 +80,72 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a test passing an explicit rdwr_buf_size of 0 to
-bpf_kfunc_call_test_get_rdwr_mem() and then reading the returned R0.
-R0 should be a zero-sized PTR_TO_MEM, so the access must be rejected
-with "min value is outside of the allowed memory range".
+meta->pkt_access is only ever a copy of fn->pkt_access, assigned once in
+check_helper_call() and read back in may_access_direct_pkt_data(). Have
+may_access_direct_pkt_data() take the bpf_func_proto and read
+fn->pkt_access directly, and drop the meta field along with its
+assignment.
 
-This covers the pre-existing bug where a zero size argument was
-treated as "no size argument": the verifier fell through to
-btf_resolve_size() and sized R0 after the pointed-to return type,
-wrongly allowing the read.
+The only non-NULL caller, check_func_arg(), already has fn in scope; the
+remaining callers pass NULL and are unaffected.
+
+No functional change intended.
 
 Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- .../selftests/bpf/prog_tests/kfunc_call.c     |  1 +
- .../selftests/bpf/progs/kfunc_call_fail.c     | 27 +++++++++++++++++++
- 2 files changed, 28 insertions(+)
+ kernel/bpf/verifier.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-index c9fce95d220e..7af5560f2a08 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-@@ -66,6 +66,7 @@ static struct kfunc_test_params kfunc_tests[] = {
- 	TC_FAIL(kfunc_call_test_get_mem_fail_rdonly, 0, "R0 cannot write into rdonly_mem"),
- 	TC_FAIL(kfunc_call_test_get_mem_fail_use_after_free, 0, "invalid mem access 'scalar'"),
- 	TC_FAIL(kfunc_call_test_get_mem_fail_oob, 0, "min value is outside of the allowed memory range"),
-+	TC_FAIL(kfunc_call_test_get_mem_fail_zero_size, 0, "min value is outside of the allowed memory range"),
- 	TC_FAIL(kfunc_call_test_get_mem_fail_oversized, 0, "allocation size exceeds u32 max"),
- 	TC_FAIL(kfunc_call_test_get_mem_fail_not_const, 0, "is not a const"),
- 	TC_FAIL(kfunc_call_test_mem_acquire_fail, 0, "acquire kernel function does not return PTR_TO_BTF_ID"),
-diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_fail.c b/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
-index 6144ce3ff0b2..64b6a0b0ab1c 100644
---- a/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
-+++ b/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
-@@ -103,6 +103,33 @@ int kfunc_call_test_get_mem_fail_oob(struct __sk_buff *skb)
- 	return ret;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 463b49df4ff9..37127ae1ff28 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -258,7 +258,6 @@ struct bpf_call_arg_meta {
+ 	struct ref_obj_desc ref_obj;
+ 	struct arg_raw_mem_desc arg_raw_mem;
+ 	struct ret_mem_desc ret_mem;
+-	bool pkt_access;
+ 	u8 release_regno;
+ 	u64 msize_max_value;
+ 	int func_id;
+@@ -4673,7 +4672,7 @@ static int check_map_access(struct bpf_verifier_env *env, struct bpf_reg_state *
  }
  
-+SEC("?tc")
-+int kfunc_call_test_get_mem_fail_zero_size(struct __sk_buff *skb)
-+{
-+	struct prog_test_ref_kfunc *pt;
-+	unsigned long s = 0;
-+	int *p = NULL;
-+	int ret = 0;
-+
-+	pt = bpf_kfunc_call_test_acquire(&s);
-+	if (pt) {
-+		/*
-+		 * An explicit rdwr_buf_size of 0 gives R0 a zero-sized buffer,
-+		 * so any access is out of bounds, hence -EACCES. Previously the
-+		 * verifier treated a zero size as "no size argument" and sized
-+		 * R0 after the pointed-to return type, wrongly allowing the read.
-+		 */
-+		p = bpf_kfunc_call_test_get_rdwr_mem(pt, 0);
-+		if (p)
-+			ret = p[0];
-+		else
-+			ret = -1;
-+
-+		bpf_kfunc_call_test_release(pt);
-+	}
-+	return ret;
-+}
-+
- SEC("?tc")
- int kfunc_call_test_get_mem_fail_oversized(struct __sk_buff *skb)
+ static bool may_access_direct_pkt_data(struct bpf_verifier_env *env,
+-			       const struct bpf_call_arg_meta *meta,
++			       const struct bpf_func_proto *fn,
+ 			       enum bpf_access_type t)
  {
+ 	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+@@ -4697,8 +4696,8 @@ static bool may_access_direct_pkt_data(struct bpf_verifier_env *env,
+ 	case BPF_PROG_TYPE_LWT_XMIT:
+ 	case BPF_PROG_TYPE_SK_SKB:
+ 	case BPF_PROG_TYPE_SK_MSG:
+-		if (meta)
+-			return meta->pkt_access;
++		if (fn)
++			return fn->pkt_access;
+ 
+ 		env->seen_direct_write = true;
+ 		return true;
+@@ -8332,7 +8331,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 	}
+ 
+ 	if (type_is_pkt_pointer(type) &&
+-	    !may_access_direct_pkt_data(env, meta, BPF_READ)) {
++	    !may_access_direct_pkt_data(env, fn, BPF_READ)) {
+ 		verbose(env, "helper access to the packet is not allowed\n");
+ 		return -EACCES;
+ 	}
+@@ -10285,7 +10284,6 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 	}
+ 
+ 	memset(&meta, 0, sizeof(meta));
+-	meta.pkt_access = fn->pkt_access;
+ 
+ 	err = check_func_proto(fn, &meta);
+ 	if (err) {
 -- 
 2.52.0
 
