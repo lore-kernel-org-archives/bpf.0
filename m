@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D985743F0A3
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 22:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D383D349A
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 22:14:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784153323; cv=none; b=GO6DIU0eXUJiJGKf0hfgcCjxr2D5NXyp3yIQ82HKFNY9mz6RW2NifOjvw6hkqGYQDDtBLcrq1hR+g5GFFEs32CPoURhxJzOHMjnmW82WMh8/9GIKT9v16tsvHuIzJK0hP529r+U6hRW+zhrOoB0YlavHiAZhegaqgoQeykp8+P0=
+	t=1784153654; cv=none; b=famtGPWeEs5xChWrkNZCeTQeaoGjBCJg7z7KDEAtv7W6JNafguleg71Ag+qThq4BVZA/GgyhoAlSfalL9atNeSXWmh0opRS+Z/uS3yRnPUPfAxconqfRhUiqn46OPqMmexJsdxDRilTHpf398ouTFqTEMtBCjmzH5BtLbj7uWQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784153323; c=relaxed/simple;
-	bh=jXm6jrWCNwVcSj5eIa1xyn7Utce70osTcmkDqf5KNJw=;
+	s=arc-20240116; t=1784153654; c=relaxed/simple;
+	bh=0XISBnDoS3yCH76EPutTBjIyx4UBxPfOdWUa9/QHXAY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=DH/GMqUmzfSLYYlHs1x1FI/6l2pSlz6HpZ8jxDnhniIk5E2zNwyb2nxh21hksrL1vYaODqu90aCTwOd1P8KQkbaWpFNQ2+8WjAWd6+xbex0dcb4waySPkTnVWx6JXdUTbrsySgk+mhPkp8EZUj4pLsw+kGHsBzyyguY+Fm3dma8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BUZWGctB; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=hY9XOZmVbYOAA3tmBaqKzKXNk6G3s9O8aTCbLmQtKKvGJ9NUIyh+MDf51XoAOwg5WPCZoRsAEmIdPGUn4dJn6hUflCXI4bWHTtmDKxoZ5ShTZpFzc9AOrwPGgxGyKE8d+NeEnuDi/Q8ZZvSUrGsqwdYCHlSBBLlits+8/iNvJdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fCmk8xw5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BUZWGctB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD3391F000E9;
-	Wed, 15 Jul 2026 22:08:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fCmk8xw5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF3D1F000E9;
+	Wed, 15 Jul 2026 22:14:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784153322;
-	bh=yA9gAdyLAvI9NxqltCZSlPY8NkhGW3elH7Xx1WBzeGk=;
+	s=k20260515; t=1784153652;
+	bh=vCsGiv70CWm2Dx2Tq4hoW4Ryd+w4ExWY1HRyzXaZyhU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=BUZWGctBldILfCumkQNXYuOc8urNjyO0mZ27VuaG+hsg34F6mOs8qOfzlDlktF2GC
-	 um5zvT5AwHPL3+ao+HKhsll00C3ynvLMmBI1nkxBwBNYK/YwxbsxdU5MecVdXEB3N8
-	 oLDe0esaIhZ7taaa2kFqda99e3hPYw6DHboe/K/ikCmcsUJez97jQ6t0jQIYl+HMfG
-	 GpwW61JYD1IBPK9itRcRnB/ezJQSZqClBxa8frrz+AAUL6LLQ1/f8IWo7oLn7M2U8O
-	 tgUvJbI42OTxJrHzg1ltS0R3v83TKsBG8Oov1JWMNFhk8wYwOUSznh7rxxzHiAthui
-	 nRTWmZmbLmgeA==
+	b=fCmk8xw5zUCX3BR94M9Cu8Cb5OaBINJYrJNy6HPcRczaqb1J2FeEQia7PQPvl4V78
+	 GLrf7LZM5TDBLJIx21qgEY/7TTj+IXGMdb/OKKWt+ywY73JFzcfRbshmgtuQ3zGpAa
+	 egALdNRdXGPSN+yiiJbnzq/qzo0255PAXQe4tZPoJpvVlfcWrkG83EUqTl7saXZiPd
+	 J9yB+ctpbg+Ifrt0SGnKj5hv/6BUsncPEpH2DtWlcPLLzS9MnYwfs9MsIM7sZXf2a8
+	 PQ2WbcEIGTLJ/quuXrqx37yjr2mOpqGZ4NFmNx35WQe2Zskng0LZPmwLy9fJupeTHs
+	 yPayVjy0Dnhmw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 2/8] net: veth: add xmo_rx_checksum callback
- to veth driver
+Subject: Re: [PATCH bpf-next v1 8/9] bpf, x86: Fix stack-passed arguments
+ for indirect trampolines
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Lorenzo Bianconi" <lorenzo@kernel.org>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260715-bpf-xdp-meta-rxcksum-v5-2-623d5c0d0ab7@kernel.org>
-References: <20260715-bpf-xdp-meta-rxcksum-v5-0-623d5c0d0ab7@kernel.org>
- <20260715-bpf-xdp-meta-rxcksum-v5-2-623d5c0d0ab7@kernel.org>
+In-Reply-To: <20260715220052.1590783-9-memxor@gmail.com>
+References: <20260715220052.1590783-1-memxor@gmail.com>
+ <20260715220052.1590783-9-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 15 Jul 2026 22:08:41 +0000
-Message-Id: <20260715220841.AD3391F000E9@smtp.kernel.org>
+Date: Wed, 15 Jul 2026 22:14:12 +0000
+Message-Id: <20260715221412.ACF3D1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,71 +47,72 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] veth_xdp_rx_checksum incorrectly maps CHECKSUM_PARTIAL to XDP_CHEC=
-KSUM_NONE, causing XDP programs to drop valid locally-generated packets.
+
+Pre-existing issues:
+- [Medium] The patch correctly fixes the struct_ops stack argument offset b=
+ug for x86, but leaves the exact same bug unfixed in the ARM64, RISC-V, and=
+ LoongArch BPF JIT implementations.
 --
 
---- Patch [2]: [PATCH bpf-next v5 2/8] net: veth: add xmo_rx_checksum callb=
-ack to veth driver ---
-commit 34eae1c96706424d6fb3ab7f5a60445ee0f6dd08
-Author: Lorenzo Bianconi <lorenzo@kernel.org>
+--- Patch [8]: [PATCH bpf-next v1 8/9] bpf, x86: Fix stack-passed arguments=
+ for indirect trampolines ---
+commit 804aec167442bbd8ddbbc13495bc188618bbaeaf
+Author: Tejun Heo <tj@kernel.org>
 
-net: veth: add xmo_rx_checksum callback to veth driver
+bpf, x86: Fix stack-passed arguments for indirect trampolines
 
-Implement xmo_rx_checksum callback in veth driver to report RX checksum
-result to the eBPF program bounded to the veth device.
+This commit fixes a bug in the x86 BPF JIT where stack-passed arguments
+for indirect trampolines (such as struct_ops) were read from the wrong
+offset. It correctly adjusts the offset to account for only the caller's
+return address being on the stack, which fixes callbacks that have more
+than six arguments.
 
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 8170bf33ccf95..dbf30089581c8 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -1701,6 +1701,37 @@ static int veth_xdp_rx_vlan_tag(const struct xdp_m=
-d *ctx, __be16 *vlan_proto,
->  	return err;
->  }
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 2f25353f135bd..672fe54dfeb8d 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -3074,6 +3074,7 @@ static void save_args(const struct btf_func_model *=
+m, u8 **prog,
+>  {
+>  	int arg_regs, first_off =3D 0, nr_regs =3D 0, nr_stack_slots =3D 0;
+>  	bool use_jmp =3D bpf_trampoline_use_jmp(flags);
+> +	int stack_args_off =3D (use_jmp || (flags & BPF_TRAMP_F_INDIRECT)) ? 16=
+ : 24;
+
+[Severity: Medium]
+This is a pre-existing issue, but does this same bug also need to be fixed
+in the ARM64, RISC-V, and LoongArch BPF JIT implementations?
+
+On ARM64, save_args() unconditionally hardcodes a 32-byte offset:
+
+arch/arm64/net/bpf_jit_comp.c:save_args() {
+    ...
+    soff =3D 32; /* on stack arguments start from FP + 32 */
+    ...
+}
+
+This seems to assume two 16-byte frames (FP+LR and FP+R9), but struct_ops
+only pushes one, meaning stack arguments would start at FP + 16.
+
+Similarly, on RISC-V and LoongArch, store_args() unconditionally skips 16
+bytes for the traced function's T0 and FP frame:
+
+arch/riscv/net/bpf_jit_comp64.c:store_args() {
+    ...
+    /* skip slots for T0 and FP of traced function */
+    emit_ld(RV_REG_T1, 16 + (i - RV_MAX_REG_ARGS) * 8, RV_REG_FP, ctx);
+    ...
+}
+
+For BPF_TRAMP_F_INDIRECT (is_struct_ops), the prologue aligns FP directly
+to the caller's SP, so arguments start exactly at FP. Will these hardcoded
+offsets cause the JIT to read 16 bytes past the actual arguments on these
+architectures as well?
+
+>  	int i, j, slot =3D 0;
 > =20
-> +static int veth_xdp_rx_checksum(const struct xdp_md *ctx,
-> +				enum xdp_checksum *ip_summed,
-> +				u32 *cksum, u8 *cksum_level)
-> +{
-> +	const struct veth_xdp_buff *_ctx =3D (void *)ctx;
-> +	const struct sk_buff *skb =3D _ctx->skb;
-> +
-> +	if (!skb)
-> +		return -ENODATA;
-> +
-> +	switch (skb->ip_summed) {
-> +	case CHECKSUM_COMPLETE:
-> +		*ip_summed =3D XDP_CHECKSUM_COMPLETE;
-> +		*cksum =3D skb->csum;
-> +		*cksum_level =3D 0;
-> +		break;
-> +	case CHECKSUM_UNNECESSARY:
-> +		*ip_summed =3D XDP_CHECKSUM_UNNECESSARY;
-> +		*cksum_level =3D skb->csum_level;
-> +		*cksum =3D 0;
-> +		break;
-> +	default:
-> +		*ip_summed =3D XDP_CHECKSUM_NONE;
-> +		*cksum_level =3D 0;
-> +		*cksum =3D 0;
-> +		break;
-> +	}
-
-[Severity: High]
-Is there a missing case for CHECKSUM_PARTIAL in this switch statement inside
-veth_xdp_rx_checksum()?
-
-When a local process sends traffic over a veth pair with checksum offload
-enabled, the packet is passed to the receiving veth with skb->ip_summed
-set to CHECKSUM_PARTIAL.
-
-By falling through to the default case, this maps CHECKSUM_PARTIAL to
-XDP_CHECKSUM_NONE. An attached XDP program that validates checksums will see
-XDP_CHECKSUM_NONE and attempt to compute a software checksum. The software
-computation will fail because the TCP/UDP checksum field only contains a
-pseudo-header checksum at this point, leading to dropped packets.
+>  	/* Store function arguments to stack.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260715-bpf-xdp-me=
-ta-rxcksum-v5-0-623d5c0d0ab7@kernel.org?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260715220052.1590=
+783-1-memxor@gmail.com?part=3D8
