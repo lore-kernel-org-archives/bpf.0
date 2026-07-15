@@ -1,143 +1,152 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D64382394
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 14:46:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A5339A05F
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 14:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784126810; cv=none; b=B4yTkTepWxR7V63zEVs4PpuULN/89lbHjCRhGfy8dRO+SCnXPv1l7gxzjbESWZGrGB864+GfVl0xzq7tuI8od5ARbF9LTn2ghL9rOvX8fDu3xx6jVlc98ZQvawl7atgj1v6VV6wHlpCDFy2BuTzPaDSzYC0nM0z06ry4u86iEN8=
+	t=1784127264; cv=none; b=c1U/BfqCkHGPK+zgePWIdVRJUKNy9Tflzp0QoYxLQJOQcBTlFJbECEuH+lfhCOBxzFZi/5bCekuMx74OO6Jacdjo+xm2sfo86sYee8AbjUJkw/letSwqvONH3R+/4TL5PYnvW91nODx0nxiwlOV81RrLQMRQbyZ2e2ULi98l/MY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784126810; c=relaxed/simple;
-	bh=mo64BaUYAihjdcVVKQcSfM6eK8LWt+arXGZ+s8lWgfA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E+RZ5hVjDEus2SLXonlhvk9/x9E2yavuo1EwldgnUzxt63R68PZOW5ZuZW/5ajXuW4l/ECQI2T0MW3i7UhHAE4R4E/2+Z7dWPRyv42E41QxNdIFWbg+NCgSVvZYav2VFiTbVUZMMSGQDNV9LsRPWq4VmggeFkv8Mi/5iD7R+ZF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Wm0338i7; arc=none smtp.client-ip=209.85.208.51
+	s=arc-20240116; t=1784127264; c=relaxed/simple;
+	bh=B0WPxj3EierW3H0emFrNYAU3ITUd/G+ZN9Cb4xiUUa4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QywqCmQwTf01Z7xSyj385zppWCeKHkCsnY4+lqNMnNeBK8zZj2lL955xrfHjZYGOE+djJNHMYPAyv04dmiYGfE+RYpjC+nZi9IaJYN6UBvBqZoaHHOr/L0fn3FFg7bx7VJ16uWN6HXl5VhmbJg1UhEysiyRKBii9KI5STdlDUpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nElDO6d1; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Wm0338i7"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-69a50189d25so9857658a12.3
-        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 07:46:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nElDO6d1"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-493e8d4f4dcso41830545e9.0
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 07:54:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1784126806; x=1784731606; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=xqdxpiRH6Z2ScU/4HRU79Jz4czUFiYR0vIxP6WbDz1c=;
-        b=Wm0338i7irtGkRSuNQvmQHZWfN4mOL3eE83FtdJlP4x0/0bjfgwPnPYeP4cCxPrkk6
-         rrV+2wOtsOwaWdLfJOurOKJqcORt89jQGO3kQ4DLMVAI/RhTujm+H4zmR3IINt71swvR
-         R6TAbD+jLK9uUW4wvWyQT73zhNPj6OQd3WjLGsYtDmuB0SXmCB9OwZSbQ+gTphqOtCBe
-         BW+iy6+1d2vuvJFq901J32wk81APqGB2n7ItuDJk8lRhG7sn/S9IO/uebkXfMOIen1QR
-         RjPxgarqxgmirS5yXXCr70dXq7pXuyI8df3ftS0ojqzC2gUdv6J6Y/lnVOCoDhCUc6XT
-         x92Q==
+        d=linaro.org; s=google; t=1784127256; x=1784732056; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=NoqWI+ZkKhb51wo8tujVZWJK2s6uymb7bKFku4KV8C8=;
+        b=nElDO6d1lmbSDXiDUFVzPy5O1oargC2cX5VmUmcGJYM76UZvT/plCpwdUtwGrypAtI
+         QgXh0ug/5pEEFuMi6THgzrcx5avL9psucFCayeITCGSOvcIqax9SSLsb1z1sst3XJ1xy
+         l+04JuVYkXaBn//og+ltyLuIanZkp4sjs1+n/HZb4R1jiM5vFo/1qnMsxbJNeEHNb+Fn
+         X4B/SR1319Tb0Ahn8zitikMahSf2xUmKJInr0LZ9UWUL+Av5sb/nGfsLsKr4a8ONky2j
+         Fu0nBCBHwWtHOxLrZrmIs4mQgeTQdTJzpGjc2Vtko1G4R4yNJYIsUXbmsnmVo7WKYHjQ
+         gghg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784126806; x=1784731606;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=xqdxpiRH6Z2ScU/4HRU79Jz4czUFiYR0vIxP6WbDz1c=;
-        b=F6IO77ya8a721svHVdDTpuW1Qk9BCvLApvFEA6QdvvLi+F7N4zbqpfq7sCmUB5SDoF
-         OGlmvPO7xUotIM432x8qaT5Se5GPGdgK1S+Toba6bi5juODIyQhZwR/P5HGVUlPO7D3x
-         lAGIFT4SnqVNci2pf2EKKHvv2Si+cWPa2GMWA1vdCJCHCY0oOZgXvHMR/9AoUXWxkZW0
-         0QEGgpZBhfxSdwfvi956dgb28Nl3nWO3qGNKqXalz0pougeyccPKg3sCMPZ9Co3Bp1NC
-         sKdnbSPEII6nFsA9xGUk4Jkzgc1dSwGuirJa8l7XI5jASp4Cta3uLyiGGmNgOoHl3RYs
-         1x1Q==
-X-Forwarded-Encrypted: i=1; AHgh+RpdtrEcJHTxWjp8758Bc5+pNqpLME/N3KkATxwnNLbl8q5eMxyrS2fLOdS1UIB0tEEnV1M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYDFV4W9N6kfoeM0Xz7nkOTx1qsqpAUi7+cWMhGtCWReHG5koF
-	hXwGJ3Qyh2kv7nIqRyKOykOj/5UA1mRdRbtAjcGFVNnsvyFnLpWK+pBwuLp9ucbpgHY=
-X-Gm-Gg: AfdE7cn4kSDDYZDqI9rKze0EGvI6ipN0cfjj92zILyJMqKau7RbpfVQLqHFZVXYIX7X
-	zE4XNeyqyLNLXJc+tRAIbQg5UyQKdnGdXeDa6sz3yoFuTcY6fYvJb+MDvWEzf2wEzpIRoDHyCTR
-	iP5IAy6hx0b2qKaCPonu+rLbmElWNNiFAljRiVk8CScb0ypjUx4TGur1cxKgrvQlddWHFa1Vmah
-	rJ8q+BjwvBWd9jMNGlSd6LoOgO0enDOWqJTyMiOBjUt7gtkvh1T1YFHmBWy4+8aLcgj1nb7d/GH
-	k9ob5NQClyG8SQtUONk87RE6irBh23uq/wcwSuiOnAYe0tLu7w3CNDDVdESh7Oz54ppXzrBi4u6
-	7mtZKRmXiQX0Y8prU0Qfzv3B92ppZT7HuCLYhxUpf77HM70V5fq7Z5k+vNxffD7B9E9xhaU7MLf
-	O/8i4ysKPyzh5/TdbVvdYjVW4=
-X-Received: by 2002:a17:907:9451:b0:c16:7402:1abc with SMTP id a640c23a62f3a-c167949a4ccmr216570466b.47.1784126805726;
-        Wed, 15 Jul 2026 07:46:45 -0700 (PDT)
-Received: from [172.27.236.118] ([212.187.182.162])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c16873187absm45796466b.38.2026.07.15.07.46.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jul 2026 07:46:45 -0700 (PDT)
-Message-ID: <617b1d89-35f5-4dee-9aeb-eac7a0d34d38@linaro.org>
-Date: Wed, 15 Jul 2026 15:46:44 +0100
+        d=1e100.net; s=20251104; t=1784127256; x=1784732056;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=NoqWI+ZkKhb51wo8tujVZWJK2s6uymb7bKFku4KV8C8=;
+        b=IlhycWqH7w4zvmZWOzuxgS+dSbQFvq/VyPSh///iQVrlzZEyd40a1WIP2gUzTkf0TZ
+         MoA/QyQ5F3kTYoAD7PVObKPnin8dXhR40y7TCjCUQYmq993J8hAMtVglyxrO285GOqX4
+         1R5ThMAMZN6UTeCmjapdOD/pdw4IQBrFjb+tqPKL/xHlheTqHT5x+grdKikBJ+yY6nNY
+         c5nrkm7wd2uSXoPQwwk3YH6OYiyQdhB2gFo+qzIPKNYBvqC6183YC46MY7T459Zpr6nI
+         exMWY2EPigoCyFz+5dXmbN95Lq2n9rUGfuiXdDyf2oFkAe59h/oL8CDCQSPhOxEQORYJ
+         BHsQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rrt4yH1Hm5rpcuJWwh48MeEfheArSpp2qdXvc4MWtxC5+KCQJWcZCN0LpSFd/wPQC4aqZw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOkBUm6+E3xR/NiONrxwCDBpdy8PDWeO0oDO7kd4oR4kvkNCOh
+	184R7W1jIv/dOCkrgACda866DCmnx3zqxEUeK5F9axPpVwBUu+oLb7df7CNzGbf8YTw=
+X-Gm-Gg: AfdE7cnfK/SvdMh/2EdUC7fxz7mNhjnLXtBtj/bcktH6y7pn4+xOEkLL+0FJLmrcPCJ
+	mjHz0OFlZweZeLsmw99ZeCwraQBdkT645CVAIAv94KEYaYD8ySi/JTfEgabq6uFsmQwSK+qi/nP
+	6dixnBiIh0Wl//Ob+CU5x0gwQqLUlqsI7oXvJik8h3/9lhMI0/2rm0yVbxYOyKUtscEZkOYfL1m
+	ogh6sjJkssLxmrHTTwvYb3D9Aakoy/wXTpIitGSkx3smi1ooNU5pzsI1/rIwOuJXqn+UmtwkTnL
+	elcHpguV2HduPTW4uoH8+yh/m3ZV2IMCmTYc+dqp9/vmJaTpmdkyi+wQ0wYSNAWSbvgPe5+DNFE
+	1lylZwB1M4yfsYoaCJA0yoFD99hqgPSVlQN/Ai82KiRCbj46LdBHbfnngMqveUuySF1xC1eepot
+	4OfyLlkaYYoue2XhXrq3+bBg==
+X-Received: by 2002:a05:600c:3487:b0:493:bacb:1341 with SMTP id 5b1f17b1804b1-4953c144adamr35488965e9.4.1784127256465;
+        Wed, 15 Jul 2026 07:54:16 -0700 (PDT)
+Received: from e133063.arm.com ([212.187.182.162])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49510c8e220sm137649275e9.15.2026.07.15.07.54.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2026 07:54:15 -0700 (PDT)
+From: James Clark <james.clark@linaro.org>
+Subject: [PATCH v4 0/4] tools/build: Allow versioning of all LLVM tools
+Date: Wed, 15 Jul 2026 15:53:47 +0100
+Message-Id: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/5] tools/build: selftests: Allow versioning LLVM lld
-To: sashiko-reviews@lists.linux.dev, Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-References: <20260715-james-perf-llvm-version-v3-0-8854bfe5af7e@linaro.org>
- <20260715-james-perf-llvm-version-v3-4-8854bfe5af7e@linaro.org>
- <20260715124513.8DA9E1F000E9@smtp.kernel.org>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <20260715124513.8DA9E1F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPueV2oC/3XN0QqCMBTG8VeRXbfwzE1XV71HdDHnmS7MyRajE
+ N+9KURFePk/8P3ORAJ6i4Ecs4l4jDZYN6Tgu4zoTg0tUtukJixnZS4A6FXdMNARvaF9H280ol8
+ 2lBeqBl2LWlcNSevRo7GPVT5fUnc23J1/ro8iLNe3yTfNCDSnpVYa1EFxLZtTbwfl3d75lixoZ
+ N+Q3IZYggwwrbnJC2jkH1R8oArENlQkSErBa4NCmQp/oHmeXwJwbDdRAQAA
+X-Change-ID: 20260511-james-perf-llvm-version-43ab1cb5bc7d
+To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, James Clark <james.clark@linaro.org>
+X-Mailer: b4 0.14.2
 
+I ran into the build issue mentioned in the first commit, because using
+an option like LLVM=-15 is a documented way to build [1], but only
+some of the LLVM tools defined in tools/ support this.
 
+After fixing that, a lot of other tidyups fell out. I didn't go too far,
+for example some selftests include tools/testing/selftests/lib.mk which
+reimplements some of the LLVM_SUFFIX stuff, but other selftests include
+tools/scripts/Makefile.include and I stopped before touching the former.
+Some other non build scripts hard code toolchains and I didn't touch
+those either, this change is only focused on things that already
+include Makefile.include.
 
-On 15/07/2026 13:45, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [Medium] Bypassing Clang's internal linker path resolution causes silent linker version mismatches for out-of-path toolchains.
-> - [Low] Unbalanced parenthesis in the `USE_LD_ERR` error messages.
-> --
-> 
-> --- Patch [4]: [PATCH v3 4/5] tools/build: selftests: Allow versioning LLVM lld ---
-> commit cdccb2d14502b0641ebfd4e8ddb945bdb605ed46
-> Author: James Clark <james.clark@linaro.org>
-> 
-> tools/build: selftests: Allow versioning LLVM lld
-> 
-> This commit updates the BPF selftests Makefile to use the LLD variable
-> from Makefile.include to ensure consistency with the rest of the LLVM
-> toolchain. It explicitly resolves paths to the linker via shell commands
-> and passes the result to clang's -fuse-ld flag.
-> 
->> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -264,30 +264,34 @@ $(OUTPUT)/%:%.c
->>   
->>   # LLVM's ld.lld doesn't support all the architectures, so use it only on x86
->>   ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
->> -LLD := lld
->> +USE_LD := $(shell command -v $(LLD))
-> 
-> [Severity: Medium]
-> Will this shell resolution cause silent linker version mismatches if a user
-> builds with an out-of-path compiler (e.g., CLANG=/path/to/clang) without
-> setting LLVM= or modifying the system PATH?
-> 
-> Previously, passing -fuse-ld=lld allowed clang to natively resolve the ld.lld
-> binary relative to its own executable path. Bypassing clang's internal linker
-> path resolution with `shell command -v` might cause the build to pick up a
-> system linker (like /usr/bin/ld.lld) instead of the bundled one.
-> 
+[1]: Documentation/kbuild/llvm.rst
 
-I can just drop this patch. I assumed $LLD should behave like the other 
-tools, but it's only used here where the compiler already picks it's 
-sibling linker with the correct version.
+Signed-off-by: James Clark <james.clark@linaro.org>
+---
+Changes in v4:
+- Drop "tools/build: selftests: Allow versioning LLVM lld", clang
+  already picks the correct sibling lld version. (Sashiko)
+- Link to v3: https://lore.kernel.org/r/20260715-james-perf-llvm-version-v3-0-8854bfe5af7e@linaro.org
 
->> +USE_LD_ERR = linker '$(LLD)' not found - add it to PATH, or pass LLVM=/path/ or LLD=/abs/ld.lld)
-> 
-> [Severity: Low]
-> Is there an extra closing parenthesis at the end of this error message string?
-> 
->>   else
->> -LLD := $(shell command -v $(LD))
->> +USE_LD := $(shell command -v $(LD))
->> +USE_LD_ERR = linker '$(LD)' not found - add it to PATH, or pass LLVM=/path/ or LD=/abs/ld)
-> 
-> [Severity: Low]
-> Is there also an unbalanced closing parenthesis here?
-> 
->>   endif
-> 
+Changes in v3:
+- Add warning for empty $USE_LD
+- Use $HOSTREADELF in bpf Makefile
+- Rebase on v7.2-rc3
+- Link to v2: https://lore.kernel.org/r/20260518-james-perf-llvm-version-v2-0-f12cc4f031d8@linaro.org
+
+Changes in v2:
+- Fix selftests/bpf build. LLD needs to take the full path to be used
+  with -fuse-ld=
+- Link to v1: https://lore.kernel.org/r/20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org
+
+---
+James Clark (4):
+      tools/build: Allow versioning of all LLVM tools defined in Makefile.include
+      tools/build: Indent if else blocks
+      tools/build: Allow versioning LLVM readelf
+      tools/build: selftests: Remove some duplicate toolchain definitions
+
+ tools/bpf/resolve_btfids/Makefile    |  3 --
+ tools/lib/api/Makefile               |  4 --
+ tools/lib/bpf/Makefile               |  8 ++--
+ tools/lib/subcmd/Makefile            |  4 --
+ tools/lib/symbol/Makefile            |  4 --
+ tools/perf/Makefile.perf             |  7 ----
+ tools/scripts/Makefile.include       | 77 ++++++++++++++++++++----------------
+ tools/testing/selftests/bpf/Makefile |  1 -
+ 8 files changed, 46 insertions(+), 62 deletions(-)
+---
+base-commit: a13c140cc289c0b7b3770bce5b3ad42ab35074aa
+change-id: 20260511-james-perf-llvm-version-43ab1cb5bc7d
+
+Best regards,
+-- 
+James Clark <james.clark@linaro.org>
 
