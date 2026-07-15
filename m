@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E1933128DF
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 14:08:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5C231E83A
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 14:08:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784124526; cv=none; b=tv2+Fzg9iHHmWRbGCP29ogeVtrSsAztk1w7o0s0mfav+W4ZIkLksU3iqVsGicie83M9Iv2xh129Q8aZ5qwXL2HKBr8NtTBDfQoE2MSeCFN+MS0h3EGItkrm4jzDtvBVuQPWeMuhRnEKGhfDkWtOqoyQ72HVfw0KQaNKSm1QumzI=
+	t=1784124527; cv=none; b=a1GDaPE1yYrc4OiImRMJsrUYcJ5sSwIYs55kvPCOz9mgKa6bxcOTqnc0j3j6q1MKIuPxUKLnAgJuA7OHXUbGWePCUSCO9jYDHCK7QTFddeZTrVnVmVAwmT3wNAq3QB4XQ7hfL1ahZjloAl3ViVwntg2ds0Hln5FgDZEsWL0uCnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784124526; c=relaxed/simple;
-	bh=NZMBYxpr7+h22waLWdJ6wU2aVcDR3ZbIx9cI4ZVE2bE=;
+	s=arc-20240116; t=1784124527; c=relaxed/simple;
+	bh=lq+9aN+dJHBH9ukllxWiDdFsy4PByB1+JgDYjhPTzMY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uqLdjpirIVghb1IjxsZpW5e2moG7sK1JbNa9zpIkiDAN978kslwptGE2U00JtqlylWkfuk0k8xMozxsMxYpYdfQm2ZkvbJgb4z0B3OepkV1eMSmHoNFzWTDB2ZsIXYX6J7PJH5YxeRDAg7oZsTINo6YXSQ3FojRSXZhslWeUS3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dw6KZrS4; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=P4JZ9uBON3BrTR7firwN+DrvYzwL/Xtza4LADvun1kQmx9dcEj29G076swP4uiP/HT5mLWFCQ+7fECUKC8n1fPnsI5LLTJT4ZmhCM78PcSS8ZVAsdJfMoaZSUcWb4bwnaULMXQkykji3z/DPdQVMhMP1+6e1emzW4QlJ+RtbMpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m6+dih93; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dw6KZrS4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 873211F000E9;
-	Wed, 15 Jul 2026 14:08:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m6+dih93"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8638A1F00A3A;
+	Wed, 15 Jul 2026 14:08:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784124524;
-	bh=vlrAHjYi0rWK+Yy3LM2pvm0/GbxCvyLAsLfk73J7Pzw=;
+	s=k20260515; t=1784124525;
+	bh=wcIU+uqoDe8HqlFGifwVVLXDiFspZ1Vmol8CIpV6esI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dw6KZrS4MPgZ0UmaQ8932E4FtSADEl/DOu6hBK+/luJPXX9zoR0IGobyxOuU5osOj
-	 gyNPRqfOgzhjCkBnBcRtqz5yNTXXnSC82LSjqo/6Fe6pKLsn/gFo0Zewx01w9Qg1j/
-	 OEfcWXfFOZt9zjoi7NTQ6qn2DnAcmS2PjMA4FlXqTXx+mceanWNFMye478SRygtQ9i
-	 iLHPXppetry2aNq2lLF0JDb/eTXDzb0YR0MIhsnpjObuH5WfXtHzUjC+wfNK1kU0Vp
-	 TLqv84jvlV+g+qgwHu+YtZwpQr+xEY+7m/j+SBNjYFh342dxB+IWdHkVFi/qDKNicS
-	 UvFlW08xMIE6Q==
+	b=m6+dih93u3+EPZNdToxg4rLL/yrk5OojkChvDAl/vCQD75VTAeUWR/9Wqd5N2nKeP
+	 WS41O+9pTAny1w00AgHTyNwFhd57OQoysw6zNqAnyvDRnJk376DHQJYBMPFfempQSt
+	 nMQwsQ2raBOjbuZE62gyM3hWbQe1777yfntC72ttnc0g/35Z31z/VUi9kl5DwKj9gJ
+	 4FOmOqJzmhad2mXpk/8vrpNJF7Knov3ZmCEZu6Bb6hxEDazj1ElcYtAKFe7yAcefUX
+	 dataw3JdH0OZAyci6MVXA2bO0Ea7SQPN+KePD6LpFxvKEKeS/B7CJj+hHSm+pDeQRD
+	 C0nOQF7kr3qbg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 net 3/6] xsk: provide sufficient space in
- pool->tx_descs
+Subject: Re: [PATCH v3 net 4/6] xsk: reclaim invalid multi-buffer Tx descs
+ in ZC path
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260714140722.111645-4-maciej.fijalkowski@intel.com>
+In-Reply-To: <20260714140722.111645-5-maciej.fijalkowski@intel.com>
 References: <20260714140722.111645-1-maciej.fijalkowski@intel.com>
- <20260714140722.111645-4-maciej.fijalkowski@intel.com>
+ <20260714140722.111645-5-maciej.fijalkowski@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 15 Jul 2026 14:08:44 +0000
-Message-Id: <20260715140844.873211F000E9@smtp.kernel.org>
+Date: Wed, 15 Jul 2026 14:08:45 +0000
+Message-Id: <20260715140845.8638A1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,84 +49,122 @@ Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Heap buffer overflow in AF_XDP TX batch processing due to undersiz=
-ed `pool->tx_descs` in shared UMEM configurations.
+- [High] Processing an invalid descriptor or draining an invalid multi-buff=
+er packet at the beginning of a Tx batch stalls the Tx queue.
 --
 
---- Patch [3]: [PATCH v3 net 3/6] xsk: provide sufficient space in pool->tx=
-_descs ---
-commit 6f635cabf694299ed3f7be4ce0e5f328e6bd90e0
+--- Patch [4]: [PATCH v3 net 4/6] xsk: reclaim invalid multi-buffer Tx desc=
+s in ZC path ---
+commit f71b54a29f7fa6021e0f05cf7b9e1dfd86287c21
 Author: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-xsk: provide sufficient space in pool->tx_descs
+xsk: reclaim invalid multi-buffer Tx descs in ZC path
 
-The temporary Tx descriptor array in an XSK buffer pool is currently
-sized from the Tx ring of the socket that creates the pool.
+This commit updates the zero-copy Tx batch parser to process descriptors in
+packet units rather than individually. It ensures that descriptors belonging
+to invalid or oversized multi-buffer packets are properly drained and
+returned to the completion ring for reclamation without being sent to the
+driver.
+
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 385a3f4a1b320..2909a0ec68373 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
 
 [ ... ]
 
-> Size the temporary descriptor array to the larger of the first Tx ring
-> and the device's xdp_zc_max_segs capability. This keeps the array large
-> enough to inspect one maximum-sized valid packet. Larger shared Tx rings
-> do not require further resizing, as they can be processed over multiple
-> batches.
+> @@ -603,19 +758,16 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_=
+pool *pool, u32 nb_pkts)
+>  	if (!nb_pkts)
+>  		goto out;
+> =20
+> -	nb_pkts =3D xskq_cons_read_desc_batch(xs->tx, pool, nb_pkts);
+> -	if (!nb_pkts) {
+> -		xs->tx->queue_empty_descs++;
+> -		goto out;
+> -	}
+> -
+> -	__xskq_cons_release(xs->tx);
+> -	xskq_prod_write_addr_batch(pool->cq, pool->tx_descs, nb_pkts);
+> -	xs->sk.sk_write_space(&xs->sk);
+> +	batch =3D umem_shared ?
+> +		xsk_tx_peek_release_shared_desc_batch(pool, nb_pkts) :
+> +		__xsk_tx_peek_release_desc_batch(pool, xs,
+> +						 pool->tx_descs,
+> +						 nb_pkts);
+> +	xsk_tx_commit_batch(pool, &batch);
+> =20
+>  out:
+>  	rcu_read_unlock();
+> -	return nb_pkts;
+> +	return batch.tx_descs;
+>  }
 
 [Severity: High]
-This is a pre-existing issue, but is the statement that larger shared Tx
-rings do not require further resizing accurate?
+This isn't a bug introduced by this patch, but returning 0 to the driver
+here from xsk_tx_peek_release_desc_batch when the batch consists solely of
+reclaimed descriptors signals that the Tx ring is empty.
 
-If a secondary socket shares the UMEM and has a much larger TX ring than
-the first socket, pool->tx_descs is not resized, locking its size to
-max(first_socket_nentries, dev->xdp_zc_max_segs).
+Since user space typically waits for hardware completions before manually
+triggering sendmsg again, does returning 0 here result in a permanent
+Tx queue stall until an unrelated Rx packet arrives to trigger an interrupt?
 
-However, the batch reading functions don't seem to bound their reads to
-the allocated size of the array. They appear to read up to the driver's
-budget (e.g., 64) and the current socket's available elements.=20
+> diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
+> index 3e3fbb73d23e2..a15ff1929db62 100644
+> --- a/net/xdp/xsk_queue.h
+> +++ b/net/xdp/xsk_queue.h
 
-Could this cause a heap buffer overflow when writing into descs?
+[ ... ]
 
-net/xdp/xsk.c:xsk_tx_peek_release_fallback() {
-    ...
-	while (nb_pkts < max_entries && xsk_tx_peek_desc(pool, &descs[nb_pkts]))
-		nb_pkts++;
-    ...
-}
+> @@ -282,26 +295,49 @@ u32 xskq_cons_read_desc_batch(struct xsk_queue *q, =
+struct xsk_buff_pool *pool,
+>  		descs[nb_entries] =3D ring->desc[idx];
+>  		cached_cons++;
+>  		parse_desc(q, pool, &descs[nb_entries], &parsed);
+> -		if (unlikely(!parsed.valid))
+> -			break;
+> +		if (unlikely(!parsed.valid)) {
+> +			if (!drain && !nr_frags && !parsed.mb)
+> +				break;
 
-net/xdp/xsk_queue.h:xskq_cons_read_desc_batch() {
-    ...
-	while (cached_cons !=3D q->cached_prod && nb_entries < max) {
-		...
-		descs[nb_entries] =3D ring->desc[idx];
-		cached_cons++;
-    ...
-}
+[Severity: High]
+This is a pre-existing issue, but when xskq_cons_read_desc_batch encounters
+a standalone invalid descriptor at the very start of a batch, it breaks
+early out of this processing loop.
 
-If a user binds a minimal first socket (e.g. 2 entries) and a large shared
-second socket, the softirq batch process could write past the end of the
-array. Since ring->desc is memory-mapped to userspace, could an attacker
-control the overwritten heap memory?
+If no valid descriptors were accumulated yet, doesn't this result in
+returning an empty batch to the driver, causing NAPI polling to halt
+prematurely and stranding any subsequent valid packets on the ring?
 
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 43791647cf182..385a3f4a1b320 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -1557,7 +1558,8 @@ static int xsk_bind(struct socket *sock, struct soc=
-kaddr_unsized *addr, int addr
->  			 * utilizes
->  			 */
->  			if (xs->tx && !xs->pool->tx_descs) {
-> -				err =3D xp_alloc_tx_descs(xs->pool, xs);
-> +				err =3D xp_alloc_tx_descs(xs->pool, xs,
-> +							dev->xdp_zc_max_segs);
+> +
+> +			drain =3D true;
+> +		}
+> +
+> +		nr_frags++;
+> +		nb_entries++;
+> =20
+>  		if (likely(!parsed.mb)) {
+> -			total_descs +=3D (nr_frags + 1);
+> -			nr_frags =3D 0;
+> -		} else {
+> -			nr_frags++;
+> -			if (nr_frags =3D=3D pool->xdp_zc_max_segs) {
+> +			if (unlikely(drain)) {
+> +				batch.reclaim_descs =3D nr_frags;
+> +				WRITE_ONCE(xs->drain_cont, false);
+>  				nr_frags =3D 0;
+>  				break;
+>  			}
 
-This isn't a bug introduced by this patch, but since tx_descs is not
-reallocated if it already exists, the array size is permanently frozen
-to the first socket's size.
+[Severity: High]
+Similarly, this is a pre-existing issue, but breaking early here when
+finishing a drained packet will leave batch.tx_descs as 0 if no valid
+packets were seen first.
 
-Should the array be resized to accommodate the largest shared ring, or
-should the batch readers be updated to cap their reads to the array's
-actual size?
+Could this stall the Tx queue, since no valid packets are submitted to the
+hardware to generate the Tx completion interrupts that user space needs
+to resume operation?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260714140722.1116=
-45-1-maciej.fijalkowski@intel.com?part=3D3
+45-1-maciej.fijalkowski@intel.com?part=3D4
