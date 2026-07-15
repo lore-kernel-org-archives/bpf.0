@@ -1,153 +1,117 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FBF3AD51E
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 22:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D985743F0A3
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 22:08:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784153301; cv=none; b=kFOxN/AqVeErttcPC/ZdlQlIu1IAeMVmwnNik+hkyT3FWqLxBbzTN0v4iChQiMXR2L06qiRXwb9JxyUvQFDe/8FuuK79KFySV+chXhtAphqwO1V08Gk0lvwM3DLP67voIQvmjK0mFdEDpbtA2BNYiZ1OrZ08N4vAerZNtuwWR90=
+	t=1784153323; cv=none; b=GO6DIU0eXUJiJGKf0hfgcCjxr2D5NXyp3yIQ82HKFNY9mz6RW2NifOjvw6hkqGYQDDtBLcrq1hR+g5GFFEs32CPoURhxJzOHMjnmW82WMh8/9GIKT9v16tsvHuIzJK0hP529r+U6hRW+zhrOoB0YlavHiAZhegaqgoQeykp8+P0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784153301; c=relaxed/simple;
-	bh=hrb4REJDSvfMlHrQ6uyGMXKaD0sovJSQpZ6Ne9pam2k=;
+	s=arc-20240116; t=1784153323; c=relaxed/simple;
+	bh=jXm6jrWCNwVcSj5eIa1xyn7Utce70osTcmkDqf5KNJw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hT8MMBH6yTiZ8crH0LbFvcgeuLz9P9GPd6pV8T7qceX2nxRhMP1+wwMdmZdnXaUEZuPY/l0P0opvWD4LsrTCluMxIUP8YPzxY0M7MK8m9uo1r7D8qWWzY90rjuj2IAXe0HAkaWrnSlL38EY8HkVmt5ywjOfIQrToFbIo4nBHMFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dBxTZeBj; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=DH/GMqUmzfSLYYlHs1x1FI/6l2pSlz6HpZ8jxDnhniIk5E2zNwyb2nxh21hksrL1vYaODqu90aCTwOd1P8KQkbaWpFNQ2+8WjAWd6+xbex0dcb4waySPkTnVWx6JXdUTbrsySgk+mhPkp8EZUj4pLsw+kGHsBzyyguY+Fm3dma8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BUZWGctB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dBxTZeBj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D39621F000E9;
-	Wed, 15 Jul 2026 22:08:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BUZWGctB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD3391F000E9;
+	Wed, 15 Jul 2026 22:08:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784153300;
-	bh=4dBtTBb3An3Ip0vkCGhvUEDxbyxYy2TZLrIUeOlEBTc=;
+	s=k20260515; t=1784153322;
+	bh=yA9gAdyLAvI9NxqltCZSlPY8NkhGW3elH7Xx1WBzeGk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dBxTZeBj/aNiIiEntRsgoKQ1msDx41DtRBnXLFXYdYLSC1QWsFMU/jCh9Mt5dkdSU
-	 ddnbo0Ruk1r/zxDUQv04VdZ2kSyWx82+xj8b6KUbxchaoprhTu7/XCksLX4leqF1N9
-	 XxUyWUSU7cvjZoE2mS0NupVOzfsA0VtnzW6xgggDaPd6LiRBt9Rk6AMUUcHNAMOPKW
-	 Ee9LOLWOLhSJEIgsbjFKoI7MFgSXKE7WEYrDWT+liOmWBbwh+CfwrDcI1RyRYbxZzI
-	 ijyfVcL3xkhPp5hSamrkTPi/j2T1rpyfRdOzuONHkTrO2a8DwqhhX0FdZkxGkZt7Ix
-	 l56sToiOkrcCQ==
+	b=BUZWGctBldILfCumkQNXYuOc8urNjyO0mZ27VuaG+hsg34F6mOs8qOfzlDlktF2GC
+	 um5zvT5AwHPL3+ao+HKhsll00C3ynvLMmBI1nkxBwBNYK/YwxbsxdU5MecVdXEB3N8
+	 oLDe0esaIhZ7taaa2kFqda99e3hPYw6DHboe/K/ikCmcsUJez97jQ6t0jQIYl+HMfG
+	 GpwW61JYD1IBPK9itRcRnB/ezJQSZqClBxa8frrz+AAUL6LLQ1/f8IWo7oLn7M2U8O
+	 tgUvJbI42OTxJrHzg1ltS0R3v83TKsBG8Oov1JWMNFhk8wYwOUSznh7rxxzHiAthui
+	 nRTWmZmbLmgeA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 7/8] selftests/bpf: Add test for
- bpf_skb_rx_checksum kfunc
+Subject: Re: [PATCH bpf-next v5 2/8] net: veth: add xmo_rx_checksum callback
+ to veth driver
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Lorenzo Bianconi" <lorenzo@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260715-bpf-xdp-meta-rxcksum-v5-7-623d5c0d0ab7@kernel.org>
+In-Reply-To: <20260715-bpf-xdp-meta-rxcksum-v5-2-623d5c0d0ab7@kernel.org>
 References: <20260715-bpf-xdp-meta-rxcksum-v5-0-623d5c0d0ab7@kernel.org>
- <20260715-bpf-xdp-meta-rxcksum-v5-7-623d5c0d0ab7@kernel.org>
+ <20260715-bpf-xdp-meta-rxcksum-v5-2-623d5c0d0ab7@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 15 Jul 2026 22:08:19 +0000
-Message-Id: <20260715220819.D39621F000E9@smtp.kernel.org>
+Date: Wed, 15 Jul 2026 22:08:41 +0000
+Message-Id: <20260715220841.AD3391F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The `csum_cnt` array map is sized incorrectly and explicitly dro=
-ps valid `SKB_CSUM_PARTIAL` checksum states.
-- [Low] Passing an `enum skb_csum *` to a kfunc expecting a `__u32 *` cause=
-s an incompatible pointer type warning.
-- [Low] The multi-line comment for `bpf_skb_rx_checksum` violates the requi=
-red BPF subsystem comment style.
+- [High] veth_xdp_rx_checksum incorrectly maps CHECKSUM_PARTIAL to XDP_CHEC=
+KSUM_NONE, causing XDP programs to drop valid locally-generated packets.
 --
 
---- Patch [7]: [PATCH bpf-next v5 7/8] selftests/bpf: Add test for bpf_skb_=
-rx_checksum kfunc ---
-commit b45897a4d5ef22742e4af5ab8e7a00ba0c92d2f2
+--- Patch [2]: [PATCH bpf-next v5 2/8] net: veth: add xmo_rx_checksum callb=
+ack to veth driver ---
+commit 34eae1c96706424d6fb3ab7f5a60445ee0f6dd08
 Author: Lorenzo Bianconi <lorenzo@kernel.org>
 
-selftests/bpf: Add test for bpf_skb_rx_checksum kfunc
+net: veth: add xmo_rx_checksum callback to veth driver
 
-This commit adds a selftest for the newly added bpf_skb_rx_checksum() kfunc.
-The test consists of a TC BPF program that calls the kfunc and records the
-checksum type, along with a userspace test runner.
+Implement xmo_rx_checksum callback in veth driver to report RX checksum
+result to the eBPF program bounded to the veth device.
 
-> diff --git a/tools/testing/selftests/bpf/bpf_kfuncs.h b/tools/testing/sel=
-ftests/bpf/bpf_kfuncs.h
-> index ae71e9b690518..d03572e26df2d 100644
-> --- a/tools/testing/selftests/bpf/bpf_kfuncs.h
-> +++ b/tools/testing/selftests/bpf/bpf_kfuncs.h
-> @@ -64,6 +64,14 @@ struct bpf_tcp_req_attrs;
->  extern int bpf_sk_assign_tcp_reqsk(struct __sk_buff *skb, struct sock *s=
-k,
->  				   struct bpf_tcp_req_attrs *attrs, int attrs__sz) __ksym;
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index 8170bf33ccf95..dbf30089581c8 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
+> @@ -1701,6 +1701,37 @@ static int veth_xdp_rx_vlan_tag(const struct xdp_m=
+d *ctx, __be16 *vlan_proto,
+>  	return err;
+>  }
 > =20
-> +/* Description
-> + *  Read skb RX checksum info (ip_summed and csum_meta).
-
-[Severity: Low]
-This isn't a bug, but does this multi-line comment follow the BPF subsystem
-comment style? The guidelines require the opening /* to be on its own line.
-
-> + * Returns
-> + *  0 on success
-> + */
-> +extern int bpf_skb_rx_checksum(struct __sk_buff *skb, __u32 *ip_summed,
-> +			       __u32 *csum_meta) __ksym;
-> +
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/skb_rx_checksum.c b/tools/=
-testing/selftests/bpf/progs/skb_rx_checksum.c
-> new file mode 100644
-> index 0000000000000..dc4e192905d53
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/skb_rx_checksum.c
-> @@ -0,0 +1,33 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <linux/bpf.h>
-> +#include <linux/pkt_cls.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include "bpf_kfuncs.h"
-> +#include "skb_rx_checksum.h"
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARRAY);
-> +	__uint(max_entries, SKB_CSUM_PARTIAL);
-
-[Severity: Medium]
-Does this incorrectly restrict the map size? SKB_CSUM_PARTIAL is defined as
-3, which means the map can only hold entries for 0, 1, and 2, leaving no
-room to track the SKB_CSUM_PARTIAL state itself.
-
-> +	__type(key, __u32);
-> +	__type(value, __u64);
-> +} csum_cnt SEC(".maps");
-> +
-> +SEC("tc")
-> +int tc_rx_csum(struct __sk_buff *skb)
+> +static int veth_xdp_rx_checksum(const struct xdp_md *ctx,
+> +				enum xdp_checksum *ip_summed,
+> +				u32 *cksum, u8 *cksum_level)
 > +{
-> +	enum skb_csum ip_summed;
-> +	__u32 csum_meta;
-> +	__u64 *cnt;
+> +	const struct veth_xdp_buff *_ctx =3D (void *)ctx;
+> +	const struct sk_buff *skb =3D _ctx->skb;
 > +
-> +	bpf_skb_rx_checksum(skb, &ip_summed, &csum_meta);
-
-[Severity: Low]
-Will this cause an incompatible pointer type compiler warning in
-tc_rx_csum()? The kfunc bpf_skb_rx_checksum() expects a __u32 * for its
-second argument, but &ip_summed is a pointer to an enum skb_csum.
-
-> +	if (ip_summed < SKB_CSUM_PARTIAL) {
-
-[Severity: Medium]
-By using strictly less than SKB_CSUM_PARTIAL, does this silently drop valid
-packets that have the SKB_CSUM_PARTIAL state?
-
-> +		cnt =3D bpf_map_lookup_elem(&csum_cnt, &ip_summed);
-> +		if (cnt)
-> +			__sync_fetch_and_add(cnt, 1);
+> +	if (!skb)
+> +		return -ENODATA;
+> +
+> +	switch (skb->ip_summed) {
+> +	case CHECKSUM_COMPLETE:
+> +		*ip_summed =3D XDP_CHECKSUM_COMPLETE;
+> +		*cksum =3D skb->csum;
+> +		*cksum_level =3D 0;
+> +		break;
+> +	case CHECKSUM_UNNECESSARY:
+> +		*ip_summed =3D XDP_CHECKSUM_UNNECESSARY;
+> +		*cksum_level =3D skb->csum_level;
+> +		*cksum =3D 0;
+> +		break;
+> +	default:
+> +		*ip_summed =3D XDP_CHECKSUM_NONE;
+> +		*cksum_level =3D 0;
+> +		*cksum =3D 0;
+> +		break;
 > +	}
-> +
-> +	return TC_ACT_OK;
-> +}
+
+[Severity: High]
+Is there a missing case for CHECKSUM_PARTIAL in this switch statement inside
+veth_xdp_rx_checksum()?
+
+When a local process sends traffic over a veth pair with checksum offload
+enabled, the packet is passed to the receiving veth with skb->ip_summed
+set to CHECKSUM_PARTIAL.
+
+By falling through to the default case, this maps CHECKSUM_PARTIAL to
+XDP_CHECKSUM_NONE. An attached XDP program that validates checksums will see
+XDP_CHECKSUM_NONE and attempt to compute a software checksum. The software
+computation will fail because the TCP/UDP checksum field only contains a
+pseudo-header checksum at this point, leading to dropped packets.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260715-bpf-xdp-me=
-ta-rxcksum-v5-0-623d5c0d0ab7@kernel.org?part=3D7
+ta-rxcksum-v5-0-623d5c0d0ab7@kernel.org?part=3D2
