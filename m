@@ -1,110 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AC833CF1FE;
-	Wed, 15 Jul 2026 21:29:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB04A37E5CB
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 21:35:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784150953; cv=none; b=ZuQYmmJoS99z4GFYKbxTunpJpt5D+0bADjVbcKUDQ+UI5rLdhRwZs3FVl2HoLlWaiska7+akdx9wTRiUfBQbbiMCerUkqDJxdJ/KjmIGr4qR9XpoqDM8yDN0cxa9roiE6pSwgPG7jdpufDRqxasMy/7rRrSzpPt5A8OHtL0YfOg=
+	t=1784151346; cv=none; b=lmMWEILn1vtztpqzIskXET6Zo8j2x2qjR8GMBZm124Ys2mNcdVfAEl8TJzkV+0KSd6dewBX6YqFX+cSv4i45iNSXfKxO+25qYbEYcijqDyIKPC+0T3NGBFCSTsYg9YdREuBZ7bFdAPl7OLxwVRXWZR9TNMHi8rlSYc7kWXmRhDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784150953; c=relaxed/simple;
-	bh=wDb0ezA9eFyOvG4pCNK3eJil6YKm7mNmDWs3yGdmdkc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uMyyS3tPU3q2PY5gsKK/dSIo4Pyo2+J1xCF8uT3FNzb9JYTf71liZpUHtY5Bqmsv8z7FGkoQ1Hsearg3MVDqz3clL6MZyZ1kHCmcme+4X0XLijdiAFT51nOUdbgig2QxKjRs2pfwIE7zcTyXhc2FnGfK6XRjvXTLnJreMWATr+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qgm9gD+l; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1784151346; c=relaxed/simple;
+	bh=H06707SCcUEpQKy3SuFkb5jGYwBixHq8bDcyFHkpNwg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EjwM/D66p7FsrIFOquHH3U9iOmjtTYoah7CQgZClhYn4zJ/tHgZ8ljzHhtEUQaPrbJlsCnB69XQsuYS0ZJxE5MKIIDcryoYUv2U1CD6OGJYvOYiNFWt6tk0lOEHM64hZjRjlH+oPklgDH0GBkPrlcx3+XIMKl1v8DZGnDmg+Y9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D9gfOj6q; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qgm9gD+l"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784150951; x=1815686951;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wDb0ezA9eFyOvG4pCNK3eJil6YKm7mNmDWs3yGdmdkc=;
-  b=Qgm9gD+l471DTKMTyPWCMKy3btgTd3AlHlUMB2pm5jg+c9ncyl6RFrWn
-   b9fDoGdHWlV2btXvl8tx9j6MEd50dWy8DpNKUmIE5aCv0ASGZenHObZIH
-   j0NMJDYq+vOu8FwZJlVM27sjMjmSWpDihykbzFUsdVPqKuTBzjYdGmS7S
-   xngV2NOd8FWrRkKIOJXn3mrDSrT+y4M+DKZCklZhcD1sy++WpBIMQFJ/c
-   2gt2IItzEcJ9a22BTCzP4Rz4o8etPzHTRCcPBaSPu9pkX+ARRBqb6szM+
-   O1YjpsmZw8vNl87Qm2iHxePI+gMf223dE7pJa8jtBDqPgm311OoQnQIfN
-   w==;
-X-CSE-ConnectionGUID: Kol+Cfd5TJSHfr40bLxCJA==
-X-CSE-MsgGUID: pM40vrcvR/Srl74o3UpsVg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11847"; a="84897313"
-X-IronPort-AV: E=Sophos;i="6.25,166,1779174000"; 
-   d="scan'208";a="84897313"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2026 14:29:11 -0700
-X-CSE-ConnectionGUID: j2zqk8J3TmyP7lamzXyFAg==
-X-CSE-MsgGUID: sHu8xZFPQjSTg5dDdA8UPg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,166,1779174000"; 
-   d="scan'208";a="260616267"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2026 14:29:11 -0700
-Date: Wed, 15 Jul 2026 14:29:11 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: stable@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
-Cc: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
-	x86@kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH 6.12.y 6/6] bpf: Prefer dirty packs for eBPF allocations
-Message-ID: <20260715-cbpf-jit-spray-hardening-6-12-y-v1-6-d8585a9aed80@linux.intel.com>
-X-Mailer: b4 0.16-dev
-References: <20260715-cbpf-jit-spray-hardening-6-12-y-v1-0-d8585a9aed80@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D9gfOj6q"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-474560436c3so1929018f8f.0
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 14:35:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784151343; x=1784756143; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=XoPbLUiXGDVybmpDf9ldp04oUouyQ+e8sy+2Axcu02k=;
+        b=D9gfOj6qVfv+R1Mdq9wEJiKaoKsEPAb+ckiNPGzL4iYTQCQudsm2ew/lO+SNaK3ttp
+         SgpguTVx3ur5KwSco+6mCYXO69HMfG1AVgS3NFFy1KXfKlnIxa/M9UKi3+429xhSdFMK
+         7b2W7Xq3cYZOOZtLBKUrSNBmgCILfMWKv1ilaAGEmGd9eFie3PXwsvLtueM8CERddAQY
+         puyrt12IjRbjauOJ710lf1pwY7wn7KFTJ7ACq89h8Lgh237dDQCSc+Zu7de08HVatplQ
+         GbL1Fj/LdqeYtjQne7AtEo2f12HD39K7pnN2RxB/1H3OmKIX4XU4J1iwcBcTFjRRHj9O
+         4fFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784151343; x=1784756143;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=XoPbLUiXGDVybmpDf9ldp04oUouyQ+e8sy+2Axcu02k=;
+        b=JVQKQhoUOjfSDInPbcx9fKUdIub2QBrfuOF5Yvjyu55k4Trf456S274BtHkuscuQ35
+         U6IE8GY6JvdfpoQqH+zXHOyzv7asqraq9/SWbQiEKNSOrf4YYAmcx+mkGZaGDBEhRzoY
+         E5dGIXARC5keWOuxR2QSvgq2vXwYq1w62QltkcCPtA8G+pmAjae1O+xqhNkfb/JNCNzD
+         2SbrMXgiIimr0yZErXzM5l6lHi/Fi2gs885CLYAD3My+9DmWlIlf9daY0ZeJYmDznJSY
+         cGr33yFPGeIEp1/GiX5Ffxlqt/Bq5ZZjurGYuLfUb7FLjnEQk2Q2BsXWwLK5hZigLjf5
+         JLWA==
+X-Gm-Message-State: AOJu0YwpMlZEEsAa8CNV13XZ+T2V66IGP83C+IHzBD+mtQ9ZzMaKqx9m
+	LZJGOcRZ7RaWRaHcXpIDMlMzSNzwc25eQJa/ucUlTFm/NJzL/xeXSe6q
+X-Gm-Gg: AfdE7ck0kzlyguI75lIf/w7TjPtiUDp5l4rE1htFK/lNam/WEgUaHMwWhlPEon4Vfjb
+	0f/S3C1SO/LXX6p1loKmHlqM/l/JxuQ4ys3m13szmmRU/sxge62mDAUtGt4CvjJBmZMqIwMKwFt
+	ez4um2zC/8XWUuAMrD1yR+DSnPhTKyoujOn16A3opzW8Mwj6DvXZFB0LRJXdcJEKtl8S2AE3x7p
+	2ChfyIuNyO9YEh8nFr8/gMpSXu/YLUln6awm97JHZpSN2lxVZo/+jczKB3Vu3vweDZPAtApiOXq
+	hx8PQYjWNDp5jyLmUN62NvcP262MR2iV1omASKhdeLvPK7P8j5EBCUydUmqsonqLOYuj3vKckjQ
+	jLuaKK+QXvLjmwRpK9c3I9TQG+7688XXny4chTmhQzjX9o2Np+IgbL8l7i52o67SEKQlbAwK8wJ
+	JOz+HDLhbT64gnxPh7peQEGZoPX1RmTWUtOwYnD5PVdZwVi9K4+RoH06Uvd7G22U4IZtsJZPPsz
+	L8w
+X-Received: by 2002:a5d:5f51:0:b0:47f:51bc:efe2 with SMTP id ffacd0b85a97d-47f51bd05bcmr4660373f8f.11.1784151342782;
+        Wed, 15 Jul 2026 14:35:42 -0700 (PDT)
+Received: from localhost.localdomain (host86-153-201-25.range86-153.btcentralplus.com. [86.153.201.25])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f4635c86csm19224122f8f.16.2026.07.15.14.35.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2026 14:35:42 -0700 (PDT)
+From: Nnamdi Onyeyiri <nnamdio@gmail.com>
+To: jiayuan.chen@linux.dev
+Cc: bpf@vger.kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	horms@kernel.org,
+	jakub@cloudflare.com,
+	john.fastabend@gmail.com,
+	kuba@kernel.org,
+	kuniyu@google.com,
+	ncardwell@google.com,
+	netdev@vger.kernel.org,
+	nnamdio@gmail.com,
+	pabeni@redhat.com,
+	sashiko-reviews@lists.linux.dev
+Subject: [PATCH v4 0/2] bpf, sockmap: handle spurious tcp_msg_wait_data() wakeup
+Date: Wed, 15 Jul 2026 22:35:36 +0100
+Message-ID: <20260715213538.37229-1-nnamdio@gmail.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <5b07d2ab-84ee-46ae-84c9-7542499d26d7@linux.dev>
+References: <5b07d2ab-84ee-46ae-84c9-7542499d26d7@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260715-cbpf-jit-spray-hardening-6-12-y-v1-0-d8585a9aed80@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 
-commit b72e29e0f7ee329d89f86db8700c8ea99b4a370a upstream.
+Spurious wakeups in tcp_msg_wait_data() isn't being handled by
+tcp_bpf_recvmsg() and tcp_bpf_recvmsg_parser(), leading to unexpected
+EAGAIN errors returned by recvfrom()/recv().  Adding handling for the
+wakeup and a selftest.
 
-The pack allocator only flushes predictors when reusing a dirty pack for
-cBPF, eBPF allocations never trigger a flush. Currently, eBPF picks the
-first free pack, which could be a clean pack. As an optimization, leaving
-a clean pack for cBPF can avoid flushes.
+This issue was first discovered in an application that adds sockets to
+a sockmap as a way to view the received data.  No redirects or any
+other operations are performed.
 
-Prefer dirty packs for eBPF and keep clean packs free for cBPF. This
-mirrors the existing cBPF preference for clean packs: each program kind
-prefers the pack that avoids an extra flush, and falls back to the other
-kind only when no preferred pack has room. eBPF reuse of a dirty pack is
-harmless since eBPF being privileged does not flush.
+Sashiko has noted a few other pre-existing issues in the same area
+(https://patch.msgid.link/20260714205118.17DB11F000E9@smtp.kernel.org)
+that can lead to EAGAIN in tcp_bpf_recvmsg() and
+tcp_bpf_recvmsg_parser().  A local run of Sashiko also identified a
+potential issue in tcp_bpf_recvmsg() handling zero-data FIN packets when
+the MSG_PEEK flag is set.  To prevent this patchset from growing too
+large, I intend to submit follow up patches to address these once this
+one has been accepted.
 
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Changes in v2:
+- In tcp_bpf_recvmsg, handle signals and the socket closing in the loop.
+- Fix spurious wakeups when SO_RCVTIMEO has been set on the socket.
+- Link to v1: https://patch.msgid.link/ak_rR-Skd8Mvn4mH@localhost.localdomain
+
+Changes in v3:
+- Added the sockmap_recvfrom selftest.
+- Link to v2: https://patch.msgid.link/alFRK66z45eDNZA7@localhost.localdomain
+
+Changes in v4:
+- Fix potential data loss in tcp_bpf_recvmsg() when a FIN or RST has
+  been received.
+- Check the return code of pthread_create() in the selftest.
+- Fix race caused by using EXPECT macros in a thread in selftest.
+- Link to v3: https://patch.msgid.link/20260714203927.32289-1-nnamdio@gmail.com
+
+Signed-off-by: Nnamdi Onyeyiri <nnamdio@gmail.com>
 ---
- kernel/bpf/core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Nnamdi Onyeyiri (2):
+  bpf, sockmap: handle spurious tcp_msg_wait_data() wakeup
+  bpf, sockmap: handle spurious tcp_msg_wait_data() wakeup
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 665f8423b760..d9131b235f79 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -998,10 +998,10 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns, bool
- 			goto found_free_area;
- 		/*
- 		 * cBPF reuse of a dirty pack triggers a flush, so prefer a
--		 * clean pack for cBPF. eBPF never flushes, so pick the first
--		 * free pack, dirty or clean.
-+		 * clean pack for cBPF. eBPF never flushes, so steer it to a
-+		 * dirty pack and keep clean packs free for cBPF.
- 		 */
--		if (!was_classic || !pack->arch_flush_needed)
-+		if (was_classic ^ pack->arch_flush_needed)
- 			goto found_free_area;
- 		if (!fallback_pack) {
- 			fallback_pack = pack;
+ net/ipv4/tcp_bpf.c                            |  69 +++-
+ tools/testing/selftests/net/.gitignore        |   2 +
+ tools/testing/selftests/net/Makefile          |   5 +
+ .../selftests/net/sockmap_recvfrom.bpf.c      |  31 ++
+ .../testing/selftests/net/sockmap_recvfrom.c  | 299 ++++++++++++++++++
+ 5 files changed, 397 insertions(+), 9 deletions(-)
+ create mode 100644 tools/testing/selftests/net/sockmap_recvfrom.bpf.c
+ create mode 100644 tools/testing/selftests/net/sockmap_recvfrom.c
 
 -- 
-2.43.0
-
+2.52.0
 
