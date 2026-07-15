@@ -1,141 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F2D35979;
-	Wed, 15 Jul 2026 14:16:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D64382394
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 14:46:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784124991; cv=none; b=KfK0v56/ipYIpSpSwVLZDSgYBKT7x2c0ucwRMmkZtUwGBEvp1GPNUb8vxudq+Uir0Mpxdaac6BtWlQnq8UKj2fw5fik26w4ipmFQcA7vAfAAWnsKMezZHxua9QFNheDGkdsXnAIK/ZLhT7DzIvW2RBMgfn6jFXnfEZWAzSOt154=
+	t=1784126810; cv=none; b=B4yTkTepWxR7V63zEVs4PpuULN/89lbHjCRhGfy8dRO+SCnXPv1l7gxzjbESWZGrGB864+GfVl0xzq7tuI8od5ARbF9LTn2ghL9rOvX8fDu3xx6jVlc98ZQvawl7atgj1v6VV6wHlpCDFy2BuTzPaDSzYC0nM0z06ry4u86iEN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784124991; c=relaxed/simple;
-	bh=pGwB/bTHOs2/inH07hoVPtuuEgBzmNSQea1pphRCakw=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=LbD2t04Lre72qTgEjg4+pYX7WmhXLPaXgbE/tezeT6zqeReDKHp7qguLf7VKHXSJafYrRbzq7BWkV5P2NtFEWWqVUwUmn8aFg+UhFTqdMPmhuM25qdD/bUKT5snBLG+n0S7S9/S53Wpqic0cARIvzfzHPdpRErEiuZbY32rQ6s0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LRTh16mR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784126810; c=relaxed/simple;
+	bh=mo64BaUYAihjdcVVKQcSfM6eK8LWt+arXGZ+s8lWgfA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=E+RZ5hVjDEus2SLXonlhvk9/x9E2yavuo1EwldgnUzxt63R68PZOW5ZuZW/5ajXuW4l/ECQI2T0MW3i7UhHAE4R4E/2+Z7dWPRyv42E41QxNdIFWbg+NCgSVvZYav2VFiTbVUZMMSGQDNV9LsRPWq4VmggeFkv8Mi/5iD7R+ZF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Wm0338i7; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LRTh16mR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 179E91F000E9;
-	Wed, 15 Jul 2026 14:16:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784124989;
-	bh=t+bwpuTRptvyCO3bOxQYXi/J+49Jig0wU9FV1VYgk1U=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=LRTh16mRsy/c1BfJrXztagTLiF6iwreCzUL+HMeDfNjLTGE+v0MTqoHM8/94eqABY
-	 N+4rtgZL0EhbYK5cAWGP8gj1ZAFr8ysQnUg3LJ1PmoX2SySSt09D3L2ijTv/4nXxuR
-	 4LDqQrY4WGX8Sm/idsfK4IcTNLzYVepREK/kdWMk38B1xyBvHKg+MdYQDRQF14bs45
-	 jul3NIZI0mB8QJhljbpCxZSix9msf8uYy+MmNt65ImY7LaGLv/N9lIzfEszPHiiEtr
-	 Acq2DWAV0AppoRiInvJeAEKS8BHpzof/0gBMpYFlWjlydAXfZwQxHBKZTGLZ8EgTm/
-	 CUv8LK3VaELxw==
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Wm0338i7"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-69a50189d25so9857658a12.3
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 07:46:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1784126806; x=1784731606; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=xqdxpiRH6Z2ScU/4HRU79Jz4czUFiYR0vIxP6WbDz1c=;
+        b=Wm0338i7irtGkRSuNQvmQHZWfN4mOL3eE83FtdJlP4x0/0bjfgwPnPYeP4cCxPrkk6
+         rrV+2wOtsOwaWdLfJOurOKJqcORt89jQGO3kQ4DLMVAI/RhTujm+H4zmR3IINt71swvR
+         R6TAbD+jLK9uUW4wvWyQT73zhNPj6OQd3WjLGsYtDmuB0SXmCB9OwZSbQ+gTphqOtCBe
+         BW+iy6+1d2vuvJFq901J32wk81APqGB2n7ItuDJk8lRhG7sn/S9IO/uebkXfMOIen1QR
+         RjPxgarqxgmirS5yXXCr70dXq7pXuyI8df3ftS0ojqzC2gUdv6J6Y/lnVOCoDhCUc6XT
+         x92Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784126806; x=1784731606;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=xqdxpiRH6Z2ScU/4HRU79Jz4czUFiYR0vIxP6WbDz1c=;
+        b=F6IO77ya8a721svHVdDTpuW1Qk9BCvLApvFEA6QdvvLi+F7N4zbqpfq7sCmUB5SDoF
+         OGlmvPO7xUotIM432x8qaT5Se5GPGdgK1S+Toba6bi5juODIyQhZwR/P5HGVUlPO7D3x
+         lAGIFT4SnqVNci2pf2EKKHvv2Si+cWPa2GMWA1vdCJCHCY0oOZgXvHMR/9AoUXWxkZW0
+         0QEGgpZBhfxSdwfvi956dgb28Nl3nWO3qGNKqXalz0pougeyccPKg3sCMPZ9Co3Bp1NC
+         sKdnbSPEII6nFsA9xGUk4Jkzgc1dSwGuirJa8l7XI5jASp4Cta3uLyiGGmNgOoHl3RYs
+         1x1Q==
+X-Forwarded-Encrypted: i=1; AHgh+RpdtrEcJHTxWjp8758Bc5+pNqpLME/N3KkATxwnNLbl8q5eMxyrS2fLOdS1UIB0tEEnV1M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYDFV4W9N6kfoeM0Xz7nkOTx1qsqpAUi7+cWMhGtCWReHG5koF
+	hXwGJ3Qyh2kv7nIqRyKOykOj/5UA1mRdRbtAjcGFVNnsvyFnLpWK+pBwuLp9ucbpgHY=
+X-Gm-Gg: AfdE7cn4kSDDYZDqI9rKze0EGvI6ipN0cfjj92zILyJMqKau7RbpfVQLqHFZVXYIX7X
+	zE4XNeyqyLNLXJc+tRAIbQg5UyQKdnGdXeDa6sz3yoFuTcY6fYvJb+MDvWEzf2wEzpIRoDHyCTR
+	iP5IAy6hx0b2qKaCPonu+rLbmElWNNiFAljRiVk8CScb0ypjUx4TGur1cxKgrvQlddWHFa1Vmah
+	rJ8q+BjwvBWd9jMNGlSd6LoOgO0enDOWqJTyMiOBjUt7gtkvh1T1YFHmBWy4+8aLcgj1nb7d/GH
+	k9ob5NQClyG8SQtUONk87RE6irBh23uq/wcwSuiOnAYe0tLu7w3CNDDVdESh7Oz54ppXzrBi4u6
+	7mtZKRmXiQX0Y8prU0Qfzv3B92ppZT7HuCLYhxUpf77HM70V5fq7Z5k+vNxffD7B9E9xhaU7MLf
+	O/8i4ysKPyzh5/TdbVvdYjVW4=
+X-Received: by 2002:a17:907:9451:b0:c16:7402:1abc with SMTP id a640c23a62f3a-c167949a4ccmr216570466b.47.1784126805726;
+        Wed, 15 Jul 2026 07:46:45 -0700 (PDT)
+Received: from [172.27.236.118] ([212.187.182.162])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c16873187absm45796466b.38.2026.07.15.07.46.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jul 2026 07:46:45 -0700 (PDT)
+Message-ID: <617b1d89-35f5-4dee-9aeb-eac7a0d34d38@linaro.org>
+Date: Wed, 15 Jul 2026 15:46:44 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 4/5] tools/build: selftests: Allow versioning LLVM lld
+To: sashiko-reviews@lists.linux.dev, Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+References: <20260715-james-perf-llvm-version-v3-0-8854bfe5af7e@linaro.org>
+ <20260715-james-perf-llvm-version-v3-4-8854bfe5af7e@linaro.org>
+ <20260715124513.8DA9E1F000E9@smtp.kernel.org>
+Content-Language: en-US
+From: James Clark <james.clark@linaro.org>
+In-Reply-To: <20260715124513.8DA9E1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH mm-hotfixes v3 1/4] mm/vmalloc: acquire init_mm lock on
- huge vmap to avoid ptdump UAF
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Kiryl Shutsemau <kas@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Suren Baghdasaryan <surenb@google.com>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Shakeel Butt <shakeel.butt@linux.dev>, David Hildenbrand <david@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
- Uladzislau Rezki <urezki@gmail.com>, Toshi Kani <toshi.kani@hpe.com>, 
- Dave Hansen <dave.hansen@linux.intel.com>, 
- Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Dev Jain <dev.jain@arm.com>, 
- Ryan Roberts <ryan.roberts@arm.com>, David Carlier <devnexen@gmail.com>, 
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org, 
- syzbot+fd95a72470f5a44e464c@syzkaller.appspotmail.com
-In-Reply-To: <aldhVdwj9oMRN1Lk@thinkstation>
-References: <20260714-series-vmap-race-fix-v3-0-b812eccfa0f9@kernel.org>
- <20260714-series-vmap-race-fix-v3-1-b812eccfa0f9@kernel.org>
- <aldhVdwj9oMRN1Lk@thinkstation>
-Date: Wed, 15 Jul 2026 15:16:08 +0100
-Message-Id: <178412496800.59347.11482869717348078349.b4-reply@b4>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1974; i=ljs@kernel.org;
- h=from:subject:message-id; bh=pGwB/bTHOs2/inH07hoVPtuuEgBzmNSQea1pphRCakw=;
- b=kA0DAAoWz53NioHifxQByyZiAGpXlimhljcAvWKWFrIOS3sEzEn8GxUJs2S9+ijUshZ0yWDKX
- oh1BAAWCgAdFiEE5/QXv1IUVp6J0E9Gz53NioHifxQFAmpXlikACgkQz53NioHifxSp3QD/TBV5
- Z46e/1R1KuwDd9I5f4zeXSY2PL7Lfd/HyDWWJhEA/2/77m0B36Vzye1+PL6ojrs5HOdPpWBBkzu
- ZANDfPtQA
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-On 2026-07-15 11:34 +0100, Kiryl Shutsemau wrote:
-> On Tue, Jul 14, 2026 at 06:24:23PM +0100, Lorenzo Stoakes wrote:
-> > Currently there is a nasty race between ptdump and vmap when attempting to
-> > map a huge P4D, PMD or PUD entry:
->
-> Nit: that's a strange order of levels :P
 
-Ha, seems I couldn't decide on ordering so went with something random :P
 
-Let's try 'P4D, PUD or PMD' instead :))
-
->
-> > Fix this by holding the mmap read lock in vmap_try_huge_*() when freeing
-> > page tables.
->
-> How about adding here something like:
->
->   The read lock is sufficient: ptdump is the only walker that must be
->   excluded and it holds the mmap write lock. Other holders of the read
->   lock may run concurrently, but each exclusively owns the range it
->   operates on and cannot reach the page tables freed here.
-
-You mean maybe I put the commit message on _too_ much of a diet? :)
-
-Yeah sure, sounds good.
-
->
-> > +	/*
-> > +	 * Kernel page table walkers either walk ranges they own exclusively or
-> > +	 * hold the mmap write lock on init_mm (ptdump being the motivating
-> > +	 * case).
-> > +	 *
-> > +	 * Therefore, acquire the mmap read lock to prevent use-after-free when
-> > +	 * freeing page tables.
-> > +	 */
->
-> Same for the comment, maybe:
->
->       /*
->        * Acquire the mmap read lock to exclude ptdump, which walks
->        * kernel page tables it does not own under the mmap write lock.
-+	 *
->        * Concurrent read lock holders are safe: each exclusively owns
->        * the range it operates on and cannot reach this page table.
->        */
-
-Yeah that's better agreed.
-
-Let's replace it, but I think (being super nitty) with an extra blank line as
-above.
-
->
-> With that:
->
-> Reviewed-by: Kiryl Shutsemau <kas@kernel.org>
-
-Thanks!
-
->
+On 15/07/2026 13:45, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [Medium] Bypassing Clang's internal linker path resolution causes silent linker version mismatches for out-of-path toolchains.
+> - [Low] Unbalanced parenthesis in the `USE_LD_ERR` error messages.
 > --
->   Kiryl Shutsemau / Kirill A. Shutemov
->
+> 
+> --- Patch [4]: [PATCH v3 4/5] tools/build: selftests: Allow versioning LLVM lld ---
+> commit cdccb2d14502b0641ebfd4e8ddb945bdb605ed46
+> Author: James Clark <james.clark@linaro.org>
+> 
+> tools/build: selftests: Allow versioning LLVM lld
+> 
+> This commit updates the BPF selftests Makefile to use the LLD variable
+> from Makefile.include to ensure consistency with the rest of the LLVM
+> toolchain. It explicitly resolves paths to the linker via shell commands
+> and passes the result to clang's -fuse-ld flag.
+> 
+>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+>> --- a/tools/testing/selftests/bpf/Makefile
+>> +++ b/tools/testing/selftests/bpf/Makefile
+>> @@ -264,30 +264,34 @@ $(OUTPUT)/%:%.c
+>>   
+>>   # LLVM's ld.lld doesn't support all the architectures, so use it only on x86
+>>   ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
+>> -LLD := lld
+>> +USE_LD := $(shell command -v $(LLD))
+> 
+> [Severity: Medium]
+> Will this shell resolution cause silent linker version mismatches if a user
+> builds with an out-of-path compiler (e.g., CLANG=/path/to/clang) without
+> setting LLVM= or modifying the system PATH?
+> 
+> Previously, passing -fuse-ld=lld allowed clang to natively resolve the ld.lld
+> binary relative to its own executable path. Bypassing clang's internal linker
+> path resolution with `shell command -v` might cause the build to pick up a
+> system linker (like /usr/bin/ld.lld) instead of the bundled one.
+> 
 
-Andrew - could you fix the commit message and the comment as above? Can respin
-if needed.
+I can just drop this patch. I assumed $LLD should behave like the other 
+tools, but it's only used here where the compiler already picks it's 
+sibling linker with the correct version.
 
-Thanks, Lorenzo
+>> +USE_LD_ERR = linker '$(LLD)' not found - add it to PATH, or pass LLVM=/path/ or LLD=/abs/ld.lld)
+> 
+> [Severity: Low]
+> Is there an extra closing parenthesis at the end of this error message string?
+> 
+>>   else
+>> -LLD := $(shell command -v $(LD))
+>> +USE_LD := $(shell command -v $(LD))
+>> +USE_LD_ERR = linker '$(LD)' not found - add it to PATH, or pass LLVM=/path/ or LD=/abs/ld)
+> 
+> [Severity: Low]
+> Is there also an unbalanced closing parenthesis here?
+> 
+>>   endif
+> 
 
