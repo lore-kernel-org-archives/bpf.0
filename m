@@ -1,89 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14E330AAA9;
-	Wed, 15 Jul 2026 08:40:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8F53D891C;
+	Wed, 15 Jul 2026 08:49:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784104840; cv=none; b=F395zsBGHSYnNfNGD2hUpSg6YEuJeJ1wd/KbIwbjnjy0Vq1W2ZaZDq02HzjcCQ9Ozl5lEn5YFamzfEVeBy2r/o9q6mzMuTUN+VMxeR3kGa/bwts4H83Bhuutx0FWm2ZnNgw+ZyXi+cPa2ZbmUFwGc8OPfYRyPagMSzKefLh0R2s=
+	t=1784105403; cv=none; b=eNsoJO4MYxZzPmHrDetgcFvpPoEwyt4vA1Bz5ohGAKyRLYtoGnJmz8Hc9ai9gxuEsQfvbONO8lGUsscQeoXmVJBN7ry9V7ROkkxbhp4VtFqw80WrqCOO3Xopi50YObi+RqWK74v39+S2AiQUarFs9Yn7fBBcRkrfoTNEj4aV+Rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784104840; c=relaxed/simple;
-	bh=XZ+UP6SL1gjTGREjGTlBL+zx0cwpy4UD3RrZUMJYC4U=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=HAdInKOIBBZReHBMTwjkYiAdgwppI/CmC4xwjOf8RD93KKAPuoTeGMKBiM/JKBPDqzJlVFIe3IyTP6cCscsemdj9a6SAoqcLQqn9RjxJvuPp/OBKwzFeSyB55l+RkDzTnnwPWP4ZvDInKZj/3SZDfXyAJoHYludjGEUprM6xu5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VQ3MIUm3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784105403; c=relaxed/simple;
+	bh=uitRDkWW53iDM4jOjF4jr38Fhuk8vDR/4csWNguwm80=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gJZArQ1NPlP0UclcP7WxFLcoaF/JXZoHM4s8lHlh+yM+P4PPyoEMrVLA/sYJ1eYw0Qnu9TeZ6iQwxRSRSjiI5kv0wzfF7Dfj+qjkibZe2lJTyoNSzkmjzaFbMMIkhon48YPyad7PRqlwU0u1MFPXGN+tmPkvbg279J8tAZ8kt98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eTTQs1kH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VQ3MIUm3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86EAD1F000E9;
-	Wed, 15 Jul 2026 08:40:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eTTQs1kH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F0A91F00A3A;
+	Wed, 15 Jul 2026 08:49:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784104838;
-	bh=zAjrGa64tqK/7nRkcEaSFxMhCRl3hQjTgA9NIHb98NE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=VQ3MIUm3hlselemW6SnktNAF6vZ4Za3/HscrWSRlRra1m+kUetXOhxxeu/cX8smhp
-	 ApQe4Dj3lMTtSziawoOgL8c5dFJ8zNaEh/WkJC6TLMMjPRMZuJcxKgtaaVLsXU1i54
-	 kJkmykmHz40LB0mgIEZ4NWkB23pwK6dm8MRx+Eel/B3XynyPDpOjzOtFhw3dznhT2L
-	 fPsaqkCAdkSx+maf5PcbAM1zzQLKZSZ/wD2wsvzI6tCej4xMKz98GYleWeI1H1PLb/
-	 CZE8gmkvDn1X92jt2xJEjJbIP8P2F9rDhhyYNrNLbm+Uqyn3W1nivD/XPU9NLlZRtu
-	 Djy0QMIdKfOLQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0AC03938C6F;
-	Wed, 15 Jul 2026 08:40:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1784105395;
+	bh=uitRDkWW53iDM4jOjF4jr38Fhuk8vDR/4csWNguwm80=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=eTTQs1kHDnv24z6sGGe74snLCNDI9BRDFvqV3VvH2UoGiOAL18jl/9sh+xVdzeprE
+	 1I+twMPVuuhWSHXX51WIqCtMvpOFG1qOBBPzoip6tGHXtDVeOpqTXBjTGbr2FFpnIL
+	 VLc01Le+nkjUAgDNbODM6IGcg8S06zlb+7RQSxcYeiMc5NJMnP2mtFihcOshJLo2jd
+	 RjH58YOIl7PvuElpdTUJ/Wo3VQWNhjtRfveKy0ovWEC/F3TlkTf3uxBggMtgPfUTEV
+	 GphG0Hd5vZ2U8OEqG43VvUi77GxBwfakSQ5av4f0VkfQ7c6fn17j6XVxYnOK9x5h9g
+	 u6AK2ovZnt79g==
+Date: Wed, 15 Jul 2026 09:49:36 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Suren Baghdasaryan <surenb@google.com>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+	Uladzislau Rezki <urezki@gmail.com>, Toshi Kani <toshi.kani@hpe.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Kiryl Shutsemau <kas@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Dev Jain <dev.jain@arm.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, David Carlier <devnexen@gmail.com>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	stable@vger.kernel.org
+Subject: Re: [PATCH mm-hotfixes v3 2/4] x86/mm/pat: acquire mmap lock on page
+ table free to avoid ptdump UAF
+Message-ID: <aldJG6vysez8HVJ4@lucifer>
+References: <20260714-series-vmap-race-fix-v3-0-b812eccfa0f9@kernel.org>
+ <20260714-series-vmap-race-fix-v3-2-b812eccfa0f9@kernel.org>
+ <13fcd4d7-0efc-4aa5-9425-8f4fa05c8eee@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v4 0/4] bpf, sockmap: Fix sockmap leaking UDP socks
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178410481264.3960544.5024095828575176304.git-patchwork-notify@kernel.org>
-Date: Wed, 15 Jul 2026 08:40:12 +0000
-References: <20260707-sockmap-lookup-udp-leak-v4-0-f878346f27ab@rbox.co>
-In-Reply-To: <20260707-sockmap-lookup-udp-leak-v4-0-f878346f27ab@rbox.co>
-To: Michal Luczaj <mhal@rbox.co>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- shuah@kernel.org, john.fastabend@gmail.com, jakub@cloudflare.com,
- jiayuan.chen@linux.dev, edumazet@google.com, kuniyu@google.com,
- pabeni@redhat.com, willemb@google.com, davem@davemloft.net, kuba@kernel.org,
- horms@kernel.org, cong.wang@bytedance.com, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <13fcd4d7-0efc-4aa5-9425-8f4fa05c8eee@intel.com>
 
-Hello:
+On Tue, Jul 14, 2026 at 10:29:51AM -0700, Dave Hansen wrote:
+> On 7/14/26 10:24, Lorenzo Stoakes wrote:
+> ...
+> > Resolve the issue by acquiring the mmap read lock on init_mm which prevents
+> > a concurrent ptdump as it acquires the write lock.
+>
+> The move over to locking on init_mm instead of current->mm fixes the
+> earlier issues I saw with this. Thanks for doing that!
 
-This series was applied to bpf/bpf.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+No worries! It's kinda laying foundations and then addressing things with other
+patches in the series, which is why Mike's suggestion of combining all the
+patches in one series was clearly the right way to go :)
 
-On Tue, 07 Jul 2026 06:23:55 +0200 you wrote:
-> Fix for UDP sockets getting leaked during sockmap lookup/release.
-> Accompanied by selftests updates.
-> 
-> Two Sashiko's concerns to be addressed separately:
-> https://lore.kernel.org/bpf/20260626205814.BAC3C1F000E9@smtp.kernel.org/
-> 
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> 
-> [...]
+>
+> Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
+>
 
-Here is the summary with links:
-  - [bpf,v4,1/4] selftests/bpf: Ensure UDP sockets are bound
-    https://git.kernel.org/bpf/bpf/c/fe3ff273767e
-  - [bpf,v4,2/4] bpf, sockmap: Reject unhashed UDP sockets on sockmap update
-    https://git.kernel.org/bpf/bpf/c/66efd3368ae1
-  - [bpf,v4,3/4] selftests/bpf: Adapt sockmap update error handling
-    https://git.kernel.org/bpf/bpf/c/30581eda4a07
-  - [bpf,v4,4/4] selftests/bpf: Fail unbound UDP on sockmap update
-    https://git.kernel.org/bpf/bpf/c/203b06932777
+Thanks!
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Cheers, Lorenzo
