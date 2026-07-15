@@ -1,206 +1,80 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D1EE42DA58;
-	Wed, 15 Jul 2026 10:51:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DBEE3644C5;
+	Wed, 15 Jul 2026 11:20:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784112679; cv=none; b=LtP8t4+i+KUZ1n8ct++GCN2o3ynrFPZLYCTcDGgy/W6gIeqUknDUZtGLUvH7JnMiXmE0V7ShVwxMuzCEEEH2kJKFTf++iwwekBG+qJ8TIQ7YOc/HU6+jBxPdVWTTCfJ1z1aQggWkMsT3jZkFhST49JF4wXN8J+/lYC8me+5Un8o=
+	t=1784114433; cv=none; b=ONFph4gH7Lc2UzFDfyD5B1uFKzrOmP+XFaMmj1puZB5gERor0hVi9I/+8w61+rYvRfyLcXmZLu1xmcrr9zJ84cRX330J0uf4Lzy8WzwRzegeJVi2SkBkwWwA8Zdy37l91jtKYdrbqWLssbFOTf6x7CpIUmbwmXKnNJVsC3w6sPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784112679; c=relaxed/simple;
-	bh=oPGzhaPSpgI+3ohGSTa6N7gnt2CPbtIL9fwtt+XMNVo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=qJDobpt6V9150WUNECREOJ/dgpc4C0KXyCcl41qN2StWEOfZdLFKcbmpvqLCHRHBljOxsUQVbrndjtkWrkS3MxAGQWIo8WH44wdxHaDx/JFmoc8kRxFEgnuZ679Og6uHwNTC1m3Zu15ojKB7CzKVV17f+5EbYK/YtvkmfuQ8ZsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S5oD8Zyh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1784114433; c=relaxed/simple;
+	bh=0NcWneMKzs6bNMV2FYY4+6v7TNNTf1TS4eisR/SLjvI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=PSSmYX/KwtsvDyNNssNNzAOc7o9HmD5VedJvyFG7JJNTPQhBchyr434f8qMzts1df712Em2WVQ44ZOsaiLfvzcmaPZpSsjc/rMZIQWYmekG4qENtDMuy9pocYbZIm9jB/trUdpXgI0N/ZL/+6z3BKYrt5IwNZ39cjmqulzsAmig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d0/vtt8d; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S5oD8Zyh"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 75288C2BCB9;
-	Wed, 15 Jul 2026 10:51:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1784112678;
-	bh=oPGzhaPSpgI+3ohGSTa6N7gnt2CPbtIL9fwtt+XMNVo=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=S5oD8ZyhGPh0yLNDHVHRfovhv12Tp/9JaihEEMwIvIYq+aZQgPNjQ5hsniYTKOj8G
-	 MgATrxTQo3g7jNA3WSRbHyylNXZcHylpwjloR6dtsJbRT8Ds5X56KYVoVnCdHW/FRj
-	 ZQS0U7Qs8o+wU4hgNg5Q3/bwjppG7fI48w7g8fH/ITzA13wdZqe0RS0YgkIvmBIQ3d
-	 NrWRYcO6bYumwuW3eL4NFAJyWALn5dBEb/I4IzzP81Q2IN/vyo7RCVYG5Lj5cuOuVT
-	 z5aUVWCAjLbfITjASKX5PCRPu8LmiOLmTMUI8krJuTGWrCIbG+e0o4cgEw2nPN9CU7
-	 MveU+i9THYLRQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 511E2C44501;
-	Wed, 15 Jul 2026 10:51:18 +0000 (UTC)
-From: Florian Schmaus via B4 Relay <devnull+flo.geekplace.eu@kernel.org>
-Date: Wed, 15 Jul 2026 12:51:17 +0200
-Subject: [PATCH] selftests: do not preserve ownership when installing files
- with rsync
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d0/vtt8d"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 223EF1F000E9;
+	Wed, 15 Jul 2026 11:20:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784114432;
+	bh=xK7lmLKOgzYo+r9AmMW2eLh2JhwZ/hLDl7uoITZGQR4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=d0/vtt8dZ9yFZ4+8QNNJ9Le0V2qIPlonrjJN0Wa8YpAw7q+JYfStUG+0avmfI87ZQ
+	 cJ7p4K76OQjhF0hgHwkSt08OEjWSeggJYc5GgEpdXaA8ejEAdaFidC/hnwsCsyht1v
+	 qD4Yzxkix3w+l9uyDrkHPqYn3lNpMSoqla01ZOVP4gCANaRYpf+KEYBwXy/czV/7Ya
+	 Qg17SPgemlWfThFvL0Wp3UISKed2uN7gH/nviQgBkFFSGE9BXVeJQNc7Fn92/d9NGY
+	 zspI/uVDYCr5gSmZcK9i307azdvtxMcA3QRxQ8GC8ZPQSajVPw1KwhgYa2dyhK4sx1
+	 Ipdb3dGTky4lQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 569603939352;
+	Wed, 15 Jul 2026 11:20:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260715-kselftest-rsync-right-v1-1-8df6c7734389@geekplace.eu>
-X-B4-Tracking: v=1; b=H4sIACRmV2oC/yXMQQrCMBBG4auUWTuQFGLVq4iLNv5pRyXKTCpK6
- d2NuvwW7y1kUIHRoVlI8RSTe67wm4bi1OcRLOdqal27dZ0PfDXcUoEVVnvnyCrjVLgP3ZAcdsH
- vHdX2oUjy+n2Pp79tHi6I5Tujdf0AyTWPxHkAAAA=
-X-Change-ID: 20260715-kselftest-rsync-right-a57bf0e85190
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
- Davidlohr Bueso <dave@stgolabs.net>, 
- =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Florian Schmaus <flo@geekplace.eu>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5468; i=flo@geekplace.eu;
- h=from:subject:message-id;
- bh=kprIu4Ky9iJXUA+IM60eGgnLUoGB91S6ZfNND3RnBrU=;
- b=owGbwMvMwMWoZLn8xddWhSDG02pJDFnhaaqFvB+0pp7L/2n8cF3C4rTH8/6vPLDUet7y6pWVn
- 5K2FExy7mRcz8LAyMUwU0yRZXop63wrxTsPs5/8XgcziJUJZIq0SAMDELAw8OUm5pUa6RjpmWob
- 6hkCGTpG8RA5PQaNzOLi0tQi3bSCIoe8/JLEksz8vGK9/ILUvIL0Ar20zLSSjIz8ouJUoBF6eak
- llubmpgamlm7GjkaGLs6uhmZOriZuTo6uRkbGlo7mrhZuphamRgamRgxcnAIw1+yqZf/Dd2zSYw
- V2+0beqOUruF/XK88wFnIpebZLplCP/cPa/xF+6zmD5gmt5fstGJfEvcTVhIHtchqznHCpW8mF6
- Rf/ZHyc/iHH8O7m65/9L558uIbFfIpWosvXuCuncsMUdPyi73ceWOm2S+RFplNpgECEidfyZSvu
- rFdlcCjatJXJTsAvQuynyfX2iLsWH9I4ft1cudIndP1FnmOzy+bx7DwmvqRqvu7hfrWsWwJ6S5T
- P3Q2aVB6qzMzc2MIYfsFAPvdzw0FtX42mH7FTX97f8N8l+UX+iZNZb27lGDc+q2eJ+LbjyE+DG8
- nlZyqlZ4gtu9Nvbvj9gOfjnbc2Kl2+82Gzo2fNs8l/X/ff8J9ge6EHAA==
-X-Developer-Key: i=flo@geekplace.eu; a=openpgp;
- fpr=1357B01865B2503C18453D208CAC2A9678548E35
-X-Endpoint-Received: by B4 Relay for flo@geekplace.eu/default with
- auth_id=792
-X-Original-From: Florian Schmaus <flo@geekplace.eu>
-Reply-To: flo@geekplace.eu
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix fib_lookup VLAN tests on
+ hosts
+ with forwarding on
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178411440591.4020782.15937168768043001912.git-patchwork-notify@kernel.org>
+Date: Wed, 15 Jul 2026 11:20:05 +0000
+References: <20260715100349.2684391-1-avinash.duduskar@gmail.com>
+In-Reply-To: <20260715100349.2684391-1-avinash.duduskar@gmail.com>
+To: Avinash Duduskar <avinash.duduskar@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com,
+ shuah@kernel.org, eddyz87@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ toke@redhat.com, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-From: Florian Schmaus <flo@geekplace.eu>
+Hello:
 
-When kselftests are built and installed using "make install" or
-integrated into other build systems (such as Yocto's "devtool
-modify"), the source tree might be owned by a non-root developer user.
+This patch was applied to bpf/bpf-next.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
 
-Because the installation scripts use "rsync -a", which implies -o and
--g, the installed test binaries and scripts are explicitly assigned
-the UID/GID of the source tree owner instead of the user running the
-install command. This results in UID leaks into the root filesystem.
+On Wed, 15 Jul 2026 15:33:49 +0530 you wrote:
+> The VLAN tests assume the test namespace starts with IPv4 forwarding off,
+> but a new netns copies conf/all and conf/default from init_net
+> (devinet_init_net(), with net.core.devconf_inherit_init_net at its
+> default), so on a host with net.ipv4.conf.all.forwarding=1 the devices in
+> the netns come up with forwarding already enabled. IPv6 uses compiled
+> defaults at the same sysctl value, so only the IPv4 arms are affected.
+> 
+> [...]
 
-Fix this by explicitly adding --no-owner --no-group to all rsync
-invocations across the selftests Makefiles so that the installed files
-are owned by the installing user (typically root).
+Here is the summary with links:
+  - [bpf-next] selftests/bpf: Fix fib_lookup VLAN tests on hosts with forwarding on
+    https://git.kernel.org/bpf/bpf-next/c/d1f4b56417a3
 
-Signed-off-by: Florian Schmaus <flo@geekplace.eu>
----
- tools/testing/selftests/bpf/Makefile     | 6 +++---
- tools/testing/selftests/futex/Makefile   | 2 +-
- tools/testing/selftests/lib.mk           | 8 ++++----
- tools/testing/selftests/sparc64/Makefile | 2 +-
- 4 files changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index b642ee489ea6..1ff923eab76b 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -781,7 +781,7 @@ $(TRUNNER_LIB_OBJS): $(TRUNNER_OUTPUT)/%.o:$(TOOLSDIR)/lib/%.c
- $(TRUNNER_BINARY)-extras: $(TRUNNER_EXTRA_FILES) | $(TRUNNER_OUTPUT)
- ifneq ($2:$(OUTPUT),:$(shell pwd))
- 	$$(call msg,EXT-COPY,$(TRUNNER_BINARY),$(TRUNNER_EXTRA_FILES))
--	$(Q)rsync -aq $(if $(PERMISSIVE),--ignore-missing-args) $$^ $(TRUNNER_OUTPUT)/
-+	$(Q)rsync -aq --no-owner --no-group $(if $(PERMISSIVE),--ignore-missing-args) $$^ $(TRUNNER_OUTPUT)/
- endif
- 
- # some X.test.o files have runtime dependencies on Y.bpf.o files
-@@ -1048,7 +1048,7 @@ EXTRA_CLEAN := $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)			\
- ifneq ($(PERMISSIVE),)
- override define INSTALL_SINGLE_RULE
- 	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
--	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links --ignore-missing-args $(INSTALL_LIST) $(INSTALL_PATH)/)
-+	$(if $(INSTALL_LIST),rsync -a --no-owner --no-group --copy-unsafe-links --ignore-missing-args $(INSTALL_LIST) $(INSTALL_PATH)/)
- endef
- endif
- 
-@@ -1057,7 +1057,7 @@ override define INSTALL_RULE
- 	$(DEFAULT_INSTALL_RULE)
- 	@for DIR in $(TEST_INST_SUBDIRS); do				  \
- 		mkdir -p $(INSTALL_PATH)/$$DIR;				  \
--		rsync -a $(if $(PERMISSIVE),--ignore-missing-args)	  \
-+		rsync -a --no-owner --no-group $(if $(PERMISSIVE),--ignore-missing-args)	  \
- 			$(OUTPUT)/$$DIR/*.bpf.o				  \
- 			$(INSTALL_PATH)/$$DIR;				  \
- 	done
-diff --git a/tools/testing/selftests/futex/Makefile b/tools/testing/selftests/futex/Makefile
-index 78ab2cd111f6..c59f40b837e8 100644
---- a/tools/testing/selftests/futex/Makefile
-+++ b/tools/testing/selftests/futex/Makefile
-@@ -11,7 +11,7 @@ all:
- 		mkdir $$BUILD_TARGET  -p;	\
- 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
- 		if [ -e $$DIR/$(TEST_PROGS) ]; then \
--			rsync -a $$DIR/$(TEST_PROGS) $$BUILD_TARGET/; \
-+			rsync -a --no-owner --no-group $$DIR/$(TEST_PROGS) $$BUILD_TARGET/; \
- 		fi \
- 	done
- 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index f02cc8a2e4ae..aedcee1c04c6 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -122,14 +122,14 @@ define INSTALL_INCLUDES
- 			fi; \
- 			relative_files="$$relative_files $$relative_dir/$$entry_name"; \
- 		done; \
--		cd $(SRC_PATH) && rsync -aR $$relative_files $(OBJ_PATH)/ \
-+		cd $(SRC_PATH) && rsync -aR --no-owner --no-group $$relative_files $(OBJ_PATH)/ \
- 	)
- endef
- 
- run_tests: all
- ifdef building_out_of_srctree
- 	@if [ "X$(TEST_PROGS)$(TEST_PROGS_EXTENDED)$(TEST_FILES)$(TEST_GEN_MODS_DIR)" != "X" ]; then \
--		rsync -aq --copy-unsafe-links $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(TEST_GEN_MODS_DIR) $(OUTPUT); \
-+		rsync -aq --no-owner --no-group --copy-unsafe-links $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(TEST_GEN_MODS_DIR) $(OUTPUT); \
- 	fi
- 	@$(INSTALL_INCLUDES)
- 	@if [ "X$(TEST_PROGS)" != "X" ]; then \
-@@ -150,12 +150,12 @@ clean_mods_dir:
- 
- define INSTALL_SINGLE_RULE
- 	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
--	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links $(INSTALL_LIST) $(INSTALL_PATH)/)
-+	$(if $(INSTALL_LIST),rsync -a --no-owner --no-group --copy-unsafe-links $(INSTALL_LIST) $(INSTALL_PATH)/)
- endef
- 
- define INSTALL_MODS_RULE
- 	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH)/$(INSTALL_LIST))
--	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links $(INSTALL_LIST)/*.ko $(INSTALL_PATH)/$(INSTALL_LIST))
-+	$(if $(INSTALL_LIST),rsync -a --no-owner --no-group --copy-unsafe-links $(INSTALL_LIST)/*.ko $(INSTALL_PATH)/$(INSTALL_LIST))
- endef
- 
- define INSTALL_RULE
-diff --git a/tools/testing/selftests/sparc64/Makefile b/tools/testing/selftests/sparc64/Makefile
-index 88f7be76f962..001b68e6354b 100644
---- a/tools/testing/selftests/sparc64/Makefile
-+++ b/tools/testing/selftests/sparc64/Makefile
-@@ -25,7 +25,7 @@ all:
- 		#SUBDIR test prog name should be in the form: SUBDIR_test.sh \
- 		TEST=$$DIR"_test.sh"; \
- 		if [ -e $$DIR/$$TEST ]; then \
--			rsync -a $$DIR/$$TEST $$BUILD_TARGET/; \
-+			rsync -a --no-owner --no-group $$DIR/$$TEST $$BUILD_TARGET/; \
- 		fi \
- 	done
- 
-
----
-base-commit: 3b029c035b34bbc693405ddf759f0e9b920c27f1
-change-id: 20260715-kselftest-rsync-right-a57bf0e85190
-
-Best regards,
---  
-Florian Schmaus <flo@geekplace.eu>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
