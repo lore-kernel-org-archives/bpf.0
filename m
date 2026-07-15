@@ -1,122 +1,99 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4FE40EB99
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 14:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE9437A4AF
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 14:12:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784124682; cv=none; b=Jy4J6cZkE7OyOR+9ltnbJ1bJmji4e5o8Zg1CELevNxRx7eD9xyDC0Kj1G2pwMY2EMjC89xcC+bArNRpROsFM3eY0c8BDkzIlYH729g6te/t93fid1aYQtJNc82SbLFfDqql7OWdNm6I+ns3WtQQAKU+Cm0qcPH7sj29WlB/QuPc=
+	t=1784124724; cv=none; b=NqvV+5A+KHFbBfY7LzXDC6QcPIGMwcz7kgoM0bms4vImot3S2X6Jys3pNvMEGsOnTeY4mvjx/wmzXJNWUrFFcMc98026hcg2Kpijd/sga0mrpWJEDVtOL8foBKE+P4gunu6Js7MQV7U5kIIcSbmgI+G3fVF8AqS+oQ6bipxgxM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784124682; c=relaxed/simple;
-	bh=RA9msLx8YZVz0nQkiJOmodBiTiA4Hy7Pm2CbmYB59sg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kExVTSSW//yQmxefx/vt5H0/tjFoETR48fscJW9WcxCOVSIHc6YvDvuqSdDMJXMeLP56tkTSUiedivkb3PnLUWgYkqDiek09f2w0gsXJs96Xx5gfOzzX7FkwUlmuCeKNvG9YjKry8edNGKAo7pB0KbUSto0T4woYIoCcuuhJ4+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cLGEsdhP; arc=none smtp.client-ip=91.218.175.189
+	s=arc-20240116; t=1784124724; c=relaxed/simple;
+	bh=ndIKSrxKmnZE3dqZBVKJ4gJkM4iILtOVd8tk7yAm7Bo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VpHsMHhwxAJ96ZW6/wQkn+a3M7tyXqR3PB/eL0sUiNrhRNAk786nAQNzzlWAd/5mbteydx/QRDv2LCAqdykOZcAYmhxyb8IUZ1H2uDz0Lbf/nM3G4l+OUwVloOGjqfmAqIUwfEX5u1p618Z4jZix6fOBFjhGtWLj+W9KDi+ZirU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DPSNM8JO; arc=none smtp.client-ip=95.215.58.187
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cLGEsdhP"
-Message-ID: <ffb90c46-6bb4-438f-8915-6983a931d3e1@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DPSNM8JO"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784124677;
+	t=1784124720;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=sWpEQZen8y9kDoBjZT+t0D5JRqLAnm4B0/i7uKFgG+Q=;
-	b=cLGEsdhPVTzDjzk5fwYDd79KdD7FaYozHLS+NyFL3pEEuN3WeYYdebdu41LkwJPzLTM6yh
-	Vhtqmi37nNS1Hp6h0oga+1TluIc/rUexdWKiKg1s6ZmV/6lE0lIWC1R1Cqam1AMOjs7c1N
-	MORfHbZlJXN6iaMJEXZLXtpwv20JxvI=
-Date: Wed, 15 Jul 2026 22:11:01 +0800
+	bh=F4+xmeri9B7yuLUBZttyuZ0Ke5OCWdR2oNJkXqmaxfk=;
+	b=DPSNM8JOVEdpxg0EF4Tq11QjLxM5d/2/uVeFOpNT9ZYfLNsobbfDndEtQUId18Qwo4aYJ0
+	Tle3VH6+jqBI9URw+OPE3XkUegM5E3VYfzbri3+whCjuuA9TMP6BeMacK3aI6mSeIJyuvb
+	ru1z70D1zwaCl/zH/EDJYjbYLDbmpZQ=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Leon Hwang <leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 1/3] bpf: Disallow interpreter fallback for arena-related insns
+Date: Wed, 15 Jul 2026 22:11:20 +0800
+Message-ID: <20260715141122.15783-2-leon.hwang@linux.dev>
+In-Reply-To: <20260715141122.15783-1-leon.hwang@linux.dev>
+References: <20260715141122.15783-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 0/4] bpf: Inline the numeric open-coded iterator
- kfuncs
-To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>
-References: <20260715130430.318421-1-puranjay@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20260715130430.318421-1-puranjay@kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On 2026/7/15 21:04, Puranjay Mohan wrote:
-> The bpf_for(i, start, end) macro is BPF's open-coded numeric iterator. It
-> expands into calls to three kfuncs: bpf_iter_num_new() to set the iterator
-> up, bpf_iter_num_next() once per iteration, and bpf_iter_num_destroy() to
-> tear it down. The verifier emits these as ordinary kfunc calls, so a
-> bpf_for() loop pays function-call overhead on setup, teardown, and — most
-> importantly — on every single iteration via bpf_iter_num_next().
-> 
-> All three kfuncs are tiny and only touch the 8-byte on-stack iterator state
-> (struct bpf_iter_num_kern { int cur; int end; }). That makes them good
-> candidates for inlining, the same way several other special kfuncs are
-> already open-coded in bpf_fixup_kfunc_call(). This series replaces each of
-> the three calls with an equivalent inline BPF instruction sequence:
-> 
->   - bpf_iter_num_new(): keeps the (s64)end - (s64)start overflow check
->     (emitted with sign-extending moves) and returns the same
->     -EINVAL / -E2BIG / 0 results as the kfunc.
-> 
->   - bpf_iter_num_next(): the hot path. Since cur and end are int, the
->     kfunc's (s64)(s->cur + 1) >= s->end test reduces to a signed 32-bit
->     comparison of (s->cur + 1) against s->end, so the inlined code uses a
->     32-bit compare with no sign extension.
-> 
->   - bpf_iter_num_destroy(): a single 8-byte store zeroing the state.
-> 
-> The emitted instructions are plain BPF and remain valid for the
-> interpreter, so interpreter fallback stays correct and no jit_required
-> marking is needed.
-> 
-> Patch 4 adds a bench_bpf_for benchmark, modeled on the existing bpf_loop
-> benchmark, that runs a bpf_for() loop with an empty body so the
-> per-iteration iterator cost can be measured directly.
-> 
-> Results (./bench -p 1 --nr_loops 1000 bpf-for):
-> 
->   +--------+----------------------+----------------------+--------------+
->   |  arch  |       inlined        |     kfunc calls      |   result     |
->   +--------+----------------------+----------------------+--------------+
->   | x86-64 | 12884 M/s (0.078 ns) | 5812 M/s (0.172 ns)  | ~2.2x faster |
->   +--------+----------------------+----------------------+--------------+
->   | arm64  | 546.1 M/s (1.831 ns) | 545.8 M/s (1.832 ns) | neutral      |
->   +--------+----------------------+----------------------+--------------+
-> 
+Since the interpreter does not support the arena-related insns,
+interpreter fallback should not be allowed for these insns in
+core.c::__bpf_prog_select_runtime().
 
+Currently, when the interpreter executes the arena ST/LDX/STX insns,
+it would hit the BUG_ON() in ___bpf_prog_run() at run time.
 
-The bench results are excellent on x86-64.
+[    2.579196] BPF interpreter: unknown opcode a2 (imm: 0x0)
+[    2.579998] ------------[ cut here ]------------
+[    2.580652] kernel BUG at kernel/bpf/core.c:2349!
+[    2.581314] Oops: invalid opcode: 0000 [#1] SMP PTI
 
-However, after looking through patch #1 and patch #2, hmm, they seem
-quite complex.
+Set jit_required as true when arena map is used in the prog to disallow
+interpreter fallback for arena-related insns.
 
-Alexei suggested that the kfuncs could be inlined by the kernel disasm
-approach [1]. With that approach, it should be possible to inline many
-kfuncs and helpers on both x86-64 and arm64.
+Fixes: 6082b6c328b5 ("bpf: Recognize addr_space_cast instruction in the verifier.")
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ kernel/bpf/verifier.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I think we should try hard to implement the disasm approach.
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index de816063ae63..3849d3d00e15 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17873,6 +17873,7 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
+ 			return -EOPNOTSUPP;
+ 		}
+ 		env->prog->aux->arena = (void *)map;
++		env->prog->jit_required = true;
+ 		if (!bpf_arena_get_user_vm_start(env->prog->aux->arena)) {
+ 			verbose(env, "arena's user address must be set via map_extra or mmap()\n");
+ 			return -EINVAL;
+-- 
+2.55.0
 
-[1]
-https://lore.kernel.org/bpf/CAADnVQLNmQGKf5S5ZNwHYzScYBhnWFmnzLg=5Xxy4SgYKE3EfQ@mail.gmail.com/
-
-Thanks,
-Leon
-
-> On x86-64, removing the per-iteration call to bpf_iter_num_next() roughly
-> doubles throughput. On arm64 the numbers are unchanged: the loop is bound
-> by the load/store dependency chain on the on-stack iterator state rather
-> than by call overhead, so inlining neither helps nor hurts there. It still
-> removes the calls.
-> 
-> [...]
