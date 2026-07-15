@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0955F1624D5
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 07:00:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0777D34104E
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 07:09:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784098858; cv=none; b=X2XC/TsI4GGisb/hcHOsSaFNDaDmimjeWlkqkdGOJdkoH0Pfk1W9UHjrtx2gM/Fbzi+GKL8KAheQyYMFoP3ejqAwubH+m9fwn9M9uyjPetaZm1mZ/EWIkm1fZ4E3t2CcdHhtrRtRe5tUmMVAGIlgIl21YVBM5Gfq/SC7KGjjyHU=
+	t=1784099350; cv=none; b=hp+eQwkqpzGlBTDdPSOMYCsRKtyaCV62Noc90KTiT3xQeCxEk9C8WHoSnM4PcnQcqIH4eRYMqb4dy+W8mv8IkmvDkGE1r59drv4+aW1+9aA6pPyl3koPyyI33HGu9CkwYX61LiZ3D4yezrxjfq6gTfpiJ8XY+7SrJFUL7OZuUYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784098858; c=relaxed/simple;
-	bh=mCjT+rTorVfmR7V2nwCHREP7zGZHUtVYLTQwFNGL4Zo=;
+	s=arc-20240116; t=1784099350; c=relaxed/simple;
+	bh=H9HEUm8U5MK4U+UcwPTJhqyu4UwJK5xeOAfn/gMLpmY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=r6mHiO2SADQhwtX0aWLNZ3fk2P4tFzrVubRjX9PIf77kRB2kBGFL3yJRK1XOddVJfzEihyPc5EryBPT0kDyW7uFYdNDU79BKVueyeQ4C4ByohZJ97vg8V31BMubmjjcuq/bkaC7RdiWrJiaorNXONyA3ICBjrFFYWJznjGB4z/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dvQG67Kh; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=UJn/gy6BIEjDyry4ugxccruE+NBiRbJCpJpyjyitJgO6BtekTH11kEwDoHbUmFvztOjoCAtWeKGYOQ/CXXkmOla5yNEark7Y6TXAK88DKtpTB5AqrIj6WSGBiyGgTJe6hZ8YvHOuLJxgPGaOrchz8IX9CWO3fkV6nHBcNYtHB6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EkOE6BzN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dvQG67Kh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B8451F000E9;
-	Wed, 15 Jul 2026 07:00:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EkOE6BzN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B341F000E9;
+	Wed, 15 Jul 2026 07:09:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784098856;
-	bh=Xg7zIKfEQfyCJhwtrRM23wceWmzXph79ObEIeCTCDoE=;
+	s=k20260515; t=1784099348;
+	bh=H9v1g7EKp8Uf4V8A+iVOwBqfRLakLF85NSMth3QPbUo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dvQG67KhHewvEQbnE4BLbu1EBfgaVcUYsRzRhihhUXHP13qL0J/81hiN8OcRK4t5W
-	 xnXMwMkQ2s8E2967EcAzUxaGNAJYqOe4dTPzyeA+x6MBmQkZbD3ZTezLIEdRDxGlFN
-	 MPi2vhgPXhaQblhiNzBzJDybB0VexaOx7/oy/fvGn6YIps1vIpXiewxNeL6WCqP+0Q
-	 UsFQccAr6rid6lYAeNJXvipVp0lp1B+3cDw3TUzu+futIlELOKdvYDa0UnXT1GfIt4
-	 IGApTZ5IxljNrdQL7ZB4cGXhyB0/KB3EjBjCM1pxkEEGHUAixDG8tSfW+M7atx+MR8
-	 8HFmdIm2p3yVA==
+	b=EkOE6BzNsjntqrvhZq/qaQ4xgEyIs9h9yvkAA78NKezKf8VjDo4MuhsHRC2FPbmiC
+	 tHjqsuxo934jVRBBlfkbRFF+N41Fk1THIjGEJtkB1wcQ6H9P5OyNt/ZWtXkmuFym/q
+	 ysvQxtrqqKeChofeBP6U3h2uEbFFwhLMXv1pRGeCIEjKy4fsHrHEYD5smW01AjnDVG
+	 8Wlc57fPKL3kr2mwPnOnQUED1EJP8obiYOho2bAGcBUqa5JCA5nhvWpNhd2jdEeJiR
+	 XVSBiyql7rszL4IcBH9jJbZ+9FpDwwIQy+WSybRoyfFq1aW68cDGOYMpFyYn+82/ST
+	 0L/WQqZvgteyw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 7/7] bpf: Unify helper and kfunc call
- argument meta
+Subject: Re: [PATCH bpf-next v2 2/7] bpf: Factor out raw_mode-related fields
+ in bpf_call_arg_meta
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Amery Hung" <ameryhung@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260715064047.1793790-8-ameryhung@gmail.com>
+In-Reply-To: <20260715064047.1793790-3-ameryhung@gmail.com>
 References: <20260715064047.1793790-1-ameryhung@gmail.com>
- <20260715064047.1793790-8-ameryhung@gmail.com>
+ <20260715064047.1793790-3-ameryhung@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 15 Jul 2026 07:00:55 +0000
-Message-Id: <20260715070056.6B8451F000E9@smtp.kernel.org>
+Date: Wed, 15 Jul 2026 07:09:07 +0000
+Message-Id: <20260715070908.30B341F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,78 +49,74 @@ Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Uninitialized stack variable `meta.func_name` dereferenced on erro=
-r path, leading to kernel panic.
+- [Critical] `bpf_map_peek_elem` reads uninitialized stack memory when used=
+ with `BPF_MAP_TYPE_BLOOM_FILTER`, causing a kernel stack information leak.
 --
 
---- Patch [7]: [PATCH bpf-next v2 7/7] bpf: Unify helper and kfunc call arg=
-ument meta ---
-commit ca91a3b2fc7adc980912af895a2a5840eb94b51f
+--- Patch [2]: [PATCH bpf-next v2 2/7] bpf: Factor out raw_mode-related fie=
+lds in bpf_call_arg_meta ---
+commit b67be9cc9af835cbe1e71cd21cd41e24382f1240
 Author: Amery Hung <ameryhung@gmail.com>
 
-bpf: Unify helper and kfunc call argument meta
-   =20
-This commit merges bpf_call_arg_meta and bpf_kfunc_call_arg_meta into a sin=
-gle
-struct. The unused btf_id field is dropped from the helper meta as groundwo=
-rk
-for sharing argument checking logic.
+bpf: Factor out raw_mode-related fields in bpf_call_arg_meta
+
+This patch groups scattered MEM_UNINIT memory argument fields into a new
+struct arg_raw_mem_desc. It identifies raw arguments upfront in
+check_raw_mode_ok(), matching them by register number in
+check_stack_range_initialized() to eliminate the separate raw_mode flag.
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 7dd961ede88df..1a41f99a9133c 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-> @@ -12953,11 +12953,11 @@ static int check_kfunc_call(struct bpf_verifier=
-_env *env, struct bpf_insn *insn,
->  	struct bpf_reg_state *regs =3D cur_regs(env);
->  	const char *func_name, *ptr_type_name;
->  	const struct btf_type *t, *ptr_type;
-> -	struct bpf_kfunc_call_arg_meta meta;
-> +	struct bpf_call_arg_meta meta;
->  	struct bpf_insn_aux_data *insn_aux;
->  	int err, insn_idx =3D *insn_idx_p;
->  	const struct btf_param *args;
 
 [ ... ]
 
->  	/* skip for now, but return error when we find this in fixup_kfunc_call=
- */
->  	if (!insn->imm)
->  		return 0;
+> @@ -7727,7 +7725,13 @@ static bool arg_type_is_mem_size(enum bpf_arg_type=
+ type)
 > =20
->  	err =3D bpf_fetch_kfunc_arg_meta(env, insn->imm, insn->off, &meta);
->  	if (err =3D=3D -EACCES && meta.func_name)
->  		verbose(env, "calling kernel function %s is not allowed\n", meta.func_=
-name);
+>  static bool arg_type_is_raw_mem(enum bpf_arg_type type)
+>  {
+> -	return base_type(type) =3D=3D ARG_PTR_TO_MEM &&
+> +	/*
+> +	 * A map value output buffer (e.g. bpf_map_pop_elem) is also a raw
+> +	 * (uninitialized) memory argument, and like ARG_PTR_TO_MEM it may be
+> +	 * passed as a PTR_TO_STACK that reaches check_stack_range_initialized(=
+).
+> +	 */
+> +	return (base_type(type) =3D=3D ARG_PTR_TO_MEM ||
+> +		base_type(type) =3D=3D ARG_PTR_TO_MAP_VALUE) &&
+>  	       type & MEM_UNINIT;
+>  }
 
-[Severity: High]
-This is a pre-existing issue, but does this error path dereference an
-uninitialized stack variable?
+[Severity: Critical]
+This is a pre-existing issue, but does treating ARG_PTR_TO_MAP_VALUE as
+uninitialized memory expose a stack information leak when used with
+bpf_map_peek_elem() and Bloom filters?
 
-Looking at bpf_fetch_kfunc_arg_meta() in kernel/bpf/verifier.c, if
-fetch_kfunc_meta() returns an error like -EACCES, it returns early without
-initializing the struct:
+The verifier prototype bpf_map_peek_elem_proto specifies MEM_UNINIT | MEM_W=
+RITE,
+which assumes the map operation acts as an output buffer and will initialize
+the memory.
 
-int bpf_fetch_kfunc_arg_meta(...)
-{
-        ...
-        err =3D fetch_kfunc_meta(env, func_id, offset, &kfunc);
-        if (err)
-                return err;
-       =20
-        memset(meta, 0, sizeof(*meta));
-        ...
+However, when called on a BPF_MAP_TYPE_BLOOM_FILTER, bloom_map_peek_elem()
+uses the buffer strictly as an input to compute a hash without writing to i=
+t:
+
+kernel/bpf/bloom_filter.c:bloom_map_peek_elem() {
+    ...
+    for (i =3D 0; i < bloom->nr_hash_funcs; i++) {
+        h =3D hash(bloom, value, map->value_size, i);
+        if (!test_bit(h, bloom->bitset))
+            return -ENOENT;
+    }
+    ...
 }
 
-When this early return happens, the meta struct on the stack in
-check_kfunc_call() remains uninitialized. The check here for
-err =3D=3D -EACCES && meta.func_name will then evaluate garbage memory for
-meta.func_name.
-
-If the uninitialized memory evaluates to true, verbose() will dereference
-that garbage pointer, which could lead to a kernel panic. Could we initiali=
-ze
-the meta struct earlier, or zero it in check_kfunc_call() before passing it?
+Since the map never initializes the buffer, but the verifier believes it
+does, could a BPF program use this to read uninitialized kernel stack memor=
+y?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260715064047.1793=
-790-1-ameryhung@gmail.com?part=3D7
+790-1-ameryhung@gmail.com?part=3D2
