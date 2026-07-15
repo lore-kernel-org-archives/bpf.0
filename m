@@ -1,99 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8444231717D
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 07:48:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589043603D5;
+	Wed, 15 Jul 2026 08:31:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784101704; cv=none; b=fV4aSKnTIKbf8tvGGfsBS8h1D6R3emAa9qXxRdmuotAxx8fq2unBTYGwRfEjjeIg0uPQPgFwCMncDVdiz14+ZZYc4iaokEoK8xubinj9Ov9wHiGEFcm2L/Qkt6rP5FzYM06SSp2IfnH0zTJVjHV4V/aSZzodSZXxxQqXADpt1DY=
+	t=1784104311; cv=none; b=TnKzvcxlgqHWzBYcAJRXxZiI61wZOzwwg6xEf6K2nUj+W7Ng/bYjIOeFiwgPA95RecX3MjlQD1h+0CYBzv6LQ/r43WfSYqhNQzqTo2epG4B76FOCphMBHBxYX+tCqA1ukByePT2u3v2vpz2zlqjqbXYgBVNJRwdqRHXozHfWbXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784101704; c=relaxed/simple;
-	bh=R+5NUp9Szz8rsHGIF+fk7uJFcDv4Pm7B342YPWWN1cs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=SNkNBQTsbeb9IHFeJvQwI88NhsJNd8zoXNxr7/VfP7Ks/0Xx3OS2k04vLwbZY9RbGaa/tS94u3grc/XXlIi/DOhpFKDl9XlYW9wndOOQjrWTaQuNj7YZtHQVxztr2E/vf9dHCu3P24Q9F54RJyc7mfHtc6RwTE6/jvCOAK43tsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eOh7yYu/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784104311; c=relaxed/simple;
+	bh=QcqaG9bdGXl50jPu/JZyaS7ewr6T+770xaHIMx0NS0Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ybyt2qKbWOvStAzLf4p+1MGWNask0LITt0qUniTtu79nbGBJUK3VIFc68u3aex5W77ruPLB6U9VN68BxARo3TwOUhtEiTOD4y74TT7KE7+iEMSgy9r8/1xOl8Ocdy0ty0L7/7zsxh2wYOMvcIO9LkD103idiNjVMXWORPjrF2Qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XUzAtmOx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eOh7yYu/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D3771F000E9;
-	Wed, 15 Jul 2026 07:48:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XUzAtmOx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5DA41F000E9;
+	Wed, 15 Jul 2026 08:31:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784101703;
-	bh=rg64IYQjSZ9X0WOzkU0/eeMrKG39rm2hjmMztTmJTX8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=eOh7yYu/YK44oQq47CvmqB6FvSx/5CSws/nETPv1Nxw9UEIV8snwFMpcks3wWs+s7
-	 9qT9d09C/2qnJpw92mTmb3UiiTBqPFjG5smCJjGGxjld3g7Hpido55uJGMh5n8rMF3
-	 43i9BIb3swxvzRPINw2dsjo2+mo/F2Ro77u5ss4ZKzbt8RX6JErwUC/gIZ5JY+ONw2
-	 Q1d0bZ32hNPNp6tyzM23AbImWExspUO0D0nVa5aci6TeXZEUvLdPVq1Vw9bpW/IRi1
-	 qsuwfg9RGNlG4mAQx7vy2pUe/HBaT2mrje13iYB8rLhUWFNWFx6THpz1118bJ7Zq+b
-	 TlhgzuPHIhX3w==
-Content-Type: multipart/mixed; boundary="===============4563141561048231257=="
+	s=k20260515; t=1784104309;
+	bh=QcqaG9bdGXl50jPu/JZyaS7ewr6T+770xaHIMx0NS0Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=XUzAtmOxttpIajpYuy9PHtsD/bbW3lMFTsULGrMLvudH7saF0OU+fpWl05tOPF6R5
+	 tP3keWSIwMqQ8Qx6ee5BaOdgQLqR+bNqka/rqBZpHdQOLs2mDTSYbheNF78Igp0/HA
+	 Pf4kpQpBBTUT2RpHgFJtIwPFPjufQ170EIEbnVoLc4n8lvuzFvTQ3lsnkjcazdojkk
+	 J2AkTaVg7ZHOEBORZxSngiVqpWHUvWAOIRyRnMe3zvEJYh3TXK4bc+/Am4c5Zd1x1w
+	 uw/4/J0AllxcbikrYAIxECY8JQBp/wRGpkqQX0wQKp1p9DXCEiLP32lM18eK4CXR5n
+	 MuUZZ7YqLzzMg==
+Date: Wed, 15 Jul 2026 09:31:31 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Suren Baghdasaryan <surenb@google.com>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, David Hildenbrand <david@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+	Uladzislau Rezki <urezki@gmail.com>, Toshi Kani <toshi.kani@hpe.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Kiryl Shutsemau <kas@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Dev Jain <dev.jain@arm.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, David Carlier <devnexen@gmail.com>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	stable@vger.kernel.org, syzbot+fd95a72470f5a44e464c@syzkaller.appspotmail.com
+Subject: Re: [PATCH mm-hotfixes v3 0/4] mm: fix UAF caused by race between
+ ptdump and vmap pgtable freeing
+Message-ID: <aldFYDI6LFOv3GsM@lucifer>
+References: <20260714-series-vmap-race-fix-v3-0-b812eccfa0f9@kernel.org>
+ <20260714121102.9cb28d080556c94d45a6bc3e@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <4d24779bbd606775a1edd2cab18a8e82034425b4a38856813b3ac6a043a8eeaa@mail.kernel.org>
-In-Reply-To: <20260715064047.1793790-3-ameryhung@gmail.com>
-References: <20260715064047.1793790-3-ameryhung@gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/7] bpf: Factor out raw_mode-related fields in bpf_call_arg_meta
-From: bot+bpf-ci@kernel.org
-To: ameryhung@gmail.com,bpf@vger.kernel.org
-Cc: alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 15 Jul 2026 07:48:23 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260714121102.9cb28d080556c94d45a6bc3e@linux-foundation.org>
 
---===============4563141561048231257==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> commit 898896816b1b94bb310b2829155d616641a4e0b3
-> Author: Amery Hung <ameryhung@gmail.com>
+On Tue, Jul 14, 2026 at 12:11:02PM -0700, Andrew Morton wrote:
+> On Tue, 14 Jul 2026 18:24:22 +0100 Lorenzo Stoakes <ljs@kernel.org> wrote:
 >
->     bpf: Factor out raw_mode-related fields in bpf_call_arg_meta
+> > Kernel page table walkers fall into two broad categories - those ranges
+> > where no exclusion is required via walk_kernel_page_table_range_lockless()
+> > and those where exclusion is required via walk_kernel_page_table_range()
+> > or walk_page_range_debug().
+> >
+> > ...
+> >
+> > This series works around this by #ifndef CONFIG_ARM64'ing the mmap read
+> > lock in vmap logic, then partially reverting commit fa93b45fd397 ("arm64:
+> > Enable vmalloc-huge with ptdump"), keeping the enablement of huge vmap
+> > support, and removing the ifdeffery with the partial revert patch.
 >
->     To prepare for unifying the helper and kfunc call_arg_meta, group the
->     scattered MEM_UNINIT ("raw") memory argument fields (raw_mode, regno and
->     access_size) into a new struct arg_raw_mem_desc. The intention is to
->     make it clear about when these are set and used instead of fields with
->     overly generic names.
+> Thanks, I've updated mm-hotfixes-unstable.
 >
->     Identify the raw argument once, up front, in check_raw_mode_ok() (like
->     check_proto_release_reg() does for release_regno), recording its regno.
->     check_stack_range_initialized() now recognizes the raw buffer by matching
->     that regno, so the separate raw_mode flag is no longer needed, and the
->     per-argument "meta->raw_mode = arg_type & MEM_UNINIT" assignments in
->     check_func_arg() go away with it.
+> > v3:
+> > * Rebased on latest master of Linus's tree.
+> > * Accumulated tags, thanks everybody!
+> > * Reworded commit messages as per Kiryl and Boris.
 >
->     A raw memory argument can be tagged either ARG_PTR_TO_MEM | MEM_UNINIT or
->     ARG_PTR_TO_MAP_VALUE | MEM_UNINIT (the output buffer of bpf_map_pop_elem()
->     and bpf_map_peek_elem()). Either may be passed as a PTR_TO_STACK, which
->     reaches check_stack_range_initialized() through check_helper_mem_access(),
->     so both must be treated as raw. Extend arg_type_is_raw_mem() to match the
->     map value case as well; otherwise check_raw_mode_ok() would not record the
->     regno for it and an uninitialized stack buffer passed to those helpers
->     would be wrongly rejected for programs without CAP_PERFMON.
->
->     No functional change intended. This patch does not enable raw_mode
->     memory access for kfunc (i.e., uninit stack will not be allowed to be
->     passed to kfunc for unprivileged programs). Existing kfuncs with arguments
->     tagged with __uninit are either priviledged or dynptr kfuncs, which take
->     another path to make sure the access is checked by check_mem_access().
->
->     Acked-by: Eduard Zingerman <eddyz87@gmail.com>
->     Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> I've confirmed that v3 introduced no code alterations.
 
-This looks like a bug fix for MEM_UNINIT handling with map value
-arguments. The commit message explains that without the arg_type_is_raw_mem()
-extension to match ARG_PTR_TO_MAP_VALUE | MEM_UNINIT, valid programs would be
-wrongly rejected. Should this include:
-
-  Fixes: 18752d73c1898 ("bpf: Improve check_raw_mode_ok test for MEM_UNINIT-tagged types")
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29395575390
---===============4563141561048231257==--
+Thanks!
