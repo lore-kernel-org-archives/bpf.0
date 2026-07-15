@@ -1,184 +1,163 @@
-Received: from out203-205-221-149.mail.qq.com (out203-205-221-149.mail.qq.com [203.205.221.149])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF09036E46F;
-	Wed, 15 Jul 2026 01:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383FE42BC2D
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 01:40:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784078904; cv=none; b=TR52ABCdOz85qKRzB2Jrqwoq9/UEDFu0lWFBk8OfF7yhU95KvH66jTk4fgH0Yub7/MpvaExe2DiIK25zVw6FHVw+JmtnnbXiQ4xhIVhvaXPhjmsZjNOiZS6saMZHwtJ326p+terNAyz5gN93JMoOf46I8tBxdEjiwUpnqUA0c4E=
+	t=1784079638; cv=none; b=oQrNhugf4dYErx8fgwrfp7sWtSlH5YhWNEE9/ruHZSil+f6UtRHIKWVC7pJWSDAEYUwu2YjzyjcnlDf0x8J649nUoa2dk99Zqojb24BNuCAutTLSIHmEoBY6e3+5GKdUPOyegk1UEVtdjArKXEMxdDdPdLvcLgcBy+8/dhztG+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784078904; c=relaxed/simple;
-	bh=20atOgI0T765b6W6HwUmO+KNzDuKFwW+2nLs95EBFRQ=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=CbMs1SpQ9XlKNYg6gXTTjNFF9pht8wV+AZZQMDrfPx5FWLNHBnowwVmDyLeNdNIKUV/JqerKEXMXMrdDT9Z9WC6vrFpPIQjMqaTMrkGA3WG7lqdwtI2p0wxoVXg0QQ0QMbWwSqxxodwbbZq/nH+W2Bnq1BTciRM42qcB4JSpbhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=rtR0nZ4M; arc=none smtp.client-ip=203.205.221.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1784079638; c=relaxed/simple;
+	bh=tFlgfgup/umEW9I8LMFEujhd3gpVsLyx4sygYHQLOlg=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Yt077uUCvp+srQuZzWd0eDkpKcTxf8hcA6SMKMYrs19+g+csZBpeA2Yl/No9vWGHVKcFpSMKpurwqlFjrlzcoRaxgi5R+Zt8CqwnhZmoNFixlWwjhJjBGF+cHkR25Q+PqI8PCidd5jHNQ6DRajFlEOYWpuQIFGCH5y42xr259i8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IbaHopaS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="rtR0nZ4M"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1784078898;
-	bh=kG44LITixTvxuVq0CrIOkkCG4aWgKxeoPMP+cfbAv9E=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=rtR0nZ4MxLXhxRvVlHnzV5yFJEvVfjF1u0WgwGEnsFE3XDsdU70iXjcECjfO26Qdj
-	 qm6yD/L2jlCsHIJP77oodLDhADivcvcYoZ3NzllocMz9Rl+HG8BfIUTazZCHiOZFqZ
-	 u1UiAf5aKm+NPh049MeDqT6FH4mGQ9Zlxu9yFq5c=
-Received: from NUC10 ([39.156.73.14])
-	by newxmesmtplogicsvrszc50-0.qq.com (NewEsmtp) with SMTP
-	id 6FB10817; Wed, 15 Jul 2026 09:27:59 +0800
-X-QQ-mid: xmsmtpt1784078889t83qiqxay
-Message-ID: <tencent_DB0510330C3A8574B3C62E6154165FCB4709@qq.com>
-X-QQ-XMAILINFO: OVFdYp27KdlJ+X/Z9ZVknGd+tpIkFAv3GJd8mvgtvtyAUbwcBvWuQRBmgsVINL
-	 H+qJdCxex+IOhzs/3dq/6QhDY94gtKdm27o2w6cC1Jiy0YelwHnwdCUSrKl+RGy7y9FIDKvoOFu0
-	 nHJSdHviSZUaVgjrI+Duaj1O3aOFkQ5CRZlrt+ETU1DmWtb9B7GLF/nUY1G7+0s/NowGxZ6PYcA5
-	 4jqAaV4u+hUnDh/EoRFmvXWQK4UcyjupxMbyINW0naftEHsE8lejvjD9J26ICpQe/UTTGd6z5KiN
-	 ZHpuIZTmLCF1Cm6qYVnXs45SUz2KcLArQ7nYKJg+Mk2vdFmu4dGlzJHVD/ngevU5ptVcpYF8370W
-	 CXGIjH1hdvFNmabNcYVdebDyasuWCwR4OVp8bQQWEblrLYqHauLR2zz+hiBN9dXjqJrm3EvJuOyj
-	 V3KPDgxtjmQv6v7tE5BA4B/TlAp+zCWxfeOQ6Ps6y2YmgB4Fw9EsldIw3LjBZyVso1y3KvQ+8280
-	 y+4JDiCaJ9F/3iFAxpCStem+2C4CUa04Do6TzZU9m+EXc0Mc4tvblzMuP1VqOedZItI9iRN8n98+
-	 q+tlba7nDT6yNUA93xAOOve38CH5rafvzhmHGEkVU1NAbfUJiz92ipZh4icSCjpYpzhh3VB/btrk
-	 GDE5jFZbQOcCJqNHOgZMr3t2omgbZa30v2HaWUMTrZAit2iWTsJB2cK+kQ0R55T/667NYsLwCQpB
-	 V1xEcMWhPygRmq9Q7sRr2dSeDOTQcOlYypXq/AI3LLgYWrCNC+g6wRg0Jy/l5tINjXZ645f2XDEr
-	 ZmTNGgF86ftgZvOtXi4pCb5ObX8ch9rSxh9J158YH1tT8VcLIs/uLtaJ93szilrpcnKs19ToC0lx
-	 yHm8R3u6LGf+AZkSXEkuGoound2f5/QC3cpDapl3nlVO4OJopllwc73Z0VsP9pBM6c2IFqTEUtpB
-	 vlYG2v6aWzg3G/sZlkMRUf2IibHxIDKxSTkE1nVEcOE7ySefo3sqPgZkTPkFg6GUpdQ3ejqcoE0R
-	 KHpAVCvtGA0pJJBZ/oqYVBR2sNvJELPManiy1N5TutkEF1FTwPbrdfGLxONG/B61/5NYXTQTdQlI
-	 Je54vfWdF+hYXNC7M=
-X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
-From: Rong Tao <rtoax@foxmail.com>
-To: andrii@kernel.org,
-	vmalik@redhat.com,
-	ast@kernel.org
-Cc: rtoax@foxmail.com,
-	Rong Tao <rongtao@cestc.cn>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>,
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Test bpf_strcat,bpf_strncat kfuncs
-Date: Wed, 15 Jul 2026 09:27:27 +0800
-X-OQ-MSGID: <7e219bf4db2380e33b13c5134b484e58dca80e8f.1784078494.git.rtoax@foxmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <cover.1784078494.git.rtoax@foxmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IbaHopaS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B00561F000E9;
+	Wed, 15 Jul 2026 01:40:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784079636;
+	bh=63P/R4dQC93pn1YyD1fPSYAbeDgJQdFr70QcPh1/ogE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=IbaHopaSDvqXGgJ0idiksQZGXL2N26wAzBTdrFL5098qeqUrdgYMU0bDhd9dmaugS
+	 AUwSEVTc/HJb6iZ7Wxb1wPjh1K+t7UEfeSz6jJ/A9FSWAEKjz/Gu3RWdhkAhliFoyc
+	 WDzuCJVDoHomiFZxcVfrgLCm/Y4WiZmmHDe1R9DZqtPR5Y/4sPfKY25xC0D9kgBNeB
+	 wqEqiY0yquYN9Bu0jpl3t7NlPKHQX2UZMI4Q6LmKCTd7zTjevi7ofQM2Z7DggNw0d/
+	 96yyJIaOw6fLJS1rHuUnGa2zEBxpQuxMwbqLhlMrIjHGCmfxOocYl+c+XKfZkN4r/X
+	 ccV3NmtZEmpQw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: add bpf_strcat,bpf_strncat kfunc
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Rong Tao" <rtoax@foxmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <tencent_9EC04DC824CBF5124305E73564341511C405@qq.com>
 References: <cover.1784078494.git.rtoax@foxmail.com>
+ <tencent_9EC04DC824CBF5124305E73564341511C405@qq.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 15 Jul 2026 01:40:36 +0000
+Message-Id: <20260715014036.B00561F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Rong Tao <rongtao@cestc.cn>
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] bpf_strncat unconditionally reads one byte beyond the caller-speci=
+fied source limit (len) after the copy loop, causing a spurious -EFAULT if =
+the source buffer ends at a page boundary.
+- [Medium] The destination string is left completely non-null-terminated if=
+ a memory fault occurs during the copy loop.
+- [Medium] Integer overflow in the `space` calculation causes spurious `-E2=
+BIG` failures for destination buffers larger than 2GB.
+--
 
-Add tests for new kfuncs bpf_strcat() and bpf_strncat().
+--- Patch [1]: [PATCH bpf-next v2 1/2] bpf: add bpf_strcat,bpf_strncat kfun=
+c ---
+commit 638de7ac547b3d0857f680c3e68dbfcae6e2543c
+Author: Rong Tao <rongtao@cestc.cn>
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- .../selftests/bpf/prog_tests/string_kfuncs.c        |  2 ++
- .../selftests/bpf/progs/string_kfuncs_failure1.c    | 13 +++++++++++++
- .../selftests/bpf/progs/string_kfuncs_failure2.c    |  2 ++
- .../selftests/bpf/progs/string_kfuncs_success.c     |  3 +++
- 4 files changed, 20 insertions(+)
+bpf: add bpf_strcat,bpf_strncat kfunc
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-index 300032a19445..460567ef622a 100644
---- a/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-+++ b/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-@@ -24,6 +24,8 @@ static const char * const test_cases[] = {
- 	"strcasestr",
- 	"strnstr",
- 	"strncasestr",
-+	"strcat",
-+	"strncat",
- };
- 
- void run_too_long_tests(void)
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-index bddc4e8579d2..29bc7eabbb6a 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-@@ -8,6 +8,7 @@
- 
- char *user_ptr = (char *)1;
- char *invalid_kern_ptr = (char *)-1;
-+char kern_buf[32] = { "hello" };
- 
- /*
-  * When passing userspace pointers, the error code differs based on arch:
-@@ -53,6 +54,10 @@ SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null1(void *ctx) { return
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null2(void *ctx) { return bpf_strnstr("hello", NULL, 1); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strncasestr_null1(void *ctx) { return bpf_strncasestr(NULL, "hello", 1); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strncasestr_null2(void *ctx) { return bpf_strncasestr("hello", NULL, 1); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strcat_null1(void *ctx) { return bpf_strcat(NULL, 6, "hello"); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strcat_null2(void *ctx) { return bpf_strcat(kern_buf, sizeof(kern_buf), NULL); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strncat_null1(void *ctx) { return bpf_strncat(NULL, 6, "hello", 2); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strncat_null2(void *ctx) { return bpf_strncat(kern_buf, sizeof(kern_buf), NULL, 2); }
- 
- /* Passing userspace ptr to string kfuncs */
- SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_user_ptr1(void *ctx) { return bpf_strcmp(user_ptr, "hello"); }
-@@ -79,6 +84,10 @@ SEC("syscall") __retval(USER_PTR_ERR) int test_strnstr_user_ptr1(void *ctx) { re
- SEC("syscall") __retval(USER_PTR_ERR) int test_strnstr_user_ptr2(void *ctx) { return bpf_strnstr("hello", user_ptr, 1); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strncasestr_user_ptr1(void *ctx) { return bpf_strncasestr(user_ptr, "hello", 1); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strncasestr_user_ptr2(void *ctx) { return bpf_strncasestr("hello", user_ptr, 1); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcat_user_ptr1(void *ctx) { return bpf_strcat(user_ptr, 1, "hello"); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcat_user_ptr2(void *ctx) { return bpf_strcat(kern_buf, sizeof(kern_buf), user_ptr); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strncat_user_ptr1(void *ctx) { return bpf_strncat(user_ptr, 1, "hello", 2); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strncat_user_ptr2(void *ctx) { return bpf_strncat(kern_buf, sizeof(kern_buf), user_ptr, 1); }
- 
- #endif /* __TARGET_ARCH_s390 */
- 
-@@ -107,5 +116,9 @@ SEC("syscall") __retval(-EFAULT) int test_strnstr_pagefault1(void *ctx) { return
- SEC("syscall") __retval(-EFAULT) int test_strnstr_pagefault2(void *ctx) { return bpf_strnstr("hello", invalid_kern_ptr, 1); }
- SEC("syscall") __retval(-EFAULT) int test_strncasestr_pagefault1(void *ctx) { return bpf_strncasestr(invalid_kern_ptr, "hello", 1); }
- SEC("syscall") __retval(-EFAULT) int test_strncasestr_pagefault2(void *ctx) { return bpf_strncasestr("hello", invalid_kern_ptr, 1); }
-+SEC("syscall") __retval(-EFAULT) int test_strcat_pagefault1(void *ctx) { return bpf_strcat(invalid_kern_ptr, 1, "hello"); }
-+SEC("syscall") __retval(-EFAULT) int test_strcat_pagefault2(void *ctx) { return bpf_strcat(kern_buf, sizeof(kern_buf), invalid_kern_ptr); }
-+SEC("syscall") __retval(-EFAULT) int test_strncat_pagefault1(void *ctx) { return bpf_strncat(invalid_kern_ptr, 1, "hello", 2); }
-+SEC("syscall") __retval(-EFAULT) int test_strncat_pagefault2(void *ctx) { return bpf_strncat(kern_buf, sizeof(kern_buf), invalid_kern_ptr, 2); }
- 
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-index 412c53b87b18..38f0a5f326b5 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-@@ -23,5 +23,7 @@ SEC("syscall") int test_strstr_too_long(void *ctx) { return bpf_strstr(long_str,
- SEC("syscall") int test_strcasestr_too_long(void *ctx) { return bpf_strcasestr(long_str, "hello"); }
- SEC("syscall") int test_strnstr_too_long(void *ctx) { return bpf_strnstr(long_str, "hello", sizeof(long_str)); }
- SEC("syscall") int test_strncasestr_too_long(void *ctx) { return bpf_strncasestr(long_str, "hello", sizeof(long_str)); }
-+SEC("syscall") int test_strcat_too_long(void *ctx) { return bpf_strcat(long_str, sizeof(long_str), "hello"); }
-+SEC("syscall") int test_strncat_too_long(void *ctx) { return bpf_strncat(long_str, sizeof(long_str), "hello", 3); }
- 
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-index f65b1226a81a..93996b0e9595 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-@@ -6,6 +6,7 @@
- #include "errno.h"
- 
- char str[] = "hello world";
-+char buf[32] = "hello";
- 
- #define __test(retval) SEC("syscall") __success __retval(retval)
- 
-@@ -59,5 +60,7 @@ __test(-ENOENT) int test_strncasestr_notfound1(void *ctx) { return bpf_strncases
- __test(-ENOENT) int test_strncasestr_notfound2(void *ctx) { return bpf_strncasestr(str, "hello", 4); }
- __test(-ENOENT) int test_strncasestr_notfound3(void *ctx) { return bpf_strncasestr("", "a", 0); }
- __test(0) int test_strncasestr_empty(void *ctx) { return bpf_strncasestr(str, "", 1); }
-+__test(10) int test_strcat_success(void *ctx) { return bpf_strcat(buf, sizeof(buf), "world"); }
-+__test(13) int test_strncat_success(void *ctx) { return bpf_strncat(buf, sizeof(buf), "world", 3); }
- 
- char _license[] SEC("license") = "GPL";
--- 
-2.55.0
+This patch adds string concatenation kfuncs bpf_strcat and bpf_strncat to
+the BPF subsystem. These functions allow appending non-null bytes from a
+source string to a destination string with size limits.
 
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index c18f1e16edee4..401f94efd687c 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+[ ... ]
+> @@ -4195,6 +4195,96 @@ __bpf_kfunc int bpf_strncasestr(const char *s1__ig=
+n, const char *s2__ign,
+>  	return __bpf_strnstr(s1__ign, s2__ign, len, true);
+>  }
+> =20
+> +static int __bpf_strncat(char *dst, u32 dsz, const char *src, u32 sz)
+> +{
+> +	int dlen, slen, space, copied;
+> +	char cs =3D '?';
+> +
+> +	if (!copy_from_kernel_nofault_allowed(dst, 1) ||
+> +	    !copy_from_kernel_nofault_allowed(src, 1)) {
+> +		return -ERANGE;
+> +	}
+> +
+> +	dlen =3D bpf_strnlen(dst, dsz);
+> +	if (dlen < 0)
+> +		return dlen;
+> +	slen =3D bpf_strnlen(src, sz);
+> +	if (slen < 0)
+> +		return slen;
+> +
+> +	if (dlen >=3D dsz || sz =3D=3D 0 || dsz =3D=3D 0)
+> +		return -EINVAL;
+> +
+> +	space =3D dsz - dlen;
+> +	if (space <=3D 1 || space < min(slen, sz) + 1)
+> +		return -E2BIG;
+
+[Severity: Medium]
+Will this calculation overflow if dsz is greater than or equal to 2GB?
+
+Since space is a signed int and dsz is a u32, dsz - dlen can result
+in a negative number for large destination buffers, such as those from a
+BPF arena. A negative value satisfies the space <=3D 1 check, causing the
+function to incorrectly abort and return -E2BIG.
+
+> +
+> +	guard(pagefault)();
+> +	for (copied =3D 0; copied < space - 1 && copied < slen; copied++) {
+> +		__get_kernel_nofault(&cs, src, char, err_out);
+> +		if (cs =3D=3D '\0')
+> +			break;
+> +
+> +		__put_kernel_nofault(dst + dlen + copied, &cs, char, err_out);
+
+[Severity: Medium]
+Does this leave the destination string non-null-terminated if a memory fault
+occurs during the copy?
+
+If the loop copies at least one character (overwriting the destination's
+original null terminator) and then a subsequent read or write triggers a
+page fault, the code jumps directly to err_out without restoring a null
+terminator.
+
+While it returns an error, BPF programs that do not check the return value
+might operate on corrupted state.
+
+> +
+> +		src++;
+> +	}
+> +	cs =3D '\0';
+> +	__put_kernel_nofault(dst + dlen + copied, &cs, char, err_out);
+> +
+> +	__get_kernel_nofault(&cs, src, char, err_out);
+> +	if (cs !=3D '\0' && sz > copied)
+> +		return -E2BIG;
+
+[Severity: High]
+Can this unconditionally read one byte beyond the caller-specified limit sz?
+
+When the copy loop finishes, copied may equal sz. The pointer src will
+have been incremented sz times. If the original src buffer is exactly
+sz bytes and ends at a page boundary, this read will trigger a page fault,
+causing a spurious -EFAULT return.
+
+Additionally, if copied =3D=3D sz, the subsequent sz > copied check evaluat=
+es
+to false anyway, making the read unnecessary in that case.
+
+> +
+> +	return dlen + copied;
+> +err_out:
+> +	return -EFAULT;
+> +}
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1784078494.gi=
+t.rtoax@foxmail.com?part=3D1
