@@ -1,114 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978B92D0292
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 22:22:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47D1C3043C8;
+	Wed, 15 Jul 2026 22:24:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784154141; cv=none; b=OQzYxUPVnFcMunJVKjyHI3Ldblpn9wldR0ifykJRTy+ZacSQ3lzI5AyDb17i5r+BHCYfjNu59OejwU94qDQHkoo6oPPs7SIhlga36EOdg+rU/h7OuIRhtVP1rQhvhd/mHhkWd4oQT+yp2qVTNoBJ0Gr4XAK5y+MmWja0hwnDIR4=
+	t=1784154301; cv=none; b=BQMHPNRlymh54x2QhVQ9E+8vXUSBdScrBlsd9lkIJL8S88BLwt9R/WbaVsBX8ottJuaF5BpHSXKRXeFaY3BLL/PmjXT+KFcnbWR72VHZCUfg8SIfLC1ZjQBC80Zp9ejO1HadSkKTkmnzJfElkxEuNo8UJ94CXxGFym7niL7Vz3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784154141; c=relaxed/simple;
-	bh=YcZxo2VHRx1ZgOD2I7EZXV3zjuDfZ63iTAZsri6kQzQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=O26ZWwE1TONI+jqmbP6xm0VQ7uYXuQQqMATz67XUKHC+1g1zhtEe9OGkjgeX/GVLsOGOBoH3YUItOUuE4HgfnVqwIw/tPwWu2ScAsgbM7MbkwAJzrsa+0mxkdyJHyVUDpl/CCWsy5JFdJF8tAmXJ8rPKOyPwrZ4pS0xhAmCo8SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GvCAmIMI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784154301; c=relaxed/simple;
+	bh=mslhgdUt2Ww20foGxEh4FU3Id5Y8x3oEvizlFZd2i5c=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=K9Bk6UYM9mfutVDs96lkOLGEJJhn2kgJIshuNtrMOl0u7TbpgoBb9F/5GA/yC4KAMy3C9NQpgSgGEbUNjIm1qpKO/YqR4WtAvhQ/xpnmFH0bwYtuRUCq5C78LJK6WgJMgCfUfR2yqKu7Ab68lTxjBPPfHa1fEMlGwXU3i8rdm5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DqgWX7BX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GvCAmIMI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 194631F000E9;
-	Wed, 15 Jul 2026 22:22:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DqgWX7BX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BAE31F000E9;
+	Wed, 15 Jul 2026 22:24:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784154140;
-	bh=mvyNmCCx1vlVlAg8q7kUMcNEArc5dOHs7DJnj76SuSQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GvCAmIMI9w1CjpSn7Y51C6ZDR+0BP8+BVODLe1AkePgkMpHnZ65USYtUcrb6H5vTZ
-	 MEIRbaN6zNRLS9mUeHEu8JPPcrKxvEQUh7fQdFswJmgn27gBQQvP3REGWJ+xhkaW++
-	 /l95VJt1GoK4u12RKXW57FOn1NjGzqw+xPCK6YNloNDiaLyU99dyWc9OJAD5BnHEjV
-	 jB5Yiahh6TawHOFDWrmb+uryyzNWB7kg/GZ2iPMUam7nus0UgovKGxF2ljuAH+T2N2
-	 tBf2Ae8XoGvkRf/LK+xqJnWsWgeE5CKh3NdsyLzTurG+IpZAMfJ5jQsu6AZzrsyGqp
-	 ya3yHUnxRoLCQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 2/9] bpf: Support __arena and
- __arena_nullable on struct_ops stub arguments
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260715220052.1590783-3-memxor@gmail.com>
-References: <20260715220052.1590783-1-memxor@gmail.com>
- <20260715220052.1590783-3-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 15 Jul 2026 22:22:19 +0000
-Message-Id: <20260715222220.194631F000E9@smtp.kernel.org>
+	s=k20260515; t=1784154299;
+	bh=K68CSxTCGAzi7nRLVNdLS1+FYuDfWJYdurucXyw0L8E=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=DqgWX7BX4lPLnk3/5P4HRDPA6l6kqseUgXn6bX2/GO5ELsXAl4U6AfeG/rucAGeow
+	 F7umQJs5FgmDgACEU1t60gedLSKlDVQZgEK6cNuLXQOzUDQeT5kgu/mmfp3hIpGZHF
+	 jlT0VeybqnVLvzGV9LfMNa/bNqoTbxM390yT5KzcsziYQr4NuMxaW6kRBenUt3g3Gw
+	 DrQ2Zn62D4AftaH4dOL6Kb/oB6YvZFnXRJpMr7Yygw5KiSWD8VA7LYoMRrWToMYOWp
+	 9jQUvTJH9aYQgWfZQbzXpug16PENWyvtXDJC91AtiqbJJhWVAQ+OTTTAf/yZC5Wkod
+	 Y4LcHIvrBRecg==
+Content-Type: multipart/mixed; boundary="===============0392436415614422320=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <53cafe8dbb89d70b7aa626bd4819f513026da6764d8e00e0346ef6e2225a60b5@mail.kernel.org>
+In-Reply-To: <20260715-bpf-xdp-meta-rxcksum-v5-1-623d5c0d0ab7@kernel.org>
+References: <20260715-bpf-xdp-meta-rxcksum-v5-1-623d5c0d0ab7@kernel.org>
+Subject: Re: [PATCH bpf-next v5 1/8] netlink: specs: add XDP RX checksum capability to XDP metadata specs
+From: bot+bpf-ci@kernel.org
+To: lorenzo@kernel.org,donald.hunter@gmail.com,kuba@kernel.org,davem@davemloft.net,edumazet@google.com,pabeni@redhat.com,horms@kernel.org,ast@kernel.org,daniel@iogearbox.net,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,andrew+netdev@lunn.ch,anthony.l.nguyen@intel.com,przemyslaw.kitszel@intel.com,aleksander.lobakin@intel.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,maciej.fijalkowski@intel.com,corbet@lwn.net,skhan@linuxfoundation.org,memxor@gmail.com,emil@etsalapatis.com
+Cc: deliran@verdict.gg,jakub@cloudflare.com,netdev@vger.kernel.org,bpf@vger.kernel.org,intel-wired-lan@lists.osuosl.org,linux-kselftest@vger.kernel.org,linux-doc@vger.kernel.org,aleksandr.loktionov@intel.com,lorenzo@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 15 Jul 2026 22:24:59 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] EXT (freplace) and TRACING (fentry/fexit) programs attached to=
- struct_ops programs bypass defensive checks and `ctx_arg_info` inheritance=
-, causing them to incorrectly verify arena pointers as trusted kernel point=
-ers (`PTR_TO_BTF_ID`).
---
+--===============0392436415614422320==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
---- Patch [2]: [PATCH bpf-next v1 2/9] bpf: Support __arena and __arena_nul=
-lable on struct_ops stub arguments ---
-commit 592a1abca0acd2ddc98e47619cf772faa71d7c0d
-Author: Tejun Heo <tj@kernel.org>
+> diff --git a/net/core/xdp.c b/net/core/xdp.c
+> index 9890a30584ba..9bcaa423ad17 100644
+> --- a/net/core/xdp.c
+> +++ b/net/core/xdp.c
+> @@ -961,6 +961,38 @@ __bpf_kfunc int bpf_xdp_metadata_rx_vlan_tag(const struct xdp_md *ctx,
+>  	return -EOPNOTSUPP;
+>  }
+>
+> +/**
+> + * bpf_xdp_metadata_rx_checksum - Read XDP frame RX checksum.
+> + * @ctx: XDP context pointer.
+> + * @ip_summed: Return value pointer to a bitmask indicating available checksums.
+> + * @cksum: Return value pointer indicating the hw checksum value.
+> + * @cksum_level: Return value pointer indicating the checksum level result.
+> + *
+> + * In case of success, ``ip_summed`` is set to the RX checksum result. Possible
+> + * values are:
+> + * ``XDP_CHECKSUM_NONE``
+> + * ``XDP_CHECKSUM_UNNECESSARY``
+> + * ``XDP_CHECKSUM_COMPLETE``
+> + * ``XDP_CHECKSUM_COMPLETE`` | ``XDP_CHECKSUM_UNNECESSARY``
+> + *
+> + * In case of success, ``cksum`` contains the checksum value calculated by the
+> + * NIC. ``cksum`` is valid only if ``XDP_CHECKSUM_COMPLETE`` is set in
+> + * ``ip_summed``. ``cksum_level`` contains the checksum level reported by the
+> + * hw. ``cksum_level`` can be considered valid only if
+> + * ``XDP_CHECKSUM_UNNECESSARY`` is set in ``ip_summed``.
 
-bpf: Support __arena and __arena_nullable on struct_ops stub arguments
+Earlier review of this series raised the case where the NIC reports
+COMPLETE or UNNECESSARY, the XDP program then modifies the packet and
+returns XDP_PASS.  In that situation the reported checksum is stale.
 
-This patch adds support for the __arena and __arena_nullable suffixes on
-struct_ops callback arguments. The trampoline automatically converts the
-kernel pointer to an arena pointer when saving arguments, allowing the BPF
-program to dereference it directly.
+It was noted on the list that drivers today do not invalidate the
+checksum in this case, they only stop reporting COMPLETE while an XDP
+program is attached.
 
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> index 6eadf64f7ec90..56759891eab79 100644
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
+Would it help to document that expected driver behavior here (how it
+works today versus what is expected), and possibly add a kselftest that
+checks it?  If this is handled in a later patch of the series, please
+disregard.
 
-[ ... ]
+> + *
+> + * Return:
+> + * * Returns 0 on success or ``-errno`` on error.
+> + * * ``-EOPNOTSUPP`` : means device driver does not implement kfunc
+> + * * ``-ENODATA``    : means no RX-checksum available for this frame
+> + */
+> +__bpf_kfunc int bpf_xdp_metadata_rx_checksum(const struct xdp_md *ctx,
+> +					     enum xdp_checksum *ip_summed,
+> +					     u32 *cksum, u8 *cksum_level)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
 
-> @@ -688,6 +736,22 @@ static int bpf_trampoline_update(struct bpf_trampoli=
-ne *tr, bool lock_direct_mut
->  		goto out;
->  	}
-> =20
-> +	/*
-> +	 * Arena ctx args are converted only by the struct_ops indirect
-> +	 * trampoline, which dispatches to a single known prog. Generic
-> +	 * trampolines can mix progs with different arenas, so no conversion
-> +	 * is possible here. Not reachable today: only struct_ops progs get
-> +	 * arena ctx args and they never ride generic trampolines.
-> +	 */
-> +	for (kind =3D 0; kind < BPF_TRAMP_MAX; kind++) {
-> +		for (i =3D 0; i < tnodes[kind].nr_nodes; i++) {
-> +			if (bpf_prog_has_arena_ctx_arg(tnodes[kind].nodes[i]->link->prog)) {
-> +				err =3D -ENOTSUPP;
-> +				goto out;
-> +			}
-> +		}
-> +	}
 
-[Severity: Critical]
-Will this defensive check be bypassed for FENTRY/EXT programs attached to
-struct_ops programs?
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-When an FENTRY or EXT program attaches to a struct_ops program, it does not
-inherit ctx_arg_info from its target in bpf_check_attach_target(). Because
-the attaching program lacks ctx_arg_info, bpf_prog_has_arena_ctx_arg()
-would return false here, allowing the attachment to proceed instead of
-returning -ENOTSUPP.
-
-If this check is bypassed, could the attaching FENTRY/EXT program evaluate
-the argument as a standard PTR_TO_BTF_ID? Since the generic FENTRY
-trampoline receives the already-converted, user-controlled arena offset from
-the struct_ops caller, this might allow an attaching program to treat an
-untrusted offset as a trusted kernel pointer.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260715220052.1590=
-783-1-memxor@gmail.com?part=3D2
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29453967825
+--===============0392436415614422320==--
