@@ -1,182 +1,181 @@
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+Received: from out203-205-221-153.mail.qq.com (out203-205-221-153.mail.qq.com [203.205.221.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A44A41C5799
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 00:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5523A279DC3
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 01:03:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784076838; cv=none; b=OqvUcAs3vQ8m+n14r2TjetoPwBndcA+hEpZf6iwgWDC2pDv2KPiP/+u0VCXjNZODWgxb557CkwaBxKMcQN8gH6aOUmdfpLfz1xSJTnTlN2horyUJ0OblyU/Bc4xehK0m15O6dsPz/uQob++8wCFKRgPffOysvc8ynME17Aun3Gc=
+	t=1784077392; cv=none; b=mE8eirEH9E9h81UAp3I3MRX7OMtHgp1YftEzw4G5s/FxUqYlT0MXIOL6pLuaO4Bz1LtI1oQ6rVL2BG74p5FhlKlqfPycq3BBbrsfx5MU99R60BpV0HQTlp6pzc+RzdeHcQLEwjkR/QLDqQ/uOiQgvmrTpQOtdL8FDRSySd2i25c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784076838; c=relaxed/simple;
-	bh=dzR4chfAqelA0jb4wh+0QfOekInSKSeLvL31Fd25vA4=;
+	s=arc-20240116; t=1784077392; c=relaxed/simple;
+	bh=Pr+FcyIJAIaGTPvNLVGNiqEwVwmLoj1wNuaL56VSm0A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TOag/4/fxlflx7ygL27QrLzBdL5vUhxXUgpGlIF9H9pnUVsRd7/n8/20kGeenS0Zgn0HeQ3MDoOGoEZX36NjagKd/cAMht57rzZZ16bMt2Uu0hg8WgnoaNDL5GVZI7xlxnJCIzNMLC911Mspvd2GWA50IE7BBQwYocK6r2fgBik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EuKIt3bQ; arc=none smtp.client-ip=95.215.58.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=o8tNFjKCu9jsouBFKNCBhpXdX5bvmz8qEumNbt0XEvp7gMqPPBMrOGpAgh4FO0QNVUg4R1bfxaJYH+FaT3eZHukvV5XbYUsRtJFNa5+4GWgGEjnBIWQ58Mq7aXK6Ij1jwOo2eJxy26119+qXtG8FGCG8d5y2+06RGjfFdBhclf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=WJd4kA55; arc=none smtp.client-ip=203.205.221.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EuKIt3bQ"
-Message-ID: <5f38c9a5-a8a3-4bed-bb8c-b7260a1c1a11@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784076830;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=S8Xr4dGhJZKjGNNQ6pEqCn3LF/D8kyTDL/foZNruU/k=;
-	b=EuKIt3bQcp/69RLnkg8I8UrqG+DVbETJ5/MW5J7hZp0Z04CDFQhz9cvkCTvBpj8lh7YOdf
-	s5aZ40lBh1GDs5aLXsbrX51qOjeHTrlRY2VwDkorbJOrQP93xsZ9gaGI/hPd8JZ3TM4Nqo
-	b8X8LFYIOwe59C/DseApJESGNqckITk=
-Date: Tue, 14 Jul 2026 17:53:28 -0700
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="WJd4kA55"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1784077382;
+	bh=+ezWaPL8o+Bf9DeBMrDIJ6C9VjJpCHDmRZLbvOm2aLw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=WJd4kA55fRvoz7Elgy3JD9LPVMaIipWdI+7pG5bxbUgngu6gbIVIgHsj01skZbjPI
+	 iRfeap7xwz19SB6PWaRiJZJrhj6u1ww4wAPM7QvmwVTVFvxQNtImemqRUjXCOWjXON
+	 Frko+mjizBX7sEZbjTTblQJmkisnex+JIQd7vBj0=
+Received: from [10.56.52.25] ([39.156.73.14])
+	by newxmesmtplogicsvrszb51-1.qq.com (NewEsmtp) with SMTP
+	id C0B066F; Wed, 15 Jul 2026 09:03:00 +0800
+X-QQ-mid: xmsmtpt1784077380t5aucd3hs
+Message-ID: <tencent_D85EA546CD11A70CDA84E0B33A2F87547009@qq.com>
+X-QQ-XMAILINFO: OIJV+wUmQOUAceMm1HCrPD82gY1K0qPip8ARpzE3CNhE3XxC9b9m4vSwo/V1bC
+	 yviS4Kbtiwuqz5HivRRLVqYHEVLoMPoDswR8fIcF8U3yfSpiRsYOP5jbS8422pq05L0ruKGgylip
+	 Ah23E3GGrOSSaWUqwom5UX9X5qQpymAeWlDxFKx1K6+lpcgAE2NFPyJilNESwy5gFlxXDtDXLZQk
+	 aRTNB3Pbo0bjDh0BdNyNwN1cL36r2HSOuVt18rNsR5uJV0F0IrOzg0ntPzFzMtHWKucOU41QF/Mg
+	 mXWf71Kl5B6BLjVCxBNR7/cjKGZKEdltP8+1BAQpaxybt3Tovo4tpBAH9zceHE2EhEA09QGxs8qP
+	 FxA1U0XRr5nDyO7Q3cPt5m4rmFrFiCOBjwoa6rlGxW+VohRaXBS0q3M9cEwpIHYJsDvVbLG7v44Y
+	 xAdOyn/SWjhHD/tnxxhDjspI4FFEQn1V53pItmBXFAyXVXMGSA0xsY3rVu8bxeewlruTHLsbDoFf
+	 OZ+iWwrLJZ8JEWaTW/V4XnJom6MIXSeTt0QOoLEiPU0w2llPRlAAlG0x25GQXu3zxmw6F9RYBcFS
+	 lf6eSnMIltez+XbSHipWbeAsZ0fV426uTmL46jnmg43kA8T9fh2g7b3dl+s6zr4PUn4IvcTN7/4z
+	 v+JRoLVpvK+tzTn8IP/Mk6JSkcN9uNSWK95lbusupmBE4qBmJcxIlYxx+GGnHzvR8s5H0Y2CE/7b
+	 R4YxfUI/5pHzUWI0Mwxhpic3e5bNolSAHt047hiHt9hLow23BFTnEGgoKIPDh+EUMTpc7kUYUszG
+	 ISvC1u6FMhefNcH+La47HMrq5hwLMGZacNfM70f8lcRM/Z7OS1/57cKMQvxgV1ZWMzbmLCJz3hn9
+	 +x0nrrRGU1yIEBONFW79HItX0Cn7z4KQKlIF1CEH6sGVVn2hvCQdqX4O11b0ifWcYBsFK2fIdmfm
+	 6i1j5X97/Ma0i+cyYTqXP4+dKy3blhijioEASDHPI/4bTg8NfP98/BEukEci5dC18fCA/PPWZN8r
+	 txnoxLioFbJ4apm+TD
+X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
+X-OQ-MSGID: <4c4fa501-95a2-47c3-bbc7-b9816eeb435f@foxmail.com>
+Date: Wed, 15 Jul 2026 09:03:00 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v5 04/10] bpf, x86: add helper to emit kasan
- checks in x86 JITed programs
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
- <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Andrey Konovalov <andreyknvl@gmail.com>
-Cc: ebpf@linuxfoundation.org,
- Bastien Curutchet <bastien.curutchet@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
- <20260709-kasan-v5-4-1c64af8e4e1e@bootlin.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/2] bpf: add bpf_strcat,bpf_strncat kfunc
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <cover.1784021302.git.rongtao@cestc.cn>
+ <tencent_59689407B1C3204B08362BEEF244A5FE5505@qq.com>
+ <20260714101933.4AD381F000E9@smtp.kernel.org>
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260709-kasan-v5-4-1c64af8e4e1e@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-
-On 7/9/26 3:01 AM, Alexis LothorÃ© (eBPF Foundation) wrote:
-> Add the emit_kasan_check() function that emits KASAN shadow memory
-> checks before memory accesses in JIT-compiled BPF programs. The
-> implementation relies on the existing __asan_{load,store}X functions
-> from KASAN subsystem. The helper:
-> - ensures that the kasan instrumention is actually needed: if the
->   instruction being processed accesses the program stack, we skip the
->   instrumentation, as those accesses are already protected with page
->   guards
-> - saves registers. This includes caller-saved registers, but also
->   temporary registers, as those were possibly used by the
->   affected program. Theoretically, r10 and r11 should be saved as well,
->   but the number of called function and their scope being limited, they
->   are skipped for the sake of reducing the overhead
-
-My clanker got very excited about r10 and r11 not being saved, just
-like sashiko. So I looked at this a bit closer. TL;DR it's fine
-
-I built the kernel with gcc 11.5, gcc 15.2 and clang 22 and
-disassembled __asan_{load,store}{1,2,4,8}: none of them touch r10 or
-r11. gcc goes up to r8, clang uses nothing above rdi.
-
-However, kasan_check_range() does use r10/r11.  And looks like we are
-ok only because the fixed-size helpers inline the shadow check and
-never call kasan_check_range().
-
-If any of the fixed-size 1/2/4/8 helpers ever actually call
-kasan_check_range(), r10 may get clobbered.
-
-Maybe we should leave a comment on emit_kasan_check() about this?..
-
-> - computes the accessed address and stores it in %rdi
-> - calls the relevant function, depending on the instruction being a load
->   or a store, and the size of the access.
-> - restores registers
-> 
-> The special care needed when inserting this instrumentation comes at the
-> cost of a non negligeable increase in JITed code size. For example, a
-> bare
-> 
->   mov 	0x0(%si),rbx # Load in rbx content at address stored in rsi
-> 
-> becomes
-> 
->   push    %rax
->   push    %rcx
->   push    %rdx
->   push    %rsi
->   push    %rdi
->   push    %r8
->   push    %r9
->   mov     %rsi,%rdi
->   call    0xffffffff81da0a60 <__asan_load8>
->   pop     %r9
->   pop     %r8
->   pop     %rdi
->   pop     %rsi
->   pop     %rdx
->   pop     %rcx
->   pop     %rax
->   mov     0x0(%rsi),rbx
-> 
-> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> ---
-> Changes in v3:
-> - skip kasan instrumentation if there is no verifier env (cBPF)
-> - move helper up in the file
-> 
-> Changes in v2:
-> - move asan functions declaration directly into jit compiler, and guard
->   them with IS_ENABLED
-> - remove faulty stack alignment, no arg is passed to kasan funcs on the
->   stack anyway
-> - make sure to emit call depth accounting code
-> - do not save unneeded registers
-> - update helper signature to let caller configure some values (eg:
->   is_write)
-> ---
->  arch/x86/net/bpf_jit_comp.c | 95 +++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 95 insertions(+)
-> 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index de7515ea1bea..d35f58350d71 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -21,6 +21,17 @@
->  #include <asm/unwind.h>
->  #include <asm/cfi.h>
->  
-> +#if IS_ENABLED(CONFIG_BPF_JIT_KASAN)
-> +void __asan_load1(void *p);
-> +void __asan_store1(void *p);
-> +void __asan_load2(void *p);
-> +void __asan_store2(void *p);
-> +void __asan_load4(void *p);
-> +void __asan_store4(void *p);
-> +void __asan_load8(void *p);
-> +void __asan_store8(void *p);
-> +#endif
-> +
->  static bool all_callee_regs_used[4] = {true, true, true, true};
->  
->  static u8 *emit_code(u8 *ptr, u32 bytes, unsigned int len)
-> @@ -1110,6 +1121,90 @@ static void maybe_emit_1mod(u8 **pprog, u32 reg, bool is64)
->  	*pprog = prog;
->  }
->  
-> +static int emit_kasan_check(struct bpf_verifier_env *env, u8 **pprog,
-> +			    u32 addr_reg, struct bpf_insn *insn, u8 *ip,
-> +			    bool is_write, bool accesses_stack_only)
+From: Rong Tao <rtoax@foxmail.com>
+In-Reply-To: <20260714101933.4AD381F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-nit: IMO it's not nice to introduce functions with no caller as a
-separate patch: it triggers -Wunused-function on this commit, which
-may or may not be used in a build. I'd fold this in patch #6 where the
-function is actually called.
+On 7/14/26 18:19, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 5 potential issue(s) to consider:
+> - [Critical] Arbitrary Kernel Memory Write via Verifier Bypass
+> - [High] Missing page fault protection leading to sleeping in atomic context
+> - [High] Time-Of-Check to Time-Of-Use (TOCTOU) race leading to unbounded loop and soft lockup
+> - [Medium] Unbounded out-of-bounds read on destination buffer
+> - [Medium] Unbounded out-of-bounds read on source buffer
+> --
+>
+> --- Patch [1]: [PATCH bpf-next 1/2] bpf: add bpf_strcat,bpf_strncat kfunc ---
+> commit a7b2e5fa67dde4d93faf939b8283a2aa59b8ca2d
+> Author: Rong Tao <rongtao@cestc.cn>
+>
+> bpf: add bpf_strcat,bpf_strncat kfunc
+>
+> This commit introduces bpf_strcat and bpf_strncat kfuncs to allow string
+> concatenation in BPF programs. It requires the destination buffer size as a
+> parameter for safety.
+>
+>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>> index c18f1e16edee4..e99b643136822 100644
+>> --- a/kernel/bpf/helpers.c
+>> +++ b/kernel/bpf/helpers.c
+> [ ... ]
+>> @@ -4195,6 +4195,95 @@ __bpf_kfunc int bpf_strncasestr(const char *s1__ign, const char *s2__ign,
+>>   	return __bpf_strnstr(s1__ign, s2__ign, len, true);
+>>   }
+>>   
+>> +static int __bpf_strncat(char *dst, u32 dsz, const char *src, u32 sz)
+>> +{
+>> +	int dlen, slen, space, copied;
+>> +	char cs = '?';
+>> +
+>> +	if (!copy_from_kernel_nofault_allowed(dst, 1) ||
+>> +	    !copy_from_kernel_nofault_allowed(src, 1)) {
+>> +		return -ERANGE;
+>> +	}
+>> +
+>> +	dlen = bpf_strnlen(dst, XATTR_SIZE_MAX);
+> [Severity: Medium]
+> Does this code perform an unbounded read on the destination buffer? The limit
+> should be bounded by the provided size dsz, rather than statically set to
+> XATTR_SIZE_MAX.
+Thanks!
+>
+>> +	if (dlen < 0)
+>> +		return dlen;
+>> +	slen = bpf_strnlen(src, XATTR_SIZE_MAX);
+> [Severity: Medium]
+> Does this scan read out-of-bounds on the source buffer? The limit could be
+> bounded by the requested copy length sz rather than unconditionally reading
+> up to XATTR_SIZE_MAX.
+Thanks!
+>
+>> +	if (slen < 0)
+>> +		return slen;
+>> +
+>> +	if (dlen >= dsz || sz == 0 || dsz == 0)
+>> +		return -EINVAL;
+>> +
+>> +	space = dsz - dlen;
+>> +	if (space <= 1 || space < min(slen, sz) + 1)
+>> +		return -E2BIG;
+>> +
+>> +	for (copied = 0; copied < space - 1 && copied < sz; copied++) {
+> [Severity: High]
+> Does this code introduce a Time-Of-Check to Time-Of-Use race? The loop bounds
+> omit checking copied < slen, relying entirely on encountering a null
+> terminator.
+>
+> If a concurrent thread modifies the source buffer to remove the null terminator
+> after bpf_strnlen() executes, could this loop run out of bounds and lead to a
+> soft lockup?
+Thanks!
+>
+>> +		__get_kernel_nofault(&cs, src, char, err_out);
+> [Severity: High]
+> Does this sequence lack page fault protection? Unlike other string helpers,
+> __bpf_strncat() fails to wrap its memory accesses in guard(pagefault)().
+>
+> If a BPF program executing in a non-sleepable context calls this on an unmapped
+> address, it seems the generic page fault handler will attempt to take sleepable
+> locks.
+Thanks ;)
+>> +		if (cs == '\0')
+>> +			break;
+>> +
+>> +		__put_kernel_nofault(dst + dlen + copied, &cs, char, err_out);
+> [Severity: Critical]
+> Can this write to arbitrary kernel memory? The function writes to the unchecked
+> destination pointer.
+>
+> Because the bpf_strcat() kfunc signature uses the __ign suffix for dst__ign,
+> verifier safety checks are bypassed. Any user capable of loading BPF programs
+> could potentially use this to write user-controlled bytes to arbitrary kernel
+> memory.
+Thanks ;)
+>
+>> +
+>> +		src++;
+>> +	}
+> [ ... ]
+>> +__bpf_kfunc int bpf_strcat(char *dst__ign, u32 dst__sz, const char *src__ign)
+> [Severity: Critical]
+> Does the dst__ign argument bypass verifier checks? The __ign suffix explicitly
+> instructs the BPF verifier to ignore this argument, which removes all memory
+> safety and bounds checks for the destination pointer.
 
-> [...]
+Thank you very much, I will fix all the potential problems.
+
+Rong Tao
+
+
