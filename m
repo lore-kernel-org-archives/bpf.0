@@ -1,99 +1,84 @@
-Received: from kmail-prod-ay-skadi20.mail.kakao.com (kmail-prod-ay-skadi20.mail.kakao.com [220.64.109.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52BD24A2E21
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 17:56:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.64.109.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6DF942588A
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 18:06:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784138186; cv=none; b=uoMXsct15zjL2Gq/Y71Iw92na0mnL9D/fmr2p1hpEY7RNSo8E5IKaTcBKk/bWIAA9HGPegduehp6aSA210tHpPTHGWz+DRZHgb+Fo/gHeQ/zOX2Pvwu7xjkuOu5suSOi0LNH/Ni1GZM9yjqTp2Aik2tThW3A0lC4p5PkgnL0Wxw=
+	t=1784138812; cv=none; b=D16GKvKmv0G6ia7e8mnRma3JyLPmq5fAajieZFkBrzT2d9YiopTBSee7rQ39QSFg6TQNk6mPomO64z7XhV7FEqjEl8ESLca49lhBP5qUf1k6PibsebiTp0+Jnsa0BWH8cjkfu/r6ORguvglRyRsYYldvyzvRiOO/ElDDxpOiN58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784138186; c=relaxed/simple;
-	bh=i9e2Br03g574hin3M4SwuDNyIeapUGVAdu46hmT7hcY=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=SUe/6LrQsbRRKAnqBBJTPj+XFGXwKWyTABc/X5e19LQGZUbO8SPPiXK7ZAo4HgwAPM5Uc0RwEmZ1ppV5Ur4ENWz3NVJI+jEZhBSbQRnlcfd0JDSwq7qbNgxJlZQWZI4p26TBXX5Y4OV/8ikUNmWvQwKmUiX51ZbyEIqyAEWFdgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kakao.com; spf=pass smtp.mailfrom=kakao.com; dkim=pass (1024-bit key) header.d=kakao.com header.i=@kakao.com header.b=Pm+Yd66N; arc=none smtp.client-ip=220.64.109.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kakao.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kakao.com
+	s=arc-20240116; t=1784138812; c=relaxed/simple;
+	bh=D2adfgaG2jNrgdw99QhEx5eBLI1fPru+xT5lFZUj3/o=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=WjsaZDujAHmgpALudQWKKyRXhcGOVC/+STc4wzdrmxKQPROVR9z8o+y16orWZQl/xQcoT16n1WroU/vVtOX82FTiPmS1bemh8MFofI1bErWVVhzvGldyeh5hUZYduOulL7OsOQp654uXSlohZpoe09WFcYb8YcW/3czpGif75p8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BYUi7qHg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kakao.com header.i=@kakao.com header.b="Pm+Yd66N"
-Received: from 220.64.108.50 ([221.158.213.82]) by skadi-sender of skadi-sender-normal-prod-deployment-75cdbddb7b-m4hl9 (10.240.28.115) with HTTP id 20260716024535.1ogY5_ZgTdmwA4CzyWx1Hw@awo.kakao.com for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 02:56:23 +0900 (KST)
-Received: from [192.168.1.135] (HELO awo) (221.158.213.82) by skadi-relay with ESMTPA; Thu, 16 Jul 2026 02:45:35 +0900 (KST)
-Message-ID: <20260716024535.1ogY5_ZgTdmwA4CzyWx1Hw@awo.kakao.com>
-Date: Thu, 16 Jul 2026 02:45:35 +0900
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BYUi7qHg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A75E1F00A3D;
+	Wed, 15 Jul 2026 18:06:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784138805;
+	bh=sf7sp8M0Q4uvzE4JnPzCHhgb8sIG7WzwruWfiEjgNt0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=BYUi7qHgVz1GH8+LFsxCaHbXJwfOnaf5U3j/15iOIILqL7XKhzDOOKZkB8afgMWyB
+	 O1F0rQjWdzcqPwYBk5aBFtey+ZkmNc/JUoIXDlNJuIN6iUXUCB/I5OuUuAUCIsjTpB
+	 dg3MRCyn4pOr4/mr4BGVO/gumIr6fmlr5LNUb9wOQCocZIkxyZ9r875sZAobRGZN2G
+	 Cs0V1o1VE08kwAJCkQXOUxmCML7gJUMbKXBTNMuHY1h/MmvJ7UN+53oy2SGB+YTuiK
+	 ONS78827JlHYuRzgnwFbNffrYsKkghIC/qeVIV33PVVoUx1zebpLuNRqaUSz2uT+bf
+	 YjUU5A4MO1AfQ==
+Content-Type: multipart/mixed; boundary="===============7053188643893630975=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: ko
-To: stable@vger.kernel.org
-Cc: mattbobrowski@google.com, daniel@iogearbox.net, bpf@vger.kernel.org
-From: oxsignal <awo@kakao.com>
-Subject: [STABLE REQUEST] bpf: Reject BPF_MAP_TYPE_INODE_STORAGE creation if
- BPF LSM is uninitialized
-Autocrypt: addr=awo@kakao.com; keydata=
- xjMEaj29sBYJKwYBBAHaRw8BAQdAw70uTjoir+cAyBh4bE41+T3ZcY8JesXsX3fS9/RLqjTN
- GG94c2lnbmFsIDxhd29Aa2FrYW8uY29tPsKZBBMWCgBBFiEEGv1NEb7fVFTMT0j+R7bglptH
- GOEFAmo9vbACGwMFCRLMAwAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQR7bglptH
- GOHMqwEA6mrPjV0UgHUnEdJFO835SFkJSp0KSedPk+pBE01G4zcBAPZ/e4sf0lVjJY89KTxn
- 4RB4Eow8xC44CQNADA4qTQ4GzjgEaj29sBIKKwYBBAGXVQEFAQEHQEWbznwsfynGj+y39+0F
- FbJkriqjdRs3p7yB8CZbzpI5AwEIB8J+BBgWCgAmFiEEGv1NEb7fVFTMT0j+R7bglptHGOEF
- Amo9vbACGwwFCRLMAwAACgkQR7bglptHGOGoxQD/W9GDBLtwyqik5drzIqHifwNtoiAu9K0Q
- KAU76xfh47oA/2qtEH7FrQ72egFJtQdY+zJn+tqi4I6wG+lqM4v5itMJ
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Errors-To: awo@kakao.com
-X-Kakaomail-MID: 20260716024535.1ogY5_ZgTdmwA4CzyWx1Hw@awo.kakao.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple; t=1784137535;
-	s=1444202050.kakao; d=kakao.com;
-	h=Content-Transfer-Encoding:Content-Type:Subject:From:To:MIME-Version:Date:Message-ID;
-	bh=i9e2Br03g574hin3M4SwuDNyIeapUGVAdu46hmT7hcY=;
-	b=Pm+Yd66Nwl1ictQiyTj9OmsmnsquEKaSGsyJdVRZZSHN9eAGPylNeXQmadR2ZNQV
-	sHuZVRowoKPK9ybiboo2s88HULfullEHbU9cJ+b44yRN7h7GdcejUerg/lJK+fLkqa9
-	nwA4sXpeaW64LffwiqO0GfiPabi0Z7axS8u1q/5c=
+Message-Id: <4de40ae6ece9361c31cc7bfc3fca7c18ef49961e0f70beb9fb8c2e8fe457697a@mail.kernel.org>
+In-Reply-To: <20260715172127.2416388-2-ameryhung@gmail.com>
+References: <20260715172127.2416388-2-ameryhung@gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/2] bpf: Disable raw mdoe for bloom filter map_peek
+From: bot+bpf-ci@kernel.org
+To: ameryhung@gmail.com,bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 15 Jul 2026 18:06:45 +0000 (UTC)
 
-Hi,
+--===============7053188643893630975==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-I am the original reporter of this bug. Please backport upstream commit
+> commit 54799fbcec7677972df927e8da6804b0cd39495d
+> Author: Amery Hung <ameryhung@gmail.com>
+>
+>     bpf: Disable raw mdoe for bloom filter map_peek
+>
+>     For a bloom filter, the value argument of bpf_map_peek_elem() is always
+>     an input. Therefore, the verifier should not allow passing uninitialized
+>     stack memory to it to avoid information leak.
+>
+>     bpf_map_peek_elem() tags its value argument ARG_PTR_TO_MAP_VALUE |
+>     MEM_UNINIT, telling the verifier the callee fills the buffer. This holds
+>     for queue/stack maps, but not for a bloom filter, which reads the buffer
+>     as an input to test set membership and never writes it.
+>
+>     As a result, a program can pass an uninitialized stack buffer to
+>     bpf_map_peek_elem() on a bloom filter. The verifier accepts it and marks
+>     the buffer initialized on return, letting the program read back leftover
+>     kernel stack memory. Bloom maps require CAP_BPF to create, so this is a
+>     CAP_BPF-gated stack infoleak that bypasses the boundary CAP_BPF is meant
+>     to enforce (arbitrary kernel reads are gated behind CAP_PERFMON).
+>
+>     Signed-off-by: Amery Hung <ameryhung@gmail.com>
 
-a6f0643e4f63cfaa0d5d4a69de4f132eac4b8fe4
-("bpf: Reject BPF_MAP_TYPE_INODE_STORAGE creation if BPF LSM is 
-uninitialized")
+This looks like a bug fix for the raw mode handling introduced in commit
+92ec8b1b6b24. Should this include:
 
-to all affected supported stable trees (5.10.y and newer).
+  Fixes: 92ec8b1b6b24 ("bpf: Factor out raw_mode-related fields in bpf_call_arg_meta")
 
-When CONFIG_BPF_LSM=y but the BPF LSM is not enabled at boot, creating
-and updating a BPF_MAP_TYPE_INODE_STORAGE map can use an uninitialized
-inode security blob offset and overwrite the rcu_head.func callback.
-Later cleanup may execute a NULL callback and panic the kernel.
 
-The issue was introduced by commit 8ea636848aca
-("bpf: Implement bpf_local_storage for inodes"), included since v5.10.
-The fix has been in mainline since v7.2-rc2.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-I reproduced the panic on unmodified official Ubuntu cloud images:
-
-1. Ubuntu 24.04.4 LTS
-    Image: 
-https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.img
-    Kernel: 6.8.0-124-generic
-    CONFIG_BPF_LSM=y
-    CONFIG_LSM="landlock,lockdown,yama,integrity,apparmor"
-    Active LSMs: lockdown,capability,landlock,yama,apparmor
-
-2. Ubuntu 26.04 LTS
-    Image: 
-https://cloud-images.ubuntu.com/releases/26.04/release/ubuntu-26.04-server-cloudimg-amd64.img
-    Kernel: 7.0.0-22-generic
-    CONFIG_BPF_LSM=y
-    CONFIG_LSM="landlock,lockdown,yama,integrity,apparmor"
-    Active LSMs: lockdown,capability,landlock,yama,apparmor,ima,evm
-
-In both cases, CONFIG_BPF_LSM is enabled but the BPF LSM is excluded
-from the default CONFIG_LSM list and is inactive at runtime. This
-demonstrates that the bug is reachable with default configurations of
-supported distribution kernels, without a custom kernel build.
-
-Thanks,
-oxsignal
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29436864141
+--===============7053188643893630975==--
