@@ -1,172 +1,178 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE0B481AAE;
-	Wed, 15 Jul 2026 15:25:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 812B448A2C7;
+	Wed, 15 Jul 2026 15:33:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784129110; cv=none; b=i5NhLveVy71KSYi98NxjzjbhARQKNb8p5hjYrDH9yQdFvx8tU7GJ1GMOM7ENKIAEYH3wKeF8HI8itSY158pGivRWuAx1KY22/QIrFLx/e2aEYcaR8rFiyZlhtj5pHatMnQnj+QhC8+YpNx2LF+1/qcZf5ScfphUsugPDlNdnYqI=
+	t=1784129595; cv=none; b=h+SA5EmwbY4RwLdhjB6FJKiw6Z9cJZsM86kkilLVL3RA6WmKdCQxh6ErnmijVYQMLVxZfHnkHmuveftx5W5TmnmC31dGEXw5XnD+rPyiJ4Xy989b7BF7Mj8PnJ1VVrO75J3SnV4YgA0/alpKtzJnL7RvdL8prf9r2Y2hVHd4/Cg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784129110; c=relaxed/simple;
-	bh=TFQwChPGGQpyD8Jb2d8bWS+39TTHhvMm1OUCTvvPIaE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lDXR0B2w095GrL66RAECTHMRP17V2KNDbbJaOFcu3JRJTB2nVRuJZ4eVLj0QDRiI5q0e2vmDjTSFShAE9+xsjvyHIiRBJbIV6FfM+38Bh+IPE/2eCL6gQah5ZengTXfHxo77RXAr36GU1Q+M5YKxB2hZ/+S9KLMOkuMFErBwKrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VwMy915a; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784129595; c=relaxed/simple;
+	bh=9NFtk8ipM5KJ5OP1JBTOlxmN1Tzjs3giweNqKYb9Idc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LGkoCImyWxPl81APW+lBjUfmEsozu6gQzxi9/OMlx7AZDSx+z0Uds5ASz8noyFXLSBgbbUwaRjX5pL7BgfLFkpNMjdKrsBdanqyoRXDkhMKMlIR4AycAKjnP256Y/fNxjCFrcHeiskzMGp5QaV1yJ6euo9wDzPlBbuAnndEym3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TwX+kbk8; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VwMy915a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 964801F00A3A;
-	Wed, 15 Jul 2026 15:25:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784129108;
-	bh=qCp0Z/LIk1edhZq1e91Hff3OKVN7JtELVDWP1PDw0J0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=VwMy915aEQWDn/J7UuYWhhXw3fAuF/NfHhCeydmjSgm8zTWdGZ07KnFIzAFCGPioU
-	 mNxRZH8SV2AisnBrgxf6GmCTn7fXNnVEc+e6DwDNpH8jpvm7hrvgYEc111EpGEewhI
-	 6h1bpyF04jdaupPip8MRN51K+CRQ7yFfolxRDo1qEZeqCY/M/SWy/xLZkfS7kJ4Glg
-	 ILmipLdPfluoX0rllpEQL22sWbqsl9tnp7m7OpLfDbSlevM6b2g8JeCQyXT/bMyIg7
-	 OOiSSVscvB13OcUayLrJJSpfisWAiHKVMx1nO7Bc9tqbk0zTWgfwXUf+nUg98nEETe
-	 O4cENe7Z0QUYQ==
-Date: Wed, 15 Jul 2026 16:24:59 +0100
-From: Will Deacon <will@kernel.org>
-To: Lorenzo Stoakes <ljs@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	David Hildenbrand <david@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Toshi Kani <toshi.kani@hpe.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Kiryl Shutsemau <kas@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Dev Jain <dev.jain@arm.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	David Carlier <devnexen@gmail.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org,
-	abarnas@google.com
-Subject: Re: [PATCH mm-hotfixes v3 2/4] x86/mm/pat: acquire mmap lock on page
- table free to avoid ptdump UAF
-Message-ID: <alemS7vxeRB7NcBO@willie-the-truck>
-References: <20260714-series-vmap-race-fix-v3-0-b812eccfa0f9@kernel.org>
- <20260714-series-vmap-race-fix-v3-2-b812eccfa0f9@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TwX+kbk8"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784129590;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=c/0uouHnf4tZaE4/pH0JenhlmSOjwRyz40UPt6Vw/Yk=;
+	b=TwX+kbk83qvTkC9W6LNi6sN+s7Dor42B2Ej60WBM5hqD2qUNRqCOkMkXF1pFZlGv2ld0/z
+	HKKOrAT8SSdcC/WFfbE473zDm/ikJxUBTj1v84RFeupclEurykpefZMkRk/ofOXiaIkHMp
+	Rqv06BtAhBpqV3GaAAMPRmPKtvxMdf0=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Quentin Monnet <qmo@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v10 1/9] bpf: Drop duplicate blank lines in verifier
+Date: Wed, 15 Jul 2026 23:32:45 +0800
+Message-ID: <20260715153254.92010-2-leon.hwang@linux.dev>
+In-Reply-To: <20260715153254.92010-1-leon.hwang@linux.dev>
+References: <20260715153254.92010-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260714-series-vmap-race-fix-v3-2-b812eccfa0f9@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Lorenzo,
+There are many adjacent blank lines in the verifier that have accumulated
+over time.
 
-I'm certainly no x86 expert (quite the opposite!), but I was looking at
-this with Adrian and got myself confused. See below.
+Drop them for cleanup.
 
-On Tue, Jul 14, 2026 at 06:24:24PM +0100, Lorenzo Stoakes wrote:
-> x86 implements page attribute modification using its Change Page
-> Attributes (CPA) mechanism.
-> 
-> This tracks properties of ranges such as cache mode through x86 page
-> attributes, and as part of that logic manipulates kernel page tables.
-> 
-> Since commit 41d88484c71c ("x86/mm/pat: restore large ROX pages after
-> fragmentation") ranges of kernel page table entries can be collapsed into
-> huge page table entries as part of this logic.
-> 
-> As part of this collapse, it frees the page tables which the collapsed
-> entries previously pointed to, and it does so without any relevant locks
-> being held to preclude concurrent kernel page table walkers.
-> 
-> The only way this code can be reached is if CPA_COLLAPSE is specified, and
-> this is only set in set_memory_rox() via:
-> 
-> set_memory_rox()
-> -> change_page_attr_set_clr()
-> -> cpa_flush()
-> -> cpa_collapse_large_pages()
-> 
-> Notable users of this are execmem and bpf when manipulating executable
-> mappings.
-> 
-> However, this is problematic for ptdump as it walks ranges it does not own
-> and thus runs the risk of a use-after-free on page tables freed underneath
-> it.
-> 
-> Resolve the issue by acquiring the mmap read lock on init_mm which prevents
-> a concurrent ptdump as it acquires the write lock.
-> 
-> It is safe to acquire a sleeping lock as all the callers invoke
-> set_memory_rox() from process context and in any case,
-> change_page_attr_set_clr() calls vm_unmap_alias() which ultimately takes a
-> mutex, disallowing atomic context here.
-> 
-> Fixes: 41d88484c71c ("x86/mm/pat: restore large ROX pages after fragmentation")
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Reviewed-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
-> Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
-> ---
->  arch/x86/mm/pat/set_memory.c | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> index d023a40a1e03..4c4b8244502f 100644
-> --- a/arch/x86/mm/pat/set_memory.c
-> +++ b/arch/x86/mm/pat/set_memory.c
-> @@ -22,6 +22,7 @@
->  #include <linux/cc_platform.h>
->  #include <linux/set_memory.h>
->  #include <linux/memregion.h>
-> +#include <linux/cleanup.h>
->  
->  #include <asm/e820/api.h>
->  #include <asm/processor.h>
-> @@ -436,9 +437,16 @@ static void cpa_collapse_large_pages(struct cpa_data *cpa)
->  
->  	flush_tlb_all();
->  
-> -	list_for_each_entry_safe(ptdesc, tmp, &pgtables, pt_list) {
-> -		list_del(&ptdesc->pt_list);
-> -		pagetable_free(ptdesc);
-> +	/*
-> +	 * ptdump might read these page tables, so avoid a use-after-free by
-> +	 * acquiring the mmap read lock on init_mm (ptdump acquires the mmap
-> +	 * write lock).
-> +	 */
-> +	scoped_guard(mmap_read_lock, &init_mm) {
-> +		list_for_each_entry_safe(ptdesc, tmp, &pgtables, pt_list) {
-> +			list_del(&ptdesc->pt_list);
-> +			pagetable_free(ptdesc);
-> +		}
+No functional changes intended.
 
-As I understand it, the argument for taking the read lock is that we're
-operating on a region that we "wholly own" and therefore we can happily
-run concurrently with CPUs walking distinct parts of the page-table.
-However, from what I can tell, the CPA collapse logic will operate on
-regions outside of the address range being manipulated by its caller
-because it rounds up to the PMD size.
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ kernel/bpf/verifier.c | 14 --------------
+ 1 file changed, 14 deletions(-)
 
-As a made-up example, imagine I have a 2MiB aligned region where the
-first 1MiB is read-only and the second 1MiB is in the default r/w state.
-If one CPU calls set_memory_rw() on the first 1MiB while another CPU is
-walking the second 1MiB (via some other API that doesn't take cpa_lock),
-it looks to me like the first CPU can collapse the page-table and free
-the unused pages under the feet of the other CPU. What prevents that
-from happening?
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index de816063ae63..e1244a721194 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -634,7 +634,6 @@ static void __mark_dynptr_reg(struct bpf_reg_state *reg,
+ 			      enum bpf_dynptr_type type,
+ 			      bool first_slot, int id, int parent_id);
+ 
+-
+ static void mark_dynptr_stack_regs(struct bpf_verifier_env *env,
+ 				   struct bpf_reg_state *sreg1,
+ 				   struct bpf_reg_state *sreg2,
+@@ -1671,7 +1670,6 @@ static bool same_callsites(struct bpf_verifier_state *a, struct bpf_verifier_sta
+ 	return true;
+ }
+ 
+-
+ void bpf_free_backedges(struct bpf_scc_visit *visit)
+ {
+ 	struct bpf_scc_backedge *backedge, *next;
+@@ -2291,7 +2289,6 @@ static struct bpf_verifier_state *push_async_cb(struct bpf_verifier_env *env,
+ 	return &elem->st;
+ }
+ 
+-
+ static int cmp_subprogs(const void *a, const void *b)
+ {
+ 	return ((struct bpf_subprog_info *)a)->start -
+@@ -4044,7 +4041,6 @@ static int check_stack_read(struct bpf_verifier_env *env,
+ 	return err;
+ }
+ 
+-
+ /* check_stack_write dispatches to check_stack_write_fixed_off or
+  * check_stack_write_var_off.
+  *
+@@ -4840,7 +4836,6 @@ static int check_sock_access(struct bpf_verifier_env *env, int insn_idx,
+ 		valid = false;
+ 	}
+ 
+-
+ 	if (valid) {
+ 		env->insn_aux_data[insn_idx].ctx_field_size =
+ 			info.ctx_field_size;
+@@ -6683,7 +6678,6 @@ static int check_stack_range_initialized(
+ 	if (err)
+ 		return err;
+ 
+-
+ 	if (tnum_is_const(reg->var_off)) {
+ 		min_off = max_off = reg->var_off.value + off;
+ 	} else {
+@@ -7404,7 +7398,6 @@ static bool is_iter_new_kfunc(struct bpf_call_arg_meta *meta)
+ 	return meta->kfunc_flags & KF_ITER_NEW;
+ }
+ 
+-
+ static bool is_iter_destroy_kfunc(struct bpf_call_arg_meta *meta)
+ {
+ 	return meta->kfunc_flags & KF_ITER_DESTROY;
+@@ -11539,7 +11532,6 @@ static int process_irq_flag(struct bpf_verifier_env *env, struct bpf_reg_state *
+ 	return 0;
+ }
+ 
+-
+ static int ref_set_non_owning(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
+ {
+ 	struct btf_record *rec = reg_btf_record(reg);
+@@ -16421,7 +16413,6 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 	return 0;
+ }
+ 
+-
+ static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_range *range)
+ {
+ 	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+@@ -18363,8 +18354,6 @@ static void release_insn_arrays(struct bpf_verifier_env *env)
+ 		bpf_insn_array_release(env->insn_array_maps[i]);
+ }
+ 
+-
+-
+ /* The verifier does more data flow analysis than llvm and will not
+  * explore branches that are dead at run time. Malicious programs can
+  * have dead code too. Therefore replace all dead at-run-time code
+@@ -18392,8 +18381,6 @@ static void sanitize_dead_code(struct bpf_verifier_env *env)
+ 	}
+ }
+ 
+-
+-
+ static void free_states(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_verifier_state_list *sl;
+@@ -18675,7 +18662,6 @@ static int do_check_main(struct bpf_verifier_env *env)
+ 	return ret;
+ }
+ 
+-
+ static void print_verification_stats(struct bpf_verifier_env *env)
+ {
+ 	/* Skip over hidden subprogs which are not verified. */
+-- 
+2.55.0
 
-If all concurrent walkers have interrupts disabled, I guess the TLB
-invalidation logic would do it, but it would be good to call this out in
-the commit message because it's not clear to me why the read_lock is
-sufficient for the collapsing case.
-
-Cheers,
-
-Will
