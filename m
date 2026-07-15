@@ -1,64 +1,65 @@
-Received: from mail-ej2-f2.google.com (mail-ej2-f2.google.com [74.125.228.130])
+Received: from mail-ej2-f1.google.com (mail-ej2-f1.google.com [74.125.228.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA6C443E36
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 18:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343CE3EC69B
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 18:18:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784139080; cv=none; b=LKjgd95W4s5RrQd2MgaePiBI3bXjW6Pmed/0ZoPt+8BKOc/xBKFulxFXuOdSy3MicUa/mmOJzly6+rcwN8NRN0kPSzVosg5FYJBGwKC6GNLLbwg/uxokGlt5rIUOwtQNzQBgbAbwTRjqVbghVmq63i/cd9bRVAM/ImeEOcnkh1U=
+	t=1784139520; cv=none; b=eBbaULuypCjIIEGaz6g0neHmMRfzKCxujzk2QH3fxwde+OXUSkbm/LaUMZpYhzVQEw6kQuLBEPIep70PW8K3OxFM2cGTxofJXRXcOuy1Q6LfWpgFMX5ZtNZFVvL0WR76ybqOX25dp8PN5a5Z+hMoSRwO8U2dZwt40ETUectyyg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784139080; c=relaxed/simple;
-	bh=Htkoo/9cO7CIKP0jO4iIc3KDWoevJ0e/Ac9yRQ3UJXk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=ZEAB59/7ukatO3W0PBR8CGugrWOGUyQrqLLaTJ5Fewv2oht3sarR0HrVZmyio/eA717st76JUeBQ8Z00TdvDd13veGW2i/NgTzY7vQIAdK76/ucILB9L/ERK2JmZXV/1BDuTZXxvy/5KKh1GNsfwaR5ymEWHuqK0HJiyFNA2Buk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pnHS8tyR; arc=none smtp.client-ip=74.125.228.130
+	s=arc-20240116; t=1784139520; c=relaxed/simple;
+	bh=CGnwrvxBZUBJNsGDc5J38Smj3FbBScJs1UW9f6LEfxU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=srJeV6vgxnmdxL+xvNFo4k4PYLnEWeVR5WmJ0EaNnnjy10xGqv9yCUhvg4UaZntn/67btRguMsx/nQQUcslecXdHLuwvfYoaC/RlfyofRHm8MKOYx9gyZElW+rbDI/VexBuIvrPKjSLYAxxahJnmJ6iNKZbEceGZ0OaEFL4G7QU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=heIJXOwj; arc=none smtp.client-ip=74.125.228.129
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pnHS8tyR"
-Received: by mail-ej2-f2.google.com with SMTP id a640c23a62f3a-c159467cca6so130062866b.0
-        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 11:11:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="heIJXOwj"
+Received: by mail-ej2-f1.google.com with SMTP id a640c23a62f3a-c15be3ef521so70241766b.1
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 11:18:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784139077; x=1784743877; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
+        d=gmail.com; s=20251104; t=1784139516; x=1784744316; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=HlBALkHxWRmALUuOT5uGqcGnPT4o5St+F0S3DDKC6sQ=;
-        b=pnHS8tyRcY4LQnGkF63YaIAVDoBZUJt8FGDVb2x9aL5XCLttwvNB9lnv/V9sa4r2dY
-         PU0aEtr7qmUqFXuRS6VV3+ZIntLLo5nT5r5UmxaKvbr2mqGb2IvC2u46yzhsxP/BClch
-         oTXlePNUoXBg/k9mnY6zIvrGeuNOb4hiGb4nSJHaFvgPFlTeJMbJEeTvBlLeaFbxgcNE
-         VqlKK0Y4PET+aD4AIYmgZBO3sdh0m62ED2bifFj5wUonEYO7oTA3otCATY8xY7Ptgauz
-         lahjgX8ejqf0XvtWnvgA01qKKbQHlrsC9HUsgaZ8Ty4R6kPOSFaviTNULBbT6j+l9p6m
-         dGTQ==
+        bh=YL44ie3Qr6HiLZb3x0pAWallDq/vLBABEZmepMhurnA=;
+        b=heIJXOwjYQKFPHWkuCaHpLcsye7Ssa6Pvk53YxiuzPICpmcT9BgBjksJbLx9zImUgz
+         o+ZfmxAj/Yuni8SZidzI0sAarpWUWbseUXI0VDNFUXBP89Uk2sHDKQbtgLGgzhVyHDxp
+         tjWZzzpFcTLa681GC4llZU2Ue1w20vOTTfZJbX0IRkLXG5vbPUqOsOr8Gmba9dnPoAjT
+         Epg7TeXI/lO6pFb9eN22g8pODfo0PagZDFDPjuUF+dUQYU892WASWBzMbpk2mKkLNW1Y
+         Key4Y9BWj2CgF6UjLYheOAoGBGpfXfkgVpVAsMc91u89kyv3nItQVGwwPxghQYZms3q+
+         d7Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784139077; x=1784743877;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
+        d=1e100.net; s=20251104; t=1784139516; x=1784744316;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=HlBALkHxWRmALUuOT5uGqcGnPT4o5St+F0S3DDKC6sQ=;
-        b=ArG5nbR0u9nmEIAA7y/xmPhCCK/y8xmbiF5nqzFxJlQQY/F/98cdOLH2XwR4R+05o7
-         qTyXOUq4cau/D8w3B7sPwHMCT6aIqkeLsG7zb+cucziwK999Sb/TuYIBTuvjpT5nDEwN
-         dC20Gj/frKN7GjDRZY+3SUXeDFzCW/7geBpjtBM0eWTimQM4kUBJvHt5Itg3N0CSUTO8
-         crjsno+NYKkiJP1qlRkurrDRsAWt7+xyPYYlTCVwXtqdIOxr2xmk0pgwXX08poI8TZRe
-         5BePpammjPGuSTvUCOP06+fm7C2TInkNCOeUyXY3uNX3XQn3NqqHLK7U4KwcTp0ULEII
-         mAHg==
-X-Gm-Message-State: AOJu0YxkCqB79277BvxOQFgM5PixRQ5e6+25nhAG7kCqFw9jYiZByXTa
-	ISZKoly2xZfvXH9Ks23VOXJimWtNGCnvAQkH/stu52b5n3xIINkNEImG
-X-Gm-Gg: AfdE7cnqrlHmdgRrlBC9LlZMmX3PsTf0cJnq+KSpnpEPl1txlcbks1ttGQD6KJZx4qu
-	AXlmDcfH3I9kMNoFxhPswY+jsHhl9Gv08moz2hZyDS19qCYpimWrUxbppO5p5EWGkZJwEm0uWZT
-	J0KX8hqv3rTHR1byzg+94oqyjpnxAx/Qx42sRMxmiOi8oMK+Ga+2eevGm9adLQ9YkL2TZG5b5rA
-	hikqMQZ6UeQcEfisxHRV9ubXxTbjoyKB4a1lwOnhsP8kr9TDatD/7ReT5Xc19E3QgyWdg8j8HTG
-	3Jmz9mfIkxXiAKAUsyaFBZAXruD0R8d7j9JRm0NV0qjABkFd8/6diSfY78VV6sekYj3W3T18SmJ
-	oS93Q+Ev1GU6CmVE8VoDAaFHuHw12/AbfEnNug5zvFTP/+iD80IDpTvMGeTDsnE2RU2coXJeV2o
-	sQrQfLafYkkmW7BGV85iDVTV518HxTaVyfveN5yf4WdR56z4hKxVXkZVi4CaYLUEiixySMvN978
-	tUSEjJSGtFQisazUyBAbX+7fGHkUCtyTVDVIAe+5ityRTXe/2KL3+A=
-X-Received: by 2002:a17:907:1685:b0:c16:6dac:a004 with SMTP id a640c23a62f3a-c166dacb0bbmr433642266b.24.1784139076860;
-        Wed, 15 Jul 2026 11:11:16 -0700 (PDT)
+        bh=YL44ie3Qr6HiLZb3x0pAWallDq/vLBABEZmepMhurnA=;
+        b=oQrW7JGepyAKqbbHFFNmW9Sd4aM49TInWuzcRyoZzJAPZmXdVTcnqNtkA4rREe33pF
+         i8WPeshL805YjZrbPZTP0/5ntLGnvBAINQf6Q4AujKv40LMA0vdEgNSy7GzA/ie2RaLr
+         RlCEZXby1sEkSRUSW/HKRppPn/dp+KSTA62WY9yiUxIzf5GI3jmUtLP6YzdRRFWP5Y8T
+         +iOunia1DXUv03EG14s/eRVVR33r+n9pr6yDz8Abs6/4UCehTQrox3HcgnWojbiSIgFg
+         uaa2ky5/p2hFWbk4QaRDCndRwOv4P97qyBJz8WdZZ7qnvHrsZdzO6OHW5Y/YiOV3zQLD
+         dVNw==
+X-Forwarded-Encrypted: i=1; AHgh+RqlyZeqqQsBm9pq55mmXRmfBPu/knEwKtNW10T1Sra4BQTbOYtbvvssJQjHirN86ZL7ok4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxsmg6biTFBvqK3QzRfC6hf038Mr8O3JOmEef1F+fusc8+fEWsv
+	RDT33lJa1+Nhebi6sQs0B0K3yM6qJZwpkm2l3Mle7rrvCLMWju9tgVyD
+X-Gm-Gg: AfdE7cl4rZw3oky6Tcu6a8AUSgB0doSnLXQXVLtE5Vhqxqa0i031PdU81uE9bgcUavj
+	iIgVWHd9iv5cRXpjZjSMAUVyKNA86CzHlw4gBh9gMrB0FdcmoXCx+NkI7Js5pT61ZS+pGes11jT
+	dY9QZjVu3UEmoRrguZE0G9eVzr2JngpaxVEZ3q9MYe8Jzj3iCFr3rhozD3OY+ZScFNidbTYPZ2I
+	dRtsVbf6nPEQXRYEK5hNqfYzaNXKiE+RGoJEpnQ91rdtVTmgYZi46vCL1dv7j8sW9+gem/Yl0bx
+	IRzlTGaWpSZVydJh99qQnsHcxK3N7PVdFU4er8RlbCn7TdwRNc7kLwNYVRNKPNJm2c59lSOevYD
+	YNDaQKMChHQDM9PEBRZLgpUr3TnzN8IP9lqkcoLqcpihGhP/HIJJBuQrNHQumQvNXnmVJf6rCC6
+	5UNCps0LnHaLLyLM+4VM8Ka3IY9LVLDxhr98S0ZiK9rm3jMCB1KKKWVHD84Pnpb6/aXUvu7wvAK
+	nsdT5Bf1aXRiqinkwBLa1y+MuxGcZ5TdRtL4AGJx+o6031+Y6jGqyo=
+X-Received: by 2002:a17:907:707:b0:c16:11c0:c5ad with SMTP id a640c23a62f3a-c168bbdb733mr41224266b.31.1784139515461;
+        Wed, 15 Jul 2026 11:18:35 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c1687170e24sm74925566b.20.2026.07.15.11.11.16
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c16871962cesm75862666b.25.2026.07.15.11.18.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2026 11:11:16 -0700 (PDT)
+        Wed, 15 Jul 2026 11:18:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,106 +68,63 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 15 Jul 2026 20:11:15 +0200
-Message-Id: <DJZCIOHS5WIH.UOBSKB42OXMZ@gmail.com>
+Date: Wed, 15 Jul 2026 20:18:34 +0200
+Message-Id: <DJZCO9XPTTSK.2AA711NJSYRFD@gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/2] bpf: Disable raw mdoe for bloom filter
+ map_peek
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>, "Amery Hung" <ameryhung@gmail.com>
-Cc: <bpf@vger.kernel.org>, "Roman Gushchin" <roman.gushchin@linux.dev>
-Subject: Re: [PATCH bpf-next v1 2/2] bpf: Zero kfunc arg meta before error
- paths can read it
+To: "Amery Hung" <ameryhung@gmail.com>, <bpf@vger.kernel.org>
+Cc: <alexei.starovoitov@gmail.com>, <andrii@kernel.org>,
+ <daniel@iogearbox.net>, <eddyz87@gmail.com>, <memxor@gmail.com>,
+ <kernel-team@meta.com>
 X-Mailer: aerc 0.21.0
 References: <20260715172127.2416388-1-ameryhung@gmail.com>
- <20260715172127.2416388-3-ameryhung@gmail.com>
- <20260715173853.886C81F00A3D@smtp.kernel.org>
-In-Reply-To: <20260715173853.886C81F00A3D@smtp.kernel.org>
+ <20260715172127.2416388-2-ameryhung@gmail.com>
+In-Reply-To: <20260715172127.2416388-2-ameryhung@gmail.com>
 
-On Wed Jul 15, 2026 at 7:38 PM CEST, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
+On Wed Jul 15, 2026 at 7:21 PM CEST, Amery Hung wrote:
+> For a bloom filter, the value argument of bpf_map_peek_elem() is always
+> an input. Therefore, the verifier should not allow passing uninitialized
+> stack memory to it to avoid information leak.
 >
-> Pre-existing issues:
-> - [High] BPF kfuncs bpf_mem_cgroup_memory_events and bpf_mem_cgroup_vm_ev=
-ents do not handle negative enum values, bypassing bounds checks and allowi=
-ng out-of-bounds array reads.
-> --
+> bpf_map_peek_elem() tags its value argument ARG_PTR_TO_MAP_VALUE |
+> MEM_UNINIT, telling the verifier the callee fills the buffer. This holds
+> for queue/stack maps, but not for a bloom filter, which reads the buffer
+> as an input to test set membership and never writes it.
 >
-> --- Patch [2]: [PATCH bpf-next v1 2/2] bpf: Zero kfunc arg meta before er=
-ror paths can read it ---
-> commit 53f60dae3990fbb436a03cb878e7564339ccd1e9
-> Author: Amery Hung <ameryhung@gmail.com>
+> As a result, a program can pass an uninitialized stack buffer to
+> bpf_map_peek_elem() on a bloom filter. The verifier accepts it and marks
+> the buffer initialized on return, letting the program read back leftover
+> kernel stack memory. Bloom maps require CAP_BPF to create, so this is a
+> CAP_BPF-gated stack infoleak that bypasses the boundary CAP_BPF is meant
+> to enforce (arbitrary kernel reads are gated behind CAP_PERFMON).
 >
-> bpf: Zero kfunc arg meta before error paths can read it
->
-> check_kfunc_call() reads meta.func_name when bpf_fetch_kfunc_arg_meta()
-> returns -EACCES, but that error can come from fetch_kfunc_meta() (e.g.
-> fd_array_get_btf() rejecting BTF binding for a signed program) before
-> meta is memset(), leaving it uninitialized and risking a garbage deref
-> in verbose().
->
-> Move the memset() to the start of bpf_fetch_kfunc_arg_meta() so meta is
-> zeroed on every error return. The intended "not allowed" -EACCES path
-> still sets func_name first, so its message is unchanged.
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index c87e5fec5a857..ddfa4f57016b7 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->
-> [ ... ]
->
-> [Severity: High]
-> This isn't a bug introduced by this patch, but this is a pre-existing iss=
-ue.
-> Do the bounds checks in bpf_mem_cgroup_memory_events() and
-> bpf_mem_cgroup_vm_events() properly handle negative values?
->
-> Since enums evaluate to signed integers in C, and the BPF verifier does
-> not enforce enum ranges, a BPF program could pass a negative value to
-> bpf_mem_cgroup_memory_events() in mm/bpf_memcontrol.c:
->
-> 	if (unlikely(event >=3D MEMCG_NR_MEMORY_EVENTS))
-> 		return (unsigned long)-1;
->
-> 	return atomic_long_read(&memcg->memory_events[event]);
->
-> For a negative value, the bounds check above evaluates to false, which
-> allows an out-of-bounds read on the memory_events array.
->
-> Can a similar out-of-bounds read happen in bpf_mem_cgroup_vm_events()?
->
-> 	if (unlikely(!memcg_vm_event_item_valid(event)))
-> 		return (unsigned long)-1;
->
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> ---
 
-+Cc Roman
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-I think we should just do:
+>  kernel/bpf/verifier.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index de816063ae63..c87e5fec5a85 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -8422,6 +8422,15 @@ static int check_func_arg(struct bpf_verifier_env =
+*env, u32 arg,
+>  			verifier_bug(env, "invalid map_ptr to access map->value");
+>  			return -EFAULT;
+>  		}
+> +
+> +		/*
+> +		 * Disable raw mode for bpf_map_peek_elem() on a bloom filter. The hel=
+per reads
+> +		 * the value buffer as an input rather than filling it.
+> +		 */
+> +		if (meta->func_id =3D=3D BPF_FUNC_map_peek_elem &&
+> +		    meta->map.ptr->map_type =3D=3D BPF_MAP_TYPE_BLOOM_FILTER)
+> +			meta->arg_raw_mem.regno =3D 0;
+> +
 
-	if (unlikely(event < 0 || !memcg_vm_event_item_valid(event)))
- 		return (unsigned long)-1;
-
-as fix?
-
-> 	return memcg_events(memcg, event);
->
-> The validation routine in mm/memcontrol.c uses the same signed comparison=
-:
->
-> bool memcg_vm_event_item_valid(enum vm_event_item idx)
-> {
-> 	if (idx >=3D NR_VM_EVENT_ITEMS)
-> 		return false;
->
-> 	return !BAD_STAT_IDX(memcg_events_index(idx));
-> }
->
-> This allows negative index values to reach memcg_events_index():
->
-> static inline int memcg_events_index(enum vm_event_item idx)
-> {
-> 	return mem_cgroup_events_index[idx];
-> }
->
-> Could this allow a BPF program to read arbitrary out-of-bounds kernel mem=
-ory?
-
+Sigh. Such unfortunate misuse of semantics.
