@@ -1,32 +1,32 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 812B448A2C7;
-	Wed, 15 Jul 2026 15:33:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A16E48AE16
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 15:33:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784129595; cv=none; b=h+SA5EmwbY4RwLdhjB6FJKiw6Z9cJZsM86kkilLVL3RA6WmKdCQxh6ErnmijVYQMLVxZfHnkHmuveftx5W5TmnmC31dGEXw5XnD+rPyiJ4Xy989b7BF7Mj8PnJ1VVrO75J3SnV4YgA0/alpKtzJnL7RvdL8prf9r2Y2hVHd4/Cg=
+	t=1784129600; cv=none; b=AA6AuX7Pe/5Gludp7w1XiLTgsGRdYTcj5aVW8HEOfy/2WV/ddHYZcLxh1psKZqsn+THGtFWQ5Hvmih8oCAGu0U85vr3gJhh02/UFM4+Q8ssDq1fYqGqx9Q4q4s53FdkvG9tfUjYZqecL1SSqFXMfN/DquZteG/VnZNwzdBWZalk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784129595; c=relaxed/simple;
-	bh=9NFtk8ipM5KJ5OP1JBTOlxmN1Tzjs3giweNqKYb9Idc=;
+	s=arc-20240116; t=1784129600; c=relaxed/simple;
+	bh=cr41+XO5D9jKqFo18pqPehrifJTOp1pUQJ7BlJS7WU4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LGkoCImyWxPl81APW+lBjUfmEsozu6gQzxi9/OMlx7AZDSx+z0Uds5ASz8noyFXLSBgbbUwaRjX5pL7BgfLFkpNMjdKrsBdanqyoRXDkhMKMlIR4AycAKjnP256Y/fNxjCFrcHeiskzMGp5QaV1yJ6euo9wDzPlBbuAnndEym3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TwX+kbk8; arc=none smtp.client-ip=91.218.175.172
+	 MIME-Version; b=R2OSTSpzG85l+8JSIMFmeX4ff8NY0WvHDD1taulR8LPnZDD/MJt0gi7q9HGOvjjprSpv4AK5ZwQRZ0sF2kXYUSu/S9a5Xsyas2zNUUDSA9Mm3q8hUdt38slLXvLPzf54G15/7VVj4esreX6jpOVIDU32sjgm8tJtcJTIrQ+4o44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lITK0x3U; arc=none smtp.client-ip=91.218.175.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TwX+kbk8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lITK0x3U"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784129590;
+	t=1784129595;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=c/0uouHnf4tZaE4/pH0JenhlmSOjwRyz40UPt6Vw/Yk=;
-	b=TwX+kbk83qvTkC9W6LNi6sN+s7Dor42B2Ej60WBM5hqD2qUNRqCOkMkXF1pFZlGv2ld0/z
-	HKKOrAT8SSdcC/WFfbE473zDm/ikJxUBTj1v84RFeupclEurykpefZMkRk/ofOXiaIkHMp
-	Rqv06BtAhBpqV3GaAAMPRmPKtvxMdf0=
+	bh=JmN/bfu/npFvY4vxRuJ56rPtQKMRckzMiXSheo3rAi0=;
+	b=lITK0x3UK5wYyhG7YHaSN2q4+a6N6R8Qr5p5hlPWtoS/+kgI6d35fqiLdYsaQN9WS0qLZ5
+	PQxmRHFhLT2/EUljz4b5oGOd7gYvUzQot/9+CAWEPHrx8TPaBvOYelLP+A/e+7DR6mCbto
+	hZQ/3Ge3uobdatSzVoc3jg2qmdwIPSo=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -45,9 +45,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v10 1/9] bpf: Drop duplicate blank lines in verifier
-Date: Wed, 15 Jul 2026 23:32:45 +0800
-Message-ID: <20260715153254.92010-2-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v10 2/9] bpf: Introduce global percpu data
+Date: Wed, 15 Jul 2026 23:32:46 +0800
+Message-ID: <20260715153254.92010-3-leon.hwang@linux.dev>
 In-Reply-To: <20260715153254.92010-1-leon.hwang@linux.dev>
 References: <20260715153254.92010-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -59,120 +59,215 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-There are many adjacent blank lines in the verifier that have accumulated
-over time.
+Introduce global percpu data, inspired by the commit
+6316f78306c1 ("Merge branch 'support-global-data'"). It enables the
+definition of global percpu variables in BPF, similar to the
+include/linux/percpu-defs.h::DEFINE_PER_CPU() macro.
 
-Drop them for cleanup.
+For example, in BPF, it is able to define a global percpu variable like:
 
-No functional changes intended.
+int data SEC(".percpu");
+
+With this patch, tools like retsnoop [1] and bpfsnoop [2] can simplify
+their BPF code for handling LBRs. The code can be updated from
+
+static struct perf_branch_entry lbrs[1][MAX_LBR_ENTRIES] SEC(".data.lbrs");
+
+to
+
+static struct perf_branch_entry lbrs[MAX_LBR_ENTRIES] SEC(".percpu.lbrs");
+
+This eliminates the need to retrieve the CPU ID using the
+bpf_get_smp_processor_id() helper.
+
+Additionally, by reusing global percpu data map, sharing information
+between tail callers and callees or freplace callers and callees becomes
+simpler compared to reusing percpu_array maps.
+
+Links:
+[1] https://github.com/anakryiko/retsnoop
+[2] https://github.com/bpfsnoop/bpfsnoop
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- kernel/bpf/verifier.c | 14 --------------
- 1 file changed, 14 deletions(-)
+ kernel/bpf/arraymap.c   | 38 ++++++++++++++++++++++++++++++++++++--
+ kernel/bpf/const_fold.c |  1 -
+ kernel/bpf/fixups.c     | 38 ++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/verifier.c   | 15 +++++++++++++++
+ 4 files changed, 89 insertions(+), 3 deletions(-)
 
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 248b4818178c..c4e9430941e5 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -259,6 +259,37 @@ static void *percpu_array_map_lookup_elem(struct bpf_map *map, void *key)
+ 	return this_cpu_ptr(array->pptrs[index & array->index_mask]);
+ }
+ 
++static int percpu_array_map_direct_value_addr(const struct bpf_map *map, u64 *imm, u32 off)
++{
++	struct bpf_array *array = container_of(map, struct bpf_array, map);
++
++	if (map->max_entries != 1)
++		return -EOPNOTSUPP;
++	if (off >= map->value_size)
++		return -EINVAL;
++	if (!bpf_jit_supports_percpu_insn())
++		return -EOPNOTSUPP;
++
++	*imm = (u64)(__force unsigned long) array->pptrs[0];
++	return 0;
++}
++
++static int percpu_array_map_direct_value_meta(const struct bpf_map *map, u64 imm, u32 *off)
++{
++	struct bpf_array *array = container_of(map, struct bpf_array, map);
++	u64 base = (u64)(__force unsigned long) array->pptrs[0];
++
++	if (map->max_entries != 1)
++		return -EOPNOTSUPP;
++	if (imm < base || imm >= base + array->elem_size)
++		return -ENOENT;
++	if (!bpf_jit_supports_percpu_insn())
++		return -EOPNOTSUPP;
++
++	*off = imm - base;
++	return 0;
++}
++
+ /* emit BPF instructions equivalent to C code of percpu_array_map_lookup_elem() */
+ static int percpu_array_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
+ {
+@@ -551,9 +582,10 @@ static int array_map_check_btf(struct bpf_map *map,
+ 			       const struct btf_type *key_type,
+ 			       const struct btf_type *value_type)
+ {
+-	/* One exception for keyless BTF: .bss/.data/.rodata map */
++	/* One exception for keyless BTF: .bss/.data/.rodata/.percpu map */
+ 	if (btf_type_is_void(key_type)) {
+-		if (map->map_type != BPF_MAP_TYPE_ARRAY ||
++		if ((map->map_type != BPF_MAP_TYPE_ARRAY &&
++		     map->map_type != BPF_MAP_TYPE_PERCPU_ARRAY) ||
+ 		    map->max_entries != 1)
+ 			return -EINVAL;
+ 
+@@ -832,6 +864,8 @@ const struct bpf_map_ops percpu_array_map_ops = {
+ 	.map_get_next_key = bpf_array_get_next_key,
+ 	.map_lookup_elem = percpu_array_map_lookup_elem,
+ 	.map_gen_lookup = percpu_array_map_gen_lookup,
++	.map_direct_value_addr = percpu_array_map_direct_value_addr,
++	.map_direct_value_meta = percpu_array_map_direct_value_meta,
+ 	.map_update_elem = array_map_update_elem,
+ 	.map_delete_elem = array_map_delete_elem,
+ 	.map_lookup_percpu_elem = percpu_array_map_lookup_percpu_elem,
+diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
+index b2a19acadb91..5787246bef30 100644
+--- a/kernel/bpf/const_fold.c
++++ b/kernel/bpf/const_fold.c
+@@ -182,7 +182,6 @@ static void const_reg_xfer(struct bpf_verifier_env *env, struct const_arg_info *
+ 		u64 val = 0;
+ 
+ 		if (!bpf_map_is_rdonly(map) || !map->ops->map_direct_value_addr ||
+-		    map->map_type == BPF_MAP_TYPE_INSN_ARRAY ||
+ 		    off < 0 || off + size > map->value_size ||
+ 		    bpf_map_direct_read(map, off, size, &val, is_ldsx)) {
+ 			*dst = unknown;
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index d3be972714b2..02642bba73e5 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -1818,6 +1818,44 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			goto next_insn;
+ 		}
+ 
++		if (env->prog->jit_requested &&
++		    bpf_jit_supports_percpu_insn() &&
++		    insn->code == (BPF_LD | BPF_IMM | BPF_DW) &&
++		    (insn->src_reg == BPF_PSEUDO_MAP_VALUE ||
++		     insn->src_reg == BPF_PSEUDO_MAP_IDX_VALUE)) {
++			struct bpf_map *map;
++
++			aux = &env->insn_aux_data[i + delta];
++			map = env->used_maps[aux->map_index];
++			if (map->map_type != BPF_MAP_TYPE_PERCPU_ARRAY)
++				goto next_insn;
++
++			prog->jit_required = true;
++
++			/*
++			 * We are *skipping* first half of ld_imm64 insn
++			 * with 'i++;', patching over second half of it
++			 * with that same half + mov64_percpu_reg insn.
++			 * All because bpf_patch_insn_data() can only
++			 * replace one 8-byte insn, which does not work
++			 * well for ld_imm64 insn.
++			 */
++
++			insn_buf[0] = insn[1];
++			insn_buf[1] = BPF_MOV64_PERCPU_REG(insn->dst_reg, insn->dst_reg);
++			cnt = 2;
++
++			i++;
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			if (!new_prog)
++				return -ENOMEM;
++
++			delta    += cnt - 1;
++			env->prog = prog = new_prog;
++			insn      = new_prog->insnsi + i + delta;
++			goto next_insn;
++		}
++
+ 		if (insn->code != (BPF_JMP | BPF_CALL))
+ 			goto next_insn;
+ 		if (insn->src_reg == BPF_PSEUDO_CALL)
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index de816063ae63..e1244a721194 100644
+index e1244a721194..ae442ea217c4 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -634,7 +634,6 @@ static void __mark_dynptr_reg(struct bpf_reg_state *reg,
- 			      enum bpf_dynptr_type type,
- 			      bool first_slot, int id, int parent_id);
+@@ -5615,6 +5615,8 @@ int bpf_map_direct_read(struct bpf_map *map, int off, int size, u64 *val,
+ 	u64 addr;
+ 	int err;
  
--
- static void mark_dynptr_stack_regs(struct bpf_verifier_env *env,
- 				   struct bpf_reg_state *sreg1,
- 				   struct bpf_reg_state *sreg2,
-@@ -1671,7 +1670,6 @@ static bool same_callsites(struct bpf_verifier_state *a, struct bpf_verifier_sta
- 	return true;
- }
- 
--
- void bpf_free_backedges(struct bpf_scc_visit *visit)
- {
- 	struct bpf_scc_backedge *backedge, *next;
-@@ -2291,7 +2289,6 @@ static struct bpf_verifier_state *push_async_cb(struct bpf_verifier_env *env,
- 	return &elem->st;
- }
- 
--
- static int cmp_subprogs(const void *a, const void *b)
- {
- 	return ((struct bpf_subprog_info *)a)->start -
-@@ -4044,7 +4041,6 @@ static int check_stack_read(struct bpf_verifier_env *env,
- 	return err;
- }
- 
--
- /* check_stack_write dispatches to check_stack_write_fixed_off or
-  * check_stack_write_var_off.
-  *
-@@ -4840,7 +4836,6 @@ static int check_sock_access(struct bpf_verifier_env *env, int insn_idx,
- 		valid = false;
- 	}
- 
--
- 	if (valid) {
- 		env->insn_aux_data[insn_idx].ctx_field_size =
- 			info.ctx_field_size;
-@@ -6683,7 +6678,6 @@ static int check_stack_range_initialized(
++	if (map->map_type == BPF_MAP_TYPE_INSN_ARRAY || map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY)
++		return -EINVAL;
+ 	err = map->ops->map_direct_value_addr(map, &addr, off);
  	if (err)
  		return err;
- 
--
- 	if (tnum_is_const(reg->var_off)) {
- 		min_off = max_off = reg->var_off.value + off;
- 	} else {
-@@ -7404,7 +7398,6 @@ static bool is_iter_new_kfunc(struct bpf_call_arg_meta *meta)
- 	return meta->kfunc_flags & KF_ITER_NEW;
- }
- 
--
- static bool is_iter_destroy_kfunc(struct bpf_call_arg_meta *meta)
- {
- 	return meta->kfunc_flags & KF_ITER_DESTROY;
-@@ -11539,7 +11532,6 @@ static int process_irq_flag(struct bpf_verifier_env *env, struct bpf_reg_state *
- 	return 0;
- }
- 
--
- static int ref_set_non_owning(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
- {
- 	struct btf_record *rec = reg_btf_record(reg);
-@@ -16421,7 +16413,6 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 	return 0;
- }
- 
--
- static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_range *range)
- {
- 	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
-@@ -18363,8 +18354,6 @@ static void release_insn_arrays(struct bpf_verifier_env *env)
- 		bpf_insn_array_release(env->insn_array_maps[i]);
- }
- 
--
--
- /* The verifier does more data flow analysis than llvm and will not
-  * explore branches that are dead at run time. Malicious programs can
-  * have dead code too. Therefore replace all dead at-run-time code
-@@ -18392,8 +18381,6 @@ static void sanitize_dead_code(struct bpf_verifier_env *env)
+@@ -6174,6 +6176,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
+ 			if (tnum_is_const(reg->var_off) &&
+ 			    bpf_map_is_rdonly(map) &&
+ 			    map->ops->map_direct_value_addr &&
++			    map->map_type != BPF_MAP_TYPE_PERCPU_ARRAY &&
+ 			    map->map_type != BPF_MAP_TYPE_INSN_ARRAY) {
+ 				int map_off = off + reg->var_off.value;
+ 				u64 val = 0;
+@@ -8176,6 +8179,12 @@ static int check_arg_const_str(struct bpf_verifier_env *env,
+ 		return -EACCES;
  	}
- }
  
--
--
- static void free_states(struct bpf_verifier_env *env)
- {
- 	struct bpf_verifier_state_list *sl;
-@@ -18675,7 +18662,6 @@ static int do_check_main(struct bpf_verifier_env *env)
- 	return ret;
- }
++	if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
++		verbose(env, "%s points to percpu_array map which cannot be used as const string\n",
++			reg_arg_name(env, argno));
++		return -EACCES;
++	}
++
+ 	if (!bpf_map_is_rdonly(map)) {
+ 		verbose(env, "%s does not point to a readonly map'\n", reg_arg_name(env, argno));
+ 		return -EACCES;
+@@ -18279,6 +18288,12 @@ static int check_and_resolve_insns(struct bpf_verifier_env *env)
+ 					return -EINVAL;
+ 				}
  
--
- static void print_verification_stats(struct bpf_verifier_env *env)
- {
- 	/* Skip over hidden subprogs which are not verified. */
++				if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY &&
++				    !env->prog->jit_requested) {
++					verbose(env, "JIT is required to use global percpu data\n");
++					return -EOPNOTSUPP;
++				}
++
+ 				err = map->ops->map_direct_value_addr(map, &addr, off);
+ 				if (err) {
+ 					verbose(env, "invalid access to map value pointer, value_size=%u off=%u\n",
 -- 
 2.55.0
 
