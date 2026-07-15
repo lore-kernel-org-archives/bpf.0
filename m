@@ -1,187 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F632EEE80;
-	Wed, 15 Jul 2026 15:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49BE048AE2B
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 15:55:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784130581; cv=none; b=a94mc97NIRJkUuaLw3eymK9f063snZrkaDp74WodFSFY+mxTVNRX/liUAYuf166OWFnGoEFTT8Z6+rwRts0OUPySuhcOkeiKEB8sjh/pd9zqVdvz9a5YocezlJR7dIWKvHehhcQawYaNM0/xaC4pSCF75q4Slx7fdjQmg/KZjeY=
+	t=1784130903; cv=none; b=O6ICbGsUhmptx52tcmzmg0zcXS+BvEb0JkoZGwyeLJhduAFX9VuTiVHe/hH84AN/wvGnvyhSuOIwOh3ePTctRhBly4w6ljYjlPIahnMf1PK/SXDdbIAAdgrephQKuasHTeJ5kpguftrBLYKAjlKDtxD/BTBvdhk335OYE/eJ6WA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784130581; c=relaxed/simple;
-	bh=REy7UL312QrEDzK1bW0DMkqqh4m8Ol8H1Ad9I4djheA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CunHmnjtA1++LAnbMLVTpfHHMlpwi0ud0aO6pBbViRiD5j2urjProa0TjfN6wDJfX1IcNBRJCuEEFz9HDHyktZ7kS0qDyoRnR/FBQsSHPkNCruS8JJAjopGfoDXgtXfKOr20mJ5HYfBLce8tihmbx26HDtD68miR93WqVXqosNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JfStKliW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784130903; c=relaxed/simple;
+	bh=kAhvEIViAkC+5ZqCW92kwKzeea6/VXeP6+ess1LAPgE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Qgj+r7GxN0QuZ1d0SS04OEWBvSK3jFJVWoX2A6Nj+U3wuuxnVx0KaOilerZApp5QL5FhuyIz+UhKxDct4gPxuVbPhM9C6p+R0m+JRGrGdWo+R6w+YA1T+kieY0JPsHd4yA9iLfbdoL4RmhMRq+mFuqsG4+COCUFR6Iv1up6/OKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n851PkYk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JfStKliW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27E021F000E9;
-	Wed, 15 Jul 2026 15:49:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n851PkYk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C5F1F00A3D;
+	Wed, 15 Jul 2026 15:55:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784130580;
-	bh=dppU3jext8Cfhc/a4fcob/OWEauwlB4pCHse6dF5FfE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=JfStKliWix9MQgnZ5RZg9SJ72c2MTpasGugfWwP7+RJOvdJ96GK2cdQR/hyjOHt3N
-	 PoICC3f/12tQsSjwwmrk4qdrpdx1oTc2w0cCF1zgOQtDB3SYTldCH7cLg9v+LTWwhz
-	 ae8/7OsggPgfBKlm6DusfuBPm0vDTJvOIhJKlGSlqVZGP3XK5SlSJyzr1dntetduZK
-	 QL307ELqTSxqUUyNDPoqjM2I4XRG1/wxlv+2MHaJ4ORE4CwT1irifJgiPl1kCjBUZy
-	 qoHp+UfSipV3mdjpYbAVCBIMkI5oFsyDTv1YESKX7JKF2Logz1eO7y05C7pC1uVQ6a
-	 D7LztoDurYkGA==
-Date: Wed, 15 Jul 2026 18:49:30 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Will Deacon <will@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	David Hildenbrand <david@kernel.org>,
-	Michal Hocko <mhocko@suse.com>, Uladzislau Rezki <urezki@gmail.com>,
-	Toshi Kani <toshi.kani@hpe.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Kiryl Shutsemau <kas@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Dev Jain <dev.jain@arm.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	David Carlier <devnexen@gmail.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org,
-	abarnas@google.com
-Subject: Re: [PATCH mm-hotfixes v3 2/4] x86/mm/pat: acquire mmap lock on page
- table free to avoid ptdump UAF
-Message-ID: <alesCtwXdIqH6bOP@kernel.org>
-References: <20260714-series-vmap-race-fix-v3-0-b812eccfa0f9@kernel.org>
- <20260714-series-vmap-race-fix-v3-2-b812eccfa0f9@kernel.org>
- <alemS7vxeRB7NcBO@willie-the-truck>
+	s=k20260515; t=1784130902;
+	bh=sGvOfqES3LVzQe/KY6jYUXJdg6uBVeI36z/uMPtvVpg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=n851PkYkp/vvV1Rx0jNhMI6NXzhlXYwbm9l0bueG8Tx2c+01MkyjjP1Scf2f0ZNfH
+	 bjqWkVyJBRCGU8F9WCRIxOZ6y0QRYtYvk91DjXPG1isag3bjDgfxWedYadp6S9nY8C
+	 t2p0LHTFPm215lLgfoFB9+64ovuEpJTks22b/JxITQ3SGd5IMLXM/zQrlQcE8NtbOq
+	 InXrsZaLNDwvSuKNrghv2AZfhdUHpWSqWi4NqEwXNZN8O59txuOG2+SIzIuU0WUCNF
+	 hAq84qnjls2hBFwwckY4g8qfDmvQPgLh6NnLAlMAlNDArIpv47ish5sbHOycby9yI3
+	 OfBl7HhMkQmeg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v10 6/9] selftests/bpf: Add tests to verify
+ global percpu data
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Leon Hwang" <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260715153254.92010-7-leon.hwang@linux.dev>
+References: <20260715153254.92010-1-leon.hwang@linux.dev>
+ <20260715153254.92010-7-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 15 Jul 2026 15:55:01 +0000
+Message-Id: <20260715155501.C8C5F1F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alemS7vxeRB7NcBO@willie-the-truck>
 
-Hi Will,
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The `test_global_percpu_data_subskel` selftest fails uncondition=
+ally because it asserts `var_cnt > 0` on a subskeleton that is generated wi=
+th zero variables.
+--
 
-On Wed, Jul 15, 2026 at 04:24:59PM +0100, Will Deacon wrote:
-> Hi Lorenzo,
-> 
-> I'm certainly no x86 expert (quite the opposite!), but I was looking at
-> this with Adrian and got myself confused. See below.
-> 
-> On Tue, Jul 14, 2026 at 06:24:24PM +0100, Lorenzo Stoakes wrote:
-> > x86 implements page attribute modification using its Change Page
-> > Attributes (CPA) mechanism.
-> > 
-> > This tracks properties of ranges such as cache mode through x86 page
-> > attributes, and as part of that logic manipulates kernel page tables.
-> > 
-> > Since commit 41d88484c71c ("x86/mm/pat: restore large ROX pages after
-> > fragmentation") ranges of kernel page table entries can be collapsed into
-> > huge page table entries as part of this logic.
-> > 
-> > As part of this collapse, it frees the page tables which the collapsed
-> > entries previously pointed to, and it does so without any relevant locks
-> > being held to preclude concurrent kernel page table walkers.
-> > 
-> > The only way this code can be reached is if CPA_COLLAPSE is specified, and
-> > this is only set in set_memory_rox() via:
-> > 
-> > set_memory_rox()
-> > -> change_page_attr_set_clr()
-> > -> cpa_flush()
-> > -> cpa_collapse_large_pages()
-> > 
-> > Notable users of this are execmem and bpf when manipulating executable
-> > mappings.
-> > 
-> > However, this is problematic for ptdump as it walks ranges it does not own
-> > and thus runs the risk of a use-after-free on page tables freed underneath
-> > it.
-> > 
-> > Resolve the issue by acquiring the mmap read lock on init_mm which prevents
-> > a concurrent ptdump as it acquires the write lock.
-> > 
-> > It is safe to acquire a sleeping lock as all the callers invoke
-> > set_memory_rox() from process context and in any case,
-> > change_page_attr_set_clr() calls vm_unmap_alias() which ultimately takes a
-> > mutex, disallowing atomic context here.
-> > 
-> > Fixes: 41d88484c71c ("x86/mm/pat: restore large ROX pages after fragmentation")
-> > Cc: stable@vger.kernel.org
-> > Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> > Reviewed-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
-> > Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
-> > ---
-> >  arch/x86/mm/pat/set_memory.c | 14 +++++++++++---
-> >  1 file changed, 11 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> > index d023a40a1e03..4c4b8244502f 100644
-> > --- a/arch/x86/mm/pat/set_memory.c
-> > +++ b/arch/x86/mm/pat/set_memory.c
-> > @@ -22,6 +22,7 @@
-> >  #include <linux/cc_platform.h>
-> >  #include <linux/set_memory.h>
-> >  #include <linux/memregion.h>
-> > +#include <linux/cleanup.h>
-> >  
-> >  #include <asm/e820/api.h>
-> >  #include <asm/processor.h>
-> > @@ -436,9 +437,16 @@ static void cpa_collapse_large_pages(struct cpa_data *cpa)
-> >  
-> >  	flush_tlb_all();
-> >  
-> > -	list_for_each_entry_safe(ptdesc, tmp, &pgtables, pt_list) {
-> > -		list_del(&ptdesc->pt_list);
-> > -		pagetable_free(ptdesc);
-> > +	/*
-> > +	 * ptdump might read these page tables, so avoid a use-after-free by
-> > +	 * acquiring the mmap read lock on init_mm (ptdump acquires the mmap
-> > +	 * write lock).
-> > +	 */
-> > +	scoped_guard(mmap_read_lock, &init_mm) {
-> > +		list_for_each_entry_safe(ptdesc, tmp, &pgtables, pt_list) {
-> > +			list_del(&ptdesc->pt_list);
-> > +			pagetable_free(ptdesc);
-> > +		}
-> 
-> As I understand it, the argument for taking the read lock is that we're
-> operating on a region that we "wholly own" and therefore we can happily
-> run concurrently with CPUs walking distinct parts of the page-table.
-> However, from what I can tell, the CPA collapse logic will operate on
-> regions outside of the address range being manipulated by its caller
-> because it rounds up to the PMD size.
-> 
-> As a made-up example, imagine I have a 2MiB aligned region where the
-> first 1MiB is read-only and the second 1MiB is in the default r/w state.
-> If one CPU calls set_memory_rw() on the first 1MiB while another CPU is
-> walking the second 1MiB (via some other API that doesn't take cpa_lock),
-> it looks to me like the first CPU can collapse the page-table and free
-> the unused pages under the feet of the other CPU. What prevents that
-> from happening?
+--- Patch [6]: [PATCH bpf-next v10 6/9] selftests/bpf: Add tests to verify =
+global percpu data ---
+commit c5a32c0630bc8d9b3aedfc264c75289a1f8e6d98
+Author: Leon Hwang <leon.hwang@linux.dev>
 
-Nothing, and there's a patch to fix that that synchronizes
-cpa_collapse_large_pages() using cpa_lock:
+selftests/bpf: Add tests to verify global percpu data
 
-https://lore.kernel.org/all/20260626163213.2284080-1-den@openvz.org
+This commit adds selftests to verify operations on global percpu data in BPF
+programs. It tests various libbpf APIs and skeleton behaviors for percpu
+maps. It also adds a test to ensure live variables of a subskeleton do not
+include global percpu data.
 
-This still won't be enough to sync with ptdump though.
- 
-> If all concurrent walkers have interrupts disabled, I guess the TLB
-> invalidation logic would do it, but it would be good to call this out in
-> the commit message because it's not clear to me why the read_lock is
-> sufficient for the collapsing case.
-> 
-> Cheers,
-> 
-> Will
+> diff --git a/tools/testing/selftests/bpf/prog_tests/global_percpu_subskel=
+.c b/tools/testing/selftests/bpf/prog_tests/global_percpu_subskel.c
+> new file mode 100644
+> index 0000000000000..8aebd533d86b5
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/global_percpu_subskel.c
+> @@ -0,0 +1,37 @@
 
--- 
-Sincerely yours,
-Mike.
+[ ... ]
+
+> +	if (!ASSERT_OK_PTR(subskel->maps.percpu, "maps.percpu"))
+> +		goto out;
+> +	ASSERT_EQ(bpf_map__type(subskel->maps.percpu), BPF_MAP_TYPE_PERCPU_ARRA=
+Y,
+> +		  "percpu_map_type");
+> +	ASSERT_GT(subskel->subskel->var_cnt, 0, "var_cnt");
+
+[Severity: Medium]
+Since test_global_percpu_data.c only contains variables in .percpu* section=
+s,
+and the subskeleton generator skips percpu array variables, will var_cnt
+always be exactly 0 here, causing this test to unconditionally fail?
+
+Would it make sense to either add a standard global variable to
+test_global_percpu_data.c (e.g. in .bss or .data), or adjust this assertion?
+
+> +
+> +	for (i =3D 0; i < subskel->subskel->var_cnt; i++) {
+> +		const struct bpf_var_skeleton *var;
+> +
+> +		var =3D (void *) subskel->subskel->vars + i * subskel->subskel->var_sk=
+el_sz;
+> +		ASSERT_NEQ(var->map, &subskel->maps.percpu, "var");
+> +	}
+> +
+> +out:
+> +	test_global_percpu_data__destroy(subskel);
+> +	bpf_object__close(obj);
+> +}
+
+> diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c =
+b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+> new file mode 100644
+> index 0000000000000..54380dfb11a5a
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+> @@ -0,0 +1,33 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include "bpf_misc.h"
+> +
+> +int unused SEC(".percpu.looooooooong");
+> +int data2 SEC(".percpu.data");
+> +int data SEC(".percpu") =3D -1;
+> +int nums[7] SEC(".percpu");
+> +char run SEC(".percpu") =3D 0;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260715153254.9201=
+0-1-leon.hwang@linux.dev?part=3D6
