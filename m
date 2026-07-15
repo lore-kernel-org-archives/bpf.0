@@ -1,491 +1,176 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E0533BCD16
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 21:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE172D6E64;
+	Wed, 15 Jul 2026 21:40:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784151348; cv=none; b=dul6+W77RaRuXauLiSWOKpexQp//PqtRrtOZbkQGEAzRA/72IxWEE85awzLVu6THPPlvWdPse1ivV1l2kijQt9nh/u/tDflA+w9A0xfa/SUKwXzALLmF24RqpxiCXNi9ADpb6P6ZIqFOolG3H+qYaG8quM8Oc7LX6rHPj6VQSwk=
+	t=1784151660; cv=none; b=GdjAPSwAar+hAbSJaWmSOU/TWjr3oL/Sl2aRKSho105LQpqzKdjEnW1LiVTvcXQWpaNl/H0qzneHTlC6g2yVYrHZQ54GA3ZKGKrO7yIn1ELYAQ/8JFhnz0NMZp5pGSDLDPMuUb9fghT8v3cYGp2S3A242ljQEeXSKW+fEzDsNr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784151348; c=relaxed/simple;
-	bh=ZKOMyDoJ6g3UwcacRyDOPkw2zOY/wvzrMIe3bKIhxug=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Bg/Gq0EH8LbRHkg8HENxDHZx2QkJUzMwvAt+DAMs2d1PrVGLF59SZyHdGs8imaLRpnNbV8jKgfglVyJKOysRH/hM6RjUSXFCZmnYie9Oj3+1mKLbjLRFuX4xN50o+x3z8MsyQJgts3gTLSd6/HeefglhRB29NyGNq2w9s/21+3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ado/EjOg; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784151660; c=relaxed/simple;
+	bh=+wRx/2cZl1CRjeNc+LZxEILml80uHsfQzvBknjG31C0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Q3aQFHkc3IEPnjc2sDdhBtTE66V9p5SdOi7b7w8peOuMmJTaXD9KKlAu3KWAvW8kv9Aw0b+lLp7mTT7ty0EG9lRUhWh0pMb1rdqox220i9qNIsLbo5lradYNW71HIn33aenqal982IQIUJYqUvKye0dk8BpCOx/4I7eiRJcehqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nM5Zby8I; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ado/EjOg"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-4758bd3731bso2017330f8f.0
-        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 14:35:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784151345; x=1784756145; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=d9ZjibRHTP77IoV3000xMUSYR9VstJ4TVfh1m4URAq8=;
-        b=Ado/EjOgWZzQuANP9zpARr+/kKxBNOGbgArkCA9cha9oejwFCPz6s325rv5/AUCfwt
-         ff7iaoSqQ19w/DzYBHNyHlUbSI/S4GaBQ3ICgzJJOw/e7G46zwzv4bRAR+Rj4fZ/ygqx
-         0aXAsp4VElWyin/uNOK4flAIbcvyf6+2eyVzr7NqLmb953KPKf3lHu+FMlwLIDO5bJE7
-         Nu/CBGLkRJzN9UMzers2zBtH9yRFW7QHt+twCfcJ9akO6KvuvWcTygtfqB3joldB3LFg
-         jEjdlXU9txhNFSwKXEXDWMuJTkK0VvA2kGsXiDFLUG6ks8lKQUhY7nKgx++f76SeeL7o
-         2W5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784151345; x=1784756145;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=d9ZjibRHTP77IoV3000xMUSYR9VstJ4TVfh1m4URAq8=;
-        b=Ma8bged8BnHLFTkda2laUC16NUeuDLlt3N8dm0c7VtUewt+lOXwFhbq4KUtuNj3PU1
-         4tLdLa0qDTn9oNAYPJ6Bt7gbfg+zWcrIBvOXPBdnj61wmbGiDu3um2pqDu+IpMNq6wWk
-         CsaDidjXJ07NclkU0CMO+ta8fLqc7UKovhaofMjNDByO/NllQE2YfXVtz4HilPLZBuJ/
-         V8XkmU9KBMYgQ2Scb0dDyrio4Dkm9hMYkXeY2mPRT3Urvx0MSvCKWmU9R2M57PjydWSY
-         opWhWy63ekbDGNr9kDXOG4AWu7U32zPripToHuVRmxlC1/K3llbdL+ESqQwXACOHGhxq
-         eAFw==
-X-Gm-Message-State: AOJu0Yyw8y5UXeLtJc5RpOqLqerFH+qGtPOuWJCIbttgBoz67JlTT7Uw
-	ZNT3sEBD0FEIYY6DKrW5ShU59z8NDYgFZJHzc/5q8J04Z9GtkXSTonqM
-X-Gm-Gg: AfdE7ckGufVOOVclFkD/Low557d3XU1C6nH8BYvQWVRkj3nhgNrOEg2IbXtvirSOJAv
-	3WSTos73db99ashziafQqrlRqqVxnNFcIueDMpgefa2q/9vqb+DYi36uhEw5bWFZ/fB7639aevq
-	KX7sKpWDa1VRrUF99WZ/JZUY4qcBmMqLo0dg5yovp0TTcGwYqe28+wd9OigYXHJvCFOOhzikV0i
-	K3HhIxrIUfRcaOy7PpyIyvj58KA538n4MYJ3hfwXpvGB42JPf/iMa4k2kJTURQ9+jPuVL5RTf5z
-	FG24cLlPP8PiK5tO8/a69hY/BYYMW72DI7WBJqi8SzvNUcIOmHFTZr7Y0eN1jchbp24nPnCfW35
-	PhZ51nqeHy/S51ErIEORu8frzVOoDcUHhcmOHRS6ECMu0NhFMuf2bkfZkFH7mdP3mWPkNjbuEPo
-	ryQN/jXweFsfMPMpeXpR7bqKsiyj8EVK0Ewt6cNaHovKay7Dym2vpOmW8J52D4E1qcAA==
-X-Received: by 2002:a05:6000:1ac8:b0:47d:f6a5:1fd6 with SMTP id ffacd0b85a97d-47f55f06503mr1044251f8f.26.1784151344632;
-        Wed, 15 Jul 2026 14:35:44 -0700 (PDT)
-Received: from localhost.localdomain (host86-153-201-25.range86-153.btcentralplus.com. [86.153.201.25])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f4635c86csm19224122f8f.16.2026.07.15.14.35.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2026 14:35:44 -0700 (PDT)
-From: Nnamdi Onyeyiri <nnamdio@gmail.com>
-To: jiayuan.chen@linux.dev
-Cc: bpf@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	horms@kernel.org,
-	jakub@cloudflare.com,
-	john.fastabend@gmail.com,
-	kuba@kernel.org,
-	kuniyu@google.com,
-	ncardwell@google.com,
-	netdev@vger.kernel.org,
-	nnamdio@gmail.com,
-	pabeni@redhat.com,
-	sashiko-reviews@lists.linux.dev
-Subject: [PATCH v4 2/2] bpf, sockmap: handle spurious tcp_msg_wait_data() wakeup
-Date: Wed, 15 Jul 2026 22:35:38 +0100
-Message-ID: <20260715213538.37229-3-nnamdio@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260715213538.37229-1-nnamdio@gmail.com>
-References: <5b07d2ab-84ee-46ae-84c9-7542499d26d7@linux.dev>
- <20260715213538.37229-1-nnamdio@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nM5Zby8I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4766E1F000E9;
+	Wed, 15 Jul 2026 21:40:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784151659;
+	bh=beMvsMOYV/35qvC4uNSHGPgxhMwJhGYCp9bcZZ4egZU=;
+	h=From:Subject:Date:To:Cc;
+	b=nM5Zby8IovOatbyak1vT2rmYnjz/8yyWs1oXOT7zbxv73sEFKBa+H1gPrkdx28+Sp
+	 YIkDERxUSsq/tnZdjX26mEfidhyzojKK+6E30lHjgbgGLqgOC4/kesGpjK0JvjGvUu
+	 fAbuzIjtoqila0/bQ0TSJDHKaZVZSGtWzKJGd9QHLLAFBvL3a9E67R46fM8IfnbflT
+	 lRtufK5+UzisSaPAOaCniTW3Srnfl1E0I5dJI3JuY7yLBupLyNxWEo6JbD0fGkqzDE
+	 4b33R+4uxrTZ2x9p3sT93WkehSHfqZn7dyShngFIDD1lk0XUgrWJe4hAjd0dt2aJZx
+	 4YTUlJfbieWCA==
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+Subject: [PATCH bpf-next v5 0/8] Add the the capability to load HW RX
+ checksum in eBPF programs
+Date: Wed, 15 Jul 2026 23:39:40 +0200
+Message-Id: <20260715-bpf-xdp-meta-rxcksum-v5-0-623d5c0d0ab7@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/33OwW6DMAyA4Vepcm4mx8FAetp7TD2EYErUFlBCE
+ VPFuy8gTeo00aNl/Z/9FJGD5yhOh6cIPPno+y4NdDwI19ruwtLXaRYISGCQZDU0cq4HeefRyjC
+ 7a3zcpQHIS2I0YGqR0iFw4+eN/RJr0fE8inPatD6Offje7k247d/TE0qQeaUbNmXh2KjPK4eOb
+ x99uKynUp0DKv2mtiW6rAS0TcWv9frPpH5/WBXYUVRSmGoiZy1Qpv4p+lUpdhSdFA2AmSOobPF
+ XWZblBz8K4ZaNAQAA
+X-Change-ID: 20250925-bpf-xdp-meta-rxcksum-900685e2909d
+To: Donald Hunter <donald.hunter@gmail.com>, 
+ Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ Tony Nguyen <anthony.l.nguyen@intel.com>, 
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+ Alexander Lobakin <aleksander.lobakin@intel.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Vladimir Vdovin <deliran@verdict.gg>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org, 
+ bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Aleksandr Loktionov <aleksandr.loktionov@intel.com>, 
+ Lorenzo Bianconi <lorenzo@kernel.org>
+X-Mailer: b4 0.14.3
 
-This selftest exercises the tcp_bpf_recvmsg() and tcp_bpf_recvmsg_parser()
-functions, to ensure that they are properly handling spurious wakeups in
-tcp_msg_wait_data().
+Introduce bpf_xdp_metadata_rx_checksum() kfunc in order to load the HW
+RX checksum results in the eBPF program binded to the NIC.
+Implement xmo_rx_checksum callback for veth and ice drivers.
 
-The expected behaviour is that:
+If the hardware detects a wrong/failed checksum, it will report
+CHECKSUM_NONE in the packet metadata. Moreover, CHECKSUM_NONE will be
+returned even if the NIC can't parse the packet (e.g. if it does not
+support a specific protocol). A possible use case for
+bpf_xdp_metadata_rx_checksum() would be to implement a XDP DDoS
+application [1] combining the info from bpf_xdp_metadata_rx_checksum()
+and bpf_xdp_metadata_rx_hash() kfuncs in order to filter packets with a
+wrong/failed checksum.
 
-  * Without a timeout - recvfrom() does not return an EAGAIN error.
+[1] https://blog.cloudflare.com/unimog-cloudflares-edge-load-balancer/
 
-  * With a timeout - recvfrom() returns EAGAIN, but only after the
-    SO_RCVTIMEO timeout has expired.
-
-If the spurious wakeups are not correctly handled, the above assertions
-fail.
-
-Signed-off-by: Nnamdi Onyeyiri <nnamdio@gmail.com>
 ---
- tools/testing/selftests/net/.gitignore        |   2 +
- tools/testing/selftests/net/Makefile          |   5 +
- .../selftests/net/sockmap_recvfrom.bpf.c      |  31 ++
- .../testing/selftests/net/sockmap_recvfrom.c  | 299 ++++++++++++++++++
- 4 files changed, 337 insertions(+)
- create mode 100644 tools/testing/selftests/net/sockmap_recvfrom.bpf.c
- create mode 100644 tools/testing/selftests/net/sockmap_recvfrom.c
+Changes in v5:
+- Add new kfunc to Documentation/networking/xdp-rx-metadata.rst
+  documentation
+- Introduce bpf_skb_rx_checksum kfunc and related selftest.
+- Introduce selftest to check the driver invalidates the rx checksum if
+  running in XDP mode.
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index c9f46031ac73..a1840a5d45f6 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -39,6 +39,8 @@ sk_connect_zero_addr
- sk_so_peek_off
- skf_net_off
- socket
-+sockmap_recvfrom
-+sockmap_recvfrom.bpf.o
- so_incoming_cpu
- so_netns_cookie
- so_rcv_listener
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 708d960ae07d..dd04b80725c6 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -191,6 +191,7 @@ TEST_GEN_PROGS := \
- 	sk_connect_zero_addr \
- 	sk_so_peek_off \
- 	so_incoming_cpu \
-+	sockmap_recvfrom \
- 	tap \
- 	tcp_port_share \
- 	tls \
-@@ -238,3 +239,7 @@ $(OUTPUT)/bind_bhash: LDLIBS += -lpthread
- $(OUTPUT)/io_uring_zerocopy_tx: CFLAGS += -I../../../include/
- 
- include bpf.mk
-+
-+$(OUTPUT)/sockmap_recvfrom: $(BPFOBJ)
-+$(OUTPUT)/sockmap_recvfrom: LDLIBS += $(BPFOBJ) -lelf -lz -lpthread
-+$(OUTPUT)/sockmap_recvfrom: CFLAGS += -I$(OUTPUT)/tools/include
-diff --git a/tools/testing/selftests/net/sockmap_recvfrom.bpf.c b/tools/testing/selftests/net/sockmap_recvfrom.bpf.c
-new file mode 100644
-index 000000000000..fec470c738f1
---- /dev/null
-+++ b/tools/testing/selftests/net/sockmap_recvfrom.bpf.c
-@@ -0,0 +1,31 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#define AF_INET 2
-+
-+char LICENSE[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKHASH);
-+	__uint(max_entries, 1024);
-+	__type(key, __u64);
-+	__type(value, __u64);
-+
-+} map_socks SEC(".maps");
-+
-+SEC("sockops") int on_sockops(struct bpf_sock_ops *ctx)
-+{
-+	if (ctx->family == AF_INET && ctx->op == BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB) {
-+		__u64 cookie = bpf_get_socket_cookie(ctx);
-+
-+		bpf_sock_hash_update(ctx, &map_socks, &cookie, BPF_NOEXIST);
-+	}
-+
-+	return 0;
-+}
-+
-+SEC("sk_skb/stream_verdict") int on_recv(struct __sk_buff *ctx)
-+{
-+	return SK_PASS;
-+}
-diff --git a/tools/testing/selftests/net/sockmap_recvfrom.c b/tools/testing/selftests/net/sockmap_recvfrom.c
-new file mode 100644
-index 000000000000..25657fc3dbcd
---- /dev/null
-+++ b/tools/testing/selftests/net/sockmap_recvfrom.c
-@@ -0,0 +1,299 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <arpa/inet.h>
-+#include <bpf/libbpf.h>
-+#include <fcntl.h>
-+#include <pthread.h>
-+#include <stdatomic.h>
-+#include <sys/socket.h>
-+#include <sys/time.h>
-+#include <unistd.h>
-+
-+#include "kselftest_harness.h"
-+
-+#define MAX_ITERATIONS 100
-+#define PAYLOAD_END 'e'
-+
-+static int start_listening(struct __test_metadata *_metadata, uint16_t *port)
-+{
-+	struct sockaddr_in addr;
-+	socklen_t addrlen;
-+	int fd;
-+
-+	memset(&addr, 0, sizeof(addr));
-+	addr.sin_family = AF_INET;
-+	addr.sin_addr.s_addr = INADDR_ANY;
-+
-+	fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-+
-+	ASSERT_NE(fd, -1);
-+	ASSERT_EQ(bind(fd, (struct sockaddr *)&addr, sizeof(addr)), 0);
-+	ASSERT_EQ(listen(fd, 5), 0);
-+
-+	addrlen = sizeof(addr);
-+
-+	ASSERT_EQ(getsockname(fd, (struct sockaddr *)&addr, &addrlen), 0);
-+
-+	*port = addr.sin_port;
-+
-+	return fd;
-+}
-+
-+static void process_client(int fd, atomic_int *running, bool *failed)
-+{
-+	char buf[1024];
-+	struct timeval timeo;
-+
-+	timeo.tv_sec = 0;
-+	timeo.tv_usec = 1000;
-+
-+	if (setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timeo, sizeof(timeo)))
-+		*failed = true;
-+
-+	while (atomic_load(running)) {
-+		ssize_t len = recvfrom(fd, buf, sizeof(buf), 0, NULL, NULL);
-+
-+		if (len == -1) {
-+			if (errno != EAGAIN && errno != EINTR)
-+				*failed = true;
-+			continue;
-+		}
-+
-+		if (len <= 0 || buf[len - 1] == PAYLOAD_END)
-+			break;
-+	}
-+
-+	send(fd, "test", 4, MSG_NOSIGNAL);
-+
-+	close(fd);
-+}
-+
-+struct bpf_t {
-+	struct bpf_object *obj;
-+	struct bpf_link *on_sockops;
-+	struct bpf_link *on_recv;
-+};
-+
-+static void setup_bpf(struct __test_metadata *_metadata, const char *path, bool recv,
-+						struct bpf_t *bpf)
-+{
-+	struct bpf_program *prog;
-+	int cgroup;
-+
-+	memset(bpf, 0, sizeof(*bpf));
-+	bpf->obj = bpf_object__open_file(path, NULL);
-+
-+	ASSERT_NE(bpf->obj, NULL);
-+	ASSERT_EQ(bpf_object__load(bpf->obj), 0);
-+
-+	prog = bpf_object__find_program_by_name(bpf->obj, "on_sockops");
-+	ASSERT_NE(prog, NULL);
-+
-+	cgroup = open("/sys/fs/cgroup", O_RDONLY);
-+	ASSERT_NE(cgroup, -1);
-+
-+	bpf->on_sockops = bpf_program__attach_cgroup(prog, cgroup);
-+	close(cgroup);
-+
-+	ASSERT_NE(bpf->on_sockops, NULL);
-+
-+	if (recv) {
-+		struct bpf_map *map = bpf_object__find_map_by_name(bpf->obj, "map_socks");
-+
-+		ASSERT_NE(map, NULL);
-+
-+		prog = bpf_object__find_program_by_name(bpf->obj, "on_recv");
-+		ASSERT_NE(prog, NULL);
-+
-+		bpf->on_recv = bpf_program__attach_sockmap(prog, bpf_map__fd(map));
-+		ASSERT_NE(bpf->on_recv, NULL);
-+	}
-+}
-+
-+struct server_t {
-+	int fd;
-+	atomic_int running;
-+	pthread_t thread;
-+	bool thread_created;
-+};
-+
-+static void *run_server(void *arg)
-+{
-+	struct server_t *server = arg;
-+	bool failed = false;
-+
-+	while (atomic_load(&server->running)) {
-+		int client_fd = accept(server->fd, NULL, NULL);
-+
-+		if (client_fd == -1) {
-+			if (!atomic_load(&server->running))
-+				break;
-+
-+			continue;
-+		}
-+
-+		process_client(client_fd, &server->running, &failed);
-+	}
-+
-+	if (failed)
-+		return (void *)1;
-+
-+	return NULL;
-+}
-+
-+static int send_payload(struct __test_metadata *_metadata, int fd, const char *buf, size_t len)
-+{
-+	size_t remaining = len;
-+
-+	do {
-+		ssize_t bytes = write(fd, buf + (len - remaining), remaining);
-+
-+		if (bytes < 0) {
-+			if (errno == EINTR)
-+				continue;
-+
-+			return -1;
-+		}
-+
-+		remaining -= bytes;
-+	} while (remaining);
-+
-+	return 0;
-+}
-+
-+FIXTURE(sockmap_recvfrom)
-+{
-+	struct server_t server;
-+	struct sockaddr_in addr;
-+	struct bpf_t bpf;
-+	char *payload;
-+	size_t payload_len;
-+};
-+
-+FIXTURE_VARIANT(sockmap_recvfrom)
-+{
-+	bool with_recv;
-+};
-+
-+FIXTURE_VARIANT_ADD(sockmap_recvfrom, recvmsg)
-+{
-+	.with_recv = false
-+};
-+
-+FIXTURE_VARIANT_ADD(sockmap_recvfrom, recvmsg_parser)
-+{
-+	.with_recv = true
-+};
-+
-+FIXTURE_SETUP(sockmap_recvfrom)
-+{
-+	memset(&self->server, 0, sizeof(self->server));
-+	self->server.fd = -1;
-+
-+	memset(&self->addr, 0, sizeof(self->addr));
-+
-+	self->payload_len = 1024 * 1024 * 25;
-+	self->payload = malloc(self->payload_len);
-+	ASSERT_NE(self->payload, NULL);
-+
-+	memset(self->payload, 0, self->payload_len);
-+	self->payload[self->payload_len - 1] = PAYLOAD_END;
-+
-+	setup_bpf(_metadata, "sockmap_recvfrom.bpf.o", variant->with_recv, &self->bpf);
-+	atomic_store(&self->server.running, 1);
-+	self->server.fd = start_listening(_metadata, &self->addr.sin_port);
-+
-+	self->addr.sin_family = AF_INET;
-+	self->addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-+
-+	ASSERT_EQ(pthread_create(&self->server.thread, NULL, &run_server, &self->server), 0);
-+	self->server.thread_created = true;
-+}
-+
-+FIXTURE_TEARDOWN(sockmap_recvfrom)
-+{
-+	atomic_store(&self->server.running, 0);
-+
-+	if (self->server.fd != -1)
-+		shutdown(self->server.fd, SHUT_RD);
-+
-+	if (self->server.thread_created) {
-+		void *retval = NULL;
-+
-+		pthread_join(self->server.thread, &retval);
-+		EXPECT_EQ(retval, NULL);
-+	}
-+
-+	if (self->server.fd != -1)
-+		close(self->server.fd);
-+
-+	free(self->payload);
-+	bpf_link__destroy(self->bpf.on_sockops);
-+
-+	if (self->bpf.on_recv)
-+		bpf_link__destroy(self->bpf.on_recv);
-+
-+	bpf_object__close(self->bpf.obj);
-+}
-+
-+TEST_F(sockmap_recvfrom, no_timeout)
-+{
-+	char ignored[128];
-+
-+	for (int i = 0; i < MAX_ITERATIONS; ++i) {
-+		int fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-+
-+		ASSERT_NE(fd, -1);
-+		ASSERT_EQ(connect(fd, (struct sockaddr *)&self->addr, sizeof(self->addr)), 0);
-+
-+		ASSERT_EQ(send_payload(_metadata, fd, self->payload, self->payload_len), 0);
-+
-+		if (recvfrom(fd, ignored, sizeof(ignored), 0, NULL, NULL) < 0)
-+			ASSERT_NE(errno, EAGAIN);
-+
-+		close(fd);
-+	}
-+}
-+
-+static int64_t to_nanos(struct timespec *time)
-+{
-+	return (time->tv_sec * 1000000000LL) + time->tv_nsec;
-+}
-+
-+TEST_F(sockmap_recvfrom, with_timeout)
-+{
-+	char ignored[128];
-+	struct timeval timeo;
-+
-+	timeo.tv_sec = 0;
-+	timeo.tv_usec = 5000;
-+
-+	/* remove the payload end delimiter so the server never responds and recvfrom times out. */
-+	self->payload[self->payload_len - 1] = 0;
-+
-+	for (int i = 0; i < MAX_ITERATIONS; ++i) {
-+		struct timespec beg;
-+		struct timespec end;
-+		int err;
-+
-+		int fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-+
-+		ASSERT_NE(fd, -1);
-+		ASSERT_EQ(connect(fd, (struct sockaddr *)&self->addr, sizeof(self->addr)), 0);
-+
-+		ASSERT_EQ(send_payload(_metadata, fd, self->payload, self->payload_len), 0);
-+
-+		ASSERT_EQ(setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timeo, sizeof(timeo)), 0);
-+
-+		clock_gettime(CLOCK_MONOTONIC, &beg);
-+		ASSERT_EQ(recvfrom(fd, ignored, sizeof(ignored), 0, NULL, NULL), -1);
-+		err = errno;
-+		clock_gettime(CLOCK_MONOTONIC, &end);
-+
-+		ASSERT_EQ(err, EAGAIN);
-+		ASSERT_GE(to_nanos(&end) - to_nanos(&beg), timeo.tv_usec * 1000);
-+
-+		close(fd);
-+	}
-+}
-+
-+TEST_HARNESS_MAIN
+Changes in v4:
+- Report cusm and csum_level separately and convert ip_summed to a
+  bitmask in bpf_xdp_metadata_rx_hash()
+- Fix endianness issue in bpf selftests
+- Add a comment about the driver expected behaviour if the the NIC reports
+  CHECKSUM_UNNECESSARY or CHECKSUM_COMPLETE and the eBPF program modifes
+  the packet
+- Introduce bpf_get_skb_cksum kfunc and related selftest to load the
+  checksum result to the SCHED_CLS eBPF program attached to the qdisc.
+- Link to v3: https://lore.kernel.org/r/20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba71@kernel.org
+
+Changes in v3:
+- Remoe leftover assignment from v2 in veth_xdp_rx_checksum()
+- Fix typos
+- Fix commit logs
+- Link to v2: https://lore.kernel.org/r/20260213-bpf-xdp-meta-rxcksum-v2-0-a82c4802afbe@kernel.org
+
+Changes in v2:
+- Remove XDP_CHECKSUM_PARTIAL definition
+- Improve veth_xdp_rx_checksum() callback
+- Fix uninitialized case for cksum_meta in ice_get_rx_csum()
+- Fix sparse warnings in ice driver
+- Fix typos
+- Link to v1: https://lore.kernel.org/r/20260210-bpf-xdp-meta-rxcksum-v1-0-e5d55caa0541@kernel.org
+
+Changes in v1:
+- Rebase on top of bpf-next
+- Test ice driver using xdp_hw_metadata tool available in the bpf
+  kernel selftest
+- Improve cover letter with an use-case for
+  bpf_xdp_metadata_rx_checksum()
+- Link to RFC v2: https://lore.kernel.org/r/20250925-bpf-xdp-meta-rxcksum-v2-0-6b3fe987ce91@kernel.org
+
+Changes in RFC v2:
+- Squash patch 1/6 and 2/6
+- Introduce enum xdp_checksum definitions
+- Rework ice support to reuse ice_rx_csum codebase
+
+---
+Lorenzo Bianconi (8):
+      netlink: specs: add XDP RX checksum capability to XDP metadata specs
+      net: veth: add xmo_rx_checksum callback to veth driver
+      net: ice: add xmo_rx_checksum callback
+      selftests/bpf: add selftest support for bpf_xdp_metadata_rx_checksum
+      selftests/bpf: add bpf_xdp_metadata_rx_checksum support to xdp_hw_metadat prog
+      net: add bpf_skb_rx_checksum kfunc to read skb checksum metadata
+      selftests/bpf: Add test for bpf_skb_rx_checksum kfunc
+      selftests: net: add test for XDP_PASS skb checksum invalidation
+
+ Documentation/netlink/specs/netdev.yaml            |   5 +
+ Documentation/networking/xdp-rx-metadata.rst       |   8 ++
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c      | 123 ++++++++++++++-------
+ drivers/net/veth.c                                 |  32 ++++++
+ include/net/xdp.h                                  |  13 +++
+ include/uapi/linux/netdev.h                        |   3 +
+ net/core/filter.c                                  |  31 ++++++
+ net/core/xdp.c                                     |  32 ++++++
+ tools/include/uapi/linux/netdev.h                  |   3 +
+ tools/testing/selftests/bpf/bpf_kfuncs.h           |   8 ++
+ .../selftests/bpf/prog_tests/skb_rx_checksum.c     |  50 +++++++++
+ .../selftests/bpf/prog_tests/xdp_metadata.c        |   9 ++
+ .../testing/selftests/bpf/progs/skb_rx_checksum.c  |  33 ++++++
+ .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |   7 ++
+ tools/testing/selftests/bpf/progs/xdp_metadata.c   |   2 +
+ tools/testing/selftests/bpf/skb_rx_checksum.h      |   8 ++
+ tools/testing/selftests/bpf/xdp_hw_metadata.c      |  31 ++++++
+ tools/testing/selftests/bpf/xdp_metadata.h         |  13 +++
+ .../selftests/drivers/net/hw/xdp_metadata.py       |  55 ++++++++-
+ .../selftests/net/lib/skb_metadata_csum.bpf.c      |  73 ++++++++++++
+ 20 files changed, 496 insertions(+), 43 deletions(-)
+---
+base-commit: f6f3b36c15ed44de1fbb44e645e4fae8c4a4453e
+change-id: 20250925-bpf-xdp-meta-rxcksum-900685e2909d
+
+Best regards,
 -- 
-2.52.0
+Lorenzo Bianconi <lorenzo@kernel.org>
 
