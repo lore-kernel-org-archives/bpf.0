@@ -1,113 +1,81 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9945C41D62D
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 09:16:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 263A941D65D;
+	Wed, 15 Jul 2026 09:20:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784107004; cv=none; b=hQS8D5I8ku7A5SJvSeZJUNx6Tfun6Ca8EBChcrjS185JSInN0NUbdqtHV/dgOB2T9IgbH1dWhnSh2QwkxterSNbUKOCehLmyoTVInjRFklmK/9lmEv5ZPT5+eK1F51tf8E87EXlfvKVbApc2o+j3dPkj4ALtsCdrSrAYbiuPyTU=
+	t=1784107236; cv=none; b=VJVZPAu5NNRXFTwvtAczw8ZG7AOmGIV9HVrAJIiprnvSvNVLa06GtrY40avD3fjk+7cudg/qqa/aV0zgl/qHNMVG66xAr+AdUWXxhmxky/U/w7D7d6wPW0dLOPaGUSEIlSG2ZsT/72pHKJz2ksLVOC6C7s1ct4dwLTwJGtlH/sE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784107004; c=relaxed/simple;
-	bh=j9GQJQzKvcMR+VCSiLR4VIzU/cQ+59f4K6xs5L/YzoM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uQVKhDJT1BW6XZ/7ql45qF80B9kqlW8/vEONsZsJzL610WK0Vxy7YY+N17hMGf79V/oUpCXyRSfYiwVbCqOdtA+kUFYc84AgmVEl0tPturaNM5k7GkaQu3KcnVD1qpdc/lvpnxyMV1T88zUlaj50AGRmHTzcAMN4N4KyGWbiw9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=eyJ0F88i; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1784107236; c=relaxed/simple;
+	bh=K3lc3/SJqlFIf+u1/wXLZhZwPtLLwAmXLFruIwBFY5Y=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=M6o460lXGzaNIdMgZRUaxgQo9mczMbobOd9uKl+HRp81cwae1dIV7bygCEzvOrOyN7XGlPMdkrzUXG+NnFhCL++2vHyI0g5D2B9AJsXR62G4CfEmivo92t8HWK2VGdjlBOLznnMhpUwM/pztJ6mRoIzL+eAgvBBFNnZNNvxBObs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kAudLFSa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="eyJ0F88i"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c160420289bso688366366b.0
-        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 02:16:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1784106994; x=1784711794; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=A1ZmhCboRG80lxcYaF433cPODXSJBxTB3W4f2Wh3+4c=;
-        b=eyJ0F88ipHm7mrBSfZk5sbVGtLSJL61gfqM4lmBMfcwfbHgCK+2o0CQumTSsH7jCG2
-         MhIAXtEF1t6+E0MGfjVdNOBIoSjqjqBbr3p7ZngEHg6h01XrhWlXLlvtypxmKnOdJaDm
-         FUDgM08QDUiGzMuSgsg1Rh6vjTpFRmlfzmsyKSXA3mM9skH1ytlWXREnI5pX2KJ1xK2A
-         baSMJRgxUenAH1cqQF+ltlf1m25ideXr1y6U2GwDutvv/u5Z3aUvEPxBkXL1W8qr4zCd
-         yYNbqLuaFYOPLSd2r9hHyzp0c3NvIeiW8pZUpDN0saakUlW+FNHUC7QVVNGf/Xi0CoP2
-         OtGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784106994; x=1784711794;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=A1ZmhCboRG80lxcYaF433cPODXSJBxTB3W4f2Wh3+4c=;
-        b=HloIG9xKej8uZZEnqnXu3a8qoSNpN7HHbwZAz29z43YeHj58XMKQ6GXyieZMwgr2mK
-         JfiuNPpgcaSzXLPZVohNb0TwJo6EORrgqAyLe0LuLPu+GEoSLtPu0FSsWe2vk2Bowx7M
-         +cv0Dv3m9VOTbcqzCCwcvOZL4PTFg8Rf4GtDuYI9CtCfIJaS+UYlSu4FzFa+wbSZUzSq
-         XYharboI8pxeldFIkgvZtRNamvXiCON/EFinkAi1yVjVE8LDMKZ3iECU88UzunDSYsPq
-         u/XcZEZZscEEfbsl9KPYdP6xpEeKt+LDjHbUXIil5q7x+ke+hARlHoU5gRNY0lQDgYjL
-         /Veg==
-X-Forwarded-Encrypted: i=1; AHgh+RoZxynhevv8a6/R0ZG+wuaSLkIL/I+VIGfQCBRXiOhBweOyqvgF9gZnlUwn4a2GNDn7uoI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3omt2i3mHOpp7OlZrtQZDJIzx9WSLSkKO0SYPOogwkXQ0oLek
-	66BiSSBlui8hVBP095ed6vNaXA03JnNvV5aMauSIKihbh39/iM33yVZd6Jxa8iQBWGw=
-X-Gm-Gg: AfdE7clxP2AYDlvf9urSJxz5hLyI7KNuI4jn/x3VxATJPPRLdfSM64Yr9/qQQ0EPTX+
-	TBjq85+biImX4k5lphrxPBGKGQkcKuEMZYcvy+/3jBMUYaHbalg0z21TskdTkI9IiqPqImQNXsh
-	TsEO1pR/KlsUpIyU0aAWiPfsxhzWitbtSltl0gxv5mq0TFR3s6i3YjE3+id9vsBD5QEutn0W9O5
-	pglyE/rzvl59uySZ/mpH4kVhnuiQ8INOtB2rdsnVD/qzgcFvTTWmaKqcBSPLUjW6pB67XDXgnua
-	HYHaVkIAxBoccpYz2RgIcOcTf29LaVEyGpR2yQiktyxX1+jFUlBqGbxGPiosxdi9083W9nA1g8n
-	UBFu4oHqtWeeFZ/wF7N2nbzumy3VhsKCHvcdoJplVlHRUc9Nb4rcE3yncHlc62shwex3MbhBVjU
-	1kpOn5eqq97EWV1c+DbBcTCIu0TXcWXq0E
-X-Received: by 2002:a17:906:9c8d:b0:c16:579f:f7e2 with SMTP id a640c23a62f3a-c1667c58e81mr324023266b.64.1784106994203;
-        Wed, 15 Jul 2026 02:16:34 -0700 (PDT)
-Received: from u94a (27-51-89-168.adsl.fetnet.net. [27.51.89.168])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9d3c99fsm130888425ad.68.2026.07.15.02.16.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2026 02:16:32 -0700 (PDT)
-Date: Wed, 15 Jul 2026 17:16:17 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: sun jian <sun.jian.kdev@gmail.com>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Matt Mullins <mmullins@mmlx.us>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH bpf v5 2/2] selftests/bpf: Cover negative buffer pointer
- offsets
-Message-ID: <aldPkgqkV9yq9OFf@u94a>
-References: <20260714093846.18159-1-sun.jian.kdev@gmail.com>
- <20260714093846.18159-3-sun.jian.kdev@gmail.com>
- <alcGgfNM94zgydlK@u94a>
- <alcKV2MXI_5dsaez@u94a>
- <CABFUUZFsJsF-C5Z2gb3FkZ7WD=vBavnGdZ7veScP_+dwZLsaMg@mail.gmail.com>
- <488c235db713648bb2f5c90e4389c96a97ebcdde.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kAudLFSa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C93911F000E9;
+	Wed, 15 Jul 2026 09:20:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784107234;
+	bh=BvW5fMXW2I+0++iWJ3nKKN2dWxiW8VsR77HyEPA+1KQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=kAudLFSaTK7FKUkJlIQ1eesZNmS8g09P6PxxZFjV/QRpY2UvASF1GK0LuTlpkSPvG
+	 UxYOj0myM2OazqUuL6vOk714kT3Ju6hnY6zAPi3PQ5L7ZjO6xz3E38C4qhHBv6cDJC
+	 mh5zwcUvIJ74uLZQ0fxY0qqAGoEtQt0vN/aE3L/G2v3DECaBGDR1sDKl75H4aZ6nQA
+	 c5pJHp0ck9rV4G4JO1ifUK7GFqdUAyIrGjVcd5zQVeEVMZ9AXFUYDv2dYTYFT3FZo2
+	 OxJqk86ONJk82oq5ac6AyXTNw4AzrJq2NXrOfZuJx5FuB+j19twDEhnn4cSlwfvgv6
+	 i4NntyXcTbLaw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 199553938E8D;
+	Wed, 15 Jul 2026 09:20:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <488c235db713648bb2f5c90e4389c96a97ebcdde.camel@gmail.com>
+Subject: Re: [PATCH bpf v3 0/2] bpf, sockmap: Fix FIONREAD for sockets without
+ a verdict program
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178410720889.3980181.6978995644978494942.git-patchwork-notify@kernel.org>
+Date: Wed, 15 Jul 2026 09:20:08 +0000
+References: <20260708-fionread-no-verdict-v3-0-b4ee31b3af53@coralogix.com>
+In-Reply-To: <20260708-fionread-no-verdict-v3-0-b4ee31b3af53@coralogix.com>
+To: Mattia Meleleo <mattia.meleleo@coralogix.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, john.fastabend@gmail.com,
+ jakub@cloudflare.com, jiayuan.chen@linux.dev, memxor@gmail.com,
+ emil@etsalapatis.com
 
-On Wed, Jul 15, 2026 at 01:54:37AM -0700, Eduard Zingerman wrote:
-> On Wed, 2026-07-15 at 13:26 +0800, sun jian wrote:
-> > > Anyway, still recommend adding a regression test that test access to one
-> > > byte before the start of writable context.
-> > 
-> > The new tracepoint_writable_reject_negative_const_offset verifier case
-> > already covers an access before the start of the writable context:
-> > 
-> >     r6 = *(u64 *)(r1 + 0);
-> >     r6 += -8;
-> >     r0 = *(u64 *)(r6 + 0);
-> > 
-> > Its effective access range is [-8, 0), so it is rejected at load time.
-> > This is the direct regression test for the negative-start case.
+Hello:
+
+This series was applied to bpf/bpf.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+
+On Wed, 08 Jul 2026 18:54:59 +0200 you wrote:
+> Sockets added to a sockmap/sockhash with no stream/skb verdict program
+> attached answer FIONREAD with 0 even when unread data is pending in
+> sk_receive_queue. Fix tcp_bpf_ioctl() to account for the receive queue
+> in that case, and add a selftest.
 > 
-> The existing test seem to be sufficient, why would it matter is at
-> offset -8 or -1 given that the read is appropriately sized?
+> Changes in v3:
+> - Remove unused sk_psock_msg_inq()
+> - Link to v2: https://patch.msgid.link/20260708-fionread-no-verdict-v2-0-29dd293621c7@coralogix.com
+> 
+> [...]
 
-Right it doesn't. Let's just, pretend I haven't suggest that.
+Here is the summary with links:
+  - [bpf,v3,1/2] bpf, sockmap: Account for receive queue in FIONREAD without a verdict program
+    https://git.kernel.org/bpf/bpf/c/04af4efde58a
+  - [bpf,v3,2/2] selftests/bpf: Test FIONREAD on a sockmap socket without a verdict program
+    https://git.kernel.org/bpf/bpf/c/a42f05cc4c1d
 
-[...]
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
