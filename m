@@ -1,74 +1,65 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E46127587D;
-	Tue, 14 Jul 2026 23:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2384D249EB;
+	Wed, 15 Jul 2026 00:12:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784073377; cv=none; b=kISQ4q1/bU4v0TggFpy+kOy2vrWB5Tg2NaxEeXsRYCzh9g41fo8m+exc8wdS7A3ggf4ktoM5/ip/CdI/6pEgBC7/Vpq2/JkhKBRQdIICDZ5zju8QHxvVQxM/jS7or3mU129/1dRdSufxno/YbvL+KTLweFZjITu0I2Z1YEi3y9o=
+	t=1784074377; cv=none; b=dNlGF6HT7XMnOpVeWddrPLa7q4BEgK9CR7N0hf4KNgKDf/HgH+m8XXtnrjGT6rWV6qXEWNtEB3gzyfjn1B3hX0CRe+VoGAUKn5/ohmCV7QkZTuTYLLx516k2H64wKa6WRnmtgzNHlu++QwAJBpzNRwde58tXHTlZ7WSYaf6cJhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784073377; c=relaxed/simple;
-	bh=lv+Vv4vLOjz9vGIGt0vpsKkIVSI5c/rk3NRjSUaYapg=;
-	h=Date:Message-ID:To:Cc:From:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o99++7lJm05QSe5USpLrp/lqN42reIquVrhtkGOygT9nz/xtmSyVF+b+10kWbITcBjiVQqKU5v9qFlfCs976v1pAjLG2UCs+rMkzC14SdBmwnL35maNzKM7COjEsOdylr4xPSm9TsOWL8pZX2Xzevd6Kk91vC7H6xiiZxT/K0dM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gg6bNl3l; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784074377; c=relaxed/simple;
+	bh=6jc+yjp1RQ5OnSkF89Ts/Jm0d9pCxfFq87zIRlLRKY0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fAzM5k89wx2Ovy6FUOdxPHe6i3xAG8ChDcIt7pQfPwLqhigb3f04MotVZhxsCMbVITmifsLH4KaU2ZBIsW+krjTvl2Lalqrj4OKoaV9uAtEsNIIO6FQyHwIXHcYUSZ7Es6ULqUWBCPuxu+OxFXB1tVNZfwx1QruGlroV17uQHgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CMYw2Fig; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gg6bNl3l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3077A1F000E9;
-	Tue, 14 Jul 2026 23:56:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CMYw2Fig"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0E381F000E9;
+	Wed, 15 Jul 2026 00:12:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784073376;
-	bh=0h5Va8ni1OohLi1Sssv6cbVzXGa++iFfEvuH90v5y5I=;
-	h=Date:To:Cc:From:Subject:In-Reply-To:References;
-	b=Gg6bNl3lmKw+NRzUEzgK1q68hYwul3RruxnDCh4lw+47I9/SG9gXOTz3eCyUtmYit
-	 Jcf6+34eTfPMMwM1SH7Ff9X5J3tR81MXm92AmSRhxE7nsBYAR/VV/2pA+bwMW1Z4rG
-	 KLxHfdBnqZ/+M/VdRlqd7oenWP4HTQK4bdG8CQSxDhEv0Ry1xh59PoNSBMBFGPeYTK
-	 I1fe7QVX7de+dMDl8FPCaZ3WTJ40LpDuBfFVOa52H1KnbrlnCk8WcwTaOyRtseY5FH
-	 KlhenNwdiL2NnJeccVnbxS5WLLBHiVcDV0onJ+V99TmtoGp3tbemGYed6ncAElioGa
-	 pBnasDgnY+f3Q==
-Date: Tue, 14 Jul 2026 13:56:15 -1000
-Message-ID: <7c5d028a7a46a2917a3fcc8d1eccf084@kernel.org>
-To: zhidao su (Xiaomi) <soolaugust@gmail.com>
-Cc: David Vernet <void@manifault.com>,
- Andrea Righi <arighi@nvidia.com>,
- Changwoo Min <changwoo@igalia.com>,
- Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>,
- Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>,
- Valentin Schneider <vschneid@redhat.com>,
- K Prateek Nayak <kprateek.nayak@amd.com>,
- sched-ext@lists.linux.dev,
- linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-From: Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH] sched_ext: Validate cid override before updating tables
-In-Reply-To: <20260714024704.3318132-1-soolaugust@gmail.com>
-References: <20260714024704.3318132-1-soolaugust@gmail.com>
+	s=k20260515; t=1784074376;
+	bh=SDbonQLIoOSfVB1dApPM6LkzNs1SHNxOM+rrSsaUBBQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=CMYw2FigPP7WfHBpvhgZlAhmWy0bpTPXB0dWdx6Sf2hHBsld1RyoxLlCa++abrtsP
+	 6EV4GohitQfVk2wKCr8O71Tk0CdeD46bXWbAd2OqoAUCZQKX4FEbqODHs0l9VZXgHA
+	 iRubQs5iHitl98Xt++qJSvdKnk6DPP7t4j7rCfrbbuns2ri1g0rNuDJt2wPVOI5RQC
+	 Gkks8B8BofuZ3kPdXy6OKqse1ZB5GzONMooax7IYKIEDgxmK9JfdyAwMg8UBJjWMwL
+	 te64+fdolGgdSWPyG5+w2q0ZQPCiYtxCHLkkE2gxADmGExi2IMa1LU+wdk/ZFNBGYW
+	 n+XWGFINNchSQ==
+From: Sasha Levin <sashal@kernel.org>
+To: stable@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Sasha Levin <sashal@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	loongarch@lists.linux.dev,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	x86@kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Subject: Re: [PATCH 6.18.y 0/6] cBPF JIT spray hardening
+Date: Tue, 14 Jul 2026 20:12:40 -0400
+Message-ID: <20260714200600.stable0011@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260713-cbpf-jit-spray-hardening-6-18-y-v1-0-755f60c55705@linux.intel.com>
+References: <20260713-cbpf-jit-spray-hardening-6-18-y-v1-0-755f60c55705@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
 
-Hello.
+> These backports harden BPF JIT against spectre-v2 class of attacks. Without
+> a predictor flush, execution of new BPF program may use stale prediction
+> left behind by the freed one.
 
-for-7.3 already does this. scx_bpf_cid_override() validates the whole
-mapping first (cid_valid() and the duplicate check) and only writes
-scx_cpu_to_cid_tbl/scx_cid_to_cpu_tbl in a second pass, so a failed
-override leaves the tables untouched. It also kmemdup()s the input up
-front to avoid a concurrent-mutation race.
-
-The patch is against an older cid.c and no longer applies, so no respin
-is needed.
-
-Thanks.
+Queued the series for 6.18, thanks.
 
 -- 
-tejun
+Thanks,
+Sasha
