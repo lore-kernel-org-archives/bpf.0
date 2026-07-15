@@ -1,160 +1,156 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 307A72989B0
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 13:31:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA272877E8
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 13:33:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784122272; cv=none; b=oqhX+VQ1hxIJhw67wQ4Zo3cy0Inuvpv82VV5Y1yhObPjmTcV6XoCdtPHeH00Y/1JCqvJZRLGDE0xey/kG5CwGGmXoTzisaieHHFOD/G6so4KPxs0QVqxVzbQ3Vc9TCMP49//+XAT1Y6U2oeOcI6odralbRAvk5WGZ2YqIdD64xs=
+	t=1784122439; cv=none; b=Nb+r90GbkzBQ60DjnNMj9s2IdZgPbWJ8SoXeEvrArtmVGtE6c3sTZByXOFmlQJEPhakkFGGtDG0op6rztfyxyoFnIL2u0pDld6wfGPIwzm5WHcYZMKxTnxmIlIep79QK1g/67prA2XPsgdQZHPBpn6UqsPfyAO1ziizAwDthH/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784122272; c=relaxed/simple;
-	bh=r7yevapaTVOLPi2EMY3yRB3VyEnuiVOGm6nqUqP7j4Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QgLkTX9GQppSk1Xrb4wS8xwaefM9i0iKDz3c+SCIEj6Vlou4B0f8UIDH1rZD7krEE+Hym+0BWNMzuiTqdKAaBrRd9AO8XcF2WXvhLcql5WbdR7TVudDQfT3NLSofxeC8YdvmV8VHvjsalchrZGkv2KpPAgY6NkZ6xMOQAza27Gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WyCEVY3K; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=csKbZ+iS; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1784122439; c=relaxed/simple;
+	bh=MYGH258/PHU7QaQv4S4hHO3mBM25h/p+WtrhvnUqE0k=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=G5VUfF5lIB8//IK+qHuUDLTkbrgFQyz/vbfmY0Id+FBHYHf8+Rj/sTzFr7jfMMjmlO4qEkhxJVreIibaBe7i0f8Zhrky/sYWBKvsHboYmRYsvSGXd3AMRGU3IJzUjfVoCk0EcpF1CD1PC8pKJ/e5oT7DT3cfCgbaNJTCnIpgy3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cjLkkTnq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WyCEVY3K";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="csKbZ+iS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784122260;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=enHATtN5iwfaTojb3cX860YgJN62BkbBuCc1G6D8rKA=;
-	b=WyCEVY3Ky9Ijfz66CkDlKH9+8duvV1KotBs0TP62O1A9UdaQtthe3ZcUweG9LR6VZuVM/u
-	GRnJ3ao2RCjLdlMalCff2paEtezFsNQVw3VgMhOgo4orkdJ9K3s+D3nbI+kBZ4esnuiNoJ
-	FUe8k/f72U5v0j6b5WfL9SzJ1A2hfsQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-319-J3hA3cYOO7eP1-QJ8clSqQ-1; Wed, 15 Jul 2026 09:30:58 -0400
-X-MC-Unique: J3hA3cYOO7eP1-QJ8clSqQ-1
-X-Mimecast-MFC-AGG-ID: J3hA3cYOO7eP1-QJ8clSqQ_1784122257
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-493b54823bdso4528505e9.0
-        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 06:30:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1784122257; x=1784727057; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=enHATtN5iwfaTojb3cX860YgJN62BkbBuCc1G6D8rKA=;
-        b=csKbZ+iS0sqSIrU76V/rgED/qwZzEpeeinRT/Wj3CIiHt7qS2bUQyiQO1JeClNk5hO
-         EAugLzzgaFJi67YRAcOvB4m5qizuxek48+CoBaU2iXNfzqXfG6yof5l3LlE5GSUTK6MX
-         F9AP7Do/sJIpRwGA7U7yHHiw8cVwOn/yNOyNquOY0SZiw0+5dCHehLwcDbAcem0zFiZp
-         GgdtQFeYQjff9q6qZbfuO3QKADf4ASlZSjOvNc9eoyndEcPTx6hcqA2kAKtKiVpAW9bv
-         aPLtGB0YSzMvkzog2X1P4W/InMrdLxJCX9EnDUujd0E5XF9OnLP+W6c54LSTF7CYSoZd
-         04xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784122257; x=1784727057;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=enHATtN5iwfaTojb3cX860YgJN62BkbBuCc1G6D8rKA=;
-        b=WzkJrzGBSlh4oeGBlGlnZM+/s7pYu12o8HYqI+tKm5dFHZJebZuHWlxHmPFkuA2JQa
-         e4auOY1tZxvnfci0d+3VkaQnPMA7Y09jC3krHdBEKE6i7eCaBOeYmiRNuQy0tv2m8Jwi
-         KOdC1pWmHs5MKAYcmf0vMG5RiQSnlTOE09pKEubN1zZUVLXPr9MNTn0rIiG5MqMpr6no
-         QKmVPoQLUR7frHXtQ8fDqJQwbozAGIGGL5xIncONv6IhkNgVHS833T/WRHt/4gJsNH3n
-         BSmrMzUxfeWMXVvpaSDJlp+xaAfQtW4Co1CtBzYC99V2rrB7jZuGJ/QknldsJx+GWLUv
-         IOjg==
-X-Gm-Message-State: AOJu0Yw336SAyL7knyrwdI1Gim891AZ4Af3l5qlDXoOXl+xDdadS80Xd
-	wsJYO+kMh/FVaHeqkV1+lwCJ8jyTonIK3EYqZOrNZKZvl0M5gun+XveonPutPSUPycuuLWarjXz
-	A1uNgxdYvxLYqpyGEa3S290l2766A7uERQUbQW7N4sqsiSa0M/uh5
-X-Gm-Gg: AfdE7ckNKrwj+H1gSz60iNFrCtNwJum/9sbSZ4Y9x2pRD2Y5ww/lg1avFwTEsa3zCZ7
-	qvlH4pqkZyiggFF5dsDX5JDxZ++rjCm3/M0OsnzwT3bRNdDGL1SMo+r05YUafeHoVlkgpOVd9CU
-	YIaI/vTBo5+fkKo++4asG8shnyK/g5MH8qP7sJuNW29DlT2KbHDmMxhpBpvg3Vrhh5PqUsSjs9e
-	mVuSuo/1uQ4kyI1EDYvvR7CRIUmnC0hsP7UQ+B9rt8qV/wu/RysC04fjereK3ScS2nyDnHfeXVj
-	COY4OfhXDQdRhBDUCQSQvtzWes0XlGHu9g9UwDm78TiyqfCXowiWzs5JOF0M5fnHzF9dVwdj+Yn
-	dCUiWkdwHb2VwuZzciVqKj4DCqbbapkWYtQ9PnoArvJEWhg==
-X-Received: by 2002:a05:600c:1d8c:b0:494:1f7:8057 with SMTP id 5b1f17b1804b1-49401f780a8mr115132825e9.1.1784122257063;
-        Wed, 15 Jul 2026 06:30:57 -0700 (PDT)
-X-Received: by 2002:a05:600c:1d8c:b0:494:1f7:8057 with SMTP id 5b1f17b1804b1-49401f780a8mr115132405e9.1.1784122256659;
-        Wed, 15 Jul 2026 06:30:56 -0700 (PDT)
-Received: from [192.168.0.135] (185-219-167-205-static.vivo.cz. [185.219.167.205])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4953df0fc6esm44194195e9.9.2026.07.15.06.30.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jul 2026 06:30:56 -0700 (PDT)
-Message-ID: <c49fbf3d-c1de-4eb3-a6b4-22c7bc84d655@redhat.com>
-Date: Wed, 15 Jul 2026 15:30:54 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cjLkkTnq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CCAC1F000E9;
+	Wed, 15 Jul 2026 13:33:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784122438;
+	bh=7iJhT1gTn0+A9j3TtmaPUxEeX4UwgXhgWESi0J0LqnQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=cjLkkTnq3zx0RXe9KiTh+ChVwhqz7R+n9kJJ5UAm8FVDCbZtPOJP+O+mUefXwgzFy
+	 WhwsZNWKoU4sPnoKWyL5xdR69M41CfSXppQIsXF+BHk+WGRXVuRA38B0KGk+YQlx82
+	 4XHpUFTNk1YGNGCK+fCqz5Jhu22Wo9T05uHUdKKMYOhBUGLl7BYtd4wD/TTybLe16k
+	 2jJ+dHU1T67/YHHNPcx0Xv61z8FGWlDNDRccspQPsU3XS8xZdLh1gOWOYba9gu0A8W
+	 ZTSEO31fCUN/6KCnBJthyxRmBKusGdUnukCQ4DwcCLE6ccnAoH8p6gBHzuXXa7SQe4
+	 xTNh01qEr0udA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/4] bpf: Inline bpf_iter_num_new() kfunc
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Puranjay Mohan" <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260715130430.318421-2-puranjay@kernel.org>
+References: <20260715130430.318421-1-puranjay@kernel.org>
+ <20260715130430.318421-2-puranjay@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 15 Jul 2026 13:33:57 +0000
+Message-Id: <20260715133358.0CCAC1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 0/4] selftests/bpf: Fix compilation with
- RELEASE=1
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- Eric Biggers <ebiggers@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>
-References: <cover.1784112948.git.vmalik@redhat.com>
- <CAP01T74To6X_XPeM5L9wN52QuL8oSuoDA3jk3jhR_Y1bLXH2Lw@mail.gmail.com>
-From: Viktor Malik <vmalik@redhat.com>
-Content-Language: en-US
-In-Reply-To: <CAP01T74To6X_XPeM5L9wN52QuL8oSuoDA3jk3jhR_Y1bLXH2Lw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 7/15/26 14:10, Kumar Kartikeya Dwivedi wrote:
-> On Wed, 15 Jul 2026 at 13:22, Viktor Malik <vmalik@redhat.com> wrote:
->>
->> When compiling BPF selftests with RELEASE=1 (which most notably adds
->> -O2), GCC reports several warnings. These are by default treated as
->> errors and abort the compilation.
->>
->> This series fixes all of the issues such that selftests can be compiled
->> with RELEASE=1.
->>
-> 
-> Are these changes sufficient to fix all issues? I see more when I
-> compile with GCC 15 and RELEASE=1.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] The inlined `bpf_iter_num_new` emits CPUv4 `BPF_MOVSX64_REG` instr=
+uctions during the post-verification fixup pass. On architectures whose JIT=
+ compilers do not natively support CPUv4 (e.g. x86-32, MIPS32), `BPF_MOVSX`=
+ is miscompiled as a standard zero-extending 64-bit `MOV` because they igno=
+re `insn->off`. This breaks the iterator's loop bounds check and causes a d=
+enial of service (unbounded BPF loop).
+--
 
-Strange, I tried compiling with both GCC 15 and 16 and these four
-patches got rid of all the issues. Can you send the specific issues that
-you see?
+--- Patch [1]: [PATCH bpf-next 1/4] bpf: Inline bpf_iter_num_new() kfunc ---
+commit a284b42200c5d5b485b4d27a28c08c05022dfa70
+Author: Puranjay Mohan <puranjay@kernel.org>
 
-> Also, is there no way to make ASSERT_OK_PTR work when we're testing
-> for non-NULL-ness? Having to change it to explicit != NULL is kinda
-> sad.
+bpf: Inline bpf_iter_num_new() kfunc
+   =20
+The numeric iterator kfuncs bpf_iter_num_{new,next,destroy}() back the
+open-coded iterator macro bpf_for() and are emitted as regular kfunc
+calls by the verifier. bpf_iter_num_new() is small and only touches the
+on-stack iterator state, so the verifier can open-code it and avoid the
+call overhead of setting up an iterator.
 
-ASSERT_OK_PTR uses libbpf_get_error(), which returns -errno when the
-passed pointer is NULL. This is correct for checking pointers returned
-from libbpf because libbpf always sets errno when it returns NULL as an
-erroneous value of a pointer. However, that is not the case for other
-library functions, such as malloc(), so calling libbpf_get_error() on
-their result may actually return 0, if the function returned NULL and
-never set errno. 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index de816063ae63d..f578cebbade4f 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-So, I'd say that in the current state, results of non-libbpf
-ptr-returning functions should be checked with ASSERT_NEQ.
-Alternatively, we can update ASSERT_OK_PTR to explicitly fail with a
-default error code when NULL is passed, for example:
+[ ... ]
 
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-index 2cf950afcd85..bf94b0947790 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -390,7 +390,7 @@ void hexdump(const char *prefix, const void *buf, size_t len);
- #define ASSERT_OK_PTR(ptr, name) ({                                    \
-        static int duration = 0;                                        \
-        const void *___res = (ptr);                                     \
--       int ___err = libbpf_get_error(___res);                          \
-+       int ___err = ___res ? libbpf_get_error(___res) : -EINVAL;       \
-        bool ___ok = ___err == 0;                                       \
-        CHECK(!___ok, (name), "unexpected error: %d\n", ___err);        \
-        ___ok;                                                          \
+> @@ -19715,6 +19715,40 @@ static void __fixup_collection_insert_kfunc(stru=
+ct bpf_insn_aux_data *insn_aux,
+>  	*cnt =3D 4;
+>  }
+> =20
+> +/*
+> + * Inline bpf_iter_num_new(). R1 holds the pointer to the iterator, R2 a=
+nd R3
+> + * hold the (int) start and end arguments. Keep in sync with the kfunc in
+> + * kernel/bpf/bpf_iter.c.
+> + */
+> +static int inline_bpf_iter_num_new(struct bpf_insn *insn_buf)
+> +{
+> +	/* if (start > end) goto einval; */
+> +	insn_buf[0] =3D BPF_JMP32_REG(BPF_JSGT, BPF_REG_2, BPF_REG_3, 9);
+> +	/* r0 =3D (s64)end - (s64)start; */
+> +	insn_buf[1] =3D BPF_MOVSX64_REG(BPF_REG_0, BPF_REG_3, 32);
+> +	insn_buf[2] =3D BPF_MOVSX64_REG(BPF_REG_4, BPF_REG_2, 32);
 
-However, that would make us lose the error codes passed via errno from
-libbpf.
+[Severity: High]
+Does this code emit CPUv4 instructions (BPF_MOVSX64_REG) into the instructi=
+on
+stream post-verification?
 
-Viktor
+Since inline_bpf_iter_num_new() is called from bpf_fixup_kfunc_call() after
+do_check() has completed, the verifier will not reject these instructions on
+older architectures.
 
+On architectures whose JIT compilers do not natively support CPUv4 (such as
+x86-32 or MIPS32), BPF_MOVSX is miscompiled as a standard zero-extending
+64-bit MOV because they ignore insn->off.
+
+If start is a negative number and end is positive, start will be passed
+zero-extended in the 64-bit register. A normal 64-bit MOV fails to sign-ext=
+end
+this, and the subsequent subtraction r0 =3D end - start yields a large nega=
+tive
+64-bit integer instead of the actual positive distance.
+
+> +	insn_buf[3] =3D BPF_ALU64_REG(BPF_SUB, BPF_REG_0, BPF_REG_4);
+> +	/* if (r0 > BPF_MAX_LOOPS) goto e2big; */
+> +	insn_buf[4] =3D BPF_JMP_IMM(BPF_JSGT, BPF_REG_0, BPF_MAX_LOOPS, 8);
+
+[Severity: High]
+Could the signed comparison BPF_JSGT fail to enforce the loop bounds if the
+subtraction yields a large negative number on older JITs?
+
+If the distance calculation evaluates as a negative 64-bit integer, this ch=
+eck
+would evaluate to false, bypassing the BPF_MAX_LOOPS limit. This could allow
+a BPF program to loop up to 4.29 billion times, potentially hanging the
+kernel.
+
+Since the if (start > end) check already ensures end >=3D start, would it be
+safer to use standard 32-bit arithmetic? A 32-bit unsigned subtraction
+(u32)end - (u32)start evaluates to the exact distance and correctly
+zero-extends into the 64-bit register for the subsequent BPF_MAX_LOOPS chec=
+k.
+
+> +	/* s->cur =3D start - 1; */
+> +	insn_buf[5] =3D BPF_ALU32_IMM(BPF_ADD, BPF_REG_2, -1);
+> +	insn_buf[6] =3D BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_2, 0);
+> +	/* s->end =3D end; */
+> +	insn_buf[7] =3D BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_3, 4);
+> +	/* return 0; */
+> +	insn_buf[8] =3D BPF_MOV64_IMM(BPF_REG_0, 0);
+> +	insn_buf[9] =3D BPF_JMP_A(5);
+> +	/* einval: s->cur =3D s->end =3D 0; return -EINVAL; */
+> +	insn_buf[10] =3D BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 0);
+> +	insn_buf[11] =3D BPF_MOV64_IMM(BPF_REG_0, -EINVAL);
+> +	insn_buf[12] =3D BPF_JMP_A(2);
+> +	/* e2big: s->cur =3D s->end =3D 0; return -E2BIG; */
+> +	insn_buf[13] =3D BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 0);
+> +	insn_buf[14] =3D BPF_MOV64_IMM(BPF_REG_0, -E2BIG);
+> +
+> +	return 15;
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260715130430.3184=
+21-1-puranjay@kernel.org?part=3D1
