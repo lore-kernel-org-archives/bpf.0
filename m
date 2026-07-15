@@ -1,310 +1,343 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6272742046C
-	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 13:05:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784120722; cv=none; b=UsZ5mLeldzxIV0b+qxIkX4hInqt3S9c+OcjgcOD5Nl7kjhGdRuVc+1/4meqz2/9VL6vkKkGXCIteQrXFUkcheyErQhTFTEotTifmAlDimbjJvTunNOHFcgWnZO6kt2aj3RzmO4IZOOOT5GaQZZfYbKimsp2aecM1FZfLLrThp9E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784120722; c=relaxed/simple;
-	bh=ejcKgWrXGtNt0NjxXIvzH/KBv/r8VCy/3l8goGVQV/Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SHBuyPYBfeT0FJxTgHlPTu8VUyzapQ86Gj7LpcG1rBCPJgPdQwJH0o8vzQ+4IYdhrRKgipwk1pWC8PDm5H6X3llnN7KzzdCsWCciWiEtaMka9iWZXbsU03lN/KGXyf21fDztFEkr0Wg6Apj+9NKu6zjLo+8wXGKfxWGt+NmVTPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BHqSwy9b; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F786423E9E
+	for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 13:25:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784121904; cv=pass; b=Z1jZM3RlcTW3XAOXc/o1IMsGhb0UyD/3oN7bi/Na05dF9chGqMEi9D3gSZ1irFwhdEXQETsOt0PB6YyePEb2gACP+v1PzGfaFg89oOK3IhZB3tsayMkUxPhtbbp5gVkWDirVY1EayFttElhnnWqi3MkP5wJvV0Y7pFmGDbxG6EU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784121904; c=relaxed/simple;
+	bh=+ImxGfoF/5ZmmXzXPDTFAXQCctmgnDa6Q7tJhtf4IzQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sS7ntVEFi+xpQ29oHfUs/x9dpyvd2DxUnWD9QFGAHsbSS/nwLVD6rwg5fwhAUU7BVFhH+HwcIPlwbwGBaeH8vTgMQc1zHhmHvQAg+O3biHXDVAPfvsyIQkbNX06ddJqdjG1bn5ddHmSi9c+Uwf6wi5CWb/CC1CGU50kDNc1Zw7Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kd6cMrUb; arc=pass smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BHqSwy9b"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63A61F000E9;
-	Wed, 15 Jul 2026 13:05:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784120721;
-	bh=x2B4i+37ZUZMS3mV6DUOlviFFCTrygWG44jj/kzOuUQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=BHqSwy9b0Vmip4wXio7UrW8vjDPiGo1r7tq0/wY07bIvO07mVkxxKaGfITSJxYOtP
-	 zwu9HFxtpRWNB1r/fGtq46v1Zn4woh12AhODYE2yKlKhMWHm9IKB0OHKS6hVynZWNa
-	 cK/VGf7/p6sZkqvVVbpL/Y033O1K5cyO92T1lnsbUscAGpqCWMa/Ycv8zK3EX2yMS9
-	 LOBuB+oluvE24x29/oAQKwYXwvFvOIP27U+yWRBf19PuGA2Dxz30+1aig6m9yXGFi8
-	 xWkjCRm3oqVxLMWvuyvRDX8IpbihFz7JvMBrp2qdijwbn5m7Mm36pjHc3HxD7c/RYW
-	 bElG7AZOs+Q+w==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	"Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Martin KaFai Lau" <martin.lau@linux.dev>,
-	"Eduard Zingerman" <eddyz87@gmail.com>,
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-	"Song Liu" <song@kernel.org>,
-	"Yonghong Song" <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next 4/4] selftests/bpf: Add bpf_for() benchmark
-Date: Wed, 15 Jul 2026 06:04:26 -0700
-Message-ID: <20260715130430.318421-5-puranjay@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260715130430.318421-1-puranjay@kernel.org>
-References: <20260715130430.318421-1-puranjay@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kd6cMrUb"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2cab973140bso63293425ad.3
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 06:25:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784121901; cv=none;
+        d=google.com; s=arc-20260327;
+        b=mM4nKtoYA1WpRVGh8dee2Vvv7xsM6tQjPF9fuxPnEzVXr9Fvu2LpikEHB6Z1IacX6f
+         hBeunhQ5F48L2EtVPWOAFbsbvELQxIbWHgRrKfNCqEpeeReMRJ/UClmxVm6vHqE5PQWv
+         l8jgcXEsHRHK2IyrCGtvAiBvy/rDBuW3X6HVQKlmJHlVWSjTZYnT7RS+e0Oe9ULQUu3Y
+         k15KIXL2ULQwa6wH8r+2w05UumFU9z8LvH+d0GdHPi0WY44oeJA9qVJPFeXQYr3D7Xel
+         dS56dfCeXFkAu7xiJDi76HGf3l5ASX8Wmmu4VHXUkDhikn4UAsa6Sy+5yVs3xoOUSpzB
+         wMyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=MIyXXD/1ObhjMvzQvOK5SfD5jJjoFUQVdkb8pW0CIHs=;
+        fh=efRVle/IurXFzyJOAC5NmK/7LxmvzVRJKsGTSglCYug=;
+        b=b6JKfc1khxUmnOkUcP/soEKbHUG0RxmjRJ2sLm7mjIutPUM0feuHU0M9/pujLO9UHA
+         ovW+SxDVKSpL1dCnAtvWgOP98SKI4iVWZeN4tNQA+7OD0qDYBiAMd4qf4ga6DzJ+nUhw
+         zsE2VH9fwQpbsvOQ24d+WFZClh7Rd56tJXfktZvlQeu+B9YBCTy7pyVhlwFdCquvID5q
+         DGCDzBjHeNjzOAzaHgRWdlXSFBY5IqGBcJDipLzguHSD0M4Od1d7BLhXKxhqaXruyXmE
+         n0inSI4Lko5Jw+PoEEqhlawPYTvVs3ghbVN8DFQI/Rjp9V95Vj6dA/D04JyCLCjbhDOv
+         i67A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784121901; x=1784726701; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=MIyXXD/1ObhjMvzQvOK5SfD5jJjoFUQVdkb8pW0CIHs=;
+        b=Kd6cMrUbBGPCCkN3o59SlANkT6kn+lCr8MYS1+kvsE0/XCPLRF4nINC8K31ZEAg+oo
+         M/M1UmOAYoVYzklyhZ1SnopWSB+GvQUgMSv0qpJSNbU1DWDkk7WD0wwLsgQ6EhmUtxiT
+         zE3V9OhYL+EEgdAj6iKaa0FwtYBhQjWjedgpO+jKqmpZ4EWxrHx7TJAcqzcdudb0Liao
+         f8L3vCzH3XmnJzN8KmrQPlYLhpY3siMy6uWyV8b1ym7ZZCXp7VT52u9d3oVvjnmtN0jN
+         W7FvrVIDsBD6AfBv7vtNIMLNngFBL3DwjHoStDrqVDOsCDoDTmBNbNF6iMakgC0FaCwJ
+         WvRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784121901; x=1784726701;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=MIyXXD/1ObhjMvzQvOK5SfD5jJjoFUQVdkb8pW0CIHs=;
+        b=gicS4n5/2zKn7YnfX9mQqic8APZEVtan31KF1ea76OrxeWhQiBEpjeUNPYed65U1ZV
+         wHwWSQiGsYgNt1bPr4xkeLyMSNWJKskFiKv9yX+ZkvMg7OSMqYFiwKHiRNu3HGPRPNVI
+         cAkVW9ounTw9aojS4pfR8FXcqEpLroU1JPZS2t1b7PoJBHHBAGe7xBiSWl0+F0L9VY3J
+         ca2UpAk59Kqh+r9EZGo7kehBtsP58C/PQOYzzKTu5ed/0jfyXn0n/rXbvCa55aCX2Y0q
+         ivmq+JIkMVb3HLJeg2z5Rxc7T3uXD+27uWWbajZs3ycxJnJtM6JDqg21TlPgTXbmxBNB
+         WtoA==
+X-Gm-Message-State: AOJu0YxxfJybuUElcqCZHv3TAdMwT+HyFwoAe6x/eVPb2cq/Lo5DFAsn
+	bAe6Jxt0DtH144a2tmcr+ZPLpbRjODNy2Qp5zY4GAdlLrUrDI0Zq+XyoeFNRJ3i8h3xQrjC50Za
+	8qejPauQnbgpQZTAwmuviocaJnksPK/PoGqtvguY=
+X-Gm-Gg: AfdE7clHHfoLsQgpHTniBr77STteU5jT2KebOebJDq+YIuWe/l7VIu7CouxaJJ+DMYz
+	Wgd1Wr9Sqtbgq9ec2wdUuQi9HljcUX+GuAeCVcw2ESoi7U5Zx+BfAuBHW819FtU/eHmtmmkt9uD
+	USOCymw4VpuAvG+U9aIY/tIXaP1sgH3ZhQKPUuGm23Fs6swkaHVwA+5ro3a62QEfQ/OKtniuDTo
+	iRRcSSsqt4QAs+i7quEE3yU0B+x3eujuGbLy6o8SE2lJWssFQwfTWsIrmpewFktdyVS1XRexQkD
+	cEpS9EZY4O8c
+X-Received: by 2002:a17:903:32c8:b0:2cc:9179:325 with SMTP id
+ d9443c01a7336-2cf03c10898mr24774215ad.13.1784121901140; Wed, 15 Jul 2026
+ 06:25:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260616155716.2631508-1-puranjay@kernel.org>
+In-Reply-To: <20260616155716.2631508-1-puranjay@kernel.org>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Wed, 15 Jul 2026 14:24:44 +0100
+X-Gm-Features: AUfX_mwWBOKbyfSmJxs0-FaIwsp_KQBgG-zpi2QhGXcbzGJBUKacwgaiXD7t2Qs
+Message-ID: <CANk7y0j0j9GH7GpN6ahjiUwab_884csZcecrVsfBHupUANMgNw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/4] arm64: Add BRBE support for bpf_get_branch_snapshot()
+To: bpf@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>, 
+	Will Deacon <will@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Leo Yan <leo.yan@arm.com>, Rob Herring <robh@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	James Clark <james.clark@linaro.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>, 
+	Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>, 
+	Stephane Eranian <eranian@google.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif <usama.arif@linux.dev>, 
+	linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The bpf_for() macro builds on the numeric open-coded iterator kfuncs
-bpf_iter_num_{new,next,destroy}(). Add a benchmark, modelled on the
-existing bpf_loop benchmark, that repeatedly runs a bpf_for() loop so the
-per-iteration cost of the iterator can be measured, e.g. to quantify the
-effect of inlining the iterator kfuncs in the verifier.
+Hi Mark and Will,
 
-The BPF program runs an inner bpf_for(i, 0, nr_loops) loop with an empty
-body 1000 times per trigger and accounts nr_loops hits per outer
-iteration, mirroring bench_bpf_loop so the two are directly comparable.
+Could you please have a look at this patchset when you get a chance?
 
-nr_loops defaults to 1000 so that the per-iteration bpf_iter_num_next()
-cost, rather than the one-time bpf_iter_num_new()/destroy() setup and
-teardown, dominates the reported numbers:
+It has been reviewed by Rob.
 
-  $ ./bench -p 1 --nr_loops 1000 bpf-for
+Thanks,
+Puranjay
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- tools/testing/selftests/bpf/Makefile          |   2 +
- tools/testing/selftests/bpf/bench.c           |   4 +
- .../selftests/bpf/benchs/bench_bpf_for.c      | 105 ++++++++++++++++++
- .../selftests/bpf/benchs/run_bench_bpf_for.sh |  15 +++
- .../selftests/bpf/progs/bpf_for_bench.c       |  32 ++++++
- 5 files changed, 158 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_for.c
- create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_for.sh
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_for_bench.c
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index b642ee489ea64..00b6ff636e3c1 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -967,6 +967,7 @@ $(OUTPUT)/bench_ringbufs.o: $(OUTPUT)/ringbuf_bench.skel.h \
- 			    $(OUTPUT)/perfbuf_bench.skel.h
- $(OUTPUT)/bench_bloom_filter_map.o: $(OUTPUT)/bloom_filter_bench.skel.h
- $(OUTPUT)/bench_bpf_loop.o: $(OUTPUT)/bpf_loop_bench.skel.h
-+$(OUTPUT)/bench_bpf_for.o: $(OUTPUT)/bpf_for_bench.skel.h
- $(OUTPUT)/bench_strncmp.o: $(OUTPUT)/strncmp_bench.skel.h
- $(OUTPUT)/bench_bpf_hashmap_full_update.o: $(OUTPUT)/bpf_hashmap_full_update_bench.skel.h
- $(OUTPUT)/bench_local_storage.o: $(OUTPUT)/local_storage_bench.skel.h
-@@ -992,6 +993,7 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 		 $(OUTPUT)/bench_ringbufs.o \
- 		 $(OUTPUT)/bench_bloom_filter_map.o \
- 		 $(OUTPUT)/bench_bpf_loop.o \
-+		 $(OUTPUT)/bench_bpf_for.o \
- 		 $(OUTPUT)/bench_strncmp.o \
- 		 $(OUTPUT)/bench_bpf_hashmap_full_update.o \
- 		 $(OUTPUT)/bench_local_storage.o \
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index 3d9d2cd7764bd..b86b73456d3ca 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -276,6 +276,7 @@ static const struct argp_option opts[] = {
- extern struct argp bench_ringbufs_argp;
- extern struct argp bench_bloom_map_argp;
- extern struct argp bench_bpf_loop_argp;
-+extern struct argp bench_bpf_for_argp;
- extern struct argp bench_local_storage_argp;
- extern struct argp bench_local_storage_rcu_tasks_trace_argp;
- extern struct argp bench_strncmp_argp;
-@@ -292,6 +293,7 @@ static const struct argp_child bench_parsers[] = {
- 	{ &bench_ringbufs_argp, 0, "Ring buffers benchmark", 0 },
- 	{ &bench_bloom_map_argp, 0, "Bloom filter map benchmark", 0 },
- 	{ &bench_bpf_loop_argp, 0, "bpf_loop helper benchmark", 0 },
-+	{ &bench_bpf_for_argp, 0, "bpf_for loop benchmark", 0 },
- 	{ &bench_local_storage_argp, 0, "local_storage benchmark", 0 },
- 	{ &bench_strncmp_argp, 0, "bpf_strncmp helper benchmark", 0 },
- 	{ &bench_local_storage_rcu_tasks_trace_argp, 0,
-@@ -557,6 +559,7 @@ extern const struct bench bench_bloom_false_positive;
- extern const struct bench bench_hashmap_without_bloom;
- extern const struct bench bench_hashmap_with_bloom;
- extern const struct bench bench_bpf_loop;
-+extern const struct bench bench_bpf_for;
- extern const struct bench bench_strncmp_no_helper;
- extern const struct bench bench_strncmp_helper;
- extern const struct bench bench_bpf_hashmap_full_update;
-@@ -640,6 +643,7 @@ static const struct bench *benchs[] = {
- 	&bench_hashmap_without_bloom,
- 	&bench_hashmap_with_bloom,
- 	&bench_bpf_loop,
-+	&bench_bpf_for,
- 	&bench_strncmp_no_helper,
- 	&bench_strncmp_helper,
- 	&bench_bpf_hashmap_full_update,
-diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_for.c b/tools/testing/selftests/bpf/benchs/bench_bpf_for.c
-new file mode 100644
-index 0000000000000..789f8bfe25b9a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/bench_bpf_for.c
-@@ -0,0 +1,105 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <argp.h>
-+#include "bench.h"
-+#include "bpf_for_bench.skel.h"
-+
-+/* BPF triggering benchmarks */
-+static struct ctx {
-+	struct bpf_for_bench *skel;
-+} ctx;
-+
-+static struct {
-+	__u32 nr_loops;
-+} args = {
-+	/*
-+	 * Default to a large loop count so the per-iteration
-+	 * bpf_iter_num_next() cost dominates the one-time
-+	 * bpf_iter_num_new()/destroy() setup and teardown.
-+	 */
-+	.nr_loops = 1000,
-+};
-+
-+enum {
-+	ARG_NR_LOOPS = 4000,
-+};
-+
-+static const struct argp_option opts[] = {
-+	{ "nr_loops", ARG_NR_LOOPS, "nr_loops", 0,
-+		"Set number of iterations for the bpf_for() loop"},
-+	{},
-+};
-+
-+static error_t parse_arg(int key, char *arg, struct argp_state *state)
-+{
-+	switch (key) {
-+	case ARG_NR_LOOPS:
-+		args.nr_loops = strtol(arg, NULL, 10);
-+		break;
-+	default:
-+		return ARGP_ERR_UNKNOWN;
-+	}
-+
-+	return 0;
-+}
-+
-+/* exported into benchmark runner */
-+const struct argp bench_bpf_for_argp = {
-+	.options = opts,
-+	.parser = parse_arg,
-+};
-+
-+static void validate(void)
-+{
-+	if (env.consumer_cnt != 0) {
-+		fprintf(stderr, "benchmark doesn't support consumer!\n");
-+		exit(1);
-+	}
-+}
-+
-+static void *producer(void *input)
-+{
-+	while (true)
-+		/* trigger the bpf program */
-+		syscall(__NR_getpgid);
-+
-+	return NULL;
-+}
-+
-+static void measure(struct bench_res *res)
-+{
-+	res->hits = atomic_swap(&ctx.skel->bss->hits, 0);
-+}
-+
-+static void setup(void)
-+{
-+	struct bpf_link *link;
-+
-+	setup_libbpf();
-+
-+	ctx.skel = bpf_for_bench__open_and_load();
-+	if (!ctx.skel) {
-+		fprintf(stderr, "failed to open skeleton\n");
-+		exit(1);
-+	}
-+
-+	link = bpf_program__attach(ctx.skel->progs.benchmark);
-+	if (!link) {
-+		fprintf(stderr, "failed to attach program!\n");
-+		exit(1);
-+	}
-+
-+	ctx.skel->bss->nr_loops = args.nr_loops;
-+}
-+
-+const struct bench bench_bpf_for = {
-+	.name = "bpf-for",
-+	.argp = &bench_bpf_for_argp,
-+	.validate = validate,
-+	.setup = setup,
-+	.producer_thread = producer,
-+	.measure = measure,
-+	.report_progress = ops_report_progress,
-+	.report_final = ops_report_final,
-+};
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_bpf_for.sh b/tools/testing/selftests/bpf/benchs/run_bench_bpf_for.sh
-new file mode 100755
-index 0000000000000..7da6453920dab
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_bpf_for.sh
-@@ -0,0 +1,15 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source ./benchs/run_common.sh
-+
-+set -eufo pipefail
-+
-+for t in 1 4 8 12 16; do
-+for i in 10 100 500 1000 5000 10000 50000 100000 500000 1000000; do
-+subtitle "nr_loops: $i, nr_threads: $t"
-+	summarize_ops "bpf_for: " \
-+	    "$($RUN_BENCH -p $t --nr_loops $i bpf-for)"
-+	printf "\n"
-+done
-+done
-diff --git a/tools/testing/selftests/bpf/progs/bpf_for_bench.c b/tools/testing/selftests/bpf/progs/bpf_for_bench.c
-new file mode 100644
-index 0000000000000..920f8f188e864
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_for_bench.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+u32 nr_loops;
-+long hits;
-+
-+static int outer_loop(__u32 index, void *data)
-+{
-+	int i;
-+
-+	/*
-+	 * Empty body: the work being measured is the open-coded numeric
-+	 * iterator itself (bpf_iter_num_new/next/destroy behind bpf_for()).
-+	 */
-+	bpf_for(i, 0, nr_loops)
-+		;
-+	__sync_add_and_fetch(&hits, nr_loops);
-+	return 0;
-+}
-+
-+SEC("fentry/" SYS_PREFIX "sys_getpgid")
-+int benchmark(void *ctx)
-+{
-+	bpf_loop(1000, outer_loop, NULL, 0);
-+	return 0;
-+}
--- 
-2.53.0-Meta
-
+On Tue, Jun 16, 2026 at 4:57=E2=80=AFPM Puranjay Mohan <puranjay@kernel.org=
+> wrote:
+>
+> Changelog:
+>
+> v4: https://lore.kernel.org/all/20260527121207.2312181-1-puranjay@kernel.=
+org/
+> Changes in v5:
+> - Rework patch 2: drop the UAPI union. Instead rename the helper to perf_=
+clear_branch_entry() and
+>   clear the entry with a single
+>         *br =3D (struct perf_branch_entry){ }.
+>   This stays kernel-internal, with no changes to the uapi/ or tools/ head=
+ers (James Clark).
+> - Add an isb() to the BRBCR_EL1 =3D=3D 0 early-exit in the snapshot, for =
+consistency with the other
+>   two exit paths (bpf-ci).
+> - Add Rob Herring's Reviewed-by to patch 3
+>
+> v3: https://lore.kernel.org/all/20260413185740.3286146-1-puranjay@kernel.=
+org/
+> Changes in v4:
+> - Fix leaking branch records when scheduled task has an unrelated perf ev=
+ent (Sashiko)
+> - Update tools/include/uapi/linux/perf_event.h as well for patch 2
+> - Introduce cpu_has_brbe() and use it in
+>   arm_brbe_snapshot_branch_stack(0 to make sure we don't run on a CPU
+>   without BRBE.
+> - Add explicit isb() after after writing to SYS_BRBFCR_EL1.
+> - Rebase on latest arm64 tree.
+>
+> v2: https://lore.kernel.org/all/20260318171706.2840512-1-puranjay@kernel.=
+org/
+> Changes in v3:
+> - Move NULL pmu_ctx fix from arm_pmuv3.c to perf core (Leo Yan)
+> - Use union to clear branch entry bitfields instead of per-field
+>   zeroing (Leo Yan)
+> - Remove per-CPU brbe_active flag; check BRBCR_EL1 =3D=3D 0 instead (Rob
+>   Herring)
+> - Remove redundant valid_brbidr() check in snapshot path (Rob Herring)
+> - Introduce for_each_brbe_entry() iterator to deduplicate bank
+>   iteration (Rob Herring)
+> - Include perf core maintainers (Leo Yan, Rob Herring)
+>
+> v1: https://lore.kernel.org/all/20260313180352.3800358-1-puranjay@kernel.=
+org/
+> Changes in v2:
+> - Rebased on arm64/for-next/core
+> - Add per-CPU brbe_active flag to guard against UNDEFINED sysreg access
+>   on non-BRBE CPUs in heterogeneous big.LITTLE systems.
+> - Fix pre-existing bug in perf_clear_branch_entry_bitfields() that missed
+>   zeroing new_type and priv bitfields, added as a separate patch with
+>   Fixes tags (new patch 2).
+> - Use architecture-specific selftest threshold (#if defined(__aarch64__))
+>   instead of raising the global threshold, to preserve x86 regression
+>   detection.
+>
+> RFC: https://lore.kernel.org/all/20260102214043.1410242-1-puranjay@kernel=
+.org/
+> Changes from RFC:
+>  - Fix pre-existing NULL pointer dereference in armv8pmu_sched_task()
+>    found by Leo Yan during testing (patch 1)
+>  - Pause BRBE before local_daif_save() to avoid branch pollution from
+>    trace_hardirqs_off()
+>  - Use local_daif_save() to prevent pNMI race from counter overflow
+>    (Mark Rutland)
+>  - Reuse perf_entry_from_brbe_regset() instead of duplicating register
+>    read logic, by making it accept NULL event (Mark Rutland)
+>  - Invalidate BRBE after reading to maintain record contiguity for
+>    other consumers (Mark Rutland)
+>  - Adjust selftest wasted_entries threshold for ARM64 (patch 3)
+>  - Tested on ARM FVP with BRBE enabled
+>
+> This series enables the bpf_get_branch_snapshot() BPF helper on ARM64
+> by implementing the perf_snapshot_branch_stack static call for ARM's
+> Branch Record Buffer Extension (BRBE).
+>
+> bpf_get_branch_snapshot() [1] allows BPF programs to capture hardware
+> branch records on-demand from any BPF tracing context. This was
+> previously only available on x86 (Intel LBR) since v5.16. With BRBE
+> available on ARMv9, this series closes the gap for ARM64.
+>
+> Usage model
+> -----------
+>
+> The helper works in conjunction with perf events. The userspace
+> component of the BPF application opens a perf event with
+> PERF_SAMPLE_BRANCH_STACK on each CPU, which configures the hardware
+> to continuously record branches into BRBE (on ARM64) or LBR (on x86).
+> A BPF program attached to a tracepoint, kprobe, or fentry hook can
+> then call bpf_get_branch_snapshot() to snapshot the branch buffer at
+> any point. Without an active perf event, BRBE is not recording and
+> the buffer is empty.
+>
+> On-demand branch snapshots from BPF are useful for diagnosing which
+> specific code path was taken inside a function. Stack traces only show
+> function boundaries, but branch records reveal the exact sequence of
+> jumps, calls, and returns within a function -- making it possible to
+> identify which specific error check triggered a failure, or which
+> callback implementation was invoked through a function pointer.
+>
+> For example, retsnoop [2] is a BPF-based tool for non-intrusive
+> mass-tracing of kernel internals. Its LBR mode (--lbr) creates per-CPU
+> perf events with PERF_SAMPLE_BRANCH_STACK and then uses
+> bpf_get_branch_snapshot() in its fentry/fexit BPF programs to capture
+> branch records whenever a traced function returns an error.
+>
+> Consider debugging a bpf() syscall that returns -EINVAL when creating
+> a BPF map with invalid parameters. Running retsnoop on an ARM64 FVP
+> with BRBE to trace the bpf() syscall and array_map_alloc_check():
+>
+>   $ retsnoop -e '*sys_bpf' -a 'array_map_alloc_check' --lbr=3Dany \
+>              -F -k vmlinux --debug full-lbr
+>   $ simfail bpf-bad-map-max-entries-array  # in another terminal
+>
+> Output of retsnoop:
+>
+>   --- fentry BPF program (entries #63-#17) ---
+>
+>   [#63-#59] __htab_map_lookup_elem: hash table walk with memcmp        (h=
+ashtab.c)
+>   [#58] __htab_map_lookup_elem+0x98  -> dump_bpf_prog+0xc850           (h=
+ashtab.c:750)
+>   [#57-#55] ... dump_bpf_prog internal branches ...
+>   [#54] dump_bpf_prog+0xcab8        -> bpf_get_current_pid_tgid+0x0    (h=
+elpers.c:225)
+>   [#53] bpf_get_current_pid_tgid+0x1c -> dump_bpf_prog+0xcabc          (h=
+elpers.c:225)
+>   [#52-#51] ... dump_bpf_prog -> __htab_map_lookup_elem ...
+>   [#50-#47] __htab_map_lookup_elem: htab_map_hash (jhash2), select_bucket
+>   [#46-#42] lookup_nulls_elem_raw: hash chain walk with memcmp         (h=
+ashtab.c:717)
+>   [#41] __htab_map_lookup_elem+0x98  -> dump_bpf_prog+0xcaf8           (h=
+ashtab.c:750)
+>   [#40-#37] ... dump_bpf_prog -> bpf_ktime_get_ns ...
+>   [#36] bpf_ktime_get_ns+0x10       -> ktime_get_mono_fast_ns+0x0      (h=
+elpers.c:178)
+>   [#35-#32] ktime_get_mono_fast_ns: tk_clock_read -> arch_counter_get_cnt=
+pct
+>   [#31] ktime_get_mono_fast_ns+0x9c -> bpf_ktime_get_ns+0x14           (t=
+imekeeping.c:493)
+>   [#30] bpf_ktime_get_ns+0x18       -> dump_bpf_prog+0xcd50            (h=
+elpers.c:178)
+>   [#29-#25] ... dump_bpf_prog internal branches ...
+>   [#24] dump_bpf_prog+0x11b28       -> __bpf_prog_exit_recur+0x0       (t=
+rampoline.c:1190)
+>   [#23-#17] __bpf_prog_exit_recur: rcu_read_unlock, migrate_enable     (t=
+rampoline.c:1195)
+>
+>   --- array_map_alloc_check (entries #16-#12) ---
+>
+>   [#16] dump_bpf_prog+0x11b38       -> array_map_alloc_check+0x8       (a=
+rraymap.c:55)
+>   [#15] array_map_alloc_check+0x18  -> array_map_alloc_check+0xb8      (a=
+rraymap.c:56)
+>         . bpf_map_attr_numa_node       . bpf_map_attr_numa_node
+>   [#14] array_map_alloc_check+0xbc  -> array_map_alloc_check+0x20      (a=
+rraymap.c:59)
+>         . bpf_map_attr_numa_node
+>   [#13] array_map_alloc_check+0x24  -> array_map_alloc_check+0x94      (a=
+rraymap.c:64)
+>   [#12] array_map_alloc_check+0x98  -> dump_bpf_prog+0x11b3c           (a=
+rraymap.c:82)
+>
+>   --- fexit trampoline overhead (entries #11-#00) ---
+>
+>   [#11] dump_bpf_prog+0x11b5c       -> __bpf_prog_enter_recur+0x0      (t=
+rampoline.c:1145)
+>   [#10-#03] __bpf_prog_enter_recur: rcu_read_lock, migrate_disable     (t=
+rampoline.c:1146)
+>   [#02] __bpf_prog_enter_recur+0x114 -> dump_bpf_prog+0x11b60          (t=
+rampoline.c:1157)
+>   [#01] dump_bpf_prog+0x11b6c       -> dump_bpf_prog+0xd230
+>   [#00] dump_bpf_prog+0xd340        -> arm_brbe_snapshot_branch_stack+0x0=
+ (arm_brbe.c:814)
+>
+>                    el0t_64_sync+0x168
+>                    el0t_64_sync_handler+0x98
+>                    el0_svc+0x28
+>                    do_el0_svc+0x4c
+>                    invoke_syscall.constprop.0+0x54
+>     373us [-EINVAL] __arm64_sys_bpf+0x8
+>                     __sys_bpf+0x87c
+>                     map_create+0x120
+>      95us [-EINVAL] array_map_alloc_check+0x8
+>
+> The FVP's BRBE buffer has 64 entries (BRBE supports 8, 16, 32, or
+> 64). Of these, entries #63-#17 (47) are consumed by the fentry BPF
+> trampoline that ran before the function, and entries #11-#00 (12)
+> are consumed by the fexit trampoline that runs after. Entry #00
+> shows the very last branch recorded before BRBE is paused: the call
+> into arm_brbe_snapshot_branch_stack().
+>
+> The 5 useful entries (#16-#12) show the exact path taken inside
+> array_map_alloc_check(). Record #14 shows a jump from line 56
+> (bpf_map_attr_numa_node) to line 59 (the if-condition), and #13
+> shows an immediate jump from line 59 (attr->max_entries =3D=3D 0) to
+> line 64 (return -EINVAL), skipping lines 60-63. This pinpoints
+> max_entries=3D=3D0 as the cause -- a diagnosis impossible with stack
+> traces alone.
+>
+> [1] 856c02dbce4f ("bpf: Introduce helper bpf_get_branch_snapshot")
+> [2] https://github.com/anakryiko/retsnoop
+>
+> Puranjay Mohan (4):
+>   perf/core: Fix sched_task callbacks for CPU-wide branch stack events
+>   perf/core: Clear the whole branch entry in perf_clear_branch_entry()
+>   perf/arm64: Add BRBE support for bpf_get_branch_snapshot()
+>   selftests/bpf: Adjust wasted entries threshold for ARM64 BRBE
+>
+>  arch/x86/events/amd/brs.c                     |   2 +-
+>  arch/x86/events/amd/lbr.c                     |   2 +-
+>  arch/x86/events/intel/lbr.c                   |   6 +-
+>  drivers/perf/arm_brbe.c                       | 130 +++++++++++++++---
+>  drivers/perf/arm_brbe.h                       |   9 ++
+>  drivers/perf/arm_pmuv3.c                      |   5 +-
+>  include/linux/perf_event.h                    |  16 +--
+>  kernel/events/core.c                          |  17 ++-
+>  .../bpf/prog_tests/get_branch_snapshot.c      |  13 +-
+>  9 files changed, 150 insertions(+), 50 deletions(-)
+>
+>
+> base-commit: 61c19a9feb1d87156e46e38d7759f3ad23710e24
+> --
+> 2.53.0-Meta
+>
