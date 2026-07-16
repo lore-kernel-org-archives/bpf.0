@@ -1,160 +1,105 @@
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C0993B4E9F
-	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 08:39:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA10E3C09E0;
+	Thu, 16 Jul 2026 08:40:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784191158; cv=none; b=laHXSik1olALiNLXPUZJUc9rHUiBO258SZOgr+jTLGf5aKQLNOAHk2uJ9vTbS7YJyzMVig7b+Y7tD2iGdbu3bT4/6eLS5pjJ+lubdWHUzFCNt3CmxWTy0Ehk6EW8XBUDAcrC9/wRZPradiEKHvSiidvVq95AI1ClSnXNiH5TPjA=
+	t=1784191213; cv=none; b=EEoKeyGDIEK/QKRFxJiLF2QzR58JP+QeuJ3UuazQq8thpiieQTpPJuHNTjePOHj9FheqaJ6dTkDL+GDDcV6HwsJiZHb0/fOSUpXCBrGqRoY6C8k+uje7RhIPC6l6PJO1dHyVMzHtSN1RI6gWruXvsnlmCrf6ib9nxka3XLj7owY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784191158; c=relaxed/simple;
-	bh=x2bQJ7vfupd36anNgI86CIztM7aj/1OzOlOjAoooFSI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iDlLUz8Fhl8NN8tBfZnGbRMnQZ5m6fjfRrsNmNgWTIhWcieVx2DREAVgQ+W2Ku1gNNL6nmL9xofYH+rpumg6Adsk2z85PzLaYVvvhe9djIFRLBwrC0WLqxYMkPsP26J2cJYLA8Rj8/0ktfRIdIH5RH/C9WzNhHVVWSFkRr/iM6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=OVlno6UJ; arc=none smtp.client-ip=162.62.57.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1784191213; c=relaxed/simple;
+	bh=RmI8X0ywKJo5AqoISg3nDdvOvKlpWpWS29g7nD4VuCw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=B8xhadQyc7WqerTx7MvouwTvQgLDRqbvk+MuP2rBx8AKmU4xOO16pHD3d5aEGQ9GQZKkXc4UjDUoq4dLq7a75yJI4o1Djk1hk8T6moxc14LHYPH2XSyEP0n+eLijVt+UxSBVAKo1Qjr/uwSW9Tf/QpHgAik5It0ANYU3KMMWyBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f/TJ4nbj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="OVlno6UJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1784191151;
-	bh=WkeEU9gbBbAhKaoVq8Px2vG3HlKEpMx6/DAQ8mAJqfI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=OVlno6UJ3c7Zz+E2tvzlsbZshBXH3lfTvlKWp/a9tf4xL9E5qk9XfU4/Az0gyXrQc
-	 s//9yYhKat2Gcmleiq72Lr3rFG0gSAKpozUWRhnIho9LcLQV1T4zfoF9fAx8ZR7ZRk
-	 d6NVeq8CZxn/yVJHRoOhIRjcrkwkgMSYJYk6wAys=
-Received: from [10.56.52.25] ([39.156.73.14])
-	by newxmesmtplogicsvrszc43-0.qq.com (NewEsmtp) with SMTP
-	id 9C9216DA; Thu, 16 Jul 2026 16:39:09 +0800
-X-QQ-mid: xmsmtpt1784191149tl4vgbkl2
-Message-ID: <tencent_93F2525405E17565340D71CA005A482C6B05@qq.com>
-X-QQ-XMAILINFO: NwU6Bou9okj/YUfiKeZ/EUpwxIzIK8n26/Z3RJkzrNM3M9hq8yIvbzlbUgX1uy
-	 IPpKxNnMlW+r8BNC9Y2m1D1KoEXrLV/Riq/ipXkqWJ+FOwDngI2qhaUWpanYyCOPnqZC9oaURYoU
-	 70eUmJ38xO62s8qsxe0CwNsJuVUFhnSaDpSgedMadDY2rjaKV/oTNa8LUHUehYBLX8ULE+NGoZaq
-	 reVnByMEVl1NroZPI+yOxrrMCHQhCFy/oQh+FAYpd7tp6bLxEOknRUkWkEVpxtiI40/t02ebE6U5
-	 ucyx1JtXIt1okk20fkYy4GtmSz0+w/nW9nl9WaMwOSx/A4z6GEcBVF2bKz/yi+jKSsUgKiQBtRJq
-	 /HiocMhv0QeFLTwQ0CB0Fi+d40xd44U0P8032iks7FD4UXgzhZjdw1mJwYl1qtwihH/ueoK9AubZ
-	 gsS0JGM9Zlxt722711J5KgT1nhJYjb5YeTcYAnJIzRtbCGSBc5nwFYsCHwu2QaRpYZPKS87VwrOe
-	 T2hJLxsdLAu82mpf+MdXRtpbxg4vE06/L1N0yaG6xXMgY2slqQP9zLSodXYQLWpqlrXupxEfE16N
-	 6x1FCHcAhcEntycK1T4vlZ77hcum0bEdGPM1yc/LrdMKvpn9p4ISZA2cxvoNWDf3MQ4GqIbLbEm+
-	 PLReuaXunTX1Vs7w4Z9mHPWwp9Bj5ucSK8fdYcyy6+65CSTFpNfY1nrMPd9jmMs9q72+XhIbm9hD
-	 ymrhl7MYqf05EZcTGharHPoxF2TVs+zn3JRDNRZ1vvP8yo+gZw5ZCGRo9YYTsyP0kYiQwNK8FISO
-	 qDHsbu1MehKqB8r5mXxSpk9YUwthM8wU+ZbC6qX8xR8KzeEaV6PjJkQJfRryge2ddMhPVdnOGtVP
-	 xdXMh2BJ3GJ71Zsv4FPSLGhCZGKtbQZTnO94AojnJo/E8VzOZ6e8c8MfSEApDFQyo6/+STs4tQaq
-	 /ZWgWSS+i2i8Xa0KliEb6SRc61v7VM3423JIMsiDdzR9wOEg0hk7CqSXcJ2Kc+Rn25uiS6mNUF1E
-	 Z61JevM1GVoe5dDeQXnTuUM/5YpJk2yLLr3rOkyw==
-X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
-X-OQ-MSGID: <b2ea354e-cdbd-4b21-a9cb-3f6389e847e2@foxmail.com>
-Date: Thu, 16 Jul 2026 16:39:08 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f/TJ4nbj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D93601F00A3A;
+	Thu, 16 Jul 2026 08:40:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784191211;
+	bh=1qGYz+P3LBTYY4lqZ9Zhy3LPOk8R0ED0gCCmiSwGKck=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=f/TJ4nbjQCqXI1omOteC2TYbo6r5M0zldVEySpvhbsFDQFGzy2Kca2CMIk7c+axwe
+	 iefAC/8RodCLuOM2wqTCAZXEQDWC2P+W8OFLexG6SL8NNSdSfCLl/jBGxsf1Id657H
+	 DUIAWKf4cpi6CoJg5MrIN1qd1POVfHdILoRGWXJpM6JmV4ONeSe2wzTlHKZxZKhsk/
+	 3NlVagn5PZEcteDbnXjRcLrMxDZmyeovsF9iN6n0/5wg/Uu4/ZVx7sMGeA0fY0fg/+
+	 4EPF9pKZLwtOOXQqw7FsPWwA8NmJxGAWiCxw32E5cOsKdJF2s7hl9EH/8DDW0A9eAx
+	 VqE87F0M3l1kQ==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Feng Jiang <jiangfeng@kylinos.cn>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya
+ Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
+ Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+ <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Pu Lehui
+ <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, Paul Walmsley
+ <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>
+Cc: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+ bpf@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, Feng Jiang
+ <jiangfeng@kylinos.cn>
+Subject: Re: [PATCH v2] bpf, riscv: fix missing extable entry for arena
+ load_acquire
+In-Reply-To: <20260716-bpf-riscv-fix-extable-v2-1-421f75812533@kylinos.cn>
+References: <20260716-bpf-riscv-fix-extable-v2-1-421f75812533@kylinos.cn>
+Date: Thu, 16 Jul 2026 10:40:08 +0200
+Message-ID: <87wluvuy3b.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Test
- bpf_strcat,bpf_strncat kfuncs
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <cover.1784078494.git.rtoax@foxmail.com>
- <tencent_DB0510330C3A8574B3C62E6154165FCB4709@qq.com>
- <20260715014256.15E721F000E9@smtp.kernel.org>
-Content-Language: en-US
-From: Rong Tao <rtoax@foxmail.com>
-In-Reply-To: <20260715014256.15E721F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Feng Jiang <jiangfeng@kylinos.cn> writes:
+
+> emit_atomic_ld_st() returns 1 to have build_body() skip the zext after
+> a sub-word load_acquire. The caller does "ret =3D ret ?:
+> add_exception_handler(...)", which skips add_exception_handler() on any
+> non-zero ret, so the extable entry is missing and a faulting
+> PROBE_ATOMIC load_acquire oopses.
+>
+> Check ret >=3D 0 before calling add_exception_handler(), and return ret
+> unchanged so build_body() still skips the zext.
+>
+> Fixes: fb7cefabae81 ("riscv, bpf: Add support arena atomics for RV64")
+> Suggested-by: Pu Lehui <pulehui@huawei.com>
+> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+> ---
+> Changes in v2:
+> - Drop extra variable as suggested by Pu Lehui.
+> - Link to v1: https://lore.kernel.org/r/20260716-bpf-riscv-fix-extable-v1=
+-1-af023cc17af4@kylinos.cn
+> ---
+>  arch/riscv/net/bpf_jit_comp64.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
+p64.c
+> index f9d5347ba966..0db89093ff89 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -1986,7 +1986,10 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn,=
+ struct rv_jit_context *ctx,
+>  		else
+>  			ret =3D emit_atomic_rmw(rd, rs, insn, ctx);
+>=20=20
+> -		ret =3D ret ?: add_exception_handler(insn, REG_DONT_CLEAR_MARKER, ctx);
+> +		/* ret can be 1 (skip-zext); extable entry still needs to be added */
+> +		if (ret >=3D 0)
+> +			ret =3D add_exception_handler(insn, REG_DONT_CLEAR_MARKER, ctx) ?: re=
+t;
+
+I don't agree with Sashiko that this was fully pre-existing. This fix
+changes the existing behaviour of BPF_DW | BPF_LOAD_ACQ. We can now end
+up with stale register data.
+
+I'd like to see a v3 that addresses REG_DONT_CLEAR_MARKER for atomic
+loads (zext included).
 
 
-On 7/15/26 09:42, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
->
-> New issues:
-> - [Medium] The selftest `test_strncat_success` unconditionally fails because it incorrectly expects a return value of 13, assuming the global buffer retains state across subtests.
-> - [Medium] Six failure tests for `strcat` and `strncat` will fail to load in the verifier because they pass invalid scalars (`NULL`, `1`, `-1`) to the strictly typed `dst` memory pointer argument.
->
-> Pre-existing issues:
-> - [High] The `__bpf_strncat` kfunc unconditionally performs an out-of-bounds read of the source string to check for truncation, erroneously returning `-EFAULT` on perfectly valid memory.
-> --
->
-> --- Patch [2]: [PATCH bpf-next v2 2/2] selftests/bpf: Test bpf_strcat,bpf_strncat kfuncs ---
-> commit a3847dce2f7db636af75a6ec747d26e7cc1b00dd
-> Author: Rong Tao <rongtao@cestc.cn>
->
-> selftests/bpf: Test bpf_strcat,bpf_strncat kfuncs
->
-> Add tests for new kfuncs bpf_strcat() and bpf_strncat().
->
->> diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
->> index bddc4e8579d24..29bc7eabbb6aa 100644
->> --- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
->> +++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-> [ ... ]
->> @@ -53,6 +54,10 @@ SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null1(void *ctx) { return
->>   SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null2(void *ctx) { return bpf_strnstr("hello", NULL, 1); }
->>   SEC("syscall")  __retval(USER_PTR_ERR)int test_strncasestr_null1(void *ctx) { return bpf_strncasestr(NULL, "hello", 1); }
->>   SEC("syscall")  __retval(USER_PTR_ERR)int test_strncasestr_null2(void *ctx) { return bpf_strncasestr("hello", NULL, 1); }
->> +SEC("syscall")  __retval(USER_PTR_ERR)int test_strcat_null1(void *ctx) { return bpf_strcat(NULL, 6, "hello"); }
-> [Severity: Medium]
-> Will this test, along with test_strcat_user_ptr1 and test_strcat_pagefault1
-> added below, fail to load in the verifier?
->
-> Because the dst argument in bpf_strcat() lacks the __ign suffix, the verifier
-> strictly checks it as a KF_ARG_PTR_TO_MEM_SIZE. Passing NULL or scalar values
-> like 1 or -1 causes load-time rejection with -EACCES.
->
-> Since the __retval(...) annotation expects a successful load followed by a
-> runtime error, will these tests cause the test runner to abort with an
-> unexpected load failure?
->
->> +SEC("syscall")  __retval(USER_PTR_ERR)int test_strcat_null2(void *ctx) { return bpf_strcat(kern_buf, sizeof(kern_buf), NULL); }
->> +SEC("syscall")  __retval(USER_PTR_ERR)int test_strncat_null1(void *ctx) { return bpf_strncat(NULL, 6, "hello", 2); }
->> +SEC("syscall")  __retval(USER_PTR_ERR)int test_strncat_null2(void *ctx) { return bpf_strncat(kern_buf, sizeof(kern_buf), NULL, 2); }
-> [ ... ]
->> diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
->> index f65b1226a81a3..93996b0e9595e 100644
->> --- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
->> +++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-> [ ... ]
->> @@ -59,5 +60,7 @@ __test(-ENOENT) int test_strncasestr_notfound1(void *ctx) { return bpf_strncases
->>   __test(-ENOENT) int test_strncasestr_notfound2(void *ctx) { return bpf_strncasestr(str, "hello", 4); }
->>   __test(-ENOENT) int test_strncasestr_notfound3(void *ctx) { return bpf_strncasestr("", "a", 0); }
->>   __test(0) int test_strncasestr_empty(void *ctx) { return bpf_strncasestr(str, "", 1); }
->> +__test(10) int test_strcat_success(void *ctx) { return bpf_strcat(buf, sizeof(buf), "world"); }
->> +__test(13) int test_strncat_success(void *ctx) { return bpf_strncat(buf, sizeof(buf), "world", 3); }
-> [Severity: Medium]
-> Does this test expect an incorrect return value?
->
-> The BPF test loader isolates subtests by reloading the skeleton for each test
-> program. This resets the global variable buf back to its initial .data state
-> of "hello" (5 bytes) before this test runs.
->
-> Because bpf_strncat() appends "wor" (3 bytes) to "hello", won't the correct
-> return value be 8 instead of 13?
->
-> [Severity: High]
-> This is a pre-existing issue, but I noticed a potential problem in the
-> __bpf_strncat() implementation being tested here.
->
-> kernel/bpf/helpers.c:__bpf_strncat() {
->          ...
->          __get_kernel_nofault(&cs, src, char, err_out);
->          if (cs != '\0' && sz > copied)
->                  return -E2BIG;
->          ...
-> }
->
-> Does this unconditionally read past the requested size boundary?
->
-> If a caller requests exactly sz bytes, and the source string satisfies this
-> but ends at a page boundary, won't the unconditional read of the next byte
-> cause a spurious page fault and incorrectly return -EFAULT instead of success?
-
-Thanks, i'll fix it in v3 ;)
-
-Rong Tao
-
->
->>   char _license[] SEC("license") = "GPL";
-
+Bj=C3=B6rn
