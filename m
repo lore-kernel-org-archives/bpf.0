@@ -1,150 +1,147 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CACE37E5F7
-	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 22:30:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D322D47E9
+	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 23:01:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784241058; cv=none; b=aJXTQaEBe8qdkAEfrp5JO993z3+Jao8hSLm5CfmI3AH5ca/dIcqPCjXiUmClpYAxcuuqB2JI0cj31SzzgMW/GxXM76f4mEosMaRF6ZYt5ypb98MwOWQ0Te2oYKf1E4NxiCnQx5AvMQ1OLcQq+cWTznthFeYmVVoutOtYbeAT9Kg=
+	t=1784242885; cv=none; b=ugr1f3/HuxkXK6JV/8AwyA+rgdU90LoEGq5ZpZFRKM1R1Tg/FnGWfSyMI8X8dLwn1OQj09w9pvegajws9DhgMXBTZ7ipqUkrMj4BX+ICNHk54NMb7H+axrEKN5Y2pkhD9gzAXb9Kt3wq1ronAvl82EkiraNlblLIYqB6QXfhdRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784241058; c=relaxed/simple;
-	bh=ot1GNo1gVRyZJWP8njVcEz1T81CPSxx4Z/T3i2f4BGM=;
+	s=arc-20240116; t=1784242885; c=relaxed/simple;
+	bh=bDX3+wffRV7PxmPLycy16u9ynIhU07YpqI3xFHl2iAo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cFRLelEh8/2bige29CUyV71fdokHVvxlXNTIRT1PXQkMprpMVX3asWSc9C0etN5anRO9d+pNUZ/pgLzgxXloP6TFvzZrfdWahbXhfeUR0y2ynGX0p2RIreSabRRWfnrR/EEhahCgKW91VV8ithBJFVJwP8zpBrblqgw2gN22xsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o4IVdNB5; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=o7C1xDKV2jY+PwdqO1oxhHGLXP9mzElFIkA5E0PYz9B7B9JW3TBDpASLsrnuF/8busY/5GXuMfJs1Cc2zw+UzUz96hzFIv1wRbuDEAIURhNnaoMJvLpWZnuq9EMqn8qWEtI9v2bkVwBwXI4EAWTu91/VDpZ2Pj8YjGv88T4XBak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrife.io; spf=none smtp.mailfrom=jrife.io; dkim=pass (2048-bit key) header.d=jrife-io.20251104.gappssmtp.com header.i=@jrife-io.20251104.gappssmtp.com header.b=Wwv/aH5t; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrife.io
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=jrife.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o4IVdNB5"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-ca2fad0ae38so5626991a12.3
-        for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 15:30:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=jrife-io.20251104.gappssmtp.com header.i=@jrife-io.20251104.gappssmtp.com header.b="Wwv/aH5t"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-84a6f026675so354647b3a.0
+        for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 16:01:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784241056; x=1784845856; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jnQqVHT9mIlQjz4b13IFWBpUZI0AFofijg1xz6XP/Fs=;
-        b=o4IVdNB5cHZDi+biVvBttG1Zw0Vu+InskeepJSSBxtDHg5MMzvKpMNgQ5zNk8852r/
-         pjDZTg2slp+9q23Kho1lK+cOvr76zuJcr/Ys7yY0Iqm3ljCbkDeGE0aeOjMqnIf6vhJ6
-         9rARmYehh5KaW36z0TdnShite12LHFAvCC4VsUQ/yeZAhjZjOHvPO/nC9UDrHsy4UxlU
-         8B2Ye0tmn/DfW1gN056pbObzCUsOTqtRZBYZhixcveyF4R0G7gJCuAjiAl2M3I4HQ1Uo
-         0ub+5ovo69NWiDUJCNxEqxYIfXskeCiovyeT8M1tVhzNeWdY1GSg3wjiOddxYxxfq/9x
-         EWVw==
+        d=jrife-io.20251104.gappssmtp.com; s=20251104; t=1784242883; x=1784847683; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=wyGjYfYZ0w+7WbZ59KK/1C1iYXN2+xrcuEWLzFLAWmA=;
+        b=Wwv/aH5tNEB65gqsWcnD+jgaMxsUkcc9qexD913PMY2MbtcaoQSuvNfdMkVLYfFzF7
+         Crx3cmwfUQSTlQhrHBR7ofHxXY6fwRZxjiOwXeZ9NoWjSqqJ7FdgTEYcuTXZAxnhXXeY
+         ktDRI0Z+Oqr/TqY7k9JabXAAFCp1NBqZTXkskQJL6cPOvBbBCkigwkUA906/xuKoqQpq
+         Deqi2xxNdY3B89lGlMa2nH0ZyAftAlXjWsGuBekQcYdxhtTbqoOpwrp06g7r4IFapb4s
+         lc8QyB4JhDSrBwBB7SyIZJchMesaM+1DJQMOrIfZnbwAswg0LNgq24wQ+JeoJUsK15S6
+         7vNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784241056; x=1784845856;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=jnQqVHT9mIlQjz4b13IFWBpUZI0AFofijg1xz6XP/Fs=;
-        b=aCEL7NAsXG9GHP8NkCEUQR675KckkXw9bv6ivuPvS73Ge/xrYjUdKDBhufxRg+5cPj
-         KiZop+y71mBog4pc3x3plDTqN9xndybfHjDbwMj0UrUlyL43Iz4Jjn7nEA0B0HT8lbM6
-         2goytHABR9XFutNJdmy4a0YSlCebkWhYa9eoC0kn3tMEpEnAtTXP3rIOrxAbMOALwpl/
-         wMJg5JAhV/PT8ccOB7uAC0reSF16xT2LsrtVfBUPVBFgUwuWCT/mlWENXndhWee3e9Mo
-         MoKp496pjS+QlWciTzlVJrXjj+yvJEFwBd1VAMlY5KLjUPARjIOaLG/8TY7YDG9ZMoTm
-         PNHQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpqncxkAE5PTXrrmU8t2sMalDvh+uIwvssE8cHUfjN6z5KoxFY9SKoKedb0J4AoOvh829A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaeCr37yLA/vgaH8dzMdMElmbKhRgUCpIODYmTB6QoJmsNArjk
-	tbqjFG8wZuY0o1ckbc8mZFolCoLF96+DYSr3RRZ75vf6DXmkQ4ux0Loz
-X-Gm-Gg: AfdE7cnQbtggI9BIFKmFUg2V47M32P+rmf6WJCtC6xV8zxJ4uqDBbBTccpuswh+GBQK
-	hybdJuq2bmMg653KwuO07GlvZEklDfKoihjkKH7TtTeQ5c/PusmLsIaJN6nqNVhqf/oFo6eaEp+
-	I/7ukqaZ07Wlm542rM4pHgJbnoJjtg9/LLnta/Ygc/ssxH7wmREX50Z8W8HRjrUEvnDTokxx47t
-	JMp7JLOkc4WLOMJU22pMChywTMMjFKsmOm7eLzR/X+9NbXRUDhE8rUR8t+JvtxXJIQKZXBihVkr
-	9BCgqreqgCLXy+PtuqrFhY6OlKTr74B3C8np/Tb7TSdyzEfHKYHpe/7SU1liTDEqM83PdFfRzLJ
-	RvN6brOviSAfIbS4qaigtQLu/9MKnHjM4/oi3wkONaKeMv7zA9/JMLYxeuZ836cg4pQiXNJ+N/w
-	cNZpFbWXhrGmb352II0cet7XnNwDAJMC6fAKN8TZn7kBw=
-X-Received: by 2002:a05:6a21:7103:b0:398:837a:7af0 with SMTP id adf61e73a8af0-3c36c1e6ac4mr9446805637.30.1784241055983;
-        Thu, 16 Jul 2026 15:30:55 -0700 (PDT)
-Received: from google.com ([2a00:79e0:2ebe:8:38ea:b937:53f6:928c])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31429f9d444sm113394eec.6.2026.07.16.15.30.54
+        d=1e100.net; s=20251104; t=1784242883; x=1784847683;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=wyGjYfYZ0w+7WbZ59KK/1C1iYXN2+xrcuEWLzFLAWmA=;
+        b=kRitUvNHKYEbml0NV5xeyGsRILJeaAYqnW04tR0VEhPzIag4InL6Qscz7wVlrkAw2E
+         Ni8ahjOP+8MA3BQ0qynO8RjI3TU6oeNNb8Ym+Z92/CeBFVBbRg7YOh4uJM68AFkEBCrA
+         KGgxNPzKZXY1acVhc1ycICP5+WStuxzk3TEa6R07WijQ4XTvXMHm8tAhH2rebmgm0R6c
+         cVR9xDQp4S89X4NX1A8m8Ych9DHDzOmBCGd6gH2EnIjPuB2BZ4FOVRun9ol67VSHW6oe
+         S0+6CLpbtunclaiQDVmK3MC5vd3HeYzrO97H/GRcxKy1kmm+ZL67qunqCMofqZyjrvDK
+         tk9Q==
+X-Forwarded-Encrypted: i=1; AHgh+RqOjPYXM75ERR/1l5putQ21P4535VKk+cUOr6qdAMK6p74KRDsYWDrPWgRTq6tzpFADf7M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyH3LK9fv7A5Or9V0ueZoEr1dhEsZ7Eam1O8luVZsdMySXS5+Zo
+	uyvndZev0MiNoIQrFo6RF1nz8VqoIU2XPvMmKyrmPUzMiUWOwoS1SU3/EvS0J9fPnJg=
+X-Gm-Gg: AfdE7ck9FTreJBRH/wrW2eQtI7BiQtzVwb5gjWmRA9QzQRObu7XZWaKLs3WTEGGOOZx
+	xW/h2GJlAt+zIw+9YZn/p7xUndSV8sVU84I1XwrWVf9CBjv5RtlL7xorzRR5xjgAyrEQpSeSwd0
+	PWWeWmt1FIMfe9073yoIpxXb03Cs/D9jpxwrquX98CAP5XCP//z1hrGECJysMp+EpgbUZsOzpK1
+	H5wsoim1aHThMwA+YtJCiaGA53XRZHGu8EQixFh1Kn8ZaDxailQec1ivr7eT1JSHgQoSU6lsl/o
+	Rb06AoaXOUPgSxSEkrto6yQo21Akz4q5hkIyatL+L/guqdPcRsQVqTRuGpPJrUef0cbzlXZLbbh
+	Mcaz8LE5YFvEMIsRlYN0/HJMOqOO3u4hZp9fmeoD9iTl9Ynhda7l+/0vfRdhKaA==
+X-Received: by 2002:a17:90b:5588:b0:381:cef1:11b2 with SMTP id 98e67ed59e1d1-38e4b550a72mr37011a91.7.1784242882764;
+        Thu, 16 Jul 2026 16:01:22 -0700 (PDT)
+Received: from t14 ([2001:5a8:47ec:d700:5ca:1606:20e7:441d])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13cd42b2c0bsm13474872c88.8.2026.07.16.16.01.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2026 15:30:55 -0700 (PDT)
-Date: Thu, 16 Jul 2026 15:30:51 -0700
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc: Theodore Tso <tytso@mit.edu>, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, 
-	Derek Barbosa <debarbos@redhat.com>, Matthieu Baerts <matttbe@kernel.org>, 
-	Konstantin Ryabitsev <konstantin@linuxfoundation.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Steven Rostedt <rostedt@goodmis.org>, users@kernel.org, 
-	Linux Media Mailing List <linux-media@vger.kernel.org>, Stephen Finucane <stephenfin@redhat.com>, 
-	bpf <bpf@vger.kernel.org>, Chris Mason <clm@meta.com>, 
-	Christian Brauner <brauner@kernel.org>, Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: Re: Linking Patchwork with Sashiko?
-Message-ID: <allajcbLlV5xwfXh@google.com>
-References: <7ia4mrvtrxjl.fsf@castle.c.googlers.com>
- <20260715005909.GF1656185@killaraus.ideasonboard.com>
- <00a244f8-5be6-4ee7-b5b1-e4cbdcd4fc77@linux.dev>
- <20260715163921.GH1778116@killaraus.ideasonboard.com>
- <153db0fa-65ac-49de-9bf5-456c9639954c@linux.dev>
- <20260715190654.GK1778116@killaraus.ideasonboard.com>
- <alfwOgVRgUJYOGtU@mit.edu>
- <ef9f77c613a05c5745941587099eeb4f159d5e31.camel@ndufresne.ca>
- <alhMB7vGodoewjcz@mit.edu>
- <cd791ba9f1819528a9a964ae2ae3833c8e6c4b87.camel@ndufresne.ca>
+        Thu, 16 Jul 2026 16:01:22 -0700 (PDT)
+Date: Thu, 16 Jul 2026 16:01:20 -0700
+From: Jordan Rife <jordan@jrife.io>
+To: "Xiang Mei (Microsoft)" <xmei5@asu.edu>
+Cc: Eric Dumazet <edumazet@google.com>, 
+	Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	"David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, AutonomousCodeSecurity@microsoft.com, 
+	tgopinath@linux.microsoft.com, kys@microsoft.com
+Subject: Re: [PATCH net] bpf: tcp: fix double sock release on batch realloc
+Message-ID: <2shuri6mxofmo7ijmzb5frge3gc72n5p25ksoobdunlqlbfs2g@rprbuqbs6vhu>
+References: <20260713233230.3553593-1-xmei5@asu.edu>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cd791ba9f1819528a9a964ae2ae3833c8e6c4b87.camel@ndufresne.ca>
+In-Reply-To: <20260713233230.3553593-1-xmei5@asu.edu>
 
-On Thu, Jul 16, 2026 at 04:54:37PM -0400, Nicolas Dufresne wrote:
-> Le mercredi 15 juillet 2026 à 23:53 -0400, Theodore Tso a écrit :
-> > On Wed, Jul 15, 2026 at 11:00:54PM -0500, Nicolas Dufresne wrote:
-> > > In V4L2 m2m notably, there is a "job" in the background, which allow
-> > > to safely (at least this is the theory) chain up work, and
-> > > synchronize against pending work. But Sashiko (and other AI) seems
-> > > to not get it and state with confidence and long explanation that
-> > > the drivers are racy and should do X/Y/Z more on top (and never
-> > > blames the framework).
-> > 
-> > Is there actually a race which is allowed by the framework?  Or is
-> > Sashiko's proposed race actually not possible?
+On Mon, Jul 13, 2026 at 11:32:30PM +0000, Xiang Mei (Microsoft) wrote:
+> bpf_iter_tcp_batch() releases the current batch via
+> bpf_iter_tcp_put_batch(), which drops the socket refs and rewrites
+> each slot with the socket cookie, then grows the batch. cur_sk/end_sk
+> are kept for bpf_iter_tcp_resume(), but on realloc failure the function
+> returns ERR_PTR() before resume runs, leaving cur_sk < end_sk over
+> slots that now hold cookies rather than sock pointers.
+> bpf_iter_tcp_seq_stop() then calls bpf_iter_tcp_put_batch() again and
+> dereferences a cookie as a struct sock.
 > 
-> Not that I'm aware of, as long as the driver follow the conventions. A typical
-> occurrence of this is when Sashiko suggest that you should do an extra worker
-> cancel after streamoff. The framework already ensure, through a job wait
-> mechanism, that there is no more active tasks. This allow chaining this work
-> across workers, and one really done with the task, the driver will call a
-> function to finish the job.
-> 
-> Though, AI is also fed with code using the framework, but not the jobs. Venus
-> and Iris from Qualcomm just leave the job running, and manually tear down and
-> finish the job on streamoff. So when AI use that as example (or thinking model),
-> they conclude defensive coding is needed. I bet that if Qualcomm Iris/Venus
-> developer where to review other m2m they would provide similar reviews. But they
-> will likely add words that show a certain level of uncertainty, very unlike
-> Sashiko today.
-> 
-> What happens is that developers endup producing defensive code for cases that
-> will never occur, but it can go as far as refactoring and putting in place extra
-> mechanism that are simply duplicate of the existing framework. So we receive
-> more complex code, with convincing comment that does not reflect any real-life
-> scenarios.
-> 
-> Now its not a great mechanism, since its easy to "finish the job" and keep
-> working, which can make the driver code run concurrently with a device_run()
-> from another thread. And for multi-core drivers, its easy to forget that the
-> framework does not protect anything concurrent inside your driver.
-> 
-> Sashiko is just not doing the teaching that is needed for new contributors, or
-> for experienced developers handling slightly different type of HW with this
-> "problematic" framework.
+> Empty the batch on the failure path so stop() does not release it
+> again. The sockets were already freed by the first
+> bpf_iter_tcp_put_batch(), so nothing leaks, and a later read() rescans
 
-So I think here you need to teach Sashiko a bit. Submit a patch to
-https://github.com/masoncl/review-prompts that creates
-kernel/subsystem/media.md and lists all fine points of the APIs and
-common pitfalls that driver writers are often fall into. That will steer
-Sashiko away from suggesting hallucinated or impossible to happen
-scenarios.
+Since bpf_iter_tcp_batch returns an ERR_PTR in this case iteration
+wouldn't continue on a subsequent read, but otherwise the fix makes
+sense to me.
 
-Thanks.
+> the bucket from the start instead of skipping it. The sibling
+> GFP_NOWAIT failure path still holds real socket references and is left
+> for stop() to release.
+> 
+>   BUG: KASAN: null-ptr-deref in __sock_gen_cookie
+>   Read of size 8 at addr 0000000000000059 by task exploit
+>    ...
+>    __sock_gen_cookie (net/core/sock_diag.c:28)
+>    bpf_iter_tcp_put_batch (net/ipv4/tcp_ipv4.c:2918)
+>    bpf_iter_tcp_seq_stop (net/ipv4/tcp_ipv4.c:3270)
+>    bpf_seq_read (kernel/bpf/bpf_iter.c:205)
+>    vfs_read (fs/read_write.c:572)
+>    ksys_read (fs/read_write.c:716)
+>    do_syscall_64
+>    entry_SYSCALL_64_after_hwframe
+>   Kernel panic - not syncing: Fatal exception
+> 
+> Fixes: cdec67a489d4 ("bpf: tcp: Make sure iter->batch always contains a full bucket snapshot")
+> Reported-by: AutonomousCodeSecurity@microsoft.com
+> Signed-off-by: Xiang Mei (Microsoft) <xmei5@asu.edu>
+> ---
+>  net/ipv4/tcp_ipv4.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+> index 209ef7522508..dd3ed62704f9 100644
+> --- a/net/ipv4/tcp_ipv4.c
+> +++ b/net/ipv4/tcp_ipv4.c
+> @@ -3141,8 +3141,11 @@ static struct sock *bpf_iter_tcp_batch(struct seq_file *seq)
+>  	bpf_iter_tcp_put_batch(iter);
+>  	err = bpf_iter_tcp_realloc_batch(iter, expected * 3 / 2,
+>  					 GFP_USER);
+> -	if (err)
+> +	if (err) {
+> +		iter->cur_sk = 0;
+> +		iter->end_sk = 0;
+>  		return ERR_PTR(err);
+> +	}
+>  
+>  	sk = bpf_iter_tcp_resume(seq);
+>  	if (!sk)
+> -- 
+> 2.43.0
+> 
 
--- 
-Dmitry
+Reviewed-by: Jordan Rife <jordan@jrife.io>
