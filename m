@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1ECD38AC90;
-	Thu, 16 Jul 2026 07:51:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4183E3ADBB4;
+	Thu, 16 Jul 2026 07:51:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784188312; cv=none; b=p+xRUyqFGCiZRj4eD8RAwIiSfEt0wWz8y21mTj4hNpNU0G2FjWURJEwQCh9mBVFYOlf3/uqoW2UQBeLbMHTFrzxNbeZVlmHMpWX+SuEXO+H9AIRj1p3Wh7jwbSnN+3yazF1BjzuTo6o1jn/o5coufULz7j8EQASO0HKiCMW2agA=
+	t=1784188322; cv=none; b=HGb+jBZBaQi7dl9Ewe9DYIkKMxamINDhhm3sB7yPZk1/qk6E5oyDXiai6IoqkCT8BKHM6o1IqrNaRBR4DZ0OCpdqyWYCNovm+QH62Q8H3uNajIyWRk26akMGqf1Rm31obswKL70mhNNadV/91S4b7IW6vtgB8ehJ3LUMkElJXGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784188312; c=relaxed/simple;
-	bh=5Fd4+eK9E6eGfW7e6mF7U9Cj3d2x2DrKQzkF77OObNc=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Q6YkRVKFQMgxlu2tlFN3mhH9TdEhwJNFy4kv7WMYFZgKj9UFNLsouJ9ohYbe2dtqI6qyWmspdHRHoxma/adWVEy6uFnXHn6MZ3wbBYveS0GGKp4zqkMZg4ZYX6orbIGkLKVppySS4NGEKIEOhfoNLm5ZIndmgcAIFWYkBUulqkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fUXd1JVq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784188322; c=relaxed/simple;
+	bh=KMdENao6bsuzOHvaCM1iOOpBS7g+cu2arpkSzIMQIts=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=NL2z+jU1Yk0IuYVMLSL+Gcdt7x9dHFqvWX+684jdZoVlpvwUhu1mCZNFykEMxMLcMTufBJKr0ZnV5diLF2SQsZ5N90rexwH+hFbZ8v6iBTfhjFibGI3CJ7/FWx+fLGB6ryPpyPYE9hJ5g0qzkLzsVJbE7PoIWjU+Akph3ohBp10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k2d4O1mV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fUXd1JVq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 538CF1F00A3D;
-	Thu, 16 Jul 2026 07:51:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k2d4O1mV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 977211F000E9;
+	Thu, 16 Jul 2026 07:51:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784188305;
-	bh=K0q4iQ8vXEaQKfG3l11G3u2R60hLYqiFlU6seI3ml1I=;
-	h=From:Subject:Date:To:Cc;
-	b=fUXd1JVqXFDPnj8QOBtPJtiP6A2yMszY4qJW4W1rOlQj5xVB2ON2hyS0+UiksxXGa
-	 fknB4ezYhROdKZOAQbIB+xikYYPQthHda565MBVgXEk3mkzvFciHpJHi2Gpa5LVoT4
-	 1grvWMUELOhnAnjCM2y1FDOoOB9/ya41UrjTB4qFiRlx3OSmiYtwEJlZZZXcitOLNF
-	 tN6AOWoma3gTbL7oWAQKemS7CKfOEENgZOjSu5d77tBqyUHlKa6NbjbJGUmpaE9ZEg
-	 PsErQkijdfiasDmy56G7M+9/ITlKhGleL06OsrFFEVtJcks8O6qU6oHm952U4PATnu
-	 WckbAAe5evdaA==
+	s=k20260515; t=1784188310;
+	bh=iVpt+hTdXRr4Os4s4lc7gHEYSJh+NwOMWjHuKRC8z2o=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=k2d4O1mVI/GvrOYKJjFNghBetNfDaX4fwpcx9HfDdFS/d1HxUh+eYM+TWz2eC61cm
+	 9qXhjxNJSgzipDaOReWmBomQwyrGuTazubkr+eJAOrXKCRxN6W8cBK49YMlKOmPyCd
+	 iqN69Jk/oRGS6Ybfg2HtN/cDR3hMZTP8r39SL1d4X6rWgJyD55g7t6hTa11dfT3E20
+	 dXwVYz1u5cI366NUZLxOqAqdCtq2TFMyGRh5MLMXIb9r/mzXuYKYip2UmDyy2J/CL3
+	 768jXv3n2unnxHG+F/lYn4Q9OFW1xctr0pcKuoZ/sRpJKYvNK5e0jpRvWBtavIPWAa
+	 Jw0TPLb/fWK6A==
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-Subject: [PATCH bpf-next v3 0/5] bpf, x86: enable EXECMEM_ROX_CACHE for BPF
- allocations
-Date: Thu, 16 Jul 2026 10:51:34 +0300
-Message-Id: <20260716-execmem-x86-rox-bpf-v0-v3-0-4e76158c01c5@kernel.org>
+Date: Thu, 16 Jul 2026 10:51:35 +0300
+Subject: [PATCH bpf-next v3 1/5] bpf: dispatcher: allocate
+ bpf_dispatcher->rw_image with vzalloc()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,12 +38,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAIaNWGoC/4WOwY7CIBRFf8Ww9jmALaOu/A/jAsrDMlpqHpVgT
- P/dUjOZuDCzvO+de3IfLCJ5jGy3eDDC5KPvwxTWywVrWh1OCN5OmUkuFVdSAWZsOuwgbxRQn8F
- cHSQOppKV0BY33Do2la+EzudZfGCFCZgHdnx94s38YDMUb2GNjgiGdGjacvqlvzodB6RCtD4OP
- d3nlUnMzv8GJQEcqlpzw9FWDrf7M1LAy6qn07wjyT/PtxAfPXLyGGe3tbLrWoh3zziOT0+brxt
- DAQAA
-X-Change-ID: 20260626-execmem-x86-rox-bpf-v0-b4241ade80df
+Message-Id: <20260716-execmem-x86-rox-bpf-v0-v3-1-4e76158c01c5@kernel.org>
+References: <20260716-execmem-x86-rox-bpf-v0-v3-0-4e76158c01c5@kernel.org>
+In-Reply-To: <20260716-execmem-x86-rox-bpf-v0-v3-0-4e76158c01c5@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Andrii Nakryiko <andrii@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
  Borislav Petkov <bp@alien8.de>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -59,49 +56,46 @@ Cc: Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>,
  bpf@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org
 X-Mailer: b4 0.16-dev
 
-Hi,
+bpf_dispatcher->rw_image is a temporary writable buffer that
+arch_prepare_bpf_dispatcher() fills and then copies into
+bpf_dispatcher->image using bpf_arch_text_copy().
 
-BPF allocations of executable memory on x86 are essentially read-only. Most
-paths that call bpf_jit_alloc_exec() immediately make it ROX with
-set_memory_rox().
+The rel32 offsets emitted by emit_bpf_dispatcher() are calculated against
+->image, so ->rw_image does not need to live in the module address range.
 
-The code generation, at least on x86, uses separately allocated writable
-buffers and then updates the actual text memory with text_poke().
+Allocate ->rw_image with vzalloc() to avoid permissions dance when
+EXECMEM_BPF will be backed by ROX caches.
 
-These patches do several small adjustments to how BPF allocates executable
-memory and enable EXECMEM_ROX_CACHE for BPF allocations on x86.
+Using vzalloc() rather than vmalloc() ensures that the memory that
+bpf_dispatcher_update() unconditionally copies into the executable buffer
+is zeroed, which is not ideal but still better than random memory returned
+by the existing bpf_jit_alloc_exec() or plain vmalloc().
 
+Switching from bpf_jit_alloc_exec() to vzalloc() also saves a bit of
+space in the more scarce module address space.
+
+Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
-v3 changes:
-* replace vmalloc() with vzalloc() in bpf_dispatcher_change_prog()
-* rebase on the current bpf-next
+ kernel/bpf/dispatcher.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-v2: https://patch.msgid.link/20260711-execmem-x86-rox-bpf-v0-v2-0-bfd956d35119@kernel.org
-* rebase on the current bpf-next
+diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
+index ea2d60dc1fee..79f0c222c583 100644
+--- a/kernel/bpf/dispatcher.c
++++ b/kernel/bpf/dispatcher.c
+@@ -148,7 +148,10 @@ void bpf_dispatcher_change_prog(struct bpf_dispatcher *d, struct bpf_prog *from,
+ 		d->image = bpf_prog_pack_alloc(PAGE_SIZE, bpf_jit_fill_hole_with_zero, false);
+ 		if (!d->image)
+ 			goto out;
+-		d->rw_image = bpf_jit_alloc_exec(PAGE_SIZE);
++		/* d->rw_image doesn't need to be in module memory range, so we
++		 * can use vzalloc.
++		 */
++		d->rw_image = vzalloc(PAGE_SIZE);
+ 		if (!d->rw_image) {
+ 			bpf_prog_pack_free(d->image, PAGE_SIZE);
+ 			d->image = NULL;
 
-v1: https://patch.msgid.link/20260626-execmem-x86-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org
-
----
-
----
-Mike Rapoport (Microsoft) (5):
-      bpf: dispatcher: allocate bpf_dispatcher->rw_image with vzalloc()
-      bpf: drop __weak from bpf_jit_alloc_exec() and bpf_jit_free_exec()
-      bpf: alloc_prog_pack(): skip ROX management for already ROX memory
-      bpf, x86: make sure allocation in arch_bpf_trampoline_size() is writable
-      x86/bpf: enable EXECMEM_ROX_CACHE for BPF allocations
-
- arch/x86/mm/init.c          |  4 ++--
- arch/x86/net/bpf_jit_comp.c |  5 ++---
- include/linux/filter.h      |  1 +
- kernel/bpf/core.c           | 30 +++++++++++++++++++++---------
- kernel/bpf/dispatcher.c     |  5 ++++-
- 5 files changed, 30 insertions(+), 15 deletions(-)
----
-base-commit: d1f4b56417a3dc1a0600f960b14f46bd25eda89d
-change-id: 20260626-execmem-x86-rox-bpf-v0-b4241ade80df
-
---
-Sincerely yours,
-Mike.
+-- 
+2.53.0
 
