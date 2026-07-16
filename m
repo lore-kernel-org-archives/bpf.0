@@ -1,27 +1,27 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D664D3FA5F0;
-	Thu, 16 Jul 2026 11:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84B8241D643;
+	Thu, 16 Jul 2026 11:57:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784203061; cv=none; b=Lhns7HbKl0krmoQlBAy2UdIH60KZuQlXQNtaoMi8axQTTGSYs95rwDTJVp1CSsvaaZZczIvEPtsGmFDq/Xbtz5tbNFBHvJNycHoasPp51yifZQx3h7AKlb7YsIF4ZPGee5YVYMvWdt8x97RhY1UGOqP/gnOXKaqQDDHsEo6AUew=
+	t=1784203064; cv=none; b=n3Ey5BdM9gM3QEj9Etw3i99QeZDn8Ky9YqAZTUnvG3C8emaF2Pd9BR68X5LSXzRDf/2SSXC9dKgKivtbii/+38CU8DikYHFujiqIRPMVTTJHmGSbg7jpIsnS7VxbiN6f18qd7SBM6MlMQK2lgSr7bQk4xNZh+ZIJQL6ROK7cbRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784203061; c=relaxed/simple;
-	bh=we3UXBkNgV61YozjdH88dP9krx4vo5YA7Gzb/HWrdkY=;
+	s=arc-20240116; t=1784203064; c=relaxed/simple;
+	bh=NYJz8adaTR+7JKhL/JT6BWLZuRQHdk8v43lmWNrdLEs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=FJV2JiPELjhhFzA1EHOd03lIDGtI56H0ZwxvtQ1xzr2c+wdukdvPoQbSxODOGsahC6MSRWWdOyC70mkxjS/+kURVP7uzrZUMP/6iO5xY5fq465lPIeJr6/hkuoIGuqNCSI9NCre6szt4NsallfsSBcWCufwu2lmIdtOGv8kYjFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=VTwLYu6qgqRSFL+h+LbDG8ZhfFj5FIpXyvz4nsIkvA2g2pysEI3ysLH2Dy/8GFuxCF5m4zZ14MYu/znTZckah2KV0JN00RTdY/JmVJQJdns+q6Y1Kshgj0MqBHA09x+YqX07ZA0e/VRIu8eFcGJILwq1O7pwwI9BmrmCAovlHuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h1BNV49nyzKHMXX;
-	Thu, 16 Jul 2026 19:56:58 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h1BNn4TWdzYQttW;
+	Thu, 16 Jul 2026 19:57:13 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 795B34058D;
+	by mail.maildlp.com (Postfix) with ESMTP id 50D4E4056E;
 	Thu, 16 Jul 2026 19:57:32 +0800 (CST)
 Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgC3x3Mqx1hqeWi+BQ--.49322S5;
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgC3x3Mqx1hqeWi+BQ--.49322S3;
 	Thu, 16 Jul 2026 19:57:32 +0800 (CST)
 From: Pu Lehui <pulehui@huaweicloud.com>
 To: bpf@vger.kernel.org,
@@ -39,9 +39,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Pu Lehui <pulehui@huawei.com>,
 	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf-next v3 3/3] selftests/bpf: Add testcases for callback with tailcall
-Date: Thu, 16 Jul 2026 12:01:57 +0000
-Message-Id: <20260716120157.835937-4-pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next v3 1/3] bpf: Sync tail_call_reachable with callee state on entry
+Date: Thu, 16 Jul 2026 12:01:55 +0000
+Message-Id: <20260716120157.835937-2-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260716120157.835937-1-pulehui@huaweicloud.com>
 References: <20260716120157.835937-1-pulehui@huaweicloud.com>
@@ -52,157 +52,69 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgC3x3Mqx1hqeWi+BQ--.49322S5
-X-Coremail-Antispam: 1UD129KBjvJXoWxXw43Cr4kWr17Xr1rXrWxtFb_yoW5Kw45pF
-	yDZw15tryrWF1fAF47Gr48uFZ8Zan5JFWUtryrJr98Ars7Ar93WFn2kry8KF93G3yrZry5
-	Z3sYqFs3Cw4kJaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUmY14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
-	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-	8EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-	0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-	IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-	Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
-	xKxwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
-	JVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
-	kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY
-	6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
-	IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIev
-	Ja73UjIFyTuYvjfUO_MaUUUUU
+X-CM-TRANSID:cCh0CgC3x3Mqx1hqeWi+BQ--.49322S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tw1rGw48tF17Aw17Kw18uFg_yoW8AryxpF
+	Z5Was2qrWkXa4jy3ZrCr48ZayrKa98t347Gr1UA343t3WqyF9rWrs8Ka4fXFyY9rW0qw1F
+	gFyUWrZ0yw18A3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUmj14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
+	x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
+	ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
+	xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
+	vE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
+	r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04
+	v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
+	6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7
+	AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE
+	2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcV
+	C2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kfnx
+	nUUI43ZEXa7VUjrHUDUUUUU==
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
 From: Pu Lehui <pulehui@huawei.com>
 
-Add 2 testcases for callback with tailcall:
-1. failure case: callback->subprog->tailcall.
-2. success case: subprog with tailcall do not affect
-   no-tailcall callback.
+Currently in check_max_stack_depth_subprog, when the verifier enters a
+new callee branch, the local tail_call_reachable is not properly
+synchronized with the callee's state.
 
+Consider a main prog branching into multiple subprogs:
+
+       subprog0 -> tailcall
+main <
+       subprog1 -> subprog2
+
+When the verifier finishes checking subprog0 and backtracks to main
+prog, the local tail_call_reachable state is left as true. As it
+proceeds to subprog1, this uncleared state leaks into the new branch,
+falsely marking subprog1 and subprog2 as tailcall reachable.
+
+Fix this by explicitly syncing tail_call_reachable with the callee's
+has_tail_call state on entry. The caller's state is safely preserved and
+restored via the existing backtracking logic.
+
+Fixes: ebf7d1f508a7 ("bpf, x64: rework pro/epilogue and tailcall handling in JIT")
+Reported-by: Sashiko <sashiko-bot@kernel.org>
 Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
- .../selftests/bpf/prog_tests/tailcalls.c      |  7 ++
- .../selftests/bpf/progs/tailcall_callback.c   | 81 +++++++++++++++++++
- 2 files changed, 88 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall_callback.c
+ kernel/bpf/verifier.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-index a5a226d0104c..c66037162da5 100644
---- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-@@ -12,6 +12,7 @@
- #include "tailcall_cgrp_storage_no_storage.skel.h"
- #include "tailcall_cgrp_storage.skel.h"
- #include "tailcall_sleepable.skel.h"
-+#include "tailcall_callback.skel.h"
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index de816063ae63..782d939c38cd 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5263,8 +5263,8 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 		if (!priv_stack_supported)
+ 			subprog[idx].priv_stack_mode = NO_PRIV_STACK;
  
- /* test_tailcall_1 checks basic functionality by patching multiple locations
-  * in a single program for a single tail call slot with nop->jmp, jmp->nop
-@@ -1901,6 +1902,11 @@ static void test_tailcall_sleepable(void)
- 	tailcall_sleepable__destroy(skel);
- }
+-		if (subprog[idx].has_tail_call)
+-			tail_call_reachable = true;
++		/* sync tail_call_reachable with callee state on entry */
++		tail_call_reachable = subprog[idx].has_tail_call;
  
-+static void test_tailcall_callback(void)
-+{
-+	RUN_TESTS(tailcall_callback);
-+}
-+
- void test_tailcalls(void)
- {
- 	if (test__start_subtest("tailcall_1"))
-@@ -1967,4 +1973,5 @@ void test_tailcalls(void)
- 		test_tailcall_cgrp_storage_no_storage_leaf();
- 	if (test__start_subtest("tailcall_cgrp_storage_no_storage_bridge"))
- 		test_tailcall_cgrp_storage_no_storage_bridge();
-+	test_tailcall_callback();
- }
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_callback.c b/tools/testing/selftests/bpf/progs/tailcall_callback.c
-new file mode 100644
-index 000000000000..c41632cf423b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall_callback.c
-@@ -0,0 +1,81 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "bpf_test_utils.h"
-+
-+int classifier_0(struct __sk_buff *skb);
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__array(values, void (void));
-+} jmp_table SEC(".maps") = {
-+	.values = {
-+		[0] = (void *) &classifier_0,
-+	},
-+};
-+
-+__auxiliary
-+SEC("tc")
-+int classifier_0(struct __sk_buff *skb)
-+{
-+	return 0;
-+}
-+
-+static __noinline
-+int subprog_tail0(struct __sk_buff *skb)
-+{
-+	int ret = 0;
-+
-+	bpf_tail_call_static(skb, &jmp_table, 0);
-+	barrier_var(ret);
-+	return ret;
-+}
-+
-+static __noinline
-+int callback_loop(int index, void **cb_ctx)
-+{
-+	int ret;
-+
-+	ret = subprog_tail0(*cb_ctx);
-+	barrier_var(ret);
-+	return ret ? 1 : 0;
-+}
-+
-+static __noinline
-+int callback_empty(int index, void *data)
-+{
-+	return 0;
-+}
-+
-+/* callback involving subprog with tail call is rejected */
-+SEC("tc")
-+__failure __msg("cannot tail call within callback")
-+int tailcall_callback_1(struct __sk_buff *skb)
-+{
-+	clobber_regs_stack();
-+
-+	bpf_loop(1, callback_loop, &skb, 0);
-+	return 0;
-+}
-+
-+/* subprogs with tailcall do not affect no-tailcall callback */
-+SEC("tc")
-+__success
-+__retval(0)
-+int tailcall_callback_2(struct __sk_buff *skb)
-+{
-+	int ret;
-+
-+	clobber_regs_stack();
-+
-+	ret = subprog_tail0(skb);
-+	__sink(ret);
-+
-+	bpf_loop(1, callback_empty, NULL, 0);
-+	return 0;
-+}
-+
-+char __license[] SEC("license") = "GPL";
+ 		frame = bpf_subprog_is_global(env, idx) ? 0 : frame + 1;
+ 		if (frame >= MAX_CALL_FRAMES) {
 -- 
 2.34.1
 
